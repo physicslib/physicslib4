@@ -20,4 +20,4 @@ greeting, string, tutorial
 -/
 
 /-- A constant string greeting the world. -/
-def hello := "world"
+def hello : String := "world"
