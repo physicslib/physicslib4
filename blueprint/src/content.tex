@@ -1,7 +1,89 @@
-% In this file you should put the actual content of the blueprint.
-% It will be used both by the web and the print version.
-% It should *not* include the \begin{document}
-%
-% If you want to split the blueprint content into several files then
-% the current file can be a simple sequence of \input. Otherwise It
-% can start with a \section or \chapter for instance.
+\documentclass{amsproc}
+
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{xca}[theorem]{Exercise}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+
+\title{AQFT in Lean}
+
+\author{Kelly J Davis}
+\email{kdavis@alum.mit.edu}
+
+\subjclass[2010]{Primary }
+
+\keywords{AQFT}
+
+\date{June 5, 2026}
+
+
+\input{sections/sec0/abstract}
+\maketitle
+\pagebreak
+
+\tableofcontents
+\pagebreak
+
+\section{Original Haag Kastler Axioms}\label{sec:original-haag-kastler-axioms}
+\input{sections/sec1/original_haag_kastler_axioms}
+\vfill
+\pagebreak
+
+\section{Axiom 0 (Minkowski Space)}\label{sec:axiom-0-(minkowski-space)}
+``Minkowski space'' is referred to, directly or indirectly, in most of these axioms. However, a crisp, mathematical definition of ``Minkowski space'' is never given in Haag and Kastler's \href{https://doi.org/10.1063/1.1704187}{original work}. So, to clarify the axioms, we should provide one.
+
+Normally this level of pedanticism isn't warranted. But, for example, Axiom 1 (Local Algebras) refers to the $\mathbf{B}$ as \textit{``open sets with compact closure in Minkowski space''}. So, the topology of ``Minkowski space'' \textit{is} relevant, and not all topologies may yield ``physical'' results.
+
+All that being said, to ensure that the axioms are built on a solid foundation, we need a formal definition of ``Minkowski space'' to build them on.
+\input{sections/sec2/2-1_standard_topology_on_minkowski_space}
+\input{sections/sec2/2-2_indiscrete_topology_on_minkowski_space}
+\input{sections/sec2/2-3_euclidean_topology_on_minkowski_space}
+\input{sections/sec2/2-4_alexandrov_topology_on_minkowski_space}
+\vfill
+\pagebreak
+
+\section{Axiom 1 (Local Algebras)}\label{sec:axiom-1-(local-algebras)}
+Next let us consider Axiom 1 (Local Algebras) which states
+ 
+\textbf{Axiom 1} \textit{(Local Algebras)} The ``regions'' $\mathbf{B}$ for which the correspondence
+
+\begin{align}
+\mathbf{B} \rightarrow \mathfrak{U}(\mathbf{B})
+\end{align}
+
+is defined shall be the open sets with compact closure in Minkowski space, the algebras $\mathfrak{U}(\mathbf{B})$ shall be (abstract) C\*-algebras.
+\input{sections/sec3/3-1_regions_of_measurement}
+\vfill
+\pagebreak
+
+\section{Axiom 2 (Isotony)}\label{sec:axiom-2-(isotony)}
+Now let us consider Axiom 2 (Isotony) which states
+
+\textbf{Axiom 2} \textit{(Isotony)} If $\mathbf{B_1} \subset \mathbf{B_2}$ then $\mathfrak{U}(\mathbf{B_1}) \subset \mathfrak{U}(\mathbf{B_2})$. We assume in addition that one of the two following situations prevails. Either $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ have a common unit element, or neither of them has a unit. The first situation can be obtained from the second by formal adjunction of a unit.
+%\input{sections/sec3/3-1_regions_of_measurement}
+\vfill
+\pagebreak
+
+\section{Axiom 3 (Local Commutativity)}\label{sec:axiom-3-(local-commutativity)}
+
+\section{Axiom 4 (Quasilocal Algebra)}\label{sec:axiom-4-(quasilocal-algebra)}
+
+\section{Axiom 5 (Lorentz Covariance)}\label{sec:axiom-5-(lorentz-covariance)}
+
+\section{Axioms 6 (Primitivity)}\label{sec:axiom-6-(primitivity)}
+
+\section{Haag Kastler Axioms Unpacked}\label{sec:haag-kastler-axioms-unpacked}
+
+\end{document}
