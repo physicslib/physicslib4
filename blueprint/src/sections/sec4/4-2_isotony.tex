@@ -1,0 +1,48 @@
+\subsection{Isotony}\label{subsec:isotony}
+With this understanding of how AQFT is operationalized, we can now examine isotony in a bit more detail. We will find that isotony, along with the requirement that $\mathfrak{U}(\mathbf{B})$ be a C*-algebra, is a ``natural'' requirement.
+
+As mentioned when we introduced the GNS construction, given an AQFT state $\omega$ on an (abstract) C*-algebra $\mathfrak{U}(\mathbf{B})$ with unit the GNS construction produces a triple $(\mathcal{H}_\omega, \pi_\omega, \Omega_\omega)$ consisting of a Hilbert space $\mathcal{H}_\omega$, a *-homomorphism (and thus representation) $\pi_\omega$ of $\mathfrak{U}(\mathbf{B})$ on the Hilbert space, and $\Omega_\omega$ a distinguished vector in the Hilbert space.
+
+``Observables'' in the region $\mathbf{B}$ then correspond to self-adjoint elements of the von Neumann algebra $\pi_\omega(\mathfrak{U}(\mathbf{B}))''$. Furthermore, the possible values one can obtain when ``measuring'' the ``observable'' corresponding to a self-adjoint $A$ in $\pi_\omega(\mathfrak{U}(\mathbf{B}))''$ are the values in the spectrum $\sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}))''}(A)$ of $A$ when it is viewed as an element of the von Neumann algebra $\pi_\omega(\mathfrak{U}(\mathbf{B}))''$.
+
+Consider again our main theme, isotony. It implies that if $\mathbf{B_1} \subset \mathbf{B_2}$ then $\mathfrak{U}(\mathbf{B_1}) \subset \mathfrak{U}(\mathbf{B_2})$.
+
+So, if we have a state $\omega$ in $\mathfrak{U}(\mathbf{B_2})^*$ we can consider the ``observables'' corresponding to the self-adjoint elements of $\pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''$.
+
+As $\mathfrak{U}(\mathbf{B_1}) \subset \mathfrak{U}(\mathbf{B_2})$ we can restrict the action of $\omega$ to $\mathfrak{U}(\mathbf{B_1})$ and use this restriction, which we also denote by $\omega$, to define a state in $\mathfrak{U}(\mathbf{B_1})^*$.
+
+So, with this state $\omega$ in $\mathfrak{U}(\mathbf{B_1})^*$ we can consider the ``observables'' corresponding to the self-adjoint elements of $\pi_{\omega}(\mathfrak{U}(\mathbf{B_1}))''$.
+
+If one traces through definitions of taking the commutator, one finds
+\begin{align}
+\pi_{\omega}(\mathfrak{U}(\mathbf{B_2})) \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''.
+\end{align}
+However, as $\mathfrak{U}(\mathbf{B_1}) \subset \mathfrak{U}(\mathbf{B_2})$, one also has $\pi_{\omega}(\mathfrak{U}(\mathbf{B_1})) \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))$. This in turn implies that
+\begin{align}
+\pi_{\omega}(\mathfrak{U}(\mathbf{B_1})) \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''.
+\end{align}
+Tracing definitions of the commutators again one finds this implies
+\begin{align}
+\pi_{\omega}(\mathfrak{U}(\mathbf{B_1}))'' \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''.
+\end{align}
+So we can view an ``observable's'' self-adjoint element $A$ in $\pi_{\omega}(\mathfrak{U}(\mathbf{B_1}))''$ equivalently as a self-adjoint element $A$ in $\pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''$. This allows us to view the ``observable'' as being ``measured'' in $\mathbf{B}_1$ or being ``measured'' in $\mathbf{B}_2$.
+
+However, as one will recall, the possible values one can obtain when ``measuring'' the ``observable'' corresponding to a self-adjoint $A$ in $\pi_{\omega}(\mathfrak{U}(\mathbf{B_1}))''$ are the values in the spectrum $\sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_1))''}(A)$. Similarly, the possible values one can obtain when ``measuring'' the self-adjoint $A$ viewed as an element of $\pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''$ are the values in the spectrum $\sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_2))''}(A)$.
+
+Observation indicates that experimental results do not depend on whether we consider an experiment as occurring in $\mathbf{B}_1$, the city of Cambridge, Massachusetts, or whether we consider it as occurring in $\mathbf{B}_2$, the state of Massachusetts. So this means that the spectrum $\sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_1))''}(A)$ and the spectrum $\sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_2))''}(A)$ should be identical.
+
+It turns out that for C*-algebras we have the following theorem (Proposition 2.2.7 of \href{https://doi.org/10.1007/978-3-662-02520-8}{Bratteli and Robinson})
+
+\begin{theorem}[C*-Spectrum is Invariant Under Inclusion]
+Let $\mathfrak{U}_1$ be a C*-subalgebra of the C*-algebra $\mathfrak{U}_2$. If $a$ is an element of $\mathfrak{U}_1$, then the spectrum $\sigma_{\mathfrak{U}_1}(a)$ of $a$ when viewed as an element of $\mathfrak{U}_1$ is the same as the spectrum $\sigma_{\mathfrak{U}_2}(a)$ of $a$ when viewed as an element of $\mathfrak{U}_2$*
+\begin{align}
+\sigma_{\mathfrak{U}_1}(a) = \sigma_{\mathfrak{U}_2}(a).
+\end{align}
+\end{theorem}
+\noindent This allows us to drop the subscript from $\sigma_{\mathfrak{U}_1}(a)$ and $\sigma_{\mathfrak{U}_2}(a)$ and to write $\sigma(a)$ unambiguously.
+
+As the von Neumann algebras $\pi_{\omega}(\mathfrak{U}(\mathbf{B_1}))''$ and $\pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''$ are both also C*-algebras, we can apply this theorem to conclude
+\begin{align}
+\sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_1))''}(A) = \sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_2))''}(A)
+\end{align}
+which is a check on our use of C*-algebras (The same doesn't hold for Banach *-algebras for example.) and a check on the isotony axiom.

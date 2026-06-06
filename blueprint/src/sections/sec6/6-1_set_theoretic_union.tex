@@ -1,0 +1,14 @@
+\subsection{Set-Theoretic Union}\label{subsec:set-theoretic-union}
+The first claim this axiom makes is that the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$ is a normed *-algebra. Is this the case?
+
+If the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$ is a normed *-algebra, then all of the standard properties of a normed *-algebra (e.g. finite vector sums, finite algebraic products, involution...) must be defined for elements of this set-theoretic union. Are such properties defined?
+
+Consider two arbitrary elements $a_1$ and $a_2$ in this set-theoretic union. As $a_1$ and $a_2$ are elements of this set-theoretic union, there exists a $\mathbf{B}_1$ such that $a_1 \in \mathfrak{U}(\mathbf{B}_1)$ and a $\mathbf{B}_2$ such that $a_2 \in \mathfrak{U}(\mathbf{B}_2)$.
+
+By definition $\mathbf{B}_1$ is of the form $I^+(p_1) \cap I^-(q_1)$ and $\mathbf{B}_2$ is of the form $I^+(p_2) \cap I^-(q_2)$. As we are in Minkowski spacetime, there always exists a $p$ and $q$ such that both  $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$ are contained in $I^+(p) \cap I^-(q)$. Let us denote the set $I^+(p) \cap I^-(q)$ as $\mathbf{B}$, i.e. $\mathbf{B} \equiv I^+(p) \cap I^-(q)$.
+
+As both $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$ are contained in $I^+(p) \cap I^-(q)$, the isotony axiom implies that $\mathfrak{U}(\mathbf{B}_1) \subset \mathfrak{U}(\mathbf{B})$ and $\mathfrak{U}(\mathbf{B}_2) \subset \mathfrak{U}(\mathbf{B})$. This in turn implies that $a_1, a_2 \in \mathfrak{U}(\mathbf{B})$, which in turn implies that all of the standard properties of a normed *-algebra (e.g. vector sum, algebraic product, involution...) hold for $a_1$ and $a_2$ viewed as elements of the algebra $\mathfrak{U}(\mathbf{B})$.
+
+As $a_1$ and $a_2$ were arbitrary elements of the set-theoretic union, the standard properties of a normed *-algebra (e.g. vector sum, algebraic product, involution...) hold for an arbitrary finite number of elements in the set-theoretic union.
+
+The subtle point to note here is that limits of elements in this set-theoretic union may not be in the set-theoretic union. Completion solves this problem.
