@@ -1,34 +1,3 @@
-\documentclass{amsproc}
-
-\usepackage{hyperref}
-
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{xca}[theorem]{Exercise}
-
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
-
-\numberwithin{equation}{section}
-
-\begin{document}
-
-\title{AQFT in Lean}
-
-\author{Kelly J Davis}
-\email{kdavis@alum.mit.edu}
-
-\subjclass[2010]{Primary }
-
-\keywords{AQFT}
-
-\date{June 5, 2026}
-
-
 \input{sections/sec0/abstract}
 \maketitle
 \pagebreak
@@ -39,8 +8,6 @@
 \section{Original Haag Kastler Axioms}\label{sec:original-haag-kastler-axioms}
 \input{sections/sec1/introduction}
 \input{sections/sec1/original_haag_kastler_axioms}
-\vfill
-\pagebreak
 
 \section{Axiom 0 (Minkowski Space)}\label{sec:axiom-0-(minkowski-space)}
 \input{sections/sec2/introduction}
@@ -48,46 +15,38 @@
 \input{sections/sec2/2-2_indiscrete_topology_on_minkowski_space}
 \input{sections/sec2/2-3_euclidean_topology_on_minkowski_space}
 \input{sections/sec2/2-4_alexandrov_topology_on_minkowski_space}
-\vfill
-\pagebreak
 
 \section{Axiom 1 (Local Algebras)}\label{sec:axiom-1-(local-algebras)}
 \input{sections/sec3/introduction}
 \input{sections/sec3/3-1_regions_of_measurement}
-\vfill
-\pagebreak
 
 \section{Axiom 2 (Isotony)}\label{sec:axiom-2-(isotony)}
 \input{sections/sec4/introduction}
 \input{sections/sec4/4-1_gns_construction}
 \input{sections/sec4/4-2_isotony}
 \input{sections/sec4/4-3_common_unit}
-\vfill
-\pagebreak
 
 \section{Axiom 3 (Local Commutativity)}\label{sec:axiom-3-(local-commutativity)}
 \input{sections/sec5/introduction}
 \input{sections/sec5/5-1_completely_spacelike}
 \input{sections/sec5/5-2_quasilocal_algebra}
-\vfill
-\pagebreak
 
 \section{Axiom 4 (Quasilocal Algebra)}\label{sec:axiom-4-(quasilocal-algebra)}
 \input{sections/sec6/introduction}
 \input{sections/sec6/6-1_set_theoretic_union}
 \input{sections/sec6/6-2_completion_of_the_set_theoretic_union}
 \input{sections/sec6/6-3_all_observables_of_interest}
-\vfill
-\pagebreak
 
 \section{Axiom 5 (Lorentz Covariance)}\label{sec:axiom-5-(lorentz-covariance)}
-\vfill
-\pagebreak
+\input{sections/sec7/introduction}
+\input{sections/sec7/7-1_inhomogeneous_lorentz_group}
+\input{sections/sec7/7-2_action_of_the_inhomogeneous_lorentz_groups_identity_component}
 
 \section{Axioms 6 (Primitivity)}\label{sec:axiom-6-(primitivity)}
-\vfill
-\pagebreak
+\input{sections/sec8/introduction}
+\input{sections/sec8/8-1_faithful_representations}
+\input{sections/sec8/8-2_faithful_and_irreducible_representations}
 
 \section{Haag Kastler Axioms Unpacked}\label{sec:haag-kastler-axioms-unpacked}
-
-\end{document}
+\input{sections/sec9/introduction}
+\input{sections/sec9/haag_kastler_axioms_unpacked}
