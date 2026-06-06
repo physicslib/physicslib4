@@ -42,9 +42,22 @@ Before introducing the next axiom, we must introduce two definitions:
 Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven, taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the *quasilocal algebra*.
 \end{definition}
 
+\begin{definition}[Causal Future and Causal Past]
+\label{def:causalR-fture-and-causal-past}
+\uses{def:minkowski-spacetime}
+Consider a point $p$ in a Minkowski spacetime. The \textit{causal future} of $p$ is the set $J^+(p)$ of points reachable from $p$ via a future-directed, time-like or light-like curve. Similarly, the \textit{causal past} of $p$ is the set $J^-(p)$ of all points that reach $p$ via a future-directed, time-like or light-like curve.
+\end{definition}
+
+\begin{definition}[Spacelike Related]
+\label{def:spacelike-related}
+\uses{def:minkowski-spacetime}
+Consider two points $p_1$ and $p_2$ in a Minkowski spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
+\end{definition}
+
 \begin{definition}[Completely Spacelike]
 \label{def:completely-spacelike}
 \uses{def:minkowski-spacetime}
+\uses{def:spacelike-related}
 Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in Minkowski spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
 \end{definition}
 
