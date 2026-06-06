@@ -1,12 +1,15 @@
 Before even stating the ``sharpened'' axioms, the first thing we need to do is to define what we mean when we say ``Minkowski spacetime.''
 
 \begin{definition}[Minkowski Spacetime]
+\label{def:minkowski-spacetime}
 Minkowski spacetime is the set $\mathbb{R}^4$ equipped with the Alexandrov topology, Minkowski metric, and standard time orientation $(1,0,0,0)$. (Note the Alexandrov topology is the topology in which sets of the form $I^+(p) \cap I^-(q)$ form the base.)
 \end{definition}
 
 With that out of the way we can state the axioms.
 
 \begin{axiom}[Local Algebras]
+\label{axm:local-algebras}
+\uses{def:minkowski-spacetime}
 For any basis element $\mathbf{B}$ of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
 \begin{align}
 \mathbf{B} \longmapsto \mathfrak{U}(\mathbf{B}),
@@ -19,6 +22,9 @@ where $\mathbf{1}$ is the multiplicative identity in the abstract C*-algebra $\m
 \end{axiom}
 
 \begin{axiom}[Isotony]
+\label{axm:isotony}
+\uses{def:minkowski-spacetime}
+\uses{axm:local-algebras}
 Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
 
 If $\mathbf{B}_1 \subset \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subset \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
@@ -31,14 +37,23 @@ a unital *-monomorphism.
 Before introducing the next axiom, we must introduce two definitions:
 
 \begin{definition}[Quasilocal Algebra]
-Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven,  taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the *quasilocal algebra*.
+\label{def:quasilocal-algebra}
+\uses{axm:local-algebras}
+Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven, taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the *quasilocal algebra*.
 \end{definition}
 
 \begin{definition}[Completely Spacelike]
-Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in Minkowski spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are *completely spacelike*  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
+\label{def:completely-spacelike}
+\uses{def:minkowski-spacetime}
+Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in Minkowski spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
 \end{definition}
 
 \begin{axiom}[Local Commutativity]
+\label{axm:local-commutativity}
+\uses{def:minkowski-spacetime}
+\uses{def:completely-spacelike}
+\uses{axm:local-algebras}
+\uses{def:quasilocal-algebra}
 Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
 
 If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the quasilocal algebra $\mathfrak{U}$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ it follows that
@@ -51,14 +66,22 @@ in the quasilocal algebra $\mathfrak{U}$.
 The next axiom makes use of the following new definition:
 
 \begin{definition}[Quasilocal Observable]
+\label{def:quasilocal-observable}
+\uses{def:quasilocal-algebra}
 The image $\pi_\omega(a)$ of a self-adjoint member $a$ of the quasilocal algebra $\mathfrak{U}$ under a GNS *-homomorphism $\pi_\omega$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{quasilocal observable}.
 \end{definition}
 
 \begin{axiom}[Quasilocal Algebra]
+\label{axm:quasilocal-algebra}
+\uses{def:quasilocal-observable}
 All ``observables'' are quasilocal observables.
 \end{axiom}
 
 \begin{axiom}[Lorentz Covariance]
+\label{axm:lorentz-covariance}
+\uses{def:minkowski-spacetime}
+\uses{axm:local-algebras}
+\uses{axm:isotony}
 Let $\mathbf{B}$ be any basis element of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$.
 
 A member $L$ of the inhomogeneous Lorentz group connected to the identity acts on $\mathfrak{U}(\mathbf{B})$ as follows
