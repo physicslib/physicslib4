@@ -1,4 +1,4 @@
-\subsection{Isotony}\label{subsec:isotony}
+\section{Isotony}\label{sctn:isotony}
 With this understanding of how AQFT is operationalized, we can now examine isotony in a bit more detail. We will find that isotony, along with the requirement that $\mathfrak{U}(\mathbf{B})$ be a C*-algebra, is a ``natural'' requirement.
 
 As mentioned when we introduced the GNS construction, given an AQFT state $\omega$ on an (abstract) C*-algebra $\mathfrak{U}(\mathbf{B})$ with unit the GNS construction produces a triple $(\mathcal{H}_\omega, \pi_\omega, \Omega_\omega)$ consisting of a Hilbert space $\mathcal{H}_\omega$, a *-homomorphism (and thus representation) $\pi_\omega$ of $\mathfrak{U}(\mathbf{B})$ on the Hilbert space, and $\Omega_\omega$ a distinguished vector in the Hilbert space.
@@ -15,15 +15,15 @@ So, with this state $\omega$ in $\mathfrak{U}(\mathbf{B_1})^*$ we can consider t
 
 If one traces through definitions of taking the commutator, one finds
 \begin{align}
-\pi_{\omega}(\mathfrak{U}(\mathbf{B_2})) \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''.
+    \pi_{\omega}(\mathfrak{U}(\mathbf{B_2})) \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''.
 \end{align}
 However, as $\mathfrak{U}(\mathbf{B_1}) \subset \mathfrak{U}(\mathbf{B_2})$, one also has $\pi_{\omega}(\mathfrak{U}(\mathbf{B_1})) \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))$. This in turn implies that
 \begin{align}
-\pi_{\omega}(\mathfrak{U}(\mathbf{B_1})) \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''.
+    \pi_{\omega}(\mathfrak{U}(\mathbf{B_1})) \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''.
 \end{align}
 Tracing definitions of the commutators again one finds this implies
 \begin{align}
-\pi_{\omega}(\mathfrak{U}(\mathbf{B_1}))'' \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''.
+    \pi_{\omega}(\mathfrak{U}(\mathbf{B_1}))'' \subset \pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''.
 \end{align}
 So we can view an ``observable's'' self-adjoint element $A$ in $\pi_{\omega}(\mathfrak{U}(\mathbf{B_1}))''$ equivalently as a self-adjoint element $A$ in $\pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''$. This allows us to view the ``observable'' as being ``measured'' in $\mathbf{B}_1$ or being ``measured'' in $\mathbf{B}_2$.
 
@@ -34,15 +34,15 @@ Observation indicates that experimental results do not depend on whether we cons
 It turns out that for C*-algebras we have the following theorem (Proposition 2.2.7 of \href{https://doi.org/10.1007/978-3-662-02520-8}{Bratteli and Robinson})
 
 \begin{theorem}[C*-Spectrum is Invariant Under Inclusion]
-Let $\mathfrak{U}_1$ be a C*-subalgebra of the C*-algebra $\mathfrak{U}_2$. If $a$ is an element of $\mathfrak{U}_1$, then the spectrum $\sigma_{\mathfrak{U}_1}(a)$ of $a$ when viewed as an element of $\mathfrak{U}_1$ is the same as the spectrum $\sigma_{\mathfrak{U}_2}(a)$ of $a$ when viewed as an element of $\mathfrak{U}_2$*
-\begin{align}
-\sigma_{\mathfrak{U}_1}(a) = \sigma_{\mathfrak{U}_2}(a).
-\end{align}
+    Let $\mathfrak{U}_1$ be a C*-subalgebra of the C*-algebra $\mathfrak{U}_2$. If $a$ is an element of $\mathfrak{U}_1$, then the spectrum $\sigma_{\mathfrak{U}_1}(a)$ of $a$ when viewed as an element of $\mathfrak{U}_1$ is the same as the spectrum $\sigma_{\mathfrak{U}_2}(a)$ of $a$ when viewed as an element of $\mathfrak{U}_2$*
+    \begin{align}
+        \sigma_{\mathfrak{U}_1}(a) = \sigma_{\mathfrak{U}_2}(a).
+    \end{align}
 \end{theorem}
 \noindent This allows us to drop the subscript from $\sigma_{\mathfrak{U}_1}(a)$ and $\sigma_{\mathfrak{U}_2}(a)$ and to write $\sigma(a)$ unambiguously.
 
 As the von Neumann algebras $\pi_{\omega}(\mathfrak{U}(\mathbf{B_1}))''$ and $\pi_{\omega}(\mathfrak{U}(\mathbf{B_2}))''$ are both also C*-algebras, we can apply this theorem to conclude
 \begin{align}
-\sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_1))''}(A) = \sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_2))''}(A)
+    \sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_1))''}(A) = \sigma_{\pi_\omega(\mathfrak{U}(\mathbf{B}_2))''}(A)
 \end{align}
 which is a check on our use of C*-algebras (The same doesn't hold for Banach *-algebras for example.) and a check on the isotony axiom.

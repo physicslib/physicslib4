@@ -1,9 +1,9 @@
-\subsection{Regions of Measurement}\label{subsec:regions-of-measurement}
+\section{Regions of Measurement}\label{sctn:regions-of-measurement}
 In Axiom 1 (Local Algebras), the regions $\mathbf{B}$ are open sets with compact closure in Minkowski space, presumably equipped with a Euclidean topology though Haag and Kastler were silent on this point.
 
 In Haag and Kastler's original \href{https://doi.org/10.1063/1.1704187}{work}, these $\mathbf{B}$ are regions in which one ``measures'' an ``observable''. Let us focus on such open sets with compact closure and see if they do indeed represent regions in which one ``measures'' an ``observable'', or if they require modification.
 
-\subsubsection{Measurement}
+\subsection{Measurement}
 The topic of ``measurement'' is a fraught topic within quantum mechanics and, by extension, quantum field theory. What is ``measurement''? What role do ``observers'' play in ``measurement''? Does ``measurement'' collapse the wavefunction? The questions are myriad and won't be settled here.
 
 However, despite having no idea what ``measurement'' is, with just two ``plausible'' assumptions we can make progress in defining properties of the regions  $\mathbf{B}$ in which a ``measurement'' can occur.
@@ -12,7 +12,7 @@ The first ``plausible'' assumption is that the ``process of measurement'' starts
 
 The second ``plausible'' assumption is that the ``process of measurement'' stops at some point $q$ in Minkowski space.
 
-\subsubsection{Regions of Measurement}
+\subsection{Regions of Measurement}
 With these ``plausible'' assumptions, we reach the ``plausible'' conclusion that a ``measurement'', whatever that may be, when done by a massive probe, occurs within regions of the form $I^+(p) \cap I^-(q)$, where $I^+(p)$ is the chronological future of $p$ and $I^-(q)$ is the chronological past of $q$.
 
 The choice $I^+(p) \cap I^-(q)$ makes sense as, due to the constraints of special relativity, a massive probe can only perform a ``measurement'', whatever that is, in the region $I^+(p) \cap I^-(q)$.
@@ -20,17 +20,17 @@ The choice $I^+(p) \cap I^-(q)$ makes sense as, due to the constraints of specia
 This then implies that all our regions $\mathbf{B}$ should be of the form $I^+(p) \cap I^-(q)$ for appropriate $p$ and $q$ denoting the start and stop of the associated ``measurement''.
 
 
-\subsubsection{Criticisms}
+\subsection{Criticisms}
 While requiring $\mathbf{B}$ to be of the form $I^+(p) \cap I^-(q)$ is more ``natural'' than just requiring $\mathbf{B}$ be an open set with compact closure, it's still not without its problems.
 
-\paragraph{Infinite Recursion}
+\subsubsection{Infinite Recursion}
 Consider the point $p$ at which the “process of measurement” starts. This point has a set of spacetime coordinates $x_p$. These coordinates must also be ``measured'', e.g. by looking at a watch and checking GPS.
 
 However, this seemingly leads to an infinite recursion. To ``measure'' the coordinates of $p$ one must ``measure'' the coordinates of two other points $p_p$ and $q_p$ to determine the region $I^+(p_p) \cap I^-(q_p)$ in which $p$ is ``measured'', then one has to do the same for $p_p$ and $q_p$...
 
 The resolution to this problem is the simple observation that in Algebraic Quantum Field Theory (AQFT) Minkowski spacetime is treated classically. Hence, coordinates of the point $p$ and those of the point $q$ can be measured in the sense of classical mechanics without having to worry about regions of the form $I^+(p_p) \cap I^-(q_p)$, for example.
 
-\paragraph{Causal Regions of Measurement}
+\subsubsection{Causal Regions of Measurement}
 We chose regions $\mathbf{B}$ of the form $I^+(p) \cap I^-(q)$ under the assumption that probes were massive. Without any real justification this excludes massless probes. We could have also considered massive and massless probes and utilized causal instead of chronological regions.
 
 In other words we could have required our regions $\mathbf{B}$ to be of the form $J^+(p) \cap J^-(q)$, where $J^+(p)$ is the \textit{causal future} of $p$ (i.e. the set of points reachable from $p$ via a future-directed, time-like or light-like curve) and $J^-(q)$ is the \textit{causal past} of $q$ (i.e. the set of all points that reach $q$ via a future-directed, time-like or light-like curve). This, then, would allow for massless probes.
@@ -46,7 +46,7 @@ In standard quantum field theory a field is an operator-valued distribution. (Se
 Traditionally (See Section II.4.1 of \href{https://doi.org/10.1007/978-3-642-61458-3}{Haag}) AQFT motivates the passage from a standard field, i.e. an operator-valued distribution $\Phi$, to the algebra $\mathfrak{U}(\mathbf{B})$ on an open, bounded set $\mathbf{B}$ by constructing a representation of the algebra $\mathfrak{U}(\mathbf{B})$ from \textit{smearings} of $\Phi$ over $\mathbf{B}$, i.e. a representation\footnote{The notation $a_R$ used here is used instead of the more traditional $\pi_\omega(a)$ to prevent a degression into the GNS construction, which we none-the-less present later.} $a_R$ of an element $a$ of $\mathfrak{U}(\mathbf{B})$ would be defined as follows
 
 \begin{align}
-a_R \equiv \int_{\mathbf{B}} f(x) \Phi(x) \, d^4x,
+    a_R \equiv \int_{\mathbf{B}} f(x) \Phi(x) \, d^4x,
 \end{align}
 
 where $f(x)$ is a \textit{test function}, a smooth function with support in $\mathbf{B}$.
@@ -54,7 +54,7 @@ where $f(x)$ is a \textit{test function}, a smooth function with support in $\ma
 Trying to generalize this to $\mathfrak{U}(\{p\})$ immediately runs into problems. Naively a representation $b_R$ of an element $b$ in $\mathfrak{U}(\{p\})$ would be of the form
 
 \begin{align}
-b_R \equiv \int_{\{p\}} f(x) \Phi(x) \, d^4x.
+    b_R \equiv \int_{\{p\}} f(x) \Phi(x) \, d^4x.
 \end{align}
 
 However, this doesn't make any sense. $\Phi$ is an operator valued distribution and may not even be defined at $p$. Hence, $b_R$ and thus $b$ isn't defined, which in turn implies $\mathfrak{U}(\{p\})$ isn't defined.

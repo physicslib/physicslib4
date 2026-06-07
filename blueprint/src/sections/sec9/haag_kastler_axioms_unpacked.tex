@@ -1,127 +1,220 @@
-Before even stating the ``sharpened'' axioms, the first thing we need to do is to define what we mean when we say ``Minkowski spacetime.''
+\section{GNS Construction}\label{sctn:gns-construction}
+TODO
 
-\begin{definition}[Minkowski Spacetime]
-\label{def:minkowski-spacetime}
-Minkowski spacetime is the set $\mathbb{R}^4$ equipped with the Alexandrov topology, Minkowski metric, and standard time orientation $(1,0,0,0)$. (Note the Alexandrov topology is the topology in which sets of the form $I^+(p) \cap I^-(q)$ form the base.)
+\section{Spacetime}\label{sctn:spacetime}
+\begin{definition}[Spacetime]
+    \label{def:spacetime}
+    A \textit{spacetime} is a real, four-dimensional, connected, smooth, Hausdorff manifold $M$ with a globally defined smooth tensor field $g$ of type $(0,2)$ which is non-degenerate and ``Lorentzian''. By \textit{Lorentzian} we mean that for any $p \in M$ there is a basis of the tangent space $TM|_p$ to $M$ at $p$ relative to which $g|_p$ is zero in its non-diagonal entries and on the diagonal takes the form $\text{diag}(-1,1,1,1)$.
 \end{definition}
 
-With that out of the way we can state the axioms.
+\begin{definition}[Standard Minkowski Spacetime]
+    \label{def:standard-minkowski-spacetime}
+    \textit{Standard Minkowski spacetime} is a spacetime in which the underlying real, four-dimensional, connected, smooth, Hausdorff manifold is $\mathbb{R}^4$ with the Euclidean topology. In addition $g$ takes the form $g|_p=\text{diag}(-1,1,1,1)$ for all $p$ in $\mathbb{R}^4$ with respect to the standard coordinates on $\mathbb{R}^4$.
+\end{definition}
 
-\begin{axiom}[Local Algebras]
-\label{axm:local-algebras}
-\uses{def:minkowski-spacetime}
-For any basis element $\mathbf{B}$ of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
-\begin{align}
-\mathbf{B} \longmapsto \mathfrak{U}(\mathbf{B}),
-\end{align}
-and when $\mathbf{B}$ is the empty set, we have the distinguished correspondence
-\begin{align}
-\emptyset \longmapsto \mathbb{C} \mathbf{1},
-\end{align}
-where $\mathbf{1}$ is the multiplicative identity in the abstract C*-algebra $\mathbb{C} \mathbf{1}$.
-\end{axiom}
+\begin{definition}[Timelike, Spacelike, or Null Vectors]
+    \label{def:timelike-spacelike-null-vectors}
+    \uses{def:spacetime}
+    Let $M$ be a spacetime, $p$ a point in $M$, and $g$ the tensor field of type $(0,2)$ associated to $M$. Any tangent vector $v \in TM|_p$ is \textit{timelike}, \textit{spacelike}, or \textit{null} if $g|_p(v,v)$ is negative, positive, or zero respectively.
+\end{definition}
 
-\begin{axiom}[Isotony]
-\label{axm:isotony}
-\uses{def:minkowski-spacetime}
-\uses{axm:local-algebras}
-Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
+\begin{definition}[Time Orientation]
+    \label{def:time-orientable}
+    \uses{def:spacetime}
+    \uses{def:timelike-spacelike-null-vectors}
+    A spacetime $M$ is \textit{time-orientable} if it admits a smooth, non-vanishing vector field $t$ that is timelike. Such a smooth, non-vanishing vector field is called a \textit{time-orientation}.
+\end{definition}
 
-If $\mathbf{B}_1 \subset \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subset \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
-\begin{align}
-i : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2),
-\end{align}
-a unital *-monomorphism.
-\end{axiom}
+\begin{definition}[Future and Past Pointing Vectors]
+    \label{def:future-and-past-pointing-vectors}
+    \uses{def:spacetime}
+    \uses{def:timelike-spacelike-null-vectors}
+    For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
+\end{definition}
 
-Before introducing the next axiom, we must introduce two definitions:
+% TODO: Define path (defined to eb smooth), curve (defined to be smooth), past endpoint, and future endpoint
 
-\begin{definition}[Quasilocal Algebra]
-\label{def:quasilocal-algebra}
-\uses{axm:local-algebras}
-Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven, taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the *quasilocal algebra*.
+\begin{definition}[Timelike and Causal Curves]
+    \label{def:timelike-and-causal-curves}
+    \uses{def:timelike-spacelike-null-vectors}
+    A \textit{timelike curve} is a curve with a tangent vector that is timelike at every point along the curve. A \textit{causal curve} is a curve with a tangent vector that is timelike or null at every point along the curve.
+\end{definition}
+
+\begin{definition}[Future and Past Oriented Curves]
+    \label{def:future-and-past-oriented-curves}
+    \uses{def:future-and-past-pointing-vectors}
+    A \textit{future-oriented curve} is a curve with a tangent vector that is future-pointing at every point. A \textit{past-oriented curve} is a curve with a tangent vector that is past-pointing at every point.
+\end{definition}
+
+\begin{definition}[Trip]
+    \label{def:trip}
+    \uses{def:future-and-past-oriented-curves}
+    \uses{def:timelike-and-causal-curvess}
+    A \textit{trip} is a curve which is piecewise a future-oriented, timelike geodesic. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
+\end{definition}
+
+\begin{definition}[Causal Trip]
+    \label{def:causal-trip}
+    \uses{def:future-and-past-oriented-curves}
+    \uses{def:timelike-and-causal-curvess}
+    A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
+\end{definition}
+
+\begin{definition}[Chronological Future and Chronological Past]
+    \label{def:chronological-future-and-chronological-past}
+    \uses{def:standard-minkowski-spacetime}
+    \uses{def:trip}
+    For standard Minkowski spacetime $M$ and $p$ in $M$ the set $I^+(p) = \{q \in M : p \ll q\}$ is called the \textit{chronological future} of $p$. $I^-(p) = \{q \in M : q \ll p\}$ is called the \textit{chronological past} of $p$. The \textit{chronological future} of a set $S \subset M$ is the union of the chronological future of each element of the set
+    \begin{align}
+        I^+(S) = \bigcup\limits_{p \in S} I^+(p).
+    \end{align}
+    The \textit{chronological past} of $S$ is defined similarly
+    \begin{align}
+        I^-(S) = \bigcup\limits_{p \in S} I^-(p).
+    \end{align}
 \end{definition}
 
 \begin{definition}[Causal Future and Causal Past]
-\label{def:causalR-fture-and-causal-past}
-\uses{def:minkowski-spacetime}
-Consider a point $p$ in a Minkowski spacetime. The \textit{causal future} of $p$ is the set $J^+(p)$ of points reachable from $p$ via a future-directed, time-like or light-like curve. Similarly, the \textit{causal past} of $p$ is the set $J^-(p)$ of all points that reach $p$ via a future-directed, time-like or light-like curve.
+    \label{def:causal-future-and-causal-past}
+    \uses{def:standard-minkowski-spacetime}
+    \uses{def:causal-trip}
+    For standard Minkowski spacetime $M$ and $p$ in $M$ the set $J^+(p) = \{q \in M : p \prec q\}$ is called the \textit{causal future} of $p$. $J^-(p) = \{q \in M : q \prec p\}$ is called the \textit{causal past} of $p$. The \textit{causal future} of a set $S \subset M$ is the union of the causal future of each element of the set
+    \begin{align}
+        J^+(S) = \bigcup\limits_{p \in S} J^+(p).
+    \end{align}
+    The \textit{causal past} of $S$ is defined similarly
+    \begin{align}
+        J^-(S) = \bigcup\limits_{p \in S} J^-(p).
+    \end{align}
 \end{definition}
 
 \begin{definition}[Spacelike Related]
-\label{def:spacelike-related}
-\uses{def:minkowski-spacetime}
-Consider two points $p_1$ and $p_2$ in a Minkowski spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
+    \label{def:spacelike-related}
+    \uses{def:standard-minkowski-spacetime}
+    \uses{def:causal-future-and-causal-past}
+    Consider two points $p_1$ and $p_2$ in a Minkowski spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
 \end{definition}
 
 \begin{definition}[Completely Spacelike]
-\label{def:completely-spacelike}
-\uses{def:minkowski-spacetime}
-\uses{def:spacelike-related}
-Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in Minkowski spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
+    \label{def:completely-spacelike}
+    \uses{def:standard-minkowski-spacetime}
+    \uses{def:spacelike-related}
+    Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in Minkowski spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
+\end{definition}
+
+\begin{definition}[Alexandrov Topology]
+    \label{def:alexandrov-topology}
+    \uses{def:standard-minkowski-spacetime}
+    \uses{def:chronological-future-and-chronological-past}
+    \textit{Alexandrov topology} on standard Minkowski spacetime is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in standard Minkowski spacetime.
+\end{definition}
+
+\begin{definition}[Minkowski Spacetime]
+    \label{def:minkowski-spacetime}
+    \uses{def:standard-minkowski-spacetime}
+    \uses{def:alexandrov-topology}
+    \textit{Minkowski spacetime} is standard Minkowski spacetime equipped with Alexandrov topology.
+\end{definition}
+
+\section{Haag Kastler Axioms}\label{sctn:haag-kastler-axioms}
+With that out of the way we can state the axioms.
+
+\begin{axiom}[Local Algebras]
+    \label{axm:local-algebras}
+    \uses{def:minkowski-spacetime}
+    For any basis element $\mathbf{B}$ of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
+    \begin{align}
+        \mathbf{B} \longmapsto \mathfrak{U}(\mathbf{B}),
+    \end{align}
+    and when $\mathbf{B}$ is the empty set, we have the distinguished correspondence
+    \begin{align}
+        \emptyset \longmapsto \mathbb{C} \mathbf{1},
+    \end{align}
+    where $\mathbf{1}$ is the multiplicative identity in the abstract C*-algebra $\mathbb{C} \mathbf{1}$.
+\end{axiom}
+
+\begin{axiom}[Isotony]
+    \label{axm:isotony}
+    \uses{def:minkowski-spacetime}
+    \uses{axm:local-algebras}
+    Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
+    
+    If $\mathbf{B}_1 \subset \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subset \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
+    \begin{align}
+        i : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2),
+    \end{align}
+    a unital *-monomorphism.
+\end{axiom}
+
+Before introducing the next axiom, we must introduce the definition:
+
+\begin{definition}[Quasilocal Algebra]
+    \label{def:quasilocal-algebra}
+    \uses{axm:local-algebras}
+    Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven, taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the *quasilocal algebra*.
 \end{definition}
 
 \begin{axiom}[Local Commutativity]
-\label{axm:local-commutativity}
-\uses{def:minkowski-spacetime}
-\uses{def:completely-spacelike}
-\uses{axm:local-algebras}
-\uses{def:quasilocal-algebra}
-Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
-
-If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the quasilocal algebra $\mathfrak{U}$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ it follows that
-\begin{align}
-i(a_1) i(a_2) - i(a_2) i(a_1) = 0
-\end{align}
-in the quasilocal algebra $\mathfrak{U}$.
+    \label{axm:local-commutativity}
+    \uses{def:minkowski-spacetime}
+    \uses{def:completely-spacelike}
+    \uses{axm:local-algebras}
+    \uses{def:quasilocal-algebra}
+    Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
+    
+    If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the quasilocal algebra $\mathfrak{U}$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ it follows that
+    \begin{align}
+        i(a_1) i(a_2) - i(a_2) i(a_1) = 0
+    \end{align}
+    in the quasilocal algebra $\mathfrak{U}$.
 \end{axiom}
 
 The next axiom makes use of the following new definition:
 
 \begin{definition}[Quasilocal Observable]
-\label{def:quasilocal-observable}
-\uses{def:quasilocal-algebra}
-The image $\pi_\omega(a)$ of a self-adjoint member $a$ of the quasilocal algebra $\mathfrak{U}$ under a GNS *-homomorphism $\pi_\omega$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{quasilocal observable}.
+    \label{def:quasilocal-observable}
+    \uses{def:quasilocal-algebra}
+    The image $\pi_\omega(a)$ of a self-adjoint member $a$ of the quasilocal algebra $\mathfrak{U}$ under a GNS *-homomorphism $\pi_\omega$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{quasilocal observable}.
 \end{definition}
 
 \begin{axiom}[Quasilocal Algebra]
-\label{axm:quasilocal-algebra}
-\uses{def:quasilocal-observable}
-All ``observables'' are quasilocal observables.
+    \label{axm:quasilocal-algebra}
+    \uses{def:quasilocal-observable}
+    All ``observables'' are quasilocal observables.
 \end{axiom}
 
 \begin{axiom}[Lorentz Covariance]
-\label{axm:lorentz-covariance}
-\uses{def:minkowski-spacetime}
-\uses{axm:local-algebras}
-\uses{axm:isotony}
-Let $\mathbf{B}$ be any basis element of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$.
-
-A member $L$ of the inhomogeneous Lorentz group connected to the identity acts on $\mathfrak{U}(\mathbf{B})$ as follows
-\begin{align}
-\alpha_L : \mathfrak{U}(\mathbf{B}) &\longrightarrow \mathfrak{U}(L\mathbf{B}) \\
-                     a              &\longmapsto     \alpha_L(a)
-\end{align}
-where $L\mathbf{B}$ is the image of the region $\mathbf{B}$ under the transformation $L$ and $\alpha_L$ is a unital *-isomorphism generated by $L$. The map $\alpha_L$ is such that (1) for the identity element $\mathbf{1}$ of the Lorentz group it satisfies
-\begin{align}
-\alpha_{\mathbf{1}}(a) = a,
-\end{align}
-(2) for all appropriate $a$, $L$, and $L'$ it satisfies
-\begin{align}
-\alpha_{L' \cdot L}(a) = \alpha_{L'}(\alpha_{L}(a)),
-\end{align}
-and (3) for basis elements $\mathbf{B}_\iota \subset \mathbf{B}_\kappa$ and the unital *-monomorphism $i$ of Axiom 2 (Isotony) $\alpha_L$ commutes with $i$. In other words the following diagram
-
-\begin{center}
-\begin{tikzcd}
-\mathfrak{U}(\mathbf{B}_\kappa) \arrow[r, "\alpha_L"]
-& \mathfrak{U}(L\mathbf{B}_\kappa) \\
-\mathfrak{U}(\mathbf{B}_\iota) \arrow[r, "\alpha_L"]  \arrow[u, "i"]
-& \mathfrak{U}(L\mathbf{B}_\iota)  \arrow[u, "i"]
-\end{tikzcd}
-\end{center}
-
-commutes.
+    \label{axm:lorentz-covariance}
+    \uses{def:minkowski-spacetime}
+    \uses{axm:local-algebras}
+    \uses{axm:isotony}
+    Let $\mathbf{B}$ be any basis element of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$.
+    
+    A member $L$ of the inhomogeneous Lorentz group connected to the identity acts on $\mathfrak{U}(\mathbf{B})$ as follows
+    \begin{align}
+        \alpha_L : \mathfrak{U}(\mathbf{B}) &\longrightarrow \mathfrak{U}(L\mathbf{B}) \\
+                             a              &\longmapsto     \alpha_L(a)
+    \end{align}
+    where $L\mathbf{B}$ is the image of the region $\mathbf{B}$ under the transformation $L$ and $\alpha_L$ is a unital *-isomorphism generated by $L$. The map $\alpha_L$ is such that (1) for the identity element $\mathbf{1}$ of the Lorentz group it satisfies
+    \begin{align}
+        \alpha_{\mathbf{1}}(a) = a,
+    \end{align}
+    (2) for all appropriate $a$, $L$, and $L'$ it satisfies
+    \begin{align}
+        \alpha_{L' \cdot L}(a) = \alpha_{L'}(\alpha_{L}(a)),
+    \end{align}
+    and (3) for basis elements $\mathbf{B}_\iota \subset \mathbf{B}_\kappa$ and the unital *-monomorphism $i$ of Axiom 2 (Isotony) $\alpha_L$ commutes with $i$. In other words the following diagram
+    
+    \begin{center}
+        \begin{tikzcd}
+            \mathfrak{U}(\mathbf{B}_\kappa) \arrow[r, "\alpha_L"]
+            & \mathfrak{U}(L\mathbf{B}_\kappa) \\
+            \mathfrak{U}(\mathbf{B}_\iota) \arrow[r, "\alpha_L"]  \arrow[u, "i"]
+            & \mathfrak{U}(L\mathbf{B}_\iota)  \arrow[u, "i"]
+        \end{tikzcd}
+    \end{center}
+    
+    commutes.
 \end{axiom}
 
 
