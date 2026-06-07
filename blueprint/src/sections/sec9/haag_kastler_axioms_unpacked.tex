@@ -1,4 +1,4 @@
-\section{GNS Construction}\label{sctn:gns-construction}
+\section{GNS Construction Details}\label{sctn:gns-construction-details}
 TODO
 
 \section{Spacetime}\label{sctn:spacetime}
@@ -32,39 +32,62 @@ TODO
     For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
 \end{definition}
 
-% TODO: Define path (defined to eb smooth), curve (defined to be smooth), past endpoint, and future endpoint
-
-\begin{definition}[Timelike and Causal Curves]
-    \label{def:timelike-and-causal-curves}
-    \uses{def:timelike-spacelike-null-vectors}
-    A \textit{timelike curve} is a curve with a tangent vector that is timelike at every point along the curve. A \textit{causal curve} is a curve with a tangent vector that is timelike or null at every point along the curve.
+\begin{definition}[Paths]
+    \label{def:paths}
+    \uses{def:spacetime}
+    A \textit{path} is a continuous map $\mu :\Sigma \rightarrow M$ from the \textit{parameter space}--a closed, connected subset $\Sigma$ of $\mathbb{R}$ that contains more than a single point--to a spacetime $M$. A \textit{smooth path} is a path $\mu$ that is smooth and has a non-vanishing derivative.
 \end{definition}
 
-\begin{definition}[Future and Past Oriented Curves]
-    \label{def:future-and-past-oriented-curves}
+\begin{definition}[Curves]
+    \label{def:curves}
+    \uses{def:paths}
+    A \textit{curve} is an equivalence class of paths equivalent under homeomorphisms of the parameter space. A \textit{smooth curve} is an equivalence class of smooth paths equivalent under diffeomorphisms of the parameter space.
+\end{definition}
+
+\begin{definition}[Timelike and Causal Smooth Curves]
+    \label{def:timelike-and-causal-smooth-curves}
+    \uses{def:timelike-spacelike-null-vectors}
+    A \textit{timelike smooth curve} is a smooth curve with a tangent vector that is timelike at every point along the smooth curve. A \textit{causal smooth curve} is a smooth curve with a tangent vector that is timelike or null at every point along the smooth curve.
+\end{definition}
+
+\begin{definition}[Future and Past Oriented Smooth Curves]
+    \label{def:future-and-past-oriented-smooth-curves}
     \uses{def:future-and-past-pointing-vectors}
-    A \textit{future-oriented curve} is a curve with a tangent vector that is future-pointing at every point. A \textit{past-oriented curve} is a curve with a tangent vector that is past-pointing at every point.
+    A \textit{future-oriented smooth curve} is a smooth curve with a tangent vector that is future-pointing at every point. A \textit{past-oriented smooth curve} is a smooth curve with a tangent vector that is past-pointing at every point.
+\end{definition}
+
+\begin{definition}[Endpoints]
+    \label{def:endpoints}
+    \uses{def:spacetime}
+    \uses{def:paths}
+    \uses{def:curves}
+    \uses{def:timelike-and-causal-smooth-curves}
+    A point $p$ in a spacetime $M$ is the \textit{endpoint} of a path $\mu$ or its associated curve if it is a member of the image $\mu(\partial\Sigma)$ of the boundary $\partial\Sigma$ of the parameter space under $\mu$. If $\mu$ is a smooth path and its associated smooth curve is timelike and future-oriented, then an endpoint $p$ is a \textit{past endpoint} if it is the image under $\mu$ of the lesser of the two boundary components of $\partial\Sigma$. It is a \textit{future endpoint} if it is the image under $\mu$ of the greater of the two boundary components of $\partial\Sigma$.
 \end{definition}
 
 \begin{definition}[Trip]
     \label{def:trip}
-    \uses{def:future-and-past-oriented-curves}
-    \uses{def:timelike-and-causal-curvess}
+    \uses{def:curves}
+    \uses{def:future-and-past-oriented-smooth-curves}
+    \uses{def:timelike-and-causal-smooth-curves}
+    \uses{def:endpoints}
     A \textit{trip} is a curve which is piecewise a future-oriented, timelike geodesic. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
 \end{definition}
 
 \begin{definition}[Causal Trip]
     \label{def:causal-trip}
-    \uses{def:future-and-past-oriented-curves}
-    \uses{def:timelike-and-causal-curvess}
+    \uses{def:curves}
+    \uses{def:future-and-past-oriented-smooth-curves}
+    \uses{def:timelike-and-causal-smooth-curves}
+    \uses{def:endpoints}
     A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
 \end{definition}
 
 \begin{definition}[Chronological Future and Chronological Past]
     \label{def:chronological-future-and-chronological-past}
-    \uses{def:standard-minkowski-spacetime}
+    \uses{def:spacetime}
     \uses{def:trip}
-    For standard Minkowski spacetime $M$ and $p$ in $M$ the set $I^+(p) = \{q \in M : p \ll q\}$ is called the \textit{chronological future} of $p$. $I^-(p) = \{q \in M : q \ll p\}$ is called the \textit{chronological past} of $p$. The \textit{chronological future} of a set $S \subset M$ is the union of the chronological future of each element of the set
+    For a spacetime $M$ and $p$ in $M$ the set $I^+(p) = \{q \in M : p \ll q\}$ is called the \textit{chronological future} of $p$. $I^-(p) = \{q \in M : q \ll p\}$ is called the \textit{chronological past} of $p$. The \textit{chronological future} of a set $S \subset M$ is the union of the chronological future of each element of the set
     \begin{align}
         I^+(S) = \bigcup\limits_{p \in S} I^+(p).
     \end{align}
@@ -76,9 +99,9 @@ TODO
 
 \begin{definition}[Causal Future and Causal Past]
     \label{def:causal-future-and-causal-past}
-    \uses{def:standard-minkowski-spacetime}
+    \uses{def:spacetime}
     \uses{def:causal-trip}
-    For standard Minkowski spacetime $M$ and $p$ in $M$ the set $J^+(p) = \{q \in M : p \prec q\}$ is called the \textit{causal future} of $p$. $J^-(p) = \{q \in M : q \prec p\}$ is called the \textit{causal past} of $p$. The \textit{causal future} of a set $S \subset M$ is the union of the causal future of each element of the set
+    For a spacetime $M$ and $p$ in $M$ the set $J^+(p) = \{q \in M : p \prec q\}$ is called the \textit{causal future} of $p$. $J^-(p) = \{q \in M : q \prec p\}$ is called the \textit{causal past} of $p$. The \textit{causal future} of a set $S \subset M$ is the union of the causal future of each element of the set
     \begin{align}
         J^+(S) = \bigcup\limits_{p \in S} J^+(p).
     \end{align}
@@ -90,23 +113,23 @@ TODO
 
 \begin{definition}[Spacelike Related]
     \label{def:spacelike-related}
-    \uses{def:standard-minkowski-spacetime}
+    \uses{def:spacetime}
     \uses{def:causal-future-and-causal-past}
-    Consider two points $p_1$ and $p_2$ in a Minkowski spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
+    Consider two points $p_1$ and $p_2$ in a spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
 \end{definition}
 
 \begin{definition}[Completely Spacelike]
     \label{def:completely-spacelike}
-    \uses{def:standard-minkowski-spacetime}
+    \uses{def:spacetime}
     \uses{def:spacelike-related}
-    Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in Minkowski spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
+    Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in a spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
 \end{definition}
 
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
-    \uses{def:standard-minkowski-spacetime}
+    \uses{def:spacetime}
     \uses{def:chronological-future-and-chronological-past}
-    \textit{Alexandrov topology} on standard Minkowski spacetime is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in standard Minkowski spacetime.
+    \textit{Alexandrov topology} on a spacetime $M$ is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in $M$.
 \end{definition}
 
 \begin{definition}[Minkowski Spacetime]
@@ -121,7 +144,9 @@ With that out of the way we can state the axioms.
 
 \begin{axiom}[Local Algebras]
     \label{axm:local-algebras}
+    \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
+    \uses{def:chronological-future-and-chronological-past}
     For any basis element $\mathbf{B}$ of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
     \begin{align}
         \mathbf{B} \longmapsto \mathfrak{U}(\mathbf{B}),
@@ -135,7 +160,9 @@ With that out of the way we can state the axioms.
 
 \begin{axiom}[Isotony]
     \label{axm:isotony}
+    \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
+    \uses{def:chronological-future-and-chronological-past}
     \uses{axm:local-algebras}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
     
@@ -151,12 +178,14 @@ Before introducing the next axiom, we must introduce the definition:
 \begin{definition}[Quasilocal Algebra]
     \label{def:quasilocal-algebra}
     \uses{axm:local-algebras}
-    Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven, taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the *quasilocal algebra*.
+    Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven, taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the \textit{quasilocal algebra}.
 \end{definition}
 
 \begin{axiom}[Local Commutativity]
     \label{axm:local-commutativity}
+    \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
+    \uses{def:chronological-future-and-chronological-past}
     \uses{def:completely-spacelike}
     \uses{axm:local-algebras}
     \uses{def:quasilocal-algebra}
@@ -185,7 +214,9 @@ The next axiom makes use of the following new definition:
 
 \begin{axiom}[Lorentz Covariance]
     \label{axm:lorentz-covariance}
+    \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
+    \uses{def:chronological-future-and-chronological-past}
     \uses{axm:local-algebras}
     \uses{axm:isotony}
     Let $\mathbf{B}$ be any basis element of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$.
