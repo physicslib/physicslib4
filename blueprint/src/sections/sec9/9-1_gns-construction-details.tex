@@ -33,8 +33,11 @@ With this terminology we are then able to state the GNS Construction Theorem.
 
 \begin{theorem}[GNS Construction Theorem]
     \label{thrm:gns-construction-theorem}
+    \lean{Physicslib4.GNS.gns_construction}
+    \leanfile{Physicslib4/GNS/Construction.lean}
     \uses{def:state}
     \uses{def:cyclic-vector}
+    \leanok
     Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. One can then construct a Hilbert space $\mathcal{H}_\omega$ and *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ such that
     \begin{align}
         \pi_\omega(a^*) = \pi_\omega(a)^\dagger.
