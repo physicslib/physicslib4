@@ -5,9 +5,11 @@ Authors: Lean Community
 -/
 import Mathlib.Geometry.Manifold.IsManifold.Basic
 import Mathlib.Geometry.Manifold.ContMDiff.Basic
+import Mathlib.Geometry.Manifold.MFDeriv.Defs
 import Mathlib.Analysis.InnerProductSpace.EuclideanDist
 import Mathlib.LinearAlgebra.Matrix.BilinearForm
 import Mathlib.LinearAlgebra.Matrix.DotProduct
+import Mathlib.LinearAlgebra.Basis.Basic
 
 /-!
 # Spacetime
@@ -79,8 +81,8 @@ This matches the blueprint condition that there is a basis relative to which
 diagonal).
 -/
 def LorentzianAt {V : Type*} [AddCommGroup V] [Module ℝ V]
-    (g : V →ₗ[ℝ] V →ₗ[ℝ] ℝ) : Prop :=
-  ∃ b : Basis (Fin 4) ℝ V,
+    (g : V → V → ℝ) : Prop :=
+  ∃ b : Module.Basis (Fin 4) ℝ V,
     ∀ i j : Fin 4, g (b i) (b j) = lorentzSignature i j
 
 /--
@@ -138,7 +140,7 @@ structure Spacetime where
   /-- The Lorentzian condition at every point: there exists a basis of the
   tangent space relative to which `g x` has Gram matrix `diag(-1, 1, 1, 1)`. -/
   lorentzian : ∀ x : Carrier,
-    LorentzianAt ((val x).toLinearMap₂)
+    LorentzianAt (fun v w : TangentSpace model x => val x v w)
   /-- Smoothness of `g` in any extended chart: for any base point `x₀` and any
   pair of constant model-space vectors `v, w : SpacetimeModel`, the function
   `y ↦ val (e.symm y) (mfderiv model model e.symm y v) (mfderiv model model e.symm y w)`
