@@ -1,5 +1,9 @@
 import Physicslib4.Basic
 import Physicslib4.Spacetime.Basic
+import Physicslib4.Spacetime.CausalStructure
+import Physicslib4.Spacetime.Curves
+import Physicslib4.Spacetime.Causality
+import Physicslib4.Spacetime.Minkowski
 import Physicslib4.GNS.Basic
 import Physicslib4.GNS.CauchySchwarz
 import Physicslib4.GNS.Construction
