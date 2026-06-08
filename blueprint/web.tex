@@ -1,0 +1,24 @@
+% This file makes a web version of the blueprint
+% It should include all the \usepackage needed for this version.
+
+\documentclass{report}
+
+\usepackage{amssymb, amsthm, amsmath, tikz-cd}
+\usepackage{hyperref}
+\usepackage[showmore, dep_graph]{blueprint}
+
+
+\input{src/macros/common}
+\input{src/macros/web}
+
+\home{https://physicslib.github.io/physicslib4}
+\github{https://github.com/physicslib/physicslib4}
+\dochome{https://physicslib.github.io/physicslib4/docs}
+
+\title{AQFT in Lean}
+\author{Kelly J Davis}
+
+\begin{document}
+\maketitle
+\input{src/content}
+\end{document}

@@ -1,0 +1,24 @@
+% This file makes a printable version of the blueprint
+% It should include all the \usepackage needed for the pdf version.
+
+\documentclass[a4paper]{report}
+
+\usepackage{geometry}
+
+\usepackage{expl3}
+
+\usepackage{amssymb, amsthm, mathtools, tikz-cd}
+\usepackage[unicode,colorlinks=true,linkcolor=blue,urlcolor=magenta, citecolor=blue]{hyperref}
+
+\usepackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
+
+\input{src/macros/common}
+\input{src/macros/print}
+
+\title{AQFT in Lean}
+\author{Kelly J Davis}
+
+\begin{document}
+\maketitle
+\input{src/content}
+\end{document}
