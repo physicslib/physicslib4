@@ -1,137 +1,54 @@
-\section{Spacetime}\label{sctn:spacetime}
-\begin{definition}[Spacetime]
-    \label{def:spacetime}
-    A \textit{spacetime} is a real, four-dimensional, connected, smooth, Hausdorff manifold $M$ with a globally defined smooth tensor field $g$ of type $(0,2)$ which is non-degenerate and ``Lorentzian''. By \textit{Lorentzian} we mean that for any $p \in M$ there is a basis of the tangent space $TM|_p$ to $M$ at $p$ relative to which $g|_p$ is zero in its non-diagonal entries and on the diagonal takes the form $\text{diag}(-1,1,1,1)$.
-\end{definition}
+\input{sections/sec0/abstract}
+\maketitle
+\pagebreak
 
-\begin{definition}[Standard Minkowski Spacetime]
-    \label{def:standard-minkowski-spacetime}
-    \textit{Standard Minkowski spacetime} is a spacetime in which the underlying real, four-dimensional, connected, smooth, Hausdorff manifold is $\mathbb{R}^4$ with the Euclidean topology. In addition $g$ takes the form $g|_p=\text{diag}(-1,1,1,1)$ for all $p$ in $\mathbb{R}^4$ with respect to the standard coordinates on $\mathbb{R}^4$.
-\end{definition}
+\tableofcontents
+\pagebreak
 
-\begin{definition}[Timelike, Spacelike, or Null Vectors]
-    \label{def:timelike-spacelike-null-vectors}
-    \uses{def:spacetime}
-    Let $M$ be a spacetime, $p$ a point in $M$, and $g$ the tensor field of type $(0,2)$ associated to $M$. Any tangent vector $v \in TM|_p$ is \textit{timelike}, \textit{spacelike}, or \textit{null} if $g|_p(v,v)$ is negative, positive, or zero respectively.
-\end{definition}
+\chapter{Original Haag Kastler Axioms}\label{chptr:original-haag-kastler-axioms}
+\input{sections/sec1/introduction}
+\input{sections/sec1/1-1_original_haag_kastler_axioms}
 
-\begin{definition}[Time Orientation]
-    \label{def:time-orientable}
-    \uses{def:spacetime}
-    \uses{def:timelike-spacelike-null-vectors}
-    A spacetime $M$ is \textit{time-orientable} if it admits a smooth, non-vanishing vector field $t$ that is timelike. Such a smooth, non-vanishing vector field is called a \textit{time-orientation}.
-\end{definition}
+\chapter{Axiom 0 (Minkowski Space)}\label{chptr:axiom-0-(minkowski-space)}
+\input{sections/sec2/introduction}
+\input{sections/sec2/2-1_standard_topology_on_minkowski_space}
+\input{sections/sec2/2-2_indiscrete_topology_on_minkowski_space}
+\input{sections/sec2/2-3_euclidean_topology_on_minkowski_space}
+\input{sections/sec2/2-4_alexandrov_topology_on_minkowski_space}
 
-\begin{definition}[Future and Past Pointing Vectors]
-    \label{def:future-and-past-pointing-vectors}
-    \uses{def:spacetime}
-    \uses{def:timelike-spacelike-null-vectors}
-    For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
-\end{definition}
+\chapter{Axiom 1 (Local Algebras)}\label{chptr:axiom-1-(local-algebras)}
+\input{sections/sec3/introduction}
+\input{sections/sec3/3-1_regions_of_measurement}
 
-\begin{definition}[Paths]
-    \label{def:paths}
-    \uses{def:spacetime}
-    A \textit{path} is a continuous map $\mu :\Sigma \rightarrow M$ from the \textit{parameter space}--a closed, connected subset $\Sigma$ of $\mathbb{R}$ that contains more than a single point--to a spacetime $M$. A \textit{smooth path} is a path $\mu$ that is smooth and has a non-vanishing derivative.
-\end{definition}
+\chapter{Axiom 2 (Isotony)}\label{chptr:axiom-2-(isotony)}
+\input{sections/sec4/introduction}
+\input{sections/sec4/4-1_gns_construction}
+\input{sections/sec4/4-2_isotony}
+\input{sections/sec4/4-3_common_unit}
 
-\begin{definition}[Curves]
-    \label{def:curves}
-    \uses{def:paths}
-    A \textit{curve} is an equivalence class of paths equivalent under homeomorphisms of the parameter space. A \textit{smooth curve} is an equivalence class of smooth paths equivalent under diffeomorphisms of the parameter space.
-\end{definition}
+\chapter{Axiom 3 (Local Commutativity)}\label{chptr:axiom-3-(local-commutativity)}
+\input{sections/sec5/introduction}
+\input{sections/sec5/5-1_completely_spacelike}
+\input{sections/sec5/5-2_quasilocal_algebra}
 
-\begin{definition}[Timelike and Causal Smooth Curves]
-    \label{def:timelike-and-causal-smooth-curves}
-    \uses{def:timelike-spacelike-null-vectors}
-    A \textit{timelike smooth curve} is a smooth curve with a tangent vector that is timelike at every point along the smooth curve. A \textit{causal smooth curve} is a smooth curve with a tangent vector that is timelike or null at every point along the smooth curve.
-\end{definition}
+\chapter{Axiom 4 (Quasilocal Algebra)}\label{chptr:axiom-4-(quasilocal-algebra)}
+\input{sections/sec6/introduction}
+\input{sections/sec6/6-1_set_theoretic_union}
+\input{sections/sec6/6-2_completion_of_the_set_theoretic_union}
+\input{sections/sec6/6-3_all_observables_of_interest}
 
-\begin{definition}[Future and Past Oriented Smooth Curves]
-    \label{def:future-and-past-oriented-smooth-curves}
-    \uses{def:future-and-past-pointing-vectors}
-    A \textit{future-oriented smooth curve} is a smooth curve with a tangent vector that is future-pointing at every point. A \textit{past-oriented smooth curve} is a smooth curve with a tangent vector that is past-pointing at every point.
-\end{definition}
+\chapter{Axiom 5 (Lorentz Covariance)}\label{chptr:axiom-5-(lorentz-covariance)}
+\input{sections/sec7/introduction}
+\input{sections/sec7/7-1_inhomogeneous_lorentz_group}
+\input{sections/sec7/7-2_action_of_the_inhomogeneous_lorentz_groups_identity_component}
 
-\begin{definition}[Endpoints]
-    \label{def:endpoints}
-    \uses{def:spacetime}
-    \uses{def:paths}
-    \uses{def:curves}
-    \uses{def:timelike-and-causal-smooth-curves}
-    A point $p$ in a spacetime $M$ is the \textit{endpoint} of a path $\mu$ or its associated curve if it is a member of the image $\mu(\partial\Sigma)$ of the boundary $\partial\Sigma$ of the parameter space under $\mu$. If $\mu$ is a smooth path and its associated smooth curve is timelike and future-oriented, then an endpoint $p$ is a \textit{past endpoint} if it is the image under $\mu$ of the lesser of the two boundary components of $\partial\Sigma$. It is a \textit{future endpoint} if it is the image under $\mu$ of the greater of the two boundary components of $\partial\Sigma$.
-\end{definition}
+\chapter{Axioms 6 (Primitivity)}\label{chptr:axiom-6-(primitivity)}
+\input{sections/sec8/introduction}
+\input{sections/sec8/8-1_faithful_representations}
+\input{sections/sec8/8-2_faithful_and_irreducible_representations}
 
-\begin{definition}[Trip]
-    \label{def:trip}
-    \uses{def:curves}
-    \uses{def:future-and-past-oriented-smooth-curves}
-    \uses{def:timelike-and-causal-smooth-curves}
-    \uses{def:endpoints}
-    A \textit{trip} is a curve which is piecewise a future-oriented, timelike geodesic. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
-\end{definition}
-
-\begin{definition}[Causal Trip]
-    \label{def:causal-trip}
-    \uses{def:curves}
-    \uses{def:future-and-past-oriented-smooth-curves}
-    \uses{def:timelike-and-causal-smooth-curves}
-    \uses{def:endpoints}
-    A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
-\end{definition}
-
-\begin{definition}[Chronological Future and Chronological Past]
-    \label{def:chronological-future-and-chronological-past}
-    \uses{def:spacetime}
-    \uses{def:trip}
-    For a spacetime $M$ and $p$ in $M$ the set $I^+(p) = \{q \in M : p \ll q\}$ is called the \textit{chronological future} of $p$. $I^-(p) = \{q \in M : q \ll p\}$ is called the \textit{chronological past} of $p$. The \textit{chronological future} of a set $S \subset M$ is the union of the chronological future of each element of the set
-    \begin{align}
-        I^+(S) = \bigcup\limits_{p \in S} I^+(p).
-    \end{align}
-    The \textit{chronological past} of $S$ is defined similarly
-    \begin{align}
-        I^-(S) = \bigcup\limits_{p \in S} I^-(p).
-    \end{align}
-\end{definition}
-
-\begin{definition}[Causal Future and Causal Past]
-    \label{def:causal-future-and-causal-past}
-    \uses{def:spacetime}
-    \uses{def:causal-trip}
-    For a spacetime $M$ and $p$ in $M$ the set $J^+(p) = \{q \in M : p \prec q\}$ is called the \textit{causal future} of $p$. $J^-(p) = \{q \in M : q \prec p\}$ is called the \textit{causal past} of $p$. The \textit{causal future} of a set $S \subset M$ is the union of the causal future of each element of the set
-    \begin{align}
-        J^+(S) = \bigcup\limits_{p \in S} J^+(p).
-    \end{align}
-    The \textit{causal past} of $S$ is defined similarly
-    \begin{align}
-        J^-(S) = \bigcup\limits_{p \in S} J^-(p).
-    \end{align}
-\end{definition}
-
-\begin{definition}[Spacelike Related]
-    \label{def:spacelike-related}
-    \uses{def:spacetime}
-    \uses{def:causal-future-and-causal-past}
-    Consider two points $p_1$ and $p_2$ in a spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
-\end{definition}
-
-\begin{definition}[Completely Spacelike]
-    \label{def:completely-spacelike}
-    \uses{def:spacetime}
-    \uses{def:spacelike-related}
-    Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in a spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
-\end{definition}
-
-\begin{definition}[Alexandrov Topology]
-    \label{def:alexandrov-topology}
-    \uses{def:spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \textit{Alexandrov topology} on a spacetime $M$ is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in $M$.
-\end{definition}
-
-\begin{definition}[Minkowski Spacetime]
-    \label{def:minkowski-spacetime}
-    \uses{def:standard-minkowski-spacetime}
-    \uses{def:alexandrov-topology}
-    \textit{Minkowski spacetime} is standard Minkowski spacetime equipped with Alexandrov topology.
-\end{definition}
+\chapter{Haag Kastler Axioms Blueprint}\label{chptr:haag-kastler-axioms-blueprint}
+\input{sections/sec9/introduction}
+\input{sections/sec9/9-1_gns-construction-details}
+\input{sections/sec9/9-2_spacetime}
+\input{sections/sec9/9-3_haag-kastler-axioms}
