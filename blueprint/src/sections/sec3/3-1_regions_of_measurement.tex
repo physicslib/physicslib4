@@ -44,19 +44,15 @@ Second, with a $\mathbf{B}$ of the form $\{p\}$ we can use Axiom 1 to assign an 
 In standard quantum field theory a field is an operator-valued distribution. (See Section 3.10 of \href{https://doi.org/10.1017/9781108225144}{Talagrand}.) So, as it is a distribution, it is defined almost everywhere. This means that there may exist points $p$ in Minkowski space at which it is not defined.
 
 Traditionally (See Section II.4.1 of \href{https://doi.org/10.1007/978-3-642-61458-3}{Haag}) AQFT motivates the passage from a standard field, i.e. an operator-valued distribution $\Phi$, to the algebra $\mathfrak{U}(\mathbf{B})$ on an open, bounded set $\mathbf{B}$ by constructing a representation of the algebra $\mathfrak{U}(\mathbf{B})$ from \textit{smearings} of $\Phi$ over $\mathbf{B}$, i.e. a representation\footnote{The notation $a_R$ used here is used instead of the more traditional $\pi_\omega(a)$ to prevent a degression into the GNS construction, which we none-the-less present later.} $a_R$ of an element $a$ of $\mathfrak{U}(\mathbf{B})$ would be defined as follows
-
 \begin{align}
     a_R \equiv \int_{\mathbf{B}} f(x) \Phi(x) \, d^4x,
 \end{align}
-
 where $f(x)$ is a \textit{test function}, a smooth function with support in $\mathbf{B}$.
 
 Trying to generalize this to $\mathfrak{U}(\{p\})$ immediately runs into problems. Naively a representation $b_R$ of an element $b$ in $\mathfrak{U}(\{p\})$ would be of the form
-
 \begin{align}
     b_R \equiv \int_{\{p\}} f(x) \Phi(x) \, d^4x.
 \end{align}
-
 However, this doesn't make any sense. $\Phi$ is an operator valued distribution and may not even be defined at $p$. Hence, $b_R$ and thus $b$ isn't defined, which in turn implies $\mathfrak{U}(\{p\})$ isn't defined.
 
 So, all of this implies that our original choice requiring regions $\mathbf{B}$ to be of the form $I^+(p) \cap I^-(q)$, and not of the form $J^+(p) \cap J^-(q)$, was the right one.
