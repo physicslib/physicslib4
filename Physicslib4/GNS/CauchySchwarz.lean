@@ -44,6 +44,33 @@ namespace GNS
 open scoped ComplexOrder
 
 variable {A : Type*} [NonUnitalNonAssocRing A] [StarRing A] [Module ℂ A]
+  [IsScalarTower ℂ A A] [SMulCommClass ℂ A A] [StarModule ℂ A]
+
+section
+omit [IsScalarTower ℂ A A] [SMulCommClass ℂ A A] [StarModule ℂ A]
+
+/-- Expansion: `ω (star (x + y) * (x + y))` via linearity. -/
+private lemma omega_expand_add
+    (ω : A →ₗ[ℂ] ℂ) (x y : A) :
+    ω (star (x + y) * (x + y))
+      = ω (star x * x) + ω (star x * y) + ω (star y * x) + ω (star y * y) := by
+  rw [star_add, add_mul, mul_add, mul_add]
+  simp [map_add]
+  ring
+
+end
+
+/-- Expansion: `ω (star (l • a + b) * (l • a + b))` via linearity. -/
+private lemma omega_expand_smul_add
+    (ω : A →ₗ[ℂ] ℂ) (l : ℂ) (a b : A) :
+    ω (star (l • a + b) * (l • a + b))
+      = (starRingEnd ℂ l * l) * ω (star a * a)
+        + (starRingEnd ℂ l) * ω (star a * b)
+        + l * ω (star b * a)
+        + ω (star b * b) := by
+  rw [star_add, star_smul, add_mul, mul_add, mul_add]
+  simp [smul_mul_assoc, mul_smul_comm, map_add, map_smul, smul_eq_mul]
+  ring
 
 /--
 **Hermitian symmetry for positive linear functionals on a `*`-algebra**
@@ -56,7 +83,31 @@ If `ω : A →ₗ[ℂ] ℂ` satisfies `0 ≤ ω (star a * a)` for every `a : A`,
 theorem omega_star_swap_conj
     (ω : A →ₗ[ℂ] ℂ) (hω : ∀ a : A, 0 ≤ ω (star a * a)) (a b : A) :
     ω (star a * b) = star (ω (star b * a)) := by
-  sorry
+  set z := ω (star a * b)
+  set w := ω (star b * a)
+  have hRa_im : (ω (star a * a)).im = 0 := (Complex.nonneg_iff.mp (hω a)).2.symm
+  have hRb_im : (ω (star b * b)).im = 0 := (Complex.nonneg_iff.mp (hω b)).2.symm
+  have h1 := hω (a + b)
+  rw [omega_expand_add ω a b] at h1
+  have h1_im : (ω (star a * a) + z + w + ω (star b * b)).im = 0 :=
+    (Complex.nonneg_iff.mp h1).2.symm
+  have him_zw : z.im + w.im = 0 := by
+    simp [Complex.add_im, hRa_im, hRb_im] at h1_im
+    linarith
+  have h2 := hω ((Complex.I) • a + b)
+  rw [omega_expand_smul_add ω Complex.I a b] at h2
+  have hII : (starRingEnd ℂ) Complex.I * Complex.I = 1 := by
+    rw [Complex.conj_I, neg_mul, Complex.I_mul_I, neg_neg]
+  rw [hII, one_mul, Complex.conj_I] at h2
+  have h2_im : (ω (star a * a) + -Complex.I * z + Complex.I * w + ω (star b * b)).im = 0 :=
+    (Complex.nonneg_iff.mp h2).2.symm
+  have hre_zw : z.re = w.re := by
+    simp [Complex.add_im, Complex.mul_im, Complex.I_re, Complex.I_im,
+      hRa_im, hRb_im] at h2_im
+    linarith
+  apply Complex.ext
+  · rw [Complex.star_def, Complex.conj_re]; exact hre_zw
+  · rw [Complex.star_def, Complex.conj_im]; linarith
 
 /--
 **Cauchy-Schwarz inequality for positive linear functionals on a `*`-algebra**
@@ -76,7 +127,64 @@ theorem cauchy_schwarz_inequality
     (ω : A →ₗ[ℂ] ℂ) (hω : ∀ a : A, 0 ≤ ω (star a * a)) (a b : A) :
     Complex.normSq (ω (star a * b))
       ≤ (ω (star a * a)).re * (ω (star b * b)).re := by
-  sorry
+  set z := ω (star a * b) with hz_def
+  set Ra := (ω (star a * a)).re with hRa_def
+  set Rb := (ω (star b * b)).re with hRb_def
+  have hRa_nn : 0 ≤ Ra := (Complex.nonneg_iff.mp (hω a)).1
+  have hRb_nn : 0 ≤ Rb := (Complex.nonneg_iff.mp (hω b)).1
+  have hRa_im : (ω (star a * a)).im = 0 := (Complex.nonneg_iff.mp (hω a)).2.symm
+  have hRb_im : (ω (star b * b)).im = 0 := (Complex.nonneg_iff.mp (hω b)).2.symm
+  have hRa_eq : ω (star a * a) = (Ra : ℂ) := by
+    apply Complex.ext <;> simp [hRa_def, hRa_im]
+  have hRb_eq : ω (star b * b) = (Rb : ℂ) := by
+    apply Complex.ext <;> simp [hRb_def, hRb_im]
+  have hsymm : ω (star b * a) = star z := by
+    rw [hz_def, omega_star_swap_conj ω hω a b]; simp
+  have key : ∀ l : ℂ, 0 ≤ ((starRingEnd ℂ) l * l) * (Ra : ℂ)
+        + (starRingEnd ℂ) l * z + l * star z + (Rb : ℂ) := by
+    intro l
+    have h := hω (l • a + b)
+    rw [omega_expand_smul_add ω l a b, hRa_eq, hRb_eq, ← hz_def, hsymm] at h
+    exact h
+  by_cases hRa_zero : Ra = 0
+  · rw [hRa_zero, zero_mul]
+    suffices h : Complex.normSq z = 0 by rw [h]
+    by_contra hzne
+    have hzpos : 0 < Complex.normSq z :=
+      lt_of_le_of_ne (Complex.normSq_nonneg z) (Ne.symm hzne)
+    set r : ℝ := (Rb + 1) / Complex.normSq z with hr_def
+    have hr_pos : 0 < r := div_pos (by linarith) hzpos
+    have hkey := key (-(r : ℂ) * z)
+    rw [hRa_zero] at hkey
+    have hexpr : (((starRingEnd ℂ) (-(r : ℂ) * z) * (-(r : ℂ) * z)) * ((0:ℝ) : ℂ)
+        + (starRingEnd ℂ) (-(r : ℂ) * z) * z + (-(r : ℂ) * z) * star z + (Rb : ℂ)).re
+        = -2 * r * Complex.normSq z + Rb := by
+      simp [Complex.mul_re, Complex.mul_im, Complex.conj_re, Complex.conj_im,
+        Complex.ofReal_re, Complex.ofReal_im, Complex.normSq_apply]
+      ring
+    have hkey_re := (Complex.nonneg_iff.mp hkey).1
+    rw [hexpr] at hkey_re
+    have hcalc : 2 * r * Complex.normSq z = 2 * (Rb + 1) := by
+      rw [hr_def]; field_simp
+    linarith
+  · have hRa_pos : 0 < Ra := lt_of_le_of_ne hRa_nn (Ne.symm hRa_zero)
+    have hkey := key (-z / (Ra : ℂ))
+    have hexpr : (((starRingEnd ℂ) (-z / (Ra : ℂ)) * (-z / (Ra : ℂ))) * (Ra : ℂ)
+        + (starRingEnd ℂ) (-z / (Ra : ℂ)) * z + (-z / (Ra : ℂ)) * star z + (Rb : ℂ)).re
+        = -Complex.normSq z / Ra + Rb := by
+      simp only [Complex.div_re, Complex.div_im, Complex.mul_re, Complex.mul_im,
+        Complex.conj_re, Complex.conj_im, Complex.neg_re, Complex.neg_im,
+        Complex.ofReal_re, Complex.ofReal_im, Complex.add_re,
+        Complex.normSq_apply, Complex.star_def]
+      field_simp
+      ring
+    have hkey_re := (Complex.nonneg_iff.mp hkey).1
+    rw [hexpr] at hkey_re
+    have hineq : Complex.normSq z / Ra ≤ Rb := by
+      have hneg : -Complex.normSq z / Ra = -(Complex.normSq z / Ra) := by ring
+      linarith [hneg]
+    rw [mul_comm]
+    exact (div_le_iff₀ hRa_pos).mp hineq
 
 end GNS
 end Physicslib4
