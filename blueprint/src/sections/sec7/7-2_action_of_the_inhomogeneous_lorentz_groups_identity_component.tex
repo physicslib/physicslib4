@@ -1,0 +1,34 @@
+\section{Action of the Inhomogeneous Lorentz Group's Identity Component}\label{sctn:action-of-the-inhomogeneous-lorentz-groups-identity-component}
+Consider an element $L$ of the inhomogeneous Lorentz group's identity component. For a given $\mathfrak{U}(\mathbf{B})$ the action of $L$ on $\mathfrak{U}(\mathbf{B})$ should ``naturally'' take the form
+\begin{align}
+    \mathfrak{U}(\mathbf{B}) \rightarrow \mathfrak{U}(\mathbf{LB}),
+\end{align}
+where $\mathbf{LB}$ is the set that results from $L$ acting on $\mathbf{B}$.
+
+By definition the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$ is a dense subset of the quasilocal algebra $\mathfrak{U}$. Hence, this ``natural'' action of the inhomogeneous Lorentz group's identity component on elements of the form $\mathfrak{U}(\mathbf{B})$ defines its action on a dense subset of the quasilocal algebra $\mathfrak{U}$.
+
+This then leads to the question: How does one extend the action of the inhomogeneous Lorentz group's identity component to all of the quasilocal algebra $\mathfrak{U}$?
+
+It turns out, one can extend the action of the inhomogeneous Lorentz group's identity component to all of the quasilocal algebra $\mathfrak{U}$ by using the following theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
+\begin{theorem}[Bounded Linear Transformation Theorem]
+    Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+\end{theorem}
+\noindent However, before applying this theorem to the case at hand we have to recount some properties of the elements we are working with.
+
+First, as the quasilocal algebra $\mathfrak{U}$ is a C*-algebra, it is a normed space and can play the role of $V_1$ in this theorem.
+
+Second, as the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$ is a dense subset of the quasilocal algebra $\mathfrak{U}$, it can play the role of $W$ in this theorem.
+
+Next, by construction the quasilocal algebra is the completion of the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$, thus it is a Banach space. Hence, it can also play the role of $V_2$ in the theorem.
+
+Finally, the action of the inhomogeneous Lorentz group's identity component on the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$ is a bounded linear map. In fact its operator norm is 1.
+
+It's obviously linear; the remaining thing to prove is that it's bounded. The easiest manner to prove this is to think of the action of $L$ as \textit{passive}, i.e. $\mathbf{B}$ doesn't move under the action of $L$; only the coordinates used to describe $\mathbf{B}$ change. In thinking about $L$ as a passive transformation, it's obvious its norm is 1.
+
+Explicitly, the norm of an element in its domain is equal to the norm of the image of that element. Hence, the ratio that appears in the definition of the operator norm
+\begin{align}
+    \|L\| \equiv \sup\limits_{\|a\| \ne 0} \frac{\|a^L\|}{\|a\|} = \sup\limits_{\|a\| \ne 0} \frac{\|a\|}{\|a\|} = 1
+\end{align}
+is identically 1.
+
+With all of these ingredients prepared we can apply the Bounded Linear Transformation Theorem to extend the action of the inhomogeneous Lorentz group's identity component uniquely to all of the quasilocal algebra $\mathfrak{U}$, completing our examination of Axiom 5 (Lorentz Covariance).

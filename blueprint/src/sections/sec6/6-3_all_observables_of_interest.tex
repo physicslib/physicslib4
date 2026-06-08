@@ -1,0 +1,40 @@
+\section{All Observables of Interest}\label{sctn:all-observables-of-interest}
+The final assertion of this axiom states
+\begin{quote}
+    We maintain that $\mathfrak{U}$ contains all observables of interest.
+\end{quote}
+This is the only element of the axiom that isn't straightforward.
+
+As we've seen, given a state $\omega$ we can use the GNS construction to create the von Neumann algebra $\pi_\omega(\mathfrak{U})''$. ``Observables'' then correspond to self-adjoint elements of $\pi_\omega(\mathfrak{U})''$.
+
+Tracing the definitions of $\pi_\omega(\mathfrak{U})'$ and $\pi_\omega(\mathfrak{U})'' \equiv (\pi_\omega(\mathfrak{U})')'$ we see that for a generic state $\omega$
+\begin{align}
+    \pi_\omega(\mathfrak{U}) \subseteq \pi_\omega(\mathfrak{U})'',
+\end{align}
+i.e. $\pi_\omega(\mathfrak{U})$ is generically a proper subset of $\pi_\omega(\mathfrak{U})''$ and the complement of $\pi_\omega(\mathfrak{U})$ in $\pi_\omega(\mathfrak{U})''$ may not be the empty set.
+
+For the generic state $\omega$ self-adjoint elements $a$ of $\mathfrak{U}$ then correspond to ``observables'' as follows: $\pi_\omega$ is a *-homomorphism; hence, $\pi_\omega$ maps a self-adjoint element $a$ to a self-adjoint element $\pi_\omega(a)$. By construction $\pi_\omega(a)$ is within $\pi_\omega(\mathfrak{U})$ and thus within $\pi_\omega(\mathfrak{U})''$. So $\pi_\omega(a)$ is a self-adjoint element of $\pi_\omega(\mathfrak{U})''$ and thus corresponds to an ``observable''. It is in this sense that $\mathfrak{U}$ ``contains observables''.
+
+However, generically $\pi_\omega(\mathfrak{U})$ is only a proper subset of $\pi_\omega(\mathfrak{U})''$. Hence, generically there exist ``observables'' corresponding to self-adjoint elements of $\pi_\omega(\mathfrak{U})''$ that do not correspond to an element of $\mathfrak{U}$, i.e. generically self-adjoint elements of $\pi_\omega(\mathfrak{U})'' \backslash \pi_\omega(\mathfrak{U})$ exist.
+
+What are we to make of this in light of the axiom's statement ``We maintain that $\mathfrak{U}$ contains all observables of interest''?
+
+What this actually means becomes clear if we examine a related theorem. But before doing so we must dispense with a few preliminary results.
+
+The GNS construction provides a *-homomorphism $\pi_\omega$. Furthermore, our slight modification of Axiom 2 (Isotony) implies that $\mathfrak{U}$ is unital, i.e. there exists a unit $\mathbf{1}$ in $\mathfrak{U}$. Thus, $\pi_\omega(\mathfrak{U})$ is a *-subalgebra of $\mathcal{B}(\mathcal{H}_\omega)$ ( i.e. the set of bounded operators on the Hilbert space $\mathcal{H}_\omega$ ) and $\pi_\omega(\mathfrak{U})$ contains the identity operator on the Hilbert space $\pi_\omega(\mathbf{1})$.
+
+These facts together with the following theorem (Lemma 4.1.4 of \href{https://doi.org/10.1016/C2009-0-22289-6}{Murphy})
+\begin{theorem}[Unital *-algebras are Strongly Dense]
+    Let $\mathcal{H}$ be a Hilbert space and $\mathcal{S}$ a *-subalgebra of $\mathcal{B}(\mathcal{H})$ that contains the identity. Then $\mathcal{S}$ is strongly dense in $\mathcal{S}''$.
+\end{theorem}
+\noindent imply that $\pi_\omega(\mathfrak{U})$ is strongly dense in $\pi_\omega(\mathfrak{U})''$.
+
+As $\pi_\omega(\mathfrak{U})$ is strongly dense in $\pi_\omega(\mathfrak{U})''$, the definition of strongly dense implies that if one is presented with any $A''$ in $\pi_\omega(\mathfrak{U})''$ then for any $\varepsilon$ such that $0 < \varepsilon$ there exists a $\pi_\omega(a)$ in $\pi_\omega(\mathfrak{U})$ such that
+\begin{align}
+    \| \pi_\omega(a)\psi - A''\psi \| < \varepsilon
+\end{align}
+for all $\psi$ in $\mathcal{H}_\omega$. In other words the distance between the Hilbert space state $A''\psi$ and the Hilbert space state $\pi_\omega(a)\psi$ can be made as small as one likes.
+
+This implies that experimentally one is unable to measure if one is working with the operators $\pi_\omega(\mathfrak{U})$ or with the operators $\pi_\omega(\mathfrak{U})''$. So there may indeed exist self-adjoint elements of $\pi_\omega(\mathfrak{U})'' \backslash \pi_\omega(\mathfrak{U})$, but physically they are indistinguishable from elements in $\pi_\omega(\mathfrak{U})$.
+
+So, in this sense $\mathfrak{U}$ ``contains all observables of interest''.

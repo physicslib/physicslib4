@@ -1,0 +1,14 @@
+\section{Completion of the Set-Theoretic Union}\label{sctn:completion-of-the-set-theoretic-union}
+Completion of the set-theoretic union is relatively standard.
+
+One considers any Cauchy sequence $\{a_i\}$ in the set-theoretic union. The limit of such a Cauchy sequence might not be in the set-theoretic union. So, we \textit{complete} the set-theoretic union to the quasilocal algebra $\mathfrak{U}$ by asserting that $\mathfrak{U}$ contains, in addition to all the elements of the set-theoretic union, the limit of all Cauchy sequences in the set-theoretic union.
+
+It turns out that all the standard properties of a C*-algebra are retained by the completion. For example, consider a Cauchy sequence $\{a_i\}$ that converges to $a$. One has
+\begin{align}
+    \|a^*a\| - \|a\|^2 = \lim\limits_{i \rightarrow \infty} \|a_i^*a_i\| - \|a_i\|^2 = 0.
+\end{align}
+So the C*-norm property holds for the quasilocal algebra $\mathfrak{U}$. Furthermore, as a result of the following theorem (Corollary 2.2.6 of \href{https://doi.org/10.1007/978-3-662-02520-8}{Bratteli and Robinson})
+\begin{theorem}[C*-norm is Unique]
+    If $\mathfrak{U}$ is a *-algebra and there exists a norm on $\mathfrak{U}$ with the C*-norm property and with respect to which $\mathfrak{U}$ is closed, then this norm is unique.
+\end{theorem}
+\noindent this C*-norm on the quasilocal algebra $\mathfrak{U}$ is unique.
