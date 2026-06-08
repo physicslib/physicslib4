@@ -81,7 +81,10 @@ The most famous of these results is the Cauchy-Schwarz Inequality
 
 \begin{lemma}[Cauchy-Schwarz Inequality]
     \label{lmm:cauchy-schwarz-inequality}
+    \lean{Physicslib4.GNS.cauchy_schwarz_inequality}
+    \leanfile{Physicslib4/GNS/CauchySchwarz.lean}
     \uses{def:state}
+    \leanok
     Let $\mathcal{A}$ be a *-algebra and $\omega$ a \textit{positive} element of the dual space $\mathcal{A}^*$, i.e. $\omega$ is an element of the dual space $\mathcal{A}^*$ such that for any $a \in \mathcal{A}$ one has $0 \le \omega(a^*a)$. Then
     \begin{align}
         \omega(a^*b) &= \overline{\omega(b^*a)} \\
