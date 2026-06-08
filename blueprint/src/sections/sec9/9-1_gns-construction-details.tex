@@ -9,6 +9,7 @@ In this section we will state the GNS Construction Theorem, which we prove in su
 Before stating the theorem we'll need to introduce terminology that appears in the theorem's statement. We begin with the definition of "state" and some closely associated terms.
 
 \begin{definition}[State]
+    \label{def:state}
     Let $\mathfrak{U}$ be an abstract C*-algebra. A \textit{state} is an element $\omega$ of the dual space $\mathfrak{U}^*$ that is
     \begin{itemize}
         \item \textit{Positive} - for any $a \in \mathfrak{U}$ we have $0 \le \omega(a^*a)$ and
@@ -20,25 +21,29 @@ Before stating the theorem we'll need to introduce terminology that appears in t
 We will also have need of the term "cyclic vector".
 
 \begin{definition}[Cyclic Vector]
-Let $\mathcal{A}$ be an algebra represented by the bounded operators $\pi(\mathcal{A})$ on the Hilbert space $\mathcal{H}$. A vector $\Omega$ in $\mathcal{H}$ is said to be a \textit{cyclic vector} if the set
-\begin{align}
-    \{ A\Omega : A \in \pi(\mathcal{A}) \}
-\end{align}
-is dense in $\mathcal{H}$.
+    \label{def:cyclic-vector}
+    Let $\mathcal{A}$ be an algebra represented by the bounded operators $\pi(\mathcal{A})$ on the Hilbert space $\mathcal{H}$. A vector $\Omega$ in $\mathcal{H}$ is said to be a \textit{cyclic vector} if the set
+    \begin{align}
+        \{ A\Omega : A \in \pi(\mathcal{A}) \}
+    \end{align}
+    is dense in $\mathcal{H}$.
 \end{definition}
 
 With this terminology we are then able to state the GNS Construction Theorem.
 
 \begin{theorem}[GNS Construction Theorem]
-Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. One can then construct a Hilbert space $\mathcal{H}_\omega$ and *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ such that
-\begin{align}
-    \pi_\omega(a^*) = \pi_\omega(a)^\dagger.
-\end{align}
-As $\mathfrak{U}$ is unital, there exists a cyclic vector $\Omega$ in $\mathcal{H}_\omega$ for the representation $\pi_\omega$ such that
-\begin{align}
-    \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>_{\mathcal{H}_\omega}.
-\end{align}
-The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$ or the \textit{cyclic representation} of $(\mathfrak{U}, \omega)$. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
+    \label{thrm:gns-construction-theorem}
+    \uses{def:state}
+    \uses{def:cyclic-vector}
+    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. One can then construct a Hilbert space $\mathcal{H}_\omega$ and *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ such that
+    \begin{align}
+        \pi_\omega(a^*) = \pi_\omega(a)^\dagger.
+    \end{align}
+    As $\mathfrak{U}$ is unital, there exists a cyclic vector $\Omega$ in $\mathcal{H}_\omega$ for the representation $\pi_\omega$ such that
+    \begin{align}
+        \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>_{\mathcal{H}_\omega}.
+    \end{align}
+    The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$ or the \textit{cyclic representation} of $(\mathfrak{U}, \omega)$. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
 \end{theorem}
 \begin{proof}
 With the GNS Construction Theorem stated, we can now commence with its proof.
@@ -75,12 +80,14 @@ However, before being able to see this plan through we'll need to take a quick d
 The most famous of these results is the Cauchy-Schwarz Inequality
 
 \begin{lemma}[Cauchy-Schwarz Inequality]
-Let $\mathcal{A}$ be a *-algebra and $\omega$ a \textit{positive} element of the dual space $\mathcal{A}^*$, i.e. $\omega$ is an element of the dual space $\mathcal{A}^*$ such that for any $a \in \mathcal{A}$ one has $0 \le \omega(a^*a)$. Then
-\begin{align}
-    \omega(a^*b) &= \overline{\omega(b^*a)} \\
-    |\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b)
-\end{align}
-for all $a$ and $b$ in $\mathcal{A}$.
+    \label{lmm:cauchy-schwarz-inequality}
+    \uses{def:state}
+    Let $\mathcal{A}$ be a *-algebra and $\omega$ a \textit{positive} element of the dual space $\mathcal{A}^*$, i.e. $\omega$ is an element of the dual space $\mathcal{A}^*$ such that for any $a \in \mathcal{A}$ one has $0 \le \omega(a^*a)$. Then
+    \begin{align}
+        \omega(a^*b) &= \overline{\omega(b^*a)} \\
+        |\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b)
+    \end{align}
+    for all $a$ and $b$ in $\mathcal{A}$.
 \end{lemma}
 \begin{proof}
 Positivity of $\omega$ implies that for any $a$ and $b$ in $\mathcal{A}$ and $\lambda \in \mathbb{C}$ one has
@@ -157,14 +164,17 @@ follows trivially, completing our proof.
 The next result we need to prove is:
 
 \begin{lemma}
-Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}_1$ defined by
-\begin{align}
-    \mathcal{N}_1 \equiv \{ n \in \mathfrak{U} : \omega(b^*n) = 0 \;\; \forall \, b \in \mathfrak{U} \}
-\end{align}
-is equivalent to the set $\mathcal{N}$ defined by
-\begin{align}
-    \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
-\end{align}\end{lemma}
+    \label{lmm:lmm1}
+    \uses{def:state}
+    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}_1$ defined by
+    \begin{align}
+        \mathcal{N}_1 \equiv \{ n \in \mathfrak{U} : \omega(b^*n) = 0 \;\; \forall \, b \in \mathfrak{U} \}
+    \end{align}
+    is equivalent to the set $\mathcal{N}$ defined by
+    \begin{align}
+        \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
+    \end{align}
+\end{lemma}
 \begin{proof}
 We will first prove that $\mathcal{N} \subseteq \mathcal{N}_1$. Then we will prove $\mathcal{N}_1 \subseteq \mathcal{N}$. Together these imply $\mathcal{N} = \mathcal{N}_1$, the final desired result.
 
@@ -186,11 +196,13 @@ We have thus proven $\mathcal{N} \subseteq \mathcal{N}_1$ and $\mathcal{N}_1 \su
 Next we will prove $\mathcal{N}$ is a closed, linear subspace of $\mathfrak{U}$. Establishing this will allow us to take the quotient of $\mathfrak{U}$ by $\mathcal{N}$.
 
 \begin{lemma}
-Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}$ defined by
-\begin{align}
-    \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
-\end{align}
-is a closed, linear subspace of $\mathfrak{U}$.
+    \label{lmm:lmm2}
+    \uses{def:state}
+    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}$ defined by
+    \begin{align}
+        \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
+    \end{align}
+    is a closed, linear subspace of $\mathfrak{U}$.
 \end{lemma}
 \begin{proof}
 First let us prove that $\mathcal{N}$ is a linear subspace of $\mathfrak{U}$.
@@ -211,7 +223,7 @@ Next let us prove that $\mathcal{N}$ is a closed subspace of $\mathfrak{U}$.
 First, let us note that as $\omega$ is a state, it is by definition a linear, normalized operator on $\mathfrak{U}$. Hence, it is a linear, bounded operator on $\mathfrak{U}$, a normed space. Thus, as a result of the standard theorem (Theorem B.2.4 of \href{https://arxiv.org/abs/2410.16599}{Entanglement in Algebraic Quantum Field Theories})
 
 \begin{theorem}
-Let $X$ and $Y$ be normed spaces and $T: \mathcal{D}(T) \rightarrow Y$ be a linear operator where $\mathcal{D}(T) \subseteq X$. Then $T$ is continuous if and only if it is bounded.
+    Let $X$ and $Y$ be normed spaces and $T: \mathcal{D}(T) \rightarrow Y$ be a linear operator where $\mathcal{D}(T) \subseteq X$. Then $T$ is continuous if and only if it is bounded.
 \end{theorem}
 
 \noindent along with the fact that $\mathbb{C}$ is a normed space, it follows that $\omega$ is continuous.
@@ -294,11 +306,11 @@ as a result of $\omega$ being positive.
 Now as $\phi$ is a positive, linear function on the unital C*-algebra $\mathfrak{U}$ we can invoke the theorem (Chapter III Theorem 2.2.9 of \href{https://doi.org/10.1007/978-3-642-61458-3}{Haag})
 
 \begin{theorem}
-A positive, linear operator $\phi$ on a unital Banach *-algebra $\mathcal{A}$ is bounded and satisfies
-\begin{align}
-    \|\phi\| = \phi(\mathbf{1})
-\end{align}
-where $\phi(\mathbf{1})$ is $\phi$ acting on the unit $\mathbf{1}$ of $\mathcal{A}$.
+    A positive, linear operator $\phi$ on a unital Banach *-algebra $\mathcal{A}$ is bounded and satisfies
+    \begin{align}
+        \|\phi\| = \phi(\mathbf{1})
+    \end{align}
+    where $\phi(\mathbf{1})$ is $\phi$ acting on the unit $\mathbf{1}$ of $\mathcal{A}$.
 \end{theorem}
 
 \noindent to prove that $\|\phi\| = \phi(\mathbf{1})$. A short computation finds
@@ -327,7 +339,7 @@ which is the statement that $\pi_\omega(a)$ is a bounded operator on $\mathfrak{
 Thus using the following standard theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
 
 \begin{theorem}[Bounded Linear Transformation Theorem]
-Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+    Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
 \end{theorem}
 
 \noindent one can extend $\pi_\omega$ from the dense subset $\mathfrak{U} / \mathcal{N}$ of $\mathcal{H}_\omega$ to all of $\mathcal{H}_\omega$. We do so and use the same notation $\pi_\omega$ for this extension.
@@ -399,7 +411,7 @@ we find that $U$ preserves the inner product and is thus bounded. Furthermore, a
 As $U$ is bounded on its dense domain, the Bounded Linear Transformation Theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
 
 \begin{theorem}[Bounded Linear Transformation Theorem]
-Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+    Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
 \end{theorem}
 
 \noindent can be used to extend the domain of $U$ to all of $\mathcal{H}_\omega$. This gives a well-defined, unitary map from $\mathcal{H}_\omega$ to $\mathcal{H}_\omega'$ that we also denote by $U : \mathcal{H}_\omega \rightarrow \mathcal{H}_\omega'$.
@@ -445,7 +457,7 @@ Thus $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\pi_\omega(c)'\Omega'
 As $\Omega'$ is cyclic, $\pi_\omega(c)'\Omega'$ is dense in $\mathcal{H}_\omega'$, and thus the  Bounded Linear Transformation Theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
 
 \begin{theorem}[Bounded Linear Transformation Theorem]
-Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+    Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
 \end{theorem}
 
 \noindent can be invoked to prove that $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\mathcal{H}_\omega'$, proving that
@@ -459,15 +471,15 @@ and two GNS triples associated to $(\mathfrak{U}, \omega)$ can differ at most by
 This concludes the proof of the GNS Construction Theorem:
 
 \begin{theorem}[GNS Construction Theorem]
-Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. One can then construct a Hilbert space $\mathcal{H}_\omega$ and *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ such that
-\begin{align}
-    \pi_\omega(a^*) = \pi_\omega(a)^\dagger.
-\end{align}
-As $\mathfrak{U}$ is unital, there exists a cyclic vector $\Omega$ in $\mathcal{H}_\omega$ for the representation $\pi_\omega$ such that
-\begin{align}
-    \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>_{\mathcal{H}_\omega}.
-\end{align}
-    The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$ \textit{cyclic representation} of $(\mathfrak{U}, \omega)$*. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
+    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. One can then construct a Hilbert space $\mathcal{H}_\omega$ and *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ such that
+    \begin{align}
+        \pi_\omega(a^*) = \pi_\omega(a)^\dagger.
+    \end{align}
+    As $\mathfrak{U}$ is unital, there exists a cyclic vector $\Omega$ in $\mathcal{H}_\omega$ for the representation $\pi_\omega$ such that
+    \begin{align}
+        \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>_{\mathcal{H}_\omega}.
+    \end{align}
+        The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$ \textit{cyclic representation} of $(\mathfrak{U}, \omega)$*. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
 \end{theorem}
 
 \noindent The reason we provided such detail is that we will have need not only of the theorem, but also of the details of the theorem's proof in subsequent blog posts.
