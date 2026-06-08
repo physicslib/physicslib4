@@ -45,7 +45,7 @@ With this terminology we are then able to state the GNS Construction Theorem.
     \end{align}
     The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$ or the \textit{cyclic representation} of $(\mathfrak{U}, \omega)$. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
 \end{theorem}
-\begin{proof}
+
 With the GNS Construction Theorem stated, we can now commence with its proof.
 
 This proof has five parts: (1) the construction of the GNS Hilbert space $\mathcal{H}_\omega$, (2) the construction of the *-representation $\pi_\omega$, (3) the construction of the cyclic vector $\Omega$ in $\mathcal{H}_\omega$, (4) the proof that the *-representation $\pi_\omega$ is faithful, and (5) the proof of uniqueness up to unitary equivalence. Each part corresponds to a subsequent subsection.
@@ -228,9 +228,9 @@ Next let us prove that $\mathcal{N}$ is a closed subspace of $\mathfrak{U}$.
 
 First, let us note that as $\omega$ is a state, it is by definition a linear, normalized operator on $\mathfrak{U}$. Hence, it is a linear, bounded operator on $\mathfrak{U}$, a normed space. Thus, as a result of the standard theorem (Theorem B.2.4 of \href{https://arxiv.org/abs/2410.16599}{Entanglement in Algebraic Quantum Field Theories})
 
-\begin{theorem}
-    Let $X$ and $Y$ be normed spaces and $T: \mathcal{D}(T) \rightarrow Y$ be a linear operator where $\mathcal{D}(T) \subseteq X$. Then $T$ is continuous if and only if it is bounded.
-\end{theorem}
+\begin{quote}
+    \textit{Theorem.} Let $X$ and $Y$ be normed spaces and $T: \mathcal{D}(T) \rightarrow Y$ be a linear operator where $\mathcal{D}(T) \subseteq X$. Then $T$ is continuous if and only if it is bounded.
+\end{quote}
 
 \noindent along with the fact that $\mathbb{C}$ is a normed space, it follows that $\omega$ is continuous.
 
@@ -311,13 +311,13 @@ as a result of $\omega$ being positive.
 
 Now as $\phi$ is a positive, linear function on the unital C*-algebra $\mathfrak{U}$ we can invoke the theorem (Chapter III Theorem 2.2.9 of \href{https://doi.org/10.1007/978-3-642-61458-3}{Haag})
 
-\begin{theorem}
-    A positive, linear operator $\phi$ on a unital Banach *-algebra $\mathcal{A}$ is bounded and satisfies
+\begin{quote}
+    \textit{Theorem.} A positive, linear operator $\phi$ on a unital Banach *-algebra $\mathcal{A}$ is bounded and satisfies
     \begin{align}
         \|\phi\| = \phi(\mathbf{1})
     \end{align}
     where $\phi(\mathbf{1})$ is $\phi$ acting on the unit $\mathbf{1}$ of $\mathcal{A}$.
-\end{theorem}
+\end{quote}
 
 \noindent to prove that $\|\phi\| = \phi(\mathbf{1})$. A short computation finds
 \begin{align}
@@ -344,9 +344,9 @@ which is the statement that $\pi_\omega(a)$ is a bounded operator on $\mathfrak{
 
 Thus using the following standard theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
 
-\begin{theorem}[Bounded Linear Transformation Theorem]
-    Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
-\end{theorem}
+\begin{quote}
+    \textit{Bounded Linear Transformation Theorem.} Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+\end{quote}
 
 \noindent one can extend $\pi_\omega$ from the dense subset $\mathfrak{U} / \mathcal{N}$ of $\mathcal{H}_\omega$ to all of $\mathcal{H}_\omega$. We do so and use the same notation $\pi_\omega$ for this extension.
 
@@ -416,9 +416,9 @@ we find that $U$ preserves the inner product and is thus bounded. Furthermore, a
 
 As $U$ is bounded on its dense domain, the Bounded Linear Transformation Theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
 
-\begin{theorem}[Bounded Linear Transformation Theorem]
-    Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
-\end{theorem}
+\begin{quote}
+    \textit{Bounded Linear Transformation Theorem.} Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+\end{quote}
 
 \noindent can be used to extend the domain of $U$ to all of $\mathcal{H}_\omega$. This gives a well-defined, unitary map from $\mathcal{H}_\omega$ to $\mathcal{H}_\omega'$ that we also denote by $U : \mathcal{H}_\omega \rightarrow \mathcal{H}_\omega'$.
 
@@ -462,30 +462,21 @@ Thus $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\pi_\omega(c)'\Omega'
 
 As $\Omega'$ is cyclic, $\pi_\omega(c)'\Omega'$ is dense in $\mathcal{H}_\omega'$, and thus the  Bounded Linear Transformation Theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
 
-\begin{theorem}[Bounded Linear Transformation Theorem]
-    Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
-\end{theorem}
+\begin{quote}
+    \textit{Bounded Linear Transformation Theorem.} Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+\end{quote}
 
 \noindent can be invoked to prove that $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\mathcal{H}_\omega'$, proving that
 \begin{align}
     \pi_\omega(a)' = U\pi_\omega(a)U^{-1},
 \end{align}
 and two GNS triples associated to $(\mathfrak{U}, \omega)$ can differ at most by a unitary transformation, completing our proof of the GNS Construction Theorem.
-\end{proof}
 
 \subsection{Summary}
-This concludes the proof of the GNS Construction Theorem:
-
-\begin{theorem}[GNS Construction Theorem]
-    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. One can then construct a Hilbert space $\mathcal{H}_\omega$ and *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ such that
-    \begin{align}
-        \pi_\omega(a^*) = \pi_\omega(a)^\dagger.
-    \end{align}
-    As $\mathfrak{U}$ is unital, there exists a cyclic vector $\Omega$ in $\mathcal{H}_\omega$ for the representation $\pi_\omega$ such that
-    \begin{align}
-        \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>_{\mathcal{H}_\omega}.
-    \end{align}
-        The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$ \textit{cyclic representation} of $(\mathfrak{U}, \omega)$*. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
-\end{theorem}
+This concludes the proof of the GNS Construction Theorem (see Theorem~\ref{thrm:gns-construction-theorem}). To summarise: given a state $\omega$ over a unital C*-algebra $\mathfrak{U}$ one can construct a Hilbert space $\mathcal{H}_\omega$, a *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ satisfying $\pi_\omega(a^*) = \pi_\omega(a)^\dagger$, and a cyclic vector $\Omega$ in $\mathcal{H}_\omega$ such that
+\begin{align}
+    \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>_{\mathcal{H}_\omega}.
+\end{align}
+The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$, or the \textit{cyclic representation} of $(\mathfrak{U}, \omega)$. If $\omega$ is faithful then so is $\pi_\omega$, and the GNS triple is unique up to unitary equivalence.
 
 \noindent The reason we provided such detail is that we will have need not only of the theorem, but also of the details of the theorem's proof in subsequent blog posts.
