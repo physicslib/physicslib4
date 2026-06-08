@@ -78,7 +78,7 @@ The most famous of these results is the Cauchy-Schwarz Inequality
 Let $\mathcal{A}$ be a *-algebra and $\omega$ a \textit{positive} element of the dual space $\mathcal{A}^*$, i.e. $\omega$ is an element of the dual space $\mathcal{A}^*$ such that for any $a \in \mathcal{A}$ one has $0 \le \omega(a^*a)$. Then
 \begin{align}
     \omega(a^*b) &= \overline{\omega(b^*a)} \\
-|\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b)
+    |\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b)
 \end{align}
 for all $a$ and $b$ in $\mathcal{A}$.
 \end{lemma}
@@ -214,7 +214,7 @@ First, let us note that as $\omega$ is a state, it is by definition a linear, no
 Let $X$ and $Y$ be normed spaces and $T: \mathcal{D}(T) \rightarrow Y$ be a linear operator where $\mathcal{D}(T) \subseteq X$. Then $T$ is continuous if and only if it is bounded.
 \end{theorem}
 
-along with the fact that $\mathbb{C}$ is a normed space, it follows that $\omega$ is continuous.
+\noindent along with the fact that $\mathbb{C}$ is a normed space, it follows that $\omega$ is continuous.
 
 With the continuity of $\omega$ in hand, consider a sequence $(n_i)_{i \in \mathbb{N}}$ in $\mathcal{N}$ that converges to $n$ in $\mathfrak{U}$. As $\omega$ is continuous, for any $b$ in $\mathfrak{U}$ one has
 \begin{align}
@@ -277,9 +277,9 @@ Consider a non-zero $[z]$ in $\mathfrak{U} / \mathcal{N}$. Simply applying defin
     \|\pi_\omega(a)[z]\|^2 &= \|[az]\|^2 \\
                            &= \left<[az], [az]\right> \\
                            &= \omega((az)^*(az)) \\
-                           &= \omega(z^\textit{(a^}a)z) \\
-                           &= \frac{\omega(z^\textit{(a^}a)z)}{\omega(z^*z)} \omega(z^*z) \\
-                           &= \frac{\omega(z^\textit{(a^}a)z)}{\omega(z^*z)} \|[z]\|^2.
+                           &= \omega(z^*(a^*a)z) \\
+                           &= \frac{\omega(z^*(a^*a)z)}{\omega(z^*z)} \omega(z^*z) \\
+                           &= \frac{\omega(z^*(a^*a)z)}{\omega(z^*z)} \|[z]\|^2.
 \end{align}
 With that last equation in mind let us define the map $\phi$ acting on $\mathfrak{U}$ by
 \begin{align}
@@ -287,7 +287,7 @@ With that last equation in mind let us define the map $\phi$ acting on $\mathfra
 \end{align}
 One can easily check that $\phi$ when acting on $\mathfrak{U}$ is linear and positive as
 \begin{align}
-    \phi(c^*c) = \frac{\omega(z^\textit{(c^}c)z)}{\omega(z^*z)} = \frac{\omega((cz)^*(cz))}{\omega(z^*z)} \ge 0
+    \phi(c^*c) = \frac{\omega(z^*(c^*c)z)}{\omega(z^*z)} = \frac{\omega((cz)^*(cz))}{\omega(z^*z)} \ge 0
 \end{align}
 as a result of $\omega$ being positive.
 
@@ -301,7 +301,7 @@ A positive, linear operator $\phi$ on a unital Banach *-algebra $\mathcal{A}$ is
 where $\phi(\mathbf{1})$ is $\phi$ acting on the unit $\mathbf{1}$ of $\mathcal{A}$.
 \end{theorem}
 
-to prove that $\|\phi\| = \phi(\mathbf{1})$. A short computation finds
+\noindent to prove that $\|\phi\| = \phi(\mathbf{1})$. A short computation finds
 \begin{align}
     \phi(\mathbf{1}) = \frac{\omega(z^*\mathbf{1}z)}{\omega(z^*z)} = 1
 \end{align}
@@ -330,14 +330,14 @@ Thus using the following standard theorem (Theorem A.36 \href{https://doi.org/10
 *Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.*
 \end{theorem}
 
-one can extend $\pi_\omega$ from the dense subset $\mathfrak{U} / \mathcal{N}$ of $\mathcal{H}_\omega$ to all of $\mathcal{H}_\omega$. We do so and use the same notation $\pi_\omega$ for this extension.
+\noindent one can extend $\pi_\omega$ from the dense subset $\mathfrak{U} / \mathcal{N}$ of $\mathcal{H}_\omega$ to all of $\mathcal{H}_\omega$. We do so and use the same notation $\pi_\omega$ for this extension.
 
 Finally we need to prove that $\pi_\omega$ is not only an algebraic morphism but is a *-morphism. Thankfully this is relatively simple.
 
 For $[x]$ and $[y]$ in $\mathfrak{U} / \mathcal{N}$ and $a$ in $\mathfrak{U}$, we have
 \begin{align}
     \left<[x], \pi_\omega(a^*)[y]\right> &= \left<[x], [a^*y]\right> \\
-                                         &= \omega(x^\textit{a^}y) \\
+                                         &= \omega(x^*a^*y) \\
                                          &= \omega((ax)^*y) \\
                                          &= \left<[ax], [y]\right> \\
                                          &= \left<\pi_\omega(a)[x], [y]\right> \\
@@ -402,7 +402,7 @@ As $U$ is bounded on its dense domain, the Bounded Linear Transformation Theorem
 *Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.*
 \end{theorem}
 
-can be used to extend the domain of $U$ to all of $\mathcal{H}_\omega$. This gives a well-defined, unitary map from $\mathcal{H}_\omega$ to $\mathcal{H}_\omega'$ that we also denote by $U : \mathcal{H}_\omega \rightarrow \mathcal{H}_\omega'$.
+\noindent can be used to extend the domain of $U$ to all of $\mathcal{H}_\omega$. This gives a well-defined, unitary map from $\mathcal{H}_\omega$ to $\mathcal{H}_\omega'$ that we also denote by $U : \mathcal{H}_\omega \rightarrow \mathcal{H}_\omega'$.
 
 Now, the definition of $U$
 \begin{align}
@@ -448,7 +448,7 @@ As $\Omega'$ is cyclic, $\pi_\omega(c)'\Omega'$ is dense in $\mathcal{H}_\omega'
 *Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.*
 \end{theorem}
 
-can be invoked to prove that $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\mathcal{H}_\omega'$, proving that
+\noindent can be invoked to prove that $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\mathcal{H}_\omega'$, proving that
 \begin{align}
     \pi_\omega(a)' = U\pi_\omega(a)U^{-1},
 \end{align}
@@ -467,7 +467,7 @@ As $\mathfrak{U}$ is unital, there exists a cyclic vector $\Omega$ in $\mathcal{
 \begin{align}
     \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>_{\mathcal{H}_\omega}.
 \end{align}
-The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the *GNS triple associated to $(\mathfrak{U}, \omega)$\textit{ or the }cyclic representation of $(\mathfrak{U}, \omega)$*. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
+    The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$ \textit{cyclic representation} of $(\mathfrak{U}, \omega)$*. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
 \end{theorem}
 
-The reason we provided such detail is that we will have need not only of the theorem, but also of the details of the theorem's proof in subsequent blog posts.
+\noindent The reason we provided such detail is that we will have need not only of the theorem, but also of the details of the theorem's proof in subsequent blog posts.
