@@ -72,6 +72,7 @@ should replace this by the genuine geodesic condition (typically:
 auto-parallelism of the tangent vector field along the curve with
 respect to the Levi-Civita connection of `g`).
 -/
+@[nolint unusedArguments]
 def IsGeodesic (_μ : M.SmoothPath) : Prop := True
 
 /-! ### Trips and chronological precedence -/
