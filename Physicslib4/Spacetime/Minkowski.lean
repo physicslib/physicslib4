@@ -105,9 +105,10 @@ noncomputable def StandardMinkowskiSpacetime : Spacetime where
     -- The identity charted space is a `C^∞` manifold.
     infer_instance
   tangent_findim := fun _ => by
-    -- `TangentSpace` at the identity model is the model itself, which is
-    -- finite-dimensional.
-    sorry
+    -- `TangentSpace (modelWithCornersSelf ℝ SpacetimeModel) _` reduces to
+    -- `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`, which is finite-dimensional.
+    change FiniteDimensional ℝ SpacetimeModel
+    infer_instance
   val := fun _ => minkowskiForm
   symm := by
     intro _ v w
