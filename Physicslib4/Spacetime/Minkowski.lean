@@ -129,7 +129,22 @@ noncomputable def StandardMinkowskiSpacetime : Spacetime where
     -- `(PiLp.single 2 i 1).ofLp j = if j = i then 1 else 0`. Splitting on
     -- `i : Fin 4` and simplifying collapses `hi` to `v.ofLp i = 0`.
     fin_cases i <;> simp_all
-  lorentzian := by sorry
+  lorentzian := by
+    intro x
+    -- Witness: the standard orthonormal basis of `EuclideanSpace ℝ (Fin 4)`,
+    -- viewed as a `Module.Basis` via `OrthonormalBasis.toBasis`.
+    refine ⟨(EuclideanSpace.basisFun (Fin 4) ℝ).toBasis, ?_⟩
+    intro i j
+    -- Unfold the lambda and the `TangentSpace`/`OrthonormalBasis.toBasis`
+    -- machinery so the goal becomes about `minkowskiForm` on
+    -- `EuclideanSpace.single _ 1` vectors.
+    change minkowskiForm
+        ((EuclideanSpace.basisFun (Fin 4) ℝ) i)
+        ((EuclideanSpace.basisFun (Fin 4) ℝ) j) =
+        lorentzSignature i j
+    rw [EuclideanSpace.basisFun_apply, EuclideanSpace.basisFun_apply]
+    simp only [minkowskiForm_apply, lorentzSignature, Matrix.diagonal]
+    fin_cases i <;> fin_cases j <;> simp [Matrix.of_apply]
   smooth_in_charts := by sorry
 
 /-- Additive-group structure on the Minkowski spacetime carrier,
