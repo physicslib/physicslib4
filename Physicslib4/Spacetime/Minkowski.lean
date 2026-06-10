@@ -327,8 +327,83 @@ talk about the Alexandrov topology. We leave its construction as
 `∂_0` pointing in the `0`-th coordinate direction.
 -/
 noncomputable def standardMinkowskiTimeOrientation :
-    StandardMinkowskiSpacetime.TimeOrientation :=
-  sorry
+    StandardMinkowskiSpacetime.TimeOrientation where
+  field := fun _ => EuclideanSpace.single (0 : Fin 4) (1 : ℝ)
+  nonvanishing := by
+    intro x h
+    have h0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 = 1 := by
+      rw [PiLp.single_apply]; simp
+    have hzero : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 =
+        (0 : SpacetimeModel).ofLp 0 := by rw [h]; rfl
+    have hz : (0 : SpacetimeModel).ofLp 0 = (0 : ℝ) := rfl
+    rw [h0, hz] at hzero
+    exact one_ne_zero hzero
+  timelike_at := by
+    intro x
+    change minkowskiForm (EuclideanSpace.single (0 : Fin 4) (1 : ℝ))
+                         (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) < 0
+    simp only [minkowskiForm_apply]
+    have h0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 = 1 := by
+      rw [PiLp.single_apply]; simp
+    have h1 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1 = 0 := by
+      rw [PiLp.single_apply]; simp
+    have h2 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2 = 0 := by
+      rw [PiLp.single_apply]; simp
+    have h3 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3 = 0 := by
+      rw [PiLp.single_apply]; simp
+    change -((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0) *
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0) +
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1) *
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1) +
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2) *
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2) +
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3) *
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3) < 0
+    rw [h0, h1, h2, h3]
+    norm_num
+  smooth := by
+    intro x₀
+    -- `StandardMinkowskiSpacetime.Carrier = SpacetimeModel` by `rfl`. Cast
+    -- `x₀` to `SpacetimeModel` explicitly so the structure projections in
+    -- the goal reduce, matching the pattern of `smooth_in_charts`.
+    let x₀' : SpacetimeModel := x₀
+    change ContDiffWithinAt ℝ ⊤
+      (fun y => mfderiv (modelWithCornersSelf ℝ SpacetimeModel)
+                        (modelWithCornersSelf ℝ SpacetimeModel)
+          (extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm y
+          (mfderiv (modelWithCornersSelf ℝ SpacetimeModel)
+                   (modelWithCornersSelf ℝ SpacetimeModel)
+            (extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀')
+            ((extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm y)
+            (EuclideanSpace.single (0 : Fin 4) (1 : ℝ))))
+      (extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').target
+      ((extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀') x₀')
+    apply ContDiffWithinAt.congr_of_eventuallyEq
+      (f := fun _ : SpacetimeModel => EuclideanSpace.single (0 : Fin 4) (1 : ℝ))
+    · exact contDiffWithinAt_const
+    · filter_upwards with y
+      have hsymm :
+          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm =
+            (id : SpacetimeModel → SpacetimeModel) := by
+        simp
+      have hchart :
+          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀') =
+            (id : SpacetimeModel → SpacetimeModel) := by
+        simp
+      rw [hsymm, hchart]
+      simp only [mfderiv_id]
+      rfl
+    · have hsymm :
+          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm =
+            (id : SpacetimeModel → SpacetimeModel) := by
+        simp
+      have hchart :
+          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀') =
+            (id : SpacetimeModel → SpacetimeModel) := by
+        simp
+      rw [hsymm, hchart]
+      simp only [mfderiv_id]
+      rfl
 
 /-- A `Type` synonym for the carrier of standard Minkowski spacetime
 intended to carry the Alexandrov topology. -/
