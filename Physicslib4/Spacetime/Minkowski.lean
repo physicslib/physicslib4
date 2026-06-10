@@ -105,6 +105,100 @@ noncomputable instance instModuleStandardMinkowskiCarrier :
   change Module ℝ SpacetimeModel
   infer_instance
 
+/-! ### The orthochronous Lorentz group SO(1,3)↑ -/
+
+/-- A linear automorphism `L` of the spacetime model preserves the
+Minkowski form: `⟨L v, L w⟩ = ⟨v, w⟩` for all `v, w`. -/
+def IsLorentz (L : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel) : Prop :=
+  ∀ v w, minkowskiForm (L v) (L w) = minkowskiForm v w
+
+/-- A linear automorphism `L` is *proper* if its determinant is `1`. -/
+def IsProper (L : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel) : Prop :=
+  LinearMap.det L.toLinearMap = 1
+
+/-- A linear automorphism `L` is *orthochronous* if it preserves the
+direction of time: the time component of `L e₀` is positive, where
+`e₀ = EuclideanSpace.single 0 1` is the standard timelike basis vector. -/
+def IsOrthochronous (L : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel) : Prop :=
+  0 < (L (EuclideanSpace.single (0 : Fin 4) (1 : ℝ))) 0
+
+/-- The identity preserves the Minkowski form. -/
+theorem isLorentz_refl : IsLorentz (LinearEquiv.refl ℝ SpacetimeModel) := by
+  intro v w; rfl
+
+/-- The composition of two Lorentz transformations is Lorentz. -/
+theorem isLorentz_trans {L₁ L₂ : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel}
+    (h₁ : IsLorentz L₁) (h₂ : IsLorentz L₂) : IsLorentz (L₁.trans L₂) := by
+  intro v w
+  simp only [LinearEquiv.trans_apply]
+  rw [h₂, h₁]
+
+/-- The inverse of a Lorentz transformation is Lorentz. -/
+theorem isLorentz_symm {L : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel}
+    (h : IsLorentz L) : IsLorentz L.symm := by
+  intro v w
+  have := h (L.symm v) (L.symm w)
+  rw [L.apply_symm_apply, L.apply_symm_apply] at this
+  exact this.symm
+
+/-- The identity is proper. -/
+theorem isProper_refl : IsProper (LinearEquiv.refl ℝ SpacetimeModel) := by
+  unfold IsProper
+  rw [LinearEquiv.refl_toLinearMap]
+  exact LinearMap.det_id
+
+/-- The composition of two proper transformations is proper. -/
+theorem isProper_trans {L₁ L₂ : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel}
+    (h₁ : IsProper L₁) (h₂ : IsProper L₂) : IsProper (L₁.trans L₂) := by
+  unfold IsProper at h₁ h₂ ⊢
+  show LinearMap.det (L₁.trans L₂).toLinearMap = 1
+  -- `(L₁.trans L₂).toLinearMap = L₂.toLinearMap ∘ₗ L₁.toLinearMap`.
+  have : (L₁.trans L₂).toLinearMap = L₂.toLinearMap ∘ₗ L₁.toLinearMap := rfl
+  rw [this, LinearMap.det_comp, h₁, h₂, mul_one]
+
+/-- The inverse of a proper transformation is proper. -/
+theorem isProper_symm {L : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel}
+    (h : IsProper L) : IsProper L.symm := by
+  -- Use that `LinearEquiv.det` is a monoid hom to `Rˣ` and
+  -- `LinearEquiv.coe_inv_det` relates it to `LinearMap.det _.symm`.
+  unfold IsProper at h ⊢
+  have h1 : (LinearEquiv.det L : ℝ) = 1 := by
+    rw [LinearEquiv.coe_det]; exact h
+  -- `LinearMap.det L.symm = ↑(LinearEquiv.det L)⁻¹`.
+  rw [← LinearEquiv.coe_inv_det]
+  -- `↑(u⁻¹) = (↑u)⁻¹` for units, then use `h1`.
+  rw [Units.val_inv_eq_inv_val, h1, inv_one]
+
+/-- The identity is orthochronous. -/
+theorem isOrthochronous_refl :
+    IsOrthochronous (LinearEquiv.refl ℝ SpacetimeModel) := by
+  unfold IsOrthochronous
+  simp only [LinearEquiv.refl_apply]
+  -- `(EuclideanSpace.single 0 1) 0 = 1 > 0`.
+  -- `EuclideanSpace ℝ (Fin 4)` is definitionally `PiLp 2 (fun _ => ℝ)`,
+  -- and `(x : EuclideanSpace ℝ ι) i = x.ofLp i` definitionally.
+  change (0 : ℝ) < (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0
+  have : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 = 1 := by
+    rw [PiLp.single_apply]; simp
+  rw [this]
+  exact one_pos
+
+/-- The composition of two orthochronous Lorentz transformations is
+orthochronous. (Requires that both transformations are Lorentz.) -/
+theorem isOrthochronous_trans {L₁ L₂ : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel}
+    (hL₁ : IsLorentz L₁) (hO₁ : IsOrthochronous L₁)
+    (hL₂ : IsLorentz L₂) (hO₂ : IsOrthochronous L₂) :
+    IsOrthochronous (L₁.trans L₂) := by
+  -- TODO: requires reverse Cauchy-Schwarz on a Lorentzian form
+  sorry
+
+/-- The inverse of an orthochronous Lorentz transformation is
+orthochronous. -/
+theorem isOrthochronous_symm {L : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel}
+    (hL : IsLorentz L) (hO : IsOrthochronous L) : IsOrthochronous L.symm := by
+  -- TODO: requires reverse Cauchy-Schwarz on a Lorentzian form
+  sorry
+
 /-! ### Alexandrov topology -/
 
 namespace Spacetime

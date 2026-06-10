@@ -23,16 +23,14 @@ axioms, section 9.3 of the AQFT-in-Lean blueprint):
 
 ## Main definitions
 
-* `Physicslib4.AQFT.HaagKastler.InhomogeneousLorentzGroup`: a
-  concrete realisation of the inhomogeneous Lorentz group acting on
-  Minkowski spacetime, modelled as the set of pairs
-  `(L, t)` where `L : V ≃ₗ[ℝ] V` is a linear automorphism of the
-  spacetime carrier `V` and `t : V` is a translation. The group
-  operation is composition of the affine maps `x ↦ L x + t`. This
-  is the "first-pass" Poincaré group: the genuine identity
-  component of the orthochronous Lorentz group lives inside it as
-  a subgroup whose `L` lies in `SO(1,3)↑`, and a future refinement
-  can restrict to that subgroup.
+* `Physicslib4.AQFT.HaagKastler.InhomogeneousLorentzGroup`: the
+  identity component of the inhomogeneous Lorentz group acting on
+  Minkowski spacetime, modelled as the set of pairs `(L, t)` where
+  `L : V ≃ₗ[ℝ] V` is a linear automorphism of the spacetime
+  carrier `V` lying in `SO(1,3)↑` (preserves the Minkowski form,
+  has determinant `1`, and preserves the future time direction)
+  and `t : V` is a translation. The group operation is composition
+  of the affine maps `x ↦ L x + t`.
 
 * `Physicslib4.AQFT.HaagKastler.LorentzCovariance`: a `Prop`-valued
   predicate on a `LocalNet` asserting Axiom 5.
@@ -52,12 +50,14 @@ axioms, section 9.3 of the AQFT-in-Lean blueprint):
   over them: the predicate asks that *some* choice of isotony
   arrows makes the action equivariant.
 
-* The "linear" component is taken as the full group of `ℝ`-linear
-  automorphisms of `StandardMinkowskiSpacetime.Carrier`. The
-  genuine identity component of the orthochronous Lorentz group is
-  the subgroup whose linear part preserves the Minkowski metric
-  and has positive time orientation; this is the natural next
-  refinement.
+* The "linear" component is restricted to the orthochronous proper
+  Lorentz subgroup `SO(1,3)↑` of `ℝ`-linear automorphisms of
+  `StandardMinkowskiSpacetime.Carrier`: those preserving the
+  Minkowski form, with determinant `+1`, and preserving the future
+  time direction. Closure of the orthochronous condition under
+  composition and inversion is currently `sorry`-bearing (see
+  `Physicslib4.isOrthochronous_trans` and
+  `Physicslib4.isOrthochronous_symm` in `Spacetime/Minkowski.lean`).
 -/
 
 namespace Physicslib4
@@ -67,15 +67,12 @@ namespace HaagKastler
 open Physicslib4
 open scoped Pointwise
 
-/-- A concrete first-pass realisation of the inhomogeneous Lorentz
-group acting on Minkowski spacetime, as the set of pairs `(L, t)`
-where `L` is an `ℝ`-linear automorphism of the spacetime carrier
-and `t` is a translation vector. The group law is composition of
-the affine maps `x ↦ L x + t`.
-
-The genuine identity component of the orthochronous Lorentz group
-(restricting `L` to `SO(1,3)↑`) is a subgroup of this type; a
-future refinement can substitute the subgroup. -/
+/-- The identity component of the inhomogeneous Lorentz group
+acting on Minkowski spacetime, as the set of pairs `(L, t)` where
+`L` is an `ℝ`-linear automorphism of the spacetime carrier lying
+in `SO(1,3)↑` (Lorentz, proper, orthochronous) and `t` is a
+translation vector. The group law is composition of the affine
+maps `x ↦ L x + t`. -/
 structure InhomogeneousLorentzGroup where
   /-- The "Lorentz part": an `ℝ`-linear automorphism of the
   Minkowski spacetime carrier. -/
@@ -83,6 +80,12 @@ structure InhomogeneousLorentzGroup where
               StandardMinkowskiSpacetime.Carrier
   /-- The translation part: a vector in the spacetime carrier. -/
   translation : StandardMinkowskiSpacetime.Carrier
+  /-- The linear part preserves the Minkowski form. -/
+  isLorentz : IsLorentz linear
+  /-- The linear part is proper (determinant `1`). -/
+  isProper : IsProper linear
+  /-- The linear part is orthochronous (preserves the direction of time). -/
+  isOrthochronous : IsOrthochronous linear
 
 namespace InhomogeneousLorentzGroup
 
@@ -98,13 +101,24 @@ of the affine maps `x ↦ Lᵢ x + tᵢ`. -/
 noncomputable instance : Group InhomogeneousLorentzGroup where
   mul a b :=
     { linear := b.linear.trans a.linear
-      translation := a.translation + a.linear b.translation }
+      translation := a.translation + a.linear b.translation
+      isLorentz := isLorentz_trans b.isLorentz a.isLorentz
+      isProper := isProper_trans b.isProper a.isProper
+      isOrthochronous :=
+        isOrthochronous_trans b.isLorentz b.isOrthochronous
+          a.isLorentz a.isOrthochronous }
   one :=
     { linear := LinearEquiv.refl ℝ _
-      translation := 0 }
+      translation := 0
+      isLorentz := isLorentz_refl
+      isProper := isProper_refl
+      isOrthochronous := isOrthochronous_refl }
   inv a :=
     { linear := a.linear.symm
-      translation := -a.linear.symm a.translation }
+      translation := -a.linear.symm a.translation
+      isLorentz := isLorentz_symm a.isLorentz
+      isProper := isProper_symm a.isProper
+      isOrthochronous := isOrthochronous_symm a.isLorentz a.isOrthochronous }
   mul_assoc a b c := by
     refine ext ?_ ?_
     · ext x; rfl
