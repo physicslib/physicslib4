@@ -486,12 +486,24 @@ theorem chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
   sorry
 
 /-- **Characterisation of `chronologicalPast` on standard Minkowski.**
-Dual to `chronologicalFuture_standardMinkowski`. -/
+Dual to `chronologicalFuture_standardMinkowski`, obtained from it by the
+definitional time-reversal symmetry of `ChronologicallyPrecedes`. -/
 theorem chronologicalPast_standardMinkowski (q : SpacetimeModel) :
     Spacetime.chronologicalPast StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation q
       = minkowskiBackwardCone q := by
-  sorry
+  ext p
+  change p ∈ Spacetime.chronologicalPast StandardMinkowskiSpacetime
+                 standardMinkowskiTimeOrientation q
+       ↔ p ∈ minkowskiBackwardCone q
+  rw [show p ∈ Spacetime.chronologicalPast StandardMinkowskiSpacetime
+              standardMinkowskiTimeOrientation q
+        ↔ q ∈ Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+              standardMinkowskiTimeOrientation p
+        from Iff.rfl,
+      chronologicalFuture_standardMinkowski p,
+      minkowskiBackwardCone_eq]
+  rfl
 
 /-- A `Type` synonym for the carrier of standard Minkowski spacetime
 intended to carry the Alexandrov topology. -/
