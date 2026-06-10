@@ -23,14 +23,16 @@ axioms, section 9.3 of the AQFT-in-Lean blueprint):
 
 ## Main definitions
 
-* `Physicslib4.AQFT.HaagKastler.InhomogeneousLorentzGroup`: an
-  opaque placeholder for the identity component of the
-  inhomogeneous Lorentz group acting on Minkowski spacetime.
-  Mathlib (at `v4.31.0-rc1`) does not provide a packaged
-  `LorentzGroup` type (the `PhysLean` library does, but is not a
-  dependency of this project), so we leave both the group and its
-  action on `StandardMinkowskiSpacetime.Carrier` as `sorry`-bearing
-  declarations.
+* `Physicslib4.AQFT.HaagKastler.InhomogeneousLorentzGroup`: a
+  concrete realisation of the inhomogeneous Lorentz group acting on
+  Minkowski spacetime, modelled as the set of pairs
+  `(L, t)` where `L : V ≃ₗ[ℝ] V` is a linear automorphism of the
+  spacetime carrier `V` and `t : V` is a translation. The group
+  operation is composition of the affine maps `x ↦ L x + t`. This
+  is the "first-pass" Poincaré group: the genuine identity
+  component of the orthochronous Lorentz group lives inside it as
+  a subgroup whose `L` lies in `SO(1,3)↑`, and a future refinement
+  can restrict to that subgroup.
 
 * `Physicslib4.AQFT.HaagKastler.LorentzCovariance`: a `Prop`-valued
   predicate on a `LocalNet` asserting Axiom 5.
@@ -50,10 +52,12 @@ axioms, section 9.3 of the AQFT-in-Lean blueprint):
   over them: the predicate asks that *some* choice of isotony
   arrows makes the action equivariant.
 
-* The Lorentz group itself is left as an opaque `Type` with a
-  `Group` instance produced by `sorry`, to be replaced by the
-  genuine identity component of the inhomogeneous Lorentz group
-  once Mathlib (or a future blueprint section) provides one.
+* The "linear" component is taken as the full group of `ℝ`-linear
+  automorphisms of `StandardMinkowskiSpacetime.Carrier`. The
+  genuine identity component of the orthochronous Lorentz group is
+  the subgroup whose linear part preserves the Minkowski metric
+  and has positive time orientation; this is the natural next
+  refinement.
 -/
 
 namespace Physicslib4
