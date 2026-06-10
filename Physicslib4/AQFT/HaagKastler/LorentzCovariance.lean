@@ -61,30 +61,109 @@ axioms, section 9.3 of the AQFT-in-Lean blueprint):
 -/
 
 namespace Physicslib4
+
+/-- Additive-group structure on the Minkowski spacetime carrier,
+inherited from `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`. -/
+noncomputable instance instAddCommGroupCarrier :
+    AddCommGroup StandardMinkowskiSpacetime.Carrier := by
+  change AddCommGroup SpacetimeModel
+  infer_instance
+
+/-- `ℝ`-module structure on the Minkowski spacetime carrier,
+inherited from `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`. -/
+noncomputable instance instModuleCarrier :
+    Module ℝ StandardMinkowskiSpacetime.Carrier := by
+  change Module ℝ SpacetimeModel
+  infer_instance
+
 namespace AQFT
 namespace HaagKastler
 
 open Physicslib4
 open scoped Pointwise
 
-/-- A placeholder for the identity component of the inhomogeneous
-Lorentz group, acting on Minkowski spacetime.
+/-- A concrete first-pass realisation of the inhomogeneous Lorentz
+group acting on Minkowski spacetime, as the set of pairs `(L, t)`
+where `L` is an `ℝ`-linear automorphism of the spacetime carrier
+and `t` is a translation vector. The group law is composition of
+the affine maps `x ↦ L x + t`.
 
-Mathlib v4.31.0-rc1 does not provide a `LorentzGroup` type. The
-genuine construction lives in `PhysLean`, which is not a dependency
-of this project. Downstream work should replace this opaque type by
-the genuine identity component (see section 7.1 of the
-blueprint). -/
-opaque InhomogeneousLorentzGroup : Type
+The genuine identity component of the orthochronous Lorentz group
+(restricting `L` to `SO(1,3)↑`) is a subgroup of this type; a
+future refinement can substitute the subgroup. -/
+structure InhomogeneousLorentzGroup where
+  /-- The "Lorentz part": an `ℝ`-linear automorphism of the
+  Minkowski spacetime carrier. -/
+  linear : StandardMinkowskiSpacetime.Carrier ≃ₗ[ℝ]
+              StandardMinkowskiSpacetime.Carrier
+  /-- The translation part: a vector in the spacetime carrier. -/
+  translation : StandardMinkowskiSpacetime.Carrier
 
-/-- A `Group` instance on the placeholder `InhomogeneousLorentzGroup`. -/
-noncomputable instance : Group InhomogeneousLorentzGroup := sorry
+namespace InhomogeneousLorentzGroup
 
-/-- A placeholder `MulAction` of the inhomogeneous Lorentz group on
-the carrier of standard Minkowski spacetime. -/
+@[ext]
+theorem ext {a b : InhomogeneousLorentzGroup}
+    (hL : a.linear = b.linear) (ht : a.translation = b.translation) :
+    a = b := by
+  cases a; cases b; simp_all
+
+/-- Group structure on the inhomogeneous Lorentz group: the product
+`(L₁, t₁) * (L₂, t₂) = (L₁ ∘ L₂, t₁ + L₁ t₂)` is the composition
+of the affine maps `x ↦ Lᵢ x + tᵢ`. -/
+noncomputable instance : Group InhomogeneousLorentzGroup where
+  mul a b :=
+    { linear := b.linear.trans a.linear
+      translation := a.translation + a.linear b.translation }
+  one :=
+    { linear := LinearEquiv.refl ℝ _
+      translation := 0 }
+  inv a :=
+    { linear := a.linear.symm
+      translation := -a.linear.symm a.translation }
+  mul_assoc a b c := by
+    refine ext ?_ ?_
+    · ext x; rfl
+    · change (a.translation + a.linear b.translation)
+            + (b.linear.trans a.linear) c.translation
+          = a.translation
+            + a.linear (b.translation + b.linear c.translation)
+      rw [LinearEquiv.trans_apply, map_add, add_assoc]
+  one_mul a := by
+    refine ext ?_ ?_
+    · ext x; rfl
+    · change (0 : StandardMinkowskiSpacetime.Carrier)
+            + (LinearEquiv.refl ℝ _) a.translation
+          = a.translation
+      simp
+  mul_one a := by
+    refine ext ?_ ?_
+    · ext x; rfl
+    · change a.translation + a.linear 0 = a.translation
+      simp
+  inv_mul_cancel a := by
+    refine ext ?_ ?_
+    · ext x
+      change a.linear.symm (a.linear x) = x
+      simp
+    · change -a.linear.symm a.translation + a.linear.symm a.translation = 0
+      simp
+
+/-- The `MulAction` of the inhomogeneous Lorentz group on the
+Minkowski spacetime carrier: `(L, t) • x = L x + t`. -/
 noncomputable instance :
-    MulAction InhomogeneousLorentzGroup StandardMinkowskiSpacetime.Carrier :=
-  sorry
+    MulAction InhomogeneousLorentzGroup StandardMinkowskiSpacetime.Carrier where
+  smul g x := g.linear x + g.translation
+  one_smul x := by
+    change (LinearEquiv.refl ℝ _) x + (0 : StandardMinkowskiSpacetime.Carrier) = x
+    simp
+  mul_smul g h x := by
+    change (h.linear.trans g.linear) x
+          + (g.translation + g.linear h.translation)
+        = g.linear (h.linear x + h.translation) + g.translation
+    rw [LinearEquiv.trans_apply, map_add]
+    abel
+
+end InhomogeneousLorentzGroup
 
 /--
 **Axiom 5 (Lorentz Covariance).** A local net `U` is *Lorentz
