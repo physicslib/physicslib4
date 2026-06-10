@@ -91,6 +91,20 @@ noncomputable def StandardMinkowskiSpacetime : Spacetime where
   lorentzian := by sorry
   smooth_in_charts := by sorry
 
+/-- Additive-group structure on the Minkowski spacetime carrier,
+inherited from `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`. -/
+noncomputable instance instAddCommGroupStandardMinkowskiCarrier :
+    AddCommGroup StandardMinkowskiSpacetime.Carrier := by
+  change AddCommGroup SpacetimeModel
+  infer_instance
+
+/-- `ℝ`-module structure on the Minkowski spacetime carrier,
+inherited from `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`. -/
+noncomputable instance instModuleStandardMinkowskiCarrier :
+    Module ℝ StandardMinkowskiSpacetime.Carrier := by
+  change Module ℝ SpacetimeModel
+  infer_instance
+
 /-! ### Alexandrov topology -/
 
 namespace Spacetime

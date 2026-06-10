@@ -61,21 +61,6 @@ axioms, section 9.3 of the AQFT-in-Lean blueprint):
 -/
 
 namespace Physicslib4
-
-/-- Additive-group structure on the Minkowski spacetime carrier,
-inherited from `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`. -/
-noncomputable instance instAddCommGroupCarrier :
-    AddCommGroup StandardMinkowskiSpacetime.Carrier := by
-  change AddCommGroup SpacetimeModel
-  infer_instance
-
-/-- `ℝ`-module structure on the Minkowski spacetime carrier,
-inherited from `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`. -/
-noncomputable instance instModuleCarrier :
-    Module ℝ StandardMinkowskiSpacetime.Carrier := by
-  change Module ℝ SpacetimeModel
-  infer_instance
-
 namespace AQFT
 namespace HaagKastler
 
