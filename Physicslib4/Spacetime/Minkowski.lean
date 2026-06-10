@@ -109,8 +109,26 @@ noncomputable def StandardMinkowskiSpacetime : Spacetime where
     -- finite-dimensional.
     sorry
   val := fun _ => minkowskiForm
-  symm := by sorry
-  nondegenerate := by sorry
+  symm := by
+    intro _ v w
+    change minkowskiForm v w = minkowskiForm w v
+    simp only [minkowskiForm_apply]
+    ring
+  nondegenerate := by
+    intro _ v hv
+    -- `TangentSpace 𝓘(ℝ, SpacetimeModel) _` reduces to `SpacetimeModel`, so
+    -- the hypothesis `hv` can be viewed at the model type for the `PiLp` API.
+    have hv' : ∀ w : SpacetimeModel, minkowskiForm v w = 0 := hv
+    apply PiLp.ext
+    intro i
+    -- The RHS `WithLp.ofLp 0 i` reduces definitionally to `(0 : ℝ)`.
+    change v.ofLp i = (0 : ℝ)
+    -- Instantiate `hv'` at the basis vector `EuclideanSpace.single i 1`.
+    have hi := hv' (PiLp.single 2 i (1 : ℝ))
+    simp only [minkowskiForm_apply] at hi
+    -- `(PiLp.single 2 i 1).ofLp j = if j = i then 1 else 0`. Splitting on
+    -- `i : Fin 4` and simplifying collapses `hi` to `v.ofLp i = 0`.
+    fin_cases i <;> simp_all
   lorentzian := by sorry
   smooth_in_charts := by sorry
 
