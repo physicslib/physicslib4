@@ -308,6 +308,36 @@ consisting of all intersections of chronological futures and pasts.
 
 end Spacetime
 
+/-! ### The forward and backward Minkowski-cones -/
+
+/-- The *forward Minkowski-cone* of a point `p ∈ ℝ⁴`: the set of
+points `q` with `p.0 < q.0` and `-(q.0 - p.0)² + Σ_{i>0} (q.i - p.i)² < 0`.
+This is the coordinate-explicit form of the chronological future of `p`
+on standard Minkowski spacetime. -/
+def minkowskiForwardCone (p : SpacetimeModel) : Set SpacetimeModel :=
+  {q | p 0 < q 0 ∧
+    -(q 0 - p 0)^2 + (q 1 - p 1)^2 + (q 2 - p 2)^2 + (q 3 - p 3)^2 < 0}
+
+/-- The *backward Minkowski-cone* of a point `q ∈ ℝ⁴`: the set of points
+`p` with `p.0 < q.0` and `-(q.0 - p.0)² + Σ_{i>0} (q.i - p.i)² < 0`.
+Equivalently, `p ∈ minkowskiBackwardCone q ↔ q ∈ minkowskiForwardCone p`. -/
+def minkowskiBackwardCone (q : SpacetimeModel) : Set SpacetimeModel :=
+  {p | p 0 < q 0 ∧
+    -(q 0 - p 0)^2 + (q 1 - p 1)^2 + (q 2 - p 2)^2 + (q 3 - p 3)^2 < 0}
+
+@[simp] theorem mem_minkowskiForwardCone (p q : SpacetimeModel) :
+    q ∈ minkowskiForwardCone p ↔
+      p 0 < q 0 ∧
+      -(q 0 - p 0)^2 + (q 1 - p 1)^2 + (q 2 - p 2)^2 + (q 3 - p 3)^2 < 0 := Iff.rfl
+
+@[simp] theorem mem_minkowskiBackwardCone (p q : SpacetimeModel) :
+    p ∈ minkowskiBackwardCone q ↔
+      p 0 < q 0 ∧
+      -(q 0 - p 0)^2 + (q 1 - p 1)^2 + (q 2 - p 2)^2 + (q 3 - p 3)^2 < 0 := Iff.rfl
+
+theorem minkowskiBackwardCone_eq (q : SpacetimeModel) :
+    minkowskiBackwardCone q = {p | q ∈ minkowskiForwardCone p} := rfl
+
 /-! ### Minkowski spacetime -/
 
 /--
@@ -404,6 +434,64 @@ noncomputable def standardMinkowskiTimeOrientation :
       rw [hsymm, hchart]
       simp only [mfderiv_id]
       rfl
+
+/-!
+### Characterisation of the chronological future on standard Minkowski
+
+The two theorems below identify `chronologicalFuture` and
+`chronologicalPast` on `StandardMinkowskiSpacetime` (with the canonical
+time orientation `∂_0`) with the coordinate-explicit forward / backward
+Minkowski-cones. Both statements are needed downstream to compare the
+Alexandrov topology with the Euclidean topology on `ℝ⁴`; both are left
+as `sorry` here. The intended proof strategy is as follows.
+
+* **Forward direction** (`chronologicalFuture ⊆ minkowskiForwardCone`):
+  given a chronological trip from `p` to `q`, one has a smooth curve
+  `μ : [a, b] → ℝ⁴` whose tangent `μ'(s)` is everywhere timelike
+  (`g(μ'(s), μ'(s)) < 0`) and future-oriented
+  (`g(∂_0, μ'(s)) < 0`). Integrating `μ'` over `[a, b]` yields
+  `q - p = ∫_a^b μ'(s) ds`. The open forward time-cone in `ℝ⁴` is a
+  convex cone (closed under positive-linear combinations of timelike
+  future-oriented vectors), so `q - p` lies in the open forward cone,
+  i.e. `(q - p) 0 > 0` and `-((q - p) 0)^2 + Σ_{i>0} ((q - p) i)^2 < 0`.
+* **Reverse direction** (`minkowskiForwardCone ⊆ chronologicalFuture`):
+  given `q ∈ minkowskiForwardCone p`, define the straight-line path
+  `μ : [0, 1] → ℝ⁴`, `s ↦ p + s • (q - p)`. Then `μ` is linear, hence
+  `C^∞`; its derivative is the constant vector `q - p`, which is
+  nonvanishing (since `p 0 < q 0` forces `q ≠ p`), timelike (the
+  Minkowski form of `q - p` with itself is the hypothesis), and
+  future-oriented (since `(q - p) 0 > 0`). The geodesic flag
+  `IsGeodesic = True` is automatic for the chosen API, and the endpoint
+  conditions are witnessed by `0`, `1 ∈ frontier (Set.Icc 0 1) = {0, 1}`
+  together with `μ 0 = p` and `μ 1 = q`.
+
+Both directions ultimately appeal to the smooth-curve API in
+`Physicslib4.Spacetime.Curves` and the chronological-trip definition in
+`Physicslib4.Spacetime.Causality`. They are genuine follow-up work and
+are tracked as the two remaining `sorry`s in this file (in addition to
+the topology / smooth-structure transport `sorry`s on
+`MinkowskiSpacetime` further below).
+-/
+
+/-- **Characterisation of `chronologicalFuture` on standard Minkowski.**
+The chronological future of `p` on `StandardMinkowskiSpacetime` agrees with
+the forward Minkowski-cone of `p`. This is the coordinate-explicit form of
+`I⁺(p)` that lets the agreement of the Alexandrov topology with the
+Euclidean topology on `ℝ⁴` be proved. Both directions reduce to the
+smooth-curve API and are left as `sorry` here; see the roadmap above. -/
+theorem chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
+    Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation p
+      = minkowskiForwardCone p := by
+  sorry
+
+/-- **Characterisation of `chronologicalPast` on standard Minkowski.**
+Dual to `chronologicalFuture_standardMinkowski`. -/
+theorem chronologicalPast_standardMinkowski (q : SpacetimeModel) :
+    Spacetime.chronologicalPast StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation q
+      = minkowskiBackwardCone q := by
+  sorry
 
 /-- A `Type` synonym for the carrier of standard Minkowski spacetime
 intended to carry the Alexandrov topology. -/
