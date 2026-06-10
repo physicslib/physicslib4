@@ -7,6 +7,7 @@ import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Causality
+import Mathlib.Geometry.Manifold.MFDeriv.SpecificFunctions
 
 /-!
 # Minkowski spacetime and the Alexandrov topology
@@ -146,7 +147,33 @@ noncomputable def StandardMinkowskiSpacetime : Spacetime where
     rw [EuclideanSpace.basisFun_apply, EuclideanSpace.basisFun_apply]
     simp only [minkowskiForm_apply, lorentzSignature, Matrix.diagonal]
     fin_cases i <;> fin_cases j <;> simp [Matrix.of_apply]
-  smooth_in_charts := by sorry
+  smooth_in_charts := by
+    intro x₀ v w
+    -- Unfold the `let e := extChartAt ... x₀` binding.
+    simp only
+    -- On the model space, `mfderiv I I (e.symm) y = id`, so the integrand is
+    -- the constant `minkowskiForm v w` on `e.target = univ`.
+    apply ContDiffWithinAt.congr_of_eventuallyEq
+      (f := fun _ : SpacetimeModel => minkowskiForm v w)
+    · exact contDiffWithinAt_const
+    · -- Pointwise equality of the integrand with the constant `minkowskiForm v w`
+      -- on a neighborhood of `e x₀` within `e.target`.
+      filter_upwards with y
+      have hsymm :
+          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀).symm =
+            (id : SpacetimeModel → SpacetimeModel) := by
+        simp
+      rw [hsymm, mfderiv_id]
+      rfl
+    · -- `(fun _ => minkowskiForm v w) (e x₀) = minkowskiForm v w`, and the
+      -- function we replaced it with also evaluates to `minkowskiForm v w`
+      -- at `y = e x₀` (since `e.symm (e x₀) = x₀` and `mfderiv id = id`).
+      have hsymm :
+          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀).symm =
+            (id : SpacetimeModel → SpacetimeModel) := by
+        simp
+      rw [hsymm, mfderiv_id]
+      rfl
 
 /-- Additive-group structure on the Minkowski spacetime carrier,
 inherited from `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`. -/
