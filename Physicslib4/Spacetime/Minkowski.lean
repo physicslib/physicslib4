@@ -440,11 +440,48 @@ noncomputable def MinkowskiSpacetime : Spacetime where
     sorry
   model := StandardMinkowskiSpacetime.model
   isManifold := by sorry
-  tangent_findim := by sorry
-  val := by sorry
-  symm := by sorry
-  nondegenerate := by sorry
-  lorentzian := by sorry
+  tangent_findim := fun _ => by
+    -- `TangentSpace (modelWithCornersSelf ℝ SpacetimeModel) _` reduces to
+    -- `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`, which is finite-dimensional.
+    change FiniteDimensional ℝ SpacetimeModel
+    infer_instance
+  val := fun _ => minkowskiForm
+  symm := by
+    intro _ v w
+    change minkowskiForm v w = minkowskiForm w v
+    simp only [minkowskiForm_apply]
+    ring
+  nondegenerate := by
+    intro _ v hv
+    -- `TangentSpace 𝓘(ℝ, SpacetimeModel) _` reduces to `SpacetimeModel`, so
+    -- the hypothesis `hv` can be viewed at the model type for the `PiLp` API.
+    have hv' : ∀ w : SpacetimeModel, minkowskiForm v w = 0 := hv
+    apply PiLp.ext
+    intro i
+    -- The RHS `WithLp.ofLp 0 i` reduces definitionally to `(0 : ℝ)`.
+    change v.ofLp i = (0 : ℝ)
+    -- Instantiate `hv'` at the basis vector `EuclideanSpace.single i 1`.
+    have hi := hv' (PiLp.single 2 i (1 : ℝ))
+    simp only [minkowskiForm_apply] at hi
+    -- `(PiLp.single 2 i 1).ofLp j = if j = i then 1 else 0`. Splitting on
+    -- `i : Fin 4` and simplifying collapses `hi` to `v.ofLp i = 0`.
+    fin_cases i <;> simp_all
+  lorentzian := by
+    intro x
+    -- Witness: the standard orthonormal basis of `EuclideanSpace ℝ (Fin 4)`,
+    -- viewed as a `Module.Basis` via `OrthonormalBasis.toBasis`.
+    refine ⟨(EuclideanSpace.basisFun (Fin 4) ℝ).toBasis, ?_⟩
+    intro i j
+    -- Unfold the lambda and the `TangentSpace`/`OrthonormalBasis.toBasis`
+    -- machinery so the goal becomes about `minkowskiForm` on
+    -- `EuclideanSpace.single _ 1` vectors.
+    change minkowskiForm
+        ((EuclideanSpace.basisFun (Fin 4) ℝ) i)
+        ((EuclideanSpace.basisFun (Fin 4) ℝ) j) =
+        lorentzSignature i j
+    rw [EuclideanSpace.basisFun_apply, EuclideanSpace.basisFun_apply]
+    simp only [minkowskiForm_apply, lorentzSignature, Matrix.diagonal]
+    fin_cases i <;> fin_cases j <;> simp [Matrix.of_apply]
   smooth_in_charts := by sorry
 
 end Physicslib4
