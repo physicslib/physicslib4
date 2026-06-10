@@ -3,6 +3,8 @@ With that out of the way we can state the axioms. Each axiom below is presented 
 
 \begin{definition}[Axiom 1: Local Algebras]
     \label{def:local-algebras}
+    \lean{Physicslib4.AQFT.HaagKastler.LocalNet}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalAlgebras.lean}
     \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
     \uses{def:chronological-future-and-chronological-past}
@@ -19,6 +21,8 @@ With that out of the way we can state the axioms. Each axiom below is presented 
 
 \begin{definition}[Axiom 2: Isotony]
     \label{def:isotony}
+    \lean{Physicslib4.AQFT.HaagKastler.Isotony}
+    \leanfile{Physicslib4/AQFT/HaagKastler/Isotony.lean}
     \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
     \uses{def:chronological-future-and-chronological-past}
@@ -42,6 +46,8 @@ Before introducing the next axiom, we must introduce the definition:
 
 \begin{definition}[Axiom 3: Local Commutativity]
     \label{def:local-commutativity}
+    \lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalCommutativity.lean}
     \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
     \uses{def:chronological-future-and-chronological-past}
@@ -69,12 +75,16 @@ The next axiom makes use of the following new definition:
 
 \begin{definition}[Axiom 4: Quasilocal Completeness]
     \label{def:quasilocal-completeness}
+    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalCompleteness.lean}
     \uses{def:quasilocal-observable}
     All ``observables'' are quasilocal observables.
 \end{definition}
 
 \begin{definition}[Axiom 5: Lorentz Covariance]
     \label{def:lorentz-covariance}
+    \lean{Physicslib4.AQFT.HaagKastler.LorentzCovariance}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LorentzCovariance.lean}
     \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
     \uses{def:chronological-future-and-chronological-past}
@@ -111,6 +121,8 @@ The next axiom makes use of the following new definition:
 
 \begin{definition}[Haag-Kastler Net]
     \label{def:haag-kastler-net}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet}
+    \leanfile{Physicslib4/AQFT/HaagKastler/Net.lean}
     \uses{def:local-algebras}
     \uses{def:isotony}
     \uses{def:local-commutativity}
