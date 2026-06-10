@@ -88,6 +88,32 @@ structure LocalNet where
 
 attribute [instance] LocalNet.instCStarAlgebra
 
+/-!
+**Unitality.** In `Mathlib v4.31.0-rc1`, `CStarAlgebra` is *defined* as
+the class of *unital* (complex) C\*-algebras: it extends `NormedRing`
+(which extends `Ring`, so we get `(1 : algebra B)` for free) plus
+`StarRing`, `CStarRing`, `NormedAlgebra ℂ _`, etc. The non-unital
+version is the separately-named `NonUnitalCStarAlgebra` class.
+Consequently `(1 : U.algebra B)` is available for every `B`, and
+every `StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂)` automatically
+preserves `1` (via its `AlgHom` parent). The blueprint's "unital
+\*-monomorphism" language in downstream axioms (Isotony, Lorentz
+Covariance, ...) is therefore honoured by the present `LocalNet`
+structure without an extra `One`/`NormedAlgebra` bundle. -/
+
+-- Compile-time witnesses for the docstring above. These also serve as
+-- a regression check should the underlying Mathlib `CStarAlgebra`
+-- class drift back to a non-unital baseline.
+
+example (U : LocalNet) (B : Set StandardMinkowskiSpacetime.Carrier) :
+    U.algebra B :=
+  (1 : U.algebra B)
+
+example (U : LocalNet) (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier)
+    (φ : StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂)) :
+    φ (1 : U.algebra B₁) = (1 : U.algebra B₂) :=
+  map_one φ
+
 end HaagKastler
 end AQFT
 end Physicslib4
