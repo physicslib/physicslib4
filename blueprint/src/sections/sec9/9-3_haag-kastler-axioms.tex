@@ -1,8 +1,8 @@
 \section{Haag Kastler Axioms}\label{sctn:haag-kastler-axioms}
-With that out of the way we can state the axioms.
+With that out of the way we can state the axioms. Each axiom below is presented as a \emph{definition} so that it is captured as a node in the blueprint declaration graph. In the Lean formalization each axiom corresponds to a \texttt{Prop}-valued predicate (or, in the case of \emph{Local Algebras}, a data field), and the bundling structure \texttt{HaagKastlerNet} packages them together (see \cref{def:haag-kastler-net}). Downstream theorems take an instance of \texttt{HaagKastlerNet} as a hypothesis and invoke each axiom as a projection.
 
-\begin{axiom}[Local Algebras]
-    \label{axm:local-algebras}
+\begin{definition}[Axiom 1: Local Algebras]
+    \label{def:local-algebras}
     \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
     \uses{def:chronological-future-and-chronological-past}
@@ -15,47 +15,47 @@ With that out of the way we can state the axioms.
         \emptyset \longmapsto \mathbb{C} \mathbf{1},
     \end{align}
     where $\mathbf{1}$ is the multiplicative identity in the abstract C*-algebra $\mathbb{C} \mathbf{1}$.
-\end{axiom}
+\end{definition}
 
-\begin{axiom}[Isotony]
-    \label{axm:isotony}
+\begin{definition}[Axiom 2: Isotony]
+    \label{def:isotony}
     \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
     \uses{def:chronological-future-and-chronological-past}
-    \uses{axm:local-algebras}
+    \uses{def:local-algebras}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
-    
+
     If $\mathbf{B}_1 \subset \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subset \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
     \begin{align}
         i : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2),
     \end{align}
     a unital *-monomorphism.
-\end{axiom}
+\end{definition}
 
 Before introducing the next axiom, we must introduce the definition:
 
 \begin{definition}[Quasilocal Algebra]
     \label{def:quasilocal-algebra}
-    \uses{axm:local-algebras}
+    \uses{def:local-algebras}
     Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven, taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the \textit{quasilocal algebra}.
 \end{definition}
 
-\begin{axiom}[Local Commutativity]
-    \label{axm:local-commutativity}
+\begin{definition}[Axiom 3: Local Commutativity]
+    \label{def:local-commutativity}
     \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
     \uses{def:chronological-future-and-chronological-past}
     \uses{def:completely-spacelike}
-    \uses{axm:local-algebras}
+    \uses{def:local-algebras}
     \uses{def:quasilocal-algebra}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
-    
+
     If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the quasilocal algebra $\mathfrak{U}$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ it follows that
     \begin{align}
         i(a_1) i(a_2) - i(a_2) i(a_1) = 0
     \end{align}
     in the quasilocal algebra $\mathfrak{U}$.
-\end{axiom}
+\end{definition}
 
 The next axiom makes use of the following new definition:
 
@@ -67,21 +67,21 @@ The next axiom makes use of the following new definition:
     The image $\pi_\omega(a)$ of a self-adjoint member $a$ of the quasilocal algebra $\mathfrak{U}$ under a GNS *-homomorphism $\pi_\omega$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{quasilocal observable}.
 \end{definition}
 
-\begin{axiom}[Quasilocal Algebra]
-    \label{axm:quasilocal-algebra}
+\begin{definition}[Axiom 4: Quasilocal Completeness]
+    \label{def:quasilocal-completeness}
     \uses{def:quasilocal-observable}
     All ``observables'' are quasilocal observables.
-\end{axiom}
+\end{definition}
 
-\begin{axiom}[Lorentz Covariance]
-    \label{axm:lorentz-covariance}
+\begin{definition}[Axiom 5: Lorentz Covariance]
+    \label{def:lorentz-covariance}
     \uses{def:alexandrov-topology}
     \uses{def:minkowski-spacetime}
     \uses{def:chronological-future-and-chronological-past}
-    \uses{axm:local-algebras}
-    \uses{axm:isotony}
+    \uses{def:local-algebras}
+    \uses{def:isotony}
     Let $\mathbf{B}$ be any basis element of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$.
-    
+
     A member $L$ of the inhomogeneous Lorentz group connected to the identity acts on $\mathfrak{U}(\mathbf{B})$ as follows
     \begin{align}
         \alpha_L : \mathfrak{U}(\mathbf{B}) &\longrightarrow \mathfrak{U}(L\mathbf{B}) \\
@@ -96,7 +96,7 @@ The next axiom makes use of the following new definition:
         \alpha_{L' \cdot L}(a) = \alpha_{L'}(\alpha_{L}(a)),
     \end{align}
     and (3) for basis elements $\mathbf{B}_\iota \subset \mathbf{B}_\kappa$ and the unital *-monomorphism $i$ of Axiom 2 (Isotony) $\alpha_L$ commutes with $i$. In other words the following diagram
-    
+
     \begin{center}
         \begin{tikzcd}
             \mathfrak{U}(\mathbf{B}_\kappa) \arrow[r, "\alpha_L"]
@@ -105,10 +105,19 @@ The next axiom makes use of the following new definition:
             & \mathfrak{U}(L\mathbf{B}_\iota)  \arrow[u, "i"]
         \end{tikzcd}
     \end{center}
-    
-    commutes.
-\end{axiom}
 
+    commutes.
+\end{definition}
+
+\begin{definition}[Haag-Kastler Net]
+    \label{def:haag-kastler-net}
+    \uses{def:local-algebras}
+    \uses{def:isotony}
+    \uses{def:local-commutativity}
+    \uses{def:quasilocal-completeness}
+    \uses{def:lorentz-covariance}
+    A \emph{Haag-Kastler net} on Minkowski spacetime is the bundling of the data of \cref{def:local-algebras} together with the properties of \cref{def:isotony}, \cref{def:local-commutativity}, \cref{def:quasilocal-completeness}, and \cref{def:lorentz-covariance}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT take an instance of this structure as a hypothesis and invoke each axiom as a projection.
+\end{definition}
 
 This concludes the presentation of the ``sharpened'' axioms. As proven in this blog post, these ``sharpened'' axioms entail the original axioms save Axiom 6 (Primitivity), which is an axiom that we abandon.
 
