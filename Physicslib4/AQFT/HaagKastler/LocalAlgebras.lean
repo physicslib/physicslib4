@@ -1,0 +1,93 @@
+/-
+Copyright (c) 2026 Lean Community. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Lean Community
+-/
+import Mathlib.Analysis.CStarAlgebra.Classes
+import Physicslib4.Spacetime.Minkowski
+
+/-!
+# Axiom 1: Local Algebras
+
+This file formalises the blueprint declaration `def:local-algebras`
+(Axiom 1 of the "sharpened" Haag-Kastler axioms, section 9.3 of the
+AQFT-in-Lean blueprint):
+
+> An assignment from the Alexandrov-basis sets `𝐁` of Minkowski
+> spacetime to (abstract, unital) C*-algebras `𝔘(𝐁)`, with
+> `𝔘(∅) = ℂ · 1`.
+
+## Main definitions
+
+* `Physicslib4.AQFT.HaagKastler.LocalNet`: a `structure` bundling
+  the *data* of Axiom 1: for every Alexandrov-basis set `𝐁` of
+  Minkowski spacetime (together with the empty set), a carrier type
+  `algebra B` and a `CStarAlgebra` instance on it, plus the
+  normalisation condition that the algebra assigned to `∅` is
+  (isomorphic to) `ℂ`.
+
+## Modelling notes
+
+* The blueprint regions `𝐁` are *non-empty* Alexandrov-basis sets,
+  plus the convention `𝔘(∅) = ℂ · 1` for normalisation. We package
+  this by indexing the net over arbitrary subsets `B : Set
+  MinkowskiSpacetime.Carrier`, with the data only "meaningful" for
+  `B ∈ Spacetime.alexandrovBasis _ _` or `B = ∅`. The Lean shape
+  thus stores the assignment as a function `Set ... → Type*`
+  carrying a `CStarAlgebra` instance.
+
+* The Alexandrov-basis condition is left as a separate predicate
+  `IsAlexandrovBasisSet`; downstream axioms (Isotony, Local
+  Commutativity, ...) quantify only over basis sets.
+
+* The "𝔘(∅) = ℂ" condition is encoded by a distinguished
+  `StarAlgEquiv` between the fiber over `∅` and `ℂ`. We use
+  `sorry`-placeholders where the unification of the `CStarAlgebra`
+  instance is non-trivial; the *statement* is faithful.
+-/
+
+namespace Physicslib4
+namespace AQFT
+namespace HaagKastler
+
+open Physicslib4
+
+/-- An *Alexandrov-basis set* of Minkowski spacetime: a subset of
+`StandardMinkowskiSpacetime.Carrier` of the form `I⁺(p) ∩ I⁻(q)`
+for some points `p, q`. We index over the underlying carrier of
+`StandardMinkowskiSpacetime` (which is defeq to
+`MinkowskiSpacetime.Carrier`) so that the Alexandrov-basis predicate
+and the completely-spacelike predicate (used in Axiom 3) talk about
+the same `Set`. -/
+def IsAlexandrovBasisSet (B : Set StandardMinkowskiSpacetime.Carrier) : Prop :=
+  B ∈ Spacetime.alexandrovBasis StandardMinkowskiSpacetime
+    standardMinkowskiTimeOrientation
+
+/--
+**Axiom 1 (Local Algebras).** The *data* of a Haag-Kastler local
+net: an assignment, for every subset `B` of Minkowski spacetime
+(thought of as an Alexandrov-basis set, with the empty set covering
+the normalisation `𝔘(∅) = ℂ · 1`), of a unital C*-algebra `algebra
+B`.
+
+The "𝔘(∅) = ℂ" normalisation is captured by the field
+`emptyEquivComplex` exhibiting a `StarAlgEquiv` between
+`algebra ∅` and `ℂ`.
+
+Blueprint reference: `def:local-algebras`.
+-/
+structure LocalNet where
+  /-- The C*-algebra `𝔘(B)` assigned to a (would-be Alexandrov-basis)
+  region `B`. -/
+  algebra : Set StandardMinkowskiSpacetime.Carrier → Type*
+  /-- The `CStarAlgebra` instance on each fiber `𝔘(B)`. -/
+  instCStarAlgebra : ∀ B, CStarAlgebra (algebra B)
+  /-- Normalisation: `𝔘(∅) = ℂ · 1`, encoded as a `*`-algebra
+  isomorphism `algebra ∅ ≃⋆ₐ[ℂ] ℂ`. -/
+  emptyEquivComplex : StarAlgEquiv ℂ (algebra ∅) ℂ
+
+attribute [instance] LocalNet.instCStarAlgebra
+
+end HaagKastler
+end AQFT
+end Physicslib4
