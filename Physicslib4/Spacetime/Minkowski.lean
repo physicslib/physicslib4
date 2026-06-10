@@ -52,13 +52,36 @@ open scoped Manifold
 
 /-! ### Standard Minkowski spacetime -/
 
+/-- The underlying bilinear `LinearMap` for the Minkowski metric on
+`ℝ⁴`: `(v, w) ↦ -v 0 * w 0 + v 1 * w 1 + v 2 * w 2 + v 3 * w 3`. -/
+noncomputable def minkowskiFormₗ :
+    SpacetimeModel →ₗ[ℝ] SpacetimeModel →ₗ[ℝ] ℝ :=
+  LinearMap.mk₂ ℝ
+    (fun v w => -(v 0) * (w 0) + (v 1) * (w 1) + (v 2) * (w 2) + (v 3) * (w 3))
+    (fun v₁ v₂ w => by simp; ring)
+    (fun c v w => by simp; ring)
+    (fun v w₁ w₂ => by simp; ring)
+    (fun c v w => by simp; ring)
+
 /-- The Minkowski metric on `T_p ℝ⁴ = ℝ⁴`, viewed as a continuous bilinear
 form `ℝ⁴ →L[ℝ] ℝ⁴ →L[ℝ] ℝ` given by `(v, w) ↦ -v 0 * w 0 + v 1 * w 1 +
 v 2 * w 2 + v 3 * w 3`. This is the form whose Gram matrix in the standard
 basis is `diag(-1, 1, 1, 1) = lorentzSignature`. -/
 noncomputable def minkowskiForm :
     SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ :=
-  sorry
+  LinearMap.toContinuousLinearMap
+    { toFun := fun v => LinearMap.toContinuousLinearMap (minkowskiFormₗ v)
+      map_add' := fun v₁ v₂ => by
+        ext w
+        simp [minkowskiFormₗ]
+      map_smul' := fun c v => by
+        ext w
+        simp [minkowskiFormₗ] }
+
+@[simp] theorem minkowskiForm_apply (v w : SpacetimeModel) :
+    minkowskiForm v w =
+      -(v 0) * (w 0) + (v 1) * (w 1) + (v 2) * (w 2) + (v 3) * (w 3) := by
+  rfl
 
 /--
 *Standard Minkowski spacetime* is the spacetime whose underlying real,
