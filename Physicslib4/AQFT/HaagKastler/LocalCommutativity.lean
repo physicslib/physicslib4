@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
+import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
 import Physicslib4.Spacetime.Causality
 
 /-!
@@ -25,18 +26,18 @@ axioms, section 9.3 of the AQFT-in-Lean blueprint):
 ## Modelling notes
 
 * "Commuting in the quasilocal algebra" requires an ambient
-  C*-algebra `𝔘` containing every `𝔘(B)` as a subalgebra. We
-  package this as: the *existence* of a unital C*-algebra `Q`
-  together with unital `*`-monomorphisms
-  `ιB : 𝔘(B) →⋆ₐ[ℂ] Q`, valid for every Alexandrov-basis `B`, such
-  that whenever `B₁` and `B₂` are completely spacelike, the images
-  `ιB₁(𝔘(B₁))` and `ιB₂(𝔘(B₂))` commute pointwise in `Q`.
+  C*-algebra `𝔘` containing every `𝔘(B)` as a subalgebra. Rather
+  than inlining that data, we quantify existentially over a
+  `QuasilocalAlgebra U` — the bundled structure that packages an
+  ambient C*-algebra together with the family of faithful unital
+  `*`-monomorphisms `ιB : 𝔘(B) →⋆ₐ[ℂ] 𝔘`. Axiom 3 then asserts
+  that, for *some* such ambient algebra, the images of any two
+  completely-spacelike local algebras commute pointwise.
 
-* The quasilocal algebra and its embeddings are fully constructed
-  in Axiom 4 (`QuasilocalCompleteness`); here we only *assert* that
-  the local-commutativity property holds for *some* such ambient
-  data, which is the weakest mathematically faithful form of
-  Axiom 3 that is statable in isolation.
+* The quasilocal algebra itself — including its density / completion
+  property — is the subject of Axiom 4 (`QuasilocalCompleteness`);
+  here we only *use* the structure to phrase commutativity. The two
+  axioms can in principle share the same witness.
 -/
 
 namespace Physicslib4
@@ -47,26 +48,24 @@ open Physicslib4
 
 /--
 **Axiom 3 (Local Commutativity).** A local net `U` satisfies *local
-commutativity* if there exists a unital ambient C*-algebra `Q`
-(playing the role of the quasilocal algebra) together with unital
-`*`-monomorphisms `ιB : U.algebra B →⋆ₐ[ℂ] Q` for every
-Alexandrov-basis set `B`, such that whenever two basis sets
+commutativity* if there exists a `QuasilocalAlgebra U` — i.e. an
+ambient unital C*-algebra `Q.carrier` equipped with faithful unital
+`*`-monomorphisms `Q.ι B : U.algebra B →⋆ₐ[ℂ] Q.carrier` for every
+Alexandrov-basis set `B` — such that whenever two basis sets
 `B₁`, `B₂` are completely spacelike with respect to each other,
-the images `ιB₁(U.algebra B₁)` and `ιB₂(U.algebra B₂)` commute
-pointwise inside `Q`.
+the images `Q.ι B₁ (U.algebra B₁)` and `Q.ι B₂ (U.algebra B₂)`
+commute pointwise inside `Q.carrier`.
 
 Blueprint reference: `def:local-commutativity`.
 -/
 def LocalCommutativity (U : LocalNet) : Prop :=
-  ∃ (Q : Type) (_ : CStarAlgebra Q)
-    (ι : ∀ B : Set StandardMinkowskiSpacetime.Carrier, StarAlgHom ℂ (U.algebra B) Q),
-      (∀ B, IsAlexandrovBasisSet B → Function.Injective (ι B)) ∧
-      ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
-        IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ →
-        Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
-          standardMinkowskiTimeOrientation B₁ B₂ →
-        ∀ (a : U.algebra B₁) (b : U.algebra B₂),
-          Commute (ι B₁ a) (ι B₂ b)
+  ∃ Q : QuasilocalAlgebra U,
+    ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
+      IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ →
+      Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation B₁ B₂ →
+      ∀ (a : U.algebra B₁) (b : U.algebra B₂),
+        Commute (Q.ι B₁ a) (Q.ι B₂ b)
 
 end HaagKastler
 end AQFT

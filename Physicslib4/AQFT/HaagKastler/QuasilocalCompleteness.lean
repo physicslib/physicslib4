@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
+import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
 
 /-!
 # Axiom 4: Quasilocal Completeness
@@ -26,19 +27,22 @@ Haag-Kastler axioms, section 9.3 of the AQFT-in-Lean blueprint):
 
 * Following the blueprint, the quasilocal algebra `𝔘` is the
   C*-algebraic *completion* of the set-theoretic union of all
-  `𝔘(B)`. We encode this by requiring the existence of a unital
-  C*-algebra `Q`, together with unital `*`-monomorphisms
-  `ιB : 𝔘(B) →⋆ₐ[ℂ] Q` for every Alexandrov-basis set `B`, such
-  that the union of their images is *dense* in `Q`.
+  `𝔘(B)`. The bundled `QuasilocalAlgebra U` structure already
+  packages exactly this data — an ambient C*-algebra together with
+  faithful unital `*`-monomorphisms whose images have dense union —
+  so Axiom 4 collapses to bare nonemptiness:
+  `Nonempty (QuasilocalAlgebra U)`.
 
-* The density condition captures "all observables are quasilocal":
-  every element of `Q` is the norm-limit of a sequence (or net) of
-  elements of `⋃_B ιB(𝔘(B))`.
+* In particular, both the *faithfulness* of the embeddings and the
+  *density* of the union of their images are part of the
+  `QuasilocalAlgebra` structure itself; there is nothing further to
+  assert at this level.
 
 * This is closely related to (and refines) the existence statement
   used in `LocalCommutativity`; the two predicates can in principle
-  be witnessed by the *same* ambient algebra `Q`, but we keep them
-  separate so each axiom can be stated and tested in isolation.
+  be witnessed by the *same* ambient `QuasilocalAlgebra`, but we
+  keep them separate so each axiom can be stated and tested in
+  isolation.
 -/
 
 namespace Physicslib4
@@ -49,26 +53,24 @@ open Physicslib4
 
 /--
 **Axiom 4 (Quasilocal Completeness).** A local net `U` satisfies
-*quasilocal completeness* if there exists a unital ambient
-C*-algebra `Q` — the *quasilocal algebra* — together with unital
-`*`-monomorphisms `ιB : U.algebra B →⋆ₐ[ℂ] Q` for every
-Alexandrov-basis set `B`, such that the union
-`⋃ B, Set.range (ιB)` is *dense* in `Q`.
+*quasilocal completeness* if it *admits a quasilocal algebra*,
+i.e. `Nonempty (QuasilocalAlgebra U)`.
+
+Unfolding the `QuasilocalAlgebra` structure, this says there exists
+a unital ambient C*-algebra `Q.carrier` — the *quasilocal algebra*
+`𝔘` — together with unital `*`-monomorphisms
+`Q.ι B : U.algebra B →⋆ₐ[ℂ] Q.carrier` for every Alexandrov-basis
+set `B`, each injective on Alexandrov-basis sets, and such that the
+union `⋃ B, Set.range (Q.ι B)` is *dense* in `Q.carrier`.
 
 This expresses the blueprint's "all observables are quasilocal
-observables": every element of `Q` is the norm-limit of a sequence
-of elements of `⋃_B 𝔘(B)`.
+observables": every element of `Q.carrier` is the norm-limit of a
+sequence of elements of `⋃_B 𝔘(B)`.
 
 Blueprint reference: `def:quasilocal-completeness`.
 -/
 def QuasilocalCompleteness (U : LocalNet) : Prop :=
-  ∃ (Q : Type) (_ : CStarAlgebra Q)
-    (ι : ∀ B : Set StandardMinkowskiSpacetime.Carrier,
-           StarAlgHom ℂ (U.algebra B) Q),
-      (∀ B, IsAlexandrovBasisSet B → Function.Injective (ι B)) ∧
-      Dense (⋃ (B : Set StandardMinkowskiSpacetime.Carrier)
-                (_ : IsAlexandrovBasisSet B),
-                Set.range (ι B))
+  Nonempty (QuasilocalAlgebra U)
 
 end HaagKastler
 end AQFT
