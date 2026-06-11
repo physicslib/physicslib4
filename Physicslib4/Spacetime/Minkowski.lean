@@ -480,6 +480,60 @@ def minkowskiBackwardCone (q : SpacetimeModel) : Set SpacetimeModel :=
 theorem minkowskiBackwardCone_eq (q : SpacetimeModel) :
     minkowskiBackwardCone q = {p | q ∈ minkowskiForwardCone p} := rfl
 
+/-- The forward Minkowski-cone of `p` is an open subset of the Euclidean
+topology on `ℝ⁴`. -/
+theorem isOpen_minkowskiForwardCone (p : SpacetimeModel) :
+    IsOpen (minkowskiForwardCone p) := by
+  have h0 : Continuous fun q : SpacetimeModel => q 0 :=
+    PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) 0
+  have h1 : Continuous fun q : SpacetimeModel => q 1 :=
+    PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) 1
+  have h2 : Continuous fun q : SpacetimeModel => q 2 :=
+    PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) 2
+  have h3 : Continuous fun q : SpacetimeModel => q 3 :=
+    PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) 3
+  have hOpen1 : IsOpen {q : SpacetimeModel | p 0 < q 0} :=
+    h0.isOpen_preimage _ isOpen_Ioi
+  have hCont :
+      Continuous fun q : SpacetimeModel =>
+        -(q 0 - p 0) ^ 2 + (q 1 - p 1) ^ 2 + (q 2 - p 2) ^ 2 + (q 3 - p 3) ^ 2 := by
+    refine ((((h0.sub continuous_const).pow 2).neg.add
+      ((h1.sub continuous_const).pow 2)).add
+      ((h2.sub continuous_const).pow 2)).add
+      ((h3.sub continuous_const).pow 2)
+  have hOpen2 :
+      IsOpen {q : SpacetimeModel |
+        -(q 0 - p 0) ^ 2 + (q 1 - p 1) ^ 2 + (q 2 - p 2) ^ 2 + (q 3 - p 3) ^ 2 < 0} :=
+    hCont.isOpen_preimage _ isOpen_Iio
+  exact hOpen1.inter hOpen2
+
+/-- The backward Minkowski-cone of `q` is an open subset of the Euclidean
+topology on `ℝ⁴`. -/
+theorem isOpen_minkowskiBackwardCone (q : SpacetimeModel) :
+    IsOpen (minkowskiBackwardCone q) := by
+  have h0 : Continuous fun p : SpacetimeModel => p 0 :=
+    PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) 0
+  have h1 : Continuous fun p : SpacetimeModel => p 1 :=
+    PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) 1
+  have h2 : Continuous fun p : SpacetimeModel => p 2 :=
+    PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) 2
+  have h3 : Continuous fun p : SpacetimeModel => p 3 :=
+    PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) 3
+  have hOpen1 : IsOpen {p : SpacetimeModel | p 0 < q 0} :=
+    h0.isOpen_preimage _ isOpen_Iio
+  have hCont :
+      Continuous fun p : SpacetimeModel =>
+        -(q 0 - p 0) ^ 2 + (q 1 - p 1) ^ 2 + (q 2 - p 2) ^ 2 + (q 3 - p 3) ^ 2 := by
+    refine ((((continuous_const.sub h0).pow 2).neg.add
+      ((continuous_const.sub h1).pow 2)).add
+      ((continuous_const.sub h2).pow 2)).add
+      ((continuous_const.sub h3).pow 2)
+  have hOpen2 :
+      IsOpen {p : SpacetimeModel |
+        -(q 0 - p 0) ^ 2 + (q 1 - p 1) ^ 2 + (q 2 - p 2) ^ 2 + (q 3 - p 3) ^ 2 < 0} :=
+    hCont.isOpen_preimage _ isOpen_Iio
+  exact hOpen1.inter hOpen2
+
 /-! ### Minkowski spacetime -/
 
 /--
