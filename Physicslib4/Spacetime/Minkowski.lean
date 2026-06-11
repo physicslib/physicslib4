@@ -917,13 +917,49 @@ with parameter space `Set.Icc a b`, the manifold tangent
 content packaged in a single declaration; its proof is deferred. -/
 theorem standardMinkowski_smoothPath_tangent_continuousOn
     (μ : StandardMinkowskiSpacetime.SmoothPath) {a b : ℝ}
-    (_hparam : μ.parameterSpace = Set.Icc a b) :
+    (hparam : μ.parameterSpace = Set.Icc a b) :
     ContinuousOn
       (fun s => mfderivWithin (modelWithCornersSelf ℝ ℝ)
                   StandardMinkowskiSpacetime.model
                   μ.toFun μ.parameterSpace s (1 : ℝ))
       (Set.Icc a b) := by
-  sorry
+  let f : ℝ → SpacetimeModel := μ.toFun
+  -- Smoothness reduced to ContDiffOn on `Set.Icc a b`.
+  have hsmooth : ContDiffOn ℝ ⊤ f (Set.Icc a b) := by
+    have h := μ.smoothOn
+    rw [hparam] at h
+    exact contMDiffOn_iff_contDiffOn.mp h
+  -- `a < b` from nontriviality of the parameter space.
+  have hab : a < b := by
+    rcases μ.nontrivial with ⟨s, t, hs, ht, hst⟩
+    rw [hparam] at hs ht
+    obtain ⟨has, hsb⟩ := hs
+    obtain ⟨hat, htb⟩ := ht
+    rcases lt_or_eq_of_le (has.trans hsb) with hlt | heq
+    · exact hlt
+    · exfalso
+      have hsa : s = a := le_antisymm (heq ▸ hsb) has
+      have hta : t = a := le_antisymm (heq ▸ htb) hat
+      exact hst (hsa.trans hta.symm)
+  have hUnique : UniqueDiffOn ℝ (Set.Icc a b) := uniqueDiffOn_Icc hab
+  have hcont_deriv : ContinuousOn (derivWithin f (Set.Icc a b)) (Set.Icc a b) :=
+    ContDiffOn.continuousOn_derivWithin hsmooth hUnique le_top
+  -- Pointwise: `mfderivWithin … 1 = derivWithin f (Icc a b)`.
+  have hpw : ∀ s,
+      mfderivWithin (modelWithCornersSelf ℝ ℝ)
+          StandardMinkowskiSpacetime.model
+          μ.toFun (Set.Icc a b) s (1 : ℝ)
+        = derivWithin f (Set.Icc a b) s := by
+    intro s
+    change mfderivWithin (modelWithCornersSelf ℝ ℝ)
+          (modelWithCornersSelf ℝ SpacetimeModel) f (Set.Icc a b) s (1 : ℝ)
+        = derivWithin f (Set.Icc a b) s
+    rw [mfderivWithin_eq_fderivWithin]; rfl
+  -- Conclude continuity by rewriting the parameter space and using `congr`.
+  rw [hparam]
+  refine hcont_deriv.congr ?_
+  intro s _hs
+  exact hpw s
 
 /-- *Analytic stub (FTC for a trip on standard Minkowski)*: every trip `c`
 from `p` to `q` on standard Minkowski spacetime is represented by a
