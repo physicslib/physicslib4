@@ -799,7 +799,7 @@ the past/future endpoint data and the timelike future-oriented properties of
 The proof is deferred as a named sub-stub. -/
 theorem standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
     {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
-    (_htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
+    (htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
               standardMinkowskiTimeOrientation p q c) :
     ∃ (rep : StandardMinkowskiSpacetime.SmoothPath),
       c = Spacetime.SmoothCurve.ofPath StandardMinkowskiSpacetime rep ∧
@@ -810,7 +810,20 @@ theorem standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
           StandardMinkowskiSpacetime.model
           rep.toFun rep.parameterSpace s (1 : ℝ))
           ∈ minkowskiForwardCone (0 : SpacetimeModel)) := by
-  sorry
+  obtain ⟨rep, hc, htimelike, hfuture, _hgeo, hpast, hfuture_ep⟩ := htrip
+  refine ⟨rep, hc, hpast, hfuture_ep, ?_⟩
+  intro s hs
+  have h1 : StandardMinkowskiSpacetime.IsTimelike (x := (0 : SpacetimeModel))
+      (mfderivWithin (modelWithCornersSelf ℝ ℝ)
+        StandardMinkowskiSpacetime.model
+        rep.toFun rep.parameterSpace s (1 : ℝ)) := htimelike s hs
+  have h2 : StandardMinkowskiSpacetime.IsFuturePointing
+      standardMinkowskiTimeOrientation (x := (0 : SpacetimeModel))
+      (mfderivWithin (modelWithCornersSelf ℝ ℝ)
+        StandardMinkowskiSpacetime.model
+        rep.toFun rep.parameterSpace s (1 : ℝ)) := hfuture s hs
+  exact (standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero
+    _).mp ⟨h1, h2⟩
 
 /-- *Analytic stub (parameter space of a smooth path with endpoints is an
 `Icc`)*: a smooth path `rep` whose parameter space is closed and connected
