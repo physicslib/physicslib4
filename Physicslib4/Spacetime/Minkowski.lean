@@ -486,8 +486,8 @@ pending the integration argument.
 a stub here to keep this first pass structural.)* -/
 theorem standardMinkowski_lineSegmentPath_continuousOn (p q : SpacetimeModel) :
     ContinuousOn (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
-      (Set.Icc (0 : ℝ) 1) := by
-  sorry
+      (Set.Icc (0 : ℝ) 1) :=
+  (continuous_const.add (Continuous.smul continuous_id continuous_const)).continuousOn
 
 /-- The straight-line path `s ↦ p + s • (q - p)` is `C^∞` on `[0, 1]`,
 viewed as a map from `(ℝ, modelWithCornersSelf ℝ ℝ)` to standard Minkowski
