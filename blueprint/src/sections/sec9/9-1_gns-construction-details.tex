@@ -1,54 +1,488 @@
-\input{sections/sec0/abstract}
-\maketitle
-\pagebreak
+\section{GNS Construction Details}\label{sctn:gns-construction-details}
+Here we will state and prove the GNS Construction Theorem, which we make use of in the axioms we present later.
 
-\tableofcontents
-\pagebreak
+We generally follow the clear, straightforward presentation in \href{https://arxiv.org/abs/2410.16599}{Entanglement in Algebraic Quantum Field Theories}.
 
-\chapter{Original Haag Kastler Axioms}\label{chptr:original-haag-kastler-axioms}
-\input{sections/sec1/introduction}
-\input{sections/sec1/1-1_original_haag_kastler_axioms}
+\subsection{GNS Construction Theorem}
+In this section we will state the GNS Construction Theorem, which we prove in subsequent sections.
 
-\chapter{Axiom 0 (Minkowski Space)}\label{chptr:axiom-0-(minkowski-space)}
-\input{sections/sec2/introduction}
-\input{sections/sec2/2-1_standard_topology_on_minkowski_space}
-\input{sections/sec2/2-2_indiscrete_topology_on_minkowski_space}
-\input{sections/sec2/2-3_euclidean_topology_on_minkowski_space}
-\input{sections/sec2/2-4_alexandrov_topology_on_minkowski_space}
+Before stating the theorem we'll need to introduce terminology that appears in the theorem's statement. We begin with the definition of "state" and some closely associated terms.
 
-\chapter{Axiom 1 (Local Algebras)}\label{chptr:axiom-1-(local-algebras)}
-\input{sections/sec3/introduction}
-\input{sections/sec3/3-1_regions_of_measurement}
+\begin{definition}[State]
+    \label{def:state}
+    Let $\mathfrak{U}$ be an abstract C*-algebra. A \textit{state} is an element $\omega$ of the dual space $\mathfrak{U}^*$ that is
+    \begin{itemize}
+        \item \textit{Positive} - for any $a \in \mathfrak{U}$ we have $0 \le \omega(a^*a)$ and
+        \item \textit{Normalized} - the operator norm satisfies $\| \omega \|=1$.
+    \end{itemize}
+    Furthermore, a state $\omega$ is said to be \textit{faithful} if for any non-zero $a$ in $\mathfrak{U}$, it follows that $0 < \omega(a^*a)$.
+\end{definition}
 
-\chapter{Axiom 2 (Isotony)}\label{chptr:axiom-2-(isotony)}
-\input{sections/sec4/introduction}
-\input{sections/sec4/4-1_gns_construction}
-\input{sections/sec4/4-2_isotony}
-\input{sections/sec4/4-3_common_unit}
+We will also have need of the term "cyclic vector".
 
-\chapter{Axiom 3 (Local Commutativity)}\label{chptr:axiom-3-(local-commutativity)}
-\input{sections/sec5/introduction}
-\input{sections/sec5/5-1_completely_spacelike}
-\input{sections/sec5/5-2_quasilocal_algebra}
+\begin{definition}[Cyclic Vector]
+    \label{def:cyclic-vector}
+    Let $\mathcal{A}$ be an algebra represented by the bounded operators $\pi(\mathcal{A})$ on the Hilbert space $\mathcal{H}$. A vector $\Omega$ in $\mathcal{H}$ is said to be a \textit{cyclic vector} if the set
+    \begin{align}
+        \{ A\Omega : A \in \pi(\mathcal{A}) \}
+    \end{align}
+    is dense in $\mathcal{H}$.
+\end{definition}
 
-\chapter{Axiom 4 (Quasilocal Algebra)}\label{chptr:axiom-4-(quasilocal-algebra)}
-\input{sections/sec6/introduction}
-\input{sections/sec6/6-1_set_theoretic_union}
-\input{sections/sec6/6-2_completion_of_the_set_theoretic_union}
-\input{sections/sec6/6-3_all_observables_of_interest}
+With this terminology we are then able to state the GNS Construction Theorem.
 
-\chapter{Axiom 5 (Lorentz Covariance)}\label{chptr:axiom-5-(lorentz-covariance)}
-\input{sections/sec7/introduction}
-\input{sections/sec7/7-1_inhomogeneous_lorentz_group}
-\input{sections/sec7/7-2_action_of_the_inhomogeneous_lorentz_groups_identity_component}
+\begin{theorem}[GNS Construction Theorem]
+    \label{thrm:gns-construction-theorem}
+    \lean{Physicslib4.GNS.gns_construction}
+    \leanfile{Physicslib4/GNS/Construction.lean}
+    \uses{def:state}
+    \uses{def:cyclic-vector}
+    \leanok
+    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. One can then construct a Hilbert space $\mathcal{H}_\omega$ and *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ such that
+    \begin{align}
+        \pi_\omega(a^*) = \pi_\omega(a)^\dagger.
+    \end{align}
+    As $\mathfrak{U}$ is unital, there exists a cyclic vector $\Omega$ in $\mathcal{H}_\omega$ for the representation $\pi_\omega$ such that
+    \begin{align}
+        \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>_{\mathcal{H}_\omega}.
+    \end{align}
+    The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$ or the \textit{cyclic representation} of $(\mathfrak{U}, \omega)$. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
+\end{theorem}
 
-\chapter{Axioms 6 (Primitivity)}\label{chptr:axiom-6-(primitivity)}
-\input{sections/sec8/introduction}
-\input{sections/sec8/8-1_faithful_representations}
-\input{sections/sec8/8-2_faithful_and_irreducible_representations}
+With the GNS Construction Theorem stated, we can now commence with its proof.
 
-\chapter{Haag Kastler Axioms Blueprint}\label{chptr:haag-kastler-axioms-blueprint}
-\input{sections/sec9/introduction}
-\input{sections/sec9/9-1_gns-construction-details}
-\input{sections/sec9/9-2_spacetime}
-\input{sections/sec9/9-3_haag-kastler-axioms}
+This proof has five parts: (1) the construction of the GNS Hilbert space $\mathcal{H}_\omega$, (2) the construction of the *-representation $\pi_\omega$, (3) the construction of the cyclic vector $\Omega$ in $\mathcal{H}_\omega$, (4) the proof that the *-representation $\pi_\omega$ is faithful, and (5) the proof of uniqueness up to unitary equivalence. Each part corresponds to a subsequent subsection.
+
+\subsubsection{Construction of the GNS Hilbert Space}
+We'll construct the GNS Hilbert space $\mathcal{H}_\omega$ from the C*-algebra $\mathfrak{U}$ itself, modifying $\mathfrak{U}$ as needed to obtain the desired $\mathcal{H}_\omega$.
+
+Let's start by attempting to place an inner product on $\mathfrak{U}$. Naively one might hope the following defines an inner product
+\begin{align}
+    \left< a, b \right> \equiv \omega(a^*b)
+\end{align}
+on $\mathfrak{U}$. Unfortunately it doesn't. Let's examine why this fails.
+
+Consider the set
+\begin{align}
+    \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
+\end{align}
+Generically $\omega$ isn't faithful. Thus in $\mathcal{N}$ there exist non-zero $n$. For such $n$ one has
+\begin{align}
+    \left< n, n \right> \equiv \omega(n^*n) = 0.
+\end{align}
+Hence, there are non-zero $n$ in $\mathfrak{U}$ such that $\left< n, n \right> = 0$. The existence of such $n$ proves that our naive inner product on $\mathfrak{U}$
+\begin{align}
+    \left< a, b \right> \equiv \omega(a^*b)
+\end{align}
+actually isn't an inner product. However, the form $\mathcal{N}$ takes gives us a hint as to how to repair this naive inner product.
+
+In particular, if we quotient $\mathfrak{U}$ by $\mathcal{N}$ we may rid ourselves of the problem we encountered above and hopefully be able to construct an inner product on $\mathfrak{U} / \mathcal{N}$ and its completion. We'll see this plan actually works.
+
+However, before being able to see this plan through we'll need to take a quick detour and prove a few needed results.
+
+The most famous of these results is the Cauchy-Schwarz Inequality
+
+\begin{lemma}[Cauchy-Schwarz Inequality]
+    \label{lmm:cauchy-schwarz-inequality}
+    \lean{Physicslib4.GNS.cauchy_schwarz_inequality}
+    \leanfile{Physicslib4/GNS/CauchySchwarz.lean}
+    \uses{def:state}
+    \leanok
+    Let $\mathcal{A}$ be a *-algebra and $\omega$ a \textit{positive} element of the dual space $\mathcal{A}^*$, i.e. $\omega$ is an element of the dual space $\mathcal{A}^*$ such that for any $a \in \mathcal{A}$ one has $0 \le \omega(a^*a)$. Then
+    \begin{align}
+        \omega(a^*b) &= \overline{\omega(b^*a)} \\
+        |\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b)
+    \end{align}
+    for all $a$ and $b$ in $\mathcal{A}$.
+\end{lemma}
+\begin{proof}
+Positivity of $\omega$ implies that for any $a$ and $b$ in $\mathcal{A}$ and $\lambda \in \mathbb{C}$ one has
+\begin{align}
+    0 \le \omega\left((\lambda a + b)^*(\lambda a + b)\right).
+\end{align}
+As $\omega$ is an element of the dual space $\mathcal{A}^*$ and thus linear, this implies
+\begin{align}
+    0 \le |\lambda|^2\omega(a^*a) + \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) + \omega(b^*b).
+\end{align}
+This inequality then implies both desired results,
+\begin{align}
+    \omega(a^*b) &= \overline{\omega(b^*a)} \\
+    |\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b).
+\end{align}
+We will prove these one-by-one. Let us first prove this inequality implies $\omega(a^*b) = \overline{\omega(b^*a)}$.
+
+Notice that the inequality is between two real numbers, $0$ and the right-hand side. As $\omega$ is positive, the first and last summands on the right-hand side are obviously real. This then implies
+\begin{align}
+    \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) \in \mathbb{R}.
+\end{align}
+As $\lambda$ is arbitrary, we are free to choose it to be real, which implies the imaginary parts of $\omega(a^*b)$ and $\omega(b^*a)$ are equal but have the opposite signs.
+
+Similarly, we are free to choose $\lambda$ to be imaginary, which implies that the real parts of $\omega(a^*b)$ and $\omega(b^*a)$ are equal. Together these facts imply the first result
+\begin{align}
+    \omega(a^*b) = \overline{\omega(b^*a)}.
+\end{align}
+Let us next prove that our inequality
+\begin{align}
+    0 \le |\lambda|^2\omega(a^*a) + \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) + \omega(b^*b)
+\end{align}
+implies $\lvert \omega(a^*b) \rvert^2 \le \omega(a^*a) \omega(b^*b)$.
+
+Again, as $\lambda$ is arbitrary, we are free to choose it to extremize the right-hand side of the inequality. Extremizing the right-hand of this inequality with respect to $\overline{\lambda}$ and assuming $\omega(a^*a) \ne 0$ one finds at the extrema
+\begin{align}
+    \lambda = - \frac{\omega(a^*b)}{\omega(a^*a)}.
+\end{align}
+Substituting this into the inequality, multiplying by $\omega(a^*a)$ while using the fact that $\omega$ is positive, and using $\omega(a^*b) = \overline{\omega(b^*a)}$, then one obtains
+\begin{align}
+    0 \le \lvert \omega(a^*b) \rvert^2 - \lvert \omega(a^*b) \rvert^2 - \lvert \omega(a^*b) \rvert^2 + \omega(a^*a) \omega(b^*b)
+\end{align}
+which implies
+\begin{align}
+    \lvert \omega(a^*b) \rvert^2 \le \omega(a^*a) \omega(b^*b),
+\end{align}
+the second desired result under the assumption that $\omega(a^*a) \ne 0$.
+
+If we now allow for the case $\omega(a^*a) = 0$, our inequality reduces to
+\begin{align}
+    0 \le \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) + \omega(b^*b).
+\end{align}
+Our previous result implies $\omega(b^*a) = \overline{\omega(a^*b)}$. Hence, this inequality takes the form
+\begin{align}
+    0 \le \overline{\lambda}\omega(a^*b) + \lambda\overline{\omega(a^*b)} + \omega(b^*b) = 2\text{Re}\left(\overline{\lambda} \omega(a^*b)\right) + \omega(b^*b).
+\end{align}
+Now as $\lambda$ is arbitrary we are free to select it as follows
+\begin{align}
+    \overline{\lambda} = -r \overline{\omega(a^*b)}
+\end{align}
+where $0 < r$ is an arbitrary positive real number. Then the previous inequality takes the form
+\begin{align}
+    0 &\le 2\text{Re}\left(\overline{\lambda} \omega(a^*b)\right) + \omega(b^*b) \\
+      &= -2r \lvert \omega(a^*b) \rvert^2 + \omega(b^*b).
+\end{align}
+Now if we assume for the moment that $0 < \lvert \omega(a^*b) \rvert$, then we can always select $0 < r$ large enough such that this inequality is violated, the $-2r \lvert \omega(a^*b) \rvert^2$ term dominating the $\omega(b^*b)$ term. Hence, it must be the case that $\lvert \omega(a^*b) \rvert = 0$.
+
+Now we have $\omega(a^*a) = 0$ and $\lvert \omega(a^*b) \rvert = 0$. Hence, the desired inequality
+\begin{align}
+    \lvert \omega(a^*b) \rvert^2 \le \omega(a^*a) \omega(b^*b),
+\end{align}
+follows trivially, completing our proof.
+\end{proof}
+
+The next result we need to prove is:
+
+\begin{lemma}
+    \label{lmm:lmm1}
+    \lean{Physicslib4.GNS.lmm1}
+    \leanfile{Physicslib4/GNS/NullSpace.lean}
+    \uses{def:state}
+    \leanok
+    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}_1$ defined by
+    \begin{align}
+        \mathcal{N}_1 \equiv \{ n \in \mathfrak{U} : \omega(b^*n) = 0 \;\; \forall \, b \in \mathfrak{U} \}
+    \end{align}
+    is equivalent to the set $\mathcal{N}$ defined by
+    \begin{align}
+        \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+We will first prove that $\mathcal{N} \subseteq \mathcal{N}_1$. Then we will prove $\mathcal{N}_1 \subseteq \mathcal{N}$. Together these imply $\mathcal{N} = \mathcal{N}_1$, the final desired result.
+
+Let us begin by proving $\mathcal{N} \subseteq \mathcal{N}_1$.
+
+$\mathfrak{U}$ is a C*-algebra and thus a *-algebra. In addition $\omega$ is a state and thus a positive element of the dual space $\mathfrak{U}^*$. Thus, for arbitrary $b$ and $n$ in $\mathfrak{U}$ we can apply the Cauchy-Schwarz inequality to obtain
+\begin{align}
+    \lvert \omega(b^*n) \rvert^2 \le \omega(b^*b) \omega(n^*n).
+\end{align}
+Thus if $n$ is in $\mathcal{N}$, and thus satisfies $\omega(n^*n) = 0$, then this inequality implies $\omega(b^*n) = 0$ for all $b$ in $\mathfrak{U}$. This then implies $n$ is in $\mathcal{N}_1$. As $n$ was an arbitrary element of $\mathcal{N}$, this in turn implies that $\mathcal{N} \subseteq \mathcal{N}_1$, the first desired result.
+
+Next let us prove that $\mathcal{N}_1 \subseteq \mathcal{N}$.
+
+Consider an arbitrary $n_1$ in $\mathcal{N}_1$. By definition $\omega(b^*n_1) = 0$ for any $b$ in $\mathfrak{U}$. In particular we can select $b=n_1$. Doing so we have $\omega(n_1^*n_1) = 0$. This then implies $n_1$ is in $\mathcal{N}$. As $n_1$ was an arbitrary element of $\mathcal{N}_1$ this further implies $\mathcal{N}_1 \subseteq \mathcal{N}$, the second desired result.
+
+We have thus proven $\mathcal{N} \subseteq \mathcal{N}_1$ and $\mathcal{N}_1 \subseteq \mathcal{N}$ which together imply $\mathcal{N} = \mathcal{N}_1$, the final desired result.
+\end{proof}
+
+Next we will prove $\mathcal{N}$ is a closed, linear subspace of $\mathfrak{U}$. Establishing this will allow us to take the quotient of $\mathfrak{U}$ by $\mathcal{N}$.
+
+\begin{lemma}
+    \label{lmm:lmm2}
+    \lean{Physicslib4.GNS.lmm2}
+    \leanfile{Physicslib4/GNS/NullSpace.lean}
+    \uses{def:state}
+    \leanok
+    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}$ defined by
+    \begin{align}
+        \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
+    \end{align}
+    is a closed, linear subspace of $\mathfrak{U}$.
+\end{lemma}
+\begin{proof}
+First let us prove that $\mathcal{N}$ is a linear subspace of $\mathfrak{U}$.
+
+Consider arbitrary $n,m \in \mathcal{N}$ and arbitrary $\lambda, \mu \in \mathbb{C}$. As proven above $\mathcal{N} = \mathcal{N}_1$, thus for arbitrary $b \in \mathfrak{U}$, one has
+\begin{align}
+    \omega(b^*n) &= 0 \\
+    \omega(b^*m) &= 0.
+\end{align}
+Hence, the linearity of $\omega$ then implies
+\begin{align}
+    \omega(b^*(\lambda n + \mu m)) = \lambda \omega(b^*n) + \mu \omega(b^*m) = 0.
+\end{align}
+As $b \in \mathfrak{U}$ was arbitrary, this implies that $(\lambda n + \mu m) \in \mathcal{N}_1$. As we previously proved $\mathcal{N} = \mathcal{N}_1$, this in turn implies $(\lambda n + \mu m) \in \mathcal{N}$. Hence $\mathcal{N}$ is a linear subspace of $\mathfrak{U}$, the first desired result.
+
+Next let us prove that $\mathcal{N}$ is a closed subspace of $\mathfrak{U}$.
+
+First, let us note that as $\omega$ is a state, it is by definition a linear, normalized operator on $\mathfrak{U}$. Hence, it is a linear, bounded operator on $\mathfrak{U}$, a normed space. Thus, as a result of the standard theorem (Theorem B.2.4 of \href{https://arxiv.org/abs/2410.16599}{Entanglement in Algebraic Quantum Field Theories})
+
+\begin{quote}
+    \textit{Theorem.} Let $X$ and $Y$ be normed spaces and $T: \mathcal{D}(T) \rightarrow Y$ be a linear operator where $\mathcal{D}(T) \subseteq X$. Then $T$ is continuous if and only if it is bounded.
+\end{quote}
+
+\noindent along with the fact that $\mathbb{C}$ is a normed space, it follows that $\omega$ is continuous.
+
+With the continuity of $\omega$ in hand, consider a sequence $(n_i)_{i \in \mathbb{N}}$ in $\mathcal{N}$ that converges to $n$ in $\mathfrak{U}$. As $\omega$ is continuous, for any $b$ in $\mathfrak{U}$ one has
+\begin{align}
+    \omega\left(b^*n\right) = \omega\left(b^*(\lim\limits_{i \rightarrow \infty} n_i)\right) = \lim\limits_{i \rightarrow \infty} \omega(b^*n_i) = 0,
+\end{align}
+where the final equality follows from our previous result $\mathcal{N} = \mathcal{N}_1$. This proves that $n$ is an element of $\mathcal{N}_1$ and thus, as a consequence of our previous result $\mathcal{N}_1 = \mathcal{N}$, that $n$ is an element of $\mathcal{N}$. This establishes that $\mathcal{N}$ is closed, proving the second and final desired result, $\mathcal{N}$ is a closed subspace of $\mathfrak{U}$.
+\end{proof}
+
+As we have established that $\mathcal{N}$ is a closed, linear subspace of $\mathfrak{U}$, we can now take the quotient of $\mathfrak{U}$ by $\mathcal{N}$. Elements of the quotient $\mathfrak{U} / \mathcal{N}$ are equivalence classes of the form
+\begin{align}
+    [a] \equiv \{ a + n : n \in \mathcal{N} \}
+\end{align}
+with the zero vector in $\mathfrak{U} / \mathcal{N}$ given by
+\begin{align}
+    [0] \equiv \{ n : n \in \mathcal{N} \}.
+\end{align}
+On $\mathfrak{U} / \mathcal{N}$ we can introduce an inner product
+\begin{align}
+    \left<[a], [b]\right> \equiv \omega(a^*b)
+\end{align}
+motivated by our naive attempt at placing an inner product on $\mathfrak{U}$. This inner product is well-defined on $\mathfrak{U} / \mathcal{N}$ as one can see from its invariance under $a \rightarrow a + n$ where $n$ is in $\mathcal{N}$,
+\begin{align}
+    \omega((a + n)^*b) = \omega(a^*b) + \omega(n^*b) = \omega(a^*b) + \overline{\omega(b^*n)} = \omega(a^*b).
+\end{align}
+In this the first equality follows from $\omega$ being linear, the second from our previous result $\omega(n^*b) = \overline{\omega(b^*n)}$, and the final from our previous result $\mathcal{N} = \mathcal{N}_1$. A similar argument using $\mathcal{N} = \mathcal{N}_1$ yields invariance under $b \rightarrow b + n$ too.
+
+Furthermore, the inner product
+\begin{align}
+    \left<[a], [b]\right> \equiv \omega(a^*b)
+\end{align}
+on $\mathfrak{U} / \mathcal{N}$ doesn't suffer from the same problem that our naive inner product on $\mathfrak{U}$ did. In particular, one can easily prove
+\begin{align}
+    \left<[a], [a]\right> = 0
+\end{align}
+if and only if $[a] = [0]$. This is essentially by construction.
+
+The final step in going from $\mathfrak{U} / \mathcal{N}$ to the Hilbert space $\mathcal{H}_\omega$ consists of completing $\mathfrak{U} / \mathcal{N}$ in the norm defined by the inner product above. As this is standard, we will not present the details here. The completion of $\mathfrak{U} / \mathcal{N}$ in this norm is the Hilbert space $\mathcal{H}_\omega$ of the GNS Construction Theorem.
+
+\subsubsection{Construction of the GNS Representation}
+Next we will construct $\pi_\omega$ the *-representation of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$. This will be much easier than the construction of $\mathcal{H}_\omega$.
+
+By construction we can consider $\mathfrak{U} / \mathcal{N}$ as dense in $\mathcal{H}_\omega$. On this dense subset we define the action of $\pi_\omega$ the *-representation of $\mathfrak{U}$ on $\mathfrak{U} / \mathcal{N}$ as follows
+\begin{align}
+    \pi_\omega(a)[z] \equiv [az]
+\end{align}
+where $[z]$ is an arbitrary element of $\mathfrak{U} / \mathcal{N}$.
+
+This definition of $\pi_\omega$ on $\mathfrak{U} / \mathcal{N}$ is well-defined as for any other member of the equivalence class $[z]$ of the form $[z + n]$ one has
+\begin{align}
+    \pi_\omega(a)[z + n] = [az + an] = [az],
+\end{align}
+where the second equality follows from our previous result $\mathcal{N}_1 = \mathcal{N}$. In other words, $\pi_\omega$ is well-defined as $\mathcal{N}$ is a left-ideal in $\mathfrak{U}$.
+
+Furthermore, it trivially follows from the definition of $\pi_\omega$ that it is linear and an algebraic morphism. So it remains to prove that $\pi_\omega$ is bounded and also a *-morphism.
+
+Let us first prove that $\pi_\omega$ is bounded.
+
+Consider a non-zero $[z]$ in $\mathfrak{U} / \mathcal{N}$. Simply applying definitions one has
+\begin{align}
+    \|\pi_\omega(a)[z]\|^2 &= \|[az]\|^2 \\
+                           &= \left<[az], [az]\right> \\
+                           &= \omega((az)^*(az)) \\
+                           &= \omega(z^*(a^*a)z) \\
+                           &= \frac{\omega(z^*(a^*a)z)}{\omega(z^*z)} \omega(z^*z) \\
+                           &= \frac{\omega(z^*(a^*a)z)}{\omega(z^*z)} \|[z]\|^2.
+\end{align}
+With that last equation in mind let us define the map $\phi$ acting on $\mathfrak{U}$ by
+\begin{align}
+    \phi(a) \equiv \frac{\omega(z^*az)}{\omega(z^*z)}.
+\end{align}
+One can easily check that $\phi$ when acting on $\mathfrak{U}$ is linear and positive as
+\begin{align}
+    \phi(c^*c) = \frac{\omega(z^*(c^*c)z)}{\omega(z^*z)} = \frac{\omega((cz)^*(cz))}{\omega(z^*z)} \ge 0
+\end{align}
+as a result of $\omega$ being positive.
+
+Now as $\phi$ is a positive, linear function on the unital C*-algebra $\mathfrak{U}$ we can invoke the theorem (Chapter III Theorem 2.2.9 of \href{https://doi.org/10.1007/978-3-642-61458-3}{Haag})
+
+\begin{quote}
+    \textit{Theorem.} A positive, linear operator $\phi$ on a unital Banach *-algebra $\mathcal{A}$ is bounded and satisfies
+    \begin{align}
+        \|\phi\| = \phi(\mathbf{1})
+    \end{align}
+    where $\phi(\mathbf{1})$ is $\phi$ acting on the unit $\mathbf{1}$ of $\mathcal{A}$.
+\end{quote}
+
+\noindent to prove that $\|\phi\| = \phi(\mathbf{1})$. A short computation finds
+\begin{align}
+    \phi(\mathbf{1}) = \frac{\omega(z^*\mathbf{1}z)}{\omega(z^*z)} = 1
+\end{align}
+proving $\|\phi\|=1$, i.e. $\phi$ is normalized. As $\phi$ is a linear, positive, normalized operator on the unital C*-algebra $\mathfrak{U}$, it is indeed a state.
+
+Now as $\phi$ is normalized and thus $\|\phi\|=1$, the definition of the norm $\|\phi\|$ implies
+\begin{align}
+    \|\phi(c)\| \le \|\phi\| \, \|c\| = \|c\|.
+\end{align}
+This along with our previous derivation gives
+\begin{align}
+    \|\pi_\omega(a)[z]\|^2 &= \phi(a^*a) \|[z]\|^2 \\
+                           &\le \|\phi\| \, \|a^*a\| \, \|[z]\|^2 \\
+                           &=  \|a^*a\| \, \|[z]\|^2 \\
+                           &= \|a\|^2 \, \|[z]\|^2.
+\end{align}
+Using the definition of the norm $\|\pi_\omega(a)\|$ this equation then implies
+\begin{align}
+    \|\pi_\omega(a)\| \le \|a\|
+\end{align}
+which is the statement that $\pi_\omega(a)$ is a bounded operator on $\mathfrak{U} / \mathcal{N}$.
+
+Thus using the following standard theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
+
+\begin{quote}
+    \textit{Bounded Linear Transformation Theorem.} Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+\end{quote}
+
+\noindent one can extend $\pi_\omega$ from the dense subset $\mathfrak{U} / \mathcal{N}$ of $\mathcal{H}_\omega$ to all of $\mathcal{H}_\omega$. We do so and use the same notation $\pi_\omega$ for this extension.
+
+Finally we need to prove that $\pi_\omega$ is not only an algebraic morphism but is a *-morphism. Thankfully this is relatively simple.
+
+For $[x]$ and $[y]$ in $\mathfrak{U} / \mathcal{N}$ and $a$ in $\mathfrak{U}$, we have
+\begin{align}
+    \left<[x], \pi_\omega(a^*)[y]\right> &= \left<[x], [a^*y]\right> \\
+                                         &= \omega(x^*a^*y) \\
+                                         &= \omega((ax)^*y) \\
+                                         &= \left<[ax], [y]\right> \\
+                                         &= \left<\pi_\omega(a)[x], [y]\right> \\
+                                         &= \left<[x], \pi_\omega(a)^\dagger [y]\right>
+\end{align}
+Hence, $\pi_\omega(a^*) = \pi_\omega(a)^\dagger$ and $\pi_\omega$ is a *-morphism.
+
+\subsubsection{Construction of the Cyclic Vector}
+Our next task is to construct the cyclic vector $\Omega$. This is relatively straightforward.
+
+As $\mathfrak{U}$ is unital we can make the definition
+\begin{align}
+    \Omega \equiv [\mathbf{1}].
+\end{align}
+Tracing definitions we have
+\begin{align}
+    \{\pi_\omega(a)\Omega : a \in \mathfrak{U}\} = \{[a] : a \in \mathfrak{U}\} = \mathfrak{U} / \mathcal{N}.
+\end{align}
+As $\mathfrak{U} / \mathcal{N}$ is dense in $\mathcal{H}_\omega$, this implies that $\Omega$ is a cyclic vector in $\mathcal{H}_\omega$ for the representation $\pi_\omega$, the property claimed of $\Omega$ in the GNS Construction Theorem.
+
+In addition tracing definitions gives
+\begin{align}
+    \left<\Omega, \pi_\omega(a)\Omega\right> = \left<[\mathbf{1}], \pi_\omega(a)[\mathbf{1}]\right> = \left<[\mathbf{1}], [a]\right> = \omega(\mathbf{1}a) = \omega(a)
+\end{align}
+which proves another relation
+\begin{align}
+    \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>
+\end{align}
+claimed in the GNS Construction Theorem.
+
+\subsubsection{Faithfulness of the GNS Representation}
+Now we are going to prove the *-representation $\pi_\omega$ is faithful if $\omega$ is a faithful state.
+
+For this section of the proof, assume that $\omega$ is a faithful state.
+
+To prove that $\pi_\omega$ is a faithful representation, we must prove that $\ker \pi_\omega = \{0\}$. In other words, we must prove that $\pi_\omega(a) = 0$ implies that $a=0$.
+
+Assume that $\pi_\omega(a) = 0$. Thus we have
+\begin{align}
+    0 = \left<\pi_\omega(a)\Omega, \pi_\omega(a)\Omega\right> = \omega(a^*a).
+\end{align}
+As $\omega$ is assumed faithful in this section of the proof, this implies that $a=0$. This in turn implies $\ker \pi_\omega = \{0\}$, which proves that if $\omega$ is faithful, then $\pi_\omega$ is faithful, the desired result.
+
+\subsubsection{Uniqueness up to Unitary Equivalence}
+Finally to complete the proof of the GNS Construction Theorem we now prove that the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
+
+To that end let $(\mathcal{H}_\omega', \pi_\omega', \Omega')$ be a second GNS triple associated to $(\mathfrak{U}, \omega)$. (This implies, in particular, that the inner product on $\mathcal{H}_\omega'$ is given by $\omega$.) Then define an operator $U$ by
+\begin{align}
+    U\pi_\omega(a)\Omega \equiv \pi_\omega(a)'\Omega'.
+\end{align}
+The operator $U$ is obviously linear. Furthermore, as $\Omega$ and $\Omega'$ are cyclic, the domain of $U$ is dense in $\mathcal{H}_\omega$ and its range is dense in $\mathcal{H}_\omega'$. Now, as a result of chasing definitions
+\begin{align}
+    \left< U\pi_\omega(a)\Omega, U\pi_\omega(b)\Omega \right>' &= \left<\pi_\omega(a)'\Omega', \pi_\omega(b)'\Omega'\right>' \\
+                                                               &= \omega(a^*b) \\
+                                                               &= \left<\pi_\omega(a)\Omega, \pi_\omega(b)\Omega\right>
+\end{align}
+we find that $U$ preserves the inner product and is thus bounded. Furthermore, as $U$ preserves the inner product on its dense domain and dense range, it's also unitary there.
+
+As $U$ is bounded on its dense domain, the Bounded Linear Transformation Theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
+
+\begin{quote}
+    \textit{Bounded Linear Transformation Theorem.} Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+\end{quote}
+
+\noindent can be used to extend the domain of $U$ to all of $\mathcal{H}_\omega$. This gives a well-defined, unitary map from $\mathcal{H}_\omega$ to $\mathcal{H}_\omega'$ that we also denote by $U : \mathcal{H}_\omega \rightarrow \mathcal{H}_\omega'$.
+
+Now, the definition of $U$
+\begin{align}
+    U\pi_\omega(a)\Omega = \pi_\omega(a)'\Omega'.
+\end{align}
+gives for the case $a = \mathbf{1}$
+\begin{align}
+    U\Omega = \Omega'.
+\end{align}
+Hence, the fact that $U$ is unitary and thus $U^{-1}$ is well-defined gives
+\begin{align}
+    \left< U\pi_\omega(a)\Omega, U\pi_\omega(b)\Omega \right>' &= \left< U\pi_\omega(a)U^{-1}U\Omega, U\pi_\omega(b)\Omega \right>' \\
+                                                               &= \left< U\pi_\omega(a)U^{-1}U\Omega, \pi_\omega(b)'\Omega' \right>' \\
+                                                               &= \left< U\pi_\omega(a)U^{-1}\Omega', \pi_\omega(b)'\Omega' \right>'.
+\end{align}
+However, the definition of $U$ implies
+\begin{align}
+    \left< U\pi_\omega(a)\Omega, U\pi_\omega(b)\Omega \right>' = \left<\pi_\omega(a)'\Omega', \pi_\omega(b)'\Omega'\right>'.
+\end{align}
+Thus the previous two equations imply
+\begin{align}
+    \left< U\pi_\omega(a)U^{-1}\Omega', \pi_\omega(b)'\Omega' \right>' = \left<\pi_\omega(a)'\Omega', \pi_\omega(b)'\Omega'\right>'.
+\end{align}
+As a result of cyclicity of $\Omega'$ this implies that
+\begin{align}
+    U\pi_\omega(a)U^{-1}\Omega' = \pi_\omega(a)'\Omega'.
+\end{align}
+To complete the proof we must first show that $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree not only on $\Omega'$, but also on $\pi_\omega(c)'\Omega'$, which as $\Omega'$ is cyclic is dense in $\mathcal{H}_\omega'$. This can then be used along with the Bounded Linear Transformation Theorem to prove that $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\mathcal{H}_\omega'$.
+
+Let us first prove that $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\pi_\omega(c)'\Omega'$. We have
+\begin{align}
+    U\pi_\omega(a)U^{-1} \pi_\omega(c)'\Omega' &= U\pi_\omega(a)U^{-1} U\pi_\omega(c)U^{-1} \Omega' \\
+                                               &= U\pi_\omega(a)\pi_\omega(c)U^{-1} \Omega' \\
+                                               &= U\pi_\omega(ac)U^{-1} \Omega' \\
+                                               &= \pi_\omega(ac)' \Omega' \\
+                                               &= \pi_\omega(a)'\pi_\omega(c)' \Omega'
+\end{align}
+Thus $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\pi_\omega(c)'\Omega'$.
+
+As $\Omega'$ is cyclic, $\pi_\omega(c)'\Omega'$ is dense in $\mathcal{H}_\omega'$, and thus the  Bounded Linear Transformation Theorem (Theorem A.36 \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
+
+\begin{quote}
+    \textit{Bounded Linear Transformation Theorem.} Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}|_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
+\end{quote}
+
+\noindent can be invoked to prove that $U\pi_\omega(a)U^{-1}$ and $\pi_\omega(a)'$ agree on $\mathcal{H}_\omega'$, proving that
+\begin{align}
+    \pi_\omega(a)' = U\pi_\omega(a)U^{-1},
+\end{align}
+and two GNS triples associated to $(\mathfrak{U}, \omega)$ can differ at most by a unitary transformation, completing our proof of the GNS Construction Theorem.
+
+\subsection{Summary}
+This concludes the proof of the GNS Construction Theorem (see Theorem~\ref{thrm:gns-construction-theorem}). To summarise: given a state $\omega$ over a unital C*-algebra $\mathfrak{U}$ one can construct a Hilbert space $\mathcal{H}_\omega$, a *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ satisfying $\pi_\omega(a^*) = \pi_\omega(a)^\dagger$, and a cyclic vector $\Omega$ in $\mathcal{H}_\omega$ such that
+\begin{align}
+    \omega(a) = \left<\Omega, \pi_\omega(a)\Omega\right>_{\mathcal{H}_\omega}.
+\end{align}
+The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$, or the \textit{cyclic representation} of $(\mathfrak{U}, \omega)$. If $\omega$ is faithful then so is $\pi_\omega$, and the GNS triple is unique up to unitary equivalence.
+
+\noindent The reason we provided such detail is that we will have need not only of the theorem, but also of the details of the theorem's proof in subsequent blog posts.
