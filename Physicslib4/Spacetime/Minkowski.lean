@@ -9,6 +9,8 @@ import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Causality
 import Mathlib.Geometry.Manifold.MFDeriv.SpecificFunctions
 import Mathlib.Geometry.Manifold.ContMDiff.NormedSpace
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
+import Mathlib.Analysis.Convex.Basic
 
 /-!
 # Minkowski spacetime and the Alexandrov topology
@@ -572,15 +574,199 @@ noncomputable def standardMinkowski_lineSegmentPath
   smoothOn := standardMinkowski_lineSegmentPath_smoothOn p q
   nonvanishing := standardMinkowski_lineSegmentPath_nonvanishing p q hpq
 
+/-!
+### Forward direction: scaffolding for `chronologicalFuture ⊆ minkowskiForwardCone`
+
+The forward subset of `chronologicalFuture_standardMinkowski` says: if there
+is a chronological trip from `p` to `q` on standard Minkowski spacetime, then
+`q` lies in the open forward Minkowski-cone of `p`. We package the analytic
+content into four named stubs and assemble the structural proof from them:
+
+1. `mem_minkowskiForwardCone_iff_sub_mem` — the obvious translation
+   `q ∈ minkowskiForwardCone p ↔ (q - p) ∈ minkowskiForwardCone 0`,
+   reducing membership to the based-at-zero cone.
+2. `standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero`
+   — a vector `v : ℝ⁴` is timelike and future-pointing for the canonical
+   time orientation `∂_0` iff `v ∈ minkowskiForwardCone 0`.
+3. `standardMinkowski_trip_displacement_eq_intervalIntegral` — the
+   fundamental theorem of calculus applied to a trip: given a trip from `p`
+   to `q` witnessed by a smooth path `rep`, there exist parameter values
+   `a ≤ b` in `rep.parameterSpace` with `rep a = p`, `rep b = q`, and
+   `q - p = ∫_a^b tangent(s) ds`, where `tangent(s)` is the manifold
+   derivative of `rep.toFun` at `s` applied to `1 : ℝ`.
+4. `intervalIntegral_mem_minkowskiForwardCone_zero` — closure of the open
+   forward Minkowski-cone (at the origin) under positive interval
+   integration: if a continuous-on-`[a, b]` integrand lands in
+   `minkowskiForwardCone 0` on the open interval `(a, b)` and `a < b`,
+   then `∫_a^b f s ds ∈ minkowskiForwardCone 0`. This is the geometric
+   "convex cone closed under positive linear combinations" fact, passed
+   through Mathlib's interval-integral machinery.
+
+The forward-subset proof itself wires these together: from the trip
+witness, FTC (stub 3) gives an interval-integral representation of
+`q - p`; the trip's timelike future-pointing tangent (combined with stub
+2) shows the integrand lies in `minkowskiForwardCone 0`; closure under
+positive integration (stub 4) puts `q - p` in `minkowskiForwardCone 0`;
+and the translation lemma (stub 1) converts back to
+`q ∈ minkowskiForwardCone p`. Every remaining `sorry` is in one of the
+four named stubs.
+-/
+
+/-- Translation lemma: `q ∈ minkowskiForwardCone p ↔ (q - p) ∈
+minkowskiForwardCone 0`. Both sides reduce to the same conjunction of
+inequalities on the components of `q - p`. -/
+theorem mem_minkowskiForwardCone_iff_sub_mem (p q : SpacetimeModel) :
+    q ∈ minkowskiForwardCone p ↔ (q - p) ∈ minkowskiForwardCone 0 := by
+  constructor
+  · rintro ⟨h_time, h_cone⟩
+    refine ⟨?_, ?_⟩
+    · -- `0 0 < (q - p) 0` reduces to `0 < q 0 - p 0`, i.e. `p 0 < q 0`.
+      change (0 : ℝ) < (q - p) 0
+      have hsub : (q - p) 0 = q 0 - p 0 := rfl
+      rw [hsub]; linarith
+    · -- The quadratic form on `q - p` matches the quadratic form on `q - p`
+      -- via componentwise definitional equalities.
+      change -((q - p) 0 - (0 : SpacetimeModel) 0) ^ 2 +
+          ((q - p) 1 - (0 : SpacetimeModel) 1) ^ 2 +
+          ((q - p) 2 - (0 : SpacetimeModel) 2) ^ 2 +
+          ((q - p) 3 - (0 : SpacetimeModel) 3) ^ 2 < 0
+      have h0 : (0 : SpacetimeModel) 0 = 0 := rfl
+      have h1 : (0 : SpacetimeModel) 1 = 0 := rfl
+      have h2 : (0 : SpacetimeModel) 2 = 0 := rfl
+      have h3 : (0 : SpacetimeModel) 3 = 0 := rfl
+      have e0 : (q - p) 0 = q 0 - p 0 := rfl
+      have e1 : (q - p) 1 = q 1 - p 1 := rfl
+      have e2 : (q - p) 2 = q 2 - p 2 := rfl
+      have e3 : (q - p) 3 = q 3 - p 3 := rfl
+      rw [h0, h1, h2, h3, e0, e1, e2, e3]
+      simp only [sub_zero]
+      exact h_cone
+  · rintro ⟨h_time, h_cone⟩
+    refine ⟨?_, ?_⟩
+    · have hsub : (q - p) 0 = q 0 - p 0 := rfl
+      have h0 : (0 : SpacetimeModel) 0 = 0 := rfl
+      have h_time' : (0 : ℝ) < q 0 - p 0 := by
+        rw [show ((0 : SpacetimeModel) 0 : ℝ) = (0 : ℝ) from h0, hsub] at h_time
+        exact h_time
+      linarith
+    · have h0 : (0 : SpacetimeModel) 0 = 0 := rfl
+      have h1 : (0 : SpacetimeModel) 1 = 0 := rfl
+      have h2 : (0 : SpacetimeModel) 2 = 0 := rfl
+      have h3 : (0 : SpacetimeModel) 3 = 0 := rfl
+      have e0 : (q - p) 0 = q 0 - p 0 := rfl
+      have e1 : (q - p) 1 = q 1 - p 1 := rfl
+      have e2 : (q - p) 2 = q 2 - p 2 := rfl
+      have e3 : (q - p) 3 = q 3 - p 3 := rfl
+      have h_cone' : -((q - p) 0) ^ 2 + ((q - p) 1) ^ 2 +
+          ((q - p) 2) ^ 2 + ((q - p) 3) ^ 2 < 0 := by
+        have := h_cone
+        rw [show ((0 : SpacetimeModel) 0 : ℝ) = (0 : ℝ) from h0,
+            show ((0 : SpacetimeModel) 1 : ℝ) = (0 : ℝ) from h1,
+            show ((0 : SpacetimeModel) 2 : ℝ) = (0 : ℝ) from h2,
+            show ((0 : SpacetimeModel) 3 : ℝ) = (0 : ℝ) from h3] at this
+        simpa using this
+      rw [e0, e1, e2, e3] at h_cone'
+      linarith [h_cone']
+
+/-- *Analytic stub (timelike + future-pointing ↔ in the forward cone)*: on
+standard Minkowski spacetime with canonical time orientation `∂_0`, a
+tangent vector `v` is timelike and future-pointing in the
+`Spacetime`-theoretic sense iff `v ∈ minkowskiForwardCone 0`. This packs
+together the chain of definitional unfoldings of `IsTimelike`,
+`IsFuturePointing`, and the explicit form of `minkowskiForm` against the
+distinguished basis vector. -/
+theorem standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero
+    (v : SpacetimeModel) :
+    (StandardMinkowskiSpacetime.IsTimelike (x := (0 : SpacetimeModel)) v ∧
+      StandardMinkowskiSpacetime.IsFuturePointing
+        standardMinkowskiTimeOrientation (x := (0 : SpacetimeModel)) v) ↔
+    v ∈ minkowskiForwardCone 0 := by
+  sorry
+
+/-- *Analytic stub (FTC for a trip on standard Minkowski)*: every trip `c`
+from `p` to `q` on standard Minkowski spacetime is represented by a
+smooth path `rep` with parameter values `a ≤ b` lying in
+`rep.parameterSpace`, satisfying `rep a = p`, `rep b = q`, with the
+property that the trip's tangent at every interior `s ∈ (a, b)` is
+timelike future-pointing, and such that the fundamental theorem of
+calculus gives `q - p = ∫_a^b rep.tangent(s) ds`. Continuity of the
+tangent on the closed parameter interval is also exposed for use in the
+integration argument. -/
+theorem standardMinkowski_trip_displacement_eq_intervalIntegral
+    {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
+    (htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
+              standardMinkowskiTimeOrientation p q c) :
+    ∃ (rep : StandardMinkowskiSpacetime.SmoothPath) (a b : ℝ),
+      a < b ∧ a ∈ rep.parameterSpace ∧ b ∈ rep.parameterSpace ∧
+      rep.toFun a = p ∧ rep.toFun b = q ∧
+      ContinuousOn
+        (fun s => mfderivWithin (modelWithCornersSelf ℝ ℝ)
+                    StandardMinkowskiSpacetime.model
+                    rep.toFun rep.parameterSpace s (1 : ℝ))
+        (Set.Icc a b) ∧
+      (∀ s ∈ Set.Ioo a b,
+        (mfderivWithin (modelWithCornersSelf ℝ ℝ)
+            StandardMinkowskiSpacetime.model
+            rep.toFun rep.parameterSpace s (1 : ℝ))
+          ∈ minkowskiForwardCone (0 : SpacetimeModel)) ∧
+      (q - p : SpacetimeModel) = ∫ s in a..b,
+        mfderivWithin (modelWithCornersSelf ℝ ℝ)
+          StandardMinkowskiSpacetime.model
+          rep.toFun rep.parameterSpace s (1 : ℝ) := by
+  sorry
+
+/-- *Analytic stub (closure under positive interval integration)*: if `f :
+ℝ → ℝ⁴` is continuous on `[a, b]` and lies in the open forward
+Minkowski-cone at the origin throughout the open interval `(a, b)` (with
+`a < b`), then the interval integral `∫_a^b f s ds` also lies in
+`minkowskiForwardCone 0`. This is the analytic incarnation of "the open
+forward Minkowski-cone is a convex cone, closed under positive convex
+combinations and hence under positive integration of cone-valued
+integrands". -/
+theorem intervalIntegral_mem_minkowskiForwardCone_zero
+    {f : ℝ → SpacetimeModel} {a b : ℝ}
+    (_hab : a < b)
+    (_hf : ContinuousOn f (Set.Icc a b))
+    (_hmem : ∀ s ∈ Set.Ioo a b, f s ∈ minkowskiForwardCone (0 : SpacetimeModel)) :
+    (∫ s in a..b, f s) ∈ minkowskiForwardCone (0 : SpacetimeModel) := by
+  sorry
+
 /-- *Forward subset* of `chronologicalFuture_standardMinkowski`: every
 point in the chronological future of `p` lies in the open forward
-Minkowski-cone. This direction requires integrating the timelike
-tangent vector over a trip, and is currently `sorry`'d. -/
+Minkowski-cone. The body wires together
+`standardMinkowski_trip_displacement_eq_intervalIntegral`,
+`intervalIntegral_mem_minkowskiForwardCone_zero`, and
+`mem_minkowskiForwardCone_iff_sub_mem`; the remaining analytic content
+sits in those named stubs. -/
 theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
     Spacetime.chronologicalFuture StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation p
       ⊆ minkowskiForwardCone p := by
-  sorry
+  intro q hq
+  -- `StandardMinkowskiSpacetime.Carrier = SpacetimeModel` definitionally; we
+  -- re-bind `q` at the model type so that arithmetic and cone membership
+  -- elaborate cleanly.
+  let q' : SpacetimeModel := q
+  -- Unpack the trip witness.
+  obtain ⟨c, htrip⟩ := hq
+  -- FTC representation of `q' - p` as an interval integral of the trip's
+  -- tangent. The stub also delivers continuity of the tangent on `[a, b]`
+  -- and membership of the tangent in `minkowskiForwardCone 0` on the open
+  -- interval `(a, b)` (with `a < b` guaranteed by the nontriviality of a
+  -- trip's parameter space combined with the past/future endpoint data).
+  obtain ⟨rep, a, b, hab, _ha, _hb, _hpa, _hqb,
+           hcont, hmem, hftc⟩ :=
+    standardMinkowski_trip_displacement_eq_intervalIntegral (p := p) (q := q')
+      (c := c) htrip
+  -- Apply the cone's closure under positive interval integration to get
+  -- `(q' - p) ∈ minkowskiForwardCone 0`.
+  have hsub : (q' - p) ∈ minkowskiForwardCone (0 : SpacetimeModel) := by
+    rw [hftc]
+    exact intervalIntegral_mem_minkowskiForwardCone_zero hab hcont hmem
+  -- Translate back: `q' ∈ minkowskiForwardCone p` iff
+  -- `(q' - p) ∈ minkowskiForwardCone 0`.
+  change q' ∈ minkowskiForwardCone p
+  exact (mem_minkowskiForwardCone_iff_sub_mem p q').mpr hsub
 
 /-- *Reverse subset* of `chronologicalFuture_standardMinkowski`: every
 point of the open forward Minkowski-cone of `p` lies in the chronological
