@@ -511,7 +511,32 @@ theorem standardMinkowski_lineSegmentPath_mfderivWithin (p q : SpacetimeModel) :
         StandardMinkowskiSpacetime.model
         (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
         (Set.Icc 0 1) s (1 : ℝ) = q - p := by
-  sorry
+  intro s hs
+  -- Reduce `mfderivWithin` to `fderivWithin` on the self-models.
+  have hmodel : StandardMinkowskiSpacetime.model
+      = modelWithCornersSelf ℝ SpacetimeModel := rfl
+  rw [hmodel, mfderivWithin_eq_fderivWithin]
+  -- The Fréchet derivative of `s ↦ p + s • (q - p)` at `s` is
+  -- `(ContinuousLinearMap.id ℝ ℝ).smulRight (q - p)`.
+  have hfderiv :
+      HasFDerivAt (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
+        ((ContinuousLinearMap.id ℝ ℝ).smulRight (q - p)) s := by
+    have hidf : HasFDerivAt (fun s : ℝ => s) (ContinuousLinearMap.id ℝ ℝ) s :=
+      hasFDerivAt_id s
+    have h2 : HasFDerivAt (fun s : ℝ => s • (q - p))
+        ((ContinuousLinearMap.id ℝ ℝ).smulRight (q - p)) s :=
+      HasFDerivAt.smul_const hidf (q - p)
+    exact HasFDerivAt.const_add p h2
+  -- Use the within-version to identify `fderivWithin`.
+  have hwithin : HasFDerivWithinAt (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
+      ((ContinuousLinearMap.id ℝ ℝ).smulRight (q - p)) (Set.Icc (0 : ℝ) 1) s :=
+    hfderiv.hasFDerivWithinAt
+  have hunique : UniqueDiffWithinAt ℝ (Set.Icc (0 : ℝ) 1) s :=
+    uniqueDiffOn_Icc zero_lt_one s hs
+  rw [HasFDerivWithinAt.fderivWithin hwithin hunique]
+  -- Compute the action on `1`.
+  change ((ContinuousLinearMap.id ℝ ℝ).smulRight (q - p)) (1 : ℝ) = q - p
+  rw [ContinuousLinearMap.smulRight_apply, ContinuousLinearMap.id_apply, one_smul]
 
 /-- The straight-line path `s ↦ p + s • (q - p)` has non-vanishing derivative
 `q - p` (assuming `p ≠ q`). *(Analytic stub for the chronological-future
