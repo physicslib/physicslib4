@@ -8,6 +8,7 @@ import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Causality
 import Mathlib.Geometry.Manifold.MFDeriv.SpecificFunctions
+import Mathlib.Geometry.Manifold.ContMDiff.NormedSpace
 
 /-!
 # Minkowski spacetime and the Alexandrov topology
@@ -497,7 +498,9 @@ theorem standardMinkowski_lineSegmentPath_smoothOn (p q : SpacetimeModel) :
       StandardMinkowskiSpacetime.model ⊤
       (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
       (Set.Icc (0 : ℝ) 1) := by
-  sorry
+  have h : ContDiff ℝ (⊤ : WithTop ℕ∞) (fun s : ℝ => (p : SpacetimeModel) + s • (q - p)) :=
+    contDiff_const.add (contDiff_id.smul contDiff_const)
+  exact (contMDiff_iff_contDiff.mpr h).contMDiffOn
 
 /-- The derivative of the straight-line path `s ↦ p + s • (q - p)` at every
 point of `[0, 1]`, applied to the basis vector `1 : ℝ`, equals `q - p`.
