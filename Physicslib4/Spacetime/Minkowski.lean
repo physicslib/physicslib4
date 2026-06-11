@@ -272,14 +272,117 @@ theorem isOrthochronous_refl :
   rw [this]
   exact one_pos
 
+/-- Helper: if two timelike unit vectors `v, w` (with
+`minkowskiForm v v = minkowskiForm w w = -1`) satisfy
+`minkowskiForm v w < 0` and `w` has positive time component,
+then `v` also has positive time component. This is the
+"reverse Cauchy-Schwarz" lemma underlying orthochronousness. -/
+private lemma timelike_sameSign_of_minkowskiForm_neg
+    {v w : SpacetimeModel}
+    (hv : minkowskiForm v v = -1) (hw : minkowskiForm w w = -1)
+    (hpos : 0 < w.ofLp 0) (hvw : minkowskiForm v w < 0) :
+    0 < v.ofLp 0 := by
+  have hv' :
+      -(v.ofLp 0) * (v.ofLp 0) + (v.ofLp 1) * (v.ofLp 1) +
+        (v.ofLp 2) * (v.ofLp 2) + (v.ofLp 3) * (v.ofLp 3) = -1 := by
+    have := hv
+    simp only [minkowskiForm_apply] at this
+    exact this
+  have hw' :
+      -(w.ofLp 0) * (w.ofLp 0) + (w.ofLp 1) * (w.ofLp 1) +
+        (w.ofLp 2) * (w.ofLp 2) + (w.ofLp 3) * (w.ofLp 3) = -1 := by
+    have := hw
+    simp only [minkowskiForm_apply] at this
+    exact this
+  have hvw' :
+      -(v.ofLp 0) * (w.ofLp 0) + (v.ofLp 1) * (w.ofLp 1) +
+        (v.ofLp 2) * (w.ofLp 2) + (v.ofLp 3) * (w.ofLp 3) < 0 := by
+    have := hvw
+    simp only [minkowskiForm_apply] at this
+    exact this
+  by_contra hneg0
+  rw [not_lt] at hneg0
+  obtain ⟨a, ha⟩ : ∃ a : ℝ, a = v.ofLp 0 := ⟨v.ofLp 0, rfl⟩
+  obtain ⟨b, hb⟩ : ∃ b : ℝ, b = w.ofLp 0 := ⟨w.ofLp 0, rfl⟩
+  obtain ⟨p, hp⟩ : ∃ p : ℝ, p = v.ofLp 1 := ⟨v.ofLp 1, rfl⟩
+  obtain ⟨q, hq⟩ : ∃ q : ℝ, q = v.ofLp 2 := ⟨v.ofLp 2, rfl⟩
+  obtain ⟨r, hr⟩ : ∃ r : ℝ, r = v.ofLp 3 := ⟨v.ofLp 3, rfl⟩
+  obtain ⟨p', hp'⟩ : ∃ p' : ℝ, p' = w.ofLp 1 := ⟨w.ofLp 1, rfl⟩
+  obtain ⟨q', hq'⟩ : ∃ q' : ℝ, q' = w.ofLp 2 := ⟨w.ofLp 2, rfl⟩
+  obtain ⟨r', hr'⟩ : ∃ r' : ℝ, r' = w.ofLp 3 := ⟨w.ofLp 3, rfl⟩
+  rw [← ha, ← hp, ← hq, ← hr] at hv'
+  rw [← hb, ← hp', ← hq', ← hr'] at hw'
+  rw [← ha, ← hb, ← hp, ← hq, ← hr, ← hp', ← hq', ← hr'] at hvw'
+  rw [← hb] at hpos
+  rw [← ha] at hneg0
+  have ha_sq_ge : a * a ≥ 1 := by
+    nlinarith [sq_nonneg p, sq_nonneg q, sq_nonneg r, hv']
+  have hb_sq_ge : b * b ≥ 1 := by
+    nlinarith [sq_nonneg p', sq_nonneg q', sq_nonneg r', hw']
+  have ha_neg : a < 0 := by nlinarith [ha_sq_ge, hneg0, sq_nonneg (a + 1)]
+  have hCS : (p * p' + q * q' + r * r') ^ 2 ≤
+      (p * p + q * q + r * r) * (p' * p' + q' * q' + r' * r') := by
+    nlinarith [sq_nonneg (p * q' - q * p'), sq_nonneg (p * r' - r * p'),
+               sq_nonneg (q * r' - r * q')]
+  have hpqr : p * p + q * q + r * r = a * a - 1 := by linarith [hv']
+  have hpqr' : p' * p' + q' * q' + r' * r' = b * b - 1 := by linarith [hw']
+  have hs_lt_ab : p * p' + q * q' + r * r' < a * b := by linarith [hvw']
+  have hab_neg : a * b < 0 := mul_neg_of_neg_of_pos ha_neg hpos
+  have hab_sq_lt : (a * b) ^ 2 < (p * p' + q * q' + r * r') ^ 2 := by
+    have hs_neg : p * p' + q * q' + r * r' < 0 := by linarith
+    have habs : -(p * p' + q * q' + r * r') > -(a * b) := by linarith
+    have hpos1 : (0 : ℝ) < -(a * b) := by linarith
+    nlinarith [habs, hpos1, sq_nonneg (p * p' + q * q' + r * r' - a * b)]
+  have hCS2 : (p * p' + q * q' + r * r') ^ 2 ≤ (a * a - 1) * (b * b - 1) := by
+    calc (p * p' + q * q' + r * r') ^ 2
+        ≤ (p * p + q * q + r * r) * (p' * p' + q' * q' + r' * r') := hCS
+      _ = (a * a - 1) * (b * b - 1) := by rw [hpqr, hpqr']
+  have hexpand : (a * a - 1) * (b * b - 1) = (a * b) ^ 2 - a * a - b * b + 1 := by
+    ring
+  rw [hexpand] at hCS2
+  have hfinal : a * a + b * b < 1 := by linarith [hab_sq_lt, hCS2]
+  linarith [ha_sq_ge, hb_sq_ge]
+
 /-- The composition of two orthochronous Lorentz transformations is
 orthochronous. (Requires that both transformations are Lorentz.) -/
 theorem isOrthochronous_trans {L₁ L₂ : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel}
     (hL₁ : IsLorentz L₁) (hO₁ : IsOrthochronous L₁)
     (hL₂ : IsLorentz L₂) (hO₂ : IsOrthochronous L₂) :
     IsOrthochronous (L₁.trans L₂) := by
-  -- TODO: requires reverse Cauchy-Schwarz on a Lorentzian form
-  sorry
+  set e₀ : SpacetimeModel := EuclideanSpace.single (0 : Fin 4) (1 : ℝ) with he₀
+  have he₀_form : minkowskiForm e₀ e₀ = -1 := by
+    simp only [minkowskiForm_apply]
+    have h0 : e₀.ofLp 0 = 1 := by rw [he₀, PiLp.single_apply]; simp
+    have h1 : e₀.ofLp 1 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    have h2 : e₀.ofLp 2 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    have h3 : e₀.ofLp 3 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    change -(e₀.ofLp 0) * (e₀.ofLp 0) + (e₀.ofLp 1) * (e₀.ofLp 1) +
+        (e₀.ofLp 2) * (e₀.ofLp 2) + (e₀.ofLp 3) * (e₀.ofLp 3) = -1
+    rw [h0, h1, h2, h3]; ring
+  have huu : minkowskiForm (L₁ e₀) (L₁ e₀) = -1 := by rw [hL₁]; exact he₀_form
+  have hvv : minkowskiForm (L₂ (L₁ e₀)) (L₂ (L₁ e₀)) = -1 := by
+    rw [hL₂]; exact huu
+  have hww : minkowskiForm (L₂ e₀) (L₂ e₀) = -1 := by rw [hL₂]; exact he₀_form
+  have hvw_eq : minkowskiForm (L₂ (L₁ e₀)) (L₂ e₀) = -((L₁ e₀).ofLp 0) := by
+    rw [hL₂]
+    simp only [minkowskiForm_apply]
+    have h0 : e₀.ofLp 0 = 1 := by rw [he₀, PiLp.single_apply]; simp
+    have h1 : e₀.ofLp 1 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    have h2 : e₀.ofLp 2 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    have h3 : e₀.ofLp 3 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    change -((L₁ e₀).ofLp 0) * (e₀.ofLp 0) + ((L₁ e₀).ofLp 1) * (e₀.ofLp 1) +
+        ((L₁ e₀).ofLp 2) * (e₀.ofLp 2) + ((L₁ e₀).ofLp 3) * (e₀.ofLp 3) =
+          -((L₁ e₀).ofLp 0)
+    rw [h0, h1, h2, h3]; ring
+  have hu0 : (0 : ℝ) < (L₁ e₀).ofLp 0 := hO₁
+  have hw0 : (0 : ℝ) < (L₂ e₀).ofLp 0 := hO₂
+  have hvw_neg : minkowskiForm (L₂ (L₁ e₀)) (L₂ e₀) < 0 := by
+    rw [hvw_eq]; linarith
+  unfold IsOrthochronous
+  change (0 : ℝ) < ((L₁.trans L₂) e₀).ofLp 0
+  have htrans : (L₁.trans L₂) e₀ = L₂ (L₁ e₀) := rfl
+  rw [htrans]
+  exact timelike_sameSign_of_minkowskiForm_neg hvv hww hw0 hvw_neg
 
 /-- The inverse of an orthochronous Lorentz transformation is
 orthochronous. -/
