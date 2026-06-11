@@ -828,19 +828,81 @@ theorem standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
 /-- *Analytic stub (parameter space of a smooth path with endpoints is an
 `Icc`)*: a smooth path `rep` whose parameter space is closed and connected
 with at least two distinct points and which carries a past endpoint `p` and
-a future endpoint `q` has parameter space exhaustively equal to
-`Set.Icc a b` with `a < b`, `rep.toFun a = p`, and `rep.toFun b = q`. This
-is the order-topological consequence of "a closed connected non-singleton
-subset of `ℝ` is a closed interval, and `IsPastEndpoint` / `IsFutureEndpoint`
-expose its endpoints". -/
+a future endpoint `q` with `p ≠ q` has parameter space exhaustively equal
+to `Set.Icc a b` with `a < b`, `rep.toFun a = p`, and `rep.toFun b = q`.
+This is the order-topological consequence of "a closed connected
+non-singleton subset of `ℝ` is a closed interval, and `IsPastEndpoint` /
+`IsFutureEndpoint` expose its endpoints". The hypothesis `p ≠ q` rules out
+the otherwise admissible case in which `rep.parameterSpace` is an unbounded
+half-line or `Set.univ`; both have frontier consisting of at most a single
+point, which would force `p = q`. -/
 theorem standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints
     (rep : StandardMinkowskiSpacetime.SmoothPath)
     {p q : SpacetimeModel}
-    (_hp : Spacetime.IsPastEndpoint StandardMinkowskiSpacetime rep p)
-    (_hq : Spacetime.IsFutureEndpoint StandardMinkowskiSpacetime rep q) :
+    (hp : Spacetime.IsPastEndpoint StandardMinkowskiSpacetime rep p)
+    (hq : Spacetime.IsFutureEndpoint StandardMinkowskiSpacetime rep q)
+    (hpq : p ≠ q) :
     ∃ a b : ℝ, a < b ∧ rep.parameterSpace = Set.Icc a b ∧
       rep.toFun a = p ∧ rep.toFun b = q := by
-  sorry
+  obtain ⟨sp, hsp_front, hsp_eq, hsp_min⟩ := hp
+  obtain ⟨sq, hsq_front, hsq_eq, hsq_max⟩ := hq
+  -- The frontier of a closed set is contained in the set.
+  have hclosed : IsClosed rep.parameterSpace := rep.isClosed
+  have hsp_mem : sp ∈ rep.parameterSpace := hclosed.frontier_subset hsp_front
+  have hsq_mem : sq ∈ rep.parameterSpace := hclosed.frontier_subset hsq_front
+  -- `sp ≤ sq` from minimality of `sp` applied to `sq ∈ frontier`.
+  have hsp_le_sq : sp ≤ sq := hsp_min sq hsq_front
+  -- `sp ≠ sq`: otherwise `p = rep.toFun sp = rep.toFun sq = q`.
+  have hsp_ne_sq : sp ≠ sq := by
+    intro h
+    apply hpq
+    rw [← hsp_eq, ← hsq_eq, h]
+  have hab : sp < sq := lt_of_le_of_ne hsp_le_sq hsp_ne_sq
+  -- Preconnectedness and ordConnectedness of the parameter space.
+  have hpre : IsPreconnected rep.parameterSpace := rep.isConnected.isPreconnected
+  have hord : rep.parameterSpace.OrdConnected := hpre.ordConnected
+  -- `Icc sp sq ⊆ rep.parameterSpace`.
+  have h_icc_sub : Set.Icc sp sq ⊆ rep.parameterSpace :=
+    hord.out hsp_mem hsq_mem
+  -- Reverse inclusion: `rep.parameterSpace ⊆ Set.Icc sp sq`.
+  have h_sub_icc : rep.parameterSpace ⊆ Set.Icc sp sq := by
+    intro t ht
+    refine Set.mem_Icc.mpr ⟨?_, ?_⟩
+    · -- `sp ≤ t`. Assume `t < sp`; derive a contradiction by showing
+      -- `sp ∈ interior rep.parameterSpace`, contradicting `sp ∈ frontier`.
+      by_contra hlt
+      push Not at hlt
+      -- `hlt : t < sp`.
+      -- `Icc t sq ⊆ rep.parameterSpace`.
+      have h_t_sq_sub : Set.Icc t sq ⊆ rep.parameterSpace :=
+        hord.out ht hsq_mem
+      have h_ioo_sub : Set.Ioo t sq ⊆ rep.parameterSpace :=
+        (Set.Ioo_subset_Icc_self.trans h_t_sq_sub)
+      have h_sp_in_ioo : sp ∈ Set.Ioo t sq := ⟨hlt, hab⟩
+      have h_sp_interior : sp ∈ interior rep.parameterSpace :=
+        interior_maximal h_ioo_sub isOpen_Ioo h_sp_in_ioo
+      have h_sp_not_interior : sp ∉ interior rep.parameterSpace := by
+        rw [hclosed.frontier_eq] at hsp_front
+        exact hsp_front.2
+      exact h_sp_not_interior h_sp_interior
+    · -- `t ≤ sq`. Symmetric argument.
+      by_contra hlt
+      push Not at hlt
+      -- `hlt : sq < t`.
+      have h_sp_t_sub : Set.Icc sp t ⊆ rep.parameterSpace :=
+        hord.out hsp_mem ht
+      have h_ioo_sub : Set.Ioo sp t ⊆ rep.parameterSpace :=
+        (Set.Ioo_subset_Icc_self.trans h_sp_t_sub)
+      have h_sq_in_ioo : sq ∈ Set.Ioo sp t := ⟨hab, hlt⟩
+      have h_sq_interior : sq ∈ interior rep.parameterSpace :=
+        interior_maximal h_ioo_sub isOpen_Ioo h_sq_in_ioo
+      have h_sq_not_interior : sq ∉ interior rep.parameterSpace := by
+        rw [hclosed.frontier_eq] at hsq_front
+        exact hsq_front.2
+      exact h_sq_not_interior h_sq_interior
+  -- Assemble.
+  refine ⟨sp, sq, hab, ?_, hsp_eq, hsq_eq⟩
+  exact Set.Subset.antisymm h_sub_icc h_icc_sub
 
 /-- *Analytic stub (continuity of the manifold tangent of a smooth path on
 its parameter `Icc`)*: for a smooth path `μ` on standard Minkowski spacetime
@@ -876,7 +938,8 @@ The body wires together four named sub-stubs:
 theorem standardMinkowski_trip_displacement_eq_intervalIntegral
     {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
     (htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
-              standardMinkowskiTimeOrientation p q c) :
+              standardMinkowskiTimeOrientation p q c)
+    (hpq : p ≠ q) :
     ∃ (rep : StandardMinkowskiSpacetime.SmoothPath) (a b : ℝ),
       a < b ∧ a ∈ rep.parameterSpace ∧ b ∈ rep.parameterSpace ∧
       rep.toFun a = p ∧ rep.toFun b = q ∧
@@ -903,7 +966,7 @@ theorem standardMinkowski_trip_displacement_eq_intervalIntegral
   -- the endpoint values.
   obtain ⟨a, b, hab, hparam, ha_eq, hb_eq⟩ :=
     standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints
-      rep (p := p) (q := q) hpast hfuture
+      rep (p := p) (q := q) hpast hfuture hpq
   -- Membership of `a, b` in the parameter space.
   have ha_mem : a ∈ rep.parameterSpace := by
     rw [hparam]; exact Set.left_mem_Icc.mpr hab.le
@@ -1136,6 +1199,17 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
     simp only [sub_zero]
     linarith [h_sq_lt]
 
+/-- *Substub*: chronological precedence on standard Minkowski with the
+canonical time orientation implies the endpoints are distinct. Follows from
+strict monotonicity of the zeroth coordinate along a future-oriented
+timelike smooth path. -/
+theorem standardMinkowski_chronologicallyPrecedes_ne
+    {p q : SpacetimeModel}
+    (h : Spacetime.ChronologicallyPrecedes StandardMinkowskiSpacetime
+            standardMinkowskiTimeOrientation p q) :
+    p ≠ q := by
+  sorry
+
 /-- *Forward subset* of `chronologicalFuture_standardMinkowski`: every
 point in the chronological future of `p` lies in the open forward
 Minkowski-cone. The body wires together
@@ -1152,6 +1226,12 @@ theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
   -- re-bind `q` at the model type so that arithmetic and cone membership
   -- elaborate cleanly.
   let q' : SpacetimeModel := q
+  -- `hq : q ∈ chronologicalFuture _ _ p` unfolds to a chronological
+  -- precedence witness `p ≪ q`.
+  have hprec : Spacetime.ChronologicallyPrecedes StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation p q' := hq
+  -- Distinctness of `p` and `q'` from the new mini-substub.
+  have hpq : p ≠ q' := standardMinkowski_chronologicallyPrecedes_ne hprec
   -- Unpack the trip witness.
   obtain ⟨c, htrip⟩ := hq
   -- FTC representation of `q' - p` as an interval integral of the trip's
@@ -1162,7 +1242,7 @@ theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
   obtain ⟨rep, a, b, hab, _ha, _hb, _hpa, _hqb,
            hcont, hmem, hftc⟩ :=
     standardMinkowski_trip_displacement_eq_intervalIntegral (p := p) (q := q')
-      (c := c) htrip
+      (c := c) htrip hpq
   -- Apply the cone's closure under positive interval integration to get
   -- `(q' - p) ∈ minkowskiForwardCone 0`.
   have hsub : (q' - p) ∈ minkowskiForwardCone (0 : SpacetimeModel) := by
