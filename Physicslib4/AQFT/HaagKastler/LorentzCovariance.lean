@@ -55,9 +55,11 @@ axioms, section 9.3 of the AQFT-in-Lean blueprint):
   `StandardMinkowskiSpacetime.Carrier`: those preserving the
   Minkowski form, with determinant `+1`, and preserving the future
   time direction. Closure of the orthochronous condition under
-  composition and inversion is currently `sorry`-bearing (see
+  composition and inversion is provided by
   `Physicslib4.isOrthochronous_trans` and
-  `Physicslib4.isOrthochronous_symm` in `Spacetime/Minkowski.lean`).
+  `Physicslib4.isOrthochronous_symm` in `Spacetime/Minkowski.lean`,
+  proved via the reverse Cauchy-Schwarz inequality on the Minkowski
+  form.
 -/
 
 namespace Physicslib4
