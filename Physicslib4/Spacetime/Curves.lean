@@ -255,23 +255,29 @@ For a smooth path `μ` whose associated smooth curve is timelike and
 future-oriented, a *past endpoint* is the image under `μ` of the lesser of
 the two boundary components of `∂Σ`.
 
-We capture this as: there exists a value `s ∈ ∂Σ` such that every other
-`s' ∈ ∂Σ` satisfies `s ≤ s'`, and `μ s = p`.
+We capture this as: there exists a value `s ∈ Σ` such that every other
+`s' ∈ Σ` satisfies `s ≤ s'`, and `μ s = p`. Quantifying over the parameter
+space (rather than its frontier `∂Σ`) ensures the witness is a genuine
+minimum of `Σ`, which on a closed connected `Σ ⊆ ℝ` forces `Σ` to be
+bounded below; together with `IsFutureEndpoint` this excludes half-lines and
+pins `Σ` down to a compact closed interval `[a, b]`.
 -/
 def IsPastEndpoint (μ : M.SmoothPath) (p : M.Carrier) : Prop :=
-  ∃ s ∈ frontier μ.parameterSpace,
+  ∃ s ∈ μ.parameterSpace,
     μ.toFun s = p ∧
-    (∀ s' ∈ frontier μ.parameterSpace, s ≤ s')
+    (∀ s' ∈ μ.parameterSpace, s ≤ s')
 
 /--
 For a smooth path `μ` whose associated smooth curve is timelike and
 future-oriented, a *future endpoint* is the image under `μ` of the greater
-of the two boundary components of `∂Σ`.
+of the two boundary components of `∂Σ`. Quantifying over the parameter
+space (rather than `∂Σ`) ensures the witness is a genuine maximum, forcing
+boundedness above; see `IsPastEndpoint` for the dual.
 -/
 def IsFutureEndpoint (μ : M.SmoothPath) (p : M.Carrier) : Prop :=
-  ∃ s ∈ frontier μ.parameterSpace,
+  ∃ s ∈ μ.parameterSpace,
     μ.toFun s = p ∧
-    (∀ s' ∈ frontier μ.parameterSpace, s' ≤ s)
+    (∀ s' ∈ μ.parameterSpace, s' ≤ s)
 
 end Spacetime
 
