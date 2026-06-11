@@ -808,10 +808,22 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
       ContinuousOn (fun s => (f s) i) (Set.Icc a b) := fun i =>
     (PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) i).comp_continuousOn _hf
   -- Pointwise positivity and Lorentzian inequality on (a, b).
-  have h_pos : ∀ s ∈ Set.Ioo a b, 0 < (f s) 0 := fun s hs => (_hmem s hs).1
+  have h_pos : ∀ s ∈ Set.Ioo a b, 0 < (f s) 0 := by
+    intro s hs
+    have h := (_hmem s hs).1
+    -- h : (0 : SpacetimeModel) 0 < (f s) 0, with (0 : SpacetimeModel) 0 = 0.
+    have hz : (0 : SpacetimeModel) 0 = 0 := rfl
+    rw [hz] at h; exact h
   have h_lor : ∀ s ∈ Set.Ioo a b,
-      -((f s) 0) ^ 2 + ((f s) 1) ^ 2 + ((f s) 2) ^ 2 + ((f s) 3) ^ 2 < 0 :=
-    fun s hs => (_hmem s hs).2
+      -((f s) 0) ^ 2 + ((f s) 1) ^ 2 + ((f s) 2) ^ 2 + ((f s) 3) ^ 2 < 0 := by
+    intro s hs
+    have h := (_hmem s hs).2
+    have hz0 : (0 : SpacetimeModel) 0 = 0 := rfl
+    have hz1 : (0 : SpacetimeModel) 1 = 0 := rfl
+    have hz2 : (0 : SpacetimeModel) 2 = 0 := rfl
+    have hz3 : (0 : SpacetimeModel) 3 = 0 := rfl
+    rw [hz0, hz1, hz2, hz3] at h
+    simpa using h
   -- Continuity of (f s) 0 on the closed interval.
   have hf0_cont : ContinuousOn (fun s => (f s) 0) (Set.Icc a b) := hf_cont_coord 0
   -- Coordinate-by-coordinate evaluation of the integral via the projection CLM.
@@ -823,16 +835,21 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
     -- `EuclideanSpace.proj i` evaluated at `v` is `v i`.
     simpa [EuclideanSpace.proj, PiLp.proj_apply, hI_def] using this.symm
   -- Define the spatial map T v := v - EuclideanSpace.single 0 (v 0); this is
-  -- a continuous linear endomorphism of `SpacetimeModel`.
+  -- a continuous linear endomorphism of `SpacetimeModel`, built from
+  -- `EuclideanSpace.proj 0` and the basis vector `EuclideanSpace.single 0 1`.
   set T : SpacetimeModel →L[ℝ] SpacetimeModel :=
     ContinuousLinearMap.id ℝ SpacetimeModel -
-      (PiLp.single (𝕜 := ℝ) (p := 2) (ι := Fin 4)
-          (fun _ => ℝ) (0 : Fin 4)).toContinuousLinearMap.comp
-        (EuclideanSpace.proj (0 : Fin 4)) with hT_def
+      (EuclideanSpace.proj (0 : Fin 4)).smulRight
+        (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) with hT_def
   have hT_apply : ∀ v : SpacetimeModel,
       T v = v - EuclideanSpace.single (0 : Fin 4) (v 0) := by
     intro v
-    simp [hT_def, EuclideanSpace.single]
+    simp only [hT_def, ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
+      ContinuousLinearMap.smulRight_apply, EuclideanSpace.coe_proj]
+    -- (v 0) • single 0 1 = single 0 (v 0)
+    congr 1
+    ext i
+    simp [EuclideanSpace.single, PiLp.single_apply, mul_comm]
   -- Properties of T applied coordinatewise.
   have hT_coord : ∀ (v : SpacetimeModel) (i : Fin 4),
       (T v) i = if i = 0 then 0 else v i := by
@@ -840,10 +857,10 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
     rw [hT_apply]
     by_cases h : i = 0
     · subst h
-      simp [PiLp.single_apply]
+      simp
     · have hsingle : (EuclideanSpace.single (0 : Fin 4) (v 0)) i = 0 := by
-        simp [EuclideanSpace.single, PiLp.single_apply, h]
-      simp [hsingle, h]
+        simp [EuclideanSpace.single, h]
+      simp [h]
   -- ‖T v‖² = (v 1)² + (v 2)² + (v 3)² for any v.
   have hT_norm_sq : ∀ v : SpacetimeModel,
       ‖T v‖ ^ 2 = (v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2 := by
@@ -870,35 +887,39 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
   have hfS_norm_cont : ContinuousOn (fun s => ‖fS s‖) (Set.Icc a b) :=
     continuous_norm.comp_continuousOn hfS_cont
   have hfS_le : ∀ s ∈ Set.Icc a b, ‖fS s‖ ≤ (f s) 0 := by
-    -- Closure argument: the closed set { s | ‖fS s‖ ≤ (f s) 0 } ∩ [a, b]
+    -- Closure argument: the closed set { s ∈ [a, b] | ‖fS s‖ ≤ (f s) 0 }
     -- contains the dense subset (a, b) (where the strict inequality holds), so
-    -- by closure of [a, b] = closure (a, b), the weak inequality holds.
+    -- by `closure (Ioo a b) = Icc a b`, the weak inequality extends.
     intro s hs
     have h_closure : s ∈ closure (Set.Ioo a b) := by
       rw [closure_Ioo _hab.ne]; exact hs
-    have hcont_diff : ContinuousOn (fun t => ((f t) 0) - ‖fS t‖) (Set.Icc a b) :=
-      hf0_cont.sub hfS_norm_cont
-    have h_le_on_open : ∀ t ∈ Set.Ioo a b, 0 ≤ ((f t) 0) - ‖fS t‖ := by
-      intro t ht; linarith [hfS_lt t ht]
-    -- Translate to a closed-set membership argument.
-    have h_subset : Set.Ioo a b ⊆
-        {t | 0 ≤ ((f t) 0) - ‖fS t‖} ∩ Set.Icc a b := by
-      intro t ht
-      exact ⟨h_le_on_open t ht, Set.Ioo_subset_Icc_self ht⟩
-    have h_closed : IsClosed
-        ({t | 0 ≤ ((f t) 0) - ‖fS t‖} ∩ Set.Icc a b) := by
-      rw [show ({t | 0 ≤ ((f t) 0) - ‖fS t‖} ∩ Set.Icc a b)
-            = {t ∈ Set.Icc a b | 0 ≤ ((f t) 0) - ‖fS t‖} from
-              (Set.sep_eq_inter_setOf _ _).symm]
+    -- Construct a closed superset of (a,b) inside which the weak inequality
+    -- holds, then membership of `s` in the closure gives the result.
+    let S : Set ℝ := {t ∈ Set.Icc a b | ‖fS t‖ ≤ (f t) 0}
+    have hS_closed : IsClosed S := by
+      have hcont_diff : ContinuousOn (fun t => (f t) 0 - ‖fS t‖) (Set.Icc a b) :=
+        hf0_cont.sub hfS_norm_cont
+      have h_eq : S = (Set.Icc a b) ∩
+          ((fun t => (f t) 0 - ‖fS t‖) ⁻¹' Set.Ici 0) := by
+        ext t
+        constructor
+        · rintro ⟨ht, hle⟩; exact ⟨ht, by simp; linarith⟩
+        · rintro ⟨ht, hpre⟩
+          refine ⟨ht, ?_⟩
+          have := hpre
+          simp at this
+          linarith
+      rw [h_eq]
       exact hcont_diff.preimage_isClosed_of_isClosed isClosed_Icc isClosed_Ici
-    have hs_in : s ∈ {t | 0 ≤ ((f t) 0) - ‖fS t‖} ∩ Set.Icc a b := by
-      have h_clo_sub : closure (Set.Ioo a b) ⊆
-          {t | 0 ≤ ((f t) 0) - ‖fS t‖} ∩ Set.Icc a b :=
-        h_closed.closure_subset_iff.mpr h_subset
-      have : s ∈ {t | 0 ≤ ((f t) 0) - ‖fS t‖} ∩ Set.Icc a b :=
-        h_clo_sub h_closure
-      exact this
-    linarith [hs_in.1]
+    have h_subset : Set.Ioo a b ⊆ S := by
+      intro t ht
+      refine ⟨Set.Ioo_subset_Icc_self ht, ?_⟩
+      exact (hfS_lt t ht).le
+    have hs_in_S : s ∈ S := by
+      have h_clo_sub : closure (Set.Ioo a b) ⊆ S :=
+        hS_closed.closure_subset_iff.mpr h_subset
+      exact h_clo_sub h_closure
+    exact hs_in_S.2
   -- Strict integral inequality: ∫ ‖fS s‖ ds < ∫ (f s) 0 ds.
   have h_int_lt : (∫ s in a..b, ‖fS s‖) < ∫ s in a..b, (f s) 0 := by
     apply intervalIntegral.integral_lt_integral_of_continuousOn_of_le_of_exists_lt
@@ -921,9 +942,9 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
   -- Norm of the spatial part of I.
   -- ∫ fS = T I, so for i = 0: (∫ fS) 0 = 0; for i ≠ 0: (∫ fS) i = I i.
   have hT_int : T I = ∫ s in a..b, fS s := by
-    have := T.intervalIntegral_comp_comm (μ := MeasureTheory.volume) hf_int
-    simp [hI_def, hfS_def] at this ⊢
-    exact this.symm
+    have h := T.intervalIntegral_comp_comm (μ := MeasureTheory.volume) hf_int
+    -- `h : (∫ s in a..b, T (f s)) = T (∫ s in a..b, f s)`
+    simpa [hI_def, hfS_def] using h.symm
   -- ‖T I‖² = (I 1)² + (I 2)² + (I 3)² by `hT_norm_sq`.
   have hTI_norm_sq :
       ‖T I‖ ^ 2 = (I 1) ^ 2 + (I 2) ^ 2 + (I 3) ^ 2 := hT_norm_sq I
@@ -940,12 +961,12 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
     nlinarith [hTI_norm_lt, hI0_pos, hnn]
   -- Conclude.
   refine ⟨?_, ?_⟩
-  · -- 0 0 < I 0 after unfolding cone membership.
-    show (0 : SpacetimeModel) 0 < I 0
+  · -- (0 : SpacetimeModel) 0 < I 0 after unfolding cone membership.
+    change (0 : SpacetimeModel) 0 < I 0
     have h0 : (0 : SpacetimeModel) 0 = 0 := rfl
     rw [h0]; exact hI0_pos
   · -- Lorentzian inequality.
-    show -(I 0 - (0 : SpacetimeModel) 0) ^ 2 +
+    change -(I 0 - (0 : SpacetimeModel) 0) ^ 2 +
         (I 1 - (0 : SpacetimeModel) 1) ^ 2 +
         (I 2 - (0 : SpacetimeModel) 2) ^ 2 +
         (I 3 - (0 : SpacetimeModel) 3) ^ 2 < 0
