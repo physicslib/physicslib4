@@ -10,6 +10,8 @@ import Physicslib4.Spacetime.Causality
 import Mathlib.Geometry.Manifold.MFDeriv.SpecificFunctions
 import Mathlib.Geometry.Manifold.ContMDiff.NormedSpace
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+import Mathlib.Analysis.Calculus.ContDiff.Deriv
 import Mathlib.Analysis.Convex.Basic
 
 /-!
@@ -781,13 +783,51 @@ of calculus packaged for the `mfderivWithin` of a smooth path; its proof is
 deferred to a downstream analytic-stub agent. -/
 theorem standardMinkowski_smoothPath_fundamental_theorem_calculus
     (μ : StandardMinkowskiSpacetime.SmoothPath) {a b : ℝ}
-    (_hab : a < b) (_hparam : μ.parameterSpace = Set.Icc a b) :
+    (hab : a < b) (hparam : μ.parameterSpace = Set.Icc a b) :
     (μ.toFun b - μ.toFun a : SpacetimeModel) =
       ∫ s in a..b,
         mfderivWithin (modelWithCornersSelf ℝ ℝ)
           StandardMinkowskiSpacetime.model
           μ.toFun μ.parameterSpace s (1 : ℝ) := by
-  sorry
+  let f : ℝ → SpacetimeModel := μ.toFun
+  rw [hparam]
+  have hsmooth : ContDiffOn ℝ ⊤ f (Set.Icc a b) := by
+    have h := μ.smoothOn
+    rw [hparam] at h
+    exact contMDiffOn_iff_contDiffOn.mp h
+  have hcont : ContinuousOn f (Set.Icc a b) := hsmooth.continuousOn
+  have hUnique : UniqueDiffOn ℝ (Set.Icc a b) := uniqueDiffOn_Icc hab
+  have hderiv : ∀ x ∈ Set.Ioo a b,
+      HasDerivAt f (derivWithin f (Set.Icc a b) x) x := by
+    intro x hx
+    have hxIcc : x ∈ Set.Icc a b := Set.Ioo_subset_Icc_self hx
+    have hmem : Set.Icc a b ∈ nhds x := Icc_mem_nhds hx.1 hx.2
+    have hdiffWithin : DifferentiableWithinAt ℝ f (Set.Icc a b) x :=
+      hsmooth.differentiableOn (by norm_num) x hxIcc
+    have hdiffAt : DifferentiableAt ℝ f x := hdiffWithin.differentiableAt hmem
+    have hderivAt : HasDerivAt f (deriv f x) x := hdiffAt.hasDerivAt
+    have heq : derivWithin f (Set.Icc a b) x = deriv f x :=
+      derivWithin_of_mem_nhds hmem
+    rw [heq]; exact hderivAt
+  have hcont_deriv : ContinuousOn (derivWithin f (Set.Icc a b)) (Set.Icc a b) :=
+    ContDiffOn.continuousOn_derivWithin hsmooth hUnique le_top
+  have hint : IntervalIntegrable (derivWithin f (Set.Icc a b))
+      MeasureTheory.volume a b :=
+    hcont_deriv.intervalIntegrable_of_Icc hab.le
+  have hFTC : ∫ x in a..b, derivWithin f (Set.Icc a b) x = f b - f a :=
+    intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le hab.le hcont hderiv hint
+  have hpw : ∀ s,
+      mfderivWithin (modelWithCornersSelf ℝ ℝ)
+          StandardMinkowskiSpacetime.model
+          μ.toFun (Set.Icc a b) s (1 : ℝ)
+        = derivWithin f (Set.Icc a b) s := by
+    intro s
+    change mfderivWithin (modelWithCornersSelf ℝ ℝ)
+          (modelWithCornersSelf ℝ SpacetimeModel) f (Set.Icc a b) s (1 : ℝ)
+        = derivWithin f (Set.Icc a b) s
+    rw [mfderivWithin_eq_fderivWithin]; rfl
+  simp_rw [hpw]
+  exact hFTC.symm
 
 /-- *Analytic stub (trip tangent ∈ forward cone)*: for any trip `rep` on
 standard Minkowski spacetime witnessing a chronological precedence, the
