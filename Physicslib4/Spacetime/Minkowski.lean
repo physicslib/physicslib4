@@ -1624,6 +1624,172 @@ theorem euclidean_le_alexandrov_standardMinkowski :
   rw [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski]
   exact (isOpen_minkowskiForwardCone p).inter (isOpen_minkowskiBackwardCone q)
 
+/-- *Hard direction of the Alexandrov-vs-Euclidean topology comparison.*
+Every Euclidean-open subset of standard Minkowski spacetime is open in the
+Alexandrov topology. In Mathlib's convention
+(`t₁ ≤ t₂ ↔ ∀ U, IsOpen[t₂] U → IsOpen[t₁] U`), this is stated as
+`Alexandrov ≤ Euclidean`. Around each Euclidean-open point `x` we find a
+double cone `I⁺(x⁻) ∩ I⁻(x⁺)` shrunk to fit inside an open ball of `U`. -/
+theorem alexandrov_le_euclidean_standardMinkowski :
+    Spacetime.alexandrovTopology StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation
+      ≤ (inferInstance : TopologicalSpace SpacetimeModel) := by
+  rw [TopologicalSpace.le_def]
+  -- `StandardMinkowskiSpacetime.Carrier` is definitionally `SpacetimeModel`,
+  -- so we may transport everything to the underlying Euclidean model.
+  change ∀ U : Set SpacetimeModel, IsOpen U →
+      @IsOpen SpacetimeModel
+        (Spacetime.alexandrovTopology StandardMinkowskiSpacetime
+          standardMinkowskiTimeOrientation) U
+  intro U hU
+  -- We prove `IsOpen[Alexandrov] U` by showing every point of `U` has an
+  -- Alexandrov-open neighbourhood inside `U`.
+  refine (@isOpen_iff_forall_mem_open SpacetimeModel
+      (Spacetime.alexandrovTopology StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation) U).mpr ?_
+  intro x hxU
+  rcases Metric.isOpen_iff.mp hU x hxU with ⟨ε, hε, hball⟩
+  set δ : ℝ := ε / 2 with hδ
+  have hδpos : 0 < δ := by positivity
+  have hδlt : δ < ε := by simp [hδ]; linarith
+  -- Define the shifted points x⁻ and x⁺
+  set xMinus : SpacetimeModel := x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)
+    with hxMinus
+  set xPlus : SpacetimeModel := x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)
+    with hxPlus
+  -- Coordinate evaluations of x⁻ and x⁺
+  have single0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = 1 := by
+    rw [PiLp.single_apply]; simp
+  have single1 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 1 = 0 := by
+    rw [PiLp.single_apply]; simp
+  have single2 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 2 = 0 := by
+    rw [PiLp.single_apply]; simp
+  have single3 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 3 = 0 := by
+    rw [PiLp.single_apply]; simp
+  have xMinus0 : xMinus 0 = x 0 - δ := by
+    change (x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = x 0 - δ
+    rw [PiLp.sub_apply, PiLp.smul_apply, single0]; ring
+  have xMinus1 : xMinus 1 = x 1 := by
+    change (x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 1 = x 1
+    rw [PiLp.sub_apply, PiLp.smul_apply, single1]; ring
+  have xMinus2 : xMinus 2 = x 2 := by
+    change (x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 2 = x 2
+    rw [PiLp.sub_apply, PiLp.smul_apply, single2]; ring
+  have xMinus3 : xMinus 3 = x 3 := by
+    change (x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 3 = x 3
+    rw [PiLp.sub_apply, PiLp.smul_apply, single3]; ring
+  have xPlus0 : xPlus 0 = x 0 + δ := by
+    change (x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = x 0 + δ
+    rw [PiLp.add_apply, PiLp.smul_apply, single0]; ring
+  have xPlus1 : xPlus 1 = x 1 := by
+    change (x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 1 = x 1
+    rw [PiLp.add_apply, PiLp.smul_apply, single1]; ring
+  have xPlus2 : xPlus 2 = x 2 := by
+    change (x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 2 = x 2
+    rw [PiLp.add_apply, PiLp.smul_apply, single2]; ring
+  have xPlus3 : xPlus 3 = x 3 := by
+    change (x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 3 = x 3
+    rw [PiLp.add_apply, PiLp.smul_apply, single3]; ring
+  -- The Alexandrov-open candidate V
+  set V : Set SpacetimeModel :=
+    minkowskiForwardCone xMinus ∩ minkowskiBackwardCone xPlus with hV
+  refine ⟨V, ?subset, ?openV, ?memV⟩
+  · -- V ⊆ U: any q in V lies in the ε-ball around x
+    intro q hq
+    apply hball
+    obtain ⟨hqFwd, hqBwd⟩ := hq
+    simp only [mem_minkowskiForwardCone] at hqFwd
+    simp only [mem_minkowskiBackwardCone] at hqBwd
+    -- Rewrite the cone inequalities using the explicit coordinates
+    rw [xMinus0, xMinus1, xMinus2, xMinus3] at hqFwd
+    rw [xPlus0, xPlus1, xPlus2, xPlus3] at hqBwd
+    obtain ⟨hLow, hConeFwd⟩ := hqFwd
+    obtain ⟨hHigh, hConeBwd⟩ := hqBwd
+    -- The squared sum of spatial differences
+    set r2 : ℝ := (q 1 - x 1)^2 + (q 2 - x 2)^2 + (q 3 - x 3)^2 with hr2
+    have hr2_nn : 0 ≤ r2 := by
+      have h1 := sq_nonneg (q 1 - x 1)
+      have h2 := sq_nonneg (q 2 - x 2)
+      have h3 := sq_nonneg (q 3 - x 3)
+      linarith
+    -- From the forward cone: (q 0 - (x 0 - δ))^2 > r2 and q 0 - (x 0 - δ) > 0
+    have hFwdPos : 0 < q 0 - (x 0 - δ) := by linarith
+    have hFwdSq : r2 < (q 0 - (x 0 - δ))^2 := by
+      have : -(q 0 - (x 0 - δ))^2 + (q 1 - x 1)^2 +
+          (q 2 - x 2)^2 + (q 3 - x 3)^2 < 0 := hConeFwd
+      linarith
+    -- From the backward cone: (x 0 + δ - q 0)^2 > r2 and x 0 + δ - q 0 > 0
+    have hBwdPos : 0 < x 0 + δ - q 0 := by linarith
+    have hBwdSq : r2 < (x 0 + δ - q 0)^2 := by
+      -- Spatial squared distances are symmetric: (x i - q i)^2 = (q i - x i)^2
+      nlinarith [hConeBwd, sq_nonneg (q 1 - x 1), sq_nonneg (q 2 - x 2),
+        sq_nonneg (q 3 - x 3), sq_nonneg (x 1 - q 1), sq_nonneg (x 2 - q 2),
+        sq_nonneg (x 3 - q 3)]
+    -- Compute dist q x via EuclideanSpace.dist_sq_eq
+    rw [Metric.mem_ball]
+    have hdist_sq : dist q x ^ 2 = ∑ i, dist (q i) (x i) ^ 2 :=
+      EuclideanSpace.dist_sq_eq q x
+    -- Expand the sum over Fin 4
+    have hdist_sum :
+        dist q x ^ 2 = (q 0 - x 0)^2 + (q 1 - x 1)^2 +
+          (q 2 - x 2)^2 + (q 3 - x 3)^2 := by
+      rw [hdist_sq]
+      rw [show (Finset.univ : Finset (Fin 4)) = {0, 1, 2, 3} from rfl]
+      simp [Finset.sum_insert, Finset.mem_insert, Real.dist_eq, sq_abs]
+      ring
+    -- We want dist q x < ε
+    have hε_eq : ε = 2 * δ := by field_simp [hδ]; ring
+    have h_a_sq : (q 0 - x 0)^2 < δ^2 :=
+      sq_lt_sq' (by linarith) (by linarith)
+    have h_r2_lt : r2 < δ^2 + (q 0 - x 0)^2 := by
+      -- 2 * r2 < (q 0 - (x 0 - δ))^2 + (x 0 + δ - q 0)^2 = 2 * δ^2 + 2 * (q 0 - x 0)^2
+      have key : (q 0 - (x 0 - δ))^2 + (x 0 + δ - q 0)^2 =
+          2 * δ^2 + 2 * (q 0 - x 0)^2 := by ring
+      linarith [hFwdSq, hBwdSq, key]
+    have h_dist_sq_lt : dist q x ^ 2 < ε ^ 2 := by
+      rw [hdist_sum, hε_eq]
+      have hr2_unfold : r2 = (q 1 - x 1)^2 + (q 2 - x 2)^2 + (q 3 - x 3)^2 := hr2
+      linarith [h_a_sq, h_r2_lt, hr2_unfold]
+    -- Conclude dist q x < ε from squared inequality
+    have hε_nn : 0 ≤ ε := le_of_lt hε
+    exact (abs_lt_of_sq_lt_sq' h_dist_sq_lt hε_nn).2
+  · -- V is open in the Alexandrov topology
+    apply TopologicalSpace.isOpen_generateFrom_of_mem
+    refine ⟨xMinus, xPlus, ?_⟩
+    rw [chronologicalFuture_standardMinkowski xMinus,
+        chronologicalPast_standardMinkowski xPlus]
+    rfl
+  · -- x ∈ V
+    refine ⟨?_, ?_⟩
+    · -- x ∈ minkowskiForwardCone xMinus
+      change xMinus 0 < x 0 ∧
+          -(x 0 - xMinus 0)^2 + (x 1 - xMinus 1)^2 +
+            (x 2 - xMinus 2)^2 + (x 3 - xMinus 3)^2 < 0
+      refine ⟨?_, ?_⟩
+      · rw [xMinus0]; linarith
+      · rw [xMinus0, xMinus1, xMinus2, xMinus3]
+        have e : x 0 - (x 0 - δ) = δ := by ring
+        rw [e]
+        have h1 : x 1 - x 1 = 0 := by ring
+        have h2 : x 2 - x 2 = 0 := by ring
+        have h3 : x 3 - x 3 = 0 := by ring
+        rw [h1, h2, h3]
+        nlinarith [hδpos]
+    · -- x ∈ minkowskiBackwardCone xPlus
+      change x 0 < xPlus 0 ∧
+          -(xPlus 0 - x 0)^2 + (xPlus 1 - x 1)^2 +
+            (xPlus 2 - x 2)^2 + (xPlus 3 - x 3)^2 < 0
+      refine ⟨?_, ?_⟩
+      · rw [xPlus0]; linarith
+      · rw [xPlus0, xPlus1, xPlus2, xPlus3]
+        have e : x 0 + δ - x 0 = δ := by ring
+        rw [e]
+        have h1 : x 1 - x 1 = 0 := by ring
+        have h2 : x 2 - x 2 = 0 := by ring
+        have h3 : x 3 - x 3 = 0 := by ring
+        rw [h1, h2, h3]
+        nlinarith [hδpos]
+
 /-- A `Type` synonym for the carrier of standard Minkowski spacetime
 intended to carry the Alexandrov topology. -/
 def MinkowskiSpacetimeCarrier : Type := StandardMinkowskiSpacetime.Carrier
