@@ -681,7 +681,76 @@ theorem standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_z
       StandardMinkowskiSpacetime.IsFuturePointing
         standardMinkowskiTimeOrientation (x := (0 : SpacetimeModel)) v) ↔
     v ∈ minkowskiForwardCone 0 := by
-  sorry
+  have h0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 = 1 := by
+    rw [PiLp.single_apply]; simp
+  have h1 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1 = 0 := by
+    rw [PiLp.single_apply]; simp
+  have h2 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2 = 0 := by
+    rw [PiLp.single_apply]; simp
+  have h3 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3 = 0 := by
+    rw [PiLp.single_apply]; simp
+  constructor
+  · rintro ⟨h_timelike, h_fp⟩
+    have h_tl : minkowskiForm v v < 0 := h_timelike
+    rcases h_fp with ⟨_, h_e0_v⟩ | ⟨h_null, _⟩
+    · have h_e0 : minkowskiForm
+            (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) v < 0 := h_e0_v
+      simp only [minkowskiForm_apply] at h_e0
+      change -((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0) *
+          (v.ofLp 0) +
+          ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1) * (v.ofLp 1) +
+          ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2) * (v.ofLp 2) +
+          ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3) *
+          (v.ofLp 3) < 0 at h_e0
+      rw [h0, h1, h2, h3] at h_e0
+      simp only [minkowskiForm_apply] at h_tl
+      refine ⟨?_, ?_⟩
+      · change (0 : SpacetimeModel) 0 < v 0
+        have hz : (0 : SpacetimeModel) 0 = (0 : ℝ) := rfl
+        rw [hz]
+        linarith
+      · change -(v 0 - (0 : SpacetimeModel) 0) ^ 2 +
+            (v 1 - (0 : SpacetimeModel) 1) ^ 2 +
+            (v 2 - (0 : SpacetimeModel) 2) ^ 2 +
+            (v 3 - (0 : SpacetimeModel) 3) ^ 2 < 0
+        have hz0 : (0 : SpacetimeModel) 0 = (0 : ℝ) := rfl
+        have hz1 : (0 : SpacetimeModel) 1 = (0 : ℝ) := rfl
+        have hz2 : (0 : SpacetimeModel) 2 = (0 : ℝ) := rfl
+        have hz3 : (0 : SpacetimeModel) 3 = (0 : ℝ) := rfl
+        rw [hz0, hz1, hz2, hz3]
+        nlinarith [h_tl]
+    · exfalso
+      have h_null' : minkowskiForm v v = 0 := h_null
+      linarith
+  · rintro ⟨h_pos, h_cone⟩
+    have hz0 : (0 : SpacetimeModel) 0 = (0 : ℝ) := rfl
+    have hz1 : (0 : SpacetimeModel) 1 = (0 : ℝ) := rfl
+    have hz2 : (0 : SpacetimeModel) 2 = (0 : ℝ) := rfl
+    have hz3 : (0 : SpacetimeModel) 3 = (0 : ℝ) := rfl
+    have h_pos' : 0 < v 0 := by
+      have := h_pos
+      rw [hz0] at this
+      exact this
+    have h_cone' : -(v 0) ^ 2 + (v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2 < 0 := by
+      have := h_cone
+      rw [hz0, hz1, hz2, hz3] at this
+      nlinarith [this]
+    have h_tl : minkowskiForm v v < 0 := by
+      change -(v 0) * (v 0) + (v 1) * (v 1) + (v 2) * (v 2) + (v 3) * (v 3) < 0
+      nlinarith [h_cone']
+    refine ⟨h_tl, ?_⟩
+    left
+    refine ⟨h_tl, ?_⟩
+    change minkowskiForm (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) v < 0
+    simp only [minkowskiForm_apply]
+    change -((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0) * (v.ofLp 0) +
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1) * (v.ofLp 1) +
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2) * (v.ofLp 2) +
+        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3) * (v.ofLp 3) < 0
+    rw [h0, h1, h2, h3]
+    have : v.ofLp 0 = v 0 := rfl
+    rw [this]
+    linarith
 
 /-- *Analytic stub (FTC for a trip on standard Minkowski)*: every trip `c`
 from `p` to `q` on standard Minkowski spacetime is represented by a
