@@ -1,138 +1,54 @@
-\section{Haag Kastler Axioms}\label{sctn:haag-kastler-axioms}
-With that out of the way we can state the axioms. Each axiom below is presented as a \emph{definition} so that it is captured as a node in the blueprint declaration graph. In the Lean formalization each axiom corresponds to a \texttt{Prop}-valued predicate (or, in the case of \emph{Local Algebras}, a data field), and the bundling structure \texttt{HaagKastlerNet} packages them together (see \cref{def:haag-kastler-net}). Downstream theorems take an instance of \texttt{HaagKastlerNet} as a hypothesis and invoke each axiom as a projection.
+\input{sections/sec0/abstract}
+\maketitle
+\pagebreak
 
-\begin{definition}[Axiom 1: Local Algebras]
-    \label{def:local-algebras}
-    \lean{Physicslib4.AQFT.HaagKastler.LocalNet}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalAlgebras.lean}
-    \uses{def:alexandrov-topology}
-    \uses{def:minkowski-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    For any basis element $\mathbf{B}$ of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
-    \begin{align}
-        \mathbf{B} \longmapsto \mathfrak{U}(\mathbf{B}),
-    \end{align}
-    and when $\mathbf{B}$ is the empty set, we have the distinguished correspondence
-    \begin{align}
-        \emptyset \longmapsto \mathbb{C} \mathbf{1},
-    \end{align}
-    where $\mathbf{1}$ is the multiplicative identity in the abstract C*-algebra $\mathbb{C} \mathbf{1}$.
-\end{definition}
+\tableofcontents
+\pagebreak
 
-\begin{definition}[Axiom 2: Isotony]
-    \label{def:isotony}
-    \lean{Physicslib4.AQFT.HaagKastler.Isotony}
-    \leanfile{Physicslib4/AQFT/HaagKastler/Isotony.lean}
-    \uses{def:alexandrov-topology}
-    \uses{def:minkowski-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:local-algebras}
-    Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
+\chapter{Original Haag Kastler Axioms}\label{chptr:original-haag-kastler-axioms}
+\input{sections/sec1/introduction}
+\input{sections/sec1/1-1_original_haag_kastler_axioms}
 
-    If $\mathbf{B}_1 \subset \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subset \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
-    \begin{align}
-        i : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2),
-    \end{align}
-    a unital *-monomorphism.
-\end{definition}
+\chapter{Axiom 0 (Minkowski Space)}\label{chptr:axiom-0-(minkowski-space)}
+\input{sections/sec2/introduction}
+\input{sections/sec2/2-1_standard_topology_on_minkowski_space}
+\input{sections/sec2/2-2_indiscrete_topology_on_minkowski_space}
+\input{sections/sec2/2-3_euclidean_topology_on_minkowski_space}
+\input{sections/sec2/2-4_alexandrov_topology_on_minkowski_space}
 
-Before introducing the next axiom, we must introduce the definition:
+\chapter{Axiom 1 (Local Algebras)}\label{chptr:axiom-1-(local-algebras)}
+\input{sections/sec3/introduction}
+\input{sections/sec3/3-1_regions_of_measurement}
 
-\begin{definition}[Quasilocal Algebra]
-    \label{def:quasilocal-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAlgebra.lean}
-    \uses{def:local-algebras}
-    Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven, taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the \textit{quasilocal algebra}.
-\end{definition}
+\chapter{Axiom 2 (Isotony)}\label{chptr:axiom-2-(isotony)}
+\input{sections/sec4/introduction}
+\input{sections/sec4/4-1_gns_construction}
+\input{sections/sec4/4-2_isotony}
+\input{sections/sec4/4-3_common_unit}
 
-\begin{definition}[Axiom 3: Local Commutativity]
-    \label{def:local-commutativity}
-    \lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalCommutativity.lean}
-    \uses{def:alexandrov-topology}
-    \uses{def:minkowski-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:completely-spacelike}
-    \uses{def:local-algebras}
-    \uses{def:quasilocal-algebra}
-    Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
+\chapter{Axiom 3 (Local Commutativity)}\label{chptr:axiom-3-(local-commutativity)}
+\input{sections/sec5/introduction}
+\input{sections/sec5/5-1_completely_spacelike}
+\input{sections/sec5/5-2_quasilocal_algebra}
 
-    If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the quasilocal algebra $\mathfrak{U}$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ it follows that
-    \begin{align}
-        i(a_1) i(a_2) - i(a_2) i(a_1) = 0
-    \end{align}
-    in the quasilocal algebra $\mathfrak{U}$.
-\end{definition}
+\chapter{Axiom 4 (Quasilocal Algebra)}\label{chptr:axiom-4-(quasilocal-algebra)}
+\input{sections/sec6/introduction}
+\input{sections/sec6/6-1_set_theoretic_union}
+\input{sections/sec6/6-2_completion_of_the_set_theoretic_union}
+\input{sections/sec6/6-3_all_observables_of_interest}
 
-The next axiom makes use of the following new definition:
+\chapter{Axiom 5 (Lorentz Covariance)}\label{chptr:axiom-5-(lorentz-covariance)}
+\input{sections/sec7/introduction}
+\input{sections/sec7/7-1_inhomogeneous_lorentz_group}
+\input{sections/sec7/7-2_action_of_the_inhomogeneous_lorentz_groups_identity_component}
 
-\begin{definition}[Quasilocal Observable]
-    \label{def:quasilocal-observable}
-    \uses{def:quasilocal-algebra}
-    \uses{thrm:gns-construction-theorem}
-    \uses{def:state}
-    The image $\pi_\omega(a)$ of a self-adjoint member $a$ of the quasilocal algebra $\mathfrak{U}$ under a GNS *-homomorphism $\pi_\omega$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{quasilocal observable}.
-\end{definition}
+\chapter{Axioms 6 (Primitivity)}\label{chptr:axiom-6-(primitivity)}
+\input{sections/sec8/introduction}
+\input{sections/sec8/8-1_faithful_representations}
+\input{sections/sec8/8-2_faithful_and_irreducible_representations}
 
-\begin{definition}[Axiom 4: Quasilocal Completeness]
-    \label{def:quasilocal-completeness}
-    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalCompleteness.lean}
-    \uses{def:quasilocal-observable}
-    All ``observables'' are quasilocal observables.
-\end{definition}
-
-\begin{definition}[Axiom 5: Lorentz Covariance]
-    \label{def:lorentz-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.LorentzCovariance}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LorentzCovariance.lean}
-    \uses{def:alexandrov-topology}
-    \uses{def:minkowski-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:local-algebras}
-    \uses{def:isotony}
-    Let $\mathbf{B}$ be any basis element of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$.
-
-    A member $L$ of the inhomogeneous Lorentz group connected to the identity acts on $\mathfrak{U}(\mathbf{B})$ as follows
-    \begin{align}
-        \alpha_L : \mathfrak{U}(\mathbf{B}) &\longrightarrow \mathfrak{U}(L\mathbf{B}) \\
-                             a              &\longmapsto     \alpha_L(a)
-    \end{align}
-    where $L\mathbf{B}$ is the image of the region $\mathbf{B}$ under the transformation $L$ and $\alpha_L$ is a unital *-isomorphism generated by $L$. The map $\alpha_L$ is such that (1) for the identity element $\mathbf{1}$ of the Lorentz group it satisfies
-    \begin{align}
-        \alpha_{\mathbf{1}}(a) = a,
-    \end{align}
-    (2) for all appropriate $a$, $L$, and $L'$ it satisfies
-    \begin{align}
-        \alpha_{L' \cdot L}(a) = \alpha_{L'}(\alpha_{L}(a)),
-    \end{align}
-    and (3) for basis elements $\mathbf{B}_\iota \subset \mathbf{B}_\kappa$ and the unital *-monomorphism $i$ of Axiom 2 (Isotony) $\alpha_L$ commutes with $i$. In other words the following diagram
-
-    \begin{center}
-        \begin{tikzcd}
-            \mathfrak{U}(\mathbf{B}_\kappa) \arrow[r, "\alpha_L"]
-            & \mathfrak{U}(L\mathbf{B}_\kappa) \\
-            \mathfrak{U}(\mathbf{B}_\iota) \arrow[r, "\alpha_L"]  \arrow[u, "i"]
-            & \mathfrak{U}(L\mathbf{B}_\iota)  \arrow[u, "i"]
-        \end{tikzcd}
-    \end{center}
-
-    commutes.
-\end{definition}
-
-\begin{definition}[Haag-Kastler Net]
-    \label{def:haag-kastler-net}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet}
-    \leanfile{Physicslib4/AQFT/HaagKastler/Net.lean}
-    \uses{def:local-algebras}
-    \uses{def:isotony}
-    \uses{def:local-commutativity}
-    \uses{def:quasilocal-completeness}
-    \uses{def:lorentz-covariance}
-    A \emph{Haag-Kastler net} on Minkowski spacetime is the bundling of the data of \cref{def:local-algebras} together with the properties of \cref{def:isotony}, \cref{def:local-commutativity}, \cref{def:quasilocal-completeness}, and \cref{def:lorentz-covariance}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT take an instance of this structure as a hypothesis and invoke each axiom as a projection.
-\end{definition}
-
-This concludes the presentation of the ``sharpened'' axioms. As proven in this blog post, these ``sharpened'' axioms entail the original axioms save Axiom 6 (Primitivity), which is an axiom that we abandon.
-
-These ``sharpened'' axioms also allow for a straightforward generalization to a set of axioms describing AQFT in curved spacetime, i.e. a set of axioms describing AQFT in a curved spacetime background that is fixed and treated classically. In a subsequent blog post we will detail these axioms.
+\chapter{Haag Kastler Axioms Blueprint}\label{chptr:haag-kastler-axioms-blueprint}
+\input{sections/sec9/introduction}
+\input{sections/sec9/9-1_gns-construction-details}
+\input{sections/sec9/9-2_spacetime}
+\input{sections/sec9/9-3_haag-kastler-axioms}
