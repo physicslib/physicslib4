@@ -580,7 +580,7 @@ noncomputable def standardMinkowski_lineSegmentPath
 The forward subset of `chronologicalFuture_standardMinkowski` says: if there
 is a chronological trip from `p` to `q` on standard Minkowski spacetime, then
 `q` lies in the open forward Minkowski-cone of `p`. We package the analytic
-content into four named stubs and assemble the structural proof from them:
+content into four top-level stubs and assemble the structural proof from them:
 
 1. `mem_minkowskiForwardCone_iff_sub_mem` — the obvious translation
    `q ∈ minkowskiForwardCone p ↔ (q - p) ∈ minkowskiForwardCone 0`,
@@ -593,7 +593,28 @@ content into four named stubs and assemble the structural proof from them:
    to `q` witnessed by a smooth path `rep`, there exist parameter values
    `a ≤ b` in `rep.parameterSpace` with `rep a = p`, `rep b = q`, and
    `q - p = ∫_a^b tangent(s) ds`, where `tangent(s)` is the manifold
-   derivative of `rep.toFun` at `s` applied to `1 : ℝ`.
+   derivative of `rep.toFun` at `s` applied to `1 : ℝ`. The body of this
+   stub is `sorry`-free; it wires together four further named sub-stubs:
+
+   * `standardMinkowski_smoothPath_fundamental_theorem_calculus`
+     (substub A) — the integration content: for a smooth path on standard
+     Minkowski parametrised by `Set.Icc a b`, the displacement
+     `μ b - μ a` equals the interval integral of the manifold tangent.
+   * `standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero`
+     (substub B) — the geometric content: a trip witness produces a
+     `rep : SmoothPath` whose endpoint structure matches `p, q` and
+     whose manifold tangent at every parameter point lies in
+     `minkowskiForwardCone 0`. Discharged by unpacking the trip and
+     pointwise applying stub 2.
+   * `standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints`
+     (substub C) — the geometric structural content: a closed connected
+     non-singleton subset of `ℝ` carrying a past and a future endpoint
+     in its frontier is exhaustively a closed interval `Set.Icc a b`
+     with `a < b`.
+   * `standardMinkowski_smoothPath_tangent_continuousOn` (substub D)
+     — the analytic regularity content: the manifold tangent
+     `s ↦ mfderivWithin _ _ rep.toFun rep.parameterSpace s 1` is
+     continuous on `rep.parameterSpace` whenever it equals an `Icc a b`.
 4. `intervalIntegral_mem_minkowskiForwardCone_zero` — closure of the open
    forward Minkowski-cone (at the origin) under positive interval
    integration: if a continuous-on-`[a, b]` integrand lands in
@@ -609,7 +630,7 @@ witness, FTC (stub 3) gives an interval-integral representation of
 positive integration (stub 4) puts `q - p` in `minkowskiForwardCone 0`;
 and the translation lemma (stub 1) converts back to
 `q ∈ minkowskiForwardCone p`. Every remaining `sorry` is in one of the
-four named stubs.
+four named stubs (or, for stub 3, in the four sub-stubs A–D above).
 -/
 
 /-- Translation lemma: `q ∈ minkowskiForwardCone p ↔ (q - p) ∈
@@ -752,6 +773,78 @@ theorem standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_z
     rw [this]
     linarith
 
+/-- *Analytic stub (smooth-path FTC for standard Minkowski)*: for any smooth
+path `μ` on standard Minkowski spacetime whose parameter space is the closed
+interval `Set.Icc a b` with `a < b`, the difference of endpoints equals the
+interval integral of the manifold tangent. This is the fundamental theorem
+of calculus packaged for the `mfderivWithin` of a smooth path; its proof is
+deferred to a downstream analytic-stub agent. -/
+theorem standardMinkowski_smoothPath_fundamental_theorem_calculus
+    (μ : StandardMinkowskiSpacetime.SmoothPath) {a b : ℝ}
+    (_hab : a < b) (_hparam : μ.parameterSpace = Set.Icc a b) :
+    (μ.toFun b - μ.toFun a : SpacetimeModel) =
+      ∫ s in a..b,
+        mfderivWithin (modelWithCornersSelf ℝ ℝ)
+          StandardMinkowskiSpacetime.model
+          μ.toFun μ.parameterSpace s (1 : ℝ) := by
+  sorry
+
+/-- *Analytic stub (trip tangent ∈ forward cone)*: for any trip `rep` on
+standard Minkowski spacetime witnessing a chronological precedence, the
+manifold tangent at every parameter point lies in `minkowskiForwardCone 0`.
+The intended proof unpacks the trip witness (yielding `rep` together with
+the past/future endpoint data and the timelike future-oriented properties of
+`rep`) and pointwise applies
+`standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero`.
+The proof is deferred as a named sub-stub. -/
+theorem standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
+    {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
+    (_htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
+              standardMinkowskiTimeOrientation p q c) :
+    ∃ (rep : StandardMinkowskiSpacetime.SmoothPath),
+      c = Spacetime.SmoothCurve.ofPath StandardMinkowskiSpacetime rep ∧
+      Spacetime.IsPastEndpoint StandardMinkowskiSpacetime rep p ∧
+      Spacetime.IsFutureEndpoint StandardMinkowskiSpacetime rep q ∧
+      (∀ s ∈ rep.parameterSpace,
+        (mfderivWithin (modelWithCornersSelf ℝ ℝ)
+          StandardMinkowskiSpacetime.model
+          rep.toFun rep.parameterSpace s (1 : ℝ))
+          ∈ minkowskiForwardCone (0 : SpacetimeModel)) := by
+  sorry
+
+/-- *Analytic stub (parameter space of a smooth path with endpoints is an
+`Icc`)*: a smooth path `rep` whose parameter space is closed and connected
+with at least two distinct points and which carries a past endpoint `p` and
+a future endpoint `q` has parameter space exhaustively equal to
+`Set.Icc a b` with `a < b`, `rep.toFun a = p`, and `rep.toFun b = q`. This
+is the order-topological consequence of "a closed connected non-singleton
+subset of `ℝ` is a closed interval, and `IsPastEndpoint` / `IsFutureEndpoint`
+expose its endpoints". -/
+theorem standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints
+    (rep : StandardMinkowskiSpacetime.SmoothPath)
+    {p q : SpacetimeModel}
+    (_hp : Spacetime.IsPastEndpoint StandardMinkowskiSpacetime rep p)
+    (_hq : Spacetime.IsFutureEndpoint StandardMinkowskiSpacetime rep q) :
+    ∃ a b : ℝ, a < b ∧ rep.parameterSpace = Set.Icc a b ∧
+      rep.toFun a = p ∧ rep.toFun b = q := by
+  sorry
+
+/-- *Analytic stub (continuity of the manifold tangent of a smooth path on
+its parameter `Icc`)*: for a smooth path `μ` on standard Minkowski spacetime
+with parameter space `Set.Icc a b`, the manifold tangent
+`s ↦ mfderivWithin _ _ μ.toFun μ.parameterSpace s 1` is continuous on
+`Set.Icc a b`. This is the `ContMDiffOn` → continuity-of-`mfderivWithin`
+content packaged in a single declaration; its proof is deferred. -/
+theorem standardMinkowski_smoothPath_tangent_continuousOn
+    (μ : StandardMinkowskiSpacetime.SmoothPath) {a b : ℝ}
+    (_hparam : μ.parameterSpace = Set.Icc a b) :
+    ContinuousOn
+      (fun s => mfderivWithin (modelWithCornersSelf ℝ ℝ)
+                  StandardMinkowskiSpacetime.model
+                  μ.toFun μ.parameterSpace s (1 : ℝ))
+      (Set.Icc a b) := by
+  sorry
+
 /-- *Analytic stub (FTC for a trip on standard Minkowski)*: every trip `c`
 from `p` to `q` on standard Minkowski spacetime is represented by a
 smooth path `rep` with parameter values `a ≤ b` lying in
@@ -760,7 +853,13 @@ property that the trip's tangent at every interior `s ∈ (a, b)` is
 timelike future-pointing, and such that the fundamental theorem of
 calculus gives `q - p = ∫_a^b rep.tangent(s) ds`. Continuity of the
 tangent on the closed parameter interval is also exposed for use in the
-integration argument. -/
+integration argument.
+
+The body wires together four named sub-stubs:
+`standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero`,
+`standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints`,
+`standardMinkowski_smoothPath_fundamental_theorem_calculus`, and
+`standardMinkowski_smoothPath_tangent_continuousOn`. -/
 theorem standardMinkowski_trip_displacement_eq_intervalIntegral
     {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
     (htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
@@ -782,7 +881,53 @@ theorem standardMinkowski_trip_displacement_eq_intervalIntegral
         mfderivWithin (modelWithCornersSelf ℝ ℝ)
           StandardMinkowskiSpacetime.model
           rep.toFun rep.parameterSpace s (1 : ℝ) := by
-  sorry
+  -- (B) Unpack the trip into a representative `rep` together with the
+  -- endpoint data and the pointwise tangent-in-cone witness.
+  obtain ⟨rep, _hrep_eq, hpast, hfuture, htangent_cone⟩ :=
+    standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
+      (p := p) (q := q) (c := c) htrip
+  -- (C) Extract `a, b` with `parameterSpace = Set.Icc a b`, `a < b`, and
+  -- the endpoint values.
+  obtain ⟨a, b, hab, hparam, ha_eq, hb_eq⟩ :=
+    standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints
+      rep (p := p) (q := q) hpast hfuture
+  -- Membership of `a, b` in the parameter space.
+  have ha_mem : a ∈ rep.parameterSpace := by
+    rw [hparam]; exact Set.left_mem_Icc.mpr hab.le
+  have hb_mem : b ∈ rep.parameterSpace := by
+    rw [hparam]; exact Set.right_mem_Icc.mpr hab.le
+  -- (D) Continuity of the tangent on `[a, b]`.
+  have hcont :
+      ContinuousOn
+        (fun s => mfderivWithin (modelWithCornersSelf ℝ ℝ)
+                    StandardMinkowskiSpacetime.model
+                    rep.toFun rep.parameterSpace s (1 : ℝ))
+        (Set.Icc a b) :=
+    standardMinkowski_smoothPath_tangent_continuousOn rep hparam
+  -- Tangent membership in the cone on the open interior `(a, b)`, obtained
+  -- by restricting `htangent_cone` to `Set.Ioo a b ⊆ rep.parameterSpace`.
+  have hmem :
+      ∀ s ∈ Set.Ioo a b,
+        (mfderivWithin (modelWithCornersSelf ℝ ℝ)
+            StandardMinkowskiSpacetime.model
+            rep.toFun rep.parameterSpace s (1 : ℝ))
+          ∈ minkowskiForwardCone (0 : SpacetimeModel) := by
+    intro s hs
+    apply htangent_cone
+    rw [hparam]
+    exact Set.Ioo_subset_Icc_self hs
+  -- (A) FTC: `rep b - rep a = ∫ s in a..b, tangent s`.
+  have hftc :
+      (rep.toFun b - rep.toFun a : SpacetimeModel) =
+        ∫ s in a..b,
+          mfderivWithin (modelWithCornersSelf ℝ ℝ)
+            StandardMinkowskiSpacetime.model
+            rep.toFun rep.parameterSpace s (1 : ℝ) :=
+    standardMinkowski_smoothPath_fundamental_theorem_calculus rep hab hparam
+  -- Substitute the endpoint values and assemble the existential.
+  refine ⟨rep, a, b, hab, ha_mem, hb_mem, ha_eq, hb_eq, hcont, hmem, ?_⟩
+  rw [← ha_eq, ← hb_eq]
+  exact hftc
 
 /-- *Analytic stub (closure under positive interval integration)*: if `f :
 ℝ → ℝ⁴` is continuous on `[a, b]` and lies in the open forward
