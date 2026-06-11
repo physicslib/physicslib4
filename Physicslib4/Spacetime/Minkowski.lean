@@ -388,8 +388,42 @@ theorem isOrthochronous_trans {L₁ L₂ : SpacetimeModel ≃ₗ[ℝ] SpacetimeM
 orthochronous. -/
 theorem isOrthochronous_symm {L : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel}
     (hL : IsLorentz L) (hO : IsOrthochronous L) : IsOrthochronous L.symm := by
-  -- TODO: requires reverse Cauchy-Schwarz on a Lorentzian form
-  sorry
+  set e₀ : SpacetimeModel := EuclideanSpace.single (0 : Fin 4) (1 : ℝ) with he₀
+  have he₀_form : minkowskiForm e₀ e₀ = -1 := by
+    simp only [minkowskiForm_apply]
+    have h0 : e₀.ofLp 0 = 1 := by rw [he₀, PiLp.single_apply]; simp
+    have h1 : e₀.ofLp 1 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    have h2 : e₀.ofLp 2 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    have h3 : e₀.ofLp 3 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    change -(e₀.ofLp 0) * (e₀.ofLp 0) + (e₀.ofLp 1) * (e₀.ofLp 1) +
+        (e₀.ofLp 2) * (e₀.ofLp 2) + (e₀.ofLp 3) * (e₀.ofLp 3) = -1
+    rw [h0, h1, h2, h3]; ring
+  have hLsymm : IsLorentz L.symm := isLorentz_symm hL
+  have hvv : minkowskiForm (L.symm e₀) (L.symm e₀) = -1 := by
+    rw [hLsymm]; exact he₀_form
+  have hww : minkowskiForm e₀ e₀ = -1 := he₀_form
+  have hkey : minkowskiForm (L.symm e₀) e₀ = -((L e₀).ofLp 0) := by
+    have hL' := hL (L.symm e₀) e₀
+    rw [L.apply_symm_apply] at hL'
+    rw [← hL']
+    simp only [minkowskiForm_apply]
+    have h0 : e₀.ofLp 0 = 1 := by rw [he₀, PiLp.single_apply]; simp
+    have h1 : e₀.ofLp 1 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    have h2 : e₀.ofLp 2 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    have h3 : e₀.ofLp 3 = 0 := by rw [he₀, PiLp.single_apply]; simp
+    change -(e₀.ofLp 0) * ((L e₀).ofLp 0) + (e₀.ofLp 1) * ((L e₀).ofLp 1)
+        + (e₀.ofLp 2) * ((L e₀).ofLp 2) + (e₀.ofLp 3) * ((L e₀).ofLp 3)
+          = -((L e₀).ofLp 0)
+    rw [h0, h1, h2, h3]; ring
+  have hw0 : (0 : ℝ) < e₀.ofLp 0 := by
+    have : e₀.ofLp 0 = 1 := by rw [he₀, PiLp.single_apply]; simp
+    rw [this]; exact one_pos
+  have hLe0 : (0 : ℝ) < (L e₀).ofLp 0 := hO
+  have hvw_neg : minkowskiForm (L.symm e₀) e₀ < 0 := by
+    rw [hkey]; linarith
+  unfold IsOrthochronous
+  change (0 : ℝ) < (L.symm e₀).ofLp 0
+  exact timelike_sameSign_of_minkowskiForm_neg hvv hww hw0 hvw_neg
 
 /-! ### Alexandrov topology -/
 
