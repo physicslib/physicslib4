@@ -1610,6 +1610,20 @@ theorem chronologicalPast_standardMinkowski (q : SpacetimeModel) :
       minkowskiBackwardCone_eq]
   rfl
 
+/-- *Easy direction of the Alexandrov-vs-Euclidean topology comparison.*
+Every Alexandrov-basis set `I⁺(p) ∩ I⁻(q)` on standard Minkowski spacetime
+is open in the Euclidean topology on `ℝ⁴`. In Mathlib's convention
+(`t₁ ≤ t₂ ↔ ∀ U, IsOpen[t₂] U → IsOpen[t₁] U`), this is stated as
+`Euclidean ≤ Alexandrov`. -/
+theorem euclidean_le_alexandrov_standardMinkowski :
+    (inferInstance : TopologicalSpace SpacetimeModel)
+      ≤ Spacetime.alexandrovTopology StandardMinkowskiSpacetime
+          standardMinkowskiTimeOrientation := by
+  apply le_generateFrom
+  rintro s ⟨p, q, rfl⟩
+  rw [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski]
+  exact (isOpen_minkowskiForwardCone p).inter (isOpen_minkowskiBackwardCone q)
+
 /-- A `Type` synonym for the carrier of standard Minkowski spacetime
 intended to carry the Alexandrov topology. -/
 def MinkowskiSpacetimeCarrier : Type := StandardMinkowskiSpacetime.Carrier
