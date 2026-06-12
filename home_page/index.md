@@ -3,7 +3,7 @@ canonical: https://physicslib.github.io/physicslib4/
 meta-description: by Kelly J Davis
 meta-og:description: by Kelly J Davis
 meta-og:locale: en_US
-meta-og:site_name: A Formalisation of the Haag–Kastler Axioms of Algebraic Quantum Field Theory
+meta-og:site_name: Formalising Algebraic Quantum Field Theory in Lean
 meta-og:title: AQFT in Lean
 meta-og:type: website
 meta-og:url: https://physicslib.github.io/physicslib4/
@@ -11,7 +11,7 @@ meta-theme-color: #157878
 meta-twitter:card: summary
 meta-twitter:title: AQFT in Lean
 meta-viewport: width=device-width, initial-scale=1
-title: AQFT in Lean | A Formalisation of the Haag–Kastler Axioms of Algebraic Quantum Field Theory
+title: Formalising AQFT in Lean
 ---
 
 # AQFT in Lean
