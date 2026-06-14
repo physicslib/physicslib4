@@ -209,6 +209,32 @@ theorem quasilocalObservables_eq {U : LocalNet} (Q : QuasilocalAlgebra U)
   simp only [quasilocalObservables, Set.mem_setOf_eq, isQuasilocalObservable_iff,
     Set.mem_inter_iff, SetLike.mem_coe, selfAdjoint.mem_iff, isSelfAdjoint_iff]
 
+section ObservablesSet
+
+variable {U : LocalNet} (Q : QuasilocalAlgebra U) {H : Type}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+
+/-- The identity operator is a quasilocal observable. -/
+theorem one_mem_quasilocalObservables :
+    (1 : H →L[ℂ] H) ∈ quasilocalObservables Q π :=
+  isQuasilocalObservable_one
+
+/-- The quasilocal observables are closed under addition. -/
+theorem add_mem_quasilocalObservables {S T : H →L[ℂ] H}
+    (hS : S ∈ quasilocalObservables Q π) (hT : T ∈ quasilocalObservables Q π) :
+    S + T ∈ quasilocalObservables Q π :=
+  IsQuasilocalObservable.add hS hT
+
+/-- The quasilocal observables are closed under scaling by a self-adjoint
+(i.e. real) complex scalar. -/
+theorem smul_mem_quasilocalObservables {c : ℂ} {T : H →L[ℂ] H}
+    (hT : T ∈ quasilocalObservables Q π) (hc : IsSelfAdjoint c) :
+    c • T ∈ quasilocalObservables Q π :=
+  IsQuasilocalObservable.smul hT hc
+
+end ObservablesSet
+
 end HaagKastler
 end AQFT
 end Physicslib4
