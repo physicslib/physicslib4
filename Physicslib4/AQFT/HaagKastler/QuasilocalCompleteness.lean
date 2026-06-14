@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
+import Physicslib4.GNS.Construction
 
 /-!
 # Axiom 4: Quasilocal Completeness
@@ -22,6 +23,11 @@ Haag-Kastler axioms, section 9.3 of the AQFT-in-Lean blueprint):
 
 * `Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness`: a
   `Prop`-valued predicate on a `LocalNet` asserting Axiom 4.
+* `Physicslib4.AQFT.HaagKastler.IsQuasilocalObservable`: a
+  `Prop`-valued predicate (blueprint `def:quasilocal-observable`)
+  saying a bounded operator on the GNS Hilbert space is the image
+  `π a` of a self-adjoint element `a` of the quasilocal algebra
+  under a GNS `*`-representation `π`.
 
 ## Modelling notes
 
@@ -50,6 +56,7 @@ namespace AQFT
 namespace HaagKastler
 
 open Physicslib4
+open Physicslib4.GNS
 
 /--
 **Axiom 4 (Quasilocal Completeness).** A local net `U` satisfies
@@ -71,6 +78,57 @@ Blueprint reference: `def:quasilocal-completeness`.
 -/
 def QuasilocalCompleteness (U : LocalNet) : Prop :=
   Nonempty (QuasilocalAlgebra U)
+
+/--
+**Quasilocal Observable** (blueprint label `def:quasilocal-observable`).
+
+Fix a quasilocal algebra `Q` for a local net `U` and a GNS
+`*`-representation `π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)` of the
+quasilocal algebra `𝔘 = Q.carrier` on a complex Hilbert space `H`
+(in practice obtained from `Physicslib4.GNS.gns_construction`
+applied to a state `ω` on `Q.carrier`). A bounded operator
+`T : H →L[ℂ] H` is a *quasilocal observable* if it is the image
+`T = π a` of some *self-adjoint* element `a` of the quasilocal
+algebra.
+
+By `IsQuasilocalObservable.isSelfAdjoint`, every quasilocal
+observable is self-adjoint, matching the blueprint's "the image
+`π_ω(a)` of a self-adjoint member `a` of the quasilocal algebra
+`𝔘` ... is self-adjoint and thus corresponds to an observable".
+
+Blueprint reference: `def:quasilocal-observable`.
+-/
+def IsQuasilocalObservable {U : LocalNet} (Q : QuasilocalAlgebra U)
+    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (T : H →L[ℂ] H) : Prop :=
+  ∃ a : Q.carrier, IsSelfAdjoint a ∧ T = π a
+
+/-- Every quasilocal observable is self-adjoint: it is the image of a
+self-adjoint element of the quasilocal algebra under a `*`-homomorphism.
+This is the self-adjointness clause of `def:quasilocal-observable`. -/
+theorem IsQuasilocalObservable.isSelfAdjoint {U : LocalNet}
+    {Q : QuasilocalAlgebra U}
+    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)} {T : H →L[ℂ] H}
+    (hT : IsQuasilocalObservable Q π T) : IsSelfAdjoint T := by
+  obtain ⟨a, ha, rfl⟩ := hT
+  change star (π a) = π a
+  rw [← map_star, ha.star_eq]
+
+/-- For any state `ω` on the quasilocal algebra and any self-adjoint
+element `a` of it, the GNS construction provides a `*`-representation
+in which `π a` is a quasilocal observable (and is self-adjoint). This is
+the existence content of `def:quasilocal-observable`, tying together
+`thrm:gns-construction-theorem` and `def:state`. -/
+theorem exists_isQuasilocalObservable {U : LocalNet} (Q : QuasilocalAlgebra U)
+    (ω : State Q.carrier) {a : Q.carrier} (ha : IsSelfAdjoint a) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)),
+        IsQuasilocalObservable Q π (π a) ∧ IsSelfAdjoint (π a) := by
+  obtain ⟨H, hng, hip, hcs, π, _, _, _, _⟩ := gns_construction ω
+  refine ⟨H, hng, hip, hcs, π, ⟨a, ha, rfl⟩, ?_⟩
+  change star (π a) = π a
+  rw [← map_star, ha.star_eq]
 
 end HaagKastler
 end AQFT
