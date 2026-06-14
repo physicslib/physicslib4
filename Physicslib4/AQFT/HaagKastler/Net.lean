@@ -35,6 +35,8 @@ namespace Physicslib4
 namespace AQFT
 namespace HaagKastler
 
+open Physicslib4 Spacetime
+
 /--
 A *Haag-Kastler net* on (the Alexandrov-basis sets of) Minkowski
 spacetime: the data of Axiom 1 (`def:local-algebras`) together with
@@ -61,6 +63,75 @@ structure HaagKastlerNet where
   /-- *Lorentz covariance*: the inhomogeneous Lorentz group acts on
   the net and the action commutes with isotony (Axiom 5). -/
   lorentzCovariance : LorentzCovariance U
+
+/-!
+## The trivial net and joint satisfiability of the axioms
+
+The Haag-Kastler axioms are not vacuous: the *trivial net*, assigning the
+one-dimensional C*-algebra `ℂ` to every region, satisfies all of Axioms 1-5.
+This witnesses `Nonempty HaagKastlerNet`, i.e. the five axioms are jointly
+consistent.
+-/
+
+/-- The *trivial local net*: every region is assigned the C*-algebra `ℂ`, with
+the empty-region normalisation being the identity isomorphism. -/
+noncomputable def trivialLocalNet : LocalNet where
+  algebra := fun _ => ℂ
+  instCStarAlgebra := fun _ => inferInstance
+  emptyEquivComplex := StarAlgEquiv.refl
+
+/-- A concrete Alexandrov-basis set of standard Minkowski spacetime
+(`I⁺(0) ∩ I⁻(0)`), used as a witness that basis sets exist. -/
+def trivialBasisSet : Set StandardMinkowskiSpacetime.Carrier :=
+  chronologicalFuture StandardMinkowskiSpacetime standardMinkowskiTimeOrientation 0
+    ∩ chronologicalPast StandardMinkowskiSpacetime standardMinkowskiTimeOrientation 0
+
+lemma isAlexandrovBasisSet_trivialBasisSet :
+    IsAlexandrovBasisSet trivialBasisSet :=
+  ⟨0, 0, rfl⟩
+
+/-- The trivial quasilocal algebra for the trivial net: ambient C*-algebra `ℂ`,
+with every local embedding the identity `ℂ →⋆ₐ[ℂ] ℂ`. -/
+noncomputable def trivialQuasilocalAlgebra : QuasilocalAlgebra trivialLocalNet where
+  carrier := ℂ
+  instCStarAlgebra := inferInstance
+  ι := fun _ => StarAlgHom.id ℂ ℂ
+  ι_injective := fun _ _ _ _ h => h
+  dense_range := fun x =>
+    subset_closure (Set.mem_iUnion₂.mpr
+      ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet, x, rfl⟩)
+
+theorem trivialLocalNet_isotony : Isotony trivialLocalNet :=
+  fun _ _ _ _ _ => ⟨StarAlgHom.id ℂ ℂ, fun _ _ h => h⟩
+
+theorem trivialLocalNet_localCommutativity :
+    LocalCommutativity trivialLocalNet :=
+  ⟨trivialQuasilocalAlgebra, by
+    intro B₁ B₂ _ _ _ a b
+    exact @mul_comm ℂ _ (trivialQuasilocalAlgebra.ι B₁ a)
+      (trivialQuasilocalAlgebra.ι B₂ b)⟩
+
+theorem trivialLocalNet_quasilocalCompleteness :
+    QuasilocalCompleteness trivialLocalNet :=
+  ⟨trivialQuasilocalAlgebra⟩
+
+theorem trivialLocalNet_lorentzCovariance :
+    LorentzCovariance trivialLocalNet := by
+  refine ⟨fun _ _ => StarAlgEquiv.refl, fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ,
+    ?_, ?_, ?_, ?_⟩
+  · intro B₁ B₂ hB₁ hB₂ h a b hh; exact hh
+  · intro _ _; rfl
+  · intro _ _ _ _; rfl
+  · intro _ _ _ _ _ _ _ _ _ _; rfl
+
+/-- **The Haag-Kastler axioms are jointly satisfiable.** The trivial net (every
+region ↦ `ℂ`) is a Haag-Kastler net, so `HaagKastlerNet` is nonempty. -/
+theorem nonempty_haagKastlerNet : Nonempty HaagKastlerNet :=
+  ⟨{ U := trivialLocalNet
+     isotony := trivialLocalNet_isotony
+     localCommutativity := trivialLocalNet_localCommutativity
+     quasilocalCompleteness := trivialLocalNet_quasilocalCompleteness
+     lorentzCovariance := trivialLocalNet_lorentzCovariance }⟩
 
 end HaagKastler
 end AQFT
