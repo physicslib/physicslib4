@@ -114,6 +114,22 @@ example (U : LocalNet) (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier)
     φ (1 : U.algebra B₁) = (1 : U.algebra B₂) :=
   map_one φ
 
+/-- The empty-region algebra `𝔘(∅)` is *commutative*: it is `*`-isomorphic to
+`ℂ` via the normalisation `emptyEquivComplex`, so its multiplication inherits
+commutativity from `ℂ`. -/
+theorem LocalNet.mul_comm_algebra_empty (U : LocalNet) (a b : U.algebra ∅) :
+    a * b = b * a :=
+  U.emptyEquivComplex.injective <| by
+    rw [map_mul, map_mul]; exact mul_comm _ _
+
+/-- The empty-region algebra `𝔘(∅)` is *one-dimensional* over `ℂ`: the
+normalisation `emptyEquivComplex : 𝔘(∅) ≃⋆ₐ[ℂ] ℂ` is in particular a
+`ℂ`-linear equivalence, so `𝔘(∅)` has the same `ℂ`-dimension as `ℂ`. -/
+theorem LocalNet.finrank_algebra_empty (U : LocalNet) :
+    Module.finrank ℂ (U.algebra ∅) = 1 := by
+  rw [U.emptyEquivComplex.toAlgEquiv.toLinearEquiv.finrank_eq]
+  exact CommSemiring.finrank_self ℂ
+
 end HaagKastler
 end AQFT
 end Physicslib4
