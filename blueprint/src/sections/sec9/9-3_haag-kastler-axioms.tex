@@ -1,5 +1,5 @@
 \section{Haag Kastler Axioms}\label{sctn:haag-kastler-axioms}
-With that out of the way we can state the axioms. Each axiom below is presented as a \emph{definition} so that it is captured as a node in the blueprint declaration graph. In the Lean formalization each axiom corresponds to a \texttt{Prop}-valued predicate (or, in the case of \emph{Local Algebras}, a data field), and the bundling structure \texttt{HaagKastlerNet} packages them together (see \cref{def:haag-kastler-net}). Downstream theorems take an instance of \texttt{HaagKastlerNet} as a hypothesis and invoke each axiom as a projection.
+With that out of the way we can state the axioms. Each axiom below is presented as a \emph{definition} so that it is captured as a node in the blueprint declaration graph. In the Lean formalization each axiom corresponds to a \texttt{Prop}-valued predicate (or, in the case of \emph{Local Algebras}, a data field), and the bundling structure \texttt{HaagKastlerNet} packages them together (see \ref{def:haag-kastler-net}). Downstream theorems take an instance of \texttt{HaagKastlerNet} as a hypothesis and invoke each axiom as a projection.
 
 \begin{definition}[Axiom 1: Local Algebras]
     \label{def:local-algebras}
@@ -140,7 +140,7 @@ The next axiom makes use of the following new definition:
     \uses{def:local-commutativity}
     \uses{def:quasilocal-completeness}
     \uses{def:lorentz-covariance}
-    A \emph{Haag-Kastler net} on Minkowski spacetime is the bundling of the data of \cref{def:local-algebras} together with the properties of \cref{def:isotony}, \cref{def:local-commutativity}, \cref{def:quasilocal-completeness}, and \cref{def:lorentz-covariance}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT take an instance of this structure as a hypothesis and invoke each axiom as a projection.
+    A \emph{Haag-Kastler net} on Minkowski spacetime is the bundling of the data of \ref{def:local-algebras} together with the properties of \ref{def:isotony}, \ref{def:local-commutativity}, \ref{def:quasilocal-completeness}, and \ref{def:lorentz-covariance}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT take an instance of this structure as a hypothesis and invoke each axiom as a projection.
 \end{definition}
 
 This concludes the presentation of the ``sharpened'' axioms. As proven in this blog post, these ``sharpened'' axioms entail the original axioms save Axiom 6 (Primitivity), which is an axiom that we abandon.

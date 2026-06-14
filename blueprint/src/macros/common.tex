@@ -17,3 +17,9 @@
 
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
+
+% `\leanfile` is not a standard leanblueprint macro, so define it as a no-op
+% taking the source-file path. This keeps both the web (plasTeX) and pdf
+% (pdflatex) builds free of "unrecognized command" / "undefined control
+% sequence" errors while documenting each declaration's Lean source file.
+\providecommand{\leanfile}[1]{}
