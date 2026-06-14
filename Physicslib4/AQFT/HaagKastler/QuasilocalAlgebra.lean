@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
+import Mathlib.Analysis.CStarAlgebra.Hom
 
 /-!
 # Quasilocal Algebra
@@ -102,6 +103,22 @@ structure QuasilocalAlgebra (U : LocalNet) where
                           Set.range (ι B))
 
 attribute [instance] QuasilocalAlgebra.instCStarAlgebra
+
+/-- Each local embedding `Q.ι B` is norm-preserving on Alexandrov-basis sets:
+an injective `*`-homomorphism of complex C*-algebras is isometric, so the
+local algebra `𝔘(B)` sits inside the quasilocal algebra `𝔘` with its norm
+intact. -/
+theorem QuasilocalAlgebra.norm_ι {U : LocalNet} (Q : QuasilocalAlgebra U)
+    {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
+    (a : U.algebra B) : ‖Q.ι B a‖ = ‖a‖ :=
+  NonUnitalStarAlgHom.norm_map (Q.ι B) (Q.ι_injective hB) a
+
+/-- Each local embedding `Q.ι B` is an isometry on Alexandrov-basis sets.
+This is the metric form of `QuasilocalAlgebra.norm_ι`. -/
+theorem QuasilocalAlgebra.isometry_ι {U : LocalNet} (Q : QuasilocalAlgebra U)
+    {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B) :
+    Isometry (Q.ι B) :=
+  NonUnitalStarAlgHom.isometry (Q.ι B) (Q.ι_injective hB)
 
 end HaagKastler
 end AQFT
