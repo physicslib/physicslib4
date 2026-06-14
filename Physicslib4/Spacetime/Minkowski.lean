@@ -1888,7 +1888,7 @@ noncomputable def MinkowskiSpacetime : Spacetime where
   connected :=
     (Homeomorph.connectedSpace_iff euclideanHomeoMinkowski).mp inferInstance
   chartedSpace := instChartedSpaceMinkowskiCarrier
-  model := StandardMinkowskiSpacetime.model
+  model := modelWithCornersSelf ℝ SpacetimeModel
   isManifold := instIsManifoldMinkowskiCarrier
   tangent_findim := fun _ => by
     -- `TangentSpace (modelWithCornersSelf ℝ SpacetimeModel) _` reduces to
@@ -1942,9 +1942,9 @@ noncomputable def MinkowskiSpacetime : Spacetime where
     · exact contDiffWithinAt_const
     · filter_upwards [self_mem_nhdsWithin] with y hy
       rw [mfderiv_extChartAt_symm_minkowski x₀ hy]
-      simp
+      rfl
     · rw [mfderiv_extChartAt_symm_minkowski x₀
         ((extChartAt _ x₀).map_source (mem_extChartAt_source x₀))]
-      simp
+      rfl
 
 end Physicslib4
