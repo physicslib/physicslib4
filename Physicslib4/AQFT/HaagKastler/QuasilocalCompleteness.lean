@@ -130,6 +130,46 @@ theorem exists_isQuasilocalObservable {U : LocalNet} (Q : QuasilocalAlgebra U)
   change star (π a) = π a
   rw [← map_star, ha.star_eq]
 
+section Observables
+
+variable {U : LocalNet} {Q : QuasilocalAlgebra U} {H : Type}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  {π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)}
+
+/-- The identity operator on the GNS Hilbert space is a quasilocal observable:
+it is the image `π 1` of the (self-adjoint) unit of the quasilocal algebra. -/
+theorem isQuasilocalObservable_one : IsQuasilocalObservable Q π 1 :=
+  ⟨1, IsSelfAdjoint.one Q.carrier, (map_one π).symm⟩
+
+/-- Quasilocal observables are closed under addition: the sum of the images of
+two self-adjoint elements is the image of their (self-adjoint) sum. -/
+theorem IsQuasilocalObservable.add {S T : H →L[ℂ] H}
+    (hS : IsQuasilocalObservable Q π S) (hT : IsQuasilocalObservable Q π T) :
+    IsQuasilocalObservable Q π (S + T) := by
+  obtain ⟨a, ha, rfl⟩ := hS
+  obtain ⟨b, hb, rfl⟩ := hT
+  exact ⟨a + b, ha.add hb, (map_add π a b).symm⟩
+
+/-- Quasilocal observables are closed under scaling by a *self-adjoint* complex
+scalar (equivalently, a real scalar): self-adjointness of `c • a` requires
+`star c = c`. -/
+theorem IsQuasilocalObservable.smul {c : ℂ} {T : H →L[ℂ] H}
+    (hT : IsQuasilocalObservable Q π T) (hc : IsSelfAdjoint c) :
+    IsQuasilocalObservable Q π (c • T) := by
+  obtain ⟨a, ha, rfl⟩ := hT
+  exact ⟨c • a, hc.smul ha, (map_smul π c a).symm⟩
+
+/-- *Real-linear combinations* of quasilocal observables are quasilocal
+observables. The scalars are taken self-adjoint in `ℂ`, i.e. real, which is
+exactly the condition under which the combination stays self-adjoint. -/
+theorem IsQuasilocalObservable.smul_add_smul {c d : ℂ} {S T : H →L[ℂ] H}
+    (hc : IsSelfAdjoint c) (hd : IsSelfAdjoint d)
+    (hS : IsQuasilocalObservable Q π S) (hT : IsQuasilocalObservable Q π T) :
+    IsQuasilocalObservable Q π (c • S + d • T) :=
+  (hS.smul hc).add (hT.smul hd)
+
+end Observables
+
 end HaagKastler
 end AQFT
 end Physicslib4
