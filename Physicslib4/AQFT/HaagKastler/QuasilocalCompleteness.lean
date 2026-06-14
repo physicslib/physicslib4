@@ -168,6 +168,26 @@ theorem IsQuasilocalObservable.smul_add_smul {c d : ℂ} {S T : H →L[ℂ] H}
     IsQuasilocalObservable Q π (c • S + d • T) :=
   (hS.smul hc).add (hT.smul hd)
 
+/-- **Characterisation of quasilocal observables.** An operator `T` on the GNS
+Hilbert space is a quasilocal observable precisely when it is self-adjoint and
+lies in the range of the representation `π`. The forward direction is
+`IsQuasilocalObservable.isSelfAdjoint`; the converse holds even when `π` is not
+injective, by replacing a preimage `b` with its self-adjoint part
+`2⁻¹ • (b + star b)`, which `π` still sends to `T`. -/
+theorem isQuasilocalObservable_iff {T : H →L[ℂ] H} :
+    IsQuasilocalObservable Q π T ↔ IsSelfAdjoint T ∧ T ∈ Set.range π := by
+  constructor
+  · rintro ⟨a, ha, rfl⟩
+    exact ⟨IsQuasilocalObservable.isSelfAdjoint ⟨a, ha, rfl⟩, a, rfl⟩
+  · rintro ⟨hT, b, rfl⟩
+    have hsa : IsSelfAdjoint (b + star b) := by
+      rw [IsSelfAdjoint, star_add, star_star, add_comm]
+    have hc : IsSelfAdjoint (2⁻¹ : ℂ) := by
+      change star (2⁻¹ : ℂ) = 2⁻¹; rw [star_inv₀]; norm_num
+    refine ⟨(2⁻¹ : ℂ) • (b + star b), hc.smul hsa, ?_⟩
+    rw [map_smul, map_add, map_star, hT.star_eq, ← two_smul ℂ (π b), smul_smul,
+      inv_mul_cancel₀ (two_ne_zero), one_smul]
+
 end Observables
 
 end HaagKastler
