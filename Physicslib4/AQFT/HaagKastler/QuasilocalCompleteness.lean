@@ -190,6 +190,25 @@ theorem isQuasilocalObservable_iff {T : H →L[ℂ] H} :
 
 end Observables
 
+/-- The set of *quasilocal observables* on the GNS Hilbert space `H` for the
+representation `π`: all bounded operators of the form `π a` with `a` a
+self-adjoint element of the quasilocal algebra. -/
+def quasilocalObservables {U : LocalNet} (Q : QuasilocalAlgebra U) {H : Type}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) : Set (H →L[ℂ] H) :=
+  {T | IsQuasilocalObservable Q π T}
+
+/-- The quasilocal observables are exactly the self-adjoint elements lying in
+the range of the representation `π`. -/
+theorem quasilocalObservables_eq {U : LocalNet} (Q : QuasilocalAlgebra U)
+    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) :
+    quasilocalObservables Q π
+      = (selfAdjoint (H →L[ℂ] H) : Set (H →L[ℂ] H)) ∩ Set.range π := by
+  ext T
+  simp only [quasilocalObservables, Set.mem_setOf_eq, isQuasilocalObservable_iff,
+    Set.mem_inter_iff, SetLike.mem_coe, selfAdjoint.mem_iff, isSelfAdjoint_iff]
+
 end HaagKastler
 end AQFT
 end Physicslib4
