@@ -668,10 +668,10 @@ Both directions ultimately appeal to the smooth-curve API in
 scaffolded structurally as
 `minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski`,
 with the analytic content factored into the named lemmas
-`standardMinkowski_lineSegmentPath_continuousOn`,
-`standardMinkowski_lineSegmentPath_smoothOn`,
-`standardMinkowski_lineSegmentPath_mfderivWithin` and
-`standardMinkowski_lineSegmentPath_nonvanishing`, each currently
+`standardMinkowskiLineSegmentPath_continuousOn`,
+`standardMinkowskiLineSegmentPath_smoothOn`,
+`standardMinkowskiLineSegmentPath_mfderivWithin` and
+`standardMinkowskiLineSegmentPath_nonvanishing`, each currently
 `sorry`'d. The forward direction is bundled as
 `chronologicalFuture_standardMinkowski_subset` and still `sorry`'d
 pending the integration argument.
@@ -681,7 +681,7 @@ pending the integration argument.
 *(Analytic stub for the chronological-future characterisation: easy from
 `continuousOn_const` / `Continuous.smul` / `continuousOn_id` but written as
 a stub here to keep this first pass structural.)* -/
-theorem standardMinkowski_lineSegmentPath_continuousOn (p q : SpacetimeModel) :
+theorem standardMinkowskiLineSegmentPath_continuousOn (p q : SpacetimeModel) :
     ContinuousOn (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
       (Set.Icc (0 : ℝ) 1) :=
   (continuous_const.add (Continuous.smul continuous_id continuous_const)).continuousOn
@@ -689,7 +689,7 @@ theorem standardMinkowski_lineSegmentPath_continuousOn (p q : SpacetimeModel) :
 /-- The straight-line path `s ↦ p + s • (q - p)` is `C^∞` on `[0, 1]`,
 viewed as a map from `(ℝ, modelWithCornersSelf ℝ ℝ)` to standard Minkowski
 spacetime. *(Analytic stub for the chronological-future characterisation.)* -/
-theorem standardMinkowski_lineSegmentPath_smoothOn (p q : SpacetimeModel) :
+theorem standardMinkowskiLineSegmentPath_smoothOn (p q : SpacetimeModel) :
     ContMDiffOn (modelWithCornersSelf ℝ ℝ)
       StandardMinkowskiSpacetime.model ⊤
       (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
@@ -701,7 +701,7 @@ theorem standardMinkowski_lineSegmentPath_smoothOn (p q : SpacetimeModel) :
 /-- The derivative of the straight-line path `s ↦ p + s • (q - p)` at every
 point of `[0, 1]`, applied to the basis vector `1 : ℝ`, equals `q - p`.
 *(Analytic stub for the chronological-future characterisation.)* -/
-theorem standardMinkowski_lineSegmentPath_mfderivWithin (p q : SpacetimeModel) :
+theorem standardMinkowskiLineSegmentPath_mfderivWithin (p q : SpacetimeModel) :
     ∀ s ∈ Set.Icc (0 : ℝ) 1,
       mfderivWithin (modelWithCornersSelf ℝ ℝ)
         StandardMinkowskiSpacetime.model
@@ -736,9 +736,9 @@ theorem standardMinkowski_lineSegmentPath_mfderivWithin (p q : SpacetimeModel) :
 
 /-- The straight-line path `s ↦ p + s • (q - p)` has non-vanishing derivative
 `q - p` (assuming `p ≠ q`). *(Analytic stub for the chronological-future
-characterisation: follows from `standardMinkowski_lineSegmentPath_mfderivWithin`
+characterisation: follows from `standardMinkowskiLineSegmentPath_mfderivWithin`
 together with `p ≠ q`.)* -/
-theorem standardMinkowski_lineSegmentPath_nonvanishing (p q : SpacetimeModel)
+theorem standardMinkowskiLineSegmentPath_nonvanishing (p q : SpacetimeModel)
     (hpq : p ≠ q) :
     ∀ s ∈ Set.Icc (0 : ℝ) 1,
       mfderivWithin (modelWithCornersSelf ℝ ℝ)
@@ -746,7 +746,7 @@ theorem standardMinkowski_lineSegmentPath_nonvanishing (p q : SpacetimeModel)
         (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
         (Set.Icc 0 1) s (1 : ℝ) ≠ 0 := by
   intro s hs
-  rw [standardMinkowski_lineSegmentPath_mfderivWithin p q s hs]
+  rw [standardMinkowskiLineSegmentPath_mfderivWithin p q s hs]
   intro hzero
   apply hpq
   have hqp : q = p := sub_eq_zero.mp hzero
@@ -756,7 +756,7 @@ theorem standardMinkowski_lineSegmentPath_nonvanishing (p q : SpacetimeModel)
 spacetime: `s ↦ p + s • (q - p)` parametrised by `[0, 1]`. This is the
 canonical witness for the reverse direction of
 `chronologicalFuture_standardMinkowski`. -/
-noncomputable def standardMinkowski_lineSegmentPath
+noncomputable def standardMinkowskiLineSegmentPath
     (p q : SpacetimeModel) (hpq : p ≠ q) :
     StandardMinkowskiSpacetime.SmoothPath where
   parameterSpace := Set.Icc (0 : ℝ) 1
@@ -764,9 +764,9 @@ noncomputable def standardMinkowski_lineSegmentPath
   isConnected := ⟨⟨0, by simp⟩, isPreconnected_Icc⟩
   nontrivial := ⟨0, 1, by simp, by simp, zero_ne_one⟩
   toFun := fun s => (p : SpacetimeModel) + s • (q - p)
-  continuousOn := standardMinkowski_lineSegmentPath_continuousOn p q
-  smoothOn := standardMinkowski_lineSegmentPath_smoothOn p q
-  nonvanishing := standardMinkowski_lineSegmentPath_nonvanishing p q hpq
+  continuousOn := standardMinkowskiLineSegmentPath_continuousOn p q
+  smoothOn := standardMinkowskiLineSegmentPath_smoothOn p q
+  nonvanishing := standardMinkowskiLineSegmentPath_nonvanishing p q hpq
 
 /-!
 ### Forward direction: scaffolding for `chronologicalFuture ⊆ minkowskiForwardCone`
@@ -1471,7 +1471,7 @@ theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
 /-- *Reverse subset* of `chronologicalFuture_standardMinkowski`: every
 point of the open forward Minkowski-cone of `p` lies in the chronological
 future of `p`. Witnessed by the straight-line path
-`standardMinkowski_lineSegmentPath`. -/
+`standardMinkowskiLineSegmentPath`. -/
 theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
     (p : SpacetimeModel) :
     minkowskiForwardCone p ⊆
@@ -1484,8 +1484,8 @@ theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
     rw [h] at h_time
     exact lt_irrefl _ h_time
   refine ⟨Spacetime.SmoothCurve.ofPath _
-    (standardMinkowski_lineSegmentPath p q hpq), ?_⟩
-  refine ⟨standardMinkowski_lineSegmentPath p q hpq, rfl, ?_, ?_, ?_, ?_, ?_⟩
+    (standardMinkowskiLineSegmentPath p q hpq), ?_⟩
+  refine ⟨standardMinkowskiLineSegmentPath p q hpq, rfl, ?_, ?_, ?_, ?_, ?_⟩
   · intro s hs
     have hs' : s ∈ Set.Icc (0 : ℝ) 1 := hs
     change minkowskiForm
@@ -1497,7 +1497,7 @@ theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
           StandardMinkowskiSpacetime.model
           (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
           (Set.Icc 0 1) s (1 : ℝ)) < 0
-    rw [standardMinkowski_lineSegmentPath_mfderivWithin p q s hs']
+    rw [standardMinkowskiLineSegmentPath_mfderivWithin p q s hs']
     simp only [minkowskiForm_apply]
     have e0 : (q - p) 0 = q 0 - p 0 := rfl
     have e1 : (q - p) 1 = q 1 - p 1 := rfl
@@ -1521,7 +1521,7 @@ theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
             StandardMinkowskiSpacetime.model
             (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
             (Set.Icc 0 1) s (1 : ℝ)) < 0
-      rw [standardMinkowski_lineSegmentPath_mfderivWithin p q s hs']
+      rw [standardMinkowskiLineSegmentPath_mfderivWithin p q s hs']
       simp only [minkowskiForm_apply]
       have e0 : (q - p) 0 = q 0 - p 0 := rfl
       have e1 : (q - p) 1 = q 1 - p 1 := rfl
@@ -1537,7 +1537,7 @@ theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
             StandardMinkowskiSpacetime.model
             (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
             (Set.Icc 0 1) s (1 : ℝ)) < 0
-      rw [standardMinkowski_lineSegmentPath_mfderivWithin p q s hs']
+      rw [standardMinkowskiLineSegmentPath_mfderivWithin p q s hs']
       simp only [minkowskiForm_apply]
       have h0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 = 1 := by
         rw [PiLp.single_apply]; simp
