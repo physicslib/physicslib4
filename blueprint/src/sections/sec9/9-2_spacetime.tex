@@ -3,23 +3,33 @@
     \label{def:spacetime}
     \lean{Physicslib4.Spacetime}
     \leanfile{Physicslib4/Spacetime/Basic.lean}
+    \leanok
     A \textit{spacetime} is a real, four-dimensional, connected, smooth, Hausdorff manifold $M$ with a globally defined smooth tensor field $g$ of type $(0,2)$ which is non-degenerate and ``Lorentzian''. By \textit{Lorentzian} we mean that for any $p \in M$ there is a basis of the tangent space $TM|_p$ to $M$ at $p$ relative to which $g|_p$ is zero in its non-diagonal entries and on the diagonal takes the form $\text{diag}(-1,1,1,1)$.
 \end{definition}
 
 \begin{definition}[Standard Minkowski Spacetime]
     \label{def:standard-minkowski-spacetime}
+    \lean{Physicslib4.StandardMinkowskiSpacetime}
+    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \leanok
     \uses{def:spacetime}
     \textit{Standard Minkowski spacetime} is a spacetime in which the underlying real, four-dimensional, connected, smooth, Hausdorff manifold is $\mathbb{R}^4$ with the Euclidean topology. In addition $g$ takes the form $g|_p=\text{diag}(-1,1,1,1)$ for all $p$ in $\mathbb{R}^4$ with respect to the standard coordinates on $\mathbb{R}^4$.
 \end{definition}
 
 \begin{definition}[Timelike, Spacelike, or Null Vectors]
     \label{def:timelike-spacelike-null-vectors}
+    \lean{Physicslib4.Spacetime.IsTimelike, Physicslib4.Spacetime.IsSpacelike, Physicslib4.Spacetime.IsNull}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \leanok
     \uses{def:spacetime}
     Let $M$ be a spacetime, $p$ a point in $M$, and $g$ the tensor field of type $(0,2)$ associated to $M$. Any tangent vector $v \in TM|_p$ is \textit{timelike}, \textit{spacelike}, or \textit{null} if $g|_p(v,v)$ is negative, positive, or zero respectively.
 \end{definition}
 
 \begin{definition}[Time Orientation]
     \label{def:time-orientable}
+    \lean{Physicslib4.Spacetime.TimeOrientation, Physicslib4.Spacetime.IsTimeOrientable}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \leanok
     \uses{def:spacetime}
     \uses{def:timelike-spacelike-null-vectors}
     A spacetime $M$ is \textit{time-orientable} if it admits a smooth, non-vanishing vector field $t$ that is timelike. Such a smooth, non-vanishing vector field is called a \textit{time-orientation}.
@@ -27,6 +37,9 @@
 
 \begin{definition}[Future and Past Pointing Vectors]
     \label{def:future-and-past-pointing-vectors}
+    \lean{Physicslib4.Spacetime.IsFuturePointing, Physicslib4.Spacetime.IsPastPointing}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \leanok
     \uses{def:spacetime}
     \uses{def:timelike-spacelike-null-vectors}
     For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
@@ -34,30 +47,45 @@
 
 \begin{definition}[Paths]
     \label{def:paths}
+    \lean{Physicslib4.Spacetime.Path, Physicslib4.Spacetime.SmoothPath}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
     \uses{def:spacetime}
     A \textit{path} is a continuous map $\mu :\Sigma \rightarrow M$ from the \textit{parameter space}--a closed, connected subset $\Sigma$ of $\mathbb{R}$ that contains more than a single point--to a spacetime $M$. A \textit{smooth path} is a path $\mu$ that is smooth and has a non-vanishing derivative.
 \end{definition}
 
 \begin{definition}[Curves]
     \label{def:curves}
+    \lean{Physicslib4.Spacetime.Curve, Physicslib4.Spacetime.SmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
     \uses{def:paths}
     A \textit{curve} is an equivalence class of paths equivalent under homeomorphisms of the parameter space. A \textit{smooth curve} is an equivalence class of smooth paths equivalent under diffeomorphisms of the parameter space.
 \end{definition}
 
 \begin{definition}[Timelike and Causal Smooth Curves]
     \label{def:timelike-and-causal-smooth-curves}
+    \lean{Physicslib4.Spacetime.IsTimelikeSmoothCurve, Physicslib4.Spacetime.IsCausalSmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
     \uses{def:timelike-spacelike-null-vectors}
     A \textit{timelike smooth curve} is a smooth curve with a tangent vector that is timelike at every point along the smooth curve. A \textit{causal smooth curve} is a smooth curve with a tangent vector that is timelike or null at every point along the smooth curve.
 \end{definition}
 
 \begin{definition}[Future and Past Oriented Smooth Curves]
     \label{def:future-and-past-oriented-smooth-curves}
+    \lean{Physicslib4.Spacetime.IsFutureOrientedSmoothCurve, Physicslib4.Spacetime.IsPastOrientedSmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
     \uses{def:future-and-past-pointing-vectors}
     A \textit{future-oriented smooth curve} is a smooth curve with a tangent vector that is future-pointing at every point. A \textit{past-oriented smooth curve} is a smooth curve with a tangent vector that is past-pointing at every point.
 \end{definition}
 
 \begin{definition}[Endpoints]
     \label{def:endpoints}
+    \lean{Physicslib4.Spacetime.IsEndpoint, Physicslib4.Spacetime.IsPastEndpoint, Physicslib4.Spacetime.IsFutureEndpoint}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
     \uses{def:spacetime}
     \uses{def:paths}
     \uses{def:curves}
@@ -67,6 +95,9 @@
 
 \begin{definition}[Trip]
     \label{def:trip}
+    \lean{Physicslib4.Spacetime.IsTrip, Physicslib4.Spacetime.ChronologicallyPrecedes}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
     \uses{def:curves}
     \uses{def:future-and-past-oriented-smooth-curves}
     \uses{def:timelike-and-causal-smooth-curves}
@@ -76,6 +107,9 @@
 
 \begin{definition}[Causal Trip]
     \label{def:causal-trip}
+    \lean{Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
     \uses{def:curves}
     \uses{def:future-and-past-oriented-smooth-curves}
     \uses{def:timelike-and-causal-smooth-curves}
@@ -85,6 +119,9 @@
 
 \begin{definition}[Chronological Future and Chronological Past]
     \label{def:chronological-future-and-chronological-past}
+    \lean{Physicslib4.Spacetime.chronologicalFuture, Physicslib4.Spacetime.chronologicalPast, Physicslib4.Spacetime.chronologicalFutureSet, Physicslib4.Spacetime.chronologicalPastSet}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
     \uses{def:spacetime}
     \uses{def:trip}
     For a spacetime $M$ and $p$ in $M$ the set $I^+(p) = \{q \in M : p \ll q\}$ is called the \textit{chronological future} of $p$. $I^-(p) = \{q \in M : q \ll p\}$ is called the \textit{chronological past} of $p$. The \textit{chronological future} of a set $S \subset M$ is the union of the chronological future of each element of the set
@@ -99,6 +136,9 @@
 
 \begin{definition}[Causal Future and Causal Past]
     \label{def:causal-future-and-causal-past}
+    \lean{Physicslib4.Spacetime.causalFuture, Physicslib4.Spacetime.causalPast, Physicslib4.Spacetime.causalFutureSet, Physicslib4.Spacetime.causalPastSet}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
     \uses{def:spacetime}
     \uses{def:causal-trip}
     For a spacetime $M$ and $p$ in $M$ the set $J^+(p) = \{q \in M : p \prec q\}$ is called the \textit{causal future} of $p$. $J^-(p) = \{q \in M : q \prec p\}$ is called the \textit{causal past} of $p$. The \textit{causal future} of a set $S \subset M$ is the union of the causal future of each element of the set
@@ -113,6 +153,9 @@
 
 \begin{definition}[Spacelike Related]
     \label{def:spacelike-related}
+    \lean{Physicslib4.Spacetime.IsSpacelikeRelated}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
     \uses{def:spacetime}
     \uses{def:causal-future-and-causal-past}
     Consider two points $p_1$ and $p_2$ in a spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
@@ -120,6 +163,9 @@
 
 \begin{definition}[Completely Spacelike]
     \label{def:completely-spacelike}
+    \lean{Physicslib4.Spacetime.IsCompletelySpacelike}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
     \uses{def:spacetime}
     \uses{def:spacelike-related}
     Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in a spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
@@ -127,6 +173,9 @@
 
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
+    \lean{Physicslib4.Spacetime.alexandrovTopology}
+    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \leanok
     \uses{def:spacetime}
     \uses{def:chronological-future-and-chronological-past}
     \textit{Alexandrov topology} on a spacetime $M$ is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in $M$.
@@ -134,6 +183,9 @@
 
 \begin{definition}[Minkowski Spacetime]
     \label{def:minkowski-spacetime}
+    \lean{Physicslib4.MinkowskiSpacetime}
+    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \leanok
     \uses{def:standard-minkowski-spacetime}
     \uses{def:alexandrov-topology}
     \textit{Minkowski spacetime} is standard Minkowski spacetime equipped with Alexandrov topology.

@@ -10,6 +10,9 @@ Before stating the theorem we'll need to introduce terminology that appears in t
 
 \begin{definition}[State]
     \label{def:state}
+    \lean{Physicslib4.GNS.State, Physicslib4.GNS.IsFaithful}
+    \leanfile{Physicslib4/GNS/Basic.lean}
+    \leanok
     Let $\mathfrak{U}$ be an abstract C*-algebra. A \textit{state} is an element $\omega$ of the dual space $\mathfrak{U}^*$ that is
     \begin{itemize}
         \item \textit{Positive} - for any $a \in \mathfrak{U}$ we have $0 \le \omega(a^*a)$ and
@@ -22,6 +25,9 @@ We will also have need of the term "cyclic vector".
 
 \begin{definition}[Cyclic Vector]
     \label{def:cyclic-vector}
+    \lean{Physicslib4.GNS.IsCyclicVector}
+    \leanfile{Physicslib4/GNS/Basic.lean}
+    \leanok
     Let $\mathcal{A}$ be an algebra represented by the bounded operators $\pi(\mathcal{A})$ on the Hilbert space $\mathcal{H}$. A vector $\Omega$ in $\mathcal{H}$ is said to be a \textit{cyclic vector} if the set
     \begin{align}
         \{ A\Omega : A \in \pi(\mathcal{A}) \}
