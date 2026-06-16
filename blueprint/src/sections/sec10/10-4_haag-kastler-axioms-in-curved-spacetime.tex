@@ -1,0 +1,126 @@
+\section{Haag Kastler Axioms in Curved Spacetime}\label{sctn:haag-kastler-axioms-in-curved-spacetime}
+Here we recount the axioms we've established for AQFT in Lorentzian spacetime.
+
+The first axiom states:
+
+\begin{definition}[Axiom 1: Local Algebras]
+    \label{def:local-algebras-in-curved-spacetime}
+    \uses{def:alexandrov-topology}
+    \uses{def:lorentzian-spacetime}
+    \uses{def:chronological-future-and-chronological-past}
+    For any basis element $\mathbf{B}$ of the Alexandrov topology on a Lorentzian spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
+    \begin{align}
+        \mathbf{B} \longmapsto \mathfrak{U}(\mathbf{B}),
+    \end{align}
+    and when $\mathbf{B}$ is the empty set, we have the distinguished correspondence
+    \begin{align}
+        \emptyset \longmapsto \mathbb{C} \mathbf{1},
+    \end{align}
+    where $\mathbf{1}$ is the multiplicative identity in the abstract C*-algebra $\mathbb{C} \mathbf{1}$.
+\end{definition}
+
+The second axiom can be immediately stated too.
+
+\begin{definition}[Axiom 2: Isotony]
+    \label{def:isotony-in-curved-spacetime}
+    \uses{def:alexandrov-topology}
+    \uses{def:lorentzian-spacetime}
+    \uses{def:chronological-future-and-chronological-past}
+    \uses{def:local-algebras-in-curved-spacetime}
+    Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
+    
+    If $\mathbf{B}_1 \subset \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subset \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
+    \begin{align}
+        i : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2),
+    \end{align}
+    a unital *-monomorphism.
+\end{definition}
+
+The next axiom can be stated as follows:
+
+\begin{definition}[Axiom 3: Local Commutativity]
+    \label{def:local-commutativity-in-curved-spacetime}
+    \uses{def:alexandrov-topology}
+    \uses{def:lorentzian-spacetime}
+    \uses{def:chronological-future-and-chronological-past}
+    \uses{def:completely-spacelike}
+    \uses{def:local-algebras-in-curved-spacetime} 
+    Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
+    
+    If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, for any Alexandrov topology basis element $\mathbf{B}$ such that $\mathbf{B_1}, \mathbf{B_2} \subseteq \mathbf{B}$ the algebras $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the C*-algebra $\mathfrak{U}(\mathbf{B})$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ we have
+    \begin{align}
+        i(a_1) i(a_2) - i(a_2) i(a_1) = 0
+    \end{align}
+    in the C*-algebra $\mathfrak{U}(\mathbf{B})$, where $i$ is the unital *-monomorphism Axiom 2 (Isotony).
+    
+    If no such $\mathbf{B}$ exists, then it simply doesn't make sense to consider if $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute as they are not in the same algebra.
+\end{definition}
+
+The next axiom has need of the following definition
+
+\begin{definition}[Local Observable]
+    \label{def:local-observable}
+    \uses{def:lorentzian-spacetime}
+    \uses{thrm:gns-construction-theorem}
+    \uses{def:local-algebras-in-curved-spacetime} 
+    \uses{def:state}
+    For Lorentzian spacetime $M$ the image $\pi_\omega(a)$ of a self-adjoint member $a$ of the local algebra $\mathfrak{U}(\mathbf{B})$ under the GNS *-homomorphism $\pi_\omega$ of a state $\omega$ on $\mathfrak{U}(\mathbf{B})$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{local observable}.
+\end{definition}
+
+and can be stated as follows:
+
+\begin{definition}[Axiom 4: Local Completeness]
+    \label{def:local-completeness-in-curved-spacetime}
+    \uses{def:local-observable}
+    All ``observables'' are local observables.
+\end{definition}
+
+The final axiom states:
+
+\begin{definition}[Axiom 5: Isometric Covariance]
+    \label{def:isometric-covariance-in-curved-spacetime}
+    \uses{def:alexandrov-topology}
+    \uses{def:lorentzian-spacetime}
+    \uses{def:chronological-future-and-chronological-past}
+    \uses{def:local-algebras-in-curved-spacetime}
+    \uses{def:isotony-in-curved-spacetime}
+    Let $\mathbf{B}$ be any basis element of the Alexandrov topology on a Lorentzian spacetime $M$, i.e. any set of the form $I^+(p) \cap I^-(q)$.
+    
+    A member $\varphi$ of the group of isometries of $M$ connected to the identity acts on $\mathfrak{U}(\mathbf{B})$ as follows
+    \begin{align}
+        \alpha_\varphi : \mathfrak{U}(\mathbf{B}) &\longrightarrow \mathfrak{U}(\varphi(\mathbf{B})) \\
+                                   a              &\longmapsto     \alpha_\varphi(a)
+    \end{align}
+    where $\varphi(\mathbf{B})$ is the image of the basis element $\mathbf{B}$ under the isometry $\varphi$ and $\alpha_\varphi$ is a unital *-isomorphism generated by $\varphi$. The map $\alpha_\varphi$ is such that (1) for the identity isometry $\mathbf{1}$ it satisfies
+    \begin{align}
+        \alpha_{\mathbf{1}}(a) = a,
+    \end{align}
+    (2) for all appropriate $a$, $\varphi$, and $\varphi'$ it satisfies
+    \begin{align}
+        \alpha_{\varphi' \circ \varphi}(a) = \alpha_{\varphi'}(\alpha_{\varphi}(a)),
+    \end{align}
+    and (3) for Alexandrov topology basis elements $\mathbf{B}_\iota \subset \mathbf{B}_\kappa$ and the unital *-monomorphism $i$ of Axiom 2 (Isotony) $\alpha_\varphi$ commutes with $i$. In other words the following diagram
+
+    \begin{center}
+        \begin{tikzcd}
+            \mathfrak{U}(\mathbf{B}_\kappa) \arrow[r, "\alpha_\varphi"]
+            & \mathfrak{U}(\varphi(\mathbf{B}_\kappa)) \\
+            \mathfrak{U}(\mathbf{B}_\iota) \arrow[r, "\alpha_\varphi"]  \arrow[u, "i"]
+            & \mathfrak{U}(\varphi(\mathbf{B}_\iota))  \arrow[u, "i"]
+        \end{tikzcd}
+    \end{center}
+
+    commutes.
+\end{definition}
+
+\begin{definition}[Haag-Kastler Net in Curved Spacetime]
+    \label{def:haag-kastler-net-in-curved-spacetime}
+    \uses{def:local-algebras-in-curved-spacetime}
+    \uses{def:isotony-in-curved-spacetime}
+    \uses{def:local-commutativity-in-curved-spacetime}
+    \uses{def:local-completeness-in-curved-spacetime}
+    \uses{def:isometric-covariance-in-curved-spacetime}
+    A \emph{Haag-Kastler net in curved spacetime} on a Lorentzian spacetime is the bundling of the data of \ref{def:local-algebras-in-curved-spacetime} together with the properties of \ref{def:isotony-in-curved-spacetime}, \ref{def:local-commutativity-in-curved-spacetime}, \ref{def:local-completeness-in-curved-spacetime}, and \ref{def:isometric-covariance-in-curved-spacetime}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT in curved spacetime take an instance of this structure as a hypothesis and invoke each axiom as a projection.
+\end{definition}
+
+Generally these axioms follow in a straightforward manner from those of AQFT in Minkowski spacetime. The only ``surprise'' in this presentation is the absence of a quasilocal algebra. However, as we found, its absence is simply a reflection of the observational constraints of Lorentzian spacetime which don't exist in Minkowski spacetime.
