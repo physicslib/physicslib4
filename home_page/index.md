@@ -22,9 +22,9 @@ title: Formalising AQFT in Lean
 
 # AQFT in Lean
 
-In 1964, Rudolf Haag and Daniel Kastler introduced a set of axioms for Algebraic Quantum Field Theory (AQFT), proposing a mathematically rigorous, operator-algebraic framework for quantum field theory in terms of nets of C\*-algebras indexed by regions of spacetime. This project formalises a "sharpened" version of these axioms in the [Lean Theorem Prover](https://leanprover-community.github.io), following the [original paper by Haag and Kastler](https://doi.org/10.1063/1.1704187). The original axioms, while revolutionary, left several details underspecified. This project clarifies those details and produces definitions, theorems, and axioms amenable to computer-assisted formalisation.
+In 1964, Rudolf Haag and Daniel Kastler introduced a set of axioms for Algebraic Quantum Field Theory (AQFT) in Minkowski spacetime, proposing a mathematically rigorous, operator-algebraic framework for quantum field theory in terms of nets of C\*-algebras indexed by regions of Minkowski spacetime. This project formalises a "sharpened" version of these axioms in the [Lean Theorem Prover](https://leanprover-community.github.io), following the [original paper by Haag and Kastler](https://doi.org/10.1063/1.1704187). The original axioms, while revolutionary, left several details underspecified. This project clarifies those details and produces definitions, theorems, and axioms amenable to computer-assisted formalisation. In addition, this project formalises these "sharpened" axioms in curved spacetime too.
 
-The blueprint is structured so that Chapters 1–8 motivate and analyse each of the original Haag–Kastler axioms in turn. These chapters serve as mathematical background and are not themselves formalised in Lean. Chapter 9 then collects the "sharpened" axioms together with the supporting definitions and theorems that have been carefully stated for formalisation; it is the content of Chapter 9—and only Chapter 9—that is formalised in Lean.
+The blueprint is structured so that Chapters 1–9 motivate and analyse each of the original Haag–Kastler axioms in turn as well as their generalization to curved spacetime. These chapters serve as mathematical background and are not themselves formalised in Lean. Chapter 10 then collects the "sharpened" axioms together with the supporting definitions and theorems that have been carefully stated for formalisation; it is the content of Chapter 10—and only Chapter 10—that is formalised in Lean.
 
 If you'd like to contribute, you may find the following links useful:
 
@@ -36,7 +36,7 @@ If you'd like to contribute, you may find the following links useful:
 
 ## The Blueprint
 
-Chapters 1–8 of the blueprint unpack and analyse the original Haag–Kastler axioms one by one:
+Chapters 1–9 of the blueprint unpack and analyse the original Haag–Kastler axioms one by one:
 
 - **Chapter 1** presents the original Haag–Kastler axioms as stated in the 1964 paper.
 - **Chapter 2 (Axiom 0 – Minkowski Space)** examines the role of Minkowski spacetime and compares the standard, indiscrete, Euclidean, and Alexandrov topologies on it.
@@ -46,16 +46,17 @@ Chapters 1–8 of the blueprint unpack and analyse the original Haag–Kastler a
 - **Chapter 6 (Axiom 4 – Quasilocal Algebra)** analyses the construction of the quasilocal algebra as the completion of the set-theoretic union of all local algebras, and the axiom that all observables are quasilocal.
 - **Chapter 7 (Axiom 5 – Lorentz Covariance)** studies the action of the inhomogeneous Lorentz group (connected to the identity) on the net of local algebras and the covariance requirement.
 - **Chapter 8 (Axiom 6 – Primitivity)** examines faithful and irreducible representations; this axiom is ultimately abandoned in the sharpened formulation.
+- **Chapter 9 (Haag–Kastler Axioms in Curved Spacetime)** generalizes the Haag–Kastler Axioms in Minkowski spacetime to curved spacetime, i.e. Lorentzian spacetime.
 
-Chapter 9 assembles the formalisation-ready content. It begins by carefully stating and proving the **GNS Construction Theorem** (with full detail, since both the theorem and specific steps of its proof are used in the axioms). It then gives precise definitions for spacetime, Minkowski spacetime, causal structure (timelike, spacelike, and null vectors; trips; causal trips; chronological and causal futures and pasts; the Alexandrov topology), and finally states the **sharpened Haag–Kastler Axioms**: Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, and Lorentz Covariance.
+Chapter 10 assembles the formalisation-ready content. It begins by carefully stating and proving the **GNS Construction Theorem** (with full detail, since both the theorem and specific steps of its proof are used in the axioms). It then gives precise definitions for spacetime, Minkowski spacetime, Lorentzian spacetime, causal structure (timelike, spacelike, and null vectors; trips; causal trips; chronological and causal futures and pasts; the Alexandrov topology), and finally states the **sharpened Haag–Kastler Axioms**: Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, and Lorentz Covariance as well as their generalization to curved spacetime.
 
 ## What is Being Formalised
 
-Only the content of Chapter 9 is formalised in Lean. This comprises:
+Only the content of Chapter 10 is formalised in Lean. This comprises:
 
-- **Definitions** — State, Cyclic Vector, Spacetime, Standard Minkowski Spacetime, Timelike/Spacelike/Null Vectors, Time Orientation, Future and Past Pointing Vectors, Paths, Curves, Timelike and Causal Smooth Curves, Future and Past Oriented Smooth Curves, Endpoints, Trip, Causal Trip, Chronological Future and Past, Causal Future and Past, Spacelike Related, Completely Spacelike, Alexandrov Topology, Minkowski Spacetime, Quasilocal Algebra, Quasilocal Observable.
+- **Definitions** — State, Cyclic Vector, Spacetime, Standard Minkowski Spacetime, Timelike/Spacelike/Null Vectors, Time Orientation, Future and Past Pointing Vectors, Paths, Curves, Timelike and Causal Smooth Curves, Future and Past Oriented Smooth Curves, Endpoints, Trip, Causal Trip, Chronological Future and Past, Causal Future and Past, Spacelike Related, Completely Spacelike, Alexandrov Topology, Minkowski Spacetime, Lorentzian spacetime, Quasilocal Algebra, Quasilocal Observable, Local Observable.
 - **Lemmas and Theorems** — the Cauchy–Schwarz inequality for states, equivalence of the two descriptions of the left-ideal \(\mathcal{N}\), the fact that \(\mathcal{N}\) is a closed linear subspace, and the full GNS Construction Theorem (including construction of the GNS Hilbert space, the \(\ast\)-representation, the cyclic vector, faithfulness, and uniqueness up to unitary equivalence).
-- **Axioms** — Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, and Lorentz Covariance.
+- **Axioms** — Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, and Lorentz Covariance and their generalization to curved spacetime.
 
 ## Contributing
 
