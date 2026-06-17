@@ -9,7 +9,7 @@ import Physicslib4.GNS.Basic
 # The null space of a state on a unital C*-algebra
 
 This file formalises the statements of lemmas `lmm:lmm1` and `lmm:lmm2` from
-section 9.1 of the AQFT-in-Lean blueprint.
+section 10.1 of the AQFT-in-Lean blueprint.
 
 Given a state `ω` on a unital C*-algebra `A`, the *null space* of `ω` is the
 set

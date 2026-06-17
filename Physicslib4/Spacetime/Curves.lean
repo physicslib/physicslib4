@@ -14,7 +14,7 @@ import Mathlib.Geometry.Manifold.MFDeriv.Basic
 # Paths and curves on a spacetime
 
 This file formalises the various flavours of paths and curves used in
-section 9.2 of the AQFT-in-Lean blueprint.
+section 10.2 of the AQFT-in-Lean blueprint.
 
 ## Main definitions
 

@@ -12,7 +12,7 @@ import Physicslib4.GNS.Construction
 
 This file formalises the blueprint declaration
 `def:quasilocal-completeness` (Axiom 4 of the "sharpened"
-Haag-Kastler axioms, section 9.3 of the AQFT-in-Lean blueprint):
+Haag-Kastler axioms, section 10.3 of the AQFT-in-Lean blueprint):
 
 > All "observables" are *quasilocal observables*: the union of the
 > images of all local algebras `𝔘(𝐁)` is dense in (and thus

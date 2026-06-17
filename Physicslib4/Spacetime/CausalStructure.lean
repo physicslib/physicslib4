@@ -11,7 +11,7 @@ import Mathlib.Topology.Basic
 # Causal structure on a spacetime
 
 This file formalises the pointwise causal structure attached to a spacetime,
-following section 9.2 of the AQFT-in-Lean blueprint.
+following section 10.2 of the AQFT-in-Lean blueprint.
 
 ## Main definitions
 

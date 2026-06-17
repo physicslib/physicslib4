@@ -11,7 +11,7 @@ import Mathlib.Algebra.Star.Module
 
 This file states the Cauchy-Schwarz inequality for positive linear functionals
 on an arbitrary (not necessarily unital, not necessarily normed) *-algebra over
-`ℂ`, following the AQFT-in-Lean blueprint section 9.1, label
+`ℂ`, following the AQFT-in-Lean blueprint section 10.1, label
 `lmm:cauchy-schwarz-inequality`.
 
 The hypothesis is **weaker than `Physicslib4.GNS.State`**: we only require a
