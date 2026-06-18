@@ -7,6 +7,7 @@ import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Causality
 import Physicslib4.Spacetime.Isometry
 import Physicslib4.Spacetime.IsometryTopology
+import Physicslib4.Spacetime.LorentzianSpacetime
 import Mathlib.Geometry.Manifold.LocalDiffeomorph
 import Mathlib.Geometry.Manifold.MFDeriv.FDeriv
 
@@ -25,6 +26,8 @@ isometry `g`, together with the chain-rule description of its tangent vector.
 
 * `Physicslib4.Spacetime.Isometry.pushforwardPath`.
 -/
+
+open scoped Pointwise
 
 namespace Physicslib4
 
@@ -333,7 +336,49 @@ theorem alexandrovBasis_image_of_mem_orientedIdentityComponent (g : Isometry M)
     g.toDiffeo '' B ∈ alexandrovBasis M t :=
   alexandrovBasis_image_of_mem g t (Subgroup.mem_inf.mp hg).2 hB
 
+/-- The pointwise action of an isometry on a set is the image under its
+underlying map: `g • B = g(B)`. -/
+theorem smul_set_eq_image (g : Isometry M) (B : Set M.Carrier) :
+    g • B = g.toDiffeo '' B := by
+  rw [← Set.image_smul]
+  rfl
+
+/-- Basis-set preservation in pointwise-action form: a future-orientation-
+preserving isometry sends Alexandrov-basis sets to basis sets, with the action
+written as `g • B`. -/
+theorem alexandrovBasis_smul_of_mem (g : Isometry M) (t : M.TimeOrientation)
+    (hg : g ∈ futureOrientationPreserving M t) {B : Set M.Carrier}
+    (hB : B ∈ alexandrovBasis M t) : g • B ∈ alexandrovBasis M t := by
+  rw [smul_set_eq_image]
+  exact alexandrovBasis_image_of_mem g t hg hB
+
 end Isometry
+
+namespace LorentzianSpacetime
+
+variable (L : LorentzianSpacetime)
+
+/-- **Basis-set preservation on a Lorentzian spacetime (image form).** An
+isometry of `L.toSpacetime` in the oriented identity component carries
+`IsBasisSet` sets to `IsBasisSet` sets. -/
+theorem isBasisSet_image (g : Isometry L.toSpacetime)
+    (hg : g ∈ Isometry.orientedIdentityComponent L.toSpacetime L.timeOrientation)
+    {B : Set L.Carrier} (hB : L.IsBasisSet B) :
+    L.IsBasisSet (g.toDiffeo '' B) :=
+  Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent g
+    L.timeOrientation hg hB
+
+/-- **Basis-set preservation on a Lorentzian spacetime (pointwise-action form).**
+The same statement written with the pointwise action `g • B`, as used by the
+abstract Axiom 5 interface. -/
+theorem isBasisSet_smul (g : Isometry L.toSpacetime)
+    (hg : g ∈ Isometry.orientedIdentityComponent L.toSpacetime L.timeOrientation)
+    {B : Set L.Carrier} (hB : L.IsBasisSet B) :
+    L.IsBasisSet (g • B) := by
+  rw [Isometry.smul_set_eq_image]
+  exact L.isBasisSet_image g hg hB
+
+end LorentzianSpacetime
 
 end Spacetime
 
