@@ -64,6 +64,8 @@ namespace HaagKastlerCurved
 
 open scoped Pointwise
 
+universe u
+
 /--
 **Abstract Lorentzian spacetime interface** (blueprint
 `def:lorentzian-spacetime`, Chapter 10, `sec10/10-2_spacetime`).
@@ -86,13 +88,13 @@ interface.
 -/
 structure LorentzianSpacetime where
   /-- The type of spacetime points of `M`. -/
-  Carrier : Type*
+  Carrier : Type u
   /-- The Alexandrov-basis sets `𝐁 = I⁺(p) ∩ I⁻(q)` of `M`. -/
   IsBasisSet : Set Carrier → Prop
   /-- Complete spacelike separation of two basis sets (Axiom 3). -/
   IsCompletelySpacelike : Set Carrier → Set Carrier → Prop
   /-- The group of isometries of `M` connected to the identity. -/
-  Isom : Type*
+  Isom : Type u
   /-- The group structure on the identity-component isometries. -/
   instGroup : Group Isom
   /-- The action of the isometries on spacetime points. -/
