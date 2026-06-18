@@ -248,6 +248,44 @@ theorem isCompletelySpacelike_comm (t : M.TimeOrientation)
   constructor <;> intro h p hp q hq <;>
     exact (isSpacelikeRelated_comm M t).mp (h q hq p hp)
 
+/-! ### Monotonicity of set-valued futures and pasts -/
+
+/-- The set-valued chronological future is monotone. -/
+theorem chronologicalFutureSet_mono (t : M.TimeOrientation)
+    {S T : Set M.Carrier} (h : S ⊆ T) :
+    chronologicalFutureSet M t S ⊆ chronologicalFutureSet M t T := by
+  intro q hq
+  simp only [chronologicalFutureSet, Set.mem_iUnion] at hq ⊢
+  obtain ⟨p, hp, hpq⟩ := hq
+  exact ⟨p, h hp, hpq⟩
+
+/-- The set-valued chronological past is monotone. -/
+theorem chronologicalPastSet_mono (t : M.TimeOrientation)
+    {S T : Set M.Carrier} (h : S ⊆ T) :
+    chronologicalPastSet M t S ⊆ chronologicalPastSet M t T := by
+  intro q hq
+  simp only [chronologicalPastSet, Set.mem_iUnion] at hq ⊢
+  obtain ⟨p, hp, hpq⟩ := hq
+  exact ⟨p, h hp, hpq⟩
+
+/-- The set-valued causal future is monotone. -/
+theorem causalFutureSet_mono (t : M.TimeOrientation)
+    {S T : Set M.Carrier} (h : S ⊆ T) :
+    causalFutureSet M t S ⊆ causalFutureSet M t T := by
+  intro q hq
+  simp only [causalFutureSet, Set.mem_iUnion] at hq ⊢
+  obtain ⟨p, hp, hpq⟩ := hq
+  exact ⟨p, h hp, hpq⟩
+
+/-- The set-valued causal past is monotone. -/
+theorem causalPastSet_mono (t : M.TimeOrientation)
+    {S T : Set M.Carrier} (h : S ⊆ T) :
+    causalPastSet M t S ⊆ causalPastSet M t T := by
+  intro q hq
+  simp only [causalPastSet, Set.mem_iUnion] at hq ⊢
+  obtain ⟨p, hp, hpq⟩ := hq
+  exact ⟨p, h hp, hpq⟩
+
 /-! ### Alexandrov topology -/
 
 /-- The basis sets generating the Alexandrov topology: all sets of the
@@ -263,6 +301,12 @@ consisting of all intersections of chronological futures and pasts.
 @[reducible] def alexandrovTopology (t : M.TimeOrientation) :
     TopologicalSpace M.Carrier :=
   TopologicalSpace.generateFrom (alexandrovBasis M t)
+
+/-- Every basis set is open in the Alexandrov topology. -/
+theorem isOpen_alexandrov_of_mem_basis (t : M.TimeOrientation)
+    {B : Set M.Carrier} (hB : B ∈ alexandrovBasis M t) :
+    @IsOpen M.Carrier (alexandrovTopology M t) B :=
+  TopologicalSpace.GenerateOpen.basic B hB
 
 end Spacetime
 
