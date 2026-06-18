@@ -24,8 +24,8 @@ import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Causality
 import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Isometry
-import Physicslib4.Spacetime.IsometryTopology
 import Physicslib4.Spacetime.IsometryCausality
+import Physicslib4.Spacetime.IsometryTopology
 import Physicslib4.Spacetime.LorentzCausality
 import Physicslib4.Spacetime.LorentzianSpacetime
 import Physicslib4.Spacetime.Minkowski
