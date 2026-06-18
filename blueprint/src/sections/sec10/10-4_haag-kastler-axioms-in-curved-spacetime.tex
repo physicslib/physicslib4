@@ -8,9 +8,7 @@ The first axiom states:
     \lean{Physicslib4.AQFT.HaagKastlerCurved.LocalNet}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalAlgebras.lean}
     \leanok
-    \uses{def:alexandrov-topology}
-    \uses{def:lorentzian-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past}
     For any basis element $\mathbf{B}$ of the Alexandrov topology on a Lorentzian spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
     \begin{align}
         \mathbf{B} \longmapsto \mathfrak{U}(\mathbf{B}),
@@ -29,10 +27,7 @@ The second axiom can be immediately stated too.
     \lean{Physicslib4.AQFT.HaagKastlerCurved.Isotony}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Isotony.lean}
     \leanok
-    \uses{def:alexandrov-topology}
-    \uses{def:lorentzian-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:local-algebras-in-curved-spacetime}
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
     
     If $\mathbf{B}_1 \subset \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subset \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
@@ -49,11 +44,7 @@ The next axiom can be stated as follows:
     \lean{Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalCommutativity.lean}
     \leanok
-    \uses{def:alexandrov-topology}
-    \uses{def:lorentzian-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:completely-spacelike}
-    \uses{def:local-algebras-in-curved-spacetime} 
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:completely-spacelike, def:local-algebras-in-curved-spacetime}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
     
     If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, for any Alexandrov topology basis element $\mathbf{B}$ such that $\mathbf{B_1}, \mathbf{B_2} \subseteq \mathbf{B}$ the algebras $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the C*-algebra $\mathfrak{U}(\mathbf{B})$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ we have
@@ -72,10 +63,7 @@ The next axiom has need of the following definition
     \lean{Physicslib4.AQFT.HaagKastlerCurved.IsLocalObservable}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalAlgebra.lean}
     \leanok
-    \uses{def:lorentzian-spacetime}
-    \uses{thrm:gns-construction-theorem}
-    \uses{def:local-algebras-in-curved-spacetime} 
-    \uses{def:state}
+    \uses{def:lorentzian-spacetime, thrm:gns-construction-theorem, def:local-algebras-in-curved-spacetime, def:state}
     For Lorentzian spacetime $M$ the image $\pi_\omega(a)$ of a self-adjoint member $a$ of the local algebra $\mathfrak{U}(\mathbf{B})$ under the GNS *-homomorphism $\pi_\omega$ of a state $\omega$ on $\mathfrak{U}(\mathbf{B})$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{local observable}.
 \end{definition}
 
@@ -97,11 +85,7 @@ The final axiom states:
     \lean{Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/IsometricCovariance.lean}
     \leanok
-    \uses{def:alexandrov-topology}
-    \uses{def:lorentzian-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:local-algebras-in-curved-spacetime}
-    \uses{def:isotony-in-curved-spacetime}
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime, def:isotony-in-curved-spacetime}
     Let $\mathbf{B}$ be any basis element of the Alexandrov topology on a Lorentzian spacetime $M$, i.e. any set of the form $I^+(p) \cap I^-(q)$.
     
     A member $\varphi$ of the group of isometries of $M$ connected to the identity acts on $\mathfrak{U}(\mathbf{B})$ as follows
@@ -136,11 +120,7 @@ The final axiom states:
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Net.lean}
     \leanok
-    \uses{def:local-algebras-in-curved-spacetime}
-    \uses{def:isotony-in-curved-spacetime}
-    \uses{def:local-commutativity-in-curved-spacetime}
-    \uses{def:local-completeness-in-curved-spacetime}
-    \uses{def:isometric-covariance-in-curved-spacetime}
+    \uses{def:local-algebras-in-curved-spacetime, def:isotony-in-curved-spacetime, def:local-commutativity-in-curved-spacetime, def:local-completeness-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime}
     A \emph{Haag-Kastler net in curved spacetime} on a Lorentzian spacetime is the bundling of the data of \ref{def:local-algebras-in-curved-spacetime} together with the properties of \ref{def:isotony-in-curved-spacetime}, \ref{def:local-commutativity-in-curved-spacetime}, \ref{def:local-completeness-in-curved-spacetime}, and \ref{def:isometric-covariance-in-curved-spacetime}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT in curved spacetime take an instance of this structure as a hypothesis and invoke each axiom as a projection.
 \end{definition}
 
