@@ -108,6 +108,18 @@ instance instT2SpaceAlexandrov :
     @T2Space M.Carrier (alexandrovTopology M.toSpacetime M.timeOrientation) :=
   M.alexandrov_t2
 
+/-- Complete spacelike separation of two regions is symmetric. -/
+theorem isCompletelySpacelike_comm {O₁ O₂ : Set M.Carrier} :
+    M.IsCompletelySpacelike O₁ O₂ ↔ M.IsCompletelySpacelike O₂ O₁ :=
+  Spacetime.isCompletelySpacelike_comm M.toSpacetime M.timeOrientation
+
+/-- Every Alexandrov-basis set `I⁺(p) ∩ I⁻(q)` is open in the Alexandrov
+topology of the Lorentzian spacetime. -/
+theorem isOpen_alexandrov_of_isBasisSet {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) :
+    @IsOpen M.Carrier (alexandrovTopology M.toSpacetime M.timeOrientation) B :=
+  Spacetime.isOpen_alexandrov_of_mem_basis M.toSpacetime M.timeOrientation hB
+
 end LorentzianSpacetime
 
 end Spacetime
