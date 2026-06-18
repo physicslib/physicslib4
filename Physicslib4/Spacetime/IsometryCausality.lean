@@ -150,6 +150,37 @@ def PreservesFutureOrientation (g : Isometry M) (t : M.TimeOrientation) : Prop :
     M.IsFuturePointing t v →
       M.IsFuturePointing t (mfderiv M.model M.model g.toDiffeo x v)
 
+/-- The identity isometry preserves the future orientation. -/
+theorem preservesFutureOrientation_one (t : M.TimeOrientation) :
+    (1 : Isometry M).PreservesFutureOrientation t := by
+  intro x v hv
+  have h : mfderiv M.model M.model (1 : Isometry M).toDiffeo x v = v := by
+    have hid : mfderiv M.model M.model (1 : Isometry M).toDiffeo x
+        = ContinuousLinearMap.id ℝ (TangentSpace M.model x) := by
+      rw [show ((1 : Isometry M).toDiffeo) = Diffeomorph.refl M.model M.Carrier ⊤ from rfl,
+        Diffeomorph.coe_refl, mfderiv_id]
+    rw [hid]; rfl
+  rw [← h] at hv
+  exact hv
+
+/-- Future-orientation preservation is closed under composition. -/
+theorem preservesFutureOrientation_mul {g h : Isometry M} {t : M.TimeOrientation}
+    (hg : g.PreservesFutureOrientation t) (hh : h.PreservesFutureOrientation t) :
+    (g * h).PreservesFutureOrientation t := by
+  intro x v hv
+  have hcomp := mfderiv_comp_apply (I := M.model) (I' := M.model) (I'' := M.model)
+    (f := (h.toDiffeo : M.Carrier → M.Carrier))
+    (g := (g.toDiffeo : M.Carrier → M.Carrier)) (x := x)
+    ((g.toDiffeo.mdifferentiable (by simp)) (h.toDiffeo x))
+    ((h.toDiffeo.mdifferentiable (by simp)) x) v
+  rw [← Diffeomorph.coe_trans] at hcomp
+  have key : M.IsFuturePointing t
+      (mfderiv M.model M.model g.toDiffeo (h.toDiffeo x)
+        (mfderiv M.model M.model h.toDiffeo x v)) :=
+    hg (h.toDiffeo x) _ (hh x v hv)
+  rw [← hcomp] at key
+  exact key
+
 /-- Under future-orientation preservation, the pushforward of a future-oriented
 path is future-oriented. -/
 theorem pushforwardPath_isFutureOriented (g : Isometry M) (μ : M.SmoothPath)
