@@ -198,6 +198,56 @@ def IsCompletelySpacelike (t : M.TimeOrientation) (O₁ O₂ : Set M.Carrier) :
     Prop :=
   ∀ p₁ ∈ O₁, ∀ p₂ ∈ O₂, IsSpacelikeRelated M t p₁ p₂
 
+/-! ### Chronological implies causal
+
+A timelike trip is in particular a causal trip, so chronological precedence
+refines causal precedence and chronological futures/pasts sit inside the
+corresponding causal ones. -/
+
+/-- A timelike path is causal. -/
+theorem isCausal_of_isTimelike {μ : M.SmoothPath}
+    (h : SmoothPath.IsTimelike M μ) : SmoothPath.IsCausal M μ :=
+  fun s hs => Or.inl (h s hs)
+
+/-- Every trip is a causal trip. -/
+theorem isCausalTrip_of_isTrip (t : M.TimeOrientation) {p q : M.Carrier}
+    {c : SmoothCurve M} (h : M.IsTrip t p q c) : M.IsCausalTrip t p q c := by
+  obtain ⟨rep, hc, htl, hfo, hg, hpe, hfe⟩ := h
+  exact ⟨rep, hc, M.isCausal_of_isTimelike htl, hfo, hg, hpe, hfe⟩
+
+/-- Chronological precedence implies causal precedence. -/
+theorem causallyPrecedes_of_chronologicallyPrecedes (t : M.TimeOrientation)
+    {p q : M.Carrier} (h : M.ChronologicallyPrecedes t p q) :
+    M.CausallyPrecedes t p q := by
+  obtain ⟨c, hc⟩ := h
+  exact ⟨c, M.isCausalTrip_of_isTrip t hc⟩
+
+/-- The chronological future is contained in the causal future. -/
+theorem chronologicalFuture_subset_causalFuture (t : M.TimeOrientation)
+    (p : M.Carrier) : chronologicalFuture M t p ⊆ causalFuture M t p :=
+  fun _ hq => M.causallyPrecedes_of_chronologicallyPrecedes t hq
+
+/-- The chronological past is contained in the causal past. -/
+theorem chronologicalPast_subset_causalPast (t : M.TimeOrientation)
+    (p : M.Carrier) : chronologicalPast M t p ⊆ causalPast M t p :=
+  fun _ hq => M.causallyPrecedes_of_chronologicallyPrecedes t hq
+
+/-! ### Symmetry of spacelike relatedness -/
+
+/-- Spacelike relatedness is symmetric. -/
+theorem isSpacelikeRelated_comm (t : M.TimeOrientation) {p₁ p₂ : M.Carrier} :
+    M.IsSpacelikeRelated t p₁ p₂ ↔ M.IsSpacelikeRelated t p₂ p₁ := by
+  unfold IsSpacelikeRelated
+  simp only [Set.mem_union, causalFuture, causalPast, Set.mem_setOf_eq, not_or]
+  tauto
+
+/-- Complete spacelike separation is symmetric in its two regions. -/
+theorem isCompletelySpacelike_comm (t : M.TimeOrientation)
+    {O₁ O₂ : Set M.Carrier} :
+    M.IsCompletelySpacelike t O₁ O₂ ↔ M.IsCompletelySpacelike t O₂ O₁ := by
+  constructor <;> intro h p hp q hq <;>
+    exact (isSpacelikeRelated_comm M t).mp (h q hq p hp)
+
 /-! ### Alexandrov topology -/
 
 /-- The basis sets generating the Alexandrov topology: all sets of the
