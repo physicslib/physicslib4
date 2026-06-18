@@ -63,8 +63,7 @@
     \lean{Physicslib4.Spacetime.isTimelike_or_isNull_of_isFuturePointing, Physicslib4.Spacetime.isTimelike_or_isNull_of_isPastPointing, Physicslib4.Spacetime.not_isFuturePointing_and_isPastPointing_of_isTimelike}
     \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
     \leanok
-    \uses{def:future-and-past-pointing-vectors}
-    \uses{lmm:causal-classification}
+    \uses{def:future-and-past-pointing-vectors, lmm:causal-classification}
     A future-pointing or past-pointing vector is timelike or null. Moreover a timelike vector cannot be both future-pointing and past-pointing with respect to a fixed time orientation.
 \end{lemma}
 \begin{proof}
@@ -183,10 +182,7 @@
     \lean{Physicslib4.Spacetime.isCausal_of_isTimelike, Physicslib4.Spacetime.isCausalTrip_of_isTrip, Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture, Physicslib4.Spacetime.chronologicalPast_subset_causalPast}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
-    \uses{def:trip}
-    \uses{def:causal-trip}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:causal-future-and-causal-past}
+    \uses{def:trip, def:causal-trip, def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
     Every trip is a causal trip, so $p \ll q$ implies $p \prec q$. Consequently $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$.
 \end{lemma}
 \begin{proof}
@@ -199,8 +195,7 @@
     \lean{Physicslib4.Spacetime.chronologicalFutureSet_mono, Physicslib4.Spacetime.chronologicalPastSet_mono, Physicslib4.Spacetime.causalFutureSet_mono, Physicslib4.Spacetime.causalPastSet_mono}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:causal-future-and-causal-past}
+    \uses{def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
     The set-valued chronological and causal futures and pasts are monotone: if $S \subseteq T$ then $I^\pm(S) \subseteq I^\pm(T)$ and $J^\pm(S) \subseteq J^\pm(T)$.
 \end{lemma}
 \begin{proof}
@@ -233,8 +228,7 @@
     \lean{Physicslib4.Spacetime.isSpacelikeRelated_comm, Physicslib4.Spacetime.isCompletelySpacelike_comm}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
-    \uses{def:spacelike-related}
-    \uses{def:completely-spacelike}
+    \uses{def:spacelike-related, def:completely-spacelike}
     Spacelike relatedness is symmetric, and consequently complete spacelike separation is symmetric in its two regions: $\mathbf{O}_1, \mathbf{O}_2$ are completely spacelike if and only if $\mathbf{O}_2, \mathbf{O}_1$ are.
 \end{lemma}
 \begin{proof}
@@ -290,12 +284,90 @@
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_comm, Physicslib4.Spacetime.LorentzianSpacetime.isOpen_alexandrov_of_isBasisSet}
     \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
     \leanok
-    \uses{def:lorentzian-spacetime}
-    \uses{lmm:completely-spacelike-symm}
-    \uses{lmm:alexandrov-basis-open}
+    \uses{def:lorentzian-spacetime, lmm:completely-spacelike-symm, lmm:alexandrov-basis-open}
     On a Lorentzian spacetime, complete spacelike separation of two regions is symmetric, and every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
 \end{lemma}
 \begin{proof}
     \leanok
     These are restatements of the symmetry of complete spacelike separation and the openness of basis sets for the underlying spacetime, transported through the bundling of a Lorentzian spacetime over its underlying spacetime and time orientation.
+\end{proof}
+
+\subsection{Isometries and basis-set preservation}
+
+\begin{lemma}[Isometries Preserve the Causal Classification]
+    \label{lmm:isometry-preserves-classification}
+    \lean{Physicslib4.Spacetime.Isometry.preserves_self, Physicslib4.Spacetime.Isometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.Isometry.isNull_mfderiv_iff, Physicslib4.Spacetime.Isometry.isSpacelike_mfderiv_iff}
+    \leanfile{Physicslib4/Spacetime/Isometry.lean}
+    \leanok
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
+    An isometry $\varphi$ of a spacetime preserves the metric square of a tangent vector, $g_{\varphi(x)}(d\varphi_x v, d\varphi_x v) = g_x(v,v)$, and therefore $d\varphi_x v$ is timelike, null, or spacelike if and only if $v$ is.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Specialising the metric-preservation property of an isometry to $w = v$ gives the square identity; the three classification equivalences then follow from the sign of $g(v,v)$ being unchanged.
+\end{proof}
+
+\begin{lemma}[Unique Differentials Along a Path]
+    \label{lmm:path-parameter-unique-diff}
+    \lean{Physicslib4.Spacetime.Path.uniqueDiffOn_parameterSpace}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:paths}
+    The parameter space of a path has unique differentials: being a closed, connected subset of $\mathbb{R}$ with more than one point, it is a non-degenerate interval, hence convex with non-empty interior.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A connected subset of $\mathbb{R}$ is convex, and a closed convex set with at least two points contains a non-degenerate open interval, so has non-empty interior; convex sets with non-empty interior have unique differentials.
+\end{proof}
+
+\begin{lemma}[Pushforward of a Path Under an Isometry]
+    \label{lmm:pushforward-path}
+    \lean{Physicslib4.Spacetime.Isometry.pushforwardPath, Physicslib4.Spacetime.Isometry.pushforwardPath_tangent, Physicslib4.Spacetime.Isometry.pushforwardPath_isTimelike, Physicslib4.Spacetime.Isometry.pushforwardPath_isCausal, Physicslib4.Spacetime.Isometry.pushforwardPath_isPastEndpoint, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureEndpoint}
+    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \leanok
+    \uses{def:paths, def:timelike-and-causal-smooth-curves, def:endpoints, lmm:isometry-preserves-classification, lmm:path-parameter-unique-diff}
+    An isometry $\varphi$ pushes a smooth path $\mu$ forward to the smooth path $\varphi \circ \mu$ on the same parameter space, with tangent vector $d\varphi(\dot\mu)$. The pushforward preserves the timelike and causal conditions and carries the past and future endpoints of $\mu$ to those of $\varphi \circ \mu$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Smoothness and non-vanishing of the derivative of $\varphi \circ \mu$ follow from the chain rule (using unique differentials on the parameter space) together with the fact that an isometry's differential is a linear isomorphism. The tangent identity then transports the classification and endpoint conditions.
+\end{proof}
+
+\begin{lemma}[Isometries Preserve Chronology]
+    \label{lmm:isometry-preserves-chronology}
+    \lean{Physicslib4.Spacetime.Isometry.PreservesFutureOrientation, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_one, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_mul, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureOriented, Physicslib4.Spacetime.Isometry.chronologicallyPrecedes_pushforward, Physicslib4.Spacetime.Isometry.chronologicalFuture_image_subset, Physicslib4.Spacetime.Isometry.chronologicalFuture_image, Physicslib4.Spacetime.Isometry.chronologicalPast_image_subset, Physicslib4.Spacetime.Isometry.chronologicalPast_image}
+    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \leanok
+    \uses{def:trip, def:chronological-future-and-chronological-past, lmm:pushforward-path}
+    Say an isometry $\varphi$ \emph{preserves the future orientation} if its differential sends future-pointing vectors to future-pointing vectors; this property holds for the identity and is closed under composition. Under it, $\varphi$ carries trips to trips, so $p \ll q$ implies $\varphi(p) \ll \varphi(q)$, and the chronological futures and pasts satisfy $\varphi(I^\pm(p)) = I^\pm(\varphi(p))$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Future-orientation preservation makes the pushforward of a future-oriented trip a future-oriented trip, giving $p \ll q \Rightarrow \varphi(p) \ll \varphi(q)$. Applying this to $\varphi$ and to $\varphi^{-1}$ yields the image equalities for $I^+$ and $I^-$.
+\end{proof}
+
+\begin{lemma}[Isometries Preserve Basis Sets]
+    \label{lmm:isometry-preserves-basis-sets}
+    \lean{Physicslib4.Spacetime.Isometry.futureOrientationPreserving, Physicslib4.Spacetime.Isometry.orientedIdentityComponent, Physicslib4.Spacetime.Isometry.alexandrovBasis_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent, Physicslib4.Spacetime.Isometry.smul_set_eq_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_smul_of_mem, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_image, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_smul}
+    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \leanok
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, lmm:isometry-preserves-chronology}
+    The future-orientation-preserving isometries (those $\varphi$ with both $\varphi$ and $\varphi^{-1}$ preserving the orientation) form a subgroup, and intersecting it with the identity component gives the \emph{oriented identity component}. Every such isometry maps Alexandrov-basis diamonds to diamonds, $\varphi(I^+(p) \cap I^-(q)) = I^+(\varphi(p)) \cap I^-(\varphi(q))$, both as an image and in pointwise-action form $\varphi \cdot \mathbf{B}$, and this lifts to the bundled Lorentzian spacetime.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Bundling the inverse into the predicate makes the subgroup axioms follow from the identity and composition cases with no appeal to the group topology. Basis-set preservation is then the image of an intersection of a chronological future and past, computed via the previous lemma using injectivity of the isometry.
+\end{proof}
+
+\begin{lemma}[Axiom 5 Basis-Set Preservation]
+    \label{lmm:axiom5-basis-preservation}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_isBasisSet_smul}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/IdentityComponent.lean}
+    \leanok
+    \uses{lmm:isometry-preserves-basis-sets, def:isometric-covariance-in-curved-spacetime}
+    Instantiating the abstract curved-spacetime interface with the oriented identity component, every isometry $\varphi$ of the abstract spacetime carries Alexandrov-basis sets to basis sets, $\varphi \cdot \mathbf{B}$ is again a basis set. This is exactly the well-definedness condition for the Axiom 5 action $\mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The abstract isometry group of the bridge is, by definition, the oriented identity component, so basis-set preservation transfers verbatim from the concrete statement.
 \end{proof}
