@@ -9,6 +9,8 @@ import Mathlib.Topology.ContinuousOn
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Geometry.Manifold.ContMDiff.Basic
 import Mathlib.Geometry.Manifold.MFDeriv.Basic
+import Mathlib.Analysis.Calculus.TangentCone.Real
+import Mathlib.Analysis.Convex.Topology
 
 /-!
 # Paths and curves on a spacetime
@@ -104,6 +106,28 @@ structure SmoothPath extends M.Path where
   nonvanishing : ∀ s ∈ parameterSpace,
     mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model toFun parameterSpace s
         (1 : ℝ) ≠ 0
+
+/-- The parameter space of a path has unique differentials: being a closed
+connected subset of `ℝ` with at least two points, it is a non-degenerate
+interval, hence convex with non-empty interior. This is the analytic
+prerequisite for differentiating compositions along a path via the
+`mfderivWithin` chain rule. -/
+theorem Path.uniqueDiffOn_parameterSpace (μ : M.Path) :
+    UniqueDiffOn ℝ μ.parameterSpace := by
+  have hoc : μ.parameterSpace.OrdConnected :=
+    μ.isConnected.isPreconnected.ordConnected
+  have hconv : Convex ℝ μ.parameterSpace := convex_iff_ordConnected.mpr hoc
+  apply uniqueDiffOn_convex hconv
+  obtain ⟨a, b, ha, hb, hab⟩ := μ.nontrivial
+  rcases lt_or_gt_of_ne hab with h | h
+  · have hIoo : Set.Ioo a b ⊆ interior μ.parameterSpace :=
+      isOpen_Ioo.subset_interior_iff.mpr
+        (Set.Ioo_subset_Icc_self.trans (hoc.out ha hb))
+    exact ⟨(a + b) / 2, hIoo (Set.mem_Ioo.mpr ⟨by linarith, by linarith⟩)⟩
+  · have hIoo : Set.Ioo b a ⊆ interior μ.parameterSpace :=
+      isOpen_Ioo.subset_interior_iff.mpr
+        (Set.Ioo_subset_Icc_self.trans (hoc.out hb ha))
+    exact ⟨(a + b) / 2, hIoo (Set.mem_Ioo.mpr ⟨by linarith, by linarith⟩)⟩
 
 /-! ### Reparametrisation equivalence -/
 
