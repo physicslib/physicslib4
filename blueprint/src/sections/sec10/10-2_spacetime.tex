@@ -221,6 +221,19 @@
     The relation $p_2 \notin J^+(p_1) \cup J^-(p_1)$ is symmetric in $p_1, p_2$ since $J^+(p_1)$ and $J^-(p_1)$ swap roles with $J^-(p_2)$ and $J^+(p_2)$ under the exchange. Symmetry of complete spacelike separation follows by applying this pointwise.
 \end{proof}
 
+\begin{lemma}[Structural Properties of Complete Spacelike Separation]
+    \label{lmm:completely-spacelike-structural}
+    \lean{Physicslib4.Spacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.isCompletelySpacelike_union_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_right}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:completely-spacelike, def:lorentzian-spacetime}
+    Complete spacelike separation is monotone under shrinking either region; the empty region is completely spacelike to any region; and a union of regions is completely spacelike to $\mathbf{O}$ if and only if each part is. The same properties hold for the bundled Lorentzian spacetime.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each follows directly from the pointwise definition: monotonicity by restricting the universally-quantified points, the empty cases vacuously, and the union cases by splitting the membership disjunction.
+\end{proof}
+
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
     \lean{Physicslib4.Spacetime.alexandrovTopology}
