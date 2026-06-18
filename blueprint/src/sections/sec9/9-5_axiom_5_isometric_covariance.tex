@@ -15,6 +15,8 @@ So instead of diffeomorphisms connected to the identity being used, what's being
 
 So in the current case of a Lorentzian spacetime what we should be using are isometries connected to the identity. Using this, the axiom takes the following form:
 
+(Formalization remark.) An isometry connected to the identity automatically preserves the time orientation, so ``isometries connected to the identity'' is the same group as ``identity-component isometries that preserve the future orientation''. The Lean formalization works with the latter description: it intersects the identity component with the (explicitly orientation-preserving) subgroup, because the inclusion of the identity component into the orientation-preserving isometries relies on a Myers--Steenrod-type rigidity result not yet available in Mathlib. This is an implementation choice only; it does not alter the mathematical content of the axiom below.
+
 \begin{axiom}[Isometric Covariance]
     Let $\mathbf{B}$ be any basis element of the Alexandrov topology on a Lorentzian spacetime $M$, i.e. any set of the form $I^+(p) \cap I^-(q)$.
     
