@@ -248,6 +248,48 @@ theorem isCompletelySpacelike_comm (t : M.TimeOrientation)
   constructor <;> intro h p hp q hq <;>
     exact (isSpacelikeRelated_comm M t).mp (h q hq p hp)
 
+/-- Complete spacelike separation is monotone under shrinking either region. -/
+theorem isCompletelySpacelike_mono (t : M.TimeOrientation)
+    {O₁ O₁' O₂ O₂' : Set M.Carrier} (h₁ : O₁' ⊆ O₁) (h₂ : O₂' ⊆ O₂)
+    (h : M.IsCompletelySpacelike t O₁ O₂) :
+    M.IsCompletelySpacelike t O₁' O₂' :=
+  fun p₁ hp₁ p₂ hp₂ => h p₁ (h₁ hp₁) p₂ (h₂ hp₂)
+
+/-- The empty region is completely spacelike to anything (on the left). -/
+@[simp] theorem isCompletelySpacelike_empty_left (t : M.TimeOrientation)
+    (O : Set M.Carrier) : M.IsCompletelySpacelike t ∅ O :=
+  fun p₁ hp₁ => absurd hp₁ (Set.notMem_empty p₁)
+
+/-- The empty region is completely spacelike to anything (on the right). -/
+@[simp] theorem isCompletelySpacelike_empty_right (t : M.TimeOrientation)
+    (O : Set M.Carrier) : M.IsCompletelySpacelike t O ∅ :=
+  fun _ _ p₂ hp₂ => absurd hp₂ (Set.notMem_empty p₂)
+
+/-- A union of regions is completely spacelike to `O₂` iff each part is. -/
+theorem isCompletelySpacelike_union_left (t : M.TimeOrientation)
+    (O₁ O₁' O₂ : Set M.Carrier) :
+    M.IsCompletelySpacelike t (O₁ ∪ O₁') O₂ ↔
+      M.IsCompletelySpacelike t O₁ O₂ ∧ M.IsCompletelySpacelike t O₁' O₂ := by
+  constructor
+  · intro h
+    exact ⟨fun p₁ hp₁ => h p₁ (Or.inl hp₁), fun p₁ hp₁ => h p₁ (Or.inr hp₁)⟩
+  · rintro ⟨h, h'⟩ p₁ (hp₁ | hp₁) p₂ hp₂
+    · exact h p₁ hp₁ p₂ hp₂
+    · exact h' p₁ hp₁ p₂ hp₂
+
+/-- `O₁` is completely spacelike to a union iff it is to each part. -/
+theorem isCompletelySpacelike_union_right (t : M.TimeOrientation)
+    (O₁ O₂ O₂' : Set M.Carrier) :
+    M.IsCompletelySpacelike t O₁ (O₂ ∪ O₂') ↔
+      M.IsCompletelySpacelike t O₁ O₂ ∧ M.IsCompletelySpacelike t O₁ O₂' := by
+  constructor
+  · intro h
+    exact ⟨fun p₁ hp₁ p₂ hp₂ => h p₁ hp₁ p₂ (Or.inl hp₂),
+      fun p₁ hp₁ p₂ hp₂ => h p₁ hp₁ p₂ (Or.inr hp₂)⟩
+  · rintro ⟨h, h'⟩ p₁ hp₁ p₂ (hp₂ | hp₂)
+    · exact h p₁ hp₁ p₂ hp₂
+    · exact h' p₁ hp₁ p₂ hp₂
+
 /-! ### Monotonicity of set-valued futures and pasts -/
 
 /-- The set-valued chronological future is monotone. -/
