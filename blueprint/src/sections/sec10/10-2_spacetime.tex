@@ -38,6 +38,25 @@
     Immediate from the trichotomy of $<$, $=$, $>$ applied to $g|_p(v,v)$, together with $g|_p(0,0) = 0$ since $g|_p$ is bilinear.
 \end{proof}
 
+\begin{lemma}[Reverse Cauchy-Schwarz for Timelike Vectors]
+    \label{lmm:reverse-cauchy-schwarz}
+    \lean{Physicslib4.reverse_cauchy_schwarz_of_lorentzianAt, Physicslib4.Spacetime.reverse_cauchy_schwarz}
+    \leanfile{Physicslib4/Spacetime/LorentzCauchySchwarz.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
+    Let $g$ be a symmetric Lorentzian bilinear form on a real four-dimensional vector space and let $v, w$ be timelike, that is $g(v,v) < 0$ and $g(w,w) < 0$. Then the reverse Cauchy-Schwarz inequality holds:
+    \begin{align}
+        g(v,v)\, g(w,w) \le g(v,w)^2.
+    \end{align}
+    In particular this applies pointwise to the metric $g|_p$ of any spacetime $M$ and any two timelike tangent vectors at a point $p$.
+\end{lemma}
+\begin{proof}
+    Choose a Lorentzian basis $b$, so that $g$ has Gram matrix $\mathrm{diag}(-1,1,1,1)$. Expanding $v$ and $w$ in this basis and using bilinearity, $g(v,v) = -(v^0)^2 + \lVert \mathbf{v}\rVert^2$ and $g(v,w) = -v^0 w^0 + \langle \mathbf{v}, \mathbf{w}\rangle$, where $v^0, w^0$ are the time components, $\mathbf{v}, \mathbf{w}$ the spatial parts, and $\langle\cdot,\cdot\rangle$, $\lVert\cdot\rVert$ the Euclidean inner product and norm on the three spatial coordinates. Timelikeness gives $(v^0)^2 > \lVert\mathbf{v}\rVert^2$ and $(w^0)^2 > \lVert\mathbf{w}\rVert^2$. The ordinary Cauchy-Schwarz inequality gives $\lvert\langle\mathbf{v},\mathbf{w}\rangle\rvert \le \lVert\mathbf{v}\rVert\,\lVert\mathbf{w}\rVert < \lvert v^0\rvert\,\lvert w^0\rvert$, so $\lvert g(v,w)\rvert \ge \lvert v^0 w^0\rvert - \lVert\mathbf{v}\rVert\,\lVert\mathbf{w}\rVert \ge 0$. Squaring and applying the algebraic identity
+    \begin{align}
+        (pq - rs)^2 - (p^2 - r^2)(q^2 - s^2) = (ps - rq)^2 \ge 0
+    \end{align}
+    with $p = \lvert v^0\rvert$, $q = \lvert w^0\rvert$, $r = \lVert\mathbf{v}\rVert$, $s = \lVert\mathbf{w}\rVert$ yields $g(v,w)^2 \ge g(v,v)\,g(w,w)$.
+\end{proof}
+
 \begin{definition}[Time Orientation]
     \label{def:time-orientable}
     \lean{Physicslib4.Spacetime.TimeOrientation, Physicslib4.Spacetime.IsTimeOrientable}
