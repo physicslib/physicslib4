@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Causality
 import Physicslib4.Spacetime.Isometry
+import Physicslib4.Spacetime.IsometryTopology
 import Mathlib.Geometry.Manifold.LocalDiffeomorph
 import Mathlib.Geometry.Manifold.MFDeriv.FDeriv
 
@@ -181,6 +182,40 @@ theorem preservesFutureOrientation_mul {g h : Isometry M} {t : M.TimeOrientation
   rw [← hcomp] at key
   exact key
 
+/-- The **future-orientation-preserving isometries**: those `g` for which both
+`g` and `g⁻¹` preserve the future orientation `t`. Bundling the inverse makes
+this a genuine subgroup using only the identity and composition lemmas, with no
+appeal to the (C⁰) group topology. This is the group over which Axiom 5's
+isometric covariance is intended to range. -/
+noncomputable def futureOrientationPreserving (M : Spacetime) (t : M.TimeOrientation) :
+    Subgroup (Isometry M) where
+  carrier := {g | g.PreservesFutureOrientation t ∧ g⁻¹.PreservesFutureOrientation t}
+  one_mem' := by
+    refine ⟨preservesFutureOrientation_one t, ?_⟩
+    rw [inv_one]; exact preservesFutureOrientation_one t
+  mul_mem' := by
+    rintro a b ⟨ha, ha'⟩ ⟨hb, hb'⟩
+    refine ⟨preservesFutureOrientation_mul ha hb, ?_⟩
+    rw [mul_inv_rev]; exact preservesFutureOrientation_mul hb' ha'
+  inv_mem' := by
+    rintro a ⟨ha, ha'⟩
+    exact ⟨ha', by rw [inv_inv]; exact ha⟩
+
+@[simp] theorem mem_futureOrientationPreserving {g : Isometry M}
+    {t : M.TimeOrientation} :
+    g ∈ futureOrientationPreserving M t ↔
+      g.PreservesFutureOrientation t ∧ g⁻¹.PreservesFutureOrientation t :=
+  Iff.rfl
+
+/-- The **oriented identity component**: the identity-component isometries that
+also preserve the future orientation. This folds orientation-preservation into
+the identity-component group of Axiom 5, sidestepping the (unprovable with the
+current C⁰ topology) statement that every identity-component isometry preserves
+orientation. -/
+noncomputable def orientedIdentityComponent (M : Spacetime) (t : M.TimeOrientation) :
+    Subgroup (Isometry M) :=
+  Isometry.identityComponent M ⊓ futureOrientationPreserving M t
+
 /-- Under future-orientation preservation, the pushforward of a future-oriented
 path is future-oriented. -/
 theorem pushforwardPath_isFutureOriented (g : Isometry M) (μ : M.SmoothPath)
@@ -279,6 +314,24 @@ theorem alexandrovBasis_image (g : Isometry M) (t : M.TimeOrientation)
     Function.LeftInverse.injective (g := g⁻¹.toDiffeo) (fun x => g.inv_toDiffeo_apply x)
   rw [Set.image_inter hinj, chronologicalFuture_image g t hg hg' p,
     chronologicalPast_image g t hg hg' q]
+
+/-- **Unconditional basis-set preservation** for a future-orientation-preserving
+isometry: it carries Alexandrov-basis sets to Alexandrov-basis sets. -/
+theorem alexandrovBasis_image_of_mem (g : Isometry M) (t : M.TimeOrientation)
+    (hg : g ∈ futureOrientationPreserving M t) {B : Set M.Carrier}
+    (hB : B ∈ alexandrovBasis M t) : g.toDiffeo '' B ∈ alexandrovBasis M t :=
+  alexandrovBasis_image g t (mem_futureOrientationPreserving.mp hg).1
+    (mem_futureOrientationPreserving.mp hg).2 hB
+
+/-- **Basis-set preservation for the oriented identity component.** Every
+isometry in the oriented identity component carries Alexandrov-basis sets to
+Alexandrov-basis sets - the geometric input behind Axiom 5's action
+`𝔘(𝐁) → 𝔘(φ(𝐁))`, now unconditional. -/
+theorem alexandrovBasis_image_of_mem_orientedIdentityComponent (g : Isometry M)
+    (t : M.TimeOrientation) (hg : g ∈ orientedIdentityComponent M t)
+    {B : Set M.Carrier} (hB : B ∈ alexandrovBasis M t) :
+    g.toDiffeo '' B ∈ alexandrovBasis M t :=
+  alexandrovBasis_image_of_mem g t (Subgroup.mem_inf.mp hg).2 hB
 
 end Isometry
 
