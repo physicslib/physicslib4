@@ -9,7 +9,7 @@ import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 # Axiom 2: Isotony
 
 This file formalises the blueprint declaration `def:isotony`
-(Axiom 2 of the "sharpened" Haag-Kastler axioms, section 9.3 of the
+(Axiom 2 of the "sharpened" Haag-Kastler axioms, section 10.3 of the
 AQFT-in-Lean blueprint):
 
 > If `𝐁₁ ⊆ 𝐁₂` (basis sets of the Alexandrov topology) then the

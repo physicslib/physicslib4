@@ -1,0 +1,65 @@
+\section{Prologue}\label{sctn:prologue}
+Most presentations of AQFT in curved spacetime gloss over the details of exactly what ``Lorentzian spacetime'' is. It's too ``basic''.
+
+In contrast to those presentations, we want to spend some time detailing exactly what ``Lorentzian spacetime'' is before we formulate AQFT there. This level of pedantry will serve us well when formulating AQFT on ``Lorentzian spacetime'', helping to motivate otherwise opaque aspects of the formulation.
+
+\subsection{Smooth Manifold}
+Consider a smooth, connected, four dimensional Hausdorff manifold $M$ equipped with a topology, which we simply call the ``manifold topology''. This will form the ``core'' of our definition of a ``Lorentzian spacetime''.
+
+\subsection{Existence of a Lorentzian Metric}
+As we wish this $M$ to be a ``Lorentzian spacetime'', it should support a Lorentzian metric. Not all such $M$ support Lorentzian metrics. In fact for such an $M$ to support a Lorentzian metric, it must admit additional structure.
+
+In particular, as we have seen previously, the required structure follows from the theorem (Theorem 2.69 from \href{https://doi.org/10.1007/978-3-319-91755-9}{Lee})
+
+\begin{theorem}[Existence of a Lorentz Metric]
+    A smooth manifold $M$ admits a smooth Lorentz metric if and only if it admits a smooth, nowhere-vanishing global vector field.
+\end{theorem}
+
+So, we require, in addition to all the structure $M$ already supports, that it also supports a smooth, nowhere-vanishing global vector field $t^a$, as this is required for $M$ to support a smooth Lorentzian metric.
+
+\subsection{Alexandrov Topology}
+As in the case of a Minkowski spacetime, it's ``odd'' that the manifold topology on $M$ may have nothing to do with the Lorentzian nature of spacetime. The manifold topology could, as was the case for Minkowski spacetime, be derived from purely Euclidean metrics. Physics isn't Euclidean; so there seems to be a fundamental tension.
+
+In the case of Minkowski spacetime we introduced sets of the form $I^+(p) \cap I^-(q)$, showed that they are open in the Euclidean topology (Proposition 2.8 of \href{https://doi.org/10.1137/1.9781611970609}{Penrose}), and can be used as the basis of the Alexandrov topology (Definition 4.22 of \href{https://doi.org/10.1137/1.9781611970609}{Penrose}). Furthermore, we showed that the Alexandrov topology is equivalent to the Euclidean topology (Paragraph 4.23 of \href{https://doi.org/10.1137/1.9781611970609}{Penrose}). We want to generalize all of this to ``Lorentzian spacetimes''.
+
+It turns out that just as in the case of Minkowski spacetime, sets of the form $I^+(p) \cap I^-(q)$ on $M$ are open sets in the manifold topology (Proposition 2.8 of \href{https://doi.org/10.1137/1.9781611970609}{Penrose}). Furthermore, on $M$ they also form the basis of a topology (Definition 4.22 of \href{https://doi.org/10.1137/1.9781611970609}{Penrose}), again called the Alexandrov topology. However, for $M$ the relationship between the Alexandrov topology and the manifold topology is more nuanced than in the case of Minkowski spacetime.
+
+It turns out that to understand this nuance, we need to introduce several definitions that aid in the process.
+
+\begin{definition}[Causally Convex]
+    Consider an open subset $\mathbf{O}$ of a smooth, connected, four dimensional Hausdorff manifold $M$ that is equipped with a Lorentzian metric. $\mathbf{O}$ is said to be \textit{causally convex} if for every $p$ and $r$ in $\mathbf{O}$ and $q$ in $M$ the existence of a future-directed, time-like curve from $p$ to $q$ and a future-directed, time-like curve from $q$ to $r$ implies that $q$ is a member of $\mathbf{O}$.
+\end{definition}
+
+\begin{definition}[Strongly Causal]
+    Consider a smooth, connected, four dimensional Hausdorff manifold $M$ that is equipped with a Lorentzian metric. $M$ is said to be \textit{strongly causal} at $p \in M$ if $p$ has arbitrarily small causally convex neighborhoods. $M$ is said to be \textit{strongly causal} if $M$ is strongly causal at every $p \in M$.
+\end{definition}
+
+With these definitions in hand we can then present the key theorem describing how the Alexandrov topology and the manifold topology are related (Theorem 4.24 of \href{https://doi.org/10.1137/1.9781611970609}{Penrose}):
+
+\begin{theorem}[Properties of the Alexandrov Topology]
+    The following three conditions on a smooth, connected, four dimensional manifold $M$ with Hausdorff manifold topology are equivalent:
+    \begin{enumerate}
+        \item $M$ is strongly causal;
+        \item the Alexandrov Topology agrees with the manifold topology;
+        \item the Alexandrov Topology is Hausdorff.
+    \end{enumerate}
+\end{theorem}
+
+As one can see, this has ``deep'' implications for the case at hand, the smooth manifold $M$.
+
+Physically, the Alexandrov topology seems more ``natural'' as it relies upon basis elements $I^+(p) \cap I^-(q)$ ``natural'' to Lorentzian nature of spacetime. So physically one would expect a ``Lorentzian spacetime'' to ``naturally'' be equipped with an Alexandrov topology. The question is how does one accomplish this goal?
+
+In the case of Minkowski spacetime the Alexandrov topology on $\mathbb{R}^4$ agreed with the Euclidean topology without any further assumptions. The Euclidean ``scaffolding'' used to construct the Alexandrov topology simply ``fell away''. The previous theorem implies that for the more general case we are dealing with now on $M$, removing the manifold topology ``scaffolding'' requires additional assumptions.
+
+In particular, we can either assume that $M$ is strongly causal or that the Alexandrov Topology is Hausdorff. Either assumption implies the other and that the Alexandrov Topology agrees with the manifold topology, and thus the manifold topology ``scaffolding'' can be removed.
+
+As both assumptions are equivalent, we can select either. With that in mind, we add the additional assumption that the Alexandrov Topology on $M$ is Hausdorff. So in total $M$ is a smooth, connected, four dimensional manifold equipped with a smooth, nowhere-vanishing global vector field $t^a$ and associated Lorentzian metric. In addition $M$ is equipped with an associated Hausdorff Alexandrov Topology.
+
+\subsection{Lorentzian Spacetime}
+Finally we have all the pieces in place to define a ``Lorentzian spacetime''.
+
+\begin{definition}[Lorentzian Spacetime]
+    A \textit{Lorentzian spacetime} is a smooth, connected, four dimensional manifold equipped with a smooth, nowhere-vanishing global vector field $t^a$ and associated Lorentzian metric. In addition it is equipped with an associated Hausdorff Alexandrov topology.
+\end{definition}
+
+It will be on such Lorentzian spacetimes that AQFT ``unfolds''.

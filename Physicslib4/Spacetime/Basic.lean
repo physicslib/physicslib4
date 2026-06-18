@@ -15,7 +15,7 @@ import Mathlib.LinearAlgebra.Basis.Basic
 # Spacetime
 
 This file formalises the notion of a *spacetime* used in the AQFT-in-Lean
-blueprint, section 9.2.
+blueprint, section 10.2.
 
 ## Main definitions
 
@@ -86,7 +86,7 @@ def LorentzianAt {V : Type*} [AddCommGroup V] [Module ℝ V]
     ∀ i j : Fin 4, g (b i) (b j) = lorentzSignature i j
 
 /--
-A *spacetime*, in the sense of the AQFT-in-Lean blueprint (section 9.2,
+A *spacetime*, in the sense of the AQFT-in-Lean blueprint (section 10.2,
 `def:spacetime`), is a real, four-dimensional, connected, smooth, Hausdorff
 manifold `M` equipped with a globally defined smooth tensor field `g` of type
 `(0,2)` which is non-degenerate and Lorentzian.

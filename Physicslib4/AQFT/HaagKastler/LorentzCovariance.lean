@@ -11,7 +11,7 @@ import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 
 This file formalises the blueprint declaration
 `def:lorentz-covariance` (Axiom 5 of the "sharpened" Haag-Kastler
-axioms, section 9.3 of the AQFT-in-Lean blueprint):
+axioms, section 10.3 of the AQFT-in-Lean blueprint):
 
 > The inhomogeneous Lorentz group `𝓛` (more precisely, its identity
 > component; see section 7.1 of the blueprint) acts on the
@@ -163,6 +163,59 @@ noncomputable instance :
         = g.linear (h.linear x + h.translation) + g.translation
     rw [LinearEquiv.trans_apply, map_add]
     abel
+
+/-- The translation part of the action cancels on differences: the displacement
+between two points is transformed by the *linear* part alone. -/
+theorem smul_sub_smul (g : InhomogeneousLorentzGroup)
+    (x y : StandardMinkowskiSpacetime.Carrier) :
+    g • x - g • y = g.linear (x - y) := by
+  change (g.linear x + g.translation) - (g.linear y + g.translation)
+      = g.linear (x - y)
+  rw [map_sub]
+  abel
+
+/-- **The inhomogeneous Lorentz group acts by isometries of the Minkowski
+form.** Since the translation part cancels on differences and the linear part
+is Lorentz, the Minkowski inner product of displacements is preserved. -/
+theorem minkowskiForm_smul_sub_smul (g : InhomogeneousLorentzGroup)
+    (x y z w : StandardMinkowskiSpacetime.Carrier) :
+    minkowskiForm (g • x - g • y) (g • z - g • w)
+      = minkowskiForm (x - y) (z - w) := by
+  rw [smul_sub_smul, smul_sub_smul]
+  exact g.isLorentz (x - y) (z - w)
+
+/-- The *Minkowski interval* between two events is invariant under the
+inhomogeneous Lorentz group: `‖g • x - g • y‖²_M = ‖x - y‖²_M`. This is the
+diagonal case of `minkowskiForm_smul_sub_smul`. -/
+theorem minkowskiForm_smul_sub_self (g : InhomogeneousLorentzGroup)
+    (x y : StandardMinkowskiSpacetime.Carrier) :
+    minkowskiForm (g • x - g • y) (g • x - g • y)
+      = minkowskiForm (x - y) (x - y) :=
+  minkowskiForm_smul_sub_smul g x y x y
+
+/-- The action preserves *timelike separation*: `g • x` and `g • y` are
+timelike-separated (negative Minkowski interval) iff `x` and `y` are. -/
+theorem timelike_separated_smul_iff (g : InhomogeneousLorentzGroup)
+    (x y : StandardMinkowskiSpacetime.Carrier) :
+    minkowskiForm (g • x - g • y) (g • x - g • y) < 0
+      ↔ minkowskiForm (x - y) (x - y) < 0 := by
+  rw [minkowskiForm_smul_sub_self]
+
+/-- The action preserves *spacelike separation*: `g • x` and `g • y` are
+spacelike-separated (positive Minkowski interval) iff `x` and `y` are. -/
+theorem spacelike_separated_smul_iff (g : InhomogeneousLorentzGroup)
+    (x y : StandardMinkowskiSpacetime.Carrier) :
+    0 < minkowskiForm (g • x - g • y) (g • x - g • y)
+      ↔ 0 < minkowskiForm (x - y) (x - y) := by
+  rw [minkowskiForm_smul_sub_self]
+
+/-- The action preserves *null separation*: `g • x` and `g • y` are
+null-separated (zero Minkowski interval) iff `x` and `y` are. -/
+theorem null_separated_smul_iff (g : InhomogeneousLorentzGroup)
+    (x y : StandardMinkowskiSpacetime.Carrier) :
+    minkowskiForm (g • x - g • y) (g • x - g • y) = 0
+      ↔ minkowskiForm (x - y) (x - y) = 0 := by
+  rw [minkowskiForm_smul_sub_self]
 
 end InhomogeneousLorentzGroup
 

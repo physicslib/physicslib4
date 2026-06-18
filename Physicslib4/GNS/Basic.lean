@@ -12,7 +12,7 @@ import Mathlib.Analysis.Normed.Module.Dual
 # Basic definitions for the GNS construction
 
 This file formalises some basic notions used in the GNS construction, following
-the AQFT-in-Lean blueprint, section 9.1.
+the AQFT-in-Lean blueprint, section 10.1.
 
 ## Main definitions
 

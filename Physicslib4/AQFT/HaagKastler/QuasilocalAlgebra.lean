@@ -10,7 +10,7 @@ import Mathlib.Analysis.CStarAlgebra.Hom
 # Quasilocal Algebra
 
 This file formalises the blueprint declaration
-`def:quasilocal-algebra` (section 9.3 of the AQFT-in-Lean blueprint):
+`def:quasilocal-algebra` (section 10.3 of the AQFT-in-Lean blueprint):
 
 > Consider the set-theoretic union of all `𝔘(𝐁)`. As previously
 > proven, this set-theoretic union is a normed *-algebra. Also, as

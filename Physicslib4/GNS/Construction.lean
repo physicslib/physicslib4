@@ -9,7 +9,7 @@ import Physicslib4.GNS.Basic
 # The GNS Construction Theorem
 
 This file states the GNS Construction Theorem from the AQFT-in-Lean blueprint
-(section 9.1, label `thrm:gns-construction-theorem`).
+(section 10.1, label `thrm:gns-construction-theorem`).
 
 Given a state `ω` over a unital C*-algebra `A`, the theorem asserts the
 existence of a complex Hilbert space `H_ω`, a *-representation

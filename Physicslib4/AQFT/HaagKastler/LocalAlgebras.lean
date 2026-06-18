@@ -10,7 +10,7 @@ import Physicslib4.Spacetime.Minkowski
 # Axiom 1: Local Algebras
 
 This file formalises the blueprint declaration `def:local-algebras`
-(Axiom 1 of the "sharpened" Haag-Kastler axioms, section 9.3 of the
+(Axiom 1 of the "sharpened" Haag-Kastler axioms, section 10.3 of the
 AQFT-in-Lean blueprint):
 
 > An assignment from the Alexandrov-basis sets `𝐁` of Minkowski
