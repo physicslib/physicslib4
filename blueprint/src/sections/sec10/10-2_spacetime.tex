@@ -25,6 +25,19 @@
     Let $M$ be a spacetime, $p$ a point in $M$, and $g$ the tensor field of type $(0,2)$ associated to $M$. Any tangent vector $v \in TM|_p$ is \textit{timelike}, \textit{spacelike}, or \textit{null} if $g|_p(v,v)$ is negative, positive, or zero respectively.
 \end{definition}
 
+\begin{lemma}[Causal Classification]
+    \label{lmm:causal-classification}
+    \lean{Physicslib4.Spacetime.isTimelike_or_isNull_or_isSpacelike, Physicslib4.Spacetime.not_isSpacelike_of_isTimelike, Physicslib4.Spacetime.not_isTimelike_of_isSpacelike, Physicslib4.Spacetime.not_isNull_of_isTimelike, Physicslib4.Spacetime.not_isNull_of_isSpacelike, Physicslib4.Spacetime.isNull_zero}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \leanok
+    \uses{def:timelike-spacelike-null-vectors}
+    Every tangent vector $v \in TM|_p$ is exactly one of timelike, null, or spacelike. In particular the three classes are mutually exclusive, and the zero vector is null.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Immediate from the trichotomy of $<$, $=$, $>$ applied to $g|_p(v,v)$, together with $g|_p(0,0) = 0$ since $g|_p$ is bilinear.
+\end{proof}
+
 \begin{definition}[Time Orientation]
     \label{def:time-orientable}
     \lean{Physicslib4.Spacetime.TimeOrientation, Physicslib4.Spacetime.IsTimeOrientable}
@@ -44,6 +57,20 @@
     \uses{def:timelike-spacelike-null-vectors}
     For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
 \end{definition}
+
+\begin{lemma}[Orientation of Pointing Vectors]
+    \label{lmm:pointing-orientation}
+    \lean{Physicslib4.Spacetime.isTimelike_or_isNull_of_isFuturePointing, Physicslib4.Spacetime.isTimelike_or_isNull_of_isPastPointing, Physicslib4.Spacetime.not_isFuturePointing_and_isPastPointing_of_isTimelike}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \leanok
+    \uses{def:future-and-past-pointing-vectors}
+    \uses{lmm:causal-classification}
+    A future-pointing or past-pointing vector is timelike or null. Moreover a timelike vector cannot be both future-pointing and past-pointing with respect to a fixed time orientation.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first claim is immediate from the definition, which is a disjunction over the timelike and null cases. For the second, a timelike $v$ is not null, so both pointing conditions reduce to their timelike branches $g|_p(t,v) < 0$ and $g|_p(t,v) > 0$, which cannot hold simultaneously.
+\end{proof}
 
 \begin{definition}[Paths]
     \label{def:paths}
@@ -151,6 +178,36 @@
     \end{align}
 \end{definition}
 
+\begin{lemma}[Chronological Precedence Implies Causal Precedence]
+    \label{lmm:chronological-implies-causal}
+    \lean{Physicslib4.Spacetime.isCausal_of_isTimelike, Physicslib4.Spacetime.isCausalTrip_of_isTrip, Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture, Physicslib4.Spacetime.chronologicalPast_subset_causalPast}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:trip}
+    \uses{def:causal-trip}
+    \uses{def:chronological-future-and-chronological-past}
+    \uses{def:causal-future-and-causal-past}
+    Every trip is a causal trip, so $p \ll q$ implies $p \prec q$. Consequently $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A timelike tangent vector is in particular causal (timelike or null), so a future-oriented timelike geodesic is a future-oriented causal geodesic. Hence any trip witnessing $p \ll q$ is also a causal trip witnessing $p \prec q$. The set inclusions follow by unfolding the definitions of the futures and pasts.
+\end{proof}
+
+\begin{lemma}[Monotonicity of Futures and Pasts]
+    \label{lmm:future-past-monotone}
+    \lean{Physicslib4.Spacetime.chronologicalFutureSet_mono, Physicslib4.Spacetime.chronologicalPastSet_mono, Physicslib4.Spacetime.causalFutureSet_mono, Physicslib4.Spacetime.causalPastSet_mono}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:chronological-future-and-chronological-past}
+    \uses{def:causal-future-and-causal-past}
+    The set-valued chronological and causal futures and pasts are monotone: if $S \subseteq T$ then $I^\pm(S) \subseteq I^\pm(T)$ and $J^\pm(S) \subseteq J^\pm(T)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each operator is an indexed union over the points of its argument set, and a union over a larger index set contains the union over a smaller one.
+\end{proof}
+
 \begin{definition}[Spacelike Related]
     \label{def:spacelike-related}
     \lean{Physicslib4.Spacetime.IsSpacelikeRelated}
@@ -171,6 +228,20 @@
     Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in a spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
 \end{definition}
 
+\begin{lemma}[Symmetry of Spacelike Separation]
+    \label{lmm:completely-spacelike-symm}
+    \lean{Physicslib4.Spacetime.isSpacelikeRelated_comm, Physicslib4.Spacetime.isCompletelySpacelike_comm}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:spacelike-related}
+    \uses{def:completely-spacelike}
+    Spacelike relatedness is symmetric, and consequently complete spacelike separation is symmetric in its two regions: $\mathbf{O}_1, \mathbf{O}_2$ are completely spacelike if and only if $\mathbf{O}_2, \mathbf{O}_1$ are.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The relation $p_2 \notin J^+(p_1) \cup J^-(p_1)$ is symmetric in $p_1, p_2$ since $J^+(p_1)$ and $J^-(p_1)$ swap roles with $J^-(p_2)$ and $J^+(p_2)$ under the exchange. Symmetry of complete spacelike separation follows by applying this pointwise.
+\end{proof}
+
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
     \lean{Physicslib4.Spacetime.alexandrovTopology}
@@ -180,6 +251,19 @@
     \uses{def:chronological-future-and-chronological-past}
     \textit{Alexandrov topology} on a spacetime $M$ is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in $M$.
 \end{definition}
+
+\begin{lemma}[Basis Sets Are Alexandrov-Open]
+    \label{lmm:alexandrov-basis-open}
+    \lean{Physicslib4.Spacetime.isOpen_alexandrov_of_mem_basis}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:alexandrov-topology}
+    Every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By construction the Alexandrov topology is generated by these basis sets, and any generating set is open in the generated topology.
+\end{proof}
 
 \begin{definition}[Minkowski Spacetime]
     \label{def:minkowski-spacetime}
@@ -200,3 +284,18 @@
     \uses{def:alexandrov-topology}
     \textit{Lorentzian spacetime} is a spacetime equipped with a Hausdorff Alexandrov topology.
 \end{definition}
+
+\begin{lemma}[Bundled Spacelike Separation and Basis Openness]
+    \label{lmm:lorentzian-causal-lifts}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_comm, Physicslib4.Spacetime.LorentzianSpacetime.isOpen_alexandrov_of_isBasisSet}
+    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \leanok
+    \uses{def:lorentzian-spacetime}
+    \uses{lmm:completely-spacelike-symm}
+    \uses{lmm:alexandrov-basis-open}
+    On a Lorentzian spacetime, complete spacelike separation of two regions is symmetric, and every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
+\end{lemma}
+\begin{proof}
+    \leanok
+    These are restatements of the symmetry of complete spacelike separation and the openness of basis sets for the underlying spacetime, transported through the bundling of a Lorentzian spacetime over its underlying spacetime and time orientation.
+\end{proof}
