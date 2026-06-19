@@ -85,6 +85,14 @@ The full geometric content (smooth 4-manifold, Lorentzian metric,
 nowhere-vanishing time-orientation field, Hausdorff Alexandrov
 topology) is deferred; a concrete construction instantiates this
 interface.
+
+This is the *axiom-facing interface* form of the geometric bundle
+`Physicslib4.Spacetime.LorentzianSpacetime`: every such geometric
+Lorentzian spacetime instantiates this interface via
+`Physicslib4.Spacetime.LorentzianSpacetime.toAbstract`, which supplies
+`Carrier`, `IsBasisSet`, `IsCompletelySpacelike`, and the
+identity-component isometry group with its action. Both declarations
+correspond to the same blueprint definition `def:lorentzian-spacetime`.
 -/
 structure LorentzianSpacetime where
   /-- The type of spacetime points of `M`. -/

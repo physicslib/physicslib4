@@ -66,6 +66,11 @@ with a smooth nowhere-vanishing global timelike vector field
 (`timeOrientation`) and an associated *Hausdorff* Alexandrov topology
 (`alexandrov_t2`).
 
+This is the geometric bundle; `LorentzianSpacetime.toAbstract` exposes
+it as the axiom-facing interface
+`Physicslib4.AQFT.HaagKastlerCurved.LorentzianSpacetime` over which the
+curved Haag-Kastler axioms are stated.
+
 Blueprint reference: `def:lorentzian-spacetime`.
 -/
 structure LorentzianSpacetime where
