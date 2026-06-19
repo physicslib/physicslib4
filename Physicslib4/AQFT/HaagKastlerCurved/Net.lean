@@ -63,6 +63,59 @@ structure HaagKastlerNet (M : LorentzianSpacetime) where
   acts on the net and commutes with isotony (Axiom 5). -/
   isometricCovariance : IsometricCovariance U
 
+namespace HaagKastlerNet
+
+variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
+
+/-- The local algebra `𝔘(B)` assigned by the net to a region `B`
+(the Axiom 1 data, via the underlying `LocalNet M`). -/
+abbrev algebra (B : Set M.Carrier) :=
+  N.U.algebra B
+
+/-- Net-level normalisation `𝔘(∅) ≃⋆ₐ[ℂ] ℂ`. -/
+noncomputable def emptyEquivComplex : StarAlgEquiv ℂ (N.algebra ∅) ℂ :=
+  N.U.emptyEquivComplex
+
+/-- The empty-region algebra `𝔘(∅)` is commutative. -/
+theorem mul_comm_algebra_empty (a b : N.algebra ∅) : a * b = b * a :=
+  N.U.mul_comm_algebra_empty a b
+
+/-- The empty-region algebra `𝔘(∅)` is one-dimensional over `ℂ`. -/
+theorem finrank_algebra_empty : Module.finrank ℂ (N.algebra ∅) = 1 :=
+  N.U.finrank_algebra_empty
+
+/-- **Isotony, reflexivity.** Every Alexandrov-basis set embeds into
+itself via the identity unital `*`-monomorphism. -/
+theorem isotony_refl {B : Set M.Carrier} :
+    ∃ φ : StarAlgHom ℂ (N.algebra B) (N.algebra B), Function.Injective φ :=
+  exists_injective_self N.U
+
+/-- **Isotony, transitivity.** For inclusions `B₁ ⊆ B₂ ⊆ B₃` of
+Alexandrov-basis sets, the net's isotony embeddings compose to a unital
+`*`-monomorphism `𝔘(B₁) ↪ 𝔘(B₃)`. -/
+theorem isotony_trans ⦃B₁ B₂ B₃ : Set M.Carrier⦄
+    (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂) (hB₃ : M.IsBasisSet B₃)
+    (h₁₂ : B₁ ⊆ B₂) (h₂₃ : B₂ ⊆ B₃) :
+    ∃ φ : StarAlgHom ℂ (N.algebra B₁) (N.algebra B₃), Function.Injective φ :=
+  N.isotony.trans hB₁ hB₂ hB₃ h₁₂ h₂₃
+
+/-- The *covariance equivalence* `𝔘(B) ≃⋆ₐ[ℂ] 𝔘(φ·B)` implementing the
+action of an identity-component isometry `φ` on the net, chosen from the
+existence witness provided by Axiom 5 (`isometricCovariance`). -/
+noncomputable def covEquiv (φ : M.Isom) (B : Set M.Carrier) :
+    StarAlgEquiv ℂ (N.algebra B) (N.algebra (φ • B)) :=
+  N.isometricCovariance.choose φ B
+
+/-- **Isometry invariance of the local dimension.** The local algebras
+of a region `B` and of its isometric image `φ·B` have the same
+`ℂ`-dimension: the covariance equivalence is in particular a `ℂ`-linear
+isomorphism `𝔘(B) ≃ₗ[ℂ] 𝔘(φ·B)`. -/
+theorem finrank_algebra_smul (φ : M.Isom) (B : Set M.Carrier) :
+    Module.finrank ℂ (N.algebra B) = Module.finrank ℂ (N.algebra (φ • B)) :=
+  (N.covEquiv φ B).toAlgEquiv.toLinearEquiv.finrank_eq
+
+end HaagKastlerNet
+
 /-!
 ## The trivial net and joint satisfiability of the axioms
 
