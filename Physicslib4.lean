@@ -7,6 +7,7 @@ import Physicslib4.AQFT.HaagKastler.Net
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
 import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
+import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
 import Physicslib4.AQFT.HaagKastlerCurved.IdentityComponent
 import Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance
 import Physicslib4.AQFT.HaagKastlerCurved.Isotony
