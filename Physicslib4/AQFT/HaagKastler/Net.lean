@@ -101,6 +101,25 @@ theorem isotony_trans
     ∃ φ : StarAlgHom ℂ (N.algebra B₁) (N.algebra B₃), Function.Injective φ :=
   N.isotony.trans hB₁ hB₂ hB₃ h₁₂ h₂₃
 
+/-- The *canonical quasilocal algebra* `𝔘` of the net, chosen from the
+existence witness provided by Axiom 4 (`quasilocalCompleteness`). -/
+noncomputable def quasilocal : QuasilocalAlgebra N.U :=
+  Classical.choice N.quasilocalCompleteness
+
+/-- Each local algebra `𝔘(B)` of an Alexandrov-basis set embeds
+*norm-preservingly* into the canonical quasilocal algebra `𝔘`. -/
+theorem norm_ι {B : Set StandardMinkowskiSpacetime.Carrier}
+    (hB : IsAlexandrovBasisSet B) (a : N.algebra B) :
+    ‖N.quasilocal.ι B a‖ = ‖a‖ :=
+  N.quasilocal.norm_ι hB a
+
+/-- Each local embedding `𝔘(B) ↪ 𝔘` into the canonical quasilocal
+algebra is an isometry (the metric form of `norm_ι`). -/
+theorem isometry_ι {B : Set StandardMinkowskiSpacetime.Carrier}
+    (hB : IsAlexandrovBasisSet B) :
+    Isometry (N.quasilocal.ι B) :=
+  N.quasilocal.isometry_ι hB
+
 end HaagKastlerNet
 
 /-!
