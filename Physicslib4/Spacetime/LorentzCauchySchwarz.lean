@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.Spacetime.Basic
+import Physicslib4.Spacetime.CausalStructure
 import Mathlib.LinearAlgebra.BilinearForm.Basic
-import Mathlib.Tactic
 
 /-!
 # Reverse Cauchy-Schwarz inequality for timelike vectors
@@ -45,11 +45,13 @@ open scoped BigOperators
 Lorentzian bilinear form on a real four-dimensional vector space. -/
 theorem reverse_cauchy_schwarz_of_lorentzianAt
     {V : Type*} [AddCommGroup V] [Module ℝ V]
-    {B : LinearMap.BilinForm ℝ V} (hsymm : ∀ v w, B v w = B w v)
+    {B : LinearMap.BilinForm ℝ V} (_hsymm : ∀ v w, B v w = B w v)
     (hL : LorentzianAt (fun v w => B v w))
-    {v w : V} (hv : B v v < 0) (hw : B w w < 0) :
+    {v w : V} (_hv : B v v < 0) (hw : B w w < 0) :
     B v v * B w w ≤ (B v w) ^ 2 := by
   obtain ⟨b, hb⟩ := hL
+  -- Beta-reduced form of the Gram-matrix hypothesis, usable directly by `rw`.
+  have hb' : ∀ i j : Fin 4, B (b i) (b j) = lorentzSignature i j := hb
   -- Coordinate (diagonal) expansion of the bilinear form in the Lorentzian basis.
   have coord : ∀ x y : V, B x y =
       -(b.repr x 0 * b.repr y 0)
@@ -60,16 +62,15 @@ theorem reverse_cauchy_schwarz_of_lorentzianAt
       conv_lhs => rw [← b.sum_repr y]
       rw [map_sum]
       refine Finset.sum_congr rfl (fun j _ => ?_)
-      rw [map_smul, smul_eq_mul, hb]
+      rw [map_smul, smul_eq_mul, hb']
     have step1 : B x y = ∑ i, ∑ j, b.repr x i * (b.repr y j * lorentzSignature i j) := by
       conv_lhs => rw [← b.sum_repr x]
       rw [map_sum, LinearMap.sum_apply]
       refine Finset.sum_congr rfl (fun i _ => ?_)
       rw [map_smul, LinearMap.smul_apply, smul_eq_mul, step2 i, Finset.mul_sum]
-    rw [step1]
-    simp only [lorentzSignature, Matrix.diagonal_apply, mul_ite, mul_zero,
-      Finset.sum_ite_eq, Finset.mem_univ, if_true, Fin.sum_univ_four]
-    norm_num
+    rw [step1, Fin.sum_univ_four]
+    simp only [Fin.sum_univ_four, lorentzSignature, Matrix.diagonal_apply, Fin.isValue,
+      Fin.reduceEq, ↓reduceIte, mul_zero, add_zero, mul_neg, mul_one]
     ring
   -- The time coordinate of `w` is nonzero, since `w` is timelike.
   have hwexp := hw
