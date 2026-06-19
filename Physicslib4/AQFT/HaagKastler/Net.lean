@@ -153,6 +153,30 @@ theorem commute_covEquiv_iff (L : InhomogeneousLorentzGroup)
   refine ⟨fun h => ?_, fun h => h.map (N.covEquiv L B)⟩
   simpa using h.map (N.covEquiv L B).symm
 
+/-- **Covariance, identity.** The action of the identity Lorentz
+transformation is the identity automorphism (modulo the canonical
+identification `𝔘(B) = 𝔘(1·B)` from `one_smul`). -/
+theorem covEquiv_one (B : Set StandardMinkowskiSpacetime.Carrier)
+    (a : N.algebra B) :
+    (N.covEquiv (1 : InhomogeneousLorentzGroup) B :
+        N.algebra B → N.algebra ((1 : InhomogeneousLorentzGroup) • B)) a
+      = (congrArg N.U.algebra
+          (one_smul InhomogeneousLorentzGroup B).symm).mp a :=
+  N.lorentzCovariance.choose_spec.choose_spec.2.1 B a
+
+/-- **Covariance, composition.** The action is multiplicative in the
+group element: `α (L'·L) = α L' ∘ α L` (modulo the canonical
+identification `𝔘((L'·L)·B) = 𝔘(L'·(L·B))` from `mul_smul`). -/
+theorem covEquiv_mul (L L' : InhomogeneousLorentzGroup)
+    (B : Set StandardMinkowskiSpacetime.Carrier) (a : N.algebra B) :
+    (N.covEquiv (L' * L) B :
+        N.algebra B → N.algebra ((L' * L) • B)) a
+      = (congrArg N.U.algebra (mul_smul L' L B).symm).mp
+          ((N.covEquiv L' (L • B) :
+              N.algebra (L • B) → N.algebra (L' • (L • B)))
+            ((N.covEquiv L B : N.algebra B → N.algebra (L • B)) a)) :=
+  N.lorentzCovariance.choose_spec.choose_spec.2.2.1 L L' B a
+
 /-- The *quasilocal algebra witnessing local commutativity* (Axiom 3),
 chosen from the existence witness in `localCommutativity`. (This may differ
 from the canonical `quasilocal` of Axiom 4.) -/

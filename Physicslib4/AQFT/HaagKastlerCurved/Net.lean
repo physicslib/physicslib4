@@ -129,6 +129,27 @@ theorem commute_covEquiv_iff (φ : M.Isom) {B : Set M.Carrier}
   refine ⟨fun h => ?_, fun h => h.map (N.covEquiv φ B)⟩
   simpa using h.map (N.covEquiv φ B).symm
 
+/-- **Covariance, identity.** The action of the identity isometry is the
+identity automorphism (modulo the canonical identification
+`𝔘(B) = 𝔘(1·B)` from `one_smul`). -/
+theorem covEquiv_one (B : Set M.Carrier) (a : N.algebra B) :
+    (N.covEquiv (1 : M.Isom) B :
+        N.algebra B → N.algebra ((1 : M.Isom) • B)) a
+      = (congrArg N.U.algebra (one_smul M.Isom B).symm).mp a :=
+  N.isometricCovariance.choose_spec.choose_spec.2.1 B a
+
+/-- **Covariance, composition.** The action is multiplicative in the
+group element: `α (φ'·φ) = α φ' ∘ α φ` (modulo the canonical
+identification `𝔘((φ'·φ)·B) = 𝔘(φ'·(φ·B))` from `mul_smul`). -/
+theorem covEquiv_mul (φ φ' : M.Isom) (B : Set M.Carrier) (a : N.algebra B) :
+    (N.covEquiv (φ' * φ) B :
+        N.algebra B → N.algebra ((φ' * φ) • B)) a
+      = (congrArg N.U.algebra (mul_smul φ' φ B).symm).mp
+          ((N.covEquiv φ' (φ • B) :
+              N.algebra (φ • B) → N.algebra (φ' • (φ • B)))
+            ((N.covEquiv φ B : N.algebra B → N.algebra (φ • B)) a)) :=
+  N.isometricCovariance.choose_spec.choose_spec.2.2.1 φ φ' B a
+
 /-- The *isotony embeddings witnessing local commutativity* (Axiom 3),
 chosen from the existence witness in `localCommutativity`. -/
 noncomputable def commIsotony ⦃B₁ B₂ : Set M.Carrier⦄
