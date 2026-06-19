@@ -3,6 +3,7 @@ Copyright (c) 2026 Lean Community. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
+import Mathlib.Analysis.CStarAlgebra.Hom
 import Physicslib4.AQFT.HaagKastlerCurved.Isotony
 import Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity
 import Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebra
@@ -113,6 +114,52 @@ isomorphism `𝔘(B) ≃ₗ[ℂ] 𝔘(φ·B)`. -/
 theorem finrank_algebra_smul (φ : M.Isom) (B : Set M.Carrier) :
     Module.finrank ℂ (N.algebra B) = Module.finrank ℂ (N.algebra (φ • B)) :=
   (N.covEquiv φ B).toAlgEquiv.toLinearEquiv.finrank_eq
+
+/-- **Isometry invariance of the local norm.** The covariance equivalence is a
+`*`-isomorphism of C*-algebras, hence isometric: `‖α a‖ = ‖a‖`. -/
+theorem norm_covEquiv (φ : M.Isom) {B : Set M.Carrier} (a : N.algebra B) :
+    ‖N.covEquiv φ B a‖ = ‖a‖ :=
+  NonUnitalStarAlgHom.norm_map (N.covEquiv φ B) (N.covEquiv φ B).injective a
+
+/-- **Isometric transport of commutativity.** Two local elements commute iff
+their images under the covariance equivalence commute. -/
+theorem commute_covEquiv_iff (φ : M.Isom) {B : Set M.Carrier}
+    (a b : N.algebra B) :
+    Commute (N.covEquiv φ B a) (N.covEquiv φ B b) ↔ Commute a b := by
+  refine ⟨fun h => ?_, fun h => h.map (N.covEquiv φ B)⟩
+  simpa using h.map (N.covEquiv φ B).symm
+
+/-- The *isotony embeddings witnessing local commutativity* (Axiom 3),
+chosen from the existence witness in `localCommutativity`. -/
+noncomputable def commIsotony ⦃B₁ B₂ : Set M.Carrier⦄
+    (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂) :
+    StarAlgHom ℂ (N.U.algebra B₁) (N.U.algebra B₂) :=
+  N.localCommutativity.choose h₁ h₂ h
+
+/-- Each chosen isotony embedding is injective. -/
+theorem commIsotony_injective ⦃B₁ B₂ : Set M.Carrier⦄
+    (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂) :
+    Function.Injective (N.commIsotony h₁ h₂ h) :=
+  N.localCommutativity.choose_spec.1 h₁ h₂ h
+
+/-- **Local commutativity.** If basis sets `B₁`, `B₂` are completely spacelike
+and both contained in a common basis set `B`, their images in `𝔘(B)` under the
+isotony embeddings commute. -/
+theorem commute_of_spacelike ⦃B₁ B₂ B : Set M.Carrier⦄
+    (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂) (hB : M.IsBasisSet B)
+    (hs : M.IsCompletelySpacelike B₁ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B)
+    (a : N.algebra B₁) (b : N.algebra B₂) :
+    Commute (N.commIsotony hB₁ hB h₁ a) (N.commIsotony hB₂ hB h₂ b) :=
+  N.localCommutativity.choose_spec.2 hB₁ hB₂ hB hs h₁ h₂ a b
+
+/-- **Local commutativity is symmetric.** Commutation of completely-spacelike
+local algebras inside a common containing basis algebra holds in either order. -/
+theorem commute_of_spacelike_symm ⦃B₁ B₂ B : Set M.Carrier⦄
+    (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂) (hB : M.IsBasisSet B)
+    (hs : M.IsCompletelySpacelike B₁ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B)
+    (a : N.algebra B₁) (b : N.algebra B₂) :
+    Commute (N.commIsotony hB₂ hB h₂ b) (N.commIsotony hB₁ hB h₁ a) :=
+  (N.commute_of_spacelike hB₁ hB₂ hB hs h₁ h₂ a b).symm
 
 section Observables
 

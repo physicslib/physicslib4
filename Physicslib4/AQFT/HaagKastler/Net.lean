@@ -138,6 +138,48 @@ theorem finrank_algebra_smul (L : InhomogeneousLorentzGroup)
     Module.finrank ℂ (N.algebra B) = Module.finrank ℂ (N.algebra (L • B)) :=
   (N.covEquiv L B).toAlgEquiv.toLinearEquiv.finrank_eq
 
+/-- **Lorentz invariance of the local norm.** The covariance equivalence is a
+`*`-isomorphism of C*-algebras, hence isometric: `‖α a‖ = ‖a‖`. -/
+theorem norm_covEquiv (L : InhomogeneousLorentzGroup)
+    {B : Set StandardMinkowskiSpacetime.Carrier} (a : N.algebra B) :
+    ‖N.covEquiv L B a‖ = ‖a‖ :=
+  NonUnitalStarAlgHom.norm_map (N.covEquiv L B) (N.covEquiv L B).injective a
+
+/-- **Lorentz transport of commutativity.** Two local elements commute iff
+their images under the covariance equivalence commute. -/
+theorem commute_covEquiv_iff (L : InhomogeneousLorentzGroup)
+    {B : Set StandardMinkowskiSpacetime.Carrier} (a b : N.algebra B) :
+    Commute (N.covEquiv L B a) (N.covEquiv L B b) ↔ Commute a b := by
+  refine ⟨fun h => ?_, fun h => h.map (N.covEquiv L B)⟩
+  simpa using h.map (N.covEquiv L B).symm
+
+/-- The *quasilocal algebra witnessing local commutativity* (Axiom 3),
+chosen from the existence witness in `localCommutativity`. (This may differ
+from the canonical `quasilocal` of Axiom 4.) -/
+noncomputable def commAlgebra : QuasilocalAlgebra N.U :=
+  N.localCommutativity.choose
+
+/-- **Local commutativity.** The images in `commAlgebra` of two
+completely-spacelike basis algebras commute. -/
+theorem commute_ι_of_spacelike ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+    (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation B₁ B₂)
+    (a : N.algebra B₁) (b : N.algebra B₂) :
+    Commute (N.commAlgebra.ι B₁ a) (N.commAlgebra.ι B₂ b) :=
+  N.localCommutativity.choose_spec hB₁ hB₂ hs a b
+
+/-- **Local commutativity is symmetric.** Commutation of completely-spacelike
+local algebras holds in either order. -/
+theorem commute_ι_of_spacelike_symm
+    ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+    (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation B₁ B₂)
+    (a : N.algebra B₁) (b : N.algebra B₂) :
+    Commute (N.commAlgebra.ι B₂ b) (N.commAlgebra.ι B₁ a) :=
+  (N.commute_ι_of_spacelike hB₁ hB₂ hs a b).symm
+
 end HaagKastlerNet
 
 /-!
