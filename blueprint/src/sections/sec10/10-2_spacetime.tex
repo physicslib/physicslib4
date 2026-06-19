@@ -106,6 +106,32 @@
     The first claim is immediate from the definition, which is a disjunction over the timelike and null cases. For the second, a timelike $v$ is not null, so both pointing conditions reduce to their timelike branches $g|_p(t,v) < 0$ and $g|_p(t,v) > 0$, which cannot hold simultaneously.
 \end{proof}
 
+\begin{lemma}[Sign Lemma for the Future Cone]
+    \label{lmm:cone-sign-lemma}
+    \lean{Physicslib4.nonneg_of_orthogonal_timelike, Physicslib4.cauchy_schwarz_on_orthogonal, Physicslib4.bilin_neg_of_inner_t_neg, Physicslib4.Spacetime.inner_neg_of_future_timelike}
+    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \uses{def:spacetime, def:time-orientable, def:future-and-past-pointing-vectors, lmm:reverse-cauchy-schwarz}
+    \leanok
+    Let $g$ be a symmetric Lorentzian bilinear form, $t$ a timelike vector, and write $t^\perp = \{u : g(t,u) = 0\}$ for the spacelike complement. Then $g$ is positive semidefinite on $t^\perp$ (so the ordinary Cauchy-Schwarz inequality holds there), and consequently for any timelike $v, w$ with $g(t,v) < 0$ and $g(t,w) < 0$ one has $g(v,w) < 0$. In particular two timelike tangent vectors that are future-pointing with respect to a common time orientation have negative inner product.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reverse-cauchy-schwarz}
+    If $u \in t^\perp$ had $g(u,u) < 0$ then $u$ would be timelike, and reverse Cauchy-Schwarz (\cref{lmm:reverse-cauchy-schwarz}) would give $g(t,t)\,g(u,u) \le g(t,u)^2 = 0$, contradicting $g(t,t)\,g(u,u) > 0$; hence $g$ is positive semidefinite on $t^\perp$, and Cauchy-Schwarz follows from nonnegativity of the quadratic $s \mapsto g(s u + u', s u + u')$. For the sign claim, decompose $v$ and $w$ along $t$: the vectors $v_\perp = g(t,t)\,v - g(t,v)\,t$ and $w_\perp = g(t,t)\,w - g(t,w)\,t$ lie in $t^\perp$, and $g(v,w) = g(t,t)^{-2}\big(g(t,t)\,g(v,w)\big)$ expands so that $g(t,t)\,g(v,w) = g(t,v)\,g(t,w) + g(v_\perp, w_\perp)/g(t,t)$. Applying Cauchy-Schwarz to $g(v_\perp,w_\perp)$ together with the reverse Cauchy-Schwarz bounds $g(t,v)^2 \ge g(t,t)g(v,v)$ and $g(t,w)^2 \ge g(t,t)g(w,w)$ forces $g(t,t)\,g(v,w) > 0$, and since $g(t,t) < 0$ this gives $g(v,w) < 0$.
+\end{proof}
+
+\begin{lemma}[Convexity of the Future Cone]
+    \label{lmm:future-cone-convexity}
+    \lean{Physicslib4.Spacetime.isFuturePointing_add}
+    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \uses{def:future-and-past-pointing-vectors, lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
+    \leanok
+    The sum of two timelike future-pointing tangent vectors (with respect to a fixed time orientation) is again timelike and future-pointing. Thus the timelike future-pointing vectors form a convex cone.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
+    Let $v, w$ be timelike and future-pointing, so $g(t,v) < 0$ and $g(t,w) < 0$. By the sign lemma (\cref{lmm:cone-sign-lemma}) $g(v,w) < 0$, so $v$ and $w$ are aligned and $v + w$ is timelike by cone convexity (\cref{lmm:timelike-cone-convexity}). Moreover $g(t, v+w) = g(t,v) + g(t,w) < 0$ by bilinearity, so $v + w$ is future-pointing.
+\end{proof}
+
 \begin{definition}[Paths]
     \label{def:paths}
     \lean{Physicslib4.Spacetime.Path, Physicslib4.Spacetime.SmoothPath}
