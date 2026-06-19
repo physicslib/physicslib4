@@ -49,6 +49,77 @@ theorem dense_adjoin_iUnion_range_ι {U : LocalNet} (Q : QuasilocalAlgebra U) :
         Set.range (Q.ι B)) : Set Q.carrier) :=
   Q.dense_range.mono (StarAlgebra.subset_adjoin ℂ _)
 
+namespace QuasilocalAlgebra
+
+variable {U : LocalNet} (Q : QuasilocalAlgebra U)
+
+/-- The union of all local images `ι_B(𝔘(B))` over Alexandrov-basis sets `B`. -/
+def localImages : Set Q.carrier :=
+  ⋃ (B : Set StandardMinkowskiSpacetime.Carrier) (_ : IsAlexandrovBasisSet B),
+    Set.range (Q.ι B)
+
+@[simp] theorem mem_localImages {x : Q.carrier} :
+    x ∈ Q.localImages ↔ ∃ B, IsAlexandrovBasisSet B ∧ ∃ a, Q.ι B a = x := by
+  simp only [localImages, Set.mem_iUnion, Set.mem_range, exists_prop]
+
+/-- **Directedness of the local images.** Any two elements of the union of
+local images are images, from a *common* basis set `C`, of elements of
+`𝔘(C)` - using basis directedness and the isotony-coherence `ι_inclusion`. -/
+theorem exists_common_image {x y : Q.carrier}
+    (hx : x ∈ Q.localImages) (hy : y ∈ Q.localImages) :
+    ∃ C, IsAlexandrovBasisSet C ∧ ∃ a b : U.algebra C,
+      Q.ι C a = x ∧ Q.ι C b = y := by
+  rw [mem_localImages] at hx hy
+  obtain ⟨B, hB, a, rfl⟩ := hx
+  obtain ⟨B', hB', a', rfl⟩ := hy
+  obtain ⟨C, hC, hBC, hB'C⟩ := IsAlexandrovBasisSet.directed hB hB'
+  exact ⟨C, hC, Q.inclusion hB hC hBC a, Q.inclusion hB' hC hB'C a',
+    Q.ι_inclusion hB hC hBC a, Q.ι_inclusion hB' hC hB'C a'⟩
+
+/-- **The union of local images is a `*`-subalgebra of the quasilocal algebra.**
+Closure under multiplication and addition uses directedness (`exists_common_image`)
+to route both arguments through a single embedding `ι_C`; closure under `star`,
+`1`, `0`, and scalars is pointwise. -/
+def localStarSubalgebra : StarSubalgebra ℂ Q.carrier where
+  carrier := Q.localImages
+  mul_mem' := by
+    intro x y hx hy
+    obtain ⟨C, hC, a, b, rfl, rfl⟩ := Q.exists_common_image hx hy
+    rw [mem_localImages]
+    exact ⟨C, hC, a * b, by rw [map_mul]⟩
+  add_mem' := by
+    intro x y hx hy
+    obtain ⟨C, hC, a, b, rfl, rfl⟩ := Q.exists_common_image hx hy
+    rw [mem_localImages]
+    exact ⟨C, hC, a + b, by rw [map_add]⟩
+  one_mem' := by
+    rw [mem_localImages]
+    exact ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet, 1, by rw [map_one]⟩
+  zero_mem' := by
+    rw [mem_localImages]
+    exact ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet, 0, by rw [map_zero]⟩
+  algebraMap_mem' := by
+    intro r
+    rw [mem_localImages]
+    exact ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet,
+      algebraMap ℂ _ r, AlgHomClass.commutes (Q.ι trivialBasisSet) r⟩
+  star_mem' := by
+    intro x hx
+    rw [mem_localImages] at hx ⊢
+    obtain ⟨B, hB, a, rfl⟩ := hx
+    exact ⟨B, hB, star a, by rw [map_star]⟩
+
+@[simp] theorem coe_localStarSubalgebra :
+    (Q.localStarSubalgebra : Set Q.carrier) = Q.localImages := rfl
+
+/-- The local `*`-subalgebra is dense in the quasilocal algebra. -/
+theorem dense_localStarSubalgebra :
+    Dense (Q.localStarSubalgebra : Set Q.carrier) := by
+  rw [coe_localStarSubalgebra]
+  exact Q.dense_range
+
+end QuasilocalAlgebra
+
 end HaagKastler
 end AQFT
 end Physicslib4
