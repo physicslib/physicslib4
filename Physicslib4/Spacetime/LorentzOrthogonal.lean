@@ -449,6 +449,60 @@ theorem isPastPointing_add (M : Spacetime) (x : M.Carrier)
   rw [neg_add]
   exact isFuturePointing_add_general M x τ hfv hfw
 
+/-- **Positive scaling preserves future-pointing.** A positive multiple of a
+future-pointing vector is future-pointing. -/
+theorem isFuturePointing_smul_pos (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v : TangentSpace M.model x} {c : ℝ} (hc : 0 < c)
+    (hfv : M.IsFuturePointing τ v) : M.IsFuturePointing τ (c • v) := by
+  have hquad : ∀ u : TangentSpace M.model x, M.val x (c • u) (c • u) = c * (c * M.val x u u) :=
+    fun u => by simp only [map_smul, ContinuousLinearMap.smul_apply, smul_eq_mul]
+  have hlin : ∀ u : TangentSpace M.model x,
+      M.val x (τ.field x) (c • u) = c * M.val x (τ.field x) u :=
+    fun u => by rw [map_smul, smul_eq_mul]
+  rcases hfv with ⟨htl, hsgn⟩ | ⟨hnull, vs, hvs, htend⟩
+  · have htl' : M.val x v v < 0 := htl
+    refine Or.inl ⟨?_, ?_⟩
+    · change M.val x (c • v) (c • v) < 0; rw [hquad]; nlinarith [htl', mul_pos hc hc]
+    · rw [hlin]; nlinarith [hsgn, hc]
+  · have hnull' : M.val x v v = 0 := hnull
+    refine Or.inr ⟨?_, fun n => c • vs n, fun n => ⟨?_, ?_⟩, ?_⟩
+    · change M.val x (c • v) (c • v) = 0; rw [hquad, hnull']; ring
+    · have h1 : M.val x (vs n) (vs n) < 0 := (hvs n).1
+      change M.val x (c • vs n) (c • vs n) < 0; rw [hquad]; nlinarith [h1, mul_pos hc hc]
+    · rw [hlin]; nlinarith [(hvs n).2, hc]
+    · exact htend.const_smul c
+
+/-- **The future cone is a convex cone.** Any positive linear combination of two
+future-pointing tangent vectors is future-pointing. This is the convex-cone
+packaging of `isFuturePointing_add_general`, the downstream form of cone
+convexity consumed elsewhere in the causal structure. -/
+theorem isFuturePointing_pos_combination (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v w : TangentSpace M.model x} {a b : ℝ}
+    (ha : 0 < a) (hb : 0 < b)
+    (hfv : M.IsFuturePointing τ v) (hfw : M.IsFuturePointing τ w) :
+    M.IsFuturePointing τ (a • v + b • w) :=
+  isFuturePointing_add_general M x τ
+    (isFuturePointing_smul_pos M x τ ha hfv) (isFuturePointing_smul_pos M x τ hb hfw)
+
+/-- Positive scaling preserves past-pointing (time reversal of
+`isFuturePointing_smul_pos`). -/
+theorem isPastPointing_smul_pos (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v : TangentSpace M.model x} {c : ℝ} (hc : 0 < c)
+    (hfv : M.IsPastPointing τ v) : M.IsPastPointing τ (c • v) := by
+  rw [isPastPointing_iff_isFuturePointing_neg] at hfv ⊢
+  rw [← smul_neg]
+  exact isFuturePointing_smul_pos M x τ hc hfv
+
+/-- **The past cone is a convex cone.** Any positive linear combination of two
+past-pointing tangent vectors is past-pointing. -/
+theorem isPastPointing_pos_combination (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v w : TangentSpace M.model x} {a b : ℝ}
+    (ha : 0 < a) (hb : 0 < b)
+    (hfv : M.IsPastPointing τ v) (hfw : M.IsPastPointing τ w) :
+    M.IsPastPointing τ (a • v + b • w) :=
+  isPastPointing_add M x τ
+    (isPastPointing_smul_pos M x τ ha hfv) (isPastPointing_smul_pos M x τ hb hfw)
+
 end Spacetime
 
 end Physicslib4

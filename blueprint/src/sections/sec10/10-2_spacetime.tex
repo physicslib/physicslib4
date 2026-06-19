@@ -134,11 +134,11 @@
 
 \begin{lemma}[Convexity of the Future Cone]
     \label{lmm:future-cone-convexity}
-    \lean{Physicslib4.Spacetime.isFuturePointing_add, Physicslib4.Spacetime.exists_seq_of_isFuturePointing, Physicslib4.Spacetime.inner_t_nonpos_of_future, Physicslib4.Spacetime.inner_nonpos_of_future, Physicslib4.Spacetime.isFuturePointing_add_general, Physicslib4.Spacetime.isPastPointing_iff_isFuturePointing_neg, Physicslib4.Spacetime.isPastPointing_add}
+    \lean{Physicslib4.Spacetime.isFuturePointing_add, Physicslib4.Spacetime.exists_seq_of_isFuturePointing, Physicslib4.Spacetime.inner_t_nonpos_of_future, Physicslib4.Spacetime.inner_nonpos_of_future, Physicslib4.Spacetime.isFuturePointing_add_general, Physicslib4.Spacetime.isPastPointing_iff_isFuturePointing_neg, Physicslib4.Spacetime.isPastPointing_add, Physicslib4.Spacetime.isFuturePointing_smul_pos, Physicslib4.Spacetime.isFuturePointing_pos_combination, Physicslib4.Spacetime.isPastPointing_smul_pos, Physicslib4.Spacetime.isPastPointing_pos_combination}
     \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
     \uses{def:future-and-past-pointing-vectors, lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
     \leanok
-    The sum of two timelike future-pointing tangent vectors (with respect to a fixed time orientation) is again timelike and future-pointing. More generally, the sum of any two future-pointing tangent vectors -- timelike or null -- is future-pointing, so the full future cone, including its null boundary, is convex. Since a vector is past-pointing exactly when its negation is future-pointing, the past cone is convex as well.
+    The sum of two timelike future-pointing tangent vectors (with respect to a fixed time orientation) is again timelike and future-pointing. More generally, the sum of any two future-pointing tangent vectors -- timelike or null -- is future-pointing, so the full future cone, including its null boundary, is convex. Since a vector is past-pointing exactly when its negation is future-pointing, the past cone is convex as well. Downstream this packages as the statement that the future-pointing and past-pointing tangent vectors each form a convex cone: they are closed under positive scaling and, more generally, under positive linear combinations $a v + b w$ with $a, b > 0$.
 \end{lemma}
 \begin{proof}
     \uses{lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
