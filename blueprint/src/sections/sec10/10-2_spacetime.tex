@@ -58,6 +58,23 @@
     with $p = \lvert v^0\rvert$, $q = \lvert w^0\rvert$, $r = \lVert\mathbf{v}\rVert$, $s = \lVert\mathbf{w}\rVert$ yields $g(v,w)^2 \ge g(v,v)\,g(w,w)$.
 \end{proof}
 
+\begin{lemma}[Timelike Cone Convexity and Reverse Triangle Inequality]
+    \label{lmm:timelike-cone-convexity}
+    \lean{Physicslib4.add_isTimelike_of_lorentzianAt, Physicslib4.reverse_triangle_of_lorentzianAt, Physicslib4.Spacetime.add_isTimelike, Physicslib4.Spacetime.reverse_triangle}
+    \leanfile{Physicslib4/Spacetime/LorentzCone.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors, lmm:reverse-cauchy-schwarz}
+    \leanok
+    Let $g$ be a symmetric Lorentzian bilinear form on a real four-dimensional vector space and let $v, w$ be timelike and \emph{aligned}, that is $g(v,v) < 0$, $g(w,w) < 0$ and $g(v,w) \le 0$. Then $v + w$ is timelike, and the reverse (Lorentzian) triangle inequality holds:
+    \begin{align}
+        \sqrt{-g(v,v)} + \sqrt{-g(w,w)} \le \sqrt{-g(v+w,\,v+w)}.
+    \end{align}
+    In particular the timelike vectors sharing a time cone (so that $g(v,w) \le 0$) form a convex cone, and this applies pointwise to the metric $g|_p$ of any spacetime.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reverse-cauchy-schwarz}
+    Bilinearity and symmetry give $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w)$. Writing $a = -g(v,v) > 0$, $b = -g(w,w) > 0$ and $c = -g(v,w) \ge 0$, this equals $-(a + b + 2c) < 0$, so $v+w$ is timelike. The reverse Cauchy-Schwarz inequality (\cref{lmm:reverse-cauchy-schwarz}) gives $g(v,w)^2 \ge g(v,v)\,g(w,w)$, that is $c^2 \ge ab$, hence $c \ge \sqrt{ab} = \sqrt a \,\sqrt b$. Therefore $-g(v+w,v+w) = a + b + 2c \ge a + b + 2\sqrt a\,\sqrt b = (\sqrt a + \sqrt b)^2$, and taking square roots yields the reverse triangle inequality.
+\end{proof}
+
 \begin{definition}[Time Orientation]
     \label{def:time-orientable}
     \lean{Physicslib4.Spacetime.TimeOrientation, Physicslib4.Spacetime.IsTimeOrientable}
