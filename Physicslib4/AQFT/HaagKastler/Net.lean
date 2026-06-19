@@ -180,6 +180,55 @@ theorem commute_ι_of_spacelike_symm
     Commute (N.commAlgebra.ι B₂ b) (N.commAlgebra.ι B₁ a) :=
   (N.commute_ι_of_spacelike hB₁ hB₂ hs a b).symm
 
+section Observables
+
+variable {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+
+/-- **Characterisation of the net's quasilocal observables.** An operator on the
+GNS Hilbert space is a quasilocal observable iff it is self-adjoint and lies in
+the range of the representation `π` of the canonical quasilocal algebra. -/
+theorem isQuasilocalObservable_iff {T : H →L[ℂ] H} :
+    IsQuasilocalObservable N.quasilocal π T ↔ IsSelfAdjoint T ∧ T ∈ Set.range π :=
+  HaagKastler.isQuasilocalObservable_iff
+
+/-- Every self-adjoint operator in the range of `π` is a quasilocal observable
+of the net. -/
+theorem isQuasilocalObservable_of_isSelfAdjoint (T : H →L[ℂ] H)
+    (hT : IsSelfAdjoint T) (hmem : T ∈ Set.range π) :
+    IsQuasilocalObservable N.quasilocal π T :=
+  HaagKastler.isQuasilocalObservable_iff.mpr ⟨hT, hmem⟩
+
+/-- The identity operator is a quasilocal observable of the net. -/
+theorem isQuasilocalObservable_one :
+    IsQuasilocalObservable N.quasilocal π (1 : H →L[ℂ] H) :=
+  HaagKastler.isQuasilocalObservable_one
+
+/-- The net's quasilocal observables are closed under addition. -/
+theorem isQuasilocalObservable_add {S T : H →L[ℂ] H}
+    (hS : IsQuasilocalObservable N.quasilocal π S)
+    (hT : IsQuasilocalObservable N.quasilocal π T) :
+    IsQuasilocalObservable N.quasilocal π (S + T) :=
+  hS.add hT
+
+/-- The net's quasilocal observables are closed under scaling by a self-adjoint
+(i.e. real) complex scalar. -/
+theorem isQuasilocalObservable_smul {c : ℂ} {T : H →L[ℂ] H}
+    (hT : IsQuasilocalObservable N.quasilocal π T) (hc : IsSelfAdjoint c) :
+    IsQuasilocalObservable N.quasilocal π (c • T) :=
+  hT.smul hc
+
+/-- *Real-linear combinations* of the net's quasilocal observables are
+quasilocal observables. -/
+theorem isQuasilocalObservable_smul_add_smul {c d : ℂ} {S T : H →L[ℂ] H}
+    (hc : IsSelfAdjoint c) (hd : IsSelfAdjoint d)
+    (hS : IsQuasilocalObservable N.quasilocal π S)
+    (hT : IsQuasilocalObservable N.quasilocal π T) :
+    IsQuasilocalObservable N.quasilocal π (c • S + d • T) :=
+  (hS.smul hc).add (hT.smul hd)
+
+end Observables
+
 end HaagKastlerNet
 
 /-!
