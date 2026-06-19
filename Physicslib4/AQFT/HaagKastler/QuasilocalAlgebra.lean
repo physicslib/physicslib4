@@ -101,6 +101,19 @@ structure QuasilocalAlgebra (U : LocalNet) where
   dense_range : Dense (⋃ (B : Set StandardMinkowskiSpacetime.Carrier)
                           (_ : IsAlexandrovBasisSet B),
                           Set.range (ι B))
+  /-- A chosen family of isotony `*`-monomorphisms
+  `inclusion : 𝔘(B₁) →⋆ₐ[ℂ] 𝔘(B₂)` for inclusions `B₁ ⊆ B₂` of
+  Alexandrov-basis sets. -/
+  inclusion : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
+                IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ → B₁ ⊆ B₂ →
+                  StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂)
+  /-- *Isotony coherence*: the embeddings respect the chosen isotony arrows,
+  `ι B₂ ∘ inclusion = ι B₁`. An element of `𝔘(B₁)` thus embeds into the
+  quasilocal algebra `𝔘` independently of the basis set used to view it. -/
+  ι_inclusion : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+                  (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+                  (h : B₁ ⊆ B₂) (a : U.algebra B₁),
+                    ι B₂ (inclusion hB₁ hB₂ h a) = ι B₁ a
 
 attribute [instance] QuasilocalAlgebra.instCStarAlgebra
 

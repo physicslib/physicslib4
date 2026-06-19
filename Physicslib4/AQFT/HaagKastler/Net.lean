@@ -291,6 +291,8 @@ noncomputable def trivialQuasilocalAlgebra : QuasilocalAlgebra trivialLocalNet w
   dense_range := fun x =>
     subset_closure (Set.mem_iUnion₂.mpr
       ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet, x, rfl⟩)
+  inclusion := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
+  ι_inclusion := fun _ _ _ _ _ _ => rfl
 
 theorem trivialLocalNet_isotony : Isotony trivialLocalNet :=
   fun _ _ _ _ _ => ⟨StarAlgHom.id ℂ ℂ, fun _ _ h => h⟩
