@@ -36,3 +36,4 @@ import Physicslib4.Spacetime.LorentzCone
 import Physicslib4.Spacetime.LorentzOrthogonal
 import Physicslib4.Spacetime.LorentzianSpacetime
 import Physicslib4.Spacetime.Minkowski
+import Physicslib4.Spacetime.MinkowskiDirected
