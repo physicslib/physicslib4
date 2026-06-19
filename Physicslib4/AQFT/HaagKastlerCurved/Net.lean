@@ -114,6 +114,48 @@ theorem finrank_algebra_smul (φ : M.Isom) (B : Set M.Carrier) :
     Module.finrank ℂ (N.algebra B) = Module.finrank ℂ (N.algebra (φ • B)) :=
   (N.covEquiv φ B).toAlgEquiv.toLinearEquiv.finrank_eq
 
+section Observables
+
+variable {B : Set M.Carrier} {H : Type}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+
+/-- **Net-level Axiom 4 (Local Algebra).** In every GNS representation `π`
+of a local algebra `𝔘(B)` of the net (over an Alexandrov-basis set `B`),
+every self-adjoint operator in the range of `π` is a local observable.
+This applies the net's `localAlgebra` field. -/
+theorem isLocalObservable_of_isSelfAdjoint (hB : M.IsBasisSet B)
+    (T : H →L[ℂ] H) (hT : IsSelfAdjoint T) (hmem : T ∈ Set.range π) :
+    IsLocalObservable π T :=
+  N.localAlgebra hB π T hT hmem
+
+/-- The identity operator is a local observable of the net. -/
+theorem isLocalObservable_one : IsLocalObservable π (1 : H →L[ℂ] H) :=
+  HaagKastlerCurved.isLocalObservable_one
+
+/-- The net's local observables are closed under addition. -/
+theorem isLocalObservable_add {S T : H →L[ℂ] H}
+    (hS : IsLocalObservable π S) (hT : IsLocalObservable π T) :
+    IsLocalObservable π (S + T) :=
+  hS.add hT
+
+/-- The net's local observables are closed under scaling by a self-adjoint
+(i.e. real) complex scalar. -/
+theorem isLocalObservable_smul {c : ℂ} {T : H →L[ℂ] H}
+    (hT : IsLocalObservable π T) (hc : IsSelfAdjoint c) :
+    IsLocalObservable π (c • T) :=
+  hT.smul hc
+
+/-- *Real-linear combinations* of the net's local observables are local
+observables. -/
+theorem isLocalObservable_smul_add_smul {c d : ℂ} {S T : H →L[ℂ] H}
+    (hc : IsSelfAdjoint c) (hd : IsSelfAdjoint d)
+    (hS : IsLocalObservable π S) (hT : IsLocalObservable π T) :
+    IsLocalObservable π (c • S + d • T) :=
+  (hS.smul hc).add (hT.smul hd)
+
+end Observables
+
 end HaagKastlerNet
 
 /-!
