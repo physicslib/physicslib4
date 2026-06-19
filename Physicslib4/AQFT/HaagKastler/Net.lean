@@ -36,6 +36,7 @@ namespace AQFT
 namespace HaagKastler
 
 open Physicslib4 Spacetime
+open scoped Pointwise
 
 /--
 A *Haag-Kastler net* on (the Alexandrov-basis sets of) Minkowski
@@ -119,6 +120,23 @@ theorem isometry_ι {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B) :
     Isometry (N.quasilocal.ι B) :=
   N.quasilocal.isometry_ι hB
+
+/-- The *covariance equivalence* `𝔘(B) ≃⋆ₐ[ℂ] 𝔘(L·B)` implementing the
+action of a Lorentz transformation `L` on the net, chosen from the
+existence witness provided by Axiom 5 (`lorentzCovariance`). -/
+noncomputable def covEquiv (L : InhomogeneousLorentzGroup)
+    (B : Set StandardMinkowskiSpacetime.Carrier) :
+    StarAlgEquiv ℂ (N.algebra B) (N.algebra (L • B)) :=
+  N.lorentzCovariance.choose L B
+
+/-- **Lorentz invariance of the local dimension.** The local algebras of
+a region `B` and of its Lorentz translate `L·B` have the same
+`ℂ`-dimension: the covariance equivalence is in particular a
+`ℂ`-linear isomorphism `𝔘(B) ≃ₗ[ℂ] 𝔘(L·B)`. -/
+theorem finrank_algebra_smul (L : InhomogeneousLorentzGroup)
+    (B : Set StandardMinkowskiSpacetime.Carrier) :
+    Module.finrank ℂ (N.algebra B) = Module.finrank ℂ (N.algebra (L • B)) :=
+  (N.covEquiv L B).toAlgEquiv.toLinearEquiv.finrank_eq
 
 end HaagKastlerNet
 
