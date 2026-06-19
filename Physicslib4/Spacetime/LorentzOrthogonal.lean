@@ -92,6 +92,65 @@ theorem cauchy_schwarz_on_orthogonal
   apply nonneg_of_orthogonal_timelike hsymm hL ht
   simp only [map_add, map_smul, smul_eq_mul, hx, hy, mul_zero, add_zero]
 
+/-- **Nondegeneracy from the Lorentzian basis.** A Lorentzian bilinear form is
+nondegenerate: if `B v w = 0` for every `w`, then `v = 0`. This is extracted
+from the signature basis, on which the Gram matrix `diag(-1,1,1,1)` is
+invertible. -/
+theorem eq_zero_of_forall_bilin_eq_zero
+    {B : LinearMap.BilinForm ℝ V} (hL : LorentzianAt (fun v w => B v w))
+    {v : V} (h : ∀ w, B v w = 0) : v = 0 := by
+  obtain ⟨b, hb⟩ := hL
+  have hb' : ∀ i j : Fin 4, B (b i) (b j) = lorentzSignature i j := hb
+  have hcoord : ∀ j, b.repr v j = 0 := by
+    intro j
+    have key : B v (b j) = b.repr v j * lorentzSignature j j := by
+      conv_lhs => rw [← b.sum_repr v]
+      rw [map_sum, LinearMap.sum_apply, Finset.sum_eq_single j]
+      · rw [map_smul, LinearMap.smul_apply, smul_eq_mul, hb']
+      · intro i _ hij
+        rw [map_smul, LinearMap.smul_apply, smul_eq_mul, hb', lorentzSignature,
+          Matrix.diagonal_apply_ne _ hij, mul_zero]
+      · intro hj; exact absurd (Finset.mem_univ j) hj
+    rw [h (b j)] at key
+    have hsig : lorentzSignature j j ≠ 0 := by
+      simp only [lorentzSignature, Matrix.diagonal_apply_eq]
+      split <;> norm_num
+    exact (mul_eq_zero.mp key.symm).resolve_right hsig
+  have hbr : b.repr v = 0 := by
+    ext j; rw [Finsupp.zero_apply]; exact hcoord j
+  exact b.repr.injective (hbr.trans (map_zero b.repr).symm)
+
+/-- **Strict positive-definiteness of the spacelike complement.** If `t` is
+timelike and `u ≠ 0` is orthogonal to `t`, then `0 < B u u`. A null vector in
+`t^⊥` would, by Cauchy-Schwarz on `t^⊥`, be orthogonal to all of `t^⊥`, hence to
+everything, contradicting nondegeneracy. -/
+theorem pos_of_orthogonal_timelike
+    {B : LinearMap.BilinForm ℝ V} (hsymm : ∀ v w, B v w = B w v)
+    (hL : LorentzianAt (fun v w => B v w))
+    {t u : V} (ht : B t t < 0) (h : B t u = 0) (hu : u ≠ 0) : 0 < B u u := by
+  rcases (nonneg_of_orthogonal_timelike hsymm hL ht h).lt_or_eq with hpos | hzero
+  · exact hpos
+  · exfalso
+    apply hu
+    apply eq_zero_of_forall_bilin_eq_zero hL
+    intro x
+    have hxperp : B t ((B t t) • x - (B t x) • t) = 0 := inner_orthogonal_component t x
+    have hcs := cauchy_schwarz_on_orthogonal hsymm hL ht h hxperp
+    have hz2 : (B u u) * (B ((B t t) • x - (B t x) • t) ((B t t) • x - (B t x) • t)) = 0 := by
+      rw [← hzero]; ring
+    rw [hz2] at hcs
+    have hsq : (B u ((B t t) • x - (B t x) • t)) ^ 2 = 0 := le_antisymm hcs (sq_nonneg _)
+    have huxp : B u ((B t t) • x - (B t x) • t) = 0 := (pow_eq_zero_iff (by norm_num)).mp hsq
+    have hut : B u t = 0 := by rw [hsymm u t]; exact h
+    have expand : B u ((B t t) • x - (B t x) • t)
+        = (B t t) * (B u x) - (B t x) * (B u t) := by
+      simp only [map_sub, map_smul, smul_eq_mul]
+    rw [hut, mul_zero, sub_zero] at expand
+    rw [expand] at huxp
+    rcases mul_eq_zero.mp huxp with h1 | h2
+    · exact absurd h1 (ne_of_lt ht)
+    · exact h2
+
 /-- Pure-real algebraic core of the sign lemma. Given the scalars produced by
 the `t`-orthogonal decomposition, with their reverse Cauchy-Schwarz bounds and
 the forward Cauchy-Schwarz inequality on the spacelike complement, the cross
@@ -185,6 +244,26 @@ theorem inner_neg_of_future_timelike (M : Spacetime) (x : M.Carrier)
   have hfw' : B (τ.field x) w < 0 := by rw [hBapp]; exact hfw
   have h := bilin_neg_of_inner_t_neg hsymm hL ht hv' hw' hfv' hfw'
   rwa [hBapp] at h
+
+/-- **Spacelike complement, pointwise.** A nonzero tangent vector orthogonal to
+a timelike vector is spacelike: the metric is positive definite on the spacelike
+complement. -/
+theorem isSpacelike_of_orthogonal_timelike (M : Spacetime) (x : M.Carrier)
+    {t u : TangentSpace M.model x} (ht : M.IsTimelike t)
+    (h : M.val x t u = 0) (hu : u ≠ 0) : M.IsSpacelike u := by
+  let B : LinearMap.BilinForm ℝ (TangentSpace M.model x) :=
+    LinearMap.mk₂ ℝ (fun a c => M.val x a c)
+      (fun a₁ a₂ c => by simp) (fun r a c => by simp)
+      (fun a c₁ c₂ => by simp) (fun r a c => by simp)
+  have hBapp : ∀ a c, B a c = M.val x a c := fun a c => rfl
+  have hsymm : ∀ a c, B a c = B c a := by
+    intro a c; rw [hBapp, hBapp]; exact M.symm x a c
+  have hL : LorentzianAt (fun a c => B a c) := by simpa only [hBapp] using M.lorentzian x
+  have ht' : B t t < 0 := by rw [hBapp]; exact ht
+  have h' : B t u = 0 := by rw [hBapp]; exact h
+  have hpos := pos_of_orthogonal_timelike hsymm hL ht' h' hu
+  rw [hBapp] at hpos
+  exact hpos
 
 /-- **Convexity of the future cone (timelike part).** The sum of two timelike
 future-pointing tangent vectors is again timelike and future-pointing with
