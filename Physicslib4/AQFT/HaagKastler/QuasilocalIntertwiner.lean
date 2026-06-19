@@ -120,6 +120,66 @@ theorem dense_localStarSubalgebra :
 
 end QuasilocalAlgebra
 
+open scoped Pointwise
+
+/-- **Covariance-compatible embeddings.** A quasilocal algebra `Q` of the net
+`N` is *covariant-compatible* for a Lorentz transformation `L` if its local
+embeddings intertwine the covariance action with the chosen isotony inclusions:
+`ι_{L·B}(α_L a) = ι_{L·C}(α_L (incl_{B,C} a))` for `B ⊆ C`. This is the
+honest content carried by the embeddings of a genuinely covariant `𝔘`. -/
+def IsCovariantQuasilocal (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) : Prop :=
+  ∀ ⦃B C : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB : IsAlexandrovBasisSet B) (hC : IsAlexandrovBasisSet C) (h : B ⊆ C)
+    (a : N.U.algebra B),
+      Q.ι (L • B) (N.covEquiv L B a)
+        = Q.ι (L • C) (N.covEquiv L C (Q.inclusion hB hC h a))
+
+/-- **Well-definedness of the intertwiner.** If two local elements `ι_B a` and
+`ι_{B'} a'` agree in `𝔘`, then their intended images
+`ι_{L·B}(α_L a)` and `ι_{L·B'}(α_L a')` agree. The proof routes both through a
+common basis set `C` (directedness), uses `ι_inclusion` + injectivity to
+identify the inclusions, and `hcompat` to push through the action. -/
+theorem ι_covEquiv_congr (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    ⦃B B' : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB : IsAlexandrovBasisSet B) (hB' : IsAlexandrovBasisSet B')
+    (a : N.U.algebra B) (a' : N.U.algebra B') (heq : Q.ι B a = Q.ι B' a') :
+    Q.ι (L • B) (N.covEquiv L B a) = Q.ι (L • B') (N.covEquiv L B' a') := by
+  obtain ⟨C, hC, hBC, hB'C⟩ := IsAlexandrovBasisSet.directed hB hB'
+  have hinj : Q.inclusion hB hC hBC a = Q.inclusion hB' hC hB'C a' := by
+    apply Q.ι_injective hC
+    rw [Q.ι_inclusion hB hC hBC a, Q.ι_inclusion hB' hC hB'C a']
+    exact heq
+  calc Q.ι (L • B) (N.covEquiv L B a)
+      = Q.ι (L • C) (N.covEquiv L C (Q.inclusion hB hC hBC a)) := hcompat hB hC hBC a
+    _ = Q.ι (L • C) (N.covEquiv L C (Q.inclusion hB' hC hB'C a')) := by rw [hinj]
+    _ = Q.ι (L • B') (N.covEquiv L B' a') := (hcompat hB' hC hB'C a').symm
+
+open Classical in
+/-- The **intertwiner** on the quasilocal algebra: on a local element `ι_B a`
+it returns `ι_{L·B}(α_L a)` (and `0` off the local images). Its characterising
+equation is `intertwiner_ι`, valid once `Q` is covariance-compatible. -/
+noncomputable def intertwiner (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (x : Q.carrier) : Q.carrier :=
+  if h : ∃ B, IsAlexandrovBasisSet B ∧ ∃ a : N.U.algebra B, Q.ι B a = x then
+    Q.ι (L • h.choose) (N.covEquiv L h.choose h.choose_spec.2.choose)
+  else 0
+
+/-- **Defining equation of the intertwiner.** On `ι_B a` it returns
+`ι_{L·B}(α_L a)`, well-definedly. -/
+theorem intertwiner_ι (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
+    (a : N.U.algebra B) :
+    intertwiner N Q L (Q.ι B a) = Q.ι (L • B) (N.covEquiv L B a) := by
+  have h₀ : ∃ B', IsAlexandrovBasisSet B' ∧ ∃ a' : N.U.algebra B', Q.ι B' a' = Q.ι B a :=
+    ⟨B, hB, a, rfl⟩
+  unfold intertwiner
+  rw [dif_pos h₀]
+  exact ι_covEquiv_congr N Q L hcompat h₀.choose_spec.1 hB h₀.choose_spec.2.choose a
+    h₀.choose_spec.2.choose_spec
+
 end HaagKastler
 end AQFT
 end Physicslib4
