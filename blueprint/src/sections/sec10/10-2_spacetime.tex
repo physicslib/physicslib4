@@ -72,7 +72,7 @@
 \end{lemma}
 \begin{proof}
     \uses{lmm:reverse-cauchy-schwarz}
-    Bilinearity and symmetry give $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w)$. Writing $a = -g(v,v) > 0$, $b = -g(w,w) > 0$ and $c = -g(v,w) \ge 0$, this equals $-(a + b + 2c) < 0$, so $v+w$ is timelike. The reverse Cauchy-Schwarz inequality (\cref{lmm:reverse-cauchy-schwarz}) gives $g(v,w)^2 \ge g(v,v)\,g(w,w)$, that is $c^2 \ge ab$, hence $c \ge \sqrt{ab} = \sqrt a \,\sqrt b$. Therefore $-g(v+w,v+w) = a + b + 2c \ge a + b + 2\sqrt a\,\sqrt b = (\sqrt a + \sqrt b)^2$, and taking square roots yields the reverse triangle inequality.
+    Bilinearity and symmetry give $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w)$. Writing $a = -g(v,v) > 0$, $b = -g(w,w) > 0$ and $c = -g(v,w) \ge 0$, this equals $-(a + b + 2c) < 0$, so $v+w$ is timelike. The reverse Cauchy-Schwarz inequality (\ref{lmm:reverse-cauchy-schwarz}) gives $g(v,w)^2 \ge g(v,v)\,g(w,w)$, that is $c^2 \ge ab$, hence $c \ge \sqrt{ab} = \sqrt a \,\sqrt b$. Therefore $-g(v+w,v+w) = a + b + 2c \ge a + b + 2\sqrt a\,\sqrt b = (\sqrt a + \sqrt b)^2$, and taking square roots yields the reverse triangle inequality.
 \end{proof}
 
 \begin{definition}[Time Orientation]
@@ -116,7 +116,7 @@
 \end{lemma}
 \begin{proof}
     \uses{lmm:reverse-cauchy-schwarz}
-    If $u \in t^\perp$ had $g(u,u) < 0$ then $u$ would be timelike, and reverse Cauchy-Schwarz (\cref{lmm:reverse-cauchy-schwarz}) would give $g(t,t)\,g(u,u) \le g(t,u)^2 = 0$, contradicting $g(t,t)\,g(u,u) > 0$; hence $g$ is positive semidefinite on $t^\perp$, and Cauchy-Schwarz follows from nonnegativity of the quadratic $s \mapsto g(s u + u', s u + u')$. For the sign claim, decompose $v$ and $w$ along $t$: the vectors $v_\perp = g(t,t)\,v - g(t,v)\,t$ and $w_\perp = g(t,t)\,w - g(t,w)\,t$ lie in $t^\perp$, and $g(v,w) = g(t,t)^{-2}\big(g(t,t)\,g(v,w)\big)$ expands so that $g(t,t)\,g(v,w) = g(t,v)\,g(t,w) + g(v_\perp, w_\perp)/g(t,t)$. Applying Cauchy-Schwarz to $g(v_\perp,w_\perp)$ together with the reverse Cauchy-Schwarz bounds $g(t,v)^2 \ge g(t,t)g(v,v)$ and $g(t,w)^2 \ge g(t,t)g(w,w)$ forces $g(t,t)\,g(v,w) > 0$, and since $g(t,t) < 0$ this gives $g(v,w) < 0$.
+    If $u \in t^\perp$ had $g(u,u) < 0$ then $u$ would be timelike, and reverse Cauchy-Schwarz (\ref{lmm:reverse-cauchy-schwarz}) would give $g(t,t)\,g(u,u) \le g(t,u)^2 = 0$, contradicting $g(t,t)\,g(u,u) > 0$; hence $g$ is positive semidefinite on $t^\perp$, and Cauchy-Schwarz follows from nonnegativity of the quadratic $s \mapsto g(s u + u', s u + u')$. For the sign claim, decompose $v$ and $w$ along $t$: the vectors $v_\perp = g(t,t)\,v - g(t,v)\,t$ and $w_\perp = g(t,t)\,w - g(t,w)\,t$ lie in $t^\perp$, and $g(v,w) = g(t,t)^{-2}\big(g(t,t)\,g(v,w)\big)$ expands so that $g(t,t)\,g(v,w) = g(t,v)\,g(t,w) + g(v_\perp, w_\perp)/g(t,t)$. Applying Cauchy-Schwarz to $g(v_\perp,w_\perp)$ together with the reverse Cauchy-Schwarz bounds $g(t,v)^2 \ge g(t,t)g(v,v)$ and $g(t,w)^2 \ge g(t,t)g(w,w)$ forces $g(t,t)\,g(v,w) > 0$, and since $g(t,t) < 0$ this gives $g(v,w) < 0$.
 \end{proof}
 
 \begin{lemma}[Definiteness of the Spacelike Complement]
@@ -129,7 +129,7 @@
 \end{lemma}
 \begin{proof}
     \uses{lmm:cone-sign-lemma}
-    Nondegeneracy follows because $g(v, b_j) = (b.\mathrm{repr}\,v)_j \cdot \mathrm{diag}(-1,1,1,1)_{jj}$ in the signature basis $b$, and the diagonal entries are nonzero; so $g(v, \cdot) = 0$ forces every coordinate of $v$ to vanish. For definiteness, semidefiniteness (\cref{lmm:cone-sign-lemma}) gives $g(u,u) \ge 0$; if $g(u,u) = 0$ then for any $u' \in t^\perp$ Cauchy-Schwarz gives $g(u,u')^2 \le g(u,u)\,g(u',u') = 0$, so $u$ is orthogonal to all of $t^\perp$, and since it is also orthogonal to $t$ it is orthogonal to everything, whence $u = 0$ by nondegeneracy, contradicting $u \ne 0$.
+    Nondegeneracy follows because $g(v, b_j) = (b.\mathrm{repr}\,v)_j \cdot \mathrm{diag}(-1,1,1,1)_{jj}$ in the signature basis $b$, and the diagonal entries are nonzero; so $g(v, \cdot) = 0$ forces every coordinate of $v$ to vanish. For definiteness, semidefiniteness (\ref{lmm:cone-sign-lemma}) gives $g(u,u) \ge 0$; if $g(u,u) = 0$ then for any $u' \in t^\perp$ Cauchy-Schwarz gives $g(u,u')^2 \le g(u,u)\,g(u',u') = 0$, so $u$ is orthogonal to all of $t^\perp$, and since it is also orthogonal to $t$ it is orthogonal to everything, whence $u = 0$ by nondegeneracy, contradicting $u \ne 0$.
 \end{proof}
 
 \begin{lemma}[Convexity of the Future Cone]
@@ -142,7 +142,7 @@
 \end{lemma}
 \begin{proof}
     \uses{lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
-    For two timelike future-pointing $v, w$ we have $g(t,v) < 0$ and $g(t,w) < 0$. By the sign lemma (\cref{lmm:cone-sign-lemma}) $g(v,w) < 0$, so $v$ and $w$ are aligned and $v + w$ is timelike by cone convexity (\cref{lmm:timelike-cone-convexity}); moreover $g(t, v+w) = g(t,v) + g(t,w) < 0$, so $v + w$ is future-pointing. For the general case, every future-pointing vector is a limit of future-pointing timelike vectors (the constant sequence if timelike, the approximating sequence from the definition if null). Approximating $v$ and $w$ by such sequences $v_n, w_n$, each $v_n + w_n$ is timelike future-pointing by the timelike case. Passing to the limit gives $g(v,w) \le 0$ (continuity of the fixed maps $u \mapsto g(a,u)$ with symmetry), so $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w) \le 0$ and $v+w$ is causal, and $g(t,v+w) = g(t,v) + g(t,w) \le 0$. If $g(v+w,v+w) < 0$ the sum is timelike and reverse Cauchy-Schwarz makes $g(t,v+w) \ne 0$, hence negative, so the sum is future-pointing timelike; if $g(v+w,v+w) = 0$ the sum is null and is the limit of the future-pointing timelike sequence $v_n + w_n$, hence future-pointing null.
+    For two timelike future-pointing $v, w$ we have $g(t,v) < 0$ and $g(t,w) < 0$. By the sign lemma (\ref{lmm:cone-sign-lemma}) $g(v,w) < 0$, so $v$ and $w$ are aligned and $v + w$ is timelike by cone convexity (\ref{lmm:timelike-cone-convexity}); moreover $g(t, v+w) = g(t,v) + g(t,w) < 0$, so $v + w$ is future-pointing. For the general case, every future-pointing vector is a limit of future-pointing timelike vectors (the constant sequence if timelike, the approximating sequence from the definition if null). Approximating $v$ and $w$ by such sequences $v_n, w_n$, each $v_n + w_n$ is timelike future-pointing by the timelike case. Passing to the limit gives $g(v,w) \le 0$ (continuity of the fixed maps $u \mapsto g(a,u)$ with symmetry), so $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w) \le 0$ and $v+w$ is causal, and $g(t,v+w) = g(t,v) + g(t,w) \le 0$. If $g(v+w,v+w) < 0$ the sum is timelike and reverse Cauchy-Schwarz makes $g(t,v+w) \ne 0$, hence negative, so the sum is future-pointing timelike; if $g(v+w,v+w) = 0$ the sum is null and is the limit of the future-pointing timelike sequence $v_n + w_n$, hence future-pointing null.
 \end{proof}
 
 \begin{definition}[Paths]
