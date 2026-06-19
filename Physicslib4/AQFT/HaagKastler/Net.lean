@@ -64,6 +64,45 @@ structure HaagKastlerNet where
   the net and the action commutes with isotony (Axiom 5). -/
   lorentzCovariance : LorentzCovariance U
 
+namespace HaagKastlerNet
+
+variable (N : HaagKastlerNet)
+
+/-- The local algebra `𝔘(B)` assigned by the net to a region `B`
+(the Axiom 1 data, via the underlying `LocalNet`). -/
+abbrev algebra (B : Set StandardMinkowskiSpacetime.Carrier) :=
+  N.U.algebra B
+
+/-- Net-level normalisation `𝔘(∅) ≃⋆ₐ[ℂ] ℂ`. -/
+noncomputable def emptyEquivComplex : StarAlgEquiv ℂ (N.algebra ∅) ℂ :=
+  N.U.emptyEquivComplex
+
+/-- The empty-region algebra `𝔘(∅)` is commutative. -/
+theorem mul_comm_algebra_empty (a b : N.algebra ∅) : a * b = b * a :=
+  N.U.mul_comm_algebra_empty a b
+
+/-- The empty-region algebra `𝔘(∅)` is one-dimensional over `ℂ`. -/
+theorem finrank_algebra_empty : Module.finrank ℂ (N.algebra ∅) = 1 :=
+  N.U.finrank_algebra_empty
+
+/-- **Isotony, reflexivity.** Every Alexandrov-basis set embeds into
+itself via the identity unital `*`-monomorphism. -/
+theorem isotony_refl {B : Set StandardMinkowskiSpacetime.Carrier} :
+    ∃ φ : StarAlgHom ℂ (N.algebra B) (N.algebra B), Function.Injective φ :=
+  exists_injective_self N.U
+
+/-- **Isotony, transitivity.** For inclusions `B₁ ⊆ B₂ ⊆ B₃` of
+Alexandrov-basis sets, the net's isotony embeddings compose to a unital
+`*`-monomorphism `𝔘(B₁) ↪ 𝔘(B₃)`. -/
+theorem isotony_trans
+    ⦃B₁ B₂ B₃ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+    (hB₃ : IsAlexandrovBasisSet B₃) (h₁₂ : B₁ ⊆ B₂) (h₂₃ : B₂ ⊆ B₃) :
+    ∃ φ : StarAlgHom ℂ (N.algebra B₁) (N.algebra B₃), Function.Injective φ :=
+  N.isotony.trans hB₁ hB₂ hB₃ h₁₂ h₂₃
+
+end HaagKastlerNet
+
 /-!
 ## The trivial net and joint satisfiability of the axioms
 
