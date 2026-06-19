@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
+import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.Spacetime.LorentzianSpacetime
 import Physicslib4.Spacetime.Isometry
 
@@ -73,5 +74,28 @@ noncomputable def toAbstract (L : LorentzianSpacetime) :
 end LorentzianSpacetime
 
 end Spacetime
+
+namespace AQFT.HaagKastlerCurved.HaagKastlerNet
+
+/-- **Monotonicity of local commutativity over a concrete spacetime.** The
+geometric specialisation of `commute_of_spacelike_mono`: for a Haag-Kastler net
+over the abstract interface induced by a concrete Lorentzian spacetime `L`, the
+spacelike-monotonicity hypothesis is discharged automatically by
+`Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono`. -/
+theorem commute_of_spacelike_mono_geometric
+    {L : Spacetime.LorentzianSpacetime} (N : HaagKastlerNet L.toAbstract)
+    ⦃B₁ B₂ B₁' B₂' B : Set L.toAbstract.Carrier⦄
+    (hB₁' : L.toAbstract.IsBasisSet B₁') (hB₂' : L.toAbstract.IsBasisSet B₂')
+    (hB : L.toAbstract.IsBasisSet B)
+    (hs : L.toAbstract.IsCompletelySpacelike B₁ B₂)
+    (hsub₁ : B₁' ⊆ B₁) (hsub₂ : B₂' ⊆ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B)
+    (a : N.algebra B₁') (b : N.algebra B₂') :
+    Commute (N.commIsotony hB₁' hB (hsub₁.trans h₁) a)
+            (N.commIsotony hB₂' hB (hsub₂.trans h₂) b) :=
+  N.commute_of_spacelike_mono
+    (fun _ _ _ _ hh₁ hh₂ hh => L.isCompletelySpacelike_mono hh₁ hh₂ hh)
+    hB₁' hB₂' hB hs hsub₁ hsub₂ h₁ h₂ a b
+
+end AQFT.HaagKastlerCurved.HaagKastlerNet
 
 end Physicslib4
