@@ -161,6 +161,28 @@ theorem commute_of_spacelike_symm ⦃B₁ B₂ B : Set M.Carrier⦄
     Commute (N.commIsotony hB₂ hB h₂ b) (N.commIsotony hB₁ hB h₁ a) :=
   (N.commute_of_spacelike hB₁ hB₂ hB hs h₁ h₂ a b).symm
 
+/-- **Monotonicity of local commutativity.** Commutation of completely-spacelike
+basis algebras is inherited by sub-basis-sets: if `B₁`, `B₂` are completely
+spacelike and contained in a common basis set `B`, and `B₁' ⊆ B₁`, `B₂' ⊆ B₂`
+are basis sets, then the images of `𝔘(B₁')` and `𝔘(B₂')` in `𝔘(B)` commute.
+
+The first argument `mono` is the monotonicity of the spacelike-separation
+relation. On the abstract `LorentzianSpacetime` interface this is a hypothesis;
+for a net over a geometric spacetime it is discharged by
+`Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono`. -/
+theorem commute_of_spacelike_mono
+    (mono : ∀ ⦃O₁ O₁' O₂ O₂' : Set M.Carrier⦄, O₁' ⊆ O₁ → O₂' ⊆ O₂ →
+      M.IsCompletelySpacelike O₁ O₂ → M.IsCompletelySpacelike O₁' O₂')
+    ⦃B₁ B₂ B₁' B₂' B : Set M.Carrier⦄
+    (hB₁' : M.IsBasisSet B₁') (hB₂' : M.IsBasisSet B₂') (hB : M.IsBasisSet B)
+    (hs : M.IsCompletelySpacelike B₁ B₂)
+    (hsub₁ : B₁' ⊆ B₁) (hsub₂ : B₂' ⊆ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B)
+    (a : N.algebra B₁') (b : N.algebra B₂') :
+    Commute (N.commIsotony hB₁' hB (hsub₁.trans h₁) a)
+            (N.commIsotony hB₂' hB (hsub₂.trans h₂) b) :=
+  N.commute_of_spacelike hB₁' hB₂' hB (mono hsub₁ hsub₂ hs)
+    (hsub₁.trans h₁) (hsub₂.trans h₂) a b
+
 section Observables
 
 variable {B : Set M.Carrier} {H : Type}
