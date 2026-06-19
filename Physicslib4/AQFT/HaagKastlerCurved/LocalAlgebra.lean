@@ -134,6 +134,111 @@ theorem localAlgebra_of (U : LocalNet M) : LocalAlgebra U := by
   rw [map_smul, map_add, map_star, hT.star_eq, ← two_smul ℂ (π b), smul_smul,
     inv_mul_cancel₀ (two_ne_zero), one_smul]
 
+section Observables
+
+variable {U : LocalNet M} {B : Set M.Carrier} {H : Type}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  {π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)}
+
+/-- The identity operator on the GNS Hilbert space is a local observable:
+it is the image `π 1` of the (self-adjoint) unit of the local algebra. -/
+theorem isLocalObservable_one : IsLocalObservable π (1 : H →L[ℂ] H) :=
+  ⟨1, IsSelfAdjoint.one (U.algebra B), (map_one π).symm⟩
+
+/-- Local observables are closed under addition: the sum of the images of two
+self-adjoint elements is the image of their (self-adjoint) sum. -/
+theorem IsLocalObservable.add {S T : H →L[ℂ] H}
+    (hS : IsLocalObservable π S) (hT : IsLocalObservable π T) :
+    IsLocalObservable π (S + T) := by
+  obtain ⟨a, ha, rfl⟩ := hS
+  obtain ⟨b, hb, rfl⟩ := hT
+  exact ⟨a + b, ha.add hb, (map_add π a b).symm⟩
+
+/-- Local observables are closed under scaling by a *self-adjoint* complex
+scalar (equivalently, a real scalar): self-adjointness of `c • a` requires
+`star c = c`. -/
+theorem IsLocalObservable.smul {c : ℂ} {T : H →L[ℂ] H}
+    (hT : IsLocalObservable π T) (hc : IsSelfAdjoint c) :
+    IsLocalObservable π (c • T) := by
+  obtain ⟨a, ha, rfl⟩ := hT
+  exact ⟨c • a, hc.smul ha, (map_smul π c a).symm⟩
+
+/-- *Real-linear combinations* of local observables are local observables. The
+scalars are taken self-adjoint in `ℂ`, i.e. real, which is exactly the
+condition under which the combination stays self-adjoint. -/
+theorem IsLocalObservable.smul_add_smul {c d : ℂ} {S T : H →L[ℂ] H}
+    (hc : IsSelfAdjoint c) (hd : IsSelfAdjoint d)
+    (hS : IsLocalObservable π S) (hT : IsLocalObservable π T) :
+    IsLocalObservable π (c • S + d • T) :=
+  (hS.smul hc).add (hT.smul hd)
+
+/-- **Characterisation of local observables.** An operator `T` on the GNS
+Hilbert space is a local observable precisely when it is self-adjoint and lies
+in the range of the representation `π`. The forward direction is
+`IsLocalObservable.isSelfAdjoint`; the converse holds even when `π` is not
+injective, by replacing a preimage `b` with its self-adjoint part
+`2⁻¹ • (b + star b)`, which `π` still sends to `T`. -/
+theorem isLocalObservable_iff {T : H →L[ℂ] H} :
+    IsLocalObservable π T ↔ IsSelfAdjoint T ∧ T ∈ Set.range π := by
+  constructor
+  · rintro ⟨a, ha, rfl⟩
+    exact ⟨IsLocalObservable.isSelfAdjoint ⟨a, ha, rfl⟩, a, rfl⟩
+  · rintro ⟨hT, b, rfl⟩
+    have hsa : IsSelfAdjoint (b + star b) := by
+      rw [IsSelfAdjoint, star_add, star_star, add_comm]
+    have hc : IsSelfAdjoint (2⁻¹ : ℂ) := by
+      change star (2⁻¹ : ℂ) = 2⁻¹; rw [star_inv₀]; norm_num
+    refine ⟨(2⁻¹ : ℂ) • (b + star b), hc.smul hsa, ?_⟩
+    rw [map_smul, map_add, map_star, hT.star_eq, ← two_smul ℂ (π b), smul_smul,
+      inv_mul_cancel₀ (two_ne_zero), one_smul]
+
+end Observables
+
+/-- The set of *local observables* on the GNS Hilbert space `H` for the
+representation `π`: all bounded operators of the form `π a` with `a` a
+self-adjoint element of the local algebra. -/
+def localObservables {U : LocalNet M} {B : Set M.Carrier} {H : Type}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) : Set (H →L[ℂ] H) :=
+  {T | IsLocalObservable π T}
+
+/-- The local observables are exactly the self-adjoint elements lying in the
+range of the representation `π`. -/
+theorem localObservables_eq {U : LocalNet M} {B : Set M.Carrier} {H : Type}
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) :
+    localObservables π
+      = (selfAdjoint (H →L[ℂ] H) : Set (H →L[ℂ] H)) ∩ Set.range π := by
+  ext T
+  simp only [localObservables, Set.mem_setOf_eq, isLocalObservable_iff,
+    Set.mem_inter_iff, SetLike.mem_coe, selfAdjoint.mem_iff, isSelfAdjoint_iff]
+
+section ObservablesSet
+
+variable {U : LocalNet M} {B : Set M.Carrier} {H : Type}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+
+/-- The identity operator is a local observable. -/
+theorem one_mem_localObservables :
+    (1 : H →L[ℂ] H) ∈ localObservables π :=
+  isLocalObservable_one
+
+/-- The local observables are closed under addition. -/
+theorem add_mem_localObservables {S T : H →L[ℂ] H}
+    (hS : S ∈ localObservables π) (hT : T ∈ localObservables π) :
+    S + T ∈ localObservables π :=
+  IsLocalObservable.add hS hT
+
+/-- The local observables are closed under scaling by a self-adjoint
+(i.e. real) complex scalar. -/
+theorem smul_mem_localObservables {c : ℂ} {T : H →L[ℂ] H}
+    (hT : T ∈ localObservables π) (hc : IsSelfAdjoint c) :
+    c • T ∈ localObservables π :=
+  IsLocalObservable.smul hT hc
+
+end ObservablesSet
+
 end HaagKastlerCurved
 end AQFT
 end Physicslib4
