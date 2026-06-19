@@ -392,6 +392,63 @@ theorem isFuturePointing_add_general (M : Spacetime) (x : M.Carrier)
   · -- Null limit: future-pointing via the null branch, witnessed by the summed sequence.
     exact Or.inr ⟨hzero, fun n => vs n + ws n, fun n => ⟨htl n, hsgn n⟩, hsum⟩
 
+/-- **Time reversal.** A tangent vector is past-pointing with respect to a time
+orientation exactly when its negation is future-pointing. -/
+theorem isPastPointing_iff_isFuturePointing_neg (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v : TangentSpace M.model x} :
+    M.IsPastPointing τ v ↔ M.IsFuturePointing τ (-v) := by
+  have hquad : ∀ u : TangentSpace M.model x, M.val x (-u) (-u) = M.val x u u := fun u => by
+    simp only [map_neg, ContinuousLinearMap.neg_apply, neg_neg]
+  have hlin : ∀ u : TangentSpace M.model x,
+      M.val x (τ.field x) (-u) = -(M.val x (τ.field x) u) := fun u => by rw [map_neg]
+  simp only [IsPastPointing, IsFuturePointing, IsTimelike, IsNull]
+  constructor
+  · rintro (⟨htl, hsgn⟩ | ⟨hnull, vs, hvs, htend⟩)
+    · exact Or.inl ⟨by rw [hquad]; exact htl, by rw [hlin]; linarith⟩
+    · refine Or.inr ⟨by rw [hquad]; exact hnull, fun n => -(vs n), fun n => ⟨?_, ?_⟩, ?_⟩
+      · rw [hquad]; exact (hvs n).1
+      · rw [hlin]; linarith [(hvs n).2]
+      · exact htend.neg
+  · rintro (⟨htl, hsgn⟩ | ⟨hnull, ws, hws, htend⟩)
+    · refine Or.inl ⟨?_, ?_⟩
+      · rw [← hquad v]; exact htl
+      · rw [hlin] at hsgn; linarith
+    · refine Or.inr ⟨?_, fun n => -(ws n), fun n => ⟨?_, ?_⟩, ?_⟩
+      · rw [← hquad v]; exact hnull
+      · rw [hquad]; exact (hws n).1
+      · rw [hlin]; linarith [(hws n).2]
+      · have h := htend.neg; rwa [neg_neg] at h
+
+/-- **Past-cone sign lemma.** Two timelike tangent vectors that are past-pointing
+with respect to the same time orientation have negative inner product. (Time
+reversal of `inner_neg_of_future_timelike`.) -/
+theorem inner_neg_of_past_timelike (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v w : TangentSpace M.model x}
+    (hv : M.IsTimelike v) (hw : M.IsTimelike w)
+    (hpv : 0 < M.val x (τ.field x) v) (hpw : 0 < M.val x (τ.field x) w) :
+    M.val x v w < 0 := by
+  have hv' : M.IsTimelike (-v) := by
+    change M.val x (-v) (-v) < 0
+    simp only [map_neg, ContinuousLinearMap.neg_apply, neg_neg]; exact hv
+  have hw' : M.IsTimelike (-w) := by
+    change M.val x (-w) (-w) < 0
+    simp only [map_neg, ContinuousLinearMap.neg_apply, neg_neg]; exact hw
+  have hsv : M.val x (τ.field x) (-v) < 0 := by rw [map_neg]; linarith
+  have hsw : M.val x (τ.field x) (-w) < 0 := by rw [map_neg]; linarith
+  have h := inner_neg_of_future_timelike M x τ hv' hw' hsv hsw
+  simpa only [map_neg, ContinuousLinearMap.neg_apply, neg_neg] using h
+
+/-- **Convexity of the past cone.** The sum of any two past-pointing tangent
+vectors (timelike or null) is past-pointing. Obtained from
+`isFuturePointing_add_general` by time reversal. -/
+theorem isPastPointing_add (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v w : TangentSpace M.model x}
+    (hfv : M.IsPastPointing τ v) (hfw : M.IsPastPointing τ w) :
+    M.IsPastPointing τ (v + w) := by
+  simp only [isPastPointing_iff_isFuturePointing_neg] at hfv hfw ⊢
+  rw [neg_add]
+  exact isFuturePointing_add_general M x τ hfv hfw
+
 end Spacetime
 
 end Physicslib4
