@@ -291,6 +291,107 @@ theorem isFuturePointing_add (M : Spacetime) (x : M.Carrier)
     rw [map_add]; linarith [hfv1, hfw1]
   exact Or.inl ⟨hvw, hsum⟩
 
+/-- Every future-pointing vector (timelike or null) is the limit of a sequence of
+future-pointing timelike vectors. For a timelike vector this is the constant
+sequence; for a null vector it is exactly the approximating sequence in the
+definition of `IsFuturePointing`. -/
+theorem exists_seq_of_isFuturePointing (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v : TangentSpace M.model x} (hv : M.IsFuturePointing τ v) :
+    ∃ vs : ℕ → TangentSpace M.model x,
+      (∀ n, M.IsTimelike (vs n) ∧ M.val x (τ.field x) (vs n) < 0) ∧
+      Filter.Tendsto vs Filter.atTop (nhds v) := by
+  rcases hv with ⟨htl, hsgn⟩ | ⟨_, hseq⟩
+  · exact ⟨fun _ => v, fun _ => ⟨htl, hsgn⟩, tendsto_const_nhds⟩
+  · exact hseq
+
+/-- The time-orientation pairing is nonpositive on any future-pointing vector:
+`g|_p(τ, v) ≤ 0`. For timelike `v` this is the defining strict inequality; for
+null `v` it follows by passing to the limit along the approximating sequence
+(continuity of the fixed continuous linear functional `g|_p(τ, ·)`). -/
+theorem inner_t_nonpos_of_future (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v : TangentSpace M.model x} (hfv : M.IsFuturePointing τ v) :
+    M.val x (τ.field x) v ≤ 0 := by
+  obtain ⟨vs, hvs, hvtend⟩ := exists_seq_of_isFuturePointing M x τ hfv
+  have htend : Filter.Tendsto (fun n => M.val x (τ.field x) (vs n)) Filter.atTop
+      (nhds (M.val x (τ.field x) v)) :=
+    ((M.val x (τ.field x)).continuous.tendsto v).comp hvtend
+  exact le_of_tendsto' htend (fun n => le_of_lt (hvs n).2)
+
+/-- **Generalized sign lemma.** Any two future-pointing vectors (timelike or
+null) have nonpositive inner product `g|_p(v,w) ≤ 0`. Only continuity of the
+fixed continuous linear maps `g|_p(a, ·)` is used (with symmetry to keep the
+varying vector in the second slot), so no normed structure on the tangent space
+is required. -/
+theorem inner_nonpos_of_future (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v w : TangentSpace M.model x}
+    (hfv : M.IsFuturePointing τ v) (hfw : M.IsFuturePointing τ w) :
+    M.val x v w ≤ 0 := by
+  obtain ⟨vs, hvs, hvtend⟩ := exists_seq_of_isFuturePointing M x τ hfv
+  obtain ⟨ws, hws, hwtend⟩ := exists_seq_of_isFuturePointing M x τ hfw
+  -- For each `n`, the strict sign lemma on the timelike approximants `ws m`, then a limit.
+  have step2 : ∀ n, M.val x (vs n) w ≤ 0 := by
+    intro n
+    have hlt : ∀ m, M.val x (vs n) (ws m) < 0 := fun m =>
+      inner_neg_of_future_timelike M x τ (hvs n).1 (hws m).1 (hvs n).2 (hws m).2
+    have htend : Filter.Tendsto (fun m => M.val x (vs n) (ws m)) Filter.atTop
+        (nhds (M.val x (vs n) w)) := ((M.val x (vs n)).continuous.tendsto w).comp hwtend
+    exact le_of_tendsto' htend (fun m => le_of_lt (hlt m))
+  have step2' : ∀ n, M.val x w (vs n) ≤ 0 := fun n => by rw [M.symm x w (vs n)]; exact step2 n
+  have htend : Filter.Tendsto (fun n => M.val x w (vs n)) Filter.atTop (nhds (M.val x w v)) :=
+    ((M.val x w).continuous.tendsto v).comp hvtend
+  have hwv : M.val x w v ≤ 0 := le_of_tendsto' htend step2'
+  rw [M.symm x v w]; exact hwv
+
+/-- **Convexity of the future cone (general form).** The sum of any two
+future-pointing tangent vectors (timelike or null) is future-pointing with
+respect to the same time orientation. The timelike summands are handled by
+`isFuturePointing_add`; the null branch is treated by approximating each summand
+by future-pointing timelike vectors and passing to the limit. -/
+theorem isFuturePointing_add_general (M : Spacetime) (x : M.Carrier)
+    (τ : M.TimeOrientation) {v w : TangentSpace M.model x}
+    (hfv : M.IsFuturePointing τ v) (hfw : M.IsFuturePointing τ w) :
+    M.IsFuturePointing τ (v + w) := by
+  obtain ⟨vs, hvs, hvtend⟩ := exists_seq_of_isFuturePointing M x τ hfv
+  obtain ⟨ws, hws, hwtend⟩ := exists_seq_of_isFuturePointing M x τ hfw
+  -- The summed sequence is timelike and future-pointing at every stage.
+  have htl : ∀ n, M.IsTimelike (vs n + ws n) := fun n =>
+    M.add_isTimelike x (hvs n).1 (hws n).1
+      (le_of_lt (inner_neg_of_future_timelike M x τ (hvs n).1 (hws n).1 (hvs n).2 (hws n).2))
+  have hsgn : ∀ n, M.val x (τ.field x) (vs n + ws n) < 0 := fun n => by
+    rw [map_add]; linarith [(hvs n).2, (hws n).2]
+  have hsum : Filter.Tendsto (fun n => vs n + ws n) Filter.atTop (nhds (v + w)) :=
+    hvtend.add hwtend
+  -- Causality of the limit from the additive expansion and the generalized sign lemma.
+  have hvv : M.val x v v ≤ 0 := by
+    rcases hfv with ⟨h, _⟩ | ⟨h, _⟩
+    · exact le_of_lt h
+    · exact le_of_eq h
+  have hww : M.val x w w ≤ 0 := by
+    rcases hfw with ⟨h, _⟩ | ⟨h, _⟩
+    · exact le_of_lt h
+    · exact le_of_eq h
+  have hvw : M.val x v w ≤ 0 := inner_nonpos_of_future M x τ hfv hfw
+  have hexp : M.val x (v + w) (v + w) = M.val x v v + 2 * (M.val x v w) + M.val x w w := by
+    simp only [map_add, ContinuousLinearMap.add_apply]
+    rw [M.symm x w v]; ring
+  have hcausal : M.val x (v + w) (v + w) ≤ 0 := by rw [hexp]; linarith [hvv, hww, hvw]
+  -- The time-orientation pairing is nonpositive on the sum.
+  have htsum : M.val x (τ.field x) (v + w) ≤ 0 := by
+    rw [map_add]
+    linarith [inner_t_nonpos_of_future M x τ hfv, inner_t_nonpos_of_future M x τ hfw]
+  rcases lt_or_eq_of_le hcausal with hneg | hzero
+  · -- Timelike limit: future-pointing via the timelike branch.
+    refine Or.inl ⟨hneg, ?_⟩
+    have ht0 : M.val x (τ.field x) (τ.field x) < 0 := τ.timelike_at x
+    have hne : M.val x (τ.field x) (v + w) ≠ 0 := by
+      intro h0
+      have hrcs := M.reverse_cauchy_schwarz x (τ.timelike_at x) hneg
+      rw [h0] at hrcs
+      nlinarith [mul_pos_of_neg_of_neg ht0 hneg]
+    exact lt_of_le_of_ne htsum hne
+  · -- Null limit: future-pointing via the null branch, witnessed by the summed sequence.
+    exact Or.inr ⟨hzero, fun n => vs n + ws n, fun n => ⟨htl n, hsgn n⟩, hsum⟩
+
 end Spacetime
 
 end Physicslib4
