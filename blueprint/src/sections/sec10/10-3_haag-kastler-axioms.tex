@@ -202,3 +202,21 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \uses{def:covariant-quasilocal-algebra}
     The covariance action $L \mapsto \beta_L$ of a covariant quasilocal algebra is a genuine action of the Lorentz group by $*$-automorphisms of the quasilocal algebra: $\beta_{\mathbf{1}} = \mathrm{id}$ and $\beta_{L'L} = \beta_{L'} \circ \beta_L$.
 \end{lemma}
+
+\begin{definition}[Invariant State]
+    \label{def:invariant-state}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{def:covariant-quasilocal-algebra, def:state}
+    A state $\omega$ on the quasilocal algebra of a covariant quasilocal algebra (\ref{def:covariant-quasilocal-algebra}) is \emph{(Poincar\'e-)invariant} if it is a fixed point of the dual covariance action: $\omega(\beta_L a) = \omega(a)$ for every Lorentz transformation $L$ and observable $a$. This is the invariance condition of a vacuum state; further conditions (e.g.\ the spectrum condition) are imposed separately.
+\end{definition}
+
+\begin{theorem}[GNS Unitary Implementation of an Invariant State]
+    \label{thrm:invariant-state-gns-unitary}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState.exists_gns_unitary}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{def:invariant-state, thrm:gns-construction-theorem, lmm:quasilocal-action-coherence}
+    For an invariant state $\omega$, the covariance action is implemented on the GNS Hilbert space by a family of unitaries $U(L)$ satisfying $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\,\Omega$ and $U(L)\Omega = \Omega$. The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space.
+\end{theorem}
