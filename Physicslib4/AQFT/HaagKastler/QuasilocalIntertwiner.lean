@@ -5,6 +5,8 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.Net
 import Physicslib4.Spacetime.MinkowskiDirected
+import Physicslib4.Spacetime.LorentzCausality
+import Physicslib4.Analysis.CStarDenseExtend
 
 /-!
 # Towards the intertwiner on the generated subalgebra
@@ -275,6 +277,41 @@ noncomputable def intertwinerHom (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U
     (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
     (s : Q.localStarSubalgebra) :
     intertwinerHom N Q L hcompat s = intertwiner N Q L (s : Q.carrier) := rfl
+
+/-- **The intertwiner is norm-preserving on the local images.** It maps
+`ι_B a ↦ ι_{L·B}(α_L a)`; both embeddings are isometric (`norm_ι`, using that
+`L·B` is again a basis set) and `α_L` is isometric (`norm_covEquiv`). -/
+theorem intertwiner_norm (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    {x : Q.carrier} (hx : x ∈ Q.localImages) :
+    ‖intertwiner N Q L x‖ = ‖x‖ := by
+  rw [Q.mem_localImages] at hx
+  obtain ⟨B, hB, a, rfl⟩ := hx
+  rw [intertwiner_ι N Q L hcompat hB a, Q.norm_ι (isAlexandrovBasisSet_smul L hB),
+    N.norm_covEquiv, Q.norm_ι hB]
+
+/-- **The bundled intertwiner is an isometry** on the local `*`-subalgebra. -/
+theorem intertwinerHom_isometry (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
+    Isometry (intertwinerHom N Q L hcompat) := by
+  refine Isometry.of_dist_eq (fun x y => ?_)
+  rw [Subtype.dist_eq, dist_eq_norm, dist_eq_norm,
+    ← map_sub (intertwinerHom N Q L hcompat), intertwinerHom_apply,
+    AddSubgroupClass.coe_sub]
+  exact intertwiner_norm N Q L hcompat (sub_mem x.2 y.2)
+
+/-- **Existence of the extended intertwiner.** The norm-preserving (hence
+uniformly continuous) `*`-homomorphism on the dense local `*`-subalgebra extends
+to a `*`-homomorphism `F : 𝔘 →⋆ₐ[ℂ] 𝔘` agreeing with the intertwiner on the
+local images. -/
+theorem exists_intertwiner_extend (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
+    ∃ F : Q.carrier →⋆ₐ[ℂ] Q.carrier,
+      ∀ s : Q.localStarSubalgebra, F (s : Q.carrier) = intertwiner N Q L (s : Q.carrier) := by
+  obtain ⟨F, hF⟩ := exists_starAlgHom_extend_of_dense Q.localStarSubalgebra
+    Q.dense_localStarSubalgebra (intertwinerHom N Q L hcompat)
+    (intertwinerHom_isometry N Q L hcompat).uniformContinuous
+  exact ⟨F, hF⟩
 
 end HaagKastler
 end AQFT
