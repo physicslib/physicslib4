@@ -1,14 +1,13 @@
 import Physicslib4.AQFT.HaagKastler.CovariantState
-import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.AQFT.HaagKastler.Isotony
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.LocalCommutativity
 import Physicslib4.AQFT.HaagKastler.LorentzCovariance
 import Physicslib4.AQFT.HaagKastler.Net
 import Physicslib4.AQFT.HaagKastler.QuasilocalAction
-import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
 import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
+import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
 import Physicslib4.AQFT.HaagKastlerCurved.IdentityComponent
@@ -19,6 +18,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebras
 import Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity
 import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
+import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.Basic
 import Physicslib4.GNS.Basic
 import Physicslib4.GNS.CauchySchwarz
