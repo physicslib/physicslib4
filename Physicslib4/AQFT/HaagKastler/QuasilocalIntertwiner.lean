@@ -523,6 +523,64 @@ theorem IsInvariantState.inner_invariant (C : CovariantQuasilocalAlgebra)
   rw [← map_star (C.action L) a, ← map_mul (C.action L)]
   exact hω L (star a * b)
 
+open scoped InnerProductSpace in
+/-- **Step 2: GNS unitary implementation of an invariant state.** For an
+invariant state `ω`, the fiberwise covariance action is implemented on the GNS
+Hilbert space by a family of unitaries `U L` with `U L (π a Ω) = π (β_L a) Ω` and
+`U L Ω = Ω`. The unitaries are the dense-extension of the isometry
+`π a Ω ↦ π (β_L a) Ω` (isometric by `inner_invariant`), via
+`LinearEquiv.extendOfIsometry`. -/
+theorem IsInvariantState.exists_gns_unitary (C : CovariantQuasilocalAlgebra)
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
+        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
+          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) := by
+  obtain ⟨H, _, _, _, π, Ω, hcyc, hrepro, _⟩ := Physicslib4.GNS.gns_construction ω
+  let cyc : C.quasilocal.carrier →ₗ[ℂ] H :=
+    { toFun := fun a => π a Ω
+      map_add' := fun a b => by rw [map_add, ContinuousLinearMap.add_apply]
+      map_smul' := fun c a => by rw [map_smul, ContinuousLinearMap.smul_apply]; rfl }
+  have hcycdense : DenseRange (cyc : C.quasilocal.carrier → H) := hcyc
+  have q : ∀ x, (ω (star x * x) : ℂ) = ⟪π x Ω, π x Ω⟫_ℂ := by
+    intro x
+    rw [hrepro (star x * x), map_mul, map_star, ContinuousLinearMap.mul_apply,
+      ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_right]
+  have hnorm : ∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
+      ‖cyc ((C.action L).toAlgEquiv.toLinearEquiv a)‖ = ‖cyc a‖ := by
+    intro L a
+    change ‖π (C.action L a) Ω‖ = ‖π a Ω‖
+    have key : ⟪π (C.action L a) Ω, π (C.action L a) Ω⟫_ℂ = ⟪π a Ω, π a Ω⟫_ℂ := by
+      rw [← q (C.action L a), ← q a]; exact IsInvariantState.inner_invariant C hω L a a
+    have h2 : ‖π (C.action L a) Ω‖ ^ 2 = ‖π a Ω‖ ^ 2 := by
+      rw [← inner_self_eq_norm_sq (𝕜 := ℂ), ← inner_self_eq_norm_sq (𝕜 := ℂ)]
+      exact congrArg RCLike.re key
+    rw [← Real.sqrt_sq (norm_nonneg (π (C.action L a) Ω)),
+      ← Real.sqrt_sq (norm_nonneg (π a Ω)), h2]
+  let U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H) := fun L =>
+    (C.action L).toAlgEquiv.toLinearEquiv.extendOfIsometry cyc cyc hcycdense hcycdense (hnorm L)
+  refine ⟨H, inferInstance, inferInstance, inferInstance, π, Ω, U, hrepro, ?_, ?_⟩
+  · intro L a
+    exact (C.action L).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense
+      (hnorm L) a
+  · intro L
+    have hΩ : cyc (1 : C.quasilocal.carrier) = Ω := by
+      change π 1 Ω = Ω
+      rw [map_one, ContinuousLinearMap.one_apply]
+    have hone : cyc ((C.action L).toAlgEquiv.toLinearEquiv (1 : C.quasilocal.carrier)) = Ω := by
+      change π (C.action L 1) Ω = Ω
+      rw [map_one (C.action L)]
+      change π 1 Ω = Ω
+      rw [map_one, ContinuousLinearMap.one_apply]
+    calc U L Ω = U L (cyc 1) := by rw [hΩ]
+      _ = cyc ((C.action L).toAlgEquiv.toLinearEquiv 1) :=
+          (C.action L).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense
+            (hnorm L) 1
+      _ = Ω := hone
+
 end CovariantQuasilocalAlgebra
 
 /-- The trivial net with its trivial quasilocal algebra is a covariant quasilocal
