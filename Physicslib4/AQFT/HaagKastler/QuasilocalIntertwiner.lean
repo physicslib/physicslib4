@@ -469,6 +469,39 @@ theorem action_ι (C : CovariantQuasilocalAlgebra) (L : InhomogeneousLorentzGrou
       = C.quasilocal.ι (L • B) (C.net.covEquiv L B a) :=
   (C.lift L).intertwines hB a
 
+/-- The action agrees with the underlying extended `*`-homomorphism. -/
+theorem action_apply (C : CovariantQuasilocalAlgebra)
+    (L : InhomogeneousLorentzGroup) (x : C.quasilocal.carrier) :
+    C.action L x = extendHom C.covariant L x :=
+  StarAlgEquiv.ofStarAlgHom_apply _ _ _ _ x
+
+/-- **The action is trivial at the identity:** `β_1 = id`. -/
+theorem action_one_apply (C : CovariantQuasilocalAlgebra)
+    (x : C.quasilocal.carrier) : C.action 1 x = x := by
+  rw [action_apply, DFunLike.congr_fun (extendHom_one C.covariant) x]
+  rfl
+
+/-- **The action is multiplicative in the group element:**
+`β_{L'·L} = β_{L'} ∘ β_L`. -/
+theorem action_mul_apply (C : CovariantQuasilocalAlgebra)
+    (L L' : InhomogeneousLorentzGroup) (x : C.quasilocal.carrier) :
+    C.action (L' * L) x = C.action L' (C.action L x) := by
+  rw [action_apply, action_apply, action_apply,
+    DFunLike.congr_fun (extendHom_comp C.covariant L L') x]
+  rfl
+
+/-- The covariance action sends the identity to the identity automorphism. -/
+theorem action_one (C : CovariantQuasilocalAlgebra) :
+    C.action 1 = StarAlgEquiv.refl := by
+  ext x; rw [action_one_apply]; rfl
+
+/-- The covariance action is multiplicative: `β_{L'·L} = β_L` followed by
+`β_{L'}`. -/
+theorem action_mul (C : CovariantQuasilocalAlgebra)
+    (L L' : InhomogeneousLorentzGroup) :
+    C.action (L' * L) = (C.action L).trans (C.action L') := by
+  ext x; rw [action_mul_apply]; rfl
+
 end CovariantQuasilocalAlgebra
 
 /-- The trivial net with its trivial quasilocal algebra is a covariant quasilocal

@@ -193,3 +193,12 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \uses{def:haag-kastler-net, def:quasilocal-algebra, def:lorentz-covariance, def:quasilocal-lift, thrm:quasilocal-lift-exists}
     A \emph{covariant quasilocal algebra} bundles a Haag-Kastler net (\ref{def:haag-kastler-net}), a quasilocal algebra of that net (\ref{def:quasilocal-algebra}), and a proof that the embeddings are covariance-compatible for every Lorentz transformation. On such data the quasilocal lift (\ref{def:quasilocal-lift}) exists for every $L$ by \ref{thrm:quasilocal-lift-exists}, yielding the covariance action $L \mapsto \beta_L$ on the quasilocal algebra; the trivial net provides an instance. This is the natural home for the covariance dynamics: the compatibility hypothesis of \ref{thrm:quasilocal-lift-exists} becomes structural data rather than a side condition.
 \end{definition}
+
+\begin{lemma}[Group-Action Coherence of the Covariance Automorphism]
+    \label{lmm:quasilocal-action-coherence}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.action_one, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.action_mul}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{def:covariant-quasilocal-algebra}
+    The covariance action $L \mapsto \beta_L$ of a covariant quasilocal algebra is a genuine action of the Lorentz group by $*$-automorphisms of the quasilocal algebra: $\beta_{\mathbf{1}} = \mathrm{id}$ and $\beta_{L'L} = \beta_{L'} \circ \beta_L$.
+\end{lemma}
