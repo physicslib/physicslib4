@@ -502,6 +502,27 @@ theorem action_mul (C : CovariantQuasilocalAlgebra)
     C.action (L' * L) = (C.action L).trans (C.action L') := by
   ext x; rw [action_mul_apply]; rfl
 
+/-- A state `ω` on the quasilocal algebra is *(Poincaré-)invariant* if it is a
+fixed point of the dual covariance action: `ω(β_L a) = ω(a)` for every Lorentz
+transformation `L` and every observable `a`. This is the invariance part of the
+vacuum conditions; the spectrum condition is imposed separately. -/
+def IsInvariantState (C : CovariantQuasilocalAlgebra)
+    (ω : Physicslib4.GNS.State C.quasilocal.carrier) : Prop :=
+  ∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
+    ω (C.action L a) = ω a
+
+/-- **Invariance of the GNS inner product.** For an invariant state, the
+sesquilinear form `(a, b) ↦ ω(a^* b)` - which is the GNS inner product of the
+cyclic vectors `π(a)Ω`, `π(b)Ω` - is preserved by the action. This is the
+algebraic input that makes the implementing operator on the GNS space an
+isometry, hence (Step 2) a unitary. -/
+theorem IsInvariantState.inner_invariant (C : CovariantQuasilocalAlgebra)
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
+    (L : InhomogeneousLorentzGroup) (a b : C.quasilocal.carrier) :
+    ω (star (C.action L a) * C.action L b) = ω (star a * b) := by
+  rw [← map_star (C.action L) a, ← map_mul (C.action L)]
+  exact hω L (star a * b)
+
 end CovariantQuasilocalAlgebra
 
 /-- The trivial net with its trivial quasilocal algebra is a covariant quasilocal
