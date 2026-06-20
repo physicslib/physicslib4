@@ -53,6 +53,26 @@ def Isotony (U : LocalNet) : Prop :=
       ∃ φ : StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂),
         Function.Injective φ
 
+/-- **Isotony is reflexive.** Every Alexandrov-basis set embeds into
+itself via the identity unital `*`-monomorphism, independently of any
+isotony hypothesis. -/
+theorem exists_injective_self (U : LocalNet)
+    {B : Set StandardMinkowskiSpacetime.Carrier} :
+    ∃ φ : StarAlgHom ℂ (U.algebra B) (U.algebra B), Function.Injective φ :=
+  ⟨StarAlgHom.id ℂ (U.algebra B), fun _ _ h => h⟩
+
+/-- **Isotony is transitive.** Given inclusions `B₁ ⊆ B₂ ⊆ B₃` of
+Alexandrov-basis sets, the isotony embeddings compose to a unital
+`*`-monomorphism `𝔘(B₁) ↪ 𝔘(B₃)`. -/
+theorem Isotony.trans {U : LocalNet} (h : Isotony U)
+    ⦃B₁ B₂ B₃ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+    (hB₃ : IsAlexandrovBasisSet B₃) (h₁₂ : B₁ ⊆ B₂) (h₂₃ : B₂ ⊆ B₃) :
+    ∃ φ : StarAlgHom ℂ (U.algebra B₁) (U.algebra B₃), Function.Injective φ := by
+  obtain ⟨φ, hφ⟩ := h hB₁ hB₂ h₁₂
+  obtain ⟨ψ, hψ⟩ := h hB₂ hB₃ h₂₃
+  exact ⟨ψ.comp φ, fun a b hab => hφ (hψ (by simpa using hab))⟩
+
 end HaagKastler
 end AQFT
 end Physicslib4

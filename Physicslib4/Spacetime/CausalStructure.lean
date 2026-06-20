@@ -65,6 +65,41 @@ def IsSpacelike {x : M.Carrier} (v : TangentSpace M.model x) : Prop :=
 def IsNull {x : M.Carrier} (v : TangentSpace M.model x) : Prop :=
   M.val x v v = 0
 
+/-! ### Basic classification lemmas
+
+Every tangent vector falls into exactly one of the three classes, fixed by the
+sign of `g|_p(v,v)`. -/
+
+/-- Causal trichotomy: every tangent vector is timelike, null, or spacelike. -/
+theorem isTimelike_or_isNull_or_isSpacelike {x : M.Carrier}
+    (v : TangentSpace M.model x) :
+    M.IsTimelike v ∨ M.IsNull v ∨ M.IsSpacelike v :=
+  lt_trichotomy (M.val x v v) 0
+
+/-- A timelike vector is not spacelike. -/
+theorem not_isSpacelike_of_isTimelike {x : M.Carrier}
+    {v : TangentSpace M.model x} (h : M.IsTimelike v) : ¬ M.IsSpacelike v :=
+  fun hs => lt_asymm h hs
+
+/-- A spacelike vector is not timelike. -/
+theorem not_isTimelike_of_isSpacelike {x : M.Carrier}
+    {v : TangentSpace M.model x} (h : M.IsSpacelike v) : ¬ M.IsTimelike v :=
+  fun ht => lt_asymm ht h
+
+/-- A timelike vector is not null. -/
+theorem not_isNull_of_isTimelike {x : M.Carrier}
+    {v : TangentSpace M.model x} (h : M.IsTimelike v) : ¬ M.IsNull v :=
+  ne_of_lt h
+
+/-- A spacelike vector is not null. -/
+theorem not_isNull_of_isSpacelike {x : M.Carrier}
+    {v : TangentSpace M.model x} (h : M.IsSpacelike v) : ¬ M.IsNull v :=
+  ne_of_gt h
+
+/-- The zero tangent vector is null. -/
+theorem isNull_zero {x : M.Carrier} : M.IsNull (0 : TangentSpace M.model x) := by
+  simp [IsNull]
+
 /-! ### Time orientation -/
 
 /--
@@ -124,6 +159,37 @@ def IsPastPointing (t : M.TimeOrientation) {x : M.Carrier}
     ∃ vs : ℕ → TangentSpace M.model x,
       (∀ n, M.IsTimelike (vs n) ∧ 0 < M.val x (t.field x) (vs n)) ∧
       Filter.Tendsto vs Filter.atTop (nhds v))
+
+/-! ### Future/past-pointing classification lemmas -/
+
+/-- A future-pointing vector is either timelike or null. -/
+theorem isTimelike_or_isNull_of_isFuturePointing (t : M.TimeOrientation)
+    {x : M.Carrier} {v : TangentSpace M.model x}
+    (h : M.IsFuturePointing t v) : M.IsTimelike v ∨ M.IsNull v :=
+  h.imp And.left And.left
+
+/-- A past-pointing vector is either timelike or null. -/
+theorem isTimelike_or_isNull_of_isPastPointing (t : M.TimeOrientation)
+    {x : M.Carrier} {v : TangentSpace M.model x}
+    (h : M.IsPastPointing t v) : M.IsTimelike v ∨ M.IsNull v :=
+  h.imp And.left And.left
+
+/-- A timelike vector cannot be both future-pointing and past-pointing with
+respect to a fixed time orientation. -/
+theorem not_isFuturePointing_and_isPastPointing_of_isTimelike
+    (t : M.TimeOrientation) {x : M.Carrier} {v : TangentSpace M.model x}
+    (hv : M.IsTimelike v) :
+    ¬ (M.IsFuturePointing t v ∧ M.IsPastPointing t v) := by
+  rintro ⟨hf, hp⟩
+  have hft : M.val x (t.field x) v < 0 := by
+    rcases hf with ⟨_, h⟩ | ⟨hn, _⟩
+    · exact h
+    · exact absurd hn (M.not_isNull_of_isTimelike hv)
+  have hpt : 0 < M.val x (t.field x) v := by
+    rcases hp with ⟨_, h⟩ | ⟨hn, _⟩
+    · exact h
+    · exact absurd hn (M.not_isNull_of_isTimelike hv)
+  exact lt_asymm hft hpt
 
 end Spacetime
 

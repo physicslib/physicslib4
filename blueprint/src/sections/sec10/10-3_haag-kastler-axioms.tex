@@ -6,9 +6,7 @@ With that out of the way we can state the axioms. Each axiom below is presented 
     \lean{Physicslib4.AQFT.HaagKastler.LocalNet}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalAlgebras.lean}
     \leanok
-    \uses{def:alexandrov-topology}
-    \uses{def:minkowski-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
+    \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past}
     For any basis element $\mathbf{B}$ of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
     \begin{align}
         \mathbf{B} \longmapsto \mathfrak{U}(\mathbf{B}),
@@ -25,10 +23,7 @@ With that out of the way we can state the axioms. Each axiom below is presented 
     \lean{Physicslib4.AQFT.HaagKastler.Isotony}
     \leanfile{Physicslib4/AQFT/HaagKastler/Isotony.lean}
     \leanok
-    \uses{def:alexandrov-topology}
-    \uses{def:minkowski-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:local-algebras}
+    \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past, def:local-algebras}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
 
     If $\mathbf{B}_1 \subset \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subset \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
@@ -54,12 +49,7 @@ Before introducing the next axiom, we must introduce the definition:
     \lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalCommutativity.lean}
     \leanok
-    \uses{def:alexandrov-topology}
-    \uses{def:minkowski-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:completely-spacelike}
-    \uses{def:local-algebras}
-    \uses{def:quasilocal-algebra}
+    \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past, def:completely-spacelike, def:local-algebras, def:quasilocal-algebra}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
 
     If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the quasilocal algebra $\mathfrak{U}$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ it follows that
@@ -76,9 +66,7 @@ The next axiom makes use of the following new definition:
     \lean{Physicslib4.AQFT.HaagKastler.IsQuasilocalObservable}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalCompleteness.lean}
     \leanok
-    \uses{def:quasilocal-algebra}
-    \uses{thrm:gns-construction-theorem}
-    \uses{def:state}
+    \uses{def:quasilocal-algebra, thrm:gns-construction-theorem, def:state}
     The image $\pi_\omega(a)$ of a self-adjoint member $a$ of the quasilocal algebra $\mathfrak{U}$ under a GNS *-homomorphism $\pi_\omega$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{quasilocal observable}.
 \end{definition}
 
@@ -96,11 +84,7 @@ The next axiom makes use of the following new definition:
     \lean{Physicslib4.AQFT.HaagKastler.LorentzCovariance}
     \leanfile{Physicslib4/AQFT/HaagKastler/LorentzCovariance.lean}
     \leanok
-    \uses{def:alexandrov-topology}
-    \uses{def:minkowski-spacetime}
-    \uses{def:chronological-future-and-chronological-past}
-    \uses{def:local-algebras}
-    \uses{def:isotony}
+    \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past, def:local-algebras, def:isotony}
     Let $\mathbf{B}$ be any basis element of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$.
 
     A member $L$ of the inhomogeneous Lorentz group connected to the identity acts on $\mathfrak{U}(\mathbf{B})$ as follows
@@ -135,14 +119,104 @@ The next axiom makes use of the following new definition:
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet}
     \leanfile{Physicslib4/AQFT/HaagKastler/Net.lean}
     \leanok
-    \uses{def:local-algebras}
-    \uses{def:isotony}
-    \uses{def:local-commutativity}
-    \uses{def:quasilocal-completeness}
-    \uses{def:lorentz-covariance}
+    \uses{def:local-algebras, def:isotony, def:local-commutativity, def:quasilocal-completeness, def:lorentz-covariance}
     A \emph{Haag-Kastler net} on Minkowski spacetime is the bundling of the data of \ref{def:local-algebras} together with the properties of \ref{def:isotony}, \ref{def:local-commutativity}, \ref{def:quasilocal-completeness}, and \ref{def:lorentz-covariance}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT take an instance of this structure as a hypothesis and invoke each axiom as a projection.
 \end{definition}
 
 This concludes the presentation of the ``sharpened'' axioms. As proven in this blog post, these ``sharpened'' axioms entail the original axioms save Axiom 6 (Primitivity), which is an axiom that we abandon.
 
 These ``sharpened'' axioms also allow for a straightforward generalization to a set of axioms describing AQFT in curved spacetime, i.e. a set of axioms describing AQFT in a curved spacetime background that is fixed and treated classically. In a subsequent blog post we will detail these axioms.
+
+\subsection{Covariant States and the Covariance Action}
+
+The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts on the net fiberwise, through the $*$-isomorphisms $\alpha_L : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(L\cdot\mathbf{B})$. We record two consequences: the notion of a Lorentz-covariant family of local states, and the lift of the fiberwise action to a single dynamical $*$-automorphism of the quasilocal algebra.
+
+\begin{definition}[Covariant Family of Local States]
+    \label{def:covariant-state-family}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily}
+    \leanfile{Physicslib4/AQFT/HaagKastler/CovariantState.lean}
+    \leanok
+    \uses{def:haag-kastler-net, def:state, def:lorentz-covariance}
+    Given a Haag-Kastler net (\ref{def:haag-kastler-net}), a \emph{covariant family of local states} assigns to every region $\mathbf{B}$ a state $\omega_{\mathbf{B}}$ on the local algebra $\mathfrak{U}(\mathbf{B})$ such that, for every Lorentz transformation $L$ and every $a \in \mathfrak{U}(\mathbf{B})$, one has $\omega_{\mathbf{B}}(a) = \omega_{L\cdot\mathbf{B}}(\alpha_L a)$, where $\alpha_L$ is the covariance isomorphism of \ref{def:lorentz-covariance}. The local states are thus intertwined by the Lorentz action.
+\end{definition}
+
+\begin{lemma}[Composition of Covariance]
+    \label{lmm:covariant-state-family-compose}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily.comp}
+    \leanfile{Physicslib4/AQFT/HaagKastler/CovariantState.lean}
+    \leanok
+    \uses{def:covariant-state-family}
+    For a covariant family of local states, the covariance relation composes along the group: $\omega_{\mathbf{B}}(a) = \omega_{L'\cdot(L\cdot\mathbf{B})}\big(\alpha_{L'}(\alpha_L a)\big)$, reflecting the multiplicativity of the Lorentz action.
+\end{lemma}
+
+\begin{definition}[Quasilocal Covariance Automorphism]
+    \label{def:quasilocal-lift}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAction.lean}
+    \leanok
+    \uses{def:quasilocal-algebra, def:lorentz-covariance}
+    A \emph{lift} of the fiberwise Lorentz action of $L$ to a quasilocal algebra $\mathfrak{U}$ (\ref{def:quasilocal-algebra}) is a $*$-automorphism $\beta_L$ of $\mathfrak{U}$ intertwining the local embeddings $\iota_{\mathbf{B}}$ with the covariance isomorphisms: $\beta_L(\iota_{\mathbf{B}} a) = \iota_{L\cdot\mathbf{B}}(\alpha_L a)$ for every Alexandrov-basis set $\mathbf{B}$.
+\end{definition}
+
+\begin{lemma}[Uniqueness of the Quasilocal Lift]
+    \label{lmm:quasilocal-lift-unique}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift.unique}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAction.lean}
+    \leanok
+    \uses{def:quasilocal-lift}
+    Any two lifts of the same $L$ have the same underlying automorphism: they agree on the union of the local images, which is dense in $\mathfrak{U}$, and $*$-automorphisms of a C*-algebra are continuous.
+\end{lemma}
+
+\begin{theorem}[Existence of the Quasilocal Lift]
+    \label{thrm:quasilocal-lift-exists}
+    \lean{Physicslib4.AQFT.HaagKastler.nonempty_quasilocalLift}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{def:quasilocal-lift, def:quasilocal-algebra}
+    For a covariance-compatible quasilocal algebra, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists. The intertwiner is defined on the directed union of local images (a dense $*$-subalgebra) and extended by uniform continuity; the inverse is supplied by $L^{-1}$, and the group laws $\beta_{L'L} = \beta_{L'}\circ\beta_L$ and $\beta_{1} = \mathrm{id}$ furnish the two-sided inverse.
+\end{theorem}
+
+\begin{theorem}[Existence for the Trivial Net]
+    \label{thrm:quasilocal-lift-trivial}
+    \lean{Physicslib4.AQFT.HaagKastler.nonempty_trivialQuasilocalLift}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{thrm:quasilocal-lift-exists}
+    The covariance-compatibility hypothesis is satisfiable: the trivial net's quasilocal algebra is covariance-compatible (every $*$-automorphism of $\mathbb{C}$ is the identity), so the quasilocal lift exists unconditionally for the trivial net.
+\end{theorem}
+
+\begin{definition}[Covariant Quasilocal Algebra]
+    \label{def:covariant-quasilocal-algebra}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{def:haag-kastler-net, def:quasilocal-algebra, def:lorentz-covariance, def:quasilocal-lift, thrm:quasilocal-lift-exists}
+    A \emph{covariant quasilocal algebra} bundles a Haag-Kastler net (\ref{def:haag-kastler-net}), a quasilocal algebra of that net (\ref{def:quasilocal-algebra}), and a proof that the embeddings are covariance-compatible for every Lorentz transformation. On such data the quasilocal lift (\ref{def:quasilocal-lift}) exists for every $L$ by \ref{thrm:quasilocal-lift-exists}, yielding the covariance action $L \mapsto \beta_L$ on the quasilocal algebra; the trivial net provides an instance. This is the natural home for the covariance dynamics: the compatibility hypothesis of \ref{thrm:quasilocal-lift-exists} becomes structural data rather than a side condition.
+\end{definition}
+
+\begin{lemma}[Group-Action Coherence of the Covariance Automorphism]
+    \label{lmm:quasilocal-action-coherence}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.action_one, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.action_mul}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{def:covariant-quasilocal-algebra}
+    The covariance action $L \mapsto \beta_L$ of a covariant quasilocal algebra is a genuine action of the Lorentz group by $*$-automorphisms of the quasilocal algebra: $\beta_{\mathbf{1}} = \mathrm{id}$ and $\beta_{L'L} = \beta_{L'} \circ \beta_L$.
+\end{lemma}
+
+\begin{definition}[Invariant State]
+    \label{def:invariant-state}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{def:covariant-quasilocal-algebra, def:state}
+    A state $\omega$ on the quasilocal algebra of a covariant quasilocal algebra (\ref{def:covariant-quasilocal-algebra}) is \emph{(Poincar\'e-)invariant} if it is a fixed point of the dual covariance action: $\omega(\beta_L a) = \omega(a)$ for every Lorentz transformation $L$ and observable $a$. This is the invariance condition of a vacuum state; further conditions (e.g.\ the spectrum condition) are imposed separately.
+\end{definition}
+
+\begin{theorem}[GNS Unitary Implementation of an Invariant State]
+    \label{thrm:invariant-state-gns-unitary}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState.exists_gns_unitary}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{def:invariant-state, thrm:gns-construction-theorem, lmm:quasilocal-action-coherence}
+    For an invariant state $\omega$, the covariance action is implemented on the GNS Hilbert space by a family of unitaries $U(L)$ satisfying $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\,\Omega$ and $U(L)\Omega = \Omega$. The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space.
+\end{theorem}

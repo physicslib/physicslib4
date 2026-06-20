@@ -159,6 +159,40 @@ determined by its action on points. -/
 instance : FaithfulSMul (Isometry M) M.Carrier where
   eq_of_smul_eq_smul h := Isometry.ext (DFunLike.ext _ _ fun x => h x)
 
+/-! ### Invariance of the causal classification
+
+An isometry preserves the metric square of a tangent vector, hence preserves
+the timelike/null/spacelike classification. These are the basic facts linking
+the isometry group to the causal structure underlying Axiom 5. -/
+
+/-- An isometry preserves the metric square `g(v,v)` of a tangent vector. -/
+theorem preserves_self (g : Isometry M) (x : M.Carrier)
+    (v : TangentSpace M.model x) :
+    M.val (g.toDiffeo x) (mfderiv M.model M.model g.toDiffeo x v)
+        (mfderiv M.model M.model g.toDiffeo x v) = M.val x v v :=
+  g.preserves x v v
+
+/-- An isometry preserves timelike vectors. -/
+theorem isTimelike_mfderiv_iff (g : Isometry M) (x : M.Carrier)
+    (v : TangentSpace M.model x) :
+    M.IsTimelike (mfderiv M.model M.model g.toDiffeo x v) ↔ M.IsTimelike v := by
+  unfold IsTimelike
+  rw [g.preserves x v v]
+
+/-- An isometry preserves null vectors. -/
+theorem isNull_mfderiv_iff (g : Isometry M) (x : M.Carrier)
+    (v : TangentSpace M.model x) :
+    M.IsNull (mfderiv M.model M.model g.toDiffeo x v) ↔ M.IsNull v := by
+  unfold IsNull
+  rw [g.preserves x v v]
+
+/-- An isometry preserves spacelike vectors. -/
+theorem isSpacelike_mfderiv_iff (g : Isometry M) (x : M.Carrier)
+    (v : TangentSpace M.model x) :
+    M.IsSpacelike (mfderiv M.model M.model g.toDiffeo x v) ↔ M.IsSpacelike v := by
+  unfold IsSpacelike
+  rw [g.preserves x v v]
+
 end Isometry
 
 end Spacetime

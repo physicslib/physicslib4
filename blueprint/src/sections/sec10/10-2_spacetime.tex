@@ -25,13 +25,62 @@
     Let $M$ be a spacetime, $p$ a point in $M$, and $g$ the tensor field of type $(0,2)$ associated to $M$. Any tangent vector $v \in TM|_p$ is \textit{timelike}, \textit{spacelike}, or \textit{null} if $g|_p(v,v)$ is negative, positive, or zero respectively.
 \end{definition}
 
+\begin{lemma}[Causal Classification]
+    \label{lmm:causal-classification}
+    \lean{Physicslib4.Spacetime.isTimelike_or_isNull_or_isSpacelike, Physicslib4.Spacetime.not_isSpacelike_of_isTimelike, Physicslib4.Spacetime.not_isTimelike_of_isSpacelike, Physicslib4.Spacetime.not_isNull_of_isTimelike, Physicslib4.Spacetime.not_isNull_of_isSpacelike, Physicslib4.Spacetime.isNull_zero}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \leanok
+    \uses{def:timelike-spacelike-null-vectors}
+    Every tangent vector $v \in TM|_p$ is exactly one of timelike, null, or spacelike. In particular the three classes are mutually exclusive, and the zero vector is null.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Immediate from the trichotomy of $<$, $=$, $>$ applied to $g|_p(v,v)$, together with $g|_p(0,0) = 0$ since $g|_p$ is bilinear.
+\end{proof}
+
+\begin{lemma}[Reverse Cauchy-Schwarz for Timelike Vectors]
+    \label{lmm:reverse-cauchy-schwarz}
+    \lean{Physicslib4.reverse_cauchy_schwarz_of_lorentzianAt, Physicslib4.Spacetime.reverse_cauchy_schwarz}
+    \leanfile{Physicslib4/Spacetime/LorentzCauchySchwarz.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
+    \leanok
+    Let $g$ be a symmetric Lorentzian bilinear form on a real four-dimensional vector space and let $v, w$ be timelike, that is $g(v,v) < 0$ and $g(w,w) < 0$. Then the reverse Cauchy-Schwarz inequality holds:
+    \begin{align}
+        g(v,v)\, g(w,w) \le g(v,w)^2.
+    \end{align}
+    In particular this applies pointwise to the metric $g|_p$ of any spacetime $M$ and any two timelike tangent vectors at a point $p$.
+\end{lemma}
+\begin{proof}
+    Choose a Lorentzian basis $b$, so that $g$ has Gram matrix $\mathrm{diag}(-1,1,1,1)$. Expanding $v$ and $w$ in this basis and using bilinearity, $g(v,v) = -(v^0)^2 + \lVert \mathbf{v}\rVert^2$ and $g(v,w) = -v^0 w^0 + \langle \mathbf{v}, \mathbf{w}\rangle$, where $v^0, w^0$ are the time components, $\mathbf{v}, \mathbf{w}$ the spatial parts, and $\langle\cdot,\cdot\rangle$, $\lVert\cdot\rVert$ the Euclidean inner product and norm on the three spatial coordinates. Timelikeness gives $(v^0)^2 > \lVert\mathbf{v}\rVert^2$ and $(w^0)^2 > \lVert\mathbf{w}\rVert^2$. The ordinary Cauchy-Schwarz inequality gives $\lvert\langle\mathbf{v},\mathbf{w}\rangle\rvert \le \lVert\mathbf{v}\rVert\,\lVert\mathbf{w}\rVert < \lvert v^0\rvert\,\lvert w^0\rvert$, so $\lvert g(v,w)\rvert \ge \lvert v^0 w^0\rvert - \lVert\mathbf{v}\rVert\,\lVert\mathbf{w}\rVert \ge 0$. Squaring and applying the algebraic identity
+    \begin{align}
+        (pq - rs)^2 - (p^2 - r^2)(q^2 - s^2) = (ps - rq)^2 \ge 0
+    \end{align}
+    with $p = \lvert v^0\rvert$, $q = \lvert w^0\rvert$, $r = \lVert\mathbf{v}\rVert$, $s = \lVert\mathbf{w}\rVert$ yields $g(v,w)^2 \ge g(v,v)\,g(w,w)$.
+\end{proof}
+
+\begin{lemma}[Timelike Cone Convexity and Reverse Triangle Inequality]
+    \label{lmm:timelike-cone-convexity}
+    \lean{Physicslib4.add_isTimelike_of_lorentzianAt, Physicslib4.reverse_triangle_of_lorentzianAt, Physicslib4.Spacetime.add_isTimelike, Physicslib4.Spacetime.reverse_triangle}
+    \leanfile{Physicslib4/Spacetime/LorentzCone.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors, lmm:reverse-cauchy-schwarz}
+    \leanok
+    Let $g$ be a symmetric Lorentzian bilinear form on a real four-dimensional vector space and let $v, w$ be timelike and \emph{aligned}, that is $g(v,v) < 0$, $g(w,w) < 0$ and $g(v,w) \le 0$. Then $v + w$ is timelike, and the reverse (Lorentzian) triangle inequality holds:
+    \begin{align}
+        \sqrt{-g(v,v)} + \sqrt{-g(w,w)} \le \sqrt{-g(v+w,\,v+w)}.
+    \end{align}
+    In particular the timelike vectors sharing a time cone (so that $g(v,w) \le 0$) form a convex cone, and this applies pointwise to the metric $g|_p$ of any spacetime.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reverse-cauchy-schwarz}
+    Bilinearity and symmetry give $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w)$. Writing $a = -g(v,v) > 0$, $b = -g(w,w) > 0$ and $c = -g(v,w) \ge 0$, this equals $-(a + b + 2c) < 0$, so $v+w$ is timelike. The reverse Cauchy-Schwarz inequality (\ref{lmm:reverse-cauchy-schwarz}) gives $g(v,w)^2 \ge g(v,v)\,g(w,w)$, that is $c^2 \ge ab$, hence $c \ge \sqrt{ab} = \sqrt a \,\sqrt b$. Therefore $-g(v+w,v+w) = a + b + 2c \ge a + b + 2\sqrt a\,\sqrt b = (\sqrt a + \sqrt b)^2$, and taking square roots yields the reverse triangle inequality.
+\end{proof}
+
 \begin{definition}[Time Orientation]
     \label{def:time-orientable}
     \lean{Physicslib4.Spacetime.TimeOrientation, Physicslib4.Spacetime.IsTimeOrientable}
     \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
     \leanok
-    \uses{def:spacetime}
-    \uses{def:timelike-spacelike-null-vectors}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
     A spacetime $M$ is \textit{time-orientable} if it admits a smooth, non-vanishing vector field $t$ that is timelike. Such a smooth, non-vanishing vector field is called a \textit{time-orientation}.
 \end{definition}
 
@@ -40,10 +89,61 @@
     \lean{Physicslib4.Spacetime.IsFuturePointing, Physicslib4.Spacetime.IsPastPointing}
     \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
     \leanok
-    \uses{def:spacetime}
-    \uses{def:timelike-spacelike-null-vectors}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
     For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
 \end{definition}
+
+\begin{lemma}[Orientation of Pointing Vectors]
+    \label{lmm:pointing-orientation}
+    \lean{Physicslib4.Spacetime.isTimelike_or_isNull_of_isFuturePointing, Physicslib4.Spacetime.isTimelike_or_isNull_of_isPastPointing, Physicslib4.Spacetime.not_isFuturePointing_and_isPastPointing_of_isTimelike}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \leanok
+    \uses{def:future-and-past-pointing-vectors, lmm:causal-classification}
+    A future-pointing or past-pointing vector is timelike or null. Moreover a timelike vector cannot be both future-pointing and past-pointing with respect to a fixed time orientation.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first claim is immediate from the definition, which is a disjunction over the timelike and null cases. For the second, a timelike $v$ is not null, so both pointing conditions reduce to their timelike branches $g|_p(t,v) < 0$ and $g|_p(t,v) > 0$, which cannot hold simultaneously.
+\end{proof}
+
+\begin{lemma}[Sign Lemma for the Future Cone]
+    \label{lmm:cone-sign-lemma}
+    \lean{Physicslib4.nonneg_of_orthogonal_timelike, Physicslib4.cauchy_schwarz_on_orthogonal, Physicslib4.bilin_neg_of_inner_t_neg, Physicslib4.Spacetime.inner_neg_of_future_timelike, Physicslib4.Spacetime.inner_neg_of_past_timelike}
+    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \uses{def:spacetime, def:time-orientable, def:future-and-past-pointing-vectors, lmm:reverse-cauchy-schwarz}
+    \leanok
+    Let $g$ be a symmetric Lorentzian bilinear form, $t$ a timelike vector, and write $t^\perp = \{u : g(t,u) = 0\}$ for the spacelike complement. Then $g$ is positive semidefinite on $t^\perp$ (so the ordinary Cauchy-Schwarz inequality holds there), and consequently for any timelike $v, w$ with $g(t,v) < 0$ and $g(t,w) < 0$ one has $g(v,w) < 0$. In particular two timelike tangent vectors that are future-pointing with respect to a common time orientation have negative inner product; by time reversal the same holds for two past-pointing timelike vectors (with $g(t,v) > 0$ and $g(t,w) > 0$).
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reverse-cauchy-schwarz}
+    If $u \in t^\perp$ had $g(u,u) < 0$ then $u$ would be timelike, and reverse Cauchy-Schwarz (\ref{lmm:reverse-cauchy-schwarz}) would give $g(t,t)\,g(u,u) \le g(t,u)^2 = 0$, contradicting $g(t,t)\,g(u,u) > 0$; hence $g$ is positive semidefinite on $t^\perp$, and Cauchy-Schwarz follows from nonnegativity of the quadratic $s \mapsto g(s u + u', s u + u')$. For the sign claim, decompose $v$ and $w$ along $t$: the vectors $v_\perp = g(t,t)\,v - g(t,v)\,t$ and $w_\perp = g(t,t)\,w - g(t,w)\,t$ lie in $t^\perp$, and $g(v,w) = g(t,t)^{-2}\big(g(t,t)\,g(v,w)\big)$ expands so that $g(t,t)\,g(v,w) = g(t,v)\,g(t,w) + g(v_\perp, w_\perp)/g(t,t)$. Applying Cauchy-Schwarz to $g(v_\perp,w_\perp)$ together with the reverse Cauchy-Schwarz bounds $g(t,v)^2 \ge g(t,t)g(v,v)$ and $g(t,w)^2 \ge g(t,t)g(w,w)$ forces $g(t,t)\,g(v,w) > 0$, and since $g(t,t) < 0$ this gives $g(v,w) < 0$.
+\end{proof}
+
+\begin{lemma}[Definiteness of the Spacelike Complement]
+    \label{lmm:spacelike-complement-definite}
+    \lean{Physicslib4.eq_zero_of_forall_bilin_eq_zero, Physicslib4.pos_of_orthogonal_timelike, Physicslib4.Spacetime.isSpacelike_of_orthogonal_timelike}
+    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors, lmm:cone-sign-lemma}
+    \leanok
+    A Lorentzian bilinear form is nondegenerate: if $g(v,w) = 0$ for every $w$, then $v = 0$ (this is read off the signature basis, on which the Gram matrix $\mathrm{diag}(-1,1,1,1)$ is invertible). Consequently $g$ is positive \emph{definite} on the spacelike complement: if $t$ is timelike and $u \ne 0$ satisfies $g(t,u) = 0$, then $g(u,u) > 0$, i.e. $u$ is spacelike.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:cone-sign-lemma}
+    Nondegeneracy follows because $g(v, b_j) = (b.\mathrm{repr}\,v)_j \cdot \mathrm{diag}(-1,1,1,1)_{jj}$ in the signature basis $b$, and the diagonal entries are nonzero; so $g(v, \cdot) = 0$ forces every coordinate of $v$ to vanish. For definiteness, semidefiniteness (\ref{lmm:cone-sign-lemma}) gives $g(u,u) \ge 0$; if $g(u,u) = 0$ then for any $u' \in t^\perp$ Cauchy-Schwarz gives $g(u,u')^2 \le g(u,u)\,g(u',u') = 0$, so $u$ is orthogonal to all of $t^\perp$, and since it is also orthogonal to $t$ it is orthogonal to everything, whence $u = 0$ by nondegeneracy, contradicting $u \ne 0$.
+\end{proof}
+
+\begin{lemma}[Convexity of the Future Cone]
+    \label{lmm:future-cone-convexity}
+    \lean{Physicslib4.Spacetime.isFuturePointing_add, Physicslib4.Spacetime.exists_seq_of_isFuturePointing, Physicslib4.Spacetime.inner_t_nonpos_of_future, Physicslib4.Spacetime.inner_nonpos_of_future, Physicslib4.Spacetime.isFuturePointing_add_general, Physicslib4.Spacetime.isPastPointing_iff_isFuturePointing_neg, Physicslib4.Spacetime.isPastPointing_add, Physicslib4.Spacetime.isFuturePointing_smul_pos, Physicslib4.Spacetime.isFuturePointing_pos_combination, Physicslib4.Spacetime.isPastPointing_smul_pos, Physicslib4.Spacetime.isPastPointing_pos_combination}
+    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \uses{def:future-and-past-pointing-vectors, lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
+    \leanok
+    The sum of two timelike future-pointing tangent vectors (with respect to a fixed time orientation) is again timelike and future-pointing. More generally, the sum of any two future-pointing tangent vectors -- timelike or null -- is future-pointing, so the full future cone, including its null boundary, is convex. Since a vector is past-pointing exactly when its negation is future-pointing, the past cone is convex as well. Downstream this packages as the statement that the future-pointing and past-pointing tangent vectors each form a convex cone: they are closed under positive scaling and, more generally, under positive linear combinations $a v + b w$ with $a, b > 0$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
+    For two timelike future-pointing $v, w$ we have $g(t,v) < 0$ and $g(t,w) < 0$. By the sign lemma (\ref{lmm:cone-sign-lemma}) $g(v,w) < 0$, so $v$ and $w$ are aligned and $v + w$ is timelike by cone convexity (\ref{lmm:timelike-cone-convexity}); moreover $g(t, v+w) = g(t,v) + g(t,w) < 0$, so $v + w$ is future-pointing. For the general case, every future-pointing vector is a limit of future-pointing timelike vectors (the constant sequence if timelike, the approximating sequence from the definition if null). Approximating $v$ and $w$ by such sequences $v_n, w_n$, each $v_n + w_n$ is timelike future-pointing by the timelike case. Passing to the limit gives $g(v,w) \le 0$ (continuity of the fixed maps $u \mapsto g(a,u)$ with symmetry), so $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w) \le 0$ and $v+w$ is causal, and $g(t,v+w) = g(t,v) + g(t,w) \le 0$. If $g(v+w,v+w) < 0$ the sum is timelike and reverse Cauchy-Schwarz makes $g(t,v+w) \ne 0$, hence negative, so the sum is future-pointing timelike; if $g(v+w,v+w) = 0$ the sum is null and is the limit of the future-pointing timelike sequence $v_n + w_n$, hence future-pointing null.
+\end{proof}
 
 \begin{definition}[Paths]
     \label{def:paths}
@@ -86,10 +186,7 @@
     \lean{Physicslib4.Spacetime.IsEndpoint, Physicslib4.Spacetime.IsPastEndpoint, Physicslib4.Spacetime.IsFutureEndpoint}
     \leanfile{Physicslib4/Spacetime/Curves.lean}
     \leanok
-    \uses{def:spacetime}
-    \uses{def:paths}
-    \uses{def:curves}
-    \uses{def:timelike-and-causal-smooth-curves}
+    \uses{def:spacetime, def:paths, def:curves, def:timelike-and-causal-smooth-curves}
     A point $p$ in a spacetime $M$ is the \textit{endpoint} of a path $\mu$ or its associated curve if it is a member of the image $\mu(\partial\Sigma)$ of the boundary $\partial\Sigma$ of the parameter space under $\mu$. If $\mu$ is a smooth path and its associated smooth curve is timelike and future-oriented, then an endpoint $p$ is a \textit{past endpoint} if it is the image under $\mu$ of the lesser of the two boundary components of $\partial\Sigma$. It is a \textit{future endpoint} if it is the image under $\mu$ of the greater of the two boundary components of $\partial\Sigma$.
 \end{definition}
 
@@ -98,10 +195,7 @@
     \lean{Physicslib4.Spacetime.IsTrip, Physicslib4.Spacetime.ChronologicallyPrecedes}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
-    \uses{def:curves}
-    \uses{def:future-and-past-oriented-smooth-curves}
-    \uses{def:timelike-and-causal-smooth-curves}
-    \uses{def:endpoints}
+    \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints}
     A \textit{trip} is a curve which is piecewise a future-oriented, timelike geodesic. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
 \end{definition}
 
@@ -110,10 +204,7 @@
     \lean{Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
-    \uses{def:curves}
-    \uses{def:future-and-past-oriented-smooth-curves}
-    \uses{def:timelike-and-causal-smooth-curves}
-    \uses{def:endpoints}
+    \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints}
     A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
 \end{definition}
 
@@ -122,8 +213,7 @@
     \lean{Physicslib4.Spacetime.chronologicalFuture, Physicslib4.Spacetime.chronologicalPast, Physicslib4.Spacetime.chronologicalFutureSet, Physicslib4.Spacetime.chronologicalPastSet}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
-    \uses{def:spacetime}
-    \uses{def:trip}
+    \uses{def:spacetime, def:trip}
     For a spacetime $M$ and $p$ in $M$ the set $I^+(p) = \{q \in M : p \ll q\}$ is called the \textit{chronological future} of $p$. $I^-(p) = \{q \in M : q \ll p\}$ is called the \textit{chronological past} of $p$. The \textit{chronological future} of a set $S \subset M$ is the union of the chronological future of each element of the set
     \begin{align}
         I^+(S) = \bigcup\limits_{p \in S} I^+(p).
@@ -139,8 +229,7 @@
     \lean{Physicslib4.Spacetime.causalFuture, Physicslib4.Spacetime.causalPast, Physicslib4.Spacetime.causalFutureSet, Physicslib4.Spacetime.causalPastSet}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
-    \uses{def:spacetime}
-    \uses{def:causal-trip}
+    \uses{def:spacetime, def:causal-trip}
     For a spacetime $M$ and $p$ in $M$ the set $J^+(p) = \{q \in M : p \prec q\}$ is called the \textit{causal future} of $p$. $J^-(p) = \{q \in M : q \prec p\}$ is called the \textit{causal past} of $p$. The \textit{causal future} of a set $S \subset M$ is the union of the causal future of each element of the set
     \begin{align}
         J^+(S) = \bigcup\limits_{p \in S} J^+(p).
@@ -151,13 +240,38 @@
     \end{align}
 \end{definition}
 
+\begin{lemma}[Chronological Precedence Implies Causal Precedence]
+    \label{lmm:chronological-implies-causal}
+    \lean{Physicslib4.Spacetime.isCausal_of_isTimelike, Physicslib4.Spacetime.isCausalTrip_of_isTrip, Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture, Physicslib4.Spacetime.chronologicalPast_subset_causalPast}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:trip, def:causal-trip, def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
+    Every trip is a causal trip, so $p \ll q$ implies $p \prec q$. Consequently $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A timelike tangent vector is in particular causal (timelike or null), so a future-oriented timelike geodesic is a future-oriented causal geodesic. Hence any trip witnessing $p \ll q$ is also a causal trip witnessing $p \prec q$. The set inclusions follow by unfolding the definitions of the futures and pasts.
+\end{proof}
+
+\begin{lemma}[Monotonicity of Futures and Pasts]
+    \label{lmm:future-past-monotone}
+    \lean{Physicslib4.Spacetime.chronologicalFutureSet_mono, Physicslib4.Spacetime.chronologicalPastSet_mono, Physicslib4.Spacetime.causalFutureSet_mono, Physicslib4.Spacetime.causalPastSet_mono}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
+    The set-valued chronological and causal futures and pasts are monotone: if $S \subseteq T$ then $I^\pm(S) \subseteq I^\pm(T)$ and $J^\pm(S) \subseteq J^\pm(T)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each operator is an indexed union over the points of its argument set, and a union over a larger index set contains the union over a smaller one.
+\end{proof}
+
 \begin{definition}[Spacelike Related]
     \label{def:spacelike-related}
     \lean{Physicslib4.Spacetime.IsSpacelikeRelated}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
-    \uses{def:spacetime}
-    \uses{def:causal-future-and-causal-past}
+    \uses{def:spacetime, def:causal-future-and-causal-past}
     Consider two points $p_1$ and $p_2$ in a spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
 \end{definition}
 
@@ -166,28 +280,64 @@
     \lean{Physicslib4.Spacetime.IsCompletelySpacelike}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
-    \uses{def:spacetime}
-    \uses{def:spacelike-related}
+    \uses{def:spacetime, def:spacelike-related}
     Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in a spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
 \end{definition}
+
+\begin{lemma}[Symmetry of Spacelike Separation]
+    \label{lmm:completely-spacelike-symm}
+    \lean{Physicslib4.Spacetime.isSpacelikeRelated_comm, Physicslib4.Spacetime.isCompletelySpacelike_comm}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:spacelike-related, def:completely-spacelike}
+    Spacelike relatedness is symmetric, and consequently complete spacelike separation is symmetric in its two regions: $\mathbf{O}_1, \mathbf{O}_2$ are completely spacelike if and only if $\mathbf{O}_2, \mathbf{O}_1$ are.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The relation $p_2 \notin J^+(p_1) \cup J^-(p_1)$ is symmetric in $p_1, p_2$ since $J^+(p_1)$ and $J^-(p_1)$ swap roles with $J^-(p_2)$ and $J^+(p_2)$ under the exchange. Symmetry of complete spacelike separation follows by applying this pointwise.
+\end{proof}
+
+\begin{lemma}[Structural Properties of Complete Spacelike Separation]
+    \label{lmm:completely-spacelike-structural}
+    \lean{Physicslib4.Spacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.isCompletelySpacelike_union_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_right}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:completely-spacelike, def:lorentzian-spacetime}
+    Complete spacelike separation is monotone under shrinking either region; the empty region is completely spacelike to any region; and a union of regions is completely spacelike to $\mathbf{O}$ if and only if each part is. The same properties hold for the bundled Lorentzian spacetime.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each follows directly from the pointwise definition: monotonicity by restricting the universally-quantified points, the empty cases vacuously, and the union cases by splitting the membership disjunction.
+\end{proof}
 
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
     \lean{Physicslib4.Spacetime.alexandrovTopology}
     \leanfile{Physicslib4/Spacetime/Minkowski.lean}
     \leanok
-    \uses{def:spacetime}
-    \uses{def:chronological-future-and-chronological-past}
+    \uses{def:spacetime, def:chronological-future-and-chronological-past}
     \textit{Alexandrov topology} on a spacetime $M$ is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in $M$.
 \end{definition}
+
+\begin{lemma}[Basis Sets Are Alexandrov-Open]
+    \label{lmm:alexandrov-basis-open}
+    \lean{Physicslib4.Spacetime.isOpen_alexandrov_of_mem_basis}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:alexandrov-topology}
+    Every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By construction the Alexandrov topology is generated by these basis sets, and any generating set is open in the generated topology.
+\end{proof}
 
 \begin{definition}[Minkowski Spacetime]
     \label{def:minkowski-spacetime}
     \lean{Physicslib4.MinkowskiSpacetime}
     \leanfile{Physicslib4/Spacetime/Minkowski.lean}
     \leanok
-    \uses{def:standard-minkowski-spacetime}
-    \uses{def:alexandrov-topology}
+    \uses{def:standard-minkowski-spacetime, def:alexandrov-topology}
     \textit{Minkowski spacetime} is standard Minkowski spacetime equipped with Alexandrov topology.
 \end{definition}
 
@@ -196,7 +346,99 @@
     \lean{Physicslib4.Spacetime.LorentzianSpacetime}
     \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
     \leanok
-    \uses{def:spacetime}
-    \uses{def:alexandrov-topology}
+    \uses{def:spacetime, def:alexandrov-topology}
     \textit{Lorentzian spacetime} is a spacetime equipped with a Hausdorff Alexandrov topology.
 \end{definition}
+
+\begin{lemma}[Bundled Spacelike Separation and Basis Openness]
+    \label{lmm:lorentzian-causal-lifts}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_comm, Physicslib4.Spacetime.LorentzianSpacetime.isOpen_alexandrov_of_isBasisSet}
+    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \leanok
+    \uses{def:lorentzian-spacetime, lmm:completely-spacelike-symm, lmm:alexandrov-basis-open}
+    On a Lorentzian spacetime, complete spacelike separation of two regions is symmetric, and every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
+\end{lemma}
+\begin{proof}
+    \leanok
+    These are restatements of the symmetry of complete spacelike separation and the openness of basis sets for the underlying spacetime, transported through the bundling of a Lorentzian spacetime over its underlying spacetime and time orientation.
+\end{proof}
+
+\subsection{Isometries and basis-set preservation}
+
+\begin{lemma}[Isometries Preserve the Causal Classification]
+    \label{lmm:isometry-preserves-classification}
+    \lean{Physicslib4.Spacetime.Isometry.preserves_self, Physicslib4.Spacetime.Isometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.Isometry.isNull_mfderiv_iff, Physicslib4.Spacetime.Isometry.isSpacelike_mfderiv_iff}
+    \leanfile{Physicslib4/Spacetime/Isometry.lean}
+    \leanok
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
+    An isometry $\varphi$ of a spacetime preserves the metric square of a tangent vector, $g_{\varphi(x)}(d\varphi_x v, d\varphi_x v) = g_x(v,v)$, and therefore $d\varphi_x v$ is timelike, null, or spacelike if and only if $v$ is.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Specialising the metric-preservation property of an isometry to $w = v$ gives the square identity; the three classification equivalences then follow from the sign of $g(v,v)$ being unchanged.
+\end{proof}
+
+\begin{lemma}[Unique Differentials Along a Path]
+    \label{lmm:path-parameter-unique-diff}
+    \lean{Physicslib4.Spacetime.Path.uniqueDiffOn_parameterSpace}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:paths}
+    The parameter space of a path has unique differentials: being a closed, connected subset of $\mathbb{R}$ with more than one point, it is a non-degenerate interval, hence convex with non-empty interior.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A connected subset of $\mathbb{R}$ is convex, and a closed convex set with at least two points contains a non-degenerate open interval, so has non-empty interior; convex sets with non-empty interior have unique differentials.
+\end{proof}
+
+\begin{lemma}[Pushforward of a Path Under an Isometry]
+    \label{lmm:pushforward-path}
+    \lean{Physicslib4.Spacetime.Isometry.pushforwardPath, Physicslib4.Spacetime.Isometry.pushforwardPath_tangent, Physicslib4.Spacetime.Isometry.pushforwardPath_isTimelike, Physicslib4.Spacetime.Isometry.pushforwardPath_isCausal, Physicslib4.Spacetime.Isometry.pushforwardPath_isPastEndpoint, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureEndpoint}
+    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \leanok
+    \uses{def:paths, def:timelike-and-causal-smooth-curves, def:endpoints, lmm:isometry-preserves-classification, lmm:path-parameter-unique-diff}
+    An isometry $\varphi$ pushes a smooth path $\mu$ forward to the smooth path $\varphi \circ \mu$ on the same parameter space, with tangent vector $d\varphi(\dot\mu)$. The pushforward preserves the timelike and causal conditions and carries the past and future endpoints of $\mu$ to those of $\varphi \circ \mu$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Smoothness and non-vanishing of the derivative of $\varphi \circ \mu$ follow from the chain rule (using unique differentials on the parameter space) together with the fact that an isometry's differential is a linear isomorphism. The tangent identity then transports the classification and endpoint conditions.
+\end{proof}
+
+\begin{lemma}[Isometries Preserve Chronology]
+    \label{lmm:isometry-preserves-chronology}
+    \lean{Physicslib4.Spacetime.Isometry.PreservesFutureOrientation, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_one, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_mul, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureOriented, Physicslib4.Spacetime.Isometry.chronologicallyPrecedes_pushforward, Physicslib4.Spacetime.Isometry.chronologicalFuture_image_subset, Physicslib4.Spacetime.Isometry.chronologicalFuture_image, Physicslib4.Spacetime.Isometry.chronologicalPast_image_subset, Physicslib4.Spacetime.Isometry.chronologicalPast_image}
+    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \leanok
+    \uses{def:trip, def:chronological-future-and-chronological-past, lmm:pushforward-path}
+    Say an isometry $\varphi$ \emph{preserves the future orientation} if its differential sends future-pointing vectors to future-pointing vectors; this property holds for the identity and is closed under composition. Under it, $\varphi$ carries trips to trips, so $p \ll q$ implies $\varphi(p) \ll \varphi(q)$, and the chronological futures and pasts satisfy $\varphi(I^\pm(p)) = I^\pm(\varphi(p))$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Future-orientation preservation makes the pushforward of a future-oriented trip a future-oriented trip, giving $p \ll q \Rightarrow \varphi(p) \ll \varphi(q)$. Applying this to $\varphi$ and to $\varphi^{-1}$ yields the image equalities for $I^+$ and $I^-$.
+\end{proof}
+
+\begin{lemma}[Isometries Preserve Basis Sets]
+    \label{lmm:isometry-preserves-basis-sets}
+    \lean{Physicslib4.Spacetime.Isometry.futureOrientationPreserving, Physicslib4.Spacetime.Isometry.orientedIdentityComponent, Physicslib4.Spacetime.Isometry.alexandrovBasis_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent, Physicslib4.Spacetime.Isometry.smul_set_eq_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_smul_of_mem, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_image, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_smul}
+    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \leanok
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, lmm:isometry-preserves-chronology}
+    The future-orientation-preserving isometries (those $\varphi$ with both $\varphi$ and $\varphi^{-1}$ preserving the orientation) form a subgroup, and intersecting it with the identity component gives the \emph{oriented identity component}. Every such isometry maps Alexandrov-basis diamonds to diamonds, $\varphi(I^+(p) \cap I^-(q)) = I^+(\varphi(p)) \cap I^-(\varphi(q))$, both as an image and in pointwise-action form $\varphi \cdot \mathbf{B}$, and this lifts to the bundled Lorentzian spacetime.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Bundling the inverse into the predicate makes the subgroup axioms follow from the identity and composition cases with no appeal to the group topology. Basis-set preservation is then the image of an intersection of a chronological future and past, computed via the previous lemma using injectivity of the isometry.
+\end{proof}
+
+\begin{lemma}[Axiom 5 Basis-Set Preservation]
+    \label{lmm:axiom5-basis-preservation}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_isBasisSet_smul}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/IdentityComponent.lean}
+    \leanok
+    \uses{lmm:isometry-preserves-basis-sets, def:isometric-covariance-in-curved-spacetime}
+    Instantiating the abstract curved-spacetime interface with the oriented identity component, every isometry $\varphi$ of the abstract spacetime carries Alexandrov-basis sets to basis sets, $\varphi \cdot \mathbf{B}$ is again a basis set. This is exactly the well-definedness condition for the Axiom 5 action $\mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The abstract isometry group of the bridge is, by definition, the oriented identity component, so basis-set preservation transfers verbatim from the concrete statement.
+\end{proof}

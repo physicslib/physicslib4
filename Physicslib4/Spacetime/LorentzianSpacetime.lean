@@ -66,6 +66,11 @@ with a smooth nowhere-vanishing global timelike vector field
 (`timeOrientation`) and an associated *Hausdorff* Alexandrov topology
 (`alexandrov_t2`).
 
+This is the geometric bundle; `LorentzianSpacetime.toAbstract` exposes
+it as the axiom-facing interface
+`Physicslib4.AQFT.HaagKastlerCurved.LorentzianSpacetime` over which the
+curved Haag-Kastler axioms are stated.
+
 Blueprint reference: `def:lorentzian-spacetime`.
 -/
 structure LorentzianSpacetime where
@@ -107,6 +112,44 @@ carrier with the Alexandrov topology. -/
 instance instT2SpaceAlexandrov :
     @T2Space M.Carrier (alexandrovTopology M.toSpacetime M.timeOrientation) :=
   M.alexandrov_t2
+
+/-- Complete spacelike separation of two regions is symmetric. -/
+theorem isCompletelySpacelike_comm {O₁ O₂ : Set M.Carrier} :
+    M.IsCompletelySpacelike O₁ O₂ ↔ M.IsCompletelySpacelike O₂ O₁ :=
+  Spacetime.isCompletelySpacelike_comm M.toSpacetime M.timeOrientation
+
+/-- Complete spacelike separation is monotone under shrinking either region. -/
+theorem isCompletelySpacelike_mono {O₁ O₁' O₂ O₂' : Set M.Carrier}
+    (h₁ : O₁' ⊆ O₁) (h₂ : O₂' ⊆ O₂) (h : M.IsCompletelySpacelike O₁ O₂) :
+    M.IsCompletelySpacelike O₁' O₂' :=
+  Spacetime.isCompletelySpacelike_mono M.toSpacetime M.timeOrientation h₁ h₂ h
+
+@[simp] theorem isCompletelySpacelike_empty_left (O : Set M.Carrier) :
+    M.IsCompletelySpacelike ∅ O :=
+  Spacetime.isCompletelySpacelike_empty_left M.toSpacetime M.timeOrientation O
+
+@[simp] theorem isCompletelySpacelike_empty_right (O : Set M.Carrier) :
+    M.IsCompletelySpacelike O ∅ :=
+  Spacetime.isCompletelySpacelike_empty_right M.toSpacetime M.timeOrientation O
+
+/-- A union of regions is completely spacelike to `O₂` iff each part is. -/
+theorem isCompletelySpacelike_union_left (O₁ O₁' O₂ : Set M.Carrier) :
+    M.IsCompletelySpacelike (O₁ ∪ O₁') O₂ ↔
+      M.IsCompletelySpacelike O₁ O₂ ∧ M.IsCompletelySpacelike O₁' O₂ :=
+  Spacetime.isCompletelySpacelike_union_left M.toSpacetime M.timeOrientation O₁ O₁' O₂
+
+/-- `O₁` is completely spacelike to a union iff it is to each part. -/
+theorem isCompletelySpacelike_union_right (O₁ O₂ O₂' : Set M.Carrier) :
+    M.IsCompletelySpacelike O₁ (O₂ ∪ O₂') ↔
+      M.IsCompletelySpacelike O₁ O₂ ∧ M.IsCompletelySpacelike O₁ O₂' :=
+  Spacetime.isCompletelySpacelike_union_right M.toSpacetime M.timeOrientation O₁ O₂ O₂'
+
+/-- Every Alexandrov-basis set `I⁺(p) ∩ I⁻(q)` is open in the Alexandrov
+topology of the Lorentzian spacetime. -/
+theorem isOpen_alexandrov_of_isBasisSet {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) :
+    @IsOpen M.Carrier (alexandrovTopology M.toSpacetime M.timeOrientation) B :=
+  Spacetime.isOpen_alexandrov_of_mem_basis M.toSpacetime M.timeOrientation hB
 
 end LorentzianSpacetime
 

@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.Spacetime.IsometryTopology
+import Physicslib4.Spacetime.IsometryCausality
 
 /-!
 # Bridging via the identity-component isometry group
@@ -38,15 +39,19 @@ namespace LorentzianSpacetime
 
 /--
 The abstract Haag-Kastler interface induced by a concrete Lorentzian
-spacetime, with the isometry group taken to be the **identity component**
-(isometries connected to the identity), as in Axiom 5.
+spacetime, with the isometry group taken to be the **oriented identity
+component** (identity-component isometries that also preserve the future
+orientation), as in Axiom 5. Using the oriented component makes basis-set
+preservation `φ(𝐁)` a theorem (`toAbstractIdentityComponent_isBasisSet_smul`)
+rather than an unprovable consequence of the bare (C⁰) group topology.
 -/
 noncomputable def toAbstractIdentityComponent (L : LorentzianSpacetime) :
     AQFT.HaagKastlerCurved.LorentzianSpacetime where
   Carrier := L.Carrier
   IsBasisSet := L.IsBasisSet
   IsCompletelySpacelike := L.IsCompletelySpacelike
-  Isom := ↥(Spacetime.Isometry.identityComponent L.toSpacetime)
+  Isom := ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime
+    L.timeOrientation)
   instGroup := inferInstance
   instAction := inferInstance
 
@@ -55,6 +60,28 @@ noncomputable def toAbstractIdentityComponent (L : LorentzianSpacetime) :
 
 @[simp] theorem toAbstractIdentityComponent_IsBasisSet (L : LorentzianSpacetime) :
     (L.toAbstractIdentityComponent).IsBasisSet = L.IsBasisSet := rfl
+
+/-- The abstract isometry group of the bridge is, definitionally, the oriented
+identity component. Exposed as a `simp` lemma so abstract-interface statements
+can be rewritten to the concrete subgroup. -/
+@[simp] theorem toAbstractIdentityComponent_Isom (L : LorentzianSpacetime) :
+    (L.toAbstractIdentityComponent).Isom
+      = ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime
+          L.timeOrientation) := rfl
+
+open scoped Pointwise in
+/-- **Axiom 5 basis-set preservation, stated over the abstract bridge.** Every
+isometry `φ` of the abstract spacetime carries Alexandrov-basis sets to basis
+sets: `φ(𝐁) = φ • 𝐁` is again a basis set. This is what makes the Axiom 5
+action `𝔘(𝐁) → 𝔘(φ(𝐁))` well-defined. -/
+theorem toAbstractIdentityComponent_isBasisSet_smul (L : LorentzianSpacetime)
+    (φ : (L.toAbstractIdentityComponent).Isom)
+    {B : Set (L.toAbstractIdentityComponent).Carrier}
+    (hB : (L.toAbstractIdentityComponent).IsBasisSet B) :
+    (L.toAbstractIdentityComponent).IsBasisSet (φ • B) := by
+  let g : ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime
+      L.timeOrientation) := φ
+  exact L.isBasisSet_smul (↑g) g.2 hB
 
 /-- The identity-component isometry group acts **faithfully** on the
 spacetime: an identity-component isometry is determined by its action on
