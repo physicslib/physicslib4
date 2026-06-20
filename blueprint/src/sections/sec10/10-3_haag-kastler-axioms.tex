@@ -126,3 +126,61 @@ The next axiom makes use of the following new definition:
 This concludes the presentation of the ``sharpened'' axioms. As proven in this blog post, these ``sharpened'' axioms entail the original axioms save Axiom 6 (Primitivity), which is an axiom that we abandon.
 
 These ``sharpened'' axioms also allow for a straightforward generalization to a set of axioms describing AQFT in curved spacetime, i.e. a set of axioms describing AQFT in a curved spacetime background that is fixed and treated classically. In a subsequent blog post we will detail these axioms.
+
+\subsection{Covariant States and the Covariance Action}
+
+The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts on the net fiberwise, through the $*$-isomorphisms $\alpha_L : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(L\cdot\mathbf{B})$. We record two consequences: the notion of a Lorentz-covariant family of local states, and the lift of the fiberwise action to a single dynamical $*$-automorphism of the quasilocal algebra.
+
+\begin{definition}[Covariant Family of Local States]
+    \label{def:covariant-state-family}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily}
+    \leanfile{Physicslib4/AQFT/HaagKastler/CovariantState.lean}
+    \leanok
+    \uses{def:haag-kastler-net, def:state, def:lorentz-covariance}
+    Given a Haag-Kastler net (\ref{def:haag-kastler-net}), a \emph{covariant family of local states} assigns to every region $\mathbf{B}$ a state $\omega_{\mathbf{B}}$ on the local algebra $\mathfrak{U}(\mathbf{B})$ such that, for every Lorentz transformation $L$ and every $a \in \mathfrak{U}(\mathbf{B})$, one has $\omega_{\mathbf{B}}(a) = \omega_{L\cdot\mathbf{B}}(\alpha_L a)$, where $\alpha_L$ is the covariance isomorphism of \ref{def:lorentz-covariance}. The local states are thus intertwined by the Lorentz action.
+\end{definition}
+
+\begin{lemma}[Composition of Covariance]
+    \label{lmm:covariant-state-family-compose}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily.comp}
+    \leanfile{Physicslib4/AQFT/HaagKastler/CovariantState.lean}
+    \leanok
+    \uses{def:covariant-state-family}
+    For a covariant family of local states, the covariance relation composes along the group: $\omega_{\mathbf{B}}(a) = \omega_{L'\cdot(L\cdot\mathbf{B})}\big(\alpha_{L'}(\alpha_L a)\big)$, reflecting the multiplicativity of the Lorentz action.
+\end{lemma}
+
+\begin{definition}[Quasilocal Covariance Automorphism]
+    \label{def:quasilocal-lift}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAction.lean}
+    \leanok
+    \uses{def:quasilocal-algebra, def:lorentz-covariance}
+    A \emph{lift} of the fiberwise Lorentz action of $L$ to a quasilocal algebra $\mathfrak{U}$ (\ref{def:quasilocal-algebra}) is a $*$-automorphism $\beta_L$ of $\mathfrak{U}$ intertwining the local embeddings $\iota_{\mathbf{B}}$ with the covariance isomorphisms: $\beta_L(\iota_{\mathbf{B}} a) = \iota_{L\cdot\mathbf{B}}(\alpha_L a)$ for every Alexandrov-basis set $\mathbf{B}$.
+\end{definition}
+
+\begin{lemma}[Uniqueness of the Quasilocal Lift]
+    \label{lmm:quasilocal-lift-unique}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift.unique}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAction.lean}
+    \leanok
+    \uses{def:quasilocal-lift}
+    Any two lifts of the same $L$ have the same underlying automorphism: they agree on the union of the local images, which is dense in $\mathfrak{U}$, and $*$-automorphisms of a C*-algebra are continuous.
+\end{lemma}
+
+\begin{theorem}[Existence of the Quasilocal Lift]
+    \label{thrm:quasilocal-lift-exists}
+    \lean{Physicslib4.AQFT.HaagKastler.nonempty_quasilocalLift}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{def:quasilocal-lift, def:quasilocal-algebra}
+    For a covariance-compatible quasilocal algebra, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists. The intertwiner is defined on the directed union of local images (a dense $*$-subalgebra) and extended by uniform continuity; the inverse is supplied by $L^{-1}$, and the group laws $\beta_{L'L} = \beta_{L'}\circ\beta_L$ and $\beta_{1} = \mathrm{id}$ furnish the two-sided inverse.
+\end{theorem}
+
+\begin{theorem}[Existence for the Trivial Net]
+    \label{thrm:quasilocal-lift-trivial}
+    \lean{Physicslib4.AQFT.HaagKastler.nonempty_trivialQuasilocalLift}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{thrm:quasilocal-lift-exists}
+    The covariance-compatibility hypothesis is satisfiable: the trivial net's quasilocal algebra is covariance-compatible (every $*$-automorphism of $\mathbb{C}$ is the identity), so the quasilocal lift exists unconditionally for the trivial net.
+\end{theorem}

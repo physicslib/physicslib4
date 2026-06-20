@@ -125,3 +125,25 @@ The final axiom states:
 \end{definition}
 
 Generally these axioms follow in a straightforward manner from those of AQFT in Minkowski spacetime. The only ``surprise'' in this presentation is the absence of a quasilocal algebra. However, as we found, its absence is simply a reflection of the observational constraints of Lorentzian spacetime which don't exist in Minkowski spacetime.
+
+\subsection{Covariant States in Curved Spacetime}
+
+As in the Minkowski case, the isometric covariance (\ref{def:isometric-covariance-in-curved-spacetime}) acts fiberwise through the $*$-isomorphisms $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$. Since there is no quasilocal algebra, only the local notion of a covariant family of states is available.
+
+\begin{definition}[Covariant Family of Local States in Curved Spacetime]
+    \label{def:covariant-state-family-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsCovariantFamily}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/CovariantState.lean}
+    \leanok
+    \uses{def:haag-kastler-net-in-curved-spacetime, def:state, def:isometric-covariance-in-curved-spacetime}
+    Given a Haag-Kastler net on a Lorentzian spacetime (\ref{def:haag-kastler-net-in-curved-spacetime}), a \emph{covariant family of local states} assigns to every region $\mathbf{B}$ a state $\omega_{\mathbf{B}}$ on $\mathfrak{U}(\mathbf{B})$ such that, for every identity-component isometry $\varphi$ and every $a \in \mathfrak{U}(\mathbf{B})$, $\omega_{\mathbf{B}}(a) = \omega_{\varphi(\mathbf{B})}(\alpha_\varphi a)$, where $\alpha_\varphi$ is the covariance isomorphism of \ref{def:isometric-covariance-in-curved-spacetime}.
+\end{definition}
+
+\begin{lemma}[Composition of Covariance in Curved Spacetime]
+    \label{lmm:covariant-state-family-compose-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsCovariantFamily.comp}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/CovariantState.lean}
+    \leanok
+    \uses{def:covariant-state-family-in-curved-spacetime}
+    For a covariant family of local states, the covariance relation composes along the isometry group: $\omega_{\mathbf{B}}(a) = \omega_{\varphi'(\varphi(\mathbf{B}))}\big(\alpha_{\varphi'}(\alpha_\varphi a)\big)$.
+\end{lemma}
