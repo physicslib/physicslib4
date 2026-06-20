@@ -317,14 +317,19 @@ theorem trivialLocalNet_lorentzCovariance :
   · intro _ _ _ _; rfl
   · intro _ _ _ _ _ _ _ _ _ _; rfl
 
+/-- The *trivial Haag-Kastler net*: the trivial local net (every region ↦ `ℂ`)
+bundled with proofs of Axioms 2-5. -/
+noncomputable def trivialHaagKastlerNet : HaagKastlerNet where
+  U := trivialLocalNet
+  isotony := trivialLocalNet_isotony
+  localCommutativity := trivialLocalNet_localCommutativity
+  quasilocalCompleteness := trivialLocalNet_quasilocalCompleteness
+  lorentzCovariance := trivialLocalNet_lorentzCovariance
+
 /-- **The Haag-Kastler axioms are jointly satisfiable.** The trivial net (every
 region ↦ `ℂ`) is a Haag-Kastler net, so `HaagKastlerNet` is nonempty. -/
 theorem nonempty_haagKastlerNet : Nonempty HaagKastlerNet :=
-  ⟨{ U := trivialLocalNet
-     isotony := trivialLocalNet_isotony
-     localCommutativity := trivialLocalNet_localCommutativity
-     quasilocalCompleteness := trivialLocalNet_quasilocalCompleteness
-     lorentzCovariance := trivialLocalNet_lorentzCovariance }⟩
+  ⟨trivialHaagKastlerNet⟩
 
 end HaagKastler
 end AQFT

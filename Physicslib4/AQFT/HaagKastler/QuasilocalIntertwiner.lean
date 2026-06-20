@@ -411,6 +411,29 @@ theorem nonempty_quasilocalLift (hcov : IsCovariant N Q)
     (L : InhomogeneousLorentzGroup) : Nonempty (N.QuasilocalLift Q L) :=
   ⟨quasilocalLift hcov L⟩
 
+/-- **The trivial quasilocal algebra is covariance-compatible.** Every local
+algebra is `ℂ`, every `ℂ`-algebra `*`-automorphism of `ℂ` is the identity, and
+the embeddings/inclusions are the identity, so the compatibility holds. -/
+theorem isCovariant_trivial :
+    IsCovariant trivialHaagKastlerNet trivialQuasilocalAlgebra := by
+  have key : ∀ (f : ℂ ≃⋆ₐ[ℂ] ℂ) (z : ℂ), f z = z := fun f z => by
+    simpa using AlgHomClass.commutes f z
+  intro L B C hB hC h a
+  change trivialHaagKastlerNet.covEquiv L B a
+      = trivialHaagKastlerNet.covEquiv L C (trivialQuasilocalAlgebra.inclusion hB hC h a)
+  exact (key (trivialHaagKastlerNet.covEquiv L B) a).trans
+    (key (trivialHaagKastlerNet.covEquiv L C)
+      (trivialQuasilocalAlgebra.inclusion hB hC h a)).symm
+
+/-- **The quasilocal lift exists unconditionally for the trivial net.** -/
+noncomputable def trivialQuasilocalLift (L : InhomogeneousLorentzGroup) :
+    trivialHaagKastlerNet.QuasilocalLift trivialQuasilocalAlgebra L :=
+  quasilocalLift isCovariant_trivial L
+
+theorem nonempty_trivialQuasilocalLift (L : InhomogeneousLorentzGroup) :
+    Nonempty (trivialHaagKastlerNet.QuasilocalLift trivialQuasilocalAlgebra L) :=
+  ⟨trivialQuasilocalLift L⟩
+
 end HaagKastler
 end AQFT
 end Physicslib4
