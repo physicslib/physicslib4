@@ -38,7 +38,7 @@ C*-algebra `A` into a C*-algebra `B` extends to a `*`-homomorphism on all of
 theorem exists_starAlgHom_extend_of_dense
     (S : StarSubalgebra ℂ A) (hS : Dense (S : Set A))
     (f : S →⋆ₐ[ℂ] B) (hf : UniformContinuous (f : S → B)) :
-    ∃ F : A →⋆ₐ[ℂ] B, ∀ x : S, F (x : A) = f x := by
+    ∃ F : A →⋆ₐ[ℂ] B, Continuous F ∧ ∀ x : S, F (x : A) = f x := by
   have hue : IsUniformInducing ((↑) : S → A) := isUniformInducing_val (S : Set A)
   have hdr : DenseRange ((↑) : S → A) := by
     simpa only [DenseRange, Subtype.range_coe_subtype, SetLike.setOf_mem_eq] using hS
@@ -104,6 +104,6 @@ theorem exists_starAlgHom_extend_of_dense
       map_mul' := hmul
       map_zero' := hzero
       map_add' := hadd }
-  refine ⟨{ AlgHom.mk' Fring hsmul with map_star' := hstar }, fun x => heq x⟩
+  refine ⟨{ AlgHom.mk' Fring hsmul with map_star' := hstar }, hcont, fun x => heq x⟩
 
 end Physicslib4
