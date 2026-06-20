@@ -180,6 +180,64 @@ theorem intertwiner_ι (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
   exact ι_covEquiv_congr N Q L hcompat h₀.choose_spec.1 hB h₀.choose_spec.2.choose a
     h₀.choose_spec.2.choose_spec
 
+/-- **Additivity of the intertwiner.** On the local images it preserves
+addition - both arguments are routed through a common basis algebra `ι_C`. -/
+theorem intertwiner_add (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    {x y : Q.carrier} (hx : x ∈ Q.localImages) (hy : y ∈ Q.localImages) :
+    intertwiner N Q L (x + y) = intertwiner N Q L x + intertwiner N Q L y := by
+  obtain ⟨C, hC, a, b, rfl, rfl⟩ := Q.exists_common_image hx hy
+  rw [← map_add (Q.ι C), intertwiner_ι N Q L hcompat hC (a + b),
+    intertwiner_ι N Q L hcompat hC a, intertwiner_ι N Q L hcompat hC b,
+    map_add (N.covEquiv L C), map_add (Q.ι (L • C))]
+
+/-- **Multiplicativity of the intertwiner.** On the local images it preserves
+multiplication - both arguments are routed through a common basis algebra. -/
+theorem intertwiner_mul (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    {x y : Q.carrier} (hx : x ∈ Q.localImages) (hy : y ∈ Q.localImages) :
+    intertwiner N Q L (x * y) = intertwiner N Q L x * intertwiner N Q L y := by
+  obtain ⟨C, hC, a, b, rfl, rfl⟩ := Q.exists_common_image hx hy
+  rw [← map_mul (Q.ι C), intertwiner_ι N Q L hcompat hC (a * b),
+    intertwiner_ι N Q L hcompat hC a, intertwiner_ι N Q L hcompat hC b,
+    map_mul (N.covEquiv L C), map_mul (Q.ι (L • C))]
+
+/-- The intertwiner preserves `0`. -/
+theorem intertwiner_zero (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
+    intertwiner N Q L 0 = 0 := by
+  have h : intertwiner N Q L (Q.ι trivialBasisSet (0 : N.U.algebra trivialBasisSet)) = 0 := by
+    rw [intertwiner_ι N Q L hcompat isAlexandrovBasisSet_trivialBasisSet 0, map_zero, map_zero]
+  simpa using h
+
+/-- The intertwiner preserves `1`. -/
+theorem intertwiner_one (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
+    intertwiner N Q L 1 = 1 := by
+  have h : intertwiner N Q L (Q.ι trivialBasisSet (1 : N.U.algebra trivialBasisSet)) = 1 := by
+    rw [intertwiner_ι N Q L hcompat isAlexandrovBasisSet_trivialBasisSet 1, map_one, map_one]
+  simpa using h
+
+/-- The intertwiner preserves `star` on the local images. -/
+theorem intertwiner_star (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    {x : Q.carrier} (hx : x ∈ Q.localImages) :
+    intertwiner N Q L (star x) = star (intertwiner N Q L x) := by
+  rw [Q.mem_localImages] at hx
+  obtain ⟨B, hB, a, rfl⟩ := hx
+  rw [← map_star (Q.ι B), intertwiner_ι N Q L hcompat hB (star a),
+    intertwiner_ι N Q L hcompat hB a, map_star (N.covEquiv L B), map_star (Q.ι (L • B))]
+
+/-- The intertwiner is `ℂ`-linear on the local images. -/
+theorem intertwiner_smul (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (c : ℂ) {x : Q.carrier} (hx : x ∈ Q.localImages) :
+    intertwiner N Q L (c • x) = c • intertwiner N Q L x := by
+  rw [Q.mem_localImages] at hx
+  obtain ⟨B, hB, a, rfl⟩ := hx
+  rw [← map_smul (Q.ι B) c a, intertwiner_ι N Q L hcompat hB (c • a),
+    intertwiner_ι N Q L hcompat hB a, map_smul (N.covEquiv L B), map_smul (Q.ι (L • B))]
+
 end HaagKastler
 end AQFT
 end Physicslib4
