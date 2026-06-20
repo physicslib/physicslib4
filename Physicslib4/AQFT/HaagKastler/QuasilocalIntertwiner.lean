@@ -238,6 +238,44 @@ theorem intertwiner_smul (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
   rw [← map_smul (Q.ι B) c a, intertwiner_ι N Q L hcompat hB (c • a),
     intertwiner_ι N Q L hcompat hB a, map_smul (N.covEquiv L B), map_smul (Q.ι (L • B))]
 
+/-- **The intertwiner as a `*`-homomorphism on the local subalgebra.** Bundles
+the homomorphism laws of `intertwiner` into a `StarAlgHom` from the dense local
+`*`-subalgebra of `𝔘` into `𝔘`. -/
+noncomputable def intertwinerHom (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
+    Q.localStarSubalgebra →⋆ₐ[ℂ] Q.carrier where
+  toFun s := intertwiner N Q L (s : Q.carrier)
+  map_one' := by
+    change intertwiner N Q L ((1 : Q.localStarSubalgebra) : Q.carrier) = 1
+    rw [OneMemClass.coe_one]; exact intertwiner_one N Q L hcompat
+  map_mul' s t := by
+    change intertwiner N Q L ((s * t : Q.localStarSubalgebra) : Q.carrier)
+      = intertwiner N Q L (s : Q.carrier) * intertwiner N Q L (t : Q.carrier)
+    rw [MulMemClass.coe_mul]; exact intertwiner_mul N Q L hcompat s.2 t.2
+  map_zero' := by
+    change intertwiner N Q L ((0 : Q.localStarSubalgebra) : Q.carrier) = 0
+    rw [ZeroMemClass.coe_zero]; exact intertwiner_zero N Q L hcompat
+  map_add' s t := by
+    change intertwiner N Q L ((s + t : Q.localStarSubalgebra) : Q.carrier)
+      = intertwiner N Q L (s : Q.carrier) + intertwiner N Q L (t : Q.carrier)
+    rw [AddMemClass.coe_add]; exact intertwiner_add N Q L hcompat s.2 t.2
+  commutes' r := by
+    change intertwiner N Q L ((algebraMap ℂ Q.localStarSubalgebra r : Q.carrier))
+      = algebraMap ℂ Q.carrier r
+    have hcoe : ((algebraMap ℂ Q.localStarSubalgebra r : Q.carrier))
+        = algebraMap ℂ Q.carrier r :=
+      AlgHomClass.commutes (StarSubalgebra.subtype Q.localStarSubalgebra) r
+    rw [hcoe, Algebra.algebraMap_eq_smul_one,
+      intertwiner_smul N Q L hcompat r (one_mem Q.localStarSubalgebra),
+      intertwiner_one N Q L hcompat]
+  map_star' s := by
+    rw [StarMemClass.coe_star]; exact intertwiner_star N Q L hcompat s.2
+
+@[simp] theorem intertwinerHom_apply (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
+    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (s : Q.localStarSubalgebra) :
+    intertwinerHom N Q L hcompat s = intertwiner N Q L (s : Q.carrier) := rfl
+
 end HaagKastler
 end AQFT
 end Physicslib4
