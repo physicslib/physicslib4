@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.Net
+import Physicslib4.AQFT.HaagKastler.QuasilocalAction
 import Physicslib4.Spacetime.MinkowskiDirected
 import Physicslib4.Spacetime.LorentzCausality
 import Physicslib4.Analysis.CStarDenseExtend
@@ -119,6 +120,14 @@ theorem dense_localStarSubalgebra :
     Dense (Q.localStarSubalgebra : Set Q.carrier) := by
   rw [coe_localStarSubalgebra]
   exact Q.dense_range
+
+/-- **Naturality of the embeddings under set equality.** If `B₁ = B₂` then the
+embedding of `a` and of its transport agree in `𝔘`. Used to reconcile the
+cross-fiber casts coming from `covEquiv_one` / `covEquiv_mul`. -/
+theorem ι_cast {B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier} (h : B₁ = B₂)
+    (a : U.algebra B₁) :
+    Q.ι B₂ ((congrArg U.algebra h).mp a) = Q.ι B₁ a := by
+  subst h; rfl
 
 end QuasilocalAlgebra
 
@@ -306,12 +315,101 @@ to a `*`-homomorphism `F : 𝔘 →⋆ₐ[ℂ] 𝔘` agreeing with the intertwin
 local images. -/
 theorem exists_intertwiner_extend (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U)
     (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
-    ∃ F : Q.carrier →⋆ₐ[ℂ] Q.carrier,
+    ∃ F : Q.carrier →⋆ₐ[ℂ] Q.carrier, Continuous F ∧
       ∀ s : Q.localStarSubalgebra, F (s : Q.carrier) = intertwiner N Q L (s : Q.carrier) := by
-  obtain ⟨F, hF⟩ := exists_starAlgHom_extend_of_dense Q.localStarSubalgebra
+  obtain ⟨F, hFc, hF⟩ := exists_starAlgHom_extend_of_dense Q.localStarSubalgebra
     Q.dense_localStarSubalgebra (intertwinerHom N Q L hcompat)
     (intertwinerHom_isometry N Q L hcompat).uniformContinuous
-  exact ⟨F, hF⟩
+  exact ⟨F, hFc, hF⟩
+
+/-- A quasilocal algebra is *covariant* if its embeddings are covariance-
+compatible for **every** Lorentz transformation (so the lift exists for all
+`L`). -/
+def IsCovariant (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U) : Prop :=
+  ∀ L : InhomogeneousLorentzGroup, IsCovariantQuasilocal N Q L
+
+variable {N : HaagKastlerNet} {Q : QuasilocalAlgebra N.U}
+
+/-- The chosen extended intertwiner `Φ_L : 𝔘 →⋆ₐ[ℂ] 𝔘` for a covariant
+quasilocal algebra. -/
+noncomputable def extendHom (hcov : IsCovariant N Q)
+    (L : InhomogeneousLorentzGroup) : Q.carrier →⋆ₐ[ℂ] Q.carrier :=
+  (exists_intertwiner_extend N Q L (hcov L)).choose
+
+theorem extendHom_continuous (hcov : IsCovariant N Q)
+    (L : InhomogeneousLorentzGroup) : Continuous (extendHom hcov L) :=
+  (exists_intertwiner_extend N Q L (hcov L)).choose_spec.1
+
+/-- `Φ_L` implements the fiberwise action on the generators:
+`Φ_L (ι_B a) = ι_{L·B}(α_L a)`. -/
+theorem extendHom_ι (hcov : IsCovariant N Q) (L : InhomogeneousLorentzGroup)
+    {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
+    (a : N.U.algebra B) :
+    extendHom hcov L (Q.ι B a) = Q.ι (L • B) (N.covEquiv L B a) := by
+  have hmem : Q.ι B a ∈ Q.localStarSubalgebra := (Q.mem_localImages).mpr ⟨B, hB, a, rfl⟩
+  have h := (exists_intertwiner_extend N Q L (hcov L)).choose_spec.2 ⟨Q.ι B a, hmem⟩
+  rw [intertwiner_ι N Q L (hcov L) hB a] at h
+  exact h
+
+/-- Two `*`-homomorphisms of `𝔘` that are continuous and agree on the local
+images are equal (the images are dense). -/
+theorem starAlgHom_ext_localImages {f g : Q.carrier →⋆ₐ[ℂ] Q.carrier}
+    (hf : Continuous f) (hg : Continuous g)
+    (h : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄, IsAlexandrovBasisSet B →
+      ∀ a : N.U.algebra B, f (Q.ι B a) = g (Q.ι B a)) :
+    f = g := by
+  apply DFunLike.coe_injective
+  apply Continuous.ext_on Q.dense_range hf hg
+  intro x hx
+  simp only [Set.mem_iUnion, Set.mem_range] at hx
+  obtain ⟨B, hB, a, rfl⟩ := hx
+  exact h hB a
+
+/-- **`Φ` is multiplicative in the group element:** `Φ_{L'·L} = Φ_{L'} ∘ Φ_L`. -/
+theorem extendHom_comp (hcov : IsCovariant N Q)
+    (L L' : InhomogeneousLorentzGroup) :
+    extendHom hcov (L' * L) = (extendHom hcov L').comp (extendHom hcov L) := by
+  refine starAlgHom_ext_localImages (extendHom_continuous hcov (L' * L))
+    ((extendHom_continuous hcov L').comp (extendHom_continuous hcov L)) ?_
+  intro B hB a
+  rw [StarAlgHom.comp_apply, extendHom_ι hcov L hB a,
+    extendHom_ι hcov L' (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a),
+    extendHom_ι hcov (L' * L) hB a, N.covEquiv_mul L L' B a]
+  exact Q.ι_cast (mul_smul L' L B).symm _
+
+/-- **`Φ_1 = id`.** -/
+theorem extendHom_one (hcov : IsCovariant N Q) :
+    extendHom hcov 1 = StarAlgHom.id ℂ Q.carrier := by
+  refine starAlgHom_ext_localImages (extendHom_continuous hcov 1) continuous_id ?_
+  intro B hB a
+  rw [extendHom_ι hcov 1 hB a, N.covEquiv_one B a]
+  exact Q.ι_cast (one_smul InhomogeneousLorentzGroup B).symm a
+
+theorem extendHom_comp_inv (hcov : IsCovariant N Q) (L : InhomogeneousLorentzGroup) :
+    (extendHom hcov L).comp (extendHom hcov L⁻¹) = StarAlgHom.id ℂ Q.carrier := by
+  rw [← extendHom_comp hcov L⁻¹ L, mul_inv_cancel, extendHom_one]
+
+theorem extendHom_inv_comp (hcov : IsCovariant N Q) (L : InhomogeneousLorentzGroup) :
+    (extendHom hcov L⁻¹).comp (extendHom hcov L) = StarAlgHom.id ℂ Q.carrier := by
+  rw [← extendHom_comp hcov L L⁻¹, inv_mul_cancel, extendHom_one]
+
+/-- **Existence of the quasilocal lift.** For a covariance-compatible quasilocal
+algebra, the fiberwise Lorentz action lifts to a `*`-automorphism of `𝔘`,
+inhabiting `QuasilocalLift`. -/
+noncomputable def quasilocalLift (hcov : IsCovariant N Q)
+    (L : InhomogeneousLorentzGroup) : N.QuasilocalLift Q L where
+  β := StarAlgEquiv.ofStarAlgHom (extendHom hcov L) (extendHom hcov L⁻¹)
+        (fun x => DFunLike.congr_fun (extendHom_inv_comp hcov L) x)
+        (fun x => DFunLike.congr_fun (extendHom_comp_inv hcov L) x)
+  intertwines := by
+    intro B hB a
+    rw [StarAlgEquiv.ofStarAlgHom_apply]
+    exact extendHom_ι hcov L hB a
+
+/-- The quasilocal lift exists for every Lorentz transformation. -/
+theorem nonempty_quasilocalLift (hcov : IsCovariant N Q)
+    (L : InhomogeneousLorentzGroup) : Nonempty (N.QuasilocalLift Q L) :=
+  ⟨quasilocalLift hcov L⟩
 
 end HaagKastler
 end AQFT
