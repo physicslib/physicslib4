@@ -434,6 +434,53 @@ theorem nonempty_trivialQuasilocalLift (L : InhomogeneousLorentzGroup) :
     Nonempty (trivialHaagKastlerNet.QuasilocalLift trivialQuasilocalAlgebra L) :=
   ⟨trivialQuasilocalLift L⟩
 
+/-- A **covariant quasilocal algebra**: a Haag-Kastler net together with a
+quasilocal algebra whose embeddings are covariance-compatible for every Lorentz
+transformation. On such data the Lorentz action lifts to a `*`-automorphism of
+the quasilocal algebra for every `L`. -/
+structure CovariantQuasilocalAlgebra where
+  /-- The underlying Haag-Kastler net. -/
+  net : HaagKastlerNet
+  /-- A quasilocal algebra of the net. -/
+  quasilocal : QuasilocalAlgebra net.U
+  /-- Covariance-compatibility of the embeddings, for every Lorentz
+  transformation. -/
+  covariant : IsCovariant net quasilocal
+
+namespace CovariantQuasilocalAlgebra
+
+/-- The lift of the Lorentz action of `L` to a `*`-automorphism of the
+quasilocal algebra, packaged as a `QuasilocalLift`. -/
+noncomputable def lift (C : CovariantQuasilocalAlgebra)
+    (L : InhomogeneousLorentzGroup) : C.net.QuasilocalLift C.quasilocal L :=
+  quasilocalLift C.covariant L
+
+/-- The covariance `*`-automorphism `β_L` of the quasilocal algebra. -/
+noncomputable def action (C : CovariantQuasilocalAlgebra)
+    (L : InhomogeneousLorentzGroup) : C.quasilocal.carrier ≃⋆ₐ[ℂ] C.quasilocal.carrier :=
+  (C.lift L).β
+
+/-- The action implements the fiberwise covariance on the local images:
+`β_L (ι_B a) = ι_{L·B}(α_L a)`. -/
+theorem action_ι (C : CovariantQuasilocalAlgebra) (L : InhomogeneousLorentzGroup)
+    {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
+    (a : C.net.U.algebra B) :
+    C.action L (C.quasilocal.ι B a)
+      = C.quasilocal.ι (L • B) (C.net.covEquiv L B a) :=
+  (C.lift L).intertwines hB a
+
+end CovariantQuasilocalAlgebra
+
+/-- The trivial net with its trivial quasilocal algebra is a covariant quasilocal
+algebra, so the structure is inhabited. -/
+noncomputable def trivialCovariantQuasilocalAlgebra : CovariantQuasilocalAlgebra where
+  net := trivialHaagKastlerNet
+  quasilocal := trivialQuasilocalAlgebra
+  covariant := isCovariant_trivial
+
+theorem nonempty_covariantQuasilocalAlgebra : Nonempty CovariantQuasilocalAlgebra :=
+  ⟨trivialCovariantQuasilocalAlgebra⟩
+
 end HaagKastler
 end AQFT
 end Physicslib4
