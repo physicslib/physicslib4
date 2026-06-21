@@ -538,7 +538,9 @@ theorem IsInvariantState.exists_gns_unitary (C : CovariantQuasilocalAlgebra)
         (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
         (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
           U L (π a Ω) = π (C.action L a) Ω) ∧
-        (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) := by
+        (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
+        (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
+        U 1 = LinearIsometryEquiv.refl ℂ H := by
   obtain ⟨H, _, _, _, π, Ω, hcyc, hrepro, _⟩ := Physicslib4.GNS.gns_construction ω
   let cyc : C.quasilocal.carrier →ₗ[ℂ] H :=
     { toFun := fun a => π a Ω
@@ -562,7 +564,11 @@ theorem IsInvariantState.exists_gns_unitary (C : CovariantQuasilocalAlgebra)
       ← Real.sqrt_sq (norm_nonneg (π a Ω)), h2]
   let U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H) := fun L =>
     (C.action L).toAlgEquiv.toLinearEquiv.extendOfIsometry cyc cyc hcycdense hcycdense (hnorm L)
-  refine ⟨H, inferInstance, inferInstance, inferInstance, π, Ω, U, hrepro, ?_, ?_⟩
+  have hUcyc : ∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
+      U L (cyc a) = cyc (C.action L a) := fun L a =>
+    (C.action L).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense
+      (hnorm L) a
+  refine ⟨H, inferInstance, inferInstance, inferInstance, π, Ω, U, hrepro, ?_, ?_, ?_, ?_⟩
   · intro L a
     exact (C.action L).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense
       (hnorm L) a
@@ -580,6 +586,25 @@ theorem IsInvariantState.exists_gns_unitary (C : CovariantQuasilocalAlgebra)
           (C.action L).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense
             (hnorm L) 1
       _ = Ω := hone
+  · intro L L'
+    have hfun : (U (L' * L) : H → H) = fun x => U L' (U L x) := by
+      refine Continuous.ext_on hcycdense (U (L' * L)).continuous
+        ((U L').continuous.comp (U L).continuous) ?_
+      rintro _ ⟨a, rfl⟩
+      change U (L' * L) (cyc a) = U L' (U L (cyc a))
+      rw [hUcyc, hUcyc, hUcyc, action_mul_apply]
+    apply LinearIsometryEquiv.ext
+    intro x
+    rw [LinearIsometryEquiv.trans_apply]
+    exact congrFun hfun x
+  · have hfun : (U (1 : InhomogeneousLorentzGroup) : H → H) = id := by
+      refine Continuous.ext_on hcycdense (U 1).continuous continuous_id ?_
+      rintro _ ⟨a, rfl⟩
+      rw [hUcyc, action_one_apply, id_eq]
+    apply LinearIsometryEquiv.ext
+    intro x
+    change U 1 x = x
+    exact congrFun hfun x
 
 end CovariantQuasilocalAlgebra
 
