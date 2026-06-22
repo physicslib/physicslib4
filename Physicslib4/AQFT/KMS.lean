@@ -64,8 +64,67 @@ def IsKMSState (α : ℝ → (A ≃⋆ₐ[ℂ] A)) (β : ℝ) (ω : State A) : P
   ∀ a b : A, ∃ F : ℂ → ℂ,
     ContinuousOn F (kmsStrip β) ∧
     DifferentiableOn ℂ F (kmsStripInterior β) ∧
+    (∃ C : ℝ, ∀ z ∈ kmsStrip β, ‖F z‖ ≤ C) ∧
     (∀ t : ℝ, F (t : ℂ) = (ω (a * α t b) : ℂ)) ∧
     (∀ t : ℝ, F ((t : ℂ) + (β : ℂ) * Complex.I) = (ω (α t b * a) : ℂ))
+
+/-- **The strip-Liouville principle.** A function `F` that is continuous and
+bounded on the closed strip `0 ≤ Im z ≤ β`, holomorphic on the open strip, and
+has equal boundary values `F(t) = F(t + iβ)` for all real `t`, is constant along
+the real axis: `F(t) = F(0)`.
+
+Mathematically this is a standard consequence of the Schwarz reflection
+principle (the equal boundary values let `F` extend to an `iβ`-periodic entire
+function, bounded, hence constant by Liouville). Mathlib provides Liouville
+(`Differentiable.apply_eq_apply_of_bounded`) and Phragmén-Lindelöf for strips,
+but not the holomorphic gluing across a line that the periodic extension needs,
+so this principle is isolated here as an explicit hypothesis rather than proved.
+-/
+def StripLiouville (β : ℝ) : Prop :=
+  ∀ F : ℂ → ℂ, ContinuousOn F (kmsStrip β) → DifferentiableOn ℂ F (kmsStripInterior β) →
+    (∃ C : ℝ, ∀ z ∈ kmsStrip β, ‖F z‖ ≤ C) →
+    (∀ t : ℝ, F (t : ℂ) = F ((t : ℂ) + (β : ℂ) * Complex.I)) →
+    ∀ t : ℝ, F (t : ℂ) = F 0
+
+/-- **Boundary coincidence for the diagonal `a = 1`.** For a KMS state, the
+correlation function of the pair `(1, a)` has its two boundary values *equal* -
+both are `t ↦ ω(α_t a)`. This is the algebraic heart of the invariance argument
+(it follows directly from the KMS condition with `a := 1`). -/
+theorem IsKMSState.correlationOne {α : ℝ → (A ≃⋆ₐ[ℂ] A)} {β : ℝ} {ω : State A}
+    (h : IsKMSState α β ω) (a : A) :
+    ∃ F : ℂ → ℂ,
+      ContinuousOn F (kmsStrip β) ∧
+      DifferentiableOn ℂ F (kmsStripInterior β) ∧
+      (∃ C : ℝ, ∀ z ∈ kmsStrip β, ‖F z‖ ≤ C) ∧
+      (∀ t : ℝ, F (t : ℂ) = (ω (α t a) : ℂ)) ∧
+      (∀ t : ℝ, F ((t : ℂ) + (β : ℂ) * Complex.I) = (ω (α t a) : ℂ)) := by
+  obtain ⟨F, hcont, hdiff, hbdd, hbot, htop⟩ := h 1 a
+  refine ⟨F, hcont, hdiff, hbdd, fun t => ?_, fun t => ?_⟩
+  · rw [hbot t, one_mul]
+  · rw [htop t, mul_one]
+
+/-- **A KMS state is invariant under its one-parameter automorphism group.**
+Given the strip-Liouville principle (`StripLiouville β`, the standard analytic
+fact isolated above), every `(α, β)`-KMS state `ω` is `α`-invariant:
+`ω(α_t a) = ω(a)` for all `t` and `a`.
+
+The proof: by `correlationOne`, the correlation function `F` of `(1, a)` has
+equal boundary values `F(t) = F(t+iβ) = ω(α_t a)`; the strip-Liouville principle
+forces `F(t) = F(0)`, and `F(0) = ω(α_0 a) = ω(a)`. -/
+theorem IsKMSState.invariant {α : ℝ → (A ≃⋆ₐ[ℂ] A)} {β : ℝ} {ω : State A}
+    (h : IsKMSState α β ω) (hα : IsOneParameterAut α) (hSL : StripLiouville β)
+    (a : A) (t : ℝ) :
+    (ω (α t a) : ℂ) = (ω a : ℂ) := by
+  obtain ⟨F, hcont, hdiff, hbdd, hbot, htop⟩ := h.correlationOne a
+  have hper : ∀ s : ℝ, F (s : ℂ) = F ((s : ℂ) + (β : ℂ) * Complex.I) := fun s => by
+    rw [hbot s, htop s]
+  have hconst : ∀ s : ℝ, F (s : ℂ) = F 0 := hSL F hcont hdiff hbdd hper
+  have h0 : F (0 : ℂ) = (ω (α 0 a) : ℂ) := by
+    have := hbot 0; rwa [Complex.ofReal_zero] at this
+  calc (ω (α t a) : ℂ) = F (t : ℂ) := (hbot t).symm
+    _ = F 0 := hconst t
+    _ = (ω (α 0 a) : ℂ) := h0
+    _ = (ω a : ℂ) := by rw [hα.1 a]
 
 end AQFT
 end Physicslib4
