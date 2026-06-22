@@ -85,6 +85,47 @@ theorem IsCovariantFamily.comp
       = ω (L' • (L • B)) (N.covEquiv L' (L • B) (N.covEquiv L B a)) := by
   rw [hω L B a, hω L' (L • B) (N.covEquiv L B a)]
 
+/--
+**Fiberwise weak continuity of the covariance action (state-relative).**
+
+This is the fiberwise, state-relative continuity hypothesis for the Lorentz
+action. It does *not* strengthen Axiom 5 and uses no quasilocal algebra, so
+the notion ports verbatim to curved spacetime (where there is no ambient
+quasilocal algebra).
+
+Continuity is measured relative to a state `ω` on the algebra of a
+*containing* region `B`. A fixed observable `a ∈ 𝔘(B)` is compared against
+the Lorentz-transported observable `α_L b` of a `b ∈ 𝔘(O)` from a
+sub-region `O`. The transported observable `α_L b` lives in the *different*
+algebra `𝔘(L·O)`, so it is embedded back into `𝔘(B)` along a supplied
+isotony inclusion `incl` (the fiberwise isotony datum). The inclusion is
+explicit data rather than the existential isotony witness, because an
+uncontrolled per-`L` choice would make "continuous in `L`" ill-defined.
+
+The family is *weakly continuous* if for all `a ∈ 𝔘(B)`, `b ∈ 𝔘(O)` the
+GNS matrix coefficient
+`L ↦ ω(a⋆ · ι_{L·O ⊆ B}(α_L b))`
+is continuous on the subspace of transformations `L` keeping `L·O` an
+Alexandrov-basis set inside `B`.
+
+The *diagonal* coefficient `ω(α_L(a⋆ b))` collapses to `ω(a⋆ b)` by
+covariance (constant); this off-diagonal form is the genuine continuity
+content, and is the standard input - together with uniform boundedness
+`‖U(L)‖ = 1` - from which strong continuity of the GNS unitary
+representation follows.
+-/
+def IsWeaklyContinuousAction
+    (O B : Set StandardMinkowskiSpacetime.Carrier)
+    (ω : State (N.algebra B))
+    (incl : ∀ L : InhomogeneousLorentzGroup,
+        IsAlexandrovBasisSet (L • O) → L • O ⊆ B →
+          N.algebra (L • O) →⋆ₐ[ℂ] N.algebra B) :
+    Prop :=
+  ∀ (a : N.algebra B) (b : N.algebra O),
+    Continuous fun L : {L : InhomogeneousLorentzGroup //
+        IsAlexandrovBasisSet (L • O) ∧ L • O ⊆ B} =>
+      ω (star a * incl L.1 L.2.1 L.2.2 (N.covEquiv L.1 O b))
+
 end HaagKastlerNet
 
 end HaagKastler
