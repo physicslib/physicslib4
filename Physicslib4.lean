@@ -25,6 +25,7 @@ import Physicslib4.GNS.Basic
 import Physicslib4.GNS.CauchySchwarz
 import Physicslib4.GNS.Construction
 import Physicslib4.GNS.NullSpace
+import Physicslib4.GNS.UnitaryRepresentation
 import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Causality
