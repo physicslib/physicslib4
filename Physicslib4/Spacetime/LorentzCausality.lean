@@ -113,19 +113,6 @@ open Spacetime
 open AQFT.HaagKastler
 open scoped Pointwise
 
-/-- `StandardMinkowskiSpacetime.Carrier` is definitionally `SpacetimeModel`
-(`= EuclideanSpace ℝ (Fin 4)`); expose its normed/finite-dimensional structure
-so that the Fréchet-derivative and continuity API applies to the affine
-Lorentz action directly. -/
-noncomputable instance : NormedAddCommGroup StandardMinkowskiSpacetime.Carrier :=
-  inferInstanceAs (NormedAddCommGroup SpacetimeModel)
-
-noncomputable instance : NormedSpace ℝ StandardMinkowskiSpacetime.Carrier :=
-  inferInstanceAs (NormedSpace ℝ SpacetimeModel)
-
-instance : FiniteDimensional ℝ StandardMinkowskiSpacetime.Carrier :=
-  inferInstanceAs (FiniteDimensional ℝ SpacetimeModel)
-
 /-- For a smooth path `μ` on standard Minkowski spacetime, the manifold
 derivative of its Lorentz pushforward `s ↦ g.linear (μ s) + g.translation`
 equals `g.linear` applied to the derivative of `μ`. The constant translation
