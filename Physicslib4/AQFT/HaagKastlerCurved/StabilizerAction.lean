@@ -141,6 +141,41 @@ theorem exists_gns_unitary_stabilizer (B : Set M.Carrier)
   Physicslib4.GNS.exists_gns_unitary_of_invariant (N.stabAutHom B) ω hinv
     (fun g g' a => N.stabAutHom_mul B g g' a) (fun a => N.stabAutHom_one B a)
 
+/-- **Strongly continuous GNS unitary representation of the stabilizer.**
+
+Strengthening of `exists_gns_unitary_stabilizer`: if the isometry group `M.Isom`
+carries a topology (passed as an instance argument, since the abstract
+`LorentzianSpacetime` interface provides none) and the matrix coefficients
+`g ↦ ω(a⋆ · g·b)` are continuous on `Stab(B)`, then the unitary representation
+`U` of `Stab(B)` is strongly continuous: `g ↦ U g ψ` is continuous for every
+GNS vector `ψ`.
+
+The stabilizer subgroup `↥(MulAction.stabilizer M.Isom B)` inherits its topology
+as a subspace of `M.Isom`. This is the curved-spacetime specialization of
+`GNS.exists_gns_unitary_of_invariant_strongContinuous`. -/
+theorem exists_gns_unitary_stabilizer_strongContinuous [TopologicalSpace M.Isom]
+    (B : Set M.Carrier) (ω : State (N.algebra B))
+    (hinv : ∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
+        ω (N.stabAutHom B g a) = ω a)
+    (hwc : ∀ a b : N.algebra B,
+        Continuous fun g : ↥(MulAction.stabilizer M.Isom B) =>
+          (ω (star a * N.stabAutHom B g b) : ℂ)) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : ↥(MulAction.stabilizer M.Isom B) → (H ≃ₗᵢ[ℂ] H)),
+        (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
+          U g (π a Ω) = π (N.stabAutHom B g a) Ω) ∧
+        (∀ g : ↥(MulAction.stabilizer M.Isom B), U g Ω = Ω) ∧
+        (∀ g g' : ↥(MulAction.stabilizer M.Isom B),
+          U (g' * g) = (U g).trans (U g')) ∧
+        U 1 = LinearIsometryEquiv.refl ℂ H ∧
+        (∀ ψ : H,
+          Continuous fun g : ↥(MulAction.stabilizer M.Isom B) => U g ψ) :=
+  Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous (N.stabAutHom B)
+    ω hinv (fun g g' a => N.stabAutHom_mul B g g' a)
+    (fun a => N.stabAutHom_one B a) hwc
+
 end HaagKastlerNet
 
 end HaagKastlerCurved
