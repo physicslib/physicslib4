@@ -147,3 +147,45 @@ As in the Minkowski case, the isometric covariance (\ref{def:isometric-covarianc
     \uses{def:covariant-state-family-in-curved-spacetime}
     For a covariant family of local states, the covariance relation composes along the isometry group: $\omega_{\mathbf{B}}(a) = \omega_{\varphi'(\varphi(\mathbf{B}))}\big(\alpha_{\varphi'}(\alpha_\varphi a)\big)$.
 \end{lemma}
+
+\subsection{The Stabilizer GNS Unitary in Curved Spacetime}
+
+In the Minkowski case the fiberwise covariance action lifts to a $*$-automorphism of the quasilocal algebra $\mathfrak{U}$, on whose GNS space an invariant state induces a unitary representation of the \emph{full} Poincar\'e group (\ref{thrm:invariant-state-gns-unitary}). In curved spacetime there is no quasilocal algebra, so the covariance isomorphisms $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$ map between \emph{different} local algebras and do not assemble into a single unitary representation.
+
+They do, however, restrict to a genuine action by automorphisms of one fixed local algebra $\mathfrak{U}(\mathbf{B})$ on the \emph{stabilizer subgroup} $\mathrm{Stab}(\mathbf{B}) = \{\varphi : \varphi(\mathbf{B}) = \mathbf{B}\}$ of the region: when $\varphi(\mathbf{B}) = \mathbf{B}$, the isomorphism $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B})) = \mathfrak{U}(\mathbf{B})$ is an automorphism of $\mathfrak{U}(\mathbf{B})$. Physically $\mathrm{Stab}(\mathbf{B})$ is the curved-spacetime stand-in for the global symmetry group, typically a Killing flow (the stationary flow of a black-hole exterior, giving a Hartle-Hawking/KMS state; the de Sitter static-patch boost, giving the Gibbons-Hawking temperature) or a spatial-symmetry subgroup (the rotations fixing a comoving ball in an FLRW cosmology).
+
+\begin{definition}[Stabilizer Action on a Local Algebra]
+    \label{def:stabilizer-action-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
+    \leanok
+    \uses{def:haag-kastler-net-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime}
+    For an identity-component isometry $\varphi$ fixing the region $\mathbf{B}$ (so $\varphi(\mathbf{B}) = \mathbf{B}$), the covariance isomorphism $\alpha_\varphi$ of \ref{def:isometric-covariance-in-curved-spacetime} lands back in $\mathfrak{U}(\mathbf{B})$ and so defines an automorphism $\hat\alpha_\varphi$ of the single algebra $\mathfrak{U}(\mathbf{B})$.
+\end{definition}
+
+\begin{lemma}[The Stabilizer Action is a Group Action]
+    \label{lmm:stabilizer-action-laws-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut_one, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut_mul}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
+    \leanok
+    \uses{def:stabilizer-action-in-curved-spacetime}
+    The assignment $\varphi \mapsto \hat\alpha_\varphi$ is a monoid action of $\mathrm{Stab}(\mathbf{B})$ by automorphisms of $\mathfrak{U}(\mathbf{B})$: $\hat\alpha_1 = \mathrm{id}$ and $\hat\alpha_{\varphi'\varphi} = \hat\alpha_{\varphi'}\circ\hat\alpha_\varphi$. These follow from the identity and composition laws of the covariance action (\ref{def:isometric-covariance-in-curved-spacetime}); the canonical region-casts collapse because all the regions involved equal $\mathbf{B}$.
+\end{lemma}
+
+\begin{theorem}[GNS Unitary Representation of the Stabilizer]
+    \label{thrm:gns-unitary-stabilizer-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
+    \leanok
+    \uses{def:stabilizer-action-in-curved-spacetime, lmm:stabilizer-action-laws-in-curved-spacetime, def:state, thrm:gns-construction-theorem}
+    Let $\omega$ be a state on $\mathfrak{U}(\mathbf{B})$ invariant under the stabilizer action, $\omega(\hat\alpha_\varphi a) = \omega(a)$ for all $\varphi \in \mathrm{Stab}(\mathbf{B})$. Then the action is implemented on the GNS Hilbert space of $\omega$ by a unitary representation $U$ of $\mathrm{Stab}(\mathbf{B})$: there is a GNS triple $(H, \pi, \Omega)$ and unitaries $U(\varphi)$ with $U(\varphi)\,\pi(a)\Omega = \pi(\hat\alpha_\varphi a)\,\Omega$, $U(\varphi)\Omega = \Omega$, the group laws, and $U(1) = \mathrm{id}$. This is the curved-spacetime counterpart of \ref{thrm:invariant-state-gns-unitary}: in the absence of a quasilocal algebra, the unitary representation is of the stabilizer subgroup acting on the single algebra $\mathfrak{U}(\mathbf{B})$, rather than of the full isometry group.
+\end{theorem}
+
+\begin{theorem}[Strongly Continuous Stabilizer GNS Unitary]
+    \label{thrm:gns-unitary-stabilizer-strongly-continuous-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer_strongContinuous}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
+    \leanok
+    \uses{thrm:gns-unitary-stabilizer-in-curved-spacetime}
+    If moreover the isometry group carries a topology (the abstract interface supplies none, so it is an added hypothesis) and the matrix coefficients $\varphi \mapsto \omega\big(a^*\,\hat\alpha_\varphi b\big)$ are continuous on $\mathrm{Stab}(\mathbf{B})$, then the representation $U$ is strongly continuous: $\varphi \mapsto U(\varphi)\psi$ is continuous for every GNS vector $\psi$. The stabilizer subgroup inherits its topology as a subspace of the isometry group.
+\end{theorem}
