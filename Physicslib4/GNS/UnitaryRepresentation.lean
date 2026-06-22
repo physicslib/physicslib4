@@ -45,6 +45,32 @@ namespace GNS
 
 open scoped InnerProductSpace
 
+/-- **Operator covariance of a GNS implementation.** If a family of unitaries
+`U g` implements the action `γ` on the cyclic vector (`U g (π a Ω) = π (γ g a) Ω`)
+and the vectors `π a Ω` are dense, then the implementation holds at the operator
+level: `U g · π(a) · U(g)⁻¹ = π(γ g a)` on all of `H`. (No group structure on the
+index `G` is needed; the inverse is the inverse of the unitary `U g`.) -/
+theorem gns_operator_covariance {A : Type*} [CStarAlgebra A] {G : Type*}
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} {Ω : H} {γ : G → (A ≃⋆ₐ[ℂ] A)}
+    {U : G → (H ≃ₗᵢ[ℂ] H)}
+    (hcyc : DenseRange fun a => π a Ω)
+    (himpl : ∀ (g : G) (a : A), U g (π a Ω) = π (γ g a) Ω)
+    (g : G) (a : A) (x : H) :
+    U g (π a ((U g).symm x)) = π (γ g a) x := by
+  have hint : (fun y => U g (π a y)) = fun y => π (γ g a) (U g y) := by
+    refine Continuous.ext_on hcyc ((U g).continuous.comp (π a).continuous)
+      ((π (γ g a)).continuous.comp (U g).continuous) ?_
+    rintro _ ⟨b, rfl⟩
+    change U g (π a (π b Ω)) = π (γ g a) (U g (π b Ω))
+    have e1 : (π a) (π b Ω) = π (a * b) Ω := by
+      rw [← ContinuousLinearMap.mul_apply, ← map_mul]
+    have e2 : (π (γ g a)) (π (γ g b) Ω) = π (γ g a * γ g b) Ω := by
+      rw [← ContinuousLinearMap.mul_apply, ← map_mul]
+    rw [e1, himpl g (a * b), map_mul (γ g), himpl g b, e2]
+  rw [show U g (π a ((U g).symm x)) = π (γ g a) (U g ((U g).symm x)) from
+        congrFun hint ((U g).symm x), (U g).apply_symm_apply]
+
 /-- **GNS unitary representation of an invariant automorphism action.**
 
 For a unital C*-algebra `A`, a state `ω`, and a monoid-indexed family of
@@ -66,7 +92,8 @@ theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
         (∀ (g : G) (a : A), U g (π a Ω) = π (γ g a) Ω) ∧
         (∀ g : G, U g Ω = Ω) ∧
         (∀ g g' : G, U (g' * g) = (U g).trans (U g')) ∧
-        U 1 = LinearIsometryEquiv.refl ℂ H := by
+        U 1 = LinearIsometryEquiv.refl ℂ H ∧
+        (∀ (g : G) (a : A) (x : H), U g (π a ((U g).symm x)) = π (γ g a) x) := by
   obtain ⟨H, _, _, _, π, Ω, hcyc, hrepro, _⟩ := gns_construction ω
   let cyc : A →ₗ[ℂ] H :=
     { toFun := fun a => π a Ω
@@ -96,7 +123,7 @@ theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
     (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry cyc cyc hcycdense hcycdense (hnorm g)
   have hUcyc : ∀ (g : G) (a : A), U g (cyc a) = cyc (γ g a) := fun g a =>
     (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense (hnorm g) a
-  refine ⟨H, inferInstance, inferInstance, inferInstance, π, Ω, U, hrepro, ?_, ?_, ?_, ?_⟩
+  refine ⟨H, inferInstance, inferInstance, inferInstance, π, Ω, U, hrepro, ?_, ?_, ?_, ?_, ?_⟩
   · intro g a
     exact (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense
       (hnorm g) a
@@ -133,6 +160,7 @@ theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
     intro x
     change U 1 x = x
     exact congrFun hfun x
+  · exact fun g a x => gns_operator_covariance hcycdense hUcyc g a x
 
 /-- **Strongly continuous GNS unitary representation of an invariant action.**
 
@@ -161,7 +189,8 @@ theorem exists_gns_unitary_of_invariant_strongContinuous.{u} {A : Type u}
         (∀ g : G, U g Ω = Ω) ∧
         (∀ g g' : G, U (g' * g) = (U g).trans (U g')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
-        (∀ ψ : H, Continuous fun g : G => U g ψ) := by
+        (∀ ψ : H, Continuous fun g : G => U g ψ) ∧
+        (∀ (g : G) (a : A) (x : H), U g (π a ((U g).symm x)) = π (γ g a) x) := by
   obtain ⟨H, _, _, _, π, Ω, hcyc, hrepro, _⟩ := gns_construction ω
   let cyc : A →ₗ[ℂ] H :=
     { toFun := fun a => π a Ω
@@ -191,7 +220,8 @@ theorem exists_gns_unitary_of_invariant_strongContinuous.{u} {A : Type u}
     (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry cyc cyc hcycdense hcycdense (hnorm g)
   have hUcyc : ∀ (g : G) (a : A), U g (cyc a) = cyc (γ g a) := fun g a =>
     (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense (hnorm g) a
-  refine ⟨H, inferInstance, inferInstance, inferInstance, π, Ω, U, hrepro, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨H, inferInstance, inferInstance, inferInstance, π, Ω, U, hrepro,
+    ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro g a
     exact (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense
       (hnorm g) a
@@ -239,6 +269,7 @@ theorem exists_gns_unitary_of_invariant_strongContinuous.{u} {A : Type u}
       rw [qq a (γ g b)]
     rw [heq]
     exact hwc a b
+  · exact fun g a x => gns_operator_covariance hcycdense hUcyc g a x
 
 end GNS
 end Physicslib4

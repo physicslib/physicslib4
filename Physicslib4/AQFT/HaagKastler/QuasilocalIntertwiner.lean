@@ -541,11 +541,14 @@ theorem IsInvariantState.exists_gns_unitary (C : CovariantQuasilocalAlgebra)
           U L (π a Ω) = π (C.action L a) Ω) ∧
         (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
         (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
-        U 1 = LinearIsometryEquiv.refl ℂ H :=
+        U 1 = LinearIsometryEquiv.refl ℂ H ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (C.action L a) x) :=
   -- This is the specialization of the algebra-agnostic
   -- `GNS.exists_gns_unitary_of_invariant` to the quasilocal algebra `𝔘` with the
   -- covariance action `β = C.action`: invariance is `hω`, multiplicativity is
-  -- `action_mul_apply`, and the identity law is `action_one_apply`.
+  -- `action_mul_apply`, and the identity law is `action_one_apply`. The final
+  -- clause is operator covariance `U(L) π(a) U(L)⁻¹ = π(β_L a)`.
   Physicslib4.GNS.exists_gns_unitary_of_invariant C.action ω hω
     C.action_mul_apply C.action_one_apply
 
@@ -575,7 +578,9 @@ theorem IsInvariantState.exists_gns_unitary_strongContinuous
         (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
         (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
-        (∀ ψ : H, Continuous fun L : InhomogeneousLorentzGroup => U L ψ) :=
+        (∀ ψ : H, Continuous fun L : InhomogeneousLorentzGroup => U L ψ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (C.action L a) x) :=
   Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous C.action ω hω
     C.action_mul_apply C.action_one_apply hwc
 

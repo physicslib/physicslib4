@@ -137,7 +137,9 @@ theorem exists_gns_unitary_stabilizer (B : Set M.Carrier)
         (∀ g : ↥(MulAction.stabilizer M.Isom B), U g Ω = Ω) ∧
         (∀ g g' : ↥(MulAction.stabilizer M.Isom B),
           U (g' * g) = (U g).trans (U g')) ∧
-        U 1 = LinearIsometryEquiv.refl ℂ H :=
+        U 1 = LinearIsometryEquiv.refl ℂ H ∧
+        (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B) (x : H),
+          U g (π a ((U g).symm x)) = π (N.stabAutHom B g a) x) :=
   Physicslib4.GNS.exists_gns_unitary_of_invariant (N.stabAutHom B) ω hinv
     (fun g g' a => N.stabAutHom_mul B g g' a) (fun a => N.stabAutHom_one B a)
 
@@ -171,7 +173,9 @@ theorem exists_gns_unitary_stabilizer_strongContinuous [TopologicalSpace M.Isom]
           U (g' * g) = (U g).trans (U g')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
         (∀ ψ : H,
-          Continuous fun g : ↥(MulAction.stabilizer M.Isom B) => U g ψ) :=
+          Continuous fun g : ↥(MulAction.stabilizer M.Isom B) => U g ψ) ∧
+        (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B) (x : H),
+          U g (π a ((U g).symm x)) = π (N.stabAutHom B g a) x) :=
   Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous (N.stabAutHom B)
     ω hinv (fun g g' a => N.stabAutHom_mul B g g' a)
     (fun a => N.stabAutHom_one B a) hwc
