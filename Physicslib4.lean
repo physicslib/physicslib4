@@ -8,6 +8,7 @@ import Physicslib4.AQFT.HaagKastler.QuasilocalAction
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
 import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
+import Physicslib4.AQFT.KMS
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
 import Physicslib4.AQFT.HaagKastlerCurved.IdentityComponent
@@ -19,6 +20,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity
 import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
+import Physicslib4.AQFT.HaagKastlerCurved.StabilizerKMS
 import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.Analysis.StrongContinuity
 import Physicslib4.Basic
