@@ -19,6 +19,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity
 import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
 import Physicslib4.Analysis.CStarDenseExtend
+import Physicslib4.Analysis.StrongContinuity
 import Physicslib4.Basic
 import Physicslib4.GNS.Basic
 import Physicslib4.GNS.CauchySchwarz
