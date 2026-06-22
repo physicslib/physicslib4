@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.GNS.Basic
 import Mathlib.Analysis.Calculus.FDeriv.Basic
+import Mathlib.Analysis.Complex.Liouville
 
 /-!
 # The KMS (analyticity) condition for a one-parameter automorphism group
@@ -85,6 +86,25 @@ def StripLiouville (β : ℝ) : Prop :=
     (∃ C : ℝ, ∀ z ∈ kmsStrip β, ‖F z‖ ≤ C) →
     (∀ t : ℝ, F (t : ℂ) = F ((t : ℂ) + (β : ℂ) * Complex.I)) →
     ∀ t : ℝ, F (t : ℂ) = F 0
+
+/-- **Liouville endgame for the strip-Liouville principle.** A function `F` is
+constant along the real axis as soon as it admits a *bounded entire extension*
+`H` agreeing with it on `ℝ`. This is the Liouville half of the strip-Liouville
+principle, fully discharged: a bounded entire function is constant
+(`Differentiable.apply_eq_apply_of_bounded`), so `F t = H t = H 0 = F 0`.
+
+It isolates the remaining content of `StripLiouville` to the *construction* of
+the bounded entire extension `H` from the periodic boundary values - i.e. the
+horizontal-line Schwarz reflection that Mathlib does not yet provide. -/
+theorem stripLiouville_of_entire_extension {F : ℂ → ℂ}
+    (H : ℂ → ℂ) (hH : Differentiable ℂ H)
+    (hbdd : Bornology.IsBounded (Set.range H))
+    (hagree : ∀ t : ℝ, H (t : ℂ) = F (t : ℂ)) :
+    ∀ t : ℝ, F (t : ℂ) = F 0 := by
+  intro t
+  have h0 : H 0 = F 0 := by have := hagree 0; rwa [Complex.ofReal_zero] at this
+  have hconst : H (t : ℂ) = H 0 := hH.apply_eq_apply_of_bounded hbdd _ _
+  rw [← hagree t, hconst, h0]
 
 /-- **Boundary coincidence for the diagonal `a = 1`.** For a KMS state, the
 correlation function of the pair `(1, a)` has its two boundary values *equal* -
