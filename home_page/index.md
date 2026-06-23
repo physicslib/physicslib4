@@ -95,7 +95,7 @@ Only the content of Chapter 10 is formalised in Lean. This comprises:
 
 **GNS Construction**
 - Cauchy–Schwarz inequality for states
-- Equivalence of the two descriptions of the left-ideal $$\mathcal{N}$$; $$\mathcal{N}$$ is a closed linear subspace
+- Equivalence of the two descriptions of the left-ideal \$\mathcal{N}\$; \$\mathcal{N}\$ is a closed linear subspace
 - Full GNS Construction Theorem (Hilbert space, \*-representation, cyclic vector, faithfulness, uniqueness up to unitary equivalence)
 - Separating vector of a faithful state
 
@@ -127,9 +127,9 @@ Only the content of Chapter 10 is formalised in Lean. This comprises:
 - Einstein Causality in a representation, curved spacetime (Theorem 93)
 
 **KMS condition**
-- Boundary coincidence for $$a = 1$$
-- $$i\beta$$-periodic entire extension (strip Schwarz reflection)
-- Strip-Liouville holds for $$\beta > 0$$
+- Boundary coincidence for \$a = 1\$
+- \$i\beta\$-periodic entire extension (strip Schwarz reflection)
+- Strip-Liouville holds for \$\beta > 0\$
 - KMS states are invariant (Theorem 83)
 - Uniqueness on the strip from boundary values; uniqueness of the KMS correlation function
 - A Killing flow induces a one-parameter automorphism group
