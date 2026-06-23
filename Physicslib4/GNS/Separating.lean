@@ -20,8 +20,8 @@ separating vector is the basic datum.
 ## Main results
 
 * `Physicslib4.GNS.separating_of_faithful`: in any representation reproducing a
-  faithful state, the cyclic vector is separating; in particular the GNS vector
-  of a faithful state is separating.
+  faithful state, the cyclic vector is separating.
+* `Physicslib4.GNS.exists_gns_separating`: the GNS specialization.
 -/
 
 namespace Physicslib4
@@ -46,6 +46,21 @@ theorem separating_of_faithful {ω : State A} (hω : ω.IsFaithful)
     simp [ContinuousLinearMap.mul_apply, ha]
   rw [hzero] at hpos
   exact lt_irrefl 0 hpos
+
+/-- **The GNS vector of a faithful state is cyclic and separating.** For a faithful
+state `ω` there is a GNS triple `(H, π, Ω)` reproducing `ω` whose cyclic vector
+`Ω` is separating for `π(A)`. -/
+theorem exists_gns_separating.{u} {A : Type u} [CStarAlgebra A]
+    (ω : State A) (hω : ω.IsFaithful) :
+    ∃ (H : Type u)
+      (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
+      (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
+        IsCyclicVector π Ω ∧
+        (∀ a : A, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ a : A, π a Ω = 0 → a = 0) := by
+  obtain ⟨H, i1, i2, i3, π, Ω, hcyc, hrep, _⟩ := gns_construction ω
+  exact ⟨H, i1, i2, i3, π, Ω, hcyc, hrep,
+    fun a ha => separating_of_faithful hω π Ω hrep ha⟩
 
 end GNS
 end Physicslib4

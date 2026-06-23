@@ -234,6 +234,19 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     For an invariant state $\omega$, the covariance action is implemented on the GNS Hilbert space by a family of unitaries $U(L)$ satisfying $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\,\Omega$ and $U(L)\Omega = \Omega$. The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space.
 \end{theorem}
 
+\subsection{The Separating Vector of a Faithful State}
+
+A faithful state has a sharper consequence at the level of the GNS construction than the faithfulness of its representation: its cyclic vector is also \emph{separating}. This is the basic datum of the modular (Tomita-Takesaki) theory of the associated von Neumann algebra.
+
+\begin{theorem}[Separating Vector of a Faithful State]
+    \label{thrm:separating-faithful}
+    \lean{Physicslib4.GNS.separating_of_faithful, Physicslib4.GNS.exists_gns_separating}
+    \leanfile{Physicslib4/GNS/Separating.lean}
+    \leanok
+    \uses{def:state, def:cyclic-vector, thrm:gns-construction-theorem}
+    Let $\omega$ be a faithful state and $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ its GNS triple. Then the cyclic vector $\Omega$ is \emph{separating} for $\pi_\omega(\mathfrak{U})$: if $\pi_\omega(a)\Omega = 0$ then $a = 0$. Indeed $\pi_\omega(a)\Omega = 0$ gives $\omega(a^* a) = \langle \Omega, \pi_\omega(a^* a)\Omega\rangle = \langle \pi_\omega(a)\Omega, \pi_\omega(a)\Omega\rangle = 0$, and faithfulness forces $a = 0$. This holds in any representation reproducing a faithful state, not only the GNS one.
+\end{theorem}
+
 \subsection{The KMS Condition and Thermal Equilibrium}
 
 Poincar\'e (or Killing-flow) invariance is only part of what singles out a physical equilibrium state. The Kubo-Martin-Schwinger (KMS) condition is the algebraic characterization of thermal equilibrium at inverse temperature $\beta$. It is phrased purely as an \emph{analyticity} statement about correlation functions, so - unlike the spectrum condition - it needs no unbounded-operator theory (no Stone theorem, no spectral measures). It is exactly the condition satisfied by the curved-spacetime examples of \ref{thrm:gns-unitary-stabilizer-in-curved-spacetime}: the Hartle-Hawking state on a black-hole exterior and the Gibbons-Hawking state in the de Sitter static patch are KMS for the relevant Killing flow.
