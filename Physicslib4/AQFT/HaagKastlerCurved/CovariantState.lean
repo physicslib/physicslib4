@@ -80,6 +80,40 @@ theorem IsCovariantFamily.comp
       = ω (φ' • (φ • B)) (N.covEquiv φ' (φ • B) (N.covEquiv φ B a)) := by
   rw [hω φ B a, hω φ' (φ • B) (N.covEquiv φ B a)]
 
+/--
+**Fiberwise weak continuity of the covariance action (state-relative),
+curved spacetime.** Mirror of
+`Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyContinuousAction`.
+
+Continuity is measured relative to a state `ω` on the algebra of a
+*containing* region `B`. A fixed observable `a ∈ 𝔘(B)` is compared against
+the isometry-transported observable `α_φ b` of a `b ∈ 𝔘(O)` from a
+sub-region `O`. Since `α_φ b` lives in the *different* algebra `𝔘(φ·O)`,
+it is embedded back into `𝔘(B)` along a supplied isotony inclusion `incl`
+(explicit data, not the existential isotony witness). The family is
+*weakly continuous* if for all `a`, `b` the matrix coefficient
+`φ ↦ ω(a⋆ · ι_{φ·O ⊆ B}(α_φ b))`
+is continuous on the subspace of isometries keeping `φ·O` a basis set
+inside `B`.
+
+Because the abstract `LorentzianSpacetime` interface equips `M.Isom` with
+only a group and an action - no topology - the topology required to state
+continuity enters as an explicit `[TopologicalSpace M.Isom]` instance
+argument rather than as a field on the interface. The definition is
+otherwise identical to the Minkowski one and uses no quasilocal algebra,
+confirming that the fiberwise form ports cleanly to curved spacetime. -/
+def IsWeaklyContinuousAction [TopologicalSpace M.Isom]
+    (O B : Set M.Carrier)
+    (ω : State (N.algebra B))
+    (incl : ∀ φ : M.Isom,
+        M.IsBasisSet (φ • O) → φ • O ⊆ B →
+          N.algebra (φ • O) →⋆ₐ[ℂ] N.algebra B) :
+    Prop :=
+  ∀ (a : N.algebra B) (b : N.algebra O),
+    Continuous fun φ : {φ : M.Isom //
+        M.IsBasisSet (φ • O) ∧ φ • O ⊆ B} =>
+      ω (star a * incl φ.1 φ.2.1 φ.2.2 (N.covEquiv φ.1 O b))
+
 end HaagKastlerNet
 
 end HaagKastlerCurved

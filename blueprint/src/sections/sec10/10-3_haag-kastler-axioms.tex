@@ -127,6 +127,19 @@ This concludes the presentation of the ``sharpened'' axioms. As proven in this b
 
 These ``sharpened'' axioms also allow for a straightforward generalization to a set of axioms describing AQFT in curved spacetime, i.e. a set of axioms describing AQFT in a curved spacetime background that is fixed and treated classically. In a subsequent blog post we will detail these axioms.
 
+\subsection{Einstein Causality}
+
+Local commutativity (\ref{def:local-commutativity}) is an algebraic statement about the quasilocal algebra. Its physical content - that spacelike-separated measurements do not interfere - is its operator form: in any representation of the quasilocal algebra, spacelike-separated local observables commute as bounded operators on the Hilbert space.
+
+\begin{theorem}[Einstein Causality in a Representation]
+    \label{thrm:einstein-causality}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.einstein_causality, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.exists_gns_einstein_causality}
+    \leanfile{Physicslib4/AQFT/HaagKastler/EinsteinCausality.lean}
+    \leanok
+    \uses{def:local-commutativity, def:haag-kastler-net, thrm:gns-construction-theorem, def:state}
+    Let $\pi$ be any $*$-representation of the quasilocal algebra on a Hilbert space $H$. If $\mathbf{B}_1, \mathbf{B}_2$ are completely spacelike-separated basis regions, then for all $a \in \mathfrak{U}(\mathbf{B}_1)$ and $b \in \mathfrak{U}(\mathbf{B}_2)$ the operators $\pi(\iota_{\mathbf{B}_1} a)$ and $\pi(\iota_{\mathbf{B}_2} b)$ commute. This is the image under $\pi$ of the local commutativity relation (\ref{def:local-commutativity}); since the GNS representation of any state is such a $\pi$, spacelike-separated local observables commute on every GNS Hilbert space.
+\end{theorem}
+
 \subsection{Covariant States and the Covariance Action}
 
 The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts on the net fiberwise, through the $*$-isomorphisms $\alpha_L : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(L\cdot\mathbf{B})$. We record two consequences: the notion of a Lorentz-covariant family of local states, and the lift of the fiberwise action to a single dynamical $*$-automorphism of the quasilocal algebra.
@@ -219,4 +232,99 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \leanok
     \uses{def:invariant-state, thrm:gns-construction-theorem, lmm:quasilocal-action-coherence}
     For an invariant state $\omega$, the covariance action is implemented on the GNS Hilbert space by a family of unitaries $U(L)$ satisfying $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\,\Omega$ and $U(L)\Omega = \Omega$. The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space.
+\end{theorem}
+
+\subsection{The Separating Vector of a Faithful State}
+
+A faithful state has a sharper consequence at the level of the GNS construction than the faithfulness of its representation: its cyclic vector is also \emph{separating}. This is the basic datum of the modular (Tomita-Takesaki) theory of the associated von Neumann algebra.
+
+\begin{theorem}[Separating Vector of a Faithful State]
+    \label{thrm:separating-faithful}
+    \lean{Physicslib4.GNS.separating_of_faithful, Physicslib4.GNS.exists_gns_separating}
+    \leanfile{Physicslib4/GNS/Separating.lean}
+    \leanok
+    \uses{def:state, def:cyclic-vector, thrm:gns-construction-theorem}
+    Let $\omega$ be a faithful state and $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ its GNS triple. Then the cyclic vector $\Omega$ is \emph{separating} for $\pi_\omega(\mathfrak{U})$: if $\pi_\omega(a)\Omega = 0$ then $a = 0$. Indeed $\pi_\omega(a)\Omega = 0$ gives $\omega(a^* a) = \langle \Omega, \pi_\omega(a^* a)\Omega\rangle = \langle \pi_\omega(a)\Omega, \pi_\omega(a)\Omega\rangle = 0$, and faithfulness forces $a = 0$. This holds in any representation reproducing a faithful state, not only the GNS one.
+\end{theorem}
+
+\subsection{The KMS Condition and Thermal Equilibrium}
+
+Poincar\'e (or Killing-flow) invariance is only part of what singles out a physical equilibrium state. The Kubo-Martin-Schwinger (KMS) condition is the algebraic characterization of thermal equilibrium at inverse temperature $\beta$. It is phrased purely as an \emph{analyticity} statement about correlation functions, so - unlike the spectrum condition - it needs no unbounded-operator theory (no Stone theorem, no spectral measures). It is exactly the condition satisfied by the curved-spacetime examples of \ref{thrm:gns-unitary-stabilizer-in-curved-spacetime}: the Hartle-Hawking state on a black-hole exterior and the Gibbons-Hawking state in the de Sitter static patch are KMS for the relevant Killing flow.
+
+\begin{definition}[One-Parameter Automorphism Group]
+    \label{def:one-parameter-aut}
+    \lean{Physicslib4.AQFT.IsOneParameterAut}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    A family $\alpha : \mathbb{R} \to (A \simeq_{\star\mathrm{a}} A)$ of $*$-automorphisms of a C$^*$-algebra $A$ is a \emph{one-parameter group} if $\alpha_0 = \mathrm{id}$ and $\alpha_{s+t} = \alpha_s \circ \alpha_t$. This is the algebraic time evolution; in the curved-spacetime setting it is the automorphism group induced by a Killing flow.
+\end{definition}
+
+\begin{definition}[KMS State]
+    \label{def:kms-state}
+    \lean{Physicslib4.AQFT.IsKMSState}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:one-parameter-aut, def:state}
+    A state $\omega$ on $A$ is \emph{$(\alpha, \beta)$-KMS} for a one-parameter automorphism group $\alpha$ (\ref{def:one-parameter-aut}) at inverse temperature $\beta$ if for every $a, b \in A$ the correlation function $t \mapsto \omega(a\,\alpha_t b)$ extends to a function $F$ on the closed strip $0 \le \operatorname{Im} z \le \beta$ that is continuous there, holomorphic on the open strip, bounded, and whose boundary value on $\operatorname{Im} z = \beta$ is $t \mapsto \omega(\alpha_t b\, \cdot a)$.
+\end{definition}
+
+\begin{lemma}[Boundary Coincidence for $a = 1$]
+    \label{lmm:kms-correlation-one}
+    \lean{Physicslib4.AQFT.IsKMSState.correlationOne}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:kms-state}
+    For a KMS state $\omega$ and any observable $a$, the correlation function $F$ of the pair $(1, a)$ has its two boundary values \emph{equal} - both are $t \mapsto \omega(\alpha_t a)$. This is the algebraic heart of the invariance argument: it follows directly from the KMS condition with $a := 1$, since $\omega(1\cdot\alpha_t a) = \omega(\alpha_t a \cdot 1) = \omega(\alpha_t a)$.
+\end{lemma}
+
+\begin{definition}[Strip-Liouville Principle]
+    \label{def:strip-liouville}
+    \lean{Physicslib4.AQFT.StripLiouville}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    The \emph{strip-Liouville principle} at width $\beta$ is the statement that any function $F$ continuous and bounded on the closed strip $0 \le \operatorname{Im} z \le \beta$, holomorphic on the open strip, and with equal boundary values $F(t) = F(t + i\beta)$ for all real $t$, is constant along the real axis: $F(t) = F(0)$. It is the analytic input that turns boundary coincidence into invariance.
+\end{definition}
+
+\begin{theorem}[$i\beta$-Periodic Entire Extension (Strip Schwarz Reflection)]
+    \label{thrm:strip-periodic-extension}
+    \lean{Physicslib4.exists_bounded_entire_extension_of_strip_periodic}
+    \leanfile{Physicslib4/Analysis/StripPeriodicExtension.lean}
+    \leanok
+    A function $F$ continuous on the closed strip $0 \le \operatorname{Im} z \le \beta$, holomorphic on the open strip, bounded, and with equal boundary values $F(t) = F(t + i\beta)$ on the real axis, admits a \emph{bounded entire} extension $H$ agreeing with $F$ on $\mathbb{R}$. The extension is the $i\beta$-periodic continuation $H(z) = F\!\left(z - \lfloor \operatorname{Im} z / \beta \rfloor\, i\beta\right)$, which folds every point into the fundamental strip: it is continuous across each gluing line $\operatorname{Im} z = k\beta$ because the boundary values match by periodicity, holomorphic off the lines as $F$ composed with a holomorphic shift, and holomorphic on the lines by the horizontal-line removable-singularity theorem (Morera). This is the analytic engine behind the strip-Liouville principle.
+\end{theorem}
+
+\begin{theorem}[Strip-Liouville Holds for $\beta > 0$]
+    \label{thrm:strip-liouville-pos}
+    \lean{Physicslib4.AQFT.stripLiouville_of_pos}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:strip-liouville, thrm:strip-periodic-extension}
+    At positive width $\beta > 0$ the strip-Liouville principle (\ref{def:strip-liouville}) is a theorem. The equal boundary values let $F$ extend to a bounded $i\beta$-periodic \emph{entire} function by the strip Schwarz reflection (\ref{thrm:strip-periodic-extension}), which is then constant on $\mathbb{R}$ by Liouville's theorem. The hypothesis $\beta > 0$ is necessary: at $\beta = 0$ the open strip is empty and at $\beta < 0$ the strip itself is empty, and in both cases the principle is false.
+\end{theorem}
+
+\begin{theorem}[KMS States are Invariant]
+    \label{thrm:kms-invariance}
+    \lean{Physicslib4.AQFT.IsKMSState.invariant_of_pos}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:kms-state, lmm:kms-correlation-one, thrm:strip-liouville-pos}
+    At positive inverse temperature $\beta > 0$, every $(\alpha, \beta)$-KMS state $\omega$ is $\alpha$-invariant: $\omega(\alpha_t a) = \omega(a)$ for all $t$ and $a$. By boundary coincidence (\ref{lmm:kms-correlation-one}) the KMS correlation function of $(1, a)$ has equal boundary values $F(t) = F(t + i\beta) = \omega(\alpha_t a)$; the strip-Liouville principle for $\beta > 0$ (\ref{thrm:strip-liouville-pos}) forces $F(t) = F(0)$, so $\omega(\alpha_t a) = F(t) = F(0) = \omega(\alpha_0 a) = \omega(a)$.
+\end{theorem}
+
+\begin{theorem}[Uniqueness on the Strip from Boundary Values]
+    \label{thrm:strip-uniqueness}
+    \lean{Physicslib4.eqOn_strip_of_eq_boundary}
+    \leanfile{Physicslib4/Analysis/StripPeriodicExtension.lean}
+    \leanok
+    \uses{thrm:strip-periodic-extension}
+    Two functions continuous and bounded on the closed strip $0 \le \operatorname{Im} z \le \beta$ (with $\beta > 0$), holomorphic on the open strip, that agree on \emph{both} boundary lines $\operatorname{Im} z = 0$ and $\operatorname{Im} z = \beta$, agree on the whole strip. Indeed their difference has vanishing boundary values, so its $i\beta$-periodic extension (\ref{thrm:strip-periodic-extension}) is a bounded entire function, constant by Liouville, equal to its value $0$ at the origin.
+\end{theorem}
+
+\begin{theorem}[Uniqueness of the KMS Correlation Function]
+    \label{thrm:kms-correlation-unique}
+    \lean{Physicslib4.AQFT.IsKMSState.correlation_eqOn}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:kms-state, thrm:strip-uniqueness}
+    For $\beta > 0$, the analytic completion of a KMS correlation function is unique: any two functions satisfying the KMS analytic data for the same pair $(a, b)$ - continuous and bounded on the strip, holomorphic on the interior, with the prescribed boundary values $t \mapsto \omega(a\,\alpha_t b)$ and $t \mapsto \omega(\alpha_t b\,\cdot a)$ - agree on the whole strip. This is the strip uniqueness (\ref{thrm:strip-uniqueness}) applied to the two analytic completions, which share both boundary values.
 \end{theorem}

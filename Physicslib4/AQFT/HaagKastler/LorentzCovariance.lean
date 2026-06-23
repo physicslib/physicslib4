@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Mathlib.Algebra.Group.Pointwise.Set.Scalar
+import Mathlib.Analysis.Normed.Operator.BoundedLinearMaps
+import Mathlib.Topology.Algebra.Module.FiniteDimension
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 
 /-!
@@ -148,6 +150,90 @@ noncomputable instance : Group InhomogeneousLorentzGroup where
       simp
     · change -a.linear.symm a.translation + a.linear.symm a.translation = 0
       simp
+
+/-! ### Topological group structure
+
+The inhomogeneous Lorentz group is topologized as a subspace of the
+operator-norm space `(Carrier →L Carrier)² × Carrier`, recording each element as
+its linear part, the inverse of its linear part, and its translation. Carrying
+the inverse linear part as a separate coordinate makes group inversion a
+continuous coordinate operation (a swap plus an application), so no continuity
+of operator inversion is needed. -/
+
+/-- The faithful coordinate embedding used to topologize the inhomogeneous
+Lorentz group: `g ↦ (g.linear, g.linear⁻¹, g.translation)` inside the
+operator-norm space. -/
+noncomputable def toProd (g : InhomogeneousLorentzGroup) :
+    (StandardMinkowskiSpacetime.Carrier →L[ℝ] StandardMinkowskiSpacetime.Carrier) ×
+      (StandardMinkowskiSpacetime.Carrier →L[ℝ] StandardMinkowskiSpacetime.Carrier) ×
+      StandardMinkowskiSpacetime.Carrier :=
+  (LinearMap.toContinuousLinearMap (g.linear : _ →ₗ[ℝ] _),
+   LinearMap.toContinuousLinearMap (g.linear.symm : _ →ₗ[ℝ] _),
+   g.translation)
+
+/-- The topology on the inhomogeneous Lorentz group, induced by the coordinate
+embedding `toProd` into the operator-norm space. -/
+noncomputable instance : TopologicalSpace InhomogeneousLorentzGroup :=
+  TopologicalSpace.induced toProd inferInstance
+
+theorem continuous_toProd : Continuous (toProd) := continuous_induced_dom
+
+/-- The embedding decomposes multiplication: the linear part composes, the
+inverse linear part composes in reverse, and the translation is the affine
+combination. -/
+theorem toProd_mul (a b : InhomogeneousLorentzGroup) :
+    toProd (a * b) =
+      ((toProd a).1.comp (toProd b).1,
+       (toProd b).2.1.comp (toProd a).2.1,
+       (toProd a).2.2 + (toProd a).1 ((toProd b).2.2)) := by
+  refine Prod.ext ?_ (Prod.ext ?_ ?_)
+  · ext x
+    simp only [toProd, ContinuousLinearMap.comp_apply,
+      LinearMap.coe_toContinuousLinearMap', LinearEquiv.coe_coe]
+    rfl
+  · ext x
+    simp only [toProd, ContinuousLinearMap.comp_apply,
+      LinearMap.coe_toContinuousLinearMap', LinearEquiv.coe_coe]
+    rfl
+  · simp only [toProd, LinearMap.coe_toContinuousLinearMap', LinearEquiv.coe_coe]
+    rfl
+
+/-- The embedding decomposes inversion: swap the two linear coordinates and
+negate the back-transported translation. -/
+theorem toProd_inv (a : InhomogeneousLorentzGroup) :
+    toProd a⁻¹ =
+      ((toProd a).2.1, (toProd a).1,
+       -(toProd a).2.1 ((toProd a).2.2)) := by
+  refine Prod.ext ?_ (Prod.ext ?_ ?_)
+  · rfl
+  · ext x
+    simp only [toProd, LinearMap.coe_toContinuousLinearMap', LinearEquiv.coe_coe]
+    change a.linear.symm.symm x = a.linear x
+    rw [LinearEquiv.symm_symm]
+  · simp only [toProd, LinearMap.coe_toContinuousLinearMap', LinearEquiv.coe_coe]
+    rfl
+
+noncomputable instance : ContinuousMul InhomogeneousLorentzGroup := by
+  constructor
+  rw [continuous_induced_rng]
+  have hfst : Continuous fun p : InhomogeneousLorentzGroup × InhomogeneousLorentzGroup =>
+      toProd p.1 := continuous_toProd.comp continuous_fst
+  have hsnd : Continuous fun p : InhomogeneousLorentzGroup × InhomogeneousLorentzGroup =>
+      toProd p.2 := continuous_toProd.comp continuous_snd
+  simp only [Function.comp_def, toProd_mul]
+  exact (hfst.fst.clm_comp hsnd.fst).prodMk
+    ((hsnd.snd.fst.clm_comp hfst.snd.fst).prodMk
+      (hfst.snd.snd.add (hfst.fst.clm_apply hsnd.snd.snd)))
+
+noncomputable instance : ContinuousInv InhomogeneousLorentzGroup := by
+  constructor
+  rw [continuous_induced_rng]
+  simp only [Function.comp_def, toProd_inv]
+  exact continuous_toProd.snd.fst.prodMk
+    (continuous_toProd.fst.prodMk
+      (continuous_toProd.snd.fst.clm_apply continuous_toProd.snd.snd).neg)
+
+noncomputable instance : IsTopologicalGroup InhomogeneousLorentzGroup where
 
 /-- The `MulAction` of the inhomogeneous Lorentz group on the
 Minkowski spacetime carrier: `(L, t) • x = L x + t`. -/

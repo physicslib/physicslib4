@@ -126,6 +126,19 @@ The final axiom states:
 
 Generally these axioms follow in a straightforward manner from those of AQFT in Minkowski spacetime. The only ``surprise'' in this presentation is the absence of a quasilocal algebra. However, as we found, its absence is simply a reflection of the observational constraints of Lorentzian spacetime which don't exist in Minkowski spacetime.
 
+\subsection{Einstein Causality in Curved Spacetime}
+
+The operator form of local commutativity (\ref{def:local-commutativity-in-curved-spacetime}) carries over to curved spacetime. The only adaptation is dictated by the absence of a quasilocal algebra: causality is expressed in a representation of a common containing local algebra $\mathfrak{U}(\mathbf{B})$, rather than of a global quasilocal algebra.
+
+\begin{theorem}[Einstein Causality in a Representation (Curved Spacetime)]
+    \label{thrm:einstein-causality-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.einstein_causality, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_einstein_causality}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/EinsteinCausality.lean}
+    \leanok
+    \uses{def:local-commutativity-in-curved-spacetime, def:haag-kastler-net-in-curved-spacetime, thrm:gns-construction-theorem, def:state}
+    Let $\pi$ be any $*$-representation of a containing basis algebra $\mathfrak{U}(\mathbf{B})$ on a Hilbert space $H$. If $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$ are completely spacelike-separated basis regions, then the images of the local observables of $\mathbf{B}_1$ and $\mathbf{B}_2$ in $\mathfrak{U}(\mathbf{B})$ commute under $\pi$ as bounded operators on $H$. This is the image under $\pi$ of the curved local commutativity (\ref{def:local-commutativity-in-curved-spacetime}); it holds in particular on the GNS Hilbert space of any state on $\mathfrak{U}(\mathbf{B})$. It is the curved-spacetime counterpart of \ref{thrm:einstein-causality}, with the containing local algebra playing the role of the quasilocal algebra.
+\end{theorem}
+
 \subsection{Covariant States in Curved Spacetime}
 
 As in the Minkowski case, the isometric covariance (\ref{def:isometric-covariance-in-curved-spacetime}) acts fiberwise through the $*$-isomorphisms $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$. Since there is no quasilocal algebra, only the local notion of a covariant family of states is available.
@@ -147,3 +160,76 @@ As in the Minkowski case, the isometric covariance (\ref{def:isometric-covarianc
     \uses{def:covariant-state-family-in-curved-spacetime}
     For a covariant family of local states, the covariance relation composes along the isometry group: $\omega_{\mathbf{B}}(a) = \omega_{\varphi'(\varphi(\mathbf{B}))}\big(\alpha_{\varphi'}(\alpha_\varphi a)\big)$.
 \end{lemma}
+
+\subsection{The Stabilizer GNS Unitary in Curved Spacetime}
+
+In the Minkowski case the fiberwise covariance action lifts to a $*$-automorphism of the quasilocal algebra $\mathfrak{U}$, on whose GNS space an invariant state induces a unitary representation of the \emph{full} Poincar\'e group (\ref{thrm:invariant-state-gns-unitary}). In curved spacetime there is no quasilocal algebra, so the covariance isomorphisms $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$ map between \emph{different} local algebras and do not assemble into a single unitary representation.
+
+They do, however, restrict to a genuine action by automorphisms of one fixed local algebra $\mathfrak{U}(\mathbf{B})$ on the \emph{stabilizer subgroup} $\mathrm{Stab}(\mathbf{B}) = \{\varphi : \varphi(\mathbf{B}) = \mathbf{B}\}$ of the region: when $\varphi(\mathbf{B}) = \mathbf{B}$, the isomorphism $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B})) = \mathfrak{U}(\mathbf{B})$ is an automorphism of $\mathfrak{U}(\mathbf{B})$. Physically $\mathrm{Stab}(\mathbf{B})$ is the curved-spacetime stand-in for the global symmetry group, typically a Killing flow (the stationary flow of a black-hole exterior, giving a Hartle-Hawking/KMS state; the de Sitter static-patch boost, giving the Gibbons-Hawking temperature) or a spatial-symmetry subgroup (the rotations fixing a comoving ball in an FLRW cosmology).
+
+\begin{definition}[Stabilizer Action on a Local Algebra]
+    \label{def:stabilizer-action-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
+    \leanok
+    \uses{def:haag-kastler-net-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime}
+    For an identity-component isometry $\varphi$ fixing the region $\mathbf{B}$ (so $\varphi(\mathbf{B}) = \mathbf{B}$), the covariance isomorphism $\alpha_\varphi$ of \ref{def:isometric-covariance-in-curved-spacetime} lands back in $\mathfrak{U}(\mathbf{B})$ and so defines an automorphism $\hat\alpha_\varphi$ of the single algebra $\mathfrak{U}(\mathbf{B})$.
+\end{definition}
+
+\begin{lemma}[The Stabilizer Action is a Group Action]
+    \label{lmm:stabilizer-action-laws-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut_one, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut_mul}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
+    \leanok
+    \uses{def:stabilizer-action-in-curved-spacetime}
+    The assignment $\varphi \mapsto \hat\alpha_\varphi$ is a monoid action of $\mathrm{Stab}(\mathbf{B})$ by automorphisms of $\mathfrak{U}(\mathbf{B})$: $\hat\alpha_1 = \mathrm{id}$ and $\hat\alpha_{\varphi'\varphi} = \hat\alpha_{\varphi'}\circ\hat\alpha_\varphi$. These follow from the identity and composition laws of the covariance action (\ref{def:isometric-covariance-in-curved-spacetime}); the canonical region-casts collapse because all the regions involved equal $\mathbf{B}$.
+\end{lemma}
+
+\begin{theorem}[GNS Unitary Representation of the Stabilizer]
+    \label{thrm:gns-unitary-stabilizer-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
+    \leanok
+    \uses{def:stabilizer-action-in-curved-spacetime, lmm:stabilizer-action-laws-in-curved-spacetime, def:state, thrm:gns-construction-theorem}
+    Let $\omega$ be a state on $\mathfrak{U}(\mathbf{B})$ invariant under the stabilizer action, $\omega(\hat\alpha_\varphi a) = \omega(a)$ for all $\varphi \in \mathrm{Stab}(\mathbf{B})$. Then the action is implemented on the GNS Hilbert space of $\omega$ by a unitary representation $U$ of $\mathrm{Stab}(\mathbf{B})$: there is a GNS triple $(H, \pi, \Omega)$ and unitaries $U(\varphi)$ with $U(\varphi)\,\pi(a)\Omega = \pi(\hat\alpha_\varphi a)\,\Omega$, $U(\varphi)\Omega = \Omega$, the group laws, and $U(1) = \mathrm{id}$. This is the curved-spacetime counterpart of \ref{thrm:invariant-state-gns-unitary}: in the absence of a quasilocal algebra, the unitary representation is of the stabilizer subgroup acting on the single algebra $\mathfrak{U}(\mathbf{B})$, rather than of the full isometry group.
+\end{theorem}
+
+\begin{theorem}[Strongly Continuous Stabilizer GNS Unitary]
+    \label{thrm:gns-unitary-stabilizer-strongly-continuous-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer_strongContinuous}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
+    \leanok
+    \uses{thrm:gns-unitary-stabilizer-in-curved-spacetime}
+    If moreover the isometry group carries a topology (the abstract interface supplies none, so it is an added hypothesis) and the matrix coefficients $\varphi \mapsto \omega\big(a^*\,\hat\alpha_\varphi b\big)$ are continuous on $\mathrm{Stab}(\mathbf{B})$, then the representation $U$ is strongly continuous: $\varphi \mapsto U(\varphi)\psi$ is continuous for every GNS vector $\psi$. The stabilizer subgroup inherits its topology as a subspace of the isometry group.
+\end{theorem}
+
+\subsection{KMS States for a Killing Flow}
+
+The stabilizer subgroup of a region is, in the genuinely curved examples, a one-parameter Killing flow rather than the full isometry group. Such a flow makes the local algebra $\mathfrak{U}(\mathbf{B})$ into a dynamical system, and the natural equilibrium states are the KMS states (\ref{def:kms-state}) for that flow. This is the precise sense in which the curved-spacetime thermal states are thermal: the Hartle-Hawking state on a Schwarzschild exterior is KMS for the stationary Killing flow at the Hawking temperature, and the Bunch-Davies state restricted to a de Sitter static patch is KMS for the boost Killing flow at the Gibbons-Hawking temperature.
+
+\begin{definition}[Killing-Flow Automorphism Family]
+    \label{def:flow-aut-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.flowAut}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerKMS.lean}
+    \leanok
+    \uses{def:stabilizer-action-in-curved-spacetime}
+    A \emph{Killing flow} fixing a region $\mathbf{B}$ is a map $t \mapsto \varphi_t$ from $\mathbb{R}$ into the stabilizer $\mathrm{Stab}(\mathbf{B})$. Through the stabilizer automorphism (\ref{def:stabilizer-action-in-curved-spacetime}) it induces, for each $t$, an automorphism $\hat\alpha_{\varphi_t}$ of the single local algebra $\mathfrak{U}(\mathbf{B})$ - the time evolution of $\mathfrak{U}(\mathbf{B})$ along the flow.
+\end{definition}
+
+\begin{lemma}[A Killing Flow Induces a One-Parameter Group]
+    \label{lmm:one-parameter-aut-flow-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isOneParameterAut_flowAut}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerKMS.lean}
+    \leanok
+    \uses{def:flow-aut-in-curved-spacetime, lmm:stabilizer-action-laws-in-curved-spacetime, def:one-parameter-aut}
+    If the flow is a one-parameter subgroup of $\mathrm{Stab}(\mathbf{B})$ ($\varphi_0 = 1$ and $\varphi_{s+t} = \varphi_s\,\varphi_t$), then the induced family $t \mapsto \hat\alpha_{\varphi_t}$ is a one-parameter automorphism group of $\mathfrak{U}(\mathbf{B})$ (\ref{def:one-parameter-aut}). This is immediate from the group-action laws of the stabilizer action (\ref{lmm:stabilizer-action-laws-in-curved-spacetime}).
+\end{lemma}
+
+\begin{definition}[KMS State for a Killing Flow]
+    \label{def:kms-state-for-flow-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsKMSStateForFlow}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerKMS.lean}
+    \leanok
+    \uses{lmm:one-parameter-aut-flow-in-curved-spacetime, def:kms-state, def:state}
+    A state $\omega$ on $\mathfrak{U}(\mathbf{B})$ is a \emph{KMS state for the Killing flow} $\varphi$ at inverse temperature $\beta$ if it satisfies the KMS condition (\ref{def:kms-state}) for the induced one-parameter automorphism group (\ref{lmm:one-parameter-aut-flow-in-curved-spacetime}). When $\beta > 0$ such a state is automatically invariant under the flow (\ref{thrm:kms-invariance}), so it induces, by the stabilizer GNS unitary (\ref{thrm:gns-unitary-stabilizer-in-curved-spacetime}), a unitary representation of the flow on its GNS space - the modular/thermal time evolution.
+\end{definition}

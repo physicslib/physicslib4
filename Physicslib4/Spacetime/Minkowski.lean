@@ -195,6 +195,22 @@ noncomputable instance instModuleStandardMinkowskiCarrier :
   change Module ℝ SpacetimeModel
   infer_instance
 
+/-- `StandardMinkowskiSpacetime.Carrier` is definitionally `SpacetimeModel`
+(`= EuclideanSpace ℝ (Fin 4)`); expose its normed/finite-dimensional structure
+so that the Fréchet-derivative and continuity API applies to the affine
+Lorentz action directly. -/
+noncomputable instance instNormedAddCommGroupStandardMinkowskiCarrier :
+    NormedAddCommGroup StandardMinkowskiSpacetime.Carrier :=
+  inferInstanceAs (NormedAddCommGroup SpacetimeModel)
+
+noncomputable instance instNormedSpaceStandardMinkowskiCarrier :
+    NormedSpace ℝ StandardMinkowskiSpacetime.Carrier :=
+  inferInstanceAs (NormedSpace ℝ SpacetimeModel)
+
+instance instFiniteDimensionalStandardMinkowskiCarrier :
+    FiniteDimensional ℝ StandardMinkowskiSpacetime.Carrier :=
+  inferInstanceAs (FiniteDimensional ℝ SpacetimeModel)
+
 /-! ### The orthochronous Lorentz group SO(1,3)↑ -/
 
 /-- A linear automorphism `L` of the spacetime model preserves the
