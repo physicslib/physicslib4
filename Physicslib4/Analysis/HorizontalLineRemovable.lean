@@ -4,17 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Mathlib.Analysis.Complex.CauchyIntegral
+import Mathlib.Analysis.Complex.HasPrimitives
 
 /-!
 # Towards horizontal-line removability (Morera-based)
 
-This file develops building blocks for the **horizontal-line removable
-singularity** theorem: a function continuous on an open set `U` and holomorphic
-on `U` minus a horizontal line is holomorphic on all of `U`. That theorem is the
+This file proves the **horizontal-line removable singularity** theorem: a
+function continuous on an open set `U` and holomorphic on `U` minus a horizontal
+line is holomorphic on all of `U`
+(`differentiableOn_of_continuousOn_off_horizontal_line`). That theorem is the
 missing prerequisite for the strip Schwarz reflection used in the KMS
 invariance proof (`StripLiouville`).
 
-## This file (foundation)
+## Foundation (rectangle contour integrals)
 
 * `Physicslib4.rectIntegralReal`: the contour integral of `f` over the boundary
   of the axis-parallel rectangle `[a,b] × [c,d]` (Cauchy-Goursat normal form,
@@ -33,15 +35,23 @@ invariance proof (`StripLiouville`).
   Cauchy-Goursat to each sub-rectangle (continuous on closure, holomorphic on
   interior, which avoids the line).
 
-## Roadmap (subsequent building blocks, not in this file)
+## Morera glue and removability
 
-1. **Morera glue**: vanishing rectangle integrals over all sub-rectangles give a
-   primitive, hence holomorphy (`Complex.IsConservativeOn` / Morera).
-2. **Removability**: assemble the straddling vanishing + Morera into "continuous
-   on `U`, holomorphic off the line ⟹ holomorphic on `U`".
-3. **Strip Schwarz reflection**: use removability to build the `iβ`-periodic
-   entire extension, discharging `StripLiouville` (and KMS invariance) via
-   `Physicslib4.AQFT.stripLiouville_of_entire_extension`.
+* `Physicslib4.wedgeIntegral_add_wedgeIntegral_eq_rectIntegralReal`: the bridge
+  to Mathlib's Morera API - the sum of the two opposite wedge integrals
+  (`Complex.wedgeIntegral`) equals our `rectIntegralReal`.
+* `Physicslib4.rectIntegralReal_eq_zero_of_subset`: every closed rectangle in `U`
+  has vanishing boundary integral (any corner ordering, any line position),
+  reducing to ordered bounds via `rectIntegralReal_swap_re/_swap_im`.
+* `Physicslib4.differentiableOn_of_continuousOn_off_horizontal_line`: **the
+  removable-singularity theorem**, via Morera
+  (`Complex.isConservativeOn_and_continuousOn_iff_isDifferentiableOn`).
+
+## Roadmap (remaining, not in this file)
+
+* **Strip Schwarz reflection**: use removability to build the `iβ`-periodic
+  entire extension, discharging `StripLiouville` (and KMS invariance) via
+  `Physicslib4.AQFT.stripLiouville_of_entire_extension`.
 -/
 
 namespace Physicslib4
@@ -155,5 +165,109 @@ theorem rectIntegralReal_eq_zero_of_continuousOn_off_horizontal_line (f : ℂ �
     · exact Set.mem_Icc.mpr ⟨hcℓ.trans him.1.le, him.2.le⟩
     · simp only [Set.mem_setOf_eq]; exact (ne_of_lt him.1).symm
   rw [hlow, hupp, add_zero]
+
+/-- Swapping the real bounds negates the rectangle contour integral. -/
+theorem rectIntegralReal_swap_re (f : ℂ → E) (a b c d : ℝ) :
+    rectIntegralReal f b a c d = -rectIntegralReal f a b c d := by
+  simp only [rectIntegralReal, intervalIntegral.integral_symm a b]
+  abel
+
+/-- Swapping the imaginary bounds negates the rectangle contour integral. -/
+theorem rectIntegralReal_swap_im (f : ℂ → E) (a b c d : ℝ) :
+    rectIntegralReal f a b d c = -rectIntegralReal f a b c d := by
+  simp only [rectIntegralReal, intervalIntegral.integral_symm c d, smul_neg]
+  abel
+
+/-- The sum of the two opposite wedge integrals equals the rectangle contour
+integral. This is the bridge between Mathlib's `Complex.IsConservativeOn`
+(phrased via `wedgeIntegral`) and our `rectIntegralReal`: the two wedges trace
+the four edges of the rectangle, with the shared diagonal-free edges combining
+into the full boundary. -/
+theorem wedgeIntegral_add_wedgeIntegral_eq_rectIntegralReal (f : ℂ → E) (z w : ℂ) :
+    wedgeIntegral z w f + wedgeIntegral w z f
+      = rectIntegralReal f z.re w.re z.im w.im := by
+  simp only [wedgeIntegral, rectIntegralReal]
+  rw [intervalIntegral.integral_symm z.re w.re, intervalIntegral.integral_symm z.im w.im,
+    smul_neg]
+  abel
+
+/-- **Rectangle integrals vanish on a set, off a horizontal line.** If `f` is
+continuous on a set `U` and holomorphic on `U` minus the horizontal line
+`im = ℓ`, then the boundary integral of `f` over *any* closed rectangle contained
+in `U` vanishes - regardless of corner ordering and of where the line sits
+relative to the rectangle. The proof reduces to ordered bounds via the swap
+lemmas, then splits into three positions of `ℓ`: inside `[c,d]` (straddling
+vanishing) or outside on either side (plain Cauchy-Goursat, the interior
+avoiding the line). -/
+theorem rectIntegralReal_eq_zero_of_subset {U : Set ℂ} (ℓ : ℝ)
+    (f : ℂ → E) (hc : ContinuousOn f U)
+    (hd : DifferentiableOn ℂ f (U \ {z : ℂ | z.im = ℓ}))
+    (a b c d : ℝ) (hsub : (Set.uIcc a b ×ℂ Set.uIcc c d) ⊆ U) :
+    rectIntegralReal f a b c d = 0 := by
+  have ordered : ∀ a b c d : ℝ, a ≤ b → c ≤ d →
+      (Set.uIcc a b ×ℂ Set.uIcc c d) ⊆ U → rectIntegralReal f a b c d = 0 := by
+    intro a b c d hab hcd hsub
+    have hcont : ContinuousOn f (Set.uIcc a b ×ℂ Set.uIcc c d) := hc.mono hsub
+    -- membership of the open interior in the closed rectangle (`⊆ U`)
+    have hmem_open : ∀ z : ℂ, z.re ∈ Set.Ioo a b → z.im ∈ Set.Ioo c d →
+        z ∈ Set.uIcc a b ×ℂ Set.uIcc c d := by
+      intro z hre him
+      rw [Complex.mem_reProdIm, Set.uIcc_of_le hab, Set.uIcc_of_le hcd]
+      exact ⟨Set.Ioo_subset_Icc_self hre, Set.Ioo_subset_Icc_self him⟩
+    rcases le_total c ℓ with hcℓ | hℓc
+    · rcases le_total ℓ d with hℓd | hdℓ
+      · -- `c ≤ ℓ ≤ d`: straddling vanishing
+        refine rectIntegralReal_eq_zero_of_continuousOn_off_horizontal_line f a b c d ℓ
+          hab hcℓ hℓd hcont (hd.mono (fun z hz => ?_))
+        refine Set.mem_diff_of_mem (hsub ?_) hz.2
+        rw [Complex.mem_reProdIm, Set.uIcc_of_le hab, Set.uIcc_of_le hcd]
+        exact Complex.mem_reProdIm.mp hz.1
+      · -- `d < ℓ`: line above the rectangle, plain Cauchy-Goursat
+        refine rectIntegralReal_eq_zero_of_continuousOn_of_differentiableOn f a b c d
+          hcont (hd.mono ?_)
+        rw [min_eq_left hab, max_eq_right hab, min_eq_left hcd, max_eq_right hcd]
+        intro z hz
+        rw [Complex.mem_reProdIm] at hz
+        exact Set.mem_diff_of_mem (hsub (hmem_open z hz.1 hz.2)) (ne_of_lt (hz.2.2.trans_le hdℓ))
+    · -- `ℓ < c`: line below the rectangle, plain Cauchy-Goursat
+      refine rectIntegralReal_eq_zero_of_continuousOn_of_differentiableOn f a b c d
+        hcont (hd.mono ?_)
+      rw [min_eq_left hab, max_eq_right hab, min_eq_left hcd, max_eq_right hcd]
+      intro z hz
+      rw [Complex.mem_reProdIm] at hz
+      exact Set.mem_diff_of_mem (hsub (hmem_open z hz.1 hz.2))
+        (ne_of_lt (lt_of_le_of_lt hℓc hz.2.1)).symm
+  rcases le_total a b with hab | hab <;> rcases le_total c d with hcd | hcd
+  · exact ordered a b c d hab hcd hsub
+  · have h := ordered a b d c hab hcd (by rw [Set.uIcc_comm d c]; exact hsub)
+    rw [rectIntegralReal_swap_im] at h
+    exact neg_eq_zero.mp h
+  · have h := ordered b a c d hab hcd (by rw [Set.uIcc_comm b a]; exact hsub)
+    rw [rectIntegralReal_swap_re] at h
+    exact neg_eq_zero.mp h
+  · have h := ordered b a d c hab hcd
+      (by rw [Set.uIcc_comm b a, Set.uIcc_comm d c]; exact hsub)
+    rw [rectIntegralReal_swap_re, rectIntegralReal_swap_im, neg_neg] at h
+    exact h
+
+/-- **Horizontal-line removable singularity (Morera).** If `f` is continuous on
+an open set `U` and holomorphic on `U` minus the horizontal line `im = ℓ`, then
+`f` is holomorphic on all of `U`. The line is removed: continuity across it plus
+holomorphy on either side forces differentiability on it.
+
+The proof is Morera's theorem in the form
+`Complex.isConservativeOn_and_continuousOn_iff_isDifferentiableOn`: it suffices
+that `f` is conservative on `U`, i.e. every rectangle boundary integral vanishes,
+which is `rectIntegralReal_eq_zero_of_subset`. -/
+theorem differentiableOn_of_continuousOn_off_horizontal_line [CompleteSpace E] {U : Set ℂ}
+    (hU : IsOpen U) (ℓ : ℝ) (f : ℂ → E) (hc : ContinuousOn f U)
+    (hd : DifferentiableOn ℂ f (U \ {z : ℂ | z.im = ℓ})) :
+    DifferentiableOn ℂ f U := by
+  rw [← Complex.isConservativeOn_and_continuousOn_iff_isDifferentiableOn hU]
+  refine ⟨?_, hc⟩
+  intro z w hzw
+  simp only [Complex.Rectangle] at hzw
+  rw [eq_neg_iff_add_eq_zero, wedgeIntegral_add_wedgeIntegral_eq_rectIntegralReal]
+  exact rectIntegralReal_eq_zero_of_subset ℓ f hc hd z.re w.re z.im w.im hzw
 
 end Physicslib4
