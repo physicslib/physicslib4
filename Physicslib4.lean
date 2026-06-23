@@ -23,6 +23,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerKMS
 import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.Analysis.HorizontalLineRemovable
+import Physicslib4.Analysis.StripPeriodicExtension
 import Physicslib4.Analysis.StrongContinuity
 import Physicslib4.Basic
 import Physicslib4.GNS.Basic

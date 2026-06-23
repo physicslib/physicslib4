@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.GNS.Basic
+import Physicslib4.Analysis.StripPeriodicExtension
 import Mathlib.Analysis.Calculus.FDeriv.Basic
 import Mathlib.Analysis.Complex.Liouville
 
@@ -106,6 +107,18 @@ theorem stripLiouville_of_entire_extension {F : ℂ → ℂ}
   have hconst : H (t : ℂ) = H 0 := hH.apply_eq_apply_of_bounded hbdd _ _
   rw [← hagree t, hconst, h0]
 
+/-- **The strip-Liouville principle holds for `β > 0`.** This discharges the
+`StripLiouville β` hypothesis unconditionally for positive inverse temperature:
+the equal boundary values let `F` extend to a bounded `iβ`-periodic *entire*
+function (`Physicslib4.exists_bounded_entire_extension_of_strip_periodic`, the
+horizontal-line Schwarz reflection), which is then constant on `ℝ` by the
+Liouville endgame `stripLiouville_of_entire_extension`. -/
+theorem stripLiouville_of_pos {β : ℝ} (hβ : 0 < β) : StripLiouville β := by
+  intro F hcont hdiff hbdd hper t
+  obtain ⟨H, hHdiff, hHbdd, hHagree⟩ :=
+    Physicslib4.exists_bounded_entire_extension_of_strip_periodic hβ hcont hdiff hper hbdd
+  exact stripLiouville_of_entire_extension H hHdiff hHbdd hHagree t
+
 /-- **Boundary coincidence for the diagonal `a = 1`.** For a KMS state, the
 correlation function of the pair `(1, a)` has its two boundary values *equal* -
 both are `t ↦ ω(α_t a)`. This is the algebraic heart of the invariance argument
@@ -145,6 +158,14 @@ theorem IsKMSState.invariant {α : ℝ → (A ≃⋆ₐ[ℂ] A)} {β : ℝ} {ω 
     _ = F 0 := hconst t
     _ = (ω (α 0 a) : ℂ) := h0
     _ = (ω a : ℂ) := by rw [hα.1 a]
+
+/-- **A KMS state at positive inverse temperature is `α`-invariant**, with no
+external analytic hypothesis: the strip-Liouville principle is now a theorem
+(`stripLiouville_of_pos`) for `β > 0`. -/
+theorem IsKMSState.invariant_of_pos {α : ℝ → (A ≃⋆ₐ[ℂ] A)} {β : ℝ} {ω : State A}
+    (h : IsKMSState α β ω) (hα : IsOneParameterAut α) (hβ : 0 < β) (a : A) (t : ℝ) :
+    (ω (α t a) : ℂ) = (ω a : ℂ) :=
+  h.invariant hα (stripLiouville_of_pos hβ) a t
 
 end AQFT
 end Physicslib4
