@@ -136,6 +136,30 @@ theorem IsKMSState.correlationOne {α : ℝ → (A ≃⋆ₐ[ℂ] A)} {β : ℝ}
   · rw [hbot t, one_mul]
   · rw [htop t, mul_one]
 
+/-- **Uniqueness of the KMS correlation function.** For `β > 0`, any two functions
+satisfying the KMS analytic data for the same pair `(a, b)` - continuous and
+bounded on the strip, holomorphic on the interior, with the prescribed boundary
+values `t ↦ ω(a · α_t b)` and `t ↦ ω(α_t b · a)` - agree on the whole strip. The
+analytic completion in the KMS condition is therefore unique.
+
+The proof is the strip machinery: the difference of two such functions has
+vanishing boundary values, so it vanishes on the strip by the `iβ`-periodic
+extension plus Liouville (`eqOn_strip_of_eq_boundary`). The hypothesis `β > 0`
+is the same one that makes the extension entire. -/
+theorem IsKMSState.correlation_eqOn {α : ℝ → (A ≃⋆ₐ[ℂ] A)} {β : ℝ} {ω : State A}
+    (hβ : 0 < β) {a b : A} {F G : ℂ → ℂ}
+    (hFc : ContinuousOn F (kmsStrip β)) (hFd : DifferentiableOn ℂ F (kmsStripInterior β))
+    (hFb : ∃ C : ℝ, ∀ z ∈ kmsStrip β, ‖F z‖ ≤ C)
+    (hFbot : ∀ t : ℝ, F (t : ℂ) = (ω (a * α t b) : ℂ))
+    (hFtop : ∀ t : ℝ, F ((t : ℂ) + (β : ℂ) * Complex.I) = (ω (α t b * a) : ℂ))
+    (hGc : ContinuousOn G (kmsStrip β)) (hGd : DifferentiableOn ℂ G (kmsStripInterior β))
+    (hGb : ∃ C : ℝ, ∀ z ∈ kmsStrip β, ‖G z‖ ≤ C)
+    (hGbot : ∀ t : ℝ, G (t : ℂ) = (ω (a * α t b) : ℂ))
+    (hGtop : ∀ t : ℝ, G ((t : ℂ) + (β : ℂ) * Complex.I) = (ω (α t b * a) : ℂ))
+    {z : ℂ} (hz0 : 0 ≤ z.im) (hzβ : z.im ≤ β) : F z = G z :=
+  Physicslib4.eqOn_strip_of_eq_boundary hβ hFc hFd hFb hGc hGd hGb
+    (fun t => by rw [hFbot t, hGbot t]) (fun t => by rw [hFtop t, hGtop t]) hz0 hzβ
+
 /-- **A KMS state is invariant under its one-parameter automorphism group.**
 Given the strip-Liouville principle (`StripLiouville β`, the standard analytic
 fact isolated above), every `(α, β)`-KMS state `ω` is `α`-invariant:

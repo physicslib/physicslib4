@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.Analysis.HorizontalLineRemovable
+import Mathlib.Analysis.Complex.Liouville
 
 /-!
 # The `iβ`-periodic entire extension (strip Schwarz reflection)
@@ -312,6 +313,75 @@ theorem exists_bounded_entire_extension_of_strip_periodic (hβ : 0 < β)
     have hfl : ⌊((t : ℝ) : ℂ).im / β⌋ = 0 := by rw [Complex.ofReal_im, zero_div, Int.floor_zero]
     simp only [pext, pshift, hfl, Int.cast_zero, zero_mul, sub_zero]
 
+/-- The periodic extension agrees with `F` on the (half-open) fundamental strip
+`0 ≤ Im z < β`, where the fold is the identity. -/
+theorem pext_eq_of_mem_strip (hβ : 0 < β) {z : ℂ} (h0 : 0 ≤ z.im) (hβz : z.im < β) :
+    pext β F z = F z := by
+  have hfl : ⌊z.im / β⌋ = 0 :=
+    (floor_div_eq_iff hβ z.im 0).mpr
+      ⟨by simp only [Int.cast_zero, zero_mul]; exact h0,
+       by simp only [Int.cast_zero, zero_add, one_mul]; exact hβz⟩
+  simp only [pext, pshift, hfl, Int.cast_zero, zero_mul, sub_zero]
+
+/-- **Vanishing from zero boundary values.** A function continuous and bounded on
+the closed strip `0 ≤ Im z ≤ β`, holomorphic on the open strip, whose boundary
+values on *both* lines vanish, is identically zero on the strip. The periodic
+extension is then a bounded entire function (its boundary values agree), hence
+constant by Liouville, and the constant is its value `F(0) = 0`. -/
+theorem eq_zero_on_strip_of_zero_boundary (hβ : 0 < β)
+    (hcont : ContinuousOn F {z : ℂ | 0 ≤ z.im ∧ z.im ≤ β})
+    (hdiff : DifferentiableOn ℂ F {z : ℂ | 0 < z.im ∧ z.im < β})
+    (hbdd : ∃ C : ℝ, ∀ z ∈ {z : ℂ | 0 ≤ z.im ∧ z.im ≤ β}, ‖F z‖ ≤ C)
+    (hbot : ∀ t : ℝ, F (t : ℂ) = 0)
+    (htop : ∀ t : ℝ, F ((t : ℂ) + (β : ℂ) * Complex.I) = 0)
+    {z : ℂ} (hz0 : 0 ≤ z.im) (hzβ : z.im ≤ β) : F z = 0 := by
+  have hper : ∀ t : ℝ, F (t : ℂ) = F ((t : ℂ) + (β : ℂ) * Complex.I) := by
+    intro t; rw [hbot, htop]
+  have hdiffH : Differentiable ℂ (pext β F) := pext_differentiable hβ hcont hdiff hper
+  have hbddH : Bornology.IsBounded (Set.range (pext β F)) := by
+    rw [isBounded_iff_forall_norm_le]
+    obtain ⟨C, hC⟩ := hbdd
+    exact ⟨C, by
+      rintro _ ⟨w, rfl⟩
+      exact hC (pshift β w) ⟨(pshift_im_mem hβ w).1, le_of_lt (pshift_im_mem hβ w).2⟩⟩
+  have hF0 : F (0 : ℂ) = 0 := by have := hbot 0; rwa [Complex.ofReal_zero] at this
+  rcases eq_or_lt_of_le hzβ with hzeq | hzlt
+  · have hzrepr : z = (↑z.re : ℂ) + (↑β : ℂ) * Complex.I := by
+      apply Complex.ext
+      · simp
+      · simpa using hzeq
+    rw [hzrepr]; exact htop z.re
+  · have hHz : pext β F z = F z := pext_eq_of_mem_strip hβ hz0 hzlt
+    have hH0 : pext β F (0 : ℂ) = F (0 : ℂ) := pext_eq_of_mem_strip hβ (by simp) (by simpa using hβ)
+    have hconst : pext β F z = pext β F 0 :=
+      Differentiable.apply_eq_apply_of_bounded hdiffH hbddH _ _
+    rw [hHz, hH0, hF0] at hconst
+    exact hconst
+
 end
+
+/-- **Uniqueness from boundary values.** Two functions continuous and bounded on
+the closed strip `0 ≤ Im z ≤ β`, holomorphic on the open strip, that agree on
+*both* boundary lines, agree on the whole closed strip. (Their difference has
+zero boundary values, so vanishes by `eq_zero_on_strip_of_zero_boundary`.) -/
+theorem eqOn_strip_of_eq_boundary {β : ℝ} (hβ : 0 < β) {F G : ℂ → ℂ}
+    (hFc : ContinuousOn F {z : ℂ | 0 ≤ z.im ∧ z.im ≤ β})
+    (hFd : DifferentiableOn ℂ F {z : ℂ | 0 < z.im ∧ z.im < β})
+    (hFb : ∃ C : ℝ, ∀ z ∈ {z : ℂ | 0 ≤ z.im ∧ z.im ≤ β}, ‖F z‖ ≤ C)
+    (hGc : ContinuousOn G {z : ℂ | 0 ≤ z.im ∧ z.im ≤ β})
+    (hGd : DifferentiableOn ℂ G {z : ℂ | 0 < z.im ∧ z.im < β})
+    (hGb : ∃ C : ℝ, ∀ z ∈ {z : ℂ | 0 ≤ z.im ∧ z.im ≤ β}, ‖G z‖ ≤ C)
+    (hbot : ∀ t : ℝ, F (t : ℂ) = G (t : ℂ))
+    (htop : ∀ t : ℝ,
+      F ((t : ℂ) + (β : ℂ) * Complex.I) = G ((t : ℂ) + (β : ℂ) * Complex.I))
+    {z : ℂ} (hz0 : 0 ≤ z.im) (hzβ : z.im ≤ β) : F z = G z := by
+  have hbdd : ∃ C : ℝ, ∀ z ∈ {z : ℂ | 0 ≤ z.im ∧ z.im ≤ β}, ‖F z - G z‖ ≤ C := by
+    obtain ⟨CF, hCF⟩ := hFb; obtain ⟨CG, hCG⟩ := hGb
+    exact ⟨CF + CG, fun z hz => (norm_sub_le _ _).trans (add_le_add (hCF z hz) (hCG z hz))⟩
+  have hzero := eq_zero_on_strip_of_zero_boundary (F := fun z => F z - G z) hβ
+    (hFc.sub hGc) (hFd.sub hGd) hbdd
+    (fun s => by simp only [hbot s, sub_self])
+    (fun s => by simp only [htop s, sub_self]) hz0 hzβ
+  exact sub_eq_zero.mp hzero
 
 end Physicslib4
