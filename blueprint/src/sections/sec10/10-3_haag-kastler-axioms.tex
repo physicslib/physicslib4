@@ -242,6 +242,23 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
     A state $\omega$ on $A$ is \emph{$(\alpha, \beta)$-KMS} for a one-parameter automorphism group $\alpha$ (\ref{def:one-parameter-aut}) at inverse temperature $\beta$ if for every $a, b \in A$ the correlation function $t \mapsto \omega(a\,\alpha_t b)$ extends to a function $F$ on the closed strip $0 \le \operatorname{Im} z \le \beta$ that is continuous there, holomorphic on the open strip, bounded, and whose boundary value on $\operatorname{Im} z = \beta$ is $t \mapsto \omega(\alpha_t b\, \cdot a)$.
 \end{definition}
 
+\begin{lemma}[Boundary Coincidence for $a = 1$]
+    \label{lmm:kms-correlation-one}
+    \lean{Physicslib4.AQFT.IsKMSState.correlationOne}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:kms-state}
+    For a KMS state $\omega$ and any observable $a$, the correlation function $F$ of the pair $(1, a)$ has its two boundary values \emph{equal} - both are $t \mapsto \omega(\alpha_t a)$. This is the algebraic heart of the invariance argument: it follows directly from the KMS condition with $a := 1$, since $\omega(1\cdot\alpha_t a) = \omega(\alpha_t a \cdot 1) = \omega(\alpha_t a)$.
+\end{lemma}
+
+\begin{definition}[Strip-Liouville Principle]
+    \label{def:strip-liouville}
+    \lean{Physicslib4.AQFT.StripLiouville}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    The \emph{strip-Liouville principle} at width $\beta$ is the statement that any function $F$ continuous and bounded on the closed strip $0 \le \operatorname{Im} z \le \beta$, holomorphic on the open strip, and with equal boundary values $F(t) = F(t + i\beta)$ for all real $t$, is constant along the real axis: $F(t) = F(0)$. It is the analytic input that turns boundary coincidence into invariance.
+\end{definition}
+
 \begin{theorem}[$i\beta$-Periodic Entire Extension (Strip Schwarz Reflection)]
     \label{thrm:strip-periodic-extension}
     \lean{Physicslib4.exists_bounded_entire_extension_of_strip_periodic}
@@ -250,11 +267,20 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
     A function $F$ continuous on the closed strip $0 \le \operatorname{Im} z \le \beta$, holomorphic on the open strip, bounded, and with equal boundary values $F(t) = F(t + i\beta)$ on the real axis, admits a \emph{bounded entire} extension $H$ agreeing with $F$ on $\mathbb{R}$. The extension is the $i\beta$-periodic continuation $H(z) = F\!\left(z - \lfloor \operatorname{Im} z / \beta \rfloor\, i\beta\right)$, which folds every point into the fundamental strip: it is continuous across each gluing line $\operatorname{Im} z = k\beta$ because the boundary values match by periodicity, holomorphic off the lines as $F$ composed with a holomorphic shift, and holomorphic on the lines by the horizontal-line removable-singularity theorem (Morera). This is the analytic engine behind the strip-Liouville principle.
 \end{theorem}
 
+\begin{theorem}[Strip-Liouville Holds for $\beta > 0$]
+    \label{thrm:strip-liouville-pos}
+    \lean{Physicslib4.AQFT.stripLiouville_of_pos}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:strip-liouville, thrm:strip-periodic-extension}
+    At positive width $\beta > 0$ the strip-Liouville principle (\ref{def:strip-liouville}) is a theorem. The equal boundary values let $F$ extend to a bounded $i\beta$-periodic \emph{entire} function by the strip Schwarz reflection (\ref{thrm:strip-periodic-extension}), which is then constant on $\mathbb{R}$ by Liouville's theorem. The hypothesis $\beta > 0$ is necessary: at $\beta = 0$ the open strip is empty and at $\beta < 0$ the strip itself is empty, and in both cases the principle is false.
+\end{theorem}
+
 \begin{theorem}[KMS States are Invariant]
     \label{thrm:kms-invariance}
     \lean{Physicslib4.AQFT.IsKMSState.invariant_of_pos}
     \leanfile{Physicslib4/AQFT/KMS.lean}
     \leanok
-    \uses{def:kms-state, thrm:strip-periodic-extension}
-    At positive inverse temperature $\beta > 0$, every $(\alpha, \beta)$-KMS state $\omega$ is $\alpha$-invariant: $\omega(\alpha_t a) = \omega(a)$ for all $t$ and $a$. Taking $a = 1$, the KMS correlation function of $(1, a)$ has \emph{equal} boundary values $F(t) = F(t + i\beta) = \omega(\alpha_t a)$; by the strip Schwarz reflection (\ref{thrm:strip-periodic-extension}) it extends to a bounded entire function, hence is constant on $\mathbb{R}$ by Liouville, so $\omega(\alpha_t a) = F(t) = F(0) = \omega(a)$. The positivity $\beta > 0$ is essential: at $\beta \le 0$ the strip degenerates and the conclusion fails.
+    \uses{def:kms-state, lmm:kms-correlation-one, thrm:strip-liouville-pos}
+    At positive inverse temperature $\beta > 0$, every $(\alpha, \beta)$-KMS state $\omega$ is $\alpha$-invariant: $\omega(\alpha_t a) = \omega(a)$ for all $t$ and $a$. By boundary coincidence (\ref{lmm:kms-correlation-one}) the KMS correlation function of $(1, a)$ has equal boundary values $F(t) = F(t + i\beta) = \omega(\alpha_t a)$; the strip-Liouville principle for $\beta > 0$ (\ref{thrm:strip-liouville-pos}) forces $F(t) = F(0)$, so $\omega(\alpha_t a) = F(t) = F(0) = \omega(\alpha_0 a) = \omega(a)$.
 \end{theorem}
