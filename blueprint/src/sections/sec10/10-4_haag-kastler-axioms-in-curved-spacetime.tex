@@ -126,6 +126,19 @@ The final axiom states:
 
 Generally these axioms follow in a straightforward manner from those of AQFT in Minkowski spacetime. The only ``surprise'' in this presentation is the absence of a quasilocal algebra. However, as we found, its absence is simply a reflection of the observational constraints of Lorentzian spacetime which don't exist in Minkowski spacetime.
 
+\subsection{Einstein Causality in Curved Spacetime}
+
+The operator form of local commutativity (\ref{def:local-commutativity-in-curved-spacetime}) carries over to curved spacetime. The only adaptation is dictated by the absence of a quasilocal algebra: causality is expressed in a representation of a common containing local algebra $\mathfrak{U}(\mathbf{B})$, rather than of a global quasilocal algebra.
+
+\begin{theorem}[Einstein Causality in a Representation (Curved Spacetime)]
+    \label{thrm:einstein-causality-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.einstein_causality, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_einstein_causality}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/EinsteinCausality.lean}
+    \leanok
+    \uses{def:local-commutativity-in-curved-spacetime, def:haag-kastler-net-in-curved-spacetime, thrm:gns-construction-theorem, def:state}
+    Let $\pi$ be any $*$-representation of a containing basis algebra $\mathfrak{U}(\mathbf{B})$ on a Hilbert space $H$. If $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$ are completely spacelike-separated basis regions, then the images of the local observables of $\mathbf{B}_1$ and $\mathbf{B}_2$ in $\mathfrak{U}(\mathbf{B})$ commute under $\pi$ as bounded operators on $H$. This is the image under $\pi$ of the curved local commutativity (\ref{def:local-commutativity-in-curved-spacetime}); it holds in particular on the GNS Hilbert space of any state on $\mathfrak{U}(\mathbf{B})$. It is the curved-spacetime counterpart of \ref{thrm:einstein-causality}, with the containing local algebra playing the role of the quasilocal algebra.
+\end{theorem}
+
 \subsection{Covariant States in Curved Spacetime}
 
 As in the Minkowski case, the isometric covariance (\ref{def:isometric-covariance-in-curved-spacetime}) acts fiberwise through the $*$-isomorphisms $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$. Since there is no quasilocal algebra, only the local notion of a covariant family of states is available.

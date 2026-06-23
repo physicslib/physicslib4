@@ -127,6 +127,19 @@ This concludes the presentation of the ``sharpened'' axioms. As proven in this b
 
 These ``sharpened'' axioms also allow for a straightforward generalization to a set of axioms describing AQFT in curved spacetime, i.e. a set of axioms describing AQFT in a curved spacetime background that is fixed and treated classically. In a subsequent blog post we will detail these axioms.
 
+\subsection{Einstein Causality}
+
+Local commutativity (\ref{def:local-commutativity}) is an algebraic statement about the quasilocal algebra. Its physical content - that spacelike-separated measurements do not interfere - is its operator form: in any representation of the quasilocal algebra, spacelike-separated local observables commute as bounded operators on the Hilbert space.
+
+\begin{theorem}[Einstein Causality in a Representation]
+    \label{thrm:einstein-causality}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.einstein_causality, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.exists_gns_einstein_causality}
+    \leanfile{Physicslib4/AQFT/HaagKastler/EinsteinCausality.lean}
+    \leanok
+    \uses{def:local-commutativity, def:haag-kastler-net, thrm:gns-construction-theorem, def:state}
+    Let $\pi$ be any $*$-representation of the quasilocal algebra on a Hilbert space $H$. If $\mathbf{B}_1, \mathbf{B}_2$ are completely spacelike-separated basis regions, then for all $a \in \mathfrak{U}(\mathbf{B}_1)$ and $b \in \mathfrak{U}(\mathbf{B}_2)$ the operators $\pi(\iota_{\mathbf{B}_1} a)$ and $\pi(\iota_{\mathbf{B}_2} b)$ commute. This is the image under $\pi$ of the local commutativity relation (\ref{def:local-commutativity}); since the GNS representation of any state is such a $\pi$, spacelike-separated local observables commute on every GNS Hilbert space.
+\end{theorem}
+
 \subsection{Covariant States and the Covariance Action}
 
 The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts on the net fiberwise, through the $*$-isomorphisms $\alpha_L : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(L\cdot\mathbf{B})$. We record two consequences: the notion of a Lorentz-covariant family of local states, and the lift of the fiberwise action to a single dynamical $*$-automorphism of the quasilocal algebra.
