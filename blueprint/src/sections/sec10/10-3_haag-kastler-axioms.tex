@@ -297,3 +297,21 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
     \uses{def:kms-state, lmm:kms-correlation-one, thrm:strip-liouville-pos}
     At positive inverse temperature $\beta > 0$, every $(\alpha, \beta)$-KMS state $\omega$ is $\alpha$-invariant: $\omega(\alpha_t a) = \omega(a)$ for all $t$ and $a$. By boundary coincidence (\ref{lmm:kms-correlation-one}) the KMS correlation function of $(1, a)$ has equal boundary values $F(t) = F(t + i\beta) = \omega(\alpha_t a)$; the strip-Liouville principle for $\beta > 0$ (\ref{thrm:strip-liouville-pos}) forces $F(t) = F(0)$, so $\omega(\alpha_t a) = F(t) = F(0) = \omega(\alpha_0 a) = \omega(a)$.
 \end{theorem}
+
+\begin{theorem}[Uniqueness on the Strip from Boundary Values]
+    \label{thrm:strip-uniqueness}
+    \lean{Physicslib4.eqOn_strip_of_eq_boundary}
+    \leanfile{Physicslib4/Analysis/StripPeriodicExtension.lean}
+    \leanok
+    \uses{thrm:strip-periodic-extension}
+    Two functions continuous and bounded on the closed strip $0 \le \operatorname{Im} z \le \beta$ (with $\beta > 0$), holomorphic on the open strip, that agree on \emph{both} boundary lines $\operatorname{Im} z = 0$ and $\operatorname{Im} z = \beta$, agree on the whole strip. Indeed their difference has vanishing boundary values, so its $i\beta$-periodic extension (\ref{thrm:strip-periodic-extension}) is a bounded entire function, constant by Liouville, equal to its value $0$ at the origin.
+\end{theorem}
+
+\begin{theorem}[Uniqueness of the KMS Correlation Function]
+    \label{thrm:kms-correlation-unique}
+    \lean{Physicslib4.AQFT.IsKMSState.correlation_eqOn}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:kms-state, thrm:strip-uniqueness}
+    For $\beta > 0$, the analytic completion of a KMS correlation function is unique: any two functions satisfying the KMS analytic data for the same pair $(a, b)$ - continuous and bounded on the strip, holomorphic on the interior, with the prescribed boundary values $t \mapsto \omega(a\,\alpha_t b)$ and $t \mapsto \omega(\alpha_t b\,\cdot a)$ - agree on the whole strip. This is the strip uniqueness (\ref{thrm:strip-uniqueness}) applied to the two analytic completions, which share both boundary values.
+\end{theorem}
