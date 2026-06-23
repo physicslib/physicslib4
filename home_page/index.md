@@ -41,22 +41,104 @@ Chapters 1–9 of the blueprint unpack and analyse the original Haag–Kastler a
 - **Chapter 1** presents the original Haag–Kastler axioms as stated in the 1964 paper.
 - **Chapter 2 (Axiom 0 – Minkowski Space)** examines the role of Minkowski spacetime and compares the standard, indiscrete, Euclidean, and Alexandrov topologies on it.
 - **Chapter 3 (Axiom 1 – Local Algebras)** discusses the notion of regions of measurement and the assignment of a C\*-algebra to each such region.
-- **Chapter 4 (Axiom 2 – Isotony)** introduces the GNS Construction in motivating context and studies the isotony condition—the requirement that inclusions of spacetime regions induce *-monomorphisms of the corresponding algebras.
+- **Chapter 4 (Axiom 2 – Isotony)** introduces the GNS Construction in motivating context and studies the isotony condition—the requirement that inclusions of spacetime regions induce \*-monomorphisms of the corresponding algebras.
 - **Chapter 5 (Axiom 3 – Local Commutativity)** introduces the notion of completely spacelike separated regions and the quasilocal algebra, and studies the requirement that observables localised in spacelike separated regions commute.
 - **Chapter 6 (Axiom 4 – Quasilocal Algebra)** analyses the construction of the quasilocal algebra as the completion of the set-theoretic union of all local algebras, and the axiom that all observables are quasilocal.
 - **Chapter 7 (Axiom 5 – Lorentz Covariance)** studies the action of the inhomogeneous Lorentz group (connected to the identity) on the net of local algebras and the covariance requirement.
 - **Chapter 8 (Axiom 6 – Primitivity)** examines faithful and irreducible representations; this axiom is ultimately abandoned in the sharpened formulation.
 - **Chapter 9 (Haag–Kastler Axioms in Curved Spacetime)** generalizes the Haag–Kastler Axioms in Minkowski spacetime to curved spacetime, i.e. Lorentzian spacetime.
 
-Chapter 10 assembles the formalisation-ready content. It begins by carefully stating and proving the **GNS Construction Theorem** (with full detail, since both the theorem and specific steps of its proof are used in the axioms). It then gives precise definitions for spacetime, Minkowski spacetime, Lorentzian spacetime, and causal structure (timelike, spacelike, and null vectors; time orientation; future- and past-pointing vectors; paths, curves, and trips; causal trips; chronological and causal futures and pasts; spacelike separation; the Alexandrov topology), together with a battery of supporting lemmas establishing the basic geometry of this causal structure (the causal classification trichotomy, the reverse Cauchy–Schwarz and reverse triangle inequalities for timelike vectors, convexity of the future and past cones, monotonicity of futures and pasts, and symmetry of spacelike separation). A further subsection proves that isometries preserve this causal structure—classification, chronology, and Alexandrov-basis sets—which underwrites the well-definedness of the covariance axiom. It then states the **sharpened Haag–Kastler Axioms**: Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, and Lorentz Covariance, bundled together into a single `HaagKastlerNet` structure, as well as their generalization to curved spacetime. Finally, it develops the notion of Lorentz- and isometry-covariant families of local states, the lift of the fiberwise covariance action to a dynamical automorphism of the quasilocal algebra, and the GNS-unitary implementation of an invariant (vacuum) state.
+Chapter 10 assembles the formalisation-ready content, organised into four main blocks:
+
+- **GNS Construction.** Carefully states and proves the GNS Construction Theorem in full detail—construction of the GNS Hilbert space, the \*-representation, the cyclic vector, faithfulness, and uniqueness up to unitary equivalence—since both the theorem and specific steps of its proof are used in the axioms that follow.
+
+- **Spacetime and causal structure.** Gives precise definitions of spacetime, Minkowski spacetime, and Lorentzian spacetime, together with the full apparatus of causal structure: timelike, spacelike, and null vectors; time orientation; future- and past-pointing vectors; paths, curves, and trips; causal trips; chronological and causal futures and pasts; spacelike separation; and the Alexandrov topology. Supporting lemmas establish the basic geometry (the causal classification trichotomy, the reverse Cauchy–Schwarz and reverse triangle inequalities for timelike vectors, convexity of the future and past cones, monotonicity of futures and pasts, symmetry of spacelike separation, and the fact that isometries preserve causal classification, chronology, and Alexandrov-basis sets).
+
+- **Sharpened Haag–Kastler Axioms in Minkowski and curved spacetime.** States the sharpened axioms—Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, and Lorentz Covariance—bundled into a single `HaagKastlerNet` structure, together with their curved-spacetime generalisation (`HaagKastlerNet` in curved spacetime). Derives the operator form of Einstein Causality in both settings. Develops covariant families of local states, the lift of the fiberwise covariance action to a \*-automorphism of the quasilocal algebra, group-action coherence of the covariance automorphism, and GNS-unitary implementation of a Poincaré-invariant (vacuum) state. In the curved-spacetime setting, where no quasilocal algebra exists, the covariance action restricts to the stabilizer subgroup of a region, and the GNS unitary represents that stabilizer action.
+
+- **KMS condition and thermal equilibrium.** Introduces one-parameter automorphism groups and KMS states as the algebraic characterisation of thermal equilibrium. Proves the strip-Liouville principle (via a periodic entire extension / strip Schwarz reflection argument) and derives from it that every KMS state at positive inverse temperature is automatically invariant, that the KMS correlation function is unique, and that the separating-vector property holds for faithful states. In the curved-spacetime setting, identifies Killing flows as one-parameter subgroups of the stabilizer, and defines KMS states for a Killing flow—the precise algebraic sense in which the Hartle–Hawking and Gibbons–Hawking states are thermal.
 
 ## What is Being Formalised
 
 Only the content of Chapter 10 is formalised in Lean. This comprises:
 
-- **Definitions** — State, Cyclic Vector, Spacetime, Standard Minkowski Spacetime, Timelike/Spacelike/Null Vectors, Time Orientation, Future and Past Pointing Vectors, Paths, Curves, Timelike and Causal Smooth Curves, Future and Past Oriented Smooth Curves, Endpoints, Trip, Causal Trip, Chronological Future and Past, Causal Future and Past, Spacelike Related, Completely Spacelike, Alexandrov Topology, Minkowski Spacetime, Lorentzian Spacetime, Haag–Kastler Net, Quasilocal Algebra, Quasilocal Observable, Local Observable, Covariant Family of Local States, Quasilocal Covariance Automorphism, Covariant Quasilocal Algebra, Invariant State, Haag–Kastler Net in Curved Spacetime, Covariant Family of Local States in Curved Spacetime.
-- **Lemmas and Theorems** — the Cauchy–Schwarz inequality for states, equivalence of the two descriptions of the left-ideal $$\mathcal{N}$$, the fact that $$\mathcal{N}$$ is a closed linear subspace, and the full GNS Construction Theorem (including construction of the GNS Hilbert space, the $$\ast$$-representation, the cyclic vector, faithfulness, and uniqueness up to unitary equivalence); the causal classification trichotomy, the reverse Cauchy–Schwarz inequality and reverse triangle inequality for timelike vectors, convexity of the timelike and future/past cones, the sign and definiteness lemmas underlying time orientation, chronological precedence implying causal precedence, monotonicity of futures and pasts, and symmetry of spacelike separation; that isometries preserve the causal classification, chronology, and Alexandrov-basis sets; composition of covariance, uniqueness and existence of the quasilocal covariance lift, group-action coherence of the covariance automorphism, and GNS-unitary implementation of an invariant state.
-- **Axioms** — Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, and Lorentz Covariance and their generalization to curved spacetime.
+### Definitions
+
+**GNS Construction**
+- State, Cyclic Vector
+
+**Spacetime and causal structure**
+- Spacetime, Standard Minkowski Spacetime
+- Timelike / Spacelike / Null Vectors, Time Orientation, Future- and Past-Pointing Vectors
+- Paths, Curves, Timelike and Causal Smooth Curves, Future- and Past-Oriented Smooth Curves, Endpoints
+- Trip, Causal Trip
+- Chronological Future and Past, Causal Future and Past
+- Spacelike Related, Completely Spacelike
+- Alexandrov Topology, Minkowski Spacetime, Lorentzian Spacetime
+
+**Sharpened axioms – Minkowski spacetime**
+- Haag–Kastler Net, Quasilocal Algebra, Quasilocal Observable, Local Observable
+- Covariant Family of Local States, Quasilocal Covariance Automorphism, Covariant Quasilocal Algebra, Invariant State
+
+**Sharpened axioms – curved spacetime**
+- Haag–Kastler Net in Curved Spacetime
+- Covariant Family of Local States in Curved Spacetime
+- Stabilizer Action on a Local Algebra
+- Killing-Flow Automorphism Family
+
+**KMS condition**
+- One-Parameter Automorphism Group, KMS State
+- Strip-Liouville Principle
+- KMS State for a Killing Flow
+
+### Lemmas and Theorems
+
+**GNS Construction**
+- Cauchy–Schwarz inequality for states
+- Equivalence of the two descriptions of the left-ideal $$\mathcal{N}$$; $$\mathcal{N}$$ is a closed linear subspace
+- Full GNS Construction Theorem (Hilbert space, \*-representation, cyclic vector, faithfulness, uniqueness up to unitary equivalence)
+- Separating vector of a faithful state
+
+**Causal structure**
+- Causal classification trichotomy
+- Reverse Cauchy–Schwarz inequality and reverse triangle inequality for timelike vectors
+- Convexity of the timelike and future/past cones; sign and definiteness lemmas for the future cone
+- Chronological precedence implies causal precedence
+- Monotonicity of futures and pasts; symmetry of spacelike separation
+- Structural properties of complete spacelike separation; basis sets are Alexandrov-open; bundled spacelike separation
+
+**Isometry preservation**
+- Isometries preserve the causal classification, chronology, and Alexandrov-basis sets
+- Unique differentials along a path; pushforward of a path under an isometry
+- Axiom 5 basis-set preservation
+
+**Covariance – Minkowski spacetime**
+- Composition of covariance
+- Uniqueness and existence of the quasilocal covariance lift
+- Group-action coherence of the covariance automorphism
+- Existence for the trivial net
+- GNS-unitary implementation of an invariant state (Theorem 75)
+- Einstein Causality in a representation (Theorem 65)
+
+**Covariance – curved spacetime**
+- Composition of covariance in curved spacetime
+- The stabilizer action is a group action
+- GNS unitary representation of the stabilizer (Theorem 98); strongly continuous stabilizer GNS unitary
+- Einstein Causality in a representation, curved spacetime (Theorem 93)
+
+**KMS condition**
+- Boundary coincidence for $$a = 1$$
+- $$i\beta$$-periodic entire extension (strip Schwarz reflection)
+- Strip-Liouville holds for $$\beta > 0$$
+- KMS states are invariant (Theorem 83)
+- Uniqueness on the strip from boundary values; uniqueness of the KMS correlation function
+- A Killing flow induces a one-parameter automorphism group
+
+### Axioms
+
+**Minkowski spacetime:** Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, Lorentz Covariance.
+
+**Curved spacetime:** Local Algebras, Isotony, Local Commutativity, Local Completeness, Isometric Covariance.
 
 ## Contributing
 
