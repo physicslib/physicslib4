@@ -170,6 +170,15 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. Unlike Minkowski, the curved Axiom 3 isotony embeddings are chosen witnesses with no built-in composition law, so the coherence of the embeddings (that the $\mathbf{B}_1 \hookrightarrow \mathbf{B}$ embedding factors through $\mathbf{B}_2$) is taken as an explicit hypothesis; it holds automatically whenever the Axiom 3 witnesses form a genuine inclusion family. Given it, the local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ and the double commutant is monotone.
 \end{theorem}
 
+\begin{theorem}[Statistical Independence (Schlieder Property)]
+    \label{thrm:statistical-independence-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_separating, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.eq_zero_of_commute_of_cyclic}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \leanok
+    \uses{thrm:von-neumann-microcausality-in-curved-spacetime, def:cyclic-vector}
+    The abstract mechanism is: if $\Omega$ is cyclic for a set $S$ of operators, then any $R$ commuting with all of $S$ with $R\Omega = 0$ is zero (it vanishes on the dense set $S\Omega$). Applied to the net: if $\Omega$ is cyclic for the local observables of $\mathbf{B}_1$ - the role supplied in Minkowski spacetime by Reeh-Schlieder - then for a spacelike-separated subregion $\mathbf{B}_2$, every $R \in R(\mathbf{B}_2)$ with $R\Omega = 0$ is zero, since $R(\mathbf{B}_2)$ commutes with the observables of $\mathbf{B}_1$ by curved microcausality (\ref{thrm:von-neumann-microcausality-in-curved-spacetime}). Thus $\Omega$ is separating for $R(\mathbf{B}_2)$: a nonzero observable of one region cannot be annihilated by the cyclic vector of a spacelike-separated region, the operator-algebraic form of statistical independence.
+\end{theorem}
+
 \subsection{Covariant States in Curved Spacetime}
 
 As in the Minkowski case, the isometric covariance (\ref{def:isometric-covariance-in-curved-spacetime}) acts fiberwise through the $*$-isomorphisms $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$. Since there is no quasilocal algebra, only the local notion of a covariant family of states is available.
