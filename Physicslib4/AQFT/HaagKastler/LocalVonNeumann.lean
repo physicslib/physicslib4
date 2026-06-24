@@ -63,6 +63,21 @@ theorem localVonNeumann_subset_centralizer
     ⊆ Set.centralizer (Set.centralizer (Set.centralizer (N.localOperators π B₂)))
   rwa [Set.centralizer_centralizer_centralizer]
 
+/-- **Isotony of the net of von Neumann algebras.** For basis regions `B₁ ⊆ B₂`,
+the local von Neumann algebras are nested: `R(B₁) ⊆ R(B₂)`. The local observables
+of `B₁` embed into those of `B₂` via the quasilocal isotony coherence
+(`ι_inclusion`), and the double commutant is monotone. -/
+theorem localVonNeumann_mono
+    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂) :
+    N.localVonNeumann π B₁ ⊆ N.localVonNeumann π B₂ := by
+  have hsub : N.localOperators π B₁ ⊆ N.localOperators π B₂ := by
+    rintro x ⟨a, rfl⟩
+    exact ⟨N.commAlgebra.inclusion hB₁ hB₂ h a,
+      congrArg π (N.commAlgebra.ι_inclusion hB₁ hB₂ h a)⟩
+  exact Set.centralizer_subset (Set.centralizer_subset hsub)
+
 end HaagKastlerNet
 end HaagKastler
 end AQFT

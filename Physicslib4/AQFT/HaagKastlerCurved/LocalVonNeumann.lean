@@ -70,6 +70,31 @@ theorem localVonNeumann_subset_centralizer
     ⊆ Set.centralizer (Set.centralizer (Set.centralizer (N.localOperators π hB₂ hB h₂)))
   rwa [Set.centralizer_centralizer_centralizer]
 
+/-- **Isotony of the net of von Neumann algebras (curved spacetime).** For nested
+basis subregions `B₁ ⊆ B₂ ⊆ B`, the local von Neumann algebras are nested:
+`R(B₁) ⊆ R(B₂)`. Unlike Minkowski, the curved Axiom 3 isotony embeddings
+(`commIsotony`) are chosen witnesses with no built-in composition law, so the
+coherence `commIsotony (B₁ ⊆ B) = commIsotony (B₂ ⊆ B) ∘ commIsotony (B₁ ⊆ B₂)`
+is taken as an explicit hypothesis `hcoh` (it is automatic whenever the embeddings
+are coherent, e.g. for a net whose Axiom 3 witnesses come from a genuine inclusion
+family). Given it, the local observables of `B₁` embed into those of `B₂` and the
+double commutant is monotone. -/
+theorem localVonNeumann_mono
+    {B : Set M.Carrier} (hB : M.IsBasisSet B)
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄
+    (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁₂ : B₁ ⊆ B₂) (h₂ : B₂ ⊆ B)
+    (hcoh : ∀ a : N.algebra B₁,
+        N.commIsotony hB₁ hB (h₁₂.trans h₂) a
+          = N.commIsotony hB₂ hB h₂ (N.commIsotony hB₁ hB₂ h₁₂ a)) :
+    N.localVonNeumann π hB₁ hB (h₁₂.trans h₂) ⊆ N.localVonNeumann π hB₂ hB h₂ := by
+  have hsub : N.localOperators π hB₁ hB (h₁₂.trans h₂)
+      ⊆ N.localOperators π hB₂ hB h₂ := by
+    rintro x ⟨a, rfl⟩
+    exact ⟨N.commIsotony hB₁ hB₂ h₁₂ a, congrArg π (hcoh a).symm⟩
+  exact Set.centralizer_subset (Set.centralizer_subset hsub)
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT
