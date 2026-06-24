@@ -140,6 +140,116 @@ Local commutativity (\ref{def:local-commutativity}) is an algebraic statement ab
     Let $\pi$ be any $*$-representation of the quasilocal algebra on a Hilbert space $H$. If $\mathbf{B}_1, \mathbf{B}_2$ are completely spacelike-separated basis regions, then for all $a \in \mathfrak{U}(\mathbf{B}_1)$ and $b \in \mathfrak{U}(\mathbf{B}_2)$ the operators $\pi(\iota_{\mathbf{B}_1} a)$ and $\pi(\iota_{\mathbf{B}_2} b)$ commute. This is the image under $\pi$ of the local commutativity relation (\ref{def:local-commutativity}); since the GNS representation of any state is such a $\pi$, spacelike-separated local observables commute on every GNS Hilbert space.
 \end{theorem}
 
+\subsection{Local von Neumann Algebras}
+
+The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the genuine object of algebraic quantum field theory is the net of von Neumann algebras they generate in a representation. Given a $*$-representation $\pi$ of the quasilocal algebra on a Hilbert space $H$, the \emph{local von Neumann algebra} of a region $\mathbf{B}$ is the bicommutant $R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$ of the local observable operators. We model the commutant by the centralizer in $\mathcal{B}(H)$.
+
+\begin{definition}[Local von Neumann Algebra]
+    \label{def:local-von-neumann}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localOperators, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:haag-kastler-net, thrm:gns-construction-theorem}
+    Let $\pi$ be a $*$-representation of the quasilocal algebra on $H$. The \emph{local observable operators} of a region $\mathbf{B}$ are the image $\pi(\mathfrak{U}(\mathbf{B})) = \{\pi(\iota_{\mathbf{B}} a) : a \in \mathfrak{U}(\mathbf{B})\}$. The \emph{local von Neumann algebra} $R(\mathbf{B})$ is the bicommutant $\pi(\mathfrak{U}(\mathbf{B}))''$.
+\end{definition}
+
+\begin{theorem}[Microcausality at the von Neumann Level]
+    \label{thrm:von-neumann-microcausality}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_subset_centralizer}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann, thrm:einstein-causality}
+    For completely spacelike-separated basis regions $\mathbf{B}_1, \mathbf{B}_2$, the local von Neumann algebras commute: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$. This is the von Neumann form of Einstein causality (\ref{thrm:einstein-causality}): elementwise commutation $\pi(\mathfrak{U}(\mathbf{B}_2)) \subseteq \pi(\mathfrak{U}(\mathbf{B}_1))'$, with the antitonicity of the commutant and the identity $S''' = S'$ collapsing the iterated commutants. A Haag-Kastler net is thus a net of mutually commuting von Neumann algebras for spacelike regions.
+\end{theorem}
+
+\begin{theorem}[Isotony of the von Neumann Net]
+    \label{thrm:von-neumann-isotony}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_mono}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann, def:isotony}
+    For basis regions $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. The local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ via the quasilocal isotony coherence, and the double commutant is monotone.
+\end{theorem}
+
+\subsection{Irreducibility and Schur's Lemma}
+
+A representation is \emph{irreducible} when its commutant is trivial: the only operators commuting with every $\pi(a)$ are scalars. This is the von Neumann (commutant) form of irreducibility. The cornerstone, connecting the commutant to the GNS state, is the topological Schur lemma for a cyclic representation.
+
+\begin{definition}[Irreducible Representation]
+    \label{def:irreducible-representation}
+    \lean{Physicslib4.GNS.IsIrreducible}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    A $*$-representation $\pi : A \to \mathcal{B}(H)$ is \emph{irreducible} if every bounded operator $T$ commuting with all $\pi(a)$ is a scalar multiple of the identity, $T = c \cdot 1$.
+\end{definition}
+
+\begin{theorem}[Topological Schur Lemma]
+    \label{thrm:schur-lemma}
+    \lean{Physicslib4.GNS.eq_smul_one_of_commute_of_cyclic}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{def:cyclic-vector}
+    Let $\Omega$ be a cyclic vector for $\pi$. If $T$ commutes with every $\pi(a)$ and the diagonal coefficient $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ equals $c$ times $a \mapsto \langle \Omega, \pi(a)\Omega\rangle$, then $T = c \cdot 1$. The proof is pure Hilbert-space analysis: using the $*$-representation property and the commutation relation, every off-diagonal coefficient $\langle \pi(b)\Omega, (T - c)\,\pi(a)\Omega\rangle$ vanishes, so $(T - c)$ annihilates the dense cyclic orbit and is therefore zero.
+\end{theorem}
+
+\begin{theorem}[Commutant Scalar iff Proportional Coefficient]
+    \label{thrm:commutant-scalar-iff}
+    \lean{Physicslib4.GNS.isScalar_iff_coeff_proportional}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{thrm:schur-lemma, def:state, thrm:gns-construction-theorem}
+    In a cyclic representation reproducing a state $\omega$, an operator $T$ commuting with all $\pi(a)$ is a scalar multiple of the identity if and only if its diagonal coefficient $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ is a scalar multiple of $\omega$. This is the precise operator-theoretic bridge to purity: irreducibility (every commutant element is scalar) is exactly the statement that every commutant coefficient is proportional to $\omega$.
+\end{theorem}
+
+\begin{definition}[Pure State]
+    \label{def:pure-state}
+    \lean{Physicslib4.GNS.IsPure}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{def:state}
+    A state $\omega$ is \emph{pure} if every positive linear functional $\psi$ dominated by $\omega$ (that is, $0 \le \psi(a^*a) \le \omega(a^*a)$ for all $a$) is a scalar multiple of $\omega$. This order-theoretic characterization is the extreme-point notion of purity, phrased to avoid convex-combination and normalization bookkeeping.
+\end{definition}
+
+One direction of the classical equivalence ``$\omega$ pure $\iff$ GNS representation irreducible'' is established below.
+
+\begin{theorem}[Pure Implies Irreducible]
+    \label{thrm:pure-implies-irreducible}
+    \lean{Physicslib4.GNS.isIrreducible_of_isPure}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{def:pure-state, def:irreducible-representation, thrm:commutant-scalar-iff}
+    If $\omega$ is pure, then any cyclic representation reproducing $\omega$ (in particular its GNS representation) is irreducible. Since the commutant is $*$-closed, a commuting operator decomposes into self-adjoint real and imaginary parts; for a self-adjoint commuting $S$, the affine rescaling $T = (2(\Vert S\Vert+1))^{-1} S + \tfrac12$ satisfies $0 \le T \le 1$, so its coefficient functional $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ is positive and dominated by $\omega$. Purity forces it proportional to $\omega$, whence $T$ (and so $S$, and so the original operator) is a scalar by \ref{thrm:commutant-scalar-iff}.
+\end{theorem}
+
+The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS Radon-Nikodym correspondence: that every dominated positive functional $\psi \le \omega$ is represented by an operator $T$ in the commutant, via the bounded sesquilinear form $(\pi(a)\Omega, \pi(b)\Omega) \mapsto \psi(a^* b)$. The analytic crux is that this form is well-defined and bounded.
+
+\begin{theorem}[The GNS Radon-Nikodym Form is Bounded]
+    \label{thrm:gns-form-bound}
+    \lean{Physicslib4.GNS.gns_form_norm_le, Physicslib4.GNS.gns_form_well_defined}
+    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \leanok
+    \uses{def:pure-state, lmm:cauchy-schwarz-inequality}
+    For a positive functional $\psi$ dominated by the state $\omega$ in its cyclic GNS representation, the form values obey $\Vert\psi(a^* b)\Vert \le \Vert\pi(a)\Omega\Vert\,\Vert\pi(b)\Omega\Vert$. This follows from the Cauchy-Schwarz inequality for $\psi$, the domination $\psi \le \omega$, and the reproducing identity $\omega(x^* x) = \Vert\pi(x)\Omega\Vert^2$. In particular the form depends only on the GNS vectors $\pi(a)\Omega, \pi(b)\Omega$, not on the representatives $a, b$, so it is well-defined on the cyclic subspace.
+\end{theorem}
+
+\begin{theorem}[The GNS Radon-Nikodym Operator]
+    \label{thrm:gns-radon-nikodym-operator}
+    \lean{Physicslib4.GNS.rnOp, Physicslib4.GNS.rnOp_inner, Physicslib4.GNS.rnOp_commute, Physicslib4.GNS.rnOp_reproducing}
+    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \leanok
+    \uses{thrm:gns-form-bound}
+    The bounded form of \ref{thrm:gns-form-bound} is the inner product of an operator $T$ on the GNS space: extending the densely-defined bounded form by the Fréchet-Riesz representation and a norm-controlled dense extension yields $T$ with $\langle \pi(a)\Omega, T\,\pi(b)\Omega\rangle = \psi(a^* b)$. From this reproducing identity, $T$ commutes with every $\pi(c)$ (an adjoint computation on the dense cyclic vectors), and $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$ (taking $a = 1$ in the first slot).
+\end{theorem}
+
+\begin{theorem}[Pure $\iff$ Irreducible]
+    \label{thrm:pure-iff-irreducible}
+    \lean{Physicslib4.GNS.isPure_iff_isIrreducible}
+    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \leanok
+    \uses{thrm:pure-implies-irreducible, thrm:gns-radon-nikodym-operator, thrm:commutant-scalar-iff}
+    A state $\omega$ is pure if and only if its cyclic GNS representation is irreducible. For the converse direction, given a dominated $\psi$, its Radon-Nikodym operator $T$ commutes with $\pi$, so by irreducibility $T = c \cdot 1$; the reproducing identity then gives $\psi(a) = c\,\omega(a)$, so $\psi$ is a scalar multiple of $\omega$ and $\omega$ is pure.
+\end{theorem}
+
 \subsection{Covariant States and the Covariance Action}
 
 The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts on the net fiberwise, through the $*$-isomorphisms $\alpha_L : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(L\cdot\mathbf{B})$. We record two consequences: the notion of a Lorentz-covariant family of local states, and the lift of the fiberwise action to a single dynamical $*$-automorphism of the quasilocal algebra.

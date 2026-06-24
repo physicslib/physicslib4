@@ -139,6 +139,37 @@ The operator form of local commutativity (\ref{def:local-commutativity-in-curved
     Let $\pi$ be any $*$-representation of a containing basis algebra $\mathfrak{U}(\mathbf{B})$ on a Hilbert space $H$. If $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$ are completely spacelike-separated basis regions, then the images of the local observables of $\mathbf{B}_1$ and $\mathbf{B}_2$ in $\mathfrak{U}(\mathbf{B})$ commute under $\pi$ as bounded operators on $H$. This is the image under $\pi$ of the curved local commutativity (\ref{def:local-commutativity-in-curved-spacetime}); it holds in particular on the GNS Hilbert space of any state on $\mathfrak{U}(\mathbf{B})$. It is the curved-spacetime counterpart of \ref{thrm:einstein-causality}, with the containing local algebra playing the role of the quasilocal algebra.
 \end{theorem}
 
+\subsection{Local von Neumann Algebras in Curved Spacetime}
+
+The von Neumann net carries over to curved spacetime, again relative to a containing basis algebra $\mathfrak{U}(\mathbf{B})$. Given a $*$-representation $\pi$ of $\mathfrak{U}(\mathbf{B})$ on a Hilbert space $H$, the local von Neumann algebra of a subregion $\mathbf{B}' \subseteq \mathbf{B}$ is the bicommutant $R(\mathbf{B}') = \pi(\mathfrak{U}(\mathbf{B}'))''$, where $\mathfrak{U}(\mathbf{B}')$ is embedded into $\mathfrak{U}(\mathbf{B})$ by the isotony witness of Axiom 2.
+
+\begin{definition}[Local von Neumann Algebra in Curved Spacetime]
+    \label{def:local-von-neumann-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localOperators, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:haag-kastler-net-in-curved-spacetime, thrm:gns-construction-theorem}
+    Let $\pi$ be a $*$-representation of a containing basis algebra $\mathfrak{U}(\mathbf{B})$ on $H$. For a subregion $\mathbf{B}' \subseteq \mathbf{B}$, the \emph{local observable operators} are the image $\pi(\mathfrak{U}(\mathbf{B}'))$ under the isotony embedding, and the \emph{local von Neumann algebra} $R(\mathbf{B}')$ is the bicommutant $\pi(\mathfrak{U}(\mathbf{B}'))''$.
+\end{definition}
+
+\begin{theorem}[Microcausality at the von Neumann Level (Curved Spacetime)]
+    \label{thrm:von-neumann-microcausality-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_subset_centralizer}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann-in-curved-spacetime, thrm:einstein-causality-in-curved-spacetime}
+    For completely spacelike-separated basis subregions $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$, the local von Neumann algebras commute: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$. This is the von Neumann form of curved Einstein causality (\ref{thrm:einstein-causality-in-curved-spacetime}), via the antitonicity of the commutant and $S''' = S'$. It is the curved counterpart of \ref{thrm:von-neumann-microcausality}.
+\end{theorem}
+
+\begin{theorem}[Isotony of the von Neumann Net (Curved Spacetime)]
+    \label{thrm:von-neumann-isotony-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_mono}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann-in-curved-spacetime, def:isotony-in-curved-spacetime}
+    For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. Unlike Minkowski, the curved Axiom 3 isotony embeddings are chosen witnesses with no built-in composition law, so the coherence of the embeddings (that the $\mathbf{B}_1 \hookrightarrow \mathbf{B}$ embedding factors through $\mathbf{B}_2$) is taken as an explicit hypothesis; it holds automatically whenever the Axiom 3 witnesses form a genuine inclusion family. Given it, the local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ and the double commutant is monotone.
+\end{theorem}
+
 \subsection{Covariant States in Curved Spacetime}
 
 As in the Minkowski case, the isometric covariance (\ref{def:isometric-covariance-in-curved-spacetime}) acts fiberwise through the $*$-isomorphisms $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$. Since there is no quasilocal algebra, only the local notion of a covariant family of states is available.
