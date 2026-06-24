@@ -61,7 +61,7 @@ Chapter 10 assembles the formalisation-ready content, organised into six main bl
 
 - **Separating vectors and faithful states.** Proves that the cyclic vector of a faithful state is also separating for the image of the GNS representation—the basic datum of Tomita–Takesaki modular theory. This result holds in any representation reproducing a faithful state, not only the canonical GNS one.
 
-- **KMS condition and thermal equilibrium.** Introduces one-parameter automorphism groups and KMS states as the algebraic characterisation of thermal equilibrium. Proves the strip-Liouville principle (via a periodic entire extension / strip Schwarz reflection argument) and derives from it that every KMS state at positive inverse temperature is automatically invariant, that the KMS correlation function is unique, and that the separating-vector property holds for faithful states. In the curved-spacetime setting, identifies Killing flows as one-parameter subgroups of the stabiliser, and defines KMS states for a Killing flow—the precise algebraic sense in which the Hartle–Hawking and Gibbons–Hawking states are thermal.
+- **KMS condition and thermal equilibrium.** Introduces one-parameter automorphism groups and KMS states as the algebraic characterisation of thermal equilibrium. Introduces the Strip-Liouville Principle—the statement that a function continuous and bounded on a closed strip, holomorphic on the open strip, and with equal boundary values on both edges must be constant along the real axis—and proves it holds at positive inverse temperature via a periodic entire extension (strip Schwarz reflection) argument followed by Liouville's theorem. Derives from the strip-Liouville principle that every KMS state at positive inverse temperature is automatically invariant under the time evolution, and that the analytic completion of a KMS correlation function is unique (any two strip-functions sharing both boundary values agree everywhere on the strip). In the curved-spacetime setting, identifies Killing flows as one-parameter subgroups of the stabiliser of a region, defines the induced one-parameter automorphism group on the local algebra, and defines KMS states for a Killing flow—the precise algebraic sense in which the Hartle–Hawking and Gibbons–Hawking states are thermal. Proves that a KMS state for a Killing flow at positive inverse temperature automatically carries a strongly continuous one-parameter unitary group on its GNS Hilbert space implementing the flow, yielding the curved-spacetime thermal (equilibrium) representation.
 
 ## What is Being Formalised
 
@@ -87,9 +87,11 @@ Only the content of Chapter 10 is formalised in Lean. This comprises:
 
 **Sharpened axioms – curved spacetime**
 - Haag–Kastler Net in Curved Spacetime
+- Local Observable (curved spacetime)
 - Covariant Family of Local States in Curved Spacetime
 - Stabiliser Action on a Local Algebra
 - Killing-Flow Automorphism Family
+- KMS State for a Killing Flow
 
 **Local von Neumann algebras and irreducibility**
 - Local von Neumann Algebra (Minkowski and curved spacetime)
@@ -99,7 +101,6 @@ Only the content of Chapter 10 is formalised in Lean. This comprises:
 **KMS condition**
 - One-Parameter Automorphism Group, KMS State
 - Strip-Liouville Principle
-- KMS State for a Killing Flow
 
 ### Lemmas and Theorems
 
@@ -139,6 +140,7 @@ Only the content of Chapter 10 is formalised in Lean. This comprises:
 **Local von Neumann algebras – Minkowski spacetime**
 - Microcausality: spacelike-separated local von Neumann algebras commute (Theorem 67)
 - Isotony of the von Neumann net (Theorem 68)
+- Statistical Independence (Schlieder Property): if the cyclic vector of one region is cyclic for its local observables, it is separating for the local von Neumann algebra of any spacelike-separated region (Theorem 69)
 - Topological Schur Lemma for cyclic representations (Theorem 70)
 - Commutant operator is scalar iff its diagonal coefficient is proportional to the state (Theorem 71)
 - Pure state implies irreducible GNS representation (Theorem 73)
@@ -149,14 +151,17 @@ Only the content of Chapter 10 is formalised in Lean. This comprises:
 **Local von Neumann algebras – curved spacetime**
 - Microcausality relative to a containing local algebra (Theorem 106)
 - Isotony of the curved von Neumann net (Theorem 107)
+- Statistical Independence (Schlieder Property) in curved spacetime: if the cyclic vector of one subregion is cyclic for its local observables, it is separating for the local von Neumann algebra of any completely spacelike-separated subregion (Theorem 109)
 
 **KMS condition**
 - Boundary coincidence for $$a = 1$$
 - $$i\beta$$-periodic entire extension (strip Schwarz reflection)
 - Strip-Liouville holds for $$\beta > 0$$
 - KMS states are invariant (Theorem 94)
-- Uniqueness on the strip from boundary values; uniqueness of the KMS correlation function
-- A Killing flow induces a one-parameter automorphism group
+- Uniqueness on the strip from boundary values: two strip-functions sharing both boundary lines agree everywhere on the strip (Theorem 96)
+- Uniqueness of the KMS correlation function: the analytic completion of a KMS correlation function for any pair $$(a, b)$$ is unique (Theorem 97)
+- A Killing flow induces a one-parameter automorphism group on the local algebra (Lemma 117)
+- The Killing-Flow KMS Thermal Representation: a KMS state for a Killing flow at positive inverse temperature carries a strongly continuous one-parameter unitary group on its GNS Hilbert space implementing the flow (Theorem 119)
 
 ### Axioms
 
