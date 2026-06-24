@@ -59,7 +59,7 @@ theorem localVonNeumann_subset_centralizer
     exact N.einstein_causality π hB₁ hB₂ hs a b
   have h1 : N.localVonNeumann π B₁ ⊆ Set.centralizer (N.localOperators π B₂) :=
     Set.centralizer_subset hcomm
-  show N.localVonNeumann π B₁
+  change N.localVonNeumann π B₁
     ⊆ Set.centralizer (Set.centralizer (Set.centralizer (N.localOperators π B₂)))
   rwa [Set.centralizer_centralizer_centralizer]
 

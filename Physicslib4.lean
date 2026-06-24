@@ -3,6 +3,7 @@ import Physicslib4.AQFT.HaagKastler.EinsteinCausality
 import Physicslib4.AQFT.HaagKastler.Isotony
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.LocalCommutativity
+import Physicslib4.AQFT.HaagKastler.LocalVonNeumann
 import Physicslib4.AQFT.HaagKastler.LorentzCovariance
 import Physicslib4.AQFT.HaagKastler.Net
 import Physicslib4.AQFT.HaagKastler.QuasilocalAction
@@ -18,6 +19,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.Isotony
 import Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebra
 import Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebras
 import Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity
+import Physicslib4.AQFT.HaagKastlerCurved.LocalVonNeumann
 import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
