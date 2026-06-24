@@ -171,6 +171,47 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     For basis regions $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. The local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ via the quasilocal isotony coherence, and the double commutant is monotone.
 \end{theorem}
 
+\subsection{Irreducibility and Schur's Lemma}
+
+A representation is \emph{irreducible} when its commutant is trivial: the only operators commuting with every $\pi(a)$ are scalars. This is the von Neumann (commutant) form of irreducibility. The cornerstone, connecting the commutant to the GNS state, is the topological Schur lemma for a cyclic representation.
+
+\begin{definition}[Irreducible Representation]
+    \label{def:irreducible-representation}
+    \lean{Physicslib4.GNS.IsIrreducible}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    A $*$-representation $\pi : A \to \mathcal{B}(H)$ is \emph{irreducible} if every bounded operator $T$ commuting with all $\pi(a)$ is a scalar multiple of the identity, $T = c \cdot 1$.
+\end{definition}
+
+\begin{theorem}[Topological Schur Lemma]
+    \label{thrm:schur-lemma}
+    \lean{Physicslib4.GNS.eq_smul_one_of_commute_of_cyclic}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{def:cyclic-vector}
+    Let $\Omega$ be a cyclic vector for $\pi$. If $T$ commutes with every $\pi(a)$ and the diagonal coefficient $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ equals $c$ times $a \mapsto \langle \Omega, \pi(a)\Omega\rangle$, then $T = c \cdot 1$. The proof is pure Hilbert-space analysis: using the $*$-representation property and the commutation relation, every off-diagonal coefficient $\langle \pi(b)\Omega, (T - c)\,\pi(a)\Omega\rangle$ vanishes, so $(T - c)$ annihilates the dense cyclic orbit and is therefore zero.
+\end{theorem}
+
+\begin{theorem}[Commutant Scalar iff Proportional Coefficient]
+    \label{thrm:commutant-scalar-iff}
+    \lean{Physicslib4.GNS.isScalar_iff_coeff_proportional}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{thrm:schur-lemma, def:state, thrm:gns-construction-theorem}
+    In a cyclic representation reproducing a state $\omega$, an operator $T$ commuting with all $\pi(a)$ is a scalar multiple of the identity if and only if its diagonal coefficient $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ is a scalar multiple of $\omega$. This is the precise operator-theoretic bridge to purity: irreducibility (every commutant element is scalar) is exactly the statement that every commutant coefficient is proportional to $\omega$.
+\end{theorem}
+
+\begin{definition}[Pure State]
+    \label{def:pure-state}
+    \lean{Physicslib4.GNS.IsPure}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{def:state}
+    A state $\omega$ is \emph{pure} if every positive linear functional $\psi$ dominated by $\omega$ (that is, $0 \le \psi(a^*a) \le \omega(a^*a)$ for all $a$) is a scalar multiple of $\omega$. This order-theoretic characterization is the extreme-point notion of purity, phrased to avoid convex-combination and normalization bookkeeping.
+\end{definition}
+
+The classical theorem states that $\omega$ is pure if and only if its GNS representation is irreducible. The bridge \ref{thrm:commutant-scalar-iff} reduces the equivalence to the correspondence between dominated positive functionals and positive operators in the commutant (the GNS Radon-Nikodym theorem): a dominated $\psi$ arises as $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$ for a unique $0 \le T \le 1$ in the commutant. Given that correspondence, $T$ scalar (irreducibility) is equivalent to $\psi$ proportional to $\omega$ (purity). The correspondence itself is a separate analytic development.
+
 \subsection{Covariant States and the Covariance Action}
 
 The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts on the net fiberwise, through the $*$-isomorphisms $\alpha_L : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(L\cdot\mathbf{B})$. We record two consequences: the notion of a Lorentz-covariant family of local states, and the lift of the fiberwise action to a single dynamical $*$-automorphism of the quasilocal algebra.
