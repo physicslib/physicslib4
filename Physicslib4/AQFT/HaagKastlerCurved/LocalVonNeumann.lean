@@ -95,6 +95,43 @@ theorem localVonNeumann_mono
     exact ⟨N.commIsotony hB₁ hB₂ h₁₂ a, congrArg π (hcoh a).symm⟩
   exact Set.centralizer_subset (Set.centralizer_subset hsub)
 
+omit [CompleteSpace H] in
+/-- **Statistical independence (abstract form).** If `Ω` is cyclic for a set `S` of
+operators (the vectors `T Ω`, `T ∈ S`, are dense), then any operator `R` commuting
+with every element of `S` and annihilating `Ω` is zero. Equivalently, `Ω` is
+separating for the commutant of `S`. -/
+theorem eq_zero_of_commute_of_cyclic {S : Set (H →L[ℂ] H)} {Ω : H}
+    (hcyc : Dense ((fun T => T Ω) '' S)) {R : H →L[ℂ] H}
+    (hcomm : ∀ T ∈ S, R * T = T * R) (hRΩ : R Ω = 0) : R = 0 := by
+  have hzero : Set.EqOn (⇑R) (fun _ => (0 : H)) ((fun T => T Ω) '' S) := by
+    rintro _ ⟨T, hT, rfl⟩
+    change R (T Ω) = 0
+    rw [← ContinuousLinearMap.mul_apply, hcomm T hT, ContinuousLinearMap.mul_apply, hRΩ,
+      map_zero]
+  have hRx : (⇑R) = fun _ => (0 : H) :=
+    Continuous.ext_on hcyc R.continuous continuous_const hzero
+  exact ContinuousLinearMap.ext fun x =>
+    (congrFun hRx x).trans (ContinuousLinearMap.zero_apply x).symm
+
+/-- **Statistical independence (Schlieder property) for spacelike curved regions.**
+If `Ω` is cyclic for the local observables of `B₁` - the role supplied in
+Minkowski spacetime by Reeh-Schlieder - then a nonzero element of the
+spacelike-separated local von Neumann algebra `R(B₂)` cannot annihilate `Ω`:
+`R Ω = 0 ⟹ R = 0`. So `Ω` is separating for `R(B₂)`, the operator-algebraic form
+of the statistical independence of spacelike-separated local algebras. -/
+theorem localVonNeumann_separating
+    {B : Set M.Carrier} (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (hs : M.IsCompletelySpacelike B₁ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) {Ω : H}
+    (hcyc : Dense ((fun T => T Ω) '' N.localOperators π hB₁ hB h₁))
+    {R : H →L[ℂ] H} (hR : R ∈ N.localVonNeumann π hB₂ hB h₂) (hRΩ : R Ω = 0) :
+    R = 0 := by
+  refine eq_zero_of_commute_of_cyclic hcyc (fun A hA => ?_) hRΩ
+  have hA' : A ∈ Set.centralizer (N.localVonNeumann π hB₂ hB h₂) :=
+    N.localVonNeumann_subset_centralizer hB π hB₁ hB₂ hs h₁ h₂
+      (Set.subset_centralizer_centralizer hA)
+  exact (Set.mem_centralizer_iff.mp hA') R hR
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT

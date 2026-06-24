@@ -171,6 +171,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     For basis regions $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. The local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ via the quasilocal isotony coherence, and the double commutant is monotone.
 \end{theorem}
 
+\begin{theorem}[Statistical Independence (Schlieder Property)]
+    \label{thrm:statistical-independence}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_separating, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.eq_zero_of_commute_of_cyclic}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{thrm:von-neumann-microcausality, def:cyclic-vector}
+    If $\Omega$ is cyclic for the local observables of $\mathbf{B}_1$, then for a spacelike-separated region $\mathbf{B}_2$ every $R \in R(\mathbf{B}_2)$ with $R\Omega = 0$ is zero, so $\Omega$ is separating for $R(\mathbf{B}_2)$. The implication is elementary ($R$ vanishes on the dense set of vectors $A\Omega$ for $A$ a local observable of $\mathbf{B}_1$, since $R(\mathbf{B}_2)$ commutes with those observables by microcausality, \ref{thrm:von-neumann-microcausality}). In Minkowski spacetime the cyclicity hypothesis is exactly the content of the Reeh-Schlieder theorem, which rests on the spectrum condition; here it is taken as an explicit hypothesis, mirroring the curved-spacetime version where no spectrum condition is available.
+\end{theorem}
+
 \subsection{Irreducibility and Schur's Lemma}
 
 A representation is \emph{irreducible} when its commutant is trivial: the only operators commuting with every $\pi(a)$ are scalars. This is the von Neumann (commutant) form of irreducibility. The cornerstone, connecting the commutant to the GNS state, is the topological Schur lemma for a cyclic representation.
