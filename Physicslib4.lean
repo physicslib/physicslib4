@@ -35,6 +35,7 @@ import Physicslib4.GNS.CauchySchwarz
 import Physicslib4.GNS.Construction
 import Physicslib4.GNS.Irreducibility
 import Physicslib4.GNS.NullSpace
+import Physicslib4.GNS.RadonNikodym
 import Physicslib4.GNS.Separating
 import Physicslib4.GNS.UnitaryRepresentation
 import Physicslib4.Spacetime.Basic

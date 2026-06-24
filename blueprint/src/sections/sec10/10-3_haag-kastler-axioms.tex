@@ -221,7 +221,34 @@ One direction of the classical equivalence ``$\omega$ pure $\iff$ GNS representa
     If $\omega$ is pure, then any cyclic representation reproducing $\omega$ (in particular its GNS representation) is irreducible. Since the commutant is $*$-closed, a commuting operator decomposes into self-adjoint real and imaginary parts; for a self-adjoint commuting $S$, the affine rescaling $T = (2(\Vert S\Vert+1))^{-1} S + \tfrac12$ satisfies $0 \le T \le 1$, so its coefficient functional $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ is positive and dominated by $\omega$. Purity forces it proportional to $\omega$, whence $T$ (and so $S$, and so the original operator) is a scalar by \ref{thrm:commutant-scalar-iff}.
 \end{theorem}
 
-The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS Radon-Nikodym correspondence: that \emph{every} dominated positive functional $\psi \le \omega$ arises as $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$ for some $0 \le T \le 1$ in the commutant. That surjectivity (a bounded sesquilinear-form extension) is a separate analytic development.
+The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS Radon-Nikodym correspondence: that every dominated positive functional $\psi \le \omega$ is represented by an operator $T$ in the commutant, via the bounded sesquilinear form $(\pi(a)\Omega, \pi(b)\Omega) \mapsto \psi(a^* b)$. The analytic crux is that this form is well-defined and bounded.
+
+\begin{theorem}[The GNS Radon-Nikodym Form is Bounded]
+    \label{thrm:gns-form-bound}
+    \lean{Physicslib4.GNS.gns_form_norm_le, Physicslib4.GNS.gns_form_well_defined}
+    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \leanok
+    \uses{def:pure-state, lmm:cauchy-schwarz-inequality}
+    For a positive functional $\psi$ dominated by the state $\omega$ in its cyclic GNS representation, the form values obey $\Vert\psi(a^* b)\Vert \le \Vert\pi(a)\Omega\Vert\,\Vert\pi(b)\Omega\Vert$. This follows from the Cauchy-Schwarz inequality for $\psi$, the domination $\psi \le \omega$, and the reproducing identity $\omega(x^* x) = \Vert\pi(x)\Omega\Vert^2$. In particular the form depends only on the GNS vectors $\pi(a)\Omega, \pi(b)\Omega$, not on the representatives $a, b$, so it is well-defined on the cyclic subspace.
+\end{theorem}
+
+\begin{theorem}[The GNS Radon-Nikodym Operator]
+    \label{thrm:gns-radon-nikodym-operator}
+    \lean{Physicslib4.GNS.rnOp, Physicslib4.GNS.rnOp_inner, Physicslib4.GNS.rnOp_commute, Physicslib4.GNS.rnOp_reproducing}
+    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \leanok
+    \uses{thrm:gns-form-bound}
+    The bounded form of \ref{thrm:gns-form-bound} is the inner product of an operator $T$ on the GNS space: extending the densely-defined bounded form by the Fréchet-Riesz representation and a norm-controlled dense extension yields $T$ with $\langle \pi(a)\Omega, T\,\pi(b)\Omega\rangle = \psi(a^* b)$. From this reproducing identity, $T$ commutes with every $\pi(c)$ (an adjoint computation on the dense cyclic vectors), and $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$ (taking $a = 1$ in the first slot).
+\end{theorem}
+
+\begin{theorem}[Pure $\iff$ Irreducible]
+    \label{thrm:pure-iff-irreducible}
+    \lean{Physicslib4.GNS.isPure_iff_isIrreducible}
+    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \leanok
+    \uses{thrm:pure-implies-irreducible, thrm:gns-radon-nikodym-operator, thrm:commutant-scalar-iff}
+    A state $\omega$ is pure if and only if its cyclic GNS representation is irreducible. For the converse direction, given a dominated $\psi$, its Radon-Nikodym operator $T$ commutes with $\pi$, so by irreducibility $T = c \cdot 1$; the reproducing identity then gives $\psi(a) = c\,\omega(a)$, so $\psi$ is a scalar multiple of $\omega$ and $\omega$ is pure.
+\end{theorem}
 
 \subsection{Covariant States and the Covariance Action}
 
