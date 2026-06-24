@@ -210,7 +210,18 @@ A representation is \emph{irreducible} when its commutant is trivial: the only o
     A state $\omega$ is \emph{pure} if every positive linear functional $\psi$ dominated by $\omega$ (that is, $0 \le \psi(a^*a) \le \omega(a^*a)$ for all $a$) is a scalar multiple of $\omega$. This order-theoretic characterization is the extreme-point notion of purity, phrased to avoid convex-combination and normalization bookkeeping.
 \end{definition}
 
-The classical theorem states that $\omega$ is pure if and only if its GNS representation is irreducible. The bridge \ref{thrm:commutant-scalar-iff} reduces the equivalence to the correspondence between dominated positive functionals and positive operators in the commutant (the GNS Radon-Nikodym theorem): a dominated $\psi$ arises as $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$ for a unique $0 \le T \le 1$ in the commutant. Given that correspondence, $T$ scalar (irreducibility) is equivalent to $\psi$ proportional to $\omega$ (purity). The correspondence itself is a separate analytic development.
+One direction of the classical equivalence ``$\omega$ pure $\iff$ GNS representation irreducible'' is established below.
+
+\begin{theorem}[Pure Implies Irreducible]
+    \label{thrm:pure-implies-irreducible}
+    \lean{Physicslib4.GNS.isIrreducible_of_isPure}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{def:pure-state, def:irreducible-representation, thrm:commutant-scalar-iff}
+    If $\omega$ is pure, then any cyclic representation reproducing $\omega$ (in particular its GNS representation) is irreducible. Since the commutant is $*$-closed, a commuting operator decomposes into self-adjoint real and imaginary parts; for a self-adjoint commuting $S$, the affine rescaling $T = (2(\Vert S\Vert+1))^{-1} S + \tfrac12$ satisfies $0 \le T \le 1$, so its coefficient functional $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ is positive and dominated by $\omega$. Purity forces it proportional to $\omega$, whence $T$ (and so $S$, and so the original operator) is a scalar by \ref{thrm:commutant-scalar-iff}.
+\end{theorem}
+
+The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS Radon-Nikodym correspondence: that \emph{every} dominated positive functional $\psi \le \omega$ arises as $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$ for some $0 \le T \le 1$ in the commutant. That surjectivity (a bounded sesquilinear-form extension) is a separate analytic development.
 
 \subsection{Covariant States and the Covariance Action}
 
