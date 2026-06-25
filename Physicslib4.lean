@@ -21,6 +21,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebras
 import Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity
 import Physicslib4.AQFT.HaagKastlerCurved.LocalVonNeumann
 import Physicslib4.AQFT.HaagKastlerCurved.Net
+import Physicslib4.AQFT.HaagKastlerCurved.Purity
 import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerKMS
