@@ -587,15 +587,19 @@ theorem IsInvariantState.exists_gns_unitary_strongContinuous
     C.action_mul_apply C.action_one_apply hwc
 
 open scoped InnerProductSpace in
-/-- **The vacuum representation (Minkowski).** A state `ω` on the quasilocal
-algebra that is both invariant under the covariance action and pure yields a GNS
-representation that is simultaneously *covariant* - implemented by a unitary
-representation `U` of the inhomogeneous Lorentz group fixing the cyclic vector `Ω`,
-with the operator covariance `U(L) π(a) U(L)⁻¹ = π(β_L a)` - and *irreducible*.
-This is the algebraic core of a vacuum sector: combine
+/-- **Irreducible covariant representation of a pure invariant state (Minkowski).**
+A state `ω` on the quasilocal algebra that is both invariant under the covariance
+action and pure yields a GNS representation that is simultaneously *covariant* -
+implemented by a unitary representation `U` of the inhomogeneous Lorentz group
+fixing the cyclic vector `Ω`, with the operator covariance
+`U(L) π(a) U(L)⁻¹ = π(β_L a)` - and *irreducible*. It combines
 `IsInvariantState.exists_gns_unitary` (a covariant GNS triple with invariant cyclic
-`Ω`) with purity ⟹ irreducibility (`isPure_iff_isIrreducible`). -/
-theorem IsInvariantState.exists_gns_vacuum (C : CovariantQuasilocalAlgebra)
+`Ω`) with purity ⟹ irreducibility (`isPure_iff_isIrreducible`).
+
+This is a necessary precursor to, but not yet, a *vacuum* representation: a genuine
+vacuum would additionally require the spectrum condition (positivity of the energy-
+momentum spectrum), which is not available here. -/
+theorem IsInvariantState.exists_gns_irreducible_covariant (C : CovariantQuasilocalAlgebra)
     {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
     (hpure : Physicslib4.GNS.IsPure ω) :
     ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)

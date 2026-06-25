@@ -265,13 +265,13 @@ They do, however, restrict to a genuine action by automorphisms of one fixed loc
     If moreover the isometry group carries a topology (the abstract interface supplies none, so it is an added hypothesis) and the matrix coefficients $\varphi \mapsto \omega\big(a^*\,\hat\alpha_\varphi b\big)$ are continuous on $\mathrm{Stab}(\mathbf{B})$, then the representation $U$ is strongly continuous: $\varphi \mapsto U(\varphi)\psi$ is continuous for every GNS vector $\psi$. The stabilizer subgroup inherits its topology as a subspace of the isometry group.
 \end{theorem}
 
-\begin{theorem}[The Vacuum Representation (Curved Spacetime)]
-    \label{thrm:vacuum-representation-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_vacuum_stabilizer}
+\begin{theorem}[Irreducible Covariant Representation of a Pure Invariant State (Curved Spacetime)]
+    \label{thrm:irreducible-covariant-representation-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_irreducible_covariant_stabilizer}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
     \leanok
     \uses{thrm:gns-unitary-stabilizer-in-curved-spacetime, def:pure-state, def:irreducible-representation, thrm:pure-iff-irreducible-in-curved-spacetime}
-    A state $\omega$ on a local algebra $\mathfrak{U}(\mathbf{B})$ that is invariant under the stabilizer action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U$ of $\mathrm{Stab}(\mathbf{B})$ fixing the cyclic vector $\Omega$, with operator covariance $U(\varphi)\,\pi(a)\,U(\varphi)^{-1} = \pi(\hat\alpha_\varphi a)$ - and \emph{irreducible}. This is the curved analogue of \ref{thrm:vacuum-representation}, valid per region since there is no quasilocal algebra, combining \ref{thrm:gns-unitary-stabilizer-in-curved-spacetime} with purity $\Rightarrow$ irreducibility.
+    A state $\omega$ on a local algebra $\mathfrak{U}(\mathbf{B})$ that is invariant under the stabilizer action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U$ of $\mathrm{Stab}(\mathbf{B})$ fixing the cyclic vector $\Omega$, with operator covariance $U(\varphi)\,\pi(a)\,U(\varphi)^{-1} = \pi(\hat\alpha_\varphi a)$ - and \emph{irreducible}. This is the curved, per-region analogue of \ref{thrm:irreducible-covariant-representation} (there is no quasilocal algebra), combining \ref{thrm:gns-unitary-stabilizer-in-curved-spacetime} with purity $\Rightarrow$ irreducibility. It is not a vacuum: curved spacetime admits no global vacuum, and the analogue of the spectrum condition (the Hadamard / microlocal spectrum condition) is a separate requirement not imposed here.
 \end{theorem}
 
 \subsection{KMS States for a Killing Flow}

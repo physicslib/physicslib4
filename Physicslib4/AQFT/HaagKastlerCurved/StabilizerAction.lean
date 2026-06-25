@@ -182,15 +182,19 @@ theorem exists_gns_unitary_stabilizer_strongContinuous [TopologicalSpace M.Isom]
     ω hinv (fun g g' a => N.stabAutHom_mul B g g' a)
     (fun a => N.stabAutHom_one B a) hwc
 
-/-- **The vacuum representation (curved spacetime).** A state `ω` on a local
-algebra `𝔘(B)` that is invariant under the stabilizer action and pure yields a GNS
-representation that is simultaneously *covariant* - implemented by a unitary
-representation `U` of the stabilizer `Stab(B)` fixing the cyclic vector `Ω`, with
-the operator covariance `U(g) π(a) U(g)⁻¹ = π(g · a)` - and *irreducible*. This is
-the curved analogue of the Minkowski vacuum representation, valid per region since
-there is no quasilocal algebra: it combines `exists_gns_unitary_stabilizer` with
-purity ⟹ irreducibility (`isPure_iff_isIrreducible`). -/
-theorem exists_gns_vacuum_stabilizer (B : Set M.Carrier)
+/-- **Irreducible covariant representation of a pure invariant state (curved
+spacetime).** A state `ω` on a local algebra `𝔘(B)` that is invariant under the
+stabilizer action and pure yields a GNS representation that is simultaneously
+*covariant* - implemented by a unitary representation `U` of the stabilizer
+`Stab(B)` fixing the cyclic vector `Ω`, with the operator covariance
+`U(g) π(a) U(g)⁻¹ = π(g · a)` - and *irreducible*. It is the curved, per-region
+analogue (there is no quasilocal algebra), combining `exists_gns_unitary_stabilizer`
+with purity ⟹ irreducibility (`isPure_iff_isIrreducible`).
+
+As in the Minkowski case this is a precursor to, not, a *vacuum*: curved spacetime
+has no global vacuum, and the analogue of the spectrum condition (the Hadamard /
+microlocal spectrum condition) is a separate requirement not imposed here. -/
+theorem exists_gns_irreducible_covariant_stabilizer (B : Set M.Carrier)
     (ω : State (N.algebra B))
     (hinv : ∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
         ω (N.stabAutHom B g a) = ω a)
