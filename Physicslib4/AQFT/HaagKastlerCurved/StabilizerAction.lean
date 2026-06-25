@@ -5,6 +5,8 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.GNS.UnitaryRepresentation
+import Physicslib4.GNS.RadonNikodym
+import Physicslib4.GNS.ExtremeState
 
 /-!
 # Stabilizer action on a curved local algebra and its GNS unitary
@@ -139,7 +141,8 @@ theorem exists_gns_unitary_stabilizer (B : Set M.Carrier)
           U (g' * g) = (U g).trans (U g')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
         (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B) (x : H),
-          U g (π a ((U g).symm x)) = π (N.stabAutHom B g a) x) :=
+          U g (π a ((U g).symm x)) = π (N.stabAutHom B g a) x) ∧
+        IsCyclicVector π Ω :=
   Physicslib4.GNS.exists_gns_unitary_of_invariant (N.stabAutHom B) ω hinv
     (fun g g' a => N.stabAutHom_mul B g g' a) (fun a => N.stabAutHom_one B a)
 
@@ -179,6 +182,51 @@ theorem exists_gns_unitary_stabilizer_strongContinuous [TopologicalSpace M.Isom]
   Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous (N.stabAutHom B)
     ω hinv (fun g g' a => N.stabAutHom_mul B g g' a)
     (fun a => N.stabAutHom_one B a) hwc
+
+/-- **Irreducible covariant representation of a pure invariant state (curved
+spacetime).** A state `ω` on a local algebra `𝔘(B)` that is invariant under the
+stabilizer action and pure yields a GNS representation that is simultaneously
+*covariant* - implemented by a unitary representation `U` of the stabilizer
+`Stab(B)` fixing the cyclic vector `Ω`, with the operator covariance
+`U(g) π(a) U(g)⁻¹ = π(g · a)` - and *irreducible*. It is the curved, per-region
+analogue (there is no quasilocal algebra), combining `exists_gns_unitary_stabilizer`
+with purity ⟹ irreducibility (`isPure_iff_isIrreducible`).
+
+As in the Minkowski case this is a precursor to, not, a *vacuum*: curved spacetime
+has no global vacuum, and the analogue of the spectrum condition (the Hadamard /
+microlocal spectrum condition) is a separate requirement not imposed here. -/
+theorem exists_gns_irreducible_covariant_stabilizer (B : Set M.Carrier)
+    (ω : State (N.algebra B))
+    (hinv : ∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
+        ω (N.stabAutHom B g a) = ω a)
+    (hpure : IsPure ω) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : ↥(MulAction.stabilizer M.Isom B) → (H ≃ₗᵢ[ℂ] H)),
+        IsCyclicVector π Ω ∧
+        (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
+          U g (π a Ω) = π (N.stabAutHom B g a) Ω) ∧
+        (∀ g : ↥(MulAction.stabilizer M.Isom B), U g Ω = Ω) ∧
+        (∀ g g' : ↥(MulAction.stabilizer M.Isom B),
+          U (g' * g) = (U g).trans (U g')) ∧
+        U 1 = LinearIsometryEquiv.refl ℂ H ∧
+        (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B) (x : H),
+          U g (π a ((U g).symm x)) = π (N.stabAutHom B g a) x) ∧
+        IsIrreducible π := by
+  obtain ⟨H, i1, i2, i3, π, Ω, U, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hcyc⟩ :=
+    N.exists_gns_unitary_stabilizer B ω hinv
+  exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov,
+    (isPure_iff_isIrreducible hcyc hrepro).mp hpure⟩
+
+/-- **Purity is invariant under the stabilizer action (curved spacetime).** A state
+`ω` on a local algebra `𝔘(B)` is pure if and only if its pullback `ω ∘ \hatα_g`
+along the stabilizer automorphism is pure, for any `g ∈ Stab(B)`. Specialization of
+`isPure_precomp_iff`. -/
+theorem isPure_precomp_stabAut_iff (B : Set M.Carrier)
+    (ω : State (N.algebra B)) (g : ↥(MulAction.stabilizer M.Isom B)) :
+    IsPure (ω.precomp (N.stabAutHom B g)) ↔ IsPure ω :=
+  isPure_precomp_iff ω (N.stabAutHom B g)
 
 end HaagKastlerNet
 

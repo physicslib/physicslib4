@@ -55,9 +55,9 @@ Chapter 10 assembles the formalisation-ready content, organised into six main bl
 
 - **Spacetime and causal structure.** Gives precise definitions of spacetime, Minkowski spacetime, and Lorentzian spacetime, together with the full apparatus of causal structure: timelike, spacelike, and null vectors; time orientation; future- and past-pointing vectors; paths, curves, and trips; causal trips; chronological and causal futures and pasts; spacelike separation; and the Alexandrov topology. Supporting lemmas establish the basic geometry (the causal classification trichotomy, the reverse Cauchy–Schwarz and reverse triangle inequalities for timelike vectors, convexity of the future and past cones, monotonicity of futures and pasts, symmetry of spacelike separation, and the fact that isometries preserve causal classification, chronology, and Alexandrov-basis sets).
 
-- **Sharpened Haag–Kastler Axioms in Minkowski and curved spacetime.** States the sharpened axioms—Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, and Lorentz Covariance—bundled into a single `HaagKastlerNet` structure, together with their curved-spacetime generalisation (`HaagKastlerNet` in curved spacetime). Derives the operator form of Einstein Causality in both settings. Develops covariant families of local states, the lift of the fiberwise covariance action to a \*-automorphism of the quasilocal algebra, group-action coherence of the covariance automorphism, and GNS-unitary implementation of a Poincaré-invariant (vacuum) state. In the curved-spacetime setting, where no quasilocal algebra exists, the covariance action restricts to the stabiliser subgroup of a region, and the GNS unitary represents that stabiliser action.
+- **Sharpened Haag–Kastler Axioms in Minkowski and curved spacetime.** States the sharpened axioms—Local Algebras, Isotony, Local Commutativity, Quasilocal Algebra, and Lorentz Covariance—bundled into a single `HaagKastlerNet` structure, together with their curved-spacetime generalisation (`HaagKastlerNet` in curved spacetime). Derives the operator form of Einstein Causality in both settings. Develops covariant families of local states, the lift of the fiberwise covariance action to a \*-automorphism of the quasilocal algebra, group-action coherence of the covariance automorphism, and GNS-unitary implementation of a Poincaré-invariant (vacuum) state. Proves that purity of a state is preserved by any \*-automorphism and is therefore a Lorentz-covariance-invariant property, and that a state that is both invariant and pure yields a GNS representation that is simultaneously covariant and irreducible—a necessary precursor to a vacuum representation. In the curved-spacetime setting, where no quasilocal algebra exists, the covariance action restricts to the stabiliser subgroup of a region, and the GNS unitary represents that stabiliser action; the same combination of invariance and purity yields an irreducible covariant GNS representation of the stabiliser subgroup.
 
-- **Local von Neumann algebras and irreducibility.** Develops the von Neumann algebra layer of the theory: defines the local von Neumann algebra $$R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$$ of a region $$\mathbf{B}$$ in a representation $$\pi$$, and proves Microcausality (spacelike-separated local von Neumann algebras commute) and isotony of the von Neumann net. Introduces the notion of an irreducible representation via its commutant, and establishes the Topological Schur Lemma for cyclic representations. Proves the equivalence of purity of a state and irreducibility of its GNS representation (Pure $$\iff$$ Irreducible), including the GNS Radon–Nikodym theorem that realises every dominated positive functional as an operator in the commutant. All of these results are carried over to the curved-spacetime setting, where microcausality and isotony are expressed relative to a common containing local algebra rather than the (non-existent) quasilocal algebra.
+- **Local von Neumann algebras and irreducibility.** Develops the von Neumann algebra layer of the theory: defines the local von Neumann algebra $$R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$$ of a region $$\mathbf{B}$$ in a representation $$\pi$$, and proves Microcausality (spacelike-separated local von Neumann algebras commute) and isotony of the von Neumann net. Introduces the notion of an irreducible representation via its commutant, and establishes the Topological Schur Lemma for cyclic representations. Proves the equivalence of purity of a state and irreducibility of its GNS representation (Pure $$\iff$$ Irreducible), including the GNS Radon–Nikodym theorem that realises every dominated positive functional as an operator in the commutant. Proves that the norm of any positive linear functional on a unital C\*-algebra equals its value on the unit, and uses this to establish that purity and being an extreme point of the state space are equivalent characterisations of the same condition (Pure $$\iff$$ Extreme Point). Proves that an irreducible representation generates a von Neumann algebra with trivial centre—a factor—and consequently that the GNS representation of a pure state is a factor. All of these results are carried over to the curved-spacetime setting, where microcausality and isotony are expressed relative to a common containing local algebra rather than the (non-existent) quasilocal algebra, and where purity of a state on a local algebra is equivalently characterised by extreme-point status and by irreducibility of the local GNS representation.
 
 - **Separating vectors and faithful states.** Proves that the cyclic vector of a faithful state is also separating for the image of the GNS representation—the basic datum of Tomita–Takesaki modular theory. This result holds in any representation reproducing a faithful state, not only the canonical GNS one.
 
@@ -97,6 +97,7 @@ Only the content of Chapter 10 is formalised in Lean. This comprises:
 - Local von Neumann Algebra (Minkowski and curved spacetime)
 - Irreducible Representation
 - Pure State
+- Extreme Point of the State Space
 
 **KMS condition**
 - One-Parameter Automorphism Group, KMS State
@@ -128,40 +129,52 @@ Only the content of Chapter 10 is formalised in Lean. This comprises:
 - Uniqueness and existence of the quasilocal covariance lift
 - Group-action coherence of the covariance automorphism
 - Existence for the trivial net
-- GNS-unitary implementation of an invariant state (Theorem 86)
+- GNS-unitary implementation of an invariant state (Theorem 96)
+- Irreducible covariant GNS representation of a pure invariant state (Theorem 97)
+- Purity is covariance-invariant: purity of a state is preserved under pullback by any \*-automorphism, and in particular under the covariance automorphism $$\beta_L$$ (Theorem 98)
 - Einstein Causality in a representation (Theorem 65)
 
 **Covariance – curved spacetime**
 - Composition of covariance in curved spacetime
 - The stabiliser action is a group action
-- GNS unitary representation of the stabiliser (Theorem 112); strongly continuous stabiliser GNS unitary
-- Einstein Causality in a representation, curved spacetime (Theorem 104)
+- GNS unitary representation of the stabiliser (Theorem 129); strongly continuous stabiliser GNS unitary (Theorem 130)
+- Irreducible covariant GNS representation of a pure invariant state on a local algebra (Theorem 131)
+- Purity is invariant under the stabiliser action (Theorem 132)
+- Einstein Causality in a representation, curved spacetime (Theorem 116)
 
 **Local von Neumann algebras – Minkowski spacetime**
-- Microcausality: spacelike-separated local von Neumann algebras commute (Theorem 67)
-- Isotony of the von Neumann net (Theorem 68)
-- Statistical Independence (Schlieder Property): if the cyclic vector of one region is cyclic for its local observables, it is separating for the local von Neumann algebra of any spacelike-separated region (Theorem 69)
-- Topological Schur Lemma for cyclic representations (Theorem 70)
-- Commutant operator is scalar iff its diagonal coefficient is proportional to the state (Theorem 71)
-- Pure state implies irreducible GNS representation (Theorem 73)
-- GNS Radon–Nikodym form is bounded (Theorem 74)
-- GNS Radon–Nikodym operator exists and commutes with the representation (Theorem 75)
-- Pure state $$\iff$$ irreducible GNS representation (Theorem 76)
+- Microcausality: spacelike-separated local von Neumann algebras commute (Theorem 68)
+- Isotony of the von Neumann net (Theorem 69)
+- Statistical Independence (Schlieder Property): if the cyclic vector of one region is cyclic for its local observables, it is separating for the local von Neumann algebra of any spacelike-separated region (Theorem 71)
+- Topological Schur Lemma for cyclic representations (Theorem 73)
+- Commutant operator is scalar iff its diagonal coefficient is proportional to the state (Theorem 74)
+- Pure state implies irreducible GNS representation (Theorem 76)
+- GNS Radon–Nikodym form is bounded (Theorem 77)
+- GNS Radon–Nikodym operator exists and commutes with the representation (Theorem 78)
+- Pure state $$\iff$$ irreducible GNS representation (Theorem 79)
+- An irreducible representation generates a von Neumann algebra with trivial centre, i.e. a factor (Theorem 80)
+- The GNS representation of a pure state generates a factor (Theorem 81)
+- Norm of a positive linear functional equals its value on the unit (Theorem 82)
+- Pure state $$\iff$$ extreme point of the state space (Theorem 84)
+- Pure state $$\iff$$ extreme point of the state space of the quasilocal algebra (Theorem 85)
+- Pure state $$\iff$$ irreducible GNS representation on the quasilocal algebra (Theorem 86)
 
 **Local von Neumann algebras – curved spacetime**
-- Microcausality relative to a containing local algebra (Theorem 106)
-- Isotony of the curved von Neumann net (Theorem 107)
-- Statistical Independence (Schlieder Property) in curved spacetime: if the cyclic vector of one subregion is cyclic for its local observables, it is separating for the local von Neumann algebra of any completely spacelike-separated subregion (Theorem 109)
+- Microcausality relative to a containing local algebra (Theorem 119)
+- Isotony of the curved von Neumann net (Theorem 120)
+- Statistical Independence (Schlieder Property) in curved spacetime: if the cyclic vector of one subregion is cyclic for its local observables, it is separating for the local von Neumann algebra of any completely spacelike-separated subregion (Theorem 122)
+- Pure state $$\iff$$ extreme point of the state space of a local algebra (Theorem 123)
+- Pure state $$\iff$$ irreducible GNS representation on a local algebra (Theorem 124)
 
 **KMS condition**
 - Boundary coincidence for $$a = 1$$
-- $$i\beta$$-periodic entire extension (strip Schwarz reflection)
-- Strip-Liouville holds for $$\beta > 0$$
-- KMS states are invariant (Theorem 94)
-- Uniqueness on the strip from boundary values: two strip-functions sharing both boundary lines agree everywhere on the strip (Theorem 96)
-- Uniqueness of the KMS correlation function: the analytic completion of a KMS correlation function for any pair $$(a, b)$$ is unique (Theorem 97)
-- A Killing flow induces a one-parameter automorphism group on the local algebra (Lemma 117)
-- The Killing-Flow KMS Thermal Representation: a KMS state for a Killing flow at positive inverse temperature carries a strongly continuous one-parameter unitary group on its GNS Hilbert space implementing the flow (Theorem 119)
+- $$i\beta$$-periodic entire extension (strip Schwarz reflection) (Theorem 104)
+- Strip-Liouville holds for $$\beta > 0$$ (Theorem 105)
+- KMS states are invariant (Theorem 106)
+- Uniqueness on the strip from boundary values: two strip-functions sharing both boundary lines agree everywhere on the strip (Theorem 107)
+- Uniqueness of the KMS correlation function: the analytic completion of a KMS correlation function for any pair $$(a, b)$$ is unique (Theorem 108)
+- A Killing flow induces a one-parameter automorphism group on the local algebra (Lemma 134)
+- The Killing-Flow KMS Thermal Representation: a KMS state for a Killing flow at positive inverse temperature carries a strongly continuous one-parameter unitary group on its GNS Hilbert space implementing the flow (Theorem 136)
 
 ### Axioms
 

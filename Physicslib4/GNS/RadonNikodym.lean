@@ -283,5 +283,23 @@ theorem isPure_iff_isIrreducible {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[�
   ⟨fun hpure => isIrreducible_of_isPure hcyc hrep hpure,
    fun hirr => isPure_of_isIrreducible hcyc hrep hirr⟩
 
+/-- **The GNS representation of a pure state is a factor.** For a pure state `ω`
+there is a cyclic GNS triple `(H, π, Ω)` reproducing `ω` whose generated von
+Neumann algebra `π(A)''` has *trivial center*: the center
+`π(A)'' ∩ (π(A)'')'` equals the scalar operators. This combines the GNS
+construction, purity ⟹ irreducibility (`isPure_iff_isIrreducible`), and
+`center_gnsVonNeumann_eq_of_isIrreducible`. -/
+theorem exists_gns_factor_of_isPure.{u} {A : Type u} [CStarAlgebra A]
+    {ω : State A} (hpure : IsPure ω) :
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
+        IsCyclicVector π Ω ∧
+        (∀ a : A, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        gnsVonNeumann π ∩ Set.centralizer (gnsVonNeumann π)
+          = {T : H →L[ℂ] H | ∃ c : ℂ, T = c • 1} := by
+  obtain ⟨H, i1, i2, i3, π, Ω, hcyc, hrepro, _⟩ := gns_construction ω
+  exact ⟨H, i1, i2, i3, π, Ω, hcyc, hrepro,
+    center_gnsVonNeumann_eq_of_isIrreducible ((isPure_iff_isIrreducible hcyc hrepro).mp hpure)⟩
+
 end GNS
 end Physicslib4

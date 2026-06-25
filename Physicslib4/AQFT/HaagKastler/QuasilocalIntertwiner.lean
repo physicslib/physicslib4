@@ -9,6 +9,8 @@ import Physicslib4.Spacetime.MinkowskiDirected
 import Physicslib4.Spacetime.LorentzCausality
 import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.GNS.UnitaryRepresentation
+import Physicslib4.GNS.RadonNikodym
+import Physicslib4.GNS.ExtremeState
 
 /-!
 # Towards the intertwiner on the generated subalgebra
@@ -543,7 +545,8 @@ theorem IsInvariantState.exists_gns_unitary (C : CovariantQuasilocalAlgebra)
         (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
         (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
-          U L (π a ((U L).symm x)) = π (C.action L a) x) :=
+          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        Physicslib4.GNS.IsCyclicVector π Ω :=
   -- This is the specialization of the algebra-agnostic
   -- `GNS.exists_gns_unitary_of_invariant` to the quasilocal algebra `𝔘` with the
   -- covariance action `β = C.action`: invariance is `hω`, multiplicativity is
@@ -583,6 +586,49 @@ theorem IsInvariantState.exists_gns_unitary_strongContinuous
           U L (π a ((U L).symm x)) = π (C.action L a) x) :=
   Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous C.action ω hω
     C.action_mul_apply C.action_one_apply hwc
+
+open scoped InnerProductSpace in
+/-- **Irreducible covariant representation of a pure invariant state (Minkowski).**
+A state `ω` on the quasilocal algebra that is both invariant under the covariance
+action and pure yields a GNS representation that is simultaneously *covariant* -
+implemented by a unitary representation `U` of the inhomogeneous Lorentz group
+fixing the cyclic vector `Ω`, with the operator covariance
+`U(L) π(a) U(L)⁻¹ = π(β_L a)` - and *irreducible*. It combines
+`IsInvariantState.exists_gns_unitary` (a covariant GNS triple with invariant cyclic
+`Ω`) with purity ⟹ irreducibility (`isPure_iff_isIrreducible`).
+
+This is a necessary precursor to, but not yet, a *vacuum* representation: a genuine
+vacuum would additionally require the spectrum condition (positivity of the energy-
+momentum spectrum), which is not available here. -/
+theorem IsInvariantState.exists_gns_irreducible_covariant (C : CovariantQuasilocalAlgebra)
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
+    (hpure : Physicslib4.GNS.IsPure ω) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
+        Physicslib4.GNS.IsCyclicVector π Ω ∧
+        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
+          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
+        (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
+        U 1 = LinearIsometryEquiv.refl ℂ H ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        Physicslib4.GNS.IsIrreducible π := by
+  obtain ⟨H, i1, i2, i3, π, Ω, U, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hcyc⟩ :=
+    IsInvariantState.exists_gns_unitary C hω
+  exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov,
+    (Physicslib4.GNS.isPure_iff_isIrreducible hcyc hrepro).mp hpure⟩
+
+/-- **Purity is covariance-invariant (Minkowski).** A state `ω` on the quasilocal
+algebra is pure if and only if its pullback `ω ∘ β_L` along the covariance
+automorphism is pure: purity is preserved by the `*`-automorphism `β_L = C.action L`.
+Specialization of `isPure_precomp_iff`. -/
+theorem isPure_precomp_action_iff (C : CovariantQuasilocalAlgebra)
+    (ω : Physicslib4.GNS.State C.quasilocal.carrier) (L : InhomogeneousLorentzGroup) :
+    Physicslib4.GNS.IsPure (ω.precomp (C.action L)) ↔ Physicslib4.GNS.IsPure ω :=
+  Physicslib4.GNS.isPure_precomp_iff ω (C.action L)
 
 end CovariantQuasilocalAlgebra
 
