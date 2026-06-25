@@ -159,6 +159,34 @@ noncomputable def localVonNeumannAlgebra {B : Set M.Carrier}
       = N.localVonNeumann π hB' hB h :=
   coe_vonNeumannOfSelfAdjoint _ _
 
+/-- **Microcausality, bundled (curved spacetime).** For completely spacelike-separated
+subregions `B₁, B₂ ⊆ B`, the bundled local von Neumann algebras commute,
+`R(B₁) ≤ R(B₂)'`. -/
+theorem localVonNeumannAlgebra_le_commutant {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (hs : M.IsCompletelySpacelike B₁ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) :
+    N.localVonNeumannAlgebra π hB₁ hB h₁
+      ≤ (N.localVonNeumannAlgebra π hB₂ hB h₂).commutant := by
+  rw [← SetLike.coe_subset_coe]
+  simp only [coe_localVonNeumannAlgebra, VonNeumannAlgebra.coe_commutant]
+  exact N.localVonNeumann_subset_centralizer hB π hB₁ hB₂ hs h₁ h₂
+
+/-- **Isotony, bundled (curved spacetime).** `B₁ ⊆ B₂ ⊆ B` (with the isotony
+coherence) gives `R(B₁) ≤ R(B₂)`. -/
+theorem localVonNeumannAlgebra_mono {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁₂ : B₁ ⊆ B₂) (h₂ : B₂ ⊆ B)
+    (hcoh : ∀ a : N.algebra B₁,
+        N.commIsotony hB₁ hB (h₁₂.trans h₂) a
+          = N.commIsotony hB₂ hB h₂ (N.commIsotony hB₁ hB₂ h₁₂ a)) :
+    N.localVonNeumannAlgebra π hB₁ hB (h₁₂.trans h₂)
+      ≤ N.localVonNeumannAlgebra π hB₂ hB h₂ := by
+  rw [← SetLike.coe_subset_coe]
+  simp only [coe_localVonNeumannAlgebra]
+  exact N.localVonNeumann_mono hB π hB₁ hB₂ h₁₂ h₂ hcoh
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT

@@ -179,6 +179,15 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. Unlike Minkowski, the curved Axiom 3 isotony embeddings are chosen witnesses with no built-in composition law, so the coherence of the embeddings (that the $\mathbf{B}_1 \hookrightarrow \mathbf{B}$ embedding factors through $\mathbf{B}_2$) is taken as an explicit hypothesis; it holds automatically whenever the Axiom 3 witnesses form a genuine inclusion family. Given it, the local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ and the double commutant is monotone.
 \end{theorem}
 
+\begin{theorem}[Bundled von Neumann Microcausality and Isotony (Curved Spacetime)]
+    \label{thrm:von-neumann-bundled-order-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_le_commutant, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_mono}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann-algebra-in-curved-spacetime, thrm:von-neumann-microcausality-in-curved-spacetime, thrm:von-neumann-isotony-in-curved-spacetime}
+    Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}')$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated subregions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$ (with the isotony coherence) $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$. Both reduce to the set-level statements through the coercion $\uparrow R(\mathbf{B}') = \pi(\mathfrak{U}(\mathbf{B}'))''$.
+\end{theorem}
+
 \begin{theorem}[Statistical Independence (Schlieder Property)]
     \label{thrm:statistical-independence-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_separating, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.eq_zero_of_commute_of_cyclic}

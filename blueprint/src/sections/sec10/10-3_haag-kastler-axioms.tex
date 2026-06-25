@@ -180,6 +180,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     For basis regions $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. The local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ via the quasilocal isotony coherence, and the double commutant is monotone.
 \end{theorem}
 
+\begin{theorem}[Bundled von Neumann Microcausality and Isotony]
+    \label{thrm:von-neumann-bundled-order}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_mono}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann-algebra, thrm:von-neumann-microcausality, thrm:von-neumann-isotony}
+    Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B})$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated regions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$, $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$. Both reduce to the set-level statements through the coercion $\uparrow R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$.
+\end{theorem}
+
 \begin{theorem}[Statistical Independence (Schlieder Property)]
     \label{thrm:statistical-independence}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_separating, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.eq_zero_of_commute_of_cyclic}

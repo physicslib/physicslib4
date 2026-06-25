@@ -137,6 +137,30 @@ noncomputable def localVonNeumannAlgebra (π : N.commAlgebra.carrier →⋆ₐ[�
     (N.localVonNeumannAlgebra π B : Set (H →L[ℂ] H)) = N.localVonNeumann π B :=
   coe_vonNeumannOfSelfAdjoint _ _
 
+/-- **Microcausality, bundled (Minkowski).** For completely spacelike-separated
+regions, `R(B₁) ≤ R(B₂)'` as von Neumann algebras (`VonNeumannAlgebra.commutant`). -/
+theorem localVonNeumannAlgebra_le_commutant
+    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+    (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation B₁ B₂) :
+    N.localVonNeumannAlgebra π B₁ ≤ (N.localVonNeumannAlgebra π B₂).commutant := by
+  rw [← SetLike.coe_subset_coe]
+  simp only [coe_localVonNeumannAlgebra, VonNeumannAlgebra.coe_commutant]
+  exact N.localVonNeumann_subset_centralizer π hB₁ hB₂ hs
+
+/-- **Isotony, bundled (Minkowski).** `B₁ ⊆ B₂ ⟹ R(B₁) ≤ R(B₂)` as von Neumann
+algebras. -/
+theorem localVonNeumannAlgebra_mono
+    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂) :
+    N.localVonNeumannAlgebra π B₁ ≤ N.localVonNeumannAlgebra π B₂ := by
+  rw [← SetLike.coe_subset_coe]
+  simp only [coe_localVonNeumannAlgebra]
+  exact N.localVonNeumann_mono π hB₁ hB₂ h
+
 end HaagKastlerNet
 end HaagKastler
 end AQFT
