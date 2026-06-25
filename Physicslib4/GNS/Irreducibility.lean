@@ -7,6 +7,7 @@ import Physicslib4.GNS.Construction
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+import Mathlib.Analysis.VonNeumannAlgebra.Basic
 
 /-!
 # Irreducibility of representations and Schur's lemma
@@ -353,6 +354,66 @@ theorem isIrreducible_of_isPure
 (double `Set.centralizer`) of the image `π(A)`, i.e. `π(A)''`. -/
 def gnsVonNeumann (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) : Set (H →L[ℂ] H) :=
   Set.centralizer (Set.centralizer (Set.range π))
+
+omit [CStarAlgebra A] in
+/-- The commutant (`Set.centralizer`) of a self-adjoint set of operators is
+itself self-adjoint. -/
+theorem star_mem_setCentralizer {S : Set (H →L[ℂ] H)} (hS : ∀ x ∈ S, star x ∈ S)
+    {a : H →L[ℂ] H} (ha : a ∈ Set.centralizer S) : star a ∈ Set.centralizer S := by
+  simp only [Set.mem_centralizer_iff] at ha ⊢
+  intro m hm
+  have h2 := congrArg star (ha (star m) (hS m hm))
+  simp only [star_mul, star_star] at h2
+  exact h2.symm
+
+omit [CStarAlgebra A] in
+/-- The commutant of a self-adjoint set of operators is `*`-closed (subalgebra
+form, used to build the `StarSubalgebra`). -/
+theorem star_mem_subalgebraCentralizer {T : Set (H →L[ℂ] H)}
+    (hT : ∀ x ∈ T, star x ∈ T) {a : H →L[ℂ] H}
+    (ha : a ∈ Subalgebra.centralizer ℂ T) :
+    star a ∈ Subalgebra.centralizer ℂ T := by
+  simp only [Subalgebra.mem_centralizer_iff] at ha ⊢
+  intro m hm
+  have h2 := congrArg star (ha (star m) (hT m hm))
+  simp only [star_mul, star_star] at h2
+  exact h2.symm
+
+/-- The commutant of a self-adjoint set of operators, packaged as a
+`StarSubalgebra` (it is a subalgebra, and `*`-closed by the previous lemma). -/
+noncomputable def starSubalgebraCentralizer (T : Set (H →L[ℂ] H))
+    (hT : ∀ x ∈ T, star x ∈ T) : StarSubalgebra ℂ (H →L[ℂ] H) where
+  toSubalgebra := Subalgebra.centralizer ℂ T
+  star_mem' ha := star_mem_subalgebraCentralizer hT ha
+
+omit [CStarAlgebra A] in
+@[simp] theorem coe_starSubalgebraCentralizer (T : Set (H →L[ℂ] H))
+    (hT : ∀ x ∈ T, star x ∈ T) :
+    (starSubalgebraCentralizer T hT : Set (H →L[ℂ] H)) = Set.centralizer T :=
+  Subalgebra.coe_centralizer ℂ T
+
+omit [CStarAlgebra A] in
+theorem carrier_starSubalgebraCentralizer (T : Set (H →L[ℂ] H))
+    (hT : ∀ x ∈ T, star x ∈ T) :
+    (starSubalgebraCentralizer T hT).carrier = Set.centralizer T :=
+  Subalgebra.coe_centralizer ℂ T
+
+/-- **The bicommutant of a self-adjoint set is a von Neumann algebra.** For a
+self-adjoint set `S` of bounded operators, the double commutant `S''` is a von
+Neumann algebra (it equals its own bicommutant, since `S'''' = S''`). -/
+noncomputable def vonNeumannOfSelfAdjoint (S : Set (H →L[ℂ] H))
+    (hS : ∀ x ∈ S, star x ∈ S) : VonNeumannAlgebra H where
+  toStarSubalgebra :=
+    starSubalgebraCentralizer (Set.centralizer S) (fun _ hx => star_mem_setCentralizer hS hx)
+  centralizer_centralizer' := by
+    rw [carrier_starSubalgebraCentralizer, Set.centralizer_centralizer_centralizer]
+
+omit [CStarAlgebra A] in
+@[simp] theorem coe_vonNeumannOfSelfAdjoint (S : Set (H →L[ℂ] H))
+    (hS : ∀ x ∈ S, star x ∈ S) :
+    (vonNeumannOfSelfAdjoint S hS : Set (H →L[ℂ] H))
+      = Set.centralizer (Set.centralizer S) :=
+  Subalgebra.coe_centralizer ℂ (Set.centralizer S)
 
 omit [CompleteSpace H] in
 private theorem smul_one_mem_centralizer (c : ℂ) (S : Set (H →L[ℂ] H)) :

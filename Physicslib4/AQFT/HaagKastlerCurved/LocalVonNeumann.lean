@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastlerCurved.EinsteinCausality
+import Physicslib4.GNS.Irreducibility
 
 /-!
 # Local von Neumann algebras and spacelike commutation (curved spacetime)
@@ -131,6 +132,32 @@ theorem localVonNeumann_separating
     N.localVonNeumann_subset_centralizer hB π hB₁ hB₂ hs h₁ h₂
       (Set.subset_centralizer_centralizer hA)
   exact (Set.mem_centralizer_iff.mp hA') R hR
+
+/-- The local observable operators `π(𝔘(B'))` form a self-adjoint set: `π` and the
+isotony embedding `commIsotony` are `*`-homomorphisms. -/
+theorem localOperators_selfAdjoint {B : Set M.Carrier}
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B) (h : B' ⊆ B) :
+    ∀ x ∈ N.localOperators π hB' hB h, star x ∈ N.localOperators π hB' hB h := by
+  rintro x ⟨a, rfl⟩
+  exact ⟨star a, by simp only [map_star]⟩
+
+/-- The **local von Neumann algebra** `R(B')` as a genuine `VonNeumannAlgebra`: the
+bicommutant of the self-adjoint set of local observable operators inside `B(H)`.
+Its underlying set is `localVonNeumann π hB' hB h`. -/
+noncomputable def localVonNeumannAlgebra {B : Set M.Carrier}
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B) (h : B' ⊆ B) :
+    VonNeumannAlgebra H :=
+  vonNeumannOfSelfAdjoint (N.localOperators π hB' hB h)
+    (N.localOperators_selfAdjoint π hB' hB h)
+
+@[simp] theorem coe_localVonNeumannAlgebra {B : Set M.Carrier}
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B) (h : B' ⊆ B) :
+    (N.localVonNeumannAlgebra π hB' hB h : Set (H →L[ℂ] H))
+      = N.localVonNeumann π hB' hB h :=
+  coe_vonNeumannOfSelfAdjoint _ _
 
 end HaagKastlerNet
 end HaagKastlerCurved

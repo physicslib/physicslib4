@@ -152,6 +152,15 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     Let $\pi$ be a $*$-representation of a containing basis algebra $\mathfrak{U}(\mathbf{B})$ on $H$. For a subregion $\mathbf{B}' \subseteq \mathbf{B}$, the \emph{local observable operators} are the image $\pi(\mathfrak{U}(\mathbf{B}'))$ under the isotony embedding, and the \emph{local von Neumann algebra} $R(\mathbf{B}')$ is the bicommutant $\pi(\mathfrak{U}(\mathbf{B}'))''$.
 \end{definition}
 
+\begin{definition}[$R(\mathbf{B}')$ as a von Neumann Algebra (Curved Spacetime)]
+    \label{def:local-von-neumann-algebra-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann-in-curved-spacetime, def:local-von-neumann-algebra}
+    As in the Minkowski case, $R(\mathbf{B}')$ is registered as a genuine \texttt{VonNeumannAlgebra}: the local observable operators $\pi(\mathfrak{U}(\mathbf{B}'))$ are self-adjoint (the isotony embedding and $\pi$ are $*$-homomorphisms), so their bicommutant is a von Neumann algebra whose underlying set is the bicommutant of \ref{def:local-von-neumann-in-curved-spacetime}. The construction is the same general bicommutant-of-a-self-adjoint-set lemma.
+\end{definition}
+
 \begin{theorem}[Microcausality at the von Neumann Level (Curved Spacetime)]
     \label{thrm:von-neumann-microcausality-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_subset_centralizer}

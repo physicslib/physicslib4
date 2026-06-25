@@ -153,6 +153,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     Let $\pi$ be a $*$-representation of the quasilocal algebra on $H$. The \emph{local observable operators} of a region $\mathbf{B}$ are the image $\pi(\mathfrak{U}(\mathbf{B})) = \{\pi(\iota_{\mathbf{B}} a) : a \in \mathfrak{U}(\mathbf{B})\}$. The \emph{local von Neumann algebra} $R(\mathbf{B})$ is the bicommutant $\pi(\mathfrak{U}(\mathbf{B}))''$.
 \end{definition}
 
+\begin{definition}[$R(\mathbf{B})$ as a von Neumann Algebra]
+    \label{def:local-von-neumann-algebra}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra, Physicslib4.GNS.vonNeumannOfSelfAdjoint}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann}
+    The local algebra $R(\mathbf{B})$ is registered as a genuine \texttt{VonNeumannAlgebra} (Mathlib's bundled structure), not merely a set of operators. The general fact is that the bicommutant $S''$ of any self-adjoint set $S$ of bounded operators is a von Neumann algebra: $S'$ is a $*$-subalgebra (the centralizer of a self-adjoint set is $*$-closed), and $S'' = S''''$ since the triple commutant collapses. The local observable operators $\pi(\mathfrak{U}(\mathbf{B}))$ are self-adjoint ($\pi$ and $\iota$ are $*$-homomorphisms), so $R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$ is a von Neumann algebra whose underlying set is the bicommutant of \ref{def:local-von-neumann}.
+\end{definition}
+
 \begin{theorem}[Microcausality at the von Neumann Level]
     \label{thrm:von-neumann-microcausality}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_subset_centralizer}

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.EinsteinCausality
+import Physicslib4.GNS.Irreducibility
 
 /-!
 # Local von Neumann algebras and spacelike commutation
@@ -115,6 +116,26 @@ theorem localVonNeumann_separating
   have hA' : A ∈ Set.centralizer (N.localVonNeumann π B₂) :=
     N.localVonNeumann_subset_centralizer π hB₁ hB₂ hs (Set.subset_centralizer_centralizer hA)
   exact (Set.mem_centralizer_iff.mp hA') R hR
+
+/-- The local observable operators `π(𝔘(B))` form a self-adjoint set: `π` and the
+quasilocal embedding `ι` are `*`-homomorphisms, so `star (π (ι B a)) = π (ι B (star a))`. -/
+theorem localOperators_selfAdjoint (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B : Set StandardMinkowskiSpacetime.Carrier) :
+    ∀ x ∈ N.localOperators π B, star x ∈ N.localOperators π B := by
+  rintro x ⟨a, rfl⟩
+  exact ⟨star a, by simp only [map_star]⟩
+
+/-- The **local von Neumann algebra** `R(B)` as a genuine `VonNeumannAlgebra`: the
+bicommutant of the self-adjoint set of local observable operators. Its underlying
+set is `localVonNeumann π B`. -/
+noncomputable def localVonNeumannAlgebra (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B : Set StandardMinkowskiSpacetime.Carrier) : VonNeumannAlgebra H :=
+  vonNeumannOfSelfAdjoint (N.localOperators π B) (N.localOperators_selfAdjoint π B)
+
+@[simp] theorem coe_localVonNeumannAlgebra (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B : Set StandardMinkowskiSpacetime.Carrier) :
+    (N.localVonNeumannAlgebra π B : Set (H →L[ℂ] H)) = N.localVonNeumann π B :=
+  coe_vonNeumannOfSelfAdjoint _ _
 
 end HaagKastlerNet
 end HaagKastler
