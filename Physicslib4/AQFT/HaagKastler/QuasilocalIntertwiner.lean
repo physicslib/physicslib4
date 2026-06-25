@@ -10,6 +10,7 @@ import Physicslib4.Spacetime.LorentzCausality
 import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.GNS.UnitaryRepresentation
 import Physicslib4.GNS.RadonNikodym
+import Physicslib4.GNS.ExtremeState
 
 /-!
 # Towards the intertwiner on the generated subalgebra
@@ -619,6 +620,15 @@ theorem IsInvariantState.exists_gns_irreducible_covariant (C : CovariantQuasiloc
     IsInvariantState.exists_gns_unitary C hω
   exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov,
     (Physicslib4.GNS.isPure_iff_isIrreducible hcyc hrepro).mp hpure⟩
+
+/-- **Purity is covariance-invariant (Minkowski).** A state `ω` on the quasilocal
+algebra is pure if and only if its pullback `ω ∘ β_L` along the covariance
+automorphism is pure: purity is preserved by the `*`-automorphism `β_L = C.action L`.
+Specialization of `isPure_precomp_iff`. -/
+theorem isPure_precomp_action_iff (C : CovariantQuasilocalAlgebra)
+    (ω : Physicslib4.GNS.State C.quasilocal.carrier) (L : InhomogeneousLorentzGroup) :
+    Physicslib4.GNS.IsPure (ω.precomp (C.action L)) ↔ Physicslib4.GNS.IsPure ω :=
+  Physicslib4.GNS.isPure_precomp_iff ω (C.action L)
 
 end CovariantQuasilocalAlgebra
 

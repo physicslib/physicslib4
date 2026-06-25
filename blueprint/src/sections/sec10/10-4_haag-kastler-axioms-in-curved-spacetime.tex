@@ -274,6 +274,15 @@ They do, however, restrict to a genuine action by automorphisms of one fixed loc
     A state $\omega$ on a local algebra $\mathfrak{U}(\mathbf{B})$ that is invariant under the stabilizer action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U$ of $\mathrm{Stab}(\mathbf{B})$ fixing the cyclic vector $\Omega$, with operator covariance $U(\varphi)\,\pi(a)\,U(\varphi)^{-1} = \pi(\hat\alpha_\varphi a)$ - and \emph{irreducible}. This is the curved, per-region analogue of \ref{thrm:irreducible-covariant-representation} (there is no quasilocal algebra), combining \ref{thrm:gns-unitary-stabilizer-in-curved-spacetime} with purity $\Rightarrow$ irreducibility. It is not a vacuum: curved spacetime admits no global vacuum, and the analogue of the spectrum condition (the Hadamard / microlocal spectrum condition) is a separate requirement not imposed here.
 \end{theorem}
 
+\begin{theorem}[Purity is Invariant under the Stabilizer Action]
+    \label{thrm:purity-covariance-invariant-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isPure_precomp_stabAut_iff}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
+    \leanok
+    \uses{def:pure-state, def:stabilizer-action-in-curved-spacetime, thrm:purity-covariance-invariant}
+    A state $\omega$ on a local algebra $\mathfrak{U}(\mathbf{B})$ is pure if and only if its pullback $\omega \circ \hat\alpha_\varphi$ along the stabilizer automorphism is pure, for every $\varphi \in \mathrm{Stab}(\mathbf{B})$. This is the curved specialization of \ref{thrm:purity-covariance-invariant}: purity is invariant under the isometric symmetry that fixes the region.
+\end{theorem}
+
 \subsection{KMS States for a Killing Flow}
 
 The stabilizer subgroup of a region is, in the genuinely curved examples, a one-parameter Killing flow rather than the full isometry group. Such a flow makes the local algebra $\mathfrak{U}(\mathbf{B})$ into a dynamical system, and the natural equilibrium states are the KMS states (\ref{def:kms-state}) for that flow. This is the precise sense in which the curved-spacetime thermal states are thermal: the Hartle-Hawking state on a Schwarzschild exterior is KMS for the stationary Killing flow at the Hawking temperature, and the Bunch-Davies state restricted to a de Sitter static patch is KMS for the boost Killing flow at the Gibbons-Hawking temperature.

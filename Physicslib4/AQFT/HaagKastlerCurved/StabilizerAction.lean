@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.GNS.UnitaryRepresentation
 import Physicslib4.GNS.RadonNikodym
+import Physicslib4.GNS.ExtremeState
 
 /-!
 # Stabilizer action on a curved local algebra and its GNS unitary
@@ -217,6 +218,15 @@ theorem exists_gns_irreducible_covariant_stabilizer (B : Set M.Carrier)
     N.exists_gns_unitary_stabilizer B ω hinv
   exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov,
     (isPure_iff_isIrreducible hcyc hrepro).mp hpure⟩
+
+/-- **Purity is invariant under the stabilizer action (curved spacetime).** A state
+`ω` on a local algebra `𝔘(B)` is pure if and only if its pullback `ω ∘ \hatα_g`
+along the stabilizer automorphism is pure, for any `g ∈ Stab(B)`. Specialization of
+`isPure_precomp_iff`. -/
+theorem isPure_precomp_stabAut_iff (B : Set M.Carrier)
+    (ω : State (N.algebra B)) (g : ↥(MulAction.stabilizer M.Isom B)) :
+    IsPure (ω.precomp (N.stabAutHom B g)) ↔ IsPure ω :=
+  isPure_precomp_iff ω (N.stabAutHom B g)
 
 end HaagKastlerNet
 

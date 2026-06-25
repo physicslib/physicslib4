@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.GNS.Irreducibility
 import Physicslib4.GNS.CauchySchwarz
 import Mathlib.Analysis.CStarAlgebra.Basic
+import Mathlib.Analysis.CStarAlgebra.Spectrum
 
 /-!
 # Pure states and extreme points of the state space
@@ -298,6 +299,82 @@ theorem isPure_of_isExtremePoint (ω : State A) (hext : ω.IsExtremePoint) :
 /-- **Purity ⟺ extreme point of the state space.** -/
 theorem isPure_iff_isExtremePoint (ω : State A) : IsPure ω ↔ ω.IsExtremePoint :=
   ⟨isExtremePoint_of_isPure ω, isPure_of_isExtremePoint ω⟩
+
+/-- A `*`-automorphism of a C*-algebra as a continuous `ℂ`-linear map; it is
+isometric (`StarAlgEquiv.isometry`), hence bounded with norm `≤ 1`. -/
+noncomputable def starAlgEquivCLM (Φ : A ≃⋆ₐ[ℂ] A) : A →L[ℂ] A :=
+  Φ.toAlgEquiv.toLinearMap.mkContinuous 1 fun a => by
+    rw [one_mul]
+    have hni : ‖Φ a‖ = ‖a‖ := by
+      have h := (StarAlgEquiv.isometry Φ).dist_eq a 0
+      simpa [dist_eq_norm, map_zero] using h
+    exact le_of_eq hni
+
+@[simp] theorem starAlgEquivCLM_apply (Φ : A ≃⋆ₐ[ℂ] A) (a : A) :
+    starAlgEquivCLM Φ a = Φ a := rfl
+
+/-- The **pullback of a state along a `*`-automorphism** `Φ`: `a ↦ ω (Φ a)`. It is
+again a state - positivity is the `Φ`-equivariance of `star a * a`, and the
+normalization `‖ω ∘ Φ‖ = 1` follows since `Φ` is unital (`(ω∘Φ)(1) = ω(1) = 1`)
+and positive functionals have norm equal to their value at `1`. -/
+noncomputable def State.precomp (ω : State A) (Φ : A ≃⋆ₐ[ℂ] A) : State A where
+  toContinuousLinearMap := ω.toContinuousLinearMap.comp (starAlgEquivCLM Φ)
+  isPositive := fun a => by
+    rw [ContinuousLinearMap.comp_apply, starAlgEquivCLM_apply, map_mul, map_star]
+    exact ω.isPositive (Φ a)
+  isNormalized := by
+    haveI := nontrivial_of_state ω
+    have hpos : ∀ a, 0 ≤ (ω.toContinuousLinearMap.comp (starAlgEquivCLM Φ)) (star a * a) := by
+      intro a
+      rw [ContinuousLinearMap.comp_apply, starAlgEquivCLM_apply, map_mul, map_star]
+      exact ω.isPositive (Φ a)
+    rw [norm_eq_re_apply_one_of_positive hpos, ContinuousLinearMap.comp_apply,
+      starAlgEquivCLM_apply, map_one]
+    rw [show ω.toContinuousLinearMap 1 = ω 1 from rfl, ω.apply_one, Complex.one_re]
+
+@[simp] theorem State.precomp_apply (ω : State A) (Φ : A ≃⋆ₐ[ℂ] A) (a : A) :
+    (ω.precomp Φ) a = ω (Φ a) := rfl
+
+/-- Pulling back by `Φ` and then `Φ⁻¹` recovers the original state. -/
+theorem State.precomp_precomp_symm (ω : State A) (Φ : A ≃⋆ₐ[ℂ] A) :
+    (ω.precomp Φ).precomp Φ.symm = ω := by
+  apply DFunLike.ext
+  intro a
+  simp only [State.precomp_apply, StarAlgEquiv.apply_symm_apply]
+
+/-- **Purity is preserved by pullback along a `*`-automorphism** (one direction).
+If `ω` is pure, so is `ω ∘ Φ`. A dominated positive functional `ψ ≤ ω ∘ Φ` becomes
+`ψ ∘ Φ⁻¹ ≤ ω` after transport, which purity sends to a scalar multiple of `ω`;
+transporting back gives `ψ` proportional to `ω ∘ Φ`. -/
+theorem isPure_precomp_of_isPure {ω : State A} (Φ : A ≃⋆ₐ[ℂ] A) (hpure : IsPure ω) :
+    IsPure (ω.precomp Φ) := by
+  intro ψ hψpos hψdom
+  set ψ' : A →L[ℂ] ℂ := ψ.comp (starAlgEquivCLM Φ.symm) with hψ'_def
+  have hψ'app : ∀ a, ψ' a = ψ (Φ.symm a) := fun a => by
+    rw [hψ'_def, ContinuousLinearMap.comp_apply, starAlgEquivCLM_apply]
+  have hψ'pos : ∀ a, 0 ≤ ψ' (star a * a) := by
+    intro a; rw [hψ'app, map_mul, map_star]; exact hψpos (Φ.symm a)
+  have hψ'dom : ∀ a, ψ' (star a * a) ≤ ω (star a * a) := by
+    intro a
+    rw [hψ'app, map_mul, map_star]
+    have hrhs : (ω.precomp Φ) (star (Φ.symm a) * Φ.symm a) = ω (star a * a) := by
+      rw [State.precomp_apply, map_mul, map_star, StarAlgEquiv.apply_symm_apply]
+    exact (hψdom (Φ.symm a)).trans (le_of_eq hrhs)
+  obtain ⟨t, ht⟩ := hpure ψ' hψ'pos hψ'dom
+  refine ⟨t, fun b => ?_⟩
+  have hb := ht (Φ b)
+  rw [hψ'app, StarAlgEquiv.symm_apply_apply] at hb
+  rw [State.precomp_apply]
+  exact hb
+
+/-- **Purity is invariant under a `*`-automorphism**: `ω ∘ Φ` is pure iff `ω` is.
+On a Haag-Kastler net with `Φ = β_L` the covariance automorphism, this says purity
+of a state is a covariance-invariant property. -/
+theorem isPure_precomp_iff (ω : State A) (Φ : A ≃⋆ₐ[ℂ] A) :
+    IsPure (ω.precomp Φ) ↔ IsPure ω := by
+  refine ⟨fun h => ?_, isPure_precomp_of_isPure Φ⟩
+  have h2 := isPure_precomp_of_isPure Φ.symm h
+  rwa [State.precomp_precomp_symm] at h2
 
 end GNS
 end Physicslib4
