@@ -367,6 +367,39 @@ theorem isPure_precomp_of_isPure {ω : State A} (Φ : A ≃⋆ₐ[ℂ] A) (hpure
   rw [State.precomp_apply]
   exact hb
 
+/-- The **convex combination** `s·ω₁ + (1-s)·ω₂` of two states (`0 ≤ s ≤ 1`). It is
+again a state: positivity is clear, and normalization `‖·‖ = 1` follows since the
+combination is positive and evaluates to `s·1 + (1-s)·1 = 1` on the unit. -/
+noncomputable def State.convexCombo (ω₁ ω₂ : State A) (s : ℝ) (hs0 : 0 ≤ s) (hs1 : s ≤ 1) :
+    State A where
+  toContinuousLinearMap :=
+    (s : ℂ) • ω₁.toContinuousLinearMap + ((1 - s : ℝ) : ℂ) • ω₂.toContinuousLinearMap
+  isPositive := fun a => by
+    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
+    exact add_nonneg (mul_nonneg (complex_ofReal_nonneg hs0) (ω₁.isPositive a))
+      (mul_nonneg (complex_ofReal_nonneg (by linarith)) (ω₂.isPositive a))
+  isNormalized := by
+    haveI := nontrivial_of_state ω₁
+    have hpos : ∀ a, 0 ≤ ((s : ℂ) • ω₁.toContinuousLinearMap
+        + ((1 - s : ℝ) : ℂ) • ω₂.toContinuousLinearMap) (star a * a) := by
+      intro a
+      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
+      exact add_nonneg (mul_nonneg (complex_ofReal_nonneg hs0) (ω₁.isPositive a))
+        (mul_nonneg (complex_ofReal_nonneg (by linarith)) (ω₂.isPositive a))
+    rw [norm_eq_re_apply_one_of_positive hpos]
+    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
+    rw [show ω₁.toContinuousLinearMap 1 = ω₁ 1 from rfl,
+      show ω₂.toContinuousLinearMap 1 = ω₂ 1 from rfl, ω₁.apply_one, ω₂.apply_one]
+    rw [show (s : ℂ) * 1 + ((1 - s : ℝ) : ℂ) * 1 = 1 from by push_cast; ring, Complex.one_re]
+
+@[simp] theorem State.convexCombo_apply (ω₁ ω₂ : State A) (s : ℝ) (hs0 : 0 ≤ s) (hs1 : s ≤ 1)
+    (a : A) :
+    (ω₁.convexCombo ω₂ s hs0 hs1) a = (s : ℂ) * ω₁ a + ((1 - s : ℝ) : ℂ) * ω₂ a := by
+  change ((s : ℂ) • ω₁.toContinuousLinearMap + ((1 - s : ℝ) : ℂ) • ω₂.toContinuousLinearMap) a
+    = (s : ℂ) * ω₁ a + ((1 - s : ℝ) : ℂ) * ω₂ a
+  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
+  rfl
+
 /-- **Purity is invariant under a `*`-automorphism**: `ω ∘ Φ` is pure iff `ω` is.
 On a Haag-Kastler net with `Φ = β_L` the covariance automorphism, this says purity
 of a state is a covariance-invariant property. -/

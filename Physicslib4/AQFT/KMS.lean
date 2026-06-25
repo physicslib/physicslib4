@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.GNS.Basic
+import Physicslib4.GNS.ExtremeState
 import Physicslib4.Analysis.StripPeriodicExtension
 import Mathlib.Analysis.Calculus.FDeriv.Basic
 import Mathlib.Analysis.Complex.Liouville
@@ -118,6 +119,37 @@ theorem stripLiouville_of_pos {β : ℝ} (hβ : 0 < β) : StripLiouville β := b
   obtain ⟨H, hHdiff, hHbdd, hHagree⟩ :=
     Physicslib4.exists_bounded_entire_extension_of_strip_periodic hβ hcont hdiff hper hbdd
   exact stripLiouville_of_entire_extension H hHdiff hHbdd hHagree t
+
+/-- **The KMS state set is convex.** A convex combination `s·ω₁ + (1-s)·ω₂`
+(`0 ≤ s ≤ 1`) of two `(α, β)`-KMS states is again `(α, β)`-KMS: for each pair
+`(a, b)` the analytic interpolant is the corresponding convex combination
+`s·F₁ + (1-s)·F₂` of the two interpolants, which is continuous, bounded, and
+holomorphic on the strip, and whose boundary values add. Physically the
+equilibrium (KMS) states at fixed temperature form a convex set. -/
+theorem IsKMSState.convexCombo {α : ℝ → (A ≃⋆ₐ[ℂ] A)} {β : ℝ} {ω₁ ω₂ : State A}
+    (s : ℝ) (hs0 : 0 ≤ s) (hs1 : s ≤ 1)
+    (h₁ : IsKMSState α β ω₁) (h₂ : IsKMSState α β ω₂) :
+    IsKMSState α β (ω₁.convexCombo ω₂ s hs0 hs1) := by
+  intro a b
+  obtain ⟨F₁, hF1c, hF1d, ⟨C₁, hC1⟩, hF1lo, hF1hi⟩ := h₁ a b
+  obtain ⟨F₂, hF2c, hF2d, ⟨C₂, hC2⟩, hF2lo, hF2hi⟩ := h₂ a b
+  refine ⟨fun z => (s : ℂ) * F₁ z + ((1 - s : ℝ) : ℂ) * F₂ z, ?_, ?_, ?_, ?_, ?_⟩
+  · exact (continuousOn_const.mul hF1c).add (continuousOn_const.mul hF2c)
+  · exact (hF1d.const_mul _).add (hF2d.const_mul _)
+  · refine ⟨‖(s : ℂ)‖ * C₁ + ‖((1 - s : ℝ) : ℂ)‖ * C₂, fun z hz => ?_⟩
+    calc ‖(s : ℂ) * F₁ z + ((1 - s : ℝ) : ℂ) * F₂ z‖
+        ≤ ‖(s : ℂ) * F₁ z‖ + ‖((1 - s : ℝ) : ℂ) * F₂ z‖ := norm_add_le _ _
+      _ = ‖(s : ℂ)‖ * ‖F₁ z‖ + ‖((1 - s : ℝ) : ℂ)‖ * ‖F₂ z‖ := by rw [norm_mul, norm_mul]
+      _ ≤ ‖(s : ℂ)‖ * C₁ + ‖((1 - s : ℝ) : ℂ)‖ * C₂ := by
+          gcongr
+          · exact hC1 z hz
+          · exact hC2 z hz
+  · intro t
+    simp only [State.convexCombo_apply]
+    rw [hF1lo t, hF2lo t]
+  · intro t
+    simp only [State.convexCombo_apply]
+    rw [hF1hi t, hF2hi t]
 
 /-- **Boundary coincidence for the diagonal `a = 1`.** For a KMS state, the
 correlation function of the pair `(1, a)` has its two boundary values *equal* -

@@ -494,6 +494,15 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
     A state $\omega$ on $A$ is \emph{$(\alpha, \beta)$-KMS} for a one-parameter automorphism group $\alpha$ (\ref{def:one-parameter-aut}) at inverse temperature $\beta$ if for every $a, b \in A$ the correlation function $t \mapsto \omega(a\,\alpha_t b)$ extends to a function $F$ on the closed strip $0 \le \operatorname{Im} z \le \beta$ that is continuous there, holomorphic on the open strip, bounded, and whose boundary value on $\operatorname{Im} z = \beta$ is $t \mapsto \omega(\alpha_t b\, \cdot a)$.
 \end{definition}
 
+\begin{theorem}[The KMS State Set is Convex]
+    \label{thrm:kms-convex}
+    \lean{Physicslib4.AQFT.IsKMSState.convexCombo}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:kms-state}
+    A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two $(\alpha, \beta)$-KMS states is again $(\alpha, \beta)$-KMS: for each pair $(a, b)$ the analytic interpolant is the convex combination $s\,F_1 + (1-s)\,F_2$ of the two interpolants, which is continuous, bounded, and holomorphic on the strip, with boundary values that add. Thus the equilibrium states at a fixed temperature form a convex set.
+\end{theorem}
+
 \begin{lemma}[Boundary Coincidence for $a = 1$]
     \label{lmm:kms-correlation-one}
     \lean{Physicslib4.AQFT.IsKMSState.correlationOne}
