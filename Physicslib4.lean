@@ -6,6 +6,7 @@ import Physicslib4.AQFT.HaagKastler.LocalCommutativity
 import Physicslib4.AQFT.HaagKastler.LocalVonNeumann
 import Physicslib4.AQFT.HaagKastler.LorentzCovariance
 import Physicslib4.AQFT.HaagKastler.Net
+import Physicslib4.AQFT.HaagKastler.Purity
 import Physicslib4.AQFT.HaagKastler.QuasilocalAction
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
 import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness

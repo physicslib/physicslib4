@@ -288,6 +288,26 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     A state $\omega$ is pure if and only if it is an extreme point of the state space. If $\omega$ is pure and $\omega = t\,\omega_1 + (1-t)\,\omega_2$, then $t\,\omega_1$ is a positive functional dominated by $\omega$, hence (by purity) a scalar multiple of $\omega$; evaluating at $1$, where every state gives $1$, pins the scalar to $t$ and forces $\omega_1 = \omega = \omega_2$. Conversely, if $\omega$ is extreme and $\psi \le \omega$ is dominated, set $\lambda = \mathrm{Re}\,\psi(1) \in [0,1]$; for $\lambda \in (0,1)$ the rescaled functionals $\lambda^{-1}\psi$ and $(1-\lambda)^{-1}(\omega - \psi)$ are states (normalized via \ref{thrm:norm-positive-functional}) whose convex combination is $\omega$, so extremality identifies them and forces $\psi = \lambda\,\omega$; the boundary cases $\lambda = 0$ and $\lambda = 1$ give $\psi = 0$ and $\psi = \omega$ respectively.
 \end{theorem}
 
+These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Minkowski net, where they characterize purity of a global state - the natural setting for the vacuum and other distinguished states.
+
+\begin{theorem}[Pure $\iff$ Extreme Point on the Quasilocal Algebra]
+    \label{thrm:pure-iff-extreme-quasilocal}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.pure_iff_extreme}
+    \leanfile{Physicslib4/AQFT/HaagKastler/Purity.lean}
+    \leanok
+    \uses{def:pure-state, def:extreme-state, thrm:pure-iff-extreme, def:quasilocal-completeness}
+    A state $\omega$ on the canonical quasilocal algebra $\mathfrak{U}$ of a Haag-Kastler net is pure if and only if it is an extreme point of the state space of $\mathfrak{U}$. This is the abstract equivalence \ref{thrm:pure-iff-extreme} applied to the C*-algebra $\mathfrak{U}$.
+\end{theorem}
+
+\begin{theorem}[Pure $\iff$ Irreducible GNS on the Quasilocal Algebra]
+    \label{thrm:pure-iff-irreducible-quasilocal}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.exists_gns_pure_iff_irreducible}
+    \leanfile{Physicslib4/AQFT/HaagKastler/Purity.lean}
+    \leanok
+    \uses{def:pure-state, def:irreducible-representation, thrm:pure-iff-irreducible, thrm:gns-construction-theorem, def:quasilocal-completeness}
+    For a state $\omega$ on the quasilocal algebra $\mathfrak{U}$ there is a GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ in which $\omega$ is pure if and only if the representation $\pi$ is irreducible. This combines the GNS construction with the abstract \ref{thrm:pure-iff-irreducible}.
+\end{theorem}
+
 \subsection{Covariant States and the Covariance Action}
 
 The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts on the net fiberwise, through the $*$-isomorphisms $\alpha_L : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(L\cdot\mathbf{B})$. We record two consequences: the notion of a Lorentz-covariant family of local states, and the lift of the fiberwise action to a single dynamical $*$-automorphism of the quasilocal algebra.
