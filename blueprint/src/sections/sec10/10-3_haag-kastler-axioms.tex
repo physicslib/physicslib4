@@ -402,6 +402,17 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     For an invariant state $\omega$, the covariance action is implemented on the GNS Hilbert space by a family of unitaries $U(L)$ satisfying $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\,\Omega$ and $U(L)\Omega = \Omega$. The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space.
 \end{theorem}
 
+Combining invariance with purity gives the structural content of a \emph{vacuum sector}: the representation is both covariant and irreducible.
+
+\begin{theorem}[The Vacuum Representation]
+    \label{thrm:vacuum-representation}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState.exists_gns_vacuum}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \leanok
+    \uses{thrm:invariant-state-gns-unitary, def:pure-state, def:irreducible-representation, thrm:pure-iff-irreducible}
+    A state $\omega$ on the quasilocal algebra that is both invariant under the covariance action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U(L)$ of the inhomogeneous Lorentz group fixing the cyclic vector $\Omega$, with operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$ - and \emph{irreducible}. This combines the covariant GNS triple of \ref{thrm:invariant-state-gns-unitary} with purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}).
+\end{theorem}
+
 \subsection{The Separating Vector of a Faithful State}
 
 A faithful state has a sharper consequence at the level of the GNS construction than the faithfulness of its representation: its cyclic vector is also \emph{separating}. This is the basic datum of the modular (Tomita-Takesaki) theory of the associated von Neumann algebra.

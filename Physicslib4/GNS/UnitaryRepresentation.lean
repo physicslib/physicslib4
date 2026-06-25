@@ -93,7 +93,8 @@ theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
         (∀ g : G, U g Ω = Ω) ∧
         (∀ g g' : G, U (g' * g) = (U g).trans (U g')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
-        (∀ (g : G) (a : A) (x : H), U g (π a ((U g).symm x)) = π (γ g a) x) := by
+        (∀ (g : G) (a : A) (x : H), U g (π a ((U g).symm x)) = π (γ g a) x) ∧
+        IsCyclicVector π Ω := by
   obtain ⟨H, _, _, _, π, Ω, hcyc, hrepro, _⟩ := gns_construction ω
   let cyc : A →ₗ[ℂ] H :=
     { toFun := fun a => π a Ω
@@ -123,7 +124,7 @@ theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
     (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry cyc cyc hcycdense hcycdense (hnorm g)
   have hUcyc : ∀ (g : G) (a : A), U g (cyc a) = cyc (γ g a) := fun g a =>
     (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense (hnorm g) a
-  refine ⟨H, inferInstance, inferInstance, inferInstance, π, Ω, U, hrepro, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨H, inferInstance, inferInstance, inferInstance, π, Ω, U, hrepro, ?_, ?_, ?_, ?_, ?_, hcyc⟩
   · intro g a
     exact (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense
       (hnorm g) a
