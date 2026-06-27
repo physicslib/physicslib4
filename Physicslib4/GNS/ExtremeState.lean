@@ -7,6 +7,7 @@ import Physicslib4.GNS.Irreducibility
 import Physicslib4.GNS.CauchySchwarz
 import Mathlib.Analysis.CStarAlgebra.Basic
 import Mathlib.Analysis.CStarAlgebra.Spectrum
+import Mathlib.Analysis.Convex.Extreme
 
 /-!
 # Pure states and extreme points of the state space
@@ -408,6 +409,75 @@ theorem isPure_precomp_iff (ω : State A) (Φ : A ≃⋆ₐ[ℂ] A) :
   refine ⟨fun h => ?_, isPure_precomp_of_isPure Φ⟩
   have h2 := isPure_precomp_of_isPure Φ.symm h
   rwa [State.precomp_precomp_symm] at h2
+
+/-- The coercion `State A → (A →L[ℂ] ℂ)` is injective. -/
+theorem State.toContinuousLinearMap_injective :
+    Function.Injective (State.toContinuousLinearMap : State A → (A →L[ℂ] ℂ)) := by
+  intro ω₁ ω₂ h
+  cases ω₁; cases ω₂
+  simp only [State.mk.injEq]
+  exact h
+
+@[simp] theorem State.coe_toContinuousLinearMap (ω : State A) (a : A) :
+    ω.toContinuousLinearMap a = ω a := rfl
+
+variable (A) in
+/-- The **state space** of `A` realized as a subset of the real topological vector
+space `A →L[ℂ] ℂ` (which carries a real-module structure via
+`NormedSpace.complexToReal`): the image of all states under the coercion. -/
+def stateSpace : Set (A →L[ℂ] ℂ) := Set.range (State.toContinuousLinearMap : State A → _)
+
+/-- **The state space is convex.** A real convex combination `a·ω₁ + b·ω₂`
+(`a, b ≥ 0`, `a + b = 1`) of two states is again a state, via `State.convexCombo`. -/
+theorem convex_stateSpace : Convex ℝ (stateSpace A) := by
+  rintro _ ⟨ω₁, rfl⟩ _ ⟨ω₂, rfl⟩ a b ha hb hab
+  refine ⟨ω₁.convexCombo ω₂ a ha (by linarith), ?_⟩
+  have hb' : b = 1 - a := by linarith
+  refine ContinuousLinearMap.ext fun c => ?_
+  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+    Complex.real_smul, State.coe_toContinuousLinearMap, State.convexCombo_apply, hb']
+
+/-- **Bridge to Mathlib's convex-geometry API.** A state `ω`, viewed in the
+ambient space `A →L[ℂ] ℂ`, is an extreme point of the state space (`Set.extremePoints`)
+exactly when it is an extreme point in the sense of `State.IsExtremePoint`. -/
+theorem mem_extremePoints_iff_isExtremePoint (ω : State A) :
+    ω.toContinuousLinearMap ∈ (stateSpace A).extremePoints ℝ ↔ ω.IsExtremePoint := by
+  rw [mem_extremePoints]
+  constructor
+  · rintro ⟨_, h⟩ ω₁ ω₂ t ht0 ht1 hdec
+    have hseg : ω.toContinuousLinearMap
+        ∈ openSegment ℝ ω₁.toContinuousLinearMap ω₂.toContinuousLinearMap := by
+      refine ⟨t, 1 - t, ht0, by linarith, by ring, ?_⟩
+      refine ContinuousLinearMap.ext fun c => ?_
+      have hc := hdec c
+      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+        Complex.real_smul, State.coe_toContinuousLinearMap]
+      rw [hc]
+      push_cast
+      ring
+    obtain ⟨he₁, he₂⟩ :=
+      h ω₁.toContinuousLinearMap ⟨ω₁, rfl⟩ ω₂.toContinuousLinearMap ⟨ω₂, rfl⟩ hseg
+    exact State.toContinuousLinearMap_injective (he₁.trans he₂.symm)
+  · intro hext
+    refine ⟨⟨ω, rfl⟩, ?_⟩
+    rintro _ ⟨ω₁, rfl⟩ _ ⟨ω₂, rfl⟩ ⟨a, b, ha, hb, hab, heq⟩
+    have hdec : ∀ c, (ω c : ℂ) = (a : ℂ) * ω₁ c + (1 - a : ℂ) * ω₂ c := by
+      intro c
+      have hc := congrArg (fun φ : A →L[ℂ] ℂ => φ c) heq
+      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+        Complex.real_smul, State.coe_toContinuousLinearMap] at hc
+      rw [← hc]
+      have hb' : b = 1 - a := by linarith
+      rw [hb']; push_cast; ring
+    have hω : ω₁ = ω₂ := hext ω₁ ω₂ a ha (by linarith) hdec
+    subst hω
+    have hcombo : ω₁.toContinuousLinearMap = ω.toContinuousLinearMap := by
+      rw [← heq]
+      refine ContinuousLinearMap.ext fun c => ?_
+      rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+        ContinuousLinearMap.smul_apply, Complex.real_smul, Complex.real_smul,
+        ← add_mul, ← Complex.ofReal_add, hab, Complex.ofReal_one, one_mul]
+    exact ⟨hcombo, hcombo⟩
 
 end GNS
 end Physicslib4

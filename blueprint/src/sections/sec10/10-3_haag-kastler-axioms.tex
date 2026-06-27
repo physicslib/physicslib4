@@ -335,6 +335,15 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     A state $\omega$ is pure if and only if it is an extreme point of the state space. If $\omega$ is pure and $\omega = t\,\omega_1 + (1-t)\,\omega_2$, then $t\,\omega_1$ is a positive functional dominated by $\omega$, hence (by purity) a scalar multiple of $\omega$; evaluating at $1$, where every state gives $1$, pins the scalar to $t$ and forces $\omega_1 = \omega = \omega_2$. Conversely, if $\omega$ is extreme and $\psi \le \omega$ is dominated, set $\lambda = \mathrm{Re}\,\psi(1) \in [0,1]$; for $\lambda \in (0,1)$ the rescaled functionals $\lambda^{-1}\psi$ and $(1-\lambda)^{-1}(\omega - \psi)$ are states (normalized via \ref{thrm:norm-positive-functional}) whose convex combination is $\omega$, so extremality identifies them and forces $\psi = \lambda\,\omega$; the boundary cases $\lambda = 0$ and $\lambda = 1$ give $\psi = 0$ and $\psi = \omega$ respectively.
 \end{theorem}
 
+\begin{theorem}[State-Space Convexity and the Extreme-Point Bridge]
+    \label{thrm:state-space-convex-bridge}
+    \lean{Physicslib4.GNS.convex_stateSpace, Physicslib4.GNS.mem_extremePoints_iff_isExtremePoint}
+    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \leanok
+    \uses{def:state, def:extreme-state}
+    Realizing the state space as the subset $\mathrm{stateSpace}(A) \subseteq A \to_L \mathbb{C}$ (the latter a real topological vector space via $\texttt{NormedSpace.complexToReal}$), it is convex: a real convex combination $a\,\omega_1 + b\,\omega_2$ of states is again a state, via $\texttt{State.convexCombo}$. Moreover a state $\omega$ lies in Mathlib's $\mathrm{extremePoints}_{\mathbb{R}}$ of the state space exactly when it is extreme in the sense of \ref{def:extreme-state}, connecting the purity characterizations to the Krein-Milman/Choquet API.
+\end{theorem}
+
 These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Minkowski net, where they characterize purity of a global state - the natural setting for the vacuum and other distinguished states.
 
 \begin{theorem}[Pure $\iff$ Extreme Point on the Quasilocal Algebra]
