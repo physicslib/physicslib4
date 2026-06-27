@@ -198,6 +198,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     If $\Omega$ is cyclic for the local observables of $\mathbf{B}_1$, then for a spacelike-separated region $\mathbf{B}_2$ every $R \in R(\mathbf{B}_2)$ with $R\Omega = 0$ is zero, so $\Omega$ is separating for $R(\mathbf{B}_2)$. The implication is elementary ($R$ vanishes on the dense set of vectors $A\Omega$ for $A$ a local observable of $\mathbf{B}_1$, since $R(\mathbf{B}_2)$ commutes with those observables by microcausality, \ref{thrm:von-neumann-microcausality}). In Minkowski spacetime the cyclicity hypothesis is exactly the content of the Reeh-Schlieder theorem, which rests on the spectrum condition; here it is taken as an explicit hypothesis, mirroring the curved-spacetime version where no spectrum condition is available.
 \end{theorem}
 
+\begin{theorem}[Statistical Independence, bundled]
+    \label{thrm:statistical-independence-bundled}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_separating}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{thrm:statistical-independence, def:local-von-neumann-algebra}
+    The separating property phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}_2)$: with $\Omega$ cyclic for the local observables of $\mathbf{B}_1$, every $R$ in the bundled algebra $R(\mathbf{B}_2)$ of a spacelike-separated region with $R\Omega = 0$ is zero. It reduces to \ref{thrm:statistical-independence} through the coercion $\uparrow R(\mathbf{B}_2) = \pi(\mathfrak{U}(\mathbf{B}_2))''$.
+\end{theorem}
+
 \subsection{Irreducibility and Schur's Lemma}
 
 A representation is \emph{irreducible} when its commutant is trivial: the only operators commuting with every $\pi(a)$ are scalars. This is the von Neumann (commutant) form of irreducibility. The cornerstone, connecting the commutant to the GNS state, is the topological Schur lemma for a cyclic representation.

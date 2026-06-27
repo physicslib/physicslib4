@@ -197,6 +197,15 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     The abstract mechanism is: if $\Omega$ is cyclic for a set $S$ of operators, then any $R$ commuting with all of $S$ with $R\Omega = 0$ is zero (it vanishes on the dense set $S\Omega$). Applied to the net: if $\Omega$ is cyclic for the local observables of $\mathbf{B}_1$ - the role supplied in Minkowski spacetime by Reeh-Schlieder - then for a spacelike-separated subregion $\mathbf{B}_2$, every $R \in R(\mathbf{B}_2)$ with $R\Omega = 0$ is zero, since $R(\mathbf{B}_2)$ commutes with the observables of $\mathbf{B}_1$ by curved microcausality (\ref{thrm:von-neumann-microcausality-in-curved-spacetime}). Thus $\Omega$ is separating for $R(\mathbf{B}_2)$: a nonzero observable of one region cannot be annihilated by the cyclic vector of a spacelike-separated region, the operator-algebraic form of statistical independence.
 \end{theorem}
 
+\begin{theorem}[Statistical Independence, bundled (curved spacetime)]
+    \label{thrm:statistical-independence-bundled-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_separating}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \leanok
+    \uses{thrm:statistical-independence-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime}
+    The separating property phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}_2)$: with $\Omega$ cyclic for the local observables of $\mathbf{B}_1$, every $R$ in the bundled algebra $R(\mathbf{B}_2)$ of a spacelike-separated subregion with $R\Omega = 0$ is zero. It reduces to \ref{thrm:statistical-independence-in-curved-spacetime} through the coercion $\uparrow R(\mathbf{B}_2) = \pi(\mathfrak{U}(\mathbf{B}_2))''$.
+\end{theorem}
+
 \subsection{Purity of States on Local Algebras in Curved Spacetime}
 
 Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved spacetime is itself a unital C*-algebra with its own state space and GNS representations. The abstract characterizations of purity therefore apply per region, registered here for $\mathfrak{U}(\mathbf{B})$. There is no quasilocal algebra in curved spacetime, so - unlike the Minkowski covariant-vacuum picture - these are genuinely local statements, one for each region.

@@ -187,6 +187,20 @@ theorem localVonNeumannAlgebra_mono {B : Set M.Carrier}
   simp only [coe_localVonNeumannAlgebra]
   exact N.localVonNeumann_mono hB π hB₁ hB₂ h₁₂ h₂ hcoh
 
+/-- **Statistical independence, bundled (curved spacetime).** If `Ω` is cyclic for the
+local observables of `B₁`, then `Ω` is separating for the bundled local von Neumann
+algebra `R(B₂)` of a spacelike-separated subregion: any `R ∈ R(B₂)` with `R Ω = 0` is
+zero. -/
+theorem localVonNeumannAlgebra_separating {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (hs : M.IsCompletelySpacelike B₁ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) {Ω : H}
+    (hcyc : Dense ((fun T => T Ω) '' N.localOperators π hB₁ hB h₁))
+    {R : H →L[ℂ] H} (hR : R ∈ N.localVonNeumannAlgebra π hB₂ hB h₂) (hRΩ : R Ω = 0) :
+    R = 0 := by
+  refine N.localVonNeumann_separating hB π hB₁ hB₂ hs h₁ h₂ hcyc ?_ hRΩ
+  rwa [← SetLike.mem_coe, coe_localVonNeumannAlgebra] at hR
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT

@@ -161,6 +161,22 @@ theorem localVonNeumannAlgebra_mono
   simp only [coe_localVonNeumannAlgebra]
   exact N.localVonNeumann_mono π hB₁ hB₂ h
 
+/-- **Statistical independence, bundled (Minkowski).** If `Ω` is cyclic for the local
+observables of `B₁` (the Reeh-Schlieder input), then `Ω` is separating for the bundled
+local von Neumann algebra `R(B₂)` of a spacelike-separated region: any `R ∈ R(B₂)` with
+`R Ω = 0` is zero. -/
+theorem localVonNeumannAlgebra_separating
+    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+    (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation B₁ B₂) {Ω : H}
+    (hcyc : Dense ((fun T => T Ω) '' N.localOperators π B₁))
+    {R : H →L[ℂ] H} (hR : R ∈ N.localVonNeumannAlgebra π B₂) (hRΩ : R Ω = 0) :
+    R = 0 := by
+  refine N.localVonNeumann_separating π hB₁ hB₂ hs hcyc ?_ hRΩ
+  rwa [← SetLike.mem_coe, coe_localVonNeumannAlgebra] at hR
+
 end HaagKastlerNet
 end HaagKastler
 end AQFT
