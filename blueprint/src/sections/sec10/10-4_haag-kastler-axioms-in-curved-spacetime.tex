@@ -340,3 +340,12 @@ The stabilizer subgroup of a region is, in the genuinely curved examples, a one-
     \uses{def:kms-state-for-flow-in-curved-spacetime, thrm:kms-invariance, thrm:gns-unitary-stabilizer-strongly-continuous-in-curved-spacetime}
     Let $\omega$ be a KMS state on $\mathfrak{U}(\mathbf{B})$ for a one-parameter Killing flow $t \mapsto \varphi_t$ into $\mathrm{Stab}(\mathbf{B})$, at inverse temperature $\beta > 0$, whose matrix coefficients $t \mapsto \omega(a^* \hat\alpha_{\varphi_t} b)$ are continuous. Then its GNS triple $(H, \pi, \Omega)$ carries a \emph{strongly continuous} one-parameter unitary group $U : \mathbb{R} \to \mathcal{U}(H)$ implementing the flow: $U_t\,\pi(a)\Omega = \pi(\hat\alpha_{\varphi_t} a)\Omega$, $U_t\Omega = \Omega$, $U_0 = \mathrm{id}$, $U_{s+t} = U_s U_t$, and $t \mapsto U_t\psi$ is continuous for every $\psi$. This is the curved-spacetime equilibrium (thermal) representation - the analogue of the Minkowski vacuum representation - realized for the Hartle-Hawking and Gibbons-Hawking states. KMS at $\beta > 0$ supplies the flow-invariance, which feeds the strongly continuous GNS unitary construction.
 \end{theorem}
+
+\begin{theorem}[Convexity of the Killing-Flow KMS States]
+    \label{thrm:kms-convex-for-flow-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsKMSStateForFlow.convexCombo}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerKMS.lean}
+    \leanok
+    \uses{def:kms-state-for-flow-in-curved-spacetime, thrm:kms-convex}
+    A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two KMS states on $\mathfrak{U}(\mathbf{B})$ for the same Killing flow $\varphi$ at the same inverse temperature $\beta$ is again a KMS state for that flow. This specializes the abstract KMS convexity (\ref{thrm:kms-convex}) to the induced one-parameter group $\mathrm{flowAut}$. Physically, the curved-spacetime thermal equilibrium states for a stationary Killing flow form a convex set.
+\end{theorem}
