@@ -119,6 +119,20 @@ theorem IsKMSStateForFlow.exists_gns_unitary_strongContinuous
     hone', fun s t => ?_, fun ψ => hstrong ψ⟩
   exact hmul' (Multiplicative.ofAdd t) (Multiplicative.ofAdd s)
 
+/-- **The Killing-flow KMS state set is convex.** A convex combination
+`s·ω₁ + (1-s)·ω₂` (`0 ≤ s ≤ 1`) of two KMS states on `𝔘(B)` for the same Killing
+flow at the same inverse temperature `β` is again a KMS state for that flow. This
+specializes the abstract KMS convexity (`AQFT.IsKMSState.convexCombo`) to the
+induced one-parameter group `flowAut`. Physically the curved-spacetime thermal
+equilibrium states for a stationary Killing flow form a convex set. -/
+theorem IsKMSStateForFlow.convexCombo
+    (B : Set M.Carrier) (flow : ℝ → ↥(MulAction.stabilizer M.Isom B)) {β : ℝ}
+    {ω₁ ω₂ : Physicslib4.GNS.State (N.algebra B)}
+    (s : ℝ) (hs0 : 0 ≤ s) (hs1 : s ≤ 1)
+    (h₁ : N.IsKMSStateForFlow B flow β ω₁) (h₂ : N.IsKMSStateForFlow B flow β ω₂) :
+    N.IsKMSStateForFlow B flow β (ω₁.convexCombo ω₂ s hs0 hs1) :=
+  AQFT.IsKMSState.convexCombo s hs0 hs1 h₁ h₂
+
 end HaagKastlerNet
 
 end HaagKastlerCurved

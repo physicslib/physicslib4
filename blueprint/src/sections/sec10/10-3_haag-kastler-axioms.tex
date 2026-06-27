@@ -198,6 +198,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     If $\Omega$ is cyclic for the local observables of $\mathbf{B}_1$, then for a spacelike-separated region $\mathbf{B}_2$ every $R \in R(\mathbf{B}_2)$ with $R\Omega = 0$ is zero, so $\Omega$ is separating for $R(\mathbf{B}_2)$. The implication is elementary ($R$ vanishes on the dense set of vectors $A\Omega$ for $A$ a local observable of $\mathbf{B}_1$, since $R(\mathbf{B}_2)$ commutes with those observables by microcausality, \ref{thrm:von-neumann-microcausality}). In Minkowski spacetime the cyclicity hypothesis is exactly the content of the Reeh-Schlieder theorem, which rests on the spectrum condition; here it is taken as an explicit hypothesis, mirroring the curved-spacetime version where no spectrum condition is available.
 \end{theorem}
 
+\begin{theorem}[Statistical Independence, bundled]
+    \label{thrm:statistical-independence-bundled}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_separating}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{thrm:statistical-independence, def:local-von-neumann-algebra}
+    The separating property phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}_2)$: with $\Omega$ cyclic for the local observables of $\mathbf{B}_1$, every $R$ in the bundled algebra $R(\mathbf{B}_2)$ of a spacelike-separated region with $R\Omega = 0$ is zero. It reduces to \ref{thrm:statistical-independence} through the coercion $\uparrow R(\mathbf{B}_2) = \pi(\mathfrak{U}(\mathbf{B}_2))''$.
+\end{theorem}
+
 \subsection{Irreducibility and Schur's Lemma}
 
 A representation is \emph{irreducible} when its commutant is trivial: the only operators commuting with every $\pi(a)$ are scalars. This is the von Neumann (commutant) form of irreducibility. The cornerstone, connecting the commutant to the GNS state, is the topological Schur lemma for a cyclic representation.
@@ -324,6 +333,15 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     \leanok
     \uses{def:pure-state, def:extreme-state, thrm:norm-positive-functional}
     A state $\omega$ is pure if and only if it is an extreme point of the state space. If $\omega$ is pure and $\omega = t\,\omega_1 + (1-t)\,\omega_2$, then $t\,\omega_1$ is a positive functional dominated by $\omega$, hence (by purity) a scalar multiple of $\omega$; evaluating at $1$, where every state gives $1$, pins the scalar to $t$ and forces $\omega_1 = \omega = \omega_2$. Conversely, if $\omega$ is extreme and $\psi \le \omega$ is dominated, set $\lambda = \mathrm{Re}\,\psi(1) \in [0,1]$; for $\lambda \in (0,1)$ the rescaled functionals $\lambda^{-1}\psi$ and $(1-\lambda)^{-1}(\omega - \psi)$ are states (normalized via \ref{thrm:norm-positive-functional}) whose convex combination is $\omega$, so extremality identifies them and forces $\psi = \lambda\,\omega$; the boundary cases $\lambda = 0$ and $\lambda = 1$ give $\psi = 0$ and $\psi = \omega$ respectively.
+\end{theorem}
+
+\begin{theorem}[State-Space Convexity and the Extreme-Point Bridge]
+    \label{thrm:state-space-convex-bridge}
+    \lean{Physicslib4.GNS.convex_stateSpace, Physicslib4.GNS.mem_extremePoints_iff_isExtremePoint}
+    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \leanok
+    \uses{def:state, def:extreme-state}
+    Realizing the state space as the subset $\mathrm{stateSpace}(A) \subseteq A \to_L \mathbb{C}$ (the latter a real topological vector space via $\texttt{NormedSpace.complexToReal}$), it is convex: a real convex combination $a\,\omega_1 + b\,\omega_2$ of states is again a state, via $\texttt{State.convexCombo}$. Moreover a state $\omega$ lies in Mathlib's $\mathrm{extremePoints}_{\mathbb{R}}$ of the state space exactly when it is extreme in the sense of \ref{def:extreme-state}, connecting the purity characterizations to the Krein-Milman/Choquet API.
 \end{theorem}
 
 These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Minkowski net, where they characterize purity of a global state - the natural setting for the vacuum and other distinguished states.
@@ -494,6 +512,15 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
     A state $\omega$ on $A$ is \emph{$(\alpha, \beta)$-KMS} for a one-parameter automorphism group $\alpha$ (\ref{def:one-parameter-aut}) at inverse temperature $\beta$ if for every $a, b \in A$ the correlation function $t \mapsto \omega(a\,\alpha_t b)$ extends to a function $F$ on the closed strip $0 \le \operatorname{Im} z \le \beta$ that is continuous there, holomorphic on the open strip, bounded, and whose boundary value on $\operatorname{Im} z = \beta$ is $t \mapsto \omega(\alpha_t b\, \cdot a)$.
 \end{definition}
 
+\begin{theorem}[The KMS State Set is Convex]
+    \label{thrm:kms-convex}
+    \lean{Physicslib4.AQFT.IsKMSState.convexCombo}
+    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \leanok
+    \uses{def:kms-state}
+    A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two $(\alpha, \beta)$-KMS states is again $(\alpha, \beta)$-KMS: for each pair $(a, b)$ the analytic interpolant is the convex combination $s\,F_1 + (1-s)\,F_2$ of the two interpolants, which is continuous, bounded, and holomorphic on the strip, with boundary values that add. Thus the equilibrium states at a fixed temperature form a convex set.
+\end{theorem}
+
 \begin{lemma}[Boundary Coincidence for $a = 1$]
     \label{lmm:kms-correlation-one}
     \lean{Physicslib4.AQFT.IsKMSState.correlationOne}
@@ -553,4 +580,44 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
     \leanok
     \uses{def:kms-state, thrm:strip-uniqueness}
     For $\beta > 0$, the analytic completion of a KMS correlation function is unique: any two functions satisfying the KMS analytic data for the same pair $(a, b)$ - continuous and bounded on the strip, holomorphic on the interior, with the prescribed boundary values $t \mapsto \omega(a\,\alpha_t b)$ and $t \mapsto \omega(\alpha_t b\,\cdot a)$ - agree on the whole strip. This is the strip uniqueness (\ref{thrm:strip-uniqueness}) applied to the two analytic completions, which share both boundary values.
+\end{theorem}
+
+\subsection{KMS States for the Covariance Flow}
+
+A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - for instance the time-translation subgroup - induces, via the quasilocal lift $\beta_L$ (\ref{lmm:quasilocal-action-coherence}), a one-parameter group of $*$-automorphisms of the global quasilocal algebra $\mathfrak{U}$. Unlike the curved case, where the absence of a global algebra forces a restriction to the stabilizer $\mathrm{Stab}(\mathbf{B})$, here $\beta_L$ is a genuine automorphism of the single algebra $\mathfrak{U}$ for every $L$, so no restriction is needed.
+
+\begin{definition}[Covariance-Flow Automorphism Family]
+    \label{def:flow-aut-covariance}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.flowAut}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \leanok
+    \uses{def:covariant-quasilocal-algebra, lmm:quasilocal-action-coherence}
+    Given a one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group, the \emph{covariance-flow automorphism family} of $\mathfrak{U}$ is $t \mapsto \beta_{L_t}$, the covariance action evaluated along the flow.
+\end{definition}
+
+\begin{lemma}[A Lorentz One-Parameter Subgroup Induces a One-Parameter Group]
+    \label{lmm:one-parameter-aut-flow-covariance}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isOneParameterAut_flowAut}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \leanok
+    \uses{def:flow-aut-covariance, def:one-parameter-aut}
+    If $t \mapsto L_t$ is a one-parameter subgroup ($L_0 = 1$, $L_{s+t} = L_s L_t$), then the induced automorphisms $t \mapsto \beta_{L_t}$ of $\mathfrak{U}$ form a one-parameter automorphism group (\ref{def:one-parameter-aut}), by the coherence of the covariance action (\ref{lmm:quasilocal-action-coherence}).
+\end{lemma}
+
+\begin{definition}[KMS State for the Covariance Flow]
+    \label{def:kms-state-for-flow-covariance}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsKMSStateForFlow}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \leanok
+    \uses{lmm:one-parameter-aut-flow-covariance, def:kms-state, def:state}
+    A state $\omega$ on the quasilocal algebra $\mathfrak{U}$ is a \emph{KMS state for the covariance flow} $L$ at inverse temperature $\beta$ if it satisfies the KMS condition (\ref{def:kms-state}) for the induced one-parameter automorphism group (\ref{lmm:one-parameter-aut-flow-covariance}).
+\end{definition}
+
+\begin{theorem}[Convexity of the Covariance-Flow KMS States]
+    \label{thrm:kms-convex-for-flow-covariance}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsKMSStateForFlow.convexCombo}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \leanok
+    \uses{def:kms-state-for-flow-covariance, thrm:kms-convex}
+    A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two KMS states on $\mathfrak{U}$ for the same covariance flow $L$ at the same inverse temperature $\beta$ is again a KMS state for that flow. This specializes the abstract KMS convexity (\ref{thrm:kms-convex}) to the induced one-parameter group $\mathrm{flowAut}$. Physically, the equilibrium states for a one-parameter symmetry flow form a convex set.
 \end{theorem}
