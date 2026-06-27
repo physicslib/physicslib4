@@ -1,0 +1,363 @@
+\section{Spectral Theorems}\label{sctn:spectral-theorems}
+
+
+\subsection{The Spectral Theorem for Bounded Self-Adjoint Operators}
+
+\subsubsection{Elementary Properties of Bounded Operators}
+
+\begin{definition}[Bounded Operator Notation]
+    \label{def:bounded-operator-notation}
+    We notate the set of operator norm bounded operators on a separable, complex Hilbert space $\mathbf{H}$ as $\mathcal{B}(\mathbf{H})$.
+\end{definition}
+
+\begin{lemma}[Bounded Operators form a Banach Space]
+    \label{lmm:bounded-operators-form-a-banach-space}
+    \uses{def:bounded-operator-notation}
+    $\mathcal{B}(\mathbf{H})$ forms a Banach space under the operator norm.
+\end{lemma}
+
+\begin{proof}
+    By definition a Banach space is a normed vector space that is complete with respect to the distance function associated to its norm. Hence, we must prove that $\mathcal{B}(\mathbf{H})$ is a normed vector space that is complete with respect to the distance function associated to its norm.
+
+    The norm we place on $\mathcal{B}(\mathbf{H})$ is the operator norm. The operator norm is a norm. Hence, $\mathcal{B}(\mathbf{H})$ is normed.
+
+    Next we must prove that $\mathcal{B}(\mathbf{H})$ is a vector space. Consider $A, B \in \mathcal{B}(\mathbf{H})$ as well as $\alpha, \beta \in \mathbb{C}$. As the operator norm is a norm we have
+    \begin{align}
+        \|\alpha A + \beta B\| &\le \|\alpha A\| + \|\beta B\| \\
+                               &=    |\alpha| \, \|A\| + |\beta| \, \|B\| \\
+                               &< \infty,
+    \end{align}
+    where the final step follows from the fact that $A, B \in \mathcal{B}(\mathbf{H})$ and thus $\|A\|$ and $\|B\|$ are bounded. This implies that $\alpha A + \beta B$ is bounded and thus a member of $\mathcal{B}(\mathbf{H})$. This in turn implies that $\mathcal{B}(\mathbf{H})$ is a vector space.
+
+    Finally we must prove that $\mathcal{B}(\mathbf{H})$ is complete with respect to the distance function associated to the operator norm.
+
+    Consider a Cauchy sequence $\{A_i\}_{i \in \mathbb{N}}$ in $\mathcal{B}(\mathbf{H})$. The definition of Cauchy sequence implies that for any $\epsilon > 0$ there exists a $N \in \mathbb{N}$ such that for all $i,j \ge N$ we have
+    \begin{align}
+        \|A_i - A_j\| < \epsilon.
+    \end{align}
+
+    Fix $\psi \in \mathbf{H}$. With this fixed $\psi \in \mathbf{H}$ consider the sequence $\{A_i\psi\}_{i \in \mathbb{N}}$ in $\mathbf{H}$. For any $i,j \in \mathbb{N}$ we have
+    \begin{align}
+        \|A_i\psi - A_j\psi\| &= \|(A_i - A_j)\psi\| \\
+                              &\le \|A_i - A_j\| \, \|\psi\|,
+    \end{align}
+    where the first line follows from linearity and the second line follows from the definition of operator norm. For any $\epsilon > 0$ there exists a $N \in \mathbb{N}$ such that for all $i,j \ge N$ we have
+    \begin{align}
+        \|A_i - A_j\| < \epsilon.
+    \end{align}
+    Thus for such $\epsilon$, $i$, and $j$ we have
+    \begin{align}
+        \|A_i\psi - A_j\psi\| < \epsilon \|\psi\|.
+    \end{align}
+    This implies that $\{A_i\psi\}_{i \in \mathbb{N}}$ is a Cauchy sequence in $\mathbf{H}$. As $\mathbf{H}$ is complete, this Cauchy sequence converges to an element of $\mathbf{H}$.
+
+    With this knowledge, we can define a map $A : \mathbf{H} \rightarrow \mathbf{H}$ point-wise as follows
+    \begin{align}
+        A\psi \equiv \lim\limits_{i \rightarrow \infty} A_i\psi.
+    \end{align}
+    As we have just proven, the fact that $\{A_i\psi\}_{i \in \mathbb{N}}$ is a Cauchy sequence implies this map is well-defined. 
+
+    Linearity of $A$ follows from the fact that each $\{A_i\}_{i \in \mathbb{N}}$ is linear. In more detail, given $\psi,\phi \in \mathbf{H}$ and $\alpha,\beta \in \mathbb{C}$ we have
+    \begin{align}
+        A(\alpha\psi + \beta\phi) &\equiv \lim\limits_{i \rightarrow \infty} A_i (\alpha\psi + \beta\phi) \\
+                                  &= \lim\limits_{i \rightarrow \infty} \alpha A_i\psi + \beta A_i\phi \\
+                                  &= \lim\limits_{i \rightarrow \infty} \alpha A_i\psi + \lim\limits_{i \rightarrow \infty} \beta A_i\phi \\
+                                  &= \alpha \lim\limits_{i \rightarrow \infty} A_i\psi + \beta \lim\limits_{i \rightarrow \infty} A_i\phi \\
+                                  &= \alpha A\psi + \beta A\phi,
+    \end{align}
+    proving $A$ is linear.
+
+    Next let us prove that $\{A_i\psi\}_{i \in \mathbb{N}}$ converges to $A$ in the operator norm.
+
+    As we previously established, for a fixed $\psi \in \mathbf{H}$ and any $i,j \in \mathbb{N}$ we have
+    \begin{align}
+        \|A_i\psi - A_j\psi\| &= \|(A_i - A_j)\psi\| \\
+                              &\le \|A_i - A_j\| \, \|\psi\|.
+    \end{align}
+    If this fixed $\psi$ is such that $\|\psi\| = 1$, then for any $\epsilon > 0$ there exists a $N \in \mathbb{N}$ such that for all $i,j \ge N$ we have
+    \begin{align}
+        \|A_i\psi - A_j\psi\| &\le \|A_i - A_j\| \, \|\psi\| \\
+                              &= \|A_i - A_j\| \\
+                              &< \epsilon.
+    \end{align}
+    Fixing a $i \ge N$ and taking the limit as $j \rightarrow \infty$ we have, as a result of continuity of the norm and our previous result
+    \begin{align}
+        \lim\limits_{j \rightarrow \infty} \|A_i\psi - A_j\psi\| &= \|A_i\psi - A\psi\| \le \epsilon.
+    \end{align}
+    As $\epsilon$ independent of $\psi$, this limit holds uniformly for all $\psi \in \mathbf{H}$ such that $\|\psi\| = 1$. Thus we can take the supremum over such $\psi$ to obtain
+    \begin{align}
+        \|A_i - A\| \equiv \sup\limits_{\|\psi\| = 1} \|A_i\psi - A\psi\| \le \epsilon.
+    \end{align}
+    This proves that $\{A_i\}_{i \in \mathbb{N}}$ converges to $A$ in the operator norm.
+
+    Finally let us prove that $A$ is bounded. For fixed $i \ge N$ we have
+    \begin{align}
+        \|A\| &=   \|A - A_i + A_i\| \\
+              &\le \|A - A_i\| + \|A_i\| \\
+              &\le \epsilon + \|A_i\| \\
+              &< \infty,
+    \end{align}
+    where the second line follows from the definition of a norm, the third from the fact that $\{A_i\}_{i \in \mathbb{N}}$ converges to $A$ in the operator norm, and the final from the fact that $A_i$ is an element of $\mathcal{B}(\mathbf{H})$ and is thus bounded. So we conclude that $\|A\| < \infty$ and thus $A$ is bounded and thus an element of $\mathcal{B}(\mathbf{H})$.
+
+    So in conclusion every Cauchy sequence $\{A_i\}_{i \in \mathbb{N}}$ in $\mathcal{B}(\mathbf{H})$ converges in the operator norm to an operator $A$ that is linear and bounded, meaning $A$ is in $\mathcal{B}(\mathbf{H})$. Thus $\mathcal{B}(\mathbf{H})$ equipped with the operator norm is complete and thus a Banach space.
+\end{proof}
+
+\begin{definition}[Bounded Inverse]
+    \label{def:bounded-inverse}
+    \uses{def:bounded-operator-notation}
+    A \textit{bounded inverse} of $A \in \mathcal{B}(\mathbf{H})$ is an element $B \in \mathcal{B}(\mathbf{H})$ such that $AB = BA = \mathbf{1}$.
+\end{definition}
+
+\begin{definition}[Resolvent and Spectrum]
+    \label{def:bounded-operator-resolvent-and-spectrum} % Hall Definition 7.4
+    \uses{def:bounded-operator-notation}
+    \uses{def:bounded-inverse}
+    For $A \in \mathcal{B}(\mathbf{H})$, the \textit{resolvent set} of $A$, denoted as $\rho(A)$, is the set of all $\lambda \in \mathbb{C}$ such that the operator $(A - \lambda \mathbf{1})$ has a bounded inverse. The \textit{spectrum} of $A$, denoted by $\sigma(A)$, is the complement of the resolvent set $\rho(A)$ of $A$ in $\mathbb{C}$. For $\lambda$ in the resolvent set of $A$ the bounded inverse operator $(A - \lambda \mathbf{1})^{-1}$ is called the \textit{resolvent} of $A$ at $\lambda$.
+\end{definition}
+
+\subsubsection{Spectral Theorem for Bounded Self-Adjoint Operators}
+
+\paragraph{Projection-Valued Measures}
+
+\begin{definition}[Bounded Orthogonal Projection]
+    \label{def:bounded-orthogonal-projection}
+    \uses{def:bounded-operator-notation}
+    A \textit{bounded orthogonal projection}, sometimes shortened to \textit{orthogonal projection}, is an element $P \in \mathcal{B}(\mathbf{H})$ such that $P^2 = P$ and $P^* = P$.
+\end{definition}
+
+\begin{definition}[Projection-Valued Measure]
+    \label{def:projection-valued-measure} % Hall Definition 7.10
+    \uses{def:bounded-operator-notation}
+    \uses{def:bounded-orthogonal-projection}
+    Let $X$ be a set and $\Omega(X)$ a $\sigma$-algebra on $X$. A map $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ is called a \textit{projection-valued measure} if the following properties are satisfied:
+    \begin{enumerate}
+        \item For each $E \in \Omega(X)$, it follows that $\mu(E)$ is a bounded orthogonal projection.
+        \item $\mu(\emptyset) = 0$, where $\emptyset \in \Omega(X)$ is the empty set, and $\mu(X) = \mathbf{1}$. 
+        \item If $E_1$, $E_2$, $E_3$... in $\Omega(X)$ are disjoint, then for all $v \in \mathbf{H}$, we have
+            \begin{align}
+                \mu \left( \bigcup_{j = 1}^{\infty} E_j \right) v = \sum_{j = 1}^{\infty} \mu(E_j)v,
+            \end{align}
+            where the convergence of the sum is in the norm topology on $\mathbf{H}$.
+        \item For all $E_1, E_2 \in \Omega(X)$, we have $\mu(E_1 \cap E_2) = \mu(E_1) \mu(E_2)$.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}[Projection-Valued Measure's Associated Measure]
+    \label{thrm:projection-valued-measures-associated-measure} % Hall bottom of page 138
+    \uses{def:projection-valued-measure}
+    \uses{def:bounded-operator-notation}
+    Given a projection-valued measure $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ and any $\psi \in \mathbf{H}$ the map $\mu_\psi$ defined by
+    \begin{align}
+        \mu_\psi : \Omega(X) &\longrightarrow \mathbb{R} \\
+                          E  &\longmapsto \mu_\psi(E) \equiv \left< \psi, \mu(E) \psi \right>
+    \end{align}
+    defines a positive real-valued measure $\mu_\psi$ on $\Omega(X)$.
+\end{theorem}
+
+\begin{proof}
+    To prove that $\mu_\psi$ defines a positive real-valued measure on $X$ with $\sigma$-algebra $\Omega(X)$ we must prove
+    \begin{itemize}
+        \item \textbf{Empty set is of measure zero} - $\mu_\psi(\emptyset) = 0$, where $\emptyset$ is the empty set.
+        \item \textbf{Non-negativity} - For all $E \in \Omega(X)$, it follows that $\mu_\psi(E) \ge 0$.
+        \item \textbf{Countable additivity} - For disjoint $E_1$, $E_2$, $E_3$... in $\Omega(X)$ 
+            \begin{align}
+                \mu_\psi \left( \bigcup_{j = 1}^{\infty} E_j \right) = \sum_{j = 1}^{\infty} \mu_\psi(E_j).
+            \end{align}
+    \end{itemize}
+
+    Let us first prove the empty set is of measure zero, i.e. $\mu_\psi(\emptyset) = 0$. The definition of $\mu_\psi$ along with the definition of the projection-valued measure $\mu$ imply
+    \begin{align}
+        \mu_\psi(\emptyset) &= \left< \psi, \mu(\emptyset) \psi \right> \\
+                            &= \left< \psi, 0 \psi \right> \\
+                            &= 0.
+    \end{align}
+    Hence, $\mu_\psi(\emptyset) = 0$ as desired.
+
+    Next let us prove non-negativity, i.e. for all $E \in \Omega(X)$, it follows that $\mu_\psi(E) \ge 0$.  The definition of $\mu_\psi$, the projection-valued measure $\mu$, and an orthogonal projection imply
+    \begin{align}
+        \mu_\psi(E) &= \left< \psi, \mu(E) \psi \right> \\
+                    &= \left< \psi, \mu(E) \mu(E) \psi \right>  \\
+                    &= \left< \psi, \mu(E)^* \mu(E) \psi \right>  \\
+                    &= \left< \mu(E) \psi, \mu(E) \psi \right>  \\
+                    &\ge 0,
+    \end{align}
+    where the final step follows from the definition of an inner product. Thus, $\mu_\psi(E) \ge 0$ as desired.
+
+    Finally let us prove countable additivity. Let $E_1$, $E_2$, $E_3$... in $\Omega(X)$ be disjoint. The definition of $\mu_\psi$ along with the definition of the projection-valued measure $\mu$ imply
+    \begin{align}
+        \mu_\psi \left( \bigcup_{j = 1}^{\infty} E_j \right) &= \left< \psi, \mu \left( \bigcup_{j = 1}^{\infty} E_j \right) \psi \right>  \\
+                                                             &= \left< \psi, \sum_{j = 1}^{\infty} \mu(E_j) \psi \right>  \\
+                                                             &= \sum_{j = 1}^{\infty} \left< \psi, \mu(E_j) \psi \right>  \\
+                                                             &= \sum_{j = 1}^{\infty} \mu_\psi(E_j),
+    \end{align}
+    which is the desired result.
+
+    Together these imply that $\mu_\psi$ defines a positive real-valued measure $\mu_\psi$ on $\Omega(X)$.
+\end{proof}
+
+\begin{definition}[(Bounded) Sesquilinear Form]
+    \label{def:bounded-sesquilinear form}
+    A \textit{sesquilinear form} on a Hilbert space $\mathbf{H}$ is a map $L : \mathbf{H} \times \mathbf{H} \rightarrow \mathbb{C}$ that is conjugate linear in the first factor and linear in the second factor. A sesquilinear form  $L$ is a \textit{bounded sesquilinear form} if there exists a constant $C$ in $\mathbb{R}$ such that for all $\phi, \psi \in \mathbf{H}$
+    \begin{align}
+        |L(\phi, \psi)| \le C \|\phi\| \, \|\psi\|,
+    \end{align}
+    where $|\cdot|$ is the norm on $\mathbb{C}$ and $\|\cdot\|$ is the norm on $\mathbf{H}$.
+\end{definition}
+
+\begin{definition}[(Bounded) Quadratic Form]
+    \label{def:bounded-quadratic-form}
+    \uses{def:bounded-sesquilinear form}
+    A \textit{quadratic form} on a Hilbert space $\mathbf{H}$ is a map $Q : \mathbf{H} \rightarrow \mathbb{C}$ with the following properties:
+    \begin{enumerate}
+        \item $Q(\lambda\psi) = |\lambda|^2 Q(\psi)$ for all $\psi \in \mathbf{H}$ and $\lambda \in \mathbb{C}$.
+        \item The map $L : \mathbf{H} \times \mathbf{H} \rightarrow \mathbb{C}$ defined by
+            \begin{align}
+                L(\phi, \psi) &\equiv \frac{1}{2} \left[ Q(\phi + \psi) - Q(\phi) - Q(\psi) \right] \\
+                              &-\frac{i}{2} \left[ Q(\phi + i\psi) - Q(\phi) - Q(i\psi) \right]
+            \end{align}
+            is a sesquilinear form on $\mathbf{H}$.
+    \end{enumerate}
+    A quadratic form $Q$ is a \textit{bounded quadratic form} if there exists a constant $C$ in $\mathbb{R}$ such that for all $\phi$ in $\mathbf{H}$
+    \begin{align}
+        |Q(\phi)| \le C \|\phi\|^2,
+    \end{align}
+    where $|\cdot|$ is the norm on $\mathbb{C}$ and $\|\cdot\|$ is the norm on $\mathbf{H}$.
+\end{definition}
+
+\begin{theorem}[Operator-Valued Integration]
+    \label{thrm:operator-valued-integration} % Hall Proposition 7.11 
+    \uses{def:projection-valued-measure}
+    \uses{def:bounded-operator-notation}
+    \uses{thrm:projection-valued-measures-associated-measure}
+    Let $\Omega(X)$ be a $\sigma$-algebra on a set $X$ and let $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ be a projection-valued measure. Then there exists a unique linear map, denoted by
+    \begin{align}
+        f \longmapsto \int_X f \, d\mu,
+    \end{align}
+    from the space of bounded, measurable, complex-valued functions on $X$ into $\mathcal{B}(\mathbf{H})$ with the property that
+    \begin{align}
+        \left< \psi, \left( \int_X f \, d\mu \right) \psi \right> = \int_X f d\mu_\psi,
+    \end{align}
+    for all $f$ and $\psi \in \mathbf{H}$, where $\mu_\psi$ is the positive real-valued measure of Theorem~\ref{thrm:projection-valued-measures-associated-measure} and $\left< \cdot, \cdot \right>$ is the Hilbert space inner product on $\mathbf{H}$. This unique linear map has the following additional properties
+    \begin{enumerate}
+        \item For all $E \in \Omega(X)$, we have
+            \begin{align}
+                \int_X 1_E \, d\mu = \mu(E),
+            \end{align}
+            where $1_E$ is the indicator function of $E$. In particular, the integral of the constant function $1$ is $\mathbf{1}$.
+        \item For all $f$, we have
+            \begin{align}
+                \left\| \, \int_X f \, d\mu \, \right\| \le \sup\limits_{\lambda \in X} \left| f(\lambda) \right|,
+            \end{align}
+            where $\|\cdot\|$ is the Hilbert space norm on $\mathbf{H}$ and $|\cdot|$ is the norm on $\mathbb{C}$.
+        \item Integration is multiplicative: For all $f$ and $g$, we have
+            \begin{align}
+                \int_X fg \, d\mu = \left( \int_X f \, d\mu \right) \left( \int_X g \, d\mu \right).
+            \end{align}
+        \item For all $f$, we have
+            \begin{align}
+                \int_X \overline{f} \, d\mu = \left( \int_X f \, d\mu \right)^*,
+            \end{align}
+            where $\overline{f}$ is the complex conjugate of $f$ and the superscript $*$ denotes the adjoint on $\mathcal{B}(\mathbf{H})$ arising from the Hilbert space inner product. In particular, if $f$ is real-valued, then
+            \begin{align}
+                \left( \int_X \overline{f} \, d\mu \right)
+            \end{align}
+            is self-adjoint.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    By hypothesis we have a projection-valued measure $\mu$. Consider any bounded, measurable, complex-valed function $f$ on $X$ and any $\psi \in \mathbf{H}$. With this, let us define a map $Q_f : \mathbf{H} \rightarrow \mathbb{C}$ by
+    \begin{align}
+        Q_f(\psi) \equiv \int_X f \, d\mu_\psi,
+    \end{align}
+    where $\mu_\psi$ is the positive real-valued measure of Theorem~\ref{thrm:projection-valued-measures-associated-measure}.
+
+    If $f$ is an indicator function $1_E$ for any $E \in \Omega(X)$, then as a result fo the definition of $\mu_\psi$ we have
+    \begin{align}
+        Q_{1_E}(\psi) &= \int_X 1_E \, d\mu_\psi \\
+                      &= \int_E d\mu_\psi \\
+                      &= \mu_\psi(E) \\
+                      &= \left< \psi, \mu(E) \psi \right>.
+    \end{align}
+    So in summary
+    \begin{align}
+        Q_{1_E}(\psi) = \left< \psi, \mu(E) \psi \right>.
+    \end{align}
+    For such a $Q_{1_E}$ we can prove the lemma
+    \begin{lemma}
+        For any $E \in \Omega(X)$ with indicator function $1_E$, the map $Q_{1_E}$ defined above is a bounded quadratic form.
+    \end{lemma}
+    \begin{proof}
+        To prove $Q_{1_E}$ is a bounded quadratic form we must first prove that it is a quadratic form
+        \begin{enumerate}
+            \item $Q_{1_E}(\lambda\psi) = |\lambda|^2 Q_{1_E}(\psi)$ for any $\psi \in \mathbf{H}$ and $\lambda \in \mathbb{C}$.
+            \item The map $L_{1_E} : \mathbf{H} \times \mathbf{H} \rightarrow \mathbb{C}$ defined by
+                \begin{align}
+                    L_{1_E}(\phi, \psi) &\equiv \frac{1}{2} \left[ Q_{1_E}(\phi + \psi) - Q_{1_E}(\phi) - Q_{1_E}(\psi) \right] \\
+                                        &-\frac{i}{2} \left[ Q_{1_E}(\phi + i\psi) - Q_{1_E}(\phi) - Q_{1_E}(i\psi) \right]
+                \end{align}
+                is a sesquilinear form on $\mathbf{H}$.
+        \end{enumerate}
+        To prove it is a bounded quadratic form we must in addition prove that there exists a constant $C$ in $\mathbb{R}$ such that for all $\phi$ in $\mathbf{H}$
+        \begin{align}
+            |Q_{1_E}(\phi)| \le C \|\phi\|^2,
+        \end{align}
+        where $|\cdot|$ is the norm on $\mathbb{C}$ and $\|\cdot\|$ is the norm on $\mathbf{H}$.
+
+        First let us prove that $Q_{1_E}(\lambda\psi) = |\lambda|^2 Q_{1_E}(\psi)$ for any $\psi \in \mathbf{H}$ and $\lambda \in \mathbb{C}$. We have
+        \begin{align}
+            Q_{1_E}(\lambda\psi) &= \left< \lambda \psi, \mu(E) \lambda \psi \right> \\
+                                 &= \lambda^* \lambda \left< \psi, \mu(E) \psi \right> \\
+                                 &= |\lambda|^2 \left< \psi, \mu(E) \psi \right> \\
+                                 &= |\lambda|^2 Q_{1_E}(\psi),
+        \end{align}
+        which is the desired resut $Q_{1_E}(\lambda\psi) = |\lambda|^2 Q_{1_E}(\psi)$.
+
+        Next let us prove the map $L_{1_E} : \mathbf{H} \times \mathbf{H} \rightarrow \mathbb{C}$ defined above is a esquilinear form on $\mathbf{H}$.
+
+    % TODO
+    \end{proof}
+
+    % TODO
+\end{proof}
+
+\paragraph{The Spectral Theorem}
+
+\begin{theorem}[Spectral Theorem for Bounded Operators]
+    \label{thrm:spectral-theorem-for-bounded-self-adjoint-operator}
+    \uses{def:bounded-operator-notation}
+    \uses{def:projection-valued-measure} % Hall Definition 7.10
+    \uses{def:borel-sigma-algebra} % TODO
+    \uses{def:bounded-operator-resolvent-and-spectrum} % Hall Definition 7.4
+    \uses{thrm:operator-valued-integration} % Hall Proposition 7.11 
+    If $A$ is a self-adjoint element of $\mathcal{B}(\mathbf{H})$, then there exists a unique projection-valued measure $\mu^A$ associated to $A$ with domain $\Omega(\sigma(A))$ the Borel $\sigma$-algebra on the spectrum $\sigma(A)$ of $A$ and range $\mathcal{B}(\mathbf{H})$, such that
+    \begin{align}
+        \int_{\sigma(A)} \lambda \, d\mu^A(\lambda) = A.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    % TODO
+\end{proof}
+
+
+\subsection{Unbounded Operators}
+
+\subsubsection{Adjoint and Closure of an Unbounded Operator}
+
+\subsubsection{Elementary Properties of Adjoints and Closed Operators}
+
+\subsubsection{The Spectrum of an Unbounded Operator}
+
+\subsubsection{Conditions for Self-Adjointness and Essential Self-Adjointness}
+
+\subsubsection{Sums of Self-Adjoint Operators}
+
+
+\subsection{The Spectral Theorem for Unbounded Self-Adjoint Operators}
+
+\subsubsection{Spectral Theorem for Bounded Self-Adjoint Operators}
+
+\subsubsection{Stone's Theorem and One-Parameter Unitary Groups}
+
+\subsubsection{The Spectral Theorem for Bounded Normal Operators}
