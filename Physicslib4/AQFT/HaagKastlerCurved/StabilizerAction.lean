@@ -213,11 +213,13 @@ theorem exists_gns_irreducible_covariant_stabilizer (B : Set M.Carrier)
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
         (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B) (x : H),
           U g (π a ((U g).symm x)) = π (N.stabAutHom B g a) x) ∧
-        IsIrreducible π := by
+        IsIrreducible π ∧
+        gnsVonNeumann π = Set.univ := by
   obtain ⟨H, i1, i2, i3, π, Ω, U, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hcyc⟩ :=
     N.exists_gns_unitary_stabilizer B ω hinv
-  exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov,
-    (isPure_iff_isIrreducible hcyc hrepro).mp hpure⟩
+  have hirr := (isPure_iff_isIrreducible hcyc hrepro).mp hpure
+  exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hirr,
+    gnsVonNeumann_eq_univ_of_isIrreducible hirr⟩
 
 /-- **Purity is invariant under the stabilizer action (curved spacetime).** A state
 `ω` on a local algebra `𝔘(B)` is pure if and only if its pullback `ω ∘ \hatα_g`

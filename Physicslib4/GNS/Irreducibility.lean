@@ -440,5 +440,26 @@ theorem center_gnsVonNeumann_eq_of_isIrreducible {π : A →⋆ₐ[ℂ] (H →L[
   · rintro ⟨c, rfl⟩
     exact ⟨smul_one_mem_centralizer c _, smul_one_mem_centralizer c _⟩
 
+/-- **An irreducible representation generates all of `B(H)`.** The von Neumann
+algebra `π(A)''` of an irreducible representation is the whole algebra of bounded
+operators: `gnsVonNeumann π = ⊤`. By irreducibility the commutant `π(A)'` is the
+scalars, and the centralizer of the scalars is everything (every operator commutes
+with `c • 1`), so the bicommutant `π(A)'' = (scalars)' = B(H)`. This is the
+density (bicommutant-theorem) form of irreducibility. -/
+theorem gnsVonNeumann_eq_univ_of_isIrreducible {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)}
+    (hirr : IsIrreducible π) : gnsVonNeumann π = Set.univ := by
+  have hcomm : Set.centralizer (Set.range π) = {T : H →L[ℂ] H | ∃ c : ℂ, T = c • 1} := by
+    apply Set.Subset.antisymm
+    · intro T hT
+      exact hirr T fun a => Set.mem_centralizer_iff.mp hT (π a) ⟨a, rfl⟩
+    · rintro _ ⟨c, rfl⟩
+      exact smul_one_mem_centralizer c _
+  unfold gnsVonNeumann
+  rw [hcomm, Set.eq_univ_iff_forall]
+  intro T
+  rw [Set.mem_centralizer_iff]
+  rintro _ ⟨c, rfl⟩
+  rw [smul_mul_assoc, one_mul, mul_smul_comm, mul_one]
+
 end GNS
 end Physicslib4

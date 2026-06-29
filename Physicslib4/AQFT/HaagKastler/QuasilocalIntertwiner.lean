@@ -615,11 +615,13 @@ theorem IsInvariantState.exists_gns_irreducible_covariant (C : CovariantQuasiloc
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
         (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
           U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
-        Physicslib4.GNS.IsIrreducible π := by
+        Physicslib4.GNS.IsIrreducible π ∧
+        Physicslib4.GNS.gnsVonNeumann π = Set.univ := by
   obtain ⟨H, i1, i2, i3, π, Ω, U, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hcyc⟩ :=
     IsInvariantState.exists_gns_unitary C hω
-  exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov,
-    (Physicslib4.GNS.isPure_iff_isIrreducible hcyc hrepro).mp hpure⟩
+  have hirr := (Physicslib4.GNS.isPure_iff_isIrreducible hcyc hrepro).mp hpure
+  exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hirr,
+    Physicslib4.GNS.gnsVonNeumann_eq_univ_of_isIrreducible hirr⟩
 
 /-- **Purity is covariance-invariant (Minkowski).** A state `ω` on the quasilocal
 algebra is pure if and only if its pullback `ω ∘ β_L` along the covariance
