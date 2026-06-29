@@ -44,6 +44,7 @@ import Physicslib4.GNS.NullSpace
 import Physicslib4.GNS.RadonNikodym
 import Physicslib4.GNS.Separating
 import Physicslib4.GNS.UnitaryRepresentation
+import Physicslib4.Operators.Conjugation
 import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Causality

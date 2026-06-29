@@ -461,5 +461,29 @@ theorem gnsVonNeumann_eq_univ_of_isIrreducible {π : A →⋆ₐ[ℂ] (H →L[�
   rintro _ ⟨c, rfl⟩
   rw [smul_mul_assoc, one_mul, mul_smul_comm, mul_one]
 
+/-- **Irreducibility is equivalent to generating `\mathcal B(H)`.** A representation
+is irreducible iff its generated von Neumann algebra is the whole of `\mathcal B(H)`.
+The forward direction is `gnsVonNeumann_eq_univ_of_isIrreducible`; the converse uses
+that `\mathcal B(H)` is a *central* `ℂ`-algebra (its center is the scalars): if the
+bicommutant is everything then every operator commutes with the commutant, so any
+operator commuting with `π(A)` is central, hence scalar. -/
+theorem isIrreducible_iff_gnsVonNeumann_eq_univ {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} :
+    IsIrreducible π ↔ gnsVonNeumann π = Set.univ := by
+  refine ⟨gnsVonNeumann_eq_univ_of_isIrreducible, fun hgvn T hT => ?_⟩
+  have hTc : T ∈ Set.centralizer (Set.range π) := by
+    rw [Set.mem_centralizer_iff]
+    rintro _ ⟨a, rfl⟩
+    exact hT a
+  have hmem : T ∈ Subalgebra.center ℂ (H →L[ℂ] H) := by
+    rw [Subalgebra.mem_center_iff]
+    intro S
+    have hS : S ∈ Set.centralizer (Set.centralizer (Set.range π)) := by
+      have : S ∈ gnsVonNeumann π := by rw [hgvn]; exact Set.mem_univ S
+      exact this
+    exact ((Set.mem_centralizer_iff.mp hS) T hTc).symm
+  rw [Algebra.IsCentral.center_eq_bot ℂ (H →L[ℂ] H), Algebra.mem_bot] at hmem
+  obtain ⟨c, hc⟩ := hmem
+  exact ⟨c, by rw [← hc, Algebra.algebraMap_eq_smul_one]⟩
+
 end GNS
 end Physicslib4

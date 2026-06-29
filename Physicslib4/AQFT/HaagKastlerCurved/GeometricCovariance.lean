@@ -5,7 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastlerCurved.LocalVonNeumann
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
-import Physicslib4.AQFT.HaagKastler.GeometricCovariance
+import Physicslib4.Operators.Conjugation
 
 /-!
 # Geometric covariance of the local von Neumann net (curved spacetime)
