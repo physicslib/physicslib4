@@ -177,6 +177,17 @@ theorem localVonNeumannAlgebra_separating
   refine N.localVonNeumann_separating π hB₁ hB₂ hs hcyc ?_ hRΩ
   rwa [← SetLike.mem_coe, coe_localVonNeumannAlgebra] at hR
 
+/-- **The net of von Neumann algebras as an order-preserving map.** Packaging
+isotony, the assignment `B ↦ R(B)` is a monotone map from the poset of basis
+regions (ordered by inclusion) to the von Neumann algebras of `B(H)`. This is the
+statement that the local net is a functor on the inclusion poset: containment of
+regions is sent to containment of algebras. -/
+noncomputable def vonNeumannNet (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) :
+    {B : Set StandardMinkowskiSpacetime.Carrier // IsAlexandrovBasisSet B} →o
+      VonNeumannAlgebra H where
+  toFun B := N.localVonNeumannAlgebra π B.1
+  monotone' B₁ B₂ h := N.localVonNeumannAlgebra_mono π B₁.2 B₂.2 h
+
 end HaagKastlerNet
 end HaagKastler
 end AQFT

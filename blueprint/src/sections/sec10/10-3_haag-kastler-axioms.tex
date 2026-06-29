@@ -189,6 +189,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B})$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated regions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$, $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$. Both reduce to the set-level statements through the coercion $\uparrow R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$.
 \end{theorem}
 
+\begin{definition}[The Net of von Neumann Algebras]
+    \label{def:von-neumann-net}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.vonNeumannNet}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann-algebra, thrm:von-neumann-bundled-order}
+    Packaging isotony, the assignment $\mathbf{B} \mapsto R(\mathbf{B})$ is an order-preserving map from the poset of basis regions (ordered by inclusion) to the von Neumann algebras of $\mathcal{B}(H)$. This realizes \emph{the net} as a functor on the inclusion poset: containment of regions is sent to containment of algebras. It is the central object of the algebraic approach.
+\end{definition}
+
 \begin{theorem}[Statistical Independence (Schlieder Property)]
     \label{thrm:statistical-independence}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_separating, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.eq_zero_of_commute_of_cyclic}

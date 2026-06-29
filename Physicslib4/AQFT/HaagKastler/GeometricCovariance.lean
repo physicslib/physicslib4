@@ -33,6 +33,21 @@ hence maps bicommutants to bicommutants.
 
 open scoped Pointwise
 
+namespace Physicslib4.GNS
+
+variable {A : Type*} [CStarAlgebra A]
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- **The von Neumann algebra of an irreducible representation is a factor.** This
+restates `center_gnsVonNeumann_eq_of_isIrreducible` in the factor vocabulary
+(`Physicslib4.IsFactor`, the predicate used for orbit-invariance): the center
+`π(A)'' ∩ (π(A)'')'` is exactly the scalars. -/
+theorem isFactor_gnsVonNeumann_of_isIrreducible {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)}
+    (hirr : IsIrreducible π) : Physicslib4.IsFactor (gnsVonNeumann π) :=
+  center_gnsVonNeumann_eq_of_isIrreducible hirr
+
+end Physicslib4.GNS
+
 namespace Physicslib4
 namespace AQFT
 namespace HaagKastler
