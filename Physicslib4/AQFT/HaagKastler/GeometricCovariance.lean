@@ -175,7 +175,7 @@ def restrictStarAlgEquiv {A : Type*} [Ring A] [StarRing A] [Algebra ℂ A] [Star
   map_mul' x y := Subtype.ext (by simp)
   map_add' x y := Subtype.ext (by simp)
   map_smul' r x := Subtype.ext (by simp)
-  map_star' x := Subtype.ext (by simp)
+  map_star' x := Subtype.ext (map_star e _)
 
 end Physicslib4
 
@@ -250,6 +250,74 @@ theorem lieConj_image_covLocalVonNeumann (C : CovariantQuasilocalAlgebra)
   unfold covLocalVonNeumann
   rw [(Physicslib4.lieConj Uop).image_centralizer_centralizer (C.covLocalOperators π B),
     C.lieConj_image_covLocalOperators π Uop L hB hcov]
+
+/-- The local observable operators of a region form a self-adjoint set. -/
+theorem covLocalOperators_selfAdjoint (C : CovariantQuasilocalAlgebra)
+    (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B : Set StandardMinkowskiSpacetime.Carrier) :
+    ∀ x ∈ C.covLocalOperators π B, star x ∈ C.covLocalOperators π B := by
+  rintro x ⟨a, rfl⟩
+  exact ⟨star a, by simp only [map_star]⟩
+
+/-- The local von Neumann algebra `R(B)` as a bundled `VonNeumannAlgebra`. -/
+noncomputable def covLocalVonNeumannAlgebra (C : CovariantQuasilocalAlgebra)
+    (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B : Set StandardMinkowskiSpacetime.Carrier) : VonNeumannAlgebra H :=
+  vonNeumannOfSelfAdjoint (C.covLocalOperators π B) (C.covLocalOperators_selfAdjoint π B)
+
+@[simp] theorem coe_covLocalVonNeumannAlgebra (C : CovariantQuasilocalAlgebra)
+    (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B : Set StandardMinkowskiSpacetime.Carrier) :
+    (C.covLocalVonNeumannAlgebra π B : Set (H →L[ℂ] H)) = C.covLocalVonNeumann π B :=
+  coe_vonNeumannOfSelfAdjoint _ _
+
+/-- **Geometric covariance as a von Neumann algebra isomorphism (Minkowski).**
+Conjugation by the implementing unitary `U(L)` is the `*`-isomorphism
+`R(B) ≃ R(L · B)` of local von Neumann algebras: it restricts the conjugation
+`*`-automorphism `T ↦ U(L) T U(L)⁻¹` of `B(H)` (Mathlib's
+`LinearIsometryEquiv.conjStarAlgEquiv`), whose image of `R(B)` is exactly
+`R(L · B)` by geometric covariance. -/
+noncomputable def covLocalVonNeumannEquiv (C : CovariantQuasilocalAlgebra)
+    (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Uop : H ≃ₗᵢ[ℂ] H)
+    (L : InhomogeneousLorentzGroup) {B : Set StandardMinkowskiSpacetime.Carrier}
+    (hB : IsAlexandrovBasisSet B)
+    (hcov : ∀ (a : C.quasilocal.carrier) (x : H),
+      Uop (π a (Uop.symm x)) = π (C.action L a) x) :
+    (C.covLocalVonNeumannAlgebra π B).toStarSubalgebra ≃⋆ₐ[ℂ]
+      (C.covLocalVonNeumannAlgebra π (L • B)).toStarSubalgebra := by
+  have hfun : (⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop) : (H →L[ℂ] H) → (H →L[ℂ] H))
+      = ⇑(Physicslib4.lieConj Uop) := by
+    funext T; exact (Physicslib4.lieConj_apply_eq_conjStarAlgEquiv Uop T).symm
+  have himg : ⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop) '' C.covLocalVonNeumann π B
+      = C.covLocalVonNeumann π (L • B) := by
+    rw [hfun]; exact C.lieConj_image_covLocalVonNeumann π Uop L hB hcov
+  have himg' : ⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop).symm ''
+      C.covLocalVonNeumann π (L • B) = C.covLocalVonNeumann π B := by
+    rw [← himg, Set.image_image]
+    simp only [StarAlgEquiv.symm_apply_apply, Set.image_id']
+  refine Physicslib4.restrictStarAlgEquiv (LinearIsometryEquiv.conjStarAlgEquiv Uop)
+    (fun x hx => ?_) (fun y hy => ?_)
+  · have hx' : x ∈ C.covLocalVonNeumann π B := by
+      have h1 : x ∈ ((C.covLocalVonNeumannAlgebra π B).toStarSubalgebra : Set (H →L[ℂ] H)) := hx
+      rwa [VonNeumannAlgebra.coe_toStarSubalgebra, coe_covLocalVonNeumannAlgebra] at h1
+    have hmem : LinearIsometryEquiv.conjStarAlgEquiv Uop x
+        ∈ C.covLocalVonNeumann π (L • B) := by
+      rw [← himg]; exact Set.mem_image_of_mem _ hx'
+    change LinearIsometryEquiv.conjStarAlgEquiv Uop x
+      ∈ (C.covLocalVonNeumannAlgebra π (L • B)).toStarSubalgebra
+    rw [← SetLike.mem_coe, VonNeumannAlgebra.coe_toStarSubalgebra, coe_covLocalVonNeumannAlgebra]
+    exact hmem
+  · have hy' : y ∈ C.covLocalVonNeumann π (L • B) := by
+      have h1 : y ∈ ((C.covLocalVonNeumannAlgebra π (L • B)).toStarSubalgebra : Set (H →L[ℂ] H)) :=
+        hy
+      rwa [VonNeumannAlgebra.coe_toStarSubalgebra, coe_covLocalVonNeumannAlgebra] at h1
+    have hmem : (LinearIsometryEquiv.conjStarAlgEquiv Uop).symm y
+        ∈ C.covLocalVonNeumann π B := by
+      rw [← himg']; exact Set.mem_image_of_mem _ hy'
+    change (LinearIsometryEquiv.conjStarAlgEquiv Uop).symm y
+      ∈ (C.covLocalVonNeumannAlgebra π B).toStarSubalgebra
+    rw [← SetLike.mem_coe, VonNeumannAlgebra.coe_toStarSubalgebra, coe_covLocalVonNeumannAlgebra]
+    exact hmem
 
 /-- **Orbit-invariance of factoriality (Minkowski).** If the local von Neumann
 algebra `R(B)` of a region is a factor (trivial center), then so is `R(L · B)`

@@ -142,6 +142,58 @@ theorem localVonNeumann_isFactor_smul
   rw [← N.lieConj_image_localVonNeumann hB π Uop g hB₁ h₁ hgB₁ h₁' hcov hcompat]
   exact h.conj Uop
 
+/-- **Geometric covariance as a von Neumann algebra isomorphism (curved spacetime).**
+For `g ∈ Stab(B)`, conjugation by the implementing unitary `U(g)` is the
+`*`-isomorphism `R(B₁) ≃ R(g · B₁)` of local von Neumann algebras: it restricts the
+conjugation `*`-automorphism `T ↦ U(g) T U(g)⁻¹` of `B(H)`, whose image of `R(B₁)`
+is exactly `R(g · B₁)` by geometric covariance. -/
+noncomputable def localVonNeumannEquiv
+    {B : Set M.Carrier} (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (Uop : H ≃ₗᵢ[ℂ] H) (g : ↥(MulAction.stabilizer M.Isom B))
+    ⦃B₁ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (h₁ : B₁ ⊆ B)
+    (hgB₁ : M.IsBasisSet ((g : M.Isom) • B₁)) (h₁' : (g : M.Isom) • B₁ ⊆ B)
+    (hcov : ∀ (a : N.algebra B) (x : H),
+      Uop (π a (Uop.symm x)) = π (N.stabAutHom B g a) x)
+    (hcompat : ∀ a : N.algebra B₁,
+      N.stabAutHom B g (N.commIsotony hB₁ hB h₁ a)
+        = N.commIsotony hgB₁ hB h₁' (N.covEquiv (g : M.Isom) B₁ a)) :
+    (N.localVonNeumannAlgebra π hB₁ hB h₁).toStarSubalgebra ≃⋆ₐ[ℂ]
+      (N.localVonNeumannAlgebra π hgB₁ hB h₁').toStarSubalgebra := by
+  have hfun : (⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop) : (H →L[ℂ] H) → (H →L[ℂ] H))
+      = ⇑(Physicslib4.lieConj Uop) := by
+    funext T; exact (Physicslib4.lieConj_apply_eq_conjStarAlgEquiv Uop T).symm
+  have himg : ⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop) '' N.localVonNeumann π hB₁ hB h₁
+      = N.localVonNeumann π hgB₁ hB h₁' := by
+    rw [hfun]; exact N.lieConj_image_localVonNeumann hB π Uop g hB₁ h₁ hgB₁ h₁' hcov hcompat
+  have himg' : ⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop).symm ''
+      N.localVonNeumann π hgB₁ hB h₁' = N.localVonNeumann π hB₁ hB h₁ := by
+    rw [← himg, Set.image_image]
+    simp only [StarAlgEquiv.symm_apply_apply, Set.image_id']
+  refine Physicslib4.restrictStarAlgEquiv (LinearIsometryEquiv.conjStarAlgEquiv Uop)
+    (fun x hx => ?_) (fun y hy => ?_)
+  · have hx' : x ∈ N.localVonNeumann π hB₁ hB h₁ := by
+      have h1 : x ∈ ((N.localVonNeumannAlgebra π hB₁ hB h₁).toStarSubalgebra : Set (H →L[ℂ] H)) :=
+        hx
+      rwa [VonNeumannAlgebra.coe_toStarSubalgebra, coe_localVonNeumannAlgebra] at h1
+    have hmem : LinearIsometryEquiv.conjStarAlgEquiv Uop x
+        ∈ N.localVonNeumann π hgB₁ hB h₁' := by
+      rw [← himg]; exact Set.mem_image_of_mem _ hx'
+    change LinearIsometryEquiv.conjStarAlgEquiv Uop x
+      ∈ (N.localVonNeumannAlgebra π hgB₁ hB h₁').toStarSubalgebra
+    rw [← SetLike.mem_coe, VonNeumannAlgebra.coe_toStarSubalgebra, coe_localVonNeumannAlgebra]
+    exact hmem
+  · have hy' : y ∈ N.localVonNeumann π hgB₁ hB h₁' := by
+      have h1 : y ∈ ((N.localVonNeumannAlgebra π hgB₁ hB h₁').toStarSubalgebra :
+          Set (H →L[ℂ] H)) := hy
+      rwa [VonNeumannAlgebra.coe_toStarSubalgebra, coe_localVonNeumannAlgebra] at h1
+    have hmem : (LinearIsometryEquiv.conjStarAlgEquiv Uop).symm y
+        ∈ N.localVonNeumann π hB₁ hB h₁ := by
+      rw [← himg']; exact Set.mem_image_of_mem _ hy'
+    change (LinearIsometryEquiv.conjStarAlgEquiv Uop).symm y
+      ∈ (N.localVonNeumannAlgebra π hB₁ hB h₁).toStarSubalgebra
+    rw [← SetLike.mem_coe, VonNeumannAlgebra.coe_toStarSubalgebra, coe_localVonNeumannAlgebra]
+    exact hmem
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT

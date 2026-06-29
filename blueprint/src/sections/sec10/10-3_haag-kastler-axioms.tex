@@ -227,6 +227,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     If the local von Neumann algebra $R(\mathbf{B})$ is a \emph{factor} (its center $R(\mathbf{B}) \cap R(\mathbf{B})'$ is exactly the scalars), then so is $R(L \cdot \mathbf{B})$ for every Lorentz transformation $L$. Geometric covariance (\ref{thrm:von-neumann-geometric-covariance}) exhibits $R(L \cdot \mathbf{B}) = U(L) R(\mathbf{B}) U(L)^{-1}$; conjugation by a unitary is a multiplicative automorphism that carries the center onto the center and fixes the scalars, so it preserves the factor property. Thus being a factor is constant along the Lorentz orbit of a region.
 \end{theorem}
 
+\begin{theorem}[Geometric Covariance as a von Neumann Algebra Isomorphism]
+    \label{thrm:von-neumann-covariance-iso}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.covLocalVonNeumannEquiv}
+    \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \leanok
+    \uses{thrm:von-neumann-geometric-covariance, def:local-von-neumann-algebra}
+    The geometric-covariance set equality is upgraded to a first-class \emph{$*$-algebra isomorphism} of the bundled local von Neumann algebras, $R(\mathbf{B}) \cong R(L \cdot \mathbf{B})$. It is the restriction of the conjugation $*$-automorphism $T \mapsto U(L) T U(L)^{-1}$ of $\mathcal{B}(H)$ (Mathlib's \texttt{conjStarAlgEquiv}, whose adjoint-is-inverse property makes conjugation by a unitary star-preserving) to $R(\mathbf{B})$, whose image is exactly $R(L \cdot \mathbf{B})$. The reusable ingredient is that a $*$-automorphism carrying the underlying set of one star-subalgebra onto another restricts to a star-algebra equivalence between them. This makes the unitary equivalence of orbit-related local algebras an explicit transportable object.
+\end{theorem}
+
 \subsection{Irreducibility and Schur's Lemma}
 
 A representation is \emph{irreducible} when its commutant is trivial: the only operators commuting with every $\pi(a)$ are scalars. This is the von Neumann (commutant) form of irreducibility. The cornerstone, connecting the commutant to the GNS state, is the topological Schur lemma for a cyclic representation.

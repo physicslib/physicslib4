@@ -226,6 +226,15 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     If the local von Neumann algebra $R(\mathbf{B}_1)$ of a subregion is a factor, then so is $R(g \cdot \mathbf{B}_1)$ for every $g \in \mathrm{Stab}(\mathbf{B})$. Geometric covariance exhibits $R(g \cdot \mathbf{B}_1) = U(g) R(\mathbf{B}_1) U(g)^{-1}$, and conjugation by a unitary preserves the factor property; so being a factor is constant along the stabilizer orbit of a subregion.
 \end{theorem}
 
+\begin{theorem}[Geometric Covariance as a von Neumann Algebra Isomorphism (Curved Spacetime)]
+    \label{thrm:von-neumann-covariance-iso-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannEquiv}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeometricCovariance.lean}
+    \leanok
+    \uses{thrm:von-neumann-geometric-covariance-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime}
+    For $g \in \mathrm{Stab}(\mathbf{B})$, the geometric-covariance set equality is upgraded to a first-class $*$-algebra isomorphism of the bundled local von Neumann algebras, $R(\mathbf{B}_1) \cong R(g \cdot \mathbf{B}_1)$, given by restricting the conjugation $*$-automorphism $T \mapsto U(g) T U(g)^{-1}$ of $\mathcal{B}(H)$ to $R(\mathbf{B}_1)$. It reuses the same restriction construction as the Minkowski case (\ref{thrm:von-neumann-covariance-iso}).
+\end{theorem}
+
 \subsection{Purity of States on Local Algebras in Curved Spacetime}
 
 Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved spacetime is itself a unital C*-algebra with its own state space and GNS representations. The abstract characterizations of purity therefore apply per region, registered here for $\mathfrak{U}(\mathbf{B})$. There is no quasilocal algebra in curved spacetime, so - unlike the Minkowski covariant-vacuum picture - these are genuinely local statements, one for each region.
