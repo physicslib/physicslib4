@@ -1,5 +1,6 @@
 import Physicslib4.AQFT.HaagKastler.CovariantState
 import Physicslib4.AQFT.HaagKastler.EinsteinCausality
+import Physicslib4.AQFT.HaagKastler.GeometricCovariance
 import Physicslib4.AQFT.HaagKastler.Isotony
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.LocalCommutativity
