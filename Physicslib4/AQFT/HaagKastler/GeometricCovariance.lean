@@ -98,13 +98,14 @@ the algebra `H →L[ℂ] H` of bounded operators: `T ↦ U T U⁻¹`. -/
 noncomputable def lieConj (Uop : H ≃ₗᵢ[ℂ] H) : (H →L[ℂ] H) ≃* (H →L[ℂ] H) :=
   Units.conjMulEquiv (Uop.toContinuousLinearEquiv.toUnit)
 
+omit [CompleteSpace H] in
 @[simp] theorem lieConj_apply (Uop : H ≃ₗᵢ[ℂ] H) (T : H →L[ℂ] H) (x : H) :
     lieConj Uop T x = Uop (T (Uop.symm x)) := by
-  show ((Uop.toContinuousLinearEquiv : H →L[ℂ] H) * T
+  change ((Uop.toContinuousLinearEquiv : H →L[ℂ] H) * T
         * (Uop.toContinuousLinearEquiv.symm : H →L[ℂ] H)) x = Uop (T (Uop.symm x))
   simp only [ContinuousLinearMap.mul_apply, ContinuousLinearEquiv.coe_coe,
-    LinearIsometryEquiv.coe_toContinuousLinearEquiv,
-    LinearIsometryEquiv.toContinuousLinearEquiv_symm]
+    LinearIsometryEquiv.coe_toContinuousLinearEquiv]
+  rfl
 
 end Physicslib4
 
@@ -153,9 +154,10 @@ theorem lieConj_image_covLocalOperators (C : CovariantQuasilocalAlgebra)
   · rintro ⟨_, ⟨a, rfl⟩, rfl⟩
     exact ⟨C.net.covEquiv L B a, by rw [hconj (C.quasilocal.ι B a), action_ι C L hB a]⟩
   · rintro ⟨a', rfl⟩
-    obtain ⟨a, rfl⟩ := (C.net.covEquiv L B).surjective a'
-    exact ⟨π (C.quasilocal.ι B a), ⟨a, rfl⟩,
-      by rw [hconj (C.quasilocal.ι B a), action_ι C L hB a]⟩
+    refine ⟨π (C.quasilocal.ι B ((C.net.covEquiv L B).symm a')),
+      ⟨(C.net.covEquiv L B).symm a', rfl⟩, ?_⟩
+    rw [hconj (C.quasilocal.ι B ((C.net.covEquiv L B).symm a')),
+      action_ι C L hB ((C.net.covEquiv L B).symm a'), StarAlgEquiv.apply_symm_apply]
 
 /-- **Geometric covariance of the local von Neumann net (Minkowski).** In a
 covariant representation `π` of the quasilocal algebra with operator covariance
