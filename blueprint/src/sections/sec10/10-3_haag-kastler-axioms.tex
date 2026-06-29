@@ -218,6 +218,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     This is the statement that the symmetry group acts \emph{geometrically} on the net of von Neumann algebras. The proof rests on three ingredients, all already available: operator covariance (the last clause of \ref{thrm:irreducible-covariant-representation}); the fact that $\beta_L = $ the covariance action sends $\iota_{\mathbf{B}}(\mathfrak{U}(\mathbf{B}))$ onto $\iota_{L\cdot\mathbf{B}}(\mathfrak{U}(L\cdot\mathbf{B}))$ (from the action-on-generators identity and surjectivity of the covariance equivalence $\alpha_L$); and the algebraic fact that conjugation by a unit is a multiplicative automorphism, which therefore commutes with the bicommutant. The reusable core is that a multiplicative automorphism maps the centralizer of a set onto the centralizer of its image, hence maps bicommutants to bicommutants. In particular $R(\mathbf{B})$ and $R(L \cdot \mathbf{B})$ are unitarily equivalent (conjugate by $U(L)$), so any unitary-conjugation-invariant property of a local von Neumann algebra --- such as being a factor --- is constant along the Lorentz orbit of a region.
 \end{theorem}
 
+\begin{theorem}[Orbit-Invariance of Factoriality]
+    \label{thrm:von-neumann-factor-orbit}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.covLocalVonNeumann_isFactor_smul}
+    \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \leanok
+    \uses{thrm:von-neumann-geometric-covariance, thrm:irreducible-factor}
+    If the local von Neumann algebra $R(\mathbf{B})$ is a \emph{factor} (its center $R(\mathbf{B}) \cap R(\mathbf{B})'$ is exactly the scalars), then so is $R(L \cdot \mathbf{B})$ for every Lorentz transformation $L$. Geometric covariance (\ref{thrm:von-neumann-geometric-covariance}) exhibits $R(L \cdot \mathbf{B}) = U(L) R(\mathbf{B}) U(L)^{-1}$; conjugation by a unitary is a multiplicative automorphism that carries the center onto the center and fixes the scalars, so it preserves the factor property. Thus being a factor is constant along the Lorentz orbit of a region.
+\end{theorem}
+
 \subsection{Irreducibility and Schur's Lemma}
 
 A representation is \emph{irreducible} when its commutant is trivial: the only operators commuting with every $\pi(a)$ are scalars. This is the von Neumann (commutant) form of irreducibility. The cornerstone, connecting the commutant to the GNS state, is the topological Schur lemma for a cyclic representation.

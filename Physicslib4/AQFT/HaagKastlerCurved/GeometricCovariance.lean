@@ -122,6 +122,26 @@ theorem lieConj_image_localVonNeumannAlgebra
   simp only [coe_localVonNeumannAlgebra]
   exact N.lieConj_image_localVonNeumann hB π Uop g hB₁ h₁ hgB₁ h₁' hcov hcompat
 
+/-- **Orbit-invariance of factoriality (curved spacetime).** If the local von
+Neumann algebra `R(B₁)` of a subregion is a factor, then so is `R(g · B₁)` for
+`g ∈ Stab(B)`. Geometric covariance exhibits `R(g · B₁)` as the unitary conjugate
+`U(g) R(B₁) U(g)⁻¹`, and conjugation preserves the factor property; so being a
+factor is constant along the stabilizer orbit of a subregion. -/
+theorem localVonNeumann_isFactor_smul
+    {B : Set M.Carrier} (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (Uop : H ≃ₗᵢ[ℂ] H) (g : ↥(MulAction.stabilizer M.Isom B))
+    ⦃B₁ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (h₁ : B₁ ⊆ B)
+    (hgB₁ : M.IsBasisSet ((g : M.Isom) • B₁)) (h₁' : (g : M.Isom) • B₁ ⊆ B)
+    (hcov : ∀ (a : N.algebra B) (x : H),
+      Uop (π a (Uop.symm x)) = π (N.stabAutHom B g a) x)
+    (hcompat : ∀ a : N.algebra B₁,
+      N.stabAutHom B g (N.commIsotony hB₁ hB h₁ a)
+        = N.commIsotony hgB₁ hB h₁' (N.covEquiv (g : M.Isom) B₁ a))
+    (h : Physicslib4.IsFactor (N.localVonNeumann π hB₁ hB h₁)) :
+    Physicslib4.IsFactor (N.localVonNeumann π hgB₁ hB h₁') := by
+  rw [← N.lieConj_image_localVonNeumann hB π Uop g hB₁ h₁ hgB₁ h₁' hcov hcompat]
+  exact h.conj Uop
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT

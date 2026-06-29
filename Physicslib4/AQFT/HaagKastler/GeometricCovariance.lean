@@ -107,6 +107,46 @@ omit [CompleteSpace H] in
     LinearIsometryEquiv.coe_toContinuousLinearEquiv]
   rfl
 
+/-- The scalar operators `{c · 1 : c ∈ ℂ}` of a Hilbert space, the (would-be)
+center of any von Neumann algebra acting irreducibly. -/
+def scalarOperators (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H] :
+    Set (H →L[ℂ] H) :=
+  {T : H →L[ℂ] H | ∃ c : ℂ, T = c • 1}
+
+/-- A von Neumann algebra (a set of operators) is a *factor* when its center
+`R ∩ R'` is exactly the scalars. -/
+def IsFactor (R : Set (H →L[ℂ] H)) : Prop :=
+  R ∩ Set.centralizer R = scalarOperators H
+
+omit [CompleteSpace H] in
+/-- Conjugation by a unitary fixes the scalar operators setwise:
+`U (c · 1) U⁻¹ = c · 1`. -/
+theorem lieConj_image_scalarOperators (Uop : H ≃ₗᵢ[ℂ] H) :
+    lieConj Uop '' scalarOperators H = scalarOperators H := by
+  have hfix : ∀ c : ℂ, lieConj Uop (c • (1 : H →L[ℂ] H)) = c • 1 := by
+    intro c
+    ext x
+    rw [lieConj_apply]
+    simp
+  ext T
+  simp only [scalarOperators, Set.mem_image, Set.mem_setOf_eq]
+  constructor
+  · rintro ⟨_, ⟨c, rfl⟩, rfl⟩
+    exact ⟨c, hfix c⟩
+  · rintro ⟨c, rfl⟩
+    exact ⟨c • (1 : H →L[ℂ] H), ⟨c, rfl⟩, hfix c⟩
+
+omit [CompleteSpace H] in
+/-- **Conjugation preserves factoriality.** If a von Neumann algebra `R` is a
+factor, so is its conjugate `U R U⁻¹`. Conjugation is a multiplicative
+automorphism, so it carries the center `R ∩ R'` onto the center of `U R U⁻¹` and
+fixes the scalars. -/
+theorem IsFactor.conj (Uop : H ≃ₗᵢ[ℂ] H) {R : Set (H →L[ℂ] H)} (h : IsFactor R) :
+    IsFactor (lieConj Uop '' R) := by
+  unfold IsFactor at h ⊢
+  rw [← (lieConj Uop).image_centralizer R, ← Set.image_inter (lieConj Uop).injective, h,
+    lieConj_image_scalarOperators]
+
 end Physicslib4
 
 namespace Physicslib4
@@ -180,6 +220,22 @@ theorem lieConj_image_covLocalVonNeumann (C : CovariantQuasilocalAlgebra)
   unfold covLocalVonNeumann
   rw [(Physicslib4.lieConj Uop).image_centralizer_centralizer (C.covLocalOperators π B),
     C.lieConj_image_covLocalOperators π Uop L hB hcov]
+
+/-- **Orbit-invariance of factoriality (Minkowski).** If the local von Neumann
+algebra `R(B)` of a region is a factor (trivial center), then so is `R(L · B)`
+for every Lorentz transformation `L`. Geometric covariance exhibits `R(L · B)` as
+the unitary conjugate `U(L) R(B) U(L)⁻¹`, and conjugation preserves the factor
+property. So being a factor is constant along the Lorentz orbit of a region. -/
+theorem covLocalVonNeumann_isFactor_smul (C : CovariantQuasilocalAlgebra)
+    (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Uop : H ≃ₗᵢ[ℂ] H)
+    (L : InhomogeneousLorentzGroup) {B : Set StandardMinkowskiSpacetime.Carrier}
+    (hB : IsAlexandrovBasisSet B)
+    (hcov : ∀ (a : C.quasilocal.carrier) (x : H),
+      Uop (π a (Uop.symm x)) = π (C.action L a) x)
+    (h : Physicslib4.IsFactor (C.covLocalVonNeumann π B)) :
+    Physicslib4.IsFactor (C.covLocalVonNeumann π (L • B)) := by
+  rw [← C.lieConj_image_covLocalVonNeumann π Uop L hB hcov]
+  exact h.conj Uop
 
 end CovariantQuasilocalAlgebra
 end HaagKastler

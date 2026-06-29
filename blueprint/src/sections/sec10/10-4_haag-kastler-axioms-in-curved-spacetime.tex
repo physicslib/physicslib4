@@ -217,6 +217,15 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     Hence $R(\mathbf{B}_1)$ and $R(g \cdot \mathbf{B}_1)$ are unitarily equivalent. Unlike Minkowski, the abstract \texttt{LorentzianSpacetime} interface supplies neither basis-set preservation $M.\mathrm{IsBasisSet}(g \cdot \mathbf{B}_1)$ nor the coherence relating the stabilizer action $\hat\alpha_g$ to the chosen isotony embeddings (\ref{def:isotony-in-curved-spacetime}); both enter as explicit hypotheses, discharged for a net from a concrete geometric spacetime. The proof reuses the shared conjugation core: conjugation by a unit is a multiplicative automorphism, which maps centralizers --- hence bicommutants --- to those of the image.
 \end{theorem}
 
+\begin{theorem}[Orbit-Invariance of Factoriality (Curved Spacetime)]
+    \label{thrm:von-neumann-factor-orbit-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_isFactor_smul}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeometricCovariance.lean}
+    \leanok
+    \uses{thrm:von-neumann-geometric-covariance-in-curved-spacetime}
+    If the local von Neumann algebra $R(\mathbf{B}_1)$ of a subregion is a factor, then so is $R(g \cdot \mathbf{B}_1)$ for every $g \in \mathrm{Stab}(\mathbf{B})$. Geometric covariance exhibits $R(g \cdot \mathbf{B}_1) = U(g) R(\mathbf{B}_1) U(g)^{-1}$, and conjugation by a unitary preserves the factor property; so being a factor is constant along the stabilizer orbit of a subregion.
+\end{theorem}
+
 \subsection{Purity of States on Local Algebras in Curved Spacetime}
 
 Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved spacetime is itself a unital C*-algebra with its own state space and GNS representations. The abstract characterizations of purity therefore apply per region, registered here for $\mathfrak{U}(\mathbf{B})$. There is no quasilocal algebra in curved spacetime, so - unlike the Minkowski covariant-vacuum picture - these are genuinely local statements, one for each region.
