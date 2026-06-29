@@ -14,6 +14,7 @@ import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.HaagKastler.QuasilocalKMS
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
+import Physicslib4.AQFT.HaagKastlerCurved.GeometricCovariance
 import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
 import Physicslib4.AQFT.HaagKastlerCurved.EinsteinCausality
 import Physicslib4.AQFT.HaagKastlerCurved.IdentityComponent
