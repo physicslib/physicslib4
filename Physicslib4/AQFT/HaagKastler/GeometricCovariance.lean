@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.HaagKastler.LocalVonNeumann
+import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # Geometric covariance of the local von Neumann net
@@ -146,6 +147,35 @@ theorem IsFactor.conj (Uop : H ≃ₗᵢ[ℂ] H) {R : Set (H →L[ℂ] H)} (h : 
   unfold IsFactor at h ⊢
   rw [← (lieConj Uop).image_centralizer R, ← Set.image_inter (lieConj Uop).injective, h,
     lieConj_image_scalarOperators]
+
+/-- The conjugation `MulEquiv` `lieConj U` agrees, as a map of operators, with
+Mathlib's conjugation `*`-algebra automorphism `LinearIsometryEquiv.conjStarAlgEquiv U`.
+This bridges our bare-monoid conjugation to the full `StarAlgEquiv`. -/
+theorem lieConj_apply_eq_conjStarAlgEquiv (Uop : H ≃ₗᵢ[ℂ] H) (T : H →L[ℂ] H) :
+    lieConj Uop T = LinearIsometryEquiv.conjStarAlgEquiv Uop T := by
+  ext x
+  rw [lieConj_apply, LinearIsometryEquiv.conjStarAlgEquiv_apply]
+  simp [ContinuousLinearMap.comp_apply]
+
+end Physicslib4
+
+namespace Physicslib4
+
+/-- A star-algebra automorphism `e` of `A` whose underlying map carries the set of
+a star-subalgebra `S` onto that of `T` restricts to a star-algebra equivalence
+`S ≃⋆ₐ[ℂ] T`. -/
+@[simps! apply]
+def restrictStarAlgEquiv {A : Type*} [Ring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]
+    (e : A ≃⋆ₐ[ℂ] A) {S T : StarSubalgebra ℂ A}
+    (hfwd : ∀ x ∈ S, e x ∈ T) (hbwd : ∀ y ∈ T, e.symm y ∈ S) : S ≃⋆ₐ[ℂ] T where
+  toFun x := ⟨e x, hfwd x x.2⟩
+  invFun y := ⟨e.symm y, hbwd y y.2⟩
+  left_inv x := Subtype.ext (by simp)
+  right_inv y := Subtype.ext (by simp)
+  map_mul' x y := Subtype.ext (by simp)
+  map_add' x y := Subtype.ext (by simp)
+  map_smul' r x := Subtype.ext (by simp)
+  map_star' x := Subtype.ext (by simp)
 
 end Physicslib4
 
