@@ -551,6 +551,15 @@ Combining invariance with purity makes the GNS representation both covariant and
     A state $\omega$ on the quasilocal algebra is a \emph{vacuum state} (relative to a future-timelike-translation predicate) when it is invariant under the covariance action (\ref{def:invariant-state}) and, in a GNS representation reproducing $\omega$ and implementing the action by unitaries $U(L)$, every future-timelike translation one-parameter subgroup $\gamma$ has positive energy: $t \mapsto U(\gamma(t))$ satisfies \ref{def:positive-energy}. This packages the two \emph{necessary} vacuum conditions --- invariance and the spectrum condition --- with the spectrum condition entering as the positive-energy hypothesis on the implementing unitaries. The future-timelike-translation predicate is a parameter, to be instantiated once the translation subgroup of the Lorentz group and its causal structure are wired in; the positive-energy condition is the bounded-generator scaffold. Constructing/discharging the spectrum condition for a concrete net is the Stone-gated next layer.
 \end{definition}
 
+\begin{theorem}[No-Stone Consequences of a Vacuum State]
+    \label{thrm:vacuum-no-stone}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState.invariant, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState.exists_gns_irreducible_covariant}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:vacuum-state, thrm:irreducible-covariant-representation}
+    The conditions a vacuum state satisfies that need neither the spectrum condition nor Stone's theorem. First, a vacuum state is \emph{invariant} (the first conjunct of the definition). Second, a \emph{pure} vacuum state yields the irreducible covariant GNS representation of \ref{thrm:irreducible-covariant-representation}: a covariant GNS triple with implementing unitaries $U(L)$ fixing $\Omega$ and operator covariance $U(L)\pi(a)U(L)^{-1} = \pi(\beta_L a)$, whose representation is irreducible and generates all of $\mathcal{B}(H)$. Both follow by projecting to invariance and chaining with purity $\Rightarrow$ irreducibility; the spectrum-condition content of the vacuum is not used.
+\end{theorem}
+
 \begin{theorem}[Purity is Covariance-Invariant]
     \label{thrm:purity-covariance-invariant}
     \lean{Physicslib4.GNS.isPure_precomp_iff, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isPure_precomp_action_iff}

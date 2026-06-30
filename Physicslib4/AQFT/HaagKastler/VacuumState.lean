@@ -93,6 +93,42 @@ def CovariantQuasilocalAlgebra.IsVacuumState (C : CovariantQuasilocalAlgebra)
         (∀ γ : ℝ → InhomogeneousLorentzGroup,
           IsOneParameterSubgroup γ → ftl γ → IsPositiveEnergy (fun t => U (γ t)))
 
+/-- **A vacuum state is invariant.** Invariance is the first conjunct of the vacuum
+conditions, so it is immediate - no spectrum condition / Stone's theorem needed. -/
+theorem CovariantQuasilocalAlgebra.IsVacuumState.invariant
+    {C : CovariantQuasilocalAlgebra}
+    {ftl : (ℝ → InhomogeneousLorentzGroup) → Prop}
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
+    (h : C.IsVacuumState ftl ω) : C.IsInvariantState ω :=
+  h.1
+
+/-- **A pure vacuum state yields an irreducible covariant representation.** Combining
+invariance (`IsVacuumState.invariant`) with purity gives the irreducible, covariant GNS
+representation of `IsInvariantState.exists_gns_irreducible_covariant`: a covariant GNS
+triple with implementing unitaries `U(L)` (fixing `Ω`, with operator covariance) whose
+representation is irreducible and generates all of `𝓑(H)`. This needs no spectrum
+condition; it is the same no-Stone content, now packaged for a (pure) vacuum state. -/
+theorem CovariantQuasilocalAlgebra.IsVacuumState.exists_gns_irreducible_covariant
+    {C : CovariantQuasilocalAlgebra}
+    {ftl : (ℝ → InhomogeneousLorentzGroup) → Prop}
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
+    (h : C.IsVacuumState ftl ω) (hpure : Physicslib4.GNS.IsPure ω) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
+        Physicslib4.GNS.IsCyclicVector π Ω ∧
+        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
+          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
+        (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
+        U 1 = LinearIsometryEquiv.refl ℂ H ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        Physicslib4.GNS.IsIrreducible π ∧
+        Physicslib4.GNS.gnsVonNeumann π = Set.univ :=
+  IsInvariantState.exists_gns_irreducible_covariant C h.invariant hpure
+
 end HaagKastler
 end AQFT
 end Physicslib4
