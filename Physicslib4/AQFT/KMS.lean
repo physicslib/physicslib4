@@ -95,9 +95,12 @@ constant along the real axis as soon as it admits a *bounded entire extension*
 principle, fully discharged: a bounded entire function is constant
 (`Differentiable.apply_eq_apply_of_bounded`), so `F t = H t = H 0 = F 0`.
 
-It isolates the remaining content of `StripLiouville` to the *construction* of
-the bounded entire extension `H` from the periodic boundary values - i.e. the
-horizontal-line Schwarz reflection that Mathlib does not yet provide. -/
+It isolates the other half of `StripLiouville` - the *construction* of the
+bounded entire extension `H` from the periodic boundary values - which is the
+horizontal-line Schwarz reflection. Mathlib does not package that reflection,
+so it is built in `StripPeriodicExtension.lean`
+(`exists_bounded_entire_extension_of_strip_periodic`); together with this
+endgame it discharges `StripLiouville` for `β > 0` (`stripLiouville_of_pos`). -/
 theorem stripLiouville_of_entire_extension {F : ℂ → ℂ}
     (H : ℂ → ℂ) (hH : Differentiable ℂ H)
     (hbdd : Bornology.IsBounded (Set.range H))

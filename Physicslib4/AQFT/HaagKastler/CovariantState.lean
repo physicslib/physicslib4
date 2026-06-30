@@ -31,10 +31,13 @@ intertwined by these equivalences.
 
 ## Notes
 
-This is the local, fiberwise form of covariance. A genuine *vacuum state*
-- a single Lorentz-invariant state on the quasilocal algebra `𝔘` - additionally
-requires lifting the fiberwise action to an automorphism group of the quasilocal
-algebra, which is not yet available; that is the natural next layer.
+This is the local, fiberwise form of covariance. Lifting the fiberwise action
+to an automorphism group of the quasilocal algebra `𝔘` is carried out in
+`QuasilocalIntertwiner.lean` (`QuasilocalLift`, `CovariantQuasilocalAlgebra.action`),
+which gives Lorentz-invariant states a single invariant state on `𝔘`. A genuine
+*vacuum state* requires, beyond invariance, the spectrum condition (energy
+positivity), which is not yet formalizable (Mathlib lacks Stone's theorem and
+unbounded self-adjoint operator theory).
 -/
 
 namespace Physicslib4

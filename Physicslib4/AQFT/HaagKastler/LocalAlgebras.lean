@@ -41,9 +41,9 @@ AQFT-in-Lean blueprint):
   Commutativity, ...) quantify only over basis sets.
 
 * The "𝔘(∅) = ℂ" condition is encoded by a distinguished
-  `StarAlgEquiv` between the fiber over `∅` and `ℂ`. We use
-  `sorry`-placeholders where the unification of the `CStarAlgebra`
-  instance is non-trivial; the *statement* is faithful.
+  `StarAlgEquiv` field `emptyEquivComplex` between the fiber over `∅`
+  and `ℂ`, supplied by each concrete net (e.g. `StarAlgEquiv.refl`
+  for the trivial net).
 -/
 
 namespace Physicslib4
