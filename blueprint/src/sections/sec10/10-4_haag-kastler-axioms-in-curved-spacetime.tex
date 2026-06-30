@@ -268,6 +268,15 @@ Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved sp
     For a state $\omega$ on the local algebra $\mathfrak{U}(\mathbf{B})$ there is a GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ in which $\omega$ is pure if and only if the representation $\pi$ is irreducible (its commutant is trivial). This combines the GNS construction with the abstract \ref{thrm:pure-iff-irreducible}.
 \end{theorem}
 
+\begin{theorem}[Pure GNS on a Local Algebra is a Factor Generating $\mathcal{B}(H)$]
+    \label{thrm:pure-factor-generates-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_factor_of_isPure, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_generates_all_of_isPure}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Purity.lean}
+    \leanok
+    \uses{def:pure-state, thrm:pure-factor, thrm:pure-generates-all}
+    For a pure state $\omega$ on the local algebra $\mathfrak{U}(\mathbf{B})$ there is a cyclic GNS triple reproducing $\omega$ whose generated von Neumann algebra $\pi(\mathfrak{U}(\mathbf{B}))''$ has trivial center (it is a factor) and is in fact all of $\mathcal{B}(H)$. These are the abstract factor (\ref{thrm:pure-factor}) and density (\ref{thrm:pure-generates-all}) statements registered per region on the curved local algebra $\mathfrak{U}(\mathbf{B})$, the right generality in curved spacetime where there is no quasilocal algebra.
+\end{theorem}
+
 \subsection{Covariant States in Curved Spacetime}
 
 As in the Minkowski case, the isometric covariance (\ref{def:isometric-covariance-in-curved-spacetime}) acts fiberwise through the $*$-isomorphisms $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$. Since there is no quasilocal algebra, only the local notion of a covariant family of states is available.
