@@ -534,6 +534,23 @@ Combining invariance with purity makes the GNS representation both covariant and
     A state $\omega$ on the quasilocal algebra that is both invariant under the covariance action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U(L)$ of the inhomogeneous Lorentz group fixing the cyclic vector $\Omega$, with operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$ - and \emph{irreducible}; in particular it generates all of $\mathcal{B}(H)$ ($\pi(\mathfrak{U})'' = \mathcal{B}(H)$, by \ref{thrm:irreducible-generates-all}). This combines the covariant GNS triple of \ref{thrm:invariant-state-gns-unitary} with purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}). It is a necessary precursor to a vacuum representation; the spectrum condition would be the remaining ingredient.
 \end{theorem}
 
+\begin{definition}[Positive Energy (bounded-generator scaffold)]
+    \label{def:positive-energy}
+    \lean{Physicslib4.AQFT.HaagKastler.IsPositiveEnergy}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    A strongly continuous one-parameter unitary group $V : \mathbb{R} \to \mathcal{U}(H)$ has \emph{positive energy} when its generator is a positive operator: there exists a positive bounded operator $P$ (hence self-adjoint, with non-negative spectrum) such that $V(t) = e^{i t P}$ for all $t$. The positivity of $P$ is the energy-positivity asserted by the spectrum condition. The generator of a physical translation is unbounded, so requiring $P$ bounded is a genuine restriction; the faithful unbounded form requires Stone's theorem and the theory of unbounded self-adjoint operators, which Mathlib does not yet provide. This is the bounded-generator scaffold.
+\end{definition}
+
+\begin{definition}[Vacuum State (generator-parameterized scaffold)]
+    \label{def:vacuum-state}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:invariant-state, def:positive-energy, def:covariant-quasilocal-algebra, thrm:invariant-state-gns-unitary}
+    A state $\omega$ on the quasilocal algebra is a \emph{vacuum state} (relative to a future-timelike-translation predicate) when it is invariant under the covariance action (\ref{def:invariant-state}) and, in a GNS representation reproducing $\omega$ and implementing the action by unitaries $U(L)$, every future-timelike translation one-parameter subgroup $\gamma$ has positive energy: $t \mapsto U(\gamma(t))$ satisfies \ref{def:positive-energy}. This packages the two \emph{necessary} vacuum conditions --- invariance and the spectrum condition --- with the spectrum condition entering as the positive-energy hypothesis on the implementing unitaries. The future-timelike-translation predicate is a parameter, to be instantiated once the translation subgroup of the Lorentz group and its causal structure are wired in; the positive-energy condition is the bounded-generator scaffold. Constructing/discharging the spectrum condition for a concrete net is the Stone-gated next layer.
+\end{definition}
+
 \begin{theorem}[Purity is Covariance-Invariant]
     \label{thrm:purity-covariance-invariant}
     \lean{Physicslib4.GNS.isPure_precomp_iff, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isPure_precomp_action_iff}
