@@ -39,12 +39,11 @@ Alexandrov topology).
 
 * The bilinear form on `T_p ℝ⁴` corresponding to `diag(-1,1,1,1)` is
   constructed pointwise as a continuous bilinear map. We expose the
-  underlying function on the model space; the proofs of symmetry,
-  non-degeneracy, the Lorentzian condition, and smoothness in charts
-  are left as `sorry`, since their formal expansion against Mathlib's
-  `mfderiv` / `extChartAt` API for `ℝ⁴` is a substantial separate
-  endeavour. The blueprint's *statement* is faithfully captured by the
-  shape of `StandardMinkowskiSpacetime`.
+  underlying function on the model space; symmetry, non-degeneracy, and
+  the Lorentzian condition are all proved in the
+  `StandardMinkowskiSpacetime` construction, and the smooth-manifold data
+  is the identity charted space on `ℝ⁴`. The blueprint's statement is
+  faithfully captured by the shape of `StandardMinkowskiSpacetime`.
 
 * `MinkowskiSpacetime` is defined as a type synonym for the carrier of
   `StandardMinkowskiSpacetime` (i.e. `ℝ⁴`), with a `TopologicalSpace`
@@ -636,9 +635,9 @@ spacetime is captured at the typeclass level by the alternative
 topology directly.
 
 A time orientation `t` on standard Minkowski spacetime is required to
-talk about the Alexandrov topology. We leave its construction as
-`sorry`; the canonical choice is the constant timelike vector field
-`∂_0` pointing in the `0`-th coordinate direction.
+talk about the Alexandrov topology. It is the constant timelike vector
+field `∂_0` pointing in the `0`-th coordinate direction, with its
+non-vanishing discharged below.
 -/
 noncomputable def standardMinkowskiTimeOrientation :
     StandardMinkowskiSpacetime.TimeOrientation where
@@ -726,8 +725,8 @@ The two theorems below identify `chronologicalFuture` and
 `chronologicalPast` on `StandardMinkowskiSpacetime` (with the canonical
 time orientation `∂_0`) with the coordinate-explicit forward / backward
 Minkowski-cones. Both statements are needed downstream to compare the
-Alexandrov topology with the Euclidean topology on `ℝ⁴`; both are left
-as `sorry` here. The intended proof strategy is as follows.
+Alexandrov topology with the Euclidean topology on `ℝ⁴`; both are proved
+below. The proof structure is as follows.
 
 * **Forward direction** (`chronologicalFuture ⊆ minkowskiForwardCone`):
   given a chronological trip from `p` to `q`, one has a smooth curve
@@ -751,23 +750,20 @@ as `sorry` here. The intended proof strategy is as follows.
 
 Both directions ultimately appeal to the smooth-curve API in
 `Physicslib4.Spacetime.Curves` and the chronological-trip definition in
-`Physicslib4.Spacetime.Causality`. The reverse direction has been
-scaffolded structurally as
+`Physicslib4.Spacetime.Causality`. The reverse direction is
 `minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski`,
 with the analytic content factored into the named lemmas
 `standardMinkowskiLineSegmentPath_continuousOn`,
 `standardMinkowskiLineSegmentPath_smoothOn`,
 `standardMinkowskiLineSegmentPath_mfderivWithin` and
-`standardMinkowskiLineSegmentPath_nonvanishing`, each currently
-`sorry`'d. The forward direction is bundled as
-`chronologicalFuture_standardMinkowski_subset` and still `sorry`'d
-pending the integration argument.
+`standardMinkowskiLineSegmentPath_nonvanishing`. The forward direction is
+`chronologicalFuture_standardMinkowski_subset`, via the integration
+argument below.
 -/
 
-/-- The straight-line path `s ↦ p + s • (q - p)` is continuous on `[0, 1]`.
-*(Analytic stub for the chronological-future characterisation: easy from
-`continuousOn_const` / `Continuous.smul` / `continuousOn_id` but written as
-a stub here to keep this first pass structural.)* -/
+/-- The straight-line path `s ↦ p + s • (q - p)` is continuous on `[0, 1]`
+(from `continuousOn_const` / `Continuous.smul` / `continuousOn_id`). A
+component of the chronological-future characterisation. -/
 theorem standardMinkowskiLineSegmentPath_continuousOn (p q : SpacetimeModel) :
     ContinuousOn (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
       (Set.Icc (0 : ℝ) 1) :=
@@ -775,7 +771,7 @@ theorem standardMinkowskiLineSegmentPath_continuousOn (p q : SpacetimeModel) :
 
 /-- The straight-line path `s ↦ p + s • (q - p)` is `C^∞` on `[0, 1]`,
 viewed as a map from `(ℝ, modelWithCornersSelf ℝ ℝ)` to standard Minkowski
-spacetime. *(Analytic stub for the chronological-future characterisation.)* -/
+spacetime. A component of the chronological-future characterisation. -/
 theorem standardMinkowskiLineSegmentPath_smoothOn (p q : SpacetimeModel) :
     ContMDiffOn (modelWithCornersSelf ℝ ℝ)
       StandardMinkowskiSpacetime.model ⊤
@@ -787,7 +783,7 @@ theorem standardMinkowskiLineSegmentPath_smoothOn (p q : SpacetimeModel) :
 
 /-- The derivative of the straight-line path `s ↦ p + s • (q - p)` at every
 point of `[0, 1]`, applied to the basis vector `1 : ℝ`, equals `q - p`.
-*(Analytic stub for the chronological-future characterisation.)* -/
+A component of the chronological-future characterisation. -/
 theorem standardMinkowskiLineSegmentPath_mfderivWithin (p q : SpacetimeModel) :
     ∀ s ∈ Set.Icc (0 : ℝ) 1,
       mfderivWithin (modelWithCornersSelf ℝ ℝ)
@@ -822,9 +818,9 @@ theorem standardMinkowskiLineSegmentPath_mfderivWithin (p q : SpacetimeModel) :
   rw [ContinuousLinearMap.smulRight_apply, ContinuousLinearMap.id_apply, one_smul]
 
 /-- The straight-line path `s ↦ p + s • (q - p)` has non-vanishing derivative
-`q - p` (assuming `p ≠ q`). *(Analytic stub for the chronological-future
-characterisation: follows from `standardMinkowskiLineSegmentPath_mfderivWithin`
-together with `p ≠ q`.)* -/
+`q - p` (assuming `p ≠ q`); follows from
+`standardMinkowskiLineSegmentPath_mfderivWithin` together with `p ≠ q`. A
+component of the chronological-future characterisation. -/
 theorem standardMinkowskiLineSegmentPath_nonvanishing (p q : SpacetimeModel)
     (hpq : p ≠ q) :
     ∀ s ∈ Set.Icc (0 : ℝ) 1,
@@ -861,7 +857,7 @@ noncomputable def standardMinkowskiLineSegmentPath
 The forward subset of `chronologicalFuture_standardMinkowski` says: if there
 is a chronological trip from `p` to `q` on standard Minkowski spacetime, then
 `q` lies in the open forward Minkowski-cone of `p`. We package the analytic
-content into four top-level stubs and assemble the structural proof from them:
+content into four named lemmas and assemble the proof from them:
 
 1. `mem_minkowskiForwardCone_iff_sub_mem` — the obvious translation
    `q ∈ minkowskiForwardCone p ↔ (q - p) ∈ minkowskiForwardCone 0`,
@@ -874,25 +870,25 @@ content into four top-level stubs and assemble the structural proof from them:
    to `q` witnessed by a smooth path `rep`, there exist parameter values
    `a ≤ b` in `rep.parameterSpace` with `rep a = p`, `rep b = q`, and
    `q - p = ∫_a^b tangent(s) ds`, where `tangent(s)` is the manifold
-   derivative of `rep.toFun` at `s` applied to `1 : ℝ`. The body of this
-   stub is `sorry`-free; it wires together four further named sub-stubs:
+   derivative of `rep.toFun` at `s` applied to `1 : ℝ`. Its body wires
+   together four further named sub-lemmas:
 
    * `standardMinkowski_smoothPath_fundamental_theorem_calculus`
-     (substub A) — the integration content: for a smooth path on standard
+     (sub-lemma A) — the integration content: for a smooth path on standard
      Minkowski parametrised by `Set.Icc a b`, the displacement
      `μ b - μ a` equals the interval integral of the manifold tangent.
    * `standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero`
-     (substub B) — the geometric content: a trip witness produces a
+     (sub-lemma B) — the geometric content: a trip witness produces a
      `rep : SmoothPath` whose endpoint structure matches `p, q` and
      whose manifold tangent at every parameter point lies in
      `minkowskiForwardCone 0`. Discharged by unpacking the trip and
-     pointwise applying stub 2.
+     pointwise applying step 2.
    * `standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints`
-     (substub C) — the geometric structural content: a closed connected
+     (sub-lemma C) — the geometric structural content: a closed connected
      non-singleton subset of `ℝ` carrying a past and a future endpoint
      in its frontier is exhaustively a closed interval `Set.Icc a b`
      with `a < b`.
-   * `standardMinkowski_smoothPath_tangent_continuousOn` (substub D)
+   * `standardMinkowski_smoothPath_tangent_continuousOn` (sub-lemma D)
      — the analytic regularity content: the manifold tangent
      `s ↦ mfderivWithin _ _ rep.toFun rep.parameterSpace s 1` is
      continuous on `rep.parameterSpace` whenever it equals an `Icc a b`.
@@ -905,13 +901,13 @@ content into four top-level stubs and assemble the structural proof from them:
    through Mathlib's interval-integral machinery.
 
 The forward-subset proof itself wires these together: from the trip
-witness, FTC (stub 3) gives an interval-integral representation of
-`q - p`; the trip's timelike future-pointing tangent (combined with stub
+witness, FTC (step 3) gives an interval-integral representation of
+`q - p`; the trip's timelike future-pointing tangent (combined with step
 2) shows the integrand lies in `minkowskiForwardCone 0`; closure under
-positive integration (stub 4) puts `q - p` in `minkowskiForwardCone 0`;
-and the translation lemma (stub 1) converts back to
-`q ∈ minkowskiForwardCone p`. Every remaining `sorry` is in one of the
-four named stubs (or, for stub 3, in the four sub-stubs A–D above).
+positive integration (step 4) puts `q - p` in `minkowskiForwardCone 0`;
+and the translation lemma (step 1) converts back to
+`q ∈ minkowskiForwardCone p`. Each step is one of the four named lemmas
+(or, for step 3, one of the four sub-lemmas A–D above).
 -/
 
 /-- Translation lemma: `q ∈ minkowskiForwardCone p ↔ (q - p) ∈
@@ -970,7 +966,7 @@ theorem mem_minkowskiForwardCone_iff_sub_mem (p q : SpacetimeModel) :
       rw [e0, e1, e2, e3] at h_cone'
       linarith [h_cone']
 
-/-- *Analytic stub (timelike + future-pointing ↔ in the forward cone)*: on
+/-- **Timelike + future-pointing ↔ in the forward cone.** On
 standard Minkowski spacetime with canonical time orientation `∂_0`, a
 tangent vector `v` is timelike and future-pointing in the
 `Spacetime`-theoretic sense iff `v ∈ minkowskiForwardCone 0`. This packs
@@ -1054,12 +1050,11 @@ theorem standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_z
     rw [this]
     linarith
 
-/-- *Analytic stub (smooth-path FTC for standard Minkowski)*: for any smooth
-path `μ` on standard Minkowski spacetime whose parameter space is the closed
-interval `Set.Icc a b` with `a < b`, the difference of endpoints equals the
-interval integral of the manifold tangent. This is the fundamental theorem
-of calculus packaged for the `mfderivWithin` of a smooth path; its proof is
-deferred to a downstream analytic-stub agent. -/
+/-- **Smooth-path FTC for standard Minkowski.** For any smooth path `μ` on
+standard Minkowski spacetime whose parameter space is the closed interval
+`Set.Icc a b` with `a < b`, the difference of endpoints equals the interval
+integral of the manifold tangent. This is the fundamental theorem of
+calculus packaged for the `mfderivWithin` of a smooth path. -/
 theorem standardMinkowski_smoothPath_fundamental_theorem_calculus
     (μ : StandardMinkowskiSpacetime.SmoothPath) {a b : ℝ}
     (hab : a < b) (hparam : μ.parameterSpace = Set.Icc a b) :
@@ -1108,14 +1103,12 @@ theorem standardMinkowski_smoothPath_fundamental_theorem_calculus
   simp_rw [hpw]
   exact hFTC.symm
 
-/-- *Analytic stub (trip tangent ∈ forward cone)*: for any trip `rep` on
-standard Minkowski spacetime witnessing a chronological precedence, the
-manifold tangent at every parameter point lies in `minkowskiForwardCone 0`.
-The intended proof unpacks the trip witness (yielding `rep` together with
-the past/future endpoint data and the timelike future-oriented properties of
-`rep`) and pointwise applies
-`standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero`.
-The proof is deferred as a named sub-stub. -/
+/-- **Trip tangent ∈ forward cone.** For any trip `rep` on standard Minkowski
+spacetime witnessing a chronological precedence, the manifold tangent at every
+parameter point lies in `minkowskiForwardCone 0`. The proof unpacks the trip
+witness (yielding `rep` together with the past/future endpoint data and the
+timelike future-oriented properties of `rep`) and pointwise applies
+`standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero`. -/
 theorem standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
     {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
     (htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
@@ -1144,7 +1137,7 @@ theorem standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
   exact (standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero
     _).mp ⟨h1, h2⟩
 
-/-- *Substub (parameter space is a closed bounded interval)*: a smooth path
+/-- **Parameter space is a closed bounded interval.** A smooth path
 `rep` on standard Minkowski spacetime carrying both a past endpoint `p` and
 a future endpoint `q` has parameter space exhaustively equal to
 `Set.Icc a b` with `a < b`, `rep.toFun a = p`, and `rep.toFun b = q`. With
@@ -1188,12 +1181,12 @@ theorem standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints
     have hord : rep.parameterSpace.OrdConnected := hpre.ordConnected
     exact hord.out hsp_mem hsq_mem
 
-/-- *Analytic stub (continuity of the manifold tangent of a smooth path on
-its parameter `Icc`)*: for a smooth path `μ` on standard Minkowski spacetime
-with parameter space `Set.Icc a b`, the manifold tangent
+/-- **Continuity of the manifold tangent of a smooth path on its parameter
+`Icc`.** For a smooth path `μ` on standard Minkowski spacetime with parameter
+space `Set.Icc a b`, the manifold tangent
 `s ↦ mfderivWithin _ _ μ.toFun μ.parameterSpace s 1` is continuous on
 `Set.Icc a b`. This is the `ContMDiffOn` → continuity-of-`mfderivWithin`
-content packaged in a single declaration; its proof is deferred. -/
+content packaged in a single declaration. -/
 theorem standardMinkowski_smoothPath_tangent_continuousOn
     (μ : StandardMinkowskiSpacetime.SmoothPath) {a b : ℝ}
     (hparam : μ.parameterSpace = Set.Icc a b) :
@@ -1240,7 +1233,7 @@ theorem standardMinkowski_smoothPath_tangent_continuousOn
   intro s _hs
   exact hpw s
 
-/-- *Analytic stub (FTC for a trip on standard Minkowski)*: every trip `c`
+/-- **FTC for a trip on standard Minkowski.** Every trip `c`
 from `p` to `q` on standard Minkowski spacetime is represented by a
 smooth path `rep` with parameter values `a ≤ b` lying in
 `rep.parameterSpace`, satisfying `rep a = p`, `rep b = q`, with the
@@ -1250,7 +1243,7 @@ calculus gives `q - p = ∫_a^b rep.tangent(s) ds`. Continuity of the
 tangent on the closed parameter interval is also exposed for use in the
 integration argument.
 
-The body wires together four named sub-stubs:
+The body wires together four named sub-lemmas:
 `standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero`,
 `standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints`,
 `standardMinkowski_smoothPath_fundamental_theorem_calculus`, and
@@ -1324,7 +1317,7 @@ theorem standardMinkowski_trip_displacement_eq_intervalIntegral
   rw [← ha_eq, ← hb_eq]
   exact hftc
 
-/-- *Analytic stub (closure under positive interval integration)*: if `f :
+/-- **Closure under positive interval integration.** If `f :
 ℝ → ℝ⁴` is continuous on `[a, b]` and lies in the open forward
 Minkowski-cone at the origin throughout the open interval `(a, b)` (with
 `a < b`), then the interval integral `∫_a^b f s ds` also lies in
@@ -1523,8 +1516,8 @@ point in the chronological future of `p` lies in the open forward
 Minkowski-cone. The body wires together
 `standardMinkowski_trip_displacement_eq_intervalIntegral`,
 `intervalIntegral_mem_minkowskiForwardCone_zero`, and
-`mem_minkowskiForwardCone_iff_sub_mem`; the remaining analytic content
-sits in those named stubs. -/
+`mem_minkowskiForwardCone_iff_sub_mem`; the analytic content
+sits in those named lemmas. -/
 theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
     Spacetime.chronologicalFuture StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation p
@@ -1537,7 +1530,7 @@ theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
   -- Unpack the trip witness.
   obtain ⟨c, htrip⟩ := hq
   -- FTC representation of `q' - p` as an interval integral of the trip's
-  -- tangent. The stub also delivers continuity of the tangent on `[a, b]`
+  -- tangent. The lemma also delivers continuity of the tangent on `[a, b]`
   -- and membership of the tangent in `minkowskiForwardCone 0` on the open
   -- interval `(a, b)` (with `a < b` guaranteed by the nontriviality of a
   -- trip's parameter space combined with the past/future endpoint data).
@@ -1667,9 +1660,9 @@ The chronological future of `p` on `StandardMinkowskiSpacetime` agrees with
 the forward Minkowski-cone of `p`. This is the coordinate-explicit form of
 `I⁺(p)` that lets the agreement of the Alexandrov topology with the
 Euclidean topology on `ℝ⁴` be proved. The two directions are split into
-`chronologicalFuture_standardMinkowski_subset` (still `sorry`) and
+`chronologicalFuture_standardMinkowski_subset` and
 `minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski`
-(scaffolded with small analytic stubs). -/
+(each assembled from the small analytic lemmas above). -/
 theorem chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
     Spacetime.chronologicalFuture StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation p
@@ -1962,11 +1955,10 @@ We return a `Spacetime` whose carrier is `MinkowskiSpacetimeCarrier`,
 whose smooth-manifold data is inherited from `StandardMinkowskiSpacetime`,
 and whose metric is `minkowskiForm`. The retopologisation of the carrier
 to the Alexandrov topology is handled by the `TopologicalSpace` instance
-on `MinkowskiSpacetimeCarrier`; the remaining smooth-manifold data is
-re-asserted as `sorry`, since proving that the smooth-manifold structure
-on `StandardMinkowskiSpacetime` transports to the Alexandrov topology is
-mathematically non-trivial (it is the *content* of section 2.4 of the
-blueprint).
+on `MinkowskiSpacetimeCarrier`; the smooth-manifold data is transported
+along the homeomorphism `euclideanHomeoMinkowski` via the named instances
+`instChartedSpaceMinkowskiCarrier` and `instIsManifoldMinkowskiCarrier`
+(the content of section 2.4 of the blueprint).
 -/
 noncomputable def MinkowskiSpacetime : Spacetime where
   Carrier := MinkowskiSpacetimeCarrier
