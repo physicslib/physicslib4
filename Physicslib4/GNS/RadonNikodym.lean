@@ -301,5 +301,22 @@ theorem exists_gns_factor_of_isPure.{u} {A : Type u} [CStarAlgebra A]
   exact ⟨H, i1, i2, i3, π, Ω, hcyc, hrepro,
     center_gnsVonNeumann_eq_of_isIrreducible ((isPure_iff_isIrreducible hcyc hrepro).mp hpure)⟩
 
+/-- **The GNS representation of a pure state generates all of `B(H)`.** For a pure
+state `ω` there is a cyclic GNS triple `(H, π, Ω)` reproducing `ω` whose generated von
+Neumann algebra is the whole of `B(H)`: `π(A)'' = B(H)`. This is the density
+(bicommutant-theorem) sharpening of `exists_gns_factor_of_isPure`, combining the GNS
+construction, purity ⟹ irreducibility (`isPure_iff_isIrreducible`), and the density form
+`gnsVonNeumann_eq_univ_of_isIrreducible`. -/
+theorem exists_gns_generates_all_of_isPure.{u} {A : Type u} [CStarAlgebra A]
+    {ω : State A} (hpure : IsPure ω) :
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
+        IsCyclicVector π Ω ∧
+        (∀ a : A, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        gnsVonNeumann π = Set.univ := by
+  obtain ⟨H, i1, i2, i3, π, Ω, hcyc, hrepro, _⟩ := gns_construction ω
+  exact ⟨H, i1, i2, i3, π, Ω, hcyc, hrepro,
+    gnsVonNeumann_eq_univ_of_isIrreducible ((isPure_iff_isIrreducible hcyc hrepro).mp hpure)⟩
+
 end GNS
 end Physicslib4

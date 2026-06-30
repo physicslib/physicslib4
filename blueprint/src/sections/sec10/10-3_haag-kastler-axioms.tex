@@ -353,6 +353,15 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
     For a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra $\pi(A)''$ has trivial center, i.e. is a factor. This combines the GNS construction, purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}), and \ref{thrm:irreducible-factor}. It applies verbatim to the quasilocal algebra $\mathfrak{U}$ and to each local algebra $\mathfrak{U}(\mathbf{B})$, since both are C*-algebras.
 \end{theorem}
 
+\begin{theorem}[The GNS Representation of a Pure State Generates $\mathcal{B}(H)$]
+    \label{thrm:pure-generates-all}
+    \lean{Physicslib4.GNS.exists_gns_generates_all_of_isPure}
+    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \leanok
+    \uses{def:pure-state, thrm:pure-iff-irreducible, thrm:irreducible-generates-all, thrm:gns-construction-theorem}
+    The density (bicommutant-theorem) sharpening of \ref{thrm:pure-factor}: for a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra is \emph{all} of $\mathcal{B}(H)$, $\pi(A)'' = \mathcal{B}(H)$. It combines the GNS construction, purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}), and the density form \ref{thrm:irreducible-generates-all}. As with the factor statement, it applies verbatim to the quasilocal algebra $\mathfrak{U}$ and to each local algebra $\mathfrak{U}(\mathbf{B})$.
+\end{theorem}
+
 The order-theoretic definition of purity (\ref{def:pure-state}) coincides with the convex-geometric one: $\omega$ is an extreme point of the state space. The analytic key is the normalization identity for positive functionals.
 
 \begin{theorem}[Norm of a Positive Functional]
