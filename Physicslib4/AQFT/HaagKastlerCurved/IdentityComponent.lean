@@ -112,4 +112,33 @@ end LorentzianSpacetime
 
 end Spacetime
 
+namespace AQFT.HaagKastlerCurved.HaagKastlerNet
+
+/-- **Monotonicity of local commutativity over the identity-component bridge.**
+The identity-component analogue of `commute_of_spacelike_mono_geometric`: for a
+Haag-Kastler net over the abstract interface induced by a concrete Lorentzian
+spacetime `L` with `Isom` the *oriented identity component*, the
+spacelike-monotonicity hypothesis is discharged automatically by
+`Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono` (the bridge's
+`IsCompletelySpacelike` is, definitionally, that of `L`). This is the
+physically faithful form: the symmetry group is the isometries connected to the
+identity, as in Axiom 5. -/
+theorem commute_of_spacelike_mono_identityComponent
+    {L : Spacetime.LorentzianSpacetime}
+    (N : HaagKastlerNet L.toAbstractIdentityComponent)
+    ⦃B₁ B₂ B₁' B₂' B : Set L.toAbstractIdentityComponent.Carrier⦄
+    (hB₁' : L.toAbstractIdentityComponent.IsBasisSet B₁')
+    (hB₂' : L.toAbstractIdentityComponent.IsBasisSet B₂')
+    (hB : L.toAbstractIdentityComponent.IsBasisSet B)
+    (hs : L.toAbstractIdentityComponent.IsCompletelySpacelike B₁ B₂)
+    (hsub₁ : B₁' ⊆ B₁) (hsub₂ : B₂' ⊆ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B)
+    (a : N.algebra B₁') (b : N.algebra B₂') :
+    Commute (N.commIsotony hB₁' hB (hsub₁.trans h₁) a)
+            (N.commIsotony hB₂' hB (hsub₂.trans h₂) b) :=
+  N.commute_of_spacelike_mono
+    (fun _ _ _ _ hh₁ hh₂ hh => L.isCompletelySpacelike_mono hh₁ hh₂ hh)
+    hB₁' hB₂' hB hs hsub₁ hsub₂ h₁ h₂ a b
+
+end AQFT.HaagKastlerCurved.HaagKastlerNet
+
 end Physicslib4
