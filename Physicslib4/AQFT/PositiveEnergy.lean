@@ -86,22 +86,6 @@ theorem exp_generator_unique {P Q : H →L[ℂ] H}
   have key : Complex.I • P = Complex.I • Q := hP.unique hQ
   exact smul_right_injective (H →L[ℂ] H) Complex.I_ne_zero key
 
-/-- Conjugation by a unitary commutes with the operator exponential:
-`exp (W A W⁻¹) = W (exp A) W⁻¹`. Immediate from `NormedSpace.exp_units_conj`, since
-`lieConj W` is conjugation by the unit `W`. -/
-theorem exp_lieConj (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) :
-    NormedSpace.exp (lieConj W A) = lieConj W (NormedSpace.exp A) := by
-  haveI : NormedAlgebra ℚ (H →L[ℂ] H) :=
-    NormedAlgebra.restrictScalars ℚ ℂ (H →L[ℂ] H)
-  simp only [lieConj, Units.conjMulEquiv_apply]
-  exact NormedSpace.exp_units_conj _ A
-
-omit [CompleteSpace H] in
-/-- Conjugation by a unitary is `ℂ`-linear: `lieConj W (c • A) = c • lieConj W A`. -/
-theorem lieConj_smul (W : H ≃ₗᵢ[ℂ] H) (c : ℂ) (A : H →L[ℂ] H) :
-    lieConj W (c • A) = c • lieConj W A := by
-  simp only [lieConj, Units.conjMulEquiv_apply, mul_smul_comm, smul_mul_assoc]
-
 /-- **Positive energy is a unitary invariant.** If a one-parameter unitary group `V`
 has positive energy, so does its conjugate `t ↦ W ∘ V t ∘ W⁻¹` by a unitary `W`, with
 generator `W P W⁻¹` (positive, being the unitary conjugate of the positive generator

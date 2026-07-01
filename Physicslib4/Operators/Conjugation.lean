@@ -7,6 +7,7 @@ import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Algebra.Star.Subalgebra
 import Mathlib.Algebra.Group.Center
 import Mathlib.Tactic.NoncommRing
+import Mathlib.Analysis.Normed.Algebra.Exponential
 
 /-!
 # Conjugation by a unit and by a unitary
@@ -102,6 +103,22 @@ omit [CompleteSpace H] in
   simp only [ContinuousLinearMap.mul_apply, ContinuousLinearEquiv.coe_coe,
     LinearIsometryEquiv.coe_toContinuousLinearEquiv]
   rfl
+
+/-- Conjugation by a unitary commutes with the operator exponential:
+`exp (W A W⁻¹) = W (exp A) W⁻¹`. Immediate from `NormedSpace.exp_units_conj`, since
+`lieConj W` is conjugation by the unit `W`. -/
+theorem exp_lieConj (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) :
+    NormedSpace.exp (lieConj W A) = lieConj W (NormedSpace.exp A) := by
+  haveI : NormedAlgebra ℚ (H →L[ℂ] H) :=
+    NormedAlgebra.restrictScalars ℚ ℂ (H →L[ℂ] H)
+  simp only [lieConj, Units.conjMulEquiv_apply]
+  exact NormedSpace.exp_units_conj _ A
+
+omit [CompleteSpace H] in
+/-- Conjugation by a unitary is `ℂ`-linear: `lieConj W (c • A) = c • lieConj W A`. -/
+theorem lieConj_smul (W : H ≃ₗᵢ[ℂ] H) (c : ℂ) (A : H →L[ℂ] H) :
+    lieConj W (c • A) = c • lieConj W A := by
+  simp only [lieConj, Units.conjMulEquiv_apply, mul_smul_comm, smul_mul_assoc]
 
 /-- The scalar operators `{c · 1 : c ∈ ℂ}` of a Hilbert space, the (would-be)
 center of any von Neumann algebra acting irreducibly. -/
