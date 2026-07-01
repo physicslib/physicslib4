@@ -4,8 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
+import Physicslib4.Operators.Conjugation
 import Mathlib.Analysis.Normed.Algebra.Exponential
+import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Analysis.InnerProductSpace.Positive
+import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # Vacuum states: the generator-parameterized scaffold
@@ -130,6 +133,94 @@ energy-positivity that the spectrum condition asserts. -/
 def IsPositiveEnergy (V : ℝ → (H ≃ₗᵢ[ℂ] H)) : Prop :=
   ∃ P : H →L[ℂ] H, P.IsPositive ∧
     ∀ (t : ℝ) (x : H), V t x = NormedSpace.exp (((t : ℂ) * Complex.I) • P) x
+
+/-- The constant (trivial) unitary group `t ↦ id` has positive energy, with zero
+generator `P = 0`: `exp(0) = 1 = id`, and `0` is a positive operator. -/
+theorem isPositiveEnergy_const_refl :
+    IsPositiveEnergy (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) := by
+  refine ⟨0, ContinuousLinearMap.isPositive_zero, fun t x => ?_⟩
+  simp [smul_zero, NormedSpace.exp_zero]
+
+/-- **Uniqueness of the positive-energy generator.** If two bounded generators induce
+the same one-parameter unitary group — `exp(i t P) = exp(i t Q)` for all `t` — they are
+equal. Differentiating at `t = 0` gives `i \cdot P = i \cdot Q`, hence `P = Q`;
+positivity is not needed. So the generator witnessing `IsPositiveEnergy` is unique. -/
+theorem exp_generator_unique {P Q : H →L[ℂ] H}
+    (h : ∀ (t : ℝ) (x : H),
+      NormedSpace.exp (((t : ℂ) * Complex.I) • P) x
+        = NormedSpace.exp (((t : ℂ) * Complex.I) • Q) x) :
+    P = Q := by
+  -- The two operator-valued exponential families coincide as functions.
+  have hfun : (fun t : ℝ => NormedSpace.exp (((t : ℂ) * Complex.I) • P))
+      = (fun t : ℝ => NormedSpace.exp (((t : ℂ) * Complex.I) • Q)) := by
+    funext t; exact ContinuousLinearMap.ext (h t)
+  -- Derivative at `0` of each exponential family is `i • generator`.  Working with a
+  -- real scalar `u` and rewriting `((u:ℂ) * i) • R = u • (i • R)` avoids differentiating
+  -- through the `ℝ → ℂ` coercion.
+  have hderiv : ∀ R : H →L[ℂ] H,
+      HasDerivAt (fun t : ℝ => NormedSpace.exp (((t : ℂ) * Complex.I) • R))
+        (Complex.I • R) 0 := by
+    intro R
+    have hc := hasDerivAt_exp_smul_const (𝕂 := ℝ) (Complex.I • R) (0 : ℝ)
+    simp only [zero_smul, NormedSpace.exp_zero, one_mul] at hc
+    have hfeq : (fun u : ℝ => NormedSpace.exp (u • (Complex.I • R)))
+        = (fun t : ℝ => NormedSpace.exp (((t : ℂ) * Complex.I) • R)) := by
+      funext u; rw [← Complex.coe_smul, smul_smul]
+    rwa [hfeq] at hc
+  have hP := hderiv P
+  have hQ := hderiv Q
+  rw [hfun] at hP
+  have key : Complex.I • P = Complex.I • Q := hP.unique hQ
+  exact smul_right_injective (H →L[ℂ] H) Complex.I_ne_zero key
+
+/-- Conjugation by a unitary commutes with the operator exponential:
+`exp (W A W⁻¹) = W (exp A) W⁻¹`. Immediate from `NormedSpace.exp_units_conj`, since
+`lieConj W` is conjugation by the unit `W`. -/
+theorem exp_lieConj (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) :
+    NormedSpace.exp (lieConj W A) = lieConj W (NormedSpace.exp A) := by
+  haveI : NormedAlgebra ℚ (H →L[ℂ] H) :=
+    NormedAlgebra.restrictScalars ℚ ℂ (H →L[ℂ] H)
+  simp only [lieConj, Units.conjMulEquiv_apply]
+  exact NormedSpace.exp_units_conj _ A
+
+omit [CompleteSpace H] in
+/-- Conjugation by a unitary is `ℂ`-linear: `lieConj W (c • A) = c • lieConj W A`. -/
+theorem lieConj_smul (W : H ≃ₗᵢ[ℂ] H) (c : ℂ) (A : H →L[ℂ] H) :
+    lieConj W (c • A) = c • lieConj W A := by
+  simp only [lieConj, Units.conjMulEquiv_apply, mul_smul_comm, smul_mul_assoc]
+
+/-- **Positive energy is a unitary invariant.** If a one-parameter unitary group `V`
+has positive energy, so does its conjugate `t ↦ W ∘ V t ∘ W⁻¹` by a unitary `W`, with
+generator `W P W⁻¹` (positive, being the unitary conjugate of the positive generator
+`P`). Physically: the spectrum condition does not depend on the choice of unitary
+frame. -/
+theorem IsPositiveEnergy.conj (W : H ≃ₗᵢ[ℂ] H) {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
+    (hV : IsPositiveEnergy V) :
+    IsPositiveEnergy (fun t => (W.symm.trans (V t)).trans W) := by
+  obtain ⟨P, hPpos, hPexp⟩ := hV
+  refine ⟨lieConj W P, ?_, fun t x => ?_⟩
+  · -- `W P W⁻¹` is positive: symmetry and non-negativity transport through `W`'s
+    -- isometry, using only `lieConj_apply` and `inner_map_map`.
+    refine ContinuousLinearMap.isPositive_def.mpr ⟨fun a b => ?_, fun x => ?_⟩
+    · simp only [ContinuousLinearMap.coe_coe, lieConj_apply]
+      calc ⟪W (P (W.symm a)), b⟫_ℂ
+          = ⟪W (P (W.symm a)), W (W.symm b)⟫_ℂ := by rw [W.apply_symm_apply]
+        _ = ⟪P (W.symm a), W.symm b⟫_ℂ := W.inner_map_map _ _
+        _ = ⟪W.symm a, P (W.symm b)⟫_ℂ := (ContinuousLinearMap.isPositive_def.mp hPpos).1 _ _
+        _ = ⟪W (W.symm a), W (P (W.symm b))⟫_ℂ := (W.inner_map_map _ _).symm
+        _ = ⟪a, W (P (W.symm b))⟫_ℂ := by rw [W.apply_symm_apply]
+    · rw [ContinuousLinearMap.reApplyInnerSelf_apply, lieConj_apply]
+      have key : ⟪W (P (W.symm x)), x⟫_ℂ = ⟪P (W.symm x), W.symm x⟫_ℂ := by
+        rw [← W.inner_map_map (P (W.symm x)) (W.symm x), W.apply_symm_apply]
+      rw [key]
+      have hpp := (ContinuousLinearMap.isPositive_def.mp hPpos).2 (W.symm x)
+      rwa [ContinuousLinearMap.reApplyInnerSelf_apply] at hpp
+  · -- `W ∘ exp(itP) ∘ W⁻¹ = exp(it · W P W⁻¹)` on cyclic vectors.
+    change ((W.symm.trans (V t)).trans W) x
+        = NormedSpace.exp (((t : ℂ) * Complex.I) • lieConj W P) x
+    rw [← lieConj_smul, exp_lieConj, lieConj_apply,
+      LinearIsometryEquiv.trans_apply, LinearIsometryEquiv.trans_apply,
+      hPexp t (W.symm x)]
 
 /-- **Vacuum state (generator-parameterized scaffold).** A state `ω` on the
 quasilocal algebra is a *vacuum state* (relative to the future-timelike-translation

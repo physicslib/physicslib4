@@ -542,6 +542,15 @@ Combining invariance with purity makes the GNS representation both covariant and
     A strongly continuous one-parameter unitary group $V : \mathbb{R} \to \mathcal{U}(H)$ has \emph{positive energy} when its generator is a positive operator: there exists a positive bounded operator $P$ (hence self-adjoint, with non-negative spectrum) such that $V(t) = e^{i t P}$ for all $t$. The positivity of $P$ is the energy-positivity asserted by the spectrum condition. The generator of a physical translation is unbounded, so requiring $P$ bounded is a genuine restriction; the faithful unbounded form requires Stone's theorem and the theory of unbounded self-adjoint operators, which Mathlib does not yet provide. This is the bounded-generator scaffold.
 \end{definition}
 
+\begin{theorem}[Positive-Energy API]
+    \label{thrm:positive-energy-api}
+    \lean{Physicslib4.AQFT.HaagKastler.isPositiveEnergy_const_refl, Physicslib4.AQFT.HaagKastler.exp_generator_unique, Physicslib4.AQFT.HaagKastler.IsPositiveEnergy.conj}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:positive-energy}
+    Structural properties of the positive-energy condition, all Stone-free. (i) \emph{Trivial subgroup}: the constant group $t \mapsto \mathrm{id}$ has positive energy, with zero generator. (ii) \emph{Uniqueness of the generator}: if two bounded generators induce the same one-parameter group, $e^{i t P} = e^{i t Q}$ for all $t$, then $P = Q$ --- differentiating at $t = 0$ gives $i P = i Q$; positivity is not needed. Hence the generator witnessing positive energy is unique. (iii) \emph{Unitary invariance}: if $V$ has positive energy, so does its conjugate $t \mapsto W \circ V(t) \circ W^{-1}$ by a unitary $W$, with generator $W P W^{-1}$ (positive, being the unitary conjugate of $P$); the energy exponential transports via $e^{W A W^{-1}} = W e^{A} W^{-1}$. Physically, the spectrum condition does not depend on the choice of unitary frame.
+\end{theorem}
+
 \begin{definition}[Vacuum State (generator-parameterized scaffold)]
     \label{def:vacuum-state}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState}
