@@ -222,6 +222,24 @@ theorem IsPositiveEnergy.conj (W : H ≃ₗᵢ[ℂ] H) {V : ℝ → (H ≃ₗᵢ
       LinearIsometryEquiv.trans_apply, LinearIsometryEquiv.trans_apply,
       hPexp t (W.symm x)]
 
+/-- **A positive-energy group is strongly continuous.** The bounded-generator scaffold
+`V t = exp(i t P)` is automatically strongly continuous: `t ↦ V t x` is continuous for
+every `x`, since `t ↦ (i t) • P` is continuous and the operator exponential is
+continuous. This justifies describing a positive-energy group as a *strongly continuous*
+one-parameter unitary group. -/
+theorem IsPositiveEnergy.strongContinuous {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
+    (hV : IsPositiveEnergy V) (x : H) : Continuous (fun t : ℝ => V t x) := by
+  obtain ⟨P, _, hPexp⟩ := hV
+  haveI : NormedAlgebra ℚ (H →L[ℂ] H) :=
+    NormedAlgebra.restrictScalars ℚ ℂ (H →L[ℂ] H)
+  have hfun : (fun t : ℝ => V t x)
+      = fun t : ℝ => NormedSpace.exp (((t : ℂ) * Complex.I) • P) x := by
+    funext t; exact hPexp t x
+  rw [hfun]
+  have harg : Continuous (fun t : ℝ => ((t : ℂ) * Complex.I) • P) :=
+    (Complex.continuous_ofReal.mul continuous_const).smul continuous_const
+  exact (NormedSpace.exp_continuous.comp harg).clm_apply continuous_const
+
 /-- **Vacuum state (generator-parameterized scaffold).** A state `ω` on the
 quasilocal algebra is a *vacuum state* (relative to the future-timelike-translation
 predicate `ftl`) when:
