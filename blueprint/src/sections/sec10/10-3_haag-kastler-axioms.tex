@@ -409,6 +409,15 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     Realizing the state space as the subset $\mathrm{stateSpace}(A) \subseteq A \to_L \mathbb{C}$ (the latter a real topological vector space via $\texttt{NormedSpace.complexToReal}$), it is convex: a real convex combination $a\,\omega_1 + b\,\omega_2$ of states is again a state, via $\texttt{State.convexCombo}$. Moreover a state $\omega$ lies in Mathlib's $\mathrm{extremePoints}_{\mathbb{R}}$ of the state space exactly when it is extreme in the sense of \ref{def:extreme-state}, connecting the purity characterizations to the Krein-Milman/Choquet API.
 \end{theorem}
 
+\begin{theorem}[Weak-* Compactness of the State Space]
+    \label{thrm:state-space-weak-compact}
+    \lean{Physicslib4.GNS.isCompact_weakStateSet}
+    \leanfile{Physicslib4/GNS/PureStateExists.lean}
+    \leanok
+    \uses{def:state}
+    The state space, realized inside the weak-* dual $\mathrm{WeakDual}\,\mathbb{C}\,A$ as the positive functionals with $\varphi(1) = 1$, is \emph{weak-* compact}. By Banach-Alaoglu it suffices that it is a weak-* closed subset of the closed unit ball: the positivity conditions $0 \le \varphi(a^* a)$ and the normalization $\varphi(1) = 1$ are each weak-* closed (evaluation at a fixed element is weak-* continuous), and a positive functional with $\varphi(1)=1$ has $\|\varphi\| = 1$. This is the analytic input for the existence of pure states via Krein-Milman.
+\end{theorem}
+
 These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Minkowski net, where they characterize purity of a global state - the natural setting for the vacuum and other distinguished states.
 
 \begin{theorem}[Pure $\iff$ Extreme Point on the Quasilocal Algebra]

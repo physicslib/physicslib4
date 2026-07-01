@@ -42,6 +42,7 @@ import Physicslib4.GNS.Construction
 import Physicslib4.GNS.ExtremeState
 import Physicslib4.GNS.Irreducibility
 import Physicslib4.GNS.NullSpace
+import Physicslib4.GNS.PureStateExists
 import Physicslib4.GNS.RadonNikodym
 import Physicslib4.GNS.Separating
 import Physicslib4.GNS.UnitaryRepresentation
