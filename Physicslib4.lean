@@ -31,6 +31,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerKMS
 import Physicslib4.AQFT.KMS
+import Physicslib4.AQFT.PositiveEnergy
 import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.Analysis.HorizontalLineRemovable
 import Physicslib4.Analysis.StripPeriodicExtension
