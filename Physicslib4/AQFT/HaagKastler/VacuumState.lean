@@ -29,9 +29,16 @@ construction/self-adjointness that Stone will provide:
   unbounded form to follow once Stone's theorem lands.
 * `CovariantQuasilocalAlgebra.IsVacuumState ftl ω` — invariance plus, in the GNS
   representation, positive energy of every future-timelike translation subgroup.
-  The future-timelike-translation predicate `ftl` is a parameter, to be supplied
-  once the translation subgroup of the Lorentz group and its causal structure are
-  wired in.
+  The future-timelike-translation predicate `ftl` is a parameter.
+* `translationSub` / `translationFlow` / `IsFutureTimelikeTranslation` — the pure
+  *translation* subgroup `n ↦ (id, n)` of the inhomogeneous Lorentz group, the
+  one-parameter flow `t ↦ (id, t • n)`, and the concrete predicate picking out the
+  flows in a future-pointing timelike direction `n` (i.e. `n` in the forward
+  Minkowski cone). This wires in the translation subgroup and its causal structure,
+  so `ftl` can be discharged with its intended value.
+* `CovariantQuasilocalAlgebra.IsVacuumStateConcrete ω` — `IsVacuumState` with `ftl`
+  fixed to `IsFutureTimelikeTranslation`; the vacuum definition then depends on no
+  free predicate.
 
 These are the *necessary* conditions for a vacuum; constructing/discharging the
 spectrum condition for a concrete net is the Stone-gated next layer.
@@ -50,6 +57,65 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteS
 are the future-timelike *translation* subgroups. -/
 def IsOneParameterSubgroup (γ : ℝ → InhomogeneousLorentzGroup) : Prop :=
   γ 0 = 1 ∧ ∀ s t : ℝ, γ (s + t) = γ s * γ t
+
+/-! ### The translation subgroup
+
+The physically relevant one-parameter subgroups for the spectrum condition are the
+pure *translations*. An element of `InhomogeneousLorentzGroup` is a pair
+`(linear, translation)`; a pure translation has `linear = id`, so it embeds the
+additive group of the spacetime carrier. This section wires that embedding in and
+gives the concrete future-timelike-translation predicate, replacing the abstract
+`ftl` parameter of `IsVacuumState` with its intended value. -/
+
+/-- The pure-translation embedding of the spacetime carrier into the inhomogeneous
+Lorentz group: `n ↦ (id, n)`, i.e. the affine map `x ↦ x + n`. -/
+noncomputable def translationSub (n : StandardMinkowskiSpacetime.Carrier) :
+    InhomogeneousLorentzGroup where
+  linear := LinearEquiv.refl ℝ _
+  translation := n
+  isLorentz := isLorentz_refl
+  isProper := isProper_refl
+  isOrthochronous := isOrthochronous_refl
+
+/-- The pure-translation embedding sends `0` to the identity. -/
+@[simp] theorem translationSub_zero :
+    translationSub (0 : StandardMinkowskiSpacetime.Carrier) = 1 :=
+  InhomogeneousLorentzGroup.ext rfl rfl
+
+/-- The pure-translation embedding is a homomorphism from the additive carrier:
+`translationSub (n + m) = translationSub n * translationSub m` (the linear parts are
+both the identity, and translations add). -/
+theorem translationSub_mul (n m : StandardMinkowskiSpacetime.Carrier) :
+    translationSub (n + m) = translationSub n * translationSub m := by
+  refine InhomogeneousLorentzGroup.ext ?_ ?_
+  · ext x; rfl
+  · change n + m = n + (LinearEquiv.refl ℝ _) m
+    simp
+
+/-- The one-parameter translation subgroup in a direction `n`: `t ↦ (id, t • n)`. -/
+noncomputable def translationFlow (n : StandardMinkowskiSpacetime.Carrier) :
+    ℝ → InhomogeneousLorentzGroup :=
+  fun t => translationSub (t • n)
+
+/-- The translation flow in direction `n` is a one-parameter subgroup. -/
+theorem isOneParameterSubgroup_translationFlow
+    (n : StandardMinkowskiSpacetime.Carrier) :
+    IsOneParameterSubgroup (translationFlow n) := by
+  refine ⟨?_, ?_⟩
+  · change translationSub ((0 : ℝ) • n) = 1
+    rw [zero_smul, translationSub_zero]
+  · intro s t
+    change translationSub ((s + t) • n) = translationSub (s • n) * translationSub (t • n)
+    rw [add_smul, translationSub_mul]
+
+/-- **Concrete future-timelike-translation predicate.** A one-parameter subgroup `γ`
+is a future-timelike translation when it is the translation flow `t ↦ (id, t • n)` in
+a future-pointing timelike direction `n` — i.e. `n` lies in the forward Minkowski
+cone at the origin. This is the value with which the abstract `ftl` parameter of
+`IsVacuumState` is meant to be discharged. -/
+def IsFutureTimelikeTranslation (γ : ℝ → InhomogeneousLorentzGroup) : Prop :=
+  ∃ n : StandardMinkowskiSpacetime.Carrier,
+    (n : SpacetimeModel) ∈ minkowskiForwardCone 0 ∧ γ = translationFlow n
 
 /-- **Positive-energy condition (bounded-generator scaffold).** A one-parameter
 unitary group `V : ℝ → (H ≃ₗᵢ[ℂ] H)` has *positive energy* when its generator is a
@@ -128,6 +194,45 @@ theorem CovariantQuasilocalAlgebra.IsVacuumState.exists_gns_irreducible_covarian
         Physicslib4.GNS.IsIrreducible π ∧
         Physicslib4.GNS.gnsVonNeumann π = Set.univ :=
   IsInvariantState.exists_gns_irreducible_covariant C h.invariant hpure
+
+/-- **Vacuum state with the concrete spectrum condition.** Specializes
+`IsVacuumState` to the concrete future-timelike-translation predicate
+`IsFutureTimelikeTranslation`, so the spectrum condition is imposed on exactly the
+one-parameter translation subgroups `t ↦ (id, t • n)` with `n` future-pointing
+timelike. This discharges the abstract `ftl` parameter with its intended value, so a
+concrete vacuum state no longer depends on a free predicate. -/
+def CovariantQuasilocalAlgebra.IsVacuumStateConcrete (C : CovariantQuasilocalAlgebra)
+    (ω : Physicslib4.GNS.State C.quasilocal.carrier) : Prop :=
+  C.IsVacuumState IsFutureTimelikeTranslation ω
+
+/-- A concrete vacuum state is invariant (unfolds to the parameterized form). -/
+theorem CovariantQuasilocalAlgebra.IsVacuumStateConcrete.invariant
+    {C : CovariantQuasilocalAlgebra}
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
+    (h : C.IsVacuumStateConcrete ω) : C.IsInvariantState ω :=
+  h.1
+
+/-- A pure concrete vacuum state yields an irreducible covariant representation
+(unfolds to the parameterized form). -/
+theorem CovariantQuasilocalAlgebra.IsVacuumStateConcrete.exists_gns_irreducible_covariant
+    {C : CovariantQuasilocalAlgebra}
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
+    (h : C.IsVacuumStateConcrete ω) (hpure : Physicslib4.GNS.IsPure ω) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
+        Physicslib4.GNS.IsCyclicVector π Ω ∧
+        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
+          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
+        (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
+        U 1 = LinearIsometryEquiv.refl ℂ H ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        Physicslib4.GNS.IsIrreducible π ∧
+        Physicslib4.GNS.gnsVonNeumann π = Set.univ :=
+  IsVacuumState.exists_gns_irreducible_covariant h hpure
 
 end HaagKastler
 end AQFT

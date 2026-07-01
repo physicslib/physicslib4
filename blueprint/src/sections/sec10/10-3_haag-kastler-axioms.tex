@@ -560,6 +560,24 @@ Combining invariance with purity makes the GNS representation both covariant and
     The conditions a vacuum state satisfies that need neither the spectrum condition nor Stone's theorem. First, a vacuum state is \emph{invariant} (the first conjunct of the definition). Second, a \emph{pure} vacuum state yields the irreducible covariant GNS representation of \ref{thrm:irreducible-covariant-representation}: a covariant GNS triple with implementing unitaries $U(L)$ fixing $\Omega$ and operator covariance $U(L)\pi(a)U(L)^{-1} = \pi(\beta_L a)$, whose representation is irreducible and generates all of $\mathcal{B}(H)$. Both follow by projecting to invariance and chaining with purity $\Rightarrow$ irreducibility; the spectrum-condition content of the vacuum is not used.
 \end{theorem}
 
+\begin{definition}[Future-Timelike Translation Subgroup]
+    \label{def:future-timelike-translation}
+    \lean{Physicslib4.AQFT.HaagKastler.translationSub, Physicslib4.AQFT.HaagKastler.translationFlow, Physicslib4.AQFT.HaagKastler.isOneParameterSubgroup_translationFlow, Physicslib4.AQFT.HaagKastler.IsFutureTimelikeTranslation}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:lorentz-covariance, def:vacuum-state}
+    The pure \emph{translations} of the inhomogeneous Lorentz group: an element is a pair $(\text{linear}, \text{translation})$, and a pure translation $\mathrm{translationSub}(n) = (\mathrm{id}, n)$ has trivial linear part, so $n \mapsto (\mathrm{id}, n)$ embeds the additive group of the spacetime carrier ($\mathrm{translationSub}(0) = 1$, $\mathrm{translationSub}(n+m) = \mathrm{translationSub}(n)\,\mathrm{translationSub}(m)$). The one-parameter translation flow in a direction $n$ is $\mathrm{translationFlow}(n)(t) = (\mathrm{id}, t \cdot n)$, which is a one-parameter subgroup. A one-parameter subgroup $\gamma$ is a \emph{future-timelike translation} when $\gamma = \mathrm{translationFlow}(n)$ for some future-pointing timelike $n$ --- i.e. $n$ lies in the forward Minkowski cone at the origin. This wires in the translation subgroup and its causal structure, giving the concrete predicate with which the abstract future-timelike-translation parameter of \ref{def:vacuum-state} is discharged.
+\end{definition}
+
+\begin{definition}[Vacuum State with the Concrete Spectrum Condition]
+    \label{def:vacuum-state-concrete}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumStateConcrete}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:vacuum-state, def:future-timelike-translation}
+    The vacuum-state condition of \ref{def:vacuum-state} with its future-timelike-translation parameter fixed to the concrete predicate \ref{def:future-timelike-translation}: the spectrum condition is imposed on exactly the one-parameter translation subgroups $t \mapsto (\mathrm{id}, t \cdot n)$ with $n$ future-pointing timelike. The vacuum definition then depends on no free predicate. Invariance and (for a pure state) the irreducible covariant representation follow as in \ref{thrm:vacuum-no-stone}, since the concrete form unfolds to the parameterized one.
+\end{definition}
+
 \begin{theorem}[Purity is Covariance-Invariant]
     \label{thrm:purity-covariance-invariant}
     \lean{Physicslib4.GNS.isPure_precomp_iff, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isPure_precomp_action_iff}
