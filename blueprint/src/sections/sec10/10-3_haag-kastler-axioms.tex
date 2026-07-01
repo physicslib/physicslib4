@@ -748,3 +748,12 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
     \uses{def:kms-state-for-flow-covariance, thrm:kms-convex}
     A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two KMS states on $\mathfrak{U}$ for the same covariance flow $L$ at the same inverse temperature $\beta$ is again a KMS state for that flow. This specializes the abstract KMS convexity (\ref{thrm:kms-convex}) to the induced one-parameter group $\mathrm{flowAut}$. Physically, the equilibrium states for a one-parameter symmetry flow form a convex set.
 \end{theorem}
+
+\begin{definition}[Ground State for a Covariance Flow]
+    \label{def:ground-state-for-flow-covariance}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsGroundStateForFlow, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsGroundStateForFlow.invariant, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsGroundStateForFlow.exists_strongContinuous_unitary}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \leanok
+    \uses{def:kms-state-for-flow-covariance, def:positive-energy, def:covariant-quasilocal-algebra}
+    A state $\omega$ on the quasilocal algebra $\mathfrak{U}$ is a \emph{ground state} for a one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group (e.g.\ a translation or boost flow) when it is invariant under the flow and, in a GNS representation reproducing $\omega$ and implementing the flow by unitaries $U(t)$ fixing $\Omega$, the one-parameter unitary group $t \mapsto U(t)$ has positive energy (\ref{def:positive-energy}). This is the ground-state ($\beta \to \infty$, spectrum-condition) counterpart of the covariance-flow KMS state \ref{def:kms-state-for-flow-covariance}: the stationary state whose flow generator, the Hamiltonian for a timelike flow, is positive. Two Stone-free consequences: a ground state is flow-invariant, and its implementing unitary group is strongly continuous. It is the Minkowski analogue of the curved Killing-flow ground state \ref{def:ground-state-for-flow-in-curved-spacetime}.
+\end{definition}

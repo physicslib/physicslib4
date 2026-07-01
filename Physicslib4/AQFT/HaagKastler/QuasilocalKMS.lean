@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.KMS
+import Physicslib4.AQFT.PositiveEnergy
 
 /-!
 # KMS states for the covariance action in Minkowski spacetime
@@ -81,6 +82,53 @@ theorem IsKMSStateForFlow.convexCombo (flow : ℝ → InhomogeneousLorentzGroup)
     (h₁ : C.IsKMSStateForFlow flow β ω₁) (h₂ : C.IsKMSStateForFlow flow β ω₂) :
     C.IsKMSStateForFlow flow β (ω₁.convexCombo ω₂ s hs0 hs1) :=
   AQFT.IsKMSState.convexCombo s hs0 hs1 h₁ h₂
+
+open scoped InnerProductSpace in
+/-- **Ground state for a covariance flow (bounded-generator scaffold).** A state `ω` on
+the quasilocal algebra `𝔘` is a *ground state* for a one-parameter subgroup `t ↦ L_t` of
+the inhomogeneous Lorentz group (e.g. a translation or boost flow) when it is invariant
+under the flow and, in a GNS representation `(K, π, Ω)` reproducing `ω` and implementing
+the flow by unitaries `U` fixing `Ω`, the one-parameter unitary group `t ↦ U t` has
+positive energy (`AQFT.IsPositiveEnergy`). This is the ground-state (`β → ∞`,
+spectrum-condition) counterpart of `IsKMSStateForFlow`: the stationary state whose flow
+generator (the Hamiltonian, for a timelike flow) is positive. The positive-energy
+condition is the bounded-generator scaffold; the faithful unbounded form is Stone-gated. -/
+def IsGroundStateForFlow (flow : ℝ → InhomogeneousLorentzGroup)
+    (ω : Physicslib4.GNS.State C.quasilocal.carrier) : Prop :=
+  (∀ (t : ℝ) (a : C.quasilocal.carrier), (ω (C.flowAut flow t a) : ℂ) = ω a) ∧
+    ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
+      (_ : CompleteSpace K) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
+      (U : ℝ → (K ≃ₗᵢ[ℂ] K)),
+        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (t : ℝ) (a : C.quasilocal.carrier), U t (π a Ω) = π (C.flowAut flow t a) Ω) ∧
+        (∀ t : ℝ, U t Ω = Ω) ∧
+        AQFT.IsPositiveEnergy U
+
+/-- A covariance-flow ground state is invariant under the flow (the first conjunct); no
+spectrum condition or Stone's theorem is needed. -/
+theorem IsGroundStateForFlow.invariant (flow : ℝ → InhomogeneousLorentzGroup)
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
+    (h : C.IsGroundStateForFlow flow ω) :
+    ∀ (t : ℝ) (a : C.quasilocal.carrier), (ω (C.flowAut flow t a) : ℂ) = ω a :=
+  h.1
+
+open scoped InnerProductSpace in
+/-- The implementing unitary group of a covariance-flow ground state is strongly
+continuous, since it has positive energy (`AQFT.IsPositiveEnergy.strongContinuous`). This
+needs no spectrum condition. -/
+theorem IsGroundStateForFlow.exists_strongContinuous_unitary
+    (flow : ℝ → InhomogeneousLorentzGroup)
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
+    (h : C.IsGroundStateForFlow flow ω) :
+    ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
+      (_ : CompleteSpace K) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
+      (U : ℝ → (K ≃ₗᵢ[ℂ] K)),
+        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (t : ℝ) (a : C.quasilocal.carrier), U t (π a Ω) = π (C.flowAut flow t a) Ω) ∧
+        (∀ t : ℝ, U t Ω = Ω) ∧
+        ∀ ψ : K, Continuous fun t : ℝ => U t ψ := by
+  obtain ⟨_, K, _, _, _, π, Ω, U, hrep, himpl, hfix, hpe⟩ := h
+  exact ⟨K, ‹_›, ‹_›, ‹_›, π, Ω, U, hrep, himpl, hfix, fun ψ => hpe.strongContinuous ψ⟩
 
 end CovariantQuasilocalAlgebra
 
