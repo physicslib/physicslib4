@@ -23,8 +23,8 @@ here so neither net depends on the other.
 * `Physicslib4.lieConj U` — conjugation by a unitary `U : H ≃ₗᵢ[ℂ] H` on `B(H)`,
   with `lieConj_apply` and the bridge `lieConj_apply_eq_conjStarAlgEquiv` to
   Mathlib's `LinearIsometryEquiv.conjStarAlgEquiv`. Its algebra/metric structure is
-  recorded by `lieConj_one`, `lieConj_add`, `lieConj_smul`, `exp_lieConj`, and the
-  norm preservation `norm_lieConj`.
+  recorded by `lieConj_one`, `lieConj_add`, `lieConj_smul`, `lieConj_star`, `exp_lieConj`,
+  and the norm preservation `norm_lieConj`.
 * `Physicslib4.scalarOperators` / `IsFactor` and `IsFactor.conj` — the factor
   (trivial-center) property and its preservation under conjugation.
 * `Physicslib4.restrictStarAlgEquiv` — a `*`-automorphism carrying one
@@ -181,6 +181,13 @@ theorem lieConj_apply_eq_conjStarAlgEquiv (Uop : H ≃ₗᵢ[ℂ] H) (T : H →L
   ext x
   rw [lieConj_apply, LinearIsometryEquiv.conjStarAlgEquiv_apply]
   simp [ContinuousLinearMap.comp_apply]
+
+/-- Conjugation by a unitary is `star`-preserving: `lieConj W (star A) = star (lieConj W A)`.
+It agrees with Mathlib's conjugation `*`-automorphism, which preserves the adjoint. -/
+theorem lieConj_star (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) :
+    lieConj W (star A) = star (lieConj W A) := by
+  rw [lieConj_apply_eq_conjStarAlgEquiv, lieConj_apply_eq_conjStarAlgEquiv]
+  exact map_star _ A
 
 omit [CompleteSpace H] in
 /-- **Conjugation by a unitary is norm-preserving:** `‖lieConj W A‖ = ‖A‖`. Since `W`
