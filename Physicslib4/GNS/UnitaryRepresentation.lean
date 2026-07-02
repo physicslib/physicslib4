@@ -163,6 +163,36 @@ theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
     exact congrFun hfun x
   · exact fun g a x => gns_operator_covariance hcycdense hUcyc g a x
 
+/-- **Bundled GNS unitary representation of an invariant action.** The bundled form
+of `exists_gns_unitary_of_invariant`: the action enters as a group homomorphism
+`γ : G →* (A ≃⋆ₐ[ℂ] A)`, and the implementing unitaries are returned as a bundled
+group homomorphism `U : G →* (H ≃ₗᵢ[ℂ] H)` — a genuine unitary representation.
+
+The group laws `U (g' * g) = U g' * U g` and `U 1 = 1` are now carried by `U`
+itself (`map_mul`/`map_one`), so they no longer appear as separate hypotheses on
+`γ` or clauses on `U`. What remains are the geometric clauses: the reproducing
+formula, the implementation `U g (π a Ω) = π (γ g a) Ω`, vacuum invariance
+`U g Ω = Ω`, operator covariance, and cyclicity. Both group structures use the
+composition convention `f * g = g.trans f` (`StarAlgEquiv.aut`,
+`LinearIsometryEquiv.instGroup`). -/
+theorem exists_gns_unitaryRep_of_invariant.{u} {A : Type u} [CStarAlgebra A]
+    {G : Type*} [Monoid G] (γ : G →* (A ≃⋆ₐ[ℂ] A)) (ω : State A)
+    (hinv : ∀ (g : G) (a : A), ω (γ g a) = ω a) :
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : G →* (H ≃ₗᵢ[ℂ] H)),
+        (∀ a : A, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (g : G) (a : A), U g (π a Ω) = π (γ g a) Ω) ∧
+        (∀ g : G, U g Ω = Ω) ∧
+        (∀ (g : G) (a : A) (x : H), U g (π a ((U g).symm x)) = π (γ g a) x) ∧
+        IsCyclicVector π Ω := by
+  obtain ⟨H, _, _, _, π, Ω, U, hrepro, himpl, hΩ, hmulU, honeU, hopcov, hcyc⟩ :=
+    exists_gns_unitary_of_invariant (fun g => γ g) ω hinv
+      (fun g g' a => by rw [map_mul]; rfl) (fun a => by rw [map_one]; rfl)
+  exact ⟨H, inferInstance, inferInstance, inferInstance, π, Ω,
+    { toFun := U, map_one' := honeU, map_mul' := fun a b => hmulU b a },
+    hrepro, himpl, hΩ, hopcov, hcyc⟩
+
 /-- **Strongly continuous GNS unitary representation of an invariant action.**
 
 Strengthening of `exists_gns_unitary_of_invariant`: if, in addition, the index
@@ -271,6 +301,32 @@ theorem exists_gns_unitary_of_invariant_strongContinuous.{u} {A : Type u}
     rw [heq]
     exact hwc a b
   · exact fun g a x => gns_operator_covariance hcycdense hUcyc g a x
+
+/-- **Bundled strongly continuous GNS unitary representation.** The bundled form of
+`exists_gns_unitary_of_invariant_strongContinuous`: the action enters as a group
+homomorphism `γ : G →* (A ≃⋆ₐ[ℂ] A)` and the strongly continuous implementing
+unitaries are returned as a bundled group homomorphism `U : G →* (H ≃ₗᵢ[ℂ] H)`. The
+group laws are carried by `U`; the strong-continuity clause `g ↦ U g ψ` continuous
+and the geometric clauses remain. -/
+theorem exists_gns_unitaryRep_of_invariant_strongContinuous.{u} {A : Type u}
+    [CStarAlgebra A] {G : Type*} [Monoid G] [TopologicalSpace G]
+    (γ : G →* (A ≃⋆ₐ[ℂ] A)) (ω : State A)
+    (hinv : ∀ (g : G) (a : A), ω (γ g a) = ω a)
+    (hwc : ∀ a b : A, Continuous fun g : G => (ω (star a * γ g b) : ℂ)) :
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : G →* (H ≃ₗᵢ[ℂ] H)),
+        (∀ a : A, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (g : G) (a : A), U g (π a Ω) = π (γ g a) Ω) ∧
+        (∀ g : G, U g Ω = Ω) ∧
+        (∀ ψ : H, Continuous fun g : G => U g ψ) ∧
+        (∀ (g : G) (a : A) (x : H), U g (π a ((U g).symm x)) = π (γ g a) x) := by
+  obtain ⟨H, _, _, _, π, Ω, U, hrepro, himpl, hΩ, hmulU, honeU, hsc, hopcov⟩ :=
+    exists_gns_unitary_of_invariant_strongContinuous (fun g => γ g) ω hinv
+      (fun g g' a => by rw [map_mul]; rfl) (fun a => by rw [map_one]; rfl) hwc
+  exact ⟨H, inferInstance, inferInstance, inferInstance, π, Ω,
+    { toFun := U, map_one' := honeU, map_mul' := fun a b => hmulU b a },
+    hrepro, himpl, hΩ, hsc, hopcov⟩
 
 end GNS
 end Physicslib4
