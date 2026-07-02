@@ -22,7 +22,9 @@ here so neither net depends on the other.
   automorphism maps centralizers (hence bicommutants) to those of the image.
 * `Physicslib4.lieConj U` — conjugation by a unitary `U : H ≃ₗᵢ[ℂ] H` on `B(H)`,
   with `lieConj_apply` and the bridge `lieConj_apply_eq_conjStarAlgEquiv` to
-  Mathlib's `LinearIsometryEquiv.conjStarAlgEquiv`.
+  Mathlib's `LinearIsometryEquiv.conjStarAlgEquiv`. Its algebra/metric structure is
+  recorded by `lieConj_one`, `lieConj_add`, `lieConj_smul`, `exp_lieConj`, and the
+  norm preservation `norm_lieConj`.
 * `Physicslib4.scalarOperators` / `IsFactor` and `IsFactor.conj` — the factor
   (trivial-center) property and its preservation under conjugation.
 * `Physicslib4.restrictStarAlgEquiv` — a `*`-automorphism carrying one
@@ -120,6 +122,17 @@ theorem lieConj_smul (W : H ≃ₗᵢ[ℂ] H) (c : ℂ) (A : H →L[ℂ] H) :
     lieConj W (c • A) = c • lieConj W A := by
   simp only [lieConj, Units.conjMulEquiv_apply, mul_smul_comm, smul_mul_assoc]
 
+omit [CompleteSpace H] in
+/-- Conjugation by a unitary fixes the identity: `lieConj W 1 = 1`. -/
+@[simp] theorem lieConj_one (W : H ≃ₗᵢ[ℂ] H) : lieConj W (1 : H →L[ℂ] H) = 1 :=
+  map_one (lieConj W)
+
+omit [CompleteSpace H] in
+/-- Conjugation by a unitary is additive: `lieConj W (A + B) = lieConj W A + lieConj W B`. -/
+theorem lieConj_add (W : H ≃ₗᵢ[ℂ] H) (A B : H →L[ℂ] H) :
+    lieConj W (A + B) = lieConj W A + lieConj W B := by
+  simp only [lieConj, Units.conjMulEquiv_apply, mul_add, add_mul]
+
 /-- The scalar operators `{c · 1 : c ∈ ℂ}` of a Hilbert space, the (would-be)
 center of any von Neumann algebra acting irreducibly. -/
 def scalarOperators (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H] :
@@ -168,6 +181,22 @@ theorem lieConj_apply_eq_conjStarAlgEquiv (Uop : H ≃ₗᵢ[ℂ] H) (T : H →L
   ext x
   rw [lieConj_apply, LinearIsometryEquiv.conjStarAlgEquiv_apply]
   simp [ContinuousLinearMap.comp_apply]
+
+omit [CompleteSpace H] in
+/-- **Conjugation by a unitary is norm-preserving:** `‖lieConj W A‖ = ‖A‖`. Since `W`
+and `W⁻¹` are isometries, conjugation is a similarity that preserves the operator
+norm; proved directly by bounding both directions. -/
+theorem norm_lieConj (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) :
+    ‖lieConj W A‖ = ‖A‖ := by
+  refine le_antisymm (ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg A) fun x => ?_)
+    (ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_)
+  · rw [lieConj_apply, W.norm_map]
+    calc ‖A (W.symm x)‖ ≤ ‖A‖ * ‖W.symm x‖ := A.le_opNorm _
+      _ = ‖A‖ * ‖x‖ := by rw [W.symm.norm_map]
+  · have hx : A x = W.symm (lieConj W A (W x)) := by simp [lieConj_apply]
+    rw [hx, W.symm.norm_map]
+    calc ‖lieConj W A (W x)‖ ≤ ‖lieConj W A‖ * ‖W x‖ := (lieConj W A).le_opNorm _
+      _ = ‖lieConj W A‖ * ‖x‖ := by rw [W.norm_map]
 
 /-- A star-algebra automorphism `e` of `A` whose underlying map carries the set of
 a star-subalgebra `S` onto that of `T` restricts to a star-algebra equivalence
