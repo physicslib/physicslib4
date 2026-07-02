@@ -36,8 +36,11 @@ its action on the generators, so at most one lift exists for each `L`.
 
 This is the *uniqueness* half of the lifting problem. **Existence** - actually
 constructing `β_L` by extending the densely-defined intertwiner to the
-completion - requires the union of local images to form a `*`-subalgebra and a
-uniformly-continuous-extension argument, and is deferred.
+completion - is carried out in `QuasilocalIntertwiner.lean`
+(`nonempty_quasilocalLift`): the union of local images forms a `*`-subalgebra
+(directedness of the Alexandrov basis plus the isotony coherence), and the
+densely-defined intertwiner extends by the uniformly-continuous-extension
+argument `exists_starAlgHom_extend_of_dense`.
 -/
 
 namespace Physicslib4

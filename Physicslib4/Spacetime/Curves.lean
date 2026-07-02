@@ -42,14 +42,14 @@ section 10.2 of the AQFT-in-Lean blueprint.
 
 The notion of "smooth at a boundary point of a closed interval" is delicate
 in general. In this file we follow the conservative convention used in
-Mathlib for `ContMDiff` of a function on a subset, leaving the precise
-"non-vanishing derivative" condition stated pointwise on the parameter
-space `Σ`. Several auxiliary smoothness conditions are stated as `sorry`
-placeholders within the `Prop`-valued fields; the *statements* remain
-faithful to the blueprint, but cannot be fully discharged with Mathlib
-v4.31.0-rc1 in a one-line way (Mathlib does not provide a packaged
-"smooth manifold-valued map on a closed subset of ℝ" with a tangent
-vector / derivative API).
+Mathlib for `ContMDiff` of a function on a subset, and state the
+"non-vanishing derivative" condition pointwise on the parameter space `Σ`.
+These are genuine `Prop` fields of `SmoothPath` — `smoothOn : ContMDiffOn …`
+and `nonvanishing : ∀ s ∈ Σ, mfderivWithin _ _ toFun Σ s 1 ≠ 0` — carried by
+the structure, not `sorry` placeholders. They are discharged for concrete
+paths via named lemmas; for the straight-line path see
+`standardMinkowskiLineSegmentPath_smoothOn` and
+`standardMinkowskiLineSegmentPath_nonvanishing` in `Minkowski.lean`.
 -/
 
 namespace Physicslib4

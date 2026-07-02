@@ -32,9 +32,13 @@ intertwined by these equivalences.
 
 ## Notes
 
-As in the Minkowski case, this is the local, fiberwise form of covariance; a
-genuine isometry-invariant *vacuum state* additionally requires lifting the
-fiberwise action to an automorphism group, which is not yet available.
+As in the Minkowski case, this is the local, fiberwise form of covariance.
+Lifting the fiberwise action to an automorphism group is realized per region by
+the stabilizer action `stabAut` (`StabilizerAction.lean`): for `g` fixing `B`,
+`α_g` is an automorphism of the single algebra `𝔘(B)`. Since curved spacetime
+has no quasilocal algebra, there is no global isometry-invariant vacuum;
+equilibrium is instead captured by KMS states for Killing flows
+(`StabilizerKMS.lean`).
 -/
 
 namespace Physicslib4

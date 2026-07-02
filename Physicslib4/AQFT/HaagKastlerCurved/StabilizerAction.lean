@@ -116,6 +116,22 @@ theorem stabAutHom_mul (B : Set M.Carrier)
     (MulAction.mem_stabilizer_iff.mp g'.2)
     (MulAction.mem_stabilizer_iff.mp (g' * g).2) a
 
+/-- The stabilizer action packaged as a **group homomorphism** from the stabilizer
+subgroup `Stab(B)` to the `*`-automorphism group of the local algebra `𝔘(B)`,
+`g ↦ α̂_g`. This bundles `stabAutHom_one` and `stabAutHom_mul`; the target's group
+law is composition (`f * g = g.trans f`, `StarAlgEquiv.aut`). It exhibits the
+stabilizer action as a unitary-free representation of `Stab(B)` by `*`-automorphisms
+of `𝔘(B)` — the curved counterpart of the Minkowski `actionHom`. -/
+noncomputable def stabAutMonoidHom (B : Set M.Carrier) :
+    ↥(MulAction.stabilizer M.Isom B) →* (N.algebra B ≃⋆ₐ[ℂ] N.algebra B) where
+  toFun := N.stabAutHom B
+  map_one' := StarAlgEquiv.ext (N.stabAutHom_one B)
+  map_mul' a b := StarAlgEquiv.ext fun x => N.stabAutHom_mul B b a x
+
+@[simp] theorem stabAutMonoidHom_apply (B : Set M.Carrier)
+    (g : ↥(MulAction.stabilizer M.Isom B)) :
+    N.stabAutMonoidHom B g = N.stabAutHom B g := rfl
+
 /-- **GNS unitary representation of the stabilizer.** For a state `ω` on the
 local algebra `𝔘(B)` that is invariant under the stabilizer action of
 `Stab(B) = {φ : φ·B = B}`, the action is implemented on the GNS Hilbert space by
@@ -213,11 +229,13 @@ theorem exists_gns_irreducible_covariant_stabilizer (B : Set M.Carrier)
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
         (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B) (x : H),
           U g (π a ((U g).symm x)) = π (N.stabAutHom B g a) x) ∧
-        IsIrreducible π := by
+        IsIrreducible π ∧
+        gnsVonNeumann π = Set.univ := by
   obtain ⟨H, i1, i2, i3, π, Ω, U, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hcyc⟩ :=
     N.exists_gns_unitary_stabilizer B ω hinv
-  exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov,
-    (isPure_iff_isIrreducible hcyc hrepro).mp hpure⟩
+  have hirr := (isPure_iff_isIrreducible hcyc hrepro).mp hpure
+  exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hirr,
+    gnsVonNeumann_eq_univ_of_isIrreducible hirr⟩
 
 /-- **Purity is invariant under the stabilizer action (curved spacetime).** A state
 `ω` on a local algebra `𝔘(B)` is pure if and only if its pullback `ω ∘ \hatα_g`

@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
 import Physicslib4.AQFT.KMS
+import Physicslib4.AQFT.PositiveEnergy
 import Physicslib4.GNS.UnitaryRepresentation
 
 /-!
@@ -132,6 +133,53 @@ theorem IsKMSStateForFlow.convexCombo
     (h₁ : N.IsKMSStateForFlow B flow β ω₁) (h₂ : N.IsKMSStateForFlow B flow β ω₂) :
     N.IsKMSStateForFlow B flow β (ω₁.convexCombo ω₂ s hs0 hs1) :=
   AQFT.IsKMSState.convexCombo s hs0 hs1 h₁ h₂
+
+/-- **Ground state for a Killing flow (bounded-generator scaffold).** A state `ω` on
+`𝔘(B)` is a *ground state* for a one-parameter Killing flow `t ↦ φ_t` into `Stab(B)`
+when it is invariant under the flow and, in a GNS representation `(K, π, Ω)` reproducing
+`ω` and implementing the flow by unitaries `U` (fixing `Ω`), the one-parameter unitary
+group `t ↦ U t` has positive energy (`AQFT.IsPositiveEnergy`). This is the ground-state
+(`β → ∞`, spectrum-condition) counterpart of `IsKMSStateForFlow`: it selects the
+stationary state whose Killing-flow generator (the local "Hamiltonian") is positive. The
+positive-energy condition is the bounded-generator scaffold; the faithful unbounded form
+is Stone-gated. -/
+def IsGroundStateForFlow (B : Set M.Carrier)
+    (flow : ℝ → ↥(MulAction.stabilizer M.Isom B))
+    (ω : Physicslib4.GNS.State (N.algebra B)) : Prop :=
+  (∀ (t : ℝ) (a : N.algebra B), (ω (N.flowAut B flow t a) : ℂ) = ω a) ∧
+    ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
+      (_ : CompleteSpace K) (π : N.algebra B →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
+      (U : ℝ → (K ≃ₗᵢ[ℂ] K)),
+        (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (t : ℝ) (a : N.algebra B), U t (π a Ω) = π (N.flowAut B flow t a) Ω) ∧
+        (∀ t : ℝ, U t Ω = Ω) ∧
+        AQFT.IsPositiveEnergy U
+
+/-- A Killing-flow ground state is invariant under the flow (the first conjunct); no
+spectrum condition or Stone's theorem is needed. -/
+theorem IsGroundStateForFlow.invariant (B : Set M.Carrier)
+    (flow : ℝ → ↥(MulAction.stabilizer M.Isom B))
+    {ω : Physicslib4.GNS.State (N.algebra B)}
+    (h : N.IsGroundStateForFlow B flow ω) :
+    ∀ (t : ℝ) (a : N.algebra B), (ω (N.flowAut B flow t a) : ℂ) = ω a :=
+  h.1
+
+/-- The implementing unitary group of a Killing-flow ground state is strongly
+continuous, since it has positive energy (`AQFT.IsPositiveEnergy.strongContinuous`). This
+needs no spectrum condition. -/
+theorem IsGroundStateForFlow.exists_strongContinuous_unitary (B : Set M.Carrier)
+    (flow : ℝ → ↥(MulAction.stabilizer M.Isom B))
+    {ω : Physicslib4.GNS.State (N.algebra B)}
+    (h : N.IsGroundStateForFlow B flow ω) :
+    ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
+      (_ : CompleteSpace K) (π : N.algebra B →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
+      (U : ℝ → (K ≃ₗᵢ[ℂ] K)),
+        (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (t : ℝ) (a : N.algebra B), U t (π a Ω) = π (N.flowAut B flow t a) Ω) ∧
+        (∀ t : ℝ, U t Ω = Ω) ∧
+        ∀ ψ : K, Continuous fun t : ℝ => U t ψ := by
+  obtain ⟨_, K, _, _, _, π, Ω, U, hrep, himpl, hfix, hpe⟩ := h
+  exact ⟨K, ‹_›, ‹_›, ‹_›, π, Ω, U, hrep, himpl, hfix, fun ψ => hpe.strongContinuous ψ⟩
 
 end HaagKastlerNet
 

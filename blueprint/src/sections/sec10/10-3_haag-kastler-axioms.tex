@@ -189,6 +189,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B})$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated regions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$, $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$. Both reduce to the set-level statements through the coercion $\uparrow R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$.
 \end{theorem}
 
+\begin{definition}[The Net of von Neumann Algebras]
+    \label{def:von-neumann-net}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.vonNeumannNet}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{def:local-von-neumann-algebra, thrm:von-neumann-bundled-order}
+    Packaging isotony, the assignment $\mathbf{B} \mapsto R(\mathbf{B})$ is an order-preserving map from the poset of basis regions (ordered by inclusion) to the von Neumann algebras of $\mathcal{B}(H)$. This realizes \emph{the net} as a functor on the inclusion poset: containment of regions is sent to containment of algebras. It is the central object of the algebraic approach.
+\end{definition}
+
 \begin{theorem}[Statistical Independence (Schlieder Property)]
     \label{thrm:statistical-independence}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_separating, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.eq_zero_of_commute_of_cyclic}
@@ -205,6 +214,35 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     \leanok
     \uses{thrm:statistical-independence, def:local-von-neumann-algebra}
     The separating property phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}_2)$: with $\Omega$ cyclic for the local observables of $\mathbf{B}_1$, every $R$ in the bundled algebra $R(\mathbf{B}_2)$ of a spacelike-separated region with $R\Omega = 0$ is zero. It reduces to \ref{thrm:statistical-independence} through the coercion $\uparrow R(\mathbf{B}_2) = \pi(\mathfrak{U}(\mathbf{B}_2))''$.
+\end{theorem}
+
+\begin{theorem}[Geometric Covariance of the von Neumann Net]
+    \label{thrm:von-neumann-geometric-covariance}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.lieConj_image_covLocalVonNeumann, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.lieConj_image_covLocalOperators}
+    \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \leanok
+    \uses{def:local-von-neumann, def:covariant-quasilocal-algebra, thrm:irreducible-covariant-representation}
+    In a covariant representation $\pi$ of the quasilocal algebra with the operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$, conjugation by the implementing unitary $U(L)$ carries the local von Neumann algebra of a region $\mathbf{B}$ onto that of the Lorentz-transformed region $L \cdot \mathbf{B}$:
+    \[ U(L)\, R(\mathbf{B})\, U(L)^{-1} = R(L \cdot \mathbf{B}). \]
+    This is the statement that the symmetry group acts \emph{geometrically} on the net of von Neumann algebras. The proof rests on three ingredients, all already available: operator covariance (the last clause of \ref{thrm:irreducible-covariant-representation}); the fact that $\beta_L = $ the covariance action sends $\iota_{\mathbf{B}}(\mathfrak{U}(\mathbf{B}))$ onto $\iota_{L\cdot\mathbf{B}}(\mathfrak{U}(L\cdot\mathbf{B}))$ (from the action-on-generators identity and surjectivity of the covariance equivalence $\alpha_L$); and the algebraic fact that conjugation by a unit is a multiplicative automorphism, which therefore commutes with the bicommutant. The reusable core is that a multiplicative automorphism maps the centralizer of a set onto the centralizer of its image, hence maps bicommutants to bicommutants. In particular $R(\mathbf{B})$ and $R(L \cdot \mathbf{B})$ are unitarily equivalent (conjugate by $U(L)$), so any unitary-conjugation-invariant property of a local von Neumann algebra --- such as being a factor --- is constant along the Lorentz orbit of a region.
+\end{theorem}
+
+\begin{theorem}[Orbit-Invariance of Factoriality]
+    \label{thrm:von-neumann-factor-orbit}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.covLocalVonNeumann_isFactor_smul}
+    \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \leanok
+    \uses{thrm:von-neumann-geometric-covariance, thrm:irreducible-factor}
+    If the local von Neumann algebra $R(\mathbf{B})$ is a \emph{factor} (its center $R(\mathbf{B}) \cap R(\mathbf{B})'$ is exactly the scalars), then so is $R(L \cdot \mathbf{B})$ for every Lorentz transformation $L$. Geometric covariance (\ref{thrm:von-neumann-geometric-covariance}) exhibits $R(L \cdot \mathbf{B}) = U(L) R(\mathbf{B}) U(L)^{-1}$; conjugation by a unitary is a multiplicative automorphism that carries the center onto the center and fixes the scalars, so it preserves the factor property. Thus being a factor is constant along the Lorentz orbit of a region.
+\end{theorem}
+
+\begin{theorem}[Geometric Covariance as a von Neumann Algebra Isomorphism]
+    \label{thrm:von-neumann-covariance-iso}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.covLocalVonNeumannEquiv}
+    \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \leanok
+    \uses{thrm:von-neumann-geometric-covariance, def:local-von-neumann-algebra}
+    The geometric-covariance set equality is upgraded to a first-class \emph{$*$-algebra isomorphism} of the bundled local von Neumann algebras, $R(\mathbf{B}) \cong R(L \cdot \mathbf{B})$. It is the restriction of the conjugation $*$-automorphism $T \mapsto U(L) T U(L)^{-1}$ of $\mathcal{B}(H)$ (Mathlib's \texttt{conjStarAlgEquiv}, whose adjoint-is-inverse property makes conjugation by a unitary star-preserving) to $R(\mathbf{B})$, whose image is exactly $R(L \cdot \mathbf{B})$. The reusable ingredient is that a $*$-automorphism carrying the underlying set of one star-subalgebra onto another restricts to a star-algebra equivalence between them. This makes the unitary equivalence of orbit-related local algebras an explicit transportable object.
 \end{theorem}
 
 \subsection{Irreducibility and Schur's Lemma}
@@ -297,6 +335,24 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
     The von Neumann algebra $\pi(A)''$ generated by an irreducible representation has \emph{trivial center}: an operator lies in the center $\pi(A)'' \cap (\pi(A)'')'$ if and only if it is a scalar multiple of the identity. Indeed the center is contained in $(\pi(A)'')' = \pi(A)'$ (the triple commutant collapses to the single one), which irreducibility makes the scalars; conversely scalars are central.
 \end{theorem}
 
+\begin{theorem}[Irreducibility $\iff$ Generating $\mathcal{B}(H)$]
+    \label{thrm:irreducible-generates-all}
+    \lean{Physicslib4.GNS.isIrreducible_iff_gnsVonNeumann_eq_univ, Physicslib4.GNS.gnsVonNeumann_eq_univ_of_isIrreducible}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{def:irreducible-representation, def:local-von-neumann}
+    A representation is irreducible if and only if the von Neumann algebra $\pi(A)''$ it generates is \emph{all} of $\mathcal{B}(H)$: $\pi(A)'' = \mathcal{B}(H)$. For the forward direction, irreducibility makes the commutant $\pi(A)'$ exactly the scalars, and the centralizer of the scalars is everything (every bounded operator commutes with $c \cdot 1$), so $\pi(A)'' = (\text{scalars})' = \mathcal{B}(H)$. The converse uses that $\mathcal{B}(H)$ is a \emph{central} $\mathbb{C}$-algebra (its center is the scalars): if the bicommutant is everything, every operator commutes with the commutant, so any operator commuting with $\pi(A)$ is central, hence scalar. This is the density (bicommutant-theorem) form of irreducibility, sharpening the factor statement \ref{thrm:irreducible-factor}.
+\end{theorem}
+
+\begin{theorem}[Bundled Density Form of Irreducibility]
+    \label{thrm:gns-generates-all-bundled}
+    \lean{Physicslib4.GNS.coe_gnsVonNeumannAlgebra_eq_univ_of_isIrreducible, Physicslib4.GNS.gnsVonNeumannAlgebra_isGreatest_of_isIrreducible}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    \uses{thrm:irreducible-generates-all, def:local-von-neumann-algebra}
+    The von Neumann algebra $\pi(A)''$ generated by a representation is bundled as a first-class \texttt{VonNeumannAlgebra} (\texttt{gnsVonNeumannAlgebra}), the image $\pi(A)$ being self-adjoint. For an irreducible representation, this bundled algebra is all of $\mathcal{B}(H)$: its underlying set is everything, and equivalently it is the \emph{greatest} von Neumann algebra on $H$ (every $S$ satisfies $S \le \pi(A)''$). This is the bundled counterpart of \ref{thrm:irreducible-generates-all}. Mathlib's \texttt{VonNeumannAlgebra} carries no lattice $\top$, so the literal $\pi(A)'' = \top$ is phrased at the level of the underlying set together with the greatest-element statement under the existing $\le$.
+\end{theorem}
+
 \begin{theorem}[The GNS Representation of a Pure State is a Factor]
     \label{thrm:pure-factor}
     \lean{Physicslib4.GNS.exists_gns_factor_of_isPure}
@@ -304,6 +360,15 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
     \leanok
     \uses{def:pure-state, thrm:pure-iff-irreducible, thrm:irreducible-factor, thrm:gns-construction-theorem}
     For a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra $\pi(A)''$ has trivial center, i.e. is a factor. This combines the GNS construction, purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}), and \ref{thrm:irreducible-factor}. It applies verbatim to the quasilocal algebra $\mathfrak{U}$ and to each local algebra $\mathfrak{U}(\mathbf{B})$, since both are C*-algebras.
+\end{theorem}
+
+\begin{theorem}[The GNS Representation of a Pure State Generates $\mathcal{B}(H)$]
+    \label{thrm:pure-generates-all}
+    \lean{Physicslib4.GNS.exists_gns_generates_all_of_isPure}
+    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \leanok
+    \uses{def:pure-state, thrm:pure-iff-irreducible, thrm:irreducible-generates-all, thrm:gns-construction-theorem}
+    The density (bicommutant-theorem) sharpening of \ref{thrm:pure-factor}: for a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra is \emph{all} of $\mathcal{B}(H)$, $\pi(A)'' = \mathcal{B}(H)$. It combines the GNS construction, purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}), and the density form \ref{thrm:irreducible-generates-all}. As with the factor statement, it applies verbatim to the quasilocal algebra $\mathfrak{U}$ and to each local algebra $\mathfrak{U}(\mathbf{B})$.
 \end{theorem}
 
 The order-theoretic definition of purity (\ref{def:pure-state}) coincides with the convex-geometric one: $\omega$ is an extreme point of the state space. The analytic key is the normalization identity for positive functionals.
@@ -342,6 +407,15 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     \leanok
     \uses{def:state, def:extreme-state}
     Realizing the state space as the subset $\mathrm{stateSpace}(A) \subseteq A \to_L \mathbb{C}$ (the latter a real topological vector space via $\texttt{NormedSpace.complexToReal}$), it is convex: a real convex combination $a\,\omega_1 + b\,\omega_2$ of states is again a state, via $\texttt{State.convexCombo}$. Moreover a state $\omega$ lies in Mathlib's $\mathrm{extremePoints}_{\mathbb{R}}$ of the state space exactly when it is extreme in the sense of \ref{def:extreme-state}, connecting the purity characterizations to the Krein-Milman/Choquet API.
+\end{theorem}
+
+\begin{theorem}[Weak-* Compactness of the State Space]
+    \label{thrm:state-space-weak-compact}
+    \lean{Physicslib4.GNS.isCompact_weakStateSet}
+    \leanfile{Physicslib4/GNS/PureStateExists.lean}
+    \leanok
+    \uses{def:state}
+    The state space, realized inside the weak-* dual $\mathrm{WeakDual}\,\mathbb{C}\,A$ as the positive functionals with $\varphi(1) = 1$, is \emph{weak-* compact}. By Banach-Alaoglu it suffices that it is a weak-* closed subset of the closed unit ball: the positivity conditions $0 \le \varphi(a^* a)$ and the normalization $\varphi(1) = 1$ are each weak-* closed (evaluation at a fixed element is weak-* continuous), and a positive functional with $\varphi(1)=1$ has $\|\varphi\| = 1$. This is the analytic input for the existence of pure states via Krein-Milman.
 \end{theorem}
 
 These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Minkowski net, where they characterize purity of a global state - the natural setting for the vacuum and other distinguished states.
@@ -465,9 +539,62 @@ Combining invariance with purity makes the GNS representation both covariant and
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState.exists_gns_irreducible_covariant}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
-    \uses{thrm:invariant-state-gns-unitary, def:pure-state, def:irreducible-representation, thrm:pure-iff-irreducible}
-    A state $\omega$ on the quasilocal algebra that is both invariant under the covariance action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U(L)$ of the inhomogeneous Lorentz group fixing the cyclic vector $\Omega$, with operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$ - and \emph{irreducible}. This combines the covariant GNS triple of \ref{thrm:invariant-state-gns-unitary} with purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}). It is a necessary precursor to a vacuum representation; the spectrum condition would be the remaining ingredient.
+    \uses{thrm:invariant-state-gns-unitary, def:pure-state, def:irreducible-representation, thrm:pure-iff-irreducible, thrm:irreducible-generates-all}
+    A state $\omega$ on the quasilocal algebra that is both invariant under the covariance action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U(L)$ of the inhomogeneous Lorentz group fixing the cyclic vector $\Omega$, with operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$ - and \emph{irreducible}; in particular it generates all of $\mathcal{B}(H)$ ($\pi(\mathfrak{U})'' = \mathcal{B}(H)$, by \ref{thrm:irreducible-generates-all}). This combines the covariant GNS triple of \ref{thrm:invariant-state-gns-unitary} with purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}). It is a necessary precursor to a vacuum representation; the spectrum condition would be the remaining ingredient.
 \end{theorem}
+
+\begin{definition}[Positive Energy (bounded-generator scaffold)]
+    \label{def:positive-energy}
+    \lean{Physicslib4.AQFT.IsPositiveEnergy}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    A strongly continuous one-parameter unitary group $V : \mathbb{R} \to \mathcal{U}(H)$ has \emph{positive energy} when its generator is a positive operator: there exists a positive bounded operator $P$ (hence self-adjoint, with non-negative spectrum) such that $V(t) = e^{i t P}$ for all $t$. The positivity of $P$ is the energy-positivity asserted by the spectrum condition. The generator of a physical translation is unbounded, so requiring $P$ bounded is a genuine restriction; the faithful unbounded form requires Stone's theorem and the theory of unbounded self-adjoint operators, which Mathlib does not yet provide. This is the bounded-generator scaffold.
+\end{definition}
+
+\begin{theorem}[Positive-Energy API]
+    \label{thrm:positive-energy-api}
+    \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl, Physicslib4.AQFT.exp_generator_unique, Physicslib4.AQFT.IsPositiveEnergy.conj, Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:positive-energy}
+    Structural properties of the positive-energy condition, all Stone-free. (i) \emph{Trivial subgroup}: the constant group $t \mapsto \mathrm{id}$ has positive energy, with zero generator. (ii) \emph{Uniqueness of the generator}: if two bounded generators induce the same one-parameter group, $e^{i t P} = e^{i t Q}$ for all $t$, then $P = Q$ --- differentiating at $t = 0$ gives $i P = i Q$; positivity is not needed. Hence the generator witnessing positive energy is unique. (iii) \emph{Unitary invariance}: if $V$ has positive energy, so does its conjugate $t \mapsto W \circ V(t) \circ W^{-1}$ by a unitary $W$, with generator $W P W^{-1}$ (positive, being the unitary conjugate of $P$); the energy exponential transports via $e^{W A W^{-1}} = W e^{A} W^{-1}$. Physically, the spectrum condition does not depend on the choice of unitary frame. (iv) \emph{Strong continuity}: a positive-energy group is strongly continuous --- $t \mapsto V(t) x$ is continuous for every $x$, since $t \mapsto (i t) P$ is continuous and the operator exponential is continuous. This justifies calling it a strongly continuous one-parameter unitary group.
+\end{theorem}
+
+\begin{definition}[Vacuum State (generator-parameterized scaffold)]
+    \label{def:vacuum-state}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:invariant-state, def:positive-energy, def:covariant-quasilocal-algebra, thrm:invariant-state-gns-unitary}
+    A state $\omega$ on the quasilocal algebra is a \emph{vacuum state} (relative to a future-timelike-translation predicate) when it is invariant under the covariance action (\ref{def:invariant-state}) and, in a GNS representation reproducing $\omega$ and implementing the action by unitaries $U(L)$, every future-timelike translation one-parameter subgroup $\gamma$ has positive energy: $t \mapsto U(\gamma(t))$ satisfies \ref{def:positive-energy}. This packages the two \emph{necessary} vacuum conditions --- invariance and the spectrum condition --- with the spectrum condition entering as the positive-energy hypothesis on the implementing unitaries. The future-timelike-translation predicate is a parameter, to be instantiated once the translation subgroup of the Lorentz group and its causal structure are wired in; the positive-energy condition is the bounded-generator scaffold. Constructing/discharging the spectrum condition for a concrete net is the Stone-gated next layer.
+\end{definition}
+
+\begin{theorem}[No-Stone Consequences of a Vacuum State]
+    \label{thrm:vacuum-no-stone}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState.invariant, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState.exists_gns_irreducible_covariant}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:vacuum-state, thrm:irreducible-covariant-representation}
+    The conditions a vacuum state satisfies that need neither the spectrum condition nor Stone's theorem. First, a vacuum state is \emph{invariant} (the first conjunct of the definition). Second, a \emph{pure} vacuum state yields the irreducible covariant GNS representation of \ref{thrm:irreducible-covariant-representation}: a covariant GNS triple with implementing unitaries $U(L)$ fixing $\Omega$ and operator covariance $U(L)\pi(a)U(L)^{-1} = \pi(\beta_L a)$, whose representation is irreducible and generates all of $\mathcal{B}(H)$. Both follow by projecting to invariance and chaining with purity $\Rightarrow$ irreducibility; the spectrum-condition content of the vacuum is not used.
+\end{theorem}
+
+\begin{definition}[Future-Timelike Translation Subgroup]
+    \label{def:future-timelike-translation}
+    \lean{Physicslib4.AQFT.HaagKastler.translationSub, Physicslib4.AQFT.HaagKastler.translationFlow, Physicslib4.AQFT.HaagKastler.isOneParameterSubgroup_translationFlow, Physicslib4.AQFT.HaagKastler.IsFutureTimelikeTranslation}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:lorentz-covariance, def:vacuum-state}
+    The pure \emph{translations} of the inhomogeneous Lorentz group: an element is a pair $(\text{linear}, \text{translation})$, and a pure translation $\mathrm{translationSub}(n) = (\mathrm{id}, n)$ has trivial linear part, so $n \mapsto (\mathrm{id}, n)$ embeds the additive group of the spacetime carrier ($\mathrm{translationSub}(0) = 1$, $\mathrm{translationSub}(n+m) = \mathrm{translationSub}(n)\,\mathrm{translationSub}(m)$). The one-parameter translation flow in a direction $n$ is $\mathrm{translationFlow}(n)(t) = (\mathrm{id}, t \cdot n)$, which is a one-parameter subgroup. A one-parameter subgroup $\gamma$ is a \emph{future-timelike translation} when $\gamma = \mathrm{translationFlow}(n)$ for some future-pointing timelike $n$ --- i.e. $n$ lies in the forward Minkowski cone at the origin. This wires in the translation subgroup and its causal structure, giving the concrete predicate with which the abstract future-timelike-translation parameter of \ref{def:vacuum-state} is discharged.
+\end{definition}
+
+\begin{definition}[Vacuum State with the Concrete Spectrum Condition]
+    \label{def:vacuum-state-concrete}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumStateConcrete}
+    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \leanok
+    \uses{def:vacuum-state, def:future-timelike-translation}
+    The vacuum-state condition of \ref{def:vacuum-state} with its future-timelike-translation parameter fixed to the concrete predicate \ref{def:future-timelike-translation}: the spectrum condition is imposed on exactly the one-parameter translation subgroups $t \mapsto (\mathrm{id}, t \cdot n)$ with $n$ future-pointing timelike. The vacuum definition then depends on no free predicate. Invariance and (for a pure state) the irreducible covariant representation follow as in \ref{thrm:vacuum-no-stone}, since the concrete form unfolds to the parameterized one.
+\end{definition}
 
 \begin{theorem}[Purity is Covariance-Invariant]
     \label{thrm:purity-covariance-invariant}
@@ -621,3 +748,12 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
     \uses{def:kms-state-for-flow-covariance, thrm:kms-convex}
     A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two KMS states on $\mathfrak{U}$ for the same covariance flow $L$ at the same inverse temperature $\beta$ is again a KMS state for that flow. This specializes the abstract KMS convexity (\ref{thrm:kms-convex}) to the induced one-parameter group $\mathrm{flowAut}$. Physically, the equilibrium states for a one-parameter symmetry flow form a convex set.
 \end{theorem}
+
+\begin{definition}[Ground State for a Covariance Flow]
+    \label{def:ground-state-for-flow-covariance}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsGroundStateForFlow, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsGroundStateForFlow.invariant, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsGroundStateForFlow.exists_strongContinuous_unitary}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \leanok
+    \uses{def:kms-state-for-flow-covariance, def:positive-energy, def:covariant-quasilocal-algebra}
+    A state $\omega$ on the quasilocal algebra $\mathfrak{U}$ is a \emph{ground state} for a one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group (e.g.\ a translation or boost flow) when it is invariant under the flow and, in a GNS representation reproducing $\omega$ and implementing the flow by unitaries $U(t)$ fixing $\Omega$, the one-parameter unitary group $t \mapsto U(t)$ has positive energy (\ref{def:positive-energy}). This is the ground-state ($\beta \to \infty$, spectrum-condition) counterpart of the covariance-flow KMS state \ref{def:kms-state-for-flow-covariance}: the stationary state whose flow generator, the Hamiltonian for a timelike flow, is positive. Two Stone-free consequences: a ground state is flow-invariant, and its implementing unitary group is strongly continuous. It is the Minkowski analogue of the curved Killing-flow ground state \ref{def:ground-state-for-flow-in-curved-spacetime}.
+\end{definition}

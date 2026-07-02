@@ -188,6 +188,17 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}')$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated subregions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$ (with the isotony coherence) $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$. Both reduce to the set-level statements through the coercion $\uparrow R(\mathbf{B}') = \pi(\mathfrak{U}(\mathbf{B}'))''$.
 \end{theorem}
 
+\begin{definition}[The Net of von Neumann Algebras in Curved Spacetime]
+    \label{def:von-neumann-net-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.vonNeumannNet}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \leanok
+    \uses{thrm:von-neumann-bundled-order-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime}
+    The curved counterpart of the von Neumann net (\ref{def:von-neumann-net}). Fixing a containing basis region $\mathbf{B}$ and a $*$-representation $\pi$ of $\mathfrak{U}(\mathbf{B})$, the assignment $\mathbf{B}' \mapsto R(\mathbf{B}')$ is an order-preserving map from the poset of basis subregions of $\mathbf{B}$ (ordered by inclusion) to the von Neumann algebras of $\mathcal{B}(H)$ --- the local net, restricted to a containing region, as a functor on the inclusion poset.
+
+    Unlike the Minkowski case, the coherence of the isotony embeddings (\emph{coherent below} $\mathbf{B}$: the $\mathbf{B}_1 \hookrightarrow \mathbf{B}$ embedding factors through $\mathbf{B}_2$ for all nested $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$) is supplied as a single hypothesis rather than discharged geometrically. This is intrinsic, not a gap: the coherence is a property of the net's chosen Axiom 3 isotony witnesses, not of the spacetime, so --- unlike spacelike-monotonicity --- it cannot be discharged over a concrete spacetime. The curved Axiom 3 selects those witnesses by choice (with no built-in composition law), so the coherence is unavailable for free even for the trivial net; it holds for any net whose witnesses form a genuine inclusion family. Given it once, the map's monotonicity carries no per-edge side condition.
+\end{definition}
+
 \begin{theorem}[Statistical Independence (Schlieder Property)]
     \label{thrm:statistical-independence-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_separating, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.eq_zero_of_commute_of_cyclic}
@@ -204,6 +215,35 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     \leanok
     \uses{thrm:statistical-independence-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime}
     The separating property phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}_2)$: with $\Omega$ cyclic for the local observables of $\mathbf{B}_1$, every $R$ in the bundled algebra $R(\mathbf{B}_2)$ of a spacelike-separated subregion with $R\Omega = 0$ is zero. It reduces to \ref{thrm:statistical-independence-in-curved-spacetime} through the coercion $\uparrow R(\mathbf{B}_2) = \pi(\mathfrak{U}(\mathbf{B}_2))''$.
+\end{theorem}
+
+\begin{theorem}[Geometric Covariance of the von Neumann Net (Curved Spacetime)]
+    \label{thrm:von-neumann-geometric-covariance-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumann, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localOperators}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeometricCovariance.lean}
+    \leanok
+    \uses{def:local-von-neumann-in-curved-spacetime, def:stabilizer-action-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime}
+    The curved, stabilizer-subgroup analogue of geometric covariance. There is no quasilocal algebra in curved spacetime, so the only symmetries acting on the containing algebra $\mathfrak{U}(\mathbf{B})$ are the stabilizer $\mathrm{Stab}(\mathbf{B}) = \{g : g \cdot \mathbf{B} = \mathbf{B}\}$. For $g \in \mathrm{Stab}(\mathbf{B})$, the implementing unitary $U(g)$ of the stabilizer GNS representation (\ref{thrm:gns-unitary-stabilizer-in-curved-spacetime}) conjugates the local von Neumann algebra of a subregion $\mathbf{B}_1 \subseteq \mathbf{B}$ onto that of $g \cdot \mathbf{B}_1$:
+    \[ U(g)\, R(\mathbf{B}_1)\, U(g)^{-1} = R(g \cdot \mathbf{B}_1). \]
+    Hence $R(\mathbf{B}_1)$ and $R(g \cdot \mathbf{B}_1)$ are unitarily equivalent. Unlike Minkowski, the abstract \texttt{LorentzianSpacetime} interface supplies neither basis-set preservation $M.\mathrm{IsBasisSet}(g \cdot \mathbf{B}_1)$ nor the coherence relating the stabilizer action $\hat\alpha_g$ to the chosen isotony embeddings (\ref{def:isotony-in-curved-spacetime}); both enter as explicit hypotheses, discharged for a net from a concrete geometric spacetime. The proof reuses the shared conjugation core: conjugation by a unit is a multiplicative automorphism, which maps centralizers --- hence bicommutants --- to those of the image.
+\end{theorem}
+
+\begin{theorem}[Orbit-Invariance of Factoriality (Curved Spacetime)]
+    \label{thrm:von-neumann-factor-orbit-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_isFactor_smul}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeometricCovariance.lean}
+    \leanok
+    \uses{thrm:von-neumann-geometric-covariance-in-curved-spacetime}
+    If the local von Neumann algebra $R(\mathbf{B}_1)$ of a subregion is a factor, then so is $R(g \cdot \mathbf{B}_1)$ for every $g \in \mathrm{Stab}(\mathbf{B})$. Geometric covariance exhibits $R(g \cdot \mathbf{B}_1) = U(g) R(\mathbf{B}_1) U(g)^{-1}$, and conjugation by a unitary preserves the factor property; so being a factor is constant along the stabilizer orbit of a subregion.
+\end{theorem}
+
+\begin{theorem}[Geometric Covariance as a von Neumann Algebra Isomorphism (Curved Spacetime)]
+    \label{thrm:von-neumann-covariance-iso-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannEquiv}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeometricCovariance.lean}
+    \leanok
+    \uses{thrm:von-neumann-geometric-covariance-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime}
+    For $g \in \mathrm{Stab}(\mathbf{B})$, the geometric-covariance set equality is upgraded to a first-class $*$-algebra isomorphism of the bundled local von Neumann algebras, $R(\mathbf{B}_1) \cong R(g \cdot \mathbf{B}_1)$, given by restricting the conjugation $*$-automorphism $T \mapsto U(g) T U(g)^{-1}$ of $\mathcal{B}(H)$ to $R(\mathbf{B}_1)$. It reuses the same restriction construction as the Minkowski case (\ref{thrm:von-neumann-covariance-iso}).
 \end{theorem}
 
 \subsection{Purity of States on Local Algebras in Curved Spacetime}
@@ -226,6 +266,15 @@ Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved sp
     \leanok
     \uses{def:pure-state, def:irreducible-representation, thrm:pure-iff-irreducible, thrm:gns-construction-theorem}
     For a state $\omega$ on the local algebra $\mathfrak{U}(\mathbf{B})$ there is a GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ in which $\omega$ is pure if and only if the representation $\pi$ is irreducible (its commutant is trivial). This combines the GNS construction with the abstract \ref{thrm:pure-iff-irreducible}.
+\end{theorem}
+
+\begin{theorem}[Pure GNS on a Local Algebra is a Factor Generating $\mathcal{B}(H)$]
+    \label{thrm:pure-factor-generates-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_factor_of_isPure, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_generates_all_of_isPure}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Purity.lean}
+    \leanok
+    \uses{def:pure-state, thrm:pure-factor, thrm:pure-generates-all}
+    For a pure state $\omega$ on the local algebra $\mathfrak{U}(\mathbf{B})$ there is a cyclic GNS triple reproducing $\omega$ whose generated von Neumann algebra $\pi(\mathfrak{U}(\mathbf{B}))''$ has trivial center (it is a factor) and is in fact all of $\mathcal{B}(H)$. These are the abstract factor (\ref{thrm:pure-factor}) and density (\ref{thrm:pure-generates-all}) statements registered per region on the curved local algebra $\mathfrak{U}(\mathbf{B})$, the right generality in curved spacetime where there is no quasilocal algebra.
 \end{theorem}
 
 \subsection{Covariant States in Curved Spacetime}
@@ -298,7 +347,7 @@ They do, however, restrict to a genuine action by automorphisms of one fixed loc
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
     \leanok
     \uses{thrm:gns-unitary-stabilizer-in-curved-spacetime, def:pure-state, def:irreducible-representation, thrm:pure-iff-irreducible-in-curved-spacetime}
-    A state $\omega$ on a local algebra $\mathfrak{U}(\mathbf{B})$ that is invariant under the stabilizer action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U$ of $\mathrm{Stab}(\mathbf{B})$ fixing the cyclic vector $\Omega$, with operator covariance $U(\varphi)\,\pi(a)\,U(\varphi)^{-1} = \pi(\hat\alpha_\varphi a)$ - and \emph{irreducible}. This is the curved, per-region analogue of \ref{thrm:irreducible-covariant-representation} (there is no quasilocal algebra), combining \ref{thrm:gns-unitary-stabilizer-in-curved-spacetime} with purity $\Rightarrow$ irreducibility. It is not a vacuum: curved spacetime admits no global vacuum, and the analogue of the spectrum condition (the Hadamard / microlocal spectrum condition) is a separate requirement not imposed here.
+    A state $\omega$ on a local algebra $\mathfrak{U}(\mathbf{B})$ that is invariant under the stabilizer action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U$ of $\mathrm{Stab}(\mathbf{B})$ fixing the cyclic vector $\Omega$, with operator covariance $U(\varphi)\,\pi(a)\,U(\varphi)^{-1} = \pi(\hat\alpha_\varphi a)$ - and \emph{irreducible}; in particular it generates all of $\mathcal{B}(H)$ ($\pi(\mathfrak{U}(\mathbf{B}))'' = \mathcal{B}(H)$, by \ref{thrm:irreducible-generates-all}). This is the curved, per-region analogue of \ref{thrm:irreducible-covariant-representation} (there is no quasilocal algebra), combining \ref{thrm:gns-unitary-stabilizer-in-curved-spacetime} with purity $\Rightarrow$ irreducibility. It is not a vacuum: curved spacetime admits no global vacuum, and the analogue of the spectrum condition (the Hadamard / microlocal spectrum condition) is a separate requirement not imposed here.
 \end{theorem}
 
 \begin{theorem}[Purity is Invariant under the Stabilizer Action]
@@ -358,3 +407,12 @@ The stabilizer subgroup of a region is, in the genuinely curved examples, a one-
     \uses{def:kms-state-for-flow-in-curved-spacetime, thrm:kms-convex}
     A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two KMS states on $\mathfrak{U}(\mathbf{B})$ for the same Killing flow $\varphi$ at the same inverse temperature $\beta$ is again a KMS state for that flow. This specializes the abstract KMS convexity (\ref{thrm:kms-convex}) to the induced one-parameter group $\mathrm{flowAut}$. Physically, the curved-spacetime thermal equilibrium states for a stationary Killing flow form a convex set.
 \end{theorem}
+
+\begin{definition}[Ground State for a Killing Flow]
+    \label{def:ground-state-for-flow-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsGroundStateForFlow, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsGroundStateForFlow.invariant, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsGroundStateForFlow.exists_strongContinuous_unitary}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerKMS.lean}
+    \leanok
+    \uses{def:kms-state-for-flow-in-curved-spacetime, def:positive-energy, def:stabilizer-action-in-curved-spacetime}
+    A state $\omega$ on $\mathfrak{U}(\mathbf{B})$ is a \emph{ground state} for a one-parameter Killing flow $t \mapsto \varphi_t$ into $\mathrm{Stab}(\mathbf{B})$ when it is invariant under the flow and, in a GNS representation reproducing $\omega$ and implementing the flow by unitaries $U(t)$ fixing $\Omega$, the one-parameter unitary group $t \mapsto U(t)$ has positive energy (\ref{def:positive-energy}). This is the ground-state ($\beta \to \infty$, spectrum-condition) counterpart of the Killing-flow KMS state \ref{def:kms-state-for-flow-in-curved-spacetime}: it selects the stationary state whose Killing-flow generator, the local Hamiltonian, is positive. Two Stone-free consequences: a ground state is flow-invariant, and its implementing unitary group is strongly continuous. The positive-energy condition is the bounded-generator scaffold; the faithful unbounded form is Stone-gated.
+\end{definition}

@@ -1,5 +1,6 @@
 import Physicslib4.AQFT.HaagKastler.CovariantState
 import Physicslib4.AQFT.HaagKastler.EinsteinCausality
+import Physicslib4.AQFT.HaagKastler.GeometricCovariance
 import Physicslib4.AQFT.HaagKastler.Isotony
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.LocalCommutativity
@@ -12,9 +13,11 @@ import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
 import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.HaagKastler.QuasilocalKMS
+import Physicslib4.AQFT.HaagKastler.VacuumState
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
 import Physicslib4.AQFT.HaagKastlerCurved.EinsteinCausality
+import Physicslib4.AQFT.HaagKastlerCurved.GeometricCovariance
 import Physicslib4.AQFT.HaagKastlerCurved.IdentityComponent
 import Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance
 import Physicslib4.AQFT.HaagKastlerCurved.Isotony
@@ -28,6 +31,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerKMS
 import Physicslib4.AQFT.KMS
+import Physicslib4.AQFT.PositiveEnergy
 import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.Analysis.HorizontalLineRemovable
 import Physicslib4.Analysis.StripPeriodicExtension
@@ -39,9 +43,11 @@ import Physicslib4.GNS.Construction
 import Physicslib4.GNS.ExtremeState
 import Physicslib4.GNS.Irreducibility
 import Physicslib4.GNS.NullSpace
+import Physicslib4.GNS.PureStateExists
 import Physicslib4.GNS.RadonNikodym
 import Physicslib4.GNS.Separating
 import Physicslib4.GNS.UnitaryRepresentation
+import Physicslib4.Operators.Conjugation
 import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Causality

@@ -52,46 +52,9 @@ theorem sub_intMul_re (k : ℤ) (β : ℝ) (w : ℂ) :
   simp [Complex.sub_re, Complex.mul_re, Complex.intCast_re, Complex.intCast_im,
     Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im]
 
-/-- The half-plane `{Im z < c}` is open. -/
-theorem isOpen_setOf_im_lt (c : ℝ) : IsOpen {z : ℂ | z.im < c} :=
-  isOpen_lt Complex.continuous_im continuous_const
-
-/-- Closure of the open lower half-plane `{Im z < c}` is `{Im z ≤ c}`. -/
-theorem closure_setOf_im_lt (c : ℝ) :
-    closure {z : ℂ | z.im < c} = {z : ℂ | z.im ≤ c} := by
-  apply Subset.antisymm
-  · exact closure_minimal (Set.setOf_subset_setOf.mpr fun z h => le_of_lt h)
-      (isClosed_le Complex.continuous_im continuous_const)
-  · intro z hz
-    rw [Metric.mem_closure_iff]
-    intro ε hε
-    refine ⟨z - (ε / 2 : ℝ) * Complex.I, ?_, ?_⟩
-    · change (z - (ε / 2 : ℝ) * Complex.I).im < c
-      simp only [Complex.sub_im, Complex.mul_im, Complex.ofReal_re,
-        Complex.ofReal_im, Complex.I_re, Complex.I_im, mul_zero, mul_one, add_zero]
-      have : z.im ≤ c := hz
-      linarith
-    · rw [Complex.dist_eq]
-      have he : z - (z - (ε / 2 : ℝ) * Complex.I) = (ε / 2 : ℝ) * Complex.I := by ring
-      rw [he, norm_mul, Complex.norm_I, mul_one, Complex.norm_real, Real.norm_eq_abs,
-        abs_of_pos (by linarith)]
-      linarith
-
-/-- Closure of `{¬ (Im z < c)}` is `{c ≤ Im z}`. -/
-theorem closure_setOf_not_im_lt (c : ℝ) :
-    closure {z : ℂ | ¬ (z.im < c)} = {z : ℂ | c ≤ z.im} := by
-  have h : {z : ℂ | ¬ (z.im < c)} = {z : ℂ | c ≤ z.im} := by ext z; simp [not_lt]
-  rw [h, (isClosed_le continuous_const Complex.continuous_im).closure_eq]
-
-/-- Frontier of `{Im z < c}` is the line `{Im z = c}`. -/
-theorem frontier_setOf_im_lt (c : ℝ) :
-    frontier {z : ℂ | z.im < c} = {z : ℂ | z.im = c} := by
-  rw [show frontier {z : ℂ | z.im < c}
-      = closure {z : ℂ | z.im < c} \ interior {z : ℂ | z.im < c} from rfl,
-    closure_setOf_im_lt, (isOpen_setOf_im_lt c).interior_eq]
-  ext z
-  simp only [Set.mem_diff, Set.mem_setOf_eq, not_lt]
-  exact ⟨fun ⟨h1, h2⟩ => le_antisymm h1 h2, fun h => ⟨h.le, h.ge⟩⟩
+-- The half-plane topology helpers (`isOpen_setOf_im_lt`, `closure_setOf_im_lt`,
+-- `closure_setOf_not_im_lt`, `frontier_setOf_im_lt`) now live in
+-- `Physicslib4.Analysis.HorizontalLineRemovable` alongside the general gluing lemma.
 
 variable {β : ℝ}
 

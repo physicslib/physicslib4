@@ -47,11 +47,17 @@ invariance proof (`StripLiouville`).
   removable-singularity theorem**, via Morera
   (`Complex.isConservativeOn_and_continuousOn_iff_isDifferentiableOn`).
 
-## Roadmap (remaining, not in this file)
+## Holomorphic gluing across a horizontal line
 
-* **Strip Schwarz reflection**: use removability to build the `iβ`-periodic
-  entire extension, discharging `StripLiouville` (and KMS invariance) via
-  `Physicslib4.AQFT.stripLiouville_of_entire_extension`.
+* Half-plane topology helpers `isOpen_setOf_im_lt`, `closure_setOf_im_lt`,
+  `closure_setOf_not_im_lt`, `frontier_setOf_im_lt`.
+* `Physicslib4.differentiableOn_if_of_eqOn_horizontal_line`: **the general
+  Schwarz-reflection gluing lemma** - two functions holomorphic on the open
+  half-planes below/above a horizontal line, continuous up to it, and agreeing on
+  it, glue to a function holomorphic across it. This is the reusable, spacetime-
+  and strip-agnostic mechanism specialized by the `iβ`-periodic strip reflection
+  (`Physicslib4.pext_differentiableAt_online`) that discharges `StripLiouville`
+  (and hence KMS invariance) via `Physicslib4.AQFT.stripLiouville_of_entire_extension`.
 -/
 
 namespace Physicslib4
@@ -269,5 +275,96 @@ theorem differentiableOn_of_continuousOn_off_horizontal_line [CompleteSpace E] {
   simp only [Complex.Rectangle] at hzw
   rw [eq_neg_iff_add_eq_zero, wedgeIntegral_add_wedgeIntegral_eq_rectIntegralReal]
   exact rectIntegralReal_eq_zero_of_subset ℓ f hc hd z.re w.re z.im w.im hzw
+
+/-! ## Half-plane topology and holomorphic gluing across a horizontal line -/
+
+/-- The open lower half-plane `{Im z < c}` is open. -/
+theorem isOpen_setOf_im_lt (c : ℝ) : IsOpen {z : ℂ | z.im < c} :=
+  isOpen_lt Complex.continuous_im continuous_const
+
+/-- Closure of the open lower half-plane `{Im z < c}` is `{Im z ≤ c}`. -/
+theorem closure_setOf_im_lt (c : ℝ) :
+    closure {z : ℂ | z.im < c} = {z : ℂ | z.im ≤ c} := by
+  apply Set.Subset.antisymm
+  · exact closure_minimal (Set.setOf_subset_setOf.mpr fun z h => le_of_lt h)
+      (isClosed_le Complex.continuous_im continuous_const)
+  · intro z hz
+    rw [Metric.mem_closure_iff]
+    intro ε hε
+    refine ⟨z - (ε / 2 : ℝ) * Complex.I, ?_, ?_⟩
+    · change (z - (ε / 2 : ℝ) * Complex.I).im < c
+      simp only [Complex.sub_im, Complex.mul_im, Complex.ofReal_re,
+        Complex.ofReal_im, Complex.I_re, Complex.I_im, mul_zero, mul_one, add_zero]
+      have : z.im ≤ c := hz
+      linarith
+    · rw [Complex.dist_eq]
+      have he : z - (z - (ε / 2 : ℝ) * Complex.I) = (ε / 2 : ℝ) * Complex.I := by ring
+      rw [he, norm_mul, Complex.norm_I, mul_one, Complex.norm_real, Real.norm_eq_abs,
+        abs_of_pos (by linarith)]
+      linarith
+
+/-- Closure of `{¬ (Im z < c)}` is `{c ≤ Im z}`. -/
+theorem closure_setOf_not_im_lt (c : ℝ) :
+    closure {z : ℂ | ¬ (z.im < c)} = {z : ℂ | c ≤ z.im} := by
+  have h : {z : ℂ | ¬ (z.im < c)} = {z : ℂ | c ≤ z.im} := by ext z; simp [not_lt]
+  rw [h, (isClosed_le continuous_const Complex.continuous_im).closure_eq]
+
+/-- Frontier of `{Im z < c}` is the line `{Im z = c}`. -/
+theorem frontier_setOf_im_lt (c : ℝ) :
+    frontier {z : ℂ | z.im < c} = {z : ℂ | z.im = c} := by
+  rw [show frontier {z : ℂ | z.im < c}
+      = closure {z : ℂ | z.im < c} \ interior {z : ℂ | z.im < c} from rfl,
+    closure_setOf_im_lt, (isOpen_setOf_im_lt c).interior_eq]
+  ext z
+  simp only [Set.mem_diff, Set.mem_setOf_eq, not_lt]
+  exact ⟨fun ⟨h1, h2⟩ => le_antisymm h1 h2, fun h => ⟨h.le, h.ge⟩⟩
+
+/-- **Holomorphic gluing across a horizontal line (Schwarz-reflection form).**
+Suppose `g` is continuous on the closed lower part `U ∩ {Im ≤ ℓ}` and holomorphic
+on the open lower part `U ∩ {Im < ℓ}`; `h` is continuous on the closed upper part
+`U ∩ {ℓ ≤ Im}` and holomorphic on the open upper part `U ∩ {ℓ < Im}`; and the two
+agree on the line `Im = ℓ` inside `U`. Then the piecewise function
+`z ↦ if Im z < ℓ then g z else h z` is holomorphic on the open set `U`.
+
+The pieces glue to a function continuous on `U` (`ContinuousOn.if`, using that the
+closures of the two open half-planes are the closed half-planes and their common
+frontier is the line), holomorphic off the line, hence holomorphic across it by
+`differentiableOn_of_continuousOn_off_horizontal_line`. This is the reusable
+mechanism underlying the strip Schwarz reflection. -/
+theorem differentiableOn_if_of_eqOn_horizontal_line [CompleteSpace E] {U : Set ℂ}
+    (hU : IsOpen U) (ℓ : ℝ) {g h : ℂ → E}
+    (hgc : ContinuousOn g (U ∩ {z : ℂ | z.im ≤ ℓ}))
+    (hhc : ContinuousOn h (U ∩ {z : ℂ | ℓ ≤ z.im}))
+    (hgd : DifferentiableOn ℂ g (U ∩ {z : ℂ | z.im < ℓ}))
+    (hhd : DifferentiableOn ℂ h (U ∩ {z : ℂ | ℓ < z.im}))
+    (hglue : ∀ z ∈ U, z.im = ℓ → g z = h z) :
+    DifferentiableOn ℂ (fun z => if z.im < ℓ then g z else h z) U := by
+  have hcont : ContinuousOn (fun z => if z.im < ℓ then g z else h z) U := by
+    apply ContinuousOn.if
+    · intro z hz
+      rw [Set.mem_inter_iff, frontier_setOf_im_lt, Set.mem_setOf_eq] at hz
+      exact hglue z hz.1 hz.2
+    · rw [closure_setOf_im_lt]; exact hgc
+    · rw [closure_setOf_not_im_lt]; exact hhc
+  have hdiff : DifferentiableOn ℂ (fun z => if z.im < ℓ then g z else h z)
+      (U \ {z : ℂ | z.im = ℓ}) := by
+    intro z hz
+    obtain ⟨hzU, hzne⟩ := hz
+    rw [Set.mem_setOf_eq] at hzne
+    rcases lt_or_gt_of_ne hzne with hlt | hgt
+    · have hopen : IsOpen (U ∩ {w : ℂ | w.im < ℓ}) := hU.inter (isOpen_setOf_im_lt ℓ)
+      have hgat : DifferentiableAt ℂ g z := hgd.differentiableAt (hopen.mem_nhds ⟨hzU, hlt⟩)
+      have heq : (fun z => if z.im < ℓ then g z else h z) =ᶠ[nhds z] g := by
+        filter_upwards [(isOpen_setOf_im_lt ℓ).mem_nhds hlt] with w hw
+        simp only [if_pos hw]
+      exact (heq.differentiableAt_iff.mpr hgat).differentiableWithinAt
+    · have hopen : IsOpen (U ∩ {w : ℂ | ℓ < w.im}) :=
+        hU.inter (isOpen_lt continuous_const Complex.continuous_im)
+      have hhat : DifferentiableAt ℂ h z := hhd.differentiableAt (hopen.mem_nhds ⟨hzU, hgt⟩)
+      have heq : (fun z => if z.im < ℓ then g z else h z) =ᶠ[nhds z] h := by
+        filter_upwards [(isOpen_lt continuous_const Complex.continuous_im).mem_nhds hgt] with w hw
+        simp only [if_neg (not_lt.mpr (le_of_lt hw))]
+      exact (heq.differentiableAt_iff.mpr hhat).differentiableWithinAt
+  exact differentiableOn_of_continuousOn_off_horizontal_line hU ℓ _ hcont hdiff
 
 end Physicslib4

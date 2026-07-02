@@ -61,6 +61,35 @@ theorem exists_gns_pure_iff_irreducible {B : Set M.Carrier} (ω : State (N.algeb
   obtain ⟨H, i1, i2, i3, π, Ω, hcyc, hrep, _⟩ := gns_construction ω
   exact ⟨H, i1, i2, i3, π, Ω, hcyc, hrep, isPure_iff_isIrreducible hcyc hrep⟩
 
+/-- **The GNS representation of a pure state on a curved local algebra is a factor.**
+For a pure state `ω` on `𝔘(B)` there is a cyclic GNS triple reproducing `ω` whose
+generated von Neumann algebra `π(𝔘(B))''` has trivial center (its center equals the
+scalars). The abstract `GNS.exists_gns_factor_of_isPure` at the C*-algebra `𝔘(B)`. -/
+theorem exists_gns_factor_of_isPure {B : Set M.Carrier} {ω : State (N.algebra B)}
+    (hpure : IsPure ω) :
+    ∃ (H : Type)
+      (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
+      (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
+        IsCyclicVector π Ω ∧
+        (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        gnsVonNeumann π ∩ Set.centralizer (gnsVonNeumann π)
+          = {T : H →L[ℂ] H | ∃ c : ℂ, T = c • 1} :=
+  GNS.exists_gns_factor_of_isPure hpure
+
+/-- **The GNS representation of a pure state on a curved local algebra generates `𝓑(H)`.**
+For a pure state `ω` on `𝔘(B)` there is a cyclic GNS triple reproducing `ω` whose generated
+von Neumann algebra is all of `𝓑(H)`: `π(𝔘(B))'' = 𝓑(H)`. The abstract
+`GNS.exists_gns_generates_all_of_isPure` at the C*-algebra `𝔘(B)`. -/
+theorem exists_gns_generates_all_of_isPure {B : Set M.Carrier} {ω : State (N.algebra B)}
+    (hpure : IsPure ω) :
+    ∃ (H : Type)
+      (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
+      (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
+        IsCyclicVector π Ω ∧
+        (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        gnsVonNeumann π = Set.univ :=
+  GNS.exists_gns_generates_all_of_isPure hpure
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT

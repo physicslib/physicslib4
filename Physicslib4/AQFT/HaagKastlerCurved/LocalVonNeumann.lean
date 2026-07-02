@@ -201,6 +201,44 @@ theorem localVonNeumannAlgebra_separating {B : Set M.Carrier}
   refine N.localVonNeumann_separating hB π hB₁ hB₂ hs h₁ h₂ hcyc ?_ hRΩ
   rwa [← SetLike.mem_coe, coe_localVonNeumannAlgebra] at hR
 
+/-- The chosen Axiom-3 isotony embeddings `commIsotony` are **coherent below `B`**:
+for nested basis subregions `B₁ ⊆ B₂ ⊆ B`, the direct embedding `𝔘(B₁) → 𝔘(B)` factors
+through `𝔘(B₂)`.
+
+Unlike Minkowski spacetime — whose `QuasilocalAlgebra` carries the `ι_inclusion` coherence
+as *data*, making von Neumann isotony unconditional — the curved Axiom 3 selects its
+isotony witnesses via `Classical.choose` (`commIsotony`). The composition law below is
+therefore not available for free for *any* net: even the trivial net, whose witness is the
+identity, hides it behind `Classical.choose` (which does not reduce to the witness), and
+`toAbstract` does not touch the net's Axiom-3 data. It must be assumed; it holds for any
+net whose Axiom-3 witnesses form a genuine inclusion family. -/
+def IsIsotonyCoherentBelow {B : Set M.Carrier} (hB : M.IsBasisSet B) : Prop :=
+  ∀ ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁₂ : B₁ ⊆ B₂) (h₂ : B₂ ⊆ B) (a : N.algebra B₁),
+      N.commIsotony hB₁ hB (h₁₂.trans h₂) a
+        = N.commIsotony hB₂ hB h₂ (N.commIsotony hB₁ hB₂ h₁₂ a)
+
+/-- **The net of von Neumann algebras as an order-preserving map (curved spacetime).**
+Fixing a containing basis region `B` and a representation `π` of `𝔘(B)`, and assuming the
+isotony embeddings are coherent below `B` (`IsIsotonyCoherentBelow`), the assignment
+`B' ↦ R(B')` is a monotone map from the poset of basis subregions of `B` (ordered by
+inclusion) to the von Neumann algebras of `B(H)`. This is the curved counterpart of the
+Minkowski `vonNeumannNet`: the local net restricted to a containing region is a functor on
+the inclusion poset, sending containment of regions to containment of algebras.
+
+The coherence enters as a single hypothesis rather than being discharged geometrically:
+unlike spacelike-monotonicity (a spacetime fact discharged over `toAbstract` by
+`commute_of_spacelike_mono_geometric`), it is a property of the net's chosen Axiom-3
+embeddings, not of the underlying spacetime. The map is nonetheless *unconditional* in
+that its monotonicity field carries no per-edge side condition. -/
+noncomputable def vonNeumannNet {B : Set M.Carrier} (hB : M.IsBasisSet B)
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (hcoh : N.IsIsotonyCoherentBelow hB) :
+    {B' : Set M.Carrier // M.IsBasisSet B' ∧ B' ⊆ B} →o VonNeumannAlgebra H where
+  toFun B' := N.localVonNeumannAlgebra π B'.2.1 hB B'.2.2
+  monotone' B₁ B₂ h :=
+    N.localVonNeumannAlgebra_mono hB π B₁.2.1 B₂.2.1 h B₂.2.2
+      (hcoh B₁.2.1 B₂.2.1 h B₂.2.2)
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT
