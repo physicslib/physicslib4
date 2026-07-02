@@ -505,6 +505,21 @@ theorem action_mul (C : CovariantQuasilocalAlgebra)
     C.action (L' * L) = (C.action L).trans (C.action L') := by
   ext x; rw [action_mul_apply]; rfl
 
+/-- The covariance action packaged as a **group homomorphism** from the
+inhomogeneous Lorentz group to the `*`-automorphism group of the quasilocal
+algebra, `L ↦ β_L`. This bundles `action_one` and `action_mul`; the target's group
+law is composition (`f * g = g.trans f`, `StarAlgEquiv.aut`), which is exactly the
+form of `action_mul`. It exhibits the covariance action as a genuine unitary-free
+representation of the Poincaré group by `*`-automorphisms of `𝔘`. -/
+noncomputable def actionHom (C : CovariantQuasilocalAlgebra) :
+    InhomogeneousLorentzGroup →* (C.quasilocal.carrier ≃⋆ₐ[ℂ] C.quasilocal.carrier) where
+  toFun := C.action
+  map_one' := C.action_one
+  map_mul' a b := C.action_mul b a
+
+@[simp] theorem actionHom_apply (C : CovariantQuasilocalAlgebra)
+    (L : InhomogeneousLorentzGroup) : C.actionHom L = C.action L := rfl
+
 /-- A state `ω` on the quasilocal algebra is *(Poincaré-)invariant* if it is a
 fixed point of the dual covariance action: `ω(β_L a) = ω(a)` for every Lorentz
 transformation `L` and every observable `a`. This is the invariance part of the

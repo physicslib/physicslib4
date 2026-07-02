@@ -116,6 +116,22 @@ theorem stabAutHom_mul (B : Set M.Carrier)
     (MulAction.mem_stabilizer_iff.mp g'.2)
     (MulAction.mem_stabilizer_iff.mp (g' * g).2) a
 
+/-- The stabilizer action packaged as a **group homomorphism** from the stabilizer
+subgroup `Stab(B)` to the `*`-automorphism group of the local algebra `𝔘(B)`,
+`g ↦ α̂_g`. This bundles `stabAutHom_one` and `stabAutHom_mul`; the target's group
+law is composition (`f * g = g.trans f`, `StarAlgEquiv.aut`). It exhibits the
+stabilizer action as a unitary-free representation of `Stab(B)` by `*`-automorphisms
+of `𝔘(B)` — the curved counterpart of the Minkowski `actionHom`. -/
+noncomputable def stabAutMonoidHom (B : Set M.Carrier) :
+    ↥(MulAction.stabilizer M.Isom B) →* (N.algebra B ≃⋆ₐ[ℂ] N.algebra B) where
+  toFun := N.stabAutHom B
+  map_one' := StarAlgEquiv.ext (N.stabAutHom_one B)
+  map_mul' a b := StarAlgEquiv.ext fun x => N.stabAutHom_mul B b a x
+
+@[simp] theorem stabAutMonoidHom_apply (B : Set M.Carrier)
+    (g : ↥(MulAction.stabilizer M.Isom B)) :
+    N.stabAutMonoidHom B g = N.stabAutHom B g := rfl
+
 /-- **GNS unitary representation of the stabilizer.** For a state `ω` on the
 local algebra `𝔘(B)` that is invariant under the stabilizer action of
 `Stab(B) = {φ : φ·B = B}`, the action is implemented on the GNS Hilbert space by
