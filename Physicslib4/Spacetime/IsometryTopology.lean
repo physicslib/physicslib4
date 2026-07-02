@@ -122,6 +122,19 @@ noncomputable instance : ContinuousMul (Isometry M) where
 
 instance : IsTopologicalGroup (Isometry M) := ⟨⟩
 
+/-- **The isometry group acts continuously on spacetime.** The action
+`(g, x) ↦ g • x = g.toDiffeo x` is jointly continuous: it factors as the
+evaluation `(g, x) ↦ (toContinuousMap g) x`, and evaluation `C(M,M) × M → M` is
+continuous since `M` is locally compact (`Continuous.eval`). This is the standard
+continuity companion to the topological-group structure, used by any
+continuity argument over the isometry group. -/
+noncomputable instance instContinuousSMul : ContinuousSMul (Isometry M) M.Carrier where
+  continuous_smul := by
+    have h : (fun p : Isometry M × M.Carrier => p.1 • p.2)
+        = fun p => toContinuousMap p.1 p.2 := by funext p; rfl
+    rw [h]
+    exact (continuous_toContinuousMap.comp continuous_fst).eval continuous_snd
+
 /--
 The **identity-component subgroup** of the isometry group: the isometries
 *connected to the identity*, formalising the group used in Axiom 5
