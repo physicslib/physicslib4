@@ -199,6 +199,51 @@ theorem exists_gns_unitary_stabilizer_strongContinuous [TopologicalSpace M.Isom]
     ω hinv (fun g g' a => N.stabAutHom_mul B g g' a)
     (fun a => N.stabAutHom_one B a) hwc
 
+/-- **Bundled GNS unitary representation of the stabilizer.** The bundled form of
+`exists_gns_unitary_stabilizer`: the implementing unitaries are returned as a
+genuine unitary representation `U : ↥Stab(B) →* (H ≃ₗᵢ[ℂ] H)`, feeding the
+stabilizer group homomorphism `stabAutMonoidHom` into the bundled analytic core
+`GNS.exists_gns_unitaryRep_of_invariant`. -/
+theorem exists_gns_unitaryRep_stabilizer (B : Set M.Carrier)
+    (ω : State (N.algebra B))
+    (hinv : ∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
+        ω (N.stabAutHom B g a) = ω a) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : ↥(MulAction.stabilizer M.Isom B) →* (H ≃ₗᵢ[ℂ] H)),
+        (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
+          U g (π a Ω) = π (N.stabAutHom B g a) Ω) ∧
+        (∀ g : ↥(MulAction.stabilizer M.Isom B), U g Ω = Ω) ∧
+        (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B) (x : H),
+          U g (π a ((U g).symm x)) = π (N.stabAutHom B g a) x) ∧
+        IsCyclicVector π Ω :=
+  Physicslib4.GNS.exists_gns_unitaryRep_of_invariant (N.stabAutMonoidHom B) ω hinv
+
+/-- **Bundled strongly continuous GNS unitary representation of the stabilizer.**
+The bundled form of `exists_gns_unitary_stabilizer_strongContinuous`: the strongly
+continuous implementing unitaries are returned as a bundled group homomorphism
+`U : ↥Stab(B) →* (H ≃ₗᵢ[ℂ] H)`. -/
+theorem exists_gns_unitaryRep_stabilizer_strongContinuous [TopologicalSpace M.Isom]
+    (B : Set M.Carrier) (ω : State (N.algebra B))
+    (hinv : ∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
+        ω (N.stabAutHom B g a) = ω a)
+    (hwc : ∀ a b : N.algebra B,
+        Continuous fun g : ↥(MulAction.stabilizer M.Isom B) =>
+          (ω (star a * N.stabAutHom B g b) : ℂ)) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : ↥(MulAction.stabilizer M.Isom B) →* (H ≃ₗᵢ[ℂ] H)),
+        (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
+          U g (π a Ω) = π (N.stabAutHom B g a) Ω) ∧
+        (∀ g : ↥(MulAction.stabilizer M.Isom B), U g Ω = Ω) ∧
+        (∀ ψ : H, Continuous fun g : ↥(MulAction.stabilizer M.Isom B) => U g ψ) ∧
+        (∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B) (x : H),
+          U g (π a ((U g).symm x)) = π (N.stabAutHom B g a) x) :=
+  Physicslib4.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous
+    (N.stabAutMonoidHom B) ω hinv hwc
+
 /-- **Irreducible covariant representation of a pure invariant state (curved
 spacetime).** A state `ω` on a local algebra `𝔘(B)` that is invariant under the
 stabilizer action and pure yields a GNS representation that is simultaneously
