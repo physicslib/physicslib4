@@ -219,6 +219,17 @@ noncomputable def orientedIdentityComponent (M : Spacetime) (t : M.TimeOrientati
     Subgroup (Isometry M) :=
   Isometry.identityComponent M ⊓ futureOrientationPreserving M t
 
+/-- The Axiom-5 isometry subgroups act **continuously** on spacetime points: both
+the identity component and the oriented identity component inherit
+`ContinuousSMul … M.Carrier` automatically from the full isometry group's
+`ContinuousSMul` (`IsometryTopology`) via the subgroup action. Recorded here as a
+confirmation, since these are the concrete `M.Isom` supplied to the curved
+Haag-Kastler bridge. -/
+example (M : Spacetime) (t : M.TimeOrientation) : True := by
+  have _ : ContinuousSMul ↥(identityComponent M) M.Carrier := inferInstance
+  have _ : ContinuousSMul ↥(orientedIdentityComponent M t) M.Carrier := inferInstance
+  trivial
+
 /-- Under future-orientation preservation, the pushforward of a future-oriented
 path is future-oriented. -/
 theorem pushforwardPath_isFutureOriented (g : Isometry M) (μ : M.SmoothPath)
