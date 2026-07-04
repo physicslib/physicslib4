@@ -95,11 +95,8 @@ noncomputable def pushforwardPath (g : Isometry M) (μ : M.SmoothPath) :
 isometry applied to the tangent vector of `μ`. -/
 theorem pushforwardPath_tangent (g : Isometry M) (μ : M.SmoothPath)
     {s : ℝ} (hs : s ∈ μ.parameterSpace) :
-    mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model (g.pushforwardPath μ).toFun
-        (g.pushforwardPath μ).parameterSpace s (1 : ℝ)
-      = mfderiv M.model M.model g.toDiffeo (μ.toFun s)
-          (mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
-            μ.toFun μ.parameterSpace s (1 : ℝ)) :=
+    (g.pushforwardPath μ).tangent s
+      = mfderiv M.model M.model g.toDiffeo (μ.toFun s) (μ.tangent s) :=
   mfderivWithin_comp_diffeo g μ hs
 
 /-- The pushforward of a timelike path is timelike: isometries preserve the

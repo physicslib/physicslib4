@@ -129,6 +129,27 @@ theorem Path.uniqueDiffOn_parameterSpace (μ : M.Path) :
         (Set.Ioo_subset_Icc_self.trans (hoc.out hb ha))
     exact ⟨(a + b) / 2, hIoo (Set.mem_Ioo.mpr ⟨by linarith, by linarith⟩)⟩
 
+/-! ### Tangent vector -/
+
+/-- The **tangent vector** of a smooth path `μ` at parameter `s`: the manifold
+derivative of `μ` along its parameter space, applied to the basis vector `1 : ℝ`.
+This is the object all the causal predicates below are phrased in terms of. -/
+noncomputable def SmoothPath.tangent {M : Spacetime} (μ : M.SmoothPath) (s : ℝ) :
+    TangentSpace M.model (μ.toFun s) :=
+  mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model μ.toFun μ.parameterSpace s (1 : ℝ)
+
+/-- Unfolding lemma for `SmoothPath.tangent` to the raw `mfderivWithin` form. -/
+theorem SmoothPath.tangent_def {M : Spacetime} (μ : M.SmoothPath) (s : ℝ) :
+    μ.tangent s
+      = mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
+          μ.toFun μ.parameterSpace s (1 : ℝ) := rfl
+
+/-- The tangent vector of a smooth path is non-vanishing on the parameter
+space (the `nonvanishing` field, restated via `tangent`). -/
+theorem SmoothPath.tangent_ne_zero {M : Spacetime} (μ : M.SmoothPath) {s : ℝ}
+    (hs : s ∈ μ.parameterSpace) : μ.tangent s ≠ 0 :=
+  μ.nonvanishing s hs
+
 /-! ### Reparametrisation equivalence -/
 
 /--
@@ -191,26 +212,18 @@ vector at `s` (the image under `mfderivWithin` of `1 : ℝ`) is a timelike
 tangent vector at the spacetime point `μ s`.
 -/
 def SmoothPath.IsTimelikeAt (μ : M.SmoothPath) (s : ℝ) : Prop :=
-  M.IsTimelike
-    (mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
-      μ.toFun μ.parameterSpace s (1 : ℝ))
+  M.IsTimelike (μ.tangent s)
 
 /-- A smooth path is timelike if its tangent vector is timelike at every
 point of the parameter space. -/
 def SmoothPath.IsTimelike (μ : M.SmoothPath) : Prop :=
-  ∀ s ∈ μ.parameterSpace,
-    M.IsTimelike
-      (mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
-        μ.toFun μ.parameterSpace s (1 : ℝ))
+  ∀ s ∈ μ.parameterSpace, M.IsTimelike (μ.tangent s)
 
 /-- A smooth path is *causal* if its tangent vector is either timelike or
 null at every point of the parameter space. -/
 def SmoothPath.IsCausal (μ : M.SmoothPath) : Prop :=
   ∀ s ∈ μ.parameterSpace,
-    M.IsTimelike (mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
-                   μ.toFun μ.parameterSpace s (1 : ℝ)) ∨
-    M.IsNull (mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
-                   μ.toFun μ.parameterSpace s (1 : ℝ))
+    M.IsTimelike (μ.tangent s) ∨ M.IsNull (μ.tangent s)
 
 /--
 A *timelike smooth curve* is a smooth curve all of whose representative
@@ -234,19 +247,13 @@ def IsCausalSmoothCurve (c : SmoothCurve M) : Prop :=
 if its tangent vector is future-pointing at every parameter point. -/
 def SmoothPath.IsFutureOriented (μ : M.SmoothPath) (t : M.TimeOrientation) :
     Prop :=
-  ∀ s ∈ μ.parameterSpace,
-    M.IsFuturePointing t
-      (mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
-        μ.toFun μ.parameterSpace s (1 : ℝ))
+  ∀ s ∈ μ.parameterSpace, M.IsFuturePointing t (μ.tangent s)
 
 /-- A smooth path is *past-oriented* with respect to a time orientation `t`
 if its tangent vector is past-pointing at every parameter point. -/
 def SmoothPath.IsPastOriented (μ : M.SmoothPath) (t : M.TimeOrientation) :
     Prop :=
-  ∀ s ∈ μ.parameterSpace,
-    M.IsPastPointing t
-      (mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
-        μ.toFun μ.parameterSpace s (1 : ℝ))
+  ∀ s ∈ μ.parameterSpace, M.IsPastPointing t (μ.tangent s)
 
 /-- A *future-oriented smooth curve* is a smooth curve admitting a
 future-oriented representative smooth path (relative to a fixed time
