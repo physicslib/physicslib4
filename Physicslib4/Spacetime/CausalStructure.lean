@@ -100,6 +100,42 @@ theorem not_isNull_of_isSpacelike {x : M.Carrier}
 theorem isNull_zero {x : M.Carrier} : M.IsNull (0 : TangentSpace M.model x) := by
   simp [IsNull]
 
+/-! ### Scaling invariance of the causal classification
+
+The causal type of a tangent vector depends only on the sign of `g(v,v)`, which
+scales quadratically under `v ↦ c • v`. Hence for `c ≠ 0` the timelike / null /
+spacelike classification is invariant under scaling — the algebraic fact behind
+reparametrisation-invariance of the causal type of a curve. -/
+
+/-- The metric square scales quadratically: `g(c•v, c•v) = c² · g(v,v)`. -/
+theorem val_smul_smul {x : M.Carrier} (c : ℝ) (v : TangentSpace M.model x) :
+    M.val x (c • v) (c • v) = c ^ 2 * M.val x v v := by
+  simp only [map_smul, ContinuousLinearMap.smul_apply, smul_eq_mul]
+  ring
+
+/-- **Scaling invariance of timelikeness.** For `c ≠ 0`, `c • v` is timelike iff
+`v` is. -/
+theorem isTimelike_smul_iff {x : M.Carrier} {c : ℝ} (hc : c ≠ 0)
+    (v : TangentSpace M.model x) : M.IsTimelike (c • v) ↔ M.IsTimelike v := by
+  have hc2 : 0 < c ^ 2 := by positivity
+  simp only [IsTimelike, val_smul_smul]
+  constructor <;> intro h <;> nlinarith [hc2]
+
+/-- **Scaling invariance of nullness.** For `c ≠ 0`, `c • v` is null iff `v` is. -/
+theorem isNull_smul_iff {x : M.Carrier} {c : ℝ} (hc : c ≠ 0)
+    (v : TangentSpace M.model x) : M.IsNull (c • v) ↔ M.IsNull v := by
+  have hc2 : ¬ (c ^ 2 = 0) := pow_ne_zero 2 hc
+  simp only [IsNull, val_smul_smul, mul_eq_zero]
+  tauto
+
+/-- **Scaling invariance of spacelikeness.** For `c ≠ 0`, `c • v` is spacelike iff
+`v` is. -/
+theorem isSpacelike_smul_iff {x : M.Carrier} {c : ℝ} (hc : c ≠ 0)
+    (v : TangentSpace M.model x) : M.IsSpacelike (c • v) ↔ M.IsSpacelike v := by
+  have hc2 : 0 < c ^ 2 := by positivity
+  simp only [IsSpacelike, val_smul_smul]
+  constructor <;> intro h <;> nlinarith [hc2]
+
 /-! ### Time orientation -/
 
 /--

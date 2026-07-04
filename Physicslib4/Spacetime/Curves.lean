@@ -9,6 +9,7 @@ import Mathlib.Topology.ContinuousOn
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Geometry.Manifold.ContMDiff.Basic
 import Mathlib.Geometry.Manifold.MFDeriv.Basic
+import Mathlib.Geometry.Manifold.MFDeriv.FDeriv
 import Mathlib.Analysis.Calculus.TangentCone.Real
 import Mathlib.Analysis.Convex.Topology
 
@@ -149,6 +150,36 @@ space (the `nonvanishing` field, restated via `tangent`). -/
 theorem SmoothPath.tangent_ne_zero {M : Spacetime} (μ : M.SmoothPath) {s : ℝ}
     (hs : s ∈ μ.parameterSpace) : μ.tangent s ≠ 0 :=
   μ.nonvanishing s hs
+
+/-- **Reparametrisation chain rule for the tangent vector.** Composing a smooth
+path `μ` with a (manifold-)differentiable reparametrisation `φ : ℝ → ℝ` that maps
+`Σ'` into `μ`'s parameter space scales the tangent vector by the derivative of
+`φ`: `tangent (μ ∘ φ) s = (φ'(s)) • tangent μ (φ s)`, where the scalar is the
+one-dimensional manifold derivative of `φ`. This is the analytic heart of the
+reparametrisation-invariance of the causal type of a curve. -/
+theorem SmoothPath.mfderivWithin_comp_reparam {M : Spacetime} (μ : M.SmoothPath)
+    {φ : ℝ → ℝ} {u : Set ℝ} {s : ℝ}
+    (hφ : MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ)
+            (modelWithCornersSelf ℝ ℝ) φ u s)
+    (hmaps : Set.MapsTo φ u μ.parameterSpace)
+    (huniq : UniqueMDiffWithinAt (modelWithCornersSelf ℝ ℝ) u s)
+    (hs : s ∈ u) :
+    mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model (μ.toFun ∘ φ) u s (1 : ℝ)
+      = (derivWithin φ u s) • μ.tangent (φ s) := by
+  have hg : MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ) M.model
+      μ.toFun μ.parameterSpace (φ s) :=
+    (μ.smoothOn (φ s) (hmaps hs)).mdifferentiableWithinAt (by simp)
+  have hcomp := mfderivWithin_comp s hg hφ hmaps huniq
+  rw [hcomp]
+  change mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model μ.toFun μ.parameterSpace (φ s)
+      (mfderivWithin (modelWithCornersSelf ℝ ℝ) (modelWithCornersSelf ℝ ℝ) φ u s (1 : ℝ))
+    = derivWithin φ u s • μ.tangent (φ s)
+  rw [SmoothPath.tangent_def, ← ContinuousLinearMap.map_smul]
+  congr 1
+  rw [mfderivWithin_eq_fderivWithin]
+  change (fderivWithin ℝ φ u s) 1 = (derivWithin φ u s : ℝ) • (1 : ℝ)
+  rw [smul_eq_mul, mul_one]
+  rfl
 
 /-! ### Reparametrisation equivalence -/
 
