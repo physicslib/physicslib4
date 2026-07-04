@@ -181,6 +181,31 @@ theorem SmoothPath.mfderivWithin_comp_reparam {M : Spacetime} (μ : M.SmoothPath
   rw [smul_eq_mul, mul_one]
   rfl
 
+/-- **Tangent vector under a reparametrisation.** If a reparametrisation
+`φ : ℝ → ℝ` (differentiable, mapping `μ₁`'s parameter space into `μ₂`'s) identifies
+the two paths pointwise (`μ₂ (φ s') = μ₁ s'` on `μ₁`'s parameter space), then the
+tangent vectors are related by the derivative of `φ`:
+`tangent μ₁ s = (φ'(s)) • tangent μ₂ (φ s)`. Combines the reparametrisation chain
+rule with `mfderivWithin_congr` (the two paths agree on the parameter space, so
+have equal within-derivatives). -/
+theorem SmoothPath.tangent_reparam_eq {M : Spacetime} (μ₁ μ₂ : M.SmoothPath)
+    {φ : ℝ → ℝ} {s : ℝ}
+    (hφ : MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ)
+            (modelWithCornersSelf ℝ ℝ) φ μ₁.parameterSpace s)
+    (hmaps : Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace)
+    (heq : ∀ s' ∈ μ₁.parameterSpace, μ₂.toFun (φ s') = μ₁.toFun s')
+    (hs : s ∈ μ₁.parameterSpace) :
+    μ₁.tangent s = (derivWithin φ μ₁.parameterSpace s) • μ₂.tangent (φ s) := by
+  have huniq : UniqueMDiffWithinAt (modelWithCornersSelf ℝ ℝ) μ₁.parameterSpace s :=
+    (Path.uniqueDiffOn_parameterSpace M μ₁.toPath s hs).uniqueMDiffWithinAt
+  have hcongr : mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
+        μ₁.toFun μ₁.parameterSpace s
+      = mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
+          (μ₂.toFun ∘ φ) μ₁.parameterSpace s :=
+    mfderivWithin_congr (fun s' hs' => (heq s' hs').symm) (heq s hs).symm
+  rw [SmoothPath.tangent_def, hcongr]
+  exact μ₂.mfderivWithin_comp_reparam hφ hmaps huniq hs
+
 /-! ### Reparametrisation equivalence -/
 
 /--
@@ -244,6 +269,25 @@ tangent vector at the spacetime point `μ s`.
 -/
 def SmoothPath.IsTimelikeAt (μ : M.SmoothPath) (s : ℝ) : Prop :=
   M.IsTimelike (μ.tangent s)
+
+/-- **Pointwise reparametrisation-invariance of timelikeness.** Under a
+reparametrisation identifying `μ₁` with `μ₂` (as in `tangent_reparam_eq`) with
+non-vanishing derivative `φ'(s) ≠ 0`, `μ₁` is timelike at `s` iff `μ₂` is timelike
+at `φ s`. Combines the reparametrisation chain rule with the scaling invariance
+`isTimelike_smul_iff`. -/
+theorem SmoothPath.isTimelikeAt_reparam {M : Spacetime} (μ₁ μ₂ : M.SmoothPath)
+    {φ : ℝ → ℝ} {s : ℝ}
+    (hφ : MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ)
+            (modelWithCornersSelf ℝ ℝ) φ μ₁.parameterSpace s)
+    (hmaps : Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace)
+    (heq : ∀ s' ∈ μ₁.parameterSpace, μ₂.toFun (φ s') = μ₁.toFun s')
+    (hs : s ∈ μ₁.parameterSpace)
+    (hφ' : derivWithin φ μ₁.parameterSpace s ≠ 0) :
+    SmoothPath.IsTimelikeAt M μ₁ s ↔ SmoothPath.IsTimelikeAt M μ₂ (φ s) := by
+  simp only [SmoothPath.IsTimelikeAt]
+  rw [μ₁.tangent_reparam_eq μ₂ hφ hmaps heq hs,
+    show μ₁.toFun s = μ₂.toFun (φ s) from (heq s hs).symm]
+  exact M.isTimelike_smul_iff hφ' (μ₂.tangent (φ s))
 
 /-- A smooth path is timelike if its tangent vector is timelike at every
 point of the parameter space. -/
