@@ -570,6 +570,133 @@ theorem SmoothPath.isPastOriented_iff_of_orientedSmoothPathEquiv {M : Spacetime}
       μ₁.isPastPointing_reparam μ₂ t (hφmdiff _ hs) hφmaps heq hs (hpos _ hs)
     exact hiff.mpr (h₂ _ (hφmaps hs))
 
+/-! ### Well-definedness of the causal type on smooth curves
+
+Timelikeness and causality are invariant under *any* smooth reparametrisation, so
+they descend to genuine predicates on `SmoothCurve` (the quotient by
+`SmoothPathEquiv`): a curve is timelike/causal iff any chosen representative is.
+The transfer along the quotient uses the equivalence closure of `SmoothPathEquiv`
+(via `Quot.eqvGen_exact`) together with the per-reparametrisation iffs. -/
+
+/-- Timelikeness is invariant along the equivalence closure of `SmoothPathEquiv`. -/
+theorem SmoothPath.isTimelike_iff_of_eqvGen {M : Spacetime} {μ₁ μ₂ : M.SmoothPath}
+    (h : Relation.EqvGen M.SmoothPathEquiv μ₁ μ₂) :
+    SmoothPath.IsTimelike M μ₁ ↔ SmoothPath.IsTimelike M μ₂ := by
+  induction h with
+  | rel x y hxy => exact SmoothPath.isTimelike_iff_of_smoothPathEquiv hxy
+  | refl x => exact Iff.rfl
+  | symm x y _ ih => exact ih.symm
+  | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- **Well-definedness of timelikeness on smooth curves.** A smooth curve is
+timelike (has a timelike representative) iff the chosen representative `μ` is
+timelike; the value does not depend on the representative. -/
+theorem isTimelikeSmoothCurve_ofPath_iff {M : Spacetime} (μ : M.SmoothPath) :
+    IsTimelikeSmoothCurve M (SmoothCurve.ofPath M μ) ↔ SmoothPath.IsTimelike M μ := by
+  constructor
+  · rintro ⟨μ', heq, htl⟩
+    exact (SmoothPath.isTimelike_iff_of_eqvGen (Quot.eqvGen_exact heq)).mpr htl
+  · intro htl
+    exact ⟨μ, rfl, htl⟩
+
+/-- Causality is invariant along the equivalence closure of `SmoothPathEquiv`. -/
+theorem SmoothPath.isCausal_iff_of_eqvGen {M : Spacetime} {μ₁ μ₂ : M.SmoothPath}
+    (h : Relation.EqvGen M.SmoothPathEquiv μ₁ μ₂) :
+    SmoothPath.IsCausal M μ₁ ↔ SmoothPath.IsCausal M μ₂ := by
+  induction h with
+  | rel x y hxy => exact SmoothPath.isCausal_iff_of_smoothPathEquiv hxy
+  | refl x => exact Iff.rfl
+  | symm x y _ ih => exact ih.symm
+  | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- **Well-definedness of causality on smooth curves.** -/
+theorem isCausalSmoothCurve_ofPath_iff {M : Spacetime} (μ : M.SmoothPath) :
+    IsCausalSmoothCurve M (SmoothCurve.ofPath M μ) ↔ SmoothPath.IsCausal M μ := by
+  constructor
+  · rintro ⟨μ', heq, hc⟩
+    exact (SmoothPath.isCausal_iff_of_eqvGen (Quot.eqvGen_exact heq)).mpr hc
+  · intro hc
+    exact ⟨μ, rfl, hc⟩
+
+/-! ### Oriented smooth curves and well-definedness of orientation
+
+The time orientation of a curve (future- vs past-pointing) is *not* invariant under
+orientation-reversing reparametrisations, so it does not descend to `SmoothCurve`.
+It does descend to the finer quotient by `OrientedSmoothPathEquiv`, which is the
+correct home for future/past-oriented curves. -/
+
+/-- An *oriented smooth curve*: an equivalence class of smooth paths under
+orientation-preserving reparametrisation. Finer than `SmoothCurve` (which also
+allows orientation-reversing reparametrisations), it is the natural domain on which
+the time orientation of a curve is well-defined. -/
+def OrientedSmoothCurve : Type := Quot M.OrientedSmoothPathEquiv
+
+/-- Every smooth path determines an oriented smooth curve. -/
+def OrientedSmoothCurve.ofPath (μ : M.SmoothPath) : OrientedSmoothCurve M :=
+  Quot.mk _ μ
+
+/-- An oriented smooth curve is *future-oriented* (relative to a time orientation
+`t`) if it admits a future-oriented representative smooth path. -/
+def IsFutureOrientedCurve (t : M.TimeOrientation) (c : OrientedSmoothCurve M) :
+    Prop :=
+  ∃ μ : M.SmoothPath,
+    c = OrientedSmoothCurve.ofPath M μ ∧ SmoothPath.IsFutureOriented M μ t
+
+/-- An oriented smooth curve is *past-oriented* (relative to a time orientation
+`t`) if it admits a past-oriented representative smooth path. -/
+def IsPastOrientedCurve (t : M.TimeOrientation) (c : OrientedSmoothCurve M) :
+    Prop :=
+  ∃ μ : M.SmoothPath,
+    c = OrientedSmoothCurve.ofPath M μ ∧ SmoothPath.IsPastOriented M μ t
+
+/-- Future-orientedness is invariant along the equivalence closure of
+`OrientedSmoothPathEquiv`. -/
+theorem SmoothPath.isFutureOriented_iff_of_eqvGen {M : Spacetime}
+    (t : M.TimeOrientation) {μ₁ μ₂ : M.SmoothPath}
+    (h : Relation.EqvGen M.OrientedSmoothPathEquiv μ₁ μ₂) :
+    SmoothPath.IsFutureOriented M μ₁ t ↔ SmoothPath.IsFutureOriented M μ₂ t := by
+  induction h with
+  | rel x y hxy =>
+      exact SmoothPath.isFutureOriented_iff_of_orientedSmoothPathEquiv t hxy
+  | refl x => exact Iff.rfl
+  | symm x y _ ih => exact ih.symm
+  | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- **Well-definedness of future-orientedness on oriented smooth curves.** -/
+theorem isFutureOrientedCurve_ofPath_iff {M : Spacetime} (t : M.TimeOrientation)
+    (μ : M.SmoothPath) :
+    IsFutureOrientedCurve M t (OrientedSmoothCurve.ofPath M μ)
+      ↔ SmoothPath.IsFutureOriented M μ t := by
+  constructor
+  · rintro ⟨μ', heq, hfo⟩
+    exact (SmoothPath.isFutureOriented_iff_of_eqvGen t (Quot.eqvGen_exact heq)).mpr hfo
+  · intro hfo
+    exact ⟨μ, rfl, hfo⟩
+
+/-- Past-orientedness is invariant along the equivalence closure of
+`OrientedSmoothPathEquiv`. -/
+theorem SmoothPath.isPastOriented_iff_of_eqvGen {M : Spacetime}
+    (t : M.TimeOrientation) {μ₁ μ₂ : M.SmoothPath}
+    (h : Relation.EqvGen M.OrientedSmoothPathEquiv μ₁ μ₂) :
+    SmoothPath.IsPastOriented M μ₁ t ↔ SmoothPath.IsPastOriented M μ₂ t := by
+  induction h with
+  | rel x y hxy =>
+      exact SmoothPath.isPastOriented_iff_of_orientedSmoothPathEquiv t hxy
+  | refl x => exact Iff.rfl
+  | symm x y _ ih => exact ih.symm
+  | trans x y z _ _ ih₁ ih₂ => exact ih₁.trans ih₂
+
+/-- **Well-definedness of past-orientedness on oriented smooth curves.** -/
+theorem isPastOrientedCurve_ofPath_iff {M : Spacetime} (t : M.TimeOrientation)
+    (μ : M.SmoothPath) :
+    IsPastOrientedCurve M t (OrientedSmoothCurve.ofPath M μ)
+      ↔ SmoothPath.IsPastOriented M μ t := by
+  constructor
+  · rintro ⟨μ', heq, hpo⟩
+    exact (SmoothPath.isPastOriented_iff_of_eqvGen t (Quot.eqvGen_exact heq)).mpr hpo
+  · intro hpo
+    exact ⟨μ, rfl, hpo⟩
+
 /-! ### Endpoints -/
 
 /--
