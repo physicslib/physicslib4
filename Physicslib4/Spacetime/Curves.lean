@@ -697,6 +697,63 @@ theorem isPastOrientedCurve_ofPath_iff {M : Spacetime} (t : M.TimeOrientation)
   · intro hpo
     exact ⟨μ, rfl, hpo⟩
 
+/-! ### Projection to the coarser quotient
+
+Every orientation-preserving reparametrisation is a smooth reparametrisation, so
+there is a canonical projection `OrientedSmoothCurve → SmoothCurve` forgetting the
+orientation. It sends `ofPath μ` to `ofPath μ`, hence is compatible with the
+(orientation-independent) timelike and causal predicates. -/
+
+/-- The canonical projection from oriented smooth curves to smooth curves,
+forgetting the orientation. Well-defined because `OrientedSmoothPathEquiv` refines
+`SmoothPathEquiv`. -/
+def OrientedSmoothCurve.toSmoothCurve (c : OrientedSmoothCurve M) : SmoothCurve M :=
+  Quot.lift (fun μ => SmoothCurve.ofPath M μ)
+    (fun _ _ h => Quot.sound h.toSmoothPathEquiv) c
+
+@[simp] theorem OrientedSmoothCurve.toSmoothCurve_ofPath (μ : M.SmoothPath) :
+    (OrientedSmoothCurve.ofPath M μ).toSmoothCurve = SmoothCurve.ofPath M μ := rfl
+
+/-- The projection is surjective: every smooth curve underlies an oriented one. -/
+theorem OrientedSmoothCurve.toSmoothCurve_surjective :
+    Function.Surjective (OrientedSmoothCurve.toSmoothCurve M) := by
+  intro c
+  obtain ⟨μ, rfl⟩ := Quot.exists_rep c
+  exact ⟨OrientedSmoothCurve.ofPath M μ, rfl⟩
+
+/-- **Compatibility with timelikeness.** The smooth curve underlying an oriented
+smooth curve `ofPath μ` is timelike iff `μ` is — the timelike predicate factors
+through the projection. -/
+theorem isTimelikeSmoothCurve_toSmoothCurve_ofPath (μ : M.SmoothPath) :
+    IsTimelikeSmoothCurve M (OrientedSmoothCurve.ofPath M μ).toSmoothCurve
+      ↔ SmoothPath.IsTimelike M μ := by
+  rw [OrientedSmoothCurve.toSmoothCurve_ofPath]
+  exact isTimelikeSmoothCurve_ofPath_iff μ
+
+/-- **Compatibility with causality.** -/
+theorem isCausalSmoothCurve_toSmoothCurve_ofPath (μ : M.SmoothPath) :
+    IsCausalSmoothCurve M (OrientedSmoothCurve.ofPath M μ).toSmoothCurve
+      ↔ SmoothPath.IsCausal M μ := by
+  rw [OrientedSmoothCurve.toSmoothCurve_ofPath]
+  exact isCausalSmoothCurve_ofPath_iff μ
+
+/-- A future-oriented oriented smooth curve projects to a causal smooth curve
+(future-pointing tangents are timelike or null). -/
+theorem IsFutureOrientedCurve.isCausal_toSmoothCurve {t : M.TimeOrientation}
+    {c : OrientedSmoothCurve M} (h : IsFutureOrientedCurve M t c) :
+    IsCausalSmoothCurve M c.toSmoothCurve := by
+  obtain ⟨μ, rfl, hfo⟩ := h
+  exact (isCausalSmoothCurve_toSmoothCurve_ofPath M μ).mpr
+    (fun s hs => M.isTimelike_or_isNull_of_isFuturePointing t (hfo s hs))
+
+/-- A past-oriented oriented smooth curve projects to a causal smooth curve. -/
+theorem IsPastOrientedCurve.isCausal_toSmoothCurve {t : M.TimeOrientation}
+    {c : OrientedSmoothCurve M} (h : IsPastOrientedCurve M t c) :
+    IsCausalSmoothCurve M c.toSmoothCurve := by
+  obtain ⟨μ, rfl, hpo⟩ := h
+  exact (isCausalSmoothCurve_toSmoothCurve_ofPath M μ).mpr
+    (fun s hs => M.isTimelike_or_isNull_of_isPastPointing t (hpo s hs))
+
 /-! ### Endpoints -/
 
 /--
