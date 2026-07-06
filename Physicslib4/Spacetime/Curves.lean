@@ -8,8 +8,11 @@ import Physicslib4.Spacetime.CausalStructure
 import Mathlib.Topology.ContinuousOn
 import Mathlib.Topology.Connected.Basic
 import Mathlib.Geometry.Manifold.ContMDiff.Basic
+import Mathlib.Geometry.Manifold.ContMDiff.NormedSpace
 import Mathlib.Geometry.Manifold.MFDeriv.Basic
 import Mathlib.Geometry.Manifold.MFDeriv.FDeriv
+import Mathlib.Analysis.Calculus.Deriv.Comp
+import Mathlib.Analysis.Calculus.Deriv.Basic
 import Mathlib.Analysis.Calculus.TangentCone.Real
 import Mathlib.Analysis.Convex.Topology
 
@@ -206,6 +209,40 @@ theorem SmoothPath.tangent_reparam_eq {M : Spacetime} (μ₁ μ₂ : M.SmoothPat
   rw [SmoothPath.tangent_def, hcongr]
   exact μ₂.mfderivWithin_comp_reparam hφ hmaps huniq hs
 
+/-- **Non-vanishing of a reparametrisation derivative.** If `ψ ∘ φ = id` on a set
+`u` (with `φ` mapping `u` into `v`, both maps differentiable within their sets, and
+`u` having unique differentials at `x`), then the within-derivative of `φ` is
+non-zero at `x`. This is the real-analytic fact behind the `derivWithin φ ≠ 0`
+hypothesis of the pointwise reparametrisation lemmas, obtained by differentiating
+the left-inverse identity via the chain rule. -/
+theorem derivWithin_ne_zero_of_leftInverse {φ ψ : ℝ → ℝ} {u v : Set ℝ} {x : ℝ}
+    (hφ : DifferentiableWithinAt ℝ φ u x)
+    (hψ : DifferentiableWithinAt ℝ ψ v (φ x))
+    (hmaps : Set.MapsTo φ u v)
+    (huniq : UniqueDiffWithinAt ℝ u x)
+    (hx : x ∈ u)
+    (hinv : ∀ y ∈ u, ψ (φ y) = y) :
+    derivWithin φ u x ≠ 0 := by
+  intro hzero
+  have hcomp : derivWithin (ψ ∘ φ) u x
+      = derivWithin ψ v (φ x) * derivWithin φ u x :=
+    derivWithin_comp x hψ hφ hmaps
+  have hid : derivWithin (ψ ∘ φ) u x = 1 :=
+    (derivWithin_congr (fun y hy => hinv y hy) (hinv x hx)).trans
+      (derivWithin_id' x u huniq)
+  rw [hzero, mul_zero, hid] at hcomp
+  exact one_ne_zero hcomp
+
+/-- A `C^⊤` function `ℝ → ℝ` is manifold-differentiable within a set, for the
+self models on `ℝ`. Bridges the `ContDiffOn` datum stored in `SmoothPathEquiv` to
+the `MDifferentiableWithinAt` hypothesis required by the tangent reparametrisation
+lemmas. -/
+theorem mdifferentiableWithinAt_of_contDiffOn {φ : ℝ → ℝ} {u : Set ℝ}
+    (h : ContDiffOn ℝ ⊤ φ u) {x : ℝ} (hx : x ∈ u) :
+    MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ) (modelWithCornersSelf ℝ ℝ)
+      φ u x :=
+  ((h.contDiffWithinAt hx).contMDiffWithinAt).mdifferentiableWithinAt (by simp)
+
 /-! ### Reparametrisation equivalence -/
 
 /--
@@ -289,6 +326,25 @@ theorem SmoothPath.isTimelikeAt_reparam {M : Spacetime} (μ₁ μ₂ : M.SmoothP
     show μ₁.toFun s = μ₂.toFun (φ s) from (heq s hs).symm]
   exact M.isTimelike_smul_iff hφ' (μ₂.tangent (φ s))
 
+/-- **Pointwise reparametrisation-invariance of the causal (timelike-or-null)
+condition.** The direct analogue of `isTimelikeAt_reparam` for the disjunction
+`timelike ∨ null`, via the reparametrisation chain rule together with the scaling
+invariances `isTimelike_smul_iff` and `isNull_smul_iff`. -/
+theorem SmoothPath.causalAt_reparam {M : Spacetime} (μ₁ μ₂ : M.SmoothPath)
+    {φ : ℝ → ℝ} {s : ℝ}
+    (hφ : MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ)
+            (modelWithCornersSelf ℝ ℝ) φ μ₁.parameterSpace s)
+    (hmaps : Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace)
+    (heq : ∀ s' ∈ μ₁.parameterSpace, μ₂.toFun (φ s') = μ₁.toFun s')
+    (hs : s ∈ μ₁.parameterSpace)
+    (hφ' : derivWithin φ μ₁.parameterSpace s ≠ 0) :
+    (M.IsTimelike (μ₁.tangent s) ∨ M.IsNull (μ₁.tangent s))
+      ↔ (M.IsTimelike (μ₂.tangent (φ s)) ∨ M.IsNull (μ₂.tangent (φ s))) := by
+  rw [μ₁.tangent_reparam_eq μ₂ hφ hmaps heq hs,
+    show μ₁.toFun s = μ₂.toFun (φ s) from (heq s hs).symm]
+  exact or_congr (M.isTimelike_smul_iff hφ' (μ₂.tangent (φ s)))
+    (M.isNull_smul_iff hφ' (μ₂.tangent (φ s)))
+
 /-- A smooth path is timelike if its tangent vector is timelike at every
 point of the parameter space. -/
 def SmoothPath.IsTimelike (μ : M.SmoothPath) : Prop :=
@@ -299,6 +355,63 @@ null at every point of the parameter space. -/
 def SmoothPath.IsCausal (μ : M.SmoothPath) : Prop :=
   ∀ s ∈ μ.parameterSpace,
     M.IsTimelike (μ.tangent s) ∨ M.IsNull (μ.tangent s)
+
+/-- **Reparametrisation-invariance of timelikeness.** Two smooth paths related by
+a smooth reparametrisation (`SmoothPathEquiv`) are timelike together: one is
+timelike iff the other is. The forward direction uses the inverse diffeomorphism
+`ψ` for surjectivity onto `μ₂`'s parameter space; both directions rest on the
+pointwise `isTimelikeAt_reparam` (via the chain rule and scaling invariance), with
+the reparametrisation derivative non-vanishing by
+`derivWithin_ne_zero_of_leftInverse`. -/
+theorem SmoothPath.isTimelike_iff_of_smoothPathEquiv {M : Spacetime}
+    {μ₁ μ₂ : M.SmoothPath} (h : M.SmoothPathEquiv μ₁ μ₂) :
+    SmoothPath.IsTimelike M μ₁ ↔ SmoothPath.IsTimelike M μ₂ := by
+  obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq⟩ := h
+  have hφmdiff : ∀ x ∈ μ₁.parameterSpace,
+      MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ) (modelWithCornersSelf ℝ ℝ)
+        φ μ₁.parameterSpace x :=
+    fun x hx => mdifferentiableWithinAt_of_contDiffOn hφC hx
+  have hφderiv : ∀ x ∈ μ₁.parameterSpace, derivWithin φ μ₁.parameterSpace x ≠ 0 :=
+    fun x hx => derivWithin_ne_zero_of_leftInverse
+      ((hφC.differentiableOn (by simp)) x hx)
+      ((hψC.differentiableOn (by simp)) (φ x) (hφmaps hx))
+      hφmaps (Path.uniqueDiffOn_parameterSpace M μ₁.toPath x hx) hx hψφ
+  constructor
+  · intro h₁ t ht
+    have hs : ψ t ∈ μ₁.parameterSpace := hψmaps ht
+    have hiff := μ₁.isTimelikeAt_reparam μ₂ (hφmdiff _ hs) hφmaps heq hs (hφderiv _ hs)
+    rw [hφψ t ht] at hiff
+    exact hiff.mp (h₁ _ hs)
+  · intro h₂ s hs
+    have hiff := μ₁.isTimelikeAt_reparam μ₂ (hφmdiff _ hs) hφmaps heq hs (hφderiv _ hs)
+    exact hiff.mpr (h₂ _ (hφmaps hs))
+
+/-- **Reparametrisation-invariance of the causal condition.** Two smooth paths
+related by a smooth reparametrisation (`SmoothPathEquiv`) are causal together. Same
+structure as `isTimelike_iff_of_smoothPathEquiv`, using the pointwise
+`causalAt_reparam`. -/
+theorem SmoothPath.isCausal_iff_of_smoothPathEquiv {M : Spacetime}
+    {μ₁ μ₂ : M.SmoothPath} (h : M.SmoothPathEquiv μ₁ μ₂) :
+    SmoothPath.IsCausal M μ₁ ↔ SmoothPath.IsCausal M μ₂ := by
+  obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq⟩ := h
+  have hφmdiff : ∀ x ∈ μ₁.parameterSpace,
+      MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ) (modelWithCornersSelf ℝ ℝ)
+        φ μ₁.parameterSpace x :=
+    fun x hx => mdifferentiableWithinAt_of_contDiffOn hφC hx
+  have hφderiv : ∀ x ∈ μ₁.parameterSpace, derivWithin φ μ₁.parameterSpace x ≠ 0 :=
+    fun x hx => derivWithin_ne_zero_of_leftInverse
+      ((hφC.differentiableOn (by simp)) x hx)
+      ((hψC.differentiableOn (by simp)) (φ x) (hφmaps hx))
+      hφmaps (Path.uniqueDiffOn_parameterSpace M μ₁.toPath x hx) hx hψφ
+  constructor
+  · intro h₁ t ht
+    have hs : ψ t ∈ μ₁.parameterSpace := hψmaps ht
+    have hiff := μ₁.causalAt_reparam μ₂ (hφmdiff _ hs) hφmaps heq hs (hφderiv _ hs)
+    rw [hφψ t ht] at hiff
+    exact hiff.mp (h₁ _ hs)
+  · intro h₂ s hs
+    have hiff := μ₁.causalAt_reparam μ₂ (hφmdiff _ hs) hφmaps heq hs (hφderiv _ hs)
+    exact hiff.mpr (h₂ _ (hφmaps hs))
 
 /--
 A *timelike smooth curve* is a smooth curve all of whose representative
