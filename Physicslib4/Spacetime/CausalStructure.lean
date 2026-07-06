@@ -227,6 +227,62 @@ theorem not_isFuturePointing_and_isPastPointing_of_isTimelike
     · exact absurd hn (M.not_isNull_of_isTimelike hv)
   exact lt_asymm hft hpt
 
+/-! ### Positive-scaling invariance of orientation
+
+Unlike the causal *type* (invariant under any non-zero scaling), future/past-
+pointing is preserved only under scaling by a **positive** scalar — scaling by a
+negative one swaps the two. This is the algebraic fact behind the
+reparametrisation-invariance of the *orientation* of a curve under
+orientation-preserving reparametrisations. -/
+
+/-- Linearity of the metric in the second argument: `g(t, c • v) = c · g(t, v)`. -/
+theorem val_field_smul (t : M.TimeOrientation) {x : M.Carrier} (c : ℝ)
+    (v : TangentSpace M.model x) :
+    M.val x (t.field x) (c • v) = c * M.val x (t.field x) v := by
+  simp only [map_smul, smul_eq_mul]
+
+/-- **Positive scaling preserves future-pointing** (forward direction). -/
+theorem isFuturePointing_smul_of (t : M.TimeOrientation) {x : M.Carrier} {c : ℝ}
+    (hc : 0 < c) {v : TangentSpace M.model x} (h : M.IsFuturePointing t v) :
+    M.IsFuturePointing t (c • v) := by
+  rcases h with ⟨htl, hlt⟩ | ⟨hnull, vs, hvs, htends⟩
+  · exact Or.inl ⟨(M.isTimelike_smul_iff hc.ne' v).mpr htl, by
+      rw [val_field_smul]; exact mul_neg_of_pos_of_neg hc hlt⟩
+  · refine Or.inr ⟨(M.isNull_smul_iff hc.ne' v).mpr hnull,
+      fun n => c • vs n, fun n => ⟨?_, ?_⟩, htends.const_smul c⟩
+    · exact (M.isTimelike_smul_iff hc.ne' (vs n)).mpr (hvs n).1
+    · rw [val_field_smul]; exact mul_neg_of_pos_of_neg hc (hvs n).2
+
+/-- **Positive-scaling invariance of future-pointing.** For `c > 0`, `c • v` is
+future-pointing iff `v` is. -/
+theorem isFuturePointing_smul_iff (t : M.TimeOrientation) {x : M.Carrier} {c : ℝ}
+    (hc : 0 < c) (v : TangentSpace M.model x) :
+    M.IsFuturePointing t (c • v) ↔ M.IsFuturePointing t v := by
+  refine ⟨fun h => ?_, M.isFuturePointing_smul_of t hc⟩
+  have h' := M.isFuturePointing_smul_of t (inv_pos.mpr hc) h
+  rwa [smul_smul, inv_mul_cancel₀ hc.ne', one_smul] at h'
+
+/-- **Positive scaling preserves past-pointing** (forward direction). -/
+theorem isPastPointing_smul_of (t : M.TimeOrientation) {x : M.Carrier} {c : ℝ}
+    (hc : 0 < c) {v : TangentSpace M.model x} (h : M.IsPastPointing t v) :
+    M.IsPastPointing t (c • v) := by
+  rcases h with ⟨htl, hgt⟩ | ⟨hnull, vs, hvs, htends⟩
+  · exact Or.inl ⟨(M.isTimelike_smul_iff hc.ne' v).mpr htl, by
+      rw [val_field_smul]; exact mul_pos hc hgt⟩
+  · refine Or.inr ⟨(M.isNull_smul_iff hc.ne' v).mpr hnull,
+      fun n => c • vs n, fun n => ⟨?_, ?_⟩, htends.const_smul c⟩
+    · exact (M.isTimelike_smul_iff hc.ne' (vs n)).mpr (hvs n).1
+    · rw [val_field_smul]; exact mul_pos hc (hvs n).2
+
+/-- **Positive-scaling invariance of past-pointing.** For `c > 0`, `c • v` is
+past-pointing iff `v` is. -/
+theorem isPastPointing_smul_iff (t : M.TimeOrientation) {x : M.Carrier} {c : ℝ}
+    (hc : 0 < c) (v : TangentSpace M.model x) :
+    M.IsPastPointing t (c • v) ↔ M.IsPastPointing t v := by
+  refine ⟨fun h => ?_, M.isPastPointing_smul_of t hc⟩
+  have h' := M.isPastPointing_smul_of t (inv_pos.mpr hc) h
+  rwa [smul_smul, inv_mul_cancel₀ hc.ne', one_smul] at h'
+
 end Spacetime
 
 end Physicslib4

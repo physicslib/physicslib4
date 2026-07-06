@@ -277,6 +277,32 @@ def SmoothPathEquiv (μ₁ μ₂ : M.SmoothPath) : Prop :=
     (∀ t ∈ μ₂.parameterSpace, φ (ψ t) = t) ∧
     (∀ s ∈ μ₁.parameterSpace, μ₂.toFun (φ s) = μ₁.toFun s)
 
+/--
+Two smooth paths are *orientation-preservingly* equivalent if they are related by
+a smooth reparametrisation `φ` (as in `SmoothPathEquiv`) whose within-derivative is
+everywhere positive on `μ₁`'s parameter space. Positivity of `φ'` is exactly what
+distinguishes orientation-preserving from orientation-reversing reparametrisations,
+and it is the extra datum needed to transport the *time orientation* of a curve
+(future/past-pointing), not merely its causal type.
+-/
+def OrientedSmoothPathEquiv (μ₁ μ₂ : M.SmoothPath) : Prop :=
+  ∃ φ ψ : ℝ → ℝ,
+    ContDiffOn ℝ ⊤ φ μ₁.parameterSpace ∧
+    ContDiffOn ℝ ⊤ ψ μ₂.parameterSpace ∧
+    Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace ∧
+    Set.MapsTo ψ μ₂.parameterSpace μ₁.parameterSpace ∧
+    (∀ s ∈ μ₁.parameterSpace, ψ (φ s) = s) ∧
+    (∀ t ∈ μ₂.parameterSpace, φ (ψ t) = t) ∧
+    (∀ s ∈ μ₁.parameterSpace, μ₂.toFun (φ s) = μ₁.toFun s) ∧
+    (∀ s ∈ μ₁.parameterSpace, 0 < derivWithin φ μ₁.parameterSpace s)
+
+/-- An orientation-preserving smooth reparametrisation is in particular a smooth
+reparametrisation. -/
+theorem OrientedSmoothPathEquiv.toSmoothPathEquiv {μ₁ μ₂ : M.SmoothPath}
+    (h : M.OrientedSmoothPathEquiv μ₁ μ₂) : M.SmoothPathEquiv μ₁ μ₂ := by
+  obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq, _⟩ := h
+  exact ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq⟩
+
 /-! ### Curves -/
 
 /-- A *curve* in a spacetime is an equivalence class of paths under
@@ -344,6 +370,41 @@ theorem SmoothPath.causalAt_reparam {M : Spacetime} (μ₁ μ₂ : M.SmoothPath)
     show μ₁.toFun s = μ₂.toFun (φ s) from (heq s hs).symm]
   exact or_congr (M.isTimelike_smul_iff hφ' (μ₂.tangent (φ s)))
     (M.isNull_smul_iff hφ' (μ₂.tangent (φ s)))
+
+/-- **Pointwise reparametrisation-invariance of future-pointing.** Under an
+orientation-preserving reparametrisation identifying `μ₁` with `μ₂` (positive
+derivative `0 < φ'(s)`), `μ₁`'s tangent is future-pointing at `s` iff `μ₂`'s is at
+`φ s`. Combines the reparametrisation chain rule with the positive-scaling
+invariance `isFuturePointing_smul_iff`. -/
+theorem SmoothPath.isFuturePointing_reparam {M : Spacetime} (μ₁ μ₂ : M.SmoothPath)
+    (t : M.TimeOrientation) {φ : ℝ → ℝ} {s : ℝ}
+    (hφ : MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ)
+            (modelWithCornersSelf ℝ ℝ) φ μ₁.parameterSpace s)
+    (hmaps : Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace)
+    (heq : ∀ s' ∈ μ₁.parameterSpace, μ₂.toFun (φ s') = μ₁.toFun s')
+    (hs : s ∈ μ₁.parameterSpace)
+    (hφ' : 0 < derivWithin φ μ₁.parameterSpace s) :
+    M.IsFuturePointing t (μ₁.tangent s)
+      ↔ M.IsFuturePointing t (μ₂.tangent (φ s)) := by
+  rw [μ₁.tangent_reparam_eq μ₂ hφ hmaps heq hs,
+    show μ₁.toFun s = μ₂.toFun (φ s) from (heq s hs).symm]
+  exact M.isFuturePointing_smul_iff t hφ' (μ₂.tangent (φ s))
+
+/-- **Pointwise reparametrisation-invariance of past-pointing.** The dual of
+`isFuturePointing_reparam`, via `isPastPointing_smul_iff`. -/
+theorem SmoothPath.isPastPointing_reparam {M : Spacetime} (μ₁ μ₂ : M.SmoothPath)
+    (t : M.TimeOrientation) {φ : ℝ → ℝ} {s : ℝ}
+    (hφ : MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ)
+            (modelWithCornersSelf ℝ ℝ) φ μ₁.parameterSpace s)
+    (hmaps : Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace)
+    (heq : ∀ s' ∈ μ₁.parameterSpace, μ₂.toFun (φ s') = μ₁.toFun s')
+    (hs : s ∈ μ₁.parameterSpace)
+    (hφ' : 0 < derivWithin φ μ₁.parameterSpace s) :
+    M.IsPastPointing t (μ₁.tangent s)
+      ↔ M.IsPastPointing t (μ₂.tangent (φ s)) := by
+  rw [μ₁.tangent_reparam_eq μ₂ hφ hmaps heq hs,
+    show μ₁.toFun s = μ₂.toFun (φ s) from (heq s hs).symm]
+  exact M.isPastPointing_smul_iff t hφ' (μ₂.tangent (φ s))
 
 /-- A smooth path is timelike if its tangent vector is timelike at every
 point of the parameter space. -/
@@ -458,6 +519,56 @@ def IsPastOrientedSmoothCurve (t : M.TimeOrientation) (c : SmoothCurve M) :
     Prop :=
   ∃ μ : M.SmoothPath,
     c = SmoothCurve.ofPath M μ ∧ SmoothPath.IsPastOriented M μ t
+
+/-- **Reparametrisation-invariance of future-orientedness.** Two smooth paths
+related by an orientation-preserving smooth reparametrisation
+(`OrientedSmoothPathEquiv`) are future-oriented together: one is future-oriented
+iff the other is. The forward direction uses the inverse diffeomorphism `ψ` for
+surjectivity; both directions rest on the pointwise `isFuturePointing_reparam`,
+with the reparametrisation derivative positive by hypothesis. -/
+theorem SmoothPath.isFutureOriented_iff_of_orientedSmoothPathEquiv {M : Spacetime}
+    {μ₁ μ₂ : M.SmoothPath} (t : M.TimeOrientation)
+    (h : M.OrientedSmoothPathEquiv μ₁ μ₂) :
+    SmoothPath.IsFutureOriented M μ₁ t ↔ SmoothPath.IsFutureOriented M μ₂ t := by
+  obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq, hpos⟩ := h
+  have hφmdiff : ∀ x ∈ μ₁.parameterSpace,
+      MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ) (modelWithCornersSelf ℝ ℝ)
+        φ μ₁.parameterSpace x :=
+    fun x hx => mdifferentiableWithinAt_of_contDiffOn hφC hx
+  constructor
+  · intro h₁ p hp
+    have hs : ψ p ∈ μ₁.parameterSpace := hψmaps hp
+    have hiff :=
+      μ₁.isFuturePointing_reparam μ₂ t (hφmdiff _ hs) hφmaps heq hs (hpos _ hs)
+    rw [hφψ p hp] at hiff
+    exact hiff.mp (h₁ _ hs)
+  · intro h₂ s hs
+    have hiff :=
+      μ₁.isFuturePointing_reparam μ₂ t (hφmdiff _ hs) hφmaps heq hs (hpos _ hs)
+    exact hiff.mpr (h₂ _ (hφmaps hs))
+
+/-- **Reparametrisation-invariance of past-orientedness.** The dual of
+`isFutureOriented_iff_of_orientedSmoothPathEquiv`, via `isPastPointing_reparam`. -/
+theorem SmoothPath.isPastOriented_iff_of_orientedSmoothPathEquiv {M : Spacetime}
+    {μ₁ μ₂ : M.SmoothPath} (t : M.TimeOrientation)
+    (h : M.OrientedSmoothPathEquiv μ₁ μ₂) :
+    SmoothPath.IsPastOriented M μ₁ t ↔ SmoothPath.IsPastOriented M μ₂ t := by
+  obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq, hpos⟩ := h
+  have hφmdiff : ∀ x ∈ μ₁.parameterSpace,
+      MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ) (modelWithCornersSelf ℝ ℝ)
+        φ μ₁.parameterSpace x :=
+    fun x hx => mdifferentiableWithinAt_of_contDiffOn hφC hx
+  constructor
+  · intro h₁ p hp
+    have hs : ψ p ∈ μ₁.parameterSpace := hψmaps hp
+    have hiff :=
+      μ₁.isPastPointing_reparam μ₂ t (hφmdiff _ hs) hφmaps heq hs (hpos _ hs)
+    rw [hφψ p hp] at hiff
+    exact hiff.mp (h₁ _ hs)
+  · intro h₂ s hs
+    have hiff :=
+      μ₁.isPastPointing_reparam μ₂ t (hφmdiff _ hs) hφmaps heq hs (hpos _ hs)
+    exact hiff.mpr (h₂ _ (hφmaps hs))
 
 /-! ### Endpoints -/
 
