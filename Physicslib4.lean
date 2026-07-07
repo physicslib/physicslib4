@@ -50,6 +50,7 @@ import Physicslib4.GNS.Superselection
 import Physicslib4.GNS.UnitaryEquiv
 import Physicslib4.GNS.UnitaryRepresentation
 import Physicslib4.Operators.Conjugation
+import Physicslib4.Operators.LpDiagonal
 import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Causality
