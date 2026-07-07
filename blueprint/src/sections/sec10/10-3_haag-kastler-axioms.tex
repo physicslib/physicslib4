@@ -478,6 +478,46 @@ The comparison of representations is the entry point to superselection theory. F
     Two representations are \emph{quasi-equivalent} when there is a $*$-isomorphism of their generated von Neumann algebras $\pi_1(A)'' \simeq \pi_2(A)''$ carrying $\pi_1(a)$ to $\pi_2(a)$. This is an equivalence relation, and it is coarser than unitary equivalence: unitary equivalence implies quasi-equivalence, because the conjugation $*$-isomorphism $T \mapsto U T U^{-1}$ restricts to a $*$-isomorphism of the generated von Neumann algebras.
 \end{definition}
 
+\subsection{Direct Sums, Amplification, and Reducibility}
+
+Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their direct sum acts on the $\ell^2$-direct sum $\bigoplus_i H_i$. This is the construction underlying amplifications and the reducibility of non-primary representations.
+
+\begin{definition}[Direct-Sum Representation]
+    \label{def:direct-sum-representation}
+    \lean{Physicslib4.GNS.directSum}
+    \leanfile{Physicslib4/GNS/DirectSum.lean}
+    \leanok
+    \uses{thrm:gns-construction-theorem}
+    The \emph{direct sum} $\bigoplus_i \pi_i : A \to \mathcal{B}(\ell^2(\iota, H))$ of a family of $*$-representations acts coordinatewise: $(\bigoplus_i \pi_i)(a)$ is the diagonal operator $x \mapsto (\pi_i(a)\,x_i)_i$ on the $\ell^2$-direct sum. It is a $*$-representation, the diagonal being uniformly bounded by $\Vert a\Vert$ since each $\pi_i$ is contractive.
+\end{definition}
+
+\begin{theorem}[Subrepresentations and Commutant of a Direct Sum]
+    \label{thrm:direct-sum-subrepresentation}
+    \lean{Physicslib4.GNS.intertwines_single, Physicslib4.GNS.summandProj_mem_commutant}
+    \leanfile{Physicslib4/GNS/DirectSum.lean}
+    \leanok
+    \uses{def:direct-sum-representation, def:disjoint-representations}
+    Each summand embeds as a subrepresentation: the isometric inclusion $H_j \hookrightarrow \ell^2(\iota, H)$ intertwines $\pi_j$ with $\bigoplus_i \pi_i$. Moreover the orthogonal projection onto the $j$-th summand lies in the commutant of the direct sum, so each summand is a reducing subspace.
+\end{theorem}
+
+\begin{definition}[Amplification]
+    \label{def:amplification}
+    \lean{Physicslib4.GNS.amplification}
+    \leanfile{Physicslib4/GNS/Amplification.lean}
+    \leanok
+    \uses{def:direct-sum-representation}
+    The \emph{$\iota$-fold amplification} $\iota \cdot \pi := \bigoplus_{i : \iota} \pi$ of a single representation is the direct sum of $\iota$ copies of $\pi$; $\pi$ embeds as each summand.
+\end{definition}
+
+\begin{theorem}[Reducibility of a Direct Sum]
+    \label{thrm:direct-sum-reducible}
+    \lean{Physicslib4.GNS.not_isIrreducible_directSum}
+    \leanfile{Physicslib4/GNS/Amplification.lean}
+    \leanok
+    \uses{def:direct-sum-representation, def:irreducible-representation, thrm:direct-sum-subrepresentation}
+    A direct sum with two summands carrying nonzero vectors is \emph{reducible}. Were $\bigoplus_i \pi_i$ irreducible, every summand projection would be a scalar (its commutant being trivial); but the projection onto one of two nonzero summands is a nontrivial projection, hence not scalar. In particular an amplification $\iota \cdot \pi$ with at least two copies (and $\pi$ acting on a nonzero space) is reducible --- the multiplicity is visible in the commutant.
+\end{theorem}
+
 \subsection{Covariant States and the Covariance Action}
 
 The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts on the net fiberwise, through the $*$-isomorphisms $\alpha_L : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(L\cdot\mathbf{B})$. We record two consequences: the notion of a Lorentz-covariant family of local states, and the lift of the fiberwise action to a single dynamical $*$-automorphism of the quasilocal algebra.
