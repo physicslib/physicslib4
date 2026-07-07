@@ -438,6 +438,46 @@ These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Mink
     For a state $\omega$ on the quasilocal algebra $\mathfrak{U}$ there is a GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ in which $\omega$ is pure if and only if the representation $\pi$ is irreducible. This combines the GNS construction with the abstract \ref{thrm:pure-iff-irreducible}.
 \end{theorem}
 
+\subsection{Unitary Equivalence and Superselection}
+
+The comparison of representations is the entry point to superselection theory. For $*$-representations $\pi : A \to \mathcal{B}(H)$ of a C*-algebra --- in particular of the quasilocal algebra $\mathfrak{U}$ or a local algebra $\mathfrak{U}(\mathbf{B})$ --- we record three successively coarser notions of sameness (unitary equivalence, quasi-equivalence, and the negation of the finest, disjointness) and the representation-theoretic invariants they preserve.
+
+\begin{definition}[Unitary Equivalence of Representations]
+    \label{def:unitary-equivalence}
+    \lean{Physicslib4.GNS.UnitaryEquiv}
+    \leanfile{Physicslib4/GNS/UnitaryEquiv.lean}
+    \leanok
+    \uses{thrm:gns-construction-theorem}
+    Two $*$-representations $\pi_1 : A \to \mathcal{B}(H_1)$ and $\pi_2 : A \to \mathcal{B}(H_2)$ are \emph{unitarily equivalent} when there is an isometric isomorphism $U : H_1 \simeq H_2$ of the underlying Hilbert spaces intertwining them: $U(\pi_1(a)\,x) = \pi_2(a)(U x)$. This is an equivalence relation --- reflexive, symmetric, and transitive.
+\end{definition}
+
+\begin{theorem}[Irreducibility and Factoriality are Unitary Invariants]
+    \label{thrm:unitary-equiv-invariants}
+    \lean{Physicslib4.GNS.UnitaryEquiv.isIrreducible_iff, Physicslib4.GNS.UnitaryEquiv.isFactor_iff}
+    \leanfile{Physicslib4/GNS/UnitaryEquiv.lean}
+    \leanok
+    \uses{def:unitary-equivalence, def:irreducible-representation, thrm:irreducible-factor}
+    Unitarily equivalent representations share their representation-theoretic type: $\pi_1$ is irreducible if and only if $\pi_2$ is, and the generated von Neumann algebra $\pi_1(A)''$ is a factor if and only if $\pi_2(A)''$ is. The transport is packaged through the cross-space conjugation $T \mapsto U T U^{-1}$, a multiplicative isomorphism $\mathcal{B}(H_1) \simeq \mathcal{B}(H_2)$ that carries $\pi_1(A)$ onto $\pi_2(A)$, centralizers onto centralizers, and scalars onto scalars; irreducibility (commutant equal to the scalars) and factoriality (trivial center of $\pi(A)''$) are then preserved.
+\end{theorem}
+
+\begin{definition}[Disjoint Representations]
+    \label{def:disjoint-representations}
+    \lean{Physicslib4.GNS.AreDisjoint}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{def:unitary-equivalence}
+    An \emph{intertwiner} $T : H_1 \to H_2$ between $\pi_1$ and $\pi_2$ satisfies $T(\pi_1(a)\,x) = \pi_2(a)(T x)$; intertwiners are closed under sums, scalars, composition, and the adjoint (the adjoint of a $\pi_1 \to \pi_2$ intertwiner is a $\pi_2 \to \pi_1$ intertwiner). Two representations are \emph{disjoint} when the only intertwiner between them is $0$. Disjointness is symmetric (take adjoints), and a representation on a nonzero Hilbert space is never disjoint from itself; more generally, unitarily equivalent representations on nonzero spaces are never disjoint, since the implementing unitary is a nonzero intertwiner.
+\end{definition}
+
+\begin{definition}[Quasi-Equivalence of Representations]
+    \label{def:quasi-equivalence}
+    \lean{Physicslib4.GNS.QuasiEquiv}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{def:unitary-equivalence, thrm:irreducible-factor}
+    Two representations are \emph{quasi-equivalent} when there is a $*$-isomorphism of their generated von Neumann algebras $\pi_1(A)'' \simeq \pi_2(A)''$ carrying $\pi_1(a)$ to $\pi_2(a)$. This is an equivalence relation, and it is coarser than unitary equivalence: unitary equivalence implies quasi-equivalence, because the conjugation $*$-isomorphism $T \mapsto U T U^{-1}$ restricts to a $*$-isomorphism of the generated von Neumann algebras.
+\end{definition}
+
 \subsection{Covariant States and the Covariance Action}
 
 The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts on the net fiberwise, through the $*$-isomorphisms $\alpha_L : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(L\cdot\mathbf{B})$. We record two consequences: the notion of a Lorentz-covariant family of local states, and the lift of the fiberwise action to a single dynamical $*$-automorphism of the quasilocal algebra.
