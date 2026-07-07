@@ -37,6 +37,7 @@ import Physicslib4.Analysis.HorizontalLineRemovable
 import Physicslib4.Analysis.StripPeriodicExtension
 import Physicslib4.Analysis.StrongContinuity
 import Physicslib4.Basic
+import Physicslib4.GNS.Amplification
 import Physicslib4.GNS.Basic
 import Physicslib4.GNS.CauchySchwarz
 import Physicslib4.GNS.Construction
