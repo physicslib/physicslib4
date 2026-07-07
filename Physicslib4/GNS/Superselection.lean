@@ -124,6 +124,114 @@ theorem UnitaryEquiv.not_areDisjoint [Nontrivial H₁] (h : UnitaryEquiv π₁ �
       ContinuousLinearMap.zero_apply] using this
   exact hv (U.injective (hUv.trans (map_zero U).symm))
 
+/-! ### Schur's lemma and the irreducible dichotomy -/
+
+/-- **Schur's lemma.** A nonzero intertwiner between two irreducible representations
+rescales to a unitary: `π₁` and `π₂` are unitarily equivalent. The operator `T⋆T`
+commutes with `π₁`, hence is a positive scalar `r · 1`; the normalisation
+`(√r)⁻¹ · T` is then a linear isometry, and `T T⋆` being a nonzero scalar makes it
+surjective, i.e. a unitary equivalence. -/
+theorem UnitaryEquiv.of_intertwines_of_isIrreducible
+    (h1 : IsIrreducible π₁) (h2 : IsIrreducible π₂)
+    {T : H₁ →L[ℂ] H₂} (hT : Intertwines π₁ π₂ T) (hT0 : T ≠ 0) :
+    UnitaryEquiv π₁ π₂ := by
+  obtain ⟨c, hc⟩ := h1 ((ContinuousLinearMap.adjoint T).comp T)
+    (fun a => ContinuousLinearMap.ext fun x => ((hT.adjoint.comp hT) a x).symm)
+  obtain ⟨d, hd⟩ := h2 (T.comp (ContinuousLinearMap.adjoint T))
+    (fun a => ContinuousLinearMap.ext fun x => ((hT.comp hT.adjoint) a x).symm)
+  -- `⟪T x, T x⟫ = c ⟪x, x⟫`.
+  have hcT : ∀ x : H₁, inner ℂ (T x) (T x) = c * inner ℂ x x := by
+    intro x
+    rw [← ContinuousLinearMap.adjoint_inner_right T x (T x)]
+    change inner ℂ x (((ContinuousLinearMap.adjoint T).comp T) x) = c * inner ℂ x x
+    rw [hc]
+    simp [inner_smul_right]
+  -- a witness with `T x₀ ≠ 0`.
+  obtain ⟨x₀, hx₀⟩ : ∃ x, T x ≠ 0 := by
+    by_contra h; simp only [not_exists, not_not] at h
+    exact hT0 (ContinuousLinearMap.ext fun x => by simp [h x])
+  -- `‖T x‖² = c.re ‖x‖²`, so `c.re =: r > 0`.
+  have hnorm2 : ∀ x : H₁, ‖T x‖ ^ 2 = RCLike.re c * ‖x‖ ^ 2 := by
+    intro x
+    have h0 := congrArg RCLike.re (hcT x)
+    rwa [RCLike.mul_re, inner_self_im, mul_zero, sub_zero, inner_self_eq_norm_sq,
+      inner_self_eq_norm_sq] at h0
+  set r : ℝ := RCLike.re c with hr_def
+  have hr_pos : 0 < r := by
+    have := hnorm2 x₀
+    have hx₀0 : x₀ ≠ 0 := fun h => hx₀ (by rw [h, map_zero])
+    have hxpos : (0:ℝ) < ‖x₀‖ ^ 2 := pow_pos (norm_pos_iff.mpr hx₀0) 2
+    have hTpos : (0:ℝ) < ‖T x₀‖ ^ 2 := pow_pos (norm_pos_iff.mpr hx₀) 2
+    nlinarith [this, hxpos, hTpos]
+  have hsr : 0 < Real.sqrt r := Real.sqrt_pos.mpr hr_pos
+  have hnorm : ∀ x : H₁, ‖T x‖ = Real.sqrt r * ‖x‖ := by
+    intro x
+    rw [← Real.sqrt_sq (norm_nonneg (T x)), hnorm2 x, Real.sqrt_mul hr_pos.le,
+      Real.sqrt_sq (norm_nonneg x)]
+  -- the rescaled isometry.
+  have hfnorm : ∀ x : H₁, ‖((Real.sqrt r)⁻¹ : ℂ) • T x‖ = ‖x‖ := by
+    intro x
+    rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_of_nonneg (Real.sqrt_nonneg r),
+      hnorm x, ← mul_assoc, inv_mul_cancel₀ (ne_of_gt hsr), one_mul]
+  -- `T` is surjective (from `T T⋆ = d • 1`, `d ≠ 0`).
+  have hdT : ∀ y : H₂,
+      inner ℂ ((ContinuousLinearMap.adjoint T) y) ((ContinuousLinearMap.adjoint T) y)
+        = d * inner ℂ y y := by
+    intro y
+    rw [← ContinuousLinearMap.adjoint_inner_right (ContinuousLinearMap.adjoint T) y
+      ((ContinuousLinearMap.adjoint T) y), ContinuousLinearMap.adjoint_adjoint]
+    change inner ℂ y ((T.comp (ContinuousLinearMap.adjoint T)) y) = d * inner ℂ y y
+    rw [hd]
+    simp [inner_smul_right]
+  have hd0 : d ≠ 0 := by
+    obtain ⟨y, hy⟩ : ∃ y, (ContinuousLinearMap.adjoint T) y ≠ 0 := by
+      by_contra h; simp only [not_exists, not_not] at h
+      have hadj : ContinuousLinearMap.adjoint T = 0 :=
+        ContinuousLinearMap.ext fun x => by simp [h x]
+      exact hx₀ (by rw [← ContinuousLinearMap.adjoint_adjoint T, hadj]; simp)
+    intro hdz
+    have hz := hdT y
+    rw [hdz, zero_mul] at hz
+    exact hy (inner_self_eq_zero.mp hz)
+  have hTsurj : Function.Surjective T := by
+    intro y
+    refine ⟨d⁻¹ • (ContinuousLinearMap.adjoint T) y, ?_⟩
+    rw [map_smul]
+    have : T ((ContinuousLinearMap.adjoint T) y) = d • y := by
+      have h' : T ((ContinuousLinearMap.adjoint T) y)
+          = (T.comp (ContinuousLinearMap.adjoint T)) y := rfl
+      rw [h', hd]; simp
+    rw [this, smul_smul, inv_mul_cancel₀ hd0, one_smul]
+  -- bundle the isometry and its surjectivity.
+  let fLI : H₁ →ₗᵢ[ℂ] H₂ :=
+    { toLinearMap := ((Real.sqrt r)⁻¹ : ℂ) • (T : H₁ →ₗ[ℂ] H₂)
+      norm_map' := hfnorm }
+  have hfsurj : Function.Surjective fLI := by
+    intro y
+    obtain ⟨x, hx⟩ := hTsurj (((Real.sqrt r) : ℂ) • y)
+    refine ⟨x, ?_⟩
+    change ((Real.sqrt r)⁻¹ : ℂ) • T x = y
+    rw [hx, smul_smul]
+    rw [← Complex.ofReal_inv, ← Complex.ofReal_mul, inv_mul_cancel₀ (ne_of_gt hsr),
+      Complex.ofReal_one, one_smul]
+  refine ⟨LinearIsometryEquiv.ofSurjective fLI hfsurj, fun a x => ?_⟩
+  rw [LinearIsometryEquiv.coe_ofSurjective]
+  change ((Real.sqrt r)⁻¹ : ℂ) • T (π₁ a x) = π₂ a (((Real.sqrt r)⁻¹ : ℂ) • T x)
+  rw [hT a x, map_smul]
+
+/-- **The irreducible dichotomy.** Two irreducible representations are either disjoint
+or unitarily equivalent. -/
+theorem areDisjoint_or_unitaryEquiv_of_isIrreducible
+    (h1 : IsIrreducible π₁) (h2 : IsIrreducible π₂) :
+    AreDisjoint π₁ π₂ ∨ UnitaryEquiv π₁ π₂ := by
+  by_cases hd : AreDisjoint π₁ π₂
+  · exact Or.inl hd
+  · refine Or.inr ?_
+    rw [AreDisjoint] at hd
+    obtain ⟨T, hT'⟩ := not_forall.mp hd
+    obtain ⟨hT, hT0⟩ := Classical.not_imp.mp hT'
+    exact UnitaryEquiv.of_intertwines_of_isIrreducible h1 h2 hT hT0
+
 /-! ### Quasi-equivalence -/
 
 omit [CompleteSpace H₁] [CompleteSpace H₂] in
