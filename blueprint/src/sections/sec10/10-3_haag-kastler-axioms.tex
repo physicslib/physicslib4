@@ -505,6 +505,15 @@ The comparison of representations is the entry point to superselection theory. F
     The endomorphism algebra of an irreducible representation is $\mathbb{C}\cdot 1$: every self-intertwiner of an irreducible representation is a scalar multiple of the identity. This is the commutant form of irreducibility read through the intertwiner language, and it identifies each irreducible sector with a simple (one-dimensional-centred) object.
 \end{lemma}
 
+\begin{theorem}[The Pure-State Dichotomy]
+    \label{thrm:pure-state-dichotomy}
+    \lean{Physicslib4.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{def:pure-state, thrm:irreducible-dichotomy, thrm:pure-iff-irreducible}
+    The GNS representations of two pure states are either disjoint or unitarily equivalent. Indeed the GNS representation of a pure state is irreducible (\ref{thrm:pure-iff-irreducible}), so the irreducible dichotomy (\ref{thrm:irreducible-dichotomy}) applies. Pure states thus fall into \emph{superselection sectors}: the sector of a pure state is the unitary-equivalence class of its irreducible GNS representation.
+\end{theorem}
+
 \subsection{Direct Sums, Amplification, and Reducibility}
 
 Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their direct sum acts on the $\ell^2$-direct sum $\bigoplus_i H_i$. This is the construction underlying amplifications and the reducibility of non-primary representations.

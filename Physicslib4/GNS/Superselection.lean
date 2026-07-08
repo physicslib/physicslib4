@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.GNS.UnitaryEquiv
+import Physicslib4.GNS.RadonNikodym
 
 /-!
 # Disjointness and quasi-equivalence of representations
@@ -321,6 +322,28 @@ theorem intertwines_self_iff_isScalar {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H�
     Intertwines π π T ↔ ∃ c : ℂ, T = c • 1 := by
   rw [intertwines_self_iff_mem_centralizer, isIrreducible_iff_centralizer.mp h]
   exact Iff.rfl
+
+/-! ### The pure-state dichotomy -/
+
+/-- **The pure-state dichotomy.** The GNS representations of two pure states are
+either disjoint or unitarily equivalent. Pure states thus fall into superselection
+sectors: the sector of a pure state is the unitary-equivalence class of its
+(irreducible) GNS representation. -/
+theorem exists_gns_areDisjoint_or_unitaryEquiv_of_isPure.{u} {A : Type u} [CStarAlgebra A]
+    {ω₁ ω₂ : State A} (h1 : IsPure ω₁) (h2 : IsPure ω₂) :
+    ∃ (K₁ : Type u) (_ : NormedAddCommGroup K₁) (_ : InnerProductSpace ℂ K₁)
+      (_ : CompleteSpace K₁) (π₁ : A →⋆ₐ[ℂ] (K₁ →L[ℂ] K₁)) (Ω₁ : K₁)
+      (K₂ : Type u) (_ : NormedAddCommGroup K₂) (_ : InnerProductSpace ℂ K₂)
+      (_ : CompleteSpace K₂) (π₂ : A →⋆ₐ[ℂ] (K₂ →L[ℂ] K₂)) (Ω₂ : K₂),
+        (∀ a : A, (ω₁ a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ) ∧
+        (∀ a : A, (ω₂ a : ℂ) = ⟪Ω₂, π₂ a Ω₂⟫_ℂ) ∧
+        (AreDisjoint π₁ π₂ ∨ UnitaryEquiv π₁ π₂) := by
+  obtain ⟨K₁, i1, i2, i3, π₁, Ω₁, hcyc₁, hrep₁, _⟩ := gns_construction ω₁
+  obtain ⟨K₂, j1, j2, j3, π₂, Ω₂, hcyc₂, hrep₂, _⟩ := gns_construction ω₂
+  refine ⟨K₁, i1, i2, i3, π₁, Ω₁, K₂, j1, j2, j3, π₂, Ω₂, hrep₁, hrep₂, ?_⟩
+  exact areDisjoint_or_unitaryEquiv_of_isIrreducible
+    ((isPure_iff_isIrreducible hcyc₁ hrep₁).mp h1)
+    ((isPure_iff_isIrreducible hcyc₂ hrep₂).mp h2)
 
 /-! ### Quasi-equivalence -/
 
