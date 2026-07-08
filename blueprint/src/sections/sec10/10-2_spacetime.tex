@@ -181,6 +181,42 @@
     A \textit{future-oriented smooth curve} is a smooth curve with a tangent vector that is future-pointing at every point. A \textit{past-oriented smooth curve} is a smooth curve with a tangent vector that is past-pointing at every point.
 \end{definition}
 
+\begin{theorem}[Reparametrisation-Invariance of the Causal Type]
+    \label{thrm:smooth-curve-causal-well-defined}
+    \lean{Physicslib4.Spacetime.isTimelikeSmoothCurve_ofPath_iff, Physicslib4.Spacetime.isCausalSmoothCurve_ofPath_iff}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:timelike-and-causal-smooth-curves}
+    The timelike and causal predicates are well-defined on smooth curves, independently of the chosen path representative: a smooth path is timelike (resp. causal) if and only if its associated smooth curve is. The invariance rests on the chain rule for the tangent under a smooth reparametrisation $\varphi$, namely $\mathrm{tangent}(\mu\circ\varphi)(s) = \varphi'(s)\cdot\mathrm{tangent}(\mu)(\varphi(s))$, together with the scale-invariance of the causal classification: since $g(c\,v, c\,v) = c^2\, g(v,v)$, the vector $c\,v$ is timelike/null exactly when $v$ is, for $c \neq 0$.
+\end{theorem}
+
+\begin{definition}[Oriented Smooth Curve]
+    \label{def:oriented-smooth-curve}
+    \lean{Physicslib4.Spacetime.OrientedSmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:curves}
+    An orientation-reversing reparametrisation flips the time-orientation of the tangent, so future/past orientation is well-defined only on the finer quotient by \emph{orientation-preserving} reparametrisations (those with positive within-derivative). An \emph{oriented smooth curve} is an equivalence class of smooth paths under this finer relation.
+\end{definition}
+
+\begin{theorem}[Reparametrisation-Invariance of Orientation]
+    \label{thrm:oriented-curve-well-defined}
+    \lean{Physicslib4.Spacetime.isFutureOrientedCurve_ofPath_iff, Physicslib4.Spacetime.isPastOrientedCurve_ofPath_iff}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:oriented-smooth-curve, def:future-and-past-oriented-smooth-curves}
+    Future- and past-orientation are well-defined on oriented smooth curves: a smooth path is future-oriented (resp. past-oriented) if and only if its oriented smooth curve is. The positive within-derivative of an orientation-preserving reparametrisation, together with the positive-scaling invariance of pointing vectors ($c\,v$ is future-pointing iff $v$ is, for $c > 0$), gives the invariance.
+\end{theorem}
+
+\begin{theorem}[The Forgetful Projection of Oriented Curves]
+    \label{thrm:oriented-curve-projection}
+    \lean{Physicslib4.Spacetime.OrientedSmoothCurve.toSmoothCurve, Physicslib4.Spacetime.IsFutureOrientedCurve.isCausal_toSmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:oriented-smooth-curve, def:curves, def:timelike-and-causal-smooth-curves}
+    Every oriented smooth curve has an underlying smooth curve, via a canonical surjection $\mathrm{OrientedSmoothCurve} \to \mathrm{SmoothCurve}$ that forgets the orientation data. The timelike and causal predicates factor through it, and a future- or past-oriented curve projects to a causal smooth curve.
+\end{theorem}
+
 \begin{definition}[Endpoints]
     \label{def:endpoints}
     \lean{Physicslib4.Spacetime.IsEndpoint, Physicslib4.Spacetime.IsPastEndpoint, Physicslib4.Spacetime.IsFutureEndpoint}

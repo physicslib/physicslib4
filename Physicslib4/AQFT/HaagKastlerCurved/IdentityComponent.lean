@@ -69,6 +69,31 @@ can be rewritten to the concrete subgroup. -/
       = ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime
           L.timeOrientation) := rfl
 
+/-- The abstract isometry group of the `toAbstract` bridge inherits the
+topological-group topology of the concrete isometry group. This discharges the
+`[TopologicalSpace M.Isom]` hypothesis of the curved covariance/KMS results
+(e.g. the strongly continuous stabilizer GNS unitary) automatically for a net
+over a concrete Lorentzian spacetime — no explicit topology argument is needed. -/
+noncomputable instance instTopologicalSpaceToAbstractIsom (L : LorentzianSpacetime) :
+    TopologicalSpace (L.toAbstract).Isom :=
+  inferInstanceAs (TopologicalSpace (Isometry L.toSpacetime))
+
+/-- The abstract isometry group of the `toAbstractIdentityComponent` bridge
+inherits the subspace topology of the oriented identity-component subgroup,
+discharging `[TopologicalSpace M.Isom]` automatically over a concrete spacetime. -/
+noncomputable instance instTopologicalSpaceToAbstractIdentityComponentIsom
+    (L : LorentzianSpacetime) :
+    TopologicalSpace (L.toAbstractIdentityComponent).Isom :=
+  inferInstanceAs (TopologicalSpace
+    ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime L.timeOrientation))
+
+/-- Confirmation that the `[TopologicalSpace M.Isom]` requirement of the curved
+results is met by both bridges over a concrete spacetime. -/
+example (L : LorentzianSpacetime) : True := by
+  have _ : TopologicalSpace (L.toAbstract).Isom := inferInstance
+  have _ : TopologicalSpace (L.toAbstractIdentityComponent).Isom := inferInstance
+  trivial
+
 open scoped Pointwise in
 /-- **Axiom 5 basis-set preservation, stated over the abstract bridge.** Every
 isometry `φ` of the abstract spacetime carries Alexandrov-basis sets to basis

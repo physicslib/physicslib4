@@ -603,6 +603,49 @@ theorem IsInvariantState.exists_gns_unitary_strongContinuous
     C.action_mul_apply C.action_one_apply hwc
 
 open scoped InnerProductSpace in
+/-- **Bundled GNS unitary representation of an invariant state.** The bundled form
+of `IsInvariantState.exists_gns_unitary`: the implementing unitaries are returned
+as a genuine unitary representation `U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)`
+(a bundled group homomorphism), rather than a bare family with separate group-law
+clauses. It feeds the covariance group homomorphism `C.actionHom` into the bundled
+analytic core `GNS.exists_gns_unitaryRep_of_invariant`. -/
+theorem IsInvariantState.exists_gns_unitaryRep (C : CovariantQuasilocalAlgebra)
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)),
+        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
+          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        Physicslib4.GNS.IsCyclicVector π Ω :=
+  Physicslib4.GNS.exists_gns_unitaryRep_of_invariant C.actionHom ω hω
+
+open scoped InnerProductSpace in
+/-- **Bundled strongly continuous GNS unitary representation of an invariant state.**
+The bundled form of `IsInvariantState.exists_gns_unitary_strongContinuous`: the
+strongly continuous implementing unitaries are returned as a bundled group
+homomorphism `U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)`. -/
+theorem IsInvariantState.exists_gns_unitaryRep_strongContinuous
+    (C : CovariantQuasilocalAlgebra)
+    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
+    (hwc : ∀ a b : C.quasilocal.carrier,
+      Continuous fun L : InhomogeneousLorentzGroup => (ω (star a * C.action L b) : ℂ)) :
+    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)),
+        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
+          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
+        (∀ ψ : H, Continuous fun L : InhomogeneousLorentzGroup => U L ψ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (C.action L a) x) :=
+  Physicslib4.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous C.actionHom ω hω hwc
+
+open scoped InnerProductSpace in
 /-- **Irreducible covariant representation of a pure invariant state (Minkowski).**
 A state `ω` on the quasilocal algebra that is both invariant under the covariance
 action and pure yields a GNS representation that is simultaneously *covariant* -

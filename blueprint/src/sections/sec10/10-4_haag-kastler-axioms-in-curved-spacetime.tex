@@ -277,6 +277,15 @@ Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved sp
     For a pure state $\omega$ on the local algebra $\mathfrak{U}(\mathbf{B})$ there is a cyclic GNS triple reproducing $\omega$ whose generated von Neumann algebra $\pi(\mathfrak{U}(\mathbf{B}))''$ has trivial center (it is a factor) and is in fact all of $\mathcal{B}(H)$. These are the abstract factor (\ref{thrm:pure-factor}) and density (\ref{thrm:pure-generates-all}) statements registered per region on the curved local algebra $\mathfrak{U}(\mathbf{B})$, the right generality in curved spacetime where there is no quasilocal algebra.
 \end{theorem}
 
+\begin{theorem}[The Irreducible Dichotomy for a Curved Local Algebra]
+    \label{thrm:irreducible-dichotomy-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.areDisjoint_or_unitaryEquiv_of_isIrreducible}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Purity.lean}
+    \leanok
+    \uses{thrm:irreducible-dichotomy, def:irreducible-representation}
+    Two irreducible representations of a curved local algebra $\mathfrak{U}(\mathbf{B})$ are either disjoint or unitarily equivalent. This is the abstract irreducible dichotomy (\ref{thrm:irreducible-dichotomy}) registered per region on the C*-algebra $\mathfrak{U}(\mathbf{B})$ --- the right generality in curved spacetime, where sectors are attached to the local algebras.
+\end{theorem}
+
 \subsection{Covariant States in Curved Spacetime}
 
 As in the Minkowski case, the isometric covariance (\ref{def:isometric-covariance-in-curved-spacetime}) acts fiberwise through the $*$-isomorphisms $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$. Since there is no quasilocal algebra, only the local notion of a covariant family of states is available.
