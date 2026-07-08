@@ -478,6 +478,15 @@ The comparison of representations is the entry point to superselection theory. F
     Two representations are \emph{quasi-equivalent} when there is a $*$-isomorphism of their generated von Neumann algebras $\pi_1(A)'' \simeq \pi_2(A)''$ carrying $\pi_1(a)$ to $\pi_2(a)$. This is an equivalence relation, and it is coarser than unitary equivalence: unitary equivalence implies quasi-equivalence, because the conjugation $*$-isomorphism $T \mapsto U T U^{-1}$ restricts to a $*$-isomorphism of the generated von Neumann algebras.
 \end{definition}
 
+\begin{theorem}[Schur's Lemma and the Irreducible Dichotomy]
+    \label{thrm:irreducible-dichotomy}
+    \lean{Physicslib4.GNS.UnitaryEquiv.of_intertwines_of_isIrreducible, Physicslib4.GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{def:unitary-equivalence, def:disjoint-representations, def:irreducible-representation}
+    A nonzero intertwiner $T$ between two \emph{irreducible} representations rescales to a unitary equivalence: $T^\ast T$ commutes with $\pi_1$, hence is a positive scalar $r \cdot 1$ with $r > 0$, so $(\sqrt r)^{-1}\,T$ is a linear isometry; and $T T^\ast$ is a nonzero scalar (irreducibility of $\pi_2$), which makes $T$ surjective, so the isometry is a unitary. Consequently two irreducible representations are either \emph{disjoint} or \emph{unitarily equivalent} --- the foundational trichotomy of superselection theory, identifying sectors with unitary-equivalence classes of irreducible representations.
+\end{theorem}
+
 \subsection{Direct Sums, Amplification, and Reducibility}
 
 Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their direct sum acts on the $\ell^2$-direct sum $\bigoplus_i H_i$. This is the construction underlying amplifications and the reducibility of non-primary representations.
