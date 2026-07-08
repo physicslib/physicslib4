@@ -496,6 +496,15 @@ The comparison of representations is the entry point to superselection theory. F
     The space of intertwiners between two irreducible representations is at most one-dimensional: any two intertwiners $S, T$ with $S \neq 0$ are proportional, $T = \lambda \cdot S$. Indeed $S^\ast S = a\cdot 1$ and $S^\ast T = b \cdot 1$ (commuting with $\pi_1$, hence scalar), and $S S^\ast = c \cdot 1$ with $c \neq 0$ (irreducibility of $\pi_2$) makes $S^\ast$ injective; since $S^\ast\big(T - (b/a)\,S\big) = 0$, injectivity gives $T = (b/a)\,S$. So irreducible representations intertwine multiplicity-free.
 \end{lemma}
 
+\begin{lemma}[Endomorphism Algebra of an Irreducible Representation]
+    \label{lmm:endomorphism-scalar}
+    \lean{Physicslib4.GNS.intertwines_self_iff_isScalar}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{def:irreducible-representation, def:disjoint-representations}
+    The endomorphism algebra of an irreducible representation is $\mathbb{C}\cdot 1$: every self-intertwiner of an irreducible representation is a scalar multiple of the identity. This is the commutant form of irreducibility read through the intertwiner language, and it identifies each irreducible sector with a simple (one-dimensional-centred) object.
+\end{lemma}
+
 \subsection{Direct Sums, Amplification, and Reducibility}
 
 Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their direct sum acts on the $\ell^2$-direct sum $\bigoplus_i H_i$. This is the construction underlying amplifications and the reducibility of non-primary representations.

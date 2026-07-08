@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.GNS.RadonNikodym
 import Physicslib4.GNS.ExtremeState
+import Physicslib4.GNS.Superselection
 
 /-!
 # Purity of states on curved local algebras
@@ -89,6 +90,19 @@ theorem exists_gns_generates_all_of_isPure {B : Set M.Carrier} {ω : State (N.al
         (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
         gnsVonNeumann π = Set.univ :=
   GNS.exists_gns_generates_all_of_isPure hpure
+
+/-- **The irreducible dichotomy for curved local algebras.** Two irreducible
+representations of a curved local algebra `𝔘(B)` are either disjoint or unitarily
+equivalent. The abstract `GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible` at the
+C*-algebra `𝔘(B)`. -/
+theorem areDisjoint_or_unitaryEquiv_of_isIrreducible {B : Set M.Carrier}
+    {H₁ H₂ : Type*}
+    [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
+    [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
+    {π₁ : N.algebra B →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)} {π₂ : N.algebra B →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)}
+    (h1 : GNS.IsIrreducible π₁) (h2 : GNS.IsIrreducible π₂) :
+    GNS.AreDisjoint π₁ π₂ ∨ GNS.UnitaryEquiv π₁ π₂ :=
+  GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible h1 h2
 
 end HaagKastlerNet
 end HaagKastlerCurved

@@ -299,6 +299,29 @@ theorem eq_smul_of_intertwines_of_isIrreducible
     simpa using hSadj_inj hx
   exact sub_eq_zero.mp hzero
 
+/-! ### The endomorphism algebra of an irreducible representation -/
+
+/-- A self-intertwiner is exactly an operator in the commutant of the representation. -/
+theorem intertwines_self_iff_mem_centralizer {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)}
+    {T : H₁ →L[ℂ] H₁} : Intertwines π π T ↔ T ∈ Set.centralizer (Set.range π) := by
+  rw [Set.mem_centralizer_iff]
+  constructor
+  · rintro h _ ⟨a, rfl⟩
+    ext x
+    simpa only [ContinuousLinearMap.mul_apply] using (h a x).symm
+  · intro h a x
+    simpa only [ContinuousLinearMap.mul_apply] using
+      (DFunLike.congr_fun (h (π a) ⟨a, rfl⟩) x).symm
+
+/-- **The endomorphism algebra of an irreducible representation is `ℂ · 1`.** Every
+self-intertwiner of an irreducible representation is a scalar multiple of the
+identity. -/
+theorem intertwines_self_iff_isScalar {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)}
+    (h : IsIrreducible π) {T : H₁ →L[ℂ] H₁} :
+    Intertwines π π T ↔ ∃ c : ℂ, T = c • 1 := by
+  rw [intertwines_self_iff_mem_centralizer, isIrreducible_iff_centralizer.mp h]
+  exact Iff.rfl
+
 /-! ### Quasi-equivalence -/
 
 omit [CompleteSpace H₁] [CompleteSpace H₂] in
