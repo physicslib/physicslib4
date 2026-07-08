@@ -232,6 +232,73 @@ theorem areDisjoint_or_unitaryEquiv_of_isIrreducible
     obtain ⟨hT, hT0⟩ := Classical.not_imp.mp hT'
     exact UnitaryEquiv.of_intertwines_of_isIrreducible h1 h2 hT hT0
 
+/-- **Schur multiplicity.** The space of intertwiners between two irreducible
+representations is at most one-dimensional: any two intertwiners with `S ≠ 0` are
+proportional, `T = λ • S`. -/
+theorem eq_smul_of_intertwines_of_isIrreducible
+    (h1 : IsIrreducible π₁) (h2 : IsIrreducible π₂)
+    {S T : H₁ →L[ℂ] H₂} (hS : Intertwines π₁ π₂ S) (hT : Intertwines π₁ π₂ T)
+    (hS0 : S ≠ 0) : ∃ lam : ℂ, T = lam • S := by
+  obtain ⟨a, ha⟩ := h1 ((ContinuousLinearMap.adjoint S).comp S)
+    (fun x => ContinuousLinearMap.ext fun y => ((hS.adjoint.comp hS) x y).symm)
+  obtain ⟨b, hb⟩ := h1 ((ContinuousLinearMap.adjoint S).comp T)
+    (fun x => ContinuousLinearMap.ext fun y => ((hS.adjoint.comp hT) x y).symm)
+  obtain ⟨c, hc⟩ := h2 (S.comp (ContinuousLinearMap.adjoint S))
+    (fun x => ContinuousLinearMap.ext fun y => ((hS.comp hS.adjoint) x y).symm)
+  obtain ⟨x₀, hx₀⟩ : ∃ x, S x ≠ 0 := by
+    by_contra h; simp only [not_exists, not_not] at h
+    exact hS0 (ContinuousLinearMap.ext fun x => by simp [h x])
+  have ha0 : a ≠ 0 := by
+    intro haz
+    apply hx₀
+    refine (inner_self_eq_zero (𝕜 := ℂ)).mp ?_
+    rw [← ContinuousLinearMap.adjoint_inner_right S x₀ (S x₀)]
+    change inner ℂ x₀ (((ContinuousLinearMap.adjoint S).comp S) x₀) = 0
+    rw [ha, haz]; simp
+  have hc0 : c ≠ 0 := by
+    obtain ⟨y, hy⟩ : ∃ y, (ContinuousLinearMap.adjoint S) y ≠ 0 := by
+      by_contra h; simp only [not_exists, not_not] at h
+      have hadj : ContinuousLinearMap.adjoint S = 0 :=
+        ContinuousLinearMap.ext fun x => by simp [h x]
+      exact hx₀ (by rw [← ContinuousLinearMap.adjoint_adjoint S, hadj]; simp)
+    intro hcz
+    apply hy
+    refine (inner_self_eq_zero (𝕜 := ℂ)).mp ?_
+    rw [← ContinuousLinearMap.adjoint_inner_right (ContinuousLinearMap.adjoint S) y
+      ((ContinuousLinearMap.adjoint S) y), ContinuousLinearMap.adjoint_adjoint]
+    change inner ℂ y ((S.comp (ContinuousLinearMap.adjoint S)) y) = 0
+    rw [hc, hcz]; simp
+  refine ⟨b / a, ?_⟩
+  -- `S⋆` is injective (from `S S⋆ = c • 1`, `c ≠ 0`).
+  have hSadj_inj : Function.Injective (ContinuousLinearMap.adjoint S) := by
+    intro u v huv
+    have happ : (S.comp (ContinuousLinearMap.adjoint S)) u
+        = (S.comp (ContinuousLinearMap.adjoint S)) v := by
+      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply, huv]
+    rw [hc] at happ
+    simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] at happ
+    have hcuv : c • (u - v) = 0 := by rw [smul_sub, happ, sub_self]
+    rcases smul_eq_zero.mp hcuv with h | h
+    · exact absurd h hc0
+    · exact sub_eq_zero.mp h
+  -- `S⋆ ((T − (b/a) • S) x) = 0`, so by injectivity `T = (b/a) • S`.
+  have hkey : ∀ x, (ContinuousLinearMap.adjoint S) ((T - (b / a) • S) x) = 0 := by
+    intro x
+    have hTx : (ContinuousLinearMap.adjoint S) (T x) = b • x := by
+      have := DFunLike.congr_fun hb x
+      simpa using this
+    have hSx : (ContinuousLinearMap.adjoint S) (S x) = a • x := by
+      have := DFunLike.congr_fun ha x
+      simpa using this
+    rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply, map_sub, map_smul,
+      hTx, hSx, smul_smul, div_mul_cancel₀ b ha0, sub_self]
+  have hzero : T - (b / a) • S = 0 := by
+    ext x
+    have hx := hkey x
+    rw [← map_zero (ContinuousLinearMap.adjoint S)] at hx
+    simpa using hSadj_inj hx
+  exact sub_eq_zero.mp hzero
+
 /-! ### Quasi-equivalence -/
 
 omit [CompleteSpace H₁] [CompleteSpace H₂] in

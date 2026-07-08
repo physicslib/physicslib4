@@ -487,6 +487,15 @@ The comparison of representations is the entry point to superselection theory. F
     A nonzero intertwiner $T$ between two \emph{irreducible} representations rescales to a unitary equivalence: $T^\ast T$ commutes with $\pi_1$, hence is a positive scalar $r \cdot 1$ with $r > 0$, so $(\sqrt r)^{-1}\,T$ is a linear isometry; and $T T^\ast$ is a nonzero scalar (irreducibility of $\pi_2$), which makes $T$ surjective, so the isometry is a unitary. Consequently two irreducible representations are either \emph{disjoint} or \emph{unitarily equivalent} --- the foundational trichotomy of superselection theory, identifying sectors with unitary-equivalence classes of irreducible representations.
 \end{theorem}
 
+\begin{lemma}[Schur Multiplicity]
+    \label{lmm:schur-multiplicity}
+    \lean{Physicslib4.GNS.eq_smul_of_intertwines_of_isIrreducible}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{thrm:irreducible-dichotomy, def:irreducible-representation}
+    The space of intertwiners between two irreducible representations is at most one-dimensional: any two intertwiners $S, T$ with $S \neq 0$ are proportional, $T = \lambda \cdot S$. Indeed $S^\ast S = a\cdot 1$ and $S^\ast T = b \cdot 1$ (commuting with $\pi_1$, hence scalar), and $S S^\ast = c \cdot 1$ with $c \neq 0$ (irreducibility of $\pi_2$) makes $S^\ast$ injective; since $S^\ast\big(T - (b/a)\,S\big) = 0$, injectivity gives $T = (b/a)\,S$. So irreducible representations intertwine multiplicity-free.
+\end{lemma}
+
 \subsection{Direct Sums, Amplification, and Reducibility}
 
 Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their direct sum acts on the $\ell^2$-direct sum $\bigoplus_i H_i$. This is the construction underlying amplifications and the reducibility of non-primary representations.
