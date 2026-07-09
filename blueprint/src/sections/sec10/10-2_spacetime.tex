@@ -346,6 +346,28 @@
     Each follows directly from the pointwise definition: monotonicity by restricting the universally-quantified points, the empty cases vacuously, and the union cases by splitting the membership disjunction.
 \end{proof}
 
+\begin{definition}[Spacelike Complement of a Region]
+    \label{def:spacelike-complement}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:completely-spacelike, def:lorentzian-spacetime}
+    The \emph{spacelike complement} $\mathbf{B}^\perp$ of a region $\mathbf{B}$ is the set of points completely spacelike-separated from all of $\mathbf{B}$: $\mathbf{B}^\perp = \{ x \mid \{x\} \text{ is completely spacelike to } \mathbf{B} \}$. It is the geometric substrate of locality and Haag duality.
+\end{definition}
+
+\begin{lemma}[Order Structure of the Spacelike Complement]
+    \label{lmm:spacelike-complement-order}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_iff}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:spacelike-complement, lmm:completely-spacelike-symm, lmm:completely-spacelike-structural}
+    The spacelike complement is antitone ($\mathbf{B}_1 \subseteq \mathbf{B}_2 \Rightarrow \mathbf{B}_2^\perp \subseteq \mathbf{B}_1^\perp$), a region is contained in its double complement ($\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$), and the triple complement collapses ($\mathbf{B}^{\perp\perp\perp} = \mathbf{B}^\perp$). Moreover $\mathbf{B}_1 \subseteq \mathbf{B}_2^\perp$ if and only if $\mathbf{B}_1$ and $\mathbf{B}_2$ are completely spacelike-separated, so complementation is the Galois connection attached to the spacelike-separation relation.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Antitonicity and the Galois bridge are the pointwise monotonicity of complete spacelike separation; the double-complement inclusion follows by symmetry of the relation; and the triple-complement identity is the standard consequence of antitonicity together with the double-complement inclusion.
+\end{proof}
+
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
     \lean{Physicslib4.Spacetime.alexandrovTopology}
