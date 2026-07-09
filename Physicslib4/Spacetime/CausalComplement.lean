@@ -24,6 +24,35 @@ field theory. We record its order structure:
 
 namespace Physicslib4
 namespace Spacetime
+
+section SpacetimeLevel
+variable (M : Spacetime) (t : M.TimeOrientation)
+
+/-- The **spacelike complement** `B^⊥` of a region `B`, with respect to a time
+orientation `t`: the points completely spacelike-separated from all of `B`. -/
+def spacelikeComplement (B : Set M.Carrier) : Set M.Carrier :=
+  {x | Spacetime.IsCompletelySpacelike M t {x} B}
+
+@[simp] theorem mem_spacelikeComplement {B : Set M.Carrier} {x : M.Carrier} :
+    x ∈ Spacetime.spacelikeComplement M t B ↔ Spacetime.IsCompletelySpacelike M t {x} B :=
+  Iff.rfl
+
+/-- **Galois bridge.** A region lies in the complement of another exactly when the
+two are completely spacelike-separated. -/
+theorem subset_spacelikeComplement_iff {B₁ B₂ : Set M.Carrier} :
+    B₁ ⊆ Spacetime.spacelikeComplement M t B₂ ↔ Spacetime.IsCompletelySpacelike M t B₁ B₂ := by
+  constructor
+  · intro h p hp q hq
+    exact (h hp) p rfl q hq
+  · intro h x hx
+    rw [mem_spacelikeComplement]
+    intro p hp q hq
+    rw [Set.mem_singleton_iff] at hp
+    subst hp
+    exact h p hx q hq
+
+end SpacetimeLevel
+
 namespace LorentzianSpacetime
 
 variable (M : LorentzianSpacetime)
