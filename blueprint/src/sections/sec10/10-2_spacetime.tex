@@ -228,21 +228,30 @@
 
 \begin{definition}[Trip]
     \label{def:trip}
-    \lean{Physicslib4.Spacetime.IsTrip, Physicslib4.Spacetime.ChronologicallyPrecedes}
+    \lean{Physicslib4.Spacetime.IsTripSegment, Physicslib4.Spacetime.IsTrip, Physicslib4.Spacetime.ChronologicallyPrecedes}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
     \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints}
-    A \textit{trip} is a curve which is piecewise a future-oriented, timelike geodesic. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
+    A \textit{trip segment} is a curve which is a future-oriented, timelike geodesic. A \textit{trip} is a curve which is \emph{piecewise} a future-oriented, timelike geodesic: a finite chain of trip segments $p = x_0, x_1, \dots, x_n = q$ joined at matching endpoints. Formally this is the transitive closure of single-segment precedence, which is what makes the relation transitive by concatenation. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
 \end{definition}
 
 \begin{definition}[Causal Trip]
     \label{def:causal-trip}
-    \lean{Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes}
+    \lean{Physicslib4.Spacetime.IsCausalTripSegment, Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
     \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints}
-    A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
+    A \textit{causal trip segment} is a curve which is a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic: a finite chain of causal trip segments joined at matching endpoints. A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
 \end{definition}
+
+\begin{theorem}[Transitivity of chronological and causal precedence]
+    \label{thrm:precedence-transitive}
+    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.causallyPrecedes_trans}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:trip, def:causal-trip}
+    Chronological precedence $\ll$ and causal precedence $\prec$ are transitive: if $p \ll q$ and $q \ll r$ then $p \ll r$, and likewise for $\prec$. Two trips joined at the common point $q$ concatenate to a single piecewise trip; this is exactly the transitivity of the transitive closure.
+\end{theorem}
 
 \begin{definition}[Chronological Future and Chronological Past]
     \label{def:chronological-future-and-chronological-past}

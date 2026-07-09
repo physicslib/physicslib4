@@ -259,7 +259,11 @@ theorem chronologicallyPrecedes_pushforward (g : Isometry M) (t : M.TimeOrientat
     (hg : g.PreservesFutureOrientation t) {p q : M.Carrier}
     (h : ChronologicallyPrecedes M t p q) :
     ChronologicallyPrecedes M t (g.toDiffeo p) (g.toDiffeo q) := by
-  sorry
+  -- `ChronologicallyPrecedes` is `Relation.TransGen` of `SegmentPrecedes`.
+  -- `TransGen.lift` lifts a relation `r ≤ p ∘ (f, f)` to `TransGen r ≤ TransGen p ∘ (f, f)`.
+  exact Relation.TransGen.lift (f := g.toDiffeo)
+    (r := Spacetime.SegmentPrecedes M t) (p := Spacetime.SegmentPrecedes M t)
+    (fun a b hs => segmentPrecedes_pushforward g t hg hs) h
 
 /-- Under future-orientation preservation, the image of a chronological future
 is contained in the chronological future of the image point. -/

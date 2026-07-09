@@ -318,8 +318,9 @@ theorem causallyPrecedes_smul (g : InhomogeneousLorentzGroup)
     (h : CausallyPrecedes StandardMinkowskiSpacetime
           standardMinkowskiTimeOrientation p q) :
     CausallyPrecedes StandardMinkowskiSpacetime standardMinkowskiTimeOrientation
-      (g • p) (g • q) := by
-  sorry
+      (g • p) (g • q) :=
+  Relation.TransGen.lift (fun x => g • x)
+    (fun _ _ hs => causalSegmentPrecedes_smul g hs) h
 
 /-- **Causal precedence is Lorentz invariant.** -/
 theorem causallyPrecedes_smul_iff (g : InhomogeneousLorentzGroup)
@@ -404,8 +405,8 @@ theorem chronologicallyPrecedes_smul (g : InhomogeneousLorentzGroup)
     (h : ChronologicallyPrecedes StandardMinkowskiSpacetime
           standardMinkowskiTimeOrientation p q) :
     ChronologicallyPrecedes StandardMinkowskiSpacetime
-      standardMinkowskiTimeOrientation (g • p) (g • q) := by
-  sorry
+      standardMinkowskiTimeOrientation (g • p) (g • q) :=
+  Relation.TransGen.lift (fun x => g • x) (fun _ _ hs => segmentPrecedes_smul g hs) h
 
 /-- **Chronological precedence is Lorentz invariant.** -/
 theorem chronologicallyPrecedes_smul_iff (g : InhomogeneousLorentzGroup)

@@ -1557,7 +1557,44 @@ theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
     Spacetime.chronologicalFuture StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation p
       ⊆ minkowskiForwardCone p := by
-  sorry
+  intro q hq
+  unfold Spacetime.chronologicalFuture at hq
+  simp only [Set.mem_setOf_eq, Spacetime.ChronologicallyPrecedes, Spacetime.IsTrip] at hq
+  induction hq with
+  | single h =>
+      exact segmentPrecedes_mem_minkowskiForwardCone h
+  | tail h₁ h₂ ih =>
+      rename_i b c
+      have hc_mem_b : (c : SpacetimeModel) ∈ minkowskiForwardCone (b : SpacetimeModel) :=
+        segmentPrecedes_mem_minkowskiForwardCone h₂
+      rcases ih with ⟨hp_b, hc_b⟩
+      rcases hc_mem_b with ⟨hb_c, hc_c⟩
+      have h_p_lt_c : p 0 < c.ofLp 0 := by
+        calc
+          p 0 < b.ofLp 0 := hp_b
+          _ < c.ofLp 0 := hb_c
+      have h_cone_add_aux : (c.ofLp 1 - p 1) ^ 2 + (c.ofLp 2 - p 2) ^ 2 + (c.ofLp 3 - p 3) ^ 2
+          < (c.ofLp 0 - p 0) ^ 2 := by
+        set A := c.ofLp 0 - b.ofLp 0 with hA_def
+        set B := b.ofLp 0 - p 0 with hB_def
+        set x := c.ofLp 1 - b.ofLp 1 with hx_def
+        set y := c.ofLp 2 - b.ofLp 2 with hy_def
+        set z := c.ofLp 3 - b.ofLp 3 with hz_def
+        set u := b.ofLp 1 - p 1 with hu_def
+        set v := b.ofLp 2 - p 2 with hv_def
+        set w := b.ofLp 3 - p 3 with hw_def
+        have hA_pos : 0 < A := sub_pos.mpr hb_c
+        have hB_pos : 0 < B := sub_pos.mpr hp_b
+        have h1 : x^2 + y^2 + z^2 < A^2 := by linarith
+        have h2 : u^2 + v^2 + w^2 < B^2 := by linarith
+        have h_sum : (c.ofLp 0 - p 0) = A + B := by ring
+        have h_sum1 : c.ofLp 1 - p 1 = x + u := by ring
+        have h_sum2 : c.ofLp 2 - p 2 = y + v := by ring
+        have h_sum3 : c.ofLp 3 - p 3 = z + w := by ring
+        rw [h_sum, h_sum1, h_sum2, h_sum3]
+        nlinarith [sq_nonneg (A * u - B * x), sq_nonneg (A * v - B * y),
+          sq_nonneg (A * w - B * z), mul_pos hA_pos hB_pos, h1, h2]
+      refine ⟨h_p_lt_c, by nlinarith⟩
 
 /-- *Reverse subset* of `chronologicalFuture_standardMinkowski`: every
 point of the open forward Minkowski-cone of `p` lies in the chronological
@@ -1673,7 +1710,12 @@ theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
     minkowskiForwardCone p ⊆
       Spacetime.chronologicalFuture StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation p := by
-  sorry
+  intro q hq
+  -- Unfold `chronologicalFuture`, `ChronologicallyPrecedes`, `IsTrip`.
+  change Relation.TransGen
+    (Spacetime.SegmentPrecedes StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation) p q
+  exact Relation.TransGen.single (minkowskiForwardCone_subset_segmentPrecedes hq)
 
 /-- **Characterisation of `chronologicalFuture` on standard Minkowski.**
 The chronological future of `p` on `StandardMinkowskiSpacetime` agrees with
