@@ -78,23 +78,21 @@ def IsGeodesic (_μ : M.SmoothPath) : Prop := True
 /-! ### Trips and chronological precedence -/
 
 /--
-A *trip* from `p` to `q` in a spacetime `M` is a smooth curve `c` together
-with a representative smooth path `μ` that
+A *trip segment* from `p` to `q` in a spacetime `M` is a smooth curve `c`
+together with a representative smooth path `μ` that
 
-* is piecewise future-oriented and timelike;
-* is piecewise a geodesic;
+* is future-oriented and timelike;
+* is a geodesic;
 * has past endpoint `p` and future endpoint `q`.
 
-The "piecewise" condition is captured by the existence of a finite
-ascending list of cut points `s₀ < s₁ < ⋯ < sₖ` in the parameter space
-such that on each sub-interval the path restricts to a future-oriented
-timelike geodesic.
+This is a single geodesic piece; a full (piecewise) trip is a finite chain
+of such segments (see `IsTrip`).
 
 A `TimeOrientation` argument `t` is required to talk about
 future-orientation. The endpoints `p, q : M.Carrier` are given as
 parameters.
 -/
-def IsTrip (t : M.TimeOrientation) (p q : M.Carrier)
+def IsTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
     (c : SmoothCurve M) : Prop :=
   ∃ rep : M.SmoothPath,
     c = SmoothCurve.ofPath M rep ∧
@@ -104,10 +102,26 @@ def IsTrip (t : M.TimeOrientation) (p q : M.Carrier)
     IsPastEndpoint M rep p ∧
     IsFutureEndpoint M rep q
 
+/-- *Single-segment chronological precedence*: `p` and `q` are joined by one
+future-oriented timelike geodesic segment. -/
+def SegmentPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
+  ∃ c : SmoothCurve M, IsTripSegment M t p q c
+
+/--
+A *trip* from `p` to `q`: a curve which is *piecewise* a future-oriented
+timelike geodesic, i.e. a finite chain of trip segments joined at matching
+endpoints. This is encoded as the transitive closure of single-segment
+precedence, which is exactly "there is a finite ascending sequence
+`p = x₀, x₁, …, xₙ = q` with each consecutive pair joined by a
+future-oriented timelike geodesic segment". This genuinely piecewise form
+is what makes chronological precedence transitive by concatenation. -/
+def IsTrip (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
+  Relation.TransGen (SegmentPrecedes M t) p q
+
 /-- *Chronological precedence*: `p ≪ q` iff there exists a trip from `p`
 to `q`, relative to a fixed time orientation. -/
 def ChronologicallyPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
-  ∃ c : SmoothCurve M, IsTrip M t p q c
+  IsTrip M t p q
 
 @[inherit_doc] scoped notation:50 p " ≪[" M ", " t "] " q =>
   ChronologicallyPrecedes M t p q
@@ -115,14 +129,14 @@ def ChronologicallyPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
 /-! ### Causal trips and causal precedence -/
 
 /--
-A *causal trip* from `p` to `q` in a spacetime `M` is a smooth curve `c`
-together with a representative smooth path `μ` that
+A *causal trip segment* from `p` to `q` in a spacetime `M` is a smooth curve
+`c` together with a representative smooth path `μ` that
 
-* is piecewise future-oriented and causal;
-* is piecewise a (possibly degenerate) geodesic;
+* is future-oriented and causal;
+* is a (possibly degenerate) geodesic;
 * has past endpoint `p` and future endpoint `q`.
 -/
-def IsCausalTrip (t : M.TimeOrientation) (p q : M.Carrier)
+def IsCausalTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
     (c : SmoothCurve M) : Prop :=
   ∃ rep : M.SmoothPath,
     c = SmoothCurve.ofPath M rep ∧
@@ -132,10 +146,22 @@ def IsCausalTrip (t : M.TimeOrientation) (p q : M.Carrier)
     IsPastEndpoint M rep p ∧
     IsFutureEndpoint M rep q
 
+/-- *Single-segment causal precedence*: `p` and `q` are joined by one
+future-oriented causal geodesic segment. -/
+def CausalSegmentPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
+  ∃ c : SmoothCurve M, IsCausalTripSegment M t p q c
+
+/-- A *causal trip* from `p` to `q`: a curve which is piecewise a
+future-oriented causal geodesic, i.e. a finite chain of causal trip
+segments. Encoded as the transitive closure of single-segment causal
+precedence. -/
+def IsCausalTrip (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
+  Relation.TransGen (CausalSegmentPrecedes M t) p q
+
 /-- *Causal precedence*: `p ≺ q` iff there exists a causal trip from `p`
 to `q`, relative to a fixed time orientation. -/
 def CausallyPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
-  ∃ c : SmoothCurve M, IsCausalTrip M t p q c
+  IsCausalTrip M t p q
 
 @[inherit_doc] scoped notation:50 p " ≺[" M ", " t "] " q =>
   CausallyPrecedes M t p q
@@ -209,18 +235,42 @@ theorem isCausal_of_isTimelike {μ : M.SmoothPath}
     (h : SmoothPath.IsTimelike M μ) : SmoothPath.IsCausal M μ :=
   fun s hs => Or.inl (h s hs)
 
-/-- Every trip is a causal trip. -/
-theorem isCausalTrip_of_isTrip (t : M.TimeOrientation) {p q : M.Carrier}
-    {c : SmoothCurve M} (h : M.IsTrip t p q c) : M.IsCausalTrip t p q c := by
+/-- Every trip segment is a causal trip segment. -/
+theorem isCausalTripSegment_of_isTripSegment (t : M.TimeOrientation)
+    {p q : M.Carrier} {c : SmoothCurve M} (h : M.IsTripSegment t p q c) :
+    M.IsCausalTripSegment t p q c := by
   obtain ⟨rep, hc, htl, hfo, hg, hpe, hfe⟩ := h
   exact ⟨rep, hc, M.isCausal_of_isTimelike htl, hfo, hg, hpe, hfe⟩
+
+/-- Single-segment chronological precedence implies single-segment causal
+precedence. -/
+theorem causalSegmentPrecedes_of_segmentPrecedes (t : M.TimeOrientation)
+    {p q : M.Carrier} (h : M.SegmentPrecedes t p q) :
+    M.CausalSegmentPrecedes t p q := by
+  obtain ⟨c, hc⟩ := h
+  exact ⟨c, M.isCausalTripSegment_of_isTripSegment t hc⟩
+
+/-- **Transitivity of chronological precedence.** Two trips joined at a common
+point `q` concatenate to a single (piecewise) trip: `p ≪ q` and `q ≪ r` give
+`p ≪ r`. This is exactly the transitivity of the transitive closure. -/
+theorem chronologicallyPrecedes_trans (t : M.TimeOrientation)
+    {p q r : M.Carrier} (h₁ : M.ChronologicallyPrecedes t p q)
+    (h₂ : M.ChronologicallyPrecedes t q r) :
+    M.ChronologicallyPrecedes t p r :=
+  Relation.TransGen.trans h₁ h₂
+
+/-- **Transitivity of causal precedence.** `p ≺ q` and `q ≺ r` give `p ≺ r`. -/
+theorem causallyPrecedes_trans (t : M.TimeOrientation)
+    {p q r : M.Carrier} (h₁ : M.CausallyPrecedes t p q)
+    (h₂ : M.CausallyPrecedes t q r) :
+    M.CausallyPrecedes t p r :=
+  Relation.TransGen.trans h₁ h₂
 
 /-- Chronological precedence implies causal precedence. -/
 theorem causallyPrecedes_of_chronologicallyPrecedes (t : M.TimeOrientation)
     {p q : M.Carrier} (h : M.ChronologicallyPrecedes t p q) :
-    M.CausallyPrecedes t p q := by
-  obtain ⟨c, hc⟩ := h
-  exact ⟨c, M.isCausalTrip_of_isTrip t hc⟩
+    M.CausallyPrecedes t p q :=
+  Relation.TransGen.mono (fun _ _ => M.causalSegmentPrecedes_of_segmentPrecedes t) h
 
 /-- The chronological future is contained in the causal future. -/
 theorem chronologicalFuture_subset_causalFuture (t : M.TimeOrientation)

@@ -1111,7 +1111,7 @@ timelike future-oriented properties of `rep`) and pointwise applies
 `standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero`. -/
 theorem standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
     {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
-    (htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
+    (htrip : Spacetime.IsTripSegment StandardMinkowskiSpacetime
               standardMinkowskiTimeOrientation p q c) :
     ∃ (rep : StandardMinkowskiSpacetime.SmoothPath),
       c = Spacetime.SmoothCurve.ofPath StandardMinkowskiSpacetime rep ∧
@@ -1250,7 +1250,7 @@ The body wires together four named sub-lemmas:
 `standardMinkowski_smoothPath_tangent_continuousOn`. -/
 theorem standardMinkowski_trip_displacement_eq_intervalIntegral
     {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
-    (htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
+    (htrip : Spacetime.IsTripSegment StandardMinkowskiSpacetime
               standardMinkowskiTimeOrientation p q c) :
     ∃ (rep : StandardMinkowskiSpacetime.SmoothPath) (a b : ℝ),
       a < b ∧ a ∈ rep.parameterSpace ∧ b ∈ rep.parameterSpace ∧
@@ -1518,16 +1518,15 @@ Minkowski-cone. The body wires together
 `intervalIntegral_mem_minkowskiForwardCone_zero`, and
 `mem_minkowskiForwardCone_iff_sub_mem`; the analytic content
 sits in those named lemmas. -/
-theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
-    Spacetime.chronologicalFuture StandardMinkowskiSpacetime
-        standardMinkowskiTimeOrientation p
-      ⊆ minkowskiForwardCone p := by
-  intro q hq
+theorem segmentPrecedes_mem_minkowskiForwardCone {p q : SpacetimeModel}
+    (hq : Spacetime.SegmentPrecedes StandardMinkowskiSpacetime
+            standardMinkowskiTimeOrientation p q) :
+    q ∈ minkowskiForwardCone p := by
   -- `StandardMinkowskiSpacetime.Carrier = SpacetimeModel` definitionally; we
   -- re-bind `q` at the model type so that arithmetic and cone membership
   -- elaborate cleanly.
   let q' : SpacetimeModel := q
-  -- Unpack the trip witness.
+  -- Unpack the segment witness.
   obtain ⟨c, htrip⟩ := hq
   -- FTC representation of `q' - p` as an interval integral of the trip's
   -- tangent. The lemma also delivers continuity of the tangent on `[a, b]`
@@ -1548,16 +1547,26 @@ theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
   change q' ∈ minkowskiForwardCone p
   exact (mem_minkowskiForwardCone_iff_sub_mem p q').mpr hsub
 
+/-- *Forward subset* of `chronologicalFuture_standardMinkowski`: every
+point in the chronological future of `p` lies in the open forward
+Minkowski-cone. Because a trip is a finite chain of trip segments, this is a
+transitive-closure induction: the base case is
+`segmentPrecedes_mem_minkowskiForwardCone`, and the inductive step uses
+forward-cone nesting `minkowskiForwardCone_subset`. -/
+theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
+    Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation p
+      ⊆ minkowskiForwardCone p := by
+  sorry
+
 /-- *Reverse subset* of `chronologicalFuture_standardMinkowski`: every
 point of the open forward Minkowski-cone of `p` lies in the chronological
 future of `p`. Witnessed by the straight-line path
 `standardMinkowskiLineSegmentPath`. -/
-theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
-    (p : SpacetimeModel) :
-    minkowskiForwardCone p ⊆
-      Spacetime.chronologicalFuture StandardMinkowskiSpacetime
-        standardMinkowskiTimeOrientation p := by
-  intro q hq
+theorem minkowskiForwardCone_subset_segmentPrecedes {p q : SpacetimeModel}
+    (hq : q ∈ minkowskiForwardCone p) :
+    Spacetime.SegmentPrecedes StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation p q := by
   obtain ⟨h_time, h_cone⟩ := hq
   have hpq : p ≠ q := by
     intro h
@@ -1654,6 +1663,17 @@ theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
       simp
     · intro s' hs'
       exact hs'.2
+
+/-- *Reverse subset* of `chronologicalFuture_standardMinkowski`: every point of
+the open forward Minkowski-cone of `p` lies in the chronological future of `p`.
+A single straight-line trip segment already realises the precedence, so this is
+`Relation.TransGen.single` applied to `minkowskiForwardCone_subset_segmentPrecedes`. -/
+theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
+    (p : SpacetimeModel) :
+    minkowskiForwardCone p ⊆
+      Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation p := by
+  sorry
 
 /-- **Characterisation of `chronologicalFuture` on standard Minkowski.**
 The chronological future of `p` on `StandardMinkowskiSpacetime` agrees with
