@@ -34,12 +34,17 @@ Composition and inverse preserve the metric via the manifold chain rule
 `PartialHomeomorph.MDifferentiable.comp_symm_deriv` does. The isometries
 thus form a group acting on points.
 
-**Deferred refinement.** The blueprint's identity-component
-("connected to the identity") restriction is not captured: it requires a
-topology on the diffeomorphism group and its identity component, for
-which Mathlib has no ready support. The present `Isometry M` is the full
-metric-preserving diffeomorphism group; the identity-component subgroup
-is a future refinement.
+**On the identity-component restriction.** `Isometry M` is the full
+metric-preserving diffeomorphism group. The blueprint's identity-component
+("connected to the identity") restriction of Axiom 5 is captured downstream:
+`Physicslib4/Spacetime/IsometryTopology.lean` topologizes this group as a
+topological group and defines the identity-component subgroup
+`Isometry.identityComponent := Subgroup.connectedComponentOfOne`, and
+`Isometry.orientedIdentityComponent` (`IsometryCausality.lean`) intersects it
+with future-orientation preservation. That subgroup is the `M.Isom` supplied to
+the curved Haag-Kastler bridge `toAbstractIdentityComponent`. The full group is
+retained here as the substrate and for the axioms that hold under all
+isometries (e.g. microcausality).
 -/
 
 namespace Physicslib4
