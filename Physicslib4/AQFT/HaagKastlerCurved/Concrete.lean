@@ -37,9 +37,16 @@ spacetime:
 * `Isom` is `Physicslib4.Spacetime.Isometry` of the underlying
   spacetime, with its `Group` and `MulAction` instances.
 
-The same deferred refinements noted on `Spacetime.Isometry` apply here:
-the isometry group is the full metric-preserving group (its
-identity-component restriction is not yet captured) and its bundled
+This bridge instantiates `Isom` with the *full* metric-preserving
+isometry group. The identity-component restriction of Axiom 5
+("isometries connected to the identity") is captured by the sibling
+bridge `toAbstractIdentityComponent`
+(`Physicslib4/AQFT/HaagKastlerCurved/IdentityComponent.lean`), which uses
+`Spacetime.Isometry.orientedIdentityComponent` (the topological
+`connectedComponentOfOne` intersected with future-orientation
+preservation); this full-group bridge is retained for the axioms that
+hold under the whole isometry group (e.g. microcausality). One deferred
+refinement noted on `Spacetime.Isometry` still applies: the bundled
 differential is not yet tied to the manifold derivative.
 -/
 
