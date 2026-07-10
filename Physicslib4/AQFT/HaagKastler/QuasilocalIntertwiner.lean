@@ -402,8 +402,8 @@ inhabiting `QuasilocalLift`. -/
 noncomputable def quasilocalLift (hcov : IsCovariant N Q)
     (L : InhomogeneousLorentzGroup) : N.QuasilocalLift Q L where
   β := StarAlgEquiv.ofStarAlgHom (extendHom hcov L) (extendHom hcov L⁻¹)
-        (fun x => DFunLike.congr_fun (extendHom_inv_comp hcov L) x)
-        (fun x => DFunLike.congr_fun (extendHom_comp_inv hcov L) x)
+        (extendHom_inv_comp hcov L)
+        (extendHom_comp_inv hcov L)
   intertwines := by
     intro B hB a
     rw [StarAlgEquiv.ofStarAlgHom_apply]
@@ -476,7 +476,8 @@ theorem action_ι (C : CovariantQuasilocalAlgebra) (L : InhomogeneousLorentzGrou
 theorem action_apply (C : CovariantQuasilocalAlgebra)
     (L : InhomogeneousLorentzGroup) (x : C.quasilocal.carrier) :
     C.action L x = extendHom C.covariant L x :=
-  StarAlgEquiv.ofStarAlgHom_apply _ _ _ _ x
+  StarAlgEquiv.ofStarAlgHom_apply (extendHom C.covariant L) (extendHom C.covariant L⁻¹)
+    (extendHom_inv_comp C.covariant L) (extendHom_comp_inv C.covariant L) x
 
 /-- **The action is trivial at the identity:** `β_1 = id`. -/
 theorem action_one_apply (C : CovariantQuasilocalAlgebra)
@@ -495,7 +496,7 @@ theorem action_mul_apply (C : CovariantQuasilocalAlgebra)
 
 /-- The covariance action sends the identity to the identity automorphism. -/
 theorem action_one (C : CovariantQuasilocalAlgebra) :
-    C.action 1 = StarAlgEquiv.refl := by
+    C.action 1 = StarAlgEquiv.refl ℂ C.quasilocal.carrier := by
   ext x; rw [action_one_apply]; rfl
 
 /-- The covariance action is multiplicative: `β_{L'·L} = β_L` followed by

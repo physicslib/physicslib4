@@ -66,7 +66,7 @@ variable {A}
 
 noncomputable instance : FunLike (State A) A ℂ where
   coe ω := ω.toContinuousLinearMap
-  coe_injective' := by
+  coe_injective := by
     intro ω₁ ω₂ h
     cases ω₁
     cases ω₂

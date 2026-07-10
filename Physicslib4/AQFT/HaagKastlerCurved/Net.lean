@@ -276,7 +276,7 @@ identity isomorphism. -/
 noncomputable def trivialLocalNet (M : LorentzianSpacetime) : LocalNet M where
   algebra := fun _ => ℂ
   instCStarAlgebra := fun _ => inferInstance
-  emptyEquivComplex := StarAlgEquiv.refl
+  emptyEquivComplex := StarAlgEquiv.refl ℂ ℂ
 
 theorem trivialLocalNet_isotony (M : LorentzianSpacetime) :
     Isotony (trivialLocalNet M) :=
@@ -295,7 +295,7 @@ theorem trivialLocalNet_localAlgebra (M : LorentzianSpacetime) :
 
 theorem trivialLocalNet_isometricCovariance (M : LorentzianSpacetime) :
     IsometricCovariance (trivialLocalNet M) := by
-  refine ⟨fun _ _ => StarAlgEquiv.refl, fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ,
+  refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ,
     ?_, ?_, ?_, ?_⟩
   · intro _ _ _ _ h _ _ hh; exact hh
   · intro _ _; rfl

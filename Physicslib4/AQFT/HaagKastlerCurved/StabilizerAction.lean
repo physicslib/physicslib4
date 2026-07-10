@@ -59,11 +59,11 @@ variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
 /-- Transport a local algebra along an equality of regions. -/
 noncomputable def algCongr {B₁ B₂ : Set M.Carrier} (h : B₁ = B₂) :
     N.algebra B₁ ≃⋆ₐ[ℂ] N.algebra B₂ := by
-  subst h; exact StarAlgEquiv.refl
+  subst h; exact StarAlgEquiv.refl ℂ (N.algebra B₁)
 
 theorem algCongr_apply {B₁ B₂ : Set M.Carrier} (h : B₁ = B₂) (a : N.algebra B₁) :
     N.algCongr h a = cast (congrArg N.algebra h) a := by
-  subst h; rfl
+  subst h; simp [algCongr]
 
 /-- **Stabilizer automorphism.** For an isometry `φ` fixing the region `B`
 (`φ·B = B`), the covariance equivalence `covEquiv φ B` lands back in `𝔘(B)` and

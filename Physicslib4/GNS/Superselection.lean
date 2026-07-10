@@ -444,7 +444,7 @@ def QuasiEquiv (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (π₂ : A →�
 
 /-- Quasi-equivalence is reflexive. -/
 theorem QuasiEquiv.refl (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) : QuasiEquiv π π :=
-  ⟨StarAlgEquiv.refl, fun _ => rfl⟩
+  ⟨StarAlgEquiv.refl ℂ (gnsVonNeumannAlgebra π).toStarSubalgebra, fun _ => rfl⟩
 
 /-- Quasi-equivalence is symmetric. -/
 theorem QuasiEquiv.symm (h : QuasiEquiv π₁ π₂) : QuasiEquiv π₂ π₁ := by

@@ -269,7 +269,7 @@ the empty-region normalisation being the identity isomorphism. -/
 noncomputable def trivialLocalNet : LocalNet where
   algebra := fun _ => ℂ
   instCStarAlgebra := fun _ => inferInstance
-  emptyEquivComplex := StarAlgEquiv.refl
+  emptyEquivComplex := StarAlgEquiv.refl ℂ ℂ
 
 /-- A concrete Alexandrov-basis set of standard Minkowski spacetime
 (`I⁺(0) ∩ I⁻(0)`), used as a witness that basis sets exist. -/
@@ -310,7 +310,7 @@ theorem trivialLocalNet_quasilocalCompleteness :
 
 theorem trivialLocalNet_lorentzCovariance :
     LorentzCovariance trivialLocalNet := by
-  refine ⟨fun _ _ => StarAlgEquiv.refl, fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ,
+  refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ,
     ?_, ?_, ?_, ?_⟩
   · intro B₁ B₂ hB₁ hB₂ h a b hh; exact hh
   · intro _ _; rfl
