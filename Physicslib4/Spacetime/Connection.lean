@@ -117,7 +117,40 @@ the bilinear product rule (`ContinuousLinearMap.fderiv_of_bilinear`), which is
 exactly the compatibility Leibniz rule since `∇ = mvfderiv`. In particular the
 flat connection is compatible with the constant Minkowski metric. -/
 theorem flatConnection_isMetricCompatible_const (g₀ : E →L[ℝ] E →L[ℝ] ℝ) :
-    IsMetricCompatible (fun _ => g₀) (flatConnection (E := E)) := by sorry
+    IsMetricCompatible (fun _ => g₀) (flatConnection (E := E)) := by
+  intro σ τ x X₀ hσ hτ
+  have dσ : DifferentiableAt ℝ σ x := by
+    rw [← mdifferentiableAt_iff_differentiableAt]
+    exact hσ
+  have dτ : DifferentiableAt ℝ τ x := by
+    rw [← mdifferentiableAt_iff_differentiableAt]
+    exact hτ
+  have hprod : fderiv ℝ (fun y : E => g₀ (σ y) (τ y)) x =
+      g₀.precompR E (σ x) (fderiv ℝ τ x) + g₀.precompL E (fderiv ℝ σ x) (τ x) :=
+    g₀.fderiv_of_bilinear dσ dτ
+  have hmvf_fderiv_scalar (f : E → ℝ) (x : E) (v : TangentSpace (modelWithCornersSelf ℝ E) x) :
+      (mvfderiv (modelWithCornersSelf ℝ E) f x) v = fderiv ℝ f x v := by
+    simp [mvfderiv, mfderiv_eq_fderiv, NormedSpace.fromTangentSpace]; rfl
+  have hmvf_fderiv_vec (f : E → E) (x : E) (v : TangentSpace (modelWithCornersSelf ℝ E) x) :
+      (mvfderiv (modelWithCornersSelf ℝ E) f x) v = fderiv ℝ f x v := by
+    simp [mvfderiv, mfderiv_eq_fderiv, NormedSpace.fromTangentSpace]; rfl
+  calc
+    mvfderiv (modelWithCornersSelf ℝ E) (fun y => (fun _ => g₀) y (σ y) (τ y)) x X₀
+        = mvfderiv (modelWithCornersSelf ℝ E) (fun y => g₀ (σ y) (τ y)) x X₀ := by
+      simp
+    _ = fderiv ℝ (fun y : E => g₀ (σ y) (τ y)) x X₀ := by
+      simpa using hmvf_fderiv_scalar (fun y => g₀ (σ y) (τ y)) x X₀
+    _ = (g₀.precompR E (σ x) (fderiv ℝ τ x) + g₀.precompL E (fderiv ℝ σ x) (τ x)) X₀ := by
+      rw [hprod]
+    _ = (g₀.precompR E (σ x) (fderiv ℝ τ x)) X₀ + (g₀.precompL E (fderiv ℝ σ x) (τ x)) X₀ := rfl
+    _ = g₀ (σ x) (fderiv ℝ τ x X₀) + g₀ (fderiv ℝ σ x X₀) (τ x) := by
+      simp [ContinuousLinearMap.precompR_apply, ContinuousLinearMap.precompL_apply]
+    _ = g₀ (σ x) ((mvfderiv (modelWithCornersSelf ℝ E) τ x) X₀) + g₀ ((mvfderiv (modelWithCornersSelf ℝ E) σ x) X₀) (τ x) := by
+      rw [← hmvf_fderiv_vec τ x X₀, ← hmvf_fderiv_vec σ x X₀]
+    _ = g₀ (σ x) (flatConnection τ x X₀) + g₀ (flatConnection σ x X₀) (τ x) := by
+      simp [flatConnection]; rfl
+    _ = ((fun _ => g₀) x) (flatConnection σ x X₀) (τ x) + ((fun _ => g₀) x) (σ x) (flatConnection τ x X₀) := by
+      ring
 
 end Spacetime
 
