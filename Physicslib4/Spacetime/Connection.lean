@@ -50,7 +50,32 @@ noncomputable def flatConnection :
     CovariantDerivative (modelWithCornersSelf ℝ E) E
       (TangentSpace (modelWithCornersSelf ℝ E) : E → Type _) where
   toFun σ := mvfderiv (modelWithCornersSelf ℝ E) σ
-  isCovariantDerivativeOnUniv := by sorry
+  isCovariantDerivativeOnUniv := by
+    refine {
+      add := ?_
+      leibniz := ?_
+    }
+    · intro σ σ' x hσ hσ' _
+      let τ : E → E := σ
+      let τ' : E → E := σ'
+      have hτ : MDiffAt (T% σ) x := hσ
+      have hτ' : MDiffAt (T% σ') x := hσ'
+      have b1 : MDiffAt τ x := by
+        rw [mdifferentiableAt_section] at hτ
+        simpa [trivializationAt_model_space_apply, τ] using hτ
+      have b2 : MDiffAt τ' x := by
+        rw [mdifferentiableAt_section] at hτ'
+        simpa [trivializationAt_model_space_apply, τ'] using hτ'
+      have : d% (τ + τ') x = d% τ x + d% τ' x := mvfderiv_add b1 b2
+      simpa [τ, τ']
+    · intro σ g x hσ hg _
+      let τ : E → E := σ
+      have hτ : MDiffAt (T% σ) x := hσ
+      have b1 : MDiffAt τ x := by
+        rw [mdifferentiableAt_section] at hτ
+        simpa [trivializationAt_model_space_apply, τ] using hτ
+      have : d% (g • τ) x = g x • d% τ x + (d% g x).smulRight (τ x) := mvfderiv_smul hg b1
+      simpa [τ]
 
 end Spacetime
 

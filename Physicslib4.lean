@@ -57,6 +57,7 @@ import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalComplement
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Causality
+import Physicslib4.Spacetime.Connection
 import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Isometry
 import Physicslib4.Spacetime.IsometryCausality
