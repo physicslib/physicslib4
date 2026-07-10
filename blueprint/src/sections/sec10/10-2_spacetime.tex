@@ -244,6 +244,9 @@
     A \textit{causal trip segment} is a curve which is a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic: a finite chain of causal trip segments joined at matching endpoints. A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
 \end{definition}
 
+\medskip
+\noindent\textbf{Remark (geodesic placeholder in the formalization).} In the Lean formalization the ``geodesic'' clause of a (causal) trip segment is currently a \emph{placeholder}: the predicate \texttt{Physicslib4.Spacetime.IsGeodesic} is defined to be \texttt{True}, so it imposes no constraint. A faithful geodesic condition requires the Levi-Civita connection of the metric (auto-parallelism of the tangent vector along the curve), which the version of Mathlib pinned by this project does not provide. Consequently the formalized (causal) trip segments are future-oriented timelike (resp. causal) curves with the correct past and future endpoints, but their geodesic property is not yet enforced; the endpoint, timelike/causal, and future-orientation content is faithful. This is the one place where \ref{def:trip} and \ref{def:causal-trip} diverge from their Lean implementations, and it should be replaced by the genuine geodesic condition once a Lorentzian Levi-Civita connection is available in Mathlib.
+
 \begin{theorem}[Transitivity of chronological and causal precedence]
     \label{thrm:precedence-transitive}
     \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.causallyPrecedes_trans}
