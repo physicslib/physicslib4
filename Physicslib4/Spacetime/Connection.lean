@@ -6,8 +6,11 @@ Authors: Lean Community
 import Mathlib.Geometry.Manifold.VectorBundle.CovariantDerivative.Basic
 import Mathlib.Geometry.Manifold.VectorBundle.CovariantDerivative.Torsion
 import Mathlib.Geometry.Manifold.VectorBundle.MDifferentiable
+import Mathlib.Geometry.Manifold.VectorField.LieBracket
 import Mathlib.Geometry.Manifold.MFDeriv.NormedSpace
 import Mathlib.Geometry.Manifold.MFDeriv.FDeriv
+import Mathlib.Analysis.Calculus.VectorField
+import Mathlib.Analysis.Calculus.FDeriv.Bilinear
 
 /-!
 # The flat covariant derivative on a self-modelled manifold
@@ -76,6 +79,45 @@ noncomputable def flatConnection :
         simpa [trivializationAt_model_space_apply, τ] using hτ
       have : d% (g • τ) x = g x • d% τ x + (d% g x).smulRight (τ x) := mvfderiv_smul hg b1
       simpa [τ]
+
+/-- **The flat connection is torsion-free.** On the self-model, both the
+covariant-difference `∇_X Y - ∇_Y X` and the Lie bracket `[X, Y]` collapse to
+`fderiv Y (X) - fderiv X (Y)` (via `mlieBracketWithin_eq_lieBracketWithin` and
+`mfderiv_eq_fderiv`), so the torsion vanishes identically. Together with metric
+compatibility this identifies `flatConnection` as the Levi-Civita connection of
+the flat metric. -/
+theorem flatConnection_torsion :
+    (flatConnection (E := E)).torsion = 0 := by sorry
+
+/--
+**Indefinite metric compatibility.** A covariant derivative `cov` on the tangent
+bundle is *compatible* with a (possibly indefinite) metric field `g` if the
+Leibniz rule for the metric holds in every direction `X₀`:
+`X₀⟪σ, τ⟫ = ⟪∇_{X₀} σ, τ⟫ + ⟪σ, ∇_{X₀} τ⟫`, where `⟪·,·⟫` is `g`. This is the
+indefinite (Lorentzian) analogue of Mathlib's
+`CovariantDerivative.IsMetricCompatible`, which is stated only for a
+positive-definite inner-product bundle and so does not apply to a Lorentzian
+metric.
+-/
+def IsMetricCompatible
+    (g : ∀ x : E, TangentSpace (modelWithCornersSelf ℝ E) x →L[ℝ]
+          TangentSpace (modelWithCornersSelf ℝ E) x →L[ℝ] ℝ)
+    (cov : CovariantDerivative (modelWithCornersSelf ℝ E) E
+          (TangentSpace (modelWithCornersSelf ℝ E) : E → Type _)) : Prop :=
+  ∀ (σ τ : ∀ x, TangentSpace (modelWithCornersSelf ℝ E) x) (x : E)
+    (X₀ : TangentSpace (modelWithCornersSelf ℝ E) x),
+    MDifferentiableAt (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E) σ x →
+    MDifferentiableAt (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E) τ x →
+      mvfderiv (modelWithCornersSelf ℝ E) (fun y => g y (σ y) (τ y)) x X₀
+        = g x (cov σ x X₀) (τ x) + g x (σ x) (cov τ x X₀)
+
+/-- **The flat connection is compatible with any constant metric.** For a metric
+field that does not vary over the manifold, the metric-derivative term reduces to
+the bilinear product rule (`ContinuousLinearMap.fderiv_of_bilinear`), which is
+exactly the compatibility Leibniz rule since `∇ = mvfderiv`. In particular the
+flat connection is compatible with the constant Minkowski metric. -/
+theorem flatConnection_isMetricCompatible_const (g₀ : E →L[ℝ] E →L[ℝ] ℝ) :
+    IsMetricCompatible (fun _ => g₀) (flatConnection (E := E)) := by sorry
 
 end Spacetime
 
