@@ -87,7 +87,33 @@ covariant-difference `∇_X Y - ∇_Y X` and the Lie bracket `[X, Y]` collapse t
 compatibility this identifies `flatConnection` as the Levi-Civita connection of
 the flat metric. -/
 theorem flatConnection_torsion :
-    (flatConnection (E := E)).torsion = 0 := by sorry
+    (flatConnection (E := E)).torsion = 0 := by
+  rw [CovariantDerivative.torsion_eq_zero_iff]
+  intro X Y x hX hY
+  -- Bridge: mvfderiv I f x v = fderiv ℝ f x v for f : E → E
+  have hbridge (f : E → E) (v : TangentSpace (modelWithCornersSelf ℝ E) x) :
+      (mvfderiv (modelWithCornersSelf ℝ E) f x) v = fderiv ℝ f x v := by
+    simp [mvfderiv, mfderiv_eq_fderiv, NormedSpace.fromTangentSpace]; rfl
+  -- The manifold Lie bracket reduces to the ordinary Lie bracket, which equals fderiv difference
+  have hlie : VectorField.mlieBracket (modelWithCornersSelf ℝ E) X Y x =
+      fderiv ℝ (Y : E → E) x (X x) - fderiv ℝ (X : E → E) x (Y x) := by
+    have hmlie_to_lie : VectorField.mlieBracket (modelWithCornersSelf ℝ E) X Y x =
+        VectorField.lieBracket ℝ (X : E → E) (Y : E → E) x := by
+      calc
+        VectorField.mlieBracket (modelWithCornersSelf ℝ E) X Y x
+            = (VectorField.mlieBracketWithin (modelWithCornersSelf ℝ E) X Y Set.univ) x := by simp
+        _ = (VectorField.lieBracketWithin ℝ (X : E → E) (Y : E → E) Set.univ) x := by
+          have h := VectorField.mlieBracketWithin_eq_lieBracketWithin
+            (𝕜 := ℝ) (V := X) (W := Y) (s := Set.univ)
+          simpa using congrArg (fun f => f x) h
+        _ = VectorField.lieBracket ℝ (X : E → E) (Y : E → E) x := by simp
+    rw [hmlie_to_lie, VectorField.lieBracket_eq]
+  -- Unfold flatConnection to mvfderiv and coerce X, Y to E → E
+  dsimp [flatConnection]
+  change (mvfderiv (modelWithCornersSelf ℝ E) (Y : E → E) x) (X x) -
+      (mvfderiv (modelWithCornersSelf ℝ E) (X : E → E) x) (Y x) =
+      VectorField.mlieBracket (modelWithCornersSelf ℝ E) X Y x
+  rw [hbridge (Y : E → E) (X x), hbridge (X : E → E) (Y x), ← hlie]
 
 /--
 **Indefinite metric compatibility.** A covariant derivative `cov` on the tangent
@@ -111,6 +137,7 @@ def IsMetricCompatible
       mvfderiv (modelWithCornersSelf ℝ E) (fun y => g y (σ y) (τ y)) x X₀
         = g x (cov σ x X₀) (τ x) + g x (σ x) (cov τ x X₀)
 
+omit [FiniteDimensional ℝ E] in
 /-- **The flat connection is compatible with any constant metric.** For a metric
 field that does not vary over the manifold, the metric-derivative term reduces to
 the bilinear product rule (`ContinuousLinearMap.fderiv_of_bilinear`), which is
@@ -145,11 +172,13 @@ theorem flatConnection_isMetricCompatible_const (g₀ : E →L[ℝ] E →L[ℝ] 
     _ = (g₀.precompR E (σ x) (fderiv ℝ τ x)) X₀ + (g₀.precompL E (fderiv ℝ σ x) (τ x)) X₀ := rfl
     _ = g₀ (σ x) (fderiv ℝ τ x X₀) + g₀ (fderiv ℝ σ x X₀) (τ x) := by
       simp [ContinuousLinearMap.precompR_apply, ContinuousLinearMap.precompL_apply]
-    _ = g₀ (σ x) ((mvfderiv (modelWithCornersSelf ℝ E) τ x) X₀) + g₀ ((mvfderiv (modelWithCornersSelf ℝ E) σ x) X₀) (τ x) := by
+    _ = g₀ (σ x) ((mvfderiv (modelWithCornersSelf ℝ E) τ x) X₀)
+          + g₀ ((mvfderiv (modelWithCornersSelf ℝ E) σ x) X₀) (τ x) := by
       rw [← hmvf_fderiv_vec τ x X₀, ← hmvf_fderiv_vec σ x X₀]
     _ = g₀ (σ x) (flatConnection τ x X₀) + g₀ (flatConnection σ x X₀) (τ x) := by
       simp [flatConnection]; rfl
-    _ = ((fun _ => g₀) x) (flatConnection σ x X₀) (τ x) + ((fun _ => g₀) x) (σ x) (flatConnection τ x X₀) := by
+    _ = ((fun _ => g₀) x) (flatConnection σ x X₀) (τ x)
+          + ((fun _ => g₀) x) (σ x) (flatConnection τ x X₀) := by
       ring
 
 end Spacetime
