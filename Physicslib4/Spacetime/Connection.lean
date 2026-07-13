@@ -126,15 +126,15 @@ positive-definite inner-product bundle and so does not apply to a Lorentzian
 metric.
 -/
 def IsMetricCompatible
-    (g : ∀ x : E, TangentSpace (modelWithCornersSelf ℝ E) x →L[ℝ]
-          TangentSpace (modelWithCornersSelf ℝ E) x →L[ℝ] ℝ)
-    (cov : CovariantDerivative (modelWithCornersSelf ℝ E) E
-          (TangentSpace (modelWithCornersSelf ℝ E) : E → Type _)) : Prop :=
-  ∀ (σ τ : ∀ x, TangentSpace (modelWithCornersSelf ℝ E) x) (x : E)
-    (X₀ : TangentSpace (modelWithCornersSelf ℝ E) x),
-    MDifferentiableAt (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E) σ x →
-    MDifferentiableAt (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E) τ x →
-      mvfderiv (modelWithCornersSelf ℝ E) (fun y => g y (σ y) (τ y)) x X₀
+    {H Carrier : Type*} [TopologicalSpace H] [TopologicalSpace Carrier]
+    {I : ModelWithCorners ℝ E H} [ChartedSpace H Carrier] [IsManifold I 1 Carrier]
+    (g : ∀ x : Carrier, TangentSpace I x →L[ℝ] TangentSpace I x →L[ℝ] ℝ)
+    (cov : CovariantDerivative I E (TangentSpace I : Carrier → Type _)) : Prop :=
+  ∀ (σ τ : ∀ x, TangentSpace I x) (x : Carrier)
+    (X₀ : TangentSpace I x),
+    MDifferentiableAt I 𝓘(ℝ, E) σ x →
+    MDifferentiableAt I 𝓘(ℝ, E) τ x →
+      mvfderiv I (fun y => g y (σ y) (τ y)) x X₀
         = g x (cov σ x X₀) (τ x) + g x (σ x) (cov τ x X₀)
 
 omit [FiniteDimensional ℝ E] in
