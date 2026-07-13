@@ -62,6 +62,7 @@ import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Isometry
 import Physicslib4.Spacetime.IsometryCausality
 import Physicslib4.Spacetime.IsometryTopology
+import Physicslib4.Spacetime.LeviCivita
 import Physicslib4.Spacetime.LorentzCauchySchwarz
 import Physicslib4.Spacetime.LorentzCausality
 import Physicslib4.Spacetime.LorentzCone

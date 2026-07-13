@@ -124,8 +124,11 @@ structure Spacetime where
   /-- The model with corners used to define the smooth structure on `Carrier`.
   Typically the trivial / boundaryless one `modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 4))`. -/
   model : ModelWithCorners ℝ SpacetimeModel SpacetimeModel
-  /-- `Carrier` is a `C^∞` manifold modelled on `SpacetimeModel = ℝ⁴`. -/
-  isManifold : IsManifold model ⊤ Carrier
+  /-- `Carrier` is a `C^∞` manifold modelled on `SpacetimeModel = ℝ⁴`.
+  Declared instance-implicit so the tangent-bundle instances synthesise for
+  downstream structures (e.g. `SpacetimeWithLeviCivita`) that state a
+  `CovariantDerivative` on the tangent bundle. -/
+  [isManifold : IsManifold model ⊤ Carrier]
   /-- Each tangent space is finite-dimensional. -/
   tangent_findim : ∀ x : Carrier, FiniteDimensional ℝ (TangentSpace model x)
   /-- The metric tensor `g`, presented as a family of continuous bilinear forms
