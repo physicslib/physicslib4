@@ -265,6 +265,15 @@
     Standard Minkowski spacetime, equipped with the flat connection $\nabla \sigma = \mathrm{d}\sigma$ as its Levi-Civita connection: this connection is torsion-free and compatible with the constant Minkowski metric.
 \end{definition}
 
+\begin{definition}[Geodesic (auto-parallel curve)]
+    \label{def:geodesic-auto-parallel}
+    \lean{Physicslib4.SpacetimeWithLeviCivita.IsGeodesic}
+    \leanfile{Physicslib4/Spacetime/LeviCivita.lean}
+    \leanok
+    \uses{def:spacetime-with-levi-civita, def:curves}
+    A smooth path $\mu$ on a spacetime with Levi-Civita connection $\nabla$ is a \emph{geodesic} if it is auto-parallel, $\nabla_{\mu'}\mu' = 0$ along $\mu$. Since the formalized covariant derivative acts on global sections rather than along a curve, this is phrased as: there is a vector field $V$ that restricts to the velocity $\mu'$ along $\mu$ and satisfies $(\nabla_V V)(\mu(s)) = 0$ on $\mu$; by germ-dependence of $\nabla$ this is exactly $\nabla_{\mu'}\mu'=0$ and is independent of the extension $V$. This is the genuine geodesic condition that the placeholder \texttt{Spacetime.IsGeodesic} $:=$ \texttt{True} (used in \ref{def:trip}) would be replaced by, once the causal-trip layer is stated over a spacetime carrying a Levi-Civita connection.
+\end{definition}
+
 \begin{theorem}[Transitivity of chronological and causal precedence]
     \label{thrm:precedence-transitive}
     \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.causallyPrecedes_trans}

@@ -74,6 +74,29 @@ noncomputable def standardMinkowski : SpacetimeWithLeviCivita where
   connection_metricCompatible :=
     Spacetime.flatConnection_isMetricCompatible_const minkowskiForm
 
+/--
+A smooth path `μ` is a **geodesic** of the Levi-Civita connection `∇` if it is
+*auto-parallel*, i.e. `∇_{μ'} μ' = 0` along `μ`.
+
+Mathlib provides a covariant derivative only on *global* sections of the tangent
+bundle (`M.connection : (∀ x, TₓM) → (∀ x, TₓM →L TₓM)`), not a derivative of a
+vector field *along a curve*. We therefore phrase auto-parallelism by asking for
+a global vector field `V` that restricts to the velocity `μ.tangent` along `μ`
+and whose covariant derivative in the velocity direction vanishes on `μ`:
+`(∇_{V} V)(μ s) = M.connection V (μ s) (V (μ s)) = 0`. Because `(∇_X σ) x`
+depends only on `X x` and the germ of `σ` at `x`, this value is the genuine
+covariant acceleration `∇_{μ'} μ'` and is independent of the chosen extension
+`V`.
+
+This is a genuine condition (contrast the placeholder
+`Physicslib4.Spacetime.IsGeodesic := True`), now available for any spacetime
+carrying a Levi-Civita connection.
+-/
+def IsGeodesic (M : SpacetimeWithLeviCivita) (μ : M.toSpacetime.SmoothPath) : Prop :=
+  ∃ V : ∀ x, TangentSpace M.toSpacetime.model x,
+    (∀ s ∈ μ.parameterSpace, V (μ.toFun s) = μ.tangent s) ∧
+    (∀ s ∈ μ.parameterSpace, M.connection V (μ.toFun s) (V (μ.toFun s)) = 0)
+
 end SpacetimeWithLeviCivita
 
 end Physicslib4
