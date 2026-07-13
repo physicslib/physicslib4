@@ -10,7 +10,6 @@ import Mathlib.Analysis.InnerProductSpace.EuclideanDist
 import Mathlib.LinearAlgebra.Matrix.BilinearForm
 import Mathlib.LinearAlgebra.Matrix.DotProduct
 import Mathlib.LinearAlgebra.Basis.Basic
-import Physicslib4.Spacetime.Connection
 
 /-!
 # Spacetime
@@ -125,10 +124,8 @@ structure Spacetime where
   /-- The model with corners used to define the smooth structure on `Carrier`.
   Typically the trivial / boundaryless one `modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 4))`. -/
   model : ModelWithCorners ℝ SpacetimeModel SpacetimeModel
-  /-- `Carrier` is a `C^∞` manifold modelled on `SpacetimeModel = ℝ⁴`.
-  Declared instance-implicit so that the tangent-bundle instances (needed to
-  state the `connection` field below) synthesise inside the structure. -/
-  [isManifold : IsManifold model ⊤ Carrier]
+  /-- `Carrier` is a `C^∞` manifold modelled on `SpacetimeModel = ℝ⁴`. -/
+  isManifold : IsManifold model ⊤ Carrier
   /-- Each tangent space is finite-dimensional. -/
   tangent_findim : ∀ x : Carrier, FiniteDimensional ℝ (TangentSpace model x)
   /-- The metric tensor `g`, presented as a family of continuous bilinear forms
@@ -154,18 +151,5 @@ structure Spacetime where
       (fun y => val (e.symm y) (mfderiv model model e.symm y v)
                                  (mfderiv model model e.symm y w))
       e.target (e x₀)
-  /-- The **Levi-Civita connection** of the metric `g`, presented as a bundled
-  covariant derivative on the tangent bundle. It is not free data: the two
-  fields below force it to be torsion-free and metric-compatible, and since
-  `g` is non-degenerate such a connection is unique — so `connection` is
-  *determined* by `val` and cannot contradict the metric. -/
-  connection :
-    CovariantDerivative model SpacetimeModel (TangentSpace model : Carrier → Type _)
-  /-- The connection is **torsion-free**. -/
-  connection_torsionFree : connection.torsion = 0
-  /-- The connection is **compatible** with the metric `g`. Together with
-  torsion-freeness this pins `connection` down as the Levi-Civita connection of
-  `val`. -/
-  connection_metricCompatible : Spacetime.IsMetricCompatible val connection
 
 end Physicslib4
