@@ -2025,7 +2025,41 @@ noncomputable def flatConnectionMinkowskiCarrier :
         MinkowskiSpacetimeCarrier → Type _) where
   toFun σ := mvfderiv (modelWithCornersSelf ℝ SpacetimeModel) σ
   isCovariantDerivativeOnUniv := by
-    sorry
+    set I := modelWithCornersSelf ℝ SpacetimeModel with hI
+    set J := modelWithCornersSelf ℝ SpacetimeModel with hJ
+    set M := MinkowskiSpacetimeCarrier with hM
+    refine {
+      add := ?_
+      leibniz := ?_
+    }
+    · intro σ σ' x hσ hσ' _
+      let τ : M → SpacetimeModel := σ
+      let τ' : M → SpacetimeModel := σ'
+      -- `hσ : MDiffAt (T% σ) x` is `MDifferentiableAt I (I.prod 𝓘(ℝ, SpacetimeModel)) (T% σ) x`
+      -- Use `mdifferentiableAt_section` to convert to differentiability of the trivialization component.
+      have hsec := (mdifferentiableAt_section (IB := I) (F := SpacetimeModel)
+        (E := TangentSpace I) (s := σ) (b₀ := x)).mp hσ
+      have hsec' := (mdifferentiableAt_section (IB := I) (F := SpacetimeModel)
+        (E := TangentSpace I) (s := σ') (b₀ := x)).mp hσ'
+      -- `hsec : MDiffAt (fun b ↦ (trivializationAt SpacetimeModel (TangentSpace I) x (σ b)).2) x`
+      -- The chart on `MinkowskiSpacetimeCarrier` is the identity, so the tangent bundle trivialization
+      -- is the identity on the second component.  Use `simp` with `chartAt_minkowskiCarrier` to show this.
+      have b1 : MDifferentiableAt I J τ x := by
+        simpa [τ, TangentBundle.trivializationAt_apply, chartAt_minkowskiCarrier, hI, hJ] using hsec
+      have b2 : MDifferentiableAt I J τ' x := by
+        simpa [τ', TangentBundle.trivializationAt_apply, chartAt_minkowskiCarrier, hI, hJ] using hsec'
+      have : mvfderiv I (τ + τ') x = mvfderiv I τ x + mvfderiv I τ' x :=
+        mvfderiv_add b1 b2
+      simpa [τ, τ']
+    · intro σ g x hσ hg _
+      let τ : M → SpacetimeModel := σ
+      have hsec := (mdifferentiableAt_section (IB := I) (F := SpacetimeModel)
+        (E := TangentSpace I) (s := σ) (b₀ := x)).mp hσ
+      have b1 : MDifferentiableAt I J τ x := by
+        simpa [τ, TangentBundle.trivializationAt_apply, chartAt_minkowskiCarrier, hI, hJ] using hsec
+      have : mvfderiv I (g • τ) x = g x • mvfderiv I τ x + (mvfderiv I g x).smulRight (τ x) :=
+        mvfderiv_smul hg b1
+      simpa [τ]
 
 /-- `flatConnectionMinkowskiCarrier` is torsion-free. -/
 theorem flatConnectionMinkowskiCarrier_torsion :
