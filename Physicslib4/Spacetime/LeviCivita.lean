@@ -97,6 +97,25 @@ def IsGeodesic (M : SpacetimeWithLeviCivita) (μ : M.toSpacetime.SmoothPath) : P
     (∀ s ∈ μ.parameterSpace, V (μ.toFun s) = μ.tangent s) ∧
     (∀ s ∈ μ.parameterSpace, M.connection V (μ.toFun s) (V (μ.toFun s)) = 0)
 
+/-- **Straight lines are geodesics in Minkowski spacetime.** The line-segment
+path `s ↦ p + s(q-p)` satisfies the auto-parallel condition: its constant
+velocity `q - p` extends to the constant vector field `V ≡ q - p`, whose flat
+covariant derivative vanishes (`mvfderiv` of a constant is `0`). This witnesses
+that `IsGeodesic` is inhabited and genuinely non-trivial. -/
+theorem standardMinkowski_lineSegment_isGeodesic
+    (p q : SpacetimeModel) (hpq : p ≠ q) :
+    standardMinkowski.IsGeodesic (standardMinkowskiLineSegmentPath p q hpq) := by
+  refine ⟨fun _ => q - p, ?_, ?_⟩
+  · intro s hs
+    change q - p = (standardMinkowskiLineSegmentPath p q hpq).tangent s
+    rw [Spacetime.SmoothPath.tangent_def]
+    exact (standardMinkowskiLineSegmentPath_mfderivWithin p q s hs).symm
+  · intro s _
+    change mvfderiv (modelWithCornersSelf ℝ SpacetimeModel) (fun _ => q - p)
+        ((standardMinkowskiLineSegmentPath p q hpq).toFun s) (q - p) = 0
+    rw [mvfderiv_const]
+    simp
+
 end SpacetimeWithLeviCivita
 
 end Physicslib4
