@@ -475,7 +475,7 @@ theorem minkowskiForm_single_zero_left (v : SpacetimeModel) :
 multiplication. -/
 private theorem minkowskiForm_smul_left (r : ℝ) (a b : SpacetimeModel) :
     minkowskiForm (r • a) b = r * minkowskiForm a b := by
-  rw [map_smul, ContinuousLinearMap.smul_apply, smul_eq_mul]
+  rw [map_smul, smul_apply, smul_eq_mul]
 
 /-- Bilinearity of `minkowskiForm` in the right argument under scalar
 multiplication. -/
@@ -1377,7 +1377,7 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
   have hT_apply : ∀ v : SpacetimeModel,
       T v = v - EuclideanSpace.single (0 : Fin 4) (v 0) := by
     intro v
-    simp only [hT_def, ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
+    simp only [hT_def, sub_apply, ContinuousLinearMap.id_apply,
       ContinuousLinearMap.smulRight_apply, EuclideanSpace.coe_proj]
     -- (v 0) • single 0 1 = single 0 (v 0)
     congr 1

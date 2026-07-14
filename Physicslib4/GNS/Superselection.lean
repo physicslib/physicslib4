@@ -49,11 +49,11 @@ theorem intertwines_zero : Intertwines π₁ π₂ (0 : H₁ →L[ℂ] H₂) := 
 
 theorem Intertwines.add {S T : H₁ →L[ℂ] H₂} (hS : Intertwines π₁ π₂ S)
     (hT : Intertwines π₁ π₂ T) : Intertwines π₁ π₂ (S + T) := fun a x => by
-  simp only [ContinuousLinearMap.add_apply, hS a x, hT a x, map_add]
+  simp only [add_apply, hS a x, hT a x, map_add]
 
 theorem Intertwines.smul {T : H₁ →L[ℂ] H₂} (c : ℂ) (hT : Intertwines π₁ π₂ T) :
     Intertwines π₁ π₂ (c • T) := fun a x => by
-  simp only [ContinuousLinearMap.smul_apply, hT a x, map_smul]
+  simp only [smul_apply, hT a x, map_smul]
 
 /-- The composition of intertwiners is an intertwiner. -/
 theorem Intertwines.comp {S : H₂ →L[ℂ] H₃} {T : H₁ →L[ℂ] H₂}
@@ -122,7 +122,7 @@ theorem UnitaryEquiv.not_areDisjoint [Nontrivial H₁] (h : UnitaryEquiv π₁ �
     have := ContinuousLinearMap.ext_iff.mp h0 v
     simpa only [ContinuousLinearEquiv.coe_coe,
       LinearIsometryEquiv.coe_toContinuousLinearEquiv,
-      ContinuousLinearMap.zero_apply] using this
+      zero_apply] using this
   exact hv (U.injective (hUv.trans (map_zero U).symm))
 
 /-! ### Schur's lemma and the irreducible dichotomy -/
@@ -277,7 +277,7 @@ theorem eq_smul_of_intertwines_of_isIrreducible
         = (S.comp (ContinuousLinearMap.adjoint S)) v := by
       rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply, huv]
     rw [hc] at happ
-    simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] at happ
+    simp only [smul_apply, one_apply_eq_self] at happ
     have hcuv : c • (u - v) = 0 := by rw [smul_sub, happ, sub_self]
     rcases smul_eq_zero.mp hcuv with h | h
     · exact absurd h hc0
@@ -291,7 +291,7 @@ theorem eq_smul_of_intertwines_of_isIrreducible
     have hSx : (ContinuousLinearMap.adjoint S) (S x) = a • x := by
       have := DFunLike.congr_fun ha x
       simpa using this
-    rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply, map_sub, map_smul,
+    rw [sub_apply, smul_apply, map_sub, map_smul,
       hTx, hSx, smul_smul, div_mul_cancel₀ b ha0, sub_self]
   have hzero : T - (b / a) • S = 0 := by
     ext x
@@ -309,9 +309,9 @@ theorem intertwines_self_iff_mem_centralizer {π : A →⋆ₐ[ℂ] (H₁ →L[�
   constructor
   · rintro h _ ⟨a, rfl⟩
     ext x
-    simpa only [ContinuousLinearMap.mul_apply] using (h a x).symm
+    simpa only [mul_apply_eq_comp] using (h a x).symm
   · intro h a x
-    simpa only [ContinuousLinearMap.mul_apply] using
+    simpa only [mul_apply_eq_comp] using
       (DFunLike.congr_fun (h (π a) ⟨a, rfl⟩) x).symm
 
 /-- **The endomorphism algebra of an irreducible representation is `ℂ · 1`.** Every
@@ -389,7 +389,7 @@ omit [CompleteSpace H₁] [CompleteSpace H₂] in
 theorem conjCLM_mul (U : H₁ ≃ₗᵢ[ℂ] H₂) (S T : H₁ →L[ℂ] H₁) :
     conjCLM U (S * T) = conjCLM U S * conjCLM U T := by
   ext x
-  simp only [conjCLM_apply, ContinuousLinearMap.mul_apply,
+  simp only [conjCLM_apply, mul_apply_eq_comp,
     LinearIsometryEquiv.symm_apply_apply]
 
 omit [CompleteSpace H₁] [CompleteSpace H₂] in

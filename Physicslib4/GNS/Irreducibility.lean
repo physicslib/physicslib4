@@ -72,16 +72,16 @@ theorem eq_smul_one_of_commute_of_cyclic
         congr 1
         have h1 : (π (star b)) (T (π a Ω)) = T ((π (star b)) (π a Ω)) :=
           calc (π (star b)) (T (π a Ω))
-              = (π (star b) * T) (π a Ω) := by rw [ContinuousLinearMap.mul_apply]
+              = (π (star b) * T) (π a Ω) := by rw [mul_apply_eq_comp]
             _ = (T * π (star b)) (π a Ω) := by rw [hT (star b)]
-            _ = T ((π (star b)) (π a Ω)) := by rw [ContinuousLinearMap.mul_apply]
+            _ = T ((π (star b)) (π a Ω)) := by rw [mul_apply_eq_comp]
         rw [h1]
         congr 1
-        rw [← ContinuousLinearMap.mul_apply, ← map_mul]
+        rw [← mul_apply_eq_comp, ← map_mul]
       have e2 : ⟪(π b) Ω, π a Ω⟫_ℂ = ⟪Ω, π (star b * a) Ω⟫_ℂ := by
         rw [hadj b (π a Ω)]
         congr 1
-        rw [← ContinuousLinearMap.mul_apply, ← map_mul]
+        rw [← mul_apply_eq_comp, ← map_mul]
       rw [e1, e2, hprop (star b * a)]
       ring
     have hw0 : T (π a Ω) - c • (π a Ω) = 0 := by
@@ -101,7 +101,7 @@ theorem eq_smul_one_of_commute_of_cyclic
       (by rintro _ ⟨a, rfl⟩; exact hkey a)
   apply ContinuousLinearMap.ext
   intro x
-  rw [ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply]
+  rw [smul_apply, one_apply_eq_self]
   exact congrFun hall x
 
 /-- **A commutant operator is a scalar iff its GNS coefficient is proportional to
@@ -118,7 +118,7 @@ theorem isScalar_iff_coeff_proportional
   constructor
   · rintro ⟨c, rfl⟩
     refine ⟨c, fun a => ?_⟩
-    rw [ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply, inner_smul_right,
+    rw [smul_apply, one_apply_eq_self, inner_smul_right,
       ← hrep a]
   · rintro ⟨t, ht⟩
     refine ⟨t, ?_⟩
@@ -142,9 +142,9 @@ noncomputable def coeffFunctional (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : 
   LinearMap.mkContinuous
     { toFun := fun a => ⟪Ω, T (π a Ω)⟫_ℂ
       map_add' := fun a b => by
-        simp [map_add, ContinuousLinearMap.add_apply, inner_add_right]
+        simp [map_add, add_apply, inner_add_right]
       map_smul' := fun c a => by
-        simp [map_smul, ContinuousLinearMap.smul_apply, inner_smul_right] }
+        simp [map_smul, smul_apply, inner_smul_right] }
     (‖Ω‖ * ‖T‖ * ‖Ω‖)
     (fun a => by
       have hT' : ‖T (π a Ω)‖ ≤ ‖T‖ * (‖a‖ * ‖Ω‖) :=
@@ -167,10 +167,10 @@ theorem coeffFunctional_star_mul {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} {Ω : H
     coeffFunctional π Ω T (star a * a) = ⟪π a Ω, T (π a Ω)⟫_ℂ := by
   rw [coeffFunctional_apply]
   have hsplit : π (star a * a) Ω = π (star a) (π a Ω) := by
-    rw [map_mul, ContinuousLinearMap.mul_apply]
+    rw [map_mul, mul_apply_eq_comp]
   rw [hsplit]
   have hcomm : T (π (star a) (π a Ω)) = π (star a) (T (π a Ω)) := by
-    rw [← ContinuousLinearMap.mul_apply, ← hT (star a), ContinuousLinearMap.mul_apply]
+    rw [← mul_apply_eq_comp, ← hT (star a), mul_apply_eq_comp]
   rw [hcomm]
   have hadjeq : ContinuousLinearMap.adjoint (π a) = π (star a) := by
     rw [← ContinuousLinearMap.star_eq_adjoint, map_star]
@@ -221,7 +221,7 @@ theorem scalar_of_isSelfAdjoint_of_isPure
       Complex.re ⟪T v, v⟫_ℂ = r * Complex.re ⟪S v, v⟫_ℂ + 2⁻¹ * ‖v‖ ^ 2 := by
     intro v
     have hTv : T v = (r : ℂ) • S v + (2⁻¹ : ℂ) • v := by
-      simp [hT_def, ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply]
+      simp [hT_def, add_apply, smul_apply]
     rw [hTv, inner_add_left, inner_smul_left, inner_smul_left,
       Complex.add_re, Complex.conj_ofReal, Complex.re_ofReal_mul]
     have h2 : (starRingEnd ℂ) (2⁻¹ : ℂ) = (2⁻¹ : ℂ) := by
@@ -253,7 +253,7 @@ theorem scalar_of_isSelfAdjoint_of_isPure
     rw [ContinuousLinearMap.reApplyInnerSelf_apply]
     change (0 : ℝ) ≤ Complex.re ⟪(1 - T) v, v⟫_ℂ
     have hsub : ((1 : H →L[ℂ] H) - T) v = v - T v := by
-      simp [ContinuousLinearMap.sub_apply]
+      simp [sub_apply]
     have hvv : Complex.re ⟪v, v⟫_ℂ = ‖v‖ ^ 2 := by
       simpa using inner_self_eq_norm_sq (𝕜 := ℂ) v
     rw [hsub, inner_sub_left, Complex.sub_re, hTexp v, hvv]
@@ -274,7 +274,7 @@ theorem scalar_of_isSelfAdjoint_of_isPure
     intro a
     rw [coeffFunctional_star_mul hTcomm a, hrep (star a * a)]
     have hsplit : π (star a * a) Ω = π (star a) (π a Ω) := by
-      rw [map_mul, ContinuousLinearMap.mul_apply]
+      rw [map_mul, mul_apply_eq_comp]
     have hadjeq : ContinuousLinearMap.adjoint (π a) = π (star a) := by
       rw [← ContinuousLinearMap.star_eq_adjoint, map_star]
     have hω : ⟪Ω, π (star a * a) Ω⟫_ℂ = ⟪π a Ω, π a Ω⟫_ℂ := by
@@ -282,7 +282,7 @@ theorem scalar_of_isSelfAdjoint_of_isPure
     rw [hω]
     have hpd := isPositive_inner_nonneg hTle (π a Ω)
     have hsub : ((1 : H →L[ℂ] H) - T) (π a Ω) = π a Ω - T (π a Ω) := by
-      simp [ContinuousLinearMap.sub_apply]
+      simp [sub_apply]
     rw [hsub, inner_sub_right] at hpd
     exact sub_nonneg.mp hpd
   -- purity forces `T` to be a scalar

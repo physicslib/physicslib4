@@ -110,7 +110,7 @@ reparametrisation-invariance of the causal type of a curve. -/
 /-- The metric square scales quadratically: `g(c•v, c•v) = c² · g(v,v)`. -/
 theorem val_smul_smul {x : M.Carrier} (c : ℝ) (v : TangentSpace M.model x) :
     M.val x (c • v) (c • v) = c ^ 2 * M.val x v v := by
-  simp only [map_smul, ContinuousLinearMap.smul_apply, smul_eq_mul]
+  simp only [map_smul, smul_apply, smul_eq_mul]
   ring
 
 /-- **Scaling invariance of timelikeness.** For `c ≠ 0`, `c • v` is timelike iff

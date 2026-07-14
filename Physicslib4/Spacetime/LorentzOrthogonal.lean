@@ -372,7 +372,7 @@ theorem isFuturePointing_add_general (M : Spacetime) (x : M.Carrier)
     · exact le_of_eq h
   have hvw : M.val x v w ≤ 0 := inner_nonpos_of_future M x τ hfv hfw
   have hexp : M.val x (v + w) (v + w) = M.val x v v + 2 * (M.val x v w) + M.val x w w := by
-    simp only [map_add, ContinuousLinearMap.add_apply]
+    simp only [map_add, add_apply]
     rw [M.symm x w v]; ring
   have hcausal : M.val x (v + w) (v + w) ≤ 0 := by rw [hexp]; linarith [hvv, hww, hvw]
   -- The time-orientation pairing is nonpositive on the sum.
@@ -398,7 +398,7 @@ theorem isPastPointing_iff_isFuturePointing_neg (M : Spacetime) (x : M.Carrier)
     (τ : M.TimeOrientation) {v : TangentSpace M.model x} :
     M.IsPastPointing τ v ↔ M.IsFuturePointing τ (-v) := by
   have hquad : ∀ u : TangentSpace M.model x, M.val x (-u) (-u) = M.val x u u := fun u => by
-    simp only [map_neg, ContinuousLinearMap.neg_apply, neg_neg]
+    simp only [map_neg, neg_apply, neg_neg]
   have hlin : ∀ u : TangentSpace M.model x,
       M.val x (τ.field x) (-u) = -(M.val x (τ.field x) u) := fun u => by rw [map_neg]
   simp only [IsPastPointing, IsFuturePointing, IsTimelike, IsNull]
@@ -429,14 +429,14 @@ theorem inner_neg_of_past_timelike (M : Spacetime) (x : M.Carrier)
     M.val x v w < 0 := by
   have hv' : M.IsTimelike (-v) := by
     change M.val x (-v) (-v) < 0
-    simp only [map_neg, ContinuousLinearMap.neg_apply, neg_neg]; exact hv
+    simp only [map_neg, neg_apply, neg_neg]; exact hv
   have hw' : M.IsTimelike (-w) := by
     change M.val x (-w) (-w) < 0
-    simp only [map_neg, ContinuousLinearMap.neg_apply, neg_neg]; exact hw
+    simp only [map_neg, neg_apply, neg_neg]; exact hw
   have hsv : M.val x (τ.field x) (-v) < 0 := by rw [map_neg]; linarith
   have hsw : M.val x (τ.field x) (-w) < 0 := by rw [map_neg]; linarith
   have h := inner_neg_of_future_timelike M x τ hv' hw' hsv hsw
-  simpa only [map_neg, ContinuousLinearMap.neg_apply, neg_neg] using h
+  simpa only [map_neg, neg_apply, neg_neg] using h
 
 /-- **Convexity of the past cone.** The sum of any two past-pointing tangent
 vectors (timelike or null) is past-pointing. Obtained from
@@ -455,7 +455,7 @@ theorem isFuturePointing_smul_pos (M : Spacetime) (x : M.Carrier)
     (τ : M.TimeOrientation) {v : TangentSpace M.model x} {c : ℝ} (hc : 0 < c)
     (hfv : M.IsFuturePointing τ v) : M.IsFuturePointing τ (c • v) := by
   have hquad : ∀ u : TangentSpace M.model x, M.val x (c • u) (c • u) = c * (c * M.val x u u) :=
-    fun u => by simp only [map_smul, ContinuousLinearMap.smul_apply, smul_eq_mul]
+    fun u => by simp only [map_smul, smul_apply, smul_eq_mul]
   have hlin : ∀ u : TangentSpace M.model x,
       M.val x (τ.field x) (c • u) = c * M.val x (τ.field x) u :=
     fun u => by rw [map_smul, smul_eq_mul]
