@@ -323,6 +323,39 @@ theorem intertwines_self_iff_isScalar {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H�
   rw [intertwines_self_iff_mem_centralizer, isIrreducible_iff_centralizer.mp h]
   exact Iff.rfl
 
+/-! ### The commutant (self-intertwiner) von Neumann algebra -/
+
+/-- **The commutant `π(A)'` as a von Neumann algebra**: the algebra of
+self-intertwiners of `π` — its "gauge"/intertwiner algebra. The centralizer of
+`π(A)` is self-adjoint, and a commutant is always a von Neumann algebra
+(`S''' = S'`). -/
+noncomputable def commutantVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    VonNeumannAlgebra H₁ :=
+  vonNeumannOfSelfAdjoint (Set.centralizer (Set.range π))
+    (fun _ hx => star_mem_setCentralizer (range_selfAdjoint π) hx)
+
+@[simp] theorem coe_commutantVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) = Set.centralizer (Set.range π) := by
+  unfold commutantVonNeumann
+  rw [coe_vonNeumannOfSelfAdjoint, Set.centralizer_centralizer_centralizer]
+
+/-- Membership in the commutant von Neumann algebra is exactly being a
+self-intertwiner of `π`. -/
+theorem mem_commutantVonNeumann_iff_intertwines
+    {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)} {T : H₁ →L[ℂ] H₁} :
+    T ∈ commutantVonNeumann π ↔ Intertwines π π T := by
+  rw [intertwines_self_iff_mem_centralizer, ← coe_commutantVonNeumann, SetLike.mem_coe]
+
+/-- **A representation is irreducible iff its commutant von Neumann algebra is
+trivial**, `π(A)' = ℂ · 1`. This is the von Neumann form of Schur's lemma: the
+gauge/intertwiner algebra collapses to the scalars exactly for irreducibles. -/
+theorem isIrreducible_iff_commutantVonNeumann_eq_scalars
+    {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)} :
+    IsIrreducible π ↔
+      (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) = scalarOperators H₁ := by
+  rw [coe_commutantVonNeumann]
+  exact isIrreducible_iff_centralizer
+
 /-! ### The pure-state dichotomy -/
 
 /-- **The pure-state dichotomy.** The GNS representations of two pure states are

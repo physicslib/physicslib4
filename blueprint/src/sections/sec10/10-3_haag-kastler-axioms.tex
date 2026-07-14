@@ -514,6 +514,15 @@ The comparison of representations is the entry point to superselection theory. F
     The endomorphism algebra of an irreducible representation is $\mathbb{C}\cdot 1$: every self-intertwiner of an irreducible representation is a scalar multiple of the identity. This is the commutant form of irreducibility read through the intertwiner language, and it identifies each irreducible sector with a simple (one-dimensional-centred) object.
 \end{lemma}
 
+\begin{theorem}[The commutant (self-intertwiner) von Neumann algebra]
+    \label{thrm:commutant-von-neumann}
+    \lean{Physicslib4.GNS.commutantVonNeumann, Physicslib4.GNS.mem_commutantVonNeumann_iff_intertwines, Physicslib4.GNS.isIrreducible_iff_commutantVonNeumann_eq_scalars}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{def:irreducible-representation, lmm:endomorphism-scalar}
+    The commutant $\pi(A)'$ of a representation is packaged as a von Neumann algebra --- the algebra of self-intertwiners, i.e. the intertwiner/gauge algebra of $\pi$. Its underlying set is the centralizer of $\pi(A)$ (self-adjoint, and a commutant is always a von Neumann algebra since $S''' = S'$), an operator lies in it exactly when it is a self-intertwiner of $\pi$, and $\pi$ is irreducible if and only if this algebra is trivial ($\pi(A)' = \mathbb{C}\cdot 1$) --- the von Neumann form of Schur's lemma.
+\end{theorem}
+
 \begin{theorem}[The Pure-State Dichotomy]
     \label{thrm:pure-state-dichotomy}
     \lean{Physicslib4.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}
