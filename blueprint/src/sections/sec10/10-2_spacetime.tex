@@ -247,42 +247,6 @@
 \medskip
 \noindent\textbf{Remark (geodesic placeholder in the formalization).} In the Lean formalization the ``geodesic'' clause of a (causal) trip segment is currently a \emph{placeholder}: the predicate \texttt{Physicslib4.Spacetime.IsGeodesic} is defined to be \texttt{True}, so it imposes no constraint. A faithful geodesic condition requires the Levi-Civita connection of the metric (auto-parallelism of the tangent vector along the curve), which the version of Mathlib pinned by this project does not provide. Consequently the formalized (causal) trip segments are future-oriented timelike (resp. causal) curves with the correct past and future endpoints, but their geodesic property is not yet enforced; the endpoint, timelike/causal, and future-orientation content is faithful. This is the one place where \ref{def:trip} and \ref{def:causal-trip} diverge from their Lean implementations, and it should be replaced by the genuine geodesic condition once a Lorentzian Levi-Civita connection is available in Mathlib.
 
-\begin{definition}[Spacetime with Levi-Civita connection]
-    \label{def:spacetime-with-levi-civita}
-    \lean{Physicslib4.SpacetimeWithLeviCivita}
-    \leanfile{Physicslib4/Spacetime/LeviCivita.lean}
-    \leanok
-    \uses{def:spacetime}
-    A \emph{spacetime with Levi-Civita connection} is a spacetime $M$ (\ref{def:spacetime}) together with a covariant derivative $\nabla$ on its tangent bundle that is \emph{torsion-free} and \emph{compatible with the metric} $g$. Since $g$ is non-degenerate, such a connection is unique, so $\nabla$ is determined by the metric and cannot contradict it. The connection is bundled in this richer structure rather than as a field of a bare spacetime, so that a spacetime remains pure geometric data; only spacetimes whose Levi-Civita connection has been formalized carry this structure. This is the object on which the genuine geodesic condition of the remark above would be phrased.
-\end{definition}
-
-\begin{definition}[Minkowski spacetime with its Levi-Civita connection]
-    \label{def:standard-minkowski-levi-civita}
-    \lean{Physicslib4.SpacetimeWithLeviCivita.standardMinkowski}
-    \leanfile{Physicslib4/Spacetime/LeviCivita.lean}
-    \leanok
-    \uses{def:spacetime-with-levi-civita, def:standard-minkowski-spacetime}
-    Standard Minkowski spacetime, equipped with the flat connection $\nabla \sigma = \mathrm{d}\sigma$ as its Levi-Civita connection: this connection is torsion-free and compatible with the constant Minkowski metric.
-\end{definition}
-
-\begin{definition}[Geodesic (auto-parallel curve)]
-    \label{def:geodesic-auto-parallel}
-    \lean{Physicslib4.SpacetimeWithLeviCivita.IsGeodesic}
-    \leanfile{Physicslib4/Spacetime/LeviCivita.lean}
-    \leanok
-    \uses{def:spacetime-with-levi-civita, def:curves}
-    A smooth path $\mu$ on a spacetime with Levi-Civita connection $\nabla$ is a \emph{geodesic} if it is auto-parallel, $\nabla_{\mu'}\mu' = 0$ along $\mu$. Since the formalized covariant derivative acts on global sections rather than along a curve, this is phrased as: there is a vector field $V$ that restricts to the velocity $\mu'$ along $\mu$ and satisfies $(\nabla_V V)(\mu(s)) = 0$ on $\mu$; by germ-dependence of $\nabla$ this is exactly $\nabla_{\mu'}\mu'=0$ and is independent of the extension $V$. This is the genuine geodesic condition that the placeholder \texttt{Spacetime.IsGeodesic} $:=$ \texttt{True} (used in \ref{def:trip}) would be replaced by, once the causal-trip layer is stated over a spacetime carrying a Levi-Civita connection.
-\end{definition}
-
-\begin{theorem}[Straight lines are geodesics in Minkowski spacetime]
-    \label{thrm:minkowski-line-geodesic}
-    \lean{Physicslib4.SpacetimeWithLeviCivita.standardMinkowski_lineSegment_isGeodesic}
-    \leanfile{Physicslib4/Spacetime/LeviCivita.lean}
-    \leanok
-    \uses{def:geodesic-auto-parallel, def:standard-minkowski-levi-civita}
-    The straight-line path $s \mapsto p + s(q-p)$ is a geodesic of standard Minkowski spacetime: its constant velocity $q-p$ extends to the constant vector field $V \equiv q-p$, whose flat covariant derivative vanishes ($\mathrm{d}$ of a constant is $0$). This witnesses that \ref{def:geodesic-auto-parallel} is inhabited and non-trivial.
-\end{theorem}
-
 \begin{theorem}[Transitivity of chronological and causal precedence]
     \label{thrm:precedence-transitive}
     \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.causallyPrecedes_trans}
