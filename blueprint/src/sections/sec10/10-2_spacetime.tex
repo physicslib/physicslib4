@@ -380,6 +380,33 @@
     Antitonicity and the Galois bridge are the pointwise monotonicity of complete spacelike separation; the double-complement inclusion follows by symmetry of the relation; and the triple-complement identity is the standard consequence of antitonicity together with the double-complement inclusion.
 \end{proof}
 
+\begin{definition}[Causal closure operator]
+    \label{def:causal-closure}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalClosure}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:spacelike-complement, lmm:spacelike-complement-order}
+    The double spacelike complement $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ is a \emph{closure operator} on the regions of a Lorentzian spacetime: it is monotone, extensive ($\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$), and idempotent ($\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$). Its three defining properties are exactly the order structure of the spacelike complement.
+\end{definition}
+
+\begin{definition}[Causally complete region]
+    \label{def:causally-complete-region}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.IsCausallyComplete}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:causal-closure}
+    A region is \emph{causally complete} if it equals its own double complement, $\mathbf{B}^{\perp\perp} = \mathbf{B}$ (a fixed point of the causal closure operator). These are the regions on which algebraic QFT is naturally indexed.
+\end{definition}
+
+\begin{theorem}[Lattice of causally complete regions]
+    \label{thrm:causally-complete-lattice}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_causalComplement}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:causally-complete-region}
+    The causally complete regions form a \emph{complete lattice} (meets are intersections, joins are causal closures of unions), obtained from the causal closure operator via its Galois insertion. The spacelike complement of any region is causally complete, causally complete regions are closed under intersection, and the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an \emph{order-reversing involution} on this lattice ($\mathbf{B}^{\perp\perp} = \mathbf{B}$). (The full orthocomplement law $\mathbf{B} \wedge \mathbf{B}^\perp = \bot$ does not hold at this generality, because the trip-based causal relation is irreflexive, so a point is spacelike-separated from itself; what holds is the complete lattice with an order-reversing De~Morgan involution.)
+\end{theorem}
+
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
     \lean{Physicslib4.Spacetime.alexandrovTopology}
