@@ -492,6 +492,7 @@
     \lean{Physicslib4.Spacetime.isOpen_chronologicalFuture_inter_chronologicalPast, Physicslib4.Spacetime.isOpen_chronologicalFuture, Physicslib4.Spacetime.isOpen_chronologicalPast}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:chronological-future-and-chronological-past, def:alexandrov-topology, lmm:alexandrov-basis-open}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$, equipped with the Alexandrov topology.
     \begin{itemize}
         \item For all points $p, q \in M$ the set $I^+(p) \cap I^-(q)$ is open. This is just the basis lemma (\ref{lmm:alexandrov-basis-open}) restated on chronological futures and pasts.
@@ -502,6 +503,7 @@
     The per-point hypotheses in the last two items are quantified over the members of the set in question, so they hold \emph{vacuously} when that set is empty; this is consistent, since the empty set is open. The flat unconditional claim ``$I^+(p)$ is always open'' is \emph{false} for a general spacetime: if $I^+(p)$ is nonempty and contains a future-endpoint point $x$ (a point with no $b$ satisfying $x \ll b$), then $x$ lies in no basis set $I^+(a) \cap I^-(b)$, since membership there forces $a \ll x \ll b$ and in particular $x \ll b$. Hence $x$ has no basic Alexandrov neighbourhood contained in $I^+(p)$ and $I^+(p)$ fails to be open. The hypothesis is exactly the ``no future endpoints'' condition that removes this obstruction, and dually for pasts.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:chronological-future-and-chronological-past, def:alexandrov-topology, lmm:alexandrov-basis-open}
     The first item is the basis lemma (\ref{lmm:alexandrov-basis-open}) directly: $I^+(p) \cap I^-(q)$ is a basis set, hence open.
 

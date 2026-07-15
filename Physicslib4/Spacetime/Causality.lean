@@ -408,7 +408,7 @@ theorem isOpen_chronologicalFuture_inter_chronologicalPast (t : M.TimeOrientatio
     (p q : M.Carrier) :
     @IsOpen M.Carrier (alexandrovTopology M t)
       (chronologicalFuture M t p ∩ chronologicalPast M t q) := by
-  sorry
+  exact isOpen_alexandrov_of_mem_basis M t ⟨p, q, rfl⟩
 
 /-- If every point of `I^+(p)` has a chronological-future point (for all
 `x ∈ I^+(p)` there exists `b` with `x ≪ b`), then the chronological future
@@ -416,7 +416,32 @@ theorem isOpen_chronologicalFuture_inter_chronologicalPast (t : M.TimeOrientatio
 theorem isOpen_chronologicalFuture (t : M.TimeOrientation) (p : M.Carrier)
     (h : ∀ x ∈ chronologicalFuture M t p, ∃ b, ChronologicallyPrecedes M t x b) :
     @IsOpen M.Carrier (alexandrovTopology M t) (chronologicalFuture M t p) := by
-  sorry
+  -- Show I⁺(p) = ⋃_{b} (I⁺(p) ∩ I⁻(b)).
+  have h_eq : chronologicalFuture M t p =
+      ⋃ (b : M.Carrier), (chronologicalFuture M t p ∩ chronologicalPast M t b) := by
+    ext x
+    constructor
+    · intro hx
+      -- If x ∈ I⁺(p), then by hypothesis there is b with x ≪ b, i.e. x ∈ I⁻(b);
+      -- hence x ∈ I⁺(p) ∩ I⁻(b), so x ∈ the union.
+      obtain ⟨b, hxb⟩ := h x hx
+      have hx_mem_past : x ∈ chronologicalPast M t b := hxb
+      have hx_mem_inter : x ∈ chronologicalFuture M t p ∩ chronologicalPast M t b :=
+        ⟨hx, hx_mem_past⟩
+      exact Set.mem_iUnion.mpr ⟨b, hx_mem_inter⟩
+    · intro hx
+      -- If x ∈ ⋃_{b} (I⁺(p) ∩ I⁻(b)), then x ∈ I⁺(p) (since each term is a subset of I⁺(p)).
+      rcases Set.mem_iUnion.mp hx with ⟨b, hx_inter⟩
+      exact hx_inter.1
+  -- Each (I⁺(p) ∩ I⁻(b)) is open by the basis lemma.
+  have h_open : ∀ b : M.Carrier, @IsOpen M.Carrier (alexandrovTopology M t)
+      (chronologicalFuture M t p ∩ chronologicalPast M t b) := by
+    intro b
+    exact isOpen_chronologicalFuture_inter_chronologicalPast M t p b
+  -- An arbitrary union of open sets is open.
+  rw [h_eq]
+  exact @isOpen_iUnion M.Carrier (M.Carrier) (alexandrovTopology M t)
+    (fun b => chronologicalFuture M t p ∩ chronologicalPast M t b) h_open
 
 /-- Dually, if every point of `I^-(p)` has a chronological-past point (for all
 `x ∈ I^-(p)` there exists `a` with `a ≪ x`), then the chronological past
@@ -424,7 +449,32 @@ theorem isOpen_chronologicalFuture (t : M.TimeOrientation) (p : M.Carrier)
 theorem isOpen_chronologicalPast (t : M.TimeOrientation) (p : M.Carrier)
     (h : ∀ x ∈ chronologicalPast M t p, ∃ a, ChronologicallyPrecedes M t a x) :
     @IsOpen M.Carrier (alexandrovTopology M t) (chronologicalPast M t p) := by
-  sorry
+  -- Show I⁻(p) = ⋃_{a} (I⁺(a) ∩ I⁻(p)).
+  have h_eq : chronologicalPast M t p =
+      ⋃ (a : M.Carrier), (chronologicalFuture M t a ∩ chronologicalPast M t p) := by
+    ext x
+    constructor
+    · intro hx
+      -- If x ∈ I⁻(p), then by hypothesis there is a with a ≪ x, i.e. x ∈ I⁺(a);
+      -- hence x ∈ I⁺(a) ∩ I⁻(p), so x ∈ the union.
+      obtain ⟨a, hax⟩ := h x hx
+      have hx_mem_future : x ∈ chronologicalFuture M t a := hax
+      have hx_mem_inter : x ∈ chronologicalFuture M t a ∩ chronologicalPast M t p :=
+        ⟨hx_mem_future, hx⟩
+      exact Set.mem_iUnion.mpr ⟨a, hx_mem_inter⟩
+    · intro hx
+      -- If x ∈ ⋃_{a} (I⁺(a) ∩ I⁻(p)), then x ∈ I⁻(p) (since each term is a subset of I⁻(p)).
+      rcases Set.mem_iUnion.mp hx with ⟨a, hx_inter⟩
+      exact hx_inter.2
+  -- Each (I⁺(a) ∩ I⁻(p)) is open by the basis lemma.
+  have h_open : ∀ a : M.Carrier, @IsOpen M.Carrier (alexandrovTopology M t)
+      (chronologicalFuture M t a ∩ chronologicalPast M t p) := by
+    intro a
+    exact isOpen_chronologicalFuture_inter_chronologicalPast M t a p
+  -- An arbitrary union of open sets is open.
+  rw [h_eq]
+  exact @isOpen_iUnion M.Carrier (M.Carrier) (alexandrovTopology M t)
+    (fun a => chronologicalFuture M t a ∩ chronologicalPast M t p) h_open
 
 end Spacetime
 
