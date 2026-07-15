@@ -433,6 +433,7 @@
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_bot, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_top, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_sup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_inf, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iSup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iInf}
     \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
     \uses{thrm:causally-complete-lattice, lmm:spacelike-complement-de-morgan}
+    \leanok
     On the complete lattice of causally complete regions the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an order-reversing involution, and therefore satisfies the full De Morgan laws. Explicitly:
     \begin{itemize}
         \item (order-reversing) $\mathbf{B}_1 \le \mathbf{B}_2 \Rightarrow \mathbf{B}_2^\perp \le \mathbf{B}_1^\perp$;
@@ -442,6 +443,7 @@
     \end{itemize}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thrm:causally-complete-lattice, lmm:spacelike-complement-de-morgan}
     Recall from the lattice structure (\ref{thrm:causally-complete-lattice}) that on causally complete regions meets are intersections of the underlying sets, joins are the causal closures of unions ($\mathbf{B}_1 \sqcup \mathbf{B}_2 = (\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp}$ and dually for arbitrary families), the complement of any region is causally complete, and every region in the lattice satisfies the involution $\mathbf{B}^{\perp\perp} = \mathbf{B}$; in particular the triple-complement identity $\mathbf{C}^{\perp\perp\perp} = \mathbf{C}^\perp$ holds for any underlying set $\mathbf{C}$, since $\mathbf{C}^\perp$ is causally complete. Each law is then a direct computation on the underlying sets driven by the set-level De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}).
 
