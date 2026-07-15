@@ -11,12 +11,6 @@ weak.linter.mathlibStandardSet = true
 maxSynthPendingDepth = 3
 
 [[require]]
-name = "mathlib"
-scope = "leanprover-community"
-rev = "v4.32.0-rc1"
-
-
-[[require]]
 name = "checkdecls"
 git = "https://github.com/PatrickMassot/checkdecls.git"
 
@@ -26,3 +20,8 @@ git = "https://github.com/leanprover/doc-gen4"
 rev = "main"
 [[lean_lib]]
 name = "Physicslib4"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.32.0"
