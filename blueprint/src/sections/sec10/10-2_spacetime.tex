@@ -412,6 +412,7 @@
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_union, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_iUnion}
     \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
     \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
+    \leanok
     At the level of the underlying sets, the spacelike complement turns unions into intersections. In binary form, for regions $\mathbf{B}_1, \mathbf{B}_2$,
     \begin{align}
         (\mathbf{B}_1 \cup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \cap \mathbf{B}_2^\perp,
@@ -422,6 +423,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
     Unfold the spacelike complement pointwise: $x \in \mathbf{B}^\perp$ means the singleton $\{x\}$ is completely spacelike to $\mathbf{B}$. By the structural properties of complete spacelike separation (\ref{lmm:completely-spacelike-structural}), $\{x\}$ is completely spacelike to a union $\bigcup_i \mathbf{B}_i$ if and only if it is completely spacelike to each member $\mathbf{B}_i$. Hence membership in the complement of the union is the conjunction of membership in the individual complements, which is exactly membership in their intersection. The binary case is the special case of a two-element family.
 \end{proof}

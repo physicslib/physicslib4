@@ -223,13 +223,26 @@ an intersection: `(B₁ ∪ B₂)^⊥ = B₁^⊥ ∩ B₂^⊥`. -/
 theorem spacelikeComplement_union (B₁ B₂ : Set M.Carrier) :
     M.spacelikeComplement (B₁ ∪ B₂)
       = M.spacelikeComplement B₁ ∩ M.spacelikeComplement B₂ := by
-  sorry
+  ext x
+  simp_rw [mem_spacelikeComplement, Set.mem_inter_iff]
+  exact M.isCompletelySpacelike_union_right {x} B₁ B₂
 
 /-- **Infinitary De Morgan (set level).** The spacelike complement turns an
 indexed union into an intersection: `(⋃ i, B i)^⊥ = ⋂ i, (B i)^⊥`. -/
 theorem spacelikeComplement_iUnion {ι : Sort*} (B : ι → Set M.Carrier) :
     M.spacelikeComplement (⋃ i, B i) = ⋂ i, M.spacelikeComplement (B i) := by
-  sorry
+  ext x
+  simp_rw [mem_spacelikeComplement, Set.mem_iInter]
+  constructor
+  · intro h i
+    exact M.isCompletelySpacelike_mono (subset_refl _) (Set.subset_iUnion B i) h
+  · intro h
+    rw [isCompletelySpacelike_singleton_left_iff]
+    intro y hy
+    rcases Set.mem_iUnion.1 hy with ⟨i, hy⟩
+    have hxBi : M.IsCompletelySpacelike {x} (B i) := h i
+    rw [isCompletelySpacelike_singleton_left_iff] at hxBi
+    exact hxBi y hy
 
 /-! ### De Morgan laws for the causal complement
 
