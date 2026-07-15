@@ -270,7 +270,7 @@ theorem causallyPrecedes_trans (t : M.TimeOrientation)
 theorem causallyPrecedes_of_chronologicallyPrecedes (t : M.TimeOrientation)
     {p q : M.Carrier} (h : M.ChronologicallyPrecedes t p q) :
     M.CausallyPrecedes t p q :=
-  Relation.TransGen.mono (fun _ _ => M.causalSegmentPrecedes_of_segmentPrecedes t) h
+  Relation.TransGen.mono (fun _ _ => M.causalSegmentPrecedes_of_segmentPrecedes t) _ _ h
 
 /-- The chronological future is contained in the causal future. -/
 theorem chronologicalFuture_subset_causalFuture (t : M.TimeOrientation)
