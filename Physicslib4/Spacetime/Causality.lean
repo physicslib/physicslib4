@@ -400,6 +400,32 @@ theorem isOpen_alexandrov_of_mem_basis (t : M.TimeOrientation)
     @IsOpen M.Carrier (alexandrovTopology M t) B :=
   TopologicalSpace.GenerateOpen.basic B hB
 
+/-! ### Openness of chronological futures and pasts -/
+
+/-- Every set of the form `I^+(p) ∩ I^-(q)` is open in the Alexandrov topology.
+This is the basis lemma restated on chronological futures and pasts. -/
+theorem isOpen_chronologicalFuture_inter_chronologicalPast (t : M.TimeOrientation)
+    (p q : M.Carrier) :
+    @IsOpen M.Carrier (alexandrovTopology M t)
+      (chronologicalFuture M t p ∩ chronologicalPast M t q) := by
+  sorry
+
+/-- If every point of `I^+(p)` has a chronological-future point (for all
+`x ∈ I^+(p)` there exists `b` with `x ≪ b`), then the chronological future
+`I^+(p)` is open in the Alexandrov topology. -/
+theorem isOpen_chronologicalFuture (t : M.TimeOrientation) (p : M.Carrier)
+    (h : ∀ x ∈ chronologicalFuture M t p, ∃ b, ChronologicallyPrecedes M t x b) :
+    @IsOpen M.Carrier (alexandrovTopology M t) (chronologicalFuture M t p) := by
+  sorry
+
+/-- Dually, if every point of `I^-(p)` has a chronological-past point (for all
+`x ∈ I^-(p)` there exists `a` with `a ≪ x`), then the chronological past
+`I^-(p)` is open in the Alexandrov topology. -/
+theorem isOpen_chronologicalPast (t : M.TimeOrientation) (p : M.Carrier)
+    (h : ∀ x ∈ chronologicalPast M t p, ∃ a, ChronologicallyPrecedes M t a x) :
+    @IsOpen M.Carrier (alexandrovTopology M t) (chronologicalPast M t p) := by
+  sorry
+
 end Spacetime
 
 end Physicslib4
