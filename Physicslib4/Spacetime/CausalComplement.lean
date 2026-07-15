@@ -216,6 +216,63 @@ theorem causalComplement_causalComplement (B : M.CausallyCompleteRegion) :
   apply Subtype.ext
   exact M.isCausallyComplete_iff_isClosed.mpr B.2
 
+/-! ### De Morgan laws for the spacelike complement -/
+
+/-- **Binary De Morgan (set level).** The spacelike complement turns a union into
+an intersection: `(B₁ ∪ B₂)^⊥ = B₁^⊥ ∩ B₂^⊥`. -/
+theorem spacelikeComplement_union (B₁ B₂ : Set M.Carrier) :
+    M.spacelikeComplement (B₁ ∪ B₂)
+      = M.spacelikeComplement B₁ ∩ M.spacelikeComplement B₂ := by
+  sorry
+
+/-- **Infinitary De Morgan (set level).** The spacelike complement turns an
+indexed union into an intersection: `(⋃ i, B i)^⊥ = ⋂ i, (B i)^⊥`. -/
+theorem spacelikeComplement_iUnion {ι : Sort*} (B : ι → Set M.Carrier) :
+    M.spacelikeComplement (⋃ i, B i) = ⋂ i, M.spacelikeComplement (B i) := by
+  sorry
+
+/-! ### De Morgan laws for the causal complement
+
+On the complete lattice of causally complete regions the causal complement is an
+order-reversing involution, hence satisfies the full De Morgan laws. The lattice
+is not linearly ordered, so the equalities below rely on the involution
+(`causalComplement_causalComplement`), not on antitonicity alone. -/
+
+/-- The causal complement is **antitone** (order-reversing) on the lattice of
+causally complete regions. -/
+theorem causalComplement_antitone : Antitone M.causalComplement := by
+  sorry
+
+/-- `⊥^⊥ = ⊤`: the complement of the least region is the greatest. -/
+theorem causalComplement_bot :
+    M.causalComplement (⊥ : M.CausallyCompleteRegion) = ⊤ := by
+  sorry
+
+/-- `⊤^⊥ = ⊥`: the complement of the greatest region is the least. -/
+theorem causalComplement_top :
+    M.causalComplement (⊤ : M.CausallyCompleteRegion) = ⊥ := by
+  sorry
+
+/-- **Binary De Morgan (join).** `(B₁ ⊔ B₂)^⊥ = B₁^⊥ ⊓ B₂^⊥`. -/
+theorem causalComplement_sup (B₁ B₂ : M.CausallyCompleteRegion) :
+    M.causalComplement (B₁ ⊔ B₂) = M.causalComplement B₁ ⊓ M.causalComplement B₂ := by
+  sorry
+
+/-- **Binary De Morgan (meet).** `(B₁ ⊓ B₂)^⊥ = B₁^⊥ ⊔ B₂^⊥`. -/
+theorem causalComplement_inf (B₁ B₂ : M.CausallyCompleteRegion) :
+    M.causalComplement (B₁ ⊓ B₂) = M.causalComplement B₁ ⊔ M.causalComplement B₂ := by
+  sorry
+
+/-- **Infinitary De Morgan (join).** `(⨆ i, B i)^⊥ = ⨅ i, (B i)^⊥`. -/
+theorem causalComplement_iSup {ι : Sort*} (B : ι → M.CausallyCompleteRegion) :
+    M.causalComplement (⨆ i, B i) = ⨅ i, M.causalComplement (B i) := by
+  sorry
+
+/-- **Infinitary De Morgan (meet).** `(⨅ i, B i)^⊥ = ⨆ i, (B i)^⊥`. -/
+theorem causalComplement_iInf {ι : Sort*} (B : ι → M.CausallyCompleteRegion) :
+    M.causalComplement (⨅ i, B i) = ⨆ i, M.causalComplement (B i) := by
+  sorry
+
 end LorentzianSpacetime
 end Spacetime
 end Physicslib4

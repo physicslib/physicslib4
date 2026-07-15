@@ -407,6 +407,60 @@
     The causally complete regions form a \emph{complete lattice} (meets are intersections, joins are causal closures of unions), obtained from the causal closure operator via its Galois insertion. The spacelike complement of any region is causally complete, causally complete regions are closed under intersection, and the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an \emph{order-reversing involution} on this lattice ($\mathbf{B}^{\perp\perp} = \mathbf{B}$). (The full orthocomplement law $\mathbf{B} \wedge \mathbf{B}^\perp = \bot$ does not hold at this generality, because the trip-based causal relation is irreflexive, so a point is spacelike-separated from itself; what holds is the complete lattice with an order-reversing De~Morgan involution.)
 \end{theorem}
 
+\begin{lemma}[De Morgan Laws for the Spacelike Complement]
+    \label{lmm:spacelike-complement-de-morgan}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_union, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_iUnion}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
+    At the level of the underlying sets, the spacelike complement turns unions into intersections. In binary form, for regions $\mathbf{B}_1, \mathbf{B}_2$,
+    \begin{align}
+        (\mathbf{B}_1 \cup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \cap \mathbf{B}_2^\perp,
+    \end{align}
+    and, for an arbitrary indexed family $(\mathbf{B}_i)_{i \in I}$,
+    \begin{align}
+        \Bigl(\bigcup_{i \in I} \mathbf{B}_i\Bigr)^\perp = \bigcap_{i \in I} \mathbf{B}_i^\perp.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
+    Unfold the spacelike complement pointwise: $x \in \mathbf{B}^\perp$ means the singleton $\{x\}$ is completely spacelike to $\mathbf{B}$. By the structural properties of complete spacelike separation (\ref{lmm:completely-spacelike-structural}), $\{x\}$ is completely spacelike to a union $\bigcup_i \mathbf{B}_i$ if and only if it is completely spacelike to each member $\mathbf{B}_i$. Hence membership in the complement of the union is the conjunction of membership in the individual complements, which is exactly membership in their intersection. The binary case is the special case of a two-element family.
+\end{proof}
+
+\begin{theorem}[De Morgan Laws for the Causal Complement]
+    \label{thrm:causal-complement-de-morgan}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_bot, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_top, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_sup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_inf, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iSup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iInf}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{thrm:causally-complete-lattice, lmm:spacelike-complement-de-morgan}
+    On the complete lattice of causally complete regions the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an order-reversing involution, and therefore satisfies the full De Morgan laws. Explicitly:
+    \begin{itemize}
+        \item (order-reversing) $\mathbf{B}_1 \le \mathbf{B}_2 \Rightarrow \mathbf{B}_2^\perp \le \mathbf{B}_1^\perp$;
+        \item (bounds) $\bot^\perp = \top$ and $\top^\perp = \bot$;
+        \item (binary De Morgan) $(\mathbf{B}_1 \sqcup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \sqcap \mathbf{B}_2^\perp$ and $(\mathbf{B}_1 \sqcap \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \sqcup \mathbf{B}_2^\perp$;
+        \item (infinitary De Morgan) $\bigl(\bigsqcup_i \mathbf{B}_i\bigr)^\perp = \bigsqcap_i \mathbf{B}_i^\perp$ and $\bigl(\bigsqcap_i \mathbf{B}_i\bigr)^\perp = \bigsqcup_i \mathbf{B}_i^\perp$.
+    \end{itemize}
+\end{theorem}
+\begin{proof}
+    \uses{thrm:causally-complete-lattice, lmm:spacelike-complement-de-morgan}
+    Recall from the lattice structure (\ref{thrm:causally-complete-lattice}) that on causally complete regions meets are intersections of the underlying sets, joins are the causal closures of unions ($\mathbf{B}_1 \sqcup \mathbf{B}_2 = (\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp}$ and dually for arbitrary families), the complement of any region is causally complete, and every region in the lattice satisfies the involution $\mathbf{B}^{\perp\perp} = \mathbf{B}$; in particular the triple-complement identity $\mathbf{C}^{\perp\perp\perp} = \mathbf{C}^\perp$ holds for any underlying set $\mathbf{C}$, since $\mathbf{C}^\perp$ is causally complete. Each law is then a direct computation on the underlying sets driven by the set-level De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}).
+
+    \begin{itemize}
+        \item (order-reversing) This is the antitonicity half of the order-reversing involution supplied by \ref{thrm:causally-complete-lattice}: $\mathbf{B}_1 \le \mathbf{B}_2$ means $\mathbf{B}_1 \subseteq \mathbf{B}_2$, whence $\mathbf{B}_2^\perp \subseteq \mathbf{B}_1^\perp$, i.e. $\mathbf{B}_2^\perp \le \mathbf{B}_1^\perp$.
+        \item (join laws) Since the join is the causal closure of the union, the triple-complement identity collapses one level of complement:
+        \begin{align}
+            (\mathbf{B}_1 \sqcup \mathbf{B}_2)^\perp = \bigl((\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp}\bigr)^\perp = (\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp\perp} = (\mathbf{B}_1 \cup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \cap \mathbf{B}_2^\perp = \mathbf{B}_1^\perp \sqcap \mathbf{B}_2^\perp,
+        \end{align}
+        the fourth equality being the binary set-level De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}) and the last using that lattice meets are intersections. The indexed form is identical with the indexed De Morgan lemma in place of the binary one, giving $\bigl(\bigsqcup_i \mathbf{B}_i\bigr)^\perp = \bigsqcap_i \mathbf{B}_i^\perp$.
+        \item (meet laws) Apply the set-level De Morgan lemma to the complements $\mathbf{B}_1^\perp, \mathbf{B}_2^\perp$ and use $\mathbf{B}_i^{\perp\perp} = \mathbf{B}_i$ (each $\mathbf{B}_i$ is causally complete): $(\mathbf{B}_1^\perp \cup \mathbf{B}_2^\perp)^\perp = \mathbf{B}_1^{\perp\perp} \cap \mathbf{B}_2^{\perp\perp} = \mathbf{B}_1 \cap \mathbf{B}_2$. Taking the complement of both sides and recognising the meet as the intersection and the join as the double-complement of the union,
+        \begin{align}
+            (\mathbf{B}_1 \sqcap \mathbf{B}_2)^\perp = (\mathbf{B}_1 \cap \mathbf{B}_2)^\perp = (\mathbf{B}_1^\perp \cup \mathbf{B}_2^\perp)^{\perp\perp} = \mathbf{B}_1^\perp \sqcup \mathbf{B}_2^\perp,
+        \end{align}
+        and likewise $\bigl(\bigsqcap_i \mathbf{B}_i\bigr)^\perp = \bigsqcup_i \mathbf{B}_i^\perp$ from the indexed De Morgan lemma.
+        \item (bounds) The empty-family case of the indexed De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}) reads $\varnothing^\perp = \mathrm{univ}$, so $\top = \mathrm{univ} = \varnothing^\perp$. Hence $\top^\perp = \varnothing^{\perp\perp} = \bot$, while $\bot = \varnothing^{\perp\perp}$ and the triple-complement identity give $\bot^\perp = \varnothing^{\perp\perp\perp} = \varnothing^\perp = \top$.
+    \end{itemize}
+
+    The mathematical subtlety is that this lattice is \emph{not} linearly ordered, so the binary equalities do \emph{not} follow from antitonicity alone: a general antitone map only yields the inequality $f(\mathbf{B}_1 \sqcup \mathbf{B}_2) \le f\mathbf{B}_1 \sqcap f\mathbf{B}_2$. The equalities hold precisely because the causal complement is an order-reversing \emph{bijection} (the involution $\mathbf{B}^{\perp\perp} = \mathbf{B}$), equivalently an order isomorphism onto the order-dual lattice; it is this bijectivity that both forces the finite equalities above and, through the same set-level De Morgan computation applied to arbitrary unions, upgrades them to the infinitary laws by carrying suprema to infima.
+\end{proof}
+
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
     \lean{Physicslib4.Spacetime.alexandrovTopology}
