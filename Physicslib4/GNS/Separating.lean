@@ -43,7 +43,7 @@ theorem separating_of_faithful {ω : State A} (hω : ω.IsFaithful)
   have hpos : 0 < ω (star a * a) := hω a hne
   have hzero : ω (star a * a) = 0 := by
     rw [hrep (star a * a), map_mul, map_star]
-    simp [ContinuousLinearMap.mul_apply, ha]
+    simp [mul_apply_eq_comp, ha]
   rw [hzero] at hpos
   exact lt_irrefl 0 hpos
 

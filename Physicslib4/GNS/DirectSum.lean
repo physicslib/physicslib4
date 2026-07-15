@@ -64,7 +64,7 @@ noncomputable def directSum : A →⋆ₐ[ℂ] (lp H 2 →L[ℂ] lp H 2) where
   toFun := directSumFun π
   map_one' := by refine lpDiag_ext fun x i => ?_; simp [map_one]
   map_mul' a b := by
-    refine lpDiag_ext fun x i => ?_; simp [map_mul, ContinuousLinearMap.mul_apply]
+    refine lpDiag_ext fun x i => ?_; simp [map_mul, mul_apply_eq_comp]
   map_zero' := by
     refine lpDiag_ext fun x i => ?_
     change π i 0 (x i) = (0 : lp H 2) i
@@ -75,8 +75,8 @@ noncomputable def directSum : A →⋆ₐ[ℂ] (lp H 2 →L[ℂ] lp H 2) where
     rw [map_add (π i) a b]; rfl
   commutes' r := by
     refine lpDiag_ext fun x i => ?_
-    simp [Algebra.algebraMap_eq_smul_one, ContinuousLinearMap.smul_apply,
-      ContinuousLinearMap.one_apply, lp.coeFn_smul]
+    simp [Algebra.algebraMap_eq_smul_one, smul_apply,
+      one_apply_eq_self, lp.coeFn_smul]
   map_star' a := by
     simp only [directSumFun]
     rw [lpDiag_star]
@@ -118,7 +118,7 @@ theorem summandProj_mem_commutant (j : ι) :
   rw [Set.mem_centralizer_iff]
   rintro _ ⟨a, rfl⟩
   refine lpDiag_ext fun x i => ?_
-  simp only [ContinuousLinearMap.mul_apply, directSum_apply, directSumFun_apply_coe,
+  simp only [mul_apply_eq_comp, directSum_apply, directSumFun_apply_coe,
     summandProj_apply, lp.single_apply]
   rcases eq_or_ne i j with h | h
   · subst h; simp

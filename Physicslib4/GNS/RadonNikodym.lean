@@ -42,7 +42,7 @@ theorem reproducing_norm_sq {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[ℂ] H
     (ω (star x * x)).re = ‖π x Ω‖ ^ 2 := by
   have heq : (ω (star x * x) : ℂ) = ⟪π x Ω, π x Ω⟫_ℂ := by
     have hsplit : π (star x * x) Ω = π (star x) (π x Ω) := by
-      rw [map_mul, ContinuousLinearMap.mul_apply]
+      rw [map_mul, mul_apply_eq_comp]
     have hadjeq : ContinuousLinearMap.adjoint (π x) = π (star x) := by
       rw [← ContinuousLinearMap.star_eq_adjoint, map_star]
     rw [hrep, hsplit, ← hadjeq, ContinuousLinearMap.adjoint_inner_right]
@@ -93,7 +93,7 @@ theorem gns_form_well_defined {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[ℂ]
     (hψdom : ∀ a : A, ψ (star a * a) ≤ ω (star a * a))
     {a a' : A} (haa : π a Ω = π a' Ω) (b : A) :
     ψ (star a * b) = ψ (star a' * b) := by
-  have hzero : π (a - a') Ω = 0 := by rw [map_sub, ContinuousLinearMap.sub_apply, haa, sub_self]
+  have hzero : π (a - a') Ω = 0 := by rw [map_sub, sub_apply, haa, sub_self]
   have hb := gns_form_norm_le hrep hψpos hψdom (a - a') b
   rw [hzero, norm_zero, zero_mul] at hb
   have hψz : ψ (star (a - a') * b) = 0 := norm_le_zero_iff.mp hb
@@ -109,8 +109,8 @@ open InnerProductSpace
 /-- The cyclic map `a ↦ π a Ω` as a `ℂ`-linear map `A →ₗ[ℂ] H`. -/
 noncomputable def cycLM (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H) : A →ₗ[ℂ] H where
   toFun a := π a Ω
-  map_add' x y := by simp [map_add, ContinuousLinearMap.add_apply]
-  map_smul' c x := by simp [map_smul, ContinuousLinearMap.smul_apply]
+  map_add' x y := by simp [map_add, add_apply]
+  map_smul' c x := by simp [map_smul, smul_apply]
 
 @[simp] theorem cycLM_apply (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H) (a : A) :
     cycLM π Ω a = π a Ω := rfl
@@ -233,11 +233,11 @@ theorem rnOp_commute {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} {Ω 
     refine eq_of_dense_inner_right (cycLM_denseRange hcyc) (fun a => ?_)
     simp only [cycLM_apply]
     have hRHS : T ((π c) (π b Ω)) = T (π (c * b) Ω) := by
-      congr 1; rw [← ContinuousLinearMap.mul_apply, ← map_mul]
+      congr 1; rw [← mul_apply_eq_comp, ← map_mul]
     rw [hRHS, rnOp_inner hcyc hrep hψpos hψdom a (c * b),
       ← ContinuousLinearMap.adjoint_inner_left, hadjeq,
       show (π (star c)) (π a Ω) = π (star c * a) Ω from by
-        rw [← ContinuousLinearMap.mul_apply, ← map_mul],
+        rw [← mul_apply_eq_comp, ← map_mul],
       rnOp_inner hcyc hrep hψpos hψdom (star c * a) b]
     congr 1
     rw [star_mul, star_star, mul_assoc]
@@ -248,7 +248,7 @@ theorem rnOp_commute {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} {Ω 
     simpa using key b
   apply ContinuousLinearMap.ext
   intro y
-  rw [ContinuousLinearMap.mul_apply, ContinuousLinearMap.mul_apply]
+  rw [mul_apply_eq_comp, mul_apply_eq_comp]
   exact congrFun hfun y
 
 /-- **The reproducing identity for the state.** `ψ(a) = ⟪Ω, T (π a Ω)⟫`. -/
@@ -258,7 +258,7 @@ theorem rnOp_reproducing {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} 
     (hψdom : ∀ a : A, ψ (star a * a) ≤ ω (star a * a)) (a : A) :
     (ψ a : ℂ) = ⟪Ω, rnOp hcyc hrep hψpos hψdom (π a Ω)⟫_ℂ := by
   have h := rnOp_inner hcyc hrep hψpos hψdom 1 a
-  rw [map_one, ContinuousLinearMap.one_apply, star_one, one_mul] at h
+  rw [map_one, one_apply_eq_self, star_one, one_mul] at h
   exact h.symm
 
 /-- **Irreducible ⟹ pure.** If the GNS representation of `ω` is irreducible, then
@@ -273,7 +273,7 @@ theorem isPure_of_isIrreducible {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[�
     (fun a => rnOp_commute hcyc hrep hψpos hψdom a)
   refine ⟨c, fun a => ?_⟩
   rw [rnOp_reproducing hcyc hrep hψpos hψdom a, hc,
-    ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply, inner_smul_right, ← hrep a]
+    smul_apply, one_apply_eq_self, inner_smul_right, ← hrep a]
 
 /-- **The full GNS purity ⟺ irreducibility equivalence.** A state `ω` is pure if
 and only if its cyclic GNS representation is irreducible. -/

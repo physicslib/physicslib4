@@ -84,7 +84,7 @@ noncomputable def conjMulEquiv (U : H₁ ≃ₗᵢ[ℂ] H₂) :
   left_inv T := by ext x; simp
   right_inv S := by ext x; simp
   map_mul' S T := by
-    ext x; simp [ContinuousLinearMap.mul_apply]
+    ext x; simp [mul_apply_eq_comp]
 
 omit [CompleteSpace H₁] [CompleteSpace H₂] in
 @[simp] theorem conjMulEquiv_apply (U : H₁ ≃ₗᵢ[ℂ] H₂) (T : H₁ →L[ℂ] H₁) :

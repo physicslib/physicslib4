@@ -107,7 +107,7 @@ theorem lpDiag_add (S T : ∀ i, E i →L[𝕜] E i) {KS KT KST : ℝ}
     lpDiag (fun i => S i + T i) hKST hSTK = lpDiag S hKS hSK + lpDiag T hKT hTK := by
   refine lpDiag_ext fun x i => ?_
   change (S i + T i) (x i) = S i (x i) + T i (x i)
-  exact ContinuousLinearMap.add_apply (S i) (T i) (x i)
+  exact add_apply (S i) (T i) (x i)
 
 /-- The diagonal operator is `𝕜`-linear in the family. -/
 theorem lpDiag_smul (c : 𝕜) (T : ∀ i, E i →L[𝕜] E i) {K KcT : ℝ}

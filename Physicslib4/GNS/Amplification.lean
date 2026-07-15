@@ -60,10 +60,10 @@ theorem not_isIrreducible_directSum {j k : ι} (hjk : j ≠ k)
     exact norm_ne_zero_iff.mpr hw
   have e1 := DFunLike.congr_fun hc (lp.single 2 j v)
   have e2 := DFunLike.congr_fun hc (lp.single 2 k w)
-  simp only [summandProj_apply, ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply,
+  simp only [summandProj_apply, smul_apply, one_apply_eq_self,
     lp.single_apply_self] at e1
   simp only [summandProj_apply, lp.single_apply_ne 2 k w hjk, lp.single_zero,
-    ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] at e2
+    smul_apply, one_apply_eq_self] at e2
   have hc1 : c = 1 := by
     have h0 : (1 - c) • lp.single 2 j v = 0 := by rw [sub_smul, one_smul, ← e1, sub_self]
     rcases smul_eq_zero.mp h0 with h | h

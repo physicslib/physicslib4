@@ -107,12 +107,12 @@ theorem eq_zero_of_commute_of_cyclic {S : Set (H →L[ℂ] H)} {Ω : H}
   have hzero : Set.EqOn (⇑R) (fun _ => (0 : H)) ((fun T => T Ω) '' S) := by
     rintro _ ⟨T, hT, rfl⟩
     change R (T Ω) = 0
-    rw [← ContinuousLinearMap.mul_apply, hcomm T hT, ContinuousLinearMap.mul_apply, hRΩ,
+    rw [← mul_apply_eq_comp, hcomm T hT, mul_apply_eq_comp, hRΩ,
       map_zero]
   have hRx : (⇑R) = fun _ => (0 : H) :=
     Continuous.ext_on hcyc R.continuous continuous_const hzero
   exact ContinuousLinearMap.ext fun x =>
-    (congrFun hRx x).trans (ContinuousLinearMap.zero_apply x).symm
+    (congrFun hRx x).trans (zero_apply x).symm
 
 /-- **Statistical independence (Schlieder property) for spacelike curved regions.**
 If `Ω` is cyclic for the local observables of `B₁` - the role supplied in
