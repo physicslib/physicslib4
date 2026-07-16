@@ -269,8 +269,8 @@
     \label{thrm:causal-order-refinements}
     \lean{Physicslib4.Spacetime.chronologicallyPrecedes_irrefl, Physicslib4.Spacetime.causallyPrecedes_asymm, Physicslib4.Spacetime.causallyPrecedes_antisymm}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
-    \leanok
     \uses{def:no-closed-causal-curve, thrm:precedence-transitive, lmm:chronological-implies-causal}
+    \leanok
     Assume $M$ has no closed causal curve. Then chronological precedence is irreflexive, $\lnot(p \ll p)$ for every $p$ (since $p \ll p$ would give $p \prec p$ because chronological precedence implies causal precedence), and causal precedence is asymmetric and antisymmetric: $p \prec q$ excludes $q \prec p$, and $p \prec q$ together with $q \prec p$ forces $p = q$ (indeed both cannot hold, since transitivity would give the forbidden $p \prec p$). Thus, under the causality condition, $\prec$ is a strict partial order on the events of the spacetime.
 \end{theorem}
 

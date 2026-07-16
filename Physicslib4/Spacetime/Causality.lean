@@ -297,14 +297,16 @@ def NoClosedCausalCurve (t : M.TimeOrientation) : Prop :=
 theorem chronologicallyPrecedes_irrefl (t : M.TimeOrientation)
     (hc : M.NoClosedCausalCurve t) (p : M.Carrier) :
     ¬ M.ChronologicallyPrecedes t p p := by
-  sorry
+  intro h
+  exact hc p (M.causallyPrecedes_of_chronologicallyPrecedes t h)
 
 /-- Under the causality condition, causal precedence is **asymmetric**:
 `p ≺ q → ¬ (q ≺ p)`, since transitivity would otherwise give the forbidden `p ≺ p`. -/
 theorem causallyPrecedes_asymm (t : M.TimeOrientation)
     (hc : M.NoClosedCausalCurve t) {p q : M.Carrier}
     (hpq : M.CausallyPrecedes t p q) : ¬ M.CausallyPrecedes t q p := by
-  sorry
+  intro hqp
+  exact hc p (M.causallyPrecedes_trans t hpq hqp)
 
 /-- Under the causality condition, causal precedence is **antisymmetric**:
 `p ≺ q → q ≺ p → p = q` (in fact both cannot hold, since transitivity gives the
@@ -313,7 +315,7 @@ theorem causallyPrecedes_antisymm (t : M.TimeOrientation)
     (hc : M.NoClosedCausalCurve t) {p q : M.Carrier}
     (hpq : M.CausallyPrecedes t p q) (hqp : M.CausallyPrecedes t q p) :
     p = q := by
-  sorry
+  exact absurd (M.causallyPrecedes_trans t hpq hqp) (hc p)
 
 /-! ### Symmetry of spacelike relatedness -/
 
