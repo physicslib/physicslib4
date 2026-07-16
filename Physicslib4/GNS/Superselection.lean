@@ -383,7 +383,7 @@ theorem isFactor_gnsVonNeumann_iff_isFactor_commutant (π : A →⋆ₐ[ℂ] (H�
   unfold IsFactor
   simp only [coe_commutantVonNeumann]
   unfold gnsVonNeumann
-  simp
+  simp only [Set.centralizer_centralizer_centralizer]
   constructor <;> intro h <;> rw [Set.inter_comm] at h <;> exact h
 
 /-- **Triviality duality.** The commutant collapses to the scalars `π(A)' = ℂ · 1` if
