@@ -282,6 +282,39 @@ theorem chronologicalPast_subset_causalPast (t : M.TimeOrientation)
     (p : M.Carrier) : chronologicalPast M t p ⊆ causalPast M t p :=
   fun _ hq => M.causallyPrecedes_of_chronologicallyPrecedes t hq
 
+/-! ### Causal-order refinements under the causality condition -/
+
+/-- **The causality condition (no closed causal curve).** A spacetime satisfies the
+causality condition when no point causally precedes itself: a closed causal curve
+through `p` is exactly a causal trip `p ≺ p`, so its absence is `¬ (p ≺ p)` for all
+`p`. This is strictly weaker than strong causality and strictly stronger than the
+chronology condition `¬ (p ≪ p)`. -/
+def NoClosedCausalCurve (t : M.TimeOrientation) : Prop :=
+  ∀ p : M.Carrier, ¬ M.CausallyPrecedes t p p
+
+/-- Under the causality condition, chronological precedence is **irreflexive**:
+`¬ (p ≪ p)`, because `p ≪ p` would give the forbidden `p ≺ p`. -/
+theorem chronologicallyPrecedes_irrefl (t : M.TimeOrientation)
+    (hc : M.NoClosedCausalCurve t) (p : M.Carrier) :
+    ¬ M.ChronologicallyPrecedes t p p := by
+  sorry
+
+/-- Under the causality condition, causal precedence is **asymmetric**:
+`p ≺ q → ¬ (q ≺ p)`, since transitivity would otherwise give the forbidden `p ≺ p`. -/
+theorem causallyPrecedes_asymm (t : M.TimeOrientation)
+    (hc : M.NoClosedCausalCurve t) {p q : M.Carrier}
+    (hpq : M.CausallyPrecedes t p q) : ¬ M.CausallyPrecedes t q p := by
+  sorry
+
+/-- Under the causality condition, causal precedence is **antisymmetric**:
+`p ≺ q → q ≺ p → p = q` (in fact both cannot hold, since transitivity gives the
+forbidden `p ≺ p`). Thus `≺` is a strict partial order. -/
+theorem causallyPrecedes_antisymm (t : M.TimeOrientation)
+    (hc : M.NoClosedCausalCurve t) {p q : M.Carrier}
+    (hpq : M.CausallyPrecedes t p q) (hqp : M.CausallyPrecedes t q p) :
+    p = q := by
+  sorry
+
 /-! ### Symmetry of spacelike relatedness -/
 
 /-- Spacelike relatedness is symmetric. -/
