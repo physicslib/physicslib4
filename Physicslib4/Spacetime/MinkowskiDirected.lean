@@ -291,7 +291,123 @@ theorem exists_future_between_standardMinkowski {q₁ q₂ x : SpacetimeModel}
     (h₁ : x ∈ minkowskiBackwardCone q₁) (h₂ : x ∈ minkowskiBackwardCone q₂) :
     ∃ b, b ∈ minkowskiBackwardCone q₁ ∧ b ∈ minkowskiBackwardCone q₂ ∧
       x ∈ minkowskiBackwardCone b := by
-  sorry
+  obtain ⟨h₁0, h₁c⟩ := h₁
+  obtain ⟨h₂0, h₂c⟩ := h₂
+  set T₁ := q₁ 0 - x 0 with hT₁
+  set T₂ := q₂ 0 - x 0 with hT₂
+  set S₁ := (q₁ 1 - x 1)^2 + (q₁ 2 - x 2)^2 + (q₁ 3 - x 3)^2 with hS₁
+  set S₂ := (q₂ 1 - x 1)^2 + (q₂ 2 - x 2)^2 + (q₂ 3 - x 3)^2 with hS₂
+  have hT₁pos : 0 < T₁ := sub_pos.mpr h₁0
+  have hT₂pos : 0 < T₂ := sub_pos.mpr h₂0
+  have hS₁ltT₁sq : S₁ < T₁ ^ 2 := by
+    dsimp [S₁, T₁] at h₁c ⊢
+    linarith
+  have hS₂ltT₂sq : S₂ < T₂ ^ 2 := by
+    dsimp [S₂, T₂] at h₂c ⊢
+    linarith
+  set δ₁ := T₁ ^ 2 - S₁ with hδ₁
+  set δ₂ := T₂ ^ 2 - S₂ with hδ₂
+  have hδ₁pos : 0 < δ₁ := by rw [hδ₁]; linarith
+  have hδ₂pos : 0 < δ₂ := by rw [hδ₂]; linarith
+  have hS₁_nonneg : 0 ≤ S₁ := by rw [hS₁]; positivity
+  have hS₂_nonneg : 0 ≤ S₂ := by rw [hS₂]; positivity
+  have hδ₁leT₁sq : δ₁ ≤ T₁ ^ 2 := by rw [hδ₁]; linarith
+  have hδ₂leT₂sq : δ₂ ≤ T₂ ^ 2 := by rw [hδ₂]; linarith
+  have hδ₁_div_pos : 0 < δ₁ / (2 * T₁) := div_pos hδ₁pos (by positivity)
+  have hδ₂_div_pos : 0 < δ₂ / (2 * T₂) := div_pos hδ₂pos (by positivity)
+  set ε := min (δ₁ / (2 * T₁)) (δ₂ / (2 * T₂)) with hε
+  have hεpos : 0 < ε := by
+    rw [hε]
+    exact lt_min_iff.mpr ⟨hδ₁_div_pos, hδ₂_div_pos⟩
+  have hε_le_δ₁_div : ε ≤ δ₁ / (2 * T₁) := by
+    rw [hε]; exact min_le_left _ _
+  have hε_le_δ₂_div : ε ≤ δ₂ / (2 * T₂) := by
+    rw [hε]; exact min_le_right _ _
+  have hε_mul₁ : 2 * T₁ * ε ≤ δ₁ := by
+    have hpos : 0 < 2 * T₁ := by positivity
+    calc
+      2 * T₁ * ε ≤ 2 * T₁ * (δ₁ / (2 * T₁)) :=
+        mul_le_mul_of_nonneg_left hε_le_δ₁_div (by positivity)
+      _ = δ₁ := by field_simp [hpos.ne.symm]
+  have hε_mul₂ : 2 * T₂ * ε ≤ δ₂ := by
+    have hpos : 0 < 2 * T₂ := by positivity
+    calc
+      2 * T₂ * ε ≤ 2 * T₂ * (δ₂ / (2 * T₂)) :=
+        mul_le_mul_of_nonneg_left hε_le_δ₂_div (by positivity)
+      _ = δ₂ := by field_simp [hpos.ne.symm]
+  have hε_lt_T₁ : ε < T₁ := by
+    by_contra! h
+    have h2T₁ε_ge_2T₁sq : 2 * T₁ * ε ≥ 2 * T₁ ^ 2 := by
+      calc
+        2 * T₁ * ε ≥ 2 * T₁ * T₁ := mul_le_mul_of_nonneg_left h (by positivity)
+        _ = 2 * T₁ ^ 2 := by ring
+    have hchain : 2 * T₁ ^ 2 ≤ T₁ ^ 2 := by
+      calc
+        2 * T₁ ^ 2 ≤ 2 * T₁ * ε := h2T₁ε_ge_2T₁sq
+        _ ≤ δ₁ := hε_mul₁
+        _ ≤ T₁ ^ 2 := hδ₁leT₁sq
+    have hpos : T₁ ^ 2 > 0 := pow_pos hT₁pos 2
+    linarith
+  have hε_lt_T₂ : ε < T₂ := by
+    by_contra! h
+    have h2T₂ε_ge_2T₂sq : 2 * T₂ * ε ≥ 2 * T₂ ^ 2 := by
+      calc
+        2 * T₂ * ε ≥ 2 * T₂ * T₂ := mul_le_mul_of_nonneg_left h (by positivity)
+        _ = 2 * T₂ ^ 2 := by ring
+    have hchain : 2 * T₂ ^ 2 ≤ T₂ ^ 2 := by
+      calc
+        2 * T₂ ^ 2 ≤ 2 * T₂ * ε := h2T₂ε_ge_2T₂sq
+        _ ≤ δ₂ := hε_mul₂
+        _ ≤ T₂ ^ 2 := hδ₂leT₂sq
+    have hpos : T₂ ^ 2 > 0 := pow_pos hT₂pos 2
+    linarith
+  have hcone_ineq₁ : S₁ < (T₁ - ε) ^ 2 := by
+    have hsqpos : 0 < ε ^ 2 := pow_pos hεpos 2
+    have hsub : 2 * T₁ * ε - ε ^ 2 < δ₁ := by
+      have htemp : 2 * T₁ * ε - ε ^ 2 < 2 * T₁ * ε := by linarith
+      exact htemp.trans_le hε_mul₁
+    have eqn : (T₁ - ε) ^ 2 - S₁ = δ₁ - (2 * T₁ * ε - ε ^ 2) := by
+      rw [hδ₁]; ring
+    linarith
+  have hcone_ineq₂ : S₂ < (T₂ - ε) ^ 2 := by
+    have hsqpos : 0 < ε ^ 2 := pow_pos hεpos 2
+    have hsub : 2 * T₂ * ε - ε ^ 2 < δ₂ := by
+      have htemp : 2 * T₂ * ε - ε ^ 2 < 2 * T₂ * ε := by linarith
+      exact htemp.trans_le hε_mul₂
+    have eqn : (T₂ - ε) ^ 2 - S₂ = δ₂ - (2 * T₂ * ε - ε ^ 2) := by
+      rw [hδ₂]; ring
+    linarith
+  set b : SpacetimeModel := x + EuclideanSpace.single (0 : Fin 4) ε with hb
+  have hb0 : b 0 = x 0 + ε := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply, if_pos rfl]
+  have hb1 : b 1 = x 1 := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply, if_neg (by decide)]
+    simp
+  have hb2 : b 2 = x 2 := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply, if_neg (by decide)]
+    simp
+  have hb3 : b 3 = x 3 := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply, if_neg (by decide)]
+    simp
+  refine ⟨b, ?_, ?_, ?_⟩
+  · -- b ∈ minkowskiBackwardCone q₁
+    rw [mem_minkowskiBackwardCone, hb0, hb1, hb2, hb3]
+    dsimp [T₁, S₁]
+    constructor
+    · linarith
+    · linarith
+  · -- b ∈ minkowskiBackwardCone q₂
+    rw [mem_minkowskiBackwardCone, hb0, hb1, hb2, hb3]
+    dsimp [T₂, S₂]
+    constructor
+    · linarith
+    · linarith
+  · -- x ∈ minkowskiBackwardCone b
+    rw [mem_minkowskiBackwardCone, hb0, hb1, hb2, hb3]
+    constructor
+    · linarith
+    · have : 0 < ε ^ 2 := pow_pos hεpos 2
+      linarith
 
 /-- **Downward intersection property of the diamonds.** For two Alexandrov diamonds of
 standard Minkowski and a point `x` in their intersection, there is a diamond `B₃` with
@@ -334,12 +450,15 @@ theorem isTopologicalBasis_alexandrovBasis_standardMinkowski :
     @TopologicalSpace.IsTopologicalBasis SpacetimeModel
       (alexandrovTopology StandardMinkowskiSpacetime standardMinkowskiTimeOrientation)
       (alexandrovBasis StandardMinkowskiSpacetime standardMinkowskiTimeOrientation) := by
-  have h1 : ∀ t₁ ∈ alexandrovBasis StandardMinkowskiSpacetime standardMinkowskiTimeOrientation,
+  have h1 : ∀ t₁ ∈ alexandrovBasis StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation,
       ∀ t₂ ∈ alexandrovBasis StandardMinkowskiSpacetime standardMinkowskiTimeOrientation,
-      ∀ x ∈ t₁ ∩ t₂, ∃ t₃ ∈ alexandrovBasis StandardMinkowskiSpacetime standardMinkowskiTimeOrientation,
+      ∀ x ∈ t₁ ∩ t₂, ∃ t₃ ∈ alexandrovBasis StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation,
         x ∈ t₃ ∧ t₃ ⊆ t₁ ∩ t₂ :=
     alexandrovBasis_exists_subset_inter_standardMinkowski
-  have h2 : ⋃₀ (alexandrovBasis StandardMinkowskiSpacetime standardMinkowskiTimeOrientation) = Set.univ := by
+  have h2 : ⋃₀ (alexandrovBasis StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation) = Set.univ := by
     apply Set.sUnion_eq_univ_iff.mpr
     intro x
     rcases exists_chronologicalPast_standardMinkowski x with ⟨a, ha⟩

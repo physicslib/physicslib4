@@ -639,9 +639,11 @@
     \lean{Physicslib4.Spacetime.exists_future_between_standardMinkowski}
     \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
     \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
+    \leanok
     On standard Minkowski spacetime, if $x \ll q_1$ and $x \ll q_2$ then there is a point $b$ with $x \ll b$, $b \ll q_1$, and $b \ll q_2$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:minkowski-past-between, lmm:minkowski-chronological-open}
     Dual to \ref{lmm:minkowski-past-between}: take $b$ with the same spatial coordinates as $x$ and time coordinate $b^0 = x^0 + \varepsilon$ for a small $\varepsilon > 0$. Then $b - x = (\varepsilon, \mathbf{0})$ is future-pointing timelike, so $x \ll b$, and for each $i$ the vector $q_i - b$ keeps the spatial part of $q_i - x$ with time component $(q_i^0 - x^0) - \varepsilon$; for $\varepsilon$ small enough it stays future-pointing timelike, giving $b \ll q_i$ for both $i$ by the same coordinate estimate.
 \end{proof}
