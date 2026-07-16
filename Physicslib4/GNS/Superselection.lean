@@ -356,6 +356,39 @@ theorem isIrreducible_iff_commutantVonNeumann_eq_scalars
   rw [coe_commutantVonNeumann]
   exact isIrreducible_iff_centralizer
 
+/-! ### Double-commutant duality -/
+
+/-- **Double-commutant duality (I).** The commutant of the generated von Neumann
+algebra `π(A)''` is the commutant von Neumann algebra `π(A)'`. This is the
+triple-commutant collapse `S''' = S'` applied to the self-adjoint image `π(A)`. -/
+theorem commutant_gnsVonNeumannAlgebra (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    (gnsVonNeumannAlgebra π).commutant = commutantVonNeumann π := by
+  sorry
+
+/-- **Double-commutant duality (II).** The commutant of the commutant von Neumann
+algebra `π(A)'` is the generated von Neumann algebra `π(A)''` — this is exactly the
+definition of the bicommutant. So `π(A)''` and `π(A)'` are each other's commutants. -/
+theorem commutant_commutantVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    (commutantVonNeumann π).commutant = gnsVonNeumannAlgebra π := by
+  sorry
+
+/-- **A factor and its commutant.** A von Neumann algebra and its commutant share the
+same center (their intersection is symmetric), so the generated algebra `π(A)''` is a
+factor if and only if its commutant `π(A)'` is a factor. -/
+theorem isFactor_gnsVonNeumann_iff_isFactor_commutant (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    IsFactor (gnsVonNeumann π) ↔
+      IsFactor (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) := by
+  sorry
+
+/-- **Triviality duality.** The commutant collapses to the scalars `π(A)' = ℂ · 1` if
+and only if the generated algebra is everything `π(A)'' = B(H)`. This is the commutant
+form of the equivalence "irreducible ⟺ generates `B(H)`". -/
+theorem commutantVonNeumann_eq_scalars_iff_gnsVonNeumann_eq_univ
+    (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) = scalarOperators H₁ ↔
+      gnsVonNeumann π = Set.univ := by
+  sorry
+
 /-! ### The pure-state dichotomy -/
 
 /-- **The pure-state dichotomy.** The GNS representations of two pure states are

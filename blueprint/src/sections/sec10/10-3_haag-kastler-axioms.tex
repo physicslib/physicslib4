@@ -523,6 +523,24 @@ The comparison of representations is the entry point to superselection theory. F
     The commutant $\pi(A)'$ of a representation is packaged as a von Neumann algebra --- the algebra of self-intertwiners, i.e. the intertwiner/gauge algebra of $\pi$. Its underlying set is the centralizer of $\pi(A)$ (self-adjoint, and a commutant is always a von Neumann algebra since $S''' = S'$), an operator lies in it exactly when it is a self-intertwiner of $\pi$, and $\pi$ is irreducible if and only if this algebra is trivial ($\pi(A)' = \mathbb{C}\cdot 1$) --- the von Neumann form of Schur's lemma.
 \end{theorem}
 
+\begin{theorem}[Double-Commutant Duality]
+    \label{thrm:double-commutant-duality}
+    \lean{Physicslib4.GNS.commutant_gnsVonNeumannAlgebra, Physicslib4.GNS.commutant_commutantVonNeumann}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{thrm:commutant-von-neumann}
+    The generated von Neumann algebra $\pi(A)''$ and the commutant von Neumann algebra $\pi(A)'$ (\ref{thrm:commutant-von-neumann}) are each other's commutants. On one side, the commutant of $\pi(A)''$ is $\pi(A)'$: this is an instance of the triple-commutant collapse $S''' = S'$ applied to the self-adjoint image $\pi(A)$. On the other side, the commutant of $\pi(A)'$ is $\pi(A)''$, which is exactly the definition of the bicommutant. Together these are von Neumann's double-commutant relation for this pair, and they exhibit the bicommutant as idempotent: taking the commutant twice returns $(\pi(A)'')'' = \pi(A)''$, so $\pi(A)''$ and $\pi(A)'$ form a mutually dual pair under $S \mapsto S'$.
+\end{theorem}
+
+\begin{theorem}[A Factor and its Commutant; Triviality Duality]
+    \label{thrm:commutant-factor-duality}
+    \lean{Physicslib4.GNS.isFactor_gnsVonNeumann_iff_isFactor_commutant, Physicslib4.GNS.commutantVonNeumann_eq_scalars_iff_gnsVonNeumann_eq_univ}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{thrm:double-commutant-duality, thrm:commutant-von-neumann, thrm:irreducible-generates-all}
+    A von Neumann algebra and its commutant share the same center: the intersection $\pi(A)'' \cap (\pi(A)'')' = \pi(A)'' \cap \pi(A)'$ is symmetric under the duality of \ref{thrm:double-commutant-duality}, being simultaneously the center of $\pi(A)''$ and the center of $\pi(A)'$. Consequently $\pi(A)''$ is a factor (trivial center) if and only if its commutant $\pi(A)'$ is a factor. Dually, at the extreme of triviality, the commutant collapses to the scalars $\pi(A)' = \mathbb{C}\cdot 1$ if and only if the generated algebra is everything $\pi(A)'' = \mathcal{B}(H)$; this is the commutant form of the equivalence ``irreducible $\iff$ generates $\mathcal{B}(H)$'' (\ref{thrm:commutant-von-neumann}), passing between the two sides through the bicommutant $(\mathbb{C}\cdot 1)' = \mathcal{B}(H)$.
+\end{theorem}
+
 \begin{theorem}[The Pure-State Dichotomy]
     \label{thrm:pure-state-dichotomy}
     \lean{Physicslib4.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}
