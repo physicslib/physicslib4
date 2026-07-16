@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.Spacetime.Minkowski
+import Mathlib.Topology.Bases
 
 /-!
 # Directedness of the Alexandrov basis of standard Minkowski spacetime
@@ -153,6 +154,53 @@ theorem alexandrovBasis_directed {B₁ B₂ : Set SpacetimeModel}
     simp only [chronologicalFuture_standardMinkowski,
       chronologicalPast_standardMinkowski] at hx ⊢
     exact ⟨minkowskiForwardCone_subset hp2 hx.1, minkowskiBackwardCone_subset hq2 hx.2⟩
+
+/-! ### The Alexandrov diamonds form a genuine topological basis on standard Minkowski -/
+
+/-- **Past interpolation.** If `x` is in the forward cones of `p₁` and `p₂`, there is
+a point `a` in both forward cones with `x` in the forward cone of `a` (i.e.
+`p₁, p₂ ≪ a ≪ x`). Take `a = x - ε • e₀` for small `ε > 0`: the spatial separation
+from each `pᵢ` is unchanged, so the timelike condition survives, and `x - a = ε e₀` is
+future-timelike. -/
+theorem exists_past_between_standardMinkowski {p₁ p₂ x : SpacetimeModel}
+    (h₁ : x ∈ minkowskiForwardCone p₁) (h₂ : x ∈ minkowskiForwardCone p₂) :
+    ∃ a, a ∈ minkowskiForwardCone p₁ ∧ a ∈ minkowskiForwardCone p₂ ∧
+      x ∈ minkowskiForwardCone a := by
+  sorry
+
+/-- **Future interpolation.** If `x` is in the backward cones of `q₁` and `q₂`, there
+is a point `b` in both backward cones with `x` in the backward cone of `b` (i.e.
+`x ≪ b ≪ q₁, q₂`). Dual to `exists_past_between_standardMinkowski`, with `b = x + ε • e₀`. -/
+theorem exists_future_between_standardMinkowski {q₁ q₂ x : SpacetimeModel}
+    (h₁ : x ∈ minkowskiBackwardCone q₁) (h₂ : x ∈ minkowskiBackwardCone q₂) :
+    ∃ b, b ∈ minkowskiBackwardCone q₁ ∧ b ∈ minkowskiBackwardCone q₂ ∧
+      x ∈ minkowskiBackwardCone b := by
+  sorry
+
+/-- **Downward intersection property of the diamonds.** For two Alexandrov diamonds of
+standard Minkowski and a point `x` in their intersection, there is a diamond `B₃` with
+`x ∈ B₃ ⊆ B₁ ∩ B₂`. Uses past/future interpolation to build `B₃ = I⁺(a) ∩ I⁻(b)` and
+cone-nesting for the containment. -/
+theorem alexandrovBasis_exists_subset_inter_standardMinkowski
+    (B₁ : Set SpacetimeModel)
+    (h₁ : B₁ ∈ alexandrovBasis StandardMinkowskiSpacetime standardMinkowskiTimeOrientation)
+    (B₂ : Set SpacetimeModel)
+    (h₂ : B₂ ∈ alexandrovBasis StandardMinkowskiSpacetime standardMinkowskiTimeOrientation)
+    (x : SpacetimeModel) (hx : x ∈ B₁ ∩ B₂) :
+    ∃ B₃ ∈ alexandrovBasis StandardMinkowskiSpacetime standardMinkowskiTimeOrientation,
+      x ∈ B₃ ∧ B₃ ⊆ B₁ ∩ B₂ := by
+  sorry
+
+/-- **The Alexandrov diamonds are a topological basis on standard Minkowski.**
+Unconditionally: covering holds because every point has a chronological past and
+future point, and the downward intersection property is
+`alexandrovBasis_exists_subset_inter_standardMinkowski`; the generation condition is
+definitional. -/
+theorem isTopologicalBasis_alexandrovBasis_standardMinkowski :
+    @TopologicalSpace.IsTopologicalBasis SpacetimeModel
+      (alexandrovTopology StandardMinkowskiSpacetime standardMinkowskiTimeOrientation)
+      (alexandrovBasis StandardMinkowskiSpacetime standardMinkowskiTimeOrientation) := by
+  sorry
 
 end Spacetime
 end Physicslib4

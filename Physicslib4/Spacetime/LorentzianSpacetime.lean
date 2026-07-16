@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.Spacetime.Causality
 import Mathlib.Topology.Separation.Hausdorff
+import Mathlib.Topology.Bases
 
 /-!
 # Lorentzian spacetime
@@ -150,6 +151,31 @@ theorem isOpen_alexandrov_of_isBasisSet {B : Set M.Carrier}
     (hB : M.IsBasisSet B) :
     @IsOpen M.Carrier (alexandrovTopology M.toSpacetime M.timeOrientation) B :=
   Spacetime.isOpen_alexandrov_of_mem_basis M.toSpacetime M.timeOrientation hB
+
+/-! ### The Alexandrov diamonds as a genuine topological basis -/
+
+/-- **Covering from the Hausdorff assumption.** On a Lorentzian spacetime with at
+least two points, the Alexandrov diamonds cover the whole space: every point lies in
+some diamond `I⁺(p) ∩ I⁻(q)`. A point in no diamond would have `univ` as its only
+Alexandrov-open neighbourhood, contradicting Hausdorffness. -/
+theorem sUnion_alexandrovBasis_eq_univ [Nontrivial M.Carrier] :
+    ⋃₀ (alexandrovBasis M.toSpacetime M.timeOrientation) = Set.univ := by
+  sorry
+
+/-- **The Alexandrov diamonds form a topological basis.** On a Lorentzian spacetime
+with at least two points, if the diamonds are downward-directed (the intersection
+property), they form a genuine `IsTopologicalBasis` for the Alexandrov topology. The
+covering condition is `sUnion_alexandrovBasis_eq_univ`; the generation condition is
+definitional. -/
+theorem isTopologicalBasis_alexandrovBasis [Nontrivial M.Carrier]
+    (hdir : ∀ B₁ ∈ alexandrovBasis M.toSpacetime M.timeOrientation,
+      ∀ B₂ ∈ alexandrovBasis M.toSpacetime M.timeOrientation,
+      ∀ x ∈ B₁ ∩ B₂, ∃ B₃ ∈ alexandrovBasis M.toSpacetime M.timeOrientation,
+        x ∈ B₃ ∧ B₃ ⊆ B₁ ∩ B₂) :
+    @TopologicalSpace.IsTopologicalBasis M.Carrier
+      (alexandrovTopology M.toSpacetime M.timeOrientation)
+      (alexandrovBasis M.toSpacetime M.timeOrientation) := by
+  sorry
 
 end LorentzianSpacetime
 
