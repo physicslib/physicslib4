@@ -160,7 +160,60 @@ some diamond `I⁺(p) ∩ I⁻(q)`. A point in no diamond would have `univ` as i
 Alexandrov-open neighbourhood, contradicting Hausdorffness. -/
 theorem sUnion_alexandrovBasis_eq_univ [Nontrivial M.Carrier] :
     ⋃₀ (alexandrovBasis M.toSpacetime M.timeOrientation) = Set.univ := by
-  sorry
+  rw [Set.eq_univ_iff_forall]
+  intro x
+  by_contra hx
+  -- hx : x ∉ ⋃₀ (alexandrovBasis ...) means every basis set misses x
+  have hx' : ∀ s ∈ alexandrovBasis M.toSpacetime M.timeOrientation, x ∉ s := by
+    intro s hs
+    intro hxs
+    apply hx
+    exact Set.mem_sUnion.mpr ⟨s, hs, hxs⟩
+  -- Key: any Alexandrov-open set containing x must be the whole space.
+  have key : ∀ (U : Set M.Carrier),
+      TopologicalSpace.GenerateOpen (alexandrovBasis M.toSpacetime M.timeOrientation) U →
+      x ∈ U → U = Set.univ := by
+    intro U hU hxU
+    induction hU with
+    | basic s hs =>
+      exfalso
+      exact hx' s hs hxU
+    | univ =>
+      rfl
+    | inter s t hs ht ihs iht =>
+      have hxs : x ∈ s := hxU.1
+      have hxt : x ∈ t := hxU.2
+      have hs_univ : s = Set.univ := ihs hxs
+      have ht_univ : t = Set.univ := iht hxt
+      calc
+        s ∩ t = Set.univ ∩ Set.univ := by rw [hs_univ, ht_univ]
+        _ = Set.univ := Set.inter_univ _
+    | sUnion G hG ih =>
+      rcases Set.mem_sUnion.mp hxU with ⟨g, hgG, hxg⟩
+      have hg_univ : g = Set.univ := ih g hgG hxg
+      have h_sUnion : ⋃₀ G = Set.univ := by
+        apply le_antisymm
+        · exact Set.sUnion_subset (fun s hs => Set.subset_univ _)
+        · rw [← hg_univ]
+          exact Set.subset_sUnion_of_mem hgG
+      exact h_sUnion
+  -- Choose a second point y ≠ x (the space is nontrivial)
+  obtain ⟨y, hy⟩ := exists_ne x
+  -- T₂ separation of the Alexandrov topology gives disjoint open sets around x, y
+  obtain ⟨U, V, hUo, hVo, hxU, hyV, hdisj⟩ :=
+    @t2_separation M.Carrier (alexandrovTopology M.toSpacetime M.timeOrientation)
+      M.instT2SpaceAlexandrov x y (Ne.symm hy)
+  -- The open set U containing x must be all of M.Carrier by key
+  have hUuniv : U = Set.univ := key U hUo hxU
+  -- Hence y ∈ U
+  have hyU : y ∈ U := by
+    rw [hUuniv]
+    exact Set.mem_univ y
+  -- But then y ∈ U ∩ V, contradicting disjointness of U and V
+  have hy_inter : y ∈ U ∩ V := ⟨hyU, hyV⟩
+  have h_empty : U ∩ V = ∅ := Set.disjoint_iff_inter_eq_empty.mp hdisj
+  rw [h_empty] at hy_inter
+  exact hy_inter
 
 /-- **The Alexandrov diamonds form a topological basis.** On a Lorentzian spacetime
 with at least two points, if the diamonds are downward-directed (the intersection
@@ -175,7 +228,11 @@ theorem isTopologicalBasis_alexandrovBasis [Nontrivial M.Carrier]
     @TopologicalSpace.IsTopologicalBasis M.Carrier
       (alexandrovTopology M.toSpacetime M.timeOrientation)
       (alexandrovBasis M.toSpacetime M.timeOrientation) := by
-  sorry
+  refine @TopologicalSpace.IsTopologicalBasis.mk M.Carrier
+    (alexandrovTopology M.toSpacetime M.timeOrientation)
+    (alexandrovBasis M.toSpacetime M.timeOrientation)
+    hdir (sUnion_alexandrovBasis_eq_univ M) ?_
+  rfl
 
 end LorentzianSpacetime
 
