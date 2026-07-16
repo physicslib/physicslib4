@@ -362,15 +362,17 @@ theorem isIrreducible_iff_commutantVonNeumann_eq_scalars
 algebra `π(A)''` is the commutant von Neumann algebra `π(A)'`. This is the
 triple-commutant collapse `S''' = S'` applied to the self-adjoint image `π(A)`. -/
 theorem commutant_gnsVonNeumannAlgebra (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
-    (gnsVonNeumannAlgebra π).commutant = commutantVonNeumann π := by
-  sorry
+    (gnsVonNeumannAlgebra π).commutant = commutantVonNeumann π :=
+  SetLike.coe_injective (by
+    simp [gnsVonNeumann])
 
 /-- **Double-commutant duality (II).** The commutant of the commutant von Neumann
 algebra `π(A)'` is the generated von Neumann algebra `π(A)''` — this is exactly the
 definition of the bicommutant. So `π(A)''` and `π(A)'` are each other's commutants. -/
 theorem commutant_commutantVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
-    (commutantVonNeumann π).commutant = gnsVonNeumannAlgebra π := by
-  sorry
+    (commutantVonNeumann π).commutant = gnsVonNeumannAlgebra π :=
+  SetLike.coe_injective (by
+    simp [gnsVonNeumann])
 
 /-- **A factor and its commutant.** A von Neumann algebra and its commutant share the
 same center (their intersection is symmetric), so the generated algebra `π(A)''` is a
@@ -378,7 +380,11 @@ factor if and only if its commutant `π(A)'` is a factor. -/
 theorem isFactor_gnsVonNeumann_iff_isFactor_commutant (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
     IsFactor (gnsVonNeumann π) ↔
       IsFactor (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) := by
-  sorry
+  unfold IsFactor
+  simp only [coe_commutantVonNeumann]
+  unfold gnsVonNeumann
+  simp
+  constructor <;> intro h <;> rw [Set.inter_comm] at h <;> exact h
 
 /-- **Triviality duality.** The commutant collapses to the scalars `π(A)' = ℂ · 1` if
 and only if the generated algebra is everything `π(A)'' = B(H)`. This is the commutant
@@ -387,7 +393,8 @@ theorem commutantVonNeumann_eq_scalars_iff_gnsVonNeumann_eq_univ
     (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
     (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) = scalarOperators H₁ ↔
       gnsVonNeumann π = Set.univ := by
-  sorry
+  rw [← isIrreducible_iff_commutantVonNeumann_eq_scalars]
+  exact isIrreducible_iff_gnsVonNeumann_eq_univ
 
 /-! ### The pure-state dichotomy -/
 
