@@ -519,6 +519,7 @@
     \lean{Physicslib4.exists_chronologicalFuture_standardMinkowski, Physicslib4.exists_chronologicalPast_standardMinkowski, Physicslib4.isOpen_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_chronologicalPast_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalPast_standardMinkowski}
     \leanfile{Physicslib4/Spacetime/Minkowski.lean}
     \uses{lmm:chronological-future-past-open, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, def:alexandrov-topology}
+    \leanok
     Work on standard Minkowski spacetime, with underlying manifold $\mathbb{R}^4$, and let $e_0$ denote the unit time vector (the first standard coordinate vector).
     \begin{enumerate}
         \item Every point has a chronological future point and a chronological past point: for all $x \in \mathbb{R}^4$ there exist $b, a$ with $x \ll b$ and $a \ll x$. Concretely $b = x + e_0$ lies in the forward cone of $x$ and $a = x - e_0$ lies in the backward cone of $x$, since the connecting vector $\pm e_0$ is future-, respectively past-pointing timelike.
@@ -527,6 +528,7 @@
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:chronological-future-past-open, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, def:alexandrov-topology}
     Part (i) is read off the coordinate cone description of standard Minkowski: for any $x$ the difference $(x + e_0) - x = e_0$ has metric square $g(e_0, e_0) = -1 < 0$ and positive time component, so it is future-pointing timelike; hence $x \ll x + e_0$ and the forward cone of $x$ is nonempty. Dually $(x - e_0) - x = -e_0$ is past-pointing timelike, so $x - e_0 \ll x$ and the backward cone of $x$ is nonempty.
 

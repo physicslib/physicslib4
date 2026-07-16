@@ -2095,7 +2095,25 @@ chronological future; concretely `x + e₀` lies in the forward Minkowski cone o
 theorem exists_chronologicalFuture_standardMinkowski (x : SpacetimeModel) :
     ∃ b, b ∈ Spacetime.chronologicalFuture StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation x := by
-  sorry
+  set b := x + EuclideanSpace.single (0 : Fin 4) (1 : ℝ) with hb
+  have single0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = 1 := by
+    rw [PiLp.single_apply]; simp
+  have b0 : b 0 = x 0 + 1 := by
+    rw [hb, PiLp.add_apply, single0]
+  have b1 : b 1 = x 1 := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply]; simp
+  have b2 : b 2 = x 2 := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply]; simp
+  have b3 : b 3 = x 3 := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply]; simp
+  refine ⟨b, ?_⟩
+  rw [chronologicalFuture_standardMinkowski]
+  have hmem : b ∈ minkowskiForwardCone x := by
+    rw [mem_minkowskiForwardCone, b0, b1, b2, b3]
+    constructor
+    · nlinarith
+    · norm_num
+  exact hmem
 
 /-- **Part (i), dual: existence of a chronological-past point.**
 Every point `x` of standard Minkowski spacetime has a point strictly to its
@@ -2103,7 +2121,25 @@ chronological past; concretely `x - e₀` lies in the backward Minkowski cone. -
 theorem exists_chronologicalPast_standardMinkowski (x : SpacetimeModel) :
     ∃ a, a ∈ Spacetime.chronologicalPast StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation x := by
-  sorry
+  set a := x - EuclideanSpace.single (0 : Fin 4) (1 : ℝ) with ha
+  have single0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = 1 := by
+    rw [PiLp.single_apply]; simp
+  have a0 : a 0 = x 0 - 1 := by
+    rw [ha, PiLp.sub_apply, single0]
+  have a1 : a 1 = x 1 := by
+    rw [ha, PiLp.sub_apply, PiLp.single_apply]; simp
+  have a2 : a 2 = x 2 := by
+    rw [ha, PiLp.sub_apply, PiLp.single_apply]; simp
+  have a3 : a 3 = x 3 := by
+    rw [ha, PiLp.sub_apply, PiLp.single_apply]; simp
+  refine ⟨a, ?_⟩
+  rw [chronologicalPast_standardMinkowski]
+  have hmem : a ∈ minkowskiBackwardCone x := by
+    rw [mem_minkowskiBackwardCone, a0, a1, a2, a3]
+    constructor
+    · nlinarith
+    · norm_num
+  exact hmem
 
 /-- **Part (ii): Euclidean openness of the chronological future.**
 On standard Minkowski spacetime `I⁺(p)` is open in the Euclidean (manifold)
@@ -2112,13 +2148,15 @@ forward Minkowski cone, which is open. -/
 theorem isOpen_chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
     IsOpen (Spacetime.chronologicalFuture StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation p) := by
-  sorry
+  rw [chronologicalFuture_standardMinkowski]
+  exact isOpen_minkowskiForwardCone p
 
 /-- **Part (ii), dual: Euclidean openness of the chronological past.** -/
 theorem isOpen_chronologicalPast_standardMinkowski (q : SpacetimeModel) :
     IsOpen (Spacetime.chronologicalPast StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation q) := by
-  sorry
+  rw [chronologicalPast_standardMinkowski]
+  exact isOpen_minkowskiBackwardCone q
 
 /-- **Part (iii): unconditional Alexandrov openness of the chronological future.**
 On standard Minkowski spacetime `I⁺(p)` is open in the Alexandrov topology,
@@ -2129,7 +2167,10 @@ theorem isOpen_alexandrov_chronologicalFuture_standardMinkowski (p : SpacetimeMo
         standardMinkowskiTimeOrientation)
       (Spacetime.chronologicalFuture StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation p) := by
-  sorry
+  refine Spacetime.isOpen_chronologicalFuture StandardMinkowskiSpacetime
+    standardMinkowskiTimeOrientation p ?_
+  intro x hx
+  exact exists_chronologicalFuture_standardMinkowski x
 
 /-- **Part (iii), dual: unconditional Alexandrov openness of the chronological past.** -/
 theorem isOpen_alexandrov_chronologicalPast_standardMinkowski (q : SpacetimeModel) :
@@ -2137,6 +2178,9 @@ theorem isOpen_alexandrov_chronologicalPast_standardMinkowski (q : SpacetimeMode
         standardMinkowskiTimeOrientation)
       (Spacetime.chronologicalPast StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation q) := by
-  sorry
+  refine Spacetime.isOpen_chronologicalPast StandardMinkowskiSpacetime
+    standardMinkowskiTimeOrientation q ?_
+  intro x hx
+  exact exists_chronologicalPast_standardMinkowski x
 
 end Physicslib4
