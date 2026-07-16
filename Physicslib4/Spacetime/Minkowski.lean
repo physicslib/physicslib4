@@ -2088,4 +2088,55 @@ noncomputable def MinkowskiSpacetime : Spacetime where
         ((extChartAt _ x₀).map_source (mem_extChartAt_source x₀))]
       rfl
 
+/-- **Part (i): existence of a chronological-future point (standard Minkowski).**
+Every point `x` of standard Minkowski spacetime has a point strictly to its
+chronological future; concretely `x + e₀` lies in the forward Minkowski cone of
+`x`, since the connecting vector `e₀` is future-pointing timelike. -/
+theorem exists_chronologicalFuture_standardMinkowski (x : SpacetimeModel) :
+    ∃ b, b ∈ Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation x := by
+  sorry
+
+/-- **Part (i), dual: existence of a chronological-past point.**
+Every point `x` of standard Minkowski spacetime has a point strictly to its
+chronological past; concretely `x - e₀` lies in the backward Minkowski cone. -/
+theorem exists_chronologicalPast_standardMinkowski (x : SpacetimeModel) :
+    ∃ a, a ∈ Spacetime.chronologicalPast StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation x := by
+  sorry
+
+/-- **Part (ii): Euclidean openness of the chronological future.**
+On standard Minkowski spacetime `I⁺(p)` is open in the Euclidean (manifold)
+topology on `ℝ⁴`; via the coordinate cone characterisation it coincides with the
+forward Minkowski cone, which is open. -/
+theorem isOpen_chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
+    IsOpen (Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation p) := by
+  sorry
+
+/-- **Part (ii), dual: Euclidean openness of the chronological past.** -/
+theorem isOpen_chronologicalPast_standardMinkowski (q : SpacetimeModel) :
+    IsOpen (Spacetime.chronologicalPast StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation q) := by
+  sorry
+
+/-- **Part (iii): unconditional Alexandrov openness of the chronological future.**
+On standard Minkowski spacetime `I⁺(p)` is open in the Alexandrov topology,
+unconditionally: the per-point hypothesis of the general lemma
+`Spacetime.isOpen_chronologicalFuture` is discharged by part (i). -/
+theorem isOpen_alexandrov_chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
+    @IsOpen _ (Spacetime.alexandrovTopology StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation)
+      (Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation p) := by
+  sorry
+
+/-- **Part (iii), dual: unconditional Alexandrov openness of the chronological past.** -/
+theorem isOpen_alexandrov_chronologicalPast_standardMinkowski (q : SpacetimeModel) :
+    @IsOpen _ (Spacetime.alexandrovTopology StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation)
+      (Spacetime.chronologicalPast StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation q) := by
+  sorry
+
 end Physicslib4

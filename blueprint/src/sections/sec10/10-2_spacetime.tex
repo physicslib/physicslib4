@@ -514,6 +514,27 @@
     The right-hand side is contained in $I^+(p)$ since every term is. Conversely, if $x \in I^+(p)$ then by hypothesis there is $b$ with $x \ll b$, i.e. $x \in I^-(b)$, so $x$ lies in the $b$-th term. Each set $I^+(p) \cap I^-(b)$ is a basis set and hence open (\ref{lmm:alexandrov-basis-open}), and an arbitrary union of open sets is open; therefore $I^+(p)$ is open. The third item is dual, using $I^-(p) = \bigcup_{a \in M} \bigl(I^+(a) \cap I^-(p)\bigr)$. (Recall also that chronological precedence $\ll$ is transitive, \ref{thrm:precedence-transitive}.)
 \end{proof}
 
+\begin{lemma}[Unconditional Openness of Chronological Futures and Pasts on Standard Minkowski]
+    \label{lmm:minkowski-chronological-open}
+    \lean{Physicslib4.exists_chronologicalFuture_standardMinkowski, Physicslib4.exists_chronologicalPast_standardMinkowski, Physicslib4.isOpen_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_chronologicalPast_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalPast_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \uses{lmm:chronological-future-past-open, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, def:alexandrov-topology}
+    Work on standard Minkowski spacetime, with underlying manifold $\mathbb{R}^4$, and let $e_0$ denote the unit time vector (the first standard coordinate vector).
+    \begin{enumerate}
+        \item Every point has a chronological future point and a chronological past point: for all $x \in \mathbb{R}^4$ there exist $b, a$ with $x \ll b$ and $a \ll x$. Concretely $b = x + e_0$ lies in the forward cone of $x$ and $a = x - e_0$ lies in the backward cone of $x$, since the connecting vector $\pm e_0$ is future-, respectively past-pointing timelike.
+        \item For every point $p$ the chronological future $I^+(p)$ and the chronological past $I^-(p)$ are open in the Euclidean (manifold) topology on $\mathbb{R}^4$. On standard Minkowski the coordinate cone characterisation identifies $I^+(p)$ with the forward Minkowski cone of $p$ and $I^-(p)$ with the backward Minkowski cone of $p$, and each such cone is an open subset of $\mathbb{R}^4$.
+        \item For every point $p$ the chronological future $I^+(p)$ and the chronological past $I^-(p)$ are open in the Alexandrov topology, \emph{unconditionally}: the per-point hypothesis of \ref{lmm:chronological-future-past-open} is discharged on standard Minkowski by part (i).
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:chronological-future-past-open, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, def:alexandrov-topology}
+    Part (i) is read off the coordinate cone description of standard Minkowski: for any $x$ the difference $(x + e_0) - x = e_0$ has metric square $g(e_0, e_0) = -1 < 0$ and positive time component, so it is future-pointing timelike; hence $x \ll x + e_0$ and the forward cone of $x$ is nonempty. Dually $(x - e_0) - x = -e_0$ is past-pointing timelike, so $x - e_0 \ll x$ and the backward cone of $x$ is nonempty.
+
+    Part (ii) combines the coordinate characterisation of $I^\pm$ on standard Minkowski with the openness of the explicit cones. Under the identification of $I^+(p)$ with the forward Minkowski cone $\{y \in \mathbb{R}^4 : g(y - p, y - p) < 0,\ (y - p)^0 > 0\}$, this set is the intersection of the preimages of the open sets $(-\infty, 0)$ and $(0, \infty)$ under the continuous maps $y \mapsto g(y - p, y - p)$ (a quadratic form) and $y \mapsto (y - p)^0$ (a coordinate projection); hence it is open in the Euclidean topology on $\mathbb{R}^4$. The backward cone description of $I^-(p)$ is dual and open by the same argument.
+
+    Part (iii) applies the general lemma \ref{lmm:chronological-future-past-open}: its last two items give the openness of $I^+(p)$ and $I^-(p)$ in the Alexandrov topology provided every point of the set in question has, respectively, a chronological-future point and a chronological-past point. On standard Minkowski these hypotheses hold at every point by part (i), so both conclusions are unconditional.
+\end{proof}
+
 \begin{definition}[Minkowski Spacetime]
     \label{def:minkowski-spacetime}
     \lean{Physicslib4.MinkowskiSpacetime}
