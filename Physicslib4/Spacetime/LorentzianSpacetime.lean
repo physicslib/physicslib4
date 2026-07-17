@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.Spacetime.Causality
 import Mathlib.Topology.Separation.Hausdorff
+import Mathlib.Topology.Bases
 
 /-!
 # Lorentzian spacetime
@@ -150,6 +151,57 @@ theorem isOpen_alexandrov_of_isBasisSet {B : Set M.Carrier}
     (hB : M.IsBasisSet B) :
     @IsOpen M.Carrier (alexandrovTopology M.toSpacetime M.timeOrientation) B :=
   Spacetime.isOpen_alexandrov_of_mem_basis M.toSpacetime M.timeOrientation hB
+
+/-! ### The Alexandrov diamonds as a genuine topological basis -/
+
+/-- **Covering from the Hausdorff assumption.** On a Lorentzian spacetime with at
+least two points, the Alexandrov diamonds cover the whole space: every point lies in
+some diamond `I⁺(p) ∩ I⁻(q)`. A point in no diamond would have `univ` as its only
+Alexandrov-open neighbourhood, contradicting Hausdorffness. -/
+theorem sUnion_alexandrovBasis_eq_univ [Nontrivial M.Carrier] :
+    ⋃₀ (alexandrovBasis M.toSpacetime M.timeOrientation) = Set.univ := by
+  rw [Set.eq_univ_iff_forall]
+  intro x
+  by_contra hx
+  -- hx : x ∉ ⋃₀ (alexandrovBasis ...) means every basis set misses x
+  -- Key: any Alexandrov-open set containing x must be the whole space.
+  have key : ∀ (U : Set M.Carrier),
+      TopologicalSpace.GenerateOpen (alexandrovBasis M.toSpacetime M.timeOrientation) U →
+      x ∈ U → U = Set.univ := by
+    intro U hU hxU
+    induction hU with
+    | basic s hs => exact (hx ⟨s, hs, hxU⟩).elim
+    | univ => rfl
+    | inter s t hs ht ihs iht => rw [ihs hxU.1, iht hxU.2, Set.inter_univ]
+    | sUnion G hG ih =>
+      obtain ⟨g, hgG, hxg⟩ := hxU
+      exact Set.univ_subset_iff.mp (ih g hgG hxg ▸ Set.subset_sUnion_of_mem hgG)
+  -- Choose a second point y ≠ x (the space is nontrivial); T₂ separation gives
+  -- disjoint open sets around x and y, but the one around x is forced to be `univ`.
+  obtain ⟨y, hy⟩ := exists_ne x
+  obtain ⟨U, V, hUo, _, hxU, hyV, hdisj⟩ :=
+    @t2_separation M.Carrier (alexandrovTopology M.toSpacetime M.timeOrientation)
+      M.instT2SpaceAlexandrov x y (Ne.symm hy)
+  exact Set.disjoint_left.mp hdisj ((key U hUo hxU).ge (Set.mem_univ y)) hyV
+
+/-- **The Alexandrov diamonds form a topological basis.** On a Lorentzian spacetime
+with at least two points, if the diamonds are downward-directed (the intersection
+property), they form a genuine `IsTopologicalBasis` for the Alexandrov topology. The
+covering condition is `sUnion_alexandrovBasis_eq_univ`; the generation condition is
+definitional. -/
+theorem isTopologicalBasis_alexandrovBasis [Nontrivial M.Carrier]
+    (hdir : ∀ B₁ ∈ alexandrovBasis M.toSpacetime M.timeOrientation,
+      ∀ B₂ ∈ alexandrovBasis M.toSpacetime M.timeOrientation,
+      ∀ x ∈ B₁ ∩ B₂, ∃ B₃ ∈ alexandrovBasis M.toSpacetime M.timeOrientation,
+        x ∈ B₃ ∧ B₃ ⊆ B₁ ∩ B₂) :
+    @TopologicalSpace.IsTopologicalBasis M.Carrier
+      (alexandrovTopology M.toSpacetime M.timeOrientation)
+      (alexandrovBasis M.toSpacetime M.timeOrientation) := by
+  refine @TopologicalSpace.IsTopologicalBasis.mk M.Carrier
+    (alexandrovTopology M.toSpacetime M.timeOrientation)
+    (alexandrovBasis M.toSpacetime M.timeOrientation)
+    hdir (sUnion_alexandrovBasis_eq_univ M) ?_
+  rfl
 
 end LorentzianSpacetime
 

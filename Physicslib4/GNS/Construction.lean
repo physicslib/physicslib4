@@ -195,12 +195,12 @@ theorem gns_unique {A : Type*} [CStarAlgebra A] (ω : State A)
       U Ω₁ = Ω₂ ∧ ∀ (a : A) (x : H₁), U (π₁ a x) = π₂ a (U x) := by
   let e₁ : A →ₗ[ℂ] H₁ :=
     { toFun := fun a => π₁ a Ω₁
-      map_add' := fun a b => by simp [map_add, ContinuousLinearMap.add_apply]
-      map_smul' := fun c a => by simp [map_smul, ContinuousLinearMap.smul_apply] }
+      map_add' := fun a b => by simp [map_add, add_apply]
+      map_smul' := fun c a => by simp [map_smul, smul_apply] }
   let e₂ : A →ₗ[ℂ] H₂ :=
     { toFun := fun a => π₂ a Ω₂
-      map_add' := fun a b => by simp [map_add, ContinuousLinearMap.add_apply]
-      map_smul' := fun c a => by simp [map_smul, ContinuousLinearMap.smul_apply] }
+      map_add' := fun a b => by simp [map_add, add_apply]
+      map_smul' := fun c a => by simp [map_smul, smul_apply] }
   have hdense₁ : DenseRange e₁ := hcyc₁
   have hdense₂ : DenseRange e₂ := hcyc₂
   have hinner_eq : ∀ a b : A, ⟪e₁ a, e₁ b⟫_ℂ = ⟪e₂ a, e₂ b⟫_ℂ := by
@@ -209,11 +209,11 @@ theorem gns_unique {A : Type*} [CStarAlgebra A] (ω : State A)
     have h1 : ⟪π₁ a Ω₁, π₁ b Ω₁⟫_ℂ = ⟪Ω₁, π₁ (star a * b) Ω₁⟫_ℂ := by
       rw [← ContinuousLinearMap.adjoint_inner_right,
           ← ContinuousLinearMap.star_eq_adjoint, ← map_star]
-      rw [map_mul, ContinuousLinearMap.mul_apply]
+      rw [map_mul, mul_apply_eq_comp]
     have h2 : ⟪π₂ a Ω₂, π₂ b Ω₂⟫_ℂ = ⟪Ω₂, π₂ (star a * b) Ω₂⟫_ℂ := by
       rw [← ContinuousLinearMap.adjoint_inner_right,
           ← ContinuousLinearMap.star_eq_adjoint, ← map_star]
-      rw [map_mul, ContinuousLinearMap.mul_apply]
+      rw [map_mul, mul_apply_eq_comp]
     rw [h1, h2, ← hrep₁, ← hrep₂]
   have hnorm : ∀ a : A, ‖e₂ a‖ = ‖e₁ a‖ := by
     intro a

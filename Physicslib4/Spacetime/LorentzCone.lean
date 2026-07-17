@@ -97,7 +97,7 @@ namespace Spacetime
 private theorem val_add_self (M : Spacetime) (x : M.Carrier)
     (v w : TangentSpace M.model x) :
     M.val x (v + w) (v + w) = M.val x v v + 2 * M.val x v w + M.val x w w := by
-  simp only [map_add, ContinuousLinearMap.add_apply]
+  simp only [map_add, add_apply]
   rw [M.symm x w v]; ring
 
 /-- **Convexity of the timelike cone** for the metric of a spacetime: the sum of

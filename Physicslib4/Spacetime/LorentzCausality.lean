@@ -295,12 +295,12 @@ theorem lorentzPath_isFutureEndpoint (g : InhomogeneousLorentzGroup)
 
 /-- **A Lorentz transformation maps causal trips to causal trips**, hence
 preserves causal precedence: if `p ≺ q` then `g • p ≺ g • q`. -/
-theorem causallyPrecedes_smul (g : InhomogeneousLorentzGroup)
+theorem causalSegmentPrecedes_smul (g : InhomogeneousLorentzGroup)
     {p q : StandardMinkowskiSpacetime.Carrier}
-    (h : CausallyPrecedes StandardMinkowskiSpacetime
+    (h : CausalSegmentPrecedes StandardMinkowskiSpacetime
           standardMinkowskiTimeOrientation p q) :
-    CausallyPrecedes StandardMinkowskiSpacetime standardMinkowskiTimeOrientation
-      (g • p) (g • q) := by
+    CausalSegmentPrecedes StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation (g • p) (g • q) := by
   obtain ⟨c, rep, hc, hcausal, hfut, hgeo, hpast, hfuture⟩ := h
   exact ⟨SmoothCurve.ofPath StandardMinkowskiSpacetime (lorentzPath g rep),
     lorentzPath g rep, rfl,
@@ -309,6 +309,18 @@ theorem causallyPrecedes_smul (g : InhomogeneousLorentzGroup)
     trivial,
     lorentzPath_isPastEndpoint g rep hpast,
     lorentzPath_isFutureEndpoint g rep hfuture⟩
+
+/-- **A Lorentz transformation maps causal trips to causal trips**, hence
+preserves causal precedence: if `p ≺ q` then `g • p ≺ g • q`. Lifts
+`causalSegmentPrecedes_smul` along the transitive closure. -/
+theorem causallyPrecedes_smul (g : InhomogeneousLorentzGroup)
+    {p q : StandardMinkowskiSpacetime.Carrier}
+    (h : CausallyPrecedes StandardMinkowskiSpacetime
+          standardMinkowskiTimeOrientation p q) :
+    CausallyPrecedes StandardMinkowskiSpacetime standardMinkowskiTimeOrientation
+      (g • p) (g • q) :=
+  Relation.TransGen.lift (fun x => g • x)
+    (fun _ _ hs => causalSegmentPrecedes_smul g hs) _ _ h
 
 /-- **Causal precedence is Lorentz invariant.** -/
 theorem causallyPrecedes_smul_iff (g : InhomogeneousLorentzGroup)
@@ -370,11 +382,11 @@ theorem lorentzPath_isTimelike (g : InhomogeneousLorentzGroup)
 
 /-- **A Lorentz transformation maps trips to trips**, hence preserves
 chronological precedence: if `p ≪ q` then `g • p ≪ g • q`. -/
-theorem chronologicallyPrecedes_smul (g : InhomogeneousLorentzGroup)
+theorem segmentPrecedes_smul (g : InhomogeneousLorentzGroup)
     {p q : StandardMinkowskiSpacetime.Carrier}
-    (h : ChronologicallyPrecedes StandardMinkowskiSpacetime
+    (h : SegmentPrecedes StandardMinkowskiSpacetime
           standardMinkowskiTimeOrientation p q) :
-    ChronologicallyPrecedes StandardMinkowskiSpacetime
+    SegmentPrecedes StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation (g • p) (g • q) := by
   obtain ⟨c, rep, hc, htimelike, hfut, hgeo, hpast, hfuture⟩ := h
   exact ⟨SmoothCurve.ofPath StandardMinkowskiSpacetime (lorentzPath g rep),
@@ -384,6 +396,17 @@ theorem chronologicallyPrecedes_smul (g : InhomogeneousLorentzGroup)
     trivial,
     lorentzPath_isPastEndpoint g rep hpast,
     lorentzPath_isFutureEndpoint g rep hfuture⟩
+
+/-- **A Lorentz transformation maps trips to trips**, hence preserves
+chronological precedence: if `p ≪ q` then `g • p ≪ g • q`. Lifts
+`segmentPrecedes_smul` along the transitive closure. -/
+theorem chronologicallyPrecedes_smul (g : InhomogeneousLorentzGroup)
+    {p q : StandardMinkowskiSpacetime.Carrier}
+    (h : ChronologicallyPrecedes StandardMinkowskiSpacetime
+          standardMinkowskiTimeOrientation p q) :
+    ChronologicallyPrecedes StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation (g • p) (g • q) :=
+  Relation.TransGen.lift (fun x => g • x) (fun _ _ hs => segmentPrecedes_smul g hs) _ _ h
 
 /-- **Chronological precedence is Lorentz invariant.** -/
 theorem chronologicallyPrecedes_smul_iff (g : InhomogeneousLorentzGroup)

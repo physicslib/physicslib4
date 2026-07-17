@@ -228,21 +228,51 @@
 
 \begin{definition}[Trip]
     \label{def:trip}
-    \lean{Physicslib4.Spacetime.IsTrip, Physicslib4.Spacetime.ChronologicallyPrecedes}
+    \lean{Physicslib4.Spacetime.IsTripSegment, Physicslib4.Spacetime.IsTrip, Physicslib4.Spacetime.ChronologicallyPrecedes}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
     \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints}
-    A \textit{trip} is a curve which is piecewise a future-oriented, timelike geodesic. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
+    A \textit{trip segment} is a curve which is a future-oriented, timelike geodesic. A \textit{trip} is a curve which is \emph{piecewise} a future-oriented, timelike geodesic: a finite chain of trip segments $p = x_0, x_1, \dots, x_n = q$ joined at matching endpoints. Formally this is the transitive closure of single-segment precedence, which is what makes the relation transitive by concatenation. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
 \end{definition}
 
 \begin{definition}[Causal Trip]
     \label{def:causal-trip}
-    \lean{Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes}
+    \lean{Physicslib4.Spacetime.IsCausalTripSegment, Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
     \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints}
-    A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
+    A \textit{causal trip segment} is a curve which is a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic: a finite chain of causal trip segments joined at matching endpoints. A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
 \end{definition}
+
+\medskip
+\noindent\textbf{Remark (geodesic placeholder in the formalization).} In the Lean formalization the ``geodesic'' clause of a (causal) trip segment is currently a \emph{placeholder}: the predicate \texttt{Physicslib4.Spacetime.IsGeodesic} is defined to be \texttt{True}, so it imposes no constraint. A faithful geodesic condition requires the Levi-Civita connection of the metric (auto-parallelism of the tangent vector along the curve), which the version of Mathlib pinned by this project does not provide. Consequently the formalized (causal) trip segments are future-oriented timelike (resp. causal) curves with the correct past and future endpoints, but their geodesic property is not yet enforced; the endpoint, timelike/causal, and future-orientation content is faithful. This is the one place where \ref{def:trip} and \ref{def:causal-trip} diverge from their Lean implementations, and it should be replaced by the genuine geodesic condition once a Lorentzian Levi-Civita connection is available in Mathlib.
+
+\begin{theorem}[Transitivity of chronological and causal precedence]
+    \label{thrm:precedence-transitive}
+    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.causallyPrecedes_trans}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:trip, def:causal-trip}
+    Chronological precedence $\ll$ and causal precedence $\prec$ are transitive: if $p \ll q$ and $q \ll r$ then $p \ll r$, and likewise for $\prec$. Two trips joined at the common point $q$ concatenate to a single piecewise trip; this is exactly the transitivity of the transitive closure.
+\end{theorem}
+
+\begin{definition}[No Closed Causal Curve (Causality Condition)]
+    \label{def:no-closed-causal-curve}
+    \lean{Physicslib4.Spacetime.NoClosedCausalCurve}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:causal-trip}
+    A spacetime $M$ with time orientation $t$ satisfies the \emph{causality condition} --- equivalently, has \emph{no closed causal curve} --- when no point causally precedes itself: $\lnot(p \prec p)$ for every $p$. A closed causal curve through $p$ would be a causal trip from $p$ back to $p$, i.e.\ $p \prec p$, so its absence is exactly this condition. This is the standard causality condition, strictly weaker than strong causality and strictly stronger than the chronology condition ($\lnot(p \ll p)$ for all $p$).
+\end{definition}
+
+\begin{theorem}[Irreflexivity and Antisymmetry under Causality]
+    \label{thrm:causal-order-refinements}
+    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_irrefl, Physicslib4.Spacetime.causallyPrecedes_asymm, Physicslib4.Spacetime.causallyPrecedes_antisymm}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:no-closed-causal-curve, thrm:precedence-transitive, lmm:chronological-implies-causal}
+    \leanok
+    Assume $M$ has no closed causal curve. Then chronological precedence is irreflexive, $\lnot(p \ll p)$ for every $p$ (since $p \ll p$ would give $p \prec p$ because chronological precedence implies causal precedence), and causal precedence is asymmetric and antisymmetric: $p \prec q$ excludes $q \prec p$, and $p \prec q$ together with $q \prec p$ forces $p = q$ (indeed both cannot hold, since transitivity would give the forbidden $p \prec p$). Thus, under the causality condition, $\prec$ is a strict partial order on the events of the spacetime.
+\end{theorem}
 
 \begin{definition}[Chronological Future and Chronological Past]
     \label{def:chronological-future-and-chronological-past}
@@ -346,6 +376,113 @@
     Each follows directly from the pointwise definition: monotonicity by restricting the universally-quantified points, the empty cases vacuously, and the union cases by splitting the membership disjunction.
 \end{proof}
 
+\begin{definition}[Spacelike Complement of a Region]
+    \label{def:spacelike-complement}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:completely-spacelike, def:lorentzian-spacetime}
+    The \emph{spacelike complement} $\mathbf{B}^\perp$ of a region $\mathbf{B}$ is the set of points completely spacelike-separated from all of $\mathbf{B}$: $\mathbf{B}^\perp = \{ x \mid \{x\} \text{ is completely spacelike to } \mathbf{B} \}$. It is the geometric substrate of locality and Haag duality.
+\end{definition}
+
+\begin{lemma}[Order Structure of the Spacelike Complement]
+    \label{lmm:spacelike-complement-order}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_iff}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:spacelike-complement, lmm:completely-spacelike-symm, lmm:completely-spacelike-structural}
+    The spacelike complement is antitone ($\mathbf{B}_1 \subseteq \mathbf{B}_2 \Rightarrow \mathbf{B}_2^\perp \subseteq \mathbf{B}_1^\perp$), a region is contained in its double complement ($\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$), and the triple complement collapses ($\mathbf{B}^{\perp\perp\perp} = \mathbf{B}^\perp$). Moreover $\mathbf{B}_1 \subseteq \mathbf{B}_2^\perp$ if and only if $\mathbf{B}_1$ and $\mathbf{B}_2$ are completely spacelike-separated, so complementation is the Galois connection attached to the spacelike-separation relation.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Antitonicity and the Galois bridge are the pointwise monotonicity of complete spacelike separation; the double-complement inclusion follows by symmetry of the relation; and the triple-complement identity is the standard consequence of antitonicity together with the double-complement inclusion.
+\end{proof}
+
+\begin{definition}[Causal closure operator]
+    \label{def:causal-closure}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalClosure}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:spacelike-complement, lmm:spacelike-complement-order}
+    The double spacelike complement $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ is a \emph{closure operator} on the regions of a Lorentzian spacetime: it is monotone, extensive ($\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$), and idempotent ($\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$). Its three defining properties are exactly the order structure of the spacelike complement.
+\end{definition}
+
+\begin{definition}[Causally complete region]
+    \label{def:causally-complete-region}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.IsCausallyComplete}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:causal-closure}
+    A region is \emph{causally complete} if it equals its own double complement, $\mathbf{B}^{\perp\perp} = \mathbf{B}$ (a fixed point of the causal closure operator). These are the regions on which algebraic QFT is naturally indexed.
+\end{definition}
+
+\begin{theorem}[Lattice of causally complete regions]
+    \label{thrm:causally-complete-lattice}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_causalComplement}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:causally-complete-region}
+    The causally complete regions form a \emph{complete lattice} (meets are intersections, joins are causal closures of unions), obtained from the causal closure operator via its Galois insertion. The spacelike complement of any region is causally complete, causally complete regions are closed under intersection, and the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an \emph{order-reversing involution} on this lattice ($\mathbf{B}^{\perp\perp} = \mathbf{B}$). (The full orthocomplement law $\mathbf{B} \wedge \mathbf{B}^\perp = \bot$ does not hold at this generality, because the trip-based causal relation is irreflexive, so a point is spacelike-separated from itself; what holds is the complete lattice with an order-reversing De~Morgan involution.)
+\end{theorem}
+
+\begin{lemma}[De Morgan Laws for the Spacelike Complement]
+    \label{lmm:spacelike-complement-de-morgan}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_union, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_iUnion}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
+    \leanok
+    At the level of the underlying sets, the spacelike complement turns unions into intersections. In binary form, for regions $\mathbf{B}_1, \mathbf{B}_2$,
+    \begin{align}
+        (\mathbf{B}_1 \cup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \cap \mathbf{B}_2^\perp,
+    \end{align}
+    and, for an arbitrary indexed family $(\mathbf{B}_i)_{i \in I}$,
+    \begin{align}
+        \Bigl(\bigcup_{i \in I} \mathbf{B}_i\Bigr)^\perp = \bigcap_{i \in I} \mathbf{B}_i^\perp.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
+    Unfold the spacelike complement pointwise: $x \in \mathbf{B}^\perp$ means the singleton $\{x\}$ is completely spacelike to $\mathbf{B}$. By the structural properties of complete spacelike separation (\ref{lmm:completely-spacelike-structural}), $\{x\}$ is completely spacelike to a union $\bigcup_i \mathbf{B}_i$ if and only if it is completely spacelike to each member $\mathbf{B}_i$. Hence membership in the complement of the union is the conjunction of membership in the individual complements, which is exactly membership in their intersection. The binary case is the special case of a two-element family.
+\end{proof}
+
+\begin{theorem}[De Morgan Laws for the Causal Complement]
+    \label{thrm:causal-complement-de-morgan}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_bot, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_top, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_sup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_inf, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iSup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iInf}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{thrm:causally-complete-lattice, lmm:spacelike-complement-de-morgan}
+    \leanok
+    On the complete lattice of causally complete regions the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an order-reversing involution, and therefore satisfies the full De Morgan laws. Explicitly:
+    \begin{itemize}
+        \item (order-reversing) $\mathbf{B}_1 \le \mathbf{B}_2 \Rightarrow \mathbf{B}_2^\perp \le \mathbf{B}_1^\perp$;
+        \item (bounds) $\bot^\perp = \top$ and $\top^\perp = \bot$;
+        \item (binary De Morgan) $(\mathbf{B}_1 \sqcup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \sqcap \mathbf{B}_2^\perp$ and $(\mathbf{B}_1 \sqcap \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \sqcup \mathbf{B}_2^\perp$;
+        \item (infinitary De Morgan) $\bigl(\bigsqcup_i \mathbf{B}_i\bigr)^\perp = \bigsqcap_i \mathbf{B}_i^\perp$ and $\bigl(\bigsqcap_i \mathbf{B}_i\bigr)^\perp = \bigsqcup_i \mathbf{B}_i^\perp$.
+    \end{itemize}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:causally-complete-lattice, lmm:spacelike-complement-de-morgan}
+    Recall from the lattice structure (\ref{thrm:causally-complete-lattice}) that on causally complete regions meets are intersections of the underlying sets, joins are the causal closures of unions ($\mathbf{B}_1 \sqcup \mathbf{B}_2 = (\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp}$ and dually for arbitrary families), the complement of any region is causally complete, and every region in the lattice satisfies the involution $\mathbf{B}^{\perp\perp} = \mathbf{B}$; in particular the triple-complement identity $\mathbf{C}^{\perp\perp\perp} = \mathbf{C}^\perp$ holds for any underlying set $\mathbf{C}$, since $\mathbf{C}^\perp$ is causally complete. Each law is then a direct computation on the underlying sets driven by the set-level De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}).
+
+    \begin{itemize}
+        \item (order-reversing) This is the antitonicity half of the order-reversing involution supplied by \ref{thrm:causally-complete-lattice}: $\mathbf{B}_1 \le \mathbf{B}_2$ means $\mathbf{B}_1 \subseteq \mathbf{B}_2$, whence $\mathbf{B}_2^\perp \subseteq \mathbf{B}_1^\perp$, i.e. $\mathbf{B}_2^\perp \le \mathbf{B}_1^\perp$.
+        \item (join laws) Since the join is the causal closure of the union, the triple-complement identity collapses one level of complement:
+        \begin{align}
+            (\mathbf{B}_1 \sqcup \mathbf{B}_2)^\perp = \bigl((\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp}\bigr)^\perp = (\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp\perp} = (\mathbf{B}_1 \cup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \cap \mathbf{B}_2^\perp = \mathbf{B}_1^\perp \sqcap \mathbf{B}_2^\perp,
+        \end{align}
+        the fourth equality being the binary set-level De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}) and the last using that lattice meets are intersections. The indexed form is identical with the indexed De Morgan lemma in place of the binary one, giving $\bigl(\bigsqcup_i \mathbf{B}_i\bigr)^\perp = \bigsqcap_i \mathbf{B}_i^\perp$.
+        \item (meet laws) Apply the set-level De Morgan lemma to the complements $\mathbf{B}_1^\perp, \mathbf{B}_2^\perp$ and use $\mathbf{B}_i^{\perp\perp} = \mathbf{B}_i$ (each $\mathbf{B}_i$ is causally complete): $(\mathbf{B}_1^\perp \cup \mathbf{B}_2^\perp)^\perp = \mathbf{B}_1^{\perp\perp} \cap \mathbf{B}_2^{\perp\perp} = \mathbf{B}_1 \cap \mathbf{B}_2$. Taking the complement of both sides and recognising the meet as the intersection and the join as the double-complement of the union,
+        \begin{align}
+            (\mathbf{B}_1 \sqcap \mathbf{B}_2)^\perp = (\mathbf{B}_1 \cap \mathbf{B}_2)^\perp = (\mathbf{B}_1^\perp \cup \mathbf{B}_2^\perp)^{\perp\perp} = \mathbf{B}_1^\perp \sqcup \mathbf{B}_2^\perp,
+        \end{align}
+        and likewise $\bigl(\bigsqcap_i \mathbf{B}_i\bigr)^\perp = \bigsqcup_i \mathbf{B}_i^\perp$ from the indexed De Morgan lemma.
+        \item (bounds) The empty-family case of the indexed De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}) reads $\varnothing^\perp = \mathrm{univ}$, so $\top = \mathrm{univ} = \varnothing^\perp$. Hence $\top^\perp = \varnothing^{\perp\perp} = \bot$, while $\bot = \varnothing^{\perp\perp}$ and the triple-complement identity give $\bot^\perp = \varnothing^{\perp\perp\perp} = \varnothing^\perp = \top$.
+    \end{itemize}
+
+    The mathematical subtlety is that this lattice is \emph{not} linearly ordered, so the binary equalities do \emph{not} follow from antitonicity alone: a general antitone map only yields the inequality $f(\mathbf{B}_1 \sqcup \mathbf{B}_2) \le f\mathbf{B}_1 \sqcap f\mathbf{B}_2$. The equalities hold precisely because the causal complement is an order-reversing \emph{bijection} (the involution $\mathbf{B}^{\perp\perp} = \mathbf{B}$), equivalently an order isomorphism onto the order-dual lattice; it is this bijectivity that both forces the finite equalities above and, through the same set-level De Morgan computation applied to arbitrary unions, upgrades them to the infinitary laws by carrying suprema to infima.
+\end{proof}
+
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
     \lean{Physicslib4.Spacetime.alexandrovTopology}
@@ -366,6 +503,56 @@
 \begin{proof}
     \leanok
     By construction the Alexandrov topology is generated by these basis sets, and any generating set is open in the generated topology.
+\end{proof}
+
+\begin{lemma}[Openness of Chronological Futures and Pasts]
+    \label{lmm:chronological-future-past-open}
+    \lean{Physicslib4.Spacetime.isOpen_chronologicalFuture_inter_chronologicalPast, Physicslib4.Spacetime.isOpen_chronologicalFuture, Physicslib4.Spacetime.isOpen_chronologicalPast}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:chronological-future-and-chronological-past, def:alexandrov-topology, lmm:alexandrov-basis-open}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$, equipped with the Alexandrov topology.
+    \begin{itemize}
+        \item For all points $p, q \in M$ the set $I^+(p) \cap I^-(q)$ is open. This is just the basis lemma (\ref{lmm:alexandrov-basis-open}) restated on chronological futures and pasts.
+        \item If every point of $I^+(p)$ has a chronological-future point, i.e. for all $x \in I^+(p)$ there exists $b$ with $x \ll b$, then the chronological future $I^+(p)$ is open.
+        \item Dually, if every point of $I^-(p)$ has a chronological-past point, i.e. for all $x \in I^-(p)$ there exists $a$ with $a \ll x$, then the chronological past $I^-(p)$ is open.
+    \end{itemize}
+
+    The per-point hypotheses in the last two items are quantified over the members of the set in question, so they hold \emph{vacuously} when that set is empty; this is consistent, since the empty set is open. The flat unconditional claim ``$I^+(p)$ is always open'' is \emph{false} for a general spacetime: if $I^+(p)$ is nonempty and contains a future-endpoint point $x$ (a point with no $b$ satisfying $x \ll b$), then $x$ lies in no basis set $I^+(a) \cap I^-(b)$, since membership there forces $a \ll x \ll b$ and in particular $x \ll b$. Hence $x$ has no basic Alexandrov neighbourhood contained in $I^+(p)$ and $I^+(p)$ fails to be open. The hypothesis is exactly the ``no future endpoints'' condition that removes this obstruction, and dually for pasts.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chronological-future-and-chronological-past, def:alexandrov-topology, lmm:alexandrov-basis-open}
+    The first item is the basis lemma (\ref{lmm:alexandrov-basis-open}) directly: $I^+(p) \cap I^-(q)$ is a basis set, hence open.
+
+    For the second item, under the hypothesis we have the set identity
+    \begin{align}
+        I^+(p) = \bigcup_{b \in M} \bigl(I^+(p) \cap I^-(b)\bigr).
+    \end{align}
+    The right-hand side is contained in $I^+(p)$ since every term is. Conversely, if $x \in I^+(p)$ then by hypothesis there is $b$ with $x \ll b$, i.e. $x \in I^-(b)$, so $x$ lies in the $b$-th term. Each set $I^+(p) \cap I^-(b)$ is a basis set and hence open (\ref{lmm:alexandrov-basis-open}), and an arbitrary union of open sets is open; therefore $I^+(p)$ is open. The third item is dual, using $I^-(p) = \bigcup_{a \in M} \bigl(I^+(a) \cap I^-(p)\bigr)$. (Recall also that chronological precedence $\ll$ is transitive, \ref{thrm:precedence-transitive}.)
+\end{proof}
+
+\begin{lemma}[Unconditional Openness of Chronological Futures and Pasts on Standard Minkowski]
+    \label{lmm:minkowski-chronological-open}
+    \lean{Physicslib4.exists_chronologicalFuture_standardMinkowski, Physicslib4.exists_chronologicalPast_standardMinkowski, Physicslib4.isOpen_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_chronologicalPast_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalPast_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \uses{lmm:chronological-future-past-open, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, def:alexandrov-topology}
+    \leanok
+    Work on standard Minkowski spacetime, with underlying manifold $\mathbb{R}^4$, and let $e_0$ denote the unit time vector (the first standard coordinate vector).
+    \begin{enumerate}
+        \item Every point has a chronological future point and a chronological past point: for all $x \in \mathbb{R}^4$ there exist $b, a$ with $x \ll b$ and $a \ll x$. Concretely $b = x + e_0$ lies in the forward cone of $x$ and $a = x - e_0$ lies in the backward cone of $x$, since the connecting vector $\pm e_0$ is future-, respectively past-pointing timelike.
+        \item For every point $p$ the chronological future $I^+(p)$ and the chronological past $I^-(p)$ are open in the Euclidean (manifold) topology on $\mathbb{R}^4$. On standard Minkowski the coordinate cone characterisation identifies $I^+(p)$ with the forward Minkowski cone of $p$ and $I^-(p)$ with the backward Minkowski cone of $p$, and each such cone is an open subset of $\mathbb{R}^4$.
+        \item For every point $p$ the chronological future $I^+(p)$ and the chronological past $I^-(p)$ are open in the Alexandrov topology, \emph{unconditionally}: the per-point hypothesis of \ref{lmm:chronological-future-past-open} is discharged on standard Minkowski by part (i).
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:chronological-future-past-open, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, def:alexandrov-topology}
+    Part (i) is read off the coordinate cone description of standard Minkowski: for any $x$ the difference $(x + e_0) - x = e_0$ has metric square $g(e_0, e_0) = -1 < 0$ and positive time component, so it is future-pointing timelike; hence $x \ll x + e_0$ and the forward cone of $x$ is nonempty. Dually $(x - e_0) - x = -e_0$ is past-pointing timelike, so $x - e_0 \ll x$ and the backward cone of $x$ is nonempty.
+
+    Part (ii) combines the coordinate characterisation of $I^\pm$ on standard Minkowski with the openness of the explicit cones. Under the identification of $I^+(p)$ with the forward Minkowski cone $\{y \in \mathbb{R}^4 : g(y - p, y - p) < 0,\ (y - p)^0 > 0\}$, this set is the intersection of the preimages of the open sets $(-\infty, 0)$ and $(0, \infty)$ under the continuous maps $y \mapsto g(y - p, y - p)$ (a quadratic form) and $y \mapsto (y - p)^0$ (a coordinate projection); hence it is open in the Euclidean topology on $\mathbb{R}^4$. The backward cone description of $I^-(p)$ is dual and open by the same argument.
+
+    Part (iii) applies the general lemma \ref{lmm:chronological-future-past-open}: its last two items give the openness of $I^+(p)$ and $I^-(p)$ in the Alexandrov topology provided every point of the set in question has, respectively, a chronological-future point and a chronological-past point. On standard Minkowski these hypotheses hold at every point by part (i), so both conclusions are unconditional.
 \end{proof}
 
 \begin{definition}[Minkowski Spacetime]
@@ -397,6 +584,102 @@
 \begin{proof}
     \leanok
     These are restatements of the symmetry of complete spacelike separation and the openness of basis sets for the underlying spacetime, transported through the bundling of a Lorentzian spacetime over its underlying spacetime and time orientation.
+\end{proof}
+
+\begin{lemma}[No-Diamond Points Have Only the Whole Space as Neighbourhood]
+    \label{lmm:alexandrov-nbhd-univ-of-no-diamond}
+    \lean{alexandrov_nbhd_univ_of_no_diamond}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:alexandrov-topology}
+    \leanok
+    On a spacetime equipped with the Alexandrov topology, suppose a point $x$ lies in no diamond $I^+(p) \cap I^-(q)$. Then every Alexandrov-open set containing $x$ is the whole space $M$: the only open neighbourhood of $x$ is $M$ itself.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The Alexandrov topology is generated by the diamond subbasis, so its open sets are exactly those built by the inductive generating construction, and we induct over that construction to show any generated-open set $U$ with $x \in U$ equals $M$. A basic generating set is a diamond, which cannot contain $x$ by hypothesis, so that case is vacuous. The whole-space generator is $M$. A binary intersection $s \cap t$ containing $x$ has $x \in s$ and $x \in t$, so $s = t = M$ by the induction hypothesis and $s \cap t = M$. A union $\bigcup_i s_i$ containing $x$ contains $x$ in some member $s_i$, which equals $M$ by the induction hypothesis, so the union contains $M$ and hence equals $M$. Thus no generated-open set other than $M$ contains $x$.
+\end{proof}
+
+\begin{lemma}[Covering from the Hausdorff Assumption]
+    \label{lmm:alexandrov-covering-hausdorff}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.sUnion_alexandrovBasis_eq_univ}
+    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \uses{def:lorentzian-spacetime, def:alexandrov-topology, lmm:alexandrov-nbhd-univ-of-no-diamond}
+    \leanok
+    On a Lorentzian spacetime with at least two points, the Alexandrov diamonds cover the whole space: every point lies in some diamond $I^+(p) \cap I^-(q)$. Equivalently, every point has both a chronological past point and a chronological future point (a ``no endpoints'' condition). This is a genuine consequence of the Hausdorff assumption on the Alexandrov topology, not an extra hypothesis.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:alexandrov-nbhd-univ-of-no-diamond}
+    Suppose a point $x$ lay in no diamond $I^+(p) \cap I^-(q)$. Then by \ref{lmm:alexandrov-nbhd-univ-of-no-diamond} the only Alexandrov-open set containing $x$ is the whole space $M$. Since the space has a second point $y \ne x$, the Hausdorff assumption on the Alexandrov topology provides disjoint open sets separating $x$ and $y$; but the one containing $x$ must be all of $M$, which also contains $y$, contradicting disjointness. Hence every point lies in some diamond, which is exactly the covering half of the Alexandrov-basis property; unfolding membership in a diamond gives the equivalent ``no endpoints'' statement.
+\end{proof}
+
+\begin{theorem}[The Alexandrov Diamonds Form a Topological Basis]
+    \label{thrm:alexandrov-topological-basis}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.isTopologicalBasis_alexandrovBasis}
+    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \uses{lmm:alexandrov-covering-hausdorff, def:alexandrov-topology, def:lorentzian-spacetime}
+    \leanok
+    On a Lorentzian spacetime with at least two points, suppose the diamonds are downward-directed: for any two diamonds $B_1, B_2$ and any point $x \in B_1 \cap B_2$ there is a diamond $B_3$ with $x \in B_3 \subseteq B_1 \cap B_2$ (the intersection property). Then the diamonds form a genuine topological basis for the Alexandrov topology.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The three conditions of a topological basis all hold. The intersection (downward-directedness) property is the standing hypothesis. The covering condition --- that the diamonds' union is the whole space --- is \ref{lmm:alexandrov-covering-hausdorff}. The topology-generation condition holds by definition, since the Alexandrov topology is \emph{defined} as the topology generated by the diamond subbasis. The directedness hypothesis is the genuinely geometric content: it is exactly the assertion that the Alexandrov topology has the diamonds as a base, and it is not implied by Hausdorffness alone; it is discharged for standard Minkowski in \ref{thrm:minkowski-alexandrov-basis}.
+\end{proof}
+
+\begin{lemma}[Past Interpolation on Standard Minkowski]
+    \label{lmm:minkowski-past-between}
+    \lean{Physicslib4.Spacetime.exists_past_between_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
+    \leanok
+    On standard Minkowski spacetime, if $p_1 \ll x$ and $p_2 \ll x$ then there is a point $a$ with $p_1 \ll a$, $p_2 \ll a$, and $a \ll x$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-chronological-open}
+    Take $a$ with the same spatial coordinates as $x$ and time coordinate $a^0 = x^0 - \varepsilon$ for a small $\varepsilon > 0$. Then $x - a = (\varepsilon, \mathbf{0})$ is future-pointing timelike, so $a \ll x$. For each $i$ the connecting vector $a - p_i$ has the same spatial part as $x - p_i$ while its time component is $(x^0 - p_i^0) - \varepsilon$; since $p_i \ll x$ makes the spatial separation strictly smaller than $x^0 - p_i^0$, for $\varepsilon$ small enough the reduced time gap still dominates the spatial separation and remains positive, so $a - p_i$ is future-pointing timelike and $p_i \ll a$. Both strict inequalities hold for a common small $\varepsilon$; the estimate is a direct coordinate computation (\texttt{nlinarith}).
+\end{proof}
+
+\begin{lemma}[Future Interpolation on Standard Minkowski]
+    \label{lmm:minkowski-future-between}
+    \lean{Physicslib4.Spacetime.exists_future_between_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
+    \leanok
+    On standard Minkowski spacetime, if $x \ll q_1$ and $x \ll q_2$ then there is a point $b$ with $x \ll b$, $b \ll q_1$, and $b \ll q_2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-past-between, lmm:minkowski-chronological-open}
+    Dual to \ref{lmm:minkowski-past-between}: take $b$ with the same spatial coordinates as $x$ and time coordinate $b^0 = x^0 + \varepsilon$ for a small $\varepsilon > 0$. Then $b - x = (\varepsilon, \mathbf{0})$ is future-pointing timelike, so $x \ll b$, and for each $i$ the vector $q_i - b$ keeps the spatial part of $q_i - x$ with time component $(q_i^0 - x^0) - \varepsilon$; for $\varepsilon$ small enough it stays future-pointing timelike, giving $b \ll q_i$ for both $i$ by the same coordinate estimate.
+\end{proof}
+
+\begin{lemma}[Standard Minkowski Diamonds Are Downward-Directed]
+    \label{lmm:minkowski-diamonds-downward-directed}
+    \lean{Physicslib4.Spacetime.alexandrovBasis_exists_subset_inter_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \uses{lmm:minkowski-past-between, lmm:minkowski-future-between, thrm:precedence-transitive, def:standard-minkowski-spacetime, def:alexandrov-topology, def:chronological-future-and-chronological-past}
+    \leanok
+    On standard Minkowski spacetime the Alexandrov diamonds have the downward intersection property: for any two diamonds $B_1 = I^+(p_1) \cap I^-(q_1)$ and $B_2 = I^+(p_2) \cap I^-(q_2)$ and any $x \in B_1 \cap B_2$, there is a diamond $B_3$ with $x \in B_3 \subseteq B_1 \cap B_2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-past-between, lmm:minkowski-future-between, thrm:precedence-transitive}
+    From $x \in B_1 \cap B_2$ we have $p_1 \ll x$, $p_2 \ll x$, $x \ll q_1$, and $x \ll q_2$. Past interpolation (\ref{lmm:minkowski-past-between}) yields $a$ with $p_1 \ll a$, $p_2 \ll a$, and $a \ll x$; future interpolation (\ref{lmm:minkowski-future-between}) yields $b$ with $x \ll b$, $b \ll q_1$, and $b \ll q_2$. Set $B_3 = I^+(a) \cap I^-(b)$; then $a \ll x \ll b$ gives $x \in B_3$. For containment, any $y$ with $a \ll y \ll b$ satisfies $p_i \ll a \ll y$ and $y \ll b \ll q_i$ for each $i$, so by transitivity of $\ll$ (\ref{thrm:precedence-transitive}) $y \in I^+(p_i) \cap I^-(q_i)$; hence $B_3 \subseteq B_1 \cap B_2$.
+\end{proof}
+
+\begin{theorem}[The Alexandrov Diamonds are a Basis on Standard Minkowski]
+    \label{thrm:minkowski-alexandrov-basis}
+    \lean{Physicslib4.Spacetime.isTopologicalBasis_alexandrovBasis_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \uses{thrm:alexandrov-topological-basis, lmm:minkowski-diamonds-downward-directed, lmm:minkowski-chronological-open, def:standard-minkowski-spacetime, def:alexandrov-topology}
+    \leanok
+    On standard Minkowski spacetime the Alexandrov diamonds form a genuine topological basis for the Alexandrov topology, unconditionally.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:alexandrov-topological-basis, lmm:minkowski-diamonds-downward-directed, lmm:minkowski-chronological-open}
+    Apply \ref{thrm:alexandrov-topological-basis}. Its downward intersection hypothesis is discharged by \ref{lmm:minkowski-diamonds-downward-directed}, and its covering condition holds because on standard Minkowski every point has a chronological past point and a chronological future point (\ref{lmm:minkowski-chronological-open}). The topology-generation condition holds by definition of the Alexandrov topology.
 \end{proof}
 
 \subsection{Isometries and basis-set preservation}

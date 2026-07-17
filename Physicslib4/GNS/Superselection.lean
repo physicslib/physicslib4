@@ -49,11 +49,11 @@ theorem intertwines_zero : Intertwines π₁ π₂ (0 : H₁ →L[ℂ] H₂) := 
 
 theorem Intertwines.add {S T : H₁ →L[ℂ] H₂} (hS : Intertwines π₁ π₂ S)
     (hT : Intertwines π₁ π₂ T) : Intertwines π₁ π₂ (S + T) := fun a x => by
-  simp only [ContinuousLinearMap.add_apply, hS a x, hT a x, map_add]
+  simp only [add_apply, hS a x, hT a x, map_add]
 
 theorem Intertwines.smul {T : H₁ →L[ℂ] H₂} (c : ℂ) (hT : Intertwines π₁ π₂ T) :
     Intertwines π₁ π₂ (c • T) := fun a x => by
-  simp only [ContinuousLinearMap.smul_apply, hT a x, map_smul]
+  simp only [smul_apply, hT a x, map_smul]
 
 /-- The composition of intertwiners is an intertwiner. -/
 theorem Intertwines.comp {S : H₂ →L[ℂ] H₃} {T : H₁ →L[ℂ] H₂}
@@ -122,7 +122,7 @@ theorem UnitaryEquiv.not_areDisjoint [Nontrivial H₁] (h : UnitaryEquiv π₁ �
     have := ContinuousLinearMap.ext_iff.mp h0 v
     simpa only [ContinuousLinearEquiv.coe_coe,
       LinearIsometryEquiv.coe_toContinuousLinearEquiv,
-      ContinuousLinearMap.zero_apply] using this
+      zero_apply] using this
   exact hv (U.injective (hUv.trans (map_zero U).symm))
 
 /-! ### Schur's lemma and the irreducible dichotomy -/
@@ -277,7 +277,7 @@ theorem eq_smul_of_intertwines_of_isIrreducible
         = (S.comp (ContinuousLinearMap.adjoint S)) v := by
       rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply, huv]
     rw [hc] at happ
-    simp only [ContinuousLinearMap.smul_apply, ContinuousLinearMap.one_apply] at happ
+    simp only [smul_apply, one_apply_eq_self] at happ
     have hcuv : c • (u - v) = 0 := by rw [smul_sub, happ, sub_self]
     rcases smul_eq_zero.mp hcuv with h | h
     · exact absurd h hc0
@@ -291,7 +291,7 @@ theorem eq_smul_of_intertwines_of_isIrreducible
     have hSx : (ContinuousLinearMap.adjoint S) (S x) = a • x := by
       have := DFunLike.congr_fun ha x
       simpa using this
-    rw [ContinuousLinearMap.sub_apply, ContinuousLinearMap.smul_apply, map_sub, map_smul,
+    rw [sub_apply, smul_apply, map_sub, map_smul,
       hTx, hSx, smul_smul, div_mul_cancel₀ b ha0, sub_self]
   have hzero : T - (b / a) • S = 0 := by
     ext x
@@ -309,9 +309,9 @@ theorem intertwines_self_iff_mem_centralizer {π : A →⋆ₐ[ℂ] (H₁ →L[�
   constructor
   · rintro h _ ⟨a, rfl⟩
     ext x
-    simpa only [ContinuousLinearMap.mul_apply] using (h a x).symm
+    simpa only [mul_apply_eq_comp] using (h a x).symm
   · intro h a x
-    simpa only [ContinuousLinearMap.mul_apply] using
+    simpa only [mul_apply_eq_comp] using
       (DFunLike.congr_fun (h (π a) ⟨a, rfl⟩) x).symm
 
 /-- **The endomorphism algebra of an irreducible representation is `ℂ · 1`.** Every
@@ -322,6 +322,79 @@ theorem intertwines_self_iff_isScalar {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H�
     Intertwines π π T ↔ ∃ c : ℂ, T = c • 1 := by
   rw [intertwines_self_iff_mem_centralizer, isIrreducible_iff_centralizer.mp h]
   exact Iff.rfl
+
+/-! ### The commutant (self-intertwiner) von Neumann algebra -/
+
+/-- **The commutant `π(A)'` as a von Neumann algebra**: the algebra of
+self-intertwiners of `π` — its "gauge"/intertwiner algebra. The centralizer of
+`π(A)` is self-adjoint, and a commutant is always a von Neumann algebra
+(`S''' = S'`). -/
+noncomputable def commutantVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    VonNeumannAlgebra H₁ :=
+  vonNeumannOfSelfAdjoint (Set.centralizer (Set.range π))
+    (fun _ hx => star_mem_setCentralizer (range_selfAdjoint π) hx)
+
+@[simp] theorem coe_commutantVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) = Set.centralizer (Set.range π) := by
+  unfold commutantVonNeumann
+  rw [coe_vonNeumannOfSelfAdjoint, Set.centralizer_centralizer_centralizer]
+
+/-- Membership in the commutant von Neumann algebra is exactly being a
+self-intertwiner of `π`. -/
+theorem mem_commutantVonNeumann_iff_intertwines
+    {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)} {T : H₁ →L[ℂ] H₁} :
+    T ∈ commutantVonNeumann π ↔ Intertwines π π T := by
+  rw [intertwines_self_iff_mem_centralizer, ← coe_commutantVonNeumann, SetLike.mem_coe]
+
+/-- **A representation is irreducible iff its commutant von Neumann algebra is
+trivial**, `π(A)' = ℂ · 1`. This is the von Neumann form of Schur's lemma: the
+gauge/intertwiner algebra collapses to the scalars exactly for irreducibles. -/
+theorem isIrreducible_iff_commutantVonNeumann_eq_scalars
+    {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)} :
+    IsIrreducible π ↔
+      (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) = scalarOperators H₁ := by
+  rw [coe_commutantVonNeumann]
+  exact isIrreducible_iff_centralizer
+
+/-! ### Double-commutant duality -/
+
+/-- **Double-commutant duality (I).** The commutant of the generated von Neumann
+algebra `π(A)''` is the commutant von Neumann algebra `π(A)'`. This is the
+triple-commutant collapse `S''' = S'` applied to the self-adjoint image `π(A)`. -/
+theorem commutant_gnsVonNeumannAlgebra (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    (gnsVonNeumannAlgebra π).commutant = commutantVonNeumann π :=
+  SetLike.coe_injective (by
+    simp [gnsVonNeumann])
+
+/-- **Double-commutant duality (II).** The commutant of the commutant von Neumann
+algebra `π(A)'` is the generated von Neumann algebra `π(A)''` — this is exactly the
+definition of the bicommutant. So `π(A)''` and `π(A)'` are each other's commutants. -/
+theorem commutant_commutantVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    (commutantVonNeumann π).commutant = gnsVonNeumannAlgebra π :=
+  SetLike.coe_injective (by
+    simp [gnsVonNeumann])
+
+/-- **A factor and its commutant.** A von Neumann algebra and its commutant share the
+same center (their intersection is symmetric), so the generated algebra `π(A)''` is a
+factor if and only if its commutant `π(A)'` is a factor. -/
+theorem isFactor_gnsVonNeumann_iff_isFactor_commutant (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    IsFactor (gnsVonNeumann π) ↔
+      IsFactor (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) := by
+  unfold IsFactor
+  simp only [coe_commutantVonNeumann]
+  unfold gnsVonNeumann
+  simp only [Set.centralizer_centralizer_centralizer]
+  constructor <;> intro h <;> rw [Set.inter_comm] at h <;> exact h
+
+/-- **Triviality duality.** The commutant collapses to the scalars `π(A)' = ℂ · 1` if
+and only if the generated algebra is everything `π(A)'' = B(H)`. This is the commutant
+form of the equivalence "irreducible ⟺ generates `B(H)`". -/
+theorem commutantVonNeumann_eq_scalars_iff_gnsVonNeumann_eq_univ
+    (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
+    (commutantVonNeumann π : Set (H₁ →L[ℂ] H₁)) = scalarOperators H₁ ↔
+      gnsVonNeumann π = Set.univ := by
+  rw [← isIrreducible_iff_commutantVonNeumann_eq_scalars]
+  exact isIrreducible_iff_gnsVonNeumann_eq_univ
 
 /-! ### The pure-state dichotomy -/
 
@@ -356,7 +429,7 @@ omit [CompleteSpace H₁] [CompleteSpace H₂] in
 theorem conjCLM_mul (U : H₁ ≃ₗᵢ[ℂ] H₂) (S T : H₁ →L[ℂ] H₁) :
     conjCLM U (S * T) = conjCLM U S * conjCLM U T := by
   ext x
-  simp only [conjCLM_apply, ContinuousLinearMap.mul_apply,
+  simp only [conjCLM_apply, mul_apply_eq_comp,
     LinearIsometryEquiv.symm_apply_apply]
 
 omit [CompleteSpace H₁] [CompleteSpace H₂] in
@@ -444,7 +517,7 @@ def QuasiEquiv (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (π₂ : A →�
 
 /-- Quasi-equivalence is reflexive. -/
 theorem QuasiEquiv.refl (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) : QuasiEquiv π π :=
-  ⟨StarAlgEquiv.refl, fun _ => rfl⟩
+  ⟨StarAlgEquiv.refl ℂ (gnsVonNeumannAlgebra π).toStarSubalgebra, fun _ => rfl⟩
 
 /-- Quasi-equivalence is symmetric. -/
 theorem QuasiEquiv.symm (h : QuasiEquiv π₁ π₂) : QuasiEquiv π₂ π₁ := by

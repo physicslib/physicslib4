@@ -237,12 +237,12 @@ theorem pushforwardPath_isFutureOriented (g : Isometry M) (μ : M.SmoothPath)
   simp only [pushforwardPath_tangent g μ hs]
   exact hg (μ.toFun s) _ (h s hs)
 
-/-- Under future-orientation preservation, an isometry carries chronological
-precedence forward: `p ≪ q` implies `g p ≪ g q`. -/
-theorem chronologicallyPrecedes_pushforward (g : Isometry M) (t : M.TimeOrientation)
+/-- Under future-orientation preservation, an isometry carries a single
+trip segment forward. -/
+theorem segmentPrecedes_pushforward (g : Isometry M) (t : M.TimeOrientation)
     (hg : g.PreservesFutureOrientation t) {p q : M.Carrier}
-    (h : ChronologicallyPrecedes M t p q) :
-    ChronologicallyPrecedes M t (g.toDiffeo p) (g.toDiffeo q) := by
+    (h : SegmentPrecedes M t p q) :
+    SegmentPrecedes M t (g.toDiffeo p) (g.toDiffeo q) := by
   obtain ⟨c, rep, hc, htl, hfo, hgeo, hpe, hfe⟩ := h
   exact ⟨SmoothCurve.ofPath M (g.pushforwardPath rep), g.pushforwardPath rep, rfl,
     g.pushforwardPath_isTimelike rep htl,
@@ -250,6 +250,20 @@ theorem chronologicallyPrecedes_pushforward (g : Isometry M) (t : M.TimeOrientat
     trivial,
     g.pushforwardPath_isPastEndpoint rep hpe,
     g.pushforwardPath_isFutureEndpoint rep hfe⟩
+
+/-- Under future-orientation preservation, an isometry carries chronological
+precedence forward: `p ≪ q` implies `g p ≪ g q`. A trip is a finite chain of
+trip segments, so this lifts `segmentPrecedes_pushforward` along the transitive
+closure (`Relation.TransGen.lift`). -/
+theorem chronologicallyPrecedes_pushforward (g : Isometry M) (t : M.TimeOrientation)
+    (hg : g.PreservesFutureOrientation t) {p q : M.Carrier}
+    (h : ChronologicallyPrecedes M t p q) :
+    ChronologicallyPrecedes M t (g.toDiffeo p) (g.toDiffeo q) := by
+  -- `ChronologicallyPrecedes` is `Relation.TransGen` of `SegmentPrecedes`.
+  -- `TransGen.lift` lifts a relation `r ≤ p ∘ (f, f)` to `TransGen r ≤ TransGen p ∘ (f, f)`.
+  exact Relation.TransGen.lift (f := g.toDiffeo)
+    (r := Spacetime.SegmentPrecedes M t) (p := Spacetime.SegmentPrecedes M t)
+    (fun a b hs => segmentPrecedes_pushforward g t hg hs) _ _ h
 
 /-- Under future-orientation preservation, the image of a chronological future
 is contained in the chronological future of the image point. -/

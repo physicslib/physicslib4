@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.EinsteinCausality
 import Physicslib4.GNS.Irreducibility
+import Physicslib4.Spacetime.CausalComplement
 
 /-!
 # Local von Neumann algebras and spacelike commutation
@@ -89,12 +90,12 @@ theorem eq_zero_of_commute_of_cyclic {S : Set (H →L[ℂ] H)} {Ω : H}
   have hzero : Set.EqOn (⇑R) (fun _ => (0 : H)) ((fun T => T Ω) '' S) := by
     rintro _ ⟨T, hT, rfl⟩
     change R (T Ω) = 0
-    rw [← ContinuousLinearMap.mul_apply, hcomm T hT, ContinuousLinearMap.mul_apply, hRΩ,
+    rw [← mul_apply_eq_comp, hcomm T hT, mul_apply_eq_comp, hRΩ,
       map_zero]
   have hRx : (⇑R) = fun _ => (0 : H) :=
     Continuous.ext_on hcyc R.continuous continuous_const hzero
   exact ContinuousLinearMap.ext fun x =>
-    (congrFun hRx x).trans (ContinuousLinearMap.zero_apply x).symm
+    (congrFun hRx x).trans (zero_apply x).symm
 
 /-- **Statistical independence (Schlieder property), Minkowski spacetime.** If `Ω`
 is cyclic for the local observables of `B₁` - in Minkowski spacetime this
@@ -149,6 +150,21 @@ theorem localVonNeumannAlgebra_le_commutant
   rw [← SetLike.coe_subset_coe]
   simp only [coe_localVonNeumannAlgebra, VonNeumannAlgebra.coe_commutant]
   exact N.localVonNeumann_subset_centralizer π hB₁ hB₂ hs
+
+/-- **Additive-free locality (Minkowski).** A bounded region lying in the spacelike
+complement of `B` has its local algebra inside the commutant of `R(B)`: for basis
+sets `B' ⊆ B^⊥`, `R(B') ≤ R(B)'`. This repackages microcausality through the
+spacelike complement, keeping strictly to bounded (diamond) regions — no algebra is
+attached to the unbounded complement. -/
+theorem localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement
+    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B B' : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB : IsAlexandrovBasisSet B) (hB' : IsAlexandrovBasisSet B')
+    (hsub : B' ⊆ Spacetime.spacelikeComplement StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation B) :
+    N.localVonNeumannAlgebra π B' ≤ (N.localVonNeumannAlgebra π B).commutant :=
+  N.localVonNeumannAlgebra_le_commutant π hB' hB
+    ((Spacetime.subset_spacelikeComplement_iff _ _).mp hsub)
 
 /-- **Isotony, bundled (Minkowski).** `B₁ ⊆ B₂ ⟹ R(B₁) ≤ R(B₂)` as von Neumann
 algebras. -/

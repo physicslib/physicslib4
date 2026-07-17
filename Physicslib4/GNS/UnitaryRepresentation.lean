@@ -64,9 +64,9 @@ theorem gns_operator_covariance {A : Type*} [CStarAlgebra A] {G : Type*}
     rintro _ ⟨b, rfl⟩
     change U g (π a (π b Ω)) = π (γ g a) (U g (π b Ω))
     have e1 : (π a) (π b Ω) = π (a * b) Ω := by
-      rw [← ContinuousLinearMap.mul_apply, ← map_mul]
+      rw [← mul_apply_eq_comp, ← map_mul]
     have e2 : (π (γ g a)) (π (γ g b) Ω) = π (γ g a * γ g b) Ω := by
-      rw [← ContinuousLinearMap.mul_apply, ← map_mul]
+      rw [← mul_apply_eq_comp, ← map_mul]
     rw [e1, himpl g (a * b), map_mul (γ g), himpl g b, e2]
   rw [show U g (π a ((U g).symm x)) = π (γ g a) (U g ((U g).symm x)) from
         congrFun hint ((U g).symm x), (U g).apply_symm_apply]
@@ -98,12 +98,12 @@ theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
   obtain ⟨H, _, _, _, π, Ω, hcyc, hrepro, _⟩ := gns_construction ω
   let cyc : A →ₗ[ℂ] H :=
     { toFun := fun a => π a Ω
-      map_add' := fun a b => by rw [map_add, ContinuousLinearMap.add_apply]
-      map_smul' := fun c a => by rw [map_smul, ContinuousLinearMap.smul_apply]; rfl }
+      map_add' := fun a b => by rw [map_add, add_apply]
+      map_smul' := fun c a => by rw [map_smul, smul_apply]; rfl }
   have hcycdense : DenseRange (cyc : A → H) := hcyc
   have q : ∀ x, (ω (star x * x) : ℂ) = ⟪π x Ω, π x Ω⟫_ℂ := by
     intro x
-    rw [hrepro (star x * x), map_mul, map_star, ContinuousLinearMap.mul_apply,
+    rw [hrepro (star x * x), map_mul, map_star, mul_apply_eq_comp,
       ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_right]
   have hinner : ∀ (g : G) (a b : A), ω (star (γ g a) * γ g b) = ω (star a * b) := by
     intro g a b
@@ -131,12 +131,12 @@ theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
   · intro g
     have hΩ : cyc (1 : A) = Ω := by
       change π 1 Ω = Ω
-      rw [map_one, ContinuousLinearMap.one_apply]
+      rw [map_one, one_apply_eq_self]
     have hone' : cyc ((γ g).toAlgEquiv.toLinearEquiv (1 : A)) = Ω := by
       change π (γ g 1) Ω = Ω
       rw [map_one (γ g)]
       change π 1 Ω = Ω
-      rw [map_one, ContinuousLinearMap.one_apply]
+      rw [map_one, one_apply_eq_self]
     calc U g Ω = U g (cyc 1) := by rw [hΩ]
       _ = cyc ((γ g).toAlgEquiv.toLinearEquiv 1) :=
           (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense
@@ -225,12 +225,12 @@ theorem exists_gns_unitary_of_invariant_strongContinuous.{u} {A : Type u}
   obtain ⟨H, _, _, _, π, Ω, hcyc, hrepro, _⟩ := gns_construction ω
   let cyc : A →ₗ[ℂ] H :=
     { toFun := fun a => π a Ω
-      map_add' := fun a b => by rw [map_add, ContinuousLinearMap.add_apply]
-      map_smul' := fun c a => by rw [map_smul, ContinuousLinearMap.smul_apply]; rfl }
+      map_add' := fun a b => by rw [map_add, add_apply]
+      map_smul' := fun c a => by rw [map_smul, smul_apply]; rfl }
   have hcycdense : DenseRange (cyc : A → H) := hcyc
   have qq : ∀ a c : A, (ω (star a * c) : ℂ) = ⟪π a Ω, π c Ω⟫_ℂ := by
     intro a c
-    rw [hrepro (star a * c), map_mul, map_star, ContinuousLinearMap.mul_apply,
+    rw [hrepro (star a * c), map_mul, map_star, mul_apply_eq_comp,
       ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_right]
   have hinner : ∀ (g : G) (a b : A), ω (star (γ g a) * γ g b) = ω (star a * b) := by
     intro g a b
@@ -259,12 +259,12 @@ theorem exists_gns_unitary_of_invariant_strongContinuous.{u} {A : Type u}
   · intro g
     have hΩ : cyc (1 : A) = Ω := by
       change π 1 Ω = Ω
-      rw [map_one, ContinuousLinearMap.one_apply]
+      rw [map_one, one_apply_eq_self]
     have hone' : cyc ((γ g).toAlgEquiv.toLinearEquiv (1 : A)) = Ω := by
       change π (γ g 1) Ω = Ω
       rw [map_one (γ g)]
       change π 1 Ω = Ω
-      rw [map_one, ContinuousLinearMap.one_apply]
+      rw [map_one, one_apply_eq_self]
     calc U g Ω = U g (cyc 1) := by rw [hΩ]
       _ = cyc ((γ g).toAlgEquiv.toLinearEquiv 1) :=
           (γ g).toAlgEquiv.toLinearEquiv.extendOfIsometry_eq cyc cyc hcycdense hcycdense

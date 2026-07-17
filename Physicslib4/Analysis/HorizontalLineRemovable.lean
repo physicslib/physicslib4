@@ -156,7 +156,7 @@ theorem rectIntegralReal_eq_zero_of_continuousOn_off_horizontal_line (f : ℂ �
     intro z hz
     rw [Complex.mem_reProdIm] at hz
     obtain ⟨hre, him⟩ := hz
-    refine Set.mem_diff_of_mem (Complex.mem_reProdIm.mpr ⟨Set.Ioo_subset_Icc_self hre, ?_⟩) ?_
+    refine Set.mem_sdiff_of_mem (Complex.mem_reProdIm.mpr ⟨Set.Ioo_subset_Icc_self hre, ?_⟩) ?_
     · exact Set.mem_Icc.mpr ⟨him.1.le, him.2.le.trans hℓd⟩
     · simp only [Set.mem_setOf_eq]; exact ne_of_lt him.2
   -- The upper piece `[a,b] × [ℓ,d]`: holomorphic interior has `im > ℓ`.
@@ -167,7 +167,7 @@ theorem rectIntegralReal_eq_zero_of_continuousOn_off_horizontal_line (f : ℂ �
     intro z hz
     rw [Complex.mem_reProdIm] at hz
     obtain ⟨hre, him⟩ := hz
-    refine Set.mem_diff_of_mem (Complex.mem_reProdIm.mpr ⟨Set.Ioo_subset_Icc_self hre, ?_⟩) ?_
+    refine Set.mem_sdiff_of_mem (Complex.mem_reProdIm.mpr ⟨Set.Ioo_subset_Icc_self hre, ?_⟩) ?_
     · exact Set.mem_Icc.mpr ⟨hcℓ.trans him.1.le, him.2.le⟩
     · simp only [Set.mem_setOf_eq]; exact (ne_of_lt him.1).symm
   rw [hlow, hupp, add_zero]
@@ -225,7 +225,7 @@ theorem rectIntegralReal_eq_zero_of_subset {U : Set ℂ} (ℓ : ℝ)
       · -- `c ≤ ℓ ≤ d`: straddling vanishing
         refine rectIntegralReal_eq_zero_of_continuousOn_off_horizontal_line f a b c d ℓ
           hab hcℓ hℓd hcont (hd.mono (fun z hz => ?_))
-        refine Set.mem_diff_of_mem (hsub ?_) hz.2
+        refine Set.mem_sdiff_of_mem (hsub ?_) hz.2
         rw [Complex.mem_reProdIm, Set.uIcc_of_le hab, Set.uIcc_of_le hcd]
         exact Complex.mem_reProdIm.mp hz.1
       · -- `d < ℓ`: line above the rectangle, plain Cauchy-Goursat
@@ -234,14 +234,14 @@ theorem rectIntegralReal_eq_zero_of_subset {U : Set ℂ} (ℓ : ℝ)
         rw [min_eq_left hab, max_eq_right hab, min_eq_left hcd, max_eq_right hcd]
         intro z hz
         rw [Complex.mem_reProdIm] at hz
-        exact Set.mem_diff_of_mem (hsub (hmem_open z hz.1 hz.2)) (ne_of_lt (hz.2.2.trans_le hdℓ))
+        exact Set.mem_sdiff_of_mem (hsub (hmem_open z hz.1 hz.2)) (ne_of_lt (hz.2.2.trans_le hdℓ))
     · -- `ℓ < c`: line below the rectangle, plain Cauchy-Goursat
       refine rectIntegralReal_eq_zero_of_continuousOn_of_differentiableOn f a b c d
         hcont (hd.mono ?_)
       rw [min_eq_left hab, max_eq_right hab, min_eq_left hcd, max_eq_right hcd]
       intro z hz
       rw [Complex.mem_reProdIm] at hz
-      exact Set.mem_diff_of_mem (hsub (hmem_open z hz.1 hz.2))
+      exact Set.mem_sdiff_of_mem (hsub (hmem_open z hz.1 hz.2))
         (ne_of_lt (lt_of_le_of_lt hℓc hz.2.1)).symm
   rcases le_total a b with hab | hab <;> rcases le_total c d with hcd | hcd
   · exact ordered a b c d hab hcd hsub
@@ -316,7 +316,7 @@ theorem frontier_setOf_im_lt (c : ℝ) :
       = closure {z : ℂ | z.im < c} \ interior {z : ℂ | z.im < c} from rfl,
     closure_setOf_im_lt, (isOpen_setOf_im_lt c).interior_eq]
   ext z
-  simp only [Set.mem_diff, Set.mem_setOf_eq, not_lt]
+  simp only [Set.mem_sdiff, Set.mem_setOf_eq, not_lt]
   exact ⟨fun ⟨h1, h2⟩ => le_antisymm h1 h2, fun h => ⟨h.le, h.ge⟩⟩
 
 /-- **Holomorphic gluing across a horizontal line (Schwarz-reflection form).**

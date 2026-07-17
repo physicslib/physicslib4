@@ -5,8 +5,10 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
 import Physicslib4.AQFT.HaagKastlerCurved.Net
+import Physicslib4.AQFT.HaagKastlerCurved.LocalVonNeumann
 import Physicslib4.Spacetime.LorentzianSpacetime
 import Physicslib4.Spacetime.Isometry
+import Physicslib4.Spacetime.CausalComplement
 
 /-!
 # Bridging a concrete spacetime to the abstract Haag-Kastler interface
@@ -35,9 +37,16 @@ spacetime:
 * `Isom` is `Physicslib4.Spacetime.Isometry` of the underlying
   spacetime, with its `Group` and `MulAction` instances.
 
-The same deferred refinements noted on `Spacetime.Isometry` apply here:
-the isometry group is the full metric-preserving group (its
-identity-component restriction is not yet captured) and its bundled
+This bridge instantiates `Isom` with the *full* metric-preserving
+isometry group. The identity-component restriction of Axiom 5
+("isometries connected to the identity") is captured by the sibling
+bridge `toAbstractIdentityComponent`
+(`Physicslib4/AQFT/HaagKastlerCurved/IdentityComponent.lean`), which uses
+`Spacetime.Isometry.orientedIdentityComponent` (the topological
+`connectedComponentOfOne` intersected with future-orientation
+preservation); this full-group bridge is retained for the axioms that
+hold under the whole isometry group (e.g. microcausality). One deferred
+refinement noted on `Spacetime.Isometry` still applies: the bundled
 differential is not yet tied to the manifold derivative.
 -/
 
@@ -95,6 +104,26 @@ theorem commute_of_spacelike_mono_geometric
   N.commute_of_spacelike_mono
     (fun _ _ _ _ hh₁ hh₂ hh => L.isCompletelySpacelike_mono hh₁ hh₂ hh)
     hB₁' hB₂' hB hs hsub₁ hsub₂ h₁ h₂ a b
+
+/-- **Additive-free locality over a concrete spacetime.** The geometric
+specialisation of the curved additive-free locality: for a Haag-Kastler net over a
+concrete Lorentzian spacetime `L`, a bounded region `B₁` lying in the spacelike
+complement of `B₂` (both inside a common containing basis set `B`) has its local von
+Neumann algebra inside the commutant of `R(B₂)`. The Galois bridge
+`subset_spacelikeComplement_iff` discharges the spacelike hypothesis; no algebra is
+attached to the unbounded complement. -/
+theorem localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement_geometric
+    {L : Spacetime.LorentzianSpacetime} (N : HaagKastlerNet L.toAbstract)
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {B : Set L.toAbstract.Carrier} (hB : L.toAbstract.IsBasisSet B)
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set L.toAbstract.Carrier⦄
+    (hB₁ : L.toAbstract.IsBasisSet B₁) (hB₂ : L.toAbstract.IsBasisSet B₂)
+    (hsub : B₁ ⊆ L.spacelikeComplement B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) :
+    N.localVonNeumannAlgebra π hB₁ hB h₁
+      ≤ (N.localVonNeumannAlgebra π hB₂ hB h₂).commutant :=
+  N.localVonNeumannAlgebra_le_commutant hB π hB₁ hB₂
+    (L.subset_spacelikeComplement_iff.mp hsub) h₁ h₂
 
 end AQFT.HaagKastlerCurved.HaagKastlerNet
 

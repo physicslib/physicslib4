@@ -84,7 +84,6 @@ theorem QuasilocalLift.unique {Q : QuasilocalAlgebra N.U}
   intro x hx
   simp only [Set.mem_iUnion, Set.mem_range] at hx
   obtain ⟨B, hB, a, rfl⟩ := hx
-  change l₁.β (Q.ι B a) = l₂.β (Q.ι B a)
   rw [l₁.intertwines hB a, l₂.intertwines hB a]
 
 /-- The type of lifts of a fixed `L` is a subsingleton: a lift is determined by

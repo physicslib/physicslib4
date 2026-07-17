@@ -102,7 +102,7 @@ omit [CompleteSpace H] in
     lieConj Uop T x = Uop (T (Uop.symm x)) := by
   change ((Uop.toContinuousLinearEquiv : H →L[ℂ] H) * T
         * (Uop.toContinuousLinearEquiv.symm : H →L[ℂ] H)) x = Uop (T (Uop.symm x))
-  simp only [ContinuousLinearMap.mul_apply, ContinuousLinearEquiv.coe_coe,
+  simp only [mul_apply_eq_comp, ContinuousLinearEquiv.coe_coe,
     LinearIsometryEquiv.coe_toContinuousLinearEquiv]
   rfl
 

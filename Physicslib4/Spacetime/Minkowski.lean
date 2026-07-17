@@ -475,7 +475,7 @@ theorem minkowskiForm_single_zero_left (v : SpacetimeModel) :
 multiplication. -/
 private theorem minkowskiForm_smul_left (r : ℝ) (a b : SpacetimeModel) :
     minkowskiForm (r • a) b = r * minkowskiForm a b := by
-  rw [map_smul, ContinuousLinearMap.smul_apply, smul_eq_mul]
+  rw [map_smul, smul_apply, smul_eq_mul]
 
 /-- Bilinearity of `minkowskiForm` in the right argument under scalar
 multiplication. -/
@@ -1111,7 +1111,7 @@ timelike future-oriented properties of `rep`) and pointwise applies
 `standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero`. -/
 theorem standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
     {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
-    (htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
+    (htrip : Spacetime.IsTripSegment StandardMinkowskiSpacetime
               standardMinkowskiTimeOrientation p q c) :
     ∃ (rep : StandardMinkowskiSpacetime.SmoothPath),
       c = Spacetime.SmoothCurve.ofPath StandardMinkowskiSpacetime rep ∧
@@ -1250,7 +1250,7 @@ The body wires together four named sub-lemmas:
 `standardMinkowski_smoothPath_tangent_continuousOn`. -/
 theorem standardMinkowski_trip_displacement_eq_intervalIntegral
     {p q : SpacetimeModel} {c : StandardMinkowskiSpacetime.SmoothCurve}
-    (htrip : Spacetime.IsTrip StandardMinkowskiSpacetime
+    (htrip : Spacetime.IsTripSegment StandardMinkowskiSpacetime
               standardMinkowskiTimeOrientation p q c) :
     ∃ (rep : StandardMinkowskiSpacetime.SmoothPath) (a b : ℝ),
       a < b ∧ a ∈ rep.parameterSpace ∧ b ∈ rep.parameterSpace ∧
@@ -1377,7 +1377,7 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
   have hT_apply : ∀ v : SpacetimeModel,
       T v = v - EuclideanSpace.single (0 : Fin 4) (v 0) := by
     intro v
-    simp only [hT_def, ContinuousLinearMap.sub_apply, ContinuousLinearMap.id_apply,
+    simp only [hT_def, sub_apply, ContinuousLinearMap.id_apply,
       ContinuousLinearMap.smulRight_apply, EuclideanSpace.coe_proj]
     -- (v 0) • single 0 1 = single 0 (v 0)
     congr 1
@@ -1518,16 +1518,15 @@ Minkowski-cone. The body wires together
 `intervalIntegral_mem_minkowskiForwardCone_zero`, and
 `mem_minkowskiForwardCone_iff_sub_mem`; the analytic content
 sits in those named lemmas. -/
-theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
-    Spacetime.chronologicalFuture StandardMinkowskiSpacetime
-        standardMinkowskiTimeOrientation p
-      ⊆ minkowskiForwardCone p := by
-  intro q hq
+theorem segmentPrecedes_mem_minkowskiForwardCone {p q : SpacetimeModel}
+    (hq : Spacetime.SegmentPrecedes StandardMinkowskiSpacetime
+            standardMinkowskiTimeOrientation p q) :
+    q ∈ minkowskiForwardCone p := by
   -- `StandardMinkowskiSpacetime.Carrier = SpacetimeModel` definitionally; we
   -- re-bind `q` at the model type so that arithmetic and cone membership
   -- elaborate cleanly.
   let q' : SpacetimeModel := q
-  -- Unpack the trip witness.
+  -- Unpack the segment witness.
   obtain ⟨c, htrip⟩ := hq
   -- FTC representation of `q' - p` as an interval integral of the trip's
   -- tangent. The lemma also delivers continuity of the tangent on `[a, b]`
@@ -1548,16 +1547,63 @@ theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
   change q' ∈ minkowskiForwardCone p
   exact (mem_minkowskiForwardCone_iff_sub_mem p q').mpr hsub
 
+/-- *Forward subset* of `chronologicalFuture_standardMinkowski`: every
+point in the chronological future of `p` lies in the open forward
+Minkowski-cone. Because a trip is a finite chain of trip segments, this is a
+transitive-closure induction: the base case is
+`segmentPrecedes_mem_minkowskiForwardCone`, and the inductive step uses
+forward-cone nesting `minkowskiForwardCone_subset`. -/
+theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
+    Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation p
+      ⊆ minkowskiForwardCone p := by
+  intro q hq
+  unfold Spacetime.chronologicalFuture at hq
+  simp only [Set.mem_setOf_eq, Spacetime.ChronologicallyPrecedes, Spacetime.IsTrip] at hq
+  induction hq with
+  | single h =>
+      exact segmentPrecedes_mem_minkowskiForwardCone h
+  | tail h₁ h₂ ih =>
+      rename_i b c
+      have hc_mem_b : (c : SpacetimeModel) ∈ minkowskiForwardCone (b : SpacetimeModel) :=
+        segmentPrecedes_mem_minkowskiForwardCone h₂
+      rcases ih with ⟨hp_b, hc_b⟩
+      rcases hc_mem_b with ⟨hb_c, hc_c⟩
+      have h_p_lt_c : p 0 < c.ofLp 0 := by
+        calc
+          p 0 < b.ofLp 0 := hp_b
+          _ < c.ofLp 0 := hb_c
+      have h_cone_add_aux : (c.ofLp 1 - p 1) ^ 2 + (c.ofLp 2 - p 2) ^ 2 + (c.ofLp 3 - p 3) ^ 2
+          < (c.ofLp 0 - p 0) ^ 2 := by
+        set A := c.ofLp 0 - b.ofLp 0 with hA_def
+        set B := b.ofLp 0 - p 0 with hB_def
+        set x := c.ofLp 1 - b.ofLp 1 with hx_def
+        set y := c.ofLp 2 - b.ofLp 2 with hy_def
+        set z := c.ofLp 3 - b.ofLp 3 with hz_def
+        set u := b.ofLp 1 - p 1 with hu_def
+        set v := b.ofLp 2 - p 2 with hv_def
+        set w := b.ofLp 3 - p 3 with hw_def
+        have hA_pos : 0 < A := sub_pos.mpr hb_c
+        have hB_pos : 0 < B := sub_pos.mpr hp_b
+        have h1 : x^2 + y^2 + z^2 < A^2 := by linarith
+        have h2 : u^2 + v^2 + w^2 < B^2 := by linarith
+        have h_sum : (c.ofLp 0 - p 0) = A + B := by ring
+        have h_sum1 : c.ofLp 1 - p 1 = x + u := by ring
+        have h_sum2 : c.ofLp 2 - p 2 = y + v := by ring
+        have h_sum3 : c.ofLp 3 - p 3 = z + w := by ring
+        rw [h_sum, h_sum1, h_sum2, h_sum3]
+        nlinarith [sq_nonneg (A * u - B * x), sq_nonneg (A * v - B * y),
+          sq_nonneg (A * w - B * z), mul_pos hA_pos hB_pos, h1, h2]
+      refine ⟨h_p_lt_c, by nlinarith⟩
+
 /-- *Reverse subset* of `chronologicalFuture_standardMinkowski`: every
 point of the open forward Minkowski-cone of `p` lies in the chronological
 future of `p`. Witnessed by the straight-line path
 `standardMinkowskiLineSegmentPath`. -/
-theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
-    (p : SpacetimeModel) :
-    minkowskiForwardCone p ⊆
-      Spacetime.chronologicalFuture StandardMinkowskiSpacetime
-        standardMinkowskiTimeOrientation p := by
-  intro q hq
+theorem minkowskiForwardCone_subset_segmentPrecedes {p q : SpacetimeModel}
+    (hq : q ∈ minkowskiForwardCone p) :
+    Spacetime.SegmentPrecedes StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation p q := by
   obtain ⟨h_time, h_cone⟩ := hq
   have hpq : p ≠ q := by
     intro h
@@ -1654,6 +1700,22 @@ theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
       simp
     · intro s' hs'
       exact hs'.2
+
+/-- *Reverse subset* of `chronologicalFuture_standardMinkowski`: every point of
+the open forward Minkowski-cone of `p` lies in the chronological future of `p`.
+A single straight-line trip segment already realises the precedence, so this is
+`Relation.TransGen.single` applied to `minkowskiForwardCone_subset_segmentPrecedes`. -/
+theorem minkowskiForwardCone_subset_chronologicalFuture_standardMinkowski
+    (p : SpacetimeModel) :
+    minkowskiForwardCone p ⊆
+      Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation p := by
+  intro q hq
+  -- Unfold `chronologicalFuture`, `ChronologicallyPrecedes`, `IsTrip`.
+  change Relation.TransGen
+    (Spacetime.SegmentPrecedes StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation) p q
+  exact Relation.TransGen.single (minkowskiForwardCone_subset_segmentPrecedes hq)
 
 /-- **Characterisation of `chronologicalFuture` on standard Minkowski.**
 The chronological future of `p` on `StandardMinkowskiSpacetime` agrees with
@@ -2025,5 +2087,100 @@ noncomputable def MinkowskiSpacetime : Spacetime where
     · rw [mfderiv_extChartAt_symm_minkowski x₀
         ((extChartAt _ x₀).map_source (mem_extChartAt_source x₀))]
       rfl
+
+/-- **Part (i): existence of a chronological-future point (standard Minkowski).**
+Every point `x` of standard Minkowski spacetime has a point strictly to its
+chronological future; concretely `x + e₀` lies in the forward Minkowski cone of
+`x`, since the connecting vector `e₀` is future-pointing timelike. -/
+theorem exists_chronologicalFuture_standardMinkowski (x : SpacetimeModel) :
+    ∃ b, b ∈ Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation x := by
+  set b := x + EuclideanSpace.single (0 : Fin 4) (1 : ℝ) with hb
+  have single0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = 1 := by
+    rw [PiLp.single_apply]; simp
+  have b0 : b 0 = x 0 + 1 := by
+    rw [hb, PiLp.add_apply, single0]
+  have b1 : b 1 = x 1 := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply]; simp
+  have b2 : b 2 = x 2 := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply]; simp
+  have b3 : b 3 = x 3 := by
+    rw [hb, PiLp.add_apply, PiLp.single_apply]; simp
+  refine ⟨b, ?_⟩
+  rw [chronologicalFuture_standardMinkowski]
+  have hmem : b ∈ minkowskiForwardCone x := by
+    rw [mem_minkowskiForwardCone, b0, b1, b2, b3]
+    constructor
+    · nlinarith
+    · norm_num
+  exact hmem
+
+/-- **Part (i), dual: existence of a chronological-past point.**
+Every point `x` of standard Minkowski spacetime has a point strictly to its
+chronological past; concretely `x - e₀` lies in the backward Minkowski cone. -/
+theorem exists_chronologicalPast_standardMinkowski (x : SpacetimeModel) :
+    ∃ a, a ∈ Spacetime.chronologicalPast StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation x := by
+  set a := x - EuclideanSpace.single (0 : Fin 4) (1 : ℝ) with ha
+  have single0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = 1 := by
+    rw [PiLp.single_apply]; simp
+  have a0 : a 0 = x 0 - 1 := by
+    rw [ha, PiLp.sub_apply, single0]
+  have a1 : a 1 = x 1 := by
+    rw [ha, PiLp.sub_apply, PiLp.single_apply]; simp
+  have a2 : a 2 = x 2 := by
+    rw [ha, PiLp.sub_apply, PiLp.single_apply]; simp
+  have a3 : a 3 = x 3 := by
+    rw [ha, PiLp.sub_apply, PiLp.single_apply]; simp
+  refine ⟨a, ?_⟩
+  rw [chronologicalPast_standardMinkowski]
+  have hmem : a ∈ minkowskiBackwardCone x := by
+    rw [mem_minkowskiBackwardCone, a0, a1, a2, a3]
+    constructor
+    · nlinarith
+    · norm_num
+  exact hmem
+
+/-- **Part (ii): Euclidean openness of the chronological future.**
+On standard Minkowski spacetime `I⁺(p)` is open in the Euclidean (manifold)
+topology on `ℝ⁴`; via the coordinate cone characterisation it coincides with the
+forward Minkowski cone, which is open. -/
+theorem isOpen_chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
+    IsOpen (Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation p) := by
+  rw [chronologicalFuture_standardMinkowski]
+  exact isOpen_minkowskiForwardCone p
+
+/-- **Part (ii), dual: Euclidean openness of the chronological past.** -/
+theorem isOpen_chronologicalPast_standardMinkowski (q : SpacetimeModel) :
+    IsOpen (Spacetime.chronologicalPast StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation q) := by
+  rw [chronologicalPast_standardMinkowski]
+  exact isOpen_minkowskiBackwardCone q
+
+/-- **Part (iii): unconditional Alexandrov openness of the chronological future.**
+On standard Minkowski spacetime `I⁺(p)` is open in the Alexandrov topology,
+unconditionally: the per-point hypothesis of the general lemma
+`Spacetime.isOpen_chronologicalFuture` is discharged by part (i). -/
+theorem isOpen_alexandrov_chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
+    @IsOpen _ (Spacetime.alexandrovTopology StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation)
+      (Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation p) := by
+  refine Spacetime.isOpen_chronologicalFuture StandardMinkowskiSpacetime
+    standardMinkowskiTimeOrientation p ?_
+  intro x hx
+  exact exists_chronologicalFuture_standardMinkowski x
+
+/-- **Part (iii), dual: unconditional Alexandrov openness of the chronological past.** -/
+theorem isOpen_alexandrov_chronologicalPast_standardMinkowski (q : SpacetimeModel) :
+    @IsOpen _ (Spacetime.alexandrovTopology StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation)
+      (Spacetime.chronologicalPast StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation q) := by
+  refine Spacetime.isOpen_chronologicalPast StandardMinkowskiSpacetime
+    standardMinkowskiTimeOrientation q ?_
+  intro x hx
+  exact exists_chronologicalPast_standardMinkowski x
 
 end Physicslib4

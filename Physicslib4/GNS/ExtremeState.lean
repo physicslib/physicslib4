@@ -58,7 +58,7 @@ private lemma nontrivial_of_state (ω : State A) : Nontrivial A := by
   · exfalso
     have h0 : ω.toContinuousLinearMap = 0 := by
       ext a
-      rw [Subsingleton.elim a 0, map_zero, ContinuousLinearMap.zero_apply]
+      rw [Subsingleton.elim a 0, map_zero, zero_apply]
     have hnorm := ω.isNormalized
     rw [h0, norm_zero] at hnorm
     exact one_ne_zero hnorm.symm
@@ -155,7 +155,7 @@ theorem isExtremePoint_of_isPure (ω : State A) (hpure : IsPure ω) :
   have hψapp : ∀ a, ψ a = (t : ℂ) * ω₁ a := by
     intro a; rw [hψ_def]
     show ((t : ℂ) • ω₁.toContinuousLinearMap) a = (t : ℂ) * ω₁ a
-    rw [ContinuousLinearMap.smul_apply]; rfl
+    rw [smul_apply]; rfl
   have htne : (t : ℂ) ≠ 0 := by rw [Ne, Complex.ofReal_eq_zero]; exact ht0.ne'
   have h1tne : (1 - (t : ℂ)) ≠ 0 := by
     have he : (1 - (t : ℂ)) = ((1 - t : ℝ) : ℂ) := by push_cast; ring
@@ -229,9 +229,9 @@ theorem isPure_of_isExtremePoint (ω : State A) (hext : ω.IsExtremePoint) :
     · -- `λ = 1` : `ψ = ω`
       refine ⟨1, fun a => ?_⟩
       have hpossub : ∀ c, 0 ≤ (ω.toContinuousLinearMap - ψ) (star c * c) := by
-        intro c; rw [ContinuousLinearMap.sub_apply]; exact sub_nonneg.mpr (hψdom c)
+        intro c; rw [sub_apply]; exact sub_nonneg.mpr (hψdom c)
       have hval : ((ω.toContinuousLinearMap - ψ) 1).re = 0 := by
-        rw [ContinuousLinearMap.sub_apply, Complex.sub_re]
+        rw [sub_apply, Complex.sub_re]
         change (ω 1).re - (ψ 1).re = 0
         rw [hω1, Complex.one_re, ← hlam_def, hlam1]; ring
       have hnormsub := norm_eq_re_apply_one_of_positive hpossub
@@ -249,20 +249,20 @@ theorem isPure_of_isExtremePoint (ω : State A) (hext : ω.IsExtremePoint) :
         rw [Ne, Complex.ofReal_eq_zero]; exact h1lampos.ne'
       -- the two rescaled states
       have hpos1 : ∀ a, 0 ≤ (((lam : ℂ))⁻¹ • ψ) (star a * a) := by
-        intro a; rw [ContinuousLinearMap.smul_apply]
+        intro a; rw [smul_apply]
         exact mul_nonneg (complex_inv_ofReal_nonneg hlampos.le) (hψpos a)
       have hnorm1 : ‖((lam : ℂ))⁻¹ • ψ‖ = 1 := by
         rw [norm_smul, norm_inv_ofReal_pos hlampos, hψnorm, inv_mul_cancel₀ hlampos.ne']
       have hpossub : ∀ c, 0 ≤ (ω.toContinuousLinearMap - ψ) (star c * c) := by
-        intro c; rw [ContinuousLinearMap.sub_apply]; exact sub_nonneg.mpr (hψdom c)
+        intro c; rw [sub_apply]; exact sub_nonneg.mpr (hψdom c)
       have hnormsub : ‖ω.toContinuousLinearMap - ψ‖ = 1 - lam := by
-        rw [norm_eq_re_apply_one_of_positive hpossub, ContinuousLinearMap.sub_apply,
+        rw [norm_eq_re_apply_one_of_positive hpossub, sub_apply,
           Complex.sub_re]
         change (ω 1).re - (ψ 1).re = 1 - lam
         rw [hω1, Complex.one_re, ← hlam_def]
       have hpos2 : ∀ a, 0 ≤ ((((1 - lam : ℝ) : ℂ))⁻¹ • (ω.toContinuousLinearMap - ψ))
           (star a * a) := by
-        intro a; rw [ContinuousLinearMap.smul_apply]
+        intro a; rw [smul_apply]
         exact mul_nonneg (complex_inv_ofReal_nonneg h1lampos.le) (hpossub a)
       have hnorm2 : ‖(((1 - lam : ℝ) : ℂ))⁻¹ • (ω.toContinuousLinearMap - ψ)‖ = 1 := by
         rw [norm_smul, norm_inv_ofReal_pos h1lampos, hnormsub, inv_mul_cancel₀ h1lampos.ne']
@@ -273,12 +273,12 @@ theorem isPure_of_isExtremePoint (ω : State A) (hext : ω.IsExtremePoint) :
       have hs1a : ∀ a, s1 a = ((lam : ℂ))⁻¹ * ψ a := by
         intro a; rw [hs1]
         change (((lam : ℂ))⁻¹ • ψ) a = ((lam : ℂ))⁻¹ * ψ a
-        rw [ContinuousLinearMap.smul_apply]; rfl
+        rw [smul_apply]; rfl
       have hs2a : ∀ a, s2 a = (((1 - lam : ℝ) : ℂ))⁻¹ * (ω a - ψ a) := by
         intro a; rw [hs2]
         change ((((1 - lam : ℝ) : ℂ))⁻¹ • (ω.toContinuousLinearMap - ψ)) a
           = (((1 - lam : ℝ) : ℂ))⁻¹ * (ω a - ψ a)
-        rw [ContinuousLinearMap.smul_apply, ContinuousLinearMap.sub_apply]; rfl
+        rw [smul_apply, sub_apply]; rfl
       have hcancel : (lam : ℂ) * ((lam : ℂ))⁻¹ = 1 := mul_inv_cancel₀ hlamne
       have hcancel2 : (1 - (lam : ℂ)) * (((1 - lam : ℝ) : ℂ))⁻¹ = 1 := by
         rw [show (1 - (lam : ℂ)) = (((1 - lam : ℝ) : ℂ)) from by push_cast; ring]
@@ -376,7 +376,7 @@ noncomputable def State.convexCombo (ω₁ ω₂ : State A) (s : ℝ) (hs0 : 0 �
   toContinuousLinearMap :=
     (s : ℂ) • ω₁.toContinuousLinearMap + ((1 - s : ℝ) : ℂ) • ω₂.toContinuousLinearMap
   isPositive := fun a => by
-    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
+    simp only [add_apply, smul_apply, smul_eq_mul]
     exact add_nonneg (mul_nonneg (complex_ofReal_nonneg hs0) (ω₁.isPositive a))
       (mul_nonneg (complex_ofReal_nonneg (by linarith)) (ω₂.isPositive a))
   isNormalized := by
@@ -384,11 +384,11 @@ noncomputable def State.convexCombo (ω₁ ω₂ : State A) (s : ℝ) (hs0 : 0 �
     have hpos : ∀ a, 0 ≤ ((s : ℂ) • ω₁.toContinuousLinearMap
         + ((1 - s : ℝ) : ℂ) • ω₂.toContinuousLinearMap) (star a * a) := by
       intro a
-      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
+      simp only [add_apply, smul_apply, smul_eq_mul]
       exact add_nonneg (mul_nonneg (complex_ofReal_nonneg hs0) (ω₁.isPositive a))
         (mul_nonneg (complex_ofReal_nonneg (by linarith)) (ω₂.isPositive a))
     rw [norm_eq_re_apply_one_of_positive hpos]
-    simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
+    simp only [add_apply, smul_apply, smul_eq_mul]
     rw [show ω₁.toContinuousLinearMap 1 = ω₁ 1 from rfl,
       show ω₂.toContinuousLinearMap 1 = ω₂ 1 from rfl, ω₁.apply_one, ω₂.apply_one]
     rw [show (s : ℂ) * 1 + ((1 - s : ℝ) : ℂ) * 1 = 1 from by push_cast; ring, Complex.one_re]
@@ -398,7 +398,7 @@ noncomputable def State.convexCombo (ω₁ ω₂ : State A) (s : ℝ) (hs0 : 0 �
     (ω₁.convexCombo ω₂ s hs0 hs1) a = (s : ℂ) * ω₁ a + ((1 - s : ℝ) : ℂ) * ω₂ a := by
   change ((s : ℂ) • ω₁.toContinuousLinearMap + ((1 - s : ℝ) : ℂ) • ω₂.toContinuousLinearMap) a
     = (s : ℂ) * ω₁ a + ((1 - s : ℝ) : ℂ) * ω₂ a
-  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply, smul_eq_mul]
+  simp only [add_apply, smul_apply, smul_eq_mul]
   rfl
 
 /-- **Purity is invariant under a `*`-automorphism**: `ω ∘ Φ` is pure iff `ω` is.
@@ -434,7 +434,7 @@ theorem convex_stateSpace : Convex ℝ (stateSpace A) := by
   refine ⟨ω₁.convexCombo ω₂ a ha (by linarith), ?_⟩
   have hb' : b = 1 - a := by linarith
   refine ContinuousLinearMap.ext fun c => ?_
-  simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+  simp only [add_apply, smul_apply,
     Complex.real_smul, State.coe_toContinuousLinearMap, State.convexCombo_apply, hb']
 
 /-- **Bridge to Mathlib's convex-geometry API.** A state `ω`, viewed in the
@@ -450,7 +450,7 @@ theorem mem_extremePoints_iff_isExtremePoint (ω : State A) :
       refine ⟨t, 1 - t, ht0, by linarith, by ring, ?_⟩
       refine ContinuousLinearMap.ext fun c => ?_
       have hc := hdec c
-      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+      simp only [add_apply, smul_apply,
         Complex.real_smul, State.coe_toContinuousLinearMap]
       rw [hc]
       push_cast
@@ -464,7 +464,7 @@ theorem mem_extremePoints_iff_isExtremePoint (ω : State A) :
     have hdec : ∀ c, (ω c : ℂ) = (a : ℂ) * ω₁ c + (1 - a : ℂ) * ω₂ c := by
       intro c
       have hc := congrArg (fun φ : A →L[ℂ] ℂ => φ c) heq
-      simp only [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
+      simp only [add_apply, smul_apply,
         Complex.real_smul, State.coe_toContinuousLinearMap] at hc
       rw [← hc]
       have hb' : b = 1 - a := by linarith
@@ -474,8 +474,8 @@ theorem mem_extremePoints_iff_isExtremePoint (ω : State A) :
     have hcombo : ω₁.toContinuousLinearMap = ω.toContinuousLinearMap := by
       rw [← heq]
       refine ContinuousLinearMap.ext fun c => ?_
-      rw [ContinuousLinearMap.add_apply, ContinuousLinearMap.smul_apply,
-        ContinuousLinearMap.smul_apply, Complex.real_smul, Complex.real_smul,
+      rw [add_apply, smul_apply,
+        smul_apply, Complex.real_smul, Complex.real_smul,
         ← add_mul, ← Complex.ofReal_add, hab, Complex.ofReal_one, one_mul]
     exact ⟨hcombo, hcombo⟩
 

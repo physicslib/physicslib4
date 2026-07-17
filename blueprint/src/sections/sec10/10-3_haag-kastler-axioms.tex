@@ -216,6 +216,15 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     The separating property phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}_2)$: with $\Omega$ cyclic for the local observables of $\mathbf{B}_1$, every $R$ in the bundled algebra $R(\mathbf{B}_2)$ of a spacelike-separated region with $R\Omega = 0$ is zero. It reduces to \ref{thrm:statistical-independence} through the coercion $\uparrow R(\mathbf{B}_2) = \pi(\mathfrak{U}(\mathbf{B}_2))''$.
 \end{theorem}
 
+\begin{theorem}[Additive-Free Locality via the Spacelike Complement]
+    \label{thrm:additive-free-locality}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \leanok
+    \uses{thrm:von-neumann-bundled-order, def:spacelike-complement}
+    Locality expressed through the spacelike complement, without attaching any algebra to the unbounded complement: for basis sets $\mathbf{B}' \subseteq \mathbf{B}^\perp$, the local von Neumann algebra $R(\mathbf{B}')$ lies in the commutant $R(\mathbf{B})'$. It is a direct repackaging of bundled microcausality (\ref{thrm:von-neumann-bundled-order}) through the Galois bridge $\mathbf{B}' \subseteq \mathbf{B}^\perp \iff \mathbf{B}', \mathbf{B}$ completely spacelike, staying strictly within the physically local (bounded, diamond) regions. No local algebra is ever attached to the unbounded complement.
+\end{theorem}
+
 \begin{theorem}[Geometric Covariance of the von Neumann Net]
     \label{thrm:von-neumann-geometric-covariance}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.lieConj_image_covLocalVonNeumann, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.lieConj_image_covLocalOperators}
@@ -504,6 +513,33 @@ The comparison of representations is the entry point to superselection theory. F
     \uses{def:irreducible-representation, def:disjoint-representations}
     The endomorphism algebra of an irreducible representation is $\mathbb{C}\cdot 1$: every self-intertwiner of an irreducible representation is a scalar multiple of the identity. This is the commutant form of irreducibility read through the intertwiner language, and it identifies each irreducible sector with a simple (one-dimensional-centred) object.
 \end{lemma}
+
+\begin{theorem}[The commutant (self-intertwiner) von Neumann algebra]
+    \label{thrm:commutant-von-neumann}
+    \lean{Physicslib4.GNS.commutantVonNeumann, Physicslib4.GNS.mem_commutantVonNeumann_iff_intertwines, Physicslib4.GNS.isIrreducible_iff_commutantVonNeumann_eq_scalars}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \leanok
+    \uses{def:irreducible-representation, lmm:endomorphism-scalar}
+    The commutant $\pi(A)'$ of a representation is packaged as a von Neumann algebra --- the algebra of self-intertwiners, i.e. the intertwiner/gauge algebra of $\pi$. Its underlying set is the centralizer of $\pi(A)$ (self-adjoint, and a commutant is always a von Neumann algebra since $S''' = S'$), an operator lies in it exactly when it is a self-intertwiner of $\pi$, and $\pi$ is irreducible if and only if this algebra is trivial ($\pi(A)' = \mathbb{C}\cdot 1$) --- the von Neumann form of Schur's lemma.
+\end{theorem}
+
+\begin{theorem}[Double-Commutant Duality]
+    \label{thrm:double-commutant-duality}
+    \lean{Physicslib4.GNS.commutant_gnsVonNeumannAlgebra, Physicslib4.GNS.commutant_commutantVonNeumann}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \uses{thrm:commutant-von-neumann}
+    \leanok
+    The generated von Neumann algebra $\pi(A)''$ and the commutant von Neumann algebra $\pi(A)'$ (\ref{thrm:commutant-von-neumann}) are each other's commutants. On one side, the commutant of $\pi(A)''$ is $\pi(A)'$: this is an instance of the triple-commutant collapse $S''' = S'$ applied to the self-adjoint image $\pi(A)$. On the other side, the commutant of $\pi(A)'$ is $\pi(A)''$, which is exactly the definition of the bicommutant. Together these are von Neumann's double-commutant relation for this pair, and they exhibit the bicommutant as idempotent: taking the commutant twice returns $(\pi(A)'')'' = \pi(A)''$, so $\pi(A)''$ and $\pi(A)'$ form a mutually dual pair under $S \mapsto S'$.
+\end{theorem}
+
+\begin{theorem}[A Factor and its Commutant; Triviality Duality]
+    \label{thrm:commutant-factor-duality}
+    \lean{Physicslib4.GNS.isFactor_gnsVonNeumann_iff_isFactor_commutant, Physicslib4.GNS.commutantVonNeumann_eq_scalars_iff_gnsVonNeumann_eq_univ}
+    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \uses{thrm:double-commutant-duality, thrm:commutant-von-neumann, thrm:irreducible-generates-all}
+    \leanok
+    A von Neumann algebra and its commutant share the same center: the intersection $\pi(A)'' \cap (\pi(A)'')' = \pi(A)'' \cap \pi(A)'$ is symmetric under the duality of \ref{thrm:double-commutant-duality}, being simultaneously the center of $\pi(A)''$ and the center of $\pi(A)'$. Consequently $\pi(A)''$ is a factor (trivial center) if and only if its commutant $\pi(A)'$ is a factor. Dually, at the extreme of triviality, the commutant collapses to the scalars $\pi(A)' = \mathbb{C}\cdot 1$ if and only if the generated algebra is everything $\pi(A)'' = \mathcal{B}(H)$; this is the commutant form of the equivalence ``irreducible $\iff$ generates $\mathcal{B}(H)$'' (\ref{thrm:commutant-von-neumann}), passing between the two sides through the bicommutant $(\mathbb{C}\cdot 1)' = \mathcal{B}(H)$.
+\end{theorem}
 
 \begin{theorem}[The Pure-State Dichotomy]
     \label{thrm:pure-state-dichotomy}
