@@ -627,9 +627,11 @@
     \lean{Physicslib4.Spacetime.exists_past_between_standardMinkowski}
     \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
     \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
+    \leanok
     On standard Minkowski spacetime, if $p_1 \ll x$ and $p_2 \ll x$ then there is a point $a$ with $p_1 \ll a$, $p_2 \ll a$, and $a \ll x$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:minkowski-chronological-open}
     Take $a$ with the same spatial coordinates as $x$ and time coordinate $a^0 = x^0 - \varepsilon$ for a small $\varepsilon > 0$. Then $x - a = (\varepsilon, \mathbf{0})$ is future-pointing timelike, so $a \ll x$. For each $i$ the connecting vector $a - p_i$ has the same spatial part as $x - p_i$ while its time component is $(x^0 - p_i^0) - \varepsilon$; since $p_i \ll x$ makes the spatial separation strictly smaller than $x^0 - p_i^0$, for $\varepsilon$ small enough the reduced time gap still dominates the spatial separation and remains positive, so $a - p_i$ is future-pointing timelike and $p_i \ll a$. Both strict inequalities hold for a common small $\varepsilon$; the estimate is a direct coordinate computation (\texttt{nlinarith}).
 \end{proof}

@@ -435,6 +435,15 @@ theorem isOpen_alexandrov_of_mem_basis (t : M.TimeOrientation)
     @IsOpen M.Carrier (alexandrovTopology M t) B :=
   TopologicalSpace.GenerateOpen.basic B hB
 
+/-- **No-diamond points have only the whole space as neighbourhood.** If `x` lies
+in no Alexandrov diamond `I⁺(p) ∩ I⁻(q)`, then every Alexandrov-open set (i.e. every
+set generated from the diamond subbasis) containing `x` is the whole space `M`. -/
+theorem alexandrov_nbhd_univ_of_no_diamond (t : M.TimeOrientation) {x : M.Carrier}
+    (hx : ∀ s ∈ alexandrovBasis M t, x ∉ s) {U : Set M.Carrier}
+    (hU : TopologicalSpace.GenerateOpen (alexandrovBasis M t) U) (hxU : x ∈ U) :
+    U = Set.univ := by
+  sorry
+
 /-! ### Openness of chronological futures and pasts -/
 
 /-- Every set of the form `I^+(p) ∩ I^-(q)` is open in the Alexandrov topology.
