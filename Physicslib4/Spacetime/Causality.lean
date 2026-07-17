@@ -442,7 +442,23 @@ theorem alexandrov_nbhd_univ_of_no_diamond (t : M.TimeOrientation) {x : M.Carrie
     (hx : ∀ s ∈ alexandrovBasis M t, x ∉ s) {U : Set M.Carrier}
     (hU : TopologicalSpace.GenerateOpen (alexandrovBasis M t) U) (hxU : x ∈ U) :
     U = Set.univ := by
-  sorry
+  induction hU with
+  | basic s hs =>
+    exact absurd hxU (hx s hs)
+  | univ =>
+    rfl
+  | inter s t hs ht ihs iht =>
+    have hxs : x ∈ s := hxU.1
+    have hxt : x ∈ t := hxU.2
+    rw [ihs hxs, iht hxt, Set.inter_univ]
+  | sUnion G hG ih =>
+    rcases Set.mem_sUnion.mp hxU with ⟨g, hgG, hxg⟩
+    have hg_eq : g = Set.univ := ih g hgG hxg
+    have h_sub : Set.univ ⊆ ⋃₀ G := by
+      calc
+        Set.univ = g := hg_eq.symm
+        _ ⊆ ⋃₀ G := Set.subset_sUnion_of_mem hgG
+    exact Set.eq_univ_of_univ_subset h_sub
 
 /-! ### Openness of chronological futures and pasts -/
 

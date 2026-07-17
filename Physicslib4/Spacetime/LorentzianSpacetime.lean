@@ -164,15 +164,13 @@ theorem sUnion_alexandrovBasis_eq_univ [Nontrivial M.Carrier] :
   intro x
   by_contra hx
   -- hx : x ∉ ⋃₀ (alexandrovBasis ...) means every basis set misses x
-  have hx' : ∀ s ∈ alexandrovBasis M.toSpacetime M.timeOrientation, x ∉ s :=
-    fun s hs hxs => hx ⟨s, hs, hxs⟩
   -- Key: any Alexandrov-open set containing x must be the whole space.
   have key : ∀ (U : Set M.Carrier),
       TopologicalSpace.GenerateOpen (alexandrovBasis M.toSpacetime M.timeOrientation) U →
       x ∈ U → U = Set.univ := by
     intro U hU hxU
     induction hU with
-    | basic s hs => exact absurd hxU (hx' s hs)
+    | basic s hs => exact (hx ⟨s, hs, hxU⟩).elim
     | univ => rfl
     | inter s t hs ht ihs iht => rw [ihs hxU.1, iht hxU.2, Set.inter_univ]
     | sUnion G hG ih =>
