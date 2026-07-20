@@ -337,8 +337,8 @@
 \begin{definition}[Causal and chronological diamonds]
     \label{def:causal-diamond}
     \lean{Physicslib4.Spacetime.causalDiamond, Physicslib4.Spacetime.chronologicalDiamond, Physicslib4.Spacetime.mem_causalDiamond, Physicslib4.Spacetime.mem_chronologicalDiamond}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:causal-future-and-causal-past, def:chronological-future-and-chronological-past}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The \textit{causal diamond} of $p$ and $q$ is the intersection of the causal future of $p$ with the causal past of $q$,
     \begin{align}
         J^+(p) \cap J^-(q),
@@ -353,8 +353,8 @@
 \begin{lemma}[Structural properties of the causal diamond]
     \label{lmm:causal-diamond-structure}
     \lean{Physicslib4.Spacetime.causalDiamond_subset_of, Physicslib4.Spacetime.causalDiamond_causallyConvex, Physicslib4.Spacetime.causallyPrecedes_of_causalDiamond_nonempty}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:causal-diamond, thrm:precedence-transitive}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$, and write $D(p,q) = J^+(p) \cap J^-(q)$ for the causal diamond. Then:
     \begin{enumerate}
         \item \textit{Monotonicity under endpoint spread.} If $p' \prec p$ and $q \prec q'$ then $D(p,q) \subseteq D(p',q')$.
@@ -363,6 +363,7 @@
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:causal-diamond, thrm:precedence-transitive}
     All three are immediate from transitivity of causal precedence (\ref{thrm:precedence-transitive}). For (i), if $x \in D(p,q)$ then $p \prec x$ and $x \prec q$; combining with $p' \prec p$ and $q \prec q'$ by transitivity gives $p' \prec x$ and $x \prec q'$, so $x \in D(p',q')$. For (ii), from $a \in D(p,q)$ we have $p \prec a$, and $a \prec z$ gives $p \prec z$; from $b \in D(p,q)$ we have $b \prec q$, and $z \prec b$ gives $z \prec q$, so $z \in D(p,q)$. For (iii), any $x \in D(p,q)$ satisfies $p \prec x$ and $x \prec q$, whence $p \prec q$ by transitivity.
 \end{proof}

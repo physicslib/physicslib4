@@ -551,21 +551,24 @@ def chronologicalDiamond (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carri
 theorem mem_causalDiamond (t : M.TimeOrientation) {p q x : M.Carrier} :
     x ∈ causalDiamond M t p q ↔
       M.CausallyPrecedes t p x ∧ M.CausallyPrecedes t x q := by
-  sorry
+  simp [causalDiamond, causalFuture, causalPast, Set.mem_inter_iff, Set.mem_setOf_eq]
 
 /-- Membership in the chronological diamond: `x ∈ I^+(p) ∩ I^-(q)` iff `p ≪ x` and
 `x ≪ q`. -/
 theorem mem_chronologicalDiamond (t : M.TimeOrientation) {p q x : M.Carrier} :
     x ∈ chronologicalDiamond M t p q ↔
       M.ChronologicallyPrecedes t p x ∧ M.ChronologicallyPrecedes t x q := by
-  sorry
+  simp [chronologicalDiamond, chronologicalFuture, chronologicalPast, Set.mem_inter_iff, Set.mem_setOf_eq]
 
 /-- **Monotonicity under endpoint spread.** If `p' ≺ p` and `q ≺ q'`, then the causal
 diamond of `(p, q)` is contained in the causal diamond of `(p', q')`. -/
 theorem causalDiamond_subset_of (t : M.TimeOrientation) {p p' q q' : M.Carrier}
     (hp : M.CausallyPrecedes t p' p) (hq : M.CausallyPrecedes t q q') :
     causalDiamond M t p q ⊆ causalDiamond M t p' q' := by
-  sorry
+  intro x hx
+  rw [mem_causalDiamond] at hx ⊢
+  rcases hx with ⟨hpx, hxq⟩
+  exact ⟨M.causallyPrecedes_trans t hp hpx, M.causallyPrecedes_trans t hxq hq⟩
 
 /-- **Causal convexity.** If `a, b` lie in the causal diamond of `(p, q)`, `a ≺ z` and
 `z ≺ b`, then `z` lies in the causal diamond of `(p, q)`. -/
@@ -573,13 +576,19 @@ theorem causalDiamond_causallyConvex (t : M.TimeOrientation) {p q a b z : M.Carr
     (ha : a ∈ causalDiamond M t p q) (hb : b ∈ causalDiamond M t p q)
     (haz : M.CausallyPrecedes t a z) (hzb : M.CausallyPrecedes t z b) :
     z ∈ causalDiamond M t p q := by
-  sorry
+  rw [mem_causalDiamond] at ha hb ⊢
+  rcases ha with ⟨hpa, haq⟩
+  rcases hb with ⟨hpb, hbq⟩
+  exact ⟨M.causallyPrecedes_trans t hpa haz, M.causallyPrecedes_trans t hzb hbq⟩
 
 /-- A nonempty causal diamond forces `p ≺ q`. -/
 theorem causallyPrecedes_of_causalDiamond_nonempty (t : M.TimeOrientation)
     {p q : M.Carrier} (h : (causalDiamond M t p q).Nonempty) :
     M.CausallyPrecedes t p q := by
-  sorry
+  obtain ⟨x, hx⟩ := h
+  rw [mem_causalDiamond] at hx
+  rcases hx with ⟨hpx, hxq⟩
+  exact M.causallyPrecedes_trans t hpx hxq
 
 /-- The chronological diamond sits inside the causal diamond,
 `I^+(p) ∩ I^-(q) ⊆ J^+(p) ∩ J^-(q)`. -/
