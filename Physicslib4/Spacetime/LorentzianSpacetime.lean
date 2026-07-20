@@ -164,18 +164,13 @@ theorem sUnion_alexandrovBasis_eq_univ [Nontrivial M.Carrier] :
   intro x
   by_contra hx
   -- hx : x ∉ ⋃₀ (alexandrovBasis ...) means every basis set misses x
+  have hx' : ∀ s ∈ alexandrovBasis M.toSpacetime M.timeOrientation, x ∉ s :=
+    fun s hs hxs => hx ⟨s, hs, hxs⟩
   -- Key: any Alexandrov-open set containing x must be the whole space.
   have key : ∀ (U : Set M.Carrier),
       TopologicalSpace.GenerateOpen (alexandrovBasis M.toSpacetime M.timeOrientation) U →
-      x ∈ U → U = Set.univ := by
-    intro U hU hxU
-    induction hU with
-    | basic s hs => exact (hx ⟨s, hs, hxU⟩).elim
-    | univ => rfl
-    | inter s t hs ht ihs iht => rw [ihs hxU.1, iht hxU.2, Set.inter_univ]
-    | sUnion G hG ih =>
-      obtain ⟨g, hgG, hxg⟩ := hxU
-      exact Set.univ_subset_iff.mp (ih g hgG hxg ▸ Set.subset_sUnion_of_mem hgG)
+      x ∈ U → U = Set.univ :=
+    fun U hU hxU => alexandrov_nbhd_univ_of_no_diamond M.toSpacetime M.timeOrientation hx' hU hxU
   -- Choose a second point y ≠ x (the space is nontrivial); T₂ separation gives
   -- disjoint open sets around x and y, but the one around x is forced to be `univ`.
   obtain ⟨y, hy⟩ := exists_ne x
