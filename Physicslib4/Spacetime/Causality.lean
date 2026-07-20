@@ -617,7 +617,8 @@ def IsCausallyConvex (t : M.TimeOrientation) (C : Set M.Carrier) : Prop :=
 /-- Every causal diamond `J^+(p) ∩ J^-(q)` is a causally convex region. -/
 theorem causalDiamond_isCausallyConvex (t : M.TimeOrientation) (p q : M.Carrier) :
     IsCausallyConvex M t (causalDiamond M t p q) := by
-  sorry
+  intro a b c ha hc hac hcb
+  exact causalDiamond_causallyConvex M t ha hc hac hcb
 
 end Spacetime
 

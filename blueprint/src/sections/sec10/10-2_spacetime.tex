@@ -541,19 +541,20 @@
 \begin{definition}[Causally convex region]
     \label{def:causally-convex-region}
     \lean{Physicslib4.Spacetime.IsCausallyConvex}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:causal-future-and-causal-past}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$. A subset $\mathbf{C} \subseteq M$ is \emph{causally convex} if it contains every point causally between two of its own points: whenever $p, r \in \mathbf{C}$ and $q$ is causally between them, in the sense that $p \prec q$ and $q \prec r$, then $q \in \mathbf{C}$. Intuitively, $\mathbf{C}$ contains every causal curve segment whose endpoints lie in $\mathbf{C}$.
 \end{definition}
 
 \begin{lemma}[Causal diamonds are causally convex]
     \label{lmm:causal-diamond-causally-convex}
     \lean{Physicslib4.Spacetime.causalDiamond_isCausallyConvex}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:causally-convex-region, def:causal-diamond, lmm:causal-diamond-structure}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The causal diamond $J^+(p) \cap J^-(q)$ is a causally convex region.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:causally-convex-region, def:causal-diamond, lmm:causal-diamond-structure}
     This is exactly the causal-convexity property of the causal diamond (part (ii) of the structural lemma, \ref{lmm:causal-diamond-structure}), repackaged as the region predicate: if $a, b \in J^+(p) \cap J^-(q)$ with $a \prec z$ and $z \prec b$, then $z \in J^+(p) \cap J^-(q)$, which is precisely the statement that $J^+(p) \cap J^-(q)$ is causally convex.
 \end{proof}
@@ -561,8 +562,8 @@
 \begin{theorem}[Causally complete regions are causally convex]
     \label{thrm:causally-complete-convex}
     \lean{Physicslib4.Spacetime.spacelikeComplement_isCausallyConvex, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyConvex_of_isCausallyComplete, Physicslib4.Spacetime.LorentzianSpacetime.CausallyCompleteRegion.isCausallyConvex}
-    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
     \uses{def:causally-convex-region, def:spacelike-complement, def:causally-complete-region, thrm:precedence-transitive}
+    \leanok
     Let $M$ be a Lorentzian spacetime.
     \begin{enumerate}
         \item Every spacelike complement $\mathbf{B}^\perp$ is a causally convex region.
@@ -571,6 +572,7 @@
     Thus causal convexity is the property shared by causal diamonds (\ref{lmm:causal-diamond-causally-convex}) and by causally complete regions, even though a causal diamond need not itself be causally complete.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:causally-convex-region, def:spacelike-complement, def:causally-complete-region, thrm:precedence-transitive}
     For (i), suppose $p, r \in \mathbf{B}^\perp$ and $p \prec q \prec r$; we must show $q \in \mathbf{B}^\perp$, i.e. that $q$ is spacelike to every point of $\mathbf{B}$. This is a consequence of transitivity of causal precedence (\ref{thrm:precedence-transitive}): if $q$ were causally related to some $b \in \mathbf{B}$, then composing that relation with $p \prec q$ or $q \prec r$ would make $p$ or $r$ causally related to $b$, contradicting $p, r \in \mathbf{B}^\perp$. Hence $q$ is spacelike to all of $\mathbf{B}$, so $q \in \mathbf{B}^\perp$.
 
