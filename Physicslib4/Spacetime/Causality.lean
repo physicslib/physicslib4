@@ -606,6 +606,19 @@ theorem mem_alexandrovBasis_iff_eq_chronologicalDiamond (t : M.TimeOrientation)
     U ∈ alexandrovBasis M t ↔ ∃ p q : M.Carrier, U = chronologicalDiamond M t p q := by
   simp only [alexandrovBasis, chronologicalDiamond, Set.mem_setOf_eq]
 
+/-! ### Causal convexity -/
+
+/-- A region `C` is *causally convex* if it contains every point causally between two
+of its own points: whenever `p, r ∈ C`, `p ≺ q` and `q ≺ r`, then `q ∈ C`. -/
+def IsCausallyConvex (t : M.TimeOrientation) (C : Set M.Carrier) : Prop :=
+  ∀ ⦃p q r : M.Carrier⦄, p ∈ C → r ∈ C →
+    M.CausallyPrecedes t p q → M.CausallyPrecedes t q r → q ∈ C
+
+/-- Every causal diamond `J^+(p) ∩ J^-(q)` is a causally convex region. -/
+theorem causalDiamond_isCausallyConvex (t : M.TimeOrientation) (p q : M.Carrier) :
+    IsCausallyConvex M t (causalDiamond M t p q) := by
+  sorry
+
 end Spacetime
 
 end Physicslib4
