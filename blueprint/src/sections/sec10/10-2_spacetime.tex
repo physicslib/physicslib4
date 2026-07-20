@@ -584,8 +584,8 @@
 \begin{lemma}[Causally convex regions form a closure system]
     \label{lmm:causally-convex-closure-ops}
     \lean{Physicslib4.Spacetime.isCausallyConvex_univ, Physicslib4.Spacetime.isCausallyConvex_empty, Physicslib4.Spacetime.isCausallyConvex_inter, Physicslib4.Spacetime.isCausallyConvex_iInter, Physicslib4.Spacetime.isCausallyConvex_sInter}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:causally-convex-region}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$. The causally convex regions of $M$ form a closure system (a Moore family):
     \begin{enumerate}
         \item the whole spacetime $M$ (as $\mathrm{univ}$) is causally convex, and so is the empty set $\varnothing$;
@@ -599,6 +599,7 @@
     Consequently the causally convex regions are closed under arbitrary intersections and contain $M$, i.e. they form a Moore family.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:causally-convex-region}
     Each claim is immediate from the definition of causal convexity (\ref{def:causally-convex-region}). For $\mathrm{univ}$ the membership condition $q \in M$ is vacuously satisfied, and for $\varnothing$ the hypothesis $p, r \in \varnothing$ never holds. For an intersection, suppose $p, r$ lie in the intersection and $p \prec q \prec r$; then $p, r$ lie in every member of the family, so by that member's causal convexity $q$ lies in every member, hence in the intersection. The binary and indexed forms are the special cases of a two-element and an indexed family, and the set-indexed form ($\bigcap_0 \mathcal{S}$) unfolds membership through $\mathtt{mem\_sInter}$ to the same argument.
 \end{proof}
@@ -606,8 +607,8 @@
 \begin{definition}[Causal-convex hull]
     \label{def:causal-convex-hull}
     \lean{Physicslib4.Spacetime.causalConvexHull, Physicslib4.Spacetime.subset_causalConvexHull, Physicslib4.Spacetime.isCausallyConvex_causalConvexHull}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:causally-convex-region, lmm:causally-convex-closure-ops}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be an arbitrary region. The \emph{causal-convex hull} of $\mathbf{B}$ is the intersection of all causally convex regions containing $\mathbf{B}$:
     \begin{align}
         \mathrm{ccHull}(\mathbf{B}) \;=\; \bigcap_0 \{\, \mathbf{C} \mid \mathbf{B} \subseteq \mathbf{C} \text{ and } \mathbf{C} \text{ is causally convex} \,\}.
@@ -622,8 +623,8 @@
 \begin{theorem}[The causal-convex hull is a closure operator]
     \label{thrm:causal-convex-hull-closure}
     \lean{Physicslib4.Spacetime.causalConvexHull_minimal, Physicslib4.Spacetime.causalConvexHull_mono, Physicslib4.Spacetime.causalConvexHull_eq_of_isCausallyConvex, Physicslib4.Spacetime.causalConvexHull_idem}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:causal-convex-hull}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$. The map $\mathbf{B} \mapsto \mathrm{ccHull}(\mathbf{B})$ satisfies the closure-operator laws:
     \begin{enumerate}
         \item (minimality / universal property) if $\mathbf{B} \subseteq \mathbf{C}$ and $\mathbf{C}$ is causally convex, then $\mathrm{ccHull}(\mathbf{B}) \subseteq \mathbf{C}$;
@@ -634,6 +635,7 @@
     Together with extensivity ($\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$, \ref{def:causal-convex-hull}), these make $\mathrm{ccHull}$ a closure operator whose closed sets are exactly the causally convex regions.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:causal-convex-hull}
     (i) If $\mathbf{B} \subseteq \mathbf{C}$ and $\mathbf{C}$ is causally convex, then $\mathbf{C}$ is a member of the intersected family, so $\mathrm{ccHull}(\mathbf{B}) \subseteq \mathbf{C}$ as an intersection is contained in each of its members.
 
