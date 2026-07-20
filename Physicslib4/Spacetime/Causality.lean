@@ -536,6 +536,65 @@ theorem isOpen_chronologicalPast (t : M.TimeOrientation) (p : M.Carrier)
   exact @isOpen_iUnion M.Carrier (M.Carrier) (alexandrovTopology M t)
     (fun a => chronologicalFuture M t a ∩ chronologicalPast M t p) h_open
 
+/-! ### Causal and chronological diamonds -/
+
+/-- The *causal diamond* `J^+(p) ∩ J^-(q)` of two points `p, q`. -/
+def causalDiamond (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carrier :=
+  causalFuture M t p ∩ causalPast M t q
+
+/-- The *chronological diamond* (Alexandrov diamond) `I^+(p) ∩ I^-(q)` of two points
+`p, q`. -/
+def chronologicalDiamond (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carrier :=
+  chronologicalFuture M t p ∩ chronologicalPast M t q
+
+/-- Membership in the causal diamond: `x ∈ J^+(p) ∩ J^-(q)` iff `p ≺ x` and `x ≺ q`. -/
+theorem mem_causalDiamond (t : M.TimeOrientation) {p q x : M.Carrier} :
+    x ∈ causalDiamond M t p q ↔
+      M.CausallyPrecedes t p x ∧ M.CausallyPrecedes t x q := by
+  sorry
+
+/-- Membership in the chronological diamond: `x ∈ I^+(p) ∩ I^-(q)` iff `p ≪ x` and
+`x ≪ q`. -/
+theorem mem_chronologicalDiamond (t : M.TimeOrientation) {p q x : M.Carrier} :
+    x ∈ chronologicalDiamond M t p q ↔
+      M.ChronologicallyPrecedes t p x ∧ M.ChronologicallyPrecedes t x q := by
+  sorry
+
+/-- **Monotonicity under endpoint spread.** If `p' ≺ p` and `q ≺ q'`, then the causal
+diamond of `(p, q)` is contained in the causal diamond of `(p', q')`. -/
+theorem causalDiamond_subset_of (t : M.TimeOrientation) {p p' q q' : M.Carrier}
+    (hp : M.CausallyPrecedes t p' p) (hq : M.CausallyPrecedes t q q') :
+    causalDiamond M t p q ⊆ causalDiamond M t p' q' := by
+  sorry
+
+/-- **Causal convexity.** If `a, b` lie in the causal diamond of `(p, q)`, `a ≺ z` and
+`z ≺ b`, then `z` lies in the causal diamond of `(p, q)`. -/
+theorem causalDiamond_causallyConvex (t : M.TimeOrientation) {p q a b z : M.Carrier}
+    (ha : a ∈ causalDiamond M t p q) (hb : b ∈ causalDiamond M t p q)
+    (haz : M.CausallyPrecedes t a z) (hzb : M.CausallyPrecedes t z b) :
+    z ∈ causalDiamond M t p q := by
+  sorry
+
+/-- A nonempty causal diamond forces `p ≺ q`. -/
+theorem causallyPrecedes_of_causalDiamond_nonempty (t : M.TimeOrientation)
+    {p q : M.Carrier} (h : (causalDiamond M t p q).Nonempty) :
+    M.CausallyPrecedes t p q := by
+  sorry
+
+/-- The chronological diamond sits inside the causal diamond,
+`I^+(p) ∩ I^-(q) ⊆ J^+(p) ∩ J^-(q)`. -/
+theorem chronologicalDiamond_subset_causalDiamond (t : M.TimeOrientation)
+    (p q : M.Carrier) :
+    chronologicalDiamond M t p q ⊆ causalDiamond M t p q := by
+  sorry
+
+/-- The Alexandrov basis is exactly the family of chronological diamonds: `U` is an
+Alexandrov basis set iff `U = I^+(p) ∩ I^-(q)` for some `p, q`. -/
+theorem mem_alexandrovBasis_iff_eq_chronologicalDiamond (t : M.TimeOrientation)
+    {U : Set M.Carrier} :
+    U ∈ alexandrovBasis M t ↔ ∃ p q : M.Carrier, U = chronologicalDiamond M t p q := by
+  sorry
+
 end Spacetime
 
 end Physicslib4

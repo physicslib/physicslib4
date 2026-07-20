@@ -332,6 +332,57 @@
     Each operator is an indexed union over the points of its argument set, and a union over a larger index set contains the union over a smaller one.
 \end{proof}
 
+\subsection{Causal diamonds}
+
+\begin{definition}[Causal and chronological diamonds]
+    \label{def:causal-diamond}
+    \lean{Physicslib4.Spacetime.causalDiamond, Physicslib4.Spacetime.chronologicalDiamond, Physicslib4.Spacetime.mem_causalDiamond, Physicslib4.Spacetime.mem_chronologicalDiamond}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:causal-future-and-causal-past, def:chronological-future-and-chronological-past}
+    Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The \textit{causal diamond} of $p$ and $q$ is the intersection of the causal future of $p$ with the causal past of $q$,
+    \begin{align}
+        J^+(p) \cap J^-(q),
+    \end{align}
+    and the \textit{chronological diamond} (or \textit{Alexandrov diamond}) of $p$ and $q$ is the intersection of the chronological future of $p$ with the chronological past of $q$,
+    \begin{align}
+        I^+(p) \cap I^-(q).
+    \end{align}
+    These are characterised on points: a point $x$ lies in the causal diamond of $p$ and $q$ if and only if $p \prec x$ and $x \prec q$, and $x$ lies in the chronological diamond of $p$ and $q$ if and only if $p \ll x$ and $x \ll q$.
+\end{definition}
+
+\begin{lemma}[Structural properties of the causal diamond]
+    \label{lmm:causal-diamond-structure}
+    \lean{Physicslib4.Spacetime.causalDiamond_subset_of, Physicslib4.Spacetime.causalDiamond_causallyConvex, Physicslib4.Spacetime.causallyPrecedes_of_causalDiamond_nonempty}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:causal-diamond, thrm:precedence-transitive}
+    Let $M$ be a spacetime with time orientation $t$, and write $D(p,q) = J^+(p) \cap J^-(q)$ for the causal diamond. Then:
+    \begin{enumerate}
+        \item \textit{Monotonicity under endpoint spread.} If $p' \prec p$ and $q \prec q'$ then $D(p,q) \subseteq D(p',q')$.
+        \item \textit{Causal convexity.} If $a, b \in D(p,q)$, $a \prec z$ and $z \prec b$, then $z \in D(p,q)$.
+        \item \textit{Nonemptiness forces $p \prec q$.} If $D(p,q)$ is nonempty then $p \prec q$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \uses{def:causal-diamond, thrm:precedence-transitive}
+    All three are immediate from transitivity of causal precedence (\ref{thrm:precedence-transitive}). For (i), if $x \in D(p,q)$ then $p \prec x$ and $x \prec q$; combining with $p' \prec p$ and $q \prec q'$ by transitivity gives $p' \prec x$ and $x \prec q'$, so $x \in D(p',q')$. For (ii), from $a \in D(p,q)$ we have $p \prec a$, and $a \prec z$ gives $p \prec z$; from $b \in D(p,q)$ we have $b \prec q$, and $z \prec b$ gives $z \prec q$, so $z \in D(p,q)$. For (iii), any $x \in D(p,q)$ satisfies $p \prec x$ and $x \prec q$, whence $p \prec q$ by transitivity.
+\end{proof}
+
+\begin{theorem}[Chronological diamonds inside causal diamonds]
+    \label{thrm:causal-diamond-vs-chronological}
+    \lean{Physicslib4.Spacetime.chronologicalDiamond_subset_causalDiamond, Physicslib4.Spacetime.mem_alexandrovBasis_iff_eq_chronologicalDiamond}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:causal-diamond, lmm:chronological-implies-causal, def:alexandrov-topology}
+    Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The chronological diamond is contained in the causal diamond,
+    \begin{align}
+        I^+(p) \cap I^-(q) \subseteq J^+(p) \cap J^-(q).
+    \end{align}
+    Moreover the Alexandrov basis is exactly the family of chronological diamonds: a set $U$ is an Alexandrov basis set if and only if $U = I^+(p) \cap I^-(q)$ for some $p, q \in M$. Consequently every Alexandrov basis set sits inside the corresponding causal diamond.
+\end{theorem}
+\begin{proof}
+    \uses{def:causal-diamond, lmm:chronological-implies-causal, def:alexandrov-topology}
+    Chronological precedence refines causal precedence (\ref{lmm:chronological-implies-causal}), so $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$; intersecting these inclusions gives $I^+(p) \cap I^-(q) \subseteq J^+(p) \cap J^-(q)$. The characterisation of the Alexandrov basis is the definition of the Alexandrov topology (\ref{def:alexandrov-topology}), whose basis consists of exactly the sets $I^+(p) \cap I^-(q)$. The final claim combines the two: an Alexandrov basis set equals some $I^+(p) \cap I^-(q)$, which is contained in $J^+(p) \cap J^-(q)$.
+\end{proof}
+
 \begin{definition}[Spacelike Related]
     \label{def:spacelike-related}
     \lean{Physicslib4.Spacetime.IsSpacelikeRelated}
