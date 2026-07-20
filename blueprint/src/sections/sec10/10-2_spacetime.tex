@@ -579,6 +579,71 @@
     For (ii), a causally complete region satisfies $\mathbf{B} = \mathbf{B}^{\perp\perp} = (\mathbf{B}^\perp)^\perp$, so it is the spacelike complement of the region $\mathbf{B}^\perp$; causal convexity then follows immediately from part (i) applied to $\mathbf{B}^\perp$.
 \end{proof}
 
+\subsection{Causal convexity: closure structure}
+
+\begin{lemma}[Causally convex regions form a closure system]
+    \label{lmm:causally-convex-closure-ops}
+    \lean{Physicslib4.Spacetime.isCausallyConvex_univ, Physicslib4.Spacetime.isCausallyConvex_empty, Physicslib4.Spacetime.isCausallyConvex_inter, Physicslib4.Spacetime.isCausallyConvex_iInter, Physicslib4.Spacetime.isCausallyConvex_sInter}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:causally-convex-region}
+    Let $M$ be a spacetime with time orientation $t$. The causally convex regions of $M$ form a closure system (a Moore family):
+    \begin{enumerate}
+        \item the whole spacetime $M$ (as $\mathrm{univ}$) is causally convex, and so is the empty set $\varnothing$;
+        \item causal convexity is preserved under arbitrary intersections, in each of the standard forms:
+        \begin{itemize}
+            \item (binary) if $\mathbf{C}_1$ and $\mathbf{C}_2$ are causally convex, then $\mathbf{C}_1 \cap \mathbf{C}_2$ is causally convex;
+            \item (indexed) for any family $(\mathbf{C}_i)_{i \in I}$ of causally convex regions, $\bigcap_{i \in I} \mathbf{C}_i$ is causally convex;
+            \item (set-indexed) for any collection $\mathcal{S}$ of causally convex regions, $\bigcap_{\mathbf{C} \in \mathcal{S}} \mathbf{C} = \bigcap_0 \mathcal{S}$ is causally convex.
+        \end{itemize}
+    \end{enumerate}
+    Consequently the causally convex regions are closed under arbitrary intersections and contain $M$, i.e. they form a Moore family.
+\end{lemma}
+\begin{proof}
+    \uses{def:causally-convex-region}
+    Each claim is immediate from the definition of causal convexity (\ref{def:causally-convex-region}). For $\mathrm{univ}$ the membership condition $q \in M$ is vacuously satisfied, and for $\varnothing$ the hypothesis $p, r \in \varnothing$ never holds. For an intersection, suppose $p, r$ lie in the intersection and $p \prec q \prec r$; then $p, r$ lie in every member of the family, so by that member's causal convexity $q$ lies in every member, hence in the intersection. The binary and indexed forms are the special cases of a two-element and an indexed family, and the set-indexed form ($\bigcap_0 \mathcal{S}$) unfolds membership through $\mathtt{mem\_sInter}$ to the same argument.
+\end{proof}
+
+\begin{definition}[Causal-convex hull]
+    \label{def:causal-convex-hull}
+    \lean{Physicslib4.Spacetime.causalConvexHull, Physicslib4.Spacetime.subset_causalConvexHull, Physicslib4.Spacetime.isCausallyConvex_causalConvexHull}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:causally-convex-region, lmm:causally-convex-closure-ops}
+    Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be an arbitrary region. The \emph{causal-convex hull} of $\mathbf{B}$ is the intersection of all causally convex regions containing $\mathbf{B}$:
+    \begin{align}
+        \mathrm{ccHull}(\mathbf{B}) \;=\; \bigcap_0 \{\, \mathbf{C} \mid \mathbf{B} \subseteq \mathbf{C} \text{ and } \mathbf{C} \text{ is causally convex} \,\}.
+    \end{align}
+    It satisfies the two defining properties of a hull:
+    \begin{enumerate}
+        \item (extensivity) $\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$, since $\mathbf{B}$ is contained in every member of the intersected family;
+        \item $\mathrm{ccHull}(\mathbf{B})$ is itself causally convex, being an intersection of causally convex regions (\ref{lmm:causally-convex-closure-ops}); the family is nonempty because the whole space $M$ contains $\mathbf{B}$ and is causally convex.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}[The causal-convex hull is a closure operator]
+    \label{thrm:causal-convex-hull-closure}
+    \lean{Physicslib4.Spacetime.causalConvexHull_minimal, Physicslib4.Spacetime.causalConvexHull_mono, Physicslib4.Spacetime.causalConvexHull_eq_of_isCausallyConvex, Physicslib4.Spacetime.causalConvexHull_idem}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:causal-convex-hull}
+    Let $M$ be a spacetime with time orientation $t$. The map $\mathbf{B} \mapsto \mathrm{ccHull}(\mathbf{B})$ satisfies the closure-operator laws:
+    \begin{enumerate}
+        \item (minimality / universal property) if $\mathbf{B} \subseteq \mathbf{C}$ and $\mathbf{C}$ is causally convex, then $\mathrm{ccHull}(\mathbf{B}) \subseteq \mathbf{C}$;
+        \item (monotonicity) if $\mathbf{B}_1 \subseteq \mathbf{B}_2$, then $\mathrm{ccHull}(\mathbf{B}_1) \subseteq \mathrm{ccHull}(\mathbf{B}_2)$;
+        \item (fixed points) if $\mathbf{C}$ is causally convex, then $\mathrm{ccHull}(\mathbf{C}) = \mathbf{C}$;
+        \item (idempotence) $\mathrm{ccHull}(\mathrm{ccHull}(\mathbf{B})) = \mathrm{ccHull}(\mathbf{B})$.
+    \end{enumerate}
+    Together with extensivity ($\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$, \ref{def:causal-convex-hull}), these make $\mathrm{ccHull}$ a closure operator whose closed sets are exactly the causally convex regions.
+\end{theorem}
+\begin{proof}
+    \uses{def:causal-convex-hull}
+    (i) If $\mathbf{B} \subseteq \mathbf{C}$ and $\mathbf{C}$ is causally convex, then $\mathbf{C}$ is a member of the intersected family, so $\mathrm{ccHull}(\mathbf{B}) \subseteq \mathbf{C}$ as an intersection is contained in each of its members.
+
+    (ii) If $\mathbf{B}_1 \subseteq \mathbf{B}_2$, then $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathrm{ccHull}(\mathbf{B}_2)$ by extensivity, and $\mathrm{ccHull}(\mathbf{B}_2)$ is causally convex (\ref{def:causal-convex-hull}); applying (i) with $\mathbf{C} = \mathrm{ccHull}(\mathbf{B}_2)$ gives $\mathrm{ccHull}(\mathbf{B}_1) \subseteq \mathrm{ccHull}(\mathbf{B}_2)$.
+
+    (iii) If $\mathbf{C}$ is causally convex, then $\mathbf{C} \subseteq \mathrm{ccHull}(\mathbf{C})$ by extensivity, while (i) with $\mathbf{B} = \mathbf{C}$ (and $\mathbf{C} \subseteq \mathbf{C}$) gives $\mathrm{ccHull}(\mathbf{C}) \subseteq \mathbf{C}$; hence $\mathrm{ccHull}(\mathbf{C}) = \mathbf{C}$.
+
+    (iv) Idempotence is (iii) applied to $\mathbf{C} = \mathrm{ccHull}(\mathbf{B})$, which is causally convex by \ref{def:causal-convex-hull}.
+\end{proof}
+
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
     \lean{Physicslib4.Spacetime.alexandrovTopology}

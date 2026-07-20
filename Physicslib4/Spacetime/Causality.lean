@@ -620,6 +620,74 @@ theorem causalDiamond_isCausallyConvex (t : M.TimeOrientation) (p q : M.Carrier)
   intro a b c ha hc hac hcb
   exact causalDiamond_causallyConvex M t ha hc hac hcb
 
+/-! ### The causally convex closure structure -/
+
+/-- The whole spacetime is a causally convex region. -/
+theorem isCausallyConvex_univ (t : M.TimeOrientation) :
+    IsCausallyConvex M t (Set.univ : Set M.Carrier) := by
+  sorry
+
+/-- The empty region is causally convex (vacuously). -/
+theorem isCausallyConvex_empty (t : M.TimeOrientation) :
+    IsCausallyConvex M t (∅ : Set M.Carrier) := by
+  sorry
+
+/-- The intersection of two causally convex regions is causally convex. -/
+theorem isCausallyConvex_inter (t : M.TimeOrientation) {C₁ C₂ : Set M.Carrier}
+    (h₁ : IsCausallyConvex M t C₁) (h₂ : IsCausallyConvex M t C₂) :
+    IsCausallyConvex M t (C₁ ∩ C₂) := by
+  sorry
+
+/-- An indexed intersection of causally convex regions is causally convex. -/
+theorem isCausallyConvex_iInter (t : M.TimeOrientation) {ι : Sort*}
+    {C : ι → Set M.Carrier} (h : ∀ i, IsCausallyConvex M t (C i)) :
+    IsCausallyConvex M t (⋂ i, C i) := by
+  sorry
+
+/-- A set-indexed intersection of causally convex regions is causally convex. -/
+theorem isCausallyConvex_sInter (t : M.TimeOrientation) {𝒮 : Set (Set M.Carrier)}
+    (h : ∀ C ∈ 𝒮, IsCausallyConvex M t C) :
+    IsCausallyConvex M t (⋂₀ 𝒮) := by
+  sorry
+
+/-- The *causal-convex hull* of a region `B`: the smallest causally convex region
+containing `B`, i.e. the intersection of all causally convex regions containing `B`. -/
+def causalConvexHull (t : M.TimeOrientation) (B : Set M.Carrier) : Set M.Carrier :=
+  ⋂₀ {C | B ⊆ C ∧ IsCausallyConvex M t C}
+
+/-- A region is contained in its causal-convex hull. -/
+theorem subset_causalConvexHull (t : M.TimeOrientation) (B : Set M.Carrier) :
+    B ⊆ causalConvexHull M t B := by
+  sorry
+
+/-- The causal-convex hull is causally convex. -/
+theorem isCausallyConvex_causalConvexHull (t : M.TimeOrientation) (B : Set M.Carrier) :
+    IsCausallyConvex M t (causalConvexHull M t B) := by
+  sorry
+
+/-- **Minimality / universal property.** Any causally convex region containing `B`
+contains the causal-convex hull of `B`. -/
+theorem causalConvexHull_minimal (t : M.TimeOrientation) {B C : Set M.Carrier}
+    (hBC : B ⊆ C) (hC : IsCausallyConvex M t C) :
+    causalConvexHull M t B ⊆ C := by
+  sorry
+
+/-- The causal-convex hull is monotone. -/
+theorem causalConvexHull_mono (t : M.TimeOrientation) {B₁ B₂ : Set M.Carrier}
+    (h : B₁ ⊆ B₂) : causalConvexHull M t B₁ ⊆ causalConvexHull M t B₂ := by
+  sorry
+
+/-- The causal-convex hull fixes exactly the causally convex regions. -/
+theorem causalConvexHull_eq_of_isCausallyConvex (t : M.TimeOrientation)
+    {C : Set M.Carrier} (hC : IsCausallyConvex M t C) :
+    causalConvexHull M t C = C := by
+  sorry
+
+/-- The causal-convex hull is idempotent. -/
+theorem causalConvexHull_idem (t : M.TimeOrientation) (B : Set M.Carrier) :
+    causalConvexHull M t (causalConvexHull M t B) = causalConvexHull M t B := by
+  sorry
+
 end Spacetime
 
 end Physicslib4
