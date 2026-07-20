@@ -550,15 +550,15 @@ def chronologicalDiamond (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carri
 /-- Membership in the causal diamond: `x ∈ J^+(p) ∩ J^-(q)` iff `p ≺ x` and `x ≺ q`. -/
 theorem mem_causalDiamond (t : M.TimeOrientation) {p q x : M.Carrier} :
     x ∈ causalDiamond M t p q ↔
-      M.CausallyPrecedes t p x ∧ M.CausallyPrecedes t x q := by
-  simp [causalDiamond, causalFuture, causalPast, Set.mem_inter_iff, Set.mem_setOf_eq]
+      M.CausallyPrecedes t p x ∧ M.CausallyPrecedes t x q :=
+  Iff.rfl
 
 /-- Membership in the chronological diamond: `x ∈ I^+(p) ∩ I^-(q)` iff `p ≪ x` and
 `x ≪ q`. -/
 theorem mem_chronologicalDiamond (t : M.TimeOrientation) {p q x : M.Carrier} :
     x ∈ chronologicalDiamond M t p q ↔
-      M.ChronologicallyPrecedes t p x ∧ M.ChronologicallyPrecedes t x q := by
-  simp [chronologicalDiamond, chronologicalFuture, chronologicalPast, Set.mem_inter_iff, Set.mem_setOf_eq]
+      M.ChronologicallyPrecedes t p x ∧ M.ChronologicallyPrecedes t x q :=
+  Iff.rfl
 
 /-- **Monotonicity under endpoint spread.** If `p' ≺ p` and `q ≺ q'`, then the causal
 diamond of `(p, q)` is contained in the causal diamond of `(p', q')`. -/
@@ -595,14 +595,16 @@ theorem causallyPrecedes_of_causalDiamond_nonempty (t : M.TimeOrientation)
 theorem chronologicalDiamond_subset_causalDiamond (t : M.TimeOrientation)
     (p q : M.Carrier) :
     chronologicalDiamond M t p q ⊆ causalDiamond M t p q := by
-  sorry
+  unfold chronologicalDiamond causalDiamond
+  exact Set.inter_subset_inter (M.chronologicalFuture_subset_causalFuture t p)
+    (M.chronologicalPast_subset_causalPast t q)
 
 /-- The Alexandrov basis is exactly the family of chronological diamonds: `U` is an
 Alexandrov basis set iff `U = I^+(p) ∩ I^-(q)` for some `p, q`. -/
 theorem mem_alexandrovBasis_iff_eq_chronologicalDiamond (t : M.TimeOrientation)
     {U : Set M.Carrier} :
     U ∈ alexandrovBasis M t ↔ ∃ p q : M.Carrier, U = chronologicalDiamond M t p q := by
-  sorry
+  simp only [alexandrovBasis, chronologicalDiamond, Set.mem_setOf_eq]
 
 end Spacetime
 

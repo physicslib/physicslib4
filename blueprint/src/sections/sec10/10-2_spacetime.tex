@@ -371,8 +371,8 @@
 \begin{theorem}[Chronological diamonds inside causal diamonds]
     \label{thrm:causal-diamond-vs-chronological}
     \lean{Physicslib4.Spacetime.chronologicalDiamond_subset_causalDiamond, Physicslib4.Spacetime.mem_alexandrovBasis_iff_eq_chronologicalDiamond}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:causal-diamond, lmm:chronological-implies-causal, def:alexandrov-topology}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The chronological diamond is contained in the causal diamond,
     \begin{align}
         I^+(p) \cap I^-(q) \subseteq J^+(p) \cap J^-(q).
@@ -380,6 +380,7 @@
     Moreover the Alexandrov basis is exactly the family of chronological diamonds: a set $U$ is an Alexandrov basis set if and only if $U = I^+(p) \cap I^-(q)$ for some $p, q \in M$. Consequently every Alexandrov basis set sits inside the corresponding causal diamond.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:causal-diamond, lmm:chronological-implies-causal, def:alexandrov-topology}
     Chronological precedence refines causal precedence (\ref{lmm:chronological-implies-causal}), so $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$; intersecting these inclusions gives $I^+(p) \cap I^-(q) \subseteq J^+(p) \cap J^-(q)$. The characterisation of the Alexandrov basis is the definition of the Alexandrov topology (\ref{def:alexandrov-topology}), whose basis consists of exactly the sets $I^+(p) \cap I^-(q)$. The final claim combines the two: an Alexandrov basis set equals some $I^+(p) \cap I^-(q)$, which is contained in $J^+(p) \cap J^-(q)$.
 \end{proof}
