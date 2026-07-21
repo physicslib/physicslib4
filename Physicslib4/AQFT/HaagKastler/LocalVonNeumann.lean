@@ -204,6 +204,57 @@ noncomputable def vonNeumannNet (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H �
   toFun B := N.localVonNeumannAlgebra π B.1
   monotone' B₁ B₂ h := N.localVonNeumannAlgebra_mono π B₁.2 B₂.2 h
 
+/-- **Antitonicity of the commutant.** For bundled von Neumann algebras
+`M₁ ≤ M₂` on `H`, the commutants reverse the inclusion: `M₂' ≤ M₁'`. -/
+theorem commutant_le_commutant_of_le {M₁ M₂ : VonNeumannAlgebra H} (h : M₁ ≤ M₂) :
+    M₂.commutant ≤ M₁.commutant := by
+  sorry
+
+/-- The **relative commutant** of a nested pair `R(B₁) ⊆ R(B₂)`: the von Neumann
+algebra `R(B₁)' ∩ R(B₂)`, built as the meet of the star-subalgebras of the
+commutant of `R(B₁)` and of `R(B₂)`. Its underlying set is `R(B₁)' ∩ R(B₂)`. This
+is the basic object of the theory of local-algebra inclusions. -/
+noncomputable def relativeCommutant (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier) : VonNeumannAlgebra H where
+  toStarSubalgebra :=
+    (N.localVonNeumannAlgebra π B₁).commutant.toStarSubalgebra ⊓
+      (N.localVonNeumannAlgebra π B₂).toStarSubalgebra
+  centralizer_centralizer' := by
+    sorry
+
+/-- The underlying set of the relative commutant is `R(B₁)' ∩ R(B₂)`. -/
+@[simp] theorem coe_relativeCommutant (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier) :
+    (N.relativeCommutant π B₁ B₂ : Set (H →L[ℂ] H))
+      = Set.centralizer (N.localVonNeumann π B₁) ∩ N.localVonNeumann π B₂ := by
+  sorry
+
+/-- **The relative commutant lies in the larger algebra:** `R(B₁)' ∩ R(B₂) ≤ R(B₂)`. -/
+theorem relativeCommutant_le_right (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier) :
+    N.relativeCommutant π B₁ B₂ ≤ N.localVonNeumannAlgebra π B₂ := by
+  sorry
+
+/-- **The relative commutant commutes with the smaller algebra:** its underlying
+set is contained in `R(B₁)'`. -/
+theorem relativeCommutant_coe_subset_commutant
+    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier) :
+    (N.relativeCommutant π B₁ B₂ : Set (H →L[ℂ] H))
+      ⊆ Set.centralizer (N.localVonNeumann π B₁) := by
+  sorry
+
+/-- **The relative commutant contains the center of the ambient algebra.** For
+`B₁ ⊆ B₂`, the center `R(B₂) ∩ R(B₂)'` is contained in `R(B₁)' ∩ R(B₂)`. Via
+isotony `R(B₁) ≤ R(B₂)` and antitonicity of the commutant. -/
+theorem center_le_relativeCommutant
+    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂) :
+    N.localVonNeumann π B₂ ∩ Set.centralizer (N.localVonNeumann π B₂)
+      ⊆ (N.relativeCommutant π B₁ B₂ : Set (H →L[ℂ] H)) := by
+  sorry
+
 end HaagKastlerNet
 end HaagKastler
 end AQFT

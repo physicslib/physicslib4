@@ -254,6 +254,49 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     The geometric-covariance set equality is upgraded to a first-class \emph{$*$-algebra isomorphism} of the bundled local von Neumann algebras, $R(\mathbf{B}) \cong R(L \cdot \mathbf{B})$. It is the restriction of the conjugation $*$-automorphism $T \mapsto U(L) T U(L)^{-1}$ of $\mathcal{B}(H)$ (Mathlib's \texttt{conjStarAlgEquiv}, whose adjoint-is-inverse property makes conjugation by a unitary star-preserving) to $R(\mathbf{B})$, whose image is exactly $R(L \cdot \mathbf{B})$. The reusable ingredient is that a $*$-automorphism carrying the underlying set of one star-subalgebra onto another restricts to a star-algebra equivalence between them. This makes the unitary equivalence of orbit-related local algebras an explicit transportable object.
 \end{theorem}
 
+\subsection{Relative Commutants of Nested Local Algebras}
+
+The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is organised around a single object, the \emph{relative commutant} $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. It measures how far the smaller algebra fails to fill the larger, and always contains the center of the ambient algebra; its triviality is exactly the irreducibility of the inclusion.
+
+\begin{definition}[Relative Commutant of a Nested Pair]
+    \label{def:relative-commutant}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:local-von-neumann-algebra}
+    For a representation $\pi$ of the quasilocal algebra and two basis regions $\mathbf{B}_1, \mathbf{B}_2$, the \emph{relative commutant} of the pair is the von Neumann algebra $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, the intersection of the commutant of the local von Neumann algebra $R(\mathbf{B}_1)$ with the local von Neumann algebra $R(\mathbf{B}_2)$. It is registered as a genuine \texttt{VonNeumannAlgebra}: the intersection of two von Neumann algebras (here $R(\mathbf{B}_1)'$ and $R(\mathbf{B}_2)$) is again a von Neumann algebra, being self-adjoint and bicommutant-closed --- the double commutant of an intersection of bicommutant-closed sets is contained in each factor, hence in the intersection. Since \texttt{VonNeumannAlgebra} carries no lattice meet $\sqcap$, this object is not an abstract infimum but is constructed by hand from the self-adjoint, bicommutant-closed set $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, which is then its underlying set. This is the basic object of the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$.
+\end{definition}
+
+\begin{theorem}[Antitonicity of the Commutant]
+    \label{thrm:commutant-antitone}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.commutant_le_commutant_of_le}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    For bundled von Neumann algebras $M \le N$ on $H$, the commutants reverse the inclusion, $N' \le M'$. This is not a lattice primitive: through the coercion $\uparrow M' = \operatorname{centralizer}(\uparrow M)$ (Mathlib's \texttt{coe\_commutant}) it reduces to the antitonicity of the centralizer, $S \subseteq T \Rightarrow \operatorname{centralizer}(T) \subseteq \operatorname{centralizer}(S)$ (\texttt{Set.centralizer\_subset}), applied to $\uparrow M \subseteq \uparrow N$.
+\end{theorem}
+
+\begin{theorem}[Relative Commutant Lies in the Larger Algebra]
+    \label{thrm:relative-commutant-le-right}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant_le_right}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:relative-commutant}
+    The relative commutant is contained in the larger algebra, $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) \le R(\mathbf{B}_2)$. As \texttt{VonNeumannAlgebra} has no lattice meet, the order relation $\le$ is discharged through the coercion to underlying sets, where it is the inclusion $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) \subseteq R(\mathbf{B}_2)$, i.e. \texttt{Set.inter\_subset\_right}.
+\end{theorem}
+
+\begin{theorem}[Relative Commutant Commutes with the Smaller Algebra]
+    \label{thrm:relative-commutant-coe-commutant}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant_coe_subset_commutant}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:relative-commutant}
+    Every element of the relative commutant commutes with all of $R(\mathbf{B}_1)$: the underlying set of $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$ is contained in $R(\mathbf{B}_1)'$, that is $\uparrow\!\big(R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)\big) \subseteq R(\mathbf{B}_1)'$. On underlying sets this is \texttt{Set.inter\_subset\_left}.
+\end{theorem}
+
+\begin{theorem}[Relative Commutant Contains the Center]
+    \label{thrm:relative-commutant-center}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.center_le_relativeCommutant}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:relative-commutant, thrm:von-neumann-isotony, thrm:commutant-antitone}
+    When $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the relative commutant contains the center of the ambient algebra: the underlying set of the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in that of $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Isotony (\ref{thrm:von-neumann-isotony}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$; antitonicity of the commutant (\ref{thrm:commutant-antitone}) then yields $R(\mathbf{B}_2)' \le R(\mathbf{B}_1)'$, so $\uparrow R(\mathbf{B}_2)' \subseteq \uparrow R(\mathbf{B}_1)'$. Combined with $R(\mathbf{B}_2) \subseteq R(\mathbf{B}_2)$ through \texttt{Set.subset\_inter}, this lands $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ inside $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Thus the relative commutant of a nested pair always contains the center of the ambient algebra, and is trivial (scalars) exactly when the inclusion is irreducible.
+\end{theorem}
+
 \subsection{Irreducibility and Schur's Lemma}
 
 A representation is \emph{irreducible} when its commutant is trivial: the only operators commuting with every $\pi(a)$ are scalars. This is the von Neumann (commutant) form of irreducibility. The cornerstone, connecting the commutant to the GNS state, is the topological Schur lemma for a cyclic representation.
