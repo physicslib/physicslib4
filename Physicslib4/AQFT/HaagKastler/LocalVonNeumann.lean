@@ -227,8 +227,7 @@ noncomputable def relativeCommutant (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (
     have hcarrier : ((N.localVonNeumannAlgebra π B₁).commutant.toStarSubalgebra ⊓
         (N.localVonNeumannAlgebra π B₂).toStarSubalgebra).carrier =
       Set.centralizer (N.localVonNeumann π B₁) ∩ N.localVonNeumann π B₂ := by
-      simp only [StarSubalgebra.coe_inf, VonNeumannAlgebra.coe_commutant,
-        coe_localVonNeumannAlgebra]
+      ext x; simp [coe_localVonNeumannAlgebra]
     -- Both factors are centralizers, so the intersection is `centralizer (_ ∪ _)`,
     -- hence commutant-closed by the triple centralizer theorem.
     rw [hcarrier,
