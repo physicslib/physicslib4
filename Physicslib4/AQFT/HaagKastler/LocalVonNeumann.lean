@@ -293,7 +293,32 @@ theorem isFactor_of_isIrreducibleInclusion
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂)
     (hirr : N.IsIrreducibleInclusion π B₁ B₂) :
     IsFactor (N.localVonNeumann π B₂) := by
-  sorry
+  unfold IsFactor
+  apply Set.Subset.antisymm
+  · calc
+      N.localVonNeumann π B₂ ∩ Set.centralizer (N.localVonNeumann π B₂)
+          ⊆ (N.relativeCommutant π B₁ B₂ : Set (H →L[ℂ] H)) :=
+        N.center_le_relativeCommutant π hB₁ hB₂ h
+      _ = scalarOperators H := hirr
+  · rintro x ⟨c, rfl⟩
+    have hcomm : ∀ y : H →L[ℂ] H, (c • (1 : H →L[ℂ] H)) * y = y * (c • (1 : H →L[ℂ] H)) := by
+      intro y
+      calc
+        (c • (1 : H →L[ℂ] H)) * y = c • ((1 : H →L[ℂ] H) * y) := by
+          simp
+        _ = c • y := by simp
+        _ = y * (c • (1 : H →L[ℂ] H)) := by
+          simp
+    have hmem : (c • (1 : H →L[ℂ] H)) ∈ N.localVonNeumann π B₂ := by
+      dsimp [localVonNeumann]
+      rw [Set.mem_centralizer_iff]
+      intro y hy
+      exact (hcomm y).symm
+    have hcentral : (c • (1 : H →L[ℂ] H)) ∈ Set.centralizer (N.localVonNeumann π B₂) := by
+      rw [Set.mem_centralizer_iff]
+      intro y hy
+      exact (hcomm y).symm
+    exact ⟨hmem, hcentral⟩
 
 end HaagKastlerNet
 end HaagKastler

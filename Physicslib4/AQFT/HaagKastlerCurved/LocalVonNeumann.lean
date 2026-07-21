@@ -339,7 +339,26 @@ theorem isFactor_of_isIrreducibleInclusion {B : Set M.Carrier}
           = N.commIsotony hB₂ hB h₂ (N.commIsotony hB₁ hB₂ h₁₂ a))
     (hirr : N.IsIrreducibleInclusion hB π hB₁ hB₂ (h₁₂.trans h₂) h₂) :
     IsFactor (N.localVonNeumann π hB₂ hB h₂) := by
-  sorry
+  rw [IsFactor]
+  let R := N.localVonNeumann π hB₂ hB h₂
+  let rel : Set (H →L[ℂ] H) := N.relativeCommutant hB π hB₁ hB₂ (h₁₂.trans h₂) h₂
+  have hcenter_sub_rel : R ∩ Set.centralizer R ⊆ rel :=
+    N.center_le_relativeCommutant hB π hB₁ hB₂ h₁₂ h₂ hcoh
+  have hrel_eq_scalar : rel = scalarOperators H := hirr
+  rw [hrel_eq_scalar] at hcenter_sub_rel
+  apply Set.Subset.antisymm
+  · exact hcenter_sub_rel
+  · rintro T ⟨c, rfl⟩
+    have hmem_R : (c • 1 : H →L[ℂ] H) ∈ R := by
+      dsimp [R, localVonNeumann]
+      apply Set.mem_centralizer_iff.mpr
+      intro M hM
+      rw [mul_smul_comm, smul_mul_assoc, mul_one, one_mul]
+    have hmem_centralizer : (c • 1 : H →L[ℂ] H) ∈ Set.centralizer R := by
+      apply Set.mem_centralizer_iff.mpr
+      intro M hM
+      rw [mul_smul_comm, smul_mul_assoc, mul_one, one_mul]
+    exact ⟨hmem_R, hmem_centralizer⟩
 
 end HaagKastlerNet
 end HaagKastlerCurved

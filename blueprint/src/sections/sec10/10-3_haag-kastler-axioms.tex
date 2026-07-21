@@ -308,8 +308,8 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 \begin{theorem}[An Irreducible Inclusion has Factor Ambient]
     \label{thrm:irreducible-inclusion-factor}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_of_isIrreducibleInclusion}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
     \uses{def:irreducible-inclusion, thrm:relative-commutant-center}
+    \leanok
     If $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and the inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is irreducible, then the ambient algebra $R(\mathbf{B}_2)$ is a factor (trivial center). Indeed the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in the relative commutant (\ref{thrm:relative-commutant-center}), which by irreducibility is the scalars; since the scalars are always central, the center equals the scalars. This connects irreducibility of an inclusion to factoriality of the larger algebra.
 \end{theorem}
 
