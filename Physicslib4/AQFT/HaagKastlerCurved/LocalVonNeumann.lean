@@ -239,6 +239,64 @@ noncomputable def vonNeumannNet {B : Set M.Carrier} (hB : M.IsBasisSet B)
     N.localVonNeumannAlgebra_mono hB π B₁.2.1 B₂.2.1 h B₂.2.2
       (hcoh B₁.2.1 B₂.2.1 h B₂.2.2)
 
+/-- The **relative commutant** of a nested pair `R(B₁) ⊆ R(B₂)` of subregions of a
+containing region `B`, in a representation `π` of `𝔘(B)`: the von Neumann algebra
+`R(B₁)' ∩ R(B₂)`, built as the meet of the star-subalgebras of the commutant of
+`R(B₁)` and of `R(B₂)`. Its underlying set is `R(B₁)' ∩ R(B₂)`. Curved counterpart
+of the Minkowski relative commutant; the basic object of local-algebra inclusion
+theory. -/
+noncomputable def relativeCommutant {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) : VonNeumannAlgebra H where
+  toStarSubalgebra :=
+    (N.localVonNeumannAlgebra π hB₁ hB h₁).commutant.toStarSubalgebra ⊓
+      (N.localVonNeumannAlgebra π hB₂ hB h₂).toStarSubalgebra
+  centralizer_centralizer' := by
+    sorry
+
+/-- The underlying set of the relative commutant is `R(B₁)' ∩ R(B₂)`. -/
+@[simp] theorem coe_relativeCommutant {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) :
+    (N.relativeCommutant hB π hB₁ hB₂ h₁ h₂ : Set (H →L[ℂ] H))
+      = Set.centralizer (N.localVonNeumann π hB₁ hB h₁) ∩ N.localVonNeumann π hB₂ hB h₂ := by
+  sorry
+
+/-- **The relative commutant lies in the larger algebra:** `R(B₁)' ∩ R(B₂) ≤ R(B₂)`. -/
+theorem relativeCommutant_le_right {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) :
+    N.relativeCommutant hB π hB₁ hB₂ h₁ h₂ ≤ N.localVonNeumannAlgebra π hB₂ hB h₂ := by
+  sorry
+
+/-- **The relative commutant commutes with the smaller algebra:** its underlying set
+is contained in `R(B₁)'`. -/
+theorem relativeCommutant_coe_subset_commutant {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) :
+    (N.relativeCommutant hB π hB₁ hB₂ h₁ h₂ : Set (H →L[ℂ] H))
+      ⊆ Set.centralizer (N.localVonNeumann π hB₁ hB h₁) := by
+  sorry
+
+/-- **The relative commutant contains the center of the ambient algebra.** For nested
+basis subregions `B₁ ⊆ B₂ ⊆ B` (with the isotony coherence `hcoh`), the center
+`R(B₂) ∩ R(B₂)'` is contained in `R(B₁)' ∩ R(B₂)`. Via isotony `R(B₁) ≤ R(B₂)` and
+antitonicity of the commutant. -/
+theorem center_le_relativeCommutant {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁₂ : B₁ ⊆ B₂) (h₂ : B₂ ⊆ B)
+    (hcoh : ∀ a : N.algebra B₁,
+        N.commIsotony hB₁ hB (h₁₂.trans h₂) a
+          = N.commIsotony hB₂ hB h₂ (N.commIsotony hB₁ hB₂ h₁₂ a)) :
+    N.localVonNeumann π hB₂ hB h₂ ∩ Set.centralizer (N.localVonNeumann π hB₂ hB h₂)
+      ⊆ (N.relativeCommutant hB π hB₁ hB₂ (h₁₂.trans h₂) h₂ : Set (H →L[ℂ] H)) := by
+  sorry
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT

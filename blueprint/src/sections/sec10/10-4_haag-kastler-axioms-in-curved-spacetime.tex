@@ -255,6 +255,42 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     For $g \in \mathrm{Stab}(\mathbf{B})$, the geometric-covariance set equality is upgraded to a first-class $*$-algebra isomorphism of the bundled local von Neumann algebras, $R(\mathbf{B}_1) \cong R(g \cdot \mathbf{B}_1)$, given by restricting the conjugation $*$-automorphism $T \mapsto U(g) T U(g)^{-1}$ of $\mathcal{B}(H)$ to $R(\mathbf{B}_1)$. It reuses the same restriction construction as the Minkowski case (\ref{thrm:von-neumann-covariance-iso}).
 \end{theorem}
 
+\subsection{Relative Commutants of Nested Local Algebras in Curved Spacetime}
+
+As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is organised around the \emph{relative commutant} $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. There is no quasilocal algebra in curved spacetime, so everything is relative to a containing basis region $\mathbf{B}$ and a representation of $\mathfrak{U}(\mathbf{B})$.
+
+\begin{definition}[Relative Commutant of a Nested Pair (Curved Spacetime)]
+    \label{def:relative-commutant-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \uses{def:local-von-neumann-algebra-in-curved-spacetime}
+    For a $*$-representation $\pi$ of a containing basis algebra $\mathfrak{U}(\mathbf{B})$ and two basis subregions $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$, the \emph{relative commutant} of the pair is the von Neumann algebra $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, built as the meet of the $*$-subalgebras of the commutant of $R(\mathbf{B}_1)$ and of $R(\mathbf{B}_2)$; its underlying set is $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. As Mathlib's \texttt{VonNeumannAlgebra} carries no lattice meet, it is constructed by hand from the self-adjoint, bicommutant-closed intersection. This is the curved counterpart of the Minkowski relative commutant (\ref{def:relative-commutant}); there is no quasilocal algebra, so it lives inside the representation of a fixed containing region.
+\end{definition}
+
+\begin{theorem}[Relative Commutant Lies in the Larger Algebra (Curved Spacetime)]
+    \label{thrm:relative-commutant-le-right-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant_le_right}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \uses{def:relative-commutant-in-curved-spacetime}
+    The relative commutant is contained in the larger algebra, $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) \le R(\mathbf{B}_2)$, discharged through the coercion to underlying sets (\texttt{Set.inter\_subset\_right}).
+\end{theorem}
+
+\begin{theorem}[Relative Commutant Commutes with the Smaller Algebra (Curved Spacetime)]
+    \label{thrm:relative-commutant-coe-commutant-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant_coe_subset_commutant}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \uses{def:relative-commutant-in-curved-spacetime}
+    Every element of the relative commutant commutes with all of $R(\mathbf{B}_1)$: its underlying set is contained in $R(\mathbf{B}_1)'$ (\texttt{Set.inter\_subset\_left}).
+\end{theorem}
+
+\begin{theorem}[Relative Commutant Contains the Center (Curved Spacetime)]
+    \label{thrm:relative-commutant-center-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.center_le_relativeCommutant}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \uses{def:relative-commutant-in-curved-spacetime, thrm:von-neumann-isotony-in-curved-spacetime}
+    For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, and given the isotony coherence of the chosen Axiom 3 embeddings, the relative commutant contains the center of the ambient algebra: the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Curved isotony (\ref{thrm:von-neumann-isotony-in-curved-spacetime}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$, and antitonicity of the commutant yields $R(\mathbf{B}_2)' \subseteq R(\mathbf{B}_1)'$. The isotony-coherence hypothesis enters exactly as in curved von Neumann isotony (the curved Axiom 3 embeddings are chosen witnesses without a built-in composition law).
+\end{theorem}
+
 \subsection{Purity of States on Local Algebras in Curved Spacetime}
 
 Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved spacetime is itself a unital C*-algebra with its own state space and GNS representations. The abstract characterizations of purity therefore apply per region, registered here for $\mathfrak{U}(\mathbf{B})$. There is no quasilocal algebra in curved spacetime, so - unlike the Minkowski covariant-vacuum picture - these are genuinely local statements, one for each region.
