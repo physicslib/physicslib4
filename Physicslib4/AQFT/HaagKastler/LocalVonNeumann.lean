@@ -208,7 +208,10 @@ noncomputable def vonNeumannNet (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H �
 `M₁ ≤ M₂` on `H`, the commutants reverse the inclusion: `M₂' ≤ M₁'`. -/
 theorem commutant_le_commutant_of_le {M₁ M₂ : VonNeumannAlgebra H} (h : M₁ ≤ M₂) :
     M₂.commutant ≤ M₁.commutant := by
-  sorry
+  rw [← SetLike.coe_subset_coe]
+  simp only [VonNeumannAlgebra.coe_commutant]
+  rw [← SetLike.coe_subset_coe] at h
+  exact Set.centralizer_subset h
 
 /-- The **relative commutant** of a nested pair `R(B₁) ⊆ R(B₂)`: the von Neumann
 algebra `R(B₁)' ∩ R(B₂)`, built as the meet of the star-subalgebras of the
@@ -220,20 +223,34 @@ noncomputable def relativeCommutant (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (
     (N.localVonNeumannAlgebra π B₁).commutant.toStarSubalgebra ⊓
       (N.localVonNeumannAlgebra π B₂).toStarSubalgebra
   centralizer_centralizer' := by
-    sorry
+    -- Compute the carrier of the meet as the intersection of the two factors
+    have hcarrier : ((N.localVonNeumannAlgebra π B₁).commutant.toStarSubalgebra ⊓
+        (N.localVonNeumannAlgebra π B₂).toStarSubalgebra).carrier =
+      Set.centralizer (N.localVonNeumann π B₁) ∩ N.localVonNeumann π B₂ := by
+      simp only [StarSubalgebra.coe_inf, VonNeumannAlgebra.coe_commutant,
+        coe_localVonNeumannAlgebra]
+    -- Both factors are centralizers, so the intersection is `centralizer (_ ∪ _)`,
+    -- hence commutant-closed by the triple centralizer theorem.
+    rw [hcarrier,
+      show N.localVonNeumann π B₂
+          = Set.centralizer (Set.centralizer (N.localOperators π B₂)) from rfl,
+      ← Set.centralizer_union, Set.centralizer_centralizer_centralizer]
 
 /-- The underlying set of the relative commutant is `R(B₁)' ∩ R(B₂)`. -/
 @[simp] theorem coe_relativeCommutant (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier) :
     (N.relativeCommutant π B₁ B₂ : Set (H →L[ℂ] H))
       = Set.centralizer (N.localVonNeumann π B₁) ∩ N.localVonNeumann π B₂ := by
-  sorry
+  simp [relativeCommutant, VonNeumannAlgebra.coe_commutant, coe_localVonNeumannAlgebra,
+    StarSubalgebra.coe_inf]
 
 /-- **The relative commutant lies in the larger algebra:** `R(B₁)' ∩ R(B₂) ≤ R(B₂)`. -/
 theorem relativeCommutant_le_right (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier) :
     N.relativeCommutant π B₁ B₂ ≤ N.localVonNeumannAlgebra π B₂ := by
-  sorry
+  rw [← SetLike.coe_subset_coe]
+  simp only [coe_relativeCommutant, coe_localVonNeumannAlgebra]
+  exact Set.inter_subset_right
 
 /-- **The relative commutant commutes with the smaller algebra:** its underlying
 set is contained in `R(B₁)'`. -/
@@ -242,7 +259,8 @@ theorem relativeCommutant_coe_subset_commutant
     (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier) :
     (N.relativeCommutant π B₁ B₂ : Set (H →L[ℂ] H))
       ⊆ Set.centralizer (N.localVonNeumann π B₁) := by
-  sorry
+  rw [coe_relativeCommutant]
+  exact Set.inter_subset_left
 
 /-- **The relative commutant contains the center of the ambient algebra.** For
 `B₁ ⊆ B₂`, the center `R(B₂) ∩ R(B₂)'` is contained in `R(B₁)' ∩ R(B₂)`. Via
@@ -253,7 +271,9 @@ theorem center_le_relativeCommutant
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂) :
     N.localVonNeumann π B₂ ∩ Set.centralizer (N.localVonNeumann π B₂)
       ⊆ (N.relativeCommutant π B₁ B₂ : Set (H →L[ℂ] H)) := by
-  sorry
+  rw [coe_relativeCommutant]
+  rintro x ⟨hx1, hx2⟩
+  exact ⟨Set.centralizer_subset (N.localVonNeumann_mono π hB₁ hB₂ h) hx2, hx1⟩
 
 end HaagKastlerNet
 end HaagKastler
