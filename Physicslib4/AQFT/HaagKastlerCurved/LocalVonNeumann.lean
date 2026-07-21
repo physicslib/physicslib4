@@ -253,7 +253,17 @@ noncomputable def relativeCommutant {B : Set M.Carrier}
     (N.localVonNeumannAlgebra π hB₁ hB h₁).commutant.toStarSubalgebra ⊓
       (N.localVonNeumannAlgebra π hB₂ hB h₂).toStarSubalgebra
   centralizer_centralizer' := by
-    sorry
+    -- Compute the carrier of the meet as the intersection of the two factors
+    have hcarrier : ((N.localVonNeumannAlgebra π hB₁ hB h₁).commutant.toStarSubalgebra ⊓
+        (N.localVonNeumannAlgebra π hB₂ hB h₂).toStarSubalgebra).carrier =
+      Set.centralizer (N.localVonNeumann π hB₁ hB h₁) ∩ N.localVonNeumann π hB₂ hB h₂ := by
+      ext x; simp
+    -- Both factors are centralizers, so the intersection is `centralizer (_ ∪ _)`,
+    -- hence commutant-closed by the triple centralizer theorem.
+    rw [hcarrier,
+      show N.localVonNeumann π hB₂ hB h₂
+          = Set.centralizer (Set.centralizer (N.localOperators π hB₂ hB h₂)) from rfl,
+      ← Set.centralizer_union, Set.centralizer_centralizer_centralizer]
 
 /-- The underlying set of the relative commutant is `R(B₁)' ∩ R(B₂)`. -/
 @[simp] theorem coe_relativeCommutant {B : Set M.Carrier}
@@ -262,7 +272,8 @@ noncomputable def relativeCommutant {B : Set M.Carrier}
     (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) :
     (N.relativeCommutant hB π hB₁ hB₂ h₁ h₂ : Set (H →L[ℂ] H))
       = Set.centralizer (N.localVonNeumann π hB₁ hB h₁) ∩ N.localVonNeumann π hB₂ hB h₂ := by
-  sorry
+  simp [relativeCommutant, VonNeumannAlgebra.coe_commutant, coe_localVonNeumannAlgebra,
+    StarSubalgebra.coe_inf]
 
 /-- **The relative commutant lies in the larger algebra:** `R(B₁)' ∩ R(B₂) ≤ R(B₂)`. -/
 theorem relativeCommutant_le_right {B : Set M.Carrier}
@@ -270,7 +281,9 @@ theorem relativeCommutant_le_right {B : Set M.Carrier}
     ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
     (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) :
     N.relativeCommutant hB π hB₁ hB₂ h₁ h₂ ≤ N.localVonNeumannAlgebra π hB₂ hB h₂ := by
-  sorry
+  rw [← SetLike.coe_subset_coe]
+  simp only [coe_relativeCommutant, coe_localVonNeumannAlgebra]
+  exact Set.inter_subset_right
 
 /-- **The relative commutant commutes with the smaller algebra:** its underlying set
 is contained in `R(B₁)'`. -/
@@ -280,7 +293,8 @@ theorem relativeCommutant_coe_subset_commutant {B : Set M.Carrier}
     (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) :
     (N.relativeCommutant hB π hB₁ hB₂ h₁ h₂ : Set (H →L[ℂ] H))
       ⊆ Set.centralizer (N.localVonNeumann π hB₁ hB h₁) := by
-  sorry
+  simp [relativeCommutant, coe_localVonNeumannAlgebra, VonNeumannAlgebra.coe_commutant,
+    StarSubalgebra.coe_inf]
 
 /-- **The relative commutant contains the center of the ambient algebra.** For nested
 basis subregions `B₁ ⊆ B₂ ⊆ B` (with the isotony coherence `hcoh`), the center
@@ -295,7 +309,11 @@ theorem center_le_relativeCommutant {B : Set M.Carrier}
           = N.commIsotony hB₂ hB h₂ (N.commIsotony hB₁ hB₂ h₁₂ a)) :
     N.localVonNeumann π hB₂ hB h₂ ∩ Set.centralizer (N.localVonNeumann π hB₂ hB h₂)
       ⊆ (N.relativeCommutant hB π hB₁ hB₂ (h₁₂.trans h₂) h₂ : Set (H →L[ℂ] H)) := by
-  sorry
+  rw [coe_relativeCommutant]
+  rintro x ⟨hx1, hx2⟩
+  have hsub : N.localVonNeumann π hB₁ hB (h₁₂.trans h₂) ⊆ N.localVonNeumann π hB₂ hB h₂ :=
+    N.localVonNeumann_mono hB π hB₁ hB₂ h₁₂ h₂ hcoh
+  exact ⟨Set.centralizer_subset hsub hx2, hx1⟩
 
 end HaagKastlerNet
 end HaagKastlerCurved

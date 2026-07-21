@@ -262,32 +262,32 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
 \begin{definition}[Relative Commutant of a Nested Pair (Curved Spacetime)]
     \label{def:relative-commutant-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant}
-    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
     \uses{def:local-von-neumann-algebra-in-curved-spacetime}
+    \leanok
     For a $*$-representation $\pi$ of a containing basis algebra $\mathfrak{U}(\mathbf{B})$ and two basis subregions $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$, the \emph{relative commutant} of the pair is the von Neumann algebra $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, built as the meet of the $*$-subalgebras of the commutant of $R(\mathbf{B}_1)$ and of $R(\mathbf{B}_2)$; its underlying set is $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. As Mathlib's \texttt{VonNeumannAlgebra} carries no lattice meet, it is constructed by hand from the self-adjoint, bicommutant-closed intersection. This is the curved counterpart of the Minkowski relative commutant (\ref{def:relative-commutant}); there is no quasilocal algebra, so it lives inside the representation of a fixed containing region.
 \end{definition}
 
 \begin{theorem}[Relative Commutant Lies in the Larger Algebra (Curved Spacetime)]
     \label{thrm:relative-commutant-le-right-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant_le_right}
-    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
     \uses{def:relative-commutant-in-curved-spacetime}
+    \leanok
     The relative commutant is contained in the larger algebra, $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) \le R(\mathbf{B}_2)$, discharged through the coercion to underlying sets (\texttt{Set.inter\_subset\_right}).
 \end{theorem}
 
 \begin{theorem}[Relative Commutant Commutes with the Smaller Algebra (Curved Spacetime)]
     \label{thrm:relative-commutant-coe-commutant-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant_coe_subset_commutant}
-    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
     \uses{def:relative-commutant-in-curved-spacetime}
+    \leanok
     Every element of the relative commutant commutes with all of $R(\mathbf{B}_1)$: its underlying set is contained in $R(\mathbf{B}_1)'$ (\texttt{Set.inter\_subset\_left}).
 \end{theorem}
 
 \begin{theorem}[Relative Commutant Contains the Center (Curved Spacetime)]
     \label{thrm:relative-commutant-center-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.center_le_relativeCommutant}
-    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
     \uses{def:relative-commutant-in-curved-spacetime, thrm:von-neumann-isotony-in-curved-spacetime}
+    \leanok
     For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, and given the isotony coherence of the chosen Axiom 3 embeddings, the relative commutant contains the center of the ambient algebra: the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Curved isotony (\ref{thrm:von-neumann-isotony-in-curved-spacetime}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$, and antitonicity of the commutant yields $R(\mathbf{B}_2)' \subseteq R(\mathbf{B}_1)'$. The isotony-coherence hypothesis enters exactly as in curved von Neumann isotony (the curved Axiom 3 embeddings are chosen witnesses without a built-in composition law).
 \end{theorem}
 
