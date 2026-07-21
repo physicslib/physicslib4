@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastlerCurved.EinsteinCausality
 import Physicslib4.GNS.Irreducibility
+import Physicslib4.Operators.Conjugation
 
 /-!
 # Local von Neumann algebras and spacelike commutation (curved spacetime)
@@ -314,6 +315,31 @@ theorem center_le_relativeCommutant {B : Set M.Carrier}
   have hsub : N.localVonNeumann π hB₁ hB (h₁₂.trans h₂) ⊆ N.localVonNeumann π hB₂ hB h₂ :=
     N.localVonNeumann_mono hB π hB₁ hB₂ h₁₂ h₂ hcoh
   exact ⟨Set.centralizer_subset hsub hx2, hx1⟩
+
+/-- The inclusion `R(B₁) ⊆ R(B₂)` of subregions of `B` is **irreducible** when its
+relative commutant is trivial: `R(B₁)' ∩ R(B₂) = ℂ·1`. Curved counterpart of the
+subfactor-theoretic notion of an irreducible inclusion. -/
+def IsIrreducibleInclusion {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) : Prop :=
+  (N.relativeCommutant hB π hB₁ hB₂ h₁ h₂ : Set (H →L[ℂ] H)) = scalarOperators H
+
+/-- **An irreducible inclusion forces the ambient algebra to be a factor (curved
+spacetime).** For nested basis subregions `B₁ ⊆ B₂ ⊆ B` (with the isotony coherence
+`hcoh`), if the inclusion `R(B₁) ⊆ R(B₂)` is irreducible then `R(B₂)` is a factor. The
+center `R(B₂) ∩ R(B₂)'` lies in the relative commutant (`center_le_relativeCommutant`),
+which is the scalars by hypothesis; the scalars are always central, giving equality. -/
+theorem isFactor_of_isIrreducibleInclusion {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
+    (h₁₂ : B₁ ⊆ B₂) (h₂ : B₂ ⊆ B)
+    (hcoh : ∀ a : N.algebra B₁,
+        N.commIsotony hB₁ hB (h₁₂.trans h₂) a
+          = N.commIsotony hB₂ hB h₂ (N.commIsotony hB₁ hB₂ h₁₂ a))
+    (hirr : N.IsIrreducibleInclusion hB π hB₁ hB₂ (h₁₂.trans h₂) h₂) :
+    IsFactor (N.localVonNeumann π hB₂ hB h₂) := by
+  sorry
 
 end HaagKastlerNet
 end HaagKastlerCurved

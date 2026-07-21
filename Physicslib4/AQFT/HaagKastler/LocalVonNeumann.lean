@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.AQFT.HaagKastler.EinsteinCausality
 import Physicslib4.GNS.Irreducibility
 import Physicslib4.Spacetime.CausalComplement
+import Physicslib4.Operators.Conjugation
 
 /-!
 # Local von Neumann algebras and spacelike commutation
@@ -273,6 +274,26 @@ theorem center_le_relativeCommutant
   rw [coe_relativeCommutant]
   rintro x ⟨hx1, hx2⟩
   exact ⟨Set.centralizer_subset (N.localVonNeumann_mono π hB₁ hB₂ h) hx2, hx1⟩
+
+/-- The inclusion `R(B₁) ⊆ R(B₂)` is **irreducible** when its relative commutant is
+trivial: `R(B₁)' ∩ R(B₂) = ℂ·1`. This is the subfactor-theoretic notion of an
+irreducible inclusion. -/
+def IsIrreducibleInclusion (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier) : Prop :=
+  (N.relativeCommutant π B₁ B₂ : Set (H →L[ℂ] H)) = scalarOperators H
+
+/-- **An irreducible inclusion forces the ambient algebra to be a factor.** If
+`B₁ ⊆ B₂` and the inclusion `R(B₁) ⊆ R(B₂)` is irreducible, then `R(B₂)` is a factor
+(trivial center). The center `R(B₂) ∩ R(B₂)'` lies inside the relative commutant
+(`center_le_relativeCommutant`), which is the scalars by hypothesis; and the scalars
+are always central, giving equality. -/
+theorem isFactor_of_isIrreducibleInclusion
+    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂)
+    (hirr : N.IsIrreducibleInclusion π B₁ B₂) :
+    IsFactor (N.localVonNeumann π B₂) := by
+  sorry
 
 end HaagKastlerNet
 end HaagKastler

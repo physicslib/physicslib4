@@ -297,6 +297,22 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
     When $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the relative commutant contains the center of the ambient algebra: the underlying set of the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in that of $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Isotony (\ref{thrm:von-neumann-isotony}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$; antitonicity of the commutant (\ref{thrm:commutant-antitone}) then yields $R(\mathbf{B}_2)' \le R(\mathbf{B}_1)'$, so $\uparrow R(\mathbf{B}_2)' \subseteq \uparrow R(\mathbf{B}_1)'$. Combined with $R(\mathbf{B}_2) \subseteq R(\mathbf{B}_2)$ through \texttt{Set.subset\_inter}, this lands $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ inside $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Thus the relative commutant of a nested pair always contains the center of the ambient algebra, and is trivial (scalars) exactly when the inclusion is irreducible.
 \end{theorem}
 
+\begin{definition}[Irreducible Inclusion]
+    \label{def:irreducible-inclusion}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsIrreducibleInclusion}
+    \uses{def:relative-commutant}
+    \leanok
+    The inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is \emph{irreducible} when its relative commutant is trivial, $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) = \mathbb{C}\cdot 1$ (the scalar operators). This is the subfactor-theoretic notion of an irreducible inclusion; the relative commutant always contains the scalars, so irreducibility is the statement that it contains nothing more.
+\end{definition}
+
+\begin{theorem}[An Irreducible Inclusion has Factor Ambient]
+    \label{thrm:irreducible-inclusion-factor}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_of_isIrreducibleInclusion}
+    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:irreducible-inclusion, thrm:relative-commutant-center}
+    If $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and the inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is irreducible, then the ambient algebra $R(\mathbf{B}_2)$ is a factor (trivial center). Indeed the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in the relative commutant (\ref{thrm:relative-commutant-center}), which by irreducibility is the scalars; since the scalars are always central, the center equals the scalars. This connects irreducibility of an inclusion to factoriality of the larger algebra.
+\end{theorem}
+
 \subsection{Irreducibility and Schur's Lemma}
 
 A representation is \emph{irreducible} when its commutant is trivial: the only operators commuting with every $\pi(a)$ are scalars. This is the von Neumann (commutant) form of irreducibility. The cornerstone, connecting the commutant to the GNS state, is the topological Schur lemma for a cyclic representation.

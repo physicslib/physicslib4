@@ -291,6 +291,22 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
     For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, and given the isotony coherence of the chosen Axiom 3 embeddings, the relative commutant contains the center of the ambient algebra: the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Curved isotony (\ref{thrm:von-neumann-isotony-in-curved-spacetime}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$, and antitonicity of the commutant yields $R(\mathbf{B}_2)' \subseteq R(\mathbf{B}_1)'$. The isotony-coherence hypothesis enters exactly as in curved von Neumann isotony (the curved Axiom 3 embeddings are chosen witnesses without a built-in composition law).
 \end{theorem}
 
+\begin{definition}[Irreducible Inclusion (Curved Spacetime)]
+    \label{def:irreducible-inclusion-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsIrreducibleInclusion}
+    \uses{def:relative-commutant-in-curved-spacetime}
+    \leanok
+    The curved counterpart of \ref{def:irreducible-inclusion}: for basis subregions $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$ in a representation of $\mathfrak{U}(\mathbf{B})$, the inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is \emph{irreducible} when its relative commutant is trivial, $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) = \mathbb{C}\cdot 1$.
+\end{definition}
+
+\begin{theorem}[An Irreducible Inclusion has Factor Ambient (Curved Spacetime)]
+    \label{thrm:irreducible-inclusion-factor-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isFactor_of_isIrreducibleInclusion}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \uses{def:irreducible-inclusion-in-curved-spacetime, thrm:relative-commutant-center-in-curved-spacetime}
+    The curved mirror of \ref{thrm:irreducible-inclusion-factor}: for nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$ (with the isotony coherence), an irreducible inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ forces $R(\mathbf{B}_2)$ to be a factor, by the same argument that the center lies in the relative commutant (\ref{thrm:relative-commutant-center-in-curved-spacetime}), which irreducibility collapses to the scalars.
+\end{theorem}
+
 \subsection{Purity of States on Local Algebras in Curved Spacetime}
 
 Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved spacetime is itself a unital C*-algebra with its own state space and GNS representations. The abstract characterizations of purity therefore apply per region, registered here for $\mathfrak{U}(\mathbf{B})$. There is no quasilocal algebra in curved spacetime, so - unlike the Minkowski covariant-vacuum picture - these are genuinely local statements, one for each region.
