@@ -315,8 +315,14 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 
 \begin{theorem}[Self-Inclusion is Irreducible iff Factor]
     \label{thrm:irreducible-inclusion-self-iff-factor}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}
+    \uses{def:irreducible-inclusion}
+    \leanok
     For the trivial self-inclusion $R(\mathbf{B}) \subseteq R(\mathbf{B})$, the relative commutant $R(\mathbf{B})' \cap R(\mathbf{B})$ is exactly the center $R(\mathbf{B}) \cap R(\mathbf{B})'$. Hence the self-inclusion is irreducible if and only if $R(\mathbf{B})$ is a factor. This is the biconditional refinement of the one-directional \ref{thrm:irreducible-inclusion-factor} in the self-inclusion case.
 \end{theorem}
+\begin{proof}
+    Unfolding the definitions, irreducibility of the self-inclusion says $R(\mathbf{B})' \cap R(\mathbf{B}) = \mathbb{C}\cdot 1$, while factoriality says $R(\mathbf{B}) \cap R(\mathbf{B})' = \mathbb{C}\cdot 1$. The two intersections agree by commutativity, so the statements are equivalent.
+\end{proof}
 
 
 \subsection{Irreducibility and Schur's Lemma}
