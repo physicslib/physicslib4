@@ -313,14 +313,6 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
     If $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and the inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is irreducible, then the ambient algebra $R(\mathbf{B}_2)$ is a factor (trivial center). Indeed the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in the relative commutant (\ref{thrm:relative-commutant-center}), which by irreducibility is the scalars; since the scalars are always central, the center equals the scalars. This connects irreducibility of an inclusion to factoriality of the larger algebra.
 \end{theorem}
 
-\begin{theorem}[Self-Inclusion Irreducible iff Factor]
-    \label{thrm:irreducible-inclusion-self-factor}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
-    \uses{def:irreducible-inclusion, def:local-von-neumann-algebra}
-    For a single region $\mathbf{B}$, the self-inclusion $R(\mathbf{B}) \subseteq R(\mathbf{B})$ is irreducible if and only if $R(\mathbf{B})$ is a factor. The relative commutant of the self-inclusion is exactly the center $R(\mathbf{B}) \cap R(\mathbf{B})'$, so its triviality (irreducibility of the inclusion) coincides with triviality of the center (the factor property), up to commuting the intersection. This is the bidirectional companion to \ref{thrm:irreducible-inclusion-factor}.
-\end{theorem}
-
 
 \subsection{Irreducibility and Schur's Lemma}
 
