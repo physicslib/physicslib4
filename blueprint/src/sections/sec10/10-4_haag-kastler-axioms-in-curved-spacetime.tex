@@ -307,6 +307,14 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
     The curved mirror of \ref{thrm:irreducible-inclusion-factor}: for nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$ (with the isotony coherence), an irreducible inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ forces $R(\mathbf{B}_2)$ to be a factor, by the same argument that the center lies in the relative commutant (\ref{thrm:relative-commutant-center-in-curved-spacetime}), which irreducibility collapses to the scalars.
 \end{theorem}
 
+\begin{theorem}[Self-Inclusion Irreducible iff Factor (Curved Spacetime)]
+    \label{thrm:irreducible-inclusion-self-factor-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
+    \uses{def:irreducible-inclusion-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime}
+    The curved mirror of \ref{thrm:irreducible-inclusion-self-factor}: for a single subregion $\mathbf{B}' \subseteq \mathbf{B}$, the self-inclusion $R(\mathbf{B}') \subseteq R(\mathbf{B}')$ is irreducible if and only if $R(\mathbf{B}')$ is a factor, its relative commutant being the center $R(\mathbf{B}') \cap R(\mathbf{B}')'$.
+\end{theorem}
+
 
 \subsection{Purity of States on Local Algebras in Curved Spacetime}
 
