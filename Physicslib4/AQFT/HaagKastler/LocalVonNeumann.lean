@@ -320,16 +320,6 @@ theorem isFactor_of_isIrreducibleInclusion
       exact (hcomm y).symm
     exact ⟨hmem, hcentral⟩
 
-/-- **The self-inclusion is irreducible iff the algebra is a factor.** For a single
-region `B`, the inclusion `R(B) ⊆ R(B)` is irreducible exactly when `R(B)` is a
-factor: the relative commutant of the self-inclusion is the center `R(B) ∩ R(B)'`,
-so its triviality is precisely the factor property (up to `Set.inter_comm`). -/
-theorem isIrreducibleInclusion_self_iff_isFactor
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
-    (B : Set StandardMinkowskiSpacetime.Carrier) :
-    N.IsIrreducibleInclusion π B B ↔ IsFactor (N.localVonNeumann π B) := by
-  sorry
-
 end HaagKastlerNet
 end HaagKastler
 end AQFT
