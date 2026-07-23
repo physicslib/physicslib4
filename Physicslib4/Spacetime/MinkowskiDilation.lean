@@ -31,7 +31,36 @@ namespace Physicslib4
 changes. -/
 theorem minkowskiForwardCone_smul (lam : ℝ) (hlam : 0 < lam) (p q : SpacetimeModel) :
     lam • q ∈ minkowskiForwardCone (lam • p) ↔ q ∈ minkowskiForwardCone p := by
-  sorry
+  rw [mem_minkowskiForwardCone, mem_minkowskiForwardCone]
+  have hp0 : (lam • p) 0 = lam * p 0 := by simp
+  have hp1 : (lam • p) 1 = lam * p 1 := by simp
+  have hp2 : (lam • p) 2 = lam * p 2 := by simp
+  have hp3 : (lam • p) 3 = lam * p 3 := by simp
+  have hq0 : (lam • q) 0 = lam * q 0 := by simp
+  have hq1 : (lam • q) 1 = lam * q 1 := by simp
+  have hq2 : (lam • q) 2 = lam * q 2 := by simp
+  have hq3 : (lam • q) 3 = lam * q 3 := by simp
+  rw [hp0, hp1, hp2, hp3, hq0, hq1, hq2, hq3]
+  have hsqpos : 0 < lam ^ 2 := pow_pos hlam 2
+  constructor
+  · rintro ⟨h_time, h_quad⟩
+    constructor
+    · nlinarith
+    · have h_quad' : -(lam * q 0 - lam * p 0) ^ 2 + (lam * q 1 - lam * p 1) ^ 2 +
+        (lam * q 2 - lam * p 2) ^ 2 + (lam * q 3 - lam * p 3) ^ 2
+        = lam ^ 2 * (-(q 0 - p 0) ^ 2 + (q 1 - p 1) ^ 2 + (q 2 - p 2) ^ 2 + (q 3 - p 3) ^ 2) := by
+        ring
+      rw [h_quad'] at h_quad
+      nlinarith
+  · rintro ⟨h_time, h_quad⟩
+    constructor
+    · nlinarith
+    · have h_quad' : -(lam * q 0 - lam * p 0) ^ 2 + (lam * q 1 - lam * p 1) ^ 2 +
+        (lam * q 2 - lam * p 2) ^ 2 + (lam * q 3 - lam * p 3) ^ 2
+        = lam ^ 2 * (-(q 0 - p 0) ^ 2 + (q 1 - p 1) ^ 2 + (q 2 - p 2) ^ 2 + (q 3 - p 3) ^ 2) := by
+        ring
+      rw [h_quad']
+      nlinarith
 
 /-- **Dilations preserve the backward Minkowski cone.** For `λ > 0`,
 `λ p ∈ I⁻(λ q) ↔ p ∈ I⁻(q)`. -/
@@ -51,7 +80,37 @@ theorem alexandrovBasis_image_smul (lam : ℝ) (hlam : 0 < lam)
       standardMinkowskiTimeOrientation) :
     (fun x => lam • x) '' B ∈ Spacetime.alexandrovBasis StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation := by
-  sorry
+  simp only [Spacetime.alexandrovBasis, Set.mem_setOf_eq] at hB ⊢
+  obtain ⟨p, q, rfl⟩ := hB
+  refine ⟨lam • p, lam • q, ?_⟩
+  ext y
+  simp only [Set.mem_image, Set.mem_inter_iff]
+  rw [chronologicalFuture_standardMinkowski (p : SpacetimeModel),
+    chronologicalPast_standardMinkowski (q : SpacetimeModel),
+    chronologicalFuture_standardMinkowski (lam • (p : SpacetimeModel)),
+    chronologicalPast_standardMinkowski (lam • (q : SpacetimeModel))]
+  constructor
+  · rintro ⟨x, ⟨hxF, hxB⟩, rfl⟩
+    exact ⟨(minkowskiForwardCone_smul lam hlam _ x).mpr hxF,
+      (minkowskiBackwardCone_smul lam hlam x _).mpr hxB⟩
+  · rintro ⟨hyF, hyB⟩
+    refine ⟨lam⁻¹ • y, ⟨?_, ?_⟩, smul_inv_smul₀ hlam.ne' y⟩
+    · have hcalc : lam • (lam⁻¹ • (y : SpacetimeModel)) = (y : SpacetimeModel) := by
+        simp [smul_smul, hlam.ne']
+      have htemp : lam • (lam⁻¹ • y : SpacetimeModel) ∈ minkowskiForwardCone
+          (lam • (p : SpacetimeModel)) := by
+        rw [hcalc]
+        exact hyF
+      exact (minkowskiForwardCone_smul lam hlam (p : SpacetimeModel)
+        (lam⁻¹ • y : SpacetimeModel)).mp htemp
+    · have hcalc : lam • (lam⁻¹ • (y : SpacetimeModel)) = (y : SpacetimeModel) := by
+        simp [smul_smul, hlam.ne']
+      have htemp : lam • (lam⁻¹ • y : SpacetimeModel) ∈ minkowskiBackwardCone
+          (lam • (q : SpacetimeModel)) := by
+        rw [hcalc]
+        exact hyB
+      exact (minkowskiBackwardCone_smul lam hlam (lam⁻¹ • y : SpacetimeModel)
+        (q : SpacetimeModel)).mp htemp
 
 /-- **The Minkowski metric scales by `λ²` under a dilation:**
 `g(λ v, λ w) = λ² g(v, w)`. -/

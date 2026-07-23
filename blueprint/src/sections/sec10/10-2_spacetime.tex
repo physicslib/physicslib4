@@ -851,7 +851,6 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \begin{lemma}[Dilations Preserve the Minkowski Cones]
     \label{lmm:minkowski-dilation-cone}
     \lean{Physicslib4.minkowskiForwardCone_smul, Physicslib4.minkowskiBackwardCone_smul}
-    \leanfile{Physicslib4/Spacetime/MinkowskiDilation.lean}
     \uses{def:standard-minkowski-spacetime}
     \leanok
     For $\lambda > 0$, the dilation $x \mapsto \lambda x$ preserves the forward and backward Minkowski cones: $\lambda q \in I^+(\lambda p) \iff q \in I^+(p)$ and $\lambda p \in I^-(\lambda q) \iff p \in I^-(q)$. Scaling multiplies the defining quadratic form by $\lambda^2 > 0$ and the time-order difference by $\lambda > 0$, so neither strict inequality changes.
