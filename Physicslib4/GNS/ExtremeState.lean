@@ -551,19 +551,42 @@ pure state on `A`. A dominated positive functional `ψ ≤ ω ∘ Φ` on `A` tra
 transporting back gives `ψ` proportional to `ω ∘ Φ`. -/
 theorem isPure_comp_of_isPure (Φ : A ≃⋆ₐ[ℂ] B) {ω : State B} (hpure : IsPure ω) :
     IsPure (ω.comp Φ.toStarAlgHom) := by
-  sorry
+  intro ψ hψpos hψdom
+  set ψ' : B →L[ℂ] ℂ := ψ.comp (starAlgHomCLM Φ.symm.toStarAlgHom) with hψ'_def
+  have hψ'app : ∀ b, ψ' b = ψ (Φ.symm b) := fun b => by
+    rw [hψ'_def, ContinuousLinearMap.comp_apply, starAlgHomCLM_apply]
+    simp
+  have hψ'pos : ∀ b, 0 ≤ ψ' (star b * b) := by
+    intro b; rw [hψ'app, map_mul, map_star]; exact hψpos (Φ.symm b)
+  have hψ'dom : ∀ b, ψ' (star b * b) ≤ ω (star b * b) := by
+    intro b
+    rw [hψ'app, map_mul, map_star]
+    have hrhs : (ω.comp Φ.toStarAlgHom) (star (Φ.symm b) * Φ.symm b) = ω (star b * b) := by
+      simp [State.comp_apply, map_mul, map_star, Φ.apply_symm_apply]
+    exact (hψdom (Φ.symm b)).trans (le_of_eq hrhs)
+  obtain ⟨t, ht⟩ := hpure ψ' hψ'pos hψ'dom
+  refine ⟨t, fun a => ?_⟩
+  have ha := ht (Φ a)
+  rw [hψ'app, StarAlgEquiv.symm_apply_apply] at ha
+  rw [State.comp_apply]
+  exact ha
 
 /-- Pulling a state back along `Φ` and then along `Φ⁻¹` recovers the original state. -/
 theorem State.comp_toStarAlgHom_symm (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B) :
     (ω.comp Φ.toStarAlgHom).comp Φ.symm.toStarAlgHom = ω := by
-  sorry
+  rw [← State.comp_comp ω Φ.symm.toStarAlgHom Φ.toStarAlgHom]
+  have h : Φ.toStarAlgHom.comp Φ.symm.toStarAlgHom = StarAlgHom.id ℂ B := by
+    ext b; simp [Φ.apply_symm_apply]
+  rw [h, State.comp_id]
 
 /-- **Purity is invariant under a `*`-isomorphism**: for `Φ : A ≃⋆ₐ[ℂ] B` and a state
 `ω` on `B`, the pullback `ω ∘ Φ` is pure iff `ω` is. This is the cross-algebra
 generalization of `isPure_precomp_iff` (the `*`-automorphism case). -/
 theorem isPure_comp_iff (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B) :
     IsPure (ω.comp Φ.toStarAlgHom) ↔ IsPure ω := by
-  sorry
+  refine ⟨fun h => ?_, isPure_comp_of_isPure Φ⟩
+  have h2 := isPure_comp_of_isPure Φ.symm h
+  rwa [State.comp_toStarAlgHom_symm] at h2
 
 end GNS
 end Physicslib4

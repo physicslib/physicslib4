@@ -505,7 +505,6 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 \begin{theorem}[Purity is Invariant under a $*$-Isomorphism]
     \label{thrm:pure-pullback-invariant}
     \lean{Physicslib4.GNS.isPure_comp_iff}
-    \leanfile{Physicslib4/GNS/ExtremeState.lean}
     \uses{def:state-pullback, def:pure-state}
     \leanok
     For a $*$-isomorphism $\Phi : A \simeq B$ of C*-algebras and a state $\omega$ on $B$, the pullback $\omega \circ \Phi$ is pure if and only if $\omega$ is. A dominated positive functional $\psi \le \omega \circ \Phi$ transports to $\psi \circ \Phi^{-1} \le \omega$, which purity sends to a scalar multiple of $\omega$; transporting back gives $\psi$ proportional to $\omega \circ \Phi$, and the converse follows by applying the same to $\Phi^{-1}$ (using $(\omega \circ \Phi)\circ \Phi^{-1} = \omega$). This is the cross-algebra generalization of the $*$-automorphism case (purity is a covariance invariant); a $*$-isomorphism identifies the pure states of $A$ and $B$.
