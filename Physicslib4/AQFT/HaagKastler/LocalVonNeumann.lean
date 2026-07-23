@@ -329,7 +329,8 @@ theorem isIrreducibleInclusion_self_iff_isFactor
     (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     (B : Set StandardMinkowskiSpacetime.Carrier) :
     N.IsIrreducibleInclusion π B B ↔ IsFactor (N.localVonNeumann π B) := by
-  sorry
+  unfold IsIrreducibleInclusion IsFactor
+  rw [coe_relativeCommutant, Set.inter_comm]
 
 end HaagKastlerNet
 end HaagKastler

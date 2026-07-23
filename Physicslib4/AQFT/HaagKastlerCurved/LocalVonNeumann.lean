@@ -370,7 +370,8 @@ theorem isIrreducibleInclusion_self_iff_isFactor {B : Set M.Carrier}
     {B' : Set M.Carrier} (hB' : M.IsBasisSet B') (h' : B' ⊆ B) :
     N.IsIrreducibleInclusion hB π hB' hB' h' h'
       ↔ IsFactor (N.localVonNeumann π hB' hB h') := by
-  sorry
+  unfold IsIrreducibleInclusion IsFactor
+  rw [coe_relativeCommutant, Set.inter_comm]
 
 end HaagKastlerNet
 end HaagKastlerCurved
