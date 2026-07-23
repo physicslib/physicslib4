@@ -633,6 +633,13 @@ The comparison of representations is the entry point to superselection theory. F
     A von Neumann algebra and its commutant share the same center: the intersection $\pi(A)'' \cap (\pi(A)'')' = \pi(A)'' \cap \pi(A)'$ is symmetric under the duality of \ref{thrm:double-commutant-duality}, being simultaneously the center of $\pi(A)''$ and the center of $\pi(A)'$. Consequently $\pi(A)''$ is a factor (trivial center) if and only if its commutant $\pi(A)'$ is a factor. Dually, at the extreme of triviality, the commutant collapses to the scalars $\pi(A)' = \mathbb{C}\cdot 1$ if and only if the generated algebra is everything $\pi(A)'' = \mathcal{B}(H)$; this is the commutant form of the equivalence ``irreducible $\iff$ generates $\mathcal{B}(H)$'' (\ref{thrm:commutant-von-neumann}), passing between the two sides through the bicommutant $(\mathbb{C}\cdot 1)' = \mathcal{B}(H)$.
 \end{theorem}
 
+\begin{lemma}[Abelian $\iff$ Self-Commuting]
+    \label{lmm:von-neumann-abelian-self-commuting}
+    \lean{Physicslib4.GNS.isAbelian_iff_le_commutant}
+    \leanok
+    A von Neumann algebra $R$ is abelian --- every pair of its elements commutes --- if and only if it is contained in its own commutant, $R \subseteq R'$. This is essentially definitional: $R \subseteq R'$ says exactly that each element of $R$ commutes with every element of $R$. It is the operator-algebraic characterization of commutativity via the commutant, and the boundary case of microcausality $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$ where the two regions coincide.
+\end{lemma}
+
 \begin{theorem}[The Pure-State Dichotomy]
     \label{thrm:pure-state-dichotomy}
     \lean{Physicslib4.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}

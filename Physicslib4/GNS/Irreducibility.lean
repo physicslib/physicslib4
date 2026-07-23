@@ -523,5 +523,14 @@ theorem gnsVonNeumannAlgebra_isGreatest_of_isIrreducible {π : A →⋆ₐ[ℂ] 
   rw [← SetLike.coe_subset_coe, coe_gnsVonNeumannAlgebra_eq_univ_of_isIrreducible hirr]
   exact Set.subset_univ _
 
+/-- **A von Neumann algebra is abelian iff it is contained in its own commutant.**
+`R` is commutative (every pair of its elements commutes) exactly when `R ≤ R'`. This
+is essentially definitional: `R ≤ R'` unfolds, via `VonNeumannAlgebra.commutant`
+(modelled by `Set.centralizer`), to the statement that every element of `R` commutes
+with every element of `R`. -/
+theorem isAbelian_iff_le_commutant (R : VonNeumannAlgebra H) :
+    (∀ x ∈ R, ∀ y ∈ R, x * y = y * x) ↔ R ≤ R.commutant := by
+  simp [SetLike.le_def, VonNeumannAlgebra.mem_commutant_iff, eq_comm]
+
 end GNS
 end Physicslib4
