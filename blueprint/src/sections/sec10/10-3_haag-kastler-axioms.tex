@@ -489,18 +489,16 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 \begin{definition}[Pullback of a State]
     \label{def:state-pullback}
     \lean{Physicslib4.GNS.State.comp}
-    \leanfile{Physicslib4/GNS/ExtremeState.lean}
-    \leanok
     \uses{def:state}
+    \leanok
     For a unital $*$-homomorphism $\pi : A \to B$ of C*-algebras and a state $\omega$ on $B$, the \emph{pullback} $\omega \circ \pi$ is the functional $a \mapsto \omega(\pi(a))$. It is again a state: positivity is the $*$-compatibility $\omega(\pi(a^* a)) = \omega(\pi(a)^*\pi(a)) \ge 0$, and normalization $\Vert\omega\circ\pi\Vert = 1$ follows from unitality $\pi(1) = 1$ together with \ref{thrm:norm-positive-functional}. Thus $A \mapsto \mathrm{State}(A)$ is contravariant in $A$: a $*$-homomorphism $\pi : A \to B$ induces the pullback $\mathrm{State}(B) \to \mathrm{State}(A)$.
 \end{definition}
 
 \begin{theorem}[Functoriality of the State Pullback]
     \label{thrm:state-pullback-functorial}
     \lean{Physicslib4.GNS.State.comp_id, Physicslib4.GNS.State.comp_comp}
-    \leanfile{Physicslib4/GNS/ExtremeState.lean}
-    \leanok
     \uses{def:state-pullback}
+    \leanok
     The pullback is a contravariant functor on C*-algebras: pulling back along the identity $*$-homomorphism is the identity ($\omega \circ \mathrm{id} = \omega$), and pulling back along a composite reverses order, $\omega \circ (\pi_2 \circ \pi_1) = (\omega \circ \pi_2) \circ \pi_1$ for $\pi_1 : A \to B$, $\pi_2 : B \to C$ and $\omega$ a state on $C$.
 \end{theorem}
 

@@ -485,10 +485,12 @@ variable {B : Type*} [CStarAlgebra B]
 contractive (`‖π a‖ ≤ ‖a‖`, `NonUnitalStarAlgHom.norm_apply_le`), hence bounded with
 norm `≤ 1`. -/
 noncomputable def starAlgHomCLM (π : A →⋆ₐ[ℂ] B) : A →L[ℂ] B :=
-  π.toAlgHom.toLinearMap.mkContinuous 1 sorry
+  π.toAlgHom.toLinearMap.mkContinuous 1 fun a => by
+    rw [one_mul]
+    exact NonUnitalStarAlgHom.norm_apply_le π a
 
 @[simp] theorem starAlgHomCLM_apply (π : A →⋆ₐ[ℂ] B) (a : A) :
-    starAlgHomCLM π a = π a := by sorry
+    starAlgHomCLM π a = π a := rfl
 
 /-- The **pullback of a state along a unital `*`-homomorphism** `π : A →⋆ₐ[ℂ] B`:
 `a ↦ ω (π a)`. It is again a state — positivity is the `*`-compatibility of
@@ -498,23 +500,49 @@ their value at `1`. This exhibits `A ↦ State A` as a contravariant functor: a
 `*`-homomorphism `π : A →⋆ₐ[ℂ] B` induces the pullback `State B → State A`. -/
 noncomputable def State.comp (ω : State B) (π : A →⋆ₐ[ℂ] B) : State A where
   toContinuousLinearMap := ω.toContinuousLinearMap.comp (starAlgHomCLM π)
-  isPositive := sorry
-  isNormalized := sorry
+  isPositive := fun a => by
+    rw [ContinuousLinearMap.comp_apply, starAlgHomCLM_apply, map_mul, map_star]
+    exact ω.isPositive (π a)
+  isNormalized := by
+    haveI : Nontrivial B := nontrivial_of_state ω
+    haveI : Nontrivial A := by
+      rcases subsingleton_or_nontrivial A with hs | hn
+      · exfalso
+        have : (1 : B) = 0 := by
+          calc
+            (1 : B) = π 1 := by symm; exact map_one π
+            _ = π 0 := by rw [Subsingleton.elim (1 : A) 0]
+            _ = 0 := map_zero π
+        exact one_ne_zero this
+      · exact hn
+    have hpos : ∀ a, 0 ≤ (ω.toContinuousLinearMap.comp (starAlgHomCLM π)) (star a * a) := by
+      intro a
+      rw [ContinuousLinearMap.comp_apply, starAlgHomCLM_apply, map_mul, map_star]
+      exact ω.isPositive (π a)
+    rw [norm_eq_re_apply_one_of_positive hpos, ContinuousLinearMap.comp_apply,
+      starAlgHomCLM_apply, map_one]
+    rw [show ω.toContinuousLinearMap 1 = ω 1 from rfl, ω.apply_one, Complex.one_re]
 
 @[simp] theorem State.comp_apply (ω : State B) (π : A →⋆ₐ[ℂ] B) (a : A) :
-    (ω.comp π) a = ω (π a) := by sorry
+    (ω.comp π) a = ω (π a) := rfl
 
 /-- **Functoriality (identity).** Pulling a state back along the identity
 `*`-homomorphism leaves it unchanged. -/
 theorem State.comp_id (ω : State A) :
-    ω.comp (StarAlgHom.id ℂ A) = ω := by sorry
+    ω.comp (StarAlgHom.id ℂ A) = ω := by
+  apply DFunLike.ext
+  intro a
+  simp
 
 /-- **Functoriality (composition).** The pullback is contravariant: for
 `π₁ : A →⋆ₐ[ℂ] B` and `π₂ : B →⋆ₐ[ℂ] C`, pulling `ω : State C` back along the
 composite `π₂ ∘ π₁` equals pulling back first along `π₂`, then along `π₁`. -/
 theorem State.comp_comp {C : Type*} [CStarAlgebra C]
     (ω : State C) (π₁ : A →⋆ₐ[ℂ] B) (π₂ : B →⋆ₐ[ℂ] C) :
-    ω.comp (π₂.comp π₁) = (ω.comp π₂).comp π₁ := by sorry
+    ω.comp (π₂.comp π₁) = (ω.comp π₂).comp π₁ := by
+  apply DFunLike.ext
+  intro a
+  simp
 
 end GNS
 end Physicslib4
