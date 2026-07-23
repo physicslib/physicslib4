@@ -544,5 +544,26 @@ theorem State.comp_comp {C : Type*} [CStarAlgebra C]
   intro a
   simp
 
+/-- **Purity is preserved by pullback along a `*`-isomorphism** (one direction).
+If `ω` is a pure state on `B` and `Φ : A ≃⋆ₐ[ℂ] B`, then the pullback `ω ∘ Φ` is a
+pure state on `A`. A dominated positive functional `ψ ≤ ω ∘ Φ` on `A` transports to
+`ψ ∘ Φ⁻¹ ≤ ω` on `B`, which purity of `ω` sends to a scalar multiple of `ω`;
+transporting back gives `ψ` proportional to `ω ∘ Φ`. -/
+theorem isPure_comp_of_isPure (Φ : A ≃⋆ₐ[ℂ] B) {ω : State B} (hpure : IsPure ω) :
+    IsPure (ω.comp Φ.toStarAlgHom) := by
+  sorry
+
+/-- Pulling a state back along `Φ` and then along `Φ⁻¹` recovers the original state. -/
+theorem State.comp_toStarAlgHom_symm (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B) :
+    (ω.comp Φ.toStarAlgHom).comp Φ.symm.toStarAlgHom = ω := by
+  sorry
+
+/-- **Purity is invariant under a `*`-isomorphism**: for `Φ : A ≃⋆ₐ[ℂ] B` and a state
+`ω` on `B`, the pullback `ω ∘ Φ` is pure iff `ω` is. This is the cross-algebra
+generalization of `isPure_precomp_iff` (the `*`-automorphism case). -/
+theorem isPure_comp_iff (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B) :
+    IsPure (ω.comp Φ.toStarAlgHom) ↔ IsPure ω := by
+  sorry
+
 end GNS
 end Physicslib4

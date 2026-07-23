@@ -502,6 +502,15 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     The pullback is a contravariant functor on C*-algebras: pulling back along the identity $*$-homomorphism is the identity ($\omega \circ \mathrm{id} = \omega$), and pulling back along a composite reverses order, $\omega \circ (\pi_2 \circ \pi_1) = (\omega \circ \pi_2) \circ \pi_1$ for $\pi_1 : A \to B$, $\pi_2 : B \to C$ and $\omega$ a state on $C$.
 \end{theorem}
 
+\begin{theorem}[Purity is Invariant under a $*$-Isomorphism]
+    \label{thrm:pure-pullback-invariant}
+    \lean{Physicslib4.GNS.isPure_comp_iff}
+    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \uses{def:state-pullback, def:pure-state}
+    \leanok
+    For a $*$-isomorphism $\Phi : A \simeq B$ of C*-algebras and a state $\omega$ on $B$, the pullback $\omega \circ \Phi$ is pure if and only if $\omega$ is. A dominated positive functional $\psi \le \omega \circ \Phi$ transports to $\psi \circ \Phi^{-1} \le \omega$, which purity sends to a scalar multiple of $\omega$; transporting back gives $\psi$ proportional to $\omega \circ \Phi$, and the converse follows by applying the same to $\Phi^{-1}$ (using $(\omega \circ \Phi)\circ \Phi^{-1} = \omega$). This is the cross-algebra generalization of the $*$-automorphism case (purity is a covariance invariant); a $*$-isomorphism identifies the pure states of $A$ and $B$.
+\end{theorem}
+
 \begin{theorem}[Weak-* Compactness of the State Space]
     \label{thrm:state-space-weak-compact}
     \lean{Physicslib4.GNS.isCompact_weakStateSet}
