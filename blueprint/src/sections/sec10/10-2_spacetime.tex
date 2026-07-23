@@ -844,6 +844,37 @@
     Apply \ref{thrm:alexandrov-topological-basis}. Its downward intersection hypothesis is discharged by \ref{lmm:minkowski-diamonds-downward-directed}, and its covering condition holds because on standard Minkowski every point has a chronological past point and a chronological future point (\ref{lmm:minkowski-chronological-open}). The topology-generation condition holds by definition of the Alexandrov topology.
 \end{proof}
 
+\subsection{Dilations are causal automorphisms but not isometries}
+
+A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkowski spacetime preserves the entire causal structure, yet is not an isometry when $\lambda \neq 1$. This is the elementary core of Zeeman's theorem --- the causal automorphism group of Minkowski is strictly larger than the isometry (Poincar\'e) group, the extra generators being the dilations --- and it concretely exhibits the gap between ``causal automorphism'' and ``isometry'' (relevant to why a metric-free morphism notion cannot capture isometric covariance).
+
+\begin{lemma}[Dilations Preserve the Minkowski Cones]
+    \label{lmm:minkowski-dilation-cone}
+    \lean{Physicslib4.minkowskiForwardCone_smul, Physicslib4.minkowskiBackwardCone_smul}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDilation.lean}
+    \uses{def:standard-minkowski-spacetime}
+    \leanok
+    For $\lambda > 0$, the dilation $x \mapsto \lambda x$ preserves the forward and backward Minkowski cones: $\lambda q \in I^+(\lambda p) \iff q \in I^+(p)$ and $\lambda p \in I^-(\lambda q) \iff p \in I^-(q)$. Scaling multiplies the defining quadratic form by $\lambda^2 > 0$ and the time-order difference by $\lambda > 0$, so neither strict inequality changes.
+\end{lemma}
+
+\begin{theorem}[Dilations are Causal Automorphisms]
+    \label{thrm:minkowski-dilation-causal-automorphism}
+    \lean{Physicslib4.alexandrovBasis_image_smul}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDilation.lean}
+    \uses{lmm:minkowski-dilation-cone, def:alexandrov-topology}
+    \leanok
+    For $\lambda > 0$, the dilation $x \mapsto \lambda x$ carries Alexandrov basis sets to Alexandrov basis sets: the image of a diamond $I^+(p) \cap I^-(q)$ is again a diamond, $I^+(\lambda p) \cap I^-(\lambda q)$. Via the cone characterization of the chronological future and past on standard Minkowski (\ref{lmm:minkowski-chronological-open}) together with \ref{lmm:minkowski-dilation-cone}, so a positive dilation preserves the causal (Alexandrov) structure --- it is a causal automorphism.
+\end{theorem}
+
+\begin{theorem}[Dilations are Not Isometries]
+    \label{thrm:minkowski-dilation-not-isometry}
+    \lean{Physicslib4.minkowskiForm_smul, Physicslib4.exists_minkowskiForm_smul_ne}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDilation.lean}
+    \uses{def:standard-minkowski-spacetime}
+    \leanok
+    The Minkowski metric scales by $\lambda^2$ under a dilation, $g(\lambda v, \lambda w) = \lambda^2\, g(v,w)$. Consequently, whenever $\lambda^2 \neq 1$ the dilation does not preserve $g$: for the timelike unit vector $e_0$ one has $g(\lambda e_0, \lambda e_0) = -\lambda^2 \neq -1 = g(e_0, e_0)$. Thus for $\lambda > 0$ with $\lambda \neq 1$ the dilation is a causal automorphism (\ref{thrm:minkowski-dilation-causal-automorphism}) that is not an isometry.
+\end{theorem}
+
 \subsection{Isometries and basis-set preservation}
 
 \begin{lemma}[Isometries Preserve the Causal Classification]
