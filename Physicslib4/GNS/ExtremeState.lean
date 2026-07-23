@@ -479,5 +479,42 @@ theorem mem_extremePoints_iff_isExtremePoint (ω : State A) :
         ← add_mul, ← Complex.ofReal_add, hab, Complex.ofReal_one, one_mul]
     exact ⟨hcombo, hcombo⟩
 
+variable {B : Type*} [CStarAlgebra B]
+
+/-- A unital `*`-homomorphism of C*-algebras as a continuous `ℂ`-linear map; it is
+contractive (`‖π a‖ ≤ ‖a‖`, `NonUnitalStarAlgHom.norm_apply_le`), hence bounded with
+norm `≤ 1`. -/
+noncomputable def starAlgHomCLM (π : A →⋆ₐ[ℂ] B) : A →L[ℂ] B :=
+  π.toAlgHom.toLinearMap.mkContinuous 1 sorry
+
+@[simp] theorem starAlgHomCLM_apply (π : A →⋆ₐ[ℂ] B) (a : A) :
+    starAlgHomCLM π a = π a := by sorry
+
+/-- The **pullback of a state along a unital `*`-homomorphism** `π : A →⋆ₐ[ℂ] B`:
+`a ↦ ω (π a)`. It is again a state — positivity is the `*`-compatibility of
+`star a * a` (`π` is a `*`-hom), and the normalization `‖ω ∘ π‖ = 1` follows since
+`π` is unital (`(ω∘π)(1) = ω(1) = 1`) and positive functionals have norm equal to
+their value at `1`. This exhibits `A ↦ State A` as a contravariant functor: a
+`*`-homomorphism `π : A →⋆ₐ[ℂ] B` induces the pullback `State B → State A`. -/
+noncomputable def State.comp (ω : State B) (π : A →⋆ₐ[ℂ] B) : State A where
+  toContinuousLinearMap := ω.toContinuousLinearMap.comp (starAlgHomCLM π)
+  isPositive := sorry
+  isNormalized := sorry
+
+@[simp] theorem State.comp_apply (ω : State B) (π : A →⋆ₐ[ℂ] B) (a : A) :
+    (ω.comp π) a = ω (π a) := by sorry
+
+/-- **Functoriality (identity).** Pulling a state back along the identity
+`*`-homomorphism leaves it unchanged. -/
+theorem State.comp_id (ω : State A) :
+    ω.comp (StarAlgHom.id ℂ A) = ω := by sorry
+
+/-- **Functoriality (composition).** The pullback is contravariant: for
+`π₁ : A →⋆ₐ[ℂ] B` and `π₂ : B →⋆ₐ[ℂ] C`, pulling `ω : State C` back along the
+composite `π₂ ∘ π₁` equals pulling back first along `π₂`, then along `π₁`. -/
+theorem State.comp_comp {C : Type*} [CStarAlgebra C]
+    (ω : State C) (π₁ : A →⋆ₐ[ℂ] B) (π₂ : B →⋆ₐ[ℂ] C) :
+    ω.comp (π₂.comp π₁) = (ω.comp π₂).comp π₁ := by sorry
+
 end GNS
 end Physicslib4

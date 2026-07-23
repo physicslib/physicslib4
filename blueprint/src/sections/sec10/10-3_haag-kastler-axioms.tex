@@ -486,6 +486,24 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     Realizing the state space as the subset $\mathrm{stateSpace}(A) \subseteq A \to_L \mathbb{C}$ (the latter a real topological vector space via $\texttt{NormedSpace.complexToReal}$), it is convex: a real convex combination $a\,\omega_1 + b\,\omega_2$ of states is again a state, via $\texttt{State.convexCombo}$. Moreover a state $\omega$ lies in Mathlib's $\mathrm{extremePoints}_{\mathbb{R}}$ of the state space exactly when it is extreme in the sense of \ref{def:extreme-state}, connecting the purity characterizations to the Krein-Milman/Choquet API.
 \end{theorem}
 
+\begin{definition}[Pullback of a State]
+    \label{def:state-pullback}
+    \lean{Physicslib4.GNS.State.comp}
+    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \leanok
+    \uses{def:state}
+    For a unital $*$-homomorphism $\pi : A \to B$ of C*-algebras and a state $\omega$ on $B$, the \emph{pullback} $\omega \circ \pi$ is the functional $a \mapsto \omega(\pi(a))$. It is again a state: positivity is the $*$-compatibility $\omega(\pi(a^* a)) = \omega(\pi(a)^*\pi(a)) \ge 0$, and normalization $\Vert\omega\circ\pi\Vert = 1$ follows from unitality $\pi(1) = 1$ together with \ref{thrm:norm-positive-functional}. Thus $A \mapsto \mathrm{State}(A)$ is contravariant in $A$: a $*$-homomorphism $\pi : A \to B$ induces the pullback $\mathrm{State}(B) \to \mathrm{State}(A)$.
+\end{definition}
+
+\begin{theorem}[Functoriality of the State Pullback]
+    \label{thrm:state-pullback-functorial}
+    \lean{Physicslib4.GNS.State.comp_id, Physicslib4.GNS.State.comp_comp}
+    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \leanok
+    \uses{def:state-pullback}
+    The pullback is a contravariant functor on C*-algebras: pulling back along the identity $*$-homomorphism is the identity ($\omega \circ \mathrm{id} = \omega$), and pulling back along a composite reverses order, $\omega \circ (\pi_2 \circ \pi_1) = (\omega \circ \pi_2) \circ \pi_1$ for $\pi_1 : A \to B$, $\pi_2 : B \to C$ and $\omega$ a state on $C$.
+\end{theorem}
+
 \begin{theorem}[Weak-* Compactness of the State Space]
     \label{thrm:state-space-weak-compact}
     \lean{Physicslib4.GNS.isCompact_weakStateSet}
