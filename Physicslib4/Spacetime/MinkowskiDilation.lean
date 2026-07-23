@@ -37,7 +37,9 @@ theorem minkowskiForwardCone_smul (lam : ℝ) (hlam : 0 < lam) (p q : SpacetimeM
 `λ p ∈ I⁻(λ q) ↔ p ∈ I⁻(q)`. -/
 theorem minkowskiBackwardCone_smul (lam : ℝ) (hlam : 0 < lam) (p q : SpacetimeModel) :
     lam • p ∈ minkowskiBackwardCone (lam • q) ↔ p ∈ minkowskiBackwardCone q := by
-  sorry
+  rw [minkowskiBackwardCone_eq, minkowskiBackwardCone_eq q]
+  simp only [Set.mem_setOf_eq]
+  exact minkowskiForwardCone_smul lam hlam p q
 
 /-- **A positive dilation is a causal automorphism: it preserves the Alexandrov basis.**
 For `λ > 0`, the image of a diamond `I⁺(p) ∩ I⁻(q)` under the dilation `x ↦ λ x` is
@@ -55,7 +57,7 @@ theorem alexandrovBasis_image_smul (lam : ℝ) (hlam : 0 < lam)
 `g(λ v, λ w) = λ² g(v, w)`. -/
 theorem minkowskiForm_smul (lam : ℝ) (v w : SpacetimeModel) :
     minkowskiForm (lam • v) (lam • w) = lam ^ 2 * minkowskiForm v w := by
-  sorry
+  simp [minkowskiForm_apply]; ring
 
 /-- **Dilations are not isometries.** Whenever `λ² ≠ 1`, the dilation `x ↦ λ x` fails
 to preserve the Minkowski form: taking the timelike unit vector `e₀`, one has
@@ -65,6 +67,13 @@ isometry. -/
 theorem exists_minkowskiForm_smul_ne (lam : ℝ) (hlam : lam ^ 2 ≠ 1) :
     ∃ v w : SpacetimeModel,
       minkowskiForm (lam • v) (lam • w) ≠ minkowskiForm v w := by
-  sorry
+  set e₀ : SpacetimeModel := EuclideanSpace.single (0 : Fin 4) (1 : ℝ) with he₀
+  have h_e₀_form : minkowskiForm e₀ e₀ = -1 := by
+    simp [minkowskiForm_apply, he₀]
+  refine ⟨e₀, e₀, ?_⟩
+  rw [minkowskiForm_smul lam e₀ e₀, h_e₀_form]
+  intro h
+  apply hlam
+  linarith
 
 end Physicslib4

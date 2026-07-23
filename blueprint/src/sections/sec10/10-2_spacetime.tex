@@ -860,7 +860,6 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \begin{theorem}[Dilations are Causal Automorphisms]
     \label{thrm:minkowski-dilation-causal-automorphism}
     \lean{Physicslib4.alexandrovBasis_image_smul}
-    \leanfile{Physicslib4/Spacetime/MinkowskiDilation.lean}
     \uses{lmm:minkowski-dilation-cone, def:alexandrov-topology}
     \leanok
     For $\lambda > 0$, the dilation $x \mapsto \lambda x$ carries Alexandrov basis sets to Alexandrov basis sets: the image of a diamond $I^+(p) \cap I^-(q)$ is again a diamond, $I^+(\lambda p) \cap I^-(\lambda q)$. Via the cone characterization of the chronological future and past on standard Minkowski (\ref{lmm:minkowski-chronological-open}) together with \ref{lmm:minkowski-dilation-cone}, so a positive dilation preserves the causal (Alexandrov) structure --- it is a causal automorphism.
@@ -869,7 +868,6 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \begin{theorem}[Dilations are Not Isometries]
     \label{thrm:minkowski-dilation-not-isometry}
     \lean{Physicslib4.minkowskiForm_smul, Physicslib4.exists_minkowskiForm_smul_ne}
-    \leanfile{Physicslib4/Spacetime/MinkowskiDilation.lean}
     \uses{def:standard-minkowski-spacetime}
     \leanok
     The Minkowski metric scales by $\lambda^2$ under a dilation, $g(\lambda v, \lambda w) = \lambda^2\, g(v,w)$. Consequently, whenever $\lambda^2 \neq 1$ the dilation does not preserve $g$: for the timelike unit vector $e_0$ one has $g(\lambda e_0, \lambda e_0) = -\lambda^2 \neq -1 = g(e_0, e_0)$. Thus for $\lambda > 0$ with $\lambda \neq 1$ the dilation is a causal automorphism (\ref{thrm:minkowski-dilation-causal-automorphism}) that is not an isometry.
