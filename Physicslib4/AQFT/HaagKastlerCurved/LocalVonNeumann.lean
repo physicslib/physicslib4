@@ -360,6 +360,18 @@ theorem isFactor_of_isIrreducibleInclusion {B : Set M.Carrier}
       rw [mul_smul_comm, smul_mul_assoc, mul_one, one_mul]
     exact ⟨hmem_R, hmem_centralizer⟩
 
+/-- **Self-inclusion is irreducible iff the algebra is a factor (curved spacetime).**
+For a basis subregion `B' ⊆ B` in a representation of `𝔘(B)`, the trivial self-inclusion
+`R(B') ⊆ R(B')` is irreducible exactly when `R(B')` is a factor: the relative commutant
+of the self-inclusion is `R(B')' ∩ R(B')`, i.e. the center of `R(B')` (up to the order
+of intersection), which equals the scalars iff `R(B')` has trivial center. -/
+theorem isIrreducibleInclusion_self_iff_isFactor {B : Set M.Carrier}
+    (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    {B' : Set M.Carrier} (hB' : M.IsBasisSet B') (h' : B' ⊆ B) :
+    N.IsIrreducibleInclusion hB π hB' hB' h' h'
+      ↔ IsFactor (N.localVonNeumann π hB' hB h') := by
+  sorry
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT
