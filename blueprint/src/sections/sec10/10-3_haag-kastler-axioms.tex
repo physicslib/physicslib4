@@ -689,6 +689,22 @@ The comparison of representations is the entry point to superselection theory. F
     A factor $R$ (a von Neumann algebra with trivial center $R \cap R' = \mathbb{C}\cdot 1$) is abelian if and only if it equals the scalars $\mathbb{C}\cdot 1$. If $R$ is abelian then its center equals $R$ (\ref{lmm:von-neumann-center-eq-self-iff-abelian}), while by the factor hypothesis the center is $\mathbb{C}\cdot 1$; hence $R = \mathbb{C}\cdot 1$. Conversely the scalars are abelian, since $\mathbb{C}\cdot 1 \subseteq (\mathbb{C}\cdot 1)'$ (\ref{lmm:von-neumann-abelian-self-commuting}). Thus among factors, the abelian ones are exactly the trivial (one-dimensional) algebra of scalar multiples of the identity.
 \end{theorem}
 
+\begin{theorem}[A von Neumann algebra and its commutant share a center]
+  \label{thrm:center-eq-commutant-center}
+  \lean{Physicslib4.GNS.vonNeumannCenter_eq_commutant}
+  \uses{def:von-neumann-center, thrm:double-commutant-duality}
+  \leanok
+  The center of a von Neumann algebra equals the center of its commutant: $Z(R) = Z(R')$. Indeed $Z(R) = R \cap R'$ and $Z(R') = R' \cap R'' = R' \cap R$, which coincide by commutativity of intersection together with the double-commutant identity $R'' = R$.
+\end{theorem}
+
+\begin{theorem}[A von Neumann algebra is a factor iff its center is the scalars]
+  \label{thrm:factor-iff-center-scalars}
+  \lean{Physicslib4.GNS.isFactor_iff_center_eq_scalars}
+  \uses{def:von-neumann-center}
+  \leanok
+  A von Neumann algebra $R$ is a factor if and only if its center is the scalars, $Z(R) = R \cap R' = \mathbb{C}\cdot 1$. This is a restatement of the definition of a factor in terms of the bundled center: the underlying set of $Z(R)$ is exactly $R \cap R'$.
+\end{theorem}
+
 \begin{theorem}[The Pure-State Dichotomy]
     \label{thrm:pure-state-dichotomy}
     \lean{Physicslib4.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}

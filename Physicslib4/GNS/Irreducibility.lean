@@ -632,5 +632,29 @@ theorem isAbelian_iff_eq_scalars_of_isFactor (R : VonNeumannAlgebra H)
     rw [hc, hd]
     simp [mul_comm, smul_smul]
 
+/-- **A von Neumann algebra and its commutant share the same center.** `Z(R) = Z(R')`:
+`R ∩ R' = R' ∩ R''= R' ∩ R`, using commutativity of intersection and `R'' = R`. -/
+theorem vonNeumannCenter_eq_commutant (R : VonNeumannAlgebra H) :
+    vonNeumannCenter R = vonNeumannCenter R.commutant := by
+  apply SetLike.coe_injective
+  calc
+    (vonNeumannCenter R : Set (H →L[ℂ] H))
+        = (R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      simp
+    _ = Set.centralizer (R : Set (H →L[ℂ] H)) ∩ (R : Set (H →L[ℂ] H)) := by
+      rw [Set.inter_comm]
+    _ = (R.commutant : Set (H →L[ℂ] H)) ∩ Set.centralizer (R.commutant : Set (H →L[ℂ] H)) := by
+      simp
+    _ = (vonNeumannCenter R.commutant : Set (H →L[ℂ] H)) := by
+      simp
+
+/-- **A von Neumann algebra is a factor iff its center is the scalars.** Restates the
+definition of a factor through the bundled center: `↑(vonNeumannCenter R) = R ∩ R'`. -/
+theorem isFactor_iff_center_eq_scalars (R : VonNeumannAlgebra H) :
+    IsFactor (R : Set (H →L[ℂ] H)) ↔
+      (vonNeumannCenter R : Set (H →L[ℂ] H)) = scalarOperators H := by
+  unfold IsFactor
+  rw [coe_vonNeumannCenter]
+
 end GNS
 end Physicslib4
