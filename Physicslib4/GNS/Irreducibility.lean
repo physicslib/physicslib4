@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.GNS.Construction
+import Physicslib4.Operators.Conjugation
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
@@ -531,6 +532,105 @@ with every element of `R`. -/
 theorem isAbelian_iff_le_commutant (R : VonNeumannAlgebra H) :
     (∀ x ∈ R, ∀ y ∈ R, x * y = y * x) ↔ R ≤ R.commutant := by
   simp [SetLike.le_def, VonNeumannAlgebra.mem_commutant_iff, eq_comm]
+
+/-- **The center `R ∩ R'` is bicommutant-closed.** For a von Neumann algebra `R`,
+the intersection `R ∩ R'` equals its own bicommutant, so it is again a von Neumann
+algebra. The proof mirrors the relative-commutant construction: `R = R''`, so
+`R ∩ R' = (R')' ∩ R'`, a centralizer of a union, hence closed under the triple
+centralizer law. -/
+theorem bicommutant_inter_commutant_eq (R : VonNeumannAlgebra H) :
+    Set.centralizer
+        (Set.centralizer ((R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H))))
+      = (R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+  set S := (R : Set (H →L[ℂ] H)) with hS
+  have hS_bicommutant : Set.centralizer (Set.centralizer S) = S := by
+    simp [S]
+  have h_eq : S ∩ Set.centralizer S = Set.centralizer (Set.centralizer S ∪ S) := by
+    calc
+      S ∩ Set.centralizer S = Set.centralizer (Set.centralizer S) ∩ Set.centralizer S := by
+        rw [hS_bicommutant]
+      _ = Set.centralizer (Set.centralizer S ∪ S) := by
+        rw [Set.centralizer_union]
+  calc
+    Set.centralizer (Set.centralizer (S ∩ Set.centralizer S))
+        = Set.centralizer (Set.centralizer (Set.centralizer (Set.centralizer S ∪ S))) := by
+      rw [h_eq]
+    _ = Set.centralizer (Set.centralizer S ∪ S) := by
+      rw [Set.centralizer_centralizer_centralizer]
+    _ = S ∩ Set.centralizer S := by
+      rw [h_eq]
+
+/-- **The center of a von Neumann algebra.** `Z(R) = R ∩ R'`: the elements of `R`
+that commute with all of `R`, built as the meet of the star-subalgebras of `R` and
+its commutant. Its underlying set is `R ∩ R'`. -/
+noncomputable def vonNeumannCenter (R : VonNeumannAlgebra H) : VonNeumannAlgebra H where
+  toStarSubalgebra := R.toStarSubalgebra ⊓ R.commutant.toStarSubalgebra
+  centralizer_centralizer' := by
+    have hcar : (R.toStarSubalgebra ⊓ R.commutant.toStarSubalgebra).carrier =
+        (R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      ext x; simp [VonNeumannAlgebra.coe_commutant]
+    rw [hcar]; exact bicommutant_inter_commutant_eq R
+
+/-- The underlying set of the center is `R ∩ R'`. -/
+@[simp] theorem coe_vonNeumannCenter (R : VonNeumannAlgebra H) :
+    (vonNeumannCenter R : Set (H →L[ℂ] H))
+      = (R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+  simp [vonNeumannCenter, VonNeumannAlgebra.coe_commutant, StarSubalgebra.coe_inf]
+
+/-- **The center of a von Neumann algebra is abelian.** Any two elements of
+`Z(R) = R ∩ R'` commute: each lies in `R'`, so commutes with everything in `R`, in
+particular with the other (which lies in `R`). -/
+theorem vonNeumannCenter_isAbelian (R : VonNeumannAlgebra H) :
+    ∀ x ∈ vonNeumannCenter R, ∀ y ∈ vonNeumannCenter R, x * y = y * x := by
+  intro x hx y hy
+  rw [← SetLike.mem_coe, coe_vonNeumannCenter] at hx hy
+  rcases hx with ⟨hxR, hxC⟩
+  rcases hy with ⟨hyR, hyC⟩
+  have h := Set.mem_centralizer_iff.mp hxC y hyR
+  exact h.symm
+
+/-- **`R` is abelian iff it equals its own center.** `Z(R) = R` exactly when
+`R ⊆ R'`, i.e. when `R` is abelian. -/
+theorem vonNeumannCenter_eq_self_iff_isAbelian (R : VonNeumannAlgebra H) :
+    vonNeumannCenter R = R ↔ (∀ x ∈ R, ∀ y ∈ R, x * y = y * x) := by
+  rw [isAbelian_iff_le_commutant R]
+  constructor
+  · intro h
+    have hset_eq : (vonNeumannCenter R : Set (H →L[ℂ] H)) = (R : Set (H →L[ℂ] H)) := by
+      simpa using congrArg (fun (S : VonNeumannAlgebra H) => (S : Set (H →L[ℂ] H))) h
+    rw [coe_vonNeumannCenter] at hset_eq
+    have hsub : (R : Set (H →L[ℂ] H)) ⊆ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      rwa [Set.inter_eq_left] at hset_eq
+    have hcomm : (R.commutant : Set (H →L[ℂ] H)) = Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      simp
+    rw [← SetLike.coe_subset_coe, hcomm]
+    exact hsub
+  · intro h
+    rw [← SetLike.coe_subset_coe] at h
+    have hcomm : (R.commutant : Set (H →L[ℂ] H)) = Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      simp
+    rw [hcomm] at h
+    rw [← SetLike.coe_set_eq, coe_vonNeumannCenter, Set.inter_eq_left]
+    exact h
+
+/-- **A factor is abelian iff it is the scalars.** If a factor `R` (with trivial
+center `R ∩ R' = ℂ·1`) is abelian then its center is all of `R`, forcing
+`R = ℂ·1`; conversely the scalars are abelian. -/
+theorem isAbelian_iff_eq_scalars_of_isFactor (R : VonNeumannAlgebra H)
+    (hfac : IsFactor (R : Set (H →L[ℂ] H))) :
+    (∀ x ∈ R, ∀ y ∈ R, x * y = y * x) ↔ (R : Set (H →L[ℂ] H)) = scalarOperators H := by
+  constructor
+  · intro h_abel
+    have h_sub : (R : Set (H →L[ℂ] H)) ⊆ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      rw [← VonNeumannAlgebra.coe_commutant]
+      exact SetLike.coe_subset_coe.mpr ((isAbelian_iff_le_commutant R).mp h_abel)
+    unfold IsFactor at hfac
+    rwa [Set.inter_eq_left.mpr h_sub] at hfac
+  · intro hs x hx y hy
+    obtain ⟨c, hc⟩ : x ∈ scalarOperators H := hs ▸ hx
+    obtain ⟨d, hd⟩ : y ∈ scalarOperators H := hs ▸ hy
+    rw [hc, hd]
+    simp [mul_comm, smul_smul]
 
 end GNS
 end Physicslib4

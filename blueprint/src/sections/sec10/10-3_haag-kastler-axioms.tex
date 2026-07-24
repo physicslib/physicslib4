@@ -640,6 +640,55 @@ The comparison of representations is the entry point to superselection theory. F
     A von Neumann algebra $R$ is abelian --- every pair of its elements commutes --- if and only if it is contained in its own commutant, $R \subseteq R'$. This is essentially definitional: $R \subseteq R'$ says exactly that each element of $R$ commutes with every element of $R$. It is the operator-algebraic characterization of commutativity via the commutant, and the boundary case of microcausality $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$ where the two regions coincide.
 \end{lemma}
 
+\begin{definition}[Center of a von Neumann algebra]
+    \label{def:von-neumann-center}
+    \lean{Physicslib4.GNS.vonNeumannCenter}
+    \leanok
+    The center of a von Neumann algebra $R$ on a Hilbert space $H$ is $Z(R) = R \cap R'$, the operators of $R$ that commute with every element of $R$. Since Mathlib's \texttt{VonNeumannAlgebra} carries no lattice meet, it is built as the meet of the star-subalgebras of $R$ and its commutant $R'$; its underlying set is $R \cap R'$. That this set is again a von Neumann algebra is recorded separately in \ref{lmm:von-neumann-inter-is-von-neumann}.
+\end{definition}
+
+\begin{lemma}[The center is a von Neumann algebra]
+    \label{lmm:von-neumann-inter-is-von-neumann}
+    \lean{Physicslib4.GNS.bicommutant_inter_commutant_eq}
+    \uses{def:von-neumann-center}
+    \leanok
+    The underlying set $R \cap R'$ of the center is again a von Neumann algebra: it equals its own bicommutant, $(R \cap R')'' = R \cap R'$. The inclusion $R \cap R' \subseteq (R \cap R')''$ is the general fact $S \subseteq S''$. For the reverse, $R \cap R' \subseteq R$ and $R \cap R' \subseteq R'$; applying antitonicity of the commutant twice makes the bicommutant monotone, so $(R \cap R')'' \subseteq R'' = R$ and $(R \cap R')'' \subseteq (R')'' = R'$ (using the double-commutant identities $R'' = R$ and $R''' = R'$), whence $(R \cap R')'' \subseteq R \cap R'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:von-neumann-center}
+    Combine $S \subseteq S''$ with the double application of commutant antitonicity to $R \cap R' \subseteq R$ and $R \cap R' \subseteq R'$, together with the double-commutant identities $R'' = R$ and $R''' = R'$.
+\end{proof}
+
+\begin{theorem}[The center of a von Neumann algebra is abelian]
+    \label{thrm:von-neumann-center-abelian}
+    \lean{Physicslib4.GNS.vonNeumannCenter_isAbelian}
+    \uses{def:von-neumann-center, lmm:von-neumann-abelian-self-commuting}
+    \leanok
+    The center $Z(R) = R \cap R'$ is abelian: any two of its elements commute. Indeed an element of the center lies in $R'$, hence commutes with every element of $R$, and in particular with every other element of the center (which lies in $R$).
+\end{theorem}
+
+\begin{lemma}[$R$ is abelian iff it equals its center]
+    \label{lmm:von-neumann-center-eq-self-iff-abelian}
+    \lean{Physicslib4.GNS.vonNeumannCenter_eq_self_iff_isAbelian}
+    \uses{def:von-neumann-center, lmm:von-neumann-abelian-self-commuting}
+    \leanok
+    A von Neumann algebra $R$ is abelian if and only if its center is all of $R$, i.e. $Z(R) = R \cap R' = R$. By \ref{lmm:von-neumann-abelian-self-commuting}, $R$ is abelian iff $R \subseteq R'$, and $R \cap R' = R$ holds exactly when $R \subseteq R'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:von-neumann-abelian-self-commuting}
+    Abelianness of $R$ is equivalent to $R \subseteq R'$ (\ref{lmm:von-neumann-abelian-self-commuting}), which in turn is equivalent to $R \cap R' = R$.
+\end{proof}
+
+\begin{theorem}[A factor is abelian iff it is the scalars]
+    \label{thrm:factor-abelian-iff-scalars}
+    \lean{Physicslib4.GNS.isAbelian_iff_eq_scalars_of_isFactor}
+    \uses{def:von-neumann-center, lmm:von-neumann-center-eq-self-iff-abelian, lmm:von-neumann-abelian-self-commuting}
+    \leanok
+    A factor $R$ (a von Neumann algebra with trivial center $R \cap R' = \mathbb{C}\cdot 1$) is abelian if and only if it equals the scalars $\mathbb{C}\cdot 1$. If $R$ is abelian then its center equals $R$ (\ref{lmm:von-neumann-center-eq-self-iff-abelian}), while by the factor hypothesis the center is $\mathbb{C}\cdot 1$; hence $R = \mathbb{C}\cdot 1$. Conversely the scalars are abelian, since $\mathbb{C}\cdot 1 \subseteq (\mathbb{C}\cdot 1)'$ (\ref{lmm:von-neumann-abelian-self-commuting}). Thus among factors, the abelian ones are exactly the trivial (one-dimensional) algebra of scalar multiples of the identity.
+\end{theorem}
+
 \begin{theorem}[The Pure-State Dichotomy]
     \label{thrm:pure-state-dichotomy}
     \lean{Physicslib4.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}
