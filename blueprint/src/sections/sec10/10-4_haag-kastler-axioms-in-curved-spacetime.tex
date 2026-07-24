@@ -323,6 +323,14 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
     The general abelian/center facts, specialized to a curved local von Neumann algebra $R(\mathbf{B}')$ (for a basis subregion $\mathbf{B}' \subseteq \mathbf{B}$ in a representation of $\mathfrak{U}(\mathbf{B})$): its center $R(\mathbf{B}') \cap R(\mathbf{B}')'$ is abelian (\ref{thrm:von-neumann-center-abelian}), and if $R(\mathbf{B}')$ is a factor then it is abelian if and only if it equals the scalars $\mathbb{C}\cdot 1$ (\ref{thrm:factor-abelian-iff-scalars}).
 \end{theorem}
 
+\begin{theorem}[Center Duality for Local von Neumann Algebras (Curved Spacetime)]
+    \label{thrm:center-duality-local-von-neumann-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_center_eq_commutant, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_isFactor_iff_center_eq_scalars}
+    \uses{def:local-von-neumann-algebra-in-curved-spacetime, thrm:center-eq-commutant-center, thrm:factor-iff-center-scalars}
+    \leanok
+    The center-duality facts, specialized to a curved local von Neumann algebra $R(\mathbf{B}')$: it shares its center with its commutant, $Z(R(\mathbf{B}')) = Z(R(\mathbf{B}')')$ (\ref{thrm:center-eq-commutant-center}), and it is a factor if and only if its center is the scalars $\mathbb{C}\cdot 1$ (\ref{thrm:factor-iff-center-scalars}).
+\end{theorem}
+
 \subsection{Purity of States on Local Algebras in Curved Spacetime}
 
 Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved spacetime is itself a unital C*-algebra with its own state space and GNS representations. The abstract characterizations of purity therefore apply per region, registered here for $\mathfrak{U}(\mathbf{B})$. There is no quasilocal algebra in curved spacetime, so - unlike the Minkowski covariant-vacuum picture - these are genuinely local statements, one for each region.

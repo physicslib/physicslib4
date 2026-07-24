@@ -397,6 +397,27 @@ theorem localVonNeumannAlgebra_isAbelian_iff_eq_scalars_of_isFactor {B : Set M.C
       ↔ (N.localVonNeumannAlgebra π hB' hB h : Set (H →L[ℂ] H)) = scalarOperators H :=
   isAbelian_iff_eq_scalars_of_isFactor (N.localVonNeumannAlgebra π hB' hB h) hfac
 
+/-- **A local von Neumann algebra shares its center with its commutant (curved spacetime).**
+`Z(R(B')) = Z(R(B')')`. A thin specialization of the general `vonNeumannCenter_eq_commutant`
+to the curved local algebra. -/
+theorem localVonNeumannAlgebra_center_eq_commutant {B : Set M.Carrier}
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B) (h : B' ⊆ B) :
+    vonNeumannCenter (N.localVonNeumannAlgebra π hB' hB h)
+      = vonNeumannCenter (N.localVonNeumannAlgebra π hB' hB h).commutant :=
+  vonNeumannCenter_eq_commutant (N.localVonNeumannAlgebra π hB' hB h)
+
+/-- **A local von Neumann algebra is a factor iff its center is the scalars (curved
+spacetime).** A thin specialization of the general `isFactor_iff_center_eq_scalars` to the
+curved local algebra `R(B')`. -/
+theorem localVonNeumannAlgebra_isFactor_iff_center_eq_scalars {B : Set M.Carrier}
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B) (h : B' ⊆ B) :
+    IsFactor (N.localVonNeumannAlgebra π hB' hB h : Set (H →L[ℂ] H))
+      ↔ (vonNeumannCenter (N.localVonNeumannAlgebra π hB' hB h) : Set (H →L[ℂ] H))
+          = scalarOperators H :=
+  isFactor_iff_center_eq_scalars (N.localVonNeumannAlgebra π hB' hB h)
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT
