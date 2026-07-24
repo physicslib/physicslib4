@@ -373,6 +373,30 @@ theorem isIrreducibleInclusion_self_iff_isFactor {B : Set M.Carrier}
   unfold IsIrreducibleInclusion IsFactor
   rw [coe_relativeCommutant, Set.inter_comm]
 
+/-- **The center of a local von Neumann algebra is abelian (curved spacetime).** For a
+subregion `B' ⊆ B` in a representation of `𝔘(B)`, the center `R(B') ∩ R(B')'` is abelian.
+A thin specialization of the general `vonNeumannCenter_isAbelian` to the curved local
+algebra `R(B')`. -/
+theorem localVonNeumannAlgebra_center_isAbelian {B : Set M.Carrier}
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B) (h : B' ⊆ B) :
+    ∀ x ∈ vonNeumannCenter (N.localVonNeumannAlgebra π hB' hB h),
+      ∀ y ∈ vonNeumannCenter (N.localVonNeumannAlgebra π hB' hB h), x * y = y * x :=
+  vonNeumannCenter_isAbelian (N.localVonNeumannAlgebra π hB' hB h)
+
+/-- **A local von Neumann algebra that is a factor is abelian iff it is the scalars
+(curved spacetime).** For a subregion `B' ⊆ B`, if `R(B')` is a factor then it is abelian
+exactly when `R(B') = ℂ·1`. A thin specialization of `isAbelian_iff_eq_scalars_of_isFactor`
+to the curved local algebra. -/
+theorem localVonNeumannAlgebra_isAbelian_iff_eq_scalars_of_isFactor {B : Set M.Carrier}
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+    ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B) (h : B' ⊆ B)
+    (hfac : IsFactor (N.localVonNeumannAlgebra π hB' hB h : Set (H →L[ℂ] H))) :
+    (∀ x ∈ N.localVonNeumannAlgebra π hB' hB h,
+        ∀ y ∈ N.localVonNeumannAlgebra π hB' hB h, x * y = y * x)
+      ↔ (N.localVonNeumannAlgebra π hB' hB h : Set (H →L[ℂ] H)) = scalarOperators H :=
+  isAbelian_iff_eq_scalars_of_isFactor (N.localVonNeumannAlgebra π hB' hB h) hfac
+
 end HaagKastlerNet
 end HaagKastlerCurved
 end AQFT
