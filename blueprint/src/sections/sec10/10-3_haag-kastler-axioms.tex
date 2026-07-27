@@ -561,6 +561,43 @@ The comparison of representations is the entry point to superselection theory. F
     Unitarily equivalent representations share their representation-theoretic type: $\pi_1$ is irreducible if and only if $\pi_2$ is, and the generated von Neumann algebra $\pi_1(A)''$ is a factor if and only if $\pi_2(A)''$ is. The transport is packaged through the cross-space conjugation $T \mapsto U T U^{-1}$, a multiplicative isomorphism $\mathcal{B}(H_1) \simeq \mathcal{B}(H_2)$ that carries $\pi_1(A)$ onto $\pi_2(A)$, centralizers onto centralizers, and scalars onto scalars; irreducibility (commutant equal to the scalars) and factoriality (trivial center of $\pi(A)''$) are then preserved.
 \end{theorem}
 
+\subsection{GNS Covariance}
+
+\begin{lemma}[Cyclicity pulls back along a surjective $*$-homomorphism]
+    \label{lmm:cyclic-pullback-surjective}
+    \lean{Physicslib4.GNS.isCyclicVector_comp_of_surjective}
+    \uses{def:cyclic-vector, def:state-pullback}
+    \leanok
+    Let $\pi : B \to \mathcal{B}(H)$ be a $*$-representation with cyclic vector $\Omega$, and let $\Phi : A \to B$ be a surjective unital $*$-homomorphism. Here the pulled-back representation $\pi \circ \Phi$ of $A$ is the composite $*$-homomorphism (Mathlib's \texttt{StarAlgHom.comp}), just as the pullback of a state is fixed by \ref{def:state-pullback}. Then $\Omega$ is cyclic for $\pi \circ \Phi$. Indeed surjectivity of $\Phi$ gives $\{\pi(\Phi(a))\Omega : a \in A\} = \{\pi(b)\Omega : b \in B\}$, so the two orbits coincide as sets and density transfers verbatim.
+\end{lemma}
+\begin{proof}
+\leanok
+\end{proof}
+
+\begin{theorem}[GNS covariance under a $*$-isomorphism]
+    \label{thrm:gns-covariance}
+    \lean{Physicslib4.GNS.exists_unitary_of_gns_comp}
+    \uses{def:state-pullback, def:cyclic-vector, lmm:cyclic-pullback-surjective, thrm:gns-construction-theorem}
+    \leanok
+    Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$. Let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing the pullback state $\omega \circ \Phi$, and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then there is a unitary $U : H_1 \simeq H_2$ with $U\Omega_1 = \Omega_2$ intertwining the two representations along $\Phi$: $U(\pi_1(a)x) = \pi_2(\Phi(a))(Ux)$ for all $a \in A$, $x \in H_1$. In other words the GNS data transports covariantly along an isomorphism of the algebras. The proof observes that $(H_2, \pi_2 \circ \Phi, \Omega_2)$ is itself a cyclic representation of $A$ (\ref{lmm:cyclic-pullback-surjective}, $\Phi$ being surjective) and that it reproduces $\omega \circ \Phi$, since $\langle \Omega_2, \pi_2(\Phi a)\Omega_2\rangle = \omega(\Phi a) = (\omega \circ \Phi)(a)$ by the defining equation of the pullback state. One then applies the \emph{uniqueness clause} of \ref{thrm:gns-construction-theorem} --- in Lean the separate declaration \texttt{Physicslib4.GNS.gns\_unique}, not \texttt{gns\_construction} --- to the two cyclic representations of $A$ attached to the single state $\omega \circ \Phi$.
+\end{theorem}
+\begin{proof}
+\leanok
+\end{proof}
+
+\begin{theorem}[The GNS representation of a pullback state]
+    \label{thrm:gns-covariance-unitary-equiv}
+    \lean{Physicslib4.GNS.unitaryEquiv_comp_of_gns}
+    \uses{thrm:gns-covariance, def:unitary-equivalence, def:state-pullback}
+    \leanok
+    Restated in the language of unitary equivalence. Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$; let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing $\omega \circ \Phi$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then $\pi_1$ and $\pi_2 \circ \Phi$ are unitarily equivalent (\ref{def:unitary-equivalence}): the intertwining unitary of \ref{thrm:gns-covariance} is exactly the required witness. Together with the invariance of irreducibility and factoriality (\ref{thrm:unitary-equiv-invariants}), this is the mechanism by which superselection sectors transport along an isomorphism of the observable algebra.
+\end{theorem}
+\begin{proof}
+\leanok
+\end{proof}
+
+\subsection{Disjointness and Quasi-Equivalence}
+
 \begin{definition}[Disjoint Representations]
     \label{def:disjoint-representations}
     \lean{Physicslib4.GNS.AreDisjoint}

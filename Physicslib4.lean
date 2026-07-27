@@ -41,6 +41,7 @@ import Physicslib4.GNS.Amplification
 import Physicslib4.GNS.Basic
 import Physicslib4.GNS.CauchySchwarz
 import Physicslib4.GNS.Construction
+import Physicslib4.GNS.Covariance
 import Physicslib4.GNS.DirectSum
 import Physicslib4.GNS.ExtremeState
 import Physicslib4.GNS.Irreducibility
