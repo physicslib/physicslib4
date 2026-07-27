@@ -596,6 +596,45 @@ The comparison of representations is the entry point to superselection theory. F
 \leanok
 \end{proof}
 
+\begin{lemma}[Pullback along a surjection preserves the image algebra]
+    \label{lmm:pullback-image-invariants}
+    \lean{Physicslib4.GNS.range_comp_of_surjective, Physicslib4.GNS.isIrreducible_comp_iff, Physicslib4.GNS.gnsVonNeumann_comp_of_surjective}
+    \uses{def:irreducible-representation, def:local-von-neumann}
+    \leanok
+    Let $\pi : B \to \mathcal{B}(H)$ be a $*$-representation and $\Phi : A \to B$ a surjective unital $*$-homomorphism, and let $\pi \circ \Phi$ be the composite $*$-homomorphism (Mathlib's \texttt{StarAlgHom.comp}). Then $\pi \circ \Phi$ has the same image as $\pi$: $(\pi \circ \Phi)(A) = \pi(B)$. Consequently everything computed from the image alone is unchanged: $\pi \circ \Phi$ is irreducible if and only if $\pi$ is (irreducibility being triviality of the commutant of the image), and the generated von Neumann algebras (\ref{def:local-von-neumann}) coincide, $(\pi \circ \Phi)(A)'' = \pi(B)''$. The conclusion is sharper than a mere unitary equivalence would give: no transport is involved at all, since the two representations act on the \emph{same} Hilbert space and generate literally the same algebras, not just isomorphic ones.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:irreducible-representation, def:local-von-neumann}
+    The image identity is surjectivity of $\Phi$ applied to ranges, $\operatorname{range}(\pi \circ \Phi) = \operatorname{range}(\pi)$, which is Mathlib's \texttt{Function.Surjective.range\_comp}. For irreducibility, the existing repository lemma \texttt{Physicslib4.GNS.isIrreducible\_iff\_centralizer} (in \texttt{Physicslib4/GNS/UnitaryEquiv.lean}) already identifies irreducibility with triviality of the centralizer of the image, $\operatorname{centralizer}(\operatorname{range} \pi) = \mathbb{C} \cdot 1$; rewriting that criterion along the image identity gives the equivalence with no re-derivation. The generated von Neumann algebra is the double commutant of the image, so the same rewriting gives $(\pi \circ \Phi)(A)'' = \pi(B)''$.
+\end{proof}
+
+\begin{theorem}[Superselection type transports along a $*$-isomorphism]
+    \label{thrm:gns-sector-transport}
+    \lean{Physicslib4.GNS.isIrreducible_iff_of_gns_comp, Physicslib4.GNS.isFactor_iff_of_gns_comp}
+    \uses{thrm:gns-covariance-unitary-equiv, thrm:unitary-equiv-invariants, lmm:pullback-image-invariants, def:state-pullback}
+    \leanok
+    Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$; let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing $\omega \circ \Phi$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then $\pi_1$ is irreducible if and only if $\pi_2$ is, and $\pi_1(A)''$ is a factor if and only if $\pi_2(B)''$ is. The chain is: $\pi_1$ is unitarily equivalent to $\pi_2 \circ \Phi$ (\ref{thrm:gns-covariance-unitary-equiv}), unitary equivalence preserves irreducibility and factoriality (\ref{thrm:unitary-equiv-invariants}), and $\pi_2 \circ \Phi$ has the same image algebra as $\pi_2$ (\ref{lmm:pullback-image-invariants}). Thus an isomorphism of the observable algebra carries superselection sectors to superselection sectors, preserving their type; together with the invariance of purity (\ref{thrm:pure-pullback-invariant}) it shows the whole sector structure is an invariant of the algebra, not of its presentation.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:gns-covariance-unitary-equiv, thrm:unitary-equiv-invariants, lmm:pullback-image-invariants}
+    Compose the three steps. \ref{thrm:gns-covariance-unitary-equiv} gives $\pi_1 \sim_u \pi_2 \circ \Phi$; \ref{thrm:unitary-equiv-invariants} turns this into the two equivalences $\mathrm{Irr}(\pi_1) \iff \mathrm{Irr}(\pi_2 \circ \Phi)$ and $\mathrm{Factor}(\pi_1(A)'') \iff \mathrm{Factor}((\pi_2 \circ \Phi)(A)'')$; and \ref{lmm:pullback-image-invariants}, applied to the surjection $\Phi$, replaces $\pi_2 \circ \Phi$ by $\pi_2$ on the right of each.
+\end{proof}
+
+\begin{theorem}[GNS covariance for local algebras]
+    \label{thrm:gns-covariance-local}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.unitaryEquiv_gns_covEquiv, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducible_iff_gns_covEquiv, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_iff_gns_covEquiv}
+    \uses{def:haag-kastler-net, def:lorentz-covariance, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback}
+    \leanok
+    Let $\mathfrak{U}$ be a Haag-Kastler net (\ref{def:haag-kastler-net}). The covariance equivalence $\alpha_L : \mathfrak{U}(\mathbf{B}) \simeq \mathfrak{U}(L\cdot\mathbf{B})$ supplied by Axiom 5 (\ref{def:lorentz-covariance}) is a $*$-isomorphism of local algebras, so the abstract GNS-covariance results apply to it region by region. Let $\omega$ be a state on $\mathfrak{U}(L\cdot\mathbf{B})$, so that $\omega \circ \alpha_L$ is a state on $\mathfrak{U}(\mathbf{B})$ (\ref{def:state-pullback}); let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $\mathfrak{U}(\mathbf{B})$ reproducing $\omega \circ \alpha_L$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $\mathfrak{U}(L\cdot\mathbf{B})$ reproducing $\omega$. Then $\pi_1$ is unitarily equivalent to $\pi_2 \circ \alpha_L$; moreover $\pi_1$ is irreducible if and only if $\pi_2$ is, and $\pi_1(\mathfrak{U}(\mathbf{B}))''$ is a factor if and only if $\pi_2(\mathfrak{U}(L\cdot\mathbf{B}))''$ is. In physical terms: the superselection type of a local state is constant along the Lorentz orbit of the region.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport}
+    Instantiate \ref{thrm:gns-covariance-unitary-equiv} and \ref{thrm:gns-sector-transport} at $A := \mathfrak{U}(\mathbf{B})$, $B := \mathfrak{U}(L\cdot\mathbf{B})$ and $\Phi := \alpha_L$, the $*$-isomorphism extracted from the net's Lorentz covariance datum.
+\end{proof}
+
 \subsection{Disjointness and Quasi-Equivalence}
 
 \begin{definition}[Disjoint Representations]

@@ -89,5 +89,69 @@ theorem unitaryEquiv_comp_of_gns (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B)
   refine ⟨U, fun a x => ?_⟩
   simpa [StarAlgHom.comp_apply] using hUint a x
 
+/-! ### Transport of the representation type along a surjection -/
+
+/-- **Pullback along a surjection preserves the image.** For surjective
+`Φ : A →⋆ₐ[ℂ] B`, the composite `π ∘ Φ` has the same image as `π`. -/
+theorem range_comp_of_surjective (π : B →⋆ₐ[ℂ] (H →L[ℂ] H)) {Φ : A →⋆ₐ[ℂ] B}
+    (hsurj : Function.Surjective Φ) :
+    Set.range (π.comp Φ) = Set.range π := by
+  calc
+    Set.range (π.comp Φ) = Set.range (⇑π ∘ ⇑Φ) := by
+      ext a; simp
+    _ = Set.range π := hsurj.range_comp (⇑π)
+
+/-- **Irreducibility is unchanged by pullback along a surjection.** Irreducibility is
+triviality of the commutant of the image, and the image is unchanged, so `π ∘ Φ` is
+irreducible exactly when `π` is. -/
+theorem isIrreducible_comp_iff {π : B →⋆ₐ[ℂ] (H →L[ℂ] H)} {Φ : A →⋆ₐ[ℂ] B}
+    (hsurj : Function.Surjective Φ) :
+    IsIrreducible (π.comp Φ) ↔ IsIrreducible π := by
+  rw [isIrreducible_iff_centralizer, isIrreducible_iff_centralizer,
+    range_comp_of_surjective π hsurj]
+
+/-- **The generated von Neumann algebra is unchanged by pullback along a surjection.**
+Both are the double commutant of the same image: `(π ∘ Φ)(A)'' = π(B)''`. -/
+theorem gnsVonNeumann_comp_of_surjective (π : B →⋆ₐ[ℂ] (H →L[ℂ] H)) {Φ : A →⋆ₐ[ℂ] B}
+    (hsurj : Function.Surjective Φ) :
+    gnsVonNeumann (π.comp Φ) = gnsVonNeumann π := by
+  calc
+    gnsVonNeumann (π.comp Φ) = Set.centralizer (Set.centralizer (Set.range (π.comp Φ))) := rfl
+    _ = Set.centralizer (Set.centralizer (Set.range π)) := by
+      rw [range_comp_of_surjective π hsurj]
+    _ = gnsVonNeumann π := rfl
+
+/-- **Irreducibility transports along a `*`-isomorphism.** With the GNS hypotheses of
+`exists_unitary_of_gns_comp`, the GNS representation of the pullback state `ω ∘ Φ` is
+irreducible exactly when the GNS representation of `ω` is. -/
+theorem isIrreducible_iff_of_gns_comp (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B)
+    {H₁ : Type*} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
+    (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (Ω₁ : H₁)
+    (hcyc₁ : IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : A, ((ω.comp Φ.toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    {H₂ : Type*} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
+    (π₂ : B →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) (Ω₂ : H₂)
+    (hcyc₂ : IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : B, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    IsIrreducible π₁ ↔ IsIrreducible π₂ :=
+  ((unitaryEquiv_comp_of_gns Φ ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂).isIrreducible_iff).trans
+    (isIrreducible_comp_iff (Φ := Φ.toStarAlgHom) Φ.surjective)
+
+/-- **Factoriality transports along a `*`-isomorphism.** With the GNS hypotheses of
+`exists_unitary_of_gns_comp`, `π₁(A)''` is a factor exactly when `π₂(B)''` is. So an
+isomorphism of the observable algebra preserves the type of the superselection sector. -/
+theorem isFactor_iff_of_gns_comp (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B)
+    {H₁ : Type*} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
+    (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (Ω₁ : H₁)
+    (hcyc₁ : IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : A, ((ω.comp Φ.toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    {H₂ : Type*} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
+    (π₂ : B →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) (Ω₂ : H₂)
+    (hcyc₂ : IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : B, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    IsFactor (gnsVonNeumann π₁) ↔ IsFactor (gnsVonNeumann π₂) := by
+  have h := (unitaryEquiv_comp_of_gns Φ ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂).isFactor_iff
+  rwa [gnsVonNeumann_comp_of_surjective π₂ (Φ := Φ.toStarAlgHom) Φ.surjective] at h
+
 end GNS
 end Physicslib4
