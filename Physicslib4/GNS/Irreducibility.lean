@@ -56,54 +56,21 @@ theorem eq_smul_one_of_commute_of_cyclic
     {c : ℂ} (hprop : ∀ a : A, ⟪Ω, T (π a Ω)⟫_ℂ = c * ⟪Ω, π a Ω⟫_ℂ) :
     T = c • 1 := by
   have hcycdense : DenseRange (fun a : A => π a Ω) := hcyc
-  -- The adjoint of `π b` is `π (star b)` (since `π` is a `*`-homomorphism).
-  have hop : ∀ b : A, ContinuousLinearMap.adjoint (π b) = π (star b) := fun b => by
-    rw [← ContinuousLinearMap.star_eq_adjoint, map_star]
-  -- Move `π b` to the other slot of the inner product via the adjoint.
+  -- Move `π b` to the other slot of the inner product via the adjoint `π (star b)`.
   have hadj : ∀ (b : A) (w : H), ⟪(π b) Ω, w⟫_ℂ = ⟪Ω, π (star b) w⟫_ℂ := fun b w => by
-    rw [← hop b, ContinuousLinearMap.adjoint_inner_right]
-  -- `T` agrees with `c • ·` on the cyclic orbit.
-  have hkey : ∀ a : A, T (π a Ω) = c • (π a Ω) := by
-    intro a
-    have hzero : ∀ b : A, ⟪π b Ω, T (π a Ω) - c • (π a Ω)⟫_ℂ = 0 := by
-      intro b
-      rw [inner_sub_right, inner_smul_right]
-      have e1 : ⟪(π b) Ω, T (π a Ω)⟫_ℂ = ⟪Ω, T (π (star b * a) Ω)⟫_ℂ := by
-        rw [hadj b (T (π a Ω))]
-        congr 1
-        have h1 : (π (star b)) (T (π a Ω)) = T ((π (star b)) (π a Ω)) :=
-          calc (π (star b)) (T (π a Ω))
-              = (π (star b) * T) (π a Ω) := by rw [mul_apply_eq_comp]
-            _ = (T * π (star b)) (π a Ω) := by rw [hT (star b)]
-            _ = T ((π (star b)) (π a Ω)) := by rw [mul_apply_eq_comp]
-        rw [h1]
-        congr 1
-        rw [← mul_apply_eq_comp, ← map_mul]
-      have e2 : ⟪(π b) Ω, π a Ω⟫_ℂ = ⟪Ω, π (star b * a) Ω⟫_ℂ := by
-        rw [hadj b (π a Ω)]
-        congr 1
-        rw [← mul_apply_eq_comp, ← map_mul]
-      rw [e1, e2, hprop (star b * a)]
-      ring
-    have hw0 : T (π a Ω) - c • (π a Ω) = 0 := by
-      have hcont : Continuous (fun y : H => ⟪y, T (π a Ω) - c • (π a Ω)⟫_ℂ) :=
-        continuous_id.inner continuous_const
-      have heqon : Set.EqOn (fun y : H => ⟪y, T (π a Ω) - c • (π a Ω)⟫_ℂ)
-          (fun _ => (0 : ℂ)) (Set.range fun a' : A => π a' Ω) := by
-        rintro _ ⟨b, rfl⟩; exact hzero b
-      have hzeroall := congrFun
-        (Continuous.ext_on hcycdense hcont continuous_const heqon)
-        (T (π a Ω) - c • (π a Ω))
-      exact inner_self_eq_zero.mp hzeroall
-    exact sub_eq_zero.mp hw0
+    rw [map_star, ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_right]
+  have hπ : ∀ b a : A, π (star b) (π a Ω) = π (star b * a) Ω := fun b a => by
+    rw [← mul_apply_eq_comp, ← map_mul]
+  -- `T` agrees with `c • ·` on the cyclic orbit: all off-diagonal coefficients match.
+  have hkey : ∀ a : A, T (π a Ω) = c • (π a Ω) := fun a =>
+    hcycdense.eq_of_inner_right ℂ fun b => by
+      rw [hadj b (T (π a Ω)), ← mul_apply_eq_comp, hT (star b), mul_apply_eq_comp, hπ b a,
+        hprop (star b * a), inner_smul_right, hadj b (π a Ω), hπ b a]
   -- Density + continuity upgrade the agreement to all of `H`.
-  have hall : (fun x => T x) = (fun x : H => c • x) :=
-    Continuous.ext_on hcycdense T.continuous (continuous_const.smul continuous_id)
-      (by rintro _ ⟨a, rfl⟩; exact hkey a)
-  apply ContinuousLinearMap.ext
-  intro x
-  rw [smul_apply, one_apply_eq_self]
-  exact congrFun hall x
+  have hall := Continuous.ext_on hcycdense T.continuous
+    (continuous_const.smul continuous_id) (by rintro _ ⟨a, rfl⟩; exact hkey a)
+  exact ContinuousLinearMap.ext fun x => by
+    rw [smul_apply, one_apply_eq_self]; exact congrFun hall x
 
 /-- **A commutant operator is a scalar iff its GNS coefficient is proportional to
 the state.** In a cyclic representation reproducing `ω`, an operator `T` commuting
@@ -142,20 +109,17 @@ noncomputable def coeffFunctional (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : 
     A →L[ℂ] ℂ :=
   LinearMap.mkContinuous
     { toFun := fun a => ⟪Ω, T (π a Ω)⟫_ℂ
-      map_add' := fun a b => by
-        simp [map_add, add_apply, inner_add_right]
+      map_add' := fun a b => by simp only [map_add, add_apply, inner_add_right]
       map_smul' := fun c a => by
-        simp [map_smul, smul_apply, inner_smul_right] }
+        simp only [map_smul, smul_apply, inner_smul_right, RingHom.id_apply, smul_eq_mul] }
     (‖Ω‖ * ‖T‖ * ‖Ω‖)
     (fun a => by
       have hT' : ‖T (π a Ω)‖ ≤ ‖T‖ * (‖a‖ * ‖Ω‖) :=
-        calc ‖T (π a Ω)‖ ≤ ‖T‖ * ‖π a Ω‖ := T.le_opNorm _
-          _ ≤ ‖T‖ * (‖π a‖ * ‖Ω‖) := by gcongr; exact (π a).le_opNorm _
-          _ ≤ ‖T‖ * (‖a‖ * ‖Ω‖) := by
-              gcongr; exact NonUnitalStarAlgHom.norm_apply_le π a
-      calc ‖⟪Ω, T (π a Ω)⟫_ℂ‖ ≤ ‖Ω‖ * ‖T (π a Ω)‖ := norm_inner_le_norm Ω _
-        _ ≤ ‖Ω‖ * (‖T‖ * (‖a‖ * ‖Ω‖)) := by gcongr
-        _ = ‖Ω‖ * ‖T‖ * ‖Ω‖ * ‖a‖ := by ring)
+        (T.le_opNorm _).trans (mul_le_mul_of_nonneg_left
+          (((π a).le_opNorm Ω).trans (mul_le_mul_of_nonneg_right
+            (NonUnitalStarAlgHom.norm_apply_le π a) (norm_nonneg Ω))) (norm_nonneg T))
+      exact (norm_inner_le_norm Ω _).trans
+        ((mul_le_mul_of_nonneg_left hT' (norm_nonneg Ω)).trans_eq (by ring)))
 
 @[simp] theorem coeffFunctional_apply (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
     (T : H →L[ℂ] H) (a : A) :
