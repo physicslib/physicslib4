@@ -11,6 +11,7 @@ import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.GNS.UnitaryRepresentation
 import Physicslib4.GNS.RadonNikodym
 import Physicslib4.GNS.ExtremeState
+import Physicslib4.GNS.Covariance
 
 /-!
 # Towards the intertwiner on the generated subalgebra
@@ -690,6 +691,58 @@ theorem isPure_precomp_action_iff (C : CovariantQuasilocalAlgebra)
     (ω : Physicslib4.GNS.State C.quasilocal.carrier) (L : InhomogeneousLorentzGroup) :
     Physicslib4.GNS.IsPure (ω.precomp (C.action L)) ↔ Physicslib4.GNS.IsPure ω :=
   Physicslib4.GNS.isPure_precomp_iff ω (C.action L)
+
+/-! ### GNS covariance along the quasilocal action -/
+
+section GNSCovariance
+
+open scoped InnerProductSpace
+
+variable (C : CovariantQuasilocalAlgebra) (L : InhomogeneousLorentzGroup)
+  (ω : Physicslib4.GNS.State C.quasilocal.carrier)
+  {H₁ : Type*} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
+  (π₁ : C.quasilocal.carrier →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (Ω₁ : H₁)
+  {H₂ : Type*} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
+  (π₂ : C.quasilocal.carrier →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) (Ω₂ : H₂)
+
+/-- **GNS covariance along the quasilocal action.** The lifted covariance automorphism
+`β_L = C.action L` is a `*`-automorphism of the quasilocal algebra `𝔘`, so a cyclic
+representation of `𝔘` reproducing the pullback state `ω ∘ β_L` is unitarily equivalent
+to `π_ω ∘ β_L`. -/
+theorem unitaryEquiv_gns_action
+    (hcyc₁ : Physicslib4.GNS.IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : C.quasilocal.carrier,
+      ((ω.comp (C.action L).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hcyc₂ : Physicslib4.GNS.IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : C.quasilocal.carrier, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    Physicslib4.GNS.UnitaryEquiv π₁ (π₂.comp (C.action L).toStarAlgHom) :=
+  Physicslib4.GNS.unitaryEquiv_comp_of_gns (C.action L) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+
+/-- **Irreducibility is Lorentz invariant on the quasilocal algebra.** With the GNS data
+above, `π₁` is irreducible exactly when `π₂` is. -/
+theorem isIrreducible_iff_gns_action
+    (hcyc₁ : Physicslib4.GNS.IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : C.quasilocal.carrier,
+      ((ω.comp (C.action L).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hcyc₂ : Physicslib4.GNS.IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : C.quasilocal.carrier, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    Physicslib4.GNS.IsIrreducible π₁ ↔ Physicslib4.GNS.IsIrreducible π₂ :=
+  Physicslib4.GNS.isIrreducible_iff_of_gns_comp (C.action L) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+
+/-- **Factoriality is Lorentz invariant on the quasilocal algebra.** With the GNS data
+above, `π₁(𝔘)''` is a factor exactly when `π₂(𝔘)''` is. So the superselection type of a
+*global* state is a Lorentz invariant. -/
+theorem isFactor_iff_gns_action
+    (hcyc₁ : Physicslib4.GNS.IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : C.quasilocal.carrier,
+      ((ω.comp (C.action L).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hcyc₂ : Physicslib4.GNS.IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : C.quasilocal.carrier, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    IsFactor (Physicslib4.GNS.gnsVonNeumann π₁)
+      ↔ IsFactor (Physicslib4.GNS.gnsVonNeumann π₂) :=
+  Physicslib4.GNS.isFactor_iff_of_gns_comp (C.action L) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+
+end GNSCovariance
 
 end CovariantQuasilocalAlgebra
 

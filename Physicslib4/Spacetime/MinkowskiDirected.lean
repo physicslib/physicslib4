@@ -36,8 +36,13 @@ displacements stays inside the cone of the sum of the time displacements. -/
 private theorem cone_add_aux {x y z u v w A B : ℝ} (hA : 0 < A) (hB : 0 < B)
     (h1 : x ^ 2 + y ^ 2 + z ^ 2 < A ^ 2) (h2 : u ^ 2 + v ^ 2 + w ^ 2 < B ^ 2) :
     (x + u) ^ 2 + (y + v) ^ 2 + (z + w) ^ 2 < (A + B) ^ 2 := by
-  nlinarith [sq_nonneg (A * u - B * x), sq_nonneg (A * v - B * y),
-    sq_nonneg (A * w - B * z), mul_pos hA hB, mul_pos hA hA, mul_pos hB hB, h1, h2]
+  -- Cauchy-Schwarz: `2AB (xu + yv + zw) ≤ B²(x²+y²+z²) + A²(u²+v²+w²) < 2A²B²`.
+  have key : 2 * (A * B) * (x * u + y * v + z * w) < 2 * (A * B) * (A * B) := by
+    linarith only [mul_lt_mul_of_pos_left h1 (pow_pos hB 2),
+      mul_lt_mul_of_pos_left h2 (pow_pos hA 2), sq_nonneg (B * x - A * u),
+      sq_nonneg (B * y - A * v), sq_nonneg (B * z - A * w)]
+  linarith only [h1, h2,
+    lt_of_mul_lt_mul_left key (mul_nonneg zero_le_two (mul_pos hA hB).le)]
 
 /-- **Forward-cone transitivity.** If `p' ∈ I⁺(p)` then `I⁺(p') ⊆ I⁺(p)`. -/
 theorem minkowskiForwardCone_subset {p p' : SpacetimeModel}
@@ -47,11 +52,10 @@ theorem minkowskiForwardCone_subset {p p' : SpacetimeModel}
   rintro r ⟨hr0, hrc⟩
   refine ⟨h0.trans hr0, ?_⟩
   have h1 : (p' 1 - p 1) ^ 2 + (p' 2 - p 2) ^ 2 + (p' 3 - p 3) ^ 2
-      < (p' 0 - p 0) ^ 2 := by linarith [hc]
+      < (p' 0 - p 0) ^ 2 := by linarith only [hc]
   have h2 : (r 1 - p' 1) ^ 2 + (r 2 - p' 2) ^ 2 + (r 3 - p' 3) ^ 2
-      < (r 0 - p' 0) ^ 2 := by linarith [hrc]
-  have haux := cone_add_aux (sub_pos.mpr h0) (sub_pos.mpr hr0) h1 h2
-  nlinarith [haux]
+      < (r 0 - p' 0) ^ 2 := by linarith only [hrc]
+  linarith only [cone_add_aux (sub_pos.mpr h0) (sub_pos.mpr hr0) h1 h2]
 
 /-- **Backward-cone transitivity.** If `q' ∈ I⁻(q)` then `I⁻(q') ⊆ I⁻(q)`. -/
 theorem minkowskiBackwardCone_subset {q q' : SpacetimeModel}
@@ -72,65 +76,64 @@ private theorem single_time_apply (c : ℝ) :
    by rw [PiLp.single_apply, if_neg (by decide)],
    by rw [PiLp.single_apply, if_neg (by decide)]⟩
 
+/-- Nonnegativity of a three-term sum of squares (the spatial part of a displacement). -/
+private theorem sq3_nonneg (a b c : ℝ) : 0 ≤ a ^ 2 + b ^ 2 + c ^ 2 := by
+  positivity -- (extracted by Fuse golfer)
+
+/-- If `u + v < R ^ 2` with `0 ≤ v` and `0 < R ≤ D`, then `u < D ^ 2`. -/
+private theorem lt_sq_of_add_lt_sq {u v R D : ℝ} (hv : 0 ≤ v) (h : u + v < R ^ 2)
+    (hR : 0 < R) (hD : R ≤ D) : u < D ^ 2 := by -- (extracted by Fuse golfer)
+  linarith only [hv, h, mul_self_le_mul_self hR.le hD]
+
+/-- Two nonnegative "spatial radii" are both dominated by the squared time separation
+from a single sufficiently early time. -/
+private theorem exists_time_shift_lt {a₁ a₂ s₁ s₂ : ℝ} (h₁ : 0 ≤ s₁) (h₂ : 0 ≤ s₂) :
+    ∃ t : ℝ, t < a₁ ∧ t < a₂ ∧ s₁ < (a₁ - t) ^ 2 ∧ s₂ < (a₂ - t) ^ 2 := by
+  -- (extracted by Fuse golfer)
+  obtain ⟨R, hR, hRsq⟩ : ∃ R : ℝ, 0 < R ∧ s₁ + s₂ < R ^ 2 :=
+    ⟨Real.sqrt (s₁ + s₂) + 1, by linarith only [Real.sqrt_nonneg (s₁ + s₂)], by
+      linarith only [Real.sq_sqrt (by linarith only [h₁, h₂] : (0 : ℝ) ≤ s₁ + s₂),
+        Real.sqrt_nonneg (s₁ + s₂)]⟩
+  have k₁ := min_le_left a₁ a₂
+  have k₂ := min_le_right a₁ a₂
+  exact ⟨min a₁ a₂ - R, by linarith only [k₁, hR], by linarith only [k₂, hR],
+    lt_sq_of_add_lt_sq h₂ hRsq hR (by linarith only [k₁]),
+    lt_sq_of_add_lt_sq h₁ (by linarith only [hRsq]) hR (by linarith only [k₂])⟩
+
+/-- Time-reversed form of `exists_time_shift_lt`: a single sufficiently late time. -/
+private theorem exists_time_shift_gt {a₁ a₂ s₁ s₂ : ℝ} (h₁ : 0 ≤ s₁) (h₂ : 0 ≤ s₂) :
+    ∃ t : ℝ, a₁ < t ∧ a₂ < t ∧ s₁ < (t - a₁) ^ 2 ∧ s₂ < (t - a₂) ^ 2 := by
+  -- (extracted by Fuse golfer)
+  obtain ⟨t, ht₁, ht₂, hc₁, hc₂⟩ := exists_time_shift_lt (a₁ := -a₁) (a₂ := -a₂) h₁ h₂
+  refine ⟨-t, by linarith only [ht₁], by linarith only [ht₂], ?_, ?_⟩
+  · rw [show -t - a₁ = -a₁ - t from by ring]; exact hc₁
+  · rw [show -t - a₂ = -a₂ - t from by ring]; exact hc₂
+
 /-- **Existence of a common chronological predecessor.** Any two points lie in
 the chronological future of a single point. -/
 theorem exists_common_past (p₁ p₂ : SpacetimeModel) :
     ∃ p, p₁ ∈ minkowskiForwardCone p ∧ p₂ ∈ minkowskiForwardCone p := by
-  set s₁ : ℝ := (p₁ 1) ^ 2 + (p₁ 2) ^ 2 + (p₁ 3) ^ 2 with hs₁
-  set s₂ : ℝ := (p₂ 1) ^ 2 + (p₂ 2) ^ 2 + (p₂ 3) ^ 2 with hs₂
-  set R : ℝ := Real.sqrt (s₁ + s₂) + 1 with hR
-  set p : SpacetimeModel := EuclideanSpace.single (0 : Fin 4)
-    (min (p₁ 0) (p₂ 0) - R) with hp
-  obtain ⟨hp0, hp1, hp2, hp3⟩ := single_time_apply (min (p₁ 0) (p₂ 0) - R)
-  rw [← hp] at hp0 hp1 hp2 hp3
-  have hs1nn : 0 ≤ s₁ := by rw [hs₁]; positivity
-  have hs2nn : 0 ≤ s₂ := by rw [hs₂]; positivity
-  have hRbig : s₁ + s₂ < R ^ 2 := by
-    rw [hR]
-    nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ s₁ + s₂ by positivity),
-      Real.sqrt_nonneg (s₁ + s₂)]
-  have hRpos : 0 < R := by rw [hR]; positivity
-  refine ⟨p, ⟨?_, ?_⟩, ⟨?_, ?_⟩⟩
-  · rw [hp0]; nlinarith [min_le_left (p₁ 0) (p₂ 0), hRpos]
-  · rw [hp0, hp1, hp2, hp3]
-    have hge : R ≤ p₁ 0 - (min (p₁ 0) (p₂ 0) - R) := by
-      have := min_le_left (p₁ 0) (p₂ 0); linarith
-    nlinarith [hge, hRpos, hRbig, hs2nn, hs₁]
-  · rw [hp0]; nlinarith [min_le_right (p₁ 0) (p₂ 0), hRpos]
-  · rw [hp0, hp1, hp2, hp3]
-    have hge : R ≤ p₂ 0 - (min (p₁ 0) (p₂ 0) - R) := by
-      have := min_le_right (p₁ 0) (p₂ 0); linarith
-    nlinarith [hge, hRpos, hRbig, hs1nn, hs₂]
+  obtain ⟨t, ht₁, ht₂, hc₁, hc₂⟩ :=
+    exists_time_shift_lt (a₁ := p₁ 0) (a₂ := p₂ 0)
+      (s₁ := (p₁ 1) ^ 2 + (p₁ 2) ^ 2 + (p₁ 3) ^ 2)
+      (s₂ := (p₂ 1) ^ 2 + (p₂ 2) ^ 2 + (p₂ 3) ^ 2) (sq3_nonneg _ _ _) (sq3_nonneg _ _ _)
+  obtain ⟨e0, e1, e2, e3⟩ := single_time_apply t
+  refine ⟨EuclideanSpace.single (0 : Fin 4) t, ⟨by rwa [e0], ?_⟩, ⟨by rwa [e0], ?_⟩⟩
+  · rw [e0, e1, e2, e3]; simp only [sub_zero]; linarith only [hc₁]
+  · rw [e0, e1, e2, e3]; simp only [sub_zero]; linarith only [hc₂]
 
 /-- **Existence of a common chronological successor.** Any two points lie in
 the chronological past of a single point. -/
 theorem exists_common_future (q₁ q₂ : SpacetimeModel) :
     ∃ q, q₁ ∈ minkowskiBackwardCone q ∧ q₂ ∈ minkowskiBackwardCone q := by
-  set s₁ : ℝ := (q₁ 1) ^ 2 + (q₁ 2) ^ 2 + (q₁ 3) ^ 2 with hs₁
-  set s₂ : ℝ := (q₂ 1) ^ 2 + (q₂ 2) ^ 2 + (q₂ 3) ^ 2 with hs₂
-  set R : ℝ := Real.sqrt (s₁ + s₂) + 1 with hR
-  set q : SpacetimeModel := EuclideanSpace.single (0 : Fin 4)
-    (max (q₁ 0) (q₂ 0) + R) with hq
-  obtain ⟨hq0, hq1, hq2, hq3⟩ := single_time_apply (max (q₁ 0) (q₂ 0) + R)
-  rw [← hq] at hq0 hq1 hq2 hq3
-  have hs1nn : 0 ≤ s₁ := by rw [hs₁]; positivity
-  have hs2nn : 0 ≤ s₂ := by rw [hs₂]; positivity
-  have hRbig : s₁ + s₂ < R ^ 2 := by
-    rw [hR]
-    nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ s₁ + s₂ by positivity),
-      Real.sqrt_nonneg (s₁ + s₂)]
-  have hRpos : 0 < R := by rw [hR]; positivity
-  refine ⟨q, ⟨?_, ?_⟩, ⟨?_, ?_⟩⟩
-  · rw [hq0]; nlinarith [le_max_left (q₁ 0) (q₂ 0), hRpos]
-  · rw [hq0, hq1, hq2, hq3]
-    have hge : R ≤ max (q₁ 0) (q₂ 0) + R - q₁ 0 := by
-      have := le_max_left (q₁ 0) (q₂ 0); linarith
-    nlinarith [hge, hRpos, hRbig, hs2nn, hs₁]
-  · rw [hq0]; nlinarith [le_max_right (q₁ 0) (q₂ 0), hRpos]
-  · rw [hq0, hq1, hq2, hq3]
-    have hge : R ≤ max (q₁ 0) (q₂ 0) + R - q₂ 0 := by
-      have := le_max_right (q₁ 0) (q₂ 0); linarith
-    nlinarith [hge, hRpos, hRbig, hs1nn, hs₂]
+  obtain ⟨t, ht₁, ht₂, hc₁, hc₂⟩ :=
+    exists_time_shift_gt (a₁ := q₁ 0) (a₂ := q₂ 0)
+      (s₁ := (q₁ 1) ^ 2 + (q₁ 2) ^ 2 + (q₁ 3) ^ 2)
+      (s₂ := (q₂ 1) ^ 2 + (q₂ 2) ^ 2 + (q₂ 3) ^ 2) (sq3_nonneg _ _ _) (sq3_nonneg _ _ _)
+  obtain ⟨e0, e1, e2, e3⟩ := single_time_apply t
+  refine ⟨EuclideanSpace.single (0 : Fin 4) t, ⟨by rwa [e0], ?_⟩, ⟨by rwa [e0], ?_⟩⟩
+  · rw [e0, e1, e2, e3]; simp only [zero_sub, neg_sq]; linarith only [hc₁]
+  · rw [e0, e1, e2, e3]; simp only [zero_sub, neg_sq]; linarith only [hc₂]
 
 /-- **Directedness of the Alexandrov basis.** Any two Alexandrov-basis diamonds
 of standard Minkowski spacetime are contained in a common diamond. -/
@@ -157,6 +160,53 @@ theorem alexandrovBasis_directed {B₁ B₂ : Set SpacetimeModel}
 
 /-! ### The Alexandrov diamonds form a genuine topological basis on standard Minkowski -/
 
+/-- Coordinatewise evaluation of a translate along the time axis. -/
+private theorem sub_single_time_apply (x : SpacetimeModel) (c : ℝ) :
+    (x - EuclideanSpace.single (0 : Fin 4) c) 0 = x 0 - c ∧
+    (x - EuclideanSpace.single (0 : Fin 4) c) 1 = x 1 ∧
+    (x - EuclideanSpace.single (0 : Fin 4) c) 2 = x 2 ∧
+    (x - EuclideanSpace.single (0 : Fin 4) c) 3 = x 3 := by
+  -- (extracted by Fuse golfer)
+  obtain ⟨e0, e1, e2, e3⟩ := single_time_apply c
+  exact ⟨by rw [PiLp.sub_apply, e0], by rw [PiLp.sub_apply, e1, sub_zero],
+    by rw [PiLp.sub_apply, e2, sub_zero], by rw [PiLp.sub_apply, e3, sub_zero]⟩
+
+/-- Coordinatewise evaluation of a translate along the time axis. -/
+private theorem add_single_time_apply (x : SpacetimeModel) (c : ℝ) :
+    (x + EuclideanSpace.single (0 : Fin 4) c) 0 = x 0 + c ∧
+    (x + EuclideanSpace.single (0 : Fin 4) c) 1 = x 1 ∧
+    (x + EuclideanSpace.single (0 : Fin 4) c) 2 = x 2 ∧
+    (x + EuclideanSpace.single (0 : Fin 4) c) 3 = x 3 := by
+  -- (extracted by Fuse golfer)
+  obtain ⟨e0, e1, e2, e3⟩ := single_time_apply c
+  exact ⟨by rw [PiLp.add_apply, e0], by rw [PiLp.add_apply, e1, add_zero],
+    by rw [PiLp.add_apply, e2, add_zero], by rw [PiLp.add_apply, e3, add_zero]⟩
+
+/-- Shrinking a timelike separation: if `0 < ε ≤ (T ^ 2 - S) / (2 * T)` then `ε < T`
+and the strict inequality `S < T ^ 2` survives replacing `T` by `T - ε`. -/
+private theorem lt_and_lt_sub_sq_of_le_div {T S ε : ℝ} (hT : 0 < T) (hS : 0 ≤ S)
+    (hε : 0 < ε) (hle : ε ≤ (T ^ 2 - S) / (2 * T)) : ε < T ∧ S < (T - ε) ^ 2 := by
+  -- (extracted by Fuse golfer)
+  have h2T : (0 : ℝ) < 2 * T := by linarith only [hT]
+  have hmul : 2 * T * ε ≤ T ^ 2 - S :=
+    calc 2 * T * ε ≤ 2 * T * ((T ^ 2 - S) / (2 * T)) :=
+          mul_le_mul_of_nonneg_left hle h2T.le
+      _ = T ^ 2 - S := by field_simp
+  refine ⟨lt_of_mul_lt_mul_left ?_ h2T.le, by linarith only [hmul, pow_pos hε 2]⟩
+  linarith only [hmul, hS, pow_pos hT 2]
+
+/-- A single positive `ε` shrinks both of two timelike separations. -/
+private theorem exists_eps_shrink {T₁ T₂ S₁ S₂ : ℝ} (hT₁ : 0 < T₁) (hT₂ : 0 < T₂)
+    (hS₁ : 0 ≤ S₁) (hS₂ : 0 ≤ S₂) (h₁ : S₁ < T₁ ^ 2) (h₂ : S₂ < T₂ ^ 2) :
+    ∃ ε : ℝ, 0 < ε ∧ ε < T₁ ∧ ε < T₂ ∧ S₁ < (T₁ - ε) ^ 2 ∧ S₂ < (T₂ - ε) ^ 2 := by
+  -- (extracted by Fuse golfer)
+  have hpos : 0 < min ((T₁ ^ 2 - S₁) / (2 * T₁)) ((T₂ ^ 2 - S₂) / (2 * T₂)) :=
+    lt_min (div_pos (by linarith only [h₁]) (by linarith only [hT₁]))
+      (div_pos (by linarith only [h₂]) (by linarith only [hT₂]))
+  obtain ⟨u₁, v₁⟩ := lt_and_lt_sub_sq_of_le_div hT₁ hS₁ hpos (min_le_left _ _)
+  obtain ⟨u₂, v₂⟩ := lt_and_lt_sub_sq_of_le_div hT₂ hS₂ hpos (min_le_right _ _)
+  exact ⟨_, hpos, u₁, u₂, v₁, v₂⟩
+
 /-- **Past interpolation.** If `x` is in the forward cones of `p₁` and `p₂`, there is
 a point `a` in both forward cones with `x` in the forward cone of `a` (i.e.
 `p₁, p₂ ≪ a ≪ x`). Take `a = x - ε • e₀` for small `ε > 0`: the spatial separation
@@ -168,121 +218,19 @@ theorem exists_past_between_standardMinkowski {p₁ p₂ x : SpacetimeModel}
       x ∈ minkowskiForwardCone a := by
   obtain ⟨h₁0, h₁c⟩ := h₁
   obtain ⟨h₂0, h₂c⟩ := h₂
-  set T₁ := x 0 - p₁ 0 with hT₁
-  set T₂ := x 0 - p₂ 0 with hT₂
-  set S₁ := (x 1 - p₁ 1)^2 + (x 2 - p₁ 2)^2 + (x 3 - p₁ 3)^2 with hS₁
-  set S₂ := (x 1 - p₂ 1)^2 + (x 2 - p₂ 2)^2 + (x 3 - p₂ 3)^2 with hS₂
-  have hT₁pos : 0 < T₁ := sub_pos.mpr h₁0
-  have hT₂pos : 0 < T₂ := sub_pos.mpr h₂0
-  have hS₁ltT₁sq : S₁ < T₁ ^ 2 := by
-    dsimp [S₁, T₁] at h₁c ⊢
-    linarith
-  have hS₂ltT₂sq : S₂ < T₂ ^ 2 := by
-    dsimp [S₂, T₂] at h₂c ⊢
-    linarith
-  set δ₁ := T₁ ^ 2 - S₁ with hδ₁
-  set δ₂ := T₂ ^ 2 - S₂ with hδ₂
-  have hδ₁pos : 0 < δ₁ := by rw [hδ₁]; linarith
-  have hδ₂pos : 0 < δ₂ := by rw [hδ₂]; linarith
-  have hS₁_nonneg : 0 ≤ S₁ := by rw [hS₁]; positivity
-  have hS₂_nonneg : 0 ≤ S₂ := by rw [hS₂]; positivity
-  have hδ₁leT₁sq : δ₁ ≤ T₁ ^ 2 := by rw [hδ₁]; linarith
-  have hδ₂leT₂sq : δ₂ ≤ T₂ ^ 2 := by rw [hδ₂]; linarith
-  have hδ₁_div_pos : 0 < δ₁ / (2 * T₁) := div_pos hδ₁pos (by positivity)
-  have hδ₂_div_pos : 0 < δ₂ / (2 * T₂) := div_pos hδ₂pos (by positivity)
-  set ε := min (δ₁ / (2 * T₁)) (δ₂ / (2 * T₂)) with hε
-  have hεpos : 0 < ε := by
-    rw [hε]
-    exact lt_min_iff.mpr ⟨hδ₁_div_pos, hδ₂_div_pos⟩
-  have hε_le_δ₁_div : ε ≤ δ₁ / (2 * T₁) := by
-    rw [hε]; exact min_le_left _ _
-  have hε_le_δ₂_div : ε ≤ δ₂ / (2 * T₂) := by
-    rw [hε]; exact min_le_right _ _
-  have hε_mul₁ : 2 * T₁ * ε ≤ δ₁ := by
-    have hpos : 0 < 2 * T₁ := by positivity
-    calc
-      2 * T₁ * ε ≤ 2 * T₁ * (δ₁ / (2 * T₁)) :=
-        mul_le_mul_of_nonneg_left hε_le_δ₁_div (by positivity)
-      _ = δ₁ := by field_simp [hpos.ne.symm]
-  have hε_mul₂ : 2 * T₂ * ε ≤ δ₂ := by
-    have hpos : 0 < 2 * T₂ := by positivity
-    calc
-      2 * T₂ * ε ≤ 2 * T₂ * (δ₂ / (2 * T₂)) :=
-        mul_le_mul_of_nonneg_left hε_le_δ₂_div (by positivity)
-      _ = δ₂ := by field_simp [hpos.ne.symm]
-  have hε_lt_T₁ : ε < T₁ := by
-    by_contra! h
-    have h2T₁ε_ge_2T₁sq : 2 * T₁ * ε ≥ 2 * T₁ ^ 2 := by
-      calc
-        2 * T₁ * ε ≥ 2 * T₁ * T₁ := mul_le_mul_of_nonneg_left h (by positivity)
-        _ = 2 * T₁ ^ 2 := by ring
-    have hchain : 2 * T₁ ^ 2 ≤ T₁ ^ 2 := by
-      calc
-        2 * T₁ ^ 2 ≤ 2 * T₁ * ε := h2T₁ε_ge_2T₁sq
-        _ ≤ δ₁ := hε_mul₁
-        _ ≤ T₁ ^ 2 := hδ₁leT₁sq
-    have hpos : T₁ ^ 2 > 0 := pow_pos hT₁pos 2
-    linarith
-  have hε_lt_T₂ : ε < T₂ := by
-    by_contra! h
-    have h2T₂ε_ge_2T₂sq : 2 * T₂ * ε ≥ 2 * T₂ ^ 2 := by
-      calc
-        2 * T₂ * ε ≥ 2 * T₂ * T₂ := mul_le_mul_of_nonneg_left h (by positivity)
-        _ = 2 * T₂ ^ 2 := by ring
-    have hchain : 2 * T₂ ^ 2 ≤ T₂ ^ 2 := by
-      calc
-        2 * T₂ ^ 2 ≤ 2 * T₂ * ε := h2T₂ε_ge_2T₂sq
-        _ ≤ δ₂ := hε_mul₂
-        _ ≤ T₂ ^ 2 := hδ₂leT₂sq
-    have hpos : T₂ ^ 2 > 0 := pow_pos hT₂pos 2
-    linarith
-  have hcone_ineq₁ : S₁ < (T₁ - ε) ^ 2 := by
-    have hsqpos : 0 < ε ^ 2 := pow_pos hεpos 2
-    have hsub : 2 * T₁ * ε - ε ^ 2 < δ₁ := by
-      have htemp : 2 * T₁ * ε - ε ^ 2 < 2 * T₁ * ε := by linarith
-      exact htemp.trans_le hε_mul₁
-    have eqn : (T₁ - ε) ^ 2 - S₁ = δ₁ - (2 * T₁ * ε - ε ^ 2) := by
-      rw [hδ₁]; ring
-    linarith
-  have hcone_ineq₂ : S₂ < (T₂ - ε) ^ 2 := by
-    have hsqpos : 0 < ε ^ 2 := pow_pos hεpos 2
-    have hsub : 2 * T₂ * ε - ε ^ 2 < δ₂ := by
-      have htemp : 2 * T₂ * ε - ε ^ 2 < 2 * T₂ * ε := by linarith
-      exact htemp.trans_le hε_mul₂
-    have eqn : (T₂ - ε) ^ 2 - S₂ = δ₂ - (2 * T₂ * ε - ε ^ 2) := by
-      rw [hδ₂]; ring
-    linarith
-  set a : SpacetimeModel := x - EuclideanSpace.single (0 : Fin 4) ε with ha
-  have ha0 : a 0 = x 0 - ε := by
-    rw [ha, PiLp.sub_apply, PiLp.single_apply, if_pos rfl]
-  have ha1 : a 1 = x 1 := by
-    rw [ha, PiLp.sub_apply, PiLp.single_apply, if_neg (by decide)]
-    simp
-  have ha2 : a 2 = x 2 := by
-    rw [ha, PiLp.sub_apply, PiLp.single_apply, if_neg (by decide)]
-    simp
-  have ha3 : a 3 = x 3 := by
-    rw [ha, PiLp.sub_apply, PiLp.single_apply, if_neg (by decide)]
-    simp
-  refine ⟨a, ?_, ?_, ?_⟩
-  · -- a ∈ minkowskiForwardCone p₁
-    rw [mem_minkowskiForwardCone, ha0, ha1, ha2, ha3]
-    dsimp [T₁, S₁]
-    constructor
-    · linarith
-    · linarith
-  · -- a ∈ minkowskiForwardCone p₂
-    rw [mem_minkowskiForwardCone, ha0, ha1, ha2, ha3]
-    dsimp [T₂, S₂]
-    constructor
-    · linarith
-    · linarith
-  · -- x ∈ minkowskiForwardCone a
-    rw [mem_minkowskiForwardCone, ha0, ha1, ha2, ha3]
-    constructor
-    · linarith
-    · have : 0 < ε ^ 2 := pow_pos hεpos 2
-      linarith
+  obtain ⟨ε, hε, hε₁, hε₂, hc₁, hc₂⟩ :=
+    exists_eps_shrink (T₁ := x 0 - p₁ 0) (T₂ := x 0 - p₂ 0)
+      (S₁ := (x 1 - p₁ 1) ^ 2 + (x 2 - p₁ 2) ^ 2 + (x 3 - p₁ 3) ^ 2)
+      (S₂ := (x 1 - p₂ 1) ^ 2 + (x 2 - p₂ 2) ^ 2 + (x 3 - p₂ 3) ^ 2)
+      (sub_pos.mpr h₁0) (sub_pos.mpr h₂0) (sq3_nonneg _ _ _) (sq3_nonneg _ _ _)
+      (by linarith only [h₁c]) (by linarith only [h₂c])
+  obtain ⟨e0, e1, e2, e3⟩ := sub_single_time_apply x ε
+  refine ⟨x - EuclideanSpace.single (0 : Fin 4) ε,
+    ⟨by rw [e0]; linarith only [hε₁], ?_⟩, ⟨by rw [e0]; linarith only [hε₂], ?_⟩,
+    ⟨by rw [e0]; linarith only [hε], ?_⟩⟩
+  · rw [e0, e1, e2, e3]; linarith only [hc₁]
+  · rw [e0, e1, e2, e3]; linarith only [hc₂]
+  · rw [e0, e1, e2, e3]; linarith only [pow_pos hε 2]
 
 /-- **Future interpolation.** If `x` is in the backward cones of `q₁` and `q₂`, there
 is a point `b` in both backward cones with `x` in the backward cone of `b` (i.e.
@@ -293,121 +241,19 @@ theorem exists_future_between_standardMinkowski {q₁ q₂ x : SpacetimeModel}
       x ∈ minkowskiBackwardCone b := by
   obtain ⟨h₁0, h₁c⟩ := h₁
   obtain ⟨h₂0, h₂c⟩ := h₂
-  set T₁ := q₁ 0 - x 0 with hT₁
-  set T₂ := q₂ 0 - x 0 with hT₂
-  set S₁ := (q₁ 1 - x 1)^2 + (q₁ 2 - x 2)^2 + (q₁ 3 - x 3)^2 with hS₁
-  set S₂ := (q₂ 1 - x 1)^2 + (q₂ 2 - x 2)^2 + (q₂ 3 - x 3)^2 with hS₂
-  have hT₁pos : 0 < T₁ := sub_pos.mpr h₁0
-  have hT₂pos : 0 < T₂ := sub_pos.mpr h₂0
-  have hS₁ltT₁sq : S₁ < T₁ ^ 2 := by
-    dsimp [S₁, T₁] at h₁c ⊢
-    linarith
-  have hS₂ltT₂sq : S₂ < T₂ ^ 2 := by
-    dsimp [S₂, T₂] at h₂c ⊢
-    linarith
-  set δ₁ := T₁ ^ 2 - S₁ with hδ₁
-  set δ₂ := T₂ ^ 2 - S₂ with hδ₂
-  have hδ₁pos : 0 < δ₁ := by rw [hδ₁]; linarith
-  have hδ₂pos : 0 < δ₂ := by rw [hδ₂]; linarith
-  have hS₁_nonneg : 0 ≤ S₁ := by rw [hS₁]; positivity
-  have hS₂_nonneg : 0 ≤ S₂ := by rw [hS₂]; positivity
-  have hδ₁leT₁sq : δ₁ ≤ T₁ ^ 2 := by rw [hδ₁]; linarith
-  have hδ₂leT₂sq : δ₂ ≤ T₂ ^ 2 := by rw [hδ₂]; linarith
-  have hδ₁_div_pos : 0 < δ₁ / (2 * T₁) := div_pos hδ₁pos (by positivity)
-  have hδ₂_div_pos : 0 < δ₂ / (2 * T₂) := div_pos hδ₂pos (by positivity)
-  set ε := min (δ₁ / (2 * T₁)) (δ₂ / (2 * T₂)) with hε
-  have hεpos : 0 < ε := by
-    rw [hε]
-    exact lt_min_iff.mpr ⟨hδ₁_div_pos, hδ₂_div_pos⟩
-  have hε_le_δ₁_div : ε ≤ δ₁ / (2 * T₁) := by
-    rw [hε]; exact min_le_left _ _
-  have hε_le_δ₂_div : ε ≤ δ₂ / (2 * T₂) := by
-    rw [hε]; exact min_le_right _ _
-  have hε_mul₁ : 2 * T₁ * ε ≤ δ₁ := by
-    have hpos : 0 < 2 * T₁ := by positivity
-    calc
-      2 * T₁ * ε ≤ 2 * T₁ * (δ₁ / (2 * T₁)) :=
-        mul_le_mul_of_nonneg_left hε_le_δ₁_div (by positivity)
-      _ = δ₁ := by field_simp [hpos.ne.symm]
-  have hε_mul₂ : 2 * T₂ * ε ≤ δ₂ := by
-    have hpos : 0 < 2 * T₂ := by positivity
-    calc
-      2 * T₂ * ε ≤ 2 * T₂ * (δ₂ / (2 * T₂)) :=
-        mul_le_mul_of_nonneg_left hε_le_δ₂_div (by positivity)
-      _ = δ₂ := by field_simp [hpos.ne.symm]
-  have hε_lt_T₁ : ε < T₁ := by
-    by_contra! h
-    have h2T₁ε_ge_2T₁sq : 2 * T₁ * ε ≥ 2 * T₁ ^ 2 := by
-      calc
-        2 * T₁ * ε ≥ 2 * T₁ * T₁ := mul_le_mul_of_nonneg_left h (by positivity)
-        _ = 2 * T₁ ^ 2 := by ring
-    have hchain : 2 * T₁ ^ 2 ≤ T₁ ^ 2 := by
-      calc
-        2 * T₁ ^ 2 ≤ 2 * T₁ * ε := h2T₁ε_ge_2T₁sq
-        _ ≤ δ₁ := hε_mul₁
-        _ ≤ T₁ ^ 2 := hδ₁leT₁sq
-    have hpos : T₁ ^ 2 > 0 := pow_pos hT₁pos 2
-    linarith
-  have hε_lt_T₂ : ε < T₂ := by
-    by_contra! h
-    have h2T₂ε_ge_2T₂sq : 2 * T₂ * ε ≥ 2 * T₂ ^ 2 := by
-      calc
-        2 * T₂ * ε ≥ 2 * T₂ * T₂ := mul_le_mul_of_nonneg_left h (by positivity)
-        _ = 2 * T₂ ^ 2 := by ring
-    have hchain : 2 * T₂ ^ 2 ≤ T₂ ^ 2 := by
-      calc
-        2 * T₂ ^ 2 ≤ 2 * T₂ * ε := h2T₂ε_ge_2T₂sq
-        _ ≤ δ₂ := hε_mul₂
-        _ ≤ T₂ ^ 2 := hδ₂leT₂sq
-    have hpos : T₂ ^ 2 > 0 := pow_pos hT₂pos 2
-    linarith
-  have hcone_ineq₁ : S₁ < (T₁ - ε) ^ 2 := by
-    have hsqpos : 0 < ε ^ 2 := pow_pos hεpos 2
-    have hsub : 2 * T₁ * ε - ε ^ 2 < δ₁ := by
-      have htemp : 2 * T₁ * ε - ε ^ 2 < 2 * T₁ * ε := by linarith
-      exact htemp.trans_le hε_mul₁
-    have eqn : (T₁ - ε) ^ 2 - S₁ = δ₁ - (2 * T₁ * ε - ε ^ 2) := by
-      rw [hδ₁]; ring
-    linarith
-  have hcone_ineq₂ : S₂ < (T₂ - ε) ^ 2 := by
-    have hsqpos : 0 < ε ^ 2 := pow_pos hεpos 2
-    have hsub : 2 * T₂ * ε - ε ^ 2 < δ₂ := by
-      have htemp : 2 * T₂ * ε - ε ^ 2 < 2 * T₂ * ε := by linarith
-      exact htemp.trans_le hε_mul₂
-    have eqn : (T₂ - ε) ^ 2 - S₂ = δ₂ - (2 * T₂ * ε - ε ^ 2) := by
-      rw [hδ₂]; ring
-    linarith
-  set b : SpacetimeModel := x + EuclideanSpace.single (0 : Fin 4) ε with hb
-  have hb0 : b 0 = x 0 + ε := by
-    rw [hb, PiLp.add_apply, PiLp.single_apply, if_pos rfl]
-  have hb1 : b 1 = x 1 := by
-    rw [hb, PiLp.add_apply, PiLp.single_apply, if_neg (by decide)]
-    simp
-  have hb2 : b 2 = x 2 := by
-    rw [hb, PiLp.add_apply, PiLp.single_apply, if_neg (by decide)]
-    simp
-  have hb3 : b 3 = x 3 := by
-    rw [hb, PiLp.add_apply, PiLp.single_apply, if_neg (by decide)]
-    simp
-  refine ⟨b, ?_, ?_, ?_⟩
-  · -- b ∈ minkowskiBackwardCone q₁
-    rw [mem_minkowskiBackwardCone, hb0, hb1, hb2, hb3]
-    dsimp [T₁, S₁]
-    constructor
-    · linarith
-    · linarith
-  · -- b ∈ minkowskiBackwardCone q₂
-    rw [mem_minkowskiBackwardCone, hb0, hb1, hb2, hb3]
-    dsimp [T₂, S₂]
-    constructor
-    · linarith
-    · linarith
-  · -- x ∈ minkowskiBackwardCone b
-    rw [mem_minkowskiBackwardCone, hb0, hb1, hb2, hb3]
-    constructor
-    · linarith
-    · have : 0 < ε ^ 2 := pow_pos hεpos 2
-      linarith
+  obtain ⟨ε, hε, hε₁, hε₂, hc₁, hc₂⟩ :=
+    exists_eps_shrink (T₁ := q₁ 0 - x 0) (T₂ := q₂ 0 - x 0)
+      (S₁ := (q₁ 1 - x 1) ^ 2 + (q₁ 2 - x 2) ^ 2 + (q₁ 3 - x 3) ^ 2)
+      (S₂ := (q₂ 1 - x 1) ^ 2 + (q₂ 2 - x 2) ^ 2 + (q₂ 3 - x 3) ^ 2)
+      (sub_pos.mpr h₁0) (sub_pos.mpr h₂0) (sq3_nonneg _ _ _) (sq3_nonneg _ _ _)
+      (by linarith only [h₁c]) (by linarith only [h₂c])
+  obtain ⟨e0, e1, e2, e3⟩ := add_single_time_apply x ε
+  refine ⟨x + EuclideanSpace.single (0 : Fin 4) ε,
+    ⟨by rw [e0]; linarith only [hε₁], ?_⟩, ⟨by rw [e0]; linarith only [hε₂], ?_⟩,
+    ⟨by rw [e0]; linarith only [hε], ?_⟩⟩
+  · rw [e0, e1, e2, e3]; linarith only [hc₁]
+  · rw [e0, e1, e2, e3]; linarith only [hc₂]
+  · rw [e0, e1, e2, e3]; linarith only [pow_pos hε 2]
 
 /-- **Downward intersection property of the diamonds.** For two Alexandrov diamonds of
 standard Minkowski and a point `x` in their intersection, there is a diamond `B₃` with

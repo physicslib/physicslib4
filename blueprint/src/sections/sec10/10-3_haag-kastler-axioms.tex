@@ -997,6 +997,19 @@ Combining invariance with purity makes the GNS representation both covariant and
     Purity is preserved by any $*$-automorphism: for $\Phi : \mathfrak{U} \xrightarrow{\sim} \mathfrak{U}$, the pullback state $\omega \circ \Phi$ is pure if and only if $\omega$ is. A dominated positive functional $\psi \le \omega \circ \Phi$ transports to $\psi \circ \Phi^{-1} \le \omega$, which purity sends to a scalar multiple of $\omega$; transporting back gives $\psi$ proportional to $\omega \circ \Phi$. Applied to the covariance automorphism $\Phi = \beta_L$, this says purity of a state is a Lorentz-covariance-invariant property.
 \end{theorem}
 
+\begin{theorem}[GNS covariance along the quasilocal action]
+    \label{thrm:gns-covariance-quasilocal-action}
+    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.unitaryEquiv_gns_action, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isIrreducible_iff_gns_action, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isFactor_iff_gns_action}
+    \uses{def:covariant-quasilocal-algebra, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback}
+    \leanok
+    The lifted covariance automorphism $\beta_L$ of the quasilocal algebra $\mathfrak{U}$ is a $*$-automorphism, hence in particular a $*$-isomorphism, so the abstract GNS-covariance results apply to it. Let $\omega$ be a state on $\mathfrak{U}$. A cyclic representation of $\mathfrak{U}$ reproducing the pullback state $\omega \circ \beta_L$ is unitarily equivalent to $\pi_\omega \circ \beta_L$ (\ref{thrm:gns-covariance-unitary-equiv}), is irreducible exactly when $\pi_\omega$ is, and generates a factor exactly when $\pi_\omega$ does (\ref{thrm:gns-sector-transport}). Whereas \ref{thrm:gns-covariance-local} moves between the algebras of two different regions, here the algebra is fixed and the Lorentz group acts on it: the conclusion is that the superselection type of a \emph{global} state is a Lorentz invariant. Together with the invariance of purity (\ref{thrm:purity-covariance-invariant}) this says the entire sector classification of global states is Lorentz invariant.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:covariant-quasilocal-algebra}
+    Instantiate \ref{thrm:gns-covariance-unitary-equiv} and \ref{thrm:gns-sector-transport} at $A := \mathfrak{U}$, $B := \mathfrak{U}$ and $\Phi := \beta_L$, the $*$-automorphism of the quasilocal algebra supplied by the covariance action (\ref{def:covariant-quasilocal-algebra}). Source and target algebra coincide, so no region-cast intervenes.
+\end{proof}
+
 \subsection{The Separating Vector of a Faithful State}
 
 A faithful state has a sharper consequence at the level of the GNS construction than the faithfulness of its representation: its cyclic vector is also \emph{separating}. This is the basic datum of the modular (Tomita-Takesaki) theory of the associated von Neumann algebra.

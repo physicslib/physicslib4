@@ -466,6 +466,19 @@ They do, however, restrict to a genuine action by automorphisms of one fixed loc
     A state $\omega$ on a local algebra $\mathfrak{U}(\mathbf{B})$ is pure if and only if its pullback $\omega \circ \hat\alpha_\varphi$ along the stabilizer automorphism is pure, for every $\varphi \in \mathrm{Stab}(\mathbf{B})$. This is the curved specialization of \ref{thrm:purity-covariance-invariant}: purity is invariant under the isometric symmetry that fixes the region.
 \end{theorem}
 
+\begin{theorem}[GNS covariance along the stabilizer action]
+    \label{thrm:gns-covariance-stabilizer-action}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.unitaryEquiv_gns_stabAut, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isIrreducible_iff_gns_stabAut, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isFactor_iff_gns_stabAut}
+    \uses{def:stabilizer-action-in-curved-spacetime, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback}
+    \leanok
+    The curved counterpart of \ref{thrm:gns-covariance-quasilocal-action}. For $g$ in the stabilizer $\mathrm{Stab}(\mathbf{B})$ the stabilizer automorphism $\hat\alpha_g$ (\ref{def:stabilizer-action-in-curved-spacetime}) is a $*$-automorphism of the single local algebra $\mathfrak{U}(\mathbf{B})$. So for a state $\omega$ on $\mathfrak{U}(\mathbf{B})$, a cyclic representation reproducing $\omega \circ \hat\alpha_g$ is unitarily equivalent to $\pi_\omega \circ \hat\alpha_g$, is irreducible exactly when $\pi_\omega$ is, and generates a factor exactly when $\pi_\omega$ does. Since curved spacetime has no quasilocal algebra, the stabilizer subgroup replaces the full Lorentz group here: the superselection type of a local state is invariant under the symmetries of the region that fix it.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:stabilizer-action-in-curved-spacetime}
+    Instantiate \ref{thrm:gns-covariance-unitary-equiv} and \ref{thrm:gns-sector-transport} at $A := \mathfrak{U}(\mathbf{B})$, $B := \mathfrak{U}(\mathbf{B})$ and $\Phi := \hat\alpha_g$, the stabilizer automorphism of \ref{def:stabilizer-action-in-curved-spacetime}. Source and target algebra coincide, so the region-casts of the general covariance isomorphism play no role.
+\end{proof}
+
 \subsection{KMS States for a Killing Flow}
 
 The stabilizer subgroup of a region is, in the genuinely curved examples, a one-parameter Killing flow rather than the full isometry group. Such a flow makes the local algebra $\mathfrak{U}(\mathbf{B})$ into a dynamical system, and the natural equilibrium states are the KMS states (\ref{def:kms-state}) for that flow. This is the precise sense in which the curved-spacetime thermal states are thermal: the Hartle-Hawking state on a Schwarzschild exterior is KMS for the stationary Killing flow at the Hawking temperature, and the Bunch-Davies state restricted to a de Sitter static patch is KMS for the boost Killing flow at the Gibbons-Hawking temperature.
