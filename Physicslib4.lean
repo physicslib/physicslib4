@@ -50,6 +50,7 @@ import Physicslib4.GNS.PureStateExists
 import Physicslib4.GNS.RadonNikodym
 import Physicslib4.GNS.Separating
 import Physicslib4.GNS.Superselection
+import Physicslib4.GNS.Triple
 import Physicslib4.GNS.UnitaryEquiv
 import Physicslib4.GNS.UnitaryRepresentation
 import Physicslib4.Operators.Conjugation
