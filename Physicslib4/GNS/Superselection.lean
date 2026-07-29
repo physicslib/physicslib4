@@ -64,23 +64,13 @@ theorem Intertwines.comp {S : H₂ →L[ℂ] H₃} {T : H₁ →L[ℂ] H₂}
 
 /-- The adjoint of an intertwiner `π₁ → π₂` is an intertwiner `π₂ → π₁`. -/
 theorem Intertwines.adjoint {T : H₁ →L[ℂ] H₂} (hT : Intertwines π₁ π₂ T) :
-    Intertwines π₂ π₁ (ContinuousLinearMap.adjoint T) := by
-  have hcomp : ∀ a : A, (ContinuousLinearMap.adjoint T).comp (π₂ a)
-      = (π₁ a).comp (ContinuousLinearMap.adjoint T) := by
-    intro a
-    have h1 : T.comp (π₁ (star a)) = (π₂ (star a)).comp T :=
-      ContinuousLinearMap.ext (fun x => hT (star a) x)
-    have h2 := congrArg ContinuousLinearMap.adjoint h1
-    rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp] at h2
-    have hp1 : ContinuousLinearMap.adjoint (π₁ (star a)) = π₁ a := by
-      rw [← ContinuousLinearMap.star_eq_adjoint, ← map_star, star_star]
-    have hp2 : ContinuousLinearMap.adjoint (π₂ (star a)) = π₂ a := by
-      rw [← ContinuousLinearMap.star_eq_adjoint, ← map_star, star_star]
-    rw [hp1, hp2] at h2
-    exact h2.symm
-  intro a x
-  have hx := DFunLike.congr_fun (hcomp a) x
-  simpa only [ContinuousLinearMap.comp_apply] using hx
+    Intertwines π₂ π₁ (ContinuousLinearMap.adjoint T) := fun a x => by
+  have h := congrArg ContinuousLinearMap.adjoint
+    (ContinuousLinearMap.ext (hT (star a)) :
+      T.comp (π₁ (star a)) = (π₂ (star a)).comp T)
+  simp only [map_star, ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
+    ContinuousLinearMap.adjoint_adjoint] at h
+  exact (DFunLike.congr_fun h x).symm
 
 /-! ### Disjointness -/
 

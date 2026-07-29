@@ -166,27 +166,23 @@ theorem scalar_of_isSelfAdjoint_of_isPure
     (hpure : IsPure ω) {S : H →L[ℂ] H} (hSsa : IsSelfAdjoint S)
     (hScomm : ∀ a : A, π a * S = S * π a) :
     ∃ c : ℂ, S = c • 1 := by
-  obtain ⟨r, hr_def⟩ : ∃ r : ℝ, r = (2 * (‖S‖ + 1))⁻¹ := ⟨_, rfl⟩
-  have hrpos : 0 < r := by rw [hr_def]; positivity
-  have hrS : r * ‖S‖ ≤ 2⁻¹ := by
-    rw [hr_def, inv_mul_eq_div, div_le_iff₀ (by positivity)]
-    linarith only []
+  obtain ⟨r, hrpos, hrS⟩ : ∃ r : ℝ, 0 < r ∧ r * ‖S‖ ≤ 2⁻¹ := by
+    have hden : (0 : ℝ) < 2 * (‖S‖ + 1) := by positivity
+    exact ⟨_, inv_pos.mpr hden, by rw [inv_mul_eq_div, div_le_iff₀ hden]; linarith only []⟩
   -- the scaled operator
-  obtain ⟨T, hT_def⟩ : ∃ T : H →L[ℂ] H, T = (r : ℂ) • S + (2⁻¹ : ℂ) • (1 : H →L[ℂ] H) := ⟨_, rfl⟩
+  obtain ⟨T, hT_def⟩ : ∃ T : H →L[ℂ] H, T = (r : ℂ) • S + (2⁻¹ : ℂ) • 1 := ⟨_, rfl⟩
   have h1SA : IsSelfAdjoint (1 : H →L[ℂ] H) := .one _
   have h2 : (2⁻¹ : ℂ) = ((2⁻¹ : ℝ) : ℂ) := by rw [Complex.ofReal_inv, Complex.ofReal_ofNat]
   have hhalf : (starRingEnd ℂ) (2⁻¹ : ℂ) = (2⁻¹ : ℂ) := by rw [h2]; exact Complex.conj_ofReal _
-  have hrSA : IsSelfAdjoint ((r : ℂ)) := Complex.conj_ofReal r
-  have hhSA : IsSelfAdjoint ((2⁻¹ : ℂ)) := hhalf
-  have hTsa : IsSelfAdjoint T := by rw [hT_def]; exact (hrSA.smul hSsa).add (hhSA.smul h1SA)
+  have hTsa : IsSelfAdjoint T := by
+    rw [hT_def]
+    exact IsSelfAdjoint.add (.smul (Complex.conj_ofReal r) hSsa) (.smul hhalf h1SA)
   have hvv : ∀ v : H, Complex.re ⟪v, v⟫_ℂ = ‖v‖ ^ 2 := fun v => inner_self_eq_norm_sq (𝕜 := ℂ) v
   -- coefficient expansion of `re ⟪T v, v⟫`
   have hTexp : ∀ v : H,
       Complex.re ⟪T v, v⟫_ℂ = r * Complex.re ⟪S v, v⟫_ℂ + 2⁻¹ * ‖v‖ ^ 2 := fun v => by
-    rw [show T v = (r : ℂ) • S v + (2⁻¹ : ℂ) • v from by
-        rw [hT_def, add_apply, smul_apply, smul_apply, one_apply_eq_self],
-      inner_add_left, inner_smul_left, inner_smul_left, Complex.add_re, Complex.conj_ofReal,
-      Complex.re_ofReal_mul, hhalf, h2, Complex.re_ofReal_mul, hvv]
+    simp only [hT_def, add_apply, smul_apply, one_apply_eq_self, inner_add_left, inner_smul_left,
+      Complex.add_re, h2, Complex.conj_ofReal, Complex.re_ofReal_mul, hvv]
   -- bound: |r · re ⟪S v, v⟫| ≤ ½‖v‖², hence `0 ≤ re ⟪T v, v⟫ ≤ ‖v‖²`
   have hTb : ∀ v : H, 0 ≤ Complex.re ⟪T v, v⟫_ℂ ∧ Complex.re ⟪T v, v⟫_ℂ ≤ ‖v‖ ^ 2 := fun v => by
     have hb : |r * Complex.re ⟪S v, v⟫_ℂ| ≤ 2⁻¹ * ‖v‖ ^ 2 := by
@@ -199,41 +195,36 @@ theorem scalar_of_isSelfAdjoint_of_isPure
         _ ≤ 2⁻¹ * ‖v‖ ^ 2 := mul_le_mul_of_nonneg_right hrS (sq_nonneg ‖v‖)
     obtain ⟨hlo, hhi⟩ := abs_le.mp hb
     rw [hTexp v]
-    exact ⟨by linarith only [hlo], by linarith only [hhi]⟩
-  -- `T` and `1 - T` are positive
-  have hTpos : T.IsPositive :=
-    ContinuousLinearMap.isPositive_def.mpr ⟨hTsa.isSymmetric, fun v => (hTb v).1⟩
+    exact ⟨neg_le_iff_add_nonneg.mp hlo, le_trans (add_le_add_left hhi _)
+      (show (2 : ℝ)⁻¹ * ‖v‖ ^ 2 + 2⁻¹ * ‖v‖ ^ 2 ≤ ‖v‖ ^ 2 from le_of_eq (by ring))⟩
+  -- `1 - T` is positive (and so is `T`, inlined below)
   have hTle : (1 - T).IsPositive := by
     refine ContinuousLinearMap.isPositive_def.mpr ⟨(h1SA.sub hTsa).isSymmetric, fun v => ?_⟩
-    rw [ContinuousLinearMap.reApplyInnerSelf_apply,
-      show ((1 : H →L[ℂ] H) - T) v = v - T v from by rw [sub_apply, one_apply_eq_self],
+    rw [ContinuousLinearMap.reApplyInnerSelf_apply, sub_apply, one_apply_eq_self,
       inner_sub_left, map_sub, sub_nonneg]
     exact (hTb v).2.trans (hvv v).ge
   -- the coefficient functional is a dominated positive functional
   have hTcomm : ∀ a : A, π a * T = T * π a := fun a => by
-    rw [hT_def, mul_add, add_mul, mul_smul_comm, smul_mul_assoc, hScomm a,
-      mul_smul_comm, smul_mul_assoc, mul_one, one_mul]
-  have hψpos : ∀ a : A, 0 ≤ coeffFunctional π Ω T (star a * a) := fun a => by
-    rw [coeffFunctional_star_mul hTcomm a]; exact isPositive_inner_nonneg hTpos _
-  have hψdom : ∀ a : A, coeffFunctional π Ω T (star a * a) ≤ ω (star a * a) := fun a => by
-    have hpd := isPositive_inner_nonneg hTle (π a Ω)
-    rw [show ((1 : H →L[ℂ] H) - T) (π a Ω) = π a Ω - T (π a Ω) from by
-      rw [sub_apply, one_apply_eq_self], inner_sub_right, sub_nonneg] at hpd
-    rwa [coeffFunctional_star_mul hTcomm a, hrep (star a * a), map_mul, mul_apply_eq_comp,
-      show π (star a) = ContinuousLinearMap.adjoint (π a) from by
-        rw [← ContinuousLinearMap.star_eq_adjoint, map_star],
-      ContinuousLinearMap.adjoint_inner_right]
+    simp only [hT_def, mul_add, add_mul, mul_smul_comm, smul_mul_assoc, mul_one, one_mul,
+      hScomm a]
   -- purity forces `T` to be a scalar
-  obtain ⟨t, ht⟩ := hpure (coeffFunctional π Ω T) hψpos hψdom
-  have hTscalar : T = t • 1 :=
-    eq_smul_one_of_commute_of_cyclic hcyc hTcomm fun a => by rw [← hrep a]; exact ht a
-  -- deduce `S` is a scalar
+  obtain ⟨t, ht⟩ := hpure (coeffFunctional π Ω T)
+    (fun a => by
+      rw [coeffFunctional_star_mul hTcomm a]
+      exact isPositive_inner_nonneg
+        (ContinuousLinearMap.isPositive_def.mpr ⟨hTsa.isSymmetric, fun v => (hTb v).1⟩) _)
+    (fun a => by
+      have hpd := isPositive_inner_nonneg hTle (π a Ω)
+      rw [sub_apply, one_apply_eq_self, inner_sub_right, sub_nonneg] at hpd
+      rwa [coeffFunctional_star_mul hTcomm a, hrep (star a * a), map_mul, mul_apply_eq_comp,
+        show π (star a) = ContinuousLinearMap.adjoint (π a) from by
+          rw [← ContinuousLinearMap.star_eq_adjoint, map_star],
+        ContinuousLinearMap.adjoint_inner_right])
+  -- Schur's lemma makes `T`, hence `S`, a scalar
   refine ⟨(r : ℂ)⁻¹ * (t - 2⁻¹), ?_⟩
-  have hSeq : (r : ℂ) • S = (t - 2⁻¹) • (1 : H →L[ℂ] H) := by
-    rw [show (r : ℂ) • S = T - (2⁻¹ : ℂ) • 1 from by
-      rw [hT_def]; exact (add_sub_cancel_right _ _).symm, hTscalar, sub_smul]
-  rw [← smul_smul, ← hSeq, smul_smul,
-    inv_mul_cancel₀ (Complex.ofReal_ne_zero.mpr hrpos.ne'), one_smul]
+  rw [mul_smul, sub_smul, ← eq_sub_of_add_eq (hT_def.symm.trans
+      (eq_smul_one_of_commute_of_cyclic hcyc hTcomm fun a => by rw [← hrep a]; exact ht a)),
+    inv_smul_smul₀ (Complex.ofReal_ne_zero.mpr hrpos.ne')]
 
 /-- **Pure ⟹ irreducible.** If a state `ω` is pure, then any cyclic representation
 reproducing `ω` (in particular its GNS representation) is irreducible: the only
@@ -248,27 +239,26 @@ theorem isIrreducible_of_isPure
   -- the commutant is `*`-closed: `star T` also commutes
   have hstarcomm : ∀ a : A, π a * star T = star T * π a := fun a => by
     simpa only [star_mul, ← map_star, star_star] using (congrArg star (hTcomm (star a))).symm
-  -- self-adjoint real and imaginary parts
-  have hPSA : IsSelfAdjoint (T + star T) := .add_star_self T
-  have hPcomm : ∀ a : A, π a * (T + star T) = (T + star T) * π a := fun a => by
-    rw [mul_add, add_mul, hTcomm a, hstarcomm a]
+  -- self-adjoint real and imaginary parts; the commutation relations are `Commute` algebra
+  have hPcomm : ∀ a : A, π a * (T + star T) = (T + star T) * π a := fun a =>
+    Commute.add_right (hTcomm a) (hstarcomm a)
   have hQSA : IsSelfAdjoint (Complex.I • (star T - T)) := by
     change star (Complex.I • (star T - T)) = Complex.I • (star T - T)
     rw [star_smul, star_sub, star_star, RCLike.star_def, Complex.conj_I,
       neg_smul, ← smul_neg, neg_sub]
   have hQcomm : ∀ a : A,
-      π a * (Complex.I • (star T - T)) = (Complex.I • (star T - T)) * π a := fun a => by
-    rw [mul_smul_comm, smul_mul_assoc, mul_sub, sub_mul, hstarcomm a, hTcomm a]
+      π a * (Complex.I • (star T - T)) = (Complex.I • (star T - T)) * π a := fun a =>
+    Commute.smul_right (Commute.sub_right (hstarcomm a) (hTcomm a)) _
   -- each part is a scalar
-  obtain ⟨p, hp⟩ := scalar_of_isSelfAdjoint_of_isPure hcyc hrep hpure hPSA hPcomm
+  obtain ⟨p, hp⟩ := scalar_of_isSelfAdjoint_of_isPure hcyc hrep hpure (.add_star_self T) hPcomm
   obtain ⟨q, hq⟩ := scalar_of_isSelfAdjoint_of_isPure hcyc hrep hpure hQSA hQcomm
-  -- reconstruct `T` as a scalar
+  -- reconstruct `T` as a scalar: `T + star T` and `T - star T` are both scalars
+  have hq' : T - star T = (Complex.I * q) • (1 : H →L[ℂ] H) := by
+    rw [← smul_smul, ← hq, smul_smul, Complex.I_mul_I, neg_one_smul, neg_sub]
   refine ⟨2⁻¹ * (p + Complex.I * q), ?_⟩
-  have hval : (2 : ℂ) • T = (p + Complex.I * q) • (1 : H →L[ℂ] H) := by
-    rw [add_smul, ← hp, ← smul_smul, ← hq, smul_smul, Complex.I_mul_I, neg_one_smul, two_smul,
-      neg_sub, add_add_sub_cancel]
-  calc T = (2⁻¹ : ℂ) • ((2 : ℂ) • T) := by rw [smul_smul, inv_mul_cancel₀ two_ne_zero, one_smul]
-    _ = (2⁻¹ * (p + Complex.I * q)) • 1 := by rw [hval, smul_smul]
+  have h2T : (2 : ℂ) • T = (p + Complex.I * q) • (1 : H →L[ℂ] H) := by
+    rw [two_smul, add_smul, ← hp, ← hq', add_add_sub_cancel]
+  rw [mul_smul, ← h2T, inv_smul_smul₀ two_ne_zero]
 
 /-- The **von Neumann algebra generated by a representation** `π`: the bicommutant
 (double `Set.centralizer`) of the image `π(A)`, i.e. `π(A)''`. -/
