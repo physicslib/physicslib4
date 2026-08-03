@@ -162,8 +162,8 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
     \leanok
-    \uses{def:local-von-neumann-in-curved-spacetime, def:local-von-neumann-algebra}
-    As in the Minkowski case, $R(\mathbf{B}')$ is registered as a genuine \texttt{VonNeumannAlgebra}: the local observable operators $\pi(\mathfrak{U}(\mathbf{B}'))$ are self-adjoint (the isotony embedding and $\pi$ are $*$-homomorphisms), so their bicommutant is a von Neumann algebra whose underlying set is the bicommutant of \ref{def:local-von-neumann-in-curved-spacetime}. The construction is the same general bicommutant-of-a-self-adjoint-set lemma.
+    \uses{def:local-von-neumann-in-curved-spacetime, def:local-von-neumann-algebra, lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    As in the Minkowski case, $R(\mathbf{B}')$ is registered as a genuine \texttt{VonNeumannAlgebra}: it is the bundled algebra supplied by the same general bicommutant-of-a-self-adjoint-set lemma (\ref{lmm:bicommutant-of-selfadjoint-is-von-neumann}) for the self-adjoint set $\pi(\mathfrak{U}(\mathbf{B}'))$ of local observable operators (self-adjoint because the isotony embedding and $\pi$ are $*$-homomorphisms). Its underlying set is the bicommutant of \ref{def:local-von-neumann-in-curved-spacetime}.
 \end{definition}
 
 \begin{theorem}[Microcausality at the von Neumann Level (Curved Spacetime)]
@@ -312,9 +312,9 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
 \begin{definition}[Relative Commutant of a Nested Pair (Curved Spacetime)]
     \label{def:relative-commutant-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant}
-    \uses{def:local-von-neumann-algebra-in-curved-spacetime}
+    \uses{def:local-von-neumann-algebra-in-curved-spacetime, lmm:von-neumann-inter-general}
     \leanok
-    For a $*$-representation $\pi$ of a containing basis algebra $\mathfrak{U}(\mathbf{B})$ and two basis subregions $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$, the \emph{relative commutant} of the pair is the von Neumann algebra $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, built as the meet of the $*$-subalgebras of the commutant of $R(\mathbf{B}_1)$ and of $R(\mathbf{B}_2)$; its underlying set is $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. As Mathlib's \texttt{VonNeumannAlgebra} carries no lattice meet, it is constructed by hand from the self-adjoint, bicommutant-closed intersection. This is the curved counterpart of the Minkowski relative commutant (\ref{def:relative-commutant}); there is no quasilocal algebra, so it lives inside the representation of a fixed containing region.
+    For a $*$-representation $\pi$ of a containing basis algebra $\mathfrak{U}(\mathbf{B})$ and two basis subregions $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$, the \emph{relative commutant} of the pair is the von Neumann algebra $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, built as the meet of the $*$-subalgebras of the commutant of $R(\mathbf{B}_1)$ and of $R(\mathbf{B}_2)$; its underlying set is $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. As Mathlib's \texttt{VonNeumannAlgebra} carries no lattice meet, it is constructed by hand from that intersection; that such an intersection is again a von Neumann algebra is \ref{lmm:von-neumann-inter-general}, the general two-algebra form, since $R(\mathbf{B}_1)'$ and $R(\mathbf{B}_2)$ are not in general a commutant pair. This is the curved counterpart of the Minkowski relative commutant (\ref{def:relative-commutant}); there is no quasilocal algebra, so it lives inside the representation of a fixed containing region.
 \end{definition}
 
 \begin{theorem}[Relative Commutant Lies in the Larger Algebra (Curved Spacetime)]

@@ -54,9 +54,9 @@ Before introducing the next axiom, we must introduce the definition:
 
     If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the quasilocal algebra $\mathfrak{U}$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ it follows that
     \begin{align}
-        i(a_1) i(a_2) - i(a_2) i(a_1) = 0
+        \iota_{\mathbf{B}_1}(a_1)\, \iota_{\mathbf{B}_2}(a_2) - \iota_{\mathbf{B}_2}(a_2)\, \iota_{\mathbf{B}_1}(a_1) = 0
     \end{align}
-    in the quasilocal algebra $\mathfrak{U}$.
+    in the quasilocal algebra $\mathfrak{U}$. Here $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}$ is the \emph{canonical embedding} of a local algebra into the quasilocal algebra of \ref{def:quasilocal-algebra} --- the map into the completion of the union of the local algebras. It is \emph{not} the unital $*$-monomorphism $i : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2)$ of Axiom 2 (Isotony), which goes from one local algebra to another and not into $\mathfrak{U}$.
 \end{definition}
 
 The next axiom makes use of the following new definition:
@@ -158,13 +158,25 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     Let $\pi$ be a $*$-representation of the quasilocal algebra on $H$. The \emph{local observable operators} of a region $\mathbf{B}$ are the image $\pi(\mathfrak{U}(\mathbf{B})) = \{\pi(\iota_{\mathbf{B}} a) : a \in \mathfrak{U}(\mathbf{B})\}$. The \emph{local von Neumann algebra} $R(\mathbf{B})$ is the bicommutant $\pi(\mathfrak{U}(\mathbf{B}))''$.
 \end{definition}
 
+\begin{lemma}[The Bicommutant of a Self-Adjoint Set is a von Neumann Algebra]
+    \label{lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    \lean{Physicslib4.GNS.vonNeumannOfSelfAdjoint}
+    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \leanok
+    Let $S$ be a self-adjoint set of bounded operators on a Hilbert space $H$, that is, $x \in S$ implies $x^* \in S$. Then the bicommutant $S''$ is a von Neumann algebra: it is a $*$-subalgebra of $\mathcal{B}(H)$, and it is bicommutant-closed, $S'''' = S''$. This is the general construction that bundles every local algebra below, applied to the self-adjoint set of local observable operators.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The commutant of a self-adjoint set is $*$-closed, which is Mathlib's \texttt{Set.star\_mem\_centralizer}: if $T \in S'$ and $x \in S$, then $x^* \in S$, so $T x^* = x^* T$, and taking adjoints gives $x T^* = T^* x$; hence $T^* \in S'$. So $S'$ is itself $*$-closed, and the centralizer of any set is a subalgebra of $\mathcal{B}(H)$ (Mathlib's \texttt{Subalgebra.centralizer}); combining the two makes $S'' = (S')'$ a $*$-subalgebra. (These two are exactly what $\mathtt{Physicslib4.GNS.starSubalgebraCentralizer}$ is assembled from. Mathlib's \texttt{StarSubalgebra.centralizer} is \emph{not} the right citation: its carrier is the centralizer of the star-closure $s \cup s^*$, not of $s$.) For bicommutant-closedness, the triple-commutant collapse $S''' = S'$ (Mathlib's \texttt{Set.centralizer\_centralizer\_centralizer}) gives, on taking one further commutant, $S'''' = (S''')' = (S')' = S''$.
+\end{proof}
+
 \begin{definition}[$R(\mathbf{B})$ as a von Neumann Algebra]
     \label{def:local-von-neumann-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra, Physicslib4.GNS.vonNeumannOfSelfAdjoint}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
     \leanok
-    \uses{def:local-von-neumann}
-    The local algebra $R(\mathbf{B})$ is registered as a genuine \texttt{VonNeumannAlgebra} (Mathlib's bundled structure), not merely a set of operators. The general fact is that the bicommutant $S''$ of any self-adjoint set $S$ of bounded operators is a von Neumann algebra: $S'$ is a $*$-subalgebra (the centralizer of a self-adjoint set is $*$-closed), and $S'' = S''''$ since the triple commutant collapses. The local observable operators $\pi(\mathfrak{U}(\mathbf{B}))$ are self-adjoint ($\pi$ and $\iota$ are $*$-homomorphisms), so $R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$ is a von Neumann algebra whose underlying set is the bicommutant of \ref{def:local-von-neumann}.
+    \uses{def:local-von-neumann, lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    The local algebra $R(\mathbf{B})$ is registered as a genuine \texttt{VonNeumannAlgebra} (Mathlib's bundled structure), not merely a set of operators: it is the bundled algebra supplied by \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} for the self-adjoint set $S = \pi(\mathfrak{U}(\mathbf{B}))$ of local observable operators (self-adjoint because $\pi$ and $\iota_{\mathbf{B}}$ are $*$-homomorphisms). Its underlying set is the bicommutant $\pi(\mathfrak{U}(\mathbf{B}))''$ of \ref{def:local-von-neumann}.
 \end{definition}
 
 \begin{theorem}[Microcausality at the von Neumann Level]
@@ -311,9 +323,9 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 \begin{definition}[Relative Commutant of a Nested Pair]
     \label{def:relative-commutant}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant}
-    \uses{def:local-von-neumann-algebra}
+    \uses{def:local-von-neumann-algebra, lmm:von-neumann-inter-general}
     \leanok
-    For a representation $\pi$ of the quasilocal algebra and two basis regions $\mathbf{B}_1, \mathbf{B}_2$, the \emph{relative commutant} of the pair is the von Neumann algebra $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, the intersection of the commutant of the local von Neumann algebra $R(\mathbf{B}_1)$ with the local von Neumann algebra $R(\mathbf{B}_2)$. It is registered as a genuine \texttt{VonNeumannAlgebra}: the intersection of two von Neumann algebras (here $R(\mathbf{B}_1)'$ and $R(\mathbf{B}_2)$) is again a von Neumann algebra, being self-adjoint and bicommutant-closed --- the double commutant of an intersection of bicommutant-closed sets is contained in each factor, hence in the intersection. Since \texttt{VonNeumannAlgebra} carries no lattice meet $\sqcap$, this object is not an abstract infimum but is constructed by hand from the self-adjoint, bicommutant-closed set $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, which is then its underlying set. This is the basic object of the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$.
+    For a representation $\pi$ of the quasilocal algebra and two basis regions $\mathbf{B}_1, \mathbf{B}_2$, the \emph{relative commutant} of the pair is the von Neumann algebra $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, the intersection of the commutant of the local von Neumann algebra $R(\mathbf{B}_1)$ with the local von Neumann algebra $R(\mathbf{B}_2)$. Since \texttt{VonNeumannAlgebra} carries no lattice meet $\sqcap$, this object is not an abstract infimum but is constructed by hand from the set $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, which is then its underlying set; that the intersection of two von Neumann algebras is again a von Neumann algebra is the content of \ref{lmm:von-neumann-inter-general}, applied here to the pair $R(\mathbf{B}_1)'$, $R(\mathbf{B}_2)$ (which for $\mathbf{B}_1 \neq \mathbf{B}_2$ is \emph{not} a commutant pair, so the commutant-pair form \ref{lmm:von-neumann-inter-is-von-neumann} does not suffice here). Accordingly the Lean construction rewrites the intersection as the single commutant $(R(\mathbf{B}_1)'' \cup R(\mathbf{B}_2)')'$ via \texttt{Set.centralizer\_union} and closes it under \texttt{Set.centralizer\_centralizer\_centralizer}. This is the basic object of the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$.
 \end{definition}
 
 \begin{theorem}[Antitonicity of the Commutant]
@@ -543,14 +555,14 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
     \label{thrm:gns-generates-all-bundled}
     \lean{Physicslib4.GNS.coe_gnsVonNeumannAlgebra_eq_univ_of_isIrreducible, Physicslib4.GNS.gnsVonNeumannAlgebra_isGreatest_of_isIrreducible}
     \leanfile{Physicslib4/GNS/Irreducibility.lean}
-    \uses{def:local-von-neumann-algebra}
+    \uses{def:local-von-neumann-algebra, lmm:bicommutant-of-selfadjoint-is-von-neumann}
     \leanok
-    The von Neumann algebra $\pi(A)''$ generated by a representation is bundled as a first-class \texttt{VonNeumannAlgebra} (\texttt{gnsVonNeumannAlgebra}), the image $\pi(A)$ being self-adjoint. For an irreducible representation, this bundled algebra is all of $\mathcal{B}(H)$: its underlying set is everything, and equivalently it is the \emph{greatest} von Neumann algebra on $H$ (every $S$ satisfies $S \le \pi(A)''$). Mathlib's \texttt{VonNeumannAlgebra} carries no lattice $\top$, so the literal $\pi(A)'' = \top$ is phrased at the level of the underlying set together with the greatest-element statement under the existing $\le$.
+    The von Neumann algebra $\pi(A)''$ generated by a representation is bundled as a first-class \texttt{VonNeumannAlgebra} (\texttt{gnsVonNeumannAlgebra}); the bundling is \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} applied to the self-adjoint image $\pi(A)$. For an irreducible representation, this bundled algebra is all of $\mathcal{B}(H)$: its underlying set is everything, and equivalently it is the \emph{greatest} von Neumann algebra on $H$ (every $S$ satisfies $S \le \pi(A)''$). Mathlib's \texttt{VonNeumannAlgebra} carries no lattice $\top$, so the literal $\pi(A)'' = \top$ is phrased at the level of the underlying set together with the greatest-element statement under the existing $\le$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thrm:irreducible-generates-all}
-    This is the bundled counterpart of \ref{thrm:irreducible-generates-all}.
+    \uses{thrm:irreducible-generates-all, lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    The bundling is \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} for the self-adjoint set $\pi(A)$, and the identification of the underlying set is the bundled counterpart of \ref{thrm:irreducible-generates-all}.
 \end{proof}
 
 \begin{theorem}[The GNS Representation of a Pure State is a Factor]
@@ -884,14 +896,14 @@ The comparison of representations is the entry point to superselection theory. F
     \label{thrm:commutant-von-neumann}
     \lean{Physicslib4.GNS.commutantVonNeumann, Physicslib4.GNS.mem_commutantVonNeumann_iff_intertwines, Physicslib4.GNS.isIrreducible_iff_commutantVonNeumann_eq_scalars}
     \leanfile{Physicslib4/GNS/Superselection.lean}
-    \uses{def:irreducible-representation}
+    \uses{def:irreducible-representation, lmm:bicommutant-of-selfadjoint-is-von-neumann}
     \leanok
-    The commutant $\pi(A)'$ of a representation is packaged as a von Neumann algebra --- the algebra of self-intertwiners, i.e. the intertwiner/gauge algebra of $\pi$. Its underlying set is the centralizer of $\pi(A)$ (self-adjoint, and a commutant is always a von Neumann algebra since $S''' = S'$), an operator lies in it exactly when it is a self-intertwiner of $\pi$, and $\pi$ is irreducible if and only if this algebra is trivial ($\pi(A)' = \mathbb{C}\cdot 1$) --- the von Neumann form of Schur's lemma.
+    The commutant $\pi(A)'$ of a representation is packaged as a von Neumann algebra --- the algebra of self-intertwiners, i.e. the intertwiner/gauge algebra of $\pi$. Its underlying set is the centralizer of $\pi(A)$, which is a von Neumann algebra by \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} applied to the self-adjoint set $\pi(A)$; an operator lies in it exactly when it is a self-intertwiner of $\pi$, and $\pi$ is irreducible if and only if this algebra is trivial ($\pi(A)' = \mathbb{C}\cdot 1$) --- the von Neumann form of Schur's lemma.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:irreducible-representation, lmm:endomorphism-scalar}
-    The underlying set is a von Neumann algebra because $\pi(A)$ is self-adjoint and a commutant is always a von Neumann algebra since $S''' = S'$; membership unfolds to being a self-intertwiner of $\pi$, and the triviality criterion is \ref{lmm:endomorphism-scalar}.
+    \uses{def:irreducible-representation, lmm:endomorphism-scalar, lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    The underlying set is a von Neumann algebra by \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann}, since $\pi(A)$ is self-adjoint ($\pi$ being a $*$-homomorphism); membership unfolds to being a self-intertwiner of $\pi$, and the triviality criterion is \ref{lmm:endomorphism-scalar}.
 \end{proof}
 
 \begin{theorem}[Double-Commutant Duality]
@@ -945,12 +957,24 @@ The comparison of representations is the entry point to superselection theory. F
     \lean{Physicslib4.GNS.bicommutant_inter_commutant_eq}
     \uses{def:von-neumann-center}
     \leanok
-    The underlying set $R \cap R'$ of the center is again a von Neumann algebra: it equals its own bicommutant, $(R \cap R')'' = R \cap R'$. The inclusion $R \cap R' \subseteq (R \cap R')''$ is the general fact $S \subseteq S''$. For the reverse, $R \cap R' \subseteq R$ and $R \cap R' \subseteq R'$; applying antitonicity of the commutant twice makes the bicommutant monotone, so $(R \cap R')'' \subseteq R'' = R$ and $(R \cap R')'' \subseteq (R')'' = R'$ (using the double-commutant identities $R'' = R$ and $R''' = R'$), whence $(R \cap R')'' \subseteq R \cap R'$.
+    Let $R$ be a bundled von Neumann algebra on a Hilbert space $H$. Then $R \cap R'$ is bicommutant-closed, $(R \cap R')'' = R \cap R'$, so the center $Z(R) = R \cap R'$ of \ref{def:von-neumann-center} is again a von Neumann algebra.
+
+    This is stated for the \emph{commutant pair} $M = R$, $N = R'$ only, because that is exactly what the Lean declaration proves: \texttt{bicommutant\_inter\_commutant\_eq} takes a single \texttt{VonNeumannAlgebra R} and forms $R \cap R^{\prime}$. The general two-algebra statement is \ref{lmm:von-neumann-inter-general}, which is not yet formalized.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:von-neumann-center}
-    Combine $S \subseteq S''$ with the double application of commutant antitonicity to $R \cap R' \subseteq R$ and $R \cap R' \subseteq R'$, together with the double-commutant identities $R'' = R$ and $R''' = R'$.
+    \uses{def:von-neumann-center, lmm:von-neumann-inter-general}
+    The instance $M = R$, $N = R'$ of \ref{lmm:von-neumann-inter-general}.
+\end{proof}
+
+\begin{lemma}[The intersection of two von Neumann algebras is a von Neumann algebra]
+    \label{lmm:von-neumann-inter-general}
+    Let $M$ and $N$ be bundled von Neumann algebras on a Hilbert space $H$. Then their underlying sets intersect in a bicommutant-closed set: $(M \cap N)'' = M \cap N$, so $M \cap N$ is again a von Neumann algebra. Here $M$ and $N$ are arbitrary and need \emph{not} form a commutant pair.
+
+    This general form is what \ref{def:relative-commutant} needs, the relative commutant $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$ being the instance $M = R(\mathbf{B}_1)'$, $N = R(\mathbf{B}_2)$. It carries no \texttt{lean} reference because the repository currently proves only the commutant-pair instance \ref{lmm:von-neumann-inter-is-von-neumann}; generalising that declaration is an outstanding obligation, and the proof below is already stated in the general form it would take.
+\end{lemma}
+\begin{proof}
+    Both $M$ and $N$ are bicommutant-closed, $M'' = M$ and $N'' = N$, so by the centralizer-of-a-union identity (Mathlib's \texttt{Set.centralizer\_union}) $M \cap N = M'' \cap N'' = (M' \cup N')'$. Thus $M \cap N$ is itself a commutant, and every commutant is bicommutant-closed by the triple-commutant collapse $S''' = S'$ (Mathlib's \texttt{Set.centralizer\_centralizer\_centralizer}): $(M \cap N)'' = (M' \cup N')''' = (M' \cup N')' = M \cap N$.
 \end{proof}
 
 \begin{theorem}[The center of a von Neumann algebra is abelian]

@@ -91,8 +91,8 @@
     \lean{Physicslib4.Spacetime.IsFuturePointing, Physicslib4.Spacetime.IsPastPointing}
     \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
     \leanok
-    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
-    For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors, def:time-orientable}
+    Let $t$ be a time orientation on $M$ (\ref{def:time-orientable}). For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
 \end{definition}
 
 \begin{lemma}[Orientation of Pointing Vectors]
@@ -243,8 +243,32 @@
     \leanfile{Physicslib4/Spacetime/Curves.lean}
     \leanok
     \uses{def:spacetime, def:paths, def:curves, def:timelike-and-causal-smooth-curves}
-    A point $p$ in a spacetime $M$ is the \textit{endpoint} of a path $\mu$ or its associated curve if it is a member of the image $\mu(\partial\Sigma)$ of the boundary $\partial\Sigma$ of the parameter space under $\mu$. If $\mu$ is a smooth path and its associated smooth curve is timelike and future-oriented, then an endpoint $p$ is a \textit{past endpoint} if it is the image under $\mu$ of the lesser of the two boundary components of $\partial\Sigma$. It is a \textit{future endpoint} if it is the image under $\mu$ of the greater of the two boundary components of $\partial\Sigma$.
+    A point $p$ in a spacetime $M$ is the \textit{endpoint} of a path $\mu : \Sigma \to M$ or its associated curve if it is a member of the image $\mu(\partial\Sigma)$ of the boundary $\partial\Sigma$ of the parameter space under $\mu$, i.e.\ if $\mu(s) = p$ for some $s \in \partial\Sigma$.
+
+    For an arbitrary path $\mu$, the past and future endpoints are singled out by extremality of the \emph{parameter}, not by counting boundary components, and no causal or smoothness input enters: $p$ is a \textit{past endpoint} of $\mu$ if there is an $s \in \Sigma$ with $\mu(s) = p$ that is \emph{minimal} in the parameter space, i.e.\ $s \le s'$ for every $s' \in \Sigma$; and $p$ is a \textit{future endpoint} of $\mu$ if there is an $s \in \Sigma$ with $\mu(s) = p$ that is \emph{maximal} in the parameter space, i.e.\ $s' \le s$ for every $s' \in \Sigma$.
+
+    Quantifying over $\Sigma$ rather than over $\partial\Sigma$ is what makes this well-defined: \ref{def:paths} allows $\Sigma$ to be any closed connected subset of $\mathbb{R}$ with more than one point, so $\Sigma$ need not have two boundary components (for instance $\Sigma = [0,\infty)$ or $\Sigma = \mathbb{R}$), and ``the lesser (respectively greater) of the two boundary components'' would then denote nothing. The relation between the two notions is recorded in \ref{lmm:extremal-parameter-mem-frontier}, and the consequence for the parameter space in \ref{lmm:endpoint-parameter-space-eq-Icc}.
 \end{definition}
+
+\begin{lemma}[An extremal parameter lies in the frontier]
+    \label{lmm:extremal-parameter-mem-frontier}
+    \uses{def:endpoints, def:paths}
+    Let $\mu : \Sigma \to M$ be a path, so that $\Sigma$ is a closed connected subset of $\mathbb{R}$ with more than one point. If $s \in \Sigma$ is minimal or maximal in $\Sigma$, then $s \in \partial\Sigma$. Consequently a past or future endpoint of $\mu$ is in particular an endpoint of $\mu$.
+\end{lemma}
+\begin{proof}
+    \uses{def:endpoints, def:paths}
+    Take $s \in \Sigma$ minimal. Since $s \in \Sigma$, it suffices by \texttt{mem\_frontier\_iff\_notMem\_interior} to show $s \notin \mathrm{int}\,\Sigma$. If it were, some ball $B(s,\varepsilon) = (s-\varepsilon, s+\varepsilon)$ (\texttt{Real.ball\_eq\_Ioo}) would lie in $\Sigma$, and then $s - \varepsilon/2 \in \Sigma$ contradicts minimality. The maximal case is symmetric. The consequence is immediate: a witness $s$ for a past (resp.\ future) endpoint is minimal (resp.\ maximal) in $\Sigma$, hence lies in $\partial\Sigma$, so $\mu(s) = p$ exhibits $p$ as an endpoint.
+\end{proof}
+
+\begin{lemma}[Two endpoints force a compact parameter interval]
+    \label{lmm:endpoint-parameter-space-eq-Icc}
+    \uses{def:paths, def:endpoints}
+    Let $\mu : \Sigma \to M$ be a path. If $\mu$ has both a past endpoint and a future endpoint, then $\Sigma = [a,b]$ for some $a < b$.
+\end{lemma}
+\begin{proof}
+    \uses{def:paths, def:endpoints}
+    The witness for the past endpoint is a minimum $a$ of $\Sigma$ and the witness for the future endpoint is a maximum $b$, so $\Sigma$ is bounded below and above, with $\inf\Sigma = a$ and $\sup\Sigma = b$. Being also connected, nonempty and closed (\ref{def:paths}), $\Sigma = [a,b]$ by \texttt{eq\_Icc\_csInf\_csSup\_of\_connected\_bdd\_closed}. Finally $a < b$, since $a \le b$ and $a = b$ would make $\Sigma$ a singleton, contradicting that $\Sigma$ has more than one point.
+\end{proof}
 
 \begin{definition}[Trip]
     \label{def:trip}
@@ -486,9 +510,24 @@
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalClosure}
     \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
     \leanok
-    \uses{def:spacelike-complement, lmm:spacelike-complement-order}
-    The double spacelike complement $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ is a \emph{closure operator} on the regions of a Lorentzian spacetime: it is monotone, extensive ($\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$), and idempotent ($\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$). Its three defining properties are exactly the order structure of the spacelike complement.
+    \uses{def:spacelike-complement}
+    The \emph{causal closure} of a region $\mathbf{B}$ of a Lorentzian spacetime is its double spacelike complement $\mathbf{B}^{\perp\perp}$. This defines the operator $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ on regions; that it is a closure operator is \ref{lmm:causal-closure-is-closure-operator}.
 \end{definition}
+
+\begin{lemma}[The Causal Closure is a Closure Operator]
+    \label{lmm:causal-closure-is-closure-operator}
+    \uses{def:causal-closure, lmm:spacelike-complement-order}
+    The causal closure $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ is a \emph{closure operator} on the regions of a Lorentzian spacetime:
+    \begin{enumerate}
+        \item (monotone) if $\mathbf{B}_1 \subseteq \mathbf{B}_2$ then $\mathbf{B}_1^{\perp\perp} \subseteq \mathbf{B}_2^{\perp\perp}$;
+        \item (extensive) $\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$;
+        \item (idempotent) $\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:spacelike-complement-order}
+    All three are read off the order structure of the spacelike complement (\ref{lmm:spacelike-complement-order}). Monotonicity is antitonicity applied twice: $\mathbf{B}_1 \subseteq \mathbf{B}_2$ gives $\mathbf{B}_2^{\perp} \subseteq \mathbf{B}_1^{\perp}$, and applying antitonicity again gives $\mathbf{B}_1^{\perp\perp} \subseteq \mathbf{B}_2^{\perp\perp}$. Extensivity is the double-complement inclusion. For idempotence, the triple-complement collapse gives $\mathbf{B}^{\perp\perp\perp} = \mathbf{B}^{\perp}$, and taking the spacelike complement of both sides yields $\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$.
+\end{proof}
 
 \begin{definition}[Causally complete region]
     \label{def:causally-complete-region}
@@ -509,8 +548,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:causally-complete-region, def:causal-closure, lmm:spacelike-complement-order}
-    The lattice is obtained from the causal closure operator (\ref{def:causal-closure}) via its Galois insertion: the causally complete regions are exactly the fixed points of the closure operator, so meets are intersections and joins are the causal closures of unions. That the spacelike complement of any region is causally complete, and that complementation is an order-reversing involution on this lattice, are the antitonicity and the triple-complement identity of the spacelike complement (\ref{lmm:spacelike-complement-order}).
+    \uses{def:causally-complete-region, def:causal-closure, lmm:causal-closure-is-closure-operator, lmm:spacelike-complement-order}
+    The lattice is obtained from the causal closure operator (\ref{lmm:causal-closure-is-closure-operator}) via its Galois insertion: the causally complete regions are exactly the fixed points of the closure operator, so meets are intersections and joins are the causal closures of unions. That the spacelike complement of any region is causally complete, and that complementation is an order-reversing involution on this lattice, are the antitonicity and the triple-complement identity of the spacelike complement (\ref{lmm:spacelike-complement-order}).
 \end{proof}
 
 \begin{lemma}[De Morgan Laws for the Spacelike Complement]
@@ -642,23 +681,33 @@
 \begin{definition}[Causal-convex hull]
     \label{def:causal-convex-hull}
     \lean{Physicslib4.Spacetime.causalConvexHull, Physicslib4.Spacetime.subset_causalConvexHull, Physicslib4.Spacetime.isCausallyConvex_causalConvexHull}
-    \uses{def:causally-convex-region, lmm:causally-convex-closure-ops}
+    \uses{def:causally-convex-region}
     \leanok
     Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be an arbitrary region. The \emph{causal-convex hull} of $\mathbf{B}$ is the intersection of all causally convex regions containing $\mathbf{B}$:
     \begin{align}
         \mathrm{ccHull}(\mathbf{B}) \;=\; \bigcap_0 \{\, \mathbf{C} \mid \mathbf{B} \subseteq \mathbf{C} \text{ and } \mathbf{C} \text{ is causally convex} \,\}.
     \end{align}
-    It satisfies the two defining properties of a hull:
-    \begin{enumerate}
-        \item (extensivity) $\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$, since $\mathbf{B}$ is contained in every member of the intersected family;
-        \item $\mathrm{ccHull}(\mathbf{B})$ is itself causally convex, being an intersection of causally convex regions (\ref{lmm:causally-convex-closure-ops}); the family is nonempty because the whole space $M$ contains $\mathbf{B}$ and is causally convex.
-    \end{enumerate}
+    That this is a hull --- extensive, and causally convex --- is \ref{lmm:causal-convex-hull-extensive}.
 \end{definition}
+
+\begin{lemma}[The Causal-Convex Hull is Extensive and Causally Convex]
+    \label{lmm:causal-convex-hull-extensive}
+    \uses{def:causal-convex-hull, def:causally-convex-region, lmm:causally-convex-closure-ops}
+    Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be a region. Then the causal-convex hull satisfies the two defining properties of a hull:
+    \begin{enumerate}
+        \item (extensivity) $\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$;
+        \item (closedness) $\mathrm{ccHull}(\mathbf{B})$ is itself causally convex.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \uses{def:causal-convex-hull, lmm:causally-convex-closure-ops}
+    For (i), membership in the intersection $\bigcap_0$ unfolds to membership in every member of the family, and every member contains $\mathbf{B}$ by the defining condition of the family; so any $x \in \mathbf{B}$ lies in each member and hence in $\mathrm{ccHull}(\mathbf{B})$. For (ii), the intersected family consists of causally convex regions, and causal convexity is preserved under set-indexed intersections (\ref{lmm:causally-convex-closure-ops}); note the family is nonempty, since the whole space $M$ contains $\mathbf{B}$ and is causally convex by the same lemma.
+\end{proof}
 
 \begin{theorem}[The causal-convex hull is a closure operator]
     \label{thrm:causal-convex-hull-closure}
     \lean{Physicslib4.Spacetime.causalConvexHull_minimal, Physicslib4.Spacetime.causalConvexHull_mono, Physicslib4.Spacetime.causalConvexHull_eq_of_isCausallyConvex, Physicslib4.Spacetime.causalConvexHull_idem}
-    \uses{def:causal-convex-hull}
+    \uses{def:causal-convex-hull, lmm:causal-convex-hull-extensive}
     \leanok
     Let $M$ be a spacetime with time orientation $t$. The map $\mathbf{B} \mapsto \mathrm{ccHull}(\mathbf{B})$ satisfies the closure-operator laws:
     \begin{enumerate}
@@ -667,18 +716,18 @@
         \item (fixed points) if $\mathbf{C}$ is causally convex, then $\mathrm{ccHull}(\mathbf{C}) = \mathbf{C}$;
         \item (idempotence) $\mathrm{ccHull}(\mathrm{ccHull}(\mathbf{B})) = \mathrm{ccHull}(\mathbf{B})$.
     \end{enumerate}
-    Together with extensivity ($\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$, \ref{def:causal-convex-hull}), these make $\mathrm{ccHull}$ a closure operator whose closed sets are exactly the causally convex regions.
+    Together with extensivity ($\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$, \ref{lmm:causal-convex-hull-extensive}), these make $\mathrm{ccHull}$ a closure operator whose closed sets are exactly the causally convex regions.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:causal-convex-hull}
+    \uses{def:causal-convex-hull, lmm:causal-convex-hull-extensive}
     (i) If $\mathbf{B} \subseteq \mathbf{C}$ and $\mathbf{C}$ is causally convex, then $\mathbf{C}$ is a member of the intersected family, so $\mathrm{ccHull}(\mathbf{B}) \subseteq \mathbf{C}$ as an intersection is contained in each of its members.
 
-    (ii) If $\mathbf{B}_1 \subseteq \mathbf{B}_2$, then $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathrm{ccHull}(\mathbf{B}_2)$ by extensivity, and $\mathrm{ccHull}(\mathbf{B}_2)$ is causally convex (\ref{def:causal-convex-hull}); applying (i) with $\mathbf{C} = \mathrm{ccHull}(\mathbf{B}_2)$ gives $\mathrm{ccHull}(\mathbf{B}_1) \subseteq \mathrm{ccHull}(\mathbf{B}_2)$.
+    (ii) If $\mathbf{B}_1 \subseteq \mathbf{B}_2$, then $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathrm{ccHull}(\mathbf{B}_2)$ by extensivity, and $\mathrm{ccHull}(\mathbf{B}_2)$ is causally convex (\ref{lmm:causal-convex-hull-extensive}); applying (i) with $\mathbf{C} = \mathrm{ccHull}(\mathbf{B}_2)$ gives $\mathrm{ccHull}(\mathbf{B}_1) \subseteq \mathrm{ccHull}(\mathbf{B}_2)$.
 
     (iii) If $\mathbf{C}$ is causally convex, then $\mathbf{C} \subseteq \mathrm{ccHull}(\mathbf{C})$ by extensivity, while (i) with $\mathbf{B} = \mathbf{C}$ (and $\mathbf{C} \subseteq \mathbf{C}$) gives $\mathrm{ccHull}(\mathbf{C}) \subseteq \mathbf{C}$; hence $\mathrm{ccHull}(\mathbf{C}) = \mathbf{C}$.
 
-    (iv) Idempotence is (iii) applied to $\mathbf{C} = \mathrm{ccHull}(\mathbf{B})$, which is causally convex by \ref{def:causal-convex-hull}.
+    (iv) Idempotence is (iii) applied to $\mathbf{C} = \mathrm{ccHull}(\mathbf{B})$, which is causally convex by \ref{lmm:causal-convex-hull-extensive}.
 \end{proof}
 
 \begin{definition}[Alexandrov Topology]
