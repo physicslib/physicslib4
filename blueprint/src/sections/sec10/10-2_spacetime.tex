@@ -951,3 +951,694 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \leanok
     The abstract isometry group of the bridge is, by definition, the oriented identity component, so basis-set preservation transfers verbatim from the concrete statement.
 \end{proof}
+
+\subsection{Pullback metrics and cross-metric isometries}
+
+The single-metric isometry lemmas above compare a spacetime with itself. General covariance (\ref{def:general-covariance-in-curved-spacetime}) instead compares two \emph{different} metrics on one carrier, related by pulling back along a diffeomorphism, so the corresponding transport statements have to be redone cross-metric; the single-metric lemmas \ref{lmm:isometry-preserves-classification}--\ref{lmm:isometry-preserves-basis-sets} do not apply. This subsection supplies the geometry.
+
+\begin{definition}[Pullback of a Spacetime Metric]
+    \label{def:pullback-metric}
+    \uses{def:spacetime}
+    Let $(M,g)$ be a spacetime (\ref{def:spacetime}) and let $\psi : M \to M$ be a $C^\infty$ diffeomorphism. The \emph{pullback metric} $\psi^*g$ is the field of bilinear forms
+    \begin{align}
+        (\psi^*g)_x(v,w) := g_{\psi(x)}\big(d\psi_x v,\, d\psi_x w\big),
+    \end{align}
+    where $d\psi_x : TM|_x \to TM|_{\psi(x)}$ is the manifold differential of $\psi$ at $x$. The \emph{pullback spacetime} $\psi^*(M,g)$ is the datum obtained by keeping the carrier set, topology, Hausdorff and connectedness properties, charts, model with corners, smooth structure, and tangent-space finite-dimensionality of $(M,g)$ unchanged, and replacing the metric field by $\psi^*g$. This node is data only: that $\psi^*g$ satisfies the metric obligations of \ref{def:spacetime} is \ref{thrm:pullback-is-spacetime}.
+
+    The metric field of \ref{def:spacetime} is not a bare function of two vectors but a family of \emph{continuous} bilinear forms, $g_x : TM|_x \to_L TM|_x \to_L \mathbb{R}$. The displayed formula must therefore be realised as an inhabitant of that bundled type, not merely as a pointwise numerical prescription: $\psi^*g$ is defined by precomposing $g_{\psi(x)}$ with $d\psi_x$ in both slots,
+    \begin{align}
+        (\psi^*g)_x := \mathtt{ContinuousLinearMap.bilinearComp}\;\big(g_{\psi(x)}\big)\;\big(d\psi_x\big)\;\big(d\psi_x\big),
+    \end{align}
+    using that $d\psi_x$ is itself a continuous linear map. Continuity and bilinearity of $(\psi^*g)_x$ are then structural rather than facts to be proved, and $\mathtt{bilinearComp\_apply}$ recovers the displayed formula. Without this step there is nothing to put in the metric field of the bundled spacetime.
+\end{definition}
+
+\begin{lemma}[The Differential of a Diffeomorphism is a Linear Equivalence]
+    \label{lmm:mfderiv-diffeo-linear-equiv}
+    \uses{def:spacetime}
+    For a $C^\infty$ diffeomorphism $\psi$ of $M$ and any $x \in M$, the differential $d\psi_x : TM|_x \to TM|_{\psi(x)}$ is a continuous linear isomorphism.
+\end{lemma}
+\begin{proof}
+    This is Mathlib's \texttt{Diffeomorph.mfderivToContinuousLinearEquiv}, which packages the differential of a $C^n$ diffeomorphism ($n \neq 0$) at a point as a \texttt{ContinuousLinearEquiv} between the tangent spaces; \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} identifies its underlying map with $d\psi_x$.
+
+    Two implementation points. First, the statement deliberately claims only that $d\psi_x$ is an isomorphism, and does \emph{not} identify the inverse of that equivalence with $d(\psi^{-1})_{\psi(x)}$. Such an identification is not available definitionally: \texttt{Diffeomorph.mfderivToContinuousLinearEquiv} is built as $(\psi.\mathtt{isLocalDiffeomorph}\;x).\mathtt{mfderivToContinuousLinearEquiv}$, so its inverse function comes from \texttt{IsLocalDiffeomorphAt.mfderivToContinuousLinearEquiv} --- the differential of a \emph{local} inverse chosen by that construction, not of the global $\psi^{-1}$. Where the notation $(d\psi_x)^{-1}$ appears below it therefore means the \texttt{symm} of this equivalence, not \emph{a priori} $d(\psi^{-1})_{\psi(x)}$, and the purely algebraic consumers --- \ref{lmm:mfderiv-inverse-eq-symm}, \ref{lmm:pullback-metric-lorentzian}, \ref{lmm:pullback-time-orientation-timelike}, \ref{lmm:pullback-future-pointing-timelike} --- need nothing more, since they use only the two cancellation identities $\mathtt{symm\_apply\_apply}$ and $\mathtt{apply\_symm\_apply}$ of the equivalence, which hold for whatever the \texttt{symm} happens to be.
+
+    It must not be inferred from this that the identification is never needed. A second group of nodes reasons about $d(\psi^{-1})$ \emph{as such}, i.e.\ about $\mathtt{mfderiv}\;\psi.\mathtt{symm}$, because the orientation hypothesis they invoke is applied to the inverse diffeomorphism. What those nodes require is the chain-rule cancellation
+    \begin{align}
+        d\psi_x\big(d(\psi^{-1})_{\psi(x)}\,u\big) = u,
+    \end{align}
+    and \emph{Mathlib has no such lemma for a global} \texttt{Diffeomorph} (there is no \texttt{Diffeomorph} analogue of the $\mathtt{mfderiv}$/\texttt{symm} identities; searching turns up only \texttt{Diffeomorph.apply\_symm\_apply} at the level of points). It has to be proved by hand; that obligation is no longer left implicit here but is discharged by the separate nodes \ref{lmm:mfderiv-symm-cancel-left} and \ref{lmm:mfderiv-symm-cancel-right}. It is genuine work and is not supplied by the equivalence above.
+
+    Their direct consumers are exactly two: \ref{lmm:pullback-preserves-future-orientation}, which needs the cancellation to instantiate the $\psi^{-1}$ half of the two-sided orientation hypothesis, and \ref{lmm:cross-metric-isometry-symm}, which needs it to turn the isometry equation for $\psi$ into the isometry equation for $\psi^{-1}$. The nodes further downstream --- \ref{lmm:cross-metric-chronological-future-image}, \ref{lmm:cross-metric-chronological-past-image}, \ref{lmm:cross-metric-isometry-preserves-basis-sets} and \ref{lmm:pullback-alexandrov-homeomorphism} --- do reason about $\psi^{-1}$, but they reach the cancellation only \emph{through} those two, and so cite them rather than these nodes.
+
+    Second, \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} is \emph{not} tagged \texttt{@[simp]}, and its point argument $x$ is implicit while the diffeomorphism and the hypothesis $n \neq 0$ are explicit. It must therefore be rewritten by hand (typically as \texttt{$\leftarrow$ Diffeomorph.mfderivToContinuousLinearEquiv\_coe} with the $n \neq 0$ side goal discharged inline), rather than being picked up by \texttt{simp}.
+\end{proof}
+
+\begin{lemma}[Round-Trip Cancellation: $d\psi$ After $d(\psi^{-1})$]
+    \label{lmm:mfderiv-symm-cancel-left}
+    \uses{def:spacetime}
+    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $x \in M$. Then, pointwise,
+    \begin{align}
+        d\psi_x\big(d(\psi^{-1})_{\psi(x)}\,u\big) = u \qquad \text{for every } u \in TM|_{\psi(x)}.
+    \end{align}
+    The pointwise form displayed above is the \emph{primary} statement of this node, because that is the form in which every consumer applies it; the operator identity $d\psi_x \circ d(\psi^{-1})_{\psi(x)} = \mathrm{id}_{TM|_{\psi(x)}}$ follows from it by \texttt{ContinuousLinearMap.ext} and is not what is stated. Here $d(\psi^{-1})_{\psi(x)}$ means $\mathtt{mfderiv}\;I\;I\;\psi.\mathtt{symm}\;(\psi\,x)$: the differential of the \emph{global} inverse diffeomorphism, \emph{not} the \texttt{symm} of the equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv}.
+\end{lemma}
+\begin{proof}
+    Differentiate the composite $\psi \circ \psi^{-1}$ at the point $\psi(x)$, and apply the result to $u$.
+
+    The chain rule to cite is \texttt{mfderiv\_comp\_apply\_of\_eq}, \emph{not} \texttt{mfderiv\_comp} (nor its \texttt{\_apply} form). Its exact shape is
+    \begin{align}
+        \big(hg : \mathtt{MDifferentiableAt}\;f\text{'s target model}\;g\;y\big) \to \big(hf : \mathtt{MDifferentiableAt}\;f\;x\big) \to \big(hy : f\,x = y\big) \to \mathtt{mfderiv}\,(g \circ f)\,x\,v = \mathtt{mfderiv}\,g\,y\,\big(\mathtt{mfderiv}\,f\,x\,v\big),
+    \end{align}
+    and the base-point argument $hy$ is exactly what is needed here: instantiated at $g := \psi$, $f := \psi.\mathtt{symm}$, base point $\psi(x)$ and $y := x$, it requires $hy : \psi.\mathtt{symm}(\psi\,x) = x$, which is \texttt{Diffeomorph.symm\_apply\_apply}. Without that transport the plain \texttt{mfderiv\_comp} produces the outer factor as $\mathtt{mfderiv}\;\psi\;\big(\psi.\mathtt{symm}(\psi\,x)\big)$, whose value lives in the tangent space at $\psi(\psi.\mathtt{symm}(\psi\,x))$ rather than at $\psi(x)$; those two tangent spaces are propositionally but not definitionally identified, so the composition does not typecheck until the base point has been transported. The \texttt{\_of\_eq} variant is the lemma that takes the transport as an argument and states its conclusion at $y$.
+
+    The two differentiability hypotheses are \texttt{Diffeomorph.mdifferentiable} (side condition $n \neq 0$) applied to $\psi$ and to $\psi.\mathtt{symm}$. Finally $\psi \circ \psi.\mathtt{symm}$ is the identity function by \texttt{Diffeomorph.apply\_symm\_apply} (and \texttt{funext}), so the left-hand side is $\mathtt{mfderiv}\;\mathrm{id}\;(\psi\,x)\,u = u$ by \texttt{mfderiv\_id} and \texttt{ContinuousLinearMap.id\_apply}.
+
+    Since it is an \texttt{mfderiv} identity that is wanted and not a statement about the equivalence, \ref{lmm:mfderiv-diffeo-linear-equiv} is deliberately \emph{not} used: as recorded there, the \texttt{symm} of that equivalence is not definitionally $d(\psi^{-1})_{\psi(x)}$, so it cannot supply this.
+\end{proof}
+
+\begin{lemma}[Round-Trip Cancellation: $d(\psi^{-1})$ After $d\psi$]
+    \label{lmm:mfderiv-symm-cancel-right}
+    \uses{def:spacetime}
+    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $x \in M$. Then, pointwise,
+    \begin{align}
+        d(\psi^{-1})_{\psi(x)}\big(d\psi_x\,v\big) = v \qquad \text{for every } v \in TM|_x,
+    \end{align}
+    with the same reading of $d(\psi^{-1})_{\psi(x)}$ as in \ref{lmm:mfderiv-symm-cancel-left}, and again with the pointwise form as the primary statement.
+\end{lemma}
+\begin{proof}
+    The mirror of \ref{lmm:mfderiv-symm-cancel-left}, run on $\psi^{-1} \circ \psi$ at $x$: \texttt{mfderiv\_comp\_apply\_of\_eq} with $g := \psi.\mathtt{symm}$, $f := \psi$, base point $x$ and $y := \psi(x)$, so that the base-point argument $hy : \psi\,x = \psi\,x$ is \texttt{rfl} in this order --- the transport is trivial here, which is precisely why the two directions are separate nodes rather than one, the $hy$ bookkeeping being asymmetric between them. The composite is the identity by \texttt{Diffeomorph.symm\_apply\_apply}, and \texttt{mfderiv\_id} finishes as before.
+
+    Its consumer is \ref{lmm:cross-metric-isometry-symm}, where it is paired with \ref{lmm:mfderiv-symm-cancel-left} to record that $d(\psi^{-1})_{\psi(x)}$ and $d\psi_x$ are mutually inverse; \ref{lmm:mfderiv-symm-cancel-left} alone is what the orientation-transport nodes need.
+\end{proof}
+
+\begin{lemma}[The Formal Inverse of $d\psi_x$ is the Inverse Equivalence]
+    \label{lmm:mfderiv-inverse-eq-symm}
+    \uses{lmm:mfderiv-diffeo-linear-equiv}
+    For a $C^\infty$ diffeomorphism $\psi$ of $M$ and any $x \in M$, the formal inverse $\mathtt{ContinuousLinearMap.inverse}\,(d\psi_x)$ agrees with the inverse of the continuous linear equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv}; in particular $(d\psi_x)^{-1}\,(d\psi_x v) = v$ and $d\psi_x\big((d\psi_x)^{-1}u\big) = u$.
+\end{lemma}
+\begin{proof}
+    Mathlib's \texttt{ContinuousLinearMap.inverse} is defined by cases on invertibility and returns the junk value $0$ when its argument is not invertible, so nothing can be cancelled against it until invertibility is exhibited. Here \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} identifies $d\psi_x$ with the coercion of an equivalence, and \texttt{ContinuousLinearMap.inverse\_equiv} rewrites the formal inverse of such a coercion as the \texttt{symm} of that equivalence. The two cancellation identities are then \texttt{symm\_apply\_apply} and \texttt{apply\_symm\_apply}.
+\end{proof}
+
+This leaf is what licenses the $d\psi$ cancellations used below, and it is not optional. The pullback time orientation of \ref{lmm:pullback-time-orientation} is built with \texttt{VectorField.mpullback}, whose definition is literally $(d\psi_x).\mathtt{inverse}$ applied to the field; until that formal inverse is identified with a genuine two-sided inverse, an expression such as $d\psi_x\big((d\psi_x)^{-1} t_{\psi(x)}\big)$ cannot be simplified at all, because \texttt{ContinuousLinearMap.inverse} is a case split that may return $0$. Every cancellation in \ref{lmm:pullback-time-orientation-ne-zero}, \ref{lmm:pullback-time-orientation-timelike}, \ref{lmm:pullback-future-pointing-timelike} and \ref{lmm:pullback-metric-lorentzian} passes through this step.
+
+\begin{lemma}[The Pullback Metric is Symmetric]
+    \label{lmm:pullback-metric-symm}
+    \uses{def:pullback-metric}
+    For every $x \in M$ the form $(\psi^*g)_x$ of \ref{def:pullback-metric} is symmetric.
+\end{lemma}
+\begin{proof}
+    Unfold \ref{def:pullback-metric} on both sides and apply the symmetry of $g_{\psi(x)}$ to the pair $(d\psi_x v, d\psi_x w)$.
+\end{proof}
+
+\begin{lemma}[The Pullback Metric is Non-Degenerate]
+    \label{lmm:pullback-metric-nondegenerate}
+    \uses{def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv}
+    For every $x \in M$ the form $(\psi^*g)_x$ of \ref{def:pullback-metric} is non-degenerate: if $(\psi^*g)_x(v,w) = 0$ for all $w$, then $v = 0$.
+\end{lemma}
+\begin{proof}
+    Since $d\psi_x$ is surjective (\ref{lmm:mfderiv-diffeo-linear-equiv}), every $u \in TM|_{\psi(x)}$ is $d\psi_x w$ for some $w$, so the hypothesis says $g_{\psi(x)}(d\psi_x v, \cdot)$ vanishes identically. Non-degeneracy of $g$ gives $d\psi_x v = 0$, and injectivity of $d\psi_x$ gives $v = 0$.
+\end{proof}
+
+\begin{lemma}[The Pullback Metric is Lorentzian]
+    \label{lmm:pullback-metric-lorentzian}
+    \uses{def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv, lmm:mfderiv-inverse-eq-symm, def:spacetime}
+    For every $x \in M$ there is a basis of $TM|_x$ whose Gram matrix under $(\psi^*g)_x$ is $\mathrm{diag}(-1,1,1,1)$.
+\end{lemma}
+\begin{proof}
+    Let $\{e_i\}$ be a signature basis of $TM|_{\psi(x)}$ for $g_{\psi(x)}$, supplied by the Lorentzian condition of \ref{def:spacetime}. Transport it along the inverse of the linear equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv} using \texttt{Module.Basis.map}, giving a basis $\{(d\psi_x)^{-1}e_i\}$ of $TM|_x$. Its Gram matrix is computed by unfolding \ref{def:pullback-metric} and cancelling $d\psi_x$ against $(d\psi_x)^{-1}$:
+    \begin{align}
+        (\psi^*g)_x\big((d\psi_x)^{-1}e_i,\, (d\psi_x)^{-1}e_j\big) = g_{\psi(x)}(e_i, e_j),
+    \end{align}
+    which is $\mathrm{diag}(-1,1,1,1)$ by choice of $\{e_i\}$.
+\end{proof}
+
+The Lorentzian condition of \ref{def:spacetime} is stated as the \emph{existence} of a signature basis at each point, and the proof above uses exactly that. This is essential and not a matter of taste: were the signature condition instead a rigid condition on the chart components of the metric, the pullback would not in general satisfy it, a generic differential $d\psi_x$ not preserving coordinate components. The existential formulation is what makes the class of spacetimes closed under pullback.
+
+\begin{lemma}[Smoothness of the Tangent Coordinate Change]
+    \label{lmm:chart-transition-mfderiv-smooth}
+    \uses{def:spacetime}
+    For any $x, y \in M$ the derivative of the extended chart transition,
+    \begin{align}
+        z' \longmapsto \mathrm{fderivWithin}_{\mathbb{R}}\big(e_y \circ e_x^{-1}\big)\,(\mathrm{range}\,I)\,z',
+    \end{align}
+    is $C^{\top}$ on the source of that transition, a subset of the \emph{model space}; in full,
+    \begin{align}
+        \mathtt{ContDiffOn}\;\mathbb{R}\;\top\;\Big(\mathrm{fderivWithin}_{\mathbb{R}}\,\big(e_y \circ e_x^{-1}\big)\,(\mathrm{range}\,I)\Big)\;\big((e_x^{-1} \gg e_y).\mathtt{source}\big).
+    \end{align}
+    Nothing is asserted here about $M$: both the function and the set live on the model space.
+
+    \emph{Its consumer.} This node has exactly one consumer, and it is not the bridge \ref{lmm:mfderiv-eq-chart-jacobian} --- the remark below records why that node takes its differentiability of chart inverses from \texttt{contMDiffOn\_extChartAt\_symm} instead. The consumer is \ref{lmm:tangent-bundle-section-chart-local-iff}, the biconditional smoothness dictionary between bundle-section and chart-local form. That translation goes through the tangent-bundle trivialisation at a fixed base point, whose fibre component is $\mathrm{tangentCoordChange}\,I\,x\,x_0$; smoothness in $x$ of that component is exactly the derivative of the extended chart transition displayed above, precomposed with a chart. So the model-space \texttt{ContDiffOn} stated here is the analytic input to that step, and the node is retained for it.
+\end{lemma}
+\begin{proof}
+    This is Mathlib's \texttt{contDiffOn\_fderiv\_coord\_change} applied to the two atlas members $\mathrm{achart}(x)$ and $\mathrm{achart}(y)$. The statement above is deliberately \emph{verbatim} its conclusion, so nothing has to be massaged.
+
+    Two features of that lemma are the reason for phrasing the node this way. First, it is a statement about a function on the \emph{model space}, not on $M$: the set $(e_x^{-1} \gg e_y).\mathtt{source}$ is a subset of the model space. Second, it carries the instance hypothesis $\mathtt{IsManifold}\;I\;(n+1)\;M$ --- one degree of smoothness more than it concludes --- which for the case at hand $n = \top$ reduces to $\mathtt{IsManifold}\;I\;\top\;M$, because $\top + 1 = \top$ in $\mathtt{WithTop}\;\mathbb{N}_\infty$ (\texttt{WithTop.top\_add}); that is exactly the \texttt{isManifold} field of \ref{def:spacetime}.
+
+    In particular the node is \emph{not} to be strengthened into a statement about $\mathrm{tangentCoordChange}\,I\,x\,y$ as a function on $M$; the remark below explains why the strengthening is left to its single consumer \ref{lmm:tangent-bundle-section-chart-local-iff} rather than performed here.
+\end{proof}
+
+A word on what this node deliberately omits, and where the omitted step is instead carried out. One might expect it to conclude smoothness of the tangent coordinate change $\mathrm{tangentCoordChange}\,I\,x\,y$ as a function on $M$, which by \texttt{tangentCoordChange\_def} is the model-space function above precomposed with $e_x$. That is not stated, but not because it would be meaningless. It is perfectly well formed: $\mathrm{tangentCoordChange}\,I\,x\,y$ has type $M \to (E \to_L[\mathbb{R}] E)$, so the target is a normed space carrying its own trivial model, and
+\begin{align}
+    \mathtt{ContMDiffOn}\;I\;\mathcal{I}(\mathbb{R}, E \to_L[\mathbb{R}] E)\;n\;\big(\mathrm{tangentCoordChange}\,I\,x\,y\big)\;s
+\end{align}
+typechecks for any $s \subseteq M$. The reason for not stating it \emph{here} is that Mathlib does not prove it: the only lemma of that shape is \texttt{continuousOn\_tangentCoordChange}, giving mere \emph{continuity} on $e_x.\mathtt{source} \cap e_y.\mathtt{source}$, and there is no smoothness counterpart. Deriving it is real work --- rewrite with \texttt{tangentCoordChange\_def} to expose the model-space function above, then compose with $e_x$ and convert the resulting $\mathtt{ContDiffOn}$ into a $\mathtt{ContMDiffOn}$ on $M$, discharging the chart-source side conditions. That work is not spent for nothing, but it belongs to \ref{lmm:tangent-bundle-section-chart-local-iff}, which is where the tangent-bundle trivialisation is unfolded and is the only place the $M$-side statement is actually needed; that node is deliberately left as a stated obligation rather than decomposed further, so the step is recorded there as part of its content. The present node therefore stays at exactly the model-space \texttt{ContDiffOn} that Mathlib supplies, which is the analytic half of that obligation.
+
+Mathlib has no pullback operation on covariant tensor fields, so the smoothness obligation of \ref{def:spacetime} for $\psi^*g$ must be assembled by hand. There are two possible routes, and it matters which is chosen because they need different Mathlib input.
+
+\begin{itemize}
+    \item The \emph{\texttt{inTangentCoordinates} route}: apply \texttt{ContMDiffWithinAt.mfderivWithin} to obtain smoothness of $x \mapsto d\psi_x$ as a map into a fixed model space \emph{after} the $x$-dependent coordinate change built into \texttt{inTangentCoordinates}, then strip that wrapper using \texttt{inTangentCoordinates\_eq} together with \ref{lmm:chart-transition-mfderiv-smooth}.
+    \item The \emph{chart-representation route}: work directly with the chart representation $F$ of $\psi$ between extended charts, differentiate it with \texttt{ContDiffWithinAt.fderivWithin\_right}, and relate $d\psi$ to $\mathrm{fderivWithin}\,F$ by an explicit bridge.
+\end{itemize}
+
+\textbf{We take the chart-representation route.} The smoothness field of \ref{def:spacetime} is itself already stated in chart-representation form --- it asserts $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top$ on $e.\mathtt{target}$, at the point $e(x_0)$, of $y \mapsto g_{e^{-1}(y)}\big(d(e^{-1})_y v,\, d(e^{-1})_y w\big)$ for constant model vectors $v,w$ --- so the chart route matches the shape of both the hypothesis and the goal, and never introduces \texttt{inTangentCoordinates} at all. The \texttt{inTangentCoordinates} route would produce the derivative in a normalised form that must be un-normalised again before it can meet the goal, which is the step that made the original single proof unmanageable. Note that \ref{lmm:chart-transition-mfderiv-smooth} is \emph{not} what supplies differentiability of the chart transitions to the bridge \ref{lmm:mfderiv-eq-chart-jacobian}: as the remark above records, that node concludes smoothness of a $\mathrm{fderivWithin}$ on the model space, which is a different assertion. The bridge takes its differentiability of chart inverses from \texttt{contMDiffOn\_extChartAt\_symm} directly. Node \ref{lmm:chart-transition-mfderiv-smooth} is retained not for the bridge but for its one declared consumer \ref{lmm:tangent-bundle-section-chart-local-iff}, which needs the smoothness of the transition derivative in order to unfold the tangent-bundle trivialisation; see the statement of \ref{lmm:chart-transition-mfderiv-smooth}.
+
+Throughout this block fix $x_0 \in M$, write $e$ for the extended chart at $x_0$ and $e'$ for the extended chart at $\psi(x_0)$, and set
+\begin{align}
+    F := e' \circ \psi \circ e^{-1}, \qquad J_y := \mathrm{fderivWithin}_{\mathbb{R}}\,F\,(\mathrm{range}\,I)\,y.
+\end{align}
+
+\begin{lemma}[The Chart Representation of a Diffeomorphism is Smooth]
+    \label{lmm:psi-chart-representation-contdiff}
+    \uses{def:spacetime}
+    The chart representation $F = e' \circ \psi \circ e^{-1}$ satisfies
+    \begin{align}
+        \mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;F\;(\mathrm{range}\,I)\;\big(e(x_0)\big),
+    \end{align}
+    that is, it is $C^{\top}$ (analytic-index $\top = \omega$, matching the smoothness index of \ref{def:spacetime}) within $\mathrm{range}\,I$ \emph{at the single point} $e(x_0)$. Nothing is claimed here about where $F$ is defined or where it lands; that is the separate \ref{lmm:psi-chart-maps-into-target}.
+\end{lemma}
+\begin{proof}
+    This is one half of \texttt{contMDiffAt\_iff}, which reads
+    \begin{align}
+        \mathtt{ContMDiffAt}\;I\;I'\;n\;\psi\;x_0 \iff \mathtt{ContinuousAt}\;\psi\;x_0 \;\wedge\; \mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;\big(e' \circ \psi \circ e^{-1}\big)\;(\mathrm{range}\,I)\;\big(e(x_0)\big),
+    \end{align}
+    applied to the smoothness of $\psi$. That smoothness does \emph{not} come from \ref{def:spacetime}, which has no field about $\psi$ at all: it comes from $\psi$ being a $\mathtt{Diffeomorph}\;I\;I\;\top$, whose \texttt{contMDiff} projection --- \texttt{Diffeomorph.contMDiff} --- is exactly $\mathtt{ContMDiff}\;I\;I\;\top\;\psi$, specialised at $x_0$. So $n = \top$ here, and the conclusion is at $\top$ rather than at $\infty$. This matters downstream: $\infty$ is strictly weaker than $\top$ in $\mathtt{WithTop}\;\mathbb{N}_\infty$, and the goal of \ref{lmm:pullback-metric-smooth-in-charts} is stated at $\top$, so a chain passing through $\infty$ would not close. Note also the exact shape: the analytic conjunct is a \texttt{ContDiffWithinAt} at the \emph{single} point $e(x_0)$, not a \texttt{ContDiffOn} on $\mathrm{range}\,I$ or on any neighbourhood of $e(x_0)$. Downstream nodes must be phrased against this weaker form.
+
+    The locality assertion of \ref{lmm:psi-chart-maps-into-target} is \emph{not} part of this iff: it comes from the other conjunct and is a separate node, sharing nothing with the argument above beyond the statement of the iff itself.
+\end{proof}
+
+\begin{lemma}[The Chart Representation is Defined and Lands in the Target Near $e(x_0)$]
+    \label{lmm:psi-chart-maps-into-target}
+    \uses{def:spacetime}
+    The chart representation $F = e' \circ \psi \circ e^{-1}$ is defined and lands in the target of $e'$ near $e(x_0)$, in the filter-precise form
+    \begin{align}
+        \forall^{\mathrm{f}} y \text{ in } \mathcal{N}[\mathrm{range}\,I]\,\big(e(x_0)\big),\quad y \in e.\mathtt{target} \;\wedge\; F(y) \in e'.\mathtt{target},
+    \end{align}
+    where $\mathcal{N}[a]\,z$ denotes $\mathtt{nhdsWithin}\,z\,a$, the neighbourhood filter of $z$ within $a$ (Mathlib writes it \texttt{nhdsWithin z a}), and $\forall^{\mathrm{f}}$ is $\mathtt{Filter.Eventually}$.
+\end{lemma}
+\begin{proof}
+    Purely a locality argument; no differentiability is used, which is why it is separated from \ref{lmm:psi-chart-representation-contdiff}. From $\mathtt{ContinuousAt}\;\psi\;x_0$ --- the other conjunct of the \texttt{contMDiffAt\_iff} used in \ref{lmm:psi-chart-representation-contdiff}, or equally \texttt{Diffeomorph.continuous} specialised at $x_0$ --- and the fact that the source of $e'$ is a neighbourhood of $\psi(x_0)$ (\texttt{extChartAt\_source\_mem\_nhds}), the preimage $\psi^{-1}(e'.\mathtt{source})$ is a neighbourhood of $x_0$. Intersect it with $e.\mathtt{source}$, which is a neighbourhood of $x_0$ by the same lemma, and push the result forward along $e$.
+
+    The filter must be $\mathcal{N}[\mathrm{range}\,I]$ and not $\mathcal{N}$, and the conclusion an eventual statement and not a global $\mathtt{MapsTo}$. The reason is that the \texttt{model} field of \ref{def:spacetime} is a general $\mathtt{ModelWithCorners}$, not required to be $\mathtt{modelWithCornersSelf}$: the extended chart $e$ is then only a partial homeomorphism onto a subset of $\mathrm{range}\,I$, so pushing a neighbourhood of $x_0$ forward along $e$ yields a neighbourhood of $e(x_0)$ \emph{within} $\mathrm{range}\,I$, not an honest neighbourhood in the model space. Likewise $\mathtt{MapsTo}\;F\;(\mathrm{range}\,I)\;e'.\mathtt{target}$ is simply false --- $F$ need not even be defined off $e.\mathtt{target}$ --- which is why the statement is an $\forall^{\mathrm{f}}$ along $\mathcal{N}[\mathrm{range}\,I]\,(e(x_0))$ carrying both memberships at once. Consumers of this node get a \emph{local} $\mathtt{MapsTo}$ from it by shrinking to the witnessing set.
+\end{proof}
+
+\begin{lemma}[The Chart Jacobian is Smooth]
+    \label{lmm:chart-jacobian-smooth}
+    \uses{lmm:psi-chart-representation-contdiff}
+    The assignment $y \mapsto J_y$ satisfies $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;(y \mapsto J_y)\;(\mathrm{range}\,I)\;(e(x_0))$, as a map into the space of continuous linear maps of the model space. The index is $\top = \omega$, matching \ref{lmm:psi-chart-representation-contdiff} and the smoothness index of \ref{def:spacetime}.
+\end{lemma}
+\begin{proof}
+    Apply \texttt{ContDiffWithinAt.fderivWithin\_right} to \ref{lmm:psi-chart-representation-contdiff}. Its four hypotheses are $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;F\;s\;y_0$, $\mathtt{UniqueDiffOn}\;\mathbb{R}\;s$, an exponent gap $m + 1 \leq n$, and membership $y_0 \in s$; here $s = \mathrm{range}\,I$ and $y_0 = e(x_0)$, the unique-differentials hypothesis is \texttt{ModelWithCorners.uniqueDiffOn}, and $e(x_0) \in \mathrm{range}\,I$ holds because $e(x_0) = I(\mathrm{chart}(x_0))$.
+
+    The pointwise form \texttt{ContDiffWithinAt.fderivWithin\_right} is used rather than the set form \texttt{ContDiffOn.fderivWithin} because \ref{lmm:psi-chart-representation-contdiff} only supplies a \texttt{ContDiffWithinAt} at the single point $e(x_0)$, so the \texttt{ContDiffOn} version simply does not apply. This is also exactly how Mathlib itself proves \texttt{contDiffOn\_fderiv\_coord\_change}: it introduces a point of the source and calls \texttt{ContDiffWithinAt.fderivWithin\_right} there.
+
+    The exponent gap needs care because the smoothness index lives in $\mathtt{WithTop}\;\mathbb{N}_\infty$, where the $\infty$ of a $C^\infty$ structure and the top element $\top = \omega$ are distinct elements. \emph{The case at hand is $n = \top$}, since \ref{def:spacetime} is stated at $\top$ and \ref{lmm:psi-chart-representation-contdiff} therefore delivers $\top$; the gap $m + 1 \leq \top$ is then simply \texttt{le\_top}, with no arithmetic needed. Were the ambient index instead $\infty$, the gap would be discharged by \texttt{ENat.coe\_top\_add\_one}, the simp lemma $((\top : \mathbb{N}_\infty) : \mathtt{WithTop}\;\mathbb{N}_\infty) + 1 = (\top : \mathbb{N}_\infty)$, turning $\infty + 1 \leq \infty$ into $\infty \leq \infty$; that hypothetical is recorded only to forestall confusing the two indices, and is not what is used here.
+\end{proof}
+
+\begin{lemma}[The Differential of $\psi$ as a Chart Jacobian]
+    \label{lmm:mfderiv-eq-chart-jacobian}
+    \uses{lmm:psi-chart-maps-into-target, lmm:mfderiv-diffeo-linear-equiv}
+    For $y$ in the target of $e$ near $e(x_0)$, and with $x := e^{-1}(y)$,
+    \begin{align}
+        d\psi_x \circ d(e^{-1})_y = d(e'^{-1})_{F(y)} \circ J_y
+    \end{align}
+    as continuous linear maps from the model space to $TM|_{\psi(x)}$.
+\end{lemma}
+\begin{proof}
+    Near $y$ one has the identity of maps $\psi \circ e^{-1} = e'^{-1} \circ F$, since $e'^{-1} \circ e'$ is the identity on the source of $e'$ and $\psi(e^{-1}(y))$ lies there by \ref{lmm:psi-chart-maps-into-target}. Differentiate both sides at $y$: the left side is $d\psi_x \circ d(e^{-1})_y$ by the manifold chain rule \texttt{mfderiv\_comp} (its two differentiability hypotheses are \texttt{Diffeomorph.mdifferentiable} for $\psi$, with the side condition $n \neq 0$, and \texttt{contMDiffOn\_extChartAt\_symm} for the chart inverse $e^{-1}$ --- \emph{not} \ref{lmm:chart-transition-mfderiv-smooth}, which asserts smoothness of an $\mathrm{fderivWithin}$ on the model space and so does not give this); the right side is $d(e'^{-1})_{F(y)} \circ J_y$ by the same chain rule, using that on the model space $\mathrm{mfderiv}$ agrees with $\mathrm{fderivWithin}$ on $\mathrm{range}\,I$ (\texttt{mfderivWithin\_eq\_fderivWithin}). Since the two sides of the map identity agree on a neighbourhood, \texttt{Filter.EventuallyEq.mfderiv\_eq} identifies the derivatives.
+\end{proof}
+
+This is the bridge the decomposition turns on: it is the only place where $d\psi$, an object living in the tangent bundle, is converted into $J$, an honest derivative of a map between subsets of the model space. Everything downstream is analysis on the model space.
+
+\begin{lemma}[Composition Under an Only Eventual $\mathtt{MapsTo}$]
+    \label{lmm:contDiffWithinAt-comp-of-eventually-mapsTo}
+    Let $F : \alpha \to \beta$ and $G : \beta \to \gamma$ be maps between real normed spaces, let $s \subseteq \alpha$ and $t \subseteq \beta$, and let $y_0 \in \alpha$. Suppose
+    \begin{align}
+        \mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;G\;t\;\big(F\,y_0\big), \qquad \mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;F\;s\;y_0, \qquad \forall^{\mathrm{f}} y \text{ in } \mathcal{N}[s]\,y_0,\ F\,y \in t.
+    \end{align}
+    Then $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;(G \circ F)\;s\;y_0$.
+
+    The content is that the $\mathtt{MapsTo}$ hypothesis of the ordinary composition lemma is weakened from a global $\mathtt{MapsTo}\;F\;s\;t$ to an \emph{eventual} membership along $\mathcal{N}[s]\,y_0$. That weakening is what the situation below actually offers, and hard-coding it once here keeps the pattern out of its two consumers.
+\end{lemma}
+\begin{proof}
+    Choose a witnessing set $s' \subseteq s$ with $s' \in \mathcal{N}[s]\,y_0$ on which the eventual membership holds pointwise, so that $\mathtt{MapsTo}\;F\;s'\;t$ genuinely holds. Restrict the hypothesis on $F$ to $s'$ by \texttt{ContDiffWithinAt.mono}, compose on $s'$ with \texttt{ContDiffWithinAt.comp} --- whose $\mathtt{MapsTo}$ argument is now available --- and transfer the conclusion from $s'$ back to $s$ by \texttt{ContDiffWithinAt.mono\_of\_mem\_nhdsWithin}, which is precisely the lemma that upgrades along a set that is a neighbourhood within $s$ of the base point. Note that \texttt{ContDiffWithinAt.mono} alone cannot be used for the transfer, since it goes the wrong way: $s' \subseteq s$, not $s \subseteq s'$.
+\end{proof}
+
+\begin{lemma}[Metric Components Along $\psi$ are Smooth]
+    \label{lmm:metric-components-along-psi-smooth}
+    \uses{def:spacetime, lmm:psi-chart-representation-contdiff, lmm:psi-chart-maps-into-target, lmm:contDiffWithinAt-comp-of-eventually-mapsTo}
+    For any fixed model vectors $v', w'$, the function
+    \begin{align}
+        y \longmapsto g_{e'^{-1}(F(y))}\big(d(e'^{-1})_{F(y)} v',\; d(e'^{-1})_{F(y)} w'\big)
+    \end{align}
+    satisfies $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;(\cdots)\;(\mathrm{range}\,I)\;(e(x_0))$. The index is $\top$ and the set is $\mathrm{range}\,I$, matching \ref{lmm:chart-jacobian-smooth} so that the two compose without further set juggling; the descent to $e.\mathtt{target}$ is done once, in \ref{lmm:pullback-metric-smooth-in-charts}.
+\end{lemma}
+\begin{proof}
+    Two steps, and the second is a citation.
+
+    The smoothness field of \ref{def:spacetime}, taken at the base point $\psi(x_0)$ and the constant vectors $v', w'$, says exactly that $G : z \mapsto g_{e'^{-1}(z)}\big(d(e'^{-1})_z v', d(e'^{-1})_z w'\big)$ is $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top$ on $e'.\mathtt{target}$ at $e'(\psi(x_0))$; and $e'(\psi(x_0)) = F\big(e(x_0)\big)$, since $e^{-1}(e(x_0)) = x_0$, so this is the outer hypothesis of \ref{lmm:contDiffWithinAt-comp-of-eventually-mapsTo} at the right base point.
+
+    Now apply \ref{lmm:contDiffWithinAt-comp-of-eventually-mapsTo} with that $G$, with $F$ the chart representation, $s := \mathrm{range}\,I$, $t := e'.\mathtt{target}$ and $y_0 := e(x_0)$: its inner hypothesis is \ref{lmm:psi-chart-representation-contdiff} and its eventual-membership hypothesis is the $F(y) \in e'.\mathtt{target}$ conjunct of \ref{lmm:psi-chart-maps-into-target}.
+
+    That the eventual form is needed, rather than a global $\mathtt{MapsTo}$, is the set mismatch already flagged for \ref{lmm:pullback-metric-smooth-in-charts}: the outer factor is smooth on $e'.\mathtt{target}$ while the inner one is smooth within $\mathrm{range}\,I$, and $\mathtt{MapsTo}\;F\;(\mathrm{range}\,I)\;e'.\mathtt{target}$ is \emph{false} --- $F$ need not be defined off $e.\mathtt{target}$ at all, let alone land in $e'.\mathtt{target}$. Attempting \texttt{ContDiffWithinAt.comp} directly on $\mathrm{range}\,I$ will therefore not work; the shrink-compose-transfer that repairs it is exactly what has been factored into \ref{lmm:contDiffWithinAt-comp-of-eventually-mapsTo}, and is not to be re-derived here.
+\end{proof}
+
+\begin{lemma}[Coordinates of a Smooth Family of Vectors are Smooth]
+    \label{lmm:basis-coord-contDiffWithinAt}
+    Let $V$ be a finite-dimensional real vector space with basis $\{b_i\}_{i \in \iota}$, and let $y \mapsto v_y \in V$ be $C^{\top}$ within $s$ at $y_0$. Then $v_y = \sum_i a_i(y)\,b_i$ for every $y$, where $a_i(y) := \mathtt{Module.Basis.coord}\;\{b_i\}\;i\;(v_y)$, and each coordinate function $a_i$ is itself $C^{\top}$ within $s$ at $y_0$.
+\end{lemma}
+\begin{proof}
+    The expansion is \texttt{Module.Basis.sum\_repr}, applied at each $y$.
+
+    For the smoothness: $\mathtt{Module.Basis.coord}\;\{b_i\}\;i$ is a priori only a \emph{linear} functional, so \texttt{LinearMap.continuous\_of\_finiteDimensional} is needed to upgrade it to a continuous linear map --- \emph{this is the only place finite-dimensionality of $V$ is actually spent}, and it is why the hypothesis appears in the statement at all. Postcomposing the hypothesis on $y \mapsto v_y$ with that continuous linear map is \texttt{ContDiffWithinAt.continuousLinearMap\_comp}. (Mathlib has no declaration named \texttt{ContinuousLinearMap.contDiffAt}; the composition lemma above is the right citation, and if one prefers to go through \texttt{ContinuousLinearMap.contDiff} then the composition step is \texttt{ContDiffAt.comp\_contDiffWithinAt}.)
+\end{proof}
+
+\begin{lemma}[A Finite Double Sum of Products of Smooth Scalars is Smooth]
+    \label{lmm:bilinear-double-sum-smooth}
+    Let $\iota$ be a finite type and let $a_i$, $c_j$ and $\gamma_{ij}$ (for $i, j \in \iota$) be real-valued functions each $C^{\top}$ within $s$ at $y_0$. Then
+    \begin{align}
+        y \longmapsto \sum_{i,j} a_i(y)\, c_j(y)\, \gamma_{ij}(y)
+    \end{align}
+    is $C^{\top}$ within $s$ at $y_0$.
+\end{lemma}
+\begin{proof}
+    The sum is assembled by \texttt{ContDiffWithinAt.sum} over the index type $\iota \times \iota$, whose finiteness is the hypothesis on $\iota$; each summand is handled by two applications of \texttt{ContDiffWithinAt.mul}, once for $a_i(y)\,c_j(y)$ and once against $\gamma_{ij}$. No linear algebra and no geometry enters, and the argument is index-agnostic.
+\end{proof}
+
+\begin{lemma}[Expansion of a Bilinear Form on Basis Coordinates]
+    \label{lmm:bilinear-form-double-sum-expansion}
+    Let $V$ be a real normed space with a finite basis $\{b_i\}_{i \in \iota}$, let $\beta : V \to_L V \to_L \mathbb{R}$ be a continuous bilinear form, and let $a, c : \iota \to \mathbb{R}$. Then
+    \begin{align}
+        \beta\Big(\sum_{i \in \iota} a_i\,b_i,\ \sum_{j \in \iota} c_j\,b_j\Big) = \sum_{(i,j) \in \iota \times \iota} a_i\,c_j\,\beta(b_i, b_j).
+    \end{align}
+    Purely algebraic: no smoothness, no topology beyond the bundling of $\beta$, and no geometry.
+\end{lemma}
+\begin{proof}
+    Three rewriting steps, in this order.
+
+    First, push the outer sum through $\beta$. The lemma is the generic root-namespace \texttt{map\_sum} --- \emph{there is no} \texttt{ContinuousLinearMap.map\_sum} \emph{in Mathlib}, and citing that name will not resolve; \texttt{map\_sum} applies because $\beta$ is an inhabitant of a \texttt{ContinuousLinearMap} type, hence of \texttt{AddMonoidHomClass}. It yields $\beta\big(\sum_i a_i b_i\big) = \sum_i \beta(a_i b_i)$ as an identity of elements of $V \to_L \mathbb{R}$; evaluating a finite sum of such maps at the second argument is the root-namespace \texttt{sum\_apply} --- \emph{not} \texttt{ContinuousLinearMap.sum\_apply}, which exists only as a deprecated alias for it and should not be cited in new code --- and the scalars come out by \texttt{map\_smul}. The same pair of steps in the second slot, applied to each $\beta(b_i)$, gives the iterated sum $\sum_i \sum_j a_i\,c_j\,\beta(b_i,b_j)$.
+
+    Second, collapse the iterated sum of products of scalars with \texttt{Fintype.sum\_smul\_sum}, which is exactly the distributivity of scalar multiplication over a pair of finite sums.
+
+    Third, re-index the iterated sum as a single sum over $\iota \times \iota$ with \texttt{Finset.sum\_product'} (the primed form, whose summand is written as a function of the two components $i$ and $j$ rather than of a pair, which is the shape wanted here). This last step is what puts the statement into the single-index shape that \ref{lmm:bilinear-double-sum-smooth} consumes.
+
+    The step is separated out because it is a genuinely distinct move of its own, some eight to fifteen lines of rewriting with three lemmas that are easy to misname, and it is independent of everything analytic around it.
+\end{proof}
+
+\begin{lemma}[A Bilinear Family Precomposed in Both Slots is Smooth]
+    \label{lmm:bilinear-family-precomp-smooth}
+    \uses{lmm:basis-coord-contDiffWithinAt, lmm:bilinear-double-sum-smooth, lmm:bilinear-form-double-sum-expansion}
+    Let $V$ be a finite-dimensional real vector space with basis $\{b_i\}$, let $\beta_y$ be a family of bilinear forms on $V$ such that $y \mapsto \beta_y(b_i, b_j)$ is $C^{\top}$ within $s$ at $y_0$ for every pair $(i,j)$, and let $y \mapsto A_y$ and $y \mapsto B_y$ be families of continuous linear maps into $V$ that are $C^{\top}$ within $s$ at $y_0$. Then for any fixed $u, u'$ the function
+    \begin{align}
+        y \longmapsto \beta_y\big(A_y u,\; B_y u'\big)
+    \end{align}
+    is $C^{\top}$ within $s$ at $y_0$. (The index is $\top$ to match the rest of this chain; the argument below is in fact index-agnostic.)
+\end{lemma}
+\begin{proof}
+    First, $y \mapsto A_y u$ is $C^{\top}$ within $s$ at $y_0$ by \texttt{ContDiffWithinAt.clm\_apply} applied to the hypothesis on $y \mapsto A_y$ and the constant $u$, and likewise for $y \mapsto B_y u'$. Feeding these to \ref{lmm:basis-coord-contDiffWithinAt} gives smooth coordinate functions $a_i$, $c_j$ with $A_y u = \sum_i a_i(y)\,b_i$ and $B_y u' = \sum_j c_j(y)\,b_j$.
+
+    Next, \ref{lmm:bilinear-form-double-sum-expansion} applied to $\beta_y$ at each $y$ rewrites the goal as
+    \begin{align}
+        \beta_y\big(A_y u, B_y u'\big) = \sum_{(i,j) \in \iota \times \iota} a_i(y)\, c_j(y)\, \beta_y(b_i, b_j),
+    \end{align}
+    and \ref{lmm:bilinear-double-sum-smooth} with $\gamma_{ij}(y) := \beta_y(b_i,b_j)$ --- smooth by hypothesis, and with $\iota$ finite because $V$ is finite-dimensional --- closes it.
+
+    So this node is now purely the composition of three imported facts, one per slot of the argument: coordinates are smooth (\ref{lmm:basis-coord-contDiffWithinAt}), the bilinear form expands (\ref{lmm:bilinear-form-double-sum-expansion}), and the resulting double sum is smooth (\ref{lmm:bilinear-double-sum-smooth}). No step of it is more than a rewrite.
+\end{proof}
+
+The point of isolating this is that the smoothness field of \ref{def:spacetime} quantifies over \emph{constant} model vectors only, whereas the pullback feeds it the $y$-dependent vectors $J_y v$. Passing from one to the other is not a rewriting step but the basis expansion above, and it is entirely independent of the geometry.
+
+\begin{lemma}[Rewriting the Chart Goal into the Chart-Jacobian Form]
+    \label{lmm:pullback-metric-eventuallyEq-chart-form}
+    \uses{def:pullback-metric, lmm:mfderiv-eq-chart-jacobian, lmm:psi-chart-maps-into-target, lmm:contDiffWithinAt-comp-of-eventually-mapsTo}
+    Fix $x_0 \in M$ and constant model vectors $v, w$, and put
+    \begin{align}
+        P(y) &:= (\psi^*g)_{e^{-1}(y)}\big(d(e^{-1})_y v,\, d(e^{-1})_y w\big), \\
+        Q(y) &:= g_{e'^{-1}(F(y))}\big(d(e'^{-1})_{F(y)}(J_y v),\; d(e'^{-1})_{F(y)}(J_y w)\big).
+    \end{align}
+    Then $P = Q$ eventually along $\mathcal{N}[e.\mathtt{target}]\,\big(e(x_0)\big)$, and $P(e(x_0)) = Q(e(x_0))$. Consequently $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;Q\;e.\mathtt{target}\;\big(e(x_0)\big)$ implies $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;P\;e.\mathtt{target}\;\big(e(x_0)\big)$.
+\end{lemma}
+\begin{proof}
+    Unfold \ref{def:pullback-metric} in $P$, so that both slots read $d\psi_{e^{-1}(y)}\big(d(e^{-1})_y \cdot\big)$, and rewrite each with the bridge \ref{lmm:mfderiv-eq-chart-jacobian}, which replaces it by $d(e'^{-1})_{F(y)}(J_y \cdot)$. That gives the eventual equality, and specialising the bridge at $y = e(x_0)$ gives the agreement at the base point.
+
+    The single point to get right is that this is \emph{not} a plain \texttt{rw}. The bridge is not a global identity: it holds only for $y$ in the target of $e$ \emph{near} $e(x_0)$. So $P$ and $Q$ are not syntactically equal, only eventually equal, and the passage between the two smoothness statements is \texttt{ContDiffWithinAt.congr\_of\_eventuallyEq} along the filter $\mathcal{N}[e.\mathtt{target}]\,(e(x_0))$ --- exactly the filter that lemma expects, since the ambient set is $e.\mathtt{target}$. Its two hypotheses are the two displayed conclusions. The witnessing neighbourhood is supplied by the eventual memberships of \ref{lmm:psi-chart-maps-into-target}, transferred from $\mathcal{N}[\mathrm{range}\,I]$ to $\mathcal{N}[e.\mathtt{target}]$.
+
+    For that transfer, prefer \texttt{nhdsWithin\_extChartAt\_target\_eq'} over the inclusion $e.\mathtt{target} \subseteq \mathrm{range}\,I$ (\texttt{extChartAt\_target\_subset\_range}). The former states, for $y$ in the source of the extended chart, an \emph{equality} of filters
+    \begin{align}
+        \mathcal{N}[e.\mathtt{target}]\,\big(e(y)\big) = \mathcal{N}[\mathrm{range}\,I]\,\big(e(y)\big),
+    \end{align}
+    so at the base point $e(x_0)$ the transfer is a plain \texttt{rw} rather than a monotonicity step, and it goes in both directions. The inclusion would only give one direction and would leave the two filters distinct. Note that this removes the mismatch at the level of \emph{filters} only; the set-level mismatch between $\mathrm{range}\,I$ and $e.\mathtt{target}$ discussed in \ref{lmm:pullback-metric-smooth-in-charts} is a statement about $\mathtt{ContDiffWithinAt}$ on those sets and is still crossed there by \texttt{ContDiffWithinAt.mono}.
+
+    That shrinking is the same shrink-and-transfer as in \ref{lmm:metric-components-along-psi-smooth}, and it is not to be hand-rolled a second time: \ref{lmm:contDiffWithinAt-comp-of-eventually-mapsTo} is cited for it, since the only structure the step uses is that an eventual membership along $\mathcal{N}[s]\,y_0$ yields a witnessing $s' \subseteq s$ with $s' \in \mathcal{N}[s]\,y_0$ on which the memberships hold pointwise, and that a $\mathtt{ContDiffWithinAt}$ conclusion obtained on such an $s'$ transfers back to $s$ by \texttt{ContDiffWithinAt.mono\_of\_mem\_nhdsWithin}. Where the $y$-dependent inner map $F$ has to be composed with the outer metric factor --- which is how the goal $Q$ arises in the first place --- that node discharges the composition outright.
+\end{proof}
+
+\begin{lemma}[The Pullback Metric is Smooth in Charts]
+    \label{lmm:pullback-metric-smooth-in-charts}
+    \uses{def:spacetime, def:pullback-metric, lmm:pullback-metric-eventuallyEq-chart-form, lmm:chart-jacobian-smooth, lmm:metric-components-along-psi-smooth, lmm:bilinear-family-precomp-smooth}
+    The assignment $x \mapsto (\psi^*g)_x$ of \ref{def:pullback-metric} satisfies the smoothness field of \ref{def:spacetime}: for every $x_0 \in M$ and all constant model vectors $v, w$, the function $y \mapsto (\psi^*g)_{e^{-1}(y)}\big(d(e^{-1})_y v,\, d(e^{-1})_y w\big)$ is $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top$ on $e.\mathtt{target}$ at $e(x_0)$. The index is $\top$, not $\infty$: that is what \ref{def:spacetime} demands, and it is why every node feeding this one is stated at $\top$.
+\end{lemma}
+\begin{proof}
+    Two steps. By \ref{lmm:pullback-metric-eventuallyEq-chart-form} it suffices to prove the goal for the function $Q$ of that node, i.e.\ for
+    \begin{align}
+        y \longmapsto g_{e'^{-1}(F(y))}\big(d(e'^{-1})_{F(y)}(J_y v),\; d(e'^{-1})_{F(y)}(J_y w)\big);
+    \end{align}
+    and that is \ref{lmm:bilinear-family-precomp-smooth} with $V$ the model space, $\beta_y(v',w') := g_{e'^{-1}(F(y))}\big(d(e'^{-1})_{F(y)} v',\, d(e'^{-1})_{F(y)} w'\big)$ and $A_y = B_y = J_y$, whose three hypotheses are \ref{lmm:metric-components-along-psi-smooth} (smoothness of $y \mapsto \beta_y(b_i,b_j)$ on basis pairs), \ref{lmm:chart-jacobian-smooth} (smoothness of $y \mapsto J_y$), and finite-dimensionality of the model space, which holds as it is $\mathbb{R}^4$.
+
+    \emph{The set mismatch, explicitly.} The \texttt{smooth\_in\_charts} field of \ref{def:spacetime} --- both as hypothesis (for $g$) and as goal (for $\psi^*g$) --- is a $\mathtt{ContDiffWithinAt}$ on $e.\mathtt{target}$ at $e(x_0)$, whereas \ref{lmm:chart-jacobian-smooth} and \ref{lmm:metric-components-along-psi-smooth} are stated on $\mathrm{range}\,I$, because that is the set on which \texttt{ModelWithCorners.uniqueDiffOn} --- the unique-differentials input those nodes need --- is available. The two sets are not equal in general: $e.\mathtt{target} \subseteq \mathrm{range}\,I$ only. So \ref{lmm:bilinear-family-precomp-smooth} is applied at $s = \mathrm{range}\,I$, $y_0 = e(x_0)$, and its conclusion is then restricted to $e.\mathtt{target}$ by \texttt{ContDiffWithinAt.mono} along \texttt{extChartAt\_target\_subset\_range}. That monotonicity step is the one place the mismatch is crossed, and it must not be omitted.
+
+    The mismatch cannot instead be crossed on the unique-differentials side, and this is the trap. $\mathtt{UniqueDiffOn}$ is not monotone under passing to subsets, so \texttt{ModelWithCorners.uniqueDiffOn} on $\mathrm{range}\,I$ cannot be restricted to $e.\mathtt{target}$. Any step needing unique differentials on the chart target must therefore either be performed on $\mathrm{range}\,I$ first and its conclusion restricted --- the route taken here, which is why \ref{lmm:chart-jacobian-smooth} is stated on $\mathrm{range}\,I$ --- or obtain the property for $e.\mathtt{target}$ on its own terms, via \texttt{uniqueDiffOn\_extChartAt\_target}, which is exactly $\mathtt{UniqueDiffOn}\;\mathbb{R}\;e.\mathtt{target}$ and should simply be cited as it stands. (Its own proof is \texttt{ModelWithCorners.uniqueDiffOn\_preimage} applied to $(\mathrm{chartAt}\,H\,x_0).\mathtt{open\_target}$ after rewriting with \texttt{extChartAt\_target}. The neighbouring \texttt{ModelWithCorners.uniqueDiffOn\_preimage\_source} is \emph{not} the right lemma here: it concerns $I^{-1}(c.\mathtt{source}) \cap \mathrm{range}\,I$ for a chart $c$ --- a chart \emph{source} --- and so says nothing about $e.\mathtt{target}$.) Deducing unique differentials on $e.\mathtt{target}$ from \texttt{ModelWithCorners.uniqueDiffOn} by inclusion is in any case not available, and the formalizer should not attempt it.
+\end{proof}
+
+\begin{theorem}[The Pullback of a Spacetime is a Spacetime]
+    \label{thrm:pullback-is-spacetime}
+    \uses{def:spacetime, def:pullback-metric, lmm:pullback-metric-symm, lmm:pullback-metric-nondegenerate, lmm:pullback-metric-lorentzian, lmm:pullback-metric-smooth-in-charts}
+    For a spacetime $(M,g)$ and a $C^\infty$ diffeomorphism $\psi$ of $M$, the pullback datum $\psi^*(M,g)$ of \ref{def:pullback-metric} is again a spacetime.
+\end{theorem}
+\begin{proof}
+    The manifold data are carried over verbatim from $(M,g)$, so only the metric obligations of \ref{def:spacetime} need discharging: symmetry is \ref{lmm:pullback-metric-symm}, non-degeneracy is \ref{lmm:pullback-metric-nondegenerate}, the Lorentzian condition is \ref{lmm:pullback-metric-lorentzian}, and smoothness of the tensor field is \ref{lmm:pullback-metric-smooth-in-charts}.
+\end{proof}
+
+\begin{definition}[Two-Sided Preservation of Future Orientation]
+    \label{def:preserves-future-orientation}
+    \uses{def:time-orientable, def:future-and-past-pointing-vectors}
+    Let $g_1$ and $g_2$ be metrics on $M$ with time orientations $t_1$ and $t_2$ respectively, and let $\psi$ be a $C^\infty$ diffeomorphism of $M$. Say $\psi$ \emph{preserves the future orientation} when
+    \begin{align}
+        v \text{ future-pointing for } (g_1,t_1) \;\Longrightarrow\; d\psi_x v \text{ future-pointing for } (g_2,t_2)
+    \end{align}
+    for every $x \in M$ and $v \in TM|_x$, in the sense of \ref{def:future-and-past-pointing-vectors}. Say $\psi$ satisfies the \emph{two-sided orientation hypothesis} when both $\psi$ preserves the future orientation from $(g_1,t_1)$ to $(g_2,t_2)$ and $\psi^{-1}$ preserves it from $(g_2,t_2)$ back to $(g_1,t_1)$.
+
+    Nothing here refers to the metrics beyond the two orientations, so this is a condition on a diffeomorphism and a pair of oriented metrics, stated independently of any isometry hypothesis. The single-metric case $g_1 = g_2 = g$, $t_1 = t_2 = t$ is the existing $\mathtt{Isometry.PreservesFutureOrientation}$, and the two-sided form is what the single-metric \ref{lmm:isometry-preserves-basis-sets} already uses; the definition is hoisted here so that the lemmas below can cite it rather than restate it.
+\end{definition}
+
+The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$, which is Mathlib's $\mathtt{VectorField.mpullback}\;I\;I\;\psi\;t$. Establishing that it is a time orientation splits into a smoothness chain and two pointwise conditions. The smoothness chain is a \emph{round trip} between two idioms and it is easy to plan for only half of it: the hypothesis of \texttt{ContMDiff.mpullback\_vectorField} is a bundle-section statement, and so is its conclusion, whereas both the hypothesis available from \ref{def:time-orientable} and the goal are chart-local. Both legs of the round trip are instances of one \emph{biconditional} dictionary, stated once below as an accepted obligation; the two legs are then its \texttt{.mpr} and \texttt{.mp}, and the middle node transports along $\psi$.
+
+It matters that the dictionary is stated as an iff rather than as two separate obligations. The two legs are converses of each other, and a converse is not proved by its forward direction; a pair of nodes each pointing at the other for ``the same analytic content, read in the opposite direction'' proves neither. Stating the single iff and taking projections makes each leg two lines and leaves exactly one obligation.
+
+\begin{lemma}[Bundle-Section Smoothness Equals Chart-Local Smoothness, Accepted]
+    \label{lmm:tangent-bundle-section-chart-local-iff}
+    \uses{def:spacetime, lmm:chart-transition-mfderiv-smooth}
+    Let $W$ be a vector field on $M$. Then $W$ is smooth as a section of the tangent bundle if and only if it is chart-locally smooth in the $\mathrm{tangentCoordChange}$ form; precisely,
+    \begin{align}
+        \mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;W) \iff \forall\,x_0 \in M,\ \mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;\Big(y \mapsto \mathrm{tangentCoordChange}\;I\;\big(e^{-1}(y)\big)\;x_0\;\big(W(e^{-1}(y))\big)\Big)\;e.\mathtt{target}\;\big(e(x_0)\big),
+    \end{align}
+    where as above $e$ denotes the extended chart at $x_0$, and the left-hand side spells out as $\mathtt{ContMDiff}\;I\;I.\mathtt{tangent}\;\top\;\big(x \mapsto \mathtt{TotalSpace.mk'}\;E\;x\;(W\,x)\big)$.
+
+    Fixing one form on the right, and using it in \emph{both} legs below, is the point of the node: earlier drafts wrote the two legs against superficially different chart-local expressions and reconciled them nowhere.
+
+    \emph{The right-hand side is not literally the repository's field, and the difference is part of what is accepted here.} The $\mathrm{tangentCoordChange}$ form is chosen because it is the form in which the tangent-bundle trivialisation naturally presents the fibre component of a section. The \texttt{smooth} field of \ref{def:time-orientable}, and likewise \texttt{smooth\_in\_charts} of \ref{def:spacetime}, are instead written in \emph{double-}$\mathrm{mfderiv}$ form,
+    \begin{align}
+        \mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;\Big(y \mapsto d(e^{-1})_y\big(de_{e^{-1}(y)}\,W(e^{-1}(y))\big)\Big)\;e.\mathtt{target}\;\big(e(x_0)\big).
+    \end{align}
+    The two are equal, by $\mathrm{tangentCoordChange}$'s definition as the transition derivative of $\mathtt{tangentBundleCore}$ (\texttt{tangentCoordChange\_def}, \texttt{tangentBundleCore\_coordChange\_achart}, both \texttt{rfl}) together with the identification of $\mathrm{mfderiv}$ with $\mathrm{fderivWithin}$ on $\mathrm{range}\,I$ (\texttt{mfderivWithin\_eq\_fderivWithin}), but that equality is itself unpackaged bookkeeping and Mathlib does not supply it. It is therefore taken as part of this obligation: the biconditional is to be read as holding with either form on the right, and the two legs below may consume the repository field directly. Naming this explicitly is deliberate --- it is precisely the step that would otherwise be discovered only when the two legs failed to close by projection.
+
+    \emph{This node is an accepted obligation}, and is stated as such: it is the one place in the smoothness chain that is not decomposed to Mathlib leaves. It does not defer to any other node of this file for its content.
+\end{lemma}
+\begin{proof}
+    \emph{Accepted, not proved.} What follows records the intended route and the reason the node is left as an obligation; it is not a proof, and in particular it does not appeal to either of the two legs \ref{lmm:time-orientation-contMDiffSection} and \ref{lmm:contMDiffSection-to-chart-local}, which are its consumers.
+
+    Both directions are \texttt{tangentBundleCore} bookkeeping that Mathlib does not package. The vector-bundle side is \texttt{Bundle.contMDiffAt\_section}, which reduces $\mathtt{ContMDiffAt}$ of $x \mapsto \mathtt{TotalSpace.mk'}\;F\;x\;(s\,x)$ at $x_0$ to $\mathtt{ContMDiffAt}$ of the fibre component $x \mapsto (\mathtt{trivializationAt}\;F\;E\;x_0\;\langle x, s\,x\rangle).2$ at $x_0$; being itself an iff, it is what makes the present statement an iff rather than two independent implications. Identifying that component with $\mathrm{tangentCoordChange}\,I\,x\,x_0\,(W_x)$ is \texttt{tangentBundleCore\_coordChange\_achart} together with \texttt{tangentCoordChange\_def}. Converting between $\mathtt{ContMDiffAt}$ on $M$ and $\mathtt{ContDiffWithinAt}$ on $e.\mathtt{target}$ is \texttt{contMDiffAt\_iff}, with the chart-source side conditions discharged from \texttt{extChartAt\_source\_mem\_nhds}. The analytic input --- smoothness in $x$ of the transition derivative --- is \ref{lmm:chart-transition-mfderiv-smooth}, precomposed with the chart $e$; that is the node's single consumer, and it is a genuine Mathlib-backed input rather than a deferral.
+
+    What Mathlib lacks is any lemma packaging the round trip: the only $M$-side statement about $\mathrm{tangentCoordChange}$ is \texttt{continuousOn\_tangentCoordChange}, giving mere continuity, with no smoothness counterpart. Completing the identification is out of scope for the present pass, so the biconditional is taken as given and the two legs are its \texttt{.mpr} and \texttt{.mp}.
+\end{proof}
+
+\begin{lemma}[A Time Orientation is Smooth as a Section of the Tangent Bundle]
+    \label{lmm:time-orientation-contMDiffSection}
+    \uses{def:time-orientable, lmm:tangent-bundle-section-chart-local-iff}
+    Let $t$ be a time orientation of $(M,g)$ (\ref{def:time-orientable}). Then $t$ is smooth as a section of the tangent bundle: $\mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;t)$. This is exactly the shape of the hypothesis $hV$ of \texttt{ContMDiff.mpullback\_vectorField}; it is \emph{not} smoothness of $t$ as a bare function, and \ref{def:time-orientable} does not supply it directly.
+\end{lemma}
+\begin{proof}
+    Apply the \texttt{.mpr} direction of \ref{lmm:tangent-bundle-section-chart-local-iff} to $W := t$. Its hypothesis is the chart-local smoothness in $\mathrm{tangentCoordChange}$ form for every $x_0$, which is the \texttt{smooth} field of \ref{def:time-orientable} as it stands.
+\end{proof}
+
+\begin{lemma}[The Pullback of a Bundle-Smooth Vector Field Along a Diffeomorphism is Bundle-Smooth]
+    \label{lmm:mpullback-vectorField-contMDiff-of-diffeo}
+    \uses{lmm:time-orientation-contMDiffSection, lmm:mfderiv-diffeo-linear-equiv, def:spacetime}
+    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $V$ be a vector field on $M$ with $\mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;V)$. Then
+    \begin{align}
+        \mathtt{CMDiff}\;\top\;\big(\mathtt{T\%}\;(\mathtt{VectorField.mpullback}\;I\;I\;\psi\;V)\big).
+    \end{align}
+    Applied to $V = t$ via \ref{lmm:time-orientation-contMDiffSection}, this is the bundle-section smoothness of $\psi^*t$.
+\end{lemma}
+\begin{proof}
+    This is \texttt{ContMDiff.mpullback\_vectorField}, whose four hypotheses must all be supplied --- they are more than invertibility of the differential:
+    \begin{itemize}
+        \item $hV$: $\mathtt{CMDiff}\;m\;(\mathtt{T\%}\;V)$, the hypothesis of this node, obtained for $V = t$ from \ref{lmm:time-orientation-contMDiffSection}.
+        \item $hf$: $\mathtt{CMDiff}\;n\;\psi$, from $\psi$ being a smooth diffeomorphism (\texttt{Diffeomorph.contMDiff}); as everywhere in this section the index is $n = \top$, matching \ref{def:spacetime}.
+        \item $hf'$: $\forall x,\ (\mathtt{mfderiv\%}\;\psi\;x).\mathtt{IsInvertible}$. This is $\mathtt{ContinuousLinearMap.IsInvertible}$ --- a \emph{predicate on a continuous linear map} --- and \emph{not} a \texttt{ContinuousLinearEquiv}, so \ref{lmm:mfderiv-diffeo-linear-equiv} does not supply it directly. The bridge is: rewrite $d\psi_x$ as the coercion of the equivalence using \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} (backwards, by hand, since it is not a simp lemma; see \ref{lmm:mfderiv-diffeo-linear-equiv}), then close the goal with \texttt{ContinuousLinearMap.isInvertible\_equiv}, which states that the coercion of any \texttt{ContinuousLinearEquiv} is invertible.
+        \item $hmn$: the exponent gap $m + 1 \leq n$. Here $m = n = \top$, so it is \texttt{le\_top}, exactly as in \ref{lmm:chart-jacobian-smooth}. The exponent must be taken to be $\top$ and not $\infty$ because the goal side of the chain is at $\top$.
+    \end{itemize}
+    It further requires the instances $[\mathtt{CompleteSpace}\;E]$ and $[\mathtt{IsManifold}\;I\;1\;M]$ (both source and target instances, which coincide here since $\psi$ maps $M$ to itself); $E = \mathbb{R}^4$ is complete and the $\top$-smooth structure of \ref{def:spacetime} gives the manifold instance at order $1$.
+\end{proof}
+
+\begin{lemma}[From Bundle-Section Smoothness Back to the Chart-Local Form]
+    \label{lmm:contMDiffSection-to-chart-local}
+    \uses{def:time-orientable, lmm:tangent-bundle-section-chart-local-iff}
+    Let $W$ be a vector field on $M$ with $\mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;W)$. Then $W$ satisfies the chart-local smoothness condition that the \texttt{smooth} field of a $\mathtt{TimeOrientation}$ demands: for every $x_0 \in M$,
+    \begin{align}
+        \mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;\Big(y \mapsto \mathrm{tangentCoordChange}\;I\;\big(e^{-1}(y)\big)\;x_0\;\big(W(e^{-1}(y))\big)\Big)\;e.\mathtt{target}\;\big(e(x_0)\big).
+    \end{align}
+    This is the return leg of the dictionary, stated in the \emph{same} $\mathrm{tangentCoordChange}$ form as the right-hand side of \ref{lmm:tangent-bundle-section-chart-local-iff} and as the hypothesis consumed by \ref{lmm:time-orientation-contMDiffSection}. It is needed because the \emph{conclusion} of \texttt{ContMDiff.mpullback\_vectorField} is again a bundle-section statement, whereas the goal is chart-local; supplying only the outward leg leaves the proof stranded one step from the goal.
+\end{lemma}
+\begin{proof}
+    Apply the \texttt{.mp} direction of \ref{lmm:tangent-bundle-section-chart-local-iff} to the hypothesis, and specialise the resulting universally quantified statement at the given $x_0$. Nothing else is used; in particular this node no longer carries the \texttt{tangentBundleCore} bookkeeping, which now lives once in the biconditional.
+\end{proof}
+
+\begin{lemma}[The Pullback Time Orientation is Nowhere Vanishing]
+    \label{lmm:pullback-time-orientation-ne-zero}
+    \uses{def:time-orientable, lmm:mfderiv-inverse-eq-symm}
+    For every $x \in M$, $(\psi^*t)_x = (d\psi_x)^{-1}\,t_{\psi(x)} \neq 0$.
+\end{lemma}
+\begin{proof}
+    By \ref{lmm:mfderiv-inverse-eq-symm} the formal inverse $(d\psi_x)^{-1}$ occurring in \texttt{VectorField.mpullback} is the \texttt{symm} of a continuous linear equivalence, hence injective (\texttt{ContinuousLinearEquiv.injective}), and it sends $0$ to $0$. Since $t_{\psi(x)} \neq 0$ by the non-vanishing field of \ref{def:time-orientable}, the image is nonzero. Without \ref{lmm:mfderiv-inverse-eq-symm} this fails: $\mathtt{ContinuousLinearMap.inverse}$ returns the junk value $0$ off the invertible case and is then not injective.
+\end{proof}
+
+\begin{lemma}[The Pullback Time Orientation is Everywhere Timelike]
+    \label{lmm:pullback-time-orientation-timelike}
+    \uses{def:pullback-metric, def:time-orientable, lmm:mfderiv-inverse-eq-symm}
+    For every $x \in M$,
+    \begin{align}
+        (\psi^*g)_x\big((\psi^*t)_x,\, (\psi^*t)_x\big) = g_{\psi(x)}\big(t_{\psi(x)},\, t_{\psi(x)}\big) < 0,
+    \end{align}
+    so $(\psi^*t)_x$ is timelike for $\psi^*g$.
+\end{lemma}
+\begin{proof}
+    Unfold \ref{def:pullback-metric} (whose defining equation is recovered from the bundled form by $\mathtt{bilinearComp\_apply}$), so that the left-hand side reads $g_{\psi(x)}\big(d\psi_x\,(d\psi_x)^{-1} t_{\psi(x)},\, d\psi_x\,(d\psi_x)^{-1} t_{\psi(x)}\big)$. Cancel each occurrence by \ref{lmm:mfderiv-inverse-eq-symm} alone. That suffices, and \ref{lmm:mfderiv-symm-cancel-left} is deliberately \emph{not} needed here: the inverse appearing in this expression is the one written into $\mathtt{VectorField.mpullback}$, namely $\mathtt{ContinuousLinearMap.inverse}\,(d\psi_x)$, and \emph{not} $\mathtt{mfderiv}\;\psi.\mathtt{symm}\;(\psi\,x)$. So the cancellation required is the \texttt{apply\_symm\_apply} of the equivalence, exactly as recorded in the first implementation point of \ref{lmm:mfderiv-diffeo-linear-equiv}; the global-inverse round trip is a different identity and would be an unnecessary detour. The resulting quantity is negative by the timelike field of \ref{def:time-orientable} for $t$ at $\psi(x)$.
+\end{proof}
+
+\begin{lemma}[Pullback of a Time Orientation]
+    \label{lmm:pullback-time-orientation}
+    \uses{def:time-orientable, def:pullback-metric, thrm:pullback-is-spacetime, lmm:time-orientation-contMDiffSection, lmm:mpullback-vectorField-contMDiff-of-diffeo, lmm:contMDiffSection-to-chart-local, lmm:pullback-time-orientation-ne-zero, lmm:pullback-time-orientation-timelike}
+    Let $t$ be a time orientation of $(M,g)$ (\ref{def:time-orientable}). Then the pullback vector field $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$ is a time orientation of $\psi^*(M,g)$ (\ref{thrm:pullback-is-spacetime}): it is smooth, nowhere vanishing, and everywhere timelike for $\psi^*g$.
+\end{lemma}
+\begin{proof}
+    Assemble the three fields of a $\mathtt{TimeOrientation}$ for $\psi^*(M,g)$. Smoothness is the round trip: \ref{lmm:time-orientation-contMDiffSection} converts the chart-local smoothness of $t$ into bundle-section form, \ref{lmm:mpullback-vectorField-contMDiff-of-diffeo} transports it along $\psi$, and \ref{lmm:contMDiffSection-to-chart-local} applied to $W = \psi^*t$ converts the result back into the chart-local form the field demands. Non-vanishing is \ref{lmm:pullback-time-orientation-ne-zero} and timelikeness is \ref{lmm:pullback-time-orientation-timelike}.
+\end{proof}
+
+\begin{lemma}[Transport of Future-Pointing Timelike Vectors]
+    \label{lmm:pullback-future-pointing-timelike}
+    \uses{def:pullback-metric, lmm:pullback-time-orientation, def:future-and-past-pointing-vectors, lmm:mfderiv-inverse-eq-symm}
+    For $v \in TM|_x$ timelike for $\psi^*g$,
+    \begin{align}
+        (\psi^*g)_x\big((\psi^*t)_x,\, v\big) = g_{\psi(x)}\big(t_{\psi(x)},\, d\psi_x v\big),
+    \end{align}
+    and hence $v$ is future-pointing for $(\psi^*g, \psi^*t)$ if and only if $d\psi_x v$ is future-pointing for $(g,t)$.
+\end{lemma}
+\begin{proof}
+    Unfold \ref{def:pullback-metric} in the left-hand side and cancel $d\psi_x\big((d\psi_x)^{-1} t_{\psi(x)}\big) = t_{\psi(x)}$ by \ref{lmm:mfderiv-inverse-eq-symm}. Timelikeness transports immediately, since $(\psi^*g)_x(v,v) = g_{\psi(x)}(d\psi_x v, d\psi_x v)$ is the defining equation of \ref{def:pullback-metric} at $w = v$. Both sides of the claimed equivalence therefore sit in the timelike branch of \ref{def:future-and-past-pointing-vectors}, where future-pointing is exactly negativity of the displayed quantity.
+\end{proof}
+
+\begin{lemma}[Transport of Future-Pointing Null Vectors]
+    \label{lmm:pullback-future-pointing-null}
+    \uses{def:pullback-metric, lmm:pullback-time-orientation, def:future-and-past-pointing-vectors, lmm:pullback-future-pointing-timelike, lmm:mfderiv-diffeo-linear-equiv}
+    For $v \in TM|_x$ null for $\psi^*g$, $v$ is future-pointing for $(\psi^*g, \psi^*t)$ if and only if $d\psi_x v$ is future-pointing for $(g,t)$.
+\end{lemma}
+\begin{proof}
+    Future-pointing for a null vector is \emph{not} a sign condition: by \ref{def:future-and-past-pointing-vectors} it is the existence of a sequence $v_n$ of future-pointing timelike vectors with $v_n \to v$. So the sign argument of \ref{lmm:pullback-future-pointing-timelike} does not apply directly and the witnessing sequence must be transported.
+
+    Given such a sequence for $v$, put $w_n := d\psi_x v_n$. Each $w_n$ is timelike and future-pointing for $(g,t)$ by \ref{lmm:pullback-future-pointing-timelike}, and $w_n \to d\psi_x v$ because $d\psi_x$ is a continuous linear map (\ref{lmm:mfderiv-diffeo-linear-equiv}), so $\mathtt{Filter.Tendsto}$ composes with its continuity at $v$. As $d\psi_x v$ is null for $g$, the sequence $(w_n)$ witnesses the null branch for $d\psi_x v$. The converse runs the same argument with $(d\psi_x)^{-1}$, itself continuous and linear.
+\end{proof}
+
+\begin{lemma}[The Pullback Preserves the Future Orientation Two-Sidedly]
+    \label{lmm:pullback-preserves-future-orientation}
+    \uses{def:preserves-future-orientation, lmm:pullback-future-pointing-timelike, lmm:pullback-future-pointing-null, lmm:mfderiv-symm-cancel-left}
+    The diffeomorphism $\psi$, regarded as carrying $(\psi^*g, \psi^*t)$ to $(g,t)$, satisfies the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}.
+\end{lemma}
+\begin{proof}
+    A future-pointing vector is either timelike or null (\ref{def:future-and-past-pointing-vectors}). The timelike case is \ref{lmm:pullback-future-pointing-timelike} and the null case is \ref{lmm:pullback-future-pointing-null}; each is an equivalence, so it yields both the forward direction for $\psi$ and the forward direction for $\psi^{-1}$.
+
+    The $\psi^{-1}$ half is where \ref{lmm:mfderiv-symm-cancel-left} is spent, and it is worth naming the point exactly, since the edge is otherwise unlocatable in the argument. That half asks: for $y \in M$ and $u \in TM|_y$ future-pointing for $(g,t)$, show $d(\psi^{-1})_y u$ is future-pointing for $(\psi^*g, \psi^*t)$. Put $x := \psi^{-1}(y)$, so $y = \psi(x)$, and apply the equivalence at $x$ to the vector $v := d(\psi^{-1})_{\psi(x)}u$: it says $v$ is future-pointing for $(\psi^*g,\psi^*t)$ iff $d\psi_x v$ is future-pointing for $(g,t)$. But $d\psi_x v = d\psi_x\big(d(\psi^{-1})_{\psi(x)}u\big) = u$ by \ref{lmm:mfderiv-symm-cancel-left}, so the right-hand side is the hypothesis. The same rewriting is also what supplies the causal-type side condition of the equivalence, $(\psi^*g)_x(v,v) = g_{\psi(x)}(d\psi_x v, d\psi_x v) = g_y(u,u)$, so $v$ sits in the same timelike-or-null branch as $u$. Without the cancellation the two sides of the equivalence simply do not meet the hypothesis, since $d\psi_x\,d(\psi^{-1})_{\psi(x)}u$ is not syntactically $u$.
+\end{proof}
+
+\begin{definition}[Isometry Between Two Metrics on One Manifold]
+    \label{def:cross-metric-isometry}
+    \uses{def:pullback-metric}
+    Let $g_1$ and $g_2$ be metrics on the same manifold $M$. A $C^\infty$ diffeomorphism $\psi : M \to M$ is an \emph{isometry from $(M,g_1)$ to $(M,g_2)$} when $\psi^*g_2 = g_1$ (\ref{def:pullback-metric}), that is, when
+    \begin{align}
+        g_2\big(d\psi_x v,\, d\psi_x w\big) = g_1(v,w)
+    \end{align}
+    for every $x \in M$ and all $v, w \in TM|_x$. The usual single-metric notion --- an isometry of $(M,g)$ --- is exactly the special case $g_1 = g_2 = g$. Consequently $\psi$ is tautologically an isometry from $\psi^*(M,g)$ to $(M,g)$, the defining equation there reading $\psi^*g = \psi^*g$. The causal-transport properties of such a $\psi$ are \ref{lmm:cross-metric-isometry-preserves-classification}--\ref{lmm:cross-metric-isometry-preserves-basis-sets}.
+\end{definition}
+
+\begin{lemma}[The Inverse of a Cross-Metric Isometry is a Cross-Metric Isometry]
+    \label{lmm:cross-metric-isometry-symm}
+    \uses{def:cross-metric-isometry, lmm:mfderiv-symm-cancel-left, lmm:mfderiv-symm-cancel-right}
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ in the sense of \ref{def:cross-metric-isometry}. Then $\psi^{-1}$ is an isometry from $(M,g_2)$ to $(M,g_1)$: for every $y \in M$ and all $u, u' \in TM|_y$,
+    \begin{align}
+        g_1\big(d(\psi^{-1})_y u,\; d(\psi^{-1})_y u'\big) = g_2(u, u').
+    \end{align}
+    Moreover $d(\psi^{-1})_{\psi(x)}$ and $d\psi_x$ are mutually inverse continuous linear maps for every $x$.
+\end{lemma}
+\begin{proof}
+    Given $y$, put $x := \psi^{-1}(y)$, so that $y = \psi(x)$ by \texttt{Diffeomorph.apply\_symm\_apply}; every point of $M$ is of this form, so it is enough to prove the equation at $y = \psi(x)$. Instantiate the defining equation of \ref{def:cross-metric-isometry} at $x$ with $v := d(\psi^{-1})_{\psi(x)}u$ and $w := d(\psi^{-1})_{\psi(x)}u'$:
+    \begin{align}
+        g_2\big(d\psi_x\,d(\psi^{-1})_{\psi(x)}u,\; d\psi_x\,d(\psi^{-1})_{\psi(x)}u'\big) = g_1\big(d(\psi^{-1})_{\psi(x)}u,\; d(\psi^{-1})_{\psi(x)}u'\big),
+    \end{align}
+    and rewrite the two arguments on the left with \ref{lmm:mfderiv-symm-cancel-left}, which turns them into $u$ and $u'$. The two mutual-inverse identities are \ref{lmm:mfderiv-symm-cancel-left} and \ref{lmm:mfderiv-symm-cancel-right} as they stand.
+
+    This node exists to replace a hand-wave. The reverse inclusions in \ref{lmm:cross-metric-chronological-future-image} and \ref{lmm:cross-metric-chronological-past-image} apply \ref{lmm:cross-metric-isometry-preserves-chronology} to $\psi^{-1}$, which requires $\psi^{-1}$ to be a cross-metric isometry in the \emph{opposite} direction; that is not the defining equation of \ref{def:cross-metric-isometry} ``read backwards'', since reading it backwards gives an equation about $d\psi$, not about $d(\psi^{-1})$, and passing between the two is exactly the cancellation above.
+\end{proof}
+
+\begin{lemma}[Cross-Metric Isometries Preserve the Causal Classification]
+    \label{lmm:cross-metric-isometry-preserves-classification}
+    \uses{def:cross-metric-isometry, def:timelike-spacelike-null-vectors}
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ (\ref{def:cross-metric-isometry}). Then $g_2(d\psi_x v, d\psi_x v) = g_1(v,v)$, and hence $d\psi_x v$ is timelike, null, or spacelike for $g_2$ if and only if $v$ is timelike, null, or spacelike for $g_1$.
+\end{lemma}
+\begin{proof}
+    Specialise the defining equation of \ref{def:cross-metric-isometry} to $w = v$; the three equivalences follow because the sign of the metric square is unchanged. The single-metric \ref{lmm:isometry-preserves-classification} does not apply: source and target metrics differ here, so the statement is not an instance of it.
+\end{proof}
+
+The pushforward of a path under a cross-metric isometry is decomposed exactly as the single-metric case is in the Lean development, which splits $\mathtt{pushforwardPath}$, $\mathtt{pushforwardPath\_tangent}$, $\mathtt{pushforwardPath\_isTimelike}$ / $\mathtt{pushforwardPath\_isCausal}$ and the two endpoint lemmas into separate declarations. The single-metric \ref{lmm:pushforward-path} does not apply: source and target metrics differ here.
+
+\begin{lemma}[The Tangent Chain Rule Along a Path]
+    \label{lmm:cross-metric-pushforward-path-tangent}
+    \uses{def:paths, lmm:path-parameter-unique-diff, lmm:mfderiv-diffeo-linear-equiv}
+    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and $\mu$ a smooth path. For every parameter $s$ in the parameter space of $\mu$,
+    \begin{align}
+        \tfrac{d}{ds}\big(\psi \circ \mu\big)(s) = d\psi_{\mu(s)}\big(\dot\mu(s)\big),
+    \end{align}
+    the derivatives being taken within the parameter space.
+\end{lemma}
+\begin{proof}
+    This is \texttt{mfderivWithin\_comp} for the composite of $\mu$ with $\psi$. Write $P$ for the parameter space of $\mu$ (the inner set), $u$ for the outer set, and keep $s \in P$ for the parameter of the statement; the set and the point must be kept notationally apart, since \texttt{mfderivWithin\_comp} takes both. With that convention its exact hypotheses are
+    \begin{align}
+        hg &: \mathtt{MDifferentiableWithinAt}\;I'\;I''\;\psi\;u\;(\mu(s)), \qquad hf : \mathtt{MDifferentiableWithinAt}\;I\;I'\;\mu\;P\;s, \\
+        h &: P \subseteq \mu^{-1}(u), \qquad hxs : \mathtt{UniqueMDiffWithinAt}\;I\;P\;s,
+    \end{align}
+    of which two are easy to overlook. The uniqueness hypothesis is \emph{pointwise} --- a $\mathtt{UniqueMDiffWithinAt}$ at the single parameter $s$, not a $\mathtt{UniqueMDiffOn}$ on the whole of $P$ --- so what \ref{lmm:path-parameter-unique-diff} supplies must be specialised to $s$ and converted, as $(\dots\,s\,hs).\mathtt{uniqueMDiffWithinAt}$. And there is a set side condition $P \subseteq \mu^{-1}(u)$ relating the inner set to the outer one; here $u = \mathtt{univ}$, so it is immediate, and correspondingly the outer derivative is an unrestricted \texttt{mfderiv} obtained by \texttt{mfderivWithin\_univ}. Differentiability of $\mu$ within $P$ comes from its smoothness, and differentiability of $\psi$ from \texttt{Diffeomorph.mdifferentiable} (with side condition $n \neq 0$), which is what the repository template cited below actually uses --- not from \ref{lmm:mfderiv-diffeo-linear-equiv}, which delivers a \texttt{ContinuousLinearEquiv} rather than an $\mathtt{MDifferentiableWithinAt}$ hypothesis.
+
+    Do not re-derive this: the repository already contains the single-metric form of exactly this statement, \texttt{Physicslib4.Spacetime.Isometry.mfderivWithin\_comp\_diffeo} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean:43}, whose proof carries out precisely the four steps above (including the \texttt{uniqueMDiffWithinAt} specialisation and the \texttt{mfderivWithin\_univ} rewrite). The cross-metric statement is obtained by copying it with the target metric changed, since the identity is about the differential of $\psi$ alone and mentions no metric. Similarly, the unique-differentials input \ref{lmm:path-parameter-unique-diff} is already proved as \texttt{Physicslib4.Spacetime.Path.uniqueDiffOn\_parameterSpace} in \texttt{Physicslib4/Spacetime/Curves.lean:119} and should be cited rather than reproved.
+\end{proof}
+
+\begin{lemma}[Pushforward of a Path Under a Cross-Metric Isometry]
+    \label{lmm:cross-metric-pushforward-path}
+    \uses{def:cross-metric-isometry, def:paths, lmm:cross-metric-pushforward-path-tangent, lmm:mfderiv-diffeo-linear-equiv}
+    An isometry $\psi$ from $(M,g_1)$ to $(M,g_2)$ pushes a smooth path $\mu$ forward to a smooth path $\psi \circ \mu$ on the same parameter space, with the same closedness, connectedness and non-triviality data.
+\end{lemma}
+\begin{proof}
+    The parameter space and its properties are copied. Continuity and smoothness of $\psi \circ \mu$ follow by composing the smooth $\psi$ with the smooth $\mu$. Non-vanishing of the tangent vector is the only real obligation: rewrite it with \ref{lmm:cross-metric-pushforward-path-tangent} and use that $d\psi_{\mu(s)}$ is injective (\ref{lmm:mfderiv-diffeo-linear-equiv}) together with non-vanishing of $\dot\mu(s)$.
+
+    Again this should be assembled from the existing template rather than rederived: \texttt{Physicslib4.Spacetime.Isometry.pushforwardPath} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean:70} is the single-metric version of this very construction, and its \texttt{nonvanishing} field is the template for the obligation above --- it rewrites with \texttt{mfderivWithin\_comp\_diffeo}, then with $\leftarrow$\,\texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} and \texttt{ContinuousLinearEquiv.coe\_coe} to expose the equivalence, and finishes with its \texttt{injective}. The remaining fields (\texttt{parameterSpace}, \texttt{isClosed}, \texttt{isConnected}, \texttt{nontrivial}, \texttt{continuousOn}, \texttt{smoothOn}) are copied verbatim from that template, none of them mentioning a metric.
+\end{proof}
+
+\begin{lemma}[The Pushforward Preserves the Timelike and Causal Conditions]
+    \label{lmm:cross-metric-pushforward-path-causal}
+    \uses{lmm:cross-metric-pushforward-path, lmm:cross-metric-pushforward-path-tangent, def:timelike-and-causal-smooth-curves, lmm:cross-metric-isometry-preserves-classification}
+    If $\mu$ is timelike (respectively causal) for $g_1$, then $\psi \circ \mu$ is timelike (respectively causal) for $g_2$.
+\end{lemma}
+\begin{proof}
+    Fix $s$ and rewrite the tangent vector of $\psi \circ \mu$ using \ref{lmm:cross-metric-pushforward-path-tangent}. The classification of $d\psi_{\mu(s)}\dot\mu(s)$ for $g_2$ agrees with that of $\dot\mu(s)$ for $g_1$ by \ref{lmm:cross-metric-isometry-preserves-classification}; for the causal case split on the timelike and null disjuncts. This mirrors $\mathtt{pushforwardPath\_isTimelike}$ and $\mathtt{pushforwardPath\_isCausal}$.
+\end{proof}
+
+\begin{lemma}[The Pushforward Transports Endpoints]
+    \label{lmm:cross-metric-pushforward-path-endpoints}
+    \uses{lmm:cross-metric-pushforward-path, def:endpoints}
+    If $p$ is a past (respectively future) endpoint of $\mu$, then $\psi(p)$ is a past (respectively future) endpoint of $\psi \circ \mu$.
+\end{lemma}
+\begin{proof}
+    Being an endpoint (\ref{def:endpoints}) asserts the existence of a parameter $s$ that is minimal (respectively maximal) in the parameter space with $\mu(s) = p$. The pushforward has the same parameter space and $(\psi \circ \mu)(s) = \psi(p)$, so the same $s$ witnesses the condition; no metric or causal input is used. This mirrors $\mathtt{pushforwardPath\_isPastEndpoint}$ and $\mathtt{pushforwardPath\_isFutureEndpoint}$.
+\end{proof}
+
+\begin{lemma}[Cross-Metric Isometries Transport Chronological Precedence]
+    \label{lmm:cross-metric-isometry-preserves-chronology}
+    \uses{def:cross-metric-isometry, def:preserves-future-orientation, def:trip, def:chronological-future-and-chronological-past, lmm:cross-metric-pushforward-path, lmm:cross-metric-pushforward-path-causal, lmm:cross-metric-pushforward-path-endpoints}
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$, each equipped with a time orientation, and suppose $\psi$ preserves the future orientation in the sense of \ref{def:preserves-future-orientation}. Then $p \ll_1 q$ implies $\psi(p) \ll_2 \psi(q)$.
+\end{lemma}
+\begin{proof}
+    A witness for $p \ll_1 q$ is a future-oriented trip (\ref{def:trip}) from $p$ to $q$ for $g_1$. Push it forward by \ref{lmm:cross-metric-pushforward-path}: it is timelike for $g_2$ by \ref{lmm:cross-metric-pushforward-path-causal}, has endpoints $\psi(p)$ and $\psi(q)$ by \ref{lmm:cross-metric-pushforward-path-endpoints}, and is future-oriented because $d\psi$ carries future-pointing tangent vectors to future-pointing tangent vectors (\ref{def:preserves-future-orientation}). So it witnesses $\psi(p) \ll_2 \psi(q)$.
+\end{proof}
+
+\begin{lemma}[Image of the Chronological Future]
+    \label{lmm:cross-metric-chronological-future-image}
+    \uses{lmm:cross-metric-isometry-preserves-chronology, lmm:cross-metric-isometry-symm, def:preserves-future-orientation, def:chronological-future-and-chronological-past}
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ satisfying the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}. Then $\psi\big(I^+_1(p)\big) = I^+_2(\psi(p))$ for every $p$.
+\end{lemma}
+\begin{proof}
+    The inclusion $\subseteq$ is \ref{lmm:cross-metric-isometry-preserves-chronology} applied to $p \ll_1 q$. For $\supseteq$, note that $\psi^{-1}$ is an isometry from $(M,g_2)$ to $(M,g_1)$ by \ref{lmm:cross-metric-isometry-symm}, and preserves the future orientation by the second half of the two-sided hypothesis. Applying \ref{lmm:cross-metric-isometry-preserves-chronology} to $\psi^{-1}$ at the point $\psi(p)$ gives $\psi^{-1}\big(I^+_2(\psi(p))\big) \subseteq I^+_1(p)$, which is the reverse inclusion after applying the bijection $\psi$.
+
+    Take the skeleton from the repository rather than inventing one: the single-metric forms \texttt{Physicslib4.Spacetime.Isometry.chronologicalFuture\_image\_subset} and \texttt{...chronologicalFuture\_image} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean:270,294} are exactly this argument, and the cross-metric version differs only in carrying two metrics. In particular their proofs use \emph{neither} \texttt{Set.image\_subset\_iff} \emph{nor} any \texttt{Equiv.image\_eq\_preimage}-style rewriting, which is the tempting but wrong route: the $\subseteq$ half destructures the image membership directly (\texttt{rintro \_ $\langle$q, hq, rfl$\rangle$}) and the $\supseteq$ half exhibits the witness $\psi^{-1}(r)$ together with the point-level cancellation \texttt{toDiffeo\_inv\_apply}. The chronology step itself is lifted along the transitive closure by \texttt{Relation.TransGen.lift}.
+\end{proof}
+
+\begin{lemma}[Image of the Chronological Past]
+    \label{lmm:cross-metric-chronological-past-image}
+    \uses{lmm:cross-metric-isometry-preserves-chronology, lmm:cross-metric-isometry-symm, def:preserves-future-orientation, def:chronological-future-and-chronological-past}
+    Under the hypotheses of \ref{lmm:cross-metric-chronological-future-image}, $\psi\big(I^-_1(p)\big) = I^-_2(\psi(p))$ for every $p$.
+\end{lemma}
+\begin{proof}
+    Identical to \ref{lmm:cross-metric-chronological-future-image} with the roles of the two endpoints of the trip exchanged: $q \in I^-_1(p)$ means $q \ll_1 p$, so the same two applications of \ref{lmm:cross-metric-isometry-preserves-chronology}, to $\psi$ and to $\psi^{-1}$ --- the latter being a cross-metric isometry from $(M,g_2)$ to $(M,g_1)$ by \ref{lmm:cross-metric-isometry-symm} --- give the two inclusions.
+\end{proof}
+
+\begin{lemma}[Cross-Metric Isometries Preserve Basis Sets]
+    \label{lmm:cross-metric-isometry-preserves-basis-sets}
+    \uses{def:alexandrov-topology, def:preserves-future-orientation, lmm:cross-metric-chronological-future-image, lmm:cross-metric-chronological-past-image, lmm:pullback-time-orientation, lmm:pullback-preserves-future-orientation}
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ satisfying the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}. Then $\psi$ carries Alexandrov basis sets of $(M,g_1)$ to Alexandrov basis sets of $(M,g_2)$:
+    \begin{align}
+        \psi\big(I^+_1(p) \cap I^-_1(q)\big) = I^+_2(\psi(p)) \cap I^-_2(\psi(q)).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    The image of an intersection under an injective map is the intersection of the images, and the two factors are computed by \ref{lmm:cross-metric-chronological-future-image} and \ref{lmm:cross-metric-chronological-past-image}. In the case of interest, $g_1 = \psi^*g_2$ with the pulled-back time orientation of \ref{lmm:pullback-time-orientation}, the orientation hypothesis holds by construction (\ref{lmm:pullback-preserves-future-orientation}); in general it is carried as a hypothesis.
+\end{proof}
+
+\begin{lemma}[A Bijection Matching Generating Families is a Homeomorphism]
+    \label{lmm:bijection-generated-topology-homeomorphism}
+    Let $f : X \to Y$ be a bijection, let $\mathcal{S}$ and $\mathcal{T}$ be families of subsets of $X$ and $Y$, and equip $X$ and $Y$ with the topologies generated by $\mathcal{S}$ and $\mathcal{T}$. If $f$ carries $\mathcal{S}$ onto $\mathcal{T}$, in the sense that $f(S) \in \mathcal{T}$ for every $S \in \mathcal{S}$ and $f^{-1}(T) \in \mathcal{S}$ for every $T \in \mathcal{T}$, then $f$ is a homeomorphism.
+\end{lemma}
+\begin{proof}
+    Purely topological, with no geometry involved. By \texttt{continuous\_generateFrom\_iff} continuity of $f$ reduces to $f^{-1}(T)$ being open for each $T \in \mathcal{T}$, and $f^{-1}(T) \in \mathcal{S}$ is open by \texttt{TopologicalSpace.isOpen\_generateFrom\_of\_mem}. The same argument applied to $f^{-1}$, using that $(f^{-1})^{-1}(S) = f(S) \in \mathcal{T}$ since $f$ is a bijection, gives continuity of the inverse. Bundle the two with the bijection as a \texttt{Homeomorph}.
+
+    Two naming and notation points. The openness lemma lives in the \texttt{TopologicalSpace} namespace and must be cited by its fully qualified name: the unqualified \texttt{isOpen\_generateFrom\_of\_mem} does not resolve. By contrast \texttt{continuous\_generateFrom\_iff} genuinely is in the root namespace and is cited as written. Its exact form is
+    \begin{align}
+        \mathtt{Continuous[}t,\ \mathtt{generateFrom}\;b\mathtt{]}\;f \iff \forall\,s \in b,\ \mathtt{IsOpen}\,(f^{-1}(s)),
+    \end{align}
+    so only the \emph{source} topology is written explicitly, as the bracket argument $t$, while the right-hand side carries a plain \texttt{IsOpen} --- resolved against whatever instance is in scope on the source --- and the target is forced to be a \texttt{generateFrom}. The point to record is that $t$ is an \emph{implicit variable}, not an instance argument: at the application site below the source is the carrier $M$, which already carries its manifold topology as a registered instance, and that instance is what unification will pick unless $t$ is instantiated by hand with the Alexandrov \texttt{generateFrom} term. So the lemma must be applied with $t$ given explicitly (and the resulting plain \texttt{IsOpen} goals read against that same term), since the two Alexandrov topologies are \texttt{TopologicalSpace} \emph{terms}, not instances on the carrier. Silently letting the manifold topology be inferred yields a well-typed but wrong statement, which is the failure mode to guard against here.
+\end{proof}
+
+\begin{lemma}[The Pullback Alexandrov Topology]
+    \label{lmm:pullback-alexandrov-homeomorphism}
+    \uses{def:alexandrov-topology, def:pullback-metric, lmm:pullback-preserves-future-orientation, lmm:cross-metric-isometry-preserves-basis-sets, lmm:bijection-generated-topology-homeomorphism}
+    Let $(M,g,t)$ be a spacetime with time orientation and $\psi$ a $C^\infty$ diffeomorphism of $M$. Then $\psi$ is a homeomorphism from $\psi^*(M,g)$ carrying the Alexandrov topology of $\psi^*g$ and $\psi^*t$ to $(M,g)$ carrying the Alexandrov topology of $g$ and $t$.
+\end{lemma}
+\begin{proof}
+    Apply \ref{lmm:bijection-generated-topology-homeomorphism} with $f := \psi$, a bijection of the common carrier, and with $\mathcal{S}$, $\mathcal{T}$ the families of Alexandrov diamonds of $\psi^*g$ and of $g$ (\ref{def:alexandrov-topology}), whose generated topologies are the two Alexandrov topologies by definition. The hypothesis that $\psi$ carries $\mathcal{S}$ onto $\mathcal{T}$ is \ref{lmm:cross-metric-isometry-preserves-basis-sets} applied to $\psi$ and to $\psi^{-1}$, whose two-sided orientation hypothesis holds by \ref{lmm:pullback-preserves-future-orientation}.
+\end{proof}
+
+\begin{theorem}[The Pullback of a Lorentzian Spacetime is a Lorentzian Spacetime]
+    \label{thrm:pullback-is-lorentzian-spacetime}
+    \uses{def:lorentzian-spacetime, thrm:pullback-is-spacetime, lmm:pullback-time-orientation, lmm:pullback-alexandrov-homeomorphism}
+    Let $(M,g,t)$ be a Lorentzian spacetime (\ref{def:lorentzian-spacetime}) --- a spacetime with a time orientation and a Hausdorff Alexandrov topology --- and $\psi$ a $C^\infty$ diffeomorphism of $M$. Then $\psi^*(M,g,t)$, carrying $\psi^*g$, $\psi^*t$ and its own Alexandrov topology, is again a Lorentzian spacetime.
+\end{theorem}
+\begin{proof}
+    The underlying spacetime is \ref{thrm:pullback-is-spacetime} and the time orientation is \ref{lmm:pullback-time-orientation}, so only the Hausdorff condition on the Alexandrov topology remains. It transports along the homeomorphism of \ref{lmm:pullback-alexandrov-homeomorphism} by \texttt{Homeomorph.t2Space}.
+\end{proof}
+
+This theorem is what makes ``the net over $\psi^*(M,g)$'' meaningful in \ref{def:general-covariance-in-curved-spacetime}: the axioms of Section \ref{sctn:haag-kastler-axioms-in-curved-spacetime} are indexed by Lorentzian spacetimes, so without it there is no net over the pullback background to compare with.
