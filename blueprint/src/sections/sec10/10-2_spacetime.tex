@@ -29,8 +29,8 @@
     \label{lmm:causal-classification}
     \lean{Physicslib4.Spacetime.isTimelike_or_isNull_or_isSpacelike, Physicslib4.Spacetime.not_isSpacelike_of_isTimelike, Physicslib4.Spacetime.not_isTimelike_of_isSpacelike, Physicslib4.Spacetime.not_isNull_of_isTimelike, Physicslib4.Spacetime.not_isNull_of_isSpacelike, Physicslib4.Spacetime.isNull_zero}
     \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
-    \leanok
     \uses{def:timelike-spacelike-null-vectors}
+    \leanok
     Every tangent vector $v \in TM|_p$ is exactly one of timelike, null, or spacelike. In particular the three classes are mutually exclusive, and the zero vector is null.
 \end{lemma}
 \begin{proof}
@@ -51,6 +51,7 @@
     In particular this applies pointwise to the metric $g|_p$ of any spacetime $M$ and any two timelike tangent vectors at a point $p$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Choose a Lorentzian basis $b$, so that $g$ has Gram matrix $\mathrm{diag}(-1,1,1,1)$. Expanding $v$ and $w$ in this basis and using bilinearity, $g(v,v) = -(v^0)^2 + \lVert \mathbf{v}\rVert^2$ and $g(v,w) = -v^0 w^0 + \langle \mathbf{v}, \mathbf{w}\rangle$, where $v^0, w^0$ are the time components, $\mathbf{v}, \mathbf{w}$ the spatial parts, and $\langle\cdot,\cdot\rangle$, $\lVert\cdot\rVert$ the Euclidean inner product and norm on the three spatial coordinates. Timelikeness gives $(v^0)^2 > \lVert\mathbf{v}\rVert^2$ and $(w^0)^2 > \lVert\mathbf{w}\rVert^2$. The ordinary Cauchy-Schwarz inequality gives $\lvert\langle\mathbf{v},\mathbf{w}\rangle\rvert \le \lVert\mathbf{v}\rVert\,\lVert\mathbf{w}\rVert < \lvert v^0\rvert\,\lvert w^0\rvert$, so $\lvert g(v,w)\rvert \ge \lvert v^0 w^0\rvert - \lVert\mathbf{v}\rVert\,\lVert\mathbf{w}\rVert \ge 0$. Squaring and applying the algebraic identity
     \begin{align}
         (pq - rs)^2 - (p^2 - r^2)(q^2 - s^2) = (ps - rq)^2 \ge 0
@@ -71,6 +72,7 @@
     In particular the timelike vectors sharing a time cone (so that $g(v,w) \le 0$) form a convex cone, and this applies pointwise to the metric $g|_p$ of any spacetime.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:reverse-cauchy-schwarz}
     Bilinearity and symmetry give $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w)$. Writing $a = -g(v,v) > 0$, $b = -g(w,w) > 0$ and $c = -g(v,w) \ge 0$, this equals $-(a + b + 2c) < 0$, so $v+w$ is timelike. The reverse Cauchy-Schwarz inequality (\ref{lmm:reverse-cauchy-schwarz}) gives $g(v,w)^2 \ge g(v,v)\,g(w,w)$, that is $c^2 \ge ab$, hence $c \ge \sqrt{ab} = \sqrt a \,\sqrt b$. Therefore $-g(v+w,v+w) = a + b + 2c \ge a + b + 2\sqrt a\,\sqrt b = (\sqrt a + \sqrt b)^2$, and taking square roots yields the reverse triangle inequality.
 \end{proof}
@@ -97,8 +99,8 @@
     \label{lmm:pointing-orientation}
     \lean{Physicslib4.Spacetime.isTimelike_or_isNull_of_isFuturePointing, Physicslib4.Spacetime.isTimelike_or_isNull_of_isPastPointing, Physicslib4.Spacetime.not_isFuturePointing_and_isPastPointing_of_isTimelike}
     \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
-    \leanok
     \uses{def:future-and-past-pointing-vectors, lmm:causal-classification}
+    \leanok
     A future-pointing or past-pointing vector is timelike or null. Moreover a timelike vector cannot be both future-pointing and past-pointing with respect to a fixed time orientation.
 \end{lemma}
 \begin{proof}
@@ -115,6 +117,7 @@
     Let $g$ be a symmetric Lorentzian bilinear form, $t$ a timelike vector, and write $t^\perp = \{u : g(t,u) = 0\}$ for the spacelike complement. Then $g$ is positive semidefinite on $t^\perp$ (so the ordinary Cauchy-Schwarz inequality holds there), and consequently for any timelike $v, w$ with $g(t,v) < 0$ and $g(t,w) < 0$ one has $g(v,w) < 0$. In particular two timelike tangent vectors that are future-pointing with respect to a common time orientation have negative inner product; by time reversal the same holds for two past-pointing timelike vectors (with $g(t,v) > 0$ and $g(t,w) > 0$).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:reverse-cauchy-schwarz}
     If $u \in t^\perp$ had $g(u,u) < 0$ then $u$ would be timelike, and reverse Cauchy-Schwarz (\ref{lmm:reverse-cauchy-schwarz}) would give $g(t,t)\,g(u,u) \le g(t,u)^2 = 0$, contradicting $g(t,t)\,g(u,u) > 0$; hence $g$ is positive semidefinite on $t^\perp$, and Cauchy-Schwarz follows from nonnegativity of the quadratic $s \mapsto g(s u + u', s u + u')$. For the sign claim, decompose $v$ and $w$ along $t$: the vectors $v_\perp = g(t,t)\,v - g(t,v)\,t$ and $w_\perp = g(t,t)\,w - g(t,w)\,t$ lie in $t^\perp$, and $g(v,w) = g(t,t)^{-2}\big(g(t,t)\,g(v,w)\big)$ expands so that $g(t,t)\,g(v,w) = g(t,v)\,g(t,w) + g(v_\perp, w_\perp)/g(t,t)$. Applying Cauchy-Schwarz to $g(v_\perp,w_\perp)$ together with the reverse Cauchy-Schwarz bounds $g(t,v)^2 \ge g(t,t)g(v,v)$ and $g(t,w)^2 \ge g(t,t)g(w,w)$ forces $g(t,t)\,g(v,w) > 0$, and since $g(t,t) < 0$ this gives $g(v,w) < 0$.
 \end{proof}
@@ -128,6 +131,7 @@
     A Lorentzian bilinear form is nondegenerate: if $g(v,w) = 0$ for every $w$, then $v = 0$ (this is read off the signature basis, on which the Gram matrix $\mathrm{diag}(-1,1,1,1)$ is invertible). Consequently $g$ is positive \emph{definite} on the spacelike complement: if $t$ is timelike and $u \ne 0$ satisfies $g(t,u) = 0$, then $g(u,u) > 0$, i.e. $u$ is spacelike.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:cone-sign-lemma}
     Nondegeneracy follows because $g(v, b_j) = (b.\mathrm{repr}\,v)_j \cdot \mathrm{diag}(-1,1,1,1)_{jj}$ in the signature basis $b$, and the diagonal entries are nonzero; so $g(v, \cdot) = 0$ forces every coordinate of $v$ to vanish. For definiteness, semidefiniteness (\ref{lmm:cone-sign-lemma}) gives $g(u,u) \ge 0$; if $g(u,u) = 0$ then for any $u' \in t^\perp$ Cauchy-Schwarz gives $g(u,u')^2 \le g(u,u)\,g(u',u') = 0$, so $u$ is orthogonal to all of $t^\perp$, and since it is also orthogonal to $t$ it is orthogonal to everything, whence $u = 0$ by nondegeneracy, contradicting $u \ne 0$.
 \end{proof}
@@ -141,6 +145,7 @@
     The sum of two timelike future-pointing tangent vectors (with respect to a fixed time orientation) is again timelike and future-pointing. More generally, the sum of any two future-pointing tangent vectors -- timelike or null -- is future-pointing, so the full future cone, including its null boundary, is convex. Since a vector is past-pointing exactly when its negation is future-pointing, the past cone is convex as well. Downstream this packages as the statement that the future-pointing and past-pointing tangent vectors each form a convex cone: they are closed under positive scaling and, more generally, under positive linear combinations $a v + b w$ with $a, b > 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
     For two timelike future-pointing $v, w$ we have $g(t,v) < 0$ and $g(t,w) < 0$. By the sign lemma (\ref{lmm:cone-sign-lemma}) $g(v,w) < 0$, so $v$ and $w$ are aligned and $v + w$ is timelike by cone convexity (\ref{lmm:timelike-cone-convexity}); moreover $g(t, v+w) = g(t,v) + g(t,w) < 0$, so $v + w$ is future-pointing. For the general case, every future-pointing vector is a limit of future-pointing timelike vectors (the constant sequence if timelike, the approximating sequence from the definition if null). Approximating $v$ and $w$ by such sequences $v_n, w_n$, each $v_n + w_n$ is timelike future-pointing by the timelike case. Passing to the limit gives $g(v,w) \le 0$ (continuity of the fixed maps $u \mapsto g(a,u)$ with symmetry), so $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w) \le 0$ and $v+w$ is causal, and $g(t,v+w) = g(t,v) + g(t,w) \le 0$. If $g(v+w,v+w) < 0$ the sum is timelike and reverse Cauchy-Schwarz makes $g(t,v+w) \ne 0$, hence negative, so the sum is future-pointing timelike; if $g(v+w,v+w) = 0$ the sum is null and is the limit of the future-pointing timelike sequence $v_n + w_n$, hence future-pointing null.
 \end{proof}
@@ -185,10 +190,15 @@
     \label{thrm:smooth-curve-causal-well-defined}
     \lean{Physicslib4.Spacetime.isTimelikeSmoothCurve_ofPath_iff, Physicslib4.Spacetime.isCausalSmoothCurve_ofPath_iff}
     \leanfile{Physicslib4/Spacetime/Curves.lean}
-    \leanok
     \uses{def:timelike-and-causal-smooth-curves}
-    The timelike and causal predicates are well-defined on smooth curves, independently of the chosen path representative: a smooth path is timelike (resp. causal) if and only if its associated smooth curve is. The invariance rests on the chain rule for the tangent under a smooth reparametrisation $\varphi$, namely $\mathrm{tangent}(\mu\circ\varphi)(s) = \varphi'(s)\cdot\mathrm{tangent}(\mu)(\varphi(s))$, together with the scale-invariance of the causal classification: since $g(c\,v, c\,v) = c^2\, g(v,v)$, the vector $c\,v$ is timelike/null exactly when $v$ is, for $c \neq 0$.
+    \leanok
+    The timelike and causal predicates are well-defined on smooth curves, independently of the chosen path representative: a smooth path is timelike (resp. causal) if and only if its associated smooth curve is.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:timelike-and-causal-smooth-curves, def:timelike-spacelike-null-vectors, lmm:causal-classification}
+    The invariance rests on the chain rule for the tangent under a smooth reparametrisation $\varphi$, namely $\mathrm{tangent}(\mu\circ\varphi)(s) = \varphi'(s)\cdot\mathrm{tangent}(\mu)(\varphi(s))$, together with the scale-invariance of the causal classification: since $g(c\,v, c\,v) = c^2\, g(v,v)$, the vector $c\,v$ is timelike/null exactly when $v$ is, for $c \neq 0$.
+\end{proof}
 
 \begin{definition}[Oriented Smooth Curve]
     \label{def:oriented-smooth-curve}
@@ -203,19 +213,29 @@
     \label{thrm:oriented-curve-well-defined}
     \lean{Physicslib4.Spacetime.isFutureOrientedCurve_ofPath_iff, Physicslib4.Spacetime.isPastOrientedCurve_ofPath_iff}
     \leanfile{Physicslib4/Spacetime/Curves.lean}
-    \leanok
     \uses{def:oriented-smooth-curve, def:future-and-past-oriented-smooth-curves}
-    Future- and past-orientation are well-defined on oriented smooth curves: a smooth path is future-oriented (resp. past-oriented) if and only if its oriented smooth curve is. The positive within-derivative of an orientation-preserving reparametrisation, together with the positive-scaling invariance of pointing vectors ($c\,v$ is future-pointing iff $v$ is, for $c > 0$), gives the invariance.
+    \leanok
+    Future- and past-orientation are well-defined on oriented smooth curves: a smooth path is future-oriented (resp. past-oriented) if and only if its oriented smooth curve is.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:oriented-smooth-curve, def:future-and-past-oriented-smooth-curves, lmm:future-cone-convexity}
+    The positive within-derivative of an orientation-preserving reparametrisation, together with the positive-scaling invariance of pointing vectors ($c\,v$ is future-pointing iff $v$ is, for $c > 0$), gives the invariance.
+\end{proof}
 
 \begin{theorem}[The Forgetful Projection of Oriented Curves]
     \label{thrm:oriented-curve-projection}
     \lean{Physicslib4.Spacetime.OrientedSmoothCurve.toSmoothCurve, Physicslib4.Spacetime.IsFutureOrientedCurve.isCausal_toSmoothCurve}
     \leanfile{Physicslib4/Spacetime/Curves.lean}
-    \leanok
     \uses{def:oriented-smooth-curve, def:curves, def:timelike-and-causal-smooth-curves}
+    \leanok
     Every oriented smooth curve has an underlying smooth curve, via a canonical surjection $\mathrm{OrientedSmoothCurve} \to \mathrm{SmoothCurve}$ that forgets the orientation data. The timelike and causal predicates factor through it, and a future- or past-oriented curve projects to a causal smooth curve.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:oriented-smooth-curve, def:curves, def:timelike-and-causal-smooth-curves, thrm:smooth-curve-causal-well-defined, lmm:pointing-orientation}
+    The projection is induced by the fact that an orientation-preserving reparametrisation is in particular a reparametrisation, so passing to the coarser quotient is well-defined, and it is surjective because every smooth path represents both an oriented and an unoriented smooth curve. The timelike and causal predicates factor through it by their reparametrisation-invariance (\ref{thrm:smooth-curve-causal-well-defined}), and a future- or past-oriented curve is causal because a future- or past-pointing tangent vector is timelike or null (\ref{lmm:pointing-orientation}).
+\end{proof}
 
 \begin{definition}[Endpoints]
     \label{def:endpoints}
@@ -251,10 +271,15 @@
     \label{thrm:precedence-transitive}
     \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.causallyPrecedes_trans}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:trip, def:causal-trip}
+    \leanok
+    Chronological precedence $\ll$ and causal precedence $\prec$ are transitive: if $p \ll q$ and $q \ll r$ then $p \ll r$, and likewise for $\prec$.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:trip, def:causal-trip}
-    Chronological precedence $\ll$ and causal precedence $\prec$ are transitive: if $p \ll q$ and $q \ll r$ then $p \ll r$, and likewise for $\prec$. Two trips joined at the common point $q$ concatenate to a single piecewise trip; this is exactly the transitivity of the transitive closure.
-\end{theorem}
+    Two trips joined at the common point $q$ concatenate to a single piecewise trip; this is exactly the transitivity of the transitive closure.
+\end{proof}
 
 \begin{definition}[No Closed Causal Curve (Causality Condition)]
     \label{def:no-closed-causal-curve}
@@ -269,10 +294,15 @@
     \label{thrm:causal-order-refinements}
     \lean{Physicslib4.Spacetime.chronologicallyPrecedes_irrefl, Physicslib4.Spacetime.causallyPrecedes_asymm, Physicslib4.Spacetime.causallyPrecedes_antisymm}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
-    \uses{def:no-closed-causal-curve, thrm:precedence-transitive, lmm:chronological-implies-causal}
+    \uses{def:no-closed-causal-curve, def:trip}
     \leanok
-    Assume $M$ has no closed causal curve. Then chronological precedence is irreflexive, $\lnot(p \ll p)$ for every $p$ (since $p \ll p$ would give $p \prec p$ because chronological precedence implies causal precedence), and causal precedence is asymmetric and antisymmetric: $p \prec q$ excludes $q \prec p$, and $p \prec q$ together with $q \prec p$ forces $p = q$ (indeed both cannot hold, since transitivity would give the forbidden $p \prec p$). Thus, under the causality condition, $\prec$ is a strict partial order on the events of the spacetime.
+    Assume $M$ has no closed causal curve. Then chronological precedence is irreflexive, $\lnot(p \ll p)$ for every $p$, and causal precedence is asymmetric and antisymmetric: $p \prec q$ excludes $q \prec p$, and $p \prec q$ together with $q \prec p$ forces $p = q$. Thus, under the causality condition, $\prec$ is a strict partial order on the events of the spacetime.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:no-closed-causal-curve, thrm:precedence-transitive, lmm:chronological-implies-causal}
+    For irreflexivity of chronological precedence, $p \ll p$ would give $p \prec p$ because chronological precedence implies causal precedence (\ref{lmm:chronological-implies-causal}), which the causality condition forbids. For asymmetry and antisymmetry, $p \prec q$ and $q \prec p$ cannot both hold, since transitivity (\ref{thrm:precedence-transitive}) would give the forbidden $p \prec p$.
+\end{proof}
 
 \begin{definition}[Chronological Future and Chronological Past]
     \label{def:chronological-future-and-chronological-past}
@@ -310,8 +340,8 @@
     \label{lmm:chronological-implies-causal}
     \lean{Physicslib4.Spacetime.isCausal_of_isTimelike, Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture, Physicslib4.Spacetime.chronologicalPast_subset_causalPast}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
-    \leanok
     \uses{def:trip, def:causal-trip, def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
+    \leanok
     Every trip is a causal trip, so $p \ll q$ implies $p \prec q$. Consequently $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$.
 \end{lemma}
 \begin{proof}
@@ -323,8 +353,8 @@
     \label{lmm:future-past-monotone}
     \lean{Physicslib4.Spacetime.chronologicalFutureSet_mono, Physicslib4.Spacetime.chronologicalPastSet_mono, Physicslib4.Spacetime.causalFutureSet_mono, Physicslib4.Spacetime.causalPastSet_mono}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
-    \leanok
     \uses{def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
+    \leanok
     The set-valued chronological and causal futures and pasts are monotone: if $S \subseteq T$ then $I^\pm(S) \subseteq I^\pm(T)$ and $J^\pm(S) \subseteq J^\pm(T)$.
 \end{lemma}
 \begin{proof}
@@ -407,8 +437,8 @@
     \label{lmm:completely-spacelike-symm}
     \lean{Physicslib4.Spacetime.isSpacelikeRelated_comm, Physicslib4.Spacetime.isCompletelySpacelike_comm}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
-    \leanok
     \uses{def:spacelike-related, def:completely-spacelike}
+    \leanok
     Spacelike relatedness is symmetric, and consequently complete spacelike separation is symmetric in its two regions: $\mathbf{O}_1, \mathbf{O}_2$ are completely spacelike if and only if $\mathbf{O}_2, \mathbf{O}_1$ are.
 \end{lemma}
 \begin{proof}
@@ -420,8 +450,8 @@
     \label{lmm:completely-spacelike-structural}
     \lean{Physicslib4.Spacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.isCompletelySpacelike_union_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_right}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
-    \leanok
     \uses{def:completely-spacelike, def:lorentzian-spacetime}
+    \leanok
     Complete spacelike separation is monotone under shrinking either region; the empty region is completely spacelike to any region; and a union of regions is completely spacelike to $\mathbf{O}$ if and only if each part is. The same properties hold for the bundled Lorentzian spacetime.
 \end{lemma}
 \begin{proof}
@@ -442,8 +472,8 @@
     \label{lmm:spacelike-complement-order}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_iff}
     \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
-    \leanok
     \uses{def:spacelike-complement, lmm:completely-spacelike-symm, lmm:completely-spacelike-structural}
+    \leanok
     The spacelike complement is antitone ($\mathbf{B}_1 \subseteq \mathbf{B}_2 \Rightarrow \mathbf{B}_2^\perp \subseteq \mathbf{B}_1^\perp$), a region is contained in its double complement ($\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$), and the triple complement collapses ($\mathbf{B}^{\perp\perp\perp} = \mathbf{B}^\perp$). Moreover $\mathbf{B}_1 \subseteq \mathbf{B}_2^\perp$ if and only if $\mathbf{B}_1$ and $\mathbf{B}_2$ are completely spacelike-separated, so complementation is the Galois connection attached to the spacelike-separation relation.
 \end{lemma}
 \begin{proof}
@@ -473,10 +503,15 @@
     \label{thrm:causally-complete-lattice}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_causalComplement}
     \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{def:causally-complete-region, def:causal-closure}
     \leanok
-    \uses{def:causally-complete-region}
-    The causally complete regions form a \emph{complete lattice} (meets are intersections, joins are causal closures of unions), obtained from the causal closure operator via its Galois insertion. The spacelike complement of any region is causally complete, causally complete regions are closed under intersection, and the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an \emph{order-reversing involution} on this lattice ($\mathbf{B}^{\perp\perp} = \mathbf{B}$). (The full orthocomplement law $\mathbf{B} \wedge \mathbf{B}^\perp = \bot$ does not hold at this generality, because the trip-based causal relation is irreflexive, so a point is spacelike-separated from itself; what holds is the complete lattice with an order-reversing De~Morgan involution.)
+    The causally complete regions form a \emph{complete lattice} (meets are intersections, joins are causal closures of unions). The spacelike complement of any region is causally complete, causally complete regions are closed under intersection, and the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an \emph{order-reversing involution} on this lattice ($\mathbf{B}^{\perp\perp} = \mathbf{B}$). (The full orthocomplement law $\mathbf{B} \wedge \mathbf{B}^\perp = \bot$ does not hold at this generality, because the trip-based causal relation is irreflexive, so a point is spacelike-separated from itself; what holds is the complete lattice with an order-reversing De~Morgan involution.)
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:causally-complete-region, def:causal-closure, lmm:spacelike-complement-order}
+    The lattice is obtained from the causal closure operator (\ref{def:causal-closure}) via its Galois insertion: the causally complete regions are exactly the fixed points of the closure operator, so meets are intersections and joins are the causal closures of unions. That the spacelike complement of any region is causally complete, and that complementation is an order-reversing involution on this lattice, are the antitonicity and the triple-complement identity of the spacelike complement (\ref{lmm:spacelike-complement-order}).
+\end{proof}
 
 \begin{lemma}[De Morgan Laws for the Spacelike Complement]
     \label{lmm:spacelike-complement-de-morgan}
@@ -659,8 +694,8 @@
     \label{lmm:alexandrov-basis-open}
     \lean{Physicslib4.Spacetime.isOpen_alexandrov_of_mem_basis}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
-    \leanok
     \uses{def:alexandrov-topology}
+    \leanok
     Every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
 \end{lemma}
 \begin{proof}
@@ -740,8 +775,8 @@
     \label{lmm:lorentzian-causal-lifts}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_comm, Physicslib4.Spacetime.LorentzianSpacetime.isOpen_alexandrov_of_isBasisSet}
     \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
-    \leanok
     \uses{def:lorentzian-spacetime, lmm:completely-spacelike-symm, lmm:alexandrov-basis-open}
+    \leanok
     On a Lorentzian spacetime, complete spacelike separation of two regions is symmetric, and every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
 \end{lemma}
 \begin{proof}
@@ -851,26 +886,41 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \begin{lemma}[Dilations Preserve the Minkowski Cones]
     \label{lmm:minkowski-dilation-cone}
     \lean{Physicslib4.minkowskiForwardCone_smul, Physicslib4.minkowskiBackwardCone_smul}
-    \uses{def:standard-minkowski-spacetime}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
     \leanok
-    For $\lambda > 0$, the dilation $x \mapsto \lambda x$ preserves the forward and backward Minkowski cones: $\lambda q \in I^+(\lambda p) \iff q \in I^+(p)$ and $\lambda p \in I^-(\lambda q) \iff p \in I^-(q)$. Scaling multiplies the defining quadratic form by $\lambda^2 > 0$ and the time-order difference by $\lambda > 0$, so neither strict inequality changes.
+    For $\lambda > 0$, the dilation $x \mapsto \lambda x$ preserves the forward and backward Minkowski cones: $\lambda q \in I^+(\lambda p) \iff q \in I^+(p)$ and $\lambda p \in I^-(\lambda q) \iff p \in I^-(q)$.
 \end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:standard-minkowski-spacetime}
+    Scaling multiplies the defining quadratic form by $\lambda^2 > 0$ and the time-order difference by $\lambda > 0$, so neither strict inequality changes.
+\end{proof}
 
 \begin{theorem}[Dilations are Causal Automorphisms]
     \label{thrm:minkowski-dilation-causal-automorphism}
     \lean{Physicslib4.alexandrovBasis_image_smul}
-    \uses{lmm:minkowski-dilation-cone, def:alexandrov-topology}
+    \uses{def:alexandrov-topology, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
     \leanok
-    For $\lambda > 0$, the dilation $x \mapsto \lambda x$ carries Alexandrov basis sets to Alexandrov basis sets: the image of a diamond $I^+(p) \cap I^-(q)$ is again a diamond, $I^+(\lambda p) \cap I^-(\lambda q)$. Via the cone characterization of the chronological future and past on standard Minkowski (\ref{lmm:minkowski-chronological-open}) together with \ref{lmm:minkowski-dilation-cone}, so a positive dilation preserves the causal (Alexandrov) structure --- it is a causal automorphism.
+    For $\lambda > 0$, the dilation $x \mapsto \lambda x$ carries Alexandrov basis sets to Alexandrov basis sets: the image of a diamond $I^+(p) \cap I^-(q)$ is again a diamond, $I^+(\lambda p) \cap I^-(\lambda q)$. So a positive dilation preserves the causal (Alexandrov) structure --- it is a causal automorphism.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-dilation-cone, lmm:minkowski-chronological-open, def:alexandrov-topology}
+    Via the cone characterization of the chronological future and past on standard Minkowski (\ref{lmm:minkowski-chronological-open}) together with \ref{lmm:minkowski-dilation-cone}.
+\end{proof}
 
 \begin{theorem}[Dilations are Not Isometries]
     \label{thrm:minkowski-dilation-not-isometry}
     \lean{Physicslib4.minkowskiForm_smul, Physicslib4.exists_minkowskiForm_smul_ne}
     \uses{def:standard-minkowski-spacetime}
     \leanok
-    The Minkowski metric scales by $\lambda^2$ under a dilation, $g(\lambda v, \lambda w) = \lambda^2\, g(v,w)$. Consequently, whenever $\lambda^2 \neq 1$ the dilation does not preserve $g$: for the timelike unit vector $e_0$ one has $g(\lambda e_0, \lambda e_0) = -\lambda^2 \neq -1 = g(e_0, e_0)$. Thus for $\lambda > 0$ with $\lambda \neq 1$ the dilation is a causal automorphism (\ref{thrm:minkowski-dilation-causal-automorphism}) that is not an isometry.
+    The Minkowski metric scales by $\lambda^2$ under a dilation, $g(\lambda v, \lambda w) = \lambda^2\, g(v,w)$. Consequently, whenever $\lambda^2 \neq 1$ the dilation does not preserve $g$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:standard-minkowski-spacetime, thrm:minkowski-dilation-causal-automorphism}
+    The scaling identity is bilinearity of the Minkowski form. For the timelike unit vector $e_0$ one has $g(\lambda e_0, \lambda e_0) = -\lambda^2 \neq -1 = g(e_0, e_0)$ whenever $\lambda^2 \neq 1$, which exhibits a pair of vectors on which $g$ is not preserved. Thus for $\lambda > 0$ with $\lambda \neq 1$ the dilation is a causal automorphism (\ref{thrm:minkowski-dilation-causal-automorphism}) that is not an isometry.
+\end{proof}
 
 \subsection{Isometries and basis-set preservation}
 
@@ -878,8 +928,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \label{lmm:isometry-preserves-classification}
     \lean{Physicslib4.Spacetime.Isometry.preserves_self, Physicslib4.Spacetime.Isometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.Isometry.isNull_mfderiv_iff, Physicslib4.Spacetime.Isometry.isSpacelike_mfderiv_iff}
     \leanfile{Physicslib4/Spacetime/Isometry.lean}
-    \leanok
     \uses{def:spacetime, def:timelike-spacelike-null-vectors}
+    \leanok
     An isometry $\varphi$ of a spacetime preserves the metric square of a tangent vector, $g_{\varphi(x)}(d\varphi_x v, d\varphi_x v) = g_x(v,v)$, and therefore $d\varphi_x v$ is timelike, null, or spacelike if and only if $v$ is.
 \end{lemma}
 \begin{proof}
@@ -891,8 +941,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \label{lmm:path-parameter-unique-diff}
     \lean{Physicslib4.Spacetime.Path.uniqueDiffOn_parameterSpace}
     \leanfile{Physicslib4/Spacetime/Curves.lean}
-    \leanok
     \uses{def:paths}
+    \leanok
     The parameter space of a path has unique differentials: being a closed, connected subset of $\mathbb{R}$ with more than one point, it is a non-degenerate interval, hence convex with non-empty interior.
 \end{lemma}
 \begin{proof}
@@ -904,8 +954,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \label{lmm:pushforward-path}
     \lean{Physicslib4.Spacetime.Isometry.pushforwardPath, Physicslib4.Spacetime.Isometry.pushforwardPath_tangent, Physicslib4.Spacetime.Isometry.pushforwardPath_isTimelike, Physicslib4.Spacetime.Isometry.pushforwardPath_isCausal, Physicslib4.Spacetime.Isometry.pushforwardPath_isPastEndpoint, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureEndpoint}
     \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
-    \leanok
     \uses{def:paths, def:timelike-and-causal-smooth-curves, def:endpoints, lmm:isometry-preserves-classification, lmm:path-parameter-unique-diff}
+    \leanok
     An isometry $\varphi$ pushes a smooth path $\mu$ forward to the smooth path $\varphi \circ \mu$ on the same parameter space, with tangent vector $d\varphi(\dot\mu)$. The pushforward preserves the timelike and causal conditions and carries the past and future endpoints of $\mu$ to those of $\varphi \circ \mu$.
 \end{lemma}
 \begin{proof}
@@ -917,8 +967,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \label{lmm:isometry-preserves-chronology}
     \lean{Physicslib4.Spacetime.Isometry.PreservesFutureOrientation, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_one, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_mul, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureOriented, Physicslib4.Spacetime.Isometry.chronologicallyPrecedes_pushforward, Physicslib4.Spacetime.Isometry.chronologicalFuture_image_subset, Physicslib4.Spacetime.Isometry.chronologicalFuture_image, Physicslib4.Spacetime.Isometry.chronologicalPast_image_subset, Physicslib4.Spacetime.Isometry.chronologicalPast_image}
     \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
-    \leanok
     \uses{def:trip, def:chronological-future-and-chronological-past, lmm:pushforward-path}
+    \leanok
     Say an isometry $\varphi$ \emph{preserves the future orientation} if its differential sends future-pointing vectors to future-pointing vectors; this property holds for the identity and is closed under composition. Under it, $\varphi$ carries trips to trips, so $p \ll q$ implies $\varphi(p) \ll \varphi(q)$, and the chronological futures and pasts satisfy $\varphi(I^\pm(p)) = I^\pm(\varphi(p))$.
 \end{lemma}
 \begin{proof}
@@ -930,8 +980,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \label{lmm:isometry-preserves-basis-sets}
     \lean{Physicslib4.Spacetime.Isometry.futureOrientationPreserving, Physicslib4.Spacetime.Isometry.orientedIdentityComponent, Physicslib4.Spacetime.Isometry.alexandrovBasis_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent, Physicslib4.Spacetime.Isometry.smul_set_eq_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_smul_of_mem, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_image, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_smul}
     \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
-    \leanok
     \uses{def:alexandrov-topology, def:lorentzian-spacetime, lmm:isometry-preserves-chronology}
+    \leanok
     The future-orientation-preserving isometries (those $\varphi$ with both $\varphi$ and $\varphi^{-1}$ preserving the orientation) form a subgroup, and intersecting it with the identity component gives the \emph{oriented identity component}. Every such isometry maps Alexandrov-basis diamonds to diamonds, $\varphi(I^+(p) \cap I^-(q)) = I^+(\varphi(p)) \cap I^-(\varphi(q))$, both as an image and in pointwise-action form $\varphi \cdot \mathbf{B}$, and this lifts to the bundled Lorentzian spacetime.
 \end{lemma}
 \begin{proof}
@@ -943,8 +993,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \label{lmm:axiom5-basis-preservation}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_isBasisSet_smul}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/IdentityComponent.lean}
-    \leanok
     \uses{lmm:isometry-preserves-basis-sets, def:isometric-covariance-in-curved-spacetime}
+    \leanok
     Instantiating the abstract curved-spacetime interface with the oriented identity component, every isometry $\varphi$ of the abstract spacetime carries Alexandrov-basis sets to basis sets, $\varphi \cdot \mathbf{B}$ is again a basis set. This is exactly the well-definedness condition for the Axiom 5 action $\mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$.
 \end{lemma}
 \begin{proof}

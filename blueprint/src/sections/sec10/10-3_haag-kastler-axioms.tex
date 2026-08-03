@@ -135,10 +135,15 @@ Local commutativity (\ref{def:local-commutativity}) is an algebraic statement ab
     \label{thrm:einstein-causality}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.einstein_causality, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.exists_gns_einstein_causality}
     \leanfile{Physicslib4/AQFT/HaagKastler/EinsteinCausality.lean}
+    \uses{def:haag-kastler-net, thrm:gns-construction-theorem, def:state}
     \leanok
-    \uses{def:local-commutativity, def:haag-kastler-net, thrm:gns-construction-theorem, def:state}
-    Let $\pi$ be any $*$-representation of the quasilocal algebra on a Hilbert space $H$. If $\mathbf{B}_1, \mathbf{B}_2$ are completely spacelike-separated basis regions, then for all $a \in \mathfrak{U}(\mathbf{B}_1)$ and $b \in \mathfrak{U}(\mathbf{B}_2)$ the operators $\pi(\iota_{\mathbf{B}_1} a)$ and $\pi(\iota_{\mathbf{B}_2} b)$ commute. This is the image under $\pi$ of the local commutativity relation (\ref{def:local-commutativity}); since the GNS representation of any state is such a $\pi$, spacelike-separated local observables commute on every GNS Hilbert space.
+    Let $\pi$ be any $*$-representation of the quasilocal algebra on a Hilbert space $H$. If $\mathbf{B}_1, \mathbf{B}_2$ are completely spacelike-separated basis regions, then for all $a \in \mathfrak{U}(\mathbf{B}_1)$ and $b \in \mathfrak{U}(\mathbf{B}_2)$ the operators $\pi(\iota_{\mathbf{B}_1} a)$ and $\pi(\iota_{\mathbf{B}_2} b)$ commute.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:local-commutativity}
+    This is the image under $\pi$ of the local commutativity relation (\ref{def:local-commutativity}); since the GNS representation of any state is such a $\pi$, spacelike-separated local observables commute on every GNS Hilbert space.
+\end{proof}
 
 \subsection{Local von Neumann Algebras}
 
@@ -166,28 +171,43 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     \label{thrm:von-neumann-microcausality}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_subset_centralizer}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:local-von-neumann}
+    \leanok
+    For completely spacelike-separated basis regions $\mathbf{B}_1, \mathbf{B}_2$, the local von Neumann algebras commute: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:local-von-neumann, thrm:einstein-causality}
-    For completely spacelike-separated basis regions $\mathbf{B}_1, \mathbf{B}_2$, the local von Neumann algebras commute: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$. This is the von Neumann form of Einstein causality (\ref{thrm:einstein-causality}): elementwise commutation $\pi(\mathfrak{U}(\mathbf{B}_2)) \subseteq \pi(\mathfrak{U}(\mathbf{B}_1))'$, with the antitonicity of the commutant and the identity $S''' = S'$ collapsing the iterated commutants. A Haag-Kastler net is thus a net of mutually commuting von Neumann algebras for spacelike regions.
-\end{theorem}
+    This is the von Neumann form of Einstein causality (\ref{thrm:einstein-causality}): elementwise commutation $\pi(\mathfrak{U}(\mathbf{B}_2)) \subseteq \pi(\mathfrak{U}(\mathbf{B}_1))'$, with the antitonicity of the commutant and the identity $S''' = S'$ collapsing the iterated commutants. A Haag-Kastler net is thus a net of mutually commuting von Neumann algebras for spacelike regions.
+\end{proof}
 
 \begin{theorem}[Isotony of the von Neumann Net]
     \label{thrm:von-neumann-isotony}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_mono}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:local-von-neumann}
+    \leanok
+    For basis regions $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:local-von-neumann, def:isotony}
-    For basis regions $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. The local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ via the quasilocal isotony coherence, and the double commutant is monotone.
-\end{theorem}
+    The local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ via the quasilocal isotony coherence, and the double commutant is monotone.
+\end{proof}
 
 \begin{theorem}[Bundled von Neumann Microcausality and Isotony]
     \label{thrm:von-neumann-bundled-order}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_mono}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:local-von-neumann-algebra}
+    \leanok
+    Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B})$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated regions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$, $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:local-von-neumann-algebra, thrm:von-neumann-microcausality, thrm:von-neumann-isotony}
-    Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B})$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated regions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$, $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$. Both reduce to the set-level statements through the coercion $\uparrow R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$.
-\end{theorem}
+    Both reduce to the set-level statements through the coercion $\uparrow R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$.
+\end{proof}
 
 \begin{definition}[The Net of von Neumann Algebras]
     \label{def:von-neumann-net}
@@ -202,57 +222,87 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     \label{thrm:statistical-independence}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_separating, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.eq_zero_of_commute_of_cyclic}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:cyclic-vector}
     \leanok
-    \uses{thrm:von-neumann-microcausality, def:cyclic-vector}
-    If $\Omega$ is cyclic for the local observables of $\mathbf{B}_1$, then for a spacelike-separated region $\mathbf{B}_2$ every $R \in R(\mathbf{B}_2)$ with $R\Omega = 0$ is zero, so $\Omega$ is separating for $R(\mathbf{B}_2)$. The implication is elementary ($R$ vanishes on the dense set of vectors $A\Omega$ for $A$ a local observable of $\mathbf{B}_1$, since $R(\mathbf{B}_2)$ commutes with those observables by microcausality, \ref{thrm:von-neumann-microcausality}). In Minkowski spacetime the cyclicity hypothesis is exactly the content of the Reeh-Schlieder theorem, which rests on the spectrum condition; here it is taken as an explicit hypothesis, mirroring the curved-spacetime version where no spectrum condition is available.
+    If $\Omega$ is cyclic for the local observables of $\mathbf{B}_1$, then for a spacelike-separated region $\mathbf{B}_2$ every $R \in R(\mathbf{B}_2)$ with $R\Omega = 0$ is zero, so $\Omega$ is separating for $R(\mathbf{B}_2)$. In Minkowski spacetime the cyclicity hypothesis is exactly the content of the Reeh-Schlieder theorem, which rests on the spectrum condition; here it is taken as an explicit hypothesis, mirroring the curved-spacetime version where no spectrum condition is available.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:cyclic-vector, thrm:von-neumann-microcausality}
+    The implication is elementary ($R$ vanishes on the dense set of vectors $A\Omega$ for $A$ a local observable of $\mathbf{B}_1$, since $R(\mathbf{B}_2)$ commutes with those observables by microcausality, \ref{thrm:von-neumann-microcausality}).
+\end{proof}
 
 \begin{theorem}[Statistical Independence, bundled]
     \label{thrm:statistical-independence-bundled}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_separating}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:local-von-neumann-algebra}
     \leanok
-    \uses{thrm:statistical-independence, def:local-von-neumann-algebra}
-    The separating property phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}_2)$: with $\Omega$ cyclic for the local observables of $\mathbf{B}_1$, every $R$ in the bundled algebra $R(\mathbf{B}_2)$ of a spacelike-separated region with $R\Omega = 0$ is zero. It reduces to \ref{thrm:statistical-independence} through the coercion $\uparrow R(\mathbf{B}_2) = \pi(\mathfrak{U}(\mathbf{B}_2))''$.
+    The separating property phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}_2)$: with $\Omega$ cyclic for the local observables of $\mathbf{B}_1$, every $R$ in the bundled algebra $R(\mathbf{B}_2)$ of a spacelike-separated region with $R\Omega = 0$ is zero.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:local-von-neumann-algebra, thrm:statistical-independence}
+    It reduces to \ref{thrm:statistical-independence} through the coercion $\uparrow R(\mathbf{B}_2) = \pi(\mathfrak{U}(\mathbf{B}_2))''$.
+\end{proof}
 
 \begin{theorem}[Additive-Free Locality via the Spacelike Complement]
     \label{thrm:additive-free-locality}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \uses{def:spacelike-complement}
     \leanok
-    \uses{thrm:von-neumann-bundled-order, def:spacelike-complement}
-    Locality expressed through the spacelike complement, without attaching any algebra to the unbounded complement: for basis sets $\mathbf{B}' \subseteq \mathbf{B}^\perp$, the local von Neumann algebra $R(\mathbf{B}')$ lies in the commutant $R(\mathbf{B})'$. It is a direct repackaging of bundled microcausality (\ref{thrm:von-neumann-bundled-order}) through the Galois bridge $\mathbf{B}' \subseteq \mathbf{B}^\perp \iff \mathbf{B}', \mathbf{B}$ completely spacelike, staying strictly within the physically local (bounded, diamond) regions. No local algebra is ever attached to the unbounded complement.
+    Locality expressed through the spacelike complement, without attaching any algebra to the unbounded complement: for basis sets $\mathbf{B}' \subseteq \mathbf{B}^\perp$, the local von Neumann algebra $R(\mathbf{B}')$ lies in the commutant $R(\mathbf{B})'$. No local algebra is ever attached to the unbounded complement.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:spacelike-complement, thrm:von-neumann-bundled-order}
+    It is a direct repackaging of bundled microcausality (\ref{thrm:von-neumann-bundled-order}) through the Galois bridge $\mathbf{B}' \subseteq \mathbf{B}^\perp \iff \mathbf{B}', \mathbf{B}$ completely spacelike, staying strictly within the physically local (bounded, diamond) regions.
+\end{proof}
 
 \begin{theorem}[Geometric Covariance of the von Neumann Net]
     \label{thrm:von-neumann-geometric-covariance}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.lieConj_image_covLocalVonNeumann, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.lieConj_image_covLocalOperators}
     \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \uses{def:local-von-neumann, def:covariant-quasilocal-algebra}
     \leanok
-    \uses{def:local-von-neumann, def:covariant-quasilocal-algebra, thrm:irreducible-covariant-representation}
     In a covariant representation $\pi$ of the quasilocal algebra with the operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$, conjugation by the implementing unitary $U(L)$ carries the local von Neumann algebra of a region $\mathbf{B}$ onto that of the Lorentz-transformed region $L \cdot \mathbf{B}$:
     \[ U(L)\, R(\mathbf{B})\, U(L)^{-1} = R(L \cdot \mathbf{B}). \]
-    This is the statement that the symmetry group acts \emph{geometrically} on the net of von Neumann algebras. The proof rests on three ingredients, all already available: operator covariance (the last clause of \ref{thrm:irreducible-covariant-representation}); the fact that $\beta_L = $ the covariance action sends $\iota_{\mathbf{B}}(\mathfrak{U}(\mathbf{B}))$ onto $\iota_{L\cdot\mathbf{B}}(\mathfrak{U}(L\cdot\mathbf{B}))$ (from the action-on-generators identity and surjectivity of the covariance equivalence $\alpha_L$); and the algebraic fact that conjugation by a unit is a multiplicative automorphism, which therefore commutes with the bicommutant. The reusable core is that a multiplicative automorphism maps the centralizer of a set onto the centralizer of its image, hence maps bicommutants to bicommutants. In particular $R(\mathbf{B})$ and $R(L \cdot \mathbf{B})$ are unitarily equivalent (conjugate by $U(L)$), so any unitary-conjugation-invariant property of a local von Neumann algebra --- such as being a factor --- is constant along the Lorentz orbit of a region.
+    This is the statement that the symmetry group acts \emph{geometrically} on the net of von Neumann algebras.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:local-von-neumann, def:covariant-quasilocal-algebra, thrm:irreducible-covariant-representation}
+    The proof rests on three ingredients, all already available: operator covariance (the last clause of \ref{thrm:irreducible-covariant-representation}); the fact that $\beta_L = $ the covariance action sends $\iota_{\mathbf{B}}(\mathfrak{U}(\mathbf{B}))$ onto $\iota_{L\cdot\mathbf{B}}(\mathfrak{U}(L\cdot\mathbf{B}))$ (from the action-on-generators identity and surjectivity of the covariance equivalence $\alpha_L$); and the algebraic fact that conjugation by a unit is a multiplicative automorphism, which therefore commutes with the bicommutant. The reusable core is that a multiplicative automorphism maps the centralizer of a set onto the centralizer of its image, hence maps bicommutants to bicommutants. In particular $R(\mathbf{B})$ and $R(L \cdot \mathbf{B})$ are unitarily equivalent (conjugate by $U(L)$), so any unitary-conjugation-invariant property of a local von Neumann algebra --- such as being a factor --- is constant along the Lorentz orbit of a region.
+\end{proof}
 
 \begin{theorem}[Orbit-Invariance of Factoriality]
     \label{thrm:von-neumann-factor-orbit}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.covLocalVonNeumann_isFactor_smul}
     \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \uses{thrm:irreducible-factor}
     \leanok
-    \uses{thrm:von-neumann-geometric-covariance, thrm:irreducible-factor}
-    If the local von Neumann algebra $R(\mathbf{B})$ is a \emph{factor} (its center $R(\mathbf{B}) \cap R(\mathbf{B})'$ is exactly the scalars), then so is $R(L \cdot \mathbf{B})$ for every Lorentz transformation $L$. Geometric covariance (\ref{thrm:von-neumann-geometric-covariance}) exhibits $R(L \cdot \mathbf{B}) = U(L) R(\mathbf{B}) U(L)^{-1}$; conjugation by a unitary is a multiplicative automorphism that carries the center onto the center and fixes the scalars, so it preserves the factor property. Thus being a factor is constant along the Lorentz orbit of a region.
+    If the local von Neumann algebra $R(\mathbf{B})$ is a \emph{factor} (its center $R(\mathbf{B}) \cap R(\mathbf{B})'$ is exactly the scalars), then so is $R(L \cdot \mathbf{B})$ for every Lorentz transformation $L$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:von-neumann-geometric-covariance}
+    Geometric covariance (\ref{thrm:von-neumann-geometric-covariance}) exhibits $R(L \cdot \mathbf{B}) = U(L) R(\mathbf{B}) U(L)^{-1}$; conjugation by a unitary is a multiplicative automorphism that carries the center onto the center and fixes the scalars, so it preserves the factor property. Thus being a factor is constant along the Lorentz orbit of a region.
+\end{proof}
 
 \begin{theorem}[Geometric Covariance as a von Neumann Algebra Isomorphism]
     \label{thrm:von-neumann-covariance-iso}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.covLocalVonNeumannEquiv}
     \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \uses{def:local-von-neumann-algebra}
     \leanok
-    \uses{thrm:von-neumann-geometric-covariance, def:local-von-neumann-algebra}
-    The geometric-covariance set equality is upgraded to a first-class \emph{$*$-algebra isomorphism} of the bundled local von Neumann algebras, $R(\mathbf{B}) \cong R(L \cdot \mathbf{B})$. It is the restriction of the conjugation $*$-automorphism $T \mapsto U(L) T U(L)^{-1}$ of $\mathcal{B}(H)$ (Mathlib's \texttt{conjStarAlgEquiv}, whose adjoint-is-inverse property makes conjugation by a unitary star-preserving) to $R(\mathbf{B})$, whose image is exactly $R(L \cdot \mathbf{B})$. The reusable ingredient is that a $*$-automorphism carrying the underlying set of one star-subalgebra onto another restricts to a star-algebra equivalence between them. This makes the unitary equivalence of orbit-related local algebras an explicit transportable object.
+    The geometric-covariance set equality is upgraded to a first-class \emph{$*$-algebra isomorphism} of the bundled local von Neumann algebras, $R(\mathbf{B}) \cong R(L \cdot \mathbf{B})$. It is the restriction of the conjugation $*$-automorphism $T \mapsto U(L) T U(L)^{-1}$ of $\mathcal{B}(H)$ (Mathlib's \texttt{conjStarAlgEquiv}, whose adjoint-is-inverse property makes conjugation by a unitary star-preserving) to $R(\mathbf{B})$, whose image is exactly $R(L \cdot \mathbf{B})$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:local-von-neumann-algebra, thrm:von-neumann-geometric-covariance}
+    The reusable ingredient is that a $*$-automorphism carrying the underlying set of one star-subalgebra onto another restricts to a star-algebra equivalence between them. This makes the unitary equivalence of orbit-related local algebras an explicit transportable object.
+\end{proof}
 
 \subsection{Relative Commutants of Nested Local Algebras}
 
@@ -270,32 +320,51 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
     \label{thrm:commutant-antitone}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.commutant_le_commutant_of_le}
     \leanok
-    For bundled von Neumann algebras $M \le N$ on $H$, the commutants reverse the inclusion, $N' \le M'$. This is not a lattice primitive: through the coercion $\uparrow M' = \operatorname{centralizer}(\uparrow M)$ (Mathlib's \texttt{coe\_commutant}) it reduces to the antitonicity of the centralizer, $S \subseteq T \Rightarrow \operatorname{centralizer}(T) \subseteq \operatorname{centralizer}(S)$ (\texttt{Set.centralizer\_subset}), applied to $\uparrow M \subseteq \uparrow N$.
+    For bundled von Neumann algebras $M \le N$ on $H$, the commutants reverse the inclusion, $N' \le M'$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    This is not a lattice primitive: through the coercion $\uparrow M' = \operatorname{centralizer}(\uparrow M)$ (Mathlib's \texttt{coe\_commutant}) it reduces to the antitonicity of the centralizer, $S \subseteq T \Rightarrow \operatorname{centralizer}(T) \subseteq \operatorname{centralizer}(S)$ (\texttt{Set.centralizer\_subset}), applied to $\uparrow M \subseteq \uparrow N$.
+\end{proof}
 
 \begin{theorem}[Relative Commutant Lies in the Larger Algebra]
     \label{thrm:relative-commutant-le-right}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant_le_right}
     \uses{def:relative-commutant}
     \leanok
-    The relative commutant is contained in the larger algebra, $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) \le R(\mathbf{B}_2)$. As \texttt{VonNeumannAlgebra} has no lattice meet, the order relation $\le$ is discharged through the coercion to underlying sets, where it is the inclusion $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) \subseteq R(\mathbf{B}_2)$, i.e. \texttt{Set.inter\_subset\_right}.
+    The relative commutant is contained in the larger algebra, $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) \le R(\mathbf{B}_2)$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:relative-commutant}
+    As \texttt{VonNeumannAlgebra} has no lattice meet, the order relation $\le$ is discharged through the coercion to underlying sets, where it is the inclusion $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) \subseteq R(\mathbf{B}_2)$, i.e. \texttt{Set.inter\_subset\_right}.
+\end{proof}
 
 \begin{theorem}[Relative Commutant Commutes with the Smaller Algebra]
     \label{thrm:relative-commutant-coe-commutant}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant_coe_subset_commutant}
     \uses{def:relative-commutant}
     \leanok
-    Every element of the relative commutant commutes with all of $R(\mathbf{B}_1)$: the underlying set of $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$ is contained in $R(\mathbf{B}_1)'$, that is $\uparrow\!\big(R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)\big) \subseteq R(\mathbf{B}_1)'$. On underlying sets this is \texttt{Set.inter\_subset\_left}.
+    Every element of the relative commutant commutes with all of $R(\mathbf{B}_1)$: the underlying set of $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$ is contained in $R(\mathbf{B}_1)'$, that is $\uparrow\!\big(R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)\big) \subseteq R(\mathbf{B}_1)'$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:relative-commutant}
+    On underlying sets this is \texttt{Set.inter\_subset\_left}.
+\end{proof}
 
 \begin{theorem}[Relative Commutant Contains the Center]
     \label{thrm:relative-commutant-center}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.center_le_relativeCommutant}
-    \uses{def:relative-commutant, thrm:von-neumann-isotony, thrm:commutant-antitone}
+    \uses{def:relative-commutant}
     \leanok
-    When $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the relative commutant contains the center of the ambient algebra: the underlying set of the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in that of $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Isotony (\ref{thrm:von-neumann-isotony}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$; antitonicity of the commutant (\ref{thrm:commutant-antitone}) then yields $R(\mathbf{B}_2)' \le R(\mathbf{B}_1)'$, so $\uparrow R(\mathbf{B}_2)' \subseteq \uparrow R(\mathbf{B}_1)'$. Combined with $R(\mathbf{B}_2) \subseteq R(\mathbf{B}_2)$ through \texttt{Set.subset\_inter}, this lands $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ inside $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Thus the relative commutant of a nested pair always contains the center of the ambient algebra, and is trivial (scalars) exactly when the inclusion is irreducible.
+    When $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the relative commutant contains the center of the ambient algebra: the underlying set of the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in that of $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:relative-commutant, thrm:von-neumann-isotony, thrm:commutant-antitone}
+    Isotony (\ref{thrm:von-neumann-isotony}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$; antitonicity of the commutant (\ref{thrm:commutant-antitone}) then yields $R(\mathbf{B}_2)' \le R(\mathbf{B}_1)'$, so $\uparrow R(\mathbf{B}_2)' \subseteq \uparrow R(\mathbf{B}_1)'$. Combined with $R(\mathbf{B}_2) \subseteq R(\mathbf{B}_2)$ through \texttt{Set.subset\_inter}, this lands $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ inside $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$. Thus the relative commutant of a nested pair always contains the center of the ambient algebra, and is trivial (scalars) exactly when the inclusion is irreducible.
+\end{proof}
 
 \begin{definition}[Irreducible Inclusion]
     \label{def:irreducible-inclusion}
@@ -308,18 +377,28 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 \begin{theorem}[An Irreducible Inclusion has Factor Ambient]
     \label{thrm:irreducible-inclusion-factor}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_of_isIrreducibleInclusion}
-    \uses{def:irreducible-inclusion, thrm:relative-commutant-center}
+    \uses{def:irreducible-inclusion}
     \leanok
-    If $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and the inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is irreducible, then the ambient algebra $R(\mathbf{B}_2)$ is a factor (trivial center). Indeed the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in the relative commutant (\ref{thrm:relative-commutant-center}), which by irreducibility is the scalars; since the scalars are always central, the center equals the scalars. This connects irreducibility of an inclusion to factoriality of the larger algebra.
+    If $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and the inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is irreducible, then the ambient algebra $R(\mathbf{B}_2)$ is a factor (trivial center).
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:irreducible-inclusion, thrm:relative-commutant-center}
+    Indeed the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in the relative commutant (\ref{thrm:relative-commutant-center}), which by irreducibility is the scalars; since the scalars are always central, the center equals the scalars. This connects irreducibility of an inclusion to factoriality of the larger algebra.
+\end{proof}
 
 \begin{theorem}[Self-Inclusion is Irreducible iff Factor]
     \label{thrm:self-inclusion-factor}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}
     \uses{def:irreducible-inclusion}
     \leanok
-    The trivial self-inclusion $R(\mathbf{B}) \subseteq R(\mathbf{B})$ is irreducible if and only if $R(\mathbf{B})$ is a factor. The relative commutant of the self-inclusion is $R(\mathbf{B})' \cap R(\mathbf{B})$, i.e. the center of $R(\mathbf{B})$ (up to the order of intersection), so its triviality is exactly the factoriality of $R(\mathbf{B})$. This is the converse-completing companion to \ref{thrm:irreducible-inclusion-factor}: irreducibility of the trivial inclusion coincides with factoriality of the algebra.
+    The trivial self-inclusion $R(\mathbf{B}) \subseteq R(\mathbf{B})$ is irreducible if and only if $R(\mathbf{B})$ is a factor.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:irreducible-inclusion}
+    The relative commutant of the self-inclusion is $R(\mathbf{B})' \cap R(\mathbf{B})$, i.e. the center of $R(\mathbf{B})$ (up to the order of intersection), so its triviality is exactly the factoriality of $R(\mathbf{B})$. This is the converse-completing companion to \ref{thrm:irreducible-inclusion-factor}: irreducibility of the trivial inclusion coincides with factoriality of the algebra.
+\end{proof}
 
 
 \subsection{Irreducibility and Schur's Lemma}
@@ -338,19 +417,29 @@ A representation is \emph{irreducible} when its commutant is trivial: the only o
     \label{thrm:schur-lemma}
     \lean{Physicslib4.GNS.eq_smul_one_of_commute_of_cyclic}
     \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \uses{def:cyclic-vector}
+    \leanok
+    Let $\Omega$ be a cyclic vector for $\pi$. If $T$ commutes with every $\pi(a)$ and the diagonal coefficient $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ equals $c$ times $a \mapsto \langle \Omega, \pi(a)\Omega\rangle$, then $T = c \cdot 1$.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:cyclic-vector}
-    Let $\Omega$ be a cyclic vector for $\pi$. If $T$ commutes with every $\pi(a)$ and the diagonal coefficient $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ equals $c$ times $a \mapsto \langle \Omega, \pi(a)\Omega\rangle$, then $T = c \cdot 1$. The proof is pure Hilbert-space analysis: using the $*$-representation property and the commutation relation, every off-diagonal coefficient $\langle \pi(b)\Omega, (T - c)\,\pi(a)\Omega\rangle$ vanishes, so $(T - c)$ annihilates the dense cyclic orbit and is therefore zero.
-\end{theorem}
+    The proof is pure Hilbert-space analysis: using the $*$-representation property and the commutation relation, every off-diagonal coefficient $\langle \pi(b)\Omega, (T - c)\,\pi(a)\Omega\rangle$ vanishes, so $(T - c)$ annihilates the dense cyclic orbit and is therefore zero.
+\end{proof}
 
 \begin{theorem}[Commutant Scalar iff Proportional Coefficient]
     \label{thrm:commutant-scalar-iff}
     \lean{Physicslib4.GNS.isScalar_iff_coeff_proportional}
     \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \uses{def:state, thrm:gns-construction-theorem}
     \leanok
-    \uses{thrm:schur-lemma, def:state, thrm:gns-construction-theorem}
     In a cyclic representation reproducing a state $\omega$, an operator $T$ commuting with all $\pi(a)$ is a scalar multiple of the identity if and only if its diagonal coefficient $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ is a scalar multiple of $\omega$. This is the precise operator-theoretic bridge to purity: irreducibility (every commutant element is scalar) is exactly the statement that every commutant coefficient is proportional to $\omega$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:schur-lemma}
+    This is the topological Schur lemma (\ref{thrm:schur-lemma}) read in a cyclic representation reproducing $\omega$, whose diagonal coefficient of $\pi$ is $\omega$ itself.
+\end{proof}
 
 \begin{definition}[Pure State]
     \label{def:pure-state}
@@ -367,10 +456,15 @@ One direction of the classical equivalence ``$\omega$ pure $\iff$ GNS representa
     \label{thrm:pure-implies-irreducible}
     \lean{Physicslib4.GNS.isIrreducible_of_isPure}
     \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \uses{def:pure-state, def:irreducible-representation}
     \leanok
-    \uses{def:pure-state, def:irreducible-representation, thrm:commutant-scalar-iff}
-    If $\omega$ is pure, then any cyclic representation reproducing $\omega$ (in particular its GNS representation) is irreducible. Since the commutant is $*$-closed, a commuting operator decomposes into self-adjoint real and imaginary parts; for a self-adjoint commuting $S$, the affine rescaling $T = (2(\Vert S\Vert+1))^{-1} S + \tfrac12$ satisfies $0 \le T \le 1$, so its coefficient functional $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ is positive and dominated by $\omega$. Purity forces it proportional to $\omega$, whence $T$ (and so $S$, and so the original operator) is a scalar by \ref{thrm:commutant-scalar-iff}.
+    If $\omega$ is pure, then any cyclic representation reproducing $\omega$ (in particular its GNS representation) is irreducible.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:pure-state, thrm:commutant-scalar-iff}
+    Since the commutant is $*$-closed, a commuting operator decomposes into self-adjoint real and imaginary parts; for a self-adjoint commuting $S$, the affine rescaling $T = (2(\Vert S\Vert+1))^{-1} S + \tfrac12$ satisfies $0 \le T \le 1$, so its coefficient functional $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ is positive and dominated by $\omega$. Purity forces it proportional to $\omega$, whence $T$ (and so $S$, and so the original operator) is a scalar by \ref{thrm:commutant-scalar-iff}.
+\end{proof}
 
 The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS Radon-Nikodym correspondence: that every dominated positive functional $\psi \le \omega$ is represented by an operator $T$ in the commutant, via the bounded sesquilinear form $(\pi(a)\Omega, \pi(b)\Omega) \mapsto \psi(a^* b)$. The analytic crux is that this form is well-defined and bounded.
 
@@ -378,28 +472,42 @@ The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS
     \label{thrm:gns-form-bound}
     \lean{Physicslib4.GNS.gns_form_norm_le, Physicslib4.GNS.gns_form_well_defined}
     \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \uses{def:pure-state}
     \leanok
-    \uses{def:pure-state, lmm:cauchy-schwarz-inequality}
-    For a positive functional $\psi$ dominated by the state $\omega$ in its cyclic GNS representation, the form values obey $\Vert\psi(a^* b)\Vert \le \Vert\pi(a)\Omega\Vert\,\Vert\pi(b)\Omega\Vert$. This follows from the Cauchy-Schwarz inequality for $\psi$, the domination $\psi \le \omega$, and the reproducing identity $\omega(x^* x) = \Vert\pi(x)\Omega\Vert^2$. In particular the form depends only on the GNS vectors $\pi(a)\Omega, \pi(b)\Omega$, not on the representatives $a, b$, so it is well-defined on the cyclic subspace.
+    For a positive functional $\psi$ dominated by the state $\omega$ in its cyclic GNS representation, the form values obey $\Vert\psi(a^* b)\Vert \le \Vert\pi(a)\Omega\Vert\,\Vert\pi(b)\Omega\Vert$. In particular the form depends only on the GNS vectors $\pi(a)\Omega, \pi(b)\Omega$, not on the representatives $a, b$, so it is well-defined on the cyclic subspace.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lmm:cauchy-schwarz-inequality}
+    This follows from the Cauchy-Schwarz inequality for $\psi$, the domination $\psi \le \omega$, and the reproducing identity $\omega(x^* x) = \Vert\pi(x)\Omega\Vert^2$.
+\end{proof}
 
 \begin{theorem}[The GNS Radon-Nikodym Operator]
     \label{thrm:gns-radon-nikodym-operator}
     \lean{Physicslib4.GNS.rnOp, Physicslib4.GNS.rnOp_inner, Physicslib4.GNS.rnOp_commute, Physicslib4.GNS.rnOp_reproducing}
     \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \uses{thrm:gns-form-bound}
+    \leanok
+    The bounded form of \ref{thrm:gns-form-bound} is the inner product of an operator $T$ on the GNS space: there is a $T$ with $\langle \pi(a)\Omega, T\,\pi(b)\Omega\rangle = \psi(a^* b)$, this $T$ commutes with every $\pi(c)$, and $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{thrm:gns-form-bound}
-    The bounded form of \ref{thrm:gns-form-bound} is the inner product of an operator $T$ on the GNS space: extending the densely-defined bounded form by the Fréchet-Riesz representation and a norm-controlled dense extension yields $T$ with $\langle \pi(a)\Omega, T\,\pi(b)\Omega\rangle = \psi(a^* b)$. From this reproducing identity, $T$ commutes with every $\pi(c)$ (an adjoint computation on the dense cyclic vectors), and $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$ (taking $a = 1$ in the first slot).
-\end{theorem}
+    Extending the densely-defined bounded form by the Fréchet-Riesz representation and a norm-controlled dense extension yields $T$ with $\langle \pi(a)\Omega, T\,\pi(b)\Omega\rangle = \psi(a^* b)$. From this reproducing identity, $T$ commutes with every $\pi(c)$ (an adjoint computation on the dense cyclic vectors), and $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$ (taking $a = 1$ in the first slot).
+\end{proof}
 
 \begin{theorem}[Pure $\iff$ Irreducible]
     \label{thrm:pure-iff-irreducible}
     \lean{Physicslib4.GNS.isPure_iff_isIrreducible}
     \leanfile{Physicslib4/GNS/RadonNikodym.lean}
     \leanok
-    \uses{thrm:pure-implies-irreducible, thrm:gns-radon-nikodym-operator, thrm:commutant-scalar-iff}
-    A state $\omega$ is pure if and only if its cyclic GNS representation is irreducible. For the converse direction, given a dominated $\psi$, its Radon-Nikodym operator $T$ commutes with $\pi$, so by irreducibility $T = c \cdot 1$; the reproducing identity then gives $\psi(a) = c\,\omega(a)$, so $\psi$ is a scalar multiple of $\omega$ and $\omega$ is pure.
+    A state $\omega$ is pure if and only if its cyclic GNS representation is irreducible.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:pure-implies-irreducible, thrm:gns-radon-nikodym-operator, thrm:commutant-scalar-iff}
+    For the converse direction, given a dominated $\psi$, its Radon-Nikodym operator $T$ commutes with $\pi$, so by irreducibility $T = c \cdot 1$; the reproducing identity then gives $\psi(a) = c\,\omega(a)$, so $\psi$ is a scalar multiple of $\omega$ and $\omega$ is pure.
+\end{proof}
 
 Irreducibility has a von Neumann algebraic reading: the representation generates a \emph{factor}.
 
@@ -407,46 +515,71 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
     \label{thrm:irreducible-factor}
     \lean{Physicslib4.GNS.center_gnsVonNeumann_eq_of_isIrreducible}
     \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \uses{def:irreducible-representation, def:local-von-neumann}
+    \leanok
+    The von Neumann algebra $\pi(A)''$ generated by an irreducible representation has \emph{trivial center}: an operator lies in the center $\pi(A)'' \cap (\pi(A)'')'$ if and only if it is a scalar multiple of the identity.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:irreducible-representation, def:local-von-neumann}
-    The von Neumann algebra $\pi(A)''$ generated by an irreducible representation has \emph{trivial center}: an operator lies in the center $\pi(A)'' \cap (\pi(A)'')'$ if and only if it is a scalar multiple of the identity. Indeed the center is contained in $(\pi(A)'')' = \pi(A)'$ (the triple commutant collapses to the single one), which irreducibility makes the scalars; conversely scalars are central.
-\end{theorem}
+    Indeed the center is contained in $(\pi(A)'')' = \pi(A)'$ (the triple commutant collapses to the single one), which irreducibility makes the scalars; conversely scalars are central.
+\end{proof}
 
 \begin{theorem}[Irreducibility $\iff$ Generating $\mathcal{B}(H)$]
     \label{thrm:irreducible-generates-all}
     \lean{Physicslib4.GNS.isIrreducible_iff_gnsVonNeumann_eq_univ, Physicslib4.GNS.gnsVonNeumann_eq_univ_of_isIrreducible}
     \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \uses{def:irreducible-representation, def:local-von-neumann}
+    \leanok
+    A representation is irreducible if and only if the von Neumann algebra $\pi(A)''$ it generates is \emph{all} of $\mathcal{B}(H)$: $\pi(A)'' = \mathcal{B}(H)$. This is the density (bicommutant-theorem) form of irreducibility, sharpening the factor statement \ref{thrm:irreducible-factor}.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:irreducible-representation, def:local-von-neumann}
-    A representation is irreducible if and only if the von Neumann algebra $\pi(A)''$ it generates is \emph{all} of $\mathcal{B}(H)$: $\pi(A)'' = \mathcal{B}(H)$. For the forward direction, irreducibility makes the commutant $\pi(A)'$ exactly the scalars, and the centralizer of the scalars is everything (every bounded operator commutes with $c \cdot 1$), so $\pi(A)'' = (\text{scalars})' = \mathcal{B}(H)$. The converse uses that $\mathcal{B}(H)$ is a \emph{central} $\mathbb{C}$-algebra (its center is the scalars): if the bicommutant is everything, every operator commutes with the commutant, so any operator commuting with $\pi(A)$ is central, hence scalar. This is the density (bicommutant-theorem) form of irreducibility, sharpening the factor statement \ref{thrm:irreducible-factor}.
-\end{theorem}
+    For the forward direction, irreducibility makes the commutant $\pi(A)'$ exactly the scalars, and the centralizer of the scalars is everything (every bounded operator commutes with $c \cdot 1$), so $\pi(A)'' = (\text{scalars})' = \mathcal{B}(H)$. The converse uses that $\mathcal{B}(H)$ is a \emph{central} $\mathbb{C}$-algebra (its center is the scalars): if the bicommutant is everything, every operator commutes with the commutant, so any operator commuting with $\pi(A)$ is central, hence scalar.
+\end{proof}
 
 \begin{theorem}[Bundled Density Form of Irreducibility]
     \label{thrm:gns-generates-all-bundled}
     \lean{Physicslib4.GNS.coe_gnsVonNeumannAlgebra_eq_univ_of_isIrreducible, Physicslib4.GNS.gnsVonNeumannAlgebra_isGreatest_of_isIrreducible}
     \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \uses{def:local-von-neumann-algebra}
     \leanok
-    \uses{thrm:irreducible-generates-all, def:local-von-neumann-algebra}
-    The von Neumann algebra $\pi(A)''$ generated by a representation is bundled as a first-class \texttt{VonNeumannAlgebra} (\texttt{gnsVonNeumannAlgebra}), the image $\pi(A)$ being self-adjoint. For an irreducible representation, this bundled algebra is all of $\mathcal{B}(H)$: its underlying set is everything, and equivalently it is the \emph{greatest} von Neumann algebra on $H$ (every $S$ satisfies $S \le \pi(A)''$). This is the bundled counterpart of \ref{thrm:irreducible-generates-all}. Mathlib's \texttt{VonNeumannAlgebra} carries no lattice $\top$, so the literal $\pi(A)'' = \top$ is phrased at the level of the underlying set together with the greatest-element statement under the existing $\le$.
+    The von Neumann algebra $\pi(A)''$ generated by a representation is bundled as a first-class \texttt{VonNeumannAlgebra} (\texttt{gnsVonNeumannAlgebra}), the image $\pi(A)$ being self-adjoint. For an irreducible representation, this bundled algebra is all of $\mathcal{B}(H)$: its underlying set is everything, and equivalently it is the \emph{greatest} von Neumann algebra on $H$ (every $S$ satisfies $S \le \pi(A)''$). Mathlib's \texttt{VonNeumannAlgebra} carries no lattice $\top$, so the literal $\pi(A)'' = \top$ is phrased at the level of the underlying set together with the greatest-element statement under the existing $\le$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:irreducible-generates-all}
+    This is the bundled counterpart of \ref{thrm:irreducible-generates-all}.
+\end{proof}
 
 \begin{theorem}[The GNS Representation of a Pure State is a Factor]
     \label{thrm:pure-factor}
     \lean{Physicslib4.GNS.exists_gns_factor_of_isPure}
     \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \uses{def:pure-state, thrm:gns-construction-theorem}
     \leanok
-    \uses{def:pure-state, thrm:pure-iff-irreducible, thrm:irreducible-factor, thrm:gns-construction-theorem}
-    For a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra $\pi(A)''$ has trivial center, i.e. is a factor. This combines the GNS construction, purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}), and \ref{thrm:irreducible-factor}. It applies verbatim to the quasilocal algebra $\mathfrak{U}$ and to each local algebra $\mathfrak{U}(\mathbf{B})$, since both are C*-algebras.
+    For a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra $\pi(A)''$ has trivial center, i.e. is a factor.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:pure-iff-irreducible, thrm:irreducible-factor, thrm:gns-construction-theorem}
+    This combines the GNS construction, purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}), and \ref{thrm:irreducible-factor}. It applies verbatim to the quasilocal algebra $\mathfrak{U}$ and to each local algebra $\mathfrak{U}(\mathbf{B})$, since both are C*-algebras.
+\end{proof}
 
 \begin{theorem}[The GNS Representation of a Pure State Generates $\mathcal{B}(H)$]
     \label{thrm:pure-generates-all}
     \lean{Physicslib4.GNS.exists_gns_generates_all_of_isPure}
     \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \uses{def:pure-state, thrm:gns-construction-theorem}
     \leanok
-    \uses{def:pure-state, thrm:pure-iff-irreducible, thrm:irreducible-generates-all, thrm:gns-construction-theorem}
-    The density (bicommutant-theorem) sharpening of \ref{thrm:pure-factor}: for a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra is \emph{all} of $\mathcal{B}(H)$, $\pi(A)'' = \mathcal{B}(H)$. It combines the GNS construction, purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}), and the density form \ref{thrm:irreducible-generates-all}. As with the factor statement, it applies verbatim to the quasilocal algebra $\mathfrak{U}$ and to each local algebra $\mathfrak{U}(\mathbf{B})$.
+    The density (bicommutant-theorem) sharpening of \ref{thrm:pure-factor}: for a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra is \emph{all} of $\mathcal{B}(H)$, $\pi(A)'' = \mathcal{B}(H)$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:pure-iff-irreducible, thrm:irreducible-generates-all, thrm:gns-construction-theorem}
+    It combines the GNS construction, purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}), and the density form \ref{thrm:irreducible-generates-all}. As with the factor statement, it applies verbatim to the quasilocal algebra $\mathfrak{U}$ and to each local algebra $\mathfrak{U}(\mathbf{B})$.
+\end{proof}
 
 The order-theoretic definition of purity (\ref{def:pure-state}) coincides with the convex-geometric one: $\omega$ is an extreme point of the state space. The analytic key is the normalization identity for positive functionals.
 
@@ -455,9 +588,13 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     \lean{Physicslib4.GNS.norm_eq_re_apply_one_of_positive}
     \leanfile{Physicslib4/GNS/ExtremeState.lean}
     \leanok
-    \uses{lmm:cauchy-schwarz-inequality}
-    For a positive linear functional $\varphi$ on a unital C*-algebra, $\Vert\varphi\Vert = \mathrm{Re}\,\varphi(1)$. The bound $\mathrm{Re}\,\varphi(1) \le \Vert\varphi\Vert$ is immediate from $\Vert 1\Vert = 1$; conversely Cauchy-Schwarz with the first slot equal to $1$ gives $\Vert\varphi(b)\Vert^2 \le \mathrm{Re}\,\varphi(1)\cdot\mathrm{Re}\,\varphi(b^* b) \le \mathrm{Re}\,\varphi(1)\cdot\Vert\varphi\Vert\,\Vert b\Vert^2$, whence $\Vert\varphi\Vert^2 \le \mathrm{Re}\,\varphi(1)\cdot\Vert\varphi\Vert$. In particular every state satisfies $\omega(1) = 1$.
+    For a positive linear functional $\varphi$ on a unital C*-algebra, $\Vert\varphi\Vert = \mathrm{Re}\,\varphi(1)$. In particular every state satisfies $\omega(1) = 1$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lmm:cauchy-schwarz-inequality}
+    The bound $\mathrm{Re}\,\varphi(1) \le \Vert\varphi\Vert$ is immediate from $\Vert 1\Vert = 1$; conversely Cauchy-Schwarz with the first slot equal to $1$ gives $\Vert\varphi(b)\Vert^2 \le \mathrm{Re}\,\varphi(1)\cdot\mathrm{Re}\,\varphi(b^* b) \le \mathrm{Re}\,\varphi(1)\cdot\Vert\varphi\Vert\,\Vert b\Vert^2$, whence $\Vert\varphi\Vert^2 \le \mathrm{Re}\,\varphi(1)\cdot\Vert\varphi\Vert$.
+\end{proof}
 
 \begin{definition}[Extreme Point of the State Space]
     \label{def:extreme-state}
@@ -472,19 +609,29 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     \label{thrm:pure-iff-extreme}
     \lean{Physicslib4.GNS.isPure_iff_isExtremePoint}
     \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \uses{def:pure-state, def:extreme-state}
+    \leanok
+    A state $\omega$ is pure if and only if it is an extreme point of the state space.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:pure-state, def:extreme-state, thrm:norm-positive-functional}
-    A state $\omega$ is pure if and only if it is an extreme point of the state space. If $\omega$ is pure and $\omega = t\,\omega_1 + (1-t)\,\omega_2$, then $t\,\omega_1$ is a positive functional dominated by $\omega$, hence (by purity) a scalar multiple of $\omega$; evaluating at $1$, where every state gives $1$, pins the scalar to $t$ and forces $\omega_1 = \omega = \omega_2$. Conversely, if $\omega$ is extreme and $\psi \le \omega$ is dominated, set $\lambda = \mathrm{Re}\,\psi(1) \in [0,1]$; for $\lambda \in (0,1)$ the rescaled functionals $\lambda^{-1}\psi$ and $(1-\lambda)^{-1}(\omega - \psi)$ are states (normalized via \ref{thrm:norm-positive-functional}) whose convex combination is $\omega$, so extremality identifies them and forces $\psi = \lambda\,\omega$; the boundary cases $\lambda = 0$ and $\lambda = 1$ give $\psi = 0$ and $\psi = \omega$ respectively.
-\end{theorem}
+    If $\omega$ is pure and $\omega = t\,\omega_1 + (1-t)\,\omega_2$, then $t\,\omega_1$ is a positive functional dominated by $\omega$, hence (by purity) a scalar multiple of $\omega$; evaluating at $1$, where every state gives $1$, pins the scalar to $t$ and forces $\omega_1 = \omega = \omega_2$. Conversely, if $\omega$ is extreme and $\psi \le \omega$ is dominated, set $\lambda = \mathrm{Re}\,\psi(1) \in [0,1]$; for $\lambda \in (0,1)$ the rescaled functionals $\lambda^{-1}\psi$ and $(1-\lambda)^{-1}(\omega - \psi)$ are states (normalized via \ref{thrm:norm-positive-functional}) whose convex combination is $\omega$, so extremality identifies them and forces $\psi = \lambda\,\omega$; the boundary cases $\lambda = 0$ and $\lambda = 1$ give $\psi = 0$ and $\psi = \omega$ respectively.
+\end{proof}
 
 \begin{theorem}[State-Space Convexity and the Extreme-Point Bridge]
     \label{thrm:state-space-convex-bridge}
     \lean{Physicslib4.GNS.convex_stateSpace, Physicslib4.GNS.mem_extremePoints_iff_isExtremePoint}
     \leanfile{Physicslib4/GNS/ExtremeState.lean}
-    \leanok
     \uses{def:state, def:extreme-state}
+    \leanok
     Realizing the state space as the subset $\mathrm{stateSpace}(A) \subseteq A \to_L \mathbb{C}$ (the latter a real topological vector space via $\texttt{NormedSpace.complexToReal}$), it is convex: a real convex combination $a\,\omega_1 + b\,\omega_2$ of states is again a state, via $\texttt{State.convexCombo}$. Moreover a state $\omega$ lies in Mathlib's $\mathrm{extremePoints}_{\mathbb{R}}$ of the state space exactly when it is extreme in the sense of \ref{def:extreme-state}, connecting the purity characterizations to the Krein-Milman/Choquet API.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:state, def:extreme-state}
+    Convexity is witnessed by \texttt{State.convexCombo}, which exhibits a real convex combination of two states as a state; the extreme-point bridge is the unfolding of Mathlib's $\mathrm{extremePoints}_{\mathbb{R}}$ against \ref{def:extreme-state}.
+\end{proof}
 
 \begin{definition}[Pullback of a State]
     \label{def:state-pullback}
@@ -501,23 +648,38 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
     \leanok
     The pullback is a contravariant functor on C*-algebras: pulling back along the identity $*$-homomorphism is the identity ($\omega \circ \mathrm{id} = \omega$), and pulling back along a composite reverses order, $\omega \circ (\pi_2 \circ \pi_1) = (\omega \circ \pi_2) \circ \pi_1$ for $\pi_1 : A \to B$, $\pi_2 : B \to C$ and $\omega$ a state on $C$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:state-pullback}
+    Both identities are immediate from the defining equation $(\omega \circ \pi)(a) = \omega(\pi(a))$ of the pullback (\ref{def:state-pullback}), checked pointwise on $a$.
+\end{proof}
 
 \begin{theorem}[Purity is Invariant under a $*$-Isomorphism]
     \label{thrm:pure-pullback-invariant}
     \lean{Physicslib4.GNS.isPure_comp_iff}
     \uses{def:state-pullback, def:pure-state}
     \leanok
-    For a $*$-isomorphism $\Phi : A \simeq B$ of C*-algebras and a state $\omega$ on $B$, the pullback $\omega \circ \Phi$ is pure if and only if $\omega$ is. A dominated positive functional $\psi \le \omega \circ \Phi$ transports to $\psi \circ \Phi^{-1} \le \omega$, which purity sends to a scalar multiple of $\omega$; transporting back gives $\psi$ proportional to $\omega \circ \Phi$, and the converse follows by applying the same to $\Phi^{-1}$ (using $(\omega \circ \Phi)\circ \Phi^{-1} = \omega$). This is the cross-algebra generalization of the $*$-automorphism case (purity is a covariance invariant); a $*$-isomorphism identifies the pure states of $A$ and $B$.
+    For a $*$-isomorphism $\Phi : A \simeq B$ of C*-algebras and a state $\omega$ on $B$, the pullback $\omega \circ \Phi$ is pure if and only if $\omega$ is. This is the cross-algebra generalization of the $*$-automorphism case (purity is a covariance invariant); a $*$-isomorphism identifies the pure states of $A$ and $B$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:state-pullback, def:pure-state}
+    A dominated positive functional $\psi \le \omega \circ \Phi$ transports to $\psi \circ \Phi^{-1} \le \omega$, which purity sends to a scalar multiple of $\omega$; transporting back gives $\psi$ proportional to $\omega \circ \Phi$, and the converse follows by applying the same to $\Phi^{-1}$ (using $(\omega \circ \Phi)\circ \Phi^{-1} = \omega$).
+\end{proof}
 
 \begin{theorem}[Weak-* Compactness of the State Space]
     \label{thrm:state-space-weak-compact}
     \lean{Physicslib4.GNS.isCompact_weakStateSet}
     \leanfile{Physicslib4/GNS/PureStateExists.lean}
+    \uses{def:state}
+    \leanok
+    The state space, realized inside the weak-* dual $\mathrm{WeakDual}\,\mathbb{C}\,A$ as the positive functionals with $\varphi(1) = 1$, is \emph{weak-* compact}. This is the analytic input for the existence of pure states via Krein-Milman.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:state}
-    The state space, realized inside the weak-* dual $\mathrm{WeakDual}\,\mathbb{C}\,A$ as the positive functionals with $\varphi(1) = 1$, is \emph{weak-* compact}. By Banach-Alaoglu it suffices that it is a weak-* closed subset of the closed unit ball: the positivity conditions $0 \le \varphi(a^* a)$ and the normalization $\varphi(1) = 1$ are each weak-* closed (evaluation at a fixed element is weak-* continuous), and a positive functional with $\varphi(1)=1$ has $\|\varphi\| = 1$. This is the analytic input for the existence of pure states via Krein-Milman.
-\end{theorem}
+    By Banach-Alaoglu it suffices that it is a weak-* closed subset of the closed unit ball: the positivity conditions $0 \le \varphi(a^* a)$ and the normalization $\varphi(1) = 1$ are each weak-* closed (evaluation at a fixed element is weak-* continuous), and a positive functional with $\varphi(1)=1$ has $\|\varphi\| = 1$.
+\end{proof}
 
 These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Minkowski net, where they characterize purity of a global state - the natural setting for the vacuum and other distinguished states.
 
@@ -525,19 +687,29 @@ These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Mink
     \label{thrm:pure-iff-extreme-quasilocal}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.pure_iff_extreme}
     \leanfile{Physicslib4/AQFT/HaagKastler/Purity.lean}
+    \uses{def:pure-state, def:extreme-state, def:quasilocal-completeness}
     \leanok
-    \uses{def:pure-state, def:extreme-state, thrm:pure-iff-extreme, def:quasilocal-completeness}
-    A state $\omega$ on the canonical quasilocal algebra $\mathfrak{U}$ of a Haag-Kastler net is pure if and only if it is an extreme point of the state space of $\mathfrak{U}$. This is the abstract equivalence \ref{thrm:pure-iff-extreme} applied to the C*-algebra $\mathfrak{U}$.
+    A state $\omega$ on the canonical quasilocal algebra $\mathfrak{U}$ of a Haag-Kastler net is pure if and only if it is an extreme point of the state space of $\mathfrak{U}$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:pure-iff-extreme}
+    This is the abstract equivalence \ref{thrm:pure-iff-extreme} applied to the C*-algebra $\mathfrak{U}$.
+\end{proof}
 
 \begin{theorem}[Pure $\iff$ Irreducible GNS on the Quasilocal Algebra]
     \label{thrm:pure-iff-irreducible-quasilocal}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.exists_gns_pure_iff_irreducible}
     \leanfile{Physicslib4/AQFT/HaagKastler/Purity.lean}
+    \uses{def:pure-state, def:irreducible-representation, thrm:gns-construction-theorem, def:quasilocal-completeness}
     \leanok
-    \uses{def:pure-state, def:irreducible-representation, thrm:pure-iff-irreducible, thrm:gns-construction-theorem, def:quasilocal-completeness}
-    For a state $\omega$ on the quasilocal algebra $\mathfrak{U}$ there is a GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ in which $\omega$ is pure if and only if the representation $\pi$ is irreducible. This combines the GNS construction with the abstract \ref{thrm:pure-iff-irreducible}.
+    For a state $\omega$ on the quasilocal algebra $\mathfrak{U}$ there is a GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ in which $\omega$ is pure if and only if the representation $\pi$ is irreducible.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:pure-iff-irreducible, thrm:gns-construction-theorem}
+    This combines the GNS construction with the abstract \ref{thrm:pure-iff-irreducible}.
+\end{proof}
 
 \subsection{Unitary Equivalence and Superselection}
 
@@ -556,10 +728,15 @@ The comparison of representations is the entry point to superselection theory. F
     \label{thrm:unitary-equiv-invariants}
     \lean{Physicslib4.GNS.UnitaryEquiv.isIrreducible_iff, Physicslib4.GNS.UnitaryEquiv.isFactor_iff}
     \leanfile{Physicslib4/GNS/UnitaryEquiv.lean}
+    \uses{def:unitary-equivalence, def:irreducible-representation, thrm:irreducible-factor}
+    \leanok
+    Unitarily equivalent representations share their representation-theoretic type: $\pi_1$ is irreducible if and only if $\pi_2$ is, and the generated von Neumann algebra $\pi_1(A)''$ is a factor if and only if $\pi_2(A)''$ is.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:unitary-equivalence, def:irreducible-representation, thrm:irreducible-factor}
-    Unitarily equivalent representations share their representation-theoretic type: $\pi_1$ is irreducible if and only if $\pi_2$ is, and the generated von Neumann algebra $\pi_1(A)''$ is a factor if and only if $\pi_2(A)''$ is. The transport is packaged through the cross-space conjugation $T \mapsto U T U^{-1}$, a multiplicative isomorphism $\mathcal{B}(H_1) \simeq \mathcal{B}(H_2)$ that carries $\pi_1(A)$ onto $\pi_2(A)$, centralizers onto centralizers, and scalars onto scalars; irreducibility (commutant equal to the scalars) and factoriality (trivial center of $\pi(A)''$) are then preserved.
-\end{theorem}
+    The transport is packaged through the cross-space conjugation $T \mapsto U T U^{-1}$, a multiplicative isomorphism $\mathcal{B}(H_1) \simeq \mathcal{B}(H_2)$ that carries $\pi_1(A)$ onto $\pi_2(A)$, centralizers onto centralizers, and scalars onto scalars; irreducibility (commutant equal to the scalars) and factoriality (trivial center of $\pi(A)''$) are then preserved.
+\end{proof}
 
 \subsection{GNS Covariance}
 
@@ -568,32 +745,38 @@ The comparison of representations is the entry point to superselection theory. F
     \lean{Physicslib4.GNS.isCyclicVector_comp_of_surjective}
     \uses{def:cyclic-vector, def:state-pullback}
     \leanok
-    Let $\pi : B \to \mathcal{B}(H)$ be a $*$-representation with cyclic vector $\Omega$, and let $\Phi : A \to B$ be a surjective unital $*$-homomorphism. Here the pulled-back representation $\pi \circ \Phi$ of $A$ is the composite $*$-homomorphism (Mathlib's \texttt{StarAlgHom.comp}), just as the pullback of a state is fixed by \ref{def:state-pullback}. Then $\Omega$ is cyclic for $\pi \circ \Phi$. Indeed surjectivity of $\Phi$ gives $\{\pi(\Phi(a))\Omega : a \in A\} = \{\pi(b)\Omega : b \in B\}$, so the two orbits coincide as sets and density transfers verbatim.
+    Let $\pi : B \to \mathcal{B}(H)$ be a $*$-representation with cyclic vector $\Omega$, and let $\Phi : A \to B$ be a surjective unital $*$-homomorphism. Here the pulled-back representation $\pi \circ \Phi$ of $A$ is the composite $*$-homomorphism (Mathlib's \texttt{StarAlgHom.comp}), just as the pullback of a state is fixed by \ref{def:state-pullback}. Then $\Omega$ is cyclic for $\pi \circ \Phi$.
 \end{lemma}
 \begin{proof}
-\leanok
+    \leanok
+    \uses{def:cyclic-vector}
+    Indeed surjectivity of $\Phi$ gives $\{\pi(\Phi(a))\Omega : a \in A\} = \{\pi(b)\Omega : b \in B\}$, so the two orbits coincide as sets and density transfers verbatim.
 \end{proof}
 
 \begin{theorem}[GNS covariance under a $*$-isomorphism]
     \label{thrm:gns-covariance}
     \lean{Physicslib4.GNS.exists_unitary_of_gns_comp}
-    \uses{def:state-pullback, def:cyclic-vector, lmm:cyclic-pullback-surjective, thrm:gns-construction-theorem}
+    \uses{def:state-pullback, def:cyclic-vector, thrm:gns-construction-theorem}
     \leanok
-    Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$. Let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing the pullback state $\omega \circ \Phi$, and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then there is a unitary $U : H_1 \simeq H_2$ with $U\Omega_1 = \Omega_2$ intertwining the two representations along $\Phi$: $U(\pi_1(a)x) = \pi_2(\Phi(a))(Ux)$ for all $a \in A$, $x \in H_1$. In other words the GNS data transports covariantly along an isomorphism of the algebras. The proof observes that $(H_2, \pi_2 \circ \Phi, \Omega_2)$ is itself a cyclic representation of $A$ (\ref{lmm:cyclic-pullback-surjective}, $\Phi$ being surjective) and that it reproduces $\omega \circ \Phi$, since $\langle \Omega_2, \pi_2(\Phi a)\Omega_2\rangle = \omega(\Phi a) = (\omega \circ \Phi)(a)$ by the defining equation of the pullback state. One then applies the \emph{uniqueness clause} of \ref{thrm:gns-construction-theorem} --- in Lean the separate declaration \texttt{Physicslib4.GNS.gns\_unique}, not \texttt{gns\_construction} --- to the two cyclic representations of $A$ attached to the single state $\omega \circ \Phi$.
+    Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$. Let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing the pullback state $\omega \circ \Phi$, and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then there is a unitary $U : H_1 \simeq H_2$ with $U\Omega_1 = \Omega_2$ intertwining the two representations along $\Phi$: $U(\pi_1(a)x) = \pi_2(\Phi(a))(Ux)$ for all $a \in A$, $x \in H_1$. In other words the GNS data transports covariantly along an isomorphism of the algebras.
 \end{theorem}
 \begin{proof}
-\leanok
+    \leanok
+    \uses{lmm:cyclic-pullback-surjective, thrm:gns-construction-theorem, def:state-pullback}
+    The proof observes that $(H_2, \pi_2 \circ \Phi, \Omega_2)$ is itself a cyclic representation of $A$ (\ref{lmm:cyclic-pullback-surjective}, $\Phi$ being surjective) and that it reproduces $\omega \circ \Phi$, since $\langle \Omega_2, \pi_2(\Phi a)\Omega_2\rangle = \omega(\Phi a) = (\omega \circ \Phi)(a)$ by the defining equation of the pullback state. One then applies the \emph{uniqueness clause} of \ref{thrm:gns-construction-theorem} --- in Lean the separate declaration \texttt{Physicslib4.GNS.gns\_unique}, not \texttt{gns\_construction} --- to the two cyclic representations of $A$ attached to the single state $\omega \circ \Phi$.
 \end{proof}
 
 \begin{theorem}[The GNS representation of a pullback state]
     \label{thrm:gns-covariance-unitary-equiv}
     \lean{Physicslib4.GNS.unitaryEquiv_comp_of_gns}
-    \uses{thrm:gns-covariance, def:unitary-equivalence, def:state-pullback}
+    \uses{def:unitary-equivalence, def:state-pullback}
     \leanok
-    Restated in the language of unitary equivalence. Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$; let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing $\omega \circ \Phi$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then $\pi_1$ and $\pi_2 \circ \Phi$ are unitarily equivalent (\ref{def:unitary-equivalence}): the intertwining unitary of \ref{thrm:gns-covariance} is exactly the required witness. Together with the invariance of irreducibility and factoriality (\ref{thrm:unitary-equiv-invariants}), this is the mechanism by which superselection sectors transport along an isomorphism of the observable algebra.
+    Restated in the language of unitary equivalence. Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$; let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing $\omega \circ \Phi$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then $\pi_1$ and $\pi_2 \circ \Phi$ are unitarily equivalent (\ref{def:unitary-equivalence}).
 \end{theorem}
 \begin{proof}
-\leanok
+    \leanok
+    \uses{thrm:gns-covariance, def:unitary-equivalence}
+    The intertwining unitary of \ref{thrm:gns-covariance} is exactly the required witness. Together with the invariance of irreducibility and factoriality (\ref{thrm:unitary-equiv-invariants}), this is the mechanism by which superselection sectors transport along an isomorphism of the observable algebra.
 \end{proof}
 
 \begin{lemma}[Pullback along a surjection preserves the image algebra]
@@ -659,37 +842,57 @@ The comparison of representations is the entry point to superselection theory. F
     \label{thrm:irreducible-dichotomy}
     \lean{Physicslib4.GNS.UnitaryEquiv.of_intertwines_of_isIrreducible, Physicslib4.GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible}
     \leanfile{Physicslib4/GNS/Superselection.lean}
-    \leanok
     \uses{def:unitary-equivalence, def:disjoint-representations, def:irreducible-representation}
-    A nonzero intertwiner $T$ between two \emph{irreducible} representations rescales to a unitary equivalence: $T^\ast T$ commutes with $\pi_1$, hence is a positive scalar $r \cdot 1$ with $r > 0$, so $(\sqrt r)^{-1}\,T$ is a linear isometry; and $T T^\ast$ is a nonzero scalar (irreducibility of $\pi_2$), which makes $T$ surjective, so the isometry is a unitary. Consequently two irreducible representations are either \emph{disjoint} or \emph{unitarily equivalent} --- the foundational trichotomy of superselection theory, identifying sectors with unitary-equivalence classes of irreducible representations.
+    \leanok
+    A nonzero intertwiner $T$ between two \emph{irreducible} representations rescales to a unitary equivalence. Consequently two irreducible representations are either \emph{disjoint} or \emph{unitarily equivalent} --- the foundational trichotomy of superselection theory, identifying sectors with unitary-equivalence classes of irreducible representations.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:irreducible-representation, def:unitary-equivalence, def:disjoint-representations}
+    $T^\ast T$ commutes with $\pi_1$, hence is a positive scalar $r \cdot 1$ with $r > 0$, so $(\sqrt r)^{-1}\,T$ is a linear isometry; and $T T^\ast$ is a nonzero scalar (irreducibility of $\pi_2$), which makes $T$ surjective, so the isometry is a unitary.
+\end{proof}
 
 \begin{lemma}[Schur Multiplicity]
     \label{lmm:schur-multiplicity}
     \lean{Physicslib4.GNS.eq_smul_of_intertwines_of_isIrreducible}
     \leanfile{Physicslib4/GNS/Superselection.lean}
+    \uses{def:irreducible-representation}
+    \leanok
+    The space of intertwiners between two irreducible representations is at most one-dimensional: any two intertwiners $S, T$ with $S \neq 0$ are proportional, $T = \lambda \cdot S$.
+\end{lemma}
+\begin{proof}
     \leanok
     \uses{thrm:irreducible-dichotomy, def:irreducible-representation}
-    The space of intertwiners between two irreducible representations is at most one-dimensional: any two intertwiners $S, T$ with $S \neq 0$ are proportional, $T = \lambda \cdot S$. Indeed $S^\ast S = a\cdot 1$ and $S^\ast T = b \cdot 1$ (commuting with $\pi_1$, hence scalar), and $S S^\ast = c \cdot 1$ with $c \neq 0$ (irreducibility of $\pi_2$) makes $S^\ast$ injective; since $S^\ast\big(T - (b/a)\,S\big) = 0$, injectivity gives $T = (b/a)\,S$. So irreducible representations intertwine multiplicity-free.
-\end{lemma}
+    Indeed $S^\ast S = a\cdot 1$ and $S^\ast T = b \cdot 1$ (commuting with $\pi_1$, hence scalar), and $S S^\ast = c \cdot 1$ with $c \neq 0$ (irreducibility of $\pi_2$) makes $S^\ast$ injective; since $S^\ast\big(T - (b/a)\,S\big) = 0$, injectivity gives $T = (b/a)\,S$. So irreducible representations intertwine multiplicity-free.
+\end{proof}
 
 \begin{lemma}[Endomorphism Algebra of an Irreducible Representation]
     \label{lmm:endomorphism-scalar}
     \lean{Physicslib4.GNS.intertwines_self_iff_isScalar}
     \leanfile{Physicslib4/GNS/Superselection.lean}
+    \uses{def:irreducible-representation, def:disjoint-representations}
+    \leanok
+    The endomorphism algebra of an irreducible representation is $\mathbb{C}\cdot 1$: every self-intertwiner of an irreducible representation is a scalar multiple of the identity.
+\end{lemma}
+\begin{proof}
     \leanok
     \uses{def:irreducible-representation, def:disjoint-representations}
-    The endomorphism algebra of an irreducible representation is $\mathbb{C}\cdot 1$: every self-intertwiner of an irreducible representation is a scalar multiple of the identity. This is the commutant form of irreducibility read through the intertwiner language, and it identifies each irreducible sector with a simple (one-dimensional-centred) object.
-\end{lemma}
+    This is the commutant form of irreducibility read through the intertwiner language, and it identifies each irreducible sector with a simple (one-dimensional-centred) object.
+\end{proof}
 
 \begin{theorem}[The commutant (self-intertwiner) von Neumann algebra]
     \label{thrm:commutant-von-neumann}
     \lean{Physicslib4.GNS.commutantVonNeumann, Physicslib4.GNS.mem_commutantVonNeumann_iff_intertwines, Physicslib4.GNS.isIrreducible_iff_commutantVonNeumann_eq_scalars}
     \leanfile{Physicslib4/GNS/Superselection.lean}
+    \uses{def:irreducible-representation}
     \leanok
-    \uses{def:irreducible-representation, lmm:endomorphism-scalar}
     The commutant $\pi(A)'$ of a representation is packaged as a von Neumann algebra --- the algebra of self-intertwiners, i.e. the intertwiner/gauge algebra of $\pi$. Its underlying set is the centralizer of $\pi(A)$ (self-adjoint, and a commutant is always a von Neumann algebra since $S''' = S'$), an operator lies in it exactly when it is a self-intertwiner of $\pi$, and $\pi$ is irreducible if and only if this algebra is trivial ($\pi(A)' = \mathbb{C}\cdot 1$) --- the von Neumann form of Schur's lemma.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:irreducible-representation, lmm:endomorphism-scalar}
+    The underlying set is a von Neumann algebra because $\pi(A)$ is self-adjoint and a commutant is always a von Neumann algebra since $S''' = S'$; membership unfolds to being a self-intertwiner of $\pi$, and the triviality criterion is \ref{lmm:endomorphism-scalar}.
+\end{proof}
 
 \begin{theorem}[Double-Commutant Duality]
     \label{thrm:double-commutant-duality}
@@ -697,24 +900,38 @@ The comparison of representations is the entry point to superselection theory. F
     \leanfile{Physicslib4/GNS/Superselection.lean}
     \uses{thrm:commutant-von-neumann}
     \leanok
-    The generated von Neumann algebra $\pi(A)''$ and the commutant von Neumann algebra $\pi(A)'$ (\ref{thrm:commutant-von-neumann}) are each other's commutants. On one side, the commutant of $\pi(A)''$ is $\pi(A)'$: this is an instance of the triple-commutant collapse $S''' = S'$ applied to the self-adjoint image $\pi(A)$. On the other side, the commutant of $\pi(A)'$ is $\pi(A)''$, which is exactly the definition of the bicommutant. Together these are von Neumann's double-commutant relation for this pair, and they exhibit the bicommutant as idempotent: taking the commutant twice returns $(\pi(A)'')'' = \pi(A)''$, so $\pi(A)''$ and $\pi(A)'$ form a mutually dual pair under $S \mapsto S'$.
+    The generated von Neumann algebra $\pi(A)''$ and the commutant von Neumann algebra $\pi(A)'$ (\ref{thrm:commutant-von-neumann}) are each other's commutants.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:commutant-von-neumann}
+    On one side, the commutant of $\pi(A)''$ is $\pi(A)'$: this is an instance of the triple-commutant collapse $S''' = S'$ applied to the self-adjoint image $\pi(A)$. On the other side, the commutant of $\pi(A)'$ is $\pi(A)''$, which is exactly the definition of the bicommutant. Together these are von Neumann's double-commutant relation for this pair, and they exhibit the bicommutant as idempotent: taking the commutant twice returns $(\pi(A)'')'' = \pi(A)''$, so $\pi(A)''$ and $\pi(A)'$ form a mutually dual pair under $S \mapsto S'$.
+\end{proof}
 
 \begin{theorem}[A Factor and its Commutant; Triviality Duality]
     \label{thrm:commutant-factor-duality}
     \lean{Physicslib4.GNS.isFactor_gnsVonNeumann_iff_isFactor_commutant, Physicslib4.GNS.commutantVonNeumann_eq_scalars_iff_gnsVonNeumann_eq_univ}
     \leanfile{Physicslib4/GNS/Superselection.lean}
-    \uses{thrm:double-commutant-duality, thrm:commutant-von-neumann, thrm:irreducible-generates-all}
+    \uses{thrm:commutant-von-neumann}
     \leanok
-    A von Neumann algebra and its commutant share the same center: the intersection $\pi(A)'' \cap (\pi(A)'')' = \pi(A)'' \cap \pi(A)'$ is symmetric under the duality of \ref{thrm:double-commutant-duality}, being simultaneously the center of $\pi(A)''$ and the center of $\pi(A)'$. Consequently $\pi(A)''$ is a factor (trivial center) if and only if its commutant $\pi(A)'$ is a factor. Dually, at the extreme of triviality, the commutant collapses to the scalars $\pi(A)' = \mathbb{C}\cdot 1$ if and only if the generated algebra is everything $\pi(A)'' = \mathcal{B}(H)$; this is the commutant form of the equivalence ``irreducible $\iff$ generates $\mathcal{B}(H)$'' (\ref{thrm:commutant-von-neumann}), passing between the two sides through the bicommutant $(\mathbb{C}\cdot 1)' = \mathcal{B}(H)$.
+    A von Neumann algebra and its commutant share the same center. Consequently $\pi(A)''$ is a factor (trivial center) if and only if its commutant $\pi(A)'$ is a factor. Dually, at the extreme of triviality, the commutant collapses to the scalars $\pi(A)' = \mathbb{C}\cdot 1$ if and only if the generated algebra is everything $\pi(A)'' = \mathcal{B}(H)$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:double-commutant-duality, thrm:commutant-von-neumann, thrm:irreducible-generates-all}
+    The intersection $\pi(A)'' \cap (\pi(A)'')' = \pi(A)'' \cap \pi(A)'$ is symmetric under the duality of \ref{thrm:double-commutant-duality}, being simultaneously the center of $\pi(A)''$ and the center of $\pi(A)'$. The triviality statement is the commutant form of the equivalence ``irreducible $\iff$ generates $\mathcal{B}(H)$'' (\ref{thrm:commutant-von-neumann}), passing between the two sides through the bicommutant $(\mathbb{C}\cdot 1)' = \mathcal{B}(H)$.
+\end{proof}
 
 \begin{lemma}[Abelian $\iff$ Self-Commuting]
     \label{lmm:von-neumann-abelian-self-commuting}
     \lean{Physicslib4.GNS.isAbelian_iff_le_commutant}
     \leanok
-    A von Neumann algebra $R$ is abelian --- every pair of its elements commutes --- if and only if it is contained in its own commutant, $R \subseteq R'$. This is essentially definitional: $R \subseteq R'$ says exactly that each element of $R$ commutes with every element of $R$. It is the operator-algebraic characterization of commutativity via the commutant, and the boundary case of microcausality $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$ where the two regions coincide.
+    A von Neumann algebra $R$ is abelian --- every pair of its elements commutes --- if and only if it is contained in its own commutant, $R \subseteq R'$. It is the operator-algebraic characterization of commutativity via the commutant, and the boundary case of microcausality $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$ where the two regions coincide.
 \end{lemma}
+\begin{proof}
+    \leanok
+    This is essentially definitional: $R \subseteq R'$ says exactly that each element of $R$ commutes with every element of $R$.
+\end{proof}
 
 \begin{definition}[Center of a von Neumann algebra]
     \label{def:von-neumann-center}
@@ -739,10 +956,15 @@ The comparison of representations is the entry point to superselection theory. F
 \begin{theorem}[The center of a von Neumann algebra is abelian]
     \label{thrm:von-neumann-center-abelian}
     \lean{Physicslib4.GNS.vonNeumannCenter_isAbelian}
-    \uses{def:von-neumann-center, lmm:von-neumann-abelian-self-commuting}
+    \uses{def:von-neumann-center}
     \leanok
-    The center $Z(R) = R \cap R'$ is abelian: any two of its elements commute. Indeed an element of the center lies in $R'$, hence commutes with every element of $R$, and in particular with every other element of the center (which lies in $R$).
+    The center $Z(R) = R \cap R'$ is abelian: any two of its elements commute.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:von-neumann-center, lmm:von-neumann-abelian-self-commuting}
+    Indeed an element of the center lies in $R'$, hence commutes with every element of $R$, and in particular with every other element of the center (which lies in $R$).
+\end{proof}
 
 \begin{lemma}[$R$ is abelian iff it equals its center]
     \label{lmm:von-neumann-center-eq-self-iff-abelian}
@@ -760,35 +982,55 @@ The comparison of representations is the entry point to superselection theory. F
 \begin{theorem}[A factor is abelian iff it is the scalars]
     \label{thrm:factor-abelian-iff-scalars}
     \lean{Physicslib4.GNS.isAbelian_iff_eq_scalars_of_isFactor}
-    \uses{def:von-neumann-center, lmm:von-neumann-center-eq-self-iff-abelian, lmm:von-neumann-abelian-self-commuting}
+    \uses{def:von-neumann-center}
     \leanok
-    A factor $R$ (a von Neumann algebra with trivial center $R \cap R' = \mathbb{C}\cdot 1$) is abelian if and only if it equals the scalars $\mathbb{C}\cdot 1$. If $R$ is abelian then its center equals $R$ (\ref{lmm:von-neumann-center-eq-self-iff-abelian}), while by the factor hypothesis the center is $\mathbb{C}\cdot 1$; hence $R = \mathbb{C}\cdot 1$. Conversely the scalars are abelian, since $\mathbb{C}\cdot 1 \subseteq (\mathbb{C}\cdot 1)'$ (\ref{lmm:von-neumann-abelian-self-commuting}). Thus among factors, the abelian ones are exactly the trivial (one-dimensional) algebra of scalar multiples of the identity.
+    A factor $R$ (a von Neumann algebra with trivial center $R \cap R' = \mathbb{C}\cdot 1$) is abelian if and only if it equals the scalars $\mathbb{C}\cdot 1$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:von-neumann-center, lmm:von-neumann-center-eq-self-iff-abelian, lmm:von-neumann-abelian-self-commuting}
+    If $R$ is abelian then its center equals $R$ (\ref{lmm:von-neumann-center-eq-self-iff-abelian}), while by the factor hypothesis the center is $\mathbb{C}\cdot 1$; hence $R = \mathbb{C}\cdot 1$. Conversely the scalars are abelian, since $\mathbb{C}\cdot 1 \subseteq (\mathbb{C}\cdot 1)'$ (\ref{lmm:von-neumann-abelian-self-commuting}). Thus among factors, the abelian ones are exactly the trivial (one-dimensional) algebra of scalar multiples of the identity.
+\end{proof}
 
 \begin{theorem}[A von Neumann algebra and its commutant share a center]
   \label{thrm:center-eq-commutant-center}
   \lean{Physicslib4.GNS.vonNeumannCenter_eq_commutant}
-  \uses{def:von-neumann-center, thrm:double-commutant-duality}
+  \uses{def:von-neumann-center}
   \leanok
-  The center of a von Neumann algebra equals the center of its commutant: $Z(R) = Z(R')$. Indeed $Z(R) = R \cap R'$ and $Z(R') = R' \cap R'' = R' \cap R$, which coincide by commutativity of intersection together with the double-commutant identity $R'' = R$.
+  The center of a von Neumann algebra equals the center of its commutant: $Z(R) = Z(R')$.
 \end{theorem}
+\begin{proof}
+  \leanok
+  \uses{def:von-neumann-center, thrm:double-commutant-duality}
+  Indeed $Z(R) = R \cap R'$ and $Z(R') = R' \cap R'' = R' \cap R$, which coincide by commutativity of intersection together with the double-commutant identity $R'' = R$.
+\end{proof}
 
 \begin{theorem}[A von Neumann algebra is a factor iff its center is the scalars]
   \label{thrm:factor-iff-center-scalars}
   \lean{Physicslib4.GNS.isFactor_iff_center_eq_scalars}
   \uses{def:von-neumann-center}
   \leanok
-  A von Neumann algebra $R$ is a factor if and only if its center is the scalars, $Z(R) = R \cap R' = \mathbb{C}\cdot 1$. This is a restatement of the definition of a factor in terms of the bundled center: the underlying set of $Z(R)$ is exactly $R \cap R'$.
+  A von Neumann algebra $R$ is a factor if and only if its center is the scalars, $Z(R) = R \cap R' = \mathbb{C}\cdot 1$.
 \end{theorem}
+\begin{proof}
+  \leanok
+  \uses{def:von-neumann-center}
+  This is a restatement of the definition of a factor in terms of the bundled center: the underlying set of $Z(R)$ is exactly $R \cap R'$.
+\end{proof}
 
 \begin{theorem}[The Pure-State Dichotomy]
     \label{thrm:pure-state-dichotomy}
     \lean{Physicslib4.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}
     \leanfile{Physicslib4/GNS/Superselection.lean}
+    \uses{def:pure-state}
     \leanok
-    \uses{def:pure-state, thrm:irreducible-dichotomy, thrm:pure-iff-irreducible}
-    The GNS representations of two pure states are either disjoint or unitarily equivalent. Indeed the GNS representation of a pure state is irreducible (\ref{thrm:pure-iff-irreducible}), so the irreducible dichotomy (\ref{thrm:irreducible-dichotomy}) applies. Pure states thus fall into \emph{superselection sectors}: the sector of a pure state is the unitary-equivalence class of its irreducible GNS representation.
+    The GNS representations of two pure states are either disjoint or unitarily equivalent.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:irreducible-dichotomy, thrm:pure-iff-irreducible}
+    Indeed the GNS representation of a pure state is irreducible (\ref{thrm:pure-iff-irreducible}), so the irreducible dichotomy (\ref{thrm:irreducible-dichotomy}) applies. Pure states thus fall into \emph{superselection sectors}: the sector of a pure state is the unitary-equivalence class of its irreducible GNS representation.
+\end{proof}
 
 \subsection{Direct Sums, Amplification, and Reducibility}
 
@@ -807,10 +1049,15 @@ Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their di
     \label{thrm:direct-sum-subrepresentation}
     \lean{Physicslib4.GNS.intertwines_single, Physicslib4.GNS.summandProj_mem_commutant}
     \leanfile{Physicslib4/GNS/DirectSum.lean}
-    \leanok
     \uses{def:direct-sum-representation, def:disjoint-representations}
+    \leanok
     Each summand embeds as a subrepresentation: the isometric inclusion $H_j \hookrightarrow \ell^2(\iota, H)$ intertwines $\pi_j$ with $\bigoplus_i \pi_i$. Moreover the orthogonal projection onto the $j$-th summand lies in the commutant of the direct sum, so each summand is a reducing subspace.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:direct-sum-representation, def:disjoint-representations}
+    Both claims are coordinatewise computations with the diagonal action of \ref{def:direct-sum-representation}: the isometric inclusion is compatible with the $j$-th coordinate of the diagonal, and the projection onto the $j$-th summand commutes with every diagonal operator.
+\end{proof}
 
 \begin{definition}[Amplification]
     \label{def:amplification}
@@ -825,10 +1072,15 @@ Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their di
     \label{thrm:direct-sum-reducible}
     \lean{Physicslib4.GNS.not_isIrreducible_directSum}
     \leanfile{Physicslib4/GNS/Amplification.lean}
+    \uses{def:direct-sum-representation, def:irreducible-representation}
     \leanok
-    \uses{def:direct-sum-representation, def:irreducible-representation, thrm:direct-sum-subrepresentation}
-    A direct sum with two summands carrying nonzero vectors is \emph{reducible}. Were $\bigoplus_i \pi_i$ irreducible, every summand projection would be a scalar (its commutant being trivial); but the projection onto one of two nonzero summands is a nontrivial projection, hence not scalar. In particular an amplification $\iota \cdot \pi$ with at least two copies (and $\pi$ acting on a nonzero space) is reducible --- the multiplicity is visible in the commutant.
+    A direct sum with two summands carrying nonzero vectors is \emph{reducible}. In particular an amplification $\iota \cdot \pi$ with at least two copies (and $\pi$ acting on a nonzero space) is reducible --- the multiplicity is visible in the commutant.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:irreducible-representation, thrm:direct-sum-subrepresentation}
+    Were $\bigoplus_i \pi_i$ irreducible, every summand projection would be a scalar (its commutant being trivial); but the projection onto one of two nonzero summands is a nontrivial projection, hence not scalar.
+\end{proof}
 
 \subsection{Covariant States and the Covariance Action}
 
@@ -847,10 +1099,15 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \label{lmm:covariant-state-family-compose}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily.comp}
     \leanfile{Physicslib4/AQFT/HaagKastler/CovariantState.lean}
+    \uses{def:covariant-state-family}
+    \leanok
+    For a covariant family of local states, the covariance relation composes along the group: $\omega_{\mathbf{B}}(a) = \omega_{L'\cdot(L\cdot\mathbf{B})}\big(\alpha_{L'}(\alpha_L a)\big)$.
+\end{lemma}
+\begin{proof}
     \leanok
     \uses{def:covariant-state-family}
-    For a covariant family of local states, the covariance relation composes along the group: $\omega_{\mathbf{B}}(a) = \omega_{L'\cdot(L\cdot\mathbf{B})}\big(\alpha_{L'}(\alpha_L a)\big)$, reflecting the multiplicativity of the Lorentz action.
-\end{lemma}
+    This reflects the multiplicativity of the Lorentz action: the covariance relation of \ref{def:covariant-state-family} is applied twice, first for $L$ and then for $L'$.
+\end{proof}
 
 \begin{definition}[Quasilocal Covariance Automorphism]
     \label{def:quasilocal-lift}
@@ -865,28 +1122,42 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \label{lmm:quasilocal-lift-unique}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift.unique}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAction.lean}
+    \uses{def:quasilocal-lift}
+    \leanok
+    Any two lifts of the same $L$ have the same underlying automorphism.
+\end{lemma}
+\begin{proof}
     \leanok
     \uses{def:quasilocal-lift}
-    Any two lifts of the same $L$ have the same underlying automorphism: they agree on the union of the local images, which is dense in $\mathfrak{U}$, and $*$-automorphisms of a C*-algebra are continuous.
-\end{lemma}
+    They agree on the union of the local images, which is dense in $\mathfrak{U}$, and $*$-automorphisms of a C*-algebra are continuous.
+\end{proof}
 
 \begin{theorem}[Existence of the Quasilocal Lift]
     \label{thrm:quasilocal-lift-exists}
     \lean{Physicslib4.AQFT.HaagKastler.nonempty_quasilocalLift}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \uses{def:quasilocal-lift, def:quasilocal-algebra}
+    \leanok
+    For a covariance-compatible quasilocal algebra, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:quasilocal-lift, def:quasilocal-algebra}
-    For a covariance-compatible quasilocal algebra, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists. The intertwiner is defined on the directed union of local images (a dense $*$-subalgebra) and extended by uniform continuity; the inverse is supplied by $L^{-1}$, and the group laws $\beta_{L'L} = \beta_{L'}\circ\beta_L$ and $\beta_{1} = \mathrm{id}$ furnish the two-sided inverse.
-\end{theorem}
+    The intertwiner is defined on the directed union of local images (a dense $*$-subalgebra) and extended by uniform continuity; the inverse is supplied by $L^{-1}$, and the group laws $\beta_{L'L} = \beta_{L'}\circ\beta_L$ and $\beta_{1} = \mathrm{id}$ furnish the two-sided inverse.
+\end{proof}
 
 \begin{theorem}[Existence for the Trivial Net]
     \label{thrm:quasilocal-lift-trivial}
     \lean{Physicslib4.AQFT.HaagKastler.nonempty_trivialQuasilocalLift}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
-    \uses{thrm:quasilocal-lift-exists}
-    The covariance-compatibility hypothesis is satisfiable: the trivial net's quasilocal algebra is covariance-compatible (every $*$-automorphism of $\mathbb{C}$ is the identity), so the quasilocal lift exists unconditionally for the trivial net.
+    The covariance-compatibility hypothesis is satisfiable: the trivial net's quasilocal algebra is covariance-compatible, so the quasilocal lift exists unconditionally for the trivial net.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:quasilocal-lift-exists}
+    Covariance-compatibility holds because every $*$-automorphism of $\mathbb{C}$ is the identity; the lift is then supplied by \ref{thrm:quasilocal-lift-exists}.
+\end{proof}
 
 \begin{definition}[Covariant Quasilocal Algebra]
     \label{def:covariant-quasilocal-algebra}
@@ -901,10 +1172,15 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \label{lmm:quasilocal-action-coherence}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.action_one, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.action_mul}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
-    \leanok
     \uses{def:covariant-quasilocal-algebra}
+    \leanok
     The covariance action $L \mapsto \beta_L$ of a covariant quasilocal algebra is a genuine action of the Lorentz group by $*$-automorphisms of the quasilocal algebra: $\beta_{\mathbf{1}} = \mathrm{id}$ and $\beta_{L'L} = \beta_{L'} \circ \beta_L$.
 \end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:covariant-quasilocal-algebra}
+    These are the group laws of the lifted covariance action carried by a covariant quasilocal algebra (\ref{def:covariant-quasilocal-algebra}).
+\end{proof}
 
 \begin{definition}[Invariant State]
     \label{def:invariant-state}
@@ -919,10 +1195,15 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \label{thrm:invariant-state-gns-unitary}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState.exists_gns_unitary}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \uses{def:invariant-state, thrm:gns-construction-theorem}
     \leanok
-    \uses{def:invariant-state, thrm:gns-construction-theorem, lmm:quasilocal-action-coherence}
-    For an invariant state $\omega$, the covariance action is implemented on the GNS Hilbert space by a family of unitaries $U(L)$ satisfying $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\,\Omega$ and $U(L)\Omega = \Omega$. The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space.
+    For an invariant state $\omega$, the covariance action is implemented on the GNS Hilbert space by a family of unitaries $U(L)$ satisfying $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\,\Omega$ and $U(L)\Omega = \Omega$.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:invariant-state, lmm:quasilocal-action-coherence}
+    The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space.
+\end{proof}
 
 Combining invariance with purity makes the GNS representation both covariant and irreducible. We emphasise that this is a \emph{precursor} to a vacuum representation, not a vacuum itself: a genuine vacuum additionally requires the spectrum condition (positivity of the energy-momentum spectrum), which is not imposed - and indeed not expressible - here.
 
@@ -930,10 +1211,15 @@ Combining invariance with purity makes the GNS representation both covariant and
     \label{thrm:irreducible-covariant-representation}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState.exists_gns_irreducible_covariant}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \uses{def:pure-state, def:irreducible-representation, thrm:irreducible-generates-all}
     \leanok
-    \uses{thrm:invariant-state-gns-unitary, def:pure-state, def:irreducible-representation, thrm:pure-iff-irreducible, thrm:irreducible-generates-all}
-    A state $\omega$ on the quasilocal algebra that is both invariant under the covariance action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U(L)$ of the inhomogeneous Lorentz group fixing the cyclic vector $\Omega$, with operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$ - and \emph{irreducible}; in particular it generates all of $\mathcal{B}(H)$ ($\pi(\mathfrak{U})'' = \mathcal{B}(H)$, by \ref{thrm:irreducible-generates-all}). This combines the covariant GNS triple of \ref{thrm:invariant-state-gns-unitary} with purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}). It is a necessary precursor to a vacuum representation; the spectrum condition would be the remaining ingredient.
+    A state $\omega$ on the quasilocal algebra that is both invariant under the covariance action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U(L)$ of the inhomogeneous Lorentz group fixing the cyclic vector $\Omega$, with operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$ - and \emph{irreducible}; in particular it generates all of $\mathcal{B}(H)$ ($\pi(\mathfrak{U})'' = \mathcal{B}(H)$, by \ref{thrm:irreducible-generates-all}). It is a necessary precursor to a vacuum representation; the spectrum condition would be the remaining ingredient.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:invariant-state-gns-unitary, thrm:pure-iff-irreducible}
+    This combines the covariant GNS triple of \ref{thrm:invariant-state-gns-unitary} with purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}).
+\end{proof}
 
 \begin{definition}[Positive Energy (bounded-generator scaffold)]
     \label{def:positive-energy}
@@ -947,10 +1233,15 @@ Combining invariance with purity makes the GNS representation both covariant and
     \label{thrm:positive-energy-api}
     \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl, Physicslib4.AQFT.exp_generator_unique, Physicslib4.AQFT.IsPositiveEnergy.conj, Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}
     \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \uses{def:positive-energy}
+    \leanok
+    Structural properties of the positive-energy condition, all Stone-free. (i) \emph{Trivial subgroup}: the constant group $t \mapsto \mathrm{id}$ has positive energy, with zero generator. (ii) \emph{Uniqueness of the generator}: if two bounded generators induce the same one-parameter group, $e^{i t P} = e^{i t Q}$ for all $t$, then $P = Q$. Hence the generator witnessing positive energy is unique. (iii) \emph{Unitary invariance}: if $V$ has positive energy, so does its conjugate $t \mapsto W \circ V(t) \circ W^{-1}$ by a unitary $W$, with generator $W P W^{-1}$. Physically, the spectrum condition does not depend on the choice of unitary frame. (iv) \emph{Strong continuity}: a positive-energy group is strongly continuous --- $t \mapsto V(t) x$ is continuous for every $x$. This justifies calling it a strongly continuous one-parameter unitary group.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:positive-energy}
-    Structural properties of the positive-energy condition, all Stone-free. (i) \emph{Trivial subgroup}: the constant group $t \mapsto \mathrm{id}$ has positive energy, with zero generator. (ii) \emph{Uniqueness of the generator}: if two bounded generators induce the same one-parameter group, $e^{i t P} = e^{i t Q}$ for all $t$, then $P = Q$ --- differentiating at $t = 0$ gives $i P = i Q$; positivity is not needed. Hence the generator witnessing positive energy is unique. (iii) \emph{Unitary invariance}: if $V$ has positive energy, so does its conjugate $t \mapsto W \circ V(t) \circ W^{-1}$ by a unitary $W$, with generator $W P W^{-1}$ (positive, being the unitary conjugate of $P$); the energy exponential transports via $e^{W A W^{-1}} = W e^{A} W^{-1}$. Physically, the spectrum condition does not depend on the choice of unitary frame. (iv) \emph{Strong continuity}: a positive-energy group is strongly continuous --- $t \mapsto V(t) x$ is continuous for every $x$, since $t \mapsto (i t) P$ is continuous and the operator exponential is continuous. This justifies calling it a strongly continuous one-parameter unitary group.
-\end{theorem}
+    (ii) Differentiating at $t = 0$ gives $i P = i Q$; positivity is not needed. (iii) The generator $W P W^{-1}$ is positive, being the unitary conjugate of $P$; the energy exponential transports via $e^{W A W^{-1}} = W e^{A} W^{-1}$. (iv) $t \mapsto (i t) P$ is continuous and the operator exponential is continuous.
+\end{proof}
 
 \begin{definition}[Vacuum State (generator-parameterized scaffold)]
     \label{def:vacuum-state}
@@ -965,10 +1256,15 @@ Combining invariance with purity makes the GNS representation both covariant and
     \label{thrm:vacuum-no-stone}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState.invariant, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState.exists_gns_irreducible_covariant}
     \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \uses{def:vacuum-state, thrm:irreducible-covariant-representation}
+    \leanok
+    The conditions a vacuum state satisfies that need neither the spectrum condition nor Stone's theorem. First, a vacuum state is \emph{invariant} (the first conjunct of the definition). Second, a \emph{pure} vacuum state yields the irreducible covariant GNS representation of \ref{thrm:irreducible-covariant-representation}: a covariant GNS triple with implementing unitaries $U(L)$ fixing $\Omega$ and operator covariance $U(L)\pi(a)U(L)^{-1} = \pi(\beta_L a)$, whose representation is irreducible and generates all of $\mathcal{B}(H)$.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:vacuum-state, thrm:irreducible-covariant-representation}
-    The conditions a vacuum state satisfies that need neither the spectrum condition nor Stone's theorem. First, a vacuum state is \emph{invariant} (the first conjunct of the definition). Second, a \emph{pure} vacuum state yields the irreducible covariant GNS representation of \ref{thrm:irreducible-covariant-representation}: a covariant GNS triple with implementing unitaries $U(L)$ fixing $\Omega$ and operator covariance $U(L)\pi(a)U(L)^{-1} = \pi(\beta_L a)$, whose representation is irreducible and generates all of $\mathcal{B}(H)$. Both follow by projecting to invariance and chaining with purity $\Rightarrow$ irreducibility; the spectrum-condition content of the vacuum is not used.
-\end{theorem}
+    Both follow by projecting to invariance and chaining with purity $\Rightarrow$ irreducibility; the spectrum-condition content of the vacuum is not used.
+\end{proof}
 
 \begin{definition}[Future-Timelike Translation Subgroup]
     \label{def:future-timelike-translation}
@@ -992,10 +1288,15 @@ Combining invariance with purity makes the GNS representation both covariant and
     \label{thrm:purity-covariance-invariant}
     \lean{Physicslib4.GNS.isPure_precomp_iff, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isPure_precomp_action_iff}
     \leanfile{Physicslib4/GNS/ExtremeState.lean}
-    \leanok
     \uses{def:pure-state, lmm:quasilocal-action-coherence}
-    Purity is preserved by any $*$-automorphism: for $\Phi : \mathfrak{U} \xrightarrow{\sim} \mathfrak{U}$, the pullback state $\omega \circ \Phi$ is pure if and only if $\omega$ is. A dominated positive functional $\psi \le \omega \circ \Phi$ transports to $\psi \circ \Phi^{-1} \le \omega$, which purity sends to a scalar multiple of $\omega$; transporting back gives $\psi$ proportional to $\omega \circ \Phi$. Applied to the covariance automorphism $\Phi = \beta_L$, this says purity of a state is a Lorentz-covariance-invariant property.
+    \leanok
+    Purity is preserved by any $*$-automorphism: for $\Phi : \mathfrak{U} \xrightarrow{\sim} \mathfrak{U}$, the pullback state $\omega \circ \Phi$ is pure if and only if $\omega$ is. Applied to the covariance automorphism $\Phi = \beta_L$, this says purity of a state is a Lorentz-covariance-invariant property.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:pure-state}
+    A dominated positive functional $\psi \le \omega \circ \Phi$ transports to $\psi \circ \Phi^{-1} \le \omega$, which purity sends to a scalar multiple of $\omega$; transporting back gives $\psi$ proportional to $\omega \circ \Phi$.
+\end{proof}
 
 \begin{theorem}[GNS covariance along the quasilocal action]
     \label{thrm:gns-covariance-quasilocal-action}
@@ -1018,10 +1319,15 @@ A faithful state has a sharper consequence at the level of the GNS construction 
     \label{thrm:separating-faithful}
     \lean{Physicslib4.GNS.separating_of_faithful, Physicslib4.GNS.exists_gns_separating}
     \leanfile{Physicslib4/GNS/Separating.lean}
-    \leanok
     \uses{def:state, def:cyclic-vector, thrm:gns-construction-theorem}
-    Let $\omega$ be a faithful state and $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ its GNS triple. Then the cyclic vector $\Omega$ is \emph{separating} for $\pi_\omega(\mathfrak{U})$: if $\pi_\omega(a)\Omega = 0$ then $a = 0$. Indeed $\pi_\omega(a)\Omega = 0$ gives $\omega(a^* a) = \langle \Omega, \pi_\omega(a^* a)\Omega\rangle = \langle \pi_\omega(a)\Omega, \pi_\omega(a)\Omega\rangle = 0$, and faithfulness forces $a = 0$. This holds in any representation reproducing a faithful state, not only the GNS one.
+    \leanok
+    Let $\omega$ be a faithful state and $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ its GNS triple. Then the cyclic vector $\Omega$ is \emph{separating} for $\pi_\omega(\mathfrak{U})$: if $\pi_\omega(a)\Omega = 0$ then $a = 0$. This holds in any representation reproducing a faithful state, not only the GNS one.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:cyclic-vector, thrm:gns-construction-theorem}
+    Indeed $\pi_\omega(a)\Omega = 0$ gives $\omega(a^* a) = \langle \Omega, \pi_\omega(a^* a)\Omega\rangle = \langle \pi_\omega(a)\Omega, \pi_\omega(a)\Omega\rangle = 0$, and faithfulness forces $a = 0$.
+\end{proof}
 
 \subsection{The KMS Condition and Thermal Equilibrium}
 
@@ -1048,19 +1354,29 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
     \label{thrm:kms-convex}
     \lean{Physicslib4.AQFT.IsKMSState.convexCombo}
     \leanfile{Physicslib4/AQFT/KMS.lean}
+    \uses{def:kms-state}
+    \leanok
+    A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two $(\alpha, \beta)$-KMS states is again $(\alpha, \beta)$-KMS. Thus the equilibrium states at a fixed temperature form a convex set.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:kms-state}
-    A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two $(\alpha, \beta)$-KMS states is again $(\alpha, \beta)$-KMS: for each pair $(a, b)$ the analytic interpolant is the convex combination $s\,F_1 + (1-s)\,F_2$ of the two interpolants, which is continuous, bounded, and holomorphic on the strip, with boundary values that add. Thus the equilibrium states at a fixed temperature form a convex set.
-\end{theorem}
+    For each pair $(a, b)$ the analytic interpolant is the convex combination $s\,F_1 + (1-s)\,F_2$ of the two interpolants, which is continuous, bounded, and holomorphic on the strip, with boundary values that add.
+\end{proof}
 
 \begin{lemma}[Boundary Coincidence for $a = 1$]
     \label{lmm:kms-correlation-one}
     \lean{Physicslib4.AQFT.IsKMSState.correlationOne}
     \leanfile{Physicslib4/AQFT/KMS.lean}
+    \uses{def:kms-state}
+    \leanok
+    For a KMS state $\omega$ and any observable $a$, the correlation function $F$ of the pair $(1, a)$ has its two boundary values \emph{equal} - both are $t \mapsto \omega(\alpha_t a)$.
+\end{lemma}
+\begin{proof}
     \leanok
     \uses{def:kms-state}
-    For a KMS state $\omega$ and any observable $a$, the correlation function $F$ of the pair $(1, a)$ has its two boundary values \emph{equal} - both are $t \mapsto \omega(\alpha_t a)$. This is the algebraic heart of the invariance argument: it follows directly from the KMS condition with $a := 1$, since $\omega(1\cdot\alpha_t a) = \omega(\alpha_t a \cdot 1) = \omega(\alpha_t a)$.
-\end{lemma}
+    This is the algebraic heart of the invariance argument: it follows directly from the KMS condition with $a := 1$, since $\omega(1\cdot\alpha_t a) = \omega(\alpha_t a \cdot 1) = \omega(\alpha_t a)$.
+\end{proof}
 
 \begin{definition}[Strip-Liouville Principle]
     \label{def:strip-liouville}
@@ -1075,44 +1391,67 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
     \lean{Physicslib4.exists_bounded_entire_extension_of_strip_periodic}
     \leanfile{Physicslib4/Analysis/StripPeriodicExtension.lean}
     \leanok
-    A function $F$ continuous on the closed strip $0 \le \operatorname{Im} z \le \beta$, holomorphic on the open strip, bounded, and with equal boundary values $F(t) = F(t + i\beta)$ on the real axis, admits a \emph{bounded entire} extension $H$ agreeing with $F$ on $\mathbb{R}$. The extension is the $i\beta$-periodic continuation $H(z) = F\!\left(z - \lfloor \operatorname{Im} z / \beta \rfloor\, i\beta\right)$, which folds every point into the fundamental strip: it is continuous across each gluing line $\operatorname{Im} z = k\beta$ because the boundary values match by periodicity, holomorphic off the lines as $F$ composed with a holomorphic shift, and holomorphic on the lines by the horizontal-line removable-singularity theorem (Morera). This is the analytic engine behind the strip-Liouville principle.
+    A function $F$ continuous on the closed strip $0 \le \operatorname{Im} z \le \beta$, holomorphic on the open strip, bounded, and with equal boundary values $F(t) = F(t + i\beta)$ on the real axis, admits a \emph{bounded entire} extension $H$ agreeing with $F$ on $\mathbb{R}$. This is the analytic engine behind the strip-Liouville principle.
 \end{theorem}
+\begin{proof}
+    \leanok
+    The extension is the $i\beta$-periodic continuation $H(z) = F\!\left(z - \lfloor \operatorname{Im} z / \beta \rfloor\, i\beta\right)$, which folds every point into the fundamental strip: it is continuous across each gluing line $\operatorname{Im} z = k\beta$ because the boundary values match by periodicity, holomorphic off the lines as $F$ composed with a holomorphic shift, and holomorphic on the lines by the horizontal-line removable-singularity theorem (Morera).
+\end{proof}
 
 \begin{theorem}[Strip-Liouville Holds for $\beta > 0$]
     \label{thrm:strip-liouville-pos}
     \lean{Physicslib4.AQFT.stripLiouville_of_pos}
     \leanfile{Physicslib4/AQFT/KMS.lean}
+    \uses{def:strip-liouville}
+    \leanok
+    At positive width $\beta > 0$ the strip-Liouville principle (\ref{def:strip-liouville}) is a theorem. The hypothesis $\beta > 0$ is necessary: at $\beta = 0$ the open strip is empty and at $\beta < 0$ the strip itself is empty, and in both cases the principle is false.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:strip-liouville, thrm:strip-periodic-extension}
-    At positive width $\beta > 0$ the strip-Liouville principle (\ref{def:strip-liouville}) is a theorem. The equal boundary values let $F$ extend to a bounded $i\beta$-periodic \emph{entire} function by the strip Schwarz reflection (\ref{thrm:strip-periodic-extension}), which is then constant on $\mathbb{R}$ by Liouville's theorem. The hypothesis $\beta > 0$ is necessary: at $\beta = 0$ the open strip is empty and at $\beta < 0$ the strip itself is empty, and in both cases the principle is false.
-\end{theorem}
+    The equal boundary values let $F$ extend to a bounded $i\beta$-periodic \emph{entire} function by the strip Schwarz reflection (\ref{thrm:strip-periodic-extension}), which is then constant on $\mathbb{R}$ by Liouville's theorem.
+\end{proof}
 
 \begin{theorem}[KMS States are Invariant]
     \label{thrm:kms-invariance}
     \lean{Physicslib4.AQFT.IsKMSState.invariant_of_pos}
     \leanfile{Physicslib4/AQFT/KMS.lean}
+    \uses{def:kms-state}
+    \leanok
+    At positive inverse temperature $\beta > 0$, every $(\alpha, \beta)$-KMS state $\omega$ is $\alpha$-invariant: $\omega(\alpha_t a) = \omega(a)$ for all $t$ and $a$.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:kms-state, lmm:kms-correlation-one, thrm:strip-liouville-pos}
-    At positive inverse temperature $\beta > 0$, every $(\alpha, \beta)$-KMS state $\omega$ is $\alpha$-invariant: $\omega(\alpha_t a) = \omega(a)$ for all $t$ and $a$. By boundary coincidence (\ref{lmm:kms-correlation-one}) the KMS correlation function of $(1, a)$ has equal boundary values $F(t) = F(t + i\beta) = \omega(\alpha_t a)$; the strip-Liouville principle for $\beta > 0$ (\ref{thrm:strip-liouville-pos}) forces $F(t) = F(0)$, so $\omega(\alpha_t a) = F(t) = F(0) = \omega(\alpha_0 a) = \omega(a)$.
-\end{theorem}
+    By boundary coincidence (\ref{lmm:kms-correlation-one}) the KMS correlation function of $(1, a)$ has equal boundary values $F(t) = F(t + i\beta) = \omega(\alpha_t a)$; the strip-Liouville principle for $\beta > 0$ (\ref{thrm:strip-liouville-pos}) forces $F(t) = F(0)$, so $\omega(\alpha_t a) = F(t) = F(0) = \omega(\alpha_0 a) = \omega(a)$.
+\end{proof}
 
 \begin{theorem}[Uniqueness on the Strip from Boundary Values]
     \label{thrm:strip-uniqueness}
     \lean{Physicslib4.eqOn_strip_of_eq_boundary}
     \leanfile{Physicslib4/Analysis/StripPeriodicExtension.lean}
     \leanok
-    \uses{thrm:strip-periodic-extension}
-    Two functions continuous and bounded on the closed strip $0 \le \operatorname{Im} z \le \beta$ (with $\beta > 0$), holomorphic on the open strip, that agree on \emph{both} boundary lines $\operatorname{Im} z = 0$ and $\operatorname{Im} z = \beta$, agree on the whole strip. Indeed their difference has vanishing boundary values, so its $i\beta$-periodic extension (\ref{thrm:strip-periodic-extension}) is a bounded entire function, constant by Liouville, equal to its value $0$ at the origin.
+    Two functions continuous and bounded on the closed strip $0 \le \operatorname{Im} z \le \beta$ (with $\beta > 0$), holomorphic on the open strip, that agree on \emph{both} boundary lines $\operatorname{Im} z = 0$ and $\operatorname{Im} z = \beta$, agree on the whole strip.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:strip-periodic-extension}
+    Indeed their difference has vanishing boundary values, so its $i\beta$-periodic extension (\ref{thrm:strip-periodic-extension}) is a bounded entire function, constant by Liouville, equal to its value $0$ at the origin.
+\end{proof}
 
 \begin{theorem}[Uniqueness of the KMS Correlation Function]
     \label{thrm:kms-correlation-unique}
     \lean{Physicslib4.AQFT.IsKMSState.correlation_eqOn}
     \leanfile{Physicslib4/AQFT/KMS.lean}
+    \uses{def:kms-state}
+    \leanok
+    For $\beta > 0$, the analytic completion of a KMS correlation function is unique: any two functions satisfying the KMS analytic data for the same pair $(a, b)$ - continuous and bounded on the strip, holomorphic on the interior, with the prescribed boundary values $t \mapsto \omega(a\,\alpha_t b)$ and $t \mapsto \omega(\alpha_t b\,\cdot a)$ - agree on the whole strip.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:kms-state, thrm:strip-uniqueness}
-    For $\beta > 0$, the analytic completion of a KMS correlation function is unique: any two functions satisfying the KMS analytic data for the same pair $(a, b)$ - continuous and bounded on the strip, holomorphic on the interior, with the prescribed boundary values $t \mapsto \omega(a\,\alpha_t b)$ and $t \mapsto \omega(\alpha_t b\,\cdot a)$ - agree on the whole strip. This is the strip uniqueness (\ref{thrm:strip-uniqueness}) applied to the two analytic completions, which share both boundary values.
-\end{theorem}
+    This is the strip uniqueness (\ref{thrm:strip-uniqueness}) applied to the two analytic completions, which share both boundary values.
+\end{proof}
 
 \subsection{KMS States for the Covariance Flow}
 
@@ -1131,10 +1470,15 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
     \label{lmm:one-parameter-aut-flow-covariance}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isOneParameterAut_flowAut}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
-    \leanok
     \uses{def:flow-aut-covariance, def:one-parameter-aut}
-    If $t \mapsto L_t$ is a one-parameter subgroup ($L_0 = 1$, $L_{s+t} = L_s L_t$), then the induced automorphisms $t \mapsto \beta_{L_t}$ of $\mathfrak{U}$ form a one-parameter automorphism group (\ref{def:one-parameter-aut}), by the coherence of the covariance action (\ref{lmm:quasilocal-action-coherence}).
+    \leanok
+    If $t \mapsto L_t$ is a one-parameter subgroup ($L_0 = 1$, $L_{s+t} = L_s L_t$), then the induced automorphisms $t \mapsto \beta_{L_t}$ of $\mathfrak{U}$ form a one-parameter automorphism group (\ref{def:one-parameter-aut}).
 \end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:flow-aut-covariance, lmm:quasilocal-action-coherence}
+    This holds by the coherence of the covariance action (\ref{lmm:quasilocal-action-coherence}).
+\end{proof}
 
 \begin{definition}[KMS State for the Covariance Flow]
     \label{def:kms-state-for-flow-covariance}
@@ -1149,10 +1493,15 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
     \label{thrm:kms-convex-for-flow-covariance}
     \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsKMSStateForFlow.convexCombo}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \uses{def:kms-state-for-flow-covariance}
+    \leanok
+    A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two KMS states on $\mathfrak{U}$ for the same covariance flow $L$ at the same inverse temperature $\beta$ is again a KMS state for that flow. Physically, the equilibrium states for a one-parameter symmetry flow form a convex set.
+\end{theorem}
+\begin{proof}
     \leanok
     \uses{def:kms-state-for-flow-covariance, thrm:kms-convex}
-    A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two KMS states on $\mathfrak{U}$ for the same covariance flow $L$ at the same inverse temperature $\beta$ is again a KMS state for that flow. This specializes the abstract KMS convexity (\ref{thrm:kms-convex}) to the induced one-parameter group $\mathrm{flowAut}$. Physically, the equilibrium states for a one-parameter symmetry flow form a convex set.
-\end{theorem}
+    This specializes the abstract KMS convexity (\ref{thrm:kms-convex}) to the induced one-parameter group $\mathrm{flowAut}$.
+\end{proof}
 
 \begin{definition}[Ground State for a Covariance Flow]
     \label{def:ground-state-for-flow-covariance}

@@ -53,12 +53,12 @@ With this terminology we are then able to state the GNS Construction Theorem.
     \end{align}
     The triple $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ is called the \textit{GNS triple} associated to $(\mathfrak{U}, \omega)$ or the \textit{cyclic representation} of $(\mathfrak{U}, \omega)$. Furthermore, if $\omega$ is a faithful state, then the *-representation $\pi_\omega$ is faithful. In addition the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:state, def:cyclic-vector, lmm:cauchy-schwarz-inequality, lmm:lmm1, lmm:lmm2}
+This proof has five parts: (1) the construction of the GNS Hilbert space $\mathcal{H}_\omega$, (2) the construction of the *-representation $\pi_\omega$, (3) the construction of the cyclic vector $\Omega$ in $\mathcal{H}_\omega$, (4) the proof that the *-representation $\pi_\omega$ is faithful, and (5) the proof of uniqueness up to unitary equivalence. Each part corresponds to one of the parts below.
 
-With the GNS Construction Theorem stated, we can now commence with its proof.
-
-This proof has five parts: (1) the construction of the GNS Hilbert space $\mathcal{H}_\omega$, (2) the construction of the *-representation $\pi_\omega$, (3) the construction of the cyclic vector $\Omega$ in $\mathcal{H}_\omega$, (4) the proof that the *-representation $\pi_\omega$ is faithful, and (5) the proof of uniqueness up to unitary equivalence. Each part corresponds to a subsequent subsection.
-
-\subsubsection{Construction of the GNS Hilbert Space}
+\noindent\textbf{Construction of the GNS Hilbert Space.}
 We'll construct the GNS Hilbert space $\mathcal{H}_\omega$ from the C*-algebra $\mathfrak{U}$ itself, modifying $\mathfrak{U}$ as needed to obtain the desired $\mathcal{H}_\omega$.
 
 Let's start by attempting to place an inner product on $\mathfrak{U}$. Naively one might hope the following defines an inner product
@@ -83,174 +83,13 @@ actually isn't an inner product. However, the form $\mathcal{N}$ takes gives us 
 
 In particular, if we quotient $\mathfrak{U}$ by $\mathcal{N}$ we may rid ourselves of the problem we encountered above and hopefully be able to construct an inner product on $\mathfrak{U} / \mathcal{N}$ and its completion. We'll see this plan actually works.
 
-However, before being able to see this plan through we'll need to take a quick detour and prove a few needed results.
+However, before being able to see this plan through we'll need to take a quick detour and prove a few needed results, which are stated and proved separately below.
 
-The most famous of these results is the Cauchy-Schwarz Inequality
+The most famous of these results is the Cauchy-Schwarz Inequality (\ref{lmm:cauchy-schwarz-inequality}).
 
-\begin{lemma}[Cauchy-Schwarz Inequality]
-    \label{lmm:cauchy-schwarz-inequality}
-    \lean{Physicslib4.GNS.cauchy_schwarz_inequality}
-    \leanfile{Physicslib4/GNS/CauchySchwarz.lean}
-    \uses{def:state}
-    \leanok
-    Let $\mathcal{A}$ be a *-algebra and $\omega$ a \textit{positive} element of the dual space $\mathcal{A}^*$, i.e. $\omega$ is an element of the dual space $\mathcal{A}^*$ such that for any $a \in \mathcal{A}$ one has $0 \le \omega(a^*a)$. Then
-    \begin{align}
-        \omega(a^*b) &= \overline{\omega(b^*a)} \\
-        |\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b)
-    \end{align}
-    for all $a$ and $b$ in $\mathcal{A}$.
-\end{lemma}
-\begin{proof}
-Positivity of $\omega$ implies that for any $a$ and $b$ in $\mathcal{A}$ and $\lambda \in \mathbb{C}$ one has
-\begin{align}
-    0 \le \omega\left((\lambda a + b)^*(\lambda a + b)\right).
-\end{align}
-As $\omega$ is an element of the dual space $\mathcal{A}^*$ and thus linear, this implies
-\begin{align}
-    0 \le |\lambda|^2\omega(a^*a) + \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) + \omega(b^*b).
-\end{align}
-This inequality then implies both desired results,
-\begin{align}
-    \omega(a^*b) &= \overline{\omega(b^*a)} \\
-    |\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b).
-\end{align}
-We will prove these one-by-one. Let us first prove this inequality implies $\omega(a^*b) = \overline{\omega(b^*a)}$.
+The next result we need to prove is the equality $\mathcal{N} = \mathcal{N}_1$ of the two null sets (\ref{lmm:lmm1}).
 
-Notice that the inequality is between two real numbers, $0$ and the right-hand side. As $\omega$ is positive, the first and last summands on the right-hand side are obviously real. This then implies
-\begin{align}
-    \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) \in \mathbb{R}.
-\end{align}
-As $\lambda$ is arbitrary, we are free to choose it to be real, which implies the imaginary parts of $\omega(a^*b)$ and $\omega(b^*a)$ are equal but have the opposite signs.
-
-Similarly, we are free to choose $\lambda$ to be imaginary, which implies that the real parts of $\omega(a^*b)$ and $\omega(b^*a)$ are equal. Together these facts imply the first result
-\begin{align}
-    \omega(a^*b) = \overline{\omega(b^*a)}.
-\end{align}
-Let us next prove that our inequality
-\begin{align}
-    0 \le |\lambda|^2\omega(a^*a) + \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) + \omega(b^*b)
-\end{align}
-implies $\lvert \omega(a^*b) \rvert^2 \le \omega(a^*a) \omega(b^*b)$.
-
-Again, as $\lambda$ is arbitrary, we are free to choose it to extremize the right-hand side of the inequality. Extremizing the right-hand of this inequality with respect to $\overline{\lambda}$ and assuming $\omega(a^*a) \ne 0$ one finds at the extrema
-\begin{align}
-    \lambda = - \frac{\omega(a^*b)}{\omega(a^*a)}.
-\end{align}
-Substituting this into the inequality, multiplying by $\omega(a^*a)$ while using the fact that $\omega$ is positive, and using $\omega(a^*b) = \overline{\omega(b^*a)}$, then one obtains
-\begin{align}
-    0 \le \lvert \omega(a^*b) \rvert^2 - \lvert \omega(a^*b) \rvert^2 - \lvert \omega(a^*b) \rvert^2 + \omega(a^*a) \omega(b^*b)
-\end{align}
-which implies
-\begin{align}
-    \lvert \omega(a^*b) \rvert^2 \le \omega(a^*a) \omega(b^*b),
-\end{align}
-the second desired result under the assumption that $\omega(a^*a) \ne 0$.
-
-If we now allow for the case $\omega(a^*a) = 0$, our inequality reduces to
-\begin{align}
-    0 \le \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) + \omega(b^*b).
-\end{align}
-Our previous result implies $\omega(b^*a) = \overline{\omega(a^*b)}$. Hence, this inequality takes the form
-\begin{align}
-    0 \le \overline{\lambda}\omega(a^*b) + \lambda\overline{\omega(a^*b)} + \omega(b^*b) = 2\text{Re}\left(\overline{\lambda} \omega(a^*b)\right) + \omega(b^*b).
-\end{align}
-Now as $\lambda$ is arbitrary we are free to select it as follows
-\begin{align}
-    \overline{\lambda} = -r \overline{\omega(a^*b)}
-\end{align}
-where $0 < r$ is an arbitrary positive real number. Then the previous inequality takes the form
-\begin{align}
-    0 &\le 2\text{Re}\left(\overline{\lambda} \omega(a^*b)\right) + \omega(b^*b) \\
-      &= -2r \lvert \omega(a^*b) \rvert^2 + \omega(b^*b).
-\end{align}
-Now if we assume for the moment that $0 < \lvert \omega(a^*b) \rvert$, then we can always select $0 < r$ large enough such that this inequality is violated, the $-2r \lvert \omega(a^*b) \rvert^2$ term dominating the $\omega(b^*b)$ term. Hence, it must be the case that $\lvert \omega(a^*b) \rvert = 0$.
-
-Now we have $\omega(a^*a) = 0$ and $\lvert \omega(a^*b) \rvert = 0$. Hence, the desired inequality
-\begin{align}
-    \lvert \omega(a^*b) \rvert^2 \le \omega(a^*a) \omega(b^*b),
-\end{align}
-follows trivially, completing our proof.
-\end{proof}
-
-The next result we need to prove is:
-
-\begin{lemma}
-    \label{lmm:lmm1}
-    \lean{Physicslib4.GNS.lmm1}
-    \leanfile{Physicslib4/GNS/NullSpace.lean}
-    \uses{def:state}
-    \leanok
-    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}_1$ defined by
-    \begin{align}
-        \mathcal{N}_1 \equiv \{ n \in \mathfrak{U} : \omega(b^*n) = 0 \;\; \forall \, b \in \mathfrak{U} \}
-    \end{align}
-    is equivalent to the set $\mathcal{N}$ defined by
-    \begin{align}
-        \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
-    \end{align}
-\end{lemma}
-\begin{proof}
-We will first prove that $\mathcal{N} \subseteq \mathcal{N}_1$. Then we will prove $\mathcal{N}_1 \subseteq \mathcal{N}$. Together these imply $\mathcal{N} = \mathcal{N}_1$, the final desired result.
-
-Let us begin by proving $\mathcal{N} \subseteq \mathcal{N}_1$.
-
-$\mathfrak{U}$ is a C*-algebra and thus a *-algebra. In addition $\omega$ is a state and thus a positive element of the dual space $\mathfrak{U}^*$. Thus, for arbitrary $b$ and $n$ in $\mathfrak{U}$ we can apply the Cauchy-Schwarz inequality to obtain
-\begin{align}
-    \lvert \omega(b^*n) \rvert^2 \le \omega(b^*b) \omega(n^*n).
-\end{align}
-Thus if $n$ is in $\mathcal{N}$, and thus satisfies $\omega(n^*n) = 0$, then this inequality implies $\omega(b^*n) = 0$ for all $b$ in $\mathfrak{U}$. This then implies $n$ is in $\mathcal{N}_1$. As $n$ was an arbitrary element of $\mathcal{N}$, this in turn implies that $\mathcal{N} \subseteq \mathcal{N}_1$, the first desired result.
-
-Next let us prove that $\mathcal{N}_1 \subseteq \mathcal{N}$.
-
-Consider an arbitrary $n_1$ in $\mathcal{N}_1$. By definition $\omega(b^*n_1) = 0$ for any $b$ in $\mathfrak{U}$. In particular we can select $b=n_1$. Doing so we have $\omega(n_1^*n_1) = 0$. This then implies $n_1$ is in $\mathcal{N}$. As $n_1$ was an arbitrary element of $\mathcal{N}_1$ this further implies $\mathcal{N}_1 \subseteq \mathcal{N}$, the second desired result.
-
-We have thus proven $\mathcal{N} \subseteq \mathcal{N}_1$ and $\mathcal{N}_1 \subseteq \mathcal{N}$ which together imply $\mathcal{N} = \mathcal{N}_1$, the final desired result.
-\end{proof}
-
-Next we will prove $\mathcal{N}$ is a closed, linear subspace of $\mathfrak{U}$. Establishing this will allow us to take the quotient of $\mathfrak{U}$ by $\mathcal{N}$.
-
-\begin{lemma}
-    \label{lmm:lmm2}
-    \lean{Physicslib4.GNS.lmm2}
-    \leanfile{Physicslib4/GNS/NullSpace.lean}
-    \uses{def:state}
-    \leanok
-    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}$ defined by
-    \begin{align}
-        \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
-    \end{align}
-    is a closed, linear subspace of $\mathfrak{U}$.
-\end{lemma}
-\begin{proof}
-First let us prove that $\mathcal{N}$ is a linear subspace of $\mathfrak{U}$.
-
-Consider arbitrary $n,m \in \mathcal{N}$ and arbitrary $\lambda, \mu \in \mathbb{C}$. As proven above $\mathcal{N} = \mathcal{N}_1$, thus for arbitrary $b \in \mathfrak{U}$, one has
-\begin{align}
-    \omega(b^*n) &= 0 \\
-    \omega(b^*m) &= 0.
-\end{align}
-Hence, the linearity of $\omega$ then implies
-\begin{align}
-    \omega(b^*(\lambda n + \mu m)) = \lambda \omega(b^*n) + \mu \omega(b^*m) = 0.
-\end{align}
-As $b \in \mathfrak{U}$ was arbitrary, this implies that $(\lambda n + \mu m) \in \mathcal{N}_1$. As we previously proved $\mathcal{N} = \mathcal{N}_1$, this in turn implies $(\lambda n + \mu m) \in \mathcal{N}$. Hence $\mathcal{N}$ is a linear subspace of $\mathfrak{U}$, the first desired result.
-
-Next let us prove that $\mathcal{N}$ is a closed subspace of $\mathfrak{U}$.
-
-First, let us note that as $\omega$ is a state, it is by definition a linear, normalized operator on $\mathfrak{U}$. Hence, it is a linear, bounded operator on $\mathfrak{U}$, a normed space. Thus, as a result of the standard theorem (Theorem B.2.4 of \href{https://arxiv.org/abs/2410.16599}{Entanglement in Algebraic Quantum Field Theories})
-
-\begin{quote}
-    \textit{Theorem.} Let $X$ and $Y$ be normed spaces and $T: \mathcal{D}(T) \rightarrow Y$ be a linear operator where $\mathcal{D}(T) \subseteq X$. Then $T$ is continuous if and only if it is bounded.
-\end{quote}
-
-\noindent along with the fact that $\mathbb{C}$ is a normed space, it follows that $\omega$ is continuous.
-
-With the continuity of $\omega$ in hand, consider a sequence $(n_i)_{i \in \mathbb{N}}$ in $\mathcal{N}$ that converges to $n$ in $\mathfrak{U}$. As $\omega$ is continuous, for any $b$ in $\mathfrak{U}$ one has
-\begin{align}
-    \omega\left(b^*n\right) = \omega\left(b^*(\lim\limits_{i \rightarrow \infty} n_i)\right) = \lim\limits_{i \rightarrow \infty} \omega(b^*n_i) = 0,
-\end{align}
-where the final equality follows from our previous result $\mathcal{N} = \mathcal{N}_1$. This proves that $n$ is an element of $\mathcal{N}_1$ and thus, as a consequence of our previous result $\mathcal{N}_1 = \mathcal{N}$, that $n$ is an element of $\mathcal{N}$. This establishes that $\mathcal{N}$ is closed, proving the second and final desired result, $\mathcal{N}$ is a closed subspace of $\mathfrak{U}$.
-\end{proof}
+Next we will prove $\mathcal{N}$ is a closed, linear subspace of $\mathfrak{U}$ (\ref{lmm:lmm2}). Establishing this will allow us to take the quotient of $\mathfrak{U}$ by $\mathcal{N}$.
 
 As we have established that $\mathcal{N}$ is a closed, linear subspace of $\mathfrak{U}$, we can now take the quotient of $\mathfrak{U}$ by $\mathcal{N}$. Elements of the quotient $\mathfrak{U} / \mathcal{N}$ are equivalence classes of the form
 \begin{align}
@@ -282,7 +121,7 @@ if and only if $[a] = [0]$. This is essentially by construction.
 
 The final step in going from $\mathfrak{U} / \mathcal{N}$ to the Hilbert space $\mathcal{H}_\omega$ consists of completing $\mathfrak{U} / \mathcal{N}$ in the norm defined by the inner product above. As this is standard, we will not present the details here. The completion of $\mathfrak{U} / \mathcal{N}$ in this norm is the Hilbert space $\mathcal{H}_\omega$ of the GNS Construction Theorem.
 
-\subsubsection{Construction of the GNS Representation}
+\noindent\textbf{Construction of the GNS Representation.}
 Next we will construct $\pi_\omega$ the *-representation of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$. This will be much easier than the construction of $\mathcal{H}_\omega$.
 
 By construction we can consider $\mathfrak{U} / \mathcal{N}$ as dense in $\mathcal{H}_\omega$. On this dense subset we define the action of $\pi_\omega$ the *-representation of $\mathfrak{U}$ on $\mathfrak{U} / \mathcal{N}$ as follows
@@ -374,7 +213,7 @@ For $[x]$ and $[y]$ in $\mathfrak{U} / \mathcal{N}$ and $a$ in $\mathfrak{U}$, w
 \end{align}
 Hence, $\pi_\omega(a^*) = \pi_\omega(a)^\dagger$ and $\pi_\omega$ is a *-morphism.
 
-\subsubsection{Construction of the Cyclic Vector}
+\noindent\textbf{Construction of the Cyclic Vector.}
 Our next task is to construct the cyclic vector $\Omega$. This is relatively straightforward.
 
 As $\mathfrak{U}$ is unital we can make the definition
@@ -397,7 +236,7 @@ which proves another relation
 \end{align}
 claimed in the GNS Construction Theorem.
 
-\subsubsection{Faithfulness of the GNS Representation}
+\noindent\textbf{Faithfulness of the GNS Representation.}
 Now we are going to prove the *-representation $\pi_\omega$ is faithful if $\omega$ is a faithful state.
 
 For this section of the proof, assume that $\omega$ is a faithful state.
@@ -410,7 +249,7 @@ Assume that $\pi_\omega(a) = 0$. Thus we have
 \end{align}
 As $\omega$ is assumed faithful in this section of the proof, this implies that $a=0$. This in turn implies $\ker \pi_\omega = \{0\}$, which proves that if $\omega$ is faithful, then $\pi_\omega$ is faithful, the desired result.
 
-\subsubsection{Uniqueness up to Unitary Equivalence}
+\noindent\textbf{Uniqueness up to Unitary Equivalence.}
 Finally to complete the proof of the GNS Construction Theorem we now prove that the GNS triple associated to $(\mathfrak{U}, \omega)$ is unique up to unitary equivalence.
 
 To that end let $(\mathcal{H}_\omega', \pi_\omega', \Omega')$ be a second GNS triple associated to $(\mathfrak{U}, \omega)$. (This implies, in particular, that the inner product on $\mathcal{H}_\omega'$ is given by $\omega$.) Then define an operator $U$ by
@@ -482,6 +321,180 @@ As $\Omega'$ is cyclic, $\pi_\omega(c)'\Omega'$ is dense in $\mathcal{H}_\omega'
     \pi_\omega(a)' = U\pi_\omega(a)U^{-1},
 \end{align}
 and two GNS triples associated to $(\mathfrak{U}, \omega)$ can differ at most by a unitary transformation, completing our proof of the GNS Construction Theorem.
+\end{proof}
+
+\subsection{Auxiliary Results Used in the Proof}
+The three results used in the detour of the proof above are stated and proved here.
+
+The most famous of these results is the Cauchy-Schwarz Inequality
+
+\begin{lemma}[Cauchy-Schwarz Inequality]
+    \label{lmm:cauchy-schwarz-inequality}
+    \lean{Physicslib4.GNS.cauchy_schwarz_inequality}
+    \leanfile{Physicslib4/GNS/CauchySchwarz.lean}
+    \uses{def:state}
+    \leanok
+    Let $\mathcal{A}$ be a *-algebra and $\omega$ a \textit{positive} element of the dual space $\mathcal{A}^*$, i.e. $\omega$ is an element of the dual space $\mathcal{A}^*$ such that for any $a \in \mathcal{A}$ one has $0 \le \omega(a^*a)$. Then
+    \begin{align}
+        \omega(a^*b) &= \overline{\omega(b^*a)} \\
+        |\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b)
+    \end{align}
+    for all $a$ and $b$ in $\mathcal{A}$.
+\end{lemma}
+\begin{proof}
+\leanok
+Positivity of $\omega$ implies that for any $a$ and $b$ in $\mathcal{A}$ and $\lambda \in \mathbb{C}$ one has
+\begin{align}
+    0 \le \omega\left((\lambda a + b)^*(\lambda a + b)\right).
+\end{align}
+As $\omega$ is an element of the dual space $\mathcal{A}^*$ and thus linear, this implies
+\begin{align}
+    0 \le |\lambda|^2\omega(a^*a) + \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) + \omega(b^*b).
+\end{align}
+This inequality then implies both desired results,
+\begin{align}
+    \omega(a^*b) &= \overline{\omega(b^*a)} \\
+    |\omega(a^*b)|^2 &\le \omega(a^*a) \omega(b^*b).
+\end{align}
+We will prove these one-by-one. Let us first prove this inequality implies $\omega(a^*b) = \overline{\omega(b^*a)}$.
+
+Notice that the inequality is between two real numbers, $0$ and the right-hand side. As $\omega$ is positive, the first and last summands on the right-hand side are obviously real. This then implies
+\begin{align}
+    \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) \in \mathbb{R}.
+\end{align}
+As $\lambda$ is arbitrary, we are free to choose it to be real, which implies the imaginary parts of $\omega(a^*b)$ and $\omega(b^*a)$ are equal but have the opposite signs.
+
+Similarly, we are free to choose $\lambda$ to be imaginary, which implies that the real parts of $\omega(a^*b)$ and $\omega(b^*a)$ are equal. Together these facts imply the first result
+\begin{align}
+    \omega(a^*b) = \overline{\omega(b^*a)}.
+\end{align}
+Let us next prove that our inequality
+\begin{align}
+    0 \le |\lambda|^2\omega(a^*a) + \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) + \omega(b^*b)
+\end{align}
+implies $\lvert \omega(a^*b) \rvert^2 \le \omega(a^*a) \omega(b^*b)$.
+
+Again, as $\lambda$ is arbitrary, we are free to choose it to extremize the right-hand side of the inequality. Extremizing the right-hand of this inequality with respect to $\overline{\lambda}$ and assuming $\omega(a^*a) \ne 0$ one finds at the extrema
+\begin{align}
+    \lambda = - \frac{\omega(a^*b)}{\omega(a^*a)}.
+\end{align}
+Substituting this into the inequality, multiplying by $\omega(a^*a)$ while using the fact that $\omega$ is positive, and using $\omega(a^*b) = \overline{\omega(b^*a)}$, then one obtains
+\begin{align}
+    0 \le \lvert \omega(a^*b) \rvert^2 - \lvert \omega(a^*b) \rvert^2 - \lvert \omega(a^*b) \rvert^2 + \omega(a^*a) \omega(b^*b)
+\end{align}
+which implies
+\begin{align}
+    \lvert \omega(a^*b) \rvert^2 \le \omega(a^*a) \omega(b^*b),
+\end{align}
+the second desired result under the assumption that $\omega(a^*a) \ne 0$.
+
+If we now allow for the case $\omega(a^*a) = 0$, our inequality reduces to
+\begin{align}
+    0 \le \overline{\lambda}\omega(a^*b) + \lambda\omega(b^*a) + \omega(b^*b).
+\end{align}
+Our previous result implies $\omega(b^*a) = \overline{\omega(a^*b)}$. Hence, this inequality takes the form
+\begin{align}
+    0 \le \overline{\lambda}\omega(a^*b) + \lambda\overline{\omega(a^*b)} + \omega(b^*b) = 2\text{Re}\left(\overline{\lambda} \omega(a^*b)\right) + \omega(b^*b).
+\end{align}
+Now as $\lambda$ is arbitrary we are free to select it as follows
+\begin{align}
+    \overline{\lambda} = -r \overline{\omega(a^*b)}
+\end{align}
+where $0 < r$ is an arbitrary positive real number. Then the previous inequality takes the form
+\begin{align}
+    0 &\le 2\text{Re}\left(\overline{\lambda} \omega(a^*b)\right) + \omega(b^*b) \\
+      &= -2r \lvert \omega(a^*b) \rvert^2 + \omega(b^*b).
+\end{align}
+Now if we assume for the moment that $0 < \lvert \omega(a^*b) \rvert$, then we can always select $0 < r$ large enough such that this inequality is violated, the $-2r \lvert \omega(a^*b) \rvert^2$ term dominating the $\omega(b^*b)$ term. Hence, it must be the case that $\lvert \omega(a^*b) \rvert = 0$.
+
+Now we have $\omega(a^*a) = 0$ and $\lvert \omega(a^*b) \rvert = 0$. Hence, the desired inequality
+\begin{align}
+    \lvert \omega(a^*b) \rvert^2 \le \omega(a^*a) \omega(b^*b),
+\end{align}
+follows trivially, completing our proof.
+\end{proof}
+
+The next result we need to prove is:
+
+\begin{lemma}
+    \label{lmm:lmm1}
+    \lean{Physicslib4.GNS.lmm1}
+    \leanfile{Physicslib4/GNS/NullSpace.lean}
+    \uses{def:state}
+    \leanok
+    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}_1$ defined by
+    \begin{align}
+        \mathcal{N}_1 \equiv \{ n \in \mathfrak{U} : \omega(b^*n) = 0 \;\; \forall \, b \in \mathfrak{U} \}
+    \end{align}
+    is equivalent to the set $\mathcal{N}$ defined by
+    \begin{align}
+        \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+\leanok
+We will first prove that $\mathcal{N} \subseteq \mathcal{N}_1$. Then we will prove $\mathcal{N}_1 \subseteq \mathcal{N}$. Together these imply $\mathcal{N} = \mathcal{N}_1$, the final desired result.
+
+Let us begin by proving $\mathcal{N} \subseteq \mathcal{N}_1$.
+
+$\mathfrak{U}$ is a C*-algebra and thus a *-algebra. In addition $\omega$ is a state and thus a positive element of the dual space $\mathfrak{U}^*$. Thus, for arbitrary $b$ and $n$ in $\mathfrak{U}$ we can apply the Cauchy-Schwarz inequality to obtain
+\begin{align}
+    \lvert \omega(b^*n) \rvert^2 \le \omega(b^*b) \omega(n^*n).
+\end{align}
+Thus if $n$ is in $\mathcal{N}$, and thus satisfies $\omega(n^*n) = 0$, then this inequality implies $\omega(b^*n) = 0$ for all $b$ in $\mathfrak{U}$. This then implies $n$ is in $\mathcal{N}_1$. As $n$ was an arbitrary element of $\mathcal{N}$, this in turn implies that $\mathcal{N} \subseteq \mathcal{N}_1$, the first desired result.
+
+Next let us prove that $\mathcal{N}_1 \subseteq \mathcal{N}$.
+
+Consider an arbitrary $n_1$ in $\mathcal{N}_1$. By definition $\omega(b^*n_1) = 0$ for any $b$ in $\mathfrak{U}$. In particular we can select $b=n_1$. Doing so we have $\omega(n_1^*n_1) = 0$. This then implies $n_1$ is in $\mathcal{N}$. As $n_1$ was an arbitrary element of $\mathcal{N}_1$ this further implies $\mathcal{N}_1 \subseteq \mathcal{N}$, the second desired result.
+
+We have thus proven $\mathcal{N} \subseteq \mathcal{N}_1$ and $\mathcal{N}_1 \subseteq \mathcal{N}$ which together imply $\mathcal{N} = \mathcal{N}_1$, the final desired result.
+\end{proof}
+
+Next we will prove $\mathcal{N}$ is a closed, linear subspace of $\mathfrak{U}$. Establishing this will allow us to take the quotient of $\mathfrak{U}$ by $\mathcal{N}$.
+
+\begin{lemma}
+    \label{lmm:lmm2}
+    \lean{Physicslib4.GNS.lmm2}
+    \leanfile{Physicslib4/GNS/NullSpace.lean}
+    \uses{def:state}
+    \leanok
+    Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}$ defined by
+    \begin{align}
+        \mathcal{N} \equiv \{ n \in \mathfrak{U} : \omega(n^*n) = 0 \}.
+    \end{align}
+    is a closed, linear subspace of $\mathfrak{U}$.
+\end{lemma}
+\begin{proof}
+\leanok
+First let us prove that $\mathcal{N}$ is a linear subspace of $\mathfrak{U}$.
+
+Consider arbitrary $n,m \in \mathcal{N}$ and arbitrary $\lambda, \mu \in \mathbb{C}$. As proven above $\mathcal{N} = \mathcal{N}_1$, thus for arbitrary $b \in \mathfrak{U}$, one has
+\begin{align}
+    \omega(b^*n) &= 0 \\
+    \omega(b^*m) &= 0.
+\end{align}
+Hence, the linearity of $\omega$ then implies
+\begin{align}
+    \omega(b^*(\lambda n + \mu m)) = \lambda \omega(b^*n) + \mu \omega(b^*m) = 0.
+\end{align}
+As $b \in \mathfrak{U}$ was arbitrary, this implies that $(\lambda n + \mu m) \in \mathcal{N}_1$. As we previously proved $\mathcal{N} = \mathcal{N}_1$, this in turn implies $(\lambda n + \mu m) \in \mathcal{N}$. Hence $\mathcal{N}$ is a linear subspace of $\mathfrak{U}$, the first desired result.
+
+Next let us prove that $\mathcal{N}$ is a closed subspace of $\mathfrak{U}$.
+
+First, let us note that as $\omega$ is a state, it is by definition a linear, normalized operator on $\mathfrak{U}$. Hence, it is a linear, bounded operator on $\mathfrak{U}$, a normed space. Thus, as a result of the standard theorem (Theorem B.2.4 of \href{https://arxiv.org/abs/2410.16599}{Entanglement in Algebraic Quantum Field Theories})
+
+\begin{quote}
+    \textit{Theorem.} Let $X$ and $Y$ be normed spaces and $T: \mathcal{D}(T) \rightarrow Y$ be a linear operator where $\mathcal{D}(T) \subseteq X$. Then $T$ is continuous if and only if it is bounded.
+\end{quote}
+
+\noindent along with the fact that $\mathbb{C}$ is a normed space, it follows that $\omega$ is continuous.
+
+With the continuity of $\omega$ in hand, consider a sequence $(n_i)_{i \in \mathbb{N}}$ in $\mathcal{N}$ that converges to $n$ in $\mathfrak{U}$. As $\omega$ is continuous, for any $b$ in $\mathfrak{U}$ one has
+\begin{align}
+    \omega\left(b^*n\right) = \omega\left(b^*(\lim\limits_{i \rightarrow \infty} n_i)\right) = \lim\limits_{i \rightarrow \infty} \omega(b^*n_i) = 0,
+\end{align}
+where the final equality follows from our previous result $\mathcal{N} = \mathcal{N}_1$. This proves that $n$ is an element of $\mathcal{N}_1$ and thus, as a consequence of our previous result $\mathcal{N}_1 = \mathcal{N}$, that $n$ is an element of $\mathcal{N}$. This establishes that $\mathcal{N}$ is closed, proving the second and final desired result, $\mathcal{N}$ is a closed subspace of $\mathfrak{U}$.
+\end{proof}
 
 \subsection{Summary}
 This concludes the proof of the GNS Construction Theorem (see Theorem~\ref{thrm:gns-construction-theorem}). To summarise: given a state $\omega$ over a unital C*-algebra $\mathfrak{U}$ one can construct a Hilbert space $\mathcal{H}_\omega$, a *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ satisfying $\pi_\omega(a^*) = \pi_\omega(a)^\dagger$, and a cyclic vector $\Omega$ in $\mathcal{H}_\omega$ such that
