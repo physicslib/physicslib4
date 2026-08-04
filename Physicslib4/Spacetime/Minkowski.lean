@@ -54,6 +54,8 @@ Alexandrov topology).
 
 namespace Physicslib4
 
+open Bundle
+
 open scoped Manifold
 
 /-! ### Standard Minkowski spacetime -/
@@ -89,6 +91,7 @@ noncomputable def minkowskiForm :
       -(v 0) * (w 0) + (v 1) * (w 1) + (v 2) * (w 2) + (v 3) * (w 3) := by
   rfl
 
+set_option backward.isDefEq.respectTransparency false in
 /--
 *Standard Minkowski spacetime* is the spacetime whose underlying real,
 four-dimensional, connected, smooth, Hausdorff manifold is `ℝ⁴` (with the
@@ -152,33 +155,12 @@ noncomputable def StandardMinkowskiSpacetime : Spacetime where
     rw [EuclideanSpace.basisFun_apply, EuclideanSpace.basisFun_apply]
     simp only [minkowskiForm_apply, lorentzSignature, Matrix.diagonal]
     fin_cases i <;> fin_cases j <;> simp [Matrix.of_apply]
-  smooth_in_charts := by
-    intro x₀ v w
-    -- Unfold the `let e := extChartAt ... x₀` binding.
-    simp only
-    -- On the model space, `mfderiv I I (e.symm) y = id`, so the integrand is
-    -- the constant `minkowskiForm v w` on `e.target = univ`.
-    apply ContDiffWithinAt.congr_of_eventuallyEq
-      (f := fun _ : SpacetimeModel => minkowskiForm v w)
-    · exact contDiffWithinAt_const
-    · -- Pointwise equality of the integrand with the constant `minkowskiForm v w`
-      -- on a neighborhood of `e x₀` within `e.target`.
-      filter_upwards with y
-      have hsymm :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀).symm =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      rw [hsymm, mfderiv_id]
-      rfl
-    · -- `(fun _ => minkowskiForm v w) (e x₀) = minkowskiForm v w`, and the
-      -- function we replaced it with also evaluates to `minkowskiForm v w`
-      -- at `y = e x₀` (since `e.symm (e x₀) = x₀` and `mfderiv id = id`).
-      have hsymm :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀).symm =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      rw [hsymm, mfderiv_id]
-      rfl
+  contMDiff := by
+    intro x
+    rw [contMDiffAt_section]
+    convert! contMDiffAt_const (c := minkowskiForm)
+    ext v w
+    simp [hom_trivializationAt_apply, ContinuousLinearMap.inCoordinates, TangentSpace]
 
 /-- Additive-group structure on the Minkowski spacetime carrier,
 inherited from `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`. -/
@@ -605,6 +587,7 @@ theorem isOpen_minkowskiBackwardCone (q : SpacetimeModel) :
 
 /-! ### Minkowski spacetime -/
 
+set_option backward.isDefEq.respectTransparency false in
 /--
 *Minkowski spacetime* is the carrier of `StandardMinkowskiSpacetime`
 viewed as a topological space under the Alexandrov topology.
@@ -629,7 +612,7 @@ noncomputable def standardMinkowskiTimeOrientation :
     have h0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 = 1 := by
       rw [PiLp.single_apply]; simp
     have hzero : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 =
-        (0 : SpacetimeModel).ofLp 0 := by rw [h]; rfl
+        (0 : SpacetimeModel).ofLp 0 := by rw [h]
     have hz : (0 : SpacetimeModel).ofLp 0 = (0 : ℝ) := rfl
     rw [h0, hz] at hzero
     exact one_ne_zero hzero
@@ -656,49 +639,7 @@ noncomputable def standardMinkowskiTimeOrientation :
         ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3) < 0
     rw [h0, h1, h2, h3]
     norm_num
-  smooth := by
-    intro x₀
-    -- `StandardMinkowskiSpacetime.Carrier = SpacetimeModel` by `rfl`. Cast
-    -- `x₀` to `SpacetimeModel` explicitly so the structure projections in
-    -- the goal reduce, matching the pattern of `smooth_in_charts`.
-    let x₀' : SpacetimeModel := x₀
-    change ContDiffWithinAt ℝ ⊤
-      (fun y => mfderiv (modelWithCornersSelf ℝ SpacetimeModel)
-                        (modelWithCornersSelf ℝ SpacetimeModel)
-          (extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm y
-          (mfderiv (modelWithCornersSelf ℝ SpacetimeModel)
-                   (modelWithCornersSelf ℝ SpacetimeModel)
-            (extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀')
-            ((extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm y)
-            (EuclideanSpace.single (0 : Fin 4) (1 : ℝ))))
-      (extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').target
-      ((extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀') x₀')
-    apply ContDiffWithinAt.congr_of_eventuallyEq
-      (f := fun _ : SpacetimeModel => EuclideanSpace.single (0 : Fin 4) (1 : ℝ))
-    · exact contDiffWithinAt_const
-    · filter_upwards with y
-      have hsymm :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      have hchart :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀') =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      rw [hsymm, hchart]
-      simp only [mfderiv_id]
-      rfl
-    · have hsymm :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      have hchart :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀') =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      rw [hsymm, hchart]
-      simp only [mfderiv_id]
-      rfl
+  smooth := contMDiff_vectorSpace_iff_contDiff.mpr contDiff_const
 
 /-!
 ### Characterisation of the chronological future on standard Minkowski
@@ -1674,6 +1615,7 @@ lemma mfderiv_extChartAt_symm_minkowski (x₀ : MinkowskiSpacetimeCarrier)
     mfderivWithin_univ] at key
   exact key
 
+set_option backward.isDefEq.respectTransparency false in
 /--
 *Minkowski spacetime* is standard Minkowski spacetime re-topologised with
 the Alexandrov topology generated by intersections of chronological
@@ -1739,20 +1681,12 @@ noncomputable def MinkowskiSpacetime : Spacetime where
     rw [EuclideanSpace.basisFun_apply, EuclideanSpace.basisFun_apply]
     simp only [minkowskiForm_apply, lorentzSignature, Matrix.diagonal]
     fin_cases i <;> fin_cases j <;> simp [Matrix.of_apply]
-  smooth_in_charts := by
-    intro x₀ v w
-    simp only
-    -- The integrand is the constant `minkowskiForm v w` on the chart target,
-    -- because the inverse-chart manifold derivative is the identity there.
-    apply ContDiffWithinAt.congr_of_eventuallyEq
-      (f := fun _ : SpacetimeModel => minkowskiForm v w)
-    · exact contDiffWithinAt_const
-    · filter_upwards [self_mem_nhdsWithin] with y hy
-      rw [mfderiv_extChartAt_symm_minkowski x₀ hy]
-      rfl
-    · rw [mfderiv_extChartAt_symm_minkowski x₀
-        ((extChartAt _ x₀).map_source (mem_extChartAt_source x₀))]
-      rfl
+  contMDiff := by
+    intro x
+    rw [Bundle.contMDiffAt_section]
+    convert! contMDiffAt_const (c := minkowskiForm)
+    ext v w
+    simp [hom_trivializationAt_apply, ContinuousLinearMap.inCoordinates, TangentSpace]
 
 /-- **Part (i): existence of a chronological-future point (standard Minkowski).**
 Every point `x` of standard Minkowski spacetime has a point strictly to its

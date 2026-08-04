@@ -5,14 +5,38 @@
     \leanfile{Physicslib4/Spacetime/Basic.lean}
     \leanok
     A \textit{spacetime} is a real, four-dimensional, connected, smooth, Hausdorff manifold $M$ with a globally defined smooth tensor field $g$ of type $(0,2)$ which is non-degenerate and ``Lorentzian''. By \textit{Lorentzian} we mean that for any $p \in M$ there is a basis of the tangent space $TM|_p$ to $M$ at $p$ relative to which $g|_p$ is zero in its non-diagonal entries and on the diagonal takes the form $\text{diag}(-1,1,1,1)$.
+
+    \emph{The smoothness clause, precisely.} The metric field is a family of \emph{continuous bilinear forms} $g_x : TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$, and ``smooth'' is the field \texttt{contMDiff}, which asserts that $g$ is a $C^\omega$ \emph{section of the bundle of continuous bilinear forms on the tangent bundle} --- the regularity index being $\top$, on which see the remark on the index below. Writing $E$ for the model space and $I$ for the model with corners of $M$, it reads
+    \begin{align}
+        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\top\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;(g_x)\Big),
+    \end{align}
+    the fibre over $x$ being $TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$ and the index being $\top$.
+
+    \emph{The index, and a Lean-side discrepancy to record.} Mathlib's $\mathtt{ContMDiff}$ takes its regularity index $n$ in $\mathbb{N}_{\infty\omega} = \mathtt{WithTop}\;\mathbb{N}_\infty$, in which $\top = \omega$ means \emph{real-analytic} and $\infty = ((\top : \mathbb{N}_\infty) : \mathtt{WithTop}\;\mathbb{N}_\infty)$ is strictly smaller. The Lean field as written above therefore demands $C^\omega$, i.e.\ analyticity of the section, which is strictly stronger than the $C^\infty$ smoothness the informal phrase ``smooth tensor field $g$'' above intends. This discrepancy is recorded here as a Lean-side item, not glossed over: the index in the Lean definition should be $\infty$ rather than $\top$ for the two to agree, and until that is changed every downstream node quoting this field must be read and discharged at index $\top$.
+
+    Three further points about this formulation.
+
+    \emph{It is Mathlib's idiom.} The clause is deliberately the shape of the \texttt{contMDiff} field of Mathlib's \texttt{Bundle.ContMDiffRiemannianMetric}, whose own field is
+    \begin{align}
+        \mathtt{ContMDiff}\;I_B\;\big(I_B.\mathtt{prod}\;\mathcal{I}(\mathbb{R}, F \to_L[\mathbb{R}] F \to_L[\mathbb{R}] \mathbb{R})\big)\;n\;\big(b \mapsto \mathtt{TotalSpace.mk'}\;(F \to_L[\mathbb{R}] F \to_L[\mathbb{R}] \mathbb{R})\;b\;(\mathtt{inner}\;b)\big),
+    \end{align}
+    read with $\mathtt{inner}$ replaced by $g$. Matching it verbatim is what makes the whole bundle-section API of \texttt{Mathlib/Geometry/Manifold/VectorBundle/} apply to $g$ without translation.
+
+    \emph{The Riemannian class itself is deliberately \emph{not} instantiated.} Mathlib has no pseudo-Riemannian class, and \texttt{Bundle.ContMDiffRiemannianMetric} carries two further fields beyond \texttt{contMDiff} that a Lorentzian form cannot satisfy: \texttt{pos}, which demands $0 < g_x(v,v)$ for $v \neq 0$ and is contradicted by any timelike vector, and \texttt{isVonNBounded}, which demands that $\{v \in TM|_x \mid g_x(v,v) < 1\}$ be von Neumann bounded. The latter is not merely unproven but outright \emph{false} here: that set contains the entire light cone at $x$, since $g_x(v,v) = 0 \le 0 < 1$ for every null $v$, and the light cone is unbounded (it is closed under positive scaling). So only the \emph{shape} of the one field \texttt{contMDiff} is reused; the class is never instantiated and no instance of it may be sought.
+
+    \emph{The payoff.} From a section-level \texttt{contMDiff} one gets, by \texttt{ContMDiff.clm\_bundle\_apply₂}, that for any vector fields $V, W$ that are themselves $C^\infty$ sections of the tangent bundle the scalar function
+    \begin{align}
+        x \longmapsto g_x\big(V_x,\, W_x\big)
+    \end{align}
+    is $C^\infty$ on $M$. One identification step is needed to say it in quite that form: \texttt{clm\_bundle\_apply₂} concludes with a \emph{section}, of the trivial $\mathbb{R}$-bundle over $M$, so its output is a $\mathtt{Bundle.TotalSpace.mk'}$ term and reaching the plain scalar statement $\mathtt{ContMDiff}\;I\;\mathcal{I}(\mathbb{R},\mathbb{R})\;\top\;\big(x \mapsto g_x(V_x, W_x)\big)$ means identifying that trivial-bundle section with the function itself. This is exactly what causal and geodesic arguments need --- causal type along a curve, the sign of $g(t,\dot\mu)$, and every variational computation are statements about such scalars --- and a chart-local formulation quantifying over \emph{constant} model vectors had no route to it at all, since $V_x$ and $W_x$ vary with the point.
 \end{definition}
 
 \begin{definition}[Standard Minkowski Spacetime]
     \label{def:standard-minkowski-spacetime}
     \lean{Physicslib4.StandardMinkowskiSpacetime}
     \leanfile{Physicslib4/Spacetime/Minkowski.lean}
-    \leanok
     \uses{def:spacetime}
+    \leanok
     \textit{Standard Minkowski spacetime} is a spacetime in which the underlying real, four-dimensional, connected, smooth, Hausdorff manifold is $\mathbb{R}^4$ with the Euclidean topology. In addition $g$ takes the form $g|_p=\text{diag}(-1,1,1,1)$ for all $p$ in $\mathbb{R}^4$ with respect to the standard coordinates on $\mathbb{R}^4$.
 \end{definition}
 
@@ -81,9 +105,15 @@
     \label{def:time-orientable}
     \lean{Physicslib4.Spacetime.TimeOrientation, Physicslib4.Spacetime.IsTimeOrientable}
     \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
-    \leanok
     \uses{def:spacetime, def:timelike-spacelike-null-vectors}
+    \leanok
     A spacetime $M$ is \textit{time-orientable} if it admits a smooth, non-vanishing vector field $t$ that is timelike. Such a smooth, non-vanishing vector field is called a \textit{time-orientation}.
+
+    \emph{The smoothness clause, precisely.} As for the metric in \ref{def:spacetime}, ``smooth'' is the bundle-section condition of Mathlib's idiom rather than a chart-local one: the field \texttt{smooth} of a $\mathtt{TimeOrientation}$ asserts that $t$ is a section of the tangent bundle of regularity index $\top = \omega$, i.e.\ a $C^\omega$ (real-analytic) section, the same index discrepancy with the informal word ``smooth'' as recorded in \ref{def:spacetime} applying here,
+    \begin{align}
+        \mathtt{ContMDiff}\;I\;I.\mathtt{tangent}\;\top\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;E\;x\;(t_x)\Big),
+    \end{align}
+    with $E$ the model space and $I.\mathtt{tangent}$ the model with corners of the tangent bundle. This is the same shape as the metric clause of \ref{def:spacetime} one bundle down, and it is what the bundle-section API consumes directly: it is literally the hypothesis of \texttt{ContMDiff.mpullback\_vectorField} and, paired with the metric clause, the input of \texttt{ContMDiff.clm\_bundle\_apply₂} that makes $x \mapsto g_x(t_x, V_x)$ smooth for smooth $V$. It is \emph{not} smoothness of $t$ as a bare function, and no chart-local reformulation of it is needed anywhere below.
 \end{definition}
 
 \begin{definition}[Future and Past Pointing Vectors]
@@ -806,8 +836,8 @@
     \label{def:minkowski-spacetime}
     \lean{Physicslib4.MinkowskiSpacetime}
     \leanfile{Physicslib4/Spacetime/Minkowski.lean}
-    \leanok
     \uses{def:standard-minkowski-spacetime, def:alexandrov-topology}
+    \leanok
     \textit{Minkowski spacetime} is standard Minkowski spacetime equipped with Alexandrov topology.
 \end{definition}
 
@@ -1174,248 +1204,41 @@ This leaf is what licenses the $d\psi$ cancellations used below, and it is not o
 
 The Lorentzian condition of \ref{def:spacetime} is stated as the \emph{existence} of a signature basis at each point, and the proof above uses exactly that. This is essential and not a matter of taste: were the signature condition instead a rigid condition on the chart components of the metric, the pullback would not in general satisfy it, a generic differential $d\psi_x$ not preserving coordinate components. The existential formulation is what makes the class of spacetimes closed under pullback.
 
-\begin{lemma}[Smoothness of the Tangent Coordinate Change]
-    \label{lmm:chart-transition-mfderiv-smooth}
-    \uses{def:spacetime}
-    For any $x, y \in M$ the derivative of the extended chart transition,
-    \begin{align}
-        z' \longmapsto \mathrm{fderivWithin}_{\mathbb{R}}\big(e_y \circ e_x^{-1}\big)\,(\mathrm{range}\,I)\,z',
-    \end{align}
-    is $C^{\top}$ on the source of that transition, a subset of the \emph{model space}; in full,
-    \begin{align}
-        \mathtt{ContDiffOn}\;\mathbb{R}\;\top\;\Big(\mathrm{fderivWithin}_{\mathbb{R}}\,\big(e_y \circ e_x^{-1}\big)\,(\mathrm{range}\,I)\Big)\;\big((e_x^{-1} \gg e_y).\mathtt{source}\big).
-    \end{align}
-    Nothing is asserted here about $M$: both the function and the set live on the model space.
+Mathlib has no pullback operation on covariant tensor fields, so the smoothness obligation of \ref{def:spacetime} for $\psi^*g$ must be assembled by hand. Since that obligation is now the bundle-section condition recorded in \ref{def:spacetime}, the assembly is done entirely in the bundle-section idiom, out of three ingredients: the bundle-section smoothness of $g$ itself (the \texttt{contMDiff} field of the source spacetime), the smoothness of $\psi$ (\texttt{Diffeomorph.contMDiff}), and the smoothness of $x \mapsto d\psi_x$ as a section of the hom bundle. No chart-local reformulation of either the hypothesis or the goal is needed, and in particular nothing has to be translated between two idioms.
 
-    \emph{Its consumer.} This node has exactly one consumer, and it is not the bridge \ref{lmm:mfderiv-eq-chart-jacobian} --- the remark below records why that node takes its differentiability of chart inverses from \texttt{contMDiffOn\_extChartAt\_symm} instead. The consumer is \ref{lmm:tangent-bundle-section-chart-local-iff}, the biconditional smoothness dictionary between bundle-section and chart-local form. That translation goes through the tangent-bundle trivialisation at a fixed base point, whose fibre component is $\mathrm{tangentCoordChange}\,I\,x\,x_0$; smoothness in $x$ of that component is exactly the derivative of the extended chart transition displayed above, precomposed with a chart. So the model-space \texttt{ContDiffOn} stated here is the analytic input to that step, and the node is retained for it.
-\end{lemma}
-\begin{proof}
-    This is Mathlib's \texttt{contDiffOn\_fderiv\_coord\_change} applied to the two atlas members $\mathrm{achart}(x)$ and $\mathrm{achart}(y)$. The statement above is deliberately \emph{verbatim} its conclusion, so nothing has to be massaged.
-
-    Two features of that lemma are the reason for phrasing the node this way. First, it is a statement about a function on the \emph{model space}, not on $M$: the set $(e_x^{-1} \gg e_y).\mathtt{source}$ is a subset of the model space. Second, it carries the instance hypothesis $\mathtt{IsManifold}\;I\;(n+1)\;M$ --- one degree of smoothness more than it concludes --- which for the case at hand $n = \top$ reduces to $\mathtt{IsManifold}\;I\;\top\;M$, because $\top + 1 = \top$ in $\mathtt{WithTop}\;\mathbb{N}_\infty$ (\texttt{WithTop.top\_add}); that is exactly the \texttt{isManifold} field of \ref{def:spacetime}.
-
-    In particular the node is \emph{not} to be strengthened into a statement about $\mathrm{tangentCoordChange}\,I\,x\,y$ as a function on $M$; the remark below explains why the strengthening is left to its single consumer \ref{lmm:tangent-bundle-section-chart-local-iff} rather than performed here.
-\end{proof}
-
-A word on what this node deliberately omits, and where the omitted step is instead carried out. One might expect it to conclude smoothness of the tangent coordinate change $\mathrm{tangentCoordChange}\,I\,x\,y$ as a function on $M$, which by \texttt{tangentCoordChange\_def} is the model-space function above precomposed with $e_x$. That is not stated, but not because it would be meaningless. It is perfectly well formed: $\mathrm{tangentCoordChange}\,I\,x\,y$ has type $M \to (E \to_L[\mathbb{R}] E)$, so the target is a normed space carrying its own trivial model, and
-\begin{align}
-    \mathtt{ContMDiffOn}\;I\;\mathcal{I}(\mathbb{R}, E \to_L[\mathbb{R}] E)\;n\;\big(\mathrm{tangentCoordChange}\,I\,x\,y\big)\;s
-\end{align}
-typechecks for any $s \subseteq M$. The reason for not stating it \emph{here} is that Mathlib does not prove it: the only lemma of that shape is \texttt{continuousOn\_tangentCoordChange}, giving mere \emph{continuity} on $e_x.\mathtt{source} \cap e_y.\mathtt{source}$, and there is no smoothness counterpart. Deriving it is real work --- rewrite with \texttt{tangentCoordChange\_def} to expose the model-space function above, then compose with $e_x$ and convert the resulting $\mathtt{ContDiffOn}$ into a $\mathtt{ContMDiffOn}$ on $M$, discharging the chart-source side conditions. That work is not spent for nothing, but it belongs to \ref{lmm:tangent-bundle-section-chart-local-iff}, which is where the tangent-bundle trivialisation is unfolded and is the only place the $M$-side statement is actually needed; that node is deliberately left as a stated obligation rather than decomposed further, so the step is recorded there as part of its content. The present node therefore stays at exactly the model-space \texttt{ContDiffOn} that Mathlib supplies, which is the analytic half of that obligation.
-
-Mathlib has no pullback operation on covariant tensor fields, so the smoothness obligation of \ref{def:spacetime} for $\psi^*g$ must be assembled by hand. There are two possible routes, and it matters which is chosen because they need different Mathlib input.
-
-\begin{itemize}
-    \item The \emph{\texttt{inTangentCoordinates} route}: apply \texttt{ContMDiffWithinAt.mfderivWithin} to obtain smoothness of $x \mapsto d\psi_x$ as a map into a fixed model space \emph{after} the $x$-dependent coordinate change built into \texttt{inTangentCoordinates}, then strip that wrapper using \texttt{inTangentCoordinates\_eq} together with \ref{lmm:chart-transition-mfderiv-smooth}.
-    \item The \emph{chart-representation route}: work directly with the chart representation $F$ of $\psi$ between extended charts, differentiate it with \texttt{ContDiffWithinAt.fderivWithin\_right}, and relate $d\psi$ to $\mathrm{fderivWithin}\,F$ by an explicit bridge.
-\end{itemize}
-
-\textbf{We take the chart-representation route.} The smoothness field of \ref{def:spacetime} is itself already stated in chart-representation form --- it asserts $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top$ on $e.\mathtt{target}$, at the point $e(x_0)$, of $y \mapsto g_{e^{-1}(y)}\big(d(e^{-1})_y v,\, d(e^{-1})_y w\big)$ for constant model vectors $v,w$ --- so the chart route matches the shape of both the hypothesis and the goal, and never introduces \texttt{inTangentCoordinates} at all. The \texttt{inTangentCoordinates} route would produce the derivative in a normalised form that must be un-normalised again before it can meet the goal, which is the step that made the original single proof unmanageable. Note that \ref{lmm:chart-transition-mfderiv-smooth} is \emph{not} what supplies differentiability of the chart transitions to the bridge \ref{lmm:mfderiv-eq-chart-jacobian}: as the remark above records, that node concludes smoothness of a $\mathrm{fderivWithin}$ on the model space, which is a different assertion. The bridge takes its differentiability of chart inverses from \texttt{contMDiffOn\_extChartAt\_symm} directly. Node \ref{lmm:chart-transition-mfderiv-smooth} is retained not for the bridge but for its one declared consumer \ref{lmm:tangent-bundle-section-chart-local-iff}, which needs the smoothness of the transition derivative in order to unfold the tangent-bundle trivialisation; see the statement of \ref{lmm:chart-transition-mfderiv-smooth}.
-
-Throughout this block fix $x_0 \in M$, write $e$ for the extended chart at $x_0$ and $e'$ for the extended chart at $\psi(x_0)$, and set
-\begin{align}
-    F := e' \circ \psi \circ e^{-1}, \qquad J_y := \mathrm{fderivWithin}_{\mathbb{R}}\,F\,(\mathrm{range}\,I)\,y.
-\end{align}
-
-\begin{lemma}[The Chart Representation of a Diffeomorphism is Smooth]
-    \label{lmm:psi-chart-representation-contdiff}
-    \uses{def:spacetime}
-    The chart representation $F = e' \circ \psi \circ e^{-1}$ satisfies
-    \begin{align}
-        \mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;F\;(\mathrm{range}\,I)\;\big(e(x_0)\big),
-    \end{align}
-    that is, it is $C^{\top}$ (analytic-index $\top = \omega$, matching the smoothness index of \ref{def:spacetime}) within $\mathrm{range}\,I$ \emph{at the single point} $e(x_0)$. Nothing is claimed here about where $F$ is defined or where it lands; that is the separate \ref{lmm:psi-chart-maps-into-target}.
-\end{lemma}
-\begin{proof}
-    This is one half of \texttt{contMDiffAt\_iff}, which reads
-    \begin{align}
-        \mathtt{ContMDiffAt}\;I\;I'\;n\;\psi\;x_0 \iff \mathtt{ContinuousAt}\;\psi\;x_0 \;\wedge\; \mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;\big(e' \circ \psi \circ e^{-1}\big)\;(\mathrm{range}\,I)\;\big(e(x_0)\big),
-    \end{align}
-    applied to the smoothness of $\psi$. That smoothness does \emph{not} come from \ref{def:spacetime}, which has no field about $\psi$ at all: it comes from $\psi$ being a $\mathtt{Diffeomorph}\;I\;I\;\top$, whose \texttt{contMDiff} projection --- \texttt{Diffeomorph.contMDiff} --- is exactly $\mathtt{ContMDiff}\;I\;I\;\top\;\psi$, specialised at $x_0$. So $n = \top$ here, and the conclusion is at $\top$ rather than at $\infty$. This matters downstream: $\infty$ is strictly weaker than $\top$ in $\mathtt{WithTop}\;\mathbb{N}_\infty$, and the goal of \ref{lmm:pullback-metric-smooth-in-charts} is stated at $\top$, so a chain passing through $\infty$ would not close. Note also the exact shape: the analytic conjunct is a \texttt{ContDiffWithinAt} at the \emph{single} point $e(x_0)$, not a \texttt{ContDiffOn} on $\mathrm{range}\,I$ or on any neighbourhood of $e(x_0)$. Downstream nodes must be phrased against this weaker form.
-
-    The locality assertion of \ref{lmm:psi-chart-maps-into-target} is \emph{not} part of this iff: it comes from the other conjunct and is a separate node, sharing nothing with the argument above beyond the statement of the iff itself.
-\end{proof}
-
-\begin{lemma}[The Chart Representation is Defined and Lands in the Target Near $e(x_0)$]
-    \label{lmm:psi-chart-maps-into-target}
-    \uses{def:spacetime}
-    The chart representation $F = e' \circ \psi \circ e^{-1}$ is defined and lands in the target of $e'$ near $e(x_0)$, in the filter-precise form
-    \begin{align}
-        \forall^{\mathrm{f}} y \text{ in } \mathcal{N}[\mathrm{range}\,I]\,\big(e(x_0)\big),\quad y \in e.\mathtt{target} \;\wedge\; F(y) \in e'.\mathtt{target},
-    \end{align}
-    where $\mathcal{N}[a]\,z$ denotes $\mathtt{nhdsWithin}\,z\,a$, the neighbourhood filter of $z$ within $a$ (Mathlib writes it \texttt{nhdsWithin z a}), and $\forall^{\mathrm{f}}$ is $\mathtt{Filter.Eventually}$.
-\end{lemma}
-\begin{proof}
-    Purely a locality argument; no differentiability is used, which is why it is separated from \ref{lmm:psi-chart-representation-contdiff}. From $\mathtt{ContinuousAt}\;\psi\;x_0$ --- the other conjunct of the \texttt{contMDiffAt\_iff} used in \ref{lmm:psi-chart-representation-contdiff}, or equally \texttt{Diffeomorph.continuous} specialised at $x_0$ --- and the fact that the source of $e'$ is a neighbourhood of $\psi(x_0)$ (\texttt{extChartAt\_source\_mem\_nhds}), the preimage $\psi^{-1}(e'.\mathtt{source})$ is a neighbourhood of $x_0$. Intersect it with $e.\mathtt{source}$, which is a neighbourhood of $x_0$ by the same lemma, and push the result forward along $e$.
-
-    The filter must be $\mathcal{N}[\mathrm{range}\,I]$ and not $\mathcal{N}$, and the conclusion an eventual statement and not a global $\mathtt{MapsTo}$. The reason is that the \texttt{model} field of \ref{def:spacetime} is a general $\mathtt{ModelWithCorners}$, not required to be $\mathtt{modelWithCornersSelf}$: the extended chart $e$ is then only a partial homeomorphism onto a subset of $\mathrm{range}\,I$, so pushing a neighbourhood of $x_0$ forward along $e$ yields a neighbourhood of $e(x_0)$ \emph{within} $\mathrm{range}\,I$, not an honest neighbourhood in the model space. Likewise $\mathtt{MapsTo}\;F\;(\mathrm{range}\,I)\;e'.\mathtt{target}$ is simply false --- $F$ need not even be defined off $e.\mathtt{target}$ --- which is why the statement is an $\forall^{\mathrm{f}}$ along $\mathcal{N}[\mathrm{range}\,I]\,(e(x_0))$ carrying both memberships at once. Consumers of this node get a \emph{local} $\mathtt{MapsTo}$ from it by shrinking to the witnessing set.
-\end{proof}
-
-\begin{lemma}[The Chart Jacobian is Smooth]
-    \label{lmm:chart-jacobian-smooth}
-    \uses{lmm:psi-chart-representation-contdiff}
-    The assignment $y \mapsto J_y$ satisfies $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;(y \mapsto J_y)\;(\mathrm{range}\,I)\;(e(x_0))$, as a map into the space of continuous linear maps of the model space. The index is $\top = \omega$, matching \ref{lmm:psi-chart-representation-contdiff} and the smoothness index of \ref{def:spacetime}.
-\end{lemma}
-\begin{proof}
-    Apply \texttt{ContDiffWithinAt.fderivWithin\_right} to \ref{lmm:psi-chart-representation-contdiff}. Its four hypotheses are $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;F\;s\;y_0$, $\mathtt{UniqueDiffOn}\;\mathbb{R}\;s$, an exponent gap $m + 1 \leq n$, and membership $y_0 \in s$; here $s = \mathrm{range}\,I$ and $y_0 = e(x_0)$, the unique-differentials hypothesis is \texttt{ModelWithCorners.uniqueDiffOn}, and $e(x_0) \in \mathrm{range}\,I$ holds because $e(x_0) = I(\mathrm{chart}(x_0))$.
-
-    The pointwise form \texttt{ContDiffWithinAt.fderivWithin\_right} is used rather than the set form \texttt{ContDiffOn.fderivWithin} because \ref{lmm:psi-chart-representation-contdiff} only supplies a \texttt{ContDiffWithinAt} at the single point $e(x_0)$, so the \texttt{ContDiffOn} version simply does not apply. This is also exactly how Mathlib itself proves \texttt{contDiffOn\_fderiv\_coord\_change}: it introduces a point of the source and calls \texttt{ContDiffWithinAt.fderivWithin\_right} there.
-
-    The exponent gap needs care because the smoothness index lives in $\mathtt{WithTop}\;\mathbb{N}_\infty$, where the $\infty$ of a $C^\infty$ structure and the top element $\top = \omega$ are distinct elements. \emph{The case at hand is $n = \top$}, since \ref{def:spacetime} is stated at $\top$ and \ref{lmm:psi-chart-representation-contdiff} therefore delivers $\top$; the gap $m + 1 \leq \top$ is then simply \texttt{le\_top}, with no arithmetic needed. Were the ambient index instead $\infty$, the gap would be discharged by \texttt{ENat.coe\_top\_add\_one}, the simp lemma $((\top : \mathbb{N}_\infty) : \mathtt{WithTop}\;\mathbb{N}_\infty) + 1 = (\top : \mathbb{N}_\infty)$, turning $\infty + 1 \leq \infty$ into $\infty \leq \infty$; that hypothetical is recorded only to forestall confusing the two indices, and is not what is used here.
-\end{proof}
-
-\begin{lemma}[The Differential of $\psi$ as a Chart Jacobian]
-    \label{lmm:mfderiv-eq-chart-jacobian}
-    \uses{lmm:psi-chart-maps-into-target, lmm:mfderiv-diffeo-linear-equiv}
-    For $y$ in the target of $e$ near $e(x_0)$, and with $x := e^{-1}(y)$,
-    \begin{align}
-        d\psi_x \circ d(e^{-1})_y = d(e'^{-1})_{F(y)} \circ J_y
-    \end{align}
-    as continuous linear maps from the model space to $TM|_{\psi(x)}$.
-\end{lemma}
-\begin{proof}
-    Near $y$ one has the identity of maps $\psi \circ e^{-1} = e'^{-1} \circ F$, since $e'^{-1} \circ e'$ is the identity on the source of $e'$ and $\psi(e^{-1}(y))$ lies there by \ref{lmm:psi-chart-maps-into-target}. Differentiate both sides at $y$: the left side is $d\psi_x \circ d(e^{-1})_y$ by the manifold chain rule \texttt{mfderiv\_comp} (its two differentiability hypotheses are \texttt{Diffeomorph.mdifferentiable} for $\psi$, with the side condition $n \neq 0$, and \texttt{contMDiffOn\_extChartAt\_symm} for the chart inverse $e^{-1}$ --- \emph{not} \ref{lmm:chart-transition-mfderiv-smooth}, which asserts smoothness of an $\mathrm{fderivWithin}$ on the model space and so does not give this); the right side is $d(e'^{-1})_{F(y)} \circ J_y$ by the same chain rule, using that on the model space $\mathrm{mfderiv}$ agrees with $\mathrm{fderivWithin}$ on $\mathrm{range}\,I$ (\texttt{mfderivWithin\_eq\_fderivWithin}). Since the two sides of the map identity agree on a neighbourhood, \texttt{Filter.EventuallyEq.mfderiv\_eq} identifies the derivatives.
-\end{proof}
-
-This is the bridge the decomposition turns on: it is the only place where $d\psi$, an object living in the tangent bundle, is converted into $J$, an honest derivative of a map between subsets of the model space. Everything downstream is analysis on the model space.
-
-\begin{lemma}[Composition Under an Only Eventual $\mathtt{MapsTo}$]
-    \label{lmm:contDiffWithinAt-comp-of-eventually-mapsTo}
-    Let $F : \alpha \to \beta$ and $G : \beta \to \gamma$ be maps between real normed spaces, let $s \subseteq \alpha$ and $t \subseteq \beta$, and let $y_0 \in \alpha$. Suppose
-    \begin{align}
-        \mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;G\;t\;\big(F\,y_0\big), \qquad \mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;F\;s\;y_0, \qquad \forall^{\mathrm{f}} y \text{ in } \mathcal{N}[s]\,y_0,\ F\,y \in t.
-    \end{align}
-    Then $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;n\;(G \circ F)\;s\;y_0$.
-
-    The content is that the $\mathtt{MapsTo}$ hypothesis of the ordinary composition lemma is weakened from a global $\mathtt{MapsTo}\;F\;s\;t$ to an \emph{eventual} membership along $\mathcal{N}[s]\,y_0$. That weakening is what the situation below actually offers, and hard-coding it once here keeps the pattern out of its two consumers.
-\end{lemma}
-\begin{proof}
-    Choose a witnessing set $s' \subseteq s$ with $s' \in \mathcal{N}[s]\,y_0$ on which the eventual membership holds pointwise, so that $\mathtt{MapsTo}\;F\;s'\;t$ genuinely holds. Restrict the hypothesis on $F$ to $s'$ by \texttt{ContDiffWithinAt.mono}, compose on $s'$ with \texttt{ContDiffWithinAt.comp} --- whose $\mathtt{MapsTo}$ argument is now available --- and transfer the conclusion from $s'$ back to $s$ by \texttt{ContDiffWithinAt.mono\_of\_mem\_nhdsWithin}, which is precisely the lemma that upgrades along a set that is a neighbourhood within $s$ of the base point. Note that \texttt{ContDiffWithinAt.mono} alone cannot be used for the transfer, since it goes the wrong way: $s' \subseteq s$, not $s \subseteq s'$.
-\end{proof}
-
-\begin{lemma}[Metric Components Along $\psi$ are Smooth]
-    \label{lmm:metric-components-along-psi-smooth}
-    \uses{def:spacetime, lmm:psi-chart-representation-contdiff, lmm:psi-chart-maps-into-target, lmm:contDiffWithinAt-comp-of-eventually-mapsTo}
-    For any fixed model vectors $v', w'$, the function
-    \begin{align}
-        y \longmapsto g_{e'^{-1}(F(y))}\big(d(e'^{-1})_{F(y)} v',\; d(e'^{-1})_{F(y)} w'\big)
-    \end{align}
-    satisfies $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;(\cdots)\;(\mathrm{range}\,I)\;(e(x_0))$. The index is $\top$ and the set is $\mathrm{range}\,I$, matching \ref{lmm:chart-jacobian-smooth} so that the two compose without further set juggling; the descent to $e.\mathtt{target}$ is done once, in \ref{lmm:pullback-metric-smooth-in-charts}.
-\end{lemma}
-\begin{proof}
-    Two steps, and the second is a citation.
-
-    The smoothness field of \ref{def:spacetime}, taken at the base point $\psi(x_0)$ and the constant vectors $v', w'$, says exactly that $G : z \mapsto g_{e'^{-1}(z)}\big(d(e'^{-1})_z v', d(e'^{-1})_z w'\big)$ is $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top$ on $e'.\mathtt{target}$ at $e'(\psi(x_0))$; and $e'(\psi(x_0)) = F\big(e(x_0)\big)$, since $e^{-1}(e(x_0)) = x_0$, so this is the outer hypothesis of \ref{lmm:contDiffWithinAt-comp-of-eventually-mapsTo} at the right base point.
-
-    Now apply \ref{lmm:contDiffWithinAt-comp-of-eventually-mapsTo} with that $G$, with $F$ the chart representation, $s := \mathrm{range}\,I$, $t := e'.\mathtt{target}$ and $y_0 := e(x_0)$: its inner hypothesis is \ref{lmm:psi-chart-representation-contdiff} and its eventual-membership hypothesis is the $F(y) \in e'.\mathtt{target}$ conjunct of \ref{lmm:psi-chart-maps-into-target}.
-
-    That the eventual form is needed, rather than a global $\mathtt{MapsTo}$, is the set mismatch already flagged for \ref{lmm:pullback-metric-smooth-in-charts}: the outer factor is smooth on $e'.\mathtt{target}$ while the inner one is smooth within $\mathrm{range}\,I$, and $\mathtt{MapsTo}\;F\;(\mathrm{range}\,I)\;e'.\mathtt{target}$ is \emph{false} --- $F$ need not be defined off $e.\mathtt{target}$ at all, let alone land in $e'.\mathtt{target}$. Attempting \texttt{ContDiffWithinAt.comp} directly on $\mathrm{range}\,I$ will therefore not work; the shrink-compose-transfer that repairs it is exactly what has been factored into \ref{lmm:contDiffWithinAt-comp-of-eventually-mapsTo}, and is not to be re-derived here.
-\end{proof}
-
-\begin{lemma}[Coordinates of a Smooth Family of Vectors are Smooth]
-    \label{lmm:basis-coord-contDiffWithinAt}
-    Let $V$ be a finite-dimensional real vector space with basis $\{b_i\}_{i \in \iota}$, and let $y \mapsto v_y \in V$ be $C^{\top}$ within $s$ at $y_0$. Then $v_y = \sum_i a_i(y)\,b_i$ for every $y$, where $a_i(y) := \mathtt{Module.Basis.coord}\;\{b_i\}\;i\;(v_y)$, and each coordinate function $a_i$ is itself $C^{\top}$ within $s$ at $y_0$.
-\end{lemma}
-\begin{proof}
-    The expansion is \texttt{Module.Basis.sum\_repr}, applied at each $y$.
-
-    For the smoothness: $\mathtt{Module.Basis.coord}\;\{b_i\}\;i$ is a priori only a \emph{linear} functional, so \texttt{LinearMap.continuous\_of\_finiteDimensional} is needed to upgrade it to a continuous linear map --- \emph{this is the only place finite-dimensionality of $V$ is actually spent}, and it is why the hypothesis appears in the statement at all. Postcomposing the hypothesis on $y \mapsto v_y$ with that continuous linear map is \texttt{ContDiffWithinAt.continuousLinearMap\_comp}. (Mathlib has no declaration named \texttt{ContinuousLinearMap.contDiffAt}; the composition lemma above is the right citation, and if one prefers to go through \texttt{ContinuousLinearMap.contDiff} then the composition step is \texttt{ContDiffAt.comp\_contDiffWithinAt}.)
-\end{proof}
-
-\begin{lemma}[A Finite Double Sum of Products of Smooth Scalars is Smooth]
-    \label{lmm:bilinear-double-sum-smooth}
-    Let $\iota$ be a finite type and let $a_i$, $c_j$ and $\gamma_{ij}$ (for $i, j \in \iota$) be real-valued functions each $C^{\top}$ within $s$ at $y_0$. Then
-    \begin{align}
-        y \longmapsto \sum_{i,j} a_i(y)\, c_j(y)\, \gamma_{ij}(y)
-    \end{align}
-    is $C^{\top}$ within $s$ at $y_0$.
-\end{lemma}
-\begin{proof}
-    The sum is assembled by \texttt{ContDiffWithinAt.sum} over the index type $\iota \times \iota$, whose finiteness is the hypothesis on $\iota$; each summand is handled by two applications of \texttt{ContDiffWithinAt.mul}, once for $a_i(y)\,c_j(y)$ and once against $\gamma_{ij}$. No linear algebra and no geometry enters, and the argument is index-agnostic.
-\end{proof}
-
-\begin{lemma}[Expansion of a Bilinear Form on Basis Coordinates]
-    \label{lmm:bilinear-form-double-sum-expansion}
-    Let $V$ be a real normed space with a finite basis $\{b_i\}_{i \in \iota}$, let $\beta : V \to_L V \to_L \mathbb{R}$ be a continuous bilinear form, and let $a, c : \iota \to \mathbb{R}$. Then
-    \begin{align}
-        \beta\Big(\sum_{i \in \iota} a_i\,b_i,\ \sum_{j \in \iota} c_j\,b_j\Big) = \sum_{(i,j) \in \iota \times \iota} a_i\,c_j\,\beta(b_i, b_j).
-    \end{align}
-    Purely algebraic: no smoothness, no topology beyond the bundling of $\beta$, and no geometry.
-\end{lemma}
-\begin{proof}
-    Three rewriting steps, in this order.
-
-    First, push the outer sum through $\beta$. The lemma is the generic root-namespace \texttt{map\_sum} --- \emph{there is no} \texttt{ContinuousLinearMap.map\_sum} \emph{in Mathlib}, and citing that name will not resolve; \texttt{map\_sum} applies because $\beta$ is an inhabitant of a \texttt{ContinuousLinearMap} type, hence of \texttt{AddMonoidHomClass}. It yields $\beta\big(\sum_i a_i b_i\big) = \sum_i \beta(a_i b_i)$ as an identity of elements of $V \to_L \mathbb{R}$; evaluating a finite sum of such maps at the second argument is the root-namespace \texttt{sum\_apply} --- \emph{not} \texttt{ContinuousLinearMap.sum\_apply}, which exists only as a deprecated alias for it and should not be cited in new code --- and the scalars come out by \texttt{map\_smul}. The same pair of steps in the second slot, applied to each $\beta(b_i)$, gives the iterated sum $\sum_i \sum_j a_i\,c_j\,\beta(b_i,b_j)$.
-
-    Second, collapse the iterated sum of products of scalars with \texttt{Fintype.sum\_smul\_sum}, which is exactly the distributivity of scalar multiplication over a pair of finite sums.
-
-    Third, re-index the iterated sum as a single sum over $\iota \times \iota$ with \texttt{Finset.sum\_product'} (the primed form, whose summand is written as a function of the two components $i$ and $j$ rather than of a pair, which is the shape wanted here). This last step is what puts the statement into the single-index shape that \ref{lmm:bilinear-double-sum-smooth} consumes.
-
-    The step is separated out because it is a genuinely distinct move of its own, some eight to fifteen lines of rewriting with three lemmas that are easy to misname, and it is independent of everything analytic around it.
-\end{proof}
-
-\begin{lemma}[A Bilinear Family Precomposed in Both Slots is Smooth]
-    \label{lmm:bilinear-family-precomp-smooth}
-    \uses{lmm:basis-coord-contDiffWithinAt, lmm:bilinear-double-sum-smooth, lmm:bilinear-form-double-sum-expansion}
-    Let $V$ be a finite-dimensional real vector space with basis $\{b_i\}$, let $\beta_y$ be a family of bilinear forms on $V$ such that $y \mapsto \beta_y(b_i, b_j)$ is $C^{\top}$ within $s$ at $y_0$ for every pair $(i,j)$, and let $y \mapsto A_y$ and $y \mapsto B_y$ be families of continuous linear maps into $V$ that are $C^{\top}$ within $s$ at $y_0$. Then for any fixed $u, u'$ the function
-    \begin{align}
-        y \longmapsto \beta_y\big(A_y u,\; B_y u'\big)
-    \end{align}
-    is $C^{\top}$ within $s$ at $y_0$. (The index is $\top$ to match the rest of this chain; the argument below is in fact index-agnostic.)
-\end{lemma}
-\begin{proof}
-    First, $y \mapsto A_y u$ is $C^{\top}$ within $s$ at $y_0$ by \texttt{ContDiffWithinAt.clm\_apply} applied to the hypothesis on $y \mapsto A_y$ and the constant $u$, and likewise for $y \mapsto B_y u'$. Feeding these to \ref{lmm:basis-coord-contDiffWithinAt} gives smooth coordinate functions $a_i$, $c_j$ with $A_y u = \sum_i a_i(y)\,b_i$ and $B_y u' = \sum_j c_j(y)\,b_j$.
-
-    Next, \ref{lmm:bilinear-form-double-sum-expansion} applied to $\beta_y$ at each $y$ rewrites the goal as
-    \begin{align}
-        \beta_y\big(A_y u, B_y u'\big) = \sum_{(i,j) \in \iota \times \iota} a_i(y)\, c_j(y)\, \beta_y(b_i, b_j),
-    \end{align}
-    and \ref{lmm:bilinear-double-sum-smooth} with $\gamma_{ij}(y) := \beta_y(b_i,b_j)$ --- smooth by hypothesis, and with $\iota$ finite because $V$ is finite-dimensional --- closes it.
-
-    So this node is now purely the composition of three imported facts, one per slot of the argument: coordinates are smooth (\ref{lmm:basis-coord-contDiffWithinAt}), the bilinear form expands (\ref{lmm:bilinear-form-double-sum-expansion}), and the resulting double sum is smooth (\ref{lmm:bilinear-double-sum-smooth}). No step of it is more than a rewrite.
-\end{proof}
-
-The point of isolating this is that the smoothness field of \ref{def:spacetime} quantifies over \emph{constant} model vectors only, whereas the pullback feeds it the $y$-dependent vectors $J_y v$. Passing from one to the other is not a rewriting step but the basis expansion above, and it is entirely independent of the geometry.
-
-\begin{lemma}[Rewriting the Chart Goal into the Chart-Jacobian Form]
-    \label{lmm:pullback-metric-eventuallyEq-chart-form}
-    \uses{def:pullback-metric, lmm:mfderiv-eq-chart-jacobian, lmm:psi-chart-maps-into-target, lmm:contDiffWithinAt-comp-of-eventually-mapsTo}
-    Fix $x_0 \in M$ and constant model vectors $v, w$, and put
-    \begin{align}
-        P(y) &:= (\psi^*g)_{e^{-1}(y)}\big(d(e^{-1})_y v,\, d(e^{-1})_y w\big), \\
-        Q(y) &:= g_{e'^{-1}(F(y))}\big(d(e'^{-1})_{F(y)}(J_y v),\; d(e'^{-1})_{F(y)}(J_y w)\big).
-    \end{align}
-    Then $P = Q$ eventually along $\mathcal{N}[e.\mathtt{target}]\,\big(e(x_0)\big)$, and $P(e(x_0)) = Q(e(x_0))$. Consequently $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;Q\;e.\mathtt{target}\;\big(e(x_0)\big)$ implies $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;P\;e.\mathtt{target}\;\big(e(x_0)\big)$.
-\end{lemma}
-\begin{proof}
-    Unfold \ref{def:pullback-metric} in $P$, so that both slots read $d\psi_{e^{-1}(y)}\big(d(e^{-1})_y \cdot\big)$, and rewrite each with the bridge \ref{lmm:mfderiv-eq-chart-jacobian}, which replaces it by $d(e'^{-1})_{F(y)}(J_y \cdot)$. That gives the eventual equality, and specialising the bridge at $y = e(x_0)$ gives the agreement at the base point.
-
-    The single point to get right is that this is \emph{not} a plain \texttt{rw}. The bridge is not a global identity: it holds only for $y$ in the target of $e$ \emph{near} $e(x_0)$. So $P$ and $Q$ are not syntactically equal, only eventually equal, and the passage between the two smoothness statements is \texttt{ContDiffWithinAt.congr\_of\_eventuallyEq} along the filter $\mathcal{N}[e.\mathtt{target}]\,(e(x_0))$ --- exactly the filter that lemma expects, since the ambient set is $e.\mathtt{target}$. Its two hypotheses are the two displayed conclusions. The witnessing neighbourhood is supplied by the eventual memberships of \ref{lmm:psi-chart-maps-into-target}, transferred from $\mathcal{N}[\mathrm{range}\,I]$ to $\mathcal{N}[e.\mathtt{target}]$.
-
-    For that transfer, prefer \texttt{nhdsWithin\_extChartAt\_target\_eq'} over the inclusion $e.\mathtt{target} \subseteq \mathrm{range}\,I$ (\texttt{extChartAt\_target\_subset\_range}). The former states, for $y$ in the source of the extended chart, an \emph{equality} of filters
-    \begin{align}
-        \mathcal{N}[e.\mathtt{target}]\,\big(e(y)\big) = \mathcal{N}[\mathrm{range}\,I]\,\big(e(y)\big),
-    \end{align}
-    so at the base point $e(x_0)$ the transfer is a plain \texttt{rw} rather than a monotonicity step, and it goes in both directions. The inclusion would only give one direction and would leave the two filters distinct. Note that this removes the mismatch at the level of \emph{filters} only; the set-level mismatch between $\mathrm{range}\,I$ and $e.\mathtt{target}$ discussed in \ref{lmm:pullback-metric-smooth-in-charts} is a statement about $\mathtt{ContDiffWithinAt}$ on those sets and is still crossed there by \texttt{ContDiffWithinAt.mono}.
-
-    That shrinking is the same shrink-and-transfer as in \ref{lmm:metric-components-along-psi-smooth}, and it is not to be hand-rolled a second time: \ref{lmm:contDiffWithinAt-comp-of-eventually-mapsTo} is cited for it, since the only structure the step uses is that an eventual membership along $\mathcal{N}[s]\,y_0$ yields a witnessing $s' \subseteq s$ with $s' \in \mathcal{N}[s]\,y_0$ on which the memberships hold pointwise, and that a $\mathtt{ContDiffWithinAt}$ conclusion obtained on such an $s'$ transfers back to $s$ by \texttt{ContDiffWithinAt.mono\_of\_mem\_nhdsWithin}. Where the $y$-dependent inner map $F$ has to be composed with the outer metric factor --- which is how the goal $Q$ arises in the first place --- that node discharges the composition outright.
-\end{proof}
-
-\begin{lemma}[The Pullback Metric is Smooth in Charts]
+\begin{lemma}[The Pullback Metric is a Smooth Section of the Bilinear-Form Bundle]
     \label{lmm:pullback-metric-smooth-in-charts}
-    \uses{def:spacetime, def:pullback-metric, lmm:pullback-metric-eventuallyEq-chart-form, lmm:chart-jacobian-smooth, lmm:metric-components-along-psi-smooth, lmm:bilinear-family-precomp-smooth}
-    The assignment $x \mapsto (\psi^*g)_x$ of \ref{def:pullback-metric} satisfies the smoothness field of \ref{def:spacetime}: for every $x_0 \in M$ and all constant model vectors $v, w$, the function $y \mapsto (\psi^*g)_{e^{-1}(y)}\big(d(e^{-1})_y v,\, d(e^{-1})_y w\big)$ is $\mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top$ on $e.\mathtt{target}$ at $e(x_0)$. The index is $\top$, not $\infty$: that is what \ref{def:spacetime} demands, and it is why every node feeding this one is stated at $\top$.
+    \uses{def:spacetime, def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv}
+    The assignment $x \mapsto (\psi^*g)_x$ of \ref{def:pullback-metric} satisfies the \texttt{contMDiff} field of \ref{def:spacetime}: it is a section of the bundle of continuous bilinear forms on the tangent bundle of regularity index $\top = \omega$, i.e.\ a $C^\omega$ (real-analytic) section,
+    \begin{align}
+        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\top\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;\big((\psi^*g)_x\big)\Big).
+    \end{align}
+    The index is $\top$, not $\infty$: that is what \ref{def:spacetime} demands.
+
+    \emph{The label name is historical.} It reads \texttt{pullback-metric-smooth-in-charts} because the smoothness field of \ref{def:spacetime} was once a chart-local $\mathtt{ContDiffWithinAt}$ condition. It is kept unchanged only because \ref{thrm:pullback-is-spacetime} cites it; nothing chart-local remains in either its statement or its proof.
 \end{lemma}
 \begin{proof}
-    Two steps. By \ref{lmm:pullback-metric-eventuallyEq-chart-form} it suffices to prove the goal for the function $Q$ of that node, i.e.\ for
+    By the bundled form recorded in \ref{def:pullback-metric}, the section in question is
     \begin{align}
-        y \longmapsto g_{e'^{-1}(F(y))}\big(d(e'^{-1})_{F(y)}(J_y v),\; d(e'^{-1})_{F(y)}(J_y w)\big);
+        x \longmapsto \mathtt{ContinuousLinearMap.bilinearComp}\;\big(g_{\psi(x)}\big)\;\big(d\psi_x\big)\;\big(d\psi_x\big),
     \end{align}
-    and that is \ref{lmm:bilinear-family-precomp-smooth} with $V$ the model space, $\beta_y(v',w') := g_{e'^{-1}(F(y))}\big(d(e'^{-1})_{F(y)} v',\, d(e'^{-1})_{F(y)} w'\big)$ and $A_y = B_y = J_y$, whose three hypotheses are \ref{lmm:metric-components-along-psi-smooth} (smoothness of $y \mapsto \beta_y(b_i,b_j)$ on basis pairs), \ref{lmm:chart-jacobian-smooth} (smoothness of $y \mapsto J_y$), and finite-dimensionality of the model space, which holds as it is $\mathbb{R}^4$.
+    so the goal is smoothness in $x$ of a bilinear form obtained by precomposing a smooth family of bilinear forms with a family of continuous linear maps in both slots. Three ingredients feed it, all in the bundle-section idiom:
+    \begin{itemize}
+        \item smoothness of $g$ as a section of the bilinear-form bundle over the base map $\psi$ --- the \texttt{contMDiff} field of the source spacetime \ref{def:spacetime}, composed with $\psi$;
+        \item regularity of $\psi$ itself, supplied by \texttt{Diffeomorph.contMDiff}, read at the same index $\top = \omega$ as the goal (so ``$C^\infty$ diffeomorphism'' in the statement above is to be read at that index too, per the index remark in \ref{def:spacetime}); it supplies the base map along which the previous item is read;
+        \item smoothness of $x \mapsto d\psi_x$ as a section of the hom bundle $\mathrm{Hom}\big(TM|_x,\, TM|_{\psi(x)}\big)$ over the base map $\psi$, together with invertibility of each $d\psi_x$ (\ref{lmm:mfderiv-diffeo-linear-equiv}) where the bundled form has to be recognised as a continuous linear map.
+    \end{itemize}
+    The assembly is \emph{not} an instance of \texttt{ContMDiff.clm\_bundle\_apply₂}: that lemma applies a bilinear-form section to two vector-field \emph{sections} and returns a scalar section, so it evaluates rather than precomposes, and Mathlib has no bundle-level precomposition lemma at all --- the only precomposition statement, \texttt{ContMDiff.clm\_comp}, is for trivial bundles. The route to use instead is to unfold the goal through \texttt{contMDiffAt\_hom\_bundle}, as described next.
 
-    \emph{The set mismatch, explicitly.} The \texttt{smooth\_in\_charts} field of \ref{def:spacetime} --- both as hypothesis (for $g$) and as goal (for $\psi^*g$) --- is a $\mathtt{ContDiffWithinAt}$ on $e.\mathtt{target}$ at $e(x_0)$, whereas \ref{lmm:chart-jacobian-smooth} and \ref{lmm:metric-components-along-psi-smooth} are stated on $\mathrm{range}\,I$, because that is the set on which \texttt{ModelWithCorners.uniqueDiffOn} --- the unique-differentials input those nodes need --- is available. The two sets are not equal in general: $e.\mathtt{target} \subseteq \mathrm{range}\,I$ only. So \ref{lmm:bilinear-family-precomp-smooth} is applied at $s = \mathrm{range}\,I$, $y_0 = e(x_0)$, and its conclusion is then restricted to $e.\mathtt{target}$ by \texttt{ContDiffWithinAt.mono} along \texttt{extChartAt\_target\_subset\_range}. That monotonicity step is the one place the mismatch is crossed, and it must not be omitted.
+    \emph{The open API question.} The third ingredient is the step whose Mathlib route is \emph{not} yet pinned down, and it is recorded here as an open question rather than as a citation. No specific lemma name is asserted for it, because none has been verified to have the required shape. The intended shape of the argument, and the candidates to try, are:
+    \begin{itemize}
+        \item on the \emph{goal} side, \texttt{contMDiffAt\_hom\_bundle} in \texttt{Mathlib/Geometry/Manifold/VectorBundle/Hom.lean} does apply: the fibre here is $TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$, whose source and target both sit over the \emph{single} base point $x$, and that lemma's statement reads the fibre element through $\mathtt{inCoordinates}\;F_1\;E_1\;F_2\;E_2\;(f\,x_0).1\;(f\,x).1\;(f\,x_0).1\;(f\,x).1$, i.e.\ with one and the same base point in the source and the target slots. Applying it reduces this node to smoothness of the $\mathtt{inCoordinates}$ reading of $(\psi^*g)_x$;
+        \item that reduced goal is exactly the shape \texttt{ContMDiffAt.mfderiv} in \texttt{Mathlib/Geometry/Manifold/MFDeriv/} produces for $d\psi$, namely smoothness of the differential in the $\mathtt{inTangentCoordinates}$ normalisation rather than as a bundle section --- which is why the reduction is made in this direction and not the other;
+        \item the surrounding \texttt{inTangentCoordinates} API of the same directory (\texttt{inTangentCoordinates}, \texttt{inTangentCoordinates\_eq}), for matching the two readings up.
+    \end{itemize}
+    One thing to record so that it is not attempted: \texttt{contMDiffAt\_hom\_bundle} is \emph{not} a possible target shape for $x \mapsto d\psi_x$ itself. Its single-base-point form is precisely what rules that out, since $d\psi_x : TM|_x \to_L[\mathbb{R}] TM|_{\psi(x)}$ has \emph{two} base maps, the identity and $\psi$. The two-base-map API is \texttt{ContMDiffAt.clm\_apply\_of\_inCoordinates} and \texttt{ContMDiffWithinAt.clm\_apply\_of\_inCoordinates}, whose hypothesis is stated as smoothness of $\mathtt{inCoordinates}\;F_1\;E_1\;F_2\;E_2\;(b_1\,m_0)\;(b_1\,m)\;(b_2\,m_0)\;(b_2\,m)\;(\varphi\,m)$, with independent $b_1$ and $b_2$; Mathlib gives these only in the $\mathtt{At}$ and $\mathtt{WithinAt}$ forms, because the $\mathtt{inCoordinates}$ hypothesis only makes sense around a point.
 
-    The mismatch cannot instead be crossed on the unique-differentials side, and this is the trap. $\mathtt{UniqueDiffOn}$ is not monotone under passing to subsets, so \texttt{ModelWithCorners.uniqueDiffOn} on $\mathrm{range}\,I$ cannot be restricted to $e.\mathtt{target}$. Any step needing unique differentials on the chart target must therefore either be performed on $\mathrm{range}\,I$ first and its conclusion restricted --- the route taken here, which is why \ref{lmm:chart-jacobian-smooth} is stated on $\mathrm{range}\,I$ --- or obtain the property for $e.\mathtt{target}$ on its own terms, via \texttt{uniqueDiffOn\_extChartAt\_target}, which is exactly $\mathtt{UniqueDiffOn}\;\mathbb{R}\;e.\mathtt{target}$ and should simply be cited as it stands. (Its own proof is \texttt{ModelWithCorners.uniqueDiffOn\_preimage} applied to $(\mathrm{chartAt}\,H\,x_0).\mathtt{open\_target}$ after rewriting with \texttt{extChartAt\_target}. The neighbouring \texttt{ModelWithCorners.uniqueDiffOn\_preimage\_source} is \emph{not} the right lemma here: it concerns $I^{-1}(c.\mathtt{source}) \cap \mathrm{range}\,I$ for a chart $c$ --- a chart \emph{source} --- and so says nothing about $e.\mathtt{target}$.) Deducing unique differentials on $e.\mathtt{target}$ from \texttt{ModelWithCorners.uniqueDiffOn} by inclusion is in any case not available, and the formalizer should not attempt it.
+    Whether these compose into the ingredient as stated, or whether an intermediate lemma has to be added, is to be settled at formalization time; until then this node depends on that ingredient as an identified gap, and the formalizer should not invent a citation for it. The other two ingredients are Mathlib-backed as they stand.
 \end{proof}
 
 \begin{theorem}[The Pullback of a Spacetime is a Spacetime]
@@ -1424,7 +1247,7 @@ The point of isolating this is that the smoothness field of \ref{def:spacetime} 
     For a spacetime $(M,g)$ and a $C^\infty$ diffeomorphism $\psi$ of $M$, the pullback datum $\psi^*(M,g)$ of \ref{def:pullback-metric} is again a spacetime.
 \end{theorem}
 \begin{proof}
-    The manifold data are carried over verbatim from $(M,g)$, so only the metric obligations of \ref{def:spacetime} need discharging: symmetry is \ref{lmm:pullback-metric-symm}, non-degeneracy is \ref{lmm:pullback-metric-nondegenerate}, the Lorentzian condition is \ref{lmm:pullback-metric-lorentzian}, and smoothness of the tensor field is \ref{lmm:pullback-metric-smooth-in-charts}.
+    The manifold data are carried over verbatim from $(M,g)$, so only the metric obligations of \ref{def:spacetime} need discharging: symmetry is \ref{lmm:pullback-metric-symm}, non-degeneracy is \ref{lmm:pullback-metric-nondegenerate}, the Lorentzian condition is \ref{lmm:pullback-metric-lorentzian}, and the \texttt{contMDiff} field --- smoothness of the metric as a section of the bilinear-form bundle --- is \ref{lmm:pullback-metric-smooth-in-charts}.
 \end{proof}
 
 \begin{definition}[Two-Sided Preservation of Future Orientation]
@@ -1439,77 +1262,28 @@ The point of isolating this is that the smoothness field of \ref{def:spacetime} 
     Nothing here refers to the metrics beyond the two orientations, so this is a condition on a diffeomorphism and a pair of oriented metrics, stated independently of any isometry hypothesis. The single-metric case $g_1 = g_2 = g$, $t_1 = t_2 = t$ is the existing $\mathtt{Isometry.PreservesFutureOrientation}$, and the two-sided form is what the single-metric \ref{lmm:isometry-preserves-basis-sets} already uses; the definition is hoisted here so that the lemmas below can cite it rather than restate it.
 \end{definition}
 
-The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$, which is Mathlib's $\mathtt{VectorField.mpullback}\;I\;I\;\psi\;t$. Establishing that it is a time orientation splits into a smoothness chain and two pointwise conditions. The smoothness chain is a \emph{round trip} between two idioms and it is easy to plan for only half of it: the hypothesis of \texttt{ContMDiff.mpullback\_vectorField} is a bundle-section statement, and so is its conclusion, whereas both the hypothesis available from \ref{def:time-orientable} and the goal are chart-local. Both legs of the round trip are instances of one \emph{biconditional} dictionary, stated once below as an accepted obligation; the two legs are then its \texttt{.mpr} and \texttt{.mp}, and the middle node transports along $\psi$.
+The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$, which is Mathlib's $\mathtt{VectorField.mpullback}\;I\;I\;\psi\;t$. Establishing that it is a time orientation splits into one smoothness statement and two pointwise conditions, and the smoothness statement is now a single step. Since the \texttt{smooth} field of \ref{def:time-orientable} is itself the bundle-section condition, it is \emph{literally} the hypothesis of \texttt{ContMDiff.mpullback\_vectorField}, whose conclusion is in turn literally the field to be produced for the pullback: the transport along $\psi$ is applied directly, with no conversion on either side.
 
-It matters that the dictionary is stated as an iff rather than as two separate obligations. The two legs are converses of each other, and a converse is not proved by its forward direction; a pair of nodes each pointing at the other for ``the same analytic content, read in the opposite direction'' proves neither. Stating the single iff and taking projections makes each leg two lines and leaves exactly one obligation.
-
-\begin{lemma}[Bundle-Section Smoothness Equals Chart-Local Smoothness, Accepted]
-    \label{lmm:tangent-bundle-section-chart-local-iff}
-    \uses{def:spacetime, lmm:chart-transition-mfderiv-smooth}
-    Let $W$ be a vector field on $M$. Then $W$ is smooth as a section of the tangent bundle if and only if it is chart-locally smooth in the $\mathrm{tangentCoordChange}$ form; precisely,
-    \begin{align}
-        \mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;W) \iff \forall\,x_0 \in M,\ \mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;\Big(y \mapsto \mathrm{tangentCoordChange}\;I\;\big(e^{-1}(y)\big)\;x_0\;\big(W(e^{-1}(y))\big)\Big)\;e.\mathtt{target}\;\big(e(x_0)\big),
-    \end{align}
-    where as above $e$ denotes the extended chart at $x_0$, and the left-hand side spells out as $\mathtt{ContMDiff}\;I\;I.\mathtt{tangent}\;\top\;\big(x \mapsto \mathtt{TotalSpace.mk'}\;E\;x\;(W\,x)\big)$.
-
-    Fixing one form on the right, and using it in \emph{both} legs below, is the point of the node: earlier drafts wrote the two legs against superficially different chart-local expressions and reconciled them nowhere.
-
-    \emph{The right-hand side is not literally the repository's field, and the difference is part of what is accepted here.} The $\mathrm{tangentCoordChange}$ form is chosen because it is the form in which the tangent-bundle trivialisation naturally presents the fibre component of a section. The \texttt{smooth} field of \ref{def:time-orientable}, and likewise \texttt{smooth\_in\_charts} of \ref{def:spacetime}, are instead written in \emph{double-}$\mathrm{mfderiv}$ form,
-    \begin{align}
-        \mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;\Big(y \mapsto d(e^{-1})_y\big(de_{e^{-1}(y)}\,W(e^{-1}(y))\big)\Big)\;e.\mathtt{target}\;\big(e(x_0)\big).
-    \end{align}
-    The two are equal, by $\mathrm{tangentCoordChange}$'s definition as the transition derivative of $\mathtt{tangentBundleCore}$ (\texttt{tangentCoordChange\_def}, \texttt{tangentBundleCore\_coordChange\_achart}, both \texttt{rfl}) together with the identification of $\mathrm{mfderiv}$ with $\mathrm{fderivWithin}$ on $\mathrm{range}\,I$ (\texttt{mfderivWithin\_eq\_fderivWithin}), but that equality is itself unpackaged bookkeeping and Mathlib does not supply it. It is therefore taken as part of this obligation: the biconditional is to be read as holding with either form on the right, and the two legs below may consume the repository field directly. Naming this explicitly is deliberate --- it is precisely the step that would otherwise be discovered only when the two legs failed to close by projection.
-
-    \emph{This node is an accepted obligation}, and is stated as such: it is the one place in the smoothness chain that is not decomposed to Mathlib leaves. It does not defer to any other node of this file for its content.
-\end{lemma}
-\begin{proof}
-    \emph{Accepted, not proved.} What follows records the intended route and the reason the node is left as an obligation; it is not a proof, and in particular it does not appeal to either of the two legs \ref{lmm:time-orientation-contMDiffSection} and \ref{lmm:contMDiffSection-to-chart-local}, which are its consumers.
-
-    Both directions are \texttt{tangentBundleCore} bookkeeping that Mathlib does not package. The vector-bundle side is \texttt{Bundle.contMDiffAt\_section}, which reduces $\mathtt{ContMDiffAt}$ of $x \mapsto \mathtt{TotalSpace.mk'}\;F\;x\;(s\,x)$ at $x_0$ to $\mathtt{ContMDiffAt}$ of the fibre component $x \mapsto (\mathtt{trivializationAt}\;F\;E\;x_0\;\langle x, s\,x\rangle).2$ at $x_0$; being itself an iff, it is what makes the present statement an iff rather than two independent implications. Identifying that component with $\mathrm{tangentCoordChange}\,I\,x\,x_0\,(W_x)$ is \texttt{tangentBundleCore\_coordChange\_achart} together with \texttt{tangentCoordChange\_def}. Converting between $\mathtt{ContMDiffAt}$ on $M$ and $\mathtt{ContDiffWithinAt}$ on $e.\mathtt{target}$ is \texttt{contMDiffAt\_iff}, with the chart-source side conditions discharged from \texttt{extChartAt\_source\_mem\_nhds}. The analytic input --- smoothness in $x$ of the transition derivative --- is \ref{lmm:chart-transition-mfderiv-smooth}, precomposed with the chart $e$; that is the node's single consumer, and it is a genuine Mathlib-backed input rather than a deferral.
-
-    What Mathlib lacks is any lemma packaging the round trip: the only $M$-side statement about $\mathrm{tangentCoordChange}$ is \texttt{continuousOn\_tangentCoordChange}, giving mere continuity, with no smoothness counterpart. Completing the identification is out of scope for the present pass, so the biconditional is taken as given and the two legs are its \texttt{.mpr} and \texttt{.mp}.
-\end{proof}
-
-\begin{lemma}[A Time Orientation is Smooth as a Section of the Tangent Bundle]
-    \label{lmm:time-orientation-contMDiffSection}
-    \uses{def:time-orientable, lmm:tangent-bundle-section-chart-local-iff}
-    Let $t$ be a time orientation of $(M,g)$ (\ref{def:time-orientable}). Then $t$ is smooth as a section of the tangent bundle: $\mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;t)$. This is exactly the shape of the hypothesis $hV$ of \texttt{ContMDiff.mpullback\_vectorField}; it is \emph{not} smoothness of $t$ as a bare function, and \ref{def:time-orientable} does not supply it directly.
-\end{lemma}
-\begin{proof}
-    Apply the \texttt{.mpr} direction of \ref{lmm:tangent-bundle-section-chart-local-iff} to $W := t$. Its hypothesis is the chart-local smoothness in $\mathrm{tangentCoordChange}$ form for every $x_0$, which is the \texttt{smooth} field of \ref{def:time-orientable} as it stands.
-\end{proof}
+This is the main structural gain of making the bundle-section form primitive. In the earlier chart-local formulation the smoothness argument was a \emph{round trip} between two idioms --- chart-local hypothesis to bundle section, transport along $\psi$, bundle section back to chart-local goal --- and the dictionary between the two forms was the one node of this section that was \emph{accepted as an obligation} rather than reduced to Mathlib leaves, because Mathlib has no lemma packaging the $\mathrm{tangentCoordChange}$ round trip (the only $M$-side statement about it, \texttt{continuousOn\_tangentCoordChange}, gives mere continuity). Both conversion legs and the accepted obligation between them are now gone outright: there is no second idiom to translate to, so the \emph{time-orientation} smoothness chain below --- \ref{lmm:mpullback-vectorField-contMDiff-of-diffeo} and its consumers --- has no accepted obligation in it at all. This is a statement about that chain only, and not about the section as a whole: the metric side still carries the open hom-bundle ingredient of \ref{lmm:pullback-metric-smooth-in-charts}, namely smoothness of $x \mapsto d\psi_x$, whose Mathlib route is recorded there as an unresolved API question.
 
 \begin{lemma}[The Pullback of a Bundle-Smooth Vector Field Along a Diffeomorphism is Bundle-Smooth]
     \label{lmm:mpullback-vectorField-contMDiff-of-diffeo}
-    \uses{lmm:time-orientation-contMDiffSection, lmm:mfderiv-diffeo-linear-equiv, def:spacetime}
+    \uses{def:time-orientable, lmm:mfderiv-diffeo-linear-equiv, def:spacetime}
     Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $V$ be a vector field on $M$ with $\mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;V)$. Then
     \begin{align}
         \mathtt{CMDiff}\;\top\;\big(\mathtt{T\%}\;(\mathtt{VectorField.mpullback}\;I\;I\;\psi\;V)\big).
     \end{align}
-    Applied to $V = t$ via \ref{lmm:time-orientation-contMDiffSection}, this is the bundle-section smoothness of $\psi^*t$.
+    This node was always stated in bundle-section terms, and it is now consumed directly: the hypothesis $hV$ is \emph{literally} the \texttt{smooth} field of \ref{def:time-orientable}, so applying the node at $V = t$ needs no conversion, and its conclusion is literally the \texttt{smooth} field to be produced for $\psi^*t$.
 \end{lemma}
 \begin{proof}
     This is \texttt{ContMDiff.mpullback\_vectorField}, whose four hypotheses must all be supplied --- they are more than invertibility of the differential:
     \begin{itemize}
-        \item $hV$: $\mathtt{CMDiff}\;m\;(\mathtt{T\%}\;V)$, the hypothesis of this node, obtained for $V = t$ from \ref{lmm:time-orientation-contMDiffSection}.
+        \item $hV$: $\mathtt{CMDiff}\;m\;(\mathtt{T\%}\;V)$, the hypothesis of this node, which for $V = t$ is the \texttt{smooth} field of \ref{def:time-orientable} verbatim.
         \item $hf$: $\mathtt{CMDiff}\;n\;\psi$, from $\psi$ being a smooth diffeomorphism (\texttt{Diffeomorph.contMDiff}); as everywhere in this section the index is $n = \top$, matching \ref{def:spacetime}.
         \item $hf'$: $\forall x,\ (\mathtt{mfderiv\%}\;\psi\;x).\mathtt{IsInvertible}$. This is $\mathtt{ContinuousLinearMap.IsInvertible}$ --- a \emph{predicate on a continuous linear map} --- and \emph{not} a \texttt{ContinuousLinearEquiv}, so \ref{lmm:mfderiv-diffeo-linear-equiv} does not supply it directly. The bridge is: rewrite $d\psi_x$ as the coercion of the equivalence using \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} (backwards, by hand, since it is not a simp lemma; see \ref{lmm:mfderiv-diffeo-linear-equiv}), then close the goal with \texttt{ContinuousLinearMap.isInvertible\_equiv}, which states that the coercion of any \texttt{ContinuousLinearEquiv} is invertible.
-        \item $hmn$: the exponent gap $m + 1 \leq n$. Here $m = n = \top$, so it is \texttt{le\_top}, exactly as in \ref{lmm:chart-jacobian-smooth}. The exponent must be taken to be $\top$ and not $\infty$ because the goal side of the chain is at $\top$.
+        \item $hmn$: the exponent gap $m + 1 \leq n$. Here $m = n = \top$, so it is \texttt{le\_top}. The exponent must be taken to be $\top$ and not $\infty$ because the goal side of the chain is at $\top$.
     \end{itemize}
     It further requires the instances $[\mathtt{CompleteSpace}\;E]$ and $[\mathtt{IsManifold}\;I\;1\;M]$ (both source and target instances, which coincide here since $\psi$ maps $M$ to itself); $E = \mathbb{R}^4$ is complete and the $\top$-smooth structure of \ref{def:spacetime} gives the manifold instance at order $1$.
-\end{proof}
-
-\begin{lemma}[From Bundle-Section Smoothness Back to the Chart-Local Form]
-    \label{lmm:contMDiffSection-to-chart-local}
-    \uses{def:time-orientable, lmm:tangent-bundle-section-chart-local-iff}
-    Let $W$ be a vector field on $M$ with $\mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;W)$. Then $W$ satisfies the chart-local smoothness condition that the \texttt{smooth} field of a $\mathtt{TimeOrientation}$ demands: for every $x_0 \in M$,
-    \begin{align}
-        \mathtt{ContDiffWithinAt}\;\mathbb{R}\;\top\;\Big(y \mapsto \mathrm{tangentCoordChange}\;I\;\big(e^{-1}(y)\big)\;x_0\;\big(W(e^{-1}(y))\big)\Big)\;e.\mathtt{target}\;\big(e(x_0)\big).
-    \end{align}
-    This is the return leg of the dictionary, stated in the \emph{same} $\mathrm{tangentCoordChange}$ form as the right-hand side of \ref{lmm:tangent-bundle-section-chart-local-iff} and as the hypothesis consumed by \ref{lmm:time-orientation-contMDiffSection}. It is needed because the \emph{conclusion} of \texttt{ContMDiff.mpullback\_vectorField} is again a bundle-section statement, whereas the goal is chart-local; supplying only the outward leg leaves the proof stranded one step from the goal.
-\end{lemma}
-\begin{proof}
-    Apply the \texttt{.mp} direction of \ref{lmm:tangent-bundle-section-chart-local-iff} to the hypothesis, and specialise the resulting universally quantified statement at the given $x_0$. Nothing else is used; in particular this node no longer carries the \texttt{tangentBundleCore} bookkeeping, which now lives once in the biconditional.
 \end{proof}
 
 \begin{lemma}[The Pullback Time Orientation is Nowhere Vanishing]
@@ -1536,11 +1310,11 @@ It matters that the dictionary is stated as an iff rather than as two separate o
 
 \begin{lemma}[Pullback of a Time Orientation]
     \label{lmm:pullback-time-orientation}
-    \uses{def:time-orientable, def:pullback-metric, thrm:pullback-is-spacetime, lmm:time-orientation-contMDiffSection, lmm:mpullback-vectorField-contMDiff-of-diffeo, lmm:contMDiffSection-to-chart-local, lmm:pullback-time-orientation-ne-zero, lmm:pullback-time-orientation-timelike}
+    \uses{def:time-orientable, def:pullback-metric, thrm:pullback-is-spacetime, lmm:mpullback-vectorField-contMDiff-of-diffeo, lmm:pullback-time-orientation-ne-zero, lmm:pullback-time-orientation-timelike}
     Let $t$ be a time orientation of $(M,g)$ (\ref{def:time-orientable}). Then the pullback vector field $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$ is a time orientation of $\psi^*(M,g)$ (\ref{thrm:pullback-is-spacetime}): it is smooth, nowhere vanishing, and everywhere timelike for $\psi^*g$.
 \end{lemma}
 \begin{proof}
-    Assemble the three fields of a $\mathtt{TimeOrientation}$ for $\psi^*(M,g)$. Smoothness is the round trip: \ref{lmm:time-orientation-contMDiffSection} converts the chart-local smoothness of $t$ into bundle-section form, \ref{lmm:mpullback-vectorField-contMDiff-of-diffeo} transports it along $\psi$, and \ref{lmm:contMDiffSection-to-chart-local} applied to $W = \psi^*t$ converts the result back into the chart-local form the field demands. Non-vanishing is \ref{lmm:pullback-time-orientation-ne-zero} and timelikeness is \ref{lmm:pullback-time-orientation-timelike}.
+    Assemble the three fields of a $\mathtt{TimeOrientation}$ for $\psi^*(M,g)$. Smoothness is one step: apply \ref{lmm:mpullback-vectorField-contMDiff-of-diffeo} at $V = t$, whose hypothesis is the \texttt{smooth} field of \ref{def:time-orientable} for $t$ as it stands and whose conclusion is the \texttt{smooth} field required of $\psi^*t$; both sides are bundle-section statements, so no conversion is performed in either direction. Non-vanishing is \ref{lmm:pullback-time-orientation-ne-zero} and timelikeness is \ref{lmm:pullback-time-orientation-timelike}.
 \end{proof}
 
 \begin{lemma}[Transport of Future-Pointing Timelike Vectors]

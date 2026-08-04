@@ -30,8 +30,10 @@ Mathlib does not currently package "smooth vector field" as a single named type.
 We use the obvious unbundled form: a function `t : ∀ x, TangentSpace M.model x`
 together with two pointwise predicates (non-vanishing and timelike) and an
 unbundled smoothness statement carried as a `Prop` field. Smoothness of a
-section of the tangent bundle is captured exactly as in `Spacetime.smooth_in_charts`:
-by writing the chart-local expression and requiring `ContDiffWithinAt`.
+section of the tangent bundle is captured exactly as in `Spacetime.contMDiff`:
+in Mathlib's bundle-section idiom, as `ContMDiff` of `x ↦ TotalSpace.mk' _ x (t x)`
+into the tangent bundle. This is the left-hand side of `Bundle.contMDiffAt_section`
+and the shape `ContMDiff.mpullback_vectorField` expects.
 
 For the null future/past-pointing case we follow the blueprint and define
 future-pointing null vectors as the closure (in the obvious tangent space
@@ -159,15 +161,18 @@ structure TimeOrientation where
   nonvanishing : ∀ x : M.Carrier, field x ≠ 0
   /-- The field is timelike at every point. -/
   timelike_at : ∀ x : M.Carrier, M.IsTimelike (field x)
-  /-- The field is smooth as a section of the tangent bundle. We express this
-  via smoothness of its chart-local representative; see `Spacetime.smooth_in_charts`
-  for the analogous condition for the metric. -/
-  smooth : ∀ (x₀ : M.Carrier),
-    let e := extChartAt M.model x₀
-    ContDiffWithinAt ℝ ⊤
-      (fun y => mfderiv M.model M.model (e.symm) y
-                  (mfderiv M.model M.model e (e.symm y) (field (e.symm y))))
-      e.target (e x₀)
+  /-- The field is smooth as a section of the tangent bundle, stated in Mathlib's
+  **bundle-section** idiom, matching `Spacetime.contMDiff` for the metric.
+
+  This is the form Mathlib's bundle API speaks natively: it is literally the
+  left-hand side of `Bundle.contMDiffAt_section`, and it is the shape required by
+  `ContMDiff.mpullback_vectorField` (whose `hV` hypothesis is a bundle-section
+  statement) and consumed by `ContMDiff.clm_bundle_apply₂`. The previous
+  chart-local double-`mfderiv` formulation required a hand-built bridge in both
+  directions, since Mathlib relates `tangentCoordChange` to neither. -/
+  smooth : ContMDiff M.model M.model.tangent ⊤
+    (fun x ↦ Bundle.TotalSpace.mk' SpacetimeModel
+      (E := fun x ↦ TangentSpace M.model x) x (field x))
 
 /-- A spacetime `M` is *time-orientable* if it admits a time orientation. -/
 def IsTimeOrientable : Prop := Nonempty M.TimeOrientation
