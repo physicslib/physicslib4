@@ -24,38 +24,40 @@ The second axiom can be immediately stated too.
 
 \begin{definition}[Axiom 2: Isotony]
     \label{def:isotony-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.Isotony}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Isotony.lean}
-    \leanok
-    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
     
-    If $\mathbf{B}_1 \subseteq \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subseteq \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
+    Exactly as in the Minkowski case (\ref{def:isotony}), the axiom supplies as \emph{data} a family of unital $*$-monomorphisms
     \begin{align}
-        i : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2),
+        i_{\mathbf{B}_1\mathbf{B}_2} : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2),
     \end{align}
-    a unital *-monomorphism.
+    one for every pair of basis sets with $\mathbf{B}_1 \subseteq \mathbf{B}_2$, subject to
+    \begin{itemize}
+        \item[(a)] \emph{injectivity}: each $i_{\mathbf{B}_1\mathbf{B}_2}$ is injective;
+        \item[(b)] \emph{identity}: $i_{\mathbf{B}\mathbf{B}} = \mathrm{id}_{\mathfrak{U}(\mathbf{B})}$ for every basis set $\mathbf{B}$;
+        \item[(c)] \emph{composition}: $i_{\mathbf{B}_2\mathbf{B}_3} \circ i_{\mathbf{B}_1\mathbf{B}_2} = i_{\mathbf{B}_1\mathbf{B}_3}$ whenever $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}_3$,
+    \end{itemize}
+    so that $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ is a functor on the inclusion order of basis sets. The hypothesis is the non-strict inclusion, matching the formalisation, which quantifies over \texttt{B₁ ⊆ B₂}; the earlier $\subset$ was a divergence from the Lean, and the reflexive case is what makes (b) expressible at all.
 
-    As in the Minkowski case (\ref{def:isotony}) the hypothesis is the \emph{non-strict} inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2$, matching the formalisation \texttt{Physicslib4.AQFT.HaagKastlerCurved.Isotony}, which quantifies over \texttt{B₁ ⊆ B₂}; the earlier $\subset$ was a divergence from the Lean, and the reflexive case is what makes an identity law $i_{\mathbf{B}\mathbf{B}} = \mathrm{id}$ expressible at all.
+    The curved case is where this matters most. There is no quasilocal algebra here, so every statement about nested regions is phrased inside a common containing algebra $\mathfrak{U}(\mathbf{B})$ and has to factor a three-fold inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$. Before this amendment the isotony embeddings actually used downstream were the witnesses chosen inside Axiom 3, which carried no composition law, so that factorisation had to be assumed separately at each site. With (c) part of Axiom 2, and Axiom 3 consuming this family rather than choosing its own (\ref{def:local-commutativity-in-curved-spacetime}), the factorisation holds for every net and those hypotheses are gone.
 \end{definition}
 
 The next axiom can be stated as follows:
 
 \begin{definition}[Axiom 3: Local Commutativity]
     \label{def:local-commutativity-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalCommutativity.lean}
-    \leanok
-    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:completely-spacelike, def:local-algebras-in-curved-spacetime}
-    Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
-    
-    If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, for any Alexandrov topology basis element $\mathbf{B}$ such that $\mathbf{B_1}, \mathbf{B_2} \subseteq \mathbf{B}$ the algebras $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the C*-algebra $\mathfrak{U}(\mathbf{B})$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ we have
+    Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$. Assume Axiom 2 (\ref{def:isotony-in-curved-spacetime}), and let $i_{\mathbf{B}_1\mathbf{B}_2}$ denote its chosen isotony family.
+
+    If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then for any Alexandrov topology basis element $\mathbf{B}$ such that $\mathbf{B_1}, \mathbf{B_2} \subseteq \mathbf{B}$ the algebras $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the C*-algebra $\mathfrak{U}(\mathbf{B})$: for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$,
     \begin{align}
-        i(a_1) i(a_2) - i(a_2) i(a_1) = 0
+        i_{\mathbf{B}_1\mathbf{B}}(a_1)\, i_{\mathbf{B}_2\mathbf{B}}(a_2) - i_{\mathbf{B}_2\mathbf{B}}(a_2)\, i_{\mathbf{B}_1\mathbf{B}}(a_1) = 0
     \end{align}
-    in the C*-algebra $\mathfrak{U}(\mathbf{B})$, where $i$ is the unital *-monomorphism Axiom 2 (Isotony).
-    
+    in the C*-algebra $\mathfrak{U}(\mathbf{B})$.
+
     If no such $\mathbf{B}$ exists, then it simply doesn't make sense to consider if $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute as they are not in the same algebra.
+
+    This axiom now asserts \emph{only} the commutation condition. It previously introduced its own family of isotony embeddings existentially, together with their injectivity, and it was those chosen witnesses --- not the Axiom 2 maps --- that every downstream result actually used. Since they carried no composition law, each consumer that had to factor a three-fold inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$ was forced to assume coherence separately. The family and its injectivity now belong to Axiom 2 (\ref{def:isotony-in-curved-spacetime}), which supplies the identity and composition laws as well, and this axiom simply consumes it; the separate coherence hypotheses are consequently removed throughout this chapter.
 \end{definition}
 
 The next axiom has need of the following definition
@@ -184,41 +186,32 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
 
 \begin{theorem}[Isotony of the von Neumann Net (Curved Spacetime)]
     \label{thrm:von-neumann-isotony-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_mono}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
-    \uses{def:local-von-neumann-in-curved-spacetime, def:isotony-in-curved-spacetime}
-    \leanok
-    For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. Unlike Minkowski, the curved Axiom 3 isotony embeddings are chosen witnesses with no built-in composition law, so the coherence of the embeddings (that the $\mathbf{B}_1 \hookrightarrow \mathbf{B}$ embedding factors through $\mathbf{B}_2$) is taken as an explicit hypothesis.
+    For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. No coherence hypothesis is needed.
 \end{theorem}
 \begin{proof}
-    \leanok
     \uses{def:local-von-neumann-in-curved-spacetime, def:isotony-in-curved-spacetime}
-    Given the coherence hypothesis, the local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ and the double commutant is monotone. It holds automatically whenever the Axiom 3 witnesses form a genuine inclusion family.
+    The local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ and the double commutant is monotone. The step that needs care is that the embedding $\mathfrak{U}(\mathbf{B}_1) \to \mathfrak{U}(\mathbf{B})$ factors through $\mathfrak{U}(\mathbf{B}_2)$, i.e.\ $i_{\mathbf{B}_1\mathbf{B}} = i_{\mathbf{B}_2\mathbf{B}} \circ i_{\mathbf{B}_1\mathbf{B}_2}$; that is now exactly the composition law (c) of Axiom 2 (\ref{def:isotony-in-curved-spacetime}). Formerly the isotony embeddings in play were the witnesses chosen inside Axiom 3, which had no composition law, so this factorisation had to be assumed as a separate hypothesis.
 \end{proof}
 
 \begin{theorem}[Bundled von Neumann Microcausality and Isotony (Curved Spacetime)]
     \label{thrm:von-neumann-bundled-order-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_le_commutant, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_mono}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
-    \uses{def:local-von-neumann-algebra-in-curved-spacetime}
-    \leanok
-    Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}')$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated subregions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$ (with the isotony coherence) $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$.
+    Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}')$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated subregions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$ that $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$.
 \end{theorem}
 \begin{proof}
-    \leanok
     \uses{def:local-von-neumann-algebra-in-curved-spacetime, thrm:von-neumann-microcausality-in-curved-spacetime, thrm:von-neumann-isotony-in-curved-spacetime}
     Both reduce to the set-level statements \ref{thrm:von-neumann-microcausality-in-curved-spacetime} and \ref{thrm:von-neumann-isotony-in-curved-spacetime} through the coercion $\uparrow R(\mathbf{B}') = \pi(\mathfrak{U}(\mathbf{B}'))''$.
 \end{proof}
 
 \begin{definition}[The Net of von Neumann Algebras in Curved Spacetime]
     \label{def:von-neumann-net-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.vonNeumannNet}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
-    \leanok
-    \uses{thrm:von-neumann-bundled-order-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime}
     The curved counterpart of the von Neumann net (\ref{def:von-neumann-net}). Fixing a containing basis region $\mathbf{B}$ and a $*$-representation $\pi$ of $\mathfrak{U}(\mathbf{B})$, the assignment $\mathbf{B}' \mapsto R(\mathbf{B}')$ is an order-preserving map from the poset of basis subregions of $\mathbf{B}$ (ordered by inclusion) to the von Neumann algebras of $\mathcal{B}(H)$ --- the local net, restricted to a containing region, as a functor on the inclusion poset.
 
-    Unlike the Minkowski case, the coherence of the isotony embeddings (\emph{coherent below} $\mathbf{B}$: the $\mathbf{B}_1 \hookrightarrow \mathbf{B}$ embedding factors through $\mathbf{B}_2$ for all nested $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$) is supplied as a single hypothesis rather than discharged geometrically. This is intrinsic, not a gap: the coherence is a property of the net's chosen Axiom 3 isotony witnesses, not of the spacetime, so --- unlike spacelike-monotonicity --- it cannot be discharged over a concrete spacetime. The curved Axiom 3 selects those witnesses by choice (with no built-in composition law), so the coherence is unavailable for free even for the trivial net; it holds for any net whose witnesses form a genuine inclusion family. Given it once, the map's monotonicity carries no per-edge side condition.
+    Order-preservation carries no side condition. The factorisation this rests on --- that the $\mathbf{B}_1 \hookrightarrow \mathbf{B}$ embedding factors through $\mathbf{B}_2$ for all nested $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$ --- is the composition law (c) of Axiom 2 (\ref{def:isotony-in-curved-spacetime}), so it holds for every net, including the trivial one.
+
+    This was previously supplied as an explicit \emph{coherence} hypothesis, on the grounds that it is a property of the net's chosen embeddings rather than of the spacetime and so cannot be discharged geometrically. That reasoning was correct, and it is precisely the argument for putting the law into the axiom rather than carrying it at each site: an axiom is where a requirement on chosen data belongs. With Axiom 2 owning the family and Axiom 3 consuming it (\ref{def:local-commutativity-in-curved-spacetime}), the hypothesis is redundant here and at every other site in this chapter.
 \end{definition}
 
 \begin{theorem}[Statistical Independence (Schlieder Property)]
@@ -347,15 +340,11 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
 
 \begin{theorem}[Relative Commutant Contains the Center (Curved Spacetime)]
     \label{thrm:relative-commutant-center-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.center_le_relativeCommutant}
-    \uses{def:relative-commutant-in-curved-spacetime}
-    \leanok
-    For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, and given the isotony coherence of the chosen Axiom 3 embeddings, the relative commutant contains the center of the ambient algebra: the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$.
+    For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, the relative commutant contains the center of the ambient algebra: the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$.
 \end{theorem}
 \begin{proof}
-    \leanok
     \uses{def:relative-commutant-in-curved-spacetime, thrm:von-neumann-isotony-in-curved-spacetime}
-    Curved isotony (\ref{thrm:von-neumann-isotony-in-curved-spacetime}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$, and antitonicity of the commutant yields $R(\mathbf{B}_2)' \subseteq R(\mathbf{B}_1)'$. The isotony-coherence hypothesis enters exactly as in curved von Neumann isotony (the curved Axiom 3 embeddings are chosen witnesses without a built-in composition law).
+    Curved isotony (\ref{thrm:von-neumann-isotony-in-curved-spacetime}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$, and antitonicity of the commutant yields $R(\mathbf{B}_2)' \subseteq R(\mathbf{B}_1)'$. The factorisation of the three-fold inclusion that curved isotony needs is supplied by the composition law of Axiom 2 (\ref{def:isotony-in-curved-spacetime}), so nothing further is assumed here.
 \end{proof}
 
 \begin{definition}[Irreducible Inclusion (Curved Spacetime)]
@@ -368,13 +357,9 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
 
 \begin{theorem}[An Irreducible Inclusion has Factor Ambient (Curved Spacetime)]
     \label{thrm:irreducible-inclusion-factor-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isFactor_of_isIrreducibleInclusion}
-    \uses{def:irreducible-inclusion-in-curved-spacetime}
-    \leanok
-    The curved mirror of \ref{thrm:irreducible-inclusion-factor}: for nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$ (with the isotony coherence), an irreducible inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ forces $R(\mathbf{B}_2)$ to be a factor.
+    The curved mirror of \ref{thrm:irreducible-inclusion-factor}: for nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, an irreducible inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ forces $R(\mathbf{B}_2)$ to be a factor.
 \end{theorem}
 \begin{proof}
-    \leanok
     \uses{def:irreducible-inclusion-in-curved-spacetime, thrm:relative-commutant-center-in-curved-spacetime}
     By the same argument as in the Minkowski case: the center lies in the relative commutant (\ref{thrm:relative-commutant-center-in-curved-spacetime}), which irreducibility collapses to the scalars.
 \end{proof}

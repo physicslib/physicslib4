@@ -20,45 +20,64 @@ With that out of the way we can state the axioms. Each axiom below is presented 
 
 \begin{definition}[Axiom 2: Isotony]
     \label{def:isotony}
-    \lean{Physicslib4.AQFT.HaagKastler.Isotony}
     \leanfile{Physicslib4/AQFT/HaagKastler/Isotony.lean}
-    \leanok
-    \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past, def:local-algebras}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
 
-    If $\mathbf{B}_1 \subseteq \mathbf{B}_2$ then $\mathfrak{U}(\mathbf{B}_1) \subseteq \mathfrak{U}(\mathbf{B}_2)$, where inclusion is implemented by
+    The axiom supplies, as \emph{data}, a family of unital $*$-monomorphisms
     \begin{align}
-        i : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2),
+        i_{\mathbf{B}_1\mathbf{B}_2} : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2),
     \end{align}
-    a unital *-monomorphism.
+    one for every pair of basis sets with $\mathbf{B}_1 \subseteq \mathbf{B}_2$, subject to three conditions:
+    \begin{itemize}
+        \item[(a)] \emph{injectivity}: each $i_{\mathbf{B}_1\mathbf{B}_2}$ is injective;
+        \item[(b)] \emph{identity}: $i_{\mathbf{B}\mathbf{B}} = \mathrm{id}_{\mathfrak{U}(\mathbf{B})}$ for every basis set $\mathbf{B}$;
+        \item[(c)] \emph{composition}: $i_{\mathbf{B}_2\mathbf{B}_3} \circ i_{\mathbf{B}_1\mathbf{B}_2} = i_{\mathbf{B}_1\mathbf{B}_3}$ whenever $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}_3$.
+    \end{itemize}
+    Conditions (b) and (c) say exactly that $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ is a \emph{functor} on the inclusion order of basis sets, with the $i_{\mathbf{B}_1\mathbf{B}_2}$ as its action on morphisms.
 
-    The hypothesis is the \emph{non-strict} inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2$, matching the formalisation \texttt{Physicslib4.AQFT.HaagKastler.Isotony}, which quantifies over \texttt{B₁ ⊆ B₂}. Earlier versions of this statement wrote $\subset$; that was a divergence from the Lean, and the non-strict form is the correct one. It also matters mathematically rather than being a typographical preference: the reflexive case $\mathbf{B}_1 = \mathbf{B}_2$ is exactly what makes the identity law $i_{\mathbf{B}\mathbf{B}} = \mathrm{id}$ expressible, and the strict reading would leave the diagonal of the inclusion order outside the axiom altogether.
+    Two points about the shape of this axiom. First, the family must be \emph{chosen data} and not an existence statement: (b) and (c) are equations between the maps themselves, so there is nothing to state unless the maps are fixed. An axiom of the form ``for each inclusion there exists some monomorphism'' cannot express functoriality at all.
+
+    Second, the hypothesis is the \emph{non-strict} inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2$, matching the formalisation, which quantifies over \texttt{B₁ ⊆ B₂}. Earlier versions of this statement wrote $\subset$; that was a divergence from the Lean, and the non-strict form is the correct one. It also matters mathematically: the reflexive case $\mathbf{B}_1 = \mathbf{B}_2$ is what makes (b) expressible, and the strict reading would leave the diagonal of the inclusion order outside the axiom altogether.
+
+    Conditions (b) and (c) are required rather than derived because they are properties of the net's \emph{chosen} embeddings, not of the spacetime: no geometric fact about Alexandrov diamonds constrains which monomorphism a net picks for a given inclusion, so coherence cannot be discharged after the fact and must be part of the axiom. Their payoff is that the assignment becomes a genuine directed system, which is what gives \ref{def:quasilocal-algebra} its algebra structure, and that consumers no longer have to carry coherence as a side hypothesis.
 \end{definition}
 
 Before introducing the next axiom, we must introduce the definition:
 
 \begin{definition}[Quasilocal Algebra]
     \label{def:quasilocal-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAlgebra.lean}
-    \leanok
-    \uses{def:local-algebras}
-    Consider the set-theoretic union of all $\mathfrak{U}(\mathbf{B})$. As previously proven, this set-theoretic union is a normed *-algebra. Also, as previously proven, taking its completion one obtains a C*-algebra denoted as $\mathfrak{U}$. This C*-algebra $\mathfrak{U}$ is called the \textit{quasilocal algebra}.
+    Consider the union of all $\mathfrak{U}(\mathbf{B})$, taken along the isotony family of Axiom 2 (\ref{def:isotony}). This union is a normed *-algebra; taking its completion one obtains a C*-algebra denoted $\mathfrak{U}$, called the \textit{quasilocal algebra}.
+
+    The union is to be read as a \emph{directed colimit}, not as a set-theoretic union. This is what Axiom 2's identity and composition laws buy: with $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ a functor on the inclusion order, and the Alexandrov diamonds upward directed, the local algebras form a directed system and the colimit carries a well-defined $*$-algebra structure --- the product of $a_1 \in \mathfrak{U}(\mathbf{B}_1)$ and $a_2 \in \mathfrak{U}(\mathbf{B}_2)$ is computed in any $\mathfrak{U}(\mathbf{B})$ containing both, and functoriality is exactly what makes the answer independent of that choice. Without the two laws there is no such structure: a bare set-theoretic union of the $\mathfrak{U}(\mathbf{B})$ has no multiplication at all, since elements of different local algebras live in unrelated carriers.
+
+    \emph{Three supporting results are still outstanding and are not yet declarations in this blueprint.} They are stated here so the gap is explicit rather than resting on the phrase ``as previously proven'', which referred to the informal discussion in Chapters 6.1 and 6.2 and not to any declaration:
+    \begin{itemize}
+        \item[(i)] \emph{upward directedness}: any two Alexandrov diamonds of Minkowski spacetime are contained in a third. The blueprint currently proves only the \emph{downward} version (\ref{lmm:minkowski-diamonds-downward-directed}); the colimit needs the opposite direction, provable the same way by taking $p$ far in the common past and $q$ far in the common future;
+        \item[(ii)] that the colimit of the directed system is a normed $*$-algebra;
+        \item[(iii)] that its completion is a C*-algebra, with a unique C*-norm.
+    \end{itemize}
+    Until (i)--(iii) are declarations, this definition should be read as depending on them.
 \end{definition}
 
 \begin{definition}[Axiom 3: Local Commutativity]
     \label{def:local-commutativity}
-    \lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalCommutativity.lean}
-    \leanok
-    \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past, def:completely-spacelike, def:local-algebras, def:quasilocal-algebra}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
 
     If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the quasilocal algebra $\mathfrak{U}$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ it follows that
     \begin{align}
         \iota_{\mathbf{B}_1}(a_1)\, \iota_{\mathbf{B}_2}(a_2) - \iota_{\mathbf{B}_2}(a_2)\, \iota_{\mathbf{B}_1}(a_1) = 0
     \end{align}
-    in the quasilocal algebra $\mathfrak{U}$. Here $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}$ is the \emph{canonical embedding} of a local algebra into the quasilocal algebra of \ref{def:quasilocal-algebra} --- the map into the completion of the union of the local algebras. It is \emph{not} the unital $*$-monomorphism $i : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2)$ of Axiom 2 (Isotony), which goes from one local algebra to another and not into $\mathfrak{U}$.
+    in the quasilocal algebra $\mathfrak{U}$. Here $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}$ is the \emph{canonical embedding} of a local algebra into the quasilocal algebra of \ref{def:quasilocal-algebra} --- the map into the completion of the union of the local algebras. It is \emph{not} the unital $*$-monomorphism $i_{\mathbf{B}_1\mathbf{B}_2} : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2)$ of Axiom 2 (Isotony), which goes from one local algebra to another and not into $\mathfrak{U}$.
+
+    The two families are required to be compatible: for all basis sets $\mathbf{B}_1 \subseteq \mathbf{B}_2$,
+    \begin{align}
+        \iota_{\mathbf{B}_2} \circ i_{\mathbf{B}_1\mathbf{B}_2} = \iota_{\mathbf{B}_1}.
+    \end{align}
+    This is the cocone condition making the $\iota_{\mathbf{B}}$ a compatible family on the directed system of Axiom 2 (\ref{def:isotony}), and it is what makes $\iota_{\mathbf{B}}$ well defined on the colimit: an element of $\mathfrak{U}(\mathbf{B}_1)$ may be regarded as an element of any larger $\mathfrak{U}(\mathbf{B}_2)$, and all such readings must have the same image in $\mathfrak{U}$. Without it the displayed commutator would depend on which local algebra $a_1$ and $a_2$ were viewed in.
+
+    Note that the curved counterpart (\ref{def:local-commutativity-in-curved-spacetime}) has a different shape: there is no quasilocal algebra in curved spacetime, so commutation is stated inside a common containing algebra $\mathfrak{U}(\mathbf{B})$ using the Axiom 2 embeddings directly, and no $\iota$ appears.
 \end{definition}
 
 The next axiom makes use of the following new definition:
