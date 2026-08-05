@@ -294,8 +294,20 @@ noncomputable def trivialQuasilocalAlgebra : QuasilocalAlgebra trivialLocalNet w
   inclusion := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
   ι_inclusion := fun _ _ _ _ _ _ => rfl
 
-theorem trivialLocalNet_isotony : Isotony trivialLocalNet :=
-  fun _ _ _ _ _ => ⟨StarAlgHom.id ℂ ℂ, fun _ _ h => h⟩
+/-- The trivial net's Axiom 2 data: every local algebra is `ℂ` and every inclusion
+is implemented by the identity, which is trivially functorial. -/
+def trivialLocalNet_isotony : Isotony trivialLocalNet where
+  map := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
+  injective := by
+    intro B₁ B₂ h₁ h₂ h
+    change Function.Injective (StarAlgHom.id ℂ ℂ)
+    simpa using Function.injective_id
+  map_self := by
+    intro B h
+    rfl
+  map_comp := by
+    intro B₁ B₂ B₃ h₁ h₂ h₃ h₁₂ h₂₃
+    rfl
 
 theorem trivialLocalNet_localCommutativity :
     LocalCommutativity trivialLocalNet :=

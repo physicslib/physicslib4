@@ -20,7 +20,9 @@ With that out of the way we can state the axioms. Each axiom below is presented 
 
 \begin{definition}[Axiom 2: Isotony]
     \label{def:isotony}
+    \lean{Physicslib4.AQFT.HaagKastler.Isotony}
     \leanfile{Physicslib4/AQFT/HaagKastler/Isotony.lean}
+    \leanok
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
 
     The axiom supplies, as \emph{data}, a family of unital $*$-monomorphisms
@@ -139,8 +141,8 @@ The next axiom makes use of the following new definition:
     \label{def:haag-kastler-net}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet}
     \leanfile{Physicslib4/AQFT/HaagKastler/Net.lean}
-    \leanok
     \uses{def:local-algebras, def:isotony, def:local-commutativity, def:quasilocal-completeness, def:lorentz-covariance}
+    \leanok
     A \emph{Haag-Kastler net} on Minkowski spacetime is the bundling of the data of \ref{def:local-algebras} together with the properties of \ref{def:isotony}, \ref{def:local-commutativity}, \ref{def:quasilocal-completeness}, and \ref{def:lorentz-covariance}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT take an instance of this structure as a hypothesis and invoke each axiom as a projection.
 \end{definition}
 

@@ -51,12 +51,15 @@ Blueprint reference: `def:haag-kastler-net-in-curved-spacetime`.
 structure HaagKastlerNet (M : LorentzianSpacetime) where
   /-- The underlying assignment `B ↦ 𝔘(B)` (Axiom 1). -/
   U : LocalNet M
-  /-- *Isotony*: inclusions of basis sets induce unital
-  `*`-monomorphisms (Axiom 2). -/
+  /-- *Isotony*: the chosen functorial family of unital `*`-monomorphisms
+  implementing inclusions of basis sets (Axiom 2). This is data, carrying the
+  identity and composition laws. -/
   isotony : Isotony U
   /-- *Local commutativity*: completely-spacelike basis sets commute
-  inside any common containing basis algebra (Axiom 3). -/
-  localCommutativity : LocalCommutativity U
+  inside any common containing basis algebra (Axiom 3). This *consumes* the
+  Axiom 2 family rather than introducing its own: it asserts only the
+  commutation condition. -/
+  localCommutativity : LocalCommutativity U isotony
   /-- *Local algebra*: all observables are local observables
   (Axiom 4). -/
   localAlgebra : LocalAlgebra U
@@ -150,18 +153,41 @@ theorem covEquiv_mul (φ φ' : M.Isom) (B : Set M.Carrier) (a : N.algebra B) :
             ((N.covEquiv φ B : N.algebra B → N.algebra (φ • B)) a)) :=
   N.isometricCovariance.choose_spec.choose_spec.2.2.1 φ φ' B a
 
-/-- The *isotony embeddings witnessing local commutativity* (Axiom 3),
-chosen from the existence witness in `localCommutativity`. -/
+/-- The *isotony embeddings* of the net: the chosen family supplied by Axiom 2
+(`isotony`).
+
+Previously this was `Classical.choose`n from the Axiom 3 existence witness, which
+is why it carried no composition law and every consumer factoring a three-fold
+inclusion had to assume coherence separately. It is now literally the Axiom 2
+family, so `commIsotony_self` and `commIsotony_comp` below hold for every net. -/
 noncomputable def commIsotony ⦃B₁ B₂ : Set M.Carrier⦄
     (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂) :
     StarAlgHom ℂ (N.U.algebra B₁) (N.U.algebra B₂) :=
-  N.localCommutativity.choose h₁ h₂ h
+  N.isotony.map h₁ h₂ h
 
 /-- Each chosen isotony embedding is injective. -/
 theorem commIsotony_injective ⦃B₁ B₂ : Set M.Carrier⦄
     (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂) :
     Function.Injective (N.commIsotony h₁ h₂ h) :=
-  N.localCommutativity.choose_spec.1 h₁ h₂ h
+  N.isotony.injective h₁ h₂ h
+
+/-- **Identity law** for the isotony embeddings, from Axiom 2. -/
+theorem commIsotony_self ⦃B : Set M.Carrier⦄ (h : M.IsBasisSet B) :
+    N.commIsotony h h (subset_refl B) = StarAlgHom.id ℂ (N.U.algebra B) :=
+  N.isotony.map_self h
+
+/-- **Composition law** for the isotony embeddings, from Axiom 2: the embedding
+along `B₁ ⊆ B₃` factors through any intermediate `B₂`.
+
+This is the coherence that was previously carried as an ad hoc hypothesis at
+every site factoring a three-fold inclusion `B₁ ⊆ B₂ ⊆ B`; it now holds for
+every net, including the trivial one. -/
+theorem commIsotony_comp ⦃B₁ B₂ B₃ : Set M.Carrier⦄
+    (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h₃ : M.IsBasisSet B₃)
+    (h₁₂ : B₁ ⊆ B₂) (h₂₃ : B₂ ⊆ B₃) :
+    (N.commIsotony h₂ h₃ h₂₃).comp (N.commIsotony h₁ h₂ h₁₂)
+      = N.commIsotony h₁ h₃ (h₁₂.trans h₂₃) :=
+  N.isotony.map_comp h₁ h₂ h₃ h₁₂ h₂₃
 
 /-- **Local commutativity.** If basis sets `B₁`, `B₂` are completely spacelike
 and both contained in a common basis set `B`, their images in `𝔘(B)` under the
@@ -171,7 +197,7 @@ theorem commute_of_spacelike ⦃B₁ B₂ B : Set M.Carrier⦄
     (hs : M.IsCompletelySpacelike B₁ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B)
     (a : N.algebra B₁) (b : N.algebra B₂) :
     Commute (N.commIsotony hB₁ hB h₁ a) (N.commIsotony hB₂ hB h₂ b) :=
-  N.localCommutativity.choose_spec.2 hB₁ hB₂ hB hs h₁ h₂ a b
+  N.localCommutativity hB₁ hB₂ hB hs h₁ h₂ a b
 
 /-- **Local commutativity is symmetric.** Commutation of completely-spacelike
 local algebras inside a common containing basis algebra holds in either order. -/
@@ -278,16 +304,28 @@ noncomputable def trivialLocalNet (M : LorentzianSpacetime) : LocalNet M where
   instCStarAlgebra := fun _ => inferInstance
   emptyEquivComplex := StarAlgEquiv.refl ℂ ℂ
 
-theorem trivialLocalNet_isotony (M : LorentzianSpacetime) :
-    Isotony (trivialLocalNet M) :=
-  fun _ _ _ _ _ => ⟨StarAlgHom.id ℂ ℂ, fun _ _ h => h⟩
+/-- The trivial net's Axiom 2 data: every local algebra is `ℂ` and every
+inclusion is implemented by the identity, which is trivially functorial. -/
+def trivialLocalNet_isotony (M : LorentzianSpacetime) :
+    Isotony (trivialLocalNet M) where
+  map := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
+  injective := by
+    intro B₁ B₂ h₁ h₂ h
+    change Function.Injective (StarAlgHom.id ℂ ℂ)
+    simpa using Function.injective_id
+  map_self := by
+    intro B h
+    rfl
+  map_comp := by
+    intro B₁ B₂ B₃ h₁ h₂ h₃ h₁₂ h₂₃
+    rfl
 
 theorem trivialLocalNet_localCommutativity (M : LorentzianSpacetime) :
-    LocalCommutativity (trivialLocalNet M) := by
-  refine ⟨fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ, ?_, ?_⟩
-  · intro _ _ _ _ _ _ _ h; exact h
-  · intro _ _ _ _ _ _ _ _ _ a b
-    exact @mul_comm ℂ _ a b
+    LocalCommutativity (trivialLocalNet M) (trivialLocalNet_isotony M) := by
+  intro B₁ B₂ B hB₁ hB₂ hB hs h₁ h₂ a b
+  change (StarAlgHom.id ℂ ℂ a) * (StarAlgHom.id ℂ ℂ b)
+      = (StarAlgHom.id ℂ ℂ b) * (StarAlgHom.id ℂ ℂ a)
+  exact mul_comm _ _
 
 theorem trivialLocalNet_localAlgebra (M : LorentzianSpacetime) :
     LocalAlgebra (trivialLocalNet M) :=
