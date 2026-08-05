@@ -48,7 +48,9 @@ Before introducing the next axiom, we must introduce the definition:
 
 \begin{definition}[Quasilocal Algebra]
     \label{def:quasilocal-algebra}
+    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAlgebra.lean}
+    \leanok
     Consider the union of all $\mathfrak{U}(\mathbf{B})$, taken along the isotony family of Axiom 2 (\ref{def:isotony}). This union is a normed *-algebra; taking its completion one obtains a C*-algebra denoted $\mathfrak{U}$, called the \textit{quasilocal algebra}.
 
     The union is to be read as a \emph{directed colimit}, not as a set-theoretic union. This is what Axiom 2's identity and composition laws buy: with $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ a functor on the inclusion order, and the Alexandrov diamonds upward directed, the local algebras form a directed system and the colimit carries a well-defined $*$-algebra structure --- the product of $a_1 \in \mathfrak{U}(\mathbf{B}_1)$ and $a_2 \in \mathfrak{U}(\mathbf{B}_2)$ is computed in any $\mathfrak{U}(\mathbf{B})$ containing both, and functoriality is exactly what makes the answer independent of that choice. Without the two laws there is no such structure: a bare set-theoretic union of the $\mathfrak{U}(\mathbf{B})$ has no multiplication at all, since elements of different local algebras live in unrelated carriers.
@@ -64,7 +66,9 @@ Before introducing the next axiom, we must introduce the definition:
 
 \begin{definition}[Axiom 3: Local Commutativity]
     \label{def:local-commutativity}
+    \lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity}
     \leanfile{Physicslib4/AQFT/HaagKastler/LocalCommutativity.lean}
+    \leanok
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
 
     If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the quasilocal algebra $\mathfrak{U}$, i.e. for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$ it follows that

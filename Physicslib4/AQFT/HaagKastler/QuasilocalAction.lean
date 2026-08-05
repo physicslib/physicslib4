@@ -60,7 +60,7 @@ A *lift* of the fiberwise covariance action of `L` to a quasilocal algebra
 intertwines the covariance equivalence `α_L` with the local embeddings, i.e.
 `β (ι_B a) = ι_{L·B} (α_L a)` for every Alexandrov-basis set `B`.
 -/
-structure QuasilocalLift (Q : QuasilocalAlgebra N.U)
+structure QuasilocalLift (Q : QuasilocalAlgebra N.U N.isotony)
     (L : InhomogeneousLorentzGroup) where
   /-- The `*`-automorphism of the quasilocal algebra implementing `L`. -/
   β : Q.carrier ≃⋆ₐ[ℂ] Q.carrier
@@ -74,7 +74,7 @@ variable {N}
 /-- **Uniqueness of the lift.** Two lifts of the same Lorentz transformation
 have the same underlying automorphism: they agree on the dense union of the
 local images, and `*`-automorphisms of a C*-algebra are continuous. -/
-theorem QuasilocalLift.unique {Q : QuasilocalAlgebra N.U}
+theorem QuasilocalLift.unique {Q : QuasilocalAlgebra N.U N.isotony}
     {L : InhomogeneousLorentzGroup} (l₁ l₂ : N.QuasilocalLift Q L) :
     l₁.β = l₂.β := by
   apply DFunLike.coe_injective
@@ -89,7 +89,7 @@ theorem QuasilocalLift.unique {Q : QuasilocalAlgebra N.U}
 /-- The type of lifts of a fixed `L` is a subsingleton: a lift is determined by
 its underlying automorphism (`QuasilocalLift.unique`), and the intertwining
 field is a proposition. -/
-instance instSubsingletonQuasilocalLift {Q : QuasilocalAlgebra N.U}
+instance instSubsingletonQuasilocalLift {Q : QuasilocalAlgebra N.U N.isotony}
     {L : InhomogeneousLorentzGroup} : Subsingleton (N.QuasilocalLift Q L) where
   allEq l₁ l₂ := by
     have h := QuasilocalLift.unique l₁ l₂

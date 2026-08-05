@@ -58,8 +58,8 @@ commute pointwise inside `Q.carrier`.
 
 Blueprint reference: `def:local-commutativity`.
 -/
-def LocalCommutativity (U : LocalNet) : Prop :=
-  ∃ Q : QuasilocalAlgebra U,
+def LocalCommutativity (U : LocalNet) (i : Isotony U) : Prop :=
+  ∃ Q : QuasilocalAlgebra U i,
     ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
       IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ →
       Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime

@@ -77,7 +77,7 @@ theorem localVonNeumann_mono
     N.localVonNeumann π B₁ ⊆ N.localVonNeumann π B₂ := by
   have hsub : N.localOperators π B₁ ⊆ N.localOperators π B₂ := by
     rintro x ⟨a, rfl⟩
-    exact ⟨N.commAlgebra.inclusion hB₁ hB₂ h a,
+    exact ⟨N.isotony.map hB₁ hB₂ h a,
       congrArg π (N.commAlgebra.ι_inclusion hB₁ hB₂ h a)⟩
   exact Set.centralizer_subset (Set.centralizer_subset hsub)
 

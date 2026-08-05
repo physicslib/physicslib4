@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
+import Physicslib4.AQFT.HaagKastler.Isotony
 import Mathlib.Analysis.CStarAlgebra.Hom
 
 /-!
@@ -82,7 +83,7 @@ of a sequence of elements coming from the local algebras.
 
 Blueprint reference: `def:quasilocal-algebra`.
 -/
-structure QuasilocalAlgebra (U : LocalNet) where
+structure QuasilocalAlgebra (U : LocalNet) (i : Isotony U) where
   /-- The underlying type of the quasilocal algebra `𝔘`. -/
   carrier : Type
   /-- The `CStarAlgebra` instance on `carrier`. -/
@@ -101,19 +102,19 @@ structure QuasilocalAlgebra (U : LocalNet) where
   dense_range : Dense (⋃ (B : Set StandardMinkowskiSpacetime.Carrier)
                           (_ : IsAlexandrovBasisSet B),
                           Set.range (ι B))
-  /-- A chosen family of isotony `*`-monomorphisms
-  `inclusion : 𝔘(B₁) →⋆ₐ[ℂ] 𝔘(B₂)` for inclusions `B₁ ⊆ B₂` of
-  Alexandrov-basis sets. -/
-  inclusion : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
-                IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ → B₁ ⊆ B₂ →
-                  StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂)
-  /-- *Isotony coherence*: the embeddings respect the chosen isotony arrows,
-  `ι B₂ ∘ inclusion = ι B₁`. An element of `𝔘(B₁)` thus embeds into the
-  quasilocal algebra `𝔘` independently of the basis set used to view it. -/
+  /-- *Isotony coherence* (the cocone condition): the embeddings into `𝔘` respect
+  the Axiom 2 isotony family, `ι B₂ ∘ i.map = ι B₁`. An element of `𝔘(B₁)` thus
+  embeds into the quasilocal algebra `𝔘` independently of the basis set used to
+  view it, which is exactly what makes `ι` well defined on the colimit.
+
+  This structure formerly carried its own `inclusion` family here, duplicating
+  Axiom 2's. It is now parametrised by the Axiom 2 datum `i` and consumes
+  `i.map` instead, so there is a single isotony family in the development and
+  the cocone condition relates `ι` to *that* family. -/
   ι_inclusion : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
                   (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
                   (h : B₁ ⊆ B₂) (a : U.algebra B₁),
-                    ι B₂ (inclusion hB₁ hB₂ h a) = ι B₁ a
+                    ι B₂ (i.map hB₁ hB₂ h a) = ι B₁ a
 
 attribute [instance] QuasilocalAlgebra.instCStarAlgebra
 
@@ -121,14 +122,14 @@ attribute [instance] QuasilocalAlgebra.instCStarAlgebra
 an injective `*`-homomorphism of complex C*-algebras is isometric, so the
 local algebra `𝔘(B)` sits inside the quasilocal algebra `𝔘` with its norm
 intact. -/
-theorem QuasilocalAlgebra.norm_ι {U : LocalNet} (Q : QuasilocalAlgebra U)
+theorem QuasilocalAlgebra.norm_ι {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
     (a : U.algebra B) : ‖Q.ι B a‖ = ‖a‖ :=
   NonUnitalStarAlgHom.norm_map (Q.ι B) (Q.ι_injective hB) a
 
 /-- Each local embedding `Q.ι B` is an isometry on Alexandrov-basis sets.
 This is the metric form of `QuasilocalAlgebra.norm_ι`. -/
-theorem QuasilocalAlgebra.isometry_ι {U : LocalNet} (Q : QuasilocalAlgebra U)
+theorem QuasilocalAlgebra.isometry_ι {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B) :
     Isometry (Q.ι B) :=
   NonUnitalStarAlgHom.isometry (Q.ι B) (Q.ι_injective hB)

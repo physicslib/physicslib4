@@ -56,11 +56,11 @@ structure HaagKastlerNet where
   isotony : Isotony U
   /-- *Local commutativity*: local algebras of completely-spacelike
   basis sets commute inside the quasilocal algebra (Axiom 3). -/
-  localCommutativity : LocalCommutativity U
+  localCommutativity : LocalCommutativity U isotony
   /-- *Quasilocal completeness*: the local algebras' images are
   dense in the quasilocal algebra; i.e. all observables are
   quasilocal observables (Axiom 4). -/
-  quasilocalCompleteness : QuasilocalCompleteness U
+  quasilocalCompleteness : QuasilocalCompleteness U isotony
   /-- *Lorentz covariance*: the inhomogeneous Lorentz group acts on
   the net and the action commutes with isotony (Axiom 5). -/
   lorentzCovariance : LorentzCovariance U
@@ -104,7 +104,7 @@ theorem isotony_trans
 
 /-- The *canonical quasilocal algebra* `𝔘` of the net, chosen from the
 existence witness provided by Axiom 4 (`quasilocalCompleteness`). -/
-noncomputable def quasilocal : QuasilocalAlgebra N.U :=
+noncomputable def quasilocal : QuasilocalAlgebra N.U N.isotony :=
   Classical.choice N.quasilocalCompleteness
 
 /-- Each local algebra `𝔘(B)` of an Alexandrov-basis set embeds
@@ -180,7 +180,7 @@ theorem covEquiv_mul (L L' : InhomogeneousLorentzGroup)
 /-- The *quasilocal algebra witnessing local commutativity* (Axiom 3),
 chosen from the existence witness in `localCommutativity`. (This may differ
 from the canonical `quasilocal` of Axiom 4.) -/
-noncomputable def commAlgebra : QuasilocalAlgebra N.U :=
+noncomputable def commAlgebra : QuasilocalAlgebra N.U N.isotony :=
   N.localCommutativity.choose
 
 /-- **Local commutativity.** The images in `commAlgebra` of two
@@ -281,21 +281,10 @@ lemma isAlexandrovBasisSet_trivialBasisSet :
     IsAlexandrovBasisSet trivialBasisSet :=
   ⟨0, 0, rfl⟩
 
-/-- The trivial quasilocal algebra for the trivial net: ambient C*-algebra `ℂ`,
-with every local embedding the identity `ℂ →⋆ₐ[ℂ] ℂ`. -/
-noncomputable def trivialQuasilocalAlgebra : QuasilocalAlgebra trivialLocalNet where
-  carrier := ℂ
-  instCStarAlgebra := inferInstance
-  ι := fun _ => StarAlgHom.id ℂ ℂ
-  ι_injective := fun _ _ _ _ h => h
-  dense_range := fun x =>
-    subset_closure (Set.mem_iUnion₂.mpr
-      ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet, x, rfl⟩)
-  inclusion := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
-  ι_inclusion := fun _ _ _ _ _ _ => rfl
-
 /-- The trivial net's Axiom 2 data: every local algebra is `ℂ` and every inclusion
-is implemented by the identity, which is trivially functorial. -/
+is implemented by the identity, which is trivially functorial.
+
+This must precede `trivialQuasilocalAlgebra`, which is now indexed by it. -/
 def trivialLocalNet_isotony : Isotony trivialLocalNet where
   map := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
   injective := by
@@ -309,15 +298,30 @@ def trivialLocalNet_isotony : Isotony trivialLocalNet where
     intro B₁ B₂ B₃ h₁ h₂ h₃ h₁₂ h₂₃
     rfl
 
+/-- The trivial quasilocal algebra for the trivial net: ambient C*-algebra `ℂ`,
+with every local embedding the identity `ℂ →⋆ₐ[ℂ] ℂ`. It no longer supplies its own
+`inclusion` family; the cocone condition `ι_inclusion` is stated against the Axiom 2
+family `trivialLocalNet_isotony`. -/
+noncomputable def trivialQuasilocalAlgebra :
+    QuasilocalAlgebra trivialLocalNet trivialLocalNet_isotony where
+  carrier := ℂ
+  instCStarAlgebra := inferInstance
+  ι := fun _ => StarAlgHom.id ℂ ℂ
+  ι_injective := fun _ _ _ _ h => h
+  dense_range := fun x =>
+    subset_closure (Set.mem_iUnion₂.mpr
+      ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet, x, rfl⟩)
+  ι_inclusion := fun _ _ _ _ _ _ => rfl
+
 theorem trivialLocalNet_localCommutativity :
-    LocalCommutativity trivialLocalNet :=
+    LocalCommutativity trivialLocalNet trivialLocalNet_isotony :=
   ⟨trivialQuasilocalAlgebra, by
     intro B₁ B₂ _ _ _ a b
     exact @mul_comm ℂ _ (trivialQuasilocalAlgebra.ι B₁ a)
       (trivialQuasilocalAlgebra.ι B₂ b)⟩
 
 theorem trivialLocalNet_quasilocalCompleteness :
-    QuasilocalCompleteness trivialLocalNet :=
+    QuasilocalCompleteness trivialLocalNet trivialLocalNet_isotony :=
   ⟨trivialQuasilocalAlgebra⟩
 
 theorem trivialLocalNet_lorentzCovariance :

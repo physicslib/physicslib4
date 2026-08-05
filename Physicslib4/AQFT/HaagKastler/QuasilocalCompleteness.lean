@@ -76,8 +76,8 @@ sequence of elements of `⋃_B 𝔘(B)`.
 
 Blueprint reference: `def:quasilocal-completeness`.
 -/
-def QuasilocalCompleteness (U : LocalNet) : Prop :=
-  Nonempty (QuasilocalAlgebra U)
+def QuasilocalCompleteness (U : LocalNet) (i : Isotony U) : Prop :=
+  Nonempty (QuasilocalAlgebra U i)
 
 /--
 **Quasilocal Observable** (blueprint label `def:quasilocal-observable`).
@@ -98,7 +98,7 @@ observable is self-adjoint, matching the blueprint's "the image
 
 Blueprint reference: `def:quasilocal-observable`.
 -/
-def IsQuasilocalObservable {U : LocalNet} (Q : QuasilocalAlgebra U)
+def IsQuasilocalObservable {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (T : H →L[ℂ] H) : Prop :=
   ∃ a : Q.carrier, IsSelfAdjoint a ∧ T = π a
@@ -106,8 +106,8 @@ def IsQuasilocalObservable {U : LocalNet} (Q : QuasilocalAlgebra U)
 /-- Every quasilocal observable is self-adjoint: it is the image of a
 self-adjoint element of the quasilocal algebra under a `*`-homomorphism.
 This is the self-adjointness clause of `def:quasilocal-observable`. -/
-theorem IsQuasilocalObservable.isSelfAdjoint {U : LocalNet}
-    {Q : QuasilocalAlgebra U}
+theorem IsQuasilocalObservable.isSelfAdjoint {U : LocalNet} {i : Isotony U}
+    {Q : QuasilocalAlgebra U i}
     {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)} {T : H →L[ℂ] H}
     (hT : IsQuasilocalObservable Q π T) : IsSelfAdjoint T := by
@@ -120,7 +120,7 @@ element `a` of it, the GNS construction provides a `*`-representation
 in which `π a` is a quasilocal observable (and is self-adjoint). This is
 the existence content of `def:quasilocal-observable`, tying together
 `thrm:gns-construction-theorem` and `def:state`. -/
-theorem exists_isQuasilocalObservable {U : LocalNet} (Q : QuasilocalAlgebra U)
+theorem exists_isQuasilocalObservable {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     (ω : State Q.carrier) {a : Q.carrier} (ha : IsSelfAdjoint a) :
     ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)),
@@ -132,7 +132,7 @@ theorem exists_isQuasilocalObservable {U : LocalNet} (Q : QuasilocalAlgebra U)
 
 section Observables
 
-variable {U : LocalNet} {Q : QuasilocalAlgebra U} {H : Type}
+variable {U : LocalNet} {i : Isotony U} {Q : QuasilocalAlgebra U i} {H : Type}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   {π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)}
 
@@ -193,14 +193,14 @@ end Observables
 /-- The set of *quasilocal observables* on the GNS Hilbert space `H` for the
 representation `π`: all bounded operators of the form `π a` with `a` a
 self-adjoint element of the quasilocal algebra. -/
-def quasilocalObservables {U : LocalNet} (Q : QuasilocalAlgebra U) {H : Type}
+def quasilocalObservables {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i) {H : Type}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) : Set (H →L[ℂ] H) :=
   {T | IsQuasilocalObservable Q π T}
 
 /-- The quasilocal observables are exactly the self-adjoint elements lying in
 the range of the representation `π`. -/
-theorem quasilocalObservables_eq {U : LocalNet} (Q : QuasilocalAlgebra U)
+theorem quasilocalObservables_eq {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) :
     quasilocalObservables Q π
@@ -211,7 +211,7 @@ theorem quasilocalObservables_eq {U : LocalNet} (Q : QuasilocalAlgebra U)
 
 section ObservablesSet
 
-variable {U : LocalNet} (Q : QuasilocalAlgebra U) {H : Type}
+variable {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i) {H : Type}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
 
