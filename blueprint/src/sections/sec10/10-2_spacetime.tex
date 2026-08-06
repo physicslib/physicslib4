@@ -944,6 +944,49 @@
     From $x \in B_1 \cap B_2$ we have $p_1 \ll x$, $p_2 \ll x$, $x \ll q_1$, and $x \ll q_2$. Past interpolation (\ref{lmm:minkowski-past-between}) yields $a$ with $p_1 \ll a$, $p_2 \ll a$, and $a \ll x$; future interpolation (\ref{lmm:minkowski-future-between}) yields $b$ with $x \ll b$, $b \ll q_1$, and $b \ll q_2$. Set $B_3 = I^+(a) \cap I^-(b)$; then $a \ll x \ll b$ gives $x \in B_3$. For containment, any $y$ with $a \ll y \ll b$ satisfies $p_i \ll a \ll y$ and $y \ll b \ll q_i$ for each $i$, so by transitivity of $\ll$ (\ref{thrm:precedence-transitive}) $y \in I^+(p_i) \cap I^-(q_i)$; hence $B_3 \subseteq B_1 \cap B_2$.
 \end{proof}
 
+\begin{lemma}[Common Chronological Predecessor on Standard Minkowski]
+    \label{lmm:minkowski-exists-common-past}
+    \lean{Physicslib4.Spacetime.exists_common_past}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
+    \leanok
+    On standard Minkowski spacetime, for any two points $p_1$ and $p_2$ there is a point $p$ with $p \ll p_1$ and $p \ll p_2$. Note the absence of hypotheses: unlike the interpolation lemma \ref{lmm:minkowski-past-between}, which needs a common future point $x$ to aim below, this one holds for an arbitrary pair.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
+    Take $p$ on the time axis, $p = (t, \mathbf{0})$, with $t$ small enough. Then $p_i - p$ has time component $p_i^0 - t$ and spatial part that of $p_i$, so $p \ll p_i$ amounts to $|\mathbf{p}_i|^2 < (p_i^0 - t)^2$ together with $t < p_i^0$. Both spatial norms are fixed nonnegative reals, so choosing a single $t$ below $\min_i\bigl(p_i^0 - |\mathbf{p}_i|\bigr)$ makes each time gap exceed the corresponding spatial separation; the estimate is a direct coordinate computation (\texttt{linarith} after expanding the squares).
+\end{proof}
+
+\begin{lemma}[Common Chronological Successor on Standard Minkowski]
+    \label{lmm:minkowski-exists-common-future}
+    \lean{Physicslib4.Spacetime.exists_common_future}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
+    \leanok
+    On standard Minkowski spacetime, for any two points $q_1$ and $q_2$ there is a point $q$ with $q_1 \ll q$ and $q_2 \ll q$. Again there are no hypotheses on the pair.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
+    Dual to \ref{lmm:minkowski-exists-common-past}, but proved independently rather than by invoking it (the time-shift estimate is run in the other direction, so there is no dependency edge): take $q = (t, \mathbf{0})$ with $t$ above $\max_i\bigl(q_i^0 + |\mathbf{q}_i|\bigr)$, so that for each $i$ the vector $q - q_i$ has positive time component exceeding the spatial separation and is therefore future-pointing timelike.
+\end{proof}
+
+\begin{lemma}[Standard Minkowski Diamonds Are Upward-Directed]
+    \label{lmm:minkowski-diamonds-upward-directed}
+    \lean{Physicslib4.Spacetime.alexandrovBasis_directed}
+    \uses{lmm:minkowski-exists-common-past, lmm:minkowski-exists-common-future, thrm:precedence-transitive, def:standard-minkowski-spacetime, def:alexandrov-topology, def:chronological-future-and-chronological-past}
+    \leanok
+    On standard Minkowski spacetime the Alexandrov diamonds are \emph{upward directed}: for any two diamonds $B_1$ and $B_2$ there is a diamond $B$ with $B_1 \subseteq B$ and $B_2 \subseteq B$.
+
+    This is the \emph{opposite} direction to \ref{lmm:minkowski-diamonds-downward-directed}, and the two are easy to confuse. There, one \emph{shrinks} a diamond to sit inside an intersection $B_1 \cap B_2$ around a prescribed point $x$; that downward property is what makes the diamonds a topological basis (\ref{thrm:minkowski-alexandrov-basis}). Here one instead \emph{enlarges} $B_1$ and $B_2$ into a common containing diamond, with no point prescribed and no intersection involved. It is this upward version --- and not the downward one --- that turns the local algebras into a directed system, so it is the one the quasilocal colimit needs.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-exists-common-past, lmm:minkowski-exists-common-future, thrm:precedence-transitive}
+    Write $B_1 = I^+(p_1) \cap I^-(q_1)$ and $B_2 = I^+(p_2) \cap I^-(q_2)$. Apply \ref{lmm:minkowski-exists-common-past} to $p_1, p_2$ to get $p$ with $p \ll p_1$ and $p \ll p_2$, and \ref{lmm:minkowski-exists-common-future} to $q_1, q_2$ to get $q$ with $q_1 \ll q$ and $q_2 \ll q$. Put $B = I^+(p) \cap I^-(q)$, again a diamond. By monotonicity of the Minkowski forward and backward cones --- i.e.\ transitivity of $\ll$ (\ref{thrm:precedence-transitive}) --- $p \ll p_i$ gives $I^+(p_i) \subseteq I^+(p)$ and $q_i \ll q$ gives $I^-(q_i) \subseteq I^-(q)$; intersecting these, $B_i \subseteq B$ for $i = 1, 2$.
+
+    This lemma is already formalized, as \texttt{Physicslib4.Spacetime.alexandrovBasis\_directed}, and so are the two point-existence helpers it consumes, \texttt{exists\_common\_past} and \texttt{exists\_common\_future}.
+\end{proof}
+
 \begin{theorem}[The Alexandrov Diamonds are a Basis on Standard Minkowski]
     \label{thrm:minkowski-alexandrov-basis}
     \lean{Physicslib4.Spacetime.isTopologicalBasis_alexandrovBasis_standardMinkowski}

@@ -44,6 +44,287 @@ With that out of the way we can state the axioms. Each axiom below is presented 
     Conditions (b) and (c) are required rather than derived because they are properties of the net's \emph{chosen} embeddings, not of the spacetime: no geometric fact about Alexandrov diamonds constrains which monomorphism a net picks for a given inclusion, so coherence cannot be discharged after the fact and must be part of the axiom. Their payoff is that the assignment becomes a genuine directed system, which is what gives \ref{def:quasilocal-algebra} its algebra structure, and that consumers no longer have to carry coherence as a side hypothesis.
 \end{definition}
 
+\subsection{The Quasilocal Colimit}
+
+The quasilocal algebra of \ref{def:quasilocal-algebra} below rests on a chain of algebraic facts about the directed system of Axiom 2, which we record in this subsection. They fall into two groups: those putting a normed $*$-algebra structure on the colimit, assembled in \ref{lmm:quasilocal-union-normed-star-algebra}, and those passing from that to its completion, assembled in \ref{lmm:quasilocal-completion-cstar}. Axioms 3--5 depend only on \ref{def:quasilocal-algebra} itself and not on how it is built, so a reader after the axiom presentation alone may skip this subsection.
+
+\begin{lemma}[Alexandrov Diamonds are Directed under Inclusion]
+    \label{lmm:alexandrov-diamonds-isDirected}
+    \uses{def:alexandrov-topology, lmm:minkowski-diamonds-upward-directed}
+    The order-theoretic repackaging of \ref{lmm:minkowski-diamonds-upward-directed}: the set of Alexandrov diamonds on standard Minkowski spacetime is \texttt{DirectedOn (\ensuremath{\subseteq})}, and hence, viewed as a subtype ordered by inclusion, satisfies \texttt{IsDirectedOrder}.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:minkowski-diamonds-upward-directed}
+    Unfolding \texttt{DirectedOn} turns the goal into the statement of \ref{lmm:minkowski-diamonds-upward-directed}, which is therefore applied directly. The passage from the set-level \texttt{DirectedOn} to the subtype-level \texttt{IsDirectedOrder} that the colimit construction wants as an instance is Mathlib's \texttt{DirectedOn.isDirectedOrder}. There is no mathematical content here beyond \ref{lmm:minkowski-diamonds-upward-directed}; the node exists so that the colimit nodes can cite an instance rather than restate a $\forall\exists$ statement.
+\end{proof}
+
+\begin{lemma}[Isotony Embeddings are Isometric]
+    \label{lmm:isotony-embeddings-isometric}
+    \uses{def:local-algebras, def:isotony}
+    For all basis sets $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the isotony embedding $i_{\mathbf{B}_1\mathbf{B}_2} : \mathfrak{U}(\mathbf{B}_1) \hookrightarrow \mathfrak{U}(\mathbf{B}_2)$ of Axiom 2 (\ref{def:isotony}) is isometric: $\|i_{\mathbf{B}_1\mathbf{B}_2}(a)\| = \|a\|$ for every $a \in \mathfrak{U}(\mathbf{B}_1)$.
+\end{lemma}
+\begin{proof}
+    \uses{def:local-algebras, def:isotony}
+    An injective $*$-homomorphism between complex C*-algebras is norm preserving; this is Mathlib's \texttt{NonUnitalStarAlgHom.norm\_map}, whose only hypothesis is injectivity of the map. The local algebras are complex C*-algebras by Axiom 1 (\ref{def:local-algebras}), and injectivity is condition (a) of Axiom 2 (\ref{def:isotony}), so the lemma is that citation applied to $i_{\mathbf{B}_1\mathbf{B}_2}$.
+\end{proof}
+
+\begin{lemma}[The Isotony Family is a Directed System]
+    \label{lmm:isotony-directed-system}
+    \uses{def:local-algebras, def:isotony}
+    The isotony family $i_{\mathbf{B}_1\mathbf{B}_2}$ of Axiom 2 (\ref{def:isotony}), indexed by the diamonds ordered by inclusion, is a \emph{directed system} in Mathlib's sense: it satisfies \texttt{DirectedSystem}.
+\end{lemma}
+\begin{proof}
+    \uses{def:isotony}
+    Mathlib's \texttt{DirectedSystem f} is a two-field class: \texttt{map\_self}, saying $f_{\le\mathrm{rfl}} = \mathrm{id}$, and \texttt{map\_map}, saying $f_{jk} \circ f_{ij} = f_{ik}$. These are literally Axiom 2(b) and Axiom 2(c) (\ref{def:isotony}), so the instance is constructed by supplying those two projections. This is the node that cashes in the remark in \ref{def:isotony} that (b) and (c) make the assignment a functor.
+\end{proof}
+
+\begin{definition}[The Quasilocal Colimit as a Ring]
+    \label{def:quasilocal-colimit}
+    \uses{def:local-algebras, def:isotony, lmm:isotony-directed-system, lmm:alexandrov-diamonds-isDirected}
+    Let $\mathcal{D}$ be the type of Alexandrov diamonds ordered by inclusion. Define
+    \begin{align}
+        \varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B}) := \texttt{DirectLimit } \mathfrak{U}\ i,
+    \end{align}
+    Mathlib's general direct limit: the quotient of the sigma type $\Sigma_{\mathbf{B} : \mathcal{D}} \mathfrak{U}(\mathbf{B})$ by \texttt{DirectLimit.setoid}, which identifies $\langle \mathbf{B}_1, a_1\rangle$ with $\langle \mathbf{B}_2, a_2\rangle$ exactly when $i_{\mathbf{B}_1\mathbf{B}}(a_1) = i_{\mathbf{B}_2\mathbf{B}}(a_2)$ for some common $\mathbf{B}$. It carries a ring structure by \texttt{DirectLimit.instRingOfRingHomClass}, canonical maps $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ by \texttt{DirectLimit.Ring.of}, and the universal property by \texttt{DirectLimit.Ring.lift}. Concretely the product of $\iota_{\mathbf{B}_1}(a_1)$ and $\iota_{\mathbf{B}_2}(a_2)$ is $\iota_{\mathbf{B}}\bigl(i_{\mathbf{B}_1\mathbf{B}}(a_1)\, i_{\mathbf{B}_2\mathbf{B}}(a_2)\bigr)$ for any diamond $\mathbf{B}$ containing both.
+
+    Two side conditions make this well posed and are both discharged above: the hypothesis that the $i$ form a \texttt{DirectedSystem} is \ref{lmm:isotony-directed-system}, and the hypothesis that the index order is directed --- needed already for \texttt{DirectLimit.setoid} to be transitive --- comes from \ref{lmm:alexandrov-diamonds-isDirected} through \texttt{DirectedOn.isDirectedOrder}.
+
+    \emph{Which Mathlib construction.} It must be the general \texttt{DirectLimit}, \emph{not} \texttt{Ring.DirectLimit}. Despite its name the latter is defined as a quotient of \texttt{FreeCommRing (\ensuremath{\Sigma} i, G i)} and its \texttt{deriving} clause produces a \texttt{CommRing}; it is a commutative-rings-only construction and cannot carry the local algebras, which are noncommutative in every case of interest. The general \texttt{DirectLimit} imposes no commutativity: it asks only that the transition maps be \texttt{RingHomClass}, which the unital $*$-monomorphisms of Axiom 2 are.
+\end{definition}
+
+\begin{definition}[The Involution on the Quasilocal Colimit]
+    \label{def:quasilocal-colimit-star}
+    \uses{def:quasilocal-colimit, def:isotony}
+    Define an involution on $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ (\ref{def:quasilocal-colimit}) on representatives by
+    \begin{align}
+        \bigl[\langle \mathbf{B}, a\rangle\bigr]^{*} := \bigl[\langle \mathbf{B}, a^{*}\rangle\bigr],
+    \end{align}
+    i.e.\ as the map induced on the quotient by $\langle \mathbf{B}, a\rangle \mapsto \langle \mathbf{B}, a^{*}\rangle$. This respects \texttt{DirectLimit.setoid}, so the induced map on the quotient exists: if $i_{\mathbf{B}_1\mathbf{B}}(a_1) = i_{\mathbf{B}_2\mathbf{B}}(a_2)$ then applying $*$ in $\mathfrak{U}(\mathbf{B})$ and using that each $i_{\mathbf{B}_1\mathbf{B}_2}$ is a $*$-homomorphism (\ref{def:isotony}) gives $i_{\mathbf{B}_1\mathbf{B}}(a_1^{*}) = i_{\mathbf{B}_2\mathbf{B}}(a_2^{*})$. In particular $\iota_{\mathbf{B}}(a)^{*} = \iota_{\mathbf{B}}(a^{*})$ by construction.
+\end{definition}
+
+\begin{lemma}[The Quasilocal Colimit is a $*$-Ring]
+    \label{lmm:quasilocal-colimit-star-ring}
+    \uses{def:quasilocal-colimit, def:quasilocal-colimit-star, lmm:alexandrov-diamonds-isDirected}
+    The involution of \ref{def:quasilocal-colimit-star} makes $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ a $*$-ring: $x^{**} = x$, $(x+y)^{*} = x^{*} + y^{*}$ and $(xy)^{*} = y^{*} x^{*}$.
+\end{lemma}
+\begin{proof}
+    \uses{def:quasilocal-colimit-star, lmm:alexandrov-diamonds-isDirected}
+    Each identity involves at most two elements, so by \ref{lmm:alexandrov-diamonds-isDirected} both may be taken to have representatives $a, b$ in one and the same $\mathfrak{U}(\mathbf{B})$. Since $\iota_{\mathbf{B}}$ is a ring map commuting with $*$ (\ref{def:quasilocal-colimit-star}), each identity becomes the image under $\iota_{\mathbf{B}}$ of the corresponding $*$-ring identity in the C*-algebra $\mathfrak{U}(\mathbf{B})$, where it holds by \texttt{star\_star}, \texttt{star\_add} and \texttt{star\_mul}.
+\end{proof}
+
+\begin{lemma}[The Quasilocal Colimit is a $\mathbb{C}$-Algebra]
+    \label{lmm:quasilocal-colimit-algebra}
+    \uses{def:quasilocal-colimit, lmm:isotony-directed-system, def:local-algebras, def:isotony}
+    $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ (\ref{def:quasilocal-colimit}) is a unital algebra over $\mathbb{C}$, and each $\iota_{\mathbf{B}}$ is a unital $\mathbb{C}$-algebra homomorphism.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:isotony-directed-system, def:local-algebras, def:isotony}
+    Mathlib's \texttt{DirectLimit.instAlgebra} puts an algebra structure on the direct limit of a directed system of algebras over a fixed base ring; the canonical maps are \texttt{DirectLimit.Algebra.of}. Its hypotheses are that each component is a $\mathbb{C}$-algebra, which is Axiom 1 (\ref{def:local-algebras}), that the transition maps are $\mathbb{C}$-algebra maps, which holds because the $i_{\mathbf{B}_1\mathbf{B}_2}$ are unital $*$-monomorphisms of complex C*-algebras (\ref{def:isotony}), and the directed-system condition (\ref{lmm:isotony-directed-system}).
+\end{proof}
+
+\begin{lemma}[The Colimit Carries a $*$-Algebra Structure]
+    \label{lmm:quasilocal-colimit-star-algebra}
+    \uses{def:quasilocal-colimit, def:quasilocal-colimit-star, lmm:quasilocal-colimit-star-ring, lmm:quasilocal-colimit-algebra}
+    The colimit $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ of the local algebras along the isotony family carries a well-defined $*$-algebra structure over $\mathbb{C}$, in which the product of the classes of $a_1 \in \mathfrak{U}(\mathbf{B}_1)$ and $a_2 \in \mathfrak{U}(\mathbf{B}_2)$ is the class of $i_{\mathbf{B}_1\mathbf{B}}(a_1)\, i_{\mathbf{B}_2\mathbf{B}}(a_2)$ for any diamond $\mathbf{B}$ containing both.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-colimit-star-ring, lmm:quasilocal-colimit-algebra}
+    Bundling: the carrier and ring structure are \ref{def:quasilocal-colimit}, the involution is \ref{def:quasilocal-colimit-star}, the $*$-ring axioms are \ref{lmm:quasilocal-colimit-star-ring}, and the $\mathbb{C}$-algebra structure with $\star$ semilinear over conjugation is \ref{lmm:quasilocal-colimit-algebra}. The displayed formula for the product is the concrete description recorded in \ref{def:quasilocal-colimit}.
+\end{proof}
+
+\begin{lemma}[The Canonical Maps into the Colimit are Injective]
+    \label{lmm:quasilocal-colimit-of-injective}
+    \uses{def:quasilocal-colimit, def:isotony, lmm:alexandrov-diamonds-isDirected}
+    For every diamond $\mathbf{B}$ the canonical map $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ of \ref{def:quasilocal-colimit} is injective. Equivalently, each local algebra sits inside the colimit rather than being collapsed by it.
+\end{lemma}
+\begin{proof}
+    \uses{def:isotony, lmm:alexandrov-diamonds-isDirected}
+    Suppose $\iota_{\mathbf{B}}(a) = \iota_{\mathbf{B}}(b)$. Unfolding \texttt{DirectLimit.setoid} --- via \texttt{DirectLimit.Ring.of\_apply} and \texttt{Quotient.eq} --- this says there is a diamond $\mathbf{B}'$ with $\mathbf{B} \subseteq \mathbf{B}'$ and $i_{\mathbf{B}\mathbf{B}'}(a) = i_{\mathbf{B}\mathbf{B}'}(b)$ (the two witnesses supplied by the setoid may be taken to be the same $\mathbf{B}'$ using \ref{lmm:alexandrov-diamonds-isDirected}, and coincide anyway since both source indices are $\mathbf{B}$). Now Axiom 2(a) (\ref{def:isotony}) says $i_{\mathbf{B}\mathbf{B}'}$ is injective, so $a = b$.
+
+    This is exactly the point at which Axiom 2(a) earns its place: without injectivity of the embeddings the colimit could identify distinct local observables, and both positive definiteness of the colimit norm and the very reading of $\mathfrak{U}(\mathbf{B})$ as a subalgebra of $\mathfrak{U}$ would fail.
+\end{proof}
+
+\begin{lemma}[The Colimit Norm is Well Defined]
+    \label{lmm:quasilocal-colimit-norm-well-defined}
+    \uses{lmm:quasilocal-colimit-star-algebra, lmm:isotony-embeddings-isometric, lmm:alexandrov-diamonds-isDirected}
+    Setting $\|[a]\| := \|a\|$ for a representative $a \in \mathfrak{U}(\mathbf{B})$ gives a well-defined function on the colimit of \ref{lmm:quasilocal-colimit-star-algebra}: the value depends neither on the diamond $\mathbf{B}$ nor on the representative $a$ chosen.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:isotony-embeddings-isometric, lmm:alexandrov-diamonds-isDirected}
+    Two representatives of the same class become equal after transport into a common containing diamond, which exists by \ref{lmm:alexandrov-diamonds-isDirected}. That transport is by isotony embeddings, and those are isometric (\ref{lmm:isotony-embeddings-isometric}), so each representative has the same norm as their common image and hence the same norm as the other.
+\end{proof}
+
+The five norm axioms are now checked one at a time. All five share the same move --- pick representatives, transport into a common diamond, cite the corresponding C*-algebra fact there --- but they cite different Mathlib facts and the first one needs \ref{lmm:quasilocal-colimit-of-injective}, so they are separate nodes; \ref{lmm:quasilocal-colimit-norm-axioms} then bundles them.
+
+\begin{lemma}[The Colimit Norm is Positive Definite]
+    \label{lmm:quasilocal-colimit-norm-eq-zero}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-of-injective}
+    For $x$ in the colimit, $\|x\| = 0$ if and only if $x = 0$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-of-injective}
+    Write $x = \iota_{\mathbf{B}}(a)$ for a representative $a \in \mathfrak{U}(\mathbf{B})$. By \ref{lmm:quasilocal-colimit-norm-well-defined}, $\|x\| = \|a\|$, so $\|x\| = 0$ iff $\|a\| = 0$ iff $a = 0$ by \texttt{norm\_eq\_zero} in the C*-algebra $\mathfrak{U}(\mathbf{B})$. It remains to know that $a = 0$ is equivalent to $x = 0$, i.e.\ that $\iota_{\mathbf{B}}(a) = 0 = \iota_{\mathbf{B}}(0)$ forces $a = 0$: this is injectivity of $\iota_{\mathbf{B}}$, \ref{lmm:quasilocal-colimit-of-injective}. This is the only one of the five axioms that is not a pure transport argument.
+\end{proof}
+
+\begin{lemma}[The Colimit Norm is Absolutely Homogeneous]
+    \label{lmm:quasilocal-colimit-norm-smul}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-algebra}
+    For $c \in \mathbb{C}$ and $x$ in the colimit, $\|c \cdot x\| = |c|\,\|x\|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-algebra}
+    One element only, so no directedness is needed. Write $x = \iota_{\mathbf{B}}(a)$; since $\iota_{\mathbf{B}}$ is $\mathbb{C}$-linear (\ref{lmm:quasilocal-colimit-algebra}), $c \cdot x = \iota_{\mathbf{B}}(c \cdot a)$. By \ref{lmm:quasilocal-colimit-norm-well-defined} both sides equal their $\mathfrak{U}(\mathbf{B})$-counterparts, and there the claim is \texttt{norm\_smul}.
+\end{proof}
+
+\begin{lemma}[The Colimit Norm is Subadditive]
+    \label{lmm:quasilocal-colimit-norm-add-le}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:alexandrov-diamonds-isDirected}
+    For $x, y$ in the colimit, $\|x + y\| \le \|x\| + \|y\|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:alexandrov-diamonds-isDirected}
+    By \ref{lmm:alexandrov-diamonds-isDirected} choose a diamond $\mathbf{B}$ and representatives $a, b \in \mathfrak{U}(\mathbf{B})$ with $x = \iota_{\mathbf{B}}(a)$ and $y = \iota_{\mathbf{B}}(b)$; then $x + y = \iota_{\mathbf{B}}(a + b)$ since $\iota_{\mathbf{B}}$ is additive. By \ref{lmm:quasilocal-colimit-norm-well-defined} the three colimit norms equal $\|a+b\|$, $\|a\|$, $\|b\|$, and the inequality is \texttt{norm\_add\_le} in $\mathfrak{U}(\mathbf{B})$.
+\end{proof}
+
+\begin{lemma}[The Colimit Norm is Submultiplicative]
+    \label{lmm:quasilocal-colimit-norm-mul-le}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:alexandrov-diamonds-isDirected}
+    For $x, y$ in the colimit, $\|xy\| \le \|x\|\,\|y\|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:alexandrov-diamonds-isDirected}
+    Identical in shape to \ref{lmm:quasilocal-colimit-norm-add-le}: transport $x$ and $y$ into a common diamond $\mathbf{B}$ using \ref{lmm:alexandrov-diamonds-isDirected}, so that $xy = \iota_{\mathbf{B}}(ab)$, rewrite the three norms with \ref{lmm:quasilocal-colimit-norm-well-defined}, and cite \texttt{norm\_mul\_le} in $\mathfrak{U}(\mathbf{B})$.
+\end{proof}
+
+\begin{lemma}[The Colimit Norm is $*$-Invariant]
+    \label{lmm:quasilocal-colimit-norm-star}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, def:quasilocal-colimit-star}
+    For $x$ in the colimit, $\|x^{*}\| = \|x\|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, def:quasilocal-colimit-star}
+    One element only. Write $x = \iota_{\mathbf{B}}(a)$; by construction of the involution (\ref{def:quasilocal-colimit-star}) $x^{*} = \iota_{\mathbf{B}}(a^{*})$. By \ref{lmm:quasilocal-colimit-norm-well-defined} the two colimit norms are $\|a^{*}\|$ and $\|a\|$, and $\|a^{*}\| = \|a\|$ in the C*-algebra $\mathfrak{U}(\mathbf{B})$ is Mathlib's \texttt{norm\_star}.
+\end{proof}
+
+\begin{lemma}[The Colimit Norm Satisfies the Normed $*$-Algebra Axioms]
+    \label{lmm:quasilocal-colimit-norm-axioms}
+    \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-norm-eq-zero, lmm:quasilocal-colimit-norm-smul, lmm:quasilocal-colimit-norm-add-le, lmm:quasilocal-colimit-norm-mul-le, lmm:quasilocal-colimit-norm-star}
+    The norm of \ref{lmm:quasilocal-colimit-norm-well-defined} is a genuine norm --- positive definite, absolutely homogeneous and subadditive --- and it is submultiplicative, $\|xy\| \le \|x\|\,\|y\|$, and $*$-invariant, $\|x^*\| = \|x\|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-colimit-norm-eq-zero, lmm:quasilocal-colimit-norm-smul, lmm:quasilocal-colimit-norm-add-le, lmm:quasilocal-colimit-norm-mul-le, lmm:quasilocal-colimit-norm-star}
+    Bundling: the five clauses are \ref{lmm:quasilocal-colimit-norm-eq-zero}, \ref{lmm:quasilocal-colimit-norm-smul}, \ref{lmm:quasilocal-colimit-norm-add-le}, \ref{lmm:quasilocal-colimit-norm-mul-le} and \ref{lmm:quasilocal-colimit-norm-star} respectively. Assembling them is the \texttt{NormedAlgebra}-plus-\texttt{NormedStarGroup} instance data on the colimit.
+\end{proof}
+
+\begin{lemma}[The Quasilocal Union is a Normed $*$-Algebra]
+    \label{lmm:quasilocal-union-normed-star-algebra}
+    \uses{def:local-algebras, def:isotony, lmm:minkowski-diamonds-upward-directed, lmm:quasilocal-colimit-star-algebra, lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-norm-axioms}
+    The colimit of the local algebras $\mathfrak{U}(\mathbf{B})$ (\ref{def:local-algebras}) along the isotony family of Axiom 2 (\ref{def:isotony}), taken over the upward-directed Alexandrov diamonds (\ref{lmm:minkowski-diamonds-upward-directed}), carries a well-defined normed $*$-algebra structure, whose involution is isometric.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-colimit-star-algebra, lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-norm-axioms}
+    Assemble the three preceding lemmas: \ref{lmm:quasilocal-colimit-star-algebra} supplies the $*$-algebra structure, \ref{lmm:quasilocal-colimit-norm-well-defined} the norm function, and \ref{lmm:quasilocal-colimit-norm-axioms} the axioms that norm satisfies. Bundling them is the normed $*$-algebra structure.
+\end{proof}
+
+\begin{lemma}[The Colimit Satisfies the C*-Identity]
+    \label{lmm:quasilocal-colimit-cstar-identity}
+    \uses{lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-colimit-norm-well-defined}
+    The normed $*$-algebra of \ref{lmm:quasilocal-union-normed-star-algebra} satisfies the C*-identity $\|x^* x\| = \|x\|^2$. It is not thereby a C*-algebra: it is in general not complete.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-colimit-norm-well-defined}
+    A single element is involved, so no directedness is needed here. Pick a representative $a \in \mathfrak{U}(\mathbf{B})$ of $x$. Then $x^*x$ has the representative $a^*a$ in the same $\mathfrak{U}(\mathbf{B})$, and by \ref{lmm:quasilocal-colimit-norm-well-defined} the colimit norms of $x$ and $x^*x$ are the norms of $a$ and $a^*a$ there. So the claim reduces to $\|a^*a\| = \|a\|^2$ in $\mathfrak{U}(\mathbf{B})$, which is Mathlib's \texttt{CStarRing.norm\_star\_mul\_self}.
+\end{proof}
+
+The next five results have nothing to do with the quasilocal setting and are stated for an arbitrary normed $*$-algebra, as their titles already claim; they are applied to the colimit only in \ref{lmm:quasilocal-completion-cstar}. Throughout, $A$ denotes a normed $*$-algebra over $\mathbb{C}$ whose involution is isometric, $\widehat{A} = \texttt{UniformSpace.Completion } A$ its completion, and $\eta : A \to \widehat{A}$ the canonical map, which has dense range by \texttt{UniformSpace.Completion.denseRange\_coe}.
+
+\begin{definition}[The Involution on a Completion]
+    \label{def:completion-star}
+    Let $A$ be a normed $*$-algebra over $\mathbb{C}$ with isometric involution. Define the involution on $\widehat{A}$ by
+    \begin{align}
+        \star_{\widehat{A}} := \texttt{UniformSpace.Completion.map } \star_{A}.
+    \end{align}
+    This is legitimate because $\star_A$ is an isometry, hence uniformly continuous by \texttt{Isometry.uniformContinuous}, and \texttt{UniformSpace.Completion.map} lifts any uniformly continuous map to the completions. It is uniformly continuous, satisfies $\eta(a)^{*} = \eta(a^{*})$ by \texttt{UniformSpace.Completion.map\_coe}, and is the unique continuous map with that property by \texttt{UniformSpace.Completion.map\_unique}.
+
+    This has to be written down by hand rather than inherited: Mathlib supplies \texttt{UniformSpace.Completion.instNormedRing} for the ring and norm structure on $\widehat{A}$, but there is no \texttt{StarRing (UniformSpace.Completion A)} instance.
+\end{definition}
+
+\begin{lemma}[The Completion Involution is Involutive]
+    \label{lmm:completion-star-involutive}
+    \uses{def:completion-star}
+    With $\star_{\widehat{A}}$ as in \ref{def:completion-star}, $x^{**} = x$ for all $x \in \widehat{A}$.
+\end{lemma}
+\begin{proof}
+    \uses{def:completion-star}
+    Both $x \mapsto x^{**}$ and the identity are continuous, the former as a composite of the continuous map $\star_{\widehat{A}}$ with itself (\ref{def:completion-star}). They agree on the range of $\eta$: $\eta(a)^{**} = \eta(a^{**}) = \eta(a)$, by \texttt{UniformSpace.Completion.map\_coe} twice and \texttt{star\_star} in $A$. Since $\eta$ has dense range, \texttt{DenseRange.equalizer} upgrades this to equality on all of $\widehat{A}$.
+\end{proof}
+
+\begin{lemma}[The Completion Involution is Additive and Anti-Multiplicative]
+    \label{lmm:completion-star-add-mul}
+    \uses{def:completion-star}
+    With $\star_{\widehat{A}}$ as in \ref{def:completion-star}, $(x+y)^{*} = x^{*} + y^{*}$ and $(xy)^{*} = y^{*} x^{*}$ for all $x, y \in \widehat{A}$.
+\end{lemma}
+\begin{proof}
+    \uses{def:completion-star}
+    Both identities are between continuous functions of the pair $(x,y)$, by continuity of $\star_{\widehat{A}}$ (\ref{def:completion-star}) and of addition and multiplication on the normed ring $\widehat{A}$. They hold on the image of $A \times A$: pushing $\eta$ through with \texttt{UniformSpace.Completion.map\_coe} and the ring-map property of $\eta$ reduces each to \texttt{star\_add} and \texttt{star\_mul} in $A$. That image is dense by \texttt{UniformSpace.Completion.denseRange\_coe\ensuremath{_2}}, so \texttt{Continuous.ext\_on} closes both.
+\end{proof}
+
+\begin{lemma}[The Involution Extends to the Completion]
+    \label{lmm:star-extends-to-completion}
+    \uses{def:completion-star, lmm:completion-star-involutive, lmm:completion-star-add-mul}
+    Let $A$ be a normed $*$-algebra over $\mathbb{C}$ whose involution is isometric. Then $\widehat{A}$ is a $*$-ring with isometric involution, and the canonical map $\eta : A \to \widehat{A}$ is a $*$-homomorphism with dense range. The extension is the unique continuous one.
+\end{lemma}
+\begin{proof}
+    \uses{def:completion-star, lmm:completion-star-involutive, lmm:completion-star-add-mul}
+    Bundling into a \texttt{StarRing \ensuremath{\widehat{A}}} instance: the operation is \ref{def:completion-star}, its \texttt{star\_involutive} field is \ref{lmm:completion-star-involutive}, and its \texttt{star\_add} and \texttt{star\_mul} fields are \ref{lmm:completion-star-add-mul}. The ring and norm structure is \texttt{UniformSpace.Completion.instNormedRing}; that $\eta$ commutes with $\star$ and has dense range, and that the extension is the unique continuous one, are recorded in \ref{def:completion-star}. Isometry of $\star_{\widehat{A}}$, i.e.\ the \texttt{NormedStarGroup} field, follows from isometry of $\star_A$ by the same density argument, since $\|x^{*}\|$ and $\|x\|$ are continuous in $x$ and agree on the range of $\eta$.
+\end{proof}
+
+\begin{lemma}[The C*-Identity Passes to the Completion]
+    \label{lmm:completion-cstar-identity}
+    \uses{lmm:star-extends-to-completion}
+    Let $A$ be a normed $*$-algebra over $\mathbb{C}$ with isometric involution satisfying the C*-identity $\|a^{*}a\| = \|a\|^{2}$. Then $\widehat{A}$ satisfies $\|x^{*}x\| = \|x\|^{2}$ for all $x \in \widehat{A}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:star-extends-to-completion}
+    This is the density argument, isolated as its own node because it is the only genuinely analytic move in the block. Both $x \mapsto \|x^{*}x\|$ and $x \mapsto \|x\|^{2}$ are continuous real-valued functions on $\widehat{A}$: the involution is continuous by \ref{lmm:star-extends-to-completion}, and multiplication and the norm are continuous on a normed ring. They agree on the range of $\eta$, because $\eta$ is an isometric $*$-homomorphism (\ref{lmm:star-extends-to-completion}), so $\|\eta(a)^{*}\eta(a)\| = \|\eta(a^{*}a)\| = \|a^{*}a\| = \|a\|^{2} = \|\eta(a)\|^{2}$ using the hypothesis on $A$. Since $\eta$ has dense range and $\mathbb{R}$ is Hausdorff, \texttt{Continuous.ext\_on} gives equality on all of $\widehat{A}$.
+\end{proof}
+
+\begin{lemma}[The Completion of a C*-Normed $*$-Algebra is a C*-Algebra]
+    \label{lmm:completion-of-cstar-normed-star-algebra}
+    \uses{lmm:star-extends-to-completion, lmm:completion-cstar-identity}
+    Let $A$ be a normed $*$-algebra over $\mathbb{C}$ with isometric involution satisfying the C*-identity. Then its completion $\widehat{A}$ is a C*-algebra.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:star-extends-to-completion, lmm:completion-cstar-identity}
+    Bundling. The normed ring structure on $\widehat{A}$ is Mathlib's \texttt{UniformSpace.Completion.instNormedRing}; note that multiplication on $A$ is \emph{not} uniformly continuous --- only uniformly continuous on bounded sets --- so it is extended as a bounded bilinear map rather than by uniform continuity, which is exactly what the cited instance arranges. The $*$-ring structure with isometric involution is \ref{lmm:star-extends-to-completion}, completeness holds by construction of the completion, and the C*-identity is \ref{lmm:completion-cstar-identity}.
+\end{proof}
+
+\begin{lemma}[A $*$-Isomorphism of C*-Algebras is Isometric]
+    \label{lmm:cstar-norm-unique}
+    Every $*$-isomorphism between complex C*-algebras is isometric.
+\end{lemma}
+\begin{proof}
+    This is the Mathlib-shaped form of the statement, and it is \texttt{NonUnitalStarAlgHom.norm\_map} --- an injective $*$-homomorphism of complex C*-algebras is norm preserving --- applied to a $*$-isomorphism, which is in particular injective. (Mathlib also packages the isometry conclusion directly as \texttt{NonUnitalStarAlgHom.isometry}.)
+
+    The reading used downstream is uniqueness of the norm: a complex $*$-algebra admits at most one \emph{complete} C*-norm, for if two norms each make it a C*-algebra then the identity map, read as a $*$-isomorphism from the first C*-algebra to the second, is isometric by this lemma, and isometry of the identity is precisely equality of the two norms. Stating the lemma in the $*$-isomorphism form rather than the two-norms form is what makes it a direct citation instead of a construction: the two-norms form has to talk about two \texttt{CStarAlgebra} structures on one carrier, which Lean handles badly.
+
+    The completeness hypothesis is hidden in the word ``C*-algebra'' and is essential. The statement is false for incomplete C*-norms: the group $*$-algebra $\mathbb{C}[F_2]$ of the free group on two generators carries the distinct full and reduced C*-norms, neither of them complete. An earlier version of this blueprint claimed that any two C*-norms on a $*$-algebra coincide, which is that false statement.
+\end{proof}
+
+\begin{lemma}[The Completion is a C*-Algebra with a Unique Complete C*-Norm]
+    \label{lmm:quasilocal-completion-cstar}
+    \uses{lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-colimit-cstar-identity, lmm:completion-of-cstar-normed-star-algebra, lmm:cstar-norm-unique}
+    The completion of the normed $*$-algebra of \ref{lmm:quasilocal-union-normed-star-algebra} is a C*-algebra, and its C*-norm is the only complete C*-norm on it.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-colimit-cstar-identity, lmm:completion-of-cstar-normed-star-algebra, lmm:cstar-norm-unique}
+    This node is where the general completion results are instantiated at the colimit. Take $A$ to be the normed $*$-algebra of \ref{lmm:quasilocal-union-normed-star-algebra}; its involution is isometric by the $*$-invariance clause of that lemma, and it satisfies the C*-identity by \ref{lmm:quasilocal-colimit-cstar-identity}. Those are exactly the hypotheses of \ref{lmm:completion-of-cstar-normed-star-algebra}, which therefore gives the first half. The second half is \ref{lmm:cstar-norm-unique} in its uniqueness reading, applied to the C*-algebra just obtained.
+
+    This is the Bratteli--Robinson 2.2.6 material that Chapter 6.2 discusses informally. The uniqueness half is not a technicality: it is what makes the quasilocal algebra well defined \emph{up to isomorphism} rather than merely existing, since without it the completion would depend on a choice of norm and different choices could give non-isomorphic C*-algebras.
+
+    \emph{Formalization note.} There is a cheaper route which avoids \ref{lmm:star-extends-to-completion} and \ref{lmm:completion-of-cstar-normed-star-algebra} entirely: realise the quasilocal algebra as a closed $*$-subalgebra of an ambient C*-algebra, namely the directed union of the images of the canonical embeddings $\iota_{\mathbf{B}}$ --- data that Axiom 3 (\ref{def:local-commutativity}) already assumes --- closed off with \texttt{StarSubalgebra.topologicalClosure}. Then the involution is inherited from the ambient algebra and \texttt{StarSubalgebra.cstarAlgebra} supplies the C*-algebra structure as an instance. The abstract-colimit-plus-completion route developed above has very little Mathlib support by comparison, so which route to take should be settled before formalization begins.
+\end{proof}
+
 Before introducing the next axiom, we must introduce the definition:
 
 \begin{definition}[Quasilocal Algebra]
@@ -51,17 +332,14 @@ Before introducing the next axiom, we must introduce the definition:
     \lean{Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAlgebra.lean}
     \leanok
+    \uses{def:local-algebras, def:isotony, lmm:minkowski-diamonds-upward-directed, lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-completion-cstar}
     Consider the union of all $\mathfrak{U}(\mathbf{B})$, taken along the isotony family of Axiom 2 (\ref{def:isotony}). This union is a normed *-algebra; taking its completion one obtains a C*-algebra denoted $\mathfrak{U}$, called the \textit{quasilocal algebra}.
 
     The union is to be read as a \emph{directed colimit}, not as a set-theoretic union. This is what Axiom 2's identity and composition laws buy: with $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ a functor on the inclusion order, and the Alexandrov diamonds upward directed, the local algebras form a directed system and the colimit carries a well-defined $*$-algebra structure --- the product of $a_1 \in \mathfrak{U}(\mathbf{B}_1)$ and $a_2 \in \mathfrak{U}(\mathbf{B}_2)$ is computed in any $\mathfrak{U}(\mathbf{B})$ containing both, and functoriality is exactly what makes the answer independent of that choice. Without the two laws there is no such structure: a bare set-theoretic union of the $\mathfrak{U}(\mathbf{B})$ has no multiplication at all, since elements of different local algebras live in unrelated carriers.
 
-    \emph{Three supporting results are still outstanding and are not yet declarations in this blueprint.} They are stated here so the gap is explicit rather than resting on the phrase ``as previously proven'', which referred to the informal discussion in Chapters 6.1 and 6.2 and not to any declaration:
-    \begin{itemize}
-        \item[(i)] \emph{upward directedness}: any two Alexandrov diamonds of Minkowski spacetime are contained in a third. The blueprint currently proves only the \emph{downward} version (\ref{lmm:minkowski-diamonds-downward-directed}); the colimit needs the opposite direction, provable the same way by taking $p$ far in the common past and $q$ far in the common future;
-        \item[(ii)] that the colimit of the directed system is a normed $*$-algebra;
-        \item[(iii)] that its completion is a C*-algebra, with a unique C*-norm.
-    \end{itemize}
-    Until (i)--(iii) are declarations, this definition should be read as depending on them.
+    The three supporting results this definition rests on are now declarations of this blueprint rather than appeals to the informal discussion of Chapters 6.1 and 6.2: (i) upward directedness of the Alexandrov diamonds (\ref{lmm:minkowski-diamonds-upward-directed}), which supplies the containing diamond $\mathbf{B}$ in the description above; (ii) that the colimit of the directed system is a normed $*$-algebra (\ref{lmm:quasilocal-union-normed-star-algebra}); and (iii) that its completion is a C*-algebra with a unique C*-norm (\ref{lmm:quasilocal-completion-cstar}), the uniqueness being what pins $\mathfrak{U}$ down up to isomorphism. Of these, (i) is already formalized, while (ii) and (iii) remain open.
+
+    That this definition is marked as formalized while (ii) and (iii) are not is not an inconsistency: the Lean takes $\mathfrak{U}$ as \emph{given} --- an ambient C*-algebra together with the canonical embeddings $\iota_{\mathbf{B}}$ and their cocone condition, as recorded in \ref{def:local-commutativity} --- rather than constructing it as a colimit and completing it. Lemmas (ii) and (iii) are the obligations one incurs by \emph{building} such a $\mathfrak{U}$ from the local algebras; they are not gaps in the existing Lean. See the formalization note in \ref{lmm:quasilocal-completion-cstar} on the two available construction routes.
 \end{definition}
 
 \begin{definition}[Axiom 3: Local Commutativity]
