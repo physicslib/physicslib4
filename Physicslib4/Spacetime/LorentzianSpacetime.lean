@@ -11,7 +11,7 @@ import Mathlib.Topology.Bases
 # Lorentzian spacetime
 
 This file formalises the blueprint declaration `def:lorentzian-spacetime`
-(Chapter 10, `sections/sec10/10-2_spacetime`, of the AQFT-in-Lean blueprint;
+(Chapter 10, `sections/sec10/spacetime`, of the AQFT-in-Lean blueprint;
 the notion is also discussed expositorily in the Chapter 9 prologue):
 
 > A *Lorentzian spacetime* is a smooth, connected, four-dimensional

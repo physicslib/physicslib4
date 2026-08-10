@@ -17,7 +17,7 @@ This file bundles the data of Axiom 1
 propositional content of Axioms 2-5 into a single structure
 `HaagKastlerNet`, formalising the blueprint declaration
 `def:haag-kastler-net-in-curved-spacetime` (Chapter 10,
-`sections/sec10/10-4_haag-kastler-axioms-in-curved-spacetime`, of the
+`sections/sec10/haag-kastler-axioms-in-curved-spacetime`, of the
 AQFT-in-Lean blueprint).
 
 ## Main definitions

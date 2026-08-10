@@ -11,7 +11,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebras
 This file formalises the blueprint declaration
 `def:isotony-in-curved-spacetime` (Axiom 2 of the Haag-Kastler
 axioms on a Lorentzian spacetime, Chapter 10
-(`sections/sec10/10-4_haag-kastler-axioms-in-curved-spacetime`) of the AQFT-in-Lean
+(`sections/sec10/haag-kastler-axioms-in-curved-spacetime`) of the AQFT-in-Lean
 blueprint):
 
 > If `𝐁₁ ⊆ 𝐁₂` (Alexandrov-basis sets) then the inclusion induces a

@@ -12,7 +12,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.Isotony
 This file formalises the blueprint declaration
 `def:local-commutativity-in-curved-spacetime` (Axiom 3 of the
 Haag-Kastler axioms on a Lorentzian spacetime, Chapter 10
-(`sections/sec10/10-4_haag-kastler-axioms-in-curved-spacetime`) of the
+(`sections/sec10/haag-kastler-axioms-in-curved-spacetime`) of the
 AQFT-in-Lean blueprint):
 
 > Let `𝐁₁`, `𝐁₂` be Alexandrov-basis sets. If `𝐁₁` and `𝐁₂` are

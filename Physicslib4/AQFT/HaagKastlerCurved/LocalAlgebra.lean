@@ -13,7 +13,7 @@ This file formalises the blueprint declarations
 `def:local-observable` and
 `def:local-completeness-in-curved-spacetime` (Axiom 4 of the
 Haag-Kastler axioms on a Lorentzian spacetime, Chapter 10
-(`sections/sec10/10-4_haag-kastler-axioms-in-curved-spacetime`) of the
+(`sections/sec10/haag-kastler-axioms-in-curved-spacetime`) of the
 AQFT-in-Lean blueprint):
 
 > **Local Observable.** The image `π_ω(a)` of a self-adjoint member
