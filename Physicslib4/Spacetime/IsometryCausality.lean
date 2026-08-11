@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Causality
+import Physicslib4.Spacetime.DiffeoPath
 import Physicslib4.Spacetime.Isometry
 import Physicslib4.Spacetime.IsometryTopology
 import Physicslib4.Spacetime.LorentzianSpacetime
@@ -39,51 +40,32 @@ variable {M : Spacetime}
 
 /-- Chain rule for the tangent vector of `g ∘ μ` along the parameter space:
 the derivative of the composite is the differential of the isometry applied
-to the derivative of `μ`. -/
+to the derivative of `μ`.
+
+Metric preservation plays no role, so this is the instance `ψ := g.toDiffeo` of
+`Spacetime.mfderivWithin_comp_diffeo`
+(`lmm:cross-metric-pushforward-path-tangent`). -/
 theorem mfderivWithin_comp_diffeo (g : Isometry M) (μ : M.SmoothPath)
     {s : ℝ} (hs : s ∈ μ.parameterSpace) :
     mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
         ((g.toDiffeo : M.Carrier → M.Carrier) ∘ μ.toFun) μ.parameterSpace s (1 : ℝ)
       = mfderiv M.model M.model g.toDiffeo (μ.toFun s)
           (mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model
-            μ.toFun μ.parameterSpace s (1 : ℝ)) := by
-  have huniq : UniqueMDiffWithinAt (modelWithCornersSelf ℝ ℝ) μ.parameterSpace s :=
-    (Path.uniqueDiffOn_parameterSpace M μ.toPath s hs).uniqueMDiffWithinAt
-  have hf : MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ) M.model
-      μ.toFun μ.parameterSpace s :=
-    (μ.smoothOn s hs).mdifferentiableWithinAt (by simp)
-  have hg : MDifferentiableWithinAt M.model M.model
-      (g.toDiffeo : M.Carrier → M.Carrier) Set.univ (μ.toFun s) :=
-    (g.toDiffeo.mdifferentiable (by simp) (μ.toFun s)).mdifferentiableWithinAt
-  have hcomp := mfderivWithin_comp s hg hf (by simp) huniq
-  rw [mfderivWithin_univ] at hcomp
-  rw [hcomp]
-  rfl
+            μ.toFun μ.parameterSpace s (1 : ℝ)) :=
+  Spacetime.mfderivWithin_comp_diffeo g.toDiffeo μ hs
 
 /--
 The **pushforward of a smooth path** `μ` under an isometry `g`: the composite
-`g ∘ μ` on the same parameter space. Smoothness is inherited from the
-composition of the smooth path with the (smooth) isometry, and the tangent
-vector is non-vanishing because the differential of an isometry is a linear
-isomorphism.
+`g ∘ μ` on the same parameter space.
+
+None of the data of the pushforward path depends on the metric, so this is by
+definition the instance `ψ := g.toDiffeo` of `Spacetime.pushforwardPath`
+(`lmm:cross-metric-pushforward-path`) rather than a second copy of the same
+construction; in particular the accessors below remain `rfl`.
 -/
 noncomputable def pushforwardPath (g : Isometry M) (μ : M.SmoothPath) :
-    M.SmoothPath where
-  parameterSpace := μ.parameterSpace
-  isClosed := μ.isClosed
-  isConnected := μ.isConnected
-  nontrivial := μ.nontrivial
-  toFun := (g.toDiffeo : M.Carrier → M.Carrier) ∘ μ.toFun
-  continuousOn := g.toDiffeo.continuous.comp_continuousOn μ.continuousOn
-  smoothOn := g.toDiffeo.contMDiff.comp_contMDiffOn μ.smoothOn
-  nonvanishing := by
-    intro s hs
-    rw [mfderivWithin_comp_diffeo g μ hs,
-      ← g.toDiffeo.mfderivToContinuousLinearEquiv_coe (by simp),
-      ContinuousLinearEquiv.coe_coe]
-    exact fun h => μ.nonvanishing s hs
-      ((g.toDiffeo.mfderivToContinuousLinearEquiv (by simp) (μ.toFun s)).injective
-        (h.trans (map_zero _).symm))
+    M.SmoothPath :=
+  Spacetime.pushforwardPath g.toDiffeo μ
 
 @[simp] theorem pushforwardPath_parameterSpace (g : Isometry M) (μ : M.SmoothPath) :
     (g.pushforwardPath μ).parameterSpace = μ.parameterSpace := rfl
@@ -97,7 +79,7 @@ theorem pushforwardPath_tangent (g : Isometry M) (μ : M.SmoothPath)
     {s : ℝ} (hs : s ∈ μ.parameterSpace) :
     (g.pushforwardPath μ).tangent s
       = mfderiv M.model M.model g.toDiffeo (μ.toFun s) (μ.tangent s) :=
-  mfderivWithin_comp_diffeo g μ hs
+  Spacetime.pushforwardPath_tangent g.toDiffeo μ hs
 
 /-- The pushforward of a timelike path is timelike: isometries preserve the
 timelike condition along a path. -/
@@ -122,17 +104,15 @@ theorem pushforwardPath_isCausal (g : Isometry M) (μ : M.SmoothPath)
 pushforward path. -/
 theorem pushforwardPath_isPastEndpoint (g : Isometry M) (μ : M.SmoothPath)
     {p : M.Carrier} (h : IsPastEndpoint M μ p) :
-    IsPastEndpoint M (g.pushforwardPath μ) (g.toDiffeo p) := by
-  obtain ⟨s, hs, hsp, hmin⟩ := h
-  exact ⟨s, hs, by simp only [pushforwardPath_toFun, Function.comp_apply, hsp], hmin⟩
+    IsPastEndpoint M (g.pushforwardPath μ) (g.toDiffeo p) :=
+  Spacetime.pushforwardPath_isPastEndpoint g.toDiffeo μ h
 
 /-- A future endpoint of `μ` is carried by `g` to a future endpoint of the
 pushforward path. -/
 theorem pushforwardPath_isFutureEndpoint (g : Isometry M) (μ : M.SmoothPath)
     {p : M.Carrier} (h : IsFutureEndpoint M μ p) :
-    IsFutureEndpoint M (g.pushforwardPath μ) (g.toDiffeo p) := by
-  obtain ⟨s, hs, hsp, hmax⟩ := h
-  exact ⟨s, hs, by simp only [pushforwardPath_toFun, Function.comp_apply, hsp], hmax⟩
+    IsFutureEndpoint M (g.pushforwardPath μ) (g.toDiffeo p) :=
+  Spacetime.pushforwardPath_isFutureEndpoint g.toDiffeo μ h
 
 /-! ### Preservation of future orientation, trips and chronological precedence
 

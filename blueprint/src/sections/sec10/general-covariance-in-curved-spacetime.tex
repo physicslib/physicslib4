@@ -6,7 +6,10 @@ The geometry this rests on --- the pullback metric, the pullback of a time orien
 
 \begin{definition}[Equivalence of Haag-Kastler Nets]
     \label{def:net-equivalence-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.NetEquivalence}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeneralCovariance.lean}
     \uses{def:haag-kastler-net-in-curved-spacetime, def:local-commutativity-in-curved-spacetime, def:local-algebras-in-curved-spacetime, def:lorentzian-spacetime}
+    \leanok
     Let $M_1$ and $M_2$ be Lorentzian spacetimes (\ref{def:lorentzian-spacetime}) and let $e : M_1.\mathrm{Carrier} \simeq M_2.\mathrm{Carrier}$ be a bijection of their carriers which \emph{maps basis sets to basis sets}: $M_2.\mathrm{IsBasisSet}\,(e(\mathbf{B}))$ holds whenever $M_1.\mathrm{IsBasisSet}\,\mathbf{B}$ does. Let $\mathfrak{U}_1$ and $\mathfrak{U}_2$ be Haag-Kastler nets (\ref{def:haag-kastler-net-in-curved-spacetime}) over $M_1$ and $M_2$ respectively. An \emph{equivalence of nets along $e$} is a chosen family of unital $*$-isomorphisms
     \begin{align}
         \Theta_{\mathbf{B}} : \mathfrak{U}_1(\mathbf{B}) \longrightarrow \mathfrak{U}_2(e(\mathbf{B})),
@@ -37,12 +40,15 @@ The geometry this rests on --- the pullback metric, the pullback of a time orien
 
 \begin{definition}[General Covariance]
     \label{def:general-covariance-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.NetTheory, Physicslib4.AQFT.HaagKastlerCurved.IsGenerallyCovariant, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv_apply, Physicslib4.Spacetime.LorentzianSpacetime.toAbstract_pullback_isBasisSet}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeneralCovariance.lean}
     \uses{def:net-equivalence-in-curved-spacetime, def:pullback-metric, def:lorentzian-spacetime, thrm:pullback-is-lorentzian-spacetime, lmm:pullback-preserves-future-orientation, lmm:cross-metric-isometry-preserves-basis-sets, def:cross-metric-isometry}
+    \leanok
     A \emph{net theory} is a section of the family of Haag-Kastler nets over Lorentzian spacetimes, that is, a term
     \begin{align}
         \mathfrak{U} : \prod_{L \,:\, \mathrm{LorentzianSpacetime}} \mathrm{HaagKastlerNet}\big(L.\mathtt{toAbstract}\big),
     \end{align}
-    assigning to every geometric Lorentzian spacetime $L$ (\ref{def:lorentzian-spacetime}) a net $\mathfrak{U}_L$ over the abstract spacetime interface it induces. Such a theory is \emph{generally covariant} when, for every $L$ with underlying spacetime $(M,g,t)$ and every $C^\infty$ diffeomorphism $\psi$ of $M$, the nets $\mathfrak{U}_L$ and $\mathfrak{U}_{\psi^*L}$ are equivalent in the sense of \ref{def:net-equivalence-in-curved-spacetime} along the bijection $e := \psi$ of the common carrier. Here $\psi^*L$ is the pullback Lorentzian spacetime, which is one by \ref{thrm:pullback-is-lorentzian-spacetime}, carrying $\psi^*g$ (\ref{def:pullback-metric}) and $\psi^*t$; its basis-set hypothesis on $e$ is discharged by \ref{lmm:cross-metric-isometry-preserves-basis-sets}, applied to $\psi$ viewed as an isometry from $\psi^*(M,g)$ to $(M,g)$ (\ref{def:cross-metric-isometry}), whose two-sided orientation hypothesis holds by \ref{lmm:pullback-preserves-future-orientation}.
+    assigning to every geometric Lorentzian spacetime $L$ (\ref{def:lorentzian-spacetime}) a net $\mathfrak{U}_L$ over the abstract spacetime interface it induces. Such a theory is \emph{generally covariant} when, for every $L$ with underlying spacetime $(M,g,t)$ and every $C^\infty$ diffeomorphism $\psi$ of $M$, the nets $\mathfrak{U}_{\psi^*L}$ and $\mathfrak{U}_L$ are equivalent in the sense of \ref{def:net-equivalence-in-curved-spacetime} along the bijection $e := \psi$ of the common carrier, read as a bijection from the carrier of $\psi^*L$ to the carrier of $L$ (it is $\psi$, not $\psi^{-1}$, that carries $\psi^*L$-diamonds to $L$-diamonds). Here $\psi^*L$ is the pullback Lorentzian spacetime, which is one by \ref{thrm:pullback-is-lorentzian-spacetime}, carrying $\psi^*g$ (\ref{def:pullback-metric}) and $\psi^*t$; its basis-set hypothesis on $e$ is discharged by \ref{lmm:cross-metric-isometry-preserves-basis-sets}, applied to $\psi$ viewed as an isometry from $\psi^*(M,g)$ to $(M,g)$ (\ref{def:cross-metric-isometry}), whose two-sided orientation hypothesis holds by \ref{lmm:pullback-preserves-future-orientation}.
 
     Quantifying over \emph{all} Lorentzian spacetimes rather than over the metrics on one fixed carrier is what makes this a statement about the theory. An assignment $(g,t) \mapsto \mathfrak{U}_{(g,t)}$ with $M$ held fixed would tie the notion to a chosen carrier and could not be instantiated at the pullback of a spacetime whose carrier is presented differently; the section formulation has no such parameter, and the pullback of any $L$ is again an object of the same family, so both sides of the equivalence are always in scope.
 \end{definition}

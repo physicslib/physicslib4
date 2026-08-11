@@ -17,6 +17,7 @@ import Physicslib4.AQFT.HaagKastler.VacuumState
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
 import Physicslib4.AQFT.HaagKastlerCurved.EinsteinCausality
+import Physicslib4.AQFT.HaagKastlerCurved.GeneralCovariance
 import Physicslib4.AQFT.HaagKastlerCurved.GeometricCovariance
 import Physicslib4.AQFT.HaagKastlerCurved.IdentityComponent
 import Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance
@@ -58,7 +59,10 @@ import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalComplement
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Causality
+import Physicslib4.Spacetime.CrossMetricIsometry
 import Physicslib4.Spacetime.Curves
+import Physicslib4.Spacetime.Diffeo
+import Physicslib4.Spacetime.DiffeoPath
 import Physicslib4.Spacetime.Isometry
 import Physicslib4.Spacetime.IsometryCausality
 import Physicslib4.Spacetime.IsometryTopology
@@ -70,3 +74,4 @@ import Physicslib4.Spacetime.LorentzianSpacetime
 import Physicslib4.Spacetime.Minkowski
 import Physicslib4.Spacetime.MinkowskiDilation
 import Physicslib4.Spacetime.MinkowskiDirected
+import Physicslib4.Spacetime.Pullback

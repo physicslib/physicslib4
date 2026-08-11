@@ -1130,7 +1130,9 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{definition}[Pullback of a Spacetime Metric]
     \label{def:pullback-metric}
+    \lean{Physicslib4.Spacetime.bilinearPrecomp, Physicslib4.Spacetime.bilinearPrecomp_apply, Physicslib4.Spacetime.pullbackVal, Physicslib4.Spacetime.pullbackVal_apply}
     \uses{def:spacetime}
+    \leanok
     Let $(M,g)$ be a spacetime (\ref{def:spacetime}) and let $\psi : M \to M$ be a $C^\infty$ diffeomorphism. The \emph{pullback metric} $\psi^*g$ is the field of bilinear forms
     \begin{align}
         (\psi^*g)_x(v,w) := g_{\psi(x)}\big(d\psi_x v,\, d\psi_x w\big),
@@ -1146,10 +1148,13 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{lemma}[The Differential of a Diffeomorphism is a Linear Equivalence]
     \label{lmm:mfderiv-diffeo-linear-equiv}
+    \lean{Physicslib4.Spacetime.Diffeo, Physicslib4.Spacetime.mfderivEquiv, Physicslib4.Spacetime.mfderivEquiv_coe, Physicslib4.Spacetime.mfderiv_eq_mfderivEquiv, Physicslib4.Spacetime.isInvertible_mfderiv}
     \uses{def:spacetime}
+    \leanok
     For a $C^\infty$ diffeomorphism $\psi$ of $M$ and any $x \in M$, the differential $d\psi_x : TM|_x \to TM|_{\psi(x)}$ is a continuous linear isomorphism.
 \end{lemma}
 \begin{proof}
+    \leanok
     This is Mathlib's \texttt{Diffeomorph.mfderivToContinuousLinearEquiv}, which packages the differential of a $C^n$ diffeomorphism ($n \neq 0$) at a point as a \texttt{ContinuousLinearEquiv} between the tangent spaces; \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} identifies its underlying map with $d\psi_x$.
 
     Two implementation points. First, the statement deliberately claims only that $d\psi_x$ is an isomorphism, and does \emph{not} identify the inverse of that equivalence with $d(\psi^{-1})_{\psi(x)}$. Such an identification is not available definitionally: \texttt{Diffeomorph.mfderivToContinuousLinearEquiv} is built as $(\psi.\mathtt{isLocalDiffeomorph}\;x).\mathtt{mfderivToContinuousLinearEquiv}$, so its inverse function comes from \texttt{IsLocalDiffeomorphAt.mfderivToContinuousLinearEquiv} --- the differential of a \emph{local} inverse chosen by that construction, not of the global $\psi^{-1}$. Where the notation $(d\psi_x)^{-1}$ appears below it therefore means the \texttt{symm} of this equivalence, not \emph{a priori} $d(\psi^{-1})_{\psi(x)}$, and the purely algebraic consumers --- \ref{lmm:mfderiv-inverse-eq-symm}, \ref{lmm:pullback-metric-lorentzian}, \ref{lmm:pullback-time-orientation-timelike}, \ref{lmm:pullback-future-pointing-timelike} --- need nothing more, since they use only the two cancellation identities $\mathtt{symm\_apply\_apply}$ and $\mathtt{apply\_symm\_apply}$ of the equivalence, which hold for whatever the \texttt{symm} happens to be.
@@ -1167,7 +1172,9 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{lemma}[Round-Trip Cancellation: $d\psi$ After $d(\psi^{-1})$]
     \label{lmm:mfderiv-symm-cancel-left}
+    \lean{Physicslib4.Spacetime.mfderiv_symm_cancel_left}
     \uses{def:spacetime}
+    \leanok
     Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $x \in M$. Then, pointwise,
     \begin{align}
         d\psi_x\big(d(\psi^{-1})_{\psi(x)}\,u\big) = u \qquad \text{for every } u \in TM|_{\psi(x)}.
@@ -1175,6 +1182,7 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
     The pointwise form displayed above is the \emph{primary} statement of this node, because that is the form in which every consumer applies it; the operator identity $d\psi_x \circ d(\psi^{-1})_{\psi(x)} = \mathrm{id}_{TM|_{\psi(x)}}$ follows from it by \texttt{ContinuousLinearMap.ext} and is not what is stated. Here $d(\psi^{-1})_{\psi(x)}$ means $\mathtt{mfderiv}\;I\;I\;\psi.\mathtt{symm}\;(\psi\,x)$: the differential of the \emph{global} inverse diffeomorphism, \emph{not} the \texttt{symm} of the equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv}.
 \end{lemma}
 \begin{proof}
+    \leanok
     Differentiate the composite $\psi \circ \psi^{-1}$ at the point $\psi(x)$, and apply the result to $u$.
 
     The chain rule to cite is \texttt{mfderiv\_comp\_apply\_of\_eq}, \emph{not} \texttt{mfderiv\_comp} (nor its \texttt{\_apply} form). Its exact shape is
@@ -1190,7 +1198,9 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{lemma}[Round-Trip Cancellation: $d(\psi^{-1})$ After $d\psi$]
     \label{lmm:mfderiv-symm-cancel-right}
+    \lean{Physicslib4.Spacetime.mfderiv_symm_cancel_right}
     \uses{def:spacetime}
+    \leanok
     Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $x \in M$. Then, pointwise,
     \begin{align}
         d(\psi^{-1})_{\psi(x)}\big(d\psi_x\,v\big) = v \qquad \text{for every } v \in TM|_x,
@@ -1198,6 +1208,7 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
     with the same reading of $d(\psi^{-1})_{\psi(x)}$ as in \ref{lmm:mfderiv-symm-cancel-left}, and again with the pointwise form as the primary statement.
 \end{lemma}
 \begin{proof}
+    \leanok
     The mirror of \ref{lmm:mfderiv-symm-cancel-left}, run on $\psi^{-1} \circ \psi$ at $x$: \texttt{mfderiv\_comp\_apply\_of\_eq} with $g := \psi.\mathtt{symm}$, $f := \psi$, base point $x$ and $y := \psi(x)$, so that the base-point argument $hy : \psi\,x = \psi\,x$ is \texttt{rfl} in this order --- the transport is trivial here, which is precisely why the two directions are separate nodes rather than one, the $hy$ bookkeeping being asymmetric between them. The composite is the identity by \texttt{Diffeomorph.symm\_apply\_apply}, and \texttt{mfderiv\_id} finishes as before.
 
     Its consumer is \ref{lmm:cross-metric-isometry-symm}, where it is paired with \ref{lmm:mfderiv-symm-cancel-left} to record that $d(\psi^{-1})_{\psi(x)}$ and $d\psi_x$ are mutually inverse; \ref{lmm:mfderiv-symm-cancel-left} alone is what the orientation-transport nodes need.
@@ -1205,10 +1216,13 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{lemma}[The Formal Inverse of $d\psi_x$ is the Inverse Equivalence]
     \label{lmm:mfderiv-inverse-eq-symm}
+    \lean{Physicslib4.Spacetime.inverse_mfderiv_eq_symm, Physicslib4.Spacetime.inverse_mfderiv_apply_mfderiv, Physicslib4.Spacetime.mfderiv_apply_inverse_mfderiv}
     \uses{lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
     For a $C^\infty$ diffeomorphism $\psi$ of $M$ and any $x \in M$, the formal inverse $\mathtt{ContinuousLinearMap.inverse}\,(d\psi_x)$ agrees with the inverse of the continuous linear equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv}; in particular $(d\psi_x)^{-1}\,(d\psi_x v) = v$ and $d\psi_x\big((d\psi_x)^{-1}u\big) = u$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Mathlib's \texttt{ContinuousLinearMap.inverse} is defined by cases on invertibility and returns the junk value $0$ when its argument is not invertible, so nothing can be cancelled against it until invertibility is exhibited. Here \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} identifies $d\psi_x$ with the coercion of an equivalence, and \texttt{ContinuousLinearMap.inverse\_equiv} rewrites the formal inverse of such a coercion as the \texttt{symm} of that equivalence. The two cancellation identities are then \texttt{symm\_apply\_apply} and \texttt{apply\_symm\_apply}.
 \end{proof}
 
@@ -1216,28 +1230,37 @@ This leaf is what licenses the $d\psi$ cancellations used below, and it is not o
 
 \begin{lemma}[The Pullback Metric is Symmetric]
     \label{lmm:pullback-metric-symm}
+    \lean{Physicslib4.Spacetime.pullbackVal_symm}
     \uses{def:pullback-metric}
+    \leanok
     For every $x \in M$ the form $(\psi^*g)_x$ of \ref{def:pullback-metric} is symmetric.
 \end{lemma}
 \begin{proof}
+    \leanok
     Unfold \ref{def:pullback-metric} on both sides and apply the symmetry of $g_{\psi(x)}$ to the pair $(d\psi_x v, d\psi_x w)$.
 \end{proof}
 
 \begin{lemma}[The Pullback Metric is Non-Degenerate]
     \label{lmm:pullback-metric-nondegenerate}
+    \lean{Physicslib4.Spacetime.pullbackVal_nondegenerate}
     \uses{def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
     For every $x \in M$ the form $(\psi^*g)_x$ of \ref{def:pullback-metric} is non-degenerate: if $(\psi^*g)_x(v,w) = 0$ for all $w$, then $v = 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Since $d\psi_x$ is surjective (\ref{lmm:mfderiv-diffeo-linear-equiv}), every $u \in TM|_{\psi(x)}$ is $d\psi_x w$ for some $w$, so the hypothesis says $g_{\psi(x)}(d\psi_x v, \cdot)$ vanishes identically. Non-degeneracy of $g$ gives $d\psi_x v = 0$, and injectivity of $d\psi_x$ gives $v = 0$.
 \end{proof}
 
 \begin{lemma}[The Pullback Metric is Lorentzian]
     \label{lmm:pullback-metric-lorentzian}
+    \lean{Physicslib4.Spacetime.pullbackVal_lorentzian}
     \uses{def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv, lmm:mfderiv-inverse-eq-symm, def:spacetime}
+    \leanok
     For every $x \in M$ there is a basis of $TM|_x$ whose Gram matrix under $(\psi^*g)_x$ is $\mathrm{diag}(-1,1,1,1)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Let $\{e_i\}$ be a signature basis of $TM|_{\psi(x)}$ for $g_{\psi(x)}$, supplied by the Lorentzian condition of \ref{def:spacetime}. Transport it along the inverse of the linear equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv} using \texttt{Module.Basis.map}, giving a basis $\{(d\psi_x)^{-1}e_i\}$ of $TM|_x$. Its Gram matrix is computed by unfolding \ref{def:pullback-metric} and cancelling $d\psi_x$ against $(d\psi_x)^{-1}$:
     \begin{align}
         (\psi^*g)_x\big((d\psi_x)^{-1}e_i,\, (d\psi_x)^{-1}e_j\big) = g_{\psi(x)}(e_i, e_j),
@@ -1251,7 +1274,9 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
 
 \begin{lemma}[The Pullback Metric is a Smooth Section of the Bilinear-Form Bundle]
     \label{lmm:pullback-metric-smooth-in-charts}
+    \lean{Physicslib4.Spacetime.pullbackVal_contMDiff}
     \uses{def:spacetime, def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
     The assignment $x \mapsto (\psi^*g)_x$ of \ref{def:pullback-metric} satisfies the \texttt{contMDiff} field of \ref{def:spacetime}: it is a section of the bundle of continuous bilinear forms on the tangent bundle of regularity index $\top = \omega$, i.e.\ a $C^\omega$ (real-analytic) section,
     \begin{align}
         \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\top\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;\big((\psi^*g)_x\big)\Big).
@@ -1294,7 +1319,9 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
 
 \begin{theorem}[The Pullback of a Spacetime is a Spacetime]
     \label{thrm:pullback-is-spacetime}
+    \lean{Physicslib4.Spacetime.pullback, Physicslib4.Spacetime.pullback_Carrier, Physicslib4.Spacetime.pullback_model, Physicslib4.Spacetime.pullback_val, Physicslib4.Spacetime.pullbackDiffeo}
     \uses{def:spacetime, def:pullback-metric, lmm:pullback-metric-symm, lmm:pullback-metric-nondegenerate, lmm:pullback-metric-lorentzian, lmm:pullback-metric-smooth-in-charts}
+    \leanok
     For a spacetime $(M,g)$ and a $C^\infty$ diffeomorphism $\psi$ of $M$, the pullback datum $\psi^*(M,g)$ of \ref{def:pullback-metric} is again a spacetime.
 \end{theorem}
 \begin{proof}
@@ -1303,7 +1330,9 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
 
 \begin{definition}[Two-Sided Preservation of Future Orientation]
     \label{def:preserves-future-orientation}
+    \lean{Physicslib4.Spacetime.PreservesFutureOrientation, Physicslib4.Spacetime.PreservesFutureOrientationTwoSided}
     \uses{def:time-orientable, def:future-and-past-pointing-vectors}
+    \leanok
     Let $g_1$ and $g_2$ be metrics on $M$ with time orientations $t_1$ and $t_2$ respectively, and let $\psi$ be a $C^\infty$ diffeomorphism of $M$. Say $\psi$ \emph{preserves the future orientation} when
     \begin{align}
         v \text{ future-pointing for } (g_1,t_1) \;\Longrightarrow\; d\psi_x v \text{ future-pointing for } (g_2,t_2)
@@ -1319,7 +1348,9 @@ This is the main structural gain of making the bundle-section form primitive. In
 
 \begin{lemma}[The Pullback of a Bundle-Smooth Vector Field Along a Diffeomorphism is Bundle-Smooth]
     \label{lmm:mpullback-vectorField-contMDiff-of-diffeo}
+    \lean{Physicslib4.Spacetime.contMDiff_mpullback_vectorField}
     \uses{def:time-orientable, lmm:mfderiv-diffeo-linear-equiv, def:spacetime}
+    \leanok
     Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $V$ be a vector field on $M$ with $\mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;V)$. Then
     \begin{align}
         \mathtt{CMDiff}\;\top\;\big(\mathtt{T\%}\;(\mathtt{VectorField.mpullback}\;I\;I\;\psi\;V)\big).
@@ -1327,6 +1358,7 @@ This is the main structural gain of making the bundle-section form primitive. In
     This node was always stated in bundle-section terms, and it is now consumed directly: the hypothesis $hV$ is \emph{literally} the \texttt{smooth} field of \ref{def:time-orientable}, so applying the node at $V = t$ needs no conversion, and its conclusion is literally the \texttt{smooth} field to be produced for $\psi^*t$.
 \end{lemma}
 \begin{proof}
+    \leanok
     This is \texttt{ContMDiff.mpullback\_vectorField}, whose four hypotheses must all be supplied --- they are more than invertibility of the differential:
     \begin{itemize}
         \item $hV$: $\mathtt{CMDiff}\;m\;(\mathtt{T\%}\;V)$, the hypothesis of this node, which for $V = t$ is the \texttt{smooth} field of \ref{def:time-orientable} verbatim.
@@ -1339,16 +1371,21 @@ This is the main structural gain of making the bundle-section form primitive. In
 
 \begin{lemma}[The Pullback Time Orientation is Nowhere Vanishing]
     \label{lmm:pullback-time-orientation-ne-zero}
+    \lean{Physicslib4.Spacetime.mpullback_field_ne_zero}
     \uses{def:time-orientable, lmm:mfderiv-inverse-eq-symm}
+    \leanok
     For every $x \in M$, $(\psi^*t)_x = (d\psi_x)^{-1}\,t_{\psi(x)} \neq 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     By \ref{lmm:mfderiv-inverse-eq-symm} the formal inverse $(d\psi_x)^{-1}$ occurring in \texttt{VectorField.mpullback} is the \texttt{symm} of a continuous linear equivalence, hence injective (\texttt{ContinuousLinearEquiv.injective}), and it sends $0$ to $0$. Since $t_{\psi(x)} \neq 0$ by the non-vanishing field of \ref{def:time-orientable}, the image is nonzero. Without \ref{lmm:mfderiv-inverse-eq-symm} this fails: $\mathtt{ContinuousLinearMap.inverse}$ returns the junk value $0$ off the invertible case and is then not injective.
 \end{proof}
 
 \begin{lemma}[The Pullback Time Orientation is Everywhere Timelike]
     \label{lmm:pullback-time-orientation-timelike}
+    \lean{Physicslib4.Spacetime.pullbackVal_mpullback_field_self, Physicslib4.Spacetime.isTimelike_mpullback_field}
     \uses{def:pullback-metric, def:time-orientable, lmm:mfderiv-inverse-eq-symm}
+    \leanok
     For every $x \in M$,
     \begin{align}
         (\psi^*g)_x\big((\psi^*t)_x,\, (\psi^*t)_x\big) = g_{\psi(x)}\big(t_{\psi(x)},\, t_{\psi(x)}\big) < 0,
@@ -1356,21 +1393,27 @@ This is the main structural gain of making the bundle-section form primitive. In
     so $(\psi^*t)_x$ is timelike for $\psi^*g$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Unfold \ref{def:pullback-metric} (whose defining equation is recovered from the bundled form by $\mathtt{bilinearComp\_apply}$), so that the left-hand side reads $g_{\psi(x)}\big(d\psi_x\,(d\psi_x)^{-1} t_{\psi(x)},\, d\psi_x\,(d\psi_x)^{-1} t_{\psi(x)}\big)$. Cancel each occurrence by \ref{lmm:mfderiv-inverse-eq-symm} alone. That suffices, and \ref{lmm:mfderiv-symm-cancel-left} is deliberately \emph{not} needed here: the inverse appearing in this expression is the one written into $\mathtt{VectorField.mpullback}$, namely $\mathtt{ContinuousLinearMap.inverse}\,(d\psi_x)$, and \emph{not} $\mathtt{mfderiv}\;\psi.\mathtt{symm}\;(\psi\,x)$. So the cancellation required is the \texttt{apply\_symm\_apply} of the equivalence, exactly as recorded in the first implementation point of \ref{lmm:mfderiv-diffeo-linear-equiv}; the global-inverse round trip is a different identity and would be an unnecessary detour. The resulting quantity is negative by the timelike field of \ref{def:time-orientable} for $t$ at $\psi(x)$.
 \end{proof}
 
 \begin{lemma}[Pullback of a Time Orientation]
     \label{lmm:pullback-time-orientation}
+    \lean{Physicslib4.Spacetime.pullbackTimeOrientation, Physicslib4.Spacetime.pullbackTimeOrientation_field}
     \uses{def:time-orientable, def:pullback-metric, thrm:pullback-is-spacetime, lmm:mpullback-vectorField-contMDiff-of-diffeo, lmm:pullback-time-orientation-ne-zero, lmm:pullback-time-orientation-timelike}
+    \leanok
     Let $t$ be a time orientation of $(M,g)$ (\ref{def:time-orientable}). Then the pullback vector field $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$ is a time orientation of $\psi^*(M,g)$ (\ref{thrm:pullback-is-spacetime}): it is smooth, nowhere vanishing, and everywhere timelike for $\psi^*g$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Assemble the three fields of a $\mathtt{TimeOrientation}$ for $\psi^*(M,g)$. Smoothness is one step: apply \ref{lmm:mpullback-vectorField-contMDiff-of-diffeo} at $V = t$, whose hypothesis is the \texttt{smooth} field of \ref{def:time-orientable} for $t$ as it stands and whose conclusion is the \texttt{smooth} field required of $\psi^*t$; both sides are bundle-section statements, so no conversion is performed in either direction. Non-vanishing is \ref{lmm:pullback-time-orientation-ne-zero} and timelikeness is \ref{lmm:pullback-time-orientation-timelike}.
 \end{proof}
 
 \begin{lemma}[Transport of Future-Pointing Timelike Vectors]
     \label{lmm:pullback-future-pointing-timelike}
+    \lean{Physicslib4.Spacetime.pullbackVal_mpullback_field_apply, Physicslib4.Spacetime.isFuturePointing_pullback_iff_of_isTimelike}
     \uses{def:pullback-metric, lmm:pullback-time-orientation, def:future-and-past-pointing-vectors, lmm:mfderiv-inverse-eq-symm}
+    \leanok
     For $v \in TM|_x$ timelike for $\psi^*g$,
     \begin{align}
         (\psi^*g)_x\big((\psi^*t)_x,\, v\big) = g_{\psi(x)}\big(t_{\psi(x)},\, d\psi_x v\big),
@@ -1378,15 +1421,19 @@ This is the main structural gain of making the bundle-section form primitive. In
     and hence $v$ is future-pointing for $(\psi^*g, \psi^*t)$ if and only if $d\psi_x v$ is future-pointing for $(g,t)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Unfold \ref{def:pullback-metric} in the left-hand side and cancel $d\psi_x\big((d\psi_x)^{-1} t_{\psi(x)}\big) = t_{\psi(x)}$ by \ref{lmm:mfderiv-inverse-eq-symm}. Timelikeness transports immediately, since $(\psi^*g)_x(v,v) = g_{\psi(x)}(d\psi_x v, d\psi_x v)$ is the defining equation of \ref{def:pullback-metric} at $w = v$. Both sides of the claimed equivalence therefore sit in the timelike branch of \ref{def:future-and-past-pointing-vectors}, where future-pointing is exactly negativity of the displayed quantity.
 \end{proof}
 
 \begin{lemma}[Transport of Future-Pointing Null Vectors]
     \label{lmm:pullback-future-pointing-null}
+    \lean{Physicslib4.Spacetime.isFuturePointing_pullback_iff_of_isNull}
     \uses{def:pullback-metric, lmm:pullback-time-orientation, def:future-and-past-pointing-vectors, lmm:pullback-future-pointing-timelike, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
     For $v \in TM|_x$ null for $\psi^*g$, $v$ is future-pointing for $(\psi^*g, \psi^*t)$ if and only if $d\psi_x v$ is future-pointing for $(g,t)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Future-pointing for a null vector is \emph{not} a sign condition: by \ref{def:future-and-past-pointing-vectors} it is the existence of a sequence $v_n$ of future-pointing timelike vectors with $v_n \to v$. So the sign argument of \ref{lmm:pullback-future-pointing-timelike} does not apply directly and the witnessing sequence must be transported.
 
     Given such a sequence for $v$, put $w_n := d\psi_x v_n$. Each $w_n$ is timelike and future-pointing for $(g,t)$ by \ref{lmm:pullback-future-pointing-timelike}, and $w_n \to d\psi_x v$ because $d\psi_x$ is a continuous linear map (\ref{lmm:mfderiv-diffeo-linear-equiv}), so $\mathtt{Filter.Tendsto}$ composes with its continuity at $v$. As $d\psi_x v$ is null for $g$, the sequence $(w_n)$ witnesses the null branch for $d\psi_x v$. The converse runs the same argument with $(d\psi_x)^{-1}$, itself continuous and linear.
@@ -1394,10 +1441,13 @@ This is the main structural gain of making the bundle-section form primitive. In
 
 \begin{lemma}[The Pullback Preserves the Future Orientation Two-Sidedly]
     \label{lmm:pullback-preserves-future-orientation}
+    \lean{Physicslib4.Spacetime.pullback_preservesFutureOrientationTwoSided}
     \uses{def:preserves-future-orientation, lmm:pullback-future-pointing-timelike, lmm:pullback-future-pointing-null, lmm:mfderiv-symm-cancel-left}
+    \leanok
     The diffeomorphism $\psi$, regarded as carrying $(\psi^*g, \psi^*t)$ to $(g,t)$, satisfies the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}.
 \end{lemma}
 \begin{proof}
+    \leanok
     A future-pointing vector is either timelike or null (\ref{def:future-and-past-pointing-vectors}). The timelike case is \ref{lmm:pullback-future-pointing-timelike} and the null case is \ref{lmm:pullback-future-pointing-null}; each is an equivalence, so it yields both the forward direction for $\psi$ and the forward direction for $\psi^{-1}$.
 
     The $\psi^{-1}$ half is where \ref{lmm:mfderiv-symm-cancel-left} is spent, and it is worth naming the point exactly, since the edge is otherwise unlocatable in the argument. That half asks: for $y \in M$ and $u \in TM|_y$ future-pointing for $(g,t)$, show $d(\psi^{-1})_y u$ is future-pointing for $(\psi^*g, \psi^*t)$. Put $x := \psi^{-1}(y)$, so $y = \psi(x)$, and apply the equivalence at $x$ to the vector $v := d(\psi^{-1})_{\psi(x)}u$: it says $v$ is future-pointing for $(\psi^*g,\psi^*t)$ iff $d\psi_x v$ is future-pointing for $(g,t)$. But $d\psi_x v = d\psi_x\big(d(\psi^{-1})_{\psi(x)}u\big) = u$ by \ref{lmm:mfderiv-symm-cancel-left}, so the right-hand side is the hypothesis. The same rewriting is also what supplies the causal-type side condition of the equivalence, $(\psi^*g)_x(v,v) = g_{\psi(x)}(d\psi_x v, d\psi_x v) = g_y(u,u)$, so $v$ sits in the same timelike-or-null branch as $u$. Without the cancellation the two sides of the equivalence simply do not meet the hypothesis, since $d\psi_x\,d(\psi^{-1})_{\psi(x)}u$ is not syntactically $u$.
@@ -1405,7 +1455,9 @@ This is the main structural gain of making the bundle-section form primitive. In
 
 \begin{definition}[Isometry Between Two Metrics on One Manifold]
     \label{def:cross-metric-isometry}
+    \lean{Physicslib4.Spacetime.CrossIsometry, Physicslib4.Spacetime.pullbackCrossIsometry, Physicslib4.Spacetime.Isometry.toCrossIsometry, Physicslib4.Spacetime.Isometry.toCrossIsometry_toDiffeo, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_iff}
     \uses{def:pullback-metric}
+    \leanok
     Let $g_1$ and $g_2$ be metrics on the same manifold $M$. A $C^\infty$ diffeomorphism $\psi : M \to M$ is an \emph{isometry from $(M,g_1)$ to $(M,g_2)$} when $\psi^*g_2 = g_1$ (\ref{def:pullback-metric}), that is, when
     \begin{align}
         g_2\big(d\psi_x v,\, d\psi_x w\big) = g_1(v,w)
@@ -1415,7 +1467,9 @@ This is the main structural gain of making the bundle-section form primitive. In
 
 \begin{lemma}[The Inverse of a Cross-Metric Isometry is a Cross-Metric Isometry]
     \label{lmm:cross-metric-isometry-symm}
+    \lean{Physicslib4.Spacetime.CrossIsometry.symm_preserves, Physicslib4.Spacetime.CrossIsometry.symm}
     \uses{def:cross-metric-isometry, lmm:mfderiv-symm-cancel-left, lmm:mfderiv-symm-cancel-right}
+    \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ in the sense of \ref{def:cross-metric-isometry}. Then $\psi^{-1}$ is an isometry from $(M,g_2)$ to $(M,g_1)$: for every $y \in M$ and all $u, u' \in TM|_y$,
     \begin{align}
         g_1\big(d(\psi^{-1})_y u,\; d(\psi^{-1})_y u'\big) = g_2(u, u').
@@ -1423,6 +1477,7 @@ This is the main structural gain of making the bundle-section form primitive. In
     Moreover $d(\psi^{-1})_{\psi(x)}$ and $d\psi_x$ are mutually inverse continuous linear maps for every $x$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Given $y$, put $x := \psi^{-1}(y)$, so that $y = \psi(x)$ by \texttt{Diffeomorph.apply\_symm\_apply}; every point of $M$ is of this form, so it is enough to prove the equation at $y = \psi(x)$. Instantiate the defining equation of \ref{def:cross-metric-isometry} at $x$ with $v := d(\psi^{-1})_{\psi(x)}u$ and $w := d(\psi^{-1})_{\psi(x)}u'$:
     \begin{align}
         g_2\big(d\psi_x\,d(\psi^{-1})_{\psi(x)}u,\; d\psi_x\,d(\psi^{-1})_{\psi(x)}u'\big) = g_1\big(d(\psi^{-1})_{\psi(x)}u,\; d(\psi^{-1})_{\psi(x)}u'\big),
@@ -1434,10 +1489,13 @@ This is the main structural gain of making the bundle-section form primitive. In
 
 \begin{lemma}[Cross-Metric Isometries Preserve the Causal Classification]
     \label{lmm:cross-metric-isometry-preserves-classification}
+    \lean{Physicslib4.Spacetime.CrossIsometry.preserves_self, Physicslib4.Spacetime.CrossIsometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.CrossIsometry.isNull_mfderiv_iff, Physicslib4.Spacetime.CrossIsometry.isSpacelike_mfderiv_iff}
     \uses{def:cross-metric-isometry, def:timelike-spacelike-null-vectors}
+    \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ (\ref{def:cross-metric-isometry}). Then $g_2(d\psi_x v, d\psi_x v) = g_1(v,v)$, and hence $d\psi_x v$ is timelike, null, or spacelike for $g_2$ if and only if $v$ is timelike, null, or spacelike for $g_1$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Specialise the defining equation of \ref{def:cross-metric-isometry} to $w = v$; the three equivalences follow because the sign of the metric square is unchanged. The single-metric \ref{lmm:isometry-preserves-classification} does not apply: source and target metrics differ here, so the statement is not an instance of it.
 \end{proof}
 
@@ -1445,7 +1503,9 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[The Tangent Chain Rule Along a Path]
     \label{lmm:cross-metric-pushforward-path-tangent}
+    \lean{Physicslib4.Spacetime.mfderivWithin_comp_diffeo, Physicslib4.Spacetime.pushforwardPath_tangent}
     \uses{def:paths, lmm:path-parameter-unique-diff, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
     Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and $\mu$ a smooth path. For every parameter $s$ in the parameter space of $\mu$,
     \begin{align}
         \tfrac{d}{ds}\big(\psi \circ \mu\big)(s) = d\psi_{\mu(s)}\big(\dot\mu(s)\big),
@@ -1453,6 +1513,7 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     the derivatives being taken within the parameter space.
 \end{lemma}
 \begin{proof}
+    \leanok
     This is \texttt{mfderivWithin\_comp} for the composite of $\mu$ with $\psi$. Write $P$ for the parameter space of $\mu$ (the inner set), $u$ for the outer set, and keep $s \in P$ for the parameter of the statement; the set and the point must be kept notationally apart, since \texttt{mfderivWithin\_comp} takes both. With that convention its exact hypotheses are
     \begin{align}
         hg &: \mathtt{MDifferentiableWithinAt}\;I'\;I''\;\psi\;u\;(\mu(s)), \qquad hf : \mathtt{MDifferentiableWithinAt}\;I\;I'\;\mu\;P\;s, \\
@@ -1465,10 +1526,13 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[Pushforward of a Path Under a Cross-Metric Isometry]
     \label{lmm:cross-metric-pushforward-path}
+    \lean{Physicslib4.Spacetime.pushforwardPath, Physicslib4.Spacetime.pushforwardPath_parameterSpace, Physicslib4.Spacetime.pushforwardPath_toFun}
     \uses{def:cross-metric-isometry, def:paths, lmm:cross-metric-pushforward-path-tangent, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
     An isometry $\psi$ from $(M,g_1)$ to $(M,g_2)$ pushes a smooth path $\mu$ forward to a smooth path $\psi \circ \mu$ on the same parameter space, with the same closedness, connectedness and non-triviality data.
 \end{lemma}
 \begin{proof}
+    \leanok
     The parameter space and its properties are copied. Continuity and smoothness of $\psi \circ \mu$ follow by composing the smooth $\psi$ with the smooth $\mu$. Non-vanishing of the tangent vector is the only real obligation: rewrite it with \ref{lmm:cross-metric-pushforward-path-tangent} and use that $d\psi_{\mu(s)}$ is injective (\ref{lmm:mfderiv-diffeo-linear-equiv}) together with non-vanishing of $\dot\mu(s)$.
 
     Again this should be assembled from the existing template rather than rederived: \texttt{Physicslib4.Spacetime.Isometry.pushforwardPath} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean:70} is the single-metric version of this very construction, and its \texttt{nonvanishing} field is the template for the obligation above --- it rewrites with \texttt{mfderivWithin\_comp\_diffeo}, then with $\leftarrow$\,\texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} and \texttt{ContinuousLinearEquiv.coe\_coe} to expose the equivalence, and finishes with its \texttt{injective}. The remaining fields (\texttt{parameterSpace}, \texttt{isClosed}, \texttt{isConnected}, \texttt{nontrivial}, \texttt{continuousOn}, \texttt{smoothOn}) are copied verbatim from that template, none of them mentioning a metric.
@@ -1476,37 +1540,49 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[The Pushforward Preserves the Timelike and Causal Conditions]
     \label{lmm:cross-metric-pushforward-path-causal}
+    \lean{Physicslib4.Spacetime.CrossIsometry.pushforwardPath_isTimelike, Physicslib4.Spacetime.CrossIsometry.pushforwardPath_isCausal}
     \uses{lmm:cross-metric-pushforward-path, lmm:cross-metric-pushforward-path-tangent, def:timelike-and-causal-smooth-curves, lmm:cross-metric-isometry-preserves-classification}
+    \leanok
     If $\mu$ is timelike (respectively causal) for $g_1$, then $\psi \circ \mu$ is timelike (respectively causal) for $g_2$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Fix $s$ and rewrite the tangent vector of $\psi \circ \mu$ using \ref{lmm:cross-metric-pushforward-path-tangent}. The classification of $d\psi_{\mu(s)}\dot\mu(s)$ for $g_2$ agrees with that of $\dot\mu(s)$ for $g_1$ by \ref{lmm:cross-metric-isometry-preserves-classification}; for the causal case split on the timelike and null disjuncts. This mirrors $\mathtt{pushforwardPath\_isTimelike}$ and $\mathtt{pushforwardPath\_isCausal}$.
 \end{proof}
 
 \begin{lemma}[The Pushforward Transports Endpoints]
     \label{lmm:cross-metric-pushforward-path-endpoints}
+    \lean{Physicslib4.Spacetime.pushforwardPath_isPastEndpoint, Physicslib4.Spacetime.pushforwardPath_isFutureEndpoint}
     \uses{lmm:cross-metric-pushforward-path, def:endpoints}
+    \leanok
     If $p$ is a past (respectively future) endpoint of $\mu$, then $\psi(p)$ is a past (respectively future) endpoint of $\psi \circ \mu$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Being an endpoint (\ref{def:endpoints}) asserts the existence of a parameter $s$ that is minimal (respectively maximal) in the parameter space with $\mu(s) = p$. The pushforward has the same parameter space and $(\psi \circ \mu)(s) = \psi(p)$, so the same $s$ witnesses the condition; no metric or causal input is used. This mirrors $\mathtt{pushforwardPath\_isPastEndpoint}$ and $\mathtt{pushforwardPath\_isFutureEndpoint}$.
 \end{proof}
 
 \begin{lemma}[Cross-Metric Isometries Transport Chronological Precedence]
     \label{lmm:cross-metric-isometry-preserves-chronology}
+    \lean{Physicslib4.Spacetime.pushforwardPath_isFutureOriented, Physicslib4.Spacetime.CrossIsometry.segmentPrecedes, Physicslib4.Spacetime.CrossIsometry.chronologicallyPrecedes}
     \uses{def:cross-metric-isometry, def:preserves-future-orientation, def:trip, def:chronological-future-and-chronological-past, lmm:cross-metric-pushforward-path, lmm:cross-metric-pushforward-path-causal, lmm:cross-metric-pushforward-path-endpoints}
+    \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$, each equipped with a time orientation, and suppose $\psi$ preserves the future orientation in the sense of \ref{def:preserves-future-orientation}. Then $p \ll_1 q$ implies $\psi(p) \ll_2 \psi(q)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     A witness for $p \ll_1 q$ is a future-oriented trip (\ref{def:trip}) from $p$ to $q$ for $g_1$. Push it forward by \ref{lmm:cross-metric-pushforward-path}: it is timelike for $g_2$ by \ref{lmm:cross-metric-pushforward-path-causal}, has endpoints $\psi(p)$ and $\psi(q)$ by \ref{lmm:cross-metric-pushforward-path-endpoints}, and is future-oriented because $d\psi$ carries future-pointing tangent vectors to future-pointing tangent vectors (\ref{def:preserves-future-orientation}). So it witnesses $\psi(p) \ll_2 \psi(q)$.
 \end{proof}
 
 \begin{lemma}[Image of the Chronological Future]
     \label{lmm:cross-metric-chronological-future-image}
+    \lean{Physicslib4.Spacetime.CrossIsometry.chronologicalFuture_image}
     \uses{lmm:cross-metric-isometry-preserves-chronology, lmm:cross-metric-isometry-symm, def:preserves-future-orientation, def:chronological-future-and-chronological-past}
+    \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ satisfying the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}. Then $\psi\big(I^+_1(p)\big) = I^+_2(\psi(p))$ for every $p$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The inclusion $\subseteq$ is \ref{lmm:cross-metric-isometry-preserves-chronology} applied to $p \ll_1 q$. For $\supseteq$, note that $\psi^{-1}$ is an isometry from $(M,g_2)$ to $(M,g_1)$ by \ref{lmm:cross-metric-isometry-symm}, and preserves the future orientation by the second half of the two-sided hypothesis. Applying \ref{lmm:cross-metric-isometry-preserves-chronology} to $\psi^{-1}$ at the point $\psi(p)$ gives $\psi^{-1}\big(I^+_2(\psi(p))\big) \subseteq I^+_1(p)$, which is the reverse inclusion after applying the bijection $\psi$.
 
     Take the skeleton from the repository rather than inventing one: the single-metric forms \texttt{Physicslib4.Spacetime.Isometry.chronologicalFuture\_image\_subset} and \texttt{...chronologicalFuture\_image} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean:270,294} are exactly this argument, and the cross-metric version differs only in carrying two metrics. In particular their proofs use \emph{neither} \texttt{Set.image\_subset\_iff} \emph{nor} any \texttt{Equiv.image\_eq\_preimage}-style rewriting, which is the tempting but wrong route: the $\subseteq$ half destructures the image membership directly (\texttt{rintro \_ $\langle$q, hq, rfl$\rangle$}) and the $\supseteq$ half exhibits the witness $\psi^{-1}(r)$ together with the point-level cancellation \texttt{toDiffeo\_inv\_apply}. The chronology step itself is lifted along the transitive closure by \texttt{Relation.TransGen.lift}.
@@ -1514,30 +1590,39 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[Image of the Chronological Past]
     \label{lmm:cross-metric-chronological-past-image}
+    \lean{Physicslib4.Spacetime.CrossIsometry.chronologicalPast_image}
     \uses{lmm:cross-metric-isometry-preserves-chronology, lmm:cross-metric-isometry-symm, def:preserves-future-orientation, def:chronological-future-and-chronological-past}
+    \leanok
     Under the hypotheses of \ref{lmm:cross-metric-chronological-future-image}, $\psi\big(I^-_1(p)\big) = I^-_2(\psi(p))$ for every $p$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Identical to \ref{lmm:cross-metric-chronological-future-image} with the roles of the two endpoints of the trip exchanged: $q \in I^-_1(p)$ means $q \ll_1 p$, so the same two applications of \ref{lmm:cross-metric-isometry-preserves-chronology}, to $\psi$ and to $\psi^{-1}$ --- the latter being a cross-metric isometry from $(M,g_2)$ to $(M,g_1)$ by \ref{lmm:cross-metric-isometry-symm} --- give the two inclusions.
 \end{proof}
 
 \begin{lemma}[Cross-Metric Isometries Preserve Basis Sets]
     \label{lmm:cross-metric-isometry-preserves-basis-sets}
+    \lean{Physicslib4.Spacetime.CrossIsometry.alexandrovDiamond_image, Physicslib4.Spacetime.CrossIsometry.alexandrovBasis_image}
     \uses{def:alexandrov-topology, def:preserves-future-orientation, lmm:cross-metric-chronological-future-image, lmm:cross-metric-chronological-past-image, lmm:pullback-time-orientation, lmm:pullback-preserves-future-orientation}
+    \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ satisfying the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}. Then $\psi$ carries Alexandrov basis sets of $(M,g_1)$ to Alexandrov basis sets of $(M,g_2)$:
     \begin{align}
         \psi\big(I^+_1(p) \cap I^-_1(q)\big) = I^+_2(\psi(p)) \cap I^-_2(\psi(q)).
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     The image of an intersection under an injective map is the intersection of the images, and the two factors are computed by \ref{lmm:cross-metric-chronological-future-image} and \ref{lmm:cross-metric-chronological-past-image}. In the case of interest, $g_1 = \psi^*g_2$ with the pulled-back time orientation of \ref{lmm:pullback-time-orientation}, the orientation hypothesis holds by construction (\ref{lmm:pullback-preserves-future-orientation}); in general it is carried as a hypothesis.
 \end{proof}
 
 \begin{lemma}[A Bijection Matching Generating Families is a Homeomorphism]
     \label{lmm:bijection-generated-topology-homeomorphism}
+    \lean{Physicslib4.continuous_generateFrom_of_preimage_mem, Physicslib4.continuous_symm_generateFrom_of_image_mem, Physicslib4.homeomorphOfGenerateFrom, Physicslib4.homeomorphOfGenerateFrom_apply, Physicslib4.homeomorphOfGenerateFrom_symm_apply}
+    \leanok
     Let $f : X \to Y$ be a bijection, let $\mathcal{S}$ and $\mathcal{T}$ be families of subsets of $X$ and $Y$, and equip $X$ and $Y$ with the topologies generated by $\mathcal{S}$ and $\mathcal{T}$. If $f$ carries $\mathcal{S}$ onto $\mathcal{T}$, in the sense that $f(S) \in \mathcal{T}$ for every $S \in \mathcal{S}$ and $f^{-1}(T) \in \mathcal{S}$ for every $T \in \mathcal{T}$, then $f$ is a homeomorphism.
 \end{lemma}
 \begin{proof}
+    \leanok
     Purely topological, with no geometry involved. By \texttt{continuous\_generateFrom\_iff} continuity of $f$ reduces to $f^{-1}(T)$ being open for each $T \in \mathcal{T}$, and $f^{-1}(T) \in \mathcal{S}$ is open by \texttt{TopologicalSpace.isOpen\_generateFrom\_of\_mem}. The same argument applied to $f^{-1}$, using that $(f^{-1})^{-1}(S) = f(S) \in \mathcal{T}$ since $f$ is a bijection, gives continuity of the inverse. Bundle the two with the bijection as a \texttt{Homeomorph}.
 
     Two naming and notation points. The openness lemma lives in the \texttt{TopologicalSpace} namespace and must be cited by its fully qualified name: the unqualified \texttt{isOpen\_generateFrom\_of\_mem} does not resolve. By contrast \texttt{continuous\_generateFrom\_iff} genuinely is in the root namespace and is cited as written. Its exact form is
@@ -1549,19 +1634,25 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[The Pullback Alexandrov Topology]
     \label{lmm:pullback-alexandrov-homeomorphism}
+    \lean{Physicslib4.Spacetime.pullback_alexandrovBasis_image, Physicslib4.Spacetime.pullback_alexandrovBasis_preimage, Physicslib4.Spacetime.pullbackAlexandrovHomeomorph, Physicslib4.Spacetime.pullbackAlexandrovHomeomorph_apply}
     \uses{def:alexandrov-topology, def:pullback-metric, lmm:pullback-preserves-future-orientation, lmm:cross-metric-isometry-preserves-basis-sets, lmm:bijection-generated-topology-homeomorphism}
+    \leanok
     Let $(M,g,t)$ be a spacetime with time orientation and $\psi$ a $C^\infty$ diffeomorphism of $M$. Then $\psi$ is a homeomorphism from $\psi^*(M,g)$ carrying the Alexandrov topology of $\psi^*g$ and $\psi^*t$ to $(M,g)$ carrying the Alexandrov topology of $g$ and $t$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Apply \ref{lmm:bijection-generated-topology-homeomorphism} with $f := \psi$, a bijection of the common carrier, and with $\mathcal{S}$, $\mathcal{T}$ the families of Alexandrov diamonds of $\psi^*g$ and of $g$ (\ref{def:alexandrov-topology}), whose generated topologies are the two Alexandrov topologies by definition. The hypothesis that $\psi$ carries $\mathcal{S}$ onto $\mathcal{T}$ is \ref{lmm:cross-metric-isometry-preserves-basis-sets} applied to $\psi$ and to $\psi^{-1}$, whose two-sided orientation hypothesis holds by \ref{lmm:pullback-preserves-future-orientation}.
 \end{proof}
 
 \begin{theorem}[The Pullback of a Lorentzian Spacetime is a Lorentzian Spacetime]
     \label{thrm:pullback-is-lorentzian-spacetime}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.pullback_alexandrov_t2, Physicslib4.Spacetime.LorentzianSpacetime.pullback, Physicslib4.Spacetime.LorentzianSpacetime.pullback_toSpacetime, Physicslib4.Spacetime.LorentzianSpacetime.pullback_timeOrientation}
     \uses{def:lorentzian-spacetime, thrm:pullback-is-spacetime, lmm:pullback-time-orientation, lmm:pullback-alexandrov-homeomorphism}
+    \leanok
     Let $(M,g,t)$ be a Lorentzian spacetime (\ref{def:lorentzian-spacetime}) --- a spacetime with a time orientation and a Hausdorff Alexandrov topology --- and $\psi$ a $C^\infty$ diffeomorphism of $M$. Then $\psi^*(M,g,t)$, carrying $\psi^*g$, $\psi^*t$ and its own Alexandrov topology, is again a Lorentzian spacetime.
 \end{theorem}
 \begin{proof}
+    \leanok
     The underlying spacetime is \ref{thrm:pullback-is-spacetime} and the time orientation is \ref{lmm:pullback-time-orientation}, so only the Hausdorff condition on the Alexandrov topology remains. It transports along the homeomorphism of \ref{lmm:pullback-alexandrov-homeomorphism} by \texttt{Homeomorph.t2Space}.
 \end{proof}
 

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.Spacetime.CausalStructure
+import Physicslib4.Spacetime.Diffeo
 import Mathlib.Geometry.Manifold.Diffeomorph
 import Mathlib.Geometry.Manifold.MFDeriv.Basic
 import Mathlib.Geometry.Manifold.MFDeriv.SpecificFunctions
@@ -91,28 +92,20 @@ private theorem mfderiv_trans_apply
 
 /-- The differential of `φ` at `φ⁻¹ x` inverts the differential of `φ⁻¹`
 at `x`: this is the manifold inverse-function identity for a
-diffeomorphism, proved from `φ ∘ φ⁻¹ = id`. -/
+diffeomorphism.
+
+This is the single-manifold reading of `Spacetime.mfderiv_symm_cancel_left`
+(`lmm:mfderiv-symm-cancel-left`) at base point `φ⁻¹ x`, transported along
+`Diffeomorph.apply_symm_apply`; nothing here uses metric preservation, so the
+identity is not reproved. -/
 private theorem mfderiv_symm_cancel
     (a : Diffeomorph M.model M.model M.Carrier M.Carrier ⊤)
     (x : M.Carrier) (u : TangentSpace M.model x) :
     mfderiv M.model M.model a (a.symm x)
         (mfderiv M.model M.model a.symm x u) = u := by
-  have hcomp : (mfderiv M.model M.model a (a.symm x)).comp
-        (mfderiv M.model M.model a.symm x)
-      = ContinuousLinearMap.id ℝ (TangentSpace M.model x) := by
-    have h1 := mfderiv_comp (I := M.model) (I' := M.model) (I'' := M.model)
-      (f := (a.symm : M.Carrier → M.Carrier)) (g := (a : M.Carrier → M.Carrier))
-      (x := x) ((mdiff a) (a.symm x)) ((mdiff a.symm) x)
-    rw [← h1]
-    have h2 : mfderiv M.model M.model (id : M.Carrier → M.Carrier) x
-        = ContinuousLinearMap.id ℝ (TangentSpace M.model x) := mfderiv_id
-    rw [← h2]
-    apply Filter.EventuallyEq.mfderiv_eq
-    filter_upwards with y
-    exact a.apply_symm_apply y
-  have hu := DFunLike.congr_fun hcomp u
-  rw [ContinuousLinearMap.comp_apply] at hu
-  exact hu
+  have h := mfderiv_symm_cancel_left a (a.symm x) u
+  rw [a.apply_symm_apply x] at h
+  exact h
 
 noncomputable instance : Group (Isometry M) where
   mul a b :=
