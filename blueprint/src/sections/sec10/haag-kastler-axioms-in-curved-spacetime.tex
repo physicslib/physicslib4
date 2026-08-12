@@ -27,6 +27,7 @@ The second axiom can be immediately stated too.
     \lean{Physicslib4.AQFT.HaagKastlerCurved.Isotony}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Isotony.lean}
     \leanok
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
     
     Exactly as in the Minkowski case (\ref{def:isotony}), the axiom supplies as \emph{data} a family of unital $*$-monomorphisms
@@ -51,6 +52,7 @@ The next axiom can be stated as follows:
     \lean{Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalCommutativity.lean}
     \leanok
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime, def:isotony-in-curved-spacetime, def:completely-spacelike}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$. Assume Axiom 2 (\ref{def:isotony-in-curved-spacetime}), and let $i_{\mathbf{B}_1\mathbf{B}_2}$ denote its chosen isotony family.
 
     If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then for any Alexandrov topology basis element $\mathbf{B}$ such that $\mathbf{B_1}, \mathbf{B_2} \subseteq \mathbf{B}$ the algebras $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the C*-algebra $\mathfrak{U}(\mathbf{B})$: for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$,
