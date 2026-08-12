@@ -29,11 +29,24 @@ This file formalises the blueprint declaration
 
 ## Modelling notes
 
-* Mathlib (as of `v4.31.0-rc1`) does not yet have a canonical
-  C*-algebraic direct-limit / amalgamated-completion construction
-  for a family of C*-algebras. Consequently we cannot construct
-  *the* quasilocal algebra of a `LocalNet` as a definite term;
-  instead we package its characterising data as a `structure`.
+* Mathlib (as of `v4.31.0-rc1`) has no canonical C*-algebraic
+  direct-limit / amalgamated-completion construction for a family of
+  C*-algebras: `Mathlib.Algebra.Colimit.DirectLimit` is purely
+  algebraic (it puts no norm or topology on the colimit) and there is
+  no C*-completion anywhere in `Mathlib.Analysis.CStarAlgebra`.
+  This `structure` therefore packages the *characterising data* of a
+  quasilocal algebra rather than naming a canonical one, which is what
+  lets Axioms 3-5 be stated against it.
+
+  Note this is an interface, not a claim that no such algebra can be
+  built. The blueprint does construct one, from the net alone, by
+  taking the algebraic colimit, equipping it with the norm
+  `‖mk a‖ = ‖a‖` (well defined because the isotony maps are injective
+  and hence isometric), and completing. See the chain from
+  `def:completion-standing-hypotheses` to `lmm:quasilocal-completion-cstar`.
+  The route realising the algebra inside an ambient C*-algebra is
+  deliberately *not* used: it would have to assume such an ambient
+  algebra, and there is no physical justification for one.
 
 * A `QuasilocalAlgebra U` consists of:
   - a carrier type `carrier`,
