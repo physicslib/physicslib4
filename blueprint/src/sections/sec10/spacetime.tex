@@ -6,13 +6,13 @@
     \leanok
     A \textit{spacetime} is a real, four-dimensional, connected, smooth, Hausdorff manifold $M$ with a globally defined smooth tensor field $g$ of type $(0,2)$ which is non-degenerate and ``Lorentzian''. By \textit{Lorentzian} we mean that for any $p \in M$ there is a basis of the tangent space $TM|_p$ to $M$ at $p$ relative to which $g|_p$ is zero in its non-diagonal entries and on the diagonal takes the form $\text{diag}(-1,1,1,1)$.
 
-    \emph{The smoothness clause, precisely.} The metric field is a family of \emph{continuous bilinear forms} $g_x : TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$, and ``smooth'' is the field \texttt{contMDiff}, which asserts that $g$ is a $C^\omega$ \emph{section of the bundle of continuous bilinear forms on the tangent bundle} --- the regularity index being $\top$, on which see the remark on the index below. Writing $E$ for the model space and $I$ for the model with corners of $M$, it reads
+    \emph{The smoothness clause, precisely.} The metric field is a family of \emph{continuous bilinear forms} $g_x : TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$, and ``smooth'' is the field \texttt{contMDiff}, which asserts that $g$ is a $C^\infty$ \emph{section of the bundle of continuous bilinear forms on the tangent bundle} --- the regularity index being $\infty$, on which see the remark on the index below. Writing $E$ for the model space and $I$ for the model with corners of $M$, it reads
     \begin{align}
-        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\top\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;(g_x)\Big),
+        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\infty\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;(g_x)\Big),
     \end{align}
-    the fibre over $x$ being $TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$ and the index being $\top$.
+    the fibre over $x$ being $TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$ and the index being $\infty$.
 
-    \emph{The index, and a Lean-side discrepancy to record.} Mathlib's $\mathtt{ContMDiff}$ takes its regularity index $n$ in $\mathbb{N}_{\infty\omega} = \mathtt{WithTop}\;\mathbb{N}_\infty$, in which $\top = \omega$ means \emph{real-analytic} and $\infty = ((\top : \mathbb{N}_\infty) : \mathtt{WithTop}\;\mathbb{N}_\infty)$ is strictly smaller. The Lean field as written above therefore demands $C^\omega$, i.e.\ analyticity of the section, which is strictly stronger than the $C^\infty$ smoothness the informal phrase ``smooth tensor field $g$'' above intends. This discrepancy is recorded here as a Lean-side item, not glossed over: the index in the Lean definition should be $\infty$ rather than $\top$ for the two to agree, and until that is changed every downstream node quoting this field must be read and discharged at index $\top$.
+    \emph{The index.} Mathlib's $\mathtt{ContMDiff}$ takes its regularity index $n$ in $\mathbb{N}_{\infty\omega} = \mathtt{WithTop}\;\mathbb{N}_\infty$, in which $\top = \omega$ means \emph{real-analytic} and $\infty = ((\top : \mathbb{N}_\infty) : \mathtt{WithTop}\;\mathbb{N}_\infty)$ is strictly smaller. The index to ask for is therefore $\infty$, not $\top$: it is $\infty$ that means $C^\infty$, while $\top$ would demand the strictly stronger condition of analyticity. The Lean definition uses $\infty$, so the field agrees exactly with the informal word ``smooth'' in the statement above.
 
     Three further points about this formulation.
 
@@ -28,7 +28,7 @@
     \begin{align}
         x \longmapsto g_x\big(V_x,\, W_x\big)
     \end{align}
-    is $C^\infty$ on $M$. One identification step is needed to say it in quite that form: \texttt{clm\_bundle\_apply\ensuremath{_2}} concludes with a \emph{section}, of the trivial $\mathbb{R}$-bundle over $M$, so its output is a $\mathtt{Bundle.TotalSpace.mk'}$ term and reaching the plain scalar statement $\mathtt{ContMDiff}\;I\;\mathcal{I}(\mathbb{R},\mathbb{R})\;\top\;\big(x \mapsto g_x(V_x, W_x)\big)$ means identifying that trivial-bundle section with the function itself. This is exactly what causal and geodesic arguments need --- causal type along a curve, the sign of $g(t,\dot\mu)$, and every variational computation are statements about such scalars --- and a chart-local formulation quantifying over \emph{constant} model vectors had no route to it at all, since $V_x$ and $W_x$ vary with the point.
+    is $C^\infty$ on $M$. One identification step is needed to say it in quite that form: \texttt{clm\_bundle\_apply\ensuremath{_2}} concludes with a \emph{section}, of the trivial $\mathbb{R}$-bundle over $M$, so its output is a $\mathtt{Bundle.TotalSpace.mk'}$ term and reaching the plain scalar statement $\mathtt{ContMDiff}\;I\;\mathcal{I}(\mathbb{R},\mathbb{R})\;\infty\;\big(x \mapsto g_x(V_x, W_x)\big)$ means identifying that trivial-bundle section with the function itself. This is exactly what causal and geodesic arguments need --- causal type along a curve, the sign of $g(t,\dot\mu)$, and every variational computation are statements about such scalars --- and a chart-local formulation quantifying over \emph{constant} model vectors had no route to it at all, since $V_x$ and $W_x$ vary with the point.
 \end{definition}
 
 \begin{definition}[Standard Minkowski Spacetime]
@@ -109,9 +109,9 @@
     \leanok
     A spacetime $M$ is \textit{time-orientable} if it admits a smooth, non-vanishing vector field $t$ that is timelike. Such a smooth, non-vanishing vector field is called a \textit{time-orientation}.
 
-    \emph{The smoothness clause, precisely.} As for the metric in \ref{def:spacetime}, ``smooth'' is the bundle-section condition of Mathlib's idiom rather than a chart-local one: the field \texttt{smooth} of a $\mathtt{TimeOrientation}$ asserts that $t$ is a section of the tangent bundle of regularity index $\top = \omega$, i.e.\ a $C^\omega$ (real-analytic) section, the same index discrepancy with the informal word ``smooth'' as recorded in \ref{def:spacetime} applying here,
+    \emph{The smoothness clause, precisely.} As for the metric in \ref{def:spacetime}, ``smooth'' is the bundle-section condition of Mathlib's idiom rather than a chart-local one: the field \texttt{smooth} of a $\mathtt{TimeOrientation}$ asserts that $t$ is a section of the tangent bundle of regularity index $\infty$, i.e.\ a $C^\infty$ section, with the index convention as recorded in \ref{def:spacetime},
     \begin{align}
-        \mathtt{ContMDiff}\;I\;I.\mathtt{tangent}\;\top\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;E\;x\;(t_x)\Big),
+        \mathtt{ContMDiff}\;I\;I.\mathtt{tangent}\;\infty\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;E\;x\;(t_x)\Big),
     \end{align}
     with $E$ the model space and $I.\mathtt{tangent}$ the model with corners of the tangent bundle. This is the same shape as the metric clause of \ref{def:spacetime} one bundle down, and it is what the bundle-section API consumes directly: it is literally the hypothesis of \texttt{ContMDiff.mpullback\_vectorField} and, paired with the metric clause, the input of \texttt{ContMDiff.clm\_bundle\_apply\ensuremath{_2}} that makes $x \mapsto g_x(t_x, V_x)$ smooth for smooth $V$. It is \emph{not} smoothness of $t$ as a bare function, and no chart-local reformulation of it is needed anywhere below.
 \end{definition}
@@ -1277,15 +1277,16 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
     \lean{Physicslib4.Spacetime.pullbackVal_contMDiff}
     \uses{def:spacetime, def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv}
     \leanok
-    The assignment $x \mapsto (\psi^*g)_x$ of \ref{def:pullback-metric} satisfies the \texttt{contMDiff} field of \ref{def:spacetime}: it is a section of the bundle of continuous bilinear forms on the tangent bundle of regularity index $\top = \omega$, i.e.\ a $C^\omega$ (real-analytic) section,
+    The assignment $x \mapsto (\psi^*g)_x$ of \ref{def:pullback-metric} satisfies the \texttt{contMDiff} field of \ref{def:spacetime}: it is a section of the bundle of continuous bilinear forms on the tangent bundle of regularity index $\infty$, i.e.\ a $C^\infty$ section,
     \begin{align}
-        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\top\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;\big((\psi^*g)_x\big)\Big).
+        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\infty\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;\big((\psi^*g)_x\big)\Big).
     \end{align}
-    The index is $\top$, not $\infty$: that is what \ref{def:spacetime} demands.
+    The index is $\infty$: that is what \ref{def:spacetime} demands.
 
     \emph{The label name is historical.} It reads \texttt{pullback-metric-smooth-in-charts} because the smoothness field of \ref{def:spacetime} was once a chart-local $\mathtt{ContDiffWithinAt}$ condition. It is kept unchanged only because \ref{thrm:pullback-is-spacetime} cites it; nothing chart-local remains in either its statement or its proof.
 \end{lemma}
 \begin{proof}
+    \leanok
     By the bundled form recorded in \ref{def:pullback-metric}, the section in question is
     \begin{align}
         x \longmapsto \mathtt{ContinuousLinearMap.bilinearComp}\;\big(g_{\psi(x)}\big)\;\big(d\psi_x\big)\;\big(d\psi_x\big),
@@ -1293,14 +1294,14 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
     so the goal is smoothness in $x$ of a bilinear form obtained by precomposing a smooth family of bilinear forms with a family of continuous linear maps in both slots. Three ingredients feed it, all in the bundle-section idiom:
     \begin{itemize}
         \item smoothness of $g$ as a section of the bilinear-form bundle over the base map $\psi$ --- the \texttt{contMDiff} field of the source spacetime \ref{def:spacetime}, composed with $\psi$;
-        \item regularity of $\psi$ itself, supplied by \texttt{Diffeomorph.contMDiff}, read at the same index $\top = \omega$ as the goal (so ``$C^\infty$ diffeomorphism'' in the statement above is to be read at that index too, per the index remark in \ref{def:spacetime}); it supplies the base map along which the previous item is read;
+        \item regularity of $\psi$ itself, supplied by \texttt{Diffeomorph.contMDiff}, read at the same index $\infty$ as the goal; it supplies the base map along which the previous item is read;
         \item smoothness of $x \mapsto d\psi_x$ as a section of the hom bundle $\mathrm{Hom}\big(TM|_x,\, TM|_{\psi(x)}\big)$ over the base map $\psi$, together with invertibility of each $d\psi_x$ (\ref{lmm:mfderiv-diffeo-linear-equiv}) where the bundled form has to be recognised as a continuous linear map.
     \end{itemize}
     The assembly is \emph{not} an instance of \texttt{ContMDiff.clm\_bundle\_apply\ensuremath{_2}}: that lemma applies a bilinear-form section to two vector-field \emph{sections} and returns a scalar section, so it evaluates rather than precomposes, and Mathlib has no bundle-level precomposition lemma at all --- the only precomposition statement, \texttt{ContMDiff.clm\_comp}, is for trivial bundles. The route to use instead is to unfold the goal through \texttt{contMDiffAt\_hom\_bundle}, as described next.
 
     \emph{The route, now pinned down.} This was previously recorded as an open API question. It is no longer open: every smoothness step is supplied by Mathlib, and what remains is two mechanical local identities. The chain is:
     \begin{itemize}
-        \item smoothness of $x \mapsto d\psi_x$ is \texttt{ContMDiffAt.mfderiv\_const} (\texttt{Mathlib/Geometry/Manifold/ContMDiffMFDeriv.lean:241}), whose conclusion is $\mathtt{ContMDiffAt}$ of $\mathtt{inTangentCoordinates}\;I\;I\;\mathrm{id}\;\psi\;(\mathtt{mfderiv}\;\psi)\;x_0$. Its regularity gap $m + 1 \le n$ is \texttt{le\_top} at $m = n = \top$. Only $\mathtt{At}$ and $\mathtt{WithinAt}$ forms exist, so the global goal is opened with a single \texttt{intro};
+        \item smoothness of $x \mapsto d\psi_x$ is \texttt{ContMDiffAt.mfderiv\_const} (\texttt{Mathlib/Geometry/Manifold/ContMDiffMFDeriv.lean:241}), whose conclusion is $\mathtt{ContMDiffAt}$ of $\mathtt{inTangentCoordinates}\;I\;I\;\mathrm{id}\;\psi\;(\mathtt{mfderiv}\;\psi)\;x_0$. Its regularity gap $m + 1 \le n$ holds at $m = n = \infty$ because $\infty + 1 = \infty$ (\texttt{ENat.coe\_top\_add\_one}, which is \texttt{rfl} and \texttt{@[simp]}), so it is \texttt{le\_rfl}, not \texttt{le\_top}. Only $\mathtt{At}$ and $\mathtt{WithinAt}$ forms exist, so the global goal is opened with a single \texttt{intro};
         \item the match between that $\mathtt{inTangentCoordinates}$ conclusion and the $\mathtt{inCoordinates}$ shape the goal wants is \emph{definitional}: $\mathtt{inTangentCoordinates}$ is \emph{defined} as the two-base-point $\mathtt{inCoordinates}$ (\texttt{Mathlib/Geometry/Manifold/VectorBundle/Tangent.lean:518}). Mathlib itself relies on this defeq, assigning the output of \texttt{mfderivWithin\_const} directly to a goal spelled with raw \texttt{inCoordinates} (\texttt{Mathlib/Geometry/Manifold/VectorField/Pullback.lean:423}). That file's \texttt{ContMDiffWithinAt.mpullbackWithin\_vectorField\_inter} is the canonical template for this whole node;
         \item the two-slot precomposition is Mathlib's, via the identity $\beta.\mathtt{bilinearComp}\,A\,A = (A.\mathtt{precomp}\,\mathbb{R}) \circ (\beta \circ A)$ and then \texttt{ContMDiffAt.clm\_precomp} (\texttt{Mathlib/Geometry/Manifold/ContMDiff/NormedSpace.lean:122}) with \texttt{ContMDiffAt.clm\_comp} (\texttt{:170}).
     \end{itemize}
@@ -1325,6 +1326,7 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
     For a spacetime $(M,g)$ and a $C^\infty$ diffeomorphism $\psi$ of $M$, the pullback datum $\psi^*(M,g)$ of \ref{def:pullback-metric} is again a spacetime.
 \end{theorem}
 \begin{proof}
+    \leanok
     The manifold data are carried over verbatim from $(M,g)$, so only the metric obligations of \ref{def:spacetime} need discharging: symmetry is \ref{lmm:pullback-metric-symm}, non-degeneracy is \ref{lmm:pullback-metric-nondegenerate}, the Lorentzian condition is \ref{lmm:pullback-metric-lorentzian}, and the \texttt{contMDiff} field --- smoothness of the metric as a section of the bilinear-form bundle --- is \ref{lmm:pullback-metric-smooth-in-charts}.
 \end{proof}
 
@@ -1351,9 +1353,9 @@ This is the main structural gain of making the bundle-section form primitive. In
     \lean{Physicslib4.Spacetime.contMDiff_mpullback_vectorField}
     \uses{def:time-orientable, lmm:mfderiv-diffeo-linear-equiv, def:spacetime}
     \leanok
-    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $V$ be a vector field on $M$ with $\mathtt{CMDiff}\;\top\;(\mathtt{T\%}\;V)$. Then
+    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $V$ be a vector field on $M$ with $\mathtt{CMDiff}\;\infty\;(\mathtt{T\%}\;V)$. Then
     \begin{align}
-        \mathtt{CMDiff}\;\top\;\big(\mathtt{T\%}\;(\mathtt{VectorField.mpullback}\;I\;I\;\psi\;V)\big).
+        \mathtt{CMDiff}\;\infty\;\big(\mathtt{T\%}\;(\mathtt{VectorField.mpullback}\;I\;I\;\psi\;V)\big).
     \end{align}
     This node was always stated in bundle-section terms, and it is now consumed directly: the hypothesis $hV$ is \emph{literally} the \texttt{smooth} field of \ref{def:time-orientable}, so applying the node at $V = t$ needs no conversion, and its conclusion is literally the \texttt{smooth} field to be produced for $\psi^*t$.
 \end{lemma}
@@ -1362,11 +1364,11 @@ This is the main structural gain of making the bundle-section form primitive. In
     This is \texttt{ContMDiff.mpullback\_vectorField}, whose four hypotheses must all be supplied --- they are more than invertibility of the differential:
     \begin{itemize}
         \item $hV$: $\mathtt{CMDiff}\;m\;(\mathtt{T\%}\;V)$, the hypothesis of this node, which for $V = t$ is the \texttt{smooth} field of \ref{def:time-orientable} verbatim.
-        \item $hf$: $\mathtt{CMDiff}\;n\;\psi$, from $\psi$ being a smooth diffeomorphism (\texttt{Diffeomorph.contMDiff}); as everywhere in this section the index is $n = \top$, matching \ref{def:spacetime}.
+        \item $hf$: $\mathtt{CMDiff}\;n\;\psi$, from $\psi$ being a smooth diffeomorphism (\texttt{Diffeomorph.contMDiff}); as everywhere in this section the index is $n = \infty$, matching \ref{def:spacetime}.
         \item $hf'$: $\forall x,\ (\mathtt{mfderiv\%}\;\psi\;x).\mathtt{IsInvertible}$. This is $\mathtt{ContinuousLinearMap.IsInvertible}$ --- a \emph{predicate on a continuous linear map} --- and \emph{not} a \texttt{ContinuousLinearEquiv}, so \ref{lmm:mfderiv-diffeo-linear-equiv} does not supply it directly. The bridge is: rewrite $d\psi_x$ as the coercion of the equivalence using \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} (backwards, by hand, since it is not a simp lemma; see \ref{lmm:mfderiv-diffeo-linear-equiv}), then close the goal with \texttt{ContinuousLinearMap.isInvertible\_equiv}, which states that the coercion of any \texttt{ContinuousLinearEquiv} is invertible.
-        \item $hmn$: the exponent gap $m + 1 \leq n$. Here $m = n = \top$, so it is \texttt{le\_top}. The exponent must be taken to be $\top$ and not $\infty$ because the goal side of the chain is at $\top$.
+        \item $hmn$: the exponent gap $m + 1 \leq n$. Here $m = n = \infty$, and the gap holds because $\infty + 1 = \infty$ (\texttt{ENat.coe\_top\_add\_one}, which is \texttt{rfl} and \texttt{@[simp]}), so it is \texttt{le\_rfl}, not \texttt{le\_top}.
     \end{itemize}
-    It further requires the instances $[\mathtt{CompleteSpace}\;E]$ and $[\mathtt{IsManifold}\;I\;1\;M]$ (both source and target instances, which coincide here since $\psi$ maps $M$ to itself); $E = \mathbb{R}^4$ is complete and the $\top$-smooth structure of \ref{def:spacetime} gives the manifold instance at order $1$.
+    It further requires the instances $[\mathtt{CompleteSpace}\;E]$ and $[\mathtt{IsManifold}\;I\;1\;M]$ (both source and target instances, which coincide here since $\psi$ maps $M$ to itself); $E = \mathbb{R}^4$ is complete and the $\infty$-smooth structure of \ref{def:spacetime} gives the manifold instance at order $1$.
 \end{proof}
 
 \begin{lemma}[The Pullback Time Orientation is Nowhere Vanishing]

@@ -48,6 +48,8 @@ namespace Physicslib4
 
 namespace Spacetime
 
+open scoped ContDiff
+
 variable (M : Spacetime)
 
 attribute [instance] Spacetime.topology Spacetime.hausdorff Spacetime.connected
@@ -170,7 +172,7 @@ structure TimeOrientation where
   statement) and consumed by `ContMDiff.clm_bundle_apply₂`. The previous
   chart-local double-`mfderiv` formulation required a hand-built bridge in both
   directions, since Mathlib relates `tangentCoordChange` to neither. -/
-  smooth : ContMDiff M.model M.model.tangent ⊤
+  smooth : ContMDiff M.model M.model.tangent ∞
     (fun x ↦ Bundle.TotalSpace.mk' SpacetimeModel
       (E := fun x ↦ TangentSpace M.model x) x (field x))
 

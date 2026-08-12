@@ -60,6 +60,8 @@ namespace Physicslib4
 
 namespace Spacetime
 
+open scoped ContDiff
+
 variable (M : Spacetime)
 
 attribute [instance] Spacetime.topology Spacetime.hausdorff Spacetime.connected
@@ -103,7 +105,7 @@ point of `Σ`.
 structure SmoothPath extends M.Path where
   /-- Smoothness of the underlying map on the parameter space. -/
   smoothOn :
-    ContMDiffOn (modelWithCornersSelf ℝ ℝ) M.model ⊤ toFun parameterSpace
+    ContMDiffOn (modelWithCornersSelf ℝ ℝ) M.model ∞ toFun parameterSpace
   /-- The tangent vector along the path is non-vanishing on the parameter
   space: the manifold derivative of `toFun` applied to `1 : ℝ` is non-zero
   at each interior point of the parameter space. -/
@@ -233,12 +235,12 @@ theorem derivWithin_ne_zero_of_leftInverse {φ ψ : ℝ → ℝ} {u v : Set ℝ}
   rw [hzero, mul_zero, hid] at hcomp
   exact one_ne_zero hcomp
 
-/-- A `C^⊤` function `ℝ → ℝ` is manifold-differentiable within a set, for the
+/-- A `C^∞` function `ℝ → ℝ` is manifold-differentiable within a set, for the
 self models on `ℝ`. Bridges the `ContDiffOn` datum stored in `SmoothPathEquiv` to
 the `MDifferentiableWithinAt` hypothesis required by the tangent reparametrisation
 lemmas. -/
 theorem mdifferentiableWithinAt_of_contDiffOn {φ : ℝ → ℝ} {u : Set ℝ}
-    (h : ContDiffOn ℝ ⊤ φ u) {x : ℝ} (hx : x ∈ u) :
+    (h : ContDiffOn ℝ ∞ φ u) {x : ℝ} (hx : x ∈ u) :
     MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ) (modelWithCornersSelf ℝ ℝ)
       φ u x :=
   ((h.contDiffWithinAt hx).contMDiffWithinAt).mdifferentiableWithinAt (by simp)
@@ -269,8 +271,8 @@ two-sided inverses.
 -/
 def SmoothPathEquiv (μ₁ μ₂ : M.SmoothPath) : Prop :=
   ∃ φ ψ : ℝ → ℝ,
-    ContDiffOn ℝ ⊤ φ μ₁.parameterSpace ∧
-    ContDiffOn ℝ ⊤ ψ μ₂.parameterSpace ∧
+    ContDiffOn ℝ ∞ φ μ₁.parameterSpace ∧
+    ContDiffOn ℝ ∞ ψ μ₂.parameterSpace ∧
     Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace ∧
     Set.MapsTo ψ μ₂.parameterSpace μ₁.parameterSpace ∧
     (∀ s ∈ μ₁.parameterSpace, ψ (φ s) = s) ∧
@@ -287,8 +289,8 @@ and it is the extra datum needed to transport the *time orientation* of a curve
 -/
 def OrientedSmoothPathEquiv (μ₁ μ₂ : M.SmoothPath) : Prop :=
   ∃ φ ψ : ℝ → ℝ,
-    ContDiffOn ℝ ⊤ φ μ₁.parameterSpace ∧
-    ContDiffOn ℝ ⊤ ψ μ₂.parameterSpace ∧
+    ContDiffOn ℝ ∞ φ μ₁.parameterSpace ∧
+    ContDiffOn ℝ ∞ ψ μ₂.parameterSpace ∧
     Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace ∧
     Set.MapsTo ψ μ₂.parameterSpace μ₁.parameterSpace ∧
     (∀ s ∈ μ₁.parameterSpace, ψ (φ s) = s) ∧

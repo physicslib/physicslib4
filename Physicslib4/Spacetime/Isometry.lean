@@ -52,6 +52,8 @@ namespace Physicslib4
 
 namespace Spacetime
 
+open scoped ContDiff
+
 /--
 An **isometry** of a spacetime `M`: a `C^∞` diffeomorphism whose
 manifold differential preserves the metric.
@@ -59,7 +61,7 @@ manifold differential preserves the metric.
 @[ext]
 structure Isometry (M : Spacetime) where
   /-- The underlying `C^∞` diffeomorphism of the spacetime. -/
-  toDiffeo : Diffeomorph M.model M.model M.Carrier M.Carrier ⊤
+  toDiffeo : Diffeomorph M.model M.model M.Carrier M.Carrier ∞
   /-- Metric preservation: `g_{φ(x)}(dφ_x v, dφ_x w) = g_x(v, w)`,
   with `dφ_x` the manifold derivative `mfderiv`. -/
   preserves : ∀ (x : M.Carrier) (v w : TangentSpace M.model x),
@@ -73,14 +75,14 @@ namespace Isometry
 variable {M : Spacetime}
 
 /-- Diffeomorphisms of a spacetime are everywhere `MDifferentiable`
-(the smoothness exponent `⊤` is nonzero). -/
-private theorem mdiff (h : Diffeomorph M.model M.model M.Carrier M.Carrier ⊤) :
+(the smoothness exponent `∞` is nonzero). -/
+private theorem mdiff (h : Diffeomorph M.model M.model M.Carrier M.Carrier ∞) :
     MDifferentiable M.model M.model h :=
   h.mdifferentiable (by simp)
 
 /-- Applied chain rule for a composition of two spacetime diffeomorphisms. -/
 private theorem mfderiv_trans_apply
-    (a b : Diffeomorph M.model M.model M.Carrier M.Carrier ⊤)
+    (a b : Diffeomorph M.model M.model M.Carrier M.Carrier ∞)
     (x : M.Carrier) (u : TangentSpace M.model x) :
     mfderiv M.model M.model (b.trans a) x u
       = mfderiv M.model M.model a (b x) (mfderiv M.model M.model b x u) := by
@@ -99,7 +101,7 @@ This is the single-manifold reading of `Spacetime.mfderiv_symm_cancel_left`
 `Diffeomorph.apply_symm_apply`; nothing here uses metric preservation, so the
 identity is not reproved. -/
 private theorem mfderiv_symm_cancel
-    (a : Diffeomorph M.model M.model M.Carrier M.Carrier ⊤)
+    (a : Diffeomorph M.model M.model M.Carrier M.Carrier ∞)
     (x : M.Carrier) (u : TangentSpace M.model x) :
     mfderiv M.model M.model a (a.symm x)
         (mfderiv M.model M.model a.symm x u) = u := by
@@ -118,9 +120,9 @@ noncomputable instance : Group (Isometry M) where
           a.preserves (b.toDiffeo x) (mfderiv M.model M.model b.toDiffeo x v)
             (mfderiv M.model M.model b.toDiffeo x w), b.preserves x v w] }
   one :=
-    { toDiffeo := Diffeomorph.refl M.model M.Carrier ⊤
+    { toDiffeo := Diffeomorph.refl M.model M.Carrier ∞
       preserves := fun x v w => by
-        have h : mfderiv M.model M.model (Diffeomorph.refl M.model M.Carrier ⊤) x
+        have h : mfderiv M.model M.model (Diffeomorph.refl M.model M.Carrier ∞) x
             = ContinuousLinearMap.id ℝ (TangentSpace M.model x) := by
           rw [Diffeomorph.coe_refl, mfderiv_id]
         rw [h]

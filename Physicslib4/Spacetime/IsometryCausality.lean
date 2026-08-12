@@ -28,7 +28,7 @@ isometry `g`, together with the chain-rule description of its tangent vector.
 * `Physicslib4.Spacetime.Isometry.pushforwardPath`.
 -/
 
-open scoped Pointwise
+open scoped Pointwise ContDiff
 
 namespace Physicslib4
 
@@ -138,7 +138,7 @@ theorem preservesFutureOrientation_one (t : M.TimeOrientation) :
   have h : mfderiv M.model M.model (1 : Isometry M).toDiffeo x v = v := by
     have hid : mfderiv M.model M.model (1 : Isometry M).toDiffeo x
         = ContinuousLinearMap.id ℝ (TangentSpace M.model x) := by
-      rw [show ((1 : Isometry M).toDiffeo) = Diffeomorph.refl M.model M.Carrier ⊤ from rfl,
+      rw [show ((1 : Isometry M).toDiffeo) = Diffeomorph.refl M.model M.Carrier ∞ from rfl,
         Diffeomorph.coe_refl, mfderiv_id]
     rw [hid]; rfl
   rw [← h] at hv

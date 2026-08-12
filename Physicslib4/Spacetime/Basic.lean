@@ -63,7 +63,7 @@ carried by its fields.
 
 namespace Physicslib4
 
-open scoped Manifold
+open scoped Manifold ContDiff
 
 /-- The model space `ℝ⁴` for a spacetime, written using `EuclideanSpace`. -/
 abbrev SpacetimeModel : Type := EuclideanSpace ℝ (Fin 4)
@@ -133,7 +133,7 @@ structure Spacetime where
   This is instance-implicit so that it is available to the later `contMDiff`
   field: the bundle-section statement there needs the tangent bundle's
   `FiberBundle` / `VectorBundle` instances, which are gated on `IsManifold`. -/
-  [isManifold : IsManifold model ⊤ Carrier]
+  [isManifold : IsManifold model ∞ Carrier]
   /-- Each tangent space is finite-dimensional. -/
   tangent_findim : ∀ x : Carrier, FiniteDimensional ℝ (TangentSpace model x)
   /-- The metric tensor `g`, presented as a family of continuous bilinear forms
@@ -167,7 +167,7 @@ structure Spacetime where
   formulation had no route to it, since Mathlib provides no lemma bridging the
   two forms in either direction. -/
   contMDiff : ContMDiff model
-      (model.prod 𝓘(ℝ, SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)) ⊤
+      (model.prod 𝓘(ℝ, SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)) ∞
       (fun x ↦ Bundle.TotalSpace.mk'
         (SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)
         (E := fun x ↦ TangentSpace model x →L[ℝ] TangentSpace model x →L[ℝ] ℝ)

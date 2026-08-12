@@ -11,7 +11,7 @@ import Mathlib.Geometry.Manifold.MFDeriv.FDeriv
 /-!
 # Pushforward of a smooth path along a diffeomorphism
 
-The pushforward `ψ ∘ μ` of a smooth path along a `C^⊤` diffeomorphism of the
+The pushforward `ψ ∘ μ` of a smooth path along a `C^∞` diffeomorphism of the
 underlying manifolds, its tangent vector (the chain rule along the parameter
 space) and the transport of past and future endpoints.
 

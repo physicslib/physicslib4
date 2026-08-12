@@ -139,7 +139,7 @@ variable {M N : Spacetime}
 /--
 **Isometry between two metrics on one manifold** (`def:cross-metric-isometry`).
 
-A `C^⊤` diffeomorphism `ψ` from the manifold of `M` to that of `N` is an
+A `C^∞` diffeomorphism `ψ` from the manifold of `M` to that of `N` is an
 *isometry from `(M, g₁)` to `(N, g₂)`* when `ψ^*g₂ = g₁`, that is when
 `g₂(dψ_x v, dψ_x w) = g₁(v, w)` for every `x` and all `v, w ∈ T_xM`.
 
@@ -149,7 +149,7 @@ The usual single-metric notion — `Spacetime.Isometry M` — is exactly the cas
 -/
 @[ext]
 structure CrossIsometry (M N : Spacetime) where
-  /-- The underlying `C^⊤` diffeomorphism of the two underlying manifolds. -/
+  /-- The underlying `C^∞` diffeomorphism of the two underlying manifolds. -/
   toDiffeo : Diffeo M N
   /-- Cross-metric preservation: `g₂(dψ_x v, dψ_x w) = g₁(v, w)`. -/
   preserves : ∀ (x : M.Carrier) (v w : TangentSpace M.model x),

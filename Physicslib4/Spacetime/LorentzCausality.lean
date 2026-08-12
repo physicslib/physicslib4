@@ -111,7 +111,7 @@ end Spacetime
 
 open Spacetime
 open AQFT.HaagKastler
-open scoped Pointwise
+open scoped Pointwise ContDiff
 
 /-- For a smooth path `μ` on standard Minkowski spacetime, the manifold
 derivative of its Lorentz pushforward `s ↦ g.linear (μ s) + g.translation`
@@ -141,7 +141,7 @@ theorem lorentzPath_mfderivWithin (g : InhomogeneousLorentzGroup)
   rw [hclmF, hclmμ]
   set L : StandardMinkowskiSpacetime.Carrier →L[ℝ] StandardMinkowskiSpacetime.Carrier :=
     LinearMap.toContinuousLinearMap g.linear.toLinearMap with hLdef
-  have hcd : ContDiffOn ℝ ⊤ μ.toFun μ.parameterSpace :=
+  have hcd : ContDiffOn ℝ ∞ μ.toFun μ.parameterSpace :=
     contMDiffOn_iff_contDiffOn.mp μ.smoothOn
   have hdiff : DifferentiableWithinAt ℝ μ.toFun μ.parameterSpace s :=
     hcd.differentiableOn (by norm_num) s hs
@@ -180,12 +180,12 @@ noncomputable def lorentzPath (g : InhomogeneousLorentzGroup)
       g.linear.toLinearMap.continuous_of_finiteDimensional
     exact (hcont.comp_continuousOn μ.continuousOn).add continuousOn_const
   smoothOn := by
-    have hcd : ContDiffOn ℝ ⊤ μ.toFun μ.parameterSpace :=
+    have hcd : ContDiffOn ℝ ∞ μ.toFun μ.parameterSpace :=
       contMDiffOn_iff_contDiffOn.mp μ.smoothOn
-    have hL : ContDiff ℝ (⊤ : WithTop ℕ∞)
+    have hL : ContDiff ℝ (∞ : WithTop ℕ∞)
         (fun w : StandardMinkowskiSpacetime.Carrier => g.linear w) :=
-      (LinearMap.toContinuousLinearMap g.linear.toLinearMap).contDiff
-    have hcomp : ContDiffOn ℝ ⊤
+      (LinearMap.toContinuousLinearMap g.linear.toLinearMap).contDiff.of_le le_top
+    have hcomp : ContDiffOn ℝ ∞
         (fun s => g.linear (μ.toFun s) + g.translation) μ.parameterSpace :=
       (hL.comp_contDiffOn hcd).add contDiffOn_const
     exact contMDiffOn_iff_contDiffOn.mpr hcomp

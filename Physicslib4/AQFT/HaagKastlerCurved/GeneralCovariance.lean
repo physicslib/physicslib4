@@ -162,7 +162,7 @@ abbrev NetTheory :=
 **General covariance** (`def:general-covariance-in-curved-spacetime`).
 
 A net theory `𝔘` is *generally covariant* when, for every geometric Lorentzian
-spacetime `L` with underlying spacetime `(M, g, t)` and every `C^⊤`
+spacetime `L` with underlying spacetime `(M, g, t)` and every `C^∞`
 diffeomorphism `ψ` of `M`, the nets `𝔘_{ψ^*L}` and `𝔘_L` are equivalent in the
 sense of `NetEquivalence` along the relabelling bijection `e := ψ` of the common
 carrier.

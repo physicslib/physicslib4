@@ -10,7 +10,7 @@ import Mathlib.Geometry.Manifold.MFDeriv.SpecificFunctions
 /-!
 # Diffeomorphisms of spacetime manifolds and their differentials
 
-This file collects the purely differential-geometric material about a `C^⊤`
+This file collects the purely differential-geometric material about a `C^∞`
 diffeomorphism `ψ` between the manifolds underlying two spacetimes: that its
 differential `dψ_x` is a continuous linear equivalence, the two round-trip
 cancellations against the differential of the global inverse, and the
@@ -24,7 +24,7 @@ re-prove them, and the pullback-metric theory of
 
 ## Main definitions
 
-* `Physicslib4.Spacetime.Diffeo`: the type of `C^⊤` diffeomorphisms between the
+* `Physicslib4.Spacetime.Diffeo`: the type of `C^∞` diffeomorphisms between the
   underlying manifolds of two spacetimes.
 * `Physicslib4.Spacetime.mfderivEquiv` (`lmm:mfderiv-diffeo-linear-equiv`): the
   differential `dψ_x` as a continuous linear equivalence, a thin wrapper around
@@ -50,13 +50,13 @@ namespace Physicslib4
 
 namespace Spacetime
 
-open scoped Manifold
+open scoped Manifold ContDiff
 
-/-- The `C^⊤` diffeomorphisms from the manifold underlying the spacetime `M` to
+/-- The `C^∞` diffeomorphisms from the manifold underlying the spacetime `M` to
 the manifold underlying the spacetime `N`. For `N = M` this is the type of
 diffeomorphisms `ψ` of `M` that the blueprint pulls back along. -/
 abbrev Diffeo (M N : Spacetime) : Type _ :=
-  Diffeomorph M.model N.model M.Carrier N.Carrier ⊤
+  Diffeomorph M.model N.model M.Carrier N.Carrier ∞
 
 variable {M N : Spacetime}
 

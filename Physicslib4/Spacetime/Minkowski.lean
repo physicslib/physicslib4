@@ -56,7 +56,7 @@ namespace Physicslib4
 
 open Bundle
 
-open scoped Manifold
+open scoped Manifold ContDiff
 
 /-! ### Standard Minkowski spacetime -/
 
@@ -697,10 +697,10 @@ viewed as a map from `(ℝ, modelWithCornersSelf ℝ ℝ)` to standard Minkowski
 spacetime. A component of the chronological-future characterisation. -/
 theorem standardMinkowskiLineSegmentPath_smoothOn (p q : SpacetimeModel) :
     ContMDiffOn (modelWithCornersSelf ℝ ℝ)
-      StandardMinkowskiSpacetime.model ⊤
+      StandardMinkowskiSpacetime.model ∞
       (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
       (Set.Icc (0 : ℝ) 1) := by
-  have h : ContDiff ℝ (⊤ : WithTop ℕ∞) (fun s : ℝ => (p : SpacetimeModel) + s • (q - p)) :=
+  have h : ContDiff ℝ ∞ (fun s : ℝ => (p : SpacetimeModel) + s • (q - p)) :=
     contDiff_const.add (contDiff_id.smul contDiff_const)
   exact (contMDiff_iff_contDiff.mpr h).contMDiffOn
 
@@ -943,7 +943,7 @@ theorem standardMinkowski_smoothPath_fundamental_theorem_calculus
           μ.toFun μ.parameterSpace s (1 : ℝ) := by
   let f : ℝ → SpacetimeModel := μ.toFun
   rw [hparam]
-  have hsmooth : ContDiffOn ℝ ⊤ f (Set.Icc a b) := by
+  have hsmooth : ContDiffOn ℝ ∞ f (Set.Icc a b) := by
     have h := μ.smoothOn
     rw [hparam] at h
     exact contMDiffOn_iff_contDiffOn.mp h
@@ -962,7 +962,7 @@ theorem standardMinkowski_smoothPath_fundamental_theorem_calculus
       derivWithin_of_mem_nhds hmem
     rw [heq]; exact hderivAt
   have hcont_deriv : ContinuousOn (derivWithin f (Set.Icc a b)) (Set.Icc a b) :=
-    ContDiffOn.continuousOn_derivWithin hsmooth hUnique le_top
+    ContDiffOn.continuousOn_derivWithin hsmooth hUnique (WithTop.coe_le_coe.mpr le_top)
   have hint : IntervalIntegrable (derivWithin f (Set.Icc a b))
       MeasureTheory.volume a b :=
     hcont_deriv.intervalIntegrable_of_Icc hab.le
@@ -1075,7 +1075,7 @@ theorem standardMinkowski_smoothPath_tangent_continuousOn
       (Set.Icc a b) := by
   let f : ℝ → SpacetimeModel := μ.toFun
   -- Smoothness reduced to ContDiffOn on `Set.Icc a b`.
-  have hsmooth : ContDiffOn ℝ ⊤ f (Set.Icc a b) := by
+  have hsmooth : ContDiffOn ℝ ∞ f (Set.Icc a b) := by
     have h := μ.smoothOn
     rw [hparam] at h
     exact contMDiffOn_iff_contDiffOn.mp h
@@ -1093,7 +1093,7 @@ theorem standardMinkowski_smoothPath_tangent_continuousOn
       exact hst (hsa.trans hta.symm)
   have hUnique : UniqueDiffOn ℝ (Set.Icc a b) := uniqueDiffOn_Icc hab
   have hcont_deriv : ContinuousOn (derivWithin f (Set.Icc a b)) (Set.Icc a b) :=
-    ContDiffOn.continuousOn_derivWithin hsmooth hUnique le_top
+    ContDiffOn.continuousOn_derivWithin hsmooth hUnique (WithTop.coe_le_coe.mpr le_top)
   -- Pointwise: `mfderivWithin … 1 = derivWithin f (Icc a b)`.
   have hpw : ∀ s,
       mfderivWithin (modelWithCornersSelf ℝ ℝ)
@@ -1591,7 +1591,7 @@ every point is the same global chart. -/
 /-- The singleton-chart structure makes `MinkowskiSpacetimeCarrier` a `C^∞`
 manifold over the trivial self-model: the only transition map is the identity. -/
 noncomputable instance instIsManifoldMinkowskiCarrier :
-    IsManifold (modelWithCornersSelf ℝ SpacetimeModel) ⊤ MinkowskiSpacetimeCarrier :=
+    IsManifold (modelWithCornersSelf ℝ SpacetimeModel) ∞ MinkowskiSpacetimeCarrier :=
   euclideanHomeoMinkowski.symm.toOpenPartialHomeomorph.isManifold_singleton
     (Homeomorph.toOpenPartialHomeomorph_source _)
 

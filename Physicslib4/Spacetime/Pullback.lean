@@ -22,7 +22,7 @@ The cross-metric isometry theory built on top of this lives in
 `Physicslib4/Spacetime/CrossMetricIsometry.lean`.
 
 The purely differential-geometric input — the type `Physicslib4.Spacetime.Diffeo`
-of `C^⊤` diffeomorphisms, the differential `mfderivEquiv` as a continuous linear
+of `C^∞` diffeomorphisms, the differential `mfderivEquiv` as a continuous linear
 equivalence, the round-trip cancellations and the formal inverse — lives in
 `Physicslib4/Spacetime/Diffeo.lean`, which mentions no metric and is therefore
 imported by the single-metric isometry theory as well.
@@ -59,7 +59,7 @@ namespace Physicslib4
 
 namespace Spacetime
 
-open scoped Manifold
+open scoped Manifold ContDiff Topology
 
 variable {M N : Spacetime}
 
@@ -150,23 +150,125 @@ theorem pullbackVal_lorentzian (M : Spacetime) (ψ : Diffeo M M) (x : M.Carrier)
   simpa [Module.Basis.map_apply, mfderiv_eq_mfderivEquiv,
     ContinuousLinearEquiv.apply_symm_apply] using hb i j
 
+set_option backward.isDefEq.respectTransparency false in
+set_option maxHeartbeats 1000000 in
+-- The final `simp`/`simpa` calls in this proof unfold several layers of
+-- `inCoordinates`, trivialisation `linearMapAt`/`symm` and `bilinearComp` at
+-- once, so the elaboration is allowed a larger heartbeat budget.
 /--
 **The pullback metric is a smooth section of the bilinear-form bundle**
 (`lmm:pullback-metric-smooth-in-charts`).
 
 The `contMDiff` field of `def:spacetime` for `ψ^*g`, at the same regularity
-index `⊤ = ω` as `Spacetime.contMDiff` itself. The label name is historical: the
+index `∞` as `Spacetime.contMDiff` itself. The label name is historical: the
 statement is entirely in the bundle-section idiom and nothing chart-local
 remains.
 -/
 theorem pullbackVal_contMDiff (M : Spacetime) (ψ : Diffeo M M) :
     ContMDiff M.model
-      (M.model.prod 𝓘(ℝ, SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)) ⊤
+      (M.model.prod 𝓘(ℝ, SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)) ∞
       (fun x ↦ Bundle.TotalSpace.mk'
         (SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)
         (E := fun x ↦ TangentSpace M.model x →L[ℝ] TangentSpace M.model x →L[ℝ] ℝ)
         x (M.pullbackVal ψ x)) := by
-  sorry
+  intro x₀
+  rw [Bundle.contMDiffAt_section]
+  let F : Type := SpacetimeModel
+  let E : M.Carrier → Type := fun x => TangentSpace M.model x
+  let E₁₂ : M.Carrier → Type := fun y => E y →L[ℝ] ℝ
+  let E₂ : M.Carrier → Type := fun x => E x →L[ℝ] E₁₂ x
+  let Δ : M.Carrier → (F →L[ℝ] F) := fun x =>
+    ContinuousLinearMap.inCoordinates F E F E x₀ x (ψ x₀) (ψ x)
+      (mfderiv M.model M.model ψ x)
+  let Γ : M.Carrier → (F →L[ℝ] (F →L[ℝ] ℝ)) := fun x =>
+    ContinuousLinearMap.inCoordinates F E (F →L[ℝ] ℝ) E₁₂ (ψ x₀) (ψ x) (ψ x₀) (ψ x)
+      (M.val (ψ x))
+  /- Smoothness of the differential factor `x ↦ dψ_x`, read in tangent coordinates. -/
+  have hΔ : ContMDiffAt M.model 𝓘(ℝ, F →L[ℝ] F) ∞ Δ x₀ := by
+    -- `inTangentCoordinates` unfolds to `inCoordinates` definitionally; `exact` (rather than
+    -- `simpa`) lets the goal's model-with-corners (norm topology) drive the instantiation of the
+    -- implicit codomain model of `mfderiv_const`, matching the topology used throughout.
+    exact ContMDiffAt.mfderiv_const (I := M.model) (I' := M.model)
+      (f := (ψ : M.Carrier → M.Carrier)) (x₀ := x₀) (m := ∞) (n := ∞)
+      (Diffeomorph.contMDiffAt ψ) (by simp)
+  /- Smoothness of the metric factor `y ↦ g_y`, read in trivialised coordinates at `ψ x₀`. -/
+  have hΓψ : ContMDiffAt M.model 𝓘(ℝ, F →L[ℝ] (F →L[ℝ] ℝ)) ∞
+      (fun y => ContinuousLinearMap.inCoordinates F E (F →L[ℝ] ℝ) E₁₂
+        (ψ x₀) y (ψ x₀) y (M.val y)) (ψ x₀) := by
+    have hsec : ContMDiffAt M.model (M.model.prod 𝓘(ℝ, F →L[ℝ] (F →L[ℝ] ℝ))) ∞
+        (fun y => Bundle.TotalSpace.mk' (F →L[ℝ] (F →L[ℝ] ℝ))
+          (E := fun y => E y →L[ℝ] E₁₂ y) y (M.val y)) (ψ x₀) := by
+      simpa [E, E₁₂, E₂] using (M.contMDiff).contMDiffAt
+    -- `contMDiffAt_hom_bundle` unfolds the smoothness of the hom-bundle section directly into
+    -- the smoothness of its in-coordinates component, in norm topology.
+    exact (contMDiffAt_hom_bundle
+      (F₁ := F) (E₁ := E) (F₂ := F →L[ℝ] ℝ) (E₂ := E₁₂) (n := ∞)
+      (f := fun y => Bundle.TotalSpace.mk' (F →L[ℝ] (F →L[ℝ] ℝ))
+        (E := fun y => E y →L[ℝ] E₁₂ y) y (M.val y)) (x₀ := ψ x₀)).mp hsec |>.2
+  /- Pull the metric factor along `ψ` to get smoothness of `x ↦ Γ x` at `x₀`. -/
+  have hΓ : ContMDiffAt M.model 𝓘(ℝ, F →L[ℝ] (F →L[ℝ] ℝ)) ∞ Γ x₀ := by
+    change ContMDiffAt M.model 𝓘(ℝ, F →L[ℝ] (F →L[ℝ] ℝ)) ∞
+      (fun x => ContinuousLinearMap.inCoordinates F E (F →L[ℝ] ℝ) E₁₂
+        (ψ x₀) (ψ x) (ψ x₀) (ψ x) (M.val (ψ x))) x₀
+    exact hΓψ.comp x₀ (Diffeomorph.contMDiffAt ψ)
+  /- Assemble the two-slot precomposition:
+  `(Γ x).bilinearComp (Δ x) (Δ x) = ((Δ x).precomp ℝ).comp ((Γ x).comp (Δ x))`. -/
+  have hZ : ContMDiffAt M.model 𝓘(ℝ, F →L[ℝ] (F →L[ℝ] ℝ)) ∞
+      (fun x => (Γ x).bilinearComp (Δ x) (Δ x)) x₀ := by
+    have hDpre : ContMDiffAt M.model 𝓘(ℝ, (F →L[ℝ] ℝ) →L[ℝ] (F →L[ℝ] ℝ)) ∞
+        (fun x => (Δ x).precomp ℝ) x₀ :=
+      ContMDiffAt.clm_precomp (F₃ := ℝ) hΔ
+    have hcomp : ContMDiffAt M.model 𝓘(ℝ, F →L[ℝ] (F →L[ℝ] ℝ)) ∞
+        (fun x => (Γ x).comp (Δ x)) x₀ := hΓ.clm_comp hΔ
+    have hres : ContMDiffAt M.model 𝓘(ℝ, F →L[ℝ] (F →L[ℝ] ℝ)) ∞
+        (fun x => ((Δ x).precomp ℝ).comp ((Γ x).comp (Δ x))) x₀ :=
+      hDpre.clm_comp hcomp
+    have hEqZ : (fun x => (Γ x).bilinearComp (Δ x) (Δ x))
+        =ᶠ[𝓝 x₀] fun x => ((Δ x).precomp ℝ).comp ((Γ x).comp (Δ x)) := by
+      filter_upwards with x
+      ext v w
+      simp [ContinuousLinearMap.bilinearComp_apply]
+    exact hres.congr_of_eventuallyEq hEqZ
+  /- The goal function is eventually equal to `x ↦ (Γ x).bilinearComp (Δ x) (Δ x)` on the
+  intersection of the source and target trivialisation base sets. -/
+  have hMain : (fun x => (trivializationAt (F →L[ℝ] (F →L[ℝ] ℝ)) E₂ x₀
+        ⟨x, M.pullbackVal ψ x⟩).2)
+      =ᶠ[𝓝 x₀] fun x => (Γ x).bilinearComp (Δ x) (Δ x) := by
+    have hA : (trivializationAt F E x₀).baseSet ∈ 𝓝 x₀ :=
+      (trivializationAt F E x₀).open_baseSet.mem_nhds
+        (FiberBundle.mem_baseSet_trivializationAt' x₀)
+    have hB0 : (trivializationAt F E (ψ x₀)).baseSet ∈ 𝓝 (ψ x₀) :=
+      (trivializationAt F E (ψ x₀)).open_baseSet.mem_nhds
+        (FiberBundle.mem_baseSet_trivializationAt' (ψ x₀))
+    have hB : ψ ⁻¹' (trivializationAt F E (ψ x₀)).baseSet ∈ 𝓝 x₀ :=
+      (Diffeomorph.contMDiffAt ψ).continuousAt.preimage_mem_nhds hB0
+    filter_upwards [hA, hB] with x hx hψx
+    ext v w
+    simp only [Γ, Δ]
+    rw [hom_trivializationAt_apply]
+    rw [inCoordinates_apply_eq₂ hx hx (Set.mem_univ _)]
+    rw [pullbackVal_apply]
+    rw [ContinuousLinearMap.bilinearComp_apply]
+    rw [inCoordinates_apply_eq₂ hψx hψx (Set.mem_univ _)]
+    rw [ContinuousLinearMap.inCoordinates_eq hx hψx]
+    -- the scalar-bundle `linearMapAt` collapses to the identity (simp), leaving the
+    -- differential in the applied-trivialisation form, which `htele` telescopes
+    have hψx' : ψ x ∈ (trivializationAt F E (ψ x₀)).baseSet := hψx
+    simp
+    have htele : ∀ z : E (ψ x),
+        (trivializationAt F E (ψ x₀)).symm (ψ x)
+          ((trivializationAt F E (ψ x₀)) ⟨ψ x, z⟩).2 = z := by
+      intro z
+      have hce : ((trivializationAt F E (ψ x₀)) ⟨ψ x, z⟩).2
+          = (trivializationAt F E (ψ x₀)).linearMapAt ℝ (ψ x) z :=
+        (congrFun
+          (Bundle.Trivialization.coe_linearMapAt_of_mem
+            (e := trivializationAt F E (ψ x₀)) hψx') z).symm
+      rw [hce]
+      exact Bundle.Trivialization.symm_linearMapAt (e := trivializationAt F E (ψ x₀)) hψx' z
+    simp [htele]
+    rfl
+  exact hZ.congr_of_eventuallyEq hMain
 
 /--
 **The pullback of a spacetime is a spacetime** (`thrm:pullback-is-spacetime`).
@@ -245,7 +347,8 @@ The hypothesis `hV` is literally the `smooth` field of
 `Spacetime.TimeOrientation`, and the conclusion is literally the `smooth` field
 to be produced for `ψ^*t`, so no conversion happens on either side. This is
 `ContMDiff.mpullback_vectorField`, whose `hf'` hypothesis is supplied by
-`isInvertible_mfderiv` and whose exponent gap `⊤ + 1 ≤ ⊤` is `le_top`.
+`isInvertible_mfderiv` and whose exponent gap `∞ + 1 ≤ ∞` is discharged by
+`simp`, since `∞ + 1 = ∞` in `ℕ∞`.
 
 Following the policy of the module docstring, and matching the generality of
 `ContMDiff.mpullback_vectorField` itself, this is stated for a diffeomorphism
@@ -254,22 +357,22 @@ between the manifolds of two spacetimes; the blueprint's case is the instance
 -/
 theorem contMDiff_mpullback_vectorField
     (ψ : Diffeo M N) (V : ∀ x : N.Carrier, TangentSpace N.model x)
-    (hV : ContMDiff N.model N.model.tangent ⊤
+    (hV : ContMDiff N.model N.model.tangent ∞
       (fun x ↦ Bundle.TotalSpace.mk' SpacetimeModel
         (E := fun x ↦ TangentSpace N.model x) x (V x))) :
-    ContMDiff M.model M.model.tangent ⊤
+    ContMDiff M.model M.model.tangent ∞
       (fun x ↦ Bundle.TotalSpace.mk' SpacetimeModel
         (E := fun x ↦ TangentSpace M.model x) x
         (VectorField.mpullback M.model N.model ψ V x)) := by
   exact ContMDiff.mpullback_vectorField
     (I := M.model) (I' := N.model)
-    (m := ⊤) (n := ⊤)
+    (m := ∞) (n := ∞)
     (f := (ψ : M.Carrier → N.Carrier))
     (V := V)
     hV
     (Diffeomorph.contMDiff ψ)
     (fun x => isInvertible_mfderiv ψ x)
-    le_top
+    (by simp)
 
 /-- **The pullback time orientation is nowhere vanishing**
 (`lmm:pullback-time-orientation-ne-zero`): `(ψ^*t)_x = (dψ_x)⁻¹ t_{ψ x} ≠ 0`.
