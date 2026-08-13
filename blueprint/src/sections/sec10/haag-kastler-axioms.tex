@@ -51,20 +51,26 @@ The quasilocal algebra of \ref{def:quasilocal-algebra} below rests on a chain of
 
 \begin{lemma}[Alexandrov Diamonds are Directed under Inclusion]
     \label{lmm:alexandrov-diamonds-isDirected}
+    \lean{Physicslib4.AQFT.HaagKastler.Diamond, Physicslib4.AQFT.HaagKastler.directedOn_alexandrovBasis, Physicslib4.AQFT.HaagKastler.instIsDirectedOrderDiamond}
     \uses{def:alexandrov-topology, lmm:minkowski-diamonds-upward-directed}
+    \leanok
     The order-theoretic repackaging of \ref{lmm:minkowski-diamonds-upward-directed}: the set of Alexandrov diamonds on standard Minkowski spacetime is \texttt{DirectedOn (\ensuremath{\subseteq})}, and hence, viewed as a subtype ordered by inclusion, satisfies \texttt{IsDirectedOrder}.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:minkowski-diamonds-upward-directed}
     Unfolding \texttt{DirectedOn} turns the goal into the statement of \ref{lmm:minkowski-diamonds-upward-directed}, which is therefore applied directly. The passage from the set-level \texttt{DirectedOn} to the subtype-level \texttt{IsDirectedOrder} that the colimit construction wants as an instance is Mathlib's \texttt{DirectedOn.isDirectedOrder}. There is no mathematical content here beyond \ref{lmm:minkowski-diamonds-upward-directed}; the node exists so that the colimit nodes can cite an instance rather than restate a $\forall\exists$ statement.
 \end{proof}
 
 \begin{lemma}[The Isotony Family is a Directed System]
     \label{lmm:isotony-directed-system}
+    \lean{Physicslib4.AQFT.HaagKastler.transitionHom, Physicslib4.AQFT.HaagKastler.instDirectedSystemIsotony}
     \uses{def:local-algebras, def:isotony}
+    \leanok
     The isotony family $i_{\mathbf{B}_1\mathbf{B}_2}$ of Axiom 2 (\ref{def:isotony}), indexed by the diamonds ordered by inclusion, is a \emph{directed system} in Mathlib's sense: it satisfies \texttt{DirectedSystem}.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:isotony}
     Mathlib's \texttt{DirectedSystem f} is a two-field class: \texttt{map\_self}, saying $f_{\le\mathrm{rfl}} = \mathrm{id}$, and \texttt{map\_map}, saying $f_{jk} \circ f_{ij} = f_{ik}$. These are literally Axiom 2(b) and Axiom 2(c) (\ref{def:isotony}), so the instance is constructed by supplying those two projections. This is the node that cashes in the remark in \ref{def:isotony} that (b) and (c) make the assignment a functor.
 \end{proof}

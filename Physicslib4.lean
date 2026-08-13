@@ -10,6 +10,7 @@ import Physicslib4.AQFT.HaagKastler.Net
 import Physicslib4.AQFT.HaagKastler.Purity
 import Physicslib4.AQFT.HaagKastler.QuasilocalAction
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
+import Physicslib4.AQFT.HaagKastler.QuasilocalColimit
 import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.HaagKastler.QuasilocalKMS
