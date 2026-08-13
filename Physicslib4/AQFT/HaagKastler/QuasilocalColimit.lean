@@ -7,6 +7,7 @@ import Physicslib4.AQFT.HaagKastler.Isotony
 import Physicslib4.Spacetime.MinkowskiDirected
 import Mathlib.Algebra.Colimit.DirectLimit
 import Mathlib.Analysis.CStarAlgebra.Hom
+import Mathlib.Analysis.Normed.Unbundled.RingSeminorm
 
 /-!
 # The quasilocal colimit: index type and directed system
@@ -89,7 +90,7 @@ so the instance is built by supplying `Isotony.map_self` and `Isotony.map_comp`.
 Blueprint reference: `lmm:isotony-directed-system`. -/
 instance instDirectedSystemIsotony (U : LocalNet) (i : Isotony U) :
     DirectedSystem (fun D : Diamond => U.algebra D.1)
-      (fun D₁ D₂ h => transitionHom U i D₁ D₂ h) where
+      (transitionHom U i · · ·) where
   map_self := by
     intro D x
     change i.map D.2 D.2 (subset_refl D.1) x = x
@@ -108,8 +109,7 @@ inclusion.
 Mathlib supplies its algebraic structure (`Ring`, `StarRing`, `Algebra ℂ`,
 `StarModule ℂ`) but puts no norm on any colimit; that is built by hand below. -/
 abbrev QuasilocalColimit (U : LocalNet) (i : Isotony U) : Type :=
-  DirectLimit (fun D : Diamond => U.algebra D.1)
-    (fun D₁ D₂ h => transitionHom U i D₁ D₂ h)
+  DirectLimit (fun D : Diamond => U.algebra D.1) (transitionHom U i · · ·)
 
 /-- **The isotony embeddings are isometric.** A `*`-homomorphism of complex
 C*-algebras is isometric as soon as it is injective, and Axiom 2(a) supplies
@@ -149,6 +149,35 @@ theorem exists_common_representatives (U : LocalNet) (i : Isotony U)
     (x y : QuasilocalColimit U i) :
     ∃ (D : Diamond) (a b : U.algebra D.1), x = ⟦⟨D, a⟩⟧ ∧ y = ⟦⟨D, b⟩⟧ := by
   exact DirectLimit.exists_eq_mk₂ _ x y
+
+/-! ### Next step, and the obstacle in front of it
+
+The next blueprint node, `lmm:quasilocal-colimit-norm-axioms`, builds a `RingNorm`
+on the colimit from `colimitNorm` and then a `NormedRing` via
+`RingNorm.toNormedRing`, followed by `NormedSpace ℂ` from absolute homogeneity.
+
+It is blocked, and not on the mathematics. Mathlib's `Algebra/Colimit/DirectLimit.lean`
+does carry `Ring`, `StarRing`, `Module`, `Algebra` and `StarModule` instances on a
+direct limit, but they are stated under a variable block of the shape
+
+    {T : ∀ ⦃i j : ι⦄, i ≤ j → Type*}  {f : ∀ _ _ h, T h}
+    [∀ i j (h : i ≤ j), FunLike (T h) (G i) (G j)]
+    [∀ i j h, RingHomClass (T h) (G i) (G j)]   -- and LinearMapClass, AlgHomClass, …
+
+and they do not fire for the family here: attempting the `RingNorm` produces
+`failed to synthesize NonUnitalNonAssocRing (QuasilocalColimit U i)`, and the
+scalar action produces `failed to synthesize HSMul ℂ (QuasilocalColimit U i) ?m`.
+Writing the family as `(transitionHom U i · · ·)` rather than an eta-expanded
+lambda was necessary but not sufficient.
+
+So the obstacle is getting Lean to see the isotony family as a `T`-family with the
+requisite `…HomClass` instances, which is exactly the dependent-type plumbing
+flagged as the main friction of this construction. Everything above this point is
+proved and this file builds clean; the work resumes here.
+
+Note when resuming: every instance in `Algebra/Colimit/DirectLimit.lean` is
+anonymous, so none may be cited by name — use `inferInstance` / `inferInstanceAs`.
+-/
 
 end HaagKastler
 end AQFT
