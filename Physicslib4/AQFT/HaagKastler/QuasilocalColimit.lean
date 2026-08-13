@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.AQFT.HaagKastler.Isotony
 import Physicslib4.Spacetime.MinkowskiDirected
 import Mathlib.Algebra.Colimit.DirectLimit
+import Mathlib.Analysis.CStarAlgebra.Hom
 
 /-!
 # The quasilocal colimit: index type and directed system
@@ -99,6 +100,55 @@ instance instDirectedSystemIsotony (U : LocalNet) (i : Isotony U) :
     change ((i.map Dⱼ.2 Dₖ.2 hjk).comp (i.map Dᵢ.2 Dⱼ.2 hij)) x =
       i.map Dᵢ.2 Dₖ.2 (hij.trans hjk) x
     rw [i.map_comp Dᵢ.2 Dⱼ.2 Dₖ.2 hij hjk]
+
+/-- The **colimit of the local algebras** along the Axiom 2 isotony family: the
+directed colimit `lim_{→ 𝐁} 𝔘(𝐁)`, taken over the Alexandrov diamonds ordered by
+inclusion.
+
+Mathlib supplies its algebraic structure (`Ring`, `StarRing`, `Algebra ℂ`,
+`StarModule ℂ`) but puts no norm on any colimit; that is built by hand below. -/
+abbrev QuasilocalColimit (U : LocalNet) (i : Isotony U) : Type :=
+  DirectLimit (fun D : Diamond => U.algebra D.1)
+    (fun D₁ D₂ h => transitionHom U i D₁ D₂ h)
+
+/-- **The isotony embeddings are isometric.** A `*`-homomorphism of complex
+C*-algebras is isometric as soon as it is injective, and Axiom 2(a) supplies
+injectivity. This is what makes the colimit norm well defined.
+
+Blueprint reference: `lmm:quasilocal-colimit-norm-well-defined`. -/
+theorem norm_transitionHom (U : LocalNet) (i : Isotony U)
+    (D₁ D₂ : Diamond) (h : D₁ ≤ D₂) (a : U.algebra D₁.1) :
+    ‖transitionHom U i D₁ D₂ h a‖ = ‖a‖ :=
+  NonUnitalStarAlgHom.norm_map (transitionHom U i D₁ D₂ h) (i.injective D₁.2 D₂.2 h) a
+
+/-- **The colimit norm.** `‖[a]‖ := ‖a‖` for any representative `a`. It is well
+defined precisely because the transition maps are isometric
+(`norm_transitionHom`): the universal property of the colimit takes that isometry
+as its compatibility obligation.
+
+Blueprint reference: `lmm:quasilocal-colimit-norm-well-defined`. -/
+noncomputable def colimitNorm (U : LocalNet) (i : Isotony U) :
+    QuasilocalColimit U i → ℝ :=
+  DirectLimit.lift _ (fun _ a => ‖a‖)
+    (fun D₁ D₂ h a => (norm_transitionHom U i D₁ D₂ h a).symm)
+
+/-- The colimit norm of a class is the norm of any representative: the defining
+equation of `colimitNorm`, and the reason the node is stated as a
+well-definedness claim. -/
+@[simp] theorem colimitNorm_mk (U : LocalNet) (i : Isotony U)
+    (D : Diamond) (a : U.algebra D.1) :
+    colimitNorm U i ⟦⟨D, a⟩⟧ = ‖a‖ := rfl
+
+/-- **Common representatives for two colimit elements.** Any two elements of the
+colimit are the classes of two elements of one and the same diamond. This is what
+lets the binary algebraic and norm identities be checked on representatives, and
+it is available exactly because the index type is directed.
+
+Blueprint reference: `lmm:quasilocal-colimit-common-representatives`. -/
+theorem exists_common_representatives (U : LocalNet) (i : Isotony U)
+    (x y : QuasilocalColimit U i) :
+    ∃ (D : Diamond) (a b : U.algebra D.1), x = ⟦⟨D, a⟩⟧ ∧ y = ⟦⟨D, b⟩⟧ := by
+  exact DirectLimit.exists_eq_mk₂ _ x y
 
 end HaagKastler
 end AQFT

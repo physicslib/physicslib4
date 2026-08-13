@@ -97,20 +97,26 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
 
 \begin{lemma}[The Colimit Norm is Well Defined]
     \label{lmm:quasilocal-colimit-norm-well-defined}
+    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalColimit, Physicslib4.AQFT.HaagKastler.norm_transitionHom, Physicslib4.AQFT.HaagKastler.colimitNorm, Physicslib4.AQFT.HaagKastler.colimitNorm_mk}
     \uses{def:local-algebras, def:isotony, lmm:isotony-directed-system, lmm:alexandrov-diamonds-isDirected}
+    \leanok
     Setting $\|[a]\| := \|a\|$ for a representative $a \in \mathfrak{U}(\mathbf{B})$ gives a well-defined function on the colimit $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$: the value depends neither on the diamond $\mathbf{B}$ nor on the representative $a$ chosen.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:local-algebras, def:isotony, lmm:alexandrov-diamonds-isDirected}
     Two representatives of the same class become equal after transport into a common containing diamond, which exists by \ref{lmm:alexandrov-diamonds-isDirected}. That transport is by isotony embeddings, and those are isometric --- \texttt{NonUnitalStarAlgHom.norm\_map} applied with Axiom 2(a) (\ref{def:isotony}) in the complex C*-algebras of Axiom 1 (\ref{def:local-algebras}) --- so each representative has the same norm as their common image and hence the same norm as the other.
 \end{proof}
 
 \begin{lemma}[Common Representatives for Two Colimit Elements]
     \label{lmm:quasilocal-colimit-common-representatives}
+    \lean{Physicslib4.AQFT.HaagKastler.exists_common_representatives}
     \uses{def:local-algebras, def:isotony, lmm:isotony-directed-system, lmm:alexandrov-diamonds-isDirected}
+    \leanok
     For any two elements $x, y$ of $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ there are a single diamond $\mathbf{B}$ and elements $a, b \in \mathfrak{U}(\mathbf{B})$ with $x = \iota_{\mathbf{B}}(a)$ and $y = \iota_{\mathbf{B}}(b)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:alexandrov-diamonds-isDirected, lmm:isotony-directed-system}
     This is Mathlib's \texttt{DirectLimit.exists\_eq\_mk\ensuremath{_2}}, \texttt{theorem exists\_eq\_mk\ensuremath{_2} (z w : DirectLimit F f) : \ensuremath{\exists} i x y, z = [\ensuremath{\langle}i, x\ensuremath{\rangle}] \ensuremath{\wedge} w = [\ensuremath{\langle}i, y\ensuremath{\rangle}]}, applied to the directed system \ref{lmm:isotony-directed-system}; its directedness hypothesis is \ref{lmm:alexandrov-diamonds-isDirected} through \texttt{DirectedOn.isDirectedOrder}. When the goal is a proposition rather than data, the same fact is packaged as the induction principle \texttt{DirectLimit.induction\ensuremath{_2}}, which is the form actually used in tactic proofs.
 
