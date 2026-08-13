@@ -469,6 +469,40 @@ theorem bicommutant_inter_commutant_eq (R : VonNeumannAlgebra H) :
     _ = S ∩ Set.centralizer S := by
       rw [h_eq]
 
+/-- **The intersection of two von Neumann algebras is bicommutant-closed.** For von
+Neumann algebras `M` and `N` on `H`, the set `M ∩ N` equals its own bicommutant, so
+it is again a von Neumann algebra.
+
+Unlike `bicommutant_inter_commutant_eq`, here `M` and `N` are arbitrary and need
+*not* form a commutant pair: since `M = M''` and `N = N''`, the intersection is
+`(M' ∪ N')'`, a centralizer, and centralizers are closed under the triple
+centralizer law. -/
+theorem bicommutant_inter_eq (M N : VonNeumannAlgebra H) :
+    Set.centralizer
+        (Set.centralizer ((M : Set (H →L[ℂ] H)) ∩ (N : Set (H →L[ℂ] H))))
+      = (M : Set (H →L[ℂ] H)) ∩ (N : Set (H →L[ℂ] H)) := by
+  set S := (M : Set (H →L[ℂ] H)) with hS
+  set T := (N : Set (H →L[ℂ] H)) with hT
+  have hS_bicommutant : Set.centralizer (Set.centralizer S) = S := by
+    simp [S]
+  have hT_bicommutant : Set.centralizer (Set.centralizer T) = T := by
+    simp [T]
+  have h_eq : S ∩ T = Set.centralizer (Set.centralizer S ∪ Set.centralizer T) := by
+    calc
+      S ∩ T = Set.centralizer (Set.centralizer S) ∩ Set.centralizer (Set.centralizer T) := by
+        rw [hS_bicommutant, hT_bicommutant]
+      _ = Set.centralizer (Set.centralizer S ∪ Set.centralizer T) := by
+        rw [Set.centralizer_union]
+  calc
+    Set.centralizer (Set.centralizer (S ∩ T))
+        = Set.centralizer (Set.centralizer (Set.centralizer
+            (Set.centralizer S ∪ Set.centralizer T))) := by
+      rw [h_eq]
+    _ = Set.centralizer (Set.centralizer S ∪ Set.centralizer T) := by
+      rw [Set.centralizer_centralizer_centralizer]
+    _ = S ∩ T := by
+      rw [h_eq]
+
 /-- **The center of a von Neumann algebra.** `Z(R) = R ∩ R'`: the elements of `R`
 that commute with all of `R`, built as the meet of the star-subalgebras of `R` and
 its commutant. Its underlying set is `R ∩ R'`. -/

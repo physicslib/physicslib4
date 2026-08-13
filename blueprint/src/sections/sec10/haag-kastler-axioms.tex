@@ -1261,11 +1261,14 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{lemma}[The intersection of two von Neumann algebras is a von Neumann algebra]
     \label{lmm:von-neumann-inter-general}
+    \lean{Physicslib4.GNS.bicommutant_inter_eq}
+    \leanok
     Let $M$ and $N$ be bundled von Neumann algebras on a Hilbert space $H$. Then their underlying sets intersect in a bicommutant-closed set: $(M \cap N)'' = M \cap N$, so $M \cap N$ is again a von Neumann algebra. Here $M$ and $N$ are arbitrary and need \emph{not} form a commutant pair.
 
-    This general form is what \ref{def:relative-commutant} needs, the relative commutant $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$ being the instance $M = R(\mathbf{B}_1)'$, $N = R(\mathbf{B}_2)$. It carries no \texttt{lean} reference because the repository currently proves only the commutant-pair instance \ref{lmm:von-neumann-inter-is-von-neumann}; generalising that declaration is an outstanding obligation, and the proof below is already stated in the general form it would take.
+    This general form is what \ref{def:relative-commutant} needs, the relative commutant $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$ being the instance $M = R(\mathbf{B}_1)'$, $N = R(\mathbf{B}_2)$, and likewise for its curved-spacetime counterpart \ref{def:relative-commutant-in-curved-spacetime}. It is formalized as \texttt{Physicslib4.GNS.bicommutant\_inter\_eq}, sitting alongside the commutant-pair instance \texttt{Physicslib4.GNS.bicommutant\_inter\_commutant\_eq} of \ref{lmm:von-neumann-inter-is-von-neumann}. One nuance is worth recording: in Lean the two are independent declarations, since \texttt{bicommutant\_inter\_commutant\_eq} proves the commutant-pair case directly rather than by specialising \texttt{bicommutant\_inter\_eq}, so when \ref{lmm:von-neumann-inter-is-von-neumann} describes itself as the instance $M = R$, $N = R'$ of this lemma that records the mathematics, not the Lean proof structure; the special case could be re-derived from the general one, but currently is not.
 \end{lemma}
 \begin{proof}
+    \leanok
     Both $M$ and $N$ are bicommutant-closed, $M'' = M$ and $N'' = N$, so by the centralizer-of-a-union identity (Mathlib's \texttt{Set.centralizer\_union}) $M \cap N = M'' \cap N'' = (M' \cup N')'$. Thus $M \cap N$ is itself a commutant, and every commutant is bicommutant-closed by the triple-commutant collapse $S''' = S'$ (Mathlib's \texttt{Set.centralizer\_centralizer\_centralizer}): $(M \cap N)'' = (M' \cup N')''' = (M' \cup N')' = M \cap N$.
 \end{proof}
 
