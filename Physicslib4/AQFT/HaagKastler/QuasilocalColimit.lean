@@ -8,6 +8,7 @@ import Physicslib4.Spacetime.MinkowskiDirected
 import Mathlib.Algebra.Colimit.DirectLimit
 import Mathlib.Analysis.CStarAlgebra.Hom
 import Mathlib.Analysis.Normed.Unbundled.RingSeminorm
+import Physicslib4.Analysis.CStarCompletion
 
 /-!
 # The quasilocal colimit: index type and directed system
@@ -313,6 +314,29 @@ instance colimitCStarRing (U : LocalNet) (i : Isotony U) :
         rw [DirectLimit.star_def, DirectLimit.mul_def]
         simpa [colimitNorm_mk] using CStarRing.norm_mul_self_le a)
       x
+
+/-- The **quasilocal algebra built from the net**: the completion of the colimit of
+the local algebras along the Axiom 2 isotony family.
+
+This is the object the blueprint claims exists, constructed from the net alone,
+with no ambient C*-algebra presupposed anywhere. -/
+abbrev QuasilocalCompletion (U : LocalNet) (i : Isotony U) : Type :=
+  UniformSpace.Completion (QuasilocalColimit U i)
+
+/-- **The completion of the quasilocal colimit is a C\*-algebra**
+(`lmm:quasilocal-completion-cstar`).
+
+This is the general completion theory of `Physicslib4/Analysis/CStarCompletion.lean`
+instantiated at the colimit. Its five standing hypotheses — `NormedRing`,
+`StarRing`, `NormedAlgebra ℂ`, `StarModule ℂ` and `CStarRing` — are exactly what
+the colimit development above establishes, so the C\*-algebra structure follows by
+instance resolution with nothing further to prove.
+
+In particular isometry of the involution is not a separate obligation: it comes
+from the C\*-inequality through `CStarRing.to_normedStarGroup`. -/
+noncomputable instance quasilocalCompletionCStarAlgebra (U : LocalNet) (i : Isotony U) :
+    CStarAlgebra (QuasilocalCompletion U i) :=
+  inferInstance
 
 end HaagKastler
 end AQFT

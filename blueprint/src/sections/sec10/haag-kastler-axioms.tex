@@ -212,7 +212,9 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{definition}[The Involution on a Completion]
     \label{def:completion-star}
+    \lean{Physicslib4.instStarCompletion, Physicslib4.star_completion_coe}
     \uses{def:completion-standing-hypotheses}
+    \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Define the involution on $\widehat{A}$ by
     \begin{align}
         \star_{\widehat{A}} := \texttt{UniformSpace.Completion.map } \star_{A}.
@@ -228,7 +230,9 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Involution Extends to the Completion]
     \label{lmm:star-extends-to-completion}
+    \lean{Physicslib4.instStarRingCompletion, Physicslib4.instStarModuleCompletion}
     \uses{def:completion-standing-hypotheses, def:completion-star}
+    \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then the operation $\star_{\widehat{A}}$ of \ref{def:completion-star} is involutive, additive, anti-multiplicative and conjugate-linear over $\mathbb{C}$,
     \begin{align}
         x^{**} = x, \quad (x+y)^{*} = x^{*} + y^{*}, \quad (xy)^{*} = y^{*}x^{*}, \quad (c \cdot x)^{*} = \bar{c} \cdot x^{*}
@@ -238,6 +242,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
     All four laws are collected in this one node because they share a single proof skeleton --- \texttt{UniformSpace.Completion.induction\_on} plus \texttt{isClosed\_eq} plus the characterisation $\eta(a)^{*} = \eta(a^{*})$ of \ref{def:completion-star} --- and differ only in which coercion lemma and which component law of $A$ are cited at the end. That they end up bundled into two different typeclass instances, \texttt{StarRing \ensuremath{\widehat{A}}} and \texttt{StarModule \ensuremath{\mathbb{C}} \ensuremath{\widehat{A}}}, is a packaging detail and not a reason to split the mathematical content across nodes.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:completion-standing-hypotheses, def:completion-star}
     Four component laws are asserted, and they are proved as four \emph{standalone} named lemmas, not as inline field bodies: call them \texttt{Completion.star\_star'}, \texttt{Completion.star\_add'}, \texttt{Completion.star\_mul'} and \texttt{Completion.star\_smul'}. Each is about four lines by one shared skeleton. Both sides of the law are continuous in their arguments, by continuity of $\star_{\widehat{A}}$ (\ref{def:completion-star}) together with continuity of the relevant operation on the normed ring $\widehat{A}$; so the locus where they agree is closed by \texttt{isClosed\_eq} --- whose continuity side goals are the \texttt{fun\_prop} one-liners recorded in \ref{def:completion-star} --- and \texttt{UniformSpace.Completion.induction\_on} (in its \ensuremath{{}_2} form for the two-variable laws) reduces the claim to the canonical image. There the characterisation $\eta(a)^{*} = \eta(a^{*})$ of \ref{def:completion-star} (\texttt{UniformSpace.Completion.map\_coe}) applies, and the four differ only in which coercion lemma and which component law of $A$ are cited afterwards:
     \begin{itemize}
@@ -253,7 +258,9 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The C*-Inequality Passes to the Completion]
     \label{lmm:completion-cstar-identity}
+    \lean{Physicslib4.instCStarRingCompletion}
     \uses{def:completion-standing-hypotheses, lmm:star-extends-to-completion}
+    \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then $\widehat{A}$ satisfies
     \begin{align}
         \|x\| \, \|x\| \le \|x^{*} x\|
@@ -263,6 +270,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
     Again only the inequality is asserted, since it is exactly the \texttt{norm\_mul\_self\_le} field of \texttt{CStarRing} and hence all there is to prove. The equality $\|x^{*}x\| = \|x\|^{2}$ follows from it by \texttt{CStarRing.norm\_star\_mul\_self}, and $\|x^{*}\| = \|x\|$ by \texttt{CStarRing.to\_normedStarGroup}.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:star-extends-to-completion}
     Routine, not hard, and worth saying why. \texttt{CStarRing} is a \texttt{Prop}-valued class with exactly one field, \texttt{norm\_mul\_self\_le : \ensuremath{\forall\, x,\ \|x\| * \|x\| \le \|x^{\star} * x\|}} (\texttt{Analysis/CStarAlgebra/Basic.lean:89}). That field is a \emph{non-strict inequality} between two continuous real-valued functions of the single variable $x$, so it transports to the completion in about four lines: the locus where it holds is closed by \texttt{isClosed\_le}, and \texttt{UniformSpace.Completion.induction\_on} reduces the goal to the canonical image.
 
@@ -273,10 +281,13 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Completion is a Normed $\mathbb{C}$-Algebra]
     \label{lmm:completion-normed-algebra}
+    \lean{Physicslib4.instNormedAlgebraCompletion}
     \uses{def:completion-standing-hypotheses}
+    \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then $\widehat{A}$ carries a \texttt{NormedAlgebra \ensuremath{\mathbb{C}} \ensuremath{\widehat{A}}} instance.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:completion-standing-hypotheses}
     This node exists to work around one specific trap, and the trap is the whole of its content. Mathlib \emph{does} have a \texttt{NormedAlgebra} instance on a completion (\texttt{Analysis/Normed/Module/Completion.lean:87}), but it is gated on \texttt{SeminormedCommRing A} --- \emph{commutative} --- so it does \emph{not} fire here: $A$ is noncommutative in every case of interest. Without noticing this one would expect the instance for free and discover at formalization time that typeclass inference simply fails to find it.
 
@@ -289,10 +300,13 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Completion of a C*-Normed $*$-Algebra is a C*-Algebra]
     \label{lmm:completion-of-cstar-normed-star-algebra}
+    \lean{Physicslib4.instCStarAlgebraCompletion}
     \uses{def:completion-standing-hypotheses, lmm:star-extends-to-completion, lmm:completion-cstar-identity, lmm:completion-normed-algebra}
+    \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then its completion $\widehat{A}$ is a C*-algebra.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:star-extends-to-completion, lmm:completion-cstar-identity, lmm:completion-normed-algebra}
     Pure bundling, and the audit confirms it is literally that: \texttt{CStarAlgebra} is declared as \texttt{class CStarAlgebra (A : Type*) extends NormedRing A, StarRing A, CompleteSpace A, CStarRing A, NormedAlgebra \ensuremath{\mathbb{C}} A, StarModule \ensuremath{\mathbb{C}} A} with an \emph{empty} body (\texttt{Analysis/CStarAlgebra/Classes.lean:30-42}). It adds no field of its own beyond its parents, so once the parents below are in place this node is a \texttt{where} with an essentially empty body. Exactly those six parents are supplied for $\widehat{A}$:
     \begin{itemize}
@@ -308,10 +322,13 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Completion of the Quasilocal Colimit is a C*-Algebra]
     \label{lmm:quasilocal-completion-cstar}
+    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalCompletion, Physicslib4.AQFT.HaagKastler.quasilocalCompletionCStarAlgebra}
     \uses{lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-colimit-cstar-identity, def:completion-standing-hypotheses, lmm:completion-of-cstar-normed-star-algebra}
+    \leanok
     The completion of the normed $*$-algebra of \ref{lmm:quasilocal-union-normed-star-algebra} is a C*-algebra.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-colimit-cstar-identity, def:completion-standing-hypotheses, lmm:completion-of-cstar-normed-star-algebra}
     This node is where the general completion results are instantiated at the colimit. Take $A$ to be the normed $*$-algebra of \ref{lmm:quasilocal-union-normed-star-algebra}. Its \texttt{NormedRing}, \texttt{StarRing}, \texttt{NormedAlgebra \ensuremath{\mathbb{C}}} and \texttt{StarModule \ensuremath{\mathbb{C}}} structures are exactly what that lemma supplies, and the remaining hypothesis of \ref{def:completion-standing-hypotheses}, the C*-inequality, is \ref{lmm:quasilocal-colimit-cstar-identity}. So \ref{lmm:completion-of-cstar-normed-star-algebra} applies to $A$ verbatim, and the claim is that lemma applied to it. In particular isometry of the involution is not a separate assumption to discharge: it comes from the same inequality through \texttt{CStarRing.to\_normedStarGroup}.
 \end{proof}
