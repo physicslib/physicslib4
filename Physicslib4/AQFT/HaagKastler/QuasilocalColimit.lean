@@ -109,7 +109,7 @@ inclusion.
 Mathlib supplies its algebraic structure (`Ring`, `StarRing`, `Algebra ℂ`,
 `StarModule ℂ`) but puts no norm on any colimit; that is built by hand below. -/
 abbrev QuasilocalColimit (U : LocalNet) (i : Isotony U) : Type :=
-  DirectLimit (fun D : Diamond => U.algebra D.1) (transitionHom U i · · ·)
+  DirectLimit (fun D : Diamond => U.algebra D.1) (transitionHom U i)
 
 /-- **The isotony embeddings are isometric.** A `*`-homomorphism of complex
 C*-algebras is isometric as soon as it is injective, and Axiom 2(a) supplies
@@ -150,6 +150,90 @@ theorem exists_common_representatives (U : LocalNet) (i : Isotony U)
     ∃ (D : Diamond) (a b : U.algebra D.1), x = ⟦⟨D, a⟩⟧ ∧ y = ⟦⟨D, b⟩⟧ := by
   exact DirectLimit.exists_eq_mk₂ _ x y
 
+/-- **There is at least one Alexandrov diamond.** Every set of the form
+`I⁺(p) ∩ I⁻(q)` is a basis element, so the index type is inhabited.
+
+This is needed as an instance, not merely as a fact: the colimit's `Zero` and
+`One` are built by choosing a component (`DirectLimit.map₀` picks
+`Classical.arbitrary ι`), so Mathlib's algebraic instances on the colimit all
+carry `[Nonempty ι]`. Without it none of `Ring`, `Module ℂ` or `Algebra ℂ`
+resolves on the colimit. -/
+instance instNonemptyDiamond : Nonempty Diamond := by
+  exact ⟨⟨Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation 0 ∩
+      Spacetime.chronologicalPast StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation 0,
+    ⟨0, 0, rfl⟩⟩⟩
+
+/-- **The colimit norm is a ring norm.** Its five `RingNorm` fields are the first
+five clauses of the blueprint node: `map_zero'` and `neg'` come from
+`AddGroupSeminorm`, `add_le'` and `mul_le'` are subadditivity and
+submultiplicativity, and `eq_zero_of_map_eq_zero'` is positive definiteness.
+
+Each is checked on common representatives (`exists_common_representatives`) and
+transported by `colimitNorm_mk`. Positive definiteness is the only clause with
+real content: it is where injectivity of the canonical maps into the colimit is
+spent, via `DirectLimit.mk_injective` fed by Axiom 2(a).
+
+Blueprint reference: `lmm:quasilocal-colimit-norm-axioms`. -/
+noncomputable def colimitRingNorm (U : LocalNet) (i : Isotony U) :
+    RingNorm (QuasilocalColimit U i) where
+  toFun := colimitNorm U i
+  map_zero' := by
+    rw [DirectLimit.zero_def (Classical.arbitrary Diamond), colimitNorm_mk]
+    exact norm_zero
+  add_le' := by
+    intro x y
+    rcases exists_common_representatives U i x y with ⟨D, a, b, rfl, rfl⟩
+    rw [DirectLimit.add_def, colimitNorm_mk, colimitNorm_mk, colimitNorm_mk]
+    exact norm_add_le a b
+  neg' := by
+    intro x
+    rcases exists_common_representatives U i x x with ⟨D, a, b, rfl, _⟩
+    rw [DirectLimit.neg_def, colimitNorm_mk, colimitNorm_mk]
+    exact norm_neg a
+  mul_le' := by
+    intro x y
+    rcases exists_common_representatives U i x y with ⟨D, a, b, rfl, rfl⟩
+    rw [DirectLimit.mul_def, colimitNorm_mk, colimitNorm_mk, colimitNorm_mk]
+    exact norm_mul_le a b
+  eq_zero_of_map_eq_zero' := by
+    intro x hx
+    rcases exists_common_representatives U i x x with ⟨D, a, b, rfl, _⟩
+    have ha : ‖a‖ = 0 := by
+      simpa [colimitNorm_mk] using hx
+    have hzero : a = 0 := (norm_eq_zero.mp ha)
+    rw [hzero]
+    exact (DirectLimit.zero_def D).symm
+
+/-- The colimit as a `NormedRing`, obtained from `colimitRingNorm`.
+
+The `RingNorm` detour is forced rather than bureaucratic: `NormedRing` bundles a
+`MetricSpace`, and there is no metric on the colimit quotient until this norm
+supplies one, so `NormedRing` cannot be stated first and filled in field by field.
+
+Blueprint reference: `lmm:quasilocal-colimit-norm-axioms`. -/
+noncomputable instance colimitNormedRing (U : LocalNet) (i : Isotony U) :
+    NormedRing (QuasilocalColimit U i) :=
+  (colimitRingNorm U i).toNormedRing
+
+/-- **Absolute homogeneity of the colimit norm**, the sixth clause. It is listed
+separately from the `RingNorm` fields because a `RingNorm` knows nothing about the
+scalars; its role is to supply the `norm_smul_le` field of `NormedSpace ℂ` over
+the `NormedRing` structure just obtained.
+
+Blueprint reference: `lmm:quasilocal-colimit-norm-axioms`. -/
+theorem colimitNorm_smul (U : LocalNet) (i : Isotony U)
+    (c : ℂ) (x : QuasilocalColimit U i) :
+    colimitNorm U i (c • x) = ‖c‖ * colimitNorm U i x := by
+  exact DirectLimit.induction (f := transitionHom U i)
+    (C := fun y => colimitNorm U i (c • y) = ‖c‖ * colimitNorm U i y)
+    (by
+      intro D a
+      rw [DirectLimit.smul_def, colimitNorm_mk, colimitNorm_mk]
+      exact norm_smul c a)
+    x
+
 /-! ### Next step, and the obstacle in front of it
 
 The next blueprint node, `lmm:quasilocal-colimit-norm-axioms`, builds a `RingNorm`
@@ -178,6 +262,57 @@ proved and this file builds clean; the work resumes here.
 Note when resuming: every instance in `Algebra/Colimit/DirectLimit.lean` is
 anonymous, so none may be cited by name — use `inferInstance` / `inferInstanceAs`.
 -/
+
+/-- The `NormedRing` norm on the colimit is the norm of `colimitNorm`, by
+construction. This is the bridge that lets the representative-level lemmas above
+be used against the ambient `‖·‖`. -/
+@[simp] theorem norm_eq_colimitNorm (U : LocalNet) (i : Isotony U)
+    (x : QuasilocalColimit U i) :
+    ‖x‖ = colimitNorm U i x := rfl
+
+/-- **The colimit is a normed algebra over `ℂ`.** Together with the `StarRing` and
+`StarModule ℂ` instances, which Mathlib's `DirectLimit` supplies by typeclass
+inference from the corresponding structures on each local algebra, this is the
+normed `*`-algebra structure the blueprint node asserts.
+
+`NormedAlgebra` has no field beyond `Algebra` other than `norm_smul_le`, which is
+absolute homogeneity (`colimitNorm_smul`) weakened to an inequality. It is stated
+in the `NormedAlgebra` form because that is what the completion hypotheses consume
+downstream.
+
+Blueprint reference: `lmm:quasilocal-union-normed-star-algebra`. -/
+noncomputable instance colimitNormedAlgebra (U : LocalNet) (i : Isotony U) :
+    NormedAlgebra ℂ (QuasilocalColimit U i) where
+  norm_smul_le := by
+    intro r x
+    rw [norm_eq_colimitNorm, colimitNorm_smul, ← norm_eq_colimitNorm]
+
+/-- **The colimit satisfies the C\*-inequality** `‖x‖ * ‖x‖ ≤ ‖x⋆ * x‖`.
+
+Only the inequality is asserted, because it is literally the single field
+`norm_mul_self_le` of Mathlib's `CStarRing`, so establishing it *is* establishing
+the instance. The familiar equality `‖x⋆ * x‖ = ‖x‖ ^ 2` then comes back free from
+`CStarRing.norm_star_mul_self`, and `‖x⋆‖ = ‖x‖` from
+`CStarRing.to_normedStarGroup`; neither needs a proof of its own.
+
+Note `CStarRing` does not require completeness, which is why this holds on the
+colimit even though the colimit is in general *not* a C\*-algebra. Only one
+element is involved, so no directedness is needed: take a representative `a`, note
+`x⋆ * x` has representative `a⋆ * a` in the same local algebra, and apply the
+`CStarRing` instance there.
+
+Blueprint reference: `lmm:quasilocal-colimit-cstar-identity`. -/
+instance colimitCStarRing (U : LocalNet) (i : Isotony U) :
+    CStarRing (QuasilocalColimit U i) where
+  norm_mul_self_le := by
+    intro x
+    exact DirectLimit.induction (f := transitionHom U i)
+      (C := fun y => ‖y‖ * ‖y‖ ≤ ‖star y * y‖)
+      (by
+        intro D a
+        rw [DirectLimit.star_def, DirectLimit.mul_def]
+        simpa [colimitNorm_mk] using CStarRing.norm_mul_self_le a)
+      x
 
 end HaagKastler
 end AQFT

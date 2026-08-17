@@ -125,7 +125,9 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
 
 \begin{lemma}[The Colimit Norm is a Ring Norm and a Normed-Space Norm]
     \label{lmm:quasilocal-colimit-norm-axioms}
+    \lean{Physicslib4.AQFT.HaagKastler.instNonemptyDiamond, Physicslib4.AQFT.HaagKastler.colimitRingNorm, Physicslib4.AQFT.HaagKastler.colimitNormedRing, Physicslib4.AQFT.HaagKastler.colimitNorm_smul}
     \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-common-representatives, def:local-algebras, def:isotony, lmm:alexandrov-diamonds-isDirected}
+    \leanok
     The norm of \ref{lmm:quasilocal-colimit-norm-well-defined} satisfies the normed-$*$-algebra norm axioms on $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$: for all $x, y$ in the colimit and all $c \in \mathbb{C}$,
     \begin{align}
         \|0\| = 0, \qquad \|{-x}\| = \|x\|, \qquad \|x + y\| \le \|x\| + \|y\|, \qquad \|xy\| \le \|x\|\,\|y\|,
@@ -142,6 +144,7 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
     $*$-invariance $\|x^{*}\| = \|x\|$ is deliberately not listed. It is not an independent obligation: once the C*-inequality of \ref{lmm:quasilocal-colimit-cstar-identity} is available, \texttt{CStarRing.to\_normedStarGroup} produces the \texttt{NormedStarGroup} instance, and $\|x^{*}\| = \|x\|$ with it.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-common-representatives, def:local-algebras, def:isotony}
     Every clause is transport along a representative, which is why they share a node. For the two binary clauses take a common diamond $\mathbf{B}$ and representatives $a, b \in \mathfrak{U}(\mathbf{B})$ with $x = \iota_{\mathbf{B}}(a)$, $y = \iota_{\mathbf{B}}(b)$ by \ref{lmm:quasilocal-colimit-common-representatives}; for the unary clauses one representative suffices. Since $\iota_{\mathbf{B}}$ is a unital $\mathbb{C}$-algebra homomorphism (the \texttt{Algebra} instance recorded at the start of this subsection), $0$, $-x$, $c \cdot x$, $x + y$ and $xy$ are $\iota_{\mathbf{B}}(0)$, $\iota_{\mathbf{B}}(-a)$, $\iota_{\mathbf{B}}(c \cdot a)$, $\iota_{\mathbf{B}}(a+b)$ and $\iota_{\mathbf{B}}(ab)$.
 
@@ -154,10 +157,13 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
 
 \begin{lemma}[The Quasilocal Union is a Normed $*$-Algebra]
     \label{lmm:quasilocal-union-normed-star-algebra}
+    \lean{Physicslib4.AQFT.HaagKastler.norm_eq_colimitNorm, Physicslib4.AQFT.HaagKastler.colimitNormedAlgebra}
     \uses{def:local-algebras, def:isotony, lmm:minkowski-diamonds-upward-directed, lmm:isotony-directed-system, lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-norm-axioms}
+    \leanok
     The colimit of the local algebras $\mathfrak{U}(\mathbf{B})$ (\ref{def:local-algebras}) along the isotony family of Axiom 2 (\ref{def:isotony}), taken over the upward-directed Alexandrov diamonds (\ref{lmm:minkowski-diamonds-upward-directed}), carries a well-defined normed $*$-algebra structure over $\mathbb{C}$. Explicitly it supplies, on the colimit, a \texttt{NormedRing} structure, a \texttt{StarRing} structure, a \texttt{NormedAlgebra \ensuremath{\mathbb{C}}} structure and a \texttt{StarModule \ensuremath{\mathbb{C}}} structure.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:isotony-directed-system, lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-norm-axioms}
     Assemble. The $*$-algebra structure over $\mathbb{C}$ is supplied by Mathlib's \texttt{DirectLimit} instances, recorded at the start of this subsection and found by typeclass inference once \ref{lmm:isotony-directed-system} is in place; \ref{lmm:quasilocal-colimit-norm-well-defined} supplies the norm function; \ref{lmm:quasilocal-colimit-norm-axioms} supplies the axioms that norm satisfies, in the assembled form \texttt{NormedRing} plus \texttt{NormedSpace \ensuremath{\mathbb{C}}}. The \texttt{NormedAlgebra \ensuremath{\mathbb{C}}} structure asserted above is exactly that \texttt{NormedSpace \ensuremath{\mathbb{C}}} together with the \texttt{Algebra \ensuremath{\mathbb{C}}} instance from \texttt{DirectLimit}: \texttt{NormedAlgebra} has no field beyond \texttt{Algebra} other than \texttt{norm\_smul\_le}, which is the \texttt{NormedSpace} field. It is stated in the \texttt{NormedAlgebra} form here because that is what \ref{def:completion-standing-hypotheses} consumes downstream. Bundling them is the normed $*$-algebra structure.
 
@@ -168,7 +174,9 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
 
 \begin{lemma}[The Colimit Satisfies the C*-Inequality]
     \label{lmm:quasilocal-colimit-cstar-identity}
+    \lean{Physicslib4.AQFT.HaagKastler.colimitCStarRing}
     \uses{lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-colimit-norm-well-defined, def:local-algebras}
+    \leanok
     The normed $*$-algebra of \ref{lmm:quasilocal-union-normed-star-algebra} satisfies
     \begin{align}
         \|x\| \, \|x\| \le \|x^{*} x\|
@@ -178,6 +186,7 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
     Only this inequality is asserted, because it is literally the single field \texttt{norm\_mul\_self\_le} of Mathlib's \texttt{CStarRing} class, so establishing it \emph{is} establishing the \texttt{CStarRing} instance. The familiar equality $\|x^{*}x\| = \|x\|^{2}$ then comes back for free from \texttt{CStarRing.norm\_star\_mul\_self}, and $*$-invariance $\|x^{*}\| = \|x\|$ from \texttt{CStarRing.to\_normedStarGroup}; neither needs a proof of its own. The colimit is still not a C*-algebra: it is in general not complete.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:quasilocal-colimit-norm-well-defined, def:local-algebras}
     A single element is involved, so no directedness is needed here. Pick a representative $a \in \mathfrak{U}(\mathbf{B})$ of $x$. Then $x^{*}x$ has the representative $a^{*}a$ in the same $\mathfrak{U}(\mathbf{B})$, since the involution acts on representatives by \texttt{DirectLimit.star\_def}, and by \ref{lmm:quasilocal-colimit-norm-well-defined} the colimit norms of $x$ and $x^{*}x$ are the norms of $a$ and $a^{*}a$ there. So the claim reduces to $\|a\|\,\|a\| \le \|a^{*}a\|$ in $\mathfrak{U}(\mathbf{B})$, which is the \texttt{CStarRing} instance carried by the local algebras (\ref{def:local-algebras}), available as \texttt{CStarRing.norm\_mul\_self\_le}.
 \end{proof}
