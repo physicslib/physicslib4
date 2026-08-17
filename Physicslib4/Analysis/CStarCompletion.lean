@@ -57,6 +57,27 @@ open UniformSpace
 variable {A : Type*} [NormedRing A] [StarRing A] [NormedAlgebra ℂ A]
   [StarModule ℂ A] [CStarRing A]
 
+/-- **The standing hypotheses of this file, and the notation `Â`**
+(`def:completion-standing-hypotheses`).
+
+`CStarCompletion A` is the completion of a type `A` carrying a `NormedRing`, a
+`StarRing`, a `NormedAlgebra ℂ`, a `StarModule ℂ` and a `CStarRing` structure.
+Every result below is stated under exactly these five hypotheses, so this
+abbreviation *is* the blueprint's standing-hypotheses node: it names the setting
+and introduces the notation `Â` for the completion, whose canonical map has dense
+range by `UniformSpace.Completion.denseRange_coe`.
+
+Two remarks on the hypothesis list. No isometry hypothesis is imposed on `star`:
+`‖a⋆‖ = ‖a‖` follows from the C*-inequality, since `CStarRing.to_normedStarGroup`
+produces the `NormedStarGroup A` instance. And `StarModule ℂ A` and
+`NormedAlgebra ℂ A` are listed because they are genuinely used and are not
+consequences of the others — the former is what `star_smul` on the completion
+reduces to on the dense range, and the latter is what `NormedAlgebra` needs to
+complete. -/
+abbrev CStarCompletion (A : Type*) [NormedRing A] [StarRing A] [NormedAlgebra ℂ A]
+    [StarModule ℂ A] [CStarRing A] : Type _ :=
+  UniformSpace.Completion A
+
 /-- **The involution on a completion** (`def:completion-star`).
 
 `star` on `A` is an isometry — not assumed, but obtained from the C*-inequality
