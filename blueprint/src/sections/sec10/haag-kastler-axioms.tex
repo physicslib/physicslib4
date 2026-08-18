@@ -258,6 +258,18 @@ The remaining results of this subsection have nothing to do with the quasilocal 
     Isometry of $\star_{\widehat{A}}$ is deliberately not part of the statement and needs no density argument of its own: once $\widehat{A}$ carries the C*-inequality (\ref{lmm:completion-cstar-identity}) the \texttt{NormedStarGroup \ensuremath{\widehat{A}}} instance, and with it $\|x^{*}\| = \|x\|$, is produced by \texttt{CStarRing.to\_normedStarGroup}.
 \end{proof}
 
+\begin{lemma}[The Completion Coercion as a Bundled $*$-Algebra Homomorphism]
+    \label{lmm:completion-coe-star-alg-hom}
+    \uses{def:completion-standing-hypotheses, lmm:star-extends-to-completion}
+    Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then the canonical map $\eta : A \to \widehat{A}$ is a unital $*$-algebra homomorphism over $\mathbb{C}$, and can be bundled as a term of \texttt{StarAlgHom \ensuremath{\mathbb{C}}} $A$ $\widehat{A}$.
+\end{lemma}
+\begin{proof}
+    \uses{def:completion-standing-hypotheses, def:completion-star, lmm:star-extends-to-completion}
+    Every law needed is already available unbundled; the content of this node is that the \emph{bundling} has to be done by hand, and it is worth a node precisely so that the fact is not mistaken for a citation. Mathlib supplies the coercion only as a \emph{ring} homomorphism, \texttt{UniformSpace.Completion.coeRingHom}; there is no \texttt{coeStarAlgHom}, and no algebra-homomorphism counterpart either, anywhere in the completion files audited in \ref{def:completion-standing-hypotheses}. So \texttt{map\_one}, \texttt{map\_mul}, \texttt{map\_add} come from \texttt{coeRingHom}, and the two remaining fields are supplied individually. The first is the \texttt{AlgHom} field, and its name matters: \texttt{StarAlgHom \ensuremath{\mathbb{C}}} extends \texttt{AlgHom}, whose scalar field is \texttt{commutes'} --- agreement of the map with the two \texttt{algebraMap}s --- and \emph{not} \texttt{map\_smul}. It discharges essentially by \texttt{rfl} from the definition of \texttt{UniformSpace.Completion.algebra}, whose \texttt{smul\_def'} field already characterises the scalar action through $\eta \circ \texttt{algebraMap}$; the unbundled coercion law $c \cdot \eta(a) = \eta(c \cdot a)$, \texttt{UniformSpace.Completion.coe\_smul}, is what backs it if the \texttt{rfl} does not fire. The second is \texttt{map\_star}, which is the characterisation $\eta(a)^{*} = \eta(a^{*})$ of \ref{def:completion-star}, which \ref{lmm:star-extends-to-completion} records as part of making $\eta$ a $*$-homomorphism. Assembling those five fields into a \texttt{StarAlgHom} is a single anonymous-constructor term.
+
+    This node is stated for a general $A$ rather than only for the colimit because that is the generality at which it is true and at which the rest of this block is written; its consumer is \ref{lmm:quasilocal-embedding}, which needs a \emph{bundled} morphism and would otherwise have to inline this assembly.
+\end{proof}
+
 \begin{lemma}[The C*-Inequality Passes to the Completion]
     \label{lmm:completion-cstar-identity}
     \lean{Physicslib4.instCStarRingCompletion}
@@ -404,12 +416,123 @@ The next axiom makes use of the following new definition:
 
 \begin{definition}[Axiom 4: Quasilocal Completeness]
     \label{def:quasilocal-completeness}
-    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalCompleteness.lean}
-    \leanok
     \uses{def:quasilocal-observable}
     All ``observables'' are quasilocal observables.
+
+    \emph{What the quotation marks mean.} The quotation marks around ``observable'' are doing real work and are better explained than left implicit. An ``observable'' is here a \emph{physical primitive}: a quantity a physicist can actually measure in the world, an equivalence class of measurement procedures that agree on all outcomes. It is not defined anywhere in this blueprint, and it cannot be, because nothing in the formalism fixes what happens in a laboratory. A \emph{quasilocal observable}, by contrast, is a mathematical object: by \ref{def:quasilocal-observable} it is an operator $\pi_\omega(a)$ with $a$ a self-adjoint element of the quasilocal algebra $\mathfrak{U}$.
+
+    \emph{The assertion.} This axiom is a \emph{bridge principle} --- the one point in the axiom list at which physical reality is joined to the mathematical formalism. What it asserts is a correspondence between the two sides just distinguished: every physical observable corresponds to a quasilocal observable in the sense of \ref{def:quasilocal-observable}.
+
+    \emph{The direction is the content.} The assertion is a one-way inclusion, and which way it runs is precisely what the name ``Completeness'' records: the formalism is \emph{not too small}. Nothing a physicist can measure lies outside the quasilocal observables; there is no measurable quantity that the net of local algebras, its quasilocal algebra and their representations fail to account for. The converse --- that every quasilocal observable is physically realisable, i.e. that every self-adjoint $\pi_\omega(a)$ is measured by some actual procedure --- is a \emph{separate and strictly stronger} assertion, and it is \emph{not} asserted here. It is flagged instead as an open modelling question: whether the formalism is also \emph{not too large} is not settled by this axiom, and the axioms as stated are consistent with $\mathfrak{U}$ containing self-adjoint elements answering to no measurement at all.
+
+    \emph{This is an interpretive postulate, not a mathematical condition.} Axioms 1, 2, 3 and 5 (\ref{def:local-algebras}, \ref{def:isotony}, \ref{def:local-commutativity}, \ref{def:lorentz-covariance}) are mathematical conditions on a net: each says something checkable about the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and its structure maps. This axiom is of a different kind. One of its two sides is not a mathematical object, so the statement relates the formalism to the world rather than constraining the formalism internally, and it is therefore not the sort of statement that can be proved or disproved inside the formalism. Consequently it should have no mathematical consumers: a theorem that appears to need Axiom 4 in fact needs the \emph{mathematics} it was previously conflated with, namely the existence of the quasilocal algebra (\ref{thrm:quasilocal-algebra-exists}), not the physical correspondence. What keeps the correspondence \emph{tenable} in the presence of the larger bicommutants of \ref{def:local-von-neumann} is \ref{thrm:quasilocal-strongly-dense}.
+
+    \emph{Formalization note.} This node previously carried \texttt{Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness} together with a formalized mark. Those are removed here, because that Lean definition is a mathematical existence claim about the net --- an attempt at \ref{thrm:quasilocal-algebra-exists}, and as presently written not even that, for the reasons recorded in that node --- and says nothing whatever about physical observables or their correspondence to quasilocal ones. A faithful Lean encoding of \emph{this} node is nevertheless possible, and is pending: one takes the physical observables as an abstract primitive, a type \texttt{Observable} together with a map from it into the operators of a representation, exactly as Axiom 1 (\ref{def:local-algebras}) takes the assignment \texttt{algebra} as abstract data rather than constructing it. The axiom then reads as the assertion that this map lands in the quasilocal observables; nothing is thereby proved about the world, which is as it should be for a bridge principle.
 \end{definition}
+
+\begin{theorem}[Existence of a Quasilocal Algebra]
+    \label{thrm:quasilocal-algebra-exists}
+    \uses{def:local-algebras, def:isotony, lmm:quasilocal-completion-cstar, lmm:quasilocal-colimit-norm-well-defined, lmm:star-extends-to-completion, lmm:quasilocal-embedding, lmm:quasilocal-embedding-injective, lmm:quasilocal-embedding-cocone, lmm:quasilocal-embeddings-dense}
+    Every local net (\ref{def:local-algebras}) satisfying Axiom 2 (\ref{def:isotony}) admits a quasilocal algebra: there exist a C*-algebra $\mathfrak{U}$ and a family of unital $*$-homomorphisms $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}$, indexed by the Alexandrov-basis sets, such that each $\iota_{\mathbf{B}}$ is injective, the family satisfies the cocone condition $\iota_{\mathbf{B}_2} \circ i_{\mathbf{B}_1 \mathbf{B}_2} = \iota_{\mathbf{B}_1}$ for $\mathbf{B}_1 \subseteq \mathbf{B}_2$, and the union of the images of the $\iota_{\mathbf{B}}$ is dense in $\mathfrak{U}$.
+
+    The indexing is essential to the statement and is not a stylistic choice: the family runs over the \emph{Alexandrov-basis sets} only. Axiom 1 (\ref{def:local-algebras}) assigns an abstract unital C*-algebra to \emph{every} subset of spacetime, constrained only at $\emptyset$, so the algebras attached to non-basis subsets are junk fibres about which the axioms say nothing whatever; no claim is made about them here, and none can be.
+
+    It is a \emph{theorem}, not an axiom. Nothing needs to be assumed here: this existence claim is what the colimit-then-completion chain of this subsection establishes, running from \ref{lmm:alexandrov-diamonds-isDirected} through \ref{lmm:quasilocal-completion-cstar}. It is stated as its own node because it is the mathematical content that was previously bundled into Axiom 4 (\ref{def:quasilocal-completeness}) and is what the consumers of that axiom actually needed. It carries no formalized mark, and deliberately carries no \texttt{lean} tag either, for the reason recorded next.
+
+    \emph{Why this node points at no Lean declaration: the existing Lean states something else, and that something is false.} An earlier version of this node claimed that the statement above is exactly what \texttt{Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness}, namely \texttt{Nonempty (QuasilocalAlgebra U i)}, asserts. That is wrong, and the \texttt{lean} and \texttt{leanfile} tags have been removed rather than left pointing a formalizer at an unprovable goal. There are two independent mismatches, both in \texttt{QuasilocalAlgebra.lean}:
+    \begin{itemize}
+        \item \emph{The embedding family is indexed over all subsets.} The field is \texttt{\ensuremath{\iota} : \ensuremath{\forall} B : Set StandardMinkowskiSpacetime.Carrier, StarAlgHom \ensuremath{\mathbb{C}} (U.algebra B) carrier} --- total over every subset of spacetime, whereas only \texttt{\ensuremath{\iota}\_injective} and \texttt{\ensuremath{\iota}\_inclusion} are restricted to basis sets. Since \texttt{LocalNet.algebra} is likewise total, the structure demands a \emph{unital} $*$-homomorphism out of every junk fibre, which the statement above pointedly does not.
+        \item \emph{The carrier universe is pinned.} The field \texttt{carrier : Type} sits in \texttt{Type 0}, while \texttt{LocalNet.algebra : Set \ensuremath{\_} \ensuremath{\rightarrow} Type*} is universe polymorphic. For a net whose local algebras genuinely live in \texttt{Type 1} no \texttt{Type 0} carrier can hold injective copies of them, so the existence claim fails for size reasons alone.
+    \end{itemize}
+    The first mismatch is not a harmless over-generality: it makes the \texttt{Prop} \emph{refutable}. Take $\mathfrak{U}(\mathbf{B}) = \mathbb{C}$ for every Alexandrov-basis set and for $\emptyset$, with all transition maps the identity, so that Axiom 2(a), (b) and (c) hold; and put $\mathfrak{U}(\mathbf{B}_0) = M_2(\mathbb{C})$ for a single non-basis subset $\mathbf{B}_0$, say a singleton, which is not of the form $I^+(p) \cap I^-(q)$. For any candidate structure, each $\iota_{\mathbf{B}}$ on a basis set is a $\mathbb{C}$-algebra homomorphism out of $\mathbb{C}$, so its range is $\mathbb{C}\cdot 1$; the density clause then forces the carrier to be $\overline{\mathbb{C}\cdot 1} = \mathbb{C}\cdot 1$, while injectivity on basis sets forces it to be nontrivial, so the carrier is $\mathbb{C}$. But $\iota_{\mathbf{B}_0} : M_2(\mathbb{C}) \to \mathbb{C}$ is unital and $M_2(\mathbb{C})$ is simple, so its kernel is $0$ and it is injective --- giving $4 \le 1$, a contradiction. Hence \texttt{Nonempty (QuasilocalAlgebra U i)} is \emph{false} for that net.
+
+    So the Lean structure has to be amended before this node can be tagged. Two changes are needed: \texttt{\ensuremath{\iota}} must be restricted to basis sets, taking a strict-implicit region argument together with an \texttt{IsAlexandrovBasisSet} hypothesis before returning \texttt{StarAlgHom \ensuremath{\mathbb{C}} (U.algebra B) carrier} --- exactly the binder shape that \texttt{\ensuremath{\iota}\_injective} and \texttt{\ensuremath{\iota}\_inclusion} already use, so that all three fields agree on their domain --- and \texttt{carrier : Type} must become \texttt{carrier : Type*}. That is a Lean-side change, outside the scope of this blueprint edit, and it is recorded here so that it is not discovered only at formalization time. Note also that the docstring of \texttt{QuasilocalCompleteness.lean} already describes the family as indexed by the Alexandrov-basis sets, so the Lean's prose and its statement disagree; the prose is the correct one.
+
+    One consequence reaches beyond this node and is recorded because this is where it was found. \ref{def:haag-kastler-net} is marked as formalized and bundles \texttt{QuasilocalCompleteness} as its fourth field, so as things stand that structure bundles a refutable \texttt{Prop} and is uninhabitable for nets like the one above. Repairing \ref{def:haag-kastler-net} is a separate step; only the diagnosis belongs here.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:quasilocal-completion-cstar, lmm:quasilocal-embedding, lmm:quasilocal-embedding-injective, lmm:quasilocal-embedding-cocone, lmm:quasilocal-embeddings-dense}
+    Assembly only, and that is the point of stating the five embedding lemmas below separately. Take for $\mathfrak{U}$ the completion of the directed colimit of the local algebras, a C*-algebra by \ref{lmm:quasilocal-completion-cstar}. Take for the family the $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding}. The three remaining clauses are then exactly \ref{lmm:quasilocal-embedding-injective}, \ref{lmm:quasilocal-embedding-cocone} and \ref{lmm:quasilocal-embeddings-dense}, so the proof is one anonymous constructor supplied with the five results just cited. It is the assembly, not any of the facts, that is outstanding.
+\end{proof}
+
+The proof just given cites six facts: \ref{lmm:quasilocal-completion-cstar} for the ambient C*-algebra, and five for the embeddings and their density. Those five are recorded here, immediately after their only consumer, each as a node of its own rather than as a step buried inside an oversized proof. Throughout, $\mathfrak{U}$ denotes the completion of $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ and $\eta$ the coercion of the colimit into that completion, as in \ref{def:completion-standing-hypotheses}.
+
+\begin{lemma}[The Canonical Embeddings into the Quasilocal Algebra]
+    \label{lmm:quasilocal-embedding}
+    \uses{def:local-algebras, def:isotony, lmm:quasilocal-completion-cstar, lmm:completion-coe-star-alg-hom}
+    For each Alexandrov-basis set $\mathbf{B}$ the composite
+    \begin{align}
+        \iota_{\mathbf{B}} := \eta \circ \texttt{DirectLimit.Algebra.of} \, : \, \mathfrak{U}(\mathbf{B}) \longrightarrow \mathfrak{U}
+    \end{align}
+    is a unital $*$-algebra homomorphism over $\mathbb{C}$, bundled as a term of \texttt{StarAlgHom \ensuremath{\mathbb{C}}} $\mathfrak{U}(\mathbf{B})$ $\mathfrak{U}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-completion-cstar, lmm:completion-coe-star-alg-hom}
+    Both factors are bundled unital $*$-algebra homomorphisms, and the composite is their \texttt{StarAlgHom.comp}. For $\eta$ this is \ref{lmm:completion-coe-star-alg-hom}, applicable because the colimit satisfies the standing hypotheses of \ref{def:completion-standing-hypotheses} --- which is exactly what \ref{lmm:quasilocal-completion-cstar} checks. For the colimit insertion, the passage preceding \ref{lmm:quasilocal-colimit-norm-well-defined} records that \texttt{DirectLimit.Algebra.of} is a unital $\mathbb{C}$-algebra homomorphism supplied by Mathlib, and its one missing \texttt{StarAlgHom} field, \texttt{map\_star}, holds by definition of the involution on the colimit, \texttt{DirectLimit.star\_def}, which sends the class of $\langle \mathbf{B}, a \rangle$ to the class of $\langle \mathbf{B}, a^{*} \rangle$.
+\end{proof}
+
+\begin{lemma}[The Canonical Embeddings are Injective]
+    \label{lmm:quasilocal-embedding-injective}
+    \uses{def:isotony, lmm:quasilocal-embedding}
+    For every Alexandrov-basis set $\mathbf{B}$ the map $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding} is injective.
+\end{lemma}
+\begin{proof}
+    \uses{def:isotony, lmm:quasilocal-embedding}
+    A composite of two injections. The colimit insertion is injective by \texttt{DirectLimit.mk\_injective}, whose hypothesis is injectivity of every transition map, i.e.\ Axiom 2(a) (\ref{def:isotony}); this is the citation already recorded in the itemized list preceding \ref{lmm:quasilocal-colimit-norm-well-defined}. The coercion $\eta$ into the completion is injective because it is an isometry, \texttt{UniformSpace.Completion.coe\_isometry} --- equivalently by \texttt{UniformSpace.Completion.norm\_coe} together with positive definiteness of the colimit norm (\ref{lmm:quasilocal-colimit-norm-axioms}).
+\end{proof}
+
+\begin{lemma}[The Canonical Embeddings Form a Cocone]
+    \label{lmm:quasilocal-embedding-cocone}
+    \uses{def:isotony, lmm:quasilocal-embedding}
+    For Alexandrov-basis sets $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and every $a \in \mathfrak{U}(\mathbf{B}_1)$,
+    \begin{align}
+        \iota_{\mathbf{B}_2}\bigl(i_{\mathbf{B}_1\mathbf{B}_2}(a)\bigr) = \iota_{\mathbf{B}_1}(a),
+    \end{align}
+    where $i_{\mathbf{B}_1\mathbf{B}_2}$ is the isotony embedding of Axiom 2 (\ref{def:isotony}).
+\end{lemma}
+\begin{proof}
+    \uses{def:isotony, lmm:quasilocal-embedding}
+    The corresponding identity for the colimit insertions is \texttt{DirectLimit.Algebra.of\_f}, the compatibility of the insertions with the transition maps of the directed system. Applying $\eta$ to both sides --- a \texttt{congrArg} --- gives the claim for the composites $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding}.
+\end{proof}
+
+\begin{lemma}[The Colimit is the Union of the Images of its Insertions]
+    \label{lmm:quasilocal-colimit-union-of-insertions}
+    \uses{def:isotony}
+    Every element of $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ is of the form $\texttt{DirectLimit.Algebra.of}\,(a)$ for some Alexandrov diamond $\mathbf{B}$ and some $a \in \mathfrak{U}(\mathbf{B})$; equivalently, the union of the ranges of the insertions, taken over the diamonds, is the whole colimit.
+\end{lemma}
+\begin{proof}
+    This is the step that the earlier one-paragraph proof of \ref{thrm:quasilocal-algebra-exists} used without citing anything, which is why it is now a node. It is a direct Mathlib citation, and about two lines. Given $x$, \texttt{DirectLimit.exists\_eq\_mk}, which asserts that every $z$ in \texttt{DirectLimit F f} is the quotient class of some pair $\langle i, x \rangle$, produces an index $\mathbf{B}$ and an $a \in \mathfrak{U}(\mathbf{B})$ with $x$ the class of $\langle \mathbf{B}, a \rangle$; and \texttt{DirectLimit.Algebra.of} is \emph{definitionally} that class --- its \texttt{toFun} field is literally the map sending $x$ to the class of $\langle i, x \rangle$ --- so the rewrite is \texttt{DirectLimit.Algebra.of\_apply}, available because \texttt{of} is tagged \texttt{@[simps]}. That lemma lives in the same namespace and file as the \texttt{DirectLimit.exists\_eq\_mk\ensuremath{{}_2}} that \ref{lmm:quasilocal-colimit-common-representatives} already cites as Mathlib's, and one could equally specialise the latter by taking both elements to be $x$; the one-element form is the direct citation and is preferred.
+
+    The node survives as a node rather than being inlined because \ref{lmm:quasilocal-embeddings-dense} is its consumer and reads better citing it, and because the fact is worth stating separately: it is what identifies the range of the colimit insertions with the whole colimit, which is the pivot of the density argument.
+\end{proof}
+
+\begin{lemma}[The Images of the Canonical Embeddings are Dense]
+    \label{lmm:quasilocal-embeddings-dense}
+    \uses{lmm:quasilocal-embedding, lmm:quasilocal-colimit-union-of-insertions}
+    The union of the ranges of the $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding}, taken over the Alexandrov-basis sets, is dense in $\mathfrak{U}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-embedding, lmm:quasilocal-colimit-union-of-insertions}
+    The range of $\eta$ is dense in the completion, \texttt{UniformSpace.Completion.denseRange\_coe}. By \ref{lmm:quasilocal-colimit-union-of-insertions} that range is the image under $\eta$ of the union of the ranges of the colimit insertions, which is the union of the ranges of the $\iota_{\mathbf{B}}$; so the two sets coincide and the density transfers. A dense subset of a dense set being dense is \texttt{Dense.mono} applied to the resulting inclusion of closures.
+\end{proof}
+
+\begin{theorem}[Quasilocal Observables are Strongly Dense in the Bicommutant]
+    \label{thrm:quasilocal-strongly-dense}
+    \uses{def:quasilocal-observable, def:local-von-neumann}
+    Let $\pi$ be a \emph{unital} $*$-representation of the quasilocal algebra $\mathfrak{U}$ on a Hilbert space $H$. Then the image $\pi(\mathfrak{U})$ is dense in its bicommutant $\pi(\mathfrak{U})''$ in the strong operator topology.
+
+    Unitality is the hypothesis that does the work and it is stated directly rather than derived from a stronger one. It is essential, not decorative: for the zero representation $\pi = 0$ on a nonzero $H$ the image $\pi(\mathfrak{U}) = \{0\}$ is already strongly closed while $\pi(\mathfrak{U})'' = \mathbb{C}\cdot 1$, so density fails outright. The case of interest here is the GNS representation $\pi_\omega$ attached to a state $\omega$ (\ref{def:state}, \ref{thrm:gns-construction-theorem}), which is unital because $\mathfrak{U}$ is a unital C*-algebra and $\omega$ a state; but the theorem holds for any unital $*$-representation, and stating it for the GNS one only would be assuming more than the density theorem needs. Below, $\pi_\omega$ is written wherever the GNS case is the one being discussed.
+
+    \emph{Its role: this is what makes the bridge principle tenable.} The observables of a region are read off from the local von Neumann algebra $R(\mathbf{B}) = \pi_\omega(\mathfrak{U}(\mathbf{B}))''$ of \ref{def:local-von-neumann}, and a bicommutant is in general strictly larger than the image it is formed from. The statement above is about the global bicommutant $\pi_\omega(\mathfrak{U})''$, and it covers the local ones because $\pi_\omega(\mathfrak{U}(\mathbf{B})) \subseteq \pi_\omega(\mathfrak{U})$ and taking commutants reverses inclusions twice over, so $R(\mathbf{B}) \subseteq \pi_\omega(\mathfrak{U})''$ for every $\mathbf{B}$. Taken naively, the strictness looks like a refutation of Axiom 4 (\ref{def:quasilocal-completeness}): the bicommutant would contain self-adjoint operators that are not quasilocal observables, hence physical observables outside the quasilocal ones. This node is what blocks that reading. Every element of the bicommutant is approximated in the strong topology by elements of $\pi_\omega(\mathfrak{U})$, and strong convergence \emph{implies} convergence of all the expectation values $\langle \psi, T \psi \rangle$ that a measurement can return --- the implication runs this way and not the other, since the strong topology is strictly finer than the weak one in which those expectation values converge --- so no measurement of finite precision can distinguish an element of the bicommutant from a quasilocal observable close to it. The extra elements are therefore not new measurable quantities, and their existence does not falsify the identification of physical observables with quasilocal ones; it refines it. This is the content that Chapter 6.3 argues informally, citing Murphy Lemma 4.1.4: a unital $*$-subalgebra of $\mathcal{B}(H)$ containing the identity is strongly dense in its bicommutant.
+
+    One refinement of the argument is worth recording, since it is easy to overstate. The approximants furnished by the density theorem are elements of $\pi_\omega(\mathfrak{U})$, but they are not guaranteed to be \emph{self-adjoint}, so the reading ``every self-adjoint element of the bicommutant is a strong limit of self-adjoint quasilocal observables'' is a strictly stronger claim than the one asserted here. That stronger claim is the Kaplansky density theorem, which additionally preserves self-adjointness and norm bounds. Nothing in the tenability argument above needs it --- indistinguishability by expectation values only requires approximants at all --- but it is the result to invoke if the self-adjoint form is ever wanted.
+\end{theorem}
+\begin{proof}
+    \uses{def:quasilocal-observable, def:local-von-neumann}
+    $\pi(\mathfrak{U})$ is a $*$-subalgebra of $\mathcal{B}(H)$ containing the identity, which is exactly the unitality hypothesis, so the claim is Murphy Lemma 4.1.4 applied to it. That lemma is the von Neumann density theorem, and it is \emph{not} available in Mathlib. This node is therefore left as a stated result of the literature that the discussion of Axiom 4 depends on, deliberately not decomposed further and not formalized.
+
+    It is worth being exact about what is missing, because an earlier version of this note got it wrong and the error would cost a formalizer real work. The obstruction is \emph{not} the absence of the strong operator topology: Mathlib does have it, as \texttt{PointwiseConvergenceCLM} --- with notation \texttt{\_ \ensuremath{\rightarrow}SL\ensuremath{{}_{\mathrm{pt}}}[\_] \_} --- whose docstring describes the topology of pointwise convergence as the one ``sometimes also called the strong operator topology'', and it has the weak operator topology as \texttt{ContinuousLinearMapWOT}. So the statement of this node \emph{is} phraseable in Mathlib today, and anyone formalizing it should build on \texttt{PointwiseConvergenceCLM} rather than redevelop the topology. What is genuinely absent is the density theorem \emph{itself}, and with it the Kaplansky density theorem: Mathlib has the double commutant property of the bundled von Neumann algebra structure (\texttt{VonNeumannAlgebra.commutant\_commutant}), which says $M'' = M$ for an algebra already known to be a von Neumann algebra and is not a density result, and topological closures of star subalgebras in a normed algebra (\texttt{StarSubalgebra.topologicalClosure}), which is the norm topology and hence the wrong one. Supplying the missing theorem is a development of its own --- the interaction of the strong topology with commutants --- and outside the scope of this axiom subsection.
+\end{proof}
 
 \begin{definition}[Axiom 5: Lorentz Covariance]
     \label{def:lorentz-covariance}
@@ -1031,7 +1154,7 @@ These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Mink
     \label{thrm:pure-iff-extreme-quasilocal}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.pure_iff_extreme}
     \leanfile{Physicslib4/AQFT/HaagKastler/Purity.lean}
-    \uses{def:pure-state, def:extreme-state, def:quasilocal-completeness}
+    \uses{def:pure-state, def:extreme-state, def:quasilocal-algebra, thrm:quasilocal-algebra-exists}
     \leanok
     A state $\omega$ on the canonical quasilocal algebra $\mathfrak{U}$ of a Haag-Kastler net is pure if and only if it is an extreme point of the state space of $\mathfrak{U}$.
 \end{theorem}
@@ -1045,7 +1168,7 @@ These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Mink
     \label{thrm:pure-iff-irreducible-quasilocal}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.exists_gns_pure_iff_irreducible}
     \leanfile{Physicslib4/AQFT/HaagKastler/Purity.lean}
-    \uses{def:pure-state, def:irreducible-representation, thrm:gns-construction-theorem, def:quasilocal-completeness}
+    \uses{def:pure-state, def:irreducible-representation, thrm:gns-construction-theorem, def:quasilocal-algebra, thrm:quasilocal-algebra-exists}
     \leanok
     For a state $\omega$ on the quasilocal algebra $\mathfrak{U}$ there is a GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ in which $\omega$ is pure if and only if the representation $\pi$ is irreducible.
 \end{theorem}
