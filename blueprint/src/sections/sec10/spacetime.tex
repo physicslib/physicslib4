@@ -546,15 +546,19 @@
 
 \begin{lemma}[The Causal Closure is a Closure Operator]
     \label{lmm:causal-closure-is-closure-operator}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalClosure, Physicslib4.Spacetime.LorentzianSpacetime.causalClosure_apply}
     \uses{def:causal-closure, lmm:spacelike-complement-order}
+    \leanok
     The causal closure $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ is a \emph{closure operator} on the regions of a Lorentzian spacetime:
     \begin{enumerate}
         \item (monotone) if $\mathbf{B}_1 \subseteq \mathbf{B}_2$ then $\mathbf{B}_1^{\perp\perp} \subseteq \mathbf{B}_2^{\perp\perp}$;
         \item (extensive) $\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$;
         \item (idempotent) $\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$.
     \end{enumerate}
+    In the formalization these three laws are not standalone theorems: the causal closure is packaged as a term \texttt{causalClosure : ClosureOperator (Set M.Carrier)}, and Mathlib's \texttt{ClosureOperator} \emph{bundles} monotonicity, extensivity and idempotence as fields, so the three laws are exactly the obligations discharged in constructing that term. Definition \ref{def:causal-closure} and this lemma are therefore realised by one and the same Lean declaration, which both cite, with \texttt{causalClosure\_apply} pinning the bundled operator to the concrete map $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$. The three laws are nevertheless available separately one level down, at the level of the spacelike complement: they are \ref{lmm:spacelike-complement-order}, whose declarations \texttt{spacelikeComplement\_antitone}, \texttt{subset\_spacelikeComplement\_spacelikeComplement} and \texttt{spacelikeComplement\_spacelikeComplement\_spacelikeComplement} are what the \texttt{ClosureOperator} construction consumes.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:spacelike-complement-order}
     All three are read off the order structure of the spacelike complement (\ref{lmm:spacelike-complement-order}). Monotonicity is antitonicity applied twice: $\mathbf{B}_1 \subseteq \mathbf{B}_2$ gives $\mathbf{B}_2^{\perp} \subseteq \mathbf{B}_1^{\perp}$, and applying antitonicity again gives $\mathbf{B}_1^{\perp\perp} \subseteq \mathbf{B}_2^{\perp\perp}$. Extensivity is the double-complement inclusion. For idempotence, the triple-complement collapse gives $\mathbf{B}^{\perp\perp\perp} = \mathbf{B}^{\perp}$, and taking the spacelike complement of both sides yields $\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$.
 \end{proof}
@@ -710,7 +714,7 @@
 
 \begin{definition}[Causal-convex hull]
     \label{def:causal-convex-hull}
-    \lean{Physicslib4.Spacetime.causalConvexHull, Physicslib4.Spacetime.subset_causalConvexHull, Physicslib4.Spacetime.isCausallyConvex_causalConvexHull}
+    \lean{Physicslib4.Spacetime.causalConvexHull}
     \uses{def:causally-convex-region}
     \leanok
     Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be an arbitrary region. The \emph{causal-convex hull} of $\mathbf{B}$ is the intersection of all causally convex regions containing $\mathbf{B}$:
@@ -722,7 +726,9 @@
 
 \begin{lemma}[The Causal-Convex Hull is Extensive and Causally Convex]
     \label{lmm:causal-convex-hull-extensive}
+    \lean{Physicslib4.Spacetime.subset_causalConvexHull, Physicslib4.Spacetime.isCausallyConvex_causalConvexHull}
     \uses{def:causal-convex-hull, def:causally-convex-region, lmm:causally-convex-closure-ops}
+    \leanok
     Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be a region. Then the causal-convex hull satisfies the two defining properties of a hull:
     \begin{enumerate}
         \item (extensivity) $\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$;
@@ -730,6 +736,7 @@
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:causal-convex-hull, lmm:causally-convex-closure-ops}
     For (i), membership in the intersection $\bigcap_0$ unfolds to membership in every member of the family, and every member contains $\mathbf{B}$ by the defining condition of the family; so any $x \in \mathbf{B}$ lies in each member and hence in $\mathrm{ccHull}(\mathbf{B})$. For (ii), the intersected family consists of causally convex regions, and causal convexity is preserved under set-indexed intersections (\ref{lmm:causally-convex-closure-ops}); note the family is nonempty, since the whole space $M$ contains $\mathbf{B}$ and is causally convex by the same lemma.
 \end{proof}
