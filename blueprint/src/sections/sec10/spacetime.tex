@@ -282,20 +282,26 @@
 
 \begin{lemma}[An extremal parameter lies in the frontier]
     \label{lmm:extremal-parameter-mem-frontier}
+    \lean{Physicslib4.Spacetime.mem_frontier_of_isMin, Physicslib4.Spacetime.mem_frontier_of_isMax, Physicslib4.Spacetime.isEndpoint_of_isPastEndpoint, Physicslib4.Spacetime.isEndpoint_of_isFutureEndpoint}
     \uses{def:endpoints, def:paths}
+    \leanok
     Let $\mu : \Sigma \to M$ be a path, so that $\Sigma$ is a closed connected subset of $\mathbb{R}$ with more than one point. If $s \in \Sigma$ is minimal or maximal in $\Sigma$, then $s \in \partial\Sigma$. Consequently a past or future endpoint of $\mu$ is in particular an endpoint of $\mu$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:endpoints, def:paths}
     Take $s \in \Sigma$ minimal. Since $s \in \Sigma$, it suffices by \texttt{mem\_frontier\_iff\_notMem\_interior} to show $s \notin \mathrm{int}\,\Sigma$. If it were, some ball $B(s,\varepsilon) = (s-\varepsilon, s+\varepsilon)$ (\texttt{Real.ball\_eq\_Ioo}) would lie in $\Sigma$, and then $s - \varepsilon/2 \in \Sigma$ contradicts minimality. The maximal case is symmetric. The consequence is immediate: a witness $s$ for a past (resp.\ future) endpoint is minimal (resp.\ maximal) in $\Sigma$, hence lies in $\partial\Sigma$, so $\mu(s) = p$ exhibits $p$ as an endpoint.
 \end{proof}
 
 \begin{lemma}[Two endpoints force a compact parameter interval]
     \label{lmm:endpoint-parameter-space-eq-Icc}
+    \lean{Physicslib4.Spacetime.parameterSpace_eq_Icc_of_endpoints}
     \uses{def:paths, def:endpoints}
+    \leanok
     Let $\mu : \Sigma \to M$ be a path. If $\mu$ has both a past endpoint and a future endpoint, then $\Sigma = [a,b]$ for some $a < b$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:paths, def:endpoints}
     The witness for the past endpoint is a minimum $a$ of $\Sigma$ and the witness for the future endpoint is a maximum $b$, so $\Sigma$ is bounded below and above, with $\inf\Sigma = a$ and $\sup\Sigma = b$. Being also connected, nonempty and closed (\ref{def:paths}), $\Sigma = [a,b]$ by \texttt{eq\_Icc\_csInf\_csSup\_of\_connected\_bdd\_closed}. Finally $a < b$, since $a \le b$ and $a = b$ would make $\Sigma$ a singleton, contradicting that $\Sigma$ has more than one point.
 \end{proof}
