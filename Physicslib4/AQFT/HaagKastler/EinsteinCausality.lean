@@ -36,7 +36,9 @@ namespace HaagKastlerNet
 open Physicslib4.GNS
 open scoped InnerProductSpace
 
-variable (N : HaagKastlerNet)
+universe u
+
+variable (N : HaagKastlerNet.{u})
 
 /-- **Einstein causality in a representation.** For any `*`-representation `π` of
 the quasilocal algebra witnessing local commutativity, the images of the local
@@ -59,7 +61,7 @@ quasilocal algebra there is a GNS triple `(H, π, Ω)` reproducing `ω` in which
 local observables of completely spacelike-separated regions commute as operators
 on `H`. -/
 theorem exists_gns_einstein_causality (ω : State N.commAlgebra.carrier) :
-    ∃ (H : Type)
+    ∃ (H : Type u)
       (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
       (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
         IsCyclicVector π Ω ∧

@@ -39,6 +39,8 @@ namespace HaagKastler
 
 open Physicslib4
 
+universe u
+
 /-- **Haag-Kastler directedness of the Alexandrov basis.** Any two
 Alexandrov-basis sets are contained in a common Alexandrov-basis set. -/
 theorem IsAlexandrovBasisSet.directed
@@ -460,8 +462,9 @@ quasilocal algebra whose embeddings are covariance-compatible for every Lorentz
 transformation. On such data the Lorentz action lifts to a `*`-automorphism of
 the quasilocal algebra for every `L`. -/
 structure CovariantQuasilocalAlgebra where
-  /-- The underlying Haag-Kastler net. -/
-  net : HaagKastlerNet
+  /-- The underlying Haag-Kastler net. Annotated `.{u}` so this structure inherits
+  the net's universe polymorphism rather than pinning it. -/
+  net : HaagKastlerNet.{u}
   /-- A quasilocal algebra of the net. -/
   quasilocal : QuasilocalAlgebra net.U net.isotony
   /-- Covariance-compatibility of the embeddings, for every Lorentz
@@ -567,9 +570,9 @@ Hilbert space by a family of unitaries `U L` with `U L (π a Ω) = π (β_L a) �
 `U L Ω = Ω`. The unitaries are the dense-extension of the isometry
 `π a Ω ↦ π (β_L a) Ω` (isometric by `inner_invariant`), via
 `LinearEquiv.extendOfIsometry`. -/
-theorem IsInvariantState.exists_gns_unitary (C : CovariantQuasilocalAlgebra)
+theorem IsInvariantState.exists_gns_unitary (C : CovariantQuasilocalAlgebra.{u})
     {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
         (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -602,11 +605,11 @@ This is the quasilocal-state form of the weak-continuity hypothesis; it is the
 direct specialization of the algebra-agnostic
 `GNS.exists_gns_unitary_of_invariant_strongContinuous`. -/
 theorem IsInvariantState.exists_gns_unitary_strongContinuous
-    (C : CovariantQuasilocalAlgebra)
+    (C : CovariantQuasilocalAlgebra.{u})
     {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
     (hwc : ∀ a b : C.quasilocal.carrier,
       Continuous fun L : InhomogeneousLorentzGroup => (ω (star a * C.action L b) : ℂ)) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
         (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -628,9 +631,9 @@ as a genuine unitary representation `U : InhomogeneousLorentzGroup →* (H ≃�
 (a bundled group homomorphism), rather than a bare family with separate group-law
 clauses. It feeds the covariance group homomorphism `C.actionHom` into the bundled
 analytic core `GNS.exists_gns_unitaryRep_of_invariant`. -/
-theorem IsInvariantState.exists_gns_unitaryRep (C : CovariantQuasilocalAlgebra)
+theorem IsInvariantState.exists_gns_unitaryRep (C : CovariantQuasilocalAlgebra.{u})
     {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)),
         (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -648,11 +651,11 @@ The bundled form of `IsInvariantState.exists_gns_unitary_strongContinuous`: the
 strongly continuous implementing unitaries are returned as a bundled group
 homomorphism `U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)`. -/
 theorem IsInvariantState.exists_gns_unitaryRep_strongContinuous
-    (C : CovariantQuasilocalAlgebra)
+    (C : CovariantQuasilocalAlgebra.{u})
     {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
     (hwc : ∀ a b : C.quasilocal.carrier,
       Continuous fun L : InhomogeneousLorentzGroup => (ω (star a * C.action L b) : ℂ)) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)),
         (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -677,10 +680,10 @@ fixing the cyclic vector `Ω`, with the operator covariance
 This is a necessary precursor to, but not yet, a *vacuum* representation: a genuine
 vacuum would additionally require the spectrum condition (positivity of the energy-
 momentum spectrum), which is not available here. -/
-theorem IsInvariantState.exists_gns_irreducible_covariant (C : CovariantQuasilocalAlgebra)
+theorem IsInvariantState.exists_gns_irreducible_covariant (C : CovariantQuasilocalAlgebra.{u})
     {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
     (hpure : Physicslib4.GNS.IsPure ω) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
         Physicslib4.GNS.IsCyclicVector π Ω ∧
@@ -770,7 +773,9 @@ noncomputable def trivialCovariantQuasilocalAlgebra : CovariantQuasilocalAlgebra
   quasilocal := trivialQuasilocalAlgebra
   covariant := isCovariant_trivial
 
-theorem nonempty_covariantQuasilocalAlgebra : Nonempty CovariantQuasilocalAlgebra :=
+/-- Stated at universe `0` because the witness is built from `ℂ`; see
+`nonempty_haagKastlerNet`. -/
+theorem nonempty_covariantQuasilocalAlgebra : Nonempty CovariantQuasilocalAlgebra.{0} :=
   ⟨trivialCovariantQuasilocalAlgebra⟩
 
 end HaagKastler

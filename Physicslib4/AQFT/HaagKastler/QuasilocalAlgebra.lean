@@ -77,6 +77,8 @@ namespace HaagKastler
 
 open Physicslib4
 
+universe u
+
 /--
 **Quasilocal Algebra (data).** For a local net `U`, a
 `QuasilocalAlgebra U` is the data of an ambient unital C*-algebra
@@ -96,9 +98,25 @@ of a sequence of elements coming from the local algebras.
 
 Blueprint reference: `def:quasilocal-algebra`.
 -/
-structure QuasilocalAlgebra (U : LocalNet) (i : Isotony U) where
-  /-- The underlying type of the quasilocal algebra `𝔘`. -/
-  carrier : Type
+structure QuasilocalAlgebra (U : LocalNet.{u}) (i : Isotony U) where
+  /-- The underlying type of the quasilocal algebra `𝔘`, in the *same* universe
+  as the net's local algebras.
+
+  It must not be pinned to `Type 0`. `LocalNet.algebra` is universe polymorphic,
+  so a `Type 0` carrier would make this structure *uninhabitable* for a net whose
+  local algebras live in a higher universe: no `Type 0` type can hold injective
+  copies of them, and the existence claim would fail on size grounds alone. This
+  is the twin of the over-quantification defect recorded on `ι` below.
+
+  The carrier is tied to the net's universe rather than given a free one. That
+  costs no generality: `dense_range` forces `𝔘` to be the closure of the union of
+  the images of the local algebras, so any quasilocal algebra is already of their
+  size, and a free universe would only add copies of the same algebra higher up.
+  It does buy something important -- a free universe is constrained by no field,
+  so it could not be inferred, and `LocalCommutativity` and
+  `QuasilocalCompleteness` would each become a *family* of `Prop`s indexed by a
+  universe, making the content of Axioms 3 and 4 depend on that index. -/
+  carrier : Type u
   /-- The `CStarAlgebra` instance on `carrier`. -/
   instCStarAlgebra : CStarAlgebra carrier
   /-- The family of unital `*`-homomorphisms `ι hB : 𝔘(B) →⋆ₐ[ℂ] 𝔘`

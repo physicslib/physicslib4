@@ -36,7 +36,9 @@ namespace HaagKastlerNet
 open Physicslib4.GNS
 open scoped InnerProductSpace Pointwise
 
-variable (N : HaagKastlerNet)
+universe u
+
+variable (N : HaagKastlerNet.{u})
 
 /-- **Pure ⟺ extreme point for the quasilocal algebra.** A state `ω` on the
 canonical quasilocal algebra `𝔘` of a Minkowski Haag-Kastler net is pure if and
@@ -52,7 +54,7 @@ reproducing `ω` in which `ω` is pure if and only if the representation `π` is
 irreducible (its commutant is trivial). This combines the GNS construction with
 the abstract `isPure_iff_isIrreducible`. -/
 theorem exists_gns_pure_iff_irreducible (ω : State N.quasilocal.carrier) :
-    ∃ (H : Type)
+    ∃ (H : Type u)
       (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
       (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
         IsCyclicVector π Ω ∧

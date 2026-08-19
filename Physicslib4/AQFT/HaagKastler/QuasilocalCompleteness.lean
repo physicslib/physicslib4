@@ -58,6 +58,8 @@ namespace HaagKastler
 open Physicslib4
 open Physicslib4.GNS
 
+universe u v
+
 /--
 **Axiom 4 (Quasilocal Completeness).** A local net `U` satisfies
 *quasilocal completeness* if it *admits a quasilocal algebra*,
@@ -99,7 +101,7 @@ observable is self-adjoint, matching the blueprint's "the image
 Blueprint reference: `def:quasilocal-observable`.
 -/
 def IsQuasilocalObservable {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
-    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (T : H →L[ℂ] H) : Prop :=
   ∃ a : Q.carrier, IsSelfAdjoint a ∧ T = π a
 
@@ -108,7 +110,7 @@ self-adjoint element of the quasilocal algebra under a `*`-homomorphism.
 This is the self-adjointness clause of `def:quasilocal-observable`. -/
 theorem IsQuasilocalObservable.isSelfAdjoint {U : LocalNet} {i : Isotony U}
     {Q : QuasilocalAlgebra U i}
-    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)} {T : H →L[ℂ] H}
     (hT : IsQuasilocalObservable Q π T) : IsSelfAdjoint T := by
   obtain ⟨a, ha, rfl⟩ := hT
@@ -120,9 +122,10 @@ element `a` of it, the GNS construction provides a `*`-representation
 in which `π a` is a quasilocal observable (and is self-adjoint). This is
 the existence content of `def:quasilocal-observable`, tying together
 `thrm:gns-construction-theorem` and `def:state`. -/
-theorem exists_isQuasilocalObservable {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
+theorem exists_isQuasilocalObservable {U : LocalNet.{u}} {i : Isotony U}
+    (Q : QuasilocalAlgebra U i)
     (ω : State Q.carrier) {a : Q.carrier} (ha : IsSelfAdjoint a) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)),
         IsQuasilocalObservable Q π (π a) ∧ IsSelfAdjoint (π a) := by
   obtain ⟨H, hng, hip, hcs, π, _, _, _, _⟩ := gns_construction ω
@@ -132,7 +135,7 @@ theorem exists_isQuasilocalObservable {U : LocalNet} {i : Isotony U} (Q : Quasil
 
 section Observables
 
-variable {U : LocalNet} {i : Isotony U} {Q : QuasilocalAlgebra U i} {H : Type}
+variable {U : LocalNet} {i : Isotony U} {Q : QuasilocalAlgebra U i} {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   {π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)}
 
@@ -193,7 +196,7 @@ end Observables
 /-- The set of *quasilocal observables* on the GNS Hilbert space `H` for the
 representation `π`: all bounded operators of the form `π a` with `a` a
 self-adjoint element of the quasilocal algebra. -/
-def quasilocalObservables {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i) {H : Type}
+def quasilocalObservables {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i) {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) : Set (H →L[ℂ] H) :=
   {T | IsQuasilocalObservable Q π T}
@@ -201,7 +204,7 @@ def quasilocalObservables {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra 
 /-- The quasilocal observables are exactly the self-adjoint elements lying in
 the range of the representation `π`. -/
 theorem quasilocalObservables_eq {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
-    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) :
     quasilocalObservables Q π
       = (selfAdjoint (H →L[ℂ] H) : Set (H →L[ℂ] H)) ∩ Set.range π := by
@@ -211,7 +214,7 @@ theorem quasilocalObservables_eq {U : LocalNet} {i : Isotony U} (Q : QuasilocalA
 
 section ObservablesSet
 
-variable {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i) {H : Type}
+variable {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i) {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   (π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
 

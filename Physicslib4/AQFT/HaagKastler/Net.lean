@@ -38,6 +38,8 @@ namespace HaagKastler
 open Physicslib4 Spacetime
 open scoped Pointwise
 
+universe u
+
 /--
 A *Haag-Kastler net* on (the Alexandrov-basis sets of) Minkowski
 spacetime: the data of Axiom 1 (`def:local-algebras`) together with
@@ -48,8 +50,15 @@ proofs of Axioms 2-5 (`def:isotony`,
 Blueprint reference: `def:haag-kastler-net`.
 -/
 structure HaagKastlerNet where
-  /-- The underlying assignment `B ↦ 𝔘(B)` (Axiom 1). -/
-  U : LocalNet
+  /-- The underlying assignment `B ↦ 𝔘(B)` (Axiom 1).
+
+  Written `LocalNet.{u}` rather than `LocalNet` so that this structure is
+  universe polymorphic. Left implicit, the universe of `LocalNet` would be pinned
+  here, and every net in the development would be forced to have its local
+  algebras in one fixed universe -- the same size restriction that
+  `QuasilocalAlgebra.carrier` was just freed from, reimposed at the bundling
+  level. -/
+  U : LocalNet.{u}
   /-- *Isotony*: inclusions of Alexandrov-basis sets induce unital
   `*`-monomorphisms of the corresponding local algebras
   (Axiom 2). -/
@@ -206,7 +215,7 @@ theorem commute_ι_of_spacelike_symm
 
 section Observables
 
-variable {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
 
 /-- **Characterisation of the net's quasilocal observables.** An operator on the
@@ -343,8 +352,12 @@ noncomputable def trivialHaagKastlerNet : HaagKastlerNet where
   lorentzCovariance := trivialLocalNet_lorentzCovariance
 
 /-- **The Haag-Kastler axioms are jointly satisfiable.** The trivial net (every
-region ↦ `ℂ`) is a Haag-Kastler net, so `HaagKastlerNet` is nonempty. -/
-theorem nonempty_haagKastlerNet : Nonempty HaagKastlerNet :=
+region ↦ `ℂ`) is a Haag-Kastler net, so `HaagKastlerNet` is nonempty.
+
+Stated at universe `0` because the witness is built from `ℂ`, which lives in
+`Type`. Consistency of the axioms needs only one model, so nothing is lost; a
+witness in an arbitrary universe would come from a `ULift` of this one. -/
+theorem nonempty_haagKastlerNet : Nonempty HaagKastlerNet.{0} :=
   ⟨trivialHaagKastlerNet⟩
 
 end HaagKastler
