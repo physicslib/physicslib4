@@ -45,6 +45,8 @@ namespace HaagKastler
 
 open Physicslib4
 
+universe u
+
 /-- The **Alexandrov diamonds** of standard Minkowski spacetime, as a type,
 ordered by inclusion. This is the index type of the directed system of local
 algebras.
@@ -109,7 +111,7 @@ inclusion.
 
 Mathlib supplies its algebraic structure (`Ring`, `StarRing`, `Algebra ℂ`,
 `StarModule ℂ`) but puts no norm on any colimit; that is built by hand below. -/
-abbrev QuasilocalColimit (U : LocalNet) (i : Isotony U) : Type :=
+abbrev QuasilocalColimit (U : LocalNet.{u}) (i : Isotony U) : Type u :=
   DirectLimit (fun D : Diamond => U.algebra D.1) (transitionHom U i)
 
 /-- **The isotony embeddings are isometric.** A `*`-homomorphism of complex
@@ -320,7 +322,7 @@ the local algebras along the Axiom 2 isotony family.
 
 This is the object the blueprint claims exists, constructed from the net alone,
 with no ambient C*-algebra presupposed anywhere. -/
-abbrev QuasilocalCompletion (U : LocalNet) (i : Isotony U) : Type :=
+abbrev QuasilocalCompletion (U : LocalNet.{u}) (i : Isotony U) : Type u :=
   UniformSpace.Completion (QuasilocalColimit U i)
 
 /-- **The completion of the quasilocal colimit is a C\*-algebra**
