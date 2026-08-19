@@ -60,12 +60,12 @@ Blueprint reference: `def:local-commutativity`.
 -/
 def LocalCommutativity (U : LocalNet) (i : Isotony U) : Prop :=
   ∃ Q : QuasilocalAlgebra U i,
-    ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
-      IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ →
+    ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+      (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂),
       Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation B₁ B₂ →
       ∀ (a : U.algebra B₁) (b : U.algebra B₂),
-        Commute (Q.ι B₁ a) (Q.ι B₂ b)
+        Commute (Q.ι hB₁ a) (Q.ι hB₂ b)
 
 end HaagKastler
 end AQFT

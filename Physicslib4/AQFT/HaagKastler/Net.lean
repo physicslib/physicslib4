@@ -111,14 +111,14 @@ noncomputable def quasilocal : QuasilocalAlgebra N.U N.isotony :=
 *norm-preservingly* into the canonical quasilocal algebra `𝔘`. -/
 theorem norm_ι {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B) (a : N.algebra B) :
-    ‖N.quasilocal.ι B a‖ = ‖a‖ :=
+    ‖N.quasilocal.ι hB a‖ = ‖a‖ :=
   N.quasilocal.norm_ι hB a
 
 /-- Each local embedding `𝔘(B) ↪ 𝔘` into the canonical quasilocal
 algebra is an isometry (the metric form of `norm_ι`). -/
 theorem isometry_ι {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B) :
-    Isometry (N.quasilocal.ι B) :=
+    Isometry (N.quasilocal.ι hB) :=
   N.quasilocal.isometry_ι hB
 
 /-- The *covariance equivalence* `𝔘(B) ≃⋆ₐ[ℂ] 𝔘(L·B)` implementing the
@@ -190,7 +190,7 @@ theorem commute_ι_of_spacelike ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Ca
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : N.algebra B₁) (b : N.algebra B₂) :
-    Commute (N.commAlgebra.ι B₁ a) (N.commAlgebra.ι B₂ b) :=
+    Commute (N.commAlgebra.ι hB₁ a) (N.commAlgebra.ι hB₂ b) :=
   N.localCommutativity.choose_spec hB₁ hB₂ hs a b
 
 /-- **Local commutativity is symmetric.** Commutation of completely-spacelike
@@ -201,7 +201,7 @@ theorem commute_ι_of_spacelike_symm
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : N.algebra B₁) (b : N.algebra B₂) :
-    Commute (N.commAlgebra.ι B₂ b) (N.commAlgebra.ι B₁ a) :=
+    Commute (N.commAlgebra.ι hB₂ b) (N.commAlgebra.ι hB₁ a) :=
   (N.commute_ι_of_spacelike hB₁ hB₂ hs a b).symm
 
 section Observables
@@ -306,7 +306,7 @@ noncomputable def trivialQuasilocalAlgebra :
     QuasilocalAlgebra trivialLocalNet trivialLocalNet_isotony where
   carrier := ℂ
   instCStarAlgebra := inferInstance
-  ι := fun _ => StarAlgHom.id ℂ ℂ
+  ι := fun _ _ => StarAlgHom.id ℂ ℂ
   ι_injective := fun _ _ _ _ h => h
   dense_range := fun x =>
     subset_closure (Set.mem_iUnion₂.mpr
@@ -316,9 +316,9 @@ noncomputable def trivialQuasilocalAlgebra :
 theorem trivialLocalNet_localCommutativity :
     LocalCommutativity trivialLocalNet trivialLocalNet_isotony :=
   ⟨trivialQuasilocalAlgebra, by
-    intro B₁ B₂ _ _ _ a b
-    exact @mul_comm ℂ _ (trivialQuasilocalAlgebra.ι B₁ a)
-      (trivialQuasilocalAlgebra.ι B₂ b)⟩
+    intro B₁ B₂ hB₁ hB₂ _ a b
+    exact @mul_comm ℂ _ (trivialQuasilocalAlgebra.ι hB₁ a)
+      (trivialQuasilocalAlgebra.ι hB₂ b)⟩
 
 theorem trivialLocalNet_quasilocalCompleteness :
     QuasilocalCompleteness trivialLocalNet trivialLocalNet_isotony :=

@@ -101,20 +101,29 @@ structure QuasilocalAlgebra (U : LocalNet) (i : Isotony U) where
   carrier : Type
   /-- The `CStarAlgebra` instance on `carrier`. -/
   instCStarAlgebra : CStarAlgebra carrier
-  /-- The family of unital `*`-homomorphisms `ι B : 𝔘(B) →⋆ₐ[ℂ] 𝔘`
-  embedding each local algebra into the quasilocal algebra. -/
-  ι : ∀ B : Set StandardMinkowskiSpacetime.Carrier,
-        StarAlgHom ℂ (U.algebra B) carrier
-  /-- Each embedding `ι B` is injective on Alexandrov-basis sets,
-  i.e. every local algebra `𝔘(B)` embeds faithfully into `𝔘`. -/
-  ι_injective : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄,
-                  IsAlexandrovBasisSet B → Function.Injective (ι B)
+  /-- The family of unital `*`-homomorphisms `ι hB : 𝔘(B) →⋆ₐ[ℂ] 𝔘`
+  embedding each local algebra into the quasilocal algebra.
+
+  The family is indexed by *Alexandrov-basis sets only*, matching `Isotony.map`.
+  It must not be total over all subsets: `LocalNet.algebra` assigns a type to
+  every subset, including non-basis ones, so a total `ι` would demand an
+  embedding of those junk fibres into `𝔘` as well. Since `dense_range` below
+  constrains `𝔘` using the basis sets alone, a net carrying a large algebra on a
+  non-basis subset would then make this structure *uninhabitable* — density would
+  force `𝔘` small while a unital `*`-homomorphism out of a simple algebra is
+  automatically injective and would force it large. -/
+  ι : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄,
+        IsAlexandrovBasisSet B → StarAlgHom ℂ (U.algebra B) carrier
+  /-- Each embedding `ι hB` is injective, i.e. every local algebra `𝔘(B)`
+  embeds faithfully into `𝔘`. -/
+  ι_injective : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄
+                  (hB : IsAlexandrovBasisSet B), Function.Injective (ι hB)
   /-- The union of the images of all local algebras, ranging over
   Alexandrov-basis sets, is dense in the quasilocal algebra. This is
   the blueprint's "completion of the set-theoretic union". -/
   dense_range : Dense (⋃ (B : Set StandardMinkowskiSpacetime.Carrier)
-                          (_ : IsAlexandrovBasisSet B),
-                          Set.range (ι B))
+                          (hB : IsAlexandrovBasisSet B),
+                          Set.range (ι hB))
   /-- *Isotony coherence* (the cocone condition): the embeddings into `𝔘` respect
   the Axiom 2 isotony family, `ι B₂ ∘ i.map = ι B₁`. An element of `𝔘(B₁)` thus
   embeds into the quasilocal algebra `𝔘` independently of the basis set used to
@@ -127,7 +136,7 @@ structure QuasilocalAlgebra (U : LocalNet) (i : Isotony U) where
   ι_inclusion : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
                   (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
                   (h : B₁ ⊆ B₂) (a : U.algebra B₁),
-                    ι B₂ (i.map hB₁ hB₂ h a) = ι B₁ a
+                    ι hB₂ (i.map hB₁ hB₂ h a) = ι hB₁ a
 
 attribute [instance] QuasilocalAlgebra.instCStarAlgebra
 
@@ -137,15 +146,15 @@ local algebra `𝔘(B)` sits inside the quasilocal algebra `𝔘` with its norm
 intact. -/
 theorem QuasilocalAlgebra.norm_ι {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
-    (a : U.algebra B) : ‖Q.ι B a‖ = ‖a‖ :=
-  NonUnitalStarAlgHom.norm_map (Q.ι B) (Q.ι_injective hB) a
+    (a : U.algebra B) : ‖Q.ι hB a‖ = ‖a‖ :=
+  NonUnitalStarAlgHom.norm_map (Q.ι hB) (Q.ι_injective hB) a
 
 /-- Each local embedding `Q.ι B` is an isometry on Alexandrov-basis sets.
 This is the metric form of `QuasilocalAlgebra.norm_ι`. -/
 theorem QuasilocalAlgebra.isometry_ι {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B) :
-    Isometry (Q.ι B) :=
-  NonUnitalStarAlgHom.isometry (Q.ι B) (Q.ι_injective hB)
+    Isometry (Q.ι hB) :=
+  NonUnitalStarAlgHom.isometry (Q.ι hB) (Q.ι_injective hB)
 
 end HaagKastler
 end AQFT

@@ -52,8 +52,8 @@ local images is dense: it contains the (already dense) union of the images
 `ι_B(𝔘(B))`. -/
 theorem dense_adjoin_iUnion_range_ι {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i) :
     Dense (StarAlgebra.adjoin ℂ
-      (⋃ (B : Set StandardMinkowskiSpacetime.Carrier) (_ : IsAlexandrovBasisSet B),
-        Set.range (Q.ι B)) : Set Q.carrier) :=
+      (⋃ (B : Set StandardMinkowskiSpacetime.Carrier) (hB : IsAlexandrovBasisSet B),
+        Set.range (Q.ι hB)) : Set Q.carrier) :=
   Q.dense_range.mono (StarAlgebra.subset_adjoin ℂ _)
 
 namespace QuasilocalAlgebra
@@ -62,20 +62,21 @@ variable {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
 
 /-- The union of all local images `ι_B(𝔘(B))` over Alexandrov-basis sets `B`. -/
 def localImages : Set Q.carrier :=
-  ⋃ (B : Set StandardMinkowskiSpacetime.Carrier) (_ : IsAlexandrovBasisSet B),
-    Set.range (Q.ι B)
+  ⋃ (B : Set StandardMinkowskiSpacetime.Carrier) (hB : IsAlexandrovBasisSet B),
+    Set.range (Q.ι hB)
 
 @[simp] theorem mem_localImages {x : Q.carrier} :
-    x ∈ Q.localImages ↔ ∃ B, IsAlexandrovBasisSet B ∧ ∃ a, Q.ι B a = x := by
-  simp only [localImages, Set.mem_iUnion, Set.mem_range, exists_prop]
+    x ∈ Q.localImages ↔
+      ∃ B, ∃ hB : IsAlexandrovBasisSet B, ∃ a, Q.ι hB a = x := by
+  simp only [localImages, Set.mem_iUnion, Set.mem_range]
 
 /-- **Directedness of the local images.** Any two elements of the union of
 local images are images, from a *common* basis set `C`, of elements of
 `𝔘(C)` - using basis directedness and the isotony-coherence `ι_inclusion`. -/
 theorem exists_common_image {x y : Q.carrier}
     (hx : x ∈ Q.localImages) (hy : y ∈ Q.localImages) :
-    ∃ C, IsAlexandrovBasisSet C ∧ ∃ a b : U.algebra C,
-      Q.ι C a = x ∧ Q.ι C b = y := by
+    ∃ C, ∃ hC : IsAlexandrovBasisSet C, ∃ a b : U.algebra C,
+      Q.ι hC a = x ∧ Q.ι hC b = y := by
   rw [mem_localImages] at hx hy
   obtain ⟨B, hB, a, rfl⟩ := hx
   obtain ⟨B', hB', a', rfl⟩ := hy
@@ -109,7 +110,7 @@ def localStarSubalgebra : StarSubalgebra ℂ Q.carrier where
     intro r
     rw [mem_localImages]
     exact ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet,
-      algebraMap ℂ _ r, AlgHomClass.commutes (Q.ι trivialBasisSet) r⟩
+      algebraMap ℂ _ r, AlgHomClass.commutes (Q.ι isAlexandrovBasisSet_trivialBasisSet) r⟩
   star_mem' := by
     intro x hx
     rw [mem_localImages] at hx ⊢
@@ -128,9 +129,10 @@ theorem dense_localStarSubalgebra :
 /-- **Naturality of the embeddings under set equality.** If `B₁ = B₂` then the
 embedding of `a` and of its transport agree in `𝔘`. Used to reconcile the
 cross-fiber casts coming from `covEquiv_one` / `covEquiv_mul`. -/
-theorem ι_cast {B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier} (h : B₁ = B₂)
+theorem ι_cast ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ = B₂)
     (a : U.algebra B₁) :
-    Q.ι B₂ ((congrArg U.algebra h).mp a) = Q.ι B₁ a := by
+    Q.ι hB₂ ((congrArg U.algebra h).mp a) = Q.ι hB₁ a := by
   subst h; rfl
 
 end QuasilocalAlgebra
@@ -147,8 +149,9 @@ def IsCovariantQuasilocal (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isot
   ∀ ⦃B C : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB : IsAlexandrovBasisSet B) (hC : IsAlexandrovBasisSet C) (h : B ⊆ C)
     (a : N.U.algebra B),
-      Q.ι (L • B) (N.covEquiv L B a)
-        = Q.ι (L • C) (N.covEquiv L C (N.isotony.map hB hC h a))
+      Q.ι (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a)
+        = Q.ι (isAlexandrovBasisSet_smul L hC)
+            (N.covEquiv L C (N.isotony.map hB hC h a))
 
 /-- **Well-definedness of the intertwiner.** If two local elements `ι_B a` and
 `ι_{B'} a'` agree in `𝔘`, then their intended images
@@ -159,17 +162,20 @@ theorem ι_covEquiv_congr (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isot
     (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
     ⦃B B' : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB : IsAlexandrovBasisSet B) (hB' : IsAlexandrovBasisSet B')
-    (a : N.U.algebra B) (a' : N.U.algebra B') (heq : Q.ι B a = Q.ι B' a') :
-    Q.ι (L • B) (N.covEquiv L B a) = Q.ι (L • B') (N.covEquiv L B' a') := by
+    (a : N.U.algebra B) (a' : N.U.algebra B') (heq : Q.ι hB a = Q.ι hB' a') :
+    Q.ι (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a)
+      = Q.ι (isAlexandrovBasisSet_smul L hB') (N.covEquiv L B' a') := by
   obtain ⟨C, hC, hBC, hB'C⟩ := IsAlexandrovBasisSet.directed hB hB'
   have hinj : N.isotony.map hB hC hBC a = N.isotony.map hB' hC hB'C a' := by
     apply Q.ι_injective hC
     rw [Q.ι_inclusion hB hC hBC a, Q.ι_inclusion hB' hC hB'C a']
     exact heq
-  calc Q.ι (L • B) (N.covEquiv L B a)
-      = Q.ι (L • C) (N.covEquiv L C (N.isotony.map hB hC hBC a)) := hcompat hB hC hBC a
-    _ = Q.ι (L • C) (N.covEquiv L C (N.isotony.map hB' hC hB'C a')) := by rw [hinj]
-    _ = Q.ι (L • B') (N.covEquiv L B' a') := (hcompat hB' hC hB'C a').symm
+  calc Q.ι (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a)
+      = Q.ι (isAlexandrovBasisSet_smul L hC)
+          (N.covEquiv L C (N.isotony.map hB hC hBC a)) := hcompat hB hC hBC a
+    _ = Q.ι (isAlexandrovBasisSet_smul L hC)
+          (N.covEquiv L C (N.isotony.map hB' hC hB'C a')) := by rw [hinj]
+    _ = Q.ι (isAlexandrovBasisSet_smul L hB') (N.covEquiv L B' a') := (hcompat hB' hC hB'C a').symm
 
 open Classical in
 /-- The **intertwiner** on the quasilocal algebra: on a local element `ι_B a`
@@ -177,8 +183,9 @@ it returns `ι_{L·B}(α_L a)` (and `0` off the local images). Its characterisin
 equation is `intertwiner_ι`, valid once `Q` is covariance-compatible. -/
 noncomputable def intertwiner (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
     (L : InhomogeneousLorentzGroup) (x : Q.carrier) : Q.carrier :=
-  if h : ∃ B, IsAlexandrovBasisSet B ∧ ∃ a : N.U.algebra B, Q.ι B a = x then
-    Q.ι (L • h.choose) (N.covEquiv L h.choose h.choose_spec.2.choose)
+  if h : ∃ B, ∃ hB : IsAlexandrovBasisSet B, ∃ a : N.U.algebra B, Q.ι hB a = x then
+    Q.ι (isAlexandrovBasisSet_smul L h.choose_spec.choose)
+      (N.covEquiv L h.choose h.choose_spec.choose_spec.choose)
   else 0
 
 /-- **Defining equation of the intertwiner.** On `ι_B a` it returns
@@ -187,8 +194,10 @@ theorem intertwiner_ι (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony
     (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
     (a : N.U.algebra B) :
-    intertwiner N Q L (Q.ι B a) = Q.ι (L • B) (N.covEquiv L B a) := by
-  have h₀ : ∃ B', IsAlexandrovBasisSet B' ∧ ∃ a' : N.U.algebra B', Q.ι B' a' = Q.ι B a :=
+    intertwiner N Q L (Q.ι hB a)
+      = Q.ι (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a) := by
+  have h₀ : ∃ B', ∃ hB' : IsAlexandrovBasisSet B',
+      ∃ a' : N.U.algebra B', Q.ι hB' a' = Q.ι hB a :=
     ⟨B, hB, a, rfl⟩
   unfold intertwiner
   rw [dif_pos h₀]
@@ -202,9 +211,9 @@ theorem intertwiner_add (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isoton
     {x y : Q.carrier} (hx : x ∈ Q.localImages) (hy : y ∈ Q.localImages) :
     intertwiner N Q L (x + y) = intertwiner N Q L x + intertwiner N Q L y := by
   obtain ⟨C, hC, a, b, rfl, rfl⟩ := Q.exists_common_image hx hy
-  rw [← map_add (Q.ι C), intertwiner_ι N Q L hcompat hC (a + b),
+  rw [← map_add (Q.ι hC), intertwiner_ι N Q L hcompat hC (a + b),
     intertwiner_ι N Q L hcompat hC a, intertwiner_ι N Q L hcompat hC b,
-    map_add (N.covEquiv L C), map_add (Q.ι (L • C))]
+    map_add (N.covEquiv L C), map_add (Q.ι (isAlexandrovBasisSet_smul L hC))]
 
 /-- **Multiplicativity of the intertwiner.** On the local images it preserves
 multiplication - both arguments are routed through a common basis algebra. -/
@@ -213,15 +222,16 @@ theorem intertwiner_mul (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isoton
     {x y : Q.carrier} (hx : x ∈ Q.localImages) (hy : y ∈ Q.localImages) :
     intertwiner N Q L (x * y) = intertwiner N Q L x * intertwiner N Q L y := by
   obtain ⟨C, hC, a, b, rfl, rfl⟩ := Q.exists_common_image hx hy
-  rw [← map_mul (Q.ι C), intertwiner_ι N Q L hcompat hC (a * b),
+  rw [← map_mul (Q.ι hC), intertwiner_ι N Q L hcompat hC (a * b),
     intertwiner_ι N Q L hcompat hC a, intertwiner_ι N Q L hcompat hC b,
-    map_mul (N.covEquiv L C), map_mul (Q.ι (L • C))]
+    map_mul (N.covEquiv L C), map_mul (Q.ι (isAlexandrovBasisSet_smul L hC))]
 
 /-- The intertwiner preserves `0`. -/
 theorem intertwiner_zero (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
     (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
     intertwiner N Q L 0 = 0 := by
-  have h : intertwiner N Q L (Q.ι trivialBasisSet (0 : N.U.algebra trivialBasisSet)) = 0 := by
+  have h : intertwiner N Q L
+      (Q.ι isAlexandrovBasisSet_trivialBasisSet (0 : N.U.algebra trivialBasisSet)) = 0 := by
     rw [intertwiner_ι N Q L hcompat isAlexandrovBasisSet_trivialBasisSet 0, map_zero, map_zero]
   simpa using h
 
@@ -229,7 +239,8 @@ theorem intertwiner_zero (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isoto
 theorem intertwiner_one (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
     (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
     intertwiner N Q L 1 = 1 := by
-  have h : intertwiner N Q L (Q.ι trivialBasisSet (1 : N.U.algebra trivialBasisSet)) = 1 := by
+  have h : intertwiner N Q L
+      (Q.ι isAlexandrovBasisSet_trivialBasisSet (1 : N.U.algebra trivialBasisSet)) = 1 := by
     rw [intertwiner_ι N Q L hcompat isAlexandrovBasisSet_trivialBasisSet 1, map_one, map_one]
   simpa using h
 
@@ -240,8 +251,9 @@ theorem intertwiner_star (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isoto
     intertwiner N Q L (star x) = star (intertwiner N Q L x) := by
   rw [Q.mem_localImages] at hx
   obtain ⟨B, hB, a, rfl⟩ := hx
-  rw [← map_star (Q.ι B), intertwiner_ι N Q L hcompat hB (star a),
-    intertwiner_ι N Q L hcompat hB a, map_star (N.covEquiv L B), map_star (Q.ι (L • B))]
+  rw [← map_star (Q.ι hB), intertwiner_ι N Q L hcompat hB (star a),
+    intertwiner_ι N Q L hcompat hB a, map_star (N.covEquiv L B),
+    map_star (Q.ι (isAlexandrovBasisSet_smul L hB))]
 
 /-- The intertwiner is `ℂ`-linear on the local images. -/
 theorem intertwiner_smul (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
@@ -250,8 +262,9 @@ theorem intertwiner_smul (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isoto
     intertwiner N Q L (c • x) = c • intertwiner N Q L x := by
   rw [Q.mem_localImages] at hx
   obtain ⟨B, hB, a, rfl⟩ := hx
-  rw [← map_smul (Q.ι B) c a, intertwiner_ι N Q L hcompat hB (c • a),
-    intertwiner_ι N Q L hcompat hB a, map_smul (N.covEquiv L B), map_smul (Q.ι (L • B))]
+  rw [← map_smul (Q.ι hB) c a, intertwiner_ι N Q L hcompat hB (c • a),
+    intertwiner_ι N Q L hcompat hB a, map_smul (N.covEquiv L B),
+    map_smul (Q.ι (isAlexandrovBasisSet_smul L hB))]
 
 /-- **The intertwiner as a `*`-homomorphism on the local subalgebra.** Bundles
 the homomorphism laws of `intertwiner` into a `StarAlgHom` from the dense local
@@ -349,9 +362,10 @@ theorem extendHom_continuous (hcov : IsCovariant N Q)
 theorem extendHom_ι (hcov : IsCovariant N Q) (L : InhomogeneousLorentzGroup)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
     (a : N.U.algebra B) :
-    extendHom hcov L (Q.ι B a) = Q.ι (L • B) (N.covEquiv L B a) := by
-  have hmem : Q.ι B a ∈ Q.localStarSubalgebra := (Q.mem_localImages).mpr ⟨B, hB, a, rfl⟩
-  have h := (exists_intertwiner_extend N Q L (hcov L)).choose_spec.2 ⟨Q.ι B a, hmem⟩
+    extendHom hcov L (Q.ι hB a)
+      = Q.ι (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a) := by
+  have hmem : Q.ι hB a ∈ Q.localStarSubalgebra := (Q.mem_localImages).mpr ⟨B, hB, a, rfl⟩
+  have h := (exists_intertwiner_extend N Q L (hcov L)).choose_spec.2 ⟨Q.ι hB a, hmem⟩
   rw [intertwiner_ι N Q L (hcov L) hB a] at h
   exact h
 
@@ -359,8 +373,8 @@ theorem extendHom_ι (hcov : IsCovariant N Q) (L : InhomogeneousLorentzGroup)
 images are equal (the images are dense). -/
 theorem starAlgHom_ext_localImages {f g : Q.carrier →⋆ₐ[ℂ] Q.carrier}
     (hf : Continuous f) (hg : Continuous g)
-    (h : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄, IsAlexandrovBasisSet B →
-      ∀ a : N.U.algebra B, f (Q.ι B a) = g (Q.ι B a)) :
+    (h : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B)
+      (a : N.U.algebra B), f (Q.ι hB a) = g (Q.ι hB a)) :
     f = g := by
   apply DFunLike.coe_injective
   apply Continuous.ext_on Q.dense_range hf hg
@@ -379,7 +393,9 @@ theorem extendHom_comp (hcov : IsCovariant N Q)
   rw [StarAlgHom.comp_apply, extendHom_ι hcov L hB a,
     extendHom_ι hcov L' (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a),
     extendHom_ι hcov (L' * L) hB a, N.covEquiv_mul L L' B a]
-  exact Q.ι_cast (mul_smul L' L B).symm _
+  exact Q.ι_cast (isAlexandrovBasisSet_smul L' (isAlexandrovBasisSet_smul L hB))
+    (isAlexandrovBasisSet_smul (L' * L) hB) (mul_smul L' L B).symm
+    (N.covEquiv L' (L • B) (N.covEquiv L B a))
 
 /-- **`Φ_1 = id`.** -/
 theorem extendHom_one (hcov : IsCovariant N Q) :
@@ -387,7 +403,8 @@ theorem extendHom_one (hcov : IsCovariant N Q) :
   refine starAlgHom_ext_localImages (extendHom_continuous hcov 1) continuous_id ?_
   intro B hB a
   rw [extendHom_ι hcov 1 hB a, N.covEquiv_one B a]
-  exact Q.ι_cast (one_smul InhomogeneousLorentzGroup B).symm a
+  exact Q.ι_cast hB (isAlexandrovBasisSet_smul (1 : InhomogeneousLorentzGroup) hB)
+    (one_smul InhomogeneousLorentzGroup B).symm a
 
 theorem extendHom_comp_inv (hcov : IsCovariant N Q) (L : InhomogeneousLorentzGroup) :
     (extendHom hcov L).comp (extendHom hcov L⁻¹) = StarAlgHom.id ℂ Q.carrier := by
@@ -469,8 +486,8 @@ noncomputable def action (C : CovariantQuasilocalAlgebra)
 theorem action_ι (C : CovariantQuasilocalAlgebra) (L : InhomogeneousLorentzGroup)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
     (a : C.net.U.algebra B) :
-    C.action L (C.quasilocal.ι B a)
-      = C.quasilocal.ι (L • B) (C.net.covEquiv L B a) :=
+    C.action L (C.quasilocal.ι hB a)
+      = C.quasilocal.ι (isAlexandrovBasisSet_smul L hB) (C.net.covEquiv L B a) :=
   (C.lift L).intertwines hB a
 
 /-- The action agrees with the underlying extended `*`-homomorphism. -/

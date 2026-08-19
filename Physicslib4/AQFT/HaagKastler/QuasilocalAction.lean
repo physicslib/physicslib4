@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.Net
+import Physicslib4.Spacetime.LorentzCausality
 
 /-!
 # Lifting the covariance action to the quasilocal algebra
@@ -65,9 +66,9 @@ structure QuasilocalLift (Q : QuasilocalAlgebra N.U N.isotony)
   /-- The `*`-automorphism of the quasilocal algebra implementing `L`. -/
   β : Q.carrier ≃⋆ₐ[ℂ] Q.carrier
   /-- `β` intertwines the fiberwise action `α_L` with the local embeddings. -/
-  intertwines : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄,
-    IsAlexandrovBasisSet B → ∀ a : N.algebra B,
-      β (Q.ι B a) = Q.ι (L • B) (N.covEquiv L B a)
+  intertwines : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB : IsAlexandrovBasisSet B) (a : N.algebra B),
+      β (Q.ι hB a) = Q.ι (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a)
 
 variable {N}
 
