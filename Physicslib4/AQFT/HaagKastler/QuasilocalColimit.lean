@@ -47,8 +47,8 @@ open Physicslib4
 
 universe u
 
-/-- The **Alexandrov diamonds** of standard Minkowski spacetime, as a type,
-ordered by inclusion. This is the index type of the directed system of local
+/-- The **Alexandrov diamonds of standard Minkowski spacetime**, as a
+type, ordered by inclusion. This is the index type of the directed system of local
 algebras.
 
 Blueprint reference: `lmm:alexandrov-diamonds-isDirected`. -/
@@ -69,7 +69,7 @@ theorem directedOn_alexandrovBasis :
 
 /-- **The Alexandrov diamonds are directed under inclusion** (subtype form).
 This is the instance the colimit construction consumes, so that downstream nodes
-can cite an instance rather than restate a `∀∃` statement.
+can cite an instance instead of restating a `∀∃` statement.
 
 Blueprint reference: `lmm:alexandrov-diamonds-isDirected`. -/
 instance instIsDirectedOrderDiamond : IsDirectedOrder Diamond := by
@@ -79,9 +79,9 @@ instance instIsDirectedOrderDiamond : IsDirectedOrder Diamond := by
     Spacetime.alexandrovBasis_directed D₁.2 D₂.2
   refine ⟨⟨B, hB⟩, h₁, h₂⟩
 
-/-- The transition maps of the directed system of local algebras, in the shape
+/-- The transition maps of the directed system of local algebras, in the
 Mathlib's `DirectLimit` expects: explicit index binders, with the map itself a
-`StarAlgHom` (hence `FunLike`). -/
+`StarAlgHom`. -/
 def transitionHom (U : LocalNet) (i : Isotony U) (D₁ D₂ : Diamond) (h : D₁ ≤ D₂) :
     StarAlgHom ℂ (U.algebra D₁.1) (U.algebra D₂.1) :=
   i.map D₁.2 D₂.2 h
@@ -211,16 +211,13 @@ noncomputable def colimitRingNorm (U : LocalNet) (i : Isotony U) :
 
 /-- The colimit as a `NormedRing`, obtained from `colimitRingNorm`.
 
-The `RingNorm` detour is forced rather than bureaucratic: `NormedRing` bundles a
-`MetricSpace`, and there is no metric on the colimit quotient until this norm
-supplies one, so `NormedRing` cannot be stated first and filled in field by field.
-
-Blueprint reference: `lmm:quasilocal-colimit-norm-axioms`. -/
+`RingNorm.toNormedRing` packages the five clauses just checked into the norm and
+metric structure that everything downstream consumes. -/
 noncomputable instance colimitNormedRing (U : LocalNet) (i : Isotony U) :
     NormedRing (QuasilocalColimit U i) :=
   (colimitRingNorm U i).toNormedRing
 
-/-- **Absolute homogeneity of the colimit norm**, the sixth clause. It is listed
+/-- **Absolute homogeneity of the colimit norm**, `‖c • x‖ = ‖c‖ * ‖x‖`. It is stated
 separately from the `RingNorm` fields because a `RingNorm` knows nothing about the
 scalars; its role is to supply the `norm_smul_le` field of `NormedSpace ℂ` over
 the `NormedRing` structure just obtained.
@@ -236,35 +233,6 @@ theorem colimitNorm_smul (U : LocalNet) (i : Isotony U)
       rw [DirectLimit.smul_def, colimitNorm_mk, colimitNorm_mk]
       exact norm_smul c a)
     x
-
-/-! ### Next step, and the obstacle in front of it
-
-The next blueprint node, `lmm:quasilocal-colimit-norm-axioms`, builds a `RingNorm`
-on the colimit from `colimitNorm` and then a `NormedRing` via
-`RingNorm.toNormedRing`, followed by `NormedSpace ℂ` from absolute homogeneity.
-
-It is blocked, and not on the mathematics. Mathlib's `Algebra/Colimit/DirectLimit.lean`
-does carry `Ring`, `StarRing`, `Module`, `Algebra` and `StarModule` instances on a
-direct limit, but they are stated under a variable block of the shape
-
-    {T : ∀ ⦃i j : ι⦄, i ≤ j → Type*}  {f : ∀ _ _ h, T h}
-    [∀ i j (h : i ≤ j), FunLike (T h) (G i) (G j)]
-    [∀ i j h, RingHomClass (T h) (G i) (G j)]   -- and LinearMapClass, AlgHomClass, …
-
-and they do not fire for the family here: attempting the `RingNorm` produces
-`failed to synthesize NonUnitalNonAssocRing (QuasilocalColimit U i)`, and the
-scalar action produces `failed to synthesize HSMul ℂ (QuasilocalColimit U i) ?m`.
-Writing the family as `(transitionHom U i · · ·)` rather than an eta-expanded
-lambda was necessary but not sufficient.
-
-So the obstacle is getting Lean to see the isotony family as a `T`-family with the
-requisite `…HomClass` instances, which is exactly the dependent-type plumbing
-flagged as the main friction of this construction. Everything above this point is
-proved and this file builds clean; the work resumes here.
-
-Note when resuming: every instance in `Algebra/Colimit/DirectLimit.lean` is
-anonymous, so none may be cited by name — use `inferInstance` / `inferInstanceAs`.
--/
 
 /-- The `NormedRing` norm on the colimit is the norm of `colimitNorm`, by
 construction. This is the bridge that lets the representative-level lemmas above
@@ -339,6 +307,129 @@ from the C\*-inequality through `CStarRing.to_normedStarGroup`. -/
 noncomputable instance quasilocalCompletionCStarAlgebra (U : LocalNet) (i : Isotony U) :
     CStarAlgebra (QuasilocalCompletion U i) :=
   inferInstance
+
+/-- **The colimit insertion as a `*`-algebra homomorphism**
+(`lmm:quasilocal-embedding`).
+
+Mathlib's canonical map from a component into the colimit,
+`DirectLimit.Algebra.of`, is bundled only as an `AlgHom`; there is no
+`StarAlgHom`-valued version of it, so the one missing `StarAlgHom` field,
+`map_star'`, is supplied by hand. It holds by definition of the involution on the
+colimit, `DirectLimit.star_def`, which sends the class of `⟨D, a⟩` to the class
+of `⟨D, a⋆⟩`. -/
+noncomputable def colimitStarOf (U : LocalNet) (i : Isotony U) (D : Diamond) :
+    StarAlgHom ℂ (U.algebra D.1) (QuasilocalColimit U i) where
+  toFun x := ⟦⟨D, x⟩⟧
+  map_one' := by
+    rw [DirectLimit.one_def D]
+  map_mul' := by
+    intro a b
+    rw [DirectLimit.mul_def]
+  map_zero' := by
+    rw [DirectLimit.zero_def D]
+  map_add' := by
+    intro a b
+    rw [DirectLimit.add_def]
+  commutes' := by
+    intro r
+    rw [DirectLimit.algebraMap_def D r]
+  map_star' := by
+    intro a
+    rw [DirectLimit.star_def]
+
+/-- Applying `colimitStarOf` to an element of a local algebra gives its class in
+the colimit. -/
+@[simp] theorem colimitStarOf_apply (U : LocalNet) (i : Isotony U)
+    (D : Diamond) (a : U.algebra D.1) :
+    colimitStarOf U i D a = ⟦⟨D, a⟩⟧ := rfl
+
+/-- **The canonical embedding into the quasilocal algebra**
+(`lmm:quasilocal-embedding`).
+
+For each Alexandrov diamond `D`, the composite `ι_D := η ∘ ρ` of the colimit
+insertion `colimitStarOf` with the completion coercion
+`Physicslib4.coeStarAlgHom` is a unital `*`-algebra homomorphism over `ℂ`, both
+factors being bundled `StarAlgHom`s. -/
+noncomputable def quasilocalEmbedding (U : LocalNet) (i : Isotony U) (D : Diamond) :
+    StarAlgHom ℂ (U.algebra D.1) (QuasilocalCompletion U i) :=
+  (Physicslib4.coeStarAlgHom).comp (colimitStarOf U i D)
+
+/-- Applying `quasilocalEmbedding` to an element of a local algebra gives the
+completion class of its class in the colimit. -/
+@[simp] theorem quasilocalEmbedding_apply (U : LocalNet) (i : Isotony U)
+    (D : Diamond) (a : U.algebra D.1) :
+    quasilocalEmbedding U i D a
+      = ((⟦⟨D, a⟩⟧ : QuasilocalColimit U i) : QuasilocalCompletion U i) := rfl
+
+/-- **The colimit is the union of the images of its insertions**
+(`lmm:quasilocal-colimit-union-of-insertions`).
+
+Every element of the colimit is the class of a pair `⟨D, a⟩` (`DirectLimit.exists_eq_mk`),
+hence lies in the range of the insertion `colimitStarOf U i D`. This is what
+identifies the range of the insertions with the whole colimit, and is the pivot of
+the density argument. -/
+theorem exists_eq_colimitStarOf (U : LocalNet) (i : Isotony U) (x : QuasilocalColimit U i) :
+    ∃ (D : Diamond) (a : U.algebra D.1), colimitStarOf U i D a = x := by
+  obtain ⟨D, a, rfl⟩ := DirectLimit.exists_eq_mk _ x
+  exact ⟨D, a, rfl⟩
+
+/-- **The canonical embeddings form a cocone** (`lmm:quasilocal-embedding-cocone`).
+
+For diamonds `D₁ ≤ D₂`, embedding after transporting along isotony equals
+embedding directly: `ι_{D₂} ∘ i_{D₁ D₂} = ι_{D₁}`. This is the cocone condition
+that makes the embeddings well defined on the colimit.
+
+The identity for the colimit insertions is `DirectLimit.mk_apply`, Mathlib's
+compatibility of insertions with transition maps; applying the completion coercion
+`η` to both sides is a `congrArg`. -/
+theorem quasilocalEmbedding_transitionHom (U : LocalNet) (i : Isotony U)
+    (D₁ D₂ : Diamond) (h : D₁ ≤ D₂) (a : U.algebra D₁.1) :
+    quasilocalEmbedding U i D₂ (transitionHom U i D₁ D₂ h a)
+      = quasilocalEmbedding U i D₁ a := by
+  have hcolim :
+      (colimitStarOf U i D₂ (transitionHom U i D₁ D₂ h a) : QuasilocalColimit U i)
+        = (colimitStarOf U i D₁ a : QuasilocalColimit U i) := by
+    change (⟦⟨D₂, transitionHom U i D₁ D₂ h a⟩⟧ : QuasilocalColimit U i) =
+      (⟦⟨D₁, a⟩⟧ : QuasilocalColimit U i)
+    exact DirectLimit.mk_apply (F := fun D : Diamond => U.algebra D.1)
+      (f := transitionHom U i) D₁ D₂ a h
+  change ((colimitStarOf U i D₂ (transitionHom U i D₁ D₂ h a) : QuasilocalColimit U i)
+      : QuasilocalCompletion U i) =
+    ((colimitStarOf U i D₁ a : QuasilocalColimit U i) : QuasilocalCompletion U i)
+  rw [hcolim]
+
+/-- **The Images of the Canonical Embeddings are Dense** (`lmm:quasilocal-embeddings-dense`).
+
+The union of the ranges of the quasilocal embeddings `ι_B`, taken over all
+Alexandrov-basis diamonds, is dense in the completion of the colimit: this is
+the density clause the quasilocal algebra requires. The range of the completion
+coercion `η` is dense by `UniformSpace.Completion.denseRange_coe`, and every
+colimit element lies in the range of some insertion
+(`exists_eq_colimitStarOf`), so the range of `η` is contained in the displayed
+union; density transfers by `Dense.mono`.
+
+It is stated in the basis-set-indexed form — pairs `⟨B, hB⟩` of a set and a proof
+that it is an Alexandrov basis set — on purpose, so that the statement matches, verbatim, the
+`dense_range` field of `QuasilocalAlgebra`, which this lemma discharges. -/
+theorem dense_iUnion_range_quasilocalEmbedding (U : LocalNet) (i : Isotony U) :
+    Dense (⋃ (B : Set StandardMinkowskiSpacetime.Carrier)
+             (hB : IsAlexandrovBasisSet B),
+             Set.range (quasilocalEmbedding U i ⟨B, hB⟩)) := by
+  refine UniformSpace.Completion.denseRange_coe.mono ?_
+  rintro y ⟨x, rfl⟩
+  obtain ⟨D, a, rfl⟩ := exists_eq_colimitStarOf U i x
+  exact Set.mem_iUnion₂_of_mem (j := D.2) ⟨a, rfl⟩
+
+/-- **The colimit insertion is injective** (`lmm:quasilocal-embedding-injective`).
+
+Every transition map of the directed system is injective by Axiom 2(a)
+(`Isotony.injective`), so Mathlib's `DirectLimit.mk_injective` gives injectivity
+of the insertion of each diamond into the colimit. This is the step flagged in
+the blueprint as the place where Axiom 2(a) is spent. -/
+theorem colimitStarOf_injective (U : LocalNet) (i : Isotony U) (D : Diamond) :
+    Function.Injective (colimitStarOf U i D) := by
+  exact DirectLimit.mk_injective (F := fun D : Diamond => U.algebra D.1)
+    (f := transitionHom U i) (fun D₁ D₂ h => i.injective D₁.2 D₂.2 h) D
 
 end HaagKastler
 end AQFT

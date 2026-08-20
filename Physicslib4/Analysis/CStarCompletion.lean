@@ -201,4 +201,26 @@ every parent is now in place — completeness being the ambient `CompleteSpace`
 instance on a completion rather than anything to prove. -/
 noncomputable instance instCStarAlgebraCompletion : CStarAlgebra (Completion A) where
 
+/-- **The completion coercion as a bundled `*`-algebra homomorphism**
+(`lmm:completion-coe-star-alg-hom`).
+
+The canonical map `η : A → Â` is a unital `*`-algebra homomorphism over `ℂ`,
+bundled as a `StarAlgHom`. This is a node rather than a citation because Mathlib
+supplies the coercion only as a *ring* homomorphism,
+`UniformSpace.Completion.coeRingHom`; there is no bundled `AlgHom` or `StarAlgHom`
+version of the completion coercion anywhere, so the assembly must be done by hand.
+The ring laws come from `coeRingHom`, the `AlgHom` scalar law `commutes'` reduces
+by `rfl` from `UniformSpace.Completion.algebraMap_def`, and `map_star'` is
+`star_completion_coe` in reverse. Its consumer is `lmm:quasilocal-embedding`, which
+needs a bundled morphism. -/
+noncomputable def coeStarAlgHom : A →⋆ₐ[ℂ] CStarCompletion A :=
+  { toAlgHom :=
+      { toRingHom := UniformSpace.Completion.coeRingHom
+        commutes' := fun _r => rfl }
+    map_star' := fun a => (star_completion_coe a).symm }
+
+@[simp] theorem coe_coeStarAlgHom :
+    ⇑(coeStarAlgHom : A →⋆ₐ[ℂ] CStarCompletion A) =
+      ((↑) : A → UniformSpace.Completion A) := rfl
+
 end Physicslib4

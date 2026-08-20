@@ -260,10 +260,13 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Completion Coercion as a Bundled $*$-Algebra Homomorphism]
     \label{lmm:completion-coe-star-alg-hom}
+    \lean{Physicslib4.coeStarAlgHom}
     \uses{def:completion-standing-hypotheses, lmm:star-extends-to-completion}
+    \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then the canonical map $\eta : A \to \widehat{A}$ is a unital $*$-algebra homomorphism over $\mathbb{C}$, and can be bundled as a term of \texttt{StarAlgHom \ensuremath{\mathbb{C}}} $A$ $\widehat{A}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:completion-standing-hypotheses, def:completion-star, lmm:star-extends-to-completion}
     Every law needed is already available unbundled; the content of this node is that the \emph{bundling} has to be done by hand, and it is worth a node precisely so that the fact is not mistaken for a citation. Mathlib supplies the coercion only as a \emph{ring} homomorphism, \texttt{UniformSpace.Completion.coeRingHom}; there is no \texttt{coeStarAlgHom}, and no algebra-homomorphism counterpart either, anywhere in the completion files audited in \ref{def:completion-standing-hypotheses}. So \texttt{map\_one}, \texttt{map\_mul}, \texttt{map\_add} come from \texttt{coeRingHom}, and the two remaining fields are supplied individually. The first is the \texttt{AlgHom} field, and its name matters: \texttt{StarAlgHom \ensuremath{\mathbb{C}}} extends \texttt{AlgHom}, whose scalar field is \texttt{commutes'} --- agreement of the map with the two \texttt{algebraMap}s --- and \emph{not} \texttt{map\_smul}. It discharges essentially by \texttt{rfl} from the definition of \texttt{UniformSpace.Completion.algebra}, whose \texttt{smul\_def'} field already characterises the scalar action through $\eta \circ \texttt{algebraMap}$; the unbundled coercion law $c \cdot \eta(a) = \eta(c \cdot a)$, \texttt{UniformSpace.Completion.coe\_smul}, is what backs it if the \texttt{rfl} does not fire. The second is \texttt{map\_star}, which is the characterisation $\eta(a)^{*} = \eta(a^{*})$ of \ref{def:completion-star}, which \ref{lmm:star-extends-to-completion} records as part of making $\eta$ a $*$-homomorphism. Assembling those five fields into a \texttt{StarAlgHom} is a single anonymous-constructor term.
 
@@ -432,7 +435,9 @@ The next axiom makes use of the following new definition:
 
 \begin{theorem}[Existence of a Quasilocal Algebra]
     \label{thrm:quasilocal-algebra-exists}
+    \lean{Physicslib4.AQFT.HaagKastler.exists_quasilocalAlgebra}
     \uses{def:local-algebras, def:isotony, lmm:quasilocal-completion-cstar, lmm:quasilocal-colimit-norm-well-defined, lmm:star-extends-to-completion, lmm:quasilocal-embedding, lmm:quasilocal-embedding-injective, lmm:quasilocal-embedding-cocone, lmm:quasilocal-embeddings-dense}
+    \leanok
     Every local net (\ref{def:local-algebras}) satisfying Axiom 2 (\ref{def:isotony}) admits a quasilocal algebra: there exist a C*-algebra $\mathfrak{U}$ and a family of unital $*$-homomorphisms $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}$, indexed by the Alexandrov-basis sets, such that each $\iota_{\mathbf{B}}$ is injective, the family satisfies the cocone condition $\iota_{\mathbf{B}_2} \circ i_{\mathbf{B}_1 \mathbf{B}_2} = \iota_{\mathbf{B}_1}$ for $\mathbf{B}_1 \subseteq \mathbf{B}_2$, and the union of the images of the $\iota_{\mathbf{B}}$ is dense in $\mathfrak{U}$.
 
     The indexing is essential to the statement and is not a stylistic choice: the family runs over the \emph{Alexandrov-basis sets} only. Axiom 1 (\ref{def:local-algebras}) assigns an abstract unital C*-algebra to \emph{every} subset of spacetime, constrained only at $\emptyset$, so the algebras attached to non-basis subsets are junk fibres about which the axioms say nothing whatever; no claim is made about them here, and none can be.
@@ -454,6 +459,7 @@ The next axiom makes use of the following new definition:
     One consequence reaches beyond this node and is recorded because this is where it was found. \ref{def:haag-kastler-net} is marked as formalized and bundles \texttt{QuasilocalCompleteness} as its fourth field --- a mathematical existence claim about the net, carrying Axiom 4's name. Nothing about that field is refutable any longer, but it still states mathematics rather than the bridge principle of \ref{def:quasilocal-completeness}, and re-pointing it at this theorem instead remains outstanding. That is a separate step; only the diagnosis belongs here.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:quasilocal-completion-cstar, lmm:quasilocal-embedding, lmm:quasilocal-embedding-injective, lmm:quasilocal-embedding-cocone, lmm:quasilocal-embeddings-dense}
     Assembly only, and that is the point of stating the five embedding lemmas below separately. Take for $\mathfrak{U}$ the completion of the directed colimit of the local algebras, a C*-algebra by \ref{lmm:quasilocal-completion-cstar}. Take for the family the $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding}. The three remaining clauses are then exactly \ref{lmm:quasilocal-embedding-injective}, \ref{lmm:quasilocal-embedding-cocone} and \ref{lmm:quasilocal-embeddings-dense}, so the proof is one anonymous constructor supplied with the five results just cited. It is the assembly, not any of the facts, that is outstanding.
 \end{proof}
@@ -462,7 +468,9 @@ The proof just given cites six facts: \ref{lmm:quasilocal-completion-cstar} for 
 
 \begin{lemma}[The Canonical Embeddings into the Quasilocal Algebra]
     \label{lmm:quasilocal-embedding}
+    \lean{colimitStarOf}
     \uses{def:local-algebras, def:isotony, lmm:quasilocal-completion-cstar, lmm:completion-coe-star-alg-hom}
+    \leanok
     For each Alexandrov-basis set $\mathbf{B}$ the composite
     \begin{align}
         \iota_{\mathbf{B}} := \eta \circ \texttt{DirectLimit.Algebra.of} \, : \, \mathfrak{U}(\mathbf{B}) \longrightarrow \mathfrak{U}
@@ -470,23 +478,29 @@ The proof just given cites six facts: \ref{lmm:quasilocal-completion-cstar} for 
     is a unital $*$-algebra homomorphism over $\mathbb{C}$, bundled as a term of \texttt{StarAlgHom \ensuremath{\mathbb{C}}} $\mathfrak{U}(\mathbf{B})$ $\mathfrak{U}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:quasilocal-completion-cstar, lmm:completion-coe-star-alg-hom}
     Both factors are bundled unital $*$-algebra homomorphisms, and the composite is their \texttt{StarAlgHom.comp}. For $\eta$ this is \ref{lmm:completion-coe-star-alg-hom}, applicable because the colimit satisfies the standing hypotheses of \ref{def:completion-standing-hypotheses} --- which is exactly what \ref{lmm:quasilocal-completion-cstar} checks. For the colimit insertion, the passage preceding \ref{lmm:quasilocal-colimit-norm-well-defined} records that \texttt{DirectLimit.Algebra.of} is a unital $\mathbb{C}$-algebra homomorphism supplied by Mathlib, and its one missing \texttt{StarAlgHom} field, \texttt{map\_star}, holds by definition of the involution on the colimit, \texttt{DirectLimit.star\_def}, which sends the class of $\langle \mathbf{B}, a \rangle$ to the class of $\langle \mathbf{B}, a^{*} \rangle$.
 \end{proof}
 
 \begin{lemma}[The Canonical Embeddings are Injective]
     \label{lmm:quasilocal-embedding-injective}
+    \lean{Physicslib4.AQFT.HaagKastler.quasilocalEmbedding_injective}
     \uses{def:isotony, lmm:quasilocal-embedding}
+    \leanok
     For every Alexandrov-basis set $\mathbf{B}$ the map $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding} is injective.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:isotony, lmm:quasilocal-embedding}
     A composite of two injections. The colimit insertion is injective by \texttt{DirectLimit.mk\_injective}, whose hypothesis is injectivity of every transition map, i.e.\ Axiom 2(a) (\ref{def:isotony}); this is the citation already recorded in the itemized list preceding \ref{lmm:quasilocal-colimit-norm-well-defined}. The coercion $\eta$ into the completion is injective because it is an isometry, \texttt{UniformSpace.Completion.coe\_isometry} --- equivalently by \texttt{UniformSpace.Completion.norm\_coe} together with positive definiteness of the colimit norm (\ref{lmm:quasilocal-colimit-norm-axioms}).
 \end{proof}
 
 \begin{lemma}[The Canonical Embeddings Form a Cocone]
     \label{lmm:quasilocal-embedding-cocone}
+    \lean{Physicslib4.AQFT.HaagKastler.quasilocalEmbedding_transitionHom}
     \uses{def:isotony, lmm:quasilocal-embedding}
+    \leanok
     For Alexandrov-basis sets $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and every $a \in \mathfrak{U}(\mathbf{B}_1)$,
     \begin{align}
         \iota_{\mathbf{B}_2}\bigl(i_{\mathbf{B}_1\mathbf{B}_2}(a)\bigr) = \iota_{\mathbf{B}_1}(a),
@@ -494,16 +508,20 @@ The proof just given cites six facts: \ref{lmm:quasilocal-completion-cstar} for 
     where $i_{\mathbf{B}_1\mathbf{B}_2}$ is the isotony embedding of Axiom 2 (\ref{def:isotony}).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:isotony, lmm:quasilocal-embedding}
     The corresponding identity for the colimit insertions is \texttt{DirectLimit.Algebra.of\_f}, the compatibility of the insertions with the transition maps of the directed system. Applying $\eta$ to both sides --- a \texttt{congrArg} --- gives the claim for the composites $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding}.
 \end{proof}
 
 \begin{lemma}[The Colimit is the Union of the Images of its Insertions]
     \label{lmm:quasilocal-colimit-union-of-insertions}
+    \lean{Physicslib4.AQFT.HaagKastler.exists_eq_colimitStarOf}
     \uses{def:isotony}
+    \leanok
     Every element of $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ is of the form $\texttt{DirectLimit.Algebra.of}\,(a)$ for some Alexandrov diamond $\mathbf{B}$ and some $a \in \mathfrak{U}(\mathbf{B})$; equivalently, the union of the ranges of the insertions, taken over the diamonds, is the whole colimit.
 \end{lemma}
 \begin{proof}
+    \leanok
     This is the step that the earlier one-paragraph proof of \ref{thrm:quasilocal-algebra-exists} used without citing anything, which is why it is now a node. It is a direct Mathlib citation, and about two lines. Given $x$, \texttt{DirectLimit.exists\_eq\_mk}, which asserts that every $z$ in \texttt{DirectLimit F f} is the quotient class of some pair $\langle i, x \rangle$, produces an index $\mathbf{B}$ and an $a \in \mathfrak{U}(\mathbf{B})$ with $x$ the class of $\langle \mathbf{B}, a \rangle$; and \texttt{DirectLimit.Algebra.of} is \emph{definitionally} that class --- its \texttt{toFun} field is literally the map sending $x$ to the class of $\langle i, x \rangle$ --- so the rewrite is \texttt{DirectLimit.Algebra.of\_apply}, available because \texttt{of} is tagged \texttt{@[simps]}. That lemma lives in the same namespace and file as the \texttt{DirectLimit.exists\_eq\_mk\ensuremath{{}_2}} that \ref{lmm:quasilocal-colimit-common-representatives} already cites as Mathlib's, and one could equally specialise the latter by taking both elements to be $x$; the one-element form is the direct citation and is preferred.
 
     The node survives as a node rather than being inlined because \ref{lmm:quasilocal-embeddings-dense} is its consumer and reads better citing it, and because the fact is worth stating separately: it is what identifies the range of the colimit insertions with the whole colimit, which is the pivot of the density argument.
@@ -511,10 +529,13 @@ The proof just given cites six facts: \ref{lmm:quasilocal-completion-cstar} for 
 
 \begin{lemma}[The Images of the Canonical Embeddings are Dense]
     \label{lmm:quasilocal-embeddings-dense}
+    \lean{dense_iUnion_range_quasilocalEmbedding}
     \uses{lmm:quasilocal-embedding, lmm:quasilocal-colimit-union-of-insertions}
+    \leanok
     The union of the ranges of the $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding}, taken over the Alexandrov-basis sets, is dense in $\mathfrak{U}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:quasilocal-embedding, lmm:quasilocal-colimit-union-of-insertions}
     The range of $\eta$ is dense in the completion, \texttt{UniformSpace.Completion.denseRange\_coe}. By \ref{lmm:quasilocal-colimit-union-of-insertions} that range is the image under $\eta$ of the union of the ranges of the colimit insertions, which is the union of the ranges of the $\iota_{\mathbf{B}}$; so the two sets coincide and the density transfers. A dense subset of a dense set being dense is \texttt{Dense.mono} applied to the resulting inclusion of closures.
 \end{proof}
