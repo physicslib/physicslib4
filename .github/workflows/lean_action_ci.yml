@@ -20,6 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: leanprover/lean-action@v1
+        with:
+          build: true
+          lint: true
+          mk_all-check: true
+
       - name: Check declarations named in the blueprint exist
         run: |
           set -euo pipefail
@@ -31,7 +36,3 @@ jobs:
             | sort -u > lean_decls.txt
           echo "Checking $(wc -l < lean_decls.txt) declarations named in the blueprint."
           ~/.elan/bin/lake exe checkdecls lean_decls.txt
-        with:
-          build: true
-          lint: true
-          mk_all-check: true
