@@ -431,6 +431,13 @@ theorem colimitStarOf_injective (U : LocalNet) (i : Isotony U) (D : Diamond) :
   exact DirectLimit.mk_injective (F := fun D : Diamond => U.algebra D.1)
     (f := transitionHom U i) (fun D₁ D₂ h => i.injective D₁.2 D₂.2 h) D
 
+theorem quasilocalEmbedding_injective (U : LocalNet) (i : Isotony U) (D : Diamond) :
+    Function.Injective (quasilocalEmbedding U i D) := by
+  intro a b hab
+  apply colimitStarOf_injective U i D
+  apply UniformSpace.Completion.coe_injective
+  simpa using hab
+
 end HaagKastler
 end AQFT
 end Physicslib4

@@ -7,11 +7,13 @@ import Physicslib4.AQFT.HaagKastler.LocalCommutativity
 import Physicslib4.AQFT.HaagKastler.LocalVonNeumann
 import Physicslib4.AQFT.HaagKastler.LorentzCovariance
 import Physicslib4.AQFT.HaagKastler.Net
+import Physicslib4.AQFT.HaagKastler.ObservableBridge
 import Physicslib4.AQFT.HaagKastler.Purity
 import Physicslib4.AQFT.HaagKastler.QuasilocalAction
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
 import Physicslib4.AQFT.HaagKastler.QuasilocalColimit
-import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
+import Physicslib4.AQFT.HaagKastler.QuasilocalExistence
+import Physicslib4.AQFT.HaagKastler.QuasilocalObservable
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.HaagKastler.QuasilocalKMS
 import Physicslib4.AQFT.HaagKastler.VacuumState

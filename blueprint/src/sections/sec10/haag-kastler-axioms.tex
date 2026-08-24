@@ -411,7 +411,7 @@ The next axiom makes use of the following new definition:
 \begin{definition}[Quasilocal Observable]
     \label{def:quasilocal-observable}
     \lean{Physicslib4.AQFT.HaagKastler.IsQuasilocalObservable}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalCompleteness.lean}
+    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalObservable.lean}
     \leanok
     \uses{def:quasilocal-algebra, thrm:gns-construction-theorem, def:state}
     The image $\pi_\omega(a)$ of a self-adjoint member $a$ of the quasilocal algebra $\mathfrak{U}$ under a GNS *-homomorphism $\pi_\omega$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{quasilocal observable}.
@@ -474,7 +474,7 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
 
 \begin{lemma}[The Canonical Embeddings into the Quasilocal Algebra]
     \label{lmm:quasilocal-embedding}
-    \lean{colimitStarOf}
+    \lean{Physicslib4.AQFT.HaagKastler.colimitStarOf, Physicslib4.AQFT.HaagKastler.quasilocalEmbedding}
     \uses{def:local-algebras, def:isotony, lmm:quasilocal-completion-cstar, lmm:completion-coe-star-alg-hom}
     \leanok
     For each Alexandrov-basis set $\mathbf{B}$ the composite
@@ -535,7 +535,7 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
 
 \begin{lemma}[The Images of the Canonical Embeddings are Dense]
     \label{lmm:quasilocal-embeddings-dense}
-    \lean{dense_iUnion_range_quasilocalEmbedding}
+    \lean{Physicslib4.AQFT.HaagKastler.dense_iUnion_range_quasilocalEmbedding}
     \uses{lmm:quasilocal-embedding, lmm:quasilocal-colimit-union-of-insertions}
     \leanok
     The union of the ranges of the $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding}, taken over the Alexandrov-basis sets, is dense in $\mathfrak{U}$.

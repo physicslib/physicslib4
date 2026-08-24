@@ -6,7 +6,7 @@ Authors: Lean Community
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.Isotony
 import Physicslib4.AQFT.HaagKastler.LocalCommutativity
-import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
+import Physicslib4.AQFT.HaagKastler.QuasilocalObservable
 import Physicslib4.AQFT.HaagKastler.QuasilocalExistence
 import Physicslib4.AQFT.HaagKastler.LorentzCovariance
 

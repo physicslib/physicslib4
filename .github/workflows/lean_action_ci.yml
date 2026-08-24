@@ -20,6 +20,17 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: leanprover/lean-action@v1
+      - name: Check declarations named in the blueprint exist
+        run: |
+          set -euo pipefail
+          grep -rho '\\lean{[^}]*}' blueprint/src --include='*.tex' \
+            | sed -e 's/^\\lean{//' -e 's/}$//' \
+            | tr ',' '\n' \
+            | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
+            | grep -v '^$' \
+            | sort -u > lean_decls.txt
+          echo "Checking $(wc -l < lean_decls.txt) declarations named in the blueprint."
+          ~/.elan/bin/lake exe checkdecls lean_decls.txt
         with:
           build: true
           lint: true
