@@ -306,7 +306,7 @@ lemma isAlexandrovBasisSet_trivialBasisSet :
 is implemented by the identity, which is trivially functorial.
 
 This must precede `trivialQuasilocalAlgebra`, which is now indexed by it. -/
-def trivialLocalNet_isotony : Isotony trivialLocalNet where
+def trivialLocalNetIsotony : Isotony trivialLocalNet where
   map := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
   injective := by
     intro B₁ B₂ h₁ h₂ h
@@ -322,9 +322,9 @@ def trivialLocalNet_isotony : Isotony trivialLocalNet where
 /-- The trivial quasilocal algebra for the trivial net: ambient C*-algebra `ℂ`,
 with every local embedding the identity `ℂ →⋆ₐ[ℂ] ℂ`. It no longer supplies its own
 `inclusion` family; the cocone condition `ι_inclusion` is stated against the Axiom 2
-family `trivialLocalNet_isotony`. -/
+family `trivialLocalNetIsotony`. -/
 noncomputable def trivialQuasilocalAlgebra :
-    QuasilocalAlgebra trivialLocalNet trivialLocalNet_isotony where
+    QuasilocalAlgebra trivialLocalNet trivialLocalNetIsotony where
   carrier := ℂ
   instCStarAlgebra := inferInstance
   ι := fun _ _ => StarAlgHom.id ℂ ℂ
@@ -335,7 +335,7 @@ noncomputable def trivialQuasilocalAlgebra :
   ι_inclusion := fun _ _ _ _ _ _ => rfl
 
 theorem trivialLocalNet_localCommutativity :
-    LocalCommutativity trivialLocalNet trivialLocalNet_isotony :=
+    LocalCommutativity trivialLocalNet trivialLocalNetIsotony :=
   ⟨trivialQuasilocalAlgebra, by
     intro B₁ B₂ hB₁ hB₂ _ a b
     exact @mul_comm ℂ _ (trivialQuasilocalAlgebra.ι hB₁ a)
@@ -354,7 +354,7 @@ theorem trivialLocalNet_lorentzCovariance :
 bundled with proofs of Axioms 2-5. -/
 noncomputable def trivialHaagKastlerNet : HaagKastlerNet where
   U := trivialLocalNet
-  isotony := trivialLocalNet_isotony
+  isotony := trivialLocalNetIsotony
   localCommutativity := trivialLocalNet_localCommutativity
   lorentzCovariance := trivialLocalNet_lorentzCovariance
 

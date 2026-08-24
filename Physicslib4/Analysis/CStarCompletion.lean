@@ -73,7 +73,15 @@ produces the `NormedStarGroup A` instance. And `StarModule ℂ A` and
 `NormedAlgebra ℂ A` are listed because they are genuinely used and are not
 consequences of the others — the former is what `star_smul` on the completion
 reduces to on the dense range, and the latter is what `NormedAlgebra` needs to
-complete. -/
+complete.
+
+`StarModule ℂ A` and `CStarRing A` are not used by the right-hand side, which
+needs only the uniform structure. They are listed anyway, and the
+`unusedArguments` lint is suppressed, because naming the setting is the whole
+point of this abbreviation: it is the blueprint's standing-hypotheses node, and
+every result below is stated under exactly these five. Dropping the two would
+make the notation say less than the node it stands for. -/
+@[nolint unusedArguments]
 abbrev CStarCompletion (A : Type*) [NormedRing A] [StarRing A] [NormedAlgebra ℂ A]
     [StarModule ℂ A] [CStarRing A] : Type _ :=
   UniformSpace.Completion A

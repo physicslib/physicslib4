@@ -68,10 +68,14 @@ Lorentzian spacetime `ψ^*L` to the carrier of `L`.
 The two carriers are definitionally equal (`pullback` changes only the metric
 and the time orientation), but the blueprint insists that the two spacetimes be
 related by *data* rather than by a type equality; this is that datum.
+
+Stated with `.Carrier` rather than `.toAbstract.Carrier`: the two are
+definitionally equal, but `toAbstract_Carrier` is a `simp` lemma, so only the
+former leaves `pullbackCarrierEquiv_apply` in simp-normal form.
 -/
 noncomputable def pullbackCarrierEquiv (L : LorentzianSpacetime)
     (ψ : Diffeo L.toSpacetime L.toSpacetime) :
-    (L.pullback ψ).toAbstract.Carrier ≃ L.toAbstract.Carrier :=
+    (L.pullback ψ).Carrier ≃ L.Carrier :=
   (L.toSpacetime.pullbackDiffeo ψ).toEquiv
 
 /-- The relabelling bijection of `pullbackCarrierEquiv` is `ψ` itself. -/

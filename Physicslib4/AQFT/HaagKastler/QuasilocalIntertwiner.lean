@@ -443,10 +443,10 @@ theorem isCovariant_trivial :
     simpa using AlgHomClass.commutes f z
   intro L B C hB hC h a
   change trivialHaagKastlerNet.covEquiv L B a
-      = trivialHaagKastlerNet.covEquiv L C (trivialLocalNet_isotony.map hB hC h a)
+      = trivialHaagKastlerNet.covEquiv L C (trivialLocalNetIsotony.map hB hC h a)
   exact (key (trivialHaagKastlerNet.covEquiv L B) a).trans
     (key (trivialHaagKastlerNet.covEquiv L C)
-      (trivialLocalNet_isotony.map hB hC h a)).symm
+      (trivialLocalNetIsotony.map hB hC h a)).symm
 
 /-- **The quasilocal lift exists unconditionally for the trivial net.** -/
 noncomputable def trivialQuasilocalLift (L : InhomogeneousLorentzGroup) :

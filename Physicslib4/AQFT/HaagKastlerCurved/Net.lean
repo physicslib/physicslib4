@@ -306,7 +306,7 @@ noncomputable def trivialLocalNet (M : LorentzianSpacetime) : LocalNet M where
 
 /-- The trivial net's Axiom 2 data: every local algebra is `ℂ` and every
 inclusion is implemented by the identity, which is trivially functorial. -/
-def trivialLocalNet_isotony (M : LorentzianSpacetime) :
+def trivialLocalNetIsotony (M : LorentzianSpacetime) :
     Isotony (trivialLocalNet M) where
   map := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
   injective := by
@@ -321,7 +321,7 @@ def trivialLocalNet_isotony (M : LorentzianSpacetime) :
     rfl
 
 theorem trivialLocalNet_localCommutativity (M : LorentzianSpacetime) :
-    LocalCommutativity (trivialLocalNet M) (trivialLocalNet_isotony M) := by
+    LocalCommutativity (trivialLocalNet M) (trivialLocalNetIsotony M) := by
   intro B₁ B₂ B hB₁ hB₂ hB hs h₁ h₂ a b
   change (StarAlgHom.id ℂ ℂ a) * (StarAlgHom.id ℂ ℂ b)
       = (StarAlgHom.id ℂ ℂ b) * (StarAlgHom.id ℂ ℂ a)
@@ -345,7 +345,7 @@ Haag-Kastler net. -/
 noncomputable def trivialHaagKastlerNet (M : LorentzianSpacetime) :
     HaagKastlerNet M where
   U := trivialLocalNet M
-  isotony := trivialLocalNet_isotony M
+  isotony := trivialLocalNetIsotony M
   localCommutativity := trivialLocalNet_localCommutativity M
   localAlgebra := trivialLocalNet_localAlgebra M
   isometricCovariance := trivialLocalNet_isometricCovariance M
