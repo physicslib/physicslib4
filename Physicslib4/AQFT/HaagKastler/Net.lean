@@ -6,25 +6,36 @@ Authors: Lean Community
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.Isotony
 import Physicslib4.AQFT.HaagKastler.LocalCommutativity
-import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
+import Physicslib4.AQFT.HaagKastler.QuasilocalObservable
+import Physicslib4.AQFT.HaagKastler.QuasilocalExistence
 import Physicslib4.AQFT.HaagKastler.LorentzCovariance
 
 /-!
 # Haag-Kastler nets
 
 This file bundles the data of Axiom 1 (`def:local-algebras`)
-together with the propositional content of Axioms 2-5 into a single
-`structure HaagKastlerNet`, formalising the blueprint declaration
-`def:haag-kastler-net` (section 10.3 of the AQFT-in-Lean blueprint).
+together with the propositional content of Axioms 2, 3 and 5 into a
+single `structure HaagKastlerNet`, formalising the blueprint
+declaration `def:haag-kastler-net` (section 10.3 of the AQFT-in-Lean
+blueprint).
 
 ## Main definitions
 
 * `Physicslib4.AQFT.HaagKastler.HaagKastlerNet`: a structure
   consisting of a `LocalNet` (the Axiom 1 data) plus proofs of
-  `Isotony`, `LocalCommutativity`, `QuasilocalCompleteness`, and
-  `LorentzCovariance`.
+  `Isotony`, `LocalCommutativity` and `LorentzCovariance`.
 
 ## Notes
+
+* The structure deliberately does **not** bundle Axiom 4. What its
+  consumers needed from that axiom was the *existence* of a quasilocal
+  algebra, and that is now a theorem, `exists_quasilocalAlgebra`
+  (`thrm:quasilocal-algebra-exists`), which builds the algebra from the
+  net alone; `HaagKastlerNet.quasilocal` is defined from it. Axiom 4
+  proper (`def:quasilocal-completeness`) is a *bridge principle*
+  relating physical observables to the formalism, with no mathematical
+  consumers, and is encoded separately in
+  `Physicslib4/AQFT/HaagKastler/ObservableBridge.lean`.
 
 * The structure intentionally does not bundle Axiom 6 (Primitivity)
   or further axioms; those will be added as separate structure
@@ -38,6 +49,8 @@ namespace HaagKastler
 open Physicslib4 Spacetime
 open scoped Pointwise
 
+universe u
+
 /--
 A *Haag-Kastler net* on (the Alexandrov-basis sets of) Minkowski
 spacetime: the data of Axiom 1 (`def:local-algebras`) together with
@@ -48,19 +61,22 @@ proofs of Axioms 2-5 (`def:isotony`,
 Blueprint reference: `def:haag-kastler-net`.
 -/
 structure HaagKastlerNet where
-  /-- The underlying assignment `B ↦ 𝔘(B)` (Axiom 1). -/
-  U : LocalNet
+  /-- The underlying assignment `B ↦ 𝔘(B)` (Axiom 1).
+
+  Written `LocalNet.{u}` rather than `LocalNet` so that this structure is
+  universe polymorphic. Left implicit, the universe of `LocalNet` would be pinned
+  here, and every net in the development would be forced to have its local
+  algebras in one fixed universe -- the same size restriction that
+  `QuasilocalAlgebra.carrier` was just freed from, reimposed at the bundling
+  level. -/
+  U : LocalNet.{u}
   /-- *Isotony*: inclusions of Alexandrov-basis sets induce unital
   `*`-monomorphisms of the corresponding local algebras
   (Axiom 2). -/
   isotony : Isotony U
   /-- *Local commutativity*: local algebras of completely-spacelike
   basis sets commute inside the quasilocal algebra (Axiom 3). -/
-  localCommutativity : LocalCommutativity U
-  /-- *Quasilocal completeness*: the local algebras' images are
-  dense in the quasilocal algebra; i.e. all observables are
-  quasilocal observables (Axiom 4). -/
-  quasilocalCompleteness : QuasilocalCompleteness U
+  localCommutativity : LocalCommutativity U isotony
   /-- *Lorentz covariance*: the inhomogeneous Lorentz group acts on
   the net and the action commutes with isotony (Axiom 5). -/
   lorentzCovariance : LorentzCovariance U
@@ -102,23 +118,28 @@ theorem isotony_trans
     ∃ φ : StarAlgHom ℂ (N.algebra B₁) (N.algebra B₃), Function.Injective φ :=
   N.isotony.trans hB₁ hB₂ hB₃ h₁₂ h₂₃
 
-/-- The *canonical quasilocal algebra* `𝔘` of the net, chosen from the
-existence witness provided by Axiom 4 (`quasilocalCompleteness`). -/
-noncomputable def quasilocal : QuasilocalAlgebra N.U :=
-  Classical.choice N.quasilocalCompleteness
+/-- The *canonical quasilocal algebra* `𝔘` of the net.
+
+This is *constructed*, not assumed. The witness is `exists_quasilocalAlgebra`
+(`thrm:quasilocal-algebra-exists`), which builds `𝔘` from the net alone as the
+completion of the directed colimit of the local algebras. The net therefore
+carries no quasilocal-completeness field: what consumers of the former Axiom 4
+actually needed was this existence theorem, not a physical bridge principle. -/
+noncomputable def quasilocal : QuasilocalAlgebra N.U N.isotony :=
+  Classical.choice (exists_quasilocalAlgebra N.U N.isotony)
 
 /-- Each local algebra `𝔘(B)` of an Alexandrov-basis set embeds
 *norm-preservingly* into the canonical quasilocal algebra `𝔘`. -/
 theorem norm_ι {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B) (a : N.algebra B) :
-    ‖N.quasilocal.ι B a‖ = ‖a‖ :=
+    ‖N.quasilocal.ι hB a‖ = ‖a‖ :=
   N.quasilocal.norm_ι hB a
 
 /-- Each local embedding `𝔘(B) ↪ 𝔘` into the canonical quasilocal
 algebra is an isometry (the metric form of `norm_ι`). -/
 theorem isometry_ι {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B) :
-    Isometry (N.quasilocal.ι B) :=
+    Isometry (N.quasilocal.ι hB) :=
   N.quasilocal.isometry_ι hB
 
 /-- The *covariance equivalence* `𝔘(B) ≃⋆ₐ[ℂ] 𝔘(L·B)` implementing the
@@ -180,7 +201,7 @@ theorem covEquiv_mul (L L' : InhomogeneousLorentzGroup)
 /-- The *quasilocal algebra witnessing local commutativity* (Axiom 3),
 chosen from the existence witness in `localCommutativity`. (This may differ
 from the canonical `quasilocal` of Axiom 4.) -/
-noncomputable def commAlgebra : QuasilocalAlgebra N.U :=
+noncomputable def commAlgebra : QuasilocalAlgebra N.U N.isotony :=
   N.localCommutativity.choose
 
 /-- **Local commutativity.** The images in `commAlgebra` of two
@@ -190,7 +211,7 @@ theorem commute_ι_of_spacelike ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Ca
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : N.algebra B₁) (b : N.algebra B₂) :
-    Commute (N.commAlgebra.ι B₁ a) (N.commAlgebra.ι B₂ b) :=
+    Commute (N.commAlgebra.ι hB₁ a) (N.commAlgebra.ι hB₂ b) :=
   N.localCommutativity.choose_spec hB₁ hB₂ hs a b
 
 /-- **Local commutativity is symmetric.** Commutation of completely-spacelike
@@ -201,12 +222,12 @@ theorem commute_ι_of_spacelike_symm
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : N.algebra B₁) (b : N.algebra B₂) :
-    Commute (N.commAlgebra.ι B₂ b) (N.commAlgebra.ι B₁ a) :=
+    Commute (N.commAlgebra.ι hB₂ b) (N.commAlgebra.ι hB₁ a) :=
   (N.commute_ι_of_spacelike hB₁ hB₂ hs a b).symm
 
 section Observables
 
-variable {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
 
 /-- **Characterisation of the net's quasilocal observables.** An operator on the
@@ -281,32 +302,44 @@ lemma isAlexandrovBasisSet_trivialBasisSet :
     IsAlexandrovBasisSet trivialBasisSet :=
   ⟨0, 0, rfl⟩
 
+/-- The trivial net's Axiom 2 data: every local algebra is `ℂ` and every inclusion
+is implemented by the identity, which is trivially functorial.
+
+This must precede `trivialQuasilocalAlgebra`, which is now indexed by it. -/
+def trivialLocalNetIsotony : Isotony trivialLocalNet where
+  map := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
+  injective := by
+    intro B₁ B₂ h₁ h₂ h
+    change Function.Injective (StarAlgHom.id ℂ ℂ)
+    simpa using Function.injective_id
+  map_self := by
+    intro B h
+    rfl
+  map_comp := by
+    intro B₁ B₂ B₃ h₁ h₂ h₃ h₁₂ h₂₃
+    rfl
+
 /-- The trivial quasilocal algebra for the trivial net: ambient C*-algebra `ℂ`,
-with every local embedding the identity `ℂ →⋆ₐ[ℂ] ℂ`. -/
-noncomputable def trivialQuasilocalAlgebra : QuasilocalAlgebra trivialLocalNet where
+with every local embedding the identity `ℂ →⋆ₐ[ℂ] ℂ`. It no longer supplies its own
+`inclusion` family; the cocone condition `ι_inclusion` is stated against the Axiom 2
+family `trivialLocalNetIsotony`. -/
+noncomputable def trivialQuasilocalAlgebra :
+    QuasilocalAlgebra trivialLocalNet trivialLocalNetIsotony where
   carrier := ℂ
   instCStarAlgebra := inferInstance
-  ι := fun _ => StarAlgHom.id ℂ ℂ
+  ι := fun _ _ => StarAlgHom.id ℂ ℂ
   ι_injective := fun _ _ _ _ h => h
   dense_range := fun x =>
     subset_closure (Set.mem_iUnion₂.mpr
       ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet, x, rfl⟩)
-  inclusion := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
   ι_inclusion := fun _ _ _ _ _ _ => rfl
 
-theorem trivialLocalNet_isotony : Isotony trivialLocalNet :=
-  fun _ _ _ _ _ => ⟨StarAlgHom.id ℂ ℂ, fun _ _ h => h⟩
-
 theorem trivialLocalNet_localCommutativity :
-    LocalCommutativity trivialLocalNet :=
+    LocalCommutativity trivialLocalNet trivialLocalNetIsotony :=
   ⟨trivialQuasilocalAlgebra, by
-    intro B₁ B₂ _ _ _ a b
-    exact @mul_comm ℂ _ (trivialQuasilocalAlgebra.ι B₁ a)
-      (trivialQuasilocalAlgebra.ι B₂ b)⟩
-
-theorem trivialLocalNet_quasilocalCompleteness :
-    QuasilocalCompleteness trivialLocalNet :=
-  ⟨trivialQuasilocalAlgebra⟩
+    intro B₁ B₂ hB₁ hB₂ _ a b
+    exact @mul_comm ℂ _ (trivialQuasilocalAlgebra.ι hB₁ a)
+      (trivialQuasilocalAlgebra.ι hB₂ b)⟩
 
 theorem trivialLocalNet_lorentzCovariance :
     LorentzCovariance trivialLocalNet := by
@@ -321,14 +354,17 @@ theorem trivialLocalNet_lorentzCovariance :
 bundled with proofs of Axioms 2-5. -/
 noncomputable def trivialHaagKastlerNet : HaagKastlerNet where
   U := trivialLocalNet
-  isotony := trivialLocalNet_isotony
+  isotony := trivialLocalNetIsotony
   localCommutativity := trivialLocalNet_localCommutativity
-  quasilocalCompleteness := trivialLocalNet_quasilocalCompleteness
   lorentzCovariance := trivialLocalNet_lorentzCovariance
 
 /-- **The Haag-Kastler axioms are jointly satisfiable.** The trivial net (every
-region ↦ `ℂ`) is a Haag-Kastler net, so `HaagKastlerNet` is nonempty. -/
-theorem nonempty_haagKastlerNet : Nonempty HaagKastlerNet :=
+region ↦ `ℂ`) is a Haag-Kastler net, so `HaagKastlerNet` is nonempty.
+
+Stated at universe `0` because the witness is built from `ℂ`, which lives in
+`Type`. Consistency of the axioms needs only one model, so nothing is lost; a
+witness in an arbitrary universe would come from a `ULift` of this one. -/
+theorem nonempty_haagKastlerNet : Nonempty HaagKastlerNet.{0} :=
   ⟨trivialHaagKastlerNet⟩
 
 end HaagKastler

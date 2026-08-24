@@ -13,7 +13,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
 This file formalises the blueprint declaration
 `def:local-algebras-in-curved-spacetime` (Axiom 1 of the
 Haag-Kastler axioms on a Lorentzian spacetime, Chapter 10
-(`sections/sec10/10-4_haag-kastler-axioms-in-curved-spacetime`) of the
+(`sections/sec10/haag-kastler-axioms-in-curved-spacetime`) of the
 AQFT-in-Lean blueprint):
 
 > For any basis element `𝐁` of the Alexandrov topology on a

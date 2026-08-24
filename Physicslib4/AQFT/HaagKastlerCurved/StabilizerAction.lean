@@ -7,6 +7,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.GNS.UnitaryRepresentation
 import Physicslib4.GNS.RadonNikodym
 import Physicslib4.GNS.ExtremeState
+import Physicslib4.GNS.Covariance
 
 /-!
 # Stabilizer action on a curved local algebra and its GNS unitary
@@ -290,6 +291,56 @@ theorem isPure_precomp_stabAut_iff (B : Set M.Carrier)
     (ω : State (N.algebra B)) (g : ↥(MulAction.stabilizer M.Isom B)) :
     IsPure (ω.precomp (N.stabAutHom B g)) ↔ IsPure ω :=
   isPure_precomp_iff ω (N.stabAutHom B g)
+
+/-! ### GNS covariance along the stabilizer action -/
+
+section GNSCovariance
+
+variable (B : Set M.Carrier) (g : ↥(MulAction.stabilizer M.Isom B))
+  (ω : State (N.algebra B))
+  {H₁ : Type*} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
+  (π₁ : N.algebra B →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (Ω₁ : H₁)
+  {H₂ : Type*} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
+  (π₂ : N.algebra B →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) (Ω₂ : H₂)
+
+/-- **GNS covariance along the stabilizer action (curved spacetime).** The stabilizer
+automorphism `\hatα_g = N.stabAutHom B g` is a `*`-automorphism of the local algebra
+`𝔘(B)`, so a cyclic representation of `𝔘(B)` reproducing the pullback state `ω ∘ \hatα_g`
+is unitarily equivalent to `π_ω ∘ \hatα_g`. -/
+theorem unitaryEquiv_gns_stabAut
+    (hcyc₁ : IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : N.algebra B,
+      ((ω.comp (N.stabAutHom B g).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hcyc₂ : IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : N.algebra B, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    UnitaryEquiv π₁ (π₂.comp (N.stabAutHom B g).toStarAlgHom) :=
+  unitaryEquiv_comp_of_gns (N.stabAutHom B g) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+
+/-- **Irreducibility is stabilizer invariant (curved spacetime).** With the GNS data
+above, `π₁` is irreducible exactly when `π₂` is. -/
+theorem isIrreducible_iff_gns_stabAut
+    (hcyc₁ : IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : N.algebra B,
+      ((ω.comp (N.stabAutHom B g).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hcyc₂ : IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : N.algebra B, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    IsIrreducible π₁ ↔ IsIrreducible π₂ :=
+  isIrreducible_iff_of_gns_comp (N.stabAutHom B g) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+
+/-- **Factoriality is stabilizer invariant (curved spacetime).** With the GNS data above,
+`π₁(𝔘(B))''` is a factor exactly when `π₂(𝔘(B))''` is. So the superselection type of a
+local state is invariant under the stabilizer symmetry of the region — the curved
+counterpart of Lorentz invariance of the sector. -/
+theorem isFactor_iff_gns_stabAut
+    (hcyc₁ : IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : N.algebra B,
+      ((ω.comp (N.stabAutHom B g).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hcyc₂ : IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : N.algebra B, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    IsFactor (gnsVonNeumann π₁) ↔ IsFactor (gnsVonNeumann π₂) :=
+  isFactor_iff_of_gns_comp (N.stabAutHom B g) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+
+end GNSCovariance
 
 end HaagKastlerNet
 

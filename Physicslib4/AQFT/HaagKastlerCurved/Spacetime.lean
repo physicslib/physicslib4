@@ -12,8 +12,8 @@ import Mathlib.GroupTheory.GroupAction.Defs
 This file provides the abstract interface over which the Haag-Kastler
 axioms in *curved* (Lorentzian) spacetime are formalised, following
 Chapter 10 of the AQFT-in-Lean blueprint (`def:lorentzian-spacetime` in
-`sec10/10-2_spacetime` and the `*-in-curved-spacetime` declarations in
-`sec10/10-4_haag-kastler-axioms-in-curved-spacetime`). The expository
+`sec10/spacetime` and the `*-in-curved-spacetime` declarations in
+`sec10/haag-kastler-axioms-in-curved-spacetime`). The expository
 narrative is the separate Chapter 9 ("Haag Kastler Axioms in Curved
 Spacetime").
 
@@ -68,7 +68,7 @@ universe u
 
 /--
 **Abstract Lorentzian spacetime interface** (blueprint
-`def:lorentzian-spacetime`, Chapter 10, `sec10/10-2_spacetime`).
+`def:lorentzian-spacetime`, Chapter 10, `sec10/spacetime`).
 
 This bundles exactly the structure the curved-spacetime Haag-Kastler
 axioms quantify over:

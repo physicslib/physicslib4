@@ -1,0 +1,1674 @@
+\section{Spacetime}\label{sctn:spacetime}
+\begin{definition}[Spacetime]
+    \label{def:spacetime}
+    \lean{Physicslib4.Spacetime}
+    \leanfile{Physicslib4/Spacetime/Basic.lean}
+    \leanok
+    A \textit{spacetime} is a real, four-dimensional, connected, smooth, Hausdorff manifold $M$ with a globally defined smooth tensor field $g$ of type $(0,2)$ which is non-degenerate and ``Lorentzian''. By \textit{Lorentzian} we mean that for any $p \in M$ there is a basis of the tangent space $TM|_p$ to $M$ at $p$ relative to which $g|_p$ is zero in its non-diagonal entries and on the diagonal takes the form $\text{diag}(-1,1,1,1)$.
+
+    \emph{The smoothness clause, precisely.} The metric field is a family of \emph{continuous bilinear forms} $g_x : TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$, and ``smooth'' is the field \texttt{contMDiff}, which asserts that $g$ is a $C^\infty$ \emph{section of the bundle of continuous bilinear forms on the tangent bundle} --- the regularity index being $\infty$, on which see the remark on the index below. Writing $E$ for the model space and $I$ for the model with corners of $M$, it reads
+    \begin{align}
+        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\infty\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;(g_x)\Big),
+    \end{align}
+    the fibre over $x$ being $TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$ and the index being $\infty$.
+
+    \emph{The index.} Mathlib's $\mathtt{ContMDiff}$ takes its regularity index $n$ in $\mathbb{N}_{\infty\omega} = \mathtt{WithTop}\;\mathbb{N}_\infty$, in which $\top = \omega$ means \emph{real-analytic} and $\infty = ((\top : \mathbb{N}_\infty) : \mathtt{WithTop}\;\mathbb{N}_\infty)$ is strictly smaller. The index to ask for is therefore $\infty$, not $\top$: it is $\infty$ that means $C^\infty$, while $\top$ would demand the strictly stronger condition of analyticity. The Lean definition uses $\infty$, so the field agrees exactly with the informal word ``smooth'' in the statement above.
+
+    Three further points about this formulation.
+
+    \emph{It is Mathlib's idiom.} The clause is deliberately the shape of the \texttt{contMDiff} field of Mathlib's \texttt{Bundle.ContMDiffRiemannianMetric}, whose own field is
+    \begin{align}
+        \mathtt{ContMDiff}\;I_B\;\big(I_B.\mathtt{prod}\;\mathcal{I}(\mathbb{R}, F \to_L[\mathbb{R}] F \to_L[\mathbb{R}] \mathbb{R})\big)\;n\;\big(b \mapsto \mathtt{TotalSpace.mk'}\;(F \to_L[\mathbb{R}] F \to_L[\mathbb{R}] \mathbb{R})\;b\;(\mathtt{inner}\;b)\big),
+    \end{align}
+    read with $\mathtt{inner}$ replaced by $g$. Matching it verbatim is what makes the whole bundle-section API of \texttt{Mathlib/Geometry/Manifold/VectorBundle/} apply to $g$ without translation.
+
+    \emph{The Riemannian class itself is deliberately \emph{not} instantiated.} Mathlib has no pseudo-Riemannian class, and \texttt{Bundle.ContMDiffRiemannianMetric} carries two further fields beyond \texttt{contMDiff} that a Lorentzian form cannot satisfy: \texttt{pos}, which demands $0 < g_x(v,v)$ for $v \neq 0$ and is contradicted by any timelike vector, and \texttt{isVonNBounded}, which demands that $\{v \in TM|_x \mid g_x(v,v) < 1\}$ be von Neumann bounded. The latter is not merely unproven but outright \emph{false} here: that set contains the entire light cone at $x$, since $g_x(v,v) = 0 \le 0 < 1$ for every null $v$, and the light cone is unbounded (it is closed under positive scaling). So only the \emph{shape} of the one field \texttt{contMDiff} is reused; the class is never instantiated and no instance of it may be sought.
+
+    \emph{The payoff.} From a section-level \texttt{contMDiff} one gets, by \texttt{ContMDiff.clm\_bundle\_apply\ensuremath{_2}}, that for any vector fields $V, W$ that are themselves $C^\infty$ sections of the tangent bundle the scalar function
+    \begin{align}
+        x \longmapsto g_x\big(V_x,\, W_x\big)
+    \end{align}
+    is $C^\infty$ on $M$. One identification step is needed to say it in quite that form: \texttt{clm\_bundle\_apply\ensuremath{_2}} concludes with a \emph{section}, of the trivial $\mathbb{R}$-bundle over $M$, so its output is a $\mathtt{Bundle.TotalSpace.mk'}$ term and reaching the plain scalar statement $\mathtt{ContMDiff}\;I\;\mathcal{I}(\mathbb{R},\mathbb{R})\;\infty\;\big(x \mapsto g_x(V_x, W_x)\big)$ means identifying that trivial-bundle section with the function itself. This is exactly what causal and geodesic arguments need --- causal type along a curve, the sign of $g(t,\dot\mu)$, and every variational computation are statements about such scalars --- and a chart-local formulation quantifying over \emph{constant} model vectors had no route to it at all, since $V_x$ and $W_x$ vary with the point.
+\end{definition}
+
+\begin{definition}[Standard Minkowski Spacetime]
+    \label{def:standard-minkowski-spacetime}
+    \lean{Physicslib4.StandardMinkowskiSpacetime}
+    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \uses{def:spacetime}
+    \leanok
+    \textit{Standard Minkowski spacetime} is a spacetime in which the underlying real, four-dimensional, connected, smooth, Hausdorff manifold is $\mathbb{R}^4$ with the Euclidean topology. In addition $g$ takes the form $g|_p=\text{diag}(-1,1,1,1)$ for all $p$ in $\mathbb{R}^4$ with respect to the standard coordinates on $\mathbb{R}^4$.
+\end{definition}
+
+\begin{definition}[Timelike, Spacelike, or Null Vectors]
+    \label{def:timelike-spacelike-null-vectors}
+    \lean{Physicslib4.Spacetime.IsTimelike, Physicslib4.Spacetime.IsSpacelike, Physicslib4.Spacetime.IsNull}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \leanok
+    \uses{def:spacetime}
+    Let $M$ be a spacetime, $p$ a point in $M$, and $g$ the tensor field of type $(0,2)$ associated to $M$. Any tangent vector $v \in TM|_p$ is \textit{timelike}, \textit{spacelike}, or \textit{null} if $g|_p(v,v)$ is negative, positive, or zero respectively.
+\end{definition}
+
+\begin{lemma}[Causal Classification]
+    \label{lmm:causal-classification}
+    \lean{Physicslib4.Spacetime.isTimelike_or_isNull_or_isSpacelike, Physicslib4.Spacetime.not_isSpacelike_of_isTimelike, Physicslib4.Spacetime.not_isTimelike_of_isSpacelike, Physicslib4.Spacetime.not_isNull_of_isTimelike, Physicslib4.Spacetime.not_isNull_of_isSpacelike, Physicslib4.Spacetime.isNull_zero}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \uses{def:timelike-spacelike-null-vectors}
+    \leanok
+    Every tangent vector $v \in TM|_p$ is exactly one of timelike, null, or spacelike. In particular the three classes are mutually exclusive, and the zero vector is null.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Immediate from the trichotomy of $<$, $=$, $>$ applied to $g|_p(v,v)$, together with $g|_p(0,0) = 0$ since $g|_p$ is bilinear.
+\end{proof}
+
+\begin{lemma}[Reverse Cauchy-Schwarz for Timelike Vectors]
+    \label{lmm:reverse-cauchy-schwarz}
+    \lean{Physicslib4.reverse_cauchy_schwarz_of_lorentzianAt, Physicslib4.Spacetime.reverse_cauchy_schwarz}
+    \leanfile{Physicslib4/Spacetime/LorentzCauchySchwarz.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
+    \leanok
+    Let $g$ be a symmetric Lorentzian bilinear form on a real four-dimensional vector space and let $v, w$ be timelike, that is $g(v,v) < 0$ and $g(w,w) < 0$. Then the reverse Cauchy-Schwarz inequality holds:
+    \begin{align}
+        g(v,v)\, g(w,w) \le g(v,w)^2.
+    \end{align}
+    In particular this applies pointwise to the metric $g|_p$ of any spacetime $M$ and any two timelike tangent vectors at a point $p$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose a Lorentzian basis $b$, so that $g$ has Gram matrix $\mathrm{diag}(-1,1,1,1)$. Expanding $v$ and $w$ in this basis and using bilinearity, $g(v,v) = -(v^0)^2 + \lVert \mathbf{v}\rVert^2$ and $g(v,w) = -v^0 w^0 + \langle \mathbf{v}, \mathbf{w}\rangle$, where $v^0, w^0$ are the time components, $\mathbf{v}, \mathbf{w}$ the spatial parts, and $\langle\cdot,\cdot\rangle$, $\lVert\cdot\rVert$ the Euclidean inner product and norm on the three spatial coordinates. Timelikeness gives $(v^0)^2 > \lVert\mathbf{v}\rVert^2$ and $(w^0)^2 > \lVert\mathbf{w}\rVert^2$. The ordinary Cauchy-Schwarz inequality gives $\lvert\langle\mathbf{v},\mathbf{w}\rangle\rvert \le \lVert\mathbf{v}\rVert\,\lVert\mathbf{w}\rVert < \lvert v^0\rvert\,\lvert w^0\rvert$, so $\lvert g(v,w)\rvert \ge \lvert v^0 w^0\rvert - \lVert\mathbf{v}\rVert\,\lVert\mathbf{w}\rVert \ge 0$. Squaring and applying the algebraic identity
+    \begin{align}
+        (pq - rs)^2 - (p^2 - r^2)(q^2 - s^2) = (ps - rq)^2 \ge 0
+    \end{align}
+    with $p = \lvert v^0\rvert$, $q = \lvert w^0\rvert$, $r = \lVert\mathbf{v}\rVert$, $s = \lVert\mathbf{w}\rVert$ yields $g(v,w)^2 \ge g(v,v)\,g(w,w)$.
+\end{proof}
+
+\begin{lemma}[Timelike Cone Convexity and Reverse Triangle Inequality]
+    \label{lmm:timelike-cone-convexity}
+    \lean{Physicslib4.add_isTimelike_of_lorentzianAt, Physicslib4.reverse_triangle_of_lorentzianAt, Physicslib4.Spacetime.add_isTimelike, Physicslib4.Spacetime.reverse_triangle}
+    \leanfile{Physicslib4/Spacetime/LorentzCone.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors, lmm:reverse-cauchy-schwarz}
+    \leanok
+    Let $g$ be a symmetric Lorentzian bilinear form on a real four-dimensional vector space and let $v, w$ be timelike and \emph{aligned}, that is $g(v,v) < 0$, $g(w,w) < 0$ and $g(v,w) \le 0$. Then $v + w$ is timelike, and the reverse (Lorentzian) triangle inequality holds:
+    \begin{align}
+        \sqrt{-g(v,v)} + \sqrt{-g(w,w)} \le \sqrt{-g(v+w,\,v+w)}.
+    \end{align}
+    In particular the timelike vectors sharing a time cone (so that $g(v,w) \le 0$) form a convex cone, and this applies pointwise to the metric $g|_p$ of any spacetime.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:reverse-cauchy-schwarz}
+    Bilinearity and symmetry give $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w)$. Writing $a = -g(v,v) > 0$, $b = -g(w,w) > 0$ and $c = -g(v,w) \ge 0$, this equals $-(a + b + 2c) < 0$, so $v+w$ is timelike. The reverse Cauchy-Schwarz inequality (\ref{lmm:reverse-cauchy-schwarz}) gives $g(v,w)^2 \ge g(v,v)\,g(w,w)$, that is $c^2 \ge ab$, hence $c \ge \sqrt{ab} = \sqrt a \,\sqrt b$. Therefore $-g(v+w,v+w) = a + b + 2c \ge a + b + 2\sqrt a\,\sqrt b = (\sqrt a + \sqrt b)^2$, and taking square roots yields the reverse triangle inequality.
+\end{proof}
+
+\begin{definition}[Time Orientation]
+    \label{def:time-orientable}
+    \lean{Physicslib4.Spacetime.TimeOrientation, Physicslib4.Spacetime.IsTimeOrientable}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
+    \leanok
+    A spacetime $M$ is \textit{time-orientable} if it admits a smooth, non-vanishing vector field $t$ that is timelike. Such a smooth, non-vanishing vector field is called a \textit{time-orientation}.
+
+    \emph{The smoothness clause, precisely.} As for the metric in \ref{def:spacetime}, ``smooth'' is the bundle-section condition of Mathlib's idiom rather than a chart-local one: the field \texttt{smooth} of a $\mathtt{TimeOrientation}$ asserts that $t$ is a section of the tangent bundle of regularity index $\infty$, i.e.\ a $C^\infty$ section, with the index convention as recorded in \ref{def:spacetime},
+    \begin{align}
+        \mathtt{ContMDiff}\;I\;I.\mathtt{tangent}\;\infty\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;E\;x\;(t_x)\Big),
+    \end{align}
+    with $E$ the model space and $I.\mathtt{tangent}$ the model with corners of the tangent bundle. This is the same shape as the metric clause of \ref{def:spacetime} one bundle down, and it is what the bundle-section API consumes directly: it is literally the hypothesis of \texttt{ContMDiff.mpullback\_vectorField} and, paired with the metric clause, the input of \texttt{ContMDiff.clm\_bundle\_apply\ensuremath{_2}} that makes $x \mapsto g_x(t_x, V_x)$ smooth for smooth $V$. It is \emph{not} smoothness of $t$ as a bare function, and no chart-local reformulation of it is needed anywhere below.
+\end{definition}
+
+\begin{definition}[Future and Past Pointing Vectors]
+    \label{def:future-and-past-pointing-vectors}
+    \lean{Physicslib4.Spacetime.IsFuturePointing, Physicslib4.Spacetime.IsPastPointing}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \leanok
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors, def:time-orientable}
+    Let $t$ be a time orientation on $M$ (\ref{def:time-orientable}). For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
+\end{definition}
+
+\begin{lemma}[Orientation of Pointing Vectors]
+    \label{lmm:pointing-orientation}
+    \lean{Physicslib4.Spacetime.isTimelike_or_isNull_of_isFuturePointing, Physicslib4.Spacetime.isTimelike_or_isNull_of_isPastPointing, Physicslib4.Spacetime.not_isFuturePointing_and_isPastPointing_of_isTimelike}
+    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \uses{def:future-and-past-pointing-vectors, lmm:causal-classification}
+    \leanok
+    A future-pointing or past-pointing vector is timelike or null. Moreover a timelike vector cannot be both future-pointing and past-pointing with respect to a fixed time orientation.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first claim is immediate from the definition, which is a disjunction over the timelike and null cases. For the second, a timelike $v$ is not null, so both pointing conditions reduce to their timelike branches $g|_p(t,v) < 0$ and $g|_p(t,v) > 0$, which cannot hold simultaneously.
+\end{proof}
+
+\begin{lemma}[Sign Lemma for the Future Cone]
+    \label{lmm:cone-sign-lemma}
+    \lean{Physicslib4.nonneg_of_orthogonal_timelike, Physicslib4.cauchy_schwarz_on_orthogonal, Physicslib4.bilin_neg_of_inner_t_neg, Physicslib4.Spacetime.inner_neg_of_future_timelike, Physicslib4.Spacetime.inner_neg_of_past_timelike}
+    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \uses{def:spacetime, def:time-orientable, def:future-and-past-pointing-vectors, lmm:reverse-cauchy-schwarz}
+    \leanok
+    Let $g$ be a symmetric Lorentzian bilinear form, $t$ a timelike vector, and write $t^\perp = \{u : g(t,u) = 0\}$ for the spacelike complement. Then $g$ is positive semidefinite on $t^\perp$ (so the ordinary Cauchy-Schwarz inequality holds there), and consequently for any timelike $v, w$ with $g(t,v) < 0$ and $g(t,w) < 0$ one has $g(v,w) < 0$. In particular two timelike tangent vectors that are future-pointing with respect to a common time orientation have negative inner product; by time reversal the same holds for two past-pointing timelike vectors (with $g(t,v) > 0$ and $g(t,w) > 0$).
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:reverse-cauchy-schwarz}
+    If $u \in t^\perp$ had $g(u,u) < 0$ then $u$ would be timelike, and reverse Cauchy-Schwarz (\ref{lmm:reverse-cauchy-schwarz}) would give $g(t,t)\,g(u,u) \le g(t,u)^2 = 0$, contradicting $g(t,t)\,g(u,u) > 0$; hence $g$ is positive semidefinite on $t^\perp$, and Cauchy-Schwarz follows from nonnegativity of the quadratic $s \mapsto g(s u + u', s u + u')$. For the sign claim, decompose $v$ and $w$ along $t$: the vectors $v_\perp = g(t,t)\,v - g(t,v)\,t$ and $w_\perp = g(t,t)\,w - g(t,w)\,t$ lie in $t^\perp$, and $g(v,w) = g(t,t)^{-2}\big(g(t,t)\,g(v,w)\big)$ expands so that $g(t,t)\,g(v,w) = g(t,v)\,g(t,w) + g(v_\perp, w_\perp)/g(t,t)$. Applying Cauchy-Schwarz to $g(v_\perp,w_\perp)$ together with the reverse Cauchy-Schwarz bounds $g(t,v)^2 \ge g(t,t)g(v,v)$ and $g(t,w)^2 \ge g(t,t)g(w,w)$ forces $g(t,t)\,g(v,w) > 0$, and since $g(t,t) < 0$ this gives $g(v,w) < 0$.
+\end{proof}
+
+\begin{lemma}[Definiteness of the Spacelike Complement]
+    \label{lmm:spacelike-complement-definite}
+    \lean{Physicslib4.eq_zero_of_forall_bilin_eq_zero, Physicslib4.pos_of_orthogonal_timelike, Physicslib4.Spacetime.isSpacelike_of_orthogonal_timelike}
+    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors, lmm:cone-sign-lemma}
+    \leanok
+    A Lorentzian bilinear form is nondegenerate: if $g(v,w) = 0$ for every $w$, then $v = 0$ (this is read off the signature basis, on which the Gram matrix $\mathrm{diag}(-1,1,1,1)$ is invertible). Consequently $g$ is positive \emph{definite} on the spacelike complement: if $t$ is timelike and $u \ne 0$ satisfies $g(t,u) = 0$, then $g(u,u) > 0$, i.e. $u$ is spacelike.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:cone-sign-lemma}
+    Nondegeneracy follows because $g(v, b_j) = (b.\mathrm{repr}\,v)_j \cdot \mathrm{diag}(-1,1,1,1)_{jj}$ in the signature basis $b$, and the diagonal entries are nonzero; so $g(v, \cdot) = 0$ forces every coordinate of $v$ to vanish. For definiteness, semidefiniteness (\ref{lmm:cone-sign-lemma}) gives $g(u,u) \ge 0$; if $g(u,u) = 0$ then for any $u' \in t^\perp$ Cauchy-Schwarz gives $g(u,u')^2 \le g(u,u)\,g(u',u') = 0$, so $u$ is orthogonal to all of $t^\perp$, and since it is also orthogonal to $t$ it is orthogonal to everything, whence $u = 0$ by nondegeneracy, contradicting $u \ne 0$.
+\end{proof}
+
+\begin{lemma}[Convexity of the Future Cone]
+    \label{lmm:future-cone-convexity}
+    \lean{Physicslib4.Spacetime.isFuturePointing_add, Physicslib4.Spacetime.exists_seq_of_isFuturePointing, Physicslib4.Spacetime.inner_t_nonpos_of_future, Physicslib4.Spacetime.inner_nonpos_of_future, Physicslib4.Spacetime.isFuturePointing_add_general, Physicslib4.Spacetime.isPastPointing_iff_isFuturePointing_neg, Physicslib4.Spacetime.isPastPointing_add, Physicslib4.Spacetime.isFuturePointing_smul_pos, Physicslib4.Spacetime.isFuturePointing_pos_combination, Physicslib4.Spacetime.isPastPointing_smul_pos, Physicslib4.Spacetime.isPastPointing_pos_combination}
+    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \uses{def:future-and-past-pointing-vectors, lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
+    \leanok
+    The sum of two timelike future-pointing tangent vectors (with respect to a fixed time orientation) is again timelike and future-pointing. More generally, the sum of any two future-pointing tangent vectors -- timelike or null -- is future-pointing, so the full future cone, including its null boundary, is convex. Since a vector is past-pointing exactly when its negation is future-pointing, the past cone is convex as well. Downstream this packages as the statement that the future-pointing and past-pointing tangent vectors each form a convex cone: they are closed under positive scaling and, more generally, under positive linear combinations $a v + b w$ with $a, b > 0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
+    For two timelike future-pointing $v, w$ we have $g(t,v) < 0$ and $g(t,w) < 0$. By the sign lemma (\ref{lmm:cone-sign-lemma}) $g(v,w) < 0$, so $v$ and $w$ are aligned and $v + w$ is timelike by cone convexity (\ref{lmm:timelike-cone-convexity}); moreover $g(t, v+w) = g(t,v) + g(t,w) < 0$, so $v + w$ is future-pointing. For the general case, every future-pointing vector is a limit of future-pointing timelike vectors (the constant sequence if timelike, the approximating sequence from the definition if null). Approximating $v$ and $w$ by such sequences $v_n, w_n$, each $v_n + w_n$ is timelike future-pointing by the timelike case. Passing to the limit gives $g(v,w) \le 0$ (continuity of the fixed maps $u \mapsto g(a,u)$ with symmetry), so $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w) \le 0$ and $v+w$ is causal, and $g(t,v+w) = g(t,v) + g(t,w) \le 0$. If $g(v+w,v+w) < 0$ the sum is timelike and reverse Cauchy-Schwarz makes $g(t,v+w) \ne 0$, hence negative, so the sum is future-pointing timelike; if $g(v+w,v+w) = 0$ the sum is null and is the limit of the future-pointing timelike sequence $v_n + w_n$, hence future-pointing null.
+\end{proof}
+
+\begin{definition}[Paths]
+    \label{def:paths}
+    \lean{Physicslib4.Spacetime.Path, Physicslib4.Spacetime.SmoothPath}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:spacetime}
+    A \textit{path} is a continuous map $\mu :\Sigma \rightarrow M$ from the \textit{parameter space}--a closed, connected subset $\Sigma$ of $\mathbb{R}$ that contains more than a single point--to a spacetime $M$. A \textit{smooth path} is a path $\mu$ that is smooth and has a non-vanishing derivative.
+\end{definition}
+
+\begin{definition}[Curves]
+    \label{def:curves}
+    \lean{Physicslib4.Spacetime.Curve, Physicslib4.Spacetime.SmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:paths}
+    A \textit{curve} is an equivalence class of paths equivalent under homeomorphisms of the parameter space. A \textit{smooth curve} is an equivalence class of smooth paths equivalent under diffeomorphisms of the parameter space.
+\end{definition}
+
+\begin{definition}[Timelike and Causal Smooth Curves]
+    \label{def:timelike-and-causal-smooth-curves}
+    \lean{Physicslib4.Spacetime.IsTimelikeSmoothCurve, Physicslib4.Spacetime.IsCausalSmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:timelike-spacelike-null-vectors}
+    A \textit{timelike smooth curve} is a smooth curve with a tangent vector that is timelike at every point along the smooth curve. A \textit{causal smooth curve} is a smooth curve with a tangent vector that is timelike or null at every point along the smooth curve.
+\end{definition}
+
+\begin{definition}[Future and Past Oriented Smooth Curves]
+    \label{def:future-and-past-oriented-smooth-curves}
+    \lean{Physicslib4.Spacetime.IsFutureOrientedSmoothCurve, Physicslib4.Spacetime.IsPastOrientedSmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:future-and-past-pointing-vectors}
+    A \textit{future-oriented smooth curve} is a smooth curve with a tangent vector that is future-pointing at every point. A \textit{past-oriented smooth curve} is a smooth curve with a tangent vector that is past-pointing at every point.
+\end{definition}
+
+\begin{theorem}[Reparametrisation-Invariance of the Causal Type]
+    \label{thrm:smooth-curve-causal-well-defined}
+    \lean{Physicslib4.Spacetime.isTimelikeSmoothCurve_ofPath_iff, Physicslib4.Spacetime.isCausalSmoothCurve_ofPath_iff}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \uses{def:timelike-and-causal-smooth-curves}
+    \leanok
+    The timelike and causal predicates are well-defined on smooth curves, independently of the chosen path representative: a smooth path is timelike (resp. causal) if and only if its associated smooth curve is.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:timelike-and-causal-smooth-curves, def:timelike-spacelike-null-vectors, lmm:causal-classification}
+    The invariance rests on the chain rule for the tangent under a smooth reparametrisation $\varphi$, namely $\mathrm{tangent}(\mu\circ\varphi)(s) = \varphi'(s)\cdot\mathrm{tangent}(\mu)(\varphi(s))$, together with the scale-invariance of the causal classification: since $g(c\,v, c\,v) = c^2\, g(v,v)$, the vector $c\,v$ is timelike/null exactly when $v$ is, for $c \neq 0$.
+\end{proof}
+
+\begin{definition}[Oriented Smooth Curve]
+    \label{def:oriented-smooth-curve}
+    \lean{Physicslib4.Spacetime.OrientedSmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:curves}
+    An orientation-reversing reparametrisation flips the time-orientation of the tangent, so future/past orientation is well-defined only on the finer quotient by \emph{orientation-preserving} reparametrisations (those with positive within-derivative). An \emph{oriented smooth curve} is an equivalence class of smooth paths under this finer relation.
+\end{definition}
+
+\begin{theorem}[Reparametrisation-Invariance of Orientation]
+    \label{thrm:oriented-curve-well-defined}
+    \lean{Physicslib4.Spacetime.isFutureOrientedCurve_ofPath_iff, Physicslib4.Spacetime.isPastOrientedCurve_ofPath_iff}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \uses{def:oriented-smooth-curve, def:future-and-past-oriented-smooth-curves}
+    \leanok
+    Future- and past-orientation are well-defined on oriented smooth curves: a smooth path is future-oriented (resp. past-oriented) if and only if its oriented smooth curve is.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:oriented-smooth-curve, def:future-and-past-oriented-smooth-curves, lmm:future-cone-convexity}
+    The positive within-derivative of an orientation-preserving reparametrisation, together with the positive-scaling invariance of pointing vectors ($c\,v$ is future-pointing iff $v$ is, for $c > 0$), gives the invariance.
+\end{proof}
+
+\begin{theorem}[The Forgetful Projection of Oriented Curves]
+    \label{thrm:oriented-curve-projection}
+    \lean{Physicslib4.Spacetime.OrientedSmoothCurve.toSmoothCurve, Physicslib4.Spacetime.IsFutureOrientedCurve.isCausal_toSmoothCurve}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \uses{def:oriented-smooth-curve, def:curves, def:timelike-and-causal-smooth-curves}
+    \leanok
+    Every oriented smooth curve has an underlying smooth curve, via a canonical surjection $\mathrm{OrientedSmoothCurve} \to \mathrm{SmoothCurve}$ that forgets the orientation data. The timelike and causal predicates factor through it, and a future- or past-oriented curve projects to a causal smooth curve.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:oriented-smooth-curve, def:curves, def:timelike-and-causal-smooth-curves, thrm:smooth-curve-causal-well-defined, lmm:pointing-orientation}
+    The projection is induced by the fact that an orientation-preserving reparametrisation is in particular a reparametrisation, so passing to the coarser quotient is well-defined, and it is surjective because every smooth path represents both an oriented and an unoriented smooth curve. The timelike and causal predicates factor through it by their reparametrisation-invariance (\ref{thrm:smooth-curve-causal-well-defined}), and a future- or past-oriented curve is causal because a future- or past-pointing tangent vector is timelike or null (\ref{lmm:pointing-orientation}).
+\end{proof}
+
+\begin{definition}[Endpoints]
+    \label{def:endpoints}
+    \lean{Physicslib4.Spacetime.IsEndpoint, Physicslib4.Spacetime.IsPastEndpoint, Physicslib4.Spacetime.IsFutureEndpoint}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \leanok
+    \uses{def:spacetime, def:paths, def:curves, def:timelike-and-causal-smooth-curves}
+    A point $p$ in a spacetime $M$ is the \textit{endpoint} of a path $\mu : \Sigma \to M$ or its associated curve if it is a member of the image $\mu(\partial\Sigma)$ of the boundary $\partial\Sigma$ of the parameter space under $\mu$, i.e.\ if $\mu(s) = p$ for some $s \in \partial\Sigma$.
+
+    For an arbitrary path $\mu$, the past and future endpoints are singled out by extremality of the \emph{parameter}, not by counting boundary components, and no causal or smoothness input enters: $p$ is a \textit{past endpoint} of $\mu$ if there is an $s \in \Sigma$ with $\mu(s) = p$ that is \emph{minimal} in the parameter space, i.e.\ $s \le s'$ for every $s' \in \Sigma$; and $p$ is a \textit{future endpoint} of $\mu$ if there is an $s \in \Sigma$ with $\mu(s) = p$ that is \emph{maximal} in the parameter space, i.e.\ $s' \le s$ for every $s' \in \Sigma$.
+
+    Quantifying over $\Sigma$ rather than over $\partial\Sigma$ is what makes this well-defined: \ref{def:paths} allows $\Sigma$ to be any closed connected subset of $\mathbb{R}$ with more than one point, so $\Sigma$ need not have two boundary components (for instance $\Sigma = [0,\infty)$ or $\Sigma = \mathbb{R}$), and ``the lesser (respectively greater) of the two boundary components'' would then denote nothing. The relation between the two notions is recorded in \ref{lmm:extremal-parameter-mem-frontier}, and the consequence for the parameter space in \ref{lmm:endpoint-parameter-space-eq-Icc}.
+\end{definition}
+
+\begin{lemma}[An extremal parameter lies in the frontier]
+    \label{lmm:extremal-parameter-mem-frontier}
+    \lean{Physicslib4.Spacetime.mem_frontier_of_isMin, Physicslib4.Spacetime.mem_frontier_of_isMax, Physicslib4.Spacetime.isEndpoint_of_isPastEndpoint, Physicslib4.Spacetime.isEndpoint_of_isFutureEndpoint}
+    \uses{def:endpoints, def:paths}
+    \leanok
+    Let $\mu : \Sigma \to M$ be a path, so that $\Sigma$ is a closed connected subset of $\mathbb{R}$ with more than one point. If $s \in \Sigma$ is minimal or maximal in $\Sigma$, then $s \in \partial\Sigma$. Consequently a past or future endpoint of $\mu$ is in particular an endpoint of $\mu$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:endpoints, def:paths}
+    Take $s \in \Sigma$ minimal. Since $s \in \Sigma$, it suffices by \texttt{mem\_frontier\_iff\_notMem\_interior} to show $s \notin \mathrm{int}\,\Sigma$. If it were, some ball $B(s,\varepsilon) = (s-\varepsilon, s+\varepsilon)$ (\texttt{Real.ball\_eq\_Ioo}) would lie in $\Sigma$, and then $s - \varepsilon/2 \in \Sigma$ contradicts minimality. The maximal case is symmetric. The consequence is immediate: a witness $s$ for a past (resp.\ future) endpoint is minimal (resp.\ maximal) in $\Sigma$, hence lies in $\partial\Sigma$, so $\mu(s) = p$ exhibits $p$ as an endpoint.
+\end{proof}
+
+\begin{lemma}[Two endpoints force a compact parameter interval]
+    \label{lmm:endpoint-parameter-space-eq-Icc}
+    \lean{Physicslib4.Spacetime.parameterSpace_eq_Icc_of_endpoints}
+    \uses{def:paths, def:endpoints}
+    \leanok
+    Let $\mu : \Sigma \to M$ be a path. If $\mu$ has both a past endpoint and a future endpoint, then $\Sigma = [a,b]$ for some $a < b$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:paths, def:endpoints}
+    The witness for the past endpoint is a minimum $a$ of $\Sigma$ and the witness for the future endpoint is a maximum $b$, so $\Sigma$ is bounded below and above, with $\inf\Sigma = a$ and $\sup\Sigma = b$. Being also connected, nonempty and closed (\ref{def:paths}), $\Sigma = [a,b]$ by \texttt{eq\_Icc\_csInf\_csSup\_of\_connected\_bdd\_closed}. Finally $a < b$, since $a \le b$ and $a = b$ would make $\Sigma$ a singleton, contradicting that $\Sigma$ has more than one point.
+\end{proof}
+
+\begin{definition}[Trip]
+    \label{def:trip}
+    \lean{Physicslib4.Spacetime.IsTripSegment, Physicslib4.Spacetime.IsTrip, Physicslib4.Spacetime.ChronologicallyPrecedes}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints}
+    A \textit{trip segment} is a curve which is a future-oriented, timelike geodesic. A \textit{trip} is a curve which is \emph{piecewise} a future-oriented, timelike geodesic: a finite chain of trip segments $p = x_0, x_1, \dots, x_n = q$ joined at matching endpoints. Formally this is the transitive closure of single-segment precedence, which is what makes the relation transitive by concatenation. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
+\end{definition}
+
+\begin{definition}[Causal Trip]
+    \label{def:causal-trip}
+    \lean{Physicslib4.Spacetime.IsCausalTripSegment, Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints}
+    A \textit{causal trip segment} is a curve which is a future-oriented, causal geodesic. (Note a causal geodesic is possibly degenerate.) A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic: a finite chain of causal trip segments joined at matching endpoints. A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
+\end{definition}
+
+\medskip
+\noindent\textbf{Remark (geodesic placeholder in the formalization).} In the Lean formalization the ``geodesic'' clause of a (causal) trip segment is currently a \emph{placeholder}: the predicate \texttt{Physicslib4.Spacetime.IsGeodesic} is defined to be \texttt{True}, so it imposes no constraint. A faithful geodesic condition requires the Levi-Civita connection of the metric (auto-parallelism of the tangent vector along the curve), which the version of Mathlib pinned by this project does not provide. Consequently the formalized (causal) trip segments are future-oriented timelike (resp. causal) curves with the correct past and future endpoints, but their geodesic property is not yet enforced; the endpoint, timelike/causal, and future-orientation content is faithful. This is the one place where \ref{def:trip} and \ref{def:causal-trip} diverge from their Lean implementations, and it should be replaced by the genuine geodesic condition once a Lorentzian Levi-Civita connection is available in Mathlib.
+
+\begin{theorem}[Transitivity of chronological and causal precedence]
+    \label{thrm:precedence-transitive}
+    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.causallyPrecedes_trans}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:trip, def:causal-trip}
+    \leanok
+    Chronological precedence $\ll$ and causal precedence $\prec$ are transitive: if $p \ll q$ and $q \ll r$ then $p \ll r$, and likewise for $\prec$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:trip, def:causal-trip}
+    Two trips joined at the common point $q$ concatenate to a single piecewise trip; this is exactly the transitivity of the transitive closure.
+\end{proof}
+
+\begin{definition}[No Closed Causal Curve (Causality Condition)]
+    \label{def:no-closed-causal-curve}
+    \lean{Physicslib4.Spacetime.NoClosedCausalCurve}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:causal-trip}
+    A spacetime $M$ with time orientation $t$ satisfies the \emph{causality condition} --- equivalently, has \emph{no closed causal curve} --- when no point causally precedes itself: $\lnot(p \prec p)$ for every $p$. A closed causal curve through $p$ would be a causal trip from $p$ back to $p$, i.e.\ $p \prec p$, so its absence is exactly this condition. This is the standard causality condition, strictly weaker than strong causality and strictly stronger than the chronology condition ($\lnot(p \ll p)$ for all $p$).
+\end{definition}
+
+\begin{theorem}[Irreflexivity and Antisymmetry under Causality]
+    \label{thrm:causal-order-refinements}
+    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_irrefl, Physicslib4.Spacetime.causallyPrecedes_asymm, Physicslib4.Spacetime.causallyPrecedes_antisymm}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:no-closed-causal-curve, def:trip}
+    \leanok
+    Assume $M$ has no closed causal curve. Then chronological precedence is irreflexive, $\lnot(p \ll p)$ for every $p$, and causal precedence is asymmetric and antisymmetric: $p \prec q$ excludes $q \prec p$, and $p \prec q$ together with $q \prec p$ forces $p = q$. Thus, under the causality condition, $\prec$ is a strict partial order on the events of the spacetime.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:no-closed-causal-curve, thrm:precedence-transitive, lmm:chronological-implies-causal}
+    For irreflexivity of chronological precedence, $p \ll p$ would give $p \prec p$ because chronological precedence implies causal precedence (\ref{lmm:chronological-implies-causal}), which the causality condition forbids. For asymmetry and antisymmetry, $p \prec q$ and $q \prec p$ cannot both hold, since transitivity (\ref{thrm:precedence-transitive}) would give the forbidden $p \prec p$.
+\end{proof}
+
+\begin{definition}[Chronological Future and Chronological Past]
+    \label{def:chronological-future-and-chronological-past}
+    \lean{Physicslib4.Spacetime.chronologicalFuture, Physicslib4.Spacetime.chronologicalPast, Physicslib4.Spacetime.chronologicalFutureSet, Physicslib4.Spacetime.chronologicalPastSet}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:spacetime, def:trip}
+    For a spacetime $M$ and $p$ in $M$ the set $I^+(p) = \{q \in M : p \ll q\}$ is called the \textit{chronological future} of $p$. $I^-(p) = \{q \in M : q \ll p\}$ is called the \textit{chronological past} of $p$. The \textit{chronological future} of a set $S \subset M$ is the union of the chronological future of each element of the set
+    \begin{align}
+        I^+(S) = \bigcup\limits_{p \in S} I^+(p).
+    \end{align}
+    The \textit{chronological past} of $S$ is defined similarly
+    \begin{align}
+        I^-(S) = \bigcup\limits_{p \in S} I^-(p).
+    \end{align}
+\end{definition}
+
+\begin{definition}[Causal Future and Causal Past]
+    \label{def:causal-future-and-causal-past}
+    \lean{Physicslib4.Spacetime.causalFuture, Physicslib4.Spacetime.causalPast, Physicslib4.Spacetime.causalFutureSet, Physicslib4.Spacetime.causalPastSet}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:spacetime, def:causal-trip}
+    For a spacetime $M$ and $p$ in $M$ the set $J^+(p) = \{q \in M : p \prec q\}$ is called the \textit{causal future} of $p$. $J^-(p) = \{q \in M : q \prec p\}$ is called the \textit{causal past} of $p$. The \textit{causal future} of a set $S \subset M$ is the union of the causal future of each element of the set
+    \begin{align}
+        J^+(S) = \bigcup\limits_{p \in S} J^+(p).
+    \end{align}
+    The \textit{causal past} of $S$ is defined similarly
+    \begin{align}
+        J^-(S) = \bigcup\limits_{p \in S} J^-(p).
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Chronological Precedence Implies Causal Precedence]
+    \label{lmm:chronological-implies-causal}
+    \lean{Physicslib4.Spacetime.isCausal_of_isTimelike, Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture, Physicslib4.Spacetime.chronologicalPast_subset_causalPast}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:trip, def:causal-trip, def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
+    \leanok
+    Every trip is a causal trip, so $p \ll q$ implies $p \prec q$. Consequently $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A timelike tangent vector is in particular causal (timelike or null), so a future-oriented timelike geodesic is a future-oriented causal geodesic. Hence any trip witnessing $p \ll q$ is also a causal trip witnessing $p \prec q$. The set inclusions follow by unfolding the definitions of the futures and pasts.
+\end{proof}
+
+\begin{lemma}[Monotonicity of Futures and Pasts]
+    \label{lmm:future-past-monotone}
+    \lean{Physicslib4.Spacetime.chronologicalFutureSet_mono, Physicslib4.Spacetime.chronologicalPastSet_mono, Physicslib4.Spacetime.causalFutureSet_mono, Physicslib4.Spacetime.causalPastSet_mono}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
+    \leanok
+    The set-valued chronological and causal futures and pasts are monotone: if $S \subseteq T$ then $I^\pm(S) \subseteq I^\pm(T)$ and $J^\pm(S) \subseteq J^\pm(T)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each operator is an indexed union over the points of its argument set, and a union over a larger index set contains the union over a smaller one.
+\end{proof}
+
+\subsection{Causal diamonds}
+
+\begin{definition}[Causal and chronological diamonds]
+    \label{def:causal-diamond}
+    \lean{Physicslib4.Spacetime.causalDiamond, Physicslib4.Spacetime.chronologicalDiamond, Physicslib4.Spacetime.mem_causalDiamond, Physicslib4.Spacetime.mem_chronologicalDiamond}
+    \uses{def:causal-future-and-causal-past, def:chronological-future-and-chronological-past}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The \textit{causal diamond} of $p$ and $q$ is the intersection of the causal future of $p$ with the causal past of $q$,
+    \begin{align}
+        J^+(p) \cap J^-(q),
+    \end{align}
+    and the \textit{chronological diamond} (or \textit{Alexandrov diamond}) of $p$ and $q$ is the intersection of the chronological future of $p$ with the chronological past of $q$,
+    \begin{align}
+        I^+(p) \cap I^-(q).
+    \end{align}
+    These are characterised on points: a point $x$ lies in the causal diamond of $p$ and $q$ if and only if $p \prec x$ and $x \prec q$, and $x$ lies in the chronological diamond of $p$ and $q$ if and only if $p \ll x$ and $x \ll q$.
+\end{definition}
+
+\begin{lemma}[Structural properties of the causal diamond]
+    \label{lmm:causal-diamond-structure}
+    \lean{Physicslib4.Spacetime.causalDiamond_subset_of, Physicslib4.Spacetime.causalDiamond_causallyConvex, Physicslib4.Spacetime.causallyPrecedes_of_causalDiamond_nonempty}
+    \uses{def:causal-diamond, thrm:precedence-transitive}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$, and write $D(p,q) = J^+(p) \cap J^-(q)$ for the causal diamond. Then:
+    \begin{enumerate}
+        \item \textit{Monotonicity under endpoint spread.} If $p' \prec p$ and $q \prec q'$ then $D(p,q) \subseteq D(p',q')$.
+        \item \textit{Causal convexity.} If $a, b \in D(p,q)$, $a \prec z$ and $z \prec b$, then $z \in D(p,q)$.
+        \item \textit{Nonemptiness forces $p \prec q$.} If $D(p,q)$ is nonempty then $p \prec q$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:causal-diamond, thrm:precedence-transitive}
+    All three are immediate from transitivity of causal precedence (\ref{thrm:precedence-transitive}). For (i), if $x \in D(p,q)$ then $p \prec x$ and $x \prec q$; combining with $p' \prec p$ and $q \prec q'$ by transitivity gives $p' \prec x$ and $x \prec q'$, so $x \in D(p',q')$. For (ii), from $a \in D(p,q)$ we have $p \prec a$, and $a \prec z$ gives $p \prec z$; from $b \in D(p,q)$ we have $b \prec q$, and $z \prec b$ gives $z \prec q$, so $z \in D(p,q)$. For (iii), any $x \in D(p,q)$ satisfies $p \prec x$ and $x \prec q$, whence $p \prec q$ by transitivity.
+\end{proof}
+
+\begin{theorem}[Chronological diamonds inside causal diamonds]
+    \label{thrm:causal-diamond-vs-chronological}
+    \lean{Physicslib4.Spacetime.chronologicalDiamond_subset_causalDiamond, Physicslib4.Spacetime.mem_alexandrovBasis_iff_eq_chronologicalDiamond}
+    \uses{def:causal-diamond, lmm:chronological-implies-causal, def:alexandrov-topology}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The chronological diamond is contained in the causal diamond,
+    \begin{align}
+        I^+(p) \cap I^-(q) \subseteq J^+(p) \cap J^-(q).
+    \end{align}
+    Moreover the Alexandrov basis is exactly the family of chronological diamonds: a set $U$ is an Alexandrov basis set if and only if $U = I^+(p) \cap I^-(q)$ for some $p, q \in M$. Consequently every Alexandrov basis set sits inside the corresponding causal diamond.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:causal-diamond, lmm:chronological-implies-causal, def:alexandrov-topology}
+    Chronological precedence refines causal precedence (\ref{lmm:chronological-implies-causal}), so $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$; intersecting these inclusions gives $I^+(p) \cap I^-(q) \subseteq J^+(p) \cap J^-(q)$. The characterisation of the Alexandrov basis is the definition of the Alexandrov topology (\ref{def:alexandrov-topology}), whose basis consists of exactly the sets $I^+(p) \cap I^-(q)$. The final claim combines the two: an Alexandrov basis set equals some $I^+(p) \cap I^-(q)$, which is contained in $J^+(p) \cap J^-(q)$.
+\end{proof}
+
+\begin{definition}[Spacelike Related]
+    \label{def:spacelike-related}
+    \lean{Physicslib4.Spacetime.IsSpacelikeRelated}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:spacetime, def:causal-future-and-causal-past}
+    Consider two points $p_1$ and $p_2$ in a spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
+\end{definition}
+
+\begin{definition}[Completely Spacelike]
+    \label{def:completely-spacelike}
+    \lean{Physicslib4.Spacetime.IsCompletelySpacelike}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \leanok
+    \uses{def:spacetime, def:spacelike-related}
+    Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in a spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
+\end{definition}
+
+\begin{lemma}[Symmetry of Spacelike Separation]
+    \label{lmm:completely-spacelike-symm}
+    \lean{Physicslib4.Spacetime.isSpacelikeRelated_comm, Physicslib4.Spacetime.isCompletelySpacelike_comm}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:spacelike-related, def:completely-spacelike}
+    \leanok
+    Spacelike relatedness is symmetric, and consequently complete spacelike separation is symmetric in its two regions: $\mathbf{O}_1, \mathbf{O}_2$ are completely spacelike if and only if $\mathbf{O}_2, \mathbf{O}_1$ are.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The relation $p_2 \notin J^+(p_1) \cup J^-(p_1)$ is symmetric in $p_1, p_2$ since $J^+(p_1)$ and $J^-(p_1)$ swap roles with $J^-(p_2)$ and $J^+(p_2)$ under the exchange. Symmetry of complete spacelike separation follows by applying this pointwise.
+\end{proof}
+
+\begin{lemma}[Structural Properties of Complete Spacelike Separation]
+    \label{lmm:completely-spacelike-structural}
+    \lean{Physicslib4.Spacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.isCompletelySpacelike_union_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_right}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:completely-spacelike, def:lorentzian-spacetime}
+    \leanok
+    Complete spacelike separation is monotone under shrinking either region; the empty region is completely spacelike to any region; and a union of regions is completely spacelike to $\mathbf{O}$ if and only if each part is. The same properties hold for the bundled Lorentzian spacetime.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each follows directly from the pointwise definition: monotonicity by restricting the universally-quantified points, the empty cases vacuously, and the union cases by splitting the membership disjunction.
+\end{proof}
+
+\begin{definition}[Spacelike Complement of a Region]
+    \label{def:spacelike-complement}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:completely-spacelike, def:lorentzian-spacetime}
+    The \emph{spacelike complement} $\mathbf{B}^\perp$ of a region $\mathbf{B}$ is the set of points completely spacelike-separated from all of $\mathbf{B}$: $\mathbf{B}^\perp = \{ x \mid \{x\} \text{ is completely spacelike to } \mathbf{B} \}$. It is the geometric substrate of locality and Haag duality.
+\end{definition}
+
+\begin{lemma}[Order Structure of the Spacelike Complement]
+    \label{lmm:spacelike-complement-order}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_iff}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{def:spacelike-complement, lmm:completely-spacelike-symm, lmm:completely-spacelike-structural}
+    \leanok
+    The spacelike complement is antitone ($\mathbf{B}_1 \subseteq \mathbf{B}_2 \Rightarrow \mathbf{B}_2^\perp \subseteq \mathbf{B}_1^\perp$), a region is contained in its double complement ($\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$), and the triple complement collapses ($\mathbf{B}^{\perp\perp\perp} = \mathbf{B}^\perp$). Moreover $\mathbf{B}_1 \subseteq \mathbf{B}_2^\perp$ if and only if $\mathbf{B}_1$ and $\mathbf{B}_2$ are completely spacelike-separated, so complementation is the Galois connection attached to the spacelike-separation relation.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Antitonicity and the Galois bridge are the pointwise monotonicity of complete spacelike separation; the double-complement inclusion follows by symmetry of the relation; and the triple-complement identity is the standard consequence of antitonicity together with the double-complement inclusion.
+\end{proof}
+
+\begin{definition}[Causal closure operator]
+    \label{def:causal-closure}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalClosure}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:spacelike-complement}
+    The \emph{causal closure} of a region $\mathbf{B}$ of a Lorentzian spacetime is its double spacelike complement $\mathbf{B}^{\perp\perp}$. This defines the operator $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ on regions; that it is a closure operator is \ref{lmm:causal-closure-is-closure-operator}.
+\end{definition}
+
+\begin{lemma}[The Causal Closure is a Closure Operator]
+    \label{lmm:causal-closure-is-closure-operator}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalClosure, Physicslib4.Spacetime.LorentzianSpacetime.causalClosure_apply}
+    \uses{def:causal-closure, lmm:spacelike-complement-order}
+    \leanok
+    The causal closure $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ is a \emph{closure operator} on the regions of a Lorentzian spacetime:
+    \begin{enumerate}
+        \item (monotone) if $\mathbf{B}_1 \subseteq \mathbf{B}_2$ then $\mathbf{B}_1^{\perp\perp} \subseteq \mathbf{B}_2^{\perp\perp}$;
+        \item (extensive) $\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$;
+        \item (idempotent) $\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$.
+    \end{enumerate}
+    In the formalization these three laws are not standalone theorems: the causal closure is packaged as a term \texttt{causalClosure : ClosureOperator (Set M.Carrier)}, and Mathlib's \texttt{ClosureOperator} \emph{bundles} monotonicity, extensivity and idempotence as fields, so the three laws are exactly the obligations discharged in constructing that term. Definition \ref{def:causal-closure} and this lemma are therefore realised by one and the same Lean declaration, which both cite, with \texttt{causalClosure\_apply} pinning the bundled operator to the concrete map $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$. The three laws are nevertheless available separately one level down, at the level of the spacelike complement: they are \ref{lmm:spacelike-complement-order}, whose declarations \texttt{spacelikeComplement\_antitone}, \texttt{subset\_spacelikeComplement\_spacelikeComplement} and \texttt{spacelikeComplement\_spacelikeComplement\_spacelikeComplement} are what the \texttt{ClosureOperator} construction consumes.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:spacelike-complement-order}
+    All three are read off the order structure of the spacelike complement (\ref{lmm:spacelike-complement-order}). Monotonicity is antitonicity applied twice: $\mathbf{B}_1 \subseteq \mathbf{B}_2$ gives $\mathbf{B}_2^{\perp} \subseteq \mathbf{B}_1^{\perp}$, and applying antitonicity again gives $\mathbf{B}_1^{\perp\perp} \subseteq \mathbf{B}_2^{\perp\perp}$. Extensivity is the double-complement inclusion. For idempotence, the triple-complement collapse gives $\mathbf{B}^{\perp\perp\perp} = \mathbf{B}^{\perp}$, and taking the spacelike complement of both sides yields $\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$.
+\end{proof}
+
+\begin{definition}[Causally complete region]
+    \label{def:causally-complete-region}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.IsCausallyComplete}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \leanok
+    \uses{def:causal-closure}
+    A region is \emph{causally complete} if it equals its own double complement, $\mathbf{B}^{\perp\perp} = \mathbf{B}$ (a fixed point of the causal closure operator). These are the regions on which algebraic QFT is naturally indexed.
+\end{definition}
+
+\begin{theorem}[Lattice of causally complete regions]
+    \label{thrm:causally-complete-lattice}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.CausallyCompleteRegion, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_iff_isClosed, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_inter, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_iInter, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_coe, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_antitone}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{def:causally-complete-region, def:causal-closure}
+    \leanok
+    The causally complete regions form a \emph{complete lattice} (meets are intersections, joins are causal closures of unions). The spacelike complement of any region is causally complete, causally complete regions are closed under intersection, and the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an \emph{order-reversing involution} on this lattice ($\mathbf{B}^{\perp\perp} = \mathbf{B}$). (The full orthocomplement law $\mathbf{B} \wedge \mathbf{B}^\perp = \bot$ does not hold at this generality, because the trip-based causal relation is irreflexive, so a point is spacelike-separated from itself; what holds is the complete lattice with an order-reversing De~Morgan involution.) In the formalization the \texttt{CompleteLattice} structure on the causally complete regions is transported from the causal closure operator along its Galois insertion and is declared as an anonymous \texttt{instance}, so it has no stable name that could be cited above; the lattice claim is therefore witnessed by the carrier abbreviation \texttt{CausallyCompleteRegion} together with the bridge \texttt{isCausallyComplete\_iff\_isClosed} identifying causally complete regions with the closed elements of that closure operator.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:causally-complete-region, def:causal-closure, lmm:causal-closure-is-closure-operator, lmm:spacelike-complement-order}
+    The lattice is obtained from the causal closure operator (\ref{lmm:causal-closure-is-closure-operator}) via its Galois insertion: the causally complete regions are exactly the fixed points of the closure operator, so meets are intersections and joins are the causal closures of unions. That the spacelike complement of any region is causally complete, and that complementation is an order-reversing involution on this lattice, are the antitonicity and the triple-complement identity of the spacelike complement (\ref{lmm:spacelike-complement-order}).
+\end{proof}
+
+\begin{lemma}[De Morgan Laws for the Spacelike Complement]
+    \label{lmm:spacelike-complement-de-morgan}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_union, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_iUnion}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
+    \leanok
+    At the level of the underlying sets, the spacelike complement turns unions into intersections. In binary form, for regions $\mathbf{B}_1, \mathbf{B}_2$,
+    \begin{align}
+        (\mathbf{B}_1 \cup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \cap \mathbf{B}_2^\perp,
+    \end{align}
+    and, for an arbitrary indexed family $(\mathbf{B}_i)_{i \in I}$,
+    \begin{align}
+        \Bigl(\bigcup_{i \in I} \mathbf{B}_i\Bigr)^\perp = \bigcap_{i \in I} \mathbf{B}_i^\perp.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
+    Unfold the spacelike complement pointwise: $x \in \mathbf{B}^\perp$ means the singleton $\{x\}$ is completely spacelike to $\mathbf{B}$. By the structural properties of complete spacelike separation (\ref{lmm:completely-spacelike-structural}), $\{x\}$ is completely spacelike to a union $\bigcup_i \mathbf{B}_i$ if and only if it is completely spacelike to each member $\mathbf{B}_i$. Hence membership in the complement of the union is the conjunction of membership in the individual complements, which is exactly membership in their intersection. The binary case is the special case of a two-element family.
+\end{proof}
+
+\begin{theorem}[De Morgan Laws for the Causal Complement]
+    \label{thrm:causal-complement-de-morgan}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_bot, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_top, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_sup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_inf, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iSup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iInf}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{thrm:causally-complete-lattice, lmm:spacelike-complement-de-morgan}
+    \leanok
+    On the complete lattice of causally complete regions the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an order-reversing involution, and therefore satisfies the full De Morgan laws. Explicitly:
+    \begin{itemize}
+        \item (order-reversing) $\mathbf{B}_1 \le \mathbf{B}_2 \Rightarrow \mathbf{B}_2^\perp \le \mathbf{B}_1^\perp$;
+        \item (bounds) $\bot^\perp = \top$ and $\top^\perp = \bot$;
+        \item (binary De Morgan) $(\mathbf{B}_1 \sqcup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \sqcap \mathbf{B}_2^\perp$ and $(\mathbf{B}_1 \sqcap \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \sqcup \mathbf{B}_2^\perp$;
+        \item (infinitary De Morgan) $\bigl(\bigsqcup_i \mathbf{B}_i\bigr)^\perp = \bigsqcap_i \mathbf{B}_i^\perp$ and $\bigl(\bigsqcap_i \mathbf{B}_i\bigr)^\perp = \bigsqcup_i \mathbf{B}_i^\perp$.
+    \end{itemize}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:causally-complete-lattice, lmm:spacelike-complement-de-morgan}
+    Recall from the lattice structure (\ref{thrm:causally-complete-lattice}) that on causally complete regions meets are intersections of the underlying sets, joins are the causal closures of unions ($\mathbf{B}_1 \sqcup \mathbf{B}_2 = (\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp}$ and dually for arbitrary families), the complement of any region is causally complete, and every region in the lattice satisfies the involution $\mathbf{B}^{\perp\perp} = \mathbf{B}$; in particular the triple-complement identity $\mathbf{C}^{\perp\perp\perp} = \mathbf{C}^\perp$ holds for any underlying set $\mathbf{C}$, since $\mathbf{C}^\perp$ is causally complete. Each law is then a direct computation on the underlying sets driven by the set-level De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}).
+
+    \begin{itemize}
+        \item (order-reversing) This is the antitonicity half of the order-reversing involution supplied by \ref{thrm:causally-complete-lattice}: $\mathbf{B}_1 \le \mathbf{B}_2$ means $\mathbf{B}_1 \subseteq \mathbf{B}_2$, whence $\mathbf{B}_2^\perp \subseteq \mathbf{B}_1^\perp$, i.e. $\mathbf{B}_2^\perp \le \mathbf{B}_1^\perp$.
+        \item (join laws) Since the join is the causal closure of the union, the triple-complement identity collapses one level of complement:
+        \begin{align}
+            (\mathbf{B}_1 \sqcup \mathbf{B}_2)^\perp = \bigl((\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp}\bigr)^\perp = (\mathbf{B}_1 \cup \mathbf{B}_2)^{\perp\perp\perp} = (\mathbf{B}_1 \cup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \cap \mathbf{B}_2^\perp = \mathbf{B}_1^\perp \sqcap \mathbf{B}_2^\perp,
+        \end{align}
+        the fourth equality being the binary set-level De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}) and the last using that lattice meets are intersections. The indexed form is identical with the indexed De Morgan lemma in place of the binary one, giving $\bigl(\bigsqcup_i \mathbf{B}_i\bigr)^\perp = \bigsqcap_i \mathbf{B}_i^\perp$.
+        \item (meet laws) Apply the set-level De Morgan lemma to the complements $\mathbf{B}_1^\perp, \mathbf{B}_2^\perp$ and use $\mathbf{B}_i^{\perp\perp} = \mathbf{B}_i$ (each $\mathbf{B}_i$ is causally complete): $(\mathbf{B}_1^\perp \cup \mathbf{B}_2^\perp)^\perp = \mathbf{B}_1^{\perp\perp} \cap \mathbf{B}_2^{\perp\perp} = \mathbf{B}_1 \cap \mathbf{B}_2$. Taking the complement of both sides and recognising the meet as the intersection and the join as the double-complement of the union,
+        \begin{align}
+            (\mathbf{B}_1 \sqcap \mathbf{B}_2)^\perp = (\mathbf{B}_1 \cap \mathbf{B}_2)^\perp = (\mathbf{B}_1^\perp \cup \mathbf{B}_2^\perp)^{\perp\perp} = \mathbf{B}_1^\perp \sqcup \mathbf{B}_2^\perp,
+        \end{align}
+        and likewise $\bigl(\bigsqcap_i \mathbf{B}_i\bigr)^\perp = \bigsqcup_i \mathbf{B}_i^\perp$ from the indexed De Morgan lemma.
+        \item (bounds) The empty-family case of the indexed De Morgan lemma (\ref{lmm:spacelike-complement-de-morgan}) reads $\varnothing^\perp = \mathrm{univ}$, so $\top = \mathrm{univ} = \varnothing^\perp$. Hence $\top^\perp = \varnothing^{\perp\perp} = \bot$, while $\bot = \varnothing^{\perp\perp}$ and the triple-complement identity give $\bot^\perp = \varnothing^{\perp\perp\perp} = \varnothing^\perp = \top$.
+    \end{itemize}
+
+    The mathematical subtlety is that this lattice is \emph{not} linearly ordered, so the binary equalities do \emph{not} follow from antitonicity alone: a general antitone map only yields the inequality $f(\mathbf{B}_1 \sqcup \mathbf{B}_2) \le f\mathbf{B}_1 \sqcap f\mathbf{B}_2$. The equalities hold precisely because the causal complement is an order-reversing \emph{bijection} (the involution $\mathbf{B}^{\perp\perp} = \mathbf{B}$), equivalently an order isomorphism onto the order-dual lattice; it is this bijectivity that both forces the finite equalities above and, through the same set-level De Morgan computation applied to arbitrary unions, upgrades them to the infinitary laws by carrying suprema to infima.
+\end{proof}
+
+\subsection{Causal convexity}
+
+\begin{definition}[Causally convex region]
+    \label{def:causally-convex-region}
+    \lean{Physicslib4.Spacetime.IsCausallyConvex}
+    \uses{def:causal-future-and-causal-past}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$. A subset $\mathbf{C} \subseteq M$ is \emph{causally convex} if it contains every point causally between two of its own points: whenever $p, r \in \mathbf{C}$ and $q$ is causally between them, in the sense that $p \prec q$ and $q \prec r$, then $q \in \mathbf{C}$. Intuitively, $\mathbf{C}$ contains every causal curve segment whose endpoints lie in $\mathbf{C}$.
+\end{definition}
+
+\begin{lemma}[Causal diamonds are causally convex]
+    \label{lmm:causal-diamond-causally-convex}
+    \lean{Physicslib4.Spacetime.causalDiamond_isCausallyConvex}
+    \uses{def:causally-convex-region, def:causal-diamond, lmm:causal-diamond-structure}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The causal diamond $J^+(p) \cap J^-(q)$ is a causally convex region.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:causally-convex-region, def:causal-diamond, lmm:causal-diamond-structure}
+    This is exactly the causal-convexity property of the causal diamond (part (ii) of the structural lemma, \ref{lmm:causal-diamond-structure}), repackaged as the region predicate: if $a, b \in J^+(p) \cap J^-(q)$ with $a \prec z$ and $z \prec b$, then $z \in J^+(p) \cap J^-(q)$, which is precisely the statement that $J^+(p) \cap J^-(q)$ is causally convex.
+\end{proof}
+
+\begin{theorem}[Causally complete regions are causally convex]
+    \label{thrm:causally-complete-convex}
+    \lean{Physicslib4.Spacetime.spacelikeComplement_isCausallyConvex, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyConvex_of_isCausallyComplete, Physicslib4.Spacetime.LorentzianSpacetime.CausallyCompleteRegion.isCausallyConvex}
+    \uses{def:causally-convex-region, def:spacelike-complement, def:causally-complete-region, thrm:precedence-transitive}
+    \leanok
+    Let $M$ be a Lorentzian spacetime.
+    \begin{enumerate}
+        \item Every spacelike complement $\mathbf{B}^\perp$ is a causally convex region.
+        \item Consequently every causally complete region $\mathbf{B} = \mathbf{B}^{\perp\perp}$ — equivalently, every element of the lattice of causally complete regions — is causally convex.
+    \end{enumerate}
+    Thus causal convexity is the property shared by causal diamonds (\ref{lmm:causal-diamond-causally-convex}) and by causally complete regions, even though a causal diamond need not itself be causally complete.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:causally-convex-region, def:spacelike-complement, def:causally-complete-region, thrm:precedence-transitive}
+    For (i), suppose $p, r \in \mathbf{B}^\perp$ and $p \prec q \prec r$; we must show $q \in \mathbf{B}^\perp$, i.e. that $q$ is spacelike to every point of $\mathbf{B}$. This is a consequence of transitivity of causal precedence (\ref{thrm:precedence-transitive}): if $q$ were causally related to some $b \in \mathbf{B}$, then composing that relation with $p \prec q$ or $q \prec r$ would make $p$ or $r$ causally related to $b$, contradicting $p, r \in \mathbf{B}^\perp$. Hence $q$ is spacelike to all of $\mathbf{B}$, so $q \in \mathbf{B}^\perp$.
+
+    For (ii), a causally complete region satisfies $\mathbf{B} = \mathbf{B}^{\perp\perp} = (\mathbf{B}^\perp)^\perp$, so it is the spacelike complement of the region $\mathbf{B}^\perp$; causal convexity then follows immediately from part (i) applied to $\mathbf{B}^\perp$.
+\end{proof}
+
+\subsection{Causal convexity: closure structure}
+
+\begin{lemma}[Causally convex regions form a closure system]
+    \label{lmm:causally-convex-closure-ops}
+    \lean{Physicslib4.Spacetime.isCausallyConvex_univ, Physicslib4.Spacetime.isCausallyConvex_empty, Physicslib4.Spacetime.isCausallyConvex_inter, Physicslib4.Spacetime.isCausallyConvex_iInter, Physicslib4.Spacetime.isCausallyConvex_sInter}
+    \uses{def:causally-convex-region}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$. The causally convex regions of $M$ form a closure system (a Moore family):
+    \begin{enumerate}
+        \item the whole spacetime $M$ (as $\mathrm{univ}$) is causally convex, and so is the empty set $\varnothing$;
+        \item causal convexity is preserved under arbitrary intersections, in each of the standard forms:
+        \begin{itemize}
+            \item (binary) if $\mathbf{C}_1$ and $\mathbf{C}_2$ are causally convex, then $\mathbf{C}_1 \cap \mathbf{C}_2$ is causally convex;
+            \item (indexed) for any family $(\mathbf{C}_i)_{i \in I}$ of causally convex regions, $\bigcap_{i \in I} \mathbf{C}_i$ is causally convex;
+            \item (set-indexed) for any collection $\mathcal{S}$ of causally convex regions, $\bigcap_{\mathbf{C} \in \mathcal{S}} \mathbf{C} = \bigcap_0 \mathcal{S}$ is causally convex.
+        \end{itemize}
+    \end{enumerate}
+    Consequently the causally convex regions are closed under arbitrary intersections and contain $M$, i.e. they form a Moore family.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:causally-convex-region}
+    Each claim is immediate from the definition of causal convexity (\ref{def:causally-convex-region}). For $\mathrm{univ}$ the membership condition $q \in M$ is vacuously satisfied, and for $\varnothing$ the hypothesis $p, r \in \varnothing$ never holds. For an intersection, suppose $p, r$ lie in the intersection and $p \prec q \prec r$; then $p, r$ lie in every member of the family, so by that member's causal convexity $q$ lies in every member, hence in the intersection. The binary and indexed forms are the special cases of a two-element and an indexed family, and the set-indexed form ($\bigcap_0 \mathcal{S}$) unfolds membership through $\mathtt{mem\_sInter}$ to the same argument.
+\end{proof}
+
+\begin{definition}[Causal-convex hull]
+    \label{def:causal-convex-hull}
+    \lean{Physicslib4.Spacetime.causalConvexHull}
+    \uses{def:causally-convex-region}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be an arbitrary region. The \emph{causal-convex hull} of $\mathbf{B}$ is the intersection of all causally convex regions containing $\mathbf{B}$:
+    \begin{align}
+        \mathrm{ccHull}(\mathbf{B}) \;=\; \bigcap_0 \{\, \mathbf{C} \mid \mathbf{B} \subseteq \mathbf{C} \text{ and } \mathbf{C} \text{ is causally convex} \,\}.
+    \end{align}
+    That this is a hull --- extensive, and causally convex --- is \ref{lmm:causal-convex-hull-extensive}.
+\end{definition}
+
+\begin{lemma}[The Causal-Convex Hull is Extensive and Causally Convex]
+    \label{lmm:causal-convex-hull-extensive}
+    \lean{Physicslib4.Spacetime.subset_causalConvexHull, Physicslib4.Spacetime.isCausallyConvex_causalConvexHull}
+    \uses{def:causal-convex-hull, def:causally-convex-region, lmm:causally-convex-closure-ops}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be a region. Then the causal-convex hull satisfies the two defining properties of a hull:
+    \begin{enumerate}
+        \item (extensivity) $\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$;
+        \item (closedness) $\mathrm{ccHull}(\mathbf{B})$ is itself causally convex.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:causal-convex-hull, lmm:causally-convex-closure-ops}
+    For (i), membership in the intersection $\bigcap_0$ unfolds to membership in every member of the family, and every member contains $\mathbf{B}$ by the defining condition of the family; so any $x \in \mathbf{B}$ lies in each member and hence in $\mathrm{ccHull}(\mathbf{B})$. For (ii), the intersected family consists of causally convex regions, and causal convexity is preserved under set-indexed intersections (\ref{lmm:causally-convex-closure-ops}); note the family is nonempty, since the whole space $M$ contains $\mathbf{B}$ and is causally convex by the same lemma.
+\end{proof}
+
+\begin{theorem}[The causal-convex hull is a closure operator]
+    \label{thrm:causal-convex-hull-closure}
+    \lean{Physicslib4.Spacetime.causalConvexHull_minimal, Physicslib4.Spacetime.causalConvexHull_mono, Physicslib4.Spacetime.causalConvexHull_eq_of_isCausallyConvex, Physicslib4.Spacetime.causalConvexHull_idem}
+    \uses{def:causal-convex-hull, lmm:causal-convex-hull-extensive}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$. The map $\mathbf{B} \mapsto \mathrm{ccHull}(\mathbf{B})$ satisfies the closure-operator laws:
+    \begin{enumerate}
+        \item (minimality / universal property) if $\mathbf{B} \subseteq \mathbf{C}$ and $\mathbf{C}$ is causally convex, then $\mathrm{ccHull}(\mathbf{B}) \subseteq \mathbf{C}$;
+        \item (monotonicity) if $\mathbf{B}_1 \subseteq \mathbf{B}_2$, then $\mathrm{ccHull}(\mathbf{B}_1) \subseteq \mathrm{ccHull}(\mathbf{B}_2)$;
+        \item (fixed points) if $\mathbf{C}$ is causally convex, then $\mathrm{ccHull}(\mathbf{C}) = \mathbf{C}$;
+        \item (idempotence) $\mathrm{ccHull}(\mathrm{ccHull}(\mathbf{B})) = \mathrm{ccHull}(\mathbf{B})$.
+    \end{enumerate}
+    Together with extensivity ($\mathbf{B} \subseteq \mathrm{ccHull}(\mathbf{B})$, \ref{lmm:causal-convex-hull-extensive}), these make $\mathrm{ccHull}$ a closure operator whose closed sets are exactly the causally convex regions.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:causal-convex-hull, lmm:causal-convex-hull-extensive}
+    (i) If $\mathbf{B} \subseteq \mathbf{C}$ and $\mathbf{C}$ is causally convex, then $\mathbf{C}$ is a member of the intersected family, so $\mathrm{ccHull}(\mathbf{B}) \subseteq \mathbf{C}$ as an intersection is contained in each of its members.
+
+    (ii) If $\mathbf{B}_1 \subseteq \mathbf{B}_2$, then $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathrm{ccHull}(\mathbf{B}_2)$ by extensivity, and $\mathrm{ccHull}(\mathbf{B}_2)$ is causally convex (\ref{lmm:causal-convex-hull-extensive}); applying (i) with $\mathbf{C} = \mathrm{ccHull}(\mathbf{B}_2)$ gives $\mathrm{ccHull}(\mathbf{B}_1) \subseteq \mathrm{ccHull}(\mathbf{B}_2)$.
+
+    (iii) If $\mathbf{C}$ is causally convex, then $\mathbf{C} \subseteq \mathrm{ccHull}(\mathbf{C})$ by extensivity, while (i) with $\mathbf{B} = \mathbf{C}$ (and $\mathbf{C} \subseteq \mathbf{C}$) gives $\mathrm{ccHull}(\mathbf{C}) \subseteq \mathbf{C}$; hence $\mathrm{ccHull}(\mathbf{C}) = \mathbf{C}$.
+
+    (iv) Idempotence is (iii) applied to $\mathbf{C} = \mathrm{ccHull}(\mathbf{B})$, which is causally convex by \ref{lmm:causal-convex-hull-extensive}.
+\end{proof}
+
+\begin{definition}[Alexandrov Topology]
+    \label{def:alexandrov-topology}
+    \lean{Physicslib4.Spacetime.alexandrovTopology}
+    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \leanok
+    \uses{def:spacetime, def:chronological-future-and-chronological-past}
+    \textit{Alexandrov topology} on a spacetime $M$ is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in $M$.
+\end{definition}
+
+\begin{lemma}[Basis Sets Are Alexandrov-Open]
+    \label{lmm:alexandrov-basis-open}
+    \lean{Physicslib4.Spacetime.isOpen_alexandrov_of_mem_basis}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:alexandrov-topology}
+    \leanok
+    Every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By construction the Alexandrov topology is generated by these basis sets, and any generating set is open in the generated topology.
+\end{proof}
+
+\begin{lemma}[Openness of Chronological Futures and Pasts]
+    \label{lmm:chronological-future-past-open}
+    \lean{Physicslib4.Spacetime.isOpen_chronologicalFuture_inter_chronologicalPast, Physicslib4.Spacetime.isOpen_chronologicalFuture, Physicslib4.Spacetime.isOpen_chronologicalPast}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:chronological-future-and-chronological-past, def:alexandrov-topology, lmm:alexandrov-basis-open}
+    \leanok
+    Let $M$ be a spacetime with time orientation $t$, equipped with the Alexandrov topology.
+    \begin{itemize}
+        \item For all points $p, q \in M$ the set $I^+(p) \cap I^-(q)$ is open. This is just the basis lemma (\ref{lmm:alexandrov-basis-open}) restated on chronological futures and pasts.
+        \item If every point of $I^+(p)$ has a chronological-future point, i.e. for all $x \in I^+(p)$ there exists $b$ with $x \ll b$, then the chronological future $I^+(p)$ is open.
+        \item Dually, if every point of $I^-(p)$ has a chronological-past point, i.e. for all $x \in I^-(p)$ there exists $a$ with $a \ll x$, then the chronological past $I^-(p)$ is open.
+    \end{itemize}
+
+    The per-point hypotheses in the last two items are quantified over the members of the set in question, so they hold \emph{vacuously} when that set is empty; this is consistent, since the empty set is open. The flat unconditional claim ``$I^+(p)$ is always open'' is \emph{false} for a general spacetime: if $I^+(p)$ is nonempty and contains a future-endpoint point $x$ (a point with no $b$ satisfying $x \ll b$), then $x$ lies in no basis set $I^+(a) \cap I^-(b)$, since membership there forces $a \ll x \ll b$ and in particular $x \ll b$. Hence $x$ has no basic Alexandrov neighbourhood contained in $I^+(p)$ and $I^+(p)$ fails to be open. The hypothesis is exactly the ``no future endpoints'' condition that removes this obstruction, and dually for pasts.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chronological-future-and-chronological-past, def:alexandrov-topology, lmm:alexandrov-basis-open}
+    The first item is the basis lemma (\ref{lmm:alexandrov-basis-open}) directly: $I^+(p) \cap I^-(q)$ is a basis set, hence open.
+
+    For the second item, under the hypothesis we have the set identity
+    \begin{align}
+        I^+(p) = \bigcup_{b \in M} \bigl(I^+(p) \cap I^-(b)\bigr).
+    \end{align}
+    The right-hand side is contained in $I^+(p)$ since every term is. Conversely, if $x \in I^+(p)$ then by hypothesis there is $b$ with $x \ll b$, i.e. $x \in I^-(b)$, so $x$ lies in the $b$-th term. Each set $I^+(p) \cap I^-(b)$ is a basis set and hence open (\ref{lmm:alexandrov-basis-open}), and an arbitrary union of open sets is open; therefore $I^+(p)$ is open. The third item is dual, using $I^-(p) = \bigcup_{a \in M} \bigl(I^+(a) \cap I^-(p)\bigr)$. (Recall also that chronological precedence $\ll$ is transitive, \ref{thrm:precedence-transitive}.)
+\end{proof}
+
+\begin{lemma}[Unconditional Openness of Chronological Futures and Pasts on Standard Minkowski]
+    \label{lmm:minkowski-chronological-open}
+    \lean{Physicslib4.exists_chronologicalFuture_standardMinkowski, Physicslib4.exists_chronologicalPast_standardMinkowski, Physicslib4.isOpen_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_chronologicalPast_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalPast_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \uses{lmm:chronological-future-past-open, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, def:alexandrov-topology}
+    \leanok
+    Work on standard Minkowski spacetime, with underlying manifold $\mathbb{R}^4$, and let $e_0$ denote the unit time vector (the first standard coordinate vector).
+    \begin{enumerate}
+        \item Every point has a chronological future point and a chronological past point: for all $x \in \mathbb{R}^4$ there exist $b, a$ with $x \ll b$ and $a \ll x$. Concretely $b = x + e_0$ lies in the forward cone of $x$ and $a = x - e_0$ lies in the backward cone of $x$, since the connecting vector $\pm e_0$ is future-, respectively past-pointing timelike.
+        \item For every point $p$ the chronological future $I^+(p)$ and the chronological past $I^-(p)$ are open in the Euclidean (manifold) topology on $\mathbb{R}^4$. On standard Minkowski the coordinate cone characterisation identifies $I^+(p)$ with the forward Minkowski cone of $p$ and $I^-(p)$ with the backward Minkowski cone of $p$, and each such cone is an open subset of $\mathbb{R}^4$.
+        \item For every point $p$ the chronological future $I^+(p)$ and the chronological past $I^-(p)$ are open in the Alexandrov topology, \emph{unconditionally}: the per-point hypothesis of \ref{lmm:chronological-future-past-open} is discharged on standard Minkowski by part (i).
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:chronological-future-past-open, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, def:alexandrov-topology}
+    Part (i) is read off the coordinate cone description of standard Minkowski: for any $x$ the difference $(x + e_0) - x = e_0$ has metric square $g(e_0, e_0) = -1 < 0$ and positive time component, so it is future-pointing timelike; hence $x \ll x + e_0$ and the forward cone of $x$ is nonempty. Dually $(x - e_0) - x = -e_0$ is past-pointing timelike, so $x - e_0 \ll x$ and the backward cone of $x$ is nonempty.
+
+    Part (ii) combines the coordinate characterisation of $I^\pm$ on standard Minkowski with the openness of the explicit cones. Under the identification of $I^+(p)$ with the forward Minkowski cone $\{y \in \mathbb{R}^4 : g(y - p, y - p) < 0,\ (y - p)^0 > 0\}$, this set is the intersection of the preimages of the open sets $(-\infty, 0)$ and $(0, \infty)$ under the continuous maps $y \mapsto g(y - p, y - p)$ (a quadratic form) and $y \mapsto (y - p)^0$ (a coordinate projection); hence it is open in the Euclidean topology on $\mathbb{R}^4$. The backward cone description of $I^-(p)$ is dual and open by the same argument.
+
+    Part (iii) applies the general lemma \ref{lmm:chronological-future-past-open}: its last two items give the openness of $I^+(p)$ and $I^-(p)$ in the Alexandrov topology provided every point of the set in question has, respectively, a chronological-future point and a chronological-past point. On standard Minkowski these hypotheses hold at every point by part (i), so both conclusions are unconditional.
+\end{proof}
+
+\begin{definition}[Minkowski Spacetime]
+    \label{def:minkowski-spacetime}
+    \lean{Physicslib4.MinkowskiSpacetime}
+    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \uses{def:standard-minkowski-spacetime, def:alexandrov-topology}
+    \leanok
+    \textit{Minkowski spacetime} is standard Minkowski spacetime equipped with Alexandrov topology.
+\end{definition}
+
+\begin{definition}[Lorentzian Spacetime]
+    \label{def:lorentzian-spacetime}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime}
+    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \leanok
+    \uses{def:spacetime, def:alexandrov-topology}
+    \textit{Lorentzian spacetime} is a spacetime equipped with a Hausdorff Alexandrov topology.
+\end{definition}
+
+\begin{lemma}[Bundled Spacelike Separation and Basis Openness]
+    \label{lmm:lorentzian-causal-lifts}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_comm, Physicslib4.Spacetime.LorentzianSpacetime.isOpen_alexandrov_of_isBasisSet}
+    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \uses{def:lorentzian-spacetime, lmm:completely-spacelike-symm, lmm:alexandrov-basis-open}
+    \leanok
+    On a Lorentzian spacetime, complete spacelike separation of two regions is symmetric, and every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
+\end{lemma}
+\begin{proof}
+    \leanok
+    These are restatements of the symmetry of complete spacelike separation and the openness of basis sets for the underlying spacetime, transported through the bundling of a Lorentzian spacetime over its underlying spacetime and time orientation.
+\end{proof}
+
+\begin{lemma}[No-Diamond Points Have Only the Whole Space as Neighbourhood]
+    \label{lmm:alexandrov-nbhd-univ-of-no-diamond}
+    \lean{Physicslib4.Spacetime.alexandrov_nbhd_univ_of_no_diamond}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \uses{def:alexandrov-topology}
+    \leanok
+    On a spacetime equipped with the Alexandrov topology, suppose a point $x$ lies in no diamond $I^+(p) \cap I^-(q)$. Then every Alexandrov-open set containing $x$ is the whole space $M$: the only open neighbourhood of $x$ is $M$ itself.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The Alexandrov topology is generated by the diamond subbasis, so its open sets are exactly those built by the inductive generating construction, and we induct over that construction to show any generated-open set $U$ with $x \in U$ equals $M$. A basic generating set is a diamond, which cannot contain $x$ by hypothesis, so that case is vacuous. The whole-space generator is $M$. A binary intersection $s \cap t$ containing $x$ has $x \in s$ and $x \in t$, so $s = t = M$ by the induction hypothesis and $s \cap t = M$. A union $\bigcup_i s_i$ containing $x$ contains $x$ in some member $s_i$, which equals $M$ by the induction hypothesis, so the union contains $M$ and hence equals $M$. Thus no generated-open set other than $M$ contains $x$.
+\end{proof}
+
+\begin{lemma}[Covering from the Hausdorff Assumption]
+    \label{lmm:alexandrov-covering-hausdorff}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.sUnion_alexandrovBasis_eq_univ}
+    \uses{def:lorentzian-spacetime, def:alexandrov-topology, lmm:alexandrov-nbhd-univ-of-no-diamond}
+    \leanok
+    On a Lorentzian spacetime with at least two points, the Alexandrov diamonds cover the whole space: every point lies in some diamond $I^+(p) \cap I^-(q)$. Equivalently, every point has both a chronological past point and a chronological future point (a ``no endpoints'' condition). This is a genuine consequence of the Hausdorff assumption on the Alexandrov topology, not an extra hypothesis.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:alexandrov-nbhd-univ-of-no-diamond}
+    Suppose a point $x$ lay in no diamond $I^+(p) \cap I^-(q)$. Then by \ref{lmm:alexandrov-nbhd-univ-of-no-diamond} the only Alexandrov-open set containing $x$ is the whole space $M$. Since the space has a second point $y \ne x$, the Hausdorff assumption on the Alexandrov topology provides disjoint open sets separating $x$ and $y$; but the one containing $x$ must be all of $M$, which also contains $y$, contradicting disjointness. Hence every point lies in some diamond, which is exactly the covering half of the Alexandrov-basis property; unfolding membership in a diamond gives the equivalent ``no endpoints'' statement.
+\end{proof}
+
+\begin{theorem}[The Alexandrov Diamonds Form a Topological Basis]
+    \label{thrm:alexandrov-topological-basis}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.isTopologicalBasis_alexandrovBasis}
+    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \uses{lmm:alexandrov-covering-hausdorff, def:alexandrov-topology, def:lorentzian-spacetime}
+    \leanok
+    On a Lorentzian spacetime with at least two points, suppose the diamonds are downward-directed: for any two diamonds $B_1, B_2$ and any point $x \in B_1 \cap B_2$ there is a diamond $B_3$ with $x \in B_3 \subseteq B_1 \cap B_2$ (the intersection property). Then the diamonds form a genuine topological basis for the Alexandrov topology.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The three conditions of a topological basis all hold. The intersection (downward-directedness) property is the standing hypothesis. The covering condition --- that the diamonds' union is the whole space --- is \ref{lmm:alexandrov-covering-hausdorff}. The topology-generation condition holds by definition, since the Alexandrov topology is \emph{defined} as the topology generated by the diamond subbasis. The directedness hypothesis is the genuinely geometric content: it is exactly the assertion that the Alexandrov topology has the diamonds as a base, and it is not implied by Hausdorffness alone; it is discharged for standard Minkowski in \ref{thrm:minkowski-alexandrov-basis}.
+\end{proof}
+
+\begin{lemma}[Past Interpolation on Standard Minkowski]
+    \label{lmm:minkowski-past-between}
+    \lean{Physicslib4.Spacetime.exists_past_between_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
+    \leanok
+    On standard Minkowski spacetime, if $p_1 \ll x$ and $p_2 \ll x$ then there is a point $a$ with $p_1 \ll a$, $p_2 \ll a$, and $a \ll x$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-chronological-open}
+    Take $a$ with the same spatial coordinates as $x$ and time coordinate $a^0 = x^0 - \varepsilon$ for a small $\varepsilon > 0$. Then $x - a = (\varepsilon, \mathbf{0})$ is future-pointing timelike, so $a \ll x$. For each $i$ the connecting vector $a - p_i$ has the same spatial part as $x - p_i$ while its time component is $(x^0 - p_i^0) - \varepsilon$; since $p_i \ll x$ makes the spatial separation strictly smaller than $x^0 - p_i^0$, for $\varepsilon$ small enough the reduced time gap still dominates the spatial separation and remains positive, so $a - p_i$ is future-pointing timelike and $p_i \ll a$. Both strict inequalities hold for a common small $\varepsilon$; the estimate is a direct coordinate computation (\texttt{nlinarith}).
+\end{proof}
+
+\begin{lemma}[Future Interpolation on Standard Minkowski]
+    \label{lmm:minkowski-future-between}
+    \lean{Physicslib4.Spacetime.exists_future_between_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
+    \leanok
+    On standard Minkowski spacetime, if $x \ll q_1$ and $x \ll q_2$ then there is a point $b$ with $x \ll b$, $b \ll q_1$, and $b \ll q_2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-past-between, lmm:minkowski-chronological-open}
+    Dual to \ref{lmm:minkowski-past-between}: take $b$ with the same spatial coordinates as $x$ and time coordinate $b^0 = x^0 + \varepsilon$ for a small $\varepsilon > 0$. Then $b - x = (\varepsilon, \mathbf{0})$ is future-pointing timelike, so $x \ll b$, and for each $i$ the vector $q_i - b$ keeps the spatial part of $q_i - x$ with time component $(q_i^0 - x^0) - \varepsilon$; for $\varepsilon$ small enough it stays future-pointing timelike, giving $b \ll q_i$ for both $i$ by the same coordinate estimate.
+\end{proof}
+
+\begin{lemma}[Standard Minkowski Diamonds Are Downward-Directed]
+    \label{lmm:minkowski-diamonds-downward-directed}
+    \lean{Physicslib4.Spacetime.alexandrovBasis_exists_subset_inter_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \uses{lmm:minkowski-past-between, lmm:minkowski-future-between, thrm:precedence-transitive, def:standard-minkowski-spacetime, def:alexandrov-topology, def:chronological-future-and-chronological-past}
+    \leanok
+    On standard Minkowski spacetime the Alexandrov diamonds have the downward intersection property: for any two diamonds $B_1 = I^+(p_1) \cap I^-(q_1)$ and $B_2 = I^+(p_2) \cap I^-(q_2)$ and any $x \in B_1 \cap B_2$, there is a diamond $B_3$ with $x \in B_3 \subseteq B_1 \cap B_2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-past-between, lmm:minkowski-future-between, thrm:precedence-transitive}
+    From $x \in B_1 \cap B_2$ we have $p_1 \ll x$, $p_2 \ll x$, $x \ll q_1$, and $x \ll q_2$. Past interpolation (\ref{lmm:minkowski-past-between}) yields $a$ with $p_1 \ll a$, $p_2 \ll a$, and $a \ll x$; future interpolation (\ref{lmm:minkowski-future-between}) yields $b$ with $x \ll b$, $b \ll q_1$, and $b \ll q_2$. Set $B_3 = I^+(a) \cap I^-(b)$; then $a \ll x \ll b$ gives $x \in B_3$. For containment, any $y$ with $a \ll y \ll b$ satisfies $p_i \ll a \ll y$ and $y \ll b \ll q_i$ for each $i$, so by transitivity of $\ll$ (\ref{thrm:precedence-transitive}) $y \in I^+(p_i) \cap I^-(q_i)$; hence $B_3 \subseteq B_1 \cap B_2$.
+\end{proof}
+
+\begin{lemma}[Common Chronological Predecessor on Standard Minkowski]
+    \label{lmm:minkowski-exists-common-past}
+    \lean{Physicslib4.Spacetime.exists_common_past}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
+    \leanok
+    On standard Minkowski spacetime, for any two points $p_1$ and $p_2$ there is a point $p$ with $p \ll p_1$ and $p \ll p_2$. Note the absence of hypotheses: unlike the interpolation lemma \ref{lmm:minkowski-past-between}, which needs a common future point $x$ to aim below, this one holds for an arbitrary pair.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
+    Take $p$ on the time axis, $p = (t, \mathbf{0})$, with $t$ small enough. Then $p_i - p$ has time component $p_i^0 - t$ and spatial part that of $p_i$, so $p \ll p_i$ amounts to $|\mathbf{p}_i|^2 < (p_i^0 - t)^2$ together with $t < p_i^0$. Both spatial norms are fixed nonnegative reals, so choosing a single $t$ below $\min_i\bigl(p_i^0 - |\mathbf{p}_i|\bigr)$ makes each time gap exceed the corresponding spatial separation; the estimate is a direct coordinate computation (\texttt{linarith} after expanding the squares).
+\end{proof}
+
+\begin{lemma}[Common Chronological Successor on Standard Minkowski]
+    \label{lmm:minkowski-exists-common-future}
+    \lean{Physicslib4.Spacetime.exists_common_future}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
+    \leanok
+    On standard Minkowski spacetime, for any two points $q_1$ and $q_2$ there is a point $q$ with $q_1 \ll q$ and $q_2 \ll q$. Again there are no hypotheses on the pair.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
+    Dual to \ref{lmm:minkowski-exists-common-past}, but proved independently rather than by invoking it (the time-shift estimate is run in the other direction, so there is no dependency edge): take $q = (t, \mathbf{0})$ with $t$ above $\max_i\bigl(q_i^0 + |\mathbf{q}_i|\bigr)$, so that for each $i$ the vector $q - q_i$ has positive time component exceeding the spatial separation and is therefore future-pointing timelike.
+\end{proof}
+
+\begin{lemma}[Standard Minkowski Diamonds Are Upward-Directed]
+    \label{lmm:minkowski-diamonds-upward-directed}
+    \lean{Physicslib4.Spacetime.alexandrovBasis_directed}
+    \uses{lmm:minkowski-exists-common-past, lmm:minkowski-exists-common-future, thrm:precedence-transitive, def:standard-minkowski-spacetime, def:alexandrov-topology, def:chronological-future-and-chronological-past}
+    \leanok
+    On standard Minkowski spacetime the Alexandrov diamonds are \emph{upward directed}: for any two diamonds $B_1$ and $B_2$ there is a diamond $B$ with $B_1 \subseteq B$ and $B_2 \subseteq B$.
+
+    This is the \emph{opposite} direction to \ref{lmm:minkowski-diamonds-downward-directed}, and the two are easy to confuse. There, one \emph{shrinks} a diamond to sit inside an intersection $B_1 \cap B_2$ around a prescribed point $x$; that downward property is what makes the diamonds a topological basis (\ref{thrm:minkowski-alexandrov-basis}). Here one instead \emph{enlarges} $B_1$ and $B_2$ into a common containing diamond, with no point prescribed and no intersection involved. It is this upward version --- and not the downward one --- that turns the local algebras into a directed system, so it is the one the quasilocal colimit needs.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-exists-common-past, lmm:minkowski-exists-common-future, thrm:precedence-transitive}
+    Write $B_1 = I^+(p_1) \cap I^-(q_1)$ and $B_2 = I^+(p_2) \cap I^-(q_2)$. Apply \ref{lmm:minkowski-exists-common-past} to $p_1, p_2$ to get $p$ with $p \ll p_1$ and $p \ll p_2$, and \ref{lmm:minkowski-exists-common-future} to $q_1, q_2$ to get $q$ with $q_1 \ll q$ and $q_2 \ll q$. Put $B = I^+(p) \cap I^-(q)$, again a diamond. By monotonicity of the Minkowski forward and backward cones --- i.e.\ transitivity of $\ll$ (\ref{thrm:precedence-transitive}) --- $p \ll p_i$ gives $I^+(p_i) \subseteq I^+(p)$ and $q_i \ll q$ gives $I^-(q_i) \subseteq I^-(q)$; intersecting these, $B_i \subseteq B$ for $i = 1, 2$.
+
+    This lemma is already formalized, as \texttt{Physicslib4.Spacetime.alexandrovBasis\_directed}, and so are the two point-existence helpers it consumes, \texttt{exists\_common\_past} and \texttt{exists\_common\_future}.
+\end{proof}
+
+\begin{theorem}[The Alexandrov Diamonds are a Basis on Standard Minkowski]
+    \label{thrm:minkowski-alexandrov-basis}
+    \lean{Physicslib4.Spacetime.isTopologicalBasis_alexandrovBasis_standardMinkowski}
+    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \uses{thrm:alexandrov-topological-basis, lmm:minkowski-diamonds-downward-directed, lmm:minkowski-chronological-open, def:standard-minkowski-spacetime, def:alexandrov-topology}
+    \leanok
+    On standard Minkowski spacetime the Alexandrov diamonds form a genuine topological basis for the Alexandrov topology, unconditionally.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:alexandrov-topological-basis, lmm:minkowski-diamonds-downward-directed, lmm:minkowski-chronological-open}
+    Apply \ref{thrm:alexandrov-topological-basis}. Its downward intersection hypothesis is discharged by \ref{lmm:minkowski-diamonds-downward-directed}, and its covering condition holds because on standard Minkowski every point has a chronological past point and a chronological future point (\ref{lmm:minkowski-chronological-open}). The topology-generation condition holds by definition of the Alexandrov topology.
+\end{proof}
+
+\subsection{Dilations are causal automorphisms but not isometries}
+
+A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkowski spacetime preserves the entire causal structure, yet is not an isometry when $\lambda \neq 1$. This is the elementary core of Zeeman's theorem --- the causal automorphism group of Minkowski is strictly larger than the isometry (Poincar\'e) group, the extra generators being the dilations --- and it concretely exhibits the gap between ``causal automorphism'' and ``isometry'' (relevant to why a metric-free morphism notion cannot capture isometric covariance).
+
+\begin{lemma}[Dilations Preserve the Minkowski Cones]
+    \label{lmm:minkowski-dilation-cone}
+    \lean{Physicslib4.minkowskiForwardCone_smul, Physicslib4.minkowskiBackwardCone_smul}
+    \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
+    \leanok
+    For $\lambda > 0$, the dilation $x \mapsto \lambda x$ preserves the forward and backward Minkowski cones: $\lambda q \in I^+(\lambda p) \iff q \in I^+(p)$ and $\lambda p \in I^-(\lambda q) \iff p \in I^-(q)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:standard-minkowski-spacetime}
+    Scaling multiplies the defining quadratic form by $\lambda^2 > 0$ and the time-order difference by $\lambda > 0$, so neither strict inequality changes.
+\end{proof}
+
+\begin{theorem}[Dilations are Causal Automorphisms]
+    \label{thrm:minkowski-dilation-causal-automorphism}
+    \lean{Physicslib4.alexandrovBasis_image_smul}
+    \uses{def:alexandrov-topology, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
+    \leanok
+    For $\lambda > 0$, the dilation $x \mapsto \lambda x$ carries Alexandrov basis sets to Alexandrov basis sets: the image of a diamond $I^+(p) \cap I^-(q)$ is again a diamond, $I^+(\lambda p) \cap I^-(\lambda q)$. So a positive dilation preserves the causal (Alexandrov) structure --- it is a causal automorphism.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lmm:minkowski-dilation-cone, lmm:minkowski-chronological-open, def:alexandrov-topology}
+    Via the cone characterization of the chronological future and past on standard Minkowski (\ref{lmm:minkowski-chronological-open}) together with \ref{lmm:minkowski-dilation-cone}.
+\end{proof}
+
+\begin{theorem}[Dilations are Not Isometries]
+    \label{thrm:minkowski-dilation-not-isometry}
+    \lean{Physicslib4.minkowskiForm_smul, Physicslib4.exists_minkowskiForm_smul_ne}
+    \uses{def:standard-minkowski-spacetime}
+    \leanok
+    The Minkowski metric scales by $\lambda^2$ under a dilation, $g(\lambda v, \lambda w) = \lambda^2\, g(v,w)$. Consequently, whenever $\lambda^2 \neq 1$ the dilation does not preserve $g$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:standard-minkowski-spacetime, thrm:minkowski-dilation-causal-automorphism}
+    The scaling identity is bilinearity of the Minkowski form. For the timelike unit vector $e_0$ one has $g(\lambda e_0, \lambda e_0) = -\lambda^2 \neq -1 = g(e_0, e_0)$ whenever $\lambda^2 \neq 1$, which exhibits a pair of vectors on which $g$ is not preserved. Thus for $\lambda > 0$ with $\lambda \neq 1$ the dilation is a causal automorphism (\ref{thrm:minkowski-dilation-causal-automorphism}) that is not an isometry.
+\end{proof}
+
+\subsection{Isometries and basis-set preservation}
+
+\begin{lemma}[Isometries Preserve the Causal Classification]
+    \label{lmm:isometry-preserves-classification}
+    \lean{Physicslib4.Spacetime.Isometry.preserves_self, Physicslib4.Spacetime.Isometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.Isometry.isNull_mfderiv_iff, Physicslib4.Spacetime.Isometry.isSpacelike_mfderiv_iff}
+    \leanfile{Physicslib4/Spacetime/Isometry.lean}
+    \uses{def:spacetime, def:timelike-spacelike-null-vectors}
+    \leanok
+    An isometry $\varphi$ of a spacetime preserves the metric square of a tangent vector, $g_{\varphi(x)}(d\varphi_x v, d\varphi_x v) = g_x(v,v)$, and therefore $d\varphi_x v$ is timelike, null, or spacelike if and only if $v$ is.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Specialising the metric-preservation property of an isometry to $w = v$ gives the square identity; the three classification equivalences then follow from the sign of $g(v,v)$ being unchanged.
+\end{proof}
+
+\begin{lemma}[Unique Differentials Along a Path]
+    \label{lmm:path-parameter-unique-diff}
+    \lean{Physicslib4.Spacetime.Path.uniqueDiffOn_parameterSpace}
+    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \uses{def:paths}
+    \leanok
+    The parameter space of a path has unique differentials: being a closed, connected subset of $\mathbb{R}$ with more than one point, it is a non-degenerate interval, hence convex with non-empty interior.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A connected subset of $\mathbb{R}$ is convex, and a closed convex set with at least two points contains a non-degenerate open interval, so has non-empty interior; convex sets with non-empty interior have unique differentials.
+\end{proof}
+
+\begin{lemma}[Pushforward of a Path Under an Isometry]
+    \label{lmm:pushforward-path}
+    \lean{Physicslib4.Spacetime.Isometry.pushforwardPath, Physicslib4.Spacetime.Isometry.pushforwardPath_tangent, Physicslib4.Spacetime.Isometry.pushforwardPath_isTimelike, Physicslib4.Spacetime.Isometry.pushforwardPath_isCausal, Physicslib4.Spacetime.Isometry.pushforwardPath_isPastEndpoint, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureEndpoint}
+    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \uses{def:paths, def:timelike-and-causal-smooth-curves, def:endpoints, lmm:isometry-preserves-classification, lmm:path-parameter-unique-diff}
+    \leanok
+    An isometry $\varphi$ pushes a smooth path $\mu$ forward to the smooth path $\varphi \circ \mu$ on the same parameter space, with tangent vector $d\varphi(\dot\mu)$. The pushforward preserves the timelike and causal conditions and carries the past and future endpoints of $\mu$ to those of $\varphi \circ \mu$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Smoothness and non-vanishing of the derivative of $\varphi \circ \mu$ follow from the chain rule (using unique differentials on the parameter space) together with the fact that an isometry's differential is a linear isomorphism. The tangent identity then transports the classification and endpoint conditions.
+\end{proof}
+
+\begin{lemma}[Isometries Preserve Chronology]
+    \label{lmm:isometry-preserves-chronology}
+    \lean{Physicslib4.Spacetime.Isometry.PreservesFutureOrientation, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_one, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_mul, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureOriented, Physicslib4.Spacetime.Isometry.chronologicallyPrecedes_pushforward, Physicslib4.Spacetime.Isometry.chronologicalFuture_image_subset, Physicslib4.Spacetime.Isometry.chronologicalFuture_image, Physicslib4.Spacetime.Isometry.chronologicalPast_image_subset, Physicslib4.Spacetime.Isometry.chronologicalPast_image}
+    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \uses{def:trip, def:chronological-future-and-chronological-past, lmm:pushforward-path}
+    \leanok
+    Say an isometry $\varphi$ \emph{preserves the future orientation} if its differential sends future-pointing vectors to future-pointing vectors; this property holds for the identity and is closed under composition. Under it, $\varphi$ carries trips to trips, so $p \ll q$ implies $\varphi(p) \ll \varphi(q)$, and the chronological futures and pasts satisfy $\varphi(I^\pm(p)) = I^\pm(\varphi(p))$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Future-orientation preservation makes the pushforward of a future-oriented trip a future-oriented trip, giving $p \ll q \Rightarrow \varphi(p) \ll \varphi(q)$. Applying this to $\varphi$ and to $\varphi^{-1}$ yields the image equalities for $I^+$ and $I^-$.
+\end{proof}
+
+\begin{lemma}[Isometries Preserve Basis Sets]
+    \label{lmm:isometry-preserves-basis-sets}
+    \lean{Physicslib4.Spacetime.Isometry.futureOrientationPreserving, Physicslib4.Spacetime.Isometry.orientedIdentityComponent, Physicslib4.Spacetime.Isometry.alexandrovBasis_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent, Physicslib4.Spacetime.Isometry.smul_set_eq_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_smul_of_mem, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_image, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_smul}
+    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, lmm:isometry-preserves-chronology}
+    \leanok
+    The future-orientation-preserving isometries (those $\varphi$ with both $\varphi$ and $\varphi^{-1}$ preserving the orientation) form a subgroup, and intersecting it with the identity component gives the \emph{oriented identity component}. Every such isometry maps Alexandrov-basis diamonds to diamonds, $\varphi(I^+(p) \cap I^-(q)) = I^+(\varphi(p)) \cap I^-(\varphi(q))$, both as an image and in pointwise-action form $\varphi \cdot \mathbf{B}$, and this lifts to the bundled Lorentzian spacetime.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Bundling the inverse into the predicate makes the subgroup axioms follow from the identity and composition cases with no appeal to the group topology. Basis-set preservation is then the image of an intersection of a chronological future and past, computed via the previous lemma using injectivity of the isometry.
+\end{proof}
+
+\begin{lemma}[Axiom 5 Basis-Set Preservation]
+    \label{lmm:axiom5-basis-preservation}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_isBasisSet_smul}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/IdentityComponent.lean}
+    \uses{lmm:isometry-preserves-basis-sets, def:isometric-covariance-in-curved-spacetime}
+    \leanok
+    Instantiating the abstract curved-spacetime interface with the oriented identity component, every isometry $\varphi$ of the abstract spacetime carries Alexandrov-basis sets to basis sets, $\varphi \cdot \mathbf{B}$ is again a basis set. This is exactly the well-definedness condition for the Axiom 5 action $\mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The abstract isometry group of the bridge is, by definition, the oriented identity component, so basis-set preservation transfers verbatim from the concrete statement.
+\end{proof}
+
+\subsection{Pullback metrics and cross-metric isometries}
+
+The single-metric isometry lemmas above compare a spacetime with itself. General covariance (\ref{def:general-covariance-in-curved-spacetime}) instead compares two \emph{different} metrics on one carrier, related by pulling back along a diffeomorphism, so the corresponding transport statements have to be redone cross-metric; the single-metric lemmas \ref{lmm:isometry-preserves-classification}--\ref{lmm:isometry-preserves-basis-sets} do not apply. This subsection supplies the geometry.
+
+\begin{definition}[Pullback of a Spacetime Metric]
+    \label{def:pullback-metric}
+    \lean{Physicslib4.Spacetime.bilinearPrecomp, Physicslib4.Spacetime.bilinearPrecomp_apply, Physicslib4.Spacetime.pullbackVal, Physicslib4.Spacetime.pullbackVal_apply}
+    \uses{def:spacetime}
+    \leanok
+    Let $(M,g)$ be a spacetime (\ref{def:spacetime}) and let $\psi : M \to M$ be a $C^\infty$ diffeomorphism. The \emph{pullback metric} $\psi^*g$ is the field of bilinear forms
+    \begin{align}
+        (\psi^*g)_x(v,w) := g_{\psi(x)}\big(d\psi_x v,\, d\psi_x w\big),
+    \end{align}
+    where $d\psi_x : TM|_x \to TM|_{\psi(x)}$ is the manifold differential of $\psi$ at $x$. The \emph{pullback spacetime} $\psi^*(M,g)$ is the datum obtained by keeping the carrier set, topology, Hausdorff and connectedness properties, charts, model with corners, smooth structure, and tangent-space finite-dimensionality of $(M,g)$ unchanged, and replacing the metric field by $\psi^*g$. This node is data only: that $\psi^*g$ satisfies the metric obligations of \ref{def:spacetime} is \ref{thrm:pullback-is-spacetime}.
+
+    The metric field of \ref{def:spacetime} is not a bare function of two vectors but a family of \emph{continuous} bilinear forms, $g_x : TM|_x \to_L TM|_x \to_L \mathbb{R}$. The displayed formula must therefore be realised as an inhabitant of that bundled type, not merely as a pointwise numerical prescription: $\psi^*g$ is defined by precomposing $g_{\psi(x)}$ with $d\psi_x$ in both slots,
+    \begin{align}
+        (\psi^*g)_x := \mathtt{ContinuousLinearMap.bilinearComp}\;\big(g_{\psi(x)}\big)\;\big(d\psi_x\big)\;\big(d\psi_x\big),
+    \end{align}
+    using that $d\psi_x$ is itself a continuous linear map. Continuity and bilinearity of $(\psi^*g)_x$ are then structural rather than facts to be proved, and $\mathtt{bilinearComp\_apply}$ recovers the displayed formula. Without this step there is nothing to put in the metric field of the bundled spacetime.
+\end{definition}
+
+\begin{lemma}[The Differential of a Diffeomorphism is a Linear Equivalence]
+    \label{lmm:mfderiv-diffeo-linear-equiv}
+    \lean{Physicslib4.Spacetime.Diffeo, Physicslib4.Spacetime.mfderivEquiv, Physicslib4.Spacetime.mfderivEquiv_coe, Physicslib4.Spacetime.mfderiv_eq_mfderivEquiv, Physicslib4.Spacetime.isInvertible_mfderiv}
+    \uses{def:spacetime}
+    \leanok
+    For a $C^\infty$ diffeomorphism $\psi$ of $M$ and any $x \in M$, the differential $d\psi_x : TM|_x \to TM|_{\psi(x)}$ is a continuous linear isomorphism.
+\end{lemma}
+\begin{proof}
+    \leanok
+    This is Mathlib's \texttt{Diffeomorph.mfderivToContinuousLinearEquiv}, which packages the differential of a $C^n$ diffeomorphism ($n \neq 0$) at a point as a \texttt{ContinuousLinearEquiv} between the tangent spaces; \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} identifies its underlying map with $d\psi_x$.
+
+    Two implementation points. First, the statement deliberately claims only that $d\psi_x$ is an isomorphism, and does \emph{not} identify the inverse of that equivalence with $d(\psi^{-1})_{\psi(x)}$. Such an identification is not available definitionally: \texttt{Diffeomorph.mfderivToContinuousLinearEquiv} is built as $(\psi.\mathtt{isLocalDiffeomorph}\;x).\mathtt{mfderivToContinuousLinearEquiv}$, so its inverse function comes from \texttt{IsLocalDiffeomorphAt.mfderivToContinuousLinearEquiv} --- the differential of a \emph{local} inverse chosen by that construction, not of the global $\psi^{-1}$. Where the notation $(d\psi_x)^{-1}$ appears below it therefore means the \texttt{symm} of this equivalence, not \emph{a priori} $d(\psi^{-1})_{\psi(x)}$, and the purely algebraic consumers --- \ref{lmm:mfderiv-inverse-eq-symm}, \ref{lmm:pullback-metric-lorentzian}, \ref{lmm:pullback-time-orientation-timelike}, \ref{lmm:pullback-future-pointing-timelike} --- need nothing more, since they use only the two cancellation identities $\mathtt{symm\_apply\_apply}$ and $\mathtt{apply\_symm\_apply}$ of the equivalence, which hold for whatever the \texttt{symm} happens to be.
+
+    It must not be inferred from this that the identification is never needed. A second group of nodes reasons about $d(\psi^{-1})$ \emph{as such}, i.e.\ about $\mathtt{mfderiv}\;\psi.\mathtt{symm}$, because the orientation hypothesis they invoke is applied to the inverse diffeomorphism. What those nodes require is the chain-rule cancellation
+    \begin{align}
+        d\psi_x\big(d(\psi^{-1})_{\psi(x)}\,u\big) = u,
+    \end{align}
+    and \emph{Mathlib has no such lemma for a global} \texttt{Diffeomorph} (there is no \texttt{Diffeomorph} analogue of the $\mathtt{mfderiv}$/\texttt{symm} identities; searching turns up only \texttt{Diffeomorph.apply\_symm\_apply} at the level of points). It has to be proved by hand; that obligation is no longer left implicit here but is discharged by the separate nodes \ref{lmm:mfderiv-symm-cancel-left} and \ref{lmm:mfderiv-symm-cancel-right}. It is genuine work and is not supplied by the equivalence above.
+
+    Their direct consumers are exactly two: \ref{lmm:pullback-preserves-future-orientation}, which needs the cancellation to instantiate the $\psi^{-1}$ half of the two-sided orientation hypothesis, and \ref{lmm:cross-metric-isometry-symm}, which needs it to turn the isometry equation for $\psi$ into the isometry equation for $\psi^{-1}$. The nodes further downstream --- \ref{lmm:cross-metric-chronological-future-image}, \ref{lmm:cross-metric-chronological-past-image}, \ref{lmm:cross-metric-isometry-preserves-basis-sets} and \ref{lmm:pullback-alexandrov-homeomorphism} --- do reason about $\psi^{-1}$, but they reach the cancellation only \emph{through} those two, and so cite them rather than these nodes.
+
+    Second, \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} is \emph{not} tagged \texttt{@[simp]}, and its point argument $x$ is implicit while the diffeomorphism and the hypothesis $n \neq 0$ are explicit. It must therefore be rewritten by hand (typically as \texttt{$\leftarrow$ Diffeomorph.mfderivToContinuousLinearEquiv\_coe} with the $n \neq 0$ side goal discharged inline), rather than being picked up by \texttt{simp}.
+\end{proof}
+
+\begin{lemma}[Round-Trip Cancellation: $d\psi$ After $d(\psi^{-1})$]
+    \label{lmm:mfderiv-symm-cancel-left}
+    \lean{Physicslib4.Spacetime.mfderiv_symm_cancel_left}
+    \uses{def:spacetime}
+    \leanok
+    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $x \in M$. Then, pointwise,
+    \begin{align}
+        d\psi_x\big(d(\psi^{-1})_{\psi(x)}\,u\big) = u \qquad \text{for every } u \in TM|_{\psi(x)}.
+    \end{align}
+    The pointwise form displayed above is the \emph{primary} statement of this node, because that is the form in which every consumer applies it; the operator identity $d\psi_x \circ d(\psi^{-1})_{\psi(x)} = \mathrm{id}_{TM|_{\psi(x)}}$ follows from it by \texttt{ContinuousLinearMap.ext} and is not what is stated. Here $d(\psi^{-1})_{\psi(x)}$ means $\mathtt{mfderiv}\;I\;I\;\psi.\mathtt{symm}\;(\psi\,x)$: the differential of the \emph{global} inverse diffeomorphism, \emph{not} the \texttt{symm} of the equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Differentiate the composite $\psi \circ \psi^{-1}$ at the point $\psi(x)$, and apply the result to $u$.
+
+    The chain rule to cite is \texttt{mfderiv\_comp\_apply\_of\_eq}, \emph{not} \texttt{mfderiv\_comp} (nor its \texttt{\_apply} form). Its exact shape is
+    \begin{align}
+        \big(hg : \mathtt{MDifferentiableAt}\;f\text{'s target model}\;g\;y\big) \to \big(hf : \mathtt{MDifferentiableAt}\;f\;x\big) \to \big(hy : f\,x = y\big) \to \mathtt{mfderiv}\,(g \circ f)\,x\,v = \mathtt{mfderiv}\,g\,y\,\big(\mathtt{mfderiv}\,f\,x\,v\big),
+    \end{align}
+    and the base-point argument $hy$ is exactly what is needed here: instantiated at $g := \psi$, $f := \psi.\mathtt{symm}$, base point $\psi(x)$ and $y := x$, it requires $hy : \psi.\mathtt{symm}(\psi\,x) = x$, which is \texttt{Diffeomorph.symm\_apply\_apply}. Without that transport the plain \texttt{mfderiv\_comp} produces the outer factor as $\mathtt{mfderiv}\;\psi\;\big(\psi.\mathtt{symm}(\psi\,x)\big)$, whose value lives in the tangent space at $\psi(\psi.\mathtt{symm}(\psi\,x))$ rather than at $\psi(x)$; those two tangent spaces are propositionally but not definitionally identified, so the composition does not typecheck until the base point has been transported. The \texttt{\_of\_eq} variant is the lemma that takes the transport as an argument and states its conclusion at $y$.
+
+    The two differentiability hypotheses are \texttt{Diffeomorph.mdifferentiable} (side condition $n \neq 0$) applied to $\psi$ and to $\psi.\mathtt{symm}$. Finally $\psi \circ \psi.\mathtt{symm}$ is the identity function by \texttt{Diffeomorph.apply\_symm\_apply} (and \texttt{funext}), so the left-hand side is $\mathtt{mfderiv}\;\mathrm{id}\;(\psi\,x)\,u = u$ by \texttt{mfderiv\_id} and \texttt{ContinuousLinearMap.id\_apply}.
+
+    Since it is an \texttt{mfderiv} identity that is wanted and not a statement about the equivalence, \ref{lmm:mfderiv-diffeo-linear-equiv} is deliberately \emph{not} used: as recorded there, the \texttt{symm} of that equivalence is not definitionally $d(\psi^{-1})_{\psi(x)}$, so it cannot supply this.
+\end{proof}
+
+\begin{lemma}[Round-Trip Cancellation: $d(\psi^{-1})$ After $d\psi$]
+    \label{lmm:mfderiv-symm-cancel-right}
+    \lean{Physicslib4.Spacetime.mfderiv_symm_cancel_right}
+    \uses{def:spacetime}
+    \leanok
+    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $x \in M$. Then, pointwise,
+    \begin{align}
+        d(\psi^{-1})_{\psi(x)}\big(d\psi_x\,v\big) = v \qquad \text{for every } v \in TM|_x,
+    \end{align}
+    with the same reading of $d(\psi^{-1})_{\psi(x)}$ as in \ref{lmm:mfderiv-symm-cancel-left}, and again with the pointwise form as the primary statement.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The mirror of \ref{lmm:mfderiv-symm-cancel-left}, run on $\psi^{-1} \circ \psi$ at $x$: \texttt{mfderiv\_comp\_apply\_of\_eq} with $g := \psi.\mathtt{symm}$, $f := \psi$, base point $x$ and $y := \psi(x)$, so that the base-point argument $hy : \psi\,x = \psi\,x$ is \texttt{rfl} in this order --- the transport is trivial here, which is precisely why the two directions are separate nodes rather than one, the $hy$ bookkeeping being asymmetric between them. The composite is the identity by \texttt{Diffeomorph.symm\_apply\_apply}, and \texttt{mfderiv\_id} finishes as before.
+
+    Its consumer is \ref{lmm:cross-metric-isometry-symm}, where it is paired with \ref{lmm:mfderiv-symm-cancel-left} to record that $d(\psi^{-1})_{\psi(x)}$ and $d\psi_x$ are mutually inverse; \ref{lmm:mfderiv-symm-cancel-left} alone is what the orientation-transport nodes need.
+\end{proof}
+
+\begin{lemma}[The Formal Inverse of $d\psi_x$ is the Inverse Equivalence]
+    \label{lmm:mfderiv-inverse-eq-symm}
+    \lean{Physicslib4.Spacetime.inverse_mfderiv_eq_symm, Physicslib4.Spacetime.inverse_mfderiv_apply_mfderiv, Physicslib4.Spacetime.mfderiv_apply_inverse_mfderiv}
+    \uses{lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
+    For a $C^\infty$ diffeomorphism $\psi$ of $M$ and any $x \in M$, the formal inverse $\mathtt{ContinuousLinearMap.inverse}\,(d\psi_x)$ agrees with the inverse of the continuous linear equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv}; in particular $(d\psi_x)^{-1}\,(d\psi_x v) = v$ and $d\psi_x\big((d\psi_x)^{-1}u\big) = u$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Mathlib's \texttt{ContinuousLinearMap.inverse} is defined by cases on invertibility and returns the junk value $0$ when its argument is not invertible, so nothing can be cancelled against it until invertibility is exhibited. Here \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} identifies $d\psi_x$ with the coercion of an equivalence, and \texttt{ContinuousLinearMap.inverse\_equiv} rewrites the formal inverse of such a coercion as the \texttt{symm} of that equivalence. The two cancellation identities are then \texttt{symm\_apply\_apply} and \texttt{apply\_symm\_apply}.
+\end{proof}
+
+This leaf is what licenses the $d\psi$ cancellations used below, and it is not optional. The pullback time orientation of \ref{lmm:pullback-time-orientation} is built with \texttt{VectorField.mpullback}, whose definition is literally $(d\psi_x).\mathtt{inverse}$ applied to the field; until that formal inverse is identified with a genuine two-sided inverse, an expression such as $d\psi_x\big((d\psi_x)^{-1} t_{\psi(x)}\big)$ cannot be simplified at all, because \texttt{ContinuousLinearMap.inverse} is a case split that may return $0$. Every cancellation in \ref{lmm:pullback-time-orientation-ne-zero}, \ref{lmm:pullback-time-orientation-timelike}, \ref{lmm:pullback-future-pointing-timelike} and \ref{lmm:pullback-metric-lorentzian} passes through this step.
+
+\begin{lemma}[The Pullback Metric is Symmetric]
+    \label{lmm:pullback-metric-symm}
+    \lean{Physicslib4.Spacetime.pullbackVal_symm}
+    \uses{def:pullback-metric}
+    \leanok
+    For every $x \in M$ the form $(\psi^*g)_x$ of \ref{def:pullback-metric} is symmetric.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Unfold \ref{def:pullback-metric} on both sides and apply the symmetry of $g_{\psi(x)}$ to the pair $(d\psi_x v, d\psi_x w)$.
+\end{proof}
+
+\begin{lemma}[The Pullback Metric is Non-Degenerate]
+    \label{lmm:pullback-metric-nondegenerate}
+    \lean{Physicslib4.Spacetime.pullbackVal_nondegenerate}
+    \uses{def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
+    For every $x \in M$ the form $(\psi^*g)_x$ of \ref{def:pullback-metric} is non-degenerate: if $(\psi^*g)_x(v,w) = 0$ for all $w$, then $v = 0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $d\psi_x$ is surjective (\ref{lmm:mfderiv-diffeo-linear-equiv}), every $u \in TM|_{\psi(x)}$ is $d\psi_x w$ for some $w$, so the hypothesis says $g_{\psi(x)}(d\psi_x v, \cdot)$ vanishes identically. Non-degeneracy of $g$ gives $d\psi_x v = 0$, and injectivity of $d\psi_x$ gives $v = 0$.
+\end{proof}
+
+\begin{lemma}[The Pullback Metric is Lorentzian]
+    \label{lmm:pullback-metric-lorentzian}
+    \lean{Physicslib4.Spacetime.pullbackVal_lorentzian}
+    \uses{def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv, lmm:mfderiv-inverse-eq-symm, def:spacetime}
+    \leanok
+    For every $x \in M$ there is a basis of $TM|_x$ whose Gram matrix under $(\psi^*g)_x$ is $\mathrm{diag}(-1,1,1,1)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Let $\{e_i\}$ be a signature basis of $TM|_{\psi(x)}$ for $g_{\psi(x)}$, supplied by the Lorentzian condition of \ref{def:spacetime}. Transport it along the inverse of the linear equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv} using \texttt{Module.Basis.map}, giving a basis $\{(d\psi_x)^{-1}e_i\}$ of $TM|_x$. Its Gram matrix is computed by unfolding \ref{def:pullback-metric} and cancelling $d\psi_x$ against $(d\psi_x)^{-1}$:
+    \begin{align}
+        (\psi^*g)_x\big((d\psi_x)^{-1}e_i,\, (d\psi_x)^{-1}e_j\big) = g_{\psi(x)}(e_i, e_j),
+    \end{align}
+    which is $\mathrm{diag}(-1,1,1,1)$ by choice of $\{e_i\}$.
+\end{proof}
+
+The Lorentzian condition of \ref{def:spacetime} is stated as the \emph{existence} of a signature basis at each point, and the proof above uses exactly that. This is essential and not a matter of taste: were the signature condition instead a rigid condition on the chart components of the metric, the pullback would not in general satisfy it, a generic differential $d\psi_x$ not preserving coordinate components. The existential formulation is what makes the class of spacetimes closed under pullback.
+
+Mathlib has no pullback operation on covariant tensor fields, so the smoothness obligation of \ref{def:spacetime} for $\psi^*g$ must be assembled by hand. Since that obligation is now the bundle-section condition recorded in \ref{def:spacetime}, the assembly is done entirely in the bundle-section idiom, out of three ingredients: the bundle-section smoothness of $g$ itself (the \texttt{contMDiff} field of the source spacetime), the smoothness of $\psi$ (\texttt{Diffeomorph.contMDiff}), and the smoothness of $x \mapsto d\psi_x$ as a section of the hom bundle. No chart-local reformulation of either the hypothesis or the goal is needed, and in particular nothing has to be translated between two idioms.
+
+\begin{lemma}[The Pullback Metric is a Smooth Section of the Bilinear-Form Bundle]
+    \label{lmm:pullback-metric-smooth-in-charts}
+    \lean{Physicslib4.Spacetime.pullbackVal_contMDiff}
+    \uses{def:spacetime, def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
+    The assignment $x \mapsto (\psi^*g)_x$ of \ref{def:pullback-metric} satisfies the \texttt{contMDiff} field of \ref{def:spacetime}: it is a section of the bundle of continuous bilinear forms on the tangent bundle of regularity index $\infty$, i.e.\ a $C^\infty$ section,
+    \begin{align}
+        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\infty\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;\big((\psi^*g)_x\big)\Big).
+    \end{align}
+    The index is $\infty$: that is what \ref{def:spacetime} demands.
+
+    \emph{The label name is historical.} It reads \texttt{pullback-metric-smooth-in-charts} because the smoothness field of \ref{def:spacetime} was once a chart-local $\mathtt{ContDiffWithinAt}$ condition. It is kept unchanged only because \ref{thrm:pullback-is-spacetime} cites it; nothing chart-local remains in either its statement or its proof.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By the bundled form recorded in \ref{def:pullback-metric}, the section in question is
+    \begin{align}
+        x \longmapsto \mathtt{ContinuousLinearMap.bilinearComp}\;\big(g_{\psi(x)}\big)\;\big(d\psi_x\big)\;\big(d\psi_x\big),
+    \end{align}
+    so the goal is smoothness in $x$ of a bilinear form obtained by precomposing a smooth family of bilinear forms with a family of continuous linear maps in both slots. Three ingredients feed it, all in the bundle-section idiom:
+    \begin{itemize}
+        \item smoothness of $g$ as a section of the bilinear-form bundle over the base map $\psi$ --- the \texttt{contMDiff} field of the source spacetime \ref{def:spacetime}, composed with $\psi$;
+        \item regularity of $\psi$ itself, supplied by \texttt{Diffeomorph.contMDiff}, read at the same index $\infty$ as the goal; it supplies the base map along which the previous item is read;
+        \item smoothness of $x \mapsto d\psi_x$ as a section of the hom bundle $\mathrm{Hom}\big(TM|_x,\, TM|_{\psi(x)}\big)$ over the base map $\psi$, together with invertibility of each $d\psi_x$ (\ref{lmm:mfderiv-diffeo-linear-equiv}) where the bundled form has to be recognised as a continuous linear map.
+    \end{itemize}
+    The assembly is \emph{not} an instance of \texttt{ContMDiff.clm\_bundle\_apply\ensuremath{_2}}: that lemma applies a bilinear-form section to two vector-field \emph{sections} and returns a scalar section, so it evaluates rather than precomposes, and Mathlib has no bundle-level precomposition lemma at all --- the only precomposition statement, \texttt{ContMDiff.clm\_comp}, is for trivial bundles. The route to use instead is to unfold the goal through \texttt{contMDiffAt\_hom\_bundle}, as described next.
+
+    \emph{The route, now pinned down.} This was previously recorded as an open API question. It is no longer open: every smoothness step is supplied by Mathlib, and what remains is two mechanical local identities. The chain is:
+    \begin{itemize}
+        \item smoothness of $x \mapsto d\psi_x$ is \texttt{ContMDiffAt.mfderiv\_const} (\texttt{Mathlib/Geometry/Manifold/ContMDiffMFDeriv.lean:241}), whose conclusion is $\mathtt{ContMDiffAt}$ of $\mathtt{inTangentCoordinates}\;I\;I\;\mathrm{id}\;\psi\;(\mathtt{mfderiv}\;\psi)\;x_0$. Its regularity gap $m + 1 \le n$ holds at $m = n = \infty$ because $\infty + 1 = \infty$ (\texttt{ENat.coe\_top\_add\_one}, which is \texttt{rfl} and \texttt{@[simp]}), so it is \texttt{le\_rfl}, not \texttt{le\_top}. Only $\mathtt{At}$ and $\mathtt{WithinAt}$ forms exist, so the global goal is opened with a single \texttt{intro};
+        \item the match between that $\mathtt{inTangentCoordinates}$ conclusion and the $\mathtt{inCoordinates}$ shape the goal wants is \emph{definitional}: $\mathtt{inTangentCoordinates}$ is \emph{defined} as the two-base-point $\mathtt{inCoordinates}$ (\texttt{Mathlib/Geometry/Manifold/VectorBundle/Tangent.lean:518}). Mathlib itself relies on this defeq, assigning the output of \texttt{mfderivWithin\_const} directly to a goal spelled with raw \texttt{inCoordinates} (\texttt{Mathlib/Geometry/Manifold/VectorField/Pullback.lean:423}). That file's \texttt{ContMDiffWithinAt.mpullbackWithin\_vectorField\_inter} is the canonical template for this whole node;
+        \item the two-slot precomposition is Mathlib's, via the identity $\beta.\mathtt{bilinearComp}\,A\,A = (A.\mathtt{precomp}\,\mathbb{R}) \circ (\beta \circ A)$ and then \texttt{ContMDiffAt.clm\_precomp} (\texttt{Mathlib/Geometry/Manifold/ContMDiff/NormedSpace.lean:122}) with \texttt{ContMDiffAt.clm\_comp} (\texttt{:170}).
+    \end{itemize}
+    Two \emph{local algebraic} helpers were indeed needed and had to be written by hand, but neither is a smoothness statement, and both were written as \texttt{have}s \emph{inside} the single proof rather than as top-level lemmas. The first is the $\mathtt{precomp}$ identity just displayed, $(\Gamma\,x).\mathtt{bilinearComp}\,(\Delta\,x)\,(\Delta\,x) = ((\Delta\,x).\mathtt{precomp}\;\mathbb{R}) \circ \big((\Gamma\,x) \circ (\Delta\,x)\big)$; it holds identically, with no side conditions, and was proved by \texttt{filter\_upwards}, then \texttt{ext v w}, then \texttt{simp [ContinuousLinearMap.bilinearComp\_apply]}. The second --- that the $\mathtt{inCoordinates}$ reading of a $\mathtt{bilinearComp}$ is the $\mathtt{bilinearComp}$ of the $\mathtt{inCoordinates}$ readings --- is \emph{not} an identity: it holds only on the intersection of the two relevant trivialisation base sets, because \texttt{continuousLinearMapAt} and \texttt{symmL} are mutually inverse only there. It was therefore established as an eventual equality at $x_0$, via \texttt{filter\_upwards} on two neighbourhood facts: that $x$ lies in the base set of the trivialisation at $x_0$, and that $\psi(x)$ lies in the base set of the trivialisation at $\psi(x_0)$, the latter obtained from continuity of $\psi$ by \texttt{ContinuousAt.preimage\_mem\_nhds}; both memberships come from \texttt{FiberBundle.mem\_baseSet\_trivializationAt'} together with \texttt{Trivialization.open\_baseSet.mem\_nhds}. The computation then goes through \texttt{hom\_trivializationAt\_apply}, \texttt{Bundle.ContinuousLinearMap.inCoordinates\_apply\_eq\ensuremath{_2}} (twice), \texttt{ContinuousLinearMap.inCoordinates\_eq}, and a small telescoping step cancelling a trivialisation against its inverse via \texttt{Bundle.Trivialization.coe\_linearMapAt\_of\_mem} and \texttt{Bundle.Trivialization.symm\_linearMapAt}, finishing with \texttt{congr\_of\_eventuallyEq}. One practical warning, recorded because it cost a formalization attempt: those last two lemmas live in the \texttt{Bundle.Trivialization} namespace, \emph{not} \texttt{Trivialization}. In \texttt{Mathlib/Topology/VectorBundle/Basic.lean} the \texttt{end Pretrivialization} closes only the inner namespace, leaving \texttt{Bundle} open, so the block at line 169 nests as \texttt{Bundle.Trivialization}. Both helpers are of the same kind as the \texttt{filter\_upwards}/\texttt{ext}/\texttt{simp} steps that already close the constant-metric case in \texttt{Physicslib4/Spacetime/Minkowski.lean}.
+
+    Two corrections to what was written here before. First, \texttt{ContMDiff.clm\_comp} is \emph{not} the only precomposition statement in Mathlib --- the \texttt{clm\_precomp} and \texttt{clm\_postcomp} families live in the same file and are the ones actually needed. Second, the candidate list below was retained as a record of how the question was framed, but the second and third bullets are now settled by the two items above rather than open:
+    \begin{itemize}
+        \item on the \emph{goal} side, \texttt{contMDiffAt\_hom\_bundle} in \texttt{Mathlib/Geometry/Manifold/VectorBundle/Hom.lean} does apply: the fibre here is $TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$, whose source and target both sit over the \emph{single} base point $x$, and that lemma's statement reads the fibre element through $\mathtt{inCoordinates}\;F_1\;E_1\;F_2\;E_2\;(f\,x_0).1\;(f\,x).1\;(f\,x_0).1\;(f\,x).1$, i.e.\ with one and the same base point in the source and the target slots. Applying it reduces this node to smoothness of the $\mathtt{inCoordinates}$ reading of $(\psi^*g)_x$;
+        \item that reduced goal is exactly the shape \texttt{ContMDiffAt.mfderiv} in \texttt{Mathlib/Geometry/Manifold/MFDeriv/} produces for $d\psi$, namely smoothness of the differential in the $\mathtt{inTangentCoordinates}$ normalisation rather than as a bundle section --- which is why the reduction is made in this direction and not the other;
+        \item the surrounding \texttt{inTangentCoordinates} API of the same directory (\texttt{inTangentCoordinates}, \texttt{inTangentCoordinates\_eq}), for matching the two readings up.
+    \end{itemize}
+    One thing to record so that it is not attempted: \texttt{contMDiffAt\_hom\_bundle} is \emph{not} a possible target shape for $x \mapsto d\psi_x$ itself. Its single-base-point form is precisely what rules that out, since $d\psi_x : TM|_x \to_L[\mathbb{R}] TM|_{\psi(x)}$ has \emph{two} base maps, the identity and $\psi$. The two-base-map API is \texttt{ContMDiffAt.clm\_apply\_of\_inCoordinates} and \texttt{ContMDiffWithinAt.clm\_apply\_of\_inCoordinates}, whose hypothesis is stated as smoothness of $\mathtt{inCoordinates}\;F_1\;E_1\;F_2\;E_2\;(b_1\,m_0)\;(b_1\,m)\;(b_2\,m_0)\;(b_2\,m)\;(\varphi\,m)$, with independent $b_1$ and $b_2$; Mathlib gives these only in the $\mathtt{At}$ and $\mathtt{WithinAt}$ forms, because the $\mathtt{inCoordinates}$ hypothesis only makes sense around a point.
+
+    These do compose into the ingredient as stated. No intermediate top-level lemma was needed: the two local identities above are discharged inline, inside the single proof. All three ingredients are Mathlib-backed as they stand.
+\end{proof}
+
+\begin{theorem}[The Pullback of a Spacetime is a Spacetime]
+    \label{thrm:pullback-is-spacetime}
+    \lean{Physicslib4.Spacetime.pullback, Physicslib4.Spacetime.pullback_Carrier, Physicslib4.Spacetime.pullback_model, Physicslib4.Spacetime.pullback_val, Physicslib4.Spacetime.pullbackDiffeo}
+    \uses{def:spacetime, def:pullback-metric, lmm:pullback-metric-symm, lmm:pullback-metric-nondegenerate, lmm:pullback-metric-lorentzian, lmm:pullback-metric-smooth-in-charts}
+    \leanok
+    For a spacetime $(M,g)$ and a $C^\infty$ diffeomorphism $\psi$ of $M$, the pullback datum $\psi^*(M,g)$ of \ref{def:pullback-metric} is again a spacetime.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The manifold data are carried over verbatim from $(M,g)$, so only the metric obligations of \ref{def:spacetime} need discharging: symmetry is \ref{lmm:pullback-metric-symm}, non-degeneracy is \ref{lmm:pullback-metric-nondegenerate}, the Lorentzian condition is \ref{lmm:pullback-metric-lorentzian}, and the \texttt{contMDiff} field --- smoothness of the metric as a section of the bilinear-form bundle --- is \ref{lmm:pullback-metric-smooth-in-charts}.
+\end{proof}
+
+\begin{definition}[Two-Sided Preservation of Future Orientation]
+    \label{def:preserves-future-orientation}
+    \lean{Physicslib4.Spacetime.PreservesFutureOrientation, Physicslib4.Spacetime.PreservesFutureOrientationTwoSided}
+    \uses{def:time-orientable, def:future-and-past-pointing-vectors}
+    \leanok
+    Let $g_1$ and $g_2$ be metrics on $M$ with time orientations $t_1$ and $t_2$ respectively, and let $\psi$ be a $C^\infty$ diffeomorphism of $M$. Say $\psi$ \emph{preserves the future orientation} when
+    \begin{align}
+        v \text{ future-pointing for } (g_1,t_1) \;\Longrightarrow\; d\psi_x v \text{ future-pointing for } (g_2,t_2)
+    \end{align}
+    for every $x \in M$ and $v \in TM|_x$, in the sense of \ref{def:future-and-past-pointing-vectors}. Say $\psi$ satisfies the \emph{two-sided orientation hypothesis} when both $\psi$ preserves the future orientation from $(g_1,t_1)$ to $(g_2,t_2)$ and $\psi^{-1}$ preserves it from $(g_2,t_2)$ back to $(g_1,t_1)$.
+
+    Nothing here refers to the metrics beyond the two orientations, so this is a condition on a diffeomorphism and a pair of oriented metrics, stated independently of any isometry hypothesis. The single-metric case $g_1 = g_2 = g$, $t_1 = t_2 = t$ is the existing $\mathtt{Isometry.PreservesFutureOrientation}$, and the two-sided form is what the single-metric \ref{lmm:isometry-preserves-basis-sets} already uses; the definition is hoisted here so that the lemmas below can cite it rather than restate it.
+\end{definition}
+
+The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$, which is Mathlib's $\mathtt{VectorField.mpullback}\;I\;I\;\psi\;t$. Establishing that it is a time orientation splits into one smoothness statement and two pointwise conditions, and the smoothness statement is now a single step. Since the \texttt{smooth} field of \ref{def:time-orientable} is itself the bundle-section condition, it is \emph{literally} the hypothesis of \texttt{ContMDiff.mpullback\_vectorField}, whose conclusion is in turn literally the field to be produced for the pullback: the transport along $\psi$ is applied directly, with no conversion on either side.
+
+This is the main structural gain of making the bundle-section form primitive. In the earlier chart-local formulation the smoothness argument was a \emph{round trip} between two idioms --- chart-local hypothesis to bundle section, transport along $\psi$, bundle section back to chart-local goal --- and the dictionary between the two forms was the one node of this section that was \emph{accepted as an obligation} rather than reduced to Mathlib leaves, because Mathlib has no lemma packaging the $\mathrm{tangentCoordChange}$ round trip (the only $M$-side statement about it, \texttt{continuousOn\_tangentCoordChange}, gives mere continuity). Both conversion legs and the accepted obligation between them are now gone outright: there is no second idiom to translate to, so the \emph{time-orientation} smoothness chain below --- \ref{lmm:mpullback-vectorField-contMDiff-of-diffeo} and its consumers --- has no accepted obligation in it at all. This is a statement about that chain only, and not about the section as a whole: the metric side's hom-bundle ingredient, smoothness of $x \mapsto d\psi_x$, is likewise settled: its Mathlib route is now pinned down in \ref{lmm:pullback-metric-smooth-in-charts} (\texttt{ContMDiffAt.mfderiv\_const} plus the definitional $\mathtt{inTangentCoordinates}$/$\mathtt{inCoordinates}$ match), leaving there only two local algebraic helpers and no smoothness gap.
+
+\begin{lemma}[The Pullback of a Bundle-Smooth Vector Field Along a Diffeomorphism is Bundle-Smooth]
+    \label{lmm:mpullback-vectorField-contMDiff-of-diffeo}
+    \lean{Physicslib4.Spacetime.contMDiff_mpullback_vectorField}
+    \uses{def:time-orientable, lmm:mfderiv-diffeo-linear-equiv, def:spacetime}
+    \leanok
+    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $V$ be a vector field on $M$ with $\mathtt{CMDiff}\;\infty\;(\mathtt{T\%}\;V)$. Then
+    \begin{align}
+        \mathtt{CMDiff}\;\infty\;\big(\mathtt{T\%}\;(\mathtt{VectorField.mpullback}\;I\;I\;\psi\;V)\big).
+    \end{align}
+    This node was always stated in bundle-section terms, and it is now consumed directly: the hypothesis $hV$ is \emph{literally} the \texttt{smooth} field of \ref{def:time-orientable}, so applying the node at $V = t$ needs no conversion, and its conclusion is literally the \texttt{smooth} field to be produced for $\psi^*t$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    This is \texttt{ContMDiff.mpullback\_vectorField}, whose four hypotheses must all be supplied --- they are more than invertibility of the differential:
+    \begin{itemize}
+        \item $hV$: $\mathtt{CMDiff}\;m\;(\mathtt{T\%}\;V)$, the hypothesis of this node, which for $V = t$ is the \texttt{smooth} field of \ref{def:time-orientable} verbatim.
+        \item $hf$: $\mathtt{CMDiff}\;n\;\psi$, from $\psi$ being a smooth diffeomorphism (\texttt{Diffeomorph.contMDiff}); as everywhere in this section the index is $n = \infty$, matching \ref{def:spacetime}.
+        \item $hf'$: $\forall x,\ (\mathtt{mfderiv\%}\;\psi\;x).\mathtt{IsInvertible}$. This is $\mathtt{ContinuousLinearMap.IsInvertible}$ --- a \emph{predicate on a continuous linear map} --- and \emph{not} a \texttt{ContinuousLinearEquiv}, so \ref{lmm:mfderiv-diffeo-linear-equiv} does not supply it directly. The bridge is: rewrite $d\psi_x$ as the coercion of the equivalence using \texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} (backwards, by hand, since it is not a simp lemma; see \ref{lmm:mfderiv-diffeo-linear-equiv}), then close the goal with \texttt{ContinuousLinearMap.isInvertible\_equiv}, which states that the coercion of any \texttt{ContinuousLinearEquiv} is invertible.
+        \item $hmn$: the exponent gap $m + 1 \leq n$. Here $m = n = \infty$, and the gap holds because $\infty + 1 = \infty$ (\texttt{ENat.coe\_top\_add\_one}, which is \texttt{rfl} and \texttt{@[simp]}), so it is \texttt{le\_rfl}, not \texttt{le\_top}.
+    \end{itemize}
+    It further requires the instances $[\mathtt{CompleteSpace}\;E]$ and $[\mathtt{IsManifold}\;I\;1\;M]$ (both source and target instances, which coincide here since $\psi$ maps $M$ to itself); $E = \mathbb{R}^4$ is complete and the $\infty$-smooth structure of \ref{def:spacetime} gives the manifold instance at order $1$.
+\end{proof}
+
+\begin{lemma}[The Pullback Time Orientation is Nowhere Vanishing]
+    \label{lmm:pullback-time-orientation-ne-zero}
+    \lean{Physicslib4.Spacetime.mpullback_field_ne_zero}
+    \uses{def:time-orientable, lmm:mfderiv-inverse-eq-symm}
+    \leanok
+    For every $x \in M$, $(\psi^*t)_x = (d\psi_x)^{-1}\,t_{\psi(x)} \neq 0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By \ref{lmm:mfderiv-inverse-eq-symm} the formal inverse $(d\psi_x)^{-1}$ occurring in \texttt{VectorField.mpullback} is the \texttt{symm} of a continuous linear equivalence, hence injective (\texttt{ContinuousLinearEquiv.injective}), and it sends $0$ to $0$. Since $t_{\psi(x)} \neq 0$ by the non-vanishing field of \ref{def:time-orientable}, the image is nonzero. Without \ref{lmm:mfderiv-inverse-eq-symm} this fails: $\mathtt{ContinuousLinearMap.inverse}$ returns the junk value $0$ off the invertible case and is then not injective.
+\end{proof}
+
+\begin{lemma}[The Pullback Time Orientation is Everywhere Timelike]
+    \label{lmm:pullback-time-orientation-timelike}
+    \lean{Physicslib4.Spacetime.pullbackVal_mpullback_field_self, Physicslib4.Spacetime.isTimelike_mpullback_field}
+    \uses{def:pullback-metric, def:time-orientable, lmm:mfderiv-inverse-eq-symm}
+    \leanok
+    For every $x \in M$,
+    \begin{align}
+        (\psi^*g)_x\big((\psi^*t)_x,\, (\psi^*t)_x\big) = g_{\psi(x)}\big(t_{\psi(x)},\, t_{\psi(x)}\big) < 0,
+    \end{align}
+    so $(\psi^*t)_x$ is timelike for $\psi^*g$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Unfold \ref{def:pullback-metric} (whose defining equation is recovered from the bundled form by $\mathtt{bilinearComp\_apply}$), so that the left-hand side reads $g_{\psi(x)}\big(d\psi_x\,(d\psi_x)^{-1} t_{\psi(x)},\, d\psi_x\,(d\psi_x)^{-1} t_{\psi(x)}\big)$. Cancel each occurrence by \ref{lmm:mfderiv-inverse-eq-symm} alone. That suffices, and \ref{lmm:mfderiv-symm-cancel-left} is deliberately \emph{not} needed here: the inverse appearing in this expression is the one written into $\mathtt{VectorField.mpullback}$, namely $\mathtt{ContinuousLinearMap.inverse}\,(d\psi_x)$, and \emph{not} $\mathtt{mfderiv}\;\psi.\mathtt{symm}\;(\psi\,x)$. So the cancellation required is the \texttt{apply\_symm\_apply} of the equivalence, exactly as recorded in the first implementation point of \ref{lmm:mfderiv-diffeo-linear-equiv}; the global-inverse round trip is a different identity and would be an unnecessary detour. The resulting quantity is negative by the timelike field of \ref{def:time-orientable} for $t$ at $\psi(x)$.
+\end{proof}
+
+\begin{lemma}[Pullback of a Time Orientation]
+    \label{lmm:pullback-time-orientation}
+    \lean{Physicslib4.Spacetime.pullbackTimeOrientation, Physicslib4.Spacetime.pullbackTimeOrientation_field}
+    \uses{def:time-orientable, def:pullback-metric, thrm:pullback-is-spacetime, lmm:mpullback-vectorField-contMDiff-of-diffeo, lmm:pullback-time-orientation-ne-zero, lmm:pullback-time-orientation-timelike}
+    \leanok
+    Let $t$ be a time orientation of $(M,g)$ (\ref{def:time-orientable}). Then the pullback vector field $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$ is a time orientation of $\psi^*(M,g)$ (\ref{thrm:pullback-is-spacetime}): it is smooth, nowhere vanishing, and everywhere timelike for $\psi^*g$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Assemble the three fields of a $\mathtt{TimeOrientation}$ for $\psi^*(M,g)$. Smoothness is one step: apply \ref{lmm:mpullback-vectorField-contMDiff-of-diffeo} at $V = t$, whose hypothesis is the \texttt{smooth} field of \ref{def:time-orientable} for $t$ as it stands and whose conclusion is the \texttt{smooth} field required of $\psi^*t$; both sides are bundle-section statements, so no conversion is performed in either direction. Non-vanishing is \ref{lmm:pullback-time-orientation-ne-zero} and timelikeness is \ref{lmm:pullback-time-orientation-timelike}.
+\end{proof}
+
+\begin{lemma}[Transport of Future-Pointing Timelike Vectors]
+    \label{lmm:pullback-future-pointing-timelike}
+    \lean{Physicslib4.Spacetime.pullbackVal_mpullback_field_apply, Physicslib4.Spacetime.isFuturePointing_pullback_iff_of_isTimelike}
+    \uses{def:pullback-metric, lmm:pullback-time-orientation, def:future-and-past-pointing-vectors, lmm:mfderiv-inverse-eq-symm}
+    \leanok
+    For $v \in TM|_x$ timelike for $\psi^*g$,
+    \begin{align}
+        (\psi^*g)_x\big((\psi^*t)_x,\, v\big) = g_{\psi(x)}\big(t_{\psi(x)},\, d\psi_x v\big),
+    \end{align}
+    and hence $v$ is future-pointing for $(\psi^*g, \psi^*t)$ if and only if $d\psi_x v$ is future-pointing for $(g,t)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Unfold \ref{def:pullback-metric} in the left-hand side and cancel $d\psi_x\big((d\psi_x)^{-1} t_{\psi(x)}\big) = t_{\psi(x)}$ by \ref{lmm:mfderiv-inverse-eq-symm}. Timelikeness transports immediately, since $(\psi^*g)_x(v,v) = g_{\psi(x)}(d\psi_x v, d\psi_x v)$ is the defining equation of \ref{def:pullback-metric} at $w = v$. Both sides of the claimed equivalence therefore sit in the timelike branch of \ref{def:future-and-past-pointing-vectors}, where future-pointing is exactly negativity of the displayed quantity.
+\end{proof}
+
+\begin{lemma}[Transport of Future-Pointing Null Vectors]
+    \label{lmm:pullback-future-pointing-null}
+    \lean{Physicslib4.Spacetime.isFuturePointing_pullback_iff_of_isNull}
+    \uses{def:pullback-metric, lmm:pullback-time-orientation, def:future-and-past-pointing-vectors, lmm:pullback-future-pointing-timelike, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
+    For $v \in TM|_x$ null for $\psi^*g$, $v$ is future-pointing for $(\psi^*g, \psi^*t)$ if and only if $d\psi_x v$ is future-pointing for $(g,t)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Future-pointing for a null vector is \emph{not} a sign condition: by \ref{def:future-and-past-pointing-vectors} it is the existence of a sequence $v_n$ of future-pointing timelike vectors with $v_n \to v$. So the sign argument of \ref{lmm:pullback-future-pointing-timelike} does not apply directly and the witnessing sequence must be transported.
+
+    Given such a sequence for $v$, put $w_n := d\psi_x v_n$. Each $w_n$ is timelike and future-pointing for $(g,t)$ by \ref{lmm:pullback-future-pointing-timelike}, and $w_n \to d\psi_x v$ because $d\psi_x$ is a continuous linear map (\ref{lmm:mfderiv-diffeo-linear-equiv}), so $\mathtt{Filter.Tendsto}$ composes with its continuity at $v$. As $d\psi_x v$ is null for $g$, the sequence $(w_n)$ witnesses the null branch for $d\psi_x v$. The converse runs the same argument with $(d\psi_x)^{-1}$, itself continuous and linear.
+\end{proof}
+
+\begin{lemma}[The Pullback Preserves the Future Orientation Two-Sidedly]
+    \label{lmm:pullback-preserves-future-orientation}
+    \lean{Physicslib4.Spacetime.pullback_preservesFutureOrientationTwoSided}
+    \uses{def:preserves-future-orientation, lmm:pullback-future-pointing-timelike, lmm:pullback-future-pointing-null, lmm:mfderiv-symm-cancel-left}
+    \leanok
+    The diffeomorphism $\psi$, regarded as carrying $(\psi^*g, \psi^*t)$ to $(g,t)$, satisfies the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A future-pointing vector is either timelike or null (\ref{def:future-and-past-pointing-vectors}). The timelike case is \ref{lmm:pullback-future-pointing-timelike} and the null case is \ref{lmm:pullback-future-pointing-null}; each is an equivalence, so it yields both the forward direction for $\psi$ and the forward direction for $\psi^{-1}$.
+
+    The $\psi^{-1}$ half is where \ref{lmm:mfderiv-symm-cancel-left} is spent, and it is worth naming the point exactly, since the edge is otherwise unlocatable in the argument. That half asks: for $y \in M$ and $u \in TM|_y$ future-pointing for $(g,t)$, show $d(\psi^{-1})_y u$ is future-pointing for $(\psi^*g, \psi^*t)$. Put $x := \psi^{-1}(y)$, so $y = \psi(x)$, and apply the equivalence at $x$ to the vector $v := d(\psi^{-1})_{\psi(x)}u$: it says $v$ is future-pointing for $(\psi^*g,\psi^*t)$ iff $d\psi_x v$ is future-pointing for $(g,t)$. But $d\psi_x v = d\psi_x\big(d(\psi^{-1})_{\psi(x)}u\big) = u$ by \ref{lmm:mfderiv-symm-cancel-left}, so the right-hand side is the hypothesis. The same rewriting is also what supplies the causal-type side condition of the equivalence, $(\psi^*g)_x(v,v) = g_{\psi(x)}(d\psi_x v, d\psi_x v) = g_y(u,u)$, so $v$ sits in the same timelike-or-null branch as $u$. Without the cancellation the two sides of the equivalence simply do not meet the hypothesis, since $d\psi_x\,d(\psi^{-1})_{\psi(x)}u$ is not syntactically $u$.
+\end{proof}
+
+\begin{definition}[Isometry Between Two Metrics on One Manifold]
+    \label{def:cross-metric-isometry}
+    \lean{Physicslib4.Spacetime.CrossIsometry, Physicslib4.Spacetime.pullbackCrossIsometry, Physicslib4.Spacetime.Isometry.toCrossIsometry, Physicslib4.Spacetime.Isometry.toCrossIsometry_toDiffeo, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_iff}
+    \uses{def:pullback-metric}
+    \leanok
+    Let $g_1$ and $g_2$ be metrics on the same manifold $M$. A $C^\infty$ diffeomorphism $\psi : M \to M$ is an \emph{isometry from $(M,g_1)$ to $(M,g_2)$} when $\psi^*g_2 = g_1$ (\ref{def:pullback-metric}), that is, when
+    \begin{align}
+        g_2\big(d\psi_x v,\, d\psi_x w\big) = g_1(v,w)
+    \end{align}
+    for every $x \in M$ and all $v, w \in TM|_x$. The usual single-metric notion --- an isometry of $(M,g)$ --- is exactly the special case $g_1 = g_2 = g$. Consequently $\psi$ is tautologically an isometry from $\psi^*(M,g)$ to $(M,g)$, the defining equation there reading $\psi^*g = \psi^*g$. The causal-transport properties of such a $\psi$ are \ref{lmm:cross-metric-isometry-preserves-classification}--\ref{lmm:cross-metric-isometry-preserves-basis-sets}.
+\end{definition}
+
+\begin{lemma}[The Inverse of a Cross-Metric Isometry is a Cross-Metric Isometry]
+    \label{lmm:cross-metric-isometry-symm}
+    \lean{Physicslib4.Spacetime.CrossIsometry.symm_preserves, Physicslib4.Spacetime.CrossIsometry.symm}
+    \uses{def:cross-metric-isometry, lmm:mfderiv-symm-cancel-left, lmm:mfderiv-symm-cancel-right}
+    \leanok
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ in the sense of \ref{def:cross-metric-isometry}. Then $\psi^{-1}$ is an isometry from $(M,g_2)$ to $(M,g_1)$: for every $y \in M$ and all $u, u' \in TM|_y$,
+    \begin{align}
+        g_1\big(d(\psi^{-1})_y u,\; d(\psi^{-1})_y u'\big) = g_2(u, u').
+    \end{align}
+    Moreover $d(\psi^{-1})_{\psi(x)}$ and $d\psi_x$ are mutually inverse continuous linear maps for every $x$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Given $y$, put $x := \psi^{-1}(y)$, so that $y = \psi(x)$ by \texttt{Diffeomorph.apply\_symm\_apply}; every point of $M$ is of this form, so it is enough to prove the equation at $y = \psi(x)$. Instantiate the defining equation of \ref{def:cross-metric-isometry} at $x$ with $v := d(\psi^{-1})_{\psi(x)}u$ and $w := d(\psi^{-1})_{\psi(x)}u'$:
+    \begin{align}
+        g_2\big(d\psi_x\,d(\psi^{-1})_{\psi(x)}u,\; d\psi_x\,d(\psi^{-1})_{\psi(x)}u'\big) = g_1\big(d(\psi^{-1})_{\psi(x)}u,\; d(\psi^{-1})_{\psi(x)}u'\big),
+    \end{align}
+    and rewrite the two arguments on the left with \ref{lmm:mfderiv-symm-cancel-left}, which turns them into $u$ and $u'$. The two mutual-inverse identities are \ref{lmm:mfderiv-symm-cancel-left} and \ref{lmm:mfderiv-symm-cancel-right} as they stand.
+
+    This node exists to replace a hand-wave. The reverse inclusions in \ref{lmm:cross-metric-chronological-future-image} and \ref{lmm:cross-metric-chronological-past-image} apply \ref{lmm:cross-metric-isometry-preserves-chronology} to $\psi^{-1}$, which requires $\psi^{-1}$ to be a cross-metric isometry in the \emph{opposite} direction; that is not the defining equation of \ref{def:cross-metric-isometry} ``read backwards'', since reading it backwards gives an equation about $d\psi$, not about $d(\psi^{-1})$, and passing between the two is exactly the cancellation above.
+\end{proof}
+
+\begin{lemma}[Cross-Metric Isometries Preserve the Causal Classification]
+    \label{lmm:cross-metric-isometry-preserves-classification}
+    \lean{Physicslib4.Spacetime.CrossIsometry.preserves_self, Physicslib4.Spacetime.CrossIsometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.CrossIsometry.isNull_mfderiv_iff, Physicslib4.Spacetime.CrossIsometry.isSpacelike_mfderiv_iff}
+    \uses{def:cross-metric-isometry, def:timelike-spacelike-null-vectors}
+    \leanok
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ (\ref{def:cross-metric-isometry}). Then $g_2(d\psi_x v, d\psi_x v) = g_1(v,v)$, and hence $d\psi_x v$ is timelike, null, or spacelike for $g_2$ if and only if $v$ is timelike, null, or spacelike for $g_1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Specialise the defining equation of \ref{def:cross-metric-isometry} to $w = v$; the three equivalences follow because the sign of the metric square is unchanged. The single-metric \ref{lmm:isometry-preserves-classification} does not apply: source and target metrics differ here, so the statement is not an instance of it.
+\end{proof}
+
+The pushforward of a path under a cross-metric isometry is decomposed exactly as the single-metric case is in the Lean development, which splits $\mathtt{pushforwardPath}$, $\mathtt{pushforwardPath\_tangent}$, $\mathtt{pushforwardPath\_isTimelike}$ / $\mathtt{pushforwardPath\_isCausal}$ and the two endpoint lemmas into separate declarations. The single-metric \ref{lmm:pushforward-path} does not apply: source and target metrics differ here.
+
+\begin{lemma}[The Tangent Chain Rule Along a Path]
+    \label{lmm:cross-metric-pushforward-path-tangent}
+    \lean{Physicslib4.Spacetime.mfderivWithin_comp_diffeo, Physicslib4.Spacetime.pushforwardPath_tangent}
+    \uses{def:paths, lmm:path-parameter-unique-diff, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
+    Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and $\mu$ a smooth path. For every parameter $s$ in the parameter space of $\mu$,
+    \begin{align}
+        \tfrac{d}{ds}\big(\psi \circ \mu\big)(s) = d\psi_{\mu(s)}\big(\dot\mu(s)\big),
+    \end{align}
+    the derivatives being taken within the parameter space.
+\end{lemma}
+\begin{proof}
+    \leanok
+    This is \texttt{mfderivWithin\_comp} for the composite of $\mu$ with $\psi$. Write $P$ for the parameter space of $\mu$ (the inner set), $u$ for the outer set, and keep $s \in P$ for the parameter of the statement; the set and the point must be kept notationally apart, since \texttt{mfderivWithin\_comp} takes both. With that convention its exact hypotheses are
+    \begin{align}
+        hg &: \mathtt{MDifferentiableWithinAt}\;I'\;I''\;\psi\;u\;(\mu(s)), \qquad hf : \mathtt{MDifferentiableWithinAt}\;I\;I'\;\mu\;P\;s, \\
+        h &: P \subseteq \mu^{-1}(u), \qquad hxs : \mathtt{UniqueMDiffWithinAt}\;I\;P\;s,
+    \end{align}
+    of which two are easy to overlook. The uniqueness hypothesis is \emph{pointwise} --- a $\mathtt{UniqueMDiffWithinAt}$ at the single parameter $s$, not a $\mathtt{UniqueMDiffOn}$ on the whole of $P$ --- so what \ref{lmm:path-parameter-unique-diff} supplies must be specialised to $s$ and converted, as $(\dots\,s\,hs).\mathtt{uniqueMDiffWithinAt}$. And there is a set side condition $P \subseteq \mu^{-1}(u)$ relating the inner set to the outer one; here $u = \mathtt{univ}$, so it is immediate, and correspondingly the outer derivative is an unrestricted \texttt{mfderiv} obtained by \texttt{mfderivWithin\_univ}. Differentiability of $\mu$ within $P$ comes from its smoothness, and differentiability of $\psi$ from \texttt{Diffeomorph.mdifferentiable} (with side condition $n \neq 0$), which is what the repository template cited below actually uses --- not from \ref{lmm:mfderiv-diffeo-linear-equiv}, which delivers a \texttt{ContinuousLinearEquiv} rather than an $\mathtt{MDifferentiableWithinAt}$ hypothesis.
+
+    Do not re-derive this: the repository already contains the single-metric form of exactly this statement, \texttt{Physicslib4.Spacetime.Isometry.mfderivWithin\_comp\_diffeo} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean:43}, whose proof carries out precisely the four steps above (including the \texttt{uniqueMDiffWithinAt} specialisation and the \texttt{mfderivWithin\_univ} rewrite). The cross-metric statement is obtained by copying it with the target metric changed, since the identity is about the differential of $\psi$ alone and mentions no metric. Similarly, the unique-differentials input \ref{lmm:path-parameter-unique-diff} is already proved as \texttt{Physicslib4.Spacetime.Path.uniqueDiffOn\_parameterSpace} in \texttt{Physicslib4/Spacetime/Curves.lean:119} and should be cited rather than reproved.
+\end{proof}
+
+\begin{lemma}[Pushforward of a Path Under a Cross-Metric Isometry]
+    \label{lmm:cross-metric-pushforward-path}
+    \lean{Physicslib4.Spacetime.pushforwardPath, Physicslib4.Spacetime.pushforwardPath_parameterSpace, Physicslib4.Spacetime.pushforwardPath_toFun}
+    \uses{def:cross-metric-isometry, def:paths, lmm:cross-metric-pushforward-path-tangent, lmm:mfderiv-diffeo-linear-equiv}
+    \leanok
+    An isometry $\psi$ from $(M,g_1)$ to $(M,g_2)$ pushes a smooth path $\mu$ forward to a smooth path $\psi \circ \mu$ on the same parameter space, with the same closedness, connectedness and non-triviality data.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The parameter space and its properties are copied. Continuity and smoothness of $\psi \circ \mu$ follow by composing the smooth $\psi$ with the smooth $\mu$. Non-vanishing of the tangent vector is the only real obligation: rewrite it with \ref{lmm:cross-metric-pushforward-path-tangent} and use that $d\psi_{\mu(s)}$ is injective (\ref{lmm:mfderiv-diffeo-linear-equiv}) together with non-vanishing of $\dot\mu(s)$.
+
+    Again this should be assembled from the existing template rather than rederived: \texttt{Physicslib4.Spacetime.Isometry.pushforwardPath} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean:70} is the single-metric version of this very construction, and its \texttt{nonvanishing} field is the template for the obligation above --- it rewrites with \texttt{mfderivWithin\_comp\_diffeo}, then with $\leftarrow$\,\texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} and \texttt{ContinuousLinearEquiv.coe\_coe} to expose the equivalence, and finishes with its \texttt{injective}. The remaining fields (\texttt{parameterSpace}, \texttt{isClosed}, \texttt{isConnected}, \texttt{nontrivial}, \texttt{continuousOn}, \texttt{smoothOn}) are copied verbatim from that template, none of them mentioning a metric.
+\end{proof}
+
+\begin{lemma}[The Pushforward Preserves the Timelike and Causal Conditions]
+    \label{lmm:cross-metric-pushforward-path-causal}
+    \lean{Physicslib4.Spacetime.CrossIsometry.pushforwardPath_isTimelike, Physicslib4.Spacetime.CrossIsometry.pushforwardPath_isCausal}
+    \uses{lmm:cross-metric-pushforward-path, lmm:cross-metric-pushforward-path-tangent, def:timelike-and-causal-smooth-curves, lmm:cross-metric-isometry-preserves-classification}
+    \leanok
+    If $\mu$ is timelike (respectively causal) for $g_1$, then $\psi \circ \mu$ is timelike (respectively causal) for $g_2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Fix $s$ and rewrite the tangent vector of $\psi \circ \mu$ using \ref{lmm:cross-metric-pushforward-path-tangent}. The classification of $d\psi_{\mu(s)}\dot\mu(s)$ for $g_2$ agrees with that of $\dot\mu(s)$ for $g_1$ by \ref{lmm:cross-metric-isometry-preserves-classification}; for the causal case split on the timelike and null disjuncts. This mirrors $\mathtt{pushforwardPath\_isTimelike}$ and $\mathtt{pushforwardPath\_isCausal}$.
+\end{proof}
+
+\begin{lemma}[The Pushforward Transports Endpoints]
+    \label{lmm:cross-metric-pushforward-path-endpoints}
+    \lean{Physicslib4.Spacetime.pushforwardPath_isPastEndpoint, Physicslib4.Spacetime.pushforwardPath_isFutureEndpoint}
+    \uses{lmm:cross-metric-pushforward-path, def:endpoints}
+    \leanok
+    If $p$ is a past (respectively future) endpoint of $\mu$, then $\psi(p)$ is a past (respectively future) endpoint of $\psi \circ \mu$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Being an endpoint (\ref{def:endpoints}) asserts the existence of a parameter $s$ that is minimal (respectively maximal) in the parameter space with $\mu(s) = p$. The pushforward has the same parameter space and $(\psi \circ \mu)(s) = \psi(p)$, so the same $s$ witnesses the condition; no metric or causal input is used. This mirrors $\mathtt{pushforwardPath\_isPastEndpoint}$ and $\mathtt{pushforwardPath\_isFutureEndpoint}$.
+\end{proof}
+
+\begin{lemma}[Cross-Metric Isometries Transport Chronological Precedence]
+    \label{lmm:cross-metric-isometry-preserves-chronology}
+    \lean{Physicslib4.Spacetime.pushforwardPath_isFutureOriented, Physicslib4.Spacetime.CrossIsometry.segmentPrecedes, Physicslib4.Spacetime.CrossIsometry.chronologicallyPrecedes}
+    \uses{def:cross-metric-isometry, def:preserves-future-orientation, def:trip, def:chronological-future-and-chronological-past, lmm:cross-metric-pushforward-path, lmm:cross-metric-pushforward-path-causal, lmm:cross-metric-pushforward-path-endpoints}
+    \leanok
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$, each equipped with a time orientation, and suppose $\psi$ preserves the future orientation in the sense of \ref{def:preserves-future-orientation}. Then $p \ll_1 q$ implies $\psi(p) \ll_2 \psi(q)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A witness for $p \ll_1 q$ is a future-oriented trip (\ref{def:trip}) from $p$ to $q$ for $g_1$. Push it forward by \ref{lmm:cross-metric-pushforward-path}: it is timelike for $g_2$ by \ref{lmm:cross-metric-pushforward-path-causal}, has endpoints $\psi(p)$ and $\psi(q)$ by \ref{lmm:cross-metric-pushforward-path-endpoints}, and is future-oriented because $d\psi$ carries future-pointing tangent vectors to future-pointing tangent vectors (\ref{def:preserves-future-orientation}). So it witnesses $\psi(p) \ll_2 \psi(q)$.
+\end{proof}
+
+\begin{lemma}[Image of the Chronological Future]
+    \label{lmm:cross-metric-chronological-future-image}
+    \lean{Physicslib4.Spacetime.CrossIsometry.chronologicalFuture_image}
+    \uses{lmm:cross-metric-isometry-preserves-chronology, lmm:cross-metric-isometry-symm, def:preserves-future-orientation, def:chronological-future-and-chronological-past}
+    \leanok
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ satisfying the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}. Then $\psi\big(I^+_1(p)\big) = I^+_2(\psi(p))$ for every $p$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The inclusion $\subseteq$ is \ref{lmm:cross-metric-isometry-preserves-chronology} applied to $p \ll_1 q$. For $\supseteq$, note that $\psi^{-1}$ is an isometry from $(M,g_2)$ to $(M,g_1)$ by \ref{lmm:cross-metric-isometry-symm}, and preserves the future orientation by the second half of the two-sided hypothesis. Applying \ref{lmm:cross-metric-isometry-preserves-chronology} to $\psi^{-1}$ at the point $\psi(p)$ gives $\psi^{-1}\big(I^+_2(\psi(p))\big) \subseteq I^+_1(p)$, which is the reverse inclusion after applying the bijection $\psi$.
+
+    Take the skeleton from the repository rather than inventing one: the single-metric forms \texttt{Physicslib4.Spacetime.Isometry.chronologicalFuture\_image\_subset} and \texttt{...chronologicalFuture\_image} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean:270,294} are exactly this argument, and the cross-metric version differs only in carrying two metrics. In particular their proofs use \emph{neither} \texttt{Set.image\_subset\_iff} \emph{nor} any \texttt{Equiv.image\_eq\_preimage}-style rewriting, which is the tempting but wrong route: the $\subseteq$ half destructures the image membership directly (\texttt{rintro \_ $\langle$q, hq, rfl$\rangle$}) and the $\supseteq$ half exhibits the witness $\psi^{-1}(r)$ together with the point-level cancellation \texttt{toDiffeo\_inv\_apply}. The chronology step itself is lifted along the transitive closure by \texttt{Relation.TransGen.lift}.
+\end{proof}
+
+\begin{lemma}[Image of the Chronological Past]
+    \label{lmm:cross-metric-chronological-past-image}
+    \lean{Physicslib4.Spacetime.CrossIsometry.chronologicalPast_image}
+    \uses{lmm:cross-metric-isometry-preserves-chronology, lmm:cross-metric-isometry-symm, def:preserves-future-orientation, def:chronological-future-and-chronological-past}
+    \leanok
+    Under the hypotheses of \ref{lmm:cross-metric-chronological-future-image}, $\psi\big(I^-_1(p)\big) = I^-_2(\psi(p))$ for every $p$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Identical to \ref{lmm:cross-metric-chronological-future-image} with the roles of the two endpoints of the trip exchanged: $q \in I^-_1(p)$ means $q \ll_1 p$, so the same two applications of \ref{lmm:cross-metric-isometry-preserves-chronology}, to $\psi$ and to $\psi^{-1}$ --- the latter being a cross-metric isometry from $(M,g_2)$ to $(M,g_1)$ by \ref{lmm:cross-metric-isometry-symm} --- give the two inclusions.
+\end{proof}
+
+\begin{lemma}[Cross-Metric Isometries Preserve Basis Sets]
+    \label{lmm:cross-metric-isometry-preserves-basis-sets}
+    \lean{Physicslib4.Spacetime.CrossIsometry.alexandrovDiamond_image, Physicslib4.Spacetime.CrossIsometry.alexandrovBasis_image}
+    \uses{def:alexandrov-topology, def:preserves-future-orientation, lmm:cross-metric-chronological-future-image, lmm:cross-metric-chronological-past-image, lmm:pullback-time-orientation, lmm:pullback-preserves-future-orientation}
+    \leanok
+    Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ satisfying the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}. Then $\psi$ carries Alexandrov basis sets of $(M,g_1)$ to Alexandrov basis sets of $(M,g_2)$:
+    \begin{align}
+        \psi\big(I^+_1(p) \cap I^-_1(q)\big) = I^+_2(\psi(p)) \cap I^-_2(\psi(q)).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The image of an intersection under an injective map is the intersection of the images, and the two factors are computed by \ref{lmm:cross-metric-chronological-future-image} and \ref{lmm:cross-metric-chronological-past-image}. In the case of interest, $g_1 = \psi^*g_2$ with the pulled-back time orientation of \ref{lmm:pullback-time-orientation}, the orientation hypothesis holds by construction (\ref{lmm:pullback-preserves-future-orientation}); in general it is carried as a hypothesis.
+\end{proof}
+
+\begin{lemma}[A Bijection Matching Generating Families is a Homeomorphism]
+    \label{lmm:bijection-generated-topology-homeomorphism}
+    \lean{Physicslib4.continuous_generateFrom_of_preimage_mem, Physicslib4.continuous_symm_generateFrom_of_image_mem, Physicslib4.homeomorphOfGenerateFrom, Physicslib4.homeomorphOfGenerateFrom_apply, Physicslib4.homeomorphOfGenerateFrom_symm_apply}
+    \leanok
+    Let $f : X \to Y$ be a bijection, let $\mathcal{S}$ and $\mathcal{T}$ be families of subsets of $X$ and $Y$, and equip $X$ and $Y$ with the topologies generated by $\mathcal{S}$ and $\mathcal{T}$. If $f$ carries $\mathcal{S}$ onto $\mathcal{T}$, in the sense that $f(S) \in \mathcal{T}$ for every $S \in \mathcal{S}$ and $f^{-1}(T) \in \mathcal{S}$ for every $T \in \mathcal{T}$, then $f$ is a homeomorphism.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Purely topological, with no geometry involved. By \texttt{continuous\_generateFrom\_iff} continuity of $f$ reduces to $f^{-1}(T)$ being open for each $T \in \mathcal{T}$, and $f^{-1}(T) \in \mathcal{S}$ is open by \texttt{TopologicalSpace.isOpen\_generateFrom\_of\_mem}. The same argument applied to $f^{-1}$, using that $(f^{-1})^{-1}(S) = f(S) \in \mathcal{T}$ since $f$ is a bijection, gives continuity of the inverse. Bundle the two with the bijection as a \texttt{Homeomorph}.
+
+    Two naming and notation points. The openness lemma lives in the \texttt{TopologicalSpace} namespace and must be cited by its fully qualified name: the unqualified \texttt{isOpen\_generateFrom\_of\_mem} does not resolve. By contrast \texttt{continuous\_generateFrom\_iff} genuinely is in the root namespace and is cited as written. Its exact form is
+    \begin{align}
+        \mathtt{Continuous[}t,\ \mathtt{generateFrom}\;b\mathtt{]}\;f \iff \forall\,s \in b,\ \mathtt{IsOpen}\,(f^{-1}(s)),
+    \end{align}
+    so only the \emph{source} topology is written explicitly, as the bracket argument $t$, while the right-hand side carries a plain \texttt{IsOpen} --- resolved against whatever instance is in scope on the source --- and the target is forced to be a \texttt{generateFrom}. The point to record is that $t$ is an \emph{implicit variable}, not an instance argument: at the application site below the source is the carrier $M$, which already carries its manifold topology as a registered instance, and that instance is what unification will pick unless $t$ is instantiated by hand with the Alexandrov \texttt{generateFrom} term. So the lemma must be applied with $t$ given explicitly (and the resulting plain \texttt{IsOpen} goals read against that same term), since the two Alexandrov topologies are \texttt{TopologicalSpace} \emph{terms}, not instances on the carrier. Silently letting the manifold topology be inferred yields a well-typed but wrong statement, which is the failure mode to guard against here.
+\end{proof}
+
+\begin{lemma}[The Pullback Alexandrov Topology]
+    \label{lmm:pullback-alexandrov-homeomorphism}
+    \lean{Physicslib4.Spacetime.pullback_alexandrovBasis_image, Physicslib4.Spacetime.pullback_alexandrovBasis_preimage, Physicslib4.Spacetime.pullbackAlexandrovHomeomorph, Physicslib4.Spacetime.pullbackAlexandrovHomeomorph_apply}
+    \uses{def:alexandrov-topology, def:pullback-metric, lmm:pullback-preserves-future-orientation, lmm:cross-metric-isometry-preserves-basis-sets, lmm:bijection-generated-topology-homeomorphism}
+    \leanok
+    Let $(M,g,t)$ be a spacetime with time orientation and $\psi$ a $C^\infty$ diffeomorphism of $M$. Then $\psi$ is a homeomorphism from $\psi^*(M,g)$ carrying the Alexandrov topology of $\psi^*g$ and $\psi^*t$ to $(M,g)$ carrying the Alexandrov topology of $g$ and $t$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply \ref{lmm:bijection-generated-topology-homeomorphism} with $f := \psi$, a bijection of the common carrier, and with $\mathcal{S}$, $\mathcal{T}$ the families of Alexandrov diamonds of $\psi^*g$ and of $g$ (\ref{def:alexandrov-topology}), whose generated topologies are the two Alexandrov topologies by definition. The hypothesis that $\psi$ carries $\mathcal{S}$ onto $\mathcal{T}$ is \ref{lmm:cross-metric-isometry-preserves-basis-sets} applied to $\psi$ and to $\psi^{-1}$, whose two-sided orientation hypothesis holds by \ref{lmm:pullback-preserves-future-orientation}.
+\end{proof}
+
+\begin{theorem}[The Pullback of a Lorentzian Spacetime is a Lorentzian Spacetime]
+    \label{thrm:pullback-is-lorentzian-spacetime}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.pullback_alexandrov_t2, Physicslib4.Spacetime.LorentzianSpacetime.pullback, Physicslib4.Spacetime.LorentzianSpacetime.pullback_toSpacetime, Physicslib4.Spacetime.LorentzianSpacetime.pullback_timeOrientation}
+    \uses{def:lorentzian-spacetime, thrm:pullback-is-spacetime, lmm:pullback-time-orientation, lmm:pullback-alexandrov-homeomorphism}
+    \leanok
+    Let $(M,g,t)$ be a Lorentzian spacetime (\ref{def:lorentzian-spacetime}) --- a spacetime with a time orientation and a Hausdorff Alexandrov topology --- and $\psi$ a $C^\infty$ diffeomorphism of $M$. Then $\psi^*(M,g,t)$, carrying $\psi^*g$, $\psi^*t$ and its own Alexandrov topology, is again a Lorentzian spacetime.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The underlying spacetime is \ref{thrm:pullback-is-spacetime} and the time orientation is \ref{lmm:pullback-time-orientation}, so only the Hausdorff condition on the Alexandrov topology remains. It transports along the homeomorphism of \ref{lmm:pullback-alexandrov-homeomorphism} by \texttt{Homeomorph.t2Space}.
+\end{proof}
+
+This theorem is what makes ``the net over $\psi^*(M,g)$'' meaningful in \ref{def:general-covariance-in-curved-spacetime}: the axioms of Section \ref{sctn:haag-kastler-axioms-in-curved-spacetime} are indexed by Lorentzian spacetimes, so without it there is no net over the pullback background to compare with.

@@ -7,6 +7,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.Net
 import Physicslib4.GNS.RadonNikodym
 import Physicslib4.GNS.ExtremeState
 import Physicslib4.GNS.Superselection
+import Physicslib4.GNS.Covariance
 
 /-!
 # Purity of states on curved local algebras
@@ -35,7 +36,7 @@ namespace HaagKastlerCurved
 namespace HaagKastlerNet
 
 open Physicslib4.GNS
-open scoped InnerProductSpace
+open scoped InnerProductSpace Pointwise
 
 variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
 
@@ -103,6 +104,54 @@ theorem areDisjoint_or_unitaryEquiv_of_isIrreducible {B : Set M.Carrier}
     (h1 : GNS.IsIrreducible π₁) (h2 : GNS.IsIrreducible π₂) :
     GNS.AreDisjoint π₁ π₂ ∨ GNS.UnitaryEquiv π₁ π₂ :=
   GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible h1 h2
+
+/-! ### GNS covariance for the local algebras -/
+
+section Covariance
+
+variable (φ : M.Isom) (B : Set M.Carrier) (ω : State (N.algebra (φ • B)))
+  {H₁ : Type*} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
+  (π₁ : N.algebra B →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (Ω₁ : H₁)
+  {H₂ : Type*} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
+  (π₂ : N.algebra (φ • B) →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) (Ω₂ : H₂)
+
+/-- **GNS covariance for curved local algebras.** The Axiom 5 covariance equivalence
+`α_φ : 𝔘(B) ≃⋆ₐ[ℂ] 𝔘(φ·B)` is a `*`-isomorphism of local algebras, so a cyclic
+representation of `𝔘(B)` reproducing the pullback state `ω ∘ α_φ` is unitarily
+equivalent to `π_ω ∘ α_φ`. -/
+theorem unitaryEquiv_gns_covEquiv
+    (hcyc₁ : IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : N.algebra B,
+      ((ω.comp (N.covEquiv φ B).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hcyc₂ : IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : N.algebra (φ • B), (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    UnitaryEquiv π₁ (π₂.comp (N.covEquiv φ B).toStarAlgHom) :=
+  unitaryEquiv_comp_of_gns (N.covEquiv φ B) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+
+/-- **Irreducibility is constant along the isometry orbit of a region.** With the GNS
+data above, `π₁` is irreducible exactly when `π₂` is. -/
+theorem isIrreducible_iff_gns_covEquiv
+    (hcyc₁ : IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : N.algebra B,
+      ((ω.comp (N.covEquiv φ B).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hcyc₂ : IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : N.algebra (φ • B), (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    IsIrreducible π₁ ↔ IsIrreducible π₂ :=
+  isIrreducible_iff_of_gns_comp (N.covEquiv φ B) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+
+/-- **Factoriality is constant along the isometry orbit of a region.** With the GNS data
+above, `π₁(𝔘(B))''` is a factor exactly when `π₂(𝔘(φ·B))''` is. So the superselection
+type of a local state is an isometry-orbit invariant. -/
+theorem isFactor_iff_gns_covEquiv
+    (hcyc₁ : IsCyclicVector π₁ Ω₁)
+    (hrep₁ : ∀ a : N.algebra B,
+      ((ω.comp (N.covEquiv φ B).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hcyc₂ : IsCyclicVector π₂ Ω₂)
+    (hrep₂ : ∀ b : N.algebra (φ • B), (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    IsFactor (gnsVonNeumann π₁) ↔ IsFactor (gnsVonNeumann π₂) :=
+  isFactor_iff_of_gns_comp (N.covEquiv φ B) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+
+end Covariance
 
 end HaagKastlerNet
 end HaagKastlerCurved

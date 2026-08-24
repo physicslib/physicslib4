@@ -72,49 +72,37 @@ which gives `‖φ‖² ≤ (φ 1).re · ‖φ‖`. -/
 theorem norm_eq_re_apply_one_of_positive [Nontrivial A] {φ : A →L[ℂ] ℂ}
     (hpos : ∀ a : A, 0 ≤ φ (star a * a)) : ‖φ‖ = (φ 1).re := by
   have hNnn : (0 : ℝ) ≤ ‖φ‖ := norm_nonneg _
-  have hφ1 : (0 : ℂ) ≤ φ 1 := by have := hpos 1; rwa [star_one, one_mul] at this
-  have hμnn : 0 ≤ (φ 1).re := (Complex.nonneg_iff.mp hφ1).1
+  have hμnn : 0 ≤ (φ 1).re := (Complex.nonneg_iff.mp (by simpa using hpos 1)).1
+  have h1 := φ.le_opNorm (1 : A)
+  rw [CStarRing.norm_one, mul_one] at h1
   -- reverse bound: `(φ 1).re ≤ ‖φ‖`
-  have hrev : (φ 1).re ≤ ‖φ‖ := by
-    have h1 : (φ 1).re ≤ ‖φ 1‖ := (le_abs_self _).trans (Complex.abs_re_le_norm _)
-    have h2 : ‖φ 1‖ ≤ ‖φ‖ * ‖(1 : A)‖ := φ.le_opNorm 1
-    rw [CStarRing.norm_one, mul_one] at h2
-    exact h1.trans h2
+  have hrev : (φ 1).re ≤ ‖φ‖ := ((le_abs_self _).trans (Complex.abs_re_le_norm _)).trans h1
+  refine le_antisymm ?_ hrev
   -- key bound from Cauchy-Schwarz
-  have hbound : ∀ b : A, ‖φ b‖ ^ 2 ≤ (φ 1).re * ‖φ‖ * ‖b‖ ^ 2 := by
-    intro b
-    have hcs := cauchy_schwarz_inequality (φ : A →ₗ[ℂ] ℂ)
-      (by intro c; simpa using hpos c) 1 b
-    simp only [ContinuousLinearMap.coe_coe, star_one, one_mul] at hcs
-    rw [Complex.normSq_eq_norm_sq] at hcs
-    have hb1 : (φ (star b * b)).re ≤ ‖φ (star b * b)‖ :=
-      (le_abs_self _).trans (Complex.abs_re_le_norm _)
-    have hb2 : ‖φ (star b * b)‖ ≤ ‖φ‖ * ‖star b * b‖ := φ.le_opNorm _
+  have hbound : ∀ b : A, ‖φ b‖ ^ 2 ≤ (φ 1).re * ‖φ‖ * ‖b‖ ^ 2 := fun b => by
+    have hcs := cauchy_schwarz_inequality (φ : A →ₗ[ℂ] ℂ) (fun c => by simpa using hpos c) 1 b
+    simp only [ContinuousLinearMap.coe_coe, star_one, one_mul,
+      Complex.normSq_eq_norm_sq] at hcs
+    have hb2 := φ.le_opNorm (star b * b)
     rw [CStarRing.norm_star_mul_self] at hb2
-    have hbb : (φ (star b * b)).re ≤ ‖φ‖ * (‖b‖ * ‖b‖) := hb1.trans hb2
+    have hbb : (φ (star b * b)).re ≤ ‖φ‖ * (‖b‖ * ‖b‖) :=
+      ((le_abs_self _).trans (Complex.abs_re_le_norm _)).trans hb2
     calc ‖φ b‖ ^ 2 ≤ (φ 1).re * (φ (star b * b)).re := hcs
       _ ≤ (φ 1).re * (‖φ‖ * (‖b‖ * ‖b‖)) := mul_le_mul_of_nonneg_left hbb hμnn
       _ = (φ 1).re * ‖φ‖ * ‖b‖ ^ 2 := by ring
   -- forward bound: `‖φ‖ ≤ (φ 1).re`
-  have hfwd : ‖φ‖ ≤ (φ 1).re := by
-    by_cases hN0 : ‖φ‖ = 0
-    · rw [hN0]; exact hμnn
-    · have hNpos : 0 < ‖φ‖ := lt_of_le_of_ne hNnn (Ne.symm hN0)
-      have hμN : 0 ≤ (φ 1).re * ‖φ‖ := mul_nonneg hμnn hNnn
-      set C : ℝ := Real.sqrt ((φ 1).re * ‖φ‖) with hC_def
-      have hCnn : 0 ≤ C := Real.sqrt_nonneg _
-      have hCsq : C ^ 2 = (φ 1).re * ‖φ‖ := Real.sq_sqrt hμN
-      have hble : ∀ b : A, ‖φ b‖ ≤ C * ‖b‖ := by
-        intro b
-        have hsq : ‖φ b‖ ^ 2 ≤ (C * ‖b‖) ^ 2 := by rw [mul_pow, hCsq]; exact hbound b
-        have h0 : 0 ≤ C * ‖b‖ := mul_nonneg hCnn (norm_nonneg _)
-        have hle := Real.sqrt_le_sqrt hsq
-        rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq h0] at hle
-      have hNC : ‖φ‖ ≤ C := φ.opNorm_le_bound hCnn hble
-      have hN2 : ‖φ‖ ^ 2 ≤ (φ 1).re * ‖φ‖ := by
-        nlinarith [mul_nonneg (sub_nonneg.mpr hNC) (add_nonneg hCnn hNnn), hCsq]
-      nlinarith [hN2, hNpos]
-  exact le_antisymm hfwd hrev
+  rcases eq_or_lt_of_le hNnn with hN0 | hNpos
+  · rw [← hN0]; exact hμnn
+  · have hCnn : 0 ≤ Real.sqrt ((φ 1).re * ‖φ‖) := Real.sqrt_nonneg _
+    have hCsq : Real.sqrt ((φ 1).re * ‖φ‖) ^ 2 = (φ 1).re * ‖φ‖ :=
+      Real.sq_sqrt (mul_nonneg hμnn hNnn)
+    have hNC : ‖φ‖ ≤ Real.sqrt ((φ 1).re * ‖φ‖) :=
+      φ.opNorm_le_bound hCnn fun b => by
+        have hle := Real.sqrt_le_sqrt (show ‖φ b‖ ^ 2 ≤ (Real.sqrt ((φ 1).re * ‖φ‖) * ‖b‖) ^ 2 by
+          rw [mul_pow, hCsq]; exact hbound b)
+        rwa [Real.sqrt_sq (norm_nonneg _),
+          Real.sqrt_sq (mul_nonneg hCnn (norm_nonneg _))] at hle
+    nlinarith [mul_nonneg (sub_nonneg.mpr hNC) (add_nonneg hCnn hNnn), hCsq, hNpos]
 
 /-- A state evaluates to `1` on the unit: `ω 1 = 1`. The real part is `‖ω‖ = 1`
 (via `norm_eq_re_apply_one_of_positive` and normalization), and the imaginary part
@@ -478,6 +466,115 @@ theorem mem_extremePoints_iff_isExtremePoint (ω : State A) :
         smul_apply, Complex.real_smul, Complex.real_smul,
         ← add_mul, ← Complex.ofReal_add, hab, Complex.ofReal_one, one_mul]
     exact ⟨hcombo, hcombo⟩
+
+variable {B : Type*} [CStarAlgebra B]
+
+/-- A unital `*`-homomorphism of C*-algebras as a continuous `ℂ`-linear map; it is
+contractive (`‖π a‖ ≤ ‖a‖`, `NonUnitalStarAlgHom.norm_apply_le`), hence bounded with
+norm `≤ 1`. -/
+noncomputable def starAlgHomCLM (π : A →⋆ₐ[ℂ] B) : A →L[ℂ] B :=
+  π.toAlgHom.toLinearMap.mkContinuous 1 fun a => by
+    rw [one_mul]
+    exact NonUnitalStarAlgHom.norm_apply_le π a
+
+@[simp] theorem starAlgHomCLM_apply (π : A →⋆ₐ[ℂ] B) (a : A) :
+    starAlgHomCLM π a = π a := rfl
+
+/-- The **pullback of a state along a unital `*`-homomorphism** `π : A →⋆ₐ[ℂ] B`:
+`a ↦ ω (π a)`. It is again a state — positivity is the `*`-compatibility of
+`star a * a` (`π` is a `*`-hom), and the normalization `‖ω ∘ π‖ = 1` follows since
+`π` is unital (`(ω∘π)(1) = ω(1) = 1`) and positive functionals have norm equal to
+their value at `1`. This exhibits `A ↦ State A` as a contravariant functor: a
+`*`-homomorphism `π : A →⋆ₐ[ℂ] B` induces the pullback `State B → State A`. -/
+noncomputable def State.comp (ω : State B) (π : A →⋆ₐ[ℂ] B) : State A where
+  toContinuousLinearMap := ω.toContinuousLinearMap.comp (starAlgHomCLM π)
+  isPositive := fun a => by
+    rw [ContinuousLinearMap.comp_apply, starAlgHomCLM_apply, map_mul, map_star]
+    exact ω.isPositive (π a)
+  isNormalized := by
+    haveI : Nontrivial B := nontrivial_of_state ω
+    haveI : Nontrivial A := by
+      rcases subsingleton_or_nontrivial A with hs | hn
+      · exfalso
+        have : (1 : B) = 0 := by
+          calc
+            (1 : B) = π 1 := by symm; exact map_one π
+            _ = π 0 := by rw [Subsingleton.elim (1 : A) 0]
+            _ = 0 := map_zero π
+        exact one_ne_zero this
+      · exact hn
+    have hpos : ∀ a, 0 ≤ (ω.toContinuousLinearMap.comp (starAlgHomCLM π)) (star a * a) := by
+      intro a
+      rw [ContinuousLinearMap.comp_apply, starAlgHomCLM_apply, map_mul, map_star]
+      exact ω.isPositive (π a)
+    rw [norm_eq_re_apply_one_of_positive hpos, ContinuousLinearMap.comp_apply,
+      starAlgHomCLM_apply, map_one]
+    rw [show ω.toContinuousLinearMap 1 = ω 1 from rfl, ω.apply_one, Complex.one_re]
+
+@[simp] theorem State.comp_apply (ω : State B) (π : A →⋆ₐ[ℂ] B) (a : A) :
+    (ω.comp π) a = ω (π a) := rfl
+
+/-- **Functoriality (identity).** Pulling a state back along the identity
+`*`-homomorphism leaves it unchanged. -/
+theorem State.comp_id (ω : State A) :
+    ω.comp (StarAlgHom.id ℂ A) = ω := by
+  apply DFunLike.ext
+  intro a
+  simp
+
+/-- **Functoriality (composition).** The pullback is contravariant: for
+`π₁ : A →⋆ₐ[ℂ] B` and `π₂ : B →⋆ₐ[ℂ] C`, pulling `ω : State C` back along the
+composite `π₂ ∘ π₁` equals pulling back first along `π₂`, then along `π₁`. -/
+theorem State.comp_comp {C : Type*} [CStarAlgebra C]
+    (ω : State C) (π₁ : A →⋆ₐ[ℂ] B) (π₂ : B →⋆ₐ[ℂ] C) :
+    ω.comp (π₂.comp π₁) = (ω.comp π₂).comp π₁ := by
+  apply DFunLike.ext
+  intro a
+  simp
+
+/-- **Purity is preserved by pullback along a `*`-isomorphism** (one direction).
+If `ω` is a pure state on `B` and `Φ : A ≃⋆ₐ[ℂ] B`, then the pullback `ω ∘ Φ` is a
+pure state on `A`. A dominated positive functional `ψ ≤ ω ∘ Φ` on `A` transports to
+`ψ ∘ Φ⁻¹ ≤ ω` on `B`, which purity of `ω` sends to a scalar multiple of `ω`;
+transporting back gives `ψ` proportional to `ω ∘ Φ`. -/
+theorem isPure_comp_of_isPure (Φ : A ≃⋆ₐ[ℂ] B) {ω : State B} (hpure : IsPure ω) :
+    IsPure (ω.comp Φ.toStarAlgHom) := by
+  intro ψ hψpos hψdom
+  set ψ' : B →L[ℂ] ℂ := ψ.comp (starAlgHomCLM Φ.symm.toStarAlgHom) with hψ'_def
+  have hψ'app : ∀ b, ψ' b = ψ (Φ.symm b) := fun b => by
+    rw [hψ'_def, ContinuousLinearMap.comp_apply, starAlgHomCLM_apply]
+    simp
+  have hψ'pos : ∀ b, 0 ≤ ψ' (star b * b) := by
+    intro b; rw [hψ'app, map_mul, map_star]; exact hψpos (Φ.symm b)
+  have hψ'dom : ∀ b, ψ' (star b * b) ≤ ω (star b * b) := by
+    intro b
+    rw [hψ'app, map_mul, map_star]
+    have hrhs : (ω.comp Φ.toStarAlgHom) (star (Φ.symm b) * Φ.symm b) = ω (star b * b) := by
+      simp [State.comp_apply, map_mul, map_star, Φ.apply_symm_apply]
+    exact (hψdom (Φ.symm b)).trans (le_of_eq hrhs)
+  obtain ⟨t, ht⟩ := hpure ψ' hψ'pos hψ'dom
+  refine ⟨t, fun a => ?_⟩
+  have ha := ht (Φ a)
+  rw [hψ'app, StarAlgEquiv.symm_apply_apply] at ha
+  rw [State.comp_apply]
+  exact ha
+
+/-- Pulling a state back along `Φ` and then along `Φ⁻¹` recovers the original state. -/
+theorem State.comp_toStarAlgHom_symm (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B) :
+    (ω.comp Φ.toStarAlgHom).comp Φ.symm.toStarAlgHom = ω := by
+  rw [← State.comp_comp ω Φ.symm.toStarAlgHom Φ.toStarAlgHom]
+  have h : Φ.toStarAlgHom.comp Φ.symm.toStarAlgHom = StarAlgHom.id ℂ B := by
+    ext b; simp [Φ.apply_symm_apply]
+  rw [h, State.comp_id]
+
+/-- **Purity is invariant under a `*`-isomorphism**: for `Φ : A ≃⋆ₐ[ℂ] B` and a state
+`ω` on `B`, the pullback `ω ∘ Φ` is pure iff `ω` is. This is the cross-algebra
+generalization of `isPure_precomp_iff` (the `*`-automorphism case). -/
+theorem isPure_comp_iff (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B) :
+    IsPure (ω.comp Φ.toStarAlgHom) ↔ IsPure ω := by
+  refine ⟨fun h => ?_, isPure_comp_of_isPure Φ⟩
+  have h2 := isPure_comp_of_isPure Φ.symm h
+  rwa [State.comp_toStarAlgHom_symm] at h2
 
 end GNS
 end Physicslib4

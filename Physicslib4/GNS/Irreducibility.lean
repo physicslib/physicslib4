@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.GNS.Construction
+import Physicslib4.Operators.Conjugation
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.InnerProductSpace.Positive
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
@@ -55,54 +56,21 @@ theorem eq_smul_one_of_commute_of_cyclic
     {c : ℂ} (hprop : ∀ a : A, ⟪Ω, T (π a Ω)⟫_ℂ = c * ⟪Ω, π a Ω⟫_ℂ) :
     T = c • 1 := by
   have hcycdense : DenseRange (fun a : A => π a Ω) := hcyc
-  -- The adjoint of `π b` is `π (star b)` (since `π` is a `*`-homomorphism).
-  have hop : ∀ b : A, ContinuousLinearMap.adjoint (π b) = π (star b) := fun b => by
-    rw [← ContinuousLinearMap.star_eq_adjoint, map_star]
-  -- Move `π b` to the other slot of the inner product via the adjoint.
+  -- Move `π b` to the other slot of the inner product via the adjoint `π (star b)`.
   have hadj : ∀ (b : A) (w : H), ⟪(π b) Ω, w⟫_ℂ = ⟪Ω, π (star b) w⟫_ℂ := fun b w => by
-    rw [← hop b, ContinuousLinearMap.adjoint_inner_right]
-  -- `T` agrees with `c • ·` on the cyclic orbit.
-  have hkey : ∀ a : A, T (π a Ω) = c • (π a Ω) := by
-    intro a
-    have hzero : ∀ b : A, ⟪π b Ω, T (π a Ω) - c • (π a Ω)⟫_ℂ = 0 := by
-      intro b
-      rw [inner_sub_right, inner_smul_right]
-      have e1 : ⟪(π b) Ω, T (π a Ω)⟫_ℂ = ⟪Ω, T (π (star b * a) Ω)⟫_ℂ := by
-        rw [hadj b (T (π a Ω))]
-        congr 1
-        have h1 : (π (star b)) (T (π a Ω)) = T ((π (star b)) (π a Ω)) :=
-          calc (π (star b)) (T (π a Ω))
-              = (π (star b) * T) (π a Ω) := by rw [mul_apply_eq_comp]
-            _ = (T * π (star b)) (π a Ω) := by rw [hT (star b)]
-            _ = T ((π (star b)) (π a Ω)) := by rw [mul_apply_eq_comp]
-        rw [h1]
-        congr 1
-        rw [← mul_apply_eq_comp, ← map_mul]
-      have e2 : ⟪(π b) Ω, π a Ω⟫_ℂ = ⟪Ω, π (star b * a) Ω⟫_ℂ := by
-        rw [hadj b (π a Ω)]
-        congr 1
-        rw [← mul_apply_eq_comp, ← map_mul]
-      rw [e1, e2, hprop (star b * a)]
-      ring
-    have hw0 : T (π a Ω) - c • (π a Ω) = 0 := by
-      have hcont : Continuous (fun y : H => ⟪y, T (π a Ω) - c • (π a Ω)⟫_ℂ) :=
-        continuous_id.inner continuous_const
-      have heqon : Set.EqOn (fun y : H => ⟪y, T (π a Ω) - c • (π a Ω)⟫_ℂ)
-          (fun _ => (0 : ℂ)) (Set.range fun a' : A => π a' Ω) := by
-        rintro _ ⟨b, rfl⟩; exact hzero b
-      have hzeroall := congrFun
-        (Continuous.ext_on hcycdense hcont continuous_const heqon)
-        (T (π a Ω) - c • (π a Ω))
-      exact inner_self_eq_zero.mp hzeroall
-    exact sub_eq_zero.mp hw0
+    rw [map_star, ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_right]
+  have hπ : ∀ b a : A, π (star b) (π a Ω) = π (star b * a) Ω := fun b a => by
+    rw [← mul_apply_eq_comp, ← map_mul]
+  -- `T` agrees with `c • ·` on the cyclic orbit: all off-diagonal coefficients match.
+  have hkey : ∀ a : A, T (π a Ω) = c • (π a Ω) := fun a =>
+    hcycdense.eq_of_inner_right ℂ fun b => by
+      rw [hadj b (T (π a Ω)), ← mul_apply_eq_comp, hT (star b), mul_apply_eq_comp, hπ b a,
+        hprop (star b * a), inner_smul_right, hadj b (π a Ω), hπ b a]
   -- Density + continuity upgrade the agreement to all of `H`.
-  have hall : (fun x => T x) = (fun x : H => c • x) :=
-    Continuous.ext_on hcycdense T.continuous (continuous_const.smul continuous_id)
-      (by rintro _ ⟨a, rfl⟩; exact hkey a)
-  apply ContinuousLinearMap.ext
-  intro x
-  rw [smul_apply, one_apply_eq_self]
-  exact congrFun hall x
+  have hall := Continuous.ext_on hcycdense T.continuous
+    (continuous_const.smul continuous_id) (by rintro _ ⟨a, rfl⟩; exact hkey a)
+  exact ContinuousLinearMap.ext fun x => by
+    rw [smul_apply, one_apply_eq_self]; exact congrFun hall x
 
 /-- **A commutant operator is a scalar iff its GNS coefficient is proportional to
 the state.** In a cyclic representation reproducing `ω`, an operator `T` commuting
@@ -141,20 +109,17 @@ noncomputable def coeffFunctional (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : 
     A →L[ℂ] ℂ :=
   LinearMap.mkContinuous
     { toFun := fun a => ⟪Ω, T (π a Ω)⟫_ℂ
-      map_add' := fun a b => by
-        simp [map_add, add_apply, inner_add_right]
+      map_add' := fun a b => by simp only [map_add, add_apply, inner_add_right]
       map_smul' := fun c a => by
-        simp [map_smul, smul_apply, inner_smul_right] }
+        simp only [map_smul, smul_apply, inner_smul_right, RingHom.id_apply, smul_eq_mul] }
     (‖Ω‖ * ‖T‖ * ‖Ω‖)
     (fun a => by
       have hT' : ‖T (π a Ω)‖ ≤ ‖T‖ * (‖a‖ * ‖Ω‖) :=
-        calc ‖T (π a Ω)‖ ≤ ‖T‖ * ‖π a Ω‖ := T.le_opNorm _
-          _ ≤ ‖T‖ * (‖π a‖ * ‖Ω‖) := by gcongr; exact (π a).le_opNorm _
-          _ ≤ ‖T‖ * (‖a‖ * ‖Ω‖) := by
-              gcongr; exact NonUnitalStarAlgHom.norm_apply_le π a
-      calc ‖⟪Ω, T (π a Ω)⟫_ℂ‖ ≤ ‖Ω‖ * ‖T (π a Ω)‖ := norm_inner_le_norm Ω _
-        _ ≤ ‖Ω‖ * (‖T‖ * (‖a‖ * ‖Ω‖)) := by gcongr
-        _ = ‖Ω‖ * ‖T‖ * ‖Ω‖ * ‖a‖ := by ring)
+        (T.le_opNorm _).trans (mul_le_mul_of_nonneg_left
+          (((π a).le_opNorm Ω).trans (mul_le_mul_of_nonneg_right
+            (NonUnitalStarAlgHom.norm_apply_le π a) (norm_nonneg Ω))) (norm_nonneg T))
+      exact (norm_inner_le_norm Ω _).trans
+        ((mul_le_mul_of_nonneg_left hT' (norm_nonneg Ω)).trans_eq (by ring)))
 
 @[simp] theorem coeffFunctional_apply (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
     (T : H →L[ℂ] H) (a : A) :
@@ -201,108 +166,65 @@ theorem scalar_of_isSelfAdjoint_of_isPure
     (hpure : IsPure ω) {S : H →L[ℂ] H} (hSsa : IsSelfAdjoint S)
     (hScomm : ∀ a : A, π a * S = S * π a) :
     ∃ c : ℂ, S = c • 1 := by
-  set r : ℝ := (2 * (‖S‖ + 1))⁻¹ with hr_def
-  have hNnn : (0 : ℝ) ≤ ‖S‖ := norm_nonneg S
-  have hrpos : 0 < r := by rw [hr_def]; positivity
-  have hrS : r * ‖S‖ ≤ 1 / 2 := by
-    rw [hr_def, inv_mul_eq_div, div_le_iff₀ (by positivity)]
-    nlinarith [hNnn]
+  obtain ⟨r, hrpos, hrS⟩ : ∃ r : ℝ, 0 < r ∧ r * ‖S‖ ≤ 2⁻¹ := by
+    have hden : (0 : ℝ) < 2 * (‖S‖ + 1) := by positivity
+    exact ⟨_, inv_pos.mpr hden, by rw [inv_mul_eq_div, div_le_iff₀ hden]; linarith only []⟩
   -- the scaled operator
-  set T : H →L[ℂ] H := (r : ℂ) • S + (2⁻¹ : ℂ) • (1 : H →L[ℂ] H) with hT_def
-  have h1SA : IsSelfAdjoint (1 : H →L[ℂ] H) := by simp [IsSelfAdjoint]
-  have hrSA : IsSelfAdjoint ((r : ℂ)) := Complex.conj_ofReal r
-  have hhSA : IsSelfAdjoint ((2⁻¹ : ℂ)) := by
-    rw [show (2⁻¹ : ℂ) = ((2⁻¹ : ℝ) : ℂ) by norm_num]; exact Complex.conj_ofReal _
-  have hTsa : IsSelfAdjoint T :=
-    (hrSA.smul hSsa).add (hhSA.smul h1SA)
-  have hTsymm : T.IsSymmetric := hTsa.isSymmetric
+  obtain ⟨T, hT_def⟩ : ∃ T : H →L[ℂ] H, T = (r : ℂ) • S + (2⁻¹ : ℂ) • 1 := ⟨_, rfl⟩
+  have h1SA : IsSelfAdjoint (1 : H →L[ℂ] H) := .one _
+  have h2 : (2⁻¹ : ℂ) = ((2⁻¹ : ℝ) : ℂ) := by rw [Complex.ofReal_inv, Complex.ofReal_ofNat]
+  have hhalf : (starRingEnd ℂ) (2⁻¹ : ℂ) = (2⁻¹ : ℂ) := by rw [h2]; exact Complex.conj_ofReal _
+  have hTsa : IsSelfAdjoint T := by
+    rw [hT_def]
+    exact IsSelfAdjoint.add (.smul (Complex.conj_ofReal r) hSsa) (.smul hhalf h1SA)
+  have hvv : ∀ v : H, Complex.re ⟪v, v⟫_ℂ = ‖v‖ ^ 2 := fun v => inner_self_eq_norm_sq (𝕜 := ℂ) v
   -- coefficient expansion of `re ⟪T v, v⟫`
   have hTexp : ∀ v : H,
-      Complex.re ⟪T v, v⟫_ℂ = r * Complex.re ⟪S v, v⟫_ℂ + 2⁻¹ * ‖v‖ ^ 2 := by
-    intro v
-    have hTv : T v = (r : ℂ) • S v + (2⁻¹ : ℂ) • v := by
-      simp [hT_def, add_apply, smul_apply]
-    rw [hTv, inner_add_left, inner_smul_left, inner_smul_left,
-      Complex.add_re, Complex.conj_ofReal, Complex.re_ofReal_mul]
-    have h2 : (starRingEnd ℂ) (2⁻¹ : ℂ) = (2⁻¹ : ℂ) := by
-      rw [show (2⁻¹ : ℂ) = ((2⁻¹ : ℝ) : ℂ) by norm_num]; exact Complex.conj_ofReal _
-    rw [h2]
-    have hhalf : Complex.re ((2⁻¹ : ℂ) * ⟪v, v⟫_ℂ) = 2⁻¹ * Complex.re ⟪v, v⟫_ℂ := by
-      rw [show (2⁻¹ : ℂ) = ((2⁻¹ : ℝ) : ℂ) by norm_num, Complex.re_ofReal_mul]
-    have hvv : Complex.re ⟪v, v⟫_ℂ = ‖v‖ ^ 2 := by
-      simpa using inner_self_eq_norm_sq (𝕜 := ℂ) v
-    rw [hhalf, hvv]
-  -- bound: |re ⟪S v, v⟫| ≤ ‖S‖ ‖v‖²
-  have hb : ∀ v : H, |Complex.re ⟪S v, v⟫_ℂ| ≤ ‖S‖ * ‖v‖ ^ 2 := by
-    intro v
-    calc |Complex.re ⟪S v, v⟫_ℂ| ≤ ‖⟪S v, v⟫_ℂ‖ := Complex.abs_re_le_norm _
-      _ ≤ ‖S v‖ * ‖v‖ := norm_inner_le_norm _ _
-      _ ≤ (‖S‖ * ‖v‖) * ‖v‖ := by gcongr; exact S.le_opNorm v
-      _ = ‖S‖ * ‖v‖ ^ 2 := by ring
-  -- `T` and `1 - T` are positive
-  have hTpos : T.IsPositive := by
-    refine (ContinuousLinearMap.isPositive_def).mpr ⟨hTsymm, fun v => ?_⟩
-    rw [ContinuousLinearMap.reApplyInnerSelf_apply]
-    change (0 : ℝ) ≤ Complex.re ⟪T v, v⟫_ℂ
+      Complex.re ⟪T v, v⟫_ℂ = r * Complex.re ⟪S v, v⟫_ℂ + 2⁻¹ * ‖v‖ ^ 2 := fun v => by
+    simp only [hT_def, add_apply, smul_apply, one_apply_eq_self, inner_add_left, inner_smul_left,
+      Complex.add_re, h2, Complex.conj_ofReal, Complex.re_ofReal_mul, hvv]
+  -- bound: |r · re ⟪S v, v⟫| ≤ ½‖v‖², hence `0 ≤ re ⟪T v, v⟫ ≤ ‖v‖²`
+  have hTb : ∀ v : H, 0 ≤ Complex.re ⟪T v, v⟫_ℂ ∧ Complex.re ⟪T v, v⟫_ℂ ≤ ‖v‖ ^ 2 := fun v => by
+    have hb : |r * Complex.re ⟪S v, v⟫_ℂ| ≤ 2⁻¹ * ‖v‖ ^ 2 := by
+      rw [abs_mul, abs_of_pos hrpos]
+      calc r * |Complex.re ⟪S v, v⟫_ℂ| ≤ r * (‖S‖ * ‖v‖ * ‖v‖) :=
+            mul_le_mul_of_nonneg_left
+              (((Complex.abs_re_le_norm _).trans (norm_inner_le_norm _ _)).trans
+                (mul_le_mul_of_nonneg_right (S.le_opNorm v) (norm_nonneg v))) hrpos.le
+        _ = r * ‖S‖ * ‖v‖ ^ 2 := by ring
+        _ ≤ 2⁻¹ * ‖v‖ ^ 2 := mul_le_mul_of_nonneg_right hrS (sq_nonneg ‖v‖)
+    obtain ⟨hlo, hhi⟩ := abs_le.mp hb
     rw [hTexp v]
-    have hbv := (abs_le.mp (hb v)).1
-    nlinarith [mul_le_mul_of_nonneg_left hbv hrpos.le,
-      mul_le_mul_of_nonneg_right hrS (sq_nonneg ‖v‖), sq_nonneg ‖v‖]
+    exact ⟨neg_le_iff_add_nonneg.mp hlo, le_trans (add_le_add_left hhi _)
+      (show (2 : ℝ)⁻¹ * ‖v‖ ^ 2 + 2⁻¹ * ‖v‖ ^ 2 ≤ ‖v‖ ^ 2 from le_of_eq (by ring))⟩
+  -- `1 - T` is positive (and so is `T`, inlined below)
   have hTle : (1 - T).IsPositive := by
-    refine (ContinuousLinearMap.isPositive_def).mpr ⟨(h1SA.sub hTsa).isSymmetric, fun v => ?_⟩
-    rw [ContinuousLinearMap.reApplyInnerSelf_apply]
-    change (0 : ℝ) ≤ Complex.re ⟪(1 - T) v, v⟫_ℂ
-    have hsub : ((1 : H →L[ℂ] H) - T) v = v - T v := by
-      simp [sub_apply]
-    have hvv : Complex.re ⟪v, v⟫_ℂ = ‖v‖ ^ 2 := by
-      simpa using inner_self_eq_norm_sq (𝕜 := ℂ) v
-    rw [hsub, inner_sub_left, Complex.sub_re, hTexp v, hvv]
-    have hbv := (abs_le.mp (hb v)).2
-    nlinarith [mul_le_mul_of_nonneg_left hbv hrpos.le,
-      mul_le_mul_of_nonneg_right hrS (sq_nonneg ‖v‖), sq_nonneg ‖v‖]
+    refine ContinuousLinearMap.isPositive_def.mpr ⟨(h1SA.sub hTsa).isSymmetric, fun v => ?_⟩
+    rw [ContinuousLinearMap.reApplyInnerSelf_apply, sub_apply, one_apply_eq_self,
+      inner_sub_left, map_sub, sub_nonneg]
+    exact (hTb v).2.trans (hvv v).ge
   -- the coefficient functional is a dominated positive functional
-  have hTcomm : ∀ a : A, π a * T = T * π a := by
-    intro a
-    rw [hT_def, mul_add, add_mul, mul_smul_comm, smul_mul_assoc, hScomm a,
-      mul_smul_comm, smul_mul_assoc, mul_one, one_mul]
-  have hψpos : ∀ a : A, 0 ≤ coeffFunctional π Ω T (star a * a) := by
-    intro a
-    rw [coeffFunctional_star_mul hTcomm a]
-    exact isPositive_inner_nonneg hTpos _
-  have hψdom : ∀ a : A,
-      coeffFunctional π Ω T (star a * a) ≤ ω (star a * a) := by
-    intro a
-    rw [coeffFunctional_star_mul hTcomm a, hrep (star a * a)]
-    have hsplit : π (star a * a) Ω = π (star a) (π a Ω) := by
-      rw [map_mul, mul_apply_eq_comp]
-    have hadjeq : ContinuousLinearMap.adjoint (π a) = π (star a) := by
-      rw [← ContinuousLinearMap.star_eq_adjoint, map_star]
-    have hω : ⟪Ω, π (star a * a) Ω⟫_ℂ = ⟪π a Ω, π a Ω⟫_ℂ := by
-      rw [hsplit, ← hadjeq, ContinuousLinearMap.adjoint_inner_right]
-    rw [hω]
-    have hpd := isPositive_inner_nonneg hTle (π a Ω)
-    have hsub : ((1 : H →L[ℂ] H) - T) (π a Ω) = π a Ω - T (π a Ω) := by
-      simp [sub_apply]
-    rw [hsub, inner_sub_right] at hpd
-    exact sub_nonneg.mp hpd
+  have hTcomm : ∀ a : A, π a * T = T * π a := fun a => by
+    simp only [hT_def, mul_add, add_mul, mul_smul_comm, smul_mul_assoc, mul_one, one_mul,
+      hScomm a]
   -- purity forces `T` to be a scalar
-  obtain ⟨t, ht⟩ := hpure (coeffFunctional π Ω T) hψpos hψdom
-  have hTscalar : T = t • 1 := by
-    apply eq_smul_one_of_commute_of_cyclic hcyc hTcomm
-    intro a
-    have hta := ht a
-    rw [coeffFunctional_apply] at hta
-    rw [hta, hrep a]
-  -- deduce `S` is a scalar
+  obtain ⟨t, ht⟩ := hpure (coeffFunctional π Ω T)
+    (fun a => by
+      rw [coeffFunctional_star_mul hTcomm a]
+      exact isPositive_inner_nonneg
+        (ContinuousLinearMap.isPositive_def.mpr ⟨hTsa.isSymmetric, fun v => (hTb v).1⟩) _)
+    (fun a => by
+      have hpd := isPositive_inner_nonneg hTle (π a Ω)
+      rw [sub_apply, one_apply_eq_self, inner_sub_right, sub_nonneg] at hpd
+      rwa [coeffFunctional_star_mul hTcomm a, hrep (star a * a), map_mul, mul_apply_eq_comp,
+        show π (star a) = ContinuousLinearMap.adjoint (π a) from by
+          rw [← ContinuousLinearMap.star_eq_adjoint, map_star],
+        ContinuousLinearMap.adjoint_inner_right])
+  -- Schur's lemma makes `T`, hence `S`, a scalar
   refine ⟨(r : ℂ)⁻¹ * (t - 2⁻¹), ?_⟩
-  have hrne : (r : ℂ) ≠ 0 := by
-    simp only [ne_eq, Complex.ofReal_eq_zero]; exact ne_of_gt hrpos
-  have hSeq : (r : ℂ) • S = (t - 2⁻¹) • (1 : H →L[ℂ] H) := by
-    have hrw : (r : ℂ) • S = T - (2⁻¹ : ℂ) • 1 := by rw [hT_def]; abel
-    rw [hrw, hTscalar, sub_smul]
-  calc S = (r : ℂ)⁻¹ • ((r : ℂ) • S) := by rw [smul_smul, inv_mul_cancel₀ hrne, one_smul]
-    _ = (r : ℂ)⁻¹ • ((t - 2⁻¹) • (1 : H →L[ℂ] H)) := by rw [hSeq]
-    _ = ((r : ℂ)⁻¹ * (t - 2⁻¹)) • 1 := by rw [smul_smul]
+  rw [mul_smul, sub_smul, ← eq_sub_of_add_eq (hT_def.symm.trans
+      (eq_smul_one_of_commute_of_cyclic hcyc hTcomm fun a => by rw [← hrep a]; exact ht a)),
+    inv_smul_smul₀ (Complex.ofReal_ne_zero.mpr hrpos.ne')]
 
 /-- **Pure ⟹ irreducible.** If a state `ω` is pure, then any cyclic representation
 reproducing `ω` (in particular its GNS representation) is irreducible: the only
@@ -315,40 +237,28 @@ theorem isIrreducible_of_isPure
     (hpure : IsPure ω) : IsIrreducible π := by
   intro T hTcomm
   -- the commutant is `*`-closed: `star T` also commutes
-  have hstarcomm : ∀ a : A, π a * star T = star T * π a := by
-    intro a
-    have h := congrArg star (hTcomm (star a))
-    simp only [star_mul, ← map_star, star_star] at h
-    exact h.symm
-  -- self-adjoint real and imaginary parts
-  have hPSA : IsSelfAdjoint (T + star T) := by
-    change star (T + star T) = T + star T
-    rw [star_add, star_star, add_comm]
-  have hPcomm : ∀ a : A, π a * (T + star T) = (T + star T) * π a := by
-    intro a; rw [mul_add, add_mul, hTcomm a, hstarcomm a]
+  have hstarcomm : ∀ a : A, π a * star T = star T * π a := fun a => by
+    simpa only [star_mul, ← map_star, star_star] using (congrArg star (hTcomm (star a))).symm
+  -- self-adjoint real and imaginary parts; the commutation relations are `Commute` algebra
+  have hPcomm : ∀ a : A, π a * (T + star T) = (T + star T) * π a := fun a =>
+    Commute.add_right (hTcomm a) (hstarcomm a)
   have hQSA : IsSelfAdjoint (Complex.I • (star T - T)) := by
     change star (Complex.I • (star T - T)) = Complex.I • (star T - T)
     rw [star_smul, star_sub, star_star, RCLike.star_def, Complex.conj_I,
       neg_smul, ← smul_neg, neg_sub]
   have hQcomm : ∀ a : A,
-      π a * (Complex.I • (star T - T)) = (Complex.I • (star T - T)) * π a := by
-    intro a
-    rw [mul_smul_comm, smul_mul_assoc, mul_sub, sub_mul, hstarcomm a, hTcomm a]
+      π a * (Complex.I • (star T - T)) = (Complex.I • (star T - T)) * π a := fun a =>
+    Commute.smul_right (Commute.sub_right (hstarcomm a) (hTcomm a)) _
   -- each part is a scalar
-  obtain ⟨p, hp⟩ :=
-    scalar_of_isSelfAdjoint_of_isPure hcyc hrep hpure hPSA hPcomm
-  obtain ⟨q, hq⟩ :=
-    scalar_of_isSelfAdjoint_of_isPure hcyc hrep hpure hQSA hQcomm
-  -- reconstruct `T` as a scalar
+  obtain ⟨p, hp⟩ := scalar_of_isSelfAdjoint_of_isPure hcyc hrep hpure (.add_star_self T) hPcomm
+  obtain ⟨q, hq⟩ := scalar_of_isSelfAdjoint_of_isPure hcyc hrep hpure hQSA hQcomm
+  -- reconstruct `T` as a scalar: `T + star T` and `T - star T` are both scalars
+  have hq' : T - star T = (Complex.I * q) • (1 : H →L[ℂ] H) := by
+    rw [← smul_smul, ← hq, smul_smul, Complex.I_mul_I, neg_one_smul, neg_sub]
   refine ⟨2⁻¹ * (p + Complex.I * q), ?_⟩
-  have h2T : (2 : ℂ) • T = (T + star T) + Complex.I • (Complex.I • (star T - T)) := by
-    rw [smul_smul, Complex.I_mul_I, neg_one_smul, two_smul]; abel
-  have hval : (2 : ℂ) • T = (p + Complex.I * q) • (1 : H →L[ℂ] H) := by
-    rw [h2T, hp, hq, smul_smul, ← add_smul]
-  calc T = (2⁻¹ : ℂ) • ((2 : ℂ) • T) := by
-            rw [smul_smul, inv_mul_cancel₀ (two_ne_zero), one_smul]
-    _ = (2⁻¹ : ℂ) • ((p + Complex.I * q) • (1 : H →L[ℂ] H)) := by rw [hval]
-    _ = (2⁻¹ * (p + Complex.I * q)) • 1 := by rw [smul_smul]
+  have h2T : (2 : ℂ) • T = (p + Complex.I * q) • (1 : H →L[ℂ] H) := by
+    rw [two_smul, add_smul, ← hp, ← hq', add_add_sub_cancel]
+  rw [mul_smul, ← h2T, inv_smul_smul₀ two_ne_zero]
 
 /-- The **von Neumann algebra generated by a representation** `π`: the bicommutant
 (double `Set.centralizer`) of the image `π(A)`, i.e. `π(A)''`. -/
@@ -522,6 +432,172 @@ theorem gnsVonNeumannAlgebra_isGreatest_of_isIrreducible {π : A →⋆ₐ[ℂ] 
     S ≤ gnsVonNeumannAlgebra π := by
   rw [← SetLike.coe_subset_coe, coe_gnsVonNeumannAlgebra_eq_univ_of_isIrreducible hirr]
   exact Set.subset_univ _
+
+/-- **A von Neumann algebra is abelian iff it is contained in its own commutant.**
+`R` is commutative (every pair of its elements commutes) exactly when `R ≤ R'`. This
+is essentially definitional: `R ≤ R'` unfolds, via `VonNeumannAlgebra.commutant`
+(modelled by `Set.centralizer`), to the statement that every element of `R` commutes
+with every element of `R`. -/
+theorem isAbelian_iff_le_commutant (R : VonNeumannAlgebra H) :
+    (∀ x ∈ R, ∀ y ∈ R, x * y = y * x) ↔ R ≤ R.commutant := by
+  simp [SetLike.le_def, VonNeumannAlgebra.mem_commutant_iff, eq_comm]
+
+/-- **The center `R ∩ R'` is bicommutant-closed.** For a von Neumann algebra `R`,
+the intersection `R ∩ R'` equals its own bicommutant, so it is again a von Neumann
+algebra. The proof mirrors the relative-commutant construction: `R = R''`, so
+`R ∩ R' = (R')' ∩ R'`, a centralizer of a union, hence closed under the triple
+centralizer law. -/
+theorem bicommutant_inter_commutant_eq (R : VonNeumannAlgebra H) :
+    Set.centralizer
+        (Set.centralizer ((R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H))))
+      = (R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+  set S := (R : Set (H →L[ℂ] H)) with hS
+  have hS_bicommutant : Set.centralizer (Set.centralizer S) = S := by
+    simp [S]
+  have h_eq : S ∩ Set.centralizer S = Set.centralizer (Set.centralizer S ∪ S) := by
+    calc
+      S ∩ Set.centralizer S = Set.centralizer (Set.centralizer S) ∩ Set.centralizer S := by
+        rw [hS_bicommutant]
+      _ = Set.centralizer (Set.centralizer S ∪ S) := by
+        rw [Set.centralizer_union]
+  calc
+    Set.centralizer (Set.centralizer (S ∩ Set.centralizer S))
+        = Set.centralizer (Set.centralizer (Set.centralizer (Set.centralizer S ∪ S))) := by
+      rw [h_eq]
+    _ = Set.centralizer (Set.centralizer S ∪ S) := by
+      rw [Set.centralizer_centralizer_centralizer]
+    _ = S ∩ Set.centralizer S := by
+      rw [h_eq]
+
+/-- **The intersection of two von Neumann algebras is bicommutant-closed.** For von
+Neumann algebras `M` and `N` on `H`, the set `M ∩ N` equals its own bicommutant, so
+it is again a von Neumann algebra.
+
+Unlike `bicommutant_inter_commutant_eq`, here `M` and `N` are arbitrary and need
+*not* form a commutant pair: since `M = M''` and `N = N''`, the intersection is
+`(M' ∪ N')'`, a centralizer, and centralizers are closed under the triple
+centralizer law. -/
+theorem bicommutant_inter_eq (M N : VonNeumannAlgebra H) :
+    Set.centralizer
+        (Set.centralizer ((M : Set (H →L[ℂ] H)) ∩ (N : Set (H →L[ℂ] H))))
+      = (M : Set (H →L[ℂ] H)) ∩ (N : Set (H →L[ℂ] H)) := by
+  set S := (M : Set (H →L[ℂ] H)) with hS
+  set T := (N : Set (H →L[ℂ] H)) with hT
+  have hS_bicommutant : Set.centralizer (Set.centralizer S) = S := by
+    simp [S]
+  have hT_bicommutant : Set.centralizer (Set.centralizer T) = T := by
+    simp [T]
+  have h_eq : S ∩ T = Set.centralizer (Set.centralizer S ∪ Set.centralizer T) := by
+    calc
+      S ∩ T = Set.centralizer (Set.centralizer S) ∩ Set.centralizer (Set.centralizer T) := by
+        rw [hS_bicommutant, hT_bicommutant]
+      _ = Set.centralizer (Set.centralizer S ∪ Set.centralizer T) := by
+        rw [Set.centralizer_union]
+  calc
+    Set.centralizer (Set.centralizer (S ∩ T))
+        = Set.centralizer (Set.centralizer (Set.centralizer
+            (Set.centralizer S ∪ Set.centralizer T))) := by
+      rw [h_eq]
+    _ = Set.centralizer (Set.centralizer S ∪ Set.centralizer T) := by
+      rw [Set.centralizer_centralizer_centralizer]
+    _ = S ∩ T := by
+      rw [h_eq]
+
+/-- **The center of a von Neumann algebra.** `Z(R) = R ∩ R'`: the elements of `R`
+that commute with all of `R`, built as the meet of the star-subalgebras of `R` and
+its commutant. Its underlying set is `R ∩ R'`. -/
+noncomputable def vonNeumannCenter (R : VonNeumannAlgebra H) : VonNeumannAlgebra H where
+  toStarSubalgebra := R.toStarSubalgebra ⊓ R.commutant.toStarSubalgebra
+  centralizer_centralizer' := by
+    have hcar : (R.toStarSubalgebra ⊓ R.commutant.toStarSubalgebra).carrier =
+        (R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      ext x; simp [VonNeumannAlgebra.coe_commutant]
+    rw [hcar]; exact bicommutant_inter_commutant_eq R
+
+/-- The underlying set of the center is `R ∩ R'`. -/
+@[simp] theorem coe_vonNeumannCenter (R : VonNeumannAlgebra H) :
+    (vonNeumannCenter R : Set (H →L[ℂ] H))
+      = (R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+  simp [vonNeumannCenter, VonNeumannAlgebra.coe_commutant, StarSubalgebra.coe_inf]
+
+/-- **The center of a von Neumann algebra is abelian.** Any two elements of
+`Z(R) = R ∩ R'` commute: each lies in `R'`, so commutes with everything in `R`, in
+particular with the other (which lies in `R`). -/
+theorem vonNeumannCenter_isAbelian (R : VonNeumannAlgebra H) :
+    ∀ x ∈ vonNeumannCenter R, ∀ y ∈ vonNeumannCenter R, x * y = y * x := by
+  intro x hx y hy
+  rw [← SetLike.mem_coe, coe_vonNeumannCenter] at hx hy
+  rcases hx with ⟨hxR, hxC⟩
+  rcases hy with ⟨hyR, hyC⟩
+  have h := Set.mem_centralizer_iff.mp hxC y hyR
+  exact h.symm
+
+/-- **`R` is abelian iff it equals its own center.** `Z(R) = R` exactly when
+`R ⊆ R'`, i.e. when `R` is abelian. -/
+theorem vonNeumannCenter_eq_self_iff_isAbelian (R : VonNeumannAlgebra H) :
+    vonNeumannCenter R = R ↔ (∀ x ∈ R, ∀ y ∈ R, x * y = y * x) := by
+  rw [isAbelian_iff_le_commutant R]
+  constructor
+  · intro h
+    have hset_eq : (vonNeumannCenter R : Set (H →L[ℂ] H)) = (R : Set (H →L[ℂ] H)) := by
+      simpa using congrArg (fun (S : VonNeumannAlgebra H) => (S : Set (H →L[ℂ] H))) h
+    rw [coe_vonNeumannCenter] at hset_eq
+    have hsub : (R : Set (H →L[ℂ] H)) ⊆ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      rwa [Set.inter_eq_left] at hset_eq
+    have hcomm : (R.commutant : Set (H →L[ℂ] H)) = Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      simp
+    rw [← SetLike.coe_subset_coe, hcomm]
+    exact hsub
+  · intro h
+    rw [← SetLike.coe_subset_coe] at h
+    have hcomm : (R.commutant : Set (H →L[ℂ] H)) = Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      simp
+    rw [hcomm] at h
+    rw [← SetLike.coe_set_eq, coe_vonNeumannCenter, Set.inter_eq_left]
+    exact h
+
+/-- **A factor is abelian iff it is the scalars.** If a factor `R` (with trivial
+center `R ∩ R' = ℂ·1`) is abelian then its center is all of `R`, forcing
+`R = ℂ·1`; conversely the scalars are abelian. -/
+theorem isAbelian_iff_eq_scalars_of_isFactor (R : VonNeumannAlgebra H)
+    (hfac : IsFactor (R : Set (H →L[ℂ] H))) :
+    (∀ x ∈ R, ∀ y ∈ R, x * y = y * x) ↔ (R : Set (H →L[ℂ] H)) = scalarOperators H := by
+  constructor
+  · intro h_abel
+    have h_sub : (R : Set (H →L[ℂ] H)) ⊆ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      rw [← VonNeumannAlgebra.coe_commutant]
+      exact SetLike.coe_subset_coe.mpr ((isAbelian_iff_le_commutant R).mp h_abel)
+    unfold IsFactor at hfac
+    rwa [Set.inter_eq_left.mpr h_sub] at hfac
+  · intro hs x hx y hy
+    obtain ⟨c, hc⟩ : x ∈ scalarOperators H := hs ▸ hx
+    obtain ⟨d, hd⟩ : y ∈ scalarOperators H := hs ▸ hy
+    rw [hc, hd]
+    simp [mul_comm, smul_smul]
+
+/-- **A von Neumann algebra and its commutant share the same center.** `Z(R) = Z(R')`:
+`R ∩ R' = R' ∩ R''= R' ∩ R`, using commutativity of intersection and `R'' = R`. -/
+theorem vonNeumannCenter_eq_commutant (R : VonNeumannAlgebra H) :
+    vonNeumannCenter R = vonNeumannCenter R.commutant := by
+  apply SetLike.coe_injective
+  calc
+    (vonNeumannCenter R : Set (H →L[ℂ] H))
+        = (R : Set (H →L[ℂ] H)) ∩ Set.centralizer (R : Set (H →L[ℂ] H)) := by
+      simp
+    _ = Set.centralizer (R : Set (H →L[ℂ] H)) ∩ (R : Set (H →L[ℂ] H)) := by
+      rw [Set.inter_comm]
+    _ = (R.commutant : Set (H →L[ℂ] H)) ∩ Set.centralizer (R.commutant : Set (H →L[ℂ] H)) := by
+      simp
+    _ = (vonNeumannCenter R.commutant : Set (H →L[ℂ] H)) := by
+      simp
+
+/-- **A von Neumann algebra is a factor iff its center is the scalars.** Restates the
+definition of a factor through the bundled center: `↑(vonNeumannCenter R) = R ∩ R'`. -/
+theorem isFactor_iff_center_eq_scalars (R : VonNeumannAlgebra H) :
+    IsFactor (R : Set (H →L[ℂ] H)) ↔
+      (vonNeumannCenter R : Set (H →L[ℂ] H)) = scalarOperators H := by
+  unfold IsFactor
+  rw [coe_vonNeumannCenter]
 
 end GNS
 end Physicslib4

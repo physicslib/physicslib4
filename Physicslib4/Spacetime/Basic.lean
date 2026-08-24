@@ -6,6 +6,8 @@ Authors: Lean Community
 import Mathlib.Geometry.Manifold.IsManifold.Basic
 import Mathlib.Geometry.Manifold.ContMDiff.Basic
 import Mathlib.Geometry.Manifold.MFDeriv.Defs
+import Mathlib.Geometry.Manifold.VectorBundle.Tangent
+import Mathlib.Geometry.Manifold.VectorBundle.Hom
 import Mathlib.Analysis.InnerProductSpace.EuclideanDist
 import Mathlib.LinearAlgebra.Matrix.BilinearForm
 import Mathlib.LinearAlgebra.Matrix.DotProduct
@@ -61,7 +63,7 @@ carried by its fields.
 
 namespace Physicslib4
 
-open scoped Manifold
+open scoped Manifold ContDiff
 
 /-- The model space `ℝ⁴` for a spacetime, written using `EuclideanSpace`. -/
 abbrev SpacetimeModel : Type := EuclideanSpace ℝ (Fin 4)
@@ -101,10 +103,12 @@ The metric `g` is encoded as a family of continuous bilinear forms
 * `symm`: each `val x` is symmetric;
 * `nondegenerate`: each `val x` is non-degenerate;
 * `lorentzian`: each `val x` is Lorentzian;
-* `smooth_in_charts`: `g` varies smoothly in any local chart, expressed by
-  the smoothness of
-  `y ↦ val (e.symm y) (mfderiv I I e.symm y v) (mfderiv I I e.symm y w)`
-  on the chart target, for any constant vectors `v, w` in the model space.
+* `contMDiff`: `g` is smooth, stated in Mathlib's bundle-section idiom as
+  `C^∞`-ness of `x ↦ TotalSpace.mk' _ x (val x)` as a section of the bundle of
+  continuous bilinear forms on the tangent bundle. This has the same shape as
+  `Bundle.ContMDiffRiemannianMetric.contMDiff`, so Mathlib's bundle API applies
+  directly — notably `ContMDiff.clm_bundle_apply₂`, giving smoothness of
+  `x ↦ g x (V x) (W x)` for smooth vector fields `V, W`.
 
 The non-degeneracy is stated as: if `g x v w = 0` for every `w`, then `v = 0`.
 
@@ -124,8 +128,12 @@ structure Spacetime where
   /-- The model with corners used to define the smooth structure on `Carrier`.
   Typically the trivial / boundaryless one `modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 4))`. -/
   model : ModelWithCorners ℝ SpacetimeModel SpacetimeModel
-  /-- `Carrier` is a `C^∞` manifold modelled on `SpacetimeModel = ℝ⁴`. -/
-  isManifold : IsManifold model ⊤ Carrier
+  /-- `Carrier` is a `C^∞` manifold modelled on `SpacetimeModel = ℝ⁴`.
+
+  This is instance-implicit so that it is available to the later `contMDiff`
+  field: the bundle-section statement there needs the tangent bundle's
+  `FiberBundle` / `VectorBundle` instances, which are gated on `IsManifold`. -/
+  [isManifold : IsManifold model ∞ Carrier]
   /-- Each tangent space is finite-dimensional. -/
   tangent_findim : ∀ x : Carrier, FiniteDimensional ℝ (TangentSpace model x)
   /-- The metric tensor `g`, presented as a family of continuous bilinear forms
@@ -141,15 +149,28 @@ structure Spacetime where
   tangent space relative to which `g x` has Gram matrix `diag(-1, 1, 1, 1)`. -/
   lorentzian : ∀ x : Carrier,
     LorentzianAt (fun v w : TangentSpace model x => val x v w)
-  /-- Smoothness of `g` in any extended chart: for any base point `x₀` and any
-  pair of constant model-space vectors `v, w : SpacetimeModel`, the function
-  `y ↦ val (e.symm y) (mfderiv model model e.symm y v) (mfderiv model model e.symm y w)`
-  is `C^∞` on the chart target. -/
-  smooth_in_charts : ∀ (x₀ : Carrier) (v w : SpacetimeModel),
-    let e := extChartAt model x₀
-    ContDiffWithinAt ℝ ⊤
-      (fun y => val (e.symm y) (mfderiv model model e.symm y v)
-                                 (mfderiv model model e.symm y w))
-      e.target (e x₀)
+  /-- Smoothness of `g`, stated in Mathlib's **bundle-section** idiom: `g` is a
+  `C^∞` section of the bundle of continuous bilinear forms on the tangent
+  bundle, whose fibre at `x` is `TₓM →L[ℝ] TₓM →L[ℝ] ℝ`.
+
+  This is deliberately the same shape as `Bundle.ContMDiffRiemannianMetric.contMDiff`.
+  Mathlib has no pseudo-Riemannian metric class — `ContMDiffRiemannianMetric`
+  additionally carries `pos` and `isVonNBounded`, and the latter is not merely
+  unproven but *false* for a Lorentzian form, since `{v | g v v < 1}` contains
+  the whole light cone — so only the shape of that field is reused here, not the
+  class itself.
+
+  The payoff is that this is the form Mathlib's bundle API speaks natively: in
+  particular `ContMDiff.clm_bundle_apply₂` then gives smoothness of
+  `x ↦ g x (V x) (W x)` for smooth vector fields `V, W`, which is what causal
+  and geodesic arguments need. The previous chart-local `ContDiffWithinAt`
+  formulation had no route to it, since Mathlib provides no lemma bridging the
+  two forms in either direction. -/
+  contMDiff : ContMDiff model
+      (model.prod 𝓘(ℝ, SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)) ∞
+      (fun x ↦ Bundle.TotalSpace.mk'
+        (SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)
+        (E := fun x ↦ TangentSpace model x →L[ℝ] TangentSpace model x →L[ℝ] ℝ)
+        x (val x))
 
 end Physicslib4

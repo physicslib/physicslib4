@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
+import Physicslib4.AQFT.HaagKastler.Isotony
 import Mathlib.Analysis.CStarAlgebra.Hom
 
 /-!
@@ -28,11 +29,24 @@ This file formalises the blueprint declaration
 
 ## Modelling notes
 
-* Mathlib (as of `v4.31.0-rc1`) does not yet have a canonical
-  C*-algebraic direct-limit / amalgamated-completion construction
-  for a family of C*-algebras. Consequently we cannot construct
-  *the* quasilocal algebra of a `LocalNet` as a definite term;
-  instead we package its characterising data as a `structure`.
+* Mathlib (as of `v4.31.0-rc1`) has no canonical C*-algebraic
+  direct-limit / amalgamated-completion construction for a family of
+  C*-algebras: `Mathlib.Algebra.Colimit.DirectLimit` is purely
+  algebraic (it puts no norm or topology on the colimit) and there is
+  no C*-completion anywhere in `Mathlib.Analysis.CStarAlgebra`.
+  This `structure` therefore packages the *characterising data* of a
+  quasilocal algebra rather than naming a canonical one, which is what
+  lets Axioms 3-5 be stated against it.
+
+  Note this is an interface, not a claim that no such algebra can be
+  built. The blueprint does construct one, from the net alone, by
+  taking the algebraic colimit, equipping it with the norm
+  `‖mk a‖ = ‖a‖` (well defined because the isotony maps are injective
+  and hence isometric), and completing. See the chain from
+  `def:completion-standing-hypotheses` to `lmm:quasilocal-completion-cstar`.
+  The route realising the algebra inside an ambient C*-algebra is
+  deliberately *not* used: it would have to assume such an ambient
+  algebra, and there is no physical justification for one.
 
 * A `QuasilocalAlgebra U` consists of:
   - a carrier type `carrier`,
@@ -46,11 +60,11 @@ This file formalises the blueprint declaration
     images `ι B '' (U.algebra B)`, ranging over Alexandrov-basis
     sets `B`, is dense in `carrier`.
 
-* This mirrors exactly the existential content of
-  `QuasilocalCompleteness`: a `LocalNet` satisfies that axiom iff
-  it admits *some* `QuasilocalAlgebra`. The two are kept separate
-  so the axiom can be stated as a `Prop` and the underlying datum
-  can be passed around as a `structure`.
+* Every `LocalNet` satisfying Axiom 2 admits such a structure: that
+  is `exists_quasilocalAlgebra` (`thrm:quasilocal-algebra-exists`),
+  which builds one as the completion of the directed colimit of the
+  local algebras. So this is an interface onto a canonical object,
+  not a hypothesis a net might fail to satisfy.
 
 * The `CStarAlgebra` instance is `attribute [instance]`-marked so
   that downstream code finds the C*-structure on `Q.carrier`
@@ -62,6 +76,8 @@ namespace AQFT
 namespace HaagKastler
 
 open Physicslib4
+
+universe u
 
 /--
 **Quasilocal Algebra (data).** For a local net `U`, a
@@ -82,38 +98,63 @@ of a sequence of elements coming from the local algebras.
 
 Blueprint reference: `def:quasilocal-algebra`.
 -/
-structure QuasilocalAlgebra (U : LocalNet) where
-  /-- The underlying type of the quasilocal algebra `𝔘`. -/
-  carrier : Type
+structure QuasilocalAlgebra (U : LocalNet.{u}) (i : Isotony U) where
+  /-- The underlying type of the quasilocal algebra `𝔘`, in the *same* universe
+  as the net's local algebras.
+
+  It must not be pinned to `Type 0`. `LocalNet.algebra` is universe polymorphic,
+  so a `Type 0` carrier would make this structure *uninhabitable* for a net whose
+  local algebras live in a higher universe: no `Type 0` type can hold injective
+  copies of them, and the existence claim would fail on size grounds alone. This
+  is the twin of the over-quantification defect recorded on `ι` below.
+
+  The carrier is tied to the net's universe rather than given a free one. That
+  costs no generality: `dense_range` forces `𝔘` to be the closure of the union of
+  the images of the local algebras, so any quasilocal algebra is already of their
+  size, and a free universe would only add copies of the same algebra higher up.
+  It does buy something important -- a free universe is constrained by no field,
+  so it could not be inferred, and `LocalCommutativity` would become a *family* of
+  `Prop`s indexed by a universe, making the content of Axiom 3 depend on that
+  index. -/
+  carrier : Type u
   /-- The `CStarAlgebra` instance on `carrier`. -/
   instCStarAlgebra : CStarAlgebra carrier
-  /-- The family of unital `*`-homomorphisms `ι B : 𝔘(B) →⋆ₐ[ℂ] 𝔘`
-  embedding each local algebra into the quasilocal algebra. -/
-  ι : ∀ B : Set StandardMinkowskiSpacetime.Carrier,
-        StarAlgHom ℂ (U.algebra B) carrier
-  /-- Each embedding `ι B` is injective on Alexandrov-basis sets,
-  i.e. every local algebra `𝔘(B)` embeds faithfully into `𝔘`. -/
-  ι_injective : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄,
-                  IsAlexandrovBasisSet B → Function.Injective (ι B)
+  /-- The family of unital `*`-homomorphisms `ι hB : 𝔘(B) →⋆ₐ[ℂ] 𝔘`
+  embedding each local algebra into the quasilocal algebra.
+
+  The family is indexed by *Alexandrov-basis sets only*, matching `Isotony.map`.
+  It must not be total over all subsets: `LocalNet.algebra` assigns a type to
+  every subset, including non-basis ones, so a total `ι` would demand an
+  embedding of those junk fibres into `𝔘` as well. Since `dense_range` below
+  constrains `𝔘` using the basis sets alone, a net carrying a large algebra on a
+  non-basis subset would then make this structure *uninhabitable* — density would
+  force `𝔘` small while a unital `*`-homomorphism out of a simple algebra is
+  automatically injective and would force it large. -/
+  ι : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄,
+        IsAlexandrovBasisSet B → StarAlgHom ℂ (U.algebra B) carrier
+  /-- Each embedding `ι hB` is injective, i.e. every local algebra `𝔘(B)`
+  embeds faithfully into `𝔘`. -/
+  ι_injective : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄
+                  (hB : IsAlexandrovBasisSet B), Function.Injective (ι hB)
   /-- The union of the images of all local algebras, ranging over
   Alexandrov-basis sets, is dense in the quasilocal algebra. This is
   the blueprint's "completion of the set-theoretic union". -/
   dense_range : Dense (⋃ (B : Set StandardMinkowskiSpacetime.Carrier)
-                          (_ : IsAlexandrovBasisSet B),
-                          Set.range (ι B))
-  /-- A chosen family of isotony `*`-monomorphisms
-  `inclusion : 𝔘(B₁) →⋆ₐ[ℂ] 𝔘(B₂)` for inclusions `B₁ ⊆ B₂` of
-  Alexandrov-basis sets. -/
-  inclusion : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
-                IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ → B₁ ⊆ B₂ →
-                  StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂)
-  /-- *Isotony coherence*: the embeddings respect the chosen isotony arrows,
-  `ι B₂ ∘ inclusion = ι B₁`. An element of `𝔘(B₁)` thus embeds into the
-  quasilocal algebra `𝔘` independently of the basis set used to view it. -/
+                          (hB : IsAlexandrovBasisSet B),
+                          Set.range (ι hB))
+  /-- *Isotony coherence* (the cocone condition): the embeddings into `𝔘` respect
+  the Axiom 2 isotony family, `ι B₂ ∘ i.map = ι B₁`. An element of `𝔘(B₁)` thus
+  embeds into the quasilocal algebra `𝔘` independently of the basis set used to
+  view it, which is exactly what makes `ι` well defined on the colimit.
+
+  This structure formerly carried its own `inclusion` family here, duplicating
+  Axiom 2's. It is now parametrised by the Axiom 2 datum `i` and consumes
+  `i.map` instead, so there is a single isotony family in the development and
+  the cocone condition relates `ι` to *that* family. -/
   ι_inclusion : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
                   (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
                   (h : B₁ ⊆ B₂) (a : U.algebra B₁),
-                    ι B₂ (inclusion hB₁ hB₂ h a) = ι B₁ a
+                    ι hB₂ (i.map hB₁ hB₂ h a) = ι hB₁ a
 
 attribute [instance] QuasilocalAlgebra.instCStarAlgebra
 
@@ -121,17 +162,17 @@ attribute [instance] QuasilocalAlgebra.instCStarAlgebra
 an injective `*`-homomorphism of complex C*-algebras is isometric, so the
 local algebra `𝔘(B)` sits inside the quasilocal algebra `𝔘` with its norm
 intact. -/
-theorem QuasilocalAlgebra.norm_ι {U : LocalNet} (Q : QuasilocalAlgebra U)
+theorem QuasilocalAlgebra.norm_ι {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
-    (a : U.algebra B) : ‖Q.ι B a‖ = ‖a‖ :=
-  NonUnitalStarAlgHom.norm_map (Q.ι B) (Q.ι_injective hB) a
+    (a : U.algebra B) : ‖Q.ι hB a‖ = ‖a‖ :=
+  NonUnitalStarAlgHom.norm_map (Q.ι hB) (Q.ι_injective hB) a
 
 /-- Each local embedding `Q.ι B` is an isometry on Alexandrov-basis sets.
 This is the metric form of `QuasilocalAlgebra.norm_ι`. -/
-theorem QuasilocalAlgebra.isometry_ι {U : LocalNet} (Q : QuasilocalAlgebra U)
+theorem QuasilocalAlgebra.isometry_ι {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B) :
-    Isometry (Q.ι B) :=
-  NonUnitalStarAlgHom.isometry (Q.ι B) (Q.ι_injective hB)
+    Isometry (Q.ι hB) :=
+  NonUnitalStarAlgHom.isometry (Q.ι hB) (Q.ι_injective hB)
 
 end HaagKastler
 end AQFT

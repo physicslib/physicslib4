@@ -536,6 +536,168 @@ theorem isOpen_chronologicalPast (t : M.TimeOrientation) (p : M.Carrier)
   exact @isOpen_iUnion M.Carrier (M.Carrier) (alexandrovTopology M t)
     (fun a => chronologicalFuture M t a ∩ chronologicalPast M t p) h_open
 
+/-! ### Causal and chronological diamonds -/
+
+/-- The *causal diamond* `J^+(p) ∩ J^-(q)` of two points `p, q`. -/
+def causalDiamond (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carrier :=
+  causalFuture M t p ∩ causalPast M t q
+
+/-- The *chronological diamond* (Alexandrov diamond) `I^+(p) ∩ I^-(q)` of two points
+`p, q`. -/
+def chronologicalDiamond (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carrier :=
+  chronologicalFuture M t p ∩ chronologicalPast M t q
+
+/-- Membership in the causal diamond: `x ∈ J^+(p) ∩ J^-(q)` iff `p ≺ x` and `x ≺ q`. -/
+theorem mem_causalDiamond (t : M.TimeOrientation) {p q x : M.Carrier} :
+    x ∈ causalDiamond M t p q ↔
+      M.CausallyPrecedes t p x ∧ M.CausallyPrecedes t x q :=
+  Iff.rfl
+
+/-- Membership in the chronological diamond: `x ∈ I^+(p) ∩ I^-(q)` iff `p ≪ x` and
+`x ≪ q`. -/
+theorem mem_chronologicalDiamond (t : M.TimeOrientation) {p q x : M.Carrier} :
+    x ∈ chronologicalDiamond M t p q ↔
+      M.ChronologicallyPrecedes t p x ∧ M.ChronologicallyPrecedes t x q :=
+  Iff.rfl
+
+/-- **Monotonicity under endpoint spread.** If `p' ≺ p` and `q ≺ q'`, then the causal
+diamond of `(p, q)` is contained in the causal diamond of `(p', q')`. -/
+theorem causalDiamond_subset_of (t : M.TimeOrientation) {p p' q q' : M.Carrier}
+    (hp : M.CausallyPrecedes t p' p) (hq : M.CausallyPrecedes t q q') :
+    causalDiamond M t p q ⊆ causalDiamond M t p' q' := by
+  intro x hx
+  rw [mem_causalDiamond] at hx ⊢
+  rcases hx with ⟨hpx, hxq⟩
+  exact ⟨M.causallyPrecedes_trans t hp hpx, M.causallyPrecedes_trans t hxq hq⟩
+
+/-- **Causal convexity.** If `a, b` lie in the causal diamond of `(p, q)`, `a ≺ z` and
+`z ≺ b`, then `z` lies in the causal diamond of `(p, q)`. -/
+theorem causalDiamond_causallyConvex (t : M.TimeOrientation) {p q a b z : M.Carrier}
+    (ha : a ∈ causalDiamond M t p q) (hb : b ∈ causalDiamond M t p q)
+    (haz : M.CausallyPrecedes t a z) (hzb : M.CausallyPrecedes t z b) :
+    z ∈ causalDiamond M t p q := by
+  rw [mem_causalDiamond] at ha hb ⊢
+  rcases ha with ⟨hpa, haq⟩
+  rcases hb with ⟨hpb, hbq⟩
+  exact ⟨M.causallyPrecedes_trans t hpa haz, M.causallyPrecedes_trans t hzb hbq⟩
+
+/-- A nonempty causal diamond forces `p ≺ q`. -/
+theorem causallyPrecedes_of_causalDiamond_nonempty (t : M.TimeOrientation)
+    {p q : M.Carrier} (h : (causalDiamond M t p q).Nonempty) :
+    M.CausallyPrecedes t p q := by
+  obtain ⟨x, hx⟩ := h
+  rw [mem_causalDiamond] at hx
+  rcases hx with ⟨hpx, hxq⟩
+  exact M.causallyPrecedes_trans t hpx hxq
+
+/-- The chronological diamond sits inside the causal diamond,
+`I^+(p) ∩ I^-(q) ⊆ J^+(p) ∩ J^-(q)`. -/
+theorem chronologicalDiamond_subset_causalDiamond (t : M.TimeOrientation)
+    (p q : M.Carrier) :
+    chronologicalDiamond M t p q ⊆ causalDiamond M t p q := by
+  unfold chronologicalDiamond causalDiamond
+  exact Set.inter_subset_inter (M.chronologicalFuture_subset_causalFuture t p)
+    (M.chronologicalPast_subset_causalPast t q)
+
+/-- The Alexandrov basis is exactly the family of chronological diamonds: `U` is an
+Alexandrov basis set iff `U = I^+(p) ∩ I^-(q)` for some `p, q`. -/
+theorem mem_alexandrovBasis_iff_eq_chronologicalDiamond (t : M.TimeOrientation)
+    {U : Set M.Carrier} :
+    U ∈ alexandrovBasis M t ↔ ∃ p q : M.Carrier, U = chronologicalDiamond M t p q := by
+  simp only [alexandrovBasis, chronologicalDiamond, Set.mem_setOf_eq]
+
+/-! ### Causal convexity -/
+
+/-- A region `C` is *causally convex* if it contains every point causally between two
+of its own points: whenever `p, r ∈ C`, `p ≺ q` and `q ≺ r`, then `q ∈ C`. -/
+def IsCausallyConvex (t : M.TimeOrientation) (C : Set M.Carrier) : Prop :=
+  ∀ ⦃p q r : M.Carrier⦄, p ∈ C → r ∈ C →
+    M.CausallyPrecedes t p q → M.CausallyPrecedes t q r → q ∈ C
+
+/-- Every causal diamond `J^+(p) ∩ J^-(q)` is a causally convex region. -/
+theorem causalDiamond_isCausallyConvex (t : M.TimeOrientation) (p q : M.Carrier) :
+    IsCausallyConvex M t (causalDiamond M t p q) := by
+  intro a b c ha hc hac hcb
+  exact causalDiamond_causallyConvex M t ha hc hac hcb
+
+/-! ### The causally convex closure structure -/
+
+/-- The whole spacetime is a causally convex region. -/
+theorem isCausallyConvex_univ (t : M.TimeOrientation) :
+    IsCausallyConvex M t (Set.univ : Set M.Carrier) := by
+  intro p q r _ _ _ _; exact Set.mem_univ q
+
+/-- The empty region is causally convex (vacuously). -/
+theorem isCausallyConvex_empty (t : M.TimeOrientation) :
+    IsCausallyConvex M t (∅ : Set M.Carrier) := by
+  intro p q r hp _ _ _; exact absurd hp (Set.notMem_empty p)
+
+/-- The intersection of two causally convex regions is causally convex. -/
+theorem isCausallyConvex_inter (t : M.TimeOrientation) {C₁ C₂ : Set M.Carrier}
+    (h₁ : IsCausallyConvex M t C₁) (h₂ : IsCausallyConvex M t C₂) :
+    IsCausallyConvex M t (C₁ ∩ C₂) := by
+  intro p q r hp hr hpq hqr
+  exact ⟨h₁ hp.1 hr.1 hpq hqr, h₂ hp.2 hr.2 hpq hqr⟩
+
+/-- An indexed intersection of causally convex regions is causally convex. -/
+theorem isCausallyConvex_iInter (t : M.TimeOrientation) {ι : Sort*}
+    {C : ι → Set M.Carrier} (h : ∀ i, IsCausallyConvex M t (C i)) :
+    IsCausallyConvex M t (⋂ i, C i) := by
+  intro p q r hp hr hpq hqr
+  simp only [Set.mem_iInter] at hp hr ⊢
+  intro i
+  exact h i (hp i) (hr i) hpq hqr
+
+/-- A set-indexed intersection of causally convex regions is causally convex. -/
+theorem isCausallyConvex_sInter (t : M.TimeOrientation) {𝒮 : Set (Set M.Carrier)}
+    (h : ∀ C ∈ 𝒮, IsCausallyConvex M t C) :
+    IsCausallyConvex M t (⋂₀ 𝒮) := by
+  intro p q r hp hr hpq hqr
+  simp only [Set.mem_sInter] at hp hr ⊢
+  intro C hC
+  exact h C hC (hp C hC) (hr C hC) hpq hqr
+
+/-- The *causal-convex hull* of a region `B`: the smallest causally convex region
+containing `B`, i.e. the intersection of all causally convex regions containing `B`. -/
+def causalConvexHull (t : M.TimeOrientation) (B : Set M.Carrier) : Set M.Carrier :=
+  ⋂₀ {C | B ⊆ C ∧ IsCausallyConvex M t C}
+
+/-- A region is contained in its causal-convex hull. -/
+theorem subset_causalConvexHull (t : M.TimeOrientation) (B : Set M.Carrier) :
+    B ⊆ causalConvexHull M t B := by
+  intro x hx; rw [causalConvexHull, Set.mem_sInter]; intro C hC; exact hC.1 hx
+
+/-- The causal-convex hull is causally convex. -/
+theorem isCausallyConvex_causalConvexHull (t : M.TimeOrientation) (B : Set M.Carrier) :
+    IsCausallyConvex M t (causalConvexHull M t B) := by
+  rw [causalConvexHull]; exact isCausallyConvex_sInter M t (fun C hC => hC.2)
+
+/-- **Minimality / universal property.** Any causally convex region containing `B`
+contains the causal-convex hull of `B`. -/
+theorem causalConvexHull_minimal (t : M.TimeOrientation) {B C : Set M.Carrier}
+    (hBC : B ⊆ C) (hC : IsCausallyConvex M t C) :
+    causalConvexHull M t B ⊆ C := by
+  unfold causalConvexHull
+  exact Set.sInter_subset_of_mem ⟨hBC, hC⟩
+
+/-- The causal-convex hull is monotone. -/
+theorem causalConvexHull_mono (t : M.TimeOrientation) {B₁ B₂ : Set M.Carrier}
+    (h : B₁ ⊆ B₂) : causalConvexHull M t B₁ ⊆ causalConvexHull M t B₂ := by
+  exact causalConvexHull_minimal M t (h.trans (subset_causalConvexHull M t B₂))
+    (isCausallyConvex_causalConvexHull M t B₂)
+
+/-- The causal-convex hull fixes exactly the causally convex regions. -/
+theorem causalConvexHull_eq_of_isCausallyConvex (t : M.TimeOrientation)
+    {C : Set M.Carrier} (hC : IsCausallyConvex M t C) :
+    causalConvexHull M t C = C := by
+  exact Set.Subset.antisymm (causalConvexHull_minimal M t (Set.Subset.refl C) hC)
+    (subset_causalConvexHull M t C)
+
+/-- The causal-convex hull is idempotent. -/
+theorem causalConvexHull_idem (t : M.TimeOrientation) (B : Set M.Carrier) :
+    causalConvexHull M t (causalConvexHull M t B) = causalConvexHull M t B := by
+  exact causalConvexHull_eq_of_isCausallyConvex M t (isCausallyConvex_causalConvexHull M t B)
+
 end Spacetime
 
 end Physicslib4

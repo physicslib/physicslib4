@@ -1,1 +1,5 @@
 /.lake
+
+# Prover scratch copies: private per-declaration working files written by the
+# prover tooling. They duplicate real declarations in the same namespace.
+scratch_*

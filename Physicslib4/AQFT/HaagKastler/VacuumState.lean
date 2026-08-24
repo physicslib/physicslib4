@@ -49,6 +49,8 @@ namespace HaagKastler
 
 open scoped InnerProductSpace
 
+universe u
+
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /-- A continuous one-parameter subgroup of the inhomogeneous Lorentz group:
@@ -160,11 +162,11 @@ triple with implementing unitaries `U(L)` (fixing `Ω`, with operator covariance
 representation is irreducible and generates all of `𝓑(H)`. This needs no spectrum
 condition; it is the same no-Stone content, now packaged for a (pure) vacuum state. -/
 theorem CovariantQuasilocalAlgebra.IsVacuumState.exists_gns_irreducible_covariant
-    {C : CovariantQuasilocalAlgebra}
+    {C : CovariantQuasilocalAlgebra.{u}}
     {ftl : (ℝ → InhomogeneousLorentzGroup) → Prop}
     {ω : Physicslib4.GNS.State C.quasilocal.carrier}
     (h : C.IsVacuumState ftl ω) (hpure : Physicslib4.GNS.IsPure ω) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
         Physicslib4.GNS.IsCyclicVector π Ω ∧
@@ -200,10 +202,10 @@ theorem CovariantQuasilocalAlgebra.IsVacuumStateConcrete.invariant
 /-- A pure concrete vacuum state yields an irreducible covariant representation
 (unfolds to the parameterized form). -/
 theorem CovariantQuasilocalAlgebra.IsVacuumStateConcrete.exists_gns_irreducible_covariant
-    {C : CovariantQuasilocalAlgebra}
+    {C : CovariantQuasilocalAlgebra.{u}}
     {ω : Physicslib4.GNS.State C.quasilocal.carrier}
     (h : C.IsVacuumStateConcrete ω) (hpure : Physicslib4.GNS.IsPure ω) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
         Physicslib4.GNS.IsCyclicVector π Ω ∧

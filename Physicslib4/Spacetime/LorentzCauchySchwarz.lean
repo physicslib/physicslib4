@@ -11,7 +11,7 @@ import Mathlib.LinearAlgebra.BilinearForm.Basic
 # Reverse Cauchy-Schwarz inequality for timelike vectors
 
 This file formalises the blueprint declaration `lmm:reverse-cauchy-schwarz`
-(Chapter 10, `sections/sec10/10-2_spacetime`).
+(Chapter 10, `sections/sec10/spacetime`).
 
 For a symmetric Lorentzian bilinear form `g` (signature `diag(-1,1,1,1)`) and two
 timelike vectors `v, w` (i.e. `g v v < 0`, `g w w < 0`) the *reverse* Cauchy-Schwarz

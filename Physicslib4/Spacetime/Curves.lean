@@ -60,6 +60,8 @@ namespace Physicslib4
 
 namespace Spacetime
 
+open scoped ContDiff
+
 variable (M : Spacetime)
 
 attribute [instance] Spacetime.topology Spacetime.hausdorff Spacetime.connected
@@ -103,7 +105,7 @@ point of `Σ`.
 structure SmoothPath extends M.Path where
   /-- Smoothness of the underlying map on the parameter space. -/
   smoothOn :
-    ContMDiffOn (modelWithCornersSelf ℝ ℝ) M.model ⊤ toFun parameterSpace
+    ContMDiffOn (modelWithCornersSelf ℝ ℝ) M.model ∞ toFun parameterSpace
   /-- The tangent vector along the path is non-vanishing on the parameter
   space: the manifold derivative of `toFun` applied to `1 : ℝ` is non-zero
   at each interior point of the parameter space. -/
@@ -233,12 +235,12 @@ theorem derivWithin_ne_zero_of_leftInverse {φ ψ : ℝ → ℝ} {u v : Set ℝ}
   rw [hzero, mul_zero, hid] at hcomp
   exact one_ne_zero hcomp
 
-/-- A `C^⊤` function `ℝ → ℝ` is manifold-differentiable within a set, for the
+/-- A `C^∞` function `ℝ → ℝ` is manifold-differentiable within a set, for the
 self models on `ℝ`. Bridges the `ContDiffOn` datum stored in `SmoothPathEquiv` to
 the `MDifferentiableWithinAt` hypothesis required by the tangent reparametrisation
 lemmas. -/
 theorem mdifferentiableWithinAt_of_contDiffOn {φ : ℝ → ℝ} {u : Set ℝ}
-    (h : ContDiffOn ℝ ⊤ φ u) {x : ℝ} (hx : x ∈ u) :
+    (h : ContDiffOn ℝ ∞ φ u) {x : ℝ} (hx : x ∈ u) :
     MDifferentiableWithinAt (modelWithCornersSelf ℝ ℝ) (modelWithCornersSelf ℝ ℝ)
       φ u x :=
   ((h.contDiffWithinAt hx).contMDiffWithinAt).mdifferentiableWithinAt (by simp)
@@ -269,8 +271,8 @@ two-sided inverses.
 -/
 def SmoothPathEquiv (μ₁ μ₂ : M.SmoothPath) : Prop :=
   ∃ φ ψ : ℝ → ℝ,
-    ContDiffOn ℝ ⊤ φ μ₁.parameterSpace ∧
-    ContDiffOn ℝ ⊤ ψ μ₂.parameterSpace ∧
+    ContDiffOn ℝ ∞ φ μ₁.parameterSpace ∧
+    ContDiffOn ℝ ∞ ψ μ₂.parameterSpace ∧
     Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace ∧
     Set.MapsTo ψ μ₂.parameterSpace μ₁.parameterSpace ∧
     (∀ s ∈ μ₁.parameterSpace, ψ (φ s) = s) ∧
@@ -287,8 +289,8 @@ and it is the extra datum needed to transport the *time orientation* of a curve
 -/
 def OrientedSmoothPathEquiv (μ₁ μ₂ : M.SmoothPath) : Prop :=
   ∃ φ ψ : ℝ → ℝ,
-    ContDiffOn ℝ ⊤ φ μ₁.parameterSpace ∧
-    ContDiffOn ℝ ⊤ ψ μ₂.parameterSpace ∧
+    ContDiffOn ℝ ∞ φ μ₁.parameterSpace ∧
+    ContDiffOn ℝ ∞ ψ μ₂.parameterSpace ∧
     Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace ∧
     Set.MapsTo ψ μ₂.parameterSpace μ₁.parameterSpace ∧
     (∀ s ∈ μ₁.parameterSpace, ψ (φ s) = s) ∧
@@ -792,6 +794,96 @@ def IsFutureEndpoint (μ : M.SmoothPath) (p : M.Carrier) : Prop :=
   ∃ s ∈ μ.parameterSpace,
     μ.toFun s = p ∧
     (∀ s' ∈ μ.parameterSpace, s' ≤ s)
+
+/-! ### Extremal parameters and the shape of the parameter space
+
+These two results are what justify quantifying over the parameter space rather
+than over its frontier in `IsPastEndpoint` and `IsFutureEndpoint`: a genuine
+minimum or maximum automatically lies in the frontier, and having both forces the
+parameter space to be a compact interval. -/
+
+/-- **A minimal parameter lies in the frontier**
+(`lmm:extremal-parameter-mem-frontier`). If `s` is a minimum of the parameter
+space then it cannot be interior: an interior point has a whole interval around it
+inside the parameter space, which would contain smaller elements. -/
+theorem mem_frontier_of_isMin (μ : M.Path) {s : ℝ} (hs : s ∈ μ.parameterSpace)
+    (hmin : ∀ s' ∈ μ.parameterSpace, s ≤ s') :
+    s ∈ frontier μ.parameterSpace := by
+  rw [mem_frontier_iff_notMem_interior hs]
+  intro hint
+  rw [mem_interior_iff_mem_nhds, Metric.mem_nhds_iff] at hint
+  obtain ⟨ε, hε, hball⟩ := hint
+  have hsSub : s - ε / 2 ∈ μ.parameterSpace := hball (by
+    rw [Real.ball_eq_Ioo, Set.mem_Ioo]
+    constructor <;> linarith)
+  have := hmin (s - ε / 2) hsSub
+  linarith
+
+/-- **A maximal parameter lies in the frontier**
+(`lmm:extremal-parameter-mem-frontier`), the mirror of `mem_frontier_of_isMin`. -/
+theorem mem_frontier_of_isMax (μ : M.Path) {s : ℝ} (hs : s ∈ μ.parameterSpace)
+    (hmax : ∀ s' ∈ μ.parameterSpace, s' ≤ s) :
+    s ∈ frontier μ.parameterSpace := by
+  rw [mem_frontier_iff_notMem_interior hs]
+  intro hint
+  rw [mem_interior_iff_mem_nhds, Metric.mem_nhds_iff] at hint
+  obtain ⟨ε, hε, hball⟩ := hint
+  have hsSub : s + ε / 2 ∈ μ.parameterSpace := hball (by
+    rw [Real.ball_eq_Ioo, Set.mem_Ioo]
+    constructor <;> linarith)
+  have := hmax (s + ε / 2) hsSub
+  linarith
+
+/-- **A past endpoint is in particular an endpoint**
+(`lmm:extremal-parameter-mem-frontier`, consequence). -/
+theorem isEndpoint_of_isPastEndpoint (μ : M.SmoothPath) {p : M.Carrier}
+    (h : IsPastEndpoint M μ p) : IsEndpoint M μ.toPath p := by
+  obtain ⟨s, hs, hpeq, hmin⟩ := h
+  exact ⟨s, mem_frontier_of_isMin M μ.toPath hs hmin, hpeq⟩
+
+/-- **A future endpoint is in particular an endpoint**
+(`lmm:extremal-parameter-mem-frontier`, consequence). -/
+theorem isEndpoint_of_isFutureEndpoint (μ : M.SmoothPath) {p : M.Carrier}
+    (h : IsFutureEndpoint M μ p) : IsEndpoint M μ.toPath p := by
+  obtain ⟨s, hs, hpeq, hmax⟩ := h
+  exact ⟨s, mem_frontier_of_isMax M μ.toPath hs hmax, hpeq⟩
+
+/-- **Two endpoints force a compact parameter interval**
+(`lmm:endpoint-parameter-space-eq-Icc`).
+
+The past-endpoint witness is a minimum and the future-endpoint witness a maximum,
+so the parameter space is bounded on both sides; being also nonempty, connected and
+closed, it is the closed interval between them. It is non-degenerate because a path
+has more than one parameter. -/
+theorem parameterSpace_eq_Icc_of_endpoints (μ : M.SmoothPath) {p q : M.Carrier}
+    (hp : IsPastEndpoint M μ p) (hq : IsFutureEndpoint M μ q) :
+    ∃ a b : ℝ, a < b ∧ μ.parameterSpace = Set.Icc a b := by
+  rcases hp with ⟨a, ha, _hpa, hamin⟩
+  rcases hq with ⟨b, hb, _hqb, hbmax⟩
+  have hleast : IsLeast μ.parameterSpace a := ⟨ha, hamin⟩
+  have hgreatest : IsGreatest μ.parameterSpace b := ⟨hb, hbmax⟩
+  have hinf : sInf μ.parameterSpace = a := hleast.csInf_eq
+  have hsup : sSup μ.parameterSpace = b := hgreatest.csSup_eq
+  have hbddBelow : BddBelow μ.parameterSpace := ⟨a, hamin⟩
+  have hbddAbove : BddAbove μ.parameterSpace := ⟨b, hbmax⟩
+  have hset : μ.parameterSpace = Set.Icc a b := by
+    rw [eq_Icc_csInf_csSup_of_connected_bdd_closed μ.isConnected hbddBelow hbddAbove μ.isClosed]
+    rw [hinf, hsup]
+  have hab_le : a ≤ b := hamin b hb
+  have hab_ne : a ≠ b := by
+    intro hab_eq
+    have hsing : μ.parameterSpace = ({a} : Set ℝ) := by
+      rw [hset, hab_eq]
+      exact Set.Icc_self b
+    rcases μ.nontrivial with ⟨s, t, hs, ht, hst⟩
+    have hsa : s = a := by
+      have : s ∈ ({a} : Set ℝ) := hsing ▸ hs
+      simpa using this
+    have hta : t = a := by
+      have : t ∈ ({a} : Set ℝ) := hsing ▸ ht
+      simpa using this
+    exact hst (by rw [hsa, hta])
+  exact ⟨a, b, lt_of_le_of_ne hab_le hab_ne, hset⟩
 
 end Spacetime
 

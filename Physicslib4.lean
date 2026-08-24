@@ -7,16 +7,20 @@ import Physicslib4.AQFT.HaagKastler.LocalCommutativity
 import Physicslib4.AQFT.HaagKastler.LocalVonNeumann
 import Physicslib4.AQFT.HaagKastler.LorentzCovariance
 import Physicslib4.AQFT.HaagKastler.Net
+import Physicslib4.AQFT.HaagKastler.ObservableBridge
 import Physicslib4.AQFT.HaagKastler.Purity
 import Physicslib4.AQFT.HaagKastler.QuasilocalAction
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
-import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
+import Physicslib4.AQFT.HaagKastler.QuasilocalColimit
+import Physicslib4.AQFT.HaagKastler.QuasilocalExistence
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.HaagKastler.QuasilocalKMS
+import Physicslib4.AQFT.HaagKastler.QuasilocalObservable
 import Physicslib4.AQFT.HaagKastler.VacuumState
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
 import Physicslib4.AQFT.HaagKastlerCurved.EinsteinCausality
+import Physicslib4.AQFT.HaagKastlerCurved.GeneralCovariance
 import Physicslib4.AQFT.HaagKastlerCurved.GeometricCovariance
 import Physicslib4.AQFT.HaagKastlerCurved.IdentityComponent
 import Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance
@@ -32,6 +36,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerKMS
 import Physicslib4.AQFT.KMS
 import Physicslib4.AQFT.PositiveEnergy
+import Physicslib4.Analysis.CStarCompletion
 import Physicslib4.Analysis.CStarDenseExtend
 import Physicslib4.Analysis.HorizontalLineRemovable
 import Physicslib4.Analysis.StripPeriodicExtension
@@ -41,6 +46,7 @@ import Physicslib4.GNS.Amplification
 import Physicslib4.GNS.Basic
 import Physicslib4.GNS.CauchySchwarz
 import Physicslib4.GNS.Construction
+import Physicslib4.GNS.Covariance
 import Physicslib4.GNS.DirectSum
 import Physicslib4.GNS.ExtremeState
 import Physicslib4.GNS.Irreducibility
@@ -57,7 +63,10 @@ import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalComplement
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Causality
+import Physicslib4.Spacetime.CrossMetricIsometry
 import Physicslib4.Spacetime.Curves
+import Physicslib4.Spacetime.Diffeo
+import Physicslib4.Spacetime.DiffeoPath
 import Physicslib4.Spacetime.Isometry
 import Physicslib4.Spacetime.IsometryCausality
 import Physicslib4.Spacetime.IsometryTopology
@@ -67,4 +76,6 @@ import Physicslib4.Spacetime.LorentzCone
 import Physicslib4.Spacetime.LorentzOrthogonal
 import Physicslib4.Spacetime.LorentzianSpacetime
 import Physicslib4.Spacetime.Minkowski
+import Physicslib4.Spacetime.MinkowskiDilation
 import Physicslib4.Spacetime.MinkowskiDirected
+import Physicslib4.Spacetime.Pullback

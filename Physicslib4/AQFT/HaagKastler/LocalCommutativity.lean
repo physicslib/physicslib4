@@ -35,9 +35,10 @@ axioms, section 10.3 of the AQFT-in-Lean blueprint):
   completely-spacelike local algebras commute pointwise.
 
 * The quasilocal algebra itself — including its density / completion
-  property — is the subject of Axiom 4 (`QuasilocalCompleteness`);
-  here we only *use* the structure to phrase commutativity. The two
-  axioms can in principle share the same witness.
+  property — is *constructed* from the net by
+  `exists_quasilocalAlgebra` (`thrm:quasilocal-algebra-exists`); here
+  we only *use* the structure to phrase commutativity, and the
+  existential above may be witnessed by that canonical algebra.
 -/
 
 namespace Physicslib4
@@ -58,14 +59,14 @@ commute pointwise inside `Q.carrier`.
 
 Blueprint reference: `def:local-commutativity`.
 -/
-def LocalCommutativity (U : LocalNet) : Prop :=
-  ∃ Q : QuasilocalAlgebra U,
-    ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
-      IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ →
+def LocalCommutativity (U : LocalNet) (i : Isotony U) : Prop :=
+  ∃ Q : QuasilocalAlgebra U i,
+    ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+      (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂),
       Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation B₁ B₂ →
       ∀ (a : U.algebra B₁) (b : U.algebra B₂),
-        Commute (Q.ι B₁ a) (Q.ι B₂ b)
+        Commute (Q.ι hB₁ a) (Q.ι hB₂ b)
 
 end HaagKastler
 end AQFT

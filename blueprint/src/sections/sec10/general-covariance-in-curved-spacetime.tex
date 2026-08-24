@@ -1,0 +1,64 @@
+\section{General Covariance: Nets on Pullback-Related Metrics}\label{sctn:general-covariance-in-curved-spacetime}
+
+The gauge group of general relativity is the full diffeomorphism group of $M$, acting on \emph{all} fields, the metric included. The physical content of a spacetime is therefore its diffeomorphism-equivalence class, not the pair $(M,g)$ itself. Given a $C^\infty$ diffeomorphism $\psi$ of $M$, the models $(M,g)$ and $(M, \psi^*g)$ differ only by a relabelling of the points of $M$ that carries the metric along with it. The hole argument shows that treating such a relabelling as physical would destroy determinism: taking $\psi$ to be the identity outside a region and nontrivial inside it produces two models agreeing on all data outside the region yet differing inside it, so the field in the ``hole'' would not be determined. Its standard resolution --- Leibniz equivalence --- is to declare diffeomorphic models to represent the same physical situation. Accordingly we \emph{postulate} that a net theory assigns equivalent nets to such backgrounds. This is an independent physical assumption about the theory, not a consequence of Axioms 1--5, each of which constrains a single net over a single fixed spacetime.
+
+The geometry this rests on --- the pullback metric, the pullback of a time orientation, that a pullback of a Lorentzian spacetime is again one, and the cross-metric causal-transport lemmas --- is developed in Section \ref{sctn:spacetime}.
+
+\begin{definition}[Equivalence of Haag-Kastler Nets]
+    \label{def:net-equivalence-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.NetEquivalence}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeneralCovariance.lean}
+    \uses{def:haag-kastler-net-in-curved-spacetime, def:local-commutativity-in-curved-spacetime, def:local-algebras-in-curved-spacetime, def:lorentzian-spacetime}
+    \leanok
+    Let $M_1$ and $M_2$ be Lorentzian spacetimes (\ref{def:lorentzian-spacetime}) and let $e : M_1.\mathrm{Carrier} \simeq M_2.\mathrm{Carrier}$ be a bijection of their carriers which \emph{maps basis sets to basis sets}: $M_2.\mathrm{IsBasisSet}\,(e(\mathbf{B}))$ holds whenever $M_1.\mathrm{IsBasisSet}\,\mathbf{B}$ does. Let $\mathfrak{U}_1$ and $\mathfrak{U}_2$ be Haag-Kastler nets (\ref{def:haag-kastler-net-in-curved-spacetime}) over $M_1$ and $M_2$ respectively. An \emph{equivalence of nets along $e$} is a chosen family of unital $*$-isomorphisms
+    \begin{align}
+        \Theta_{\mathbf{B}} : \mathfrak{U}_1(\mathbf{B}) \longrightarrow \mathfrak{U}_2(e(\mathbf{B})),
+    \end{align}
+    one for each basis set $\mathbf{B}$ of $M_1$ --- well-typed precisely because of the basis-set hypothesis on $e$ --- such that for all basis sets $\mathbf{B}_1 \subseteq \mathbf{B}_2$ of $M_1$ the diagram
+
+    \begin{center}
+        \begin{tikzcd}
+            \mathfrak{U}_1(\mathbf{B}_2) \arrow[r, "\Theta_{\mathbf{B}_2}"]
+            & \mathfrak{U}_2(e(\mathbf{B}_2)) \\
+            \mathfrak{U}_1(\mathbf{B}_1) \arrow[r, "\Theta_{\mathbf{B}_1}"] \arrow[u, "\iota_1"]
+            & \mathfrak{U}_2(e(\mathbf{B}_1)) \arrow[u, "\iota_2"]
+        \end{tikzcd}
+    \end{center}
+
+    commutes, where $\iota_1$ and $\iota_2$ are the canonical isotony embeddings $\mathtt{commIsotony}$ of the two nets.
+
+    Three points on the encoding.
+
+    \textbf{The carriers are related by data, not by an equality.} A Lorentzian spacetime (\ref{def:lorentzian-spacetime}) carries its point set as a field, so ``two spacetimes on a common carrier'' would be an assertion of \emph{type} equality between $M_1.\mathrm{Carrier}$ and $M_2.\mathrm{Carrier}$. That is not a usable hypothesis: it cannot be transported along, and it forces the regions, basis-set predicates and algebras of the two nets to be compared across a type cast. Supplying a bijection $e$ instead makes every comparison take place at a definite type, and it is exactly what the geometric case provides, the relabelling diffeomorphism being a bijection of the carrier with itself.
+
+    \textbf{Only the basis-set condition on $e$ is needed here.} The definition mentions neither metrics nor isometries. All it requires of $e$ is that it carry basis sets to basis sets, which is what makes $\Theta_{\mathbf{B}}$ typecheck. The geometric input --- that a cross-metric isometry satisfying the two-sided orientation hypothesis does carry basis sets to basis sets --- is supplied at the point of use, in \ref{def:general-covariance-in-curved-spacetime}.
+
+    \textbf{$\Theta$ must be data, and the $\iota_i$ come for free.} The family $\Theta$ has to be data rather than a bare existence statement, since the commuting square refers to the chosen maps. The vertical arrows must likewise be \emph{chosen} embeddings and not mere existence witnesses --- but no extra hypothesis is needed to obtain them: Axiom 2 (\ref{def:isotony-in-curved-spacetime}) supplies the isotony family as chosen data, together with its injectivity, for every inclusion of basis sets, and \textbf{we adopt that convention} rather than have the equivalence carry a supplied family of embeddings in the style of Axiom 5 (\ref{def:isometric-covariance-in-curved-spacetime}).
+
+    Note also that naturality needs \emph{no} composition or compatibility hypothesis: it is one square attached to a single inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and never composes two embeddings. That observation still stands, but its justification has changed. It previously mattered because the embeddings were witnesses chosen inside Axiom 3, which carried no composition law, so coherence had to be assumed wherever a three-fold inclusion was factored --- as in \ref{thrm:von-neumann-isotony-in-curved-spacetime}. Axiom 2 now carries the identity and composition laws itself, so that coherence holds for every net and nothing has to be assumed anywhere; the point here is simply that this square would not have needed it in any case.
+\end{definition}
+
+\begin{definition}[General Covariance]
+    \label{def:general-covariance-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.NetTheory, Physicslib4.AQFT.HaagKastlerCurved.IsGenerallyCovariant, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv_apply, Physicslib4.Spacetime.LorentzianSpacetime.toAbstract_pullback_isBasisSet}
+    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeneralCovariance.lean}
+    \uses{def:net-equivalence-in-curved-spacetime, def:pullback-metric, def:lorentzian-spacetime, thrm:pullback-is-lorentzian-spacetime, lmm:pullback-preserves-future-orientation, lmm:cross-metric-isometry-preserves-basis-sets, def:cross-metric-isometry}
+    \leanok
+    A \emph{net theory} is a section of the family of Haag-Kastler nets over Lorentzian spacetimes, that is, a term
+    \begin{align}
+        \mathfrak{U} : \prod_{L \,:\, \mathrm{LorentzianSpacetime}} \mathrm{HaagKastlerNet}\big(L.\mathtt{toAbstract}\big),
+    \end{align}
+    assigning to every geometric Lorentzian spacetime $L$ (\ref{def:lorentzian-spacetime}) a net $\mathfrak{U}_L$ over the abstract spacetime interface it induces. Such a theory is \emph{generally covariant} when, for every $L$ with underlying spacetime $(M,g,t)$ and every $C^\infty$ diffeomorphism $\psi$ of $M$, the nets $\mathfrak{U}_{\psi^*L}$ and $\mathfrak{U}_L$ are equivalent in the sense of \ref{def:net-equivalence-in-curved-spacetime} along the bijection $e := \psi$ of the common carrier, read as a bijection from the carrier of $\psi^*L$ to the carrier of $L$ (it is $\psi$, not $\psi^{-1}$, that carries $\psi^*L$-diamonds to $L$-diamonds). Here $\psi^*L$ is the pullback Lorentzian spacetime, which is one by \ref{thrm:pullback-is-lorentzian-spacetime}, carrying $\psi^*g$ (\ref{def:pullback-metric}) and $\psi^*t$; its basis-set hypothesis on $e$ is discharged by \ref{lmm:cross-metric-isometry-preserves-basis-sets}, applied to $\psi$ viewed as an isometry from $\psi^*(M,g)$ to $(M,g)$ (\ref{def:cross-metric-isometry}), whose two-sided orientation hypothesis holds by \ref{lmm:pullback-preserves-future-orientation}.
+
+    Quantifying over \emph{all} Lorentzian spacetimes rather than over the metrics on one fixed carrier is what makes this a statement about the theory. An assignment $(g,t) \mapsto \mathfrak{U}_{(g,t)}$ with $M$ held fixed would tie the notion to a chosen carrier and could not be instantiated at the pullback of a spacetime whose carrier is presented differently; the section formulation has no such parameter, and the pullback of any $L$ is again an object of the same family, so both sides of the equivalence are always in scope.
+\end{definition}
+
+Four remarks on this postulate.
+
+\textbf{A postulate, not a theorem.} A priori nothing forces the nets over $(M,g,t)$ and over $\psi^*(M,g,t)$ to be isomorphic; general covariance asserts it. What it encodes is Leibniz equivalence: the choice of representative within a diffeomorphism class is gauge, and so can have no observable consequences. Correspondingly it provides equivalences only for diffeomorphism-related backgrounds, and says nothing whatever about two backgrounds that are not so related.
+
+\textbf{Why the morphism is specified geometrically rather than causally.} One might try to define the morphism abstractly, as a bijection of points preserving the basis sets and complete spacelike separation. That would be too weak: there are such maps that are not isometries. The dilations $x \mapsto \lambda x$ of standard Minkowski spacetime are causal automorphisms (\ref{thrm:minkowski-dilation-causal-automorphism}) --- they preserve the chronological order, hence the Alexandrov basis --- and for $\lambda \neq 1$ they are not isometries (\ref{thrm:minkowski-dilation-not-isometry}). So quantifying over abstract causal morphisms would demand scale covariance of the net, which is false for a massive theory. (We claim only this one direction. Zeeman's classification of \emph{all} causal automorphisms of Minkowski spacetime as generated by the orthochronous Poincar\'e transformations together with the dilations is neither in Mathlib nor in this blueprint, and is not needed: a single counterexample suffices.) Specifying the morphism as a diffeomorphism together with the equation $\psi^*g_2 = g_1$ (\ref{def:cross-metric-isometry}) avoids this, excluding the dilations automatically by \ref{thrm:minkowski-dilation-not-isometry}.
+
+\textbf{The relabelling must be $\psi$, not the identity.} A basis set $\mathbf{B}$ of $(M,g_1,t_1)$ is in general not a basis set of $(M,g_2,t_2)$, the two causal structures being different, and $\psi$ is precisely the map that matches them up (\ref{lmm:cross-metric-isometry-preserves-basis-sets}). This is why the region appearing on the right of $\Theta_{\mathbf{B}}$ is $\psi(\mathbf{B})$ and not $\mathbf{B}$.
+
+\textbf{Not a sixth field of the net structure.} Axioms 1--5 are conditions on a single net over a fixed spacetime, whereas general covariance relates two nets over two spacetimes. It is therefore a property of the section $L \mapsto \mathfrak{U}_L$, not an extra component of \ref{def:haag-kastler-net-in-curved-spacetime}. Note also that, unlike Axiom 5 (\ref{def:isometric-covariance-in-curved-spacetime}), no restriction to diffeomorphisms connected to the identity is needed here, because nothing requires a single net to carry a representation of a group: the equivalence compares two nets rather than acting on one.

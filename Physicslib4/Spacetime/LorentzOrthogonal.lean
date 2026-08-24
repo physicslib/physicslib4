@@ -161,31 +161,31 @@ private theorem sign_algebra {a bvv bww btv btw bvw : ℝ}
     (hcs : (a ^ 2 * bvw - a * btv * btw) ^ 2
         ≤ (a ^ 2 * bvv - a * btv ^ 2) * (a ^ 2 * bww - a * btw ^ 2)) :
     bvw < 0 := by
-  have hτ2 : 0 < a ^ 2 := by nlinarith [mul_pos_of_neg_of_neg ha ha]
+  have hτ2 : 0 < a ^ 2 := by rw [sq]; exact mul_pos_of_neg_of_neg ha ha
+  have hQ : 0 < btv * btw := mul_pos_of_neg_of_neg hbtv hbtw
+  have hBtw2 : 0 < btw ^ 2 := by rw [sq]; exact mul_pos_of_neg_of_neg hbtw hbtw
   -- Clear the common factor `a^2 > 0` from the Cauchy-Schwarz inequality.
-  have hdiv : (a * bvw - btv * btw) ^ 2 ≤ (btv ^ 2 - a * bvv) * (btw ^ 2 - a * bww) := by
-    have hmul : a ^ 2 * ((a * bvw - btv * btw) ^ 2)
-        ≤ a ^ 2 * ((btv ^ 2 - a * bvv) * (btw ^ 2 - a * bww)) := by
-      have e1 : a ^ 2 * ((a * bvw - btv * btw) ^ 2)
+  have hdiv : (a * bvw - btv * btw) ^ 2 ≤ (btv ^ 2 - a * bvv) * (btw ^ 2 - a * bww) :=
+    le_of_mul_le_mul_left (by
+      calc a ^ 2 * (a * bvw - btv * btw) ^ 2
           = (a ^ 2 * bvw - a * btv * btw) ^ 2 := by ring
-      have e2 : a ^ 2 * ((btv ^ 2 - a * bvv) * (btw ^ 2 - a * bww))
-          = (a ^ 2 * bvv - a * btv ^ 2) * (a ^ 2 * bww - a * btw ^ 2) := by ring
-      rw [e1, e2]; exact hcs
-    exact le_of_mul_le_mul_left hmul hτ2
-  -- Strictness of the `N`s, and positivity of the `(B t ·)` squares.
-  have hNvlt : btv ^ 2 - a * bvv < btv ^ 2 := by nlinarith [mul_pos_of_neg_of_neg ha hbvv]
-  have hNwlt : btw ^ 2 - a * bww < btw ^ 2 := by nlinarith [mul_pos_of_neg_of_neg ha hbww]
-  have hNv : 0 ≤ btv ^ 2 - a * bvv := by linarith [hrcsv]
-  have hNw : 0 ≤ btw ^ 2 - a * bww := by linarith [hrcsw]
-  have hBtv2 : 0 < btv ^ 2 := by nlinarith [mul_pos_of_neg_of_neg hbtv hbtv]
-  have hBtw2 : 0 < btw ^ 2 := by nlinarith [mul_pos_of_neg_of_neg hbtw hbtw]
+        _ ≤ (a ^ 2 * bvv - a * btv ^ 2) * (a ^ 2 * bww - a * btw ^ 2) := hcs
+        _ = a ^ 2 * ((btv ^ 2 - a * bvv) * (btw ^ 2 - a * bww)) := by ring) hτ2
   -- The product of the `N`s is strictly dominated by the product of the squares.
-  have hNN : (btv ^ 2 - a * bvv) * (btw ^ 2 - a * bww) < btv ^ 2 * btw ^ 2 := by
-    nlinarith [hNv, hNw, hNvlt, hNwlt, hBtv2, hBtw2]
-  have hP2 : (a * bvw - btv * btw) ^ 2 < (btv * btw) ^ 2 := by nlinarith [hdiv, hNN]
-  have hkey : 0 < a * bvw := by
-    nlinarith [hP2, mul_pos_of_neg_of_neg hbtv hbtw, sq_nonneg (a * bvw)]
-  nlinarith [hkey, ha]
+  have hNv : 0 ≤ btv ^ 2 - a * bvv := sub_nonneg.mpr hrcsv
+  have hNw : 0 ≤ btw ^ 2 - a * bww := sub_nonneg.mpr hrcsw
+  have hNvlt : btv ^ 2 - a * bvv < btv ^ 2 := sub_lt_self _ (mul_pos_of_neg_of_neg ha hbvv)
+  have hNwlt : btw ^ 2 - a * bww < btw ^ 2 := sub_lt_self _ (mul_pos_of_neg_of_neg ha hbww)
+  have hP2 : (a * bvw - btv * btw) ^ 2 < (btv * btw) ^ 2 :=
+    hdiv.trans_lt <| calc (btv ^ 2 - a * bvv) * (btw ^ 2 - a * bww)
+        ≤ (btv ^ 2 - a * bvv) * btw ^ 2 := mul_le_mul_of_nonneg_left hNwlt.le hNv
+      _ < btv ^ 2 * btw ^ 2 := mul_lt_mul_of_pos_right hNvlt hBtw2
+      _ = (btv * btw) ^ 2 := (mul_pow btv btw 2).symm
+  -- `|a * bvw - btv * btw| < btv * btw` forces the cross term `a * bvw` to be positive.
+  have habs : |a * bvw - btv * btw| < |btv * btw| := sq_lt_sq.mp hP2
+  rw [abs_of_pos hQ] at habs
+  have hkey : 0 < a * bvw := (sub_lt_self_iff _).mp (abs_sub_lt_iff.mp habs).2
+  exact ((mul_pos_iff.mp hkey).resolve_left fun h => absurd h.1 ha.asymm).2
 
 /-- **Sign lemma for cones.** Let `B` be a symmetric Lorentzian bilinear form,
 `t` a timelike vector, and `v, w` timelike vectors that are future-pointing with

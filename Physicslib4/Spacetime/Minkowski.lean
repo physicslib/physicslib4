@@ -54,7 +54,9 @@ Alexandrov topology).
 
 namespace Physicslib4
 
-open scoped Manifold
+open Bundle
+
+open scoped Manifold ContDiff
 
 /-! ### Standard Minkowski spacetime -/
 
@@ -89,6 +91,7 @@ noncomputable def minkowskiForm :
       -(v 0) * (w 0) + (v 1) * (w 1) + (v 2) * (w 2) + (v 3) * (w 3) := by
   rfl
 
+set_option backward.isDefEq.respectTransparency false in
 /--
 *Standard Minkowski spacetime* is the spacetime whose underlying real,
 four-dimensional, connected, smooth, Hausdorff manifold is `ℝ⁴` (with the
@@ -152,33 +155,12 @@ noncomputable def StandardMinkowskiSpacetime : Spacetime where
     rw [EuclideanSpace.basisFun_apply, EuclideanSpace.basisFun_apply]
     simp only [minkowskiForm_apply, lorentzSignature, Matrix.diagonal]
     fin_cases i <;> fin_cases j <;> simp [Matrix.of_apply]
-  smooth_in_charts := by
-    intro x₀ v w
-    -- Unfold the `let e := extChartAt ... x₀` binding.
-    simp only
-    -- On the model space, `mfderiv I I (e.symm) y = id`, so the integrand is
-    -- the constant `minkowskiForm v w` on `e.target = univ`.
-    apply ContDiffWithinAt.congr_of_eventuallyEq
-      (f := fun _ : SpacetimeModel => minkowskiForm v w)
-    · exact contDiffWithinAt_const
-    · -- Pointwise equality of the integrand with the constant `minkowskiForm v w`
-      -- on a neighborhood of `e x₀` within `e.target`.
-      filter_upwards with y
-      have hsymm :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀).symm =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      rw [hsymm, mfderiv_id]
-      rfl
-    · -- `(fun _ => minkowskiForm v w) (e x₀) = minkowskiForm v w`, and the
-      -- function we replaced it with also evaluates to `minkowskiForm v w`
-      -- at `y = e x₀` (since `e.symm (e x₀) = x₀` and `mfderiv id = id`).
-      have hsymm :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀).symm =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      rw [hsymm, mfderiv_id]
-      rfl
+  contMDiff := by
+    intro x
+    rw [contMDiffAt_section]
+    convert! contMDiffAt_const (c := minkowskiForm)
+    ext v w
+    simp [hom_trivializationAt_apply, ContinuousLinearMap.inCoordinates, TangentSpace]
 
 /-- Additive-group structure on the Minkowski spacetime carrier,
 inherited from `SpacetimeModel = EuclideanSpace ℝ (Fin 4)`. -/
@@ -288,6 +270,46 @@ theorem isOrthochronous_refl :
   rw [this]
   exact one_pos
 
+/-- Cauchy–Schwarz for the three-dimensional spatial parts, proved from the
+Lagrange identity. -/
+private lemma cauchySchwarz_sq_three (a₁ a₂ a₃ b₁ b₂ b₃ : ℝ) : -- (extracted by Fuse golfer)
+    (a₁ * b₁ + a₂ * b₂ + a₃ * b₃) ^ 2
+      ≤ (a₁ ^ 2 + a₂ ^ 2 + a₃ ^ 2) * (b₁ ^ 2 + b₂ ^ 2 + b₃ ^ 2) := by
+  have hL : (a₁ ^ 2 + a₂ ^ 2 + a₃ ^ 2) * (b₁ ^ 2 + b₂ ^ 2 + b₃ ^ 2)
+      - (a₁ * b₁ + a₂ * b₂ + a₃ * b₃) ^ 2
+      = (a₁ * b₂ - a₂ * b₁) ^ 2 + (a₁ * b₃ - a₃ * b₁) ^ 2
+        + (a₂ * b₃ - a₃ * b₂) ^ 2 := by ring
+  linarith [sq_nonneg (a₁ * b₂ - a₂ * b₁), sq_nonneg (a₁ * b₃ - a₃ * b₁),
+    sq_nonneg (a₂ * b₃ - a₃ * b₂)]
+
+/-- Reverse Cauchy–Schwarz in coordinates: if `(a, p, q, r)` and `(b, p', q', r')`
+are unit timelike vectors of `ℝ^{1,3}` whose Minkowski product is negative, then
+their time components `a` and `b` have the same sign. -/
+private lemma pos_of_reverse_cauchySchwarz -- (extracted by Fuse golfer)
+    {a b p q r p' q' r' : ℝ}
+    (hv : -a * a + p * p + q * q + r * r = -1)
+    (hw : -b * b + p' * p' + q' * q' + r' * r' = -1)
+    (hb : 0 < b) (hs : -a * b + p * p' + q * q' + r * r' < 0) :
+    0 < a := by
+  by_contra! ha0
+  have ha2 : 1 ≤ a * a := by
+    linarith [mul_self_nonneg p, mul_self_nonneg q, mul_self_nonneg r]
+  have hb2 : 1 ≤ b * b := by
+    linarith [mul_self_nonneg p', mul_self_nonneg q', mul_self_nonneg r']
+  have ha : a < 0 := ha0.lt_of_ne (by rintro rfl; norm_num at ha2)
+  have hab : a * b < 0 := mul_neg_of_neg_of_pos ha hb
+  -- Cauchy–Schwarz bounds `⟨v,w⟩²` above by `(a² - 1)(b² - 1)`.
+  have hCS : (p * p' + q * q' + r * r') ^ 2 ≤ (a * a - 1) * (b * b - 1) := by
+    have h1 : p ^ 2 + q ^ 2 + r ^ 2 = a * a - 1 := by linarith
+    have h2 : p' ^ 2 + q' ^ 2 + r' ^ 2 = b * b - 1 := by linarith
+    rw [← h1, ← h2]
+    exact cauchySchwarz_sq_three p q r p' q' r'
+  -- Both `⟨v,w⟩` and `a * b` are negative with `⟨v,w⟩ < a * b`, so `⟨v,w⟩² > (a*b)²`.
+  have hs2 : (0 : ℝ) < (a * b - (p * p' + q * q' + r * r')) *
+      (-(a * b) - (p * p' + q * q' + r * r')) :=
+    mul_pos (by linarith) (by linarith)
+  linarith
+
 /-- Helper: if two timelike unit vectors `v, w` (with
 `minkowskiForm v v = minkowskiForm w w = -1`) satisfy
 `minkowskiForm v w < 0` and `w` has positive time component,
@@ -298,66 +320,8 @@ private lemma timelike_sameSign_of_minkowskiForm_neg
     (hv : minkowskiForm v v = -1) (hw : minkowskiForm w w = -1)
     (hpos : 0 < w.ofLp 0) (hvw : minkowskiForm v w < 0) :
     0 < v.ofLp 0 := by
-  have hv' :
-      -(v.ofLp 0) * (v.ofLp 0) + (v.ofLp 1) * (v.ofLp 1) +
-        (v.ofLp 2) * (v.ofLp 2) + (v.ofLp 3) * (v.ofLp 3) = -1 := by
-    have := hv
-    simp only [minkowskiForm_apply] at this
-    exact this
-  have hw' :
-      -(w.ofLp 0) * (w.ofLp 0) + (w.ofLp 1) * (w.ofLp 1) +
-        (w.ofLp 2) * (w.ofLp 2) + (w.ofLp 3) * (w.ofLp 3) = -1 := by
-    have := hw
-    simp only [minkowskiForm_apply] at this
-    exact this
-  have hvw' :
-      -(v.ofLp 0) * (w.ofLp 0) + (v.ofLp 1) * (w.ofLp 1) +
-        (v.ofLp 2) * (w.ofLp 2) + (v.ofLp 3) * (w.ofLp 3) < 0 := by
-    have := hvw
-    simp only [minkowskiForm_apply] at this
-    exact this
-  by_contra hneg0
-  rw [not_lt] at hneg0
-  obtain ⟨a, ha⟩ : ∃ a : ℝ, a = v.ofLp 0 := ⟨v.ofLp 0, rfl⟩
-  obtain ⟨b, hb⟩ : ∃ b : ℝ, b = w.ofLp 0 := ⟨w.ofLp 0, rfl⟩
-  obtain ⟨p, hp⟩ : ∃ p : ℝ, p = v.ofLp 1 := ⟨v.ofLp 1, rfl⟩
-  obtain ⟨q, hq⟩ : ∃ q : ℝ, q = v.ofLp 2 := ⟨v.ofLp 2, rfl⟩
-  obtain ⟨r, hr⟩ : ∃ r : ℝ, r = v.ofLp 3 := ⟨v.ofLp 3, rfl⟩
-  obtain ⟨p', hp'⟩ : ∃ p' : ℝ, p' = w.ofLp 1 := ⟨w.ofLp 1, rfl⟩
-  obtain ⟨q', hq'⟩ : ∃ q' : ℝ, q' = w.ofLp 2 := ⟨w.ofLp 2, rfl⟩
-  obtain ⟨r', hr'⟩ : ∃ r' : ℝ, r' = w.ofLp 3 := ⟨w.ofLp 3, rfl⟩
-  rw [← ha, ← hp, ← hq, ← hr] at hv'
-  rw [← hb, ← hp', ← hq', ← hr'] at hw'
-  rw [← ha, ← hb, ← hp, ← hq, ← hr, ← hp', ← hq', ← hr'] at hvw'
-  rw [← hb] at hpos
-  rw [← ha] at hneg0
-  have ha_sq_ge : a * a ≥ 1 := by
-    nlinarith [sq_nonneg p, sq_nonneg q, sq_nonneg r, hv']
-  have hb_sq_ge : b * b ≥ 1 := by
-    nlinarith [sq_nonneg p', sq_nonneg q', sq_nonneg r', hw']
-  have ha_neg : a < 0 := by nlinarith [ha_sq_ge, hneg0, sq_nonneg (a + 1)]
-  have hCS : (p * p' + q * q' + r * r') ^ 2 ≤
-      (p * p + q * q + r * r) * (p' * p' + q' * q' + r' * r') := by
-    nlinarith [sq_nonneg (p * q' - q * p'), sq_nonneg (p * r' - r * p'),
-               sq_nonneg (q * r' - r * q')]
-  have hpqr : p * p + q * q + r * r = a * a - 1 := by linarith [hv']
-  have hpqr' : p' * p' + q' * q' + r' * r' = b * b - 1 := by linarith [hw']
-  have hs_lt_ab : p * p' + q * q' + r * r' < a * b := by linarith [hvw']
-  have hab_neg : a * b < 0 := mul_neg_of_neg_of_pos ha_neg hpos
-  have hab_sq_lt : (a * b) ^ 2 < (p * p' + q * q' + r * r') ^ 2 := by
-    have hs_neg : p * p' + q * q' + r * r' < 0 := by linarith
-    have habs : -(p * p' + q * q' + r * r') > -(a * b) := by linarith
-    have hpos1 : (0 : ℝ) < -(a * b) := by linarith
-    nlinarith [habs, hpos1, sq_nonneg (p * p' + q * q' + r * r' - a * b)]
-  have hCS2 : (p * p' + q * q' + r * r') ^ 2 ≤ (a * a - 1) * (b * b - 1) := by
-    calc (p * p' + q * q' + r * r') ^ 2
-        ≤ (p * p + q * q + r * r) * (p' * p' + q' * q' + r' * r') := hCS
-      _ = (a * a - 1) * (b * b - 1) := by rw [hpqr, hpqr']
-  have hexpand : (a * a - 1) * (b * b - 1) = (a * b) ^ 2 - a * a - b * b + 1 := by
-    ring
-  rw [hexpand] at hCS2
-  have hfinal : a * a + b * b < 1 := by linarith [hab_sq_lt, hCS2]
-  linarith [ha_sq_ge, hb_sq_ge]
+  simp only [minkowskiForm_apply] at hv hw hvw
+  exact pos_of_reverse_cauchySchwarz hv hw hpos hvw
 
 /-- The composition of two orthochronous Lorentz transformations is
 orthochronous. (Requires that both transformations are Lorentz.) -/
@@ -623,6 +587,7 @@ theorem isOpen_minkowskiBackwardCone (q : SpacetimeModel) :
 
 /-! ### Minkowski spacetime -/
 
+set_option backward.isDefEq.respectTransparency false in
 /--
 *Minkowski spacetime* is the carrier of `StandardMinkowskiSpacetime`
 viewed as a topological space under the Alexandrov topology.
@@ -647,7 +612,7 @@ noncomputable def standardMinkowskiTimeOrientation :
     have h0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 = 1 := by
       rw [PiLp.single_apply]; simp
     have hzero : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 =
-        (0 : SpacetimeModel).ofLp 0 := by rw [h]; rfl
+        (0 : SpacetimeModel).ofLp 0 := by rw [h]
     have hz : (0 : SpacetimeModel).ofLp 0 = (0 : ℝ) := rfl
     rw [h0, hz] at hzero
     exact one_ne_zero hzero
@@ -674,49 +639,7 @@ noncomputable def standardMinkowskiTimeOrientation :
         ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3) < 0
     rw [h0, h1, h2, h3]
     norm_num
-  smooth := by
-    intro x₀
-    -- `StandardMinkowskiSpacetime.Carrier = SpacetimeModel` by `rfl`. Cast
-    -- `x₀` to `SpacetimeModel` explicitly so the structure projections in
-    -- the goal reduce, matching the pattern of `smooth_in_charts`.
-    let x₀' : SpacetimeModel := x₀
-    change ContDiffWithinAt ℝ ⊤
-      (fun y => mfderiv (modelWithCornersSelf ℝ SpacetimeModel)
-                        (modelWithCornersSelf ℝ SpacetimeModel)
-          (extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm y
-          (mfderiv (modelWithCornersSelf ℝ SpacetimeModel)
-                   (modelWithCornersSelf ℝ SpacetimeModel)
-            (extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀')
-            ((extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm y)
-            (EuclideanSpace.single (0 : Fin 4) (1 : ℝ))))
-      (extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').target
-      ((extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀') x₀')
-    apply ContDiffWithinAt.congr_of_eventuallyEq
-      (f := fun _ : SpacetimeModel => EuclideanSpace.single (0 : Fin 4) (1 : ℝ))
-    · exact contDiffWithinAt_const
-    · filter_upwards with y
-      have hsymm :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      have hchart :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀') =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      rw [hsymm, hchart]
-      simp only [mfderiv_id]
-      rfl
-    · have hsymm :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀').symm =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      have hchart :
-          ⇑(extChartAt (modelWithCornersSelf ℝ SpacetimeModel) x₀') =
-            (id : SpacetimeModel → SpacetimeModel) := by
-        simp
-      rw [hsymm, hchart]
-      simp only [mfderiv_id]
-      rfl
+  smooth := contMDiff_vectorSpace_iff_contDiff.mpr contDiff_const
 
 /-!
 ### Characterisation of the chronological future on standard Minkowski
@@ -774,10 +697,10 @@ viewed as a map from `(ℝ, modelWithCornersSelf ℝ ℝ)` to standard Minkowski
 spacetime. A component of the chronological-future characterisation. -/
 theorem standardMinkowskiLineSegmentPath_smoothOn (p q : SpacetimeModel) :
     ContMDiffOn (modelWithCornersSelf ℝ ℝ)
-      StandardMinkowskiSpacetime.model ⊤
+      StandardMinkowskiSpacetime.model ∞
       (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
       (Set.Icc (0 : ℝ) 1) := by
-  have h : ContDiff ℝ (⊤ : WithTop ℕ∞) (fun s : ℝ => (p : SpacetimeModel) + s • (q - p)) :=
+  have h : ContDiff ℝ ∞ (fun s : ℝ => (p : SpacetimeModel) + s • (q - p)) :=
     contDiff_const.add (contDiff_id.smul contDiff_const)
   exact (contMDiff_iff_contDiff.mpr h).contMDiffOn
 
@@ -979,76 +902,31 @@ theorem standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_z
       StandardMinkowskiSpacetime.IsFuturePointing
         standardMinkowskiTimeOrientation (x := (0 : SpacetimeModel)) v) ↔
     v ∈ minkowskiForwardCone 0 := by
-  have h0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 = 1 := by
-    rw [PiLp.single_apply]; simp
-  have h1 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1 = 0 := by
-    rw [PiLp.single_apply]; simp
-  have h2 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2 = 0 := by
-    rw [PiLp.single_apply]; simp
-  have h3 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3 = 0 := by
-    rw [PiLp.single_apply]; simp
+  -- The two Minkowski products involved, in explicit coordinates.
+  have hz : ∀ i : Fin 4, (0 : SpacetimeModel) i = (0 : ℝ) := fun _ => rfl
+  have hvv : minkowskiForm v v = -(v 0) ^ 2 + (v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2 := by
+    rw [minkowskiForm_apply]; ring
+  have he0 : minkowskiForm (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) v = -(v 0) :=
+    minkowskiForm_single_zero_left v
   constructor
   · rintro ⟨h_timelike, h_fp⟩
     have h_tl : minkowskiForm v v < 0 := h_timelike
+    rw [hvv] at h_tl
     rcases h_fp with ⟨_, h_e0_v⟩ | ⟨h_null, _⟩
     · have h_e0 : minkowskiForm
             (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) v < 0 := h_e0_v
-      simp only [minkowskiForm_apply] at h_e0
-      change -((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0) *
-          (v.ofLp 0) +
-          ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1) * (v.ofLp 1) +
-          ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2) * (v.ofLp 2) +
-          ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3) *
-          (v.ofLp 3) < 0 at h_e0
-      rw [h0, h1, h2, h3] at h_e0
-      simp only [minkowskiForm_apply] at h_tl
-      refine ⟨?_, ?_⟩
-      · change (0 : SpacetimeModel) 0 < v 0
-        have hz : (0 : SpacetimeModel) 0 = (0 : ℝ) := rfl
-        rw [hz]
-        linarith
-      · change -(v 0 - (0 : SpacetimeModel) 0) ^ 2 +
-            (v 1 - (0 : SpacetimeModel) 1) ^ 2 +
-            (v 2 - (0 : SpacetimeModel) 2) ^ 2 +
-            (v 3 - (0 : SpacetimeModel) 3) ^ 2 < 0
-        have hz0 : (0 : SpacetimeModel) 0 = (0 : ℝ) := rfl
-        have hz1 : (0 : SpacetimeModel) 1 = (0 : ℝ) := rfl
-        have hz2 : (0 : SpacetimeModel) 2 = (0 : ℝ) := rfl
-        have hz3 : (0 : SpacetimeModel) 3 = (0 : ℝ) := rfl
-        rw [hz0, hz1, hz2, hz3]
-        nlinarith [h_tl]
-    · exfalso
-      have h_null' : minkowskiForm v v = 0 := h_null
-      linarith
+      rw [he0] at h_e0
+      exact ⟨by rw [hz]; linarith, by simp only [hz, sub_zero]; exact h_tl⟩
+    · have h_null' : minkowskiForm v v = 0 := h_null
+      rw [hvv] at h_null'
+      exact absurd h_null' h_tl.ne
   · rintro ⟨h_pos, h_cone⟩
-    have hz0 : (0 : SpacetimeModel) 0 = (0 : ℝ) := rfl
-    have hz1 : (0 : SpacetimeModel) 1 = (0 : ℝ) := rfl
-    have hz2 : (0 : SpacetimeModel) 2 = (0 : ℝ) := rfl
-    have hz3 : (0 : SpacetimeModel) 3 = (0 : ℝ) := rfl
-    have h_pos' : 0 < v 0 := by
-      have := h_pos
-      rw [hz0] at this
-      exact this
-    have h_cone' : -(v 0) ^ 2 + (v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2 < 0 := by
-      have := h_cone
-      rw [hz0, hz1, hz2, hz3] at this
-      nlinarith [this]
-    have h_tl : minkowskiForm v v < 0 := by
-      change -(v 0) * (v 0) + (v 1) * (v 1) + (v 2) * (v 2) + (v 3) * (v 3) < 0
-      nlinarith [h_cone']
-    refine ⟨h_tl, ?_⟩
-    left
-    refine ⟨h_tl, ?_⟩
+    rw [hz] at h_pos
+    simp only [hz, sub_zero] at h_cone
+    have h_tl : minkowskiForm v v < 0 := by rw [hvv]; exact h_cone
+    refine ⟨h_tl, Or.inl ⟨h_tl, ?_⟩⟩
     change minkowskiForm (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) v < 0
-    simp only [minkowskiForm_apply]
-    change -((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0) * (v.ofLp 0) +
-        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1) * (v.ofLp 1) +
-        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2) * (v.ofLp 2) +
-        ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3) * (v.ofLp 3) < 0
-    rw [h0, h1, h2, h3]
-    have : v.ofLp 0 = v 0 := rfl
-    rw [this]
-    linarith
+    rw [he0]; linarith
 
 /-- **Smooth-path FTC for standard Minkowski.** For any smooth path `μ` on
 standard Minkowski spacetime whose parameter space is the closed interval
@@ -1065,7 +943,7 @@ theorem standardMinkowski_smoothPath_fundamental_theorem_calculus
           μ.toFun μ.parameterSpace s (1 : ℝ) := by
   let f : ℝ → SpacetimeModel := μ.toFun
   rw [hparam]
-  have hsmooth : ContDiffOn ℝ ⊤ f (Set.Icc a b) := by
+  have hsmooth : ContDiffOn ℝ ∞ f (Set.Icc a b) := by
     have h := μ.smoothOn
     rw [hparam] at h
     exact contMDiffOn_iff_contDiffOn.mp h
@@ -1084,7 +962,7 @@ theorem standardMinkowski_smoothPath_fundamental_theorem_calculus
       derivWithin_of_mem_nhds hmem
     rw [heq]; exact hderivAt
   have hcont_deriv : ContinuousOn (derivWithin f (Set.Icc a b)) (Set.Icc a b) :=
-    ContDiffOn.continuousOn_derivWithin hsmooth hUnique le_top
+    ContDiffOn.continuousOn_derivWithin hsmooth hUnique (WithTop.coe_le_coe.mpr le_top)
   have hint : IntervalIntegrable (derivWithin f (Set.Icc a b))
       MeasureTheory.volume a b :=
     hcont_deriv.intervalIntegrable_of_Icc hab.le
@@ -1197,7 +1075,7 @@ theorem standardMinkowski_smoothPath_tangent_continuousOn
       (Set.Icc a b) := by
   let f : ℝ → SpacetimeModel := μ.toFun
   -- Smoothness reduced to ContDiffOn on `Set.Icc a b`.
-  have hsmooth : ContDiffOn ℝ ⊤ f (Set.Icc a b) := by
+  have hsmooth : ContDiffOn ℝ ∞ f (Set.Icc a b) := by
     have h := μ.smoothOn
     rw [hparam] at h
     exact contMDiffOn_iff_contDiffOn.mp h
@@ -1215,7 +1093,7 @@ theorem standardMinkowski_smoothPath_tangent_continuousOn
       exact hst (hsa.trans hta.symm)
   have hUnique : UniqueDiffOn ℝ (Set.Icc a b) := uniqueDiffOn_Icc hab
   have hcont_deriv : ContinuousOn (derivWithin f (Set.Icc a b)) (Set.Icc a b) :=
-    ContDiffOn.continuousOn_derivWithin hsmooth hUnique le_top
+    ContDiffOn.continuousOn_derivWithin hsmooth hUnique (WithTop.coe_le_coe.mpr le_top)
   -- Pointwise: `mfderivWithin … 1 = derivWithin f (Icc a b)`.
   have hpw : ∀ s,
       mfderivWithin (modelWithCornersSelf ℝ ℝ)
@@ -1317,6 +1195,49 @@ theorem standardMinkowski_trip_displacement_eq_intervalIntegral
   rw [← ha_eq, ← hb_eq]
   exact hftc
 
+/-- The **spatial projection** on `ℝ^{1,3}`: `v ↦ v - (v 0) • e₀`, i.e. the
+continuous linear endomorphism zeroing the time coordinate and fixing the
+three spatial ones. -/
+private noncomputable def spatialProj :
+    SpacetimeModel →L[ℝ] SpacetimeModel := -- (extracted by Fuse golfer)
+  ContinuousLinearMap.id ℝ SpacetimeModel -
+    (EuclideanSpace.proj (0 : Fin 4)).smulRight
+      (EuclideanSpace.single (0 : Fin 4) (1 : ℝ))
+
+private theorem spatialProj_apply (v : SpacetimeModel) (i : Fin 4) :
+    spatialProj v i = if i = 0 then 0 else v i := by -- (extracted by Fuse golfer)
+  have hpt : spatialProj v i
+      = v i - v 0 * (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) i := rfl
+  rw [hpt, PiLp.single_apply]
+  rcases eq_or_ne i 0 with rfl | h
+  · simp
+  · simp [h]
+
+/-- The squared norm of the spatial part of `v` is `(v 1)² + (v 2)² + (v 3)²`. -/
+private theorem norm_spatialProj_sq (v : SpacetimeModel) :
+    ‖spatialProj v‖ ^ 2 = (v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2 := by
+      -- (extracted by Fuse golfer)
+  rw [EuclideanSpace.real_norm_sq_eq]
+  simp [Fin.sum_univ_four, spatialProj_apply]
+
+/-- **The open forward cone at the origin is the "spatial norm < time" region.**
+`v ∈ minkowskiForwardCone 0` exactly when `‖spatial part of v‖ < v 0`. -/
+private theorem mem_minkowskiForwardCone_zero_iff_norm_spatialProj_lt
+    (v : SpacetimeModel) : -- (extracted by Fuse golfer)
+    v ∈ minkowskiForwardCone (0 : SpacetimeModel) ↔ ‖spatialProj v‖ < v 0 := by
+  have hz : ∀ i : Fin 4, (0 : SpacetimeModel) i = (0 : ℝ) := fun _ => rfl
+  constructor
+  · rintro ⟨h1, h2⟩
+    rw [hz] at h1
+    simp only [hz, sub_zero] at h2
+    exact lt_of_pow_lt_pow_left₀ 2 h1.le (by rw [norm_spatialProj_sq]; linarith)
+  · intro h
+    have hsq : ‖spatialProj v‖ ^ 2 < (v 0) ^ 2 :=
+      pow_lt_pow_left₀ h (norm_nonneg _) two_ne_zero
+    rw [norm_spatialProj_sq] at hsq
+    exact ⟨by rw [hz]; exact (norm_nonneg _).trans_lt h,
+      by simp only [hz, sub_zero]; linarith⟩
+
 /-- **Closure under positive interval integration.** If `f :
 ℝ → ℝ⁴` is continuous on `[a, b]` and lies in the open forward
 Minkowski-cone at the origin throughout the open interval `(a, b)` (with
@@ -1331,185 +1252,36 @@ theorem intervalIntegral_mem_minkowskiForwardCone_zero
     (_hf : ContinuousOn f (Set.Icc a b))
     (_hmem : ∀ s ∈ Set.Ioo a b, f s ∈ minkowskiForwardCone (0 : SpacetimeModel)) :
     (∫ s in a..b, f s) ∈ minkowskiForwardCone (0 : SpacetimeModel) := by
-  -- Notation
-  set I : SpacetimeModel := ∫ s in a..b, f s with hI_def
-  -- Interval integrability of f from continuity on [a, b].
   have hf_int : IntervalIntegrable f MeasureTheory.volume a b :=
     _hf.intervalIntegrable_of_Icc _hab.le
-  -- Continuity of each scalar coordinate s ↦ (f s) i on [a, b].
-  have hf_cont_coord : ∀ i : Fin 4,
-      ContinuousOn (fun s => (f s) i) (Set.Icc a b) := fun i =>
-    (PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) i).comp_continuousOn _hf
-  -- Pointwise positivity and Lorentzian inequality on (a, b).
-  have h_pos : ∀ s ∈ Set.Ioo a b, 0 < (f s) 0 := by
-    intro s hs
-    have h := (_hmem s hs).1
-    -- h : (0 : SpacetimeModel) 0 < (f s) 0, with (0 : SpacetimeModel) 0 = 0.
-    have hz : (0 : SpacetimeModel) 0 = 0 := rfl
-    rw [hz] at h; exact h
-  have h_lor : ∀ s ∈ Set.Ioo a b,
-      -((f s) 0) ^ 2 + ((f s) 1) ^ 2 + ((f s) 2) ^ 2 + ((f s) 3) ^ 2 < 0 := by
-    intro s hs
-    have h := (_hmem s hs).2
-    have hz0 : (0 : SpacetimeModel) 0 = 0 := rfl
-    have hz1 : (0 : SpacetimeModel) 1 = 0 := rfl
-    have hz2 : (0 : SpacetimeModel) 2 = 0 := rfl
-    have hz3 : (0 : SpacetimeModel) 3 = 0 := rfl
-    rw [hz0, hz1, hz2, hz3] at h
-    simpa using h
-  -- Continuity of (f s) 0 on the closed interval.
-  have hf0_cont : ContinuousOn (fun s => (f s) 0) (Set.Icc a b) := hf_cont_coord 0
-  -- Coordinate-by-coordinate evaluation of the integral via the projection CLM.
-  have hI_coord : ∀ i : Fin 4, I i = ∫ s in a..b, (f s) i := by
-    intro i
-    have := (ContinuousLinearMap.intervalIntegral_comp_comm
+  have hf0_cont : ContinuousOn (fun s => (f s) 0) (Set.Icc a b) :=
+    (PiLp.continuous_apply (β := fun _ : Fin 4 => ℝ) (p := 2) 0).comp_continuousOn _hf
+  have hS_cont : ContinuousOn (fun s => ‖spatialProj (f s)‖) (Set.Icc a b) :=
+    continuous_norm.comp_continuousOn (spatialProj.continuous.comp_continuousOn _hf)
+  -- `‖spatial‖ < time` holds strictly on `(a, b)`, hence weakly on `[a, b]`
+  -- (the strict inequality extends by continuity from a dense subset).
+  have hlt : ∀ s ∈ Set.Ioo a b, ‖spatialProj (f s)‖ < (f s) 0 := fun s hs =>
+    (mem_minkowskiForwardCone_zero_iff_norm_spatialProj_lt _).1 (_hmem s hs)
+  have hle : ∀ s ∈ Set.Icc a b, ‖spatialProj (f s)‖ ≤ (f s) 0 := fun s hs =>
+    ContinuousWithinAt.closure_le (by rw [closure_Ioo _hab.ne]; exact hs)
+      ((hS_cont s hs).mono Set.Ioo_subset_Icc_self)
+      ((hf0_cont s hs).mono Set.Ioo_subset_Icc_self)
+      fun y hy => (hlt y hy).le
+  -- Strict integral inequality: ∫ ‖spatial‖ < ∫ time.
+  have h_int_lt : (∫ s in a..b, ‖spatialProj (f s)‖) < ∫ s in a..b, (f s) 0 :=
+    intervalIntegral.integral_lt_integral_of_continuousOn_of_le_of_exists_lt
+      _hab hS_cont hf0_cont (fun x hx => hle x (Set.Ioc_subset_Icc_self hx))
+      ⟨(a + b) / 2, Set.mem_Icc.mpr ⟨by linarith, by linarith⟩,
+        hlt _ (Set.mem_Ioo.mpr ⟨by linarith, by linarith⟩)⟩
+  -- Both `spatialProj` and the coordinate `0` functional commute with `∫`.
+  have hI0 : (∫ s in a..b, f s) 0 = ∫ s in a..b, (f s) 0 := by
+    have h := (ContinuousLinearMap.intervalIntegral_comp_comm
       (E := SpacetimeModel) (F := ℝ) (𝕜 := ℝ) (μ := MeasureTheory.volume)
-      (f := f) (a := a) (b := b) (EuclideanSpace.proj i) hf_int)
-    -- `EuclideanSpace.proj i` evaluated at `v` is `v i`.
-    simpa [EuclideanSpace.proj, PiLp.proj_apply, hI_def] using this.symm
-  -- Define the spatial map T v := v - EuclideanSpace.single 0 (v 0); this is
-  -- a continuous linear endomorphism of `SpacetimeModel`, built from
-  -- `EuclideanSpace.proj 0` and the basis vector `EuclideanSpace.single 0 1`.
-  set T : SpacetimeModel →L[ℝ] SpacetimeModel :=
-    ContinuousLinearMap.id ℝ SpacetimeModel -
-      (EuclideanSpace.proj (0 : Fin 4)).smulRight
-        (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) with hT_def
-  have hT_apply : ∀ v : SpacetimeModel,
-      T v = v - EuclideanSpace.single (0 : Fin 4) (v 0) := by
-    intro v
-    simp only [hT_def, sub_apply, ContinuousLinearMap.id_apply,
-      ContinuousLinearMap.smulRight_apply, EuclideanSpace.coe_proj]
-    -- (v 0) • single 0 1 = single 0 (v 0)
-    congr 1
-    ext i
-    simp [EuclideanSpace.single, PiLp.single_apply, mul_comm]
-  -- Properties of T applied coordinatewise.
-  have hT_coord : ∀ (v : SpacetimeModel) (i : Fin 4),
-      (T v) i = if i = 0 then 0 else v i := by
-    intro v i
-    rw [hT_apply]
-    by_cases h : i = 0
-    · subst h
-      simp
-    · have hsingle : (EuclideanSpace.single (0 : Fin 4) (v 0)) i = 0 := by
-        simp [EuclideanSpace.single, h]
-      simp [h]
-  -- ‖T v‖² = (v 1)² + (v 2)² + (v 3)² for any v.
-  have hT_norm_sq : ∀ v : SpacetimeModel,
-      ‖T v‖ ^ 2 = (v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2 := by
-    intro v
-    rw [EuclideanSpace.real_norm_sq_eq]
-    simp [Fin.sum_univ_four, hT_coord]
-  -- Spatial vector fS s = T (f s); ‖fS s‖² = (f s 1)² + (f s 2)² + (f s 3)².
-  set fS : ℝ → SpacetimeModel := fun s => T (f s) with hfS_def
-  have hfS_norm_sq : ∀ s,
-      ‖fS s‖ ^ 2 = ((f s) 1) ^ 2 + ((f s) 2) ^ 2 + ((f s) 3) ^ 2 := by
-    intro s; exact hT_norm_sq (f s)
-  -- Pointwise on (a, b): ‖fS s‖ < (f s) 0.
-  have hfS_lt : ∀ s ∈ Set.Ioo a b, ‖fS s‖ < (f s) 0 := by
-    intro s hs
-    have hpos := h_pos s hs
-    have hlor := h_lor s hs
-    have hsq : ‖fS s‖ ^ 2 < ((f s) 0) ^ 2 := by
-      rw [hfS_norm_sq]; nlinarith [hlor]
-    have hnn : 0 ≤ ‖fS s‖ := norm_nonneg _
-    nlinarith [hsq, hpos, hnn, sq_nonneg (‖fS s‖ - (f s) 0), sq_nonneg (‖fS s‖ + (f s) 0)]
-  -- Pointwise on [a, b]: ‖fS s‖ ≤ (f s) 0 (extend by continuity).
-  have hfS_cont : ContinuousOn fS (Set.Icc a b) :=
-    T.continuous.comp_continuousOn _hf
-  have hfS_norm_cont : ContinuousOn (fun s => ‖fS s‖) (Set.Icc a b) :=
-    continuous_norm.comp_continuousOn hfS_cont
-  have hfS_le : ∀ s ∈ Set.Icc a b, ‖fS s‖ ≤ (f s) 0 := by
-    -- Closure argument: the closed set { s ∈ [a, b] | ‖fS s‖ ≤ (f s) 0 }
-    -- contains the dense subset (a, b) (where the strict inequality holds), so
-    -- by `closure (Ioo a b) = Icc a b`, the weak inequality extends.
-    intro s hs
-    have h_closure : s ∈ closure (Set.Ioo a b) := by
-      rw [closure_Ioo _hab.ne]; exact hs
-    -- Construct a closed superset of (a,b) inside which the weak inequality
-    -- holds, then membership of `s` in the closure gives the result.
-    let S : Set ℝ := {t ∈ Set.Icc a b | ‖fS t‖ ≤ (f t) 0}
-    have hS_closed : IsClosed S := by
-      have hcont_diff : ContinuousOn (fun t => (f t) 0 - ‖fS t‖) (Set.Icc a b) :=
-        hf0_cont.sub hfS_norm_cont
-      have h_eq : S = (Set.Icc a b) ∩
-          ((fun t => (f t) 0 - ‖fS t‖) ⁻¹' Set.Ici 0) := by
-        ext t
-        constructor
-        · rintro ⟨ht, hle⟩; exact ⟨ht, by simp; linarith⟩
-        · rintro ⟨ht, hpre⟩
-          refine ⟨ht, ?_⟩
-          have := hpre
-          simp at this
-          linarith
-      rw [h_eq]
-      exact hcont_diff.preimage_isClosed_of_isClosed isClosed_Icc isClosed_Ici
-    have h_subset : Set.Ioo a b ⊆ S := by
-      intro t ht
-      refine ⟨Set.Ioo_subset_Icc_self ht, ?_⟩
-      exact (hfS_lt t ht).le
-    have hs_in_S : s ∈ S := by
-      have h_clo_sub : closure (Set.Ioo a b) ⊆ S :=
-        hS_closed.closure_subset_iff.mpr h_subset
-      exact h_clo_sub h_closure
-    exact hs_in_S.2
-  -- Strict integral inequality: ∫ ‖fS s‖ ds < ∫ (f s) 0 ds.
-  have h_int_lt : (∫ s in a..b, ‖fS s‖) < ∫ s in a..b, (f s) 0 := by
-    apply intervalIntegral.integral_lt_integral_of_continuousOn_of_le_of_exists_lt
-      _hab hfS_norm_cont hf0_cont
-    · intro x hx
-      exact hfS_le x (Set.Ioc_subset_Icc_self hx)
-    · -- Use the midpoint.
-      refine ⟨(a + b) / 2, ?_, ?_⟩
-      · exact Set.mem_Icc.mpr ⟨by linarith, by linarith⟩
-      · exact hfS_lt ((a + b) / 2) (Set.mem_Ioo.mpr ⟨by linarith, by linarith⟩)
-  -- Positivity of I 0.
-  have hI0_pos : 0 < I 0 := by
-    rw [hI_coord 0]
-    -- 0 ≤ ‖fS s‖ ≤ (f s) 0 on [a,b], strict on (a,b); hence ∫ (f s) 0 > 0.
-    have h_int_norm_nonneg :
-        (0 : ℝ) ≤ ∫ s in a..b, ‖fS s‖ := by
-      apply intervalIntegral.integral_nonneg _hab.le
-      intro s _; exact norm_nonneg _
-    linarith [h_int_lt, h_int_norm_nonneg]
-  -- Norm of the spatial part of I.
-  -- ∫ fS = T I, so for i = 0: (∫ fS) 0 = 0; for i ≠ 0: (∫ fS) i = I i.
-  have hT_int : T I = ∫ s in a..b, fS s := by
-    have h := T.intervalIntegral_comp_comm (μ := MeasureTheory.volume) hf_int
-    -- `h : (∫ s in a..b, T (f s)) = T (∫ s in a..b, f s)`
-    simpa [hI_def, hfS_def] using h.symm
-  -- ‖T I‖² = (I 1)² + (I 2)² + (I 3)² by `hT_norm_sq`.
-  have hTI_norm_sq :
-      ‖T I‖ ^ 2 = (I 1) ^ 2 + (I 2) ^ 2 + (I 3) ^ 2 := hT_norm_sq I
-  -- Triangle inequality: ‖∫ fS‖ ≤ ∫ ‖fS s‖.
-  have h_triangle : ‖∫ s in a..b, fS s‖ ≤ ∫ s in a..b, ‖fS s‖ :=
-    intervalIntegral.norm_integral_le_integral_norm _hab.le
-  have hTI_norm_lt : ‖T I‖ < I 0 := by
-    rw [hT_int, hI_coord 0]
-    linarith [h_triangle, h_int_lt]
-  -- Squaring: (I 1)² + (I 2)² + (I 3)² < (I 0)².
-  have h_sq_lt : (I 1) ^ 2 + (I 2) ^ 2 + (I 3) ^ 2 < (I 0) ^ 2 := by
-    rw [← hTI_norm_sq]
-    have hnn : 0 ≤ ‖T I‖ := norm_nonneg _
-    nlinarith [hTI_norm_lt, hI0_pos, hnn]
-  -- Conclude.
-  refine ⟨?_, ?_⟩
-  · -- (0 : SpacetimeModel) 0 < I 0 after unfolding cone membership.
-    change (0 : SpacetimeModel) 0 < I 0
-    have h0 : (0 : SpacetimeModel) 0 = 0 := rfl
-    rw [h0]; exact hI0_pos
-  · -- Lorentzian inequality.
-    change -(I 0 - (0 : SpacetimeModel) 0) ^ 2 +
-        (I 1 - (0 : SpacetimeModel) 1) ^ 2 +
-        (I 2 - (0 : SpacetimeModel) 2) ^ 2 +
-        (I 3 - (0 : SpacetimeModel) 3) ^ 2 < 0
-    have h0 : (0 : SpacetimeModel) 0 = 0 := rfl
-    have h1 : (0 : SpacetimeModel) 1 = 0 := rfl
-    have h2 : (0 : SpacetimeModel) 2 = 0 := rfl
-    have h3 : (0 : SpacetimeModel) 3 = 0 := rfl
-    rw [h0, h1, h2, h3]
-    simp only [sub_zero]
-    linarith [h_sq_lt]
+      (f := f) (a := a) (b := b) (EuclideanSpace.proj 0) hf_int).symm
+    simpa only [EuclideanSpace.coe_proj] using h
+  refine (mem_minkowskiForwardCone_zero_iff_norm_spatialProj_lt _).2 ?_
+  rw [hI0, ← (spatialProj.intervalIntegral_comp_comm (μ := MeasureTheory.volume) hf_int)]
+  exact (intervalIntegral.norm_integral_le_integral_norm _hab.le).trans_lt h_int_lt
 
 /-- *Forward subset* of `chronologicalFuture_standardMinkowski`: every
 point in the chronological future of `p` lies in the open forward
@@ -1547,6 +1319,24 @@ theorem segmentPrecedes_mem_minkowskiForwardCone {p q : SpacetimeModel}
   change q' ∈ minkowskiForwardCone p
   exact (mem_minkowskiForwardCone_iff_sub_mem p q').mpr hsub
 
+/-- The open forward light cone of `ℝ^{1,3}` is closed under addition, in
+coordinates: the sum of two future-pointing timelike vectors is again
+future-pointing and timelike. -/
+private lemma minkowskiCone_add -- (extracted by Fuse golfer)
+    {a₀ a₁ a₂ a₃ b₀ b₁ b₂ b₃ : ℝ} (ha : 0 < a₀) (hb : 0 < b₀)
+    (ha' : -a₀ ^ 2 + a₁ ^ 2 + a₂ ^ 2 + a₃ ^ 2 < 0)
+    (hb' : -b₀ ^ 2 + b₁ ^ 2 + b₂ ^ 2 + b₃ ^ 2 < 0) :
+    -(a₀ + b₀) ^ 2 + (a₁ + b₁) ^ 2 + (a₂ + b₂) ^ 2 + (a₃ + b₃) ^ 2 < 0 := by
+  have hSa : a₁ ^ 2 + a₂ ^ 2 + a₃ ^ 2 < a₀ ^ 2 := by linarith
+  have hSb : b₁ ^ 2 + b₂ ^ 2 + b₃ ^ 2 < b₀ ^ 2 := by linarith
+  -- Cauchy–Schwarz bounds the spatial inner product by `a₀ * b₀`.
+  have hdot : a₁ * b₁ + a₂ * b₂ + a₃ * b₃ < a₀ * b₀ := by
+    refine (abs_lt_of_sq_lt_sq' ?_ (mul_pos ha hb).le).2
+    rw [mul_pow]
+    exact (cauchySchwarz_sq_three a₁ a₂ a₃ b₁ b₂ b₃).trans_lt
+      (mul_lt_mul'' hSa hSb (by positivity) (by positivity))
+  linarith
+
 /-- *Forward subset* of `chronologicalFuture_standardMinkowski`: every
 point in the chronological future of `p` lies in the open forward
 Minkowski-cone. Because a trip is a finite chain of trip segments, this is a
@@ -1564,37 +1354,10 @@ theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
   | single h =>
       exact segmentPrecedes_mem_minkowskiForwardCone h
   | tail h₁ h₂ ih =>
-      rename_i b c
-      have hc_mem_b : (c : SpacetimeModel) ∈ minkowskiForwardCone (b : SpacetimeModel) :=
-        segmentPrecedes_mem_minkowskiForwardCone h₂
-      rcases ih with ⟨hp_b, hc_b⟩
-      rcases hc_mem_b with ⟨hb_c, hc_c⟩
-      have h_p_lt_c : p 0 < c.ofLp 0 := by
-        calc
-          p 0 < b.ofLp 0 := hp_b
-          _ < c.ofLp 0 := hb_c
-      have h_cone_add_aux : (c.ofLp 1 - p 1) ^ 2 + (c.ofLp 2 - p 2) ^ 2 + (c.ofLp 3 - p 3) ^ 2
-          < (c.ofLp 0 - p 0) ^ 2 := by
-        set A := c.ofLp 0 - b.ofLp 0 with hA_def
-        set B := b.ofLp 0 - p 0 with hB_def
-        set x := c.ofLp 1 - b.ofLp 1 with hx_def
-        set y := c.ofLp 2 - b.ofLp 2 with hy_def
-        set z := c.ofLp 3 - b.ofLp 3 with hz_def
-        set u := b.ofLp 1 - p 1 with hu_def
-        set v := b.ofLp 2 - p 2 with hv_def
-        set w := b.ofLp 3 - p 3 with hw_def
-        have hA_pos : 0 < A := sub_pos.mpr hb_c
-        have hB_pos : 0 < B := sub_pos.mpr hp_b
-        have h1 : x^2 + y^2 + z^2 < A^2 := by linarith
-        have h2 : u^2 + v^2 + w^2 < B^2 := by linarith
-        have h_sum : (c.ofLp 0 - p 0) = A + B := by ring
-        have h_sum1 : c.ofLp 1 - p 1 = x + u := by ring
-        have h_sum2 : c.ofLp 2 - p 2 = y + v := by ring
-        have h_sum3 : c.ofLp 3 - p 3 = z + w := by ring
-        rw [h_sum, h_sum1, h_sum2, h_sum3]
-        nlinarith [sq_nonneg (A * u - B * x), sq_nonneg (A * v - B * y),
-          sq_nonneg (A * w - B * z), mul_pos hA_pos hB_pos, h1, h2]
-      refine ⟨h_p_lt_c, by nlinarith⟩
+      obtain ⟨hp_b, hc_b⟩ := ih
+      obtain ⟨hb_c, hc_c⟩ := segmentPrecedes_mem_minkowskiForwardCone h₂
+      exact ⟨hp_b.trans hb_c, by
+        linarith [minkowskiCone_add (sub_pos.mpr hb_c) (sub_pos.mpr hp_b) hc_c hc_b]⟩
 
 /-- *Reverse subset* of `chronologicalFuture_standardMinkowski`: every
 point of the open forward Minkowski-cone of `p` lies in the chronological
@@ -1604,102 +1367,28 @@ theorem minkowskiForwardCone_subset_segmentPrecedes {p q : SpacetimeModel}
     (hq : q ∈ minkowskiForwardCone p) :
     Spacetime.SegmentPrecedes StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation p q := by
-  obtain ⟨h_time, h_cone⟩ := hq
-  have hpq : p ≠ q := by
-    intro h
-    rw [h] at h_time
-    exact lt_irrefl _ h_time
+  have hpq : p ≠ q := fun h => lt_irrefl _ (h ▸ hq.1)
+  -- The constant tangent `q - p` lies in the forward cone at the origin, so it
+  -- is timelike and future-pointing.
+  obtain ⟨htl, hfut⟩ :=
+    (standardMinkowski_timelike_futurePointing_iff_mem_minkowskiForwardCone_zero (q - p)).2
+      ((mem_minkowskiForwardCone_iff_sub_mem p q).1 hq)
+  have htan : ∀ s ∈ Set.Icc (0 : ℝ) 1,
+      (standardMinkowskiLineSegmentPath p q hpq).tangent s = q - p :=
+    fun s hs => standardMinkowskiLineSegmentPath_mfderivWithin p q s hs
   refine ⟨Spacetime.SmoothCurve.ofPath _
     (standardMinkowskiLineSegmentPath p q hpq), ?_⟩
-  refine ⟨standardMinkowskiLineSegmentPath p q hpq, rfl, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨standardMinkowskiLineSegmentPath p q hpq, rfl, ?_, ?_, trivial, ?_, ?_⟩
   · intro s hs
-    have hs' : s ∈ Set.Icc (0 : ℝ) 1 := hs
-    change minkowskiForm
-        (mfderivWithin (modelWithCornersSelf ℝ ℝ)
-          StandardMinkowskiSpacetime.model
-          (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
-          (Set.Icc 0 1) s (1 : ℝ))
-        (mfderivWithin (modelWithCornersSelf ℝ ℝ)
-          StandardMinkowskiSpacetime.model
-          (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
-          (Set.Icc 0 1) s (1 : ℝ)) < 0
-    rw [standardMinkowskiLineSegmentPath_mfderivWithin p q s hs']
-    simp only [minkowskiForm_apply]
-    have e0 : (q - p) 0 = q 0 - p 0 := rfl
-    have e1 : (q - p) 1 = q 1 - p 1 := rfl
-    have e2 : (q - p) 2 = q 2 - p 2 := rfl
-    have e3 : (q - p) 3 = q 3 - p 3 := rfl
-    rw [e0, e1, e2, e3]
-    have hcone : -(q 0 - p 0) ^ 2 + (q 1 - p 1) ^ 2 +
-        (q 2 - p 2) ^ 2 + (q 3 - p 3) ^ 2 < 0 := h_cone
-    nlinarith [hcone, sq_nonneg (q 0 - p 0), sq_nonneg (q 1 - p 1),
-               sq_nonneg (q 2 - p 2), sq_nonneg (q 3 - p 3)]
+    rw [htan s hs]; exact htl
   · intro s hs
-    have hs' : s ∈ Set.Icc (0 : ℝ) 1 := hs
-    left
-    refine ⟨?_, ?_⟩
-    · change minkowskiForm
-          (mfderivWithin (modelWithCornersSelf ℝ ℝ)
-            StandardMinkowskiSpacetime.model
-            (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
-            (Set.Icc 0 1) s (1 : ℝ))
-          (mfderivWithin (modelWithCornersSelf ℝ ℝ)
-            StandardMinkowskiSpacetime.model
-            (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
-            (Set.Icc 0 1) s (1 : ℝ)) < 0
-      rw [standardMinkowskiLineSegmentPath_mfderivWithin p q s hs']
-      simp only [minkowskiForm_apply]
-      have e0 : (q - p) 0 = q 0 - p 0 := rfl
-      have e1 : (q - p) 1 = q 1 - p 1 := rfl
-      have e2 : (q - p) 2 = q 2 - p 2 := rfl
-      have e3 : (q - p) 3 = q 3 - p 3 := rfl
-      rw [e0, e1, e2, e3]
-      have hcone : -(q 0 - p 0) ^ 2 + (q 1 - p 1) ^ 2 +
-          (q 2 - p 2) ^ 2 + (q 3 - p 3) ^ 2 < 0 := h_cone
-      nlinarith [hcone, sq_nonneg (q 0 - p 0), sq_nonneg (q 1 - p 1),
-                 sq_nonneg (q 2 - p 2), sq_nonneg (q 3 - p 3)]
-    · change minkowskiForm (EuclideanSpace.single (0 : Fin 4) (1 : ℝ))
-          (mfderivWithin (modelWithCornersSelf ℝ ℝ)
-            StandardMinkowskiSpacetime.model
-            (fun s : ℝ => (p : SpacetimeModel) + s • (q - p))
-            (Set.Icc 0 1) s (1 : ℝ)) < 0
-      rw [standardMinkowskiLineSegmentPath_mfderivWithin p q s hs']
-      simp only [minkowskiForm_apply]
-      have h0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0 = 1 := by
-        rw [PiLp.single_apply]; simp
-      have h1 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1 = 0 := by
-        rw [PiLp.single_apply]; simp
-      have h2 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2 = 0 := by
-        rw [PiLp.single_apply]; simp
-      have h3 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3 = 0 := by
-        rw [PiLp.single_apply]; simp
-      change -((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 0)
-          * ((q - p).ofLp 0) +
-          ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 1) *
-          ((q - p).ofLp 1) +
-          ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 2) *
-          ((q - p).ofLp 2) +
-          ((EuclideanSpace.single (0 : Fin 4) (1 : ℝ)).ofLp 3) *
-          ((q - p).ofLp 3) < 0
-      rw [h0, h1, h2, h3]
-      have e0' : (q - p).ofLp 0 = q 0 - p 0 := rfl
-      rw [e0']
-      linarith
-  · trivial
-  · refine ⟨0, ?_, ?_, ?_⟩
-    · change (0 : ℝ) ∈ Set.Icc (0 : ℝ) 1
-      exact Set.left_mem_Icc.mpr zero_le_one
-    · change (p : SpacetimeModel) + (0 : ℝ) • (q - p) = p
-      simp
-    · intro s' hs'
-      exact hs'.1
-  · refine ⟨1, ?_, ?_, ?_⟩
-    · change (1 : ℝ) ∈ Set.Icc (0 : ℝ) 1
-      exact Set.right_mem_Icc.mpr zero_le_one
-    · change (p : SpacetimeModel) + (1 : ℝ) • (q - p) = q
-      simp
-    · intro s' hs'
-      exact hs'.2
+    rw [htan s hs]; exact hfut
+  · refine ⟨0, Set.left_mem_Icc.mpr zero_le_one, ?_, fun _ hs' => hs'.1⟩
+    change (p : SpacetimeModel) + (0 : ℝ) • (q - p) = p
+    simp
+  · refine ⟨1, Set.right_mem_Icc.mpr zero_le_one, ?_, fun _ hs' => hs'.2⟩
+    change (p : SpacetimeModel) + (1 : ℝ) • (q - p) = q
+    simp
 
 /-- *Reverse subset* of `chronologicalFuture_standardMinkowski`: every point of
 the open forward Minkowski-cone of `p` lies in the chronological future of `p`.
@@ -1791,56 +1480,35 @@ theorem alexandrov_le_euclidean_standardMinkowski :
       (Spacetime.alexandrovTopology StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation) U).mpr ?_
   intro x hxU
-  rcases Metric.isOpen_iff.mp hU x hxU with ⟨ε, hε, hball⟩
+  obtain ⟨ε, hε, hball⟩ := Metric.isOpen_iff.mp hU x hxU
   set δ : ℝ := ε / 2 with hδ
-  have hδpos : 0 < δ := by positivity
-  have hδlt : δ < ε := by simp [hδ]; linarith
+  have hδpos : 0 < δ := by rw [hδ]; linarith
+  have hε4 : ε ^ 2 = 4 * δ ^ 2 := by rw [hδ]; ring
   -- Define the shifted points x⁻ and x⁺
   set xMinus : SpacetimeModel := x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)
     with hxMinus
   set xPlus : SpacetimeModel := x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)
     with hxPlus
   -- Coordinate evaluations of x⁻ and x⁺
-  have single0 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = 1 := by
-    rw [PiLp.single_apply]; simp
-  have single1 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 1 = 0 := by
-    rw [PiLp.single_apply]; simp
-  have single2 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 2 = 0 := by
-    rw [PiLp.single_apply]; simp
-  have single3 : (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 3 = 0 := by
-    rw [PiLp.single_apply]; simp
-  have xMinus0 : xMinus 0 = x 0 - δ := by
-    change (x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = x 0 - δ
-    rw [PiLp.sub_apply, PiLp.smul_apply, single0]; ring
-  have xMinus1 : xMinus 1 = x 1 := by
-    change (x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 1 = x 1
-    rw [PiLp.sub_apply, PiLp.smul_apply, single1]; ring
-  have xMinus2 : xMinus 2 = x 2 := by
-    change (x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 2 = x 2
-    rw [PiLp.sub_apply, PiLp.smul_apply, single2]; ring
-  have xMinus3 : xMinus 3 = x 3 := by
-    change (x - δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 3 = x 3
-    rw [PiLp.sub_apply, PiLp.smul_apply, single3]; ring
-  have xPlus0 : xPlus 0 = x 0 + δ := by
-    change (x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 0 = x 0 + δ
-    rw [PiLp.add_apply, PiLp.smul_apply, single0]; ring
-  have xPlus1 : xPlus 1 = x 1 := by
-    change (x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 1 = x 1
-    rw [PiLp.add_apply, PiLp.smul_apply, single1]; ring
-  have xPlus2 : xPlus 2 = x 2 := by
-    change (x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 2 = x 2
-    rw [PiLp.add_apply, PiLp.smul_apply, single2]; ring
-  have xPlus3 : xPlus 3 = x 3 := by
-    change (x + δ • EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) 3 = x 3
-    rw [PiLp.add_apply, PiLp.smul_apply, single3]; ring
-  -- The Alexandrov-open candidate V
-  set V : Set SpacetimeModel :=
-    minkowskiForwardCone xMinus ∩ minkowskiBackwardCone xPlus with hV
-  refine ⟨V, ?subset, ?openV, ?memV⟩
+  obtain ⟨xMinus0, xMinus1, xMinus2, xMinus3⟩ :
+      xMinus 0 = x 0 - δ ∧ xMinus 1 = x 1 ∧ xMinus 2 = x 2 ∧ xMinus 3 = x 3 := by
+    rw [hxMinus]
+    refine ⟨?_, ?_, ?_, ?_⟩ <;>
+      simp [PiLp.sub_apply, PiLp.smul_apply]
+  obtain ⟨xPlus0, xPlus1, xPlus2, xPlus3⟩ :
+      xPlus 0 = x 0 + δ ∧ xPlus 1 = x 1 ∧ xPlus 2 = x 2 ∧ xPlus 3 = x 3 := by
+    rw [hxPlus]
+    refine ⟨?_, ?_, ?_, ?_⟩ <;>
+      simp [PiLp.add_apply, PiLp.smul_apply]
+  -- Everything below only needs the coordinates above, so forget the bodies of
+  -- `δ`, `x⁻`, `x⁺`: this keeps the remaining goals free of `PiLp` unfolding.
+  clear_value xMinus xPlus δ
+  clear hxMinus hxPlus hδ
+  refine ⟨minkowskiForwardCone xMinus ∩ minkowskiBackwardCone xPlus,
+    ?subset, ?openV, ?memV⟩
   · -- V ⊆ U: any q in V lies in the ε-ball around x
-    intro q hq
+    rintro q ⟨hqFwd, hqBwd⟩
     apply hball
-    obtain ⟨hqFwd, hqBwd⟩ := hq
     simp only [mem_minkowskiForwardCone] at hqFwd
     simp only [mem_minkowskiBackwardCone] at hqBwd
     -- Rewrite the cone inequalities using the explicit coordinates
@@ -1848,90 +1516,29 @@ theorem alexandrov_le_euclidean_standardMinkowski :
     rw [xPlus0, xPlus1, xPlus2, xPlus3] at hqBwd
     obtain ⟨hLow, hConeFwd⟩ := hqFwd
     obtain ⟨hHigh, hConeBwd⟩ := hqBwd
-    -- The squared sum of spatial differences
-    set r2 : ℝ := (q 1 - x 1)^2 + (q 2 - x 2)^2 + (q 3 - x 3)^2 with hr2
-    have hr2_nn : 0 ≤ r2 := by
-      have h1 := sq_nonneg (q 1 - x 1)
-      have h2 := sq_nonneg (q 2 - x 2)
-      have h3 := sq_nonneg (q 3 - x 3)
-      linarith
-    -- From the forward cone: (q 0 - (x 0 - δ))^2 > r2 and q 0 - (x 0 - δ) > 0
-    have hFwdPos : 0 < q 0 - (x 0 - δ) := by linarith
-    have hFwdSq : r2 < (q 0 - (x 0 - δ))^2 := by
-      have : -(q 0 - (x 0 - δ))^2 + (q 1 - x 1)^2 +
-          (q 2 - x 2)^2 + (q 3 - x 3)^2 < 0 := hConeFwd
-      linarith
-    -- From the backward cone: (x 0 + δ - q 0)^2 > r2 and x 0 + δ - q 0 > 0
-    have hBwdPos : 0 < x 0 + δ - q 0 := by linarith
-    have hBwdSq : r2 < (x 0 + δ - q 0)^2 := by
-      -- Spatial squared distances are symmetric: (x i - q i)^2 = (q i - x i)^2
-      nlinarith [hConeBwd, sq_nonneg (q 1 - x 1), sq_nonneg (q 2 - x 2),
-        sq_nonneg (q 3 - x 3), sq_nonneg (x 1 - q 1), sq_nonneg (x 2 - q 2),
-        sq_nonneg (x 3 - q 3)]
-    -- Compute dist q x via EuclideanSpace.dist_sq_eq
+    -- `dist q x ^ 2` expanded in coordinates.
+    have hdist : dist q x ^ 2 =
+        (q 0 - x 0) ^ 2 + (q 1 - x 1) ^ 2 + (q 2 - x 2) ^ 2 + (q 3 - x 3) ^ 2 := by
+      rw [EuclideanSpace.dist_sq_eq q x, Fin.sum_univ_four]
+      simp only [Real.dist_eq, sq_abs]
+    -- The time separation is at most `δ`; the two cone inequalities add up to
+    -- bound the spatial separation, giving `dist q x ^ 2 < 3 δ ^ 2 ≤ ε ^ 2`.
+    have hsq : (q 0 - x 0) ^ 2 < δ ^ 2 := sq_lt_sq' (by linarith) (by linarith)
     rw [Metric.mem_ball]
-    have hdist_sq : dist q x ^ 2 = ∑ i, dist (q i) (x i) ^ 2 :=
-      EuclideanSpace.dist_sq_eq q x
-    -- Expand the sum over Fin 4
-    have hdist_sum :
-        dist q x ^ 2 = (q 0 - x 0)^2 + (q 1 - x 1)^2 +
-          (q 2 - x 2)^2 + (q 3 - x 3)^2 := by
-      rw [hdist_sq]
-      rw [show (Finset.univ : Finset (Fin 4)) = {0, 1, 2, 3} from rfl]
-      simp [Finset.sum_insert, Finset.mem_insert, Real.dist_eq, sq_abs]
-      ring
-    -- We want dist q x < ε
-    have hε_eq : ε = 2 * δ := by field_simp [hδ]; ring
-    have h_a_sq : (q 0 - x 0)^2 < δ^2 :=
-      sq_lt_sq' (by linarith) (by linarith)
-    have h_r2_lt : r2 < δ^2 + (q 0 - x 0)^2 := by
-      -- 2 * r2 < (q 0 - (x 0 - δ))^2 + (x 0 + δ - q 0)^2 = 2 * δ^2 + 2 * (q 0 - x 0)^2
-      have key : (q 0 - (x 0 - δ))^2 + (x 0 + δ - q 0)^2 =
-          2 * δ^2 + 2 * (q 0 - x 0)^2 := by ring
-      linarith [hFwdSq, hBwdSq, key]
-    have h_dist_sq_lt : dist q x ^ 2 < ε ^ 2 := by
-      rw [hdist_sum, hε_eq]
-      have hr2_unfold : r2 = (q 1 - x 1)^2 + (q 2 - x 2)^2 + (q 3 - x 3)^2 := hr2
-      linarith [h_a_sq, h_r2_lt, hr2_unfold]
-    -- Conclude dist q x < ε from squared inequality
-    have hε_nn : 0 ≤ ε := le_of_lt hε
-    exact (abs_lt_of_sq_lt_sq' h_dist_sq_lt hε_nn).2
+    refine (abs_lt_of_sq_lt_sq' ?_ hε.le).2
+    rw [hdist, hε4]
+    linarith [sq_nonneg δ]
   · -- V is open in the Alexandrov topology
-    apply TopologicalSpace.isOpen_generateFrom_of_mem
-    refine ⟨xMinus, xPlus, ?_⟩
+    refine TopologicalSpace.isOpen_generateFrom_of_mem ⟨xMinus, xPlus, ?_⟩
     rw [chronologicalFuture_standardMinkowski xMinus,
         chronologicalPast_standardMinkowski xPlus]
     rfl
   · -- x ∈ V
-    refine ⟨?_, ?_⟩
-    · -- x ∈ minkowskiForwardCone xMinus
-      change xMinus 0 < x 0 ∧
-          -(x 0 - xMinus 0)^2 + (x 1 - xMinus 1)^2 +
-            (x 2 - xMinus 2)^2 + (x 3 - xMinus 3)^2 < 0
-      refine ⟨?_, ?_⟩
-      · rw [xMinus0]; linarith
-      · rw [xMinus0, xMinus1, xMinus2, xMinus3]
-        have e : x 0 - (x 0 - δ) = δ := by ring
-        rw [e]
-        have h1 : x 1 - x 1 = 0 := by ring
-        have h2 : x 2 - x 2 = 0 := by ring
-        have h3 : x 3 - x 3 = 0 := by ring
-        rw [h1, h2, h3]
-        nlinarith [hδpos]
-    · -- x ∈ minkowskiBackwardCone xPlus
-      change x 0 < xPlus 0 ∧
-          -(xPlus 0 - x 0)^2 + (xPlus 1 - x 1)^2 +
-            (xPlus 2 - x 2)^2 + (xPlus 3 - x 3)^2 < 0
-      refine ⟨?_, ?_⟩
-      · rw [xPlus0]; linarith
-      · rw [xPlus0, xPlus1, xPlus2, xPlus3]
-        have e : x 0 + δ - x 0 = δ := by ring
-        rw [e]
-        have h1 : x 1 - x 1 = 0 := by ring
-        have h2 : x 2 - x 2 = 0 := by ring
-        have h3 : x 3 - x 3 = 0 := by ring
-        rw [h1, h2, h3]
-        nlinarith [hδpos]
+    refine ⟨⟨?_, ?_⟩, ?_, ?_⟩
+    · rw [xMinus0]; linarith
+    · rw [xMinus0, xMinus1, xMinus2, xMinus3]; linarith [pow_pos hδpos 2]
+    · rw [xPlus0]; linarith
+    · rw [xPlus0, xPlus1, xPlus2, xPlus3]; linarith [pow_pos hδpos 2]
 
 /-- *Alexandrov = Euclidean on standard Minkowski.* Combining the two
 inclusions `euclidean_le_alexandrov_standardMinkowski` and
@@ -1984,7 +1591,7 @@ every point is the same global chart. -/
 /-- The singleton-chart structure makes `MinkowskiSpacetimeCarrier` a `C^∞`
 manifold over the trivial self-model: the only transition map is the identity. -/
 noncomputable instance instIsManifoldMinkowskiCarrier :
-    IsManifold (modelWithCornersSelf ℝ SpacetimeModel) ⊤ MinkowskiSpacetimeCarrier :=
+    IsManifold (modelWithCornersSelf ℝ SpacetimeModel) ∞ MinkowskiSpacetimeCarrier :=
   euclideanHomeoMinkowski.symm.toOpenPartialHomeomorph.isManifold_singleton
     (Homeomorph.toOpenPartialHomeomorph_source _)
 
@@ -2008,6 +1615,7 @@ lemma mfderiv_extChartAt_symm_minkowski (x₀ : MinkowskiSpacetimeCarrier)
     mfderivWithin_univ] at key
   exact key
 
+set_option backward.isDefEq.respectTransparency false in
 /--
 *Minkowski spacetime* is standard Minkowski spacetime re-topologised with
 the Alexandrov topology generated by intersections of chronological
@@ -2073,20 +1681,12 @@ noncomputable def MinkowskiSpacetime : Spacetime where
     rw [EuclideanSpace.basisFun_apply, EuclideanSpace.basisFun_apply]
     simp only [minkowskiForm_apply, lorentzSignature, Matrix.diagonal]
     fin_cases i <;> fin_cases j <;> simp [Matrix.of_apply]
-  smooth_in_charts := by
-    intro x₀ v w
-    simp only
-    -- The integrand is the constant `minkowskiForm v w` on the chart target,
-    -- because the inverse-chart manifold derivative is the identity there.
-    apply ContDiffWithinAt.congr_of_eventuallyEq
-      (f := fun _ : SpacetimeModel => minkowskiForm v w)
-    · exact contDiffWithinAt_const
-    · filter_upwards [self_mem_nhdsWithin] with y hy
-      rw [mfderiv_extChartAt_symm_minkowski x₀ hy]
-      rfl
-    · rw [mfderiv_extChartAt_symm_minkowski x₀
-        ((extChartAt _ x₀).map_source (mem_extChartAt_source x₀))]
-      rfl
+  contMDiff := by
+    intro x
+    rw [Bundle.contMDiffAt_section]
+    convert! contMDiffAt_const (c := minkowskiForm)
+    ext v w
+    simp [hom_trivializationAt_apply, ContinuousLinearMap.inCoordinates, TangentSpace]
 
 /-- **Part (i): existence of a chronological-future point (standard Minkowski).**
 Every point `x` of standard Minkowski spacetime has a point strictly to its

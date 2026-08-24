@@ -64,23 +64,13 @@ theorem Intertwines.comp {S : H₂ →L[ℂ] H₃} {T : H₁ →L[ℂ] H₂}
 
 /-- The adjoint of an intertwiner `π₁ → π₂` is an intertwiner `π₂ → π₁`. -/
 theorem Intertwines.adjoint {T : H₁ →L[ℂ] H₂} (hT : Intertwines π₁ π₂ T) :
-    Intertwines π₂ π₁ (ContinuousLinearMap.adjoint T) := by
-  have hcomp : ∀ a : A, (ContinuousLinearMap.adjoint T).comp (π₂ a)
-      = (π₁ a).comp (ContinuousLinearMap.adjoint T) := by
-    intro a
-    have h1 : T.comp (π₁ (star a)) = (π₂ (star a)).comp T :=
-      ContinuousLinearMap.ext (fun x => hT (star a) x)
-    have h2 := congrArg ContinuousLinearMap.adjoint h1
-    rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp] at h2
-    have hp1 : ContinuousLinearMap.adjoint (π₁ (star a)) = π₁ a := by
-      rw [← ContinuousLinearMap.star_eq_adjoint, ← map_star, star_star]
-    have hp2 : ContinuousLinearMap.adjoint (π₂ (star a)) = π₂ a := by
-      rw [← ContinuousLinearMap.star_eq_adjoint, ← map_star, star_star]
-    rw [hp1, hp2] at h2
-    exact h2.symm
-  intro a x
-  have hx := DFunLike.congr_fun (hcomp a) x
-  simpa only [ContinuousLinearMap.comp_apply] using hx
+    Intertwines π₂ π₁ (ContinuousLinearMap.adjoint T) := fun a x => by
+  have h := congrArg ContinuousLinearMap.adjoint
+    (ContinuousLinearMap.ext (hT (star a)) :
+      T.comp (π₁ (star a)) = (π₂ (star a)).comp T)
+  simp only [map_star, ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
+    ContinuousLinearMap.adjoint_adjoint] at h
+  exact (DFunLike.congr_fun h x).symm
 
 /-! ### Disjointness -/
 
@@ -127,6 +117,16 @@ theorem UnitaryEquiv.not_areDisjoint [Nontrivial H₁] (h : UnitaryEquiv π₁ �
 
 /-! ### Schur's lemma and the irreducible dichotomy -/
 
+/-- For intertwiners `S, T : π₁ → π₂` the operator `S⋆ T` is a self-intertwiner of
+`π₁`, so if `π₁` is irreducible it is a scalar: `S⋆ (T x) = z • x`. -/
+private lemma exists_smul_adjoint_comp_of_isIrreducible (h1 : IsIrreducible π₁)
+    {S T : H₁ →L[ℂ] H₂} (hS : Intertwines π₁ π₂ S) (hT : Intertwines π₁ π₂ T) :
+    ∃ z : ℂ, ∀ x : H₁, (ContinuousLinearMap.adjoint S) (T x) = z • x := by
+  -- (extracted by Fuse golfer)
+  obtain ⟨z, hz⟩ := h1 ((ContinuousLinearMap.adjoint S).comp T)
+    (fun a => ContinuousLinearMap.ext fun x => ((hS.adjoint.comp hT) a x).symm)
+  exact ⟨z, fun x => by simpa using DFunLike.congr_fun hz x⟩
+
 /-- **Schur's lemma.** A nonzero intertwiner between two irreducible representations
 rescales to a unitary: `π₁` and `π₂` are unitarily equivalent. The operator `T⋆T`
 commutes with `π₁`, hence is a positive scalar `r · 1`; the normalisation
@@ -136,85 +136,45 @@ theorem UnitaryEquiv.of_intertwines_of_isIrreducible
     (h1 : IsIrreducible π₁) (h2 : IsIrreducible π₂)
     {T : H₁ →L[ℂ] H₂} (hT : Intertwines π₁ π₂ T) (hT0 : T ≠ 0) :
     UnitaryEquiv π₁ π₂ := by
-  obtain ⟨c, hc⟩ := h1 ((ContinuousLinearMap.adjoint T).comp T)
-    (fun a => ContinuousLinearMap.ext fun x => ((hT.adjoint.comp hT) a x).symm)
-  obtain ⟨d, hd⟩ := h2 (T.comp (ContinuousLinearMap.adjoint T))
-    (fun a => ContinuousLinearMap.ext fun x => ((hT.comp hT.adjoint) a x).symm)
-  -- `⟪T x, T x⟫ = c ⟪x, x⟫`.
-  have hcT : ∀ x : H₁, inner ℂ (T x) (T x) = c * inner ℂ x x := by
-    intro x
-    rw [← ContinuousLinearMap.adjoint_inner_right T x (T x)]
-    change inner ℂ x (((ContinuousLinearMap.adjoint T).comp T) x) = c * inner ℂ x x
-    rw [hc]
-    simp [inner_smul_right]
-  -- a witness with `T x₀ ≠ 0`.
-  obtain ⟨x₀, hx₀⟩ : ∃ x, T x ≠ 0 := by
-    by_contra h; simp only [not_exists, not_not] at h
-    exact hT0 (ContinuousLinearMap.ext fun x => by simp [h x])
+  obtain ⟨c, hTx⟩ := exists_smul_adjoint_comp_of_isIrreducible h1 hT hT
+  obtain ⟨d, hTT⟩ := exists_smul_adjoint_comp_of_isIrreducible h2 hT.adjoint hT.adjoint
+  rw [ContinuousLinearMap.adjoint_adjoint] at hTT
+  obtain ⟨x₀, hx₀⟩ : ∃ x, T x ≠ 0 := by simpa using DFunLike.ne_iff.mp hT0
   -- `‖T x‖² = c.re ‖x‖²`, so `c.re =: r > 0`.
-  have hnorm2 : ∀ x : H₁, ‖T x‖ ^ 2 = RCLike.re c * ‖x‖ ^ 2 := by
-    intro x
-    have h0 := congrArg RCLike.re (hcT x)
+  have hnorm2 : ∀ x : H₁, ‖T x‖ ^ 2 = RCLike.re c * ‖x‖ ^ 2 := fun x => by
+    have h0 : inner ℂ (T x) (T x) = c * inner ℂ x x := by
+      rw [← ContinuousLinearMap.adjoint_inner_right T x (T x), hTx x, inner_smul_right]
+    have h1 := congrArg RCLike.re h0
     rwa [RCLike.mul_re, inner_self_im, mul_zero, sub_zero, inner_self_eq_norm_sq,
-      inner_self_eq_norm_sq] at h0
+      inner_self_eq_norm_sq] at h1
   set r : ℝ := RCLike.re c with hr_def
   have hr_pos : 0 < r := by
-    have := hnorm2 x₀
-    have hx₀0 : x₀ ≠ 0 := fun h => hx₀ (by rw [h, map_zero])
-    have hxpos : (0:ℝ) < ‖x₀‖ ^ 2 := pow_pos (norm_pos_iff.mpr hx₀0) 2
-    have hTpos : (0:ℝ) < ‖T x₀‖ ^ 2 := pow_pos (norm_pos_iff.mpr hx₀) 2
-    nlinarith [this, hxpos, hTpos]
-  have hsr : 0 < Real.sqrt r := Real.sqrt_pos.mpr hr_pos
-  have hnorm : ∀ x : H₁, ‖T x‖ = Real.sqrt r * ‖x‖ := by
-    intro x
-    rw [← Real.sqrt_sq (norm_nonneg (T x)), hnorm2 x, Real.sqrt_mul hr_pos.le,
-      Real.sqrt_sq (norm_nonneg x)]
-  -- the rescaled isometry.
-  have hfnorm : ∀ x : H₁, ‖((Real.sqrt r)⁻¹ : ℂ) • T x‖ = ‖x‖ := by
-    intro x
-    rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_of_nonneg (Real.sqrt_nonneg r),
-      hnorm x, ← mul_assoc, inv_mul_cancel₀ (ne_of_gt hsr), one_mul]
-  -- `T` is surjective (from `T T⋆ = d • 1`, `d ≠ 0`).
-  have hdT : ∀ y : H₂,
-      inner ℂ ((ContinuousLinearMap.adjoint T) y) ((ContinuousLinearMap.adjoint T) y)
-        = d * inner ℂ y y := by
-    intro y
-    rw [← ContinuousLinearMap.adjoint_inner_right (ContinuousLinearMap.adjoint T) y
-      ((ContinuousLinearMap.adjoint T) y), ContinuousLinearMap.adjoint_adjoint]
-    change inner ℂ y ((T.comp (ContinuousLinearMap.adjoint T)) y) = d * inner ℂ y y
-    rw [hd]
-    simp [inner_smul_right]
+    have hx2 : (0:ℝ) < ‖x₀‖ ^ 2 :=
+      pow_pos (norm_pos_iff.mpr fun h => hx₀ (by rw [h, map_zero])) 2
+    rw [← mul_div_cancel_right₀ r hx2.ne', ← hnorm2 x₀]
+    exact div_pos (pow_pos (norm_pos_iff.mpr hx₀) 2) hx2
+  have hsr : Real.sqrt r ≠ 0 := (Real.sqrt_pos.mpr hr_pos).ne'
+  -- `T (T⋆ (T x₀)) = c • T x₀ = d • T x₀`, so `d = c ≠ 0`.
   have hd0 : d ≠ 0 := by
-    obtain ⟨y, hy⟩ : ∃ y, (ContinuousLinearMap.adjoint T) y ≠ 0 := by
-      by_contra h; simp only [not_exists, not_not] at h
-      have hadj : ContinuousLinearMap.adjoint T = 0 :=
-        ContinuousLinearMap.ext fun x => by simp [h x]
-      exact hx₀ (by rw [← ContinuousLinearMap.adjoint_adjoint T, hadj]; simp)
-    intro hdz
-    have hz := hdT y
-    rw [hdz, zero_mul] at hz
-    exact hy (inner_self_eq_zero.mp hz)
-  have hTsurj : Function.Surjective T := by
-    intro y
-    refine ⟨d⁻¹ • (ContinuousLinearMap.adjoint T) y, ?_⟩
-    rw [map_smul]
-    have : T ((ContinuousLinearMap.adjoint T) y) = d • y := by
-      have h' : T ((ContinuousLinearMap.adjoint T) y)
-          = (T.comp (ContinuousLinearMap.adjoint T)) y := rfl
-      rw [h', hd]; simp
-    rw [this, smul_smul, inv_mul_cancel₀ hd0, one_smul]
-  -- bundle the isometry and its surjectivity.
+    have h := hTT (T x₀)
+    rw [hTx x₀, map_smul] at h
+    rw [← sub_eq_zero, ← sub_smul, smul_eq_zero_iff_left hx₀, sub_eq_zero] at h
+    rw [← h]
+    exact fun h0 => hr_pos.ne' (by rw [hr_def, h0, map_zero])
+  -- the rescaled isometry.
+  have hfnorm : ∀ x : H₁, ‖((Real.sqrt r)⁻¹ : ℂ) • T x‖ = ‖x‖ := fun x => by
+    rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_of_nonneg (Real.sqrt_nonneg r),
+      ← Real.sqrt_sq (norm_nonneg (T x)), hnorm2 x, Real.sqrt_mul hr_pos.le,
+      Real.sqrt_sq (norm_nonneg x), ← mul_assoc, inv_mul_cancel₀ hsr, one_mul]
   let fLI : H₁ →ₗᵢ[ℂ] H₂ :=
     { toLinearMap := ((Real.sqrt r)⁻¹ : ℂ) • (T : H₁ →ₗ[ℂ] H₂)
       norm_map' := hfnorm }
-  have hfsurj : Function.Surjective fLI := by
-    intro y
-    obtain ⟨x, hx⟩ := hTsurj (((Real.sqrt r) : ℂ) • y)
-    refine ⟨x, ?_⟩
-    change ((Real.sqrt r)⁻¹ : ℂ) • T x = y
-    rw [hx, smul_smul]
-    rw [← Complex.ofReal_inv, ← Complex.ofReal_mul, inv_mul_cancel₀ (ne_of_gt hsr),
-      Complex.ofReal_one, one_smul]
+  -- `T` is surjective (from `T T⋆ = d • 1`, `d ≠ 0`), hence so is `fLI`.
+  have hfsurj : Function.Surjective fLI := fun y => by
+    refine ⟨d⁻¹ • (ContinuousLinearMap.adjoint T) (((Real.sqrt r) : ℂ) • y), ?_⟩
+    change ((Real.sqrt r)⁻¹ : ℂ) • T (d⁻¹ • _) = y
+    rw [map_smul, hTT, inv_smul_smul₀ hd0,
+      inv_smul_smul₀ (Complex.ofReal_ne_zero.mpr hsr)]
   refine ⟨LinearIsometryEquiv.ofSurjective fLI hfsurj, fun a x => ?_⟩
   rw [LinearIsometryEquiv.coe_ofSurjective]
   change ((Real.sqrt r)⁻¹ : ℂ) • T (π₁ a x) = π₂ a (((Real.sqrt r)⁻¹ : ℂ) • T x)
@@ -240,65 +200,26 @@ theorem eq_smul_of_intertwines_of_isIrreducible
     (h1 : IsIrreducible π₁) (h2 : IsIrreducible π₂)
     {S T : H₁ →L[ℂ] H₂} (hS : Intertwines π₁ π₂ S) (hT : Intertwines π₁ π₂ T)
     (hS0 : S ≠ 0) : ∃ lam : ℂ, T = lam • S := by
-  obtain ⟨a, ha⟩ := h1 ((ContinuousLinearMap.adjoint S).comp S)
-    (fun x => ContinuousLinearMap.ext fun y => ((hS.adjoint.comp hS) x y).symm)
-  obtain ⟨b, hb⟩ := h1 ((ContinuousLinearMap.adjoint S).comp T)
-    (fun x => ContinuousLinearMap.ext fun y => ((hS.adjoint.comp hT) x y).symm)
-  obtain ⟨c, hc⟩ := h2 (S.comp (ContinuousLinearMap.adjoint S))
-    (fun x => ContinuousLinearMap.ext fun y => ((hS.comp hS.adjoint) x y).symm)
-  obtain ⟨x₀, hx₀⟩ : ∃ x, S x ≠ 0 := by
-    by_contra h; simp only [not_exists, not_not] at h
-    exact hS0 (ContinuousLinearMap.ext fun x => by simp [h x])
-  have ha0 : a ≠ 0 := by
-    intro haz
-    apply hx₀
-    refine (inner_self_eq_zero (𝕜 := ℂ)).mp ?_
-    rw [← ContinuousLinearMap.adjoint_inner_right S x₀ (S x₀)]
-    change inner ℂ x₀ (((ContinuousLinearMap.adjoint S).comp S) x₀) = 0
-    rw [ha, haz]; simp
-  have hc0 : c ≠ 0 := by
-    obtain ⟨y, hy⟩ : ∃ y, (ContinuousLinearMap.adjoint S) y ≠ 0 := by
-      by_contra h; simp only [not_exists, not_not] at h
-      have hadj : ContinuousLinearMap.adjoint S = 0 :=
-        ContinuousLinearMap.ext fun x => by simp [h x]
-      exact hx₀ (by rw [← ContinuousLinearMap.adjoint_adjoint S, hadj]; simp)
-    intro hcz
-    apply hy
-    refine (inner_self_eq_zero (𝕜 := ℂ)).mp ?_
-    rw [← ContinuousLinearMap.adjoint_inner_right (ContinuousLinearMap.adjoint S) y
-      ((ContinuousLinearMap.adjoint S) y), ContinuousLinearMap.adjoint_adjoint]
-    change inner ℂ y ((S.comp (ContinuousLinearMap.adjoint S)) y) = 0
-    rw [hc, hcz]; simp
-  refine ⟨b / a, ?_⟩
-  -- `S⋆` is injective (from `S S⋆ = c • 1`, `c ≠ 0`).
-  have hSadj_inj : Function.Injective (ContinuousLinearMap.adjoint S) := by
-    intro u v huv
-    have happ : (S.comp (ContinuousLinearMap.adjoint S)) u
-        = (S.comp (ContinuousLinearMap.adjoint S)) v := by
-      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply, huv]
-    rw [hc] at happ
-    simp only [smul_apply, one_apply_eq_self] at happ
-    have hcuv : c • (u - v) = 0 := by rw [smul_sub, happ, sub_self]
-    rcases smul_eq_zero.mp hcuv with h | h
-    · exact absurd h hc0
-    · exact sub_eq_zero.mp h
-  -- `S⋆ ((T − (b/a) • S) x) = 0`, so by injectivity `T = (b/a) • S`.
-  have hkey : ∀ x, (ContinuousLinearMap.adjoint S) ((T - (b / a) • S) x) = 0 := by
-    intro x
-    have hTx : (ContinuousLinearMap.adjoint S) (T x) = b • x := by
-      have := DFunLike.congr_fun hb x
-      simpa using this
-    have hSx : (ContinuousLinearMap.adjoint S) (S x) = a • x := by
-      have := DFunLike.congr_fun ha x
-      simpa using this
-    rw [sub_apply, smul_apply, map_sub, map_smul,
-      hTx, hSx, smul_smul, div_mul_cancel₀ b ha0, sub_self]
-  have hzero : T - (b / a) • S = 0 := by
-    ext x
-    have hx := hkey x
-    rw [← map_zero (ContinuousLinearMap.adjoint S)] at hx
-    simpa using hSadj_inj hx
-  exact sub_eq_zero.mp hzero
+  obtain ⟨a, hSx⟩ := exists_smul_adjoint_comp_of_isIrreducible h1 hS hS
+  obtain ⟨b, hTx⟩ := exists_smul_adjoint_comp_of_isIrreducible h1 hS hT
+  obtain ⟨c, hSS⟩ := exists_smul_adjoint_comp_of_isIrreducible h2 hS.adjoint hS.adjoint
+  rw [ContinuousLinearMap.adjoint_adjoint] at hSS
+  obtain ⟨x₀, hx₀⟩ : ∃ x, S x ≠ 0 := by simpa using DFunLike.ne_iff.mp hS0
+  -- `a ≠ 0`, since `⟪S x₀, S x₀⟫ = a ⟪x₀, x₀⟫` and `S x₀ ≠ 0`.
+  have ha0 : a ≠ 0 := fun haz => hx₀ ((inner_self_eq_zero (𝕜 := ℂ)).mp (by
+    rw [← ContinuousLinearMap.adjoint_inner_right S x₀ (S x₀), hSx x₀, haz, zero_smul,
+      inner_zero_right]))
+  -- `S (S⋆ (S x₀)) = a • S x₀ = c • S x₀`, so `c = a ≠ 0`.
+  have hca : c = a := by
+    have h := hSS (S x₀)
+    rw [hSx x₀, map_smul] at h
+    rw [← sub_eq_zero, ← sub_smul, smul_eq_zero_iff_left hx₀, sub_eq_zero] at h
+    exact h.symm
+  -- `S (S⋆ (T x)) = b • S x = c • T x = a • T x`, so `T x = (b/a) • S x`.
+  refine ⟨b / a, ContinuousLinearMap.ext fun x => ?_⟩
+  have h := hSS (T x)
+  rw [hTx x, map_smul, hca] at h
+  rw [smul_apply, div_eq_mul_inv, mul_comm, ← smul_smul, h, inv_smul_smul₀ ha0]
 
 /-! ### The endomorphism algebra of an irreducible representation -/
 

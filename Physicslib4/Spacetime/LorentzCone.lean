@@ -9,7 +9,7 @@ import Physicslib4.Spacetime.LorentzCauchySchwarz
 # Convexity of the timelike cone and the reverse triangle inequality
 
 This file formalises the blueprint declaration `lmm:timelike-cone-convexity`
-(Chapter 10, `sections/sec10/10-2_spacetime`).
+(Chapter 10, `sections/sec10/spacetime`).
 
 For a symmetric Lorentzian bilinear form `g` (signature `diag(-1,1,1,1)`) two
 timelike vectors `v, w` are *aligned* (share a time cone) when `g v w ≤ 0`. For

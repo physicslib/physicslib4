@@ -52,6 +52,33 @@ theorem subset_spacelikeComplement_iff {B₁ B₂ : Set M.Carrier} :
     subst hp
     exact h p hx q hq
 
+/-- **The spacelike complement is causally convex.** If `p` and `r` are spacelike to
+all of `B` and `p ≺ q ≺ r`, then `q` is spacelike to all of `B`, by transitivity of
+causal precedence. -/
+theorem spacelikeComplement_isCausallyConvex (B : Set M.Carrier) :
+    IsCausallyConvex M t (Spacetime.spacelikeComplement M t B) := by
+  intro p q r hp hr hpq hqr
+  rw [mem_spacelikeComplement]
+  intro a ha b hb
+  rw [Set.mem_singleton_iff] at ha
+  subst ha
+  rw [mem_spacelikeComplement] at hp hr
+  have hp_pb : IsSpacelikeRelated M t p b := hp p (by simp) b hb
+  have hr_rb : IsSpacelikeRelated M t r b := hr r (by simp) b hb
+  unfold IsSpacelikeRelated at hp_pb hr_rb
+  simp only [Set.mem_union, causalFuture, causalPast, Set.mem_setOf_eq, not_or] at hp_pb hr_rb
+  rcases hp_pb with ⟨hpb_not, hbp_not⟩
+  rcases hr_rb with ⟨hrb_not, hbr_not⟩
+  unfold IsSpacelikeRelated
+  simp only [Set.mem_union, causalFuture, causalPast, Set.mem_setOf_eq, not_or]
+  constructor
+  · intro hqb
+    apply hpb_not
+    exact causallyPrecedes_trans M t hpq hqb
+  · intro hbq
+    apply hbr_not
+    exact causallyPrecedes_trans M t hbq hqr
+
 end SpacetimeLevel
 
 namespace LorentzianSpacetime
@@ -417,6 +444,21 @@ theorem causalComplement_iInf {ι : Sort*} (B : ι → M.CausallyCompleteRegion)
     _ = M.causalClosure (⋃ i, (M.causalComplement (B i)).1) := by
       simp_rw [causalComplement_coe]
     _ = (⨆ i, M.causalComplement (B i)).1 := by rw [coe_iSup]
+
+/-! ### Causally complete regions are causally convex -/
+
+/-- **A causally complete region is causally convex.** Since `B = B^⊥⊥` is a spacelike
+complement (of `B^⊥`), it inherits causal convexity from
+`spacelikeComplement_isCausallyConvex`. -/
+theorem isCausallyConvex_of_isCausallyComplete {B : Set M.Carrier}
+    (h : M.IsCausallyComplete B) :
+    Spacetime.IsCausallyConvex M.toSpacetime M.timeOrientation B :=
+  h ▸ spacelikeComplement_isCausallyConvex M.toSpacetime M.timeOrientation (M.spacelikeComplement B)
+
+/-- Every element of the causally-complete-region lattice is causally convex. -/
+theorem CausallyCompleteRegion.isCausallyConvex (B : M.CausallyCompleteRegion) :
+    Spacetime.IsCausallyConvex M.toSpacetime M.timeOrientation B.1 := by
+  exact M.isCausallyConvex_of_isCausallyComplete (M.isCausallyComplete_iff_isClosed.mpr B.2)
 
 end LorentzianSpacetime
 end Spacetime
