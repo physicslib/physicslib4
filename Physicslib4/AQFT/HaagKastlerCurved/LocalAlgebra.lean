@@ -35,9 +35,9 @@ AQFT-in-Lean blueprint):
 
 * On a generic Lorentzian spacetime there is **no** quasilocal
   algebra (see Axiom 3), so — unlike the Minkowski Axiom 4
-  (`QuasilocalCompleteness`, which collapses to the nonemptiness of
-  a quasilocal algebra) — "all observables are local observables"
-  cannot be phrased through one ambient algebra.
+  (`ObservableCorrespondence`, whose `measure` lands in the one
+  ambient quasilocal algebra `𝔘`) — "all observables are local
+  observables" cannot be phrased through a single ambient algebra.
 
 * We therefore relativise the statement to the *local* GNS
   representations that the framework actually provides: Axiom 4

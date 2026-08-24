@@ -60,11 +60,11 @@ This file formalises the blueprint declaration
     images `ι B '' (U.algebra B)`, ranging over Alexandrov-basis
     sets `B`, is dense in `carrier`.
 
-* This mirrors exactly the existential content of
-  `QuasilocalCompleteness`: a `LocalNet` satisfies that axiom iff
-  it admits *some* `QuasilocalAlgebra`. The two are kept separate
-  so the axiom can be stated as a `Prop` and the underlying datum
-  can be passed around as a `structure`.
+* Every `LocalNet` satisfying Axiom 2 admits such a structure: that
+  is `exists_quasilocalAlgebra` (`thrm:quasilocal-algebra-exists`),
+  which builds one as the completion of the directed colimit of the
+  local algebras. So this is an interface onto a canonical object,
+  not a hypothesis a net might fail to satisfy.
 
 * The `CStarAlgebra` instance is `attribute [instance]`-marked so
   that downstream code finds the C*-structure on `Q.carrier`
@@ -113,9 +113,9 @@ structure QuasilocalAlgebra (U : LocalNet.{u}) (i : Isotony U) where
   the images of the local algebras, so any quasilocal algebra is already of their
   size, and a free universe would only add copies of the same algebra higher up.
   It does buy something important -- a free universe is constrained by no field,
-  so it could not be inferred, and `LocalCommutativity` and
-  `QuasilocalCompleteness` would each become a *family* of `Prop`s indexed by a
-  universe, making the content of Axioms 3 and 4 depend on that index. -/
+  so it could not be inferred, and `LocalCommutativity` would become a *family* of
+  `Prop`s indexed by a universe, making the content of Axiom 3 depend on that
+  index. -/
   carrier : Type u
   /-- The `CStarAlgebra` instance on `carrier`. -/
   instCStarAlgebra : CStarAlgebra carrier

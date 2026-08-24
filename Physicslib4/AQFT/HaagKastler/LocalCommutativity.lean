@@ -35,9 +35,10 @@ axioms, section 10.3 of the AQFT-in-Lean blueprint):
   completely-spacelike local algebras commute pointwise.
 
 * The quasilocal algebra itself — including its density / completion
-  property — is the subject of Axiom 4 (`QuasilocalCompleteness`);
-  here we only *use* the structure to phrase commutativity. The two
-  axioms can in principle share the same witness.
+  property — is *constructed* from the net by
+  `exists_quasilocalAlgebra` (`thrm:quasilocal-algebra-exists`); here
+  we only *use* the structure to phrase commutativity, and the
+  existential above may be witnessed by that canonical algebra.
 -/
 
 namespace Physicslib4

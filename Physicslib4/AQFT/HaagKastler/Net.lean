@@ -7,24 +7,35 @@ import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.Isotony
 import Physicslib4.AQFT.HaagKastler.LocalCommutativity
 import Physicslib4.AQFT.HaagKastler.QuasilocalCompleteness
+import Physicslib4.AQFT.HaagKastler.QuasilocalExistence
 import Physicslib4.AQFT.HaagKastler.LorentzCovariance
 
 /-!
 # Haag-Kastler nets
 
 This file bundles the data of Axiom 1 (`def:local-algebras`)
-together with the propositional content of Axioms 2-5 into a single
-`structure HaagKastlerNet`, formalising the blueprint declaration
-`def:haag-kastler-net` (section 10.3 of the AQFT-in-Lean blueprint).
+together with the propositional content of Axioms 2, 3 and 5 into a
+single `structure HaagKastlerNet`, formalising the blueprint
+declaration `def:haag-kastler-net` (section 10.3 of the AQFT-in-Lean
+blueprint).
 
 ## Main definitions
 
 * `Physicslib4.AQFT.HaagKastler.HaagKastlerNet`: a structure
   consisting of a `LocalNet` (the Axiom 1 data) plus proofs of
-  `Isotony`, `LocalCommutativity`, `QuasilocalCompleteness`, and
-  `LorentzCovariance`.
+  `Isotony`, `LocalCommutativity` and `LorentzCovariance`.
 
 ## Notes
+
+* The structure deliberately does **not** bundle Axiom 4. What its
+  consumers needed from that axiom was the *existence* of a quasilocal
+  algebra, and that is now a theorem, `exists_quasilocalAlgebra`
+  (`thrm:quasilocal-algebra-exists`), which builds the algebra from the
+  net alone; `HaagKastlerNet.quasilocal` is defined from it. Axiom 4
+  proper (`def:quasilocal-completeness`) is a *bridge principle*
+  relating physical observables to the formalism, with no mathematical
+  consumers, and is encoded separately in
+  `Physicslib4/AQFT/HaagKastler/ObservableBridge.lean`.
 
 * The structure intentionally does not bundle Axiom 6 (Primitivity)
   or further axioms; those will be added as separate structure
@@ -66,10 +77,6 @@ structure HaagKastlerNet where
   /-- *Local commutativity*: local algebras of completely-spacelike
   basis sets commute inside the quasilocal algebra (Axiom 3). -/
   localCommutativity : LocalCommutativity U isotony
-  /-- *Quasilocal completeness*: the local algebras' images are
-  dense in the quasilocal algebra; i.e. all observables are
-  quasilocal observables (Axiom 4). -/
-  quasilocalCompleteness : QuasilocalCompleteness U isotony
   /-- *Lorentz covariance*: the inhomogeneous Lorentz group acts on
   the net and the action commutes with isotony (Axiom 5). -/
   lorentzCovariance : LorentzCovariance U
@@ -111,10 +118,15 @@ theorem isotony_trans
     ∃ φ : StarAlgHom ℂ (N.algebra B₁) (N.algebra B₃), Function.Injective φ :=
   N.isotony.trans hB₁ hB₂ hB₃ h₁₂ h₂₃
 
-/-- The *canonical quasilocal algebra* `𝔘` of the net, chosen from the
-existence witness provided by Axiom 4 (`quasilocalCompleteness`). -/
+/-- The *canonical quasilocal algebra* `𝔘` of the net.
+
+This is *constructed*, not assumed. The witness is `exists_quasilocalAlgebra`
+(`thrm:quasilocal-algebra-exists`), which builds `𝔘` from the net alone as the
+completion of the directed colimit of the local algebras. The net therefore
+carries no quasilocal-completeness field: what consumers of the former Axiom 4
+actually needed was this existence theorem, not a physical bridge principle. -/
 noncomputable def quasilocal : QuasilocalAlgebra N.U N.isotony :=
-  Classical.choice N.quasilocalCompleteness
+  Classical.choice (exists_quasilocalAlgebra N.U N.isotony)
 
 /-- Each local algebra `𝔘(B)` of an Alexandrov-basis set embeds
 *norm-preservingly* into the canonical quasilocal algebra `𝔘`. -/
@@ -329,10 +341,6 @@ theorem trivialLocalNet_localCommutativity :
     exact @mul_comm ℂ _ (trivialQuasilocalAlgebra.ι hB₁ a)
       (trivialQuasilocalAlgebra.ι hB₂ b)⟩
 
-theorem trivialLocalNet_quasilocalCompleteness :
-    QuasilocalCompleteness trivialLocalNet trivialLocalNet_isotony :=
-  ⟨trivialQuasilocalAlgebra⟩
-
 theorem trivialLocalNet_lorentzCovariance :
     LorentzCovariance trivialLocalNet := by
   refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ,
@@ -348,7 +356,6 @@ noncomputable def trivialHaagKastlerNet : HaagKastlerNet where
   U := trivialLocalNet
   isotony := trivialLocalNet_isotony
   localCommutativity := trivialLocalNet_localCommutativity
-  quasilocalCompleteness := trivialLocalNet_quasilocalCompleteness
   lorentzCovariance := trivialLocalNet_lorentzCovariance
 
 /-- **The Haag-Kastler axioms are jointly satisfiable.** The trivial net (every
