@@ -9,7 +9,7 @@ import Physicslib4.Spacetime.CrossMetricIsometry
 /-!
 # General covariance: nets on pullback-related metrics
 
-This file formalises Section 10.5 of the AQFT-in-Lean blueprint
+This file formalises Section 10.7 of the AQFT-in-Lean blueprint
 (`sections/sec10/general-covariance-in-curved-spacetime`): the notion of an
 *equivalence of Haag-Kastler nets* along a basis-set-preserving bijection of
 carriers, and the postulate of *general covariance* for a net theory.

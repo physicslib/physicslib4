@@ -16,6 +16,7 @@ import Physicslib4.AQFT.HaagKastler.QuasilocalExistence
 import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.HaagKastler.QuasilocalKMS
 import Physicslib4.AQFT.HaagKastler.QuasilocalObservable
+import Physicslib4.AQFT.HaagKastler.StrongDensity
 import Physicslib4.AQFT.HaagKastler.VacuumState
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
@@ -79,3 +80,19 @@ import Physicslib4.Spacetime.Minkowski
 import Physicslib4.Spacetime.MinkowskiDilation
 import Physicslib4.Spacetime.MinkowskiDirected
 import Physicslib4.Spacetime.Pullback
+import Physicslib4.Spectral.Basic
+import Physicslib4.Spectral.BorelCalculus
+import Physicslib4.Spectral.BorelClasses
+import Physicslib4.Spectral.ContinuousCalculus
+import Physicslib4.Spectral.Forms
+import Physicslib4.Spectral.OperatorIntegral
+import Physicslib4.Spectral.ProjectionValuedMeasure
+import Physicslib4.Spectral.SpectralTheorem
+import Physicslib4.Spectral.Spectrum
+import Physicslib4.Spectral.Unbounded.AbstractCalculus
+import Physicslib4.Spectral.Unbounded.Basic
+import Physicslib4.Spectral.Unbounded.Cayley
+import Physicslib4.Spectral.Unbounded.DirectSum
+import Physicslib4.Spectral.Unbounded.Integral
+import Physicslib4.Spectral.Unbounded.Normal
+import Physicslib4.Spectral.Unbounded.Spectrum

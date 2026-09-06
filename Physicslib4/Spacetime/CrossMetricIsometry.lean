@@ -14,7 +14,7 @@ import Physicslib4.Spacetime.LorentzianSpacetime
 # Cross-metric isometries
 
 This file formalises the second half of the blueprint subsection *Pullback
-metrics and cross-metric isometries* (section 10.2 of the AQFT-in-Lean
+metrics and cross-metric isometries* (section 10.4 of the AQFT-in-Lean
 blueprint).
 
 General covariance compares two *different* metrics on one carrier, related by

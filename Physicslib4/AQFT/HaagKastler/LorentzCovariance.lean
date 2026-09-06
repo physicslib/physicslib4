@@ -13,7 +13,7 @@ import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 
 This file formalises the blueprint declaration
 `def:lorentz-covariance` (Axiom 5 of the "sharpened" Haag-Kastler
-axioms, section 10.3 of the AQFT-in-Lean blueprint):
+axioms, section 10.5 of the AQFT-in-Lean blueprint):
 
 > The inhomogeneous Lorentz group `𝓛` (more precisely, its identity
 > component; see section 7.1 of the blueprint) acts on the

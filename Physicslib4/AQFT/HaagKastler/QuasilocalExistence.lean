@@ -10,7 +10,7 @@ import Physicslib4.AQFT.HaagKastler.QuasilocalColimit
 # Existence of a quasilocal algebra
 
 This file formalises the blueprint declaration `thrm:quasilocal-algebra-exists`
-(section 10.3 of the AQFT-in-Lean blueprint):
+(section 10.5 of the AQFT-in-Lean blueprint):
 
 > Every local net satisfying Axiom 2 admits a quasilocal algebra.
 

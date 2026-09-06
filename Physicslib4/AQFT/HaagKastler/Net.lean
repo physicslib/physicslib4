@@ -16,7 +16,7 @@ import Physicslib4.AQFT.HaagKastler.LorentzCovariance
 This file bundles the data of Axiom 1 (`def:local-algebras`)
 together with the propositional content of Axioms 2, 3 and 5 into a
 single `structure HaagKastlerNet`, formalising the blueprint
-declaration `def:haag-kastler-net` (section 10.3 of the AQFT-in-Lean
+declaration `def:haag-kastler-net` (section 10.5 of the AQFT-in-Lean
 blueprint).
 
 ## Main definitions

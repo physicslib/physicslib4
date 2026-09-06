@@ -9,7 +9,7 @@ import Physicslib4.AQFT.HaagKastler.QuasilocalObservable
 # Axiom 4 as a bridge principle
 
 This file encodes the blueprint declaration `def:quasilocal-completeness`
-(Axiom 4, section 10.3 of the AQFT-in-Lean blueprint):
+(Axiom 4, section 10.5 of the AQFT-in-Lean blueprint):
 
 > All "observables" are quasilocal observables.
 
