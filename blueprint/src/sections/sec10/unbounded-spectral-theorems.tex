@@ -19,7 +19,9 @@ Recall from Section~\ref{sctn:spectral-theorems} that $\mathbf{H}$ denotes a sep
 
 \begin{definition}[Unbounded Operator]
     \label{def:hall-3.1}
+    \lean{LinearPMap, Physicslib4.Spectral.Unbounded.HasDenseDomain}
     \uses{def:bounded-operator-notation}
+    \leanok
     Let $\mathbf{H}$ be a separable, complex Hilbert space. An \textit{unbounded operator} $A$ on $\mathbf{H}$ is a linear map $A : \text{Dom}(A) \to \mathbf{H}$, where $\text{Dom}(A)$, called the \textit{domain} of $A$, is a dense subspace of $\mathbf{H}$. Here "unbounded" means "not necessarily bounded": we permit the case $\text{Dom}(A) = \mathbf{H}$ together with $A \in \mathcal{B}(\mathbf{H})$, the set of bounded operators on $\mathbf{H}$, but do not require it.
 \end{definition}
 
@@ -29,6 +31,8 @@ Three standard facts about convergence of sequences and series are used at sever
 
 \begin{proposition}[Convergence Facts for Sequences and Series]
     \label{prpstn:convergence-facts}
+    \lean{tendsto_atTop_ciSup, Metric.isCompact_of_isClosed_isBounded, IsCompact.tendsto_subseq, Summable.of_norm_bounded, tendsto_nhds_unique, Filter.Tendsto.cauchySeq}
+    \leanok
     \begin{enumerate}
         \item \textit{(Monotone bounded sequences.)} A non-decreasing sequence $\{ t_n \}_{n\in\mathbb{N}}$ of real numbers that is bounded above converges, to $\sup_n t_n$.
         \item \textit{(Bolzano–Weierstrass.)} Every sequence in a closed, bounded subset $K \subset \mathbb{C}$ has a subsequence converging to a point of $K$. (Equivalently, such a $K$ is sequentially compact.)
@@ -36,14 +40,20 @@ Three standard facts about convergence of sequences and series are used at sever
     \end{enumerate}
     We also use without further comment that limits in a metric space are unique, and that a convergent sequence is Cauchy.
 \end{proposition}
+\begin{proof}
+\leanok
+\end{proof}
 
 Before defining the adjoint of an unbounded operator, we record a small fact about dense subspaces that we will use repeatedly below — both to pin down the adjoint uniquely, and at several later points where we want to conclude that two vectors, or two operators, coincide from an equation that only holds on a dense subspace.
 
 \begin{lemma}[Equality Testing on a Dense Subspace, First Slot]
     \label{lmm:hall-dense-testing}
+    \lean{Dense.eq_of_inner_left}
+    \leanok
     Suppose $\chi_1, \chi_2 \in \mathbf{H}$ and $D \subset \mathbf{H}$ is a dense subset such that $\left< \chi_1, \psi \right> = \left< \chi_2, \psi \right>$ for all $\psi \in D$. Then $\chi_1 = \chi_2$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:continuity-of-norm-and-inner-product}
 Set $\chi \equiv \chi_1 - \chi_2$. For every $\psi \in D$, additivity of the inner product in its first argument (part of conjugate-linearity there) together with the hypothesis gives $\left< \chi, \psi \right> = \left< \chi_1, \psi \right> - \left< \chi_2, \psi \right> = 0$. Since $D$ is dense in $\mathbf{H}$, there is a sequence $\{ \psi_n \}_{n \in \mathbb{N}}$ in $D$ with $\psi_n \to \chi$. Fixing $\chi$ and applying continuity of the inner product~(\ref{prpstn:continuity-of-norm-and-inner-product}) to this sequence,
 \begin{align}
@@ -56,9 +66,12 @@ Several arguments below test equality of two vectors against a dense subset with
 
 \begin{lemma}[Equality Testing on a Dense Subspace, Second Slot]
     \label{lmm:hall-dense-testing-second-slot}
+    \lean{Dense.eq_of_inner_right}
+    \leanok
     Suppose $\chi_1, \chi_2 \in \mathbf{H}$ and $D \subset \mathbf{H}$ is a dense subset such that $\left< \phi, \chi_1 \right> = \left< \phi, \chi_2 \right>$ for all $\phi \in D$. Then $\chi_1 = \chi_2$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:hall-dense-testing}
 Conjugating both sides of the hypothesis and using conjugate symmetry of the inner product, $\left< \chi_1, \phi \right> = \overline{\left< \phi, \chi_1 \right>} = \overline{\left< \phi, \chi_2 \right>} = \left< \chi_2, \phi \right>$ for all $\phi \in D$. This is exactly the hypothesis of Lemma~\ref{lmm:hall-dense-testing}, which gives $\chi_1 = \chi_2$.
 \end{proof}
@@ -69,7 +82,9 @@ If $A$ happens to be a bounded operator on all of $\mathbf{H}$, then for any $\p
 
 \begin{definition}[Adjoint of an Unbounded Operator]
     \label{def:hall-9.1}
+    \lean{LinearPMap.adjointDomain, LinearPMap.mem_adjoint_domain_iff, LinearPMap.adjoint, LinearPMap.adjoint_isFormalAdjoint}
     \uses{def:hall-3.1, lmm:hall-dense-testing, thrm:bounded-linear-transformation-theorem, thrm:hall-a.52}
+    \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$. Let $\text{Dom}(A^*)$ be the space of all $\phi \in \mathbf{H}$ for which the linear functional
     \begin{align}
         \psi \longmapsto \left< \phi, A\psi \right>, \qquad \psi \in \text{Dom}(A),
@@ -85,12 +100,15 @@ The definition just given is not self-evidently well posed: it declares $A^*\phi
 
 \begin{proposition}[The Adjoint is Well Defined]
     \label{prpstn:adjoint-well-defined}
+    \lean{Physicslib4.Spectral.Unbounded.existsUnique_adjoint_apply}
+    \leanok
     Let $A$ be an unbounded operator on $\mathbf{H}$ and let $\phi \in \text{Dom}(A^*)$. Then there is exactly one $\chi \in \mathbf{H}$ with
     \begin{align}
         \left< \phi, A\psi \right> = \left< \chi, \psi \right> \quad \text{for all } \psi \in \text{Dom}(A).
     \end{align}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, def:hall-3.1, thrm:hall-a.52, lmm:hall-dense-testing, thrm:bounded-linear-transformation-theorem}
 Fix $\phi \in \text{Dom}(A^*)$, and consider the map $T : \text{Dom}(A) \to \mathbb{C}$ given by $T\psi \equiv \left< \phi, A\psi \right>$. Since $A$ is linear (by the definition of an unbounded operator~(\ref{def:hall-3.1})) and the inner product on $\mathbf{H}$ is linear in its second argument, $T$ is a linear map; by the defining property of $\text{Dom}(A^*)$ used above, $T$ is bounded on $\text{Dom}(A)$.
 
@@ -107,12 +125,15 @@ Before proceeding, we check that $A^*$, as just constructed, is again a linear o
 
 \begin{proposition}[Linearity of the Adjoint]
     \label{prpstn:hall-linearity-of-the-adjoint}
+    \lean{Physicslib4.Spectral.Unbounded.smul_add_mem_adjoint_domain, Physicslib4.Spectral.Unbounded.adjoint_smul_add}
+    \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$. Then $A^*$ is linear on $\text{Dom}(A^*)$: for all $\phi_1, \phi_2 \in \text{Dom}(A^*)$ and $\alpha, \beta \in \mathbb{C}$, we have $\alpha\phi_1 + \beta\phi_2 \in \text{Dom}(A^*)$, and
     \begin{align}
         A^*(\alpha\phi_1 + \beta\phi_2) = \alpha A^*\phi_1 + \beta A^*\phi_2.
     \end{align}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, lmm:hall-dense-testing, prpstn:hall-a.43, prpstn:adjoint-well-defined}
 Fix $\phi_1, \phi_2 \in \text{Dom}(A^*)$ and $\alpha, \beta \in \mathbb{C}$. For every $\psi \in \text{Dom}(A)$, using that the inner product on $\mathbf{H}$ is conjugate-linear in its first argument, and the definition of the adjoint~(\ref{def:hall-9.1}) applied to $\phi_1$ and to $\phi_2$ separately,
 \begin{align}
@@ -129,9 +150,12 @@ Several proofs below establish $\psi \in \text{Dom}(A^*)$ by exhibiting a vector
 
 \begin{lemma}[Characterizing Membership in the Adjoint's Domain]
     \label{lmm:characterizing-adjoint-domain-membership}
+    \lean{Physicslib4.Spectral.Unbounded.mem_adjoint_domain_iff_exists, Physicslib4.Spectral.Unbounded.adjoint_apply_eq_of_forall_inner}
+    \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$ and $\psi \in \mathbf{H}$. Then $\psi \in \text{Dom}(A^*)$ if and only if there exists $\varphi \in \mathbf{H}$ such that $\left< \psi, A\chi \right> = \left< \varphi, \chi \right>$ for all $\chi \in \text{Dom}(A)$; in that case, $\varphi = A^*\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, prpstn:hall-a.43, prpstn:adjoint-well-defined}
 If $\psi \in \text{Dom}(A^*)$, then $\varphi = A^*\psi$ satisfies the stated equation, directly by the definition of the adjoint~(\ref{def:hall-9.1}).
 
@@ -142,7 +166,9 @@ Among unbounded operators, the ones of central interest to us are those whose ad
 
 \begin{definition}[Symmetric Operator]
     \label{def:hall-9.2}
+    \lean{Physicslib4.Spectral.Unbounded.IsSymmetric, Physicslib4.Spectral.Unbounded.isSymmetric_iff_isFormalAdjoint}
     \uses{def:hall-3.1, def:hall-9.1}
+    \leanok
     An unbounded operator $A$ on $\mathbf{H}$ is \textit{symmetric} if
     \begin{align}
         \left< \phi, A\psi \right> = \left< A\phi, \psi \right>
@@ -154,7 +180,9 @@ To make the relationship between a symmetric operator $A$ and its adjoint $A^*$ 
 
 \begin{definition}[Extension of an Operator]
     \label{def:hall-9.3}
+    \lean{LinearPMap.le, LinearPMap.exists_of_le, LinearPMap.domRestrict}
     \uses{def:hall-3.1}
+    \leanok
     An unbounded operator $A$ on $\mathbf{H}$ is an \textit{extension} of an unbounded operator $B$ on $\mathbf{H}$ if $\text{Dom}(B) \subset \text{Dom}(A)$ and $A\psi = B\psi$ for all $\psi \in \text{Dom}(B)$. In this situation we also say $B$ is a \textit{restriction} of $A$ to $\text{Dom}(B)$, and, for a subspace $W \subset \text{Dom}(A)$, write $A\vert_W$ for the restriction of $A$ with domain $W$.
 \end{definition}
 
@@ -162,9 +190,12 @@ If $A$ is symmetric, it turns out that $A^*$ is always an extension of $A$ in th
 
 \begin{proposition}[Symmetric Operators and the Adjoint]
     \label{prpstn:hall-9.4}
+    \lean{Physicslib4.Spectral.Unbounded.isSymmetric_iff_le_adjoint}
+    \leanok
     An unbounded operator $A$ is symmetric if and only if $A^*$ is an extension of $A$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, def:hall-9.2, def:hall-9.3, prpstn:hall-a.43}
 We first prove the forward direction, i.e. that if $A$ is symmetric, then $A^*$ is an extension of $A$. Fix $\phi \in \text{Dom}(A)$. By the definition of symmetric~(\ref{def:hall-9.2}), $\left< \phi, A\psi \right> = \left< A\phi, \psi \right>$ for all $\psi \in \text{Dom}(A)$. Hence, by the \textbf{Cauchy–Schwarz Inequality}~(\ref{prpstn:hall-a.43}) — applicable since $\mathbf{H}$ is an inner product space and $A\phi, \psi \in \mathbf{H}$ —
 \begin{align}
@@ -187,7 +218,9 @@ We now come to the key definition of this section: that of self-adjointness. Eve
 
 \begin{definition}[Self-Adjoint Operator]
     \label{def:hall-9.5}
+    \lean{LinearPMap.instStar, LinearPMap.isSelfAdjoint_def}
     \uses{def:hall-3.1, def:hall-9.1, def:hall-9.3, prpstn:hall-9.4}
+    \leanok
     An unbounded operator $A$ on $\mathbf{H}$ is \textit{self-adjoint} if $\text{Dom}(A^*) = \text{Dom}(A)$ and $A^*\phi = A\phi$ for all $\phi \in \text{Dom}(A)$. Equivalently, $A$ is self-adjoint if $A^* = A$, where equality of unbounded operators is understood to include equality of domains.
 \end{definition}
 
@@ -197,23 +230,35 @@ The next two definitions let us make sense of the \textit{closure} of an unbound
 
 \begin{definition}[The Product Hilbert Space $\mathbf{H} \times \mathbf{H}$]
     \label{def:product-hilbert-space}
+    \lean{WithLp.instProdInnerProductSpace, WithLp.prod_inner_apply, WithLp.prod_norm_eq_of_L2}
+    \leanok
     $\mathbf{H} \times \mathbf{H}$ denotes the set of ordered pairs $(\phi,\psi)$ with $\phi,\psi \in \mathbf{H}$, made a complex vector space by componentwise operations and equipped with the inner product
     \begin{align}
         \left< (\phi_1,\psi_1), (\phi_2,\psi_2) \right> \equiv \left< \phi_1,\phi_2 \right> + \left< \psi_1,\psi_2 \right>,
     \end{align}
     whose associated norm is $\left\| (\phi,\psi) \right\| = \big( \left\| \phi \right\|^2 + \left\| \psi \right\|^2 \big)^{1/2}$. The inner-product axioms are inherited componentwise from those on $\mathbf{H}$, and completeness likewise: a sequence is Cauchy in $\mathbf{H}\times\mathbf{H}$ exactly when both component sequences are Cauchy in $\mathbf{H}$, by the same two inequalities used in Lemma~\ref{lmm:componentwise-convergence} below with $(\phi_m,\psi_m)$ in place of $(\phi,\psi)$. So $\mathbf{H}\times\mathbf{H}$ is again a separable, complex Hilbert space, and the topology on it is the one induced by this norm. (It is the two-summand case of Definition~\ref{def:hall-a.45} further below, but is used well before that definition, so we give it directly here.)
+
+    A word on the Lean formalization. The inner product displayed above is the one carried by Mathlib's $L^2$ product, and that is what the tagged declarations state. Every use of $\mathbf{H}\times\mathbf{H}$ below, however, is purely topological — closedness of a graph, its closure, and convergence of sequences in it — and never touches the inner product itself. The formalization therefore carries the graph of an operator in the plain product $\mathbf{H}\times\mathbf{H}$, whose topology is exactly the one induced by the norm above; Lemma~\ref{lmm:componentwise-convergence} is precisely the statement that the two agree. A reader comparing the two should not read the absence of the $L^2$ inner product from the graph declarations as an omission.
 \end{definition}
 
 \begin{theorem}[Sequential Characterization of Closed Sets and Closures]
     \label{thrm:sequential-closedness}
+    \lean{isSeqClosed_iff_isClosed, mem_closure_iff_seq_limit}
+    \leanok
     Let $M$ be a metric space and $S \subset M$. Then $S$ is closed if and only if it is sequentially closed, i.e. contains the limit of every convergent sequence of its own points; and a point of $M$ lies in the closure $\overline{S}$ if and only if it is the limit of some sequence of points of $S$.
 \end{theorem}
+\begin{proof}
+\leanok
+\end{proof}
 
 \begin{lemma}[Convergence in $\mathbf{H} \times \mathbf{H}$ is Componentwise]
     \label{lmm:componentwise-convergence}
+    \lean{Prod.tendsto_iff}
+    \leanok
     Let $\{(\phi_n,\psi_n)\}_{n\in\mathbb{N}}$ be a sequence in $\mathbf{H}\times\mathbf{H}$ and $(\phi,\psi) \in \mathbf{H}\times\mathbf{H}$. Then $(\phi_n,\psi_n) \to (\phi,\psi)$ in $\mathbf{H}\times\mathbf{H}$ if and only if $\phi_n \to \phi$ and $\psi_n \to \psi$ in $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:product-hilbert-space}
 Suppose $(\phi_n,\psi_n) \to (\phi,\psi)$. Then, by Definition~\ref{def:product-hilbert-space},
 \begin{align}
@@ -230,7 +275,9 @@ a sum of two sequences of non-negative reals each tending to $0$.
 
 \begin{definition}[Closed and Closable Operators]
     \label{def:hall-9.6}
+    \lean{LinearPMap.graph, LinearPMap.IsClosed, LinearPMap.IsClosable, LinearPMap.closure, LinearPMap.IsClosable.graph_closure_eq_closure_graph}
     \uses{def:hall-3.1, def:product-hilbert-space, lmm:componentwise-convergence, thrm:sequential-closedness}
+    \leanok
     The \textit{graph} of an unbounded operator $A$ on $\mathbf{H}$ is the subset
     \begin{align}
         \Gamma(A) \equiv \left\{ (\psi, A\psi) \;\middle|\; \psi \in \text{Dom}(A) \right\} \subset \mathbf{H} \times \mathbf{H}.
@@ -246,6 +293,8 @@ Two elementary facts about this closure — that it is automatically linear, and
 
 \begin{proposition}[Linearity and the Sequential Description of the Closure]
     \label{prpstn:closure-linearity-and-sequential-description}
+    \lean{Physicslib4.Spectral.Unbounded.hasDenseDomain_closure, Physicslib4.Spectral.Unbounded.mem_domain_closure_iff, Physicslib4.Spectral.Unbounded.closure_apply_eq_of_tendsto, Physicslib4.Spectral.Unbounded.closure_le_of_isClosed, LinearPMap.le_closure, LinearPMap.IsClosable.closure_isClosed}
+    \leanok
     Suppose $A$ is a closable operator on $\mathbf{H}$.
     \begin{enumerate}
         \item $A^{\text{cl}}$ is linear, and $\text{Dom}(A^{\text{cl}})$ is a subspace of $\mathbf{H}$; in particular $A^{\text{cl}}$ is again an unbounded operator on $\mathbf{H}$ in the sense of Definition~\ref{def:hall-3.1}.
@@ -254,6 +303,7 @@ Two elementary facts about this closure — that it is automatically linear, and
     \end{enumerate}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.6, def:hall-3.1}
 \textbf{Part 1.} The graph of $A$ is a linear subspace of $\mathbf{H} \times \mathbf{H}$: it contains $(0,0) = (0, A0)$, and for $(\phi_1,A\phi_1), (\phi_2,A\phi_2)$ in the graph and $\alpha,\beta \in \mathbb{C}$, linearity of $A$ gives $\alpha(\phi_1,A\phi_1) + \beta(\phi_2,A\phi_2) = \big(\alpha\phi_1+\beta\phi_2,\ A(\alpha\phi_1+\beta\phi_2)\big)$, again in the graph. The closure of a linear subspace of a normed vector space is again a linear subspace: if $(\phi_1,\eta_1)$ and $(\phi_2,\eta_2)$ are limits of sequences in the graph, then so is $\alpha(\phi_1,\eta_1)+\beta(\phi_2,\eta_2)$, being the limit of the corresponding linear combination of those sequences (using continuity of vector addition and scalar multiplication with respect to the norm — themselves immediate from the triangle inequality and homogeneity of the norm). So the graph of $A^{\text{cl}}$, being the closure of the graph of $A$, is a linear subspace of $\mathbf{H} \times \mathbf{H}$.
 
@@ -270,9 +320,12 @@ Hall poses the next fact as Exercise 9.11.7(a); we need it in the proof of essen
 
 \begin{lemma}[The Closure of a Symmetric Operator is Symmetric]
     \label{lmm:closure-of-symmetric-is-symmetric}
+    \lean{Physicslib4.Spectral.Unbounded.isSymmetric_closure}
+    \leanok
     Let $A$ be a symmetric, closable, unbounded operator on $\mathbf{H}$. Then $A^{\text{cl}}$ is symmetric.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.2, def:hall-9.6, prpstn:closure-linearity-and-sequential-description, prpstn:continuity-of-norm-and-inner-product}
 Let $\xi, \eta \in \text{Dom}(A^{\text{cl}})$. By Part 2 of Proposition~\ref{prpstn:closure-linearity-and-sequential-description} there are sequences $\{\xi_n\}, \{\eta_n\}$ in $\text{Dom}(A)$ with $\xi_n \to \xi$, $A\xi_n \to A^{\text{cl}}\xi$, $\eta_n \to \eta$ and $A\eta_n \to A^{\text{cl}}\eta$.
 
@@ -287,7 +340,9 @@ With self-adjointness, symmetry, and closure all in hand, we can state the last 
 
 \begin{definition}[Essentially Self-Adjoint Operator]
     \label{def:hall-9.7}
+    \lean{Physicslib4.Spectral.Unbounded.IsEssentiallySelfAdjoint}
     \uses{def:hall-3.1, def:hall-9.2, def:hall-9.5, def:hall-9.6, def:hall-9.1}
+    \leanok
     An unbounded operator $A$ on $\mathbf{H}$ is \textit{essentially self-adjoint} if $A$ is symmetric, $A$ is closable, and $A^{\text{cl}}$ is self-adjoint.
 \end{definition}
 

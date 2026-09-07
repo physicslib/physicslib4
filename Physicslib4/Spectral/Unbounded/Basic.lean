@@ -88,7 +88,11 @@ Blueprint reference: `prpstn:adjoint-well-defined`.
 theorem existsUnique_adjoint_apply {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) {φ : H}
     (hφ : φ ∈ (T†).domain) :
     ∃! χ : H, ∀ ψ : T.domain, ⟪φ, T ψ⟫_ℂ = ⟪χ, (ψ : H)⟫_ℂ := by
-  sorry
+  refine ⟨T† ⟨φ, hφ⟩, ?_, ?_⟩
+  · intro ψ
+    exact (LinearPMap.adjoint_isFormalAdjoint hT ⟨φ, hφ⟩ ψ).symm
+  · intro χ' hχ'
+    exact (LinearPMap.adjoint_apply_eq hT ⟨φ, hφ⟩ (fun x => (hχ' x).symm)).symm
 
 /--
 A linear combination of vectors in `Dom(T*)` again lies in `Dom(T*)`.
@@ -101,7 +105,8 @@ Blueprint reference: `prpstn:hall-linearity-of-the-adjoint`.
 -/
 theorem smul_add_mem_adjoint_domain {T : H →ₗ.[ℂ] H} (α β : ℂ) {φ₁ φ₂ : H}
     (h₁ : φ₁ ∈ (T†).domain) (h₂ : φ₂ ∈ (T†).domain) : α • φ₁ + β • φ₂ ∈ (T†).domain := by
-  sorry
+  exact Submodule.add_mem (T†).domain (Submodule.smul_mem (T†).domain α h₁)
+    (Submodule.smul_mem (T†).domain β h₂)
 
 /--
 The adjoint acts linearly on its domain.
@@ -111,7 +116,10 @@ Blueprint reference: `prpstn:hall-linearity-of-the-adjoint`.
 theorem adjoint_smul_add {T : H →ₗ.[ℂ] H} (α β : ℂ) (φ₁ φ₂ : (T†).domain)
     (h : α • (φ₁ : H) + β • (φ₂ : H) ∈ (T†).domain) :
     T† ⟨α • (φ₁ : H) + β • (φ₂ : H), h⟩ = α • T† φ₁ + β • T† φ₂ := by
-  sorry
+  have he : (⟨α • (φ₁ : H) + β • (φ₂ : H), h⟩ : (T†).domain) = α • φ₁ + β • φ₂ := by
+    ext
+    rfl
+  rw [he, LinearPMap.map_add, LinearPMap.map_smul, LinearPMap.map_smul]
 
 /--
 A vector `ψ` lies in `Dom(T*)` exactly when the functional `χ ↦ ⟪ψ, T χ⟫` is *exactly*
@@ -121,7 +129,13 @@ Blueprint reference: `lmm:characterizing-adjoint-domain-membership`.
 -/
 theorem mem_adjoint_domain_iff_exists {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (ψ : H) :
     ψ ∈ (T†).domain ↔ ∃ φ : H, ∀ χ : T.domain, ⟪ψ, T χ⟫_ℂ = ⟪φ, (χ : H)⟫_ℂ := by
-  sorry
+  constructor
+  · intro hψ
+    refine ⟨T† ⟨ψ, hψ⟩, ?_⟩
+    intro χ
+    exact (LinearPMap.adjoint_isFormalAdjoint hT ⟨ψ, hψ⟩ χ).symm
+  · rintro ⟨φ, hφ⟩
+    exact LinearPMap.mem_adjoint_domain_of_exists ψ ⟨φ, fun χ => (hφ χ).symm⟩
 
 /--
 The representing vector in `mem_adjoint_domain_iff_exists` is `T* ψ`.
@@ -131,7 +145,7 @@ Blueprint reference: `lmm:characterizing-adjoint-domain-membership`.
 theorem adjoint_apply_eq_of_forall_inner {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) {ψ : H}
     (hψ : ψ ∈ (T†).domain) {φ : H}
     (h : ∀ χ : T.domain, ⟪ψ, T χ⟫_ℂ = ⟪φ, (χ : H)⟫_ℂ) : T† ⟨ψ, hψ⟩ = φ := by
-  sorry
+  exact LinearPMap.adjoint_apply_eq hT ⟨ψ, hψ⟩ (fun χ => (h χ).symm)
 
 /-!
 ### Symmetric, self-adjoint and essentially self-adjoint operators
@@ -154,7 +168,7 @@ Blueprint reference: `def:hall-9.2`.
 -/
 theorem isSymmetric_iff_isFormalAdjoint {T : H →ₗ.[ℂ] H} :
     IsSymmetric T ↔ T.IsFormalAdjoint T := by
-  sorry
+  constructor <;> intro h x y <;> exact (h x y).symm
 
 /--
 An unbounded operator is symmetric if and only if its adjoint is an extension of it.
@@ -163,7 +177,14 @@ Blueprint reference: `prpstn:hall-9.4`.
 -/
 theorem isSymmetric_iff_le_adjoint {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) :
     IsSymmetric T ↔ T ≤ T† := by
-  sorry
+  constructor
+  · intro hsym
+    refine LinearPMap.IsFormalAdjoint.le_adjoint hT ?h
+    · intro x y
+      exact (hsym x y).symm
+  · intro hle φ ψ
+    rw [LinearPMap.apply_comp_inclusion hle φ]
+    exact (LinearPMap.adjoint_isFormalAdjoint hT (Submodule.inclusion hle.1 φ) ψ).symm
 
 /-!
 ### The closure of an unbounded operator
@@ -181,7 +202,7 @@ Blueprint reference: `prpstn:closure-linearity-and-sequential-description` (Part
 -/
 theorem hasDenseDomain_closure {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (hc : T.IsClosable) : HasDenseDomain T.closure := by
-  sorry
+  exact Dense.mono (SetLike.coe_subset_coe.mpr (T.le_closure).1) hT
 
 /--
 Sequential description of the domain of the closure: `ξ ∈ Dom(T^cl)` exactly when there
@@ -193,7 +214,26 @@ theorem mem_domain_closure_iff {T : H →ₗ.[ℂ] H} (hc : T.IsClosable) (ξ : 
     ξ ∈ T.closure.domain ↔
       ∃ (χ : ℕ → T.domain) (η : H),
         Tendsto (fun n => (χ n : H)) atTop (𝓝 ξ) ∧ Tendsto (fun n => T (χ n)) atTop (𝓝 η) := by
-  sorry
+  have key : ∀ y : H, (ξ, y) ∈ T.closure.graph ↔ (ξ, y) ∈ closure (T.graph : Set (H × H)) := by
+    intro y
+    rw [← hc.graph_closure_eq_closure_graph, ← Submodule.topologicalClosure_coe]
+    rfl
+  constructor
+  · intro hξ
+    have h1 : (ξ, T.closure ⟨ξ, hξ⟩) ∈ closure (T.graph : Set (H × H)) :=
+      (key _).mp (T.closure.mem_graph ⟨ξ, hξ⟩)
+    obtain ⟨s, hs, hstend⟩ := mem_closure_iff_seq_limit.mp h1
+    choose χ hχ1 hχ2 using fun n => (T.mem_graph_iff).mp (hs n)
+    obtain ⟨hfst, hsnd⟩ := (Prod.tendsto_iff s _).mp hstend
+    refine ⟨χ, T.closure ⟨ξ, hξ⟩, ?_, ?_⟩
+    · simpa only [hχ1] using hfst
+    · simpa only [hχ2] using hsnd
+  · rintro ⟨χ, η, hχ, hTχ⟩
+    have h1 : (ξ, η) ∈ closure (T.graph : Set (H × H)) := by
+      refine mem_closure_of_tendsto (hχ.prodMk_nhds hTχ) ?_
+      filter_upwards with n
+      exact T.mem_graph (χ n)
+    exact LinearPMap.mem_domain_iff.mpr ⟨η, (key η).mpr h1⟩
 
 /--
 In the situation of `mem_domain_closure_iff`, the limit of `T χ n` is `T^cl ξ`.
@@ -204,7 +244,15 @@ theorem closure_apply_eq_of_tendsto {T : H →ₗ.[ℂ] H} (hc : T.IsClosable) {
     {χ : ℕ → T.domain} (hχ : Tendsto (fun n => (χ n : H)) atTop (𝓝 ξ))
     (hTχ : Tendsto (fun n => T (χ n)) atTop (𝓝 η)) (hξ : ξ ∈ T.closure.domain) :
     T.closure ⟨ξ, hξ⟩ = η := by
-  sorry
+  have h1 : (ξ, η) ∈ closure (T.graph : Set (H × H)) := by
+    refine mem_closure_of_tendsto (hχ.prodMk_nhds hTχ) ?_
+    filter_upwards with n
+    exact T.mem_graph (χ n)
+  have h2 : (ξ, η) ∈ T.closure.graph := by
+    rw [← hc.graph_closure_eq_closure_graph]
+    rw [← Submodule.topologicalClosure_coe] at h1
+    exact h1
+  exact T.closure.mem_graph_snd_inj (T.closure.mem_graph ⟨ξ, hξ⟩) h2 rfl
 
 /--
 `T^cl` is the smallest closed extension of `T`: any closed extension of `T` is an
@@ -215,7 +263,12 @@ Blueprint reference: `prpstn:closure-linearity-and-sequential-description` (Part
 -/
 theorem closure_le_of_isClosed {T B : H →ₗ.[ℂ] H} (hc : T.IsClosable) (hTB : T ≤ B)
     (hB : B.IsClosed) : T.closure ≤ B := by
-  sorry
+  apply LinearPMap.le_of_le_graph
+  calc
+    T.closure.graph = T.graph.topologicalClosure := hc.graph_closure_eq_closure_graph.symm
+    _ ≤ B.graph.topologicalClosure :=
+      Submodule.topologicalClosure_mono (LinearPMap.le_graph_of_le hTB)
+    _ = B.graph := IsClosed.submodule_topologicalClosure_eq hB
 
 /--
 The closure of a symmetric closable operator is symmetric.
@@ -224,7 +277,47 @@ Blueprint reference: `lmm:closure-of-symmetric-is-symmetric`.
 -/
 theorem isSymmetric_closure {T : H →ₗ.[ℂ] H} (hsym : IsSymmetric T) (hc : T.IsClosable) :
     IsSymmetric T.closure := by
-  sorry
+  have hgraph : (T.closure.graph : Set (H × H)) = closure (T.graph : Set (H × H)) := by
+    calc
+      (T.closure.graph : Set (H × H)) = (T.graph.topologicalClosure : Set (H × H)) := by
+        rw [hc.graph_closure_eq_closure_graph]
+      _ = closure (T.graph : Set (H × H)) := Submodule.topologicalClosure_coe T.graph
+  have hmem : ∀ ψ : T.closure.domain,
+      ((ψ : H), T.closure ψ) ∈ closure (T.graph : Set (H × H)) := by
+    intro ψ
+    rw [← hgraph]
+    exact LinearPMap.mem_graph T.closure ψ
+  have step1 : ∀ (φ : T.domain) (ψ : T.closure.domain),
+      ⟪(φ : H), T.closure ψ⟫_ℂ = ⟪T φ, (ψ : H)⟫_ℂ := by
+    intro φ ψ
+    have hS₁ : IsClosed {p : H × H | ⟪(φ : H), p.2⟫_ℂ = ⟪T φ, p.1⟫_ℂ} := by
+      apply isClosed_eq
+      · exact Continuous.inner continuous_const continuous_snd
+      · exact Continuous.inner continuous_const continuous_fst
+    have hS₁_graph : (T.graph : Set (H × H)) ⊆ {p : H × H | ⟪(φ : H), p.2⟫_ℂ = ⟪T φ, p.1⟫_ℂ} := by
+      intro p hp
+      obtain ⟨χ, hχ1, hχ2⟩ := (LinearPMap.mem_graph_iff T).mp hp
+      change ⟪(φ : H), p.2⟫_ℂ = ⟪T φ, p.1⟫_ℂ
+      exact ((congrArg (fun z : H => ⟪(φ : H), z⟫_ℂ) hχ2.symm).trans (hsym φ χ)).trans
+        (congrArg (fun z : H => ⟪T φ, z⟫_ℂ) hχ1)
+    exact closure_minimal hS₁_graph hS₁ (hmem ψ)
+  have step2 : ∀ (b a : T.closure.domain),
+      ⟪(a : H), T.closure b⟫_ℂ = ⟪T.closure a, (b : H)⟫_ℂ := by
+    intro b
+    have hS₂ : IsClosed {p : H × H | ⟪p.1, T.closure b⟫_ℂ = ⟪p.2, (b : H)⟫_ℂ} := by
+      apply isClosed_eq
+      · exact Continuous.inner continuous_fst continuous_const
+      · exact Continuous.inner continuous_snd continuous_const
+    have hS₂_graph : (T.graph : Set (H × H)) ⊆ {p : H × H | ⟪p.1, T.closure b⟫_ℂ = ⟪p.2, (b : H)⟫_ℂ} := by
+      intro p hp
+      obtain ⟨ψ, hψ1, hψ2⟩ := (LinearPMap.mem_graph_iff T).mp hp
+      change ⟪p.1, T.closure b⟫_ℂ = ⟪p.2, (b : H)⟫_ℂ
+      exact ((congrArg (fun z : H => ⟪z, T.closure b⟫_ℂ) hψ1.symm).trans (step1 ψ b)).trans
+        (congrArg (fun z : H => ⟪z, (b : H)⟫_ℂ) hψ2)
+    intro a
+    exact closure_minimal hS₂_graph hS₂ (hmem a)
+  intro η ξ
+  exact step2 ξ η
 
 /--
 An unbounded operator is *essentially self-adjoint* if it is symmetric and closable with
