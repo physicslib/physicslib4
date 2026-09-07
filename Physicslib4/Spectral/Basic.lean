@@ -114,9 +114,9 @@ rather than restated here; the blueprint nodes carry those Mathlib names.
 * `def:indicator-function` — `Set.indicator`, `Set.indicator_apply`,
   `Set.indicator_of_mem`, `Set.indicator_of_notMem`, `Set.indicator_mul`,
   `Set.indicator_union_of_disjoint`.
-* `def:identity-and-indicator` — the compound anchor for the two notations above:
-  `ContinuousLinearMap.one_apply` and `Set.indicator_apply`. (Its third clause, that
-  `ℕ` includes `0`, is Lean's own convention and has no propositional content.)
+* `def:identity-and-indicator` — carried by
+  `Physicslib4.Spectral.one_apply_and_indicator_apply` below, which asserts both halves
+  of the compound anchor together and also records the convention that `ℕ` includes `0`.
 * `prpstn:basic-integral-properties` — `MeasureTheory.integral_indicator`,
   `MeasureTheory.integral_add`, `MeasureTheory.integral_smul`,
   `MeasureTheory.lintegral_mono`, `norm_integral_le_integral_norm`.
@@ -176,6 +176,28 @@ open scoped InnerProductSpace
 open Filter Topology ContinuousLinearMap MeasureTheory
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-!
+### Notation anchors
+-/
+
+omit [CompleteSpace H] in
+/--
+The compound anchor for the two notational conventions fixed together in the
+blueprint: the identity operator `1` acts as the identity on every vector, and
+the indicator function `1_E` takes the value `1` on `E` and `0` off it.
+
+This node also fixes a third convention with no propositional content, that
+`ℕ = {0, 1, 2, ...}` includes `0`, matching Lean and Mathlib. Section 10.3 cites
+this anchor for that convention as well as for the two notations.
+
+Blueprint reference: `def:identity-and-indicator`.
+-/
+theorem one_apply_and_indicator_apply {X : Type*} (E : Set X) (x : X)
+    [Decidable (x ∈ E)] :
+    (∀ ψ : H, (1 : H →L[ℂ] H) ψ = ψ) ∧
+      E.indicator (1 : X → ℂ) x = if x ∈ E then 1 else 0 :=
+  ⟨fun _ => rfl, by simp [Set.indicator_apply]⟩
 
 /-!
 ### Orthogonal complements of subsets
