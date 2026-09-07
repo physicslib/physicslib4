@@ -87,9 +87,7 @@ Two pieces of notation are used pervasively throughout this section and are fixe
 
 \begin{definition}[The Identity Operator and Indicator Functions]
     \label{def:identity-and-indicator}
-    \lean{Physicslib4.Spectral.one_apply_and_indicator_apply}
     \uses{def:identity-operator, def:indicator-function}
-    \leanok
     Retained as a compound reference to Definition~\ref{def:identity-operator} and Definition~\ref{def:indicator-function}, which now state these two unrelated notations separately. Citations of this anchor remain valid; new citations should prefer whichever of the two is actually needed.
 \end{definition}
 
@@ -5190,11 +5188,9 @@ The next lemma uses the Monotone Convergence Theorem for real sequences, which w
 \begin{theorem}[Monotone Convergence Theorem]
     \label{thrm:monotone-convergence-theorem}
     \lean{Physicslib4.Spectral.tendsto_iff_isBounded_of_monotone, Physicslib4.Spectral.tendsto_iff_isBounded_of_antitone}
-    \leanok
     Let $\{ a_n \}_{n \in \mathbb{N}}$ be a monotone sequence of real numbers (either $a_n \le a_{n+1}$ or $a_n \ge a_{n+1}$ for all $n$). Then the sequence $\{ a_n \}_{n \in \mathbb{N}}$ has a finite limit in $\mathbb{R}$ if and only if $\{ a_n \}_{n \in \mathbb{N}}$ is bounded.
 \end{theorem}
 \begin{proof}
-\leanok
 \end{proof}
 
 With this result as motivation, let us prove the following "utility" lemma
@@ -5202,7 +5198,6 @@ With this result as motivation, let us prove the following "utility" lemma
 \begin{lemma}[Sums of Pairwise Orthogonal Projections]
     \label{lmm:lemma-4}
     \lean{Physicslib4.Spectral.exists_isStarProjection_tendsto_partialSum}
-    \leanok
     Let $\{ P_i \}_{i \in \mathbb{N}}$ be a set of bounded orthogonal projections on a complex Hilbert space $\mathbf{H}$ that satisfy $P_iP_j = 0$ for $i \neq j$. Then for all $\psi \in \mathbf{H}$ the sequence of partial sums
     \begin{align}
         S_n\psi \equiv \sum_{i = 0}^n P_i\psi
@@ -5210,7 +5205,6 @@ With this result as motivation, let us prove the following "utility" lemma
     converges to $P\psi$ where $P$ is a bounded orthogonal projection onto the smallest closed subspace containing the range of the $P_i$.
 \end{lemma}
 \begin{proof}
-    \leanok
     \uses{prpstn:orthogonal-sum-converges, prpstn:orthogonal-sum-is-projection, prpstn:orthogonal-sum-range, lmm:projection-norm-decreasing, def:bounded-orthogonal-projection, thrm:monotone-convergence-theorem, def:bounded-operator-notation, prpstn:bounded-operators-are-continuous, prpstn:continuity-of-norm-and-inner-product}
 Convergence of the partial sums is Proposition~\ref{prpstn:orthogonal-sum-converges}; that the limit map $P$ is a bounded orthogonal projection is Proposition~\ref{prpstn:orthogonal-sum-is-projection}; and that its range is the smallest closed subspace containing the ranges of the $P_i$ is Proposition~\ref{prpstn:orthogonal-sum-range}.
 \end{proof}
@@ -5218,11 +5212,9 @@ Convergence of the partial sums is Proposition~\ref{prpstn:orthogonal-sum-conver
 \begin{proposition}[Partial Sums of Pairwise Orthogonal Projections Converge]
     \label{prpstn:orthogonal-sum-converges}
     \lean{Physicslib4.Spectral.exists_tendsto_partialSum_of_isStarProjection}
-    \leanok
     Let $\{ P_i \}_{i \in \mathbb{N}}$ be bounded orthogonal projections on a complex Hilbert space $\mathbf{H}$ with $P_iP_j = 0$ for $i \ne j$. Then for every $\psi \in \mathbf{H}$ the sequence of partial sums $S_n\psi \equiv \sum_{i=0}^n P_i\psi$ converges in $\mathbf{H}$. We write $P\psi$ for its limit.
 \end{proposition}
 \begin{proof}
-    \leanok
     \uses{def:adjoint-bounded, def:bounded-orthogonal-projection, lmm:projection-norm-decreasing, thrm:monotone-convergence-theorem, prpstn:continuity-of-norm-and-inner-product}
 the sequence of partial sums $S_n\psi$ converges.
 
@@ -5302,11 +5294,9 @@ As $S_n\psi$ is a Cauchy sequence and $\mathbf{H}$ is a Hilbert, and thus a Bana
 \begin{proposition}[The Limit of the Partial Sums is a Bounded Orthogonal Projection]
     \label{prpstn:orthogonal-sum-is-projection}
     \lean{Physicslib4.Spectral.exists_isStarProjection_tendsto_partialSum'}
-    \leanok
     With $\{P_i\}$ and $P$ as in Proposition~\ref{prpstn:orthogonal-sum-converges}, the map $\psi \mapsto P\psi$ is a bounded orthogonal projection on $\mathbf{H}$: it lies in $\mathcal{B}(\mathbf{H})$, is self-adjoint, and satisfies $PP = P$.
 \end{proposition}
 \begin{proof}
-    \leanok
     \uses{def:adjoint-bounded, prpstn:orthogonal-sum-converges, def:bounded-orthogonal-projection, prpstn:bounded-operators-are-continuous, prpstn:continuity-of-norm-and-inner-product}
 the sequence limit $P\psi$ defines a bounded orthogonal projection operator $P$. To prove that $P$ is a bounded orthogonal projection operator we must \textbf{Part 2.1:} prove that $P$ is an element of $\mathcal{B}(\mathbf{H})$, \textbf{Part 2.2:} prove that $P$ is self-adjoint, and \textbf{Part 2.3:} prove that $PP=P$.
 
@@ -5386,11 +5376,9 @@ for arbitrary $\psi \in \mathbf{H}$, the third and final condition, so $P$ is a 
 \begin{proposition}[The Range of the Limit Projection]
     \label{prpstn:orthogonal-sum-range}
     \lean{Physicslib4.Spectral.range_eq_topologicalClosure_iSup_of_tendsto_partialSum}
-    \leanok
     With $\{P_i\}$ and $P$ as in Proposition~\ref{prpstn:orthogonal-sum-converges}, the range of $P$ is the smallest closed subspace of $\mathbf{H}$ containing the ranges of all the $P_i$.
 \end{proposition}
 \begin{proof}
-    \leanok
     \uses{prpstn:bounded-operators-are-continuous, prpstn:orthogonal-sum-converges, prpstn:orthogonal-sum-is-projection, def:bounded-orthogonal-projection}
 the range of $P$ is the smallest closed subspace containing the range of the $P_i$. Proving this will require two parts \textbf{Part 3.1:} prove that the closed subspace containing the range of the $P_i$ is a subset of the range of $P$ and \textbf{Part 3.2:} prove that the range of $P$ is a subset of the closed subspace containing the range of the $P_i$.
 
@@ -5496,7 +5484,6 @@ for arbitrary $\psi \in \mathbf{H}$. This is nothing more than the statement tha
     \end{align}
 \end{proposition}
 \begin{proof}
-    \leanok
     \uses{def:adjoint-bounded, def:indicator-function, def:hall-8.6, lmm:spectrum-is-compact-metric-measurable, prpstn:hall-8.3, prpstn:mua-projection, thrm:projection-valued-measures-associated-measure, thrm:operator-valued-integration, prpstn:integral-of-indicator, def:hall-8.8}
 $\mu^A$ satisfies
 \begin{align}
@@ -5565,7 +5552,6 @@ which, as $E$ is arbitrary, is none other than the statement that the measures $
     \end{align}
 \end{proposition}
 \begin{proof}
-    \leanok
     \uses{def:adjoint-bounded, def:indicator-function, thrm:projection-valued-measures-associated-measure, prpstn:mua-projection, thrm:operator-valued-integration, prpstn:mua-indicator-integral, def:hall-8.8, def:hall-8.6, prpstn:hall-a.63}
 We show that the operator $f(A)$ of Definition~\ref{def:hall-8.8} agrees with the projection-valued integral of $f$ with respect to $\mu^A$.
 
@@ -5603,7 +5589,6 @@ However, by the uniqueness clause of Proposition~\ref{prpstn:hall-a.63} the oper
     \end{align}
 \end{proposition}
 \begin{proof}
-    \leanok
     \uses{def:adjoint-bounded, def:indicator-function, thrm:projection-valued-measures-associated-measure, def:hall-8.8, lmm:spectral-mapping-theorem, lmm:spectrum-is-compact-metric-measurable, prpstn:mua-projection, thrm:boundedness-theorem, prpstn:mua-bounded-calculus-agrees, prpstn:hall-8.3, thrm:riesz-representation, prpstn:hall-a.63, def:hall-8.6}
 We show that for continuous $g$ in $C^0(\sigma(A); \mathbb{R})$ the operator $g(A)$ of Definition~\ref{def:hall-8.8} agrees with the operator $g(A)$ of Proposition~\ref{prpstn:hall-8.3}.
 
