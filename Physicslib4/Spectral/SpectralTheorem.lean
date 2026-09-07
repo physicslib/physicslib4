@@ -167,8 +167,6 @@ theorem hasSum_borelCalculus_indicator (hA : IsSelfAdjoint A) (E : ℕ → Set (
     (ψ : H) :
     HasSum (fun j => borelCalculus hA ((E j).indicator (1 : spectrum ℝ A → ℂ)) ψ)
       (borelCalculus hA ((⋃ j, E j).indicator (1 : spectrum ℝ A → ℂ)) ψ) := by
-  sorry
-  /-
   classical
   let P : ℕ → H →L[ℂ] H := fun i =>
     borelCalculus hA ((E i).indicator (1 : spectrum ℝ A → ℂ))
@@ -227,16 +225,18 @@ theorem hasSum_borelCalculus_indicator (hA : IsSelfAdjoint A) (E : ℕ → Set (
               (⋃ i ∈ Finset.range n, E i).indicator (1 : spectrum ℝ A → ℂ) := by
             congr 1
             exact Set.inter_eq_self_of_subset_left (hfin_le n)
-          simpa [hInt]
+          rw [hInt]
     have hQR : ∀ n : ℕ, Q * R n = R n := by
       intro n
+      have hQs : star Q = Q := hQproj.isSelfAdjoint
+      have hRs : star (R n) = R n := (hRproj n).isSelfAdjoint
       calc
         Q * R n = star Q * star (R n) := by
-          rw [← hQproj.isSelfAdjoint, ← (hRproj n).isSelfAdjoint]
+          rw [hQs, hRs]
         _ = star (R n * Q) := by
           rw [star_mul]
         _ = star (R n) := congrArg star (hRQ n)
-        _ = R n := (hRproj n).isSelfAdjoint
+        _ = R n := hRs
     have hsum_op : ∀ n : ℕ, (∑ i ∈ Finset.range n, P i) = R n := by
       intro n
       induction n with
@@ -247,6 +247,9 @@ theorem hasSum_borelCalculus_indicator (hA : IsSelfAdjoint A) (E : ℕ → Set (
               have hU : (⋃ i ∈ Finset.range 0, E i) = (∅ : Set (spectrum ℝ A)) := by
                 ext l
                 simp [Finset.range_zero]
+              change (0 : H →L[ℂ] H) =
+                borelCalculus hA ((⋃ i ∈ Finset.range 0, E i).indicator
+                  (1 : spectrum ℝ A → ℂ))
               rw [hU]
               exact (borelCalculus_indicator_empty hA).symm
       | succ n ih =>
@@ -311,8 +314,8 @@ theorem hasSum_borelCalculus_indicator (hA : IsSelfAdjoint A) (E : ℕ → Set (
         change ⟪φ, (R n * R n) φ⟫_ℂ = ⟪φ, R n φ⟫_ℂ
         rw [hRidem]
       calc
-        (‖Q φ - R n φ‖ : ℂ) ^ 2 = ⟪Q φ - R n φ, Q φ - R n φ⟫_ℂ := by
-          rw [inner_self_eq_norm_sq_to_K (Q φ - R n φ)]
+        (‖Q φ - R n φ‖ : ℂ) ^ 2 = ⟪Q φ - R n φ, Q φ - R n φ⟫_ℂ :=
+          (inner_self_eq_norm_sq_to_K (Q φ - R n φ)).symm
         _ = (⟪Q φ, Q φ⟫_ℂ - ⟪Q φ, R n φ⟫_ℂ) -
             (⟪R n φ, Q φ⟫_ℂ - ⟪R n φ, R n φ⟫_ℂ) := by
           rw [inner_sub_left]
@@ -335,24 +338,30 @@ theorem hasSum_borelCalculus_indicator (hA : IsSelfAdjoint A) (E : ℕ → Set (
         constructor
         · intro n x
           change ‖(⋃ i ∈ Finset.range n, E i).indicator (1 : spectrum ℝ A → ℂ) x‖ ≤ 1
-          by_cases h : x ∈ ⋃ i ∈ Finset.range n, E i <;> simp [Set.indicator, h]
+          rw [Set.indicator_apply]
+          split <;> simp
         · intro x
           by_cases hx : x ∈ ⋃ j, E j
-          · have he : ∀ᶠ n : ℕ in atTop, f n x = 1 := by
+          · have he : (fun _ : ℕ => (1 : ℂ)) =ᶠ[atTop] fun n => f n x := by
               rcases Set.mem_iUnion.mp hx with ⟨j₀, hj₀⟩
               filter_upwards [Filter.eventually_gt_atTop j₀] with n hn
               have hx2 : x ∈ ⋃ i ∈ Finset.range n, E i :=
                 Set.mem_iUnion₂.mpr ⟨j₀, Finset.mem_range.mpr hn, hj₀⟩
-              change (⋃ i ∈ Finset.range n, E i).indicator (1 : spectrum ℝ A → ℂ) x = 1
-              simp [hx2]
-            simpa [g, Set.indicator, hx] using (tendsto_const_nhds (x := (1 : ℂ))).congr' he
-          · have h0 : ∀ n : ℕ, f n x = 0 := by
-              intro n
+              change (1 : ℂ) =
+                (⋃ i ∈ Finset.range n, E i).indicator (1 : spectrum ℝ A → ℂ) x
+              exact (Set.indicator_of_mem hx2 (1 : spectrum ℝ A → ℂ)).symm
+            have hgx : g x = 1 := Set.indicator_of_mem hx (1 : spectrum ℝ A → ℂ)
+            rw [hgx]
+            exact Filter.Tendsto.congr' he tendsto_const_nhds
+          · have h0 : (fun _ : ℕ => (0 : ℂ)) =ᶠ[atTop] fun n => f n x := by
+              refine Filter.Eventually.of_forall fun n => ?_
               have hn' : x ∉ ⋃ i ∈ Finset.range n, E i := fun h => hx (hfin_le n h)
-              change (⋃ i ∈ Finset.range n, E i).indicator (1 : spectrum ℝ A → ℂ) x = 0
-              simp [hn']
-            simpa [g, Set.indicator, hx] using
-              (tendsto_const_nhds (x := (0 : ℂ))).congr' (eventually_of_forall h0)
+              change (0 : ℂ) =
+                (⋃ i ∈ Finset.range n, E i).indicator (1 : spectrum ℝ A → ℂ) x
+              exact (Set.indicator_of_notMem hn' (1 : spectrum ℝ A → ℂ)).symm
+            have hgx : g x = 0 := Set.indicator_of_notMem hx (1 : spectrum ℝ A → ℂ)
+            rw [hgx]
+            exact Filter.Tendsto.congr' h0 tendsto_const_nhds
       have hBC : Tendsto (fun n => borelForm hA (f n) φ) atTop (𝓝 (borelForm hA g φ)) :=
         tendsto_borelForm hA hmeas hlim φ
       have hinnerR : (fun n => ⟪φ, R n φ⟫_ℂ) = fun n => borelForm hA (f n) φ := by
@@ -373,21 +382,17 @@ theorem hasSum_borelCalculus_indicator (hA : IsSelfAdjoint A) (E : ℕ → Set (
           (𝓝 (Complex.re 0)) := (Complex.continuous_re.tendsto (0 : ℂ)).comp hnsqC
       convert hc using 1
       · ext n
-        simp [Complex.ofReal_pow]
+        simp [← Complex.ofReal_pow]
       · rfl
     have hnorm : Tendsto (fun n : ℕ => ‖Q φ - R n φ‖) atTop (𝓝 (0 : ℝ)) := by
       have hsqrt : Tendsto (fun n => Real.sqrt ((‖Q φ - R n φ‖ : ℝ) ^ 2)) atTop (𝓝 0) := by
-        simpa using (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hnsq
-      convert hsqrt using 1
-      · ext n
-        rw [Real.sqrt_sq_eq_abs, abs_of_nonneg (norm_nonneg (Q φ - R n φ))]
-      · simp
+        simpa [Function.comp_def] using (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hnsq
+      refine hsqrt.congr fun n => ?_
+      rw [Real.sqrt_sq_eq_abs, abs_of_nonneg (norm_nonneg (Q φ - R n φ))]
     have hconvR : Tendsto (fun n : ℕ => R n φ) atTop (𝓝 (Q φ)) := by
       rw [tendsto_iff_norm_sub_tendsto_zero]
-      convert hnorm using 1
-      · ext n
-        rw [← norm_neg (R n φ - Q φ)]
-        rw [show -(R n φ - Q φ) = Q φ - R n φ by abel]
+      refine hnorm.congr fun n => ?_
+      rw [← norm_neg (R n φ - Q φ), neg_sub]
     have hseq : (fun n => ∑ i ∈ Finset.range n, P i φ) = fun n => R n φ := by
       funext n
       calc
@@ -395,7 +400,6 @@ theorem hasSum_borelCalculus_indicator (hA : IsSelfAdjoint A) (E : ℕ → Set (
           rw [← sum_apply]
         _ = R n φ := by rw [hsum_op n]
     simpa [← hseq] using hconvR
-  -/
 
 /-!
 ### The spectral measure
