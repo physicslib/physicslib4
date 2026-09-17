@@ -105,7 +105,47 @@ Blueprint reference: `lmm:b-squared-inequality-symmetric`.
 theorem sq_norm_le_of_isSymmetric {T : H →ₗ.[ℂ] H} (hsym : IsSymmetric T) (a b : ℝ)
     (ψ : T.domain) :
     b ^ 2 * ‖(ψ : H)‖ ^ 2 ≤ ‖T ψ - ((a : ℂ) + (b : ℂ) * Complex.I) • (ψ : H)‖ ^ 2 := by
-  sorry
+  obtain ⟨r1, hr1⟩ : ∃ r : ℝ, ⟪T ψ, (ψ : H)⟫_ℂ = (r : ℂ) := by
+    apply Complex.conj_eq_iff_real.mp
+    rw [inner_conj_symm]
+    exact hsym ψ ψ
+  obtain ⟨r2, hr2⟩ : ∃ r : ℝ, ⟪(ψ : H), (ψ : H)⟫_ℂ = (r : ℂ) := by
+    apply Complex.conj_eq_iff_real.mp
+    rw [inner_conj_symm]
+  have hr : ⟪(T ψ - (a : ℂ) • (ψ : H)), (ψ : H)⟫_ℂ = ((r1 - a * r2 : ℝ) : ℂ) := by
+    rw [inner_sub_left, inner_smul_left, Complex.conj_ofReal, hr1, hr2]
+    push_cast
+    ring
+  have hcross : (⟪(T ψ - (a : ℂ) • (ψ : H)), ((b : ℂ) * Complex.I) • (ψ : H)⟫_ℂ).re = 0 := by
+    rw [inner_smul_right, hr]
+    have hprod : ((b : ℂ) * Complex.I) * ((r1 - a * r2 : ℝ) : ℂ) =
+        ((b * (r1 - a * r2) : ℝ) : ℂ) * Complex.I := by
+      calc
+        ((b : ℂ) * Complex.I) * ((r1 - a * r2 : ℝ) : ℂ)
+            = (b : ℂ) * ((r1 - a * r2 : ℝ) : ℂ) * Complex.I := by ring
+        _ = ((b * (r1 - a * r2) : ℝ) : ℂ) * Complex.I := by rw [Complex.ofReal_mul]
+    rw [hprod, Complex.mul_I_re, Complex.ofReal_im, neg_zero]
+  have hre_defeq : RCLike.re ⟪(T ψ - (a : ℂ) • (ψ : H)), ((b : ℂ) * Complex.I) • (ψ : H)⟫_ℂ =
+      (⟪(T ψ - (a : ℂ) • (ψ : H)), ((b : ℂ) * Complex.I) • (ψ : H)⟫_ℂ).re := rfl
+  have hsmul_norm_sq : ‖((b : ℂ) * Complex.I) • (ψ : H)‖ ^ 2 = b ^ 2 * ‖(ψ : H)‖ ^ 2 := by
+    rw [norm_smul, mul_pow]
+    congr 1
+    rw [Complex.norm_mul, Complex.norm_I, mul_one, Complex.norm_real]
+    exact sq_abs b
+  have hlambda : T ψ - ((a : ℂ) + (b : ℂ) * Complex.I) • (ψ : H) =
+      (T ψ - (a : ℂ) • (ψ : H)) - ((b : ℂ) * Complex.I) • (ψ : H) := by
+    rw [add_smul]
+    abel
+  calc
+    b ^ 2 * ‖(ψ : H)‖ ^ 2 = ‖((b : ℂ) * Complex.I) • (ψ : H)‖ ^ 2 := hsmul_norm_sq.symm
+    _ ≤ ‖T ψ - (a : ℂ) • (ψ : H)‖ ^ 2 + ‖((b : ℂ) * Complex.I) • (ψ : H)‖ ^ 2 :=
+      le_add_of_nonneg_left (sq_nonneg _)
+    _ = ‖(T ψ - (a : ℂ) • (ψ : H)) - ((b : ℂ) * Complex.I) • (ψ : H)‖ ^ 2 := by
+      rw [norm_sub_sq (𝕜 := ℂ) (T ψ - (a : ℂ) • (ψ : H)) (((b : ℂ) * Complex.I) • (ψ : H)),
+        hre_defeq, hcross]
+      ring
+    _ = ‖T ψ - ((a : ℂ) + (b : ℂ) * Complex.I) • (ψ : H)‖ ^ 2 := by
+      rw [hlambda]
 
 /--
 The spectrum of an unbounded self-adjoint operator is contained in the real line.

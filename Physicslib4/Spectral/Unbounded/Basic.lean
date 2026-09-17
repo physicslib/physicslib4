@@ -470,7 +470,63 @@ Blueprint reference: `prpstn:hall-9.14`.
 theorem isClosed_range_subSmul {T : H →ₗ.[ℂ] H} (hcl : T.IsClosed) (lam : ℂ) {ε : ℝ}
     (hε : 0 < ε) (hbound : ∀ ψ : T.domain, ε * ‖(ψ : H)‖ ≤ ‖T ψ - lam • (ψ : H)‖) :
     IsClosed ((range (subSmul T lam) : Submodule ℂ H) : Set H) := by
-  sorry
+  apply isClosed_of_closure_subset
+  intro φlim hφlim
+  obtain ⟨φ, hφmem, hφtendsto⟩ := mem_closure_iff_seq_limit.mp hφlim
+  choose ψ hψ using fun n => mem_range.mp (hφmem n)
+  have key : ∀ m n : ℕ, ε * ‖(ψ m : H) - (ψ n : H)‖ ≤ ‖φ m - φ n‖ := by
+    intro m n
+    have hb := hbound (ψ m - ψ n)
+    have hcoe : ((ψ m - ψ n : (subSmul T lam).domain) : H) = (ψ m : H) - (ψ n : H) := rfl
+    have hTsub : T (ψ m - ψ n) = T (ψ m) - T (ψ n) := LinearPMap.map_sub T (ψ m) (ψ n)
+    have hsmA : φ m = T (ψ m) - lam • (ψ m : H) := by
+      have := subSmul_apply T lam (ψ m)
+      rw [hψ m] at this
+      exact this
+    have hsmB : φ n = T (ψ n) - lam • (ψ n : H) := by
+      have := subSmul_apply T lam (ψ n)
+      rw [hψ n] at this
+      exact this
+    rw [hcoe, hTsub] at hb
+    have heq : (T (ψ m) - T (ψ n)) - lam • ((ψ m : H) - (ψ n : H)) = φ m - φ n := by
+      rw [smul_sub, hsmA, hsmB]
+      abel
+    rwa [heq] at hb
+  have hψCauchy : CauchySeq (fun n => (ψ n : H)) := by
+    have hφCauchy : CauchySeq φ := hφtendsto.cauchySeq
+    rw [Metric.cauchySeq_iff] at hφCauchy ⊢
+    intro δ hδ
+    obtain ⟨N, hN⟩ := hφCauchy (δ * ε) (by positivity)
+    refine ⟨N, fun m hm n hn => ?_⟩
+    rw [dist_eq_norm]
+    have hkey := key m n
+    have hφlt := hN m hm n hn
+    rw [dist_eq_norm] at hφlt
+    have h1 : ε * ‖(ψ m : H) - (ψ n : H)‖ < ε * δ := by
+      calc ε * ‖(ψ m : H) - (ψ n : H)‖ ≤ ‖φ m - φ n‖ := hkey
+        _ < δ * ε := hφlt
+        _ = ε * δ := mul_comm δ ε
+    exact lt_of_mul_lt_mul_left h1 hε.le
+  obtain ⟨ψlim, hψtendsto⟩ := cauchySeq_tendsto_of_complete hψCauchy
+  have hTψtendsto : Tendsto (fun n => T (ψ n)) atTop (𝓝 (φlim + lam • ψlim)) := by
+    have heq : (fun n => T (ψ n)) = fun n => φ n + lam • (ψ n : H) := by
+      funext n
+      have h := hψ n
+      rw [subSmul_apply] at h
+      rw [← h]
+      abel
+    rw [heq]
+    exact hφtendsto.add (hψtendsto.const_smul lam)
+  have hmemgraph : (ψlim, φlim + lam • ψlim) ∈ T.graph := by
+    apply hcl.mem_of_tendsto (hψtendsto.prodMk_nhds hTψtendsto)
+    filter_upwards with n
+    exact T.mem_graph (ψ n)
+  obtain ⟨y, hy1, hy2⟩ := (LinearPMap.mem_graph_iff T).mp hmemgraph
+  refine mem_range.mpr ⟨y, ?_⟩
+  have hy1' : (y : H) = ψlim := hy1
+  have hy2' : T y = φlim + lam • ψlim := hy2
+  rw [subSmul_apply, hy1', hy2']
+  abel
 
 end Unbounded
 end Spectral
