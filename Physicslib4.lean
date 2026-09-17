@@ -86,6 +86,7 @@ import Physicslib4.Spectral.BorelClasses
 import Physicslib4.Spectral.ContinuousCalculus
 import Physicslib4.Spectral.Forms
 import Physicslib4.Spectral.OperatorIntegral
+import Physicslib4.Spectral.Probe
 import Physicslib4.Spectral.ProjectionValuedMeasure
 import Physicslib4.Spectral.SpectralTheorem
 import Physicslib4.Spectral.Spectrum
