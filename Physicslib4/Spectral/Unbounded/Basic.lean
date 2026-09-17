@@ -430,7 +430,51 @@ Blueprint reference: `prpstn:hall-9.13`.
 theorem adjoint_add_toPMap {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (B : H →L[ℂ] H) :
     (T + (B : H →ₗ[ℂ] H).toPMap ⊤)† =
       T† + ((ContinuousLinearMap.adjoint B : H →ₗ[ℂ] H).toPMap ⊤) := by
-  sorry
+  have hUdom : (T + (B : H →ₗ[ℂ] H).toPMap ⊤).domain = T.domain := by
+    rw [LinearPMap.add_domain, LinearMap.toPMap_domain, inf_top_eq]
+  have hU : Dense ((T + (B : H →ₗ[ℂ] H).toPMap ⊤).domain : Set H) := by
+    rw [hUdom]; exact hT
+  have hdom : ((T + (B : H →ₗ[ℂ] H).toPMap ⊤)†).domain
+      = (T† + ((ContinuousLinearMap.adjoint B : H →ₗ[ℂ] H).toPMap ⊤)).domain := by
+    have hRHSdom :
+        (T† + ((ContinuousLinearMap.adjoint B : H →ₗ[ℂ] H).toPMap ⊤)).domain = T†.domain := by
+      rw [LinearPMap.add_domain, LinearMap.toPMap_domain, inf_top_eq]
+    rw [hRHSdom]
+    ext φ
+    constructor
+    · intro hφ
+      apply LinearPMap.mem_adjoint_domain_of_exists
+      refine ⟨(T + (B : H →ₗ[ℂ] H).toPMap ⊤)† ⟨φ, hφ⟩ - ContinuousLinearMap.adjoint B φ, ?_⟩
+      intro y
+      have key := LinearPMap.adjoint_isFormalAdjoint hU ⟨φ, hφ⟩
+        (⟨(y : H), ⟨y.2, trivial⟩⟩ : (T + (B : H →ₗ[ℂ] H).toPMap ⊤).domain)
+      simp only [LinearPMap.add_apply, LinearMap.toPMap_apply, inner_add_right] at key
+      rw [inner_sub_left]
+      have hB := ContinuousLinearMap.adjoint_inner_left B (y : H) φ
+      linear_combination key - hB
+    · intro hφ
+      apply LinearPMap.mem_adjoint_domain_of_exists
+      refine ⟨T† ⟨φ, hφ⟩ + ContinuousLinearMap.adjoint B φ, ?_⟩
+      intro y
+      have key := LinearPMap.adjoint_isFormalAdjoint hT ⟨φ, hφ⟩
+        (⟨(y : H), y.prop.1⟩ : T.domain)
+      rw [LinearPMap.add_apply, inner_add_left, inner_add_right]
+      simp only [LinearMap.toPMap_apply]
+      have hB := ContinuousLinearMap.adjoint_inner_left B (y : H) φ
+      linear_combination key + hB
+  apply LinearPMap.ext hdom
+  intro x hf hg
+  have hxT : x ∈ T†.domain := hg.1
+  rw [LinearPMap.add_apply]
+  simp only [LinearMap.toPMap_apply]
+  apply LinearPMap.adjoint_apply_eq hU ⟨x, hf⟩
+  intro y
+  have key := LinearPMap.adjoint_isFormalAdjoint hT ⟨x, hxT⟩
+    (⟨(y : H), y.prop.1⟩ : T.domain)
+  rw [LinearPMap.add_apply, inner_add_left, inner_add_right]
+  simp only [LinearMap.toPMap_apply]
+  have hB := ContinuousLinearMap.adjoint_inner_left B (y : H) x
+  linear_combination key + hB
 
 /--
 The sum of an unbounded self-adjoint operator and a bounded self-adjoint operator defined
@@ -441,7 +485,8 @@ Blueprint reference: `prpstn:hall-9.13`.
 theorem isSelfAdjoint_add_of_isSelfAdjoint {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (hTsa : IsSelfAdjoint T) {B : H →L[ℂ] H} (hB : IsSelfAdjoint B) :
     IsSelfAdjoint (T + (B : H →ₗ[ℂ] H).toPMap ⊤) := by
-  sorry
+  rw [LinearPMap.isSelfAdjoint_def, adjoint_add_toPMap hT B,
+    LinearPMap.isSelfAdjoint_def.mp hTsa, ContinuousLinearMap.isSelfAdjoint_iff'.mp hB]
 
 /--
 The operator `T - λ 1`, with domain `Dom(T)`.
