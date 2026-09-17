@@ -43,9 +43,12 @@ which is `T† = T`.
   the sequential description of the closure, and its minimality.
 * `isClosable_of_isSymmetric`, `adjoint_closure_eq_adjoint`,
   `adjoint_le_adjoint_of_le`, `existsUnique_isSelfAdjoint_extension`.
+* `dense_iff_orthogonal_eq_bot` — a subspace is dense iff its orthogonal complement is
+  trivial.
 * `orthogonal_range_eq_ker_adjoint` — `Range(T)ᗮ = Ker(T*)`.
 * `adjoint_add_toPMap`, `isSelfAdjoint_add_of_isSelfAdjoint` — adjoint of a sum with a
   bounded operator.
+* `adjoint_smul_one` — `(λ 1)* = conj λ 1`.
 * `isClosed_range_subSmul` — a uniform lower bound forces `Range(T - λ 1)` to be closed.
 -/
 
@@ -408,6 +411,18 @@ theorem mem_range {T : H →ₗ.[ℂ] H} {φ : H} : φ ∈ range T ↔ ∃ ψ : 
   Iff.rfl
 
 /--
+A subspace of `H` is dense exactly when its orthogonal complement is trivial.
+
+The blueprint states this for "a subspace `V ⊆ H`"; in Lean the subspace is a
+`Submodule ℂ H`, which is the shape every use site in this section needs (the ranges
+`Range(T - λ 1)` appearing in `thrm:hall-9.17` and `thrm:hall-9.21` are submodules).
+
+Blueprint reference: `crllr:trivial-complement-characterizes-density`.
+-/
+theorem dense_iff_orthogonal_eq_bot {K : Submodule ℂ H} : Dense (K : Set H) ↔ Kᗮ = ⊥ :=
+  Submodule.dense_iff_topologicalClosure_eq_top.trans Submodule.topologicalClosure_eq_top_iff
+
+/--
 The orthogonal complement of the range of `T` is the kernel of `T*`.
 
 Blueprint reference: `prpstn:hall-9.12`.
@@ -487,6 +502,19 @@ theorem isSelfAdjoint_add_of_isSelfAdjoint {T : H →ₗ.[ℂ] H} (hT : HasDense
     IsSelfAdjoint (T + (B : H →ₗ[ℂ] H).toPMap ⊤) := by
   rw [LinearPMap.isSelfAdjoint_def, adjoint_add_toPMap hT B,
     LinearPMap.isSelfAdjoint_def.mp hTsa, ContinuousLinearMap.isSelfAdjoint_iff'.mp hB]
+
+/--
+The adjoint of the scalar multiple `λ 1` of the identity is `conj λ 1`.
+
+This supplies the `B*` left unexplained by `adjoint_add_toPMap` in the case that recurs
+throughout this section, `B = -λ 1`, so that `(T - λ 1)* = T* - conj λ 1`.
+
+Blueprint reference: `lmm:adjoint-of-scalar-multiple-of-identity`.
+-/
+theorem adjoint_smul_one (lam : ℂ) :
+    ContinuousLinearMap.adjoint (lam • (1 : H →L[ℂ] H))
+      = (starRingEnd ℂ) lam • (1 : H →L[ℂ] H) := by
+  rw [Physicslib4.Spectral.adjoint_smul, Physicslib4.Spectral.adjoint_one]
 
 /--
 The operator `T - λ 1`, with domain `Dom(T)`.
