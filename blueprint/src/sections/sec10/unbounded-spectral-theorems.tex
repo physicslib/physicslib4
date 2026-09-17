@@ -562,6 +562,8 @@ We record one more elementary fact about closed operators before turning to the 
 
 \begin{proposition}[Closedness of the Range from a Lower Bound]
     \label{prpstn:hall-9.14}
+    \lean{Physicslib4.Spectral.Unbounded.isClosed_range_subSmul}
+    \leanok
     Let $A$ be a closed operator on $\mathbf{H}$ and $\lambda \in \mathbb{C}$. Suppose there exists $\varepsilon > 0$ such that
     \begin{align}
         \varepsilon \left\| \psi \right\| \le \left\| (A - \lambda \mathbf{1})\psi \right\| \qquad \text{for all } \psi \in \text{Dom}(A).
@@ -569,6 +571,7 @@ We record one more elementary fact about closed operators before turning to the 
     Then the range of $A - \lambda \mathbf{1}$ is a closed subspace of $\mathbf{H}$. (Here $\text{Dom}(A - \lambda \mathbf{1}) \equiv \text{Dom}(A)$, as in Proposition~\ref{prpstn:hall-9.13} with $B = -\lambda \mathbf{1}$.)
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-9.6, prpstn:hall-9.13}
 Let $\{ \varphi_n \}_{n \in \mathbb{N}}$ be a sequence in $\text{Range}(A - \lambda \mathbf{1})$ converging to some $\varphi \in \mathbf{H}$; we must show $\varphi \in \text{Range}(A - \lambda \mathbf{1})$. Write $\varphi_n = (A - \lambda \mathbf{1})\psi_n$ for some sequence $\{ \psi_n \}_{n \in \mathbb{N}}$ in $\text{Dom}(A)$. Applying the hypothesis with $\psi = \psi_n - \psi_m$, and using linearity of $A - \lambda\mathbf{1}$ on $\text{Dom}(A)$,
 \begin{align}
@@ -631,6 +634,8 @@ We now come to a central result: the spectrum of a self-adjoint operator, bounde
 
 \begin{lemma}[The $b^2$ Inequality for Symmetric Operators]
     \label{lmm:b-squared-inequality-symmetric}
+    \lean{Physicslib4.Spectral.Unbounded.sq_norm_le_of_isSymmetric}
+    \leanok
     If $A$ is a symmetric operator on $\mathbf{H}$, then for all $a, b \in \mathbb{R}$ and associated $\lambda \equiv a + ib \in \mathbb{C}$,
     \begin{align}
         \left< (A - \lambda\mathbf{1})\psi, (A - \lambda\mathbf{1})\psi \right> \ge b^2 \left< \psi, \psi \right>
@@ -638,6 +643,7 @@ We now come to a central result: the spectrum of a self-adjoint operator, bounde
     for all $\psi \in \text{Dom}(A)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-9.2, def:hall-3.1, prpstn:hall-9.13, def:bounded-operator-notation}
 Fix $\psi \in \text{Dom}(A)$. By Proposition~\ref{prpstn:hall-9.13} with $B = -a\mathbf{1}$, $A - a\mathbf{1}$ has domain $\text{Dom}(A)$, and, since $A$ is symmetric and $-a\mathbf{1}$ is (trivially) symmetric with $a$ real, $A - a\mathbf{1}$ is again symmetric: for $\phi, \chi \in \text{Dom}(A)$, $\left< \phi, (A-a\mathbf{1})\chi \right> = \left< \phi, A\chi \right> - a\left< \phi, \chi \right> = \left< A\phi, \chi \right> - a \left< \phi, \chi \right> = \left< (A-a\mathbf{1})\phi, \chi \right>$, using symmetry of $A$ and reality of $a$. Applying this symmetry identity with $\phi = \chi = \psi$ gives, for our fixed $\psi \in \text{Dom}(A)$,
 \begin{align}
