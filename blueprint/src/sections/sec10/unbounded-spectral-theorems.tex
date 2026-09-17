@@ -469,9 +469,12 @@ We record one immediate consequence of Part 2, in the form we will repeatedly ne
 
 \begin{corollary}[Trivial Complement Characterizes Density]
     \label{crllr:trivial-complement-characterizes-density}
+    \lean{Physicslib4.Spectral.Unbounded.dense_iff_orthogonal_eq_bot}
+    \leanok
     A subspace $V \subset \mathbf{H}$ is dense in $\mathbf{H}$ if and only if $V^\perp = \{0\}$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-a.49, prpstn:continuity-of-norm-and-inner-product}
 If $V^\perp = \{0\}$, then, by Part 2 of \textbf{Proposition} \textit{(hall-a.49)}~(\ref{prpstn:hall-a.49}), $\overline{V} = (V^\perp)^\perp = \{0\}^\perp = \mathbf{H}$ — the last equality since $\left< \psi, 0 \right> = 0$ for every $\psi \in \mathbf{H}$, so every $\psi$ lies in $\{0\}^\perp$. Thus $V$ is dense.
 
@@ -550,9 +553,12 @@ Proposition~\ref{prpstn:hall-9.13} tells us how to add a bounded operator $B$ to
 
 \begin{lemma}[Adjoint of a Scalar Multiple of the Identity]
     \label{lmm:adjoint-of-scalar-multiple-of-identity}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_smul_one}
+    \leanok
     For $\lambda \in \mathbb{C}$, the bounded operator $\lambda\mathbf{1}$ (defined on all of $\mathbf{H}$) has adjoint $(\lambda\mathbf{1})^* = \overline{\lambda}\mathbf{1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:bounded-operator-notation, def:identity-operator, def:hall-9.1}
 For any $\phi, \psi \in \mathbf{H}$, using linearity of the inner product in its second argument,
 \begin{align}
