@@ -500,6 +500,8 @@ The next proposition tells us how the adjoint interacts with adding a bounded op
 
 \begin{proposition}[Adjoint of a Sum with a Bounded Operator]
     \label{prpstn:hall-9.13}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_add_toPMap, Physicslib4.Spectral.Unbounded.isSelfAdjoint_add_of_isSelfAdjoint}
+    \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$ and $B \in \mathcal{B}(\mathbf{H})$ is a bounded operator defined on all of $\mathbf{H}$. Let $A + B$ denote the operator with $\text{Dom}(A+B) = \text{Dom}(A)$, given by $(A+B)\psi = A\psi + B\psi$ for all $\psi \in \text{Dom}(A)$. Then $(A+B)^*$ has the same domain as $A^*$, and
     \begin{align}
         (A+B)^*\psi = A^*\psi + B^*\psi \quad \text{for all } \psi \in \text{Dom}(A^*).
@@ -507,6 +509,7 @@ The next proposition tells us how the adjoint interacts with adding a bounded op
     In particular, the sum of an unbounded self-adjoint operator and a bounded self-adjoint operator (defined on all of $\mathbf{H}$) is self-adjoint on the domain of the unbounded operator.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, lmm:hall-dense-testing, def:bounded-operator-notation, prpstn:hall-a.43, def:hall-3.1}
 We prove $\text{Dom}\big( (A+B)^* \big) \subset \text{Dom}(A^*)$ and $\text{Dom}(A^*) \subset \text{Dom}\big( (A+B)^* \big)$ in turn, and then the stated formula.
 
