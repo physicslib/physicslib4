@@ -201,8 +201,22 @@ closability are `LinearPMap.IsClosed` and `LinearPMap.IsClosable`, and `A^cl` is
 The closure of a densely defined closable operator again has dense domain, so it is
 again an unbounded operator in the blueprint's sense.
 
+`(hc : T.IsClosable)` is not used by the proof: `Dense.mono` only needs `T ≤ T.closure`,
+which holds unconditionally. It is kept for three reasons. First, the blueprint
+proposition this lemma formalizes opens "Suppose `A` is a closable operator on `H`"
+(`prpstn:closure-linearity-and-sequential-description`), so the hypothesis tracks the
+specification's stated setting rather than Lean's minimal need. Second, the three
+sibling lemmas proved from that same proposition — `mem_domain_closure_iff`,
+`closure_apply_eq_of_tendsto`, `closure_le_of_isClosed` — all genuinely use `hc`, so
+keeping it here preserves the uniformity of the group. Third, Mathlib sets
+`T.closure = T` when `T` is not closable (`LinearPMap.closure`), so without `hc` this
+statement would silently also cover that junk-value branch, where it holds trivially
+rather than for the reason the blueprint gives. The ambient `[CompleteSpace H]`
+instance is unused here for the same reason; both are covered by the `nolint` below.
+
 Blueprint reference: `prpstn:closure-linearity-and-sequential-description` (Part 1).
 -/
+@[nolint unusedArguments]
 theorem hasDenseDomain_closure {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (hc : T.IsClosable) : HasDenseDomain T.closure := by
   exact Dense.mono (SetLike.coe_subset_coe.mpr (T.le_closure).1) hT

@@ -274,8 +274,15 @@ automatically measurable, hence so is `E` (see `measurableSet_of_mem_L0`), and
 carrying the conjunct would make every membership proof discharge a derivable
 obligation.
 
+`[MeasurableSpace X]` is not used by the definition below, which needs only the
+topology on `X`. It is kept because it names the ambient measurable-space setting
+that the class `𝓛₀` and every downstream result about it are stated in — the same
+setting that lets the measurability conjunct above go unstated. Dropping the
+instance would make `L0 X` say less than the blueprint node it stands for.
+
 Blueprint reference: `def:L0-class`.
 -/
+@[nolint unusedArguments]
 def L0 (X : Type*) [TopologicalSpace X] [MeasurableSpace X] : Set (Set X) :=
   {E | ∃ (f : ℕ → C(X, ℝ)) (C : ℝ), (∀ n x, ‖f n x‖ ≤ C) ∧
     ∀ x, Tendsto (fun n => f n x) atTop (𝓝 (E.indicator (1 : X → ℝ) x))}
