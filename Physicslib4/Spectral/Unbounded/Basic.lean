@@ -163,6 +163,7 @@ Blueprint reference: `def:hall-9.2`.
 def IsSymmetric (T : H →ₗ.[ℂ] H) : Prop :=
   ∀ φ ψ : T.domain, ⟪(φ : H), T ψ⟫_ℂ = ⟪T φ, (ψ : H)⟫_ℂ
 
+omit [CompleteSpace H] in
 /--
 Symmetry in the sense of `IsSymmetric` is Mathlib's `LinearPMap.IsFormalAdjoint` of `T`
 with itself.
@@ -221,6 +222,7 @@ theorem hasDenseDomain_closure {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (hc : T.IsClosable) : HasDenseDomain T.closure := by
   exact Dense.mono (SetLike.coe_subset_coe.mpr (T.le_closure).1) hT
 
+omit [CompleteSpace H] in
 /--
 Sequential description of the domain of the closure: `ξ ∈ Dom(T^cl)` exactly when there
 is a sequence in `Dom(T)` converging to `ξ` whose image under `T` also converges.
@@ -252,6 +254,7 @@ theorem mem_domain_closure_iff {T : H →ₗ.[ℂ] H} (hc : T.IsClosable) (ξ : 
       exact T.mem_graph (χ n)
     exact LinearPMap.mem_domain_iff.mpr ⟨η, (key η).mpr h1⟩
 
+omit [CompleteSpace H] in
 /--
 In the situation of `mem_domain_closure_iff`, the limit of `T χ n` is `T^cl ξ`.
 
@@ -271,6 +274,7 @@ theorem closure_apply_eq_of_tendsto {T : H →ₗ.[ℂ] H} (hc : T.IsClosable) {
     exact h1
   exact T.closure.mem_graph_snd_inj (T.closure.mem_graph ⟨ξ, hξ⟩) h2 rfl
 
+omit [CompleteSpace H] in
 /--
 `T^cl` is the smallest closed extension of `T`: any closed extension of `T` is an
 extension of `T^cl`. (That `T^cl` is itself a closed extension of `T` is Mathlib's
@@ -287,6 +291,7 @@ theorem closure_le_of_isClosed {T B : H →ₗ.[ℂ] H} (hc : T.IsClosable) (hTB
       Submodule.topologicalClosure_mono (LinearPMap.le_graph_of_le hTB)
     _ = B.graph := IsClosed.submodule_topologicalClosure_eq hB
 
+omit [CompleteSpace H] in
 /--
 The closure of a symmetric closable operator is symmetric.
 

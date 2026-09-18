@@ -93,6 +93,7 @@ theorem pmapSpectrum_toPMap_top (A : H →L[ℂ] H) :
     pmapSpectrum ((A : H →ₗ[ℂ] H).toPMap ⊤) = spectrum ℂ A := by
   sorry
 
+omit [CompleteSpace H] in
 /--
 The `b²` inequality for a symmetric unbounded operator: for `λ = a + i b` with `a, b`
 real, `b² ‖ψ‖² ≤ ‖(T - λ 1) ψ‖²` for every `ψ ∈ Dom(T)`.
