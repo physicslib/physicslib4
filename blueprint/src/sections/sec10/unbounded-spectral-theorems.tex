@@ -369,12 +369,15 @@ Our first observation is that the adjoint's graph is always closed, regardless o
 
 \begin{proposition}[Closedness of the Adjoint's Graph; Closability of Symmetric Operators]
     \label{prpstn:hall-9.8}
+    \lean{Physicslib4.Spectral.Unbounded.isClosable_of_isSymmetric, LinearPMap.adjoint_isClosed}
+    \leanok
     \begin{enumerate}
         \item If $A$ is an unbounded operator on $\mathbf{H}$, then the graph of $A^*$ (which may or may not be densely defined) is closed in $\mathbf{H} \times \mathbf{H}$.
         \item A symmetric operator is always closable.
     \end{enumerate}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, lmm:characterizing-adjoint-domain-membership, def:closed-linear-map-on-a-subspace, def:hall-9.2, def:hall-9.6, prpstn:hall-9.4, prpstn:continuity-of-norm-and-inner-product, prpstn:hall-linearity-of-the-adjoint}
 \textbf{Part 1:} Suppose $\{ \psi_n \}_{n \in \mathbb{N}}$ is a sequence in $\text{Dom}(A^*)$ converging to some $\psi \in \mathbf{H}$, and suppose also that $\{ A^*\psi_n \}_{n \in \mathbb{N}}$ converges to some $\varphi \in \mathbf{H}$. By the definition of the adjoint~(\ref{def:hall-9.1}), $\left< \psi_n, A\chi \right> = \left< A^*\psi_n, \chi \right>$ for every $\chi \in \text{Dom}(A)$ and every $n$. Fix $\chi \in \text{Dom}(A)$. Applying continuity of the inner product~(\ref{prpstn:continuity-of-norm-and-inner-product}) — valid since $\psi_n \to \psi$ and $A^*\psi_n \to \varphi$ in $\mathbf{H}$ — to both sides of this equation,
 \begin{align}
@@ -389,9 +392,12 @@ Having shown that closable operators are exactly those with a well-behaved closu
 
 \begin{proposition}[The Adjoint of a Closure]
     \label{prpstn:hall-9.10}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_closure_eq_adjoint}
+    \leanok
     If $A$ is a closable operator on $\mathbf{H}$, then the adjoint of $A^{\text{cl}}$ coincides with the adjoint of $A$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, def:hall-9.6, prpstn:closure-linearity-and-sequential-description, lmm:characterizing-adjoint-domain-membership, prpstn:continuity-of-norm-and-inner-product}
 We prove $\text{Dom}\big( (A^{\text{cl}})^* \big) \subset \text{Dom}(A^*)$ and $\text{Dom}(A^*) \subset \text{Dom}\big( (A^{\text{cl}})^* \big)$ in turn, checking in each case that $A^*$ and $(A^{\text{cl}})^*$ agree.
 
@@ -408,9 +414,12 @@ The proof of the next proposition uses a general monotonicity fact about adjoint
 
 \begin{lemma}[Extension Reverses Adjoint Domains]
     \label{lmm:extension-reverses-adjoint-domains}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_le_adjoint_of_le}
+    \leanok
     If $C_1$ is an extension of $C_2$, then $\text{Dom}(C_1^*) \subset \text{Dom}(C_2^*)$, and $C_1^*$ and $C_2^*$ agree on $\text{Dom}(C_1^*)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, def:hall-9.3}
 Suppose $\phi \in \text{Dom}(C_1^*)$. By the definition of the adjoint~(\ref{def:hall-9.1}), the map $\psi \mapsto \left< \phi, C_1\psi \right>$ is bounded on $\text{Dom}(C_1)$, with some bounding constant $K$. Since $C_1$ is an extension of $C_2$, $\text{Dom}(C_2) \subset \text{Dom}(C_1)$ and $C_1 = C_2$ on $\text{Dom}(C_2)$, so the restriction of this map to $\text{Dom}(C_2)$ equals $\psi \mapsto \left< \phi, C_2\psi \right>$; being the restriction of a functional bounded on the larger set $\text{Dom}(C_1)$, it is bounded on the subset $\text{Dom}(C_2)$, with the same constant $K$. By the definition of the adjoint~(\ref{def:hall-9.1}) again, $\phi \in \text{Dom}(C_2^*)$.
 
@@ -419,9 +428,12 @@ Moreover, for such $\phi$, both $C_1^*\phi$ and $C_2^*\phi$ are, by the definiti
 
 \begin{proposition}[Uniqueness of the Self-Adjoint Extension of an Essentially Self-Adjoint Operator]
     \label{prpstn:hall-9.11}
+    \lean{Physicslib4.Spectral.Unbounded.existsUnique_isSelfAdjoint_extension, Physicslib4.Spectral.Unbounded.eq_closure_of_isSelfAdjoint_of_le}
+    \leanok
     If $A$ is essentially self-adjoint, then $A^{\text{cl}}$ is the unique self-adjoint extension of $A$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, def:hall-9.3, def:hall-9.5, def:hall-9.6, def:hall-9.7, prpstn:hall-9.8, prpstn:closure-linearity-and-sequential-description, lmm:extension-reverses-adjoint-domains}
 Suppose $B$ is a self-adjoint extension of $A$. Since $B = B^*$, Proposition~\ref{prpstn:hall-9.8} shows $B$ is closed. As $B$ is a closed extension of $A$, Part 3 of Proposition~\ref{prpstn:closure-linearity-and-sequential-description} shows it is an extension of $A^{\text{cl}}$; that is, $\text{Dom}(A^{\text{cl}}) \subset \text{Dom}(B)$.
 
@@ -440,7 +452,9 @@ We record next a description of $\text{Ker}(A^*)$ in terms of $A$ itself, genera
 
 \begin{definition}[Kernel of an Unbounded Operator]
     \label{def:kernel-of-an-unbounded-operator}
+    \lean{Physicslib4.Spectral.Unbounded.ker}
     \uses{def:hall-3.1}
+    \leanok
     If $A$ is an unbounded operator on $\mathbf{H}$, its \textit{kernel} is
     \begin{align}
         \text{Ker}(A) \equiv \{ \psi \in \text{Dom}(A) \mid A\psi = 0 \} \subset \text{Dom}(A).
@@ -450,7 +464,9 @@ We record next a description of $\text{Ker}(A^*)$ in terms of $A$ itself, genera
 
 \begin{definition}[Range of an Unbounded Operator]
     \label{def:range-of-an-unbounded-operator}
+    \lean{Physicslib4.Spectral.Unbounded.range}
     \uses{def:hall-3.1, def:orthogonal-complement}
+    \leanok
     If $A$ is an unbounded operator on $\mathbf{H}$, its \textit{range} is $\text{Range}(A) \equiv \{ A\psi \mid \psi \in \text{Dom}(A) \} \subset \mathbf{H}$. Since $\text{Dom}(A)$ is a subspace of $\mathbf{H}$ and $A$ is linear, $\text{Range}(A)$ is again a subspace of $\mathbf{H}$: it contains $0 = A0$, and for $A\psi_1, A\psi_2 \in \text{Range}(A)$ and $\alpha,\beta \in \mathbb{C}$, linearity of $A$ gives $\alpha A\psi_1 + \beta A\psi_2 = A(\alpha\psi_1+\beta\psi_2) \in \text{Range}(A)$, as $\alpha\psi_1+\beta\psi_2 \in \text{Dom}(A)$. Unwinding Definition~\ref{def:orthogonal-complement} for $V = \text{Range}(A)$: $\left( \text{Range}(A) \right)^\perp = \{ \psi \in \mathbf{H} \mid \left< \psi, A\phi \right> = 0 \text{ for all } \phi \in \text{Dom}(A) \}$ — the quantifier ranges over $\text{Dom}(A)$, not all of $\mathbf{H}$.
 \end{definition}
 
@@ -480,12 +496,15 @@ Conversely, suppose $V$ is dense, i.e. $\overline{V} = \mathbf{H}$. Let $\psi \i
 
 \begin{proposition}[Orthogonal Complement of the Range]
     \label{prpstn:hall-9.12}
+    \lean{Physicslib4.Spectral.Unbounded.orthogonal_range_eq_ker_adjoint}
+    \leanok
     If $A$ is an unbounded operator on $\mathbf{H}$, then
     \begin{align}
         \left( \text{Range}(A) \right)^\perp = \text{Ker}(A^*).
     \end{align}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, def:orthogonal-complement, lmm:characterizing-adjoint-domain-membership, def:range-of-an-unbounded-operator, def:kernel-of-an-unbounded-operator}
 We prove the two containments $\left( \text{Range}(A) \right)^\perp \subset \text{Ker}(A^*)$ and $\text{Ker}(A^*) \subset \left( \text{Range}(A) \right)^\perp$ in turn.
 
@@ -500,6 +519,8 @@ The next proposition tells us how the adjoint interacts with adding a bounded op
 
 \begin{proposition}[Adjoint of a Sum with a Bounded Operator]
     \label{prpstn:hall-9.13}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_add_toPMap, Physicslib4.Spectral.Unbounded.isSelfAdjoint_add_of_isSelfAdjoint}
+    \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$ and $B \in \mathcal{B}(\mathbf{H})$ is a bounded operator defined on all of $\mathbf{H}$. Let $A + B$ denote the operator with $\text{Dom}(A+B) = \text{Dom}(A)$, given by $(A+B)\psi = A\psi + B\psi$ for all $\psi \in \text{Dom}(A)$. Then $(A+B)^*$ has the same domain as $A^*$, and
     \begin{align}
         (A+B)^*\psi = A^*\psi + B^*\psi \quad \text{for all } \psi \in \text{Dom}(A^*).
@@ -507,6 +528,7 @@ The next proposition tells us how the adjoint interacts with adding a bounded op
     In particular, the sum of an unbounded self-adjoint operator and a bounded self-adjoint operator (defined on all of $\mathbf{H}$) is self-adjoint on the domain of the unbounded operator.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, lmm:hall-dense-testing, def:bounded-operator-notation, prpstn:hall-a.43, def:hall-3.1}
 We prove $\text{Dom}\big( (A+B)^* \big) \subset \text{Dom}(A^*)$ and $\text{Dom}(A^*) \subset \text{Dom}\big( (A+B)^* \big)$ in turn, and then the stated formula.
 
@@ -562,6 +584,8 @@ We record one more elementary fact about closed operators before turning to the 
 
 \begin{proposition}[Closedness of the Range from a Lower Bound]
     \label{prpstn:hall-9.14}
+    \lean{Physicslib4.Spectral.Unbounded.isClosed_range_subSmul}
+    \leanok
     Let $A$ be a closed operator on $\mathbf{H}$ and $\lambda \in \mathbb{C}$. Suppose there exists $\varepsilon > 0$ such that
     \begin{align}
         \varepsilon \left\| \psi \right\| \le \left\| (A - \lambda \mathbf{1})\psi \right\| \qquad \text{for all } \psi \in \text{Dom}(A).
@@ -569,6 +593,7 @@ We record one more elementary fact about closed operators before turning to the 
     Then the range of $A - \lambda \mathbf{1}$ is a closed subspace of $\mathbf{H}$. (Here $\text{Dom}(A - \lambda \mathbf{1}) \equiv \text{Dom}(A)$, as in Proposition~\ref{prpstn:hall-9.13} with $B = -\lambda \mathbf{1}$.)
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-9.6, prpstn:hall-9.13}
 Let $\{ \varphi_n \}_{n \in \mathbb{N}}$ be a sequence in $\text{Range}(A - \lambda \mathbf{1})$ converging to some $\varphi \in \mathbf{H}$; we must show $\varphi \in \text{Range}(A - \lambda \mathbf{1})$. Write $\varphi_n = (A - \lambda \mathbf{1})\psi_n$ for some sequence $\{ \psi_n \}_{n \in \mathbb{N}}$ in $\text{Dom}(A)$. Applying the hypothesis with $\psi = \psi_n - \psi_m$, and using linearity of $A - \lambda\mathbf{1}$ on $\text{Dom}(A)$,
 \begin{align}
