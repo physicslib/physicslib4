@@ -794,7 +794,9 @@ We close this section with a construction we will use directly in the proof of T
 
 \begin{definition}[Hilbert Space Direct Sum]
     \label{def:hall-a.45}
+    \lean{lp, lp.instInnerProductSpace}
     \uses{def:hall-3.1}
+    \leanok
     Suppose $\{ \mathbf{H}_j \}_{j=1}^\infty$ is a sequence of separable Hilbert spaces. Then the \textit{Hilbert space direct sum}, denoted
     \begin{align}
         \mathbf{H} \equiv \bigoplus_{j=1}^\infty \mathbf{H}_j,
@@ -818,9 +820,12 @@ The finite direct sum is dense in the full direct sum. This is used in the proof
 
 \begin{lemma}[The Finite Direct Sum is Dense]
     \label{lmm:finite-direct-sum-dense}
+    \lean{Physicslib4.Spectral.Unbounded.dense_setOf_finite_support}
+    \leanok
     Let $\{\mathbf{H}_j\}_{j}$ be a countable family of separable, complex Hilbert spaces and let $\mathbf{H} = \bigoplus_j \mathbf{H}_j$ be their direct sum, as in Definition~\ref{def:hall-a.45}. Then the finite direct sum — the set of sequences in $\mathbf{H}$ with only finitely many non-zero entries — is a dense subspace of $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-a.45}
 It is a subspace, being closed under componentwise linear combinations (a linear combination of two sequences each with finitely many non-zero entries again has finitely many). For density, let $\psi = (\psi_1,\psi_2,\ldots) \in \mathbf{H}$ and put $\psi^{(N)} \equiv (\psi_1,\ldots,\psi_N,0,0,\ldots)$, which lies in the finite direct sum. Then
 \begin{align}
@@ -835,13 +840,17 @@ The identification below is by a \textit{unitary} map, so we record that notion 
 
 \begin{definition}[Unitary Operator]
     \label{def:unitary-operator}
+    \lean{unitary, LinearIsometryEquiv, Unitary.linearIsometryEquiv}
     \uses{def:bounded-operator-notation}
+    \leanok
     An operator $U \in \mathcal{B}(\mathbf{H})$ is \textit{unitary} if it is a bijection of $\mathbf{H}$ onto $\mathbf{H}$ and preserves the inner product: $\left< U\phi, U\psi \right> = \left< \phi,\psi \right>$ for all $\phi,\psi \in \mathbf{H}$.
 \end{definition}
 
 \begin{definition}[Internal Orthogonal Decomposition]
     \label{def:internal-orthogonal-decomposition}
+    \lean{Physicslib4.Spectral.Unbounded.IsInternalOrthogonalDecomposition}
     \uses{def:orthogonal-complement}
+    \leanok
     A sequence $\{ \mathbf{K}_n \}_{n=1}^\infty$ of closed subspaces of $\mathbf{H}$ is an \textit{internal orthogonal decomposition} of $\mathbf{H}$ if
     \begin{enumerate}
         \item the subspaces are pairwise orthogonal: $\left< \eta, \zeta \right> = 0$ whenever $\eta \in \mathbf{K}_n$, $\zeta \in \mathbf{K}_m$ with $n \ne m$; and
@@ -853,6 +862,8 @@ A norm-preserving linear map automatically preserves the inner product, because 
 
 \begin{proposition}[Polarization Identity for the Inner Product]
     \label{prpstn:polarization-identity}
+    \lean{inner_eq_sum_norm_sq_div_four, LinearMap.norm_map_iff_inner_map_map}
+    \leanok
     For all $\phi,\psi \in \mathbf{H}$,
     \begin{align}
         \left< \phi, \psi \right> = \frac{1}{4}\Big( \left\| \phi+\psi \right\|^2 - \left\| \phi-\psi \right\|^2 \Big) - \frac{i}{4}\Big( \left\| \phi+i\psi \right\|^2 - \left\| \phi-i\psi \right\|^2 \Big).
@@ -860,6 +871,7 @@ A norm-preserving linear map automatically preserves the inner product, because 
     Consequently, if $T : \mathbf{H} \to \mathbf{H}$ is linear and norm-preserving, then $T$ preserves the inner product: $\left< T\phi, T\psi \right> = \left< \phi,\psi \right>$ for all $\phi,\psi$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:induced-norm, prpstn:hall-a.59}
 The inner product $\left< \cdot, \cdot \right>$ is itself a sesquilinear form on $\mathbf{H}$, so Proposition~\ref{prpstn:hall-a.59} applies to it with $L = \left< \cdot, \cdot \right>$, giving
 \begin{align}
@@ -877,6 +889,8 @@ For the consequence, suppose $T$ is linear with $\left\| T\chi \right\| = \left\
 
 \begin{lemma}[Internal Decompositions are Unitarily External Direct Sums]
     \label{lmm:internal-decomposition-unitary}
+    \lean{Physicslib4.Spectral.Unbounded.hasSum_injective_of_isInternalOrthogonalDecomposition, Physicslib4.Spectral.Unbounded.hasSum_norm_sq_of_isInternalOrthogonalDecomposition, Physicslib4.Spectral.Unbounded.isHilbertSum_of_isInternalOrthogonalDecomposition}
+    \leanok
     Suppose $\{ \mathbf{K}_n \}_{n=1}^\infty$ is an internal orthogonal decomposition of $\mathbf{H}$, with each $\mathbf{K}_n$ separable. Then:
     \begin{enumerate}
         \item The decomposition in Part 2 of Definition~\ref{def:internal-orthogonal-decomposition} is unique: if $\sum_n \psi_n = \sum_n \psi_n'$ with $\psi_n, \psi_n' \in \mathbf{K}_n$ (both series norm-convergent), then $\psi_n = \psi_n'$ for every $n$.
@@ -885,6 +899,7 @@ For the consequence, suppose $T$ is linear with $\left\| T\chi \right\| = \left\
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:internal-orthogonal-decomposition, def:hall-a.45, prpstn:continuity-of-norm-and-inner-product, def:unitary-operator}
 \textbf{Part 2 first.} Let $\psi = \sum_n \psi_n$ with $\psi_n \in \mathbf{K}_n$, and write $\psi^{(N)} \equiv \sum_{n=1}^N \psi_n$, so $\psi^{(N)} \to \psi$ in norm. By pairwise orthogonality (Part 1 of the definition), expanding the finite sum,
 \begin{align}
@@ -918,6 +933,8 @@ With the identification in hand, we can restate Proposition~\ref{prpstn:hall-9.2
 
 \begin{proposition}[Direct Sums of Bounded Self-Adjoint Operators]
     \label{prpstn:hall-9.26}
+    \lean{Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isDirectSumOperator, Physicslib4.Spectral.Unbounded.domain_closure_eq_directSumDomain, Physicslib4.Spectral.Unbounded.domain_adjoint_eq_directSumDomain, Physicslib4.Spectral.Unbounded.closure_apply_eq_of_isDirectSumOperator, Physicslib4.Spectral.Unbounded.adjoint_apply_eq_of_isDirectSumOperator, Physicslib4.Spectral.Unbounded.directSumDomain, Physicslib4.Spectral.Unbounded.IsDirectSumOperator}
+    \leanok
     % Hall states this as Example 9.26; we record it as a proposition and prove it.
     Suppose $\mathbf{H}$ is a Hilbert space direct sum of a sequence of separable Hilbert spaces $\mathbf{H}_j$:
     \begin{align}
@@ -934,6 +951,7 @@ With the identification in hand, we can restate Proposition~\ref{prpstn:hall-9.2
     for all $\psi = (\psi_1, \psi_2, \ldots) \in V$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-a.45, def:hall-9.1, def:hall-9.2, def:hall-9.3, def:hall-9.5, def:hall-9.6, def:hall-9.7, def:hall-9.16, prpstn:hall-9.4, prpstn:hall-9.10, prpstn:hall-9.11, prpstn:closure-linearity-and-sequential-description, thrm:hall-9.21, prpstn:hall-7.7, prpstn:hall-a.43, lmm:finite-direct-sum-dense, def:hall-3.1, prpstn:convergence-facts}
 \textbf{Part 1: $A$ is essentially self-adjoint.} Fix $j$. We claim $A_j \mp i\mathbf{1}$ maps $\mathbf{H}_j$ onto $\mathbf{H}_j$.
 
@@ -996,6 +1014,8 @@ We now record the internal-form version promised above.
 
 \begin{proposition}[Direct Sums of Bounded Self-Adjoint Operators, Internal Form]
     \label{prpstn:hall-9.26-internal}
+    \lean{Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isInternalDirectSumOperator, Physicslib4.Spectral.Unbounded.domain_closure_eq_internalDomain, Physicslib4.Spectral.Unbounded.domain_adjoint_eq_internalDomain, Physicslib4.Spectral.Unbounded.hasSum_closure_apply_of_isInternalDirectSumOperator, Physicslib4.Spectral.Unbounded.hasSum_adjoint_apply_of_isInternalDirectSumOperator, Physicslib4.Spectral.Unbounded.internalDomain, Physicslib4.Spectral.Unbounded.IsInternalDirectSumOperator}
+    \leanok
     Suppose $\{ \mathbf{K}_n \}_{n=1}^\infty$ is an internal orthogonal decomposition of $\mathbf{H}$ into separable closed subspaces, and $A_n$ is a bounded, self-adjoint operator on $\mathbf{K}_n$ for each $n$. Define
     \begin{align}
         V \equiv \left\{ \psi \in \mathbf{H} \;\middle|\; \sum_{n=1}^\infty \left( \left\| \psi_n \right\|^2 + \left\| A_n \psi_n \right\|^2 \right) < \infty \right\},
@@ -1007,6 +1027,7 @@ We now record the internal-form version promised above.
     for all $\psi \in V$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-9.26, lmm:internal-decomposition-unitary, def:internal-orthogonal-decomposition, def:hall-9.2, def:hall-9.5, def:hall-9.7, def:hall-9.1, def:unitary-operator, def:hall-3.1, prpstn:hall-9.10}
 Let $U : \mathbf{H} \to \bigoplus_n \mathbf{K}_n$ be the unitary map of Part 3 of Lemma~\ref{lmm:internal-decomposition-unitary}, $U\psi = (\psi_1,\psi_2,\ldots)$. Write $\widetilde{\mathbf{H}} \equiv \bigoplus_n \mathbf{K}_n$ for the external direct sum, and define $\widetilde{A} \equiv UAU^{-1}$, an operator on $\widetilde{\mathbf{H}}$ with $\text{Dom}(\widetilde{A}) = U\big(\text{Dom}(A)\big)$. This is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}: it is linear, being a composition of linear maps, and its domain is dense, since $U$ is a surjective isometry — hence a homeomorphism — and $\text{Dom}(A)$ is dense in $\mathbf{H}$, so its image under $U$ is dense in $\widetilde{\mathbf{H}}$.
 
