@@ -1059,6 +1059,8 @@ The associated measures are finite, with total mass determined by $\psi$. Sectio
 
 \begin{lemma}[The Associated Measure has Total Mass $\left\| \psi \right\|^2$]
     \label{lmm:associated-measure-total-mass}
+    \lean{Physicslib4.Spectral.Unbounded.assoc_univ_eq, Physicslib4.Spectral.Unbounded.assoc_le_norm_sq}
+    \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$ and $\psi \in \mathbf{H}$. Then
     \begin{align}
         \mu_\psi(X) = \left\| \psi \right\|^2 < \infty;
@@ -1066,6 +1068,7 @@ The associated measures are finite, with total mass determined by $\psi$. Sectio
     in particular $\mu_\psi$ is a finite measure, and $\mu_\psi(E) \le \left\| \psi \right\|^2$ for every $E \in \Omega(X)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:projection-valued-measures-associated-measure, def:projection-valued-measure, def:identity-operator, conv:section-integration}
 By the definition of $\mu_\psi$ and property 2 of the definition of a projection-valued measure~(\ref{def:projection-valued-measure}), which gives $\mu(X) = \mathbf{1}$,
 \begin{align}
@@ -1076,12 +1079,15 @@ finite since $\psi \in \mathbf{H}$. The final claim follows since $\mu_\psi$ is 
 
 \begin{lemma}[Norm Identity for the Bounded Integral]
     \label{lmm:norm-identity-bounded-integral}
+    \lean{Physicslib4.Spectral.Unbounded.norm_sq_integral_apply}
+    \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$ and let $f : X \to \mathbb{C}$ be bounded and measurable. Then for every $\psi \in \mathbf{H}$,
     \begin{align}
         \left\| \left( \int_X f \, d\mu \right) \psi \right\|^2 = \int_X \lvert f \rvert^2 \, d\mu_\psi.
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:integral-conjugation, prpstn:integral-multiplicative, conv:section-integration, thrm:operator-valued-integration, thrm:projection-valued-measures-associated-measure, def:hall-9.1}
 Combining multiplicativity of the integral with the fact that integration intertwines complex conjugation and the adjoint — Proposition~\ref{prpstn:integral-multiplicative} and Proposition~\ref{prpstn:integral-conjugation} — and using the definition of the adjoint~(\ref{def:hall-9.1}) for the first equality,
 \begin{align}
@@ -1097,13 +1103,17 @@ If $f$ is \textit{unbounded}, this identity suggests defining the domain of $\in
 
 \begin{definition}[Sesquilinear Form on a Subspace]
     \label{def:hall-sesquilinear-form-on-a-subspace}
+    \lean{Physicslib4.Spectral.Unbounded.SesquilinearFormOn}
     \uses{conv:section-integration, def:bounded-sesquilinear-form}
+    \leanok
     Let $D$ be a subspace of $\mathbf{H}$. A \textit{sesquilinear form on $D$} is a map $L : D \times D \to \mathbb{C}$ that is conjugate-linear in its first argument and linear in its second argument. As with quadratic forms below, taking $D = \mathbf{H}$ recovers Section~\ref{sctn:spectral-theorems}'s definition of a sesquilinear form~(\ref{def:bounded-sesquilinear-form}), and taking $D$ a closed subspace recovers that definition on the Hilbert space $D$.
 \end{definition}
 
 \begin{definition}[Quadratic Form on a Subspace]
     \label{def:hall-quadratic-form-on-a-subspace}
+    \lean{Physicslib4.Spectral.Unbounded.IsQuadraticFormOn, Physicslib4.Spectral.Unbounded.polarizationOn, Physicslib4.Spectral.Unbounded.IsBoundedQuadraticFormOn}
     \uses{conv:section-integration, def:hall-sesquilinear-form-on-a-subspace, def:bounded-quadratic-form, prpstn:hall-a.61, prpstn:hall-a.63}
+    \leanok
     Let $D$ be a subspace of $\mathbf{H}$. A \textit{quadratic form on $D$} is a map $Q : D \to \mathbb{C}$ with the following properties:
     \begin{enumerate}
         \item $Q(\lambda\psi) = \lvert \lambda \rvert^2 Q(\psi)$ for all $\psi \in D$ and $\lambda \in \mathbb{C}$.
@@ -1123,6 +1133,8 @@ Two elementary facts about quadratic forms on a subspace, generalizing Propositi
 
 \begin{proposition}[Properties of Quadratic Forms on a Subspace]
     \label{prpstn:quadratic-forms-on-a-subspace-properties}
+    \lean{Physicslib4.Spectral.Unbounded.polarizationOn_eq_inner, Physicslib4.Spectral.Unbounded.polarizationOn_conj_symm}
+    \leanok
     Let $D$ be a subspace of $\mathbf{H}$, let $Q$ be a quadratic form on $D$, and let $L$ be its associated sesquilinear form.
     \begin{enumerate}
         \item If $T : D \to \mathbf{H}$ is linear and $Q(\psi) = \left< \psi, T\psi \right>$ for all $\psi \in D$, then $L(\phi, \psi) = \left< \phi, T\psi \right>$ for all $\phi, \psi \in D$.
@@ -1130,6 +1142,7 @@ Two elementary facts about quadratic forms on a subspace, generalizing Propositi
     \end{enumerate}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, def:hall-quadratic-form-on-a-subspace}
 \textbf{Part 1.} Fix $\phi, \psi \in D$; since $D$ is a subspace, $\phi + \psi, \phi + i\psi, i\psi \in D$ as well, so $T$ and $Q$ are defined at each. Expanding $Q(\phi+\psi) = \left< \phi+\psi, T(\phi+\psi) \right>$ using linearity of $T$ and of the inner product in its second argument, and additivity in its first,
 \begin{align}
@@ -1172,9 +1185,12 @@ Since our forms are now defined on arbitrary subspaces, restriction to a smaller
 
 \begin{lemma}[Restriction of a Quadratic Form to a Subspace]
     \label{lmm:restriction-of-quadratic-form}
+    \lean{Physicslib4.Spectral.Unbounded.isQuadraticFormOn_restrict, Physicslib4.Spectral.Unbounded.polarizationOn_restrict}
+    \leanok
     Let $D' \subset D$ be subspaces of $\mathbf{H}$ and $Q$ a quadratic form on $D$. Then $Q\vert_{D'}$ is a quadratic form on $D'$, and its associated sesquilinear form is the restriction to $D' \times D'$ of the sesquilinear form associated to $Q$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, def:hall-quadratic-form-on-a-subspace}
 Property 1 of the definition of a quadratic form~(\ref{def:hall-quadratic-form-on-a-subspace}) is inherited immediately: for $\psi \in D' \subset D$ and $\lambda \in \mathbb{C}$, $\lambda\psi \in D'$ ($D'$ being a subspace) and $Q(\lambda\psi) = \lvert\lambda\rvert^2 Q(\psi)$ holds because it holds in $D$. For property 2, note that the polarization formula defining the associated form involves only the values of $Q$ at $\phi+\psi$, $\phi$, $\psi$, $\phi+i\psi$, $i\psi$, all of which lie in $D'$ when $\phi,\psi \in D'$ ($D'$ being a subspace); so the form associated to $Q\vert_{D'}$ is given by the same formula with the same values, i.e. is the restriction $L\vert_{D'\times D'}$ of the form $L$ associated to $Q$. A restriction of a map that is conjugate-linear in its first and linear in its second argument, to a product of subspaces, retains those properties; so $L\vert_{D'\times D'}$ is a sesquilinear form on $D'$, verifying property 2.
 \end{proof}
@@ -1183,7 +1199,9 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
 
 \begin{theorem}[Monotone Convergence Theorem, for Integrals]
     \label{thrm:monotone-convergence-theorem-for-integrals}
+    \lean{MeasureTheory.lintegral_tendsto_of_tendsto_of_monotone, MeasureTheory.lintegral_iSup}
     \uses{conv:section-integration}
+    \leanok
     Let $(X, \Omega, \nu)$ be a measure space, and let $\{ g_n \}_{n \in \mathbb{N}}$ be a sequence of nonnegative measurable functions on $X$ with $g_n(x) \le g_{n+1}(x)$ for all $x \in X$ and all $n$, converging pointwise to a function $g$. Then
     \begin{align}
         \int_X g_n \, d\nu \longrightarrow \int_X g \, d\nu
@@ -1193,13 +1211,17 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
 
 \begin{theorem}[Dominated Convergence Theorem]
     \label{thrm:dominated-convergence-theorem}
+    \lean{MeasureTheory.tendsto_integral_of_dominated_convergence, MeasureTheory.Integrable.mono', aestronglyMeasurable_of_tendsto_ae}
     \uses{conv:section-integration}
+    \leanok
     Let $(X,\Omega,\nu)$ be a measure space and $\{g_n\}$ measurable complex-valued functions on $X$ converging pointwise to $g$, with $\lvert g_n \rvert \le G$ for all $n$ and some $\nu$-integrable $G$. Then $g$ and each $g_n$ are $\nu$-integrable and $\int_X g_n \, d\nu \to \int_X g \, d\nu$.
 \end{theorem}
 
 \begin{proposition}[Linearity of the Integral in the Measure]
     \label{prpstn:additivity-of-the-integral-in-the-measure}
+    \lean{MeasureTheory.lintegral_add_measure, MeasureTheory.lintegral_smul_measure, MeasureTheory.integral_add_measure, MeasureTheory.integral_smul_measure}
     \uses{conv:section-integration}
+    \leanok
     Let $\nu, \nu'$ be measures on $(X,\Omega)$, let $c \ge 0$ be a real constant, and let $\nu + \nu'$ and $c\nu$ denote the measures $E \mapsto \nu(E)+\nu'(E)$ and $E \mapsto c\,\nu(E)$ respectively. Then for every nonnegative measurable $g$ on $X$,
     \begin{align}
         \int_X g \, d(\nu + \nu') = \int_X g \, d\nu + \int_X g \, d\nu'
@@ -1211,13 +1233,17 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
 
 \begin{proposition}[Monotonicity of the Integral in the Measure]
     \label{prpstn:monotonicity-of-the-integral-in-the-measure}
+    \lean{MeasureTheory.lintegral_mono', MeasureTheory.Measure.le_iff}
     \uses{conv:section-integration}
+    \leanok
     Let $\nu, \nu'$ be measures on $(X, \Omega)$ with $\nu(E) \le \nu'(E)$ for every $E \in \Omega$. Then $\int_X g \, d\nu \le \int_X g \, d\nu'$ for every nonnegative measurable $g$ on $X$.
 \end{proposition}
 
 \begin{definition}[$L^2$ of a Measure Space]
     \label{def:hall-a.46}
+    \lean{MeasureTheory.MemLp, MeasureTheory.eLpNorm, MeasureTheory.Lp, MeasureTheory.L2.innerProductSpace}
     \uses{conv:section-integration}
+    \leanok
     Let $(X,\Omega,\mu)$ be a measure space and $p \in \{1,2\}$. Write
     \begin{align}
         \mathcal{L}^p(X,\mu) \equiv \left\{ f : X \to \mathbb{C} \;\middle|\; f \text{ measurable and } \int_X \lvert f \rvert^p \, d\mu < \infty \right\},
@@ -1237,7 +1263,9 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
 
 \begin{proposition}[Countable Additivity of the Integral over a Disjoint Cover]
     \label{prpstn:countable-additivity-of-the-integral}
+    \lean{MeasureTheory.lintegral_iUnion, MeasureTheory.setLIntegral_univ}
     \uses{conv:section-integration, prpstn:basic-integral-properties}
+    \leanok
     Let $(X,\Omega,\nu)$ be a measure space, $g$ a nonnegative measurable function on $X$, and $\{ E_n \}_{n=1}^\infty$ a pairwise disjoint sequence in $\Omega$ with $\bigcup_n E_n = X$. Then
     \begin{align}
         \int_X g \, d\nu = \sum_{n=1}^\infty \int_{E_n} g \, d\nu
@@ -1247,17 +1275,25 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
 
 \begin{proposition}[Integrals Agree when Measures Agree on a Set]
     \label{prpstn:integrals-agree-when-measures-agree}
+    \lean{Physicslib4.Spectral.Unbounded.setLIntegral_congr_measure}
     \uses{conv:section-integration, prpstn:basic-integral-properties}
+    \leanok
     Let $\nu, \nu'$ be measures on $(X,\Omega)$ and $E \in \Omega$, and suppose $\nu(S) = \nu'(S)$ for every measurable $S \subset E$. Then $\int_E g \, d\nu = \int_E g \, d\nu'$ for every nonnegative measurable $g$ on $X$.
 \end{proposition}
+\begin{proof}
+\leanok
+\end{proof}
 
 We record two more facts about projection-valued measures before the main proof, both used more than once below; extracting them now avoids re-deriving them, or worse, citing "the same argument as" a proof written for a different purpose. First, though, a fact about a single projection, used at several places to know that ranges of projections are closed subspaces.
 
 \begin{lemma}[The Range of a Projection is the Kernel of its Complement]
     \label{lmm:range-of-projection-is-kernel}
+    \lean{Physicslib4.Spectral.Unbounded.range_eq_ker_one_sub, Physicslib4.Spectral.Unbounded.mem_range_iff_apply_eq, Physicslib4.Spectral.Unbounded.isClosed_range_of_isStarProjection}
+    \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$ be a bounded orthogonal projection. Then $\text{Range}(P) = \text{Ker}(\mathbf{1} - P)$, and this is a closed subspace of $\mathbf{H}$. Moreover $\eta \in \text{Range}(P)$ if and only if $P\eta = \eta$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:section-integration, def:bounded-orthogonal-projection}
 If $\eta \in \text{Range}(P)$, write $\eta = P\xi$; idempotency of $P$ (part of being a bounded orthogonal projection~(\ref{def:bounded-orthogonal-projection})) gives $P\eta = P^2\xi = P\xi = \eta$, so $(\mathbf{1}-P)\eta = 0$, i.e. $\eta \in \text{Ker}(\mathbf{1}-P)$. Conversely, if $(\mathbf{1}-P)\eta = 0$ then $\eta = P\eta \in \text{Range}(P)$. This proves both the set equality and the final characterization ($\eta \in \text{Range}(P)$ iff $P\eta = \eta$, the two conditions $P\eta=\eta$ and $(\mathbf{1}-P)\eta=0$ being the same equation).
 
@@ -1268,6 +1304,8 @@ Closed subspaces recur as Hilbert spaces in their own right — the whole develo
 
 \begin{lemma}[A Closed Subspace is a Separable Hilbert Space]
     \label{lmm:closed-subspace-is-hilbert}
+    \lean{IsClosed.completeSpace_coe, Submodule.innerProductSpace, Submodule.coe_norm, TopologicalSpace.IsSeparable.of_separableSpace, TopologicalSpace.IsSeparable.separableSpace}
+    \leanok
     Let $V$ be a closed subspace of $\mathbf{H}$. Then $V$, with the inner product inherited from $\mathbf{H}$, is itself a separable, complex Hilbert space, and its norm is the restriction of the norm of $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -1277,12 +1315,15 @@ The inner-product axioms hold on $V$ because they hold on $\mathbf{H}$ and $V \s
 
 \begin{lemma}[Range Membership Concentrates the Associated Measure]
     \label{lmm:range-membership-concentrates-measure}
+    \lean{Physicslib4.Spectral.Unbounded.assoc_compl_eq_zero, Physicslib4.Spectral.Unbounded.lintegral_assoc_eq_setLIntegral}
+    \leanok
     Suppose $\mu$ is a projection-valued measure on $(X,\Omega(X))$ and $\eta \in \text{Range}(\mu(E))$ for some $E \in \Omega(X)$. Then $\mu_\eta(E^c) = 0$. Consequently, for any nonnegative measurable $g$ on $X$,
     \begin{align}
         \int_X g \, d\mu_\eta = \int_E g \, d\mu_\eta.
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, lmm:range-of-projection-is-kernel, def:projection-valued-measure, thrm:projection-valued-measures-associated-measure, def:bounded-orthogonal-projection, prpstn:basic-integral-properties}
 By Lemma~\ref{lmm:range-of-projection-is-kernel}, applied to the bounded orthogonal projection $\mu(E)$ (property 1 of the definition of a projection-valued measure~(\ref{def:projection-valued-measure})), $\eta \in \text{Range}(\mu(E))$ gives $\mu(E)\eta = \eta$. Hence, using property 4 of that definition together with $E^c \cap E = \emptyset$, and then property 2 ($\mu(\emptyset) = 0$),
 \begin{align}
@@ -1297,6 +1338,8 @@ For the consequence: since $g \ge 0$ and the measure of $E^c$ under $\mu_\eta$ i
 
 \begin{lemma}[Norm-Convergent Decomposition over a Disjoint Cover]
     \label{lmm:norm-convergent-decomposition}
+    \lean{Physicslib4.Spectral.Unbounded.hasSum_apply_of_partition, Physicslib4.Spectral.Unbounded.apply_biUnion_eq_sum}
+    \leanok
     Suppose $\mu$ is a projection-valued measure on $(X,\Omega(X))$, and $\{F_n\}_{n\in\mathbb{N}}$ is a pairwise disjoint sequence in $\Omega(X)$ with $\bigcup_n F_n = X$. Then for every $\psi \in \mathbf{H}$:
     \begin{enumerate}
         \item $\psi = \sum_{n=1}^\infty \mu(F_n)\psi$, convergent in the norm topology on $\mathbf{H}$.
@@ -1304,6 +1347,7 @@ For the consequence: since $g \ge 0$ and the measure of $E^c$ under $\mu_\eta$ i
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:section-integration, def:projection-valued-measure}
 \textbf{Part 1.} Property 3 of the definition of a projection-valued measure~(\ref{def:projection-valued-measure}), applied to the pairwise disjoint sequence $F_1, F_2, \ldots$, gives $\mu(X)\psi = \sum_{n=1}^\infty \mu(F_n)\psi$, convergent in norm; since $\mu(X) = \mathbf{1}$ (property 2 of the same definition), this reads $\psi = \sum_{n=1}^\infty \mu(F_n)\psi$.
 
@@ -1314,6 +1358,8 @@ One more standard fact is needed before we can even state that $Q_f(\psi) \equiv
 
 \begin{lemma}[$L^2$ Implies $L^1$ on a Finite Measure Space]
     \label{lmm:l2-implies-l1}
+    \lean{MeasureTheory.MemLp.integrable, MeasureTheory.eLpNorm_le_eLpNorm_mul_rpow_measure_univ}
+    \leanok
     Suppose $\nu$ is a finite measure on $(X,\Omega)$ and $h \in L^2(X,\nu)$. Then $h \in L^1(X,\nu)$, with $\int_X \lvert h \rvert \, d\nu \le \nu(X)^{1/2} \left( \int_X \lvert h \rvert^2 \, d\nu \right)^{1/2}$.
 \end{lemma}
 \begin{proof}
@@ -1331,6 +1377,8 @@ We can now state and prove the central technical result of this section. It is t
 
 \begin{proposition}[Properties of the Integral against a Projection-Valued Measure]
     \label{prpstn:hall-10.2}
+    \lean{Physicslib4.Spectral.Unbounded.integralDomain, Physicslib4.Spectral.Unbounded.integralForm, Physicslib4.Spectral.Unbounded.dense_integralDomain, Physicslib4.Spectral.Unbounded.isQuadraticFormOn_integralForm, Physicslib4.Spectral.Unbounded.norm_polarizationOn_integralForm_le, Physicslib4.Spectral.Unbounded.existsUnique_repr_integralForm, Physicslib4.Spectral.Unbounded.pmapIntegral, Physicslib4.Spectral.Unbounded.norm_sq_pmapIntegral}
+    \leanok
     Let $\mu$ be a projection-valued measure on $(X, \Omega(X))$ with values in $\mathcal{B}(\mathbf{H})$, and let $f : X \to \mathbb{C}$ be a measurable function, not necessarily bounded (but everywhere finite-valued, since its values lie in $\mathbb{C}$ — this is used below, where the sets $\{ \lvert f \rvert < n \}$ are required to exhaust $X$). Let
     \begin{align}
         W_f \equiv \left\{ \psi \in \mathbf{H} \;\middle|\; \int_X \lvert f \rvert^2 \, d\mu_\psi < \infty \right\}.
@@ -1350,6 +1398,7 @@ We can now state and prove the central technical result of this section. It is t
     \end{enumerate}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:indicator-function, conv:section-integration, def:hall-quadratic-form-on-a-subspace, def:bounded-orthogonal-projection, thrm:projection-valued-measures-associated-measure, thrm:operator-valued-integration, thrm:monotone-convergence-theorem-for-integrals, prpstn:monotonicity-of-the-integral-in-the-measure, def:hall-a.46, lmm:l2-implies-l1, thrm:hall-a.52, prpstn:hall-a.43, thrm:bounded-linear-transformation-theorem, lmm:hall-dense-testing-second-slot, prpstn:hall-a.62, def:projection-valued-measure, prpstn:continuity-of-norm-and-inner-product, lmm:range-membership-concentrates-measure, lmm:norm-convergent-decomposition, lmm:norm-identity-bounded-integral, lmm:associated-measure-total-mass, def:hall-9.1, prpstn:quadratic-forms-on-a-subspace-properties, prpstn:basic-integral-properties, prpstn:additivity-of-the-integral-in-the-measure}
 Before checking any properties of $Q_f$, we note it is well defined: for $\psi \in W_f$, $\mu_\psi$ is a finite measure with $\mu_\psi(X) = \left\| \psi \right\|^2 < \infty$, by Lemma~\ref{lmm:associated-measure-total-mass}, and $f \in L^2(X,\mu_\psi)$ (this is exactly the membership condition defining $W_f$), so Lemma~\ref{lmm:l2-implies-l1} gives $f \in L^1(X,\mu_\psi)$. Hence $Q_f(\psi) = \int_X f \, d\mu_\psi$ is a well-defined (finite) complex number for every $\psi \in W_f$, as required for $Q_f$ to be a map $W_f \to \mathbb{C}$ at all.
 
@@ -1442,9 +1491,12 @@ The proof of Part 1 above showed, along the way, that $\text{Range}(\mu(E_n)) \s
 
 \begin{lemma}[Bounded on a Set Implies the Range Lies in the Domain]
     \label{lmm:bounded-on-set-range-in-domain}
+    \lean{Physicslib4.Spectral.Unbounded.range_subset_integralDomain, Physicslib4.Spectral.Unbounded.integral_norm_sq_le_of_mem_range}
+    \leanok
     Suppose $\mu$ is a projection-valued measure on $(X,\Omega(X))$, $f : X \to \mathbb{C}$ is measurable, and $E \in \Omega(X)$ is a set on which $f$ is bounded, say $\lvert f \rvert \le c$ on $E$. Then $\text{Range}(\mu(E)) \subset W_f$, and indeed $\int_X \lvert f \rvert^2\,d\mu_\eta \le c^2 \left\| \eta \right\|^2$ for every $\eta \in \text{Range}(\mu(E))$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:section-integration, lmm:range-membership-concentrates-measure, prpstn:hall-10.2, lmm:associated-measure-total-mass, def:projection-valued-measure, prpstn:basic-integral-properties}
 Let $\eta \in \text{Range}(\mu(E))$. By Lemma~\ref{lmm:range-membership-concentrates-measure}, $\int_X \lvert f \rvert^2 \, d\mu_\eta = \int_E \lvert f \rvert^2 \, d\mu_\eta$. Since $\lvert f \rvert \le c$ on $E$,
 \begin{align}
@@ -1457,6 +1509,8 @@ With \textbf{Proposition} \textit{(hall-10.2)} established, we can now give the 
 
 \begin{proposition}[The Integral against a Projection-Valued Measure]
     \label{prpstn:hall-10.1}
+    \lean{Physicslib4.Spectral.Unbounded.pmapIntegral, Physicslib4.Spectral.Unbounded.integralApply, Physicslib4.Spectral.Unbounded.inner_pmapIntegral, Physicslib4.Spectral.Unbounded.inner_self_pmapIntegral, Physicslib4.Spectral.Unbounded.norm_sq_pmapIntegral, Physicslib4.Spectral.Unbounded.eq_pmapIntegral_of_inner_self}
+    \leanok
     Suppose $\mu$ is a projection-valued measure on $(X, \Omega(X))$ with values in $\mathcal{B}(\mathbf{H})$ and $f : X \to \mathbb{C}$ is a measurable function, not necessarily bounded. Let $W_f$, $Q_f$, and $L_f$ be as in Proposition~\ref{prpstn:hall-10.2}. Then there exists a unique unbounded operator on $\mathbf{H}$, with domain $W_f$ — which we denote by $\int_X f \, d\mu$ — with the property that
     \begin{align}
         \left< \phi, \left( \int_X f \, d\mu \right) \psi \right> = L_f(\phi, \psi)
@@ -1476,6 +1530,7 @@ With \textbf{Proposition} \textit{(hall-10.2)} established, we can now give the 
     then $A = \int_X f \, d\mu$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, prpstn:hall-10.2, prpstn:quadratic-forms-on-a-subspace-properties, lmm:hall-dense-testing-second-slot, def:hall-quadratic-form-on-a-subspace}
 For $\psi \in W_f$, define $\left( \int_X f \, d\mu \right) \psi \equiv \chi_\psi$, the vector supplied by Part 3 of Proposition~\ref{prpstn:hall-10.2}, satisfying $L_f(\phi, \psi) = \left< \phi, \chi_\psi \right>$ for all $\phi \in W_f$ — this is exactly the off-diagonal identity claimed. Part 3 shows this assignment is linear in $\psi$, so it defines an unbounded operator on $\mathbf{H}$ with domain $W_f$, which is dense by Part 1.
 
@@ -1494,9 +1549,12 @@ The next proposition records a natural compatibility check, confirming that Prop
 
 \begin{proposition}[Coincidence with the Bounded Integral]
     \label{prpstn:coincidence-with-the-bounded-integral}
+    \lean{Physicslib4.Spectral.Unbounded.integralDomain_eq_top_of_bddMeasurable, Physicslib4.Spectral.Unbounded.pmapIntegral_of_bddMeasurable}
+    \leanok
     If $f$ is bounded, then $W_f = \mathbf{H}$, and the operator $\int_X f \, d\mu$ of Proposition~\ref{prpstn:hall-10.1} coincides with the bounded integral~(\ref{thrm:operator-valued-integration}) $\int_X f \, d\mu \in \mathcal{B}(\mathbf{H})$ of Section~\ref{sctn:spectral-theorems}.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, prpstn:hall-10.1, thrm:operator-valued-integration}
 If $f$ is bounded, $\mu_\psi$ is a finite measure for every $\psi$ (as always), so $\int_X \lvert f \rvert^2 \, d\mu_\psi < \infty$ automatically and $W_f = \mathbf{H}$. Let $A_2$ denote the bounded integral~(\ref{thrm:operator-valued-integration}) of Section~\ref{sctn:spectral-theorems}, an element of $\mathcal{B}(\mathbf{H})$, so in particular an unbounded operator on $\mathbf{H}$ with domain $\mathbf{H} = W_f$. Its defining property is exactly $\left< \psi, A_2\psi \right> = \int_X f \, d\mu_\psi$ for all $\psi \in \mathbf{H}$ — that is, $A_2$ satisfies the diagonal identity of the strengthened uniqueness clause of Proposition~\ref{prpstn:hall-10.1}. That clause therefore gives $A_2 = \int_X f \, d\mu$ directly, which is the claim.
 \end{proof}
@@ -1505,9 +1563,12 @@ The integral is insensitive to changing the integrand on a set the projection-va
 
 \begin{lemma}[The Integral Ignores Null Sets]
     \label{lmm:integral-ignores-null-sets}
+    \lean{Physicslib4.Spectral.Unbounded.integralDomain_congr_of_null, Physicslib4.Spectral.Unbounded.pmapIntegral_congr_of_null}
+    \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$ and let $f, g : X \to \mathbb{C}$ be measurable functions agreeing off a set $N \in \Omega(X)$ with $\mu(N) = 0$. Then $W_f = W_g$ and $\int_X f \, d\mu = \int_X g \, d\mu$ (as operators, with equal domains).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, prpstn:hall-10.1, prpstn:hall-10.2, thrm:projection-valued-measures-associated-measure}
 Since $\mu(N) = 0$, $\mu_\psi(N) = \left< \psi, \mu(N)\psi \right> = 0$ for every $\psi \in \mathbf{H}$; that is, $N$ is $\mu_\psi$-null for every $\psi$. Two measurable functions agreeing off a $\nu$-null set have the same $\nu$-integral whenever either is defined, and the same is true of their moduli squared. Hence, for every $\psi$,
 \begin{align}
@@ -1520,6 +1581,8 @@ Two further facts about the unbounded integral will be needed when we come to th
 
 \begin{lemma}[Truncations Converge to the Unbounded Integral]
     \label{lmm:truncations-converge}
+    \lean{Physicslib4.Spectral.Unbounded.tendsto_integral_truncation}
+    \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$, let $f : X \to \mathbb{C}$ be measurable, and let $\psi \in W_f$. Put $E_n \equiv \{ x \in X \mid \lvert f(x) \rvert < n \}$ and $f_n \equiv f\cdot 1_{E_n}$, a bounded measurable function. Then
     \begin{align}
         \left( \int_X f_n \, d\mu \right)\psi \longrightarrow \left( \int_X f \, d\mu \right)\psi
@@ -1527,6 +1590,7 @@ Two further facts about the unbounded integral will be needed when we come to th
     in the norm of $\mathbf{H}$ as $n \to \infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:indicator-function, conv:section-integration, prpstn:hall-10.1, prpstn:quadratic-forms-on-a-subspace-properties, thrm:dominated-convergence-theorem, lmm:l2-implies-l1, def:hall-quadratic-form-on-a-subspace, prpstn:hall-10.2, lmm:hall-dense-testing-second-slot, thrm:monotone-convergence-theorem-for-integrals, prpstn:continuity-of-norm-and-inner-product, lmm:norm-identity-bounded-integral, lmm:associated-measure-total-mass, prpstn:basic-integral-properties, prpstn:convergence-facts}
 Write $\chi_n \equiv \left( \int_X f_n \, d\mu \right)\psi$ — defined since $f_n$ is bounded — and $\chi \equiv \left( \int_X f \, d\mu \right)\psi$, defined since $\psi \in W_f$.
 
@@ -1551,6 +1615,8 @@ the first equality by continuity of the inner product~(\ref{prpstn:continuity-of
 
 \begin{lemma}[The Associated Measure of a Bounded-Calculus Image]
     \label{lmm:associated-measure-of-image}
+    \lean{Physicslib4.Spectral.Unbounded.assoc_integral_apply, Physicslib4.Spectral.Unbounded.lintegral_assoc_integral_apply}
+    \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$, let $h$ be a bounded measurable function on $X$, and set $T \equiv \int_X h \, d\mu \in \mathcal{B}(\mathbf{H})$. Then for every $\psi \in \mathbf{H}$ and every $E \in \Omega(X)$,
     \begin{align}
         \mu_{T\psi}(E) = \int_E \lvert h \rvert^2 \, d\mu_\psi;
@@ -1561,6 +1627,7 @@ the first equality by continuity of the inner product~(\ref{prpstn:continuity-of
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:indicator-function, prpstn:integral-conjugation, prpstn:integral-multiplicative, conv:section-integration, thrm:operator-valued-integration, thrm:projection-valued-measures-associated-measure, def:hall-9.1, thrm:monotone-convergence-theorem-for-integrals, prpstn:basic-integral-properties}
 Let $E \in \Omega(X)$. Using the definition of the adjoint~(\ref{def:hall-9.1}), then Proposition~\ref{prpstn:integral-multiplicative} and Proposition~\ref{prpstn:integral-conjugation} — multiplicativity, and the fact that integration intertwines complex conjugation with the adjoint —
 \begin{align}
@@ -1578,9 +1645,12 @@ We now extract, as a standalone lemma, the fact that $A_f$ preserves the spectra
 
 \begin{lemma}[The Integral Preserves Spectral Subspaces on which the Integrand is Bounded]
     \label{lmm:integral-preserves-spectral-subspaces}
+    \lean{Physicslib4.Spectral.Unbounded.mapsTo_pmapIntegral_range, Physicslib4.Spectral.Unbounded.range_subset_integralDomain}
+    \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$, let $f : X \to \mathbb{C}$ be measurable, and let $E \in \Omega(X)$ be a set on which $f$ is bounded. Write $A_f \equiv \int_X f\,d\mu$ and $V_E \equiv \text{Range}(\mu(E))$. Then $V_E \subset W_f$ and $A_f(V_E) \subset V_E$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, prpstn:hall-10.1, prpstn:hall-10.2, lmm:bounded-on-set-range-in-domain, lmm:range-of-projection-is-kernel, lmm:norm-convergent-decomposition, prpstn:hall-a.49, def:projection-valued-measure, prpstn:continuity-of-norm-and-inner-product, lmm:associated-measure-total-mass, prpstn:additivity-of-the-integral-in-the-measure}
 That $V_E \subset W_f$ is Lemma~\ref{lmm:bounded-on-set-range-in-domain}.
 
@@ -1617,9 +1687,12 @@ We close this section with the fact we will actually need about $\int_X f \, d\m
 
 \begin{proposition}[The Integral of a Real-Valued Function is Self-Adjoint]
     \label{prpstn:hall-10.3}
+    \lean{Physicslib4.Spectral.Unbounded.isSelfAdjoint_pmapIntegral_of_real}
+    \leanok
     If $f$ is a real-valued, measurable function on $X$, then $\int_X f \, d\mu$ is self-adjoint on $W_f$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, prpstn:hall-10.1, prpstn:hall-10.2, def:hall-9.2, def:hall-9.5, def:hall-a.45, prpstn:hall-9.4, prpstn:hall-9.26-internal, prpstn:countable-additivity-of-the-integral, prpstn:integrals-agree-when-measures-agree, lmm:bounded-on-set-range-in-domain, prpstn:hall-a.62, def:internal-orthogonal-decomposition, lmm:internal-decomposition-unitary, prpstn:hall-a.49, prpstn:hall-a.43, prpstn:quadratic-forms-on-a-subspace-properties, prpstn:hall-a.63, def:projection-valued-measure, thrm:operator-valued-integration, lmm:range-membership-concentrates-measure, lmm:norm-convergent-decomposition, prpstn:continuity-of-norm-and-inner-product, lmm:restriction-of-quadratic-form, lmm:closed-subspace-is-hilbert, lmm:associated-measure-total-mass, lmm:integral-preserves-spectral-subspaces, lmm:range-of-projection-is-kernel, prpstn:hall-9.26}
 Write $A_f \equiv \int_X f \, d\mu$. For each integer $n \ge 1$, let $F_n \equiv \{ x \in X \mid n - 1 \le \lvert f(x) \rvert < n \}$, so the $F_n$ are pairwise disjoint with $\bigcup_n F_n = X$, and let $\mathbf{H}_n \equiv \text{Range}(\mu(F_n))$, a closed subspace of $\mathbf{H}$ by Lemma~\ref{lmm:range-of-projection-is-kernel}, and hence itself a separable, complex Hilbert space with the inner product inherited from $\mathbf{H}$ (possibly $\mathbf{H}_n = \{0\}$, if $F_n$ happens to be a $\mu$-null set; this degenerate case is harmless: Proposition~\ref{prpstn:hall-9.26} is stated without excluding zero summands, and its proof discharges that case separately, since the route it otherwise takes passes through a result asserting non-emptiness of the spectrum). By Lemma~\ref{lmm:range-membership-concentrates-measure}, for any $\eta \in \mathbf{H}_n$, using $\lvert f \rvert < n$ on $F_n$,
 \begin{align}
