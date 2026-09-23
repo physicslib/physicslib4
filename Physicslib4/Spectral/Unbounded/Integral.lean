@@ -204,6 +204,29 @@ theorem assoc_le_norm_sq (ψ : H) (E : Set X) :
     (μ.assoc ψ) E ≤ ENNReal.ofReal (‖ψ‖ ^ 2) :=
   assoc_univ_eq μ ψ ▸ measure_mono (Set.subset_univ E)
 
+omit [CompleteSpace H] in
+/-- Bounded measurable functions are closed under products. -/
+private lemma mul_mem_bddMeasurable {u v : X → ℂ} (hu : u ∈ BddMeasurable X)
+    (hv : v ∈ BddMeasurable X) : u * v ∈ BddMeasurable X :=
+  let ⟨hu, Cu, hCu⟩ := hu
+  let ⟨hv, Cv, hCv⟩ := hv
+  ⟨hu.mul hv, Cu * Cv, fun x => by
+    rw [Pi.mul_apply, norm_mul]
+    exact mul_le_mul (hCu x) (hCv x) (norm_nonneg _) ((norm_nonneg _).trans (hCu x))⟩
+
+omit [CompleteSpace H] in
+/-- Bounded measurable functions are closed under complex conjugation. -/
+private lemma conj_mem_bddMeasurable {u : X → ℂ} (hu : u ∈ BddMeasurable X) :
+    (fun x => (starRingEnd ℂ) (u x)) ∈ BddMeasurable X :=
+  ⟨Complex.continuous_conj.measurable.comp hu.1, hu.2.choose, fun x => by
+    simpa using hu.2.choose_spec x⟩
+
+omit [CompleteSpace H] in
+/-- The indicator function of a measurable set is bounded and measurable. -/
+private lemma indicator_one_mem_bddMeasurable {E : Set X} (hE : MeasurableSet E) :
+    E.indicator (1 : X → ℂ) ∈ BddMeasurable X :=
+  ⟨measurable_const.indicator hE, 1, fun x => by by_cases hx : x ∈ E <;> simp [hx]⟩
+
 /--
 The norm identity for the bounded integral:
 `‖(∫ f dμ) ψ‖² = ∫ |f|² dμ_ψ` for bounded measurable `f`.
@@ -212,29 +235,13 @@ Blueprint reference: `lmm:norm-identity-bounded-integral`.
 -/
 theorem norm_sq_integral_apply {f : X → ℂ} (hf : f ∈ BddMeasurable X) (ψ : H) :
     ‖μ.integral f ψ‖ ^ 2 = ∫ x, ‖f x‖ ^ 2 ∂(μ.assoc ψ) := by
-  have hfc : (fun x => (starRingEnd ℂ) (f x)) ∈ BddMeasurable X := by
-    rw [mem_bddMeasurable]
-    rcases hf with ⟨hfmeas, C, hC⟩
-    refine ⟨?_, ⟨C, ?_⟩⟩
-    · simpa [Function.comp_def] using (Complex.continuous_conj.measurable.comp hfmeas)
-    · intro x
-      simpa using hC x
-  have hprod : (fun x => (starRingEnd ℂ) (f x)) * f ∈ BddMeasurable X := by
-    rcases hfc with ⟨hu, Cu, hCu⟩
-    rcases hf with ⟨hv, Cv, hCv⟩
-    refine ⟨hu.mul hv, max Cu 0 * max Cv 0, fun x => ?_⟩
-    calc
-      ‖(starRingEnd ℂ) (f x) * f x‖ ≤ ‖(starRingEnd ℂ) (f x)‖ * ‖f x‖ := norm_mul_le _ _
-      _ ≤ max Cu 0 * max Cv 0 :=
-        mul_le_mul ((hCu x).trans (le_max_left _ _)) ((hCv x).trans (le_max_left _ _))
-          (norm_nonneg _) (le_max_right _ _)
+  have hfc := conj_mem_bddMeasurable hf
   have key : ⟪μ.integral f ψ, μ.integral f ψ⟫_ℂ =
       ((∫ x, ‖f x‖ ^ 2 ∂(μ.assoc ψ) : ℝ) : ℂ) := by
     rw [← integral_complex_ofReal, ← adjoint_inner_right, ← ContinuousLinearMap.comp_apply,
       ← ContinuousLinearMap.mul_def, ← μ.integral_conj hf, ← μ.integral_mul hfc hf,
-      μ.inner_integral hprod]
-    refine integral_congr_ae (Filter.Eventually.of_forall fun x => ?_)
-    simp [Complex.conj_mul']
+      μ.inner_integral (mul_mem_bddMeasurable hfc hf)]
+    exact integral_congr_ae (ae_of_all _ fun x => by simp [Complex.conj_mul'])
   rw [← inner_self_eq_norm_sq (𝕜 := ℂ), key]
   rfl
 
@@ -511,19 +518,37 @@ theorem indicator_lt_mem_bddMeasurable {f : X → ℂ} (hf : Measurable f) (n : 
     · rw [Set.indicator_of_mem hx]; exact le_of_lt hx
     · rw [Set.indicator_of_notMem hx, norm_zero]; positivity⟩
 
+omit [CompleteSpace H] in
+/-- For integrable `g`, the integrals of `g` over the sublevel sets `{|f| < n}` of a
+measurable `f` converge to `∫ g` (dominated convergence). -/
+private lemma tendsto_integral_indicator_lt {E : Type*} [NormedAddCommGroup E]
+    [NormedSpace ℝ E] {f : X → ℂ} (hf : Measurable f) {ν : Measure X} {g : X → E}
+    (hg : Integrable g ν) :
+    Tendsto (fun n : ℕ => ∫ x, {x | ‖f x‖ < n}.indicator g x ∂ν) atTop (𝓝 (∫ x, g x ∂ν)) :=
+  tendsto_integral_of_dominated_convergence (fun x => ‖g x‖)
+    (fun n => (hg.indicator (measurableSet_lt hf.norm measurable_const)).1) hg.norm
+    (fun n => ae_of_all _ fun x => norm_indicator_le_norm_self g x)
+    (ae_of_all _ fun x => tendsto_const_nhds.congr' <| by
+      filter_upwards [tendsto_natCast_atTop_atTop.eventually_gt_atTop ‖f x‖] with n hn
+      exact (Set.indicator_of_mem (s := {x | ‖f x‖ < n}) hn g).symm)
+
+omit [CompleteSpace H] in
+/-- For integrable `g`, the tail integrals of `g` over `{|f| ≥ n}` tend to `0`. -/
+private lemma tendsto_integral_indicator_compl_lt {f : X → ℂ} (hf : Measurable f)
+    {ν : Measure X} {g : X → ℝ} (hg : Integrable g ν) :
+    Tendsto (fun n : ℕ => ∫ x, {x | ‖f x‖ < n}ᶜ.indicator g x ∂ν) atTop (𝓝 0) := by
+  have := (tendsto_integral_indicator_lt hf hg).const_sub (∫ x, g x ∂ν)
+  rw [sub_self] at this
+  refine this.congr fun n => ?_
+  rw [Set.indicator_compl, integral_sub' hg
+    (hg.indicator (measurableSet_lt hf.norm measurable_const))]
+
 /-- For `ψ ∈ W_f`, `∫ f · 1_{|f| < n} dμ_ψ → ∫ f dμ_ψ` (dominated convergence). -/
 theorem tendsto_integral_trunc_assoc {f : X → ℂ} (hf : Measurable f) {ψ : H}
     (hψ : ψ ∈ integralDomain μ f) :
     Tendsto (fun n : ℕ => ∫ x, {x | ‖f x‖ < n}.indicator f x ∂(μ.assoc ψ)) atTop
-      (𝓝 (∫ x, f x ∂(μ.assoc ψ))) := by
-  refine tendsto_integral_of_dominated_convergence (fun x => ‖f x‖)
-    (fun n => (indicator_lt_mem_bddMeasurable hf n).1.aestronglyMeasurable)
-    ((hψ.integrable one_le_two).norm) (fun n => Eventually.of_forall fun x => ?_)
-    (Eventually.of_forall fun x => ?_)
-  · by_cases hx : x ∈ {x | ‖f x‖ < n} <;> simp [Set.indicator, hx]
-  · refine tendsto_const_nhds.congr' ?_
-    filter_upwards [tendsto_natCast_atTop_atTop.eventually_gt_atTop ‖f x‖] with n hn
-    simp [Set.indicator, hn]
+      (𝓝 (∫ x, f x ∂(μ.assoc ψ))) :=
+  tendsto_integral_indicator_lt hf (hψ.integrable one_le_two)
 
 /--
 For `ψ ∈ W_f`, the vectors `(∫ f · 1_{|f| < n} dμ) ψ` converge in `H`: their differences
@@ -537,38 +562,22 @@ theorem tendsto_integral_trunc_apply {f : X → ℂ} (hf : Measurable f) {ψ : H
       (𝓝 χ) := by
   set F : ℕ → X → ℂ := fun n => {x | ‖f x‖ < n}.indicator f
   have hF := indicator_lt_mem_bddMeasurable hf
-  have hint : Integrable (fun x => ‖f x‖ ^ 2) (μ.assoc ψ) := by
-    simpa using hψ.integrable_norm_pow (p := 2) two_ne_zero
-  set b : ℕ → ℝ := fun N => ∫ x, {x | (N : ℝ) ≤ ‖f x‖}.indicator (fun x => ‖f x‖ ^ 2) x
-    ∂(μ.assoc ψ)
-  have hb : Tendsto b atTop (𝓝 0) := by
-    rw [← integral_zero X ℝ (μ := μ.assoc ψ)]
-    refine tendsto_integral_of_dominated_convergence (fun x => ‖f x‖ ^ 2)
-      (fun N => (hint.indicator (measurableSet_le measurable_const hf.norm)).1) hint
-      (fun N => Eventually.of_forall fun x => ?_) (Eventually.of_forall fun x => ?_)
-    · by_cases hx : x ∈ {x | (N : ℝ) ≤ ‖f x‖} <;> simp [Set.indicator, hx]
-    · refine tendsto_const_nhds.congr' ?_
-      filter_upwards [tendsto_natCast_atTop_atTop.eventually_gt_atTop ‖f x‖] with n hn
-      simp [Set.indicator, not_le.mpr hn]
-  refine cauchySeq_tendsto_of_complete (cauchySeq_of_le_tendsto_0 (fun N => Real.sqrt (b N))
-    (fun n m N hn hm => ?_) (by simpa using hb.sqrt))
+  have hint : Integrable (fun x => ‖f x‖ ^ 2) (μ.assoc ψ) := hψ.integrable_norm_pow two_ne_zero
+  refine cauchySeq_tendsto_of_complete (cauchySeq_of_le_tendsto_0 _
+    (fun n m N hn hm => ?_) (by simpa using (tendsto_integral_indicator_compl_lt hf hint).sqrt))
   have hsub : μ.integral (F n) ψ - μ.integral (F m) ψ = μ.integral (F n - F m) ψ := by
-    rw [← sub_apply, eq_comm]
-    congr 1
-    rw [eq_sub_iff_add_eq, ← μ.integral_add ((BddMeasurable X).sub_mem (hF n) (hF m)) (hF m),
-      sub_add_cancel]
+    rw [← sub_add_cancel (F n) (F m), μ.integral_add ((BddMeasurable X).sub_mem (hF n) (hF m))
+      (hF m), sub_add_cancel, add_apply, add_sub_cancel_right]
   rw [dist_eq_norm, hsub, Real.le_sqrt (norm_nonneg _)
       (integral_nonneg fun x => Set.indicator_nonneg (fun _ _ => by positivity) x),
     norm_sq_integral_apply μ ((BddMeasurable X).sub_mem (hF n) (hF m))]
-  refine integral_mono_of_nonneg (Eventually.of_forall fun x => by positivity)
-    (hint.indicator (measurableSet_le measurable_const hf.norm))
-    (Eventually.of_forall fun x => ?_)
+  refine integral_mono_of_nonneg (ae_of_all _ fun x => by positivity)
+    (hint.indicator (measurableSet_lt hf.norm measurable_const).compl) (ae_of_all _ fun x => ?_)
   have hn' : (N : ℝ) ≤ n := by exact_mod_cast hn
   have hm' : (N : ℝ) ≤ m := by exact_mod_cast hm
-  by_cases h : (N : ℝ) ≤ ‖f x‖
+  by_cases h : ‖f x‖ < N
+  · simp [Set.indicator, h, h.trans_le hn', h.trans_le hm']
   · by_cases h1 : ‖f x‖ < n <;> by_cases h2 : ‖f x‖ < m <;> simp [Set.indicator, h, h1, h2]
-  · have h' := not_le.mp h
-    simp [Set.indicator, h, h'.trans_le hn', h'.trans_le hm']
 
 /--
 There is a linear map `T : W_f → H`, the pointwise limit of the truncated integrals, which
@@ -725,107 +734,29 @@ theorem inner_self_pmapIntegral {f : X → ℂ} (hf : Measurable f) (ψ : integr
   ring
 
 /--
+The bounded truncations `f · 1_{|f| < n}` converge to `∫ f dμ` pointwise in `H`.
+
+Blueprint reference: `lmm:truncations-converge`.
+-/
+theorem tendsto_integral_truncation {f : X → ℂ} (hf : Measurable f)
+    (ψ : integralDomain μ f) :
+    Tendsto (fun n : ℕ => μ.integral ({x | ‖f x‖ < n}.indicator f) (ψ : H)) atTop
+      (𝓝 (pmapIntegral μ f ψ)) := by
+  obtain ⟨T, hlim, hT⟩ := exists_linearMap_integralForm_eq_inner μ hf
+  exact (show pmapIntegral μ f ψ = T ψ from integralApply_eq μ hf T hT ψ) ▸ hlim ψ
+
+/--
 The norm formula `‖(∫ f dμ) ψ‖² = ∫ |f|² dμ_ψ`.
 
 Blueprint reference: `prpstn:hall-10.1`.
 -/
 theorem norm_sq_pmapIntegral {f : X → ℂ} (hf : Measurable f) (ψ : integralDomain μ f) :
     ‖pmapIntegral μ f ψ‖ ^ 2 = ∫ x, ‖f x‖ ^ 2 ∂(μ.assoc (ψ : H)) := by
-  classical
-  -- the bounded truncations `gₙ = f · 1_{|f| < n}`
-  let F : ℕ → Set X := fun n => {x | ‖f x‖ < n}
-  have hFm : ∀ n, MeasurableSet (F n) := fun n => measurableSet_lt hf.norm measurable_const
-  let g : ℕ → X → ℂ := fun n => (F n).indicator f
-  have hg : ∀ n, g n ∈ BddMeasurable X := fun n => by
-    refine ⟨hf.indicator (hFm n), n, fun x => ?_⟩
-    by_cases hx : x ∈ F n
-    · simp only [g, Set.indicator_of_mem hx]; exact le_of_lt hx
-    · simp only [g, Set.indicator_of_notMem hx, norm_zero]; exact Nat.cast_nonneg n
-  have hgle : ∀ n x, ‖g n x‖ ≤ ‖f x‖ := fun n x => norm_indicator_le_norm_self f x
-  have hev : ∀ x, ∀ᶠ n in atTop, x ∈ F n := fun x => by
-    obtain ⟨N, hN⟩ := exists_nat_gt ‖f x‖
-    exact (eventually_ge_atTop N).mono fun n hn =>
-      show ‖f x‖ < n from hN.trans_le (by exact_mod_cast hn)
-  have hgt : ∀ x, Tendsto (fun n => g n x) atTop (𝓝 (f x)) := fun x =>
-    tendsto_const_nhds.congr' ((hev x).mono fun n hn => (Set.indicator_of_mem hn f).symm)
-  have hint : ∀ ξ : integralDomain μ f, Integrable f (μ.assoc (ξ : H)) :=
-    fun ξ => (mem_integralDomain μ).1 ξ.2 |>.integrable one_le_two
-  have hint2 : ∀ ξ : integralDomain μ f, Integrable (fun x => ‖f x‖ ^ 2) (μ.assoc (ξ : H)) :=
-    fun ξ => ξ.2.integrable_norm_pow two_ne_zero
-  -- diagonal convergence `⟪ξ, (∫ gₙ dμ) ξ⟫ → Q_f(ξ)`
-  have hdiag : ∀ ξ : integralDomain μ f, Tendsto (fun n => ⟪(ξ : H), μ.integral (g n) ξ⟫_ℂ)
-      atTop (𝓝 (integralForm μ f ξ)) := fun ξ => by
-    simp_rw [μ.inner_integral (hg _)]
-    exact tendsto_integral_of_dominated_convergence (fun x => ‖f x‖)
-      (fun n => (hg n).1.aestronglyMeasurable) (hint ξ).norm
-      (fun n => ae_of_all _ (hgle n)) (ae_of_all _ hgt)
-  -- off-diagonal convergence `⟪φ, (∫ gₙ dμ) ψ⟫ → ⟪φ, (∫ f dμ) ψ⟫`
-  have hoff : ∀ φ : integralDomain μ f, Tendsto (fun n => ⟪(φ : H), μ.integral (g n) ψ⟫_ℂ)
-      atTop (𝓝 ⟪(φ : H), pmapIntegral μ f ψ⟫_ℂ) := fun φ => by
-    have e : (fun n => ⟪(φ : H), μ.integral (g n) ψ⟫_ℂ) = fun n =>
-        polarizationOn (fun ξ : integralDomain μ f => ⟪(ξ : H), μ.integral (g n) ξ⟫_ℂ) φ ψ :=
-      funext fun n => (polarizationOn_eq_inner
-        ((μ.integral (g n) : H →ₗ[ℂ] H).comp (integralDomain μ f).subtype)
-        (fun _ => rfl) φ ψ).symm
-    rw [e, inner_pmapIntegral μ hf]
-    exact (tendsto_const_nhds.mul (((hdiag _).sub (hdiag _)).sub (hdiag _))).sub
-      (tendsto_const_nhds.mul (((hdiag _).sub (hdiag _)).sub (hdiag _)))
-  -- Cauchy estimate
-  let e : ℕ → ℝ := fun N => ∫ x, (F N)ᶜ.indicator (fun x => ‖f x‖ ^ 2) x ∂(μ.assoc (ψ : H))
-  have he0 : Tendsto e atTop (𝓝 0) := by
-    have := tendsto_integral_of_dominated_convergence (μ := μ.assoc (ψ : H))
-      (F := fun N => (F N)ᶜ.indicator (fun x => ‖f x‖ ^ 2)) (f := fun _ => (0 : ℝ))
-      (fun x => ‖f x‖ ^ 2)
-      (fun N => ((hf.norm.pow_const 2).indicator (hFm N).compl).aestronglyMeasurable)
-      (hint2 ψ) (fun N => ae_of_all _ fun x => by
-        rw [Real.norm_eq_abs, abs_of_nonneg (Set.indicator_nonneg (fun _ _ => by positivity) x)]
-        exact Set.indicator_le_self' (fun _ _ => by positivity) x)
-      (ae_of_all _ fun x => tendsto_const_nhds.congr' ((hev x).mono fun N hN =>
-        (Set.indicator_of_notMem (Set.notMem_compl_iff.2 hN) _).symm))
-    simpa using this
-  let s : ℕ → H := fun n => μ.integral (g n) ψ
-  have hsub : ∀ n m, s n - s m = μ.integral (g n - g m) ψ := fun n m => by
-    have := μ.integral_add ((BddMeasurable X).sub_mem (hg n) (hg m)) (hg m)
-    rw [sub_add_cancel] at this
-    simp only [s, this, add_apply, add_sub_cancel_right]
-  have hcauchy : CauchySeq s := by
-    refine cauchySeq_of_le_tendsto_0 (fun N => Real.sqrt (e N)) (fun n m N hn hm => ?_)
-      (by simpa using he0.sqrt)
-    rw [dist_eq_norm, ← abs_of_nonneg (norm_nonneg _)]
-    refine Real.abs_le_sqrt ?_
-    rw [hsub, norm_sq_integral_apply μ ((BddMeasurable X).sub_mem (hg n) (hg m))]
-    refine integral_mono_of_nonneg (ae_of_all _ fun x => by positivity)
-      ((hint2 ψ).indicator (hFm N).compl) (ae_of_all _ fun x => ?_)
-    by_cases hx : x ∈ F N
-    · have hxn : x ∈ F n := show ‖f x‖ < n from lt_of_lt_of_le hx (by exact_mod_cast hn)
-      have hxm : x ∈ F m := show ‖f x‖ < m from lt_of_lt_of_le hx (by exact_mod_cast hm)
-      simp only [Pi.sub_apply, g, Set.indicator_of_mem hxn, Set.indicator_of_mem hxm, sub_self,
-        norm_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow]
-      exact Set.indicator_nonneg (fun _ _ => by positivity) x
-    · rw [Set.indicator_of_mem (Set.mem_compl hx)]
-      refine pow_le_pow_left₀ (norm_nonneg _) ?_ 2
-      simp only [Pi.sub_apply, g]
-      by_cases hxn : x ∈ F n <;> by_cases hxm : x ∈ F m <;>
-        simp [Set.indicator_of_mem, Set.indicator_of_notMem, hxn, hxm]
-  obtain ⟨χ', hχ'⟩ := cauchySeq_tendsto_of_complete hcauchy
-  -- identify the limit with `(∫ f dμ) ψ`
-  have hbot : (integralDomain μ f)ᗮ = ⊥ :=
-    Submodule.topologicalClosure_eq_top_iff.mp
-      (Submodule.dense_iff_topologicalClosure_eq_top.mp (dense_integralDomain μ hf))
-  have hχ : χ' = pmapIntegral μ f ψ := by
-    rw [← sub_eq_zero, ← Submodule.mem_bot ℂ, ← hbot, Submodule.mem_orthogonal]
-    intro φ hφ
-    rw [inner_sub_right, tendsto_nhds_unique (tendsto_const_nhds.inner hχ') (hoff ⟨φ, hφ⟩),
-      sub_self]
-  rw [← hχ]
-  refine tendsto_nhds_unique (hχ'.norm.pow 2) ?_
-  simp_rw [s, norm_sq_integral_apply μ (hg _)]
-  exact tendsto_integral_of_dominated_convergence (fun x => ‖f x‖ ^ 2)
-    (fun n => ((hg n).1.norm.pow_const 2).aestronglyMeasurable) (hint2 ψ)
-    (fun n => ae_of_all _ fun x => by
-      rw [Real.norm_eq_abs, abs_of_nonneg (by positivity)]
-      exact pow_le_pow_left₀ (norm_nonneg _) (hgle n x) 2)
-    (ae_of_all _ fun x => ((hgt x).norm).pow 2)
+  refine tendsto_nhds_unique ((tendsto_integral_truncation μ hf ψ).norm.pow 2) ?_
+  refine (tendsto_integral_indicator_lt hf (ψ.2.integrable_norm_pow two_ne_zero)).congr
+    fun n => ?_
+  rw [norm_sq_integral_apply μ (indicator_lt_mem_bddMeasurable hf n)]
+  simp [Set.indicator_apply, apply_ite]
 
 /--
 Strengthened uniqueness: any unbounded operator with domain `W_f` satisfying merely the
@@ -980,106 +911,6 @@ theorem integral_norm_sq_le_of_mem_range {f : X → ℂ} (hf : Measurable f) {E 
           ENNReal.toReal_ofReal (by positivity), mul_comm]
 
 /--
-The bounded truncations `f · 1_{|f| < n}` converge to `∫ f dμ` pointwise in `H`.
-
-Blueprint reference: `lmm:truncations-converge`.
--/
-theorem tendsto_integral_truncation {f : X → ℂ} (hf : Measurable f)
-    (ψ : integralDomain μ f) :
-    Tendsto (fun n : ℕ => μ.integral ({x | ‖f x‖ < n}.indicator f) (ψ : H)) atTop
-      (𝓝 (pmapIntegral μ f ψ)) := by
-  classical
-  set F : ℕ → X → ℂ := fun n => {x | ‖f x‖ < n}.indicator f
-  have hFm : ∀ n : ℕ, MeasurableSet {x | ‖f x‖ < (n : ℝ)} := fun n =>
-    measurableSet_lt hf.norm measurable_const
-  have hFb : ∀ n, F n ∈ BddMeasurable X := fun n =>
-    ⟨hf.indicator (hFm n), n, fun x => by
-      by_cases hx : ‖f x‖ < n
-      · simp [F, hx, hx.le]
-      · simp [F, hx]⟩
-  have hFle : ∀ n x, ‖F n x‖ ≤ ‖f x‖ := fun n x => norm_indicator_le_norm_self _ _
-  have hFlim : ∀ x, Tendsto (fun n => F n x) atTop (𝓝 (f x)) := fun x => by
-    obtain ⟨N, hN⟩ := exists_nat_gt ‖f x‖
-    refine tendsto_const_nhds.congr' ?_
-    filter_upwards [eventually_ge_atTop N] with n hn
-    have : ‖f x‖ < n := hN.trans_le (by exact_mod_cast hn)
-    simp [F, this]
-  -- `Q_{f_n}(ξ) → Q_f(ξ)` for `ξ ∈ W_f`, by dominated convergence.
-  have hQ : ∀ ξ : integralDomain μ f, Tendsto (fun n => ∫ x, F n x ∂(μ.assoc (ξ : H)))
-      atTop (𝓝 (integralForm μ f ξ)) := fun ξ =>
-    tendsto_integral_of_dominated_convergence (fun x => ‖f x‖)
-      (fun n => (hFb n).1.aestronglyMeasurable) ((ξ.2 : MemLp f 2 _).integrable one_le_two).norm
-      (fun n => Eventually.of_forall (hFle n)) (Eventually.of_forall hFlim)
-  -- The tail integrals `∫_{|f| ≥ N} |f|² dμ_ψ` tend to `0`.
-  set G : ℕ → X → ℝ := fun N => {x | (N : ℝ) ≤ ‖f x‖}.indicator (fun x => ‖f x‖ ^ 2)
-  have hint2 : Integrable (fun x => ‖f x‖ ^ 2) (μ.assoc (ψ : H)) :=
-    MemLp.integrable_norm_pow (p := 2) ψ.2 two_ne_zero
-  have hGm : ∀ N : ℕ, MeasurableSet {x | (N : ℝ) ≤ ‖f x‖} := fun N =>
-    measurableSet_le measurable_const hf.norm
-  have hGint : ∀ N, Integrable (G N) (μ.assoc (ψ : H)) := fun N => hint2.indicator (hGm N)
-  have hGlim : Tendsto (fun N => ∫ x, G N x ∂(μ.assoc (ψ : H))) atTop (𝓝 0) := by
-    have := tendsto_integral_of_dominated_convergence (μ := μ.assoc (ψ : H)) (F := G)
-      (f := fun _ => (0 : ℝ)) (fun x => ‖f x‖ ^ 2)
-      (fun N => (hGint N).aestronglyMeasurable) hint2
-      (fun N => Eventually.of_forall fun x => by
-        rw [Real.norm_eq_abs, abs_of_nonneg (Set.indicator_nonneg (fun _ _ => by positivity) x)]
-        exact Set.indicator_le_self' (fun _ _ => by positivity) x)
-      (Eventually.of_forall fun x => by
-        obtain ⟨N, hN⟩ := exists_nat_gt ‖f x‖
-        refine tendsto_const_nhds.congr' ?_
-        filter_upwards [eventually_ge_atTop N] with n hn
-        have : ‖f x‖ < n := hN.trans_le (by exact_mod_cast hn)
-        simp [G, this])
-    simpa using this
-  -- The sequence `T_n ψ` is Cauchy.
-  have hdiff : ∀ n m N : ℕ, N ≤ n → N ≤ m → ∀ x, ‖F n x - F m x‖ ^ 2 ≤ G N x := by
-    intro n m N hn hm x
-    have hn' : (N : ℝ) ≤ n := by exact_mod_cast hn
-    have hm' : (N : ℝ) ≤ m := by exact_mod_cast hm
-    by_cases h1 : ‖f x‖ < n <;> by_cases h2 : ‖f x‖ < m <;>
-      by_cases h3 : (N : ℝ) ≤ ‖f x‖ <;> simp [F, G, h1, h2, h3] <;> linarith
-  have hsub : ∀ n m, μ.integral (F n) (ψ : H) - μ.integral (F m) (ψ : H) =
-      μ.integral (F n - F m) (ψ : H) := fun n m => by
-    have := μ.integral_add ((BddMeasurable X).sub_mem (hFb n) (hFb m)) (hFb m)
-    rw [sub_add_cancel] at this
-    rw [this, add_apply, add_sub_cancel_right]
-  have hcauchy : CauchySeq (fun n => μ.integral (F n) (ψ : H)) := by
-    refine cauchySeq_of_le_tendsto_0
-      (fun N => Real.sqrt (∫ x, G N x ∂(μ.assoc (ψ : H)))) (fun n m N hn hm => ?_) ?_
-    · rw [dist_eq_norm, hsub, ← Real.sqrt_sq (norm_nonneg _),
-        norm_sq_integral_apply μ ((BddMeasurable X).sub_mem (hFb n) (hFb m))]
-      refine Real.sqrt_le_sqrt (integral_mono_of_nonneg
-        (Eventually.of_forall fun x => by positivity) (hGint N)
-        (Eventually.of_forall fun x => hdiff n m N hn hm x))
-    · simpa using hGlim.sqrt
-  obtain ⟨χ, hχ⟩ := cauchySeq_tendsto_of_complete hcauchy
-  -- Identify the limit by testing against the dense subspace `W_f`.
-  have hinner : ∀ φ : integralDomain μ f, ⟪(φ : H), χ⟫_ℂ = ⟪(φ : H), pmapIntegral μ f ψ⟫_ℂ := by
-    intro φ
-    have h1 : Tendsto (fun n => ⟪(φ : H), μ.integral (F n) (ψ : H)⟫_ℂ) atTop
-        (𝓝 ⟪(φ : H), χ⟫_ℂ) := tendsto_const_nhds.inner hχ
-    have h2 : Tendsto (fun n => ⟪(φ : H), μ.integral (F n) (ψ : H)⟫_ℂ) atTop
-        (𝓝 (polarizationOn (integralForm μ f) φ ψ)) := by
-      have heq : ∀ n, ⟪(φ : H), μ.integral (F n) (ψ : H)⟫_ℂ =
-          polarizationOn (fun ξ : integralDomain μ f => ∫ x, F n x ∂(μ.assoc (ξ : H))) φ ψ :=
-        fun n => (polarizationOn_eq_inner
-          ((μ.integral (F n) : H →ₗ[ℂ] H) ∘ₗ (integralDomain μ f).subtype)
-          (fun ξ => (μ.inner_integral (hFb n) ξ).symm) φ ψ).symm
-      simp only [heq, polarizationOn]
-      exact ((((hQ _).sub (hQ _)).sub (hQ _)).const_mul _).sub
-        ((((hQ _).sub (hQ _)).sub (hQ _)).const_mul _)
-    rw [tendsto_nhds_unique h1 h2, inner_pmapIntegral μ hf]
-  have hzero : ∀ v : H, ⟪v, χ - pmapIntegral μ f ψ⟫_ℂ = 0 := fun v =>
-    congrFun ((continuous_id.inner continuous_const).ext_on
-      (dense_integralDomain μ hf) (continuous_const (y := (0 : ℂ)))
-      (fun φ hφ => by
-        change ⟪φ, χ - pmapIntegral μ f ψ⟫_ℂ = 0
-        rw [inner_sub_right, hinner ⟨φ, hφ⟩, sub_self])) v
-  have := hzero (χ - pmapIntegral μ f ψ)
-  rw [inner_self_eq_zero, sub_eq_zero] at this
-  exact this ▸ hχ
-
-/--
 For bounded measurable `h` and `T = ∫ h dμ`, the associated measure of `T ψ` has density
 `|h|²` with respect to `μ_ψ`.
 
@@ -1088,33 +919,22 @@ Blueprint reference: `lmm:associated-measure-of-image`.
 theorem assoc_integral_apply {h : X → ℂ} (hh : h ∈ BddMeasurable X) (ψ : H) {E : Set X}
     (hE : MeasurableSet E) :
     (μ.assoc (μ.integral h ψ)) E = ∫⁻ x in E, (‖h x‖₊ : ℝ≥0∞) ^ 2 ∂(μ.assoc ψ) := by
-  classical
-  obtain ⟨hmeas, C, hC⟩ := hh
-  have hmul : ∀ f g : X → ℂ, f ∈ BddMeasurable X → g ∈ BddMeasurable X →
-      f * g ∈ BddMeasurable X := fun f g ⟨hf, Cf, hCf⟩ ⟨hg, Cg, hCg⟩ =>
-    ⟨hf.mul hg, Cf * Cg, fun x => by
-      rw [Pi.mul_apply, norm_mul]
-      exact mul_le_mul (hCf x) (hCg x) (norm_nonneg _) ((norm_nonneg _).trans (hCf x))⟩
-  have hind : E.indicator (1 : X → ℂ) ∈ BddMeasurable X :=
-    ⟨measurable_const.indicator hE, 1, fun x => by by_cases hx : x ∈ E <;> simp [hx]⟩
-  have hconj : (fun x => (starRingEnd ℂ) (h x)) ∈ BddMeasurable X :=
-    ⟨Complex.continuous_conj.measurable.comp hmeas, C, fun x => by simpa using hC x⟩
+  have hconj := conj_mem_bddMeasurable hh
+  have hind := indicator_one_mem_bddMeasurable hE
+  have hci := mul_mem_bddMeasurable hconj hind
+  obtain ⟨hmeas, C, hC⟩ := id hh
   let G : X → ℂ := fun x => ((E.indicator (fun y => ‖h y‖ ^ 2) x : ℝ) : ℂ)
   have hG : (fun x => (starRingEnd ℂ) (h x)) * E.indicator (1 : X → ℂ) * h = G := by
     funext x
-    by_cases hx : x ∈ E
-    · simp [G, hx, Complex.conj_mul']
-    · simp [G, hx]
-  have hGm : G ∈ BddMeasurable X := hG ▸ hmul _ _ (hmul _ _ hconj hind) ⟨hmeas, C, hC⟩
+    by_cases hx : x ∈ E <;> simp [G, hx, Complex.conj_mul']
+  have hGm : G ∈ BddMeasurable X := hG ▸ mul_mem_bddMeasurable hci hh
   have hop : adjoint (μ.integral h) * μ E * μ.integral h = μ.integral G := by
-    rw [← hG, μ.integral_mul (hmul _ _ hconj hind) ⟨hmeas, C, hC⟩,
-      μ.integral_mul hconj hind, μ.integral_conj ⟨hmeas, C, hC⟩, μ.integral_indicator hE]
-  have hint : Integrable (E.indicator (fun y => ‖h y‖ ^ 2)) (μ.assoc ψ) := by
-    refine (Integrable.of_bound (C := C ^ 2) ?_
-      (Filter.Eventually.of_forall fun x => ?_)).indicator hE
-    · exact (hmeas.norm.pow_const 2).aestronglyMeasurable
-    · rw [Real.norm_eq_abs, abs_of_nonneg (by positivity)]
-      exact pow_le_pow_left₀ (norm_nonneg _) (hC x) 2
+    rw [← hG, μ.integral_mul hci hh, μ.integral_mul hconj hind, μ.integral_conj hh,
+      μ.integral_indicator hE]
+  have hint : Integrable (E.indicator (fun y => ‖h y‖ ^ 2)) (μ.assoc ψ) :=
+    (Integrable.of_bound (C := C ^ 2) (hmeas.norm.pow_const 2).aestronglyMeasurable
+      (ae_of_all _ fun x => by
+        simpa using pow_le_pow_left₀ (norm_nonneg _) (hC x) 2)).indicator hE
   have hreal : ((μ.assoc (μ.integral h ψ)) E).toReal =
       ∫ x, E.indicator (fun y => ‖h y‖ ^ 2) x ∂(μ.assoc ψ) := by
     have : ⟪μ.integral h ψ, μ E (μ.integral h ψ)⟫_ℂ =
@@ -1128,9 +948,7 @@ theorem assoc_integral_apply {h : X → ℂ} (hh : h ∈ BddMeasurable X) (ψ : 
     ← lintegral_indicator hE]
   congr 1
   funext x
-  by_cases hx : x ∈ E
-  · simp [hx, enorm_eq_nnnorm]
-  · simp [hx]
+  by_cases hx : x ∈ E <;> simp [hx, enorm_eq_nnnorm]
 
 /--
 Consequently integrals against `μ_{Tψ}` are integrals against `μ_ψ` weighted by `|h|²`.
@@ -1161,23 +979,14 @@ theorem mapsTo_pmapIntegral_range {f : X → ℂ} (hf : Measurable f) {E : Set X
     pmapIntegral μ f ψ ∈ Set.range (μ E) := by
   have hP := μ.isStarProjection_apply E
   have hψE : μ E ψ = ψ := (mem_range_iff_apply_eq hP _).1 hψ
-  have hind : E.indicator (1 : X → ℂ) ∈ BddMeasurable X :=
-    ⟨measurable_const.indicator hE, 1, fun x => by by_cases hx : x ∈ E <;> simp [hx]⟩
+  have hind := indicator_one_mem_bddMeasurable hE
   refine (isClosed_range_of_isStarProjection hP).mem_of_tendsto
     (tendsto_integral_truncation μ hf ψ) (Eventually.of_forall fun n => ?_)
-  have hg : {x | ‖f x‖ < (n : ℝ)}.indicator f ∈ BddMeasurable X :=
-    ⟨hf.indicator (measurableSet_lt hf.norm measurable_const), n, fun x => by
-      by_cases hx : x ∈ {x | ‖f x‖ < (n : ℝ)}
-      · rw [Set.indicator_of_mem hx]; exact le_of_lt hx
-      · rw [Set.indicator_of_notMem hx, norm_zero]; positivity⟩
-  rw [mem_range_iff_apply_eq hP]
+  have hg := indicator_lt_mem_bddMeasurable hf n
   have hcomm : μ E * μ.integral ({x | ‖f x‖ < (n : ℝ)}.indicator f) =
       μ.integral ({x | ‖f x‖ < (n : ℝ)}.indicator f) * μ E := by
     rw [← μ.integral_indicator hE, ← μ.integral_mul hind hg, ← μ.integral_mul hg hind, mul_comm]
-  calc μ E (μ.integral ({x | ‖f x‖ < (n : ℝ)}.indicator f) ψ)
-      = (μ E * μ.integral ({x | ‖f x‖ < (n : ℝ)}.indicator f)) ψ := rfl
-    _ = μ.integral ({x | ‖f x‖ < (n : ℝ)}.indicator f) (μ E ψ) := by rw [hcomm]; rfl
-    _ = _ := by rw [hψE]
+  rw [mem_range_iff_apply_eq hP, ← mul_apply_eq_comp, hcomm, mul_apply_eq_comp, hψE]
 
 /--
 For real-valued measurable `f`, the integral `∫ f dμ` is symmetric on `W_f`.
