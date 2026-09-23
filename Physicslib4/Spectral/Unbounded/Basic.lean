@@ -202,6 +202,28 @@ closability are `LinearPMap.IsClosed` and `LinearPMap.IsClosable`, and `A^cl` is
 
 omit [CompleteSpace H] in
 /--
+Sequential description of closedness for a linear map on a (not necessarily dense)
+subspace: `T` is closed (Mathlib's `LinearPMap.IsClosed`, i.e. its graph is closed in
+`H × H`) iff whenever `ψ n ∈ Dom(T)` with `ψ n → ψ` and `T ψ n → φ`, then `ψ ∈ Dom(T)` and
+`T ψ = φ`. No density of `Dom(T)` is assumed.
+
+Blueprint reference: `def:closed-linear-map-on-a-subspace`.
+-/
+theorem isClosed_iff_forall_tendsto {T : H →ₗ.[ℂ] H} :
+    T.IsClosed ↔
+      ∀ (χ : ℕ → T.domain) (ψ φ : H), Tendsto (fun n => (χ n : H)) atTop (𝓝 ψ) →
+        Tendsto (fun n => T (χ n)) atTop (𝓝 φ) → ∃ hψ : ψ ∈ T.domain, T ⟨ψ, hψ⟩ = φ := by
+  refine ⟨fun h χ ψ φ hχ hTχ => ?_, fun h => isSeqClosed_iff_isClosed.mp fun {u p} hu hp => ?_⟩
+  · obtain ⟨⟨y, hy⟩, rfl, rfl⟩ := T.mem_graph_iff.mp <| h.mem_of_tendsto (hχ.prodMk_nhds hTχ)
+      (Eventually.of_forall fun n => T.mem_graph (χ n))
+    exact ⟨hy, rfl⟩
+  · choose χ hχ₁ hχ₂ using fun n => T.mem_graph_iff.mp (hu n)
+    obtain ⟨hψ, e⟩ := h χ p.1 p.2
+      (by simpa only [hχ₁] using hp.fst_nhds) (by simpa only [hχ₂] using hp.snd_nhds)
+    exact T.mem_graph_iff.mpr ⟨⟨p.1, hψ⟩, rfl, e⟩
+
+omit [CompleteSpace H] in
+/--
 The closure of a densely defined closable operator again has dense domain, so it is
 again an unbounded operator in the blueprint's sense.
 
@@ -409,6 +431,53 @@ theorem existsUnique_isSelfAdjoint_extension {T : H →ₗ.[ℂ] H}
     fun _ hB => eq_closure_of_isSelfAdjoint_of_le h hB.1 hB.2⟩
 
 /-!
+### Orthogonal complements and density
+
+Part 2 of `prpstn:hall-a.49`, `(Vᗮ)ᗮ = closure V`, is Mathlib's
+`Submodule.orthogonal_orthogonal_eq_closure`.
+-/
+
+/--
+Orthogonal decomposition: if `V` is a closed subspace of `H`, every `ψ` decomposes uniquely
+as `ψ = ψ₁ + ψ₂` with `ψ₁ ∈ V` and `ψ₂ ∈ Vᗮ`.
+
+Blueprint reference: `prpstn:hall-a.49` (Part 1).
+-/
+theorem existsUnique_add_mem_orthogonal {V : Submodule ℂ H} (hV : IsClosed (V : Set H))
+    (ψ : H) : ∃! p : H × H, p.1 ∈ V ∧ p.2 ∈ Vᗮ ∧ ψ = p.1 + p.2 := by
+  haveI : CompleteSpace V := hV.completeSpace_coe
+  refine ⟨(V.starProjection ψ, ψ - V.starProjection ψ),
+    ⟨V.starProjection_apply_mem ψ, V.sub_starProjection_mem_orthogonal ψ, by simp⟩, ?_⟩
+  rintro ⟨a, b⟩ ⟨ha, hb, hψ⟩
+  have hmem : a - V.starProjection ψ ∈ V ⊓ Vᗮ := by
+    refine ⟨V.sub_mem ha (V.starProjection_apply_mem ψ), ?_⟩
+    have : a - V.starProjection ψ = (ψ - V.starProjection ψ) - b := by
+      rw [hψ]; abel
+    rw [this]
+    exact Vᗮ.sub_mem (V.sub_starProjection_mem_orthogonal ψ) hb
+  rw [Submodule.inf_orthogonal_eq_bot, Submodule.mem_bot, sub_eq_zero] at hmem
+  simp only [Prod.mk.injEq, hmem, true_and]
+  rw [← hmem, hψ]; simp
+
+/--
+A subspace `V` of `H` is dense if and only if `Vᗮ = {0}`.
+
+Blueprint reference: `crllr:trivial-complement-characterizes-density`.
+-/
+theorem dense_iff_orthogonal_eq_bot {V : Submodule ℂ H} : Dense (V : Set H) ↔ Vᗮ = ⊥ :=
+  V.dense_iff_topologicalClosure_eq_top.trans V.topologicalClosure_eq_top_iff
+
+/--
+The adjoint of the bounded operator `λ 1` is `λ̄ 1`.
+
+Blueprint reference: `lmm:adjoint-of-scalar-multiple-of-identity`.
+-/
+theorem adjoint_smul_id (lam : ℂ) :
+    ContinuousLinearMap.adjoint (lam • ContinuousLinearMap.id ℂ H) =
+      (starRingEnd ℂ lam) • ContinuousLinearMap.id ℂ H := by
+  rw [map_smulₛₗ, ContinuousLinearMap.adjoint_id]
+
+/-!
 ### Kernel and range
 -/
 
@@ -539,6 +608,34 @@ theorem isClosed_range_subSmul {T : H →ₗ.[ℂ] H} (hcl : T.IsClosed) (lam : 
   refine mem_range.mpr ⟨y, ?_⟩
   simp only at hy1 hy2
   rw [subSmul_apply, hy2, hy1, add_sub_cancel_right]
+
+/--
+The adjoint of `T - λ 1` is `T* - λ̄ 1`, including equality of domains.
+
+Blueprint reference: `prpstn:hall-9.13` with `lmm:adjoint-of-scalar-multiple-of-identity`.
+-/
+theorem adjoint_subSmul {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (lam : ℂ) :
+    (subSmul T lam)† = subSmul (T†) (starRingEnd ℂ lam) := by
+  refine adjoint_eq_of_forall_inner_iff hT fun ψ φ => ?_
+  have key : (∀ χ : (subSmul T lam).domain, ⟪ψ, subSmul T lam χ⟫_ℂ = ⟪φ, (χ : H)⟫_ℂ) ↔
+      ∀ χ : T.domain, ⟪ψ, T χ⟫_ℂ = ⟪φ + starRingEnd ℂ lam • ψ, (χ : H)⟫_ℂ := by
+    simp only [subSmul_apply, inner_sub_right, inner_smul_right, inner_add_left, inner_smul_left,
+      Complex.conj_conj, sub_eq_iff_eq_add]
+    rfl
+  refine key.trans <| (forall_inner_iff_adjoint hT).trans ⟨?_, ?_⟩
+  · rintro ⟨hψ, e⟩
+    exact ⟨hψ, by rw [subSmul_apply]; exact sub_eq_of_eq_add e⟩
+  · rintro ⟨hψ, e⟩
+    exact ⟨hψ, eq_add_of_sub_eq e⟩
+
+/--
+The orthogonal complement of the range of `T - λ 1` is the kernel of `T* - λ̄ 1`.
+
+Blueprint reference: `prpstn:hall-9.12` applied to `T - λ 1`.
+-/
+theorem orthogonal_range_subSmul {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (lam : ℂ) :
+    (range (subSmul T lam))ᗮ = ker (subSmul (T†) (starRingEnd ℂ lam)) := by
+  rw [orthogonal_range_eq_ker_adjoint (T := subSmul T lam) hT, adjoint_subSmul hT]
 
 end Unbounded
 end Spectral

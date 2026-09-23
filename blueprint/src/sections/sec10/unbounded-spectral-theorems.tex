@@ -357,7 +357,9 @@ A remark on typing, before the first proposition of this section. Definition~\re
 
 \begin{definition}[Closed Linear Map on a Subspace]
     \label{def:closed-linear-map-on-a-subspace}
+    \lean{LinearPMap.IsClosed, Physicslib4.Spectral.Unbounded.isClosed_iff_forall_tendsto}
     \uses{def:hall-9.6, def:hall-3.1, prpstn:hall-9.4}
+    \leanok
     Let $D \subset \mathbf{H}$ be a subspace, not necessarily dense, and $T : D \to \mathbf{H}$ a linear map. The \textit{graph} of $T$ is $\{ (\psi, T\psi) \mid \psi \in D \} \subset \mathbf{H} \times \mathbf{H}$, and $T$ is \textit{closed} if its graph is a closed subset of $\mathbf{H} \times \mathbf{H}$ (in the product topology fixed above). Equivalently, by sequential closedness and componentwise convergence exactly as in Definition~\ref{def:hall-9.6}: $T$ is closed if and only if, whenever $\{\psi_n\}$ is a sequence in $D$ with $\psi_n \to \psi$ and $T\psi_n \to \varphi$ for some $\psi,\varphi \in \mathbf{H}$, it follows that $\psi \in D$ and $T\psi = \varphi$.
 
     When $D$ is dense — so that $T$ is an unbounded operator in the sense of Definition~\ref{def:hall-3.1} — this agrees with Definition~\ref{def:hall-9.6}, the two conditions being verbatim the same.
@@ -474,20 +476,28 @@ We will need two standard facts about closed subspaces of a Hilbert space at sev
 
 \begin{proposition}[Orthogonal Decomposition and the Double Complement]
     \label{prpstn:hall-a.49}
+    \lean{Physicslib4.Spectral.Unbounded.existsUnique_add_mem_orthogonal, Submodule.orthogonal_orthogonal_eq_closure}
     \uses{def:orthogonal-complement}
+    \leanok
     \begin{enumerate}
         \item If $V$ is a closed subspace of $\mathbf{H}$, every $\psi \in \mathbf{H}$ decomposes uniquely as $\psi = \psi_1 + \psi_2$ with $\psi_1 \in V$ and $\psi_2 \in V^\perp$.
         \item If $V$ is any subspace of $\mathbf{H}$, then $(V^\perp)^\perp = \overline{V}$, the closure of $V$. In particular, if $V$ is closed, $(V^\perp)^\perp = V$.
     \end{enumerate}
 \end{proposition}
+\begin{proof}
+\leanok
+\end{proof}
 
 We record one immediate consequence of Part 2, in the form we will repeatedly need it: a subspace has trivial orthogonal complement exactly when it is dense.
 
 \begin{corollary}[Trivial Complement Characterizes Density]
     \label{crllr:trivial-complement-characterizes-density}
+    \lean{Physicslib4.Spectral.Unbounded.dense_iff_orthogonal_eq_bot}
+    \leanok
     A subspace $V \subset \mathbf{H}$ is dense in $\mathbf{H}$ if and only if $V^\perp = \{0\}$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-a.49, prpstn:continuity-of-norm-and-inner-product}
 If $V^\perp = \{0\}$, then, by Part 2 of \textbf{Proposition} \textit{(hall-a.49)}~(\ref{prpstn:hall-a.49}), $\overline{V} = (V^\perp)^\perp = \{0\}^\perp = \mathbf{H}$ — the last equality since $\left< \psi, 0 \right> = 0$ for every $\psi \in \mathbf{H}$, so every $\psi$ lies in $\{0\}^\perp$. Thus $V$ is dense.
 
@@ -569,9 +579,12 @@ Proposition~\ref{prpstn:hall-9.13} tells us how to add a bounded operator $B$ to
 
 \begin{lemma}[Adjoint of a Scalar Multiple of the Identity]
     \label{lmm:adjoint-of-scalar-multiple-of-identity}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_smul_id}
+    \leanok
     For $\lambda \in \mathbb{C}$, the bounded operator $\lambda\mathbf{1}$ (defined on all of $\mathbf{H}$) has adjoint $(\lambda\mathbf{1})^* = \overline{\lambda}\mathbf{1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:bounded-operator-notation, def:identity-operator, def:hall-9.1}
 For any $\phi, \psi \in \mathbf{H}$, using linearity of the inner product in its second argument,
 \begin{align}
@@ -611,7 +624,9 @@ Recall that for a bounded operator, a number $\lambda \in \mathbb{C}$ belongs to
 
 \begin{definition}[Resolvent Set and Spectrum of an Unbounded Operator]
     \label{def:hall-9.16}
+    \lean{Physicslib4.Spectral.Unbounded.pmapResolventSet, Physicslib4.Spectral.Unbounded.pmapSpectrum, Physicslib4.Spectral.Unbounded.IsResolvent}
     \uses{def:hall-3.1, def:bounded-operator-notation, def:identity-operator}
+    \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$. A number $\lambda \in \mathbb{C}$ belongs to the \textit{resolvent set} of $A$ if there exists a bounded operator $B \in \mathcal{B}(\mathbf{H})$ with the following properties:
     \begin{enumerate}
         \item For all $\psi \in \mathbf{H}$, $B\psi \in \text{Dom}(A)$ and $(A - \lambda \mathbf{1})B\psi = \psi$; and
@@ -624,9 +639,12 @@ The operator $B$ in this definition is unique when it exists, which is what lice
 
 \begin{lemma}[Uniqueness of the Resolvent]
     \label{lmm:uniqueness-of-resolvent}
+    \lean{Physicslib4.Spectral.Unbounded.existsUnique_isResolvent}
+    \leanok
     Let $A$ be an unbounded operator on $\mathbf{H}$ and $\lambda$ a point of its resolvent set. Then there is exactly one $B \in \mathcal{B}(\mathbf{H})$ satisfying properties 1 and 2 of Definition~\ref{def:hall-9.16}. We denote it $(A - \lambda\mathbf{1})^{-1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-9.16}
 Suppose $B_1, B_2 \in \mathcal{B}(\mathbf{H})$ both satisfy properties 1 and 2, and let $\psi \in \mathbf{H}$. By property 1 for $B_1$, $B_1\psi \in \text{Dom}(A)$ and $(A-\lambda\mathbf{1})B_1\psi = \psi$. Applying $B_2$ to both sides of this last equation and using property 2 for $B_2$ with the vector $B_1\psi \in \text{Dom}(A)$,
 \begin{align}
@@ -639,9 +657,12 @@ Two notions of resolvent set are now in play: the one just defined, for an unbou
 
 \begin{lemma}[The Two Notions of Spectrum Agree for Bounded Operators]
     \label{lmm:spectrum-notions-agree}
+    \lean{Physicslib4.Spectral.Unbounded.pmapResolventSet_toPMap_top, Physicslib4.Spectral.Unbounded.pmapSpectrum_toPMap_top}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$, regarded also as an unbounded operator with $\text{Dom}(A) = \mathbf{H}$. Then $\lambda \in \mathbb{C}$ lies in the resolvent set of $A$ in the sense of Definition~\ref{def:hall-9.16} if and only if it lies in the resolvent set in the sense of Definition~\ref{def:bounded-operator-resolvent-and-spectrum}. Consequently the two resulting spectra $\sigma(A)$ coincide.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-9.16, def:hall-3.1, def:bounded-operator-resolvent-and-spectrum}
 Suppose first that $\lambda$ is in the resolvent set in the sense of Section~\ref{sctn:spectral-theorems}, so $A - \lambda\mathbf{1}$ has a bounded inverse $B \in \mathcal{B}(\mathbf{H})$, meaning $(A-\lambda\mathbf{1})B = B(A-\lambda\mathbf{1}) = \mathbf{1}$. Then for every $\psi \in \mathbf{H}$ we have $B\psi \in \mathbf{H} = \text{Dom}(A)$ and $(A-\lambda\mathbf{1})B\psi = \psi$, which is property 1 of Definition~\ref{def:hall-9.16}; and for every $\psi \in \text{Dom}(A) = \mathbf{H}$, $B(A-\lambda\mathbf{1})\psi = \psi$, which is property 2.
 
@@ -656,6 +677,8 @@ We now come to a central result: the spectrum of a self-adjoint operator, bounde
 
 \begin{lemma}[The $b^2$ Inequality for Symmetric Operators]
     \label{lmm:b-squared-inequality-symmetric}
+    \lean{Physicslib4.Spectral.Unbounded.sq_norm_le_of_isSymmetric}
+    \leanok
     If $A$ is a symmetric operator on $\mathbf{H}$, then for all $a, b \in \mathbb{R}$ and associated $\lambda \equiv a + ib \in \mathbb{C}$,
     \begin{align}
         \left< (A - \lambda\mathbf{1})\psi, (A - \lambda\mathbf{1})\psi \right> \ge b^2 \left< \psi, \psi \right>
@@ -663,6 +686,7 @@ We now come to a central result: the spectrum of a self-adjoint operator, bounde
     for all $\psi \in \text{Dom}(A)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-9.2, def:hall-3.1, prpstn:hall-9.13, def:bounded-operator-notation}
 Fix $\psi \in \text{Dom}(A)$. By Proposition~\ref{prpstn:hall-9.13} with $B = -a\mathbf{1}$, $A - a\mathbf{1}$ has domain $\text{Dom}(A)$, and, since $A$ is symmetric and $-a\mathbf{1}$ is (trivially) symmetric with $a$ real, $A - a\mathbf{1}$ is again symmetric: for $\phi, \chi \in \text{Dom}(A)$, $\left< \phi, (A-a\mathbf{1})\chi \right> = \left< \phi, A\chi \right> - a\left< \phi, \chi \right> = \left< A\phi, \chi \right> - a \left< \phi, \chi \right> = \left< (A-a\mathbf{1})\phi, \chi \right>$, using symmetry of $A$ and reality of $a$. Applying this symmetry identity with $\phi = \chi = \psi$ gives, for our fixed $\psi \in \text{Dom}(A)$,
 \begin{align}
@@ -683,9 +707,12 @@ using positive-definiteness of the inner product for the last step.
 
 \begin{theorem}[Spectrum of a Self-Adjoint Operator is Real]
     \label{thrm:hall-9.17}
+    \lean{Physicslib4.Spectral.Unbounded.pmapSpectrum_subset_real}
+    \leanok
     If $A$ is an unbounded self-adjoint operator on $\mathbf{H}$, the spectrum of $A$ is contained in the real line.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.5, def:hall-9.6, def:hall-9.16, prpstn:hall-9.4, prpstn:hall-9.8, prpstn:hall-9.12, prpstn:hall-9.13, prpstn:hall-9.14, lmm:b-squared-inequality-symmetric, lmm:adjoint-of-scalar-multiple-of-identity, crllr:trivial-complement-characterizes-density, def:kernel-of-an-unbounded-operator, lmm:uniqueness-of-resolvent, def:identity-operator}
 Let $\lambda = a + ib \in \mathbb{C}$ with $b \ne 0$; we show $\lambda$ is in the resolvent set of $A$.
 
@@ -731,9 +758,12 @@ We conclude this part of the development with a criterion for essential self-adj
 
 \begin{theorem}[Essential Self-Adjointness via Dense Range]
     \label{thrm:hall-9.21}
+    \lean{Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_iff_dense_range}
+    \leanok
     If $A$ is a symmetric operator on $\mathbf{H}$, then $A$ is essentially self-adjoint if and only if $\text{Range}(A - i\mathbf{1})$ and $\text{Range}(A + i\mathbf{1})$ are dense subspaces of $\mathbf{H}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-9.2, def:hall-9.6, def:hall-9.7, def:hall-9.16, thrm:hall-9.17, prpstn:hall-9.4, prpstn:hall-9.8, prpstn:hall-9.10, prpstn:hall-9.12, prpstn:hall-9.13, prpstn:hall-9.14, prpstn:closure-linearity-and-sequential-description, lmm:b-squared-inequality-symmetric, lmm:adjoint-of-scalar-multiple-of-identity, crllr:trivial-complement-characterizes-density, prpstn:continuity-of-norm-and-inner-product, def:kernel-of-an-unbounded-operator, lmm:closure-of-symmetric-is-symmetric}
 We first prove the forward direction, i.e. that if $A$ is essentially self-adjoint, then $\text{Range}(A - i\mathbf{1})$ and $\text{Range}(A + i\mathbf{1})$ are dense in $\mathbf{H}$. Since $A$ is essentially self-adjoint, $A^{\text{cl}}$ is self-adjoint. By Proposition~\ref{prpstn:hall-9.10}, $A^* = (A^{\text{cl}})^* = A^{\text{cl}}$, the last equality because $A^{\text{cl}}$ is self-adjoint. By Proposition~\ref{prpstn:hall-9.12} and Proposition~\ref{prpstn:hall-9.13} (applied to $A - i\mathbf{1}$, i.e. with $B = -i\mathbf{1}$, so that $B^* = \overline{(-i)}\mathbf{1} = i\mathbf{1}$ by Lemma~\ref{lmm:adjoint-of-scalar-multiple-of-identity}),
 \begin{align}
