@@ -54,6 +54,11 @@ which is not a density result, and norm-topology closures of star subalgebras
 (`StarSubalgebra.topologicalClosure`), which is the wrong topology. Supplying the missing
 theorem is a development of its own and is deliberately left open here.
 
+**Restriction:** the proof is left as `sorry`. The intended form is this statement with a
+proof, i.e. von Neumann's bicommutant theorem in the strong operator topology for a unital
+`*`-subalgebra of `𝓑(H)`; it is waiting on that density theorem, either in Mathlib or as a
+local development. Nothing else in the project depends on it.
+
 The self-adjoint strengthening — that every self-adjoint element of the bicommutant is a
 strong limit of self-adjoint elements of the image — is the Kaplansky density theorem and
 is deliberately *not* claimed: nothing in the bridge argument needs it.
