@@ -57,7 +57,9 @@ Blueprint reference: `lmm:unitary-is-normal`.
 theorem unitary_mul_adjoint {U : H →L[ℂ] H} (hU : U ∈ unitary (H →L[ℂ] H)) :
     ContinuousLinearMap.adjoint U * U = 1 ∧ U * ContinuousLinearMap.adjoint U = 1 ∧
       IsStarNormal U := by
-  sorry
+  rw [← ContinuousLinearMap.star_eq_adjoint]
+  refine ⟨Unitary.star_mul_self_of_mem hU, Unitary.mul_star_self_of_mem hU, ⟨?_⟩⟩
+  rw [Commute, SemiconjBy, Unitary.star_mul_self_of_mem hU, Unitary.mul_star_self_of_mem hU]
 
 /-!
 ### The scalar Cayley map
@@ -87,23 +89,34 @@ noncomputable def cayleyInv (u : ℂ) : ℝ := (Complex.I * (u + 1) / (u - 1)).r
 Blueprint reference: `lmm:cayley-map`.
 -/
 theorem cayleyMap_mem (x : ℝ) : cayleyMap x ∈ unitCircleMinusOne := by
-  sorry
+  have h : (x : ℂ) - Complex.I ≠ 0 := fun h => by simpa using congrArg Complex.im h
+  refine ⟨?_, fun h1 => ?_⟩
+  · have : ‖(x : ℂ) + Complex.I‖ = ‖(x : ℂ) - Complex.I‖ := by
+      rw [← Complex.norm_conj]; simp [sub_eq_add_neg]
+    simp only [Set.mem_setOf_eq, cayleyMap, norm_div, this]
+    exact div_self (norm_ne_zero_iff.mpr h)
+  · simp only [Set.mem_singleton_iff, cayleyMap, div_eq_one_iff_eq h] at h1
+    have := congrArg Complex.im h1
+    norm_num at this
 
 /--
 `C` is continuous, hence Borel measurable.
 
 Blueprint reference: `lmm:cayley-map`.
 -/
-theorem continuous_cayleyMap : Continuous cayleyMap := by
-  sorry
+theorem continuous_cayleyMap : Continuous cayleyMap :=
+  Continuous.div (by fun_prop) (by fun_prop)
+    fun x h => by simpa using congrArg Complex.im h
 
 /--
 `D` is continuous on its domain, hence Borel measurable there.
 
 Blueprint reference: `lmm:cayley-map`.
 -/
-theorem continuousOn_cayleyInv : ContinuousOn cayleyInv unitCircleMinusOne := by
-  sorry
+theorem continuousOn_cayleyInv : ContinuousOn cayleyInv unitCircleMinusOne :=
+  Complex.continuous_re.comp_continuousOn <|
+    ContinuousOn.div (by fun_prop) (by fun_prop)
+      fun u hu h => hu.2 (sub_eq_zero.mp h)
 
 /--
 On the unit circle minus `1`, `i (u+1)/(u-1)` is real, so `cayleyInv` loses no information.
@@ -112,7 +125,16 @@ Blueprint reference: `lmm:cayley-map`.
 -/
 theorem cayleyInv_ofReal {u : ℂ} (hu : u ∈ unitCircleMinusOne) :
     ((cayleyInv u : ℝ) : ℂ) = Complex.I * (u + 1) / (u - 1) := by
-  sorry
+  obtain ⟨hn, h1⟩ := hu
+  have hu1 : u - 1 ≠ 0 := sub_ne_zero.mpr h1
+  have hu0 : u ≠ 0 := by rintro rfl; simp at hn
+  have hc : (starRingEnd ℂ) u = u⁻¹ := by
+    rw [Complex.inv_def, Complex.normSq_eq_norm_sq, hn]; simp
+  have hu1' : 1 - u ≠ 0 := sub_ne_zero.mpr (Ne.symm h1)
+  exact Complex.conj_eq_iff_re.mp (by
+    simp only [map_div₀, map_mul, map_add, map_sub, map_one, Complex.conj_I, hc]
+    field_simp
+    ring)
 
 /--
 `D ∘ C = id` on `ℝ`.
@@ -120,7 +142,15 @@ theorem cayleyInv_ofReal {u : ℂ} (hu : u ∈ unitCircleMinusOne) :
 Blueprint reference: `lmm:cayley-map`.
 -/
 theorem cayleyInv_cayleyMap (x : ℝ) : cayleyInv (cayleyMap x) = x := by
-  sorry
+  have h : (x : ℂ) - Complex.I ≠ 0 := fun h => by simpa using congrArg Complex.im h
+  have hp : cayleyMap x + 1 = 2 * x / ((x : ℂ) - Complex.I) := by
+    rw [cayleyMap, div_add_one h]; ring
+  have hm : cayleyMap x - 1 = 2 * Complex.I / ((x : ℂ) - Complex.I) := by
+    rw [cayleyMap, div_sub_one h]; ring
+  have : Complex.I * (cayleyMap x + 1) / (cayleyMap x - 1) = x := by
+    rw [hp, hm, mul_div_assoc, div_div_div_cancel_right₀ h]
+    field_simp
+  simp [cayleyInv, this]
 
 /--
 `C ∘ D = id` on the unit circle minus `1`.
@@ -129,15 +159,24 @@ Blueprint reference: `lmm:cayley-map`.
 -/
 theorem cayleyMap_cayleyInv {u : ℂ} (hu : u ∈ unitCircleMinusOne) :
     cayleyMap (cayleyInv u) = u := by
-  sorry
+  have hu1 : u - 1 ≠ 0 := sub_ne_zero.mpr hu.2
+  rw [cayleyMap, cayleyInv_ofReal hu]
+  have hp : Complex.I * (u + 1) / (u - 1) + Complex.I = 2 * Complex.I * u / (u - 1) := by
+    field_simp; ring
+  have hm : Complex.I * (u + 1) / (u - 1) - Complex.I = 2 * Complex.I / (u - 1) := by
+    field_simp; ring
+  rw [hp, hm, div_div_div_cancel_right₀ hu1]
+  field_simp
 
 /--
 `C` is a bijection of `ℝ` onto the unit circle minus `1`.
 
 Blueprint reference: `lmm:cayley-map`.
 -/
-theorem bijOn_cayleyMap : Set.BijOn cayleyMap Set.univ unitCircleMinusOne := by
-  sorry
+theorem bijOn_cayleyMap : Set.BijOn cayleyMap Set.univ unitCircleMinusOne :=
+  Set.InvOn.bijOn (f' := cayleyInv)
+    ⟨fun x _ => cayleyInv_cayleyMap x, fun _ hu => cayleyMap_cayleyInv hu⟩
+    (fun x _ => cayleyMap_mem x) (fun _ _ => Set.mem_univ _)
 
 /-!
 ### The Cayley transform of a self-adjoint operator
@@ -226,7 +265,8 @@ inverse.
 Blueprint reference: `lmm:borel-bijection-transports-pvm` (Part 2).
 -/
 noncomputable def mapPVM (μ : ProjectionValuedMeasure Y H) (T : Y → Z) (hT : Measurable T)
-    (hbij : Function.Bijective T) : ProjectionValuedMeasure Z H where
+    (hbij : Function.Bijective T) (_hinv : Measurable (Equiv.ofBijective T hbij).symm) :
+    ProjectionValuedMeasure Z H where
   toFun F := μ (T ⁻¹' F)
   isStarProjection' := by sorry
   notMeasurable' := by sorry
@@ -236,7 +276,8 @@ noncomputable def mapPVM (μ : ProjectionValuedMeasure Y H) (T : Y → Z) (hT : 
 
 @[simp]
 theorem mapPVM_apply (μ : ProjectionValuedMeasure Y H) (T : Y → Z) (hT : Measurable T)
-    (hbij : Function.Bijective T) (F : Set Z) : mapPVM μ T hT hbij F = μ (T ⁻¹' F) := rfl
+    (hbij : Function.Bijective T) (hinv : Measurable (Equiv.ofBijective T hbij).symm)
+    (F : Set Z) : mapPVM μ T hT hbij hinv F = μ (T ⁻¹' F) := rfl
 
 /--
 The scalar measures of the transported projection-valued measure are the pushforwards.
@@ -244,8 +285,8 @@ The scalar measures of the transported projection-valued measure are the pushfor
 Blueprint reference: `lmm:borel-bijection-transports-pvm` (Part 2).
 -/
 theorem assoc_mapPVM (μ : ProjectionValuedMeasure Y H) (T : Y → Z) (hT : Measurable T)
-    (hbij : Function.Bijective T) (ψ : H) :
-    (mapPVM μ T hT hbij).assoc ψ = (μ.assoc ψ).map T := by
+    (hbij : Function.Bijective T) (hinv : Measurable (Equiv.ofBijective T hbij).symm) (ψ : H) :
+    (mapPVM μ T hT hbij hinv).assoc ψ = (μ.assoc ψ).map T := by
   sorry
 
 end Transport
@@ -281,22 +322,28 @@ theorem pmapIntegral_cayleyInv_eq [Nontrivial H] {A : H →ₗ.[ℂ] H} (hA : Is
 
 /--
 The projection-valued measure on `ℝ` obtained by transporting `μ^U` along the Cayley map:
-`μ^A(E) = μ^U(C(E))`, spelled as the preimage of `E` under `D`.
+`μ^A(E) = μ^U(C(E))`, spelled as the preimage of `E` under `D`. Non-measurable `E` are sent
+to `0`, as a projection-valued measure requires; the preimage of a non-Borel set under `D`
+can still carry mass.
 
 Blueprint reference: `thrm:hall-10.30`.
 -/
 noncomputable def cayleyPVM {U : H →L[ℂ] H} (μU : ProjectionValuedMeasure (spectrum ℂ U) H) :
     ProjectionValuedMeasure ℝ H where
-  toFun E := μU {u : spectrum ℂ U | cayleyInv (u : ℂ) ∈ E}
+  toFun E := by
+    classical
+    exact if MeasurableSet E then μU {u : spectrum ℂ U | cayleyInv (u : ℂ) ∈ E} else 0
   isStarProjection' := by sorry
   notMeasurable' := by sorry
   univ' := by sorry
   hasSum' := by sorry
   inter' := by sorry
 
-@[simp]
 theorem cayleyPVM_apply {U : H →L[ℂ] H} (μU : ProjectionValuedMeasure (spectrum ℂ U) H)
-    (E : Set ℝ) : cayleyPVM μU E = μU {u : spectrum ℂ U | cayleyInv (u : ℂ) ∈ E} := rfl
+    {E : Set ℝ} (hE : MeasurableSet E) :
+    cayleyPVM μU E = μU {u : spectrum ℂ U | cayleyInv (u : ℂ) ∈ E} := by
+  classical
+  exact if_pos hE
 
 /--
 Transporting the spectral measure of `U` through the Cayley map gives a projection-valued
@@ -331,7 +378,7 @@ Blueprint reference: `thrm:hall-10.4`.
 theorem spectralMeasure_concentrated {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     {μ : ProjectionValuedMeasure ℝ H} (hμ : pmapIntegral μ (fun x : ℝ => (x : ℂ)) = A) :
     μ {x : ℝ | (x : ℂ) ∉ pmapSpectrum A} = 0 ∧
-      ∀ E : Set ℝ, μ E = μ (E ∩ {x : ℝ | (x : ℂ) ∈ pmapSpectrum A}) := by
+      ∀ E : Set ℝ, MeasurableSet E → μ E = μ (E ∩ {x : ℝ | (x : ℂ) ∈ pmapSpectrum A}) := by
   sorry
 
 end Unbounded

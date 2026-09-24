@@ -2710,9 +2710,12 @@ We will need one fact about unitary operators, from Definition~\ref{def:unitary-
 
 \begin{lemma}[Unitary Operators are Normal]
     \label{lmm:unitary-is-normal}
+    \lean{Physicslib4.Spectral.Unbounded.unitary_mul_adjoint}
+    \leanok
     If $U \in \mathcal{B}(\mathbf{H})$ is unitary, then $U^*U = UU^* = \mathbf{1}$; in particular $U$ is normal.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:unitary-operator, def:hall-10.19, lmm:hall-dense-testing-second-slot, def:hall-9.1}
 For all $\phi,\psi \in \mathbf{H}$, the definition of the adjoint~(\ref{def:hall-9.1}) and inner-product preservation give $\left< \phi, U^*U\psi \right> = \left< U\phi, U\psi \right> = \left< \phi, \psi \right> = \left< \phi, \mathbf{1}\psi \right>$. By Lemma~\ref{lmm:hall-dense-testing-second-slot} with $D = \mathbf{H}$, $U^*U\psi = \psi$ for every $\psi$, i.e. $U^*U = \mathbf{1}$.
 
@@ -2723,9 +2726,12 @@ The Cayley transform will be transported to a projection-valued measure on the u
 
 \begin{lemma}[The Spectrum of a Unitary Operator Lies on the Unit Circle]
     \label{lmm:unitary-spectrum-circle}
+    \lean{spectrum.subset_circle_of_unitary, Unitary.spectrum_subset_circle}
+    \leanok
     Let $U \in \mathcal{B}(\mathbf{H})$ be unitary, with $\mathbf{H} \ne \{0\}$. Then $\sigma(U) \subset S^1 \equiv \{ z \in \mathbb{C} : \lvert z \rvert = 1 \}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:nonzero-hilbert-space, def:unitary-operator, crllr:crllr-1, lmm:hall-7.6, def:bounded-operator-resolvent-and-spectrum}
 First, $\left\| U \right\| = 1$: unitarity gives $\left\| U\psi \right\| = \left\| \psi \right\|$ for all $\psi$ (take $\phi = \psi$ in the inner-product identity of Definition~\ref{def:unitary-operator} and take square roots), so $\left\| U \right\| = 1$ since $\mathbf{H} \ne \{0\}$ provides a vector of norm $1$. The same computation applied to $U^{-1}$ gives $\left\| U^{-1}\psi \right\| = \left\| U U^{-1}\psi \right\| = \left\| \psi \right\|$, so $\left\| U^{-1} \right\| = 1$ as well.
 
@@ -2740,6 +2746,8 @@ We record the scalar maps and their elementary properties. Write $S^1 \equiv \{ 
 
 \begin{lemma}[The Cayley Map and its Inverse]
     \label{lmm:cayley-map}
+    \lean{Physicslib4.Spectral.Unbounded.unitCircleMinusOne, Physicslib4.Spectral.Unbounded.cayleyMap, Physicslib4.Spectral.Unbounded.cayleyInv, Physicslib4.Spectral.Unbounded.cayleyMap_mem, Physicslib4.Spectral.Unbounded.continuous_cayleyMap, Physicslib4.Spectral.Unbounded.continuousOn_cayleyInv, Physicslib4.Spectral.Unbounded.cayleyInv_ofReal, Physicslib4.Spectral.Unbounded.cayleyInv_cayleyMap, Physicslib4.Spectral.Unbounded.cayleyMap_cayleyInv, Physicslib4.Spectral.Unbounded.bijOn_cayleyMap}
+    \leanok
     Define $C : \mathbb{R} \to \mathbb{C}$ and $D : S^1\setminus\{1\} \to \mathbb{C}$ by
     \begin{align}
         C(x) \equiv \frac{x+i}{x-i}, \qquad D(u) \equiv i\,\frac{u+1}{u-1}.
@@ -2747,6 +2755,7 @@ We record the scalar maps and their elementary properties. Write $S^1 \equiv \{ 
     Then $C$ is a bijection of $\mathbb{R}$ onto $S^1\setminus\{1\}$, $D$ is its inverse, and both are continuous (hence Borel measurable) on their domains. Moreover $D$ is real-valued.
 \end{lemma}
 \begin{proof}
+\leanok
 \textit{Well defined and continuous.} For $x \in \mathbb{R}$, $x - i \ne 0$, so $C(x)$ is defined, and $C$ is continuous as a quotient of continuous functions with non-vanishing denominator. Also $\lvert x+i \rvert = \sqrt{x^2+1} = \lvert x-i \rvert$, so $\lvert C(x) \rvert = 1$, i.e. $C(x) \in S^1$; and $C(x) = 1$ would force $x+i = x-i$, i.e. $i = -i$, which is false, so $C(x) \in S^1\setminus\{1\}$. Similarly $D$ is defined and continuous on $S^1\setminus\{1\}$, where $u - 1 \ne 0$.
 
 \textit{$D$ is real-valued.} Let $u \in S^1\setminus\{1\}$, so $\overline u = u^{-1}$. Then
@@ -2775,6 +2784,8 @@ We now construct the operator $U$. Recall from Theorem~\ref{thrm:hall-9.17} that
 
 \begin{theorem}[Cayley Transform]
     \label{thrm:hall-10.28}
+    \lean{Physicslib4.Spectral.Unbounded.IsCayleyTransform, Physicslib4.Spectral.Unbounded.exists_isCayleyTransform}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and define
     \begin{align}
         U\psi \equiv (A + i\mathbf{1})(A - i\mathbf{1})^{-1}\psi, \qquad \psi \in \mathbf{H}.
@@ -2840,6 +2851,8 @@ The Cayley transform carries the spectrum of $A$ onto the spectrum of $U$, minus
 
 \begin{lemma}[Spectral Mapping for the Cayley Transform]
     \label{lmm:cayley-spectral-mapping}
+    \lean{Physicslib4.Spectral.Unbounded.mem_spectrum_iff_cayleyMap_mem_spectrum, Physicslib4.Spectral.Unbounded.cayleyMap_image_spectrum}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$, with $\mathbf{H} \ne \{0\}$, and let $U$ be its Cayley transform. Then for every $\lambda \in \mathbb{R}$,
     \begin{align}
         \lambda \in \sigma(A) \iff C(\lambda) \in \sigma(U),
@@ -2884,16 +2897,23 @@ We first record the measure-theoretic transport fact, standard and assumed here 
 
 \begin{theorem}[Change of Variables for a Pushforward Measure]
     \label{thrm:change-of-variables}
+    \lean{MeasureTheory.lintegral_map_equiv, MeasureTheory.integral_map_equiv}
+    \leanok
     Let $(Y,\Omega(Y))$ and $(Z,\Omega(Z))$ be measurable spaces, $T : Y \to Z$ a measurable bijection with measurable inverse, and $\nu$ a measure on $\Omega(Y)$. Define the \textit{pushforward} $T_*\nu$ on $\Omega(Z)$ by $(T_*\nu)(F) \equiv \nu\big(T^{-1}(F)\big)$. Then for every measurable $g : Z \to [0,\infty]$, and for every $g$ integrable with respect to $T_*\nu$,
     \begin{align}
         \int_Z g \, d(T_*\nu) = \int_Y (g \circ T) \, d\nu.
     \end{align}
 \end{theorem}
+\begin{proof}
+\leanok
+\end{proof}
 
 We also isolate the purely set-theoretic transport of a projection-valued measure along a Borel bijection, since we will need it twice: once to build $\mu^A$ from $\mu^U$, and once, in the reverse direction, in the uniqueness argument.
 
 \begin{lemma}[A Borel Bijection Transports a Projection-Valued Measure]
     \label{lmm:borel-bijection-transports-pvm}
+    \lean{Physicslib4.Spectral.Unbounded.restrictPVM, Physicslib4.Spectral.Unbounded.mapPVM, Physicslib4.Spectral.Unbounded.assoc_mapPVM}
+    \leanok
     Let $(Y,\Omega(Y))$ and $(Z,\Omega(Z))$ be measurable spaces.
     \begin{enumerate}
         \item \textit{(Restriction.)} Let $\mu$ be a projection-valued measure on $\Omega(Y)$ and let $Y_0 \in \Omega(Y)$ satisfy $\mu(Y\setminus Y_0) = 0$. Then $\Omega(Y_0) \equiv \{ E \in \Omega(Y) \mid E \subset Y_0 \}$ is a $\sigma$-algebra on $Y_0$, and the restriction of $\mu$ to $\Omega(Y_0)$ is a projection-valued measure on $Y_0$.
@@ -2937,6 +2957,8 @@ One more observation is needed: $1$ is never an atom of $\mu^U$, so $D$ — unde
 
 \begin{lemma}[The Cayley Transform Omits the Point $1$]
     \label{lmm:cayley-omits-one}
+    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure_singleton_one_eq_zero}
+    \leanok
     Let $A$ be self-adjoint with Cayley transform $U$, and $\mu^U$ the projection-valued measure of $U$. Then $\mu^U(\{1\}) = 0$, and consequently $\mu^U_\psi(\{1\}) = 0$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -2948,6 +2970,8 @@ The next proposition is the heart of the matter: $A$ is recovered from $U$ by th
 
 \begin{proposition}[Spectral Subspaces of the Cayley Transform]
     \label{prpstn:hall-10.29}
+    \lean{Physicslib4.Spectral.Unbounded.pmapIntegral_cayleyInv_eq}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$, with $\mathbf{H} \ne \{0\}$, let $U$ be its Cayley transform, and let $D$ be as in Lemma~\ref{lmm:cayley-map}. (The hypothesis $\mathbf{H} \ne \{0\}$ is needed because the projection-valued measure $\mu^U$ below is supplied by Theorem~\ref{thrm:hall-10.20}, which assumes it.) Then
     \begin{align}
         A = \int_{\sigma(U)} D(u) \, d\mu^U(u),
@@ -3015,6 +3039,8 @@ Transporting the measure along $C$ now gives the projection-valued measure for $
 
 \begin{theorem}[Transporting the Spectral Measure through the Cayley Transform]
     \label{thrm:hall-10.30}
+    \lean{Physicslib4.Spectral.Unbounded.cayleyPVM, Physicslib4.Spectral.Unbounded.pmapIntegral_cayleyPVM_id}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$, with $\mathbf{H} \ne \{0\}$, let $U$ be its Cayley transform, and let $\mu^U$ be the projection-valued measure of $U$ supplied by Theorem~\ref{thrm:hall-10.20}. Define, for each Borel set $E \subset \mathbb{R}$,
     \begin{align}
         \mu^A(E) \equiv \mu^U\big( C(E) \big).
@@ -3057,6 +3083,8 @@ We can finally state and prove the theorem this section set out to establish.
 
 \begin{theorem}[Spectral Theorem for Unbounded, Self-Adjoint Operators]
     \label{thrm:hall-10.4}
+    \lean{Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_unbounded, Physicslib4.Spectral.Unbounded.spectralMeasure_concentrated}
+    \leanok
     If $A$ is an unbounded self-adjoint operator on $\mathbf{H}$, there is a unique projection-valued measure $\mu^A$ on the Borel $\sigma$-algebra of $\mathbb{R}$ such that
     \begin{align}
         \int_{\mathbb{R}} \lambda \, d\mu^A(\lambda) = A.
