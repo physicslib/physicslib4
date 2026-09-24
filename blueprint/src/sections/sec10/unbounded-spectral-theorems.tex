@@ -1744,7 +1744,9 @@ Every bounded self-adjoint operator is a special case of a broader, and for our 
 
 \begin{definition}[Normal Operator]
     \label{def:hall-10.19}
+    \lean{IsStarNormal}
     \uses{def:bounded-operator-notation}
+    \leanok
     A bounded operator $A$ on $\mathbf{H}$ is \textit{normal} if $A$ commutes with its adjoint: $AA^* = A^*A$.
 \end{definition}
 
@@ -1752,9 +1754,12 @@ The class is genuinely larger than the self-adjoint operators — for instance e
 
 \begin{lemma}[Bounded Self-Adjoint Operators are Normal]
     \label{lmm:self-adjoint-is-normal}
+    \lean{IsSelfAdjoint.isStarNormal}
+    \leanok
     If $A \in \mathcal{B}(\mathbf{H})$ is self-adjoint, then $A$ is normal.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.19, def:hall-9.5}
 Self-adjointness gives $A^* = A$, so $AA^* = AA = A^2$ and $A^*A = AA = A^2$; the two agree, which is the definition of normal~(\ref{def:hall-10.19}).
 \end{proof}
@@ -1773,11 +1778,16 @@ We will also need the standard corollary of the Hahn–Banach theorem identifyin
 
 \begin{theorem}[Norm via Dual Pairing]
     \label{thrm:norm-via-dual-pairing}
+    \lean{Physicslib4.Spectral.Unbounded.norm_eq_sSup_dual}
+    \leanok
     If $x$ is an element of a normed vector space $V$, then
     \begin{align}
         \|x\| = \sup \{ \lvert \xi(x) \rvert : \xi \in V^*,\ \|\xi\| \le 1 \}.
     \end{align}
 \end{theorem}
+\begin{proof}
+\leanok
+\end{proof}
 
 Section~\ref{sctn:spectral-theorems} now records the holomorphy and Neumann-series facts we need as Proposition~\ref{prpstn:resolvent-holomorphy-and-neumann-series}.
 
@@ -1785,12 +1795,15 @@ An operator-norm-convergent power series composed with any bounded linear functi
 
 \begin{lemma}[Power Growth is Controlled by the Spectral Radius]
     \label{lmm:power-growth-controlled-by-spectral-radius}
+    \lean{Physicslib4.Spectral.Unbounded.tendsto_norm_pow_div_atTop}
+    \leanok
     Suppose $\mathbf{H} \ne \{0\}$, $A \in \mathcal{B}(\mathbf{H})$, and $T \in \mathbb{R}$ with $T > R(A)$. (The hypothesis $\mathbf{H} \ne \{0\}$ is what makes $R(A)$ well defined: by Definition~\ref{def:spectral-radius} it is a supremum over $\sigma(A)$, and $\sigma(A)$ is non-empty only because of Part 1 of Proposition~\ref{prpstn:hall-7.5}, which fails on the zero space.) Then
     \begin{align}
         \lim_{m \to \infty} \frac{\|A^m\|}{T^m} = 0.
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:nonzero-hilbert-space, def:spectral-radius, prpstn:resolvent-holomorphy-and-neumann-series, thrm:laurents-theorem, lmm:nth-term-test, thrm:hall-a.40, thrm:theorem-on-completeness-of-the-dual, lmm:bounded-operators-form-a-banach-space, thrm:norm-via-dual-pairing, crllr:crllr-1, prpstn:hall-7.5}
 Fix $\lambda_1 \in \mathbb{C}$ with $R(A) < \lvert \lambda_1 \rvert < T$ (possible since $R(A) < T$). We first show there is a constant $C < \infty$ with $\|A^m\| \le C\lvert \lambda_1 \rvert^{m+1}$ for all $m$.
 
@@ -1819,12 +1832,15 @@ We now use this growth bound to establish submultiplicativity of the spectral ra
 
 \begin{lemma}[Spectral Radius of a Product of Commuting Operators]
     \label{lmm:hall-10.22}
+    \lean{Physicslib4.Spectral.Unbounded.spectralRadius_mul_le_of_commute}
+    \leanok
     Suppose $\mathbf{H} \ne \{0\}$ (so that the spectral radii below are well defined, as in Lemma~\ref{lmm:power-growth-controlled-by-spectral-radius}). If $A$ and $B$ are commuting elements of $\mathcal{B}(\mathbf{H})$, then
     \begin{align}
         R(AB) \le R(A)R(B).
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:nonzero-hilbert-space, lmm:power-growth-controlled-by-spectral-radius, def:spectral-radius, prpstn:hall-7.5, lmm:bounded-operators-form-a-banach-space, crllr:crllr-1, lmm:lemma-2, prpstn:convergence-facts}
 We first show: for \textit{every} pair of real numbers $S > R(A)$ and $T > R(B)$,
 \begin{align}
@@ -1860,6 +1876,8 @@ We can now prove the equality of norm and spectral radius for normal operators, 
 
 \begin{lemma}[Adjoint of a Product; the Adjoint is an Involution]
     \label{lmm:adjoint-product-and-involution}
+    \lean{ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint}
+    \leanok
     For $A, B \in \mathcal{B}(\mathbf{H})$:
     \begin{enumerate}
         \item $(AB)^* = B^*A^*$.
@@ -1867,6 +1885,7 @@ We can now prove the equality of norm and spectral radius for normal operators, 
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:bounded-operator-notation, def:hall-9.1}
 \textbf{Part 1.} For any $\phi,\psi \in \mathbf{H}$, applying the definition of the adjoint~(\ref{def:hall-9.1}) (for a bounded operator, with domain all of $\mathbf{H}$) to $B$ and then to $A$,
 \begin{align}
@@ -1886,9 +1905,12 @@ As this holds for all $\phi,\psi\in\mathbf{H}$, this is exactly the defining pro
 
 \begin{proposition}[Norm Equals Spectral Radius for Normal Operators]
     \label{prpstn:hall-10.21}
+    \lean{IsStarNormal.spectralRadius_eq_nnnorm}
+    \leanok
     Suppose $\mathbf{H} \ne \{0\}$ (so that $R(A)$ is well defined, as in Lemma~\ref{lmm:power-growth-controlled-by-spectral-radius}). If $A \in \mathcal{B}(\mathbf{H})$ is normal, then $\|A\| = R(A)$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{conv:nonzero-hilbert-space, def:hall-10.19, lmm:hall-10.22, def:spectral-radius, crllr:crllr-1, prpstn:hall-7.2, lmm:hall-8.1, lmm:adjoint-product-and-involution, lmm:power-growth-controlled-by-spectral-radius}
 By Corollary~\ref{crllr:crllr-1}, $R(A) \le \|A\|$ for any bounded operator. It remains to show $\|A\| \le R(A)$.
 
@@ -1908,7 +1930,9 @@ The route to the two-variable spectral mapping theorem passes through \textit{sp
 
 \begin{definition}[Spectral Subspaces]
     \label{def:hall-7.14}
+    \lean{Physicslib4.Spectral.Unbounded.spectralSubspace}
     \uses{def:projection-valued-measure, thrm:spectral-theorem-for-bounded-operators, lmm:range-of-projection-is-kernel, lmm:closed-subspace-is-hilbert}
+    \leanok
     Let $\mu$ be a projection-valued measure on a $\sigma$-algebra $\Omega(Y)$ over a set $Y$. For each $E \in \Omega(Y)$, the \textit{spectral subspace} $V_E$ of $\mathbf{H}$ (relative to $\mu$) is
     \begin{align}
         V_E \equiv \text{Range}\big( \mu(E) \big).
@@ -1922,6 +1946,8 @@ We need three properties of these subspaces. The first two follow directly from 
 
 \begin{proposition}[Properties of Spectral Subspaces]
     \label{prpstn:hall-7.15}
+    \lean{Physicslib4.Spectral.Unbounded.pvmOperator, Physicslib4.Spectral.Unbounded.mapsTo_pvmOperator_spectralSubspace, Physicslib4.Spectral.Unbounded.norm_sub_smul_le_of_mem_spectralSubspace, Physicslib4.Spectral.Unbounded.spectralSubspace_ne_bot}
+    \leanok
     Let $X \subset \mathbb{C}$ be compact, let $\mu$ be a projection-valued measure on the Borel $\sigma$-algebra of $X$, and set $A \equiv \int_X \iota \, d\mu$ — a bounded operator, since $\iota(\lambda) = \lambda$ is bounded on the compact set $X$. Let $V_E \equiv \text{Range}(\mu(E))$ be the associated spectral subspaces~(\ref{def:hall-7.14}). Then:
     \begin{enumerate}
         \item Each $V_E$ is invariant under $A$: $A(V_E) \subset V_E$.
@@ -1933,6 +1959,7 @@ We need three properties of these subspaces. The first two follow directly from 
     Note that the statement is about an arbitrary projection-valued measure on a compact $X \subset \mathbb{C}$ and the operator $A$ it integrates to; it presupposes no spectral theorem, and its proof below uses none. It will be applied in two ways: with $\mu = \mu^A$ for a bounded \textit{self-adjoint} $A$ (where $X = \sigma(A) \subset \mathbb{R}$, so the sets in Part 2 are real intervals), which is available now; and, later and only after that theorem has been proved by a route passing through this proposition, with $\mu = \mu^U$ for a bounded \textit{normal} $U$. There is no circularity: the present proposition is logically prior to both.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{conv:nonzero-hilbert-space, prpstn:integral-multiplicative, prpstn:integral-norm-bound, def:hall-7.14, lmm:integral-ignores-null-sets, prpstn:coincidence-with-the-bounded-integral, lmm:range-of-projection-is-kernel, lmm:uniqueness-of-resolvent, def:projection-valued-measure, thrm:operator-valued-integration, def:bounded-operator-resolvent-and-spectrum, lmm:spectrum-notions-agree, def:identity-operator, def:indicator-function, prpstn:basic-integral-properties}
 Throughout we use multiplicativity of the bounded integral, Proposition~\ref{prpstn:integral-multiplicative}, and write $f(A) \equiv \int_X f\,d\mu$ for bounded measurable $f$; note $\iota(A) = A$ by the definition of $A$, $1(A) = \mathbf{1}$ and $1_E(A) = \mu(E)$ by property 1 of the same theorem.
 
@@ -1963,6 +1990,8 @@ The last property we need is that an operator commuting with $A$ preserves every
 
 \begin{proposition}[Commuting Operators Preserve Spectral Subspaces]
     \label{prpstn:hall-7.16}
+    \lean{Physicslib4.Spectral.Unbounded.commute_borelCalculus, Physicslib4.Spectral.Unbounded.mapsTo_spectralSubspace_of_commute}
+    \leanok
     Suppose $\mathbf{H} \ne \{0\}$. Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and let $B \in \mathcal{B}(\mathbf{H})$ commute with $A$. Then
     \begin{enumerate}
         \item $B$ commutes with $f(A)$ for every bounded measurable $f$ on $\sigma(A)$; and
@@ -1970,6 +1999,7 @@ The last property we need is that an operator commuting with $A$ preserves every
     \end{enumerate}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:indicator-function, conv:nonzero-hilbert-space, def:hall-7.14, prpstn:quadratic-forms-on-a-subspace-properties, def:hall-9.1, thrm:projection-valued-measures-associated-measure, def:functional-calculus, thrm:bounded-convergence-theorem, thrm:stone-weierstrass-complex, lmm:hall-dense-testing-second-slot, lmm:hall-prblm-8.3.3c, lmm:spectrum-is-compact-metric-measurable, lmm:lemma-2}
 \textbf{Part 1.} Let $\mathcal{F}$ denote the set of bounded measurable $f$ on $\sigma(A)$ with $Bf(A) = f(A)B$. We show $\mathcal{F}$ contains all bounded measurable functions, in three steps.
 
@@ -2013,12 +2043,15 @@ Recall the target: the two-variable spectral mapping theorem $\sigma\big(p(A,A^*
 
 \begin{lemma}[Normality Balances the Two Norms]
     \label{lmm:normality-balances-norms}
+    \lean{Physicslib4.Spectral.Unbounded.norm_adjoint_sub_smul_apply}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal and $\lambda \in \mathbb{C}$. Then for every $\psi \in \mathbf{H}$,
     \begin{align}
         \left\| (A^* - \overline\lambda\mathbf{1})\psi \right\| = \left\| (A - \lambda\mathbf{1})\psi \right\|.
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-10.19, lmm:adjoint-product-and-involution, lmm:adjoint-of-scalar-multiple-of-identity, prpstn:hall-9.13, def:hall-9.1}
 First note $A - \lambda\mathbf{1}$ is again normal. Its adjoint is $A^* - \overline{\lambda}\mathbf{1}$, by Proposition~\ref{prpstn:hall-9.13} together with Lemma~\ref{lmm:adjoint-of-scalar-multiple-of-identity}; and expanding both products, using $AA^* = A^*A$ (normality) and the fact that scalar multiples of $\mathbf{1}$ commute with everything,
 \begin{align}
@@ -2039,7 +2072,9 @@ the middle equality being the commutation just verified. Taking square roots giv
 
 \begin{definition}[$\varepsilon$-Almost Eigenvector]
     \label{def:hall-10.24}
+    \lean{Physicslib4.Spectral.Unbounded.IsAlmostEigenvector}
     \uses{def:identity-operator, def:bounded-operator-notation}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$, $\lambda \in \mathbb{C}$, and $\varepsilon > 0$. An \textit{$\varepsilon$-almost eigenvector for $A$ with eigenvalue $\lambda$} is a nonzero vector $\psi \in \mathbf{H}$ with
     \begin{align}
         \left\| (A - \lambda\mathbf{1})\psi \right\| < \varepsilon \left\| \psi \right\|.
@@ -2050,6 +2085,8 @@ Note that, unlike the set of genuine eigenvectors for a fixed $\lambda$, the set
 
 \begin{lemma}[Almost Eigenvectors and the Spectrum of a Normal Operator]
     \label{lmm:hall-10.25}
+    \lean{Physicslib4.Spectral.Unbounded.isAlmostEigenvector_adjoint, Physicslib4.Spectral.Unbounded.mem_spectrum_iff_forall_isAlmostEigenvector}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal.
     \begin{enumerate}
         \item If $\psi$ is an $\varepsilon$-almost eigenvector for $A$ with eigenvalue $\lambda$, then $\psi$ is an $\varepsilon$-almost eigenvector for $A^*$ with eigenvalue $\overline\lambda$.
@@ -2057,6 +2094,7 @@ Note that, unlike the set of genuine eigenvectors for a fixed $\lambda$, the set
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-10.19, def:hall-10.24, lmm:normality-balances-norms, prpstn:hall-9.13, prpstn:hall-9.14, prpstn:hall-9.12, crllr:trivial-complement-characterizes-density, def:bounded-operator-resolvent-and-spectrum, def:kernel-of-an-unbounded-operator, thrm:hall-9.17}
 \textbf{Part 1.} Immediate from Lemma~\ref{lmm:normality-balances-norms}: $\left\| (A^*-\overline\lambda\mathbf{1})\psi \right\| = \left\| (A-\lambda\mathbf{1})\psi \right\| < \varepsilon\left\| \psi \right\|$, and $\psi \ne 0$.
 
@@ -2083,9 +2121,12 @@ So $A - \lambda\mathbf{1}$ is a bijection of $\mathbf{H}$ onto $\mathbf{H}$; let
 
 \begin{lemma}[Polynomials Preserve Almost Eigenvectors]
     \label{lmm:hall-10.26}
+    \lean{Physicslib4.Spectral.Unbounded.exists_const_isAlmostEigenvector_mvApply}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, $p$ a polynomial in two variables, and $\lambda \in \mathbb{C}$. Then there is a constant $C$ (depending on $p$, $A$, and $\lambda$, but not on $\varepsilon$ or $\psi$) such that: if $\psi$ is an $\varepsilon$-almost eigenvector for $A$ with eigenvalue $\lambda$, then $\psi$ is a $(C\varepsilon)$-almost eigenvector for $p(A,A^*)$ with eigenvalue $p(\lambda,\overline\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, lmm:lemma-2, def:hall-10.19, def:hall-10.24, lmm:normality-balances-norms}
 Write $p(\lambda,\overline\lambda) = \sum_{k,l} a_{kl}\lambda^k\overline\lambda^{\,l}$, so that $p(A,A^*) = \sum_{k,l} a_{kl}A^k(A^*)^l$ (a well-defined expression, since $A$ and $A^*$ commute). Then
 \begin{align}
@@ -2124,6 +2165,8 @@ Two small structural facts are needed before the main construction: that polynom
 
 \begin{lemma}[Polynomials in a Normal Operator are Normal]
     \label{lmm:polynomials-in-normal-are-normal}
+    \lean{Physicslib4.Spectral.Unbounded.mvApply, Physicslib4.Spectral.Unbounded.mvEvalConj, Physicslib4.Spectral.Unbounded.adjoint_mvApply, Physicslib4.Spectral.Unbounded.isStarNormal_mvApply, Physicslib4.Spectral.Unbounded.commute_mvApply}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal and $p$ a polynomial in two variables, $p(\lambda,\overline\lambda) = \sum_{k,l} a_{kl}\lambda^k\overline\lambda^{\,l}$. Then $p(A,A^*) \equiv \sum_{k,l} a_{kl}A^k(A^*)^l$ satisfies
     \begin{align}
         \big( p(A,A^*) \big)^* = \overline{p}(A,A^*), \qquad \text{where } \overline{p}(\lambda,\overline\lambda) \equiv \sum_{k,l} \overline{a_{kl}}\,\lambda^l\overline\lambda^{\,k},
@@ -2131,6 +2174,7 @@ Two small structural facts are needed before the main construction: that polynom
     and $p(A,A^*)$ is normal. Moreover $p(A,A^*)$, and its adjoint, commute with both $A$ and $A^*$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.19, lmm:adjoint-product-and-involution, lmm:adjoint-of-scalar-multiple-of-identity, prpstn:hall-9.13}
 By Lemma~\ref{lmm:adjoint-product-and-involution}, $\big( A^k(A^*)^l \big)^* = \big((A^*)^l\big)^*\big(A^k\big)^* = A^l (A^*)^k$, using Part 1 repeatedly to reverse each product and Part 2 to simplify $(A^*)^* = A$. Adjoints are conjugate-linear (by Proposition~\ref{prpstn:hall-9.13} for additivity and Lemma~\ref{lmm:adjoint-of-scalar-multiple-of-identity} for scalars), so $\big( p(A,A^*) \big)^* = \sum_{k,l}\overline{a_{kl}}A^l(A^*)^k = \overline{p}(A,A^*)$.
 
@@ -2139,9 +2183,12 @@ Since $A$ commutes with $A^*$ (normality), any two words in the letters $A$ and 
 
 \begin{lemma}[Restriction of a Normal Operator to a Doubly Invariant Subspace]
     \label{lmm:restriction-of-normal-operator}
+    \lean{Physicslib4.Spectral.Unbounded.exists_restrict_isStarNormal}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal and let $W \subset \mathbf{H}$ be a nonzero closed subspace invariant under both $A$ and $A^*$. Then $W$ is a separable Hilbert space in the inherited inner product, $A\vert_W \in \mathcal{B}(W)$, its adjoint (computed in $W$) is $A^*\vert_W$, and $A\vert_W$ is normal.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.19, def:hall-9.1, lmm:closed-subspace-is-hilbert}
 $W$ is a closed subspace of $\mathbf{H}$, hence itself a separable Hilbert space by Lemma~\ref{lmm:closed-subspace-is-hilbert}. Invariance means $A\vert_W$ maps $W$ into $W$, and $\left\| A\vert_W\eta \right\| = \left\| A\eta \right\| \le \left\| A \right\|\left\| \eta \right\|$, so $A\vert_W \in \mathcal{B}(W)$ with $\left\| A\vert_W \right\| \le \left\| A \right\|$.
 
@@ -2154,9 +2201,12 @@ We can now carry out the construction that replaces the matrix-case eigenspace a
 
 \begin{lemma}[An Almost-Eigenvector Subspace for a Polynomial in a Normal Operator]
     \label{lmm:hall-10.27}
+    \lean{Physicslib4.Spectral.Unbounded.exists_subspace_isAlmostEigenvector}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, $p$ a polynomial in two variables, and $\mu \in \sigma\big( p(A,A^*) \big)$. Then for every $\varepsilon > 0$ there is a nonzero closed subspace $W^\varepsilon \subset \mathbf{H}$, invariant under both $A$ and $A^*$, every nonzero element of which is an $\varepsilon$-almost eigenvector for $p(A,A^*)$ with eigenvalue $\mu$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:hall-10.19, def:hall-10.24, def:hall-7.14, prpstn:hall-7.15, prpstn:hall-7.16, lmm:hall-10.25, lmm:hall-10.26, lmm:polynomials-in-normal-are-normal, lmm:adjoint-product-and-involution, prpstn:hall-a.43, lmm:self-adjoint-is-normal, thrm:spectral-theorem-for-bounded-operators, def:hall-9.1, lmm:normality-balances-norms}
 Fix $\varepsilon > 0$ and set $B \equiv p(A,A^*) - \mu\mathbf{1}$. By Lemma~\ref{lmm:polynomials-in-normal-are-normal}, $p(A,A^*)$ is normal, and hence so is $B$ (the computation in the proof of Lemma~\ref{lmm:normality-balances-norms} shows that subtracting a scalar multiple of $\mathbf{1}$ preserves normality). Since $\mu \in \sigma(p(A,A^*))$, $0 \in \sigma(B)$ — for $B - 0\cdot\mathbf{1} = p(A,A^*) - \mu\mathbf{1}$ has a bounded two-sided inverse exactly when $\mu$ is in the resolvent set of $p(A,A^*)$.
 
@@ -2183,12 +2233,15 @@ so $\left\| B\psi \right\| \le \tfrac{\varepsilon}{2}\left\| \psi \right\| < \va
 
 \begin{theorem}[Spectral Mapping for Polynomials in $A$ and $A^*$]
     \label{thrm:hall-10.23}
+    \lean{Physicslib4.Spectral.Unbounded.spectrum_mvApply}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, with $\mathbf{H} \ne \{0\}$, and let $p$ be a polynomial in two variables. Then
     \begin{align}
         \sigma\big( p(A,A^*) \big) = \big\{ p(\lambda,\overline\lambda) \;\mid\; \lambda \in \sigma(A) \big\}.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:nonzero-hilbert-space, def:hall-10.19, def:hall-10.24, lmm:hall-10.25, lmm:hall-10.26, lmm:hall-10.27, lmm:polynomials-in-normal-are-normal, lmm:restriction-of-normal-operator, prpstn:hall-7.5, crllr:crllr-1, prpstn:convergence-facts}
 Before either inclusion, we record a uniformity remark about the constant $C$ of Lemma~\ref{lmm:hall-10.26}. Inspecting the recursion there, $C$ is built from $\left\| A \right\|$, $\left\| A^* \right\|$, the coefficients of $p$, and $\lvert \lambda \rvert$, and is non-decreasing in $\lvert \lambda \rvert$. By Corollary~\ref{crllr:crllr-1}, every $\lambda \in \sigma(A)$ satisfies $\lvert \lambda \rvert \le R(A) \le \left\| A \right\|$; and, as we will see, every $\lambda$ arising below satisfies $\lvert \lambda \rvert \le \left\| A \right\|$ as well. So there is a single constant $C$, depending only on $p$ and $A$, valid for all $\lambda$ with $\lvert\lambda\rvert \le \left\|A\right\|$. The constant produced by Lemma~\ref{lmm:hall-10.26} already satisfies $C > 0$, by its construction there, so the divisions by $C$ below are legitimate; we fix such a $C$ once and for all.
 
@@ -2227,12 +2280,15 @@ Combining Theorem~\ref{thrm:hall-10.23} with Proposition~\ref{prpstn:hall-10.21}
 
 \begin{corollary}[Norm of a Polynomial in $A$ and $A^*$]
     \label{crllr:norm-of-polynomial-in-a-astar}
+    \lean{Physicslib4.Spectral.Unbounded.norm_mvApply}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, with $\mathbf{H} \ne \{0\}$, and $p$ a polynomial in two variables. Then
     \begin{align}
         \left\| p(A,A^*) \right\| = \sup_{\lambda \in \sigma(A)} \big\lvert p(\lambda,\overline\lambda) \big\rvert.
     \end{align}
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{conv:nonzero-hilbert-space, thrm:hall-10.23, prpstn:hall-10.21, lmm:polynomials-in-normal-are-normal, def:spectral-radius}
 By Lemma~\ref{lmm:polynomials-in-normal-are-normal}, $p(A,A^*)$ is normal, so Proposition~\ref{prpstn:hall-10.21} gives $\left\| p(A,A^*) \right\| = R\big( p(A,A^*) \big)$. By the definition of the spectral radius~(\ref{def:spectral-radius}) and Theorem~\ref{thrm:hall-10.23},
 \begin{align}
@@ -2246,6 +2302,8 @@ With the norm identity in hand, extending $p \mapsto p(A,A^*)$ from polynomials 
 
 \begin{theorem}[Continuous Functional Calculus for a Normal Operator]
     \label{thrm:continuous-functional-calculus-normal}
+    \lean{Physicslib4.Spectral.Unbounded.mvPolyOn, Physicslib4.Spectral.Unbounded.normalCalculus, Physicslib4.Spectral.Unbounded.existsUnique_normalCalculus, Physicslib4.Spectral.Unbounded.normalCalculus_mvPolyOn, Physicslib4.Spectral.Unbounded.normalCalculus_mul, Physicslib4.Spectral.Unbounded.normalCalculus_star, Physicslib4.Spectral.Unbounded.norm_normalCalculus, Physicslib4.Spectral.Unbounded.normalCalculus_one_and_id, Physicslib4.Spectral.Unbounded.isSelfAdjoint_normalCalculus_of_real, Physicslib4.Spectral.Unbounded.isStarNormal_normalCalculus}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, with $\mathbf{H} \ne \{0\}$. There is a unique bounded linear map
     \begin{align}
         \Phi_A : C^0\big( \sigma(A); \mathbb{C} \big) \longrightarrow \mathcal{B}(\mathbf{H})
@@ -2261,6 +2319,7 @@ With the norm identity in hand, extending $p \mapsto p(A,A^*)$ from polynomials 
     In particular, if $f$ is real-valued on $\sigma(A)$ then $\Phi_A(f)$ is self-adjoint, and $\Phi_A(f)$ is normal for every $f$. We write $f(A) \equiv \Phi_A(f)$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:nonzero-hilbert-space, def:hall-10.19, crllr:norm-of-polynomial-in-a-astar, lmm:polynomials-in-normal-are-normal, thrm:stone-weierstrass-complex, thrm:bounded-linear-transformation-theorem, lmm:spectrum-is-compact-metric-measurable, lmm:bounded-operators-form-a-banach-space, lmm:lemma-2}
 By Lemma~\ref{lmm:spectrum-is-compact-metric-measurable}, $\sigma(A)$ is a compact metric space, so $C^0(\sigma(A);\mathbb{C})$ with the supremum norm is a normed vector space.
 
@@ -2287,7 +2346,9 @@ Throughout this section, $X$ denotes a compact metric space, equipped with its B
 
 \begin{definition}[Abstract Continuous Functional Calculus]
     \label{def:abstract-continuous-functional-calculus}
+    \lean{Physicslib4.Spectral.Unbounded.IsAbstractCalculus}
     \uses{def:identity-operator, def:bounded-operator-notation, thrm:continuous-functional-calculus-normal, conv:section-abstract}
+    \leanok
     Let $X$ be a compact metric space. An \textit{abstract continuous functional calculus} on $X$ is a map $\Phi : C^0(X;\mathbb{C}) \to \mathcal{B}(\mathbf{H})$ satisfying, for all $f,g \in C^0(X;\mathbb{C})$ and $\alpha,\beta\in\mathbb{C}$:
     \begin{enumerate}
         \item $\Phi(\alpha f + \beta g) = \alpha\Phi(f) + \beta\Phi(g)$;
@@ -2304,6 +2365,8 @@ Our first observation is that such a $\Phi$ takes non-negative functions to non-
 
 \begin{lemma}[An Abstract Calculus is Non-Negative]
     \label{lmm:abstract-calculus-non-negative}
+    \lean{Physicslib4.Spectral.Unbounded.isSelfAdjoint_of_real, Physicslib4.Spectral.Unbounded.inner_nonneg_of_nonneg, Physicslib4.Spectral.Unbounded.ofRealCM}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$.
     \begin{enumerate}
         \item If $f \in C^0(X;\mathbb{C})$ is real-valued, then $\Phi(f)$ is self-adjoint, and $\left< \psi, \Phi(f)\psi \right> \in \mathbb{R}$ for every $\psi \in \mathbf{H}$.
@@ -2311,6 +2374,7 @@ Our first observation is that such a $\Phi$ takes non-negative functions to non-
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-abstract, def:abstract-continuous-functional-calculus, def:non-negative-operator, def:hall-9.1}
 \textbf{Part 1.} If $f$ is real-valued then $\overline f = f$, so property 3 gives $\Phi(f)^* = \Phi(\overline f) = \Phi(f)$. For self-adjoint $T$ and any $\psi$, $\left< \psi, T\psi \right> = \left< T^*\psi, \psi \right> = \left< T\psi,\psi \right> = \overline{\left< \psi, T\psi \right>}$, using the definition of the adjoint~(\ref{def:hall-9.1}) and conjugate symmetry; a complex number equal to its own conjugate is real.
 
@@ -2325,7 +2389,9 @@ Non-negativity is exactly the hypothesis of the Riesz representation theorem, wh
 
 \begin{definition}[The Measures Associated to an Abstract Calculus]
     \label{def:abstract-associated-measures}
+    \lean{Physicslib4.Spectral.Unbounded.abstractMeasure, Physicslib4.Spectral.Unbounded.existsUnique_abstractMeasure, Physicslib4.Spectral.Unbounded.integral_abstractMeasure}
     \uses{conv:section-abstract, def:abstract-continuous-functional-calculus, lmm:abstract-calculus-non-negative, thrm:riesz-representation}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$ and let $\psi \in \mathbf{H}$. Define $\Lambda_\psi : C^0(X;\mathbb{R}) \to \mathbb{R}$ by
     \begin{align}
         \Lambda_\psi(f) \equiv \left< \psi, \Phi(f)\psi \right>.
@@ -2339,9 +2405,12 @@ Non-negativity is exactly the hypothesis of the Riesz representation theorem, wh
 
 \begin{lemma}[The Abstract Associated Measures are Finite]
     \label{lmm:abstract-associated-measures-finite}
+    \lean{Physicslib4.Spectral.Unbounded.abstractMeasure_univ}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with associated measures $\mu_\psi$. For every $\psi \in \mathbf{H}$, $\mu_\psi(X) = \left\| \psi \right\|^2 < \infty$. In particular $\mu_\psi$ is a finite measure.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:section-abstract, def:abstract-associated-measures, def:abstract-continuous-functional-calculus}
 Apply the defining property of $\mu_\psi$ to the constant function $1 \in C^0(X;\mathbb{R})$, and use property 5 of the definition of an abstract continuous functional calculus~(\ref{def:abstract-continuous-functional-calculus}):
 \begin{align}
@@ -2354,6 +2423,8 @@ The point of introducing the measures $\mu_\psi$ is that the right-hand side $\i
 
 \begin{proposition}[The Extended Forms are Bounded Quadratic Forms]
     \label{prpstn:abstract-extended-forms-are-bounded}
+    \lean{Physicslib4.Spectral.Unbounded.isBoundedQuadraticForm_abstractForm, Physicslib4.Spectral.Unbounded.norm_abstractForm_le, Physicslib4.Spectral.Unbounded.abstractForm_continuous, Physicslib4.Spectral.Unbounded.abstractForm}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$. For a bounded measurable $f : X \to \mathbb{C}$, define $Q_f : \mathbf{H} \to \mathbb{C}$ by
     \begin{align}
         Q_f(\psi) \equiv \int_X f \, d\mu_\psi.
@@ -2361,6 +2432,7 @@ The point of introducing the measures $\mu_\psi$ is that the right-hand side $\i
     Then $Q_f$ is a bounded quadratic form on $\mathbf{H}$, with $\lvert Q_f(\psi) \rvert \le \left\| f \right\|_\infty \left\| \psi \right\|^2$. Moreover $Q_f(\psi) = \left< \psi, \Phi(f)\psi \right>$ whenever $f$ is continuous.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{conv:section-abstract, def:abstract-associated-measures, lmm:abstract-associated-measures-finite, def:bounded-quadratic-form, prpstn:hall-a.62, thrm:bounded-convergence-theorem, lmm:hall-prblm-8.3.3c, prpstn:hall-a.61, def:abstract-continuous-functional-calculus, prpstn:basic-integral-properties}
 Let $\mathcal{F}$ be the set of bounded measurable complex-valued $f$ on $X$ for which $Q_f$ is a bounded quadratic form. We verify the three hypotheses of Lemma~\ref{lmm:hall-prblm-8.3.3c}, which will then give that $\mathcal{F}$ is everything.
 
@@ -2381,7 +2453,9 @@ With the forms in hand, converting them back to operators is immediate, and defi
 
 \begin{definition}[The Extended Calculus]
     \label{def:abstract-extended-calculus}
+    \lean{Physicslib4.Spectral.Unbounded.extendedCalculus, Physicslib4.Spectral.Unbounded.inner_extendedCalculus, Physicslib4.Spectral.Unbounded.extendedCalculus_continuous}
     \uses{conv:section-abstract, prpstn:abstract-extended-forms-are-bounded, prpstn:hall-a.63}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$ and let $f : X \to \mathbb{C}$ be bounded and measurable. By Proposition~\ref{prpstn:abstract-extended-forms-are-bounded}, $Q_f$ is a bounded quadratic form, so by Proposition~\ref{prpstn:hall-a.63} there is a unique $\widetilde\Phi(f) \in \mathcal{B}(\mathbf{H})$ with
     \begin{align}
         \left< \psi, \widetilde\Phi(f)\psi \right> = Q_f(\psi) = \int_X f \, d\mu_\psi \qquad \text{for all } \psi \in \mathbf{H}.
@@ -2393,12 +2467,15 @@ Before going further we record that $\widetilde\Phi$ is linear — used repeated
 
 \begin{lemma}[The Extended Calculus is Linear]
     \label{lmm:abstract-extended-linear}
+    \lean{Physicslib4.Spectral.Unbounded.extendedCalculus_smul_add}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. For all bounded measurable $f,g : X \to \mathbb{C}$ and $\alpha,\beta \in \mathbb{C}$,
     \begin{align}
         \widetilde\Phi(\alpha f + \beta g) = \alpha\widetilde\Phi(f) + \beta\widetilde\Phi(g).
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-abstract, def:abstract-extended-calculus, prpstn:abstract-extended-forms-are-bounded, prpstn:hall-a.63, prpstn:basic-integral-properties}
 The function $\alpha f + \beta g$ is again bounded and measurable, so $\widetilde\Phi(\alpha f + \beta g)$ is defined. For every $\psi \in \mathbf{H}$, linearity of the integral in the integrand gives
 \begin{align}
@@ -2411,6 +2488,8 @@ We isolate two facts about $\widetilde\Phi$ that the rest of this section uses r
 
 \begin{lemma}[Off-Diagonal Formula and Bounded Convergence for the Extended Calculus]
     \label{lmm:abstract-extended-convergence}
+    \lean{Physicslib4.Spectral.Unbounded.polarization_abstractForm, Physicslib4.Spectral.Unbounded.tendsto_inner_extendedCalculus}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. For bounded measurable $h$ let $L_h$ denote the sesquilinear form associated to $Q_h$. Then:
     \begin{enumerate}
         \item \textit{(Off-diagonal formula.)} $L_h(\phi,\psi) = \left< \phi, \widetilde\Phi(h)\psi \right>$ for all $\phi,\psi \in \mathbf{H}$.
@@ -2421,6 +2500,7 @@ We isolate two facts about $\widetilde\Phi$ that the rest of this section uses r
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-abstract, def:abstract-extended-calculus, prpstn:abstract-extended-forms-are-bounded, prpstn:quadratic-forms-on-a-subspace-properties, def:hall-quadratic-form-on-a-subspace, lmm:abstract-associated-measures-finite, thrm:bounded-convergence-theorem}
 \textbf{Part 1.} Apply Part 1 of Proposition~\ref{prpstn:quadratic-forms-on-a-subspace-properties} with $D = \mathbf{H}$ and $T = \widetilde\Phi(h)$. Its hypotheses hold: $Q_h$ is a quadratic form on $\mathbf{H}$ by Proposition~\ref{prpstn:abstract-extended-forms-are-bounded}, $\widetilde\Phi(h)$ is linear, and it induces $Q_h$ on the diagonal by Definition~\ref{def:abstract-extended-calculus}.
 
@@ -2435,21 +2515,27 @@ The extended calculus inherits the algebraic properties of $\Phi$. Multiplicativ
 
 \begin{lemma}[Real Functions Give Self-Adjoint Operators]
     \label{lmm:abstract-extended-real-self-adjoint}
+    \lean{Physicslib4.Spectral.Unbounded.isSelfAdjoint_extendedCalculus_of_real}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$, and let $f : X \to \mathbb{C}$ be bounded, measurable, and real-valued. Then $\widetilde\Phi(f)$ is self-adjoint.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-abstract, def:abstract-extended-calculus, prpstn:hall-a.63}
 Since $f$ is real-valued and each $\mu_\psi$ is a positive real measure, $Q_f(\psi) = \int_X f\,d\mu_\psi \in \mathbb{R}$ for every $\psi$. By the second clause of Proposition~\ref{prpstn:hall-a.63} — a bounded quadratic form taking only real values corresponds to a self-adjoint operator — $\widetilde\Phi(f)$ is self-adjoint.
 \end{proof}
 
 \begin{proposition}[The Extended Calculus is Multiplicative]
     \label{prpstn:abstract-extended-multiplicative}
+    \lean{Physicslib4.Spectral.Unbounded.extendedCalculus_mul}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. For all bounded measurable $f,g : X \to \mathbb{C}$,
     \begin{align}
         \widetilde\Phi(fg) = \widetilde\Phi(f)\widetilde\Phi(g).
     \end{align}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{conv:section-abstract, def:abstract-extended-calculus, def:abstract-continuous-functional-calculus, prpstn:abstract-extended-forms-are-bounded, lmm:abstract-associated-measures-finite, lmm:hall-prblm-8.3.3c, thrm:bounded-convergence-theorem, def:hall-quadratic-form-on-a-subspace, prpstn:quadratic-forms-on-a-subspace-properties, lmm:hall-dense-testing-second-slot, lmm:abstract-extended-linear, def:hall-9.1, lmm:abstract-extended-convergence}
 Throughout we use Lemma~\ref{lmm:abstract-extended-convergence}; we refer to its Part 2 as the \textit{convergence principle}.
 
@@ -2486,9 +2572,12 @@ By uniqueness of limits, $\left< \phi, \widetilde\Phi(fg)\psi \right> = \left< \
 
 \begin{lemma}[The Extended Calculus Respects Conjugation]
     \label{lmm:abstract-extended-conjugation}
+    \lean{Physicslib4.Spectral.Unbounded.extendedCalculus_conj}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. For every bounded measurable $f : X \to \mathbb{C}$, $\widetilde\Phi(\overline f) = \widetilde\Phi(f)^*$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-abstract, def:abstract-extended-calculus, lmm:abstract-extended-real-self-adjoint, lmm:abstract-extended-linear, thrm:hall-8.10}
 Write $f = u + iv$ with $u = \tfrac{1}{2}(f+\overline f)$ and $v = \tfrac{1}{2i}(f - \overline f)$ bounded, measurable, and real-valued. By Lemma~\ref{lmm:abstract-extended-real-self-adjoint}, $\widetilde\Phi(u)$ and $\widetilde\Phi(v)$ are self-adjoint. By Lemma~\ref{lmm:abstract-extended-linear} and conjugate-linearity of the adjoint,
 \begin{align}
@@ -2504,6 +2593,8 @@ We can now assemble the projection-valued measure. This is the abstract form of 
 
 \begin{theorem}[A Continuous Functional Calculus Yields a Projection-Valued Measure]
     \label{thrm:abstract-calculus-yields-pvm}
+    \lean{Physicslib4.Spectral.Unbounded.abstractPVM, Physicslib4.Spectral.Unbounded.abstractPVM_integral, Physicslib4.Spectral.Unbounded.abstractPVM_integral_continuous}
+    \leanok
     Let $X$ be a compact metric space and $\Phi$ an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. Define, for each Borel set $E \subset X$,
     \begin{align}
         \mu^\Phi(E) \equiv \widetilde\Phi(1_E).
@@ -2515,6 +2606,7 @@ We can now assemble the projection-valued measure. This is the abstract form of 
     in particular, for $f \in C^0(X;\mathbb{C})$, $\int_X f \, d\mu^\Phi = \Phi(f)$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{conv:section-abstract, lmm:abstract-extended-convergence, def:abstract-continuous-functional-calculus, prpstn:hall-a.63, prpstn:continuity-of-norm-and-inner-product, thrm:projection-valued-measures-associated-measure, def:abstract-extended-calculus, prpstn:abstract-extended-multiplicative, lmm:abstract-extended-real-self-adjoint, lmm:abstract-extended-conjugation, lmm:abstract-associated-measures-finite, prpstn:abstract-extended-forms-are-bounded, def:projection-valued-measure, def:bounded-orthogonal-projection, lmm:lemma-4, thrm:operator-valued-integration, lmm:hall-dense-testing-second-slot, lmm:abstract-extended-linear, def:identity-operator, def:indicator-function}
 We verify the four properties of the definition of a projection-valued measure~(\ref{def:projection-valued-measure}) in turn, then the integral formula.
 
@@ -2550,12 +2642,15 @@ The extended calculus is norm-bounded by the supremum norm. This is \textit{not}
 
 \begin{corollary}[The Extended Calculus is Norm-Bounded]
     \label{crllr:abstract-extended-norm-bound}
+    \lean{Physicslib4.Spectral.Unbounded.norm_extendedCalculus_le}
+    \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. Then for every bounded measurable $f : X \to \mathbb{C}$,
     \begin{align}
         \left\| \widetilde\Phi(f) \right\| \le \left\| f \right\|_\infty.
     \end{align}
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{prpstn:integral-norm-bound, conv:section-abstract, thrm:abstract-calculus-yields-pvm, def:abstract-extended-calculus, thrm:operator-valued-integration}
 By Theorem~\ref{thrm:abstract-calculus-yields-pvm}, $\widetilde\Phi(f) = \int_X f \, d\mu^\Phi$ for every bounded measurable $f$. Proposition~\ref{prpstn:integral-norm-bound} bounds the operator norm of that integral by the supremum norm of the integrand, giving the claim.
 \end{proof}
@@ -2565,6 +2660,8 @@ Assembling the two stages gives the result this section was aiming at.
 
 \begin{theorem}[Spectral Theorem for Bounded Normal Operators]
     \label{thrm:hall-10.20}
+    \lean{Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_normal, Physicslib4.Spectral.Unbounded.eq_of_integral_id_eq_ambient}
+    \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, with $\mathbf{H} \ne \{0\}$. Then there is a \textit{unique} projection-valued measure $\mu^A$ on the Borel $\sigma$-algebra of $\sigma(A)$ with
     \begin{align}
         \int_{\sigma(A)} \lambda \, d\mu^A(\lambda) = A.
@@ -2576,6 +2673,7 @@ Assembling the two stages gives the result this section was aiming at.
     in particular $\nu$ assigns no mass to $X \setminus \sigma(A)$, so a measure representing $A$ on a larger space is automatically concentrated on $\sigma(A)$ and agrees there with $\mu^A$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{conv:nonzero-hilbert-space, prpstn:integral-conjugation, def:hall-10.19, thrm:operator-valued-integration, thrm:riesz-representation, thrm:stone-weierstrass-complex, prpstn:hall-a.63, lmm:polynomials-in-normal-are-normal, thrm:continuous-functional-calculus-normal, thrm:abstract-calculus-yields-pvm, def:abstract-continuous-functional-calculus, def:projection-valued-measure, lmm:spectrum-is-compact-metric-measurable}
 By Lemma~\ref{lmm:spectrum-is-compact-metric-measurable}, $X \equiv \sigma(A)$ is a compact metric space. By Theorem~\ref{thrm:continuous-functional-calculus-normal}, the map $\Phi_A$ constructed there satisfies properties 1–5 of the definition of an abstract continuous functional calculus~(\ref{def:abstract-continuous-functional-calculus}), so it \textit{is} an abstract continuous functional calculus on $X$.
 
