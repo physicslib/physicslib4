@@ -1791,24 +1791,7 @@ The key technical result we are aiming for is a version of the spectral mapping 
 
 We start with a fact that will let us compute the norm of $p(A,A^*)$ once we know its spectrum: for normal operators, the operator norm equals the spectral radius, exactly as for self-adjoint operators. Proving this needs one general fact about spectral radii of commuting operators that is not yet available to us, and whose proof requires knowing that the powers of a bounded operator cannot grow faster than the spectral radius suggests.
 
-We will also need the standard corollary of the Hahn–Banach theorem identifying the norm of an element of a normed space with the supremum of its image under unit-norm functionals; like the other classical facts imported here, we state it without proof.
-
-\begin{theorem}[Norm via Dual Pairing]
-    \label{thrm:norm-via-dual-pairing}
-    \lean{Physicslib4.Spectral.Unbounded.norm_eq_sSup_dual}
-    \leanok
-    If $x$ is an element of a normed vector space $V$, then
-    \begin{align}
-        \|x\| = \sup \{ \lvert \xi(x) \rvert : \xi \in V^*,\ \|\xi\| \le 1 \}.
-    \end{align}
-\end{theorem}
-\begin{proof}
-\leanok
-\end{proof}
-
-Section~\ref{sctn:spectral-theorems} now records the holomorphy and Neumann-series facts we need as Proposition~\ref{prpstn:resolvent-holomorphy-and-neumann-series}.
-
-An operator-norm-convergent power series composed with any bounded linear functional gives a convergent scalar power series with the same radius of convergence, so Part 1 immediately gives: for any bounded linear functional $\xi$ on $\mathcal{B}(\mathbf{H})$, the scalar function $\lambda \mapsto \xi\big( (A-\lambda\mathbf{1})^{-1} \big)$ is holomorphic on the (open) resolvent set of $A$ — this is the fact Lemma~\ref{lmm:hall-8.1} uses for a general such $\xi$, and the one we need below.
+The growth bound we need follows directly from \textbf{Gelfand's Formula}~(\ref{thrm:gelfand-formula}), recorded in Section~\ref{sctn:spectral-theorems}.
 
 \begin{lemma}[Power Growth is Controlled by the Spectral Radius]
     \label{lmm:power-growth-controlled-by-spectral-radius}
@@ -1821,28 +1804,14 @@ An operator-norm-convergent power series composed with any bounded linear functi
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:identity-operator, conv:nonzero-hilbert-space, def:spectral-radius, prpstn:resolvent-holomorphy-and-neumann-series, thrm:laurents-theorem, lmm:nth-term-test, thrm:hall-a.40, thrm:theorem-on-completeness-of-the-dual, lmm:bounded-operators-form-a-banach-space, thrm:norm-via-dual-pairing, crllr:crllr-1, prpstn:hall-7.5}
-Fix $\lambda_1 \in \mathbb{C}$ with $R(A) < \lvert \lambda_1 \rvert < T$ (possible since $R(A) < T$). We first show there is a constant $C < \infty$ with $\|A^m\| \le C\lvert \lambda_1 \rvert^{m+1}$ for all $m$.
+    \uses{conv:nonzero-hilbert-space, def:spectral-radius, thrm:gelfand-formula}
+Since $R(A) \ge 0$ (a supremum of absolute values) and $R(A) < T$, we may fix $S \in \mathbb{R}$ with $R(A) < S < T$; then $0 < S < T$.
 
-By Part 1 of Proposition~\ref{prpstn:resolvent-holomorphy-and-neumann-series}, the resolvent set of $A$ is open and the resolvent is holomorphic (in the operator-norm sense) on it; this resolvent set contains $\{ \lambda : \lvert \lambda \rvert > R(A) \}$ (since $\sigma(A) \subset \{ \lvert \lambda \rvert \le R(A) \}$, by the definition of the spectral radius~(\ref{def:spectral-radius})), so the resolvent is holomorphic on all of the open annulus $R(A) < \lvert \lambda \rvert$. By Part 2 of the same proposition, for $\lvert \lambda \rvert > \|A\|$,
+By \textbf{Gelfand's Formula}~(\ref{thrm:gelfand-formula}), $\|A^m\|^{1/m} \rightarrow R(A)$ as $m \rightarrow \infty$. Since $R(A) < S$, there is an $M \in \mathbb{N}$ such that $\|A^m\|^{1/m} < S$ for all $m \ge M$ with $m \ge 1$; raising both (non-negative) sides to the $m$-th power gives $\|A^m\| \le S^m$ for all such $m$. Hence, for all $m \ge \max(M, 1)$,
 \begin{align}
-    (A - \lambda\mathbf{1})^{-1} = -\sum_{m=0}^\infty \frac{A^m}{\lambda^{m+1}},
+    0 \le \frac{\|A^m\|}{T^m} \le \left( \frac{S}{T} \right)^m.
 \end{align}
-convergent in operator norm.
-
-Fix a bounded linear functional $\xi$ on $\mathcal{B}(\mathbf{H})$. As just noted, $\lambda \mapsto \xi\big((A-\lambda\mathbf{1})^{-1}\big)$ is holomorphic on the open annulus $R(A) < \lvert \lambda \rvert$, so by \textbf{Laurent's Theorem}~(\ref{thrm:laurents-theorem}) it has a unique Laurent series expansion there, convergent throughout that annulus. Applying $\xi$ termwise to the operator-norm-convergent series above (valid for $\lvert \lambda \rvert>\|A\|$) gives a second expansion, $-\sum_m \xi(A^m)/\lambda^{m+1}$, which is a Laurent series (all terms of non-positive integer power) valid, a priori, only on the smaller annulus $\|A\| < \lvert \lambda \rvert$. On the overlap of the two annuli — which is exactly $\|A\| < \lvert \lambda \rvert$, since $R(A) \le \|A\|$ by Corollary~\ref{crllr:crllr-1} — both expansions represent the same holomorphic function, so by the uniqueness clause of \textbf{Laurent's Theorem}~(\ref{thrm:laurents-theorem}) (applied on that overlap), they are the same series: the coefficients agree. Hence the series $-\sum_m \xi(A^m)/\lambda^{m+1}$ \textit{is} the unique Laurent series of $\xi\big((A-\lambda\mathbf{1})^{-1}\big)$ on the full annulus $R(A) < \lvert \lambda \rvert$ — and, Laurent's Theorem asserting convergence of that series throughout its annulus, it converges there, in particular at $\lambda = \lambda_1$.
-
-By the \textbf{Nth-Term Test}~(\ref{lmm:nth-term-test}), convergence of $\sum_m \xi(A^m)/\lambda_1^{m+1}$ forces its terms to tend to $0$, so in particular $\{ \xi(A^m/\lambda_1^{m+1}) \}_m$ is a bounded subset of $\mathbb{C}$, with some bound $C_\xi$ depending on $\xi$ (and on $\lambda_1$). As $\xi$ ranges over all bounded linear functionals on $\mathcal{B}(\mathbf{H})$ — a Banach space, by Lemma~\ref{lmm:bounded-operators-form-a-banach-space}, and so, by the \textbf{Theorem on Completeness of the Dual}~(\ref{thrm:theorem-on-completeness-of-the-dual}), its dual $\mathcal{B}(\mathbf{H})^*$ is itself a Banach space — the \textbf{Principle of Uniform Boundedness}~(\ref{thrm:hall-a.40}), applied with $V_1 = \mathcal{B}(\mathbf{H})^*$, $V_2 = \mathbb{C}$, and the family of evaluation maps $T_m : \xi \mapsto \xi(A^m/\lambda_1^{m+1})$. Its hypotheses hold: each $T_m$ is linear in $\xi$, and bounded, since $\lvert T_m\xi \rvert = \lvert \xi(A^m/\lambda_1^{m+1}) \rvert \le \left\| \xi \right\| \left\| A^m/\lambda_1^{m+1} \right\|$ by the definition of the dual norm — so $T_m$ is a bounded linear map $\mathcal{B}(\mathbf{H})^* \to \mathbb{C}$ — and for each fixed $\xi$ the family $\{ T_m\xi \}_m$ is bounded by $C_\xi$, just shown. The principle therefore gives a constant $C < \infty$, independent of $\xi$, such that these evaluation maps have norm at most $C$ as elements of $\mathcal{B}(\mathbf{H})^{**}$: $\lvert \xi(A^m/\lambda_1^{m+1}) \rvert \le C \left\| \xi \right\|$ for every $\xi \in \mathcal{B}(\mathbf{H})^*$ and every $m$.
-
-To convert this into a bound on $\|A^m/\lambda_1^{m+1}\|$ itself, we use Theorem~\ref{thrm:norm-via-dual-pairing}.
-
-Applying Theorem~\ref{thrm:norm-via-dual-pairing} with $V = \mathcal{B}(\mathbf{H})$ and $x = A^m/\lambda_1^{m+1}$: since $\lvert \xi(A^m/\lambda_1^{m+1}) \rvert \le C\|\xi\|$ for every $\xi$, taking the supremum over $\|\xi\|\le 1$ gives $\|A^m/\lambda_1^{m+1}\| \le C$, for every $m$. That is, $\|A^m\| \le C\lvert \lambda_1 \rvert^{m+1}$ for all $m$, as claimed.
-
-Finally, since $\lvert \lambda_1 \rvert < T$,
-\begin{align}
-    \frac{\|A^m\|}{T^m} \le C\lvert \lambda_1 \rvert \left( \frac{\lvert \lambda_1 \rvert}{T} \right)^m \longrightarrow 0
-\end{align}
-as $m \to \infty$, since $\lvert \lambda_1 \rvert/T < 1$. This is the desired result.
+Since $0 \le S/T < 1$, the geometric sequence $(S/T)^m$ tends to $0$, so by the squeeze theorem $\|A^m\|/T^m \rightarrow 0$ as $m \rightarrow \infty$, the desired result.
 \end{proof}
 
 We now use this growth bound to establish submultiplicativity of the spectral radius for commuting operators.

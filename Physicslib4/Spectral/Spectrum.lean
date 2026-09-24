@@ -69,10 +69,8 @@ transcription of the blueprint, the divergence is recorded.
   real-valued form `(spectralRadius ℂ A).toReal = ‖A‖` matching the blueprint's
   real-valued `R(A)`; the `ℝ≥0∞` form is `IsSelfAdjoint.spectralRadius_eq_nnnorm`. It
   is stated for an arbitrary `CStarAlgebra`, and `CStarAlgebra (H →L[ℂ] H)` is an
-  instance. The blueprint derives it from Laurent's theorem
-  (`thrm:laurents-theorem`); Mathlib derives it from the Gelfand formula instead, so
-  `Physicslib4.Spectral.exists_unique_laurentSeries` is *not* needed for it and may
-  stay unproved without blocking this node.
+  instance. Like the blueprint, Mathlib derives it from Gelfand's formula for the
+  spectral radius.
 -/
 
 namespace Physicslib4

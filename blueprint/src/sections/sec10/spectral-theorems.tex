@@ -2676,51 +2676,17 @@ Now, as a result of the first result of Proposition~\ref{prpstn:hall-7.2}, the o
 As $B_n \rightarrow B$ in the operator norm the righthand side tends to $0$, and hence $B_n^* \rightarrow B^*$ in the operator norm, the desired result.
 \end{proof}
 
-The proof of the next lemma draws on four standard results — one about series, two from complex and functional analysis, and the Principle of Uniform Boundedness — which we state first.
+We next state a standard result from functional analysis, Gelfand's formula for the spectral radius, on which the proof of the next lemma draws.
 
-\begin{lemma}[Nth-Term Test]
-    \label{lmm:nth-term-test}
-    \lean{Summable.tendsto_atTop_zero}
+\begin{theorem}[Gelfand's Formula for the Spectral Radius]
+    \label{thrm:gelfand-formula}
+    \lean{spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius}
+    \uses{def:bounded-operator-notation, def:spectral-radius}
     \leanok
-    Let $\{a_i\}_{i \in \mathbb{N}}$ be a sequence in a normed vector space. If $\left\| a_i \right\|$ does \textbf{not} converge to $0$ — either because the limit exists and is non-zero, or because it fails to exist — then the series $\sum_i a_i$ does not converge.
-
-    Equivalently, in contrapositive form: if $\sum_i a_i$ converges then $\left\| a_i \right\| \rightarrow 0$.
-\end{lemma}
-\begin{proof}
-\leanok
-\end{proof}
-
-\begin{theorem}[Laurent's Theorem]
-    \label{thrm:laurents-theorem}
-    \lean{Physicslib4.Spectral.exists_unique_laurentSeries}
-    \leanok
-    Any function holomorphic on an open annulus in $\mathbb{C}$ can be expanded uniquely as a Laurent series on that open annulus.
-\end{theorem}
-
-\begin{theorem}[Theorem on Completeness of the Dual]
-    \label{thrm:theorem-on-completeness-of-the-dual}
-    \lean{Physicslib4.Spectral.completeSpace_dual}
-    \uses{def:adjoint-bounded}
-    \leanok
-    If $V$ is a Banach space, then its dual $V^*$ is also a Banach space.
-\end{theorem}
-\begin{proof}
-\leanok
-\end{proof}
-
-\begin{theorem}[Principle of Uniform Boundedness]
-    \label{thrm:hall-a.40}
-    \lean{banach_steinhaus}
-    \leanok
-    Suppose $\{ T_m \}$ is any family of bounded linear maps from a Banach space $V_1$ to a normed space $V_2$. Suppose that for each $\xi \in V_1$, there is a real constant $C_\xi$ such that
+    Suppose $\mathbf{H} \ne \{0\}$ and $A \in \mathcal{B}(\mathbf{H})$. Then the limit $\lim_{m \to \infty} \|A^m\|^{1/m}$ exists and equals the spectral radius $R(A)$ of $A$,
     \begin{align}
-        \| T_m \xi \| \le C_\xi
+        R(A) = \lim\limits_{m \rightarrow \infty} \|A^m\|^{1/m}.
     \end{align}
-    for all $m$. Then there exists a real constant $C$ such that for all $m$
-    \begin{align}
-        \|T_m\| \le C,
-    \end{align}
-    where $\|T_m\|$ is the operator norm of $T_m$.
 \end{theorem}
 \begin{proof}
 \leanok
@@ -2737,157 +2703,23 @@ The proof of the next lemma draws on four standard results — one about series,
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:adjoint-bounded, prpstn:resolvent-holomorphy-and-neumann-series, def:identity-operator, def:bounded-operator-notation, def:spectral-radius, prpstn:hall-7.5, def:bounded-operator-resolvent-and-spectrum, lmm:nth-term-test, prpstn:hall-7.2, thrm:analytic-equivalence-theorem, thrm:laurents-theorem, lmm:bounded-operators-form-a-banach-space, thrm:theorem-on-completeness-of-the-dual, thrm:hall-a.40, crllr:crllr-1}
-Before diving in to the details, let's present an outline of the proof. At core, the proof consists of 4 steps:
-\begin{enumerate}
-    \item Prove that if $\lvert \lambda \rvert > \|A\|$, then $(A - \lambda \mathbf{1})^{-1}$ can be expressed as a series convergent in the operator norm topology.
-    \item Prove that if $\lvert \lambda \rvert \le \|A\|$, then this series doesn't converge in the operator norm topology.
-    \item Prove that if $\lvert \lambda \rvert > R(A)$, then this series converges in the operator norm topology.
-    \item Conclude that a contradiction arises if $R(A) < \|A\|$, and thus $R(A) = \|A\|$.
-\end{enumerate}
-Let us first (1) prove that if $\lvert \lambda \rvert > \|A\|$, then $(A - \lambda \mathbf{1})^{-1}$ can be expressed as a series convergent in the operator norm topology.
+    \uses{conv:nonzero-hilbert-space, def:adjoint-bounded, def:bounded-operator-notation, def:spectral-radius, prpstn:hall-7.2, thrm:gelfand-formula}
+The proof has two steps: (1) show $\|A^{2^n}\| = \|A\|^{2^n}$ for every $n \in \mathbb{N}$, and (2) evaluate the limit in \textbf{Gelfand's Formula}~(\ref{thrm:gelfand-formula}) along the subsequence $m = 2^n$.
 
-This first result is Part 2 of Proposition~\ref{prpstn:resolvent-holomorphy-and-neumann-series}, which gives that for $\lvert \lambda \rvert > \|A\|$, the following series is convergent in the operator norm topology
+For (1), first note that if $B \in \mathcal{B}(\mathbf{H})$ is self-adjoint then so is $B^2$: for all $\chi, \psi \in \mathbf{H}$, the definition of the adjoint~(\ref{def:adjoint-bounded}) and $B^* = B$ give $\left< \chi, B^2 \psi \right> = \left< B\chi, B\psi \right> = \left< B^2 \chi, \psi \right>$. Moreover, for self-adjoint $B$ the second result of Proposition~\ref{prpstn:hall-7.2} gives
 \begin{align}
-    - \frac{1}{\lambda} \left( \mathbf{1} + \frac{A}{\lambda} + \frac{A^2}{\lambda^2} + \frac{A^3}{\lambda^3} + \cdots \right) = - \sum_{m = 0}^\infty \frac{A^m}{\lambda^{m + 1}},
+    \|B^2\| = \|B^* B\| = \|B\|^2.
 \end{align}
-and in fact is equivalent to $(A - \lambda \mathbf{1})^{-1}$
+We now prove by induction on $n$ that $A^{2^n}$ is self-adjoint and $\|A^{2^n}\| = \|A\|^{2^n}$. For $n = 0$ this is the hypothesis on $A$. If it holds for $n$, apply the two facts just proven to the self-adjoint operator $B = A^{2^n}$: since $A^{2^{n+1}} = B^2$, it is self-adjoint and
 \begin{align}
-    (A - \lambda \mathbf{1})^{-1} = - \sum_{m = 0}^\infty \frac{A^m}{\lambda^{m + 1}}.
+    \|A^{2^{n+1}}\| = \|B\|^2 = \left( \|A\|^{2^n} \right)^2 = \|A\|^{2^{n+1}}.
 \end{align}
-This is the first desired result.
 
-Next let us (2) prove that if $\lvert \lambda \rvert \le \|A\|$, then this series doesn't converge in the operator norm topology.
-
-The first step in this proof is to derive a useful identity expressing $\|A^{2^n}\|$ in terms of $\|A\|^{2^n}$. For self-adjoint $A$ Proposition~\ref{prpstn:hall-7.2} states
+For (2), \textbf{Gelfand's Formula}~(\ref{thrm:gelfand-formula}) states that $\|A^m\|^{1/m} \rightarrow R(A)$ as $m \rightarrow \infty$. Since $n \mapsto 2^n$ tends to infinity, the subsequence $\|A^{2^n}\|^{1/2^n}$ converges to the same limit $R(A)$. By (1), every term of this subsequence equals
 \begin{align}
-    \|A^2\| = \|A\|^2.
+    \|A^{2^n}\|^{1/2^n} = \left( \|A\|^{2^n} \right)^{1/2^n} = \|A\|,
 \end{align}
-For natural number $n$ iterating this identity gives
-\begin{align}
-    \|A^{2^n}\| = \|A\|^{2^n}.
-\end{align}
-This identity will be of use when we prove our series doesn't converge in the operator norm topology. In particular we will prove this using the \textbf{Nth-Term Test}~(\ref{lmm:nth-term-test}).
-
-Consider the limit
-\begin{align}
-    \lim\limits_{n \rightarrow \infty} \left\| \frac{A^{2^n}}{\lambda^{2^n + 1}} \right\|
-    &= \lim\limits_{n \rightarrow \infty} \left\lvert \frac{1}{\lambda^{2^n + 1}} \right\rvert \left\| A^{2^n} \right\| \\
-    &= \lim\limits_{n \rightarrow \infty} \left\lvert \frac{1}{\lambda^{2^n + 1}} \right\rvert \left\| A \right\|^{2^n}  \\
-    &= \lim\limits_{n \rightarrow \infty} \frac{1}{\lvert \lambda \rvert}  \left( \frac{\left\| A \right\|}{\left\lvert \lambda \right\rvert} \right)^{2^n} \\
-    &= \frac{1}{\lvert \lambda \rvert} \lim\limits_{n \rightarrow \infty} \left( \frac{\left\| A \right\|}{\left\lvert \lambda \right\rvert} \right)^{2^n}.
-\end{align}
-By hypothesis $\lvert \lambda \rvert \le \|A\|$. Hence
-\begin{align}
-    1 \le \frac{\left\| A \right\|}{\left\lvert \lambda \right\rvert}.
-\end{align}
-This implies that our derivation continues as follows
-\begin{align}
-    \lim\limits_{n \rightarrow \infty} \left\| \frac{A^{2^n}}{\lambda^{2^n + 1}} \right\|
-    = \frac{1}{\lvert \lambda \rvert} \lim\limits_{n \rightarrow \infty} \left( \frac{\left\| A \right\|}{\left\lvert \lambda \right\rvert} \right)^{2^n}
-    \neq 0.
-\end{align}
-Hence, the \textbf{Nth-Term Test}~(\ref{lmm:nth-term-test}) implies that the series does not converge.
-
-With that we have proven the desired result: if $\lvert \lambda \rvert \le \|A\|$, then our series doesn't converge in the operator norm topology.
-
-Now let us (3) prove that if $\lvert \lambda \rvert > R(A)$, then this series converges in the operator norm topology.
-
-Recall from Part 1 of Proposition~\ref{prpstn:resolvent-holomorphy-and-neumann-series} that if $\lambda_0$ is in the resolvent set of $A$ and $\lambda \in \mathbb{C}$ satisfies
-\begin{align}
-    \lvert \lambda - \lambda_0 \rvert < \frac{1}{\|(A - \lambda_0 \mathbf{1})^{-1}\|}
-\end{align}
-then $(A - \lambda \mathbf{1})^{-1}$ exists in $\mathcal{B}(\mathbf{H})$ and is expressible as the following locally convergent power series in $ (\lambda - \lambda_0)$
-\begin{align}
-    (A - \lambda \mathbf{1})^{-1} = \left( \sum_{m \in \mathbb{N}} (\lambda - \lambda_0)^m ((A - \lambda_0 \mathbf{1})^{-1})^m \right) (A - \lambda_0 \mathbf{1})^{-1},
-\end{align}
-that converges in the operator norm topology. Furthermore, as $(A - \lambda \mathbf{1})^{-1}$ exists in $\mathcal{B}(\mathbf{H})$ this implies that $\lambda$ is also in the resolvent set of $A$.
-
-Consider now any element $\xi$ in the dual space of $\mathcal{B}(\mathbf{H})$. Using $\xi$ and the above convergent series, the map
-\begin{align}
-    \lambda \longmapsto \xi (A - \lambda \mathbf{1})^{-1}
-\end{align}
-can be expressed as a locally convergent power series with coefficients in $\mathbb{C}$. Hence, it is an analytic function on the resolvent set of $A$, which is open by Part 1 of Proposition~\ref{prpstn:resolvent-holomorphy-and-neumann-series}. Hence, the \textbf{Analytic Equivalence Theorem}~(\ref{thrm:analytic-equivalence-theorem}) implies that this function is holomorphic on the resolvent set of $A$.
-
-Now, as mentioned in Definition~\ref{def:spectral-radius}, the spectral radius
-\begin{align}
-    R(A) \equiv \sup\limits_{\lambda \in \sigma(A)} \lvert \lambda \rvert
-\end{align}
-of $A$ is a finite real number. Explicitly, Proposition~\ref{prpstn:hall-7.5} implies that $\sigma(A)$ is a closed, bounded, and non-empty subset $\mathbb{C}$. Hence, $R(A)$ is a finite real number.
-
-The spectrum $\sigma(A)$ of $A$ is defined as the complement of the resolvent set of $A$ in $\mathbb{C}$. Hence, all $\lambda \in \mathbb{C}$ such that $\lvert \lambda \rvert > R(A)$ are in the resolvent set of $A$. Thus, the function
-\begin{align}
-    \lambda \longmapsto \xi (A - \lambda \mathbf{1})^{-1}
-\end{align}
-is holomorphic on the (unbounded) open annulus $R(A) < \lvert \lambda \rvert$.
-
-Now recall \textbf{Laurent's Theorem}~(\ref{thrm:laurents-theorem}) stated above: a function holomorphic on an annulus admits there a Laurent expansion, convergent on that annulus, whose coefficients are uniquely determined.
-
-Hence, the function
-\begin{align}
-    \lambda \longmapsto \xi (A - \lambda \mathbf{1})^{-1}
-\end{align}
-can be expanded uniquely into a convergent Laurent series on the (unbounded) open annulus $R(A) < \lvert \lambda \rvert$.
-
-Now in Part 1 of this proof we established that if $\lvert \lambda \rvert > \|A\|$, then $(A - \lambda \mathbf{1})^{-1}$ can be expressed as the series
-\begin{align}
-    (A - \lambda \mathbf{1})^{-1} = - \sum_{m = 0}^\infty \frac{A^m}{\lambda^{m + 1}}.
-\end{align}
-that is convergent in the operator norm topology. Acting on this series with $\xi$ we obtain the convergent Laurent series
-\begin{align}
-    \lambda \longmapsto \xi  (A - \lambda \mathbf{1})^{-1} = - \sum_{m = 0}^\infty \frac{\xi A^m}{\lambda^{m + 1}},
-\end{align}
-on the (unbounded) open annulus $\lvert \lambda \rvert > \|A\|$.
-
-Hence, we have two convergent Laurent series expansions of $(A - \lambda \mathbf{1})^{-1}$ on the (unbounded) open annulus $\max(R(A), \|A\|) < \lvert \lambda \rvert$. The first resulting from the initial application of \textbf{Laurent's Theorem}~(\ref{thrm:laurents-theorem}) and the second from the result from Part 1 of this proof. The uniqueness of \textbf{Laurent's Theorem}~(\ref{thrm:laurents-theorem}) implies that these convergent Laurent series expansions must be identical. Hence, we can write the convergent Laurent series expansion in both cases as
-\begin{align}
-    \lambda \longmapsto - \sum_{m = 0}^\infty \frac{\xi A^m}{\lambda^{m + 1}},
-\end{align}
-which converges for $R(A) < \lvert \lambda \rvert$. This completes the proof of Part 3.
-
-Next let us (4) conclude that a contradiction arises if $R(A) < \|A\|$, and thus $R(A) = \|A\|$.
-
-Recall we already established in Corollary~\ref{crllr:crllr-1} that $R(A) \le \|A\|$. We will now establish that $R(A) = \|A\|$ using proof by contradiction.
-
-Let us for the moment assume that $R(A) < \|A\|$. Then it is possible to select a $\lambda$ such that $R(A) < \lvert \lambda \rvert < \|A\|$. Let us fix this $\lambda$ for the remainder of the proof.
-
-The unique Laurent series from Part 3, evaluated at this fixed $\lambda$, converges. This implies that all of its summands are bounded. In other words, for each $\xi$ in the dual space of $\mathcal{B}(\mathbf{H})$ there exists a $C_\xi \in \mathbb{R}$---which may depend on $\xi$ and on our now-fixed $\lambda$---such that for any natural number $m$
-\begin{align}
-    \left\lvert \frac{\xi A^m}{\lambda^{m + 1}} \right\rvert < C_\xi.
-\end{align}
-Now, as we established in Lemma~\ref{lmm:bounded-operators-form-a-banach-space}, $\mathcal{B}(\mathbf{H})$ forms a Banach space under the operator norm. Recalling the \textbf{Theorem on Completeness of the Dual}~(\ref{thrm:theorem-on-completeness-of-the-dual}) we can conclude that the dual $\mathcal{B}(\mathbf{H})^*$ of $\mathcal{B}(\mathbf{H})$ is also a Banach space.
-
-As both $\mathcal{B}(\mathbf{H})$ and $\mathcal{B}(\mathbf{H})^*$ are Banach spaces and we have a set of bounded summands we can apply the \textbf{Principle of Uniform Boundedness}~(\ref{thrm:hall-a.40}) by identifying $V_1$ with $\mathcal{B}(\mathbf{H})^*$, $V_2$ with $\mathbb{C}$, the operators $\{ T_m \}$ with the operators
-\begin{align}
-    \left\{ \frac{A^m}{\lambda^{m + 1}} \right\},
-\end{align}
-evaluated at our fixed $\lambda$, and the bounds we derived previously
-\begin{align}
-    \left\lvert \frac{\xi A^m}{\lambda^{m + 1}} \right\rvert < C_\xi
-\end{align}
-with those in this theorem. Doing so we find that there exists a real number $C$---which may depend on our fixed $\lambda$---such that for all natural numbers $m$
-\begin{align}
-    \left\| \frac{A^m}{\lambda^{m + 1}} \right\| \le C,
-\end{align}
-where here the operator norm is used.
-
-Now, as one will recall, in Part 2 of this proof we established that for any natural number $n$
-\begin{align}
-    \left\| A^{2^n} \right\| = \left\| A \right\|^{2^n}.
-\end{align}
-Applying this to the bound we just derived, at our fixed $\lambda$, gives
-\begin{align}
-    \left\| \frac{A^{2^n}}{\lambda^{2^n + 1}} \right\| = \frac{\left\| A^{2^n} \right\|}{\left\lvert \lambda \right\rvert^{2^n + 1}} = \frac{\left\| A \right\|^{2^n} }{\left\lvert \lambda \right\rvert^{2^n + 1}} \le C.
-\end{align}
-Now, as $R(A) < \lvert \lambda \rvert < \|A\|$, we have
-\begin{align}
-    1 < \frac{\|A\|}{\lvert \lambda \rvert}.
-\end{align}
-Hence, it is possible to select an $n$ large enough to violate the above inequality
-\begin{align}
-    \frac{1}{\left\lvert \lambda \right\rvert} \left( \frac{\left\| A \right\|}{\left\lvert \lambda \right\rvert} \right)^{2^n} = \frac{\left\| A \right\|^{2^n} }{\left\lvert \lambda \right\rvert^{2^n + 1}} \le C.
-\end{align}
-So it can not be the case that $R(A) < \|A\|$. As we know $R(A) \le \|A\|$, the only option left is $R(A) = \|A\|$, the desired result.
+so the subsequence is constant with value $\|A\|$. By uniqueness of limits, $R(A) = \|A\|$, the desired result.
 \end{proof}
 
 The next step in this \textbf{Stage 1: The Continuous Functional Calculus} is to understand how the spectrum $\sigma(A)$ of an operator $A \in \mathcal{B}(\mathbf{H})$ is related to the spectrum $\sigma(p(A))$ of a polynomial $p(A)$ in $A$. The relation between $\sigma(A)$ and $\sigma(p(A))$ is "straightforward" and described by the \textbf{Spectral Mapping Theorem}~(\ref{lmm:spectral-mapping-theorem}).
@@ -5970,7 +5802,7 @@ So with this we have proven that under the hypotheses of the Theorem~\ref{thrm:h
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:adjoint-bounded, prpstn:resolvent-holomorphy-and-neumann-series, crllr:crllr-1, def:F-class, def:L0-class, def:algebra-of-sets, def:hall-8.6, def:hall-8.8, def:separates-points, def:spectral-radius, lmm:associated-measures-are-finite, lmm:bounded-operators-form-a-banach-space, lmm:hall-7.6, lmm:hall-7.8, lmm:hall-8.1, lmm:hall-ex-8.3.1, lmm:hall-prblm-7.4.8, lmm:hall-prblm-8.3.3a, lmm:hall-prblm-8.3.3b, lmm:hall-prblm-8.3.3c, lmm:lemma-1, lmm:lemma-2, lmm:nth-term-test, lmm:pointwise-limits-of-borel-measurable-functions, lmm:spectral-mapping-theorem, lmm:spectrum-is-compact-metric-measurable, prpstn:F-bounded, prpstn:F-closed-under-limits, prpstn:F-contains-continuous, prpstn:F-homogeneous, prpstn:F-sesquilinear, prpstn:L0-complement, prpstn:L0-contains-closed, prpstn:L0-contains-empty, prpstn:L0-union, prpstn:bounded-operators-are-continuous, prpstn:cfc-multiplicative, prpstn:cfc-non-negative, prpstn:cfc-norm, prpstn:cfc-self-adjoint, prpstn:cfc-spectral-mapping, prpstn:continuity-of-the-adjoint, prpstn:hall-7.2, prpstn:hall-7.3, prpstn:hall-7.5, prpstn:hall-7.7, prpstn:hall-8.3, prpstn:hall-8.4, prpstn:hall-8.7, prpstn:hall-a.34, prpstn:hall-a.62, thrm:analytic-equivalence-theorem, thrm:archimedean-property, thrm:bounded-convergence-theorem, thrm:bounded-linear-transformation-theorem, thrm:boundedness-theorem, thrm:complex-valued-simple-approximation-theorem, thrm:composition-theorem, thrm:existence-of-bump-functions, thrm:fundamental-theorem-of-algebra, thrm:hall-a.40, thrm:laurents-theorem, thrm:maximum-modulus-principle, thrm:monotone-class-theorem, thrm:monotone-convergence-theorem-nonincreasing, thrm:riesz-representation, thrm:theorem-on-completeness-of-the-dual, def:identity-operator, def:indicator-function, def:orthogonal-complement, prpstn:basic-integral-properties, def:bounded-operator-notation, def:projection-valued-measure, def:bounded-operator-resolvent-and-spectrum, def:bounded-orthogonal-projection, thrm:operator-valued-integration, thrm:hall-8.10, thrm:hall-prblm-8.3.4}
+    \uses{def:adjoint-bounded, thrm:gelfand-formula, prpstn:resolvent-holomorphy-and-neumann-series, crllr:crllr-1, def:F-class, def:L0-class, def:algebra-of-sets, def:hall-8.6, def:hall-8.8, def:separates-points, def:spectral-radius, lmm:associated-measures-are-finite, lmm:bounded-operators-form-a-banach-space, lmm:hall-7.6, lmm:hall-7.8, lmm:hall-8.1, lmm:hall-ex-8.3.1, lmm:hall-prblm-7.4.8, lmm:hall-prblm-8.3.3a, lmm:hall-prblm-8.3.3b, lmm:hall-prblm-8.3.3c, lmm:lemma-1, lmm:lemma-2, lmm:pointwise-limits-of-borel-measurable-functions, lmm:spectral-mapping-theorem, lmm:spectrum-is-compact-metric-measurable, prpstn:F-bounded, prpstn:F-closed-under-limits, prpstn:F-contains-continuous, prpstn:F-homogeneous, prpstn:F-sesquilinear, prpstn:L0-complement, prpstn:L0-contains-closed, prpstn:L0-contains-empty, prpstn:L0-union, prpstn:bounded-operators-are-continuous, prpstn:cfc-multiplicative, prpstn:cfc-non-negative, prpstn:cfc-norm, prpstn:cfc-self-adjoint, prpstn:cfc-spectral-mapping, prpstn:continuity-of-the-adjoint, prpstn:hall-7.2, prpstn:hall-7.3, prpstn:hall-7.5, prpstn:hall-7.7, prpstn:hall-8.3, prpstn:hall-8.4, prpstn:hall-8.7, prpstn:hall-a.34, prpstn:hall-a.62, thrm:analytic-equivalence-theorem, thrm:archimedean-property, thrm:bounded-convergence-theorem, thrm:bounded-linear-transformation-theorem, thrm:boundedness-theorem, thrm:complex-valued-simple-approximation-theorem, thrm:composition-theorem, thrm:existence-of-bump-functions, thrm:fundamental-theorem-of-algebra, thrm:maximum-modulus-principle, thrm:monotone-class-theorem, thrm:monotone-convergence-theorem-nonincreasing, thrm:riesz-representation, def:identity-operator, def:indicator-function, def:orthogonal-complement, prpstn:basic-integral-properties, def:bounded-operator-notation, def:projection-valued-measure, def:bounded-operator-resolvent-and-spectrum, def:bounded-orthogonal-projection, thrm:operator-valued-integration, thrm:hall-8.10, thrm:hall-prblm-8.3.4}
 \textit{Existence.} Theorem~\ref{thrm:hall-8.10} constructs a projection-valued measure $\mu^A$ on the Borel $\sigma$-algebra of $\sigma(A)$, with values in orthogonal projections on $\mathbf{H}$, and establishes
 \begin{align}
     \int_{\sigma(A)} \lambda \, d\mu^A(\lambda) = A.

@@ -42,8 +42,6 @@ Throughout, `H` is a complex Hilbert space, so that `H →L[ℂ] H` is the bluep
 * `Physicslib4.Spectral.mem_span_orthogonal_iff` — the orthogonal complement of an
   arbitrary *subset* of `H`.
 * `Physicslib4.Spectral.completeSpace_boundedOp` — `𝓑(H)` is a Banach space.
-* `Physicslib4.Spectral.completeSpace_dual` — the dual of a normed space is a Banach
-  space.
 * `Physicslib4.Spectral.mem_resolventSet_iff_isUnit_sub_smul`,
   `Physicslib4.Spectral.spectrum_eq_compl_resolventSet`,
   `Physicslib4.Spectral.mul_resolvent_of_mem_resolventSet` — the resolvent set, the
@@ -71,7 +69,6 @@ Throughout, `H` is a complex Hilbert space, so that `H →L[ℂ] H` is the bluep
   measurable functions.
 * `Physicslib4.Spectral.tendsto_integral_of_boundedPointwiseLimit` — the bounded
   convergence theorem on a finite measure space.
-* `Physicslib4.Spectral.exists_unique_laurentSeries` — Laurent's theorem.
 
 ## Implementation notes
 
@@ -268,22 +265,6 @@ Only completeness has propositional content, so it is what is stated here.
 Blueprint reference: `lmm:bounded-operators-form-a-banach-space`.
 -/
 theorem completeSpace_boundedOp : CompleteSpace (H →L[ℂ] H) := inferInstance
-
-/--
-The dual of a normed space is a Banach space: `V →L[ℂ] ℂ` is complete in the
-operator norm.
-
-In Mathlib this is the instance `ContinuousLinearMap.instCompleteSpace` rather than a
-theorem, so — following `completeSpace_boundedOp` above — it is restated here as the
-proposition the blueprint asserts. Note that the blueprint assumes `V` itself is a
-Banach space; that hypothesis is not needed, since completeness of `V →L[ℂ] ℂ` comes
-from completeness of the *target* `ℂ`. It is therefore omitted rather than carried as
-an unused binder.
-
-Blueprint reference: `thrm:theorem-on-completeness-of-the-dual`.
--/
-theorem completeSpace_dual (V : Type*) [NormedAddCommGroup V] [NormedSpace ℂ V] :
-    CompleteSpace (V →L[ℂ] ℂ) := inferInstance
 
 /-!
 ### The resolvent set, the spectrum and the resolvent
@@ -814,22 +795,6 @@ theorem tendsto_integral_of_boundedPointwiseLimit {X : Type*} [MeasurableSpace X
     exact h.norm_le i x
   · filter_upwards with x
     exact h.tendsto x
-
-/-!
-### Complex analysis prerequisites
--/
-
-/--
-Laurent's theorem: a function holomorphic on an open annulus admits a unique
-expansion there as a Laurent series.
-
-Blueprint reference: `thrm:laurents-theorem`.
--/
-theorem exists_unique_laurentSeries {c : ℂ} {r R : ℝ} (hr : 0 ≤ r) (hrR : r < R)
-    {f : ℂ → ℂ} (hf : DifferentiableOn ℂ f {z : ℂ | r < ‖z - c‖ ∧ ‖z - c‖ < R}) :
-    ∃! a : ℤ → ℂ, ∀ z : ℂ, r < ‖z - c‖ → ‖z - c‖ < R →
-      HasSum (fun n : ℤ => a n * (z - c) ^ n) (f z) := by
-  sorry
 
 end Spectral
 end Physicslib4

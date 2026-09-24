@@ -30,7 +30,6 @@ required), and the corresponding scalar function `λ ↦ p(λ, conj λ)` is `mvE
 
 ## Main statements
 
-* `norm_eq_sSup_dual` — the norm via the dual pairing.
 * `tendsto_norm_pow_div_atTop`, `spectralRadius_mul_le_of_commute` — power growth and the
   spectral radius of a commuting product.
 * `mapsTo_pvmOperator_spectralSubspace`, `norm_sub_smul_le_of_mem_spectralSubspace`,
@@ -78,27 +77,6 @@ noncomputable def mvEvalConj (p : MvPolynomial (Fin 2) ℂ) (lam : ℂ) : ℂ :=
 /-!
 ### Norm and spectral radius
 -/
-
-/--
-The norm of a vector is recovered by pairing it with the unit ball of the dual space:
-`‖x‖ = sup {|ξ x| : ξ ∈ V*, ‖ξ‖ ≤ 1}`.
-
-Mathlib has the two halves (`NormedSpace.norm_le_dual_bound` and the Hahn–Banach
-`exists_dual_vector''`) but not the supremum form.
-
-Blueprint reference: `thrm:norm-via-dual-pairing`.
--/
-theorem norm_eq_sSup_dual {𝕜 V : Type*} [RCLike 𝕜] [NormedAddCommGroup V] [NormedSpace 𝕜 V]
-    (x : V) :
-    ‖x‖ = sSup ((fun ξ : StrongDual 𝕜 V => ‖ξ x‖) '' Metric.closedBall 0 1) := by
-  have hle : ∀ y ∈ (fun ξ : StrongDual 𝕜 V => ‖ξ x‖) '' Metric.closedBall 0 1, y ≤ ‖x‖ := by
-    rintro _ ⟨ξ, hξ, rfl⟩
-    rw [mem_closedBall_zero_iff] at hξ
-    exact (ξ.le_opNorm x).trans (by nlinarith [norm_nonneg x])
-  obtain ⟨g, hg, hgx⟩ := exists_dual_vector'' 𝕜 x
-  refine le_antisymm (le_csSup ⟨‖x‖, hle⟩ ⟨g, mem_closedBall_zero_iff.2 hg, ?_⟩)
-    (csSup_le ⟨_, 0, Metric.mem_closedBall_self zero_le_one, rfl⟩ hle)
-  simp [hgx]
 
 /--
 Powers of a bounded operator grow no faster than the spectral radius allows: if
