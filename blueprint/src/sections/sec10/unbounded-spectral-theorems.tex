@@ -2803,6 +2803,7 @@ We now construct the operator $U$. Recall from Theorem~\ref{thrm:hall-9.17} that
     Note that Point 2 and Point 3 together say that $U - \mathbf{1}$ is a bijection of $\mathbf{H}$ onto $\text{Dom}(A)$; the symbol $(U-\mathbf{1})^{-1}$ in Point 3 refers to the inverse of \textit{that} bijection. We are \textit{not} claiming $1$ lies in the resolvent set of $U$: the map $(U-\mathbf{1})^{-1} : \text{Dom}(A) \to \mathbf{H}$ is not bounded unless $\text{Dom}(A) = \mathbf{H}$, which happens only when $A$ is bounded.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.5, def:hall-9.16, def:unitary-operator, thrm:hall-9.17, prpstn:hall-9.4, prpstn:hall-9.13, lmm:adjoint-of-scalar-multiple-of-identity, def:range-of-an-unbounded-operator, lmm:uniqueness-of-resolvent, def:identity-operator, prpstn:polarization-identity}
 \textit{Preliminaries on the resolvents.} Since $A$ is self-adjoint, Theorem~\ref{thrm:hall-9.17} gives $\sigma(A) \subset \mathbb{R}$, so $\pm i$ lie in the resolvent set. By the definition of the resolvent set~(\ref{def:hall-9.16}), there is a bounded $(A-i\mathbf{1})^{-1} \in \mathcal{B}(\mathbf{H})$ with: (i) $(A-i\mathbf{1})^{-1}\psi \in \text{Dom}(A)$ and $(A-i\mathbf{1})(A-i\mathbf{1})^{-1}\psi = \psi$ for all $\psi \in \mathbf{H}$; and (ii) $(A-i\mathbf{1})^{-1}(A-i\mathbf{1})\psi = \psi$ for all $\psi \in \text{Dom}(A)$.
 
@@ -2860,6 +2861,7 @@ The Cayley transform carries the spectrum of $A$ onto the spectrum of $U$, minus
     and consequently $C\big( \sigma(A) \big) = \sigma(U) \setminus \{1\}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, conv:nonzero-hilbert-space, thrm:hall-10.28, lmm:cayley-map, def:hall-9.16, lmm:spectrum-notions-agree, lmm:uniqueness-of-resolvent, def:bounded-operator-resolvent-and-spectrum, lmm:unitary-spectrum-circle}
 \textit{The key factorization.} Fix $\lambda \in \mathbb{R}$, so $\lambda \ne i$ and $C(\lambda) = (\lambda+i)/(\lambda-i)$ is defined. Writing $\mathbf{1} = (A-i\mathbf{1})(A-i\mathbf{1})^{-1}$ and factoring,
 \begin{align}
@@ -2925,6 +2927,7 @@ We also isolate the purely set-theoretic transport of a projection-valued measur
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:projection-valued-measure, thrm:projection-valued-measures-associated-measure, thrm:change-of-variables}
 \textbf{Part 1.} That $\Omega(Y_0)$ is a $\sigma$-algebra on $Y_0$ is immediate: it contains $Y_0$, is closed under countable unions (a countable union of subsets of $Y_0$ lies in $Y_0$), and is closed under complementation \textit{within $Y_0$}, since $Y_0 \setminus E = Y_0 \cap (Y\setminus E) \in \Omega(Y)$ for $E \in \Omega(Y_0)$.
 
@@ -2962,6 +2965,7 @@ One more observation is needed: $1$ is never an atom of $\mu^U$, so $D$ — unde
     Let $A$ be self-adjoint with Cayley transform $U$, and $\mu^U$ the projection-valued measure of $U$. Then $\mu^U(\{1\}) = 0$, and consequently $\mu^U_\psi(\{1\}) = 0$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, thrm:hall-10.28, thrm:hall-10.20, def:hall-7.14, thrm:projection-valued-measures-associated-measure, lmm:range-of-projection-is-kernel, prpstn:hall-7.15}
 Let $V \equiv \text{Range}\big(\mu^U(\{1\})\big)$ be the corresponding spectral subspace and let $\psi \in V$. Apply Part 2 of Proposition~\ref{prpstn:hall-7.15} with $X = \sigma(U)$ (compact, and contained in $\mathbb{C}$), $\mu = \mu^U$ — so that $\int_X \iota\,d\mu^U = U$ by Theorem~\ref{thrm:hall-10.20}, making the operator called $A$ there equal to $U$ — together with $\lambda_0 = 1$ and $E = \{1\} \cap \sigma(U)$. For every $\varepsilon > 0$ we have $E \subset \{ \lambda \in X \mid \lvert \lambda - 1 \rvert \le \varepsilon \}$, since the only point of $E$ is $1$ itself, at distance $0$. Hence $\left\| (U - \mathbf{1})\psi \right\| \le \varepsilon\left\| \psi \right\|$ for every $\varepsilon>0$, forcing $(U-\mathbf{1})\psi = 0$. By Point 2 of Theorem~\ref{thrm:hall-10.28}, $U - \mathbf{1}$ is injective, so $\psi = 0$. Thus $V = \{0\}$, i.e. $\mu^U(\{1\}) = 0$ (a projection with trivial range is the zero operator, since $P\xi \in \text{Range}(P) = \{0\}$ for every $\xi$). Then $\mu^U_\psi(\{1\}) = \left< \psi, \mu^U(\{1\})\psi \right> = 0$ for every $\psi$.
 \end{proof}
@@ -2979,6 +2983,7 @@ The next proposition is the heart of the matter: $A$ is recovered from $U$ by th
     with equality of domains, the right-hand side being the (generally unbounded) operator of Proposition~\ref{prpstn:hall-10.1} with domain $W_D$.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:indicator-function, conv:nonzero-hilbert-space, thrm:hall-10.28, lmm:integral-ignores-null-sets, thrm:abstract-calculus-yields-pvm, lmm:integral-preserves-spectral-subspaces, lmm:range-of-projection-is-kernel, thrm:hall-10.20, lmm:cayley-map, lmm:cayley-omits-one, def:hall-7.14, prpstn:hall-10.1, prpstn:hall-10.3, prpstn:hall-9.26-internal, def:internal-orthogonal-decomposition, lmm:bounded-on-set-range-in-domain, lmm:range-membership-concentrates-measure, lmm:norm-convergent-decomposition, prpstn:abstract-extended-multiplicative, def:abstract-extended-calculus, prpstn:hall-9.11, lmm:unitary-is-normal, crllr:abstract-extended-norm-bound, def:projection-valued-measure, prpstn:hall-9.4, prpstn:quadratic-forms-on-a-subspace-properties}
 Write $\widehat{D} \equiv \int_{\sigma(U)} D \, d\mu^U$, an unbounded operator with domain $W_D$ by Proposition~\ref{prpstn:hall-10.1}. Since $D$ is real-valued by Lemma~\ref{lmm:cayley-map}, and defined $\mu^U_\psi$-almost everywhere by Lemma~\ref{lmm:cayley-omits-one}, Proposition~\ref{prpstn:hall-10.3} shows $\widehat{D}$ is self-adjoint on $W_D$.
 
@@ -3051,6 +3056,7 @@ Transporting the measure along $C$ now gives the projection-valued measure for $
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{conv:nonzero-hilbert-space, lmm:borel-bijection-transports-pvm, prpstn:hall-10.29, lmm:cayley-map, lmm:cayley-omits-one, thrm:change-of-variables, prpstn:hall-10.1, def:projection-valued-measure, thrm:projection-valued-measures-associated-measure, lmm:unitary-spectrum-circle, prpstn:hall-10.2, thrm:hall-10.20}
 \textit{$\mu^A$ is well defined and a projection-valued measure.} By Lemma~\ref{lmm:cayley-map}, $C : \mathbb{R} \to S^1\setminus\{1\}$ is a bijection with inverse $D$, both continuous and hence Borel measurable.
 
@@ -3092,6 +3098,7 @@ We can finally state and prove the theorem this section set out to establish.
     Moreover $\mu^A$ is \textit{concentrated on the spectrum}: $\mu^A(\mathbb{R}\setminus\sigma(A)) = 0$, equivalently $\mu^A(E) = \mu^A(E \cap \sigma(A))$ for every Borel $E \subset \mathbb{R}$. Restricting $\mu^A$ to the Borel subsets of $\sigma(A)$ therefore gives a projection-valued measure on $\sigma(A)$ with $\int_{\sigma(A)}\lambda\,d\mu^A(\lambda) = A$, which is the form in which the theorem is usually stated; the two formulations correspond under extension by zero.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:identity-operator, def:indicator-function, prpstn:integral-multiplicative, lmm:borel-bijection-transports-pvm, def:hall-9.5, def:hall-9.16, thrm:hall-9.17, thrm:hall-10.30, thrm:hall-10.28, thrm:hall-10.20, prpstn:hall-10.1, prpstn:hall-10.2, lmm:cayley-map, lmm:truncations-converge, lmm:associated-measure-of-image, thrm:change-of-variables, def:projection-valued-measure, thrm:operator-valued-integration, thrm:bounded-convergence-theorem, prpstn:hall-a.63, lmm:uniqueness-of-resolvent, lmm:norm-identity-bounded-integral, lmm:integral-ignores-null-sets, lmm:unitary-spectrum-circle, lmm:cayley-spectral-mapping}
 \textit{The degenerate case.} If $\mathbf{H} = \{0\}$ the statement is immediate: the only linear map on $\{0\}$ is the zero map, which is also the identity $\mathbf{1}$, so the only candidate assignment $E \mapsto \mu^A(E) \equiv 0$ satisfies all four properties of the definition of a projection-valued measure~(\ref{def:projection-valued-measure}) (in particular $\mu^A(\mathbb{R}) = 0 = \mathbf{1}$), it is the unique such assignment, and $\int_{\mathbb{R}}\lambda\,d\mu^A(\lambda) = 0 = A$. So assume from now on that $\mathbf{H} \ne \{0\}$, as required by the results invoked below.
 

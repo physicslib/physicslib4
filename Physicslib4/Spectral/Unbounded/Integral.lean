@@ -1005,14 +1005,15 @@ theorem isSymmetric_pmapIntegral_of_real {f : X → ℂ} (hf : Measurable f)
     ← inner_pmapIntegral μ hf ψ φ, inner_conj_symm]
 
 /--
-For real-valued measurable `f` and non-real `c`, the operator `∫ f dμ - c 1` maps `W_f`
-onto `H`: a preimage of `η` is `(∫ (f - c)⁻¹ dμ) η`.
+For real measurable `f` and non-real `c`, the bounded operator `∫ (f - c)⁻¹ dμ` is a right
+inverse of `∫ f dμ - c 1`: it maps into `W_f` and `(∫ f dμ - c)(∫ (f - c)⁻¹ dμ) η = η`.
 
-Blueprint reference: `prpstn:hall-10.3`.
+Blueprint reference: `prpstn:hall-10.3`; also Step 1 of the uniqueness proof of `thrm:hall-10.4`.
 -/
-theorem range_subSmul_pmapIntegral_eq_top {f : X → ℂ} (hf : Measurable f)
-    (hreal : ∀ x, (f x).im = 0) {c : ℂ} (hc : c.im ≠ 0) :
-    range (subSmul (pmapIntegral μ f) c) = ⊤ := by
+theorem pmapIntegral_sub_smul_integral_inv {f : X → ℂ} (hf : Measurable f)
+    (hreal : ∀ x, (f x).im = 0) {c : ℂ} (hc : c.im ≠ 0) (η : H) :
+    ∃ hψ : μ.integral (fun x => (f x - c)⁻¹) η ∈ integralDomain μ f,
+      pmapIntegral μ f ⟨_, hψ⟩ - c • μ.integral (fun x => (f x - c)⁻¹) η = η := by
   have hne : ∀ x, f x - c ≠ 0 := fun x h => hc (by simpa [hreal x] using congrArg Complex.im h)
   have hlow : ∀ x, |c.im| ≤ ‖f x - c‖ := fun x => by
     simpa [hreal x] using Complex.abs_im_le_norm (f x - c)
@@ -1021,12 +1022,6 @@ theorem range_subSmul_pmapIntegral_eq_top {f : X → ℂ} (hf : Measurable f)
   have hgb : ∀ x, ‖g x‖ ≤ |c.im|⁻¹ := fun x => by
     simp only [g, norm_inv]; exact inv_anti₀ hpos (hlow x)
   have hg : g ∈ BddMeasurable X := ⟨(hf.sub_const c).inv, |c.im|⁻¹, hgb⟩
-  have hmul : ∀ u v : X → ℂ, u ∈ BddMeasurable X → v ∈ BddMeasurable X →
-      u * v ∈ BddMeasurable X := fun u v ⟨hu, Cu, hCu⟩ ⟨hv, Cv, hCv⟩ =>
-    ⟨hu.mul hv, Cu * Cv, fun x => by
-      rw [Pi.mul_apply, norm_mul]
-      exact mul_le_mul (hCu x) (hCv x) (norm_nonneg _) ((norm_nonneg _).trans (hCu x))⟩
-  -- `f g = 1 + c g` is bounded by `K`
   set K : ℝ := 1 + ‖c‖ * |c.im|⁻¹
   have hfg : ∀ x, f x * g x = 1 + c * g x := fun x => by
     simp only [g]; field_simp [hne x]; ring
@@ -1035,9 +1030,7 @@ theorem range_subSmul_pmapIntegral_eq_top {f : X → ℂ} (hf : Measurable f)
     refine (norm_add_le _ _).trans ?_
     rw [norm_one, norm_mul]
     exact add_le_add_right (mul_le_mul_of_nonneg_left (hgb x) (norm_nonneg c)) 1
-  refine eq_top_iff.2 fun η _ => ?_
   set ψ := μ.integral g η
-  -- `ψ ∈ W_f`, since `μ_ψ` has density `|g|²` with respect to `μ_η`
   have hψ : ψ ∈ integralDomain μ f := by
     refine ⟨hf.aestronglyMeasurable, ?_⟩
     rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero ENNReal.ofNat_ne_top,
@@ -1052,8 +1045,7 @@ theorem range_subSmul_pmapIntegral_eq_top {f : X → ℂ} (hf : Measurable f)
       exact pow_le_pow_left₀ (norm_nonneg _) (hfgb x) 2
     · rw [lintegral_const]
       exact ENNReal.mul_lt_top ENNReal.ofReal_lt_top (measure_lt_top _ _)
-  refine mem_range.2 ⟨⟨ψ, hψ⟩, ?_⟩
-  -- `(∫ fₙ dμ) ψ - c ψ - η = (∫ (fₙ - f) g dμ) η → 0` for the truncations `fₙ`
+  refine ⟨hψ, ?_⟩
   set F : ℕ → X → ℂ := fun n => {x | ‖f x‖ < n}.indicator f
   have hF : ∀ n, F n ∈ BddMeasurable X := indicator_lt_mem_bddMeasurable hf
   set h : ℕ → X → ℂ := fun n x => (F n x - f x) * g x
@@ -1064,16 +1056,16 @@ theorem range_subSmul_pmapIntegral_eq_top {f : X → ℂ} (hf : Measurable f)
     linear_combination -this
   have hone : (1 : X → ℂ) ∈ BddMeasurable X := ⟨measurable_const, 1, fun x => by simp⟩
   have hkey : ∀ n, μ.integral (F n) ψ - c • ψ - η = μ.integral (h n) η := fun n => by
-    rw [hdecomp, μ.integral_add ((BddMeasurable X).add_mem (hmul _ _ (hF n) hg)
+    rw [hdecomp, μ.integral_add ((BddMeasurable X).add_mem (mul_mem_bddMeasurable (hF n) hg)
         ((BddMeasurable X).smul_mem _ hg)) ((BddMeasurable X).smul_mem _ hone),
-      μ.integral_add (hmul _ _ (hF n) hg) ((BddMeasurable X).smul_mem _ hg),
+      μ.integral_add (mul_mem_bddMeasurable (hF n) hg) ((BddMeasurable X).smul_mem _ hg),
       μ.integral_mul (hF n) hg, μ.integral_smul _ hg, μ.integral_smul _ hone, μ.integral_one]
     simp only [add_apply, smul_apply, mul_apply_eq_comp, one_apply_eq_self, ψ]
     rw [neg_smul, neg_smul, one_smul]
     abel
   have hhb : ∀ n, h n ∈ BddMeasurable X := fun n => by
     rw [hdecomp]
-    exact (BddMeasurable X).add_mem ((BddMeasurable X).add_mem (hmul _ _ (hF n) hg)
+    exact (BddMeasurable X).add_mem ((BddMeasurable X).add_mem (mul_mem_bddMeasurable (hF n) hg)
       ((BddMeasurable X).smul_mem _ hg)) ((BddMeasurable X).smul_mem _ hone)
   have hhle : ∀ n x, ‖h n x‖ ≤ K := fun n x => by
     refine le_trans ?_ (hfgb x)
@@ -1103,6 +1095,19 @@ theorem range_subSmul_pmapIntegral_eq_top {f : X → ℂ} (hf : Measurable f)
     simpa using hsq.sqrt
   have h1 := ((tendsto_integral_truncation μ hf ⟨ψ, hψ⟩).sub_const (c • ψ)).sub_const η
   exact sub_eq_zero.mp (tendsto_nhds_unique h1 hlim)
+
+/--
+For real-valued measurable `f` and non-real `c`, the operator `∫ f dμ - c 1` maps `W_f`
+onto `H`: a preimage of `η` is `(∫ (f - c)⁻¹ dμ) η`.
+
+Blueprint reference: `prpstn:hall-10.3`.
+-/
+theorem range_subSmul_pmapIntegral_eq_top {f : X → ℂ} (hf : Measurable f)
+    (hreal : ∀ x, (f x).im = 0) {c : ℂ} (hc : c.im ≠ 0) :
+    range (subSmul (pmapIntegral μ f) c) = ⊤ := by
+  refine eq_top_iff.2 fun η _ => ?_
+  obtain ⟨hψ, he⟩ := pmapIntegral_sub_smul_integral_inv μ hf hreal hc η
+  exact mem_range.2 ⟨⟨_, hψ⟩, he⟩
 
 /--
 The integral of a real-valued measurable function is a self-adjoint unbounded operator on
