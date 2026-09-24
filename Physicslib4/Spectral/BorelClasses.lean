@@ -276,6 +276,7 @@ obligation.
 
 Blueprint reference: `def:L0-class`.
 -/
+@[nolint unusedArguments]
 def L0 (X : Type*) [TopologicalSpace X] [MeasurableSpace X] : Set (Set X) :=
   {E | ∃ (f : ℕ → C(X, ℝ)) (C : ℝ), (∀ n x, ‖f n x‖ ≤ C) ∧
     ∀ x, Tendsto (fun n => f n x) atTop (𝓝 (E.indicator (1 : X → ℝ) x))}
@@ -474,6 +475,7 @@ theorem isClosed_mem_L0 {E : Set X} (hE : IsClosed E) : E ∈ L0 X := by
           (x := (0 : ℝ)) hzero
       simpa [hxE] using ht
 
+omit [CompactSpace X] [BorelSpace X] in
 /--
 `𝓛₀` is an algebra of sets and contains every open subset of `X`.
 
@@ -487,6 +489,7 @@ theorem isSetAlgebra_L0 : IsSetAlgebra (L0 X) ∧ ∀ U : Set X, IsOpen U → U 
     fun _U hU => by
       simpa using compl_mem_L0 (isClosed_mem_L0 hU.isClosed_compl)⟩
 
+omit [CompactSpace X] in
 /--
 The class `𝓛₁` of sets whose indicator lies in `𝒞` contains every Borel set.
 
@@ -587,6 +590,7 @@ theorem IsBorelGenerating.indicator_mem {𝒞 : Set (X → ℂ)} (h𝒞 : IsBore
   change E ∈ ℒ
   exact hMCT hEgen
 
+omit [CompactSpace X] in
 /--
 `𝒞` is exactly the set of bounded Borel-measurable complex-valued functions on `X`.
 

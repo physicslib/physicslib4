@@ -109,7 +109,7 @@ hence `R(A)` to be a supremum over a non-empty set, is `Nontrivial H`.
 
 Blueprint reference: `lmm:power-growth-controlled-by-spectral-radius`.
 -/
-theorem tendsto_norm_pow_div_atTop [Nontrivial H] (A : H →L[ℂ] H) {T : ℝ} (hT : 0 < T)
+theorem tendsto_norm_pow_div_atTop (A : H →L[ℂ] H) {T : ℝ} (hT : 0 < T)
     (hRT : spectralRadius ℂ A < ENNReal.ofReal T) :
     Tendsto (fun m : ℕ => ‖A ^ m‖ / T ^ m) atTop (𝓝 0) := by
   have hr : ENNReal.ofReal (spectralRadius ℂ A).toReal = spectralRadius ℂ A :=
@@ -324,7 +324,7 @@ Borel functional calculus of `A`.
 
 Blueprint reference: `prpstn:hall-7.16` (Part 1).
 -/
-theorem commute_borelCalculus [Nontrivial H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A)
+theorem commute_borelCalculus {A : H →L[ℂ] H} (hA : IsSelfAdjoint A)
     {B : H →L[ℂ] H} (hB : Commute A B) {f : spectrum ℝ A → ℂ}
     (hf : f ∈ BddMeasurable (spectrum ℝ A)) : Commute (borelCalculus hA f) B := by
   -- off the diagonal, the polarization of `Q_h` is the matrix element of `h(A)`
@@ -396,7 +396,7 @@ Consequently every spectral subspace of `A` is invariant under `B`.
 
 Blueprint reference: `prpstn:hall-7.16` (Part 2).
 -/
-theorem mapsTo_spectralSubspace_of_commute [Nontrivial H] {A : H →L[ℂ] H}
+theorem mapsTo_spectralSubspace_of_commute {A : H →L[ℂ] H}
     (hA : IsSelfAdjoint A) {B : H →L[ℂ] H} (hB : Commute A B) (E : Set (spectrum ℝ A))
     (ψ : H) (hψ : ψ ∈ spectralSubspace (spectralMeasure hA) E) :
     B ψ ∈ spectralSubspace (spectralMeasure hA) E := by
@@ -612,7 +612,7 @@ exponents.
 
 Blueprint reference: `lmm:polynomials-in-normal-are-normal`.
 -/
-theorem adjoint_mvApply {A : H →L[ℂ] H} [IsStarNormal A] (p : MvPolynomial (Fin 2) ℂ) :
+theorem adjoint_mvApply {A : H →L[ℂ] H} (p : MvPolynomial (Fin 2) ℂ) :
     ContinuousLinearMap.adjoint (mvApply A p) =
       ∑ d ∈ p.support, (starRingEnd ℂ (MvPolynomial.coeff d p)) •
         (A ^ d 1 * (ContinuousLinearMap.adjoint A) ^ d 0) := by
@@ -694,7 +694,7 @@ eigenvectors for `p(A, A*)` with eigenvalue `ν`.
 
 Blueprint reference: `lmm:hall-10.27`.
 -/
-theorem exists_subspace_isAlmostEigenvector [Nontrivial H] {A : H →L[ℂ] H} [IsStarNormal A]
+theorem exists_subspace_isAlmostEigenvector {A : H →L[ℂ] H} [IsStarNormal A]
     (p : MvPolynomial (Fin 2) ℂ) {ν : ℂ} (hν : ν ∈ spectrum ℂ (mvApply A p)) {ε : ℝ}
     (hε : 0 < ε) :
     ∃ W : Submodule ℂ H, W ≠ ⊥ ∧ IsClosed (W : Set H) ∧
@@ -846,7 +846,7 @@ private theorem continuous_mvEvalConj (p : MvPolynomial (Fin 2) ℂ) :
 
 Blueprint reference: `thrm:hall-10.23`.
 -/
-theorem spectrum_mvApply [Nontrivial H] {A : H →L[ℂ] H} [IsStarNormal A]
+theorem spectrum_mvApply {A : H →L[ℂ] H} [IsStarNormal A]
     (p : MvPolynomial (Fin 2) ℂ) :
     spectrum ℂ (mvApply A p) = mvEvalConj p '' spectrum ℂ A := by
   rw [mvApply_eq_cfc, cfc_map_spectrum (a := A) (hf := (continuous_mvEvalConj p).continuousOn)]
@@ -907,7 +907,7 @@ theorem normalCalculus_mvPolyOn {A : H →L[ℂ] H} (hA : IsStarNormal A)
 
 Blueprint reference: `thrm:continuous-functional-calculus-normal`.
 -/
-theorem existsUnique_normalCalculus [Nontrivial H] {A : H →L[ℂ] H} (hA : IsStarNormal A) :
+theorem existsUnique_normalCalculus {A : H →L[ℂ] H} (hA : IsStarNormal A) :
     ∃! T : C(spectrum ℂ A, ℂ) →L[ℂ] (H →L[ℂ] H),
       ∀ p : MvPolynomial (Fin 2) ℂ, T (mvPolyOn A p) = mvApply A p := by
   set ι : C(spectrum ℂ A, ℂ) := ContinuousMap.restrict (spectrum ℂ A) (.id ℂ)

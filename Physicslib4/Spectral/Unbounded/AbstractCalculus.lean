@@ -860,7 +860,7 @@ measure on `σ(A)`.
 
 Blueprint reference: `thrm:hall-10.20`.
 -/
-theorem existsUnique_spectralMeasure_normal [Nontrivial H] {A : H →L[ℂ] H}
+theorem existsUnique_spectralMeasure_normal {A : H →L[ℂ] H}
     (hA : IsStarNormal A) :
     ∃! μ : ProjectionValuedMeasure (spectrum ℂ A) H,
       μ.integral (fun lam => (lam : ℂ)) = A := by
@@ -884,7 +884,7 @@ integrating to `A` assigns no mass off `σ(A)` and agrees with `μ^A` there.
 
 Blueprint reference: `thrm:hall-10.20`.
 -/
-theorem eq_of_integral_id_eq_ambient [Nontrivial H] {A : H →L[ℂ] H} (_hA : IsStarNormal A)
+theorem eq_of_integral_id_eq_ambient {A : H →L[ℂ] H} (_hA : IsStarNormal A)
     {Y : Set ℂ} (hY : IsCompact Y) (hsub : spectrum ℂ A ⊆ Y)
     {μA : ProjectionValuedMeasure (spectrum ℂ A) H}
     (hμA : μA.integral (fun lam => (lam : ℂ)) = A)

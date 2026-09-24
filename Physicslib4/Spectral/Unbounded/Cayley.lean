@@ -353,7 +353,7 @@ Spectral mapping for the Cayley transform: `λ ∈ σ(A)` iff `C(λ) ∈ σ(U)`,
 
 Blueprint reference: `lmm:cayley-spectral-mapping`.
 -/
-theorem mem_spectrum_iff_cayleyMap_mem_spectrum [Nontrivial H] {A : H →ₗ.[ℂ] H}
+theorem mem_spectrum_iff_cayleyMap_mem_spectrum {A : H →ₗ.[ℂ] H}
     (_hA : IsSelfAdjoint A) {B U : H →L[ℂ] H} (hU : IsCayleyTransform A B U) (lam : ℝ) :
     (lam : ℂ) ∈ pmapSpectrum A ↔ cayleyMap lam ∈ spectrum ℂ U :=
   not_congr (mem_pmapResolventSet_iff_cayley hU fun h => by simpa using congrArg Complex.im h)
@@ -363,7 +363,7 @@ Consequently `C` maps `σ(A)` onto `σ(U) \ {1}`.
 
 Blueprint reference: `lmm:cayley-spectral-mapping`.
 -/
-theorem cayleyMap_image_spectrum [Nontrivial H] {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+theorem cayleyMap_image_spectrum {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     {B U : H →L[ℂ] H} (hU : IsCayleyTransform A B U) :
     cayleyMap '' {lam : ℝ | (lam : ℂ) ∈ pmapSpectrum A} = spectrum ℂ U \ {1} := by
   ext u
@@ -892,7 +892,7 @@ Cayley transport `μ^A` of the spectral measure `μ^U` of the Cayley transform `
 
 Blueprint reference: `thrm:hall-10.4` (Steps 3 and 4 of the uniqueness proof).
 -/
-theorem eq_cayleyPVM_of_pmapIntegral_eq [Nontrivial H] {A : H →ₗ.[ℂ] H} {B U : H →L[ℂ] H}
+theorem eq_cayleyPVM_of_pmapIntegral_eq {A : H →ₗ.[ℂ] H} {B U : H →L[ℂ] H}
     (hU : IsCayleyTransform A B U) (hUu : U ∈ unitary (H →L[ℂ] H))
     (hU1 : U - 1 = (2 * Complex.I) • B)
     {μU : ProjectionValuedMeasure (spectrum ℂ U) H}

@@ -3,6 +3,7 @@ Copyright (c) 2026 Lean Community. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
+import Mathlib.MeasureTheory.Function.L2Space
 import Physicslib4.Spectral.OperatorIntegral
 import Physicslib4.Spectral.Unbounded.DirectSum
 
