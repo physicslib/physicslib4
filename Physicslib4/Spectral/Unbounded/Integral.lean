@@ -352,6 +352,19 @@ theorem isClosed_range_of_isStarProjection {P : H →L[ℂ] H} (hP : IsStarProje
   rw [show Set.range P = {η | P η = η} from Set.ext (mem_range_iff_apply_eq hP)]
   exact isClosed_eq P.continuous continuous_id
 
+/--
+A closed subspace of a separable Hilbert space is again a separable Hilbert space: it is
+complete, and separable. The separability hypothesis on `H` is the blueprint's standing
+assumption; the rest of this file does not need it.
+
+Blueprint reference: `lmm:closed-subspace-is-hilbert`.
+-/
+theorem completeSpace_and_separableSpace_of_isClosed [TopologicalSpace.SeparableSpace H]
+    {K : Submodule ℂ H} (hK : IsClosed (K : Set H)) :
+    CompleteSpace K ∧ TopologicalSpace.SeparableSpace K :=
+  ⟨hK.completeSpace_coe,
+    (TopologicalSpace.IsSeparable.of_separableSpace (K : Set H)).separableSpace⟩
+
 /-!
 ### Measure-theoretic facts not already in Mathlib
 -/

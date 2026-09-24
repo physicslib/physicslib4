@@ -1208,6 +1208,9 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
     \end{align}
     as $n \to \infty$ (an equality in $[0, \infty]$).
 \end{theorem}
+\begin{proof}
+\leanok
+\end{proof}
 
 \begin{theorem}[Dominated Convergence Theorem]
     \label{thrm:dominated-convergence-theorem}
@@ -1216,6 +1219,9 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
     \leanok
     Let $(X,\Omega,\nu)$ be a measure space and $\{g_n\}$ measurable complex-valued functions on $X$ converging pointwise to $g$, with $\lvert g_n \rvert \le G$ for all $n$ and some $\nu$-integrable $G$. Then $g$ and each $g_n$ are $\nu$-integrable and $\int_X g_n \, d\nu \to \int_X g \, d\nu$.
 \end{theorem}
+\begin{proof}
+\leanok
+\end{proof}
 
 \begin{proposition}[Linearity of the Integral in the Measure]
     \label{prpstn:additivity-of-the-integral-in-the-measure}
@@ -1230,6 +1236,9 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
     \end{align}
     (equalities in $[0,\infty]$), and both hold for every $g$ integrable with respect to the measures involved. We refer to the first identity as \textit{additivity} and the second as \textit{homogeneity} in the measure.
 \end{proposition}
+\begin{proof}
+\leanok
+\end{proof}
 
 \begin{proposition}[Monotonicity of the Integral in the Measure]
     \label{prpstn:monotonicity-of-the-integral-in-the-measure}
@@ -1238,6 +1247,9 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
     \leanok
     Let $\nu, \nu'$ be measures on $(X, \Omega)$ with $\nu(E) \le \nu'(E)$ for every $E \in \Omega$. Then $\int_X g \, d\nu \le \int_X g \, d\nu'$ for every nonnegative measurable $g$ on $X$.
 \end{proposition}
+\begin{proof}
+\leanok
+\end{proof}
 
 \begin{definition}[$L^2$ of a Measure Space]
     \label{def:hall-a.46}
@@ -1272,6 +1284,9 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
     \end{align}
     (an equality in $[0,\infty]$).
 \end{proposition}
+\begin{proof}
+\leanok
+\end{proof}
 
 \begin{proposition}[Integrals Agree when Measures Agree on a Set]
     \label{prpstn:integrals-agree-when-measures-agree}
@@ -1304,11 +1319,12 @@ Closed subspaces recur as Hilbert spaces in their own right — the whole develo
 
 \begin{lemma}[A Closed Subspace is a Separable Hilbert Space]
     \label{lmm:closed-subspace-is-hilbert}
-    \lean{IsClosed.completeSpace_coe, Submodule.innerProductSpace, Submodule.coe_norm, TopologicalSpace.IsSeparable.of_separableSpace, TopologicalSpace.IsSeparable.separableSpace}
+    \lean{Physicslib4.Spectral.Unbounded.completeSpace_and_separableSpace_of_isClosed, Submodule.innerProductSpace, Submodule.coe_norm}
     \leanok
     Let $V$ be a closed subspace of $\mathbf{H}$. Then $V$, with the inner product inherited from $\mathbf{H}$, is itself a separable, complex Hilbert space, and its norm is the restriction of the norm of $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, thrm:sequential-closedness}
 The inner-product axioms hold on $V$ because they hold on $\mathbf{H}$ and $V \subset \mathbf{H}$ is a complex subspace, so the restricted form is again an inner product; the associated norm is by construction the restriction of that of $\mathbf{H}$. For completeness, a Cauchy sequence in $V$ is Cauchy in $\mathbf{H}$, hence converges to some $\psi \in \mathbf{H}$ by completeness of $\mathbf{H}$; since $V$ is closed, $\psi \in V$ by Theorem~\ref{thrm:sequential-closedness}, and the convergence takes place in $V$. Separability is inherited: a subspace of a separable metric space is separable.
 \end{proof}
@@ -1363,6 +1379,7 @@ One more standard fact is needed before we can even state that $Q_f(\psi) \equiv
     Suppose $\nu$ is a finite measure on $(X,\Omega)$ and $h \in L^2(X,\nu)$. Then $h \in L^1(X,\nu)$, with $\int_X \lvert h \rvert \, d\nu \le \nu(X)^{1/2} \left( \int_X \lvert h \rvert^2 \, d\nu \right)^{1/2}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{conv:section-integration, def:hall-a.46, prpstn:hall-a.43}
 The constant function $1$ is square-integrable, since $\int_X 1^2 \, d\nu = \nu(X) < \infty$ ($\nu$ finite); and $\lvert h \rvert$ is square-integrable because $h$ is. So both lie in $\mathcal{L}^2(X,\nu)$ in the notation of Definition~\ref{def:hall-a.46}.
 
