@@ -11,7 +11,7 @@ import Mathlib.Order.Defs.Unbundled
 /-!
 # Causality on a spacetime
 
-This file formalises the causal-relations vocabulary of section 10.2 of the
+This file formalises the causal-relations vocabulary of section 10.4 of the
 AQFT-in-Lean blueprint: trips, causal trips, the chronological precedence
 relation `≪`, the causal precedence relation `≺`, and their associated
 chronological/causal future/past sets.
@@ -64,7 +64,7 @@ attribute [instance] Spacetime.topology Spacetime.hausdorff Spacetime.connected
 /-! ### Geodesics (placeholder) -/
 
 /--
-A *geodesic* of a spacetime, as needed by section 10.2 of the blueprint.
+A *geodesic* of a spacetime, as needed by section 10.4 of the blueprint.
 
 Mathlib v4.31.0-rc1 does not provide a Lorentzian / pseudo-Riemannian
 geodesic. We provide an opaque placeholder predicate. Downstream work

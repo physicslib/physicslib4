@@ -13,7 +13,7 @@ import Mathlib.Analysis.Normed.Operator.Bilinear
 # Pullback of a spacetime metric along a diffeomorphism
 
 This file formalises the first half of the blueprint subsection
-*Pullback metrics and cross-metric isometries* (section 10.2 of the
+*Pullback metrics and cross-metric isometries* (section 10.4 of the
 AQFT-in-Lean blueprint): the pullback metric `ψ^*g`, the fact that it is again
 a spacetime metric, and the pullback of a time orientation together with the
 two-sided transport of future-pointing-ness.

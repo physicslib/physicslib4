@@ -431,6 +431,14 @@ theorem colimitStarOf_injective (U : LocalNet) (i : Isotony U) (D : Diamond) :
   exact DirectLimit.mk_injective (F := fun D : Diamond => U.algebra D.1)
     (f := transitionHom U i) (fun D₁ D₂ h => i.injective D₁.2 D₂.2 h) D
 
+/-- **The canonical embedding is injective** (`lmm:quasilocal-embedding-injective`).
+
+The embedding `ι_D` is the composite `η ∘ colimitStarOf` of the injective colimit
+insertion with the injective completion coercion, so it is injective. Injectivity
+of the insertion — where Axiom 2(a) is spent — is `colimitStarOf_injective`;
+the completion coercion `η` is injective by
+`UniformSpace.Completion.coe_injective`, since the colimit is a `NormedRing`
+hence a `T0Space`. -/
 theorem quasilocalEmbedding_injective (U : LocalNet) (i : Isotony U) (D : Diamond) :
     Function.Injective (quasilocalEmbedding U i D) := by
   intro a b hab

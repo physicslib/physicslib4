@@ -2,4 +2,9 @@
 
 # Prover scratch copies: private per-declaration working files written by the
 # prover tooling. They duplicate real declarations in the same namespace.
+#
+# The pattern is deliberately `scratch_*` rather than `scratch_*.lean`: the
+# tooling has produced files that do not end in `.lean`, including one whose
+# name contains a space (`... .lean thy`). Those escaped the narrower rule and
+# were left untracked but not ignored.
 scratch_*

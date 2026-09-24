@@ -548,7 +548,9 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
 
 \begin{theorem}[Quasilocal Observables are Strongly Dense in the Bicommutant]
     \label{thrm:quasilocal-strongly-dense}
+    \lean{Physicslib4.AQFT.HaagKastler.dense_range_in_bicommutant}
     \uses{def:quasilocal-observable, def:local-von-neumann}
+    \leanok
     Let $\pi$ be a \emph{unital} $*$-representation of the quasilocal algebra $\mathfrak{U}$ on a Hilbert space $H$. Then the image $\pi(\mathfrak{U})$ is dense in its bicommutant $\pi(\mathfrak{U})''$ in the strong operator topology.
 
     Unitality is the hypothesis that does the work and it is stated directly rather than derived from a stronger one. It is essential, not decorative: for the zero representation $\pi = 0$ on a nonzero $H$ the image $\pi(\mathfrak{U}) = \{0\}$ is already strongly closed while $\pi(\mathfrak{U})'' = \mathbb{C}\cdot 1$, so density fails outright. The case of interest here is the GNS representation $\pi_\omega$ attached to a state $\omega$ (\ref{def:state}, \ref{thrm:gns-construction-theorem}), which is unital because $\mathfrak{U}$ is a unital C*-algebra and $\omega$ a state; but the theorem holds for any unital $*$-representation, and stating it for the GNS one only would be assuming more than the density theorem needs. Below, $\pi_\omega$ is written wherever the GNS case is the one being discussed.

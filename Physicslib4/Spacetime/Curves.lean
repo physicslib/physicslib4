@@ -20,7 +20,7 @@ import Mathlib.Analysis.Convex.Topology
 # Paths and curves on a spacetime
 
 This file formalises the various flavours of paths and curves used in
-section 10.2 of the AQFT-in-Lean blueprint.
+section 10.4 of the AQFT-in-Lean blueprint.
 
 ## Main definitions
 
