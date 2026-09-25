@@ -123,6 +123,8 @@ identity-component isometry group — satisfies *isometric covariance*
 theorem isometricCovariance_trivial_identityComponent (L : LorentzianSpacetime) :
     Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance
       (Physicslib4.AQFT.HaagKastlerCurved.trivialLocalNet
+        L.toAbstractIdentityComponent)
+      (Physicslib4.AQFT.HaagKastlerCurved.trivialLocalNetIsotony
         L.toAbstractIdentityComponent) :=
   Physicslib4.AQFT.HaagKastlerCurved.trivialLocalNet_isometricCovariance _
 

@@ -272,17 +272,17 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
 
 \begin{theorem}[Geometric Covariance of the von Neumann Net (Curved Spacetime)]
     \label{thrm:von-neumann-geometric-covariance-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumann, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localOperators}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumann, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localOperators, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutHom_commIsotony}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeometricCovariance.lean}
     \uses{def:local-von-neumann-in-curved-spacetime, def:stabilizer-action-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime}
     \leanok
     The curved, stabilizer-subgroup analogue of geometric covariance. For $g \in \mathrm{Stab}(\mathbf{B})$, the implementing unitary $U(g)$ of the stabilizer GNS representation (\ref{thrm:gns-unitary-stabilizer-in-curved-spacetime}) conjugates the local von Neumann algebra of a subregion $\mathbf{B}_1 \subseteq \mathbf{B}$ onto that of $g \cdot \mathbf{B}_1$:
     \[ U(g)\, R(\mathbf{B}_1)\, U(g)^{-1} = R(g \cdot \mathbf{B}_1). \]
-    Unlike Minkowski, the abstract \texttt{LorentzianSpacetime} interface supplies neither basis-set preservation $M.\mathrm{IsBasisSet}(g \cdot \mathbf{B}_1)$ nor the coherence relating the stabilizer action $\hat\alpha_g$ to the chosen isotony embeddings (\ref{def:isotony-in-curved-spacetime}); both enter as explicit hypotheses, discharged for a net from a concrete geometric spacetime.
+    Unlike Minkowski, the abstract \texttt{LorentzianSpacetime} interface does not supply basis-set preservation $M.\mathrm{IsBasisSet}(g \cdot \mathbf{B}_1)$, so it enters as an explicit hypothesis, discharged for a net from a concrete geometric spacetime. The coherence relating the stabilizer action $\hat\alpha_g$ to the isotony embeddings of Axiom 2 (\ref{def:isotony-in-curved-spacetime}) is not a hypothesis: it is condition (3) of Axiom 5 (\ref{def:isometric-covariance-in-curved-spacetime}), transported along $g \cdot \mathbf{B} = \mathbf{B}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:local-von-neumann-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime, thrm:von-neumann-geometric-covariance}
+    \uses{def:local-von-neumann-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime, thrm:von-neumann-geometric-covariance, def:isometric-covariance-in-curved-spacetime}
     There is no quasilocal algebra in curved spacetime, so the only symmetries acting on the containing algebra $\mathfrak{U}(\mathbf{B})$ are the stabilizer $\mathrm{Stab}(\mathbf{B}) = \{g : g \cdot \mathbf{B} = \mathbf{B}\}$. The proof reuses the shared conjugation core of \ref{thrm:von-neumann-geometric-covariance}: conjugation by a unit is a multiplicative automorphism, which maps centralizers --- hence bicommutants --- to those of the image. Hence $R(\mathbf{B}_1)$ and $R(g \cdot \mathbf{B}_1)$ are unitarily equivalent.
 \end{proof}
 
