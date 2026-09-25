@@ -132,7 +132,13 @@ condition — with the spectrum condition entering as the positive-energy hypoth
 on the implementing unitaries. The future-timelike-translation predicate `ftl` is a
 parameter (to be instantiated once the translation subgroup and its causal
 structure are available); the positive-energy condition is the bounded-generator
-scaffold of `IsPositiveEnergy`. -/
+scaffold of `IsPositiveEnergy`.
+
+**Restriction:** the spectrum condition is imposed through `IsPositiveEnergy`, which
+requires each translation group `t ↦ U (γ t)` to have a *bounded* positive generator.
+The intended form asks for a strongly continuous group whose unbounded self-adjoint
+generator is positive. It is waiting on Stone's theorem, which is in neither Mathlib nor
+this project. -/
 def CovariantQuasilocalAlgebra.IsVacuumState (C : CovariantQuasilocalAlgebra)
     (ftl : (ℝ → InhomogeneousLorentzGroup) → Prop)
     (ω : Physicslib4.GNS.State C.quasilocal.carrier) : Prop :=
@@ -187,7 +193,10 @@ theorem CovariantQuasilocalAlgebra.IsVacuumState.exists_gns_irreducible_covarian
 `IsFutureTimelikeTranslation`, so the spectrum condition is imposed on exactly the
 one-parameter translation subgroups `t ↦ (id, t • n)` with `n` future-pointing
 timelike. This discharges the abstract `ftl` parameter with its intended value, so a
-concrete vacuum state no longer depends on a free predicate. -/
+concrete vacuum state no longer depends on a free predicate.
+
+**Restriction:** inherits the bounded-generator restriction of `IsVacuumState`; the
+intended form and what it is waiting on are recorded there. -/
 def CovariantQuasilocalAlgebra.IsVacuumStateConcrete (C : CovariantQuasilocalAlgebra)
     (ω : Physicslib4.GNS.State C.quasilocal.carrier) : Prop :=
   C.IsVacuumState IsFutureTimelikeTranslation ω

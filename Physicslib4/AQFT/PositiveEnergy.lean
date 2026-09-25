@@ -43,9 +43,14 @@ self-adjoint, with non-negative spectrum) such that `V t = exp(i t P)` for every
 `t`.
 
 The generator of a physical translation is unbounded, so requiring `P` bounded is a
-restriction; the faithful unbounded form needs Stone's theorem and unbounded
-self-adjoint operators, absent from Mathlib. The positivity `P.IsPositive` is the
-energy-positivity that the spectrum condition asserts. -/
+restriction. The positivity `P.IsPositive` is the energy-positivity that the spectrum
+condition asserts.
+
+**Restriction:** the generator `P` is required to be bounded, so `V` is norm-continuous.
+The intended form is a strongly continuous unitary group `V t = exp(i t P)` with `P` an
+unbounded, positive self-adjoint operator. It is waiting on Stone's theorem, which is in
+neither Mathlib nor this project. Unbounded self-adjoint operators and their spectral
+theorem are now available in `Physicslib4.Spectral.Unbounded`. -/
 def IsPositiveEnergy (V : ℝ → (H ≃ₗᵢ[ℂ] H)) : Prop :=
   ∃ P : H →L[ℂ] H, P.IsPositive ∧
     ∀ (t : ℝ) (x : H), V t x = NormedSpace.exp (((t : ℂ) * Complex.I) • P) x
