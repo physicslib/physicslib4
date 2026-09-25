@@ -65,7 +65,7 @@ structure HaagKastlerNet (M : LorentzianSpacetime) where
   localAlgebra : LocalAlgebra U
   /-- *Isometric covariance*: the identity-component isometry group
   acts on the net and commutes with isotony (Axiom 5). -/
-  isometricCovariance : IsometricCovariance U
+  isometricCovariance : IsometricCovariance U isotony
 
 namespace HaagKastlerNet
 
@@ -139,7 +139,7 @@ theorem covEquiv_one (B : Set M.Carrier) (a : N.algebra B) :
     (N.covEquiv (1 : M.Isom) B :
         N.algebra B → N.algebra ((1 : M.Isom) • B)) a
       = (congrArg N.U.algebra (one_smul M.Isom B).symm).mp a :=
-  N.isometricCovariance.choose_spec.choose_spec.2.1 B a
+  N.isometricCovariance.choose_spec.1 B a
 
 /-- **Covariance, composition.** The action is multiplicative in the
 group element: `α (φ'·φ) = α φ' ∘ α φ` (modulo the canonical
@@ -151,7 +151,7 @@ theorem covEquiv_mul (φ φ' : M.Isom) (B : Set M.Carrier) (a : N.algebra B) :
           ((N.covEquiv φ' (φ • B) :
               N.algebra (φ • B) → N.algebra (φ' • (φ • B)))
             ((N.covEquiv φ B : N.algebra B → N.algebra (φ • B)) a)) :=
-  N.isometricCovariance.choose_spec.choose_spec.2.2.1 φ φ' B a
+  N.isometricCovariance.choose_spec.2.1 φ φ' B a
 
 /-- The *isotony embeddings* of the net: the chosen family supplied by Axiom 2
 (`isotony`).
@@ -188,6 +188,25 @@ theorem commIsotony_comp ⦃B₁ B₂ B₃ : Set M.Carrier⦄
     (N.commIsotony h₂ h₃ h₂₃).comp (N.commIsotony h₁ h₂ h₁₂)
       = N.commIsotony h₁ h₃ (h₁₂.trans h₂₃) :=
   N.isotony.map_comp h₁ h₂ h₃ h₁₂ h₂₃
+
+/-- **Covariance commutes with isotony** (Axiom 5 (3)): the covariance
+equivalences intertwine the Axiom 2 isotony embeddings,
+`α_φ ∘ i_{B₁B₂} = i_{φB₁ φB₂} ∘ α_φ`. -/
+theorem covEquiv_commIsotony (φ : M.Isom) ⦃B₁ B₂ : Set M.Carrier⦄
+    (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂)
+    (hφB₁ : M.IsBasisSet (φ • B₁)) (hφB₂ : M.IsBasisSet (φ • B₂))
+    (hφ : (φ • B₁ : Set _) ⊆ φ • B₂) (a : N.algebra B₁) :
+    N.covEquiv φ B₂ (N.commIsotony hB₁ hB₂ h a)
+      = N.commIsotony hφB₁ hφB₂ hφ (N.covEquiv φ B₁ a) :=
+  N.isometricCovariance.choose_spec.2.2 φ hB₁ hB₂ h hφB₁ hφB₂ hφ a
+
+/-- Transporting an isotony embedding along an equality of target regions. -/
+theorem cast_commIsotony ⦃B₁ B₂ B₂' : Set M.Carrier⦄ (e : B₂ = B₂')
+    (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂) (hB₂' : M.IsBasisSet B₂')
+    (h : B₁ ⊆ B₂) (h' : B₁ ⊆ B₂') (a : N.algebra B₁) :
+    cast (congrArg N.algebra e) (N.commIsotony hB₁ hB₂ h a)
+      = N.commIsotony hB₁ hB₂' h' a := by
+  subst e; rfl
 
 /-- **Local commutativity.** If basis sets `B₁`, `B₂` are completely spacelike
 and both contained in a common basis set `B`, their images in `𝔘(B)` under the
@@ -332,10 +351,8 @@ theorem trivialLocalNet_localAlgebra (M : LorentzianSpacetime) :
   localAlgebra_of (trivialLocalNet M)
 
 theorem trivialLocalNet_isometricCovariance (M : LorentzianSpacetime) :
-    IsometricCovariance (trivialLocalNet M) := by
-  refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ,
-    ?_, ?_, ?_, ?_⟩
-  · intro _ _ _ _ h _ _ hh; exact hh
+    IsometricCovariance (trivialLocalNet M) (trivialLocalNetIsotony M) := by
+  refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, ?_, ?_, ?_⟩
   · intro _ _; rfl
   · intro _ _ _ _; rfl
   · intro _ _ _ _ _ _ _ _ _ _; rfl

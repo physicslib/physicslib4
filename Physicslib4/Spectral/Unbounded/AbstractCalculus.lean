@@ -724,18 +724,6 @@ theorem norm_extendedCalculus_le (hΦ : IsAbstractCalculus Φ) {f : X → ℂ}
 ### The spectral theorem for bounded normal operators
 -/
 
-/--
-The inclusion of `σ(A)` into a compact ambient set `Y ⊆ ℂ` containing it.
--/
-def inclSpectrum {A : H →L[ℂ] H} {Y : Set ℂ} (hsub : spectrum ℂ A ⊆ Y) :
-    spectrum ℂ A → Y := fun lam => ⟨(lam : ℂ), hsub lam.2⟩
-
-omit [CompleteSpace H] in
-/-- `inclSpectrum` is continuous. -/
-theorem continuous_inclSpectrum {A : H →L[ℂ] H} {Y : Set ℂ} (hsub : spectrum ℂ A ⊆ Y) :
-    Continuous (inclSpectrum hsub) :=
-  continuous_subtype_val.subtype_mk _
-
 /-- A continuous function on a compact space is a bounded measurable integrand. -/
 theorem continuousMap_mem_bddMeasurable {Z : Type*} [TopologicalSpace Z] [CompactSpace Z]
     [MeasurableSpace Z] [OpensMeasurableSpace Z] (f : C(Z, ℂ)) :
@@ -768,12 +756,12 @@ theorem integral_const_eq_smul_one {Z : Type*} [MeasurableSpace Z]
 /-- If PVMs on `Y ⊇ σ(A)` and on `σ(A)` both integrate the identity to `A`, then they
 agree on every continuous `g` on `Y` (restricted to `σ(A)` on the right): both sides are
 `*`-homomorphisms in `g` agreeing on `λ`, and Stone–Weierstrass gives density. -/
-theorem integral_continuousMap_eq_comp_inclSpectrum {A : H →L[ℂ] H} {Y : Set ℂ}
+theorem integral_continuousMap_eq_comp_inclusion {A : H →L[ℂ] H} {Y : Set ℂ}
     [CompactSpace Y] (hsub : spectrum ℂ A ⊆ Y) {μA : ProjectionValuedMeasure (spectrum ℂ A) H}
     (hμA : μA.integral (fun lam => (lam : ℂ)) = A)
     {ν : ProjectionValuedMeasure Y H} (hν : ν.integral (fun y => (y : ℂ)) = A) (g : C(Y, ℂ)) :
-    ν.integral (fun y => g y) = μA.integral (fun lam => g (inclSpectrum hsub lam)) := by
-  let inc : C(spectrum ℂ A, Y) := ⟨inclSpectrum hsub, continuous_inclSpectrum hsub⟩
+    ν.integral (fun y => g y) = μA.integral (fun lam => g (Set.inclusion hsub lam)) := by
+  let inc : C(spectrum ℂ A, Y) := ⟨Set.inclusion hsub, continuous_inclusion hsub⟩
   have hB := continuousMap_mem_bddMeasurable (Z := Y)
   have hB' := continuousMap_mem_bddMeasurable (Z := spectrum ℂ A)
   let S : StarSubalgebra ℂ C(Y, ℂ) :=
@@ -811,44 +799,44 @@ theorem integral_continuousMap_eq_comp_inclSpectrum {A : H →L[ℂ] H} {Y : Set
     ((continuous_integral_continuousMap μA).comp (ContinuousMap.continuous_precomp inc))
     (hclos ▸ Set.mem_univ g)
 
-/-- Under the hypotheses of `integral_continuousMap_eq_comp_inclSpectrum`, the measure
-`ν_ψ` on `Y` is the push-forward of `(μA)_ψ` along `inclSpectrum`. -/
-theorem assoc_eq_map_inclSpectrum {A : H →L[ℂ] H} {Y : Set ℂ} [CompactSpace Y]
+/-- Under the hypotheses of `integral_continuousMap_eq_comp_inclusion`, the measure
+`ν_ψ` on `Y` is the push-forward of `(μA)_ψ` along `Set.inclusion hsub`. -/
+theorem assoc_eq_map_inclusion {A : H →L[ℂ] H} {Y : Set ℂ} [CompactSpace Y]
     (hsub : spectrum ℂ A ⊆ Y) {μA : ProjectionValuedMeasure (spectrum ℂ A) H}
     (hμA : μA.integral (fun lam => (lam : ℂ)) = A)
     {ν : ProjectionValuedMeasure Y H} (hν : ν.integral (fun y => (y : ℂ)) = A) (ψ : H) :
-    ν.assoc ψ = (μA.assoc ψ).map (inclSpectrum hsub) := by
-  have hm := (continuous_inclSpectrum hsub).measurable
+    ν.assoc ψ = (μA.assoc ψ).map (Set.inclusion hsub) := by
+  have hm := (continuous_inclusion hsub).measurable
   refine ext_of_forall_integral_eq_of_IsFiniteMeasure fun f => ?_
   let g : C(Y, ℂ) := ⟨fun y => (f y : ℂ), Complex.continuous_ofReal.comp f.continuous⟩
-  let inc : C(spectrum ℂ A, Y) := ⟨inclSpectrum hsub, continuous_inclSpectrum hsub⟩
+  let inc : C(spectrum ℂ A, Y) := ⟨Set.inclusion hsub, continuous_inclusion hsub⟩
   have h := congrArg (fun T : H →L[ℂ] H => ⟪ψ, T ψ⟫_ℂ)
-    (integral_continuousMap_eq_comp_inclSpectrum hsub hμA hν g)
+    (integral_continuousMap_eq_comp_inclusion hsub hμA hν g)
   rw [ν.inner_integral (continuousMap_mem_bddMeasurable g),
-    μA.inner_integral (f := fun lam => g (inclSpectrum hsub lam))
+    μA.inner_integral (f := fun lam => g (Set.inclusion hsub lam))
       (continuousMap_mem_bddMeasurable (g.comp inc))] at h
-  change ∫ x, ((f x : ℝ) : ℂ) ∂_ = ∫ x, ((f (inclSpectrum hsub x) : ℝ) : ℂ) ∂_ at h
+  change ∫ x, ((f x : ℝ) : ℂ) ∂_ = ∫ x, ((f (Set.inclusion hsub x) : ℝ) : ℂ) ∂_ at h
   rw [integral_complex_ofReal, integral_complex_ofReal] at h
   rw [integral_map hm.aemeasurable f.continuous.aestronglyMeasurable]
   exact_mod_cast h
 
 /-- The ambient uniqueness statement, for a compact `Y ⊇ σ(A)` (normality of `A` is not
 needed): `ν(E) = μA(E ∩ σ(A))`, compared through the associated measures. -/
-theorem apply_eq_apply_preimage_inclSpectrum {A : H →L[ℂ] H} {Y : Set ℂ} [CompactSpace Y]
+theorem apply_eq_apply_preimage_inclusion {A : H →L[ℂ] H} {Y : Set ℂ} [CompactSpace Y]
     (hsub : spectrum ℂ A ⊆ Y) {μA : ProjectionValuedMeasure (spectrum ℂ A) H}
     (hμA : μA.integral (fun lam => (lam : ℂ)) = A)
     {ν : ProjectionValuedMeasure Y H} (hν : ν.integral (fun y => (y : ℂ)) = A)
     {E : Set Y} (hE : MeasurableSet E) :
-    ν E = μA (inclSpectrum hsub ⁻¹' E) := by
-  have hm := (continuous_inclSpectrum hsub).measurable
-  have hE' : MeasurableSet (inclSpectrum hsub ⁻¹' E) := hm hE
+    ν E = μA (Set.inclusion hsub ⁻¹' E) := by
+  have hm := (continuous_inclusion hsub).measurable
+  have hE' : MeasurableSet (Set.inclusion hsub ⁻¹' E) := hm hE
   refine ContinuousLinearMap.coe_injective ((ext_inner_map _ _).mp fun ψ => ?_)
-  change ⟪ν E ψ, ψ⟫_ℂ = ⟪μA (inclSpectrum hsub ⁻¹' E) ψ, ψ⟫_ℂ
+  change ⟪ν E ψ, ψ⟫_ℂ = ⟪μA (Set.inclusion hsub ⁻¹' E) ψ, ψ⟫_ℂ
   rw [← inner_conj_symm]
   conv_rhs => rw [← inner_conj_symm]
   congr 1
   rw [← ν.integral_indicator hE, ν.inner_integral (indicator_one_mem_bddMeasurable hE),
-    assoc_eq_map_inclSpectrum hsub hμA hν,
+    assoc_eq_map_inclusion hsub hμA hν,
     integral_map hm.aemeasurable (indicator_one_mem_bddMeasurable hE).1.aestronglyMeasurable,
     ← μA.integral_indicator hE', μA.inner_integral (indicator_one_mem_bddMeasurable hE')]
   rfl
@@ -875,7 +863,7 @@ theorem existsUnique_spectralMeasure_normal {A : H →L[ℂ] H}
       (normalCalculus_one_and_id hA).2
   refine ⟨abstractPVM hΦ, hμ, fun ν hν => ProjectionValuedMeasure.ext fun E => ?_⟩
   by_cases hE : MeasurableSet E
-  · exact apply_eq_apply_preimage_inclSpectrum subset_rfl hμ hν hE
+  · exact apply_eq_apply_preimage_inclusion subset_rfl hμ hν hE
   · rw [ν.apply_of_not_measurableSet hE, (abstractPVM hΦ).apply_of_not_measurableSet hE]
 
 /--
@@ -890,9 +878,9 @@ theorem eq_of_integral_id_eq_ambient {A : H →L[ℂ] H} (_hA : IsStarNormal A)
     (hμA : μA.integral (fun lam => (lam : ℂ)) = A)
     {ν : ProjectionValuedMeasure Y H} (hν : ν.integral (fun y => (y : ℂ)) = A)
     {E : Set Y} (hE : MeasurableSet E) :
-    ν E = μA (inclSpectrum hsub ⁻¹' E) :=
+    ν E = μA (Set.inclusion hsub ⁻¹' E) :=
   haveI := isCompact_iff_compactSpace.mp hY
-  apply_eq_apply_preimage_inclSpectrum hsub hμA hν hE
+  apply_eq_apply_preimage_inclusion hsub hμA hν hE
 
 end Unbounded
 end Spectral

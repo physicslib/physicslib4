@@ -28,9 +28,11 @@ section 10.4 of the AQFT-in-Lean blueprint.
   non-singleton subset `Σ ⊆ ℝ` ("parameter space") to a spacetime `M`.
 * `Physicslib4.Spacetime.SmoothPath`: a path that is also smooth with
   non-vanishing derivative.
-* `Physicslib4.Spacetime.PathEquiv`, `SmoothPathEquiv`: the equivalence
-  relations on paths/smooth paths corresponding to reparametrisation by
-  homeomorphisms / diffeomorphisms of the parameter space.
+* `Physicslib4.Spacetime.PathEquiv`, `SmoothPathEquiv`: the relations on
+  paths/smooth paths corresponding to reparametrisation by homeomorphisms /
+  diffeomorphisms of the parameter space. `PathEquiv`, `SmoothPathEquiv` and its
+  orientation-preserving refinement `OrientedSmoothPathEquiv` are equivalence
+  relations.
 * `Physicslib4.Spacetime.Curve`, `SmoothCurve`: the corresponding quotient
   types.
 * `Physicslib4.Spacetime.IsTimelikeSmoothCurve`, `IsCausalSmoothCurve`:
@@ -107,8 +109,9 @@ structure SmoothPath extends M.Path where
   smoothOn :
     ContMDiffOn (modelWithCornersSelf ℝ ℝ) M.model ∞ toFun parameterSpace
   /-- The tangent vector along the path is non-vanishing on the parameter
-  space: the manifold derivative of `toFun` applied to `1 : ℝ` is non-zero
-  at each interior point of the parameter space. -/
+  space: the manifold derivative of `toFun` within the parameter space,
+  applied to `1 : ℝ`, is non-zero at every point of the parameter space,
+  endpoints included. -/
   nonvanishing : ∀ s ∈ parameterSpace,
     mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model toFun parameterSpace s
         (1 : ℝ) ≠ 0
@@ -253,12 +256,16 @@ homeomorphism `φ` of `ℝ` mapping `Σ₁` bijectively onto `Σ₂` such that
 `μ₂ ∘ φ = μ₁` on `Σ₁`. We package the homeomorphism on the parameter spaces
 via its underlying function on `ℝ` together with the relevant restriction
 conditions.
+
+Both `φ` and its inverse `ψ` map the parameter spaces into each other, so `φ`
+restricts to a homeomorphism `Σ₁ ≃ₜ Σ₂`; the relation is an equivalence relation
+(`equivalence_pathEquiv`).
 -/
 def PathEquiv (μ₁ μ₂ : M.Path) : Prop :=
   ∃ φ : ℝ → ℝ,
     Continuous φ ∧
     (∃ ψ : ℝ → ℝ, Continuous ψ ∧ Function.LeftInverse ψ φ ∧
-      Function.RightInverse ψ φ) ∧
+      Function.RightInverse ψ φ ∧ Set.MapsTo ψ μ₂.parameterSpace μ₁.parameterSpace) ∧
     Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace ∧
     (∀ s ∈ μ₁.parameterSpace, μ₂.toFun (φ s) = μ₁.toFun s)
 
@@ -305,16 +312,146 @@ theorem OrientedSmoothPathEquiv.toSmoothPathEquiv {μ₁ μ₂ : M.SmoothPath}
   obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq, _⟩ := h
   exact ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq⟩
 
+/-! ### Relational properties of the reparametrisation relations
+
+`PathEquiv`, `SmoothPathEquiv` and `OrientedSmoothPathEquiv` are equivalence
+relations. -/
+
+/-- `PathEquiv` is reflexive: every path is related to itself by the identity
+reparametrisation. -/
+theorem PathEquiv.refl (μ : M.Path) : M.PathEquiv μ μ :=
+  ⟨id, continuous_id, ⟨id, continuous_id, fun _ => rfl, fun _ => rfl, Set.mapsTo_id _⟩,
+    Set.mapsTo_id _, fun _ _ => rfl⟩
+
+variable {M} in
+/-- `PathEquiv` is transitive: reparametrising homeomorphisms compose. -/
+theorem PathEquiv.trans {μ₁ μ₂ μ₃ : M.Path} (h₁₂ : M.PathEquiv μ₁ μ₂)
+    (h₂₃ : M.PathEquiv μ₂ μ₃) : M.PathEquiv μ₁ μ₃ := by
+  obtain ⟨φ₁, hφ₁, ⟨ψ₁, hψ₁, hl₁, hr₁, hψmaps₁⟩, hmaps₁, heq₁⟩ := h₁₂
+  obtain ⟨φ₂, hφ₂, ⟨ψ₂, hψ₂, hl₂, hr₂, hψmaps₂⟩, hmaps₂, heq₂⟩ := h₂₃
+  refine ⟨φ₂ ∘ φ₁, hφ₂.comp hφ₁, ⟨ψ₁ ∘ ψ₂, hψ₁.comp hψ₂, fun x => ?_, fun x => ?_,
+    hψmaps₁.comp hψmaps₂⟩, hmaps₂.comp hmaps₁, fun s hs => ?_⟩
+  · simp only [Function.comp_apply, hl₂ (φ₁ x), hl₁ x]
+  · simp only [Function.comp_apply, hr₁ (ψ₂ x), hr₂ x]
+  · simp only [Function.comp_apply, heq₂ _ (hmaps₁ hs), heq₁ s hs]
+
+variable {M} in
+/-- `PathEquiv` is symmetric: swap the homeomorphism and its inverse. -/
+theorem PathEquiv.symm {μ₁ μ₂ : M.Path} (h : M.PathEquiv μ₁ μ₂) : M.PathEquiv μ₂ μ₁ := by
+  obtain ⟨φ, hφ, ⟨ψ, hψ, hl, hr, hψmaps⟩, hmaps, heq⟩ := h
+  refine ⟨ψ, hψ, ⟨φ, hφ, hr, hl, hmaps⟩, hψmaps, fun t ht => ?_⟩
+  rw [← heq _ (hψmaps ht), hr t]
+
+/-- `PathEquiv` is an equivalence relation. -/
+theorem equivalence_pathEquiv : Equivalence M.PathEquiv :=
+  ⟨PathEquiv.refl M, PathEquiv.symm, PathEquiv.trans⟩
+
+/-- `SmoothPathEquiv` is reflexive: every smooth path is related to itself by the
+identity reparametrisation. -/
+theorem SmoothPathEquiv.refl (μ : M.SmoothPath) : M.SmoothPathEquiv μ μ :=
+  ⟨id, id, contDiffOn_id, contDiffOn_id, Set.mapsTo_id _, Set.mapsTo_id _,
+    fun _ _ => rfl, fun _ _ => rfl, fun _ _ => rfl⟩
+
+variable {M} in
+/-- `SmoothPathEquiv` is symmetric: swap the diffeomorphism `φ` and its inverse `ψ`. -/
+theorem SmoothPathEquiv.symm {μ₁ μ₂ : M.SmoothPath} (h : M.SmoothPathEquiv μ₁ μ₂) :
+    M.SmoothPathEquiv μ₂ μ₁ := by
+  obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq⟩ := h
+  refine ⟨ψ, φ, hψC, hφC, hψmaps, hφmaps, hφψ, hψφ, fun t ht => ?_⟩
+  rw [← heq _ (hψmaps ht), hφψ t ht]
+
+variable {M} in
+/-- `SmoothPathEquiv` is transitive: reparametrising diffeomorphisms compose. -/
+theorem SmoothPathEquiv.trans {μ₁ μ₂ μ₃ : M.SmoothPath} (h₁₂ : M.SmoothPathEquiv μ₁ μ₂)
+    (h₂₃ : M.SmoothPathEquiv μ₂ μ₃) : M.SmoothPathEquiv μ₁ μ₃ := by
+  obtain ⟨φ₁, ψ₁, hφ₁C, hψ₁C, hφ₁maps, hψ₁maps, hψφ₁, hφψ₁, heq₁⟩ := h₁₂
+  obtain ⟨φ₂, ψ₂, hφ₂C, hψ₂C, hφ₂maps, hψ₂maps, hψφ₂, hφψ₂, heq₂⟩ := h₂₃
+  refine ⟨φ₂ ∘ φ₁, ψ₁ ∘ ψ₂, hφ₂C.comp hφ₁C hφ₁maps, hψ₁C.comp hψ₂C hψ₂maps,
+    hφ₂maps.comp hφ₁maps, hψ₁maps.comp hψ₂maps, fun s hs => ?_, fun t ht => ?_,
+    fun s hs => ?_⟩
+  · simp only [Function.comp_apply, hψφ₂ _ (hφ₁maps hs), hψφ₁ s hs]
+  · simp only [Function.comp_apply, hφψ₁ _ (hψ₂maps ht), hφψ₂ t ht]
+  · simp only [Function.comp_apply, heq₂ _ (hφ₁maps hs), heq₁ s hs]
+
+/-- `SmoothPathEquiv` is an equivalence relation. -/
+theorem equivalence_smoothPathEquiv : Equivalence M.SmoothPathEquiv :=
+  ⟨SmoothPathEquiv.refl M, fun h => h.symm, fun h₁₂ h₂₃ => h₁₂.trans h₂₃⟩
+
+/-- If `φ ∘ ψ = id` on `v`, with `ψ` mapping `v` into `u` and both maps differentiable
+within their sets, then a positive within-derivative of `φ` at `ψ t` forces a
+positive within-derivative of `ψ` at `t`: by the chain rule their product is `1`. -/
+private theorem derivWithin_pos_of_rightInverse {φ ψ : ℝ → ℝ} {u v : Set ℝ} {t : ℝ}
+    (hφ : DifferentiableWithinAt ℝ φ u (ψ t)) (hψ : DifferentiableWithinAt ℝ ψ v t)
+    (hmaps : Set.MapsTo ψ v u) (huniq : UniqueDiffWithinAt ℝ v t) (ht : t ∈ v)
+    (hinv : ∀ y ∈ v, φ (ψ y) = y) (hpos : 0 < derivWithin φ u (ψ t)) :
+    0 < derivWithin ψ v t := by
+  have hcomp : derivWithin (φ ∘ ψ) v t = derivWithin φ u (ψ t) * derivWithin ψ v t :=
+    derivWithin_comp t hφ hψ hmaps
+  have hid : derivWithin (φ ∘ ψ) v t = 1 :=
+    (derivWithin_congr (fun y hy => hinv y hy) (hinv t ht)).trans
+      (derivWithin_id' t v huniq)
+  rw [hid] at hcomp
+  exact pos_of_mul_pos_right (hcomp ▸ one_pos) hpos.le
+
+/-- `OrientedSmoothPathEquiv` is reflexive: the identity reparametrisation has
+derivative `1 > 0`. -/
+theorem OrientedSmoothPathEquiv.refl (μ : M.SmoothPath) : M.OrientedSmoothPathEquiv μ μ :=
+  ⟨id, id, contDiffOn_id, contDiffOn_id, Set.mapsTo_id _, Set.mapsTo_id _,
+    fun _ _ => rfl, fun _ _ => rfl, fun _ _ => rfl, fun s hs => by
+      rw [derivWithin_id s _ (Path.uniqueDiffOn_parameterSpace M μ.toPath s hs)]
+      exact one_pos⟩
+
+variable {M} in
+/-- `OrientedSmoothPathEquiv` is symmetric: swap `φ` and its inverse `ψ`. The inverse
+has positive derivative because, by the chain rule applied to `φ ∘ ψ = id`,
+`φ'(ψ t) · ψ'(t) = 1` with `φ'(ψ t) > 0`. -/
+theorem OrientedSmoothPathEquiv.symm {μ₁ μ₂ : M.SmoothPath}
+    (h : M.OrientedSmoothPathEquiv μ₁ μ₂) : M.OrientedSmoothPathEquiv μ₂ μ₁ := by
+  obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq, hpos⟩ := h
+  refine ⟨ψ, φ, hψC, hφC, hψmaps, hφmaps, hφψ, hψφ, fun t ht => ?_, fun t ht => ?_⟩
+  · rw [← heq _ (hψmaps ht), hφψ t ht]
+  · exact derivWithin_pos_of_rightInverse
+      ((hφC.differentiableOn (by simp)) (ψ t) (hψmaps ht))
+      ((hψC.differentiableOn (by simp)) t ht) hψmaps
+      (Path.uniqueDiffOn_parameterSpace M μ₂.toPath t ht) ht hφψ (hpos _ (hψmaps ht))
+
+variable {M} in
+/-- `OrientedSmoothPathEquiv` is transitive: orientation-preserving reparametrisations
+compose, the derivative of the composite being the (positive) product of the
+derivatives by the chain rule. -/
+theorem OrientedSmoothPathEquiv.trans {μ₁ μ₂ μ₃ : M.SmoothPath}
+    (h₁₂ : M.OrientedSmoothPathEquiv μ₁ μ₂) (h₂₃ : M.OrientedSmoothPathEquiv μ₂ μ₃) :
+    M.OrientedSmoothPathEquiv μ₁ μ₃ := by
+  obtain ⟨φ₁, ψ₁, hφ₁C, hψ₁C, hφ₁maps, hψ₁maps, hψφ₁, hφψ₁, heq₁, hpos₁⟩ := h₁₂
+  obtain ⟨φ₂, ψ₂, hφ₂C, hψ₂C, hφ₂maps, hψ₂maps, hψφ₂, hφψ₂, heq₂, hpos₂⟩ := h₂₃
+  refine ⟨φ₂ ∘ φ₁, ψ₁ ∘ ψ₂, hφ₂C.comp hφ₁C hφ₁maps, hψ₁C.comp hψ₂C hψ₂maps,
+    hφ₂maps.comp hφ₁maps, hψ₁maps.comp hψ₂maps, fun s hs => ?_, fun t ht => ?_,
+    fun s hs => ?_, fun s hs => ?_⟩
+  · simp only [Function.comp_apply, hψφ₂ _ (hφ₁maps hs), hψφ₁ s hs]
+  · simp only [Function.comp_apply, hφψ₁ _ (hψ₂maps ht), hφψ₂ t ht]
+  · simp only [Function.comp_apply, heq₂ _ (hφ₁maps hs), heq₁ s hs]
+  · rw [derivWithin_comp s ((hφ₂C.differentiableOn (by simp)) _ (hφ₁maps hs))
+      ((hφ₁C.differentiableOn (by simp)) s hs) hφ₁maps]
+    exact mul_pos (hpos₂ _ (hφ₁maps hs)) (hpos₁ s hs)
+
+/-- `OrientedSmoothPathEquiv` is an equivalence relation. -/
+theorem equivalence_orientedSmoothPathEquiv : Equivalence M.OrientedSmoothPathEquiv :=
+  ⟨OrientedSmoothPathEquiv.refl M, fun h => h.symm, fun h₁₂ h₂₃ => h₁₂.trans h₂₃⟩
+
 /-! ### Curves -/
 
 /-- A *curve* in a spacetime is an equivalence class of paths under
 parameter reparametrisation by homeomorphisms. We package this as a
-`Quot` over the (possibly non-equivalence) relation `PathEquiv`; the actual
-equivalence-class structure is left implicit. -/
+`Quot` over the relation `PathEquiv`, which is an equivalence relation
+(`equivalence_pathEquiv`), so its classes are exactly the fibres of `Curve.ofPath`
+(`Quot.eqvGen_exact` together with `Equivalence.eqvGen_iff`). -/
 def Curve : Type := Quot M.PathEquiv
 
 /-- A *smooth curve* in a spacetime is an equivalence class of smooth paths
-under parameter reparametrisation by diffeomorphisms. -/
+under parameter reparametrisation by diffeomorphisms. `SmoothPathEquiv` is an
+equivalence relation (`equivalence_smoothPathEquiv`), so its classes are exactly
+the fibres of `SmoothCurve.ofPath` (`Quot.eqvGen_exact` together with
+`Equivalence.eqvGen_iff`). -/
 def SmoothCurve : Type := Quot M.SmoothPathEquiv
 
 /-- Constructor: every smooth path determines a smooth curve. -/
@@ -630,7 +767,9 @@ correct home for future/past-oriented curves. -/
 /-- An *oriented smooth curve*: an equivalence class of smooth paths under
 orientation-preserving reparametrisation. Finer than `SmoothCurve` (which also
 allows orientation-reversing reparametrisations), it is the natural domain on which
-the time orientation of a curve is well-defined. -/
+the time orientation of a curve is well-defined. `OrientedSmoothPathEquiv` is an
+equivalence relation (`equivalence_orientedSmoothPathEquiv`), so the classes are
+exactly the fibres of `OrientedSmoothCurve.ofPath`. -/
 def OrientedSmoothCurve : Type := Quot M.OrientedSmoothPathEquiv
 
 /-- Every smooth path determines an oriented smooth curve. -/

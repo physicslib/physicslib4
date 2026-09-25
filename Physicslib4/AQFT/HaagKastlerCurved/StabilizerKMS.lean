@@ -142,7 +142,11 @@ group `t ↦ U t` has positive energy (`AQFT.IsPositiveEnergy`). This is the gro
 (`β → ∞`, spectrum-condition) counterpart of `IsKMSStateForFlow`: it selects the
 stationary state whose Killing-flow generator (the local "Hamiltonian") is positive. The
 positive-energy condition is the bounded-generator scaffold; the faithful unbounded form
-is Stone-gated. -/
+is Stone-gated
+
+**Restriction:** inherits the bounded-generator restriction of `AQFT.IsPositiveEnergy`
+(a positive *bounded* generator); the intended form and what it is waiting on (Stone's
+theorem) are recorded there. -/
 def IsGroundStateForFlow (B : Set M.Carrier)
     (flow : ℝ → ↥(MulAction.stabilizer M.Isom B))
     (ω : Physicslib4.GNS.State (N.algebra B)) : Prop :=

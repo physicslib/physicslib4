@@ -26,7 +26,7 @@ construction/self-adjointness that Stone will provide:
   `V t = exp(i t P)`. The bounded-generator form is a genuine restriction (physical
   generators are unbounded); it is the scaffold that compiles today, with the
   unbounded form to follow once Stone's theorem lands.
-* `CovariantQuasilocalAlgebra.IsVacuumState ftl ω` — invariance plus, in the GNS
+* `HaagKastlerNet.IsVacuumState ftl ω` — invariance plus, in the GNS
   representation, positive energy of every future-timelike translation subgroup.
   The future-timelike-translation predicate `ftl` is a parameter.
 * `translationSub` / `translationFlow` / `IsFutureTimelikeTranslation` — the pure
@@ -35,7 +35,7 @@ construction/self-adjointness that Stone will provide:
   flows in a future-pointing timelike direction `n` (i.e. `n` in the forward
   Minkowski cone). This wires in the translation subgroup and its causal structure,
   so `ftl` can be discharged with its intended value.
-* `CovariantQuasilocalAlgebra.IsVacuumStateConcrete ω` — `IsVacuumState` with `ftl`
+* `HaagKastlerNet.IsVacuumStateConcrete ω` — `IsVacuumState` with `ftl`
   fixed to `IsFutureTimelikeTranslation`; the vacuum definition then depends on no
   free predicate.
 
@@ -132,27 +132,33 @@ condition — with the spectrum condition entering as the positive-energy hypoth
 on the implementing unitaries. The future-timelike-translation predicate `ftl` is a
 parameter (to be instantiated once the translation subgroup and its causal
 structure are available); the positive-energy condition is the bounded-generator
-scaffold of `IsPositiveEnergy`. -/
-def CovariantQuasilocalAlgebra.IsVacuumState (C : CovariantQuasilocalAlgebra)
+scaffold of `IsPositiveEnergy`.
+
+**Restriction:** the spectrum condition is imposed through `IsPositiveEnergy`, which
+requires each translation group `t ↦ U (γ t)` to have a *bounded* positive generator.
+The intended form asks for a strongly continuous group whose unbounded self-adjoint
+generator is positive. It is waiting on Stone's theorem, which is in neither Mathlib nor
+this project. -/
+def HaagKastlerNet.IsVacuumState (N : HaagKastlerNet)
     (ftl : (ℝ → InhomogeneousLorentzGroup) → Prop)
-    (ω : Physicslib4.GNS.State C.quasilocal.carrier) : Prop :=
-  C.IsInvariantState ω ∧
+    (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
+  N.IsInvariantState ω ∧
     ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
-      (_ : CompleteSpace K) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
+      (_ : CompleteSpace K) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
       (U : InhomogeneousLorentzGroup → (K ≃ₗᵢ[ℂ] K)),
-        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
-          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+          U L (π a Ω) = π (N.action L a) Ω) ∧
         (∀ γ : ℝ → InhomogeneousLorentzGroup,
           IsOneParameterSubgroup γ → ftl γ → IsPositiveEnergy (fun t => U (γ t)))
 
 /-- **A vacuum state is invariant.** Invariance is the first conjunct of the vacuum
 conditions, so it is immediate - no spectrum condition / Stone's theorem needed. -/
-theorem CovariantQuasilocalAlgebra.IsVacuumState.invariant
-    {C : CovariantQuasilocalAlgebra}
+theorem HaagKastlerNet.IsVacuumState.invariant
+    {N : HaagKastlerNet}
     {ftl : (ℝ → InhomogeneousLorentzGroup) → Prop}
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
-    (h : C.IsVacuumState ftl ω) : C.IsInvariantState ω :=
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier}
+    (h : N.IsVacuumState ftl ω) : N.IsInvariantState ω :=
   h.1
 
 /-- **A pure vacuum state yields an irreducible covariant representation.** Combining
@@ -161,62 +167,65 @@ representation of `IsInvariantState.exists_gns_irreducible_covariant`: a covaria
 triple with implementing unitaries `U(L)` (fixing `Ω`, with operator covariance) whose
 representation is irreducible and generates all of `𝓑(H)`. This needs no spectrum
 condition; it is the same no-Stone content, now packaged for a (pure) vacuum state. -/
-theorem CovariantQuasilocalAlgebra.IsVacuumState.exists_gns_irreducible_covariant
-    {C : CovariantQuasilocalAlgebra.{u}}
+theorem HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant
+    {N : HaagKastlerNet.{u}}
     {ftl : (ℝ → InhomogeneousLorentzGroup) → Prop}
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
-    (h : C.IsVacuumState ftl ω) (hpure : Physicslib4.GNS.IsPure ω) :
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier}
+    (h : N.IsVacuumState ftl ω) (hpure : Physicslib4.GNS.IsPure ω) :
     ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
-      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (_ : CompleteSpace H) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
         Physicslib4.GNS.IsCyclicVector π Ω ∧
-        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
-          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+          U L (π a Ω) = π (N.action L a) Ω) ∧
         (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
         (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
-          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (N.action L a) x) ∧
         Physicslib4.GNS.IsIrreducible π ∧
         Physicslib4.GNS.gnsVonNeumann π = Set.univ :=
-  IsInvariantState.exists_gns_irreducible_covariant C h.invariant hpure
+  IsInvariantState.exists_gns_irreducible_covariant N h.invariant hpure
 
 /-- **Vacuum state with the concrete spectrum condition.** Specializes
 `IsVacuumState` to the concrete future-timelike-translation predicate
 `IsFutureTimelikeTranslation`, so the spectrum condition is imposed on exactly the
 one-parameter translation subgroups `t ↦ (id, t • n)` with `n` future-pointing
 timelike. This discharges the abstract `ftl` parameter with its intended value, so a
-concrete vacuum state no longer depends on a free predicate. -/
-def CovariantQuasilocalAlgebra.IsVacuumStateConcrete (C : CovariantQuasilocalAlgebra)
-    (ω : Physicslib4.GNS.State C.quasilocal.carrier) : Prop :=
-  C.IsVacuumState IsFutureTimelikeTranslation ω
+concrete vacuum state no longer depends on a free predicate.
+
+**Restriction:** inherits the bounded-generator restriction of `IsVacuumState`; the
+intended form and what it is waiting on are recorded there. -/
+def HaagKastlerNet.IsVacuumStateConcrete (N : HaagKastlerNet)
+    (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
+  N.IsVacuumState IsFutureTimelikeTranslation ω
 
 /-- A concrete vacuum state is invariant (unfolds to the parameterized form). -/
-theorem CovariantQuasilocalAlgebra.IsVacuumStateConcrete.invariant
-    {C : CovariantQuasilocalAlgebra}
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
-    (h : C.IsVacuumStateConcrete ω) : C.IsInvariantState ω :=
+theorem HaagKastlerNet.IsVacuumStateConcrete.invariant
+    {N : HaagKastlerNet}
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier}
+    (h : N.IsVacuumStateConcrete ω) : N.IsInvariantState ω :=
   h.1
 
 /-- A pure concrete vacuum state yields an irreducible covariant representation
 (unfolds to the parameterized form). -/
-theorem CovariantQuasilocalAlgebra.IsVacuumStateConcrete.exists_gns_irreducible_covariant
-    {C : CovariantQuasilocalAlgebra.{u}}
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier}
-    (h : C.IsVacuumStateConcrete ω) (hpure : Physicslib4.GNS.IsPure ω) :
+theorem HaagKastlerNet.IsVacuumStateConcrete.exists_gns_irreducible_covariant
+    {N : HaagKastlerNet.{u}}
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier}
+    (h : N.IsVacuumStateConcrete ω) (hpure : Physicslib4.GNS.IsPure ω) :
     ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
-      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (_ : CompleteSpace H) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
         Physicslib4.GNS.IsCyclicVector π Ω ∧
-        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
-          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+          U L (π a Ω) = π (N.action L a) Ω) ∧
         (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
         (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
-          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (N.action L a) x) ∧
         Physicslib4.GNS.IsIrreducible π ∧
         Physicslib4.GNS.gnsVonNeumann π = Set.univ :=
   IsVacuumState.exists_gns_irreducible_covariant h hpure

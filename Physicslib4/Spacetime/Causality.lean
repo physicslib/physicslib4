@@ -71,6 +71,12 @@ geodesic. We provide an opaque placeholder predicate. Downstream work
 should replace this by the genuine geodesic condition (typically:
 auto-parallelism of the tangent vector field along the curve with
 respect to the Levi-Civita connection of `g`).
+
+**Restriction:** `IsGeodesic` is `True`, so (causal) trips, and hence `≪` and `≺`, are
+chains of arbitrary future-oriented timelike (causal) smooth curves rather than of geodesics.
+The intended form is auto-parallelism of the tangent field along the curve for the
+Levi-Civita connection of `g`; it is waiting on Mathlib defining affine connections (and the
+Levi-Civita connection of a pseudo-Riemannian metric), which geodesics require.
 -/
 @[nolint unusedArguments]
 def IsGeodesic (_μ : M.SmoothPath) : Prop := True
@@ -82,7 +88,8 @@ A *trip segment* from `p` to `q` in a spacetime `M` is a smooth curve `c`
 together with a representative smooth path `μ` that
 
 * is future-oriented and timelike;
-* is a geodesic;
+* is a geodesic (currently the placeholder `IsGeodesic`, which is `True`;
+  see its **Restriction:** note);
 * has past endpoint `p` and future endpoint `q`.
 
 This is a single geodesic piece; a full (piecewise) trip is a finite chain
@@ -133,7 +140,8 @@ A *causal trip segment* from `p` to `q` in a spacetime `M` is a smooth curve
 `c` together with a representative smooth path `μ` that
 
 * is future-oriented and causal;
-* is a (possibly degenerate) geodesic;
+* is a (possibly degenerate) geodesic (currently the placeholder
+  `IsGeodesic`, which is `True`; see its **Restriction:** note);
 * has past endpoint `p` and future endpoint `q`.
 -/
 def IsCausalTripSegment (t : M.TimeOrientation) (p q : M.Carrier)

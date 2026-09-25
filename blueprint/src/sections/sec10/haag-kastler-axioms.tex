@@ -404,7 +404,26 @@ Before introducing the next axiom, we must introduce the definition:
     This is the cocone condition making the $\iota_{\mathbf{B}}$ a compatible family on the directed system of Axiom 2 (\ref{def:isotony}), and it is what makes $\iota_{\mathbf{B}}$ well defined on the colimit: an element of $\mathfrak{U}(\mathbf{B}_1)$ may be regarded as an element of any larger $\mathfrak{U}(\mathbf{B}_2)$, and all such readings must have the same image in $\mathfrak{U}$. Without it the displayed commutator would depend on which local algebra $a_1$ and $a_2$ were viewed in.
 
     Note that the curved counterpart (\ref{def:local-commutativity-in-curved-spacetime}) has a different shape: there is no quasilocal algebra in curved spacetime, so commutation is stated inside a common containing algebra $\mathfrak{U}(\mathbf{B})$ using the Axiom 2 embeddings directly, and no $\iota$ appears.
+
+    By \ref{lmm:local-commutativity-any-quasilocal} the choice of quasilocal algebra in this axiom is immaterial, so the canonical $\mathfrak{U}$ of a Haag--Kastler net can be used throughout.
 \end{definition}
+
+\begin{lemma}[Local Commutativity Holds in Every Quasilocal Algebra]
+    \label{lmm:local-commutativity-any-quasilocal}
+    \lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity.commute_ι, Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra.commute_ι_iff_commute_map}
+    \uses{def:local-commutativity, def:quasilocal-algebra, def:completely-spacelike, lmm:minkowski-diamonds-upward-directed}
+    \leanok
+    Suppose the net satisfies Axiom 3 (\ref{def:local-commutativity}) with respect to some quasilocal algebra $\mathfrak{U}$, i.e. an ambient C*-algebra with injective unital $*$-homomorphisms $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}$ satisfying the cocone condition $\iota_{\mathbf{B}_2} \circ i_{\mathbf{B}_1\mathbf{B}_2} = \iota_{\mathbf{B}_1}$ for all basis sets $\mathbf{B}_1 \subseteq \mathbf{B}_2$. Let $\mathfrak{U}'$ be any quasilocal algebra of the net (\ref{def:quasilocal-algebra}), with canonical embeddings $\iota'_{\mathbf{B}}$. Then for any completely spacelike basis sets $\mathbf{B}_1$, $\mathbf{B}_2$ and any $a_1 \in \mathfrak{U}(\mathbf{B}_1)$, $a_2 \in \mathfrak{U}(\mathbf{B}_2)$,
+    \begin{align}
+        \iota'_{\mathbf{B}_1}(a_1)\, \iota'_{\mathbf{B}_2}(a_2) = \iota'_{\mathbf{B}_2}(a_2)\, \iota'_{\mathbf{B}_1}(a_1)
+    \end{align}
+    in $\mathfrak{U}'$. In particular Axiom 3 holds in the canonical quasilocal algebra of \ref{thrm:quasilocal-algebra-exists}, and does not depend on which quasilocal algebra is used to state it.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:local-commutativity, def:isotony, lmm:minkowski-diamonds-upward-directed}
+    By upward directedness of the Alexandrov diamonds (\ref{lmm:minkowski-diamonds-upward-directed}) pick a basis set $\mathbf{B}$ with $\mathbf{B}_1 \cup \mathbf{B}_2 \subseteq \mathbf{B}$. By the cocone condition, in any quasilocal algebra $\iota_{\mathbf{B}_k}(a_k) = \iota_{\mathbf{B}}(i_{\mathbf{B}_k\mathbf{B}}(a_k))$ for $k = 1, 2$, where $i_{\mathbf{B}_k\mathbf{B}}$ are the isotony embeddings of Axiom 2 (\ref{def:isotony}). Since $\iota_{\mathbf{B}}$ is an injective $*$-homomorphism, $\iota_{\mathbf{B}_1}(a_1)$ and $\iota_{\mathbf{B}_2}(a_2)$ commute if and only if $i_{\mathbf{B}_1\mathbf{B}}(a_1)$ and $i_{\mathbf{B}_2\mathbf{B}}(a_2)$ commute in $\mathfrak{U}(\mathbf{B})$. That condition does not mention the quasilocal algebra, so commutation in the algebra for which Axiom 3 is assumed transfers to $\mathfrak{U}'$ with its embeddings $\iota'_{\mathbf{B}}$.
+\end{proof}
 
 The next axiom makes use of the following new definition:
 
@@ -458,7 +477,7 @@ The next axiom makes use of the following new definition:
 
     \emph{The carrier universe, fixed --- but not by the means this node prescribed.} The second mismatch was that the carrier was pinned to \texttt{Type 0}. The field read \texttt{carrier : Type}, while \texttt{LocalNet.algebra : Set \ensuremath{\_} \ensuremath{\rightarrow} Type*} is universe polymorphic, so for a net whose local algebras genuinely live in \texttt{Type 1} no \texttt{Type 0} carrier could hold injective copies of them and the existence claim failed for size reasons alone. What this node prescribed was \texttt{carrier : Type*}, a free universe, and that prescription does not work: a free carrier universe is constrained by no field of the structure, so it cannot be inferred, and \texttt{LocalCommutativity} fails to elaborate with ``failed to infer universe levels''. The only escape would be to give Axioms 3 and 4 an explicit universe parameter, which would make the \emph{content} of those axioms depend on that index --- a family of \texttt{Prop}s rather than a \texttt{Prop}. What was done instead is to tie the carrier to the net's universe: the structure now reads \texttt{QuasilocalAlgebra (U : LocalNet.\{u\})} with \texttt{carrier : Type u}. That costs no generality, because the density clause forces $\mathfrak{U}$ to be the closure of the union of the images of the local algebras, so any quasilocal algebra already lives in the universe of those algebras, and a free universe could only add copies of the same algebra higher up.
 
-    \emph{A third pin, one level up.} Fixing the carrier alone would not have lifted the size restriction, and this was found while making the change just described. \texttt{HaagKastlerNet} carried no universe parameter at all, so it pinned the universe of \texttt{LocalNet} outright, and \texttt{CovariantQuasilocalAlgebra} inherited that pin through its \texttt{net} field; repairing only the carrier would therefore have left the very same size restriction one level up, with every net in the development confined to a single fixed universe. Both structures now carry the net's universe. One consequence is that the two satisfiability witnesses, \texttt{nonempty\_haagKastlerNet} and \texttt{nonempty\_covariantQuasilocalAlgebra}, are now stated explicitly at universe \texttt{0}, since they are built from $\mathbb{C}$; consistency of the axioms needs only one model, so nothing is lost. No pin remains in the construction itself: \texttt{QuasilocalColimit} and \texttt{QuasilocalCompletion} are declared over \texttt{LocalNet.\{u\}} with result type \texttt{Type u}, so the colimit-and-completion development --- \texttt{colimitNorm}, \texttt{colimitRingNorm}, \texttt{colimitNormedAlgebra}, \texttt{colimitCStarRing} and \texttt{quasilocalCompletionCStarAlgebra}, that is, the $\mathfrak{U}$ that \ref{lmm:quasilocal-completion-cstar} supplies --- is available at every universe.
+    \emph{A third pin, one level up.} Fixing the carrier alone would not have lifted the size restriction, and this was found while making the change just described. \texttt{HaagKastlerNet} carried no universe parameter at all, so it pinned the universe of \texttt{LocalNet} outright, and \texttt{CovariantQuasilocalAlgebra} inherited that pin through its \texttt{net} field; repairing only the carrier would therefore have left the very same size restriction one level up, with every net in the development confined to a single fixed universe. The net now carries its universe (\texttt{CovariantQuasilocalAlgebra} has since been removed: its data is just the net's canonical $\mathfrak{U}$). One consequence is that the satisfiability witness \texttt{nonempty\_haagKastlerNet} is now stated explicitly at universe \texttt{0}, since they are built from $\mathbb{C}$; consistency of the axioms needs only one model, so nothing is lost. No pin remains in the construction itself: \texttt{QuasilocalColimit} and \texttt{QuasilocalCompletion} are declared over \texttt{LocalNet.\{u\}} with result type \texttt{Type u}, so the colimit-and-completion development --- \texttt{colimitNorm}, \texttt{colimitRingNorm}, \texttt{colimitNormedAlgebra}, \texttt{colimitCStarRing} and \texttt{quasilocalCompletionCStarAlgebra}, that is, the $\mathfrak{U}$ that \ref{lmm:quasilocal-completion-cstar} supplies --- is available at every universe.
 
     \emph{The node is now formalized}, as \texttt{Physicslib4.AQFT.HaagKastler.exists\_quasilocalAlgebra}, the assembly together with all six supporting results --- \ref{lmm:completion-coe-star-alg-hom} above and the five embedding lemmas stated immediately below this node, \ref{lmm:quasilocal-embedding}, \ref{lmm:quasilocal-embedding-injective}, \ref{lmm:quasilocal-embedding-cocone}, \ref{lmm:quasilocal-colimit-union-of-insertions} and \ref{lmm:quasilocal-embeddings-dense} --- having been completed.
 
@@ -587,7 +606,7 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
     \begin{align}
         \alpha_{L' \cdot L}(a) = \alpha_{L'}(\alpha_{L}(a)),
     \end{align}
-    and (3) for basis elements $\mathbf{B}_\iota \subset \mathbf{B}_\kappa$ and the unital *-monomorphism $i$ of Axiom 2 (Isotony) $\alpha_L$ commutes with $i$. In other words the following diagram
+    and (3) for basis elements $\mathbf{B}_\iota \subseteq \mathbf{B}_\kappa$ and the unital *-monomorphism $i$ of Axiom 2 (Isotony) $\alpha_L$ commutes with $i$. In other words the following diagram
 
     \begin{center}
         \begin{tikzcd}
@@ -763,7 +782,7 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{theorem}[Geometric Covariance of the von Neumann Net]
     \label{thrm:von-neumann-geometric-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.lieConj_image_covLocalVonNeumann, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.lieConj_image_covLocalOperators}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localVonNeumann, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localOperators}
     \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
     \uses{def:local-von-neumann, def:covariant-quasilocal-algebra}
     \leanok
@@ -779,7 +798,7 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{theorem}[Orbit-Invariance of Factoriality]
     \label{thrm:von-neumann-factor-orbit}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.covLocalVonNeumann_isFactor_smul}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_isFactor_smul}
     \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
     \uses{thrm:irreducible-factor}
     \leanok
@@ -793,7 +812,7 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{theorem}[Geometric Covariance as a von Neumann Algebra Isomorphism]
     \label{thrm:von-neumann-covariance-iso}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.covLocalVonNeumannEquiv}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannEquiv}
     \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
     \uses{def:local-von-neumann-algebra}
     \leanok
@@ -1648,17 +1667,30 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     They agree on the union of the local images, which is dense in $\mathfrak{U}$, and $*$-automorphisms of a C*-algebra are continuous.
 \end{proof}
 
+\begin{lemma}[Every Quasilocal Algebra is Covariance-Compatible]
+    \label{lmm:quasilocal-covariance-compatible}
+    \lean{Physicslib4.AQFT.HaagKastler.isCovariantQuasilocal}
+    \uses{def:quasilocal-algebra, def:lorentz-covariance, def:isotony, def:haag-kastler-net}
+    \leanok
+    Let $\mathfrak{U}$ be any quasilocal algebra (\ref{def:quasilocal-algebra}) of a Haag--Kastler net, with embeddings $\iota_{\mathbf{B}}$. For every Lorentz transformation $L$, all basis sets $\mathbf{B} \subseteq \mathbf{C}$ and $a \in \mathfrak{U}(\mathbf{B})$, $\iota_{L\cdot\mathbf{B}}(\alpha_L a) = \iota_{L\cdot\mathbf{C}}(\alpha_L(i_{\mathbf{B}\mathbf{C}}(a)))$. That is, every quasilocal algebra is covariance-compatible in the sense required by \ref{thrm:quasilocal-lift-exists}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:lorentz-covariance, def:quasilocal-algebra}
+    By condition (3) of Axiom 5 (\ref{def:lorentz-covariance}), stated for the isotony embeddings $i$ of Axiom 2, $\alpha_L(i_{\mathbf{B}\mathbf{C}}(a)) = i_{L\cdot\mathbf{B},\,L\cdot\mathbf{C}}(\alpha_L a)$, where $L\cdot\mathbf{B} \subseteq L\cdot\mathbf{C}$ are basis sets. Applying $\iota_{L\cdot\mathbf{C}}$ and the cocone condition $\iota_{L\cdot\mathbf{C}} \circ i_{L\cdot\mathbf{B},\,L\cdot\mathbf{C}} = \iota_{L\cdot\mathbf{B}}$ gives the claim.
+\end{proof}
+
 \begin{theorem}[Existence of the Quasilocal Lift]
     \label{thrm:quasilocal-lift-exists}
     \lean{Physicslib4.AQFT.HaagKastler.nonempty_quasilocalLift}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:quasilocal-lift, def:quasilocal-algebra}
     \leanok
-    For a covariance-compatible quasilocal algebra, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists.
+    For every quasilocal algebra of a Haag--Kastler net, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists. No covariance-compatibility hypothesis is needed: by \ref{lmm:quasilocal-covariance-compatible} it holds for every quasilocal algebra.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:quasilocal-lift, def:quasilocal-algebra}
+    \uses{def:quasilocal-lift, def:quasilocal-algebra, lmm:quasilocal-covariance-compatible}
     The intertwiner is defined on the directed union of local images (a dense $*$-subalgebra) and extended by uniform continuity; the inverse is supplied by $L^{-1}$, and the group laws $\beta_{L'L} = \beta_{L'}\circ\beta_L$ and $\beta_{1} = \mathrm{id}$ furnish the two-sided inverse.
 \end{proof}
 
@@ -1667,26 +1699,26 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \lean{Physicslib4.AQFT.HaagKastler.nonempty_trivialQuasilocalLift}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
-    The covariance-compatibility hypothesis is satisfiable: the trivial net's quasilocal algebra is covariance-compatible, so the quasilocal lift exists unconditionally for the trivial net.
+    For the trivial net (every region $\mapsto \mathbb{C}$) and its trivial quasilocal algebra, the quasilocal lift exists for every Lorentz transformation.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thrm:quasilocal-lift-exists}
-    Covariance-compatibility holds because every $*$-automorphism of $\mathbb{C}$ is the identity; the lift is then supplied by \ref{thrm:quasilocal-lift-exists}.
+    A special case of \ref{thrm:quasilocal-lift-exists}.
 \end{proof}
 
 \begin{definition}[Covariant Quasilocal Algebra]
     \label{def:covariant-quasilocal-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.action}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
     \uses{def:haag-kastler-net, def:quasilocal-algebra, def:lorentz-covariance, def:quasilocal-lift, thrm:quasilocal-lift-exists}
-    A \emph{covariant quasilocal algebra} bundles a Haag-Kastler net (\ref{def:haag-kastler-net}), a quasilocal algebra of that net (\ref{def:quasilocal-algebra}), and a proof that the embeddings are covariance-compatible for every Lorentz transformation. On such data the quasilocal lift (\ref{def:quasilocal-lift}) exists for every $L$ by \ref{thrm:quasilocal-lift-exists}, yielding the covariance action $L \mapsto \beta_L$ on the quasilocal algebra; the trivial net provides an instance. This is the natural home for the covariance dynamics: the compatibility hypothesis of \ref{thrm:quasilocal-lift-exists} becomes structural data rather than a side condition.
+    The \emph{covariant quasilocal algebra} of a Haag-Kastler net (\ref{def:haag-kastler-net}) is its canonical quasilocal algebra $\mathfrak{U}$ (\ref{def:quasilocal-algebra}, \ref{thrm:quasilocal-algebra-exists}) together with the \emph{covariance action} $L \mapsto \beta_L$, where $\beta_L$ is the quasilocal lift (\ref{def:quasilocal-lift}) of the fiberwise Lorentz action, which exists for every $L$ by \ref{thrm:quasilocal-lift-exists}. No further data is needed: the embeddings of $\mathfrak{U}$ are automatically covariance-compatible (\ref{lmm:quasilocal-covariance-compatible}). The covariance dynamics below are therefore stated directly for the net.
 \end{definition}
 
 \begin{lemma}[Group-Action Coherence of the Covariance Automorphism]
     \label{lmm:quasilocal-action-coherence}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.action_one, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.action_mul}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.action_one, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.action_mul}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:covariant-quasilocal-algebra}
     \leanok
@@ -1700,7 +1732,7 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{definition}[Invariant State]
     \label{def:invariant-state}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
     \uses{def:covariant-quasilocal-algebra, def:state}
@@ -1709,7 +1741,7 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{theorem}[GNS Unitary Implementation of an Invariant State]
     \label{thrm:invariant-state-gns-unitary}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState.exists_gns_unitary}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitary}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:invariant-state, thrm:gns-construction-theorem}
     \leanok
@@ -1725,7 +1757,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[Irreducible Covariant Representation of a Pure Invariant State]
     \label{thrm:irreducible-covariant-representation}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsInvariantState.exists_gns_irreducible_covariant}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_irreducible_covariant}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:pure-state, def:irreducible-representation, thrm:irreducible-generates-all}
     \leanok
@@ -1761,7 +1793,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{definition}[Vacuum State (generator-parameterized scaffold)]
     \label{def:vacuum-state}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}
     \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
     \leanok
     \uses{def:invariant-state, def:positive-energy, def:covariant-quasilocal-algebra, thrm:invariant-state-gns-unitary}
@@ -1770,7 +1802,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[No-Stone Consequences of a Vacuum State]
     \label{thrm:vacuum-no-stone}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState.invariant, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumState.exists_gns_irreducible_covariant}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.invariant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant}
     \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
     \uses{def:vacuum-state, thrm:irreducible-covariant-representation}
     \leanok
@@ -1793,7 +1825,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{definition}[Vacuum State with the Concrete Spectrum Condition]
     \label{def:vacuum-state-concrete}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsVacuumStateConcrete}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumStateConcrete}
     \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
     \leanok
     \uses{def:vacuum-state, def:future-timelike-translation}
@@ -1802,7 +1834,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[Purity is Covariance-Invariant]
     \label{thrm:purity-covariance-invariant}
-    \lean{Physicslib4.GNS.isPure_precomp_iff, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isPure_precomp_action_iff}
+    \lean{Physicslib4.GNS.isPure_precomp_iff, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isPure_precomp_action_iff}
     \leanfile{Physicslib4/GNS/ExtremeState.lean}
     \uses{def:pure-state, lmm:quasilocal-action-coherence}
     \leanok
@@ -1816,7 +1848,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[GNS covariance along the quasilocal action]
     \label{thrm:gns-covariance-quasilocal-action}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.unitaryEquiv_gns_action, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isIrreducible_iff_gns_action, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isFactor_iff_gns_action}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.unitaryEquiv_gns_action, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducible_iff_gns_action, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_iff_gns_action}
     \uses{def:covariant-quasilocal-algebra, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback}
     \leanok
     The lifted covariance automorphism $\beta_L$ of the quasilocal algebra $\mathfrak{U}$ is a $*$-automorphism, hence in particular a $*$-isomorphism, so the abstract GNS-covariance results apply to it. Let $\omega$ be a state on $\mathfrak{U}$. A cyclic representation of $\mathfrak{U}$ reproducing the pullback state $\omega \circ \beta_L$ is unitarily equivalent to $\pi_\omega \circ \beta_L$ (\ref{thrm:gns-covariance-unitary-equiv}), is irreducible exactly when $\pi_\omega$ is, and generates a factor exactly when $\pi_\omega$ does (\ref{thrm:gns-sector-transport}). Whereas \ref{thrm:gns-covariance-local} moves between the algebras of two different regions, here the algebra is fixed and the Lorentz group acts on it: the conclusion is that the superselection type of a \emph{global} state is a Lorentz invariant. Together with the invariance of purity (\ref{thrm:purity-covariance-invariant}) this says the entire sector classification of global states is Lorentz invariant.
@@ -1975,7 +2007,7 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{definition}[Covariance-Flow Automorphism Family]
     \label{def:flow-aut-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.flowAut}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.flowAut}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
     \leanok
     \uses{def:covariant-quasilocal-algebra, lmm:quasilocal-action-coherence}
@@ -1984,7 +2016,7 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{lemma}[A Lorentz One-Parameter Subgroup Induces a One-Parameter Group]
     \label{lmm:one-parameter-aut-flow-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.isOneParameterAut_flowAut}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isOneParameterAut_flowAut}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
     \uses{def:flow-aut-covariance, def:one-parameter-aut}
     \leanok
@@ -1998,7 +2030,7 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{definition}[KMS State for the Covariance Flow]
     \label{def:kms-state-for-flow-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsKMSStateForFlow}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
     \leanok
     \uses{lmm:one-parameter-aut-flow-covariance, def:kms-state, def:state}
@@ -2007,7 +2039,7 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{theorem}[Convexity of the Covariance-Flow KMS States]
     \label{thrm:kms-convex-for-flow-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsKMSStateForFlow.convexCombo}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow.convexCombo}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
     \uses{def:kms-state-for-flow-covariance}
     \leanok
@@ -2021,7 +2053,7 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{definition}[Ground State for a Covariance Flow]
     \label{def:ground-state-for-flow-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsGroundStateForFlow, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsGroundStateForFlow.invariant, Physicslib4.AQFT.HaagKastler.CovariantQuasilocalAlgebra.IsGroundStateForFlow.exists_strongContinuous_unitary}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow.invariant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow.exists_strongContinuous_unitary}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
     \leanok
     \uses{def:kms-state-for-flow-covariance, def:positive-energy, def:covariant-quasilocal-algebra}

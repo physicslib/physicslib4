@@ -40,13 +40,13 @@ The geometry this rests on --- the pullback metric, the pullback of a time orien
 
 \begin{definition}[General Covariance]
     \label{def:general-covariance-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.NetTheory, Physicslib4.AQFT.HaagKastlerCurved.IsGenerallyCovariant, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv_apply, Physicslib4.Spacetime.LorentzianSpacetime.toAbstract_pullback_isBasisSet}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.NetTheory, Physicslib4.AQFT.HaagKastlerCurved.IsGenerallyCovariant, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv_apply, Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_pullback_isBasisSet}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeneralCovariance.lean}
     \uses{def:net-equivalence-in-curved-spacetime, def:pullback-metric, def:lorentzian-spacetime, thrm:pullback-is-lorentzian-spacetime, lmm:pullback-preserves-future-orientation, lmm:cross-metric-isometry-preserves-basis-sets, def:cross-metric-isometry}
     \leanok
     A \emph{net theory} is a section of the family of Haag-Kastler nets over Lorentzian spacetimes, that is, a term
     \begin{align}
-        \mathfrak{U} : \prod_{L \,:\, \mathrm{LorentzianSpacetime}} \mathrm{HaagKastlerNet}\big(L.\mathtt{toAbstract}\big),
+        \mathfrak{U} : \prod_{L \,:\, \mathrm{LorentzianSpacetime}} \mathrm{HaagKastlerNet}\big(L.\mathtt{toAbstractIdentityComponent}\big),
     \end{align}
     assigning to every geometric Lorentzian spacetime $L$ (\ref{def:lorentzian-spacetime}) a net $\mathfrak{U}_L$ over the abstract spacetime interface it induces. Such a theory is \emph{generally covariant} when, for every $L$ with underlying spacetime $(M,g,t)$ and every $C^\infty$ diffeomorphism $\psi$ of $M$, the nets $\mathfrak{U}_{\psi^*L}$ and $\mathfrak{U}_L$ are equivalent in the sense of \ref{def:net-equivalence-in-curved-spacetime} along the bijection $e := \psi$ of the common carrier, read as a bijection from the carrier of $\psi^*L$ to the carrier of $L$ (it is $\psi$, not $\psi^{-1}$, that carries $\psi^*L$-diamonds to $L$-diamonds). Here $\psi^*L$ is the pullback Lorentzian spacetime, which is one by \ref{thrm:pullback-is-lorentzian-spacetime}, carrying $\psi^*g$ (\ref{def:pullback-metric}) and $\psi^*t$; its basis-set hypothesis on $e$ is discharged by \ref{lmm:cross-metric-isometry-preserves-basis-sets}, applied to $\psi$ viewed as an isometry from $\psi^*(M,g)$ to $(M,g)$ (\ref{def:cross-metric-isometry}), whose two-sided orientation hypothesis holds by \ref{lmm:pullback-preserves-future-orientation}.
 

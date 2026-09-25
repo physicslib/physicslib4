@@ -35,13 +35,13 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteS
 
 /-- The local observable operators of a region `B` in a representation `π`: the
 image `π(𝔘(B))` of the local algebra. -/
-def localOperators (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+def localOperators (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) : Set (H →L[ℂ] H) :=
-  Set.range fun a : N.U.algebra B => π (N.commAlgebra.ι hB a)
+  Set.range fun a : N.U.algebra B => π (N.quasilocal.ι hB a)
 
 /-- The **local von Neumann algebra** `R(B) = π(𝔘(B))''`, the bicommutant of the
 local observable operators (the commutant being `Set.centralizer`). -/
-def localVonNeumann (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+def localVonNeumann (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
     Set (H →L[ℂ] H) :=
   Set.centralizer (Set.centralizer (N.localOperators π hB))
@@ -50,7 +50,7 @@ def localVonNeumann (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
 basis regions `B₁, B₂`, the local von Neumann algebras commute:
 `R(B₁) ⊆ R(B₂)'`. This is the von Neumann form of Einstein causality. -/
 theorem localVonNeumann_subset_centralizer
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
@@ -72,14 +72,14 @@ the local von Neumann algebras are nested: `R(B₁) ⊆ R(B₂)`. The local obse
 of `B₁` embed into those of `B₂` via the quasilocal isotony coherence
 (`ι_inclusion`), and the double commutant is monotone. -/
 theorem localVonNeumann_mono
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂) :
     N.localVonNeumann π hB₁ ⊆ N.localVonNeumann π hB₂ := by
   have hsub : N.localOperators π hB₁ ⊆ N.localOperators π hB₂ := by
     rintro x ⟨a, rfl⟩
     exact ⟨N.isotony.map hB₁ hB₂ h a,
-      congrArg π (N.commAlgebra.ι_inclusion hB₁ hB₂ h a)⟩
+      congrArg π (N.quasilocal.ι_inclusion hB₁ hB₂ h a)⟩
   exact Set.centralizer_subset (Set.centralizer_subset hsub)
 
 omit [CompleteSpace H] in
@@ -107,7 +107,7 @@ spacelike-separated local von Neumann algebra `R(B₂)` cannot annihilate `Ω`:
 the Reeh-Schlieder input (which rests on the spectrum condition); the implication
 itself is elementary. -/
 theorem localVonNeumann_separating
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
@@ -122,7 +122,7 @@ theorem localVonNeumann_separating
 
 /-- The local observable operators `π(𝔘(B))` form a self-adjoint set: `π` and the
 quasilocal embedding `ι` are `*`-homomorphisms, so `star (π (ι B a)) = π (ι B (star a))`. -/
-theorem localOperators_selfAdjoint (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+theorem localOperators_selfAdjoint (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
     ∀ x ∈ N.localOperators π hB, star x ∈ N.localOperators π hB := by
   rintro x ⟨a, rfl⟩
@@ -131,12 +131,12 @@ theorem localOperators_selfAdjoint (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H
 /-- The **local von Neumann algebra** `R(B)` as a genuine `VonNeumannAlgebra`: the
 bicommutant of the self-adjoint set of local observable operators. Its underlying
 set is `localVonNeumann π B`. -/
-noncomputable def localVonNeumannAlgebra (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+noncomputable def localVonNeumannAlgebra (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
     VonNeumannAlgebra H :=
   vonNeumannOfSelfAdjoint (N.localOperators π hB) (N.localOperators_selfAdjoint π hB)
 
-@[simp] theorem coe_localVonNeumannAlgebra (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+@[simp] theorem coe_localVonNeumannAlgebra (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
     (N.localVonNeumannAlgebra π hB : Set (H →L[ℂ] H)) = N.localVonNeumann π hB :=
   coe_vonNeumannOfSelfAdjoint _ _
@@ -144,7 +144,7 @@ noncomputable def localVonNeumannAlgebra (π : N.commAlgebra.carrier →⋆ₐ[�
 /-- **Microcausality, bundled (Minkowski).** For completely spacelike-separated
 regions, `R(B₁) ≤ R(B₂)'` as von Neumann algebras (`VonNeumannAlgebra.commutant`). -/
 theorem localVonNeumannAlgebra_le_commutant
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
@@ -160,7 +160,7 @@ sets `B' ⊆ B^⊥`, `R(B') ≤ R(B)'`. This repackages microcausality through t
 spacelike complement, keeping strictly to bounded (diamond) regions — no algebra is
 attached to the unbounded complement. -/
 theorem localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B B' : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB : IsAlexandrovBasisSet B) (hB' : IsAlexandrovBasisSet B')
     (hsub : B' ⊆ Spacetime.spacelikeComplement StandardMinkowskiSpacetime
@@ -172,7 +172,7 @@ theorem localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement
 /-- **Isotony, bundled (Minkowski).** `B₁ ⊆ B₂ ⟹ R(B₁) ≤ R(B₂)` as von Neumann
 algebras. -/
 theorem localVonNeumannAlgebra_mono
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂) :
     N.localVonNeumannAlgebra π hB₁ ≤ N.localVonNeumannAlgebra π hB₂ := by
@@ -185,7 +185,7 @@ observables of `B₁` (the Reeh-Schlieder input), then `Ω` is separating for th
 local von Neumann algebra `R(B₂)` of a spacelike-separated region: any `R ∈ R(B₂)` with
 `R Ω = 0` is zero. -/
 theorem localVonNeumannAlgebra_separating
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
@@ -201,7 +201,7 @@ isotony, the assignment `B ↦ R(B)` is a monotone map from the poset of basis
 regions (ordered by inclusion) to the von Neumann algebras of `B(H)`. This is the
 statement that the local net is a functor on the inclusion poset: containment of
 regions is sent to containment of algebras. -/
-noncomputable def vonNeumannNet (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) :
+noncomputable def vonNeumannNet (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) :
     {B : Set StandardMinkowskiSpacetime.Carrier // IsAlexandrovBasisSet B} →o
       VonNeumannAlgebra H where
   toFun B := N.localVonNeumannAlgebra π B.2
@@ -220,7 +220,7 @@ theorem commutant_le_commutant_of_le {M₁ M₂ : VonNeumannAlgebra H} (h : M₁
 algebra `R(B₁)' ∩ R(B₂)`, built as the meet of the star-subalgebras of the
 commutant of `R(B₁)` and of `R(B₂)`. Its underlying set is `R(B₁)' ∩ R(B₂)`. This
 is the basic object of the theory of local-algebra inclusions. -/
-noncomputable def relativeCommutant (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+noncomputable def relativeCommutant (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) : VonNeumannAlgebra H where
   toStarSubalgebra :=
@@ -240,7 +240,7 @@ noncomputable def relativeCommutant (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (
       ← Set.centralizer_union, Set.centralizer_centralizer_centralizer]
 
 /-- The underlying set of the relative commutant is `R(B₁)' ∩ R(B₂)`. -/
-@[simp] theorem coe_relativeCommutant (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+@[simp] theorem coe_relativeCommutant (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) :
     (N.relativeCommutant π hB₁ hB₂ : Set (H →L[ℂ] H))
@@ -249,7 +249,7 @@ noncomputable def relativeCommutant (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (
     StarSubalgebra.coe_inf]
 
 /-- **The relative commutant lies in the larger algebra:** `R(B₁)' ∩ R(B₂) ≤ R(B₂)`. -/
-theorem relativeCommutant_le_right (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+theorem relativeCommutant_le_right (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) :
     N.relativeCommutant π hB₁ hB₂ ≤ N.localVonNeumannAlgebra π hB₂ := by
@@ -260,7 +260,7 @@ theorem relativeCommutant_le_right (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H
 /-- **The relative commutant commutes with the smaller algebra:** its underlying
 set is contained in `R(B₁)'`. -/
 theorem relativeCommutant_coe_subset_commutant
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) :
     (N.relativeCommutant π hB₁ hB₂ : Set (H →L[ℂ] H))
@@ -272,7 +272,7 @@ theorem relativeCommutant_coe_subset_commutant
 `B₁ ⊆ B₂`, the center `R(B₂) ∩ R(B₂)'` is contained in `R(B₁)' ∩ R(B₂)`. Via
 isotony `R(B₁) ≤ R(B₂)` and antitonicity of the commutant. -/
 theorem center_le_relativeCommutant
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂) :
     N.localVonNeumann π hB₂ ∩ Set.centralizer (N.localVonNeumann π hB₂)
@@ -284,7 +284,7 @@ theorem center_le_relativeCommutant
 /-- The inclusion `R(B₁) ⊆ R(B₂)` is **irreducible** when its relative commutant is
 trivial: `R(B₁)' ∩ R(B₂) = ℂ·1`. This is the subfactor-theoretic notion of an
 irreducible inclusion. -/
-def IsIrreducibleInclusion (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+def IsIrreducibleInclusion (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) : Prop :=
   (N.relativeCommutant π hB₁ hB₂ : Set (H →L[ℂ] H)) = scalarOperators H
@@ -295,7 +295,7 @@ def IsIrreducibleInclusion (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[�
 (`center_le_relativeCommutant`), which is the scalars by hypothesis; and the scalars
 are always central, giving equality. -/
 theorem isFactor_of_isIrreducibleInclusion
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂)
     (hirr : N.IsIrreducibleInclusion π hB₁ hB₂) :
@@ -333,7 +333,7 @@ commutant of the self-inclusion is `R(B)' ∩ R(B)`, i.e. the center of `R(B)` (
 order of intersection), which equals the scalars iff `R(B)` has trivial center. This is
 the converse-completing companion to `isFactor_of_isIrreducibleInclusion`. -/
 theorem isIrreducibleInclusion_self_iff_isFactor
-    (π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
     N.IsIrreducibleInclusion π hB hB ↔ IsFactor (N.localVonNeumann π hB) := by
   unfold IsIrreducibleInclusion IsFactor

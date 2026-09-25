@@ -155,18 +155,29 @@ def IsCovariantQuasilocal (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isot
         = Q.ι (isAlexandrovBasisSet_smul L hC)
             (N.covEquiv L C (N.isotony.map hB hC h a))
 
+/-- **Every quasilocal algebra is covariance-compatible.** Axiom 5 (3) is stated
+for the Axiom 2 isotony family, so `α_L` intertwines the isotony embeddings, and
+the cocone condition `ι_inclusion` then gives `IsCovariantQuasilocal` for every
+quasilocal algebra and every Lorentz transformation. -/
+theorem isCovariantQuasilocal (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
+    (L : InhomogeneousLorentzGroup) : IsCovariantQuasilocal N Q L := by
+  intro B C hB hC h a
+  rw [N.covEquiv_isotony L hB hC h (isAlexandrovBasisSet_smul L hB)
+    (isAlexandrovBasisSet_smul L hC) (Set.smul_set_mono h) a, Q.ι_inclusion]
+
 /-- **Well-definedness of the intertwiner.** If two local elements `ι_B a` and
 `ι_{B'} a'` agree in `𝔘`, then their intended images
 `ι_{L·B}(α_L a)` and `ι_{L·B'}(α_L a')` agree. The proof routes both through a
 common basis set `C` (directedness), uses `ι_inclusion` + injectivity to
-identify the inclusions, and `hcompat` to push through the action. -/
+identify the inclusions, and `isCovariantQuasilocal` to push through the action. -/
 theorem ι_covEquiv_congr (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (L : InhomogeneousLorentzGroup)
     ⦃B B' : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB : IsAlexandrovBasisSet B) (hB' : IsAlexandrovBasisSet B')
     (a : N.U.algebra B) (a' : N.U.algebra B') (heq : Q.ι hB a = Q.ι hB' a') :
     Q.ι (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a)
       = Q.ι (isAlexandrovBasisSet_smul L hB') (N.covEquiv L B' a') := by
+  have hcompat := isCovariantQuasilocal N Q L
   obtain ⟨C, hC, hBC, hB'C⟩ := IsAlexandrovBasisSet.directed hB hB'
   have hinj : N.isotony.map hB hC hBC a = N.isotony.map hB' hC hB'C a' := by
     apply Q.ι_injective hC
@@ -182,7 +193,7 @@ theorem ι_covEquiv_congr (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isot
 open Classical in
 /-- The **intertwiner** on the quasilocal algebra: on a local element `ι_B a`
 it returns `ι_{L·B}(α_L a)` (and `0` off the local images). Its characterising
-equation is `intertwiner_ι`, valid once `Q` is covariance-compatible. -/
+equation is `intertwiner_ι`. -/
 noncomputable def intertwiner (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
     (L : InhomogeneousLorentzGroup) (x : Q.carrier) : Q.carrier :=
   if h : ∃ B, ∃ hB : IsAlexandrovBasisSet B, ∃ a : N.U.algebra B, Q.ι hB a = x then
@@ -193,7 +204,7 @@ noncomputable def intertwiner (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.
 /-- **Defining equation of the intertwiner.** On `ι_B a` it returns
 `ι_{L·B}(α_L a)`, well-definedly. -/
 theorem intertwiner_ι (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (L : InhomogeneousLorentzGroup)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
     (a : N.U.algebra B) :
     intertwiner N Q L (Q.ι hB a)
@@ -203,92 +214,92 @@ theorem intertwiner_ι (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony
     ⟨B, hB, a, rfl⟩
   unfold intertwiner
   rw [dif_pos h₀]
-  exact ι_covEquiv_congr N Q L hcompat h₀.choose_spec.1 hB h₀.choose_spec.2.choose a
+  exact ι_covEquiv_congr N Q L h₀.choose_spec.1 hB h₀.choose_spec.2.choose a
     h₀.choose_spec.2.choose_spec
 
 /-- **Additivity of the intertwiner.** On the local images it preserves
 addition - both arguments are routed through a common basis algebra `ι_C`. -/
 theorem intertwiner_add (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (L : InhomogeneousLorentzGroup)
     {x y : Q.carrier} (hx : x ∈ Q.localImages) (hy : y ∈ Q.localImages) :
     intertwiner N Q L (x + y) = intertwiner N Q L x + intertwiner N Q L y := by
   obtain ⟨C, hC, a, b, rfl, rfl⟩ := Q.exists_common_image hx hy
-  rw [← map_add (Q.ι hC), intertwiner_ι N Q L hcompat hC (a + b),
-    intertwiner_ι N Q L hcompat hC a, intertwiner_ι N Q L hcompat hC b,
+  rw [← map_add (Q.ι hC), intertwiner_ι N Q L hC (a + b),
+    intertwiner_ι N Q L hC a, intertwiner_ι N Q L hC b,
     map_add (N.covEquiv L C), map_add (Q.ι (isAlexandrovBasisSet_smul L hC))]
 
 /-- **Multiplicativity of the intertwiner.** On the local images it preserves
 multiplication - both arguments are routed through a common basis algebra. -/
 theorem intertwiner_mul (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (L : InhomogeneousLorentzGroup)
     {x y : Q.carrier} (hx : x ∈ Q.localImages) (hy : y ∈ Q.localImages) :
     intertwiner N Q L (x * y) = intertwiner N Q L x * intertwiner N Q L y := by
   obtain ⟨C, hC, a, b, rfl, rfl⟩ := Q.exists_common_image hx hy
-  rw [← map_mul (Q.ι hC), intertwiner_ι N Q L hcompat hC (a * b),
-    intertwiner_ι N Q L hcompat hC a, intertwiner_ι N Q L hcompat hC b,
+  rw [← map_mul (Q.ι hC), intertwiner_ι N Q L hC (a * b),
+    intertwiner_ι N Q L hC a, intertwiner_ι N Q L hC b,
     map_mul (N.covEquiv L C), map_mul (Q.ι (isAlexandrovBasisSet_smul L hC))]
 
 /-- The intertwiner preserves `0`. -/
 theorem intertwiner_zero (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
+    (L : InhomogeneousLorentzGroup) :
     intertwiner N Q L 0 = 0 := by
   have h : intertwiner N Q L
       (Q.ι isAlexandrovBasisSet_trivialBasisSet (0 : N.U.algebra trivialBasisSet)) = 0 := by
-    rw [intertwiner_ι N Q L hcompat isAlexandrovBasisSet_trivialBasisSet 0, map_zero, map_zero]
+    rw [intertwiner_ι N Q L isAlexandrovBasisSet_trivialBasisSet 0, map_zero, map_zero]
   simpa using h
 
 /-- The intertwiner preserves `1`. -/
 theorem intertwiner_one (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
+    (L : InhomogeneousLorentzGroup) :
     intertwiner N Q L 1 = 1 := by
   have h : intertwiner N Q L
       (Q.ι isAlexandrovBasisSet_trivialBasisSet (1 : N.U.algebra trivialBasisSet)) = 1 := by
-    rw [intertwiner_ι N Q L hcompat isAlexandrovBasisSet_trivialBasisSet 1, map_one, map_one]
+    rw [intertwiner_ι N Q L isAlexandrovBasisSet_trivialBasisSet 1, map_one, map_one]
   simpa using h
 
 /-- The intertwiner preserves `star` on the local images. -/
 theorem intertwiner_star (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (L : InhomogeneousLorentzGroup)
     {x : Q.carrier} (hx : x ∈ Q.localImages) :
     intertwiner N Q L (star x) = star (intertwiner N Q L x) := by
   rw [Q.mem_localImages] at hx
   obtain ⟨B, hB, a, rfl⟩ := hx
-  rw [← map_star (Q.ι hB), intertwiner_ι N Q L hcompat hB (star a),
-    intertwiner_ι N Q L hcompat hB a, map_star (N.covEquiv L B),
+  rw [← map_star (Q.ι hB), intertwiner_ι N Q L hB (star a),
+    intertwiner_ι N Q L hB a, map_star (N.covEquiv L B),
     map_star (Q.ι (isAlexandrovBasisSet_smul L hB))]
 
 /-- The intertwiner is `ℂ`-linear on the local images. -/
 theorem intertwiner_smul (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (L : InhomogeneousLorentzGroup)
     (c : ℂ) {x : Q.carrier} (hx : x ∈ Q.localImages) :
     intertwiner N Q L (c • x) = c • intertwiner N Q L x := by
   rw [Q.mem_localImages] at hx
   obtain ⟨B, hB, a, rfl⟩ := hx
-  rw [← map_smul (Q.ι hB) c a, intertwiner_ι N Q L hcompat hB (c • a),
-    intertwiner_ι N Q L hcompat hB a, map_smul (N.covEquiv L B),
+  rw [← map_smul (Q.ι hB) c a, intertwiner_ι N Q L hB (c • a),
+    intertwiner_ι N Q L hB a, map_smul (N.covEquiv L B),
     map_smul (Q.ι (isAlexandrovBasisSet_smul L hB))]
 
 /-- **The intertwiner as a `*`-homomorphism on the local subalgebra.** Bundles
 the homomorphism laws of `intertwiner` into a `StarAlgHom` from the dense local
 `*`-subalgebra of `𝔘` into `𝔘`. -/
 noncomputable def intertwinerHom (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
+    (L : InhomogeneousLorentzGroup) :
     Q.localStarSubalgebra →⋆ₐ[ℂ] Q.carrier where
   toFun s := intertwiner N Q L (s : Q.carrier)
   map_one' := by
     change intertwiner N Q L ((1 : Q.localStarSubalgebra) : Q.carrier) = 1
-    rw [OneMemClass.coe_one]; exact intertwiner_one N Q L hcompat
+    rw [OneMemClass.coe_one]; exact intertwiner_one N Q L
   map_mul' s t := by
     change intertwiner N Q L ((s * t : Q.localStarSubalgebra) : Q.carrier)
       = intertwiner N Q L (s : Q.carrier) * intertwiner N Q L (t : Q.carrier)
-    rw [MulMemClass.coe_mul]; exact intertwiner_mul N Q L hcompat s.2 t.2
+    rw [MulMemClass.coe_mul]; exact intertwiner_mul N Q L s.2 t.2
   map_zero' := by
     change intertwiner N Q L ((0 : Q.localStarSubalgebra) : Q.carrier) = 0
-    rw [ZeroMemClass.coe_zero]; exact intertwiner_zero N Q L hcompat
+    rw [ZeroMemClass.coe_zero]; exact intertwiner_zero N Q L
   map_add' s t := by
     change intertwiner N Q L ((s + t : Q.localStarSubalgebra) : Q.carrier)
       = intertwiner N Q L (s : Q.carrier) + intertwiner N Q L (t : Q.carrier)
-    rw [AddMemClass.coe_add]; exact intertwiner_add N Q L hcompat s.2 t.2
+    rw [AddMemClass.coe_add]; exact intertwiner_add N Q L s.2 t.2
   commutes' r := by
     change intertwiner N Q L ((algebraMap ℂ Q.localStarSubalgebra r : Q.carrier))
       = algebraMap ℂ Q.carrier r
@@ -296,81 +307,76 @@ noncomputable def intertwinerHom (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U
         = algebraMap ℂ Q.carrier r :=
       AlgHomClass.commutes (StarSubalgebra.subtype Q.localStarSubalgebra) r
     rw [hcoe, Algebra.algebraMap_eq_smul_one,
-      intertwiner_smul N Q L hcompat r (one_mem Q.localStarSubalgebra),
-      intertwiner_one N Q L hcompat]
+      intertwiner_smul N Q L r (one_mem Q.localStarSubalgebra),
+      intertwiner_one N Q L]
   map_star' s := by
-    rw [StarMemClass.coe_star]; exact intertwiner_star N Q L hcompat s.2
+    rw [StarMemClass.coe_star]; exact intertwiner_star N Q L s.2
 
 @[simp] theorem intertwinerHom_apply (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (L : InhomogeneousLorentzGroup)
     (s : Q.localStarSubalgebra) :
-    intertwinerHom N Q L hcompat s = intertwiner N Q L (s : Q.carrier) := rfl
+    intertwinerHom N Q L s = intertwiner N Q L (s : Q.carrier) := rfl
 
 /-- **The intertwiner is norm-preserving on the local images.** It maps
 `ι_B a ↦ ι_{L·B}(α_L a)`; both embeddings are isometric (`norm_ι`, using that
 `L·B` is again a basis set) and `α_L` is isometric (`norm_covEquiv`). -/
 theorem intertwiner_norm (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L)
+    (L : InhomogeneousLorentzGroup)
     {x : Q.carrier} (hx : x ∈ Q.localImages) :
     ‖intertwiner N Q L x‖ = ‖x‖ := by
   rw [Q.mem_localImages] at hx
   obtain ⟨B, hB, a, rfl⟩ := hx
-  rw [intertwiner_ι N Q L hcompat hB a, Q.norm_ι (isAlexandrovBasisSet_smul L hB),
+  rw [intertwiner_ι N Q L hB a, Q.norm_ι (isAlexandrovBasisSet_smul L hB),
     N.norm_covEquiv, Q.norm_ι hB]
 
 /-- **The bundled intertwiner is an isometry** on the local `*`-subalgebra. -/
 theorem intertwinerHom_isometry (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
-    Isometry (intertwinerHom N Q L hcompat) := by
+    (L : InhomogeneousLorentzGroup) :
+    Isometry (intertwinerHom N Q L) := by
   refine Isometry.of_dist_eq (fun x y => ?_)
   rw [Subtype.dist_eq, dist_eq_norm, dist_eq_norm,
-    ← map_sub (intertwinerHom N Q L hcompat), intertwinerHom_apply,
+    ← map_sub (intertwinerHom N Q L), intertwinerHom_apply,
     AddSubgroupClass.coe_sub]
-  exact intertwiner_norm N Q L hcompat (sub_mem x.2 y.2)
+  exact intertwiner_norm N Q L (sub_mem x.2 y.2)
 
 /-- **Existence of the extended intertwiner.** The norm-preserving (hence
 uniformly continuous) `*`-homomorphism on the dense local `*`-subalgebra extends
 to a `*`-homomorphism `F : 𝔘 →⋆ₐ[ℂ] 𝔘` agreeing with the intertwiner on the
 local images. -/
 theorem exists_intertwiner_extend (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
-    (L : InhomogeneousLorentzGroup) (hcompat : IsCovariantQuasilocal N Q L) :
+    (L : InhomogeneousLorentzGroup) :
     ∃ F : Q.carrier →⋆ₐ[ℂ] Q.carrier, Continuous F ∧
       ∀ s : Q.localStarSubalgebra, F (s : Q.carrier) = intertwiner N Q L (s : Q.carrier) := by
   obtain ⟨F, hFc, hF⟩ := exists_starAlgHom_extend_of_dense Q.localStarSubalgebra
-    Q.dense_localStarSubalgebra (intertwinerHom N Q L hcompat)
-    (intertwinerHom_isometry N Q L hcompat).uniformContinuous
+    Q.dense_localStarSubalgebra (intertwinerHom N Q L)
+    (intertwinerHom_isometry N Q L).uniformContinuous
   exact ⟨F, hFc, hF⟩
 
-/-- A quasilocal algebra is *covariant* if its embeddings are covariance-
-compatible for **every** Lorentz transformation (so the lift exists for all
-`L`). -/
-def IsCovariant (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony) : Prop :=
-  ∀ L : InhomogeneousLorentzGroup, IsCovariantQuasilocal N Q L
+section Extend
 
-variable {N : HaagKastlerNet} {Q : QuasilocalAlgebra N.U N.isotony}
+variable (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
 
-/-- The chosen extended intertwiner `Φ_L : 𝔘 →⋆ₐ[ℂ] 𝔘` for a covariant
-quasilocal algebra. -/
-noncomputable def extendHom (hcov : IsCovariant N Q)
-    (L : InhomogeneousLorentzGroup) : Q.carrier →⋆ₐ[ℂ] Q.carrier :=
-  (exists_intertwiner_extend N Q L (hcov L)).choose
+/-- The chosen extended intertwiner `Φ_L : 𝔘 →⋆ₐ[ℂ] 𝔘` of a quasilocal
+algebra. -/
+noncomputable def extendHom (L : InhomogeneousLorentzGroup) : Q.carrier →⋆ₐ[ℂ] Q.carrier :=
+  (exists_intertwiner_extend N Q L).choose
 
-theorem extendHom_continuous (hcov : IsCovariant N Q)
-    (L : InhomogeneousLorentzGroup) : Continuous (extendHom hcov L) :=
-  (exists_intertwiner_extend N Q L (hcov L)).choose_spec.1
+theorem extendHom_continuous (L : InhomogeneousLorentzGroup) : Continuous (extendHom N Q L) :=
+  (exists_intertwiner_extend N Q L).choose_spec.1
 
 /-- `Φ_L` implements the fiberwise action on the generators:
 `Φ_L (ι_B a) = ι_{L·B}(α_L a)`. -/
-theorem extendHom_ι (hcov : IsCovariant N Q) (L : InhomogeneousLorentzGroup)
+theorem extendHom_ι (L : InhomogeneousLorentzGroup)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
     (a : N.U.algebra B) :
-    extendHom hcov L (Q.ι hB a)
+    extendHom N Q L (Q.ι hB a)
       = Q.ι (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a) := by
   have hmem : Q.ι hB a ∈ Q.localStarSubalgebra := (Q.mem_localImages).mpr ⟨B, hB, a, rfl⟩
-  have h := (exists_intertwiner_extend N Q L (hcov L)).choose_spec.2 ⟨Q.ι hB a, hmem⟩
-  rw [intertwiner_ι N Q L (hcov L) hB a] at h
+  have h := (exists_intertwiner_extend N Q L).choose_spec.2 ⟨Q.ι hB a, hmem⟩
+  rw [intertwiner_ι N Q L hB a] at h
   exact h
 
+variable {N Q} in
 /-- Two `*`-homomorphisms of `𝔘` that are continuous and agree on the local
 images are equal (the images are dense). -/
 theorem starAlgHom_ext_localImages {f g : Q.carrier →⋆ₐ[ℂ] Q.carrier}
@@ -386,145 +392,117 @@ theorem starAlgHom_ext_localImages {f g : Q.carrier →⋆ₐ[ℂ] Q.carrier}
   exact h hB a
 
 /-- **`Φ` is multiplicative in the group element:** `Φ_{L'·L} = Φ_{L'} ∘ Φ_L`. -/
-theorem extendHom_comp (hcov : IsCovariant N Q)
-    (L L' : InhomogeneousLorentzGroup) :
-    extendHom hcov (L' * L) = (extendHom hcov L').comp (extendHom hcov L) := by
-  refine starAlgHom_ext_localImages (extendHom_continuous hcov (L' * L))
-    ((extendHom_continuous hcov L').comp (extendHom_continuous hcov L)) ?_
+theorem extendHom_comp (L L' : InhomogeneousLorentzGroup) :
+    extendHom N Q (L' * L) = (extendHom N Q L').comp (extendHom N Q L) := by
+  refine starAlgHom_ext_localImages (extendHom_continuous N Q (L' * L))
+    ((extendHom_continuous N Q L').comp (extendHom_continuous N Q L)) ?_
   intro B hB a
-  rw [StarAlgHom.comp_apply, extendHom_ι hcov L hB a,
-    extendHom_ι hcov L' (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a),
-    extendHom_ι hcov (L' * L) hB a, N.covEquiv_mul L L' B a]
+  rw [StarAlgHom.comp_apply, extendHom_ι N Q L hB a,
+    extendHom_ι N Q L' (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a),
+    extendHom_ι N Q (L' * L) hB a, N.covEquiv_mul L L' B a]
   exact Q.ι_cast (isAlexandrovBasisSet_smul L' (isAlexandrovBasisSet_smul L hB))
     (isAlexandrovBasisSet_smul (L' * L) hB) (mul_smul L' L B).symm
     (N.covEquiv L' (L • B) (N.covEquiv L B a))
 
 /-- **`Φ_1 = id`.** -/
-theorem extendHom_one (hcov : IsCovariant N Q) :
-    extendHom hcov 1 = StarAlgHom.id ℂ Q.carrier := by
-  refine starAlgHom_ext_localImages (extendHom_continuous hcov 1) continuous_id ?_
+theorem extendHom_one :
+    extendHom N Q 1 = StarAlgHom.id ℂ Q.carrier := by
+  refine starAlgHom_ext_localImages (extendHom_continuous N Q 1) continuous_id ?_
   intro B hB a
-  rw [extendHom_ι hcov 1 hB a, N.covEquiv_one B a]
+  rw [extendHom_ι N Q 1 hB a, N.covEquiv_one B a]
   exact Q.ι_cast hB (isAlexandrovBasisSet_smul (1 : InhomogeneousLorentzGroup) hB)
     (one_smul InhomogeneousLorentzGroup B).symm a
 
-theorem extendHom_comp_inv (hcov : IsCovariant N Q) (L : InhomogeneousLorentzGroup) :
-    (extendHom hcov L).comp (extendHom hcov L⁻¹) = StarAlgHom.id ℂ Q.carrier := by
-  rw [← extendHom_comp hcov L⁻¹ L, mul_inv_cancel, extendHom_one]
+theorem extendHom_comp_inv (L : InhomogeneousLorentzGroup) :
+    (extendHom N Q L).comp (extendHom N Q L⁻¹) = StarAlgHom.id ℂ Q.carrier := by
+  rw [← extendHom_comp N Q L⁻¹ L, mul_inv_cancel, extendHom_one]
 
-theorem extendHom_inv_comp (hcov : IsCovariant N Q) (L : InhomogeneousLorentzGroup) :
-    (extendHom hcov L⁻¹).comp (extendHom hcov L) = StarAlgHom.id ℂ Q.carrier := by
-  rw [← extendHom_comp hcov L L⁻¹, inv_mul_cancel, extendHom_one]
+theorem extendHom_inv_comp (L : InhomogeneousLorentzGroup) :
+    (extendHom N Q L⁻¹).comp (extendHom N Q L) = StarAlgHom.id ℂ Q.carrier := by
+  rw [← extendHom_comp N Q L L⁻¹, inv_mul_cancel, extendHom_one]
 
-/-- **Existence of the quasilocal lift.** For a covariance-compatible quasilocal
-algebra, the fiberwise Lorentz action lifts to a `*`-automorphism of `𝔘`,
-inhabiting `QuasilocalLift`. -/
-noncomputable def quasilocalLift (hcov : IsCovariant N Q)
-    (L : InhomogeneousLorentzGroup) : N.QuasilocalLift Q L where
-  β := StarAlgEquiv.ofStarAlgHom (extendHom hcov L) (extendHom hcov L⁻¹)
-        (extendHom_inv_comp hcov L)
-        (extendHom_comp_inv hcov L)
+/-- **Existence of the quasilocal lift.** For every quasilocal algebra (all are
+covariance-compatible, `isCovariantQuasilocal`), the fiberwise Lorentz action
+lifts to a `*`-automorphism of `𝔘`, inhabiting `QuasilocalLift`. -/
+noncomputable def quasilocalLift (L : InhomogeneousLorentzGroup) : N.QuasilocalLift Q L where
+  β := StarAlgEquiv.ofStarAlgHom (extendHom N Q L) (extendHom N Q L⁻¹)
+        (extendHom_inv_comp N Q L)
+        (extendHom_comp_inv N Q L)
   intertwines := by
     intro B hB a
     rw [StarAlgEquiv.ofStarAlgHom_apply]
-    exact extendHom_ι hcov L hB a
+    exact extendHom_ι N Q L hB a
 
 /-- The quasilocal lift exists for every Lorentz transformation. -/
-theorem nonempty_quasilocalLift (hcov : IsCovariant N Q)
-    (L : InhomogeneousLorentzGroup) : Nonempty (N.QuasilocalLift Q L) :=
-  ⟨quasilocalLift hcov L⟩
-
-/-- **The trivial quasilocal algebra is covariance-compatible.** Every local
-algebra is `ℂ`, every `ℂ`-algebra `*`-automorphism of `ℂ` is the identity, and
-the embeddings/inclusions are the identity, so the compatibility holds. -/
-theorem isCovariant_trivial :
-    IsCovariant trivialHaagKastlerNet trivialQuasilocalAlgebra := by
-  have key : ∀ (f : ℂ ≃⋆ₐ[ℂ] ℂ) (z : ℂ), f z = z := fun f z => by
-    simpa using AlgHomClass.commutes f z
-  intro L B C hB hC h a
-  change trivialHaagKastlerNet.covEquiv L B a
-      = trivialHaagKastlerNet.covEquiv L C (trivialLocalNetIsotony.map hB hC h a)
-  exact (key (trivialHaagKastlerNet.covEquiv L B) a).trans
-    (key (trivialHaagKastlerNet.covEquiv L C)
-      (trivialLocalNetIsotony.map hB hC h a)).symm
+theorem nonempty_quasilocalLift (L : InhomogeneousLorentzGroup) : Nonempty (N.QuasilocalLift Q L) :=
+  ⟨quasilocalLift N Q L⟩
 
 /-- **The quasilocal lift exists unconditionally for the trivial net.** -/
 noncomputable def trivialQuasilocalLift (L : InhomogeneousLorentzGroup) :
     trivialHaagKastlerNet.QuasilocalLift trivialQuasilocalAlgebra L :=
-  quasilocalLift isCovariant_trivial L
+  quasilocalLift trivialHaagKastlerNet trivialQuasilocalAlgebra L
 
 theorem nonempty_trivialQuasilocalLift (L : InhomogeneousLorentzGroup) :
     Nonempty (trivialHaagKastlerNet.QuasilocalLift trivialQuasilocalAlgebra L) :=
   ⟨trivialQuasilocalLift L⟩
 
-/-- A **covariant quasilocal algebra**: a Haag-Kastler net together with a
-quasilocal algebra whose embeddings are covariance-compatible for every Lorentz
-transformation. On such data the Lorentz action lifts to a `*`-automorphism of
-the quasilocal algebra for every `L`. -/
-structure CovariantQuasilocalAlgebra where
-  /-- The underlying Haag-Kastler net. Annotated `.{u}` so this structure inherits
-  the net's universe polymorphism rather than pinning it. -/
-  net : HaagKastlerNet.{u}
-  /-- A quasilocal algebra of the net. -/
-  quasilocal : QuasilocalAlgebra net.U net.isotony
-  /-- Covariance-compatibility of the embeddings, for every Lorentz
-  transformation. -/
-  covariant : IsCovariant net quasilocal
+end Extend
 
-namespace CovariantQuasilocalAlgebra
+namespace HaagKastlerNet
 
 /-- The lift of the Lorentz action of `L` to a `*`-automorphism of the
 quasilocal algebra, packaged as a `QuasilocalLift`. -/
-noncomputable def lift (C : CovariantQuasilocalAlgebra)
-    (L : InhomogeneousLorentzGroup) : C.net.QuasilocalLift C.quasilocal L :=
-  quasilocalLift C.covariant L
+noncomputable def lift (N : HaagKastlerNet)
+    (L : InhomogeneousLorentzGroup) : N.QuasilocalLift N.quasilocal L :=
+  quasilocalLift N N.quasilocal L
 
 /-- The covariance `*`-automorphism `β_L` of the quasilocal algebra. -/
-noncomputable def action (C : CovariantQuasilocalAlgebra)
-    (L : InhomogeneousLorentzGroup) : C.quasilocal.carrier ≃⋆ₐ[ℂ] C.quasilocal.carrier :=
-  (C.lift L).β
+noncomputable def action (N : HaagKastlerNet)
+    (L : InhomogeneousLorentzGroup) : N.quasilocal.carrier ≃⋆ₐ[ℂ] N.quasilocal.carrier :=
+  (N.lift L).β
 
 /-- The action implements the fiberwise covariance on the local images:
 `β_L (ι_B a) = ι_{L·B}(α_L a)`. -/
-theorem action_ι (C : CovariantQuasilocalAlgebra) (L : InhomogeneousLorentzGroup)
+theorem action_ι (N : HaagKastlerNet) (L : InhomogeneousLorentzGroup)
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B)
-    (a : C.net.U.algebra B) :
-    C.action L (C.quasilocal.ι hB a)
-      = C.quasilocal.ι (isAlexandrovBasisSet_smul L hB) (C.net.covEquiv L B a) :=
-  (C.lift L).intertwines hB a
+    (a : N.U.algebra B) :
+    N.action L (N.quasilocal.ι hB a)
+      = N.quasilocal.ι (isAlexandrovBasisSet_smul L hB) (N.covEquiv L B a) :=
+  (N.lift L).intertwines hB a
 
 /-- The action agrees with the underlying extended `*`-homomorphism. -/
-theorem action_apply (C : CovariantQuasilocalAlgebra)
-    (L : InhomogeneousLorentzGroup) (x : C.quasilocal.carrier) :
-    C.action L x = extendHom C.covariant L x :=
-  StarAlgEquiv.ofStarAlgHom_apply (extendHom C.covariant L) (extendHom C.covariant L⁻¹)
-    (extendHom_inv_comp C.covariant L) (extendHom_comp_inv C.covariant L) x
+theorem action_apply (N : HaagKastlerNet)
+    (L : InhomogeneousLorentzGroup) (x : N.quasilocal.carrier) :
+    N.action L x = extendHom N N.quasilocal L x :=
+  StarAlgEquiv.ofStarAlgHom_apply (extendHom N N.quasilocal L)
+    (extendHom N N.quasilocal L⁻¹)
+    (extendHom_inv_comp N N.quasilocal L) (extendHom_comp_inv N N.quasilocal L) x
 
 /-- **The action is trivial at the identity:** `β_1 = id`. -/
-theorem action_one_apply (C : CovariantQuasilocalAlgebra)
-    (x : C.quasilocal.carrier) : C.action 1 x = x := by
-  rw [action_apply, DFunLike.congr_fun (extendHom_one C.covariant) x]
+theorem action_one_apply (N : HaagKastlerNet)
+    (x : N.quasilocal.carrier) : N.action 1 x = x := by
+  rw [action_apply, DFunLike.congr_fun (extendHom_one N N.quasilocal) x]
   rfl
 
 /-- **The action is multiplicative in the group element:**
 `β_{L'·L} = β_{L'} ∘ β_L`. -/
-theorem action_mul_apply (C : CovariantQuasilocalAlgebra)
-    (L L' : InhomogeneousLorentzGroup) (x : C.quasilocal.carrier) :
-    C.action (L' * L) x = C.action L' (C.action L x) := by
+theorem action_mul_apply (N : HaagKastlerNet)
+    (L L' : InhomogeneousLorentzGroup) (x : N.quasilocal.carrier) :
+    N.action (L' * L) x = N.action L' (N.action L x) := by
   rw [action_apply, action_apply, action_apply,
-    DFunLike.congr_fun (extendHom_comp C.covariant L L') x]
+    DFunLike.congr_fun (extendHom_comp N N.quasilocal L L') x]
   rfl
 
 /-- The covariance action sends the identity to the identity automorphism. -/
-theorem action_one (C : CovariantQuasilocalAlgebra) :
-    C.action 1 = StarAlgEquiv.refl ℂ C.quasilocal.carrier := by
+theorem action_one (N : HaagKastlerNet) :
+    N.action 1 = StarAlgEquiv.refl ℂ N.quasilocal.carrier := by
   ext x; rw [action_one_apply]; rfl
 
 /-- The covariance action is multiplicative: `β_{L'·L} = β_L` followed by
 `β_{L'}`. -/
-theorem action_mul (C : CovariantQuasilocalAlgebra)
+theorem action_mul (N : HaagKastlerNet)
     (L L' : InhomogeneousLorentzGroup) :
-    C.action (L' * L) = (C.action L).trans (C.action L') := by
+    N.action (L' * L) = (N.action L).trans (N.action L') := by
   ext x; rw [action_mul_apply]; rfl
 
 /-- The covariance action packaged as a **group homomorphism** from the
@@ -533,34 +511,34 @@ algebra, `L ↦ β_L`. This bundles `action_one` and `action_mul`; the target's 
 law is composition (`f * g = g.trans f`, `StarAlgEquiv.aut`), which is exactly the
 form of `action_mul`. It exhibits the covariance action as a genuine unitary-free
 representation of the Poincaré group by `*`-automorphisms of `𝔘`. -/
-noncomputable def actionHom (C : CovariantQuasilocalAlgebra) :
-    InhomogeneousLorentzGroup →* (C.quasilocal.carrier ≃⋆ₐ[ℂ] C.quasilocal.carrier) where
-  toFun := C.action
-  map_one' := C.action_one
-  map_mul' a b := C.action_mul b a
+noncomputable def actionHom (N : HaagKastlerNet) :
+    InhomogeneousLorentzGroup →* (N.quasilocal.carrier ≃⋆ₐ[ℂ] N.quasilocal.carrier) where
+  toFun := N.action
+  map_one' := N.action_one
+  map_mul' a b := N.action_mul b a
 
-@[simp] theorem actionHom_apply (C : CovariantQuasilocalAlgebra)
-    (L : InhomogeneousLorentzGroup) : C.actionHom L = C.action L := rfl
+@[simp] theorem actionHom_apply (N : HaagKastlerNet)
+    (L : InhomogeneousLorentzGroup) : N.actionHom L = N.action L := rfl
 
 /-- A state `ω` on the quasilocal algebra is *(Poincaré-)invariant* if it is a
 fixed point of the dual covariance action: `ω(β_L a) = ω(a)` for every Lorentz
 transformation `L` and every observable `a`. This is the invariance part of the
 vacuum conditions; the spectrum condition is imposed separately. -/
-def IsInvariantState (C : CovariantQuasilocalAlgebra)
-    (ω : Physicslib4.GNS.State C.quasilocal.carrier) : Prop :=
-  ∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
-    ω (C.action L a) = ω a
+def IsInvariantState (N : HaagKastlerNet)
+    (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
+  ∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+    ω (N.action L a) = ω a
 
 /-- **Invariance of the GNS inner product.** For an invariant state, the
 sesquilinear form `(a, b) ↦ ω(a^* b)` - which is the GNS inner product of the
 cyclic vectors `π(a)Ω`, `π(b)Ω` - is preserved by the action. This is the
 algebraic input that makes the implementing operator on the GNS space an
 isometry, hence (Step 2) a unitary. -/
-theorem IsInvariantState.inner_invariant (C : CovariantQuasilocalAlgebra)
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
-    (L : InhomogeneousLorentzGroup) (a b : C.quasilocal.carrier) :
-    ω (star (C.action L a) * C.action L b) = ω (star a * b) := by
-  rw [← map_star (C.action L) a, ← map_mul (C.action L)]
+theorem IsInvariantState.inner_invariant (N : HaagKastlerNet)
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier} (hω : N.IsInvariantState ω)
+    (L : InhomogeneousLorentzGroup) (a b : N.quasilocal.carrier) :
+    ω (star (N.action L a) * N.action L b) = ω (star a * b) := by
+  rw [← map_star (N.action L) a, ← map_mul (N.action L)]
   exact hω L (star a * b)
 
 open scoped InnerProductSpace in
@@ -570,27 +548,27 @@ Hilbert space by a family of unitaries `U L` with `U L (π a Ω) = π (β_L a) �
 `U L Ω = Ω`. The unitaries are the dense-extension of the isometry
 `π a Ω ↦ π (β_L a) Ω` (isometric by `inner_invariant`), via
 `LinearEquiv.extendOfIsometry`. -/
-theorem IsInvariantState.exists_gns_unitary (C : CovariantQuasilocalAlgebra.{u})
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω) :
+theorem IsInvariantState.exists_gns_unitary (N : HaagKastlerNet.{u})
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier} (hω : N.IsInvariantState ω) :
     ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
-      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (_ : CompleteSpace H) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
-        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
-          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+          U L (π a Ω) = π (N.action L a) Ω) ∧
         (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
         (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
-          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (N.action L a) x) ∧
         Physicslib4.GNS.IsCyclicVector π Ω :=
   -- This is the specialization of the algebra-agnostic
   -- `GNS.exists_gns_unitary_of_invariant` to the quasilocal algebra `𝔘` with the
-  -- covariance action `β = C.action`: invariance is `hω`, multiplicativity is
+  -- covariance action `β = N.action`: invariance is `hω`, multiplicativity is
   -- `action_mul_apply`, and the identity law is `action_one_apply`. The final
   -- clause is operator covariance `U(L) π(a) U(L)⁻¹ = π(β_L a)`.
-  Physicslib4.GNS.exists_gns_unitary_of_invariant C.action ω hω
-    C.action_mul_apply C.action_one_apply
+  Physicslib4.GNS.exists_gns_unitary_of_invariant N.action ω hω
+    N.action_mul_apply N.action_one_apply
 
 open scoped InnerProductSpace in
 /-- **Strongly continuous GNS unitary representation of an invariant state.**
@@ -605,45 +583,45 @@ This is the quasilocal-state form of the weak-continuity hypothesis; it is the
 direct specialization of the algebra-agnostic
 `GNS.exists_gns_unitary_of_invariant_strongContinuous`. -/
 theorem IsInvariantState.exists_gns_unitary_strongContinuous
-    (C : CovariantQuasilocalAlgebra.{u})
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
-    (hwc : ∀ a b : C.quasilocal.carrier,
-      Continuous fun L : InhomogeneousLorentzGroup => (ω (star a * C.action L b) : ℂ)) :
+    (N : HaagKastlerNet.{u})
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier} (hω : N.IsInvariantState ω)
+    (hwc : ∀ a b : N.quasilocal.carrier,
+      Continuous fun L : InhomogeneousLorentzGroup => (ω (star a * N.action L b) : ℂ)) :
     ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
-      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (_ : CompleteSpace H) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
-        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
-          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+          U L (π a Ω) = π (N.action L a) Ω) ∧
         (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
         (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
         (∀ ψ : H, Continuous fun L : InhomogeneousLorentzGroup => U L ψ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
-          U L (π a ((U L).symm x)) = π (C.action L a) x) :=
-  Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous C.action ω hω
-    C.action_mul_apply C.action_one_apply hwc
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (N.action L a) x) :=
+  Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous N.action ω hω
+    N.action_mul_apply N.action_one_apply hwc
 
 open scoped InnerProductSpace in
 /-- **Bundled GNS unitary representation of an invariant state.** The bundled form
 of `IsInvariantState.exists_gns_unitary`: the implementing unitaries are returned
 as a genuine unitary representation `U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)`
 (a bundled group homomorphism), rather than a bare family with separate group-law
-clauses. It feeds the covariance group homomorphism `C.actionHom` into the bundled
+clauses. It feeds the covariance group homomorphism `N.actionHom` into the bundled
 analytic core `GNS.exists_gns_unitaryRep_of_invariant`. -/
-theorem IsInvariantState.exists_gns_unitaryRep (C : CovariantQuasilocalAlgebra.{u})
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω) :
+theorem IsInvariantState.exists_gns_unitaryRep (N : HaagKastlerNet.{u})
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier} (hω : N.IsInvariantState ω) :
     ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
-      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (_ : CompleteSpace H) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)),
-        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
-          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+          U L (π a Ω) = π (N.action L a) Ω) ∧
         (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
-          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (N.action L a) x) ∧
         Physicslib4.GNS.IsCyclicVector π Ω :=
-  Physicslib4.GNS.exists_gns_unitaryRep_of_invariant C.actionHom ω hω
+  Physicslib4.GNS.exists_gns_unitaryRep_of_invariant N.actionHom ω hω
 
 open scoped InnerProductSpace in
 /-- **Bundled strongly continuous GNS unitary representation of an invariant state.**
@@ -651,21 +629,21 @@ The bundled form of `IsInvariantState.exists_gns_unitary_strongContinuous`: the
 strongly continuous implementing unitaries are returned as a bundled group
 homomorphism `U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)`. -/
 theorem IsInvariantState.exists_gns_unitaryRep_strongContinuous
-    (C : CovariantQuasilocalAlgebra.{u})
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
-    (hwc : ∀ a b : C.quasilocal.carrier,
-      Continuous fun L : InhomogeneousLorentzGroup => (ω (star a * C.action L b) : ℂ)) :
+    (N : HaagKastlerNet.{u})
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier} (hω : N.IsInvariantState ω)
+    (hwc : ∀ a b : N.quasilocal.carrier,
+      Continuous fun L : InhomogeneousLorentzGroup => (ω (star a * N.action L b) : ℂ)) :
     ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
-      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (_ : CompleteSpace H) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup →* (H ≃ₗᵢ[ℂ] H)),
-        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
-          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+          U L (π a Ω) = π (N.action L a) Ω) ∧
         (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
         (∀ ψ : H, Continuous fun L : InhomogeneousLorentzGroup => U L ψ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
-          U L (π a ((U L).symm x)) = π (C.action L a) x) :=
-  Physicslib4.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous C.actionHom ω hω hwc
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (N.action L a) x) :=
+  Physicslib4.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous N.actionHom ω hω hwc
 
 open scoped InnerProductSpace in
 /-- **Irreducible covariant representation of a pure invariant state (Minkowski).**
@@ -680,37 +658,37 @@ fixing the cyclic vector `Ω`, with the operator covariance
 This is a necessary precursor to, but not yet, a *vacuum* representation: a genuine
 vacuum would additionally require the spectrum condition (positivity of the energy-
 momentum spectrum), which is not available here. -/
-theorem IsInvariantState.exists_gns_irreducible_covariant (C : CovariantQuasilocalAlgebra.{u})
-    {ω : Physicslib4.GNS.State C.quasilocal.carrier} (hω : C.IsInvariantState ω)
+theorem IsInvariantState.exists_gns_irreducible_covariant (N : HaagKastlerNet.{u})
+    {ω : Physicslib4.GNS.State N.quasilocal.carrier} (hω : N.IsInvariantState ω)
     (hpure : Physicslib4.GNS.IsPure ω) :
     ∃ (H : Type u) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
-      (_ : CompleteSpace H) (π : C.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
+      (_ : CompleteSpace H) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H)),
         Physicslib4.GNS.IsCyclicVector π Ω ∧
-        (∀ a : C.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier),
-          U L (π a Ω) = π (C.action L a) Ω) ∧
+        (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+          U L (π a Ω) = π (N.action L a) Ω) ∧
         (∀ L : InhomogeneousLorentzGroup, U L Ω = Ω) ∧
         (∀ L L' : InhomogeneousLorentzGroup, U (L' * L) = (U L).trans (U L')) ∧
         U 1 = LinearIsometryEquiv.refl ℂ H ∧
-        (∀ (L : InhomogeneousLorentzGroup) (a : C.quasilocal.carrier) (x : H),
-          U L (π a ((U L).symm x)) = π (C.action L a) x) ∧
+        (∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier) (x : H),
+          U L (π a ((U L).symm x)) = π (N.action L a) x) ∧
         Physicslib4.GNS.IsIrreducible π ∧
         Physicslib4.GNS.gnsVonNeumann π = Set.univ := by
   obtain ⟨H, i1, i2, i3, π, Ω, U, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hcyc⟩ :=
-    IsInvariantState.exists_gns_unitary C hω
+    IsInvariantState.exists_gns_unitary N hω
   have hirr := (Physicslib4.GNS.isPure_iff_isIrreducible hcyc hrepro).mp hpure
   exact ⟨H, i1, i2, i3, π, Ω, U, hcyc, hrepro, himpl, hUΩ, hmul, hUone, hopcov, hirr,
     Physicslib4.GNS.gnsVonNeumann_eq_univ_of_isIrreducible hirr⟩
 
 /-- **Purity is covariance-invariant (Minkowski).** A state `ω` on the quasilocal
 algebra is pure if and only if its pullback `ω ∘ β_L` along the covariance
-automorphism is pure: purity is preserved by the `*`-automorphism `β_L = C.action L`.
+automorphism is pure: purity is preserved by the `*`-automorphism `β_L = N.action L`.
 Specialization of `isPure_precomp_iff`. -/
-theorem isPure_precomp_action_iff (C : CovariantQuasilocalAlgebra)
-    (ω : Physicslib4.GNS.State C.quasilocal.carrier) (L : InhomogeneousLorentzGroup) :
-    Physicslib4.GNS.IsPure (ω.precomp (C.action L)) ↔ Physicslib4.GNS.IsPure ω :=
-  Physicslib4.GNS.isPure_precomp_iff ω (C.action L)
+theorem isPure_precomp_action_iff (N : HaagKastlerNet)
+    (ω : Physicslib4.GNS.State N.quasilocal.carrier) (L : InhomogeneousLorentzGroup) :
+    Physicslib4.GNS.IsPure (ω.precomp (N.action L)) ↔ Physicslib4.GNS.IsPure ω :=
+  Physicslib4.GNS.isPure_precomp_iff ω (N.action L)
 
 /-! ### GNS covariance along the quasilocal action -/
 
@@ -718,65 +696,53 @@ section GNSCovariance
 
 open scoped InnerProductSpace
 
-variable (C : CovariantQuasilocalAlgebra) (L : InhomogeneousLorentzGroup)
-  (ω : Physicslib4.GNS.State C.quasilocal.carrier)
+variable (N : HaagKastlerNet) (L : InhomogeneousLorentzGroup)
+  (ω : Physicslib4.GNS.State N.quasilocal.carrier)
   {H₁ : Type*} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
-  (π₁ : C.quasilocal.carrier →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (Ω₁ : H₁)
+  (π₁ : N.quasilocal.carrier →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (Ω₁ : H₁)
   {H₂ : Type*} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
-  (π₂ : C.quasilocal.carrier →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) (Ω₂ : H₂)
+  (π₂ : N.quasilocal.carrier →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) (Ω₂ : H₂)
 
 /-- **GNS covariance along the quasilocal action.** The lifted covariance automorphism
-`β_L = C.action L` is a `*`-automorphism of the quasilocal algebra `𝔘`, so a cyclic
+`β_L = N.action L` is a `*`-automorphism of the quasilocal algebra `𝔘`, so a cyclic
 representation of `𝔘` reproducing the pullback state `ω ∘ β_L` is unitarily equivalent
 to `π_ω ∘ β_L`. -/
 theorem unitaryEquiv_gns_action
     (hcyc₁ : Physicslib4.GNS.IsCyclicVector π₁ Ω₁)
-    (hrep₁ : ∀ a : C.quasilocal.carrier,
-      ((ω.comp (C.action L).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hrep₁ : ∀ a : N.quasilocal.carrier,
+      ((ω.comp (N.action L).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
     (hcyc₂ : Physicslib4.GNS.IsCyclicVector π₂ Ω₂)
-    (hrep₂ : ∀ b : C.quasilocal.carrier, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
-    Physicslib4.GNS.UnitaryEquiv π₁ (π₂.comp (C.action L).toStarAlgHom) :=
-  Physicslib4.GNS.unitaryEquiv_comp_of_gns (C.action L) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+    (hrep₂ : ∀ b : N.quasilocal.carrier, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    Physicslib4.GNS.UnitaryEquiv π₁ (π₂.comp (N.action L).toStarAlgHom) :=
+  Physicslib4.GNS.unitaryEquiv_comp_of_gns (N.action L) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
 
 /-- **Irreducibility is Lorentz invariant on the quasilocal algebra.** With the GNS data
 above, `π₁` is irreducible exactly when `π₂` is. -/
 theorem isIrreducible_iff_gns_action
     (hcyc₁ : Physicslib4.GNS.IsCyclicVector π₁ Ω₁)
-    (hrep₁ : ∀ a : C.quasilocal.carrier,
-      ((ω.comp (C.action L).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hrep₁ : ∀ a : N.quasilocal.carrier,
+      ((ω.comp (N.action L).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
     (hcyc₂ : Physicslib4.GNS.IsCyclicVector π₂ Ω₂)
-    (hrep₂ : ∀ b : C.quasilocal.carrier, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    (hrep₂ : ∀ b : N.quasilocal.carrier, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
     Physicslib4.GNS.IsIrreducible π₁ ↔ Physicslib4.GNS.IsIrreducible π₂ :=
-  Physicslib4.GNS.isIrreducible_iff_of_gns_comp (C.action L) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+  Physicslib4.GNS.isIrreducible_iff_of_gns_comp (N.action L) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
 
 /-- **Factoriality is Lorentz invariant on the quasilocal algebra.** With the GNS data
 above, `π₁(𝔘)''` is a factor exactly when `π₂(𝔘)''` is. So the superselection type of a
 *global* state is a Lorentz invariant. -/
 theorem isFactor_iff_gns_action
     (hcyc₁ : Physicslib4.GNS.IsCyclicVector π₁ Ω₁)
-    (hrep₁ : ∀ a : C.quasilocal.carrier,
-      ((ω.comp (C.action L).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
+    (hrep₁ : ∀ a : N.quasilocal.carrier,
+      ((ω.comp (N.action L).toStarAlgHom) a : ℂ) = ⟪Ω₁, π₁ a Ω₁⟫_ℂ)
     (hcyc₂ : Physicslib4.GNS.IsCyclicVector π₂ Ω₂)
-    (hrep₂ : ∀ b : C.quasilocal.carrier, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
+    (hrep₂ : ∀ b : N.quasilocal.carrier, (ω b : ℂ) = ⟪Ω₂, π₂ b Ω₂⟫_ℂ) :
     IsFactor (Physicslib4.GNS.gnsVonNeumann π₁)
       ↔ IsFactor (Physicslib4.GNS.gnsVonNeumann π₂) :=
-  Physicslib4.GNS.isFactor_iff_of_gns_comp (C.action L) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
+  Physicslib4.GNS.isFactor_iff_of_gns_comp (N.action L) ω π₁ Ω₁ hcyc₁ hrep₁ π₂ Ω₂ hcyc₂ hrep₂
 
 end GNSCovariance
 
-end CovariantQuasilocalAlgebra
-
-/-- The trivial net with its trivial quasilocal algebra is a covariant quasilocal
-algebra, so the structure is inhabited. -/
-noncomputable def trivialCovariantQuasilocalAlgebra : CovariantQuasilocalAlgebra where
-  net := trivialHaagKastlerNet
-  quasilocal := trivialQuasilocalAlgebra
-  covariant := isCovariant_trivial
-
-/-- Stated at universe `0` because the witness is built from `ℂ`; see
-`nonempty_haagKastlerNet`. -/
-theorem nonempty_covariantQuasilocalAlgebra : Nonempty CovariantQuasilocalAlgebra.{0} :=
-  ⟨trivialCovariantQuasilocalAlgebra⟩
+end HaagKastlerNet
 
 end HaagKastler
 end AQFT

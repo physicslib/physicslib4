@@ -45,7 +45,9 @@ bridge `toAbstractIdentityComponent`
 `Spacetime.Isometry.orientedIdentityComponent` (the topological
 `connectedComponentOfOne` intersected with future-orientation
 preservation); this full-group bridge is retained for the axioms that
-hold under the whole isometry group (e.g. microcausality). One deferred
+hold under the whole isometry group (e.g. microcausality). General covariance
+(`NetTheory`, `IsGenerallyCovariant`) is stated over `toAbstractIdentityComponent`,
+so its Axiom 5 asks only for the identity component, as the blueprint does. One deferred
 refinement noted on `Spacetime.Isometry` still applies: the bundled
 differential is not yet tied to the manifold derivative.
 -/

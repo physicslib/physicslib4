@@ -6,7 +6,7 @@ Authors: Lean Community
 import Mathlib.Algebra.Group.Pointwise.Set.Scalar
 import Mathlib.Analysis.Normed.Operator.BoundedLinearMaps
 import Mathlib.Topology.Algebra.Module.FiniteDimension
-import Physicslib4.AQFT.HaagKastler.LocalAlgebras
+import Physicslib4.AQFT.HaagKastler.Isotony
 
 /-!
 # Axiom 5: Lorentz Covariance
@@ -35,7 +35,7 @@ axioms, section 10.5 of the AQFT-in-Lean blueprint):
   of the affine maps `x ↦ L x + t`.
 
 * `Physicslib4.AQFT.HaagKastler.LorentzCovariance`: a `Prop`-valued
-  predicate on a `LocalNet` asserting Axiom 5.
+  predicate on a `LocalNet` and its Axiom 2 isotony family asserting Axiom 5.
 
 ## Modelling notes
 
@@ -47,10 +47,10 @@ axioms, section 10.5 of the AQFT-in-Lean blueprint):
 * "Commutes with isotony" is encoded by the commutativity of, for
   every `B₁ ⊆ B₂` (basis sets) and every `L`, the square formed by
   the isotony arrow `𝔘(B₁) ↪ 𝔘(B₂)` and the action arrows
-  `𝔘(B₁) ≃ 𝔘(L·B₁)` and `𝔘(B₂) ≃ 𝔘(L·B₂)`. Because the isotony
-  arrows are existentially quantified (see `Isotony`), we quantify
-  over them: the predicate asks that *some* choice of isotony
-  arrows makes the action equivariant.
+  `𝔘(B₁) ≃ 𝔘(L·B₁)` and `𝔘(B₂) ≃ 𝔘(L·B₂)`. The isotony arrows are
+  those of Axiom 2: the predicate takes the `Isotony` family as a
+  parameter, so the action is required to be equivariant for the net's
+  own embeddings, not for a separately chosen family.
 
 * The "linear" component is restricted to the orthochronous proper
   Lorentz subgroup `SO(1,3)↑` of `ℝ`-linear automorphisms of
@@ -316,15 +316,9 @@ covariant* if the inhomogeneous Lorentz group acts on the assignment
     `α (L' · L) = α L' ∘ α L`, and
 (3) *commutes with isotony*.
 
-Concretely, there exist:
-
-* for every group element `L : InhomogeneousLorentzGroup` and every
-  Alexandrov-basis set `B`, a `*`-algebra equivalence
-  `α L B : U.algebra B ≃⋆ₐ[ℂ] U.algebra (L • B)`;
-* for every inclusion `B₁ ⊆ B₂` of basis sets, a choice of
-  isotony-witness unital `*`-monomorphism
-  `ι B₁ B₂ : U.algebra B₁ →⋆ₐ[ℂ] U.algebra B₂`;
-
+Concretely, there exists, for every group element
+`L : InhomogeneousLorentzGroup` and every Alexandrov-basis set `B`, a
+`*`-algebra equivalence `α L B : U.algebra B ≃⋆ₐ[ℂ] U.algebra (L • B)`,
 such that
 
 (1) [identity] for every basis set `B` and every `a : U.algebra B`,
@@ -340,9 +334,10 @@ such that
 (3) [isotony] for every `L`, every inclusion `B₁ ⊆ B₂`, and every
     element `a : U.algebra B₁`, the action of `L` commutes with the
     isotony inclusion:
-    `α L B₂ (ι B₁ B₂ a) = ι' (L • B₁) (L • B₂) (α L B₁ a)`,
-    where `ι'` is the isotony-witness arrow for `L • B₁ ⊆ L • B₂`
-    (which holds because `L • _` preserves set inclusions).
+    `α L B₂ (i.map a) = i.map (α L B₁ a)`, where the right-hand `i.map`
+    is the Axiom 2 embedding for `L • B₁ ⊆ L • B₂` (which holds because
+    `L • _` preserves set inclusions). The isotony family `i` is the one of
+    Axiom 2, taken as a parameter, not a separately chosen family.
 
 The cross-fiber identifications in conditions (1) and (2) are
 implemented as `Eq.mpr` of the obvious congruence
@@ -350,17 +345,11 @@ implemented as `Eq.mpr` of the obvious congruence
 
 Blueprint reference: `def:lorentz-covariance`.
 -/
-def LorentzCovariance (U : LocalNet) : Prop :=
-  ∃ (α : ∀ (L : InhomogeneousLorentzGroup)
+def LorentzCovariance (U : LocalNet) (i : Isotony U) : Prop :=
+  ∃ α : ∀ (L : InhomogeneousLorentzGroup)
           (B : Set StandardMinkowskiSpacetime.Carrier),
         StarAlgEquiv ℂ (U.algebra B)
-          (U.algebra ((L • B : Set StandardMinkowskiSpacetime.Carrier))))
-    (ι : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
-          IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ →
-          B₁ ⊆ B₂ → StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂)),
-      (∀ ⦃B₁ B₂⦄ (hB₁ : IsAlexandrovBasisSet B₁)
-         (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂),
-          Function.Injective (ι hB₁ hB₂ h)) ∧
+          (U.algebra ((L • B : Set StandardMinkowskiSpacetime.Carrier))),
       -- (1) Identity: α 1 B a = a, modulo `one_smul : (1 : G) • B = B`.
       (∀ (B : Set StandardMinkowskiSpacetime.Carrier) (a : U.algebra B),
           (α (1 : InhomogeneousLorentzGroup) B :
@@ -375,7 +364,7 @@ def LorentzCovariance (U : LocalNet) : Prop :=
             = (congrArg U.algebra (mul_smul L' L B).symm).mp
                 ((α L' (L • B) : U.algebra (L • B) → U.algebra (L' • (L • B)))
                   ((α L B : U.algebra B → U.algebra (L • B)) a))) ∧
-      -- (3) The action commutes with isotony (already in the original predicate).
+      -- (3) The action commutes with the Axiom 2 isotony family `i`.
       ∀ (L : InhomogeneousLorentzGroup)
         ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
         (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
@@ -384,8 +373,8 @@ def LorentzCovariance (U : LocalNet) : Prop :=
         (hLB₂ : IsAlexandrovBasisSet (L • B₂))
         (hL : (L • B₁ : Set _) ⊆ L • B₂)
         (a : U.algebra B₁),
-          (α L B₂ : U.algebra B₂ → U.algebra (L • B₂)) (ι hB₁ hB₂ h a)
-            = ι hLB₁ hLB₂ hL ((α L B₁ : U.algebra B₁ → U.algebra (L • B₁)) a)
+          (α L B₂ : U.algebra B₂ → U.algebra (L • B₂)) (i.map hB₁ hB₂ h a)
+            = i.map hLB₁ hLB₂ hL ((α L B₁ : U.algebra B₁ → U.algebra (L • B₁)) a)
 
 end HaagKastler
 end AQFT

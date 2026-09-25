@@ -37,10 +37,10 @@ AQFT-in-Lean blueprint):
   commutativity inside the local algebra `𝔘(B)`, transported there
   by the isotony embeddings `i : 𝔘(Bᵢ) ↪ 𝔘(B)`.
 
-* The isotony embeddings used are exactly those of Axiom 2; we
-  existentially bind a coherent family `ι` of injective unital
-  `*`-monomorphisms (one per basis-set inclusion) and require their
-  images to commute. When no common containing basis set `B` exists,
+* The isotony embeddings used are exactly those of Axiom 2: the
+  predicate takes the `Isotony` family as a parameter and requires the
+  images of its embeddings to commute; it introduces no family of its
+  own. When no common containing basis set `B` exists,
   the universally quantified condition is vacuously satisfied,
   matching the blueprint's "if no such `𝐁` exists, it doesn't make
   sense to ask whether they commute".

@@ -79,7 +79,7 @@ structure HaagKastlerNet where
   localCommutativity : LocalCommutativity U isotony
   /-- *Lorentz covariance*: the inhomogeneous Lorentz group acts on
   the net and the action commutes with isotony (Axiom 5). -/
-  lorentzCovariance : LorentzCovariance U
+  lorentzCovariance : LorentzCovariance U isotony
 
 namespace HaagKastlerNet
 
@@ -183,7 +183,7 @@ theorem covEquiv_one (B : Set StandardMinkowskiSpacetime.Carrier)
         N.algebra B → N.algebra ((1 : InhomogeneousLorentzGroup) • B)) a
       = (congrArg N.U.algebra
           (one_smul InhomogeneousLorentzGroup B).symm).mp a :=
-  N.lorentzCovariance.choose_spec.choose_spec.2.1 B a
+  N.lorentzCovariance.choose_spec.1 B a
 
 /-- **Covariance, composition.** The action is multiplicative in the
 group element: `α (L'·L) = α L' ∘ α L` (modulo the canonical
@@ -196,23 +196,31 @@ theorem covEquiv_mul (L L' : InhomogeneousLorentzGroup)
           ((N.covEquiv L' (L • B) :
               N.algebra (L • B) → N.algebra (L' • (L • B)))
             ((N.covEquiv L B : N.algebra B → N.algebra (L • B)) a)) :=
-  N.lorentzCovariance.choose_spec.choose_spec.2.2.1 L L' B a
+  N.lorentzCovariance.choose_spec.2.1 L L' B a
 
-/-- The *quasilocal algebra witnessing local commutativity* (Axiom 3),
-chosen from the existence witness in `localCommutativity`. (This may differ
-from the canonical `quasilocal` of Axiom 4.) -/
-noncomputable def commAlgebra : QuasilocalAlgebra N.U N.isotony :=
-  N.localCommutativity.choose
+/-- **Covariance commutes with isotony** (Axiom 5 (3)): the covariance
+equivalences intertwine the Axiom 2 isotony embeddings,
+`α_L ∘ i_{B₁B₂} = i_{L·B₁, L·B₂} ∘ α_L`. -/
+theorem covEquiv_isotony (L : InhomogeneousLorentzGroup)
+    ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂)
+    (hLB₁ : IsAlexandrovBasisSet (L • B₁)) (hLB₂ : IsAlexandrovBasisSet (L • B₂))
+    (hL : (L • B₁ : Set _) ⊆ L • B₂) (a : N.algebra B₁) :
+    N.covEquiv L B₂ (N.isotony.map hB₁ hB₂ h a)
+      = N.isotony.map hLB₁ hLB₂ hL (N.covEquiv L B₁ a) :=
+  N.lorentzCovariance.choose_spec.2.2 L hB₁ hB₂ h hLB₁ hLB₂ hL a
 
-/-- **Local commutativity.** The images in `commAlgebra` of two
-completely-spacelike basis algebras commute. -/
+/-- **Local commutativity.** The images in the canonical quasilocal algebra
+`quasilocal` of two completely-spacelike basis algebras commute. Axiom 3 only
+asserts this in *some* quasilocal algebra; `LocalCommutativity.commute_ι` transfers
+it to every one. -/
 theorem commute_ι_of_spacelike ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : N.algebra B₁) (b : N.algebra B₂) :
-    Commute (N.commAlgebra.ι hB₁ a) (N.commAlgebra.ι hB₂ b) :=
-  N.localCommutativity.choose_spec hB₁ hB₂ hs a b
+    Commute (N.quasilocal.ι hB₁ a) (N.quasilocal.ι hB₂ b) :=
+  N.localCommutativity.commute_ι N.quasilocal hB₁ hB₂ hs a b
 
 /-- **Local commutativity is symmetric.** Commutation of completely-spacelike
 local algebras holds in either order. -/
@@ -222,7 +230,7 @@ theorem commute_ι_of_spacelike_symm
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : N.algebra B₁) (b : N.algebra B₂) :
-    Commute (N.commAlgebra.ι hB₂ b) (N.commAlgebra.ι hB₁ a) :=
+    Commute (N.quasilocal.ι hB₂ b) (N.quasilocal.ι hB₁ a) :=
   (N.commute_ι_of_spacelike hB₁ hB₂ hs a b).symm
 
 section Observables
@@ -342,10 +350,8 @@ theorem trivialLocalNet_localCommutativity :
       (trivialQuasilocalAlgebra.ι hB₂ b)⟩
 
 theorem trivialLocalNet_lorentzCovariance :
-    LorentzCovariance trivialLocalNet := by
-  refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ,
-    ?_, ?_, ?_, ?_⟩
-  · intro B₁ B₂ hB₁ hB₂ h a b hh; exact hh
+    LorentzCovariance trivialLocalNet trivialLocalNetIsotony := by
+  refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, ?_, ?_, ?_⟩
   · intro _ _; rfl
   · intro _ _ _ _; rfl
   · intro _ _ _ _ _ _ _ _ _ _; rfl

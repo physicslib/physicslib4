@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Mathlib.Algebra.Group.Pointwise.Set.Scalar
-import Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebras
+import Physicslib4.AQFT.HaagKastlerCurved.Isotony
 
 /-!
 # Axiom 5 (Isometric Covariance), curved spacetime
@@ -25,7 +25,8 @@ AQFT-in-Lean blueprint):
 ## Main definitions
 
 * `Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance`: a
-  `Prop`-valued predicate on a `LocalNet M` asserting Axiom 5.
+  `Prop`-valued predicate on a `LocalNet M` and its Axiom 2 isotony family
+  asserting Axiom 5.
 
 ## Modelling notes
 
@@ -62,28 +63,21 @@ assignment `B ↦ U.algebra B` and the action
     `α (φ' · φ) = α φ' ∘ α φ`, and
 (3) *commutes with isotony*.
 
-Concretely, there exist:
+Concretely, there exists, for every isometry `φ : M.Isom` and every
+Alexandrov-basis set `B`, a `*`-algebra equivalence
+`α φ B : U.algebra B ≃⋆ₐ[ℂ] U.algebra (φ • B)` such that (1) `α 1 B a = a`,
+(2) `α (φ' * φ) B a = α φ' (φ • B) (α φ B a)`, and (3) for every `φ` and
+inclusion `B₁ ⊆ B₂`, `α φ B₂ ∘ i.map = i.map ∘ α φ B₁`.
 
-* for every isometry `φ : M.Isom` and every Alexandrov-basis set `B`,
-  a `*`-algebra equivalence `α φ B : U.algebra B ≃⋆ₐ[ℂ] U.algebra (φ • B)`;
-* for every inclusion `B₁ ⊆ B₂` of basis sets, a choice of isotony
-  `*`-monomorphism `ι B₁ B₂ : U.algebra B₁ →⋆ₐ[ℂ] U.algebra B₂`;
-
-such that (1) `α 1 B a = a`, (2)
-`α (φ' * φ) B a = α φ' (φ • B) (α φ B a)`, and (3) for every `φ` and
-inclusion `B₁ ⊆ B₂`, the action commutes with the isotony inclusion.
+Condition (3) is stated for the isotony family `i` of Axiom 2, which this
+predicate takes as a parameter, not for a separately chosen family: the
+blueprint's Axiom 5 commutes with "the unital `*`-monomorphism `i` of Axiom 2".
 
 Blueprint reference: `def:isometric-covariance-in-curved-spacetime`.
 -/
-def IsometricCovariance (U : LocalNet M) : Prop :=
-  ∃ (α : ∀ (φ : M.Isom) (B : Set M.Carrier),
-        StarAlgEquiv ℂ (U.algebra B) (U.algebra ((φ • B : Set M.Carrier))))
-    (ι : ∀ ⦃B₁ B₂ : Set M.Carrier⦄,
-          M.IsBasisSet B₁ → M.IsBasisSet B₂ → B₁ ⊆ B₂ →
-            StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂)),
-      (∀ ⦃B₁ B₂⦄ (hB₁ : M.IsBasisSet B₁)
-         (hB₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂),
-          Function.Injective (ι hB₁ hB₂ h)) ∧
+def IsometricCovariance (U : LocalNet M) (i : Isotony U) : Prop :=
+  ∃ α : ∀ (φ : M.Isom) (B : Set M.Carrier),
+        StarAlgEquiv ℂ (U.algebra B) (U.algebra ((φ • B : Set M.Carrier))),
       -- (1) Identity: α 1 B a = a, modulo `one_smul : (1 : M.Isom) • B = B`.
       (∀ (B : Set M.Carrier) (a : U.algebra B),
           (α (1 : M.Isom) B :
@@ -96,7 +90,7 @@ def IsometricCovariance (U : LocalNet M) : Prop :=
             = (congrArg U.algebra (mul_smul φ' φ B).symm).mp
                 ((α φ' (φ • B) : U.algebra (φ • B) → U.algebra (φ' • (φ • B)))
                   ((α φ B : U.algebra B → U.algebra (φ • B)) a))) ∧
-      -- (3) The action commutes with isotony.
+      -- (3) The action commutes with the Axiom 2 isotony family `i`.
       ∀ (φ : M.Isom) ⦃B₁ B₂ : Set M.Carrier⦄
         (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
         (h : B₁ ⊆ B₂)
@@ -104,8 +98,8 @@ def IsometricCovariance (U : LocalNet M) : Prop :=
         (hφB₂ : M.IsBasisSet (φ • B₂))
         (hφ : (φ • B₁ : Set _) ⊆ φ • B₂)
         (a : U.algebra B₁),
-          (α φ B₂ : U.algebra B₂ → U.algebra (φ • B₂)) (ι hB₁ hB₂ h a)
-            = ι hφB₁ hφB₂ hφ ((α φ B₁ : U.algebra B₁ → U.algebra (φ • B₁)) a)
+          (α φ B₂ : U.algebra B₂ → U.algebra (φ • B₂)) (i.map hB₁ hB₂ h a)
+            = i.map hφB₁ hφB₂ hφ ((α φ B₁ : U.algebra B₁ → U.algebra (φ • B₁)) a)
 
 end HaagKastlerCurved
 end AQFT
