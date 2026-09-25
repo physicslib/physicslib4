@@ -535,10 +535,9 @@ private theorem mem_adjoint_of_mem_internalDomain (hK : IsInternalOrthogonalDeco
 /--
 The internal form of `prpstn:hall-9.26`: essential self-adjointness.
 
-**Restriction:** the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`,
-which uses the Hilbert adjoint on `K n →L[ℂ] K n`) is assumed rather than derived from
-`hK.isClosed` via `IsClosed.completeSpace_coe`; being `Prop`-valued it costs no generality,
-a caller supplying it with `haveI`.
+Remark: the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`, which
+uses the Hilbert adjoint on `K n →L[ℂ] K n`) is not a restriction: it follows from `hK.isClosed`
+via `IsClosed.completeSpace_coe`, so a caller can always supply it with `haveI`.
 
 Blueprint reference: `prpstn:hall-9.26-internal`.
 -/
@@ -562,10 +561,9 @@ private theorem closure_eq_adjoint_of_isInternalDirectSumOperator
 /--
 The domain of the closure is the maximal internal domain.
 
-**Restriction:** the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`,
-which uses the Hilbert adjoint on `K n →L[ℂ] K n`) is assumed rather than derived from
-`hK.isClosed` via `IsClosed.completeSpace_coe`; being `Prop`-valued it costs no generality,
-a caller supplying it with `haveI`.
+Remark: the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`, which
+uses the Hilbert adjoint on `K n →L[ℂ] K n`) is not a restriction: it follows from `hK.isClosed`
+via `IsClosed.completeSpace_coe`, so a caller can always supply it with `haveI`.
 
 Blueprint reference: `prpstn:hall-9.26-internal`.
 -/
@@ -579,10 +577,9 @@ theorem domain_closure_eq_internalDomain (hK : IsInternalOrthogonalDecomposition
 /--
 The domain of the adjoint is the maximal internal domain.
 
-**Restriction:** the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`,
-which uses the Hilbert adjoint on `K n →L[ℂ] K n`) is assumed rather than derived from
-`hK.isClosed` via `IsClosed.completeSpace_coe`; being `Prop`-valued it costs no generality,
-a caller supplying it with `haveI`.
+Remark: the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`, which
+uses the Hilbert adjoint on `K n →L[ℂ] K n`) is not a restriction: it follows from `hK.isClosed`
+via `IsClosed.completeSpace_coe`, so a caller can always supply it with `haveI`.
 
 Blueprint reference: `prpstn:hall-9.26-internal`.
 -/
@@ -596,10 +593,9 @@ theorem domain_adjoint_eq_internalDomain (hK : IsInternalOrthogonalDecomposition
 On the maximal internal domain, the closure is given by the norm-convergent sum
 `∑ₙ Aₙ ψₙ`.
 
-**Restriction:** the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`,
-which uses the Hilbert adjoint on `K n →L[ℂ] K n`) is assumed rather than derived from
-`hK.isClosed` via `IsClosed.completeSpace_coe`; being `Prop`-valued it costs no generality,
-a caller supplying it with `haveI`.
+Remark: the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`, which
+uses the Hilbert adjoint on `K n →L[ℂ] K n`) is not a restriction: it follows from `hK.isClosed`
+via `IsClosed.completeSpace_coe`, so a caller can always supply it with `haveI`.
 
 Blueprint reference: `prpstn:hall-9.26-internal`.
 -/
@@ -617,10 +613,9 @@ theorem hasSum_closure_apply_of_isInternalDirectSumOperator
 /--
 The same formula for the adjoint.
 
-**Restriction:** the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`,
-which uses the Hilbert adjoint on `K n →L[ℂ] K n`) is assumed rather than derived from
-`hK.isClosed` via `IsClosed.completeSpace_coe`; being `Prop`-valued it costs no generality,
-a caller supplying it with `haveI`.
+Remark: the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`, which
+uses the Hilbert adjoint on `K n →L[ℂ] K n`) is not a restriction: it follows from `hK.isClosed`
+via `IsClosed.completeSpace_coe`, so a caller can always supply it with `haveI`.
 
 Blueprint reference: `prpstn:hall-9.26-internal`.
 -/
