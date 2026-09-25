@@ -71,6 +71,12 @@ geodesic. We provide an opaque placeholder predicate. Downstream work
 should replace this by the genuine geodesic condition (typically:
 auto-parallelism of the tangent vector field along the curve with
 respect to the Levi-Civita connection of `g`).
+
+**Restriction:** `IsGeodesic` is `True`, so (causal) trips, and hence `≪` and `≺`, are
+chains of arbitrary future-oriented timelike (causal) smooth curves rather than of geodesics.
+The intended form is auto-parallelism of the tangent field along the curve for the
+Levi-Civita connection of `g`; it is waiting on Mathlib defining affine connections (and the
+Levi-Civita connection of a pseudo-Riemannian metric), which geodesics require.
 -/
 @[nolint unusedArguments]
 def IsGeodesic (_μ : M.SmoothPath) : Prop := True

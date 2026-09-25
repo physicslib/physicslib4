@@ -341,6 +341,9 @@
     Two trips joined at the common point $q$ concatenate to a single piecewise trip; this is exactly the transitivity of the transitive closure.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[No Closed Causal Curve (Causality Condition)]
     \label{def:no-closed-causal-curve}
     \lean{Physicslib4.Spacetime.NoClosedCausalCurve}
@@ -349,6 +352,9 @@
     \uses{def:causal-trip}
     A spacetime $M$ with time orientation $t$ satisfies the \emph{causality condition} --- equivalently, has \emph{no closed causal curve} --- when no point causally precedes itself: $\lnot(p \prec p)$ for every $p$. A closed causal curve through $p$ would be a causal trip from $p$ back to $p$, i.e.\ $p \prec p$, so its absence is exactly this condition. This is the standard causality condition, strictly weaker than strong causality and strictly stronger than the chronology condition ($\lnot(p \ll p)$ for all $p$).
 \end{definition}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Irreflexivity and Antisymmetry under Causality]
     \label{thrm:causal-order-refinements}
@@ -363,6 +369,9 @@
     \uses{def:no-closed-causal-curve, thrm:precedence-transitive, lmm:chronological-implies-causal}
     For irreflexivity of chronological precedence, $p \ll p$ would give $p \prec p$ because chronological precedence implies causal precedence (\ref{lmm:chronological-implies-causal}), which the causality condition forbids. For asymmetry and antisymmetry, $p \prec q$ and $q \prec p$ cannot both hold, since transitivity (\ref{thrm:precedence-transitive}) would give the forbidden $p \prec p$.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Chronological Future and Chronological Past]
     \label{def:chronological-future-and-chronological-past}
@@ -380,6 +389,9 @@
     \end{align}
 \end{definition}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Causal Future and Causal Past]
     \label{def:causal-future-and-causal-past}
     \lean{Physicslib4.Spacetime.causalFuture, Physicslib4.Spacetime.causalPast, Physicslib4.Spacetime.causalFutureSet, Physicslib4.Spacetime.causalPastSet}
@@ -396,6 +408,9 @@
     \end{align}
 \end{definition}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Chronological Precedence Implies Causal Precedence]
     \label{lmm:chronological-implies-causal}
     \lean{Physicslib4.Spacetime.isCausal_of_isTimelike, Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture, Physicslib4.Spacetime.chronologicalPast_subset_causalPast}
@@ -409,6 +424,9 @@
     A timelike tangent vector is in particular causal (timelike or null), so a future-oriented timelike geodesic is a future-oriented causal geodesic. Hence any trip witnessing $p \ll q$ is also a causal trip witnessing $p \prec q$. The set inclusions follow by unfolding the definitions of the futures and pasts.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Monotonicity of Futures and Pasts]
     \label{lmm:future-past-monotone}
     \lean{Physicslib4.Spacetime.chronologicalFutureSet_mono, Physicslib4.Spacetime.chronologicalPastSet_mono, Physicslib4.Spacetime.causalFutureSet_mono, Physicslib4.Spacetime.causalPastSet_mono}
@@ -421,6 +439,9 @@
     \leanok
     Each operator is an indexed union over the points of its argument set, and a union over a larger index set contains the union over a smaller one.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \subsection{Causal diamonds}
 
@@ -440,6 +461,9 @@
     These are characterised on points: a point $x$ lies in the causal diamond of $p$ and $q$ if and only if $p \prec x$ and $x \prec q$, and $x$ lies in the chronological diamond of $p$ and $q$ if and only if $p \ll x$ and $x \ll q$.
 \end{definition}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Structural properties of the causal diamond]
     \label{lmm:causal-diamond-structure}
     \lean{Physicslib4.Spacetime.causalDiamond_subset_of, Physicslib4.Spacetime.causalDiamond_causallyConvex, Physicslib4.Spacetime.causallyPrecedes_of_causalDiamond_nonempty}
@@ -458,6 +482,9 @@
     All three are immediate from transitivity of causal precedence (\ref{thrm:precedence-transitive}). For (i), if $x \in D(p,q)$ then $p \prec x$ and $x \prec q$; combining with $p' \prec p$ and $q \prec q'$ by transitivity gives $p' \prec x$ and $x \prec q'$, so $x \in D(p',q')$. For (ii), from $a \in D(p,q)$ we have $p \prec a$, and $a \prec z$ gives $p \prec z$; from $b \in D(p,q)$ we have $b \prec q$, and $z \prec b$ gives $z \prec q$, so $z \in D(p,q)$. For (iii), any $x \in D(p,q)$ satisfies $p \prec x$ and $x \prec q$, whence $p \prec q$ by transitivity.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{theorem}[Chronological diamonds inside causal diamonds]
     \label{thrm:causal-diamond-vs-chronological}
     \lean{Physicslib4.Spacetime.chronologicalDiamond_subset_causalDiamond, Physicslib4.Spacetime.mem_alexandrovBasis_iff_eq_chronologicalDiamond}
@@ -475,6 +502,9 @@
     Chronological precedence refines causal precedence (\ref{lmm:chronological-implies-causal}), so $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$; intersecting these inclusions gives $I^+(p) \cap I^-(q) \subseteq J^+(p) \cap J^-(q)$. The characterisation of the Alexandrov basis is the definition of the Alexandrov topology (\ref{def:alexandrov-topology}), whose basis consists of exactly the sets $I^+(p) \cap I^-(q)$. The final claim combines the two: an Alexandrov basis set equals some $I^+(p) \cap I^-(q)$, which is contained in $J^+(p) \cap J^-(q)$.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Spacelike Related]
     \label{def:spacelike-related}
     \lean{Physicslib4.Spacetime.IsSpacelikeRelated}
@@ -484,6 +514,9 @@
     Consider two points $p_1$ and $p_2$ in a spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
 \end{definition}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Completely Spacelike]
     \label{def:completely-spacelike}
     \lean{Physicslib4.Spacetime.IsCompletelySpacelike}
@@ -492,6 +525,9 @@
     \uses{def:spacetime, def:spacelike-related}
     Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in a spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
 \end{definition}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Symmetry of Spacelike Separation]
     \label{lmm:completely-spacelike-symm}
@@ -506,6 +542,9 @@
     The relation $p_2 \notin J^+(p_1) \cup J^-(p_1)$ is symmetric in $p_1, p_2$ since $J^+(p_1)$ and $J^-(p_1)$ swap roles with $J^-(p_2)$ and $J^+(p_2)$ under the exchange. Symmetry of complete spacelike separation follows by applying this pointwise.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Structural Properties of Complete Spacelike Separation]
     \label{lmm:completely-spacelike-structural}
     \lean{Physicslib4.Spacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.isCompletelySpacelike_union_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_right}
@@ -519,6 +558,9 @@
     Each follows directly from the pointwise definition: monotonicity by restricting the universally-quantified points, the empty cases vacuously, and the union cases by splitting the membership disjunction.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Spacelike Complement of a Region]
     \label{def:spacelike-complement}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement}
@@ -527,6 +569,9 @@
     \uses{def:completely-spacelike, def:lorentzian-spacetime}
     The \emph{spacelike complement} $\mathbf{B}^\perp$ of a region $\mathbf{B}$ is the set of points completely spacelike-separated from all of $\mathbf{B}$: $\mathbf{B}^\perp = \{ x \mid \{x\} \text{ is completely spacelike to } \mathbf{B} \}$. It is the geometric substrate of locality and Haag duality.
 \end{definition}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Order Structure of the Spacelike Complement]
     \label{lmm:spacelike-complement-order}
@@ -541,6 +586,9 @@
     Antitonicity and the Galois bridge are the pointwise monotonicity of complete spacelike separation; the double-complement inclusion follows by symmetry of the relation; and the triple-complement identity is the standard consequence of antitonicity together with the double-complement inclusion.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Causal closure operator]
     \label{def:causal-closure}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalClosure}
@@ -549,6 +597,9 @@
     \uses{def:spacelike-complement}
     The \emph{causal closure} of a region $\mathbf{B}$ of a Lorentzian spacetime is its double spacelike complement $\mathbf{B}^{\perp\perp}$. This defines the operator $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ on regions; that it is a closure operator is \ref{lmm:causal-closure-is-closure-operator}.
 \end{definition}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[The Causal Closure is a Closure Operator]
     \label{lmm:causal-closure-is-closure-operator}
@@ -569,6 +620,9 @@
     All three are read off the order structure of the spacelike complement (\ref{lmm:spacelike-complement-order}). Monotonicity is antitonicity applied twice: $\mathbf{B}_1 \subseteq \mathbf{B}_2$ gives $\mathbf{B}_2^{\perp} \subseteq \mathbf{B}_1^{\perp}$, and applying antitonicity again gives $\mathbf{B}_1^{\perp\perp} \subseteq \mathbf{B}_2^{\perp\perp}$. Extensivity is the double-complement inclusion. For idempotence, the triple-complement collapse gives $\mathbf{B}^{\perp\perp\perp} = \mathbf{B}^{\perp}$, and taking the spacelike complement of both sides yields $\mathbf{B}^{\perp\perp\perp\perp} = \mathbf{B}^{\perp\perp}$.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Causally complete region]
     \label{def:causally-complete-region}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.IsCausallyComplete}
@@ -577,6 +631,9 @@
     \uses{def:causal-closure}
     A region is \emph{causally complete} if it equals its own double complement, $\mathbf{B}^{\perp\perp} = \mathbf{B}$ (a fixed point of the causal closure operator). These are the regions on which algebraic QFT is naturally indexed.
 \end{definition}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Lattice of causally complete regions]
     \label{thrm:causally-complete-lattice}
@@ -591,6 +648,9 @@
     \uses{def:causally-complete-region, def:causal-closure, lmm:causal-closure-is-closure-operator, lmm:spacelike-complement-order}
     The lattice is obtained from the causal closure operator (\ref{lmm:causal-closure-is-closure-operator}) via its Galois insertion: the causally complete regions are exactly the fixed points of the closure operator, so meets are intersections and joins are the causal closures of unions. That the spacelike complement of any region is causally complete, and that complementation is an order-reversing involution on this lattice, are the antitonicity and the triple-complement identity of the spacelike complement (\ref{lmm:spacelike-complement-order}).
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[De Morgan Laws for the Spacelike Complement]
     \label{lmm:spacelike-complement-de-morgan}
@@ -612,6 +672,9 @@
     \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
     Unfold the spacelike complement pointwise: $x \in \mathbf{B}^\perp$ means the singleton $\{x\}$ is completely spacelike to $\mathbf{B}$. By the structural properties of complete spacelike separation (\ref{lmm:completely-spacelike-structural}), $\{x\}$ is completely spacelike to a union $\bigcup_i \mathbf{B}_i$ if and only if it is completely spacelike to each member $\mathbf{B}_i$. Hence membership in the complement of the union is the conjunction of membership in the individual complements, which is exactly membership in their intersection. The binary case is the special case of a two-element family.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[De Morgan Laws for the Causal Complement]
     \label{thrm:causal-complement-de-morgan}
@@ -650,6 +713,9 @@
     The mathematical subtlety is that this lattice is \emph{not} linearly ordered, so the binary equalities do \emph{not} follow from antitonicity alone: a general antitone map only yields the inequality $f(\mathbf{B}_1 \sqcup \mathbf{B}_2) \le f\mathbf{B}_1 \sqcap f\mathbf{B}_2$. The equalities hold precisely because the causal complement is an order-reversing \emph{bijection} (the involution $\mathbf{B}^{\perp\perp} = \mathbf{B}$), equivalently an order isomorphism onto the order-dual lattice; it is this bijectivity that both forces the finite equalities above and, through the same set-level De Morgan computation applied to arbitrary unions, upgrades them to the infinitary laws by carrying suprema to infima.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \subsection{Causal convexity}
 
 \begin{definition}[Causally convex region]
@@ -659,6 +725,9 @@
     \leanok
     Let $M$ be a spacetime with time orientation $t$. A subset $\mathbf{C} \subseteq M$ is \emph{causally convex} if it contains every point causally between two of its own points: whenever $p, r \in \mathbf{C}$ and $q$ is causally between them, in the sense that $p \prec q$ and $q \prec r$, then $q \in \mathbf{C}$. Intuitively, $\mathbf{C}$ contains every causal curve segment whose endpoints lie in $\mathbf{C}$.
 \end{definition}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Causal diamonds are causally convex]
     \label{lmm:causal-diamond-causally-convex}
@@ -672,6 +741,9 @@
     \uses{def:causally-convex-region, def:causal-diamond, lmm:causal-diamond-structure}
     This is exactly the causal-convexity property of the causal diamond (part (ii) of the structural lemma, \ref{lmm:causal-diamond-structure}), repackaged as the region predicate: if $a, b \in J^+(p) \cap J^-(q)$ with $a \prec z$ and $z \prec b$, then $z \in J^+(p) \cap J^-(q)$, which is precisely the statement that $J^+(p) \cap J^-(q)$ is causally convex.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Causally complete regions are causally convex]
     \label{thrm:causally-complete-convex}
@@ -692,6 +764,9 @@
 
     For (ii), a causally complete region satisfies $\mathbf{B} = \mathbf{B}^{\perp\perp} = (\mathbf{B}^\perp)^\perp$, so it is the spacelike complement of the region $\mathbf{B}^\perp$; causal convexity then follows immediately from part (i) applied to $\mathbf{B}^\perp$.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \subsection{Causal convexity: closure structure}
 
@@ -718,6 +793,9 @@
     Each claim is immediate from the definition of causal convexity (\ref{def:causally-convex-region}). For $\mathrm{univ}$ the membership condition $q \in M$ is vacuously satisfied, and for $\varnothing$ the hypothesis $p, r \in \varnothing$ never holds. For an intersection, suppose $p, r$ lie in the intersection and $p \prec q \prec r$; then $p, r$ lie in every member of the family, so by that member's causal convexity $q$ lies in every member, hence in the intersection. The binary and indexed forms are the special cases of a two-element and an indexed family, and the set-indexed form ($\bigcap_0 \mathcal{S}$) unfolds membership through $\mathtt{mem\_sInter}$ to the same argument.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Causal-convex hull]
     \label{def:causal-convex-hull}
     \lean{Physicslib4.Spacetime.causalConvexHull}
@@ -729,6 +807,9 @@
     \end{align}
     That this is a hull --- extensive, and causally convex --- is \ref{lmm:causal-convex-hull-extensive}.
 \end{definition}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[The Causal-Convex Hull is Extensive and Causally Convex]
     \label{lmm:causal-convex-hull-extensive}
@@ -746,6 +827,9 @@
     \uses{def:causal-convex-hull, lmm:causally-convex-closure-ops}
     For (i), membership in the intersection $\bigcap_0$ unfolds to membership in every member of the family, and every member contains $\mathbf{B}$ by the defining condition of the family; so any $x \in \mathbf{B}$ lies in each member and hence in $\mathrm{ccHull}(\mathbf{B})$. For (ii), the intersected family consists of causally convex regions, and causal convexity is preserved under set-indexed intersections (\ref{lmm:causally-convex-closure-ops}); note the family is nonempty, since the whole space $M$ contains $\mathbf{B}$ and is causally convex by the same lemma.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[The causal-convex hull is a closure operator]
     \label{thrm:causal-convex-hull-closure}
@@ -773,6 +857,9 @@
     (iv) Idempotence is (iii) applied to $\mathbf{C} = \mathrm{ccHull}(\mathbf{B})$, which is causally convex by \ref{lmm:causal-convex-hull-extensive}.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
     \lean{Physicslib4.Spacetime.alexandrovTopology}
@@ -781,6 +868,9 @@
     \uses{def:spacetime, def:chronological-future-and-chronological-past}
     \textit{Alexandrov topology} on a spacetime $M$ is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in $M$.
 \end{definition}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Basis Sets Are Alexandrov-Open]
     \label{lmm:alexandrov-basis-open}
@@ -794,6 +884,9 @@
     \leanok
     By construction the Alexandrov topology is generated by these basis sets, and any generating set is open in the generated topology.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Openness of Chronological Futures and Pasts]
     \label{lmm:chronological-future-past-open}
@@ -822,6 +915,9 @@
     The right-hand side is contained in $I^+(p)$ since every term is. Conversely, if $x \in I^+(p)$ then by hypothesis there is $b$ with $x \ll b$, i.e. $x \in I^-(b)$, so $x$ lies in the $b$-th term. Each set $I^+(p) \cap I^-(b)$ is a basis set and hence open (\ref{lmm:alexandrov-basis-open}), and an arbitrary union of open sets is open; therefore $I^+(p)$ is open. The third item is dual, using $I^-(p) = \bigcup_{a \in M} \bigl(I^+(a) \cap I^-(p)\bigr)$. (Recall also that chronological precedence $\ll$ is transitive, \ref{thrm:precedence-transitive}.)
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Unconditional Openness of Chronological Futures and Pasts on Standard Minkowski]
     \label{lmm:minkowski-chronological-open}
     \lean{Physicslib4.exists_chronologicalFuture_standardMinkowski, Physicslib4.exists_chronologicalPast_standardMinkowski, Physicslib4.isOpen_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_chronologicalPast_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalPast_standardMinkowski}
@@ -845,6 +941,9 @@
     Part (iii) applies the general lemma \ref{lmm:chronological-future-past-open}: its last two items give the openness of $I^+(p)$ and $I^-(p)$ in the Alexandrov topology provided every point of the set in question has, respectively, a chronological-future point and a chronological-past point. On standard Minkowski these hypotheses hold at every point by part (i), so both conclusions are unconditional.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Minkowski Spacetime]
     \label{def:minkowski-spacetime}
     \lean{Physicslib4.MinkowskiSpacetime}
@@ -854,6 +953,9 @@
     \textit{Minkowski spacetime} is standard Minkowski spacetime equipped with Alexandrov topology.
 \end{definition}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{definition}[Lorentzian Spacetime]
     \label{def:lorentzian-spacetime}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime}
@@ -862,6 +964,9 @@
     \uses{def:spacetime, def:alexandrov-topology}
     \textit{Lorentzian spacetime} is a spacetime equipped with a Hausdorff Alexandrov topology.
 \end{definition}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Bundled Spacelike Separation and Basis Openness]
     \label{lmm:lorentzian-causal-lifts}
@@ -876,6 +981,9 @@
     These are restatements of the symmetry of complete spacelike separation and the openness of basis sets for the underlying spacetime, transported through the bundling of a Lorentzian spacetime over its underlying spacetime and time orientation.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[No-Diamond Points Have Only the Whole Space as Neighbourhood]
     \label{lmm:alexandrov-nbhd-univ-of-no-diamond}
     \lean{Physicslib4.Spacetime.alexandrov_nbhd_univ_of_no_diamond}
@@ -888,6 +996,9 @@
     \leanok
     The Alexandrov topology is generated by the diamond subbasis, so its open sets are exactly those built by the inductive generating construction, and we induct over that construction to show any generated-open set $U$ with $x \in U$ equals $M$. A basic generating set is a diamond, which cannot contain $x$ by hypothesis, so that case is vacuous. The whole-space generator is $M$. A binary intersection $s \cap t$ containing $x$ has $x \in s$ and $x \in t$, so $s = t = M$ by the induction hypothesis and $s \cap t = M$. A union $\bigcup_i s_i$ containing $x$ contains $x$ in some member $s_i$, which equals $M$ by the induction hypothesis, so the union contains $M$ and hence equals $M$. Thus no generated-open set other than $M$ contains $x$.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Covering from the Hausdorff Assumption]
     \label{lmm:alexandrov-covering-hausdorff}
@@ -902,6 +1013,9 @@
     Suppose a point $x$ lay in no diamond $I^+(p) \cap I^-(q)$. Then by \ref{lmm:alexandrov-nbhd-univ-of-no-diamond} the only Alexandrov-open set containing $x$ is the whole space $M$. Since the space has a second point $y \ne x$, the Hausdorff assumption on the Alexandrov topology provides disjoint open sets separating $x$ and $y$; but the one containing $x$ must be all of $M$, which also contains $y$, contradicting disjointness. Hence every point lies in some diamond, which is exactly the covering half of the Alexandrov-basis property; unfolding membership in a diamond gives the equivalent ``no endpoints'' statement.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{theorem}[The Alexandrov Diamonds Form a Topological Basis]
     \label{thrm:alexandrov-topological-basis}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.isTopologicalBasis_alexandrovBasis}
@@ -914,6 +1028,9 @@
     \leanok
     The three conditions of a topological basis all hold. The intersection (downward-directedness) property is the standing hypothesis. The covering condition --- that the diamonds' union is the whole space --- is \ref{lmm:alexandrov-covering-hausdorff}. The topology-generation condition holds by definition, since the Alexandrov topology is \emph{defined} as the topology generated by the diamond subbasis. The directedness hypothesis is the genuinely geometric content: it is exactly the assertion that the Alexandrov topology has the diamonds as a base, and it is not implied by Hausdorffness alone; it is discharged for standard Minkowski in \ref{thrm:minkowski-alexandrov-basis}.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Past Interpolation on Standard Minkowski]
     \label{lmm:minkowski-past-between}
@@ -929,6 +1046,9 @@
     Take $a$ with the same spatial coordinates as $x$ and time coordinate $a^0 = x^0 - \varepsilon$ for a small $\varepsilon > 0$. Then $x - a = (\varepsilon, \mathbf{0})$ is future-pointing timelike, so $a \ll x$. For each $i$ the connecting vector $a - p_i$ has the same spatial part as $x - p_i$ while its time component is $(x^0 - p_i^0) - \varepsilon$; since $p_i \ll x$ makes the spatial separation strictly smaller than $x^0 - p_i^0$, for $\varepsilon$ small enough the reduced time gap still dominates the spatial separation and remains positive, so $a - p_i$ is future-pointing timelike and $p_i \ll a$. Both strict inequalities hold for a common small $\varepsilon$; the estimate is a direct coordinate computation (\texttt{nlinarith}).
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Future Interpolation on Standard Minkowski]
     \label{lmm:minkowski-future-between}
     \lean{Physicslib4.Spacetime.exists_future_between_standardMinkowski}
@@ -942,6 +1062,9 @@
     \uses{lmm:minkowski-past-between, lmm:minkowski-chronological-open}
     Dual to \ref{lmm:minkowski-past-between}: take $b$ with the same spatial coordinates as $x$ and time coordinate $b^0 = x^0 + \varepsilon$ for a small $\varepsilon > 0$. Then $b - x = (\varepsilon, \mathbf{0})$ is future-pointing timelike, so $x \ll b$, and for each $i$ the vector $q_i - b$ keeps the spatial part of $q_i - x$ with time component $(q_i^0 - x^0) - \varepsilon$; for $\varepsilon$ small enough it stays future-pointing timelike, giving $b \ll q_i$ for both $i$ by the same coordinate estimate.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Standard Minkowski Diamonds Are Downward-Directed]
     \label{lmm:minkowski-diamonds-downward-directed}
@@ -957,6 +1080,9 @@
     From $x \in B_1 \cap B_2$ we have $p_1 \ll x$, $p_2 \ll x$, $x \ll q_1$, and $x \ll q_2$. Past interpolation (\ref{lmm:minkowski-past-between}) yields $a$ with $p_1 \ll a$, $p_2 \ll a$, and $a \ll x$; future interpolation (\ref{lmm:minkowski-future-between}) yields $b$ with $x \ll b$, $b \ll q_1$, and $b \ll q_2$. Set $B_3 = I^+(a) \cap I^-(b)$; then $a \ll x \ll b$ gives $x \in B_3$. For containment, any $y$ with $a \ll y \ll b$ satisfies $p_i \ll a \ll y$ and $y \ll b \ll q_i$ for each $i$, so by transitivity of $\ll$ (\ref{thrm:precedence-transitive}) $y \in I^+(p_i) \cap I^-(q_i)$; hence $B_3 \subseteq B_1 \cap B_2$.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Common Chronological Predecessor on Standard Minkowski]
     \label{lmm:minkowski-exists-common-past}
     \lean{Physicslib4.Spacetime.exists_common_past}
@@ -970,6 +1096,9 @@
     Take $p$ on the time axis, $p = (t, \mathbf{0})$, with $t$ small enough. Then $p_i - p$ has time component $p_i^0 - t$ and spatial part that of $p_i$, so $p \ll p_i$ amounts to $|\mathbf{p}_i|^2 < (p_i^0 - t)^2$ together with $t < p_i^0$. Both spatial norms are fixed nonnegative reals, so choosing a single $t$ below $\min_i\bigl(p_i^0 - |\mathbf{p}_i|\bigr)$ makes each time gap exceed the corresponding spatial separation; the estimate is a direct coordinate computation (\texttt{linarith} after expanding the squares).
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Common Chronological Successor on Standard Minkowski]
     \label{lmm:minkowski-exists-common-future}
     \lean{Physicslib4.Spacetime.exists_common_future}
@@ -982,6 +1111,9 @@
     \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
     Dual to \ref{lmm:minkowski-exists-common-past}, but proved independently rather than by invoking it (the time-shift estimate is run in the other direction, so there is no dependency edge): take $q = (t, \mathbf{0})$ with $t$ above $\max_i\bigl(q_i^0 + |\mathbf{q}_i|\bigr)$, so that for each $i$ the vector $q - q_i$ has positive time component exceeding the spatial separation and is therefore future-pointing timelike.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Standard Minkowski Diamonds Are Upward-Directed]
     \label{lmm:minkowski-diamonds-upward-directed}
@@ -1000,6 +1132,9 @@
     This lemma is already formalized, as \texttt{Physicslib4.Spacetime.alexandrovBasis\_directed}, and so are the two point-existence helpers it consumes, \texttt{exists\_common\_past} and \texttt{exists\_common\_future}.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{theorem}[The Alexandrov Diamonds are a Basis on Standard Minkowski]
     \label{thrm:minkowski-alexandrov-basis}
     \lean{Physicslib4.Spacetime.isTopologicalBasis_alexandrovBasis_standardMinkowski}
@@ -1013,6 +1148,9 @@
     \uses{thrm:alexandrov-topological-basis, lmm:minkowski-diamonds-downward-directed, lmm:minkowski-chronological-open}
     Apply \ref{thrm:alexandrov-topological-basis}. Its downward intersection hypothesis is discharged by \ref{lmm:minkowski-diamonds-downward-directed}, and its covering condition holds because on standard Minkowski every point has a chronological past point and a chronological future point (\ref{lmm:minkowski-chronological-open}). The topology-generation condition holds by definition of the Alexandrov topology.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \subsection{Dilations are causal automorphisms but not isometries}
 
@@ -1031,6 +1169,9 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     Scaling multiplies the defining quadratic form by $\lambda^2 > 0$ and the time-order difference by $\lambda > 0$, so neither strict inequality changes.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{theorem}[Dilations are Causal Automorphisms]
     \label{thrm:minkowski-dilation-causal-automorphism}
     \lean{Physicslib4.alexandrovBasis_image_smul}
@@ -1043,6 +1184,9 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \uses{lmm:minkowski-dilation-cone, lmm:minkowski-chronological-open, def:alexandrov-topology}
     Via the cone characterization of the chronological future and past on standard Minkowski (\ref{lmm:minkowski-chronological-open}) together with \ref{lmm:minkowski-dilation-cone}.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Dilations are Not Isometries]
     \label{thrm:minkowski-dilation-not-isometry}
@@ -1111,6 +1255,9 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     Future-orientation preservation makes the pushforward of a future-oriented trip a future-oriented trip, giving $p \ll q \Rightarrow \varphi(p) \ll \varphi(q)$. Applying this to $\varphi$ and to $\varphi^{-1}$ yields the image equalities for $I^+$ and $I^-$.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Isometries Preserve Basis Sets]
     \label{lmm:isometry-preserves-basis-sets}
     \lean{Physicslib4.Spacetime.Isometry.futureOrientationPreserving, Physicslib4.Spacetime.Isometry.orientedIdentityComponent, Physicslib4.Spacetime.Isometry.alexandrovBasis_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent, Physicslib4.Spacetime.Isometry.smul_set_eq_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_smul_of_mem, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_image, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_smul}
@@ -1124,6 +1271,9 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     Bundling the inverse into the predicate makes the subgroup axioms follow from the identity and composition cases with no appeal to the group topology. Basis-set preservation is then the image of an intersection of a chronological future and past, computed via the previous lemma using injectivity of the isometry.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Axiom 5 Basis-Set Preservation]
     \label{lmm:axiom5-basis-preservation}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_isBasisSet_smul}
@@ -1136,6 +1286,9 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \leanok
     The abstract isometry group of the bridge is, by definition, the oriented identity component, so basis-set preservation transfers verbatim from the concrete statement.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \subsection{Pullback metrics and cross-metric isometries}
 
@@ -1589,6 +1742,9 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     A witness for $p \ll_1 q$ is a future-oriented trip (\ref{def:trip}) from $p$ to $q$ for $g_1$. Push it forward by \ref{lmm:cross-metric-pushforward-path}: it is timelike for $g_2$ by \ref{lmm:cross-metric-pushforward-path-causal}, has endpoints $\psi(p)$ and $\psi(q)$ by \ref{lmm:cross-metric-pushforward-path-endpoints}, and is future-oriented because $d\psi$ carries future-pointing tangent vectors to future-pointing tangent vectors (\ref{def:preserves-future-orientation}). So it witnesses $\psi(p) \ll_2 \psi(q)$.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Image of the Chronological Future]
     \label{lmm:cross-metric-chronological-future-image}
     \lean{Physicslib4.Spacetime.CrossIsometry.chronologicalFuture_image}
@@ -1603,6 +1759,9 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     Take the skeleton from the repository rather than inventing one: the single-metric forms \texttt{Physicslib4.Spacetime.Isometry.chronologicalFuture\_image\_subset} and \texttt{...chronologicalFuture\_image} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean:270,294} are exactly this argument, and the cross-metric version differs only in carrying two metrics. In particular their proofs use \emph{neither} \texttt{Set.image\_subset\_iff} \emph{nor} any \texttt{Equiv.image\_eq\_preimage}-style rewriting, which is the tempting but wrong route: the $\subseteq$ half destructures the image membership directly (\texttt{rintro \_ $\langle$q, hq, rfl$\rangle$}) and the $\supseteq$ half exhibits the witness $\psi^{-1}(r)$ together with the point-level cancellation \texttt{toDiffeo\_inv\_apply}. The chronology step itself is lifted along the transitive closure by \texttt{Relation.TransGen.lift}.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{lemma}[Image of the Chronological Past]
     \label{lmm:cross-metric-chronological-past-image}
     \lean{Physicslib4.Spacetime.CrossIsometry.chronologicalPast_image}
@@ -1614,6 +1773,9 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     \leanok
     Identical to \ref{lmm:cross-metric-chronological-future-image} with the roles of the two endpoints of the trip exchanged: $q \in I^-_1(p)$ means $q \ll_1 p$, so the same two applications of \ref{lmm:cross-metric-isometry-preserves-chronology}, to $\psi$ and to $\psi^{-1}$ --- the latter being a cross-metric isometry from $(M,g_2)$ to $(M,g_1)$ by \ref{lmm:cross-metric-isometry-symm} --- give the two inclusions.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Cross-Metric Isometries Preserve Basis Sets]
     \label{lmm:cross-metric-isometry-preserves-basis-sets}
@@ -1629,6 +1791,9 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     \leanok
     The image of an intersection under an injective map is the intersection of the images, and the two factors are computed by \ref{lmm:cross-metric-chronological-future-image} and \ref{lmm:cross-metric-chronological-past-image}. In the case of interest, $g_1 = \psi^*g_2$ with the pulled-back time orientation of \ref{lmm:pullback-time-orientation}, the orientation hypothesis holds by construction (\ref{lmm:pullback-preserves-future-orientation}); in general it is carried as a hypothesis.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[A Bijection Matching Generating Families is a Homeomorphism]
     \label{lmm:bijection-generated-topology-homeomorphism}
@@ -1659,6 +1824,9 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     Apply \ref{lmm:bijection-generated-topology-homeomorphism} with $f := \psi$, a bijection of the common carrier, and with $\mathcal{S}$, $\mathcal{T}$ the families of Alexandrov diamonds of $\psi^*g$ and of $g$ (\ref{def:alexandrov-topology}), whose generated topologies are the two Alexandrov topologies by definition. The hypothesis that $\psi$ carries $\mathcal{S}$ onto $\mathcal{T}$ is \ref{lmm:cross-metric-isometry-preserves-basis-sets} applied to $\psi$ and to $\psi^{-1}$, whose two-sided orientation hypothesis holds by \ref{lmm:pullback-preserves-future-orientation}.
 \end{proof}
 
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
+
 \begin{theorem}[The Pullback of a Lorentzian Spacetime is a Lorentzian Spacetime]
     \label{thrm:pullback-is-lorentzian-spacetime}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.pullback_alexandrov_t2, Physicslib4.Spacetime.LorentzianSpacetime.pullback, Physicslib4.Spacetime.LorentzianSpacetime.pullback_toSpacetime, Physicslib4.Spacetime.LorentzianSpacetime.pullback_timeOrientation}
@@ -1670,5 +1838,8 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     \leanok
     The underlying spacetime is \ref{thrm:pullback-is-spacetime} and the time orientation is \ref{lmm:pullback-time-orientation}, so only the Hausdorff condition on the Alexandrov topology remains. It transports along the homeomorphism of \ref{lmm:pullback-alexandrov-homeomorphism} by \texttt{Homeomorph.t2Space}.
 \end{proof}
+
+\medskip
+\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 This theorem is what makes ``the net over $\psi^*(M,g)$'' meaningful in \ref{def:general-covariance-in-curved-spacetime}: the axioms of Section \ref{sctn:haag-kastler-axioms-in-curved-spacetime} are indexed by Lorentzian spacetimes, so without it there is no net over the pullback background to compare with.
