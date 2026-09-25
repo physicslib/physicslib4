@@ -107,8 +107,9 @@ structure SmoothPath extends M.Path where
   smoothOn :
     ContMDiffOn (modelWithCornersSelf ℝ ℝ) M.model ∞ toFun parameterSpace
   /-- The tangent vector along the path is non-vanishing on the parameter
-  space: the manifold derivative of `toFun` applied to `1 : ℝ` is non-zero
-  at each interior point of the parameter space. -/
+  space: the manifold derivative of `toFun` within the parameter space,
+  applied to `1 : ℝ`, is non-zero at every point of the parameter space,
+  endpoints included. -/
   nonvanishing : ∀ s ∈ parameterSpace,
     mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model toFun parameterSpace s
         (1 : ℝ) ≠ 0

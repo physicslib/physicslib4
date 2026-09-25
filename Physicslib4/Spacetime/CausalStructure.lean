@@ -150,11 +150,11 @@ We unbundle the data as:
 * `field : ∀ x, T_xM`, the pointwise tangent vector;
 * `nonvanishing`: `field x ≠ 0` for all `x`;
 * `timelike_at`: `field x` is timelike at every `x`;
-* `smooth`: smoothness of the section in any extended chart, expressed via
-  the chart-local form of the field. This is a genuine `Prop` field of the
-  structure (a `ContDiffWithinAt` condition on the chart-local
-  representative), discharged for concrete time orientations — see
-  `standardMinkowskiTimeOrientation` in `Minkowski.lean`.
+* `smooth`: smoothness of the field as a section of the tangent bundle,
+  stated with `ContMDiff` into the total space (Mathlib's bundle-section
+  idiom). This is a genuine `Prop` field of the structure, discharged for
+  concrete time orientations — see `standardMinkowskiTimeOrientation` in
+  `Minkowski.lean`.
 -/
 structure TimeOrientation where
   /-- The underlying tangent vector field. -/

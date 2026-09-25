@@ -92,7 +92,11 @@ the flow by unitaries `U` fixing `Ω`, the one-parameter unitary group `t ↦ U 
 positive energy (`AQFT.IsPositiveEnergy`). This is the ground-state (`β → ∞`,
 spectrum-condition) counterpart of `IsKMSStateForFlow`: the stationary state whose flow
 generator (the Hamiltonian, for a timelike flow) is positive. The positive-energy
-condition is the bounded-generator scaffold; the faithful unbounded form is Stone-gated. -/
+condition is the bounded-generator scaffold; the faithful unbounded form is Stone-gated
+
+**Restriction:** inherits the bounded-generator restriction of `AQFT.IsPositiveEnergy`
+(a positive *bounded* generator); the intended form and what it is waiting on (Stone's
+theorem) are recorded there. -/
 def IsGroundStateForFlow (flow : ℝ → InhomogeneousLorentzGroup)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
   (∀ (t : ℝ) (a : N.quasilocal.carrier), (ω (N.flowAut flow t a) : ℂ) = ω a) ∧

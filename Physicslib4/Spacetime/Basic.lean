@@ -43,12 +43,12 @@ this project. We therefore unbundle the definition into Mathlib primitives:
   `I` is the chosen model with corners;
 * the metric `g` is a family of continuous bilinear forms
   `TₓM →L[ℝ] TₓM →L[ℝ] ℝ`, packaged together with symmetry, non-degeneracy,
-  smoothness in charts, and the Lorentzian condition at every point.
+  smoothness, and the Lorentzian condition at every point.
 
-The "smoothness" of `g` is encoded via the standard idiom used by
-`PseudoRiemannianMetric`: smoothness of the coordinate-expression in any
-extended chart, applied to two arbitrary constant vectors in the model
-space `ℝ⁴`. The four-dimensionality of `M` is captured by the choice of
+The smoothness of `g` is stated in Mathlib's bundle-section idiom
+(`ContMDiff` of `g` as a section of the bundle of bilinear forms on the
+tangent bundle; see the `contMDiff` field), not chart by chart. The
+four-dimensionality of `M` is captured by the choice of
 model space `EuclideanSpace ℝ (Fin 4)`.
 
 The Lorentzian condition is captured by `LorentzianAt`: existence of a basis

@@ -88,7 +88,8 @@ A *trip segment* from `p` to `q` in a spacetime `M` is a smooth curve `c`
 together with a representative smooth path `μ` that
 
 * is future-oriented and timelike;
-* is a geodesic;
+* is a geodesic (currently the placeholder `IsGeodesic`, which is `True`;
+  see its **Restriction:** note);
 * has past endpoint `p` and future endpoint `q`.
 
 This is a single geodesic piece; a full (piecewise) trip is a finite chain
@@ -139,7 +140,8 @@ A *causal trip segment* from `p` to `q` in a spacetime `M` is a smooth curve
 `c` together with a representative smooth path `μ` that
 
 * is future-oriented and causal;
-* is a (possibly degenerate) geodesic;
+* is a (possibly degenerate) geodesic (currently the placeholder
+  `IsGeodesic`, which is `True`; see its **Restriction:** note);
 * has past endpoint `p` and future endpoint `q`.
 -/
 def IsCausalTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
