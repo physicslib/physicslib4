@@ -3,7 +3,7 @@ Copyright (c) 2026 Lean Community. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
-import Physicslib4.AQFT.HaagKastlerCurved.Concrete
+import Physicslib4.AQFT.HaagKastlerCurved.IdentityComponent
 import Physicslib4.Spacetime.CrossMetricIsometry
 
 /-!
@@ -39,7 +39,7 @@ carriers, and the postulate of *general covariance* for a net theory.
   neither metrics nor isometries: all that is required of `e` is the hypothesis
   `he`, that it carries basis sets to basis sets. The geometric input is
   supplied at the point of use by
-  `Spacetime.LorentzianSpacetime.toAbstract_pullback_isBasisSet`, which is
+  `Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_pullback_isBasisSet`, which is
   `Spacetime.pullback_alexandrovBasis_image`
   (`lmm:cross-metric-isometry-preserves-basis-sets` applied to `ψ` read as a
   cross-metric isometry `ψ^*(M,g) → (M,g)`).
@@ -69,8 +69,8 @@ The two carriers are definitionally equal (`pullback` changes only the metric
 and the time orientation), but the blueprint insists that the two spacetimes be
 related by *data* rather than by a type equality; this is that datum.
 
-Stated with `.Carrier` rather than `.toAbstract.Carrier`: the two are
-definitionally equal, but `toAbstract_Carrier` is a `simp` lemma, so only the
+Stated with `.Carrier` rather than `.toAbstractIdentityComponent.Carrier`: the two are
+definitionally equal, but `toAbstractIdentityComponent_Carrier` is a `simp` lemma, so only the
 former leaves `pullbackCarrierEquiv_apply` in simp-normal form.
 -/
 noncomputable def pullbackCarrierEquiv (L : LorentzianSpacetime)
@@ -94,13 +94,13 @@ This is `Spacetime.pullback_alexandrovBasis_image`
 (`lmm:cross-metric-isometry-preserves-basis-sets` applied to `ψ` viewed as a
 cross-metric isometry from `ψ^*(M,g)` to `(M,g)`, whose two-sided orientation
 hypothesis is `lmm:pullback-preserves-future-orientation`), read through the
-bridge `toAbstract`.
+bridge `toAbstractIdentityComponent`.
 -/
-theorem toAbstract_pullback_isBasisSet (L : LorentzianSpacetime)
+theorem toAbstractIdentityComponent_pullback_isBasisSet (L : LorentzianSpacetime)
     (ψ : Diffeo L.toSpacetime L.toSpacetime) :
-    ∀ ⦃B : Set (L.pullback ψ).toAbstract.Carrier⦄,
-      (L.pullback ψ).toAbstract.IsBasisSet B →
-        L.toAbstract.IsBasisSet (⇑(L.pullbackCarrierEquiv ψ) '' B) := by
+    ∀ ⦃B : Set (L.pullback ψ).toAbstractIdentityComponent.Carrier⦄,
+      (L.pullback ψ).toAbstractIdentityComponent.IsBasisSet B →
+        L.toAbstractIdentityComponent.IsBasisSet (⇑(L.pullbackCarrierEquiv ψ) '' B) := by
   intro B hB
   exact Spacetime.pullback_alexandrovBasis_image L.toSpacetime ψ L.timeOrientation hB
 
@@ -152,7 +152,7 @@ structure NetEquivalence {M₁ M₂ : LorentzianSpacetime}
 **A net theory** (`def:general-covariance-in-curved-spacetime`, first half): a
 section of the family of Haag-Kastler nets over geometric Lorentzian
 spacetimes, assigning to every `L` a net `𝔘_L` over the abstract spacetime
-interface `L.toAbstract` it induces.
+interface `L.toAbstractIdentityComponent` it induces.
 
 Quantifying over *all* Lorentzian spacetimes, rather than over the metrics on
 one fixed carrier, is what makes general covariance a statement about the
@@ -160,7 +160,7 @@ theory: the pullback of any `L` is again an object of the same family, so both
 sides of the equivalence are always in scope.
 -/
 abbrev NetTheory :=
-  ∀ L : Spacetime.LorentzianSpacetime, HaagKastlerNet L.toAbstract
+  ∀ L : Spacetime.LorentzianSpacetime, HaagKastlerNet L.toAbstractIdentityComponent
 
 /--
 **General covariance** (`def:general-covariance-in-curved-spacetime`).
@@ -183,7 +183,7 @@ def IsGenerallyCovariant (𝔘 : NetTheory) : Prop :=
   ∀ (L : Spacetime.LorentzianSpacetime)
     (ψ : Spacetime.Diffeo L.toSpacetime L.toSpacetime),
     Nonempty (NetEquivalence (L.pullbackCarrierEquiv ψ)
-      (L.toAbstract_pullback_isBasisSet ψ) (𝔘 (L.pullback ψ)) (𝔘 L))
+      (L.toAbstractIdentityComponent_pullback_isBasisSet ψ) (𝔘 (L.pullback ψ)) (𝔘 L))
 
 end HaagKastlerCurved
 
