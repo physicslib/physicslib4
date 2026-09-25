@@ -33,7 +33,7 @@ intertwined by these equivalences.
 
 This is the local, fiberwise form of covariance. Lifting the fiberwise action
 to an automorphism group of the quasilocal algebra `𝔘` is carried out in
-`QuasilocalIntertwiner.lean` (`QuasilocalLift`, `CovariantQuasilocalAlgebra.action`),
+`QuasilocalIntertwiner.lean` (`QuasilocalLift`, `HaagKastlerNet.action`),
 which gives Lorentz-invariant states a single invariant state on `𝔘`. A genuine
 *vacuum state* requires, beyond invariance, the spectrum condition (energy
 positivity), which is not yet formalizable (Mathlib lacks Stone's theorem and
