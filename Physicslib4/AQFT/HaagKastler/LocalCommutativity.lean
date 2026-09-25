@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
 import Physicslib4.Spacetime.Causality
+import Physicslib4.Spacetime.MinkowskiDirected
 
 /-!
 # Axiom 3: Local Commutativity
@@ -23,6 +24,15 @@ axioms, section 10.5 of the AQFT-in-Lean blueprint):
 * `Physicslib4.AQFT.HaagKastler.LocalCommutativity`: a `Prop`-valued
   predicate on a `LocalNet` asserting Axiom 3.
 
+## Main results
+
+* `Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra.commute_ι_iff_commute_map`:
+  commutation of two local images in a quasilocal algebra is equivalent to
+  commutation of their isotony images in a common local algebra `𝔘(B)`.
+* `Physicslib4.AQFT.HaagKastler.LocalCommutativity.commute_ι`
+  (`lmm:local-commutativity-any-quasilocal`): Axiom 3 holds in *every*
+  quasilocal algebra of the net, in particular in the canonical one.
+
 ## Modelling notes
 
 * "Commuting in the quasilocal algebra" requires an ambient
@@ -32,13 +42,15 @@ axioms, section 10.5 of the AQFT-in-Lean blueprint):
   ambient C*-algebra together with the family of faithful unital
   `*`-monomorphisms `ιB : 𝔘(B) →⋆ₐ[ℂ] 𝔘`. Axiom 3 then asserts
   that, for *some* such ambient algebra, the images of any two
-  completely-spacelike local algebras commute pointwise.
+  completely-spacelike local algebras commute pointwise. The choice of
+  ambient algebra does not matter: `LocalCommutativity.commute_ι`
+  shows the commutation then holds in *every* `QuasilocalAlgebra U i`.
 
 * The quasilocal algebra itself — including its density / completion
   property — is *constructed* from the net by
   `exists_quasilocalAlgebra` (`thrm:quasilocal-algebra-exists`); here
-  we only *use* the structure to phrase commutativity, and the
-  existential above may be witnessed by that canonical algebra.
+  we only *use* the structure to phrase commutativity, and by
+  `LocalCommutativity.commute_ι` Axiom 3 holds in that canonical algebra.
 -/
 
 namespace Physicslib4
@@ -67,6 +79,42 @@ def LocalCommutativity (U : LocalNet) (i : Isotony U) : Prop :=
         standardMinkowskiTimeOrientation B₁ B₂ →
       ∀ (a : U.algebra B₁) (b : U.algebra B₂),
         Commute (Q.ι hB₁ a) (Q.ι hB₂ b)
+
+/-- **Commutation in a quasilocal algebra is decided locally.** For basis sets
+`B₁, B₂ ⊆ B`, the images `Q.ι hB₁ a` and `Q.ι hB₂ b` commute in `Q.carrier` iff
+the isotony images of `a` and `b` commute in the local algebra `𝔘(B)`. The
+condition on the right does not mention `Q`. -/
+theorem QuasilocalAlgebra.commute_ι_iff_commute_map {U : LocalNet} {i : Isotony U}
+    (Q : QuasilocalAlgebra U i) {B₁ B₂ B : Set StandardMinkowskiSpacetime.Carrier}
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+    (hB : IsAlexandrovBasisSet B) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B)
+    (a : U.algebra B₁) (b : U.algebra B₂) :
+    Commute (Q.ι hB₁ a) (Q.ι hB₂ b) ↔
+      Commute (i.map hB₁ hB h₁ a) (i.map hB₂ hB h₂ b) := by
+  rw [← Q.ι_inclusion hB₁ hB h₁ a, ← Q.ι_inclusion hB₂ hB h₂ b]
+  refine ⟨fun h => Q.ι_injective hB ?_, fun h => h.map (Q.ι hB)⟩
+  simpa only [map_mul] using h.eq
+
+/-- **Axiom 3 holds in every quasilocal algebra.** `LocalCommutativity` asserts
+commutation of completely-spacelike local algebras in *some* quasilocal algebra;
+since commutation is decided inside a common local algebra `𝔘(B)`
+(`QuasilocalAlgebra.commute_ι_iff_commute_map`), it then holds in *every*
+`QuasilocalAlgebra U i`, in particular in the canonical one built by
+`exists_quasilocalAlgebra`.
+
+Blueprint reference: `lmm:local-commutativity-any-quasilocal`. -/
+theorem LocalCommutativity.commute_ι {U : LocalNet} {i : Isotony U}
+    (h : LocalCommutativity U i) (Q : QuasilocalAlgebra U i)
+    ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+    (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation B₁ B₂)
+    (a : U.algebra B₁) (b : U.algebra B₂) :
+    Commute (Q.ι hB₁ a) (Q.ι hB₂ b) := by
+  obtain ⟨Q₀, hQ₀⟩ := h
+  obtain ⟨B, hB, h₁, h₂⟩ := Spacetime.alexandrovBasis_directed hB₁ hB₂
+  exact (Q.commute_ι_iff_commute_map hB₁ hB₂ hB h₁ h₂ a b).2
+    ((Q₀.commute_ι_iff_commute_map hB₁ hB₂ hB h₁ h₂ a b).1 (hQ₀ hB₁ hB₂ hs a b))
 
 end HaagKastler
 end AQFT

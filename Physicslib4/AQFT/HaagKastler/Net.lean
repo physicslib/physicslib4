@@ -198,21 +198,17 @@ theorem covEquiv_mul (L L' : InhomogeneousLorentzGroup)
             ((N.covEquiv L B : N.algebra B → N.algebra (L • B)) a)) :=
   N.lorentzCovariance.choose_spec.choose_spec.2.2.1 L L' B a
 
-/-- The *quasilocal algebra witnessing local commutativity* (Axiom 3),
-chosen from the existence witness in `localCommutativity`. (This may differ
-from the canonical `quasilocal` of Axiom 4.) -/
-noncomputable def commAlgebra : QuasilocalAlgebra N.U N.isotony :=
-  N.localCommutativity.choose
-
-/-- **Local commutativity.** The images in `commAlgebra` of two
-completely-spacelike basis algebras commute. -/
+/-- **Local commutativity.** The images in the canonical quasilocal algebra
+`quasilocal` of two completely-spacelike basis algebras commute. Axiom 3 only
+asserts this in *some* quasilocal algebra; `LocalCommutativity.commute_ι` transfers
+it to every one. -/
 theorem commute_ι_of_spacelike ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : N.algebra B₁) (b : N.algebra B₂) :
-    Commute (N.commAlgebra.ι hB₁ a) (N.commAlgebra.ι hB₂ b) :=
-  N.localCommutativity.choose_spec hB₁ hB₂ hs a b
+    Commute (N.quasilocal.ι hB₁ a) (N.quasilocal.ι hB₂ b) :=
+  N.localCommutativity.commute_ι N.quasilocal hB₁ hB₂ hs a b
 
 /-- **Local commutativity is symmetric.** Commutation of completely-spacelike
 local algebras holds in either order. -/
@@ -222,7 +218,7 @@ theorem commute_ι_of_spacelike_symm
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : N.algebra B₁) (b : N.algebra B₂) :
-    Commute (N.commAlgebra.ι hB₂ b) (N.commAlgebra.ι hB₁ a) :=
+    Commute (N.quasilocal.ι hB₂ b) (N.quasilocal.ι hB₁ a) :=
   (N.commute_ι_of_spacelike hB₁ hB₂ hs a b).symm
 
 section Observables

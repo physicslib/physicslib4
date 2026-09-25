@@ -404,7 +404,26 @@ Before introducing the next axiom, we must introduce the definition:
     This is the cocone condition making the $\iota_{\mathbf{B}}$ a compatible family on the directed system of Axiom 2 (\ref{def:isotony}), and it is what makes $\iota_{\mathbf{B}}$ well defined on the colimit: an element of $\mathfrak{U}(\mathbf{B}_1)$ may be regarded as an element of any larger $\mathfrak{U}(\mathbf{B}_2)$, and all such readings must have the same image in $\mathfrak{U}$. Without it the displayed commutator would depend on which local algebra $a_1$ and $a_2$ were viewed in.
 
     Note that the curved counterpart (\ref{def:local-commutativity-in-curved-spacetime}) has a different shape: there is no quasilocal algebra in curved spacetime, so commutation is stated inside a common containing algebra $\mathfrak{U}(\mathbf{B})$ using the Axiom 2 embeddings directly, and no $\iota$ appears.
+
+    By \ref{lmm:local-commutativity-any-quasilocal} the choice of quasilocal algebra in this axiom is immaterial, so the canonical $\mathfrak{U}$ of a Haag--Kastler net can be used throughout.
 \end{definition}
+
+\begin{lemma}[Local Commutativity Holds in Every Quasilocal Algebra]
+    \label{lmm:local-commutativity-any-quasilocal}
+    \lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity.commute_ι, Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra.commute_ι_iff_commute_map}
+    \uses{def:local-commutativity, def:quasilocal-algebra, def:completely-spacelike, lmm:minkowski-diamonds-upward-directed}
+    \leanok
+    Suppose the net satisfies Axiom 3 (\ref{def:local-commutativity}) with respect to some quasilocal algebra $\mathfrak{U}$, i.e. an ambient C*-algebra with injective unital $*$-homomorphisms $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}$ satisfying the cocone condition $\iota_{\mathbf{B}_2} \circ i_{\mathbf{B}_1\mathbf{B}_2} = \iota_{\mathbf{B}_1}$ for all basis sets $\mathbf{B}_1 \subseteq \mathbf{B}_2$. Let $\mathfrak{U}'$ be any quasilocal algebra of the net (\ref{def:quasilocal-algebra}), with canonical embeddings $\iota'_{\mathbf{B}}$. Then for any completely spacelike basis sets $\mathbf{B}_1$, $\mathbf{B}_2$ and any $a_1 \in \mathfrak{U}(\mathbf{B}_1)$, $a_2 \in \mathfrak{U}(\mathbf{B}_2)$,
+    \begin{align}
+        \iota'_{\mathbf{B}_1}(a_1)\, \iota'_{\mathbf{B}_2}(a_2) = \iota'_{\mathbf{B}_2}(a_2)\, \iota'_{\mathbf{B}_1}(a_1)
+    \end{align}
+    in $\mathfrak{U}'$. In particular Axiom 3 holds in the canonical quasilocal algebra of \ref{thrm:quasilocal-algebra-exists}, and does not depend on which quasilocal algebra is used to state it.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:local-commutativity, def:isotony, lmm:minkowski-diamonds-upward-directed}
+    By upward directedness of the Alexandrov diamonds (\ref{lmm:minkowski-diamonds-upward-directed}) pick a basis set $\mathbf{B}$ with $\mathbf{B}_1 \cup \mathbf{B}_2 \subseteq \mathbf{B}$. By the cocone condition, in any quasilocal algebra $\iota_{\mathbf{B}_k}(a_k) = \iota_{\mathbf{B}}(i_{\mathbf{B}_k\mathbf{B}}(a_k))$ for $k = 1, 2$, where $i_{\mathbf{B}_k\mathbf{B}}$ are the isotony embeddings of Axiom 2 (\ref{def:isotony}). Since $\iota_{\mathbf{B}}$ is an injective $*$-homomorphism, $\iota_{\mathbf{B}_1}(a_1)$ and $\iota_{\mathbf{B}_2}(a_2)$ commute if and only if $i_{\mathbf{B}_1\mathbf{B}}(a_1)$ and $i_{\mathbf{B}_2\mathbf{B}}(a_2)$ commute in $\mathfrak{U}(\mathbf{B})$. That condition does not mention the quasilocal algebra, so commutation in the algebra for which Axiom 3 is assumed transfers to $\mathfrak{U}'$ with its embeddings $\iota'_{\mathbf{B}}$.
+\end{proof}
 
 The next axiom makes use of the following new definition:
 
