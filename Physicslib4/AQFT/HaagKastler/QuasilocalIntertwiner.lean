@@ -155,6 +155,16 @@ def IsCovariantQuasilocal (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isot
         = Q.ι (isAlexandrovBasisSet_smul L hC)
             (N.covEquiv L C (N.isotony.map hB hC h a))
 
+/-- **Every quasilocal algebra is covariance-compatible.** Axiom 5 (3) is stated
+for the Axiom 2 isotony family, so `α_L` intertwines the isotony embeddings, and
+the cocone condition `ι_inclusion` then gives `IsCovariantQuasilocal` for every
+quasilocal algebra and every Lorentz transformation. -/
+theorem isCovariantQuasilocal (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
+    (L : InhomogeneousLorentzGroup) : IsCovariantQuasilocal N Q L := by
+  intro B C hB hC h a
+  rw [N.covEquiv_isotony L hB hC h (isAlexandrovBasisSet_smul L hB)
+    (isAlexandrovBasisSet_smul L hC) (Set.smul_set_mono h) a, Q.ι_inclusion]
+
 /-- **Well-definedness of the intertwiner.** If two local elements `ι_B a` and
 `ι_{B'} a'` agree in `𝔘`, then their intended images
 `ι_{L·B}(α_L a)` and `ι_{L·B'}(α_L a')` agree. The proof routes both through a
@@ -346,6 +356,12 @@ compatible for **every** Lorentz transformation (so the lift exists for all
 `L`). -/
 def IsCovariant (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony) : Prop :=
   ∀ L : InhomogeneousLorentzGroup, IsCovariantQuasilocal N Q L
+
+/-- Every quasilocal algebra of a Haag-Kastler net is covariant
+(`isCovariantQuasilocal`). -/
+theorem isCovariant (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony) :
+    IsCovariant N Q :=
+  isCovariantQuasilocal N Q
 
 variable {N : HaagKastlerNet} {Q : QuasilocalAlgebra N.U N.isotony}
 

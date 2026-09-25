@@ -1667,13 +1667,26 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     They agree on the union of the local images, which is dense in $\mathfrak{U}$, and $*$-automorphisms of a C*-algebra are continuous.
 \end{proof}
 
+\begin{lemma}[Every Quasilocal Algebra is Covariance-Compatible]
+    \label{lmm:quasilocal-covariance-compatible}
+    \lean{Physicslib4.AQFT.HaagKastler.isCovariantQuasilocal, Physicslib4.AQFT.HaagKastler.isCovariant}
+    \uses{def:quasilocal-algebra, def:lorentz-covariance, def:isotony, def:haag-kastler-net}
+    \leanok
+    Let $\mathfrak{U}$ be any quasilocal algebra (\ref{def:quasilocal-algebra}) of a Haag--Kastler net, with embeddings $\iota_{\mathbf{B}}$. For every Lorentz transformation $L$, all basis sets $\mathbf{B} \subseteq \mathbf{C}$ and $a \in \mathfrak{U}(\mathbf{B})$, $\iota_{L\cdot\mathbf{B}}(\alpha_L a) = \iota_{L\cdot\mathbf{C}}(\alpha_L(i_{\mathbf{B}\mathbf{C}}(a)))$. That is, every quasilocal algebra is covariance-compatible in the sense required by \ref{thrm:quasilocal-lift-exists}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:lorentz-covariance, def:quasilocal-algebra}
+    By condition (3) of Axiom 5 (\ref{def:lorentz-covariance}), stated for the isotony embeddings $i$ of Axiom 2, $\alpha_L(i_{\mathbf{B}\mathbf{C}}(a)) = i_{L\cdot\mathbf{B},\,L\cdot\mathbf{C}}(\alpha_L a)$, where $L\cdot\mathbf{B} \subseteq L\cdot\mathbf{C}$ are basis sets. Applying $\iota_{L\cdot\mathbf{C}}$ and the cocone condition $\iota_{L\cdot\mathbf{C}} \circ i_{L\cdot\mathbf{B},\,L\cdot\mathbf{C}} = \iota_{L\cdot\mathbf{B}}$ gives the claim.
+\end{proof}
+
 \begin{theorem}[Existence of the Quasilocal Lift]
     \label{thrm:quasilocal-lift-exists}
     \lean{Physicslib4.AQFT.HaagKastler.nonempty_quasilocalLift}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:quasilocal-lift, def:quasilocal-algebra}
     \leanok
-    For a covariance-compatible quasilocal algebra, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists.
+    For a covariance-compatible quasilocal algebra, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists. By \ref{lmm:quasilocal-covariance-compatible} this hypothesis holds for every quasilocal algebra of a Haag--Kastler net.
 \end{theorem}
 \begin{proof}
     \leanok
