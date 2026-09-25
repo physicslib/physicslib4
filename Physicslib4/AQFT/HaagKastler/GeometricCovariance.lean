@@ -57,31 +57,17 @@ open Physicslib4.GNS
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- The local observable operators of a region `B` in a representation `π` of the
-quasilocal algebra of a covariant net: the image `π(ι_B(𝔘(B)))`. -/
-def covLocalOperators (N : HaagKastlerNet)
-    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
-    ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) : Set (H →L[ℂ] H) :=
-  Set.range fun a : N.U.algebra B => π (N.quasilocal.ι hB a)
-
-/-- The local von Neumann algebra `R(B) = π(ι_B(𝔘(B)))''` in a representation `π`
-of the covariant net's quasilocal algebra. -/
-def covLocalVonNeumann (N : HaagKastlerNet)
-    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
-    ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) : Set (H →L[ℂ] H) :=
-  Set.centralizer (Set.centralizer (N.covLocalOperators π hB))
-
 /-- **Conjugation carries the local operators of `B` onto those of `L · B`.**
 Given operator covariance `U π(a) U⁻¹ = π(β_L a)`, the conjugation `lieConj U`
 maps the local observable operators of `B` onto those of `L · B`. -/
-theorem lieConj_image_covLocalOperators (N : HaagKastlerNet)
+theorem lieConj_image_localOperators (N : HaagKastlerNet)
     (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Uop : H ≃ₗᵢ[ℂ] H)
     (L : InhomogeneousLorentzGroup) {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B)
     (hcov : ∀ (a : N.quasilocal.carrier) (x : H),
       Uop (π a (Uop.symm x)) = π (N.action L a) x) :
-    Physicslib4.lieConj Uop '' N.covLocalOperators π hB
-      = N.covLocalOperators π (isAlexandrovBasisSet_smul L hB) := by
+    Physicslib4.lieConj Uop '' N.localOperators π hB
+      = N.localOperators π (isAlexandrovBasisSet_smul L hB) := by
   have hconj : ∀ a : N.quasilocal.carrier,
       Physicslib4.lieConj Uop (π a) = π (N.action L a) := by
     intro a
@@ -89,7 +75,7 @@ theorem lieConj_image_covLocalOperators (N : HaagKastlerNet)
     rw [Physicslib4.lieConj_apply]
     exact hcov a x
   ext y
-  simp only [covLocalOperators, Set.mem_image, Set.mem_range]
+  simp only [localOperators, Set.mem_image, Set.mem_range]
   constructor
   · rintro ⟨_, ⟨a, rfl⟩, rfl⟩
     exact ⟨N.covEquiv L B a, by rw [hconj (N.quasilocal.ι hB a), action_ι N L hB a]⟩
@@ -109,38 +95,17 @@ Lorentz-transformed region `L · B`:
 The operator covariance hypothesis is exactly the last clause provided by
 `IsInvariantState.exists_gns_unitary`, so this holds in the covariant GNS
 representation of any invariant state. -/
-theorem lieConj_image_covLocalVonNeumann (N : HaagKastlerNet)
+theorem lieConj_image_localVonNeumann (N : HaagKastlerNet)
     (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Uop : H ≃ₗᵢ[ℂ] H)
     (L : InhomogeneousLorentzGroup) {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B)
     (hcov : ∀ (a : N.quasilocal.carrier) (x : H),
       Uop (π a (Uop.symm x)) = π (N.action L a) x) :
-    Physicslib4.lieConj Uop '' N.covLocalVonNeumann π hB
-      = N.covLocalVonNeumann π (isAlexandrovBasisSet_smul L hB) := by
-  unfold covLocalVonNeumann
-  rw [(Physicslib4.lieConj Uop).image_centralizer_centralizer (N.covLocalOperators π hB),
-    N.lieConj_image_covLocalOperators π Uop L hB hcov]
-
-/-- The local observable operators of a region form a self-adjoint set. -/
-theorem covLocalOperators_selfAdjoint (N : HaagKastlerNet)
-    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
-    ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
-    ∀ x ∈ N.covLocalOperators π hB, star x ∈ N.covLocalOperators π hB := by
-  rintro x ⟨a, rfl⟩
-  exact ⟨star a, by simp only [map_star]⟩
-
-/-- The local von Neumann algebra `R(B)` as a bundled `VonNeumannAlgebra`. -/
-noncomputable def covLocalVonNeumannAlgebra (N : HaagKastlerNet)
-    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
-    ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
-    VonNeumannAlgebra H :=
-  vonNeumannOfSelfAdjoint (N.covLocalOperators π hB) (N.covLocalOperators_selfAdjoint π hB)
-
-@[simp] theorem coe_covLocalVonNeumannAlgebra (N : HaagKastlerNet)
-    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
-    ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
-    (N.covLocalVonNeumannAlgebra π hB : Set (H →L[ℂ] H)) = N.covLocalVonNeumann π hB :=
-  coe_vonNeumannOfSelfAdjoint _ _
+    Physicslib4.lieConj Uop '' N.localVonNeumann π hB
+      = N.localVonNeumann π (isAlexandrovBasisSet_smul L hB) := by
+  unfold localVonNeumann
+  rw [(Physicslib4.lieConj Uop).image_centralizer_centralizer (N.localOperators π hB),
+    N.lieConj_image_localOperators π Uop L hB hcov]
 
 /-- **Geometric covariance as a von Neumann algebra isomorphism (Minkowski).**
 Conjugation by the implementing unitary `U(L)` is the `*`-isomorphism
@@ -148,47 +113,47 @@ Conjugation by the implementing unitary `U(L)` is the `*`-isomorphism
 `*`-automorphism `T ↦ U(L) T U(L)⁻¹` of `B(H)` (Mathlib's
 `LinearIsometryEquiv.conjStarAlgEquiv`), whose image of `R(B)` is exactly
 `R(L · B)` by geometric covariance. -/
-noncomputable def covLocalVonNeumannEquiv (N : HaagKastlerNet)
+noncomputable def localVonNeumannEquiv (N : HaagKastlerNet)
     (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Uop : H ≃ₗᵢ[ℂ] H)
     (L : InhomogeneousLorentzGroup) {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B)
     (hcov : ∀ (a : N.quasilocal.carrier) (x : H),
       Uop (π a (Uop.symm x)) = π (N.action L a) x) :
-    (N.covLocalVonNeumannAlgebra π hB).toStarSubalgebra ≃⋆ₐ[ℂ]
-      (N.covLocalVonNeumannAlgebra π (isAlexandrovBasisSet_smul L hB)).toStarSubalgebra := by
+    (N.localVonNeumannAlgebra π hB).toStarSubalgebra ≃⋆ₐ[ℂ]
+      (N.localVonNeumannAlgebra π (isAlexandrovBasisSet_smul L hB)).toStarSubalgebra := by
   let hL : IsAlexandrovBasisSet (L • B) := isAlexandrovBasisSet_smul L hB
   have hfun : (⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop) : (H →L[ℂ] H) → (H →L[ℂ] H))
       = ⇑(Physicslib4.lieConj Uop) := by
     funext T; exact (Physicslib4.lieConj_apply_eq_conjStarAlgEquiv Uop T).symm
-  have himg : ⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop) '' N.covLocalVonNeumann π hB
-      = N.covLocalVonNeumann π hL := by
-    rw [hfun]; exact N.lieConj_image_covLocalVonNeumann π Uop L hB hcov
+  have himg : ⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop) '' N.localVonNeumann π hB
+      = N.localVonNeumann π hL := by
+    rw [hfun]; exact N.lieConj_image_localVonNeumann π Uop L hB hcov
   have himg' : ⇑(LinearIsometryEquiv.conjStarAlgEquiv Uop).symm ''
-      N.covLocalVonNeumann π hL = N.covLocalVonNeumann π hB := by
+      N.localVonNeumann π hL = N.localVonNeumann π hB := by
     rw [← himg, Set.image_image]
     simp only [StarAlgEquiv.symm_apply_apply, Set.image_id']
   refine Physicslib4.restrictStarAlgEquiv (LinearIsometryEquiv.conjStarAlgEquiv Uop)
     (fun x hx => ?_) (fun y hy => ?_)
-  · have hx' : x ∈ N.covLocalVonNeumann π hB := by
-      have h1 : x ∈ ((N.covLocalVonNeumannAlgebra π hB).toStarSubalgebra : Set (H →L[ℂ] H)) := hx
-      rwa [VonNeumannAlgebra.coe_toStarSubalgebra, coe_covLocalVonNeumannAlgebra] at h1
+  · have hx' : x ∈ N.localVonNeumann π hB := by
+      have h1 : x ∈ ((N.localVonNeumannAlgebra π hB).toStarSubalgebra : Set (H →L[ℂ] H)) := hx
+      rwa [VonNeumannAlgebra.coe_toStarSubalgebra, coe_localVonNeumannAlgebra] at h1
     have hmem : LinearIsometryEquiv.conjStarAlgEquiv Uop x
-        ∈ N.covLocalVonNeumann π hL := by
+        ∈ N.localVonNeumann π hL := by
       rw [← himg]; exact Set.mem_image_of_mem _ hx'
     change LinearIsometryEquiv.conjStarAlgEquiv Uop x
-      ∈ (N.covLocalVonNeumannAlgebra π hL).toStarSubalgebra
-    rw [← SetLike.mem_coe, VonNeumannAlgebra.coe_toStarSubalgebra, coe_covLocalVonNeumannAlgebra]
+      ∈ (N.localVonNeumannAlgebra π hL).toStarSubalgebra
+    rw [← SetLike.mem_coe, VonNeumannAlgebra.coe_toStarSubalgebra, coe_localVonNeumannAlgebra]
     exact hmem
-  · have hy' : y ∈ N.covLocalVonNeumann π hL := by
-      have h1 : y ∈ ((N.covLocalVonNeumannAlgebra π hL).toStarSubalgebra : Set (H →L[ℂ] H)) :=
+  · have hy' : y ∈ N.localVonNeumann π hL := by
+      have h1 : y ∈ ((N.localVonNeumannAlgebra π hL).toStarSubalgebra : Set (H →L[ℂ] H)) :=
         hy
-      rwa [VonNeumannAlgebra.coe_toStarSubalgebra, coe_covLocalVonNeumannAlgebra] at h1
+      rwa [VonNeumannAlgebra.coe_toStarSubalgebra, coe_localVonNeumannAlgebra] at h1
     have hmem : (LinearIsometryEquiv.conjStarAlgEquiv Uop).symm y
-        ∈ N.covLocalVonNeumann π hB := by
+        ∈ N.localVonNeumann π hB := by
       rw [← himg']; exact Set.mem_image_of_mem _ hy'
     change (LinearIsometryEquiv.conjStarAlgEquiv Uop).symm y
-      ∈ (N.covLocalVonNeumannAlgebra π hB).toStarSubalgebra
-    rw [← SetLike.mem_coe, VonNeumannAlgebra.coe_toStarSubalgebra, coe_covLocalVonNeumannAlgebra]
+      ∈ (N.localVonNeumannAlgebra π hB).toStarSubalgebra
+    rw [← SetLike.mem_coe, VonNeumannAlgebra.coe_toStarSubalgebra, coe_localVonNeumannAlgebra]
     exact hmem
 
 /-- **Orbit-invariance of factoriality (Minkowski).** If the local von Neumann
@@ -196,15 +161,15 @@ algebra `R(B)` of a region is a factor (trivial center), then so is `R(L · B)`
 for every Lorentz transformation `L`. Geometric covariance exhibits `R(L · B)` as
 the unitary conjugate `U(L) R(B) U(L)⁻¹`, and conjugation preserves the factor
 property. So being a factor is constant along the Lorentz orbit of a region. -/
-theorem covLocalVonNeumann_isFactor_smul (N : HaagKastlerNet)
+theorem localVonNeumann_isFactor_smul (N : HaagKastlerNet)
     (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Uop : H ≃ₗᵢ[ℂ] H)
     (L : InhomogeneousLorentzGroup) {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B)
     (hcov : ∀ (a : N.quasilocal.carrier) (x : H),
       Uop (π a (Uop.symm x)) = π (N.action L a) x)
-    (h : Physicslib4.IsFactor (N.covLocalVonNeumann π hB)) :
-    Physicslib4.IsFactor (N.covLocalVonNeumann π (isAlexandrovBasisSet_smul L hB)) := by
-  rw [← N.lieConj_image_covLocalVonNeumann π Uop L hB hcov]
+    (h : Physicslib4.IsFactor (N.localVonNeumann π hB)) :
+    Physicslib4.IsFactor (N.localVonNeumann π (isAlexandrovBasisSet_smul L hB)) := by
+  rw [← N.lieConj_image_localVonNeumann π Uop L hB hcov]
   exact h.conj Uop
 
 end HaagKastlerNet
