@@ -1669,7 +1669,7 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{lemma}[Every Quasilocal Algebra is Covariance-Compatible]
     \label{lmm:quasilocal-covariance-compatible}
-    \lean{Physicslib4.AQFT.HaagKastler.isCovariantQuasilocal, Physicslib4.AQFT.HaagKastler.isCovariant}
+    \lean{Physicslib4.AQFT.HaagKastler.isCovariantQuasilocal}
     \uses{def:quasilocal-algebra, def:lorentz-covariance, def:isotony, def:haag-kastler-net}
     \leanok
     Let $\mathfrak{U}$ be any quasilocal algebra (\ref{def:quasilocal-algebra}) of a Haag--Kastler net, with embeddings $\iota_{\mathbf{B}}$. For every Lorentz transformation $L$, all basis sets $\mathbf{B} \subseteq \mathbf{C}$ and $a \in \mathfrak{U}(\mathbf{B})$, $\iota_{L\cdot\mathbf{B}}(\alpha_L a) = \iota_{L\cdot\mathbf{C}}(\alpha_L(i_{\mathbf{B}\mathbf{C}}(a)))$. That is, every quasilocal algebra is covariance-compatible in the sense required by \ref{thrm:quasilocal-lift-exists}.
@@ -1686,11 +1686,11 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:quasilocal-lift, def:quasilocal-algebra}
     \leanok
-    For a covariance-compatible quasilocal algebra, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists. By \ref{lmm:quasilocal-covariance-compatible} this hypothesis holds for every quasilocal algebra of a Haag--Kastler net.
+    For every quasilocal algebra of a Haag--Kastler net, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists. No covariance-compatibility hypothesis is needed: by \ref{lmm:quasilocal-covariance-compatible} it holds for every quasilocal algebra.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:quasilocal-lift, def:quasilocal-algebra}
+    \uses{def:quasilocal-lift, def:quasilocal-algebra, lmm:quasilocal-covariance-compatible}
     The intertwiner is defined on the directed union of local images (a dense $*$-subalgebra) and extended by uniform continuity; the inverse is supplied by $L^{-1}$, and the group laws $\beta_{L'L} = \beta_{L'}\circ\beta_L$ and $\beta_{1} = \mathrm{id}$ furnish the two-sided inverse.
 \end{proof}
 
@@ -1699,12 +1699,12 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \lean{Physicslib4.AQFT.HaagKastler.nonempty_trivialQuasilocalLift}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
-    The covariance-compatibility hypothesis is satisfiable: the trivial net's quasilocal algebra is covariance-compatible, so the quasilocal lift exists unconditionally for the trivial net.
+    For the trivial net (every region $\mapsto \mathbb{C}$) and its trivial quasilocal algebra, the quasilocal lift exists for every Lorentz transformation.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thrm:quasilocal-lift-exists}
-    Covariance-compatibility holds because every $*$-automorphism of $\mathbb{C}$ is the identity; the lift is then supplied by \ref{thrm:quasilocal-lift-exists}.
+    A special case of \ref{thrm:quasilocal-lift-exists}.
 \end{proof}
 
 \begin{definition}[Covariant Quasilocal Algebra]
@@ -1713,7 +1713,7 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
     \uses{def:haag-kastler-net, def:quasilocal-algebra, def:lorentz-covariance, def:quasilocal-lift, thrm:quasilocal-lift-exists}
-    A \emph{covariant quasilocal algebra} bundles a Haag-Kastler net (\ref{def:haag-kastler-net}), a quasilocal algebra of that net (\ref{def:quasilocal-algebra}), and a proof that the embeddings are covariance-compatible for every Lorentz transformation. On such data the quasilocal lift (\ref{def:quasilocal-lift}) exists for every $L$ by \ref{thrm:quasilocal-lift-exists}, yielding the covariance action $L \mapsto \beta_L$ on the quasilocal algebra; the trivial net provides an instance. This is the natural home for the covariance dynamics: the compatibility hypothesis of \ref{thrm:quasilocal-lift-exists} becomes structural data rather than a side condition.
+    A \emph{covariant quasilocal algebra} bundles a Haag-Kastler net (\ref{def:haag-kastler-net}) and a quasilocal algebra of that net (\ref{def:quasilocal-algebra}); its embeddings are automatically covariance-compatible for every Lorentz transformation (\ref{lmm:quasilocal-covariance-compatible}). On such data the quasilocal lift (\ref{def:quasilocal-lift}) exists for every $L$ by \ref{thrm:quasilocal-lift-exists}, yielding the covariance action $L \mapsto \beta_L$ on the quasilocal algebra; the trivial net provides an instance. This is the natural home for the covariance dynamics: the compatibility hypothesis of \ref{thrm:quasilocal-lift-exists} becomes structural data rather than a side condition.
 \end{definition}
 
 \begin{lemma}[Group-Action Coherence of the Covariance Automorphism]
