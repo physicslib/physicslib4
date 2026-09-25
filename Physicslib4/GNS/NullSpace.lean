@@ -54,29 +54,6 @@ Blueprint reference: the set `𝒩₁` in `lmm:lmm1`.
 def orthSet (ω : State A) : Set A := { n | ∀ b : A, ω (star b * n) = 0 }
 
 /--
-Inside the proofs of `lmm1`/`lmm2`, we package `ω` as a positive linear map
-using the canonical spectral order on the C*-algebra `A`. This allows
-re-using the GNS / pre-inner-product-space infrastructure in Mathlib.
--/
-private noncomputable def State.toPositiveLinearMap
-    (ω : State A) [PartialOrder A] [StarOrderedRing A] :
-    A →ₚ[ℂ] ℂ where
-  toFun := ω.toContinuousLinearMap
-  map_add' := by intro x y; exact map_add ω.toContinuousLinearMap x y
-  map_smul' := by intro c x; exact map_smul ω.toContinuousLinearMap c x
-  monotone' := by
-    intro a b hab
-    have hba : 0 ≤ b - a := sub_nonneg.mpr hab
-    obtain ⟨y, hy⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hba
-    have h_pos : 0 ≤ ω.toContinuousLinearMap (b - a) := by
-      rw [hy]; exact ω.isPositive y
-    have hsub : ω.toContinuousLinearMap (b - a)
-        = ω.toContinuousLinearMap b - ω.toContinuousLinearMap a := by
-      simp [map_sub]
-    rw [hsub] at h_pos
-    exact sub_nonneg.mp h_pos
-
-/--
 **Equality of the null set and the orthogonal set** (`lmm:lmm1`).
 
 Let `ω` be a state over a unital C*-algebra `A`. Then

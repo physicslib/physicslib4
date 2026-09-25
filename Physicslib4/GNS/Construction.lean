@@ -49,27 +49,6 @@ namespace GNS
 open scoped ComplexOrder
 open scoped InnerProductSpace
 
-/-- Repackaging of `State` as a `PositiveLinearMap`, for use with Mathlib's GNS
-infrastructure. -/
-private noncomputable def State.toPositiveLinearMap
-    {A : Type*} [CStarAlgebra A]
-    (ω : State A) [PartialOrder A] [StarOrderedRing A] :
-    A →ₚ[ℂ] ℂ where
-  toFun := ω.toContinuousLinearMap
-  map_add' := by intro x y; exact map_add ω.toContinuousLinearMap x y
-  map_smul' := by intro c x; exact map_smul ω.toContinuousLinearMap c x
-  monotone' := by
-    intro a b hab
-    have hba : 0 ≤ b - a := sub_nonneg.mpr hab
-    obtain ⟨y, hy⟩ := CStarAlgebra.nonneg_iff_eq_star_mul_self.mp hba
-    have h_pos : 0 ≤ ω.toContinuousLinearMap (b - a) := by
-      rw [hy]; exact ω.isPositive y
-    have hsub : ω.toContinuousLinearMap (b - a)
-        = ω.toContinuousLinearMap b - ω.toContinuousLinearMap a := by
-      simp [map_sub]
-    rw [hsub] at h_pos
-    exact sub_nonneg.mp h_pos
-
 /--
 **GNS Construction Theorem** (blueprint label `thrm:gns-construction-theorem`).
 
