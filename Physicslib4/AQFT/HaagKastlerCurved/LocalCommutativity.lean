@@ -54,12 +54,10 @@ variable {M : LorentzianSpacetime}
 
 /--
 **Axiom 3 (Local Commutativity), curved spacetime.** A local net `U`
-on a Lorentzian spacetime `M` satisfies *local commutativity* if
-there is a coherent family of isotony `*`-monomorphisms
-`ι : 𝔘(B₁) ↪ 𝔘(B₂)` (for inclusions `B₁ ⊆ B₂` of basis sets) such
-that whenever two basis sets `B₁`, `B₂` are completely spacelike and
-both contained in a common basis set `B`, their images in `𝔘(B)`
-under the isotony embeddings commute pointwise.
+on a Lorentzian spacetime `M`, with Axiom 2 isotony family `i`, satisfies
+*local commutativity* if whenever two basis sets `B₁`, `B₂` are completely
+spacelike and both contained in a common basis set `B`, their images in `𝔘(B)`
+under the isotony embeddings `i.map` commute pointwise.
 
 If no common containing basis set exists, no constraint is imposed,
 reflecting that there is then no algebra in which to compare them.

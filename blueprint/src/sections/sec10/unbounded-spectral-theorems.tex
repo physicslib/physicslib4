@@ -2215,6 +2215,8 @@ so $\left\| B\psi \right\| \le \tfrac{\varepsilon}{2}\left\| \psi \right\| < \va
 \textit{Step 4: invariance.} By Lemma~\ref{lmm:polynomials-in-normal-are-normal}, $p(A,A^*)$ and its adjoint commute with $A$ and with $A^*$; adding the scalar $-\mu\mathbf{1}$ (which commutes with everything) preserves this, so $B$ and $B^*$ commute with $A$ and $A^*$, and therefore so does the product $B^*B$. Applying Part 2 of Proposition~\ref{prpstn:hall-7.16} to the self-adjoint operator $B^*B$ and the commuting bounded operator $A$ shows $W^\varepsilon$ is invariant under $A$; the same with $A^*$ in place of $A$ gives invariance under $A^*$.
 \end{proof}
 
+\noindent\textit{Formalization note.} The Lean proof of this lemma (\texttt{exists\_subspace\_isAlmostEigenvector}) does not follow the argument above. With $B = p(A,A^*) - \mu\mathbf{1}$, it obtains $0 \in \sigma(B^*B)$ directly from the fact that a product of commuting operators is invertible only if both factors are, and takes $W^\varepsilon$ to be the kernel of $f(B^*B)$ for a suitable continuous clamp function $f$, using Mathlib's continuous functional calculus. Lemma~\ref{lmm:hall-10.26}, the spectral subspaces of Definition~\ref{def:hall-7.14} and Propositions~\ref{prpstn:hall-7.15}--\ref{prpstn:hall-7.16} are not used there.
+
 \paragraph{The Two-Variable Spectral Mapping Theorem}\mbox{}\\
 
 \begin{theorem}[Spectral Mapping for Polynomials in $A$ and $A^*$]

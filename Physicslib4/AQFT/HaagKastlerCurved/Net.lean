@@ -156,7 +156,7 @@ theorem covEquiv_mul (φ φ' : M.Isom) (B : Set M.Carrier) (a : N.algebra B) :
 /-- The *isotony embeddings* of the net: the chosen family supplied by Axiom 2
 (`isotony`).
 
-Previously this was `Classical.choose`n from the Axiom 3 existence witness, which
+Previously this was chosen (`Classical.choose`) from the Axiom 3 existence witness, which
 is why it carried no composition law and every consumer factoring a three-fold
 inclusion had to assume coherence separately. It is now literally the Axiom 2
 family, so `commIsotony_self` and `commIsotony_comp` below hold for every net. -/

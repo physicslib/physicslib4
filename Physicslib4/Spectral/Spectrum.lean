@@ -71,6 +71,13 @@ transcription of the blueprint, the divergence is recorded.
   is stated for an arbitrary `CStarAlgebra`, and `CStarAlgebra (H →L[ℂ] H)` is an
   instance. Like the blueprint, Mathlib derives it from Gelfand's formula for the
   spectral radius.
+* `thrm:gelfand-formula` — `spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius`,
+  the statement that `‖A ^ n‖₊ ^ (1 / n)`, read in `ℝ≥0∞`, tends to
+  `spectralRadius ℂ A`. It is the blueprint's real-valued limit under the `toReal`
+  identification above (all terms and the limit are finite). Mathlib's version holds in
+  any complex Banach algebra with no `H ≠ {0}` hypothesis; the blueprint keeps that
+  hypothesis because its real-valued `R(A)`, a supremum over `σ(A) = ∅`, is not `0` on
+  the zero space, whereas the limit is.
 -/
 
 namespace Physicslib4
