@@ -495,97 +495,7 @@ theorem mem_spectrum_iff_forall_isAlmostEigenvector {A : H →L[ℂ] H} [IsStarN
     linarith
 
 /--
-Polynomials in `A` and `A*` turn `ε`-almost eigenvectors into `(C ε)`-almost eigenvectors,
-with `C` independent of `ε` and `ψ`.
-
-Blueprint reference: `lmm:hall-10.26`.
--/
-theorem exists_const_isAlmostEigenvector_mvApply {A : H →L[ℂ] H} [IsStarNormal A]
-    (p : MvPolynomial (Fin 2) ℂ) (lam : ℂ) :
-    ∃ C : ℝ, 0 < C ∧ ∀ (ε : ℝ) (ψ : H), IsAlmostEigenvector A lam ε ψ →
-      IsAlmostEigenvector (mvApply A p) (mvEvalConj p lam) (C * ε) ψ := by
-  set N := A - lam • (1 : H →L[ℂ] H) with hNdef
-  -- one more factor `X` (with `‖(X - ν) ψ‖ ≤ ‖N ψ‖`) on the right of a controlled `T`
-  have step : ∀ (T X : H →L[ℂ] H) (μ ν : ℂ) (c : ℝ), 0 ≤ c →
-      (∀ ψ, ‖(T - μ • (1 : H →L[ℂ] H)) ψ‖ ≤ c * ‖N ψ‖) →
-      (∀ ψ, ‖(X - ν • (1 : H →L[ℂ] H)) ψ‖ ≤ ‖N ψ‖) →
-      ∃ c' : ℝ, 0 ≤ c' ∧ ∀ ψ, ‖(T * X - (μ * ν) • (1 : H →L[ℂ] H)) ψ‖ ≤ c' * ‖N ψ‖ := by
-    intro T X μ ν c hc hT hX
-    refine ⟨‖T‖ + ‖ν‖ * c, by positivity, fun ψ => ?_⟩
-    have hid : (T * X - (μ * ν) • (1 : H →L[ℂ] H)) ψ =
-        T ((X - ν • (1 : H →L[ℂ] H)) ψ) + ν • (T - μ • (1 : H →L[ℂ] H)) ψ := by
-      simp only [sub_apply, smul_apply, one_apply_eq_self, map_sub, map_smul, smul_sub,
-        smul_smul, mul_comm ν μ]
-      abel_nf
-      exact add_comm _ _
-    rw [hid]
-    calc _ ≤ ‖T ((X - ν • (1 : H →L[ℂ] H)) ψ)‖ + ‖ν • (T - μ • (1 : H →L[ℂ] H)) ψ‖ :=
-          norm_add_le _ _
-      _ ≤ ‖T‖ * ‖N ψ‖ + ‖ν‖ * (c * ‖N ψ‖) := by
-          rw [norm_smul]
-          gcongr
-          exacts [(T.le_opNorm _).trans (by gcongr; exact hX ψ), hT ψ]
-      _ = _ := by ring
-  have hA : ∀ ψ, ‖(A - lam • (1 : H →L[ℂ] H)) ψ‖ ≤ ‖N ψ‖ := fun ψ => le_rfl
-  have hA' : ∀ ψ, ‖(ContinuousLinearMap.adjoint A - (starRingEnd ℂ lam) • (1 : H →L[ℂ] H)) ψ‖ ≤
-      ‖N ψ‖ := fun ψ => (norm_adjoint_sub_smul_apply lam ψ).le
-  have mono : ∀ a b : ℕ, ∃ c : ℝ, 0 ≤ c ∧ ∀ ψ,
-      ‖(A ^ a * (ContinuousLinearMap.adjoint A) ^ b -
-        (lam ^ a * (starRingEnd ℂ lam) ^ b) • (1 : H →L[ℂ] H)) ψ‖ ≤ c * ‖N ψ‖ := by
-    intro a b
-    induction b with
-    | zero =>
-      simp only [pow_zero, mul_one]
-      induction a with
-      | zero => exact ⟨0, le_rfl, fun ψ => by simp⟩
-      | succ a ih =>
-        obtain ⟨c, hc, h⟩ := ih
-        simpa only [pow_succ] using step _ _ _ _ c hc h hA
-    | succ b ih =>
-      obtain ⟨c, hc, h⟩ := ih
-      simpa only [pow_succ, ← mul_assoc] using step _ _ _ _ c hc h hA'
-  have total : ∀ s : Finset (Fin 2 →₀ ℕ), ∃ c : ℝ, 0 ≤ c ∧ ∀ ψ,
-      ‖(∑ d ∈ s, MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1) -
-        (∑ d ∈ s, MvPolynomial.coeff d p * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) •
-          (1 : H →L[ℂ] H)) ψ‖ ≤ c * ‖N ψ‖ := by
-    intro s
-    classical
-    induction s using Finset.induction_on with
-    | empty => exact ⟨0, le_rfl, fun ψ => by simp⟩
-    | insert d s hd ih =>
-      obtain ⟨c, hc, h⟩ := ih
-      obtain ⟨c₁, hc₁, h₁⟩ := mono (d 0) (d 1)
-      refine ⟨‖MvPolynomial.coeff d p‖ * c₁ + c, by positivity, fun ψ => ?_⟩
-      rw [Finset.sum_insert hd, Finset.sum_insert hd]
-      have hid : ((MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1) +
-            ∑ d ∈ s, MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1)) -
-          (MvPolynomial.coeff d p * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1 +
-            ∑ d ∈ s, MvPolynomial.coeff d p * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) •
-              (1 : H →L[ℂ] H)) ψ =
-          MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1 -
-            (lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) • (1 : H →L[ℂ] H)) ψ +
-          (∑ d ∈ s, MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1) -
-            (∑ d ∈ s, MvPolynomial.coeff d p * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) •
-              (1 : H →L[ℂ] H)) ψ := by
-        simp only [sub_apply, add_apply, smul_apply, add_smul, smul_sub, smul_smul, mul_assoc]
-        abel
-      rw [hid]
-      calc _ ≤ _ := norm_add_le _ _
-        _ ≤ ‖MvPolynomial.coeff d p‖ * (c₁ * ‖N ψ‖) + c * ‖N ψ‖ := by
-          rw [norm_smul]
-          gcongr
-          exacts [h₁ ψ, h ψ]
-        _ = _ := by ring
-  obtain ⟨c, hc, h⟩ := total p.support
-  refine ⟨c + 1, by positivity, fun ε ψ hψ => ⟨hψ.ne_zero, ?_⟩⟩
-  have hlt := hψ.norm_lt
-  have hpos : 0 < ε * ‖ψ‖ := (norm_nonneg _).trans_lt hlt
-  calc ‖(mvApply A p - mvEvalConj p lam • (1 : H →L[ℂ] H)) ψ‖ ≤ c * ‖N ψ‖ := h ψ
-    _ ≤ c * (ε * ‖ψ‖) := by gcongr
-    _ < (c + 1) * ε * ‖ψ‖ := by nlinarith
-
-/--
-**Uniform version of `exists_const_isAlmostEigenvector_mvApply`.** For every radius `R`, one
+**Uniform constant for polynomials in `A` and `A*`.** For every radius `R`, one
 constant `C` works for all eigenvalues `λ` with `‖λ‖ ≤ R`: it depends only on `p`, `A` and `R`.
 
 Blueprint reference: `lmm:hall-10.26`.
@@ -681,6 +591,19 @@ theorem exists_const_isAlmostEigenvector_mvApply_uniform {A : H →L[ℂ] H} [Is
     _ < (c + 1) * ε * ‖ψ‖ := by nlinarith
 
 /--
+Polynomials in `A` and `A*` turn `ε`-almost eigenvectors into `(C ε)`-almost eigenvectors,
+with `C` independent of `ε` and `ψ`.
+
+Blueprint reference: `lmm:hall-10.26`.
+-/
+theorem exists_const_isAlmostEigenvector_mvApply {A : H →L[ℂ] H} [IsStarNormal A]
+    (p : MvPolynomial (Fin 2) ℂ) (lam : ℂ) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (ε : ℝ) (ψ : H), IsAlmostEigenvector A lam ε ψ →
+      IsAlmostEigenvector (mvApply A p) (mvEvalConj p lam) (C * ε) ψ := by
+  obtain ⟨C, hC, h⟩ := exists_const_isAlmostEigenvector_mvApply_uniform (A := A) p ‖lam‖
+  exact ⟨C, hC, fun ε ψ hψ => h lam le_rfl ε ψ hψ⟩
+
+/--
 The adjoint of `p(A, A*)` is obtained by conjugating the coefficients and swapping the two
 exponents.
 
@@ -765,6 +688,12 @@ theorem exists_restrict_isStarNormal {A : H →L[ℂ] H} [IsStarNormal A] {W : S
 For `ν` in the spectrum of `p(A, A*)` there is, for every `ε > 0`, a nonzero closed
 subspace invariant under `A` and `A*` all of whose nonzero vectors are `ε`-almost
 eigenvectors for `p(A, A*)` with eigenvalue `ν`.
+
+The proof does not follow the blueprint's route through `lmm:hall-10.26`, the spectral
+subspaces of `B*B` and `prpstn:hall-7.15`/`prpstn:hall-7.16`. With `B = p(A, A*) - ν`, it
+gets `0 ∈ σ(B*B)` directly from `Commute.isUnit_mul_iff`, and takes `W` to be the kernel
+of `f(B*B)` for a clamp function `f`, built with Mathlib's continuous functional calculus
+`cfc`.
 
 Blueprint reference: `lmm:hall-10.27`.
 -/

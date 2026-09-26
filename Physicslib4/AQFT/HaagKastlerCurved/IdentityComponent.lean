@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.Net
+import Physicslib4.AQFT.HaagKastlerCurved.GeometricCovariance
 import Physicslib4.Spacetime.IsometryTopology
 import Physicslib4.Spacetime.IsometryCausality
 
@@ -165,6 +166,31 @@ theorem commute_of_spacelike_mono_identityComponent
   N.commute_of_spacelike_mono
     (fun _ _ _ _ hh₁ hh₂ hh => L.isCompletelySpacelike_mono hh₁ hh₂ hh)
     hB₁' hB₂' hB hs hsub₁ hsub₂ h₁ h₂ a b
+
+open scoped Pointwise in
+/-- **Geometric covariance over the identity-component bridge.** For a net over the
+abstract interface induced by a concrete Lorentzian spacetime `L` (with `Isom` the
+oriented identity component), the basis-set preservation hypothesis `hgB₁` of
+`lieConj_image_localVonNeumann` is discharged by
+`toAbstractIdentityComponent_isBasisSet_smul`: conjugation by the implementing unitary
+`U(g)` carries `R(B₁)` onto `R(g · B₁)` with no geometric side condition. -/
+theorem lieConj_image_localVonNeumann_identityComponent
+    {L : Spacetime.LorentzianSpacetime}
+    (N : HaagKastlerNet L.toAbstractIdentityComponent)
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {B : Set L.toAbstractIdentityComponent.Carrier}
+    (hB : L.toAbstractIdentityComponent.IsBasisSet B)
+    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Uop : H ≃ₗᵢ[ℂ] H)
+    (g : ↥(MulAction.stabilizer L.toAbstractIdentityComponent.Isom B))
+    ⦃B₁ : Set L.toAbstractIdentityComponent.Carrier⦄
+    (hB₁ : L.toAbstractIdentityComponent.IsBasisSet B₁) (h₁ : B₁ ⊆ B)
+    (hcov : ∀ (a : N.algebra B) (x : H),
+      Uop (π a (Uop.symm x)) = π (N.stabAutHom B g a) x) :
+    Physicslib4.lieConj Uop '' N.localVonNeumann π hB₁ hB h₁
+      = N.localVonNeumann π
+          (L.toAbstractIdentityComponent_isBasisSet_smul (g : L.toAbstractIdentityComponent.Isom)
+            hB₁) hB (smul_subset_of_mem_stabilizer g h₁) :=
+  N.lieConj_image_localVonNeumann hB π Uop g hB₁ h₁ _ hcov
 
 end AQFT.HaagKastlerCurved.HaagKastlerNet
 
