@@ -993,8 +993,8 @@ theorem standardMinkowski_trip_tangent_mem_minkowskiForwardCone_zero
               standardMinkowskiTimeOrientation p q c) :
     ∃ (rep : StandardMinkowskiSpacetime.SmoothPath),
       c = Spacetime.SmoothCurve.ofPath StandardMinkowskiSpacetime rep ∧
-      Spacetime.IsPastEndpoint StandardMinkowskiSpacetime rep p ∧
-      Spacetime.IsFutureEndpoint StandardMinkowskiSpacetime rep q ∧
+      Spacetime.IsPastEndpoint StandardMinkowskiSpacetime rep.toPath p ∧
+      Spacetime.IsFutureEndpoint StandardMinkowskiSpacetime rep.toPath q ∧
       (∀ s ∈ rep.parameterSpace,
         (mfderivWithin (modelWithCornersSelf ℝ ℝ)
           StandardMinkowskiSpacetime.model
@@ -1026,8 +1026,8 @@ hypothesis is needed. -/
 theorem standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints
     (rep : StandardMinkowskiSpacetime.SmoothPath)
     {p q : SpacetimeModel}
-    (hp : Spacetime.IsPastEndpoint StandardMinkowskiSpacetime rep p)
-    (hq : Spacetime.IsFutureEndpoint StandardMinkowskiSpacetime rep q) :
+    (hp : Spacetime.IsPastEndpoint StandardMinkowskiSpacetime rep.toPath p)
+    (hq : Spacetime.IsFutureEndpoint StandardMinkowskiSpacetime rep.toPath q) :
     ∃ a b : ℝ, a < b ∧ rep.parameterSpace = Set.Icc a b ∧
       rep.toFun a = p ∧ rep.toFun b = q := by
   obtain ⟨sp, hsp_mem, hsp_eq, hsp_min⟩ := hp

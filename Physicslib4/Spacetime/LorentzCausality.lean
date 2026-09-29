@@ -273,8 +273,8 @@ theorem lorentzPath_isFutureOriented (g : InhomogeneousLorentzGroup)
 theorem lorentzPath_isPastEndpoint (g : InhomogeneousLorentzGroup)
     (μ : StandardMinkowskiSpacetime.SmoothPath)
     {p : StandardMinkowskiSpacetime.Carrier}
-    (h : IsPastEndpoint StandardMinkowskiSpacetime μ p) :
-    IsPastEndpoint StandardMinkowskiSpacetime (lorentzPath g μ) (g • p) := by
+    (h : IsPastEndpoint StandardMinkowskiSpacetime μ.toPath p) :
+    IsPastEndpoint StandardMinkowskiSpacetime (lorentzPath g μ).toPath (g • p) := by
   obtain ⟨s, hs, hsp, hmin⟩ := h
   refine ⟨s, hs, ?_, hmin⟩
   change g.linear (μ.toFun s) + g.translation = g • p
@@ -284,8 +284,8 @@ theorem lorentzPath_isPastEndpoint (g : InhomogeneousLorentzGroup)
 theorem lorentzPath_isFutureEndpoint (g : InhomogeneousLorentzGroup)
     (μ : StandardMinkowskiSpacetime.SmoothPath)
     {q : StandardMinkowskiSpacetime.Carrier}
-    (h : IsFutureEndpoint StandardMinkowskiSpacetime μ q) :
-    IsFutureEndpoint StandardMinkowskiSpacetime (lorentzPath g μ) (g • q) := by
+    (h : IsFutureEndpoint StandardMinkowskiSpacetime μ.toPath q) :
+    IsFutureEndpoint StandardMinkowskiSpacetime (lorentzPath g μ).toPath (g • q) := by
   obtain ⟨s, hs, hsq, hmax⟩ := h
   refine ⟨s, hs, ?_, hmax⟩
   change g.linear (μ.toFun s) + g.translation = g • q
@@ -361,11 +361,10 @@ theorem isCompletelySpacelike_smul_iff (g : InhomogeneousLorentzGroup)
 /-! ### Lorentz invariance of chronological precedence and Alexandrov-basis sets
 
 These results feed the Haag-Kastler axioms. `LorentzCovariance`
-(`AQFT/HaagKastler/LorentzCovariance.lean`) carries explicit hypotheses
-`IsAlexandrovBasisSet (L • B)`, and `LocalCommutativity` is phrased over
-completely-spacelike Alexandrov-basis pairs. The lemmas below show those
-geometric hypotheses are stable under the Lorentz action, so they can be
-discharged from the un-transformed data. -/
+(`AQFT/HaagKastler/LorentzCovarianceAxiom.lean`) uses `isAlexandrovBasisSet_smul` to
+form the isotony embedding between `L • B₁` and `L • B₂`, and `LocalCommutativity` is
+phrased over completely-spacelike Alexandrov-basis pairs. The lemmas below show those
+geometric conditions are stable under the Lorentz action. -/
 
 /-- The Lorentz pushforward of a timelike path is timelike. -/
 theorem lorentzPath_isTimelike (g : InhomogeneousLorentzGroup)
@@ -423,8 +422,8 @@ theorem chronologicallyPrecedes_smul_iff (g : InhomogeneousLorentzGroup)
 
 /-- **The Lorentz action preserves Alexandrov-basis sets.** Since `g` is a
 chronological-precedence automorphism, it carries `I⁺(p) ∩ I⁻(q)` onto
-`I⁺(g • p) ∩ I⁻(g • q)`. This discharges the `IsAlexandrovBasisSet (L • B)`
-hypotheses in `LorentzCovariance`. -/
+`I⁺(g • p) ∩ I⁻(g • q)`. Condition (3) of `LorentzCovariance`
+uses it for the basis sets `L • B₁` and `L • B₂`. -/
 theorem isAlexandrovBasisSet_smul (g : InhomogeneousLorentzGroup)
     {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B) :

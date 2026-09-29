@@ -3128,6 +3128,8 @@ from $C^0(\sigma(A); \mathbb{R})$ to $\mathcal{B}(\mathbf{H})$ that when restric
 This map $f \mapsto f(A)$ is the desired result of this proposition and is known as the \textit{(real-valued) functional calculus} for $A$.
 \end{proof}
 
+\noindent\textit{Formalization note.} The Lean proof of this proposition (\texttt{existsUnique\_realCalculus}) does not build $f \mapsto f(A)$ by extending $p \mapsto p(A)$ with the Bounded Linear Transformation Theorem. It takes the map to be Mathlib's continuous functional calculus for self-adjoint elements of a C$^*$-algebra (\texttt{cfcHom}), which Mathlib constructs independently of this blueprint and which is bounded by \texttt{norm\_cfcHom}. Uniqueness is proved as above, from the density of the polynomials in $C^0(\sigma(A);\mathbb{R})$ (Stone--Weierstrass). The same map \texttt{realCalculus} underlies the Lean statements of the properties of the functional calculus below.
+
 As a final step in \textbf{Stage 1: The Continuous Functional Calculus}, we will derive some basic properties of the (real-valued) functional calculus of a self-adjoint operator $A$ in $\mathcal{B}(\mathbf{H})$. These properties require the following definition
 
 \begin{definition}[Non-Negative Bounded Operator]

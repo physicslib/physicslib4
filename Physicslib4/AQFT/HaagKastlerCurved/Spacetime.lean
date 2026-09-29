@@ -79,7 +79,9 @@ axioms quantify over:
   basis sets (used by Axiom 3);
 * `Isom` with `instGroup`/`instAction` — the group of isometries of
   `M` connected to the identity, acting on `Carrier` (used by
-  Axiom 5).
+  Axiom 5);
+* `isBasisSet_smul` — isometries carry basis sets to basis sets, so the
+  Axiom 5 action `𝔘(𝐁) → 𝔘(φ(𝐁))` lands in the local algebra of a basis set.
 
 The full geometric content (smooth 4-manifold, Lorentzian metric,
 nowhere-vanishing time-orientation field, Hausdorff Alexandrov
@@ -89,9 +91,10 @@ interface.
 This is the *axiom-facing interface* form of the geometric bundle
 `Physicslib4.Spacetime.LorentzianSpacetime`: every such geometric
 Lorentzian spacetime instantiates this interface via
-`Physicslib4.Spacetime.LorentzianSpacetime.toAbstract`, which supplies
-`Carrier`, `IsBasisSet`, `IsCompletelySpacelike`, and the
-identity-component isometry group with its action. Both declarations
+`Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent`, which
+supplies `Carrier`, `IsBasisSet`, `IsCompletelySpacelike`, the oriented
+identity-component isometry group with its action, and the proof that those
+isometries preserve basis sets. Both declarations
 correspond to the same blueprint definition `def:lorentzian-spacetime`.
 -/
 structure LorentzianSpacetime where
@@ -107,6 +110,9 @@ structure LorentzianSpacetime where
   instGroup : Group Isom
   /-- The action of the isometries on spacetime points. -/
   instAction : MulAction Isom Carrier
+  /-- Isometries carry basis sets to basis sets, so that the Axiom 5 action
+  `𝔘(𝐁) → 𝔘(φ(𝐁))` is between local algebras of basis sets. -/
+  isBasisSet_smul : ∀ (φ : Isom) {B : Set Carrier}, IsBasisSet B → IsBasisSet (φ • B)
 
 attribute [instance] LorentzianSpacetime.instGroup LorentzianSpacetime.instAction
 

@@ -5,31 +5,20 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.Net
-import Physicslib4.AQFT.HaagKastlerCurved.GeometricCovariance
 import Physicslib4.Spacetime.IsometryTopology
 import Physicslib4.Spacetime.IsometryCausality
 
 /-!
-# Bridging via the identity-component isometry group
+# The identity-component bridge: faithfulness and satisfiability
 
-This file provides the variant of the concrete-to-abstract bridge
-(`Physicslib4.Spacetime.LorentzianSpacetime.toAbstract`) that instantiates
-the abstract interface's isometry group `Isom` with the **identity
-component** of the isometry group, matching the blueprint's "isometries
-connected to the identity" in Axiom 5
-(`def:isometric-covariance-in-curved-spacetime`).
-
-## Main definitions
-
-* `Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent`.
-
-## Modelling notes
-
-The isometry group is a topological group under the `(map, inverse)`-induced
-topology (see `Physicslib4/Spacetime/IsometryTopology.lean`), so the
-identity-component subgroup is unconditional and this bridge yields the
-abstract interface with `Isom` the genuine identity-component subgroup
-(isometries connected to the identity).
+The concrete-to-abstract bridge
+`Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent`
+(`Physicslib4/AQFT/HaagKastlerCurved/Concrete.lean`) instantiates the abstract
+interface's isometry group `Isom` with the oriented identity component of the
+isometry group, matching the blueprint's "isometries connected to the identity" in
+Axiom 5 (`def:isometric-covariance-in-curved-spacetime`). This file records that the
+identity component acts faithfully and that the curved Haag-Kastler axioms are jointly
+satisfiable over the bridge.
 -/
 
 namespace Physicslib4
@@ -37,77 +26,6 @@ namespace Physicslib4
 namespace Spacetime
 
 namespace LorentzianSpacetime
-
-/--
-The abstract Haag-Kastler interface induced by a concrete Lorentzian
-spacetime, with the isometry group taken to be the **oriented identity
-component** (identity-component isometries that also preserve the future
-orientation), as in Axiom 5. Using the oriented component makes basis-set
-preservation `φ(𝐁)` a theorem (`toAbstractIdentityComponent_isBasisSet_smul`)
-rather than an unprovable consequence of the bare (C⁰) group topology.
--/
-noncomputable def toAbstractIdentityComponent (L : LorentzianSpacetime) :
-    AQFT.HaagKastlerCurved.LorentzianSpacetime where
-  Carrier := L.Carrier
-  IsBasisSet := L.IsBasisSet
-  IsCompletelySpacelike := L.IsCompletelySpacelike
-  Isom := ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime
-    L.timeOrientation)
-  instGroup := inferInstance
-  instAction := inferInstance
-
-@[simp] theorem toAbstractIdentityComponent_Carrier (L : LorentzianSpacetime) :
-    (L.toAbstractIdentityComponent).Carrier = L.Carrier := rfl
-
-@[simp] theorem toAbstractIdentityComponent_IsBasisSet (L : LorentzianSpacetime) :
-    (L.toAbstractIdentityComponent).IsBasisSet = L.IsBasisSet := rfl
-
-/-- The abstract isometry group of the bridge is, definitionally, the oriented
-identity component. Exposed as a `simp` lemma so abstract-interface statements
-can be rewritten to the concrete subgroup. -/
-@[simp] theorem toAbstractIdentityComponent_Isom (L : LorentzianSpacetime) :
-    (L.toAbstractIdentityComponent).Isom
-      = ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime
-          L.timeOrientation) := rfl
-
-/-- The abstract isometry group of the `toAbstract` bridge inherits the
-topological-group topology of the concrete isometry group. This discharges the
-`[TopologicalSpace M.Isom]` hypothesis of the curved covariance/KMS results
-(e.g. the strongly continuous stabilizer GNS unitary) automatically for a net
-over a concrete Lorentzian spacetime — no explicit topology argument is needed. -/
-noncomputable instance instTopologicalSpaceToAbstractIsom (L : LorentzianSpacetime) :
-    TopologicalSpace (L.toAbstract).Isom :=
-  inferInstanceAs (TopologicalSpace (Isometry L.toSpacetime))
-
-/-- The abstract isometry group of the `toAbstractIdentityComponent` bridge
-inherits the subspace topology of the oriented identity-component subgroup,
-discharging `[TopologicalSpace M.Isom]` automatically over a concrete spacetime. -/
-noncomputable instance instTopologicalSpaceToAbstractIdentityComponentIsom
-    (L : LorentzianSpacetime) :
-    TopologicalSpace (L.toAbstractIdentityComponent).Isom :=
-  inferInstanceAs (TopologicalSpace
-    ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime L.timeOrientation))
-
-/-- Confirmation that the `[TopologicalSpace M.Isom]` requirement of the curved
-results is met by both bridges over a concrete spacetime. -/
-example (L : LorentzianSpacetime) : True := by
-  have _ : TopologicalSpace (L.toAbstract).Isom := inferInstance
-  have _ : TopologicalSpace (L.toAbstractIdentityComponent).Isom := inferInstance
-  trivial
-
-open scoped Pointwise in
-/-- **Axiom 5 basis-set preservation, stated over the abstract bridge.** Every
-isometry `φ` of the abstract spacetime carries Alexandrov-basis sets to basis
-sets: `φ(𝐁) = φ • 𝐁` is again a basis set. This is what makes the Axiom 5
-action `𝔘(𝐁) → 𝔘(φ(𝐁))` well-defined. -/
-theorem toAbstractIdentityComponent_isBasisSet_smul (L : LorentzianSpacetime)
-    (φ : (L.toAbstractIdentityComponent).Isom)
-    {B : Set (L.toAbstractIdentityComponent).Carrier}
-    (hB : (L.toAbstractIdentityComponent).IsBasisSet B) :
-    (L.toAbstractIdentityComponent).IsBasisSet (φ • B) := by
-  let g : ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime
-      L.timeOrientation) := φ
-  exact L.isBasisSet_smul (↑g) g.2 hB
 
 /-- The identity-component isometry group acts **faithfully** on the
 spacetime: an identity-component isometry is determined by its action on
@@ -139,59 +57,5 @@ theorem nonempty_haagKastlerNet_identityComponent (L : LorentzianSpacetime) :
 end LorentzianSpacetime
 
 end Spacetime
-
-namespace AQFT.HaagKastlerCurved.HaagKastlerNet
-
-/-- **Monotonicity of local commutativity over the identity-component bridge.**
-The identity-component analogue of `commute_of_spacelike_mono_geometric`: for a
-Haag-Kastler net over the abstract interface induced by a concrete Lorentzian
-spacetime `L` with `Isom` the *oriented identity component*, the
-spacelike-monotonicity hypothesis is discharged automatically by
-`Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono` (the bridge's
-`IsCompletelySpacelike` is, definitionally, that of `L`). This is the
-physically faithful form: the symmetry group is the isometries connected to the
-identity, as in Axiom 5. -/
-theorem commute_of_spacelike_mono_identityComponent
-    {L : Spacetime.LorentzianSpacetime}
-    (N : HaagKastlerNet L.toAbstractIdentityComponent)
-    ⦃B₁ B₂ B₁' B₂' B : Set L.toAbstractIdentityComponent.Carrier⦄
-    (hB₁' : L.toAbstractIdentityComponent.IsBasisSet B₁')
-    (hB₂' : L.toAbstractIdentityComponent.IsBasisSet B₂')
-    (hB : L.toAbstractIdentityComponent.IsBasisSet B)
-    (hs : L.toAbstractIdentityComponent.IsCompletelySpacelike B₁ B₂)
-    (hsub₁ : B₁' ⊆ B₁) (hsub₂ : B₂' ⊆ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B)
-    (a : N.algebra B₁') (b : N.algebra B₂') :
-    Commute (N.commIsotony hB₁' hB (hsub₁.trans h₁) a)
-            (N.commIsotony hB₂' hB (hsub₂.trans h₂) b) :=
-  N.commute_of_spacelike_mono
-    (fun _ _ _ _ hh₁ hh₂ hh => L.isCompletelySpacelike_mono hh₁ hh₂ hh)
-    hB₁' hB₂' hB hs hsub₁ hsub₂ h₁ h₂ a b
-
-open scoped Pointwise in
-/-- **Geometric covariance over the identity-component bridge.** For a net over the
-abstract interface induced by a concrete Lorentzian spacetime `L` (with `Isom` the
-oriented identity component), the basis-set preservation hypothesis `hgB₁` of
-`lieConj_image_localVonNeumann` is discharged by
-`toAbstractIdentityComponent_isBasisSet_smul`: conjugation by the implementing unitary
-`U(g)` carries `R(B₁)` onto `R(g · B₁)` with no geometric side condition. -/
-theorem lieConj_image_localVonNeumann_identityComponent
-    {L : Spacetime.LorentzianSpacetime}
-    (N : HaagKastlerNet L.toAbstractIdentityComponent)
-    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {B : Set L.toAbstractIdentityComponent.Carrier}
-    (hB : L.toAbstractIdentityComponent.IsBasisSet B)
-    (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Uop : H ≃ₗᵢ[ℂ] H)
-    (g : ↥(MulAction.stabilizer L.toAbstractIdentityComponent.Isom B))
-    ⦃B₁ : Set L.toAbstractIdentityComponent.Carrier⦄
-    (hB₁ : L.toAbstractIdentityComponent.IsBasisSet B₁) (h₁ : B₁ ⊆ B)
-    (hcov : ∀ (a : N.algebra B) (x : H),
-      Uop (π a (Uop.symm x)) = π (N.stabAutHom B g a) x) :
-    Physicslib4.lieConj Uop '' N.localVonNeumann π hB₁ hB h₁
-      = N.localVonNeumann π
-          (L.toAbstractIdentityComponent_isBasisSet_smul (g : L.toAbstractIdentityComponent.Isom)
-            hB₁) hB (smul_subset_of_mem_stabilizer g h₁) :=
-  N.lieConj_image_localVonNeumann hB π Uop g hB₁ h₁ _ hcov
-
-end AQFT.HaagKastlerCurved.HaagKastlerNet
 
 end Physicslib4

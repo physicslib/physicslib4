@@ -375,11 +375,14 @@ weak limit of the operators.
 Blueprint reference: `lmm:abstract-extended-convergence` (Part 2).
 -/
 theorem tendsto_inner_extendedCalculus (hΦ : IsAbstractCalculus Φ) {h : ℕ → X → ℂ}
-    {h₀ : X → ℂ} {M : ℝ} (hh : ∀ i, h i ∈ BddMeasurable X) (hh₀ : h₀ ∈ BddMeasurable X)
+    {h₀ : X → ℂ} {M : ℝ} (hh : ∀ i, h i ∈ BddMeasurable X)
     (hbdd : ∀ i x, ‖h i x‖ ≤ M) (hlim : ∀ x, Tendsto (fun i => h i x) atTop (𝓝 (h₀ x)))
     (φ ψ : H) :
     Tendsto (fun i => ⟪φ, extendedCalculus hΦ (h i) ψ⟫_ℂ) atTop
       (𝓝 ⟪φ, extendedCalculus hΦ h₀ ψ⟫_ℂ) := by
+  have hh₀ : h₀ ∈ BddMeasurable X :=
+    ⟨measurable_of_tendsto_metrizable (fun i => (hh i).1) (tendsto_pi_nhds.2 hlim),
+      M, fun x => le_of_tendsto' (hlim x).norm fun i => hbdd i x⟩
   have hQ : ∀ ξ : H, Tendsto (fun i => abstractForm hΦ (h i) ξ) atTop
       (𝓝 (abstractForm hΦ h₀ ξ)) := fun ξ =>
     tendsto_integral_of_dominated_convergence (fun _ => M)
@@ -457,13 +460,13 @@ theorem extendedCalculus_mul (hΦ : IsAbstractCalculus Φ) {f g : X → ℂ}
       refine ⟨hq, fun g => hext _ _ fun φ ψ => ?_⟩
       have t1 := tendsto_inner_extendedCalculus hΦ (h := fun n x => p n x * g x)
         (h₀ := fun x => q x * g x) (M := M * ‖g‖)
-        (fun n => hmulmem (hp n).1 (hcontmem g)) (hmulmem hq (hcontmem g))
+        (fun n => hmulmem (hp n).1 (hcontmem g))
         (fun n x => by
           rw [norm_mul]
           exact mul_le_mul (hpq.norm_le n x) (g.norm_coe_le_norm x) (norm_nonneg _)
             ((norm_nonneg _).trans (hpq.norm_le n x)))
         (fun x => (hpq.tendsto x).mul tendsto_const_nhds) φ ψ
-      have t2 := tendsto_inner_extendedCalculus hΦ (fun n => (hp n).1) hq hpq.norm_le
+      have t2 := tendsto_inner_extendedCalculus hΦ (fun n => (hp n).1) hpq.norm_le
         hpq.tendsto φ (Φ g ψ)
       refine tendsto_nhds_unique (t1.congr fun n => ?_) t2
       rw [(hp n).2 g]
@@ -495,13 +498,13 @@ theorem extendedCalculus_mul (hΦ : IsAbstractCalculus Φ) {f g : X → ℂ}
       obtain ⟨Cu, hCu⟩ := hu.2
       have t1 := tendsto_inner_extendedCalculus hΦ (h := fun n x => u x * p n x)
         (h₀ := fun x => u x * q x) (M := Cu * M)
-        (fun n => hmulmem hu (hp n).1) (hmulmem hu hq)
+        (fun n => hmulmem hu (hp n).1)
         (fun n x => by
           rw [norm_mul]
           exact mul_le_mul (hCu x) (hpq.norm_le n x) (norm_nonneg _)
             ((norm_nonneg _).trans (hCu x)))
         (fun x => tendsto_const_nhds.mul (hpq.tendsto x)) φ ψ
-      have t2 := tendsto_inner_extendedCalculus hΦ (fun n => (hp n).1) hq hpq.norm_le
+      have t2 := tendsto_inner_extendedCalculus hΦ (fun n => (hp n).1) hpq.norm_le
         hpq.tendsto (ContinuousLinearMap.adjoint (extendedCalculus hΦ u) φ) ψ
       simp only [ContinuousLinearMap.adjoint_inner_left] at t2
       refine tendsto_nhds_unique (t1.congr fun n => ?_) t2
@@ -637,7 +640,6 @@ theorem hasSum_extendedCalculus_indicator (hΦ : IsAbstractCalculus Φ) (E : ℕ
       · exact Eventually.of_forall fun n => by simp [hx]
     have hconv := tendsto_inner_extendedCalculus hΦ (M := 1)
       (fun n => indicator_one_mem_bddMeasurable (hU.diff (hF n)))
-      (zero_mem (BddMeasurable X))
       (fun n x => by by_cases hx : x ∈ (⋃ j, E j) \ F n <;> simp [hx]) hlim ψ ψ
     rw [extendedCalculus_zero, zero_apply, inner_zero_right] at hconv
     have hre := (Complex.continuous_re.tendsto 0).comp hconv

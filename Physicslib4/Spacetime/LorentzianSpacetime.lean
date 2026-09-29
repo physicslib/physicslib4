@@ -47,11 +47,11 @@ to the agreement of the Alexandrov and manifold topologies; we take the
 Hausdorff form as the primitive assumption, exactly as the Chapter 9 prologue
 does.
 
-This bundle is the concrete object intended to instantiate the abstract
+This bundle is the concrete object that instantiates the abstract
 `Physicslib4.AQFT.HaagKastlerCurved.LorentzianSpacetime` interface over
-which Axioms 1-5 are stated. The remaining ingredient for that bridge
-is the identity-component isometry group of the spacetime (used by
-Axiom 5), which is developed separately.
+which Axioms 1-5 are stated, via
+`LorentzianSpacetime.toAbstractIdentityComponent`
+(`Physicslib4/AQFT/HaagKastlerCurved/Concrete.lean`).
 -/
 
 namespace Physicslib4
@@ -67,8 +67,8 @@ with a smooth nowhere-vanishing global timelike vector field
 (`timeOrientation`) and an associated *Hausdorff* Alexandrov topology
 (`alexandrov_t2`).
 
-This is the geometric bundle; `LorentzianSpacetime.toAbstract` exposes
-it as the axiom-facing interface
+This is the geometric bundle; `LorentzianSpacetime.toAbstractIdentityComponent`
+exposes it as the axiom-facing interface
 `Physicslib4.AQFT.HaagKastlerCurved.LorentzianSpacetime` over which the
 curved Haag-Kastler axioms are stated.
 

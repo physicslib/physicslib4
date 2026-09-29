@@ -162,8 +162,7 @@ quasilocal algebra and every Lorentz transformation. -/
 theorem isCovariantQuasilocal (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony)
     (L : InhomogeneousLorentzGroup) : IsCovariantQuasilocal N Q L := by
   intro B C hB hC h a
-  rw [N.covEquiv_isotony L hB hC h (isAlexandrovBasisSet_smul L hB)
-    (isAlexandrovBasisSet_smul L hC) (Set.smul_set_mono h) a, Q.ι_inclusion]
+  rw [N.covEquiv_isotony L hB hC h a, Q.ι_inclusion]
 
 /-- **Well-definedness of the intertwiner.** If two local elements `ι_B a` and
 `ι_{B'} a'` agree in `𝔘`, then their intended images
