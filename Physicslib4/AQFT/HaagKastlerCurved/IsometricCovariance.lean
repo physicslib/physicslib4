@@ -69,12 +69,9 @@ Alexandrov-basis set `B`, a `*`-algebra equivalence
 (2) `α (φ' * φ) B a = α φ' (φ • B) (α φ B a)`, and (3) for every `φ` and
 inclusion `B₁ ⊆ B₂`, `α φ B₂ ∘ i.map = i.map ∘ α φ B₁`.
 
-In (3) the inclusion `φ • B₁ ⊆ φ • B₂` is not a hypothesis: it is `Set.smul_set_mono h`.
-The hypotheses `hφB₁`, `hφB₂` that `φ • B₁` and `φ • B₂` are basis sets are needed
-because Axiom 2's `i.map` is only defined between basis sets, and the abstract interface
-does not assert that isometries preserve basis sets. Where they fail, (3) says nothing
-about that pair. For a concrete spacetime with the identity-component isometry group they
-always hold (`toAbstractIdentityComponent_isBasisSet_smul`).
+In (3) neither the inclusion `φ • B₁ ⊆ φ • B₂` nor the fact that `φ • B₁` and `φ • B₂`
+are basis sets is a hypothesis: they are `Set.smul_set_mono h` and the interface field
+`LorentzianSpacetime.isBasisSet_smul`.
 
 Condition (3) is stated for the isotony family `i` of Axiom 2, which this
 predicate takes as a parameter, not for a separately chosen family: the
@@ -100,12 +97,9 @@ def IsometricCovariance (U : LocalNet M) (i : Isotony U) : Prop :=
       -- (3) The action commutes with the Axiom 2 isotony family `i`.
       ∀ (φ : M.Isom) ⦃B₁ B₂ : Set M.Carrier⦄
         (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
-        (h : B₁ ⊆ B₂)
-        (hφB₁ : M.IsBasisSet (φ • B₁))
-        (hφB₂ : M.IsBasisSet (φ • B₂))
-        (a : U.algebra B₁),
+        (h : B₁ ⊆ B₂) (a : U.algebra B₁),
           (α φ B₂ : U.algebra B₂ → U.algebra (φ • B₂)) (i.map hB₁ hB₂ h a)
-            = i.map hφB₁ hφB₂ (Set.smul_set_mono h)
+            = i.map (M.isBasisSet_smul φ hB₁) (M.isBasisSet_smul φ hB₂) (Set.smul_set_mono h)
                 ((α φ B₁ : U.algebra B₁ → U.algebra (φ • B₁)) a)
 
 end HaagKastlerCurved
