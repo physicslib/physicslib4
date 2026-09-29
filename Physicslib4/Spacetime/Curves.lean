@@ -1023,6 +1023,105 @@ theorem parameterSpace_eq_Icc_of_endpoints (μ : M.Path) {p q : M.Carrier}
     exact hst (by rw [hsa, hta])
   exact ⟨a, b, lt_of_le_of_ne hab_le hab_ne, hset⟩
 
+
+/-! ### Endpoints of curves
+
+An endpoint of a path is also called an endpoint of its associated curve. This is
+well defined because a reparametrisation carries the frontier of one parameter space
+onto the frontier of the other. Past and future endpoints are not defined on
+unoriented curves: an orientation-reversing reparametrisation exchanges them. -/
+
+/-- A point `p` is an *endpoint* of a curve `c` if it is an endpoint of a path
+representing `c`. By `isCurveEndpoint_ofPath_iff` this does not depend on the
+representative. -/
+def IsCurveEndpoint (c : Curve M) (p : M.Carrier) : Prop :=
+  ∃ μ : M.Path, c = Curve.ofPath M μ ∧ IsEndpoint M μ p
+
+/-- A point `p` is an *endpoint* of a smooth curve `c` if it is an endpoint of a
+smooth path representing `c`. By `isSmoothCurveEndpoint_ofPath_iff` this does not
+depend on the representative. -/
+def IsSmoothCurveEndpoint (c : SmoothCurve M) (p : M.Carrier) : Prop :=
+  ∃ μ : M.SmoothPath, c = SmoothCurve.ofPath M μ ∧ IsEndpoint M μ.toPath p
+
+variable {M} in
+/-- Endpoints are invariant under reparametrisation of paths. -/
+theorem IsEndpoint.of_pathEquiv {μ₁ μ₂ : M.Path} (h : M.PathEquiv μ₁ μ₂) {p : M.Carrier}
+    (hp : IsEndpoint M μ₁ p) : IsEndpoint M μ₂ p := by
+  obtain ⟨φ, hφ, ⟨ψ, hψ, hl, hr, hψmaps⟩, hmaps, heq⟩ := h
+  obtain ⟨s, hs, rfl⟩ := hp
+  let e : ℝ ≃ₜ ℝ :=
+    { toFun := φ, invFun := ψ, left_inv := hl, right_inv := hr,
+      continuous_toFun := hφ, continuous_invFun := hψ }
+  have himg : e '' μ₁.parameterSpace = μ₂.parameterSpace :=
+    subset_antisymm hmaps.image_subset fun t ht => ⟨ψ t, hψmaps ht, hr t⟩
+  refine ⟨φ s, ?_, heq s (μ₁.isClosed.frontier_subset hs)⟩
+  rw [← himg, ← e.image_frontier]
+  exact ⟨s, hs, rfl⟩
+
+variable {M} in
+/-- On a path, a parameter lies in the frontier of the parameter space iff it is a
+parameter which is a minimum or a maximum of the parameter space. -/
+private theorem mem_frontier_iff_isExtreme (μ : M.Path) {s : ℝ} :
+    s ∈ frontier μ.parameterSpace ↔ s ∈ μ.parameterSpace ∧
+      ((∀ t ∈ μ.parameterSpace, s ≤ t) ∨ ∀ t ∈ μ.parameterSpace, t ≤ s) := by
+  refine ⟨fun hs => ⟨μ.isClosed.frontier_subset hs, ?_⟩, fun ⟨hs, hext⟩ =>
+    hext.elim (mem_frontier_of_isMin M μ hs) (mem_frontier_of_isMax M μ hs)⟩
+  by_contra hne
+  push Not at hne
+  obtain ⟨⟨a, ha, has⟩, ⟨b, hb, hsb⟩⟩ := hne
+  have hsub : Set.Ioo a b ⊆ interior μ.parameterSpace := isOpen_Ioo.subset_interior_iff.mpr
+    (Set.Ioo_subset_Icc_self.trans (μ.isConnected.isPreconnected.ordConnected.out ha hb))
+  exact hs.2 (hsub ⟨has, hsb⟩)
+
+/-- A continuous bijection `u → v` of subsets of `ℝ` (with inverse `ψ`), `u`
+preconnected, sends a minimum or maximum of `u` to a minimum or maximum of `v`. -/
+private theorem isExtreme_image_of_invOn {u v : Set ℝ} {φ ψ : ℝ → ℝ}
+    (hu : IsPreconnected u) (hφ : ContinuousOn φ u) (hψ : Set.MapsTo ψ v u)
+    (hψφ : ∀ t ∈ u, ψ (φ t) = t) (hφψ : ∀ t ∈ v, φ (ψ t) = t) {s : ℝ} (hs : s ∈ u)
+    (hext : (∀ t ∈ u, s ≤ t) ∨ ∀ t ∈ u, t ≤ s) :
+    (∀ t ∈ v, φ s ≤ t) ∨ ∀ t ∈ v, t ≤ φ s := by
+  have hoc : (u \ {s}).OrdConnected := ⟨fun x hx y hy z hz =>
+    ⟨hu.ordConnected.out hx.1 hy.1 hz, fun hzs => by
+      rcases hext with h | h
+      · exact hx.2 (le_antisymm (hzs ▸ hz.1) (h x hx.1))
+      · exact hy.2 (le_antisymm (h y hy.1) (hzs ▸ hz.2))⟩⟩
+  have hcon := hoc.isPreconnected.image φ (hφ.mono Set.sdiff_subset)
+  have hmem : ∀ a ∈ v, a ≠ φ s → a ∈ φ '' (u \ {s}) := fun a ha hne =>
+    ⟨ψ a, ⟨hψ ha, fun h => hne (by rw [← hφψ a ha, show ψ a = s from h])⟩, hφψ a ha⟩
+  by_contra hne
+  push Not at hne
+  obtain ⟨⟨a, ha, has⟩, ⟨b, hb, hsb⟩⟩ := hne
+  obtain ⟨x, ⟨hx, hxs⟩, hφx⟩ := hcon.ordConnected.out (hmem a ha has.ne)
+    (hmem b hb hsb.ne') ⟨has.le, hsb.le⟩
+  exact hxs (by rw [← hψφ x hx, hφx, hψφ s hs]; rfl)
+
+variable {M} in
+/-- Endpoints are invariant under smooth reparametrisation of smooth paths. -/
+theorem IsEndpoint.of_smoothPathEquiv {μ₁ μ₂ : M.SmoothPath} (h : M.SmoothPathEquiv μ₁ μ₂)
+    {p : M.Carrier} (hp : IsEndpoint M μ₁.toPath p) : IsEndpoint M μ₂.toPath p := by
+  obtain ⟨φ, ψ, hφC, -, hφmaps, hψmaps, hψφ, hφψ, heq⟩ := h
+  obtain ⟨s, hs, rfl⟩ := hp
+  obtain ⟨hs, hext⟩ := (mem_frontier_iff_isExtreme μ₁.toPath).mp hs
+  refine ⟨φ s, (mem_frontier_iff_isExtreme μ₂.toPath).mpr ⟨hφmaps hs, ?_⟩, heq s hs⟩
+  exact isExtreme_image_of_invOn μ₁.isConnected.isPreconnected hφC.continuousOn hψmaps
+    hψφ hφψ hs hext
+
+variable {M} in
+/-- **Well-definedness of endpoints of curves.** -/
+theorem isCurveEndpoint_ofPath_iff (μ : M.Path) {p : M.Carrier} :
+    IsCurveEndpoint M (Curve.ofPath M μ) p ↔ IsEndpoint M μ p := by
+  refine ⟨fun ⟨μ', heq, hp⟩ => ?_, fun hp => ⟨μ, rfl, hp⟩⟩
+  have h := (equivalence_pathEquiv M).eqvGen_iff.mp (Quot.eqvGen_exact heq)
+  exact hp.of_pathEquiv h.symm
+
+variable {M} in
+/-- **Well-definedness of endpoints of smooth curves.** -/
+theorem isSmoothCurveEndpoint_ofPath_iff (μ : M.SmoothPath) {p : M.Carrier} :
+    IsSmoothCurveEndpoint M (SmoothCurve.ofPath M μ) p ↔ IsEndpoint M μ.toPath p := by
+  refine ⟨fun ⟨μ', heq, hp⟩ => ?_, fun hp => ⟨μ, rfl, hp⟩⟩
+  have h := (equivalence_smoothPathEquiv M).eqvGen_iff.mp (Quot.eqvGen_exact heq)
+  exact hp.of_smoothPathEquiv h.symm
+
 end Spacetime
 
 end Physicslib4

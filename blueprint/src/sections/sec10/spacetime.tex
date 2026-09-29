@@ -280,6 +280,19 @@
     Quantifying over $\Sigma$ rather than over $\partial\Sigma$ is what makes this well-defined: \ref{def:paths} allows $\Sigma$ to be any closed connected subset of $\mathbb{R}$ with more than one point, so $\Sigma$ need not have two boundary components (for instance $\Sigma = [0,\infty)$ or $\Sigma = \mathbb{R}$), and ``the lesser (respectively greater) of the two boundary components'' would then denote nothing. The relation between the two notions is recorded in \ref{lmm:extremal-parameter-mem-frontier}, and the consequence for the parameter space in \ref{lmm:endpoint-parameter-space-eq-Icc}.
 \end{definition}
 
+\begin{lemma}[Endpoints of curves are well defined]
+    \label{lmm:curve-endpoint-well-defined}
+    \lean{Physicslib4.Spacetime.IsCurveEndpoint, Physicslib4.Spacetime.IsSmoothCurveEndpoint, Physicslib4.Spacetime.IsEndpoint.of_pathEquiv, Physicslib4.Spacetime.IsEndpoint.of_smoothPathEquiv, Physicslib4.Spacetime.isCurveEndpoint_ofPath_iff, Physicslib4.Spacetime.isSmoothCurveEndpoint_ofPath_iff}
+    \uses{def:endpoints, def:paths, def:curves}
+    \leanok
+    If two paths (resp.\ smooth paths) are equivalent, then they have the same endpoints. Hence ``$p$ is an endpoint of the curve $[\mu]$'', meaning that $p$ is an endpoint of some representative of $[\mu]$, is well defined, both for curves and for smooth curves: $p$ is an endpoint of the curve (resp.\ smooth curve) of $\mu$ if and only if $p$ is an endpoint of $\mu$. Past and future endpoints, by contrast, are not defined for unoriented curves, because an orientation-reversing reparametrisation exchanges them.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:endpoints, def:paths, def:curves, lmm:extremal-parameter-mem-frontier}
+    For paths, the equivalence is a homeomorphism $\varphi$ of $\mathbb{R}$ carrying $\Sigma_1$ onto $\Sigma_2$ with $\mu_1 = \mu_2 \circ \varphi$; a homeomorphism of $\mathbb{R}$ carries the frontier $\partial\Sigma_1$ onto $\partial\Sigma_2$, so $\mu_1(\partial\Sigma_1) = \mu_2(\partial\Sigma_2)$. For smooth paths, $\varphi$ is defined only on the parameter spaces, so we argue intrinsically: a frontier parameter of a closed connected $\Sigma \subseteq \mathbb{R}$ with more than one point is exactly a minimum or maximum of $\Sigma$ (\ref{lmm:extremal-parameter-mem-frontier} for one direction). A continuous bijection $\Sigma_1 \to \Sigma_2$ with continuous inverse carries a minimum or maximum to a minimum or maximum, since removing an extreme point leaves the set connected, and removing any other point disconnects it. Hence $\varphi(\partial\Sigma_1) = \partial\Sigma_2$ again. The statements about $[\mu]$ follow by choosing a representative equivalent to $\mu$.
+\end{proof}
+
 \begin{lemma}[An extremal parameter lies in the frontier]
     \label{lmm:extremal-parameter-mem-frontier}
     \lean{Physicslib4.Spacetime.mem_frontier_of_isMin, Physicslib4.Spacetime.mem_frontier_of_isMax, Physicslib4.Spacetime.isEndpoint_of_isPastEndpoint, Physicslib4.Spacetime.isEndpoint_of_isFutureEndpoint}
