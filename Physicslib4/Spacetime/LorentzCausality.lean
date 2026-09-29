@@ -64,7 +64,7 @@ theorem isSpacelikeRelated_congr (t : M.TimeOrientation)
     (p₁ p₂ : M.Carrier) :
     IsSpacelikeRelated M t (g p₁) (g p₂) ↔ IsSpacelikeRelated M t p₁ p₂ := by
   simp only [IsSpacelikeRelated, Set.mem_union, causalFuture, causalPast,
-    Set.mem_setOf_eq, not_or, hg]
+    Set.mem_ofPred_eq, not_or, hg]
 
 /-- **Complete spacelikeness is invariant under taking images by a
 precedence-preserving map.** If `g` preserves causal precedence in both
@@ -428,12 +428,12 @@ theorem isAlexandrovBasisSet_smul (g : InhomogeneousLorentzGroup)
     {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B) :
     IsAlexandrovBasisSet (g • B) := by
-  simp only [IsAlexandrovBasisSet, Spacetime.alexandrovBasis, Set.mem_setOf_eq] at hB ⊢
+  simp only [IsAlexandrovBasisSet, Spacetime.alexandrovBasis, Set.mem_ofPred_eq] at hB ⊢
   obtain ⟨p, q, rfl⟩ := hB
   refine ⟨g • p, g • q, ?_⟩
   ext y
   simp only [Set.mem_smul_set, Set.mem_inter_iff, chronologicalFuture, chronologicalPast,
-    Set.mem_setOf_eq]
+    Set.mem_ofPred_eq]
   constructor
   · rintro ⟨x, ⟨hxF, hxP⟩, rfl⟩
     exact ⟨(chronologicallyPrecedes_smul_iff g p x).mpr hxF,

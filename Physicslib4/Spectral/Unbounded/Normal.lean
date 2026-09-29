@@ -66,13 +66,13 @@ is that this assignment is then multiplicative, which is
 Blueprint reference: the substitution `p ↦ p(A, A*)` of `lmm:polynomials-in-normal-are-normal`.
 -/
 noncomputable def mvApply (A : H →L[ℂ] H) (p : MvPolynomial (Fin 2) ℂ) : H →L[ℂ] H :=
-  ∑ d ∈ p.support, MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1)
+  ∑ d ∈ p.support, p.coeff d • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1)
 
 /--
 The scalar function `λ ↦ p(λ, conj λ)` attached to a two-variable polynomial.
 -/
 noncomputable def mvEvalConj (p : MvPolynomial (Fin 2) ℂ) (lam : ℂ) : ℂ :=
-  ∑ d ∈ p.support, MvPolynomial.coeff d p * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1
+  ∑ d ∈ p.support, p.coeff d * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1
 
 /-!
 ### Norm and spectral radius
@@ -115,10 +115,10 @@ The spectral radius is submultiplicative on commuting operators.
 
 Blueprint reference: `lmm:hall-10.22`.
 -/
-theorem spectralRadius_mul_le_of_commute [Nontrivial H] {A B : H →L[ℂ] H} (h : Commute A B) :
+theorem spectralRadius_mul_le_of_commute {A B : H →L[ℂ] H} (h : Commute A B) :
     spectralRadius ℂ (A * B) ≤ spectralRadius ℂ A * spectralRadius ℂ B := by
   have hfin : ∀ C : H →L[ℂ] H, spectralRadius ℂ C ≠ ⊤ := fun C =>
-    ((spectrum.spectralRadius_le_nnnorm C).trans_lt ENNReal.coe_lt_top).ne
+    ((spectralRadius_le_nnnorm C).trans_lt ENNReal.coe_lt_top).ne
   refine le_of_tendsto_of_tendsto' (spectrum.pow_norm_pow_one_div_tendsto_nhds_spectralRadius _)
     (ENNReal.Tendsto.mul (spectrum.pow_norm_pow_one_div_tendsto_nhds_spectralRadius A)
       (Or.inr (hfin B)) (spectrum.pow_norm_pow_one_div_tendsto_nhds_spectralRadius B)
@@ -268,7 +268,7 @@ theorem spectralSubspace_ne_bot {Y : Set ℂ} (hY : IsCompact Y)
     · have hd : ε ≤ ‖(y : ℂ) - lam₀‖ := by
         by_contra hlt
         exact hy (hball (by rw [Metric.mem_ball, dist_eq_norm]; linarith))
-      simp only [g, hy, if_false, norm_inv]
+      simp only [g, hy, ite_false, norm_inv]
       exact inv_anti₀ hε hd
   have hfun : f * g + U'.indicator 1 = 1 := by
     ext y
@@ -549,8 +549,8 @@ theorem exists_const_isAlmostEigenvector_mvApply_uniform {A : H →L[ℂ] H} [Is
         (by rw [Complex.norm_conj]; exact hM lam hl) (h lam hl)
         (fun ψ => (norm_adjoint_sub_smul_apply lam ψ).le)
   have total : ∀ s : Finset (Fin 2 →₀ ℕ), ∃ c : ℝ, 0 ≤ c ∧ ∀ lam : ℂ, ‖lam‖ ≤ R → ∀ ψ,
-      ‖(∑ d ∈ s, MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1) -
-        (∑ d ∈ s, MvPolynomial.coeff d p * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) •
+      ‖(∑ d ∈ s, p.coeff d • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1) -
+        (∑ d ∈ s, p.coeff d * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) •
           (1 : H →L[ℂ] H)) ψ‖ ≤ c * ‖(A - lam • (1 : H →L[ℂ] H)) ψ‖ := by
     intro s
     classical
@@ -559,23 +559,23 @@ theorem exists_const_isAlmostEigenvector_mvApply_uniform {A : H →L[ℂ] H} [Is
     | insert d s hd ih =>
       obtain ⟨c, hc, h⟩ := ih
       obtain ⟨c₁, h₁⟩ := mono (d 0) (d 1)
-      refine ⟨‖MvPolynomial.coeff d p‖ * max c₁ 0 + c, by positivity, fun lam hl ψ => ?_⟩
+      refine ⟨‖p.coeff d‖ * max c₁ 0 + c, by positivity, fun lam hl ψ => ?_⟩
       rw [Finset.sum_insert hd, Finset.sum_insert hd]
-      have hid : ((MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1) +
-            ∑ d ∈ s, MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1)) -
-          (MvPolynomial.coeff d p * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1 +
-            ∑ d ∈ s, MvPolynomial.coeff d p * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) •
+      have hid : ((p.coeff d • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1) +
+            ∑ d ∈ s, p.coeff d • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1)) -
+          (p.coeff d * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1 +
+            ∑ d ∈ s, p.coeff d * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) •
               (1 : H →L[ℂ] H)) ψ =
-          MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1 -
+          p.coeff d • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1 -
             (lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) • (1 : H →L[ℂ] H)) ψ +
-          (∑ d ∈ s, MvPolynomial.coeff d p • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1) -
-            (∑ d ∈ s, MvPolynomial.coeff d p * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) •
+          (∑ d ∈ s, p.coeff d • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1) -
+            (∑ d ∈ s, p.coeff d * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1) •
               (1 : H →L[ℂ] H)) ψ := by
         simp only [sub_apply, add_apply, smul_apply, add_smul, smul_sub, smul_smul, mul_assoc]
         abel
       rw [hid]
       calc _ ≤ _ := norm_add_le _ _
-        _ ≤ ‖MvPolynomial.coeff d p‖ * (max c₁ 0 * ‖(A - lam • (1 : H →L[ℂ] H)) ψ‖) +
+        _ ≤ ‖p.coeff d‖ * (max c₁ 0 * ‖(A - lam • (1 : H →L[ℂ] H)) ψ‖) +
             c * ‖(A - lam • (1 : H →L[ℂ] H)) ψ‖ := by
           rw [norm_smul]
           gcongr
@@ -611,7 +611,7 @@ Blueprint reference: `lmm:polynomials-in-normal-are-normal`.
 -/
 theorem adjoint_mvApply {A : H →L[ℂ] H} (p : MvPolynomial (Fin 2) ℂ) :
     ContinuousLinearMap.adjoint (mvApply A p) =
-      ∑ d ∈ p.support, (starRingEnd ℂ (MvPolynomial.coeff d p)) •
+      ∑ d ∈ p.support, (starRingEnd ℂ (p.coeff d)) •
         (A ^ d 1 * (ContinuousLinearMap.adjoint A) ^ d 0) := by
   simp only [mvApply, ← star_eq_adjoint, star_sum, star_smul, star_mul, star_pow, star_star,
     Complex.star_def]
@@ -832,7 +832,7 @@ theorem exists_subspace_isAlmostEigenvector {A : H →L[ℂ] H} [IsStarNormal A]
 private theorem mvApply_eq_cfc {A : H →L[ℂ] H} [IsStarNormal A]
     (p : MvPolynomial (Fin 2) ℂ) : mvApply A p = cfc (mvEvalConj p) A := by
   have h : mvEvalConj p =
-      ∑ d ∈ p.support, fun lam : ℂ => MvPolynomial.coeff d p * (lam ^ d 0 * star lam ^ d 1) := by
+      ∑ d ∈ p.support, fun lam : ℂ => p.coeff d * (lam ^ d 0 * star lam ^ d 1) := by
     ext lam; simp [mvEvalConj, Finset.sum_apply, mul_assoc]
   rw [h, cfc_sum _ A _ fun d _ => by fun_prop]
   refine Finset.sum_congr rfl fun d _ => ?_
@@ -901,7 +901,7 @@ Blueprint reference: `thrm:continuous-functional-calculus-normal` (the defining 
 theorem normalCalculus_mvPolyOn {A : H →L[ℂ] H} (hA : IsStarNormal A)
     (p : MvPolynomial (Fin 2) ℂ) : normalCalculus hA (mvPolyOn A p) = mvApply A p := by
   set ι : C(spectrum ℂ A, ℂ) := ⟨fun lam => (lam : ℂ), continuous_subtype_val⟩
-  have h : mvPolyOn A p = ∑ d ∈ p.support, MvPolynomial.coeff d p • (ι ^ d 0 * star ι ^ d 1) := by
+  have h : mvPolyOn A p = ∑ d ∈ p.support, p.coeff d • (ι ^ d 0 * star ι ^ d 1) := by
     ext lam
     simp [mvPolyOn, mvEvalConj, ι, mul_assoc]
   have hι : normalCalculus hA ι = A := cfcHom_id hA

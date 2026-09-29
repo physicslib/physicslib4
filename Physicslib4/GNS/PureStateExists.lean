@@ -66,7 +66,7 @@ theorem isClosed_complex_nonneg : IsClosed {z : ℂ | (0 : ℂ) ≤ z} := by
   have hset : {z : ℂ | (0 : ℂ) ≤ z}
       = (Complex.re ⁻¹' Set.Ici 0) ∩ (Complex.im ⁻¹' {0}) := by
     ext z
-    simp only [Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_preimage, Set.mem_Ici,
+    simp only [Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_preimage, Set.mem_Ici,
       Set.mem_singleton_iff, Complex.le_def, Complex.zero_re, Complex.zero_im]
     tauto
   rw [hset]
@@ -75,7 +75,7 @@ theorem isClosed_complex_nonneg : IsClosed {z : ℂ | (0 : ℂ) ≤ z} := by
 
 theorem isClosed_weakStateSet : IsClosed (weakStateSet : Set (WeakDual ℂ A)) := by
   have h1 : IsClosed {φ : WeakDual ℂ A | ∀ a : A, (0 : ℂ) ≤ φ (star a * a)} := by
-    rw [Set.setOf_forall]
+    rw [Set.ofPred_forall]
     exact isClosed_iInter fun a =>
       isClosed_complex_nonneg.preimage (WeakDual.eval_continuous (star a * a))
   have h2 : IsClosed {φ : WeakDual ℂ A | φ 1 = 1} :=

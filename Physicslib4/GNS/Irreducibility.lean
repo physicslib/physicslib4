@@ -342,7 +342,7 @@ theorem center_gnsVonNeumann_eq_of_isIrreducible {π : A →⋆ₐ[ℂ] (H →L[
     gnsVonNeumann π ∩ Set.centralizer (gnsVonNeumann π)
       = {T : H →L[ℂ] H | ∃ c : ℂ, T = c • 1} := by
   ext T
-  simp only [Set.mem_inter_iff, Set.mem_setOf_eq]
+  simp only [Set.mem_inter_iff, Set.mem_ofPred_eq]
   constructor
   · rintro ⟨_, hT'⟩
     rw [gnsVonNeumann, Set.centralizer_centralizer_centralizer] at hT'

@@ -86,6 +86,7 @@ theorem gns_construction.{u} {A : Type u} [CStarAlgebra A] (ω : State A) :
             ContinuousLinearMap.completion_apply_coe,
             PositiveLinearMap.leftMulMapPreGNS_apply,
             PositiveLinearMap.ofPreGNS, PositiveLinearMap.toPreGNS]
+      exact congrArg _ (congrArg _ (mul_one _))
     rw [show (Set.range fun a : A => f.gnsStarAlgHom a
               ((f.toPreGNS 1 : f.PreGNS) : f.GNS))
             = Set.range (fun a : A => ((f.toPreGNS a : f.PreGNS) : f.GNS)) by
@@ -112,6 +113,7 @@ theorem gns_construction.{u} {A : Type u} [CStarAlgebra A] (ω : State A) :
             ContinuousLinearMap.completion_apply_coe,
             PositiveLinearMap.leftMulMapPreGNS_apply,
             PositiveLinearMap.ofPreGNS, PositiveLinearMap.toPreGNS]
+      exact congrArg _ (congrArg _ (mul_one _))
     rw [hkey, UniformSpace.Completion.inner_coe,
         PositiveLinearMap.preGNS_inner_def]
     change (ω a : ℂ) = f (star (f.ofPreGNS (f.toPreGNS 1)) * f.ofPreGNS (f.toPreGNS a))
@@ -131,6 +133,7 @@ theorem gns_construction.{u} {A : Type u} [CStarAlgebra A] (ω : State A) :
             ContinuousLinearMap.completion_apply_coe,
             PositiveLinearMap.leftMulMapPreGNS_apply,
             PositiveLinearMap.ofPreGNS, PositiveLinearMap.toPreGNS]
+      exact congrArg _ (congrArg _ (mul_one _))
     have happ : f.gnsStarAlgHom (a - b) ((f.toPreGNS 1 : f.PreGNS) : f.GNS) = 0 := by
       rw [hsub]; rfl
     rw [hkey] at happ

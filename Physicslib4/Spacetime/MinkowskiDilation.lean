@@ -67,7 +67,7 @@ theorem minkowskiForwardCone_smul (lam : ℝ) (hlam : 0 < lam) (p q : SpacetimeM
 theorem minkowskiBackwardCone_smul (lam : ℝ) (hlam : 0 < lam) (p q : SpacetimeModel) :
     lam • p ∈ minkowskiBackwardCone (lam • q) ↔ p ∈ minkowskiBackwardCone q := by
   rw [minkowskiBackwardCone_eq, minkowskiBackwardCone_eq q]
-  simp only [Set.mem_setOf_eq]
+  simp only [Set.mem_ofPred_eq]
   exact minkowskiForwardCone_smul lam hlam p q
 
 /-- **A positive dilation is a causal automorphism: it preserves the Alexandrov basis.**
@@ -80,7 +80,7 @@ theorem alexandrovBasis_image_smul (lam : ℝ) (hlam : 0 < lam)
       standardMinkowskiTimeOrientation) :
     (fun x => lam • x) '' B ∈ Spacetime.alexandrovBasis StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation := by
-  simp only [Spacetime.alexandrovBasis, Set.mem_setOf_eq] at hB ⊢
+  simp only [Spacetime.alexandrovBasis, Set.mem_ofPred_eq] at hB ⊢
   obtain ⟨p, q, rfl⟩ := hB
   refine ⟨lam • p, lam • q, ?_⟩
   ext y

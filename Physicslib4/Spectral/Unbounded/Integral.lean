@@ -436,19 +436,19 @@ def integralDomain (f : X → ℂ) : Submodule ℂ H where
   carrier := {ψ : H | MemLp f 2 (μ.assoc ψ)}
   add_mem' := by
     intro φ ψ hφ hψ
-    simp only [Set.mem_setOf_eq] at *
+    simp only [Set.mem_ofPred_eq] at *
     have hsum : MemLp f 2 (μ.assoc φ + μ.assoc ψ) := by
-      refine ⟨hφ.1.add_measure hψ.1, ?_⟩
-      rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero ENNReal.ofNat_ne_top,
+      rw [memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero
+        ENNReal.ofNat_ne_top (hφ.aestronglyMeasurable.add_measure hψ.aestronglyMeasurable),
         lintegral_add_measure]
       exact ENNReal.add_lt_top.2
-        ⟨lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top hφ.2,
-          lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top hψ.2⟩
+        ⟨lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top hφ,
+          lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top hψ⟩
     exact hsum.of_measure_le_smul (by norm_num) (assoc_add_le μ φ ψ)
   zero_mem' := by simp [assoc_zero]
   smul_mem' := by
     intro c ψ hψ
-    simp only [Set.mem_setOf_eq] at *
+    simp only [Set.mem_ofPred_eq] at *
     rw [assoc_smul]
     exact hψ.smul_measure ENNReal.ofReal_ne_top
 
@@ -474,11 +474,11 @@ theorem dense_integralDomain {f : X → ℂ} (hf : Measurable f) :
   set F : ℕ → Set X := fun n => {x | ‖f x‖ < n}
   have hFm : ∀ n, MeasurableSet (F n) := fun n => measurableSet_lt hf.norm measurable_const
   have hFmono : Monotone F := fun m n hmn x hx => by
-    simp only [F, Set.mem_setOf_eq] at hx ⊢
+    simp only [F, Set.mem_ofPred_eq] at hx ⊢
     exact hx.trans_le (by exact_mod_cast hmn)
   have hFU : (⋃ n, F n) = Set.univ := by
     ext x
-    simp only [F, Set.mem_iUnion, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    simp only [F, Set.mem_iUnion, Set.mem_ofPred_eq, Set.mem_univ, iff_true]
     exact exists_nat_gt _
   -- `μ(Fₙ) ψ ∈ W_f`: its associated measure is `μ_ψ` restricted to `Fₙ`, where `|f| < n`.
   have hmem : ∀ n ψ, μ (F n) ψ ∈ integralDomain μ f := by
@@ -680,7 +680,7 @@ private theorem integralApply_eq {f : X → ℂ} (hf : Measurable f)
     (hT : ∀ ψ : integralDomain μ f, integralForm μ f ψ = ⟪(ψ : H), T ψ⟫_ℂ)
     (ψ : integralDomain μ f) : integralApply μ f ψ = T ψ := by
   have h := existsUnique_repr_integralForm μ hf ψ
-  rw [integralApply, dif_pos ⟨hf, h⟩]
+  rw [integralApply, dite_eq_left ⟨hf, h⟩]
   exact h.unique h.choose_spec.1 (fun φ => polarizationOn_eq_inner T hT φ ψ)
 
 private theorem integralApply_add (f : X → ℂ) (φ ψ : integralDomain μ f) :
@@ -723,7 +723,7 @@ theorem inner_pmapIntegral {f : X → ℂ} (hf : Measurable f) (φ ψ : integral
     ⟪(φ : H), pmapIntegral μ f ψ⟫_ℂ = polarizationOn (integralForm μ f) φ ψ := by
   have h := existsUnique_repr_integralForm μ hf ψ
   change ⟪(φ : H), integralApply μ f ψ⟫_ℂ = _
-  rw [integralApply, dif_pos ⟨hf, h⟩]
+  rw [integralApply, dite_eq_left ⟨hf, h⟩]
   exact (h.choose_spec.1 φ).symm
 
 /--
@@ -799,7 +799,7 @@ theorem integralDomain_eq_top_of_bddMeasurable {f : X → ℂ} (hf : f ∈ BddMe
     integralDomain μ f = ⊤ := by
   obtain ⟨hmeas, C, hC⟩ := hf
   refine eq_top_iff.2 fun ψ _ => ?_
-  haveI : IsFiniteMeasure (μ.assoc ψ) :=
+  have : IsFiniteMeasure (μ.assoc ψ) :=
     ⟨by rw [assoc_univ_eq]; exact ENNReal.ofReal_lt_top⟩
   exact MemLp.of_bound hmeas.aestronglyMeasurable C (Eventually.of_forall hC)
 
@@ -824,11 +824,10 @@ theorem pmapIntegral_of_bddMeasurable {f : X → ℂ} (hf : f ∈ BddMeasurable 
       have h := (hχ ⟨χ - μ.integral f ψ, hall _⟩).symm.trans (hrep ψ _)
       rw [← sub_eq_zero, ← inner_sub_right] at h
       exact sub_eq_zero.1 (inner_self_eq_zero.1 h)
-    rw [integralApply, dif_pos ⟨measurable_of_mem_bddMeasurable hf, hex⟩]
+    rw [integralApply, dite_eq_left ⟨measurable_of_mem_bddMeasurable hf, hex⟩]
     exact hex.unique hex.choose_spec.1 (hrep ψ)
   refine LinearPMap.ext (by rw [pmapIntegral_domain, hdom, LinearMap.toPMap_domain])
     fun x hx _ => ?_
-  rw [LinearMap.toPMap_apply]
   exact hval ⟨x, hx⟩
 
 /--
@@ -883,12 +882,12 @@ theorem pmapIntegral_congr_of_null {f g : X → ℂ} (hf : Measurable f) (hg : M
   · have h' : ∃! χ : H, ∀ φ : integralDomain μ g,
         polarizationOn (integralForm μ g) φ ⟨x, hy⟩ = ⟪(φ : H), χ⟫_ℂ := by
       simpa only [hiff] using h
-    rw [dif_pos ⟨hf, h⟩, dif_pos ⟨hg, h'⟩]
+    rw [dite_eq_left ⟨hf, h⟩, dite_eq_left ⟨hg, h'⟩]
     exact h'.unique ((hiff _).1 h.choose_spec.1) h'.choose_spec.1
   · have h' : ¬ ∃! χ : H, ∀ φ : integralDomain μ g,
         polarizationOn (integralForm μ g) φ ⟨x, hy⟩ = ⟪(φ : H), χ⟫_ℂ := by
       simpa only [hiff] using h
-    rw [dif_neg (fun hh => h hh.2), dif_neg (fun hh => h' hh.2)]
+    rw [dite_eq_right (fun hh => h hh.2), dite_eq_right (fun hh => h' hh.2)]
 
 /--
 If `|f| ≤ c` on `E`, then the range of `μ E` lies in `W_f`.
@@ -1014,9 +1013,9 @@ theorem isSymmetric_pmapIntegral_of_real {f : X → ℂ} (hf : Measurable f)
       (Complex.ext (by simp) (by simp [hreal x]) : f x = (((f x).re : ℝ) : ℂ))),
       integral_complex_ofReal, Complex.ofReal_im]
   intro φ ψ
-  rw [inner_pmapIntegral μ hf φ ψ,
-    polarizationOn_conj_symm (isQuadraticFormOn_integralForm μ hf) hQ,
-    ← inner_pmapIntegral μ hf ψ φ, inner_conj_symm]
+  rw [inner_pmapIntegral μ hf φ ψ]
+  refine (polarizationOn_conj_symm (isQuadraticFormOn_integralForm μ hf) hQ φ ψ).trans ?_
+  rw [← inner_pmapIntegral μ hf ψ φ, inner_conj_symm]
 
 /--
 For real measurable `f` and non-real `c`, the bounded operator `∫ (f - c)⁻¹ dμ` is a right
@@ -1046,8 +1045,8 @@ theorem pmapIntegral_sub_smul_integral_inv {f : X → ℂ} (hf : Measurable f)
     exact add_le_add_right (mul_le_mul_of_nonneg_left (hgb x) (norm_nonneg c)) 1
   set ψ := μ.integral g η
   have hψ : ψ ∈ integralDomain μ f := by
-    refine ⟨hf.aestronglyMeasurable, ?_⟩
-    rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero ENNReal.ofNat_ne_top,
+    rw [mem_integralDomain, memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero
+        ENNReal.ofNat_ne_top hf.aestronglyMeasurable,
       lintegral_assoc_integral_apply μ hg η (hf.enorm.pow_const _)]
     refine lt_of_le_of_lt (lintegral_mono fun x => ?_ :
       _ ≤ ∫⁻ _, ENNReal.ofReal (K ^ 2) ∂(μ.assoc η)) ?_

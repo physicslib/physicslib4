@@ -155,7 +155,7 @@ theorem lieConj_image_scalarOperators (Uop : H ≃ₗᵢ[ℂ] H) :
     rw [lieConj_apply]
     simp
   ext T
-  simp only [scalarOperators, Set.mem_image, Set.mem_setOf_eq]
+  simp only [scalarOperators, Set.mem_image, Set.mem_ofPred_eq]
   constructor
   · rintro ⟨_, ⟨c, rfl⟩, rfl⟩
     exact ⟨c, hfix c⟩

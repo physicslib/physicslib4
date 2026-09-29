@@ -386,7 +386,7 @@ The adjoint fixes the identity operator. (Involutivity of the adjoint is Mathlib
 Blueprint reference: `lmm:adjoint-algebra`.
 -/
 theorem adjoint_one : adjoint (1 : H →L[ℂ] H) = 1 := by
-  simp
+  rw [← star_eq_adjoint, star_one]
 
 /--
 Convergence in the operator norm is preserved by taking adjoints.
@@ -523,7 +523,7 @@ private noncomputable def gridBound (m : ℕ) (C : ℝ) : ℤ :=
 private noncomputable def gridVal (m : ℕ) (i j : ℤ) : ℂ :=
   Complex.mk ((i : ℝ) / (m : ℝ)) ((j : ℝ) / (m : ℝ))
 
-private lemma gridIndex_mem_Icc {C : ℝ} (hC : 0 ≤ C) {a : ℝ} (ha : |a| ≤ C) {m : ℕ}
+private lemma gridIndex_mem_Icc {C : ℝ} {a : ℝ} (ha : |a| ≤ C) {m : ℕ}
     (hm : 0 < (m : ℝ)) :
     gridIndex m a ∈ Finset.Icc (-gridBound m C) (gridBound m C) := by
   rw [Finset.mem_Icc]
@@ -644,8 +644,8 @@ theorem exists_simpleFunc_tendstoUniformly {X : Type*} [MeasurableSpace X] {f : 
         intro x
         have hx1 : |(f x).re| ≤ C0 := le_trans (Complex.abs_re_le_norm (f x)) (hC0' x)
         have hx2 : |(f x).im| ≤ C0 := le_trans (Complex.abs_im_le_norm (f x)) (hC0' x)
-        exact Finset.mem_product.mpr ⟨by simpa [K] using gridIndex_mem_Icc hC0 hx1 hm,
-          by simpa [K] using gridIndex_mem_Icc hC0 hx2 hm⟩
+        exact Finset.mem_product.mpr ⟨by simpa [K] using gridIndex_mem_Icc hx1 hm,
+          by simpa [K] using gridIndex_mem_Icc hx2 hm⟩
       have hIm : Set.range (fun x : X =>
           gridVal m (gridIndex m ((f x).re)) (gridIndex m ((f x).im))) ⊆
           (fun t : ℤ × ℤ => gridVal m t.1 t.2) '' (I : Set (ℤ × ℤ)) := by

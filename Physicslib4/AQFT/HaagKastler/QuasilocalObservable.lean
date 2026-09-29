@@ -179,7 +179,7 @@ theorem quasilocalObservables_eq {U : LocalNet} {i : Isotony U} (Q : QuasilocalA
     quasilocalObservables Q π
       = (selfAdjoint (H →L[ℂ] H) : Set (H →L[ℂ] H)) ∩ Set.range π := by
   ext T
-  simp only [quasilocalObservables, Set.mem_setOf_eq, isQuasilocalObservable_iff,
+  simp only [quasilocalObservables, Set.mem_ofPred_eq, isQuasilocalObservable_iff,
     Set.mem_inter_iff, SetLike.mem_coe, selfAdjoint.mem_iff, isSelfAdjoint_iff]
 
 section ObservablesSet

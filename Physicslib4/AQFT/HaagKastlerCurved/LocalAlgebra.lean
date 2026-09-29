@@ -210,7 +210,7 @@ theorem localObservables_eq {U : LocalNet M} {B : Set M.Carrier} {H : Type}
     localObservables π
       = (selfAdjoint (H →L[ℂ] H) : Set (H →L[ℂ] H)) ∩ Set.range π := by
   ext T
-  simp only [localObservables, Set.mem_setOf_eq, isLocalObservable_iff,
+  simp only [localObservables, Set.mem_ofPred_eq, isLocalObservable_iff,
     Set.mem_inter_iff, SetLike.mem_coe, selfAdjoint.mem_iff, isSelfAdjoint_iff]
 
 section ObservablesSet

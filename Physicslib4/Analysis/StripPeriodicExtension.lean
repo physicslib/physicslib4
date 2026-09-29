@@ -161,8 +161,8 @@ theorem pext_differentiableAt_online (hβ : 0 < β)
   have hHeq : ∀ w ∈ B, pext β F w = if w.im < c then g w else h w := by
     intro w hwB
     by_cases hwc : w.im < c
-    · rw [if_pos hwc]; simp only [pext, pshift, hfloor_lo w hwB hwc, hgdef]
-    · rw [if_neg hwc]; rw [not_lt] at hwc
+    · rw [ite_eq_left hwc]; simp only [pext, pshift, hfloor_lo w hwB hwc, hgdef]
+    · rw [ite_eq_right hwc]; rw [not_lt] at hwc
       simp only [pext, pshift, hfloor_hi w hwB hwc, hhdef]
   -- continuity of the glued model on the ball
   have hcont' : ContinuousOn (pext β F) B := by
@@ -170,7 +170,7 @@ theorem pext_differentiableAt_online (hβ : 0 < β)
       apply ContinuousOn.if
       · -- agreement on the line `Im = c`
         intro w hw
-        rw [Set.mem_inter_iff, frontier_setOf_im_lt, Set.mem_setOf_eq] at hw
+        rw [Set.mem_inter_iff, frontier_setOf_im_lt, Set.mem_ofPred_eq] at hw
         obtain ⟨_, hwc⟩ := hw
         have e1 : w - ((n₀ - 1 : ℤ) : ℂ) * ((β : ℂ) * Complex.I)
             = (↑w.re : ℂ) + (↑β : ℂ) * Complex.I := by
@@ -199,9 +199,9 @@ theorem pext_differentiableAt_online (hβ : 0 < β)
             (B ∩ {w : ℂ | w.im ≤ c}) {z : ℂ | 0 ≤ z.im ∧ z.im ≤ β} := by
           intro w hw
           obtain ⟨hwB, hwle⟩ := hw
-          rw [Set.mem_setOf_eq] at hwle
+          rw [Set.mem_ofPred_eq] at hwle
           have hb := hbound w hwB; rw [abs_lt, hz₀im] at hb
-          rw [Set.mem_setOf_eq, sub_intMul_im]
+          rw [Set.mem_ofPred_eq, sub_intMul_im]
           push_cast
           have e : ((n₀ : ℝ) - 1) * β = (n₀ : ℝ) * β - β := by ring
           rw [hc] at hwle
@@ -217,9 +217,9 @@ theorem pext_differentiableAt_online (hβ : 0 < β)
             (B ∩ {w : ℂ | c ≤ w.im}) {z : ℂ | 0 ≤ z.im ∧ z.im ≤ β} := by
           intro w hw
           obtain ⟨hwB, hwge⟩ := hw
-          rw [Set.mem_setOf_eq] at hwge
+          rw [Set.mem_ofPred_eq] at hwge
           have hb := hbound w hwB; rw [abs_lt, hz₀im] at hb
-          rw [Set.mem_setOf_eq, sub_intMul_im]
+          rw [Set.mem_ofPred_eq, sub_intMul_im]
           rw [hc] at hwge
           refine ⟨by linarith [hwge], ?_⟩
           have e : ((n₀ : ℝ) + 1) * β = (n₀ : ℝ) * β + β := by ring
@@ -231,7 +231,7 @@ theorem pext_differentiableAt_online (hβ : 0 < β)
     intro w hw
     refine (pext_differentiableAt_offline hβ hdiff ?_).differentiableWithinAt
     obtain ⟨hwB, hwne⟩ := hw
-    rw [Set.mem_setOf_eq] at hwne
+    rw [Set.mem_ofPred_eq] at hwne
     rw [pshift_im]
     have hb := hbound w hwB; rw [abs_lt, hz₀im] at hb
     rcases lt_or_gt_of_ne hwne with hlt | hgt

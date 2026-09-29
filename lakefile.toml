@@ -17,11 +17,11 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 [[require]]
 name = "«doc-gen4»"
 git = "https://github.com/leanprover/doc-gen4"
-rev = "main"
+rev = "v4.34.1"
 [[lean_lib]]
 name = "Physicslib4"
 
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.32.0"
+rev = "v4.34.1"

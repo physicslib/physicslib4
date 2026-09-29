@@ -331,7 +331,7 @@ theorem causallyPrecedes_antisymm (t : M.TimeOrientation)
 theorem isSpacelikeRelated_comm (t : M.TimeOrientation) {p₁ p₂ : M.Carrier} :
     M.IsSpacelikeRelated t p₁ p₂ ↔ M.IsSpacelikeRelated t p₂ p₁ := by
   unfold IsSpacelikeRelated
-  simp only [Set.mem_union, causalFuture, causalPast, Set.mem_setOf_eq, not_or]
+  simp only [Set.mem_union, causalFuture, causalPast, Set.mem_ofPred_eq, not_or]
   tauto
 
 /-- Complete spacelike separation is symmetric in its two regions. -/
@@ -612,7 +612,7 @@ Alexandrov basis set iff `U = I^+(p) ∩ I^-(q)` for some `p, q`. -/
 theorem mem_alexandrovBasis_iff_eq_chronologicalDiamond (t : M.TimeOrientation)
     {U : Set M.Carrier} :
     U ∈ alexandrovBasis M t ↔ ∃ p q : M.Carrier, U = chronologicalDiamond M t p q := by
-  simp only [alexandrovBasis, chronologicalDiamond, Set.mem_setOf_eq]
+  simp only [alexandrovBasis, chronologicalDiamond, Set.mem_ofPred_eq]
 
 /-! ### Causal convexity -/
 

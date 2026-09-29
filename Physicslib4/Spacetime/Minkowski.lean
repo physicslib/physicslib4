@@ -1349,7 +1349,7 @@ theorem chronologicalFuture_standardMinkowski_subset (p : SpacetimeModel) :
       ⊆ minkowskiForwardCone p := by
   intro q hq
   unfold Spacetime.chronologicalFuture at hq
-  simp only [Set.mem_setOf_eq, Spacetime.ChronologicallyPrecedes, Spacetime.IsTrip] at hq
+  simp only [Set.mem_ofPred_eq, Spacetime.ChronologicallyPrecedes, Spacetime.IsTrip] at hq
   induction hq with
   | single h =>
       exact segmentPrecedes_mem_minkowskiForwardCone h
@@ -1453,8 +1453,15 @@ theorem euclidean_le_alexandrov_standardMinkowski :
           standardMinkowskiTimeOrientation := by
   apply le_generateFrom
   rintro s ⟨p, q, rfl⟩
-  rw [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski]
-  exact (isOpen_minkowskiForwardCone p).inter (isOpen_minkowskiBackwardCone q)
+  have h := (isOpen_minkowskiForwardCone p).inter (isOpen_minkowskiBackwardCone q)
+  have e : Spacetime.chronologicalFuture StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation p ∩
+      Spacetime.chronologicalPast StandardMinkowskiSpacetime
+        standardMinkowskiTimeOrientation q =
+      minkowskiForwardCone p ∩ minkowskiBackwardCone q :=
+    congrArg₂ (· ∩ ·) (chronologicalFuture_standardMinkowski p)
+      (chronologicalPast_standardMinkowski q)
+  exact e ▸ h
 
 /-- *Hard direction of the Alexandrov-vs-Euclidean topology comparison.*
 Every Euclidean-open subset of standard Minkowski spacetime is open in the
@@ -1466,7 +1473,7 @@ theorem alexandrov_le_euclidean_standardMinkowski :
     Spacetime.alexandrovTopology StandardMinkowskiSpacetime
         standardMinkowskiTimeOrientation
       ≤ (inferInstance : TopologicalSpace SpacetimeModel) := by
-  rw [TopologicalSpace.le_def]
+  refine (TopologicalSpace.le_def (α := SpacetimeModel)).mpr ?_
   -- `StandardMinkowskiSpacetime.Carrier` is definitionally `SpacetimeModel`,
   -- so we may transport everything to the underlying Euclidean model.
   change ∀ U : Set SpacetimeModel, IsOpen U →

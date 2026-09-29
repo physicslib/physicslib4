@@ -66,11 +66,11 @@ theorem spacelikeComplement_isCausallyConvex (B : Set M.Carrier) :
   have hp_pb : IsSpacelikeRelated M t p b := hp p (by simp) b hb
   have hr_rb : IsSpacelikeRelated M t r b := hr r (by simp) b hb
   unfold IsSpacelikeRelated at hp_pb hr_rb
-  simp only [Set.mem_union, causalFuture, causalPast, Set.mem_setOf_eq, not_or] at hp_pb hr_rb
+  simp only [Set.mem_union, causalFuture, causalPast, Set.mem_ofPred_eq, not_or] at hp_pb hr_rb
   rcases hp_pb with ⟨hpb_not, hbp_not⟩
   rcases hr_rb with ⟨hrb_not, hbr_not⟩
   unfold IsSpacelikeRelated
-  simp only [Set.mem_union, causalFuture, causalPast, Set.mem_setOf_eq, not_or]
+  simp only [Set.mem_union, causalFuture, causalPast, Set.mem_ofPred_eq, not_or]
   constructor
   · intro hqb
     apply hpb_not
