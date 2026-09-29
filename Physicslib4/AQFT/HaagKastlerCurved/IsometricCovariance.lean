@@ -69,6 +69,13 @@ Alexandrov-basis set `B`, a `*`-algebra equivalence
 (2) `α (φ' * φ) B a = α φ' (φ • B) (α φ B a)`, and (3) for every `φ` and
 inclusion `B₁ ⊆ B₂`, `α φ B₂ ∘ i.map = i.map ∘ α φ B₁`.
 
+In (3) the inclusion `φ • B₁ ⊆ φ • B₂` is not a hypothesis: it is `Set.smul_set_mono h`.
+The hypotheses `hφB₁`, `hφB₂` that `φ • B₁` and `φ • B₂` are basis sets are needed
+because Axiom 2's `i.map` is only defined between basis sets, and the abstract interface
+does not assert that isometries preserve basis sets. Where they fail, (3) says nothing
+about that pair. For a concrete spacetime with the identity-component isometry group they
+always hold (`toAbstractIdentityComponent_isBasisSet_smul`).
+
 Condition (3) is stated for the isotony family `i` of Axiom 2, which this
 predicate takes as a parameter, not for a separately chosen family: the
 blueprint's Axiom 5 commutes with "the unital `*`-monomorphism `i` of Axiom 2".
@@ -96,10 +103,10 @@ def IsometricCovariance (U : LocalNet M) (i : Isotony U) : Prop :=
         (h : B₁ ⊆ B₂)
         (hφB₁ : M.IsBasisSet (φ • B₁))
         (hφB₂ : M.IsBasisSet (φ • B₂))
-        (hφ : (φ • B₁ : Set _) ⊆ φ • B₂)
         (a : U.algebra B₁),
           (α φ B₂ : U.algebra B₂ → U.algebra (φ • B₂)) (i.map hB₁ hB₂ h a)
-            = i.map hφB₁ hφB₂ hφ ((α φ B₁ : U.algebra B₁ → U.algebra (φ • B₁)) a)
+            = i.map hφB₁ hφB₂ (Set.smul_set_mono h)
+                ((α φ B₁ : U.algebra B₁ → U.algebra (φ • B₁)) a)
 
 end HaagKastlerCurved
 end AQFT

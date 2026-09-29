@@ -335,8 +335,8 @@ such that
     element `a : U.algebra B₁`, the action of `L` commutes with the
     isotony inclusion:
     `α L B₂ (i.map a) = i.map (α L B₁ a)`, where the right-hand `i.map`
-    is the Axiom 2 embedding for `L • B₁ ⊆ L • B₂` (which holds because
-    `L • _` preserves set inclusions). The isotony family `i` is the one of
+    is the Axiom 2 embedding for `L • B₁ ⊆ L • B₂`. That inclusion is not a
+    hypothesis: it is `Set.smul_set_mono h`. The isotony family `i` is the one of
     Axiom 2, taken as a parameter, not a separately chosen family.
 
 The cross-fiber identifications in conditions (1) and (2) are
@@ -371,10 +371,10 @@ def LorentzCovariance (U : LocalNet) (i : Isotony U) : Prop :=
         (h : B₁ ⊆ B₂)
         (hLB₁ : IsAlexandrovBasisSet (L • B₁))
         (hLB₂ : IsAlexandrovBasisSet (L • B₂))
-        (hL : (L • B₁ : Set _) ⊆ L • B₂)
         (a : U.algebra B₁),
           (α L B₂ : U.algebra B₂ → U.algebra (L • B₂)) (i.map hB₁ hB₂ h a)
-            = i.map hLB₁ hLB₂ hL ((α L B₁ : U.algebra B₁ → U.algebra (L • B₁)) a)
+            = i.map hLB₁ hLB₂ (Set.smul_set_mono h)
+                ((α L B₁ : U.algebra B₁ → U.algebra (L • B₁)) a)
 
 end HaagKastler
 end AQFT

@@ -205,10 +205,10 @@ theorem covEquiv_isotony (L : InhomogeneousLorentzGroup)
     ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂)
     (hLB₁ : IsAlexandrovBasisSet (L • B₁)) (hLB₂ : IsAlexandrovBasisSet (L • B₂))
-    (hL : (L • B₁ : Set _) ⊆ L • B₂) (a : N.algebra B₁) :
+    (a : N.algebra B₁) :
     N.covEquiv L B₂ (N.isotony.map hB₁ hB₂ h a)
-      = N.isotony.map hLB₁ hLB₂ hL (N.covEquiv L B₁ a) :=
-  N.lorentzCovariance.choose_spec.2.2 L hB₁ hB₂ h hLB₁ hLB₂ hL a
+      = N.isotony.map hLB₁ hLB₂ (Set.smul_set_mono h) (N.covEquiv L B₁ a) :=
+  N.lorentzCovariance.choose_spec.2.2 L hB₁ hB₂ h hLB₁ hLB₂ a
 
 /-- **Local commutativity.** The images in the canonical quasilocal algebra
 `quasilocal` of two completely-spacelike basis algebras commute. Axiom 3 only
@@ -354,7 +354,7 @@ theorem trivialLocalNet_lorentzCovariance :
   refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, ?_, ?_, ?_⟩
   · intro _ _; rfl
   · intro _ _ _ _; rfl
-  · intro _ _ _ _ _ _ _ _ _ _; rfl
+  · intro _ _ _ _ _ _ _ _ _; rfl
 
 /-- The *trivial Haag-Kastler net*: the trivial local net (every region ↦ `ℂ`)
 bundled with proofs of Axioms 2-5. -/

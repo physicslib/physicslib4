@@ -194,11 +194,10 @@ equivalences intertwine the Axiom 2 isotony embeddings,
 `α_φ ∘ i_{B₁B₂} = i_{φB₁ φB₂} ∘ α_φ`. -/
 theorem covEquiv_commIsotony (φ : M.Isom) ⦃B₁ B₂ : Set M.Carrier⦄
     (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂)
-    (hφB₁ : M.IsBasisSet (φ • B₁)) (hφB₂ : M.IsBasisSet (φ • B₂))
-    (hφ : (φ • B₁ : Set _) ⊆ φ • B₂) (a : N.algebra B₁) :
+    (hφB₁ : M.IsBasisSet (φ • B₁)) (hφB₂ : M.IsBasisSet (φ • B₂)) (a : N.algebra B₁) :
     N.covEquiv φ B₂ (N.commIsotony hB₁ hB₂ h a)
-      = N.commIsotony hφB₁ hφB₂ hφ (N.covEquiv φ B₁ a) :=
-  N.isometricCovariance.choose_spec.2.2 φ hB₁ hB₂ h hφB₁ hφB₂ hφ a
+      = N.commIsotony hφB₁ hφB₂ (Set.smul_set_mono h) (N.covEquiv φ B₁ a) :=
+  N.isometricCovariance.choose_spec.2.2 φ hB₁ hB₂ h hφB₁ hφB₂ a
 
 /-- Transporting an isotony embedding along an equality of target regions. -/
 theorem cast_commIsotony ⦃B₁ B₂ B₂' : Set M.Carrier⦄ (e : B₂ = B₂')
@@ -355,7 +354,7 @@ theorem trivialLocalNet_isometricCovariance (M : LorentzianSpacetime) :
   refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, ?_, ?_, ?_⟩
   · intro _ _; rfl
   · intro _ _ _ _; rfl
-  · intro _ _ _ _ _ _ _ _ _ _; rfl
+  · intro _ _ _ _ _ _ _ _ _; rfl
 
 /-- The trivial net over any abstract Lorentzian spacetime, bundled as a
 Haag-Kastler net. -/

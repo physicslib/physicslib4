@@ -66,7 +66,7 @@ theorem stabAutHom_commIsotony
   have e : (g : M.Isom) • B = B := MulAction.mem_stabilizer_iff.mp g.2
   have hgB : M.IsBasisSet ((g : M.Isom) • B) := by rw [e]; exact hB
   rw [stabAutHom, stabAut_apply,
-    N.covEquiv_commIsotony (g : M.Isom) hB₁ hB h₁ hgB₁ hgB (Set.smul_set_mono h₁)]
+    N.covEquiv_commIsotony (g : M.Isom) hB₁ hB h₁ hgB₁ hgB]
   exact N.cast_commIsotony e _ _ _ _ _ _
 
 /-- **Conjugation carries the local operators of `B₁` onto those of `g · B₁`.**
