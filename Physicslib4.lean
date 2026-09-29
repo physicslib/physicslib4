@@ -6,6 +6,7 @@ import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.LocalCommutativity
 import Physicslib4.AQFT.HaagKastler.LocalVonNeumann
 import Physicslib4.AQFT.HaagKastler.LorentzCovariance
+import Physicslib4.AQFT.HaagKastler.LorentzCovarianceAxiom
 import Physicslib4.AQFT.HaagKastler.Net
 import Physicslib4.AQFT.HaagKastler.ObservableBridge
 import Physicslib4.AQFT.HaagKastler.Purity

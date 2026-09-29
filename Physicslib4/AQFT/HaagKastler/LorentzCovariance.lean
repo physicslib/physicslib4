@@ -34,8 +34,10 @@ axioms, section 10.5 of the AQFT-in-Lean blueprint):
   and `t : V` is a translation. The group operation is composition
   of the affine maps `x ↦ L x + t`.
 
-* `Physicslib4.AQFT.HaagKastler.LorentzCovariance`: a `Prop`-valued
-  predicate on a `LocalNet` and its Axiom 2 isotony family asserting Axiom 5.
+* The Axiom 5 predicate `Physicslib4.AQFT.HaagKastler.LorentzCovariance` itself is in
+  `Physicslib4/AQFT/HaagKastler/LorentzCovarianceAxiom.lean`, after
+  `Physicslib4/Spacetime/LorentzCausality.lean`, which proves that the action preserves
+  Alexandrov basis sets (`isAlexandrovBasisSet_smul`).
 
 ## Modelling notes
 
@@ -304,77 +306,6 @@ theorem null_separated_smul_iff (g : InhomogeneousLorentzGroup)
   rw [minkowskiForm_smul_sub_self]
 
 end InhomogeneousLorentzGroup
-
-/--
-**Axiom 5 (Lorentz Covariance).** A local net `U` is *Lorentz
-covariant* if the inhomogeneous Lorentz group acts on the assignment
-`B ↦ U.algebra B` and the action
-
-(1) sends the identity element of the Lorentz group to the identity
-    automorphism,
-(2) is multiplicative in the group element, i.e.
-    `α (L' · L) = α L' ∘ α L`, and
-(3) *commutes with isotony*.
-
-Concretely, there exists, for every group element
-`L : InhomogeneousLorentzGroup` and every Alexandrov-basis set `B`, a
-`*`-algebra equivalence `α L B : U.algebra B ≃⋆ₐ[ℂ] U.algebra (L • B)`,
-such that
-
-(1) [identity] for every basis set `B` and every `a : U.algebra B`,
-    `α 1 B a = a` (modulo the canonical identification
-    `U.algebra (1 • B) = U.algebra B` coming from `one_smul`);
-
-(2) [composition] for every pair `L, L' : InhomogeneousLorentzGroup`,
-    every basis set `B` and every `a : U.algebra B`,
-    `α (L' * L) B a = α L' (L • B) (α L B a)` (modulo the canonical
-    identification `U.algebra ((L' * L) • B) = U.algebra (L' • (L • B))`
-    coming from `mul_smul`); and
-
-(3) [isotony] for every `L`, every inclusion `B₁ ⊆ B₂`, and every
-    element `a : U.algebra B₁`, the action of `L` commutes with the
-    isotony inclusion:
-    `α L B₂ (i.map a) = i.map (α L B₁ a)`, where the right-hand `i.map`
-    is the Axiom 2 embedding for `L • B₁ ⊆ L • B₂`. That inclusion is not a
-    hypothesis: it is `Set.smul_set_mono h`. The isotony family `i` is the one of
-    Axiom 2, taken as a parameter, not a separately chosen family.
-
-The cross-fiber identifications in conditions (1) and (2) are
-implemented as `Eq.mpr` of the obvious congruence
-`U.algebra _ = U.algebra _` produced from `one_smul`/`mul_smul`.
-
-Blueprint reference: `def:lorentz-covariance`.
--/
-def LorentzCovariance (U : LocalNet) (i : Isotony U) : Prop :=
-  ∃ α : ∀ (L : InhomogeneousLorentzGroup)
-          (B : Set StandardMinkowskiSpacetime.Carrier),
-        StarAlgEquiv ℂ (U.algebra B)
-          (U.algebra ((L • B : Set StandardMinkowskiSpacetime.Carrier))),
-      -- (1) Identity: α 1 B a = a, modulo `one_smul : (1 : G) • B = B`.
-      (∀ (B : Set StandardMinkowskiSpacetime.Carrier) (a : U.algebra B),
-          (α (1 : InhomogeneousLorentzGroup) B :
-              U.algebra B → U.algebra ((1 : InhomogeneousLorentzGroup) • B)) a
-            = (congrArg U.algebra
-                (one_smul InhomogeneousLorentzGroup B).symm).mp a) ∧
-      -- (2) Composition: α (L' * L) B a = α L' (L • B) (α L B a), modulo
-      -- `mul_smul : (L' * L) • B = L' • (L • B)`.
-      (∀ (L L' : InhomogeneousLorentzGroup)
-         (B : Set StandardMinkowskiSpacetime.Carrier) (a : U.algebra B),
-          (α (L' * L) B : U.algebra B → U.algebra ((L' * L) • B)) a
-            = (congrArg U.algebra (mul_smul L' L B).symm).mp
-                ((α L' (L • B) : U.algebra (L • B) → U.algebra (L' • (L • B)))
-                  ((α L B : U.algebra B → U.algebra (L • B)) a))) ∧
-      -- (3) The action commutes with the Axiom 2 isotony family `i`.
-      ∀ (L : InhomogeneousLorentzGroup)
-        ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
-        (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
-        (h : B₁ ⊆ B₂)
-        (hLB₁ : IsAlexandrovBasisSet (L • B₁))
-        (hLB₂ : IsAlexandrovBasisSet (L • B₂))
-        (a : U.algebra B₁),
-          (α L B₂ : U.algebra B₂ → U.algebra (L • B₂)) (i.map hB₁ hB₂ h a)
-            = i.map hLB₁ hLB₂ (Set.smul_set_mono h)
-                ((α L B₁ : U.algebra B₁ → U.algebra (L • B₁)) a)
 
 end HaagKastler
 end AQFT
