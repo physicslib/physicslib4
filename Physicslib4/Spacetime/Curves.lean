@@ -252,21 +252,21 @@ theorem mdifferentiableWithinAt_of_contDiffOn {φ : ℝ → ℝ} {u : Set ℝ}
 
 /--
 Two paths `μ₁ : Σ₁ → M`, `μ₂ : Σ₂ → M` are equivalent if there is a
-homeomorphism `φ` of `ℝ` mapping `Σ₁` bijectively onto `Σ₂` such that
-`μ₂ ∘ φ = μ₁` on `Σ₁`. We package the homeomorphism on the parameter spaces
-via its underlying function on `ℝ` together with the relevant restriction
-conditions.
-
-Both `φ` and its inverse `ψ` map the parameter spaces into each other, so `φ`
-restricts to a homeomorphism `Σ₁ ≃ₜ Σ₂`; the relation is an equivalence relation
-(`equivalence_pathEquiv`).
+homeomorphism `φ : Σ₁ ≃ₜ Σ₂` of the parameter spaces such that `μ₂ ∘ φ = μ₁` on `Σ₁`.
+As for `SmoothPathEquiv`, the homeomorphism is packaged as functions `φ, ψ : ℝ → ℝ`
+that are continuous on `Σ₁` resp. `Σ₂`, map the parameter spaces into each other and
+are inverse to each other there; nothing is asked of them off the parameter spaces.
+The relation is an equivalence relation (`equivalence_pathEquiv`), and a smooth
+reparametrisation is in particular one of these (`SmoothPathEquiv.toPathEquiv`).
 -/
 def PathEquiv (μ₁ μ₂ : M.Path) : Prop :=
-  ∃ φ : ℝ → ℝ,
-    Continuous φ ∧
-    (∃ ψ : ℝ → ℝ, Continuous ψ ∧ Function.LeftInverse ψ φ ∧
-      Function.RightInverse ψ φ ∧ Set.MapsTo ψ μ₂.parameterSpace μ₁.parameterSpace) ∧
+  ∃ φ ψ : ℝ → ℝ,
+    ContinuousOn φ μ₁.parameterSpace ∧
+    ContinuousOn ψ μ₂.parameterSpace ∧
     Set.MapsTo φ μ₁.parameterSpace μ₂.parameterSpace ∧
+    Set.MapsTo ψ μ₂.parameterSpace μ₁.parameterSpace ∧
+    (∀ s ∈ μ₁.parameterSpace, ψ (φ s) = s) ∧
+    (∀ t ∈ μ₂.parameterSpace, φ (ψ t) = t) ∧
     (∀ s ∈ μ₁.parameterSpace, μ₂.toFun (φ s) = μ₁.toFun s)
 
 /--
@@ -320,27 +320,28 @@ relations. -/
 /-- `PathEquiv` is reflexive: every path is related to itself by the identity
 reparametrisation. -/
 theorem PathEquiv.refl (μ : M.Path) : M.PathEquiv μ μ :=
-  ⟨id, continuous_id, ⟨id, continuous_id, fun _ => rfl, fun _ => rfl, Set.mapsTo_id _⟩,
-    Set.mapsTo_id _, fun _ _ => rfl⟩
+  ⟨id, id, continuousOn_id, continuousOn_id, Set.mapsTo_id _, Set.mapsTo_id _,
+    fun _ _ => rfl, fun _ _ => rfl, fun _ _ => rfl⟩
 
 variable {M} in
 /-- `PathEquiv` is transitive: reparametrising homeomorphisms compose. -/
 theorem PathEquiv.trans {μ₁ μ₂ μ₃ : M.Path} (h₁₂ : M.PathEquiv μ₁ μ₂)
     (h₂₃ : M.PathEquiv μ₂ μ₃) : M.PathEquiv μ₁ μ₃ := by
-  obtain ⟨φ₁, hφ₁, ⟨ψ₁, hψ₁, hl₁, hr₁, hψmaps₁⟩, hmaps₁, heq₁⟩ := h₁₂
-  obtain ⟨φ₂, hφ₂, ⟨ψ₂, hψ₂, hl₂, hr₂, hψmaps₂⟩, hmaps₂, heq₂⟩ := h₂₃
-  refine ⟨φ₂ ∘ φ₁, hφ₂.comp hφ₁, ⟨ψ₁ ∘ ψ₂, hψ₁.comp hψ₂, fun x => ?_, fun x => ?_,
-    hψmaps₁.comp hψmaps₂⟩, hmaps₂.comp hmaps₁, fun s hs => ?_⟩
-  · simp only [Function.comp_apply, hl₂ (φ₁ x), hl₁ x]
-  · simp only [Function.comp_apply, hr₁ (ψ₂ x), hr₂ x]
-  · simp only [Function.comp_apply, heq₂ _ (hmaps₁ hs), heq₁ s hs]
+  obtain ⟨φ₁, ψ₁, hφ₁C, hψ₁C, hφ₁maps, hψ₁maps, hψφ₁, hφψ₁, heq₁⟩ := h₁₂
+  obtain ⟨φ₂, ψ₂, hφ₂C, hψ₂C, hφ₂maps, hψ₂maps, hψφ₂, hφψ₂, heq₂⟩ := h₂₃
+  refine ⟨φ₂ ∘ φ₁, ψ₁ ∘ ψ₂, hφ₂C.comp hφ₁C hφ₁maps, hψ₁C.comp hψ₂C hψ₂maps,
+    hφ₂maps.comp hφ₁maps, hψ₁maps.comp hψ₂maps, fun s hs => ?_, fun t ht => ?_,
+    fun s hs => ?_⟩
+  · simp only [Function.comp_apply, hψφ₂ _ (hφ₁maps hs), hψφ₁ s hs]
+  · simp only [Function.comp_apply, hφψ₁ _ (hψ₂maps ht), hφψ₂ t ht]
+  · simp only [Function.comp_apply, heq₂ _ (hφ₁maps hs), heq₁ s hs]
 
 variable {M} in
 /-- `PathEquiv` is symmetric: swap the homeomorphism and its inverse. -/
 theorem PathEquiv.symm {μ₁ μ₂ : M.Path} (h : M.PathEquiv μ₁ μ₂) : M.PathEquiv μ₂ μ₁ := by
-  obtain ⟨φ, hφ, ⟨ψ, hψ, hl, hr, hψmaps⟩, hmaps, heq⟩ := h
-  refine ⟨ψ, hψ, ⟨φ, hφ, hr, hl, hmaps⟩, hψmaps, fun t ht => ?_⟩
-  rw [← heq _ (hψmaps ht), hr t]
+  obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq⟩ := h
+  refine ⟨ψ, φ, hψC, hφC, hψmaps, hφmaps, hφψ, hψφ, fun t ht => ?_⟩
+  rw [← heq _ (hψmaps ht), hφψ t ht]
 
 /-- `PathEquiv` is an equivalence relation. -/
 theorem equivalence_pathEquiv : Equivalence M.PathEquiv :=
@@ -376,6 +377,14 @@ theorem SmoothPathEquiv.trans {μ₁ μ₂ μ₃ : M.SmoothPath} (h₁₂ : M.Sm
 /-- `SmoothPathEquiv` is an equivalence relation. -/
 theorem equivalence_smoothPathEquiv : Equivalence M.SmoothPathEquiv :=
   ⟨SmoothPathEquiv.refl M, fun h => h.symm, fun h₁₂ h₂₃ => h₁₂.trans h₂₃⟩
+
+variable {M} in
+/-- A smooth reparametrisation is in particular a reparametrisation of the underlying
+paths. -/
+theorem SmoothPathEquiv.toPathEquiv {μ₁ μ₂ : M.SmoothPath} (h : M.SmoothPathEquiv μ₁ μ₂) :
+    M.PathEquiv μ₁.toPath μ₂.toPath := by
+  obtain ⟨φ, ψ, hφC, hψC, hφmaps, hψmaps, hψφ, hφψ, heq⟩ := h
+  exact ⟨φ, ψ, hφC.continuousOn, hψC.continuousOn, hφmaps, hψmaps, hψφ, hφψ, heq⟩
 
 /-- If `φ ∘ ψ = id` on `v`, with `ψ` mapping `v` into `u` and both maps differentiable
 within their sets, then a positive within-derivative of `φ` at `ψ t` forces a
@@ -1044,21 +1053,6 @@ def IsSmoothCurveEndpoint (c : SmoothCurve M) (p : M.Carrier) : Prop :=
   ∃ μ : M.SmoothPath, c = SmoothCurve.ofPath M μ ∧ IsEndpoint M μ.toPath p
 
 variable {M} in
-/-- Endpoints are invariant under reparametrisation of paths. -/
-theorem IsEndpoint.of_pathEquiv {μ₁ μ₂ : M.Path} (h : M.PathEquiv μ₁ μ₂) {p : M.Carrier}
-    (hp : IsEndpoint M μ₁ p) : IsEndpoint M μ₂ p := by
-  obtain ⟨φ, hφ, ⟨ψ, hψ, hl, hr, hψmaps⟩, hmaps, heq⟩ := h
-  obtain ⟨s, hs, rfl⟩ := hp
-  let e : ℝ ≃ₜ ℝ :=
-    { toFun := φ, invFun := ψ, left_inv := hl, right_inv := hr,
-      continuous_toFun := hφ, continuous_invFun := hψ }
-  have himg : e '' μ₁.parameterSpace = μ₂.parameterSpace :=
-    subset_antisymm hmaps.image_subset fun t ht => ⟨ψ t, hψmaps ht, hr t⟩
-  refine ⟨φ s, ?_, heq s (μ₁.isClosed.frontier_subset hs)⟩
-  rw [← himg, ← e.image_frontier]
-  exact ⟨s, hs, rfl⟩
-
-variable {M} in
 /-- On a path, a parameter lies in the frontier of the parameter space iff it is a
 parameter which is a minimum or a maximum of the parameter space. -/
 private theorem mem_frontier_iff_isExtreme (μ : M.Path) {s : ℝ} :
@@ -1096,15 +1090,21 @@ private theorem isExtreme_image_of_invOn {u v : Set ℝ} {φ ψ : ℝ → ℝ}
   exact hxs (by rw [← hψφ x hx, hφx, hψφ s hs]; rfl)
 
 variable {M} in
-/-- Endpoints are invariant under smooth reparametrisation of smooth paths. -/
-theorem IsEndpoint.of_smoothPathEquiv {μ₁ μ₂ : M.SmoothPath} (h : M.SmoothPathEquiv μ₁ μ₂)
-    {p : M.Carrier} (hp : IsEndpoint M μ₁.toPath p) : IsEndpoint M μ₂.toPath p := by
+/-- Endpoints are invariant under reparametrisation of paths. -/
+theorem IsEndpoint.of_pathEquiv {μ₁ μ₂ : M.Path} (h : M.PathEquiv μ₁ μ₂) {p : M.Carrier}
+    (hp : IsEndpoint M μ₁ p) : IsEndpoint M μ₂ p := by
   obtain ⟨φ, ψ, hφC, -, hφmaps, hψmaps, hψφ, hφψ, heq⟩ := h
   obtain ⟨s, hs, rfl⟩ := hp
-  obtain ⟨hs, hext⟩ := (mem_frontier_iff_isExtreme μ₁.toPath).mp hs
-  refine ⟨φ s, (mem_frontier_iff_isExtreme μ₂.toPath).mpr ⟨hφmaps hs, ?_⟩, heq s hs⟩
-  exact isExtreme_image_of_invOn μ₁.isConnected.isPreconnected hφC.continuousOn hψmaps
+  obtain ⟨hs, hext⟩ := (mem_frontier_iff_isExtreme μ₁).mp hs
+  refine ⟨φ s, (mem_frontier_iff_isExtreme μ₂).mpr ⟨hφmaps hs, ?_⟩, heq s hs⟩
+  exact isExtreme_image_of_invOn μ₁.isConnected.isPreconnected hφC hψmaps
     hψφ hφψ hs hext
+
+variable {M} in
+/-- Endpoints are invariant under smooth reparametrisation of smooth paths. -/
+theorem IsEndpoint.of_smoothPathEquiv {μ₁ μ₂ : M.SmoothPath} (h : M.SmoothPathEquiv μ₁ μ₂)
+    {p : M.Carrier} (hp : IsEndpoint M μ₁.toPath p) : IsEndpoint M μ₂.toPath p :=
+  hp.of_pathEquiv h.toPathEquiv
 
 variable {M} in
 /-- **Well-definedness of endpoints of curves.** -/
