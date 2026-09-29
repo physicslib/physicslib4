@@ -273,8 +273,8 @@ theorem lorentzPath_isFutureOriented (g : InhomogeneousLorentzGroup)
 theorem lorentzPath_isPastEndpoint (g : InhomogeneousLorentzGroup)
     (μ : StandardMinkowskiSpacetime.SmoothPath)
     {p : StandardMinkowskiSpacetime.Carrier}
-    (h : IsPastEndpoint StandardMinkowskiSpacetime μ p) :
-    IsPastEndpoint StandardMinkowskiSpacetime (lorentzPath g μ) (g • p) := by
+    (h : IsPastEndpoint StandardMinkowskiSpacetime μ.toPath p) :
+    IsPastEndpoint StandardMinkowskiSpacetime (lorentzPath g μ).toPath (g • p) := by
   obtain ⟨s, hs, hsp, hmin⟩ := h
   refine ⟨s, hs, ?_, hmin⟩
   change g.linear (μ.toFun s) + g.translation = g • p
@@ -284,8 +284,8 @@ theorem lorentzPath_isPastEndpoint (g : InhomogeneousLorentzGroup)
 theorem lorentzPath_isFutureEndpoint (g : InhomogeneousLorentzGroup)
     (μ : StandardMinkowskiSpacetime.SmoothPath)
     {q : StandardMinkowskiSpacetime.Carrier}
-    (h : IsFutureEndpoint StandardMinkowskiSpacetime μ q) :
-    IsFutureEndpoint StandardMinkowskiSpacetime (lorentzPath g μ) (g • q) := by
+    (h : IsFutureEndpoint StandardMinkowskiSpacetime μ.toPath q) :
+    IsFutureEndpoint StandardMinkowskiSpacetime (lorentzPath g μ).toPath (g • q) := by
   obtain ⟨s, hs, hsq, hmax⟩ := h
   refine ⟨s, hs, ?_, hmax⟩
   change g.linear (μ.toFun s) + g.translation = g • q

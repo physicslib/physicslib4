@@ -906,9 +906,9 @@ def IsEndpoint (μ : M.Path) (p : M.Carrier) : Prop :=
   ∃ s ∈ frontier μ.parameterSpace, μ.toFun s = p
 
 /--
-For a smooth path `μ` whose associated smooth curve is timelike and
-future-oriented, a *past endpoint* is the image under `μ` of the lesser of
-the two boundary components of `∂Σ`.
+For a path `μ`, a *past endpoint* is the image under `μ` of the lesser of the
+two boundary components of `∂Σ`. No smoothness or causal condition is involved;
+trips apply it to the smooth timelike or causal paths representing their segments.
 
 We capture this as: there exists a value `s ∈ Σ` such that every other
 `s' ∈ Σ` satisfies `s ≤ s'`, and `μ s = p`. Quantifying over the parameter
@@ -917,19 +917,18 @@ minimum of `Σ`, which on a closed connected `Σ ⊆ ℝ` forces `Σ` to be
 bounded below; together with `IsFutureEndpoint` this excludes half-lines and
 pins `Σ` down to a compact closed interval `[a, b]`.
 -/
-def IsPastEndpoint (μ : M.SmoothPath) (p : M.Carrier) : Prop :=
+def IsPastEndpoint (μ : M.Path) (p : M.Carrier) : Prop :=
   ∃ s ∈ μ.parameterSpace,
     μ.toFun s = p ∧
     (∀ s' ∈ μ.parameterSpace, s ≤ s')
 
 /--
-For a smooth path `μ` whose associated smooth curve is timelike and
-future-oriented, a *future endpoint* is the image under `μ` of the greater
+For a path `μ`, a *future endpoint* is the image under `μ` of the greater
 of the two boundary components of `∂Σ`. Quantifying over the parameter
 space (rather than `∂Σ`) ensures the witness is a genuine maximum, forcing
 boundedness above; see `IsPastEndpoint` for the dual.
 -/
-def IsFutureEndpoint (μ : M.SmoothPath) (p : M.Carrier) : Prop :=
+def IsFutureEndpoint (μ : M.Path) (p : M.Carrier) : Prop :=
   ∃ s ∈ μ.parameterSpace,
     μ.toFun s = p ∧
     (∀ s' ∈ μ.parameterSpace, s' ≤ s)
@@ -975,17 +974,17 @@ theorem mem_frontier_of_isMax (μ : M.Path) {s : ℝ} (hs : s ∈ μ.parameterSp
 
 /-- **A past endpoint is in particular an endpoint**
 (`lmm:extremal-parameter-mem-frontier`, consequence). -/
-theorem isEndpoint_of_isPastEndpoint (μ : M.SmoothPath) {p : M.Carrier}
-    (h : IsPastEndpoint M μ p) : IsEndpoint M μ.toPath p := by
+theorem isEndpoint_of_isPastEndpoint (μ : M.Path) {p : M.Carrier}
+    (h : IsPastEndpoint M μ p) : IsEndpoint M μ p := by
   obtain ⟨s, hs, hpeq, hmin⟩ := h
-  exact ⟨s, mem_frontier_of_isMin M μ.toPath hs hmin, hpeq⟩
+  exact ⟨s, mem_frontier_of_isMin M μ hs hmin, hpeq⟩
 
 /-- **A future endpoint is in particular an endpoint**
 (`lmm:extremal-parameter-mem-frontier`, consequence). -/
-theorem isEndpoint_of_isFutureEndpoint (μ : M.SmoothPath) {p : M.Carrier}
-    (h : IsFutureEndpoint M μ p) : IsEndpoint M μ.toPath p := by
+theorem isEndpoint_of_isFutureEndpoint (μ : M.Path) {p : M.Carrier}
+    (h : IsFutureEndpoint M μ p) : IsEndpoint M μ p := by
   obtain ⟨s, hs, hpeq, hmax⟩ := h
-  exact ⟨s, mem_frontier_of_isMax M μ.toPath hs hmax, hpeq⟩
+  exact ⟨s, mem_frontier_of_isMax M μ hs hmax, hpeq⟩
 
 /-- **Two endpoints force a compact parameter interval**
 (`lmm:endpoint-parameter-space-eq-Icc`).
@@ -994,7 +993,7 @@ The past-endpoint witness is a minimum and the future-endpoint witness a maximum
 so the parameter space is bounded on both sides; being also nonempty, connected and
 closed, it is the closed interval between them. It is non-degenerate because a path
 has more than one parameter. -/
-theorem parameterSpace_eq_Icc_of_endpoints (μ : M.SmoothPath) {p q : M.Carrier}
+theorem parameterSpace_eq_Icc_of_endpoints (μ : M.Path) {p q : M.Carrier}
     (hp : IsPastEndpoint M μ p) (hq : IsFutureEndpoint M μ q) :
     ∃ a b : ℝ, a < b ∧ μ.parameterSpace = Set.Icc a b := by
   rcases hp with ⟨a, ha, _hpa, hamin⟩

@@ -103,15 +103,15 @@ theorem pushforwardPath_isCausal (g : Isometry M) (μ : M.SmoothPath)
 /-- A past endpoint of `μ` is carried by `g` to a past endpoint of the
 pushforward path. -/
 theorem pushforwardPath_isPastEndpoint (g : Isometry M) (μ : M.SmoothPath)
-    {p : M.Carrier} (h : IsPastEndpoint M μ p) :
-    IsPastEndpoint M (g.pushforwardPath μ) (g.toDiffeo p) :=
+    {p : M.Carrier} (h : IsPastEndpoint M μ.toPath p) :
+    IsPastEndpoint M (g.pushforwardPath μ).toPath (g.toDiffeo p) :=
   Spacetime.pushforwardPath_isPastEndpoint g.toDiffeo μ h
 
 /-- A future endpoint of `μ` is carried by `g` to a future endpoint of the
 pushforward path. -/
 theorem pushforwardPath_isFutureEndpoint (g : Isometry M) (μ : M.SmoothPath)
-    {p : M.Carrier} (h : IsFutureEndpoint M μ p) :
-    IsFutureEndpoint M (g.pushforwardPath μ) (g.toDiffeo p) :=
+    {p : M.Carrier} (h : IsFutureEndpoint M μ.toPath p) :
+    IsFutureEndpoint M (g.pushforwardPath μ).toPath (g.toDiffeo p) :=
   Spacetime.pushforwardPath_isFutureEndpoint g.toDiffeo μ h
 
 /-! ### Preservation of future orientation, trips and chronological precedence

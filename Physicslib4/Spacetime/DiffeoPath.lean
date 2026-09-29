@@ -100,16 +100,16 @@ theorem pushforwardPath_tangent (ψ : Diffeo M N) (μ : M.SmoothPath)
 (`lmm:cross-metric-pushforward-path-endpoints`). No metric or causal input is
 used: the same parameter witnesses the condition. -/
 theorem pushforwardPath_isPastEndpoint (ψ : Diffeo M N) (μ : M.SmoothPath)
-    {p : M.Carrier} (h : IsPastEndpoint M μ p) :
-    IsPastEndpoint N (pushforwardPath ψ μ) (ψ p) := by
+    {p : M.Carrier} (h : IsPastEndpoint M μ.toPath p) :
+    IsPastEndpoint N (pushforwardPath ψ μ).toPath (ψ p) := by
   obtain ⟨s, hs, hsp, hmin⟩ := h
   exact ⟨s, hs, by simp only [pushforwardPath_toFun, Function.comp_apply, hsp], hmin⟩
 
 /-- **The pushforward transports future endpoints**
 (`lmm:cross-metric-pushforward-path-endpoints`). -/
 theorem pushforwardPath_isFutureEndpoint (ψ : Diffeo M N) (μ : M.SmoothPath)
-    {p : M.Carrier} (h : IsFutureEndpoint M μ p) :
-    IsFutureEndpoint N (pushforwardPath ψ μ) (ψ p) := by
+    {p : M.Carrier} (h : IsFutureEndpoint M μ.toPath p) :
+    IsFutureEndpoint N (pushforwardPath ψ μ).toPath (ψ p) := by
   obtain ⟨s, hs, hsp, hmax⟩ := h
   exact ⟨s, hs, by simp only [pushforwardPath_toFun, Function.comp_apply, hsp], hmax⟩
 

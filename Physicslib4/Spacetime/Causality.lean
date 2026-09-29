@@ -106,8 +106,8 @@ def IsTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
     SmoothPath.IsTimelike M rep ∧
     SmoothPath.IsFutureOriented M rep t ∧
     M.IsGeodesic rep ∧
-    IsPastEndpoint M rep p ∧
-    IsFutureEndpoint M rep q
+    IsPastEndpoint M rep.toPath p ∧
+    IsFutureEndpoint M rep.toPath q
 
 /-- *Single-segment chronological precedence*: `p` and `q` are joined by one
 future-oriented timelike geodesic segment. -/
@@ -151,8 +151,8 @@ def IsCausalTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
     SmoothPath.IsCausal M rep ∧
     SmoothPath.IsFutureOriented M rep t ∧
     M.IsGeodesic rep ∧
-    IsPastEndpoint M rep p ∧
-    IsFutureEndpoint M rep q
+    IsPastEndpoint M rep.toPath p ∧
+    IsFutureEndpoint M rep.toPath q
 
 /-- *Single-segment causal precedence*: `p` and `q` are joined by one
 future-oriented causal geodesic segment. -/
