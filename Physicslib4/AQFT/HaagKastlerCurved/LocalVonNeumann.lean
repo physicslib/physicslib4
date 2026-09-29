@@ -200,32 +200,6 @@ theorem localVonNeumannAlgebra_separating {B : Set M.Carrier}
   refine N.localVonNeumann_separating hB π hB₁ hB₂ hs h₁ h₂ hcyc ?_ hRΩ
   rwa [← SetLike.mem_coe, coe_localVonNeumannAlgebra] at hR
 
-/-- The chosen Axiom-3 isotony embeddings `commIsotony` are **coherent below `B`**:
-for nested basis subregions `B₁ ⊆ B₂ ⊆ B`, the direct embedding `𝔘(B₁) → 𝔘(B)` factors
-through `𝔘(B₂)`.
-
-This was formerly an assumption. The curved Axiom 3 used to select its own isotony
-witnesses via `Classical.choose`, so the composition law was unavailable even for the
-trivial net, whose witness is the identity but hidden behind a `Classical.choose` that
-does not reduce. Axiom 2 now *owns* the isotony family and carries the composition law
-as one of its fields, and Axiom 3 consumes that family, so this property holds for every
-net — see `isIsotonyCoherentBelow` immediately below. The definition is retained as a
-name for the condition. -/
-def IsIsotonyCoherentBelow {B : Set M.Carrier} (hB : M.IsBasisSet B) : Prop :=
-  ∀ ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
-    (h₁₂ : B₁ ⊆ B₂) (h₂ : B₂ ⊆ B) (a : N.algebra B₁),
-      N.commIsotony hB₁ hB (h₁₂.trans h₂) a
-        = N.commIsotony hB₂ hB h₂ (N.commIsotony hB₁ hB₂ h₁₂ a)
-
-/-- **Every net is isotony-coherent below every region.** Immediate from the composition
-law of Axiom 2 (`commIsotony_comp`), read pointwise. This is what makes the former
-`hcoh` hypotheses throughout this file redundant. -/
-theorem isIsotonyCoherentBelow {B : Set M.Carrier} (hB : M.IsBasisSet B) :
-    N.IsIsotonyCoherentBelow hB := by
-  intro B₁ B₂ hB₁ hB₂ h₁₂ h₂ a
-  rw [← N.commIsotony_comp hB₁ hB₂ hB h₁₂ h₂]
-  rfl
-
 /-- **The net of von Neumann algebras as an order-preserving map (curved spacetime).**
 Fixing a containing basis region `B` and a representation `π` of `𝔘(B)`, the assignment
 `B' ↦ R(B')` is a monotone map from the poset of basis subregions of `B` (ordered by
@@ -234,7 +208,7 @@ Minkowski `vonNeumannNet`: the local net restricted to a containing region is a 
 the inclusion poset, sending containment of regions to containment of algebras.
 
 Monotonicity carries no coherence hypothesis. The factorisation it rests on is the
-composition law of Axiom 2, discharged for every net by `isIsotonyCoherentBelow`. -/
+composition law of Axiom 2 (`commIsotony_comp`). -/
 noncomputable def vonNeumannNet {B : Set M.Carrier} (hB : M.IsBasisSet B)
     (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) :
     {B' : Set M.Carrier // M.IsBasisSet B' ∧ B' ⊆ B} →o VonNeumannAlgebra H where
