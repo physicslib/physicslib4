@@ -318,7 +318,7 @@ Blueprint reference: `def:abstract-extended-calculus`.
 theorem inner_extendedCalculus (hΦ : IsAbstractCalculus Φ) {f : X → ℂ}
     (hf : f ∈ BddMeasurable X) (ψ : H) :
     ⟪ψ, extendedCalculus hΦ f ψ⟫_ℂ = abstractForm hΦ f ψ := by
-  rw [extendedCalculus, dif_pos hf]
+  rw [extendedCalculus, dite_eq_left hf]
   exact ((isBoundedQuadraticForm_abstractForm hΦ hf).inner_toOperator ψ).symm
 
 /--
@@ -330,7 +330,7 @@ theorem extendedCalculus_continuous (hΦ : IsAbstractCalculus Φ) (f : C(X, ℂ)
     extendedCalculus hΦ (fun x => f x) = Φ f := by
   have hf : (fun x => f x) ∈ BddMeasurable X :=
     ⟨f.continuous.measurable, ‖f‖, fun x => f.norm_coe_le_norm x⟩
-  rw [extendedCalculus, dif_pos hf]
+  rw [extendedCalculus, dite_eq_left hf]
   exact ((isBoundedQuadraticForm_abstractForm hΦ hf).eq_toOperator
     (abstractForm_continuous hΦ f)).symm
 
@@ -348,7 +348,7 @@ theorem extendedCalculus_smul_add (hΦ : IsAbstractCalculus Φ) (α β : ℂ) {f
   have hint : ∀ {h : X → ℂ}, h ∈ BddMeasurable X → ∀ ψ : H,
       Integrable h (abstractMeasure hΦ ψ) := fun ⟨hm, C, hC⟩ _ =>
     Integrable.of_bound hm.aestronglyMeasurable C (Eventually.of_forall hC)
-  rw [extendedCalculus, dif_pos hfg]
+  rw [extendedCalculus, dite_eq_left hfg]
   refine ((isBoundedQuadraticForm_abstractForm hΦ hfg).eq_toOperator fun ψ => ?_).symm
   rw [add_apply, smul_apply, smul_apply, inner_add_right, inner_smul_right, inner_smul_right,
     inner_extendedCalculus hΦ hf, inner_extendedCalculus hΦ hg, abstractForm, abstractForm,
@@ -401,7 +401,7 @@ Blueprint reference: `lmm:abstract-extended-real-self-adjoint`.
 theorem isSelfAdjoint_extendedCalculus_of_real (hΦ : IsAbstractCalculus Φ) {f : X → ℂ}
     (hf : f ∈ BddMeasurable X) (hreal : ∀ x, (f x).im = 0) :
     IsSelfAdjoint (extendedCalculus hΦ f) := by
-  rw [extendedCalculus, dif_pos hf]
+  rw [extendedCalculus, dite_eq_left hf]
   refine (isBoundedQuadraticForm_abstractForm hΦ hf).isSelfAdjoint_toOperator fun ψ => ?_
   have hre : f = fun x => ((f x).re : ℂ) := funext fun x => Complex.ext rfl (by simp [hreal x])
   rw [abstractForm, hre]
@@ -582,7 +582,7 @@ theorem isStarProjection_extendedCalculus_indicator (hΦ : IsAbstractCalculus Φ
       (indicator_one_mem_bddMeasurable hE) fun x => ?_⟩
     · rw [IsIdempotentElem, ← extendedCalculus_indicator_inter hΦ hE hE, Set.inter_self]
     · by_cases hx : x ∈ E <;> simp [hx]
-  · rw [extendedCalculus, dif_neg (mt indicator_one_mem_bddMeasurable_iff.1 hE)]
+  · rw [extendedCalculus, dite_eq_right (mt indicator_one_mem_bddMeasurable_iff.1 hE)]
     exact IsStarProjection.zero _
 
 /-- For an orthogonal projection `P`, `‖P ψ‖² = Re ⟪ψ, P ψ⟫`. -/
@@ -662,7 +662,7 @@ noncomputable def abstractPVM (hΦ : IsAbstractCalculus Φ) : ProjectionValuedMe
   toFun E := extendedCalculus hΦ (E.indicator (1 : X → ℂ))
   isStarProjection' := isStarProjection_extendedCalculus_indicator hΦ
   notMeasurable' E hE := by
-    rw [extendedCalculus, dif_neg (mt indicator_one_mem_bddMeasurable_iff.1 hE)]
+    rw [extendedCalculus, dite_eq_right (mt indicator_one_mem_bddMeasurable_iff.1 hE)]
   univ' := by
     rw [Set.indicator_univ, ← hΦ.map_one, ← extendedCalculus_continuous hΦ 1]
     rfl

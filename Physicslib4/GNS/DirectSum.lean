@@ -43,7 +43,9 @@ noncomputable def lpEvalCLM (j : ι) : lp H 2 →L[ℂ] H j :=
       map_add' := fun _ _ => rfl
       map_smul' := fun _ _ => rfl }
     1
-    (fun x => by simpa using lp.norm_apply_le_norm (p := 2) (by norm_num) x j)
+    (fun x => by
+      rw [one_mul]
+      exact lp.norm_apply_le_norm (p := 2) (by norm_num) x j)
 
 omit [DecidableEq ι] [∀ (i : ι), CompleteSpace (H i)] in
 @[simp] theorem lpEvalCLM_apply (j : ι) (x : lp H 2) : lpEvalCLM j x = x j := rfl

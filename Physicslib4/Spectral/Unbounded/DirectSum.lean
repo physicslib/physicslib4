@@ -73,7 +73,7 @@ theorem dense_setOf_finite_support :
   exact fun f => mem_closure_of_tendsto (lp.hasSum_single ENNReal.ofNat_ne_top f)
     (Eventually.of_forall fun s => s.finite_toSet.subset fun i hi => by
       by_contra hs
-      simp only [lp.coeFn_sum, lp.coeFn_single, Set.mem_setOf_eq, Finset.sum_apply] at hi
+      simp only [lp.coeFn_sum, lp.coeFn_single, Set.mem_ofPred_eq, Finset.sum_apply] at hi
       exact hi (Finset.sum_eq_zero fun j hj =>
         Pi.single_eq_of_ne (fun h : i = j => hs (h ▸ hj)) _))
 

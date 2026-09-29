@@ -445,7 +445,7 @@ Blueprint reference: `prpstn:hall-a.49` (Part 1).
 -/
 theorem existsUnique_add_mem_orthogonal {V : Submodule ℂ H} (hV : IsClosed (V : Set H))
     (ψ : H) : ∃! p : H × H, p.1 ∈ V ∧ p.2 ∈ Vᗮ ∧ ψ = p.1 + p.2 := by
-  haveI : CompleteSpace V := hV.completeSpace_coe
+  have : CompleteSpace V := hV.completeSpace_coe
   refine ⟨(V.starProjection ψ, ψ - V.starProjection ψ),
     ⟨V.starProjection_apply_mem ψ, V.sub_starProjection_mem_orthogonal ψ, by simp⟩, ?_⟩
   rintro ⟨a, b⟩ ⟨ha, hb, hψ⟩
@@ -540,8 +540,8 @@ theorem adjoint_add_toPMap {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (B : H
   have key : (∀ χ : (T + (B : H →ₗ[ℂ] H).toPMap ⊤).domain,
       ⟪ψ, (T + (B : H →ₗ[ℂ] H).toPMap ⊤) χ⟫_ℂ = ⟪φ, (χ : H)⟫_ℂ) ↔
       ∀ χ : T.domain, ⟪ψ, T χ⟫_ℂ = ⟪φ - ContinuousLinearMap.adjoint B ψ, (χ : H)⟫_ℂ := by
-    simp only [LinearPMap.add_apply, LinearMap.toPMap_apply, ContinuousLinearMap.coe_coe,
-      inner_add_right, inner_sub_left, ContinuousLinearMap.adjoint_inner_left, eq_sub_iff_add_eq]
+    simp only [LinearPMap.add_apply, inner_add_right, inner_sub_left,
+      ContinuousLinearMap.adjoint_inner_left, eq_sub_iff_add_eq]
     exact ⟨fun h χ => h ⟨χ, χ.2, trivial⟩, fun h χ => h ⟨χ, χ.2.1⟩⟩
   refine key.trans <| (forall_inner_iff_adjoint hT).trans ⟨?_, ?_⟩
   · rintro ⟨hψ, e⟩
@@ -607,7 +607,8 @@ theorem isClosed_range_subSmul {T : H →ₗ.[ℂ] H} (hcl : T.IsClosed) (lam : 
     hcl.mem_of_tendsto (hξ.prodMk_nhds hT) (Eventually.of_forall fun n => T.mem_graph (ψ n))
   refine mem_range.mpr ⟨y, ?_⟩
   simp only at hy1 hy2
-  rw [subSmul_apply, hy2, hy1, add_sub_cancel_right]
+  change T y - lam • (y : H) = φ
+  rw [hy2, hy1, add_sub_cancel_right]
 
 /--
 The adjoint of `T - λ 1` is `T* - λ̄ 1`, including equality of domains.

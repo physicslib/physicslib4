@@ -87,33 +87,33 @@ Blueprint reference: `lmm:spectrum-notions-agree`.
 theorem pmapResolventSet_toPMap_top (A : H →L[ℂ] H) :
     pmapResolventSet ((A : H →ₗ[ℂ] H).toPMap ⊤) = resolventSet ℂ A := by
   ext lam
-  simp only [pmapResolventSet, resolventSet, Set.mem_setOf_eq, isUnit_iff_exists,
+  simp only [pmapResolventSet, resolventSet, Set.mem_ofPred_eq, isUnit_iff_exists,
     Algebra.algebraMap_eq_smul_one]
   constructor
   · rintro ⟨B, hB⟩
     refine ⟨-B, ?_, ?_⟩
     · ext ψ
       have := hB.rightInverse ψ
-      simp only [LinearMap.toPMap_apply, ContinuousLinearMap.coe_coe] at this
+      change A (B ψ) - lam • B ψ = ψ at this
       simp only [mul_apply_eq_comp, sub_apply, smul_apply, one_apply_eq_self, neg_apply,
         map_neg]
       convert this using 1; abel
     · ext ψ
       have := hB.leftInverse ⟨ψ, Submodule.mem_top⟩
-      simp only [LinearMap.toPMap_apply, ContinuousLinearMap.coe_coe] at this
+      change B (A ψ - lam • ψ) = ψ at this
       simp only [mul_apply_eq_comp, sub_apply, smul_apply, one_apply_eq_self, neg_apply]
       rw [← map_neg, neg_sub, this]
   · rintro ⟨b, h1, h2⟩
     refine ⟨-b, ⟨fun _ => Submodule.mem_top, fun ψ => ?_, fun ψ => ?_⟩⟩
     · have := congrArg (fun f : H →L[ℂ] H => f ψ) h1
       simp only [mul_apply_eq_comp, sub_apply, smul_apply, one_apply_eq_self] at this
-      simp only [LinearMap.toPMap_apply, ContinuousLinearMap.coe_coe, neg_apply, map_neg,
-        smul_neg]
+      change A (-b ψ) - lam • (-b ψ) = ψ
+      simp only [map_neg, smul_neg]
       convert this using 1; abel
     · have := congrArg (fun f : H →L[ℂ] H => f ψ) h2
       simp only [mul_apply_eq_comp, sub_apply, smul_apply, one_apply_eq_self] at this
-      simp only [LinearMap.toPMap_apply, ContinuousLinearMap.coe_coe, neg_apply]
-      rw [← map_neg, neg_sub, this]
+      change (-b) (A ψ - lam • (ψ : H)) = ψ
+      rw [neg_apply, ← map_neg, neg_sub, this]
 
 omit [CompleteSpace H] in
 /--

@@ -383,7 +383,6 @@ theorem hasSum_borelCalculus_indicator (hA : IsSelfAdjoint A) (E : ℕ → Set (
       convert hc using 1
       · ext n
         simp [← Complex.ofReal_pow]
-      · rfl
     have hnorm : Tendsto (fun n : ℕ => ‖Q φ - R n φ‖) atTop (𝓝 (0 : ℝ)) := by
       have hsqrt : Tendsto (fun n => Real.sqrt ((‖Q φ - R n φ‖ : ℝ) ^ 2)) atTop (𝓝 0) := by
         simpa [Function.comp_def] using (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hnsq
@@ -419,7 +418,7 @@ noncomputable def spectralMeasure (hA : IsSelfAdjoint A) :
     by_cases hE : MeasurableSet E
     · simpa [hE] using isStarProjection_borelCalculus_indicator hA hE
     · simp [hE]
-  notMeasurable' _E hE := if_neg hE
+  notMeasurable' _E hE := ite_eq_right hE
   univ' := by simpa using borelCalculus_indicator_univ hA
   hasSum' E hE hdisj v := by
     simpa [hE, MeasurableSet.iUnion hE] using hasSum_borelCalculus_indicator hA E hE hdisj v
@@ -430,7 +429,7 @@ theorem spectralMeasure_apply (hA : IsSelfAdjoint A) {E : Set (spectrum ℝ A)}
     (hE : MeasurableSet E) :
     spectralMeasure hA E = borelCalculus hA (E.indicator (1 : spectrum ℝ A → ℂ)) := by
   classical
-  simp only [spectralMeasure, ProjectionValuedMeasure.coe_mk, if_pos hE]
+  simp only [spectralMeasure, ProjectionValuedMeasure.coe_mk, ite_eq_left hE]
 
 /--
 The integral of an indicator against `μ^A` recovers `μ^A(E)`.

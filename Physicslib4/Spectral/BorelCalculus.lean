@@ -248,7 +248,7 @@ Blueprint reference: `prpstn:F-contains-continuous`.
 -/
 theorem continuous_mem_FClass (hA : IsSelfAdjoint A) (f : C(spectrum ℝ A, ℝ)) :
     (fun l => ((f l : ℝ) : ℂ)) ∈ FClass hA := by
-  rw [FClass, Set.mem_setOf_eq]
+  rw [FClass, Set.mem_ofPred_eq]
   constructor
   · rw [mem_bddMeasurable]
     constructor
@@ -350,13 +350,13 @@ theorem inner_borelCalculus (hA : IsSelfAdjoint A) {f : spectrum ℝ A → ℂ}
     (hf : f ∈ BddMeasurable (spectrum ℝ A)) (ψ : H) :
     ⟪ψ, borelCalculus hA f ψ⟫_ℂ = borelForm hA f ψ := by
   classical
-  simp only [borelCalculus, dif_pos hf]
+  simp only [borelCalculus, dite_eq_left hf]
   exact (existsUnique_borelCalculus hA hf).choose_spec.1 ψ
 
 theorem borelCalculus_of_notMem (hA : IsSelfAdjoint A) {f : spectrum ℝ A → ℂ}
     (hf : f ∉ BddMeasurable (spectrum ℝ A)) : borelCalculus hA f = 0 := by
   classical
-  simp only [borelCalculus, dif_neg hf]
+  simp only [borelCalculus, dite_eq_right hf]
 
 /-!
 ### Linearity of the calculus
@@ -687,7 +687,7 @@ theorem isBorelGenerating_F1Class (hA : IsSelfAdjoint A) :
           polarization (borelForm hA g) ψ η = ⟪ψ, borelCalculus hA g η⟫_ℂ :=
             hpol_inner g hg ψ η
           _ = ⟪ψ, (borelCalculus hA g * borelCalculus hA kc) ψ⟫_ℂ := by
-            simp [η, ContinuousLinearMap.mul_apply]
+            simp [η, mul_apply_eq_comp]
       have hpol' : Tendsto (fun n => polarization (borelForm hA (f n)) ψ η) atTop
           (𝓝 ⟪ψ, (borelCalculus hA g * borelCalculus hA kc) ψ⟫_ℂ) := by
         simpa [hpol_g] using
@@ -696,7 +696,7 @@ theorem isBorelGenerating_F1Class (hA : IsSelfAdjoint A) :
           atTop (𝓝 ⟪ψ, (borelCalculus hA g * borelCalculus hA kc) ψ⟫_ℂ) := by
         refine (hpol'.congr' (Eventually.of_forall fun n => ?_))
         rw [hpol_inner (f n) (hf n).1 ψ η]
-        simp [η, ContinuousLinearMap.mul_apply]
+        simp [η, mul_apply_eq_comp]
       exact tendsto_nhds_unique hconv1 hconv2
     let hQ : IsBoundedQuadraticForm (borelForm hA (fun l => g l * kc l)) :=
       isBoundedQuadraticForm_borelForm hA hgkc_mem

@@ -182,8 +182,9 @@ theorem SmoothPath.mfderivWithin_comp_reparam {M : Spacetime} (μ : M.SmoothPath
   change mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model μ.toFun μ.parameterSpace (φ s)
       (mfderivWithin (modelWithCornersSelf ℝ ℝ) (modelWithCornersSelf ℝ ℝ) φ u s (1 : ℝ))
     = derivWithin φ u s • μ.tangent (φ s)
-  rw [SmoothPath.tangent_def, ← ContinuousLinearMap.map_smul]
-  congr 1
+  rw [SmoothPath.tangent_def]
+  refine (congrArg _ ?_).trans ((mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model μ.toFun
+    μ.parameterSpace (φ s)).map_smul _ _)
   rw [mfderivWithin_eq_fderivWithin]
   change (fderivWithin ℝ φ u s) 1 = (derivWithin φ u s : ℝ) • (1 : ℝ)
   rw [smul_eq_mul, mul_one]

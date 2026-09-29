@@ -212,7 +212,7 @@ theorem intertwiner_ι (N : HaagKastlerNet) (Q : QuasilocalAlgebra N.U N.isotony
       ∃ a' : N.U.algebra B', Q.ι hB' a' = Q.ι hB a :=
     ⟨B, hB, a, rfl⟩
   unfold intertwiner
-  rw [dif_pos h₀]
+  rw [dite_eq_left h₀]
   exact ι_covEquiv_congr N Q L h₀.choose_spec.1 hB h₀.choose_spec.2.choose a
     h₀.choose_spec.2.choose_spec
 

@@ -137,7 +137,7 @@ theorem conjMulEquiv_image_scalar (U : H₁ ≃ₗᵢ[ℂ] H₂) :
     rw [conjMulEquiv_apply, conjCLM_apply]
     simp [map_smul]
   ext S
-  simp only [scalarOperators, Set.mem_image, Set.mem_setOf_eq]
+  simp only [scalarOperators, Set.mem_image, Set.mem_ofPred_eq]
   constructor
   · rintro ⟨_, ⟨c, rfl⟩, rfl⟩
     exact ⟨c, hfix c⟩

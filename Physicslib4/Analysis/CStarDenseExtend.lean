@@ -41,7 +41,7 @@ theorem exists_starAlgHom_extend_of_dense
     ∃ F : A →⋆ₐ[ℂ] B, Continuous F ∧ ∀ x : S, F (x : A) = f x := by
   have hue : IsUniformInducing ((↑) : S → A) := isUniformInducing_val (S : Set A)
   have hdr : DenseRange ((↑) : S → A) := by
-    simpa only [DenseRange, Subtype.range_coe_subtype, SetLike.setOf_mem_eq] using hS
+    simpa only [DenseRange, Subtype.range_coe_subtype, SetLike.setOfPred_mem_eq] using hS
   set F₀ : A → B := (hue.isDenseInducing hdr).extend (f : S → B) with hF₀def
   have hcont : Continuous F₀ :=
     (uniformContinuous_uniformly_extend hue hdr hf).continuous

@@ -425,7 +425,7 @@ theorem inner_integral (μ : ProjectionValuedMeasure X H) {f : X → ℂ}
     (hf : f ∈ BddMeasurable X) (ψ : H) :
     ⟪ψ, μ.integral f ψ⟫_ℂ = ∫ x, f x ∂(μ.assoc ψ) := by
   classical
-  simp only [integral, dif_pos hf]
+  simp only [integral, dite_eq_left hf]
   exact (existsUnique_integral μ).choose_spec.1 ⟨f, hf⟩ ψ
 
 /-!
@@ -443,7 +443,7 @@ theorem integral_add (μ : ProjectionValuedMeasure X H) {f g : X → ℂ}
     μ.integral (f + g) = μ.integral f + μ.integral g := by
   classical
   have hfg : f + g ∈ BddMeasurable X := (BddMeasurable X).add_mem hf hg
-  simp only [integral, dif_pos hf, dif_pos hg, dif_pos hfg]
+  simp only [integral, dite_eq_left hf, dite_eq_left hg, dite_eq_left hfg]
   exact map_add (existsUnique_integral μ).choose ⟨f, hf⟩ ⟨g, hg⟩
 
 /-- Homogeneity of the operator-valued integral. -/
@@ -451,7 +451,7 @@ theorem integral_smul (μ : ProjectionValuedMeasure X H) (α : ℂ) {f : X → �
     (hf : f ∈ BddMeasurable X) : μ.integral (α • f) = α • μ.integral f := by
   classical
   have hαf : α • f ∈ BddMeasurable X := (BddMeasurable X).smul_mem α hf
-  simp only [integral, dif_pos hf, dif_pos hαf]
+  simp only [integral, dite_eq_left hf, dite_eq_left hαf]
   exact map_smul (existsUnique_integral μ).choose α ⟨f, hf⟩
 
 /-!
@@ -540,7 +540,7 @@ private lemma inner_pvm_apply (μ : ProjectionValuedMeasure X H) (E : Set X) (ph
     have hidp : μ E * μ E = μ E := hP.isIdempotentElem
     calc
       μ E (μ E psi) = ((μ E) * (μ E)) psi := by
-        rw [ContinuousLinearMap.mul_apply]
+        rw [mul_apply_eq_comp]
       _ = μ E psi := by rw [hidp]
   calc
     inner ℂ phi (μ E psi) = inner ℂ phi (μ E (μ E psi)) := by
@@ -635,7 +635,7 @@ theorem norm_integral_simple_le (μ : ProjectionValuedMeasure X H) (s : SimpleFu
     · simp [Set.indicator_of_notMem hx]
   have hzero : μ.integral (fun _ : X => 0) = 0 := by
     have h0 : (fun _ : X => (0 : ℂ)) ∈ BddMeasurable X := (BddMeasurable X).zero_mem
-    rw [integral, dif_pos h0]
+    rw [integral, dite_eq_left h0]
     exact map_zero (existsUnique_integral μ).choose
   -- The integral is additive over finite pointwise sums of bounded measurable functions.
   have hlin : ∀ (t : Finset ℂ) (g : ℂ → X → ℂ),

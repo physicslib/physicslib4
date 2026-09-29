@@ -62,7 +62,7 @@ theorem minkowskiBackwardCone_subset {q q' : SpacetimeModel}
     (h : q' ∈ minkowskiBackwardCone q) :
     minkowskiBackwardCone q' ⊆ minkowskiBackwardCone q := by
   intro p hp
-  rw [minkowskiBackwardCone_eq, Set.mem_setOf_eq] at hp h ⊢
+  rw [minkowskiBackwardCone_eq, Set.mem_ofPred_eq] at hp h ⊢
   exact minkowskiForwardCone_subset hp h
 
 /-- Coordinatewise evaluation of a point supported on the time axis. -/
@@ -71,10 +71,10 @@ private theorem single_time_apply (c : ℝ) :
     (EuclideanSpace.single (0 : Fin 4) c) 1 = 0 ∧
     (EuclideanSpace.single (0 : Fin 4) c) 2 = 0 ∧
     (EuclideanSpace.single (0 : Fin 4) c) 3 = 0 :=
-  ⟨by rw [PiLp.single_apply, if_pos rfl],
-   by rw [PiLp.single_apply, if_neg (by decide)],
-   by rw [PiLp.single_apply, if_neg (by decide)],
-   by rw [PiLp.single_apply, if_neg (by decide)]⟩
+  ⟨by rw [PiLp.single_apply, ite_eq_left rfl],
+   by rw [PiLp.single_apply, ite_eq_right (by decide)],
+   by rw [PiLp.single_apply, ite_eq_right (by decide)],
+   by rw [PiLp.single_apply, ite_eq_right (by decide)]⟩
 
 /-- Nonnegativity of a three-term sum of squares (the spatial part of a displacement). -/
 private theorem sq3_nonneg (a b c : ℝ) : 0 ≤ a ^ 2 + b ^ 2 + c ^ 2 := by
@@ -135,6 +135,15 @@ theorem exists_common_future (q₁ q₂ : SpacetimeModel) :
   · rw [e0, e1, e2, e3]; simp only [zero_sub, neg_sq]; linarith only [hc₁]
   · rw [e0, e1, e2, e3]; simp only [zero_sub, neg_sq]; linarith only [hc₂]
 
+/-- An Alexandrov diamond of standard Minkowski spacetime, written as an
+intersection of coordinate cones. -/
+private theorem diamond_standardMinkowski (p q : SpacetimeModel) :
+    chronologicalFuture StandardMinkowskiSpacetime standardMinkowskiTimeOrientation p ∩
+        chronologicalPast StandardMinkowskiSpacetime standardMinkowskiTimeOrientation q =
+      minkowskiForwardCone p ∩ minkowskiBackwardCone q :=
+  congrArg₂ (· ∩ ·) (chronologicalFuture_standardMinkowski p)
+    (chronologicalPast_standardMinkowski q)
+
 /-- **Directedness of the Alexandrov basis.** Any two Alexandrov-basis diamonds
 of standard Minkowski spacetime are contained in a common diamond. -/
 theorem alexandrovBasis_directed {B₁ B₂ : Set SpacetimeModel}
@@ -150,13 +159,13 @@ theorem alexandrovBasis_directed {B₁ B₂ : Set SpacetimeModel}
   obtain ⟨q, hq1, hq2⟩ := exists_common_future q₁ q₂
   refine ⟨_, ⟨p, q, rfl⟩, ?_, ?_⟩
   · intro x hx
-    simp only [chronologicalFuture_standardMinkowski,
-      chronologicalPast_standardMinkowski] at hx ⊢
-    exact ⟨minkowskiForwardCone_subset hp1 hx.1, minkowskiBackwardCone_subset hq1 hx.2⟩
+    have hx' := (diamond_standardMinkowski p₁ q₁).le hx
+    exact (diamond_standardMinkowski p q).ge
+      ⟨minkowskiForwardCone_subset hp1 hx'.1, minkowskiBackwardCone_subset hq1 hx'.2⟩
   · intro x hx
-    simp only [chronologicalFuture_standardMinkowski,
-      chronologicalPast_standardMinkowski] at hx ⊢
-    exact ⟨minkowskiForwardCone_subset hp2 hx.1, minkowskiBackwardCone_subset hq2 hx.2⟩
+    have hx' := (diamond_standardMinkowski p₂ q₂).le hx
+    exact (diamond_standardMinkowski p q).ge
+      ⟨minkowskiForwardCone_subset hp2 hx'.1, minkowskiBackwardCone_subset hq2 hx'.2⟩
 
 /-! ### The Alexandrov diamonds form a genuine topological basis on standard Minkowski -/
 
@@ -269,19 +278,19 @@ theorem alexandrovBasis_exists_subset_inter_standardMinkowski
       x ∈ B₃ ∧ B₃ ⊆ B₁ ∩ B₂ := by
   obtain ⟨p₁, q₁, rfl⟩ := h₁
   obtain ⟨p₂, q₂, rfl⟩ := h₂
-  simp only [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski] at hx
-  obtain ⟨⟨hxp1, hxq1⟩, ⟨hxp2, hxq2⟩⟩ := hx
+  obtain ⟨⟨hxp1, hxq1⟩, ⟨hxp2, hxq2⟩⟩ :=
+    And.intro ((diamond_standardMinkowski p₁ q₁).le hx.1)
+      ((diamond_standardMinkowski p₂ q₂).le hx.2)
   obtain ⟨a, ha1, ha2, hax⟩ := exists_past_between_standardMinkowski hxp1 hxp2
   obtain ⟨b, hb1, hb2, hxb⟩ := exists_future_between_standardMinkowski hxq1 hxq2
   refine ⟨(chronologicalFuture StandardMinkowskiSpacetime standardMinkowskiTimeOrientation a ∩
     chronologicalPast StandardMinkowskiSpacetime standardMinkowskiTimeOrientation b),
     ⟨a, b, rfl⟩, ?_, ?_⟩
-  · simp only [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski]
-    exact ⟨hax, hxb⟩
+  · exact (diamond_standardMinkowski a b).ge ⟨hax, hxb⟩
   · intro y hy
-    simp only [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski] at hy ⊢
-    obtain ⟨hyf, hyb⟩ := hy
-    refine ⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩
+    obtain ⟨hyf, hyb⟩ := (diamond_standardMinkowski a b).le hy
+    refine ⟨(diamond_standardMinkowski p₁ q₁).ge ⟨?_, ?_⟩,
+      (diamond_standardMinkowski p₂ q₂).ge ⟨?_, ?_⟩⟩
     · exact minkowskiForwardCone_subset ha1 hyf
     · exact minkowskiBackwardCone_subset hb1 hyb
     · exact minkowskiForwardCone_subset ha2 hyf

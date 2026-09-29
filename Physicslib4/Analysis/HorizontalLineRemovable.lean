@@ -158,7 +158,7 @@ theorem rectIntegralReal_eq_zero_of_continuousOn_off_horizontal_line (f : ℂ �
     obtain ⟨hre, him⟩ := hz
     refine Set.mem_sdiff_of_mem (Complex.mem_reProdIm.mpr ⟨Set.Ioo_subset_Icc_self hre, ?_⟩) ?_
     · exact Set.mem_Icc.mpr ⟨him.1.le, him.2.le.trans hℓd⟩
-    · simp only [Set.mem_setOf_eq]; exact ne_of_lt him.2
+    · simp only [Set.mem_ofPred_eq]; exact ne_of_lt him.2
   -- The upper piece `[a,b] × [ℓ,d]`: holomorphic interior has `im > ℓ`.
   have hupp : rectIntegralReal f a b ℓ d = 0 := by
     refine rectIntegralReal_eq_zero_of_continuousOn_of_differentiableOn f a b ℓ d
@@ -169,7 +169,7 @@ theorem rectIntegralReal_eq_zero_of_continuousOn_off_horizontal_line (f : ℂ �
     obtain ⟨hre, him⟩ := hz
     refine Set.mem_sdiff_of_mem (Complex.mem_reProdIm.mpr ⟨Set.Ioo_subset_Icc_self hre, ?_⟩) ?_
     · exact Set.mem_Icc.mpr ⟨hcℓ.trans him.1.le, him.2.le⟩
-    · simp only [Set.mem_setOf_eq]; exact (ne_of_lt him.1).symm
+    · simp only [Set.mem_ofPred_eq]; exact (ne_of_lt him.1).symm
   rw [hlow, hupp, add_zero]
 
 /-- Swapping the real bounds negates the rectangle contour integral. -/
@@ -286,7 +286,7 @@ theorem isOpen_setOf_im_lt (c : ℝ) : IsOpen {z : ℂ | z.im < c} :=
 theorem closure_setOf_im_lt (c : ℝ) :
     closure {z : ℂ | z.im < c} = {z : ℂ | z.im ≤ c} := by
   apply Set.Subset.antisymm
-  · exact closure_minimal (Set.setOf_subset_setOf.mpr fun z h => le_of_lt h)
+  · exact closure_minimal (Set.ofPred_subset_ofPred.mpr fun z h => le_of_lt h)
       (isClosed_le Complex.continuous_im continuous_const)
   · intro z hz
     rw [Metric.mem_closure_iff]
@@ -316,7 +316,7 @@ theorem frontier_setOf_im_lt (c : ℝ) :
       = closure {z : ℂ | z.im < c} \ interior {z : ℂ | z.im < c} from rfl,
     closure_setOf_im_lt, (isOpen_setOf_im_lt c).interior_eq]
   ext z
-  simp only [Set.mem_sdiff, Set.mem_setOf_eq, not_lt]
+  simp only [Set.mem_sdiff, Set.mem_ofPred_eq, not_lt]
   exact ⟨fun ⟨h1, h2⟩ => le_antisymm h1 h2, fun h => ⟨h.le, h.ge⟩⟩
 
 /-- **Holomorphic gluing across a horizontal line (Schwarz-reflection form).**
@@ -342,7 +342,7 @@ theorem differentiableOn_if_of_eqOn_horizontal_line [CompleteSpace E] {U : Set �
   have hcont : ContinuousOn (fun z => if z.im < ℓ then g z else h z) U := by
     apply ContinuousOn.if
     · intro z hz
-      rw [Set.mem_inter_iff, frontier_setOf_im_lt, Set.mem_setOf_eq] at hz
+      rw [Set.mem_inter_iff, frontier_setOf_im_lt, Set.mem_ofPred_eq] at hz
       exact hglue z hz.1 hz.2
     · rw [closure_setOf_im_lt]; exact hgc
     · rw [closure_setOf_not_im_lt]; exact hhc
@@ -350,20 +350,20 @@ theorem differentiableOn_if_of_eqOn_horizontal_line [CompleteSpace E] {U : Set �
       (U \ {z : ℂ | z.im = ℓ}) := by
     intro z hz
     obtain ⟨hzU, hzne⟩ := hz
-    rw [Set.mem_setOf_eq] at hzne
+    rw [Set.mem_ofPred_eq] at hzne
     rcases lt_or_gt_of_ne hzne with hlt | hgt
     · have hopen : IsOpen (U ∩ {w : ℂ | w.im < ℓ}) := hU.inter (isOpen_setOf_im_lt ℓ)
       have hgat : DifferentiableAt ℂ g z := hgd.differentiableAt (hopen.mem_nhds ⟨hzU, hlt⟩)
       have heq : (fun z => if z.im < ℓ then g z else h z) =ᶠ[nhds z] g := by
         filter_upwards [(isOpen_setOf_im_lt ℓ).mem_nhds hlt] with w hw
-        simp only [if_pos hw]
+        simp only [ite_eq_left hw]
       exact (heq.differentiableAt_iff.mpr hgat).differentiableWithinAt
     · have hopen : IsOpen (U ∩ {w : ℂ | ℓ < w.im}) :=
         hU.inter (isOpen_lt continuous_const Complex.continuous_im)
       have hhat : DifferentiableAt ℂ h z := hhd.differentiableAt (hopen.mem_nhds ⟨hzU, hgt⟩)
       have heq : (fun z => if z.im < ℓ then g z else h z) =ᶠ[nhds z] h := by
         filter_upwards [(isOpen_lt continuous_const Complex.continuous_im).mem_nhds hgt] with w hw
-        simp only [if_neg (not_lt.mpr (le_of_lt hw))]
+        simp only [ite_eq_right (not_lt.mpr (le_of_lt hw))]
       exact (heq.differentiableAt_iff.mpr hhat).differentiableWithinAt
   exact differentiableOn_of_continuousOn_off_horizontal_line hU ℓ _ hcont hdiff
 

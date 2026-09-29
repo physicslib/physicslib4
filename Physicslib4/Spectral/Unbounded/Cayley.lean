@@ -93,7 +93,7 @@ theorem cayleyMap_mem (x : ℝ) : cayleyMap x ∈ unitCircleMinusOne := by
   refine ⟨?_, fun h1 => ?_⟩
   · have : ‖(x : ℂ) + Complex.I‖ = ‖(x : ℂ) - Complex.I‖ := by
       rw [← Complex.norm_conj]; simp [sub_eq_add_neg]
-    simp only [Set.mem_setOf_eq, cayleyMap, norm_div, this]
+    simp only [Set.mem_ofPred_eq, cayleyMap, norm_div, this]
     exact div_self (norm_ne_zero_iff.mpr h)
   · simp only [Set.mem_singleton_iff, cayleyMap, div_eq_one_iff_eq h] at h1
     have := congrArg Complex.im h1
@@ -606,8 +606,8 @@ theorem pmapIntegral_cayleyInv_apply_sub_one {U : H →L[ℂ] H} (hUu : U ∈ un
     · rw [hDh u hu]; exact hgb u
   rw [← hhint]
   have hmem : μU.integral h χ ∈ integralDomain μU D := by
-    refine ⟨hDm.aestronglyMeasurable, ?_⟩
-    rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero ENNReal.ofNat_ne_top,
+    rw [mem_integralDomain, memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero
+        ENNReal.ofNat_ne_top hDm.aestronglyMeasurable,
       lintegral_assoc_integral_apply μU hh χ (hDm.enorm.pow_const _)]
     refine lt_of_le_of_lt (lintegral_mono fun x => ?_ :
       _ ≤ ∫⁻ _, ENNReal.ofReal ((2 : ℝ) ^ 2) ∂(μU.assoc χ)) ?_
@@ -719,12 +719,12 @@ noncomputable def cayleyPVM {U : H →L[ℂ] H} (μU : ProjectionValuedMeasure (
     split_ifs
     · exact μU.isStarProjection_apply _
     · exact IsStarProjection.zero _
-  notMeasurable' E hE := if_neg hE
+  notMeasurable' E hE := ite_eq_right hE
   univ' := by simp
   hasSum' E hE hdisj v := by
     have hD : Measurable fun u : spectrum ℂ U => cayleyInv (u : ℂ) := by
       unfold cayleyInv; fun_prop
-    simp only [hE, MeasurableSet.iUnion hE, if_true]
+    simp only [hE, MeasurableSet.iUnion hE, ite_true]
     convert μU.hasSum_apply (fun j => {u : spectrum ℂ U | cayleyInv (u : ℂ) ∈ E j})
       (fun j => hD (hE j)) (fun i j hij => (hdisj hij).preimage _) v using 3
     ext u
@@ -732,14 +732,14 @@ noncomputable def cayleyPVM {U : H →L[ℂ] H} (μU : ProjectionValuedMeasure (
   inter' E F hE hF := by
     have hD : Measurable fun u : spectrum ℂ U => cayleyInv (u : ℂ) := by
       unfold cayleyInv; fun_prop
-    simp only [hE, hF, hE.inter hF, if_true]
+    simp only [hE, hF, hE.inter hF, ite_true]
     exact μU.apply_inter (hD hE) (hD hF)
 
 theorem cayleyPVM_apply {U : H →L[ℂ] H} (μU : ProjectionValuedMeasure (spectrum ℂ U) H)
     {E : Set ℝ} (hE : MeasurableSet E) :
     cayleyPVM μU E = μU {u : spectrum ℂ U | cayleyInv (u : ℂ) ∈ E} := by
   classical
-  exact if_pos hE
+  exact ite_eq_left hE
 
 /-- The scalar measures of `μ^A` are the pushforwards of those of `μ^U` along `D`. -/
 theorem assoc_cayleyPVM {U : H →L[ℂ] H} (μU : ProjectionValuedMeasure (spectrum ℂ U) H)
@@ -769,7 +769,8 @@ theorem pmapIntegral_cayleyPVM_id_eq {U : H →L[ℂ] H}
   refine (eq_pmapIntegral_of_inner_self _ Complex.measurable_ofReal _ hdom fun ψ => ?_).symm
   have hDc : Measurable fun u : spectrum ℂ U => ((cayleyInv (u : ℂ) : ℝ) : ℂ) :=
     Complex.measurable_ofReal.comp hD
-  rw [inner_self_pmapIntegral _ hDc, assoc_cayleyPVM,
+  refine (inner_self_pmapIntegral _ hDc ψ).trans ?_
+  rw [assoc_cayleyPVM,
     integral_map hD.aemeasurable Complex.measurable_ofReal.aestronglyMeasurable]
 
 /--
@@ -804,20 +805,20 @@ noncomputable def pushforwardPVM (μ : ProjectionValuedMeasure Y H) (T : Y → Z
     split_ifs
     · exact μ.isStarProjection_apply _
     · exact IsStarProjection.zero _
-  notMeasurable' F hF := if_neg hF
+  notMeasurable' F hF := ite_eq_right hF
   univ' := by simp
   hasSum' E hE hdisj v := by
-    simp only [hE, MeasurableSet.iUnion hE, if_true, Set.preimage_iUnion]
+    simp only [hE, MeasurableSet.iUnion hE, ite_true, Set.preimage_iUnion]
     exact μ.hasSum_apply _ (fun j => hT (hE j)) (fun i j hij => (hdisj hij).preimage T) v
   inter' E F hE hF := by
-    simp only [hE, hF, hE.inter hF, if_true, Set.preimage_inter]
+    simp only [hE, hF, hE.inter hF, ite_true, Set.preimage_inter]
     exact μ.apply_inter (hT hE) (hT hF)
 
 theorem pushforwardPVM_apply (μ : ProjectionValuedMeasure Y H) {T : Y → Z}
     (hT : Measurable T) {F : Set Z} (hF : MeasurableSet F) :
     pushforwardPVM μ T hT F = μ (T ⁻¹' F) := by
   classical
-  exact if_pos hF
+  exact ite_eq_left hF
 
 /-- Change of variables for the bounded integral: `∫ g d(T_* μ) = ∫ g ∘ T dμ`. -/
 theorem integral_pushforwardPVM (μ : ProjectionValuedMeasure Y H) {T : Y → Z}
