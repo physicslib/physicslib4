@@ -464,48 +464,63 @@
 
 \begin{lemma}[A Function Vanishing Along a Path has Zero Derivative Along It]
     \label{lmm:derivative-vanishes-along-path}
+    \lean{Physicslib4.Spacetime.SmoothPath.mfderiv_apply_tangent_eq_zero}
     \uses{def:paths}
+    \leanok
     Let $\mu : \Sigma \to M$ be a smooth path, $s \in \Sigma$, and $f : M \to \mathbb{R}$ differentiable at $\mu(s)$ with $f(\mu(t)) = 0$ for all $t \in \Sigma$ in a neighbourhood of $s$. Then $f(\mu(s)) = 0$ and $df_{\mu(s)}\big(\dot\mu(s)\big) = 0$, where $\dot\mu(s)$ is the tangent vector of $\mu$ at $s$ (the within-derivative on $\Sigma$).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:paths, lmm:path-parameter-unique-diff}
     The first claim is the hypothesis at $t = s$. By the chain rule within $\Sigma$ (\texttt{HasMFDerivAt.comp\_hasMFDerivWithinAt}) the within-derivative of $f \circ \mu$ at $s$ is $df_{\mu(s)} \circ d\mu$, whose value on $1$ is $df_{\mu(s)}(\dot\mu(s))$. On the other hand $f \circ \mu$ is eventually equal to $0$ within $\Sigma$ at $s$, so it also has within-derivative $0$ (\texttt{HasMFDerivWithinAt.congr\_of\_eventuallyEq}). Within-derivatives on $\Sigma$ are unique (\ref{lmm:path-parameter-unique-diff}), so the two agree.
 \end{proof}
 
 \begin{lemma}[Covariant Derivative Along a Curve is Local]
     \label{lmm:covariant-derivative-along-curve-local}
+    \lean{Physicslib4.Spacetime.SmoothPath.covDeriv_eq_of_eventuallyEq}
     \uses{def:metric-compatible-connection, def:paths}
+    \leanok
     Let $\nabla$ be a covariant derivative on $TM$, $\mu : \Sigma \to M$ a smooth path, $s \in \Sigma$, and $X$ a vector field with $X(\mu(s)) = \dot\mu(s)$, where $\dot\mu(s)$ is the tangent vector of $\mu$ at $s$ (the within-derivative on $\Sigma$). If $Y, Y'$ are smooth vector fields with $Y(\mu(t)) = Y'(\mu(t))$ for all $t \in \Sigma$ in a neighbourhood of $s$, then $(\nabla_X Y)(\mu(s)) = (\nabla_X Y')(\mu(s))$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:metric-compatible-connection, lmm:derivative-vanishes-along-path}
     Put $p = \mu(s)$ and $W = Y - Y'$; by additivity it suffices to show $(\nabla W)_p(\dot\mu(s)) = 0$. Choose a local frame $e_1, \dots, e_n$ of $TM$ on a neighbourhood $U$ of $p$ (Mathlib's \texttt{localFrame}, with smooth coefficient functions \texttt{localFrameCoeff}), so that $W = \sum_i f^i e_i$ on $U$ with $f^i$ smooth near $p$. Since $\nabla W$ at $p$ depends only on the germ of $W$ (\texttt{IsCovariantDerivativeOn.congr\_of\_eventuallyEq}), the Leibniz rule gives $(\nabla W)_p(\dot\mu(s)) = \sum_i df^i_p(\dot\mu(s))\,e_i(p) + \sum_i f^i(p)\,(\nabla e_i)_p(\dot\mu(s))$. Here $f^i(\mu(t)) = 0$ for $t \in \Sigma$ near $s$, so $f^i(p) = 0$ and $df^i_p(\dot\mu(s)) = 0$ by \ref{lmm:derivative-vanishes-along-path}. Both sums vanish.
 \end{proof}
 
 \begin{lemma}[Local Vector Fields Globalise]
     \label{lmm:local-vector-field-globalises}
+    \lean{Physicslib4.Spacetime.exists_contMDiff_vectorField_eventuallyEq}
+    \leanok
     Let $p \in M$ and let $X_0$ be a vector field that is smooth on an open neighbourhood $U$ of $p$ (for instance, one whose expression in the tangent-bundle trivialisation over the chart at $p$ is $C^\infty$ on $U$). There is a smooth vector field $X$ on $M$ that agrees with $X_0$ on a neighbourhood of $p$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Shrink $U$ into the chart domain at $p$ and take a smooth bump function $\rho$ centred at $p$ (\texttt{SmoothBumpFunction}) with support in $U$ and $\rho = 1$ near $p$. Then $X = \rho X_0$, extended by $0$ outside $U$, is smooth (\texttt{SmoothBumpFunction.contMDiff\_smul}, applied in the tangent-bundle trivialisation over the chart) and equals $X_0$ where $\rho = 1$.
 \end{proof}
 
 \begin{lemma}[Local Left Inverse of a Smooth Path]
     \label{lmm:path-local-left-inverse}
+    \lean{Physicslib4.Spacetime.SmoothPath.exists_localLeftInverse}
     \uses{def:paths, def:pseudo-riemannian-metric}
+    \leanok
     Let $\mu : \Sigma \to M$ be a smooth path into a boundaryless manifold and $s$ an interior point of $\Sigma$. There are an open neighbourhood $U$ of $\mu(s)$ and a $C^\infty$ function $\tau : U \to \mathbb{R}$ with $\tau(\mu(t)) = t$ for all $t$ in a neighbourhood of $s$ (inside the interior of $\Sigma$).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:paths}
     Let $\varphi$ be the chart at $p = \mu(s)$ and $c = \varphi \circ \mu$ on an open interval $J \ni s$ inside the interior of $\Sigma$ with $\mu(J)$ in the chart domain; $c$ is $C^\infty$ on $J$ and $c'(s) \neq 0$ by \ref{def:paths}. Choose a continuous linear functional $\ell$ with $\ell(c'(s)) = 1$ (\texttt{SeparatingDual.exists\_eq\_one}). The real function $h = \ell \circ c$ has $h'(s) = 1$, so it restricts to an open partial homeomorphism near $s$ (\texttt{HasStrictFDerivAt.toOpenPartialHomeomorph}), whose inverse $\sigma$ is $C^\infty$ at every point of its target, where $h' \neq 0$ after shrinking (\texttt{OpenPartialHomeomorph.contDiffAt\_symm}). Put $\tau = \sigma \circ \ell \circ \varphi$ on $U = \varphi^{-1}\big(\ell^{-1}(\text{target of }\sigma)\big)$, which is open because chart targets are open (boundaryless model); then $\tau(\mu(t)) = \sigma(h(t)) = t$ for $t$ near $s$.
 \end{proof}
 
 \begin{lemma}[The Velocity of a Smooth Path Extends to a Vector Field]
     \label{lmm:velocity-extends}
+    \lean{Physicslib4.Spacetime.SmoothPath.exists_vectorField_eq_tangent}
     \uses{def:paths}
+    \leanok
     Let $\mu : \Sigma \to M$ be a smooth path into a boundaryless manifold and $s$ an interior point of $\Sigma$. There is a smooth vector field $X$ on $M$ with $X(\mu(t)) = \dot\mu(t)$ for all $t$ in a neighbourhood of $s$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:path-local-left-inverse, lmm:local-vector-field-globalises}
     Take $U$ and $\tau$ from \ref{lmm:path-local-left-inverse}, shrunk into the chart domain at $p = \mu(s)$ and so that $\tau(U)$ lies in an open interval $J \ni s$ inside the interior of $\Sigma$. Let $c = \varphi \circ \mu$ be the chart expression of $\mu$ on $J$. Define $X_0$ on $U$ as the vector field whose chart expression (in the tangent-bundle trivialisation over the chart) at $y$ is $c'\big(\tau(y)\big)$; it is $C^\infty$ because $c'$ and $\tau$ are. For $t$ near $s$ we have $\tau(\mu(t)) = t$, so $X_0(\mu(t))$ has chart expression $c'(t)$, i.e.\ $X_0(\mu(t)) = \dot\mu(t)$. Globalise $X_0$ by \ref{lmm:local-vector-field-globalises}.
 \end{proof}
