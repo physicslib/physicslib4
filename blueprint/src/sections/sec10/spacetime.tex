@@ -324,7 +324,9 @@
 
 \begin{definition}[Pseudo-Riemannian Metric]
     \label{def:pseudo-riemannian-metric}
+    \lean{Physicslib4.Geometry.PseudoRiemannianMetric, Physicslib4.Spacetime.toPseudoRiemannianMetric}
     \uses{def:spacetime}
+    \leanok
     Let $M$ be a smooth Hausdorff manifold modelled on a finite-dimensional real normed space $E$ \emph{without boundary}: the model with corners $I$ is boundaryless (\texttt{I.Boundaryless}), so chart targets are open in $E$. (The chart and bump-function arguments below rely on this. The manifold of a spacetime in \ref{def:spacetime} has no boundary, so it satisfies this; the Lean structure \texttt{Spacetime} records this as its field \texttt{boundaryless}.) A \textit{pseudo-Riemannian metric} on $M$ is a family $g$ of continuous bilinear forms $g_x : TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$, one for each $x \in M$, such that
     \begin{enumerate}
         \item \emph{smooth:} $g$ is a $C^\infty$ section of the bundle of continuous bilinear forms on the tangent bundle, in exactly the bundle-section sense of the smoothness clause of \ref{def:spacetime};
@@ -338,7 +340,9 @@
 
 \begin{definition}[Covariant Derivative; Metric Compatibility]
     \label{def:metric-compatible-connection}
+    \lean{Physicslib4.Geometry.CovariantDerivative.IsMetricCompatibleWith}
     \uses{def:pseudo-riemannian-metric}
+    \leanok
     A \textit{vector field} is a section $X$ of $TM$, $x \mapsto X(x) \in TM|_x$. A \textit{covariant derivative} (\textit{Koszul connection}) on $TM$ is a map $\nabla$ sending each vector field $Y$ to a section $\nabla Y$ of $\mathrm{Hom}(TM, TM)$, so that $(\nabla Y)_x : TM|_x \to_L[\mathbb{R}] TM|_x$, such that for every $x \in M$
     \begin{enumerate}
         \item \emph{additivity:} $\nabla(Y + Y')_x = (\nabla Y)_x + (\nabla Y')_x$ whenever $Y, Y'$ are differentiable at $x$;
@@ -355,7 +359,9 @@
 
 \begin{definition}[Levi-Civita Connection]
     \label{def:levi-civita-connection}
+    \lean{Physicslib4.Geometry.CovariantDerivative.IsLeviCivitaFor}
     \uses{def:metric-compatible-connection}
+    \leanok
     A covariant derivative $\nabla$ on $TM$ is a \textit{Levi-Civita connection} of the pseudo-Riemannian metric $g$ if it is
     \begin{enumerate}
         \item \emph{torsion-free:} $(\nabla_X Y)(x) - (\nabla_Y X)(x) = [X,Y](x)$ for every $x$ and all vector fields $X, Y$ differentiable at $x$, where $[X,Y]$ is the Lie bracket of vector fields (Mathlib's \texttt{VectorField.mlieBracket}; equivalently \texttt{CovariantDerivative.torsion} vanishes, by \texttt{torsion\_eq\_zero\_iff}); and
@@ -366,7 +372,9 @@
 
 \begin{lemma}[Musical Isomorphism]
     \label{lmm:musical-isomorphism}
+    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.bijective_val}
     \uses{def:pseudo-riemannian-metric}
+    \leanok
     Let $g$ be a pseudo-Riemannian metric on $M$. For each $x \in M$ the map $\flat_x : TM|_x \to (TM|_x)^*$, $v \mapsto g_x(v, \cdot)$, is a linear isomorphism.
 \end{lemma}
 \begin{proof}
@@ -386,7 +394,9 @@
 
 \begin{lemma}[Koszul Formula]
     \label{lmm:koszul-formula}
+    \lean{Physicslib4.Geometry.CovariantDerivative.IsLeviCivitaFor.koszul}
     \uses{def:levi-civita-connection}
+    \leanok
     Let $\nabla$ be a Levi-Civita connection of $g$. For every $x \in M$ and all vector fields $X, Y, Z$ differentiable at $x$,
     \begin{align}
         2\,g\big(\nabla_X Y, Z\big) = X\,g(Y,Z) + Y\,g(X,Z) - Z\,g(X,Y) + g\big([X,Y],Z\big) - g\big([X,Z],Y\big) - g\big([Y,Z],X\big),
@@ -430,7 +440,9 @@
 
 \begin{theorem}[Existence and Uniqueness of the Levi-Civita Connection]
     \label{thrm:levi-civita-exists-unique}
+    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.exists_isLeviCivitaFor, Physicslib4.Geometry.CovariantDerivative.IsLeviCivitaFor.uniqueness, Physicslib4.Geometry.PseudoRiemannianMetric.leviCivita, Physicslib4.Geometry.PseudoRiemannianMetric.isLeviCivitaFor_leviCivita}
     \uses{def:levi-civita-connection}
+    \leanok
     Every pseudo-Riemannian manifold $(M,g)$ has a Levi-Civita connection, and any two Levi-Civita connections $\nabla, \nabla'$ of $g$ agree on differentiable vector fields: $(\nabla Y)_x = (\nabla' Y)_x$ whenever $Y$ is differentiable at $x$. We call it \textit{the} Levi-Civita connection of $g$. (Covariant derivatives are unconstrained on non-differentiable fields, so this is the correct form of uniqueness, as in Mathlib's \texttt{IsLeviCivitaConnection.uniqueness}.)
 \end{theorem}
 \begin{proof}
