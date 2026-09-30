@@ -134,6 +134,10 @@ structure Spacetime where
   field: the bundle-section statement there needs the tangent bundle's
   `FiberBundle` / `VectorBundle` instances, which are gated on `IsManifold`. -/
   [isManifold : IsManifold model ∞ Carrier]
+  /-- The model has no boundary: chart targets are open in `SpacetimeModel`. The
+  pseudo-Riemannian layer (Levi-Civita connection, geodesics) uses open chart targets,
+  and a spacetime is a manifold without boundary. -/
+  [boundaryless : model.Boundaryless]
   /-- Each tangent space is finite-dimensional. -/
   tangent_findim : ∀ x : Carrier, FiniteDimensional ℝ (TangentSpace model x)
   /-- The metric tensor `g`, presented as a family of continuous bilinear forms
