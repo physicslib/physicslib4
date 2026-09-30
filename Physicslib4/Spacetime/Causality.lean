@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Curves
+import Physicslib4.Geometry.PseudoRiemannian.LeviCivita
 import Mathlib.Order.Defs.Unbundled
 
 /-!
@@ -61,25 +62,29 @@ variable (M : Spacetime)
 attribute [instance] Spacetime.topology Spacetime.hausdorff Spacetime.connected
   Spacetime.chartedSpace Spacetime.isManifold Spacetime.tangent_findim
 
-/-! ### Geodesics (placeholder) -/
+/-! ### Geodesics -/
 
+open Bundle in
+open scoped Manifold ContDiff Topology in
 /--
-A *geodesic* of a spacetime, as needed by section 10.4 of the blueprint.
+A smooth path `μ` is a **geodesic** (affinely parametrised) if its velocity is parallel for the
+Levi-Civita connection `∇` of the spacetime metric: for every interior parameter `s` and every
+smooth vector field `X` that agrees with the velocity `μ'` along `μ` near `s`,
+`(∇_X X)(μ s) = 0`.
 
-Mathlib v4.31.0-rc1 does not provide a Lorentzian / pseudo-Riemannian
-geodesic. We provide an opaque placeholder predicate. Downstream work
-should replace this by the genuine geodesic condition (typically:
-auto-parallelism of the tangent vector field along the curve with
-respect to the Levi-Civita connection of `g`).
+No chart enters the definition. It is well defined because `(∇_X X)(μ s)` depends only on `X`
+along `μ` (`SmoothPath.covDeriv_eq_of_eventuallyEq`), and it is not vacuous because such an `X`
+exists near every interior parameter (`SmoothPath.exists_vectorField_eq_tangent`); the interior
+of the parameter space is non-empty. The condition is imposed only at interior parameters, which
+avoids extending the path past the endpoints of its parameter space.
 
-**Restriction:** `IsGeodesic` is `True`, so (causal) trips, and hence `≪` and `≺`, are
-chains of arbitrary future-oriented timelike (causal) smooth curves rather than of geodesics.
-The intended form is auto-parallelism of the tangent field along the curve for the
-Levi-Civita connection of `g`; it is waiting on Mathlib defining affine connections (and the
-Levi-Civita connection of a pseudo-Riemannian metric), which geodesics require.
+Blueprint reference: `def:geodesic`.
 -/
-@[nolint unusedArguments]
-def IsGeodesic (_μ : M.SmoothPath) : Prop := True
+def IsGeodesic (μ : M.SmoothPath) : Prop :=
+  ∀ s ∈ interior μ.parameterSpace, ∀ X : Π x : M.Carrier, TangentSpace M.model x,
+    ContMDiff M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) ∞ (T% X) →
+    (∀ᶠ t in 𝓝 s, X (μ.toFun t) = μ.tangent t) →
+    M.toPseudoRiemannianMetric.leviCivita X (μ.toFun s) (X (μ.toFun s)) = 0
 
 /-! ### Trips and chronological precedence -/
 
@@ -88,8 +93,7 @@ A *trip segment* from `p` to `q` in a spacetime `M` is a smooth curve `c`
 together with a representative smooth path `μ` that
 
 * is future-oriented and timelike;
-* is a geodesic (currently the placeholder `IsGeodesic`, which is `True`;
-  see its **Restriction:** note);
+* is a geodesic (`IsGeodesic`);
 * has past endpoint `p` and future endpoint `q`.
 
 This is a single geodesic piece; a full (piecewise) trip is a finite chain

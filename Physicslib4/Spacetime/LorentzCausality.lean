@@ -293,6 +293,28 @@ theorem lorentzPath_isFutureEndpoint (g : InhomogeneousLorentzGroup)
 
 /-! ### Lorentz invariance of causal precedence and spacelikeness -/
 
+/-- **Lorentz transformations map geodesics to geodesics.** The velocity of `lorentzPath g μ` is
+`g.linear` applied to the velocity of `μ` (`lorentzPath_mfderivWithin`), so it has zero
+derivative wherever the velocity of `μ` does (`standardMinkowski_isGeodesic_iff`).
+
+Blueprint reference: `lmm:isometry-preserves-geodesics` (Minkowski case). -/
+theorem lorentzPath_isGeodesic (g : InhomogeneousLorentzGroup)
+    (μ : StandardMinkowskiSpacetime.SmoothPath)
+    (h : IsGeodesic StandardMinkowskiSpacetime μ) :
+    IsGeodesic StandardMinkowskiSpacetime (lorentzPath g μ) := by
+  rw [standardMinkowski_isGeodesic_iff] at h ⊢
+  intro s hs
+  have hs' : s ∈ interior μ.parameterSpace := hs
+  let L : SpacetimeModel →L[ℝ] SpacetimeModel :=
+    LinearMap.toContinuousLinearMap g.linear.toLinearMap
+  have hd : HasDerivAt (fun t ↦ L (show SpacetimeModel from μ.tangent t)) (L 0) s :=
+    L.hasFDerivAt.comp_hasDerivAt s (h s hs')
+  rw [L.map_zero] at hd
+  refine hd.congr_of_eventuallyEq ?_
+  filter_upwards [mem_interior_iff_mem_nhds.mp hs'] with t ht
+  exact lorentzPath_mfderivWithin g μ ht
+
+
 /-- **A Lorentz transformation maps causal trips to causal trips**, hence
 preserves causal precedence: if `p ≺ q` then `g • p ≺ g • q`. -/
 theorem causalSegmentPrecedes_smul (g : InhomogeneousLorentzGroup)
@@ -306,7 +328,7 @@ theorem causalSegmentPrecedes_smul (g : InhomogeneousLorentzGroup)
     lorentzPath g rep, rfl,
     lorentzPath_isCausal g rep hcausal,
     lorentzPath_isFutureOriented g rep hfut,
-    trivial,
+    lorentzPath_isGeodesic g rep hgeo,
     lorentzPath_isPastEndpoint g rep hpast,
     lorentzPath_isFutureEndpoint g rep hfuture⟩
 
@@ -392,7 +414,7 @@ theorem segmentPrecedes_smul (g : InhomogeneousLorentzGroup)
     lorentzPath g rep, rfl,
     lorentzPath_isTimelike g rep htimelike,
     lorentzPath_isFutureOriented g rep hfut,
-    trivial,
+    lorentzPath_isGeodesic g rep hgeo,
     lorentzPath_isPastEndpoint g rep hpast,
     lorentzPath_isFutureEndpoint g rep hfuture⟩
 

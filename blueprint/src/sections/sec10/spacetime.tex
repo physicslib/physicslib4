@@ -527,7 +527,9 @@
 
 \begin{definition}[Geodesic]
     \label{def:geodesic}
+    \lean{Physicslib4.Spacetime.IsGeodesic}
     \uses{def:paths, thrm:levi-civita-exists-unique, lmm:covariant-derivative-along-curve-local, lmm:velocity-extends}
+    \leanok
     Let $(M,g)$ be a pseudo-Riemannian manifold (for instance a spacetime) with Levi-Civita connection $\nabla$ (\ref{thrm:levi-civita-exists-unique}). A smooth path $\mu : \Sigma \to M$ is a \textit{geodesic} if for every $s$ in the interior of $\Sigma$ and every smooth vector field $X$ on $M$ with $X(\mu(t)) = \dot\mu(t)$ for all $t$ in a neighbourhood of $s$,
     \begin{align}
         (\nabla_X X)(\mu(s)) = 0.
@@ -1177,30 +1179,39 @@
 
 \begin{lemma}[The Directional Derivative is Levi-Civita on Standard Minkowski]
     \label{lmm:minkowski-directional-derivative-levi-civita}
+    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.isLeviCivitaFor_flatConnection, Physicslib4.Geometry.flatConnection, Physicslib4.Geometry.isCovariantDerivativeOn_fderiv}
     \uses{def:standard-minkowski-spacetime, def:levi-civita-connection}
+    \leanok
     On standard Minkowski spacetime the tangent space at every point is $\mathbb{R}^4$ itself, so a vector field is a map $Y : \mathbb{R}^4 \to \mathbb{R}^4$. The \textit{trivial connection} $D$, $(DY)_x(v) = DY(x)\,v$ (the Fr\'echet derivative of the components of $Y$ in the direction $v$, and $0$ where $Y$ is not differentiable), is a Levi-Civita connection of the Minkowski metric.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:standard-minkowski-spacetime, def:levi-civita-connection}
     $D$ is a covariant derivative by linearity of the derivative and the product rule (\texttt{fderiv\_add}, \texttt{fderiv\_smul}). It is torsion-free because on a vector space the Lie bracket is $[X,Y](x) = DY(x)X(x) - DX(x)Y(x)$ (\texttt{VectorField.mlieBracketWithin\_eq\_lieBracketWithin} and \texttt{VectorField.lieBracket\_eq}). It is compatible with $g$ because $g$ is a constant bilinear form, so the derivative of $x \mapsto g(Y(x), Z(x))$ in direction $v$ is $g(DY(x)v, Z(x)) + g(Y(x), DZ(x)v)$ (derivative of a bounded bilinear map, \texttt{IsBoundedBilinearMap.hasFDerivAt} composed by the chain rule).
 \end{proof}
 
 \begin{lemma}[The Minkowski Levi-Civita Connection is Flat]
     \label{lmm:minkowski-levi-civita-flat}
+    \lean{Physicslib4.standardMinkowski_leviCivita_apply, Physicslib4.Geometry.PseudoRiemannianMetric.leviCivita_apply_eq_fderiv}
     \uses{lmm:minkowski-directional-derivative-levi-civita, thrm:levi-civita-exists-unique}
+    \leanok
     On standard Minkowski spacetime the Levi-Civita connection $\nabla$ is the trivial connection: $(\nabla_X Y)(x) = DY(x)\,X(x)$ for every vector field $X$ and every $Y$ differentiable at $x$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:minkowski-directional-derivative-levi-civita, thrm:levi-civita-exists-unique}
     $D$ is a Levi-Civita connection by \ref{lmm:minkowski-directional-derivative-levi-civita}, so it agrees with $\nabla$ on differentiable vector fields by the uniqueness part of \ref{thrm:levi-civita-exists-unique}.
 \end{proof}
 
 \begin{lemma}[Straight Lines are Geodesics in Standard Minkowski]
     \label{lmm:minkowski-lines-are-geodesics}
+    \lean{Physicslib4.standardMinkowskiLineSegmentPath_isGeodesic, Physicslib4.standardMinkowski_isGeodesic_iff}
     \uses{def:geodesic, def:standard-minkowski-spacetime}
+    \leanok
     On standard Minkowski spacetime, let $p, v \in \mathbb{R}^4$ with $v \neq 0$ and let $\Sigma$ be a parameter space. The affinely parametrised straight path $\mu(t) = p + t v$, $t \in \Sigma$, is a smooth path and a geodesic.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:minkowski-levi-civita-flat, lmm:covariant-derivative-along-curve-local, def:geodesic}
     $\mu$ is affine, hence smooth, with constant velocity $\dot\mu(t) = v \neq 0$. Let $s$ be an interior point of $\Sigma$ and let $X$ be a smooth vector field with $X(\mu(t)) = v$ for $t$ near $s$. The constant field $V \equiv v$ agrees with $X$ along $\mu$ near $s$, so by \ref{lmm:covariant-derivative-along-curve-local} and \ref{lmm:minkowski-levi-civita-flat}, $(\nabla_X X)(\mu(s)) = (\nabla_X V)(\mu(s)) = DV(\mu(s))\,v = 0$.
 \end{proof}
@@ -1539,22 +1550,28 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Isometries Preserve the Levi-Civita Connection]
     \label{lmm:isometry-preserves-levi-civita}
+    \lean{Physicslib4.Spacetime.Isometry.mfderiv_leviCivita_mpullback, Physicslib4.Spacetime.CrossIsometry.mfderiv_leviCivita_mpullback}
     \uses{thrm:levi-civita-exists-unique, lmm:isometry-pullback-compatible}
+    \leanok
     Let $\varphi$ be an isometry of a spacetime $M$ (as in \ref{lmm:isometry-pullback-compatible}) and $\nabla$ the Levi-Civita connection of $g$. Then $\varphi^*\nabla$ is a Levi-Civita connection of $g$, hence agrees with $\nabla$ on differentiable vector fields. Equivalently, $d\varphi_x\big((\nabla_X Y)(x)\big) = (\nabla_{\varphi_* X}\, \varphi_* Y)(\varphi(x))$ for $Y$ differentiable at $x$.
 
-    The corresponding statement for cross-metric isometries (\ref{def:cross-metric-isometry}, the Lean \texttt{CrossMetricIsometry}), between a metric and its pullback, is deferred.
+    The same holds for a cross-metric isometry $\Psi : (M, g_1) \to (N, g_2)$ (\ref{def:cross-metric-isometry}): it carries the Levi-Civita connection of $g_1$ to that of $g_2$, and hence geodesics of $g_1$ to geodesics of $g_2$, by the same argument.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:levi-civita-exists-unique, lmm:diffeo-pullback-connection, lmm:diffeo-pullback-torsion-free, lmm:isometry-pullback-compatible}
     $\varphi^*\nabla$ is a covariant derivative (\ref{lmm:diffeo-pullback-connection}), torsion-free (\ref{lmm:diffeo-pullback-torsion-free}) and compatible with $g$ (\ref{lmm:isometry-pullback-compatible}), hence Levi-Civita. Uniqueness (\ref{thrm:levi-civita-exists-unique}) gives $\varphi^*\nabla = \nabla$ on differentiable fields, which is the displayed identity.
 \end{proof}
 
 \begin{lemma}[Isometries Preserve Geodesics]
     \label{lmm:isometry-preserves-geodesics}
+    \lean{Physicslib4.Spacetime.Isometry.pushforwardPath_isGeodesic, Physicslib4.lorentzPath_isGeodesic, Physicslib4.Spacetime.CrossIsometry.pushforwardPath_isGeodesic}
     \uses{def:geodesic, lmm:pushforward-path}
+    \leanok
     Let $\varphi$ be an isometry of a spacetime $M$ (as in \ref{lmm:isometry-pullback-compatible}) and $\mu$ a smooth path. Then $\mu$ is a geodesic if and only if the pushforward path $\varphi \circ \mu$ (\ref{lmm:pushforward-path}) is a geodesic.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:isometry-preserves-levi-civita, lmm:pushforward-path, def:geodesic}
     Suppose $\mu$ is a geodesic, let $s$ be an interior point of $\Sigma$, and let $X'$ be a smooth vector field with $X'(\varphi(\mu(t))) = (\varphi\circ\mu)^{\boldsymbol\cdot}(t) = d\varphi\,\dot\mu(t)$ for $t$ near $s$ (\ref{lmm:pushforward-path}). Then $X = (\varphi^{-1})_* X'$ is smooth and $X(\mu(t)) = \dot\mu(t)$ near $s$, and $X' = \varphi_* X$, so by \ref{lmm:isometry-preserves-levi-civita} $(\nabla_{X'} X')(\varphi(\mu(s))) = d\varphi\big((\nabla_X X)(\mu(s))\big) = 0$. The converse is the same argument for the isometry $\varphi^{-1}$ and the path $\varphi \circ \mu$.
 \end{proof}

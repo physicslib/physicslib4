@@ -313,6 +313,135 @@ theorem pushforwardPath_isFutureOriented (ψ : Diffeo M N) (μ : M.SmoothPath)
 
 /-! ### Transport of chronology -/
 
+section Geodesic
+
+open Bundle VectorField Filter
+open scoped Topology ContDiff
+
+/-- The differential of a cross-metric isometry `Ψ` undoes the pullback of a vector field
+along `Ψ`. -/
+theorem CrossIsometry.mfderiv_mpullback (Ψ : CrossIsometry M N)
+    (V : Π y : N.Carrier, TangentSpace N.model y) (x : M.Carrier) :
+    mfderiv M.model N.model Ψ.toDiffeo x (mpullback M.model N.model Ψ.toDiffeo V x)
+      = V (Ψ.toDiffeo x) := by
+  rw [mpullback_apply,
+    (Ψ.toDiffeo.isInvertible_mfderiv (x := x) (by simp)).self_apply_inverse]
+
+/-- The `g₁`-pairing of pullbacks along a cross-metric isometry is the pullback of the
+`g₂`-pairing. -/
+theorem CrossIsometry.val_mpullback (Ψ : CrossIsometry M N)
+    (V W : Π y : N.Carrier, TangentSpace N.model y) (x : M.Carrier) :
+    M.toPseudoRiemannianMetric.val x (mpullback M.model N.model Ψ.toDiffeo V x)
+        (mpullback M.model N.model Ψ.toDiffeo W x)
+      = N.toPseudoRiemannianMetric.val (Ψ.toDiffeo x) (V (Ψ.toDiffeo x))
+          (W (Ψ.toDiffeo x)) := by
+  rw [← Ψ.mfderiv_mpullback V x, ← Ψ.mfderiv_mpullback W x]
+  exact (Ψ.preserves x _ _).symm
+
+/-- Chain rule for the metric pairing of vector fields pulled back along a cross-metric
+isometry. -/
+theorem CrossIsometry.mfderiv_val_mpullback (Ψ : CrossIsometry M N)
+    {A B C : Π y : N.Carrier, TangentSpace N.model y} {x : M.Carrier}
+    (hB : MDifferentiableAt N.model (N.model.prod 𝓘(ℝ, SpacetimeModel)) (T% B) (Ψ.toDiffeo x))
+    (hC : MDifferentiableAt N.model (N.model.prod 𝓘(ℝ, SpacetimeModel)) (T% C) (Ψ.toDiffeo x)) :
+    (show ℝ from mfderiv M.model 𝓘(ℝ, ℝ) (fun y ↦ M.toPseudoRiemannianMetric.val y
+        (mpullback M.model N.model Ψ.toDiffeo B y) (mpullback M.model N.model Ψ.toDiffeo C y)) x
+        (mpullback M.model N.model Ψ.toDiffeo A x))
+      = (show ℝ from mfderiv N.model 𝓘(ℝ, ℝ)
+          (fun z ↦ N.toPseudoRiemannianMetric.val z (B z) (C z)) (Ψ.toDiffeo x)
+          (A (Ψ.toDiffeo x))) := by
+  have hfun : (fun y ↦ M.toPseudoRiemannianMetric.val y
+      (mpullback M.model N.model Ψ.toDiffeo B y) (mpullback M.model N.model Ψ.toDiffeo C y))
+      = (fun z ↦ N.toPseudoRiemannianMetric.val z (B z) (C z)) ∘ Ψ.toDiffeo :=
+    funext fun y ↦ Ψ.val_mpullback B C y
+  rw [hfun]
+  exact (congrArg (fun L ↦ L (mpullback M.model N.model Ψ.toDiffeo A x))
+    (mfderiv_comp x (N.toPseudoRiemannianMetric.mdifferentiableAt_val_apply hB hC)
+      (Ψ.toDiffeo.mdifferentiable (by simp) x))).trans
+    (by rw [ContinuousLinearMap.comp_apply, Ψ.mfderiv_mpullback])
+
+/-- Naturality of the Lie bracket under a cross-metric isometry, paired with the metric. -/
+theorem CrossIsometry.val_mlieBracket_mpullback (Ψ : CrossIsometry M N)
+    {A B C : Π y : N.Carrier, TangentSpace N.model y} {x : M.Carrier}
+    (hA : MDifferentiableAt N.model (N.model.prod 𝓘(ℝ, SpacetimeModel)) (T% A) (Ψ.toDiffeo x))
+    (hC : MDifferentiableAt N.model (N.model.prod 𝓘(ℝ, SpacetimeModel)) (T% C) (Ψ.toDiffeo x)) :
+    M.toPseudoRiemannianMetric.val x (mpullback M.model N.model Ψ.toDiffeo B x)
+        (mlieBracket M.model (mpullback M.model N.model Ψ.toDiffeo A)
+          (mpullback M.model N.model Ψ.toDiffeo C) x)
+      = N.toPseudoRiemannianMetric.val (Ψ.toDiffeo x) (B (Ψ.toDiffeo x))
+          (mlieBracket N.model A C (Ψ.toDiffeo x)) := by
+  have : IsManifold M.model (minSmoothness ℝ 2) M.Carrier := IsManifold.of_le (n := ∞) (by simp)
+  have : IsManifold N.model (minSmoothness ℝ 2) N.Carrier := IsManifold.of_le (n := ∞) (by simp)
+  rw [← mpullback_mlieBracket hA hC (Ψ.toDiffeo.contMDiff x) (by simp)]
+  exact Ψ.val_mpullback B (mlieBracket N.model A C) x
+
+/-- **A cross-metric isometry intertwines the Levi-Civita connections**:
+`dΨ(∇¹_{Ψ^*A} Ψ^*B) = ∇²_A B ∘ Ψ`.
+
+Blueprint reference: `lmm:isometry-preserves-levi-civita` (cross-metric case). -/
+theorem CrossIsometry.mfderiv_leviCivita_mpullback (Ψ : CrossIsometry M N)
+    {A B : Π y : N.Carrier, TangentSpace N.model y} {x : M.Carrier}
+    (hA : MDifferentiableAt N.model (N.model.prod 𝓘(ℝ, SpacetimeModel)) (T% A) (Ψ.toDiffeo x))
+    (hB : MDifferentiableAt N.model (N.model.prod 𝓘(ℝ, SpacetimeModel)) (T% B) (Ψ.toDiffeo x)) :
+    mfderiv M.model N.model Ψ.toDiffeo x
+        (M.toPseudoRiemannianMetric.leviCivita (mpullback M.model N.model Ψ.toDiffeo B) x
+          (mpullback M.model N.model Ψ.toDiffeo A x))
+      = N.toPseudoRiemannianMetric.leviCivita B (Ψ.toDiffeo x) (A (Ψ.toDiffeo x)) := by
+  set L := M.toPseudoRiemannianMetric
+  set L' := N.toPseudoRiemannianMetric
+  have hpb : ∀ {V : Π y : N.Carrier, TangentSpace N.model y},
+      MDifferentiableAt N.model (N.model.prod 𝓘(ℝ, SpacetimeModel)) (T% V) (Ψ.toDiffeo x) →
+      MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel))
+        (T% (mpullback M.model N.model Ψ.toDiffeo V)) x := fun hV ↦
+    hV.mpullback_vectorField (Ψ.toDiffeo.contMDiff x)
+      (Ψ.toDiffeo.isInvertible_mfderiv (by simp)) (by simp)
+  apply L'.eq_of_forall_val_apply_eq
+  intro C hC
+  have h1 := L.isLeviCivitaFor_leviCivita.koszul (hpb hA) (hpb hB) (hpb hC)
+  have h2 := L'.isLeviCivitaFor_leviCivita.koszul hA hB hC
+  rw [Ψ.mfderiv_val_mpullback hB hC, Ψ.mfderiv_val_mpullback hC hA,
+    Ψ.mfderiv_val_mpullback hA hB, Ψ.val_mlieBracket_mpullback hA hC,
+    Ψ.val_mlieBracket_mpullback hB hA, Ψ.val_mlieBracket_mpullback hC hB] at h1
+  have e : L'.val (Ψ.toDiffeo x) (mfderiv M.model N.model Ψ.toDiffeo x
+      (L.leviCivita (mpullback M.model N.model Ψ.toDiffeo B) x
+        (mpullback M.model N.model Ψ.toDiffeo A x))) (C (Ψ.toDiffeo x))
+      = L.val x (L.leviCivita (mpullback M.model N.model Ψ.toDiffeo B) x
+        (mpullback M.model N.model Ψ.toDiffeo A x))
+          (mpullback M.model N.model Ψ.toDiffeo C x) := by
+    rw [← Ψ.mfderiv_mpullback C x]
+    exact Ψ.preserves x _ _
+  rw [e]
+  linarith
+
+/-- **Cross-metric isometries map geodesics to geodesics.** A cross-metric isometry
+`Ψ : (M, g₁) → (N, g₂)` carries the Levi-Civita connection of `g₁` to that of `g₂`, so the
+pushforward of a geodesic of `M` is a geodesic of `N`. This is the cross-metric version of
+`Isometry.pushforwardPath_isGeodesic`.
+
+Blueprint reference: `lmm:isometry-preserves-geodesics` (cross-metric case). -/
+theorem CrossIsometry.pushforwardPath_isGeodesic (Ψ : CrossIsometry M N) (μ : M.SmoothPath)
+    (h : IsGeodesic M μ) : IsGeodesic N (pushforwardPath Ψ.toDiffeo μ) := by
+  intro s hs X hX hXt
+  have hinv (y : M.Carrier) : (mfderiv M.model N.model Ψ.toDiffeo y).IsInvertible :=
+    Ψ.toDiffeo.isInvertible_mfderiv (by simp)
+  have hY : ContMDiff M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) ∞
+      (T% (mpullback M.model N.model Ψ.toDiffeo X)) :=
+    hX.mpullback_vectorField Ψ.toDiffeo.contMDiff hinv (by simp)
+  have hYt : ∀ᶠ t in 𝓝 s,
+      mpullback M.model N.model Ψ.toDiffeo X (μ.toFun t) = μ.tangent t := by
+    filter_upwards [hXt, mem_interior_iff_mem_nhds.mp hs] with t ht htP
+    rw [mpullback_apply]
+    change X (Ψ.toDiffeo (μ.toFun t)) = _ at ht
+    rw [ht, pushforwardPath_tangent Ψ.toDiffeo μ htP, (hinv _).inverse_apply_self]
+  have hXd : MDifferentiableAt N.model (N.model.prod 𝓘(ℝ, SpacetimeModel))
+      (T% X) (Ψ.toDiffeo (μ.toFun s)) :=
+    (hX _).mdifferentiableAt (by simp)
+  change N.toPseudoRiemannianMetric.leviCivita X (Ψ.toDiffeo (μ.toFun s))
+    (X (Ψ.toDiffeo (μ.toFun s))) = 0
+  rw [← Ψ.mfderiv_leviCivita_mpullback hXd hXd, h s hs _ hY hYt, map_zero]
+
+end Geodesic
+
 /-- A cross-metric isometry preserving the future orientation carries a single
 trip segment forward. -/
 theorem CrossIsometry.segmentPrecedes (Ψ : CrossIsometry M N)
@@ -324,7 +453,7 @@ theorem CrossIsometry.segmentPrecedes (Ψ : CrossIsometry M N)
   exact ⟨SmoothCurve.ofPath N (pushforwardPath Ψ.toDiffeo rep), pushforwardPath Ψ.toDiffeo rep, rfl,
     Ψ.pushforwardPath_isTimelike rep htl,
     pushforwardPath_isFutureOriented Ψ.toDiffeo rep t₁ t₂ hΨ hfo,
-    trivial,
+    Ψ.pushforwardPath_isGeodesic rep hgeo,
     pushforwardPath_isPastEndpoint Ψ.toDiffeo rep hpe,
     pushforwardPath_isFutureEndpoint Ψ.toDiffeo rep hfe⟩
 
