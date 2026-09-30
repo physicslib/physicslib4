@@ -412,30 +412,39 @@
 
 \begin{lemma}[Tensoriality of the Koszul Expression]
     \label{lmm:koszul-expression-tensorial}
+    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.tensorialAt_koszulAux₁, Physicslib4.Geometry.PseudoRiemannianMetric.tensorialAt_koszulAux₃, Physicslib4.Geometry.PseudoRiemannianMetric.koszulAux}
     \uses{def:pseudo-riemannian-metric, def:metric-compatible-connection}
+    \leanok
     For vector fields $X, Y, Z$ write $K(X,Y,Z)$ for one half of the right-hand side of the Koszul formula (\ref{lmm:koszul-formula}). Fix $x \in M$ and a vector field $Y$ differentiable at $x$. Then $K(X,Y,Z)(x)$ depends on $X$ and $Z$ only through $X(x)$ and $Z(x)$, and is bilinear in them. Hence there is a continuous bilinear form $K_x(Y) : TM|_x \times TM|_x \to \mathbb{R}$ with $K_x(Y)\big(X(x), Z(x)\big) = K(X,Y,Z)(x)$ for all $X, Z$ differentiable at $x$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:pseudo-riemannian-metric}
     Additivity in $X$ and in $Z$ is clear. For a function $f$ differentiable at $x$, expanding with the Leibniz rule for the derivative of a function and $[fX, W] = f[X,W] - (Wf)X$ shows $K(fX, Y, Z)(x) = f(x)\,K(X,Y,Z)(x)$ and $K(X,Y,fZ)(x) = f(x)\,K(X,Y,Z)(x)$: the terms containing a derivative of $f$ cancel in pairs by symmetry of $g$. So $K$ is tensorial at $x$ in $X$ and in $Z$ (Mathlib's \texttt{TensorialAt}), and \texttt{TensorialAt.mkHom\ensuremath{_2}} produces $K_x(Y)$. This is Mathlib's \texttt{tensorialAt\_leviCivitaAuxInner\ensuremath{_1}} and \texttt{tensorialAt\_leviCivitaAuxInner\ensuremath{_3}} with the inner product replaced by $g$.
 \end{proof}
 
 \begin{lemma}[The Koszul Connection is a Covariant Derivative]
     \label{lmm:koszul-connection-is-covariant-derivative}
+    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.isCovariantDerivativeOn_leviCivitaAux}
     \uses{lmm:koszul-expression-tensorial, lmm:musical-isomorphism, def:metric-compatible-connection}
+    \leanok
     Define $\nabla^K$ by letting $(\nabla^K Y)_x(v) \in TM|_x$ be the unique vector with $g_x\big((\nabla^K Y)_x(v), w\big) = K_x(Y)(v, w)$ for all $w \in TM|_x$, that is $(\nabla^K Y)_x(v) = \flat_x^{-1}\big(K_x(Y)(v,\cdot)\big)$ (and $0$ if $Y$ is not differentiable at $x$). Then $\nabla^K$ is a covariant derivative on $TM$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:koszul-expression-tensorial, lmm:musical-isomorphism}
     The map $\nabla^K$ is well defined and continuous linear in $v$ by \ref{lmm:koszul-expression-tensorial} and \ref{lmm:musical-isomorphism}. Since $\flat_x$ is injective it suffices to check the two axioms after pairing with an arbitrary $Z$ differentiable at $x$ through $g_x$. Additivity in $Y$ is additivity of $K$ in its middle slot. For the Leibniz rule, expanding $K(X, fY, Z)$ gives $K(X,fY,Z) = f\,K(X,Y,Z) + (Xf)\,g(Y,Z)$: the derivative-of-$f$ terms come from $X\,g(fY,Z)$, giving $(Xf)\,g(Y,Z)$; from $Z\,g(X,fY)$, giving $-(Zf)\,g(X,Y)$; from $[X,fY] = f[X,Y] + (Xf)Y$, giving $(Xf)\,g(Y,Z)$; and from $[fY,Z] = f[Y,Z] - (Zf)Y$, giving $+(Zf)\,g(Y,X)$. By symmetry of $g$ the $Zf$ terms cancel, leaving $\tfrac12 \cdot 2\,(Xf)\,g(Y,Z)$ (the term $fY\,g(X,Z)$ contains no derivative of $f$). This is the argument of Mathlib's \texttt{isCovariantDerivativeOn\_leviCivitaAux}.
 \end{proof}
 
 \begin{lemma}[The Koszul Connection is Levi-Civita]
     \label{lmm:koszul-connection-is-levi-civita}
+    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.isMetricCompatibleWith_koszulConnection, Physicslib4.Geometry.PseudoRiemannianMetric.torsion_koszulConnection_eq_zero}
     \uses{lmm:koszul-connection-is-covariant-derivative, def:levi-civita-connection}
+    \leanok
     The covariant derivative $\nabla^K$ of \ref{lmm:koszul-connection-is-covariant-derivative} is a Levi-Civita connection of $g$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:koszul-connection-is-covariant-derivative, lmm:musical-isomorphism}
     Pair with an arbitrary $Z$ through $g$ and use injectivity of $\flat_x$. Torsion-freeness: $K(X,Y,Z) - K(Y,X,Z) = g([X,Y],Z)$ by direct cancellation, using symmetry of $g$ and antisymmetry of the bracket. Compatibility: $K(X,Y,Z) + K(X,Z,Y) = X\,g(Y,Z)$, again by cancellation. These are Mathlib's \texttt{torsion\_leviCivitaConnection\_eq\_zero} and \texttt{isMetricCompatible\_leviCivitaConnection} with the inner product replaced by $g$.
 \end{proof}
@@ -448,6 +457,7 @@
     Every pseudo-Riemannian manifold $(M,g)$ has a Levi-Civita connection, and any two Levi-Civita connections $\nabla, \nabla'$ of $g$ agree on differentiable vector fields: $(\nabla Y)_x = (\nabla' Y)_x$ whenever $Y$ is differentiable at $x$. We call it \textit{the} Levi-Civita connection of $g$. (Covariant derivatives are unconstrained on non-differentiable fields, so this is the correct form of uniqueness, as in Mathlib's \texttt{IsLeviCivitaConnection.uniqueness}.)
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:koszul-formula, lmm:musical-isomorphism, lmm:koszul-connection-is-levi-civita}
     Existence is \ref{lmm:koszul-connection-is-levi-civita}. For uniqueness, fix $x$, $Y$ differentiable at $x$ and $v \in TM|_x$, and let $X$ be a smooth vector field with $X(x) = v$ (\texttt{FiberBundle.extend}). By the Koszul formula (\ref{lmm:koszul-formula}) $g_x\big((\nabla_X Y)(x), Z(x)\big) = g_x\big((\nabla'_X Y)(x), Z(x)\big)$ for every $Z$ differentiable at $x$. Every $w \in TM|_x$ is such a $Z(x)$: take $Z = \texttt{FiberBundle.extend}\;E\;w$, which is differentiable at $x$ (\texttt{FiberBundle.mdifferentiableAt\_extend}) with $Z(x) = w$ (\texttt{FiberBundle.extend\_apply\_self}). Hence $\flat_x\big((\nabla Y)_x v\big) = \flat_x\big((\nabla' Y)_x v\big)$, and injectivity (\ref{lmm:musical-isomorphism}) gives equality.
 \end{proof}
