@@ -89,7 +89,23 @@ theorem IsLeviCivitaFor.koszul (h : IsLeviCivitaFor g cov) {x : M}
       - g.val x (Y x) (mlieBracket I X Z x)
       - g.val x (Z x) (mlieBracket I Y X x)
       + g.val x (X x) (mlieBracket I Z Y x) := by
-  sorry
+  -- use the compatibility with `g` in three ways
+  have eq1a := h.isMetricCompatibleWith hX hY hZ
+  have eq2a := h.isMetricCompatibleWith hY hZ hX
+  have eq3a := h.isMetricCompatibleWith hZ hX hY
+  -- use the torsion-freeness in three ways
+  have eq1b := congr(g.val x (Y x) ($(h.torsion) x (X x) (Z x)))
+  have eq2b := congr(g.val x (Z x) ($(h.torsion) x (Y x) (X x)))
+  have eq3b := congr(g.val x (X x) ($(h.torsion) x (Z x) (Y x)))
+  rw [cov.torsion_apply hX hZ] at eq1b
+  rw [cov.torsion_apply hY hX] at eq2b
+  rw [cov.torsion_apply hZ hY] at eq3b
+  simp only [map_sub, Pi.zero_apply, zero_apply, map_zero] at eq1b eq2b eq3b
+  -- align the order of the arguments of `g`
+  rw [g.symm x (cov Z x (Y x)) (X x)] at eq2a
+  rw [g.symm x (cov X x (Z x)) (Y x)] at eq3a
+  rw [g.symm x (Z x) (cov Y x (X x))] at eq2b
+  linear_combination -(eq1a + eq2a - eq3a + eq1b + eq2b - eq3b)
 
 /-- **Uniqueness of the Levi-Civita connection.** Two Levi-Civita connections of `g` agree on
 every vector field differentiable at `x`. (Covariant derivatives are unconstrained on
@@ -100,7 +116,20 @@ theorem IsLeviCivitaFor.uniqueness (hcov : IsLeviCivitaFor g cov)
     (hcov' : IsLeviCivitaFor g cov') {x : M} {Y : Π x : M, TangentSpace I x}
     (hY : MDiffAt (T% Y) x) (X₀ : TangentSpace I x) :
     cov Y x X₀ = cov' Y x X₀ := by
-  sorry
+  set X := FiberBundle.extend E X₀
+  have hX : MDiffAt (T% X) x := FiberBundle.mdifferentiableAt_extend I E X₀
+  have hXx : X x = X₀ := FiberBundle.extend_apply_self E X₀
+  have key : g.val x (cov Y x X₀) = g.val x (cov' Y x X₀) := by
+    apply VectorBundle.injective_eval_mdifferentiableAt_sec I E (TangentSpace I) ℝ x
+    ext Z hZ
+    have h1 := hcov.koszul hX hY hZ
+    have h2 := hcov'.koszul hX hY hZ
+    rw [hXx] at h1 h2
+    simp only
+    linarith
+  have h := g.nondegenerate x (cov Y x X₀ - cov' Y x X₀) fun w ↦ by
+    rw [map_sub, key, sub_self, zero_apply]
+  exact sub_eq_zero.mp h
 
 end CovariantDerivative
 

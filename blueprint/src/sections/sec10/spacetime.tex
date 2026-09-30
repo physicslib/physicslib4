@@ -378,6 +378,7 @@
     Let $g$ be a pseudo-Riemannian metric on $M$. For each $x \in M$ the map $\flat_x : TM|_x \to (TM|_x)^*$, $v \mapsto g_x(v, \cdot)$, is a linear isomorphism.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:pseudo-riemannian-metric}
     Nondegeneracy says exactly that $\flat_x$ is injective, and $TM|_x$ and its dual have the same finite dimension, so $\flat_x$ is bijective; this is \texttt{LinearMap.BilinForm.toDual} applied to $g_x$ (continuity is automatic in finite dimension).
 \end{proof}
@@ -404,6 +405,7 @@
     both sides evaluated at $x$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:levi-civita-connection}
     Write metric compatibility three times, for the cyclic triples $(X;Y,Z)$, $(Y;Z,X)$ and $(Z;X,Y)$, and torsion-freeness three times, for the pairs $(X,Z)$, $(Y,X)$ and $(Z,Y)$, each paired with the remaining field through $g$. Using symmetry of $g$ and antisymmetry of the bracket, the stated identity is a fixed linear combination of these six equations. This is the argument of Mathlib's \texttt{IsLeviCivitaConnection.apply\_eq}, with the inner product replaced by $g$ (only symmetry and bilinearity of the inner product are used there).
 \end{proof}

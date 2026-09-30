@@ -68,7 +68,15 @@ finite-dimensional.
 Blueprint reference: `lmm:musical-isomorphism`. -/
 theorem bijective_val [FiniteDimensional ℝ E] (g : PseudoRiemannianMetric I M) (x : M) :
     Function.Bijective (g.val x) := by
-  sorry
+  let A : E →L[ℝ] E →L[ℝ] ℝ := g.val x
+  change Function.Bijective A
+  have hinj : Function.Injective (A : E →ₗ[ℝ] E →L[ℝ] ℝ) := by
+    rw [← LinearMap.ker_eq_bot, LinearMap.ker_eq_bot']
+    exact fun v hv ↦ g.nondegenerate x v fun w ↦ DFunLike.congr_fun hv w
+  have hrank : Module.finrank ℝ E = Module.finrank ℝ (E →L[ℝ] ℝ) := by
+    rw [← (LinearMap.toContinuousLinearMap (𝕜 := ℝ) (E := E) (F' := ℝ)).finrank_eq]
+    exact (Subspace.dual_finrank_eq).symm
+  exact ⟨hinj, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hrank).1 hinj⟩
 
 end PseudoRiemannianMetric
 
