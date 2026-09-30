@@ -668,8 +668,8 @@ below. The proof structure is as follows.
   `C^∞`; its derivative is the constant vector `q - p`, which is
   nonvanishing (since `p 0 < q 0` forces `q ≠ p`), timelike (the
   Minkowski form of `q - p` with itself is the hypothesis), and
-  future-oriented (since `(q - p) 0 > 0`). The geodesic flag
-  `IsGeodesic = True` is automatic for the chosen API, and the endpoint
+  future-oriented (since `(q - p) 0 > 0`). It is a geodesic because its
+  velocity is constant (`standardMinkowskiLineSegmentPath_isGeodesic`), and the endpoint
   conditions are witnessed by `0`, `1 ∈ frontier (Set.Icc 0 1) = {0, 1}`
   together with `μ 0 = p` and `μ 1 = q`.
 

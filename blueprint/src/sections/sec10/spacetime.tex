@@ -558,7 +558,6 @@
 \end{definition}
 
 \medskip
-\noindent\textbf{Remark (geodesic placeholder in the formalization).} In the Lean formalization the ``geodesic'' clause of a (causal) trip segment is currently a \emph{placeholder}: the predicate \texttt{Physicslib4.Spacetime.IsGeodesic} is defined to be \texttt{True}, so it imposes no constraint. A faithful geodesic condition requires the Levi-Civita connection of the metric (auto-parallelism of the tangent vector along the curve), which the version of Mathlib pinned by this project does not provide. Consequently the formalized (causal) trip segments are future-oriented timelike (resp. causal) curves with the correct past and future endpoints, but their geodesic property is not yet enforced; the endpoint, timelike/causal, and future-orientation content is faithful. This is the one place where \ref{def:trip} and \ref{def:causal-trip} diverge from their Lean implementations, and it should be replaced by the genuine geodesic condition once a Lorentzian Levi-Civita connection is available in Mathlib.
 
 \begin{theorem}[Transitivity of chronological and causal precedence]
     \label{thrm:precedence-transitive}
@@ -575,7 +574,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[No Closed Causal Curve (Causality Condition)]
     \label{def:no-closed-causal-curve}
@@ -587,7 +585,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Irreflexivity and Antisymmetry under Causality]
     \label{thrm:causal-order-refinements}
@@ -604,7 +601,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Chronological Future and Chronological Past]
     \label{def:chronological-future-and-chronological-past}
@@ -623,7 +619,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Causal Future and Causal Past]
     \label{def:causal-future-and-causal-past}
@@ -642,7 +637,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Chronological Precedence Implies Causal Precedence]
     \label{lmm:chronological-implies-causal}
@@ -658,7 +652,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Monotonicity of Futures and Pasts]
     \label{lmm:future-past-monotone}
@@ -674,7 +667,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \subsection{Causal diamonds}
 
@@ -695,7 +687,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Structural properties of the causal diamond]
     \label{lmm:causal-diamond-structure}
@@ -716,7 +707,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Chronological diamonds inside causal diamonds]
     \label{thrm:causal-diamond-vs-chronological}
@@ -736,7 +726,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Spacelike Related]
     \label{def:spacelike-related}
@@ -748,7 +737,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Completely Spacelike]
     \label{def:completely-spacelike}
@@ -760,7 +748,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Symmetry of Spacelike Separation]
     \label{lmm:completely-spacelike-symm}
@@ -776,7 +763,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Structural Properties of Complete Spacelike Separation]
     \label{lmm:completely-spacelike-structural}
@@ -792,7 +778,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Spacelike Complement of a Region]
     \label{def:spacelike-complement}
@@ -804,7 +789,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Order Structure of the Spacelike Complement]
     \label{lmm:spacelike-complement-order}
@@ -820,7 +804,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Causal closure operator]
     \label{def:causal-closure}
@@ -832,7 +815,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[The Causal Closure is a Closure Operator]
     \label{lmm:causal-closure-is-closure-operator}
@@ -854,7 +836,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Causally complete region]
     \label{def:causally-complete-region}
@@ -866,7 +847,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Lattice of causally complete regions]
     \label{thrm:causally-complete-lattice}
@@ -883,7 +863,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[De Morgan Laws for the Spacelike Complement]
     \label{lmm:spacelike-complement-de-morgan}
@@ -907,7 +886,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[De Morgan Laws for the Causal Complement]
     \label{thrm:causal-complement-de-morgan}
@@ -947,7 +925,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \subsection{Causal convexity}
 
@@ -960,7 +937,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Causal diamonds are causally convex]
     \label{lmm:causal-diamond-causally-convex}
@@ -976,7 +952,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Causally complete regions are causally convex]
     \label{thrm:causally-complete-convex}
@@ -999,7 +974,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \subsection{Causal convexity: closure structure}
 
@@ -1027,7 +1001,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Causal-convex hull]
     \label{def:causal-convex-hull}
@@ -1042,7 +1015,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[The Causal-Convex Hull is Extensive and Causally Convex]
     \label{lmm:causal-convex-hull-extensive}
@@ -1062,7 +1034,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[The causal-convex hull is a closure operator]
     \label{thrm:causal-convex-hull-closure}
@@ -1091,7 +1062,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
@@ -1103,7 +1073,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Basis Sets Are Alexandrov-Open]
     \label{lmm:alexandrov-basis-open}
@@ -1119,7 +1088,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Openness of Chronological Futures and Pasts]
     \label{lmm:chronological-future-past-open}
@@ -1149,7 +1117,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Unconditional Openness of Chronological Futures and Pasts on Standard Minkowski]
     \label{lmm:minkowski-chronological-open}
@@ -1175,7 +1142,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[The Directional Derivative is Levi-Civita on Standard Minkowski]
     \label{lmm:minkowski-directional-derivative-levi-civita}
@@ -1226,7 +1192,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{definition}[Lorentzian Spacetime]
     \label{def:lorentzian-spacetime}
@@ -1238,7 +1203,6 @@
 \end{definition}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Bundled Spacelike Separation and Basis Openness]
     \label{lmm:lorentzian-causal-lifts}
@@ -1254,7 +1218,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[No-Diamond Points Have Only the Whole Space as Neighbourhood]
     \label{lmm:alexandrov-nbhd-univ-of-no-diamond}
@@ -1270,7 +1233,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Covering from the Hausdorff Assumption]
     \label{lmm:alexandrov-covering-hausdorff}
@@ -1286,7 +1248,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[The Alexandrov Diamonds Form a Topological Basis]
     \label{thrm:alexandrov-topological-basis}
@@ -1302,7 +1263,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Past Interpolation on Standard Minkowski]
     \label{lmm:minkowski-past-between}
@@ -1319,7 +1279,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Future Interpolation on Standard Minkowski]
     \label{lmm:minkowski-future-between}
@@ -1336,7 +1295,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Standard Minkowski Diamonds Are Downward-Directed]
     \label{lmm:minkowski-diamonds-downward-directed}
@@ -1353,7 +1311,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Common Chronological Predecessor on Standard Minkowski]
     \label{lmm:minkowski-exists-common-past}
@@ -1369,7 +1326,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Common Chronological Successor on Standard Minkowski]
     \label{lmm:minkowski-exists-common-future}
@@ -1385,7 +1341,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Standard Minkowski Diamonds Are Upward-Directed]
     \label{lmm:minkowski-diamonds-upward-directed}
@@ -1405,7 +1360,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[The Alexandrov Diamonds are a Basis on Standard Minkowski]
     \label{thrm:minkowski-alexandrov-basis}
@@ -1422,7 +1376,6 @@
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \subsection{Dilations are causal automorphisms but not isometries}
 
@@ -1442,7 +1395,6 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Dilations are Causal Automorphisms]
     \label{thrm:minkowski-dilation-causal-automorphism}
@@ -1458,7 +1410,6 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[Dilations are Not Isometries]
     \label{thrm:minkowski-dilation-not-isometry}
@@ -1514,53 +1465,71 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     Smoothness and non-vanishing of the derivative of $\varphi \circ \mu$ follow from the chain rule (using unique differentials on the parameter space) together with the fact that an isometry's differential is a linear isomorphism. The tangent identity then transports the classification and endpoint conditions.
 \end{proof}
 
-\begin{lemma}[Pullback of a Covariant Derivative by a Diffeomorphism]
-    \label{lmm:diffeo-pullback-connection}
-    \uses{def:metric-compatible-connection, def:levi-civita-connection}
-    Let $\varphi : M \to M$ be a $C^\infty$ diffeomorphism and $\nabla$ a covariant derivative on $TM$. For a vector field $Y$ write $\varphi_* Y$ for its pushforward, $(\varphi_* Y)(\varphi(x)) = d\varphi_x\, Y(x)$ (Mathlib's \texttt{VectorField.mpullback} along $\varphi^{-1}$), and define
+\begin{lemma}[Pullback of Vector Fields and the Metric Under an Isometry]
+    \label{lmm:isometry-pullback-metric}
+    \lean{Physicslib4.Spacetime.Isometry.val_mpullback, Physicslib4.Spacetime.Isometry.mfderiv_mpullback, Physicslib4.Spacetime.CrossIsometry.val_mpullback, Physicslib4.Spacetime.CrossIsometry.mfderiv_mpullback}
+    \uses{lmm:isometry-preserves-classification}
+    \leanok
+    Let $\varphi$ be an isometry of a spacetime $M$, in the sense used throughout this section (\ref{lmm:isometry-preserves-classification}, \ref{lmm:pushforward-path}; the Lean structure \texttt{Physicslib4.Spacetime.Isometry}): a $C^\infty$ diffeomorphism of $M$ with $g_{\varphi(x)}(d\varphi_x v, d\varphi_x w) = g_x(v,w)$ for all $x$ and $v, w \in TM|_x$, where $d\varphi_x$ is the manifold derivative. For a vector field $V$ write $\varphi^* V$ for its pullback, $(\varphi^* V)(x) = (d\varphi_x)^{-1} V(\varphi(x))$ (Mathlib's \texttt{VectorField.mpullback}). Then for every $x \in M$ and all vector fields $V, W$,
     \begin{align}
-        (\varphi^*\nabla\, Y)_x(v) = (d\varphi_x)^{-1}\Big(\big(\nabla\, \varphi_* Y\big)_{\varphi(x)}\big(d\varphi_x v\big)\Big).
+        d\varphi_x\big((\varphi^* V)(x)\big) = V(\varphi(x)), \qquad g_x\big((\varphi^* V)(x), (\varphi^* W)(x)\big) = g_{\varphi(x)}\big(V(\varphi(x)), W(\varphi(x))\big).
     \end{align}
-    Then $\varphi^*\nabla$ is a covariant derivative on $TM$.
 \end{lemma}
 \begin{proof}
-    \uses{def:metric-compatible-connection}
-    Pushforward is additive and satisfies $\varphi_*(fY) = (f \circ \varphi^{-1})\,\varphi_* Y$, and by the chain rule $d(f\circ\varphi^{-1})_{\varphi(x)}(d\varphi_x v) = df_x(v)$; so additivity and the Leibniz rule for $\varphi^*\nabla$ follow from those of $\nabla$ after applying the linear isomorphism $(d\varphi_x)^{-1}$.
+    \leanok
+    \uses{lmm:isometry-preserves-classification}
+    Since $\varphi$ is a diffeomorphism, $d\varphi_x$ is a linear isomorphism, so $d\varphi_x (d\varphi_x)^{-1} V(\varphi(x)) = V(\varphi(x))$ (\texttt{VectorField.mpullback\_apply} and \texttt{ContinuousLinearMap.inverse}). The second identity is the isometry property applied to $v = (\varphi^* V)(x)$, $w = (\varphi^* W)(x)$, rewritten by the first.
 \end{proof}
 
-\begin{lemma}[Pullback Preserves Torsion-Freeness]
-    \label{lmm:diffeo-pullback-torsion-free}
-    \uses{lmm:diffeo-pullback-connection, def:levi-civita-connection}
-    In the setting of \ref{lmm:diffeo-pullback-connection}, if $\nabla$ is torsion-free then so is $\varphi^*\nabla$.
+\begin{lemma}[Derivatives of Metric Pairings of Pulled-Back Fields]
+    \label{lmm:isometry-pullback-metric-derivative}
+    \lean{Physicslib4.Spacetime.Isometry.mfderiv_val_mpullback, Physicslib4.Spacetime.CrossIsometry.mfderiv_val_mpullback}
+    \uses{lmm:isometry-pullback-metric}
+    \leanok
+    Let $\varphi$ be an isometry as in \ref{lmm:isometry-pullback-metric}, $x \in M$, and $A, B, C$ vector fields with $B, C$ differentiable at $\varphi(x)$. Then the derivative of $y \mapsto g_y\big((\varphi^* B)(y), (\varphi^* C)(y)\big)$ at $x$ in the direction $(\varphi^* A)(x)$ equals the derivative of $y \mapsto g_y\big(B(y), C(y)\big)$ at $\varphi(x)$ in the direction $A(\varphi(x))$; that is, $(\varphi^*A)\,g(\varphi^*B, \varphi^*C)(x) = A\,g(B,C)(\varphi(x))$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:diffeo-pullback-connection, def:levi-civita-connection}
-    The Lie bracket is natural under diffeomorphisms, $\varphi_*[X,Y] = [\varphi_* X, \varphi_* Y]$ (\texttt{VectorField.mpullback\_mlieBracket}), so the torsion-free identity for $\nabla$ at $\varphi(x)$ applied to $\varphi_* X, \varphi_* Y$ pulls back to the identity for $\varphi^*\nabla$ at $x$.
+    \leanok
+    \uses{lmm:isometry-pullback-metric}
+    By \ref{lmm:isometry-pullback-metric}, $y \mapsto g_y\big((\varphi^* B)(y), (\varphi^* C)(y)\big)$ is the composite $f \circ \varphi$ with $f(z) = g_z(B(z), C(z))$. The chain rule (\texttt{MDifferentiableAt.mfderiv\_comp}) gives derivative $df_{\varphi(x)} \circ d\varphi_x$ at $x$, and applying it to $(\varphi^* A)(x)$ gives $df_{\varphi(x)}(A(\varphi(x)))$ by the first identity of \ref{lmm:isometry-pullback-metric}.
 \end{proof}
 
-\begin{lemma}[Pullback by an Isometry is Metric-Compatible]
-    \label{lmm:isometry-pullback-compatible}
-    \uses{lmm:diffeo-pullback-connection, def:metric-compatible-connection, lmm:isometry-preserves-classification}
-    Let $\varphi$ be an isometry of a spacetime $M$, in the sense used throughout this section (\ref{lmm:isometry-preserves-classification}, \ref{lmm:pushforward-path}; the Lean structure \texttt{Physicslib4.Spacetime.Isometry}): a $C^\infty$ diffeomorphism of $M$ with $g_{\varphi(x)}(d\varphi_x v, d\varphi_x w) = g_x(v,w)$ for all $x$ and $v, w \in TM|_x$, where $d\varphi_x$ is the manifold derivative. If $\nabla$ is compatible with $g$, then so is $\varphi^*\nabla$.
+\begin{lemma}[Metric Pairings with Lie Brackets of Pulled-Back Fields]
+    \label{lmm:isometry-pullback-lie-bracket}
+    \lean{Physicslib4.Spacetime.Isometry.val_mlieBracket_mpullback, Physicslib4.Spacetime.CrossIsometry.val_mlieBracket_mpullback}
+    \uses{lmm:isometry-pullback-metric}
+    \leanok
+    Let $\varphi$ be an isometry as in \ref{lmm:isometry-pullback-metric}, $x \in M$, and $A, B, C$ vector fields with $B, C$ differentiable at $\varphi(x)$. Then
+    \begin{align}
+        g_x\big((\varphi^* A)(x), [\varphi^* B, \varphi^* C](x)\big) = g_{\varphi(x)}\big(A(\varphi(x)), [B, C](\varphi(x))\big).
+    \end{align}
 \end{lemma}
 \begin{proof}
-    \uses{lmm:diffeo-pullback-connection, def:metric-compatible-connection}
-    The isometry property gives $g(Y,Z) = g(\varphi_* Y, \varphi_* Z) \circ \varphi$, so by the chain rule $X\,g(Y,Z)(x) = (\varphi_* X)\,g(\varphi_* Y, \varphi_* Z)(\varphi(x))$. Expanding the right side by compatibility of $\nabla$ at $\varphi(x)$ and pulling each term back through the isometry $d\varphi_x$ gives $g_x\big((\varphi^*\nabla_X Y)(x), Z(x)\big) + g_x\big(Y(x), (\varphi^*\nabla_X Z)(x)\big)$.
+    \leanok
+    \uses{lmm:isometry-pullback-metric}
+    The Lie bracket is natural under diffeomorphisms, $[\varphi^* B, \varphi^* C] = \varphi^*[B, C]$ near $x$ (\texttt{VectorField.mpullback\_mlieBracket}), so the left side is $g_x\big((\varphi^* A)(x), (\varphi^*[B,C])(x)\big)$, which equals the right side by the second identity of \ref{lmm:isometry-pullback-metric}.
 \end{proof}
 
 \begin{lemma}[Isometries Preserve the Levi-Civita Connection]
     \label{lmm:isometry-preserves-levi-civita}
     \lean{Physicslib4.Spacetime.Isometry.mfderiv_leviCivita_mpullback, Physicslib4.Spacetime.CrossIsometry.mfderiv_leviCivita_mpullback}
-    \uses{thrm:levi-civita-exists-unique, lmm:isometry-pullback-compatible}
+    \uses{def:levi-civita-connection, lmm:isometry-pullback-metric}
     \leanok
-    Let $\varphi$ be an isometry of a spacetime $M$ (as in \ref{lmm:isometry-pullback-compatible}) and $\nabla$ the Levi-Civita connection of $g$. Then $\varphi^*\nabla$ is a Levi-Civita connection of $g$, hence agrees with $\nabla$ on differentiable vector fields. Equivalently, $d\varphi_x\big((\nabla_X Y)(x)\big) = (\nabla_{\varphi_* X}\, \varphi_* Y)(\varphi(x))$ for $Y$ differentiable at $x$.
+    Let $\varphi$ be an isometry of a spacetime $M$ (as in \ref{lmm:isometry-pullback-metric}) and $\nabla$ the Levi-Civita connection of $g$. Then $\nabla$ is natural under $\varphi$: for every $x \in M$ and all vector fields $A, B$ differentiable at $\varphi(x)$,
+    \begin{align}
+        d\varphi_x\big((\nabla_{\varphi^* A}\, \varphi^* B)(x)\big) = (\nabla_A B)(\varphi(x)).
+    \end{align}
 
     The same holds for a cross-metric isometry $\Psi : (M, g_1) \to (N, g_2)$ (\ref{def:cross-metric-isometry}): it carries the Levi-Civita connection of $g_1$ to that of $g_2$, and hence geodesics of $g_1$ to geodesics of $g_2$, by the same argument.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thrm:levi-civita-exists-unique, lmm:diffeo-pullback-connection, lmm:diffeo-pullback-torsion-free, lmm:isometry-pullback-compatible}
-    $\varphi^*\nabla$ is a covariant derivative (\ref{lmm:diffeo-pullback-connection}), torsion-free (\ref{lmm:diffeo-pullback-torsion-free}) and compatible with $g$ (\ref{lmm:isometry-pullback-compatible}), hence Levi-Civita. Uniqueness (\ref{thrm:levi-civita-exists-unique}) gives $\varphi^*\nabla = \nabla$ on differentiable fields, which is the displayed identity.
+    \uses{lmm:isometry-pullback-metric, lmm:isometry-pullback-metric-derivative, lmm:isometry-pullback-lie-bracket, lmm:koszul-formula, lmm:musical-isomorphism, def:levi-civita-connection}
+    Let $C$ be any vector field differentiable at $\varphi(x)$. Apply the Koszul formula (\ref{lmm:koszul-formula}) to $\varphi^* A, \varphi^* B, \varphi^* C$ at $x$ and to $A, B, C$ at $\varphi(x)$. The three derivative terms agree by \ref{lmm:isometry-pullback-metric-derivative} and the three bracket terms agree by \ref{lmm:isometry-pullback-lie-bracket} (after symmetry of $g$), so
+    \begin{align}
+        g_x\big((\nabla_{\varphi^* A}\varphi^* B)(x), (\varphi^* C)(x)\big) = g_{\varphi(x)}\big((\nabla_A B)(\varphi(x)), C(\varphi(x))\big).
+    \end{align}
+    By the isometry property and the first identity of \ref{lmm:isometry-pullback-metric}, the left side is $g_{\varphi(x)}\big(d\varphi_x (\nabla_{\varphi^* A}\varphi^* B)(x), C(\varphi(x))\big)$. Since every tangent vector at $\varphi(x)$ is $C(\varphi(x))$ for some smooth $C$, nondegeneracy of $g_{\varphi(x)}$ (\ref{lmm:musical-isomorphism}) gives the displayed identity.
 \end{proof}
 
 \begin{lemma}[Isometries Preserve Geodesics]
@@ -1568,12 +1537,12 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \lean{Physicslib4.Spacetime.Isometry.pushforwardPath_isGeodesic, Physicslib4.lorentzPath_isGeodesic, Physicslib4.Spacetime.CrossIsometry.pushforwardPath_isGeodesic}
     \uses{def:geodesic, lmm:pushforward-path}
     \leanok
-    Let $\varphi$ be an isometry of a spacetime $M$ (as in \ref{lmm:isometry-pullback-compatible}) and $\mu$ a smooth path. Then $\mu$ is a geodesic if and only if the pushforward path $\varphi \circ \mu$ (\ref{lmm:pushforward-path}) is a geodesic.
+    Let $\varphi$ be an isometry of a spacetime $M$ (as in \ref{lmm:isometry-pullback-metric}) and $\mu$ a smooth path. Then $\mu$ is a geodesic if and only if the pushforward path $\varphi \circ \mu$ (\ref{lmm:pushforward-path}) is a geodesic.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lmm:isometry-preserves-levi-civita, lmm:pushforward-path, def:geodesic}
-    Suppose $\mu$ is a geodesic, let $s$ be an interior point of $\Sigma$, and let $X'$ be a smooth vector field with $X'(\varphi(\mu(t))) = (\varphi\circ\mu)^{\boldsymbol\cdot}(t) = d\varphi\,\dot\mu(t)$ for $t$ near $s$ (\ref{lmm:pushforward-path}). Then $X = (\varphi^{-1})_* X'$ is smooth and $X(\mu(t)) = \dot\mu(t)$ near $s$, and $X' = \varphi_* X$, so by \ref{lmm:isometry-preserves-levi-civita} $(\nabla_{X'} X')(\varphi(\mu(s))) = d\varphi\big((\nabla_X X)(\mu(s))\big) = 0$. The converse is the same argument for the isometry $\varphi^{-1}$ and the path $\varphi \circ \mu$.
+    \uses{lmm:isometry-preserves-levi-civita, def:geodesic}
+    Suppose $\mu$ is a geodesic, let $s$ be an interior point of $\Sigma$, and let $X$ be a smooth vector field with $X(\varphi(\mu(t))) = (\varphi\circ\mu)^{\boldsymbol\cdot}(t) = d\varphi\,\dot\mu(t)$ for $t$ near $s$ (\ref{lmm:pushforward-path}). Then $\varphi^* X$ is smooth, and since $d\varphi$ is invertible, $(\varphi^* X)(\mu(t)) = (d\varphi)^{-1} X(\varphi(\mu(t))) = \dot\mu(t)$ for $t$ near $s$; so $\varphi^* X$ extends $\dot\mu$ near $s$ and the geodesic condition for $\mu$ gives $(\nabla_{\varphi^* X}\varphi^* X)(\mu(s)) = 0$. By naturality (\ref{lmm:isometry-preserves-levi-civita}), $(\nabla_X X)(\varphi(\mu(s))) = d\varphi\big((\nabla_{\varphi^* X}\varphi^* X)(\mu(s))\big) = 0$. The converse is the same argument for the isometry $\varphi^{-1}$ and the path $\varphi \circ \mu$.
 \end{proof}
 
 \begin{lemma}[Isometries Preserve Chronology]
@@ -1590,7 +1559,6 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Isometries Preserve Basis Sets]
     \label{lmm:isometry-preserves-basis-sets}
@@ -1606,7 +1574,6 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Axiom 5 Basis-Set Preservation]
     \label{lmm:axiom5-basis-preservation}
@@ -1622,7 +1589,6 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \subsection{Pullback metrics and cross-metric isometries}
 
@@ -2077,7 +2043,6 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Image of the Chronological Future]
     \label{lmm:cross-metric-chronological-future-image}
@@ -2094,7 +2059,6 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Image of the Chronological Past]
     \label{lmm:cross-metric-chronological-past-image}
@@ -2109,7 +2073,6 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[Cross-Metric Isometries Preserve Basis Sets]
     \label{lmm:cross-metric-isometry-preserves-basis-sets}
@@ -2127,7 +2090,6 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{lemma}[A Bijection Matching Generating Families is a Homeomorphism]
     \label{lmm:bijection-generated-topology-homeomorphism}
@@ -2159,7 +2121,6 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 \begin{theorem}[The Pullback of a Lorentzian Spacetime is a Lorentzian Spacetime]
     \label{thrm:pullback-is-lorentzian-spacetime}
@@ -2174,6 +2135,5 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 \end{proof}
 
 \medskip
-\noindent\textit{Formalization note.} This statement rests on the trip-based relations $\ll$ and $\prec$ of \ref{def:trip} and \ref{def:causal-trip}. In the Lean formalization their geodesic clause is a placeholder (\texttt{IsGeodesic} is \texttt{True}), because Mathlib does not yet define the connection needed to define a geodesic; see the remark following \ref{def:causal-trip}.
 
 This theorem is what makes ``the net over $\psi^*(M,g)$'' meaningful in \ref{def:general-covariance-in-curved-spacetime}: the axioms of Section \ref{sctn:haag-kastler-axioms-in-curved-spacetime} are indexed by Lorentzian spacetimes, so without it there is no net over the pullback background to compare with.

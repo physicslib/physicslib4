@@ -19,11 +19,9 @@ chronological/causal future/past sets.
 
 ## Main definitions
 
-* `Physicslib4.Spacetime.IsGeodesic` (placeholder): a `Prop` placeholder for
-  "being a geodesic". Mathlib v4.31.0-rc1 does not provide a packaged
-  notion of geodesic in a Lorentzian / pseudo-Riemannian manifold; we
-  encode the predicate as an opaque `Prop`-valued definition (defined to
-  `True` as a placeholder, see modelling notes).
+* `Physicslib4.Spacetime.IsGeodesic`: a smooth path is an (affinely parametrised) geodesic
+  of the Levi-Civita connection of the spacetime metric
+  (`Physicslib4/Geometry/PseudoRiemannian/LeviCivita.lean`), stated without charts.
 
 * `Physicslib4.Spacetime.IsTrip` / `IsCausalTrip`: a trip / causal trip is a
   smooth curve which is piecewise a future-oriented timelike / causal
@@ -41,11 +39,10 @@ chronological/causal future/past sets.
 
 ## Modelling notes
 
-* Geodesics in Lorentzian manifolds are not packaged in Mathlib. We use a
-  placeholder predicate `IsGeodesic` set to `True`; downstream agents
-  should refine this to the genuine geodesic condition once Mathlib (or
-  a sibling project) provides one. This is the *only* mathematical
-  compromise in this file.
+* Mathlib has no geodesics and only a Riemannian Levi-Civita connection. `IsGeodesic` uses
+  the pseudo-Riemannian Levi-Civita connection of `Physicslib4.Geometry` and imposes the
+  geodesic condition at interior parameters of the path through vector fields extending its
+  velocity; `Physicslib4/Spacetime/AlongPath.lean` shows this is well defined and non-vacuous.
 
 * The "piecewise" condition on trips is encoded by partitioning the
   parameter space into finitely many sub-intervals on each of which the
@@ -144,8 +141,7 @@ A *causal trip segment* from `p` to `q` in a spacetime `M` is a smooth curve
 `c` together with a representative smooth path `μ` that
 
 * is future-oriented and causal;
-* is a (possibly degenerate) geodesic (currently the placeholder
-  `IsGeodesic`, which is `True`; see its **Restriction:** note);
+* is a geodesic (`IsGeodesic`);
 * has past endpoint `p` and future endpoint `q`.
 -/
 def IsCausalTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
