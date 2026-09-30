@@ -7,6 +7,8 @@ import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalStructure
 import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Causality
+import Physicslib4.Spacetime.AlongPath
+import Physicslib4.Geometry.PseudoRiemannian.Flat
 import Mathlib.Geometry.Manifold.MFDeriv.SpecificFunctions
 import Mathlib.Geometry.Manifold.MFDeriv.Atlas
 import Mathlib.Geometry.Manifold.ContMDiff.NormedSpace
@@ -666,8 +668,8 @@ below. The proof structure is as follows.
   `C^∞`; its derivative is the constant vector `q - p`, which is
   nonvanishing (since `p 0 < q 0` forces `q ≠ p`), timelike (the
   Minkowski form of `q - p` with itself is the hypothesis), and
-  future-oriented (since `(q - p) 0 > 0`). The geodesic flag
-  `IsGeodesic = True` is automatic for the chosen API, and the endpoint
+  future-oriented (since `(q - p) 0 > 0`). It is a geodesic because its
+  velocity is constant (`standardMinkowskiLineSegmentPath_isGeodesic`), and the endpoint
   conditions are witnessed by `0`, `1 ∈ frontier (Set.Icc 0 1) = {0, 1}`
   together with `μ 0 = p` and `μ 1 = q`.
 
@@ -773,6 +775,107 @@ noncomputable def standardMinkowskiLineSegmentPath
   continuousOn := standardMinkowskiLineSegmentPath_continuousOn p q
   smoothOn := standardMinkowskiLineSegmentPath_smoothOn p q
   nonvanishing := standardMinkowskiLineSegmentPath_nonvanishing p q hpq
+
+/-! ### Geodesics of standard Minkowski spacetime -/
+
+/-- **The Levi-Civita connection of standard Minkowski spacetime is flat**: on vector fields
+differentiable at `x`, it is the directional derivative. (The metric is the constant form
+`minkowskiForm`.)
+
+Blueprint reference: `lmm:minkowski-levi-civita-flat`. -/
+theorem standardMinkowski_leviCivita_apply
+    {X : Π x : StandardMinkowskiSpacetime.Carrier,
+      TangentSpace StandardMinkowskiSpacetime.model x}
+    {x : StandardMinkowskiSpacetime.Carrier}
+    (hX : MDifferentiableAt StandardMinkowskiSpacetime.model
+      (StandardMinkowskiSpacetime.model.prod 𝓘(ℝ, SpacetimeModel)) (T% X) x)
+    (v : TangentSpace StandardMinkowskiSpacetime.model x) :
+    StandardMinkowskiSpacetime.toPseudoRiemannianMetric.leviCivita X x v
+      = fderiv ℝ (fun y : SpacetimeModel ↦ (X y : SpacetimeModel)) x v :=
+  Geometry.PseudoRiemannianMetric.leviCivita_apply_eq_fderiv (E := SpacetimeModel)
+    (g := StandardMinkowskiSpacetime.toPseudoRiemannianMetric) minkowskiForm (fun _ => rfl) hX v
+
+open scoped Topology in
+/-- At an interior parameter, a smooth path on standard Minkowski spacetime has ordinary
+derivative its tangent vector. -/
+theorem standardMinkowski_smoothPath_hasDerivAt (μ : StandardMinkowskiSpacetime.SmoothPath)
+    {s : ℝ} (hs : s ∈ interior μ.parameterSpace) :
+    HasDerivAt (fun t ↦ (show SpacetimeModel from μ.toFun t))
+      (show SpacetimeModel from μ.tangent s) s := by
+  have hn : μ.parameterSpace ∈ 𝓝 s := mem_interior_iff_mem_nhds.mp hs
+  have hmd : MDifferentiableAt 𝓘(ℝ, ℝ) 𝓘(ℝ, SpacetimeModel)
+      (fun t ↦ (show SpacetimeModel from μ.toFun t)) s :=
+    (μ.smoothOn.contMDiffAt hn).mdifferentiableAt (by simp)
+  have ht : (show SpacetimeModel from μ.tangent s)
+      = deriv (fun t ↦ (show SpacetimeModel from μ.toFun t)) s := by
+    change mfderivWithin 𝓘(ℝ, ℝ) 𝓘(ℝ, SpacetimeModel)
+      (fun t ↦ (show SpacetimeModel from μ.toFun t)) μ.parameterSpace s (1 : ℝ) = _
+    rw [mfderivWithin_of_mem_nhds hn, mfderiv_eq_fderiv]
+    rfl
+  rw [ht]
+  exact (mdifferentiableAt_iff_differentiableAt.1 hmd).hasDerivAt
+
+open scoped Topology in
+/-- Along a smooth path on standard Minkowski spacetime, if a vector field `X` differentiable at
+`μ s` extends the velocity near an interior parameter `s`, then the velocity has derivative
+`∇_{μ'(s)} X` at `s`. -/
+theorem standardMinkowski_hasDerivAt_tangent_leviCivita
+    (μ : StandardMinkowskiSpacetime.SmoothPath) {s : ℝ} (hs : s ∈ interior μ.parameterSpace)
+    {X : Π x : StandardMinkowskiSpacetime.Carrier, TangentSpace StandardMinkowskiSpacetime.model x}
+    (hX : MDifferentiableAt StandardMinkowskiSpacetime.model
+      (StandardMinkowskiSpacetime.model.prod 𝓘(ℝ, SpacetimeModel)) (T% X) (μ.toFun s))
+    (hXμ : ∀ᶠ t in 𝓝 s, X (μ.toFun t) = μ.tangent t) :
+    HasDerivAt (fun t ↦ (show SpacetimeModel from μ.tangent t))
+      (show SpacetimeModel from StandardMinkowskiSpacetime.toPseudoRiemannianMetric.leviCivita
+        X (μ.toFun s) (μ.tangent s)) s := by
+  rw [standardMinkowski_leviCivita_apply hX]
+  have hd : DifferentiableAt ℝ (fun y : SpacetimeModel ↦ (X y : SpacetimeModel)) (μ.toFun s) :=
+    mdifferentiableAt_iff_differentiableAt.1 <|
+      ((contMDiff_snd_tangentBundle_modelSpace SpacetimeModel 𝓘(ℝ, SpacetimeModel)
+        (n := 1)).mdifferentiable one_ne_zero _).comp _ hX
+  have h := hd.hasFDerivAt.comp_hasDerivAt s (standardMinkowski_smoothPath_hasDerivAt μ hs)
+  exact h.congr_of_eventuallyEq (hXμ.mono fun t ht ↦ ht.symm)
+
+open scoped Topology in
+/-- **Geodesics of standard Minkowski spacetime are the paths with zero acceleration**: a smooth
+path is a geodesic iff its velocity has derivative `0` at every interior parameter.
+
+Blueprint reference: `lmm:minkowski-lines-are-geodesics`. -/
+theorem standardMinkowski_isGeodesic_iff (μ : StandardMinkowskiSpacetime.SmoothPath) :
+    Spacetime.IsGeodesic StandardMinkowskiSpacetime μ ↔
+      ∀ s ∈ interior μ.parameterSpace,
+        HasDerivAt (fun t ↦ (show SpacetimeModel from μ.tangent t)) 0 s := by
+  have key : ∀ s ∈ interior μ.parameterSpace,
+      ∀ X : Π x : StandardMinkowskiSpacetime.Carrier,
+        TangentSpace StandardMinkowskiSpacetime.model x,
+      ContMDiff StandardMinkowskiSpacetime.model
+        (StandardMinkowskiSpacetime.model.prod 𝓘(ℝ, SpacetimeModel)) ∞ (T% X) →
+      (∀ᶠ t in 𝓝 s, X (μ.toFun t) = μ.tangent t) →
+      HasDerivAt (fun t ↦ (show SpacetimeModel from μ.tangent t))
+        (show SpacetimeModel from StandardMinkowskiSpacetime.toPseudoRiemannianMetric.leviCivita
+          X (μ.toFun s) (X (μ.toFun s))) s := fun s hs X hX hXμ ↦ by
+    rw [hXμ.self_of_nhds]
+    exact standardMinkowski_hasDerivAt_tangent_leviCivita μ hs
+      (hX.mdifferentiableAt (by simp)) hXμ
+  constructor
+  · intro hg s hs
+    obtain ⟨X, hX, hXμ⟩ := μ.exists_vectorField_eq_tangent hs
+    have h := key s hs X hX hXμ
+    rwa [hg s hs X hX hXμ] at h
+  · intro h s hs X hX hXμ
+    exact (key s hs X hX hXμ).unique (h s hs)
+
+/-- **Straight segments are geodesics.** The affinely parametrised segment from `p` to `q` is a
+geodesic of standard Minkowski spacetime.
+
+Blueprint reference: `lmm:minkowski-lines-are-geodesics`. -/
+theorem standardMinkowskiLineSegmentPath_isGeodesic (p q : SpacetimeModel) (hpq : p ≠ q) :
+    Spacetime.IsGeodesic StandardMinkowskiSpacetime (standardMinkowskiLineSegmentPath p q hpq) := by
+  refine (standardMinkowski_isGeodesic_iff _).2 fun s hs ↦ ?_
+  have hn : Set.Icc (0 : ℝ) 1 ∈ nhds s := mem_interior_iff_mem_nhds.mp hs
+  refine (hasDerivAt_const s (q - p)).congr_of_eventuallyEq ?_
+  filter_upwards [hn] with t ht
+  exact standardMinkowskiLineSegmentPath_mfderivWithin p q t ht
 
 /-!
 ### Forward direction: scaffolding for `chronologicalFuture ⊆ minkowskiForwardCone`
@@ -1378,7 +1481,8 @@ theorem minkowskiForwardCone_subset_segmentPrecedes {p q : SpacetimeModel}
     fun s hs => standardMinkowskiLineSegmentPath_mfderivWithin p q s hs
   refine ⟨Spacetime.SmoothCurve.ofPath _
     (standardMinkowskiLineSegmentPath p q hpq), ?_⟩
-  refine ⟨standardMinkowskiLineSegmentPath p q hpq, rfl, ?_, ?_, trivial, ?_, ?_⟩
+  refine ⟨standardMinkowskiLineSegmentPath p q hpq, rfl, ?_, ?_,
+    standardMinkowskiLineSegmentPath_isGeodesic p q hpq, ?_, ?_⟩
   · intro s hs
     rw [htan s hs]; exact htl
   · intro s hs

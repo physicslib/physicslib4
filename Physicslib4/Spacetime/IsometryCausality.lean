@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.Spacetime.Curves
 import Physicslib4.Spacetime.Causality
+import Physicslib4.Spacetime.AlongPath
 import Physicslib4.Spacetime.DiffeoPath
 import Physicslib4.Spacetime.Isometry
 import Physicslib4.Spacetime.IsometryTopology
@@ -217,6 +218,125 @@ theorem pushforwardPath_isFutureOriented (g : Isometry M) (μ : M.SmoothPath)
   simp only [pushforwardPath_tangent g μ hs]
   exact hg (μ.toFun s) _ (h s hs)
 
+section Geodesic
+
+open Bundle VectorField Filter
+open scoped Manifold Topology
+
+/-- The differential of an isometry `g` undoes the pullback of a vector field along `g`. -/
+theorem mfderiv_mpullback (g : Isometry M) (V : Π x : M.Carrier, TangentSpace M.model x)
+    (x : M.Carrier) :
+    mfderiv M.model M.model g.toDiffeo x (mpullback M.model M.model g.toDiffeo V x)
+      = V (g.toDiffeo x) := by
+  rw [mpullback_apply, (g.toDiffeo.isInvertible_mfderiv (x := x) (by simp)).self_apply_inverse]
+
+/-- The metric pairing of pullbacks along an isometry is the pullback of the pairing. -/
+theorem val_mpullback (g : Isometry M) (V W : Π x : M.Carrier, TangentSpace M.model x)
+    (x : M.Carrier) :
+    M.toPseudoRiemannianMetric.val x (mpullback M.model M.model g.toDiffeo V x)
+        (mpullback M.model M.model g.toDiffeo W x)
+      = M.toPseudoRiemannianMetric.val (g.toDiffeo x) (V (g.toDiffeo x)) (W (g.toDiffeo x)) := by
+  rw [← mfderiv_mpullback g V x, ← mfderiv_mpullback g W x]
+  exact (g.preserves x _ _).symm
+
+/-- Chain rule for the metric pairing of pulled-back vector fields along an isometry. -/
+theorem mfderiv_val_mpullback (g : Isometry M) {A B C : Π x : M.Carrier, TangentSpace M.model x}
+    {x : M.Carrier}
+    (hB : MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) (T% B) (g.toDiffeo x))
+    (hC : MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) (T% C) (g.toDiffeo x)) :
+    (show ℝ from mfderiv M.model 𝓘(ℝ, ℝ) (fun y ↦ M.toPseudoRiemannianMetric.val y
+        (mpullback M.model M.model g.toDiffeo B y) (mpullback M.model M.model g.toDiffeo C y)) x
+        (mpullback M.model M.model g.toDiffeo A x))
+      = (show ℝ from mfderiv M.model 𝓘(ℝ, ℝ)
+          (fun z ↦ M.toPseudoRiemannianMetric.val z (B z) (C z)) (g.toDiffeo x)
+          (A (g.toDiffeo x))) := by
+  have hfun : (fun y ↦ M.toPseudoRiemannianMetric.val y
+      (mpullback M.model M.model g.toDiffeo B y) (mpullback M.model M.model g.toDiffeo C y))
+      = (fun z ↦ M.toPseudoRiemannianMetric.val z (B z) (C z)) ∘ g.toDiffeo :=
+    funext fun y ↦ val_mpullback g B C y
+  rw [hfun]
+  exact (congrArg (fun L ↦ L (mpullback M.model M.model g.toDiffeo A x))
+    (mfderiv_comp x (M.toPseudoRiemannianMetric.mdifferentiableAt_val_apply hB hC)
+      (g.toDiffeo.mdifferentiable (by simp) x))).trans
+    (by rw [ContinuousLinearMap.comp_apply, mfderiv_mpullback])
+
+/-- Naturality of the Lie bracket under an isometry, paired with the metric. -/
+theorem val_mlieBracket_mpullback (g : Isometry M)
+    {A B C : Π x : M.Carrier, TangentSpace M.model x} {x : M.Carrier}
+    (hA : MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) (T% A) (g.toDiffeo x))
+    (hC : MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) (T% C) (g.toDiffeo x)) :
+    M.toPseudoRiemannianMetric.val x (mpullback M.model M.model g.toDiffeo B x)
+        (mlieBracket M.model (mpullback M.model M.model g.toDiffeo A)
+          (mpullback M.model M.model g.toDiffeo C) x)
+      = M.toPseudoRiemannianMetric.val (g.toDiffeo x) (B (g.toDiffeo x))
+          (mlieBracket M.model A C (g.toDiffeo x)) := by
+  have : IsManifold M.model (minSmoothness ℝ 2) M.Carrier := IsManifold.of_le (n := ∞) (by simp)
+  rw [← mpullback_mlieBracket hA hC (g.toDiffeo.contMDiff x) (by simp)]
+  exact val_mpullback g B (mlieBracket M.model A C) x
+
+/-- **An isometry preserves the Levi-Civita connection**: `dg(∇_{g^*A} g^*B) = ∇_A B ∘ g`.
+
+Blueprint reference: `lmm:isometry-preserves-levi-civita`. -/
+theorem mfderiv_leviCivita_mpullback (g : Isometry M)
+    {A B : Π x : M.Carrier, TangentSpace M.model x} {x : M.Carrier}
+    (hA : MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) (T% A) (g.toDiffeo x))
+    (hB : MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) (T% B) (g.toDiffeo x)) :
+    mfderiv M.model M.model g.toDiffeo x
+        (M.toPseudoRiemannianMetric.leviCivita (mpullback M.model M.model g.toDiffeo B) x
+          (mpullback M.model M.model g.toDiffeo A x))
+      = M.toPseudoRiemannianMetric.leviCivita B (g.toDiffeo x) (A (g.toDiffeo x)) := by
+  set L := M.toPseudoRiemannianMetric
+  have hpb : ∀ {V : Π x : M.Carrier, TangentSpace M.model x},
+      MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) (T% V) (g.toDiffeo x) →
+      MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel))
+        (T% (mpullback M.model M.model g.toDiffeo V)) x := fun hV ↦
+    hV.mpullback_vectorField (g.toDiffeo.contMDiff x)
+      (g.toDiffeo.isInvertible_mfderiv (by simp)) (by simp)
+  apply L.eq_of_forall_val_apply_eq
+  intro C hC
+  have hL := L.isLeviCivitaFor_leviCivita
+  have h1 := hL.koszul (hpb hA) (hpb hB) (hpb hC)
+  have h2 := hL.koszul hA hB hC
+  rw [mfderiv_val_mpullback g hB hC, mfderiv_val_mpullback g hC hA,
+    mfderiv_val_mpullback g hA hB, val_mlieBracket_mpullback g hA hC,
+    val_mlieBracket_mpullback g hB hA, val_mlieBracket_mpullback g hC hB] at h1
+  have e : L.val (g.toDiffeo x) (mfderiv M.model M.model g.toDiffeo x
+      (L.leviCivita (mpullback M.model M.model g.toDiffeo B) x
+        (mpullback M.model M.model g.toDiffeo A x))) (C (g.toDiffeo x))
+      = L.val x (L.leviCivita (mpullback M.model M.model g.toDiffeo B) x
+        (mpullback M.model M.model g.toDiffeo A x)) (mpullback M.model M.model g.toDiffeo C x) := by
+    rw [← mfderiv_mpullback g C x]
+    exact g.preserves x _ _
+  rw [e]
+  linarith
+
+/-- **Isometries map geodesics to geodesics.** An isometry `φ` preserves the Levi-Civita
+connection (`lmm:isometry-preserves-levi-civita`), so it carries a vector field extending the
+velocity of `μ` to one extending the velocity of `φ ∘ μ`, and the geodesic condition transfers.
+
+Blueprint reference: `lmm:isometry-preserves-geodesics`. -/
+theorem pushforwardPath_isGeodesic (g : Isometry M) (μ : M.SmoothPath)
+    (h : IsGeodesic M μ) : IsGeodesic M (g.pushforwardPath μ) := by
+  intro s hs X hX hXt
+  have hinv (y : M.Carrier) : (mfderiv M.model M.model g.toDiffeo y).IsInvertible :=
+    g.toDiffeo.isInvertible_mfderiv (by simp)
+  have hY : ContMDiff M.model (M.model.prod 𝓘(ℝ, SpacetimeModel)) ∞
+      (T% (mpullback M.model M.model g.toDiffeo X)) :=
+    hX.mpullback_vectorField g.toDiffeo.contMDiff hinv (by simp)
+  have hYt : ∀ᶠ t in 𝓝 s, mpullback M.model M.model g.toDiffeo X (μ.toFun t) = μ.tangent t := by
+    filter_upwards [hXt, mem_interior_iff_mem_nhds.mp hs] with t ht htP
+    rw [mpullback_apply]
+    change X (g.toDiffeo (μ.toFun t)) = _ at ht
+    rw [ht, pushforwardPath_tangent g μ htP, (hinv _).inverse_apply_self]
+  have hXd : MDifferentiableAt M.model (M.model.prod 𝓘(ℝ, SpacetimeModel))
+      (T% X) (g.toDiffeo (μ.toFun s)) :=
+    (hX _).mdifferentiableAt (by simp)
+  change M.toPseudoRiemannianMetric.leviCivita X (g.toDiffeo (μ.toFun s))
+    (X (g.toDiffeo (μ.toFun s))) = 0
+  rw [← mfderiv_leviCivita_mpullback g hXd hXd, h s hs _ hY hYt, map_zero]
+
+end Geodesic
+
 /-- Under future-orientation preservation, an isometry carries a single
 trip segment forward. -/
 theorem segmentPrecedes_pushforward (g : Isometry M) (t : M.TimeOrientation)
@@ -227,7 +347,7 @@ theorem segmentPrecedes_pushforward (g : Isometry M) (t : M.TimeOrientation)
   exact ⟨SmoothCurve.ofPath M (g.pushforwardPath rep), g.pushforwardPath rep, rfl,
     g.pushforwardPath_isTimelike rep htl,
     g.pushforwardPath_isFutureOriented rep t hg hfo,
-    trivial,
+    g.pushforwardPath_isGeodesic rep hgeo,
     g.pushforwardPath_isPastEndpoint rep hpe,
     g.pushforwardPath_isFutureEndpoint rep hfe⟩
 

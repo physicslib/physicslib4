@@ -84,7 +84,7 @@ theorem alexandrovBasis_image_smul (lam : ℝ) (hlam : 0 < lam)
   obtain ⟨p, q, rfl⟩ := hB
   refine ⟨lam • p, lam • q, ?_⟩
   ext y
-  simp only [Set.mem_image, Set.mem_inter_iff]
+  simp only [Set.mem_inter_iff]
   rw [chronologicalFuture_standardMinkowski (p : SpacetimeModel),
     chronologicalPast_standardMinkowski (q : SpacetimeModel),
     chronologicalFuture_standardMinkowski (lam • (p : SpacetimeModel)),
