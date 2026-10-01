@@ -565,6 +565,130 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
     The range of $\eta$ is dense in the completion, \texttt{UniformSpace.Completion.denseRange\_coe}. By \ref{lmm:quasilocal-colimit-union-of-insertions} that range is the image under $\eta$ of the union of the ranges of the colimit insertions, which is the union of the ranges of the $\iota_{\mathbf{B}}$; so the two sets coincide and the density transfers. A dense subset of a dense set being dense is \texttt{Dense.mono} applied to the resulting inclusion of closures.
 \end{proof}
 
+\subsection{The von Neumann Density Theorem}
+
+The results of this subsection are general operator theory on a complex Hilbert space $H$ and have nothing specific to do with the quasilocal setting. They are proved for a unital $*$-algebra homomorphism $\pi : \mathfrak{A} \to \mathcal{B}(H)$ from an arbitrary complex $*$-algebra $\mathfrak{A}$ (no norm on $\mathfrak{A}$ is assumed; only the operators $\pi(a)$ are bounded), and their only consumer is \ref{thrm:quasilocal-strongly-dense}. For a set $S \subseteq \mathcal{B}(H)$ the commutant $S'$ is the set centralizer $\{T : TR = RT \text{ for all } R \in S\}$ (\texttt{Set.centralizer}), and $S'' = (S')'$. The strong operator topology is the topology of pointwise convergence on $H$ (\texttt{PointwiseConvergenceCLM}). The route is Murphy, Lemma 4.1.4: first one vector, then finitely many vectors via a finite amplification. The one-vector lemmas are stated for an arbitrary complex Hilbert space $E$ and a unital $*$-algebra homomorphism $\rho : \mathfrak{A} \to \mathcal{B}(E)$, because they are applied twice: to $\pi$ on $H$, and to the amplification $\pi^\iota$ on $\ell^2(\iota; H)$.
+
+\begin{lemma}[Reducing Subspaces Give Commuting Projections]
+    \label{lmm:reducing-subspace-projection-commutes}
+    \lean{Physicslib4.commute_starProjection_of_invariant}
+    \leanok
+    Let $E$ be a complex Hilbert space, $K \subseteq E$ a closed subspace and $T \in \mathcal{B}(E)$ with $T K \subseteq K$ and $T^* K \subseteq K$. Then the orthogonal projection $P_K$ onto $K$ commutes with $T$: $P_K T = T P_K$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $x = y + z$ with $y = P_K x \in K$ and $z = x - P_K x \in K^\perp$ (\texttt{Submodule.sub\_starProjection\_mem\_orthogonal}). Then $Ty \in K$ by hypothesis, and $Tz \in K^\perp$ because for $k \in K$, $\langle k, Tz \rangle = \langle T^* k, z \rangle = 0$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}, $T^*k \in K$, \texttt{Submodule.mem\_orthogonal}). Hence $P_K T x = P_K(Ty) + P_K(Tz) = Ty + 0 = T P_K x$, using \texttt{Submodule.starProjection\_eq\_self\_iff} for $Ty \in K$ and \texttt{Submodule.starProjection\_apply\_eq\_zero\_iff} for $Tz \in K^\perp$.
+\end{proof}
+
+\begin{lemma}[Cyclic Subspaces Reduce the Representation]
+    \label{lmm:cyclic-subspace-reduces}
+    \lean{Physicslib4.starProjection_cyclic_mem_centralizer}
+    \uses{lmm:reducing-subspace-projection-commutes}
+    \leanok
+    Let $E$ be a complex Hilbert space, $\rho : \mathfrak{A} \to \mathcal{B}(E)$ a $*$-algebra homomorphism and $\xi \in E$. Let $K_\xi = \overline{\rho(\mathfrak{A})\xi}$, the closure of $\{\rho(a)\xi : a \in \mathfrak{A}\}$. Then $K_\xi$ is a closed subspace invariant under every $\rho(a)$ and every $\rho(a)^*$, and consequently its orthogonal projection $P_{K_\xi}$ lies in $\rho(\mathfrak{A})'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:reducing-subspace-projection-commutes}
+    $\rho(\mathfrak{A})\xi$ is a linear subspace since $\rho$ is linear, so $K_\xi$ is the topological closure of a submodule; being closed in the complete space $E$, it is complete and so has an orthogonal projection (\texttt{HasOrthogonalProjection}) --- this is where completeness of $E$ enters. $K_\xi$ is invariant under $\rho(a)$ because $\rho(a)\rho(b)\xi = \rho(ab)\xi$ and $\rho(a)$ is continuous, so it maps the closure into the closure; and $\rho(a)^* = \rho(a^*)$ (\texttt{map\_star}) is again of this form. By \ref{lmm:reducing-subspace-projection-commutes}, $P_{K_\xi}$ commutes with every $\rho(a)$.
+\end{proof}
+
+\begin{lemma}[The Bicommutant on a Single Vector]
+    \label{lmm:bicommutant-single-vector}
+    \lean{Physicslib4.apply_mem_closure_of_mem_bicommutant}
+    \uses{lmm:cyclic-subspace-reduces}
+    \leanok
+    Let $E$ be a complex Hilbert space and $\rho : \mathfrak{A} \to \mathcal{B}(E)$ a \emph{unital} $*$-algebra homomorphism. For $T \in \rho(\mathfrak{A})''$ and $\xi \in E$, $T\xi \in \overline{\rho(\mathfrak{A})\xi}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:cyclic-subspace-reduces}
+    By unitality $\xi = \rho(1)\xi \in K_\xi$, so $P_{K_\xi}\xi = \xi$. By \ref{lmm:cyclic-subspace-reduces}, $P_{K_\xi} \in \rho(\mathfrak{A})'$, so $T$ commutes with it, and $T\xi = T P_{K_\xi}\xi = P_{K_\xi} T\xi \in K_\xi$.
+\end{proof}
+
+\begin{definition}[Finite Amplification]
+    \label{def:finite-amplification}
+    \lean{Physicslib4.diagAmplification, Physicslib4.ampDiag, Physicslib4.toLp2}
+    \leanok
+    For a finite index type $\iota$ let $H^\iota = \ell^2(\iota; H) = \bigoplus_{i \in \iota} H$, Mathlib's \texttt{lp (fun \_ : $\iota$ => H) 2}; at $p = 2$ this is again a complex Hilbert space. For $T \in \mathcal{B}(H)$ the diagonal operator $\mathrm{diag}(T) \in \mathcal{B}(H^\iota)$ acts by $(\mathrm{diag}(T)x)_j = T x_j$ (\texttt{Physicslib4.lpDiag} with the constant family $T$ and bound $\lVert T \rVert$). The \emph{$\iota$-fold amplification} of $\pi$ is $\pi^\iota(a) = \mathrm{diag}(\pi(a))$, the bound being $\lVert \pi(a) \rVert$ itself, so no norm on $\mathfrak{A}$ is needed. Write $\mathrm{ev}_j : H^\iota \to H$ for the $j$-th coordinate map (\texttt{lp.evalCLM}) and $\iota_k : H \to H^\iota$ for the $k$-th inclusion (\texttt{lp.singleContinuousLinearMap}).
+\end{definition}
+
+\begin{lemma}[The Finite Amplification is a Unital $*$-Homomorphism]
+    \label{lmm:finite-amplification-star-hom}
+    \lean{Physicslib4.diagAmplification}
+    \uses{def:finite-amplification}
+    \leanok
+    $\pi^\iota : \mathfrak{A} \to \mathcal{B}(H^\iota)$ is a unital $*$-algebra homomorphism.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:finite-amplification}
+    Each law transfers from $\pi$ through the corresponding law for diagonal operators in \texttt{Physicslib4/Operators/LpDiagonal.lean}: \texttt{lpDiag\_one} with $\pi(1) = 1$, \texttt{lpDiag\_mul} with $\pi(ab) = \pi(a)\pi(b)$, \texttt{lpDiag\_add}, \texttt{lpDiag\_smul}, and \texttt{lpDiag\_star} with $\pi(a^*) = \pi(a)^*$.
+\end{proof}
+
+\begin{lemma}[Block Entries of the Amplified Commutant]
+    \label{lmm:commutant-of-amplification-entries}
+    \lean{Physicslib4.blockEntry_mem_centralizer}
+    \uses{def:finite-amplification}
+    \leanok
+    If $S \in (\pi^\iota(\mathfrak{A}))'$, then each block entry $S_{jk} = \mathrm{ev}_j \circ S \circ \iota_k \in \mathcal{B}(H)$ ($j, k \in \iota$) lies in $\pi(\mathfrak{A})'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:finite-amplification}
+    The diagonal operator intertwines the coordinate maps and inclusions: $\mathrm{ev}_j \circ \pi^\iota(a) = \pi(a) \circ \mathrm{ev}_j$ and $\pi^\iota(a) \circ \iota_k = \iota_k \circ \pi(a)$ (\texttt{lpDiag\_apply\_coe}, \texttt{lp.single\_apply}). Hence $\pi(a) S_{jk} = \mathrm{ev}_j\, \pi^\iota(a) S\, \iota_k = \mathrm{ev}_j\, S\, \pi^\iota(a)\, \iota_k = S_{jk}\pi(a)$.
+\end{proof}
+
+\begin{lemma}[Block Expansion on the Amplified Space]
+    \label{lmm:amplification-block-expansion}
+    \lean{Physicslib4.apply_eq_sum_blockEntry}
+    \uses{def:finite-amplification}
+    \leanok
+    For every $S \in \mathcal{B}(H^\iota)$, $x \in H^\iota$ and $j \in \iota$, $(Sx)_j = \sum_{k \in \iota} S_{jk}\, x_k$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:finite-amplification}
+    By \texttt{lp.hasSum\_single} (with $p = 2 \ne \infty$), $\sum_k \iota_k x_k$ has sum $x$; over the finite type $\iota$ this is the genuine finite sum $x = \sum_k \iota_k x_k$ (\texttt{hasSum\_fintype} and \texttt{HasSum.unique}). Apply the linear maps $S$ and then $\mathrm{ev}_j$ (\texttt{map\_sum}).
+\end{proof}
+
+\begin{lemma}[Diagonal Operators in the Amplified Bicommutant]
+    \label{lmm:diagonal-in-amplified-bicommutant}
+    \lean{Physicslib4.ampDiag_mem_bicommutant}
+    \uses{def:finite-amplification}
+    \leanok
+    If $T \in \pi(\mathfrak{A})''$ then $\mathrm{diag}(T) \in (\pi^\iota(\mathfrak{A}))''$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:commutant-of-amplification-entries, lmm:amplification-block-expansion}
+    Let $S \in (\pi^\iota(\mathfrak{A}))'$ and $x \in H^\iota$; it suffices to compare coordinates (\texttt{lp.ext}). By \ref{lmm:commutant-of-amplification-entries} each $S_{jk} \in \pi(\mathfrak{A})'$, so $T S_{jk} = S_{jk} T$; by \ref{lmm:amplification-block-expansion}, $(\mathrm{diag}(T) S x)_j = T\sum_k S_{jk} x_k = \sum_k S_{jk} T x_k = (S\,\mathrm{diag}(T) x)_j$.
+\end{proof}
+
+\begin{lemma}[The Bicommutant on Finitely Many Vectors]
+    \label{lmm:bicommutant-finite-vectors}
+    \lean{Physicslib4.exists_forall_norm_sub_lt_of_mem_bicommutant}
+    \uses{def:finite-amplification}
+    \leanok
+    Let $\pi$ be unital. For $T \in \pi(\mathfrak{A})''$, a finite set $s \subseteq H$ and $\varepsilon > 0$, there is $a \in \mathfrak{A}$ with $\lVert T x - \pi(a) x \rVert < \varepsilon$ for every $x \in s$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:bicommutant-single-vector, lmm:diagonal-in-amplified-bicommutant, lmm:finite-amplification-star-hom, def:finite-amplification}
+    Take $\iota = s$ (a finite type) and the vector $\xi = (x)_{x \in s} \in H^s$; it lies in $\ell^2$ because every function on a finite index type does (\texttt{memℓp\_gen} with \texttt{Summable.of\_finite}). By \ref{lmm:finite-amplification-star-hom} and \ref{lmm:diagonal-in-amplified-bicommutant}, \ref{lmm:bicommutant-single-vector} applies to $\pi^s$, $\mathrm{diag}(T)$ and $\xi$ on the Hilbert space $H^s$; in $\varepsilon$ form (\texttt{Metric.mem\_closure\_iff}) it gives $a$ with $\lVert \mathrm{diag}(T)\xi - \pi^s(a)\xi \rVert < \varepsilon$. The $x$-coordinate of this difference is $Tx - \pi(a)x$, whose norm is at most that of the whole vector (\texttt{lp.norm\_apply\_le\_norm}, $p \ne 0$).
+\end{proof}
+
+\begin{lemma}[A Neighbourhood Basis for the Strong Operator Topology]
+    \label{lmm:strong-neighbourhood-basis}
+    \lean{Physicslib4.AQFT.HaagKastler.hasBasis_nhds_ofFun}
+    \leanok
+    In the strong operator topology on $\mathcal{B}(H)$ (\texttt{PointwiseConvergenceCLM}, reached through \texttt{UniformConvergenceCLM.ofFun} on finite sets), the neighbourhoods of an operator $T$ have as a basis the sets $\{S : \lVert Sx - Tx \rVert < \varepsilon \text{ for all } x \in s\}$, for $s \subseteq H$ finite and $\varepsilon > 0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    At $0$ this is \texttt{PointwiseConvergenceCLM.hasBasis\_nhds\_zero\_of\_basis} (equivalently \texttt{UniformConvergenceCLM.hasBasis\_nhds\_zero\_of\_basis} for the finite-set family) applied to the ball basis \texttt{Metric.nhds\_basis\_ball} at $0 \in H$. Translate to $T$ with \texttt{map\_add\_left\_nhds\_zero} and \texttt{Filter.HasBasis.map}, using that \texttt{UniformConvergenceCLM.ofFun} is additive, so $(T + S)x - Tx = Sx$.
+\end{proof}
+
 \begin{theorem}[Quasilocal Observables are Strongly Dense in the Bicommutant]
     \label{thrm:quasilocal-strongly-dense}
     \lean{Physicslib4.AQFT.HaagKastler.dense_range_in_bicommutant}
@@ -579,11 +703,14 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
     One refinement of the argument is worth recording, since it is easy to overstate. The approximants furnished by the density theorem are elements of $\pi_\omega(\mathfrak{U})$, but they are not guaranteed to be \emph{self-adjoint}, so the reading ``every self-adjoint element of the bicommutant is a strong limit of self-adjoint quasilocal observables'' is a strictly stronger claim than the one asserted here. That stronger claim is the Kaplansky density theorem, which additionally preserves self-adjointness and norm bounds. Nothing in the tenability argument above needs it --- indistinguishability by expectation values only requires approximants at all --- but it is the result to invoke if the self-adjoint form is ever wanted.
 \end{theorem}
 \begin{proof}
-    \uses{def:quasilocal-observable, def:local-von-neumann}
-    $\pi(\mathfrak{U})$ is a $*$-subalgebra of $\mathcal{B}(H)$ containing the identity, which is exactly the unitality hypothesis, so the claim is Murphy Lemma 4.1.4 applied to it. That lemma is the von Neumann density theorem, and it is \emph{not} available in Mathlib. This node is therefore left as a stated result of the literature that the discussion of Axiom 4 depends on, deliberately not decomposed further and not formalized.
+    \leanok
+    \uses{lmm:strong-neighbourhood-basis, lmm:bicommutant-finite-vectors, def:quasilocal-observable, def:local-von-neumann}
+    Let $T \in \pi(\mathfrak{U})''$. By \texttt{mem\_closure\_iff\_nhds\_basis'} with the basis of \ref{lmm:strong-neighbourhood-basis}, it suffices, for each finite $s \subseteq H$ and $\varepsilon > 0$, to find $a$ with $\lVert \pi(a)x - Tx \rVert < \varepsilon$ for all $x \in s$; this is \ref{lmm:bicommutant-finite-vectors} applied to the unital $*$-homomorphism $\pi$.
 
-    It is worth being exact about what is missing, because an earlier version of this note got it wrong and the error would cost a formalizer real work. The obstruction is \emph{not} the absence of the strong operator topology: Mathlib does have it, as \texttt{PointwiseConvergenceCLM} --- with notation \texttt{\_ \ensuremath{\rightarrow}SL\ensuremath{{}_{\mathrm{pt}}}[\_] \_} --- whose docstring describes the topology of pointwise convergence as the one ``sometimes also called the strong operator topology'', and it has the weak operator topology as \texttt{ContinuousLinearMapWOT}. So the statement of this node \emph{is} phraseable in Mathlib today, and anyone formalizing it should build on \texttt{PointwiseConvergenceCLM} rather than redevelop the topology. What is genuinely absent is the density theorem \emph{itself}, and with it the Kaplansky density theorem: Mathlib has the double commutant property of the bundled von Neumann algebra structure (\texttt{VonNeumannAlgebra.commutant\_commutant}), which says $M'' = M$ for an algebra already known to be a von Neumann algebra and is not a density result, and topological closures of star subalgebras in a normed algebra (\texttt{StarSubalgebra.topologicalClosure}), which is the norm topology and hence the wrong one. Supplying the missing theorem is a development of its own --- the interaction of the strong topology with commutants --- and outside the scope of this axiom subsection.
+    Mathlib has the strong operator topology (\texttt{PointwiseConvergenceCLM}) and the double commutant property of bundled von Neumann algebras (\texttt{VonNeumannAlgebra.commutant\_commutant}, not a density result), but not the von Neumann density theorem itself; it is proved here, in the preceding lemmas of this subsection. The Kaplansky density theorem remains out of scope.
 \end{proof}
+
+\subsection{Lorentz Covariance and the Haag--Kastler Net}
 
 \begin{definition}[Axiom 5: Lorentz Covariance]
     \label{def:lorentz-covariance}

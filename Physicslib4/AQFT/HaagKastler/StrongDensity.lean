@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Mathlib.Topology.Algebra.Module.Spaces.PointwiseConvergenceCLM
 import Physicslib4.AQFT.HaagKastler.LocalVonNeumann
+import Physicslib4.Operators.DensityTheorem
 
 /-!
 # The von Neumann density theorem for a unital `*`-representation
@@ -18,8 +19,8 @@ bicommutant from a quasilocal observable close to it.
 The strong operator topology is Mathlib's topology of pointwise convergence,
 `PointwiseConvergenceCLM` (notation `H →Lₚₜ[ℂ] H`), and the commutant is
 `Set.centralizer`, as in `LocalVonNeumann.lean`. What Mathlib does *not* have is the
-density theorem itself (nor its Kaplansky strengthening), so the statement below is left
-unproved.
+density theorem itself (nor its Kaplansky strengthening); it is proved in
+`Physicslib4/Operators/DensityTheorem.lean` together with this file.
 
 ## Main statements
 
@@ -33,7 +34,28 @@ namespace HaagKastler
 open Topology
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-variable {𝔄 : Type*} [Ring 𝔄] [StarRing 𝔄] [Algebra ℂ 𝔄] [StarModule ℂ 𝔄]
+variable {𝔄 : Type*} [Ring 𝔄] [StarRing 𝔄] [Algebra ℂ 𝔄]
+
+omit [CompleteSpace H] in
+/-- **Basic strong neighbourhoods of an operator.** In the strong operator topology (pointwise
+convergence on finite sets), the neighbourhoods of `T` have as a basis the sets of `S` with
+`‖S x - T x‖ < ε` for all `x` in a finite set.
+
+Blueprint reference: `lmm:strong-neighbourhood-basis`. -/
+theorem hasBasis_nhds_ofFun (T : H →L[ℂ] H) :
+    (𝓝 (UniformConvergenceCLM.ofFun (σ := RingHom.id ℂ) (E := H) (F := H)
+        {s : Set H | s.Finite} T)).HasBasis
+      (fun sε : Set H × ℝ ↦ sε.1.Finite ∧ 0 < sε.2)
+      (fun sε ↦ {S | ∀ x ∈ sε.1, ‖S x - T x‖ < sε.2}) := by
+  have h0 := UniformConvergenceCLM.hasBasis_nhds_zero_of_basis (RingHom.id ℂ) H
+    {s : Set H | s.Finite} ⟨∅, Set.finite_empty⟩
+    (fun s hs t ht ↦ ⟨s ∪ t, hs.union ht, Set.subset_union_left, Set.subset_union_right⟩)
+    (Metric.nhds_basis_ball (x := (0 : H)))
+  rw [← nhds_translation_add_neg]
+  refine (h0.comap _).congr (fun _ ↦ Iff.rfl) fun sε _ ↦ ?_
+  ext S
+  simp only [Set.mem_preimage, Set.mem_ofPred_eq, mem_ball_zero_iff, sub_eq_add_neg]
+  exact Iff.rfl
 
 /--
 **The von Neumann density theorem**, in the form the observable bridge needs: the image of
@@ -51,13 +73,10 @@ it so that the closure is taken in the strong topology.
 This is Murphy's Lemma 4.1.4. It is **not** available in Mathlib: Mathlib has the double
 commutant *property* of a bundled von Neumann algebra (`VonNeumannAlgebra.commutant_commutant`),
 which is not a density result, and norm-topology closures of star subalgebras
-(`StarSubalgebra.topologicalClosure`), which is the wrong topology. Supplying the missing
-theorem is a development of its own and is deliberately left open here.
-
-**Restriction:** the proof is left as `sorry`. The intended form is this statement with a
-proof, i.e. von Neumann's bicommutant theorem in the strong operator topology for a unital
-`*`-subalgebra of `𝓑(H)`; it is waiting on that density theorem, either in Mathlib or as a
-local development. Nothing else in the project depends on it.
+(`StarSubalgebra.topologicalClosure`), which is the wrong topology. It is proved here from
+the finitely-many-vectors approximation `exists_forall_norm_sub_lt_of_mem_bicommutant` of
+`Physicslib4/Operators/DensityTheorem.lean` and the basic strong neighbourhoods
+`hasBasis_nhds_ofFun`.
 
 The self-adjoint strengthening — that every self-adjoint element of the bicommutant is a
 strong limit of self-adjoint elements of the image — is the Kaplansky density theorem and
@@ -71,7 +90,11 @@ theorem dense_range_in_bicommutant (π : 𝔄 →⋆ₐ[ℂ] (H →L[ℂ] H)) :
       Set.centralizer (Set.centralizer (Set.range π)) ⊆
     closure (⇑(UniformConvergenceCLM.ofFun (σ := RingHom.id ℂ) (E := H) (F := H)
         {s : Set H | s.Finite}) '' Set.range π) := by
-  sorry
+  rintro _ ⟨T, hT, rfl⟩
+  rw [mem_closure_iff_nhds_basis' (hasBasis_nhds_ofFun T)]
+  rintro ⟨s, ε⟩ ⟨hs, hε⟩
+  obtain ⟨a, ha⟩ := exists_forall_norm_sub_lt_of_mem_bicommutant π hT hs hε
+  exact ⟨_, fun x hx ↦ norm_sub_rev (T x) (π a x) ▸ ha x hx, π a, ⟨a, rfl⟩, rfl⟩
 
 end HaagKastler
 end AQFT

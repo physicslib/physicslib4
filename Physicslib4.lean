@@ -63,7 +63,9 @@ import Physicslib4.Geometry.PseudoRiemannian.Basic
 import Physicslib4.Geometry.PseudoRiemannian.Flat
 import Physicslib4.Geometry.PseudoRiemannian.LeviCivita
 import Physicslib4.Operators.Conjugation
+import Physicslib4.Operators.DensityTheorem
 import Physicslib4.Operators.LpDiagonal
+import Physicslib4.Operators.ReducingSubspace
 import Physicslib4.Spacetime.AlongPath
 import Physicslib4.Spacetime.Basic
 import Physicslib4.Spacetime.CausalComplement
