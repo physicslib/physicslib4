@@ -667,19 +667,25 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[The Bicommutant on Finitely Many Vectors]
     \label{lmm:bicommutant-finite-vectors}
+    \lean{Physicslib4.exists_forall_norm_sub_lt_of_mem_bicommutant}
     \uses{def:finite-amplification}
+    \leanok
     Let $\pi$ be unital. For $T \in \pi(\mathfrak{A})''$, a finite set $s \subseteq H$ and $\varepsilon > 0$, there is $a \in \mathfrak{A}$ with $\lVert T x - \pi(a) x \rVert < \varepsilon$ for every $x \in s$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:bicommutant-single-vector, lmm:diagonal-in-amplified-bicommutant, lmm:finite-amplification-star-hom, def:finite-amplification}
     Take $\iota = s$ (a finite type) and the vector $\xi = (x)_{x \in s} \in H^s$; it lies in $\ell^2$ because every function on a finite index type does (\texttt{memℓp\_gen} with \texttt{Summable.of\_finite}). By \ref{lmm:finite-amplification-star-hom} and \ref{lmm:diagonal-in-amplified-bicommutant}, \ref{lmm:bicommutant-single-vector} applies to $\pi^s$, $\mathrm{diag}(T)$ and $\xi$ on the Hilbert space $H^s$; in $\varepsilon$ form (\texttt{Metric.mem\_closure\_iff}) it gives $a$ with $\lVert \mathrm{diag}(T)\xi - \pi^s(a)\xi \rVert < \varepsilon$. The $x$-coordinate of this difference is $Tx - \pi(a)x$, whose norm is at most that of the whole vector (\texttt{lp.norm\_apply\_le\_norm}, $p \ne 0$).
 \end{proof}
 
 \begin{lemma}[A Neighbourhood Basis for the Strong Operator Topology]
     \label{lmm:strong-neighbourhood-basis}
+    \lean{Physicslib4.AQFT.HaagKastler.hasBasis_nhds_ofFun}
+    \leanok
     In the strong operator topology on $\mathcal{B}(H)$ (\texttt{PointwiseConvergenceCLM}, reached through \texttt{UniformConvergenceCLM.ofFun} on finite sets), the neighbourhoods of an operator $T$ have as a basis the sets $\{S : \lVert Sx - Tx \rVert < \varepsilon \text{ for all } x \in s\}$, for $s \subseteq H$ finite and $\varepsilon > 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     At $0$ this is \texttt{PointwiseConvergenceCLM.hasBasis\_nhds\_zero\_of\_basis} (equivalently \texttt{UniformConvergenceCLM.hasBasis\_nhds\_zero\_of\_basis} for the finite-set family) applied to the ball basis \texttt{Metric.nhds\_basis\_ball} at $0 \in H$. Translate to $T$ with \texttt{map\_add\_left\_nhds\_zero} and \texttt{Filter.HasBasis.map}, using that \texttt{UniformConvergenceCLM.ofFun} is additive, so $(T + S)x - Tx = Sx$.
 \end{proof}
 
@@ -697,6 +703,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
     One refinement of the argument is worth recording, since it is easy to overstate. The approximants furnished by the density theorem are elements of $\pi_\omega(\mathfrak{U})$, but they are not guaranteed to be \emph{self-adjoint}, so the reading ``every self-adjoint element of the bicommutant is a strong limit of self-adjoint quasilocal observables'' is a strictly stronger claim than the one asserted here. That stronger claim is the Kaplansky density theorem, which additionally preserves self-adjointness and norm bounds. Nothing in the tenability argument above needs it --- indistinguishability by expectation values only requires approximants at all --- but it is the result to invoke if the self-adjoint form is ever wanted.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:strong-neighbourhood-basis, lmm:bicommutant-finite-vectors, def:quasilocal-observable, def:local-von-neumann}
     Let $T \in \pi(\mathfrak{U})''$. By \texttt{mem\_closure\_iff\_nhds\_basis'} with the basis of \ref{lmm:strong-neighbourhood-basis}, it suffices, for each finite $s \subseteq H$ and $\varepsilon > 0$, to find $a$ with $\lVert \pi(a)x - Tx \rVert < \varepsilon$ for all $x \in s$; this is \ref{lmm:bicommutant-finite-vectors} applied to the unital $*$-homomorphism $\pi$.
 

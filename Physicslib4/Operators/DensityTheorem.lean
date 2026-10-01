@@ -213,4 +213,27 @@ theorem ampDiag_mem_bicommutant [Finite ι] (ρ : 𝔄 →⋆ₐ[ℂ] (E →L[�
 
 end Blocks
 
+/-! ### Finitely many vectors at once -/
+
+/-- **Finitely many vectors at once.** For `T ∈ ρ(𝔄)''`, a finite set `s` of vectors and
+`ε > 0`, some `a` has `‖T x - ρ a x‖ < ε` for every `x ∈ s`. (Apply the one-vector case to the
+amplification over `s`, to `diag(T)` and to the family `s ↪ E`.)
+
+Blueprint reference: `lmm:bicommutant-finite-vectors`. -/
+theorem exists_forall_norm_sub_lt_of_mem_bicommutant (ρ : 𝔄 →⋆ₐ[ℂ] (E →L[ℂ] E))
+    {T : E →L[ℂ] E} (hT : T ∈ Set.centralizer (Set.centralizer (Set.range ρ)))
+    {s : Set E} (hs : s.Finite) {ε : ℝ} (hε : 0 < ε) :
+    ∃ a : 𝔄, ∀ x ∈ s, ‖T x - ρ a x‖ < ε := by
+  have := hs.to_subtype
+  let v : lp (fun _ : s ↦ E) 2 := toLp2 fun i ↦ (i : E)
+  have h := apply_mem_closure_of_mem_bicommutant (diagAmplification s ρ)
+    (ampDiag_mem_bicommutant ρ hT) v
+  obtain ⟨_, ⟨a, rfl⟩, hd⟩ := Metric.mem_closure_iff.mp h ε hε
+  refine ⟨a, fun x hx => lt_of_le_of_lt ?_ hd⟩
+  rw [dist_eq_norm]
+  convert lp.norm_apply_le_norm (by norm_num : (2 : ENNReal) ≠ 0)
+    (ampDiag s T v - diagAmplification s ρ a v) ⟨x, hx⟩ using 1
+  rw [lp.coeFn_sub, Pi.sub_apply]
+  rfl
+
 end Physicslib4
