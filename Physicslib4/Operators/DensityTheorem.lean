@@ -12,11 +12,14 @@ import Physicslib4.Operators.LpDiagonal
 
 For a unital `*`-algebra homomorphism `ρ : 𝔄 →⋆ₐ[ℂ] (E →L[ℂ] E)` on a complex Hilbert space `E`,
 every element of the bicommutant `ρ(𝔄)''` is a strong limit of elements of `ρ(𝔄)`. This file
-proves the one-vector case: for `T ∈ ρ(𝔄)''` and `ξ ∈ E`, `T ξ` lies in the closure of
-`ρ(𝔄) ξ`. The commutant is `Set.centralizer`, as in
+proves the ingredients: the one-vector case (for `T ∈ ρ(𝔄)''` and `ξ ∈ E`, `T ξ` lies in the
+closure of `ρ(𝔄) ξ`), the diagonal amplification `ρ^ι` on `ℓ²(ι; E)`, and the fact that
+`diag(T) ∈ (ρ^ι(𝔄))''` for a finite index type `ι`. The commutant is `Set.centralizer`, as in
 `Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean`.
 
-Blueprint reference: `lmm:cyclic-subspace-reduces`, `lmm:bicommutant-single-vector`.
+Blueprint reference: `lmm:cyclic-subspace-reduces`, `lmm:bicommutant-single-vector`,
+`def:finite-amplification`, `lmm:commutant-of-amplification-entries`,
+`lmm:amplification-block-expansion`, `lmm:diagonal-in-amplified-bicommutant`.
 -/
 
 namespace Physicslib4
@@ -132,5 +135,82 @@ omit [InnerProductSpace ℂ E] [CompleteSpace E] in
 @[simp] theorem toLp2_apply (ξ : ι → E) (i : ι) : toLp2 ξ i = ξ i := rfl
 
 end Amplification
+
+/-! ### Block entries and the diagonal of the bicommutant -/
+
+section Blocks
+
+variable {ι : Type*} [DecidableEq ι]
+
+omit [CompleteSpace E] in
+/-- The **block entry** `S_{jk} = (coordinate j) ∘ S ∘ (inclusion k)` of an operator on
+`ℓ²(ι; E)`.
+
+Blueprint reference: `lmm:commutant-of-amplification-entries`. -/
+noncomputable def blockEntry (S : lp (fun _ : ι ↦ E) 2 →L[ℂ] lp (fun _ : ι ↦ E) 2) (j k : ι) :
+    E →L[ℂ] E :=
+  lp.evalCLM ℂ (fun _ : ι ↦ E) 2 j ∘L S ∘L lp.singleContinuousLinearMap ℂ (fun _ : ι ↦ E) 2 k
+
+omit [CompleteSpace E] in
+theorem blockEntry_apply (S : lp (fun _ : ι ↦ E) 2 →L[ℂ] lp (fun _ : ι ↦ E) 2) (j k : ι)
+    (v : E) : blockEntry S j k v = S (lp.single 2 k v) j := rfl
+
+/-- **The block entries of an operator commuting with the amplification commute with `ρ`.**
+
+Blueprint reference: `lmm:commutant-of-amplification-entries`. -/
+theorem blockEntry_mem_centralizer (ρ : 𝔄 →⋆ₐ[ℂ] (E →L[ℂ] E))
+    {S : lp (fun _ : ι ↦ E) 2 →L[ℂ] lp (fun _ : ι ↦ E) 2}
+    (hS : S ∈ Set.centralizer (Set.range (diagAmplification ι ρ))) (j k : ι) :
+    blockEntry S j k ∈ Set.centralizer (Set.range ρ) := by
+  rintro _ ⟨a, rfl⟩
+  have h := Set.mem_centralizer_iff.mp hS _ ⟨a, rfl⟩
+  ext v
+  have hs : ampDiag ι (ρ a) (lp.single 2 k v) = lp.single 2 k (ρ a v) := by
+    ext i
+    rw [ampDiag_apply_coe]
+    rcases eq_or_ne i k with rfl | hik
+    · rw [lp.single_apply_self, lp.single_apply_self]
+    · rw [lp.single_apply_ne _ _ _ hik, lp.single_apply_ne _ _ _ hik, map_zero]
+  calc (ρ a * blockEntry S j k) v = ((diagAmplification ι ρ a * S) (lp.single 2 k v)) j := rfl
+    _ = ((S * diagAmplification ι ρ a) (lp.single 2 k v)) j := by rw [h]
+    _ = (blockEntry S j k * ρ a) v := by
+      change S (ampDiag ι (ρ a) (lp.single 2 k v)) j = _
+      rw [hs]; rfl
+
+omit [CompleteSpace E] in
+/-- **Block expansion.** On a finite index type, `(S x)_j = ∑ₖ S_{jk} (x k)`.
+
+Blueprint reference: `lmm:amplification-block-expansion`. -/
+theorem apply_eq_sum_blockEntry [Fintype ι]
+    (S : lp (fun _ : ι ↦ E) 2 →L[ℂ] lp (fun _ : ι ↦ E) 2) (x : lp (fun _ : ι ↦ E) 2) (j : ι) :
+    S x j = ∑ k, blockEntry S j k (x k) := by
+  have hx : x = ∑ k, lp.single 2 k (x k) :=
+    (lp.hasSum_single (p := 2) (by norm_num) x).unique (hasSum_fintype _)
+  conv_lhs => rw [hx]
+  rw [map_sum, lp.coeFn_sum, Finset.sum_apply]
+  rfl
+
+omit [DecidableEq ι] in
+/-- **The diagonal of a bicommutant element lies in the amplified bicommutant.** If
+`T ∈ ρ(𝔄)''`, then `diag(T, …, T) ∈ (ρ^ι(𝔄))''` for a finite index type `ι`.
+
+Blueprint reference: `lmm:diagonal-in-amplified-bicommutant`. -/
+theorem ampDiag_mem_bicommutant [Finite ι] (ρ : 𝔄 →⋆ₐ[ℂ] (E →L[ℂ] E)) {T : E →L[ℂ] E}
+    (hT : T ∈ Set.centralizer (Set.centralizer (Set.range ρ))) :
+    ampDiag ι T ∈ Set.centralizer (Set.centralizer (Set.range (diagAmplification ι ρ))) := by
+  classical
+  have := Fintype.ofFinite ι
+  rw [Set.mem_centralizer_iff]
+  intro S hS
+  refine lpDiag_ext fun x j => ?_
+  have hc k : blockEntry S j k * T = T * blockEntry S j k :=
+    Set.mem_centralizer_iff.mp hT _ (blockEntry_mem_centralizer ρ hS j k)
+  change S (ampDiag ι T x) j = T (S x j)
+  rw [apply_eq_sum_blockEntry, apply_eq_sum_blockEntry, map_sum]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  rw [ampDiag_apply_coe]
+  exact congrArg (· (x k)) (hc k)
+
+end Blocks
 
 end Physicslib4

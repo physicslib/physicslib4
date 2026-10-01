@@ -628,30 +628,39 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[Block Entries of the Amplified Commutant]
     \label{lmm:commutant-of-amplification-entries}
+    \lean{Physicslib4.blockEntry_mem_centralizer}
     \uses{def:finite-amplification}
+    \leanok
     If $S \in (\pi^\iota(\mathfrak{A}))'$, then each block entry $S_{jk} = \mathrm{ev}_j \circ S \circ \iota_k \in \mathcal{B}(H)$ ($j, k \in \iota$) lies in $\pi(\mathfrak{A})'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:finite-amplification}
     The diagonal operator intertwines the coordinate maps and inclusions: $\mathrm{ev}_j \circ \pi^\iota(a) = \pi(a) \circ \mathrm{ev}_j$ and $\pi^\iota(a) \circ \iota_k = \iota_k \circ \pi(a)$ (\texttt{lpDiag\_apply\_coe}, \texttt{lp.single\_apply}). Hence $\pi(a) S_{jk} = \mathrm{ev}_j\, \pi^\iota(a) S\, \iota_k = \mathrm{ev}_j\, S\, \pi^\iota(a)\, \iota_k = S_{jk}\pi(a)$.
 \end{proof}
 
 \begin{lemma}[Block Expansion on the Amplified Space]
     \label{lmm:amplification-block-expansion}
+    \lean{Physicslib4.apply_eq_sum_blockEntry}
     \uses{def:finite-amplification}
+    \leanok
     For every $S \in \mathcal{B}(H^\iota)$, $x \in H^\iota$ and $j \in \iota$, $(Sx)_j = \sum_{k \in \iota} S_{jk}\, x_k$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:finite-amplification}
     By \texttt{lp.hasSum\_single} (with $p = 2 \ne \infty$), $\sum_k \iota_k x_k$ has sum $x$; over the finite type $\iota$ this is the genuine finite sum $x = \sum_k \iota_k x_k$ (\texttt{hasSum\_fintype} and \texttt{HasSum.unique}). Apply the linear maps $S$ and then $\mathrm{ev}_j$ (\texttt{map\_sum}).
 \end{proof}
 
 \begin{lemma}[Diagonal Operators in the Amplified Bicommutant]
     \label{lmm:diagonal-in-amplified-bicommutant}
+    \lean{Physicslib4.ampDiag_mem_bicommutant}
     \uses{def:finite-amplification}
+    \leanok
     If $T \in \pi(\mathfrak{A})''$ then $\mathrm{diag}(T) \in (\pi^\iota(\mathfrak{A}))''$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-of-amplification-entries, lmm:amplification-block-expansion}
     Let $S \in (\pi^\iota(\mathfrak{A}))'$ and $x \in H^\iota$; it suffices to compare coordinates (\texttt{lp.ext}). By \ref{lmm:commutant-of-amplification-entries} each $S_{jk} \in \pi(\mathfrak{A})'$, so $T S_{jk} = S_{jk} T$; by \ref{lmm:amplification-block-expansion}, $(\mathrm{diag}(T) S x)_j = T\sum_k S_{jk} x_k = \sum_k S_{jk} T x_k = (S\,\mathrm{diag}(T) x)_j$.
 \end{proof}
