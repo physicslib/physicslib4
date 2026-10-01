@@ -1,17 +1,18 @@
-<!-- Check if the current page requires MathJax support -->
+<!-- Load MathJax only on pages that ask for it (front matter `usemathjax: true`). -->
 {% if page.usemathjax %}
-  <!-- MathJax configuration script -->
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      TeX: {
-        equationNumbers: {
-          autoNumber: "AMS"  <!-- Automatically number equations using AMS style -->
-        }
+  <!-- MathJax 3 configuration. kramdown emits inline math as \( … \) and display math as
+       \[ … \], which MathJax 3 recognises by default; AMS equation numbering is kept. -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']],
+        tags: 'ams'
       }
-    });
+    };
   </script>
-  <!-- Load MathJax library asynchronously from the CDN -->
-  <script type="text/javascript" async
-    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  <!-- MathJax 3 from the jsDelivr CDN (the old cdn.mathjax.org has been retired). -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
 {% endif %}
