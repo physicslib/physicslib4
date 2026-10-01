@@ -608,15 +608,20 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{definition}[Finite Amplification]
     \label{def:finite-amplification}
+    \lean{Physicslib4.diagAmplification, Physicslib4.ampDiag, Physicslib4.toLp2}
+    \leanok
     For a finite index type $\iota$ let $H^\iota = \ell^2(\iota; H) = \bigoplus_{i \in \iota} H$, Mathlib's \texttt{lp (fun \_ : $\iota$ => H) 2}; at $p = 2$ this is again a complex Hilbert space. For $T \in \mathcal{B}(H)$ the diagonal operator $\mathrm{diag}(T) \in \mathcal{B}(H^\iota)$ acts by $(\mathrm{diag}(T)x)_j = T x_j$ (\texttt{Physicslib4.lpDiag} with the constant family $T$ and bound $\lVert T \rVert$). The \emph{$\iota$-fold amplification} of $\pi$ is $\pi^\iota(a) = \mathrm{diag}(\pi(a))$, the bound being $\lVert \pi(a) \rVert$ itself, so no norm on $\mathfrak{A}$ is needed. Write $\mathrm{ev}_j : H^\iota \to H$ for the $j$-th coordinate map (\texttt{lp.evalCLM}) and $\iota_k : H \to H^\iota$ for the $k$-th inclusion (\texttt{lp.singleContinuousLinearMap}).
 \end{definition}
 
 \begin{lemma}[The Finite Amplification is a Unital $*$-Homomorphism]
     \label{lmm:finite-amplification-star-hom}
+    \lean{Physicslib4.diagAmplification}
     \uses{def:finite-amplification}
+    \leanok
     $\pi^\iota : \mathfrak{A} \to \mathcal{B}(H^\iota)$ is a unital $*$-algebra homomorphism.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:finite-amplification}
     Each law transfers from $\pi$ through the corresponding law for diagonal operators in \texttt{Physicslib4/Operators/LpDiagonal.lean}: \texttt{lpDiag\_one} with $\pi(1) = 1$, \texttt{lpDiag\_mul} with $\pi(ab) = \pi(a)\pi(b)$, \texttt{lpDiag\_add}, \texttt{lpDiag\_smul}, and \texttt{lpDiag\_star} with $\pi(a^*) = \pi(a)^*$.
 \end{proof}

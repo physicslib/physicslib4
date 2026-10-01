@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 import Physicslib4.Operators.ReducingSubspace
+import Physicslib4.Operators.LpDiagonal
 
 /-!
 # The von Neumann density theorem
@@ -67,5 +68,69 @@ theorem apply_mem_closure_of_mem_bicommutant (ρ : 𝔄 →⋆ₐ[ℂ] (E →L[�
     rw [Submodule.topologicalClosure_coe, hrange, Submodule.span_eq]
   rw [← hK]
   exact hTξ
+
+/-! ### The amplification of a representation
+
+For an index type `ι`, the amplification `ρ^ι` acts on `ℓ²(ι; E)` by the diagonal operator
+`diag(ρ a, ρ a, …)`. Every copy is bounded by `‖ρ a‖`, so no norm on `𝔄` is needed (unlike
+`Physicslib4.GNS.directSum`, which bounds different representations through a C*-norm). Finite
+index types are used for the density theorem. -/
+
+section Amplification
+
+variable (ι : Type*)
+
+omit [CompleteSpace E] in
+/-- The **diagonal operator** `diag(T, T, …)` on `ℓ²(ι; E)`.
+
+Blueprint reference: `def:finite-amplification`. -/
+noncomputable def ampDiag (T : E →L[ℂ] E) : lp (fun _ : ι ↦ E) 2 →L[ℂ] lp (fun _ : ι ↦ E) 2 :=
+  lpDiag (fun _ ↦ T) (norm_nonneg T) (fun _ ↦ le_rfl)
+
+omit [CompleteSpace E] in
+@[simp] theorem ampDiag_apply_coe (T : E →L[ℂ] E) (x : lp (fun _ : ι ↦ E) 2) (i : ι) :
+    (ampDiag ι T x) i = T (x i) := rfl
+
+/-- The **amplification** `ρ^ι` of a unital `*`-representation `ρ` on `ℓ²(ι; E)`:
+`ρ^ι(a) = diag(ρ a, ρ a, …)`.
+
+Blueprint reference: `def:finite-amplification`, `lmm:finite-amplification-star-hom`. -/
+noncomputable def diagAmplification (ρ : 𝔄 →⋆ₐ[ℂ] (E →L[ℂ] E)) :
+    𝔄 →⋆ₐ[ℂ] (lp (fun _ : ι ↦ E) 2 →L[ℂ] lp (fun _ : ι ↦ E) 2) where
+  toFun a := ampDiag ι (ρ a)
+  map_one' := by refine lpDiag_ext fun x i => ?_; simp [ampDiag, map_one]
+  map_mul' a b := by
+    refine lpDiag_ext fun x i => ?_; simp [ampDiag, map_mul, mul_apply_eq_comp]
+  map_zero' := by
+    refine lpDiag_ext fun x i => ?_
+    change ρ 0 (x i) = (0 : lp (fun _ : ι ↦ E) 2) i
+    rw [map_zero]; rfl
+  map_add' a b := by
+    refine lpDiag_ext fun x i => ?_
+    change ρ (a + b) (x i) = ρ a (x i) + ρ b (x i)
+    rw [map_add ρ a b]; rfl
+  commutes' r := by
+    refine lpDiag_ext fun x i => ?_
+    simp [ampDiag, Algebra.algebraMap_eq_smul_one, smul_apply, one_apply_eq_self, lp.coeFn_smul]
+  map_star' a := by
+    simp only [ampDiag]
+    rw [lpDiag_star]
+    refine lpDiag_ext fun x i => ?_
+    change ρ (star a) (x i) = star (ρ a) (x i)
+    rw [map_star ρ a]
+
+@[simp] theorem diagAmplification_apply (ρ : 𝔄 →⋆ₐ[ℂ] (E →L[ℂ] E)) (a : 𝔄) :
+    diagAmplification ι ρ a = ampDiag ι (ρ a) := rfl
+
+variable {ι} [Finite ι]
+
+omit [InnerProductSpace ℂ E] [CompleteSpace E] in
+/-- A finite family of vectors as an element of `ℓ²(ι; E)`. -/
+noncomputable def toLp2 (ξ : ι → E) : lp (fun _ : ι ↦ E) 2 := ⟨ξ, Memℓp.all ξ⟩
+
+omit [InnerProductSpace ℂ E] [CompleteSpace E] in
+@[simp] theorem toLp2_apply (ξ : ι → E) (i : ι) : toLp2 ξ i = ξ i := rfl
+
+end Amplification
 
 end Physicslib4
