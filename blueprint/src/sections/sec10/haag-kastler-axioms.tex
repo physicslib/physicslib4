@@ -571,28 +571,37 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[Reducing Subspaces Give Commuting Projections]
     \label{lmm:reducing-subspace-projection-commutes}
+    \lean{Physicslib4.commute_starProjection_of_invariant}
+    \leanok
     Let $E$ be a complex Hilbert space, $K \subseteq E$ a closed subspace and $T \in \mathcal{B}(E)$ with $T K \subseteq K$ and $T^* K \subseteq K$. Then the orthogonal projection $P_K$ onto $K$ commutes with $T$: $P_K T = T P_K$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Write $x = y + z$ with $y = P_K x \in K$ and $z = x - P_K x \in K^\perp$ (\texttt{Submodule.sub\_starProjection\_mem\_orthogonal}). Then $Ty \in K$ by hypothesis, and $Tz \in K^\perp$ because for $k \in K$, $\langle k, Tz \rangle = \langle T^* k, z \rangle = 0$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}, $T^*k \in K$, \texttt{Submodule.mem\_orthogonal}). Hence $P_K T x = P_K(Ty) + P_K(Tz) = Ty + 0 = T P_K x$, using \texttt{Submodule.starProjection\_eq\_self\_iff} for $Ty \in K$ and \texttt{Submodule.starProjection\_apply\_eq\_zero\_iff} for $Tz \in K^\perp$.
 \end{proof}
 
 \begin{lemma}[Cyclic Subspaces Reduce the Representation]
     \label{lmm:cyclic-subspace-reduces}
+    \lean{Physicslib4.starProjection_cyclic_mem_centralizer}
     \uses{lmm:reducing-subspace-projection-commutes}
+    \leanok
     Let $E$ be a complex Hilbert space, $\rho : \mathfrak{A} \to \mathcal{B}(E)$ a $*$-algebra homomorphism and $\xi \in E$. Let $K_\xi = \overline{\rho(\mathfrak{A})\xi}$, the closure of $\{\rho(a)\xi : a \in \mathfrak{A}\}$. Then $K_\xi$ is a closed subspace invariant under every $\rho(a)$ and every $\rho(a)^*$, and consequently its orthogonal projection $P_{K_\xi}$ lies in $\rho(\mathfrak{A})'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:reducing-subspace-projection-commutes}
     $\rho(\mathfrak{A})\xi$ is a linear subspace since $\rho$ is linear, so $K_\xi$ is the topological closure of a submodule; being closed in the complete space $E$, it is complete and so has an orthogonal projection (\texttt{HasOrthogonalProjection}) --- this is where completeness of $E$ enters. $K_\xi$ is invariant under $\rho(a)$ because $\rho(a)\rho(b)\xi = \rho(ab)\xi$ and $\rho(a)$ is continuous, so it maps the closure into the closure; and $\rho(a)^* = \rho(a^*)$ (\texttt{map\_star}) is again of this form. By \ref{lmm:reducing-subspace-projection-commutes}, $P_{K_\xi}$ commutes with every $\rho(a)$.
 \end{proof}
 
 \begin{lemma}[The Bicommutant on a Single Vector]
     \label{lmm:bicommutant-single-vector}
+    \lean{Physicslib4.apply_mem_closure_of_mem_bicommutant}
     \uses{lmm:cyclic-subspace-reduces}
+    \leanok
     Let $E$ be a complex Hilbert space and $\rho : \mathfrak{A} \to \mathcal{B}(E)$ a \emph{unital} $*$-algebra homomorphism. For $T \in \rho(\mathfrak{A})''$ and $\xi \in E$, $T\xi \in \overline{\rho(\mathfrak{A})\xi}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:cyclic-subspace-reduces}
     By unitality $\xi = \rho(1)\xi \in K_\xi$, so $P_{K_\xi}\xi = \xi$. By \ref{lmm:cyclic-subspace-reduces}, $P_{K_\xi} \in \rho(\mathfrak{A})'$, so $T$ commutes with it, and $T\xi = T P_{K_\xi}\xi = P_{K_\xi} T\xi \in K_\xi$.
 \end{proof}
