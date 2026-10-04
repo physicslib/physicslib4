@@ -433,10 +433,13 @@ A self-adjoint operator admits no symmetric enlargement of its domain: any symme
 
 \begin{lemma}[A Self-Adjoint Operator has no Proper Symmetric Extension]
     \label{lmm:self-adjoint-maximally-symmetric}
+    \lean{Physicslib4.Spectral.Unbounded.eq_of_isSelfAdjoint_of_isSymmetric_of_le}
     \uses{def:hall-9.2, def:hall-9.3, def:hall-9.5}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and let $B$ be a symmetric extension of $A$. Then $\text{Dom}(A) = \text{Dom}(B)$, and hence $A = B$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.1, def:hall-9.2, def:hall-9.3, def:hall-9.5, def:hall-3.1, prpstn:hall-9.4, lmm:extension-reverses-adjoint-domains}
 First, $\text{Dom}(B)$ is dense: $B$ is an extension of $A$, so $\text{Dom}(B) \supset \text{Dom}(A)$ by the definition of extension~(\ref{def:hall-9.3}), and $\text{Dom}(A)$ is dense because $A$, being self-adjoint, is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}. A set containing a dense set is dense. This step is recorded explicitly because in the Lean formalization symmetry of $B$ does not presuppose that $B$ is densely defined, whereas Proposition~\ref{prpstn:hall-9.4}, applied below, needs a dense domain for $B^*$ to be defined.
 
@@ -3206,7 +3209,9 @@ With the spectral theorem in hand, every measurable function of a self-adjoint o
 
 \begin{definition}[Spectral Measure of a Self-Adjoint Operator]
     \label{def:spectral-measure}
+    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure, Physicslib4.Spectral.Unbounded.pmapIntegral_spectralMeasure, Physicslib4.Spectral.Unbounded.eq_spectralMeasure_of_pmapIntegral, Physicslib4.Spectral.Unbounded.domain_eq_integralDomain_spectralMeasure}
     \uses{def:hall-9.5, def:projection-valued-measure, thrm:hall-10.4}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$. The \textit{spectral measure} of $A$ is the unique projection-valued measure $\mu^A$ on the Borel $\sigma$-algebra of $\mathbb{R}$ with
     \begin{align}
         \int_{\mathbb{R}} \lambda \, d\mu^A(\lambda) = A,
@@ -3216,7 +3221,9 @@ With the spectral theorem in hand, every measurable function of a self-adjoint o
 
 \begin{definition}[Functional Calculus for an Unbounded Self-Adjoint Operator]
     \label{def:hall-10.5}
+    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus, Physicslib4.Spectral.Unbounded.functionalCalculus_domain, Physicslib4.Spectral.Unbounded.functionalCalculus_id}
     \uses{def:spectral-measure, def:hall-9.5, thrm:hall-9.17, thrm:hall-10.4, prpstn:hall-10.1, prpstn:hall-10.2, prpstn:coincidence-with-the-bounded-integral, def:projection-valued-measure, lmm:integral-ignores-null-sets, def:bounded-operator-resolvent-and-spectrum}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and let $\mu^A$ be its spectral measure~(\ref{def:spectral-measure}), the unique projection-valued measure on the Borel $\sigma$-algebra of $\mathbb{R}$ supplied by Theorem~\ref{thrm:hall-10.4}. For any measurable function $f : \mathbb{R} \to \mathbb{C}$, the \textit{functional calculus} defines a (possibly unbounded) operator $f(A)$ by
     \begin{align}
         f(A) \equiv \int_{\mathbb{R}} f(\lambda) \, d\mu^A(\lambda),
@@ -3234,10 +3241,13 @@ The second remark is the case used in Stone's Theorem, and we record it as a lem
 
 \begin{lemma}[Functional Calculus of a Bounded Function]
     \label{lmm:functional-calculus-bounded}
+    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_of_bddMeasurable}
     \uses{def:hall-10.5, def:spectral-measure, thrm:operator-valued-integration}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and let $f : \mathbb{R} \to \mathbb{C}$ be bounded and measurable. Then $W_f = \mathbf{H}$, and $f(A)$ coincides with the bounded integral $\int_{\mathbb{R}} f \, d\mu^A \in \mathcal{B}(\mathbf{H})$ of Section~\ref{sctn:spectral-theorems}~(\ref{thrm:operator-valued-integration}). In particular $f(A)$ is a bounded operator defined on all of $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.5, def:spectral-measure, prpstn:coincidence-with-the-bounded-integral}
 By Definition~\ref{def:hall-10.5}, $f(A)$ is the operator $\int_{\mathbb{R}} f \, d\mu^A$ of Proposition~\ref{prpstn:hall-10.1} for the projection-valued measure $\mu^A$ of Definition~\ref{def:spectral-measure}, with domain $W_f$. Proposition~\ref{prpstn:coincidence-with-the-bounded-integral}, applied to $\mu^A$ and the bounded function $f$, gives both claims.
 \end{proof}

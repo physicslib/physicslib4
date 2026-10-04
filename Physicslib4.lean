@@ -100,6 +100,7 @@ import Physicslib4.Spectral.Unbounded.AbstractCalculus
 import Physicslib4.Spectral.Unbounded.Basic
 import Physicslib4.Spectral.Unbounded.Cayley
 import Physicslib4.Spectral.Unbounded.DirectSum
+import Physicslib4.Spectral.Unbounded.FunctionalCalculus
 import Physicslib4.Spectral.Unbounded.Integral
 import Physicslib4.Spectral.Unbounded.Normal
 import Physicslib4.Spectral.Unbounded.Spectrum

@@ -406,6 +406,21 @@ theorem adjoint_le_adjoint_of_le {C₁ C₂ : H →ₗ.[ℂ] H} (hC₂ : HasDens
   exact congrArg _ (Subtype.ext hxy)
 
 /--
+A self-adjoint operator has no proper symmetric extension: if `B` is symmetric and extends
+the self-adjoint `A`, then `A = B`.
+
+`B` need not be assumed densely defined: its domain contains the dense domain of `A`.
+
+Blueprint reference: `lmm:self-adjoint-maximally-symmetric`.
+-/
+theorem eq_of_isSelfAdjoint_of_isSymmetric_of_le {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+    (hB : IsSymmetric B) (hAB : A ≤ B) : A = B := by
+  have hBd : HasDenseDomain B := Dense.mono (SetLike.coe_subset_coe.mpr hAB.1) hA.dense_domain
+  have hadj := adjoint_le_adjoint_of_le hA.dense_domain hAB
+  rw [LinearPMap.isSelfAdjoint_def.mp hA] at hadj
+  exact le_antisymm hAB (((isSymmetric_iff_le_adjoint hBd).mp hB).trans hadj)
+
+/--
 Every self-adjoint extension of an essentially self-adjoint operator `T` is `T^cl`.
 
 Blueprint reference: `prpstn:hall-9.11`.
