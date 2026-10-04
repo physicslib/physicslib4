@@ -3,7 +3,7 @@ title: "§10.1 GNS Construction (pp. 29–38)"
 usemathjax: true
 ---
 
-[Home](./) · **§10.1 GNS** · [§10.2 Spectral](sec10-2-spectral.html) · [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.4 Spacetime](sec10-4-spacetime.html) · [§10.5 Minkowski](sec10-5-haag-kastler.html) · [§10.6 Curved](sec10-6-curved.html) · [§10.7 Covariance](sec10-7-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
+[Home](./) · **§10.1 GNS** · [§10.2 Spectral](sec10-2-spectral.html) · [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.4 Stone](sec10-4-stone.html) · [§10.5 Spacetime](sec10-5-spacetime.html) · [§10.6 Minkowski](sec10-6-haag-kastler.html) · [§10.7 Curved](sec10-7-curved.html) · [§10.8 Covariance](sec10-8-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
 
 [§10.2 Spectral](sec10-2-spectral.html) →
 
@@ -32,6 +32,6 @@ Every entry links to its node in the web blueprint and names the principal Lean 
 - [**Lemma 18**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lmm2) — $$\mathcal{N}$$ is a closed linear subspace · `Physicslib4.GNS.lmm2`
 
 
-[Home](./) · **§10.1 GNS** · [§10.2 Spectral](sec10-2-spectral.html) · [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.4 Spacetime](sec10-4-spacetime.html) · [§10.5 Minkowski](sec10-5-haag-kastler.html) · [§10.6 Curved](sec10-6-curved.html) · [§10.7 Covariance](sec10-7-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
+[Home](./) · **§10.1 GNS** · [§10.2 Spectral](sec10-2-spectral.html) · [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.4 Stone](sec10-4-stone.html) · [§10.5 Spacetime](sec10-5-spacetime.html) · [§10.6 Minkowski](sec10-6-haag-kastler.html) · [§10.7 Curved](sec10-7-curved.html) · [§10.8 Covariance](sec10-8-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
 
 [§10.2 Spectral](sec10-2-spectral.html) →

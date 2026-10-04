@@ -12,7 +12,7 @@ import Mathlib.Order.Defs.Unbundled
 /-!
 # Causality on a spacetime
 
-This file formalises the causal-relations vocabulary of section 10.4 of the
+This file formalises the causal-relations vocabulary of section 10.5 of the
 AQFT-in-Lean blueprint: trips, causal trips, the chronological precedence
 relation `≪`, the causal precedence relation `≺`, and their associated
 chronological/causal future/past sets.

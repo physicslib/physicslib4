@@ -3,7 +3,7 @@ title: "§10.2 Spectral Theorems (pp. 38–155)"
 usemathjax: true
 ---
 
-[Home](./) · [§10.1 GNS](sec10-1-gns.html) · **§10.2 Spectral** · [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.4 Spacetime](sec10-4-spacetime.html) · [§10.5 Minkowski](sec10-5-haag-kastler.html) · [§10.6 Curved](sec10-6-curved.html) · [§10.7 Covariance](sec10-7-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
+[Home](./) · [§10.1 GNS](sec10-1-gns.html) · **§10.2 Spectral** · [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.4 Stone](sec10-4-stone.html) · [§10.5 Spacetime](sec10-5-spacetime.html) · [§10.6 Minkowski](sec10-6-haag-kastler.html) · [§10.7 Curved](sec10-7-curved.html) · [§10.8 Covariance](sec10-8-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
 
 ← [§10.1 GNS](sec10-1-gns.html) · [§10.3 Unbounded](sec10-3-unbounded.html) →
 
@@ -218,6 +218,6 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 
-[Home](./) · [§10.1 GNS](sec10-1-gns.html) · **§10.2 Spectral** · [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.4 Spacetime](sec10-4-spacetime.html) · [§10.5 Minkowski](sec10-5-haag-kastler.html) · [§10.6 Curved](sec10-6-curved.html) · [§10.7 Covariance](sec10-7-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
+[Home](./) · [§10.1 GNS](sec10-1-gns.html) · **§10.2 Spectral** · [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.4 Stone](sec10-4-stone.html) · [§10.5 Spacetime](sec10-5-spacetime.html) · [§10.6 Minkowski](sec10-6-haag-kastler.html) · [§10.7 Curved](sec10-7-curved.html) · [§10.8 Covariance](sec10-8-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
 
 ← [§10.1 GNS](sec10-1-gns.html) · [§10.3 Unbounded](sec10-3-unbounded.html) →
