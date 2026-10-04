@@ -12,7 +12,9 @@ We begin with the objects the theorem is about.
 
 \begin{definition}[One-Parameter Unitary Group]
     \label{def:hall-10.11}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup, Physicslib4.Spectral.Stone.IsStronglyContinuous}
     \uses{def:bounded-operator-notation, def:unitary-operator, def:identity-operator, def:adjoint-bounded, def:induced-norm, lmm:unitary-is-normal}
+    \leanok
     A \textit{one-parameter unitary group} on $\mathbf{H}$ is a family $U(t)$, $t \in \mathbb{R}$, of unitary operators on $\mathbf{H}$ such that
     \begin{align}
         U(0) &= \mathbf{1}, \\
@@ -29,10 +31,13 @@ We begin with the objects the theorem is about.
 
 \begin{lemma}[Strong Continuity is Strong Continuity at $0$]
     \label{lmm:strongly-continuous-iff-at-zero}
+    \lean{Physicslib4.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero}
     \uses{def:hall-10.11}
+    \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$. Then $U(\cdot)$ is strongly continuous if and only if $\lim_{s \to 0} \left\| U(s)\psi - \psi \right\| = 0$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11, def:unitary-operator}
 The forward implication is the case $t = 0$ of the definition, since $U(0) = \mathbf{1}$. Conversely, for any $t$ and $s$, by the group law and because $U(s)$ is unitary and hence isometric by Definition~\ref{def:unitary-operator},
 \begin{align}
@@ -43,20 +48,25 @@ and the right-hand side tends to $0$ as $s \to t$, since $t - s \to 0$, by conti
 
 \begin{lemma}[The Adjoint of $U(t)$ is $U(-t)$]
     \label{lmm:unitary-group-inner-adjoint}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.adjoint_eq, Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.inner_apply}
     \uses{def:hall-10.11, def:adjoint-bounded}
+    \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$. Then $U(t)^* = U(-t)$ for every $t \in \mathbb{R}$; equivalently,
     \begin{align}
         \left< \phi, U(t)\psi \right> = \left< U(-t)\phi, \psi \right> \qquad \text{for all } \phi, \psi \in \mathbf{H}.
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11, def:adjoint-bounded, def:unitary-operator, lmm:unitary-is-normal}
 The group law forces $U(t)^{-1} = U(-t)$, since $U(t)U(-t) = U(0) = \mathbf{1} = U(-t)U(t)$. By Lemma~\ref{lmm:unitary-is-normal} a unitary operator satisfies $U(t)^*U(t) = \mathbf{1}$, so $U(t)^* = U(t)^*\left( U(t)U(t)^{-1} \right) = \left( U(t)^*U(t) \right)U(t)^{-1} = U(t)^{-1} = U(-t)$. The inner-product form is the definition of the adjoint~(\ref{def:adjoint-bounded}).
 \end{proof}
 
 \begin{definition}[Infinitesimal Generator]
     \label{def:hall-10.13}
+    \lean{Physicslib4.Spectral.Stone.generator, Physicslib4.Spectral.Stone.generatorDomain, Physicslib4.Spectral.Stone.generatorQuotient}
     \uses{def:hall-10.11, def:hall-3.1, def:unitary-operator, def:induced-norm}
+    \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$. The \textit{infinitesimal generator} of $U(\cdot)$ is the operator $A$ given by
     \begin{align}
         A\psi = \lim\limits_{t \rightarrow 0,\ t \ne 0} \frac{1}{i} \frac{U(t)\psi - \psi}{t},
@@ -68,7 +78,9 @@ The group law forces $U(t)^{-1} = U(-t)$, since $U(t)U(-t) = U(0) = \mathbf{1} =
 
 \begin{lemma}[Characterization of the Generator]
     \label{lmm:generator-spec}
+    \lean{Physicslib4.Spectral.Stone.exists_generator_eq_iff}
     \uses{def:hall-10.13}
+    \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, and let $\psi, \chi \in \mathbf{H}$. Then $\psi \in \text{Dom}(A)$ and $A\psi = \chi$ if and only if
     \begin{align}
         \frac{1}{i} \frac{U(t)\psi - \psi}{t} \longrightarrow \chi \qquad \text{as } t \rightarrow 0,\ t \ne 0,
@@ -76,6 +88,7 @@ The group law forces $U(t)^{-1} = U(-t)$, since $U(t)U(-t) = U(0) = \mathbf{1} =
     in the norm topology on $\mathbf{H}$. In particular $\psi \in \text{Dom}(A)$ exactly when this punctured limit exists, and then the limit is $A\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.13}
 This is Definition~\ref{def:hall-10.13} unfolded, together with uniqueness of limits: $\mathbf{H}$ is Hausdorff and the punctured filter at $0$ in $\mathbb{R}$ is non-trivial, $0$ not being an isolated point, so a limit along it, when it exists, is unique.
 \end{proof}
@@ -84,7 +97,9 @@ The generator of any such group satisfies the symmetry identity. We record this 
 
 \begin{lemma}[The Generator Satisfies the Symmetry Identity]
     \label{lmm:generator-symmetry-identity}
+    \lean{Physicslib4.Spectral.Stone.isSymmetric_generator}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.2, def:hall-3.1}
+    \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $B$. Then
     \begin{align}
         \left< \phi, B\psi \right> = \left< B\phi, \psi \right> \qquad \text{for all } \phi, \psi \in \text{Dom}(B).
@@ -92,6 +107,7 @@ The generator of any such group satisfies the symmetry identity. We record this 
     In particular, if $\text{Dom}(B)$ is dense in $\mathbf{H}$, then $B$ is symmetric. In the Lean formalization, where symmetry of an operator is the identity above and does not presuppose a dense domain, the identity is itself the statement that $B$ is symmetric.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.2, def:hall-3.1, lmm:unitary-group-inner-adjoint, lmm:generator-spec, def:inner-product, def:induced-norm, prpstn:hall-a.43}
 For fixed $\phi, \psi \in \mathbf{H}$, both maps $\chi \mapsto \left< \phi, \chi \right>$ and $\chi \mapsto \left< \chi, \psi \right>$ are Lipschitz, by \textbf{Cauchy–Schwarz}~(\ref{prpstn:hall-a.43}):
 \begin{align}
@@ -121,6 +137,7 @@ The first is the Bochner integral: the extension of the Lebesgue integral to fun
     \label{thrm:bochner-integral}
     \lean{ContinuousLinearMap.integral_comp_comm, Continuous.integrable_of_hasCompactSupport}
     \uses{def:bounded-operator-notation, def:induced-norm}
+    \leanok
     Let $(X,\Omega,\nu)$ be a measure space and $V$ a Banach space. A strongly measurable function $g : X \rightarrow V$ — one that is an almost-everywhere limit of simple functions — with $\int_X \left\| g \right\| \, d\nu < \infty$ is said to be \textit{integrable}, and such a $g$ has a well-defined integral $\int_X g \, d\nu \in V$ with the following properties.
     \begin{enumerate}
         \item \textit{(Commutation with bounded linear maps.)} If $W$ is a Banach space, $T : V \rightarrow W$ is bounded and linear, and $g : X \rightarrow V$ is integrable, then $T \int_X g \, d\nu = \int_X T g \, d\nu$. In particular this applies to $T \in \mathcal{B}(\mathbf{H})$.
@@ -128,15 +145,22 @@ The first is the Bochner integral: the extension of the Lebesgue integral to fun
     \end{enumerate}
     In Mathlib the integrable functions are those satisfying \texttt{MeasureTheory.Integrable}, defined as \texttt{MeasureTheory.AEStronglyMeasurable} — strong measurability up to a null set — together with finiteness of $\int_X \left\| g \right\| \, d\nu$, and the integral is \texttt{MeasureTheory.integral}. Point 1 is \texttt{ContinuousLinearMap.integral\_comp\_comm}, and point 2 is \texttt{Continuous.integrable\_of\_hasCompactSupport}.
 \end{theorem}
+\begin{proof}
+\leanok
+\end{proof}
 
 The second supplies the mollifiers used in the same proof.
 
 \begin{lemma}[Smooth Approximate Identity]
     \label{lmm:smooth-approximate-identity}
     \lean{ContDiffBump.normed, ContDiffBump.contDiff_normed, ContDiffBump.nonneg_normed, ContDiffBump.integral_normed, ContDiffBump.tsupport_normed_eq}
+    \leanok
     For each $n \ge 1$ there is a function $f_n : \mathbb{R} \rightarrow \mathbb{R}$ that is smooth, non-negative, supported in $[-1/n, 1/n]$, and satisfies $\int_{-\infty}^{\infty} f_n(\tau) \, d\tau = 1$.
     In Mathlib such functions are supplied by the normalized bump function \texttt{ContDiffBump.normed} with respect to Lebesgue measure, centred at $0$ with inner radius $1/(2n)$ and outer radius $1/n$: it is smooth by \texttt{ContDiffBump.contDiff\_normed}, non-negative by \texttt{ContDiffBump.nonneg\_normed}, has integral $1$ by \texttt{ContDiffBump.integral\_normed}, and has support in the closed ball of radius $1/n$ by \texttt{ContDiffBump.tsupport\_normed\_eq}, which is compact. These $f_n$ are bump functions whose outer radius $1/n$ tends to $0$, which is the form in which Lemma~\ref{lmm:convolution-facts} takes them.
 \end{lemma}
+\begin{proof}
+\leanok
+\end{proof}
 
 The third collects elementary facts about differentiation of Hilbert-space-valued and vector-valued functions of a real variable.
 
@@ -144,21 +168,28 @@ The third collects elementary facts about differentiation of Hilbert-space-value
     \label{prpstn:calculus-facts}
     \lean{HasDerivAt.inner, is_const_of_deriv_eq_zero}
     \uses{def:inner-product}
+    \leanok
     \begin{enumerate}
         \item \textit{(Product rule for the inner product.)} Let $t \in \mathbb{R}$ and let $v, w : \mathbb{R} \rightarrow \mathbf{H}$ be differentiable at $t$ in the norm topology, with derivatives $v'(t), w'(t)$. Then $t \mapsto \left< v(t), w(t) \right>$ is differentiable at $t$ with derivative $\left< v'(t), w(t) \right> + \left< v(t), w'(t) \right>$.
         \item \textit{(Vanishing derivative.)} Let $V$ be a normed space and let $g : \mathbb{R} \rightarrow V$ be differentiable at every point, with $g'(t) = 0$ for all $t \in \mathbb{R}$. Then $g$ is constant. The differentiability hypothesis is stated explicitly because in Mathlib the derivative of a function at a point where it is not differentiable is defined to be $0$ (\texttt{deriv\_zero\_of\_not\_differentiableAt}), so the vanishing of the derivative does not by itself imply differentiability.
     \end{enumerate}
     In Mathlib, point 1 is \texttt{HasDerivAt.inner}, whose conclusion $\left< f(x), g' \right> + \left< f', g(x) \right>$ is the formula above with the summands exchanged; and point 2 is \texttt{is\_const\_of\_deriv\_eq\_zero}, which states that a differentiable function with $\text{deriv}\, f\, x = 0$ for all $x$ satisfies $f(x) = f(y)$ for all $x, y$, for any normed codomain.
 \end{proposition}
+\begin{proof}
+\leanok
+\end{proof}
 
 The equation $y' = cy$ follows from point 2 directly.
 
 \begin{lemma}[The Equation $y' = cy$]
     \label{lmm:linear-ode-scalar}
+    \lean{Physicslib4.Spectral.Stone.eq_mul_exp_of_hasDerivAt}
     \uses{prpstn:calculus-facts}
+    \leanok
     Let $c \in \mathbb{C}$. A differentiable function $y : \mathbb{R} \rightarrow \mathbb{C}$ satisfying $y'(t) = cy(t)$ for all $t$ is given by $y(t) = y(0)e^{ct}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:calculus-facts}
 The function $z(t) \equiv y(t)e^{-ct}$ is differentiable everywhere, as a product of differentiable functions, with derivative $y'(t)e^{-ct} - cy(t)e^{-ct} = 0$. By point 2 of Proposition~\ref{prpstn:calculus-facts}, with $V = \mathbb{C}$, $z$ is constant, equal to its value $z(0) = y(0)$; multiplying by $e^{ct}$ gives $y(t) = y(0)e^{ct}$.
 \end{proof}
@@ -173,6 +204,7 @@ a Bochner integral~(\ref{thrm:bochner-integral}) with respect to Lebesgue measur
     \label{lmm:convolution-facts}
     \lean{HasCompactSupport.hasDerivAt_convolution_left, ContDiffBump.convolution_tendsto_right_of_continuous}
     \uses{thrm:bochner-integral, lmm:smooth-approximate-identity}
+    \leanok
     Let $g : \mathbb{R} \rightarrow \mathbf{H}$ be continuous.
     \begin{enumerate}
         \item \textit{(Differentiation.)} If $f : \mathbb{R} \rightarrow \mathbb{R}$ is continuously differentiable with compact support, then $f \star g$ is differentiable at every $x_0 \in \mathbb{R}$, with derivative $(f' \star g)(x_0)$.
@@ -180,6 +212,9 @@ a Bochner integral~(\ref{thrm:bochner-integral}) with respect to Lebesgue measur
     \end{enumerate}
     In Mathlib, point 1 is \texttt{HasCompactSupport.hasDerivAt\_convolution\_left}, whose hypothesis that $g$ be locally integrable holds for continuous $g$ by \texttt{Continuous.locallyIntegrable}, and whose measure-theoretic side conditions \texttt{IsAddLeftInvariant}, \texttt{IsNegInvariant} and \texttt{SFinite} hold for Lebesgue measure \texttt{volume} on $\mathbb{R}$, which is invariant under translation and negation and $\sigma$-finite (in Mathlib these are found by instance search); the convolution is taken with $L = \texttt{ContinuousLinearMap.lsmul}\ \mathbb{R}\ \mathbb{R}$, so $\mathbf{H}$ is regarded as a real normed space; and point 2 is \texttt{ContDiffBump.convolution\_tendsto\_right\_of\_continuous}, applied to the bump functions of Lemma~\ref{lmm:smooth-approximate-identity}, whose outer radii $1/n$ tend to $0$.
 \end{lemma}
+\begin{proof}
+\leanok
+\end{proof}
 
 \subsection{From a Self-Adjoint Operator to a Unitary Group}
 One direction of the correspondence follows from the spectral theorem: every self-adjoint operator generates a strongly continuous one-parameter unitary group, and is recovered as its generator. This is the easier direction, and the proof of Stone's Theorem will use all three of its parts. Throughout this subsection $A$ is a self-adjoint operator on $\mathbf{H}$, $\mu^A$ is its spectral measure~(\ref{def:spectral-measure}) and $\mu^A_\psi$ the associated scalar measure, which is finite with total mass $\left\| \psi \right\|^2$ by Lemma~\ref{lmm:associated-measure-total-mass}; and $f_t(\lambda) \equiv e^{it\lambda}$ for $t \in \mathbb{R}$. Since $\lvert f_t(\lambda) \rvert = 1$ for every real $\lambda$, each $f_t$ is bounded, and it is measurable, being continuous.
@@ -337,10 +372,13 @@ Before proving Stone's Theorem we establish two facts about an arbitrary strongl
 
 \begin{lemma}[Differentiating an Orbit]
     \label{lmm:orbit-hasDerivAt}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit}
     \uses{def:hall-10.11, def:hall-10.13}
+    \leanok
     Let $U(\cdot)$ be a one-parameter unitary group with infinitesimal generator $A$, and let $\psi \in \text{Dom}(A)$. Then for every $t \in \mathbb{R}$ the curve $s \mapsto U(s)\psi$ is differentiable at $t$ in the norm topology on $\mathbf{H}$, with derivative $iU(t)A\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11, lmm:generator-spec, def:bounded-operator-notation}
 By the group law~(\ref{def:hall-10.11}), $U(t+h) = U(t)U(h)$, so for $h \ne 0$
 \begin{align}
@@ -351,10 +389,13 @@ By Lemma~\ref{lmm:generator-spec}, $\left( U(h)\psi - \psi \right)/h \to iA\psi$
 
 \begin{lemma}[The Group Commutes with its Generator]
     \label{lmm:generator-commutes}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.generator_apply_comm}
     \uses{def:hall-10.11, def:hall-10.13}
+    \leanok
     Let $U(\cdot)$ be a one-parameter unitary group with infinitesimal generator $A$, and let $\psi \in \text{Dom}(A)$. Then for every $t \in \mathbb{R}$, $U(t)\psi \in \text{Dom}(A)$ and $AU(t)\psi = U(t)A\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11, lmm:generator-spec, def:bounded-operator-notation}
 By the group law~(\ref{def:hall-10.11}), $U(h)U(t) = U(h+t) = U(t)U(h)$, so for $h \ne 0$
 \begin{align}
@@ -365,7 +406,9 @@ By Lemma~\ref{lmm:generator-spec} the bracket tends to $A\psi$ as $h \to 0$, $h 
 
 \begin{lemma}[The Group Preserves the Generator's Domain]
     \label{lmm:hall-10.17}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator}
     \uses{def:hall-10.11, def:hall-10.13, def:unitary-operator, def:bounded-operator-notation}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group and let $A$ be its infinitesimal generator. If $\psi \in \text{Dom}(A)$, then for all $t \in \mathbb{R}$ the vector $U(t)\psi$ belongs to $\text{Dom}(A)$ and
     \begin{align}
         \lim\limits_{h \rightarrow 0} \frac{U(t+h)\psi - U(t)\psi}{h} = iU(t)A\psi = iAU(t)\psi.
@@ -373,6 +416,7 @@ By Lemma~\ref{lmm:generator-spec} the bracket tends to $A\psi$ as $h \to 0$, $h 
     In particular the curve $t \mapsto U(t)\psi$ is differentiable in the norm topology on $\mathbf{H}$, with derivative $iAU(t)\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:orbit-hasDerivAt, lmm:generator-commutes}
 Fix $\psi \in \text{Dom}(A)$ and $t \in \mathbb{R}$. By Lemma~\ref{lmm:orbit-hasDerivAt} the limit exists and equals $iU(t)A\psi$, which is the first equality. By Lemma~\ref{lmm:generator-commutes}, $U(t)\psi \in \text{Dom}(A)$ and $U(t)A\psi = AU(t)\psi$, which gives the second equality.
 \end{proof}
