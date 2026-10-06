@@ -521,7 +521,9 @@ We can now prove the theorem. It is the converse of Proposition~\ref{prpstn:hall
 
 \begin{lemma}[An Ordinary Differential Equation along Orbits]
     \label{lmm:orbit-inner-ode}
+    \lean{Physicslib4.Spectral.Stone.hasDerivAt_inner_orbit}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.1, lmm:hall-10.18}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, densely defined by Lemma~\ref{lmm:hall-10.18}, so that its adjoint $A^*$ is defined~(\ref{def:hall-9.1}). Let $\varepsilon \in \{1, -1\}$, let $\psi \in \text{Dom}(A^*)$ with $A^*\psi = \varepsilon i\psi$, let $\phi \in \text{Dom}(A)$, and set
     \begin{align}
         y(t) \equiv \left< U(t)\phi, \psi \right>.
@@ -529,6 +531,7 @@ We can now prove the theorem. It is the converse of Proposition~\ref{prpstn:hall
     Then $y : \mathbb{R} \rightarrow \mathbb{C}$ is differentiable, with $y'(t) = \varepsilon y(t)$ for all $t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:hall-10.17, prpstn:calculus-facts, lmm:characterizing-adjoint-domain-membership, def:inner-product}
 By Lemma~\ref{lmm:hall-10.17}, $U(t)\phi \in \text{Dom}(A)$ for every $t$ and $t \mapsto U(t)\phi$ is differentiable with derivative $iAU(t)\phi$. Hence by part 1 of Proposition~\ref{prpstn:calculus-facts}, applied with the constant second argument $\psi$, $y$ is differentiable. The defining property of the adjoint~(\ref{lmm:characterizing-adjoint-domain-membership}) gives $\left< \psi, A\chi \right> = \left< A^*\psi, \chi \right>$ for $\chi \in \text{Dom}(A)$, and hence, on taking complex conjugates and applying conjugate symmetry~(\ref{def:inner-product}), $\left< A\chi, \psi \right> = \left< \chi, A^*\psi \right>$; applied with $\chi = U(t)\phi$,
 \begin{align}
@@ -539,29 +542,38 @@ the fourth equality because the inner product is conjugate-linear in its first a
 
 \begin{lemma}[Bounded Solutions of $y' = \pm y$ Vanish]
     \label{lmm:bounded-exp-solution-zero}
+    \lean{Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_bounded}
+    \leanok
     Let $\varepsilon \in \{1, -1\}$ and let $y : \mathbb{R} \rightarrow \mathbb{C}$ be differentiable and bounded, with $y'(t) = \varepsilon y(t)$ for all $t$. Then $y(0) = 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:linear-ode-scalar}
 By Lemma~\ref{lmm:linear-ode-scalar} with $c = \varepsilon$, $y(t) = y(0)e^{\varepsilon t}$, so $\lvert y(t) \rvert = \lvert y(0) \rvert e^{\varepsilon t}$. As $t \to \varepsilon\infty$ — that is, $t \to \infty$ if $\varepsilon = 1$ and $t \to -\infty$ if $\varepsilon = -1$ — we have $e^{\varepsilon t} \to \infty$; since $y$ is bounded, $y(0) = 0$.
 \end{proof}
 
 \begin{lemma}[The Deficiency Subspaces of the Generator are Trivial]
     \label{lmm:generator-ker-adjoint-trivial}
+    \lean{Physicslib4.Spectral.Stone.ker_adjoint_generator_subSmul_eq_bot}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.1, def:kernel-of-an-unbounded-operator, def:identity-operator, lmm:hall-10.18}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$. Then $\text{Ker}(A^* - i\mathbf{1}) = \{0\}$ and $\text{Ker}(A^* + i\mathbf{1}) = \{0\}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:orbit-inner-ode, lmm:bounded-exp-solution-zero, lmm:hall-10.18, crllr:trivial-complement-characterizes-density, prpstn:hall-a.43, def:unitary-operator}
 Let $\varepsilon \in \{1, -1\}$ and suppose $\psi \in \text{Ker}(A^* - \varepsilon i\mathbf{1})$, that is, $\psi \in \text{Dom}(A^*)$ with $A^*\psi = \varepsilon i\psi$. Fix $\phi \in \text{Dom}(A)$ and let $y(t) = \left< U(t)\phi, \psi \right>$. By \textbf{Cauchy–Schwarz}~(\ref{prpstn:hall-a.43}) and because each $U(t)$ is unitary, hence isometric~(\ref{def:unitary-operator}), $\lvert y(t) \rvert \le \left\| \phi \right\| \left\| \psi \right\|$, so $y$ is bounded. By Lemma~\ref{lmm:orbit-inner-ode}, $y' = \varepsilon y$, so Lemma~\ref{lmm:bounded-exp-solution-zero} gives $\left< \phi, \psi \right> = y(0) = 0$. This holds for every $\phi \in \text{Dom}(A)$, which is dense by Lemma~\ref{lmm:hall-10.18}; so $\psi \in \left( \text{Dom}(A) \right)^\perp = \{0\}$ by Corollary~\ref{crllr:trivial-complement-characterizes-density}.
 \end{proof}
 
 \begin{lemma}[The Generator is Essentially Self-Adjoint]
     \label{lmm:generator-essentially-self-adjoint}
+    \lean{Physicslib4.Spectral.Stone.isEssentiallySelfAdjoint_generator}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.2, def:hall-9.6, def:hall-9.7}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$. Then $A$ is densely defined, symmetric and essentially self-adjoint; in particular $A$ is closable and its closure $A^{\text{cl}}$ is self-adjoint.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:hall-10.18, lmm:generator-symmetry-identity, thrm:hall-9.21, prpstn:hall-9.12, prpstn:hall-9.13, lmm:adjoint-of-scalar-multiple-of-identity, crllr:trivial-complement-characterizes-density, lmm:generator-ker-adjoint-trivial, def:hall-3.1}
 Density is Lemma~\ref{lmm:hall-10.18}, so $A$ is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}; and since $\text{Dom}(A)$ is dense, Lemma~\ref{lmm:generator-symmetry-identity} shows that $A$ is symmetric~(\ref{def:hall-9.2}).
 
@@ -574,13 +586,16 @@ and symmetrically $\left( \text{Range}(A + i\mathbf{1}) \right)^\perp = \text{Ke
 
 \begin{lemma}[Differentiating the Difference of the Orbits]
     \label{lmm:orbit-difference-hasDerivAt}
+    \lean{Physicslib4.Spectral.Stone.hasDerivAt_orbit_sub_expUnitary}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.6, def:exp-unitary-group, lmm:generator-essentially-self-adjoint}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$; by Lemma~\ref{lmm:generator-essentially-self-adjoint} the closure $A^{\text{cl}}$ is self-adjoint, and we let $V(t) \equiv e^{itA^{\text{cl}}}$ as in Definition~\ref{def:exp-unitary-group}. Let $\psi \in \text{Dom}(A)$ and $w(t) \equiv U(t)\psi - V(t)\psi$. Then for every $t \in \mathbb{R}$, $w(t) \in \text{Dom}(A^{\text{cl}})$, and $w$ is differentiable at $t$ in the norm topology on $\mathbf{H}$ with
     \begin{align}
         w'(t) = iA^{\text{cl}}w(t).
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-10.14, lmm:hall-10.17, prpstn:closure-linearity-and-sequential-description}
 By Proposition~\ref{prpstn:hall-10.14}, $V(\cdot)$ is a strongly continuous one-parameter unitary group whose infinitesimal generator is $A^{\text{cl}}$. Since $A^{\text{cl}}$ extends $A$ — by Part 3 of Proposition~\ref{prpstn:closure-linearity-and-sequential-description} — we have $\psi \in \text{Dom}(A^{\text{cl}})$, so Lemma~\ref{lmm:hall-10.17} applies to $U(\cdot)$ with generator $A$ and to $V(\cdot)$ with generator $A^{\text{cl}}$. It gives that $U(t)\psi \in \text{Dom}(A) \subset \text{Dom}(A^{\text{cl}})$ and $V(t)\psi \in \text{Dom}(A^{\text{cl}})$, so $w(t) \in \text{Dom}(A^{\text{cl}})$, and, $A^{\text{cl}}$ agreeing with $A$ on $\text{Dom}(A)$ and being linear by Part 1 of Proposition~\ref{prpstn:closure-linearity-and-sequential-description},
 \begin{align}
@@ -590,10 +605,13 @@ By Proposition~\ref{prpstn:hall-10.14}, $V(\cdot)$ is a strongly continuous one-
 
 \begin{lemma}[A Solution of $w' = iCw$ with $C$ Symmetric Preserves the Norm]
     \label{lmm:norm-const-of-symmetric-derivative}
+    \lean{Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_isSymmetric}
     \uses{def:hall-9.2}
+    \leanok
     Let $C$ be a symmetric operator on $\mathbf{H}$, in the sense that $\left< C\chi, \chi' \right> = \left< \chi, C\chi' \right>$ for all $\chi, \chi' \in \text{Dom}(C)$~(\ref{def:hall-9.2}). Let $w : \mathbb{R} \rightarrow \mathbf{H}$ be differentiable, with $w(t) \in \text{Dom}(C)$ and $w'(t) = iCw(t)$ for every $t$, and $w(0) = 0$. Then $w(t) = 0$ for every $t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:calculus-facts, def:inner-product}
 By part 1 of Proposition~\ref{prpstn:calculus-facts}, the complex-valued function $t \mapsto \left< w(t), w(t) \right>$ is differentiable with derivative $\left< w'(t), w(t) \right> + \left< w(t), w'(t) \right> = 2\,\text{Re}\left< w(t), w'(t) \right>$. Composing with the bounded real-linear map $\text{Re} : \mathbb{C} \rightarrow \mathbb{R}$ (in Mathlib, \texttt{Complex.reCLM}), the real-valued function $\left\| w(t) \right\|^2 = \text{Re}\left< w(t), w(t) \right>$ is differentiable with derivative $2\,\text{Re}\left< w(t), w'(t) \right>$. Now
 \begin{align}
@@ -604,23 +622,29 @@ because $\left< w, Cw \right>$ is real: by symmetry and conjugate symmetry of th
 
 \begin{lemma}[The Orbits Agree on the Generator's Domain]
     \label{lmm:orbits-agree-on-domain}
+    \lean{Physicslib4.Spectral.Stone.orbit_eq_expUnitary_closure}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.6, def:exp-unitary-group, lmm:generator-essentially-self-adjoint}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$; by Lemma~\ref{lmm:generator-essentially-self-adjoint} the closure $A^{\text{cl}}$ is self-adjoint, and we let $V(t) \equiv e^{itA^{\text{cl}}}$ as in Definition~\ref{def:exp-unitary-group}. Then
     \begin{align}
         U(t)\psi = V(t)\psi \qquad \text{for all } t \in \mathbb{R} \text{ and all } \psi \in \text{Dom}(A).
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:orbit-difference-hasDerivAt, lmm:norm-const-of-symmetric-derivative, def:hall-9.5, prpstn:hall-9.4, lmm:exp-group-law}
 Fix $\psi \in \text{Dom}(A)$ and set $w(t) \equiv U(t)\psi - V(t)\psi$. By Lemma~\ref{lmm:orbit-difference-hasDerivAt}, $w$ is differentiable with $w(t) \in \text{Dom}(A^{\text{cl}})$ and $w'(t) = iA^{\text{cl}}w(t)$. The operator $A^{\text{cl}}$ is self-adjoint, hence symmetric — by the definition of self-adjointness~(\ref{def:hall-9.5}), $(A^{\text{cl}})^* = A^{\text{cl}}$ is an extension of $A^{\text{cl}}$, which is symmetry by Proposition~\ref{prpstn:hall-9.4}. And $w(0) = U(0)\psi - V(0)\psi = \psi - \psi = 0$, using Lemma~\ref{lmm:exp-group-law} for $V(0) = \mathbf{1}$. So Lemma~\ref{lmm:norm-const-of-symmetric-derivative}, with $C = A^{\text{cl}}$, gives $w(t) = 0$ for every $t$.
 \end{proof}
 
 \begin{lemma}[Bounded Operators Agreeing on a Dense Subspace are Equal]
     \label{lmm:agree-on-dense-subspace}
+    \lean{Physicslib4.Spectral.Stone.eq_of_eqOn_dense}
     \uses{def:bounded-operator-notation}
+    \leanok
     Let $S, T \in \mathcal{B}(\mathbf{H})$ and let $D \subset \mathbf{H}$ be a dense subspace with $S\psi = T\psi$ for all $\psi \in D$. Then $S = T$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:bounded-operator-notation, def:induced-norm}
 Given $\chi \in \mathbf{H}$, choose $\psi_n \in D$ with $\psi_n \to \chi$; then
 \begin{align}
@@ -631,7 +655,9 @@ using $S\psi_n = T\psi_n$ in the first step and the operator-norm bound of Defin
 
 \begin{theorem}[Stone's Theorem]
     \label{thrm:hall-10.15}
+    \lean{Physicslib4.Spectral.Stone.stone}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.5, def:exp-unitary-group, def:unitary-operator}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$. Then the infinitesimal generator $A$ of $U(\cdot)$ is densely defined and self-adjoint, and
     \begin{align}
         U(t) = e^{itA} \qquad \text{for all } t \in \mathbb{R}.
@@ -639,6 +665,7 @@ using $S\psi_n = T\psi_n$ in the first step and the operator-norm bound of Defin
     Moreover $A$ is the only self-adjoint operator with this property: if $B$ is self-adjoint and $U(t) = e^{itB}$ for all $t$, then $B = A$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.13, def:hall-9.5, def:exp-unitary-group, prpstn:hall-10.14, lmm:hall-10.18, lmm:generator-essentially-self-adjoint, lmm:orbits-agree-on-domain, lmm:agree-on-dense-subspace}
 Let $A$ be the infinitesimal generator of $U(\cdot)$.
 
