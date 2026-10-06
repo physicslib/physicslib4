@@ -448,7 +448,9 @@ The density of the generator's domain is proved by smoothing: averaging the orbi
 
 \begin{lemma}[Averages of an Orbit are Convolutions]
     \label{lmm:averaging-translate}
+    \lean{Physicslib4.Spectral.Stone.average_eq_convolution, Physicslib4.Spectral.Stone.average}
     \uses{def:hall-10.11, thrm:bochner-integral, lmm:convolution-facts}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$, let $\psi \in \mathbf{H}$, and let $f : \mathbb{R} \rightarrow \mathbb{R}$ be continuous with compact support. Write $g_\psi(x) \equiv U(-x)\psi$, a continuous function $\mathbb{R} \rightarrow \mathbf{H}$ by strong continuity of $U(\cdot)$, and define the \textit{average}
     \begin{align}
         B_f\psi \equiv \int_{-\infty}^{\infty} f(\tau)U(\tau)\psi \, d\tau.
@@ -460,6 +462,7 @@ The density of the generator's domain is proved by smoothing: averaging the orbi
     in particular $B_f\psi = (f \star g_\psi)(0)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11, thrm:bochner-integral, def:bounded-operator-notation}
 The map $\tau \mapsto f(\tau)U(\tau)\psi$ is continuous — by strong continuity of $U(\cdot)$~(\ref{def:hall-10.11}) and continuity of $f$ — and compactly supported, hence Bochner integrable by point 2 of Theorem~\ref{thrm:bochner-integral}. By point 1, applied to the bounded operator $U(t)$, and the group law $U(t)U(\tau) = U(t+\tau)$,
 \begin{align}
@@ -470,10 +473,13 @@ The case $t = 0$ uses $U(0) = \mathbf{1}$.
 
 \begin{lemma}[Averages Lie in the Generator's Domain]
     \label{lmm:averaging-in-generator-domain}
+    \lean{Physicslib4.Spectral.Stone.average_mem_generator_domain}
     \uses{def:hall-10.11, def:hall-10.13, lmm:averaging-translate}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, let $\psi \in \mathbf{H}$, and let $f : \mathbb{R} \rightarrow \mathbb{R}$ be continuously differentiable with compact support. Then $B_f\psi \in \text{Dom}(A)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:averaging-translate, lmm:convolution-facts, lmm:generator-spec}
 Write $F \equiv f \star g_\psi$. By point 1 of Lemma~\ref{lmm:convolution-facts}, $F$ is differentiable at $0$, with derivative $F'(0) = (f' \star g_\psi)(0)$; composing with $t \mapsto -t$, the quotient $\left( F(-t) - F(0) \right)/t$ tends to $-F'(0)$ as $t \to 0$, $t \ne 0$. By Lemma~\ref{lmm:averaging-translate}, $F(-t) = U(t)B_f\psi$ and $F(0) = B_f\psi$, so
 \begin{align}
@@ -484,20 +490,26 @@ By Lemma~\ref{lmm:generator-spec}, $B_f\psi \in \text{Dom}(A)$.
 
 \begin{lemma}[Averages Approximate the Vector]
     \label{lmm:averaging-approximates}
+    \lean{Physicslib4.Spectral.Stone.tendsto_average_bump}
     \uses{def:hall-10.11, lmm:averaging-translate, lmm:smooth-approximate-identity}
+    \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$, let $\psi \in \mathbf{H}$, and let $\{f_n\}$ be the smooth approximate identity of Lemma~\ref{lmm:smooth-approximate-identity}. Then $B_{f_n}\psi \to \psi$ as $n \to \infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:averaging-translate, lmm:convolution-facts, lmm:smooth-approximate-identity, def:hall-10.11}
 Each $f_n$ is continuous with compact support, so $B_{f_n}\psi = (f_n \star g_\psi)(0)$ by Lemma~\ref{lmm:averaging-translate}. Since $g_\psi$ is continuous, point 2 of Lemma~\ref{lmm:convolution-facts} gives $(f_n \star g_\psi)(0) \to g_\psi(0) = U(0)\psi = \psi$.
 \end{proof}
 
 \begin{lemma}[The Generator is Densely Defined]
     \label{lmm:hall-10.18}
+    \lean{Physicslib4.Spectral.Stone.hasDenseDomain_generator}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-3.1, def:unitary-operator}
+    \leanok
     For any strongly continuous one-parameter unitary group $U(\cdot)$ on $\mathbf{H}$, the infinitesimal generator $A$ is densely defined; that is, $\text{Dom}(A)$ is dense in $\mathbf{H}$. In particular $A$ is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.13, def:hall-3.1, lmm:smooth-approximate-identity, lmm:averaging-in-generator-domain, lmm:averaging-approximates}
 Fix $\psi \in \mathbf{H}$ and let $\{f_n\}$ be the smooth approximate identity of Lemma~\ref{lmm:smooth-approximate-identity}. Each $f_n$ is smooth with compact support, so $B_{f_n}\psi \in \text{Dom}(A)$ by Lemma~\ref{lmm:averaging-in-generator-domain}; and $B_{f_n}\psi \to \psi$ by Lemma~\ref{lmm:averaging-approximates}.
 
