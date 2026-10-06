@@ -221,10 +221,13 @@ One direction of the correspondence follows from the spectral theorem: every sel
 
 \begin{lemma}[The Bounded Integral of $e^{it\lambda}$ is Unitary]
     \label{lmm:exp-unitary}
+    \lean{Physicslib4.Spectral.Stone.integral_expFun_mem_unitary}
     \uses{def:hall-9.5, def:spectral-measure, thrm:operator-valued-integration, def:unitary-operator}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and $t \in \mathbb{R}$. Then the bounded integral $\int_{\mathbb{R}} f_t \, d\mu^A \in \mathcal{B}(\mathbf{H})$, where $f_t(\lambda) = e^{it\lambda}$, is unitary.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:spectral-measure, thrm:operator-valued-integration, prpstn:integral-multiplicative, prpstn:integral-conjugation, def:projection-valued-measure, def:unitary-operator, def:identity-operator, def:adjoint-bounded}
 Write $V \equiv \int_{\mathbb{R}} f_t \, d\mu^A$. The integral against a projection-valued measure is multiplicative and intertwines complex conjugation with the adjoint on bounded measurable functions: by Proposition~\ref{prpstn:integral-multiplicative} and Proposition~\ref{prpstn:integral-conjugation}, $\int fg \, d\mu^A = \left( \int f \, d\mu^A \right)\left( \int g \, d\mu^A \right)$ and $\int \overline{f} \, d\mu^A = \left( \int f \, d\mu^A \right)^*$ for bounded measurable $f,g$. Since $\overline{f_t}f_t = f_t\overline{f_t} = 1$ pointwise and the constant function $1$ integrates to $\mathbf{1}$ — because $\mu^A(\mathbb{R}) = \mathbf{1}$ by the definition of a projection-valued measure~(\ref{def:projection-valued-measure}) — we obtain
 \begin{align}
@@ -235,7 +238,9 @@ From this $V$ is unitary in the sense of Definition~\ref{def:unitary-operator}: 
 
 \begin{definition}[The Unitary Group $e^{itA}$]
     \label{def:exp-unitary-group}
+    \lean{Physicslib4.Spectral.Stone.expFun, Physicslib4.Spectral.Stone.expUnitary, Physicslib4.Spectral.Stone.functionalCalculus_expFun}
     \uses{def:hall-9.5, def:hall-10.5, def:spectral-measure, lmm:functional-calculus-bounded, lmm:exp-unitary}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$. For each $t \in \mathbb{R}$ let
     \begin{align}
         e^{itA} \equiv f_t(A) = \int_{\mathbb{R}} e^{it\lambda} \, d\mu^A(\lambda),
@@ -245,20 +250,26 @@ From this $V$ is unitary in the sense of Definition~\ref{def:unitary-operator}: 
 
 \begin{lemma}[The Group Law for $e^{itA}$]
     \label{lmm:exp-group-law}
+    \lean{Physicslib4.Spectral.Stone.isOneParameterUnitaryGroup_expUnitary}
     \uses{def:exp-unitary-group, def:hall-10.11}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$. Then $e^{i0A} = \mathbf{1}$ and $e^{i(s+t)A} = e^{isA}e^{itA}$ for all $s, t \in \mathbb{R}$; so $t \mapsto e^{itA}$ is a one-parameter unitary group.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:exp-unitary-group, prpstn:integral-multiplicative, def:projection-valued-measure, def:identity-operator}
 The constant function $f_0 = 1$ gives $e^{i0A} = \mu^A(\mathbb{R}) = \mathbf{1}$, by the definition of a projection-valued measure~(\ref{def:projection-valued-measure}). And $f_{s+t} = f_sf_t$ pointwise, so multiplicativity of the bounded integral, Proposition~\ref{prpstn:integral-multiplicative}, gives $e^{i(s+t)A} = e^{isA}e^{itA}$. Each $e^{itA}$ is unitary by Definition~\ref{def:exp-unitary-group}.
 \end{proof}
 
 \begin{lemma}[$e^{itA}$ is Strongly Continuous]
     \label{lmm:exp-strongly-continuous}
+    \lean{Physicslib4.Spectral.Stone.isStronglyContinuous_expUnitary}
     \uses{def:exp-unitary-group, def:hall-10.11}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$. Then the one-parameter unitary group $t \mapsto e^{itA}$ is strongly continuous.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:exp-unitary-group, lmm:exp-group-law, thrm:operator-valued-integration, lmm:norm-identity-bounded-integral, lmm:associated-measure-total-mass, thrm:dominated-convergence-theorem}
 Write $U(t) = e^{itA}$, and fix $\psi \in \mathbf{H}$ and $t \in \mathbb{R}$. The map $f \mapsto \int_{\mathbb{R}} f \, d\mu^A$ is linear on bounded measurable functions by Theorem~\ref{thrm:operator-valued-integration}, so $U(t) - U(s) = \int_{\mathbb{R}} (f_t - f_s) \, d\mu^A$; since $f_t - f_s$ is bounded and measurable, Lemma~\ref{lmm:norm-identity-bounded-integral} gives
 \begin{align}
@@ -271,13 +282,16 @@ The derivative of $e^{itA}$ at $t = 0$ involves the unbounded function $\iota(\l
 
 \begin{lemma}[Subtracting from a Bounded Function]
     \label{lmm:functional-calculus-sub-bounded}
+    \lean{Physicslib4.Spectral.Stone.functionalCalculus_sub_of_bddMeasurable}
     \uses{def:hall-9.5, def:hall-10.5, lmm:functional-calculus-bounded}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$, let $f : \mathbb{R} \to \mathbb{C}$ be measurable, and let $g : \mathbb{R} \to \mathbb{C}$ be bounded and measurable. Then $W_{g - f} = W_f$, and
     \begin{align}
         (g - f)(A)\psi = g(A)\psi - f(A)\psi \qquad \text{for all } \psi \in W_f.
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.5, lmm:functional-calculus-bounded, prpstn:hall-10.1, prpstn:hall-10.2, lmm:associated-measure-total-mass, def:hall-quadratic-form-on-a-subspace}
 Write $h \equiv g - f$, and let $M$ bound $\lvert g \rvert$.
 
@@ -296,7 +310,9 @@ By the uniqueness in Part 3 of Proposition~\ref{prpstn:hall-10.2}, applied to $h
 
 \begin{lemma}[Norm Identity for the Difference Quotient]
     \label{lmm:exp-quotient-norm-identity}
+    \lean{Physicslib4.Spectral.Stone.norm_sq_generatorQuotient_expUnitary_sub}
     \uses{def:exp-unitary-group, def:spectral-measure}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and $U(t) = e^{itA}$. For $t \ne 0$ write
     \begin{align}
         g_t(\lambda) \equiv \frac{1}{i}\frac{e^{it\lambda} - 1}{t}.
@@ -307,6 +323,7 @@ By the uniqueness in Part 3 of Proposition~\ref{prpstn:hall-10.2}, applied to $h
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:exp-unitary-group, def:spectral-measure, thrm:hall-10.4, thrm:operator-valued-integration, def:projection-valued-measure, lmm:functional-calculus-bounded, lmm:functional-calculus-sub-bounded, prpstn:hall-10.2}
 The function $g_t$ is measurable, being continuous, and bounded, with $\lvert g_t(\lambda) \rvert \le 2/\lvert t \rvert$ since $\lvert e^{it\lambda} \rvert = 1$. The map $f \mapsto \int_{\mathbb{R}} f \, d\mu^A$ is linear on bounded measurable functions by Theorem~\ref{thrm:operator-valued-integration}, and the constant function $1$ gives $\mathbf{1}$, so by Lemma~\ref{lmm:functional-calculus-bounded}
 \begin{align}
@@ -321,7 +338,9 @@ and Part 3 of Proposition~\ref{prpstn:hall-10.2}, applied to the measurable func
 
 \begin{lemma}[The Derivative of $e^{itA}$ at $0$]
     \label{lmm:exp-derivative-at-zero}
+    \lean{Physicslib4.Spectral.Stone.tendsto_generatorQuotient_expUnitary}
     \uses{def:exp-unitary-group}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and $U(t) = e^{itA}$. Then for all $\psi \in \text{Dom}(A)$,
     \begin{align}
         \frac{1}{i} \frac{U(t)\psi - \psi}{t} \longrightarrow A\psi \qquad \text{as } t \rightarrow 0,\ t \ne 0,
@@ -329,13 +348,16 @@ and Part 3 of Proposition~\ref{prpstn:hall-10.2}, applied to the measurable func
     in the norm topology on $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:exp-quotient-norm-identity, def:spectral-measure, thrm:dominated-convergence-theorem}
 By Lemma~\ref{lmm:exp-quotient-norm-identity} it suffices to show that $\int_{\mathbb{R}} \lvert g_t(\lambda) - \lambda \rvert^2 \, d\mu^A_\psi(\lambda) \to 0$ along the punctured filter $t \to 0$, $t \ne 0$, which is countably generated; we apply the \textbf{Dominated Convergence Theorem}~(\ref{thrm:dominated-convergence-theorem}) in its filter form (in Mathlib, \texttt{MeasureTheory.tendsto\_integral\_filter\_of\_dominated\_convergence}). The integrands are measurable, being continuous. They are dominated by $4\lambda^2$: the bound $\lvert e^{ix} - 1 \rvert \le \lvert x \rvert$ for real $x$ (in Mathlib, \texttt{Real.norm\_exp\_I\_mul\_ofReal\_sub\_one\_le}), applied with $x = t\lambda$, gives $\lvert g_t(\lambda) \rvert \le \lvert \lambda \rvert$, so $\lvert g_t(\lambda) - \lambda \rvert \le 2\lvert \lambda \rvert$; and $4\lambda^2$ is $\mu^A_\psi$-integrable because $\psi \in \text{Dom}(A) = W_\iota$ by Definition~\ref{def:spectral-measure}. Finally, the integrands tend to $0$ pointwise, since $s \mapsto e^{is\lambda}$ has derivative $i\lambda$ at $s = 0$, so that $g_t(\lambda) \to \lambda$.
 \end{proof}
 
 \begin{proposition}[Exponentiating a Self-Adjoint Operator]
     \label{prpstn:hall-10.14}
+    \lean{Physicslib4.Spectral.Stone.generator_expUnitary}
     \uses{def:hall-9.5, def:hall-10.11, def:hall-10.13, def:exp-unitary-group, def:unitary-operator}
+    \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and, for each $t \in \mathbb{R}$, define
     \begin{align}
         U(t) \equiv e^{itA},
@@ -357,6 +379,7 @@ By Lemma~\ref{lmm:exp-quotient-norm-identity} it suffices to show that $\int_{\m
     Points 2 and 3 together say exactly that the infinitesimal generator of $U(\cdot)$, in the sense of Definition~\ref{def:hall-10.13}, is $A$ itself, with equality of domains.
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{def:exp-unitary-group, lmm:exp-group-law, lmm:exp-strongly-continuous, lmm:exp-derivative-at-zero, lmm:generator-spec, lmm:generator-symmetry-identity, lmm:self-adjoint-maximally-symmetric, def:hall-9.3}
 \textbf{Point 1.} Each $U(t)$ is unitary by Definition~\ref{def:exp-unitary-group}; the group law is Lemma~\ref{lmm:exp-group-law}; and strong continuity is Lemma~\ref{lmm:exp-strongly-continuous}.
 
