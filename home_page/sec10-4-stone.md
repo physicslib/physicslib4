@@ -28,71 +28,71 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 <details markdown="1">
 <summary>§10.4.1 One-Parameter Unitary Groups (p. 235) — 12 items</summary>
 
-- [**Definition 289**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.11) — One-Parameter Unitary Group · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup` (+1 more)
-- [**Lemma 290**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:strongly-continuous-iff-at-zero) — Strong Continuity is Strong Continuity at $$0$$ · `Physicslib4.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero`
-- [**Lemma 291**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-group-inner-adjoint) — The Adjoint of $$U(t)$$ is $$U(-t)$$ · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.adjoint_eq` (+1 more)
-- [**Definition 292**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.13) — Infinitesimal Generator · `Physicslib4.Spectral.Stone.generator` (+2 more)
-- [**Lemma 293**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-spec) — Characterization of the Generator · `Physicslib4.Spectral.Stone.exists_generator_eq_iff`
-- [**Lemma 294**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-symmetry-identity) — The Generator Satisfies the Symmetry Identity · `Physicslib4.Spectral.Stone.isSymmetric_generator`
-- [**Lemma 295**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-const) — The Generator of the Trivial Group · `Physicslib4.Spectral.Stone.generator_refl`
-- [**Lemma 296**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:conj-unitary-group) — Conjugating a Unitary Group · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.conj` (+1 more)
-- [**Lemma 297**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-conj) — Conjugating a Group Conjugates its Generator · `Physicslib4.Spectral.Stone.mem_generator_conj_domain_iff` (+1 more)
-- [**Lemma 298**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-unitary-group) — $$\exp (itP)$$ is a One-Parameter Unitary Group · `Physicslib4.Spectral.Stone.exists_isOneParameterUnitaryGroup_exp`
-- [**Lemma 299**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-hasDerivAt) — The Derivative of $$\exp (itP)$$ at $$0$$ · `Physicslib4.Spectral.Stone.hasDerivAt_exp_smul_I`
-- [**Lemma 300**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-exp-bounded) — The Generator of $$\exp (itP)$$ · `Physicslib4.Spectral.Stone.generator_eq_of_eq_exp`
+- [**Definition 289**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.11) — One-Parameter Unitary Group · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup` (+1 more)
+- [**Lemma 290**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:strongly-continuous-iff-at-zero) — Strong Continuity is Strong Continuity at $$0$$ · `Physicslib4.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero`
+- [**Lemma 291**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-group-inner-adjoint) — The Adjoint of $$U(t)$$ is $$U(-t)$$ · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.adjoint_eq` (+1 more)
+- [**Definition 292**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.13) — Infinitesimal Generator · `Physicslib4.Spectral.Stone.generator` (+2 more)
+- [**Lemma 293**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-spec) — Characterization of the Generator · `Physicslib4.Spectral.Stone.exists_generator_eq_iff`
+- [**Lemma 294**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-symmetry-identity) — The Generator Satisfies the Symmetry Identity · `Physicslib4.Spectral.Stone.isSymmetric_generator`
+- [**Lemma 295**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-const) — The Generator of the Trivial Group · `Physicslib4.Spectral.Stone.generator_refl`
+- [**Lemma 296**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:conj-unitary-group) — Conjugating a Unitary Group · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.conj` (+1 more)
+- [**Lemma 297**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-conj) — Conjugating a Group Conjugates its Generator · `Physicslib4.Spectral.Stone.mem_generator_conj_domain_iff` (+1 more)
+- [**Lemma 298**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-unitary-group) — $$\exp (itP)$$ is a One-Parameter Unitary Group · `Physicslib4.Spectral.Stone.exists_isOneParameterUnitaryGroup_exp`
+- [**Lemma 299**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-hasDerivAt) — The Derivative of $$\exp (itP)$$ at $$0$$ · `Physicslib4.Spectral.Stone.hasDerivAt_exp_smul_I`
+- [**Lemma 300**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-exp-bounded) — The Generator of $$\exp (itP)$$ · `Physicslib4.Spectral.Stone.generator_eq_of_eq_exp`
 
 </details>
 
 <details markdown="1">
 <summary>§10.4.2 Imported Results (p. 239) — 5 items</summary>
 
-- [**Theorem 301**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bochner-integral) — Bochner Integral · `ContinuousLinearMap.integral_comp_comm` (+1 more)
-- [**Lemma 302**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:smooth-approximate-identity) — Smooth Approximate Identity · `ContDiffBump.normed` (+4 more)
-- [**Proposition 303**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:calculus-facts) — Facts about Differentiation · `HasDerivAt.inner` (+1 more)
-- [**Lemma 304**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:linear-ode-scalar) — The Equation $$y' = cy$$ · `Physicslib4.Spectral.Stone.eq_mul_exp_of_hasDerivAt`
-- [**Lemma 305**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:convolution-facts) — Facts about Convolution · `HasCompactSupport.hasDerivAt_convolution_left` (+1 more)
+- [**Theorem 301**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bochner-integral) — Bochner Integral · `ContinuousLinearMap.integral_comp_comm` (+1 more)
+- [**Lemma 302**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:smooth-approximate-identity) — Smooth Approximate Identity · `ContDiffBump.normed` (+4 more)
+- [**Proposition 303**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:calculus-facts) — Facts about Differentiation · `HasDerivAt.inner` (+1 more)
+- [**Lemma 304**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:linear-ode-scalar) — The Equation $$y' = cy$$ · `Physicslib4.Spectral.Stone.eq_mul_exp_of_hasDerivAt`
+- [**Lemma 305**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:convolution-facts) — Facts about Convolution · `HasCompactSupport.hasDerivAt_convolution_left` (+1 more)
 
 </details>
 
 <details markdown="1">
 <summary>§10.4.3 From a Self-Adjoint Operator to a Unitary Group (p. 241) — 8 items</summary>
 
-- [**Lemma 306**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-unitary) — The Bounded Integral of $$e^{it\lambda }$$ is Unitary · `Physicslib4.Spectral.Stone.integral_expFun_mem_unitary`
-- [**Definition 307**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:exp-unitary-group) — The Unitary Group $$e^{itA}$$ · `Physicslib4.Spectral.Stone.expFun` (+2 more)
-- [**Lemma 308**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-group-law) — The Group Law for $$e^{itA}$$ · `Physicslib4.Spectral.Stone.isOneParameterUnitaryGroup_expUnitary`
-- [**Lemma 309**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-strongly-continuous) — $$e^{itA}$$ is Strongly Continuous · `Physicslib4.Spectral.Stone.isStronglyContinuous_expUnitary`
-- [**Lemma 310**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:functional-calculus-sub-bounded) — Subtracting from a Bounded Function · `Physicslib4.Spectral.Stone.functionalCalculus_sub_of_bddMeasurable`
-- [**Lemma 311**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-quotient-norm-identity) — Norm Identity for the Difference Quotient · `Physicslib4.Spectral.Stone.norm_sq_generatorQuotient_expUnitary_sub`
-- [**Lemma 312**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-derivative-at-zero) — The Derivative of $$e^{itA}$$ at $$0$$ · `Physicslib4.Spectral.Stone.tendsto_generatorQuotient_expUnitary`
-- [**Proposition 313**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.14) — Exponentiating a Self-Adjoint Operator · `Physicslib4.Spectral.Stone.generator_expUnitary`
+- [**Lemma 306**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-unitary) — The Bounded Integral of $$e^{it\lambda }$$ is Unitary · `Physicslib4.Spectral.Stone.integral_expFun_mem_unitary`
+- [**Definition 307**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:exp-unitary-group) — The Unitary Group $$e^{itA}$$ · `Physicslib4.Spectral.Stone.expFun` (+2 more)
+- [**Lemma 308**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-group-law) — The Group Law for $$e^{itA}$$ · `Physicslib4.Spectral.Stone.isOneParameterUnitaryGroup_expUnitary`
+- [**Lemma 309**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-strongly-continuous) — $$e^{itA}$$ is Strongly Continuous · `Physicslib4.Spectral.Stone.isStronglyContinuous_expUnitary`
+- [**Lemma 310**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:functional-calculus-sub-bounded) — Subtracting from a Bounded Function · `Physicslib4.Spectral.Stone.functionalCalculus_sub_of_bddMeasurable`
+- [**Lemma 311**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-quotient-norm-identity) — Norm Identity for the Difference Quotient · `Physicslib4.Spectral.Stone.norm_sq_generatorQuotient_expUnitary_sub`
+- [**Lemma 312**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-derivative-at-zero) — The Derivative of $$e^{itA}$$ at $$0$$ · `Physicslib4.Spectral.Stone.tendsto_generatorQuotient_expUnitary`
+- [**Proposition 313**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.14) — Exponentiating a Self-Adjoint Operator · `Physicslib4.Spectral.Stone.generator_expUnitary`
 
 </details>
 
 <details markdown="1">
 <summary>§10.4.4 Two Intermediate Results (p. 244) — 7 items</summary>
 
-- [**Lemma 314**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-hasDerivAt) — Differentiating an Orbit · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit`
-- [**Lemma 315**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-commutes) — The Group Commutes with its Generator · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.generator_apply_comm`
-- [**Lemma 316**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.17) — The Group Preserves the Generator's Domain · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator`
-- [**Lemma 317**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-translate) — Averages of an Orbit are Convolutions · `Physicslib4.Spectral.Stone.average_eq_convolution` (+1 more)
-- [**Lemma 318**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-in-generator-domain) — Averages Lie in the Generator's Domain · `Physicslib4.Spectral.Stone.average_mem_generator_domain`
-- [**Lemma 319**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-approximates) — Averages Approximate the Vector · `Physicslib4.Spectral.Stone.tendsto_average_bump`
-- [**Lemma 320**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.18) — The Generator is Densely Defined · `Physicslib4.Spectral.Stone.hasDenseDomain_generator`
+- [**Lemma 314**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-hasDerivAt) — Differentiating an Orbit · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit`
+- [**Lemma 315**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-commutes) — The Group Commutes with its Generator · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.generator_apply_comm`
+- [**Lemma 316**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.17) — The Group Preserves the Generator's Domain · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator`
+- [**Lemma 317**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-translate) — Averages of an Orbit are Convolutions · `Physicslib4.Spectral.Stone.average_eq_convolution` (+1 more)
+- [**Lemma 318**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-in-generator-domain) — Averages Lie in the Generator's Domain · `Physicslib4.Spectral.Stone.average_mem_generator_domain`
+- [**Lemma 319**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-approximates) — Averages Approximate the Vector · `Physicslib4.Spectral.Stone.tendsto_average_bump`
+- [**Lemma 320**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.18) — The Generator is Densely Defined · `Physicslib4.Spectral.Stone.hasDenseDomain_generator`
 
 </details>
 
 <details markdown="1">
 <summary>§10.4.5 Stone's Theorem (p. 246) — 9 items</summary>
 
-- [**Lemma 321**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-inner-ode) — An Ordinary Differential Equation along Orbits · `Physicslib4.Spectral.Stone.hasDerivAt_inner_orbit`
-- [**Lemma 322**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bounded-exp-solution-zero) — Bounded Solutions of $$y' = \pm y$$ Vanish · `Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_bounded`
-- [**Lemma 323**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-ker-adjoint-trivial) — The Deficiency Subspaces of the Generator are Trivial · `Physicslib4.Spectral.Stone.ker_adjoint_generator_subSmul_eq_bot`
-- [**Lemma 324**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-essentially-self-adjoint) — The Generator is Essentially Self-Adjoint · `Physicslib4.Spectral.Stone.isEssentiallySelfAdjoint_generator`
-- [**Lemma 325**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-difference-hasDerivAt) — Differentiating the Difference of the Orbits · `Physicslib4.Spectral.Stone.hasDerivAt_orbit_sub_expUnitary`
-- [**Lemma 326**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:norm-const-of-symmetric-derivative) — A Solution of $$w' = iCw$$ with $$C$$ Symmetric Preserves the Norm · `Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_isSymmetric`
-- [**Lemma 327**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbits-agree-on-domain) — The Orbits Agree on the Generator's Domain · `Physicslib4.Spectral.Stone.orbit_eq_expUnitary_closure`
-- [**Lemma 328**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:agree-on-dense-subspace) — Bounded Operators Agreeing on a Dense Subspace are Equal · `Physicslib4.Spectral.Stone.eq_of_eqOn_dense`
-- [**Theorem 329**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.15) — Stone's Theorem · `Physicslib4.Spectral.Stone.stone`
+- [**Lemma 321**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-inner-ode) — An Ordinary Differential Equation along Orbits · `Physicslib4.Spectral.Stone.hasDerivAt_inner_orbit`
+- [**Lemma 322**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bounded-exp-solution-zero) — Bounded Solutions of $$y' = \pm y$$ Vanish · `Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_bounded`
+- [**Lemma 323**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-ker-adjoint-trivial) — The Deficiency Subspaces of the Generator are Trivial · `Physicslib4.Spectral.Stone.ker_adjoint_generator_subSmul_eq_bot`
+- [**Lemma 324**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-essentially-self-adjoint) — The Generator is Essentially Self-Adjoint · `Physicslib4.Spectral.Stone.isEssentiallySelfAdjoint_generator`
+- [**Lemma 325**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-difference-hasDerivAt) — Differentiating the Difference of the Orbits · `Physicslib4.Spectral.Stone.hasDerivAt_orbit_sub_expUnitary`
+- [**Lemma 326**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:norm-const-of-symmetric-derivative) — A Solution of $$w' = iCw$$ with $$C$$ Symmetric Preserves the Norm · `Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_isSymmetric`
+- [**Lemma 327**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbits-agree-on-domain) — The Orbits Agree on the Generator's Domain · `Physicslib4.Spectral.Stone.orbit_eq_expUnitary_closure`
+- [**Lemma 328**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:agree-on-dense-subspace) — Bounded Operators Agreeing on a Dense Subspace are Equal · `Physicslib4.Spectral.Stone.eq_of_eqOn_dense`
+- [**Theorem 329**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.15) — Stone's Theorem · `Physicslib4.Spectral.Stone.stone`
 
 </details>
 
