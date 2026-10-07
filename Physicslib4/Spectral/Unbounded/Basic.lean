@@ -212,7 +212,14 @@ Blueprint reference: `lmm:positive-bounded-agrees`.
 -/
 theorem isPositive_toPMap_iff (P : H →L[ℂ] H) :
     IsPositive ((P : H →ₗ[ℂ] H).toPMap ⊤) ↔ P.IsPositive := by
-  sorry
+  rw [ContinuousLinearMap.isPositive_def]
+  refine ⟨fun ⟨hs, hp⟩ => ⟨fun x y => (hs ⟨x, trivial⟩ ⟨y, trivial⟩).symm, fun x => ?_⟩,
+    fun ⟨hs, hp⟩ => ⟨fun φ ψ => (hs φ ψ).symm, fun ψ => ?_⟩⟩
+  · rw [ContinuousLinearMap.reApplyInnerSelf_apply, ← inner_re_symm]
+    exact hp ⟨x, trivial⟩
+  · have := hp ψ
+    rw [ContinuousLinearMap.reApplyInnerSelf_apply, ← inner_re_symm] at this
+    exact this
 
 omit [CompleteSpace H] in
 /--
@@ -228,7 +235,19 @@ theorem IsPositive.of_conj {A B : H →ₗ.[ℂ] H} (hA : IsPositive A) (W : H �
     (happ : ∀ (ψ : H) (h : ψ ∈ B.domain) (h' : W.symm ψ ∈ A.domain),
       B ⟨ψ, h⟩ = W (A ⟨W.symm ψ, h'⟩)) :
     IsPositive B := by
-  sorry
+  have key : ∀ φ ψ : B.domain, ⟪(φ : H), B ψ⟫_ℂ =
+      ⟪(W.symm φ : H), A ⟨W.symm ψ, (hdom ψ).1 ψ.2⟩⟫_ℂ := by
+    intro φ ψ
+    rw [happ ψ ψ.2 ((hdom ψ).1 ψ.2), ← W.inner_map_map (W.symm φ), W.apply_symm_apply]
+  have key' : ∀ φ ψ : B.domain, ⟪B φ, (ψ : H)⟫_ℂ =
+      ⟪A ⟨W.symm φ, (hdom φ).1 φ.2⟩, (W.symm ψ : H)⟫_ℂ := by
+    intro φ ψ
+    rw [happ φ φ.2 ((hdom φ).1 φ.2), ← W.inner_map_map _ (W.symm ψ), W.apply_symm_apply]
+  refine ⟨fun φ ψ => ?_, fun ψ => ?_⟩
+  · rw [key, key']
+    exact hA.1 ⟨_, (hdom φ).1 φ.2⟩ ⟨_, (hdom ψ).1 ψ.2⟩
+  · rw [key]
+    exact hA.2 ⟨_, (hdom ψ).1 ψ.2⟩
 
 /-!
 ### The closure of an unbounded operator

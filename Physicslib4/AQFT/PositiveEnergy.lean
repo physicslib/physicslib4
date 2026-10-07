@@ -3,7 +3,6 @@ Copyright (c) 2026 Lean Community. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
-import Physicslib4.Operators.Conjugation
 import Physicslib4.Spectral.Stone.Bounded
 import Physicslib4.Spectral.Stone.Theorem
 import Mathlib.Analysis.Normed.Algebra.Exponential
@@ -54,13 +53,16 @@ structure IsPositiveEnergy (V : ℝ → (H ≃ₗᵢ[ℂ] H)) : Prop where
   /-- The infinitesimal generator of `V` is a positive operator. -/
   isPositive_generator : Spectral.Unbounded.IsPositive (generator V)
 
+omit [CompleteSpace H] in
 /-- The constant (trivial) unitary group `t ↦ id` has positive energy, with generator `0`
 on all of `H`.
 
 Blueprint reference: `lmm:positive-energy-const`. -/
 theorem isPositiveEnergy_const_refl :
     IsPositiveEnergy (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) := by
-  sorry
+  refine ⟨isOneParameterUnitaryGroup_refl, isStronglyContinuous_refl, ?_⟩
+  rw [generator_refl]
+  refine ⟨fun x y => ?_, fun ψ => ?_⟩ <;> simp
 
 /-- **Uniqueness of a bounded generator.** If two bounded operators induce the same
 one-parameter unitary group — `exp(i t P) = exp(i t Q)` for all `t` — they are equal.
@@ -99,8 +101,10 @@ particular the positive operator witnessing positive energy is unique.
 Blueprint reference: `lmm:exp-generator-unique`. -/
 theorem generator_eq_of_eq_expUnitary {V : ℝ → (H ≃ₗᵢ[ℂ] H)} {B : H →ₗ.[ℂ] H}
     (hB : IsSelfAdjoint B) (h : ∀ t, V t = expUnitary hB t) : generator V = B := by
-  sorry
+  obtain rfl : V = expUnitary hB := funext h
+  exact (generator_expUnitary hB).2.2
 
+omit [CompleteSpace H] in
 /-- **Positive energy is a unitary invariant.** If `V` has positive energy, so does its
 conjugate `t ↦ W ∘ V t ∘ W⁻¹` by a unitary `W`, with generator `W A W⁻¹` on `W · Dom(A)`.
 Physically: the spectrum condition does not depend on the choice of unitary frame.
@@ -108,16 +112,19 @@ Physically: the spectrum condition does not depend on the choice of unitary fram
 Blueprint reference: `lmm:positive-energy-conj`. -/
 theorem IsPositiveEnergy.conj (W : H ≃ₗᵢ[ℂ] H) {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
     (hV : IsPositiveEnergy V) :
-    IsPositiveEnergy (fun t => (W.symm.trans (V t)).trans W) := by
-  sorry
+    IsPositiveEnergy (fun t => (W.symm.trans (V t)).trans W) :=
+  ⟨hV.isOneParameterUnitaryGroup.conj W, hV.isStronglyContinuous.conj W,
+    hV.isPositive_generator.of_conj W (mem_generator_conj_domain_iff V W)
+      (generator_conj_apply V W)⟩
 
+omit [CompleteSpace H] in
 /-- **A positive-energy group is strongly continuous**: `t ↦ V t x` is continuous for every
 `x`. This is part of the definition.
 
 Blueprint reference: `lmm:positive-energy-strong-continuous`. -/
 theorem IsPositiveEnergy.strongContinuous {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
-    (hV : IsPositiveEnergy V) (x : H) : Continuous (fun t : ℝ => V t x) := by
-  sorry
+    (hV : IsPositiveEnergy V) (x : H) : Continuous (fun t : ℝ => V t x) :=
+  hV.isStronglyContinuous x
 
 /-- **The bounded case.** If `P` is a bounded positive operator and `V(t) = exp(itP)` (the
 norm-convergent exponential series), then `V` has positive energy, with generator `P` on
@@ -127,7 +134,11 @@ Blueprint reference: `lmm:positive-energy-exp-bounded`. -/
 theorem isPositiveEnergy_exp {P : H →L[ℂ] H} (hP : P.IsPositive) {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
     (hV : ∀ (t : ℝ) (x : H), V t x = NormedSpace.exp (((t : ℂ) * Complex.I) • P) x) :
     IsPositiveEnergy V := by
-  sorry
+  obtain ⟨V', hV', hgrp⟩ := exists_isOneParameterUnitaryGroup_exp hP.isSelfAdjoint
+  obtain rfl : V = V' :=
+    funext fun t => LinearIsometryEquiv.ext fun x => (hV t x).trans (hV' t x).symm
+  exact ⟨hgrp, isStronglyContinuous_of_eq_exp hV,
+    (generator_eq_of_eq_exp hV) ▸ (Spectral.Unbounded.isPositive_toPMap_iff P).mpr hP⟩
 
 /-- **Positive energy in exponential form.** `V` has positive energy if and only if there is
 a positive self-adjoint operator `A` with `V(t) = e^{itA}` for all `t`.
@@ -136,7 +147,12 @@ Blueprint reference: `thrm:positive-energy-iff-exp`. -/
 theorem isPositiveEnergy_iff_exists_exp {V : ℝ → (H ≃ₗᵢ[ℂ] H)} :
     IsPositiveEnergy V ↔ ∃ (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A),
       Spectral.Unbounded.IsPositive A ∧ ∀ t, V t = expUnitary hA t := by
-  sorry
+  refine ⟨fun hV => ?_, fun ⟨A, hA, hpos, h⟩ => ?_⟩
+  · obtain ⟨hA, -, hexp, -⟩ := stone hV.isOneParameterUnitaryGroup hV.isStronglyContinuous
+    exact ⟨generator V, hA, hV.isPositive_generator, hexp⟩
+  · obtain rfl : V = expUnitary hA := funext h
+    obtain ⟨hgrp, hc, hgen⟩ := generator_expUnitary hA
+    exact ⟨hgrp, hc, hgen.symm ▸ hpos⟩
 
 end AQFT
 end Physicslib4

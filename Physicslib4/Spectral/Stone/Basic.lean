@@ -295,8 +295,8 @@ The trivial family `t ↦ 1` is a one-parameter unitary group.
 Blueprint reference: `lmm:generator-const`.
 -/
 theorem isOneParameterUnitaryGroup_refl :
-    IsOneParameterUnitaryGroup (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) := by
-  sorry
+    IsOneParameterUnitaryGroup (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) :=
+  ⟨fun _ => rfl, fun _ _ _ => rfl⟩
 
 /--
 The trivial family `t ↦ 1` is strongly continuous.
@@ -304,8 +304,8 @@ The trivial family `t ↦ 1` is strongly continuous.
 Blueprint reference: `lmm:generator-const`.
 -/
 theorem isStronglyContinuous_refl :
-    IsStronglyContinuous (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) := by
-  sorry
+    IsStronglyContinuous (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) :=
+  fun _ => continuous_const
 
 /--
 The generator of the trivial group `t ↦ 1` is `0`, with domain `H`.
@@ -313,7 +313,13 @@ The generator of the trivial group `t ↦ 1` is `0`, with domain `H`.
 Blueprint reference: `lmm:generator-const`.
 -/
 theorem generator_refl : generator (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) = 0 := by
-  sorry
+  have hq : ∀ ψ : H, generatorQuotient (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) ψ =
+      fun _ => 0 := fun ψ => funext fun t => by simp [generatorQuotient]
+  refine LinearPMap.ext (eq_top_iff.2 fun ψ _ => ⟨0, (hq ψ).symm ▸ tendsto_const_nhds⟩)
+    fun x y _ => ?_
+  change limUnder _ _ = 0
+  rw [hq]
+  exact tendsto_const_nhds.limUnder_eq
 
 /--
 Conjugating a one-parameter unitary group by a unitary `W` gives a one-parameter unitary group
@@ -323,8 +329,9 @@ Blueprint reference: `lmm:conj-unitary-group`.
 -/
 theorem IsOneParameterUnitaryGroup.conj {U : ℝ → (H ≃ₗᵢ[ℂ] H)}
     (hU : IsOneParameterUnitaryGroup U) (W : H ≃ₗᵢ[ℂ] H) :
-    IsOneParameterUnitaryGroup fun t => (W.symm.trans (U t)).trans W := by
-  sorry
+    IsOneParameterUnitaryGroup fun t => (W.symm.trans (U t)).trans W where
+  map_zero ψ := by simp [hU.map_zero]
+  map_add s t ψ := by simp [hU.map_add]
 
 /--
 Conjugation by a unitary preserves strong continuity.
@@ -332,8 +339,24 @@ Conjugation by a unitary preserves strong continuity.
 Blueprint reference: `lmm:conj-unitary-group`.
 -/
 theorem IsStronglyContinuous.conj {U : ℝ → (H ≃ₗᵢ[ℂ] H)} (hU : IsStronglyContinuous U)
-    (W : H ≃ₗᵢ[ℂ] H) : IsStronglyContinuous fun t => (W.symm.trans (U t)).trans W := by
-  sorry
+    (W : H ≃ₗᵢ[ℂ] H) : IsStronglyContinuous fun t => (W.symm.trans (U t)).trans W :=
+  fun ψ => W.continuous.comp (hU (W.symm ψ))
+
+private theorem tendsto_generatorQuotient_conj_iff (U : ℝ → (H ≃ₗᵢ[ℂ] H)) (W : H ≃ₗᵢ[ℂ] H)
+    (ψ χ : H) :
+    Tendsto (generatorQuotient (fun t => (W.symm.trans (U t)).trans W) ψ) (𝓝[≠] 0) (𝓝 χ) ↔
+      Tendsto (generatorQuotient U (W.symm ψ)) (𝓝[≠] 0) (𝓝 (W.symm χ)) := by
+  have hq : generatorQuotient (fun t => (W.symm.trans (U t)).trans W) ψ =
+      fun t => W (generatorQuotient U (W.symm ψ) t) := by
+    funext t
+    simp only [generatorQuotient, LinearIsometryEquiv.trans_apply, map_sub, map_smul,
+      W.apply_symm_apply]
+  rw [hq]
+  constructor
+  · intro h
+    simpa [Function.comp_def] using (W.symm.continuous.tendsto χ).comp h
+  · intro h
+    simpa [Function.comp_def] using (W.continuous.tendsto _).comp h
 
 /--
 The domain of the generator of `t ↦ W U(t) W⁻¹` is `W · Dom(A)`, `A` the generator of `U`.
@@ -345,7 +368,12 @@ Blueprint reference: `lmm:generator-conj`.
 theorem mem_generator_conj_domain_iff (U : ℝ → (H ≃ₗᵢ[ℂ] H)) (W : H ≃ₗᵢ[ℂ] H) (ψ : H) :
     ψ ∈ (generator fun t => (W.symm.trans (U t)).trans W).domain ↔
       W.symm ψ ∈ (generator U).domain := by
-  sorry
+  rw [generator_domain, generator_domain]
+  constructor
+  · rintro ⟨χ, hχ⟩
+    exact ⟨_, (tendsto_generatorQuotient_conj_iff U W ψ χ).1 hχ⟩
+  · rintro ⟨χ, hχ⟩
+    exact ⟨W χ, (tendsto_generatorQuotient_conj_iff U W ψ _).2 (by simpa using hχ)⟩
 
 /--
 The generator of `t ↦ W U(t) W⁻¹` is `W A W⁻¹`, `A` the generator of `U`.
@@ -357,7 +385,10 @@ theorem generator_conj_apply (U : ℝ → (H ≃ₗᵢ[ℂ] H)) (W : H ≃ₗᵢ
     (h' : W.symm ψ ∈ (generator U).domain) :
     (generator fun t => (W.symm.trans (U t)).trans W) ⟨ψ, h⟩ =
       W (generator U ⟨W.symm ψ, h'⟩) := by
-  sorry
+  have hA := (exists_generator_eq_iff U _ _).1 ⟨h', rfl⟩
+  obtain ⟨_, e⟩ := (exists_generator_eq_iff _ ψ (W (generator U ⟨W.symm ψ, h'⟩))).2
+    ((tendsto_generatorQuotient_conj_iff U W ψ _).2 (by simpa using hA))
+  exact e
 
 end Stone
 end Spectral

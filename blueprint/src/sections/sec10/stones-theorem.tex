@@ -138,6 +138,7 @@ Three examples of generators are used in the positive-energy condition of the Ha
     The constant family $U(t) = \mathbf{1}$, $t \in \mathbb{R}$, is a strongly continuous one-parameter unitary group, and its infinitesimal generator is the operator $0$ with domain $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11, lmm:generator-spec, def:identity-operator}
     The identity operator is unitary, $U(0) = \mathbf{1}$ and $U(s+t) = \mathbf{1} = \mathbf{1}\mathbf{1} = U(s)U(t)$, and $\left\| U(t)\psi - U(s)\psi \right\| = 0$ for all $s, t$, so $U(\cdot)$ is a strongly continuous one-parameter unitary group~(\ref{def:hall-10.11}). For every $\psi \in \mathbf{H}$ and $t \ne 0$ the quotient $\frac{1}{i}\frac{U(t)\psi - \psi}{t}$ is $0$, so it tends to $0$; by Lemma~\ref{lmm:generator-spec}, every $\psi$ lies in the domain of the generator, which sends it to $0$.
 \end{proof}
@@ -150,6 +151,7 @@ Three examples of generators are used in the positive-energy condition of the Ha
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ and let $W$ be a unitary operator on $\mathbf{H}$. Then $V(t) \equiv WU(t)W^{-1}$ is a one-parameter unitary group, and it is strongly continuous if $U(\cdot)$ is.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11, def:unitary-operator}
     Each $V(t)$ is a product of unitaries, hence unitary; $V(0) = WW^{-1} = \mathbf{1}$ and $V(s)V(t) = WU(s)W^{-1}WU(t)W^{-1} = WU(s+t)W^{-1} = V(s+t)$. Strong continuity transfers because $\left\| V(t)\psi - V(s)\psi \right\| = \left\| U(t)W^{-1}\psi - U(s)W^{-1}\psi \right\|$, $W$ being isometric~(\ref{def:unitary-operator}).
 \end{proof}
@@ -165,6 +167,7 @@ Three examples of generators are used in the positive-energy condition of the Ha
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:conj-unitary-group, lmm:generator-spec, def:bounded-operator-notation}
     By linearity of $W$, for $t \ne 0$,
     \begin{align}
@@ -187,6 +190,7 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
     Let $P \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then $V(t) \equiv \exp(itP)$ is a one-parameter unitary group.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11, def:unitary-operator, def:adjoint-bounded, def:identity-operator}
     $V(0) = \exp(0) = \mathbf{1}$ (\texttt{NormedSpace.exp\_zero}). The operators $isP$ and $itP$ commute, so $V(s+t) = V(s)V(t)$ (\texttt{NormedSpace.exp\_add\_of\_commute}). Since $P^* = P$, $(itP)^* = -itP$, so $itP$ is skew-adjoint and $V(t)$ lies in Mathlib's \texttt{unitary} submonoid (\texttt{NormedSpace.exp\_mem\_unitary\_of\_mem\_skewAdjoint}), i.e. $V(t)^*V(t) = V(t)V(t)^* = \mathbf{1}$. As in the proof of Lemma~\ref{lmm:exp-unitary}, this makes $V(t)$ unitary in the sense of Definition~\ref{def:unitary-operator}: it is bijective with inverse $V(t)^*$, and $\left< V(t)\phi, V(t)\psi \right> = \left< \phi, V(t)^*V(t)\psi \right> = \left< \phi, \psi \right>$ by the definition of the adjoint~(\ref{def:adjoint-bounded}).
 \end{proof}
@@ -199,6 +203,7 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
     Let $P \in \mathcal{B}(\mathbf{H})$. The map $\mathbb{R} \to \mathcal{B}(\mathbf{H})$, $t \mapsto \exp(t \cdot iP)$, is differentiable at $t = 0$ in the operator norm, with derivative $iP$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:bounded-operator-notation}
     Mathlib's \texttt{hasDerivAt\_exp\_smul\_const}, with scalar field $\mathbb{K} = \mathbb{R}$ and Banach algebra $\mathcal{B}(\mathbf{H})$ (\texttt{H →L[ℂ] H}), $x = iP$ and $t = 0$, gives the derivative $\exp(0 \cdot iP)\,iP = \exp(0)\,iP = iP$, using \texttt{NormedSpace.exp\_zero}. This is the instantiation used in the existing Lean proof of \texttt{Physicslib4.AQFT.exp\_generator\_unique} (\texttt{Physicslib4/AQFT/PositiveEnergy.lean}).
 \end{proof}
@@ -211,6 +216,7 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
     Let $P \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then the one-parameter unitary group $V(t) = \exp(itP)$ of Lemma~\ref{lmm:exp-bounded-unitary-group} is strongly continuous, and its infinitesimal generator is $P$, with domain $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:exp-bounded-unitary-group, lmm:exp-bounded-hasDerivAt, lmm:strongly-continuous-iff-at-zero, lmm:generator-spec, def:bounded-operator-notation}
     By Lemma~\ref{lmm:exp-bounded-hasDerivAt}, $t \mapsto V(t)$ is differentiable, hence continuous, at $0$ in the operator norm; since $\left\| V(t)\psi - \psi \right\| \le \left\| V(t) - \mathbf{1} \right\| \left\| \psi \right\|$, Lemma~\ref{lmm:strongly-continuous-iff-at-zero} gives strong continuity. By \texttt{hasDerivAt\_iff\_tendsto\_slope\_zero}, the same derivative says $t^{-1}(V(t) - \mathbf{1}) \to iP$ in operator norm along $t \to 0$, $t \ne 0$. Applying this to $\psi \in \mathbf{H}$ (evaluation at $\psi$ is a bounded linear map~(\ref{def:bounded-operator-notation})) and multiplying by $1/i$ gives $\frac{1}{i}\frac{V(t)\psi - \psi}{t} \to P\psi$; so by Lemma~\ref{lmm:generator-spec} every $\psi$ lies in the domain of the generator, which sends it to $P\psi$.
 \end{proof}

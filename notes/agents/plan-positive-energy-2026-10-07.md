@@ -209,3 +209,26 @@ nothing is changed until the user approves.
   "Dom(B) = W·Dom(A) and B = WAW⁻¹ there ⇒ B positive" to avoid building WAW⁻¹ as a LinearPMap;
   `exp_generator_unique` must be restated (or a new name used) for the D4 form. Optional: the
   label `thrm:vacuum-no-stone` is now a misnomer (user's call).
+- 2026-10-07, Rename: `thrm:vacuum-no-stone` → `thrm:vacuum-invariance-consequences` (79f642a).
+- 2026-10-07, Stage 3 done (statements; 20 `sorry`s on this branch until stage 4):
+  - Defs (orchestrator): `Spectral.Unbounded.IsPositive` (Basic.lean); `AQFT.IsPositiveEnergy`
+    rewritten as a structure (`isOneParameterUnitaryGroup`, `isStronglyContinuous`,
+    `isPositive_generator`); PositiveEnergy.lean now imports Stone.Theorem and Stone.Bounded.
+  - Statements: Unbounded/Basic `isPositive_toPMap_iff`, `IsPositive.of_conj`; Stone/Basic
+    `isOneParameterUnitaryGroup_refl`, `isStronglyContinuous_refl`, `generator_refl` (= 0),
+    `IsOneParameterUnitaryGroup.conj`, `IsStronglyContinuous.conj`,
+    `mem_generator_conj_domain_iff`, `generator_conj_apply`; new Stone/Bounded
+    `hasDerivAt_exp_smul_I`, `exists_isOneParameterUnitaryGroup_exp`,
+    `isStronglyContinuous_of_eq_exp`, `generator_eq_of_eq_exp`; PositiveEnergy
+    `isPositiveEnergy_const_refl`, `generator_eq_of_eq_expUnitary`, `IsPositiveEnergy.conj`,
+    `IsPositiveEnergy.strongContinuous` (same signature), `isPositiveEnergy_exp`,
+    `isPositiveEnergy_iff_exists_exp`. Bounded `exp_generator_unique` kept (proved).
+  - Consumers compile unchanged. Formalizer review FAIL → fixed the two bundled statements
+    (split) and the canonical `0 : H →ₗ.[ℂ] H`; its remaining finding (stale consumer docstrings
+    and Restriction lines) is stage 5 work.
+- 2026-10-07, Stage 4 done: all 20 statements proved by 8 parallel provers (one private helper,
+  `tendsto_generatorQuotient_conj_iff`, in Stone/Basic). `omit [CompleteSpace H]` added to
+  `isPositiveEnergy_const_refl`, `IsPositiveEnergy.conj`, `IsPositiveEnergy.strongContinuous`
+  (unused); `Operators.Conjugation` import dropped from PositiveEnergy.lean (no longer used).
+  No sorry in the project; build, lint, checkdecls clean; key results depend only on propext,
+  Classical.choice, Quot.sound. Next: stage 5 (consumer docstrings and Restriction lines).

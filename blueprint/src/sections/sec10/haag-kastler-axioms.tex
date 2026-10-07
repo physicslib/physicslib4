@@ -1912,6 +1912,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     The constant group $t \mapsto \mathbf{1}$ has positive energy, with generator $0$ on domain $H$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:generator-const, def:positive-unbounded-operator}
     By Lemma~\ref{lmm:generator-const} the constant group is a strongly continuous one-parameter unitary group with generator $0$ on domain $H$. The operator $0$ is positive~(\ref{def:positive-unbounded-operator}): $\left< \phi, 0\psi \right> = 0 = \left< 0\phi, \psi \right>$ and $\left< \psi, 0\psi \right> = 0 \ge 0$.
 \end{proof}
@@ -1924,6 +1925,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     Let $V(t)$, $t \in \mathbb{R}$, be a family of unitary operators on $H$, and let $B$ be a self-adjoint operator with $V(t) = e^{itB}$ (\ref{def:exp-unitary-group}) for all $t$. Then $B$ is the infinitesimal generator of $V$, with equality of domains. In particular the positive operator witnessing positive energy is unique.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-10.14}
     By Points 2 and 3 of Proposition~\ref{prpstn:hall-10.14}, the infinitesimal generator of $t \mapsto e^{itB}$ is $B$, with equality of domains; and $V$ is this group. Positivity is not used.
 \end{proof}
@@ -1936,6 +1938,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     Let $A$ be a positive operator on $H$~(\ref{def:positive-unbounded-operator}) and $W$ a unitary operator on $H$. Then the operator $WAW^{-1}$ with domain $W\,\text{Dom}(A)$ is positive.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:positive-unbounded-operator, def:unitary-operator}
     Since $W$ is unitary it preserves inner products, so $\left< \phi, W\chi \right> = \left< W^{-1}\phi, \chi \right>$ for all $\phi, \chi$~(\ref{def:unitary-operator}). For $\phi, \psi \in W\,\text{Dom}(A)$, the vectors $W^{-1}\phi, W^{-1}\psi$ lie in $\text{Dom}(A)$, and symmetry of $A$ gives
     \begin{align}
@@ -1952,6 +1955,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     If $V$ has positive energy, with generator $A$, and $W$ is unitary, then $t \mapsto WV(t)W^{-1}$ has positive energy, with generator $WAW^{-1}$ on domain $W\,\text{Dom}(A)$. Physically, the spectrum condition does not depend on the choice of unitary frame.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:conj-unitary-group, lmm:generator-conj, lmm:positive-conj}
     By Lemma~\ref{lmm:conj-unitary-group}, $t \mapsto WV(t)W^{-1}$ is a strongly continuous one-parameter unitary group; by Lemma~\ref{lmm:generator-conj} its generator is $WAW^{-1}$ on $W\,\text{Dom}(A)$; and this is positive by Lemma~\ref{lmm:positive-conj}.
 \end{proof}
@@ -1964,6 +1968,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     If $V$ has positive energy, then $V$ is strongly continuous: $t \mapsto V(t)x$ is continuous for every $x \in H$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:positive-energy, def:hall-10.11}
     Strong continuity is a clause of Definition~\ref{def:positive-energy}, and it is the continuity of $t \mapsto V(t)x$ by Definition~\ref{def:hall-10.11}.
 \end{proof}
@@ -1976,6 +1981,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     If $P \in \mathcal{B}(H)$ is a bounded positive operator, then $t \mapsto \exp(itP)$, the norm-convergent exponential series, has positive energy, with generator $P$ on domain $H$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:generator-exp-bounded, lmm:positive-bounded-agrees}
     A bounded positive operator is self-adjoint (in Mathlib, \texttt{ContinuousLinearMap.IsPositive.isSelfAdjoint}). So Lemma~\ref{lmm:generator-exp-bounded} gives a strongly continuous one-parameter unitary group with generator $P$ on domain $H$, which is positive by Lemma~\ref{lmm:positive-bounded-agrees}.
 \end{proof}
@@ -1988,6 +1994,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     A family $V(t)$, $t \in \mathbb{R}$, of unitary operators on $H$ has positive energy if and only if there is a positive self-adjoint operator $A$ with $V(t) = e^{itA}$ for all $t$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thrm:hall-10.15, prpstn:hall-10.14}
     Forward: Stone's Theorem (\ref{thrm:hall-10.15}) gives $V(t) = e^{itA}$ with the generator $A$ self-adjoint, and $A$ is positive by hypothesis. Backward: by Proposition~\ref{prpstn:hall-10.14}, $V$ is a strongly continuous one-parameter unitary group whose generator is $A$, which is positive.
 \end{proof}
