@@ -238,3 +238,11 @@ nothing is changed until the user approves.
   CovariantState.lean module note. All four `**Restriction:**` lines removed; the project now has
   none. No statement or proof changed. Build, lint clean. Note: CLAUDE.md cites the
   positive-energy docstring as its example of a Restriction line; that example no longer exists.
+- 2026-10-07, Stage 6 done: build, lint, checkdecls clean; key results on standard axioms only.
+  lean-auditor (`notes/agents/audits/audit-positive-energy-2026-10-07.md`): exactly two
+  protected changes (IsPositiveEnergy def→structure; new Unbounded.IsPositive), both as approved;
+  no unapproved changes, no statement regressions, no removed/renamed theorems, consumers'
+  statements unchanged, no sorry, no unrecorded restrictions. Fixed its one mismatch: the \lean
+  tag of thrm:positive-energy-api now lists the six current declarations (statement \uses
+  restored by hand after the status tool's strip/rewrite dropped it). lean-kit verify receipt
+  refreshed (164 files). CLAUDE.md Restriction example replaced (file is untracked).

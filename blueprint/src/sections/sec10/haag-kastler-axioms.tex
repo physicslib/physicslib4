@@ -2001,7 +2001,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[Properties of Positive Energy]
     \label{thrm:positive-energy-api}
-    \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl, Physicslib4.AQFT.exp_generator_unique, Physicslib4.AQFT.IsPositiveEnergy.conj, Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}
+    \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl, Physicslib4.AQFT.generator_eq_of_eq_expUnitary, Physicslib4.AQFT.IsPositiveEnergy.conj, Physicslib4.AQFT.IsPositiveEnergy.strongContinuous, Physicslib4.AQFT.isPositiveEnergy_exp, Physicslib4.AQFT.isPositiveEnergy_iff_exists_exp}
     \uses{def:positive-energy, def:exp-unitary-group, def:positive-unbounded-operator}
     \leanok
     Let $V$ be a family of unitary operators on $H$ indexed by $\mathbb{R}$.
@@ -2015,6 +2015,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     \end{enumerate}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:positive-energy-const, lmm:exp-generator-unique, lmm:positive-conj, lmm:positive-energy-conj, lmm:positive-energy-strong-continuous, lmm:positive-energy-exp-bounded, thrm:positive-energy-iff-exp}
     (i) Lemma~\ref{lmm:positive-energy-const}.
     (ii) Lemma~\ref{lmm:exp-generator-unique}.
