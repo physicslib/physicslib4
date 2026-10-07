@@ -55,7 +55,7 @@ Each blueprint section maps onto a compact set of Lean modules, which is the fas
 | §10.1 | `Physicslib4/GNS/` (`Basic`, `Construction`, `NullSpace`, `CauchySchwarz`) |
 | §10.2 | `Physicslib4/Spectral/` (`Basic`, `Spectrum`, `Forms`, `ProjectionValuedMeasure`, `OperatorIntegral`, `ContinuousCalculus`, `BorelClasses`, `BorelCalculus`, `SpectralTheorem`) |
 | §10.3 | `Physicslib4/Spectral/Unbounded/` (`Basic`, `Spectrum`, `DirectSum`, `Integral`, `Normal`, `AbstractCalculus`, `Cayley`) |
-| §10.4 | Not yet formalised |
+| §10.4 | `Physicslib4/Spectral/Stone/` (`Basic`, `Exponential`, `Density`, `Theorem`) |
 | §10.5 | `Physicslib4/Geometry/PseudoRiemannian/` (`Basic`, `LeviCivita`, `Flat`), `Physicslib4/Spacetime/` (`Causality`, `Curves`, `AlongPath`, `CausalComplement`, `CausalStructure`, `Minkowski`, `MinkowskiDirected`, `LorentzianSpacetime`, `IsometryCausality`, …) |
 | §10.6 | `Physicslib4/AQFT/HaagKastler/`, `Physicslib4/GNS/` (`Irreducibility`, `Superselection`, `RadonNikodym`, `ExtremeState`, …), `Physicslib4/Operators/` (`ReducingSubspace`, `DensityTheorem`), `Physicslib4/AQFT/KMS.lean`, `Physicslib4/Analysis/StripPeriodicExtension.lean` |
 | §10.7 | `Physicslib4/AQFT/HaagKastlerCurved/` (`LocalVonNeumann`, `StabilizerAction`, `StabilizerKMS`, `Purity`, `GeometricCovariance`, …) |
