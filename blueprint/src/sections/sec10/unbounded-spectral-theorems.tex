@@ -227,6 +227,28 @@ We now come to the key definition of this section: that of self-adjointness. Eve
 
 Indeed, if $A$ is self-adjoint then $\text{Dom}(A^*) = \text{Dom}(A)$ and $A^* = A$ on this common domain, which is exactly Definition~\ref{def:hall-9.3} applied with $B = A$: $A^*$ is (trivially) an extension of $A$, so by Proposition~\ref{prpstn:hall-9.4}, $A$ is symmetric. Conversely, a symmetric operator $A$ is self-adjoint precisely when $\text{Dom}(A^*)$ is no bigger than $\text{Dom}(A)$, since symmetry already gives the reverse containment via Proposition~\ref{prpstn:hall-9.4}. This is usually the difficulty in showing a symmetric operator is self-adjoint: showing that the adjoint's domain does not overshoot.
 
+Positivity of an unbounded operator is a condition on its expectation values, imposed on a symmetric operator so that those values are real. It is the notion in which the positive-energy condition of the Haag–Kastler axioms is phrased.
+
+\begin{definition}[Positive Operator]
+    \label{def:positive-unbounded-operator}
+    \uses{def:hall-3.1, def:hall-9.2}
+    An unbounded operator $A$ on $\mathbf{H}$ is \textit{positive} if it is symmetric~(\ref{def:hall-9.2}) and
+    \begin{align}
+        \text{Re}\left< \psi, A\psi \right> \ge 0 \qquad \text{for all } \psi \in \text{Dom}(A).
+    \end{align}
+    Symmetry here means only the identity $\left< \phi, A\psi \right> = \left< A\phi, \psi \right>$ for all $\phi, \psi \in \text{Dom}(A)$; density of $\text{Dom}(A)$ is not assumed, exactly as in the density-free sense of symmetry of Lemma~\ref{lmm:generator-symmetry-identity}. (For the generator of a strongly continuous group the domain is dense anyway, by Lemma~\ref{lmm:hall-10.18}.) For such an $A$ the number $\left< \psi, A\psi \right>$ is real, since $\left< \psi, A\psi \right> = \left< A\psi, \psi \right> = \overline{\left< \psi, A\psi \right>}$; so the condition says $\left< \psi, A\psi \right> \ge 0$ for every $\psi \in \text{Dom}(A)$.
+\end{definition}
+
+\begin{lemma}[Positivity of a Bounded Operator]
+    \label{lmm:positive-bounded-agrees}
+    \uses{def:positive-unbounded-operator, def:bounded-operator-notation, def:non-negative-operator}
+    Let $P \in \mathcal{B}(\mathbf{H})$, regarded as an unbounded operator with domain $\mathbf{H}$. Then $P$ is positive in the sense of Definition~\ref{def:positive-unbounded-operator} if and only if it is positive as a bounded operator, that is, symmetric with $\text{Re}\left< P\psi, \psi \right> \ge 0$ for all $\psi \in \mathbf{H}$ (in Mathlib, \texttt{ContinuousLinearMap.IsPositive}; for a symmetric bounded operator this is the non-negativity of Definition~\ref{def:non-negative-operator}).
+\end{lemma}
+\begin{proof}
+    \uses{def:positive-unbounded-operator, def:non-negative-operator, def:bounded-operator-notation}
+    Both conditions require $P$ to be symmetric on $\text{Dom}(P) = \mathbf{H}$. Their second clauses agree because $\left< \psi, P\psi \right> = \overline{\left< P\psi, \psi \right>}$ by conjugate symmetry of the inner product, so $\text{Re}\left< \psi, P\psi \right> = \text{Re}\left< P\psi, \psi \right>$ for every $\psi$ (in Mathlib, \texttt{inner\_re\_symm}).
+\end{proof}
+
 The next two definitions let us make sense of the \textit{closure} of an unbounded operator, which we will need almost immediately. They refer to the topology on $\mathbf{H} \times \mathbf{H}$, so we fix that first — as a definition and two supporting facts rather than as a remark, since every closedness argument below rests on them.
 
 \begin{definition}[The Product Hilbert Space $\mathbf{H} \times \mathbf{H}$]

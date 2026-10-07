@@ -1880,7 +1880,7 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
     The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space.
 \end{proof}
 
-Combining invariance with purity makes the GNS representation both covariant and irreducible. We emphasise that this is a \emph{precursor} to a vacuum representation, not a vacuum itself: a genuine vacuum additionally requires the spectrum condition (positivity of the energy-momentum spectrum), which is not imposed - and indeed not expressible - here.
+Combining invariance with purity makes the GNS representation both covariant and irreducible. We emphasise that this is a \emph{precursor} to a vacuum representation, not a vacuum itself: a genuine vacuum additionally requires the spectrum condition (positivity of the energy-momentum spectrum), which is not imposed at this point. It is expressed below through the positive-energy condition \ref{def:positive-energy}, imposed on the translation subgroups in the definition of a vacuum state \ref{def:vacuum-state}.
 
 \begin{theorem}[Irreducible Covariant Representation of a Pure Invariant State]
     \label{thrm:irreducible-covariant-representation}
@@ -1896,44 +1896,127 @@ Combining invariance with purity makes the GNS representation both covariant and
     This combines the covariant GNS triple of \ref{thrm:invariant-state-gns-unitary} with purity $\Rightarrow$ irreducibility (\ref{thrm:pure-iff-irreducible}).
 \end{proof}
 
-\begin{definition}[Positive Energy (bounded-generator scaffold)]
+\begin{definition}[Positive Energy]
     \label{def:positive-energy}
     \lean{Physicslib4.AQFT.IsPositiveEnergy}
-    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
-    \leanok
-    A strongly continuous one-parameter unitary group $V : \mathbb{R} \to \mathcal{U}(H)$ has \emph{positive energy} when its generator is a positive operator: there exists a positive bounded operator $P$ (hence self-adjoint, with non-negative spectrum) such that $V(t) = e^{i t P}$ for all $t$. The positivity of $P$ is the energy-positivity asserted by the spectrum condition. The generator of a physical translation is unbounded, so requiring $P$ bounded is a genuine restriction; the faithful unbounded form requires Stone's theorem and the theory of unbounded self-adjoint operators, which Mathlib does not yet provide. This is the bounded-generator scaffold.
+    \uses{def:hall-10.11, def:hall-10.13, def:positive-unbounded-operator}
+    A family $V(t)$, $t \in \mathbb{R}$, of unitary operators on $H$ has \emph{positive energy} when $V$ is a strongly continuous one-parameter unitary group (\ref{def:hall-10.11}) whose infinitesimal generator $A$ (\ref{def:hall-10.13}) is a positive operator (\ref{def:positive-unbounded-operator}): $A$ is symmetric and $\left< \psi, A\psi \right> \ge 0$ for every $\psi \in \text{Dom}(A)$. By Stone's Theorem (\ref{thrm:hall-10.15}) the generator $A$ is then densely defined and self-adjoint, and $V(t) = e^{itA}$ for all $t$; so the condition says exactly that $V(t) = e^{itP}$ with $P$ a positive self-adjoint operator, which is Theorem~\ref{thrm:positive-energy-iff-exp}. The positivity of the generator is the energy-positivity asserted by the spectrum condition.
 \end{definition}
 
-\begin{theorem}[Positive-Energy API]
-    \label{thrm:positive-energy-api}
-    \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl, Physicslib4.AQFT.exp_generator_unique, Physicslib4.AQFT.IsPositiveEnergy.conj, Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}
-    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+\begin{lemma}[The Trivial Group has Positive Energy]
+    \label{lmm:positive-energy-const}
     \uses{def:positive-energy}
-    \leanok
-    Structural properties of the positive-energy condition, all Stone-free. (i) \emph{Trivial subgroup}: the constant group $t \mapsto \mathrm{id}$ has positive energy, with zero generator. (ii) \emph{Uniqueness of the generator}: if two bounded generators induce the same one-parameter group, $e^{i t P} = e^{i t Q}$ for all $t$, then $P = Q$. Hence the generator witnessing positive energy is unique. (iii) \emph{Unitary invariance}: if $V$ has positive energy, so does its conjugate $t \mapsto W \circ V(t) \circ W^{-1}$ by a unitary $W$, with generator $W P W^{-1}$. Physically, the spectrum condition does not depend on the choice of unitary frame. (iv) \emph{Strong continuity}: a positive-energy group is strongly continuous --- $t \mapsto V(t) x$ is continuous for every $x$. This justifies calling it a strongly continuous one-parameter unitary group.
-\end{theorem}
+    The constant group $t \mapsto \mathbf{1}$ has positive energy, with generator $0$ on domain $H$.
+\end{lemma}
 \begin{proof}
-    \leanok
-    \uses{def:positive-energy}
-    (ii) Differentiating at $t = 0$ gives $i P = i Q$; positivity is not needed. (iii) The generator $W P W^{-1}$ is positive, being the unitary conjugate of $P$; the energy exponential transports via $e^{W A W^{-1}} = W e^{A} W^{-1}$. (iv) $t \mapsto (i t) P$ is continuous and the operator exponential is continuous.
+    \uses{lmm:generator-const, def:positive-unbounded-operator}
+    By Lemma~\ref{lmm:generator-const} the constant group is a strongly continuous one-parameter unitary group with generator $0$ on domain $H$. The operator $0$ is positive~(\ref{def:positive-unbounded-operator}): $\left< \phi, 0\psi \right> = 0 = \left< 0\phi, \psi \right>$ and $\left< \psi, 0\psi \right> = 0 \ge 0$.
 \end{proof}
 
-\begin{definition}[Vacuum State (generator-parameterized scaffold)]
+\begin{lemma}[Uniqueness of the Generator]
+    \label{lmm:exp-generator-unique}
+    \uses{def:hall-10.13, def:exp-unitary-group, def:hall-9.5}
+    Let $V(t)$, $t \in \mathbb{R}$, be a family of unitary operators on $H$, and let $B$ be a self-adjoint operator with $V(t) = e^{itB}$ (\ref{def:exp-unitary-group}) for all $t$. Then $B$ is the infinitesimal generator of $V$, with equality of domains. In particular the positive operator witnessing positive energy is unique.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:hall-10.14}
+    By Points 2 and 3 of Proposition~\ref{prpstn:hall-10.14}, the infinitesimal generator of $t \mapsto e^{itB}$ is $B$, with equality of domains; and $V$ is this group. Positivity is not used.
+\end{proof}
+
+\begin{lemma}[Unitary Conjugation Preserves Positivity]
+    \label{lmm:positive-conj}
+    \uses{def:positive-unbounded-operator, def:unitary-operator}
+    Let $A$ be a positive operator on $H$~(\ref{def:positive-unbounded-operator}) and $W$ a unitary operator on $H$. Then the operator $WAW^{-1}$ with domain $W\,\text{Dom}(A)$ is positive.
+\end{lemma}
+\begin{proof}
+    \uses{def:positive-unbounded-operator, def:unitary-operator}
+    Since $W$ is unitary it preserves inner products, so $\left< \phi, W\chi \right> = \left< W^{-1}\phi, \chi \right>$ for all $\phi, \chi$~(\ref{def:unitary-operator}). For $\phi, \psi \in W\,\text{Dom}(A)$, the vectors $W^{-1}\phi, W^{-1}\psi$ lie in $\text{Dom}(A)$, and symmetry of $A$ gives
+    \begin{align}
+        \left< \phi, WAW^{-1}\psi \right> = \left< W^{-1}\phi, AW^{-1}\psi \right> = \left< AW^{-1}\phi, W^{-1}\psi \right> = \left< WAW^{-1}\phi, \psi \right>.
+    \end{align}
+    Taking $\phi = \psi$ in the first equality, $\text{Re}\left< \psi, WAW^{-1}\psi \right> = \text{Re}\left< W^{-1}\psi, AW^{-1}\psi \right> \ge 0$.
+\end{proof}
+
+\begin{lemma}[Positive Energy is Unitarily Invariant]
+    \label{lmm:positive-energy-conj}
+    \uses{def:positive-energy, def:unitary-operator}
+    If $V$ has positive energy, with generator $A$, and $W$ is unitary, then $t \mapsto WV(t)W^{-1}$ has positive energy, with generator $WAW^{-1}$ on domain $W\,\text{Dom}(A)$. Physically, the spectrum condition does not depend on the choice of unitary frame.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:conj-unitary-group, lmm:generator-conj, lmm:positive-conj}
+    By Lemma~\ref{lmm:conj-unitary-group}, $t \mapsto WV(t)W^{-1}$ is a strongly continuous one-parameter unitary group; by Lemma~\ref{lmm:generator-conj} its generator is $WAW^{-1}$ on $W\,\text{Dom}(A)$; and this is positive by Lemma~\ref{lmm:positive-conj}.
+\end{proof}
+
+\begin{lemma}[A Positive-Energy Group is Strongly Continuous]
+    \label{lmm:positive-energy-strong-continuous}
+    \uses{def:positive-energy}
+    If $V$ has positive energy, then $V$ is strongly continuous: $t \mapsto V(t)x$ is continuous for every $x \in H$.
+\end{lemma}
+\begin{proof}
+    \uses{def:positive-energy, def:hall-10.11}
+    Strong continuity is a clause of Definition~\ref{def:positive-energy}, and it is the continuity of $t \mapsto V(t)x$ by Definition~\ref{def:hall-10.11}.
+\end{proof}
+
+\begin{lemma}[The Bounded Case]
+    \label{lmm:positive-energy-exp-bounded}
+    \uses{def:positive-energy, def:non-negative-operator}
+    If $P \in \mathcal{B}(H)$ is a bounded positive operator, then $t \mapsto \exp(itP)$, the norm-convergent exponential series, has positive energy, with generator $P$ on domain $H$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:generator-exp-bounded, lmm:positive-bounded-agrees}
+    A bounded positive operator is self-adjoint (in Mathlib, \texttt{ContinuousLinearMap.IsPositive.isSelfAdjoint}). So Lemma~\ref{lmm:generator-exp-bounded} gives a strongly continuous one-parameter unitary group with generator $P$ on domain $H$, which is positive by Lemma~\ref{lmm:positive-bounded-agrees}.
+\end{proof}
+
+\begin{theorem}[Positive Energy in Exponential Form]
+    \label{thrm:positive-energy-iff-exp}
+    \uses{def:positive-energy, def:exp-unitary-group, def:positive-unbounded-operator, def:hall-9.5}
+    A family $V(t)$, $t \in \mathbb{R}$, of unitary operators on $H$ has positive energy if and only if there is a positive self-adjoint operator $A$ with $V(t) = e^{itA}$ for all $t$.
+\end{theorem}
+\begin{proof}
+    \uses{thrm:hall-10.15, prpstn:hall-10.14}
+    Forward: Stone's Theorem (\ref{thrm:hall-10.15}) gives $V(t) = e^{itA}$ with the generator $A$ self-adjoint, and $A$ is positive by hypothesis. Backward: by Proposition~\ref{prpstn:hall-10.14}, $V$ is a strongly continuous one-parameter unitary group whose generator is $A$, which is positive.
+\end{proof}
+
+\begin{theorem}[Properties of Positive Energy]
+    \label{thrm:positive-energy-api}
+    \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl, Physicslib4.AQFT.exp_generator_unique, Physicslib4.AQFT.IsPositiveEnergy.conj, Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}
+    \uses{def:positive-energy, def:exp-unitary-group, def:positive-unbounded-operator}
+    Let $V$ be a family of unitary operators on $H$ indexed by $\mathbb{R}$.
+    \begin{enumerate}
+        \item[(i)] \emph{Trivial group}: the constant group $t \mapsto \mathbf{1}$ has positive energy, with generator $0$.
+        \item[(ii)] \emph{Uniqueness of the generator}: if $B$ is self-adjoint and $V(t) = e^{itB}$ (\ref{def:exp-unitary-group}) for all $t$, then $B$ is the infinitesimal generator of $V$. Hence the positive operator witnessing positive energy is unique.
+        \item[(iii)] \emph{Unitary invariance}: if $V$ has positive energy and $W$ is unitary, then $t \mapsto WV(t)W^{-1}$ has positive energy, with generator $WAW^{-1}$, where $A$ is the generator of $V$. Physically, the spectrum condition does not depend on the choice of unitary frame.
+        \item[(iv)] \emph{Strong continuity}: a positive-energy group is strongly continuous, i.e. $t \mapsto V(t)x$ is continuous for every $x$.
+        \item[(v)] \emph{Bounded case}: if $P$ is a bounded positive operator, then $t \mapsto \exp(itP)$, the norm-convergent exponential series, has positive energy, with generator $P$.
+        \item[(vi)] \emph{Exponential form}: $V$ has positive energy if and only if there is a positive self-adjoint operator $A$ with $V(t) = e^{itA}$ for all $t$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \uses{lmm:positive-energy-const, lmm:exp-generator-unique, lmm:positive-conj, lmm:positive-energy-conj, lmm:positive-energy-strong-continuous, lmm:positive-energy-exp-bounded, thrm:positive-energy-iff-exp}
+    (i) Lemma~\ref{lmm:positive-energy-const}.
+    (ii) Lemma~\ref{lmm:exp-generator-unique}.
+    (iii) Lemma~\ref{lmm:positive-energy-conj}, whose positivity step is Lemma~\ref{lmm:positive-conj}.
+    (iv) Lemma~\ref{lmm:positive-energy-strong-continuous}.
+    (v) Lemma~\ref{lmm:positive-energy-exp-bounded}.
+    (vi) Theorem~\ref{thrm:positive-energy-iff-exp}.
+\end{proof}
+
+\begin{definition}[Vacuum State]
     \label{def:vacuum-state}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}
-    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
     \leanok
     \uses{def:invariant-state, def:positive-energy, def:covariant-quasilocal-algebra, thrm:invariant-state-gns-unitary}
-    A state $\omega$ on the quasilocal algebra is a \emph{vacuum state} (relative to a future-timelike-translation predicate) when it is invariant under the covariance action (\ref{def:invariant-state}) and, in a GNS representation reproducing $\omega$ and implementing the action by unitaries $U(L)$, every future-timelike translation one-parameter subgroup $\gamma$ has positive energy: $t \mapsto U(\gamma(t))$ satisfies \ref{def:positive-energy}. This packages the two \emph{necessary} vacuum conditions --- invariance and the spectrum condition --- with the spectrum condition entering as the positive-energy hypothesis on the implementing unitaries. The future-timelike-translation predicate is a parameter, to be instantiated once the translation subgroup of the Lorentz group and its causal structure are wired in; the positive-energy condition is the bounded-generator scaffold. Constructing/discharging the spectrum condition for a concrete net is the Stone-gated next layer.
+    A state $\omega$ on the quasilocal algebra is a \emph{vacuum state} (relative to a future-timelike-translation predicate) when it is invariant under the covariance action (\ref{def:invariant-state}) and, in a GNS representation reproducing $\omega$ and implementing the action by unitaries $U(L)$, every future-timelike translation one-parameter subgroup $\gamma$ has positive energy: $t \mapsto U(\gamma(t))$ satisfies \ref{def:positive-energy}. This packages the two \emph{necessary} vacuum conditions --- invariance and the spectrum condition --- with the spectrum condition entering as the positive-energy hypothesis on the implementing unitaries. The future-timelike-translation predicate is a parameter, instantiated by the concrete predicate of \ref{def:future-timelike-translation} in \ref{def:vacuum-state-concrete}.
+
+    \emph{Remark.} Positive energy along every future-timelike translation subgroup is equivalent to the textbook form of the spectrum condition, that the joint spectrum of the energy--momentum operators (the generators of the translation subgroups) lies in the closed forward light cone. The textbook form is not used here: stating it requires a joint spectral measure for a family of commuting unbounded self-adjoint operators.
 \end{definition}
 
-\begin{theorem}[No-Stone Consequences of a Vacuum State]
+\begin{theorem}[Consequences of Invariance for a Vacuum State]
     \label{thrm:vacuum-no-stone}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.invariant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant}
-    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
     \uses{def:vacuum-state, thrm:irreducible-covariant-representation}
     \leanok
-    The conditions a vacuum state satisfies that need neither the spectrum condition nor Stone's theorem. First, a vacuum state is \emph{invariant} (the first conjunct of the definition). Second, a \emph{pure} vacuum state yields the irreducible covariant GNS representation of \ref{thrm:irreducible-covariant-representation}: a covariant GNS triple with implementing unitaries $U(L)$ fixing $\Omega$ and operator covariance $U(L)\pi(a)U(L)^{-1} = \pi(\beta_L a)$, whose representation is irreducible and generates all of $\mathcal{B}(H)$.
+    The conditions a vacuum state satisfies that do not use the spectrum condition. First, a vacuum state is \emph{invariant} (the first conjunct of the definition). Second, a \emph{pure} vacuum state yields the irreducible covariant GNS representation of \ref{thrm:irreducible-covariant-representation}: a covariant GNS triple with implementing unitaries $U(L)$ fixing $\Omega$ and operator covariance $U(L)\pi(a)U(L)^{-1} = \pi(\beta_L a)$, whose representation is irreducible and generates all of $\mathcal{B}(H)$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1953,7 +2036,6 @@ Combining invariance with purity makes the GNS representation both covariant and
 \begin{definition}[Vacuum State with the Concrete Spectrum Condition]
     \label{def:vacuum-state-concrete}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumStateConcrete}
-    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
     \leanok
     \uses{def:vacuum-state, def:future-timelike-translation}
     The vacuum-state condition of \ref{def:vacuum-state} with its future-timelike-translation parameter fixed to the concrete predicate \ref{def:future-timelike-translation}: the spectrum condition is imposed on exactly the one-parameter translation subgroups $t \mapsto (\mathrm{id}, t \cdot n)$ with $n$ future-pointing timelike. The vacuum definition then depends on no free predicate. Invariance and (for a pure state) the irreducible covariant representation follow as in \ref{thrm:vacuum-no-stone}, since the concrete form unfolds to the parameterized one.
@@ -2181,8 +2263,7 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 \begin{definition}[Ground State for a Covariance Flow]
     \label{def:ground-state-for-flow-covariance}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow.invariant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow.exists_strongContinuous_unitary}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
     \leanok
-    \uses{def:kms-state-for-flow-covariance, def:positive-energy, def:covariant-quasilocal-algebra}
-    A state $\omega$ on the quasilocal algebra $\mathfrak{U}$ is a \emph{ground state} for a one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group (e.g.\ a translation or boost flow) when it is invariant under the flow and, in a GNS representation reproducing $\omega$ and implementing the flow by unitaries $U(t)$ fixing $\Omega$, the one-parameter unitary group $t \mapsto U(t)$ has positive energy (\ref{def:positive-energy}). This is the ground-state ($\beta \to \infty$, spectrum-condition) counterpart of the covariance-flow KMS state \ref{def:kms-state-for-flow-covariance}: the stationary state whose flow generator, the Hamiltonian for a timelike flow, is positive. Two Stone-free consequences: a ground state is flow-invariant, and its implementing unitary group is strongly continuous. It is the Minkowski analogue of the curved Killing-flow ground state \ref{def:ground-state-for-flow-in-curved-spacetime}.
+    \uses{def:kms-state-for-flow-covariance, def:positive-energy, def:covariant-quasilocal-algebra, lmm:positive-energy-strong-continuous}
+    A state $\omega$ on the quasilocal algebra $\mathfrak{U}$ is a \emph{ground state} for a one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group (e.g.\ a translation or boost flow) when it is invariant under the flow and, in a GNS representation reproducing $\omega$ and implementing the flow by unitaries $U(t)$ fixing $\Omega$, the one-parameter unitary group $t \mapsto U(t)$ has positive energy (\ref{def:positive-energy}). This is the ground-state ($\beta \to \infty$, spectrum-condition) counterpart of the covariance-flow KMS state \ref{def:kms-state-for-flow-covariance}: the stationary state whose flow generator, the Hamiltonian for a timelike flow, is positive. Two consequences that do not use the positivity of the generator: a ground state is flow-invariant, and its implementing unitary group is strongly continuous. It is the Minkowski analogue of the curved Killing-flow ground state \ref{def:ground-state-for-flow-in-curved-spacetime}.
 \end{definition}
