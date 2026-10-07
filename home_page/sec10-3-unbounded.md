@@ -1,21 +1,22 @@
 ---
-title: "§10.3 Unbounded Spectral Theorems (pp. 155–233)"
+title: "§10.3 Unbounded Spectral Theorems (pp. 155–249)"
 usemathjax: true
 ---
 
-[Home](./) · [§10.1 GNS](sec10-1-gns.html) · [§10.2 Spectral](sec10-2-spectral.html) · **§10.3 Unbounded** · [§10.4 Spacetime](sec10-4-spacetime.html) · [§10.5 Minkowski](sec10-5-haag-kastler.html) · [§10.6 Curved](sec10-6-curved.html) · [§10.7 Covariance](sec10-7-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
+[Home](./) · [§10.1 GNS](sec10-1-gns.html) · [§10.2 Spectral](sec10-2-spectral.html) · **§10.3 Unbounded** · [§10.4 Stone](sec10-4-stone.html) · [§10.5 Spacetime](sec10-5-spacetime.html) · [§10.6 Minkowski](sec10-6-haag-kastler.html) · [§10.7 Curved](sec10-7-curved.html) · [§10.8 Covariance](sec10-8-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
 
-← [§10.2 Spectral](sec10-2-spectral.html) · [§10.4 Spacetime](sec10-4-spacetime.html) →
+← [§10.2 Spectral](sec10-2-spectral.html) · [§10.4 Stone](sec10-4-stone.html) →
 
-# §10.3 Unbounded Spectral Theorems (pp. 155–233)
+# §10.3 Unbounded Spectral Theorems (pp. 155–249)
 
-117 declarations (items 164–282, together with Conventions 210 and 257), extending §10.2 to the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 282). The blueprint motivates this with the few genuinely unbounded self-adjoint operators that arise in AQFT, the momentum operator being the standard example. The section reuses §10.2 without restating it, follows the same Hall presentation, and builds up unbounded operators from scratch. Its single subsection, §10.3.1 Spectral Theorem: Unbounded Self-Adjoint Operators (p. 156), proceeds in five stages.
+123 declarations (items 164–288, together with Conventions 213 and 260), extending §10.2 to the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 285) and the functional calculus it supplies. The blueprint motivates this with the few genuinely unbounded self-adjoint operators that arise in AQFT, the momentum operator being the standard example. The section reuses §10.2 without restating it, follows the same Hall presentation, and builds up unbounded operators from scratch. Its single subsection, §10.3.1 Spectral Theorem: Unbounded Self-Adjoint Operators (p. 156), proceeds in six stages.
 
-- *Unbounded operators (pp. 156–179, items 164–209).* Unbounded operators (Definition 164), their adjoints (Definition 168, Propositions 169–170, Lemma 171), symmetric operators, extensions and self-adjointness (Definitions 172–173 and 175, Proposition 174), and closed and closable operators via the graph in $$\mathbf{H} \times \mathbf{H}$$ (Definitions 176 and 179, Proposition 180), with the closure of a symmetric operator symmetric (Lemma 181) and essential self-adjointness defined (Definition 182). Elementary properties follow: symmetric operators are closable (Proposition 184), the adjoint of a closure (Proposition 185), uniqueness of the self-adjoint extension of an essentially self-adjoint operator (Proposition 187), and kernel and range, with the orthogonal complement of the range equal to the kernel of the adjoint (Definitions 188–189, Proposition 192). Next come the resolvent set and spectrum of an unbounded operator (Definition 196), which agree with the bounded notions (Lemma 198) and are real for self-adjoint operators (Theorem 200). The layer closes with criteria for essential self-adjointness: dense range (Theorem 201), and, through Hilbert direct sums and internal orthogonal decompositions (Definitions 202, 204 and 205, Lemmas 203 and 207), direct sums of bounded self-adjoint operators (Propositions 208–209).
-- *Integration against a projection-valued measure (p. 180, items 210–237).* Under standing hypotheses (Convention 210), and with sesquilinear and quadratic forms on subspaces (Definitions 213–214) and the needed measure theory (Theorems 217–218, Propositions 219–223, Definition 221), the integral of an unbounded measurable function against a projection-valued measure is constructed on its natural domain (Propositions 229 and 231). It coincides with the bounded integral of §10.2 (Proposition 232), ignores null sets (Lemma 233), is the limit of its truncations (Lemma 234), and is self-adjoint for real-valued functions (Proposition 237).
-- *Bounded normal operators (p. 198, items 238–256).* For normal operators (Definition 238) the norm equals the spectral radius (Proposition 243). Spectral subspaces (Definition 244, Propositions 245–246) and almost eigenvectors (Definition 248, Lemmas 247 and 249–253) lead to the two-variable spectral mapping theorem for polynomials in $$A$$ and $$A^*$$ (Theorem 254, Corollary 255), and hence to the continuous functional calculus for a normal operator (Theorem 256). Lemma 250 is stated with a constant uniform over all eigenvalues $$\lvert \lambda \rvert \le R$$, which is what the proof of Theorem 254 consumes; the Lean proof of Theorem 254 itself takes a shorter route through Mathlib's continuous functional calculus (`cfc_map_spectrum`), as a formalization note in the blueprint records, while the almost-eigenvector lemmas are formalised in their own right.
-- *From a continuous functional calculus to a projection-valued measure (p. 212, items 257–271).* Under standing hypotheses (Convention 257), an abstract continuous functional calculus (Definition 258) is extended, through its associated measures (Definition 260), to bounded measurable functions (Definition 263). The extension is linear, multiplicative and compatible with conjugation (Lemmas 264 and 268, Proposition 267), and it yields a projection-valued measure (Theorem 269). Combined with the previous stage, this gives the Spectral Theorem for Bounded Normal Operators (Theorem 271).
-- *The Cayley transform and the unbounded spectral theorem (pp. 221–230, items 272–282).* Unitary operators are normal, with spectrum on the unit circle (Lemmas 272–273). The Cayley map (Lemma 274) and the Cayley transform of a self-adjoint operator (Theorem 275), with its spectral mapping (Lemma 276), reduce the unbounded self-adjoint case to the bounded normal one: a projection-valued measure is transported along a Borel bijection (Lemma 278), the Cayley transform omits the point $$1$$ (Lemma 279), and the spectral measure is transported through the Cayley transform (Theorem 281). The result is the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 282).
+- *Unbounded operators (pp. 156–181, items 164–212).* Unbounded operators (Definition 164), their adjoints (Definition 168, Propositions 169–170, Lemma 171), symmetric operators, extensions and self-adjointness (Definitions 172–173 and 175, Proposition 174), positive operators, with positivity agreeing with the bounded notion (Definition 176, Lemma 177), and closed and closable operators via the graph in $$\mathbf{H} \times \mathbf{H}$$ (Definitions 178 and 181, Proposition 182), with the closure of a symmetric operator symmetric (Lemma 183) and essential self-adjointness defined (Definition 184). Elementary properties follow: symmetric operators are closable (Proposition 186), the adjoint of a closure (Proposition 187), uniqueness of the self-adjoint extension of an essentially self-adjoint operator (Proposition 190), and kernel and range, with the orthogonal complement of the range equal to the kernel of the adjoint (Definitions 191–192, Proposition 195). Next come the resolvent set and spectrum of an unbounded operator (Definition 199), which agree with the bounded notions (Lemma 201) and are real for self-adjoint operators (Theorem 203). The layer closes with criteria for essential self-adjointness: dense range (Theorem 204), and, through Hilbert direct sums and internal orthogonal decompositions (Definitions 205, 207 and 208, Lemmas 206 and 210), direct sums of bounded self-adjoint operators (Propositions 211–212).
+- *Integration against a projection-valued measure (p. 181, items 213–240).* Under standing hypotheses (Convention 213), and with sesquilinear and quadratic forms on subspaces (Definitions 216–217) and the needed measure theory (Theorems 220–221, Propositions 222–226, Definition 224), the integral of an unbounded measurable function against a projection-valued measure is constructed on its natural domain (Propositions 232 and 234). It coincides with the bounded integral of §10.2 (Proposition 235), ignores null sets (Lemma 236), is the limit of its truncations (Lemma 237), and is self-adjoint for real-valued functions (Proposition 240).
+- *Bounded normal operators (p. 199, items 241–259).* For normal operators (Definition 241) the norm equals the spectral radius (Proposition 246). Spectral subspaces (Definition 247, Propositions 248–249) and almost eigenvectors (Definition 251, Lemmas 250 and 252–256) lead to the two-variable spectral mapping theorem for polynomials in $$A$$ and $$A^*$$ (Theorem 257, Corollary 258), and hence to the continuous functional calculus for a normal operator (Theorem 259). Lemma 253 is stated with a constant uniform over all eigenvalues $$\lvert \lambda \rvert \le R$$, which is what the proof of Theorem 257 consumes; the Lean proof of Theorem 257 itself takes a shorter route through Mathlib's continuous functional calculus (`cfc_map_spectrum`), as a formalization note in the blueprint records, while the almost-eigenvector lemmas are formalised in their own right.
+- *From a continuous functional calculus to a projection-valued measure (p. 213, items 260–274).* Under standing hypotheses (Convention 260), an abstract continuous functional calculus (Definition 261) is extended, through its associated measures (Definition 263), to bounded measurable functions (Definition 266). The extension is linear, multiplicative and compatible with conjugation (Lemmas 267 and 271, Proposition 270), and it yields a projection-valued measure (Theorem 272). Combined with the previous stage, this gives the Spectral Theorem for Bounded Normal Operators (Theorem 274).
+- *The Cayley transform and the unbounded spectral theorem (pp. 222–231, items 275–285).* Unitary operators are normal, with spectrum on the unit circle (Lemmas 275–276). The Cayley map (Lemma 277) and the Cayley transform of a self-adjoint operator (Theorem 278), with its spectral mapping (Lemma 279), reduce the unbounded self-adjoint case to the bounded normal one: a projection-valued measure is transported along a Borel bijection (Lemma 281), the Cayley transform omits the point $$1$$ (Lemma 282), and the spectral measure is transported through the Cayley transform (Theorem 284). The result is the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 285).
+- *The functional calculus of an unbounded self-adjoint operator (p. 234, items 286–288).* Added for §10.4. The spectral measure of a self-adjoint operator is named (Definition 286), the functional calculus $$f(A)$$ is the integral of $$f$$ against it (Definition 287), and for bounded $$f$$ it agrees with the bounded calculus of §10.2 (Lemma 288). Earlier in the section, a self-adjoint operator is shown to have no proper symmetric extension (Lemma 189), which §10.4 uses to identify the generator of $$e^{itA}$$ with $$A$$.
 
 **Where the Lean lives:** `Physicslib4/Spectral/Unbounded/` (`Basic`, `Spectrum`, `DirectSum`, `Integral`, `Normal`, `AbstractCalculus`, `Cayley`)
 
@@ -24,209 +25,215 @@ usemathjax: true
 Each blueprint subsection below is collapsed; click a heading to see its items. Every entry links to its node in the web blueprint and names the principal Lean declaration.
 
 <details markdown="1">
-<summary>§10.3.1 · Unbounded Operators › Adjoint and Closure of an Unbounded Operator (p. 156) — 19 items</summary>
+<summary>§10.3.1 · Unbounded Operators › Adjoint and Closure of an Unbounded Operator (p. 156) — 21 items</summary>
 
-- [**Definition 164**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-3.1) — Unbounded Operator · `LinearPMap` (+1 more)
-- [**Proposition 165**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:convergence-facts) — Convergence Facts for Sequences and Series · `tendsto_atTop_ciSup` (+5 more)
-- [**Lemma 166**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-dense-testing) — Equality Testing on a Dense Subspace, First Slot · `Dense.eq_of_inner_left`
-- [**Lemma 167**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-dense-testing-second-slot) — Equality Testing on a Dense Subspace, Second Slot · `Dense.eq_of_inner_right`
-- [**Definition 168**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.1) — Adjoint of an Unbounded Operator · `LinearPMap.adjointDomain` (+3 more)
-- [**Proposition 169**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:adjoint-well-defined) — The Adjoint is Well Defined · `Physicslib4.Spectral.Unbounded.existsUnique_adjoint_apply`
-- [**Proposition 170**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-linearity-of-the-adjoint) — Linearity of the Adjoint · `Physicslib4.Spectral.Unbounded.smul_add_mem_adjoint_domain` (+1 more)
-- [**Lemma 171**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:characterizing-adjoint-domain-membership) — Characterizing Membership in the Adjoint's Domain · `Physicslib4.Spectral.Unbounded.mem_adjoint_domain_iff_exists` (+1 more)
-- [**Definition 172**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.2) — Symmetric Operator · `Physicslib4.Spectral.Unbounded.IsSymmetric` (+1 more)
-- [**Definition 173**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.3) — Extension of an Operator · `LinearPMap.le` (+2 more)
-- [**Proposition 174**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.4) — Symmetric Operators and the Adjoint · `Physicslib4.Spectral.Unbounded.isSymmetric_iff_le_adjoint`
-- [**Definition 175**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.5) — Self-Adjoint Operator · `LinearPMap.instStar` (+1 more)
-- [**Definition 176**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:product-hilbert-space) — The Product Hilbert Space $$\mathbf{H} \times \mathbf{H}$$ · `WithLp.instProdInnerProductSpace` (+2 more)
-- [**Theorem 177**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:sequential-closedness) — Sequential Characterization of Closed Sets and Closures · `isSeqClosed_iff_isClosed` (+1 more)
-- [**Lemma 178**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:componentwise-convergence) — Convergence in $$\mathbf{H} \times \mathbf{H}$$ is Componentwise · `Prod.tendsto_iff`
-- [**Definition 179**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.6) — Closed and Closable Operators · `LinearPMap.graph` (+4 more)
-- [**Proposition 180**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:closure-linearity-and-sequential-description) — Linearity and the Sequential Description of the Closure · `Physicslib4.Spectral.Unbounded.hasDenseDomain_closure` (+5 more)
-- [**Lemma 181**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:closure-of-symmetric-is-symmetric) — The Closure of a Symmetric Operator is Symmetric · `Physicslib4.Spectral.Unbounded.isSymmetric_closure`
-- [**Definition 182**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.7) — Essentially Self-Adjoint Operator · `Physicslib4.Spectral.Unbounded.IsEssentiallySelfAdjoint`
-
-</details>
-
-<details markdown="1">
-<summary>§10.3.1 · Unbounded Operators › Elementary Properties of Adjoints and Closed Operators (p. 163) — 13 items</summary>
-
-- [**Definition 183**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:closed-linear-map-on-a-subspace) — Closed Linear Map on a Subspace · `LinearPMap.IsClosed` (+1 more)
-- [**Proposition 184**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.8) — Closedness of the Adjoint's Graph; Closability of Symmetric Operators · `Physicslib4.Spectral.Unbounded.isClosable_of_isSymmetric` (+1 more)
-- [**Proposition 185**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.10) — The Adjoint of a Closure · `Physicslib4.Spectral.Unbounded.adjoint_closure_eq_adjoint`
-- [**Lemma 186**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:extension-reverses-adjoint-domains) — Extension Reverses Adjoint Domains · `Physicslib4.Spectral.Unbounded.adjoint_le_adjoint_of_le`
-- [**Proposition 187**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.11) — Uniqueness of the Self-Adjoint Extension of an Essentially Self-Adjoint Operator · `Physicslib4.Spectral.Unbounded.existsUnique_isSelfAdjoint_extension` (+1 more)
-- [**Definition 188**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kernel-of-an-unbounded-operator) — Kernel of an Unbounded Operator · `Physicslib4.Spectral.Unbounded.ker`
-- [**Definition 189**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:range-of-an-unbounded-operator) — Range of an Unbounded Operator · `Physicslib4.Spectral.Unbounded.range`
-- [**Proposition 190**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.49) — Orthogonal Decomposition and the Double Complement · `Physicslib4.Spectral.Unbounded.existsUnique_add_mem_orthogonal` (+1 more)
-- [**Corollary 191**](blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:trivial-complement-characterizes-density) — Trivial Complement Characterizes Density · `Physicslib4.Spectral.Unbounded.dense_iff_orthogonal_eq_bot`
-- [**Proposition 192**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.12) — Orthogonal Complement of the Range · `Physicslib4.Spectral.Unbounded.orthogonal_range_eq_ker_adjoint`
-- [**Proposition 193**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.13) — Adjoint of a Sum with a Bounded Operator · `Physicslib4.Spectral.Unbounded.adjoint_add_toPMap` (+1 more)
-- [**Lemma 194**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:adjoint-of-scalar-multiple-of-identity) — Adjoint of a Scalar Multiple of the Identity · `Physicslib4.Spectral.Unbounded.adjoint_smul_id`
-- [**Proposition 195**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.14) — Closedness of the Range from a Lower Bound · `Physicslib4.Spectral.Unbounded.isClosed_range_subSmul`
+- [**Definition 164**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-3.1) — Unbounded Operator · `LinearPMap` (+1 more)
+- [**Proposition 165**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:convergence-facts) — Convergence Facts for Sequences and Series · `tendsto_atTop_ciSup` (+6 more)
+- [**Lemma 166**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-dense-testing) — Equality Testing on a Dense Subspace, First Slot · `Dense.eq_of_inner_left`
+- [**Lemma 167**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-dense-testing-second-slot) — Equality Testing on a Dense Subspace, Second Slot · `Dense.eq_of_inner_right`
+- [**Definition 168**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.1) — Adjoint of an Unbounded Operator · `LinearPMap.adjointDomain` (+3 more)
+- [**Proposition 169**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:adjoint-well-defined) — The Adjoint is Well Defined · `Physicslib4.Spectral.Unbounded.existsUnique_adjoint_apply`
+- [**Proposition 170**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-linearity-of-the-adjoint) — Linearity of the Adjoint · `Physicslib4.Spectral.Unbounded.smul_add_mem_adjoint_domain` (+1 more)
+- [**Lemma 171**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:characterizing-adjoint-domain-membership) — Characterizing Membership in the Adjoint's Domain · `Physicslib4.Spectral.Unbounded.mem_adjoint_domain_iff_exists` (+1 more)
+- [**Definition 172**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.2) — Symmetric Operator · `Physicslib4.Spectral.Unbounded.IsSymmetric` (+1 more)
+- [**Definition 173**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.3) — Extension of an Operator · `LinearPMap.le` (+2 more)
+- [**Proposition 174**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.4) — Symmetric Operators and the Adjoint · `Physicslib4.Spectral.Unbounded.isSymmetric_iff_le_adjoint`
+- [**Definition 175**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.5) — Self-Adjoint Operator · `LinearPMap.instStar` (+1 more)
+- [**Definition 176**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:positive-unbounded-operator) — Positive Operator · `Physicslib4.Spectral.Unbounded.IsPositive`
+- [**Lemma 177**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-bounded-agrees) — Positivity of a Bounded Operator · `Physicslib4.Spectral.Unbounded.isPositive_toPMap_iff`
+- [**Definition 178**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:product-hilbert-space) — The Product Hilbert Space $$\mathbf{H} \times \mathbf{H}$$ · `WithLp.instProdInnerProductSpace` (+2 more)
+- [**Theorem 179**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:sequential-closedness) — Sequential Characterization of Closed Sets and Closures · `isSeqClosed_iff_isClosed` (+1 more)
+- [**Lemma 180**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:componentwise-convergence) — Convergence in $$\mathbf{H} \times \mathbf{H}$$ is Componentwise · `Prod.tendsto_iff`
+- [**Definition 181**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.6) — Closed and Closable Operators · `LinearPMap.graph` (+4 more)
+- [**Proposition 182**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:closure-linearity-and-sequential-description) — Linearity and the Sequential Description of the Closure · `Physicslib4.Spectral.Unbounded.hasDenseDomain_closure` (+5 more)
+- [**Lemma 183**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:closure-of-symmetric-is-symmetric) — The Closure of a Symmetric Operator is Symmetric · `Physicslib4.Spectral.Unbounded.isSymmetric_closure`
+- [**Definition 184**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.7) — Essentially Self-Adjoint Operator · `Physicslib4.Spectral.Unbounded.IsEssentiallySelfAdjoint`
 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · Unbounded Operators › The Spectrum of an Unbounded Operator (p. 169) — 5 items</summary>
+<summary>§10.3.1 · Unbounded Operators › Elementary Properties of Adjoints and Closed Operators (p. 164) — 14 items</summary>
 
-- [**Definition 196**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.16) — Resolvent Set and Spectrum of an Unbounded Operator · `Physicslib4.Spectral.Unbounded.pmapResolventSet` (+2 more)
-- [**Lemma 197**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:uniqueness-of-resolvent) — Uniqueness of the Resolvent · `Physicslib4.Spectral.Unbounded.existsUnique_isResolvent`
-- [**Lemma 198**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:spectrum-notions-agree) — The Two Notions of Spectrum Agree for Bounded Operators · `Physicslib4.Spectral.Unbounded.pmapResolventSet_toPMap_top` (+1 more)
-- [**Lemma 199**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:b-squared-inequality-symmetric) — The $$b^2$$ Inequality for Symmetric Operators · `Physicslib4.Spectral.Unbounded.sq_norm_le_of_isSymmetric`
-- [**Theorem 200**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-9.17) — Spectrum of a Self-Adjoint Operator is Real · `Physicslib4.Spectral.Unbounded.pmapSpectrum_subset_real`
-
-</details>
-
-<details markdown="1">
-<summary>§10.3.1 · Unbounded Operators › Conditions for Self-Adjointness and Essential Self-Adjointness (p. 172) — 9 items</summary>
-
-- [**Theorem 201**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-9.21) — Essential Self-Adjointness via Dense Range · `Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_iff_dense_range`
-- [**Definition 202**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-a.45) — Hilbert Space Direct Sum · `lp` (+1 more)
-- [**Lemma 203**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:finite-direct-sum-dense) — The Finite Direct Sum is Dense · `Physicslib4.Spectral.Unbounded.dense_setOf_finite_support`
-- [**Definition 204**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:unitary-operator) — Unitary Operator · `unitary` (+2 more)
-- [**Definition 205**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:internal-orthogonal-decomposition) — Internal Orthogonal Decomposition · `Physicslib4.Spectral.Unbounded.IsInternalOrthogonalDecomposition`
-- [**Proposition 206**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:polarization-identity) — Polarization Identity for the Inner Product · `inner_eq_sum_norm_sq_div_four` (+1 more)
-- [**Lemma 207**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:internal-decomposition-unitary) — Internal Decompositions are Unitarily External Direct Sums · `Physicslib4.Spectral.Unbounded.hasSum_injective_of_isInternalOrthogonalDecomposition` (+2 more)
-- [**Proposition 208**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.26) — Direct Sums of Bounded Self-Adjoint Operators · `Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isDirectSumOperator` (+6 more)
-- [**Proposition 209**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.26-internal) — Direct Sums of Bounded Self-Adjoint Operators, Internal Form · `Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isInternalDirectSumOperator` (+6 more)
+- [**Definition 185**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:closed-linear-map-on-a-subspace) — Closed Linear Map on a Subspace · `LinearPMap.IsClosed` (+1 more)
+- [**Proposition 186**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.8) — Closedness of the Adjoint's Graph; Closability of Symmetric Operators · `Physicslib4.Spectral.Unbounded.isClosable_of_isSymmetric` (+1 more)
+- [**Proposition 187**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.10) — The Adjoint of a Closure · `Physicslib4.Spectral.Unbounded.adjoint_closure_eq_adjoint`
+- [**Lemma 188**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:extension-reverses-adjoint-domains) — Extension Reverses Adjoint Domains · `Physicslib4.Spectral.Unbounded.adjoint_le_adjoint_of_le`
+- [**Lemma 189**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:self-adjoint-maximally-symmetric) — A Self-Adjoint Operator has no Proper Symmetric Extension · `Physicslib4.Spectral.Unbounded.eq_of_isSelfAdjoint_of_isSymmetric_of_le`
+- [**Proposition 190**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.11) — Uniqueness of the Self-Adjoint Extension of an Essentially Self-Adjoint Operator · `Physicslib4.Spectral.Unbounded.existsUnique_isSelfAdjoint_extension` (+1 more)
+- [**Definition 191**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kernel-of-an-unbounded-operator) — Kernel of an Unbounded Operator · `Physicslib4.Spectral.Unbounded.ker`
+- [**Definition 192**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:range-of-an-unbounded-operator) — Range of an Unbounded Operator · `Physicslib4.Spectral.Unbounded.range`
+- [**Proposition 193**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.49) — Orthogonal Decomposition and the Double Complement · `Physicslib4.Spectral.Unbounded.existsUnique_add_mem_orthogonal` (+1 more)
+- [**Corollary 194**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:trivial-complement-characterizes-density) — Trivial Complement Characterizes Density · `Physicslib4.Spectral.Unbounded.dense_iff_orthogonal_eq_bot`
+- [**Proposition 195**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.12) — Orthogonal Complement of the Range · `Physicslib4.Spectral.Unbounded.orthogonal_range_eq_ker_adjoint`
+- [**Proposition 196**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.13) — Adjoint of a Sum with a Bounded Operator · `Physicslib4.Spectral.Unbounded.adjoint_add_toPMap` (+1 more)
+- [**Lemma 197**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:adjoint-of-scalar-multiple-of-identity) — Adjoint of a Scalar Multiple of the Identity · `Physicslib4.Spectral.Unbounded.adjoint_smul_id`
+- [**Proposition 198**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.14) — Closedness of the Range from a Lower Bound · `Physicslib4.Spectral.Unbounded.isClosed_range_subSmul`
 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · Integration Against a Projection-Valued Measure (p. 180) — 28 items</summary>
+<summary>§10.3.1 · Unbounded Operators › The Spectrum of an Unbounded Operator (p. 170) — 5 items</summary>
 
-- [**Convention 210**](blueprint/chptr-haag-kastler-axioms-blueprint.html#conv:section-integration) — Standing Hypotheses: Integration against a Projection-Valued Measure *(a standing convention, not a declaration; it carries no Lean annotation)*
-- [**Lemma 211**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:associated-measure-total-mass) — The Associated Measure has Total Mass $$\left\| \psi \right\|^2$$ · `Physicslib4.Spectral.Unbounded.assoc_univ_eq` (+1 more)
-- [**Lemma 212**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:norm-identity-bounded-integral) — Norm Identity for the Bounded Integral · `Physicslib4.Spectral.Unbounded.norm_sq_integral_apply`
-- [**Definition 213**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-sesquilinear-form-on-a-subspace) — Sesquilinear Form on a Subspace · `Physicslib4.Spectral.Unbounded.SesquilinearFormOn`
-- [**Definition 214**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-quadratic-form-on-a-subspace) — Quadratic Form on a Subspace · `Physicslib4.Spectral.Unbounded.IsQuadraticFormOn` (+2 more)
-- [**Proposition 215**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:quadratic-forms-on-a-subspace-properties) — Properties of Quadratic Forms on a Subspace · `Physicslib4.Spectral.Unbounded.polarizationOn_eq_inner` (+1 more)
-- [**Lemma 216**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:restriction-of-quadratic-form) — Restriction of a Quadratic Form to a Subspace · `Physicslib4.Spectral.Unbounded.isQuadraticFormOn_restrict` (+1 more)
-- [**Theorem 217**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:monotone-convergence-theorem-for-integrals) — Monotone Convergence Theorem, for Integrals · `MeasureTheory.lintegral_tendsto_of_tendsto_of_monotone` (+1 more)
-- [**Theorem 218**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:dominated-convergence-theorem) — Dominated Convergence Theorem · `MeasureTheory.tendsto_integral_of_dominated_convergence` (+2 more)
-- [**Proposition 219**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:additivity-of-the-integral-in-the-measure) — Linearity of the Integral in the Measure · `MeasureTheory.lintegral_add_measure` (+3 more)
-- [**Proposition 220**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:monotonicity-of-the-integral-in-the-measure) — Monotonicity of the Integral in the Measure · `MeasureTheory.lintegral_mono'` (+1 more)
-- [**Definition 221**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-a.46) — $$L^2$$ of a Measure Space · `MeasureTheory.MemLp` (+3 more)
-- [**Proposition 222**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:countable-additivity-of-the-integral) — Countable Additivity of the Integral over a Disjoint Cover · `MeasureTheory.lintegral_iUnion` (+1 more)
-- [**Proposition 223**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integrals-agree-when-measures-agree) — Integrals Agree when Measures Agree on a Set · `Physicslib4.Spectral.Unbounded.setLIntegral_congr_measure`
-- [**Lemma 224**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:range-of-projection-is-kernel) — The Range of a Projection is the Kernel of its Complement · `Physicslib4.Spectral.Unbounded.range_eq_ker_one_sub` (+2 more)
-- [**Lemma 225**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:closed-subspace-is-hilbert) — A Closed Subspace is a Separable Hilbert Space · `Physicslib4.Spectral.Unbounded.completeSpace_and_separableSpace_of_isClosed` (+2 more)
-- [**Lemma 226**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:range-membership-concentrates-measure) — Range Membership Concentrates the Associated Measure · `Physicslib4.Spectral.Unbounded.assoc_compl_eq_zero` (+1 more)
-- [**Lemma 227**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:norm-convergent-decomposition) — Norm-Convergent Decomposition over a Disjoint Cover · `Physicslib4.Spectral.Unbounded.hasSum_apply_of_partition` (+1 more)
-- [**Lemma 228**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:l2-implies-l1) — $$L^2$$ Implies $$L^1$$ on a Finite Measure Space · `MeasureTheory.MemLp.integrable` (+1 more)
-- [**Proposition 229**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.2) — Properties of the Integral against a Projection-Valued Measure · `Physicslib4.Spectral.Unbounded.integralDomain` (+7 more)
-- [**Lemma 230**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bounded-on-set-range-in-domain) — Bounded on a Set Implies the Range Lies in the Domain · `Physicslib4.Spectral.Unbounded.range_subset_integralDomain` (+1 more)
-- [**Proposition 231**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.1) — The Integral against a Projection-Valued Measure · `Physicslib4.Spectral.Unbounded.pmapIntegral` (+5 more)
-- [**Proposition 232**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:coincidence-with-the-bounded-integral) — Coincidence with the Bounded Integral · `Physicslib4.Spectral.Unbounded.integralDomain_eq_top_of_bddMeasurable` (+1 more)
-- [**Lemma 233**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:integral-ignores-null-sets) — The Integral Ignores Null Sets · `Physicslib4.Spectral.Unbounded.integralDomain_congr_of_null` (+1 more)
-- [**Lemma 234**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:truncations-converge) — Truncations Converge to the Unbounded Integral · `Physicslib4.Spectral.Unbounded.tendsto_integral_truncation`
-- [**Lemma 235**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:associated-measure-of-image) — The Associated Measure of a Bounded-Calculus Image · `Physicslib4.Spectral.Unbounded.assoc_integral_apply` (+1 more)
-- [**Lemma 236**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:integral-preserves-spectral-subspaces) — The Integral Preserves Spectral Subspaces on which the Integrand is Bounded · `Physicslib4.Spectral.Unbounded.mapsTo_pmapIntegral_range` (+1 more)
-- [**Proposition 237**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.3) — The Integral of a Real-Valued Function is Self-Adjoint · `Physicslib4.Spectral.Unbounded.isSelfAdjoint_pmapIntegral_of_real`
+- [**Definition 199**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.16) — Resolvent Set and Spectrum of an Unbounded Operator · `Physicslib4.Spectral.Unbounded.pmapResolventSet` (+2 more)
+- [**Lemma 200**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:uniqueness-of-resolvent) — Uniqueness of the Resolvent · `Physicslib4.Spectral.Unbounded.existsUnique_isResolvent`
+- [**Lemma 201**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:spectrum-notions-agree) — The Two Notions of Spectrum Agree for Bounded Operators · `Physicslib4.Spectral.Unbounded.pmapResolventSet_toPMap_top` (+1 more)
+- [**Lemma 202**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:b-squared-inequality-symmetric) — The $$b^2$$ Inequality for Symmetric Operators · `Physicslib4.Spectral.Unbounded.sq_norm_le_of_isSymmetric`
+- [**Theorem 203**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-9.17) — Spectrum of a Self-Adjoint Operator is Real · `Physicslib4.Spectral.Unbounded.pmapSpectrum_subset_real`
 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators (p. 198) — 6 items</summary>
+<summary>§10.3.1 · Unbounded Operators › Conditions for Self-Adjointness and Essential Self-Adjointness (p. 173) — 9 items</summary>
 
-- [**Definition 238**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.19) — Normal Operator · `IsStarNormal`
-- [**Lemma 239**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:self-adjoint-is-normal) — Bounded Self-Adjoint Operators are Normal · `IsSelfAdjoint.isStarNormal`
-- [**Lemma 240**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:power-growth-controlled-by-spectral-radius) — Power Growth is Controlled by the Spectral Radius · `Physicslib4.Spectral.Unbounded.tendsto_norm_pow_div_atTop`
-- [**Lemma 241**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.22) — Spectral Radius of a Product of Commuting Operators · `Physicslib4.Spectral.Unbounded.spectralRadius_mul_le_of_commute`
-- [**Lemma 242**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:adjoint-product-and-involution) — Adjoint of a Product; the Adjoint is an Involution · `ContinuousLinearMap.adjoint_comp` (+1 more)
-- [**Proposition 243**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.21) — Norm Equals Spectral Radius for Normal Operators · `IsStarNormal.spectralRadius_eq_nnnorm`
-
-</details>
-
-<details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › Spectral Subspaces (p. 202) — 3 items</summary>
-
-- [**Definition 244**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-7.14) — Spectral Subspaces · `Physicslib4.Spectral.Unbounded.spectralSubspace`
-- [**Proposition 245**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.15) — Properties of Spectral Subspaces · `Physicslib4.Spectral.Unbounded.pvmOperator` (+3 more)
-- [**Proposition 246**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.16) — Commuting Operators Preserve Spectral Subspaces · `Physicslib4.Spectral.Unbounded.commute_borelCalculus` (+1 more)
+- [**Theorem 204**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-9.21) — Essential Self-Adjointness via Dense Range · `Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_iff_dense_range`
+- [**Definition 205**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-a.45) — Hilbert Space Direct Sum · `lp` (+1 more)
+- [**Lemma 206**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:finite-direct-sum-dense) — The Finite Direct Sum is Dense · `Physicslib4.Spectral.Unbounded.dense_setOf_finite_support`
+- [**Definition 207**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:unitary-operator) — Unitary Operator · `unitary` (+2 more)
+- [**Definition 208**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:internal-orthogonal-decomposition) — Internal Orthogonal Decomposition · `Physicslib4.Spectral.Unbounded.IsInternalOrthogonalDecomposition`
+- [**Proposition 209**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:polarization-identity) — Polarization Identity for the Inner Product · `inner_eq_sum_norm_sq_div_four` (+1 more)
+- [**Lemma 210**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:internal-decomposition-unitary) — Internal Decompositions are Unitarily External Direct Sums · `Physicslib4.Spectral.Unbounded.hasSum_injective_of_isInternalOrthogonalDecomposition` (+2 more)
+- [**Proposition 211**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.26) — Direct Sums of Bounded Self-Adjoint Operators · `Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isDirectSumOperator` (+6 more)
+- [**Proposition 212**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.26-internal) — Direct Sums of Bounded Self-Adjoint Operators, Internal Form · `Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isInternalDirectSumOperator` (+6 more)
 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › Almost Eigenvectors (p. 205) — 7 items</summary>
+<summary>§10.3.1 · Integration Against a Projection-Valued Measure (p. 181) — 28 items</summary>
 
-- [**Lemma 247**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:normality-balances-norms) — Normality Balances the Two Norms · `Physicslib4.Spectral.Unbounded.norm_adjoint_sub_smul_apply`
-- [**Definition 248**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.24) — $$\varepsilon$$-Almost Eigenvector · `Physicslib4.Spectral.Unbounded.IsAlmostEigenvector`
-- [**Lemma 249**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.25) — Almost Eigenvectors and the Spectrum of a Normal Operator · `Physicslib4.Spectral.Unbounded.isAlmostEigenvector_adjoint` (+1 more)
-- [**Lemma 250**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.26) — Polynomials Preserve Almost Eigenvectors · `Physicslib4.Spectral.Unbounded.exists_const_isAlmostEigenvector_mvApply_uniform` (+1 more)
-- [**Lemma 251**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:polynomials-in-normal-are-normal) — Polynomials in a Normal Operator are Normal · `Physicslib4.Spectral.Unbounded.mvApply` (+4 more)
-- [**Lemma 252**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:restriction-of-normal-operator) — Restriction of a Normal Operator to a Doubly Invariant Subspace · `Physicslib4.Spectral.Unbounded.exists_restrict_isStarNormal`
-- [**Lemma 253**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.27) — An Almost-Eigenvector Subspace for a Polynomial in a Normal Operator · `Physicslib4.Spectral.Unbounded.exists_subspace_isAlmostEigenvector`
-
-</details>
-
-<details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Two-Variable Spectral Mapping Theorem (p. 209) — 2 items</summary>
-
-- [**Theorem 254**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.23) — Spectral Mapping for Polynomials in $$A$$ and $$A^*$$ · `Physicslib4.Spectral.Unbounded.spectrum_mvApply`
-- [**Corollary 255**](blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:norm-of-polynomial-in-a-astar) — Norm of a Polynomial in $$A$$ and $$A^*$$ · `Physicslib4.Spectral.Unbounded.norm_mvApply`
-
-</details>
-
-<details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Continuous Functional Calculus for a Normal Operator (p. 211) — 1 item</summary>
-
-- [**Theorem 256**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:continuous-functional-calculus-normal) — Continuous Functional Calculus for a Normal Operator · `Physicslib4.Spectral.Unbounded.mvPolyOn` (+9 more)
-
-</details>
-
-<details markdown="1">
-<summary>§10.3.1 · From a Continuous Functional Calculus to a Projection-Valued Measure (p. 212) — 14 items</summary>
-
-- [**Convention 257**](blueprint/chptr-haag-kastler-axioms-blueprint.html#conv:section-abstract) — Standing Hypotheses: The Abstract Functional Calculus *(a standing convention, not a declaration; it carries no Lean annotation)*
-- [**Definition 258**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-continuous-functional-calculus) — Abstract Continuous Functional Calculus · `Physicslib4.Spectral.Unbounded.IsAbstractCalculus`
-- [**Lemma 259**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-calculus-non-negative) — An Abstract Calculus is Non-Negative · `Physicslib4.Spectral.Unbounded.isSelfAdjoint_of_real` (+2 more)
-- [**Definition 260**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-associated-measures) — The Measures Associated to an Abstract Calculus · `Physicslib4.Spectral.Unbounded.abstractMeasure` (+2 more)
-- [**Lemma 261**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-associated-measures-finite) — The Abstract Associated Measures are Finite · `Physicslib4.Spectral.Unbounded.abstractMeasure_univ`
-- [**Proposition 262**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:abstract-extended-forms-are-bounded) — The Extended Forms are Bounded Quadratic Forms · `Physicslib4.Spectral.Unbounded.isBoundedQuadraticForm_abstractForm` (+3 more)
-- [**Definition 263**](blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-extended-calculus) — The Extended Calculus · `Physicslib4.Spectral.Unbounded.extendedCalculus` (+2 more)
-- [**Lemma 264**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-extended-linear) — The Extended Calculus is Linear · `Physicslib4.Spectral.Unbounded.extendedCalculus_smul_add`
-- [**Lemma 265**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-extended-convergence) — Off-Diagonal Formula and Bounded Convergence for the Extended Calculus · `Physicslib4.Spectral.Unbounded.polarization_abstractForm` (+1 more)
-- [**Lemma 266**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-extended-real-self-adjoint) — Real Functions Give Self-Adjoint Operators · `Physicslib4.Spectral.Unbounded.isSelfAdjoint_extendedCalculus_of_real`
-- [**Proposition 267**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:abstract-extended-multiplicative) — The Extended Calculus is Multiplicative · `Physicslib4.Spectral.Unbounded.extendedCalculus_mul`
-- [**Lemma 268**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-extended-conjugation) — The Extended Calculus Respects Conjugation · `Physicslib4.Spectral.Unbounded.extendedCalculus_conj`
-- [**Theorem 269**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:abstract-calculus-yields-pvm) — A Continuous Functional Calculus Yields a Projection-Valued Measure · `Physicslib4.Spectral.Unbounded.abstractPVM` (+2 more)
-- [**Corollary 270**](blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:abstract-extended-norm-bound) — The Extended Calculus is Norm-Bounded · `Physicslib4.Spectral.Unbounded.norm_extendedCalculus_le`
+- [**Convention 213**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#conv:section-integration) — Standing Hypotheses: Integration against a Projection-Valued Measure *(a standing convention, not a declaration; it carries no Lean annotation)*
+- [**Lemma 214**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:associated-measure-total-mass) — The Associated Measure has Total Mass $$\left\| \psi \right\|^2$$ · `Physicslib4.Spectral.Unbounded.assoc_univ_eq` (+1 more)
+- [**Lemma 215**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:norm-identity-bounded-integral) — Norm Identity for the Bounded Integral · `Physicslib4.Spectral.Unbounded.norm_sq_integral_apply`
+- [**Definition 216**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-sesquilinear-form-on-a-subspace) — Sesquilinear Form on a Subspace · `Physicslib4.Spectral.Unbounded.SesquilinearFormOn`
+- [**Definition 217**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-quadratic-form-on-a-subspace) — Quadratic Form on a Subspace · `Physicslib4.Spectral.Unbounded.IsQuadraticFormOn` (+2 more)
+- [**Proposition 218**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:quadratic-forms-on-a-subspace-properties) — Properties of Quadratic Forms on a Subspace · `Physicslib4.Spectral.Unbounded.polarizationOn_eq_inner` (+1 more)
+- [**Lemma 219**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:restriction-of-quadratic-form) — Restriction of a Quadratic Form to a Subspace · `Physicslib4.Spectral.Unbounded.isQuadraticFormOn_restrict` (+1 more)
+- [**Theorem 220**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:monotone-convergence-theorem-for-integrals) — Monotone Convergence Theorem, for Integrals · `MeasureTheory.lintegral_tendsto_of_tendsto_of_monotone` (+1 more)
+- [**Theorem 221**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:dominated-convergence-theorem) — Dominated Convergence Theorem · `MeasureTheory.tendsto_integral_of_dominated_convergence` (+3 more)
+- [**Proposition 222**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:additivity-of-the-integral-in-the-measure) — Linearity of the Integral in the Measure · `MeasureTheory.lintegral_add_measure` (+3 more)
+- [**Proposition 223**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:monotonicity-of-the-integral-in-the-measure) — Monotonicity of the Integral in the Measure · `MeasureTheory.lintegral_mono'` (+1 more)
+- [**Definition 224**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-a.46) — $$L^2$$ of a Measure Space · `MeasureTheory.MemLp` (+3 more)
+- [**Proposition 225**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:countable-additivity-of-the-integral) — Countable Additivity of the Integral over a Disjoint Cover · `MeasureTheory.lintegral_iUnion` (+1 more)
+- [**Proposition 226**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integrals-agree-when-measures-agree) — Integrals Agree when Measures Agree on a Set · `Physicslib4.Spectral.Unbounded.setLIntegral_congr_measure`
+- [**Lemma 227**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:range-of-projection-is-kernel) — The Range of a Projection is the Kernel of its Complement · `Physicslib4.Spectral.Unbounded.range_eq_ker_one_sub` (+2 more)
+- [**Lemma 228**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:closed-subspace-is-hilbert) — A Closed Subspace is a Separable Hilbert Space · `Physicslib4.Spectral.Unbounded.completeSpace_and_separableSpace_of_isClosed` (+2 more)
+- [**Lemma 229**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:range-membership-concentrates-measure) — Range Membership Concentrates the Associated Measure · `Physicslib4.Spectral.Unbounded.assoc_compl_eq_zero` (+1 more)
+- [**Lemma 230**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:norm-convergent-decomposition) — Norm-Convergent Decomposition over a Disjoint Cover · `Physicslib4.Spectral.Unbounded.hasSum_apply_of_partition` (+1 more)
+- [**Lemma 231**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:l2-implies-l1) — $$L^2$$ Implies $$L^1$$ on a Finite Measure Space · `MeasureTheory.MemLp.integrable` (+1 more)
+- [**Proposition 232**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.2) — Properties of the Integral against a Projection-Valued Measure · `Physicslib4.Spectral.Unbounded.integralDomain` (+7 more)
+- [**Lemma 233**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bounded-on-set-range-in-domain) — Bounded on a Set Implies the Range Lies in the Domain · `Physicslib4.Spectral.Unbounded.range_subset_integralDomain` (+1 more)
+- [**Proposition 234**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.1) — The Integral against a Projection-Valued Measure · `Physicslib4.Spectral.Unbounded.pmapIntegral` (+5 more)
+- [**Proposition 235**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:coincidence-with-the-bounded-integral) — Coincidence with the Bounded Integral · `Physicslib4.Spectral.Unbounded.integralDomain_eq_top_of_bddMeasurable` (+1 more)
+- [**Lemma 236**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:integral-ignores-null-sets) — The Integral Ignores Null Sets · `Physicslib4.Spectral.Unbounded.integralDomain_congr_of_null` (+1 more)
+- [**Lemma 237**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:truncations-converge) — Truncations Converge to the Unbounded Integral · `Physicslib4.Spectral.Unbounded.tendsto_integral_truncation`
+- [**Lemma 238**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:associated-measure-of-image) — The Associated Measure of a Bounded-Calculus Image · `Physicslib4.Spectral.Unbounded.assoc_integral_apply` (+1 more)
+- [**Lemma 239**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:integral-preserves-spectral-subspaces) — The Integral Preserves Spectral Subspaces on which the Integrand is Bounded · `Physicslib4.Spectral.Unbounded.mapsTo_pmapIntegral_range` (+1 more)
+- [**Proposition 240**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.3) — The Integral of a Real-Valued Function is Self-Adjoint · `Physicslib4.Spectral.Unbounded.isSelfAdjoint_pmapIntegral_of_real`
 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · From a Continuous Functional Calculus to a Projection-Valued Measure › The Spectral Theorem for Bounded Normal Operators (p. 219) — 1 item</summary>
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators (p. 199) — 6 items</summary>
 
-- [**Theorem 271**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.20) — Spectral Theorem for Bounded Normal Operators · `Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_normal` (+1 more)
-
-</details>
-
-<details markdown="1">
-<summary>§10.3.1 · The Cayley Transform (p. 221) — 5 items</summary>
-
-- [**Lemma 272**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-is-normal) — Unitary Operators are Normal · `Physicslib4.Spectral.Unbounded.unitary_mul_adjoint`
-- [**Lemma 273**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-spectrum-circle) — The Spectrum of a Unitary Operator Lies on the Unit Circle · `spectrum.subset_circle_of_unitary` (+1 more)
-- [**Lemma 274**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-map) — The Cayley Map and its Inverse · `Physicslib4.Spectral.Unbounded.unitCircleMinusOne` (+9 more)
-- [**Theorem 275**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.28) — Cayley Transform · `Physicslib4.Spectral.Unbounded.IsCayleyTransform` (+1 more)
-- [**Lemma 276**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-spectral-mapping) — Spectral Mapping for the Cayley Transform · `Physicslib4.Spectral.Unbounded.mem_spectrum_iff_cayleyMap_mem_spectrum` (+1 more)
+- [**Definition 241**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.19) — Normal Operator · `IsStarNormal`
+- [**Lemma 242**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:self-adjoint-is-normal) — Bounded Self-Adjoint Operators are Normal · `IsSelfAdjoint.isStarNormal`
+- [**Lemma 243**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:power-growth-controlled-by-spectral-radius) — Power Growth is Controlled by the Spectral Radius · `Physicslib4.Spectral.Unbounded.tendsto_norm_pow_div_atTop`
+- [**Lemma 244**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.22) — Spectral Radius of a Product of Commuting Operators · `Physicslib4.Spectral.Unbounded.spectralRadius_mul_le_of_commute`
+- [**Lemma 245**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:adjoint-product-and-involution) — Adjoint of a Product; the Adjoint is an Involution · `ContinuousLinearMap.adjoint_comp` (+1 more)
+- [**Proposition 246**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.21) — Norm Equals Spectral Radius for Normal Operators · `IsStarNormal.spectralRadius_eq_nnnorm`
 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · Proof of the Spectral Theorem for Unbounded Self-Adjoint Operators (p. 225) — 6 items</summary>
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › Spectral Subspaces (p. 203) — 3 items</summary>
 
-- [**Theorem 277**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:change-of-variables) — Change of Variables for a Pushforward Measure · `MeasureTheory.lintegral_map_equiv` (+1 more)
-- [**Lemma 278**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:borel-bijection-transports-pvm) — A Borel Bijection Transports a Projection-Valued Measure · `Physicslib4.Spectral.Unbounded.restrictPVM` (+2 more)
-- [**Lemma 279**](blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-omits-one) — The Cayley Transform Omits the Point $$1$$ · `Physicslib4.Spectral.Unbounded.spectralMeasure_singleton_one_eq_zero`
-- [**Proposition 280**](blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.29) — Spectral Subspaces of the Cayley Transform · `Physicslib4.Spectral.Unbounded.pmapIntegral_cayleyInv_eq`
-- [**Theorem 281**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.30) — Transporting the Spectral Measure through the Cayley Transform · `Physicslib4.Spectral.Unbounded.cayleyPVM` (+1 more)
-- [**Theorem 282**](blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.4) — Spectral Theorem for Unbounded, Self-Adjoint Operators · `Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_unbounded` (+1 more)
+- [**Definition 247**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-7.14) — Spectral Subspaces · `Physicslib4.Spectral.Unbounded.spectralSubspace`
+- [**Proposition 248**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.15) — Properties of Spectral Subspaces · `Physicslib4.Spectral.Unbounded.pvmOperator` (+3 more)
+- [**Proposition 249**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.16) — Commuting Operators Preserve Spectral Subspaces · `Physicslib4.Spectral.Unbounded.commute_borelCalculus` (+1 more)
+
+</details>
+
+<details markdown="1">
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › Almost Eigenvectors (p. 206) — 7 items</summary>
+
+- [**Lemma 250**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:normality-balances-norms) — Normality Balances the Two Norms · `Physicslib4.Spectral.Unbounded.norm_adjoint_sub_smul_apply`
+- [**Definition 251**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.24) — $$\varepsilon$$-Almost Eigenvector · `Physicslib4.Spectral.Unbounded.IsAlmostEigenvector`
+- [**Lemma 252**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.25) — Almost Eigenvectors and the Spectrum of a Normal Operator · `Physicslib4.Spectral.Unbounded.isAlmostEigenvector_adjoint` (+1 more)
+- [**Lemma 253**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.26) — Polynomials Preserve Almost Eigenvectors · `Physicslib4.Spectral.Unbounded.exists_const_isAlmostEigenvector_mvApply_uniform` (+1 more)
+- [**Lemma 254**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:polynomials-in-normal-are-normal) — Polynomials in a Normal Operator are Normal · `Physicslib4.Spectral.Unbounded.mvApply` (+4 more)
+- [**Lemma 255**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:restriction-of-normal-operator) — Restriction of a Normal Operator to a Doubly Invariant Subspace · `Physicslib4.Spectral.Unbounded.exists_restrict_isStarNormal`
+- [**Lemma 256**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.27) — An Almost-Eigenvector Subspace for a Polynomial in a Normal Operator · `Physicslib4.Spectral.Unbounded.exists_subspace_isAlmostEigenvector`
+
+</details>
+
+<details markdown="1">
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Two-Variable Spectral Mapping Theorem (p. 210) — 2 items</summary>
+
+- [**Theorem 257**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.23) — Spectral Mapping for Polynomials in $$A$$ and $$A^*$$ · `Physicslib4.Spectral.Unbounded.spectrum_mvApply`
+- [**Corollary 258**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:norm-of-polynomial-in-a-astar) — Norm of a Polynomial in $$A$$ and $$A^*$$ · `Physicslib4.Spectral.Unbounded.norm_mvApply`
+
+</details>
+
+<details markdown="1">
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Continuous Functional Calculus for a Normal Operator (p. 212) — 1 item</summary>
+
+- [**Theorem 259**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:continuous-functional-calculus-normal) — Continuous Functional Calculus for a Normal Operator · `Physicslib4.Spectral.Unbounded.mvPolyOn` (+9 more)
+
+</details>
+
+<details markdown="1">
+<summary>§10.3.1 · From a Continuous Functional Calculus to a Projection-Valued Measure (p. 213) — 14 items</summary>
+
+- [**Convention 260**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#conv:section-abstract) — Standing Hypotheses: The Abstract Functional Calculus *(a standing convention, not a declaration; it carries no Lean annotation)*
+- [**Definition 261**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-continuous-functional-calculus) — Abstract Continuous Functional Calculus · `Physicslib4.Spectral.Unbounded.IsAbstractCalculus`
+- [**Lemma 262**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-calculus-non-negative) — An Abstract Calculus is Non-Negative · `Physicslib4.Spectral.Unbounded.isSelfAdjoint_of_real` (+2 more)
+- [**Definition 263**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-associated-measures) — The Measures Associated to an Abstract Calculus · `Physicslib4.Spectral.Unbounded.abstractMeasure` (+2 more)
+- [**Lemma 264**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-associated-measures-finite) — The Abstract Associated Measures are Finite · `Physicslib4.Spectral.Unbounded.abstractMeasure_univ`
+- [**Proposition 265**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:abstract-extended-forms-are-bounded) — The Extended Forms are Bounded Quadratic Forms · `Physicslib4.Spectral.Unbounded.isBoundedQuadraticForm_abstractForm` (+3 more)
+- [**Definition 266**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-extended-calculus) — The Extended Calculus · `Physicslib4.Spectral.Unbounded.extendedCalculus` (+2 more)
+- [**Lemma 267**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-extended-linear) — The Extended Calculus is Linear · `Physicslib4.Spectral.Unbounded.extendedCalculus_smul_add`
+- [**Lemma 268**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-extended-convergence) — Off-Diagonal Formula and Bounded Convergence for the Extended Calculus · `Physicslib4.Spectral.Unbounded.polarization_abstractForm` (+1 more)
+- [**Lemma 269**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-extended-real-self-adjoint) — Real Functions Give Self-Adjoint Operators · `Physicslib4.Spectral.Unbounded.isSelfAdjoint_extendedCalculus_of_real`
+- [**Proposition 270**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:abstract-extended-multiplicative) — The Extended Calculus is Multiplicative · `Physicslib4.Spectral.Unbounded.extendedCalculus_mul`
+- [**Lemma 271**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:abstract-extended-conjugation) — The Extended Calculus Respects Conjugation · `Physicslib4.Spectral.Unbounded.extendedCalculus_conj`
+- [**Theorem 272**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:abstract-calculus-yields-pvm) — A Continuous Functional Calculus Yields a Projection-Valued Measure · `Physicslib4.Spectral.Unbounded.abstractPVM` (+2 more)
+- [**Corollary 273**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:abstract-extended-norm-bound) — The Extended Calculus is Norm-Bounded · `Physicslib4.Spectral.Unbounded.norm_extendedCalculus_le`
+
+</details>
+
+<details markdown="1">
+<summary>§10.3.1 · From a Continuous Functional Calculus to a Projection-Valued Measure › The Spectral Theorem for Bounded Normal Operators (p. 220) — 1 item</summary>
+
+- [**Theorem 274**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.20) — Spectral Theorem for Bounded Normal Operators · `Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_normal` (+1 more)
+
+</details>
+
+<details markdown="1">
+<summary>§10.3.1 · The Cayley Transform (p. 222) — 5 items</summary>
+
+- [**Lemma 275**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-is-normal) — Unitary Operators are Normal · `Physicslib4.Spectral.Unbounded.unitary_mul_adjoint`
+- [**Lemma 276**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-spectrum-circle) — The Spectrum of a Unitary Operator Lies on the Unit Circle · `spectrum.subset_circle_of_unitary` (+1 more)
+- [**Lemma 277**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-map) — The Cayley Map and its Inverse · `Physicslib4.Spectral.Unbounded.unitCircleMinusOne` (+9 more)
+- [**Theorem 278**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.28) — Cayley Transform · `Physicslib4.Spectral.Unbounded.IsCayleyTransform` (+1 more)
+- [**Lemma 279**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-spectral-mapping) — Spectral Mapping for the Cayley Transform · `Physicslib4.Spectral.Unbounded.mem_spectrum_iff_cayleyMap_mem_spectrum` (+1 more)
+
+</details>
+
+<details markdown="1">
+<summary>§10.3.1 · Proof of the Spectral Theorem for Unbounded Self-Adjoint Operators (p. 226) — 9 items</summary>
+
+- [**Theorem 280**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:change-of-variables) — Change of Variables for a Pushforward Measure · `MeasureTheory.lintegral_map_equiv` (+1 more)
+- [**Lemma 281**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:borel-bijection-transports-pvm) — A Borel Bijection Transports a Projection-Valued Measure · `Physicslib4.Spectral.Unbounded.restrictPVM` (+2 more)
+- [**Lemma 282**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-omits-one) — The Cayley Transform Omits the Point $$1$$ · `Physicslib4.Spectral.Unbounded.spectralMeasure_singleton_one_eq_zero`
+- [**Proposition 283**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.29) — Spectral Subspaces of the Cayley Transform · `Physicslib4.Spectral.Unbounded.pmapIntegral_cayleyInv_eq`
+- [**Theorem 284**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.30) — Transporting the Spectral Measure through the Cayley Transform · `Physicslib4.Spectral.Unbounded.cayleyPVM` (+1 more)
+- [**Theorem 285**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.4) — Spectral Theorem for Unbounded, Self-Adjoint Operators · `Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_unbounded` (+1 more)
+- [**Definition 286**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:spectral-measure) — Spectral Measure of a Self-Adjoint Operator · `Physicslib4.Spectral.Unbounded.spectralMeasure` (+3 more)
+- [**Definition 287**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.5) — Functional Calculus for an Unbounded Self-Adjoint Operator · `Physicslib4.Spectral.Unbounded.functionalCalculus` (+2 more)
+- [**Lemma 288**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:functional-calculus-bounded) — Functional Calculus of a Bounded Function · `Physicslib4.Spectral.Unbounded.functionalCalculus_of_bddMeasurable`
 
 </details>
 
 
-[Home](./) · [§10.1 GNS](sec10-1-gns.html) · [§10.2 Spectral](sec10-2-spectral.html) · **§10.3 Unbounded** · [§10.4 Spacetime](sec10-4-spacetime.html) · [§10.5 Minkowski](sec10-5-haag-kastler.html) · [§10.6 Curved](sec10-6-curved.html) · [§10.7 Covariance](sec10-7-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
+[Home](./) · [§10.1 GNS](sec10-1-gns.html) · [§10.2 Spectral](sec10-2-spectral.html) · **§10.3 Unbounded** · [§10.4 Stone](sec10-4-stone.html) · [§10.5 Spacetime](sec10-5-spacetime.html) · [§10.6 Minkowski](sec10-6-haag-kastler.html) · [§10.7 Curved](sec10-7-curved.html) · [§10.8 Covariance](sec10-8-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)
 
-← [§10.2 Spectral](sec10-2-spectral.html) · [§10.4 Spacetime](sec10-4-spacetime.html) →
+← [§10.2 Spectral](sec10-2-spectral.html) · [§10.4 Stone](sec10-4-stone.html) →

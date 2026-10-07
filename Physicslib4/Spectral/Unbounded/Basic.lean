@@ -192,6 +192,63 @@ theorem isSymmetric_iff_le_adjoint {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T
   rw [LinearPMap.apply_comp_inclusion hle φ]
   exact (LinearPMap.adjoint_isFormalAdjoint hT (Submodule.inclusion hle.1 φ) ψ).symm
 
+/--
+An unbounded operator `A` is *positive* if it is symmetric (in the density-free sense of
+`IsSymmetric`) and `0 ≤ Re ⟪ψ, A ψ⟫` for every `ψ ∈ Dom(A)`. For symmetric `A` the number
+`⟪ψ, A ψ⟫` is real, so this is `⟪ψ, A ψ⟫ ≥ 0`. This mirrors Mathlib's
+`ContinuousLinearMap.IsPositive` (`isPositive_toPMap_iff`).
+
+Blueprint reference: `def:positive-unbounded-operator`.
+-/
+def IsPositive (A : H →ₗ.[ℂ] H) : Prop :=
+  IsSymmetric A ∧ ∀ ψ : A.domain, 0 ≤ (⟪(ψ : H), A ψ⟫_ℂ).re
+
+omit [CompleteSpace H] in
+/--
+A bounded operator, regarded as an unbounded operator with domain `H`, is positive exactly
+when it is positive as a bounded operator.
+
+Blueprint reference: `lmm:positive-bounded-agrees`.
+-/
+theorem isPositive_toPMap_iff (P : H →L[ℂ] H) :
+    IsPositive ((P : H →ₗ[ℂ] H).toPMap ⊤) ↔ P.IsPositive := by
+  rw [ContinuousLinearMap.isPositive_def]
+  refine ⟨fun ⟨hs, hp⟩ => ⟨fun x y => (hs ⟨x, trivial⟩ ⟨y, trivial⟩).symm, fun x => ?_⟩,
+    fun ⟨hs, hp⟩ => ⟨fun φ ψ => (hs φ ψ).symm, fun ψ => ?_⟩⟩
+  · rw [ContinuousLinearMap.reApplyInnerSelf_apply, ← inner_re_symm]
+    exact hp ⟨x, trivial⟩
+  · have := hp ψ
+    rw [ContinuousLinearMap.reApplyInnerSelf_apply, ← inner_re_symm] at this
+    exact this
+
+omit [CompleteSpace H] in
+/--
+Unitary conjugation preserves positivity: if `A` is positive, `W` is unitary, and `B` has
+domain `W · Dom(A)` with `B ψ = W A W⁻¹ ψ` there, then `B` is positive. Stated through the
+domain and the formula rather than by building `W A W⁻¹`, which is the form in which
+`Stone.mem_generator_conj_domain_iff` and `Stone.generator_conj_apply` supply it.
+
+Blueprint reference: `lmm:positive-conj`.
+-/
+theorem IsPositive.of_conj {A B : H →ₗ.[ℂ] H} (hA : IsPositive A) (W : H ≃ₗᵢ[ℂ] H)
+    (hdom : ∀ ψ : H, ψ ∈ B.domain ↔ W.symm ψ ∈ A.domain)
+    (happ : ∀ (ψ : H) (h : ψ ∈ B.domain) (h' : W.symm ψ ∈ A.domain),
+      B ⟨ψ, h⟩ = W (A ⟨W.symm ψ, h'⟩)) :
+    IsPositive B := by
+  have key : ∀ φ ψ : B.domain, ⟪(φ : H), B ψ⟫_ℂ =
+      ⟪(W.symm φ : H), A ⟨W.symm ψ, (hdom ψ).1 ψ.2⟩⟫_ℂ := by
+    intro φ ψ
+    rw [happ ψ ψ.2 ((hdom ψ).1 ψ.2), ← W.inner_map_map (W.symm φ), W.apply_symm_apply]
+  have key' : ∀ φ ψ : B.domain, ⟪B φ, (ψ : H)⟫_ℂ =
+      ⟪A ⟨W.symm φ, (hdom φ).1 φ.2⟩, (W.symm ψ : H)⟫_ℂ := by
+    intro φ ψ
+    rw [happ φ φ.2 ((hdom φ).1 φ.2), ← W.inner_map_map _ (W.symm ψ), W.apply_symm_apply]
+  refine ⟨fun φ ψ => ?_, fun ψ => ?_⟩
+  · rw [key, key']
+    exact hA.1 ⟨_, (hdom φ).1 φ.2⟩ ⟨_, (hdom ψ).1 ψ.2⟩
+  · rw [key]
+    exact hA.2 ⟨_, (hdom ψ).1 ψ.2⟩
+
 /-!
 ### The closure of an unbounded operator
 
@@ -404,6 +461,21 @@ theorem adjoint_le_adjoint_of_le {C₁ C₂ : H →ₗ.[ℂ] H} (hC₂ : HasDens
   obtain ⟨_, e⟩ := key x
   rw [← e]
   exact congrArg _ (Subtype.ext hxy)
+
+/--
+A self-adjoint operator has no proper symmetric extension: if `B` is symmetric and extends
+the self-adjoint `A`, then `A = B`.
+
+`B` need not be assumed densely defined: its domain contains the dense domain of `A`.
+
+Blueprint reference: `lmm:self-adjoint-maximally-symmetric`.
+-/
+theorem eq_of_isSelfAdjoint_of_isSymmetric_of_le {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+    (hB : IsSymmetric B) (hAB : A ≤ B) : A = B := by
+  have hBd : HasDenseDomain B := Dense.mono (SetLike.coe_subset_coe.mpr hAB.1) hA.dense_domain
+  have hadj := adjoint_le_adjoint_of_le hA.dense_domain hAB
+  rw [LinearPMap.isSelfAdjoint_def.mp hA] at hadj
+  exact le_antisymm hAB (((isSymmetric_iff_le_adjoint hBd).mp hB).trans hadj)
 
 /--
 Every self-adjoint extension of an essentially self-adjoint operator `T` is `T^cl`.

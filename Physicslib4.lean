@@ -96,10 +96,16 @@ import Physicslib4.Spectral.OperatorIntegral
 import Physicslib4.Spectral.ProjectionValuedMeasure
 import Physicslib4.Spectral.SpectralTheorem
 import Physicslib4.Spectral.Spectrum
+import Physicslib4.Spectral.Stone.Basic
+import Physicslib4.Spectral.Stone.Bounded
+import Physicslib4.Spectral.Stone.Density
+import Physicslib4.Spectral.Stone.Exponential
+import Physicslib4.Spectral.Stone.Theorem
 import Physicslib4.Spectral.Unbounded.AbstractCalculus
 import Physicslib4.Spectral.Unbounded.Basic
 import Physicslib4.Spectral.Unbounded.Cayley
 import Physicslib4.Spectral.Unbounded.DirectSum
+import Physicslib4.Spectral.Unbounded.FunctionalCalculus
 import Physicslib4.Spectral.Unbounded.Integral
 import Physicslib4.Spectral.Unbounded.Normal
 import Physicslib4.Spectral.Unbounded.Spectrum

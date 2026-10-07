@@ -13,7 +13,7 @@ import Physicslib4.Spacetime.MinkowskiDirected
 
 This file formalises the blueprint declaration
 `def:local-commutativity` (Axiom 3 of the "sharpened" Haag-Kastler
-axioms, section 10.5 of the AQFT-in-Lean blueprint):
+axioms, section 10.6 of the AQFT-in-Lean blueprint):
 
 > If two Alexandrov-basis sets `𝐁₁`, `𝐁₂` are *completely spacelike*
 > with respect to each other, then the local algebras `𝔘(𝐁₁)` and

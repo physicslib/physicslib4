@@ -1,0 +1,781 @@
+\section{Stone's Theorem}\label{sctn:stones-theorem}
+Here we will state and prove \textbf{Stone's Theorem}~(\ref{thrm:hall-10.15}), which together with Proposition~\ref{prpstn:hall-10.14} establishes a one-to-one correspondence between strongly continuous one-parameter unitary groups on $\mathbf{H}$ and self-adjoint operators on $\mathbf{H}$, as recorded in the Summary at the end of this section. In quantum mechanics this is how observables arise as generators of symmetries and of dynamics: the source text uses it to identify angular momentum as the infinitesimal generator of the one-parameter group of unitary rotation operators (source text, Section 17.1), and, together with Lemma~\ref{lmm:hall-10.17}, to show that the time evolution $\psi(t) = e^{-it\hat{H}/\hbar}\psi_0$ satisfies the Schrödinger equation, in the natural Hilbert-space sense, exactly when $\psi_0$ lies in the domain of the Hamiltonian $\hat{H}$ (source text, Section 19.4).
+
+Here, as in Section~\ref{sctn:spectral-theorems} and Section~\ref{sctn:unbounded-spectral-theorems}, we follow the presentation of \href{https://doi.org/10.1007/978-1-4614-7116-5}{Quantum Theory for Mathematicians}.
+
+This section builds on the two preceding sections: chiefly on the \textbf{Spectral Theorem for Unbounded Self-Adjoint Operators}~(\ref{thrm:hall-10.4}) and the functional calculus it supplies~(\ref{def:hall-10.5}), and also on the theory of unbounded operators — adjoints, symmetric and self-adjoint operators, closures, and the criterion for essential self-adjointness — developed in Section~\ref{sctn:unbounded-spectral-theorems}, together with the properties of the integral against a projection-valued measure established in Section~\ref{sctn:spectral-theorems}. Nothing proved in those sections depends on anything proved here, so there is no circularity.
+
+A note on conventions. As in the preceding sections, results that are standard and whose proofs lie outside the scope of this development are stated in full but not proven, and are marked as such by the absence of an accompanying proof. In this section those results are the ones concerning the Bochner integral of a Hilbert-space-valued function~(\ref{thrm:bochner-integral}), the existence of smooth approximate identities~(\ref{lmm:smooth-approximate-identity}), the elementary facts about differentiation recorded in Proposition~\ref{prpstn:calculus-facts}, and the differentiation and approximation properties of convolutions recorded in Lemma~\ref{lmm:convolution-facts}. Each is available in Mathlib, and the corresponding declarations are named where the result is stated. Every other result stated here is proven in full, including the solution of the equation $y' = cy$~(\ref{lmm:linear-ode-scalar}), which is derived from Proposition~\ref{prpstn:calculus-facts}.
+
+\subsection{One-Parameter Unitary Groups}
+We begin with the objects the theorem is about.
+
+\begin{definition}[One-Parameter Unitary Group]
+    \label{def:hall-10.11}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup, Physicslib4.Spectral.Stone.IsStronglyContinuous}
+    \uses{def:bounded-operator-notation, def:unitary-operator, def:identity-operator, def:adjoint-bounded, def:induced-norm, lmm:unitary-is-normal}
+    \leanok
+    A \textit{one-parameter unitary group} on $\mathbf{H}$ is a family $U(t)$, $t \in \mathbb{R}$, of unitary operators on $\mathbf{H}$ such that
+    \begin{align}
+        U(0) &= \mathbf{1}, \\
+        U(s + t) &= U(s)U(t) \qquad \text{for all } s,t \in \mathbb{R}.
+    \end{align}
+    A one-parameter unitary group is \textit{strongly continuous} if
+    \begin{align}
+        \lim\limits_{s \rightarrow t} \left\| U(t)\psi - U(s)\psi \right\| = 0
+    \end{align}
+    for all $\psi \in \mathbf{H}$ and all $t \in \mathbb{R}$.
+
+    Two remarks on the definition. First, the group law forces $U(t)^* = U(-t)$; this is Lemma~\ref{lmm:unitary-group-inner-adjoint} below, used in the proof of Lemma~\ref{lmm:generator-symmetry-identity}. Second, strong continuity is here required at every $t \in \mathbb{R}$, following the source text, but continuity at $0$ alone would suffice; this is Lemma~\ref{lmm:strongly-continuous-iff-at-zero} below.
+\end{definition}
+
+\begin{lemma}[Strong Continuity is Strong Continuity at $0$]
+    \label{lmm:strongly-continuous-iff-at-zero}
+    \lean{Physicslib4.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero}
+    \uses{def:hall-10.11}
+    \leanok
+    Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$. Then $U(\cdot)$ is strongly continuous if and only if $\lim_{s \to 0} \left\| U(s)\psi - \psi \right\| = 0$ for every $\psi \in \mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.11, def:unitary-operator}
+The forward implication is the case $t = 0$ of the definition, since $U(0) = \mathbf{1}$. Conversely, for any $t$ and $s$, by the group law and because $U(s)$ is unitary and hence isometric by Definition~\ref{def:unitary-operator},
+\begin{align}
+    \left\| U(t)\psi - U(s)\psi \right\| = \left\| U(s) \left( U(t-s)\psi - \psi \right) \right\| = \left\| U(t-s)\psi - \psi \right\|,
+\end{align}
+and the right-hand side tends to $0$ as $s \to t$, since $t - s \to 0$, by continuity at $0$.
+\end{proof}
+
+\begin{lemma}[The Adjoint of $U(t)$ is $U(-t)$]
+    \label{lmm:unitary-group-inner-adjoint}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.adjoint_eq, Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.inner_apply}
+    \uses{def:hall-10.11, def:adjoint-bounded}
+    \leanok
+    Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$. Then $U(t)^* = U(-t)$ for every $t \in \mathbb{R}$; equivalently,
+    \begin{align}
+        \left< \phi, U(t)\psi \right> = \left< U(-t)\phi, \psi \right> \qquad \text{for all } \phi, \psi \in \mathbf{H}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.11, def:adjoint-bounded, def:unitary-operator, lmm:unitary-is-normal}
+The group law forces $U(t)^{-1} = U(-t)$, since $U(t)U(-t) = U(0) = \mathbf{1} = U(-t)U(t)$. By Lemma~\ref{lmm:unitary-is-normal} a unitary operator satisfies $U(t)^*U(t) = \mathbf{1}$, so $U(t)^* = U(t)^*\left( U(t)U(t)^{-1} \right) = \left( U(t)^*U(t) \right)U(t)^{-1} = U(t)^{-1} = U(-t)$. The inner-product form is the definition of the adjoint~(\ref{def:adjoint-bounded}).
+\end{proof}
+
+\begin{definition}[Infinitesimal Generator]
+    \label{def:hall-10.13}
+    \lean{Physicslib4.Spectral.Stone.generator, Physicslib4.Spectral.Stone.generatorDomain, Physicslib4.Spectral.Stone.generatorQuotient}
+    \uses{def:hall-10.11, def:hall-3.1, def:unitary-operator, def:induced-norm}
+    \leanok
+    Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$. The \textit{infinitesimal generator} of $U(\cdot)$ is the operator $A$ given by
+    \begin{align}
+        A\psi = \lim\limits_{t \rightarrow 0,\ t \ne 0} \frac{1}{i} \frac{U(t)\psi - \psi}{t},
+    \end{align}
+    with $\text{Dom}(A)$ consisting of those $\psi \in \mathbf{H}$ for which the limit exists in the norm topology on $\mathbf{H}$. The limit is the \textit{punctured} one, over $t \to 0$ with $t \ne 0$, the quotient being undefined at $t = 0$.
+
+    That $A$ so defined is linear on $\text{Dom}(A)$, and that $\text{Dom}(A)$ is a subspace, are immediate from the linearity of each $U(t)$ and of limits: if the defining limit exists for $\psi$ and $\phi$ then it exists for $c\psi + \phi$ and takes the value $cA\psi + A\phi$. The definition requires neither strong continuity of $U(\cdot)$ nor density of $\text{Dom}(A)$: the generator, a linear operator on the subspace $\text{Dom}(A)$, is defined for any one-parameter unitary group. That $\text{Dom}(A)$ is \textit{dense} when $U(\cdot)$ is strongly continuous, so that $A$ is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}, is not immediate; it is the content of Lemma~\ref{lmm:hall-10.18}.
+\end{definition}
+
+\begin{lemma}[Characterization of the Generator]
+    \label{lmm:generator-spec}
+    \lean{Physicslib4.Spectral.Stone.exists_generator_eq_iff}
+    \uses{def:hall-10.13}
+    \leanok
+    Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, and let $\psi, \chi \in \mathbf{H}$. Then $\psi \in \text{Dom}(A)$ and $A\psi = \chi$ if and only if
+    \begin{align}
+        \frac{1}{i} \frac{U(t)\psi - \psi}{t} \longrightarrow \chi \qquad \text{as } t \rightarrow 0,\ t \ne 0,
+    \end{align}
+    in the norm topology on $\mathbf{H}$. In particular $\psi \in \text{Dom}(A)$ exactly when this punctured limit exists, and then the limit is $A\psi$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.13}
+This is Definition~\ref{def:hall-10.13} unfolded, together with uniqueness of limits: $\mathbf{H}$ is Hausdorff and the punctured filter at $0$ in $\mathbb{R}$ is non-trivial, $0$ not being an isolated point, so a limit along it, when it exists, is unique.
+\end{proof}
+
+The generator of any such group satisfies the symmetry identity. We record this once, since it is used both in Proposition~\ref{prpstn:hall-10.14} and in the proof of Stone's Theorem, and of the properties of the group it uses only the group law and unitarity.
+
+\begin{lemma}[The Generator Satisfies the Symmetry Identity]
+    \label{lmm:generator-symmetry-identity}
+    \lean{Physicslib4.Spectral.Stone.isSymmetric_generator}
+    \uses{def:hall-10.11, def:hall-10.13, def:hall-9.2, def:hall-3.1}
+    \leanok
+    Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $B$. Then
+    \begin{align}
+        \left< \phi, B\psi \right> = \left< B\phi, \psi \right> \qquad \text{for all } \phi, \psi \in \text{Dom}(B).
+    \end{align}
+    In particular, if $\text{Dom}(B)$ is dense in $\mathbf{H}$, then $B$ is symmetric. In the Lean formalization, where symmetry of an operator is the identity above and does not presuppose a dense domain, the identity is itself the statement that $B$ is symmetric.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.11, def:hall-10.13, def:hall-9.2, def:hall-3.1, lmm:unitary-group-inner-adjoint, lmm:generator-spec, def:inner-product, def:induced-norm, prpstn:hall-a.43}
+For fixed $\phi, \psi \in \mathbf{H}$, both maps $\chi \mapsto \left< \phi, \chi \right>$ and $\chi \mapsto \left< \chi, \psi \right>$ are Lipschitz, by \textbf{Cauchy–Schwarz}~(\ref{prpstn:hall-a.43}):
+\begin{align}
+    \lvert \left< \phi, \chi \right> - \left< \phi, \chi' \right> \rvert &\le \left\| \phi \right\| \left\| \chi - \chi' \right\|, \\
+    \lvert \left< \chi, \psi \right> - \left< \chi', \psi \right> \rvert &\le \left\| \chi - \chi' \right\| \left\| \psi \right\|.
+\end{align}
+So each commutes with limits taken along the continuous parameter $t$.
+
+Let $\phi, \psi \in \text{Dom}(B)$. By Lemma~\ref{lmm:unitary-group-inner-adjoint}, $\left< \phi, U(t)\psi \right> = \left< U(-t)\phi, \psi \right>$. Hence, all limits being punctured ($t \ne 0$),
+\begin{align}
+    \left< \phi, B\psi \right> &= \lim\limits_{t \rightarrow 0} \left< \phi, \frac{1}{i}\frac{U(t)\psi - \psi}{t} \right> \\
+        &= \lim\limits_{t \rightarrow 0} \left< -\frac{1}{i}\frac{U(-t)\phi - \phi}{t}, \psi \right> \\
+        &= \lim\limits_{t \rightarrow 0} \left< \frac{1}{i}\frac{U(-t)\phi - \phi}{(-t)}, \psi \right> \\
+        &= \left< B\phi, \psi \right>.
+\end{align}
+The first line is the characterization of $B$ at $\psi$ in Lemma~\ref{lmm:generator-spec}, passed through the Lipschitz map $\chi \mapsto \left< \phi, \chi \right>$. The second uses $\left< \phi, U(t)\psi \right> = \left< U(-t)\phi, \psi \right>$ and conjugate-linearity in the first argument~(\ref{def:inner-product}): the scalar $1/(it)$ moves into the first slot as its conjugate, $\overline{1/(it)} = -1/(it)$, since $t$ is real. The third is algebra. The fourth is Lemma~\ref{lmm:generator-spec} at $\phi$, since $t \mapsto -t$ maps the punctured neighbourhoods of $0$ to themselves, passed through the Lipschitz map $\chi \mapsto \left< \chi, \psi \right>$.
+
+If moreover $\text{Dom}(B)$ is dense, then $B$ — linear on the subspace $\text{Dom}(B)$ by Definition~\ref{def:hall-10.13} — is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}, and the identity just proved is exactly the condition for symmetry in Definition~\ref{def:hall-9.2}. In the density-free sense of symmetry used in the Lean formalization, the identity is the symmetry of $B$ directly.
+\end{proof}
+
+Three examples of generators are used in the positive-energy condition of the Haag–Kastler axioms: the trivial group, a conjugated group, and the exponential of a bounded operator.
+
+\begin{lemma}[The Generator of the Trivial Group]
+    \label{lmm:generator-const}
+    \lean{Physicslib4.Spectral.Stone.generator_refl}
+    \uses{def:hall-10.11, def:hall-10.13}
+    \leanok
+    The constant family $U(t) = \mathbf{1}$, $t \in \mathbb{R}$, is a strongly continuous one-parameter unitary group, and its infinitesimal generator is the operator $0$ with domain $\mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.11, lmm:generator-spec, def:identity-operator}
+    The identity operator is unitary, $U(0) = \mathbf{1}$ and $U(s+t) = \mathbf{1} = \mathbf{1}\mathbf{1} = U(s)U(t)$, and $\left\| U(t)\psi - U(s)\psi \right\| = 0$ for all $s, t$, so $U(\cdot)$ is a strongly continuous one-parameter unitary group~(\ref{def:hall-10.11}). For every $\psi \in \mathbf{H}$ and $t \ne 0$ the quotient $\frac{1}{i}\frac{U(t)\psi - \psi}{t}$ is $0$, so it tends to $0$; by Lemma~\ref{lmm:generator-spec}, every $\psi$ lies in the domain of the generator, which sends it to $0$.
+\end{proof}
+
+\begin{lemma}[Conjugating a Unitary Group]
+    \label{lmm:conj-unitary-group}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.conj, Physicslib4.Spectral.Stone.IsStronglyContinuous.conj}
+    \uses{def:hall-10.11, def:unitary-operator}
+    \leanok
+    Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ and let $W$ be a unitary operator on $\mathbf{H}$. Then $V(t) \equiv WU(t)W^{-1}$ is a one-parameter unitary group, and it is strongly continuous if $U(\cdot)$ is.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.11, def:unitary-operator}
+    Each $V(t)$ is a product of unitaries, hence unitary; $V(0) = WW^{-1} = \mathbf{1}$ and $V(s)V(t) = WU(s)W^{-1}WU(t)W^{-1} = WU(s+t)W^{-1} = V(s+t)$. Strong continuity transfers because $\left\| V(t)\psi - V(s)\psi \right\| = \left\| U(t)W^{-1}\psi - U(s)W^{-1}\psi \right\|$, $W$ being isometric~(\ref{def:unitary-operator}).
+\end{proof}
+
+\begin{lemma}[Conjugating a Group Conjugates its Generator]
+    \label{lmm:generator-conj}
+    \lean{Physicslib4.Spectral.Stone.mem_generator_conj_domain_iff, Physicslib4.Spectral.Stone.generator_conj_apply}
+    \uses{lmm:conj-unitary-group, def:hall-10.13, def:unitary-operator}
+    \leanok
+    Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, let $W$ be a unitary operator on $\mathbf{H}$, and let $B$ be the infinitesimal generator of the one-parameter unitary group $V(t) = WU(t)W^{-1}$ of Lemma~\ref{lmm:conj-unitary-group}. Then $\text{Dom}(B) = W\,\text{Dom}(A)$ and $B = WAW^{-1}$, that is,
+    \begin{align}
+        \psi \in \text{Dom}(B) \iff W^{-1}\psi \in \text{Dom}(A), \qquad B\psi = WAW^{-1}\psi.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:conj-unitary-group, lmm:generator-spec, def:bounded-operator-notation}
+    By linearity of $W$, for $t \ne 0$,
+    \begin{align}
+        \frac{1}{i}\frac{V(t)\psi - \psi}{t} = W\left( \frac{1}{i}\frac{U(t)W^{-1}\psi - W^{-1}\psi}{t} \right).
+    \end{align}
+    The operators $W$ and $W^{-1}$ are bounded, hence continuous~(\ref{def:bounded-operator-notation}), so the left side converges if and only if the bracket does, the limits being related by $W$. By Lemma~\ref{lmm:generator-spec} applied to $V(\cdot)$ at $\psi$ and to $U(\cdot)$ at $W^{-1}\psi$, this is the stated description of $B$.
+\end{proof}
+
+In the next three lemmas $P \in \mathcal{B}(\mathbf{H})$ is self-adjoint, $P^* = P$, and for $t \in \mathbb{R}$
+\begin{align}
+    \exp(itP) \equiv \sum_{n=0}^{\infty} \frac{(itP)^n}{n!},
+\end{align}
+the exponential series, convergent in the operator norm of the Banach algebra $\mathcal{B}(\mathbf{H})$ (in Mathlib, \texttt{NormedSpace.exp}, applied to $t \cdot (iP)$).
+
+\begin{lemma}[$\exp(itP)$ is a One-Parameter Unitary Group]
+    \label{lmm:exp-bounded-unitary-group}
+    \lean{Physicslib4.Spectral.Stone.exists_isOneParameterUnitaryGroup_exp}
+    \uses{def:hall-10.11, def:bounded-operator-notation, def:adjoint-bounded}
+    \leanok
+    Let $P \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then $V(t) \equiv \exp(itP)$ is a one-parameter unitary group.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.11, def:unitary-operator, def:adjoint-bounded, def:identity-operator}
+    $V(0) = \exp(0) = \mathbf{1}$ (\texttt{NormedSpace.exp\_zero}). The operators $isP$ and $itP$ commute, so $V(s+t) = V(s)V(t)$ (\texttt{NormedSpace.exp\_add\_of\_commute}). Since $P^* = P$, $(itP)^* = -itP$, so $itP$ is skew-adjoint and $V(t)$ lies in Mathlib's \texttt{unitary} submonoid (\texttt{NormedSpace.exp\_mem\_unitary\_of\_mem\_skewAdjoint}), i.e. $V(t)^*V(t) = V(t)V(t)^* = \mathbf{1}$. As in the proof of Lemma~\ref{lmm:exp-unitary}, this makes $V(t)$ unitary in the sense of Definition~\ref{def:unitary-operator}: it is bijective with inverse $V(t)^*$, and $\left< V(t)\phi, V(t)\psi \right> = \left< \phi, V(t)^*V(t)\psi \right> = \left< \phi, \psi \right>$ by the definition of the adjoint~(\ref{def:adjoint-bounded}).
+\end{proof}
+
+\begin{lemma}[The Derivative of $\exp(itP)$ at $0$]
+    \label{lmm:exp-bounded-hasDerivAt}
+    \lean{Physicslib4.Spectral.Stone.hasDerivAt_exp_smul_I}
+    \uses{def:bounded-operator-notation}
+    \leanok
+    Let $P \in \mathcal{B}(\mathbf{H})$. The map $\mathbb{R} \to \mathcal{B}(\mathbf{H})$, $t \mapsto \exp(t \cdot iP)$, is differentiable at $t = 0$ in the operator norm, with derivative $iP$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:bounded-operator-notation}
+    Mathlib's \texttt{hasDerivAt\_exp\_smul\_const}, with scalar field $\mathbb{K} = \mathbb{R}$ and Banach algebra $\mathcal{B}(\mathbf{H})$ (\texttt{H →L[ℂ] H}), $x = iP$ and $t = 0$, gives the derivative $\exp(0 \cdot iP)\,iP = \exp(0)\,iP = iP$, using \texttt{NormedSpace.exp\_zero}. This is the instantiation used in the existing Lean proof of \texttt{Physicslib4.AQFT.exp\_generator\_unique} (\texttt{Physicslib4/AQFT/PositiveEnergy.lean}).
+\end{proof}
+
+\begin{lemma}[The Generator of $\exp(itP)$]
+    \label{lmm:generator-exp-bounded}
+    \lean{Physicslib4.Spectral.Stone.generator_eq_of_eq_exp}
+    \uses{lmm:exp-bounded-unitary-group, def:hall-10.13}
+    \leanok
+    Let $P \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then the one-parameter unitary group $V(t) = \exp(itP)$ of Lemma~\ref{lmm:exp-bounded-unitary-group} is strongly continuous, and its infinitesimal generator is $P$, with domain $\mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:exp-bounded-unitary-group, lmm:exp-bounded-hasDerivAt, lmm:strongly-continuous-iff-at-zero, lmm:generator-spec, def:bounded-operator-notation}
+    By Lemma~\ref{lmm:exp-bounded-hasDerivAt}, $t \mapsto V(t)$ is differentiable, hence continuous, at $0$ in the operator norm; since $\left\| V(t)\psi - \psi \right\| \le \left\| V(t) - \mathbf{1} \right\| \left\| \psi \right\|$, Lemma~\ref{lmm:strongly-continuous-iff-at-zero} gives strong continuity. By \texttt{hasDerivAt\_iff\_tendsto\_slope\_zero}, the same derivative says $t^{-1}(V(t) - \mathbf{1}) \to iP$ in operator norm along $t \to 0$, $t \ne 0$. Applying this to $\psi \in \mathbf{H}$ (evaluation at $\psi$ is a bounded linear map~(\ref{def:bounded-operator-notation})) and multiplying by $1/i$ gives $\frac{1}{i}\frac{V(t)\psi - \psi}{t} \to P\psi$; so by Lemma~\ref{lmm:generator-spec} every $\psi$ lies in the domain of the generator, which sends it to $P\psi$.
+\end{proof}
+
+\subsection{Imported Results}
+Four standard results are used below whose proofs lie outside the scope of this development. We state them here in the forms in which they are used.
+
+The first is the Bochner integral: the extension of the Lebesgue integral to functions taking values in a Banach space. It is used only in the proof of Lemma~\ref{lmm:hall-10.18}, through Lemma~\ref{lmm:averaging-translate}.
+
+\begin{theorem}[Bochner Integral]
+    \label{thrm:bochner-integral}
+    \lean{ContinuousLinearMap.integral_comp_comm, Continuous.integrable_of_hasCompactSupport}
+    \uses{def:bounded-operator-notation, def:induced-norm}
+    \leanok
+    Let $(X,\Omega,\nu)$ be a measure space and $V$ a Banach space. A strongly measurable function $g : X \rightarrow V$ — one that is an almost-everywhere limit of simple functions — with $\int_X \left\| g \right\| \, d\nu < \infty$ is said to be \textit{integrable}, and such a $g$ has a well-defined integral $\int_X g \, d\nu \in V$ with the following properties.
+    \begin{enumerate}
+        \item \textit{(Commutation with bounded linear maps.)} If $W$ is a Banach space, $T : V \rightarrow W$ is bounded and linear, and $g : X \rightarrow V$ is integrable, then $T \int_X g \, d\nu = \int_X T g \, d\nu$. In particular this applies to $T \in \mathcal{B}(\mathbf{H})$.
+        \item \textit{(Continuous compactly supported integrands.)} If $X = \mathbb{R}$ with Lebesgue measure and $g : \mathbb{R} \rightarrow V$ is continuous with compact support, then $g$ is integrable.
+    \end{enumerate}
+    In Mathlib the integrable functions are those satisfying \texttt{MeasureTheory.Integrable}, defined as \texttt{MeasureTheory.AEStronglyMeasurable} — strong measurability up to a null set — together with finiteness of $\int_X \left\| g \right\| \, d\nu$, and the integral is \texttt{MeasureTheory.integral}. Point 1 is \texttt{ContinuousLinearMap.integral\_comp\_comm}, and point 2 is \texttt{Continuous.integrable\_of\_hasCompactSupport}.
+\end{theorem}
+\begin{proof}
+\leanok
+\end{proof}
+
+The second supplies the mollifiers used in the same proof.
+
+\begin{lemma}[Smooth Approximate Identity]
+    \label{lmm:smooth-approximate-identity}
+    \lean{ContDiffBump.normed, ContDiffBump.contDiff_normed, ContDiffBump.nonneg_normed, ContDiffBump.integral_normed, ContDiffBump.tsupport_normed_eq}
+    \leanok
+    For each $n \ge 1$ there is a function $f_n : \mathbb{R} \rightarrow \mathbb{R}$ that is smooth, non-negative, supported in $[-1/n, 1/n]$, and satisfies $\int_{-\infty}^{\infty} f_n(\tau) \, d\tau = 1$.
+    In Mathlib such functions are supplied by the normalized bump function \texttt{ContDiffBump.normed} with respect to Lebesgue measure, centred at $0$ with inner radius $1/(2n)$ and outer radius $1/n$: it is smooth by \texttt{ContDiffBump.contDiff\_normed}, non-negative by \texttt{ContDiffBump.nonneg\_normed}, has integral $1$ by \texttt{ContDiffBump.integral\_normed}, and has support in the closed ball of radius $1/n$ by \texttt{ContDiffBump.tsupport\_normed\_eq}, which is compact. These $f_n$ are bump functions whose outer radius $1/n$ tends to $0$, which is the form in which Lemma~\ref{lmm:convolution-facts} takes them.
+\end{lemma}
+\begin{proof}
+\leanok
+\end{proof}
+
+The third collects elementary facts about differentiation of Hilbert-space-valued and vector-valued functions of a real variable.
+
+\begin{proposition}[Facts about Differentiation]
+    \label{prpstn:calculus-facts}
+    \lean{HasDerivAt.inner, is_const_of_deriv_eq_zero}
+    \uses{def:inner-product}
+    \leanok
+    \begin{enumerate}
+        \item \textit{(Product rule for the inner product.)} Let $t \in \mathbb{R}$ and let $v, w : \mathbb{R} \rightarrow \mathbf{H}$ be differentiable at $t$ in the norm topology, with derivatives $v'(t), w'(t)$. Then $t \mapsto \left< v(t), w(t) \right>$ is differentiable at $t$ with derivative $\left< v'(t), w(t) \right> + \left< v(t), w'(t) \right>$.
+        \item \textit{(Vanishing derivative.)} Let $V$ be a normed space and let $g : \mathbb{R} \rightarrow V$ be differentiable at every point, with $g'(t) = 0$ for all $t \in \mathbb{R}$. Then $g$ is constant. The differentiability hypothesis is stated explicitly because in Mathlib the derivative of a function at a point where it is not differentiable is defined to be $0$ (\texttt{deriv\_zero\_of\_not\_differentiableAt}), so the vanishing of the derivative does not by itself imply differentiability.
+    \end{enumerate}
+    In Mathlib, point 1 is \texttt{HasDerivAt.inner}, whose conclusion $\left< f(x), g' \right> + \left< f', g(x) \right>$ is the formula above with the summands exchanged; and point 2 is \texttt{is\_const\_of\_deriv\_eq\_zero}, which states that a differentiable function with $\text{deriv}\, f\, x = 0$ for all $x$ satisfies $f(x) = f(y)$ for all $x, y$, for any normed codomain.
+\end{proposition}
+\begin{proof}
+\leanok
+\end{proof}
+
+The equation $y' = cy$ follows from point 2 directly.
+
+\begin{lemma}[The Equation $y' = cy$]
+    \label{lmm:linear-ode-scalar}
+    \lean{Physicslib4.Spectral.Stone.eq_mul_exp_of_hasDerivAt}
+    \uses{prpstn:calculus-facts}
+    \leanok
+    Let $c \in \mathbb{C}$. A differentiable function $y : \mathbb{R} \rightarrow \mathbb{C}$ satisfying $y'(t) = cy(t)$ for all $t$ is given by $y(t) = y(0)e^{ct}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{prpstn:calculus-facts}
+The function $z(t) \equiv y(t)e^{-ct}$ is differentiable everywhere, as a product of differentiable functions, with derivative $y'(t)e^{-ct} - cy(t)e^{-ct} = 0$. By point 2 of Proposition~\ref{prpstn:calculus-facts}, with $V = \mathbb{C}$, $z$ is constant, equal to its value $z(0) = y(0)$; multiplying by $e^{ct}$ gives $y(t) = y(0)e^{ct}$.
+\end{proof}
+
+The fourth is the calculus of convolutions, used in the proof of Lemma~\ref{lmm:hall-10.18}. For $f : \mathbb{R} \rightarrow \mathbb{R}$ and $g : \mathbb{R} \rightarrow \mathbf{H}$ the \textit{convolution} is
+\begin{align}
+    (f \star g)(x) \equiv \int_{-\infty}^{\infty} f(\tau)\, g(x - \tau) \, d\tau,
+\end{align}
+a Bochner integral~(\ref{thrm:bochner-integral}) with respect to Lebesgue measure; in Mathlib it is \texttt{MeasureTheory.convolution} with the bilinear map \texttt{ContinuousLinearMap.lsmul}, the formula being \texttt{MeasureTheory.convolution\_lsmul}.
+
+\begin{lemma}[Facts about Convolution]
+    \label{lmm:convolution-facts}
+    \lean{HasCompactSupport.hasDerivAt_convolution_left, ContDiffBump.convolution_tendsto_right_of_continuous}
+    \uses{thrm:bochner-integral, lmm:smooth-approximate-identity}
+    \leanok
+    Let $g : \mathbb{R} \rightarrow \mathbf{H}$ be continuous.
+    \begin{enumerate}
+        \item \textit{(Differentiation.)} If $f : \mathbb{R} \rightarrow \mathbb{R}$ is continuously differentiable with compact support, then $f \star g$ is differentiable at every $x_0 \in \mathbb{R}$, with derivative $(f' \star g)(x_0)$.
+        \item \textit{(Approximation.)} If $\{f_n\}$ is the smooth approximate identity of Lemma~\ref{lmm:smooth-approximate-identity}, then $(f_n \star g)(x_0) \to g(x_0)$ as $n \to \infty$, for every $x_0 \in \mathbb{R}$.
+    \end{enumerate}
+    In Mathlib, point 1 is \texttt{HasCompactSupport.hasDerivAt\_convolution\_left}, whose hypothesis that $g$ be locally integrable holds for continuous $g$ by \texttt{Continuous.locallyIntegrable}, and whose measure-theoretic side conditions \texttt{IsAddLeftInvariant}, \texttt{IsNegInvariant} and \texttt{SFinite} hold for Lebesgue measure \texttt{volume} on $\mathbb{R}$, which is invariant under translation and negation and $\sigma$-finite (in Mathlib these are found by instance search); the convolution is taken with $L = \texttt{ContinuousLinearMap.lsmul}\ \mathbb{R}\ \mathbb{R}$, so $\mathbf{H}$ is regarded as a real normed space; and point 2 is \texttt{ContDiffBump.convolution\_tendsto\_right\_of\_continuous}, applied to the bump functions of Lemma~\ref{lmm:smooth-approximate-identity}, whose outer radii $1/n$ tend to $0$.
+\end{lemma}
+\begin{proof}
+\leanok
+\end{proof}
+
+\subsection{From a Self-Adjoint Operator to a Unitary Group}
+One direction of the correspondence follows from the spectral theorem: every self-adjoint operator generates a strongly continuous one-parameter unitary group, and is recovered as its generator. This is the easier direction, and the proof of Stone's Theorem will use all three of its parts. Throughout this subsection $A$ is a self-adjoint operator on $\mathbf{H}$, $\mu^A$ is its spectral measure~(\ref{def:spectral-measure}) and $\mu^A_\psi$ the associated scalar measure, which is finite with total mass $\left\| \psi \right\|^2$ by Lemma~\ref{lmm:associated-measure-total-mass}; and $f_t(\lambda) \equiv e^{it\lambda}$ for $t \in \mathbb{R}$. Since $\lvert f_t(\lambda) \rvert = 1$ for every real $\lambda$, each $f_t$ is bounded, and it is measurable, being continuous.
+
+\begin{lemma}[The Bounded Integral of $e^{it\lambda}$ is Unitary]
+    \label{lmm:exp-unitary}
+    \lean{Physicslib4.Spectral.Stone.integral_expFun_mem_unitary}
+    \uses{def:hall-9.5, def:spectral-measure, thrm:operator-valued-integration, def:unitary-operator}
+    \leanok
+    Let $A$ be a self-adjoint operator on $\mathbf{H}$ and $t \in \mathbb{R}$. Then the bounded integral $\int_{\mathbb{R}} f_t \, d\mu^A \in \mathcal{B}(\mathbf{H})$, where $f_t(\lambda) = e^{it\lambda}$, is unitary.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:spectral-measure, thrm:operator-valued-integration, prpstn:integral-multiplicative, prpstn:integral-conjugation, def:projection-valued-measure, def:unitary-operator, def:identity-operator, def:adjoint-bounded}
+Write $V \equiv \int_{\mathbb{R}} f_t \, d\mu^A$. The integral against a projection-valued measure is multiplicative and intertwines complex conjugation with the adjoint on bounded measurable functions: by Proposition~\ref{prpstn:integral-multiplicative} and Proposition~\ref{prpstn:integral-conjugation}, $\int fg \, d\mu^A = \left( \int f \, d\mu^A \right)\left( \int g \, d\mu^A \right)$ and $\int \overline{f} \, d\mu^A = \left( \int f \, d\mu^A \right)^*$ for bounded measurable $f,g$. Since $\overline{f_t}f_t = f_t\overline{f_t} = 1$ pointwise and the constant function $1$ integrates to $\mathbf{1}$ — because $\mu^A(\mathbb{R}) = \mathbf{1}$ by the definition of a projection-valued measure~(\ref{def:projection-valued-measure}) — we obtain
+\begin{align}
+    V^*V = VV^* = \mathbf{1}.
+\end{align}
+From this $V$ is unitary in the sense of Definition~\ref{def:unitary-operator}: it is injective, since $V\psi = 0$ gives $\psi = V^*V\psi = 0$, and surjective, since $\chi = V\left( V^*\chi \right)$ for any $\chi$; and it preserves the inner product, $\left< V\phi, V\psi \right> = \left< \phi, V^*V\psi \right> = \left< \phi, \psi \right>$, by the definition of the adjoint~(\ref{def:adjoint-bounded}).
+\end{proof}
+
+\begin{definition}[The Unitary Group $e^{itA}$]
+    \label{def:exp-unitary-group}
+    \lean{Physicslib4.Spectral.Stone.expFun, Physicslib4.Spectral.Stone.expUnitary, Physicslib4.Spectral.Stone.functionalCalculus_expFun}
+    \uses{def:hall-9.5, def:hall-10.5, def:spectral-measure, lmm:functional-calculus-bounded, lmm:exp-unitary}
+    \leanok
+    Let $A$ be a self-adjoint operator on $\mathbf{H}$. For each $t \in \mathbb{R}$ let
+    \begin{align}
+        e^{itA} \equiv f_t(A) = \int_{\mathbb{R}} e^{it\lambda} \, d\mu^A(\lambda),
+    \end{align}
+    the functional calculus~(\ref{def:hall-10.5}) applied to the bounded measurable function $f_t(\lambda) = e^{it\lambda}$. By Lemma~\ref{lmm:functional-calculus-bounded}, $e^{itA}$ is a bounded operator defined on all of $\mathbf{H}$ and coincides with the bounded integral $\int_{\mathbb{R}} f_t \, d\mu^A$ of Section~\ref{sctn:spectral-theorems}, which is unitary by Lemma~\ref{lmm:exp-unitary}. So $t \mapsto e^{itA}$ is a family of unitary operators indexed by $\mathbb{R}$; Lemma~\ref{lmm:exp-group-law} below shows that it is a one-parameter unitary group in the sense of Definition~\ref{def:hall-10.11}. The identification with the bounded integral is what licenses the use, below, of the results proved in Section~\ref{sctn:spectral-theorems} for the bounded integral.
+\end{definition}
+
+\begin{lemma}[The Group Law for $e^{itA}$]
+    \label{lmm:exp-group-law}
+    \lean{Physicslib4.Spectral.Stone.isOneParameterUnitaryGroup_expUnitary}
+    \uses{def:exp-unitary-group, def:hall-10.11}
+    \leanok
+    Let $A$ be a self-adjoint operator on $\mathbf{H}$. Then $e^{i0A} = \mathbf{1}$ and $e^{i(s+t)A} = e^{isA}e^{itA}$ for all $s, t \in \mathbb{R}$; so $t \mapsto e^{itA}$ is a one-parameter unitary group.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:exp-unitary-group, prpstn:integral-multiplicative, def:projection-valued-measure, def:identity-operator}
+The constant function $f_0 = 1$ gives $e^{i0A} = \mu^A(\mathbb{R}) = \mathbf{1}$, by the definition of a projection-valued measure~(\ref{def:projection-valued-measure}). And $f_{s+t} = f_sf_t$ pointwise, so multiplicativity of the bounded integral, Proposition~\ref{prpstn:integral-multiplicative}, gives $e^{i(s+t)A} = e^{isA}e^{itA}$. Each $e^{itA}$ is unitary by Definition~\ref{def:exp-unitary-group}.
+\end{proof}
+
+\begin{lemma}[$e^{itA}$ is Strongly Continuous]
+    \label{lmm:exp-strongly-continuous}
+    \lean{Physicslib4.Spectral.Stone.isStronglyContinuous_expUnitary}
+    \uses{def:exp-unitary-group, def:hall-10.11}
+    \leanok
+    Let $A$ be a self-adjoint operator on $\mathbf{H}$. Then the one-parameter unitary group $t \mapsto e^{itA}$ is strongly continuous.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:exp-unitary-group, lmm:exp-group-law, thrm:operator-valued-integration, lmm:norm-identity-bounded-integral, lmm:associated-measure-total-mass, thrm:dominated-convergence-theorem}
+Write $U(t) = e^{itA}$, and fix $\psi \in \mathbf{H}$ and $t \in \mathbb{R}$. The map $f \mapsto \int_{\mathbb{R}} f \, d\mu^A$ is linear on bounded measurable functions by Theorem~\ref{thrm:operator-valued-integration}, so $U(t) - U(s) = \int_{\mathbb{R}} (f_t - f_s) \, d\mu^A$; since $f_t - f_s$ is bounded and measurable, Lemma~\ref{lmm:norm-identity-bounded-integral} gives
+\begin{align}
+    \left\| U(t)\psi - U(s)\psi \right\|^2 = \int_{\mathbb{R}} \left\lvert e^{it\lambda} - e^{is\lambda} \right\rvert^2 \, d\mu^A_\psi(\lambda).
+\end{align}
+We show the right-hand side tends to $0$ as $s \to t$, by the \textbf{Dominated Convergence Theorem}~(\ref{thrm:dominated-convergence-theorem}) in its filter form, along the countably generated filter of neighbourhoods of $t$ (in Mathlib, \texttt{MeasureTheory.tendsto\_integral\_filter\_of\_dominated\_convergence}). The integrands are measurable, being continuous; they converge pointwise to $0$ as $s \to t$, since $s \mapsto e^{is\lambda}$ is continuous for each fixed $\lambda$; and they are dominated by the constant function $4$, because $\lvert e^{it\lambda} - e^{is\lambda} \rvert \le \lvert e^{it\lambda} \rvert + \lvert e^{is\lambda} \rvert = 2$. The constant $4$ is $\mu^A_\psi$-integrable precisely because $\mu^A_\psi$ is a \textit{finite} measure, of total mass $\left\| \psi \right\|^2$, by Lemma~\ref{lmm:associated-measure-total-mass}. Hence $\left\| U(t)\psi - U(s)\psi \right\| \to 0$ as $s \to t$.
+\end{proof}
+
+The derivative of $e^{itA}$ at $t = 0$ involves the unbounded function $\iota(\lambda) = \lambda$ alongside bounded ones. The following lemma handles the difference of a bounded and an unbounded function.
+
+\begin{lemma}[Subtracting from a Bounded Function]
+    \label{lmm:functional-calculus-sub-bounded}
+    \lean{Physicslib4.Spectral.Stone.functionalCalculus_sub_of_bddMeasurable}
+    \uses{def:hall-9.5, def:hall-10.5, lmm:functional-calculus-bounded}
+    \leanok
+    Let $A$ be a self-adjoint operator on $\mathbf{H}$, let $f : \mathbb{R} \to \mathbb{C}$ be measurable, and let $g : \mathbb{R} \to \mathbb{C}$ be bounded and measurable. Then $W_{g - f} = W_f$, and
+    \begin{align}
+        (g - f)(A)\psi = g(A)\psi - f(A)\psi \qquad \text{for all } \psi \in W_f.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.5, lmm:functional-calculus-bounded, prpstn:hall-10.1, prpstn:hall-10.2, lmm:associated-measure-total-mass, def:hall-quadratic-form-on-a-subspace}
+Write $h \equiv g - f$, and let $M$ bound $\lvert g \rvert$.
+
+\textit{The two domains coincide.} For any $\xi \in \mathbf{H}$ the pointwise inequalities
+\begin{align}
+    \lvert h \rvert^2 \le 2\lvert g \rvert^2 + 2\lvert f \rvert^2, \qquad \lvert f \rvert^2 \le 2\lvert g \rvert^2 + 2\lvert h \rvert^2
+\end{align}
+hold — each is $\lvert a + b \rvert^2 \le 2\lvert a \rvert^2 + 2\lvert b \rvert^2$ — and $\int \lvert g \rvert^2 \, d\mu^A_\xi \le M^2\left\| \xi \right\|^2 < \infty$ because $\mu^A_\xi$ has total mass $\left\| \xi \right\|^2$ by Lemma~\ref{lmm:associated-measure-total-mass}. Integrating the first inequality against $\mu^A_\xi$ shows $W_f \subset W_h$, and the second shows $W_h \subset W_f$.
+
+\textit{The identity.} By Part 1 of Proposition~\ref{prpstn:hall-10.2}, for each measurable $k$ the map $Q_k(\xi) = \int_{\mathbb{R}} k \, d\mu^A_\xi$ is a quadratic form on $W_k$, finite there. On the common domain $W_f = W_h \subset W_g = \mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}), linearity of the scalar integral gives $Q_h = Q_g - Q_f$; since the polarization formula of Definition~\ref{def:hall-quadratic-form-on-a-subspace} expresses the associated sesquilinear form as a fixed linear combination of values of $Q$, it follows that $L_h(\phi,\psi) = L_g(\phi,\psi) - L_f(\phi,\psi)$ for all $\phi,\psi \in W_f$. By the defining property in Proposition~\ref{prpstn:hall-10.1}, applied to $g$ and to $f$, the vector $\chi \equiv g(A)\psi - f(A)\psi$ therefore satisfies
+\begin{align}
+    \left< \phi, \chi \right> = L_g(\phi,\psi) - L_f(\phi,\psi) = L_h(\phi,\psi) \qquad \text{for all } \phi \in W_f = W_h.
+\end{align}
+By the uniqueness in Part 3 of Proposition~\ref{prpstn:hall-10.2}, applied to $h$, the representing vector is unique, so $\chi = h(A)\psi$.
+\end{proof}
+
+\begin{lemma}[Norm Identity for the Difference Quotient]
+    \label{lmm:exp-quotient-norm-identity}
+    \lean{Physicslib4.Spectral.Stone.norm_sq_generatorQuotient_expUnitary_sub}
+    \uses{def:exp-unitary-group, def:spectral-measure}
+    \leanok
+    Let $A$ be a self-adjoint operator on $\mathbf{H}$ and $U(t) = e^{itA}$. For $t \ne 0$ write
+    \begin{align}
+        g_t(\lambda) \equiv \frac{1}{i}\frac{e^{it\lambda} - 1}{t}.
+    \end{align}
+    Then for every $\psi \in \text{Dom}(A)$ and every $t \ne 0$,
+    \begin{align}
+        \left\| \frac{1}{i}\frac{U(t)\psi - \psi}{t} - A\psi \right\|^2 = \int_{\mathbb{R}} \left\lvert g_t(\lambda) - \lambda \right\rvert^2 \, d\mu^A_\psi(\lambda).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:exp-unitary-group, def:spectral-measure, thrm:hall-10.4, thrm:operator-valued-integration, def:projection-valued-measure, lmm:functional-calculus-bounded, lmm:functional-calculus-sub-bounded, prpstn:hall-10.2}
+The function $g_t$ is measurable, being continuous, and bounded, with $\lvert g_t(\lambda) \rvert \le 2/\lvert t \rvert$ since $\lvert e^{it\lambda} \rvert = 1$. The map $f \mapsto \int_{\mathbb{R}} f \, d\mu^A$ is linear on bounded measurable functions by Theorem~\ref{thrm:operator-valued-integration}, and the constant function $1$ gives $\mathbf{1}$, so by Lemma~\ref{lmm:functional-calculus-bounded}
+\begin{align}
+    g_t(A) = \frac{1}{i}\frac{U(t) - \mathbf{1}}{t}.
+\end{align}
+By Definition~\ref{def:spectral-measure}, $A = \iota(A)$ with $\text{Dom}(A) = W_\iota$, for $\iota(\lambda) = \lambda$. So Lemma~\ref{lmm:functional-calculus-sub-bounded}, applied with $g = g_t$ and $f = \iota$, gives
+\begin{align}
+    \frac{1}{i}\frac{U(t)\psi - \psi}{t} - A\psi = (g_t - \iota)(A)\psi,
+\end{align}
+and Part 3 of Proposition~\ref{prpstn:hall-10.2}, applied to the measurable function $g_t - \iota$, gives $\left\| (g_t - \iota)(A)\psi \right\|^2 = \int_{\mathbb{R}} \lvert g_t - \iota \rvert^2 \, d\mu^A_\psi$.
+\end{proof}
+
+\begin{lemma}[The Derivative of $e^{itA}$ at $0$]
+    \label{lmm:exp-derivative-at-zero}
+    \lean{Physicslib4.Spectral.Stone.tendsto_generatorQuotient_expUnitary}
+    \uses{def:exp-unitary-group}
+    \leanok
+    Let $A$ be a self-adjoint operator on $\mathbf{H}$ and $U(t) = e^{itA}$. Then for all $\psi \in \text{Dom}(A)$,
+    \begin{align}
+        \frac{1}{i} \frac{U(t)\psi - \psi}{t} \longrightarrow A\psi \qquad \text{as } t \rightarrow 0,\ t \ne 0,
+    \end{align}
+    in the norm topology on $\mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:exp-quotient-norm-identity, def:spectral-measure, thrm:dominated-convergence-theorem}
+By Lemma~\ref{lmm:exp-quotient-norm-identity} it suffices to show that $\int_{\mathbb{R}} \lvert g_t(\lambda) - \lambda \rvert^2 \, d\mu^A_\psi(\lambda) \to 0$ along the punctured filter $t \to 0$, $t \ne 0$, which is countably generated; we apply the \textbf{Dominated Convergence Theorem}~(\ref{thrm:dominated-convergence-theorem}) in its filter form (in Mathlib, \texttt{MeasureTheory.tendsto\_integral\_filter\_of\_dominated\_convergence}). The integrands are measurable, being continuous. They are dominated by $4\lambda^2$: the bound $\lvert e^{ix} - 1 \rvert \le \lvert x \rvert$ for real $x$ (in Mathlib, \texttt{Real.norm\_exp\_I\_mul\_ofReal\_sub\_one\_le}), applied with $x = t\lambda$, gives $\lvert g_t(\lambda) \rvert \le \lvert \lambda \rvert$, so $\lvert g_t(\lambda) - \lambda \rvert \le 2\lvert \lambda \rvert$; and $4\lambda^2$ is $\mu^A_\psi$-integrable because $\psi \in \text{Dom}(A) = W_\iota$ by Definition~\ref{def:spectral-measure}. Finally, the integrands tend to $0$ pointwise, since $s \mapsto e^{is\lambda}$ has derivative $i\lambda$ at $s = 0$, so that $g_t(\lambda) \to \lambda$.
+\end{proof}
+
+\begin{proposition}[Exponentiating a Self-Adjoint Operator]
+    \label{prpstn:hall-10.14}
+    \lean{Physicslib4.Spectral.Stone.generator_expUnitary}
+    \uses{def:hall-9.5, def:hall-10.11, def:hall-10.13, def:exp-unitary-group, def:unitary-operator}
+    \leanok
+    Let $A$ be a self-adjoint operator on $\mathbf{H}$ and, for each $t \in \mathbb{R}$, define
+    \begin{align}
+        U(t) \equiv e^{itA},
+    \end{align}
+    where $e^{itA}$ is the operator of Definition~\ref{def:exp-unitary-group}, given by the functional calculus~(\ref{def:hall-10.5}) applied to the function $\lambda \mapsto e^{it\lambda}$. Then the following hold.
+    \begin{enumerate}
+        \item $U(\cdot)$ is a strongly continuous one-parameter unitary group.
+        \item For all $\psi \in \text{Dom}(A)$,
+        \begin{align}
+            A\psi = \lim\limits_{t \rightarrow 0,\ t \ne 0} \frac{1}{i} \frac{U(t)\psi - \psi}{t},
+        \end{align}
+        the limit being in the norm topology on $\mathbf{H}$.
+        \item For all $\psi \in \mathbf{H}$, if the limit
+        \begin{align}
+            \lim\limits_{t \rightarrow 0,\ t \ne 0} \frac{1}{i} \frac{U(t)\psi - \psi}{t}
+        \end{align}
+        exists in the norm topology on $\mathbf{H}$, then $\psi \in \text{Dom}(A)$ and the limit equals $A\psi$.
+    \end{enumerate}
+    Points 2 and 3 together say exactly that the infinitesimal generator of $U(\cdot)$, in the sense of Definition~\ref{def:hall-10.13}, is $A$ itself, with equality of domains.
+\end{proposition}
+\begin{proof}
+    \leanok
+    \uses{def:exp-unitary-group, lmm:exp-group-law, lmm:exp-strongly-continuous, lmm:exp-derivative-at-zero, lmm:generator-spec, lmm:generator-symmetry-identity, lmm:self-adjoint-maximally-symmetric, def:hall-9.3}
+\textbf{Point 1.} Each $U(t)$ is unitary by Definition~\ref{def:exp-unitary-group}; the group law is Lemma~\ref{lmm:exp-group-law}; and strong continuity is Lemma~\ref{lmm:exp-strongly-continuous}.
+
+\textbf{Point 2} is Lemma~\ref{lmm:exp-derivative-at-zero}.
+
+\textbf{Point 3.} Let $B$ denote the infinitesimal generator of $U(\cdot)$, as in Definition~\ref{def:hall-10.13}. By Point 2 and Lemma~\ref{lmm:generator-spec}, $B$ is an extension of $A$~(\ref{def:hall-9.3}): every $\psi \in \text{Dom}(A)$ lies in $\text{Dom}(B)$, with $B\psi = A\psi$. By Lemma~\ref{lmm:generator-symmetry-identity}, $B$ satisfies the symmetry identity, so $B$ is symmetric in the density-free sense of the Lean formalization; the density of $\text{Dom}(B) \supset \text{Dom}(A)$, needed for symmetry in the sense of Definition~\ref{def:hall-9.2}, is supplied inside the proof of Lemma~\ref{lmm:self-adjoint-maximally-symmetric}.
+
+So $B$ is a symmetric extension of the self-adjoint operator $A$. By Lemma~\ref{lmm:self-adjoint-maximally-symmetric}, $B = A$ with equality of domains. That is exactly Point 3, by Lemma~\ref{lmm:generator-spec}: if the defining limit exists at $\psi$, then $\psi \in \text{Dom}(B) = \text{Dom}(A)$ and the limit is $B\psi = A\psi$.
+\end{proof}
+
+\subsection{Two Intermediate Results}
+Before proving Stone's Theorem we establish two facts about an arbitrary strongly continuous one-parameter unitary group and its generator: that the group preserves the generator's domain and differentiates to it, and that the generator is densely defined.
+
+\begin{lemma}[Differentiating an Orbit]
+    \label{lmm:orbit-hasDerivAt}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit}
+    \uses{def:hall-10.11, def:hall-10.13}
+    \leanok
+    Let $U(\cdot)$ be a one-parameter unitary group with infinitesimal generator $A$, and let $\psi \in \text{Dom}(A)$. Then for every $t \in \mathbb{R}$ the curve $s \mapsto U(s)\psi$ is differentiable at $t$ in the norm topology on $\mathbf{H}$, with derivative $iU(t)A\psi$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.11, lmm:generator-spec, def:bounded-operator-notation}
+By the group law~(\ref{def:hall-10.11}), $U(t+h) = U(t)U(h)$, so for $h \ne 0$
+\begin{align}
+    \frac{U(t+h)\psi - U(t)\psi}{h} = U(t)\left( \frac{U(h)\psi - \psi}{h} \right).
+\end{align}
+By Lemma~\ref{lmm:generator-spec}, $\left( U(h)\psi - \psi \right)/h \to iA\psi$ as $h \to 0$, $h \ne 0$ — the defining limit multiplied by $i$. The operator $U(t)$ is bounded, hence continuous~(\ref{def:bounded-operator-notation}), so it may be passed through the limit, giving the limit $U(t)(iA\psi) = iU(t)A\psi$.
+\end{proof}
+
+\begin{lemma}[The Group Commutes with its Generator]
+    \label{lmm:generator-commutes}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.generator_apply_comm}
+    \uses{def:hall-10.11, def:hall-10.13}
+    \leanok
+    Let $U(\cdot)$ be a one-parameter unitary group with infinitesimal generator $A$, and let $\psi \in \text{Dom}(A)$. Then for every $t \in \mathbb{R}$, $U(t)\psi \in \text{Dom}(A)$ and $AU(t)\psi = U(t)A\psi$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.11, lmm:generator-spec, def:bounded-operator-notation}
+By the group law~(\ref{def:hall-10.11}), $U(h)U(t) = U(h+t) = U(t)U(h)$, so for $h \ne 0$
+\begin{align}
+    \frac{1}{i}\frac{U(h)\left( U(t)\psi \right) - U(t)\psi}{h} = U(t)\left( \frac{1}{i}\frac{U(h)\psi - \psi}{h} \right).
+\end{align}
+By Lemma~\ref{lmm:generator-spec} the bracket tends to $A\psi$ as $h \to 0$, $h \ne 0$, and $U(t)$, being bounded~(\ref{def:bounded-operator-notation}), passes through the limit; so the left-hand side tends to $U(t)A\psi$. By Lemma~\ref{lmm:generator-spec} applied to the vector $U(t)\psi$, this says exactly that $U(t)\psi \in \text{Dom}(A)$ with $AU(t)\psi = U(t)A\psi$.
+\end{proof}
+
+\begin{lemma}[The Group Preserves the Generator's Domain]
+    \label{lmm:hall-10.17}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator}
+    \uses{def:hall-10.11, def:hall-10.13, def:unitary-operator, def:bounded-operator-notation}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group and let $A$ be its infinitesimal generator. If $\psi \in \text{Dom}(A)$, then for all $t \in \mathbb{R}$ the vector $U(t)\psi$ belongs to $\text{Dom}(A)$ and
+    \begin{align}
+        \lim\limits_{h \rightarrow 0} \frac{U(t+h)\psi - U(t)\psi}{h} = iU(t)A\psi = iAU(t)\psi.
+    \end{align}
+    In particular the curve $t \mapsto U(t)\psi$ is differentiable in the norm topology on $\mathbf{H}$, with derivative $iAU(t)\psi$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:orbit-hasDerivAt, lmm:generator-commutes}
+Fix $\psi \in \text{Dom}(A)$ and $t \in \mathbb{R}$. By Lemma~\ref{lmm:orbit-hasDerivAt} the limit exists and equals $iU(t)A\psi$, which is the first equality. By Lemma~\ref{lmm:generator-commutes}, $U(t)\psi \in \text{Dom}(A)$ and $U(t)A\psi = AU(t)\psi$, which gives the second equality.
+\end{proof}
+
+The density of the generator's domain is proved by smoothing: averaging the orbit of a vector against a smooth compactly supported function produces a vector in the domain, and averaging against a smooth approximate identity recovers the original vector in the limit. The averages are convolutions, so the calculus of convolutions~(\ref{lmm:convolution-facts}) does the analytic work.
+
+\begin{lemma}[Averages of an Orbit are Convolutions]
+    \label{lmm:averaging-translate}
+    \lean{Physicslib4.Spectral.Stone.average_eq_convolution, Physicslib4.Spectral.Stone.average}
+    \uses{def:hall-10.11, thrm:bochner-integral, lmm:convolution-facts}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$, let $\psi \in \mathbf{H}$, and let $f : \mathbb{R} \rightarrow \mathbb{R}$ be continuous with compact support. Write $g_\psi(x) \equiv U(-x)\psi$, a continuous function $\mathbb{R} \rightarrow \mathbf{H}$ by strong continuity of $U(\cdot)$, and define the \textit{average}
+    \begin{align}
+        B_f\psi \equiv \int_{-\infty}^{\infty} f(\tau)U(\tau)\psi \, d\tau.
+    \end{align}
+    Then for every $t \in \mathbb{R}$,
+    \begin{align}
+        U(t)B_f\psi = (f \star g_\psi)(-t);
+    \end{align}
+    in particular $B_f\psi = (f \star g_\psi)(0)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.11, thrm:bochner-integral, def:bounded-operator-notation}
+The map $\tau \mapsto f(\tau)U(\tau)\psi$ is continuous — by strong continuity of $U(\cdot)$~(\ref{def:hall-10.11}) and continuity of $f$ — and compactly supported, hence Bochner integrable by point 2 of Theorem~\ref{thrm:bochner-integral}. By point 1, applied to the bounded operator $U(t)$, and the group law $U(t)U(\tau) = U(t+\tau)$,
+\begin{align}
+    U(t)B_f\psi = \int_{-\infty}^{\infty} f(\tau)U(t+\tau)\psi \, d\tau = \int_{-\infty}^{\infty} f(\tau)\, g_\psi(-t-\tau) \, d\tau = (f \star g_\psi)(-t).
+\end{align}
+The case $t = 0$ uses $U(0) = \mathbf{1}$.
+\end{proof}
+
+\begin{lemma}[Averages Lie in the Generator's Domain]
+    \label{lmm:averaging-in-generator-domain}
+    \lean{Physicslib4.Spectral.Stone.average_mem_generator_domain}
+    \uses{def:hall-10.11, def:hall-10.13, lmm:averaging-translate}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, let $\psi \in \mathbf{H}$, and let $f : \mathbb{R} \rightarrow \mathbb{R}$ be continuously differentiable with compact support. Then $B_f\psi \in \text{Dom}(A)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:averaging-translate, lmm:convolution-facts, lmm:generator-spec}
+Write $F \equiv f \star g_\psi$. By point 1 of Lemma~\ref{lmm:convolution-facts}, $F$ is differentiable at $0$, with derivative $F'(0) = (f' \star g_\psi)(0)$; composing with $t \mapsto -t$, the quotient $\left( F(-t) - F(0) \right)/t$ tends to $-F'(0)$ as $t \to 0$, $t \ne 0$. By Lemma~\ref{lmm:averaging-translate}, $F(-t) = U(t)B_f\psi$ and $F(0) = B_f\psi$, so
+\begin{align}
+    \frac{1}{i}\frac{U(t)B_f\psi - B_f\psi}{t} \longrightarrow -\frac{1}{i}F'(0) = i\int_{-\infty}^{\infty} f'(\tau)U(\tau)\psi \, d\tau \qquad \text{as } t \rightarrow 0,\ t \ne 0.
+\end{align}
+By Lemma~\ref{lmm:generator-spec}, $B_f\psi \in \text{Dom}(A)$.
+\end{proof}
+
+\begin{lemma}[Averages Approximate the Vector]
+    \label{lmm:averaging-approximates}
+    \lean{Physicslib4.Spectral.Stone.tendsto_average_bump}
+    \uses{def:hall-10.11, lmm:averaging-translate, lmm:smooth-approximate-identity}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$, let $\psi \in \mathbf{H}$, and let $\{f_n\}$ be the smooth approximate identity of Lemma~\ref{lmm:smooth-approximate-identity}. Then $B_{f_n}\psi \to \psi$ as $n \to \infty$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:averaging-translate, lmm:convolution-facts, lmm:smooth-approximate-identity, def:hall-10.11}
+Each $f_n$ is continuous with compact support, so $B_{f_n}\psi = (f_n \star g_\psi)(0)$ by Lemma~\ref{lmm:averaging-translate}. Since $g_\psi$ is continuous, point 2 of Lemma~\ref{lmm:convolution-facts} gives $(f_n \star g_\psi)(0) \to g_\psi(0) = U(0)\psi = \psi$.
+\end{proof}
+
+\begin{lemma}[The Generator is Densely Defined]
+    \label{lmm:hall-10.18}
+    \lean{Physicslib4.Spectral.Stone.hasDenseDomain_generator}
+    \uses{def:hall-10.11, def:hall-10.13, def:hall-3.1, def:unitary-operator}
+    \leanok
+    For any strongly continuous one-parameter unitary group $U(\cdot)$ on $\mathbf{H}$, the infinitesimal generator $A$ is densely defined; that is, $\text{Dom}(A)$ is dense in $\mathbf{H}$. In particular $A$ is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.13, def:hall-3.1, lmm:smooth-approximate-identity, lmm:averaging-in-generator-domain, lmm:averaging-approximates}
+Fix $\psi \in \mathbf{H}$ and let $\{f_n\}$ be the smooth approximate identity of Lemma~\ref{lmm:smooth-approximate-identity}. Each $f_n$ is smooth with compact support, so $B_{f_n}\psi \in \text{Dom}(A)$ by Lemma~\ref{lmm:averaging-in-generator-domain}; and $B_{f_n}\psi \to \psi$ by Lemma~\ref{lmm:averaging-approximates}.
+
+Every $\psi \in \mathbf{H}$ is therefore a limit of vectors $B_{f_n}\psi$ lying in $\text{Dom}(A)$, so $\text{Dom}(A)$ is dense in $\mathbf{H}$. Being also a subspace, as noted in Definition~\ref{def:hall-10.13}, $A$ is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}.
+\end{proof}
+
+\subsection{Stone's Theorem}
+We can now prove the theorem. It is the converse of Proposition~\ref{prpstn:hall-10.14}: not only does every self-adjoint operator generate a strongly continuous one-parameter unitary group, but every such group arises this way, from a self-adjoint generator that is uniquely determined by the group. We first establish, in a sequence of lemmas, that the generator is essentially self-adjoint and that the group agrees with the unitary group generated by the closure of the generator.
+
+\begin{lemma}[An Ordinary Differential Equation along Orbits]
+    \label{lmm:orbit-inner-ode}
+    \lean{Physicslib4.Spectral.Stone.hasDerivAt_inner_orbit}
+    \uses{def:hall-10.11, def:hall-10.13, def:hall-9.1, lmm:hall-10.18}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, densely defined by Lemma~\ref{lmm:hall-10.18}, so that its adjoint $A^*$ is defined~(\ref{def:hall-9.1}). Let $\varepsilon \in \{1, -1\}$, let $\psi \in \text{Dom}(A^*)$ with $A^*\psi = \varepsilon i\psi$, let $\phi \in \text{Dom}(A)$, and set
+    \begin{align}
+        y(t) \equiv \left< U(t)\phi, \psi \right>.
+    \end{align}
+    Then $y : \mathbb{R} \rightarrow \mathbb{C}$ is differentiable, with $y'(t) = \varepsilon y(t)$ for all $t \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:hall-10.17, prpstn:calculus-facts, lmm:characterizing-adjoint-domain-membership, def:inner-product}
+By Lemma~\ref{lmm:hall-10.17}, $U(t)\phi \in \text{Dom}(A)$ for every $t$ and $t \mapsto U(t)\phi$ is differentiable with derivative $iAU(t)\phi$. Hence by part 1 of Proposition~\ref{prpstn:calculus-facts}, applied with the constant second argument $\psi$, $y$ is differentiable. The defining property of the adjoint~(\ref{lmm:characterizing-adjoint-domain-membership}) gives $\left< \psi, A\chi \right> = \left< A^*\psi, \chi \right>$ for $\chi \in \text{Dom}(A)$, and hence, on taking complex conjugates and applying conjugate symmetry~(\ref{def:inner-product}), $\left< A\chi, \psi \right> = \left< \chi, A^*\psi \right>$; applied with $\chi = U(t)\phi$,
+\begin{align}
+    \frac{dy}{dt} = \left< iAU(t)\phi, \psi \right> = \left< iU(t)\phi, A^*\psi \right> = \left< iU(t)\phi, \varepsilon i\psi \right> = \varepsilon\left< U(t)\phi, \psi \right> = \varepsilon y(t),
+\end{align}
+the fourth equality because the inner product is conjugate-linear in its first argument and linear in its second, so the two factors of $i$ contribute $\overline{i}\,i = 1$.
+\end{proof}
+
+\begin{lemma}[Bounded Solutions of $y' = \pm y$ Vanish]
+    \label{lmm:bounded-exp-solution-zero}
+    \lean{Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_bounded}
+    \leanok
+    Let $\varepsilon \in \{1, -1\}$ and let $y : \mathbb{R} \rightarrow \mathbb{C}$ be differentiable and bounded, with $y'(t) = \varepsilon y(t)$ for all $t$. Then $y(0) = 0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:linear-ode-scalar}
+By Lemma~\ref{lmm:linear-ode-scalar} with $c = \varepsilon$, $y(t) = y(0)e^{\varepsilon t}$, so $\lvert y(t) \rvert = \lvert y(0) \rvert e^{\varepsilon t}$. As $t \to \varepsilon\infty$ — that is, $t \to \infty$ if $\varepsilon = 1$ and $t \to -\infty$ if $\varepsilon = -1$ — we have $e^{\varepsilon t} \to \infty$; since $y$ is bounded, $y(0) = 0$.
+\end{proof}
+
+\begin{lemma}[The Deficiency Subspaces of the Generator are Trivial]
+    \label{lmm:generator-ker-adjoint-trivial}
+    \lean{Physicslib4.Spectral.Stone.ker_adjoint_generator_subSmul_eq_bot}
+    \uses{def:hall-10.11, def:hall-10.13, def:hall-9.1, def:kernel-of-an-unbounded-operator, def:identity-operator, lmm:hall-10.18}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$. Then $\text{Ker}(A^* - i\mathbf{1}) = \{0\}$ and $\text{Ker}(A^* + i\mathbf{1}) = \{0\}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:orbit-inner-ode, lmm:bounded-exp-solution-zero, lmm:hall-10.18, crllr:trivial-complement-characterizes-density, prpstn:hall-a.43, def:unitary-operator}
+Let $\varepsilon \in \{1, -1\}$ and suppose $\psi \in \text{Ker}(A^* - \varepsilon i\mathbf{1})$, that is, $\psi \in \text{Dom}(A^*)$ with $A^*\psi = \varepsilon i\psi$. Fix $\phi \in \text{Dom}(A)$ and let $y(t) = \left< U(t)\phi, \psi \right>$. By \textbf{Cauchy–Schwarz}~(\ref{prpstn:hall-a.43}) and because each $U(t)$ is unitary, hence isometric~(\ref{def:unitary-operator}), $\lvert y(t) \rvert \le \left\| \phi \right\| \left\| \psi \right\|$, so $y$ is bounded. By Lemma~\ref{lmm:orbit-inner-ode}, $y' = \varepsilon y$, so Lemma~\ref{lmm:bounded-exp-solution-zero} gives $\left< \phi, \psi \right> = y(0) = 0$. This holds for every $\phi \in \text{Dom}(A)$, which is dense by Lemma~\ref{lmm:hall-10.18}; so $\psi \in \left( \text{Dom}(A) \right)^\perp = \{0\}$ by Corollary~\ref{crllr:trivial-complement-characterizes-density}.
+\end{proof}
+
+\begin{lemma}[The Generator is Essentially Self-Adjoint]
+    \label{lmm:generator-essentially-self-adjoint}
+    \lean{Physicslib4.Spectral.Stone.isEssentiallySelfAdjoint_generator}
+    \uses{def:hall-10.11, def:hall-10.13, def:hall-9.2, def:hall-9.6, def:hall-9.7}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$. Then $A$ is densely defined, symmetric and essentially self-adjoint; in particular $A$ is closable and its closure $A^{\text{cl}}$ is self-adjoint.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:hall-10.18, lmm:generator-symmetry-identity, thrm:hall-9.21, prpstn:hall-9.12, prpstn:hall-9.13, lmm:adjoint-of-scalar-multiple-of-identity, crllr:trivial-complement-characterizes-density, lmm:generator-ker-adjoint-trivial, def:hall-3.1}
+Density is Lemma~\ref{lmm:hall-10.18}, so $A$ is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}; and since $\text{Dom}(A)$ is dense, Lemma~\ref{lmm:generator-symmetry-identity} shows that $A$ is symmetric~(\ref{def:hall-9.2}).
+
+By Theorem~\ref{thrm:hall-9.21} it suffices to show that $\text{Range}(A - i\mathbf{1})$ and $\text{Range}(A + i\mathbf{1})$ are dense in $\mathbf{H}$. By Corollary~\ref{crllr:trivial-complement-characterizes-density} a subspace is dense exactly when its orthogonal complement is $\{0\}$, and by Proposition~\ref{prpstn:hall-9.12} together with Proposition~\ref{prpstn:hall-9.13} — applied to the bounded operator $-i\mathbf{1}$, whose adjoint is $i\mathbf{1}$ by Lemma~\ref{lmm:adjoint-of-scalar-multiple-of-identity} —
+\begin{align}
+    \left( \text{Range}(A - i\mathbf{1}) \right)^\perp = \text{Ker}\left( (A - i\mathbf{1})^* \right) = \text{Ker}(A^* + i\mathbf{1}),
+\end{align}
+and symmetrically $\left( \text{Range}(A + i\mathbf{1}) \right)^\perp = \text{Ker}(A^* - i\mathbf{1})$. Both kernels are $\{0\}$ by Lemma~\ref{lmm:generator-ker-adjoint-trivial}. So both ranges are dense and $A$ is essentially self-adjoint~(\ref{def:hall-9.7}).
+\end{proof}
+
+\begin{lemma}[Differentiating the Difference of the Orbits]
+    \label{lmm:orbit-difference-hasDerivAt}
+    \lean{Physicslib4.Spectral.Stone.hasDerivAt_orbit_sub_expUnitary}
+    \uses{def:hall-10.11, def:hall-10.13, def:hall-9.6, def:exp-unitary-group, lmm:generator-essentially-self-adjoint}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$; by Lemma~\ref{lmm:generator-essentially-self-adjoint} the closure $A^{\text{cl}}$ is self-adjoint, and we let $V(t) \equiv e^{itA^{\text{cl}}}$ as in Definition~\ref{def:exp-unitary-group}. Let $\psi \in \text{Dom}(A)$ and $w(t) \equiv U(t)\psi - V(t)\psi$. Then for every $t \in \mathbb{R}$, $w(t) \in \text{Dom}(A^{\text{cl}})$, and $w$ is differentiable at $t$ in the norm topology on $\mathbf{H}$ with
+    \begin{align}
+        w'(t) = iA^{\text{cl}}w(t).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{prpstn:hall-10.14, lmm:hall-10.17, prpstn:closure-linearity-and-sequential-description}
+By Proposition~\ref{prpstn:hall-10.14}, $V(\cdot)$ is a strongly continuous one-parameter unitary group whose infinitesimal generator is $A^{\text{cl}}$. Since $A^{\text{cl}}$ extends $A$ — by Part 3 of Proposition~\ref{prpstn:closure-linearity-and-sequential-description} — we have $\psi \in \text{Dom}(A^{\text{cl}})$, so Lemma~\ref{lmm:hall-10.17} applies to $U(\cdot)$ with generator $A$ and to $V(\cdot)$ with generator $A^{\text{cl}}$. It gives that $U(t)\psi \in \text{Dom}(A) \subset \text{Dom}(A^{\text{cl}})$ and $V(t)\psi \in \text{Dom}(A^{\text{cl}})$, so $w(t) \in \text{Dom}(A^{\text{cl}})$, and, $A^{\text{cl}}$ agreeing with $A$ on $\text{Dom}(A)$ and being linear by Part 1 of Proposition~\ref{prpstn:closure-linearity-and-sequential-description},
+\begin{align}
+    w'(t) = iAU(t)\psi - iA^{\text{cl}}V(t)\psi = iA^{\text{cl}}w(t).
+\end{align}
+\end{proof}
+
+\begin{lemma}[A Solution of $w' = iCw$ with $C$ Symmetric Preserves the Norm]
+    \label{lmm:norm-const-of-symmetric-derivative}
+    \lean{Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_isSymmetric}
+    \uses{def:hall-9.2}
+    \leanok
+    Let $C$ be a symmetric operator on $\mathbf{H}$, in the sense that $\left< C\chi, \chi' \right> = \left< \chi, C\chi' \right>$ for all $\chi, \chi' \in \text{Dom}(C)$~(\ref{def:hall-9.2}). Let $w : \mathbb{R} \rightarrow \mathbf{H}$ be differentiable, with $w(t) \in \text{Dom}(C)$ and $w'(t) = iCw(t)$ for every $t$, and $w(0) = 0$. Then $w(t) = 0$ for every $t \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{prpstn:calculus-facts, def:inner-product}
+By part 1 of Proposition~\ref{prpstn:calculus-facts}, the complex-valued function $t \mapsto \left< w(t), w(t) \right>$ is differentiable with derivative $\left< w'(t), w(t) \right> + \left< w(t), w'(t) \right> = 2\,\text{Re}\left< w(t), w'(t) \right>$. Composing with the bounded real-linear map $\text{Re} : \mathbb{C} \rightarrow \mathbb{R}$ (in Mathlib, \texttt{Complex.reCLM}), the real-valued function $\left\| w(t) \right\|^2 = \text{Re}\left< w(t), w(t) \right>$ is differentiable with derivative $2\,\text{Re}\left< w(t), w'(t) \right>$. Now
+\begin{align}
+    \text{Re}\left< w(t), w'(t) \right> = \text{Re}\left( i\left< w(t), Cw(t) \right> \right) = 0,
+\end{align}
+because $\left< w, Cw \right>$ is real: by symmetry and conjugate symmetry of the inner product~(\ref{def:inner-product}), $\left< w, Cw \right> = \left< Cw, w \right> = \overline{\left< w, Cw \right>}$. By part 2 of Proposition~\ref{prpstn:calculus-facts}, with $V = \mathbb{R}$, $\left\| w(t) \right\|^2$ is constant, equal to $\left\| w(0) \right\|^2 = 0$.
+\end{proof}
+
+\begin{lemma}[The Orbits Agree on the Generator's Domain]
+    \label{lmm:orbits-agree-on-domain}
+    \lean{Physicslib4.Spectral.Stone.orbit_eq_expUnitary_closure}
+    \uses{def:hall-10.11, def:hall-10.13, def:hall-9.6, def:exp-unitary-group, lmm:generator-essentially-self-adjoint}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$; by Lemma~\ref{lmm:generator-essentially-self-adjoint} the closure $A^{\text{cl}}$ is self-adjoint, and we let $V(t) \equiv e^{itA^{\text{cl}}}$ as in Definition~\ref{def:exp-unitary-group}. Then
+    \begin{align}
+        U(t)\psi = V(t)\psi \qquad \text{for all } t \in \mathbb{R} \text{ and all } \psi \in \text{Dom}(A).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lmm:orbit-difference-hasDerivAt, lmm:norm-const-of-symmetric-derivative, def:hall-9.5, prpstn:hall-9.4, lmm:exp-group-law}
+Fix $\psi \in \text{Dom}(A)$ and set $w(t) \equiv U(t)\psi - V(t)\psi$. By Lemma~\ref{lmm:orbit-difference-hasDerivAt}, $w$ is differentiable with $w(t) \in \text{Dom}(A^{\text{cl}})$ and $w'(t) = iA^{\text{cl}}w(t)$. The operator $A^{\text{cl}}$ is self-adjoint, hence symmetric — by the definition of self-adjointness~(\ref{def:hall-9.5}), $(A^{\text{cl}})^* = A^{\text{cl}}$ is an extension of $A^{\text{cl}}$, which is symmetry by Proposition~\ref{prpstn:hall-9.4}. And $w(0) = U(0)\psi - V(0)\psi = \psi - \psi = 0$, using Lemma~\ref{lmm:exp-group-law} for $V(0) = \mathbf{1}$. So Lemma~\ref{lmm:norm-const-of-symmetric-derivative}, with $C = A^{\text{cl}}$, gives $w(t) = 0$ for every $t$.
+\end{proof}
+
+\begin{lemma}[Bounded Operators Agreeing on a Dense Subspace are Equal]
+    \label{lmm:agree-on-dense-subspace}
+    \lean{Physicslib4.Spectral.Stone.eq_of_eqOn_dense}
+    \uses{def:bounded-operator-notation}
+    \leanok
+    Let $S, T \in \mathcal{B}(\mathbf{H})$ and let $D \subset \mathbf{H}$ be a dense subspace with $S\psi = T\psi$ for all $\psi \in D$. Then $S = T$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:bounded-operator-notation, def:induced-norm}
+Given $\chi \in \mathbf{H}$, choose $\psi_n \in D$ with $\psi_n \to \chi$; then
+\begin{align}
+    \left\| S\chi - T\chi \right\| &= \left\| \left( S - T \right)(\chi - \psi_n) \right\| \le \left( \left\| S \right\| + \left\| T \right\| \right) \left\| \chi - \psi_n \right\| \longrightarrow 0,
+\end{align}
+using $S\psi_n = T\psi_n$ in the first step and the operator-norm bound of Definition~\ref{def:bounded-operator-notation} in the second. So $S\chi = T\chi$ for every $\chi \in \mathbf{H}$.
+\end{proof}
+
+\begin{theorem}[Stone's Theorem]
+    \label{thrm:hall-10.15}
+    \lean{Physicslib4.Spectral.Stone.stone}
+    \uses{def:hall-10.11, def:hall-10.13, def:hall-9.5, def:exp-unitary-group, def:unitary-operator}
+    \leanok
+    Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$. Then the infinitesimal generator $A$ of $U(\cdot)$ is densely defined and self-adjoint, and
+    \begin{align}
+        U(t) = e^{itA} \qquad \text{for all } t \in \mathbb{R}.
+    \end{align}
+    Moreover $A$ is the only self-adjoint operator with this property: if $B$ is self-adjoint and $U(t) = e^{itB}$ for all $t$, then $B = A$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:hall-10.13, def:hall-9.5, def:exp-unitary-group, prpstn:hall-10.14, lmm:hall-10.18, lmm:generator-essentially-self-adjoint, lmm:orbits-agree-on-domain, lmm:agree-on-dense-subspace}
+Let $A$ be the infinitesimal generator of $U(\cdot)$.
+
+\textbf{Steps 1–3: $U(t) = e^{itA^{\text{cl}}}$.} By Lemma~\ref{lmm:generator-essentially-self-adjoint}, $A$ is densely defined and essentially self-adjoint, and $A^{\text{cl}}$ is self-adjoint. Let $V(t) \equiv e^{itA^{\text{cl}}}$~(\ref{def:exp-unitary-group}). By Lemma~\ref{lmm:orbits-agree-on-domain}, $U(t)$ and $V(t)$ agree on $\text{Dom}(A)$, which is a dense subspace by Lemma~\ref{lmm:hall-10.18}; both are bounded, so $U(t) = V(t)$ for every $t$ by Lemma~\ref{lmm:agree-on-dense-subspace}.
+
+\textbf{Step 4: $A$ is self-adjoint and $U(t) = e^{itA}$.} We now know $U(t) = e^{itA^{\text{cl}}}$. By Points 2 and 3 of Proposition~\ref{prpstn:hall-10.14} applied to the self-adjoint operator $A^{\text{cl}}$, the infinitesimal generator of $U(\cdot)$ is exactly $A^{\text{cl}}$, with equality of domains. But the infinitesimal generator of $U(\cdot)$ is $A$, by definition. Hence
+\begin{align}
+    A = A^{\text{cl}}.
+\end{align}
+Since $A^{\text{cl}}$ is self-adjoint by Lemma~\ref{lmm:generator-essentially-self-adjoint}, so is $A$; and $U(t) = e^{itA^{\text{cl}}} = e^{itA}$.
+
+\textbf{Step 5: uniqueness.} Suppose $B$ is self-adjoint with $U(t) = e^{itB}$ for all $t$. By Points 2 and 3 of Proposition~\ref{prpstn:hall-10.14}, the infinitesimal generator of $U(\cdot)$ is $B$, with equality of domains. The generator is $A$ by definition, so $B = A$.
+\end{proof}
+
+\subsection{Summary}
+Combining Proposition~\ref{prpstn:hall-10.14} and Theorem~\ref{thrm:hall-10.15}, the assignments
+\begin{align}
+    A \longmapsto \left( t \mapsto e^{itA} \right), \qquad U(\cdot) \longmapsto \text{the infinitesimal generator of } U(\cdot)
+\end{align}
+are mutually inverse bijections between the self-adjoint operators on $\mathbf{H}$ and the strongly continuous one-parameter unitary groups on $\mathbf{H}$. Proposition~\ref{prpstn:hall-10.14} shows the first assignment lands in the strongly continuous one-parameter unitary groups and that the second undoes it; Theorem~\ref{thrm:hall-10.15} shows the second assignment lands in the self-adjoint operators and that the first undoes it.

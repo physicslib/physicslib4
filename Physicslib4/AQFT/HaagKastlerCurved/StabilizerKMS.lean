@@ -134,19 +134,13 @@ theorem IsKMSStateForFlow.convexCombo
     N.IsKMSStateForFlow B flow β (ω₁.convexCombo ω₂ s hs0 hs1) :=
   AQFT.IsKMSState.convexCombo s hs0 hs1 h₁ h₂
 
-/-- **Ground state for a Killing flow (bounded-generator scaffold).** A state `ω` on
-`𝔘(B)` is a *ground state* for a one-parameter Killing flow `t ↦ φ_t` into `Stab(B)`
-when it is invariant under the flow and, in a GNS representation `(K, π, Ω)` reproducing
-`ω` and implementing the flow by unitaries `U` (fixing `Ω`), the one-parameter unitary
-group `t ↦ U t` has positive energy (`AQFT.IsPositiveEnergy`). This is the ground-state
-(`β → ∞`, spectrum-condition) counterpart of `IsKMSStateForFlow`: it selects the
-stationary state whose Killing-flow generator (the local "Hamiltonian") is positive. The
-positive-energy condition is the bounded-generator scaffold; the faithful unbounded form
-is Stone-gated
-
-**Restriction:** inherits the bounded-generator restriction of `AQFT.IsPositiveEnergy`
-(a positive *bounded* generator); the intended form and what it is waiting on (Stone's
-theorem) are recorded there. -/
+/-- **Ground state for a Killing flow.** A state `ω` on `𝔘(B)` is a *ground state* for a
+one-parameter Killing flow `t ↦ φ_t` into `Stab(B)` when it is invariant under the flow
+and, in a GNS representation `(K, π, Ω)` reproducing `ω` and implementing the flow by
+unitaries `U` (fixing `Ω`), the one-parameter unitary group `t ↦ U t` has positive energy
+(`AQFT.IsPositiveEnergy`): it is strongly continuous with positive generator. This is the
+ground-state (`β → ∞`, spectrum-condition) counterpart of `IsKMSStateForFlow`: it selects
+the stationary state whose Killing-flow generator (the local "Hamiltonian") is positive. -/
 def IsGroundStateForFlow (B : Set M.Carrier)
     (flow : ℝ → ↥(MulAction.stabilizer M.Isom B))
     (ω : Physicslib4.GNS.State (N.algebra B)) : Prop :=
@@ -159,8 +153,8 @@ def IsGroundStateForFlow (B : Set M.Carrier)
         (∀ t : ℝ, U t Ω = Ω) ∧
         AQFT.IsPositiveEnergy U
 
-/-- A Killing-flow ground state is invariant under the flow (the first conjunct); no
-spectrum condition or Stone's theorem is needed. -/
+/-- A Killing-flow ground state is invariant under the flow (the first conjunct); the
+spectrum condition is not used. -/
 theorem IsGroundStateForFlow.invariant (B : Set M.Carrier)
     (flow : ℝ → ↥(MulAction.stabilizer M.Isom B))
     {ω : Physicslib4.GNS.State (N.algebra B)}
@@ -169,8 +163,8 @@ theorem IsGroundStateForFlow.invariant (B : Set M.Carrier)
   h.1
 
 /-- The implementing unitary group of a Killing-flow ground state is strongly
-continuous, since it has positive energy (`AQFT.IsPositiveEnergy.strongContinuous`). This
-needs no spectrum condition. -/
+continuous: strong continuity is a field of the positive-energy hypothesis
+(`AQFT.IsPositiveEnergy.strongContinuous`). -/
 theorem IsGroundStateForFlow.exists_strongContinuous_unitary (B : Set M.Carrier)
     (flow : ℝ → ↥(MulAction.stabilizer M.Isom B))
     {ω : Physicslib4.GNS.State (N.algebra B)}

@@ -7,25 +7,18 @@ import Physicslib4.AQFT.HaagKastler.QuasilocalIntertwiner
 import Physicslib4.AQFT.PositiveEnergy
 
 /-!
-# Vacuum states: the generator-parameterized scaffold
+# Vacuum states
 
 A *vacuum state* of a (Poincaré-)covariant quasilocal algebra is an invariant
 state whose GNS representation additionally satisfies the **spectrum condition**:
-the energy-momentum is positive. The physically faithful form is that, for every
-future-pointing timelike direction `n`, the self-adjoint generator `P(n)` of the
-one-parameter translation unitary group `t ↦ U(t·n)` is positive (`0 ≤ P(n)`).
+the energy-momentum is positive. Here it is imposed in the form that, for every
+future-pointing timelike direction `n`, the one-parameter translation unitary group
+`t ↦ U(t·n)` has positive energy: it is strongly continuous and its self-adjoint
+generator `P(n)` is positive (`AQFT.IsPositiveEnergy`). This is equivalent to the
+textbook form, that the joint spectrum of the energy-momentum operators lies in the
+closed forward cone; that form would need a joint spectral measure for commuting
+unbounded operators and is not formalised.
 
-Stating that faithfully needs Stone's theorem and the theory of unbounded
-self-adjoint operators, neither of which Mathlib currently provides. This file
-sets up the API so that the spectrum condition enters **as a hypothesis** and the
-generator (and its positivity) is supplied data, deferring only the
-construction/self-adjointness that Stone will provide:
-
-* `IsPositiveEnergy V` — a one-parameter unitary group `V : ℝ → (H ≃ₗᵢ[ℂ] H)` has
-  positive energy when its generator is a positive *bounded* operator `P` with
-  `V t = exp(i t P)`. The bounded-generator form is a genuine restriction (physical
-  generators are unbounded); it is the scaffold that compiles today, with the
-  unbounded form to follow once Stone's theorem lands.
 * `HaagKastlerNet.IsVacuumState ftl ω` — invariance plus, in the GNS
   representation, positive energy of every future-timelike translation subgroup.
   The future-timelike-translation predicate `ftl` is a parameter.
@@ -33,14 +26,13 @@ construction/self-adjointness that Stone will provide:
   *translation* subgroup `n ↦ (id, n)` of the inhomogeneous Lorentz group, the
   one-parameter flow `t ↦ (id, t • n)`, and the concrete predicate picking out the
   flows in a future-pointing timelike direction `n` (i.e. `n` in the forward
-  Minkowski cone). This wires in the translation subgroup and its causal structure,
-  so `ftl` can be discharged with its intended value.
+  Minkowski cone), with which `ftl` is discharged.
 * `HaagKastlerNet.IsVacuumStateConcrete ω` — `IsVacuumState` with `ftl`
   fixed to `IsFutureTimelikeTranslation`; the vacuum definition then depends on no
   free predicate.
 
-These are the *necessary* conditions for a vacuum; constructing/discharging the
-spectrum condition for a concrete net is the Stone-gated next layer.
+These are the *necessary* conditions for a vacuum; constructing a vacuum state for a
+concrete net is not attempted here.
 -/
 
 namespace Physicslib4
@@ -118,27 +110,18 @@ def IsFutureTimelikeTranslation (γ : ℝ → InhomogeneousLorentzGroup) : Prop 
   ∃ n : StandardMinkowskiSpacetime.Carrier,
     (n : SpacetimeModel) ∈ minkowskiForwardCone 0 ∧ γ = translationFlow n
 
-/-- **Vacuum state (generator-parameterized scaffold).** A state `ω` on the
-quasilocal algebra is a *vacuum state* (relative to the future-timelike-translation
-predicate `ftl`) when:
+/-- **Vacuum state.** A state `ω` on the quasilocal algebra is a *vacuum state*
+(relative to the future-timelike-translation predicate `ftl`) when:
 
 1. it is invariant under the covariance action (`IsInvariantState`); and
 2. in a GNS representation `(H, π, Ω)` reproducing `ω` and implementing the action
    by unitaries `U`, every future-timelike translation one-parameter subgroup `γ`
-   has positive energy: `t ↦ U (γ t)` satisfies `IsPositiveEnergy`.
+   has positive energy: `t ↦ U (γ t)` satisfies `IsPositiveEnergy`, i.e. it is a
+   strongly continuous one-parameter unitary group with positive generator.
 
 This packages the two *necessary* vacuum conditions — invariance and the spectrum
-condition — with the spectrum condition entering as the positive-energy hypothesis
-on the implementing unitaries. The future-timelike-translation predicate `ftl` is a
-parameter (to be instantiated once the translation subgroup and its causal
-structure are available); the positive-energy condition is the bounded-generator
-scaffold of `IsPositiveEnergy`.
-
-**Restriction:** the spectrum condition is imposed through `IsPositiveEnergy`, which
-requires each translation group `t ↦ U (γ t)` to have a *bounded* positive generator.
-The intended form asks for a strongly continuous group whose unbounded self-adjoint
-generator is positive. It is waiting on Stone's theorem, which is in neither Mathlib nor
-this project. -/
+condition. The predicate `ftl` is a parameter; `IsVacuumStateConcrete` fixes it to
+`IsFutureTimelikeTranslation`. -/
 def HaagKastlerNet.IsVacuumState (N : HaagKastlerNet)
     (ftl : (ℝ → InhomogeneousLorentzGroup) → Prop)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
@@ -153,7 +136,7 @@ def HaagKastlerNet.IsVacuumState (N : HaagKastlerNet)
           IsOneParameterSubgroup γ → ftl γ → IsPositiveEnergy (fun t => U (γ t)))
 
 /-- **A vacuum state is invariant.** Invariance is the first conjunct of the vacuum
-conditions, so it is immediate - no spectrum condition / Stone's theorem needed. -/
+conditions, so it is immediate; the spectrum condition is not used. -/
 theorem HaagKastlerNet.IsVacuumState.invariant
     {N : HaagKastlerNet}
     {ftl : (ℝ → InhomogeneousLorentzGroup) → Prop}
@@ -165,8 +148,8 @@ theorem HaagKastlerNet.IsVacuumState.invariant
 invariance (`IsVacuumState.invariant`) with purity gives the irreducible, covariant GNS
 representation of `IsInvariantState.exists_gns_irreducible_covariant`: a covariant GNS
 triple with implementing unitaries `U(L)` (fixing `Ω`, with operator covariance) whose
-representation is irreducible and generates all of `𝓑(H)`. This needs no spectrum
-condition; it is the same no-Stone content, now packaged for a (pure) vacuum state. -/
+representation is irreducible and generates all of `𝓑(H)`. This does not use the
+spectrum condition. -/
 theorem HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant
     {N : HaagKastlerNet.{u}}
     {ftl : (ℝ → InhomogeneousLorentzGroup) → Prop}
@@ -193,10 +176,7 @@ theorem HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant
 `IsFutureTimelikeTranslation`, so the spectrum condition is imposed on exactly the
 one-parameter translation subgroups `t ↦ (id, t • n)` with `n` future-pointing
 timelike. This discharges the abstract `ftl` parameter with its intended value, so a
-concrete vacuum state no longer depends on a free predicate.
-
-**Restriction:** inherits the bounded-generator restriction of `IsVacuumState`; the
-intended form and what it is waiting on are recorded there. -/
+concrete vacuum state no longer depends on a free predicate. -/
 def HaagKastlerNet.IsVacuumStateConcrete (N : HaagKastlerNet)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
   N.IsVacuumState IsFutureTimelikeTranslation ω
