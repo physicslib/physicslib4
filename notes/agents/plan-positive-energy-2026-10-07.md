@@ -232,3 +232,9 @@ nothing is changed until the user approves.
   (unused); `Operators.Conjugation` import dropped from PositiveEnergy.lean (no longer used).
   No sorry in the project; build, lint, checkdecls clean; key results depend only on propext,
   Classical.choice, Quot.sound. Next: stage 5 (consumer docstrings and Restriction lines).
+- 2026-10-07, Stage 5 done: docstrings rewritten in VacuumState.lean (module doc, IsVacuumState,
+  invariant, exists_gns_irreducible_covariant, IsVacuumStateConcrete), QuasilocalKMS.lean and
+  StabilizerKMS.lean (IsGroundStateForFlow, invariant, exists_strongContinuous_unitary), and the
+  CovariantState.lean module note. All four `**Restriction:**` lines removed; the project now has
+  none. No statement or proof changed. Build, lint clean. Note: CLAUDE.md cites the
+  positive-energy docstring as its example of a Restriction line; that example no longer exists.

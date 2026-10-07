@@ -84,19 +84,15 @@ theorem IsKMSStateForFlow.convexCombo (flow : ℝ → InhomogeneousLorentzGroup)
   AQFT.IsKMSState.convexCombo s hs0 hs1 h₁ h₂
 
 open scoped InnerProductSpace in
-/-- **Ground state for a covariance flow (bounded-generator scaffold).** A state `ω` on
-the quasilocal algebra `𝔘` is a *ground state* for a one-parameter subgroup `t ↦ L_t` of
-the inhomogeneous Lorentz group (e.g. a translation or boost flow) when it is invariant
-under the flow and, in a GNS representation `(K, π, Ω)` reproducing `ω` and implementing
-the flow by unitaries `U` fixing `Ω`, the one-parameter unitary group `t ↦ U t` has
-positive energy (`AQFT.IsPositiveEnergy`). This is the ground-state (`β → ∞`,
-spectrum-condition) counterpart of `IsKMSStateForFlow`: the stationary state whose flow
-generator (the Hamiltonian, for a timelike flow) is positive. The positive-energy
-condition is the bounded-generator scaffold; the faithful unbounded form is Stone-gated
-
-**Restriction:** inherits the bounded-generator restriction of `AQFT.IsPositiveEnergy`
-(a positive *bounded* generator); the intended form and what it is waiting on (Stone's
-theorem) are recorded there. -/
+/-- **Ground state for a covariance flow.** A state `ω` on the quasilocal algebra `𝔘` is
+a *ground state* for a one-parameter subgroup `t ↦ L_t` of the inhomogeneous Lorentz group
+(e.g. a translation or boost flow) when it is invariant under the flow and, in a GNS
+representation `(K, π, Ω)` reproducing `ω` and implementing the flow by unitaries `U`
+fixing `Ω`, the one-parameter unitary group `t ↦ U t` has positive energy
+(`AQFT.IsPositiveEnergy`): it is strongly continuous with positive generator. This is the
+ground-state (`β → ∞`, spectrum-condition) counterpart of `IsKMSStateForFlow`: the
+stationary state whose flow generator (the Hamiltonian, for a timelike flow) is
+positive. -/
 def IsGroundStateForFlow (flow : ℝ → InhomogeneousLorentzGroup)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
   (∀ (t : ℝ) (a : N.quasilocal.carrier), (ω (N.flowAut flow t a) : ℂ) = ω a) ∧
@@ -108,8 +104,8 @@ def IsGroundStateForFlow (flow : ℝ → InhomogeneousLorentzGroup)
         (∀ t : ℝ, U t Ω = Ω) ∧
         AQFT.IsPositiveEnergy U
 
-/-- A covariance-flow ground state is invariant under the flow (the first conjunct); no
-spectrum condition or Stone's theorem is needed. -/
+/-- A covariance-flow ground state is invariant under the flow (the first conjunct); the
+spectrum condition is not used. -/
 theorem IsGroundStateForFlow.invariant (flow : ℝ → InhomogeneousLorentzGroup)
     {ω : Physicslib4.GNS.State N.quasilocal.carrier}
     (h : N.IsGroundStateForFlow flow ω) :
@@ -118,8 +114,8 @@ theorem IsGroundStateForFlow.invariant (flow : ℝ → InhomogeneousLorentzGroup
 
 open scoped InnerProductSpace in
 /-- The implementing unitary group of a covariance-flow ground state is strongly
-continuous, since it has positive energy (`AQFT.IsPositiveEnergy.strongContinuous`). This
-needs no spectrum condition. -/
+continuous: strong continuity is a field of the positive-energy hypothesis
+(`AQFT.IsPositiveEnergy.strongContinuous`). -/
 theorem IsGroundStateForFlow.exists_strongContinuous_unitary
     (flow : ℝ → InhomogeneousLorentzGroup)
     {ω : Physicslib4.GNS.State N.quasilocal.carrier}
