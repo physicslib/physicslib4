@@ -385,10 +385,13 @@
 
 \begin{lemma}[Smoothness of the Inverse Musical Isomorphism]
     \label{lmm:musical-inverse-smooth}
+    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.contMDiff_flatEquiv_symm, Physicslib4.Geometry.PseudoRiemannianMetric.flatEquiv}
     \uses{lmm:musical-isomorphism}
+    \leanok
     The map $x \mapsto \flat_x^{-1}$ of \ref{lmm:musical-isomorphism} is smooth: it is a $C^\infty$ section of the bundle $\mathrm{Hom}(T^*M, TM)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:musical-isomorphism, def:pseudo-riemannian-metric}
     Work in a local trivialisation of the bundle of bilinear forms: there $x \mapsto \flat_x$ is a $C^\infty$ map into the invertible elements of $E \to_L E^*$ by the smoothness clause of $g$, and inversion of continuous linear equivalences is $C^\infty$ (\texttt{contDiffAt\_map\_inverse}), so the composite $x \mapsto \flat_x^{-1}$ is $C^\infty$ in each trivialisation.
 \end{proof}

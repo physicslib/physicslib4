@@ -143,18 +143,6 @@ each point, and the musical isomorphism `flatEquiv` turns it into the desired `�
 
 variable (g : PseudoRiemannianMetric I M)
 
-/-- The **musical isomorphism** `v ↦ g_x(v, ·)` as a continuous linear equivalence
-(`bijective_val`).
-
-Blueprint reference: `lmm:musical-isomorphism`. -/
-noncomputable def flatEquiv (x : M) :
-    TangentSpace I x ≃L[ℝ] (TangentSpace I x →L[ℝ] ℝ) :=
-  haveI : FiniteDimensional ℝ (TangentSpace I x) := inferInstanceAs (FiniteDimensional ℝ E)
-  (LinearEquiv.ofBijective (g.val x : TangentSpace I x →ₗ[ℝ] TangentSpace I x →L[ℝ] ℝ)
-    (g.bijective_val x)).toContinuousLinearEquiv
-
-theorem flatEquiv_apply (x : M) (v : TangentSpace I x) : g.flatEquiv x v = g.val x v := rfl
-
 variable {X Y Z : Π x : M, TangentSpace I x}
 
 variable (X Y Z) in

@@ -24,9 +24,12 @@ metrics are included. The smoothness condition has the same bundle-section shape
 ## Main results
 
 * `Physicslib4.Geometry.PseudoRiemannianMetric.bijective_val`: at each point, `v ↦ g_x(v, ·)` is
-  a linear isomorphism `T_xM → T_x*M` (the musical isomorphism).
+  a linear isomorphism `T_xM → T_x*M` (the musical isomorphism), packaged as `flatEquiv`.
+* `Physicslib4.Geometry.PseudoRiemannianMetric.contMDiff_flatEquiv_symm`: `x ↦ ♭_x⁻¹` is a `C^∞`
+  section of `Hom(T*M, TM)`.
 
-Blueprint reference: `def:pseudo-riemannian-metric`, `lmm:musical-isomorphism`.
+Blueprint reference: `def:pseudo-riemannian-metric`, `lmm:musical-isomorphism`,
+`lmm:musical-inverse-smooth`.
 -/
 
 open Bundle
@@ -77,6 +80,59 @@ theorem bijective_val [FiniteDimensional ℝ E] (g : PseudoRiemannianMetric I M)
     rw [← (LinearMap.toContinuousLinearMap (𝕜 := ℝ) (E := E) (F' := ℝ)).finrank_eq]
     exact (Subspace.dual_finrank_eq).symm
   exact ⟨hinj, (LinearMap.injective_iff_surjective_of_finrank_eq_finrank hrank).1 hinj⟩
+
+/-- The musical isomorphism `♭_x : T_xM ≃ T_x*M`, `v ↦ g_x(v, ·)`, as a continuous linear
+equivalence (`bijective_val`; continuity of the inverse is automatic in finite dimension).
+
+Blueprint reference: `lmm:musical-isomorphism`. -/
+noncomputable def flatEquiv [FiniteDimensional ℝ E] (g : PseudoRiemannianMetric I M) (x : M) :
+    TangentSpace I x ≃L[ℝ] (TangentSpace I x →L[ℝ] ℝ) :=
+  haveI : FiniteDimensional ℝ (TangentSpace I x) := inferInstanceAs (FiniteDimensional ℝ E)
+  (LinearEquiv.ofBijective (g.val x : TangentSpace I x →ₗ[ℝ] (TangentSpace I x →L[ℝ] ℝ))
+    (g.bijective_val x)).toContinuousLinearEquiv
+
+theorem flatEquiv_apply [FiniteDimensional ℝ E] (g : PseudoRiemannianMetric I M) (x : M)
+    (v : TangentSpace I x) : g.flatEquiv x v = g.val x v :=
+  rfl
+
+/-- **Smoothness of the inverse musical isomorphism.** The map `x ↦ ♭_x⁻¹` is a `C^∞` section of
+the bundle `Hom(T*M, TM)`, whose fibre at `x` is `T_x*M →L[ℝ] T_xM`, stated in the same
+bundle-section idiom as the smoothness of `g` itself.
+
+Blueprint reference: `lmm:musical-inverse-smooth`. -/
+theorem contMDiff_flatEquiv_symm [FiniteDimensional ℝ E] (g : PseudoRiemannianMetric I M) :
+    ContMDiff I (I.prod 𝓘(ℝ, (E →L[ℝ] ℝ) →L[ℝ] E)) ∞
+      (fun x ↦ TotalSpace.mk' ((E →L[ℝ] ℝ) →L[ℝ] E)
+        (E := fun x ↦ (TangentSpace I x →L[ℝ] ℝ) →L[ℝ] TangentSpace I x) x
+        ((g.flatEquiv x).symm : (TangentSpace I x →L[ℝ] ℝ) →L[ℝ] TangentSpace I x)) := by
+  intro x₀
+  rw [contMDiffAt_hom_bundle]
+  refine ⟨contMDiffAt_id, ?_⟩
+  have hg := (contMDiffAt_hom_bundle _).1 (g.contMDiff x₀) |>.2
+  simp only at hg ⊢
+  have h₁ : x₀ ∈ (trivializationAt E (TangentSpace I) x₀).baseSet :=
+    FiberBundle.mem_baseSet_trivializationAt' x₀
+  have h₂ : x₀ ∈ (trivializationAt (E →L[ℝ] ℝ)
+      (fun x ↦ TangentSpace I x →L[ℝ] ℝ) x₀).baseSet :=
+    FiberBundle.mem_baseSet_trivializationAt' x₀
+  have hinv := (ContinuousLinearMap.IsInvertible.contDiffAt_map_inverse (𝕜 := ℝ) (n := ∞)
+    (e := ContinuousLinearMap.inCoordinates E (TangentSpace I)
+      (E →L[ℝ] ℝ) (fun x ↦ TangentSpace I x →L[ℝ] ℝ) x₀ x₀ x₀ x₀ (g.val x₀)) ?_).contMDiffAt
+  · refine (hinv.comp x₀ hg).congr_of_eventuallyEq ?_
+    filter_upwards [(trivializationAt _ _ x₀).open_baseSet.mem_nhds h₁,
+      (trivializationAt _ _ x₀).open_baseSet.mem_nhds h₂] with x hx hx'
+    simp only [Function.comp_apply]
+    rw [ContinuousLinearMap.inCoordinates_eq hx hx', ContinuousLinearMap.inCoordinates_eq hx' hx]
+    change _ = ContinuousLinearMap.inverse
+      (_ ∘L ((g.flatEquiv x : TangentSpace I x →L[ℝ] (TangentSpace I x →L[ℝ] ℝ)) ∘L _))
+    simp only [ContinuousLinearMap.inverse_equiv_comp, ContinuousLinearMap.inverse_comp_equiv,
+      ContinuousLinearMap.inverse_equiv, ContinuousLinearEquiv.symm_symm]
+    rfl
+  · rw [ContinuousLinearMap.inCoordinates_eq h₁ h₂]
+    change ContinuousLinearMap.IsInvertible
+      (_ ∘L ((g.flatEquiv x₀ : TangentSpace I x₀ →L[ℝ] (TangentSpace I x₀ →L[ℝ] ℝ)) ∘L _))
+    exact ContinuousLinearMap.isInvertible_equiv.comp
+      (ContinuousLinearMap.isInvertible_equiv.comp ContinuousLinearMap.isInvertible_equiv)
 
 end PseudoRiemannianMetric
 
