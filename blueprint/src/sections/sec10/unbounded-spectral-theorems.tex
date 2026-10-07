@@ -397,7 +397,7 @@ It is in this sense that we ask below whether $A^*$ is closed. In every case whe
 
 Our first observation is that the adjoint's graph is always closed, regardless of any hypothesis on $A$; from this, closability of symmetric operators follows immediately.
 
-\begin{proposition}[Closedness of the Adjoint's Graph; Closability of Symmetric Operators]
+\begin{proposition}[Closed Graph of the Adjoint; Closability of Symmetric Operators]
     \label{prpstn:hall-9.8}
     \lean{Physicslib4.Spectral.Unbounded.isClosable_of_isSymmetric, LinearPMap.adjoint_isClosed}
     \leanok
@@ -755,7 +755,8 @@ Writing $(A - \lambda\mathbf{1})\psi = (A-a\mathbf{1})\psi - ib\psi$ (immediate 
 \begin{align}
     \left< (A-\lambda\mathbf{1})\psi, (A-\lambda\mathbf{1})\psi \right>
         &= \left< (A-a\mathbf{1})\psi - ib\psi,\ (A-a\mathbf{1})\psi - ib\psi \right> \\
-        &= \left< (A-a\mathbf{1})\psi, (A-a\mathbf{1})\psi \right> - ib\left< (A-a\mathbf{1})\psi, \psi \right> + ib \left< \psi, (A-a\mathbf{1})\psi \right> + b^2 \left< \psi, \psi \right>.
+        &= \left< (A-a\mathbf{1})\psi, (A-a\mathbf{1})\psi \right> - ib\left< (A-a\mathbf{1})\psi, \psi \right> \notag \\
+        &\qquad + ib \left< \psi, (A-a\mathbf{1})\psi \right> + b^2 \left< \psi, \psi \right>.
 \end{align}
 Here the cross terms arise as follows: expanding the first argument by conjugate-linearity contributes $\overline{(-ib)} = ib$ to the $\psi$-term, and expanding the second by linearity contributes $-ib$; the final term is $\overline{(-ib)}(-ib)\left< \psi,\psi \right> = (ib)(-ib)\left< \psi,\psi\right> = b^2\left<\psi,\psi\right>$. By the symmetry identity just established, $\left< (A-a\mathbf{1})\psi, \psi \right> = \left< \psi, (A-a\mathbf{1})\psi \right>$, so the middle two terms cancel: $-ib\left< (A-a\mathbf{1})\psi, \psi \right> + ib \left< \psi, (A-a\mathbf{1})\psi \right> = -ib\left< \psi, (A-a\mathbf{1})\psi \right> + ib \left< \psi, (A-a\mathbf{1})\psi \right> = 0$. So
 \begin{align}
@@ -3040,9 +3041,8 @@ Write $\widehat{D} \equiv \int_{\sigma(U)} D \, d\mu^U$, an unbounded operator w
 
 For $n \ge 1$ define
 \begin{align}
-    F_1 \equiv \big\{ u \in \sigma(U) \;\mid\; \lvert u-1 \rvert \ge 1 \big\} \cup \big( \{1\} \cap \sigma(U) \big),
-    \qquad
-    F_n \equiv \left\{ u \in \sigma(U) \;\middle|\; \frac{1}{n} \le \lvert u - 1 \rvert < \frac{1}{n-1} \right\} \ (n \ge 2).
+    F_1 &\equiv \big\{ u \in \sigma(U) \;\mid\; \lvert u-1 \rvert \ge 1 \big\} \cup \big( \{1\} \cap \sigma(U) \big), \\
+    F_n &\equiv \left\{ u \in \sigma(U) \;\middle|\; \frac{1}{n} \le \lvert u - 1 \rvert < \frac{1}{n-1} \right\} \ (n \ge 2).
 \end{align}
 These are pairwise disjoint Borel subsets of $\sigma(U)$ with $\bigcup_{n\ge1} F_n = \sigma(U)$: every $u \ne 1$ has $\lvert u-1\rvert > 0$ and so lies in exactly one of the annuli, and $u=1$ has been placed in $F_1$.
 
