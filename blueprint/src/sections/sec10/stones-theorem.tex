@@ -132,7 +132,9 @@ Three examples of generators are used in the positive-energy condition of the Ha
 
 \begin{lemma}[The Generator of the Trivial Group]
     \label{lmm:generator-const}
+    \lean{Physicslib4.Spectral.Stone.generator_refl}
     \uses{def:hall-10.11, def:hall-10.13}
+    \leanok
     The constant family $U(t) = \mathbf{1}$, $t \in \mathbb{R}$, is a strongly continuous one-parameter unitary group, and its infinitesimal generator is the operator $0$ with domain $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -142,7 +144,9 @@ Three examples of generators are used in the positive-energy condition of the Ha
 
 \begin{lemma}[Conjugating a Unitary Group]
     \label{lmm:conj-unitary-group}
+    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.conj, Physicslib4.Spectral.Stone.IsStronglyContinuous.conj}
     \uses{def:hall-10.11, def:unitary-operator}
+    \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ and let $W$ be a unitary operator on $\mathbf{H}$. Then $V(t) \equiv WU(t)W^{-1}$ is a one-parameter unitary group, and it is strongly continuous if $U(\cdot)$ is.
 \end{lemma}
 \begin{proof}
@@ -152,7 +156,9 @@ Three examples of generators are used in the positive-energy condition of the Ha
 
 \begin{lemma}[Conjugating a Group Conjugates its Generator]
     \label{lmm:generator-conj}
+    \lean{Physicslib4.Spectral.Stone.mem_generator_conj_domain_iff, Physicslib4.Spectral.Stone.generator_conj_apply}
     \uses{lmm:conj-unitary-group, def:hall-10.13, def:unitary-operator}
+    \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, let $W$ be a unitary operator on $\mathbf{H}$, and let $B$ be the infinitesimal generator of the one-parameter unitary group $V(t) = WU(t)W^{-1}$ of Lemma~\ref{lmm:conj-unitary-group}. Then $\text{Dom}(B) = W\,\text{Dom}(A)$ and $B = WAW^{-1}$, that is,
     \begin{align}
         \psi \in \text{Dom}(B) \iff W^{-1}\psi \in \text{Dom}(A), \qquad B\psi = WAW^{-1}\psi.
@@ -175,7 +181,9 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
 
 \begin{lemma}[$\exp(itP)$ is a One-Parameter Unitary Group]
     \label{lmm:exp-bounded-unitary-group}
+    \lean{Physicslib4.Spectral.Stone.exists_isOneParameterUnitaryGroup_exp}
     \uses{def:hall-10.11, def:bounded-operator-notation, def:adjoint-bounded}
+    \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then $V(t) \equiv \exp(itP)$ is a one-parameter unitary group.
 \end{lemma}
 \begin{proof}
@@ -185,7 +193,9 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
 
 \begin{lemma}[The Derivative of $\exp(itP)$ at $0$]
     \label{lmm:exp-bounded-hasDerivAt}
+    \lean{Physicslib4.Spectral.Stone.hasDerivAt_exp_smul_I}
     \uses{def:bounded-operator-notation}
+    \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$. The map $\mathbb{R} \to \mathcal{B}(\mathbf{H})$, $t \mapsto \exp(t \cdot iP)$, is differentiable at $t = 0$ in the operator norm, with derivative $iP$.
 \end{lemma}
 \begin{proof}
@@ -195,7 +205,9 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
 
 \begin{lemma}[The Generator of $\exp(itP)$]
     \label{lmm:generator-exp-bounded}
+    \lean{Physicslib4.Spectral.Stone.generator_eq_of_eq_exp}
     \uses{lmm:exp-bounded-unitary-group, def:hall-10.13}
+    \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then the one-parameter unitary group $V(t) = \exp(itP)$ of Lemma~\ref{lmm:exp-bounded-unitary-group} is strongly continuous, and its infinitesimal generator is $P$, with domain $\mathbf{H}$.
 \end{lemma}
 \begin{proof}

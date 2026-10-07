@@ -231,7 +231,9 @@ Positivity of an unbounded operator is a condition on its expectation values, im
 
 \begin{definition}[Positive Operator]
     \label{def:positive-unbounded-operator}
+    \lean{Physicslib4.Spectral.Unbounded.IsPositive}
     \uses{def:hall-3.1, def:hall-9.2}
+    \leanok
     An unbounded operator $A$ on $\mathbf{H}$ is \textit{positive} if it is symmetric~(\ref{def:hall-9.2}) and
     \begin{align}
         \text{Re}\left< \psi, A\psi \right> \ge 0 \qquad \text{for all } \psi \in \text{Dom}(A).
@@ -241,7 +243,9 @@ Positivity of an unbounded operator is a condition on its expectation values, im
 
 \begin{lemma}[Positivity of a Bounded Operator]
     \label{lmm:positive-bounded-agrees}
+    \lean{Physicslib4.Spectral.Unbounded.isPositive_toPMap_iff}
     \uses{def:positive-unbounded-operator, def:bounded-operator-notation, def:non-negative-operator}
+    \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$, regarded as an unbounded operator with domain $\mathbf{H}$. Then $P$ is positive in the sense of Definition~\ref{def:positive-unbounded-operator} if and only if it is positive as a bounded operator, that is, symmetric with $\text{Re}\left< P\psi, \psi \right> \ge 0$ for all $\psi \in \mathbf{H}$ (in Mathlib, \texttt{ContinuousLinearMap.IsPositive}; for a symmetric bounded operator this is the non-negativity of Definition~\ref{def:non-negative-operator}).
 \end{lemma}
 \begin{proof}

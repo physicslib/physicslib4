@@ -1900,12 +1900,15 @@ Combining invariance with purity makes the GNS representation both covariant and
     \label{def:positive-energy}
     \lean{Physicslib4.AQFT.IsPositiveEnergy}
     \uses{def:hall-10.11, def:hall-10.13, def:positive-unbounded-operator}
+    \leanok
     A family $V(t)$, $t \in \mathbb{R}$, of unitary operators on $H$ has \emph{positive energy} when $V$ is a strongly continuous one-parameter unitary group (\ref{def:hall-10.11}) whose infinitesimal generator $A$ (\ref{def:hall-10.13}) is a positive operator (\ref{def:positive-unbounded-operator}): $A$ is symmetric and $\left< \psi, A\psi \right> \ge 0$ for every $\psi \in \text{Dom}(A)$. By Stone's Theorem (\ref{thrm:hall-10.15}) the generator $A$ is then densely defined and self-adjoint, and $V(t) = e^{itA}$ for all $t$; so the condition says exactly that $V(t) = e^{itP}$ with $P$ a positive self-adjoint operator, which is Theorem~\ref{thrm:positive-energy-iff-exp}. The positivity of the generator is the energy-positivity asserted by the spectrum condition.
 \end{definition}
 
 \begin{lemma}[The Trivial Group has Positive Energy]
     \label{lmm:positive-energy-const}
+    \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl}
     \uses{def:positive-energy}
+    \leanok
     The constant group $t \mapsto \mathbf{1}$ has positive energy, with generator $0$ on domain $H$.
 \end{lemma}
 \begin{proof}
@@ -1915,7 +1918,9 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[Uniqueness of the Generator]
     \label{lmm:exp-generator-unique}
+    \lean{Physicslib4.AQFT.generator_eq_of_eq_expUnitary, Physicslib4.AQFT.exp_generator_unique}
     \uses{def:hall-10.13, def:exp-unitary-group, def:hall-9.5}
+    \leanok
     Let $V(t)$, $t \in \mathbb{R}$, be a family of unitary operators on $H$, and let $B$ be a self-adjoint operator with $V(t) = e^{itB}$ (\ref{def:exp-unitary-group}) for all $t$. Then $B$ is the infinitesimal generator of $V$, with equality of domains. In particular the positive operator witnessing positive energy is unique.
 \end{lemma}
 \begin{proof}
@@ -1925,7 +1930,9 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[Unitary Conjugation Preserves Positivity]
     \label{lmm:positive-conj}
+    \lean{Physicslib4.Spectral.Unbounded.IsPositive.of_conj}
     \uses{def:positive-unbounded-operator, def:unitary-operator}
+    \leanok
     Let $A$ be a positive operator on $H$~(\ref{def:positive-unbounded-operator}) and $W$ a unitary operator on $H$. Then the operator $WAW^{-1}$ with domain $W\,\text{Dom}(A)$ is positive.
 \end{lemma}
 \begin{proof}
@@ -1939,7 +1946,9 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[Positive Energy is Unitarily Invariant]
     \label{lmm:positive-energy-conj}
+    \lean{Physicslib4.AQFT.IsPositiveEnergy.conj}
     \uses{def:positive-energy, def:unitary-operator}
+    \leanok
     If $V$ has positive energy, with generator $A$, and $W$ is unitary, then $t \mapsto WV(t)W^{-1}$ has positive energy, with generator $WAW^{-1}$ on domain $W\,\text{Dom}(A)$. Physically, the spectrum condition does not depend on the choice of unitary frame.
 \end{lemma}
 \begin{proof}
@@ -1949,7 +1958,9 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[A Positive-Energy Group is Strongly Continuous]
     \label{lmm:positive-energy-strong-continuous}
+    \lean{Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}
     \uses{def:positive-energy}
+    \leanok
     If $V$ has positive energy, then $V$ is strongly continuous: $t \mapsto V(t)x$ is continuous for every $x \in H$.
 \end{lemma}
 \begin{proof}
@@ -1959,7 +1970,9 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[The Bounded Case]
     \label{lmm:positive-energy-exp-bounded}
+    \lean{Physicslib4.AQFT.isPositiveEnergy_exp}
     \uses{def:positive-energy, def:non-negative-operator}
+    \leanok
     If $P \in \mathcal{B}(H)$ is a bounded positive operator, then $t \mapsto \exp(itP)$, the norm-convergent exponential series, has positive energy, with generator $P$ on domain $H$.
 \end{lemma}
 \begin{proof}
@@ -1969,7 +1982,9 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[Positive Energy in Exponential Form]
     \label{thrm:positive-energy-iff-exp}
+    \lean{Physicslib4.AQFT.isPositiveEnergy_iff_exists_exp}
     \uses{def:positive-energy, def:exp-unitary-group, def:positive-unbounded-operator, def:hall-9.5}
+    \leanok
     A family $V(t)$, $t \in \mathbb{R}$, of unitary operators on $H$ has positive energy if and only if there is a positive self-adjoint operator $A$ with $V(t) = e^{itA}$ for all $t$.
 \end{theorem}
 \begin{proof}
@@ -1981,6 +1996,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     \label{thrm:positive-energy-api}
     \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl, Physicslib4.AQFT.exp_generator_unique, Physicslib4.AQFT.IsPositiveEnergy.conj, Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}
     \uses{def:positive-energy, def:exp-unitary-group, def:positive-unbounded-operator}
+    \leanok
     Let $V$ be a family of unitary operators on $H$ indexed by $\mathbb{R}$.
     \begin{enumerate}
         \item[(i)] \emph{Trivial group}: the constant group $t \mapsto \mathbf{1}$ has positive energy, with generator $0$.

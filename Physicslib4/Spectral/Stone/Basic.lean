@@ -289,6 +289,76 @@ theorem IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator {U : ℝ → (H �
   obtain ⟨h, e⟩ := hU.generator_apply_comm ψ t
   exact ⟨h, e ▸ hU.hasDerivAt_orbit ψ t, e⟩
 
+/--
+The trivial family `t ↦ 1` is a one-parameter unitary group.
+
+Blueprint reference: `lmm:generator-const`.
+-/
+theorem isOneParameterUnitaryGroup_refl :
+    IsOneParameterUnitaryGroup (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) := by
+  sorry
+
+/--
+The trivial family `t ↦ 1` is strongly continuous.
+
+Blueprint reference: `lmm:generator-const`.
+-/
+theorem isStronglyContinuous_refl :
+    IsStronglyContinuous (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) := by
+  sorry
+
+/--
+The generator of the trivial group `t ↦ 1` is `0`, with domain `H`.
+
+Blueprint reference: `lmm:generator-const`.
+-/
+theorem generator_refl : generator (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) = 0 := by
+  sorry
+
+/--
+Conjugating a one-parameter unitary group by a unitary `W` gives a one-parameter unitary group
+`t ↦ W U(t) W⁻¹`.
+
+Blueprint reference: `lmm:conj-unitary-group`.
+-/
+theorem IsOneParameterUnitaryGroup.conj {U : ℝ → (H ≃ₗᵢ[ℂ] H)}
+    (hU : IsOneParameterUnitaryGroup U) (W : H ≃ₗᵢ[ℂ] H) :
+    IsOneParameterUnitaryGroup fun t => (W.symm.trans (U t)).trans W := by
+  sorry
+
+/--
+Conjugation by a unitary preserves strong continuity.
+
+Blueprint reference: `lmm:conj-unitary-group`.
+-/
+theorem IsStronglyContinuous.conj {U : ℝ → (H ≃ₗᵢ[ℂ] H)} (hU : IsStronglyContinuous U)
+    (W : H ≃ₗᵢ[ℂ] H) : IsStronglyContinuous fun t => (W.symm.trans (U t)).trans W := by
+  sorry
+
+/--
+The domain of the generator of `t ↦ W U(t) W⁻¹` is `W · Dom(A)`, `A` the generator of `U`.
+No group law is needed: the difference quotient at `ψ` is `W` applied to that of `U` at
+`W⁻¹ ψ`.
+
+Blueprint reference: `lmm:generator-conj`.
+-/
+theorem mem_generator_conj_domain_iff (U : ℝ → (H ≃ₗᵢ[ℂ] H)) (W : H ≃ₗᵢ[ℂ] H) (ψ : H) :
+    ψ ∈ (generator fun t => (W.symm.trans (U t)).trans W).domain ↔
+      W.symm ψ ∈ (generator U).domain := by
+  sorry
+
+/--
+The generator of `t ↦ W U(t) W⁻¹` is `W A W⁻¹`, `A` the generator of `U`.
+
+Blueprint reference: `lmm:generator-conj`.
+-/
+theorem generator_conj_apply (U : ℝ → (H ≃ₗᵢ[ℂ] H)) (W : H ≃ₗᵢ[ℂ] H) (ψ : H)
+    (h : ψ ∈ (generator fun t => (W.symm.trans (U t)).trans W).domain)
+    (h' : W.symm ψ ∈ (generator U).domain) :
+    (generator fun t => (W.symm.trans (U t)).trans W) ⟨ψ, h⟩ =
+      W (generator U ⟨W.symm ψ, h'⟩) := by
+  sorry
+
 end Stone
 end Spectral
 end Physicslib4

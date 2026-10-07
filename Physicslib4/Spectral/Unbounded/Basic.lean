@@ -192,6 +192,44 @@ theorem isSymmetric_iff_le_adjoint {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T
   rw [LinearPMap.apply_comp_inclusion hle φ]
   exact (LinearPMap.adjoint_isFormalAdjoint hT (Submodule.inclusion hle.1 φ) ψ).symm
 
+/--
+An unbounded operator `A` is *positive* if it is symmetric (in the density-free sense of
+`IsSymmetric`) and `0 ≤ Re ⟪ψ, A ψ⟫` for every `ψ ∈ Dom(A)`. For symmetric `A` the number
+`⟪ψ, A ψ⟫` is real, so this is `⟪ψ, A ψ⟫ ≥ 0`. This mirrors Mathlib's
+`ContinuousLinearMap.IsPositive` (`isPositive_toPMap_iff`).
+
+Blueprint reference: `def:positive-unbounded-operator`.
+-/
+def IsPositive (A : H →ₗ.[ℂ] H) : Prop :=
+  IsSymmetric A ∧ ∀ ψ : A.domain, 0 ≤ (⟪(ψ : H), A ψ⟫_ℂ).re
+
+omit [CompleteSpace H] in
+/--
+A bounded operator, regarded as an unbounded operator with domain `H`, is positive exactly
+when it is positive as a bounded operator.
+
+Blueprint reference: `lmm:positive-bounded-agrees`.
+-/
+theorem isPositive_toPMap_iff (P : H →L[ℂ] H) :
+    IsPositive ((P : H →ₗ[ℂ] H).toPMap ⊤) ↔ P.IsPositive := by
+  sorry
+
+omit [CompleteSpace H] in
+/--
+Unitary conjugation preserves positivity: if `A` is positive, `W` is unitary, and `B` has
+domain `W · Dom(A)` with `B ψ = W A W⁻¹ ψ` there, then `B` is positive. Stated through the
+domain and the formula rather than by building `W A W⁻¹`, which is the form in which
+`Stone.mem_generator_conj_domain_iff` and `Stone.generator_conj_apply` supply it.
+
+Blueprint reference: `lmm:positive-conj`.
+-/
+theorem IsPositive.of_conj {A B : H →ₗ.[ℂ] H} (hA : IsPositive A) (W : H ≃ₗᵢ[ℂ] H)
+    (hdom : ∀ ψ : H, ψ ∈ B.domain ↔ W.symm ψ ∈ A.domain)
+    (happ : ∀ (ψ : H) (h : ψ ∈ B.domain) (h' : W.symm ψ ∈ A.domain),
+      B ⟨ψ, h⟩ = W (A ⟨W.symm ψ, h'⟩)) :
+    IsPositive B := by
+  sorry
+
 /-!
 ### The closure of an unbounded operator
 
