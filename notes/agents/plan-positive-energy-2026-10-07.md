@@ -246,3 +246,10 @@ nothing is changed until the user approves.
   tag of thrm:positive-energy-api now lists the six current declarations (statement \uses
   restored by hand after the status tool's strip/rewrite dropped it). lean-kit verify receipt
   refreshed (164 files). CLAUDE.md Restriction example replaced (file is untracked).
+- 2026-10-07, Stage 7: PDF and web blueprint rebuilt (341 pp.). Home page: entries renumbered
+  from the new aux (664 entries incl. conventions), 15 new entries, 4 retitled, subsection item
+  counts recomputed; counts now 661 declarations (150/156/252/99/4), 660 formalised, 511 results,
+  471 written proofs, 510 formalised proofs, 1,143 distinct Lean names; §10.3/§10.4/§10.6
+  overviews and the index status paragraph describe the unbounded positive-energy condition;
+  page refs checked against node pages. Jekyll builds, 11 pages, no broken links. Merged into
+  numina/aqft-in-lean (fast-forward, not pushed).

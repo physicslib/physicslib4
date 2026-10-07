@@ -9,11 +9,11 @@ usemathjax: true
 
 ## How the blueprint is organised
 
-The blueprint is 338 pages long and splits cleanly in two.
+The blueprint is 341 pages long and splits cleanly in two.
 
 **Chapters 1–9 are mathematical background and are not formalised in Lean.** They motivate and analyse each of the original Haag–Kastler axioms in turn, and then generalise them to curved spacetime. Along the way they cite twelve supporting results, numbered 1 through 12 — Gelfand–Naimark, the Bounded Linear Transformation Theorem, the existence of a Lorentz metric, and so on. These are quoted from the literature where needed; none of them carries a Lean declaration.
 
-**Chapter 10 collects the formalisation-ready content, and it is the content of Chapter 10 that is formalised in Lean.** Its items are numbered consecutively, running from Definition 13 through Definition 661, and comprise **646 declarations in total: 149 definitions, 155 theorems, 239 lemmas, 99 propositions, and 4 corollaries**, mapped onto **1,082 distinct Lean declarations** (where Mathlib already supplies a result, the blueprint names the Mathlib declaration directly). Three further numbered items — Conventions 22, 211 and 258, standing hypotheses of the two spectral-theory sections — share the numbering but are conventions rather than declarations, and are not counted. Chapter 10 is divided into eight top-level sections, §10.1 through §10.8.
+**Chapter 10 collects the formalisation-ready content, and it is the content of Chapter 10 that is formalised in Lean.** Its items are numbered consecutively, running from Definition 13 through Definition 676, and comprise **661 declarations in total: 150 definitions, 156 theorems, 252 lemmas, 99 propositions, and 4 corollaries**, mapped onto **1,143 distinct Lean declarations** (where Mathlib already supplies a result, the blueprint names the Mathlib declaration directly). Three further numbered items — Conventions 22, 213 and 260, standing hypotheses of the two spectral-theory sections — share the numbering but are conventions rather than declarations, and are not counted. Chapter 10 is divided into eight top-level sections, §10.1 through §10.8.
 
 ## Chapters 1–9: unpacking the original axioms
 
@@ -35,16 +35,16 @@ The lower numbers, 1 through 12, label supporting theorems and definitions intro
 
 ## The section pages
 
-Only Chapter 10 is formalised in Lean. Its items are numbered consecutively from Definition 13 through Definition 661 — 646 declarations, plus the three standing conventions of §10.2 and §10.3. Each section page below summarises its section and lists **every** item, in numerical order, under the blueprint subsection in which it appears. Each entry links to the node in the web blueprint and names the principal Lean declaration that realises it; where a node maps onto several declarations, the count of the remainder is shown. The lists are derived mechanically from the blueprint's own `\lean` and `\leanok` annotations.
+Only Chapter 10 is formalised in Lean. Its items are numbered consecutively from Definition 13 through Definition 676 — 661 declarations, plus the three standing conventions of §10.2 and §10.3. Each section page below summarises its section and lists **every** item, in numerical order, under the blueprint subsection in which it appears. Each entry links to the node in the web blueprint and names the principal Lean declaration that realises it; where a node maps onto several declarations, the count of the remainder is shown. The lists are derived mechanically from the blueprint's own `\lean` and `\leanok` annotations.
 
 - [§10.1 GNS Construction (pp. 29–38)](sec10-1-gns.html)
 - [§10.2 Spectral Theorems (pp. 38–155)](sec10-2-spectral.html)
 - [§10.3 Unbounded Spectral Theorems (pp. 155–235)](sec10-3-unbounded.html)
-- [§10.4 Stone's Theorem (pp. 235–247)](sec10-4-stone.html)
-- [§10.5 Spacetime and causal structure (pp. 247–284)](sec10-5-spacetime.html)
-- [§10.6 Haag–Kastler Axioms in Minkowski spacetime (pp. 284–324)](sec10-6-haag-kastler.html)
-- [§10.7 Haag–Kastler Axioms in curved spacetime (pp. 324–333)](sec10-7-curved.html)
-- [§10.8 General Covariance: Nets on Pullback-Related Metrics (pp. 333–335)](sec10-8-general-covariance.html)
+- [§10.4 Stone's Theorem (pp. 235–249)](sec10-4-stone.html)
+- [§10.5 Spacetime and causal structure (pp. 249–286)](sec10-5-spacetime.html)
+- [§10.6 Haag–Kastler Axioms in Minkowski spacetime (pp. 286–327)](sec10-6-haag-kastler.html)
+- [§10.7 Haag–Kastler Axioms in curved spacetime (pp. 327–337)](sec10-7-curved.html)
+- [§10.8 General Covariance: Nets on Pullback-Related Metrics (pp. 337–338)](sec10-8-general-covariance.html)
 
 ## Where the Lean lives
 
