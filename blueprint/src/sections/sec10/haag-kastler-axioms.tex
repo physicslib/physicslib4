@@ -2012,7 +2012,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 \end{definition}
 
 \begin{theorem}[Consequences of Invariance for a Vacuum State]
-    \label{thrm:vacuum-no-stone}
+    \label{thrm:vacuum-invariance-consequences}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.invariant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant}
     \uses{def:vacuum-state, thrm:irreducible-covariant-representation}
     \leanok
@@ -2038,7 +2038,7 @@ Combining invariance with purity makes the GNS representation both covariant and
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumStateConcrete}
     \leanok
     \uses{def:vacuum-state, def:future-timelike-translation}
-    The vacuum-state condition of \ref{def:vacuum-state} with its future-timelike-translation parameter fixed to the concrete predicate \ref{def:future-timelike-translation}: the spectrum condition is imposed on exactly the one-parameter translation subgroups $t \mapsto (\mathrm{id}, t \cdot n)$ with $n$ future-pointing timelike. The vacuum definition then depends on no free predicate. Invariance and (for a pure state) the irreducible covariant representation follow as in \ref{thrm:vacuum-no-stone}, since the concrete form unfolds to the parameterized one.
+    The vacuum-state condition of \ref{def:vacuum-state} with its future-timelike-translation parameter fixed to the concrete predicate \ref{def:future-timelike-translation}: the spectrum condition is imposed on exactly the one-parameter translation subgroups $t \mapsto (\mathrm{id}, t \cdot n)$ with $n$ future-pointing timelike. The vacuum definition then depends on no free predicate. Invariance and (for a pure state) the irreducible covariant representation follow as in \ref{thrm:vacuum-invariance-consequences}, since the concrete form unfolds to the parameterized one.
 \end{definition}
 
 \begin{theorem}[Purity is Covariance-Invariant]
