@@ -27,3 +27,21 @@
  {\clist_map_inline:nn{#1}{\vphantom{\ref{##1}}}%
   \ignorespaces}
 \ExplSyntaxOff
+% Line breaking for long Lean names and paths (pdf only). Lean identifiers such as
+% `Physicslib4.Spectral.Stone.isEssentiallySelfAdjoint_generator` are set with \texttt,
+% which TeX never breaks, so they overflow the margin. Allow a break after each `.`, `_`
+% and `/` inside \texttt, and give TeX extra stretch before it resorts to an overfull line.
+\NewCommandCopy{\bpOrigTexttt}{\texttt}
+\ExplSyntaxOn
+\tl_new:N \l__bp_texttt_tl
+\RenewDocumentCommand{\texttt}{m}
+ {
+  \tl_set:Nn \l__bp_texttt_tl {#1}
+  \tl_replace_all:Nnn \l__bp_texttt_tl {\_} {\_\allowbreak}
+  \tl_replace_all:Nnn \l__bp_texttt_tl {.} {.\allowbreak}
+  \tl_replace_all:Nnn \l__bp_texttt_tl {/} {/\allowbreak}
+  \exp_args:NV \bpOrigTexttt \l__bp_texttt_tl
+ }
+\ExplSyntaxOff
+\setlength{\emergencystretch}{3em}
+\tolerance=2000

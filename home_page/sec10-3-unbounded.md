@@ -55,7 +55,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 <summary>§10.3.1 · Unbounded Operators › Elementary Properties of Adjoints and Closed Operators (p. 164) — 14 items</summary>
 
 - [**Definition 185**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:closed-linear-map-on-a-subspace) — Closed Linear Map on a Subspace · `LinearPMap.IsClosed` (+1 more)
-- [**Proposition 186**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.8) — Closedness of the Adjoint's Graph; Closability of Symmetric Operators · `Physicslib4.Spectral.Unbounded.isClosable_of_isSymmetric` (+1 more)
+- [**Proposition 186**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.8) — Closed Graph of the Adjoint; Closability of Symmetric Operators · `Physicslib4.Spectral.Unbounded.isClosable_of_isSymmetric` (+1 more)
 - [**Proposition 187**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.10) — The Adjoint of a Closure · `Physicslib4.Spectral.Unbounded.adjoint_closure_eq_adjoint`
 - [**Lemma 188**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:extension-reverses-adjoint-domains) — Extension Reverses Adjoint Domains · `Physicslib4.Spectral.Unbounded.adjoint_le_adjoint_of_le`
 - [**Lemma 189**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:self-adjoint-maximally-symmetric) — A Self-Adjoint Operator has no Proper Symmetric Extension · `Physicslib4.Spectral.Unbounded.eq_of_isSelfAdjoint_of_isSymmetric_of_le`

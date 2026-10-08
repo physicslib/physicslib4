@@ -8,7 +8,8 @@
 
     \emph{The smoothness clause, precisely.} The metric field is a family of \emph{continuous bilinear forms} $g_x : TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$, and ``smooth'' is the field \texttt{contMDiff}, which asserts that $g$ is a $C^\infty$ \emph{section of the bundle of continuous bilinear forms on the tangent bundle} --- the regularity index being $\infty$, on which see the remark on the index below. Writing $E$ for the model space and $I$ for the model with corners of $M$, it reads
     \begin{align}
-        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\infty\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;(g_x)\Big),
+        &\mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\infty \notag \\
+        &\qquad \Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;(g_x)\Big),
     \end{align}
     the fibre over $x$ being $TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$ and the index being $\infty$.
 
@@ -18,7 +19,8 @@
 
     \emph{It is Mathlib's idiom.} The clause is deliberately the shape of the \texttt{contMDiff} field of Mathlib's \texttt{Bundle.ContMDiffRiemannianMetric}, whose own field is
     \begin{align}
-        \mathtt{ContMDiff}\;I_B\;\big(I_B.\mathtt{prod}\;\mathcal{I}(\mathbb{R}, F \to_L[\mathbb{R}] F \to_L[\mathbb{R}] \mathbb{R})\big)\;n\;\big(b \mapsto \mathtt{TotalSpace.mk'}\;(F \to_L[\mathbb{R}] F \to_L[\mathbb{R}] \mathbb{R})\;b\;(\mathtt{inner}\;b)\big),
+        &\mathtt{ContMDiff}\;I_B\;\big(I_B.\mathtt{prod}\;\mathcal{I}(\mathbb{R}, F \to_L[\mathbb{R}] F \to_L[\mathbb{R}] \mathbb{R})\big)\;n \notag \\
+        &\qquad \big(b \mapsto \mathtt{TotalSpace.mk'}\;(F \to_L[\mathbb{R}] F \to_L[\mathbb{R}] \mathbb{R})\;b\;(\mathtt{inner}\;b)\big),
     \end{align}
     read with $\mathtt{inner}$ replaced by $g$. Matching it verbatim is what makes the whole bundle-section API of \texttt{Mathlib/Geometry/Manifold/VectorBundle/} apply to $g$ without translation.
 
@@ -385,10 +387,13 @@
 
 \begin{lemma}[Smoothness of the Inverse Musical Isomorphism]
     \label{lmm:musical-inverse-smooth}
+    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.contMDiff_flatEquiv_symm, Physicslib4.Geometry.PseudoRiemannianMetric.flatEquiv}
     \uses{lmm:musical-isomorphism}
+    \leanok
     The map $x \mapsto \flat_x^{-1}$ of \ref{lmm:musical-isomorphism} is smooth: it is a $C^\infty$ section of the bundle $\mathrm{Hom}(T^*M, TM)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:musical-isomorphism, def:pseudo-riemannian-metric}
     Work in a local trivialisation of the bundle of bilinear forms: there $x \mapsto \flat_x$ is a $C^\infty$ map into the invertible elements of $E \to_L E^*$ by the smoothness clause of $g$, and inversion of continuous linear equivalences is $C^\infty$ (\texttt{contDiffAt\_map\_inverse}), so the composite $x \mapsto \flat_x^{-1}$ is $C^\infty$ in each trivialisation.
 \end{proof}
@@ -400,7 +405,8 @@
     \leanok
     Let $\nabla$ be a Levi-Civita connection of $g$. For every $x \in M$ and all vector fields $X, Y, Z$ differentiable at $x$,
     \begin{align}
-        2\,g\big(\nabla_X Y, Z\big) = X\,g(Y,Z) + Y\,g(X,Z) - Z\,g(X,Y) + g\big([X,Y],Z\big) - g\big([X,Z],Y\big) - g\big([Y,Z],X\big),
+        2\,g\big(\nabla_X Y, Z\big) &= X\,g(Y,Z) + Y\,g(X,Z) - Z\,g(X,Y) \notag \\
+        &\qquad + g\big([X,Y],Z\big) - g\big([X,Z],Y\big) - g\big([Y,Z],X\big),
     \end{align}
     both sides evaluated at $x$.
 \end{lemma}
@@ -1653,7 +1659,8 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
     The chain rule to cite is \texttt{mfderiv\_comp\_apply\_of\_eq}, \emph{not} \texttt{mfderiv\_comp} (nor its \texttt{\_apply} form). Its exact shape is
     \begin{align}
-        \big(hg : \mathtt{MDifferentiableAt}\;f\text{'s target model}\;g\;y\big) \to \big(hf : \mathtt{MDifferentiableAt}\;f\;x\big) \to \big(hy : f\,x = y\big) \to \mathtt{mfderiv}\,(g \circ f)\,x\,v = \mathtt{mfderiv}\,g\,y\,\big(\mathtt{mfderiv}\,f\,x\,v\big),
+        &\big(hg : \mathtt{MDifferentiableAt}\;f\text{'s target model}\;g\;y\big) \to \big(hf : \mathtt{MDifferentiableAt}\;f\;x\big) \notag \\
+        &\qquad \to \big(hy : f\,x = y\big) \to \mathtt{mfderiv}\,(g \circ f)\,x\,v = \mathtt{mfderiv}\,g\,y\,\big(\mathtt{mfderiv}\,f\,x\,v\big),
     \end{align}
     and the base-point argument $hy$ is exactly what is needed here: instantiated at $g := \psi$, $f := \psi.\mathtt{symm}$, base point $\psi(x)$ and $y := x$, it requires $hy : \psi.\mathtt{symm}(\psi\,x) = x$, which is \texttt{Diffeomorph.symm\_apply\_apply}. Without that transport the plain \texttt{mfderiv\_comp} produces the outer factor as $\mathtt{mfderiv}\;\psi\;\big(\psi.\mathtt{symm}(\psi\,x)\big)$, whose value lives in the tangent space at $\psi(\psi.\mathtt{symm}(\psi\,x))$ rather than at $\psi(x)$; those two tangent spaces are propositionally but not definitionally identified, so the composition does not typecheck until the base point has been transported. The \texttt{\_of\_eq} variant is the lemma that takes the transport as an argument and states its conclusion at $y$.
 
@@ -1745,7 +1752,8 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
     \leanok
     The assignment $x \mapsto (\psi^*g)_x$ of \ref{def:pullback-metric} satisfies the \texttt{contMDiff} field of \ref{def:spacetime}: it is a section of the bundle of continuous bilinear forms on the tangent bundle of regularity index $\infty$, i.e.\ a $C^\infty$ section,
     \begin{align}
-        \mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\infty\;\Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;\big((\psi^*g)_x\big)\Big).
+        &\mathtt{ContMDiff}\;I\;\Big(I.\mathtt{prod}\;\mathcal{I}\big(\mathbb{R},\, E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\Big)\;\infty \notag \\
+        &\qquad \Big(x \mapsto \mathtt{Bundle.TotalSpace.mk'}\;\big(E \to_L[\mathbb{R}] E \to_L[\mathbb{R}] \mathbb{R}\big)\;x\;\big((\psi^*g)_x\big)\Big).
     \end{align}
     The index is $\infty$: that is what \ref{def:spacetime} demands.
 
@@ -1984,7 +1992,8 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     \leanok
     This is \texttt{mfderivWithin\_comp} for the composite of $\mu$ with $\psi$. Write $P$ for the parameter space of $\mu$ (the inner set), $u$ for the outer set, and keep $s \in P$ for the parameter of the statement; the set and the point must be kept notationally apart, since \texttt{mfderivWithin\_comp} takes both. With that convention its exact hypotheses are
     \begin{align}
-        hg &: \mathtt{MDifferentiableWithinAt}\;I'\;I''\;\psi\;u\;(\mu(s)), \qquad hf : \mathtt{MDifferentiableWithinAt}\;I\;I'\;\mu\;P\;s, \\
+        hg &: \mathtt{MDifferentiableWithinAt}\;I'\;I''\;\psi\;u\;(\mu(s)), \\
+        hf &: \mathtt{MDifferentiableWithinAt}\;I\;I'\;\mu\;P\;s, \\
         h &: P \subseteq \mu^{-1}(u), \qquad hxs : \mathtt{UniqueMDiffWithinAt}\;I\;P\;s,
     \end{align}
     of which two are easy to overlook. The uniqueness hypothesis is \emph{pointwise} --- a $\mathtt{UniqueMDiffWithinAt}$ at the single parameter $s$, not a $\mathtt{UniqueMDiffOn}$ on the whole of $P$ --- so what \ref{lmm:path-parameter-unique-diff} supplies must be specialised to $s$ and converted, as $(\dots\,s\,hs).\mathtt{uniqueMDiffWithinAt}$. And there is a set side condition $P \subseteq \mu^{-1}(u)$ relating the inner set to the outer one; here $u = \mathtt{univ}$, so it is immediate, and correspondingly the outer derivative is an unrestricted \texttt{mfderiv} obtained by \texttt{mfderivWithin\_univ}. Differentiability of $\mu$ within $P$ comes from its smoothness, and differentiability of $\psi$ from \texttt{Diffeomorph.mdifferentiable} (with side condition $n \neq 0$), which is what the repository template cited below actually uses --- not from \ref{lmm:mfderiv-diffeo-linear-equiv}, which delivers a \texttt{ContinuousLinearEquiv} rather than an $\mathtt{MDifferentiableWithinAt}$ hypothesis.
