@@ -10,7 +10,8 @@ import Physicslib4.GNS.Construction
 # Einstein causality (microcausality) in a representation
 
 Axiom 3 (local commutativity) asserts that the local algebras of two completely
-spacelike-separated regions commute inside the quasilocal algebra. This file
+spacelike-separated regions commute in any local algebra containing both; by
+`LocalCommutativity.commute_ι` they then commute inside the quasilocal algebra. This file
 pushes that algebraic statement into Hilbert space: under *any* `*`-representation
 `π` of the quasilocal algebra - in particular the GNS representation of any state -
 the local observables of spacelike-separated regions commute as bounded operators.

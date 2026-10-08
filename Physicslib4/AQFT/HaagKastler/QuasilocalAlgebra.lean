@@ -113,9 +113,9 @@ structure QuasilocalAlgebra (U : LocalNet.{u}) (i : Isotony U) where
   the images of the local algebras, so any quasilocal algebra is already of their
   size, and a free universe would only add copies of the same algebra higher up.
   It does buy something important -- a free universe is constrained by no field,
-  so it could not be inferred, and `LocalCommutativity` would become a *family* of
-  `Prop`s indexed by a universe, making the content of Axiom 3 depend on that
-  index. -/
+  so it could not be inferred, and the quasilocal form of Axiom 3
+  (`localCommutativity_iff_exists_commute_ι`) would become a *family* of `Prop`s indexed
+  by a universe, so that its equivalence with Axiom 3 would depend on that index. -/
   carrier : Type u
   /-- The `CStarAlgebra` instance on `carrier`. -/
   instCStarAlgebra : CStarAlgebra carrier
