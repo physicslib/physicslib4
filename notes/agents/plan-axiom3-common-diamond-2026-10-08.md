@@ -294,3 +294,14 @@ Statements are sorry'd, then the formalizer-reviewer runs.
   exists_quasilocalAlgebra + commute_ι; bridge backwards), trivialLocalNet_localCommutativity
   (mul_comm in ℂ). No sorry; build and lint clean. trivialQuasilocalAlgebra still used by
   QuasilocalIntertwiner.lean.
+- 2026-10-08, Stage 4 done: axioms standard (propext, Classical.choice, Quot.sound) for the three
+  new/re-proved theorems; checkdecls clean; lean-kit verify receipt refreshed. lean-auditor PASS
+  (`notes/agents/audits/audit-axiom3-common-diamond-2026-10-08.md`): one protected change (the
+  approved `LocalCommutativity` body), field type and `commute_ι` signature unchanged, iff right
+  side identical to the old body, blueprint/Lean agree on the five nodes.
+- 2026-10-08, Stage 5 done: PDF (342 pp., no errors, no overfull lines) and web rebuilt. Home page:
+  items renumbered (scripts updated for the absolute blueprint URLs), new entry Lemma 487,
+  counts 662 / 253 lemmas / 512 results and proofs / 1,146 Lean names, section page ranges set
+  from the TOC, nine page references corrected, Axiom 3 prose in the §10.6 overview, the guide's
+  Chapter 5 summary and a new note on the axioms page. Jekyll: 11 pages, no broken links, all
+  665 anchors present in the web blueprint. Merged into numina/aqft-in-lean (not pushed).

@@ -1,5 +1,5 @@
 ---
-title: "§10.3 Unbounded Spectral Theorems (pp. 155–249)"
+title: "§10.3 Unbounded Spectral Theorems (pp. 155–235)"
 usemathjax: true
 ---
 
@@ -7,7 +7,7 @@ usemathjax: true
 
 ← [§10.2 Spectral](sec10-2-spectral.html) · [§10.4 Stone](sec10-4-stone.html) →
 
-# §10.3 Unbounded Spectral Theorems (pp. 155–249)
+# §10.3 Unbounded Spectral Theorems (pp. 155–235)
 
 123 declarations (items 164–288, together with Conventions 213 and 260), extending §10.2 to the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 285) and the functional calculus it supplies. The blueprint motivates this with the few genuinely unbounded self-adjoint operators that arise in AQFT, the momentum operator being the standard example. The section reuses §10.2 without restating it, follows the same Hall presentation, and builds up unbounded operators from scratch. Its single subsection, §10.3.1 Spectral Theorem: Unbounded Self-Adjoint Operators (p. 156), proceeds in six stages.
 
@@ -166,7 +166,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Two-Variable Spectral Mapping Theorem (p. 210) — 2 items</summary>
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Two-Variable Spectral Mapping Theorem (p. 211) — 2 items</summary>
 
 - [**Theorem 257**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.23) — Spectral Mapping for Polynomials in $$A$$ and $$A^*$$ · `Physicslib4.Spectral.Unbounded.spectrum_mvApply`
 - [**Corollary 258**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:norm-of-polynomial-in-a-astar) — Norm of a Polynomial in $$A$$ and $$A^*$$ · `Physicslib4.Spectral.Unbounded.norm_mvApply`
