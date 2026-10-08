@@ -8,3 +8,4 @@
 # name contains a space (`... .lean thy`). Those escaped the narrower rule and
 # were left untracked but not ignored.
 scratch_*
+blueprint/src/web.paux
