@@ -345,7 +345,8 @@ noncomputable def trivialQuasilocalAlgebra :
 
 theorem trivialLocalNet_localCommutativity :
     LocalCommutativity trivialLocalNet trivialLocalNetIsotony := by
-  sorry
+  intro B₁ B₂ B hB₁ hB₂ hB _ h₁ h₂ a b
+  exact @mul_comm ℂ _ _ _
 
 theorem trivialLocalNet_lorentzCovariance :
     LorentzCovariance trivialLocalNet trivialLocalNetIsotony := by

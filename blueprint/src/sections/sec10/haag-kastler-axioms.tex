@@ -422,6 +422,7 @@ We next introduce the quasilocal algebra. Axiom 3 below does not need it, but ha
     in $\mathfrak{U}'$. In particular these images commute in the canonical quasilocal algebra of \ref{thrm:quasilocal-algebra-exists}.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:local-commutativity, def:quasilocal-algebra, def:isotony, lmm:minkowski-diamonds-upward-directed}
     Let $\mathbf{B}_1$, $\mathbf{B}_2$ be completely spacelike. By upward directedness of the Alexandrov diamonds (\ref{lmm:minkowski-diamonds-upward-directed}) pick a basis set $\mathbf{B}$ with $\mathbf{B}_1 \cup \mathbf{B}_2 \subseteq \mathbf{B}$. By the cocone condition of \ref{def:quasilocal-algebra}, $\iota'_{\mathbf{B}_k}(a_k) = \iota'_{\mathbf{B}}(i_{\mathbf{B}_k\mathbf{B}}(a_k))$ for $k = 1, 2$, where $i_{\mathbf{B}_k\mathbf{B}}$ are the isotony embeddings of Axiom 2 (\ref{def:isotony}). Since $\iota'_{\mathbf{B}}$ is an injective $*$-homomorphism, $\iota'_{\mathbf{B}_1}(a_1)$ and $\iota'_{\mathbf{B}_2}(a_2)$ commute if and only if $i_{\mathbf{B}_1\mathbf{B}}(a_1)$ and $i_{\mathbf{B}_2\mathbf{B}}(a_2)$ commute in $\mathfrak{U}(\mathbf{B})$, and that is what Axiom 3 (\ref{def:local-commutativity}) gives for this $\mathbf{B}$.
 \end{proof}
@@ -438,6 +439,7 @@ We next introduce the quasilocal algebra. Axiom 3 below does not need it, but ha
     and in that case this holds in every quasilocal algebra of the net.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:local-commutativity-any-quasilocal, thrm:quasilocal-algebra-exists, lmm:minkowski-diamonds-upward-directed, def:isotony, def:quasilocal-algebra}
     ($\Rightarrow$) A quasilocal algebra exists by \ref{thrm:quasilocal-algebra-exists}, and \ref{lmm:local-commutativity-any-quasilocal} gives the commutation in it, and indeed in every quasilocal algebra.
 

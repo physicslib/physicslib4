@@ -290,3 +290,7 @@ Statements are sorry'd, then the formalizer-reviewer runs.
   Sorry'd: commute_ι, the iff, `trivialLocalNet_localCommutativity` (Net.lean). Everything else
   builds unchanged. Formalizer review: statements and universes PASS; three stale docstrings fixed
   (Net.lean field, EinsteinCausality module doc, QuasilocalAlgebra.carrier universe rationale).
+- 2026-10-08, Stage 3 done: commute_ι (2 lines: directedness + bridge), the equivalence (4 lines:
+  exists_quasilocalAlgebra + commute_ι; bridge backwards), trivialLocalNet_localCommutativity
+  (mul_comm in ℂ). No sorry; build and lint clean. trivialQuasilocalAlgebra still used by
+  QuasilocalIntertwiner.lean.

@@ -101,7 +101,8 @@ theorem LocalCommutativity.commute_ι {U : LocalNet} {i : Isotony U}
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : U.algebra B₁) (b : U.algebra B₂) :
     Commute (Q.ι hB₁ a) (Q.ι hB₂ b) := by
-  sorry
+  obtain ⟨B, hB, h₁, h₂⟩ := Spacetime.alexandrovBasis_directed hB₁ hB₂
+  exact (Q.commute_ι_iff_commute_map hB₁ hB₂ hB h₁ h₂ a b).2 (h hB₁ hB₂ hB hs h₁ h₂ a b)
 
 /-- **Axiom 3 in the quasilocal algebra.** A net satisfies Axiom 3 if and only if there is a
 quasilocal algebra in which the images of any two completely-spacelike local algebras commute.
@@ -118,7 +119,11 @@ theorem localCommutativity_iff_exists_commute_ι (U : LocalNet) (i : Isotony U) 
             standardMinkowskiTimeOrientation B₁ B₂ →
           ∀ (a : U.algebra B₁) (b : U.algebra B₂),
             Commute (Q.ι hB₁ a) (Q.ι hB₂ b) := by
-  sorry
+  refine ⟨fun h => ?_, ?_⟩
+  · obtain ⟨Q⟩ := exists_quasilocalAlgebra U i
+    exact ⟨Q, fun B₁ B₂ hB₁ hB₂ hs a b => h.commute_ι Q hB₁ hB₂ hs a b⟩
+  · rintro ⟨Q, hQ⟩ B₁ B₂ B hB₁ hB₂ hB hs h₁ h₂ a b
+    exact (Q.commute_ι_iff_commute_map hB₁ hB₂ hB h₁ h₂ a b).1 (hQ hB₁ hB₂ hs a b)
 
 end HaagKastler
 end AQFT
