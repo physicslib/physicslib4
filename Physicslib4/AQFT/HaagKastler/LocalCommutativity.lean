@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.HaagKastler.LocalAlgebras
 import Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra
+import Physicslib4.AQFT.HaagKastler.QuasilocalExistence
 import Physicslib4.Spacetime.Causality
 import Physicslib4.Spacetime.MinkowskiDirected
 
@@ -16,8 +17,13 @@ This file formalises the blueprint declaration
 axioms, section 10.6 of the AQFT-in-Lean blueprint):
 
 > If two Alexandrov-basis sets `𝐁₁`, `𝐁₂` are *completely spacelike*
-> with respect to each other, then the local algebras `𝔘(𝐁₁)` and
-> `𝔘(𝐁₂)` commute *inside the quasilocal algebra* `𝔘`.
+> with respect to each other, then for every Alexandrov-basis set `𝐁`
+> containing both, the isotony images of `𝔘(𝐁₁)` and `𝔘(𝐁₂)` commute in
+> the local algebra `𝔘(𝐁)`.
+
+This is the curved-spacetime Axiom 3 (`HaagKastlerCurved.LocalCommutativity`)
+with the Minkowski basis sets; the only difference is that in Minkowski
+spacetime a containing basis set always exists (`alexandrovBasis_directed`).
 
 ## Main definitions
 
@@ -30,27 +36,11 @@ axioms, section 10.6 of the AQFT-in-Lean blueprint):
   commutation of two local images in a quasilocal algebra is equivalent to
   commutation of their isotony images in a common local algebra `𝔘(B)`.
 * `Physicslib4.AQFT.HaagKastler.LocalCommutativity.commute_ι`
-  (`lmm:local-commutativity-any-quasilocal`): Axiom 3 holds in *every*
-  quasilocal algebra of the net, in particular in the canonical one.
-
-## Modelling notes
-
-* "Commuting in the quasilocal algebra" requires an ambient
-  C*-algebra `𝔘` containing every `𝔘(B)` as a subalgebra. Rather
-  than inlining that data, we quantify existentially over a
-  `QuasilocalAlgebra U` — the bundled structure that packages an
-  ambient C*-algebra together with the family of faithful unital
-  `*`-monomorphisms `ιB : 𝔘(B) →⋆ₐ[ℂ] 𝔘`. Axiom 3 then asserts
-  that, for *some* such ambient algebra, the images of any two
-  completely-spacelike local algebras commute pointwise. The choice of
-  ambient algebra does not matter: `LocalCommutativity.commute_ι`
-  shows the commutation then holds in *every* `QuasilocalAlgebra U i`.
-
-* The quasilocal algebra itself — including its density / completion
-  property — is *constructed* from the net by
-  `exists_quasilocalAlgebra` (`thrm:quasilocal-algebra-exists`); here
-  we only *use* the structure to phrase commutativity, and by
-  `LocalCommutativity.commute_ι` Axiom 3 holds in that canonical algebra.
+  (`lmm:local-commutativity-any-quasilocal`): Axiom 3 implies commutation in
+  every quasilocal algebra of the net, in particular in the canonical one.
+* `Physicslib4.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι`
+  (`lmm:local-commutativity-iff-quasilocal`): Axiom 3 is equivalent to
+  commutation in some quasilocal algebra, the form used by earlier versions.
 -/
 
 namespace Physicslib4
@@ -60,25 +50,26 @@ namespace HaagKastler
 open Physicslib4
 
 /--
-**Axiom 3 (Local Commutativity).** A local net `U` satisfies *local
-commutativity* if there exists a `QuasilocalAlgebra U` — i.e. an
-ambient unital C*-algebra `Q.carrier` equipped with faithful unital
-`*`-monomorphisms `Q.ι B : U.algebra B →⋆ₐ[ℂ] Q.carrier` for every
-Alexandrov-basis set `B` — such that whenever two basis sets
-`B₁`, `B₂` are completely spacelike with respect to each other,
-the images `Q.ι B₁ (U.algebra B₁)` and `Q.ι B₂ (U.algebra B₂)`
-commute pointwise inside `Q.carrier`.
+**Axiom 3 (Local Commutativity).** A local net `U`, with Axiom 2 isotony family `i`,
+satisfies *local commutativity* if whenever two Alexandrov-basis sets `B₁`, `B₂` are
+completely spacelike and both contained in an Alexandrov-basis set `B`, their images in
+`𝔘(B)` under the isotony embeddings `i.map` commute pointwise.
+
+In Minkowski spacetime a containing basis set always exists
+(`Spacetime.alexandrovBasis_directed`), so the condition is never vacuous. The
+equivalent form in a quasilocal algebra is `localCommutativity_iff_exists_commute_ι`.
 
 Blueprint reference: `def:local-commutativity`.
 -/
 def LocalCommutativity (U : LocalNet) (i : Isotony U) : Prop :=
-  ∃ Q : QuasilocalAlgebra U i,
-    ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
-      (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂),
-      Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
-        standardMinkowskiTimeOrientation B₁ B₂ →
-      ∀ (a : U.algebra B₁) (b : U.algebra B₂),
-        Commute (Q.ι hB₁ a) (Q.ι hB₂ b)
+  ∀ ⦃B₁ B₂ B : Set StandardMinkowskiSpacetime.Carrier⦄
+    (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+    (hB : IsAlexandrovBasisSet B),
+    Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation B₁ B₂ →
+    (h₁ : B₁ ⊆ B) → (h₂ : B₂ ⊆ B) →
+    ∀ (a : U.algebra B₁) (b : U.algebra B₂),
+      Commute (i.map hB₁ hB h₁ a) (i.map hB₂ hB h₂ b)
 
 /-- **Commutation in a quasilocal algebra is decided locally.** For basis sets
 `B₁, B₂ ⊆ B`, the images `Q.ι hB₁ a` and `Q.ι hB₂ b` commute in `Q.carrier` iff
@@ -95,10 +86,9 @@ theorem QuasilocalAlgebra.commute_ι_iff_commute_map {U : LocalNet} {i : Isotony
   refine ⟨fun h => Q.ι_injective hB ?_, fun h => h.map (Q.ι hB)⟩
   simpa only [map_mul] using h.eq
 
-/-- **Axiom 3 holds in every quasilocal algebra.** `LocalCommutativity` asserts
-commutation of completely-spacelike local algebras in *some* quasilocal algebra;
-since commutation is decided inside a common local algebra `𝔘(B)`
-(`QuasilocalAlgebra.commute_ι_iff_commute_map`), it then holds in *every*
+/-- **Axiom 3 holds in every quasilocal algebra.** Commutation of completely-spacelike
+local algebras in a common containing `𝔘(B)` transfers, through the cocone condition and
+`QuasilocalAlgebra.commute_ι_iff_commute_map`, to commutation of their images in *every*
 `QuasilocalAlgebra U i`, in particular in the canonical one built by
 `exists_quasilocalAlgebra`.
 
@@ -111,10 +101,24 @@ theorem LocalCommutativity.commute_ι {U : LocalNet} {i : Isotony U}
       standardMinkowskiTimeOrientation B₁ B₂)
     (a : U.algebra B₁) (b : U.algebra B₂) :
     Commute (Q.ι hB₁ a) (Q.ι hB₂ b) := by
-  obtain ⟨Q₀, hQ₀⟩ := h
-  obtain ⟨B, hB, h₁, h₂⟩ := Spacetime.alexandrovBasis_directed hB₁ hB₂
-  exact (Q.commute_ι_iff_commute_map hB₁ hB₂ hB h₁ h₂ a b).2
-    ((Q₀.commute_ι_iff_commute_map hB₁ hB₂ hB h₁ h₂ a b).1 (hQ₀ hB₁ hB₂ hs a b))
+  sorry
+
+/-- **Axiom 3 in the quasilocal algebra.** A net satisfies Axiom 3 if and only if there is a
+quasilocal algebra in which the images of any two completely-spacelike local algebras commute.
+This was the form of Axiom 3 in earlier versions of the blueprint; by
+`LocalCommutativity.commute_ι` the commutation then holds in every quasilocal algebra.
+
+Blueprint reference: `lmm:local-commutativity-iff-quasilocal`. -/
+theorem localCommutativity_iff_exists_commute_ι (U : LocalNet) (i : Isotony U) :
+    LocalCommutativity U i ↔
+      ∃ Q : QuasilocalAlgebra U i,
+        ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
+          (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂),
+          Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+            standardMinkowskiTimeOrientation B₁ B₂ →
+          ∀ (a : U.algebra B₁) (b : U.algebra B₂),
+            Commute (Q.ι hB₁ a) (Q.ι hB₂ b) := by
+  sorry
 
 end HaagKastler
 end AQFT

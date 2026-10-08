@@ -281,3 +281,12 @@ Statements are sorry'd, then the formalizer-reviewer runs.
   optional Chapter 5 refinements (common upper bound in the first remark; "nonempty nested
   regions") NOT applied: they change user-approved wording, offered to the user. PDF builds
   without errors or overfull lines.
+- 2026-10-08, Chapter 5 refinements applied (user-approved): "nonempty nested regions" and the
+  common-upper-bound parenthetical (0c90000).
+- 2026-10-08, Stage 2 done: `LocalCommutativity` body rewritten (orchestrator; approved) to the
+  common-containing-diamond form, binder-for-binder parallel to the curved definition; module and
+  definition docstrings rewritten; new `localCommutativity_iff_exists_commute_ι` (right side = the
+  old body; imports QuasilocalExistence, no cycle); `LocalCommutativity.commute_ι` signature kept.
+  Sorry'd: commute_ι, the iff, `trivialLocalNet_localCommutativity` (Net.lean). Everything else
+  builds unchanged. Formalizer review: statements and universes PASS; three stale docstrings fixed
+  (Net.lean field, EinsteinCausality module doc, QuasilocalAlgebra.carrier universe rationale).

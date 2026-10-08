@@ -74,8 +74,9 @@ structure HaagKastlerNet where
   `*`-monomorphisms of the corresponding local algebras
   (Axiom 2). -/
   isotony : Isotony U
-  /-- *Local commutativity*: local algebras of completely-spacelike
-  basis sets commute inside the quasilocal algebra (Axiom 3). -/
+  /-- *Local commutativity*: for completely-spacelike basis sets `B₁`, `B₂` and every
+  basis set `B ⊇ B₁ ∪ B₂`, the isotony images of `𝔘(B₁)` and `𝔘(B₂)` commute in `𝔘(B)`
+  (Axiom 3). -/
   localCommutativity : LocalCommutativity U isotony
   /-- *Lorentz covariance*: the inhomogeneous Lorentz group acts on
   the net and the action commutes with isotony (Axiom 5). -/
@@ -211,9 +212,9 @@ theorem covEquiv_isotony (L : InhomogeneousLorentzGroup)
   N.lorentzCovariance.choose_spec.2.2 L hB₁ hB₂ h a
 
 /-- **Local commutativity.** The images in the canonical quasilocal algebra
-`quasilocal` of two completely-spacelike basis algebras commute. Axiom 3 only
-asserts this in *some* quasilocal algebra; `LocalCommutativity.commute_ι` transfers
-it to every one. -/
+`quasilocal` of two completely-spacelike basis algebras commute. Axiom 3 asserts
+commutation in a common containing local algebra; `LocalCommutativity.commute_ι` transfers
+it to every quasilocal algebra. -/
 theorem commute_ι_of_spacelike ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
     (hs : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
@@ -343,11 +344,8 @@ noncomputable def trivialQuasilocalAlgebra :
   ι_inclusion := fun _ _ _ _ _ _ => rfl
 
 theorem trivialLocalNet_localCommutativity :
-    LocalCommutativity trivialLocalNet trivialLocalNetIsotony :=
-  ⟨trivialQuasilocalAlgebra, by
-    intro B₁ B₂ hB₁ hB₂ _ a b
-    exact @mul_comm ℂ _ (trivialQuasilocalAlgebra.ι hB₁ a)
-      (trivialQuasilocalAlgebra.ι hB₂ b)⟩
+    LocalCommutativity trivialLocalNet trivialLocalNetIsotony := by
+  sorry
 
 theorem trivialLocalNet_lorentzCovariance :
     LorentzCovariance trivialLocalNet trivialLocalNetIsotony := by
