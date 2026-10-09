@@ -310,3 +310,20 @@ checked in Stage 7.
   comparison against HEAD shows code unchanged in all 30 files; no Lean/Mathlib version strings
   remain in Physicslib4/; build and lint clean; residue = 3 positional uses (CStarCompletion "the
   former" = first of two items; QuasilocalAlgebra quotes the blueprint's "as previously proven").
+- 2026-10-09, Stage 6 done:
+  - index.md: the three "Recently completed" blocks are replaced by a new "## Highlights" section,
+    placed before Formalisation status, with exactly the four D8 entries (Minkowski HK axioms;
+    Lorentzian HK axioms; bounded spectral theorem, Thm 162; unbounded spectral theorem, Thm 285),
+    each with sections, item numbers and principal Lean names. The Axiom 5 remark is undated. The
+    single web version line is in Contributing.
+  - axioms.md: the change list is now "## Design notes" (three present-tense notes).
+  - guide.md: duplicate lead-in removed; Definition 678 → 677.
+  - Section pages: all change notices removed ("(new)", "A new layer", "A new block", "now …",
+    "earlier versions …", "Axiom 4 is now split"); the sec10-6 bicommutant typo is fixed; the
+    "Mathlib lacks / itself has only / does not supply" remarks are dropped in favour of
+    project-centric wording.
+  - mathjax.html and the _config.yml comments are fixed.
+  - README: present-tense heading and wording, the single code version line (v4.34.1) in Getting
+    Started, "started June 2026" removed (it is in the CHANGELOG). The forward-looking "Scope"
+    section is kept.
+  - Jekyll builds 11 pages with no broken links; all 665 entries check.
