@@ -347,3 +347,4 @@ checked in Stage 7.
   `scripts/check_temporal_wording.py` (tested: passes on the branch, fails on planted violations)
   and the CI step for lean_action_ci.yml. None of it is applied, pending the user's approval.
 - 2026-10-09, Stage 9: merged into numina/aqft-in-lean. No tag, no push.
+- 2026-10-09, Stage 8 applied: scripts/check_temporal_wording.py + CI step committed on numina/aqft-in-lean; CLAUDE.md rule added locally (.claude/ is untracked).
