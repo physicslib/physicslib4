@@ -327,3 +327,18 @@ checked in Stage 7.
     Started, "started June 2026" removed (it is in the CHANGELOG). The forward-looking "Scope"
     section is kept.
   - Jekyll builds 11 pages with no broken links; all 665 entries check.
+- 2026-10-09, Stage 7 done (verification against branch point c0e1c24):
+  - lake build and lake lint clean.
+  - Comment-stripped comparison: code unchanged in all 30 changed Lean files.
+  - Blueprint: the same 662 labels, no `\lean`/`\uses`/`\leanok`/`\label`/`\proves`/`\begin`/`\end`
+    line changed in any file (proof blocks included).
+  - PDF has 0 errors, 0 overfull boxes and 0 undefined references; web builds; checkdecls passes;
+    Jekyll builds 11 pages with no broken links (Stage 6).
+  - Version strings: exactly three, one per form (sec10/introduction.tex, home_page/index.md,
+    README.md).
+  - Final wording search: 23 hits, all positional or logical (e.g. "as we previously proved",
+    "we are now in a position", "the former … the latter").
+  - Fixed: `QuasilocalAlgebra.lean`'s quotation of `def:quasilocal-algebra` was stale ("As
+    previously proven …"); it now quotes the current statement.
+  - Noted, not changed: several module docstrings paraphrase their blueprint statement in Lean
+    notation rather than quoting verbatim. They contain no temporal wording.

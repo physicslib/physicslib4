@@ -13,11 +13,9 @@ import Mathlib.Analysis.CStarAlgebra.Hom
 This file formalises the blueprint declaration
 `def:quasilocal-algebra` (section 10.6 of the AQFT-in-Lean blueprint):
 
-> Consider the set-theoretic union of all `𝔘(𝐁)`. As previously
-> proven, this set-theoretic union is a normed *-algebra. Also, as
-> previously proven, taking its completion one obtains a C*-algebra
-> denoted as `𝔘`. This C*-algebra `𝔘` is called the *quasilocal
-> algebra*.
+> Consider the union of all `𝔘(𝐁)`, taken along the isotony family of
+> Axiom 2. This union is a normed *-algebra; taking its completion one
+> obtains a C*-algebra denoted `𝔘`, called the *quasilocal algebra*.
 
 ## Main definitions
 
