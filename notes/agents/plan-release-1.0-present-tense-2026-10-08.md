@@ -282,3 +282,11 @@ checked in Stage 7.
   `spectral-theorems.tex` and the second half of `unbounded-spectral-theorems.tex` were only
   grep-checked; re-read before Stage 3. Several stale or false doc statements were found (listed in
   the README) and will be corrected in the present tense in Stages 3, 5 and 6.
+- 2026-10-09, The four user-approved Chapter 5/9 edits applied (20670c2): prologue "as we have seen
+  previously" removed; "not yet available in Mathlib" → "that Mathlib does not provide"; stray
+  "Clarification." deleted; "As shown in earlier in this blueprint" → Section~\ref{sctn:all-observables-of-interest}.
+  Stage 4 therefore has no remaining Chapter 0–9 items.
+- 2026-10-09, Stage 2 done: `CHANGELOG.md` (repository root) with "Unreleased" and "Pre-1.0
+  development notes", grouped as axioms, quasilocal algebra, operator theory, spacetime geometry,
+  toolchain, and documentation/web page, built from the five inventories' "To CHANGELOG" lists
+  (file:line pointers dropped; current labels and Lean names kept).
