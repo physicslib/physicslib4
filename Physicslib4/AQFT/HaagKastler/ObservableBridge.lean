@@ -32,11 +32,10 @@ quasilocal observables.
 ## Two consequences worth stating plainly
 
 * **This structure has no mathematical consumers, and that is correct.** A theorem
-  that appears to need Axiom 4 in fact needs the mathematics that was historically
-  conflated with it, namely the existence of the quasilocal algebra
-  (`thrm:quasilocal-algebra-exists`, formalized as `exists_quasilocalAlgebra`), not
-  the physical correspondence. Accordingly `HaagKastlerNet` does *not* bundle this
-  structure as a field.
+  that appears to need Axiom 4 in fact needs a mathematical fact, the existence of
+  the quasilocal algebra (`thrm:quasilocal-algebra-exists`, formalized as
+  `exists_quasilocalAlgebra`), not the physical correspondence. Accordingly
+  `HaagKastlerNet` does *not* bundle this structure as a field.
 
 * **The correspondence is deliberately not surjective.** Axiom 4 asserts a one-way
   inclusion, and which way it runs is what the name "Completeness" records: the

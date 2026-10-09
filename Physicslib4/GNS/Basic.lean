@@ -29,8 +29,8 @@ the AQFT-in-Lean blueprint, section 10.1.
 
 ## Notes
 
-Mathlib does not yet provide a packaged `State` type for C*-algebras, so we
-introduce one here. The positivity condition is stated using the canonical
+Mathlib has no packaged `State` type for C*-algebras, so one is introduced
+here. The positivity condition is stated using the canonical
 partial order on `ℂ` from Mathlib: `0 ≤ z` iff `z.re ≥ 0` and `z.im = 0`.
 
 The blueprint statement of `def:cyclic-vector` only requires `A` to be an

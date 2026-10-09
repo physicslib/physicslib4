@@ -34,13 +34,11 @@ spaces being compared live in different types).
 
 ## Notes
 
-The Hilbert space `H` is existentially quantified in `Type` (rather than
-`Type*`) to avoid the usual universe-polymorphism issues that arise when
-existentially quantifying over a type variable. In practice the GNS Hilbert
-space is constructed as a completion of a quotient of `A`, so this is not
-a real restriction provided one is willing to work universe-polymorphically
-in `A`'s universe; the precise universe placement is left to the eventual
-proof.
+The Hilbert space `H` is existentially quantified in `A`'s universe `u`
+(`gns_construction.{u}`), rather than in a separate `Type*`, to avoid the
+usual universe-polymorphism issues that arise when existentially quantifying
+over a type variable: the GNS Hilbert space is constructed as a completion of
+a quotient of `A`, so it lives there.
 -/
 
 namespace Physicslib4

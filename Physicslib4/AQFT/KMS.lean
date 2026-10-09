@@ -35,8 +35,8 @@ statement about correlation functions and so needs no unbounded-operator theory
 This is the analytic form of the KMS condition (Bratteli-Robinson): at inverse
 temperature `β > 0`, `ω` is KMS iff for all `a, b` there is `F` continuous on the
 strip `{0 ≤ Im z ≤ β}`, holomorphic in the interior, with `F(t) = ω(a α_t b)`
-and `F(t + iβ) = ω(α_t b · a)`. KMS states are automatically `α`-invariant; that
-and other consequences are left for later development.
+and `F(t + iβ) = ω(α_t b · a)`. KMS states are automatically `α`-invariant
+(`IsKMSState.invariant`, unconditionally for `β > 0` by `IsKMSState.invariant_of_pos`).
 -/
 
 namespace Physicslib4
@@ -80,8 +80,9 @@ Mathematically this is a standard consequence of the Schwarz reflection
 principle (the equal boundary values let `F` extend to an `iβ`-periodic entire
 function, bounded, hence constant by Liouville). Mathlib provides Liouville
 (`Differentiable.apply_eq_apply_of_bounded`) and Phragmén-Lindelöf for strips,
-but not the holomorphic gluing across a line that the periodic extension needs,
-so this principle is isolated here as an explicit hypothesis rather than proved.
+but not the holomorphic gluing across a line that the periodic extension needs.
+That gluing is proved in `Physicslib4.Analysis.HorizontalLineRemovable`, and
+`stripLiouville_of_pos` proves this principle for `β > 0`.
 -/
 def StripLiouville (β : ℝ) : Prop :=
   ∀ F : ℂ → ℂ, ContinuousOn F (kmsStrip β) → DifferentiableOn ℂ F (kmsStripInterior β) →
@@ -219,8 +220,8 @@ theorem IsKMSState.invariant {α : ℝ → (A ≃⋆ₐ[ℂ] A)} {β : ℝ} {ω 
     _ = (ω a : ℂ) := by rw [hα.1 a]
 
 /-- **A KMS state at positive inverse temperature is `α`-invariant**, with no
-external analytic hypothesis: the strip-Liouville principle is now a theorem
-(`stripLiouville_of_pos`) for `β > 0`. -/
+external analytic hypothesis: the strip-Liouville principle holds for `β > 0`
+(`stripLiouville_of_pos`). -/
 theorem IsKMSState.invariant_of_pos {α : ℝ → (A ≃⋆ₐ[ℂ] A)} {β : ℝ} {ω : State A}
     (h : IsKMSState α β ω) (hα : IsOneParameterAut α) (hβ : 0 < β) (a : A) (t : ℝ) :
     (ω (α t a) : ℂ) = (ω a : ℂ) :=

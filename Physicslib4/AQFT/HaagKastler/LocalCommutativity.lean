@@ -40,7 +40,7 @@ spacetime a containing basis set always exists (`alexandrovBasis_directed`).
   every quasilocal algebra of the net, in particular in the canonical one.
 * `Physicslib4.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι`
   (`lmm:local-commutativity-iff-quasilocal`): Axiom 3 is equivalent to
-  commutation in some quasilocal algebra, the form used by earlier versions.
+  commutation in some quasilocal algebra.
 -/
 
 namespace Physicslib4
@@ -106,8 +106,7 @@ theorem LocalCommutativity.commute_ι {U : LocalNet} {i : Isotony U}
 
 /-- **Axiom 3 in the quasilocal algebra.** A net satisfies Axiom 3 if and only if there is a
 quasilocal algebra in which the images of any two completely-spacelike local algebras commute.
-This was the form of Axiom 3 in earlier versions of the blueprint; by
-`LocalCommutativity.commute_ι` the commutation then holds in every quasilocal algebra.
+By `LocalCommutativity.commute_ι` the commutation then holds in every quasilocal algebra.
 
 Blueprint reference: `lmm:local-commutativity-iff-quasilocal`. -/
 theorem localCommutativity_iff_exists_commute_ι (U : LocalNet) (i : Isotony U) :

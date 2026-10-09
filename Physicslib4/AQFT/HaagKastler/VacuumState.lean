@@ -176,7 +176,7 @@ theorem HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant
 `IsFutureTimelikeTranslation`, so the spectrum condition is imposed on exactly the
 one-parameter translation subgroups `t ↦ (id, t • n)` with `n` future-pointing
 timelike. This discharges the abstract `ftl` parameter with its intended value, so a
-concrete vacuum state no longer depends on a free predicate. -/
+concrete vacuum state depends on no free predicate. -/
 def HaagKastlerNet.IsVacuumStateConcrete (N : HaagKastlerNet)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
   N.IsVacuumState IsFutureTimelikeTranslation ω

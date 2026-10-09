@@ -27,12 +27,10 @@ Krein-Milman.
 ## Note on pure-state existence
 
 Concluding the *existence of a pure state* by Krein-Milman needs
-`LocallyConvexSpace ℝ (WeakDual ℂ A)`, which in turn requires the scalar-tower instance
-`IsScalarTower ℝ ℂ (A →L[ℂ] ℂ)`; the latter does not resolve in the current Mathlib due to
-a real/complex module diamond on the dual space. The extreme-point-to-state transfer also
-needs weak-* coercion-algebra lemmas (`(t • φ + (1-t) • ψ) a = t • φ a + (1-t) • ψ a`)
-which Mathlib does not provide for `WeakDual`. Both are recorded as follow-ups; the
-compactness result below is the reusable substance.
+`LocallyConvexSpace ℝ (WeakDual ℂ A)`, which Mathlib does not synthesize. The
+extreme-point-to-state transfer also needs weak-* coercion-algebra lemmas
+(`(t • φ + (1-t) • ψ) a = t • φ a + (1-t) • ψ a`) which Mathlib does not provide
+for `WeakDual`. The compactness result below is the reusable substance.
 -/
 
 namespace Physicslib4

@@ -16,17 +16,27 @@ import Mathlib.Geometry.Manifold.MFDeriv.FDeriv
 /-!
 # Isometries and the causal structure of curves
 
-This file begins the basis-set-preservation chain for Axiom 5
-(`def:isometric-covariance-in-curved-spacetime`): an isometry should carry
-trips to trips, hence chronological precedence forward, hence chronological
-futures forward.
+This file proves basis-set preservation for Axiom 5
+(`def:isometric-covariance-in-curved-spacetime`): a future-orientation-
+preserving isometry `g` carries trips to trips, hence chronological
+precedence, chronological futures and pasts, and Alexandrov diamonds, to
+their images.
 
-The first step is the **pushforward of a smooth path** `g ∘ μ` under an
-isometry `g`, together with the chain-rule description of its tangent vector.
+The construction starts from the **pushforward of a smooth path** `g ∘ μ`
+under an isometry `g`, together with the chain-rule description of its
+tangent vector, and builds up through geodesics, chronological futures and
+pasts, and Alexandrov diamonds to `alexandrovBasis_image` and `isBasisSet_smul`.
 
-## Main definitions
+## Main definitions / results
 
 * `Physicslib4.Spacetime.Isometry.pushforwardPath`.
+* `Physicslib4.Spacetime.Isometry.orientedIdentityComponent`: the subgroup of
+  isometries that preserve a time orientation and lie in the identity
+  component.
+* `Physicslib4.Spacetime.Isometry.alexandrovBasis_image`: an isometry carries
+  Alexandrov diamonds to Alexandrov diamonds.
+* `Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_smul`: basis-set
+  preservation under the action of `orientedIdentityComponent`.
 -/
 
 open scoped Pointwise ContDiff
@@ -121,9 +131,9 @@ A general isometry preserves the metric and hence the timelike/null/spacelike
 classification, but it need not preserve the chosen time orientation `t`. We
 isolate the property that it preserves *future-pointing-ness* and show that,
 under this hypothesis, the pushforward carries trips to trips and therefore
-chronological precedence forward. The remaining step toward Axiom 5 is to show
-that identity-component isometries satisfy this property (a connectedness
-argument), which is recorded as future work. -/
+chronological precedence forward. Whether every identity-component isometry
+has this property is not decided here; `orientedIdentityComponent` includes
+it as a condition. -/
 
 /-- An isometry `g` *preserves the future orientation* `t` if its differential
 sends future-pointing tangent vectors to future-pointing tangent vectors. -/
@@ -190,9 +200,9 @@ noncomputable def futureOrientationPreserving (M : Spacetime) (t : M.TimeOrienta
 
 /-- The **oriented identity component**: the identity-component isometries that
 also preserve the future orientation. This folds orientation-preservation into
-the identity-component group of Axiom 5, sidestepping the (unprovable with the
-current C⁰ topology) statement that every identity-component isometry preserves
-orientation. -/
+the identity-component group of Axiom 5, sidestepping the statement that every
+identity-component isometry preserves orientation, which the C⁰ topology used
+here does not give. -/
 noncomputable def orientedIdentityComponent (M : Spacetime) (t : M.TimeOrientation) :
     Subgroup (Isometry M) :=
   Isometry.identityComponent M ⊓ futureOrientationPreserving M t
@@ -451,7 +461,7 @@ theorem alexandrovBasis_image_of_mem (g : Isometry M) (t : M.TimeOrientation)
 /-- **Basis-set preservation for the oriented identity component.** Every
 isometry in the oriented identity component carries Alexandrov-basis sets to
 Alexandrov-basis sets - the geometric input behind Axiom 5's action
-`𝔘(𝐁) → 𝔘(φ(𝐁))`, now unconditional. -/
+`𝔘(𝐁) → 𝔘(φ(𝐁))`, with no further hypothesis. -/
 theorem alexandrovBasis_image_of_mem_orientedIdentityComponent (g : Isometry M)
     (t : M.TimeOrientation) (hg : g ∈ orientedIdentityComponent M t)
     {B : Set M.Carrier} (hB : B ∈ alexandrovBasis M t) :

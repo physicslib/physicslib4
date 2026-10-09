@@ -274,7 +274,7 @@ theorem isOrthochronous_refl :
 
 /-- Cauchy–Schwarz for the three-dimensional spatial parts, proved from the
 Lagrange identity. -/
-private lemma cauchySchwarz_sq_three (a₁ a₂ a₃ b₁ b₂ b₃ : ℝ) : -- (extracted by Fuse golfer)
+private lemma cauchySchwarz_sq_three (a₁ a₂ a₃ b₁ b₂ b₃ : ℝ) :
     (a₁ * b₁ + a₂ * b₂ + a₃ * b₃) ^ 2
       ≤ (a₁ ^ 2 + a₂ ^ 2 + a₃ ^ 2) * (b₁ ^ 2 + b₂ ^ 2 + b₃ ^ 2) := by
   have hL : (a₁ ^ 2 + a₂ ^ 2 + a₃ ^ 2) * (b₁ ^ 2 + b₂ ^ 2 + b₃ ^ 2)
@@ -287,7 +287,7 @@ private lemma cauchySchwarz_sq_three (a₁ a₂ a₃ b₁ b₂ b₃ : ℝ) : -- 
 /-- Reverse Cauchy–Schwarz in coordinates: if `(a, p, q, r)` and `(b, p', q', r')`
 are unit timelike vectors of `ℝ^{1,3}` whose Minkowski product is negative, then
 their time components `a` and `b` have the same sign. -/
-private lemma pos_of_reverse_cauchySchwarz -- (extracted by Fuse golfer)
+private lemma pos_of_reverse_cauchySchwarz
     {a b p q r p' q' r' : ℝ}
     (hv : -a * a + p * p + q * q + r * r = -1)
     (hw : -b * b + p' * p' + q' * q' + r' * r' = -1)
@@ -878,7 +878,7 @@ theorem standardMinkowskiLineSegmentPath_isGeodesic (p q : SpacetimeModel) (hpq 
   exact standardMinkowskiLineSegmentPath_mfderivWithin p q t ht
 
 /-!
-### Forward direction: scaffolding for `chronologicalFuture ⊆ minkowskiForwardCone`
+### Forward direction: `chronologicalFuture ⊆ minkowskiForwardCone`
 
 The forward subset of `chronologicalFuture_standardMinkowski` says: if there
 is a chronological trip from `p` to `q` on standard Minkowski spacetime, then
@@ -1302,13 +1302,13 @@ theorem standardMinkowski_trip_displacement_eq_intervalIntegral
 continuous linear endomorphism zeroing the time coordinate and fixing the
 three spatial ones. -/
 private noncomputable def spatialProj :
-    SpacetimeModel →L[ℝ] SpacetimeModel := -- (extracted by Fuse golfer)
+    SpacetimeModel →L[ℝ] SpacetimeModel :=
   ContinuousLinearMap.id ℝ SpacetimeModel -
     (EuclideanSpace.proj (0 : Fin 4)).smulRight
       (EuclideanSpace.single (0 : Fin 4) (1 : ℝ))
 
 private theorem spatialProj_apply (v : SpacetimeModel) (i : Fin 4) :
-    spatialProj v i = if i = 0 then 0 else v i := by -- (extracted by Fuse golfer)
+    spatialProj v i = if i = 0 then 0 else v i := by
   have hpt : spatialProj v i
       = v i - v 0 * (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) i := rfl
   rw [hpt, PiLp.single_apply]
@@ -1319,14 +1319,13 @@ private theorem spatialProj_apply (v : SpacetimeModel) (i : Fin 4) :
 /-- The squared norm of the spatial part of `v` is `(v 1)² + (v 2)² + (v 3)²`. -/
 private theorem norm_spatialProj_sq (v : SpacetimeModel) :
     ‖spatialProj v‖ ^ 2 = (v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2 := by
-      -- (extracted by Fuse golfer)
   rw [EuclideanSpace.real_norm_sq_eq]
   simp [Fin.sum_univ_four, spatialProj_apply]
 
 /-- **The open forward cone at the origin is the "spatial norm < time" region.**
 `v ∈ minkowskiForwardCone 0` exactly when `‖spatial part of v‖ < v 0`. -/
 private theorem mem_minkowskiForwardCone_zero_iff_norm_spatialProj_lt
-    (v : SpacetimeModel) : -- (extracted by Fuse golfer)
+    (v : SpacetimeModel) :
     v ∈ minkowskiForwardCone (0 : SpacetimeModel) ↔ ‖spatialProj v‖ < v 0 := by
   have hz : ∀ i : Fin 4, (0 : SpacetimeModel) i = (0 : ℝ) := fun _ => rfl
   constructor
@@ -1425,7 +1424,7 @@ theorem segmentPrecedes_mem_minkowskiForwardCone {p q : SpacetimeModel}
 /-- The open forward light cone of `ℝ^{1,3}` is closed under addition, in
 coordinates: the sum of two future-pointing timelike vectors is again
 future-pointing and timelike. -/
-private lemma minkowskiCone_add -- (extracted by Fuse golfer)
+private lemma minkowskiCone_add
     {a₀ a₁ a₂ a₃ b₀ b₁ b₂ b₃ : ℝ} (ha : 0 < a₀) (hb : 0 < b₀)
     (ha' : -a₀ ^ 2 + a₁ ^ 2 + a₂ ^ 2 + a₃ ^ 2 < 0)
     (hb' : -b₀ ^ 2 + b₁ ^ 2 + b₂ ^ 2 + b₃ ^ 2 < 0) :

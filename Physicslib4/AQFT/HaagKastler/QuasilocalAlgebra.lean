@@ -29,9 +29,9 @@ This file formalises the blueprint declaration
 
 ## Modelling notes
 
-* Mathlib (as of `v4.31.0-rc1`) has no canonical C*-algebraic
-  direct-limit / amalgamated-completion construction for a family of
-  C*-algebras: `Mathlib.Algebra.Colimit.DirectLimit` is purely
+* Mathlib has no C*-algebraic direct-limit or amalgamated-completion
+  construction for a family of C*-algebras:
+  `Mathlib.Algebra.Colimit.DirectLimit` is purely
   algebraic (it puts no norm or topology on the colimit) and there is
   no C*-completion anywhere in `Mathlib.Analysis.CStarAlgebra`.
   This `structure` therefore packages the *characterising data* of a
@@ -147,10 +147,9 @@ structure QuasilocalAlgebra (U : LocalNet.{u}) (i : Isotony U) where
   embeds into the quasilocal algebra `𝔘` independently of the basis set used to
   view it, which is exactly what makes `ι` well defined on the colimit.
 
-  This structure formerly carried its own `inclusion` family here, duplicating
-  Axiom 2's. It is now parametrised by the Axiom 2 datum `i` and consumes
-  `i.map` instead, so there is a single isotony family in the development and
-  the cocone condition relates `ι` to *that* family. -/
+  The structure is parametrised by the Axiom 2 datum `i` and uses `i.map`, so
+  there is a single isotony family in the development and the cocone condition
+  relates `ι` to *that* family. -/
   ι_inclusion : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
                   (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
                   (h : B₁ ⊆ B₂) (a : U.algebra B₁),

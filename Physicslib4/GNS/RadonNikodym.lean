@@ -9,7 +9,7 @@ import Mathlib.Analysis.InnerProductSpace.Dual
 import Mathlib.Analysis.Normed.Operator.Extend
 
 /-!
-# Towards the GNS Radon-Nikodym correspondence
+# Boundedness of the GNS Radon-Nikodym form
 
 For a state `ω` with cyclic GNS representation `(H, π, Ω)` and a positive linear
 functional `ψ` dominated by `ω` (`0 ≤ ψ(a* a) ≤ ω(a* a)`), the classical

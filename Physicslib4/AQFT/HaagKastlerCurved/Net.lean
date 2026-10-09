@@ -156,10 +156,8 @@ theorem covEquiv_mul (φ φ' : M.Isom) (B : Set M.Carrier) (a : N.algebra B) :
 /-- The *isotony embeddings* of the net: the chosen family supplied by Axiom 2
 (`isotony`).
 
-Previously this was chosen (`Classical.choose`) from the Axiom 3 existence witness, which
-is why it carried no composition law and every consumer factoring a three-fold
-inclusion had to assume coherence separately. It is now literally the Axiom 2
-family, so `commIsotony_self` and `commIsotony_comp` below hold for every net. -/
+This is the Axiom 2 family itself, so `commIsotony_self` and `commIsotony_comp`
+below hold for every net. -/
 noncomputable def commIsotony ⦃B₁ B₂ : Set M.Carrier⦄
     (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂) :
     StarAlgHom ℂ (N.U.algebra B₁) (N.U.algebra B₂) :=
@@ -179,9 +177,8 @@ theorem commIsotony_self ⦃B : Set M.Carrier⦄ (h : M.IsBasisSet B) :
 /-- **Composition law** for the isotony embeddings, from Axiom 2: the embedding
 along `B₁ ⊆ B₃` factors through any intermediate `B₂`.
 
-This is the coherence that was previously carried as an ad hoc hypothesis at
-every site factoring a three-fold inclusion `B₁ ⊆ B₂ ⊆ B`; it now holds for
-every net, including the trivial one. -/
+This coherence holds for every net, including the trivial one, so no site
+factoring a three-fold inclusion `B₁ ⊆ B₂ ⊆ B` needs it as a hypothesis. -/
 theorem commIsotony_comp ⦃B₁ B₂ B₃ : Set M.Carrier⦄
     (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h₃ : M.IsBasisSet B₃)
     (h₁₂ : B₁ ⊆ B₂) (h₂₃ : B₂ ⊆ B₃) :

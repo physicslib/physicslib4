@@ -9,7 +9,7 @@ import Physicslib4.GNS.Basic
 /-!
 # Covariant families of local states
 
-This file begins the scaffolding for *covariant states* on a Haag-Kastler
+This file defines *covariant families of local states* on a Haag-Kastler
 net over Minkowski spacetime. The Lorentz action on the net is implemented
 fiberwise by the covariance equivalences `α_L : 𝔘(B) ≃⋆ₐ[ℂ] 𝔘(L·B)`
 (`HaagKastlerNet.covEquiv`, from Axiom 5). A *covariant family of local

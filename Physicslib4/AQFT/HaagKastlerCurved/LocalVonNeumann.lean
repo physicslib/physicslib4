@@ -76,11 +76,8 @@ theorem localVonNeumann_subset_centralizer
 basis subregions `B₁ ⊆ B₂ ⊆ B`, the local von Neumann algebras are nested:
 `R(B₁) ⊆ R(B₂)`.
 
-No coherence hypothesis is needed. The step this rests on is that the embedding
-`𝔘(B₁) → 𝔘(B)` factors through `𝔘(B₂)`, and that is now the composition law of
-Axiom 2, available as `commIsotony_comp`. Formerly the embeddings in play were the
-witnesses chosen inside Axiom 3, which carried no composition law, so this
-factorisation had to be assumed as a separate hypothesis `hcoh` at every site. -/
+No coherence hypothesis is needed: the embedding `𝔘(B₁) → 𝔘(B)` factors through
+`𝔘(B₂)` by the composition law of Axiom 2, `commIsotony_comp`. -/
 theorem localVonNeumann_mono
     {B : Set M.Carrier} (hB : M.IsBasisSet B)
     (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))

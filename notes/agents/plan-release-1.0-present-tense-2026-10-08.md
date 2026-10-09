@@ -299,3 +299,14 @@ checked in Stage 7.
   Checks: no \label/\lean/\uses/\leanok/\begin/\end line changed (git diff check), validate shows
   only the 14 pre-existing conv: errors, PDF builds with no errors and no overfull lines, web
   builds. Stage 4 has nothing left (Chapters 0–9 were done in 20670c2).
+- 2026-10-09, Stage 5 done: three lean-simplifier agents rewrote docstrings and comments in 30 files
+  (AQFT/HaagKastler + AQFT top level; HaagKastlerCurved, GNS, Analysis, Operators, Spectral;
+  Spacetime, Geometry). The third agent hit its turn limit during its final grep; the orchestrator
+  completed that check. Factual corrections: HaagKastlerNet bundles Axioms 2, 3 and 5 (no Axiom 4
+  field; Axiom 6 not adopted), GNS `H : Type u`, `isBasisSet_smul` is an interface field,
+  `IsScalarTower ℝ ℂ (A →L[ℂ] ℂ)` resolves (only `LocallyConvexSpace` is missing), KMS strip-
+  Liouville is proved, LorentzCone sign lemma exists, stale "towards …" titles fixed. Leftover
+  "-- (extracted by Fuse golfer)" markers removed everywhere. Checks: a comment-stripped
+  comparison against HEAD shows code unchanged in all 30 files; no Lean/Mathlib version strings
+  remain in Physicslib4/; build and lint clean; residue = 3 positional uses (CStarCompletion "the
+  former" = first of two items; QuasilocalAlgebra quotes the blueprint's "as previously proven").
