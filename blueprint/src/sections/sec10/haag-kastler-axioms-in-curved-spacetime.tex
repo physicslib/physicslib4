@@ -40,9 +40,9 @@ The second axiom can be immediately stated too.
         \item[(b)] \emph{identity}: $i_{\mathbf{B}\mathbf{B}} = \mathrm{id}_{\mathfrak{U}(\mathbf{B})}$ for every basis set $\mathbf{B}$;
         \item[(c)] \emph{composition}: $i_{\mathbf{B}_2\mathbf{B}_3} \circ i_{\mathbf{B}_1\mathbf{B}_2} = i_{\mathbf{B}_1\mathbf{B}_3}$ whenever $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}_3$,
     \end{itemize}
-    so that $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ is a functor on the inclusion order of basis sets. The hypothesis is the non-strict inclusion, matching the formalisation, which quantifies over \texttt{B\ensuremath{_1} \ensuremath{\subseteq} B\ensuremath{_2}}; the earlier $\subset$ was a divergence from the Lean, and the reflexive case is what makes (b) expressible at all.
+    so that $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ is a functor on the inclusion order of basis sets. The hypothesis is the non-strict inclusion, matching the formalisation, which quantifies over \texttt{B\ensuremath{_1} \ensuremath{\subseteq} B\ensuremath{_2}}; the reflexive case is what makes (b) expressible.
 
-    The curved case is where this matters most. There is no quasilocal algebra here, so every statement about nested regions is phrased inside a common containing algebra $\mathfrak{U}(\mathbf{B})$ and has to factor a three-fold inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$. Before this amendment the isotony embeddings actually used downstream were the witnesses chosen inside Axiom 3, which carried no composition law, so that factorisation had to be assumed separately at each site. With (c) part of Axiom 2, and Axiom 3 consuming this family rather than choosing its own (\ref{def:local-commutativity-in-curved-spacetime}), the factorisation holds for every net and those hypotheses are gone.
+    \emph{Design note.} The curved case has no quasilocal algebra, so every statement about nested regions is phrased inside a common containing algebra $\mathfrak{U}(\mathbf{B})$ and factors a three-fold inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$. Law (c) makes that factorisation hold for every net, and Axiom 3 uses this family rather than choosing its own (\ref{def:local-commutativity-in-curved-spacetime}), so no result assumes the factorisation separately.
 \end{definition}
 
 The next axiom can be stated as follows:
@@ -63,7 +63,7 @@ The next axiom can be stated as follows:
 
     If no such $\mathbf{B}$ exists, then it simply doesn't make sense to consider if $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute as they are not in the same algebra.
 
-    This axiom now asserts \emph{only} the commutation condition. It previously introduced its own family of isotony embeddings existentially, together with their injectivity, and it was those chosen witnesses --- not the Axiom 2 maps --- that every downstream result actually used. Since they carried no composition law, each consumer that had to factor a three-fold inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$ was forced to assume coherence separately. The family and its injectivity now belong to Axiom 2 (\ref{def:isotony-in-curved-spacetime}), which supplies the identity and composition laws as well, and this axiom simply consumes it; the separate coherence hypotheses are consequently removed throughout this chapter.
+    This axiom asserts \emph{only} the commutation condition. The isotony family, its injectivity, and its identity and composition laws belong to Axiom 2 (\ref{def:isotony-in-curved-spacetime}); this axiom uses that family, so results that factor a three-fold inclusion $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$ need no separate coherence hypothesis.
 \end{definition}
 
 The next axiom has need of the following definition
@@ -195,12 +195,12 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_mono}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalVonNeumann.lean}
     \leanok
-    For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$. No coherence hypothesis is needed.
+    For nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:local-von-neumann-in-curved-spacetime, def:isotony-in-curved-spacetime}
-    The local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ and the double commutant is monotone. The step that needs care is that the embedding $\mathfrak{U}(\mathbf{B}_1) \to \mathfrak{U}(\mathbf{B})$ factors through $\mathfrak{U}(\mathbf{B}_2)$, i.e.\ $i_{\mathbf{B}_1\mathbf{B}} = i_{\mathbf{B}_2\mathbf{B}} \circ i_{\mathbf{B}_1\mathbf{B}_2}$; that is now exactly the composition law (c) of Axiom 2 (\ref{def:isotony-in-curved-spacetime}). Formerly the isotony embeddings in play were the witnesses chosen inside Axiom 3, which had no composition law, so this factorisation had to be assumed as a separate hypothesis.
+    The local observables of $\mathbf{B}_1$ embed into those of $\mathbf{B}_2$ and the double commutant is monotone. The step that needs care is that the embedding $\mathfrak{U}(\mathbf{B}_1) \to \mathfrak{U}(\mathbf{B})$ factors through $\mathfrak{U}(\mathbf{B}_2)$, i.e.\ $i_{\mathbf{B}_1\mathbf{B}} = i_{\mathbf{B}_2\mathbf{B}} \circ i_{\mathbf{B}_1\mathbf{B}_2}$; that is exactly the composition law (c) of Axiom 2 (\ref{def:isotony-in-curved-spacetime}).
 \end{proof}
 
 \begin{theorem}[Bundled von Neumann Microcausality and Isotony (Curved Spacetime)]
@@ -225,7 +225,7 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
 
     Order-preservation carries no side condition. The factorisation this rests on --- that the $\mathbf{B}_1 \hookrightarrow \mathbf{B}$ embedding factors through $\mathbf{B}_2$ for all nested $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$ --- is the composition law (c) of Axiom 2 (\ref{def:isotony-in-curved-spacetime}), so it holds for every net, including the trivial one.
 
-    This was previously supplied as an explicit \emph{coherence} hypothesis, on the grounds that it is a property of the net's chosen embeddings rather than of the spacetime and so cannot be discharged geometrically. That reasoning was correct, and it is precisely the argument for putting the law into the axiom rather than carrying it at each site: an axiom is where a requirement on chosen data belongs. With Axiom 2 owning the family and Axiom 3 consuming it (\ref{def:local-commutativity-in-curved-spacetime}), the hypothesis is redundant here and at every other site in this chapter.
+    \emph{Design note.} The factorisation is a property of the net's chosen embeddings, not of the spacetime, so it cannot be discharged geometrically. An axiom is where a requirement on chosen data belongs, which is why the law is part of Axiom 2, with Axiom 3 using the same family (\ref{def:local-commutativity-in-curved-spacetime}), rather than a hypothesis at each site.
 \end{definition}
 
 \begin{theorem}[Statistical Independence (Schlieder Property)]
@@ -361,7 +361,7 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
 \begin{proof}
     \leanok
     \uses{def:relative-commutant-in-curved-spacetime, thrm:von-neumann-isotony-in-curved-spacetime}
-    Curved isotony (\ref{thrm:von-neumann-isotony-in-curved-spacetime}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$, and antitonicity of the commutant yields $R(\mathbf{B}_2)' \subseteq R(\mathbf{B}_1)'$. The factorisation of the three-fold inclusion that curved isotony needs is supplied by the composition law of Axiom 2 (\ref{def:isotony-in-curved-spacetime}), so nothing further is assumed here.
+    Curved isotony (\ref{thrm:von-neumann-isotony-in-curved-spacetime}) gives $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$, and antitonicity of the commutant yields $R(\mathbf{B}_2)' \subseteq R(\mathbf{B}_1)'$. The factorisation of the three-fold inclusion that curved isotony needs is the composition law of Axiom 2 (\ref{def:isotony-in-curved-spacetime}).
 \end{proof}
 
 \begin{definition}[Irreducible Inclusion (Curved Spacetime)]

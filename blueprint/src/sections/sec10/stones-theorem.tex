@@ -205,7 +205,7 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
 \begin{proof}
     \leanok
     \uses{def:bounded-operator-notation}
-    Mathlib's \texttt{hasDerivAt\_exp\_smul\_const}, with scalar field $\mathbb{K} = \mathbb{R}$ and Banach algebra $\mathcal{B}(\mathbf{H})$ (\texttt{H →L[ℂ] H}), $x = iP$ and $t = 0$, gives the derivative $\exp(0 \cdot iP)\,iP = \exp(0)\,iP = iP$, using \texttt{NormedSpace.exp\_zero}. This is the instantiation used in the existing Lean proof of \texttt{Physicslib4.AQFT.exp\_generator\_unique} (\texttt{Physicslib4/AQFT/PositiveEnergy.lean}).
+    Mathlib's \texttt{hasDerivAt\_exp\_smul\_const}, with scalar field $\mathbb{K} = \mathbb{R}$ and Banach algebra $\mathcal{B}(\mathbf{H})$ (\texttt{H →L[ℂ] H}), $x = iP$ and $t = 0$, gives the derivative $\exp(0 \cdot iP)\,iP = \exp(0)\,iP = iP$, using \texttt{NormedSpace.exp\_zero}. This is the instantiation used in the Lean proof of \texttt{Physicslib4.AQFT.exp\_generator\_unique} (\texttt{Physicslib4/AQFT/PositiveEnergy.lean}).
 \end{proof}
 
 \begin{lemma}[The Generator of $\exp(itP)$]

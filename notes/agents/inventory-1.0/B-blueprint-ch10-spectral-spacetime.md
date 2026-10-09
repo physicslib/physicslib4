@@ -52,3 +52,16 @@ Scope: `blueprint/src/sections/sec10/{spectral-theorems,unbounded-spectral-theor
 - No Lean/Mathlib version strings in the four files. The only version-like items are Mathlib/repo source **line numbers** (spacetime.tex:1778-1782, 2001, 2015, 2067), flagged in their rows.
 - The three "Formalization note" paragraphs (spectral-theorems.tex:3131; unbounded-spectral-theorems.tex:2278, 2327) are present tense with no history, so they are kept.
 - No "blog post" wording; no "(new)" or "new layer" markers in these four files.
+
+## Additional findings (Stage 3 re-read)
+
+Full read-through (2026-10-09) of `spectral-theorems.tex` (all 5834 lines) and `unbounded-spectral-theorems.tex` lines 1480–3281, looking for temporal wording that a grep would miss.
+
+| file:line | phrase | category | action | replacement |
+|---|---|---|---|---|
+| spectral-theorems.tex:25 | "It is the convention used throughout this section and its sequel." (inside statement of `def:inner-product`, commentary) | blog | rewrite | "It is the convention used throughout this section and Section~\ref{sctn:unbounded-spectral-theorems}." |
+| spectral-theorems.tex:1103 | "The next result requires the Hilbert-space self-duality theorem, which we state first." (left behind when `thrm:hall-a.52` was moved up to :319; the theorem is no longer stated next) | history (stale after restructure) | rewrite | "The next result uses the \textbf{Riesz Theorem}~(\ref{thrm:hall-a.52}) stated above." |
+| spectral-theorems.tex:2426 | "Its analogue for normal operators is proved in the sequel." (inside statement of `prpstn:hall-7.7`, commentary) | blog | rewrite | "Its analogue for normal operators is Part 2 of Lemma~\ref{lmm:hall-10.25} in Section~\ref{sctn:unbounded-spectral-theorems}." |
+| spectral-theorems.tex:5833 | "a tool which will often be used." (closing line of the section) | blog | rewrite | "a tool used again in Section~\ref{sctn:unbounded-spectral-theorems}." |
+
+Checked and kept: unbounded-spectral-theorems.tex:1846 "exactly the pattern Lemma~… and Proposition~… were introduced earlier to avoid" (positional, refers to earlier text, D1); :1848 "plain polynomials in $\lambda$ no longer suffice" (mathematical contrast between the self-adjoint and normal cases, not a change between versions); :1852, :1921 "not yet available to us" (positional). No version-dated tool claims and no Mathlib source line numbers in either file. The three "Formalization note" paragraphs read (spectral-theorems.tex:3131; unbounded-spectral-theorems.tex:2278, 2327) are present tense and stay.

@@ -290,3 +290,12 @@ checked in Stage 7.
   development notes", grouped as axioms, quasilocal algebra, operator theory, spacetime geometry,
   toolchain, and documentation/web page, built from the five inventories' "To CHANGELOG" lists
   (file:line pointers dropped; current labels and Lean names kept).
+- 2026-10-09, Stage 3 done: four parallel writers rewrote Chapter 10 (haag-kastler-axioms; curved +
+  general covariance + GNS + introduction; spacetime + Stone; bounded + unbounded spectral after a
+  full re-read that found 4 more items). The single blueprint version sentence was added to
+  `sec10/introduction.tex` (Lean and Mathlib v4.34.1). The stale "not yet formalized" claim was
+  removed, and a false Mathlib claim at spacetime.tex ≈1772 was corrected. Reviewer REVISE → four
+  fixes applied (design-note count, two Mathlib paths, "composition", an orphaned sentence).
+  Checks: no \label/\lean/\uses/\leanok/\begin/\end line changed (git diff check), validate shows
+  only the 14 pre-existing conv: errors, PDF builds with no errors and no overfull lines, web
+  builds. Stage 4 has nothing left (Chapters 0–9 were done in 20670c2).
