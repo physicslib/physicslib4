@@ -1,7 +1,7 @@
 # Plan: remove backward-looking wording for the 1.0 release
 
 Date: 2026-10-08. Proposed branch: `numina/release-1.0-docs` off `numina/aqft-in-lean`.
-Status: **in progress; Stage 1 done 2026-10-09.**
+Status: **done 2026-10-09 (Stage 8 proposal awaiting approval; no tag, not pushed).**
 
 ## Decisions (user, 2026-10-08)
 
@@ -342,3 +342,8 @@ checked in Stage 7.
     previously proven …"); it now quotes the current statement.
   - Noted, not changed: several module docstrings paraphrase their blueprint statement in Lean
     notation rather than quoting verbatim. They contain no temporal wording.
+- 2026-10-09, Stage 8 done (proposal only): `notes/agents/proposal-present-tense-guard-2026-10-09.md`
+  contains the CLAUDE.md wording (present tense; versions in three places), the script
+  `scripts/check_temporal_wording.py` (tested: passes on the branch, fails on planted violations)
+  and the CI step for lean_action_ci.yml. None of it is applied, pending the user's approval.
+- 2026-10-09, Stage 9: merged into numina/aqft-in-lean. No tag, no push.
