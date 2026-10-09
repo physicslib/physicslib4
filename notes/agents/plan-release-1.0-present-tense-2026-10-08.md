@@ -1,7 +1,7 @@
 # Plan: remove backward-looking wording for the 1.0 release
 
 Date: 2026-10-08. Proposed branch: `numina/release-1.0-docs` off `numina/aqft-in-lean`.
-Status: **decisions recorded 2026-10-08; not started.**
+Status: **in progress; Stage 1 done 2026-10-09.**
 
 ## Decisions (user, 2026-10-08)
 
@@ -277,3 +277,8 @@ checked in Stage 7.
 ## Progress log
 
 (empty)
+- 2026-10-09, Stage 1 done: five read-only inventories in `notes/agents/inventory-1.0/`
+  (A–E, about 214 action items; summary and open decisions in `inventory-1.0/README.md`). Coverage gap:
+  `spectral-theorems.tex` and the second half of `unbounded-spectral-theorems.tex` were only
+  grep-checked; re-read before Stage 3. Several stale or false doc statements were found (listed in
+  the README) and will be corrected in the present tense in Stages 3, 5 and 6.
