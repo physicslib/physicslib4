@@ -24,8 +24,8 @@ is **not** proved here. It requires a `*`-isomorphism of the generated von Neuma
 algebras `π(A)'' ≃⋆ₐ (ι·π)(A)''`. The natural map is `T ↦ lpDiag (fun _ ↦ T)`
 (the diagonal), which is an injective `*`-homomorphism carrying `π a ↦ (ι·π) a`;
 but *surjectivity* onto `(ι·π)(A)''` is exactly the amplification commutant theorem
-`(π ⊗ 1)' = π' ⊗ B(K)` (equivalently `(π ⊗ 1)'' = π'' ⊗ ℂ1`), a genuine von Neumann
-algebra result that Mathlib does not currently provide. It is recorded as deferred.
+`(π ⊗ 1)' = π' ⊗ B(K)` (equivalently `(π ⊗ 1)'' = π'' ⊗ ℂ1`), a von Neumann algebra
+result that Mathlib does not provide.
 -/
 
 namespace Physicslib4

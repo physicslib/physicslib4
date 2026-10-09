@@ -27,9 +27,8 @@ blueprint).
 
 ## Notes
 
-* The structure deliberately does **not** bundle Axiom 4. What its
-  consumers needed from that axiom was the *existence* of a quasilocal
-  algebra, and that is now a theorem, `exists_quasilocalAlgebra`
+* The structure does **not** bundle Axiom 4. The existence of a quasilocal
+  algebra is a theorem, `exists_quasilocalAlgebra`
   (`thrm:quasilocal-algebra-exists`), which builds the algebra from the
   net alone; `HaagKastlerNet.quasilocal` is defined from it. Axiom 4
   proper (`def:quasilocal-completeness`) is a *bridge principle*
@@ -37,9 +36,8 @@ blueprint).
   consumers, and is encoded separately in
   `Physicslib4/AQFT/HaagKastler/ObservableBridge.lean`.
 
-* The structure intentionally does not bundle Axiom 6 (Primitivity)
-  or further axioms; those will be added as separate structure
-  fields in subsequent files when they are formalised.
+* The structure does not bundle Axiom 6 (Primitivity), which the
+  sharpened axioms do not adopt.
 -/
 
 namespace Physicslib4
@@ -54,9 +52,8 @@ universe u
 /--
 A *Haag-Kastler net* on (the Alexandrov-basis sets of) Minkowski
 spacetime: the data of Axiom 1 (`def:local-algebras`) together with
-proofs of Axioms 2-5 (`def:isotony`,
-`def:local-commutativity`, `def:quasilocal-completeness`,
-`def:lorentz-covariance`).
+proofs of Axioms 2, 3 and 5 (`def:isotony`,
+`def:local-commutativity`, `def:lorentz-covariance`).
 
 Blueprint reference: `def:haag-kastler-net`.
 -/
@@ -66,9 +63,8 @@ structure HaagKastlerNet where
   Written `LocalNet.{u}` rather than `LocalNet` so that this structure is
   universe polymorphic. Left implicit, the universe of `LocalNet` would be pinned
   here, and every net in the development would be forced to have its local
-  algebras in one fixed universe -- the same size restriction that
-  `QuasilocalAlgebra.carrier` was just freed from, reimposed at the bundling
-  level. -/
+  algebras in one fixed universe, and the universe polymorphism of
+  `QuasilocalAlgebra.carrier` would be lost at the bundling level. -/
   U : LocalNet.{u}
   /-- *Isotony*: inclusions of Alexandrov-basis sets induce unital
   `*`-monomorphisms of the corresponding local algebras
@@ -124,8 +120,8 @@ theorem isotony_trans
 This is *constructed*, not assumed. The witness is `exists_quasilocalAlgebra`
 (`thrm:quasilocal-algebra-exists`), which builds `𝔘` from the net alone as the
 completion of the directed colimit of the local algebras. The net therefore
-carries no quasilocal-completeness field: what consumers of the former Axiom 4
-actually needed was this existence theorem, not a physical bridge principle. -/
+carries no quasilocal-completeness field: the existence of `𝔘` is a theorem,
+and Axiom 4 is a physical bridge principle (`ObservableBridge.lean`). -/
 noncomputable def quasilocal : QuasilocalAlgebra N.U N.isotony :=
   Classical.choice (exists_quasilocalAlgebra N.U N.isotony)
 
@@ -314,7 +310,7 @@ lemma isAlexandrovBasisSet_trivialBasisSet :
 /-- The trivial net's Axiom 2 data: every local algebra is `ℂ` and every inclusion
 is implemented by the identity, which is trivially functorial.
 
-This must precede `trivialQuasilocalAlgebra`, which is now indexed by it. -/
+This must precede `trivialQuasilocalAlgebra`, which is indexed by it. -/
 def trivialLocalNetIsotony : Isotony trivialLocalNet where
   map := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
   injective := by
@@ -329,9 +325,8 @@ def trivialLocalNetIsotony : Isotony trivialLocalNet where
     rfl
 
 /-- The trivial quasilocal algebra for the trivial net: ambient C*-algebra `ℂ`,
-with every local embedding the identity `ℂ →⋆ₐ[ℂ] ℂ`. It no longer supplies its own
-`inclusion` family; the cocone condition `ι_inclusion` is stated against the Axiom 2
-family `trivialLocalNetIsotony`. -/
+with every local embedding the identity `ℂ →⋆ₐ[ℂ] ℂ`. The cocone condition
+`ι_inclusion` is stated against the Axiom 2 family `trivialLocalNetIsotony`. -/
 noncomputable def trivialQuasilocalAlgebra :
     QuasilocalAlgebra trivialLocalNet trivialLocalNetIsotony where
   carrier := ℂ

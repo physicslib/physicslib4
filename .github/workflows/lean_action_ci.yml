@@ -36,3 +36,6 @@ jobs:
             | sort -u > lean_decls.txt
           echo "Checking $(wc -l < lean_decls.txt) declarations named in the blueprint."
           ~/.elan/bin/lake exe checkdecls lean_decls.txt
+
+      - name: Check documentation is in the present tense
+        run: python3 scripts/check_temporal_wording.py

@@ -31,11 +31,10 @@ specialisations.
 ## Modelling note
 
 The alignment hypothesis `g v w ≤ 0` encodes "`v` and `w` lie in the same time
-cone". For two future-pointing timelike vectors this sign holds, but proving it
-from the future-pointing condition alone requires the positive-definiteness of
-the spacelike complement (a signature/inertia argument), which is not available
-from the pointwise `LorentzianAt` data; we therefore take the sign as an
-explicit hypothesis.
+cone". For two timelike vectors future-pointing with respect to a common
+timelike vector `t` this sign holds (`bilin_neg_of_inner_t_neg`, in
+`LorentzOrthogonal.lean`); the lemmas here take the sign as an explicit
+hypothesis so that they need no time orientation.
 -/
 
 namespace Physicslib4

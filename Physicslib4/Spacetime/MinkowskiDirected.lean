@@ -78,18 +78,17 @@ private theorem single_time_apply (c : ℝ) :
 
 /-- Nonnegativity of a three-term sum of squares (the spatial part of a displacement). -/
 private theorem sq3_nonneg (a b c : ℝ) : 0 ≤ a ^ 2 + b ^ 2 + c ^ 2 := by
-  positivity -- (extracted by Fuse golfer)
+  positivity
 
 /-- If `u + v < R ^ 2` with `0 ≤ v` and `0 < R ≤ D`, then `u < D ^ 2`. -/
 private theorem lt_sq_of_add_lt_sq {u v R D : ℝ} (hv : 0 ≤ v) (h : u + v < R ^ 2)
-    (hR : 0 < R) (hD : R ≤ D) : u < D ^ 2 := by -- (extracted by Fuse golfer)
+    (hR : 0 < R) (hD : R ≤ D) : u < D ^ 2 := by
   linarith only [hv, h, mul_self_le_mul_self hR.le hD]
 
 /-- Two nonnegative "spatial radii" are both dominated by the squared time separation
 from a single sufficiently early time. -/
 private theorem exists_time_shift_lt {a₁ a₂ s₁ s₂ : ℝ} (h₁ : 0 ≤ s₁) (h₂ : 0 ≤ s₂) :
     ∃ t : ℝ, t < a₁ ∧ t < a₂ ∧ s₁ < (a₁ - t) ^ 2 ∧ s₂ < (a₂ - t) ^ 2 := by
-  -- (extracted by Fuse golfer)
   obtain ⟨R, hR, hRsq⟩ : ∃ R : ℝ, 0 < R ∧ s₁ + s₂ < R ^ 2 :=
     ⟨Real.sqrt (s₁ + s₂) + 1, by linarith only [Real.sqrt_nonneg (s₁ + s₂)], by
       linarith only [Real.sq_sqrt (by linarith only [h₁, h₂] : (0 : ℝ) ≤ s₁ + s₂),
@@ -103,7 +102,6 @@ private theorem exists_time_shift_lt {a₁ a₂ s₁ s₂ : ℝ} (h₁ : 0 ≤ s
 /-- Time-reversed form of `exists_time_shift_lt`: a single sufficiently late time. -/
 private theorem exists_time_shift_gt {a₁ a₂ s₁ s₂ : ℝ} (h₁ : 0 ≤ s₁) (h₂ : 0 ≤ s₂) :
     ∃ t : ℝ, a₁ < t ∧ a₂ < t ∧ s₁ < (t - a₁) ^ 2 ∧ s₂ < (t - a₂) ^ 2 := by
-  -- (extracted by Fuse golfer)
   obtain ⟨t, ht₁, ht₂, hc₁, hc₂⟩ := exists_time_shift_lt (a₁ := -a₁) (a₂ := -a₂) h₁ h₂
   refine ⟨-t, by linarith only [ht₁], by linarith only [ht₂], ?_, ?_⟩
   · rw [show -t - a₁ = -a₁ - t from by ring]; exact hc₁
@@ -175,7 +173,6 @@ private theorem sub_single_time_apply (x : SpacetimeModel) (c : ℝ) :
     (x - EuclideanSpace.single (0 : Fin 4) c) 1 = x 1 ∧
     (x - EuclideanSpace.single (0 : Fin 4) c) 2 = x 2 ∧
     (x - EuclideanSpace.single (0 : Fin 4) c) 3 = x 3 := by
-  -- (extracted by Fuse golfer)
   obtain ⟨e0, e1, e2, e3⟩ := single_time_apply c
   exact ⟨by rw [PiLp.sub_apply, e0], by rw [PiLp.sub_apply, e1, sub_zero],
     by rw [PiLp.sub_apply, e2, sub_zero], by rw [PiLp.sub_apply, e3, sub_zero]⟩
@@ -186,7 +183,6 @@ private theorem add_single_time_apply (x : SpacetimeModel) (c : ℝ) :
     (x + EuclideanSpace.single (0 : Fin 4) c) 1 = x 1 ∧
     (x + EuclideanSpace.single (0 : Fin 4) c) 2 = x 2 ∧
     (x + EuclideanSpace.single (0 : Fin 4) c) 3 = x 3 := by
-  -- (extracted by Fuse golfer)
   obtain ⟨e0, e1, e2, e3⟩ := single_time_apply c
   exact ⟨by rw [PiLp.add_apply, e0], by rw [PiLp.add_apply, e1, add_zero],
     by rw [PiLp.add_apply, e2, add_zero], by rw [PiLp.add_apply, e3, add_zero]⟩
@@ -195,7 +191,6 @@ private theorem add_single_time_apply (x : SpacetimeModel) (c : ℝ) :
 and the strict inequality `S < T ^ 2` survives replacing `T` by `T - ε`. -/
 private theorem lt_and_lt_sub_sq_of_le_div {T S ε : ℝ} (hT : 0 < T) (hS : 0 ≤ S)
     (hε : 0 < ε) (hle : ε ≤ (T ^ 2 - S) / (2 * T)) : ε < T ∧ S < (T - ε) ^ 2 := by
-  -- (extracted by Fuse golfer)
   have h2T : (0 : ℝ) < 2 * T := by linarith only [hT]
   have hmul : 2 * T * ε ≤ T ^ 2 - S :=
     calc 2 * T * ε ≤ 2 * T * ((T ^ 2 - S) / (2 * T)) :=
@@ -208,7 +203,6 @@ private theorem lt_and_lt_sub_sq_of_le_div {T S ε : ℝ} (hT : 0 < T) (hS : 0 �
 private theorem exists_eps_shrink {T₁ T₂ S₁ S₂ : ℝ} (hT₁ : 0 < T₁) (hT₂ : 0 < T₂)
     (hS₁ : 0 ≤ S₁) (hS₂ : 0 ≤ S₂) (h₁ : S₁ < T₁ ^ 2) (h₂ : S₂ < T₂ ^ 2) :
     ∃ ε : ℝ, 0 < ε ∧ ε < T₁ ∧ ε < T₂ ∧ S₁ < (T₁ - ε) ^ 2 ∧ S₂ < (T₂ - ε) ^ 2 := by
-  -- (extracted by Fuse golfer)
   have hpos : 0 < min ((T₁ ^ 2 - S₁) / (2 * T₁)) ((T₂ ^ 2 - S₂) / (2 * T₂)) :=
     lt_min (div_pos (by linarith only [h₁]) (by linarith only [hT₁]))
       (div_pos (by linarith only [h₂]) (by linarith only [hT₂]))

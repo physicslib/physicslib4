@@ -27,14 +27,10 @@ quasilocal observables of a representation.
 
 ## Note on the file name, and on Axiom 4
 
-This file no longer defines a `QuasilocalCompleteness` predicate, and
-despite its name it does not formalise Axiom 4. The predicate that
-used to live here was `Nonempty (QuasilocalAlgebra U i)` — a
-*mathematical existence claim* about the net wearing Axiom 4's name.
-That claim is now a theorem, `exists_quasilocalAlgebra`
-(`thrm:quasilocal-algebra-exists`), proved by building the quasilocal
-algebra from the net alone, so a hypothesis asserting it would be
-vacuous and is gone.
+Despite its name, this file does not formalise Axiom 4. The existence of a
+quasilocal algebra is a theorem, `exists_quasilocalAlgebra`
+(`thrm:quasilocal-algebra-exists`), proved by building the algebra from the
+net alone, so no hypothesis asserting it is needed.
 
 Axiom 4 proper (`def:quasilocal-completeness`) is a *bridge principle*
 relating physical observables to the formalism. It is encoded in

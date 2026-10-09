@@ -168,9 +168,10 @@ of `exists_gns_unitary_of_invariant`: the action enters as a group homomorphism
 `γ : G →* (A ≃⋆ₐ[ℂ] A)`, and the implementing unitaries are returned as a bundled
 group homomorphism `U : G →* (H ≃ₗᵢ[ℂ] H)` — a genuine unitary representation.
 
-The group laws `U (g' * g) = U g' * U g` and `U 1 = 1` are now carried by `U`
-itself (`map_mul`/`map_one`), so they no longer appear as separate hypotheses on
-`γ` or clauses on `U`. What remains are the geometric clauses: the reproducing
+The group laws `U (g' * g) = U g' * U g` and `U 1 = 1` are carried by `U` itself
+(`map_mul`/`map_one`), so, unlike in `exists_gns_unitary_of_invariant`, they are
+not separate hypotheses on `γ` or clauses on `U`. What remains are the geometric
+clauses: the reproducing
 formula, the implementation `U g (π a Ω) = π (γ g a) Ω`, vacuum invariance
 `U g Ω = Ω`, operator covariance, and cyclicity. Both group structures use the
 composition convention `f * g = g.trans f` (`StarAlgEquiv.aut`,

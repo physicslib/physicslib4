@@ -89,8 +89,8 @@ structure LocalNet where
 attribute [instance] LocalNet.instCStarAlgebra
 
 /-!
-**Unitality.** In `Mathlib v4.31.0-rc1`, `CStarAlgebra` is *defined* as
-the class of *unital* (complex) C\*-algebras: it extends `NormedRing`
+**Unitality.** Mathlib's `CStarAlgebra` is the class of *unital* (complex)
+C\*-algebras: it extends `NormedRing`
 (which extends `Ring`, so we get `(1 : algebra B)` for free) plus
 `StarRing`, `CStarRing`, `NormedAlgebra ℂ _`, etc. The non-unital
 version is the separately-named `NonUnitalCStarAlgebra` class.

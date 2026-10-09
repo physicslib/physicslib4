@@ -1,5 +1,5 @@
 \section{Spectral Theorems}\label{sctn:spectral-theorems}
-Here we will state and prove the \textbf{Spectral Theorem for Bounded, Self-Adjoint Operators}~(\ref{thrm:spectral-theorem-for-bounded-operators}). This theorem sits at the core of much of AQFT, and extensive use of this theorem will be made in subsequent work.
+Here we will state and prove the \textbf{Spectral Theorem for Bounded, Self-Adjoint Operators}~(\ref{thrm:spectral-theorem-for-bounded-operators}). This theorem sits at the core of much of AQFT, and is used throughout Sections~\ref{sctn:unbounded-spectral-theorems} and~\ref{sctn:stones-theorem}.
 
 Here, we generally follow the clear, straightforward presentation of \href{https://doi.org/10.1007/978-1-4614-7116-5}{Quantum Theory for Mathematicians}.
 
@@ -22,7 +22,7 @@ In this section we will introduce and prove some relatively "elementary" propert
         \item \textit{(Conjugate-linear in the first argument, linear in the second.)} $\left< c\phi, \psi \right> = \overline{c} \left< \phi, \psi \right>$ and $\left< \phi, c\psi \right> = c \left< \phi, \psi \right>$.
         \item \textit{(Additivity.)} $\left< \phi + \psi, \chi \right> = \left< \phi, \chi \right> + \left< \psi, \chi \right>$ and $\left< \phi, \psi + \chi \right> = \left< \phi, \psi \right> + \left< \phi, \chi \right>$.
     \end{enumerate}
-    Point 3 fixes the \textit{physics} convention — the conjugate is taken on the \textbf{first} factor. This choice is load-bearing rather than cosmetic: several expansions below, the polarization formula and the $b^2$ inequality among them, change sign under the opposite convention. It is the convention used throughout this section and its sequel.
+    Point 3 fixes the \textit{physics} convention — the conjugate is taken on the \textbf{first} factor. This choice is load-bearing rather than cosmetic: several expansions below, the polarization formula and the $b^2$ inequality among them, change sign under the opposite convention. It is the convention used throughout this section and Section~\ref{sctn:unbounded-spectral-theorems}.
 \end{definition}
 
 \begin{definition}[Norm Induced by an Inner Product]
@@ -90,7 +90,7 @@ Two pieces of notation are used pervasively throughout this section and are fixe
     \lean{Physicslib4.Spectral.one_apply_and_indicator_apply}
     \uses{def:identity-operator, def:indicator-function}
     \leanok
-    Retained as a compound reference to Definition~\ref{def:identity-operator} and Definition~\ref{def:indicator-function}, which now state these two unrelated notations separately. Citations of this anchor remain valid; new citations should prefer whichever of the two is actually needed.
+    A compound reference to Definition~\ref{def:identity-operator} and Definition~\ref{def:indicator-function}, which state these two unrelated notations separately. Citations should prefer whichever of the two is actually needed.
 \end{definition}
 
 We also fix the notation for the orthogonal complement of a subset, and record the basic properties of the Lebesgue integral that are used throughout — including the meaning of $\int_E g \, d\nu$, which appears repeatedly below.
@@ -1100,7 +1100,7 @@ The same two closure properties hold for bounded quadratic forms, and it is in t
 \textit{Boundedness.} For each $\phi$, $\lvert Q(\phi) \rvert = \lim_i \lvert Q_i(\phi) \rvert \le C \lVert \phi \rVert^2$, the inequality passing to the limit because it holds for every $i$ with the \textit{same} $C$.
 \end{proof}
 
-The next result requires the Hilbert-space self-duality theorem, which we state first.
+The next result uses the \textbf{Riesz Theorem}~(\ref{thrm:hall-a.52}) stated above.
 
 The next in the set of "helper" propositions that we will prove is the proposition (Proposition A.63 of \href{https://doi.org/10.1007/978-1-4614-7116-5}{Hall})
 
@@ -2423,7 +2423,7 @@ Now we move onto the result
     \leanok
     If $A \in \mathcal{B}(\mathbf{H})$ is self-adjoint, then the spectrum $\sigma(A)$ of $A$ is in $\mathbb{R}$.
 
-    Hall's Proposition 7.7 pairs this with a second clause characterising membership of the spectrum by the existence of almost-eigenvectors; that clause is not needed in this section and is omitted here. Its analogue for normal operators is proved in the sequel.
+    Hall's Proposition 7.7 pairs this with a second clause characterising membership of the spectrum by the existence of almost-eigenvectors; that clause is not needed in this section and is omitted here. Its analogue for normal operators is Part 2 of Lemma~\ref{lmm:hall-10.25} in Section~\ref{sctn:unbounded-spectral-theorems}.
 \end{proposition}
 \begin{proof}
     \leanok
@@ -5830,4 +5830,4 @@ With the \textbf{Spectral Theorem for Bounded, Self-Adjoint Operators}~(\ref{thr
     This is the \textit{second} construction of an operator written $f(A)$ in this section. The first, Definition~\ref{def:hall-8.8}, obtains $f(A)$ from the quadratic form $Q_f$ via Proposition~\ref{prpstn:hall-a.63}, without reference to any projection-valued measure. \textbf{The two agree}: that is the content of Proposition~\ref{prpstn:mua-bounded-calculus-agrees}, which shows $f(A) = \int_{\sigma(A)} f \, d\mu^A$ for every bounded, Borel-measurable $f$. The notation $f(A)$ is therefore unambiguous, and either construction may be used.
 \end{definition}
 
-a tool which will often be used.
+a tool used again in Section~\ref{sctn:unbounded-spectral-theorems}.

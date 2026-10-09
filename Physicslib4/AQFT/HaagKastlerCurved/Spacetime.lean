@@ -36,11 +36,14 @@ five axioms actually use:
   Axiom 3 (Local Commutativity);
 * a group `Isom` of *isometries connected to the identity* together
   with its action on `Carrier`, used by Axiom 5 (Isometric
-  Covariance).
+  Covariance);
+* `isBasisSet_smul`, witnessing that those isometries carry basis sets
+  to basis sets.
 
-A concrete `LorentzianSpacetime` produced from the eventual
-differential-geometric construction will instantiate this interface;
-the axioms and any consequences proved here transfer verbatim.
+The geometric bundle `Physicslib4.Spacetime.LorentzianSpacetime`
+instantiates this interface via `toAbstractIdentityComponent`
+(`Concrete.lean`); the axioms and any consequences proved here
+transfer verbatim.
 
 ## Modelling notes
 
@@ -85,8 +88,7 @@ axioms quantify over:
 
 The full geometric content (smooth 4-manifold, Lorentzian metric,
 nowhere-vanishing time-orientation field, Hausdorff Alexandrov
-topology) is deferred; a concrete construction instantiates this
-interface.
+topology) lives in the geometric bundle described below.
 
 This is the *axiom-facing interface* form of the geometric bundle
 `Physicslib4.Spacetime.LorentzianSpacetime`: every such geometric

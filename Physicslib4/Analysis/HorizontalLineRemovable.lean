@@ -7,14 +7,14 @@ import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.Complex.HasPrimitives
 
 /-!
-# Towards horizontal-line removability (Morera-based)
+# Horizontal-line removability (Morera-based)
 
 This file proves the **horizontal-line removable singularity** theorem: a
 function continuous on an open set `U` and holomorphic on `U` minus a horizontal
 line is holomorphic on all of `U`
 (`differentiableOn_of_continuousOn_off_horizontal_line`). That theorem is the
-missing prerequisite for the strip Schwarz reflection used in the KMS
-invariance proof (`StripLiouville`).
+prerequisite for the strip Schwarz reflection used in the KMS invariance proof
+(`StripLiouville`).
 
 ## Foundation (rectangle contour integrals)
 

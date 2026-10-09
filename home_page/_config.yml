@@ -1,6 +1,6 @@
 # Welcome to Jekyll!
 #
-# This config file is meant for settings that affect your whole blog, values
+# This config file is meant for settings that affect the whole site, values
 # which you are expected to set up once and rarely edit after that. If you find
 # yourself editing this file very often, consider using Jekyll's data files
 # feature for the data you need to update frequently.
@@ -21,7 +21,7 @@
 title: physicslib4
 #email: your-email@example.com
 description: by KellyJDavis
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /docs
 url: "https://physicslib.github.io/physicslib4" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username:
 github_username: physicslib

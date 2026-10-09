@@ -122,7 +122,7 @@ theorem UnitaryEquiv.not_areDisjoint [Nontrivial H₁] (h : UnitaryEquiv π₁ �
 private lemma exists_smul_adjoint_comp_of_isIrreducible (h1 : IsIrreducible π₁)
     {S T : H₁ →L[ℂ] H₂} (hS : Intertwines π₁ π₂ S) (hT : Intertwines π₁ π₂ T) :
     ∃ z : ℂ, ∀ x : H₁, (ContinuousLinearMap.adjoint S) (T x) = z • x := by
-  -- (extracted by Fuse golfer)
+
   obtain ⟨z, hz⟩ := h1 ((ContinuousLinearMap.adjoint S).comp T)
     (fun a => ContinuousLinearMap.ext fun x => ((hS.adjoint.comp hT) a x).symm)
   exact ⟨z, fun x => by simpa using DFunLike.congr_fun hz x⟩

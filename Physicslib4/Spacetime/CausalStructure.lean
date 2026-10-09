@@ -26,8 +26,8 @@ following section 10.5 of the AQFT-in-Lean blueprint.
 
 ## Modelling notes
 
-Mathlib does not currently package "smooth vector field" as a single named type.
-We use the obvious unbundled form: a function `t : ∀ x, TangentSpace M.model x`
+Mathlib has no single named type for smooth vector fields. We use the obvious
+unbundled form: a function `t : ∀ x, TangentSpace M.model x`
 together with two pointwise predicates (non-vanishing and timelike) and an
 unbundled smoothness statement carried as a `Prop` field. Smoothness of a
 section of the tangent bundle is captured exactly as in `Spacetime.contMDiff`:
@@ -169,8 +169,8 @@ structure TimeOrientation where
   This is the form Mathlib's bundle API speaks natively: it is literally the
   left-hand side of `Bundle.contMDiffAt_section`, and it is the shape required by
   `ContMDiff.mpullback_vectorField` (whose `hV` hypothesis is a bundle-section
-  statement) and consumed by `ContMDiff.clm_bundle_apply₂`. The previous
-  chart-local double-`mfderiv` formulation required a hand-built bridge in both
+  statement) and consumed by `ContMDiff.clm_bundle_apply₂`. A chart-local
+  double-`mfderiv` formulation would need a hand-built bridge in both
   directions, since Mathlib relates `tangentCoordChange` to neither. -/
   smooth : ContMDiff M.model M.model.tangent ∞
     (fun x ↦ Bundle.TotalSpace.mk' SpacetimeModel

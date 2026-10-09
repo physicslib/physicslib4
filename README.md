@@ -10,9 +10,9 @@ This project works towards a formal resolution of **Hilbert's 6th problem** — 
 
 Hilbert's 6th problem calls for a rigorous mathematical treatment of the axioms underlying physical theories, analogous to what Euclidean geometry received from Hilbert's own *Grundlagen der Geometrie*. Modern physics has produced candidate axiom systems — operator-algebraic frameworks for quantum mechanics and quantum field theory chief among them — but these have never been subjected to the kind of machine-checked formal scrutiny that Lean makes possible. This project aims to change that.
 
-## Current Focus: AQFT in Minkowski and Lorentzian Spacetime
+## AQFT in Minkowski and Lorentzian Spacetime
 
-The current work formalises **Algebraic Quantum Field Theory (AQFT)**, specifically a sharpened version of the [Haag–Kastler axioms (1964)](https://doi.org/10.1063/1.1704187), in both Minkowski and curved (Lorentzian) spacetime. This covers:
+physicslib4 formalises **Algebraic Quantum Field Theory (AQFT)**, specifically a sharpened version of the [Haag–Kastler axioms (1964)](https://doi.org/10.1063/1.1704187), in both Minkowski and curved (Lorentzian) spacetime. This covers:
 
 - The GNS construction and its role in representing states on C\*-algebras.
 - Causal structure: Minkowski and Lorentzian spacetimes, timelike/spacelike/null vectors, chronological and causal futures and pasts, the Alexandrov topology.
@@ -47,7 +47,7 @@ Contributions in any of these directions are welcome.
 
 ## Getting Started
 
-Requires [Lean 4](https://leanprover-community.github.io/get_started.html) and [Mathlib4](https://github.com/leanprover-community/mathlib4).
+Requires [Lean 4](https://leanprover-community.github.io/get_started.html) and [Mathlib4](https://github.com/leanprover-community/mathlib4), both at v4.34.1, as pinned by `lean-toolchain` and `lakefile.toml`.
 
 ```bash
 git clone https://github.com/physicslib/physicslib4.git
@@ -58,9 +58,9 @@ lake build            # build the project
 
 ## Contributing
 
-Contributions are welcome. The blueprint is the canonical guide to what has been stated, what has been proved, and what remains open.
+Contributions are welcome. The blueprint is the canonical guide to what is stated and what is proved.
 
-1. Consult the [blueprint](https://physicslib.github.io/physicslib4/blueprint/) and [dependency graph](https://physicslib.github.io/physicslib4/blueprint/dep_graph_document.html) to find items not yet linked to Lean proofs.
+1. Consult the [blueprint](https://physicslib.github.io/physicslib4/blueprint/) and [dependency graph](https://physicslib.github.io/physicslib4/blueprint/dep_graph_document.html) to see how each item is linked to its Lean declarations.
 2. Create a new branch and open a pull request against `main`.
 3. PRs must pass all status checks, be approved by a reviewer, and have no conflicts with the base branch before merging.
 
@@ -70,4 +70,4 @@ We are grateful to Rudolf Haag and Daniel Kastler for their foundational work, a
 
 ---
 
-Maintained by [Kelly J Davis](https://github.com/kellyjdavis). Started June 2026.
+Maintained by [Kelly J Davis](https://github.com/kellyjdavis).

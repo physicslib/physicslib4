@@ -19,10 +19,9 @@ unitary `U(g)` of the stabilizer GNS representation conjugates the local von
 Neumann algebra of a subregion `B₁ ⊆ B` onto that of `g · B₁`:
 `U(g) · R(B₁) · U(g)⁻¹ = R(g · B₁)`.
 
-Compared with Minkowski, the abstract `LorentzianSpacetime` interface does not
-provide basis-set preservation (`M.IsBasisSet (g · B₁)`), so it enters as the
-explicit hypothesis `(M.isBasisSet_smul _ hB₁)`, exactly as elsewhere in the curved development
-(e.g. `localVonNeumann_mono`). The coherence between the stabilizer action and the
+Basis-set preservation `M.IsBasisSet (g · B₁)` is supplied by the interface field
+`M.isBasisSet_smul`, as elsewhere in the curved development (e.g.
+`localVonNeumann_mono`). The coherence between the stabilizer action and the
 isotony embeddings is not a hypothesis: it is `stabAutHom_commIsotony`, derived
 from Axiom 5 (3), which is stated for the Axiom 2 isotony family.
 

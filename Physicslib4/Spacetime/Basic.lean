@@ -32,10 +32,9 @@ blueprint, section 10.5.
 
 ## Modelling notes
 
-Mathlib (at `v4.31.0-rc1`) does not provide a packaged "Lorentzian manifold"
-or "pseudo-Riemannian metric" type. The closest thing — `PseudoRiemannianMetric`
-— lives in the downstream `PhysLean` library, which is not a dependency of
-this project. We therefore unbundle the definition into Mathlib primitives:
+Mathlib provides Riemannian metrics (`Bundle.ContMDiffRiemannianMetric`) but no
+Lorentzian or pseudo-Riemannian metric type, so the definition is unbundled
+into Mathlib primitives:
 
 * the underlying manifold is presented as a `Type*` `M` equipped with a
   `TopologicalSpace`, `T2Space` (Hausdorff), `ConnectedSpace`, `ChartedSpace`
@@ -44,6 +43,10 @@ this project. We therefore unbundle the definition into Mathlib primitives:
 * the metric `g` is a family of continuous bilinear forms
   `TₓM →L[ℝ] TₓM →L[ℝ] ℝ`, packaged together with symmetry, non-degeneracy,
   smoothness, and the Lorentzian condition at every point.
+
+`Physicslib4.Geometry.PseudoRiemannianMetric` is derived from a `Spacetime` by
+`Spacetime.toPseudoRiemannianMetric`, giving access to the general
+pseudo-Riemannian API (the musical isomorphisms, the Levi-Civita connection).
 
 The smoothness of `g` is stated in Mathlib's bundle-section idiom
 (`ContMDiff` of `g` as a section of the bundle of bilinear forms on the
@@ -167,9 +170,9 @@ structure Spacetime where
   The payoff is that this is the form Mathlib's bundle API speaks natively: in
   particular `ContMDiff.clm_bundle_apply₂` then gives smoothness of
   `x ↦ g x (V x) (W x)` for smooth vector fields `V, W`, which is what causal
-  and geodesic arguments need. The previous chart-local `ContDiffWithinAt`
-  formulation had no route to it, since Mathlib provides no lemma bridging the
-  two forms in either direction. -/
+  and geodesic arguments need. A chart-local `ContDiffWithinAt` formulation
+  would have no route to it, since Mathlib provides no lemma bridging the two
+  forms in either direction. -/
   contMDiff : ContMDiff model
       (model.prod 𝓘(ℝ, SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)) ∞
       (fun x ↦ Bundle.TotalSpace.mk'

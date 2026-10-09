@@ -160,9 +160,8 @@ set_option maxHeartbeats 1000000 in
 (`lmm:pullback-metric-smooth-in-charts`).
 
 The `contMDiff` field of `def:spacetime` for `ψ^*g`, at the same regularity
-index `∞` as `Spacetime.contMDiff` itself. The label name is historical: the
-statement is entirely in the bundle-section idiom and nothing chart-local
-remains.
+index `∞` as `Spacetime.contMDiff` itself. Despite the label name, the
+statement is entirely in the bundle-section idiom and involves no charts.
 -/
 theorem pullbackVal_contMDiff (M : Spacetime) (ψ : Diffeo M M) :
     ContMDiff M.model

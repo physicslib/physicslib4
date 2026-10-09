@@ -52,10 +52,6 @@ theorem sub_intMul_re (k : ℤ) (β : ℝ) (w : ℂ) :
   simp [Complex.sub_re, Complex.mul_re, Complex.intCast_re, Complex.intCast_im,
     Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im]
 
--- The half-plane topology helpers (`isOpen_setOf_im_lt`, `closure_setOf_im_lt`,
--- `closure_setOf_not_im_lt`, `frontier_setOf_im_lt`) now live in
--- `Physicslib4.Analysis.HorizontalLineRemovable` alongside the general gluing lemma.
-
 variable {β : ℝ}
 
 /-- The vertical fold shift `z ↦ z - ⌊Im z / β⌋ · iβ`. -/
