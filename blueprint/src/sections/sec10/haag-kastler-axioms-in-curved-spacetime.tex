@@ -123,6 +123,8 @@ The final axiom states:
     \end{center}
 
     commutes.
+
+    \emph{Formalization note.} The isometry group carries the topology induced by $\varphi \mapsto (\varphi, \varphi^{-1})$ into $C(M,M) \times C(M,M)$ with the compact-open topology. The Lean takes the group of Axiom 5 to be the identity component of this group intersected with the isometries preserving the future orientation (\texttt{orientedIdentityComponent}). This is the group of isometries connected to the identity: an isometry connected to the identity preserves the future orientation, but the proof needs a Myers--Steenrod-type rigidity theorem, which Mathlib does not provide, so the Lean includes orientation preservation in the definition rather than proving it.
 \end{definition}
 
 \begin{definition}[Haag-Kastler Net in Curved Spacetime]

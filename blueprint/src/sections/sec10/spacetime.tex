@@ -322,7 +322,7 @@
 \end{proof}
 
 \medskip
-\noindent\textbf{The Levi-Civita connection and geodesics.} The trip definitions below require their curves to be geodesics. The following declarations make ``geodesic'' precise. They are stated for a general pseudo-Riemannian manifold, of which every spacetime is an instance, and they use covariant derivatives in Mathlib's sense (\texttt{IsCovariantDerivativeOn}, \texttt{CovariantDerivative}). No chart appears in any definition; charts and local frames are used only inside proofs.
+\noindent\textbf{The Levi-Civita connection and geodesics.} The trip definitions below require their curves to be geodesics. The following declarations make ``geodesic'' precise. The Levi-Civita connection is stated for a general pseudo-Riemannian manifold, of which every spacetime is an instance; geodesics are defined for spacetimes, whose smooth paths (\ref{def:paths}) they are built on. All of these declarations use covariant derivatives in Mathlib's sense (\texttt{IsCovariantDerivativeOn}, \texttt{CovariantDerivative}). No chart appears in any definition; charts and local frames are used only inside proofs.
 
 \begin{definition}[Pseudo-Riemannian Metric]
     \label{def:pseudo-riemannian-metric}
@@ -536,7 +536,7 @@
     \lean{Physicslib4.Spacetime.IsGeodesic}
     \uses{def:paths, thrm:levi-civita-exists-unique, lmm:covariant-derivative-along-curve-local, lmm:velocity-extends}
     \leanok
-    Let $(M,g)$ be a pseudo-Riemannian manifold (for instance a spacetime) with Levi-Civita connection $\nabla$ (\ref{thrm:levi-civita-exists-unique}). A smooth path $\mu : \Sigma \to M$ is a \textit{geodesic} if for every $s$ in the interior of $\Sigma$ and every smooth vector field $X$ on $M$ with $X(\mu(t)) = \dot\mu(t)$ for all $t$ in a neighbourhood of $s$,
+    Let $(M,g)$ be a spacetime with Levi-Civita connection $\nabla$ (\ref{thrm:levi-civita-exists-unique}). A smooth path $\mu : \Sigma \to M$ is a \textit{geodesic} if for every $s$ in the interior of $\Sigma$ and every smooth vector field $X$ on $M$ with $X(\mu(t)) = \dot\mu(t)$ for all $t$ in a neighbourhood of $s$,
     \begin{align}
         (\nabla_X X)(\mu(s)) = 0.
     \end{align}

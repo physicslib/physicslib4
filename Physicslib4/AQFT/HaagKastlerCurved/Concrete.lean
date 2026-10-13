@@ -38,7 +38,8 @@ The pieces of the abstract interface are read off the concrete spacetime:
 * `Isom` is the oriented identity component
   `Spacetime.Isometry.orientedIdentityComponent` (the topological
   `connectedComponentOfOne` intersected with future-orientation preservation),
-  matching the blueprint's "isometries connected to the identity" in Axiom 5;
+  which is the blueprint's group of "isometries connected to the identity" in
+  Axiom 5 (see the implementation note on `toAbstractIdentityComponent`);
 * `isBasisSet_smul` is `Spacetime.LorentzianSpacetime.isBasisSet_smul`: these
   isometries carry Alexandrov diamonds to Alexandrov diamonds.
 -/
@@ -56,6 +57,12 @@ component** (identity-component isometries that also preserve the future
 orientation), as in Axiom 5. For these isometries basis-set preservation is a
 theorem (`Spacetime.LorentzianSpacetime.isBasisSet_smul`), which supplies the
 interface field `isBasisSet_smul`.
+
+Implementation note: the oriented identity component is the group of isometries
+connected to the identity named in the blueprint. That an isometry connected to
+the identity preserves the future orientation needs a Myers–Steenrod-type rigidity
+theorem that Mathlib does not provide, so orientation preservation is included in
+the definition of the group rather than proved.
 -/
 noncomputable def toAbstractIdentityComponent (L : LorentzianSpacetime) :
     AQFT.HaagKastlerCurved.LorentzianSpacetime where
