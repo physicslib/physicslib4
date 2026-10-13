@@ -51,6 +51,15 @@ Done, uncommitted; details in `notes/agents/stage2-progress.md`. All items appli
 be removed (each is needed; the guard also treats removing one as a definition change), so all 11 carry
 a comment. One `erw` became `rw`; two stay with comments. Build and lint pass.
 
+## Stage 3 progress (2026-10-13)
+
+Details in `notes/agents/stage3-progress.md`. R15-3 done: the shared estimate is `private lemma
+norm_mul_sub_mul_lt` in `OperatorIntegral.lean` (29 lines fewer). R01-3 was not a real duplicate:
+`lmm2` already uses `nullSubmodule_isClosed`. R07-1 done after the user's guard approval (blueprint left as is; the blueprint-named wrapper
+`Spacetime.reverse_cauchy_schwarz` keeps both hypotheses, the first unused). Before that it waited on
+`LorentzCauchySchwarz.lean`; callers are `LorentzCone.lean:73` and `LorentzOrthogonal.lean:57,219-220`;
+blueprint node `lmm:reverse-cauchy-schwarz` (`spacetime.tex:67-86`) assumes both vectors timelike.
+
 ## Decisions needed first (original options, kept for reference)
 
 Protected (definitions, axiom-structure fields, or blueprint specification):

@@ -54,7 +54,7 @@ theorem nonneg_of_orthogonal_timelike
     {t u : V} (ht : B t t < 0) (h : B t u = 0) : 0 ≤ B u u := by
   by_contra hcon
   have hneg : B u u < 0 := not_le.mp hcon
-  have hcs := reverse_cauchy_schwarz_of_lorentzianAt hsymm hL ht hneg
+  have hcs := reverse_cauchy_schwarz_of_lorentzianAt (v := t) hsymm hL hneg
   rw [h] at hcs
   nlinarith [mul_pos_of_neg_of_neg ht hneg]
 
@@ -216,8 +216,8 @@ theorem bilin_neg_of_inner_t_neg
     ring
   rw [evp, ewp, evw] at hcs
   exact sign_algebra ht hv hw htv htw
-    (reverse_cauchy_schwarz_of_lorentzianAt hsymm hL ht hv)
-    (reverse_cauchy_schwarz_of_lorentzianAt hsymm hL ht hw) hcs
+    (reverse_cauchy_schwarz_of_lorentzianAt (v := t) hsymm hL hv)
+    (reverse_cauchy_schwarz_of_lorentzianAt (v := t) hsymm hL hw) hcs
 
 namespace Spacetime
 
