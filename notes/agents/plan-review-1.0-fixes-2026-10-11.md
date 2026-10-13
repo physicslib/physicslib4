@@ -45,6 +45,12 @@ No stage has started; work resumes after the weekly budget reset.
   Minkowski `LocalNet.algebra` uses `Type*` (`HaagKastler/LocalAlgebras.lean:82`). New protected question
   D8: should the curved net also be universe-polymorphic?
 
+## Stage 2 progress (2026-10-13)
+
+Done, uncommitted; details in `notes/agents/stage2-progress.md`. All items applied. No `set_option` could
+be removed (each is needed; the guard also treats removing one as a definition change), so all 11 carry
+a comment. One `erw` became `rw`; two stay with comments. Build and lint pass.
+
 ## Decisions needed first (original options, kept for reference)
 
 Protected (definitions, axiom-structure fields, or blueprint specification):

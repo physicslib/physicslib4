@@ -71,6 +71,7 @@ theorem isClosed_complex_nonneg : IsClosed {z : ℂ | (0 : ℂ) ≤ z} := by
   exact (isClosed_Ici.preimage Complex.continuous_re).inter
     (isClosed_singleton.preimage Complex.continuous_im)
 
+/-- The state set is weak-* closed. -/
 theorem isClosed_weakStateSet : IsClosed (weakStateSet : Set (WeakDual ℂ A)) := by
   have h1 : IsClosed {φ : WeakDual ℂ A | ∀ a : A, (0 : ℂ) ≤ φ (star a * a)} := by
     rw [Set.ofPred_forall]

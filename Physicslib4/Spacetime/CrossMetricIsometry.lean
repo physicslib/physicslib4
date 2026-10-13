@@ -562,6 +562,9 @@ theorem pullback_alexandrovBasis_image (M : Spacetime) (ψ : Diffeo M M)
     (M.pullbackTimeOrientation ψ t) t
     (pullback_preservesFutureOrientationTwoSided M ψ t) hB
 
+-- Needed for the same reason as the `respectTransparency` options in `Pullback.lean` (see the
+-- comment on `bilinearPrecomp` there): `TangentSpace M.model x` is only semireducibly, not
+-- reducibly, defeq to `SpacetimeModel`.
 set_option backward.isDefEq.respectTransparency false in
 /-- **`ψ⁻¹` carries Alexandrov basis sets to pullback Alexandrov basis sets**
 (`lmm:pullback-alexandrov-homeomorphism`, backward matching hypothesis).

@@ -360,6 +360,7 @@ algebra. -/
 noncomputable def extendHom (L : InhomogeneousLorentzGroup) : Q.carrier →⋆ₐ[ℂ] Q.carrier :=
   (exists_intertwiner_extend N Q L).choose
 
+/-- The extended intertwiner `Φ_L` is continuous. -/
 theorem extendHom_continuous (L : InhomogeneousLorentzGroup) : Continuous (extendHom N Q L) :=
   (exists_intertwiner_extend N Q L).choose_spec.1
 
@@ -441,6 +442,7 @@ noncomputable def trivialQuasilocalLift (L : InhomogeneousLorentzGroup) :
     trivialHaagKastlerNet.QuasilocalLift trivialQuasilocalAlgebra L :=
   quasilocalLift trivialHaagKastlerNet trivialQuasilocalAlgebra L
 
+/-- The quasilocal lift exists unconditionally for the trivial net. -/
 theorem nonempty_trivialQuasilocalLift (L : InhomogeneousLorentzGroup) :
     Nonempty (trivialHaagKastlerNet.QuasilocalLift trivialQuasilocalAlgebra L) :=
   ⟨trivialQuasilocalLift L⟩

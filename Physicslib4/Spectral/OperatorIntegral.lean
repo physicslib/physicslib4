@@ -961,8 +961,7 @@ theorem norm_integral_le (μ : ProjectionValuedMeasure X H) {f : X → ℂ}
       rintro r ⟨χ, ψ, hχ, hψ, rfl⟩
       exact hmat χ ψ hχ hψ) (by nlinarith [hset_nonneg g])
   -- (II) the sharp bound for simple functions: ‖∫ s dμ‖ ≤ ‖s‖∞, cited as the
-  -- black-box declaration `norm_integral_simple_le` (proved by another prover in
-  -- the real file).
+  -- black-box declaration `norm_integral_simple_le`, proved above in this file.
   have hsimple : ∀ (s : SimpleFunc X ℂ), ‖μ.integral (fun x => s x)‖ ≤ snorm (fun x => s x) := by
     intro s
     exact le_trans (norm_integral_simple_le μ s) (by
