@@ -81,6 +81,15 @@ tags. All new Lean names resolve. Not done: the D4 "list remaining helpers in mo
 triage of the rest of R13's 43-item uncited list (`chronologicallyPrecedes_smul_iff`,
 `isAlexandrovBasisSet_smul` and smaller API lemmas).
 
+## Stage 6 progress (2026-10-14)
+
+Done, uncommitted. R09-1: the density-theorem entry says "the lemmas above" instead of a number range, so
+it survives renumbering. R05-1: `FunctionalCalculus` listed on the §10.3 page. R12-1: stray `*` replaced.
+R12-2: chapter and section numbers in `sec5/quasilocal-algebra.tex` and `sec10/haag-kastler-axioms.tex`
+("Chapter 9", "Chapter 6.2", "Chapter 6.3") replaced by `\ref`s. R02-3: contraction removed. R15-5:
+non-emptiness dropped from the Boundedness Theorem. R14-3: no change; every Lean subscript in prose uses
+`\ensuremath{_n}` consistently, and raw Unicode appears only inside `\lean{}`.
+
 ## Decisions needed first (original options, kept for reference)
 
 Protected (definitions, axiom-structure fields, or blueprint specification):

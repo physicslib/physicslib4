@@ -18,7 +18,7 @@ usemathjax: true
 - *The Cayley transform and the unbounded spectral theorem (pp. 222–231, items 275–285).* Unitary operators are normal, with spectrum on the unit circle (Lemmas 275–276). The Cayley map (Lemma 277) and the Cayley transform of a self-adjoint operator (Theorem 278), with its spectral mapping (Lemma 279), reduce the unbounded self-adjoint case to the bounded normal one: a projection-valued measure is transported along a Borel bijection (Lemma 281), the Cayley transform omits the point $$1$$ (Lemma 282), and the spectral measure is transported through the Cayley transform (Theorem 284). The result is the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 285).
 - *The functional calculus of an unbounded self-adjoint operator (p. 234, items 286–288).* These items supply what §10.4 needs. The spectral measure of a self-adjoint operator is named (Definition 286), the functional calculus $$f(A)$$ is the integral of $$f$$ against it (Definition 287), and for bounded $$f$$ it agrees with the bounded calculus of §10.2 (Lemma 288). Earlier in the section, a self-adjoint operator is shown to have no proper symmetric extension (Lemma 189), which §10.4 uses to identify the generator of $$e^{itA}$$ with $$A$$.
 
-**Where the Lean lives:** `Physicslib4/Spectral/Unbounded/` (`Basic`, `Spectrum`, `DirectSum`, `Integral`, `Normal`, `AbstractCalculus`, `Cayley`)
+**Where the Lean lives:** `Physicslib4/Spectral/Unbounded/` (`Basic`, `Spectrum`, `DirectSum`, `Integral`, `Normal`, `AbstractCalculus`, `Cayley`, `FunctionalCalculus`)
 
 ## Items
 
