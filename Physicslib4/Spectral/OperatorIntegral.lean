@@ -36,6 +36,12 @@ in `Physicslib4/Spectral/Basic.lean`; every statement below takes
 * `Physicslib4.Spectral.ProjectionValuedMeasure.integral_mul` — multiplicativity.
 * `Physicslib4.Spectral.ProjectionValuedMeasure.integral_conj` — compatibility with
   conjugation and the adjoint.
+
+## Supporting lemmas
+
+* `Physicslib4.Spectral.isSelfAdjoint_integral_of_real` — the integral of a
+  real-valued integrand is self-adjoint, the second part of
+  `prpstn:integral-conjugation`.
 -/
 
 namespace Physicslib4

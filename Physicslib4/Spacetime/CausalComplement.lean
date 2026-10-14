@@ -21,6 +21,13 @@ field theory. We record its order structure:
 * `spacelikeComplement_spacelikeComplement_spacelikeComplement` — `B^⊥⊥⊥ = B^⊥`;
 * `subset_spacelikeComplement_iff` — the Galois-type bridge
   `B₁ ⊆ B₂^⊥ ↔ B₁, B₂ completely spacelike`.
+
+## Supporting lemmas
+
+* `isCausallyComplete_causalClosure` — the causal closure of any region is causally
+  complete, an immediate corollary of `isCausallyComplete_spacelikeComplement`.
+* `spacelikeComplement_spacelikeComplement_of_isCausallyComplete` — restates
+  `IsCausallyComplete` as an involution equation, `B^⊥⊥ = B`.
 -/
 
 namespace Physicslib4

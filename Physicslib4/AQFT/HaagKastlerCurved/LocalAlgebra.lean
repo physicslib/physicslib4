@@ -31,6 +31,14 @@ AQFT-in-Lean blueprint):
 * `Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebra` (Axiom 4,
   `def:local-completeness-in-curved-spacetime`).
 
+## Supporting lemmas
+
+* `localObservables_eq`: set-builder characterisation of `localObservables`, the
+  curved mirror of `quasilocalObservables_eq`.
+* `one_mem_localObservables`, `add_mem_localObservables`, `smul_mem_localObservables`:
+  membership API showing `localObservables` contains the identity and is closed
+  under addition and scaling.
+
 ## Modelling notes
 
 * On a generic Lorentzian spacetime there is **no** quasilocal

@@ -25,6 +25,14 @@ quasilocal observables of a representation.
   those operators, shown to be exactly the self-adjoint elements in
   the range of `π`.
 
+## Supporting lemmas
+
+* `quasilocalObservables_eq`: set-builder characterisation of `quasilocalObservables`,
+  mirroring `isQuasilocalObservable_iff`.
+* `one_mem_quasilocalObservables`, `add_mem_quasilocalObservables`,
+  `smul_mem_quasilocalObservables`: membership API showing `quasilocalObservables` contains
+  the identity and is closed under addition and (self-adjoint) scaling.
+
 ## Note on the file name, and on Axiom 4
 
 Despite its name, this file does not formalise Axiom 4. The existence of a

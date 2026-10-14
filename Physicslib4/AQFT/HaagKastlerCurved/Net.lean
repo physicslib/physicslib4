@@ -27,6 +27,19 @@ AQFT-in-Lean blueprint).
   `Isotony`, `LocalCommutativity`, `LocalAlgebra`, and
   `IsometricCovariance`.
 
+## Supporting lemmas
+
+* `commIsotony_injective`: restates `Isotony.injective` through the net's chosen
+  `commIsotony`.
+* `commute_of_spacelike_symm`: the symmetric restatement of `commute_of_spacelike`,
+  the curved mirror of `commute_ι_of_spacelike_symm`.
+* `isLocalObservable_of_isSelfAdjoint`, `isLocalObservable_add`,
+  `isLocalObservable_smul`, `isLocalObservable_smul_add_smul`: membership and
+  closure API for the net's local observables, the curved mirrors of the
+  quasilocal-observable API in `Physicslib4.AQFT.HaagKastler.Net`.
+* `trivialSpacetime`: the trivial Lorentzian spacetime underlying the joint
+  satisfiability witness mentioned above.
+
 ## Notes
 
 * As in the Minkowski case, joint satisfiability of the axioms is

@@ -37,6 +37,11 @@ functional calculus, `def:hall-8.8`, and it is multiplicative.
   `Physicslib4/Spectral/BorelClasses.lean`, from which `𝓕₁ = 𝓕₂ = {bounded Borel}`
   follows.
 
+## Supporting lemmas
+
+* `Physicslib4.Spectral.borelCalculus_of_notMem` — the degenerate case: the
+  junk value of `borelCalculus` off its domain of definition is `0`.
+
 ## Implementation notes
 
 "Bounded Borel function on `σ(A)`" is spelled `f ∈ BddMeasurable (spectrum ℝ A)`

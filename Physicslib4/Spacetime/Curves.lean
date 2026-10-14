@@ -44,6 +44,13 @@ section 10.5 of the AQFT-in-Lean blueprint.
 * `Physicslib4.Spacetime.IsEndpoint`, `IsPastEndpoint`, `IsFutureEndpoint`:
   the endpoint terminology for paths and their associated curves.
 
+## Supporting lemmas
+
+* `OrientedSmoothCurve.toSmoothCurve_surjective`: the orientation-forgetting
+  projection `OrientedSmoothCurve → SmoothCurve` is surjective.
+* `isTimelikeSmoothCurve_toSmoothCurve_ofPath`: the timelikeness companion to
+  `isCausalSmoothCurve_toSmoothCurve_ofPath`.
+
 ## Modelling notes
 
 The notion of "smooth at a boundary point of a closed interval" is delicate

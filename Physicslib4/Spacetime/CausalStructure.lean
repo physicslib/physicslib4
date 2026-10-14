@@ -24,6 +24,11 @@ following section 10.5 of the AQFT-in-Lean blueprint.
   of timelike (and null, by a limit construction) tangent vectors against a
   chosen time orientation.
 
+## Supporting lemmas
+
+* `isTimelike_smul_iff`, `isNull_smul_iff`, `isSpacelike_smul_iff`: scaling-invariance
+  of the three causal classes under nonzero real multiples of a tangent vector.
+
 ## Modelling notes
 
 Mathlib has no single named type for smooth vector fields. We use the obvious

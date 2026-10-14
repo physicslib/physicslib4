@@ -20,6 +20,11 @@ closure of `ρ(𝔄) ξ`), the diagonal amplification `ρ^ι` on `ℓ²(ι; E)`,
 Blueprint reference: `lmm:cyclic-subspace-reduces`, `lmm:bicommutant-single-vector`,
 `def:finite-amplification`, `lmm:commutant-of-amplification-entries`,
 `lmm:amplification-block-expansion`, `lmm:diagonal-in-amplified-bicommutant`.
+
+## Supporting lemmas
+
+* `blockEntry_apply` — unfolds `blockEntry` to its defining composite; feeds
+  `blockEntry_mem_centralizer` (`lmm:commutant-of-amplification-entries`).
 -/
 
 namespace Physicslib4

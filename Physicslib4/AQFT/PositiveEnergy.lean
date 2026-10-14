@@ -27,6 +27,11 @@ Minkowski (translation) and curved (Killing-flow) spectrum conditions.
 * `IsPositiveEnergy.strongContinuous` — a positive-energy group is strongly continuous.
 * `isPositiveEnergy_exp` — the bounded case `V(t) = exp(itP)`, `P ≥ 0`.
 * `isPositiveEnergy_iff_exists_exp` — the exponential form, via Stone's theorem.
+
+## Supporting lemmas
+
+* `exp_generator_unique` — the bounded special case of `generator_eq_of_eq_expUnitary`:
+  a bounded, self-adjoint, nonnegative generator is determined by `V(t) = exp(itP)`.
 -/
 
 namespace Physicslib4

@@ -23,6 +23,13 @@ We prove the basic algebra of intertwiners, that disjointness is symmetric and
 irreflexive (unitarily equivalent representations are never disjoint), that
 quasi-equivalence is an equivalence relation, and that unitary equivalence implies
 quasi-equivalence.
+
+## Supporting lemmas
+
+* `intertwines_zero` — `0` is always an intertwiner, alongside `Intertwines.add` and
+  `Intertwines.smul`.
+* `restrictStarAlgEquiv'` — restricts a `*`-isomorphism across two ambient spaces to
+  given subalgebras; an implementation step feeding `UnitaryEquiv.quasiEquiv`'s proof.
 -/
 
 namespace Physicslib4

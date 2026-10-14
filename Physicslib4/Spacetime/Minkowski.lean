@@ -52,6 +52,12 @@ Alexandrov topology).
   instance given by the Alexandrov topology. The smooth-manifold
   structure is inherited from `StandardMinkowskiSpacetime` if one wishes
   to view the same underlying point set as both.
+
+## Supporting lemmas
+
+* `mfderiv_extChartAt_symm_minkowski`: the manifold derivative of the (unique)
+  chart inverse is the identity, a technical step toward smoothness results for
+  the Lorentz action.
 -/
 
 namespace Physicslib4

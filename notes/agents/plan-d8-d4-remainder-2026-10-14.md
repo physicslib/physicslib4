@@ -10,6 +10,11 @@ definition `LocalAlgebra` and the net-level observable lemmas use `Type v`; the 
 satisfiability theorems fix `v := 0`. Build, lint and axiom checks pass. The blueprint and home page say
 nothing about universes, so they need no change.
 
+D4 remainder: done, uncommitted. Triage (`notes/agents/d4-triage-2026-10-14.md`): 24 used implicitly,
+38 helpers, 3 headline, 0 dead. The 3 headline results are added to `def:disjoint-representations` and
+`def:quasi-equivalence`; the helpers are listed in 17 module docstrings (`notes/agents/d4-progress.md`).
+No new nodes, so the home-page numbering is unchanged.
+
 ## Decision needed: D8 (protected)
 
 The curved `LocalNet.algebra` is `Set M.Carrier → Type` (`HaagKastlerCurved/LocalAlgebras.lean:62`). The

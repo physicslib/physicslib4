@@ -39,6 +39,13 @@ axioms, section 10.6 of the AQFT-in-Lean blueprint):
   `Physicslib4/Spacetime/LorentzCausality.lean`, which proves that the action preserves
   Alexandrov basis sets (`isAlexandrovBasisSet_smul`).
 
+## Supporting lemmas
+
+* `InhomogeneousLorentzGroup.timelike_separated_smul_iff`,
+  `InhomogeneousLorentzGroup.spacelike_separated_smul_iff`,
+  `InhomogeneousLorentzGroup.null_separated_smul_iff`: Lorentz invariance of the sign of the
+  Minkowski interval, one lemma per causal class.
+
 ## Modelling notes
 
 * The Lorentz-action data is given as: a group `InhomogeneousLorentzGroup`,
