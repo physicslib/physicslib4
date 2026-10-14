@@ -70,6 +70,17 @@ R14-1: blueprint statement narrowed to the derivative claim. R03-1: proof `\uses
 `thrm:hall-8.10` and `thrm:spectral-theorem-for-bounded-operators` trimmed to the nodes each proof cites
 (19→5, 47→6, 75→2). `blueprint_validate` shows only the existing `conv:` label errors.
 
+## Stage 5 progress (2026-10-14)
+
+Done, uncommitted; details in `notes/agents/stage5-progress.md`. Three batches, each written then reviewed,
+review fixes applied. 5a (`spacetime.tex`): 9 new nodes for the Lorentz group, the inhomogeneous Lorentz
+group and the Lorentz invariance of the causal relations. 5b (`haag-kastler-axioms.tex`): 2 new nodes
+(weak-to-strong continuity, strongly continuous GNS unitaries) and 3 extended `\lean{}` tags. 5c (curved):
+2 new nodes (joint satisfiability of the curved axioms; local commutativity under inclusion) and 4 extended
+tags. All new Lean names resolve. Not done: the D4 "list remaining helpers in module docstrings" part, and
+triage of the rest of R13's 43-item uncited list (`chronologicallyPrecedes_smul_iff`,
+`isAlexandrovBasisSet_smul` and smaller API lemmas).
+
 ## Decisions needed first (original options, kept for reference)
 
 Protected (definitions, axiom-structure fields, or blueprint specification):

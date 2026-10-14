@@ -70,11 +70,11 @@ The next axiom has need of the following definition
 
 \begin{definition}[Local Observable]
     \label{def:local-observable}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.IsLocalObservable}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.IsLocalObservable, Physicslib4.AQFT.HaagKastlerCurved.exists_isLocalObservable}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalAlgebra.lean}
     \leanok
     \uses{def:lorentzian-spacetime, thrm:gns-construction-theorem, def:local-algebras-in-curved-spacetime, def:state}
-    For Lorentzian spacetime $M$ the image $\pi_\omega(a)$ of a self-adjoint member $a$ of the local algebra $\mathfrak{U}(\mathbf{B})$ under the GNS *-homomorphism $\pi_\omega$ of a state $\omega$ on $\mathfrak{U}(\mathbf{B})$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{local observable}.
+    For Lorentzian spacetime $M$ the image $\pi_\omega(a)$ of a self-adjoint member $a$ of the local algebra $\mathfrak{U}(\mathbf{B})$ under the GNS *-homomorphism $\pi_\omega$ of a state $\omega$ on $\mathfrak{U}(\mathbf{B})$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{local observable}. The Lean records the existence content of this definition as \texttt{exists\_isLocalObservable}: for every state $\omega$ on $\mathfrak{U}(\mathbf{B})$ and every self-adjoint $a \in \mathfrak{U}(\mathbf{B})$, the GNS construction gives a $*$-representation $\pi$ in which $\pi(a)$ is a self-adjoint local observable.
 \end{definition}
 
 and can be stated as follows:
@@ -136,6 +136,19 @@ The final axiom states:
     A \emph{Haag-Kastler net in curved spacetime} on a Lorentzian spacetime is the bundling of the data of \ref{def:local-algebras-in-curved-spacetime} together with the properties of \ref{def:isotony-in-curved-spacetime}, \ref{def:local-commutativity-in-curved-spacetime}, \ref{def:local-completeness-in-curved-spacetime}, and \ref{def:isometric-covariance-in-curved-spacetime}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT in curved spacetime take an instance of this structure as a hypothesis and invoke each axiom as a projection.
 \end{definition}
 
+\begin{theorem}[The Curved Haag-Kastler Axioms are Jointly Satisfiable]
+    \label{thrm:haag-kastler-net-in-curved-spacetime-nonempty}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.nonempty_haagKastlerNet_identityComponent, Physicslib4.Spacetime.LorentzianSpacetime.isometricCovariance_trivial_identityComponent, Physicslib4.Spacetime.LorentzianSpacetime.identityComponent_faithfulSMul}
+    \uses{def:lorentzian-spacetime, def:haag-kastler-net-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime}
+    \leanok
+    Let $M$ be a Lorentzian spacetime, with the group of Axiom 5 taken to be the isometries of $M$ connected to the identity (as in the formalization note of \ref{def:isometric-covariance-in-curved-spacetime}). The identity component of the isometry group acts faithfully on $M$: an isometry in it is determined by its action on points. So does its orientation-preserving subgroup, the group of Axiom 5. The trivial net, which assigns the C*-algebra $\mathbb{C}$ to every basis set and the identity map to every inclusion and every isometry, satisfies isometric covariance (\ref{def:isometric-covariance-in-curved-spacetime}). Moreover it satisfies all five axioms, so a Haag-Kastler net in curved spacetime (\ref{def:haag-kastler-net-in-curved-spacetime}) over $M$ exists. Existence holds for every abstract Lorentzian spacetime of the interface (\texttt{HaagKastlerCurved.nonempty\_haagKastlerNet}), and the concrete form specializes it.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:haag-kastler-net-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime}
+    Faithfulness is inherited from the faithful action of the full isometry group on $M$, since faithfulness passes to subgroups: first to the identity component, then to its orientation-preserving subgroup. For the trivial net each local algebra is $\mathbb{C}$ and every map is the identity of $\mathbb{C}$, so the laws $\alpha_{\mathbf{1}} = \mathrm{id}$ and $\alpha_{\varphi'\circ\varphi} = \alpha_{\varphi'}\alpha_\varphi$ and the commuting square of Axiom 5 hold trivially; isotony holds because the identity is functorial, local commutativity because $\mathbb{C}$ is commutative, and local completeness because a self-adjoint $\pi(b)$ is also the image $\pi\big(\tfrac12(b + b^*)\big)$ of the self-adjoint part of $b$. The Lean proves this for an arbitrary abstract Lorentzian spacetime (\texttt{HaagKastlerCurved.nonempty\_haagKastlerNet}) and specializes it to the concrete one.
+\end{proof}
+
 Generally these axioms follow in a straightforward manner from those of AQFT in Minkowski spacetime. The only ``surprise'' in this presentation is the absence of a quasilocal algebra. However, as we found, its absence is simply a reflection of the observational constraints of Lorentzian spacetime which don't exist in Minkowski spacetime.
 
 \subsection{Einstein Causality in Curved Spacetime}
@@ -154,6 +167,19 @@ The operator form of local commutativity (\ref{def:local-commutativity-in-curved
     \leanok
     \uses{def:local-commutativity-in-curved-spacetime}
     This is the image under $\pi$ of the curved local commutativity (\ref{def:local-commutativity-in-curved-spacetime}). It is the curved-spacetime counterpart of \ref{thrm:einstein-causality}, with the containing local algebra playing the role of the quasilocal algebra.
+\end{proof}
+
+\begin{lemma}[Local Commutativity for Subregions (Concrete Spacetime)]
+    \label{lmm:local-commutativity-mono-in-curved-spacetime}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.commute_of_spacelike_mono_geometric}
+    \uses{def:lorentzian-spacetime, def:haag-kastler-net-in-curved-spacetime, def:completely-spacelike, def:isotony-in-curved-spacetime}
+    \leanok
+    Let $L$ be a Lorentzian spacetime whose group of Axiom 5 is the isometries connected to the identity, and $\mathfrak{U}$ a Haag-Kastler net over it. Let $\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}$ be completely spacelike-separated regions, $\mathbf{B}$ a basis set, and $\mathbf{B}_1' \subseteq \mathbf{B}_1$, $\mathbf{B}_2' \subseteq \mathbf{B}_2$ basis sets. Then for all $a \in \mathfrak{U}(\mathbf{B}_1')$ and $b \in \mathfrak{U}(\mathbf{B}_2')$ the isotony images $i(a), i(b) \in \mathfrak{U}(\mathbf{B})$ commute.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:local-commutativity-in-curved-spacetime, def:completely-spacelike}
+    Complete spacelike separation is inherited by subsets: every point of $\mathbf{B}_1'$ is spacelike to every point of $\mathbf{B}_2'$ because the same holds for $\mathbf{B}_1$ and $\mathbf{B}_2$ (\ref{def:completely-spacelike}). So $\mathbf{B}_1'$ and $\mathbf{B}_2'$ are completely spacelike basis sets inside $\mathbf{B}$, and local commutativity (\ref{def:local-commutativity-in-curved-spacetime}) gives $i(a)\,i(b) = i(b)\,i(a)$.
 \end{proof}
 
 \subsection{Local von Neumann Algebras in Curved Spacetime}
@@ -274,13 +300,13 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
 
 \begin{theorem}[Geometric Covariance of the von Neumann Net (Curved Spacetime)]
     \label{thrm:von-neumann-geometric-covariance-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumann, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localOperators, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutHom_commIsotony}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumann, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localOperators, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutHom_commIsotony, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumannAlgebra}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeometricCovariance.lean}
-    \uses{def:local-von-neumann-in-curved-spacetime, def:stabilizer-action-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime}
+    \uses{def:local-von-neumann-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime, def:stabilizer-action-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime}
     \leanok
     The curved, stabilizer-subgroup analogue of geometric covariance. For $g \in \mathrm{Stab}(\mathbf{B})$, the implementing unitary $U(g)$ of the stabilizer GNS representation (\ref{thrm:gns-unitary-stabilizer-in-curved-spacetime}) conjugates the local von Neumann algebra of a subregion $\mathbf{B}_1 \subseteq \mathbf{B}$ onto that of $g \cdot \mathbf{B}_1$:
     \[ U(g)\, R(\mathbf{B}_1)\, U(g)^{-1} = R(g \cdot \mathbf{B}_1). \]
-    That $g \cdot \mathbf{B}_1$ is again a basis set is not a hypothesis: the abstract \texttt{LorentzianSpacetime} interface asserts that isometries preserve basis sets, which for a concrete Lorentzian spacetime with the isometries connected to the identity is \ref{lmm:axiom5-basis-preservation}. The inclusion $g \cdot \mathbf{B}_1 \subseteq \mathbf{B}$ is not a hypothesis: it follows from $\mathbf{B}_1 \subseteq \mathbf{B}$ and $g \cdot \mathbf{B} = \mathbf{B}$. The coherence relating the stabilizer action $\hat\alpha_g$ to the isotony embeddings of Axiom 2 (\ref{def:isotony-in-curved-spacetime}) is not a hypothesis: it is condition (3) of Axiom 5 (\ref{def:isometric-covariance-in-curved-spacetime}), transported along $g \cdot \mathbf{B} = \mathbf{B}$.
+    That $g \cdot \mathbf{B}_1$ is again a basis set is not a hypothesis: the abstract \texttt{LorentzianSpacetime} interface asserts that isometries preserve basis sets, which for a concrete Lorentzian spacetime with the isometries connected to the identity is \ref{lmm:axiom5-basis-preservation}. The inclusion $g \cdot \mathbf{B}_1 \subseteq \mathbf{B}$ is not a hypothesis: it follows from $\mathbf{B}_1 \subseteq \mathbf{B}$ and $g \cdot \mathbf{B} = \mathbf{B}$. The coherence relating the stabilizer action $\hat\alpha_g$ to the isotony embeddings of Axiom 2 (\ref{def:isotony-in-curved-spacetime}) is not a hypothesis: it is condition (3) of Axiom 5 (\ref{def:isometric-covariance-in-curved-spacetime}), transported along $g \cdot \mathbf{B} = \mathbf{B}$. The same identity holds for the bundled von Neumann algebras of \ref{def:local-von-neumann-algebra-in-curved-spacetime} (\texttt{lieConj\_image\_localVonNeumannAlgebra}), whose underlying sets are $R(\mathbf{B}_1)$ and $R(g \cdot \mathbf{B}_1)$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -556,11 +582,13 @@ They do, however, restrict to a genuine action by automorphisms of one fixed loc
 
 \begin{theorem}[GNS Unitary Representation of the Stabilizer]
     \label{thrm:gns-unitary-stabilizer-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitaryRep_stabilizer}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
     \uses{def:stabilizer-action-in-curved-spacetime, def:state, thrm:gns-construction-theorem}
     \leanok
     Let $\omega$ be a state on $\mathfrak{U}(\mathbf{B})$ invariant under the stabilizer action, $\omega(\hat\alpha_\varphi a) = \omega(a)$ for all $\varphi \in \mathrm{Stab}(\mathbf{B})$. Then the action is implemented on the GNS Hilbert space of $\omega$ by a unitary representation $U$ of $\mathrm{Stab}(\mathbf{B})$: there is a GNS triple $(H, \pi, \Omega)$ and unitaries $U(\varphi)$ with $U(\varphi)\,\pi(a)\Omega = \pi(\hat\alpha_\varphi a)\,\Omega$, $U(\varphi)\Omega = \Omega$, the group laws, and $U(1) = \mathrm{id}$.
+
+    The Lean form is stronger: $U$ also satisfies operator covariance $U(\varphi)\,\pi(a)\,U(\varphi)^{-1} = \pi(\hat\alpha_\varphi a)$, and $\Omega$ is cyclic for $\pi$. The bundled form \texttt{exists\_gns\_unitaryRep\_stabilizer} packages $U$ as a group homomorphism from $\mathrm{Stab}(\mathbf{B})$ into the unitary group of $H$, with the same reproduction, implementation, invariance, covariance and cyclicity clauses.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -570,16 +598,16 @@ They do, however, restrict to a genuine action by automorphisms of one fixed loc
 
 \begin{theorem}[Strongly Continuous Stabilizer GNS Unitary]
     \label{thrm:gns-unitary-stabilizer-strongly-continuous-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer_strongContinuous}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer_strongContinuous, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitaryRep_stabilizer_strongContinuous}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
     \uses{thrm:gns-unitary-stabilizer-in-curved-spacetime}
     \leanok
-    If moreover the isometry group carries a topology (the abstract interface supplies none, so it is an added hypothesis) and the matrix coefficients $\varphi \mapsto \omega\big(a^*\,\hat\alpha_\varphi b\big)$ are continuous on $\mathrm{Stab}(\mathbf{B})$, then the representation $U$ is strongly continuous: $\varphi \mapsto U(\varphi)\psi$ is continuous for every GNS vector $\psi$.
+    If moreover the isometry group carries a topology (the abstract interface supplies none, so it is an added hypothesis) and the matrix coefficients $\varphi \mapsto \omega\big(a^*\,\hat\alpha_\varphi b\big)$ are continuous on $\mathrm{Stab}(\mathbf{B})$, then the representation $U$ is strongly continuous: $\varphi \mapsto U(\varphi)\psi$ is continuous for every GNS vector $\psi$. The bundled form \texttt{exists\_gns\_unitaryRep\_stabilizer\_strongContinuous} returns the same strongly continuous $U$ as a group homomorphism from $\mathrm{Stab}(\mathbf{B})$ into the unitary group of $H$, with the same reproduction, implementation, invariance and operator covariance $U(\varphi)\,\pi(a)\,U(\varphi)^{-1} = \pi(\hat\alpha_\varphi a)$ clauses.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thrm:gns-unitary-stabilizer-in-curved-spacetime}
-    The stabilizer subgroup inherits its topology as a subspace of the isometry group.
+    \uses{thrm:gns-unitary-stabilizer-in-curved-spacetime, lmm:weak-continuity-implies-strong, def:cyclic-vector}
+    The stabilizer subgroup inherits its topology as a subspace of the isometry group. On the dense set of vectors $\pi(a)\Omega$ (dense since $\Omega$ is cyclic) the matrix coefficients $\langle \pi(a)\Omega, U(\varphi)\pi(b)\Omega\rangle = \omega(a^*\,\hat\alpha_\varphi b)$ are continuous, so the unitaries are weakly continuous there and hence strongly continuous by \ref{lmm:weak-continuity-implies-strong}.
 \end{proof}
 
 \begin{theorem}[Irreducible Covariant Representation of a Pure Invariant State (Curved Spacetime)]
