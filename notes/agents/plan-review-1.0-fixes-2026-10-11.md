@@ -90,6 +90,16 @@ R12-2: chapter and section numbers in `sec5/quasilocal-algebra.tex` and `sec10/h
 non-emptiness dropped from the Boundedness Theorem. R14-3: no change; every Lean subscript in prose uses
 `\ensuremath{_n}` consistently, and raw Unicode appears only inside `\lean{}`.
 
+## Stage 7 progress (2026-10-14)
+
+Done, uncommitted. D6: `check_temporal_wording.py` flags "no longer", "previously" (except positional uses
+such as "as we previously proved", stripped by a `POSITIONAL` regex), and history-telling "now" phrases
+("is now proved/proven/formalized/available", "now formalized"); bare "now" is not flagged because proofs
+use it positionally. A `temporal-ok` marker skips a line. The stricter check flagged two prose lines,
+reworded. R16-2: `issues`/`pull-requests` permissions removed from `blueprint.yml` (takes effect on the
+next push to `main`). R16-3: both workflows use `actions/checkout@v6` and the same pinned `lean-action`
+SHA; `free-disk-space` pinned to v1.3.2.
+
 ## Decisions needed first (original options, kept for reference)
 
 Protected (definitions, axiom-structure fields, or blueprint specification):

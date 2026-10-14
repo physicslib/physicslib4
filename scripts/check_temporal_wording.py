@@ -3,7 +3,7 @@
 
 Scans blueprint prose, Lean comments/docstrings, the home page and the README for wording
 that refers to earlier versions of the project. References to earlier places in the same
-text ("as we previously proved") are allowed by the allowlist below.
+text ("as we previously proved") are allowed by POSITIONAL below; a line containing "temporal-ok" is skipped.
 """
 import re, sys, pathlib
 
@@ -16,7 +16,17 @@ PATTERN = re.compile(
     r"|\(new\)|\bnew (layer|block|subsection|node)\b|[Nn]ewest|\bblog\b"
     r"|left for later|for the time being|v4\.\d+\.\d+-rc\d|Mathlib \(at"
     r"|\bthe former Axiom|has been (removed|replaced|split|renamed)"
+    r"|\b[Nn]o longer\b|\b[Pp]reviously\b"
+    r"|\b(is|are) now (proved|proven|formali[sz]ed|available|supported|a theorem|in Mathlib)"
+    r"|\bnow (formali[sz]ed|proven|available|supported)\b"
 )
+# Positional references to earlier parts of the same text are allowed.
+POSITIONAL = re.compile(
+    r"\b(we|We|as|As|which|that) (have )?previously\b"
+    r"|\bpreviously (proved|proven|established|found|defined|shown|stated|derived|computed)\b"
+)
+# A line may opt out of the check with this marker.
+ALLOW = "temporal-ok"
 # Version statements are allowed in exactly these places.
 VERSION = re.compile(r"\bv4\.\d+\.\d+\b")
 VERSION_HOMES = {"blueprint/src/sections/sec10/introduction.tex", "home_page/index.md", "README.md"}
@@ -31,7 +41,7 @@ def files():
 bad = []
 for f in files():
     for n, line in enumerate(f.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
-        if PATTERN.search(line):
+        if PATTERN.search(POSITIONAL.sub("", line)) and ALLOW not in line:
             bad.append(f"{f}:{n}: temporal wording: {line.strip()[:120]}")
         if VERSION.search(line) and str(f) not in VERSION_HOMES:
             bad.append(f"{f}:{n}: version string outside its single home: {line.strip()[:120]}")
