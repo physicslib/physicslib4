@@ -355,7 +355,7 @@ The following design notes attach to \ref{lmm:quasilocal-completion-cstar} but a
 
 The completeness hypothesis is hidden in the word ``C*-algebra'' and is essential: a $*$-algebra can carry more than one C*-norm, so what could be unique is only the \emph{complete} one. The counterexample is the group $*$-algebra $\mathbb{C}[F_2]$ of the free group on two generators, which carries the distinct full and reduced C*-norms, neither of them complete.
 
-This is the Bratteli--Robinson 2.2.6 material that Chapter 6.2 discusses informally. Uniqueness is not a mere technicality there: it is what would make the quasilocal algebra well defined \emph{up to isomorphism} rather than merely existing, since without it the completion could depend on a choice of norm and different choices could give non-isomorphic C*-algebras. What \ref{lmm:quasilocal-completion-cstar} establishes is existence; uniqueness up to isomorphism is the unclaimed statement discussed above.
+This is the Bratteli--Robinson 2.2.6 material that Section~\ref{sctn:completion-of-the-set-theoretic-union} discusses informally. Uniqueness is not a mere technicality there: it is what would make the quasilocal algebra well defined \emph{up to isomorphism} rather than merely existing, since without it the completion could depend on a choice of norm and different choices could give non-isomorphic C*-algebras. What \ref{lmm:quasilocal-completion-cstar} establishes is existence; uniqueness up to isomorphism is the unclaimed statement discussed above.
 
 \emph{Design note: the quasilocal algebra is constructed, by colimit then completion.} The project constructs the quasilocal algebra \emph{from the net alone} --- the directed colimit of the local C*-algebras along the isotony family, followed by completion --- which is exactly the chain running from \ref{def:completion-standing-hypotheses} through \ref{lmm:quasilocal-completion-cstar}. The reason is physical, as the next paragraphs explain.
 
@@ -449,11 +449,13 @@ The next axiom makes use of the following new definition:
 
 \begin{definition}[Quasilocal Observable]
     \label{def:quasilocal-observable}
-    \lean{Physicslib4.AQFT.HaagKastler.IsQuasilocalObservable}
+    \lean{Physicslib4.AQFT.HaagKastler.IsQuasilocalObservable, Physicslib4.AQFT.HaagKastler.exists_isQuasilocalObservable}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalObservable.lean}
     \leanok
     \uses{def:quasilocal-algebra, thrm:gns-construction-theorem, def:state}
     The image $\pi_\omega(a)$ of a self-adjoint member $a$ of the quasilocal algebra $\mathfrak{U}$ under a GNS *-homomorphism $\pi_\omega$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{quasilocal observable}.
+
+    The existence content of this definition is \texttt{exists\_isQuasilocalObservable}: for every state $\omega$ on $\mathfrak{U}$ and every self-adjoint $a \in \mathfrak{U}$, the GNS construction (\ref{thrm:gns-construction-theorem}) supplies a Hilbert space $H$ and a $*$-representation $\pi$ of $\mathfrak{U}$ on $H$ in which $\pi(a)$ is a quasilocal observable and is self-adjoint.
 \end{definition}
 
 \begin{definition}[Axiom 4: Quasilocal Completeness]
@@ -712,7 +714,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
     Unitality is the hypothesis that does the work and it is stated directly rather than derived from a stronger one. It is essential, not decorative: for the zero representation $\pi = 0$ on a nonzero $H$ the image $\pi(\mathfrak{U}) = \{0\}$ is already strongly closed while $\pi(\mathfrak{U})'' = \mathbb{C}\cdot 1$, so density fails outright. The case of interest here is the GNS representation $\pi_\omega$ attached to a state $\omega$ (\ref{def:state}, \ref{thrm:gns-construction-theorem}), which is unital because $\mathfrak{U}$ is a unital C*-algebra and $\omega$ a state; but the theorem holds for any unital $*$-representation, and stating it for the GNS one only would be assuming more than the density theorem needs. Below, $\pi_\omega$ is written wherever the GNS case is the one being discussed.
 
-    \emph{Its role: this is what makes the bridge principle tenable.} The observables of a region are read off from the local von Neumann algebra $R(\mathbf{B}) = \pi_\omega(\mathfrak{U}(\mathbf{B}))''$ of \ref{def:local-von-neumann}, and a bicommutant is in general strictly larger than the image it is formed from. The statement above is about the global bicommutant $\pi_\omega(\mathfrak{U})''$, and it covers the local ones because $\pi_\omega(\mathfrak{U}(\mathbf{B})) \subseteq \pi_\omega(\mathfrak{U})$ and taking commutants reverses inclusions twice over, so $R(\mathbf{B}) \subseteq \pi_\omega(\mathfrak{U})''$ for every $\mathbf{B}$. Taken naively, the strictness looks like a refutation of Axiom 4 (\ref{def:quasilocal-completeness}): the bicommutant would contain self-adjoint operators that are not quasilocal observables, hence physical observables outside the quasilocal ones. This node is what blocks that reading. Every element of the bicommutant is approximated in the strong topology by elements of $\pi_\omega(\mathfrak{U})$, and strong convergence \emph{implies} convergence of all the expectation values $\langle \psi, T \psi \rangle$ that a measurement can return --- the implication runs this way and not the other, since the strong topology is strictly finer than the weak one in which those expectation values converge --- so no measurement of finite precision can distinguish an element of the bicommutant from a quasilocal observable close to it. The extra elements are therefore not new measurable quantities, and their existence does not falsify the identification of physical observables with quasilocal ones; it refines it. This is the content that Chapter 6.3 argues informally, citing Murphy Lemma 4.1.4: a unital $*$-subalgebra of $\mathcal{B}(H)$ containing the identity is strongly dense in its bicommutant.
+    \emph{Its role: this is what makes the bridge principle tenable.} The observables of a region are read off from the local von Neumann algebra $R(\mathbf{B}) = \pi_\omega(\mathfrak{U}(\mathbf{B}))''$ of \ref{def:local-von-neumann}, and a bicommutant is in general strictly larger than the image it is formed from. The statement above is about the global bicommutant $\pi_\omega(\mathfrak{U})''$, and it covers the local ones because $\pi_\omega(\mathfrak{U}(\mathbf{B})) \subseteq \pi_\omega(\mathfrak{U})$ and taking commutants reverses inclusions twice over, so $R(\mathbf{B}) \subseteq \pi_\omega(\mathfrak{U})''$ for every $\mathbf{B}$. Taken naively, the strictness looks like a refutation of Axiom 4 (\ref{def:quasilocal-completeness}): the bicommutant would contain self-adjoint operators that are not quasilocal observables, hence physical observables outside the quasilocal ones. This node is what blocks that reading. Every element of the bicommutant is approximated in the strong topology by elements of $\pi_\omega(\mathfrak{U})$, and strong convergence \emph{implies} convergence of all the expectation values $\langle \psi, T \psi \rangle$ that a measurement can return --- the implication runs this way and not the other, since the strong topology is strictly finer than the weak one in which those expectation values converge --- so no measurement of finite precision can distinguish an element of the bicommutant from a quasilocal observable close to it. The extra elements are therefore not new measurable quantities, and their existence does not falsify the identification of physical observables with quasilocal ones; it refines it. This is the content that Section~\ref{sctn:all-observables-of-interest} argues informally, citing Murphy Lemma 4.1.4: a unital $*$-subalgebra of $\mathcal{B}(H)$ containing the identity is strongly dense in its bicommutant.
 
     One refinement of the argument is worth recording, since it is easy to overstate. The approximants furnished by the density theorem are elements of $\pi_\omega(\mathfrak{U})$, but they are not guaranteed to be \emph{self-adjoint}, so the reading ``every self-adjoint element of the bicommutant is a strong limit of self-adjoint quasilocal observables'' is a strictly stronger claim than the one asserted here. That stronger claim is the Kaplansky density theorem, which additionally preserves self-adjointness and norm bounds. Nothing in the tenability argument above needs it --- indistinguishability by expectation values only requires approximants at all --- but it is the result to invoke if the self-adjoint form is ever wanted.
 \end{theorem}
@@ -1174,11 +1176,11 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
 
 \begin{theorem}[An Irreducible Representation Generates a Factor]
     \label{thrm:irreducible-factor}
-    \lean{Physicslib4.GNS.center_gnsVonNeumann_eq_of_isIrreducible}
+    \lean{Physicslib4.GNS.center_gnsVonNeumann_eq_of_isIrreducible, Physicslib4.GNS.isFactor_gnsVonNeumann_of_isIrreducible}
     \leanfile{Physicslib4/GNS/Irreducibility.lean}
     \uses{def:irreducible-representation, def:local-von-neumann}
     \leanok
-    The von Neumann algebra $\pi(A)''$ generated by an irreducible representation has \emph{trivial center}: an operator lies in the center $\pi(A)'' \cap (\pi(A)'')'$ if and only if it is a scalar multiple of the identity.
+    The von Neumann algebra $\pi(A)''$ generated by an irreducible representation has \emph{trivial center}: an operator lies in the center $\pi(A)'' \cap (\pi(A)'')'$ if and only if it is a scalar multiple of the identity. In the factor vocabulary this says that $\pi(A)''$ is a \emph{factor}, a von Neumann algebra whose center is exactly the scalars; that restatement is \texttt{isFactor\_gnsVonNeumann\_of\_isIrreducible}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1882,16 +1884,48 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{theorem}[GNS Unitary Implementation of an Invariant State]
     \label{thrm:invariant-state-gns-unitary}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitary}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitary, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep}
     \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:invariant-state, thrm:gns-construction-theorem}
     \leanok
     For an invariant state $\omega$, the covariance action is implemented on the GNS Hilbert space by a family of unitaries $U(L)$ satisfying $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\,\Omega$ and $U(L)\Omega = \Omega$.
+
+    The Lean form is stronger: $U$ is a unitary representation of the inhomogeneous Lorentz group, $U(L'L) = U(L')\,U(L)$ and $U(1) = \mathrm{id}$, it satisfies operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$, and $\Omega$ is cyclic for $\pi$. The bundled form \texttt{exists\_gns\_unitaryRep} packages $U$ as a group homomorphism from the inhomogeneous Lorentz group into the unitary group of $H$, with the same reproduction, implementation, invariance, covariance and cyclicity clauses.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:invariant-state, lmm:quasilocal-action-coherence}
-    The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space.
+    The unitaries are obtained by extending the densely-defined isometry $\pi(a)\Omega \mapsto \pi(\beta_L a)\Omega$ - isometric because $\omega$ preserves the GNS inner product $\langle \pi(a)\Omega, \pi(b)\Omega\rangle = \omega(a^* b)$ - to the whole GNS space. The group laws and operator covariance follow from the coherence of the covariance action (\ref{lmm:quasilocal-action-coherence}).
+\end{proof}
+
+\begin{lemma}[Weak Continuity Implies Strong Continuity]
+    \label{lmm:weak-continuity-implies-strong}
+    \lean{Physicslib4.strongContinuous_of_weak}
+    \uses{def:unitary-operator}
+    \leanok
+    Let $X$ be a topological space, $H$ a complex inner product space, and $x \mapsto U(x)$ a family of unitary operators on $H$ (\ref{def:unitary-operator}) indexed by $X$. Suppose $D \subseteq H$ is dense and the matrix coefficients $x \mapsto \langle \xi, U(x)\eta \rangle$ are continuous for all $\xi, \eta \in D$. Then $x \mapsto U(x)\psi$ is continuous for every $\psi \in H$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:unitary-operator}
+    Since $\|U(x)\eta\| = \|\eta\|$, the bound $|\langle \xi - \xi', U(x)\eta\rangle| \le \|\xi - \xi'\|\,\|\eta\|$ is uniform in $x$, so approximating $\xi \in H$ by $\xi' \in D$ shows that $x \mapsto \langle \xi, U(x)\eta\rangle$ is continuous for every $\xi \in H$ and $\eta \in D$. For $\eta \in D$ and $x_0 \in X$,
+    \begin{align}
+        \|U(x)\eta - U(x_0)\eta\|^2 = 2\|\eta\|^2 - 2\,\mathrm{Re}\,\langle U(x_0)\eta, U(x)\eta\rangle,
+    \end{align}
+    which tends to $0$ as $x \to x_0$ by the previous step with $\xi = U(x_0)\eta$; so $x \mapsto U(x)\eta$ is continuous. Finally, for $\psi \in H$ and $\eta \in D$, $\|U(x)\psi - U(x)\eta\| = \|\psi - \eta\|$ for every $x$, so $x \mapsto U(x)\psi$ is a uniform limit of continuous maps, hence continuous.
+\end{proof}
+
+\begin{theorem}[Strongly Continuous GNS Unitary of an Invariant State]
+    \label{thrm:invariant-state-gns-unitary-strongly-continuous}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitary_strongContinuous, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep_strongContinuous}
+    \uses{thrm:invariant-state-gns-unitary, def:inhomogeneous-lorentz-group}
+    \leanok
+    Equip the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}) with the topology induced by the embedding $(L, a) \mapsto (L, L^{-1}, a)$ into the product of the operator-norm topology on linear maps of $\mathbb{R}^4$ (twice) and $\mathbb{R}^4$. Let $\omega$ be an invariant state whose matrix coefficients $L \mapsto \omega(a^* \beta_L b)$ are continuous for all $a, b \in \mathfrak{U}$. Then the GNS unitary representation of \ref{thrm:invariant-state-gns-unitary} can be chosen \emph{strongly continuous}: there is a GNS triple $(H, \pi, \Omega)$ and unitaries $U(L)$ with $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\Omega$, $U(L)\Omega = \Omega$, $U(L'L) = U(L')\,U(L)$, $U(1) = \mathrm{id}$, $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$, and $L \mapsto U(L)\psi$ continuous for every $\psi \in H$. The bundled form \texttt{exists\_gns\_unitaryRep\_strongContinuous} returns $U$ as a group homomorphism into the unitary group of $H$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thrm:invariant-state-gns-unitary, lmm:weak-continuity-implies-strong, def:invariant-state, def:cyclic-vector}
+    Take the GNS triple and the unitaries of \ref{thrm:invariant-state-gns-unitary}. The vectors $\pi(a)\Omega$ are dense because $\Omega$ is cyclic, and on them the matrix coefficients are $\langle \pi(a)\Omega, U(L)\pi(b)\Omega\rangle = \langle \pi(a)\Omega, \pi(\beta_L b)\Omega\rangle = \omega(a^* \beta_L b)$, continuous in $L$ by hypothesis. Lemma~\ref{lmm:weak-continuity-implies-strong} with $D = \{\pi(a)\Omega : a \in \mathfrak{U}\}$ gives strong continuity.
 \end{proof}
 
 Combining invariance with purity makes the GNS representation both covariant and irreducible. We emphasise that this is a \emph{precursor} to a vacuum representation, not a vacuum itself: a genuine vacuum additionally requires the spectrum condition (positivity of the energy-momentum spectrum), which is not imposed at this point. It is expressed below through the positive-energy condition \ref{def:positive-energy}, imposed on the translation subgroups in the definition of a vacuum state \ref{def:vacuum-state}.
@@ -1933,7 +1967,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[Uniqueness of the Generator]
     \label{lmm:exp-generator-unique}
-    \lean{Physicslib4.AQFT.generator_eq_of_eq_expUnitary, Physicslib4.AQFT.exp_generator_unique}
+    \lean{Physicslib4.AQFT.generator_eq_of_eq_expUnitary}
     \uses{def:hall-10.13, def:exp-unitary-group, def:hall-9.5}
     \leanok
     Let $V(t)$, $t \in \mathbb{R}$, be a family of unitary operators on $H$, and let $B$ be a self-adjoint operator with $V(t) = e^{itB}$ (\ref{def:exp-unitary-group}) for all $t$. Then $B$ is the infinitesimal generator of $V$, with equality of domains. In particular the positive operator witnessing positive energy is unique.

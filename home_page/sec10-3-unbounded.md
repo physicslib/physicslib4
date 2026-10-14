@@ -1,5 +1,5 @@
 ---
-title: "§10.3 Unbounded Spectral Theorems (pp. 155–235)"
+title: "§10.3 Unbounded Spectral Theorems (pp. 156–236)"
 usemathjax: true
 ---
 
@@ -7,25 +7,25 @@ usemathjax: true
 
 ← [§10.2 Spectral](sec10-2-spectral.html) · [§10.4 Stone](sec10-4-stone.html) →
 
-# §10.3 Unbounded Spectral Theorems (pp. 155–235)
+# §10.3 Unbounded Spectral Theorems (pp. 156–236)
 
 123 declarations (items 164–288, together with Conventions 213 and 260), extending §10.2 to the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 285) and the functional calculus it supplies. The blueprint motivates this with the few genuinely unbounded self-adjoint operators that arise in AQFT, the momentum operator being the standard example. The section reuses §10.2 without restating it, follows the same Hall presentation, and builds up unbounded operators from scratch. Its single subsection, §10.3.1 Spectral Theorem: Unbounded Self-Adjoint Operators (p. 156), proceeds in six stages.
 
-- *Unbounded operators (pp. 156–181, items 164–212).* Unbounded operators (Definition 164), their adjoints (Definition 168, Propositions 169–170, Lemma 171), symmetric operators, extensions and self-adjointness (Definitions 172–173 and 175, Proposition 174), positive operators, with positivity agreeing with the bounded notion (Definition 176, Lemma 177), and closed and closable operators via the graph in $$\mathbf{H} \times \mathbf{H}$$ (Definitions 178 and 181, Proposition 182), with the closure of a symmetric operator symmetric (Lemma 183) and essential self-adjointness defined (Definition 184). Elementary properties follow: symmetric operators are closable (Proposition 186), the adjoint of a closure (Proposition 187), uniqueness of the self-adjoint extension of an essentially self-adjoint operator (Proposition 190), and kernel and range, with the orthogonal complement of the range equal to the kernel of the adjoint (Definitions 191–192, Proposition 195). Next come the resolvent set and spectrum of an unbounded operator (Definition 199), which agree with the bounded notions (Lemma 201) and are real for self-adjoint operators (Theorem 203). The layer closes with criteria for essential self-adjointness: dense range (Theorem 204), and, through Hilbert direct sums and internal orthogonal decompositions (Definitions 205, 207 and 208, Lemmas 206 and 210), direct sums of bounded self-adjoint operators (Propositions 211–212).
-- *Integration against a projection-valued measure (p. 181, items 213–240).* Under standing hypotheses (Convention 213), and with sesquilinear and quadratic forms on subspaces (Definitions 216–217) and the needed measure theory (Theorems 220–221, Propositions 222–226, Definition 224), the integral of an unbounded measurable function against a projection-valued measure is constructed on its natural domain (Propositions 232 and 234). It coincides with the bounded integral of §10.2 (Proposition 235), ignores null sets (Lemma 236), is the limit of its truncations (Lemma 237), and is self-adjoint for real-valued functions (Proposition 240).
-- *Bounded normal operators (p. 199, items 241–259).* For normal operators (Definition 241) the norm equals the spectral radius (Proposition 246). Spectral subspaces (Definition 247, Propositions 248–249) and almost eigenvectors (Definition 251, Lemmas 250 and 252–256) lead to the two-variable spectral mapping theorem for polynomials in $$A$$ and $$A^*$$ (Theorem 257, Corollary 258), and hence to the continuous functional calculus for a normal operator (Theorem 259). Lemma 253 is stated with a constant uniform over all eigenvalues $$\lvert \lambda \rvert \le R$$, which is what the proof of Theorem 257 consumes; the Lean proof of Theorem 257 itself takes a shorter route through Mathlib's continuous functional calculus (`cfc_map_spectrum`), as a formalization note in the blueprint records, while the almost-eigenvector lemmas are formalised in their own right.
-- *From a continuous functional calculus to a projection-valued measure (p. 213, items 260–274).* Under standing hypotheses (Convention 260), an abstract continuous functional calculus (Definition 261) is extended, through its associated measures (Definition 263), to bounded measurable functions (Definition 266). The extension is linear, multiplicative and compatible with conjugation (Lemmas 267 and 271, Proposition 270), and it yields a projection-valued measure (Theorem 272). Combined with the previous stage, this gives the Spectral Theorem for Bounded Normal Operators (Theorem 274).
-- *The Cayley transform and the unbounded spectral theorem (pp. 222–231, items 275–285).* Unitary operators are normal, with spectrum on the unit circle (Lemmas 275–276). The Cayley map (Lemma 277) and the Cayley transform of a self-adjoint operator (Theorem 278), with its spectral mapping (Lemma 279), reduce the unbounded self-adjoint case to the bounded normal one: a projection-valued measure is transported along a Borel bijection (Lemma 281), the Cayley transform omits the point $$1$$ (Lemma 282), and the spectral measure is transported through the Cayley transform (Theorem 284). The result is the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 285).
-- *The functional calculus of an unbounded self-adjoint operator (p. 234, items 286–288).* These items supply what §10.4 needs. The spectral measure of a self-adjoint operator is named (Definition 286), the functional calculus $$f(A)$$ is the integral of $$f$$ against it (Definition 287), and for bounded $$f$$ it agrees with the bounded calculus of §10.2 (Lemma 288). Earlier in the section, a self-adjoint operator is shown to have no proper symmetric extension (Lemma 189), which §10.4 uses to identify the generator of $$e^{itA}$$ with $$A$$.
+- *Unbounded operators (pp. 157–181, items 164–212).* Unbounded operators (Definition 164), their adjoints (Definition 168, Propositions 169–170, Lemma 171), symmetric operators, extensions and self-adjointness (Definitions 172–173 and 175, Proposition 174), positive operators, with positivity agreeing with the bounded notion (Definition 176, Lemma 177), and closed and closable operators via the graph in $$\mathbf{H} \times \mathbf{H}$$ (Definitions 178 and 181, Proposition 182), with the closure of a symmetric operator symmetric (Lemma 183) and essential self-adjointness defined (Definition 184). Elementary properties follow: symmetric operators are closable (Proposition 186), the adjoint of a closure (Proposition 187), uniqueness of the self-adjoint extension of an essentially self-adjoint operator (Proposition 190), and kernel and range, with the orthogonal complement of the range equal to the kernel of the adjoint (Definitions 191–192, Proposition 195). Next come the resolvent set and spectrum of an unbounded operator (Definition 199), which agree with the bounded notions (Lemma 201) and are real for self-adjoint operators (Theorem 203). The layer closes with criteria for essential self-adjointness: dense range (Theorem 204), and, through Hilbert direct sums and internal orthogonal decompositions (Definitions 205, 207 and 208, Lemmas 206 and 210), direct sums of bounded self-adjoint operators (Propositions 211–212).
+- *Integration against a projection-valued measure (p. 182, items 213–240).* Under standing hypotheses (Convention 213), and with sesquilinear and quadratic forms on subspaces (Definitions 216–217) and the needed measure theory (Theorems 220–221, Propositions 222–226, Definition 224), the integral of an unbounded measurable function against a projection-valued measure is constructed on its natural domain (Propositions 232 and 234). It coincides with the bounded integral of §10.2 (Proposition 235), ignores null sets (Lemma 236), is the limit of its truncations (Lemma 237), and is self-adjoint for real-valued functions (Proposition 240).
+- *Bounded normal operators (p. 201, items 241–259).* For normal operators (Definition 241) the norm equals the spectral radius (Proposition 246). Spectral subspaces (Definition 247, Propositions 248–249) and almost eigenvectors (Definition 251, Lemmas 250 and 252–256) lead to the two-variable spectral mapping theorem for polynomials in $$A$$ and $$A^*$$ (Theorem 257, Corollary 258), and hence to the continuous functional calculus for a normal operator (Theorem 259). Lemma 253 is stated with a constant uniform over all eigenvalues $$\lvert \lambda \rvert \le R$$, which is what the proof of Theorem 257 consumes; the Lean proof of Theorem 257 itself takes a shorter route through Mathlib's continuous functional calculus (`cfc_map_spectrum`), as a formalization note in the blueprint records, while the almost-eigenvector lemmas are formalised in their own right.
+- *From a continuous functional calculus to a projection-valued measure (p. 215, items 260–274).* Under standing hypotheses (Convention 260), an abstract continuous functional calculus (Definition 261) is extended, through its associated measures (Definition 263), to bounded measurable functions (Definition 266). The extension is linear, multiplicative and compatible with conjugation (Lemmas 267 and 271, Proposition 270), and it yields a projection-valued measure (Theorem 272). Combined with the previous stage, this gives the Spectral Theorem for Bounded Normal Operators (Theorem 274).
+- *The Cayley transform and the unbounded spectral theorem (pp. 223–232, items 275–285).* Unitary operators are normal, with spectrum on the unit circle (Lemmas 275–276). The Cayley map (Lemma 277) and the Cayley transform of a self-adjoint operator (Theorem 278), with its spectral mapping (Lemma 279), reduce the unbounded self-adjoint case to the bounded normal one: a projection-valued measure is transported along a Borel bijection (Lemma 281), the Cayley transform omits the point $$1$$ (Lemma 282), and the spectral measure is transported through the Cayley transform (Theorem 284). The result is the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 285).
+- *The functional calculus of an unbounded self-adjoint operator (p. 235, items 286–288).* These items supply what §10.4 needs. The spectral measure of a self-adjoint operator is named (Definition 286), the functional calculus $$f(A)$$ is the integral of $$f$$ against it (Definition 287), and for bounded $$f$$ it agrees with the bounded calculus of §10.2 (Lemma 288). Earlier in the section, a self-adjoint operator is shown to have no proper symmetric extension (Lemma 189), which §10.4 uses to identify the generator of $$e^{itA}$$ with $$A$$.
 
-**Where the Lean lives:** `Physicslib4/Spectral/Unbounded/` (`Basic`, `Spectrum`, `DirectSum`, `Integral`, `Normal`, `AbstractCalculus`, `Cayley`)
+**Where the Lean lives:** `Physicslib4/Spectral/Unbounded/` (`Basic`, `Spectrum`, `DirectSum`, `Integral`, `Normal`, `AbstractCalculus`, `Cayley`, `FunctionalCalculus`)
 
 ## Items
 
 Each blueprint subsection below is collapsed; click a heading to see its items. Every entry links to its node in the web blueprint and names the principal Lean declaration.
 
 <details markdown="1">
-<summary>§10.3.1 · Unbounded Operators › Adjoint and Closure of an Unbounded Operator (p. 156) — 21 items</summary>
+<summary>§10.3.1 · Unbounded Operators › Adjoint and Closure of an Unbounded Operator (p. 157) — 21 items</summary>
 
 - [**Definition 164**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-3.1) — Unbounded Operator · `LinearPMap` (+1 more)
 - [**Proposition 165**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:convergence-facts) — Convergence Facts for Sequences and Series · `tendsto_atTop_ciSup` (+6 more)
@@ -52,7 +52,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · Unbounded Operators › Elementary Properties of Adjoints and Closed Operators (p. 164) — 14 items</summary>
+<summary>§10.3.1 · Unbounded Operators › Elementary Properties of Adjoints and Closed Operators (p. 165) — 14 items</summary>
 
 - [**Definition 185**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:closed-linear-map-on-a-subspace) — Closed Linear Map on a Subspace · `LinearPMap.IsClosed` (+1 more)
 - [**Proposition 186**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.8) — Closed Graph of the Adjoint; Closability of Symmetric Operators · `Physicslib4.Spectral.Unbounded.isClosable_of_isSymmetric` (+1 more)
@@ -72,7 +72,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · Unbounded Operators › The Spectrum of an Unbounded Operator (p. 170) — 5 items</summary>
+<summary>§10.3.1 · Unbounded Operators › The Spectrum of an Unbounded Operator (p. 171) — 5 items</summary>
 
 - [**Definition 199**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.16) — Resolvent Set and Spectrum of an Unbounded Operator · `Physicslib4.Spectral.Unbounded.pmapResolventSet` (+2 more)
 - [**Lemma 200**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:uniqueness-of-resolvent) — Uniqueness of the Resolvent · `Physicslib4.Spectral.Unbounded.existsUnique_isResolvent`
@@ -83,7 +83,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · Unbounded Operators › Conditions for Self-Adjointness and Essential Self-Adjointness (p. 173) — 9 items</summary>
+<summary>§10.3.1 · Unbounded Operators › Conditions for Self-Adjointness and Essential Self-Adjointness (p. 174) — 9 items</summary>
 
 - [**Theorem 204**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-9.21) — Essential Self-Adjointness via Dense Range · `Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_iff_dense_range`
 - [**Definition 205**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-a.45) — Hilbert Space Direct Sum · `lp` (+1 more)
@@ -98,7 +98,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · Integration Against a Projection-Valued Measure (p. 181) — 28 items</summary>
+<summary>§10.3.1 · Integration Against a Projection-Valued Measure (p. 182) — 28 items</summary>
 
 - [**Convention 213**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#conv:section-integration) — Standing Hypotheses: Integration against a Projection-Valued Measure *(a standing convention, not a declaration; it carries no Lean annotation)*
 - [**Lemma 214**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:associated-measure-total-mass) — The Associated Measure has Total Mass $$\left\| \psi \right\|^2$$ · `Physicslib4.Spectral.Unbounded.assoc_univ_eq` (+1 more)
@@ -132,7 +132,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators (p. 199) — 6 items</summary>
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators (p. 201) — 6 items</summary>
 
 - [**Definition 241**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.19) — Normal Operator · `IsStarNormal`
 - [**Lemma 242**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:self-adjoint-is-normal) — Bounded Self-Adjoint Operators are Normal · `IsSelfAdjoint.isStarNormal`
@@ -144,7 +144,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › Spectral Subspaces (p. 203) — 3 items</summary>
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › Spectral Subspaces (p. 204) — 3 items</summary>
 
 - [**Definition 247**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-7.14) — Spectral Subspaces · `Physicslib4.Spectral.Unbounded.spectralSubspace`
 - [**Proposition 248**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.15) — Properties of Spectral Subspaces · `Physicslib4.Spectral.Unbounded.pvmOperator` (+3 more)
@@ -153,7 +153,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › Almost Eigenvectors (p. 206) — 7 items</summary>
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › Almost Eigenvectors (p. 208) — 7 items</summary>
 
 - [**Lemma 250**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:normality-balances-norms) — Normality Balances the Two Norms · `Physicslib4.Spectral.Unbounded.norm_adjoint_sub_smul_apply`
 - [**Definition 251**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.24) — $$\varepsilon$$-Almost Eigenvector · `Physicslib4.Spectral.Unbounded.IsAlmostEigenvector`
@@ -166,7 +166,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Two-Variable Spectral Mapping Theorem (p. 211) — 2 items</summary>
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Two-Variable Spectral Mapping Theorem (p. 212) — 2 items</summary>
 
 - [**Theorem 257**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.23) — Spectral Mapping for Polynomials in $$A$$ and $$A^*$$ · `Physicslib4.Spectral.Unbounded.spectrum_mvApply`
 - [**Corollary 258**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:norm-of-polynomial-in-a-astar) — Norm of a Polynomial in $$A$$ and $$A^*$$ · `Physicslib4.Spectral.Unbounded.norm_mvApply`
@@ -174,14 +174,14 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Continuous Functional Calculus for a Normal Operator (p. 212) — 1 item</summary>
+<summary>§10.3.1 · The Spectral Theorem for Bounded Normal Operators › The Continuous Functional Calculus for a Normal Operator (p. 213) — 1 item</summary>
 
 - [**Theorem 259**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:continuous-functional-calculus-normal) — Continuous Functional Calculus for a Normal Operator · `Physicslib4.Spectral.Unbounded.mvPolyOn` (+9 more)
 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · From a Continuous Functional Calculus to a Projection-Valued Measure (p. 213) — 14 items</summary>
+<summary>§10.3.1 · From a Continuous Functional Calculus to a Projection-Valued Measure (p. 215) — 14 items</summary>
 
 - [**Convention 260**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#conv:section-abstract) — Standing Hypotheses: The Abstract Functional Calculus *(a standing convention, not a declaration; it carries no Lean annotation)*
 - [**Definition 261**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-continuous-functional-calculus) — Abstract Continuous Functional Calculus · `Physicslib4.Spectral.Unbounded.IsAbstractCalculus`
@@ -201,14 +201,14 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · From a Continuous Functional Calculus to a Projection-Valued Measure › The Spectral Theorem for Bounded Normal Operators (p. 220) — 1 item</summary>
+<summary>§10.3.1 · From a Continuous Functional Calculus to a Projection-Valued Measure › The Spectral Theorem for Bounded Normal Operators (p. 222) — 1 item</summary>
 
 - [**Theorem 274**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.20) — Spectral Theorem for Bounded Normal Operators · `Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_normal` (+1 more)
 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · The Cayley Transform (p. 222) — 5 items</summary>
+<summary>§10.3.1 · The Cayley Transform (p. 223) — 5 items</summary>
 
 - [**Lemma 275**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-is-normal) — Unitary Operators are Normal · `Physicslib4.Spectral.Unbounded.unitary_mul_adjoint`
 - [**Lemma 276**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-spectrum-circle) — The Spectrum of a Unitary Operator Lies on the Unit Circle · `spectrum.subset_circle_of_unitary` (+1 more)
@@ -219,7 +219,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.3.1 · Proof of the Spectral Theorem for Unbounded Self-Adjoint Operators (p. 226) — 9 items</summary>
+<summary>§10.3.1 · Proof of the Spectral Theorem for Unbounded Self-Adjoint Operators (p. 227) — 9 items</summary>
 
 - [**Theorem 280**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:change-of-variables) — Change of Variables for a Pushforward Measure · `MeasureTheory.lintegral_map_equiv` (+1 more)
 - [**Lemma 281**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:borel-bijection-transports-pvm) — A Borel Bijection Transports a Projection-Valued Measure · `Physicslib4.Spectral.Unbounded.restrictPVM` (+2 more)

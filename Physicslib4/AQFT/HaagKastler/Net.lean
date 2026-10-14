@@ -338,11 +338,15 @@ noncomputable def trivialQuasilocalAlgebra :
       ⟨trivialBasisSet, isAlexandrovBasisSet_trivialBasisSet, x, rfl⟩)
   ι_inclusion := fun _ _ _ _ _ _ => rfl
 
+/-- The trivial local net satisfies Axiom 3 (local commutativity), since `ℂ` is
+commutative. -/
 theorem trivialLocalNet_localCommutativity :
     LocalCommutativity trivialLocalNet trivialLocalNetIsotony := by
   intro B₁ B₂ B hB₁ hB₂ hB _ h₁ h₂ a b
   exact @mul_comm ℂ _ _ _
 
+/-- The trivial local net satisfies Axiom 5 (Lorentz covariance), realized by the
+identity automorphism of `ℂ` at every basis set. -/
 theorem trivialLocalNet_lorentzCovariance :
     LorentzCovariance trivialLocalNet trivialLocalNetIsotony := by
   refine ⟨fun _ _ => StarAlgEquiv.refl ℂ ℂ, ?_, ?_, ?_⟩

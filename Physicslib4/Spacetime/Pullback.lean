@@ -85,6 +85,9 @@ noncomputable def bilinearPrecomp (g : SpacetimeModel →L[ℝ] SpacetimeModel �
     (A : SpacetimeModel →L[ℝ] SpacetimeModel) (v w : SpacetimeModel) :
     bilinearPrecomp g A v w = g (A v) (A w) := rfl
 
+-- Needed because `TangentSpace M.model x` is only semireducibly, not reducibly, defeq to
+-- `SpacetimeModel` (see the note on `bilinearPrecomp` above); the same reason applies at every
+-- other `respectTransparency` option in this file.
 set_option backward.isDefEq.respectTransparency false in
 /--
 **The pullback of a spacetime metric** (`def:pullback-metric`).
@@ -102,6 +105,7 @@ noncomputable def pullbackVal (M : Spacetime) (ψ : Diffeo M M) (x : M.Carrier) 
     TangentSpace M.model x →L[ℝ] TangentSpace M.model x →L[ℝ] ℝ :=
   bilinearPrecomp (M.val (ψ x)) (mfderiv M.model M.model ψ x)
 
+-- See the comment at `pullbackVal` above.
 set_option backward.isDefEq.respectTransparency false in
 @[simp] theorem pullbackVal_apply (M : Spacetime) (ψ : Diffeo M M) (x : M.Carrier)
     (v w : TangentSpace M.model x) :
@@ -109,6 +113,7 @@ set_option backward.isDefEq.respectTransparency false in
       = M.val (ψ x) (mfderiv M.model M.model ψ x v) (mfderiv M.model M.model ψ x w) :=
   rfl
 
+-- See the comment at `pullbackVal` above.
 set_option backward.isDefEq.respectTransparency false in
 /-- **The pullback metric is symmetric** (`lmm:pullback-metric-symm`). -/
 theorem pullbackVal_symm (M : Spacetime) (ψ : Diffeo M M) (x : M.Carrier)
@@ -132,6 +137,7 @@ theorem pullbackVal_nondegenerate (M : Spacetime) (ψ : Diffeo M M) (x : M.Carri
   rw [← mfderivEquiv_coe ψ x] at hnd
   exact (ContinuousLinearEquiv.map_eq_zero_iff (e := mfderivEquiv ψ x)).mp hnd
 
+-- See the comment at `pullbackVal` above.
 set_option backward.isDefEq.respectTransparency false in
 /-- **The pullback metric is Lorentzian** (`lmm:pullback-metric-lorentzian`):
 at every `x` there is a basis of `T_xM` whose Gram matrix under `(ψ^*g)_x` is
@@ -150,6 +156,7 @@ theorem pullbackVal_lorentzian (M : Spacetime) (ψ : Diffeo M M) (x : M.Carrier)
   simpa [Module.Basis.map_apply, mfderiv_eq_mfderivEquiv,
     ContinuousLinearEquiv.apply_symm_apply] using hb i j
 
+-- `respectTransparency`: see the comment at `pullbackVal` above.
 set_option backward.isDefEq.respectTransparency false in
 set_option maxHeartbeats 1000000 in
 -- The final `simp`/`simpa` calls in this proof unfold several layers of
@@ -558,6 +565,7 @@ theorem isFuturePointing_pullback_iff_of_isNull (M : Spacetime) (ψ : Diffeo M M
         exact ((ContinuousLinearMap.continuous di).tendsto
             (mfderiv M.model M.model ψ x v)).comp hutends
 
+-- See the comment at `pullbackVal` above.
 set_option backward.isDefEq.respectTransparency false in
 /--
 **The pullback preserves the future orientation two-sidedly**

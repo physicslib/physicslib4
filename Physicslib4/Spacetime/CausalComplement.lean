@@ -180,6 +180,8 @@ noncomputable def causalClosure : ClosureOperator (Set M.Carrier) :=
 def IsCausallyComplete (B : Set M.Carrier) : Prop :=
   M.spacelikeComplement (M.spacelikeComplement B) = B
 
+/-- A region is causally complete iff it is a closed element of the `causalClosure`
+closure operator. -/
 theorem isCausallyComplete_iff_isClosed {B : Set M.Carrier} :
     M.IsCausallyComplete B ↔ M.causalClosure.IsClosed B := by
   rw [ClosureOperator.isClosed_iff]
@@ -331,6 +333,8 @@ private theorem coe_iInf {ι : Sort*} (B : ι → M.CausallyCompleteRegion) :
   rw [Set.iInf_eq_iInter] at h'
   exact h'
 
+/-- The causal complement is **antitone**: a larger causally complete region has a
+smaller (or equal) causal complement. -/
 theorem causalComplement_antitone : Antitone M.causalComplement := by
   intro B₁ B₂ h
   rw [← Subtype.coe_le_coe]

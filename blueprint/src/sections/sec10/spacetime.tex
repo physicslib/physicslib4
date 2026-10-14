@@ -103,6 +103,54 @@
     Bilinearity and symmetry give $g(v+w,v+w) = g(v,v) + 2g(v,w) + g(w,w)$. Writing $a = -g(v,v) > 0$, $b = -g(w,w) > 0$ and $c = -g(v,w) \ge 0$, this equals $-(a + b + 2c) < 0$, so $v+w$ is timelike. The reverse Cauchy-Schwarz inequality (\ref{lmm:reverse-cauchy-schwarz}) gives $g(v,w)^2 \ge g(v,v)\,g(w,w)$, that is $c^2 \ge ab$, hence $c \ge \sqrt{ab} = \sqrt a \,\sqrt b$. Therefore $-g(v+w,v+w) = a + b + 2c \ge a + b + 2\sqrt a\,\sqrt b = (\sqrt a + \sqrt b)^2$, and taking square roots yields the reverse triangle inequality.
 \end{proof}
 
+\begin{definition}[Lorentz, Proper and Orthochronous Transformations]
+    \label{def:lorentz-transformation}
+    \lean{Physicslib4.IsLorentz, Physicslib4.IsProper, Physicslib4.IsOrthochronous}
+    \uses{def:standard-minkowski-spacetime}
+    \leanok
+    Let $\eta(v,w) = -v^0 w^0 + v^1 w^1 + v^2 w^2 + v^3 w^3$ be the Minkowski form on $\mathbb{R}^4$ and $e_0 = (1,0,0,0)$. A linear automorphism $L$ of $\mathbb{R}^4$ is
+    \begin{itemize}
+        \item \textit{Lorentz} if $\eta(Lv, Lw) = \eta(v,w)$ for all $v, w$;
+        \item \textit{proper} if $\det L = 1$;
+        \item \textit{orthochronous} if the time component of $L e_0$ is positive, $(L e_0)^0 > 0$.
+    \end{itemize}
+    The proper orthochronous Lorentz group $SO(1,3)^{\uparrow}$ consists of the linear automorphisms with all three properties.
+\end{definition}
+
+\begin{lemma}[Orthochronous Lorentz Transformations Preserve the Future Cone]
+    \label{lmm:orthochronous-preserves-future-timelike}
+    \lean{Physicslib4.isOrthochronous_pos_time_of_timelike}
+    \uses{def:lorentz-transformation}
+    \leanok
+    Let $L$ be an orthochronous Lorentz transformation and let $v \in \mathbb{R}^4$ be timelike, $\eta(v,v) < 0$, with positive time component $v^0 > 0$. Then $(Lv)^0 > 0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:lorentz-transformation}
+    For timelike $x, y$ the spatial parts satisfy $\lvert \mathbf{x}\cdot\mathbf{y}\rvert \le \lVert\mathbf{x}\rVert\,\lVert\mathbf{y}\rVert < \lvert x^0\rvert\,\lvert y^0\rvert$ by the Cauchy-Schwarz inequality on $\mathbb{R}^3$, so $\eta(x,y) = -x^0 y^0 + \mathbf{x}\cdot\mathbf{y} < 0$ forces $x^0 y^0 > 0$. Since $L$ is Lorentz, $Lv$ and $Le_0$ are timelike and $\eta(Lv, Le_0) = \eta(v, e_0) = -v^0 < 0$. Hence $(Lv)^0$ has the sign of $(Le_0)^0$, which is positive because $L$ is orthochronous.
+\end{proof}
+
+\begin{lemma}[Closure of the Lorentz Conditions]
+    \label{lmm:lorentz-closure}
+    \lean{Physicslib4.isLorentz_refl, Physicslib4.isLorentz_trans, Physicslib4.isLorentz_symm, Physicslib4.isProper_refl, Physicslib4.isProper_trans, Physicslib4.isProper_symm, Physicslib4.isOrthochronous_refl, Physicslib4.isOrthochronous_trans, Physicslib4.isOrthochronous_symm}
+    \uses{def:lorentz-transformation}
+    \leanok
+    The identity is Lorentz, proper and orthochronous. Each of the Lorentz and proper conditions is preserved by composition and inversion. If $L_1, L_2$ are orthochronous Lorentz transformations, then $L_2 \circ L_1$ and $L_1^{-1}$ are orthochronous. Hence $SO(1,3)^{\uparrow}$ is a group.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:lorentz-transformation, lmm:orthochronous-preserves-future-timelike}
+    The Lorentz condition composes by rewriting twice, and inverts by applying it to $L^{-1}v, L^{-1}w$. Properness follows from $\det(L_2 L_1) = \det L_2 \det L_1$ and $\det L^{-1} = (\det L)^{-1}$. For composition of orthochronous maps, $L_1 e_0$ is timelike with positive time component, so $(L_2 L_1 e_0)^0 > 0$ by \ref{lmm:orthochronous-preserves-future-timelike}. For the inverse, $u = L^{-1} e_0$ is timelike, so $u^0 \neq 0$; if $u^0 < 0$, then applying \ref{lmm:orthochronous-preserves-future-timelike} to $-u$ gives $(-e_0)^0 > 0$, which is false. Hence $u^0 > 0$.
+\end{proof}
+
+\begin{definition}[Inhomogeneous Lorentz Group]
+    \label{def:inhomogeneous-lorentz-group}
+    \lean{Physicslib4.AQFT.HaagKastler.InhomogeneousLorentzGroup}
+    \uses{def:lorentz-transformation, lmm:lorentz-closure, def:standard-minkowski-spacetime}
+    \leanok
+    The \textit{inhomogeneous Lorentz group} (the identity component of the Poincar\'e group) is the set of pairs $(L, a)$ with $L \in SO(1,3)^{\uparrow}$ and $a \in \mathbb{R}^4$, with product $(L_1, a_1)(L_2, a_2) = (L_1 L_2,\, a_1 + L_1 a_2)$. It acts on standard Minkowski spacetime by the affine maps $(L, a) \cdot x = Lx + a$.
+\end{definition}
+
 \begin{definition}[Time Orientation]
     \label{def:time-orientable}
     \lean{Physicslib4.Spacetime.TimeOrientation, Physicslib4.Spacetime.IsTimeOrientable}
@@ -322,7 +370,7 @@
 \end{proof}
 
 \medskip
-\noindent\textbf{The Levi-Civita connection and geodesics.} The trip definitions below require their curves to be geodesics. The following declarations make ``geodesic'' precise. They are stated for a general pseudo-Riemannian manifold, of which every spacetime is an instance, and they use covariant derivatives in Mathlib's sense (\texttt{IsCovariantDerivativeOn}, \texttt{CovariantDerivative}). No chart appears in any definition; charts and local frames are used only inside proofs.
+\noindent\textbf{The Levi-Civita connection and geodesics.} The trip definitions below require their curves to be geodesics. The following declarations make ``geodesic'' precise. The Levi-Civita connection is stated for a general pseudo-Riemannian manifold, of which every spacetime is an instance; geodesics are defined for spacetimes, whose smooth paths (\ref{def:paths}) they are built on. All of these declarations use covariant derivatives in Mathlib's sense (\texttt{IsCovariantDerivativeOn}, \texttt{CovariantDerivative}). No chart appears in any definition; charts and local frames are used only inside proofs.
 
 \begin{definition}[Pseudo-Riemannian Metric]
     \label{def:pseudo-riemannian-metric}
@@ -473,12 +521,12 @@
     \lean{Physicslib4.Spacetime.SmoothPath.mfderiv_apply_tangent_eq_zero}
     \uses{def:paths}
     \leanok
-    Let $\mu : \Sigma \to M$ be a smooth path, $s \in \Sigma$, and $f : M \to \mathbb{R}$ differentiable at $\mu(s)$ with $f(\mu(t)) = 0$ for all $t \in \Sigma$ in a neighbourhood of $s$. Then $f(\mu(s)) = 0$ and $df_{\mu(s)}\big(\dot\mu(s)\big) = 0$, where $\dot\mu(s)$ is the tangent vector of $\mu$ at $s$ (the within-derivative on $\Sigma$).
+    Let $\mu : \Sigma \to M$ be a smooth path, $s \in \Sigma$, and $f : M \to \mathbb{R}$ differentiable at $\mu(s)$ with $f(\mu(t)) = 0$ for all $t \in \Sigma$ in a neighbourhood of $s$. Then $df_{\mu(s)}\big(\dot\mu(s)\big) = 0$, where $\dot\mu(s)$ is the tangent vector of $\mu$ at $s$ (the within-derivative on $\Sigma$).
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{def:paths, lmm:path-parameter-unique-diff}
-    The first claim is the hypothesis at $t = s$. By the chain rule within $\Sigma$ (\texttt{HasMFDerivAt.comp\_hasMFDerivWithinAt}) the within-derivative of $f \circ \mu$ at $s$ is $df_{\mu(s)} \circ d\mu$, whose value on $1$ is $df_{\mu(s)}(\dot\mu(s))$. On the other hand $f \circ \mu$ is eventually equal to $0$ within $\Sigma$ at $s$, so it also has within-derivative $0$ (\texttt{HasMFDerivWithinAt.congr\_of\_eventuallyEq}). Within-derivatives on $\Sigma$ are unique (\ref{lmm:path-parameter-unique-diff}), so the two agree.
+    By the chain rule within $\Sigma$ (\texttt{HasMFDerivAt.comp\_hasMFDerivWithinAt}) the within-derivative of $f \circ \mu$ at $s$ is $df_{\mu(s)} \circ d\mu$, whose value on $1$ is $df_{\mu(s)}(\dot\mu(s))$. On the other hand $f \circ \mu$ is eventually equal to $0$ within $\Sigma$ at $s$, so it also has within-derivative $0$ (\texttt{HasMFDerivWithinAt.congr\_of\_eventuallyEq}). Within-derivatives on $\Sigma$ are unique (\ref{lmm:path-parameter-unique-diff}), so the two agree.
 \end{proof}
 
 \begin{lemma}[Covariant Derivative Along a Curve is Local]
@@ -536,7 +584,7 @@
     \lean{Physicslib4.Spacetime.IsGeodesic}
     \uses{def:paths, thrm:levi-civita-exists-unique, lmm:covariant-derivative-along-curve-local, lmm:velocity-extends}
     \leanok
-    Let $(M,g)$ be a pseudo-Riemannian manifold (for instance a spacetime) with Levi-Civita connection $\nabla$ (\ref{thrm:levi-civita-exists-unique}). A smooth path $\mu : \Sigma \to M$ is a \textit{geodesic} if for every $s$ in the interior of $\Sigma$ and every smooth vector field $X$ on $M$ with $X(\mu(t)) = \dot\mu(t)$ for all $t$ in a neighbourhood of $s$,
+    Let $(M,g)$ be a spacetime with Levi-Civita connection $\nabla$ (\ref{thrm:levi-civita-exists-unique}). A smooth path $\mu : \Sigma \to M$ is a \textit{geodesic} if for every $s$ in the interior of $\Sigma$ and every smooth vector field $X$ on $M$ with $X(\mu(t)) = \dot\mu(t)$ for all $t$ in a neighbourhood of $s$,
     \begin{align}
         (\nabla_X X)(\mu(s)) = 0.
     \end{align}
@@ -781,6 +829,21 @@
 \begin{proof}
     \leanok
     Each follows directly from the pointwise definition: monotonicity by restricting the universally-quantified points, the empty cases vacuously, and the union cases by splitting the membership disjunction.
+\end{proof}
+
+\medskip
+
+\begin{lemma}[Precedence-Preserving Maps Preserve Spacelike Separation]
+    \label{lmm:precedence-preserving-spacelike}
+    \lean{Physicslib4.Spacetime.isSpacelikeRelated_congr, Physicslib4.Spacetime.isCompletelySpacelike_image}
+    \uses{def:spacelike-related, def:completely-spacelike, def:causal-trip}
+    \leanok
+    Let $M$ be a spacetime with a time orientation and let $\varphi : M \to M$ be any map with $\varphi(p) \prec \varphi(q) \iff p \prec q$ for all $p, q$. Then $\varphi(p_1)$ and $\varphi(p_2)$ are spacelike related if and only if $p_1$ and $p_2$ are, and $\varphi(\mathbf{O}_1)$, $\varphi(\mathbf{O}_2)$ are completely spacelike if and only if $\mathbf{O}_1$, $\mathbf{O}_2$ are.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:spacelike-related, def:completely-spacelike, def:causal-future-and-causal-past}
+    Spacelike relatedness of $p_1, p_2$ says $\lnot(p_1 \prec p_2)$ and $\lnot(p_2 \prec p_1)$, and both conditions are unchanged when $p_i$ is replaced by $\varphi(p_i)$. For the images of regions, every point of $\varphi(\mathbf{O}_i)$ has the form $\varphi(p_i)$ with $p_i \in \mathbf{O}_i$, so the pointwise statement applies.
 \end{proof}
 
 \medskip
@@ -1549,6 +1612,53 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
     \leanok
     \uses{lmm:isometry-preserves-levi-civita, def:geodesic}
     Suppose $\mu$ is a geodesic, let $s$ be an interior point of $\Sigma$, and let $X$ be a smooth vector field with $X(\varphi(\mu(t))) = (\varphi\circ\mu)^{\boldsymbol\cdot}(t) = d\varphi\,\dot\mu(t)$ for $t$ near $s$ (\ref{lmm:pushforward-path}). Then $\varphi^* X$ is smooth, and since $d\varphi$ is invertible, $(\varphi^* X)(\mu(t)) = (d\varphi)^{-1} X(\varphi(\mu(t))) = \dot\mu(t)$ for $t$ near $s$; so $\varphi^* X$ extends $\dot\mu$ near $s$ and the geodesic condition for $\mu$ gives $(\nabla_{\varphi^* X}\varphi^* X)(\mu(s)) = 0$. By naturality (\ref{lmm:isometry-preserves-levi-civita}), $(\nabla_X X)(\varphi(\mu(s))) = d\varphi\big((\nabla_{\varphi^* X}\varphi^* X)(\mu(s))\big) = 0$. The converse is the same argument for the isometry $\varphi^{-1}$ and the path $\varphi \circ \mu$.
+\end{proof}
+
+\begin{definition}[Lorentz Pushforward of a Smooth Path]
+    \label{def:lorentz-path}
+    \lean{Physicslib4.lorentzPath}
+    \uses{def:inhomogeneous-lorentz-group, def:paths, def:time-orientable, lmm:pushforward-path}
+    \leanok
+    For $g = (L, a)$ in the inhomogeneous Lorentz group and a smooth path $\mu : \Sigma \to \mathbb{R}^4$ in standard Minkowski spacetime, the \textit{Lorentz pushforward} of $\mu$ is the smooth path $g\mu : \Sigma \to \mathbb{R}^4$, $s \mapsto L\mu(s) + a$, on the same parameter space. It is the Minkowski instance of the pushforward of a path under an isometry (\ref{lmm:pushforward-path}). The \textit{standard time orientation} of standard Minkowski spacetime (\ref{def:time-orientable}) is the constant vector field $e_0 = \partial_0$.
+\end{definition}
+
+\begin{lemma}[Lorentz Pushforward of Causal Paths]
+    \label{lmm:lorentz-path-causal}
+    \lean{Physicslib4.lorentzPath_mfderivWithin, Physicslib4.lorentzPath_isCausal, Physicslib4.lorentzPath_isFutureOriented, Physicslib4.lorentzPath_isPastEndpoint, Physicslib4.lorentzPath_isFutureEndpoint}
+    \uses{def:lorentz-path, def:timelike-and-causal-smooth-curves, def:future-and-past-oriented-smooth-curves, def:endpoints, def:time-orientable}
+    \leanok
+    Let $g = (L, a)$ be in the inhomogeneous Lorentz group and $\mu$ a smooth path in standard Minkowski spacetime. The tangent of $g\mu$ at $s$ is $L\dot\mu(s)$. If $\mu$ is causal, so is $g\mu$; if $\mu$ is future-oriented with respect to the standard time orientation, so is $g\mu$; and if $p$ (respectively $q$) is the past (respectively future) endpoint of $\mu$, then $g \cdot p$ (respectively $g \cdot q$) is the past (respectively future) endpoint of $g\mu$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:lorentz-path, def:lorentz-transformation, lmm:orthochronous-preserves-future-timelike, lmm:path-parameter-unique-diff}
+    The translation $a$ is constant, so the chain rule for the continuous linear map $L$ (using unique differentials on $\Sigma$) gives the tangent $L\dot\mu(s)$. Since $L$ is Lorentz, $\eta(L\dot\mu, L\dot\mu) = \eta(\dot\mu,\dot\mu)$, so timelike and null tangents stay timelike and null. A future-pointing timelike tangent has positive time component, which $L$ preserves by \ref{lmm:orthochronous-preserves-future-timelike}; a future-pointing null tangent is a limit of future-pointing timelike vectors, and their images under the continuous map $L$ converge to its image. The endpoints are attained at the same parameters, where $g\mu$ takes the values $g \cdot p$ and $g \cdot q$.
+\end{proof}
+
+\begin{theorem}[Lorentz Invariance of Causal Precedence]
+    \label{thrm:causal-precedence-lorentz-invariant}
+    \lean{Physicslib4.causalSegmentPrecedes_smul, Physicslib4.causallyPrecedes_smul, Physicslib4.causallyPrecedes_smul_iff}
+    \uses{def:inhomogeneous-lorentz-group, def:causal-trip, def:time-orientable}
+    \leanok
+    For every $g$ in the inhomogeneous Lorentz group and all points $p, q$ of standard Minkowski spacetime (with its standard time orientation), $g \cdot p \prec g \cdot q$ if and only if $p \prec q$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lmm:lorentz-path-causal, lmm:isometry-preserves-geodesics, def:causal-trip}
+    If $\mu$ is a future-oriented causal geodesic from $p$ to $q$, then $g\mu$ is a future-oriented causal path from $g \cdot p$ to $g \cdot q$ (\ref{lmm:lorentz-path-causal}), and it is a geodesic (\ref{lmm:isometry-preserves-geodesics}). So $g$ maps causal trip segments to causal trip segments, and hence, segment by segment, causal trips to causal trips: $p \prec q$ implies $g \cdot p \prec g \cdot q$. The converse is the same statement for $g^{-1}$.
+\end{proof}
+
+\begin{corollary}[Lorentz Invariance of Spacelike Separation]
+    \label{crllr:spacelike-lorentz-invariant}
+    \lean{Physicslib4.isSpacelikeRelated_smul_iff, Physicslib4.isCompletelySpacelike_smul_iff}
+    \uses{def:inhomogeneous-lorentz-group, def:spacelike-related, def:completely-spacelike, def:time-orientable}
+    \leanok
+    For every $g$ in the inhomogeneous Lorentz group, points $p_1, p_2$ and regions $\mathbf{O}_1, \mathbf{O}_2$ of standard Minkowski spacetime (with its standard time orientation), $g \cdot p_1$ and $g \cdot p_2$ are spacelike related if and only if $p_1$ and $p_2$ are, and $g\mathbf{O}_1$, $g\mathbf{O}_2$ are completely spacelike if and only if $\mathbf{O}_1$, $\mathbf{O}_2$ are.
+\end{corollary}
+\begin{proof}
+    \leanok
+    \uses{lmm:precedence-preserving-spacelike, thrm:causal-precedence-lorentz-invariant}
+    Apply \ref{lmm:precedence-preserving-spacelike} to the map $x \mapsto g \cdot x$, which preserves causal precedence in both directions by \ref{thrm:causal-precedence-lorentz-invariant}.
 \end{proof}
 
 \begin{lemma}[Isometries Preserve Chronology]

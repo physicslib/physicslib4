@@ -34,9 +34,11 @@ here. The positivity condition is stated using the canonical
 partial order on `ℂ` from Mathlib: `0 ≤ z` iff `z.re ≥ 0` and `z.im = 0`.
 
 The blueprint statement of `def:cyclic-vector` only requires `A` to be an
-algebra; here we keep the assumptions general enough to be reusable but
-require the operator-algebra side `H →L[ℂ] H` to make sense, so `H` is a
-complex Hilbert space.
+algebra, but `IsCyclicVector` is declared under this file's ambient
+`variable (A : Type*) [CStarAlgebra A]`, so in Lean `A` is a unital C*-algebra
+(matching every call site in the project). The generality kept here is on the
+`H` side: `H` is required only to be a complex Hilbert space, not fixed to the
+GNS space of a particular state.
 -/
 
 namespace Physicslib4

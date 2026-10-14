@@ -93,10 +93,11 @@ fixing `Ω`, the one-parameter unitary group `t ↦ U t` has positive energy
 ground-state (`β → ∞`, spectrum-condition) counterpart of `IsKMSStateForFlow`: the
 stationary state whose flow generator (the Hamiltonian, for a timelike flow) is
 positive. -/
-def IsGroundStateForFlow (flow : ℝ → InhomogeneousLorentzGroup)
+def IsGroundStateForFlow.{u} (N : HaagKastlerNet.{u})
+    (flow : ℝ → InhomogeneousLorentzGroup)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
   (∀ (t : ℝ) (a : N.quasilocal.carrier), (ω (N.flowAut flow t a) : ℂ) = ω a) ∧
-    ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
+    ∃ (K : Type u) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
       (_ : CompleteSpace K) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
       (U : ℝ → (K ≃ₗᵢ[ℂ] K)),
         (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -116,11 +117,11 @@ open scoped InnerProductSpace in
 /-- The implementing unitary group of a covariance-flow ground state is strongly
 continuous: strong continuity is a field of the positive-energy hypothesis
 (`AQFT.IsPositiveEnergy.strongContinuous`). -/
-theorem IsGroundStateForFlow.exists_strongContinuous_unitary
-    (flow : ℝ → InhomogeneousLorentzGroup)
+theorem IsGroundStateForFlow.exists_strongContinuous_unitary.{u}
+    (N : HaagKastlerNet.{u}) (flow : ℝ → InhomogeneousLorentzGroup)
     {ω : Physicslib4.GNS.State N.quasilocal.carrier}
     (h : N.IsGroundStateForFlow flow ω) :
-    ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
+    ∃ (K : Type u) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
       (_ : CompleteSpace K) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
       (U : ℝ → (K ≃ₗᵢ[ℂ] K)),
         (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧

@@ -1,5 +1,5 @@
 ---
-title: "§10.4 Stone's Theorem (pp. 235–249)"
+title: "§10.4 Stone's Theorem (pp. 236–250)"
 usemathjax: true
 ---
 
@@ -7,15 +7,15 @@ usemathjax: true
 
 ← [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.5 Spacetime](sec10-5-spacetime.html) →
 
-# §10.4 Stone's Theorem (pp. 235–249)
+# §10.4 Stone's Theorem (pp. 236–250)
 
 41 declarations (items 289–329), all formalised and proved. The section proves **Stone's Theorem** (Theorem 329): every strongly continuous one-parameter unitary group $$U$$ on a Hilbert space $$\mathbf{H}$$ is $$U(t) = e^{itA}$$ for a unique self-adjoint operator $$A$$, its infinitesimal generator. Together with the converse direction (Proposition 313) this is a one-to-one correspondence between strongly continuous one-parameter unitary groups and self-adjoint operators. In AQFT it is what turns the translation symmetry of a net into an energy–momentum operator, and it is what lets positive energy (`IsPositiveEnergy`, §10.6) be stated with a genuine unbounded generator. The section builds on the Spectral Theorem for Unbounded, Self-Adjoint Operators (Theorem 285) and the functional calculus it supplies (Definitions 286–287, Lemma 288), and proceeds in five subsections.
 
-- *One-parameter unitary groups (p. 236, items 289–300).* A one-parameter unitary group (Definition 289), strong continuity and its reduction to continuity at $$0$$ (Lemma 290), the adjoint $$U(t)^* = U(-t)$$ (Lemma 291), and the infinitesimal generator (Definition 292), with its characterisation (Lemma 293) and the symmetry identity it satisfies (Lemma 294). Three generators are computed directly: the trivial group has generator $$0$$ (Lemma 295), conjugating a group by a unitary $$W$$ conjugates its generator (Lemmas 296–297), and for bounded self-adjoint $$P$$ the group $$\exp(itP)$$ has generator $$P$$ (Lemmas 298–300); these feed the positive-energy lemmas of §10.6.
-- *Imported results (p. 239, items 301–305).* Standard analysis stated without proof and linked to Mathlib: the Bochner integral (Theorem 301), smooth approximate identities (Lemma 302), facts about differentiation (Proposition 303) and about convolution (Lemma 305). The scalar equation $$y' = cy$$ (Lemma 304) is proved from them.
-- *From a self-adjoint operator to a unitary group (p. 241, items 306–313).* For self-adjoint $$A$$ the bounded functions $$e^{it\lambda}$$ give unitaries (Lemma 306) forming the group $$e^{itA}$$ (Definition 307), which satisfies the group law (Lemma 308) and is strongly continuous by dominated convergence (Lemma 309). A difference-quotient norm identity (Lemmas 310–311) gives the derivative at $$0$$ on the domain of $$A$$ (Lemma 312), and maximal symmetry of a self-adjoint operator identifies the generator with $$A$$ (Proposition 313).
-- *Two intermediate results (p. 244, items 314–320).* Orbits $$t \mapsto U(t)\psi$$ are differentiable on the generator's domain (Lemma 314), the group commutes with its generator and preserves its domain (Lemmas 315–316), and averaging an orbit against a smooth bump, written as a convolution (Lemmas 317–319), shows that the generator is densely defined (Lemma 320).
-- *Stone's Theorem (p. 246, items 321–329).* An ordinary differential equation along orbits (Lemma 321) and the vanishing of bounded solutions of $$y' = \pm y$$ (Lemma 322) make the deficiency subspaces trivial (Lemma 323), so the generator is essentially self-adjoint (Lemma 324). A norm-preservation argument (Lemmas 325–326) shows that the orbits of $$U$$ and of $$e^{itA}$$ agree on the generator's domain (Lemma 327), hence everywhere by density (Lemma 328), which proves Stone's Theorem (Theorem 329).
+- *One-parameter unitary groups (p. 237, items 289–300).* A one-parameter unitary group (Definition 289), strong continuity and its reduction to continuity at $$0$$ (Lemma 290), the adjoint $$U(t)^* = U(-t)$$ (Lemma 291), and the infinitesimal generator (Definition 292), with its characterisation (Lemma 293) and the symmetry identity it satisfies (Lemma 294). Three generators are computed directly: the trivial group has generator $$0$$ (Lemma 295), conjugating a group by a unitary $$W$$ conjugates its generator (Lemmas 296–297), and for bounded self-adjoint $$P$$ the group $$\exp(itP)$$ has generator $$P$$ (Lemmas 298–300); these feed the positive-energy lemmas of §10.6.
+- *Imported results (p. 240, items 301–305).* Standard analysis stated without proof and linked to Mathlib: the Bochner integral (Theorem 301), smooth approximate identities (Lemma 302), facts about differentiation (Proposition 303) and about convolution (Lemma 305). The scalar equation $$y' = cy$$ (Lemma 304) is proved from them.
+- *From a self-adjoint operator to a unitary group (p. 242, items 306–313).* For self-adjoint $$A$$ the bounded functions $$e^{it\lambda}$$ give unitaries (Lemma 306) forming the group $$e^{itA}$$ (Definition 307), which satisfies the group law (Lemma 308) and is strongly continuous by dominated convergence (Lemma 309). A difference-quotient norm identity (Lemmas 310–311) gives the derivative at $$0$$ on the domain of $$A$$ (Lemma 312), and maximal symmetry of a self-adjoint operator identifies the generator with $$A$$ (Proposition 313).
+- *Two intermediate results (p. 245, items 314–320).* Orbits $$t \mapsto U(t)\psi$$ are differentiable on the generator's domain (Lemma 314), the group commutes with its generator and preserves its domain (Lemmas 315–316), and averaging an orbit against a smooth bump, written as a convolution (Lemmas 317–319), shows that the generator is densely defined (Lemma 320).
+- *Stone's Theorem (p. 247, items 321–329).* An ordinary differential equation along orbits (Lemma 321) and the vanishing of bounded solutions of $$y' = \pm y$$ (Lemma 322) make the deficiency subspaces trivial (Lemma 323), so the generator is essentially self-adjoint (Lemma 324). A norm-preservation argument (Lemmas 325–326) shows that the orbits of $$U$$ and of $$e^{itA}$$ agree on the generator's domain (Lemma 327), hence everywhere by density (Lemma 328), which proves Stone's Theorem (Theorem 329).
 
 The closing Summary of the blueprint section, the bijection between groups and generators, is recorded in prose and is not a separate declaration.
 
@@ -26,7 +26,7 @@ The closing Summary of the blueprint section, the bijection between groups and g
 Each blueprint subsection below is collapsed; click a heading to see its items. Every entry links to its node in the web blueprint and names the principal Lean declaration; the four imported results name the Mathlib declarations that supply them.
 
 <details markdown="1">
-<summary>§10.4.1 One-Parameter Unitary Groups (p. 236) — 12 items</summary>
+<summary>§10.4.1 One-Parameter Unitary Groups (p. 237) — 12 items</summary>
 
 - [**Definition 289**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.11) — One-Parameter Unitary Group · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup` (+1 more)
 - [**Lemma 290**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:strongly-continuous-iff-at-zero) — Strong Continuity is Strong Continuity at $$0$$ · `Physicslib4.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero`
@@ -44,7 +44,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.4.2 Imported Results (p. 239) — 5 items</summary>
+<summary>§10.4.2 Imported Results (p. 240) — 5 items</summary>
 
 - [**Theorem 301**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bochner-integral) — Bochner Integral · `ContinuousLinearMap.integral_comp_comm` (+1 more)
 - [**Lemma 302**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:smooth-approximate-identity) — Smooth Approximate Identity · `ContDiffBump.normed` (+4 more)
@@ -55,7 +55,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.4.3 From a Self-Adjoint Operator to a Unitary Group (p. 241) — 8 items</summary>
+<summary>§10.4.3 From a Self-Adjoint Operator to a Unitary Group (p. 242) — 8 items</summary>
 
 - [**Lemma 306**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-unitary) — The Bounded Integral of $$e^{it\lambda }$$ is Unitary · `Physicslib4.Spectral.Stone.integral_expFun_mem_unitary`
 - [**Definition 307**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:exp-unitary-group) — The Unitary Group $$e^{itA}$$ · `Physicslib4.Spectral.Stone.expFun` (+2 more)
@@ -69,7 +69,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.4.4 Two Intermediate Results (p. 244) — 7 items</summary>
+<summary>§10.4.4 Two Intermediate Results (p. 245) — 7 items</summary>
 
 - [**Lemma 314**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-hasDerivAt) — Differentiating an Orbit · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit`
 - [**Lemma 315**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-commutes) — The Group Commutes with its Generator · `Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.generator_apply_comm`
@@ -82,7 +82,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.4.5 Stone's Theorem (p. 246) — 9 items</summary>
+<summary>§10.4.5 Stone's Theorem (p. 247) — 9 items</summary>
 
 - [**Lemma 321**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-inner-ode) — An Ordinary Differential Equation along Orbits · `Physicslib4.Spectral.Stone.hasDerivAt_inner_orbit`
 - [**Lemma 322**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bounded-exp-solution-zero) — Bounded Solutions of $$y' = \pm y$$ Vanish · `Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_bounded`

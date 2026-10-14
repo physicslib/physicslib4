@@ -1,5 +1,5 @@
 ---
-title: "§10.2 Spectral Theorems (pp. 38–155)"
+title: "§10.2 Spectral Theorems (pp. 39–156)"
 usemathjax: true
 ---
 
@@ -7,16 +7,16 @@ usemathjax: true
 
 ← [§10.1 GNS](sec10-1-gns.html) · [§10.3 Unbounded](sec10-3-unbounded.html) →
 
-# §10.2 Spectral Theorems (pp. 38–155)
+# §10.2 Spectral Theorems (pp. 39–156)
 
-The largest section by declaration count (144 declarations, items 19–163, together with Convention 22), stating and proving the Spectral Theorem for Bounded, Self-Adjoint Operators (Theorem 162), a result the blueprint describes as sitting at the core of much of AQFT. It follows the presentation of Hall's *Quantum Theory for Mathematicians*. Standard results whose proofs lie outside the development — Heine–Borel, Riesz representation, Stone–Weierstrass, bounded convergence and the like — are stated in full but not proved in the prose, and are formalised all the same, usually directly by the corresponding Mathlib declaration. The whole section is a single subsection, §10.2.1 Spectral Theorem: Bounded Self-Adjoint Operators (p. 38), which proceeds in six layers.
+The largest section by proposition count (144 declarations, items 19–163, together with Convention 22), stating and proving the Spectral Theorem for Bounded, Self-Adjoint Operators (Theorem 162), a result the blueprint describes as sitting at the core of much of AQFT. It follows the presentation of Hall's *Quantum Theory for Mathematicians*. Standard results whose proofs lie outside the development — Heine–Borel, Riesz representation, Stone–Weierstrass, bounded convergence and the like — are stated in full but not proved in the prose, and are formalised all the same, usually directly by the corresponding Mathlib declaration. The whole section is a single subsection, §10.2.1 Spectral Theorem: Bounded Self-Adjoint Operators (p. 39), which proceeds in six layers.
 
 - *Elementary properties of bounded operators (pp. 39–45, items 19–37).* Fixes the inner product, the induced norm and the bounded-operator notation (Definitions 19–21), the standing convention that the Hilbert space is non-zero (Convention 22), the identity operator, indicator functions and orthogonal complements (Definitions 23–26), and basic facts about integrals, Cauchy–Schwarz, the reverse triangle inequality and continuity of the norm and inner product (Propositions 27–30). $$\mathcal{B}(\mathbf{H})$$ is a Banach space (Lemma 31); bounded inverses, the resolvent and the spectrum are defined (Definitions 32–33); and the Riesz theorem (Theorem 34) yields the adjoint of a bounded operator (Definition 35), which is bounded (Proposition 36) and has the expected algebraic properties (Lemma 37).
-- *Projection-valued measures (p. 45, items 38–67).* Orthogonal projections (Definition 38, Lemma 39) and projection-valued measures (Definition 40), with their associated scalar measures (Theorem 41) and operator-valued integration of bounded measurable functions (Theorem 42). The integral is built from bounded sesquilinear and quadratic forms (Definitions 43–44) and the simple-function approximation theorem (Theorem 45): the quadratic form of a bounded measurable function is bounded (Lemma 46, Propositions 47–49), and a bounded quadratic form determines a unique bounded operator (Propositions 50 and 55, Lemmas 51–54). The section then proves the norm bounds (Propositions 57 and 60, Lemmas 58–59), approximation by integrals of simple functions (Proposition 61), multiplicativity (Propositions 62–66), and compatibility with conjugation and the adjoint (Proposition 67).
-- *Stage 1: the continuous functional calculus (p. 80, items 68–104).* The Neumann series (Lemma 70) shows the spectrum is closed, bounded and non-empty (Proposition 73), with holomorphy of the resolvent (Proposition 74). The spectrum of a self-adjoint operator is real (Proposition 78) and compact (Lemma 80). The spectral radius (Definition 81) is at most the operator norm (Corollary 82), is given by Gelfand's formula (Theorem 85), and equals the norm for a self-adjoint operator (Lemma 86). Polynomial spectral mapping (Lemma 89), Stone–Weierstrass (Theorem 92) and the Bounded Linear Transformation Theorem (Theorem 94) then give the continuous functional calculus (Proposition 95), which is multiplicative, produces self-adjoint operators, preserves non-negativity, and satisfies the norm and spectral-mapping identities (Propositions 99–104).
-- *Stage 2: an operator-valued Riesz representation theorem (p. 107, items 105–133).* Riesz representation (Theorem 105) attaches measures to a self-adjoint operator (Proposition 106), and hence a bounded quadratic form to every bounded measurable function (Definition 107, Proposition 109). The class of functions with bounded quadratic form (Definition 110) contains the continuous functions (Proposition 115) and is closed under bounded pointwise limits (Proposition 117). A monotone-class argument through the algebra of sets $$\mathcal{L}_0$$ and bump functions (Definitions 119, 122 and 127, Theorems 128–129, Lemmas 121, 130 and 132–133) shows that the class contains every bounded Borel function.
-- *The bounded Borel functional calculus and the spectral measure (pp. 127–146, items 134–155).* The bounded Borel functional calculus (Definition 134) sends real functions to self-adjoint operators (Lemma 135) and is multiplicative (Proposition 137, via the classes $$\mathcal{F}_1$$ and $$\mathcal{F}_2$$ of Definition 138 and Propositions 139–142). The spectral projections of Borel sets form the spectral measure of the operator (Theorem 143): each is an orthogonal projection, they multiply to the intersection, and they are countably additive (Propositions 144–147, using the convergence of sums of pairwise orthogonal projections, Lemma 149 and Propositions 150–152). The two bounded functional calculi agree, and the spectral measure integrates to the operator itself (Propositions 153–155).
-- *Uniqueness and the spectral theorem (p. 147, items 156–163).* The spectral measure is unique (Theorem 156): two spectral measures of the same operator agree on polynomials, on continuous functions (via complex Stone–Weierstrass, Theorem 159, and Lemma 160) and on bounded measurable functions (Propositions 157, 158 and 161). This gives the Spectral Theorem for Bounded, Self-Adjoint Operators (Theorem 162) and the functional calculus it induces (Definition 163).
+- *Projection-valued measures (p. 46, items 38–67).* Orthogonal projections (Definition 38, Lemma 39) and projection-valued measures (Definition 40), with their associated scalar measures (Theorem 41) and operator-valued integration of bounded measurable functions (Theorem 42). The integral is built from bounded sesquilinear and quadratic forms (Definitions 43–44) and the simple-function approximation theorem (Theorem 45): the quadratic form of a bounded measurable function is bounded (Lemma 46, Propositions 47–49), and a bounded quadratic form determines a unique bounded operator (Propositions 50 and 55, Lemmas 51–54). The section then proves the norm bounds (Propositions 57 and 60, Lemmas 58–59), approximation by integrals of simple functions (Proposition 61), multiplicativity (Propositions 62–66), and compatibility with conjugation and the adjoint (Proposition 67).
+- *Stage 1: the continuous functional calculus (p. 81, items 68–104).* The Neumann series (Lemma 70) shows the spectrum is closed, bounded and non-empty (Proposition 73), with holomorphy of the resolvent (Proposition 74). The spectrum of a self-adjoint operator is real (Proposition 78) and compact (Lemma 80). The spectral radius (Definition 81) is at most the operator norm (Corollary 82), is given by Gelfand's formula (Theorem 85), and equals the norm for a self-adjoint operator (Lemma 86). Polynomial spectral mapping (Lemma 89), Stone–Weierstrass (Theorem 92) and the Bounded Linear Transformation Theorem (Theorem 94) then give the continuous functional calculus (Proposition 95), which is multiplicative, produces self-adjoint operators, preserves non-negativity, and satisfies the norm and spectral-mapping identities (Propositions 99–104).
+- *Stage 2: an operator-valued Riesz representation theorem (p. 108, items 105–133).* Riesz representation (Theorem 105) attaches measures to a self-adjoint operator (Proposition 106), and hence a bounded quadratic form to every bounded measurable function (Definition 107, Proposition 109). The class of functions with bounded quadratic form (Definition 110) contains the continuous functions (Proposition 115) and is closed under bounded pointwise limits (Proposition 117). A monotone-class argument through the algebra of sets $$\mathcal{L}_0$$ and bump functions (Definitions 119, 122 and 127, Theorems 128–129, Lemmas 121, 130 and 132–133) shows that the class contains every bounded Borel function.
+- *The bounded Borel functional calculus and the spectral measure (pp. 128–147, items 134–155).* The bounded Borel functional calculus (Definition 134) sends real functions to self-adjoint operators (Lemma 135) and is multiplicative (Proposition 137, via the classes $$\mathcal{F}_1$$ and $$\mathcal{F}_2$$ of Definition 138 and Propositions 139–142). The spectral projections of Borel sets form the spectral measure of the operator (Theorem 143): each is an orthogonal projection, they multiply to the intersection, and they are countably additive (Propositions 144–147, using the convergence of sums of pairwise orthogonal projections, Lemma 149 and Propositions 150–152). The two bounded functional calculi agree, and the spectral measure integrates to the operator itself (Propositions 153–155).
+- *Uniqueness and the spectral theorem (p. 148, items 156–163).* The spectral measure is unique (Theorem 156): two spectral measures of the same operator agree on polynomials, on continuous functions (via complex Stone–Weierstrass, Theorem 159, and Lemma 160) and on bounded measurable functions (Propositions 157, 158 and 161). This gives the Spectral Theorem for Bounded, Self-Adjoint Operators (Theorem 162) and the functional calculus it induces (Definition 163).
 
 **Where the Lean lives:** `Physicslib4/Spectral/` (`Basic`, `Spectrum`, `Forms`, `ProjectionValuedMeasure`, `OperatorIntegral`, `ContinuousCalculus`, `BorelClasses`, `BorelCalculus`, `SpectralTheorem`)
 
@@ -56,7 +56,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › Projection-Valued Measures (p. 45) — 30 items</summary>
+<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › Projection-Valued Measures (p. 46) — 30 items</summary>
 
 - [**Definition 38**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:bounded-orthogonal-projection) — Orthogonal Projection · `IsStarProjection` (+2 more)
 - [**Lemma 39**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:projection-norm-decreasing) — Orthogonal Projections are Norm-Decreasing · `Physicslib4.Spectral.norm_apply_le_of_isStarProjection`
@@ -75,8 +75,8 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 - [**Lemma 52**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:sesquilinear-pointwise-limit) — Pointwise Limits of Sesquilinear Forms are Sesquilinear · `Physicslib4.Spectral.exists_sesquilinearForm_of_tendsto`
 - [**Lemma 53**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bqf-linear-combination) — Linear Combinations of Bounded Quadratic Forms are Bounded Quadratic Forms · `Physicslib4.Spectral.IsBoundedQuadraticForm.sum`
 - [**Lemma 54**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bqf-pointwise-limit) — Uniformly Bounded Pointwise Limits of Bounded Quadratic Forms · `Physicslib4.Spectral.isBoundedQuadraticForm_of_tendsto`
-- [**Proposition 55**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.63) — A Bounded Quadratic Form Determines a Unique Bounded Operator · `Physicslib4.Spectral.existsUnique_operator_of_isBoundedQuadraticForm`
-- [**Proposition 56**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-of-indicator) — Integral of an Indicator Function · `Physicslib4.Spectral.ProjectionValuedMeasure.integral_indicator`
+- [**Proposition 55**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.63) — A Bounded Quadratic Form Determines a Unique Bounded Operator · `Physicslib4.Spectral.existsUnique_operator_of_isBoundedQuadraticForm` (+1 more)
+- [**Proposition 56**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-of-indicator) — Integral of an Indicator Function · `Physicslib4.Spectral.ProjectionValuedMeasure.integral_indicator` (+1 more)
 - [**Proposition 57**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-norm-bound) — Norm Bound for the Operator-Valued Integral · `Physicslib4.Spectral.ProjectionValuedMeasure.norm_integral_le`
 - [**Lemma 58**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lemma2-of-operator-valued-integration) — Orthogonality of Spectral Projections on a Disjoint Cover · `Physicslib4.Spectral.ProjectionValuedMeasure.inner_eq_zero_of_disjoint` (+1 more)
 - [**Lemma 59**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lemma-1) — Operator Norm via the Inner Product · `Physicslib4.Spectral.opNorm_eq_sSup_inner`
@@ -92,7 +92,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › Stage 1: The Continuous Functional Calculus (p. 80) — 37 items</summary>
+<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › Stage 1: The Continuous Functional Calculus (p. 81) — 37 items</summary>
 
 - [**Lemma 68**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lemma-2) — Bounded Operator Product is Submultiplicative · `norm_mul_le`
 - [**Proposition 69**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.34) — Absolute Convergence Implies Convergence in a Banach Space · `Summable.of_norm`
@@ -135,7 +135,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › Stage 2: An Operator-Valued Riesz Representation Theorem (p. 107) — 29 items</summary>
+<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › Stage 2: An Operator-Valued Riesz Representation Theorem (p. 108) — 29 items</summary>
 
 - [**Theorem 105**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:riesz-representation) — Riesz Representation · `Physicslib4.Spectral.existsUnique_measure_of_positive_linear`
 - [**Proposition 106**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:associated-measures-self-adjoint) — The Measures Associated to a Self-Adjoint Operator · `Physicslib4.Spectral.existsUnique_assocMeasure`
@@ -170,7 +170,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › The Bounded Borel Functional Calculus (p. 127) — 9 items</summary>
+<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › The Bounded Borel Functional Calculus (p. 128) — 9 items</summary>
 
 - [**Definition 134**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-8.8) — The Bounded Borel Functional Calculus · `Physicslib4.Spectral.existsUnique_borelCalculus` (+1 more)
 - [**Lemma 135**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lemma-3) — The Operator of a Real-Valued Function is Self-Adjoint · `Physicslib4.Spectral.isSelfAdjoint_borelCalculus`
@@ -185,7 +185,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › The Spectral Measure (p. 133) — 13 items</summary>
+<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › The Spectral Measure (p. 134) — 13 items</summary>
 
 - [**Theorem 143**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-8.10) — The Spectral Measure of a Self-Adjoint Operator · `Physicslib4.Spectral.exists_spectralMeasure`
 - [**Proposition 144**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:mua-projection) — Each Spectral Projection is an Orthogonal Projection · `Physicslib4.Spectral.isStarProjection_borelCalculus_indicator`
@@ -204,7 +204,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 </details>
 
 <details markdown="1">
-<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › Uniqueness of the Spectral Measure (p. 147) — 8 items</summary>
+<summary>§10.2.1 · Spectral Theorem for Bounded Self-Adjoint Operators › The Spectral Theorem › Uniqueness of the Spectral Measure (p. 148) — 8 items</summary>
 
 - [**Theorem 156**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-prblm-8.3.4) — Uniqueness of the Spectral Measure · `Physicslib4.Spectral.pvm_eq_of_integral_id_eq`
 - [**Proposition 157**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:pvm-agree-on-polynomials) — Two Spectral Measures Agree on Polynomials · `Physicslib4.Spectral.pvm_integral_polynomial_eq`

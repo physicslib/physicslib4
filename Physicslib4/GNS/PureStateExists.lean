@@ -71,6 +71,7 @@ theorem isClosed_complex_nonneg : IsClosed {z : ℂ | (0 : ℂ) ≤ z} := by
   exact (isClosed_Ici.preimage Complex.continuous_re).inter
     (isClosed_singleton.preimage Complex.continuous_im)
 
+/-- The state set is weak-* closed. -/
 theorem isClosed_weakStateSet : IsClosed (weakStateSet : Set (WeakDual ℂ A)) := by
   have h1 : IsClosed {φ : WeakDual ℂ A | ∀ a : A, (0 : ℂ) ≤ φ (star a * a)} := by
     rw [Set.ofPred_forall]
@@ -80,8 +81,15 @@ theorem isClosed_weakStateSet : IsClosed (weakStateSet : Set (WeakDual ℂ A)) :
     isClosed_singleton.preimage (WeakDual.eval_continuous 1)
   exact h1.inter h2
 
-theorem isCompact_weakStateSet [Nontrivial A] :
+/-- **Banach–Alaoglu for states.** The state set is weak-* compact. -/
+theorem isCompact_weakStateSet :
     IsCompact (weakStateSet : Set (WeakDual ℂ A)) := by
+  rcases subsingleton_or_nontrivial A with hA | hA
+  · convert isCompact_empty
+    refine Set.eq_empty_of_forall_notMem fun φ hφ => ?_
+    have h := hφ.2
+    rw [Subsingleton.elim (1 : A) 0, map_zero] at h
+    exact zero_ne_one h
   refine (WeakDual.isCompact_closedBall (0 : StrongDual ℂ A) 1).of_isClosed_subset
     isClosed_weakStateSet ?_
   intro φ hφ

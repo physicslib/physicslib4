@@ -47,6 +47,33 @@ open Filter Topology ContinuousLinearMap MeasureTheory
 variable {X : Type*} [MeasurableSpace X]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
+/--
+The pointwise estimate behind every uniform-convergence-of-products argument below:
+if `f` is bounded by `Mf`, `r` is bounded by `Mr`, and `s`/`r` approximate `f`/`g` to
+within `ε / (2 * Mr)` and `ε / (2 * Mf)` respectively, then `s * r` approximates
+`f * g` to within `ε`. Shared by `ProjectionValuedMeasure.integral_bddMeasurable_mul`
+(diagonal case) and `tendstoUniformly_mul_of_bounded` (product-filter case).
+-/
+private lemma norm_mul_sub_mul_lt {f g s r : ℂ} {Mf Mr ε : ℝ}
+    (hMf_pos : 0 < Mf) (hMr_pos : 0 < Mr) (hf : ‖f‖ ≤ Mf) (hr : ‖r‖ ≤ Mr)
+    (hs : ‖f - s‖ < ε / (2 * Mr)) (hg : ‖g - r‖ < ε / (2 * Mf)) :
+    ‖f * g - s * r‖ < ε := by
+  have hterm1 : ‖f‖ * ‖g - r‖ < ε / 2 := by
+    calc
+      ‖f‖ * ‖g - r‖ ≤ Mf * ‖g - r‖ := mul_le_mul_of_nonneg_right hf (norm_nonneg _)
+      _ < Mf * (ε / (2 * Mf)) := mul_lt_mul_of_pos_left hg hMf_pos
+      _ = ε / 2 := by field_simp
+  have hterm2 : ‖f - s‖ * ‖r‖ < ε / 2 := by
+    calc
+      ‖f - s‖ * ‖r‖ ≤ ‖f - s‖ * Mr := mul_le_mul_of_nonneg_left hr (norm_nonneg _)
+      _ < (ε / (2 * Mr)) * Mr := mul_lt_mul_of_pos_right hs hMr_pos
+      _ = ε / 2 := by field_simp
+  calc
+    ‖f * g - s * r‖ = ‖f * (g - r) + (f - s) * r‖ := by congr 1; ring
+    _ ≤ ‖f * (g - r)‖ + ‖(f - s) * r‖ := norm_add_le _ _
+    _ ≤ ‖f‖ * ‖g - r‖ + ‖f - s‖ * ‖r‖ := add_le_add (norm_mul_le _ _) (norm_mul_le _ _)
+    _ < ε := by linarith
+
 namespace ProjectionValuedMeasure
 
 /-!
@@ -961,8 +988,7 @@ theorem norm_integral_le (μ : ProjectionValuedMeasure X H) {f : X → ℂ}
       rintro r ⟨χ, ψ, hχ, hψ, rfl⟩
       exact hmat χ ψ hχ hψ) (by nlinarith [hset_nonneg g])
   -- (II) the sharp bound for simple functions: ‖∫ s dμ‖ ≤ ‖s‖∞, cited as the
-  -- black-box declaration `norm_integral_simple_le` (proved by another prover in
-  -- the real file).
+  -- black-box declaration `norm_integral_simple_le`, proved above in this file.
   have hsimple : ∀ (s : SimpleFunc X ℂ), ‖μ.integral (fun x => s x)‖ ≤ snorm (fun x => s x) := by
     intro s
     exact le_trans (norm_integral_simple_le μ s) (by
@@ -1411,8 +1437,10 @@ theorem integral_bddMeasurable_mul (μ : ProjectionValuedMeasure X H) {f g : X �
       _ ≤ Cf * Cg := mul_le_mul (hCf x) (hCg x) (norm_nonneg _)
         (le_trans (norm_nonneg _) (hCf x))
   -- `sᵢ rᵢ → f g` uniformly along the diagonal: the diagonal case of
-  -- `tendstoUniformly_mul_of_bounded` (which lives below this declaration and so
-  -- cannot be cited here), proved with the blueprint's ε/2-splitting.
+  -- `tendstoUniformly_mul_of_bounded`, proved from the shared estimate
+  -- `norm_mul_sub_mul_lt` (the two results cannot share a single declaration of
+  -- `TendstoUniformly` directly, since `tendstoUniformly_mul_of_bounded` is stated
+  -- for the product filter `atTop ×ˢ atTop`, not the diagonal).
   have hdiag : TendstoUniformly (fun n x => s n x * r n x) (f * g) atTop := by
     rw [Metric.tendstoUniformly_iff]
     intro ε hε
@@ -1436,50 +1464,18 @@ theorem integral_bddMeasurable_mul (μ : ProjectionValuedMeasure X H) {f g : X �
       hr' (ε / (2 * (Mf' + 1))) (by positivity)
     have hr1 : ∀ᶠ n in atTop, ∀ x, dist (g x) (r n x) < 1 := hr' 1 zero_lt_one
     filter_upwards [hsε, hrε, hr1] with n hsn hrn hr1n x
-    calc
-      dist ((f * g) x) (s n x * r n x) = ‖f x * g x - s n x * r n x‖ := by
-        simp [dist_eq_norm]
-      _ ≤ ‖(f x - s n x) * r n x‖ + ‖f x * (g x - r n x)‖ := by
-        rw [show f x * g x - s n x * r n x = (f x - s n x) * r n x + f x * (g x - r n x) by ring]
-        exact norm_add_le _ _
-      _ ≤ ‖f x - s n x‖ * ‖r n x‖ + ‖f x‖ * ‖g x - r n x‖ := by
-        exact add_le_add (norm_mul_le _ _) (norm_mul_le _ _)
-      _ ≤ ‖f x - s n x‖ * (Mg' + 1) + Mf' * ‖g x - r n x‖ := by
-        have hrx : ‖r n x‖ ≤ Mg' + 1 := by
-          have hd : ‖g x - r n x‖ < 1 := by simpa [dist_eq_norm] using hr1n x
-          have hd' : ‖r n x - g x‖ ≤ 1 := by
-            simpa [norm_sub_rev] using le_of_lt hd
-          calc
-            ‖r n x‖ = ‖(r n x - g x) + g x‖ := by
-              congr 1
-              ring
-            _ ≤ ‖r n x - g x‖ + ‖g x‖ := norm_add_le _ _
-            _ ≤ Mg' + 1 := by
-              nlinarith [hd', hMg0 x]
-        exact add_le_add
-          (mul_le_mul_of_nonneg_left hrx (norm_nonneg _))
-          (mul_le_mul_of_nonneg_right (hMf0 x) (norm_nonneg _))
-      _ < ε := by
-        have h1 : ‖f x - s n x‖ * (Mg' + 1) < ε / 2 := by
-          have hd : ‖f x - s n x‖ < ε / (2 * (Mg' + 1)) := by
-            simpa [dist_eq_norm] using hsn x
-          have heq : (ε / (2 * (Mg' + 1))) * (Mg' + 1) = ε / 2 := by
-            field_simp [hMg'1.ne']
-          exact lt_of_lt_of_eq (mul_lt_mul_of_pos_right hd hMg'1) heq
-        have h2 : Mf' * ‖g x - r n x‖ < ε / 2 := by
-          have hd : ‖g x - r n x‖ < ε / (2 * (Mf' + 1)) := by
-            simpa [dist_eq_norm] using hrn x
-          have hle : Mf' * ‖g x - r n x‖ ≤ Mf' * (ε / (2 * (Mf' + 1))) :=
-            mul_le_mul_of_nonneg_left (le_of_lt hd) hMf'
-          have hlt : Mf' * (ε / (2 * (Mf' + 1))) < ε / 2 := by
-            calc
-              Mf' * (ε / (2 * (Mf' + 1))) < (Mf' + 1) * (ε / (2 * (Mf' + 1))) :=
-                mul_lt_mul_of_pos_right (lt_add_of_pos_right Mf' one_pos)
-                  (by positivity)
-              _ = ε / 2 := by
-                field_simp [hMf'1.ne']
-          exact lt_of_le_of_lt hle hlt
-        nlinarith
+    have hrx : ‖r n x‖ ≤ Mg' + 1 := by
+      have hd : ‖g x - r n x‖ < 1 := by simpa [dist_eq_norm] using hr1n x
+      have hd' : ‖r n x - g x‖ ≤ 1 := by simpa [norm_sub_rev] using le_of_lt hd
+      calc
+        ‖r n x‖ = ‖(r n x - g x) + g x‖ := by congr 1; ring
+        _ ≤ ‖r n x - g x‖ + ‖g x‖ := norm_add_le _ _
+        _ ≤ Mg' + 1 := by nlinarith [hd', hMg0 x]
+    have hlt : ‖f x * g x - s n x * r n x‖ < ε :=
+      norm_mul_sub_mul_lt (Mf := Mf' + 1) (Mr := Mg' + 1) hMf'1 hMg'1
+        (le_trans (hMf0 x) (by linarith)) hrx
+        (by simpa [dist_eq_norm] using hsn x) (by simpa [dist_eq_norm] using hrn x)
+    simpa [dist_eq_norm] using hlt
   -- `∫ sᵢrᵢ dμ → ∫ fg dμ`
   have hlim1 : Tendsto (fun n => μ.integral (fun x => s n x * r n x)) atTop
       (𝓝 (μ.integral (f * g))) := by
@@ -1662,35 +1658,9 @@ theorem tendstoUniformly_mul_of_bounded {Y : Type*} {f g : Y → ℂ}
     have h1 : ‖f x - s i x‖ < ε / (2 * M_r) := hi x
     have h2 : ‖g x - r j x‖ < ε / (2 * M_f) := hj.1 x
     have h3 : ‖r j x‖ ≤ M_r := hj.2 x
-    have hMf_ne : M_f ≠ 0 := by linarith
-    have hMr_ne : M_r ≠ 0 := by linarith
-    have hterm1 : ‖f x‖ * ‖g x - r j x‖ < ε / 2 := by
-      calc
-        ‖f x‖ * ‖g x - r j x‖ ≤ M_f * ‖g x - r j x‖ :=
-          mul_le_mul_of_nonneg_right (hMf x) (norm_nonneg _)
-        _ < M_f * (ε / (2 * M_f)) := mul_lt_mul_of_pos_left h2 hMf_pos
-        _ = ε / 2 := by
-          field_simp [hMf_ne]
-    have hterm2 : ‖f x - s i x‖ * ‖r j x‖ < ε / 2 := by
-      calc
-        ‖f x - s i x‖ * ‖r j x‖ ≤ ‖f x - s i x‖ * M_r :=
-          mul_le_mul_of_nonneg_left h3 (norm_nonneg _)
-        _ < (ε / (2 * M_r)) * M_r := mul_lt_mul_of_pos_right h1 hMr_pos
-        _ = ε / 2 := by
-          field_simp [hMr_ne]
-    have hnorm : ‖(f * g) x - s i x * r j x‖ ≤
-        ‖f x‖ * ‖g x - r j x‖ + ‖f x - s i x‖ * ‖r j x‖ := by
-      calc
-        ‖(f * g) x - s i x * r j x‖ = ‖f x * g x - s i x * r j x‖ := by rfl
-        _ = ‖f x * (g x - r j x) + (f x - s i x) * r j x‖ := by
-          congr 1
-          ring
-        _ ≤ ‖f x * (g x - r j x)‖ + ‖(f x - s i x) * r j x‖ := norm_add_le _ _
-        _ ≤ ‖f x‖ * ‖g x - r j x‖ + ‖f x - s i x‖ * ‖r j x‖ := by
-          exact add_le_add (norm_mul_le _ _) (norm_mul_le _ _)
-    have hsum : ‖f x‖ * ‖g x - r j x‖ + ‖f x - s i x‖ * ‖r j x‖ < ε := by
-      linarith
-    simpa [dist_eq_norm] using lt_of_le_of_lt hnorm hsum
+    have hlt : ‖f x * g x - s i x * r j x‖ < ε :=
+      norm_mul_sub_mul_lt (Mf := M_f) (Mr := M_r) hMf_pos hMr_pos (hMf x) h3 h1 h2
+    simpa [dist_eq_norm] using hlt
 
 end Spectral
 end Physicslib4

@@ -199,10 +199,10 @@ noncomputable def futureOrientationPreserving (M : Spacetime) (t : M.TimeOrienta
   Iff.rfl
 
 /-- The **oriented identity component**: the identity-component isometries that
-also preserve the future orientation. This folds orientation-preservation into
-the identity-component group of Axiom 5, sidestepping the statement that every
-identity-component isometry preserves orientation, which the C⁰ topology used
-here does not give. -/
+also preserve the future orientation. This is the identity-component group of
+Axiom 5: every identity-component isometry preserves the future orientation, but
+the proof needs a Myers–Steenrod-type rigidity theorem that Mathlib does not
+provide, so orientation preservation is part of the definition instead. -/
 noncomputable def orientedIdentityComponent (M : Spacetime) (t : M.TimeOrientation) :
     Subgroup (Isometry M) :=
   Isometry.identityComponent M ⊓ futureOrientationPreserving M t

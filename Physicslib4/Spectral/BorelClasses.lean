@@ -276,6 +276,9 @@ obligation.
 
 Blueprint reference: `def:L0-class`.
 -/
+-- `MeasurableSpace X` is unused in the body (only `TopologicalSpace X` is needed, via
+-- `C(X, ℝ)`); kept for parity with the other definitions in this file (see the docstring above
+-- for why the blueprint's measurability conjunct is dropped).
 @[nolint unusedArguments]
 def L0 (X : Type*) [TopologicalSpace X] [MeasurableSpace X] : Set (Set X) :=
   {E | ∃ (f : ℕ → C(X, ℝ)) (C : ℝ), (∀ n x, ‖f n x‖ ≤ C) ∧

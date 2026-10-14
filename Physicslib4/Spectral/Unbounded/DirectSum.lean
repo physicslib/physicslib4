@@ -259,6 +259,9 @@ private theorem single_mem_range_subSmul [DecidableEq ι] (hA : ∀ i, IsSelfAdj
   obtain ⟨ξ, hξ⟩ := exists_sub_smul_eq_of_isSelfAdjoint (hA i) hc η
   refine mem_range.mpr ⟨⟨lp.single 2 i ξ, hT.memDomain _ (finite_support_single i ξ)⟩, ?_⟩
   rw [subSmul_apply]
+  -- `rw` fails here: the domain membership proof `hT.memDomain _ _` in the LHS's subtype
+  -- element is only semireducibly, not reducibly, defeq to the membership proof
+  -- `(subSmul T c).domain` expects, so plain `rw` cannot match the pattern under the subtype.
   erw [apply_single_of_isDirectSumOperator hT i ξ]
   rw [← hξ, ← lp.single_smul, ← lp.single_sub]
 
@@ -291,7 +294,7 @@ private theorem sum_single_mem_graph [DecidableEq ι] (hT : IsDirectSumOperator 
     (∑ i ∈ s, lp.single 2 i (η i), ∑ i ∈ s, lp.single 2 i (A i (η i))) ∈ T.graph := by
   have h := T.graph.sum_mem (t := s) fun i _ => by
     have := T.mem_graph ⟨lp.single 2 i (η i), hT.memDomain _ (finite_support_single i (η i))⟩
-    erw [apply_single_of_isDirectSumOperator hT i (η i)] at this
+    rw [apply_single_of_isDirectSumOperator hT i (η i)] at this
     exact this
   convert h using 1
   ext <;> simp [Prod.fst_sum, Prod.snd_sum]
@@ -464,6 +467,9 @@ private theorem summand_mem_range_subSmul (hA : ∀ n, IsSelfAdjoint (A n))
   obtain ⟨ξ, hξ⟩ := exists_sub_smul_eq_of_isSelfAdjoint (hA m) hc η
   refine mem_range.mpr ⟨⟨ξ, mem_domain_of_mem_summand hT m ξ⟩, ?_⟩
   rw [subSmul_apply]
+  -- `rw` fails here for the same reason as `single_mem_range_subSmul` above: the subtype's
+  -- domain-membership proof is only semireducibly defeq across `T.domain` and
+  -- `(subSmul T c).domain`.
   erw [apply_of_mem_summand hT m ξ]
   simp [← hξ]
 

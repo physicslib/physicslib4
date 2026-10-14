@@ -13,16 +13,19 @@ import Mathlib.LinearAlgebra.BilinearForm.Basic
 This file formalises the blueprint declaration `lmm:reverse-cauchy-schwarz`
 (Chapter 10, `sections/sec10/spacetime`).
 
-For a symmetric Lorentzian bilinear form `g` (signature `diag(-1,1,1,1)`) and two
-timelike vectors `v, w` (i.e. `g v v < 0`, `g w w < 0`) the *reverse* Cauchy-Schwarz
-inequality holds:
+For a symmetric Lorentzian bilinear form `g` (signature `diag(-1,1,1,1)`) and a
+timelike vector `w` (i.e. `g w w < 0`) the *reverse* Cauchy-Schwarz inequality
+holds for every `v`:
 ```
 g v v * g w w ≤ (g v w) ^ 2.
 ```
 
-The abstract statement `reverse_cauchy_schwarz_of_lorentzianAt` depends only on the
-pointwise `LorentzianAt` condition, so it transfers verbatim to the metric `g|_p` of
-any spacetime; `Spacetime.reverse_cauchy_schwarz` is that specialisation.
+The abstract statement `reverse_cauchy_schwarz_of_lorentzianAt` only needs `w` to
+be timelike, which is stronger than the blueprint's `lmm:reverse-cauchy-schwarz`
+(stated symmetrically, with both `v` and `w` timelike); the specialisation
+`Spacetime.reverse_cauchy_schwarz` keeps the blueprint's symmetric hypotheses to
+match its statement. It depends only on the pointwise `LorentzianAt` condition,
+so it transfers verbatim to the metric `g|_p` of any spacetime.
 
 ## Proof strategy
 
@@ -41,13 +44,16 @@ namespace Physicslib4
 
 open scoped BigOperators
 
-/-- **Reverse Cauchy-Schwarz inequality** for two timelike vectors of a symmetric
-Lorentzian bilinear form on a real four-dimensional vector space. -/
+/-- **Reverse Cauchy-Schwarz inequality** for a timelike vector `w` of a symmetric
+Lorentzian bilinear form on a real four-dimensional vector space, and an arbitrary
+vector `v`. Only `w` needs to be timelike: this is stronger than the blueprint's
+`lmm:reverse-cauchy-schwarz`, which states the symmetric hypothesis `v, w` both
+timelike. -/
 theorem reverse_cauchy_schwarz_of_lorentzianAt
     {V : Type*} [AddCommGroup V] [Module ℝ V]
     {B : LinearMap.BilinForm ℝ V} (_hsymm : ∀ v w, B v w = B w v)
     (hL : LorentzianAt (fun v w => B v w))
-    {v w : V} (_hv : B v v < 0) (hw : B w w < 0) :
+    {v w : V} (hw : B w w < 0) :
     B v v * B w w ≤ (B v w) ^ 2 := by
   obtain ⟨b, hb⟩ := hL
   -- Beta-reduced form of the Gram-matrix hypothesis, usable directly by `rw`.
@@ -95,10 +101,13 @@ theorem reverse_cauchy_schwarz_of_lorentzianAt
 namespace Spacetime
 
 /-- **Reverse Cauchy-Schwarz inequality** for the metric of a spacetime: two timelike
-tangent vectors at a point satisfy `g v v * g w w ≤ (g v w) ^ 2`. -/
+tangent vectors at a point satisfy `g v v * g w w ≤ (g v w) ^ 2`. The hypothesis on `v`
+is kept (unused in the proof) to match the blueprint's symmetric statement of
+`lmm:reverse-cauchy-schwarz`; see `reverse_cauchy_schwarz_of_lorentzianAt` for the
+sharper form that only needs `w` timelike. -/
 theorem reverse_cauchy_schwarz (M : Spacetime) (x : M.Carrier)
     {v w : TangentSpace M.model x}
-    (hv : M.IsTimelike v) (hw : M.IsTimelike w) :
+    (_hv : M.IsTimelike v) (hw : M.IsTimelike w) :
     M.val x v v * M.val x w w ≤ (M.val x v w) ^ 2 := by
   let B : LinearMap.BilinForm ℝ (TangentSpace M.model x) :=
     LinearMap.mk₂ ℝ (fun a c => M.val x a c)
@@ -109,9 +118,8 @@ theorem reverse_cauchy_schwarz (M : Spacetime) (x : M.Carrier)
     intro a c; rw [hBapp, hBapp]; exact M.symm x a c
   have hL : LorentzianAt (fun a c => B a c) := by
     simpa only [hBapp] using M.lorentzian x
-  have hv' : B v v < 0 := by rw [hBapp]; exact hv
   have hw' : B w w < 0 := by rw [hBapp]; exact hw
-  have h := reverse_cauchy_schwarz_of_lorentzianAt (B := B) hsymm hL hv' hw'
+  have h := reverse_cauchy_schwarz_of_lorentzianAt (B := B) (v := v) hsymm hL hw'
   simpa only [hBapp] using h
 
 end Spacetime

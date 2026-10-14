@@ -321,6 +321,8 @@ As $\Omega'$ is cyclic, $\pi_\omega(c)'\Omega'$ is dense in $\mathcal{H}_\omega'
     \pi_\omega(a)' = U\pi_\omega(a)U^{-1},
 \end{align}
 and two GNS triples associated to $(\mathfrak{U}, \omega)$ can differ at most by a unitary transformation, completing our proof of the GNS Construction Theorem.
+
+\noindent\textit{Formalization note.} The Lean proof of existence (\texttt{gns\_construction}) does not follow the construction above. It takes the Hilbert space to be Mathlib's GNS space of the positive linear functional $\omega$ (\texttt{PositiveLinearMap.GNS}, the completion of the quotient \texttt{PositiveLinearMap.PreGNS}), together with Mathlib's left-multiplication representation on it. Lemmas~\ref{lmm:cauchy-schwarz-inequality}, \ref{lmm:lmm1} and~\ref{lmm:lmm2} are formalized separately and are not used there.
 \end{proof}
 
 \subsection{Auxiliary Results Used in the Proof}

@@ -122,11 +122,11 @@ def IsFutureTimelikeTranslation (γ : ℝ → InhomogeneousLorentzGroup) : Prop 
 This packages the two *necessary* vacuum conditions — invariance and the spectrum
 condition. The predicate `ftl` is a parameter; `IsVacuumStateConcrete` fixes it to
 `IsFutureTimelikeTranslation`. -/
-def HaagKastlerNet.IsVacuumState (N : HaagKastlerNet)
+def HaagKastlerNet.IsVacuumState (N : HaagKastlerNet.{u})
     (ftl : (ℝ → InhomogeneousLorentzGroup) → Prop)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
   N.IsInvariantState ω ∧
-    ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
+    ∃ (K : Type u) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
       (_ : CompleteSpace K) (π : N.quasilocal.carrier →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
       (U : InhomogeneousLorentzGroup → (K ≃ₗᵢ[ℂ] K)),
         (∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧

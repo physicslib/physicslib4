@@ -70,7 +70,7 @@ theorem reverse_triangle_of_lorentzianAt
   have hc : (0 : ℝ) ≤ -(B v w) := by linarith
   -- Reverse Cauchy-Schwarz, rephrased for the nonnegative quantities.
   have hcs : B v v * B w w ≤ (B v w) ^ 2 :=
-    reverse_cauchy_schwarz_of_lorentzianAt hsymm hL hv hw
+    reverse_cauchy_schwarz_of_lorentzianAt hsymm hL hw
   have hab : (-(B v v)) * (-(B w w)) ≤ (-(B v w)) ^ 2 := by nlinarith [hcs]
   -- Hence `√a · √b ≤ c`.
   have hprod : Real.sqrt (-(B v v)) * Real.sqrt (-(B w w)) ≤ -(B v w) := by

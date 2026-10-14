@@ -36,7 +36,8 @@ This is the analytic form of the KMS condition (Bratteli-Robinson): at inverse
 temperature `β > 0`, `ω` is KMS iff for all `a, b` there is `F` continuous on the
 strip `{0 ≤ Im z ≤ β}`, holomorphic in the interior, with `F(t) = ω(a α_t b)`
 and `F(t + iβ) = ω(α_t b · a)`. KMS states are automatically `α`-invariant
-(`IsKMSState.invariant`, unconditionally for `β > 0` by `IsKMSState.invariant_of_pos`).
+(`IsKMSState.invariant`, given a `StripLiouville β` hypothesis; `IsKMSState.invariant_of_pos`
+discharges that extra hypothesis automatically whenever `β > 0`).
 -/
 
 namespace Physicslib4

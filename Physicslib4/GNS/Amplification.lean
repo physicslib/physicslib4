@@ -44,6 +44,9 @@ theorem summandProj_isScalar_of_isIrreducible (hirr : IsIrreducible (directSum �
     summandProj (H := H) j ∈ scalarOperators (lp H 2) :=
   isIrreducible_iff_centralizer.mp hirr ▸ summandProj_mem_commutant π j
 
+-- `DecidableEq ι` is bound by the ambient `variable` but only used irrelevantly, through
+-- `lp.single`/instance resolution, not by name in this proof; the `unusedDecidableInType`
+-- linter flags it when the full project is built (though not in isolation).
 set_option linter.unusedDecidableInType false in
 /-- A direct sum with two summands carrying nonzero vectors is **reducible**: the
 projection onto one summand is a non-scalar element of the commutant. -/
