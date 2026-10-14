@@ -69,7 +69,7 @@ one-parameter unitary group — `exp(i t P) = exp(i t Q)` for all `t` — they a
 Differentiating at `t = 0` gives `i P = i Q`, hence `P = Q`. The unbounded form is
 `generator_eq_of_eq_expUnitary`.
 
-Blueprint reference: `lmm:exp-generator-unique`. -/
+Blueprint reference: the bounded special case of `lmm:exp-generator-unique`. -/
 theorem exp_generator_unique {P Q : H →L[ℂ] H}
     (h : ∀ (t : ℝ) (x : H),
       NormedSpace.exp (((t : ℂ) * Complex.I) • P) x

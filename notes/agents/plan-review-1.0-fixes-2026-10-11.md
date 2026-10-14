@@ -60,6 +60,16 @@ norm_mul_sub_mul_lt` in `OperatorIntegral.lean` (29 lines fewer). R01-3 was not 
 `LorentzCauchySchwarz.lean`; callers are `LorentzCone.lean:73` and `LorentzOrthogonal.lean:57,219-220`;
 blueprint node `lmm:reverse-cauchy-schwarz` (`spacetime.tex:67-86`) assumes both vectors timelike.
 
+## Stage 4 progress (2026-10-14)
+
+Done, uncommitted. Formalization notes: GNS existence (Mathlib's `PositiveLinearMap.GNS`), `prpstn:hall-10.3`
+(bounded resolvent), `prpstn:integral-norm-bound` (the preliminary 6-sup bound via `lmm:lemma-1`; per D5 a
+note rather than a `\uses{}` edge). `\lean{}`: added `isSelfAdjoint_toOperator` and `integral_one`; removed
+`exp_generator_unique` from `lmm:exp-generator-unique` (bounded special case; its docstring says so).
+R14-1: blueprint statement narrowed to the derivative claim. R03-1: proof `\uses{}` of `prpstn:hall-8.4`,
+`thrm:hall-8.10` and `thrm:spectral-theorem-for-bounded-operators` trimmed to the nodes each proof cites
+(19→5, 47→6, 75→2). `blueprint_validate` shows only the existing `conv:` label errors.
+
 ## Decisions needed first (original options, kept for reference)
 
 Protected (definitions, axiom-structure fields, or blueprint specification):

@@ -1106,7 +1106,7 @@ The next in the set of "helper" propositions that we will prove is the propositi
 
 \begin{proposition}[A Bounded Quadratic Form Determines a Unique Bounded Operator]
     \label{prpstn:hall-a.63}
-    \lean{Physicslib4.Spectral.existsUnique_operator_of_isBoundedQuadraticForm}
+    \lean{Physicslib4.Spectral.existsUnique_operator_of_isBoundedQuadraticForm, Physicslib4.Spectral.IsBoundedQuadraticForm.isSelfAdjoint_toOperator}
     \leanok
     If $Q$ is a bounded quadratic form on $\mathbf{H}$, there is a unique $A \in \mathcal{B}(\mathbf{H})$ such that $Q(\psi) = \left< \psi, A\psi \right>$ for all $\psi \in \mathbf{H}$. If $Q(\psi)$ belongs to $\mathbb{R}$ for all $\psi \in \mathbf{H}$, then the operator $A$ is self-adjoint.
 \end{proposition}
@@ -1256,7 +1256,7 @@ We now establish, one at a time, the four properties asserted by the theorem.
 
 \begin{proposition}[Integral of an Indicator Function]
     \label{prpstn:integral-of-indicator}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.integral_indicator}
+    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.integral_indicator, Physicslib4.Spectral.ProjectionValuedMeasure.integral_one}
     \leanok
     Let $\Omega(X)$ be a $\sigma$-algebra on a set $X$, let $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ be a projection-valued measure, and let $f \mapsto \int_X f \, d\mu$ be the map of Theorem~\ref{thrm:operator-valued-integration}. Then for all $E \in \Omega(X)$,
     \begin{align}
@@ -1303,6 +1303,8 @@ which is the desired result.
 \begin{proof}
     \leanok
     \uses{def:adjoint-bounded, def:identity-operator, prpstn:hall-a.43, prpstn:integral-as-limit-of-simple, prpstn:integral-norm-bound-simple, prpstn:integral-of-indicator, thrm:complex-valued-simple-approximation-theorem, thrm:operator-valued-integration}
+\noindent\textit{Formalization note.} The Lean proof (\texttt{norm\_integral\_le}) follows the argument below, and also proves a preliminary bound $\|\int_X f\,d\mu\| \le 6\sup|f|$ by Lemma~\ref{lmm:lemma-1}, which it uses to pass to the limit of simple functions.
+
 The next result we must prove is that for all bounded, measurable, complex-valued functions $f$ on $X$, we have
 \begin{align}
     \left\| \, \int_X f \, d\mu \, \right\| \le \sup\limits_{\lambda \in X} \left\lvert f(\lambda) \right\rvert,
@@ -3252,7 +3254,7 @@ The properties of the (real-valued) functional calculus are captured in the foll
 \end{proposition}
 \begin{proof}
     \leanok
-    \uses{def:adjoint-bounded, prpstn:cfc-multiplicative, prpstn:cfc-non-negative, prpstn:cfc-norm, prpstn:cfc-self-adjoint, prpstn:cfc-spectral-mapping, def:bounded-operator-notation, prpstn:hall-8.3, def:non-negative-operator, def:bounded-operator-resolvent-and-spectrum, prpstn:hall-7.5, thrm:boundedness-theorem, thrm:operator-valued-integration, lmm:spectral-mapping-theorem, thrm:composition-theorem, prpstn:hall-7.7, lmm:hall-prblm-7.4.8, lmm:spectrum-is-compact-metric-measurable, prpstn:continuity-of-the-adjoint}
+    \uses{prpstn:cfc-multiplicative, prpstn:cfc-self-adjoint, prpstn:cfc-non-negative, prpstn:cfc-norm, prpstn:cfc-spectral-mapping}
 Each of the four properties is established separately below: multiplicativity in Proposition~\ref{prpstn:cfc-multiplicative}, self-adjointness in Proposition~\ref{prpstn:cfc-self-adjoint}, non-negativity in Proposition~\ref{prpstn:cfc-non-negative}, and the two norm-and-spectrum identities in Proposition~\ref{prpstn:cfc-norm} and Proposition~\ref{prpstn:cfc-spectral-mapping} respectively.
 \end{proof}
 
@@ -4833,7 +4835,7 @@ In what is the penultimate result required to prove the \textbf{Spectral Theorem
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:adjoint-bounded, prpstn:Q-continuous-under-limits, def:separates-points, lmm:bounded-operators-form-a-banach-space, lmm:hall-prblm-8.3.3c, lmm:pointwise-limits-of-borel-measurable-functions, lmm:projection-norm-decreasing, prpstn:bounded-operators-are-continuous, prpstn:continuity-of-norm-and-inner-product, prpstn:integral-multiplicative, prpstn:integral-norm-bound, prpstn:mua-countably-additive, prpstn:mua-empty-and-whole, prpstn:mua-integrates-to-A, prpstn:mua-multiplicative, prpstn:mua-projection, prpstn:orthogonal-sum-converges, prpstn:orthogonal-sum-is-projection, prpstn:orthogonal-sum-range, prpstn:pvm-agree-on-continuous, prpstn:pvm-agree-on-measurable, prpstn:pvm-agree-on-polynomials, thrm:bounded-convergence-theorem, thrm:bounded-linear-transformation-theorem, thrm:hall-prblm-8.3.4, thrm:monotone-convergence-theorem, def:identity-operator, def:indicator-function, prpstn:basic-integral-properties, def:bounded-operator-notation, def:bounded-operator-resolvent-and-spectrum, def:hall-8.8, def:projection-valued-measure, thrm:operator-valued-integration, lmm:lemma-3, prpstn:hall-8.9, def:bounded-orthogonal-projection, lmm:lemma-4, prpstn:hall-8.3, thrm:projection-valued-measures-associated-measure, def:hall-8.6, prpstn:hall-a.63, thrm:riesz-representation, prpstn:hall-7.7, thrm:boundedness-theorem, lmm:spectral-mapping-theorem, lmm:spectrum-is-compact-metric-measurable}
+    \uses{def:projection-valued-measure, prpstn:mua-projection, prpstn:mua-multiplicative, prpstn:mua-empty-and-whole, prpstn:mua-countably-additive, prpstn:mua-integrates-to-A}
 This proof broadly consists of two parts \textbf{Part 1:} prove that $\mu^A$ is a projection valued measure on $\sigma(A)$ and \textbf{Part 2:} prove that $\mu^A$ satisfies
 \begin{align}
     \int_{\sigma(A)} \lambda \, d\mu^A(\lambda) = A.
@@ -5806,7 +5808,7 @@ So with this we have proven that under the hypotheses of the Theorem~\ref{thrm:h
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:adjoint-bounded, thrm:gelfand-formula, prpstn:resolvent-holomorphy-and-neumann-series, crllr:crllr-1, def:F-class, def:L0-class, def:algebra-of-sets, def:hall-8.6, def:hall-8.8, def:separates-points, def:spectral-radius, lmm:associated-measures-are-finite, lmm:bounded-operators-form-a-banach-space, lmm:hall-7.6, lmm:hall-7.8, lmm:hall-8.1, lmm:hall-ex-8.3.1, lmm:hall-prblm-7.4.8, lmm:hall-prblm-8.3.3a, lmm:hall-prblm-8.3.3b, lmm:hall-prblm-8.3.3c, lmm:lemma-1, lmm:lemma-2, lmm:pointwise-limits-of-borel-measurable-functions, lmm:spectral-mapping-theorem, lmm:spectrum-is-compact-metric-measurable, prpstn:F-bounded, prpstn:F-closed-under-limits, prpstn:F-contains-continuous, prpstn:F-homogeneous, prpstn:F-sesquilinear, prpstn:L0-complement, prpstn:L0-contains-closed, prpstn:L0-contains-empty, prpstn:L0-union, prpstn:bounded-operators-are-continuous, prpstn:cfc-multiplicative, prpstn:cfc-non-negative, prpstn:cfc-norm, prpstn:cfc-self-adjoint, prpstn:cfc-spectral-mapping, prpstn:continuity-of-the-adjoint, prpstn:hall-7.2, prpstn:hall-7.3, prpstn:hall-7.5, prpstn:hall-7.7, prpstn:hall-8.3, prpstn:hall-8.4, prpstn:hall-8.7, prpstn:hall-a.34, prpstn:hall-a.62, thrm:analytic-equivalence-theorem, thrm:archimedean-property, thrm:bounded-convergence-theorem, thrm:bounded-linear-transformation-theorem, thrm:boundedness-theorem, thrm:complex-valued-simple-approximation-theorem, thrm:composition-theorem, thrm:existence-of-bump-functions, thrm:fundamental-theorem-of-algebra, thrm:maximum-modulus-principle, thrm:monotone-class-theorem, thrm:monotone-convergence-theorem-nonincreasing, thrm:riesz-representation, def:identity-operator, def:indicator-function, def:orthogonal-complement, prpstn:basic-integral-properties, def:bounded-operator-notation, def:projection-valued-measure, def:bounded-operator-resolvent-and-spectrum, def:bounded-orthogonal-projection, thrm:operator-valued-integration, thrm:hall-8.10, thrm:hall-prblm-8.3.4}
+    \uses{thrm:hall-8.10, thrm:hall-prblm-8.3.4}
 \textit{Existence.} Theorem~\ref{thrm:hall-8.10} constructs a projection-valued measure $\mu^A$ on the Borel $\sigma$-algebra of $\sigma(A)$, with values in orthogonal projections on $\mathbf{H}$, and establishes
 \begin{align}
     \int_{\sigma(A)} \lambda \, d\mu^A(\lambda) = A.

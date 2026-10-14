@@ -473,12 +473,12 @@
     \lean{Physicslib4.Spacetime.SmoothPath.mfderiv_apply_tangent_eq_zero}
     \uses{def:paths}
     \leanok
-    Let $\mu : \Sigma \to M$ be a smooth path, $s \in \Sigma$, and $f : M \to \mathbb{R}$ differentiable at $\mu(s)$ with $f(\mu(t)) = 0$ for all $t \in \Sigma$ in a neighbourhood of $s$. Then $f(\mu(s)) = 0$ and $df_{\mu(s)}\big(\dot\mu(s)\big) = 0$, where $\dot\mu(s)$ is the tangent vector of $\mu$ at $s$ (the within-derivative on $\Sigma$).
+    Let $\mu : \Sigma \to M$ be a smooth path, $s \in \Sigma$, and $f : M \to \mathbb{R}$ differentiable at $\mu(s)$ with $f(\mu(t)) = 0$ for all $t \in \Sigma$ in a neighbourhood of $s$. Then $df_{\mu(s)}\big(\dot\mu(s)\big) = 0$, where $\dot\mu(s)$ is the tangent vector of $\mu$ at $s$ (the within-derivative on $\Sigma$).
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{def:paths, lmm:path-parameter-unique-diff}
-    The first claim is the hypothesis at $t = s$. By the chain rule within $\Sigma$ (\texttt{HasMFDerivAt.comp\_hasMFDerivWithinAt}) the within-derivative of $f \circ \mu$ at $s$ is $df_{\mu(s)} \circ d\mu$, whose value on $1$ is $df_{\mu(s)}(\dot\mu(s))$. On the other hand $f \circ \mu$ is eventually equal to $0$ within $\Sigma$ at $s$, so it also has within-derivative $0$ (\texttt{HasMFDerivWithinAt.congr\_of\_eventuallyEq}). Within-derivatives on $\Sigma$ are unique (\ref{lmm:path-parameter-unique-diff}), so the two agree.
+    By the chain rule within $\Sigma$ (\texttt{HasMFDerivAt.comp\_hasMFDerivWithinAt}) the within-derivative of $f \circ \mu$ at $s$ is $df_{\mu(s)} \circ d\mu$, whose value on $1$ is $df_{\mu(s)}(\dot\mu(s))$. On the other hand $f \circ \mu$ is eventually equal to $0$ within $\Sigma$ at $s$, so it also has within-derivative $0$ (\texttt{HasMFDerivWithinAt.congr\_of\_eventuallyEq}). Within-derivatives on $\Sigma$ are unique (\ref{lmm:path-parameter-unique-diff}), so the two agree.
 \end{proof}
 
 \begin{lemma}[Covariant Derivative Along a Curve is Local]
