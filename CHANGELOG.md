@@ -8,6 +8,10 @@ file is where its history lives.
 
 The first release, 1.0, is in preparation.
 
+- The project builds against Lean and Mathlib `v4.35.0` (doc-gen4 `v4.35.0`). Two proofs follow
+  Mathlib API changes: `isCovariantDerivativeOn_fderiv` (`mvfderiv_eq_fderiv`) and
+  `isAbelian_iff_le_commutant` (`IsConcreteLE.le_iff` replaces `SetLike.le_def`).
+
 ## Pre-1.0 development notes
 
 The project started in June 2026. The notes below summarise the changes made before the first

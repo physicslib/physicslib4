@@ -440,7 +440,7 @@ is essentially definitional: `R ≤ R'` unfolds, via `VonNeumannAlgebra.commutan
 with every element of `R`. -/
 theorem isAbelian_iff_le_commutant (R : VonNeumannAlgebra H) :
     (∀ x ∈ R, ∀ y ∈ R, x * y = y * x) ↔ R ≤ R.commutant := by
-  simp [SetLike.le_def, VonNeumannAlgebra.mem_commutant_iff, eq_comm]
+  simp [IsConcreteLE.le_iff, VonNeumannAlgebra.mem_commutant_iff, eq_comm]
 
 /-- **The center `R ∩ R'` is bicommutant-closed.** For a von Neumann algebra `R`,
 the intersection `R ∩ R'` equals its own bicommutant, so it is again a von Neumann

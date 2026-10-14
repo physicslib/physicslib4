@@ -91,7 +91,7 @@ The blueprint annotates every node with the Lean declarations that realise it, s
 3. Run `lake exe cache get!` to download built dependencies (this speeds up the build process).
 4. Run `lake build` to build all files in this repository.
 
-The project targets Lean and Mathlib v4.34.1, as pinned by `lean-toolchain` and `lakefile.toml`.
+The project targets Lean and Mathlib v4.35.0, as pinned by `lean-toolchain` and `lakefile.toml`.
 
 For more on getting started with Lean, visit the [Lean community website](https://leanprover-community.github.io) and the [Mathlib documentation](https://leanprover-community.github.io/mathlib4_docs/).
 

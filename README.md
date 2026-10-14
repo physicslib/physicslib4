@@ -47,7 +47,7 @@ Contributions in any of these directions are welcome.
 
 ## Getting Started
 
-Requires [Lean 4](https://leanprover-community.github.io/get_started.html) and [Mathlib4](https://github.com/leanprover-community/mathlib4), both at v4.34.1, as pinned by `lean-toolchain` and `lakefile.toml`.
+Requires [Lean 4](https://leanprover-community.github.io/get_started.html) and [Mathlib4](https://github.com/leanprover-community/mathlib4), both at v4.35.0, as pinned by `lean-toolchain` and `lakefile.toml`.
 
 ```bash
 git clone https://github.com/physicslib/physicslib4.git

@@ -54,7 +54,7 @@ theorem isCovariantDerivativeOn_fderiv :
   · have h := fderiv_add (F := E) (hd hσ) (hd hσ')
     exact h
   · have h := fderiv_smul (F := E) (mdifferentiableAt_iff_differentiableAt.1 hg) (hd hσ)
-    rw [← mfderiv_eq_fderiv (E := E) (E' := ℝ)] at h
+    rw [mvfderiv_eq_fderiv]
     exact h
 
 /-- The **flat connection** on `E`: `∇_v σ = Dσ(v)`.
