@@ -100,6 +100,14 @@ reworded. R16-2: `issues`/`pull-requests` permissions removed from `blueprint.ym
 next push to `main`). R16-3: both workflows use `actions/checkout@v6` and the same pinned `lean-action`
 SHA; `free-disk-space` pinned to v1.3.2.
 
+## Stage 8 progress (2026-10-14)
+
+Done, home page uncommitted. `lake build` and `lake lint` pass; `leanblueprint pdf`, `web` and `checkdecls`
+pass (no undefined references in the final LaTeX pass). Home page renumbered from the rebuilt blueprint
+(details in `notes/agents/stage8-progress.md`): 675 declarations, 1,188 distinct Lean names, 345 PDF pages,
+13 new entries, all 681 links resolve. Verify receipt refreshed (`lean_guard.py verify`). Re-audit of the
+plan's changes passes (`notes/agents/audit-review-1.0-fixes-2026-10-14.md`). The plan is complete.
+
 ## Decisions needed first (original options, kept for reference)
 
 Protected (definitions, axiom-structure fields, or blueprint specification):
