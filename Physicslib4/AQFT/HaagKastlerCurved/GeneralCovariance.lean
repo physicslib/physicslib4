@@ -158,6 +158,9 @@ Quantifying over *all* Lorentzian spacetimes, rather than over the metrics on
 one fixed carrier, is what makes general covariance a statement about the
 theory: the pullback of any `L` is again an object of the same family, so both
 sides of the equivalence are always in scope.
+
+The nets of a net theory share one universe for their local algebras, the
+universe parameter of `NetTheory`.
 -/
 abbrev NetTheory :=
   ∀ L : Spacetime.LorentzianSpacetime, HaagKastlerNet L.toAbstractIdentityComponent

@@ -55,7 +55,9 @@ open Physicslib4 Physicslib4.GNS
 
 namespace HaagKastlerNet
 
-variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
+universe u v
+
+variable {M : LorentzianSpacetime.{u}} (N : HaagKastlerNet.{u, v} M)
 
 /-- Transport a local algebra along an equality of regions. -/
 noncomputable def algCongr {B₁ B₂ : Set M.Carrier} (h : B₁ = B₂) :
@@ -147,7 +149,7 @@ theorem exists_gns_unitary_stabilizer (B : Set M.Carrier)
     (ω : State (N.algebra B))
     (hinv : ∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
         ω (N.stabAutHom B g a) = ω a) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type v) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : ↥(MulAction.stabilizer M.Isom B) → (H ≃ₗᵢ[ℂ] H)),
         (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -182,7 +184,7 @@ theorem exists_gns_unitary_stabilizer_strongContinuous [TopologicalSpace M.Isom]
     (hwc : ∀ a b : N.algebra B,
         Continuous fun g : ↥(MulAction.stabilizer M.Isom B) =>
           (ω (star a * N.stabAutHom B g b) : ℂ)) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type v) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : ↥(MulAction.stabilizer M.Isom B) → (H ≃ₗᵢ[ℂ] H)),
         (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -209,7 +211,7 @@ theorem exists_gns_unitaryRep_stabilizer (B : Set M.Carrier)
     (ω : State (N.algebra B))
     (hinv : ∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
         ω (N.stabAutHom B g a) = ω a) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type v) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : ↥(MulAction.stabilizer M.Isom B) →* (H ≃ₗᵢ[ℂ] H)),
         (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -232,7 +234,7 @@ theorem exists_gns_unitaryRep_stabilizer_strongContinuous [TopologicalSpace M.Is
     (hwc : ∀ a b : N.algebra B,
         Continuous fun g : ↥(MulAction.stabilizer M.Isom B) =>
           (ω (star a * N.stabAutHom B g b) : ℂ)) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type v) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : ↥(MulAction.stabilizer M.Isom B) →* (H ≃ₗᵢ[ℂ] H)),
         (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -262,7 +264,7 @@ theorem exists_gns_irreducible_covariant_stabilizer (B : Set M.Carrier)
     (hinv : ∀ (g : ↥(MulAction.stabilizer M.Isom B)) (a : N.algebra B),
         ω (N.stabAutHom B g a) = ω a)
     (hpure : IsPure ω) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type v) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : ↥(MulAction.stabilizer M.Isom B) → (H ≃ₗᵢ[ℂ] H)),
         IsCyclicVector π Ω ∧

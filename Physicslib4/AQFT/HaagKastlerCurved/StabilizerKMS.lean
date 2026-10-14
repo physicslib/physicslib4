@@ -42,7 +42,9 @@ open scoped Pointwise InnerProductSpace
 
 namespace HaagKastlerNet
 
-variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
+universe u v
+
+variable {M : LorentzianSpacetime.{u}} (N : HaagKastlerNet.{u, v} M)
 
 /-- The one-parameter automorphism family of the local algebra `𝔘(B)` induced by
 a flow `t ↦ φ_t` into the stabilizer `Stab(B)`, via the stabilizer automorphism
@@ -96,7 +98,7 @@ theorem IsKMSStateForFlow.exists_gns_unitary_strongContinuous
     (hkms : N.IsKMSStateForFlow B flow β ω)
     (hwc : ∀ a b : N.algebra B,
         Continuous fun t : ℝ => (ω (star a * N.flowAut B flow t b) : ℂ)) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type v) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
       (U : ℝ → (H ≃ₗᵢ[ℂ] H)),
         (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -145,7 +147,7 @@ def IsGroundStateForFlow (B : Set M.Carrier)
     (flow : ℝ → ↥(MulAction.stabilizer M.Isom B))
     (ω : Physicslib4.GNS.State (N.algebra B)) : Prop :=
   (∀ (t : ℝ) (a : N.algebra B), (ω (N.flowAut B flow t a) : ℂ) = ω a) ∧
-    ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
+    ∃ (K : Type v) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
       (_ : CompleteSpace K) (π : N.algebra B →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
       (U : ℝ → (K ≃ₗᵢ[ℂ] K)),
         (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧
@@ -169,7 +171,7 @@ theorem IsGroundStateForFlow.exists_strongContinuous_unitary (B : Set M.Carrier)
     (flow : ℝ → ↥(MulAction.stabilizer M.Isom B))
     {ω : Physicslib4.GNS.State (N.algebra B)}
     (h : N.IsGroundStateForFlow B flow ω) :
-    ∃ (K : Type) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
+    ∃ (K : Type v) (_ : NormedAddCommGroup K) (_ : InnerProductSpace ℂ K)
       (_ : CompleteSpace K) (π : N.algebra B →⋆ₐ[ℂ] (K →L[ℂ] K)) (Ω : K)
       (U : ℝ → (K ≃ₗᵢ[ℂ] K)),
         (∀ a : N.algebra B, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) ∧

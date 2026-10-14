@@ -56,9 +56,10 @@ transfer verbatim.
 * `Carrier` and `Isom` are universe-polymorphic so that a concrete
   spacetime in any universe (e.g. `Physicslib4.Spacetime`, whose
   carrier is `Type*`) can instantiate the interface. The local
-  algebras assigned by `LocalNet` still land in `Type` (universe `0`),
-  which is what keeps the GNS construction in Axiom 4 at a fixed
-  universe regardless of `Carrier`.
+  algebras assigned by `LocalNet.{u, v}` live in a universe `v`
+  independent of the universe `u` of `Carrier`, and the GNS Hilbert
+  spaces of Axiom 4 (and of the GNS results built on the net) live in
+  the same universe `v` as the algebras, as in the Minkowski net.
 -/
 
 namespace Physicslib4

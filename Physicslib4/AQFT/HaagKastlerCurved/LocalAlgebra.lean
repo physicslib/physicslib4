@@ -55,7 +55,9 @@ namespace HaagKastlerCurved
 
 open Physicslib4 Physicslib4.GNS
 
-variable {M : LorentzianSpacetime}
+universe u v
+
+variable {M : LorentzianSpacetime.{u}}
 
 /--
 **Local Observable** (blueprint `def:local-observable`).
@@ -71,7 +73,7 @@ local algebra.
 Blueprint reference: `def:local-observable`.
 -/
 def IsLocalObservable {U : LocalNet M} {B : Set M.Carrier}
-    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (T : H →L[ℂ] H) : Prop :=
   ∃ a : U.algebra B, IsSelfAdjoint a ∧ T = π a
 
@@ -79,7 +81,7 @@ def IsLocalObservable {U : LocalNet M} {B : Set M.Carrier}
 self-adjoint element of the local algebra under a `*`-homomorphism.
 This is the self-adjointness clause of `def:local-observable`. -/
 theorem IsLocalObservable.isSelfAdjoint {U : LocalNet M} {B : Set M.Carrier}
-    {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     {π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)} {T : H →L[ℂ] H}
     (hT : IsLocalObservable π T) : IsSelfAdjoint T := by
   obtain ⟨a, ha, rfl⟩ := hT
@@ -91,9 +93,9 @@ element `a` of it, the GNS construction provides a `*`-representation
 in which `π a` is a local observable. This is the existence content of
 `def:local-observable`, tying together `thrm:gns-construction-theorem`
 and `def:state`. -/
-theorem exists_isLocalObservable {U : LocalNet M} {B : Set M.Carrier}
+theorem exists_isLocalObservable {U : LocalNet.{u, v} M} {B : Set M.Carrier}
     (ω : State (U.algebra B)) {a : U.algebra B} (ha : IsSelfAdjoint a) :
-    ∃ (H : Type) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
+    ∃ (H : Type v) (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H)
       (_ : CompleteSpace H) (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)),
         IsLocalObservable π (π a) ∧ IsSelfAdjoint (π a) := by
   obtain ⟨H, hng, hip, hcs, π, _, _, _, _⟩ := gns_construction ω
@@ -110,11 +112,15 @@ This is the curved reading of "all observables are local
 observables": the observables of the theory are exactly the images
 of self-adjoint local elements.
 
+The Hilbert spaces `H` range over the universe `v` of the local
+algebras, which is the universe of the GNS spaces that
+`gns_construction` produces for them (as in the Minkowski net).
+
 Blueprint reference: `def:local-completeness-in-curved-spacetime`.
 -/
-def LocalAlgebra (U : LocalNet M) : Prop :=
+def LocalAlgebra (U : LocalNet.{u, v} M) : Prop :=
   ∀ ⦃B : Set M.Carrier⦄, M.IsBasisSet B →
-    ∀ {H : Type} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    ∀ {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
       (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (T : H →L[ℂ] H),
         IsSelfAdjoint T → T ∈ Set.range π → IsLocalObservable π T
 
@@ -136,7 +142,7 @@ theorem localAlgebra_of (U : LocalNet M) : LocalAlgebra U := by
 
 section Observables
 
-variable {U : LocalNet M} {B : Set M.Carrier} {H : Type}
+variable {U : LocalNet M} {B : Set M.Carrier} {H : Type*}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   {π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)}
 
@@ -197,14 +203,14 @@ end Observables
 /-- The set of *local observables* on the GNS Hilbert space `H` for the
 representation `π`: all bounded operators of the form `π a` with `a` a
 self-adjoint element of the local algebra. -/
-def localObservables {U : LocalNet M} {B : Set M.Carrier} {H : Type}
+def localObservables {U : LocalNet M} {B : Set M.Carrier} {H : Type*}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) : Set (H →L[ℂ] H) :=
   {T | IsLocalObservable π T}
 
 /-- The local observables are exactly the self-adjoint elements lying in the
 range of the representation `π`. -/
-theorem localObservables_eq {U : LocalNet M} {B : Set M.Carrier} {H : Type}
+theorem localObservables_eq {U : LocalNet M} {B : Set M.Carrier} {H : Type*}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) :
     localObservables π
@@ -215,7 +221,7 @@ theorem localObservables_eq {U : LocalNet M} {B : Set M.Carrier} {H : Type}
 
 section ObservablesSet
 
-variable {U : LocalNet M} {B : Set M.Carrier} {H : Type}
+variable {U : LocalNet M} {B : Set M.Carrier} {H : Type*}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
 

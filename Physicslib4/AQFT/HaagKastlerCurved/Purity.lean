@@ -38,7 +38,9 @@ namespace HaagKastlerNet
 open Physicslib4.GNS
 open scoped InnerProductSpace Pointwise
 
-variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
+universe u v
+
+variable {M : LorentzianSpacetime.{u}} (N : HaagKastlerNet.{u, v} M)
 
 /-- **Pure ⟺ extreme point for a curved local algebra.** A state `ω` on the local
 algebra `𝔘(B)` of a curved Haag-Kastler net is pure if and only if it is an
@@ -54,7 +56,7 @@ reproducing `ω` in which `ω` is pure if and only if the representation `π` is
 irreducible (its commutant is trivial). This combines the GNS construction with
 the abstract `isPure_iff_isIrreducible`. -/
 theorem exists_gns_pure_iff_irreducible {B : Set M.Carrier} (ω : State (N.algebra B)) :
-    ∃ (H : Type)
+    ∃ (H : Type v)
       (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
       (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
         IsCyclicVector π Ω ∧
@@ -69,7 +71,7 @@ generated von Neumann algebra `π(𝔘(B))''` has trivial center (its center equ
 scalars). The abstract `GNS.exists_gns_factor_of_isPure` at the C*-algebra `𝔘(B)`. -/
 theorem exists_gns_factor_of_isPure {B : Set M.Carrier} {ω : State (N.algebra B)}
     (hpure : IsPure ω) :
-    ∃ (H : Type)
+    ∃ (H : Type v)
       (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
       (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
         IsCyclicVector π Ω ∧
@@ -84,7 +86,7 @@ von Neumann algebra is all of `𝓑(H)`: `π(𝔘(B))'' = 𝓑(H)`. The abstract
 `GNS.exists_gns_generates_all_of_isPure` at the C*-algebra `𝔘(B)`. -/
 theorem exists_gns_generates_all_of_isPure {B : Set M.Carrier} {ω : State (N.algebra B)}
     (hpure : IsPure ω) :
-    ∃ (H : Type)
+    ∃ (H : Type v)
       (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
       (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
         IsCyclicVector π Ω ∧

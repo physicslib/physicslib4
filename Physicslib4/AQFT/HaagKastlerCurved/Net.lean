@@ -40,17 +40,26 @@ namespace HaagKastlerCurved
 
 open scoped Pointwise
 
+universe u v
+
 /--
 A *Haag-Kastler net* on (the Alexandrov-basis sets of) a Lorentzian
 spacetime `M`: the data of Axiom 1
 (`def:local-algebras-in-curved-spacetime`) together with proofs of
 Axioms 2-5.
 
+`HaagKastlerNet.{u, v} M` has its spacetime `M` in universe `u` and its
+local algebras in universe `v`, independent of `u`.
+
 Blueprint reference: `def:haag-kastler-net-in-curved-spacetime`.
 -/
-structure HaagKastlerNet (M : LorentzianSpacetime) where
-  /-- The underlying assignment `B ↦ 𝔘(B)` (Axiom 1). -/
-  U : LocalNet M
+structure HaagKastlerNet (M : LorentzianSpacetime.{u}) where
+  /-- The underlying assignment `B ↦ 𝔘(B)` (Axiom 1).
+
+  Written `LocalNet.{u, v}` rather than `LocalNet` so that the universe `v`
+  of the local algebras is a parameter of this structure, as in the
+  Minkowski `HaagKastlerNet`. -/
+  U : LocalNet.{u, v} M
   /-- *Isotony*: the chosen functorial family of unital `*`-monomorphisms
   implementing inclusions of basis sets (Axiom 2). This is data, carrying the
   identity and composition laws. -/
@@ -69,7 +78,7 @@ structure HaagKastlerNet (M : LorentzianSpacetime) where
 
 namespace HaagKastlerNet
 
-variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
+variable {M : LorentzianSpacetime.{u}} (N : HaagKastlerNet.{u, v} M)
 
 /-- The local algebra `𝔘(B)` assigned by the net to a region `B`
 (the Axiom 1 data, via the underlying `LocalNet M`). -/
@@ -248,7 +257,7 @@ theorem commute_of_spacelike_mono
 
 section Observables
 
-variable {B : Set M.Carrier} {H : Type}
+variable {B : Set M.Carrier} {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
 
@@ -315,8 +324,10 @@ def trivialSpacetime : LorentzianSpacetime where
 
 /-- The *trivial local net* over **any** abstract Lorentzian spacetime: every
 region is assigned the C*-algebra `ℂ`, with the empty-region normalisation the
-identity isomorphism. -/
-noncomputable def trivialLocalNet (M : LorentzianSpacetime) : LocalNet M where
+identity isomorphism.
+
+Its algebras live in universe `0`, because `ℂ : Type`. -/
+noncomputable def trivialLocalNet (M : LorentzianSpacetime.{u}) : LocalNet.{u, 0} M where
   algebra := fun _ => ℂ
   instCStarAlgebra := fun _ => inferInstance
   emptyEquivComplex := StarAlgEquiv.refl ℂ ℂ
@@ -356,9 +367,9 @@ theorem trivialLocalNet_isometricCovariance (M : LorentzianSpacetime) :
   · intro _ _ _ _ _ _ _; rfl
 
 /-- The trivial net over any abstract Lorentzian spacetime, bundled as a
-Haag-Kastler net. -/
-noncomputable def trivialHaagKastlerNet (M : LorentzianSpacetime) :
-    HaagKastlerNet M where
+Haag-Kastler net, with its algebras in universe `0`. -/
+noncomputable def trivialHaagKastlerNet (M : LorentzianSpacetime.{u}) :
+    HaagKastlerNet.{u, 0} M where
   U := trivialLocalNet M
   isotony := trivialLocalNetIsotony M
   localCommutativity := trivialLocalNet_localCommutativity M
@@ -367,9 +378,15 @@ noncomputable def trivialHaagKastlerNet (M : LorentzianSpacetime) :
 
 /-- **The curved-spacetime Haag-Kastler axioms are jointly satisfiable over
 every Lorentzian spacetime.** The trivial net (every region ↦ `ℂ`) is a
-Haag-Kastler net. -/
-theorem nonempty_haagKastlerNet (M : LorentzianSpacetime) :
-    Nonempty (HaagKastlerNet M) :=
+Haag-Kastler net.
+
+Stated with the algebras in universe `0` because the witness is built from `ℂ`,
+which lives in `Type`. Consistency of the axioms needs only one model, so
+nothing is lost; a witness in an arbitrary universe would come from a `ULift`
+of this one. The same choice is made for the Minkowski
+`HaagKastler.nonempty_haagKastlerNet`. -/
+theorem nonempty_haagKastlerNet (M : LorentzianSpacetime.{u}) :
+    Nonempty (HaagKastlerNet.{u, 0} M) :=
   ⟨trivialHaagKastlerNet M⟩
 
 end HaagKastlerCurved
