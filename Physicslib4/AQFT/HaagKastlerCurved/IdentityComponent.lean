@@ -48,9 +48,13 @@ theorem isometricCovariance_trivial_identityComponent (L : LorentzianSpacetime) 
   Physicslib4.AQFT.HaagKastlerCurved.trivialLocalNet_isometricCovariance _
 
 /-- Over the concrete spacetime (with the identity-component isometry group),
-the full set of curved-spacetime Haag-Kastler axioms is jointly satisfiable. -/
+the full set of curved-spacetime Haag-Kastler axioms is jointly satisfiable.
+
+The witness is the trivial net, whose algebras are `ℂ`, so the net is stated
+with its algebras in universe `0` (as in
+`Physicslib4.AQFT.HaagKastlerCurved.nonempty_haagKastlerNet`). -/
 theorem nonempty_haagKastlerNet_identityComponent (L : LorentzianSpacetime) :
-    Nonempty (Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet
+    Nonempty (Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.{_, 0}
       L.toAbstractIdentityComponent) :=
   Physicslib4.AQFT.HaagKastlerCurved.nonempty_haagKastlerNet _
 

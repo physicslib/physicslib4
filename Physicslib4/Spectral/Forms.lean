@@ -39,6 +39,12 @@ quadratic form and invoking `existsUnique_operator_of_isBoundedQuadraticForm`
   `Physicslib4.Spectral.IsBoundedQuadraticForm.isSelfAdjoint_toOperator` — that
   operator is self-adjoint when the form is real-valued.
 
+## Supporting lemmas
+
+* `Physicslib4.Spectral.norm_le_of_tendsto_of_bound` — the quantitative half of
+  `lmm:bqf-pointwise-limit`: a pointwise limit of uniformly bounded forms obeys
+  the same bound.
+
 ## Implementation notes
 
 Sesquilinearity and bounded sesquilinearity are *not* recorded as predicates on raw

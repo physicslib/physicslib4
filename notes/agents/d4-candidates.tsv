@@ -1,0 +1,67 @@
+Physicslib4/AQFT/HaagKastler/LorentzCovariance.lean:286	theorem	timelike_separated_smul_iff	
+Physicslib4/AQFT/HaagKastler/LorentzCovariance.lean:294	theorem	spacelike_separated_smul_iff	
+Physicslib4/AQFT/HaagKastler/LorentzCovariance.lean:302	theorem	null_separated_smul_iff	
+Physicslib4/AQFT/HaagKastler/Net.lean:224	theorem	commute_ι_of_spacelike_symm	
+Physicslib4/AQFT/HaagKastler/Net.lean:247	theorem	isQuasilocalObservable_of_isSelfAdjoint	
+Physicslib4/AQFT/HaagKastler/Net.lean:258	theorem	isQuasilocalObservable_add	
+Physicslib4/AQFT/HaagKastler/Net.lean:266	theorem	isQuasilocalObservable_smul	
+Physicslib4/AQFT/HaagKastler/Net.lean:273	theorem	isQuasilocalObservable_smul_add_smul	
+Physicslib4/AQFT/HaagKastler/QuasilocalColimit.lean:342	theorem	colimitStarOf_apply	simp
+Physicslib4/AQFT/HaagKastler/QuasilocalColimit.lean:359	theorem	quasilocalEmbedding_apply	simp
+Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean:521	theorem	actionHom_apply	simp
+Physicslib4/AQFT/HaagKastler/QuasilocalObservable.lean:172	theorem	quasilocalObservables_eq	
+Physicslib4/AQFT/HaagKastler/QuasilocalObservable.lean:188	theorem	one_mem_quasilocalObservables	
+Physicslib4/AQFT/HaagKastler/QuasilocalObservable.lean:193	theorem	add_mem_quasilocalObservables	
+Physicslib4/AQFT/HaagKastler/QuasilocalObservable.lean:200	theorem	smul_mem_quasilocalObservables	
+Physicslib4/AQFT/HaagKastlerCurved/Concrete.lean:81	theorem	toAbstractIdentityComponent_IsBasisSet	simp
+Physicslib4/AQFT/HaagKastlerCurved/Concrete.lean:84	theorem	toAbstractIdentityComponent_IsCompletelySpacelike	simp
+Physicslib4/AQFT/HaagKastlerCurved/Concrete.lean:90	theorem	toAbstractIdentityComponent_Isom	simp
+Physicslib4/AQFT/HaagKastlerCurved/Concrete.lean:99	instance	instTopologicalSpaceToAbstractIdentityComponentIsom	
+Physicslib4/AQFT/HaagKastlerCurved/LocalAlgebra.lean:213	theorem	localObservables_eq	
+Physicslib4/AQFT/HaagKastlerCurved/LocalAlgebra.lean:229	theorem	one_mem_localObservables	
+Physicslib4/AQFT/HaagKastlerCurved/LocalAlgebra.lean:234	theorem	add_mem_localObservables	
+Physicslib4/AQFT/HaagKastlerCurved/LocalAlgebra.lean:241	theorem	smul_mem_localObservables	
+Physicslib4/AQFT/HaagKastlerCurved/Net.lean:176	theorem	commIsotony_injective	
+Physicslib4/AQFT/HaagKastlerCurved/Net.lean:229	theorem	commute_of_spacelike_symm	
+Physicslib4/AQFT/HaagKastlerCurved/Net.lean:268	theorem	isLocalObservable_of_isSelfAdjoint	
+Physicslib4/AQFT/HaagKastlerCurved/Net.lean:278	theorem	isLocalObservable_add	
+Physicslib4/AQFT/HaagKastlerCurved/Net.lean:285	theorem	isLocalObservable_smul	
+Physicslib4/AQFT/HaagKastlerCurved/Net.lean:292	theorem	isLocalObservable_smul_add_smul	
+Physicslib4/AQFT/HaagKastlerCurved/Net.lean:313	def	trivialSpacetime	
+Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean:134	theorem	stabAutMonoidHom_apply	simp
+Physicslib4/AQFT/PositiveEnergy.lean:73	theorem	exp_generator_unique	
+Physicslib4/Analysis/CStarCompletion.lean:230	theorem	coe_coeStarAlgHom	simp
+Physicslib4/GNS/DirectSum.lean:51	theorem	lpEvalCLM_apply	simp
+Physicslib4/GNS/Irreducibility.lean:300	theorem	coe_starSubalgebraCentralizer	simp
+Physicslib4/GNS/PureStateExists.lean:56	theorem	State.toWeakDual_mem_weakStateSet	
+Physicslib4/GNS/Superselection.lean:48	theorem	intertwines_zero	
+Physicslib4/GNS/Superselection.lean:91	theorem	not_areDisjoint_self	
+Physicslib4/GNS/Superselection.lean:100	theorem	UnitaryEquiv.not_areDisjoint	
+Physicslib4/GNS/Superselection.lean:405	def	restrictStarAlgEquiv'	
+Physicslib4/GNS/Superselection.lean:465	theorem	UnitaryEquiv.quasiEquiv	
+Physicslib4/Operators/DensityTheorem.lean:125	theorem	diagAmplification_apply	simp
+Physicslib4/Operators/DensityTheorem.lean:135	theorem	toLp2_apply	simp
+Physicslib4/Operators/DensityTheorem.lean:155	theorem	blockEntry_apply	
+Physicslib4/Spacetime/CausalComplement.lean:196	theorem	isCausallyComplete_causalClosure	
+Physicslib4/Spacetime/CausalComplement.lean:202	theorem	spacelikeComplement_spacelikeComplement_of_isCausallyComplete	
+Physicslib4/Spacetime/CausalStructure.lean:137	theorem	isSpacelike_smul_iff	
+Physicslib4/Spacetime/Curves.lean:869	theorem	OrientedSmoothCurve.toSmoothCurve_surjective	
+Physicslib4/Spacetime/Curves.lean:878	theorem	isTimelikeSmoothCurve_toSmoothCurve_ofPath	
+Physicslib4/Spacetime/IsometryTopology.lean:57	instance	instLocallyCompactSpace	
+Physicslib4/Spacetime/IsometryTopology.lean:74	instance	instTopologicalSpace	
+Physicslib4/Spacetime/IsometryTopology.lean:131	instance	instContinuousSMul	
+Physicslib4/Spacetime/LorentzCausality.lean:476	theorem	isCompletelySpacelike_smul	
+Physicslib4/Spacetime/Minkowski.lean:174	instance	instAddCommGroupStandardMinkowskiCarrier	
+Physicslib4/Spacetime/Minkowski.lean:181	instance	instModuleStandardMinkowskiCarrier	
+Physicslib4/Spacetime/Minkowski.lean:190	instance	instNormedAddCommGroupStandardMinkowskiCarrier	
+Physicslib4/Spacetime/Minkowski.lean:194	instance	instNormedSpaceStandardMinkowskiCarrier	
+Physicslib4/Spacetime/Minkowski.lean:198	instance	instFiniteDimensionalStandardMinkowskiCarrier	
+Physicslib4/Spacetime/Minkowski.lean:1710	lemma	mfderiv_extChartAt_symm_minkowski	
+Physicslib4/Spectral/BorelCalculus.lean:356	theorem	borelCalculus_of_notMem	
+Physicslib4/Spectral/Forms.lean:599	theorem	norm_le_of_tendsto_of_bound	
+Physicslib4/Spectral/OperatorIntegral.lean:1557	theorem	isSelfAdjoint_integral_of_real	
+Physicslib4/Spectral/ProjectionValuedMeasure.lean:91	instance	instFunLike	
+Physicslib4/Spectral/Unbounded/Basic.lean:646	theorem	subSmul_domain	simp
+Physicslib4/Spectral/Unbounded/Spectrum.lean:15	structure	`IsResolvent`	
+(extra)	-	chronologicallyPrecedes_smul_iff	from stage 5a
+(extra)	-	isAlexandrovBasisSet_smul	from stage 5a

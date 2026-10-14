@@ -25,6 +25,17 @@ blueprint).
   consisting of a `LocalNet` (the Axiom 1 data) plus proofs of
   `Isotony`, `LocalCommutativity` and `LorentzCovariance`.
 
+## Supporting lemmas
+
+* `HaagKastlerNet.commute_ι_of_spacelike_symm`: the symmetric restatement of
+  `commute_ι_of_spacelike`.
+* `HaagKastlerNet.isQuasilocalObservable_of_isSelfAdjoint`,
+  `HaagKastlerNet.isQuasilocalObservable_add`,
+  `HaagKastlerNet.isQuasilocalObservable_smul`,
+  `HaagKastlerNet.isQuasilocalObservable_smul_add_smul`: membership and closure
+  API for the net's quasilocal observables, under self-adjointness, addition,
+  scaling, and real-linear combinations.
+
 ## Notes
 
 * The structure does **not** bundle Axiom 4. The existence of a quasilocal

@@ -24,6 +24,11 @@ Krein-Milman.
 * `Physicslib4.GNS.isClosed_weakStateSet` — it is weak-* closed.
 * `Physicslib4.GNS.isCompact_weakStateSet` — it is weak-* compact.
 
+## Supporting lemmas
+
+* `State.toWeakDual_mem_weakStateSet` — a state's image under `State.toWeakDual` lies in
+  `weakStateSet`; the compatibility lemma a future Krein-Milman argument will need.
+
 ## Note on pure-state existence
 
 Concluding the *existence of a pure state* by Krein-Milman needs

@@ -43,6 +43,15 @@ conclude invariance of `IsSpacelikeRelated` and `IsCompletelySpacelike`.
 * `Physicslib4.isSpacelikeRelated_smul_iff`,
   `Physicslib4.isCompletelySpacelike_smul_iff`: invariance of
   spacelike-relatedness and complete spacelikeness under the Lorentz action.
+
+## Supporting lemmas
+
+* `Physicslib4.chronologicallyPrecedes_smul_iff`: Lorentz invariance of
+  segment-level chronological precedence, a scaffolding step toward
+  `causallyPrecedes_smul_iff`.
+* `Physicslib4.isCompletelySpacelike_smul`: the one-directional,
+  `g • O` set-action form of `isCompletelySpacelike_smul_iff`, used by the
+  Haag-Kastler axioms.
 -/
 
 namespace Physicslib4

@@ -35,13 +35,20 @@ Alexandrov-basis predicate replaced by the abstract interface
 `M : LorentzianSpacetime`. The empty-region normalisation
 `𝔘(∅) = ℂ · 1` is encoded by a `StarAlgEquiv` between the fiber over
 `∅` and `ℂ`.
+
+As in the Minkowski `LocalNet`, the local algebras are universe
+polymorphic: `LocalNet.{u, v} M` assigns algebras in `Type v` over a
+spacetime `M : LorentzianSpacetime.{u}`, with `v` independent of the
+carrier's universe `u`.
 -/
 
 namespace Physicslib4
 namespace AQFT
 namespace HaagKastlerCurved
 
-variable (M : LorentzianSpacetime)
+universe u v
+
+variable (M : LorentzianSpacetime.{u})
 
 /--
 **Axiom 1 (Local Algebras), curved spacetime.** The *data* of a
@@ -58,8 +65,9 @@ Blueprint reference: `def:local-algebras-in-curved-spacetime`.
 -/
 structure LocalNet where
   /-- The C*-algebra `𝔘(B)` assigned to a (would-be Alexandrov-basis)
-  region `B`. -/
-  algebra : Set M.Carrier → Type
+  region `B`. It lives in the universe `v`, independent of the
+  universe of `M.Carrier`. -/
+  algebra : Set M.Carrier → Type v
   /-- The `CStarAlgebra` instance on each fiber `𝔘(B)`. -/
   instCStarAlgebra : ∀ B, CStarAlgebra (algebra B)
   /-- Normalisation: `𝔘(∅) = ℂ · 1`, encoded as a `*`-algebra

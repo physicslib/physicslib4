@@ -34,7 +34,9 @@ namespace HaagKastlerNet
 open Physicslib4.GNS
 open scoped InnerProductSpace
 
-variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
+universe u v
+
+variable {M : LorentzianSpacetime.{u}} (N : HaagKastlerNet.{u, v} M)
 
 /-- **Einstein causality in a representation (curved spacetime).** For any
 `*`-representation `π` of a containing basis algebra `𝔘(B)`, the images of the
@@ -57,7 +59,7 @@ reproducing `ω` in which the local observables of completely spacelike-separate
 subregions commute as operators on `H`. -/
 theorem exists_gns_einstein_causality {B : Set M.Carrier} (hB : M.IsBasisSet B)
     (ω : State (N.algebra B)) :
-    ∃ (H : Type)
+    ∃ (H : Type v)
       (_ : NormedAddCommGroup H) (_ : InnerProductSpace ℂ H) (_ : CompleteSpace H)
       (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H),
         IsCyclicVector π Ω ∧
