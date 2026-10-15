@@ -33,7 +33,8 @@ namespace Tutorial
 
 /-- The diagrams that `figure` can show, by name. -/
 def diagrams : List (String × Html) := [
-  ("diamond", Site.diamondDiagram)
+  ("diamond", Site.diamondDiagram),
+  ("cones", Site.conesDiagram)
 ]
 
 block_extension Block.exercise where

@@ -86,7 +86,7 @@ and the tutorial link to each other through `../tutorial/` and `../site/`, so vi
 as they are published:
 
 ```sh
-mkdir -p /tmp/srv/physicslib4
+rm -rf /tmp/srv && mkdir -p /tmp/srv/physicslib4   # start clean: cp -R into an existing directory nests the copy
 cp -R web/_out/site /tmp/srv/physicslib4/site
 cp -R web/_out/tutorial/html-multi /tmp/srv/physicslib4/tutorial
 python3 -m http.server -d /tmp/srv
