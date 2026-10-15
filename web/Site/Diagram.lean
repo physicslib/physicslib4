@@ -1,4 +1,4 @@
-import VersoBlog
+import Verso.Output.Html
 
 /-!
 # The spacetime diagram on the landing page

@@ -14,6 +14,9 @@ The physicslib4 site uses the Lean FRO look from `verso-web-components`: its sty
   footer markup with the same CSS classes.
 * The accent colour (`--color-primary` and its derived shades) is a deep teal, `#0f766e`.
 * Highlighted Lean code is coloured (keywords, constants, bound variables); see `siteCss`.
+
+The tutorial, a manual-genre book, reuses `colorTheme`, `siteCss` and `headerWith`
+(`Tutorial.Theme`).
 -/
 
 open Verso Genre Blog Output Html Template Multi
@@ -236,17 +239,20 @@ a.feature-card:hover .feature-card-more { transform: translateX(3px); }
 }
 "
 
-/-- One navigation entry, marked active when it is the current page. -/
-def navItem (path : Path) (title url : String) : Html :=
-  let active := !url.startsWith "https://" && path == #[url.replace "/" ""]
+/-- One navigation entry, marked active when `active` holds. -/
+def navItem (active : Bool) (title url : String) : Html :=
   {{ <li class=s!"nav-item{if active then " active" else ""}"><a class="nav-link" href={{url}}>{{title}}</a></li> }}
 
-/-- The site header: the wordmark on the left; navigation, GitHub and the theme switch on the right. -/
-def header (path : Path) : Html := {{
+/--
+The header shared by the website and the tutorial: the wordmark (linking to `home`) on the left;
+the navigation `links`, GitHub and the theme switch on the right. `isActive` picks the navigation
+entry of the current page by its title.
+-/
+def headerWith (home : String) (links : Array (String × String)) (isActive : String → Bool) : Html := {{
   <header class="site-header">
     <nav class="navbar" role="navigation" aria-label="Primary navigation">
       <div class="navbar-container container">
-        <a class="nav-logo wordmark" href="./">"physicslib4"</a>
+        <a class="nav-logo wordmark" href={{ home }}>"physicslib4"</a>
         <div class="nav-toggle">
           <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox" />
           <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">"☰"</label>
@@ -254,7 +260,7 @@ def header (path : Path) : Html := {{
         <menu class="desktop-menu">
           <ul class="desktop-menu-part"></ul>
           <ul class="desktop-menu-part">
-            {{ navLinks.map fun (t, u) => navItem path t u }}
+            {{ links.map fun (t, u) => navItem (isActive t) t u }}
             <li class="nav-item">
               <a class="nav-link" href={{ githubUrl }} aria-label="GitHub">{{ (Icon.github : Html) }}</a>
             </li>
@@ -266,28 +272,35 @@ def header (path : Path) : Html := {{
       </div>
       <menu class="mobile-nav">
         <ul class="nav-list">
-          {{ navLinks.map fun (t, u) => navItem path t u }}
-          {{ navItem path "GitHub" githubUrl }}
+          {{ links.map fun (t, u) => navItem (isActive t) t u }}
+          {{ navItem false "GitHub" githubUrl }}
         </ul>
       </menu>
     </nav>
   </header>
 }}
 
-/-- The site footer, using the `verso-web-components` footer classes. -/
-def footer : Html :=
+/-- The website header; the reference-manual entry is active on the reference-manual page. -/
+def header (path : Path) : Html :=
+  headerWith "./" navLinks fun title => title == "Reference manual" && path == #["manual"]
+
+/--
+The footer shared by the website and the tutorial, using the `verso-web-components` footer classes.
+`home` and `links` are as in `headerWith`.
+-/
+def footerWith (home : String) (links : Array (String × String)) : Html :=
   let link (title url : String) : Html :=
     {{ <li><a class="footer-text" href={{url}}>{{title}}</a></li> }}
   {{
     <footer role="contentinfo" aria-label="Site footer">
       <div class="footer-grid container">
         <nav class="footer-column" aria-label="physicslib4">
-          <a class="footer-wordmark" href="./">"physicslib4"</a>
+          <a class="footer-wordmark" href={{ home }}>"physicslib4"</a>
         </nav>
         <nav class="footer-column" aria-label="Documentation">
           <h3 class="footer-heading">"Documentation"</h3>
           <ul class="footer-links">
-            {{ navLinks.map fun (t, u) => link t u }}
+            {{ links.map fun (t, u) => link t u }}
           </ul>
         </nav>
         <nav class="footer-column" aria-label="Project">
@@ -310,6 +323,9 @@ def footer : Html :=
       </div>
     </footer>
   }}
+
+/-- The website footer. -/
+def footer : Html := footerWith "./" navLinks
 
 /--
 Page metadata for the `<head>`. The icons are a plain "p4" wordmark tile in the accent colour

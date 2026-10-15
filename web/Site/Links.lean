@@ -1,8 +1,10 @@
 /-!
 # Site-wide strings and links
 
-Paths inside the site are relative to the site root: every page carries `<base href>` pointing at the
-root, so `tutorial/` resolves to the same place from every page.
+The website and the tutorial are published side by side, at `/physicslib4/site/` and
+`/physicslib4/tutorial/`. Every page of either carries a `<base href>` pointing at its own root, so
+the relative paths below resolve to the same place from every page: `../tutorial/` from the
+website, `../site/` from the tutorial.
 -/
 
 namespace Site
@@ -25,18 +27,30 @@ def docsUrl : String := publishedRoot ++ "docs/"
 /-- A blueprint guide page for one section of Chapter 10, e.g. `sectionUrl "sec10-1-gns"`. -/
 def sectionUrl (page : String) : String := publishedRoot ++ page ++ ".html"
 
-/-- The tutorial (user guide), a page of this site. -/
-def tutorialPath : String := "tutorial/"
+/-- The tutorial, a separate book (`Tutorial/`), relative to the website root. -/
+def tutorialPath : String := "../tutorial/"
 
-/-- The reference manual, a page of this site. -/
+/-- The reference manual, a page of the website, relative to the website root. -/
 def manualPath : String := "manual/"
 
-/-- The navigation links, in order. Used by the header and the footer. -/
-def navLinks : Array (String × String) := #[
-  ("Tutorial", tutorialPath),
-  ("Reference manual", manualPath),
+/-- The website root, relative to the tutorial root. -/
+def siteFromTutorial : String := "../site/"
+
+/--
+The navigation links, in order, given the paths of the website and the tutorial roots relative to
+the current root. Used by the header and the footer of the website and the tutorial.
+-/
+def navLinksFrom (siteRoot tutorialRoot : String) : Array (String × String) := #[
+  ("Tutorial", tutorialRoot),
+  ("Reference manual", siteRoot ++ manualPath),
   ("Blueprint", blueprintUrl),
   ("API docs", docsUrl)
 ]
+
+/-- The navigation links of the website. -/
+def navLinks : Array (String × String) := navLinksFrom "" tutorialPath
+
+/-- The navigation links of the tutorial. -/
+def tutorialNavLinks : Array (String × String) := navLinksFrom siteFromTutorial "./"
 
 end Site

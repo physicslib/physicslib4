@@ -42,9 +42,9 @@ jobs:
       - name: Check documentation is in the present tense
         run: python3 scripts/check_temporal_wording.py
 
-      # The Verso site build takes several minutes, so it runs only when the site, the library or
+      # The Verso site and tutorial build takes several minutes, so it runs only when `web/`, the library or
       # the toolchain changes. Without a usable base commit (new branch, manual run) it always runs.
-      - name: Check whether the Verso site needs building
+      - name: Check whether the Verso site and tutorial need building
         id: site
         env:
           EVENT: ${{ github.event_name }}
@@ -65,9 +65,10 @@ jobs:
             echo "build=false" >> "$GITHUB_OUTPUT"
           fi
 
-      # Builds the Verso site in `web/` without deploying it (deployment is in `blueprint.yml`).
-      # The site is served from `/physicslib4/site/`, so its pages must not use root-relative URLs.
-      - name: Build the Verso site
+      # Builds the Verso site and tutorial in `web/` without deploying them (deployment is in
+      # `blueprint.yml`). They are served from `/physicslib4/site/` and `/physicslib4/tutorial/`, so
+      # their pages must not use root-relative URLs.
+      - name: Build the Verso site and tutorial
         if: steps.site.outputs.build == 'true'
         working-directory: web
         run: |
@@ -75,7 +76,8 @@ jobs:
           ~/.elan/bin/lake exe cache get
           ~/.elan/bin/lake build
           ~/.elan/bin/lake exe generate-site --output _out/site
-          if grep -rnoE '(href|src)="/[^/][^"]*"' _out/site --include='*.html'; then
-            echo "Root-relative URLs found; they break under /physicslib4/site/." >&2
+          ~/.elan/bin/lake exe generate-tutorial --output _out/tutorial
+          if grep -rnoE '(href|src)="/[^/][^"]*"' _out/site _out/tutorial/html-multi --include='*.html'; then
+            echo "Root-relative URLs found; they break under /physicslib4/site/ and /physicslib4/tutorial/." >&2
             exit 1
           fi

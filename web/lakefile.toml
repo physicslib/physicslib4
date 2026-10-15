@@ -1,6 +1,6 @@
 name = "physicslib4-web"
 version = "0.1.0"
-defaultTargets = ["Site", "generate-site"]
+defaultTargets = ["Site", "generate-site", "Tutorial", "generate-tutorial"]
 
 [[require]]
 name = "verso"
@@ -22,3 +22,11 @@ name = "Site"
 [[lean_exe]]
 name = "generate-site"
 root = "Main"
+
+[[lean_lib]]
+name = "Tutorial"
+globs = ["Tutorial", "Tutorial.+"]
+
+[[lean_exe]]
+name = "generate-tutorial"
+root = "TutorialMain"
