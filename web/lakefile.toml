@@ -1,0 +1,24 @@
+name = "physicslib4-web"
+version = "0.1.0"
+defaultTargets = ["Site", "generate-site"]
+
+[[require]]
+name = "verso"
+git = "https://github.com/leanprover/verso.git"
+rev = "v4.35.0"
+
+[[require]]
+name = "versowebcomponents"
+git = "https://github.com/leanprover/verso-web-components.git"
+rev = "v4.35.0"
+
+[[require]]
+name = "physicslib4"
+path = ".."
+
+[[lean_lib]]
+name = "Site"
+
+[[lean_exe]]
+name = "generate-site"
+root = "Main"

@@ -2,8 +2,6 @@
 
 **A Lean 4 formalisation of the mathematical foundations of physics**
 
-![Three pictures of a bull in increasing levels of abstraction](/images/readme/picasso.png)
-
 ## Goal
 
 This project works towards a formal resolution of **Hilbert's 6th problem** — the axiomatisation of the mathematical foundations of physics — in the [Lean 4 theorem prover](https://leanprover-community.github.io).

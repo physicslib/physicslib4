@@ -515,3 +515,21 @@ repository on 2026-10-14 (paths relative to repo root):
    stable `v4.35.0` tags exist, checked with `git ls-remote`). `web/` then shares the project's toolchain,
    so docstrings can be embedded directly.
 3. Rollout: the Verso site goes alongside the Jekyll site first, then replaces it.
+
+## Branding and content decisions (2026-10-15)
+
+5. Name "physicslib4", tagline "A Lean 4 formalisation of the mathematical foundations of physics";
+   plain wordmark, no logo for now. The Picasso bull image is removed from the repository (copyright).
+6. Lean FRO palette with a deep-teal accent; a sample page goes to the user before the accent is final.
+7. Paths while both sites coexist: `/tutorial/` (user manual), `/manual/` (reference manual), `/site/`
+   (Verso landing page until it replaces the Jekyll `/`); blueprint and API docs unchanged.
+8. Two books: the tutorial and the reference manual.
+9. Agents draft each chapter; the user reviews. The AQFT introduction draws on blueprint Chapters 1-9.
+
+### Prose style for the Verso site and manuals
+
+- Audience: a physics or mathematics student entering the first year of a PhD in theoretical physics.
+- Crisp and straightforward.
+- When introducing a topic the reader should already know, open with a reminder, e.g. "As you will
+  recall, an algebra consists of ...", or an equivalent phrase with the same meaning.
+- Model: the expository style of arXiv:2410.16599.
