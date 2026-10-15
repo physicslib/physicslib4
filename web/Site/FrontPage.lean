@@ -70,7 +70,7 @@ https://physicslib.github.io/physicslib4/sec10-6-haag-kastler.html
 
 ::::::
 
-::::::landingSection "contents" "What is formalised"
+::::::centeredSection "contents" "What is formalised"
 
 :::features
 :::

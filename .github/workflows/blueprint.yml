@@ -45,6 +45,20 @@ jobs:
           lint: true
           mk_all-check: true
 
+      # The Verso site (`web/`, a Lake package requiring physicslib4 from `..`) is written to
+      # `home_page/site/`; the Jekyll build in docgen-action copies it unchanged to `/site/`.
+      # `lake exe cache get` unpacks Mathlib from the cache the step above downloaded, and the
+      # physicslib4 build in `../.lake/build` is reused, so neither is rebuilt. `web/.lake` is
+      # removed afterwards to free disk space for the API docs.
+      - name: Build the Verso site into home_page/site
+        working-directory: web
+        run: |
+          set -euo pipefail
+          ~/.elan/bin/lake exe cache get
+          ~/.elan/bin/lake build
+          ~/.elan/bin/lake exe generate-site --output ../home_page/site
+          rm -rf .lake
+
       - name: Compile blueprint and documentation
         uses: leanprover-community/docgen-action@7b5b9a1822650bd45aaeb4182d94bceba2030f89 # 2026-04-14
         with:

@@ -9,3 +9,6 @@
 # were left untracked but not ignored.
 scratch_*
 blueprint/src/web.paux
+
+# The Verso site, generated into the Jekyll home page by CI (blueprint.yml).
+home_page/site/
