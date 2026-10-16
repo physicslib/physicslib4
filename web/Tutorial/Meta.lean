@@ -11,6 +11,7 @@ Block directives that the manual genre does not provide:
   inside an `exercise`, after the statement.
 * `figure "name"`: one of the project's diagrams (`diagrams` below), with the contents of the
   directive as its caption.
+* `goals`: wraps a Lean block and shows the proof state after every tactic, without a click.
 
 ```
 :::::exercise
@@ -39,6 +40,11 @@ def diagrams : List (String × Html) := [
 
 block_extension Block.exercise where
   traverse _ _ _ := pure none
+  -- Long Lean messages (`#check` and `leanOutput` blocks) wrap instead of overflowing, as on the
+  -- website (`Site/Theme.lean`). Every chapter has exercises, so the rule reaches every page.
+  extraCss := [r##"
+pre.hl.lean.lean-output { white-space: pre-wrap; overflow-wrap: anywhere; }
+"##]
   toTeX := some fun _ goB _ _ contents => contents.mapM goB
   toHtml := some fun _ goB _ _ contents => do
     return {{
@@ -75,6 +81,30 @@ block_extension Block.figure (name : String) where
       </figure>
     }}
 
+block_extension Block.goals where
+  traverse _ _ _ := pure none
+  -- A tactic nested in another, such as each rule of `rw [a, b]`, keeps its state hidden: the
+  -- state after the enclosing tactic is shown instead. The state at `by` repeats the statement,
+  -- so it is hidden too. These rules rely on Verso's markup for highlighted Lean: a tactic is a
+  -- `span.tactic` holding a `label` (the tactic's text) and a `span.tactic-state`, and the `by`
+  -- keyword carries `data-binding="kw-occ-Lean.Parser.Term.byTactic-…"`. If a Verso upgrade
+  -- changes these, the redundant states reappear; check a `goals` block after upgrading.
+  extraCss := [r##"
+.goals .tactic .tactic,
+.goals .tactic:has(> label > [data-binding^="kw-occ-Lean.Parser.Term.byTactic"]) {
+  display: inline !important;
+}
+.goals .tactic .tactic > .tactic-state,
+.goals .tactic:has(> label > [data-binding^="kw-occ-Lean.Parser.Term.byTactic"]) > .tactic-state {
+  display: none !important;
+}
+.goals .tactic-state { margin: 0.25rem 0 0.5rem 0; max-width: 100%; overflow-x: auto; }
+"##]
+  toTeX := some fun _ goB _ _ contents => contents.mapM goB
+  toHtml := some fun _ goB _ _ contents =>
+    withReader (fun ρ => { ρ with codeOptions.visibleProofStates := .all }) do
+      return {{ <div class="goals">{{ ← contents.mapM goB }}</div> }}
+
 /-- An exercise. Its solution, if any, goes in a nested `solution` directive. -/
 @[directive]
 def exercise : DirectiveExpanderOf Unit
@@ -88,6 +118,16 @@ def solution : DirectiveExpanderOf Unit
   | (), stxs => do
     let blocks ← stxs.mapM elabBlock
     ``(Block.other Block.solution #[$blocks,*])
+
+/--
+Lean code whose proof states are all shown open: the goal after each tactic appears below it
+without a click.
+-/
+@[directive]
+def goals : DirectiveExpanderOf Unit
+  | (), stxs => do
+    let blocks ← stxs.mapM elabBlock
+    ``(Block.other Block.goals #[$blocks,*])
 
 /-- The name of the diagram shown by `figure`. -/
 structure FigureArgs where

@@ -1,5 +1,6 @@
 import VersoManual
 import Tutorial.AQFTInBrief
+import Tutorial.LeanInBrief
 import Tutorial.FeatureTests
 
 open Verso.Genre Manual
@@ -10,5 +11,7 @@ This tutorial introduces algebraic quantum field theory and its formalisation in
 definitions and theorems of physicslib4.
 
 {include 1 Tutorial.AQFTInBrief}
+
+{include 1 Tutorial.LeanInBrief}
 
 {include 1 Tutorial.FeatureTests}

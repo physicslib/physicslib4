@@ -30,9 +30,11 @@ examples on the page are elaborated against the library itself.
 - `TutorialMain.lean`: the `generate-tutorial` executable.
 - `Tutorial.lean`: the tutorial's title page; it includes the chapters.
 - `Tutorial/AQFTInBrief.lean`: chapter 1, "AQFT in brief" (in preparation).
+- `Tutorial/LeanInBrief.lean`: chapter 2, "Lean in brief".
 - `Tutorial/FeatureTests.lean`: a draft-only chapter showing the markup for maths, exercises,
   figures and citations; built only with `--draft`.
-- `Tutorial/Meta.lean`: the directives `exercise`, `solution` (collapsible) and `figure`.
+- `Tutorial/Meta.lean`: the directives `exercise`, `solution` (collapsible), `figure`, and `goals`,
+  which shows the proof state after every tactic of the Lean block it wraps.
 - `Tutorial/Papers.lean`: the works cited with the manual genre's `citet`, `citep` and `citehere`.
 - `Tutorial/Theme.lean`: the tutorial's configuration and styles, built from `Site/Theme.lean`.
 - `static_files/`: the "p4" wordmark icons (favicon and Apple touch icon), used by both.
@@ -59,6 +61,22 @@ from `Tutorial.lean` with `{include 1 Tutorial.<Name>}`. Each chapter is one HTM
   ```
 - Figures: `:::figure "diamond"` followed by the caption and `:::` shows the causal-diamond diagram
   of the landing page (`Site/Diagram.lean`). Further diagrams are added to `Tutorial.diagrams`.
+- Proof states: Verso shows the goal after a tactic when the reader clicks it. To show every goal
+  without a click, as in a worked proof, wrap the Lean block in `goals`:
+
+  ````
+  :::goals
+  ```lean
+  example (a b : ℕ) : a + b = b + a := by
+    rw [Nat.add_comm]
+  ```
+  :::
+  ````
+- Lean code: a chapter that elaborates library code imports the library modules it needs and
+  opens `Verso.Genre.Manual.InlineLean`. A `lean` block containing `sorry` builds (the warning is
+  shown, not fatal); `lean +error` marks a block that must fail; `leanOutput name` after
+  `lean (name := name)` shows a message and fails the build if it changes; `lean -show` checks code
+  without displaying it. Code lines are kept within 60 columns.
 - Citations: `{citet haagKastler1964}[]` gives "Haag and Kastler (1964)" and
   `{citep brunettiFredenhagenVerch2003}[]` "(Brunetti, Fredenhagen, and Verch, 2003)", each with the
   full reference as a numbered margin note; `{citehere grossi2024}[]` gives the full reference
