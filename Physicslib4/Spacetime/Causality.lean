@@ -27,9 +27,11 @@ chronological/causal future/past sets.
   smooth curve which is piecewise a future-oriented timelike / causal
   geodesic, with designated past and future endpoints.
 
-* `Physicslib4.Spacetime.ChronologicallyPrecedes` (`≪`),
-  `Physicslib4.Spacetime.CausallyPrecedes` (`≺`): the existence of a trip /
-  causal trip from `p` to `q`.
+* `Physicslib4.Spacetime.ChronologicallyPrecedes` (`≪`): the existence of a trip
+  from `p` to `q`; it is strict.
+
+* `Physicslib4.Spacetime.CausallyPrecedes` (`≺`): `p = q` or there is a causal trip
+  from `p` to `q`; it is reflexive, so `p ∈ J^±(p)`.
 
 * `Physicslib4.Spacetime.chronologicalFuture` / `chronologicalPast`,
   `causalFuture` / `causalPast`: pointwise and set-valued versions.
@@ -166,10 +168,17 @@ precedence. -/
 def IsCausalTrip (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
   Relation.TransGen (CausalSegmentPrecedes M t) p q
 
-/-- *Causal precedence*: `p ≺ q` iff there exists a causal trip from `p`
-to `q`, relative to a fixed time orientation. -/
+/-- *Causal precedence*: `p ≺ q` iff `p = q` or there exists a causal trip from `p`
+to `q`, relative to a fixed time orientation. It is encoded as the reflexive-transitive
+closure of single-segment causal precedence: a chain of zero or more causal trip segments.
+
+The relation is **reflexive**: `p ≺ p` holds by the trivial chain of no segments
+(`causallyPrecedes_refl`). This is the Hawking–Ellis convention `p ∈ J^±(p)`, in which a
+causal curve may be degenerate. The strict relation, a genuine causal curve of one or more
+segments, is `IsCausalTrip`; the two are related by
+`causallyPrecedes_iff_eq_or_isCausalTrip`. -/
 def CausallyPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
-  IsCausalTrip M t p q
+  Relation.ReflTransGen (M.CausalSegmentPrecedes t) p q
 
 @[inherit_doc] scoped notation:50 p " ≺[" M ", " t "] " q =>
   CausallyPrecedes M t p q
@@ -221,7 +230,8 @@ def causalPastSet (t : M.TimeOrientation) (S : Set M.Carrier) :
 /-! ### Spacelike relatedness -/
 
 /-- Two points `p₁, p₂` of a spacetime are *spacelike related* if
-`p₂ ∉ J^+(p₁) ∪ J^-(p₁)`. -/
+`p₂ ∉ J^+(p₁) ∪ J^-(p₁)`. Since `≺` is reflexive, no point is spacelike related to
+itself (`isSpacelikeRelated_irrefl`). -/
 def IsSpacelikeRelated (t : M.TimeOrientation) (p₁ p₂ : M.Carrier) : Prop :=
   p₂ ∉ causalFuture M t p₁ ∪ causalPast M t p₁
 
@@ -267,18 +277,46 @@ theorem chronologicallyPrecedes_trans (t : M.TimeOrientation)
     M.ChronologicallyPrecedes t p r :=
   Relation.TransGen.trans h₁ h₂
 
+/-- **Reflexivity of causal precedence.** `p ≺ p`, by the trivial chain of no segments. -/
+@[refl] theorem causallyPrecedes_refl (t : M.TimeOrientation) (p : M.Carrier) :
+    M.CausallyPrecedes t p p :=
+  Relation.ReflTransGen.refl
+
+/-- Causal precedence is equality or a (genuine) causal trip: `p ≺ q ↔ p = q ∨ IsCausalTrip p q`. -/
+theorem causallyPrecedes_iff_eq_or_isCausalTrip (t : M.TimeOrientation) {p q : M.Carrier} :
+    M.CausallyPrecedes t p q ↔ p = q ∨ M.IsCausalTrip t p q := by
+  rw [CausallyPrecedes, Relation.reflTransGen_iff_eq_or_transGen, eq_comm]
+  rfl
+
+/-- A causal trip from `p` to `q` gives causal precedence `p ≺ q`. -/
+theorem causallyPrecedes_of_isCausalTrip (t : M.TimeOrientation) {p q : M.Carrier}
+    (h : M.IsCausalTrip t p q) : M.CausallyPrecedes t p q :=
+  Relation.TransGen.to_reflTransGen h
+
+/-- **Transitivity of causal trips.** Two causal trips joined at a common point concatenate. -/
+theorem isCausalTrip_trans (t : M.TimeOrientation)
+    {p q r : M.Carrier} (h₁ : M.IsCausalTrip t p q) (h₂ : M.IsCausalTrip t q r) :
+    M.IsCausalTrip t p r :=
+  Relation.TransGen.trans h₁ h₂
+
 /-- **Transitivity of causal precedence.** `p ≺ q` and `q ≺ r` give `p ≺ r`. -/
 theorem causallyPrecedes_trans (t : M.TimeOrientation)
     {p q r : M.Carrier} (h₁ : M.CausallyPrecedes t p q)
     (h₂ : M.CausallyPrecedes t q r) :
     M.CausallyPrecedes t p r :=
-  Relation.TransGen.trans h₁ h₂
+  Relation.ReflTransGen.trans h₁ h₂
+
+/-- A trip is a causal trip: chronological precedence gives a causal trip. -/
+theorem isCausalTrip_of_chronologicallyPrecedes (t : M.TimeOrientation)
+    {p q : M.Carrier} (h : M.ChronologicallyPrecedes t p q) :
+    M.IsCausalTrip t p q :=
+  Relation.TransGen.mono (fun _ _ => M.causalSegmentPrecedes_of_segmentPrecedes t) _ _ h
 
 /-- Chronological precedence implies causal precedence. -/
 theorem causallyPrecedes_of_chronologicallyPrecedes (t : M.TimeOrientation)
     {p q : M.Carrier} (h : M.ChronologicallyPrecedes t p q) :
     M.CausallyPrecedes t p q :=
-  Relation.TransGen.mono (fun _ _ => M.causalSegmentPrecedes_of_segmentPrecedes t) _ _ h
+  M.causallyPrecedes_of_isCausalTrip t (M.isCausalTrip_of_chronologicallyPrecedes t h)
 
 /-- The chronological future is contained in the causal future. -/
 theorem chronologicalFuture_subset_causalFuture (t : M.TimeOrientation)
@@ -293,39 +331,49 @@ theorem chronologicalPast_subset_causalPast (t : M.TimeOrientation)
 /-! ### Causal-order refinements under the causality condition -/
 
 /-- **The causality condition (no closed causal curve).** A spacetime satisfies the
-causality condition when no point causally precedes itself: a closed causal curve
-through `p` is exactly a causal trip `p ≺ p`, so its absence is `¬ (p ≺ p)` for all
-`p`. This is strictly weaker than strong causality and strictly stronger than the
+causality condition when there is no closed causal curve: no causal trip
+(`IsCausalTrip`, a chain of one or more causal segments) runs from a point `p` back to
+`p`. The condition is not `¬ (p ≺ p)`, which fails in every spacetime because `≺` is
+reflexive. It is strictly weaker than strong causality and strictly stronger than the
 chronology condition `¬ (p ≪ p)`. -/
 def NoClosedCausalCurve (t : M.TimeOrientation) : Prop :=
-  ∀ p : M.Carrier, ¬ M.CausallyPrecedes t p p
+  ∀ p : M.Carrier, ¬ M.IsCausalTrip t p p
 
 /-- Under the causality condition, chronological precedence is **irreflexive**:
-`¬ (p ≪ p)`, because `p ≪ p` would give the forbidden `p ≺ p`. -/
+`¬ (p ≪ p)`, because a trip from `p` to `p` is a forbidden closed causal trip. -/
 theorem chronologicallyPrecedes_irrefl (t : M.TimeOrientation)
     (hc : M.NoClosedCausalCurve t) (p : M.Carrier) :
     ¬ M.ChronologicallyPrecedes t p p := by
   intro h
-  exact hc p (M.causallyPrecedes_of_chronologicallyPrecedes t h)
+  exact hc p (M.isCausalTrip_of_chronologicallyPrecedes t h)
 
-/-- Under the causality condition, causal precedence is **asymmetric**:
-`p ≺ q → ¬ (q ≺ p)`, since transitivity would otherwise give the forbidden `p ≺ p`. -/
-theorem causallyPrecedes_asymm (t : M.TimeOrientation)
+/-- Under the causality condition, causal trips are **asymmetric**: a causal trip from `p`
+to `q` excludes one from `q` to `p`, since concatenation would give a closed causal trip. -/
+theorem isCausalTrip_asymm (t : M.TimeOrientation)
     (hc : M.NoClosedCausalCurve t) {p q : M.Carrier}
-    (hpq : M.CausallyPrecedes t p q) : ¬ M.CausallyPrecedes t q p := by
+    (hpq : M.IsCausalTrip t p q) : ¬ M.IsCausalTrip t q p := by
   intro hqp
-  exact hc p (M.causallyPrecedes_trans t hpq hqp)
+  exact hc p (M.isCausalTrip_trans t hpq hqp)
 
 /-- Under the causality condition, causal precedence is **antisymmetric**:
-`p ≺ q → q ≺ p → p = q` (in fact both cannot hold, since transitivity gives the
-forbidden `p ≺ p`). Thus `≺` is a strict partial order. -/
+`p ≺ q → q ≺ p → p = q`. If `p ≠ q`, both relations are causal trips, which
+`isCausalTrip_asymm` excludes. Thus `≺` is a partial order. -/
 theorem causallyPrecedes_antisymm (t : M.TimeOrientation)
     (hc : M.NoClosedCausalCurve t) {p q : M.Carrier}
     (hpq : M.CausallyPrecedes t p q) (hqp : M.CausallyPrecedes t q p) :
     p = q := by
-  exact absurd (M.causallyPrecedes_trans t hpq hqp) (hc p)
+  rcases (M.causallyPrecedes_iff_eq_or_isCausalTrip t).mp hpq with h | hpq'
+  · exact h
+  rcases (M.causallyPrecedes_iff_eq_or_isCausalTrip t).mp hqp with h | hqp'
+  · exact h.symm
+  exact absurd hqp' (M.isCausalTrip_asymm t hc hpq')
 
 /-! ### Symmetry of spacelike relatedness -/
+
+/-- Spacelike relatedness is irreflexive: `p ∈ J^+(p)`, so no point is spacelike to itself. -/
+theorem isSpacelikeRelated_irrefl (t : M.TimeOrientation) (p : M.Carrier) :
+    ¬ M.IsSpacelikeRelated t p p :=
+  fun h => h (Or.inl (M.causallyPrecedes_refl t p))
 
 /-- Spacelike relatedness is symmetric. -/
 theorem isSpacelikeRelated_comm (t : M.TimeOrientation) {p₁ p₂ : M.Carrier} :

@@ -86,6 +86,13 @@ theorem spacelikeComplement_isCausallyConvex (B : Set M.Carrier) :
     apply hbr_not
     exact causallyPrecedes_trans M t hbq hqr
 
+/-- A region and its spacelike complement are disjoint, `B ∩ B^⊥ = ∅`, since no point
+is spacelike to itself (`isSpacelikeRelated_irrefl`). -/
+theorem disjoint_spacelikeComplement (B : Set M.Carrier) :
+    Disjoint B (Spacetime.spacelikeComplement M t B) :=
+  Set.disjoint_left.mpr fun x hxB hx =>
+    isSpacelikeRelated_irrefl M t x (hx x rfl x hxB)
+
 end SpacetimeLevel
 
 namespace LorentzianSpacetime
@@ -141,6 +148,18 @@ theorem spacelikeComplement_spacelikeComplement_spacelikeComplement (B : Set M.C
   ext x
   simp
 
+/-- A region and its spacelike complement are disjoint, `B ∩ B^⊥ = ∅`, since no point
+is spacelike to itself. -/
+theorem disjoint_spacelikeComplement (B : Set M.Carrier) :
+    Disjoint B (M.spacelikeComplement B) :=
+  Spacetime.disjoint_spacelikeComplement M.toSpacetime M.timeOrientation B
+
+/-- The complement of the whole spacetime is empty, since no point is spacelike to itself. -/
+@[simp] theorem spacelikeComplement_univ :
+    M.spacelikeComplement (Set.univ : Set M.Carrier) = ∅ :=
+  Set.eq_empty_of_subset_empty fun x hx =>
+    (M.disjoint_spacelikeComplement Set.univ).le_bot ⟨Set.mem_univ x, hx⟩
+
 /-- **Galois bridge.** A region lies in the complement of another exactly when the
 two are completely spacelike-separated. -/
 theorem subset_spacelikeComplement_iff {B₁ B₂ : Set M.Carrier} :
@@ -162,12 +181,10 @@ Lorentzian spacetime. Its fixed points — the **causally complete** regions —
 the natural regions of algebraic QFT, and they form a complete lattice on which
 the spacelike complement `^⊥` acts as an order-reversing involution.
 
-A caveat on orthocomplementation: the spacelike-separation relation used here is
-*irreflexive-causality* based (a point is spacelike to itself, since there is no
-degenerate closed causal trip), so `B ∩ B^⊥` need not be empty and the full
-orthocomplement law `B ⊓ B^⊥ = ⊥` does **not** hold at this generality. What does
-hold is the complete lattice with an order-reversing involution (a De Morgan
-structure). -/
+Causal precedence is reflexive, so no point is spacelike to itself and
+`B ∩ B^⊥ = ∅` (`disjoint_spacelikeComplement`). The causal complement is therefore an
+orthocomplementation: besides being an order-reversing involution, it satisfies
+`B ⊓ B^⊥ = ⊥` and `B ⊔ B^⊥ = ⊤` (`inf_causalComplement`, `sup_causalComplement`). -/
 
 /-- The **causal closure operator** `B ↦ B^⊥⊥` on the regions of `M`: monotone,
 extensive (`B ⊆ B^⊥⊥`), and idempotent (`B^⊥⊥⊥⊥ = B^⊥⊥`). -/
@@ -455,6 +472,26 @@ theorem causalComplement_iInf {ι : Sort*} (B : ι → M.CausallyCompleteRegion)
     _ = M.causalClosure (⋃ i, (M.causalComplement (B i)).1) := by
       simp_rw [causalComplement_coe]
     _ = (⨆ i, M.causalComplement (B i)).1 := by rw [coe_iSup]
+
+/-! ### Orthocomplementation -/
+
+/-- **Non-contradiction.** A causally complete region meets its causal complement only in
+the least region: `B ⊓ B^⊥ = ⊥`. -/
+theorem inf_causalComplement (B : M.CausallyCompleteRegion) :
+    B ⊓ M.causalComplement B = ⊥ := by
+  apply Subtype.ext
+  rw [coe_inf, coe_bot, causalClosure_apply, spacelikeComplement_empty, spacelikeComplement_univ,
+    causalComplement_coe]
+  exact Set.disjoint_iff_inter_eq_empty.mp (M.disjoint_spacelikeComplement B.1)
+
+/-- **Excluded middle.** A causally complete region and its causal complement join to the
+greatest region: `B ⊔ B^⊥ = ⊤`. -/
+theorem sup_causalComplement (B : M.CausallyCompleteRegion) :
+    B ⊔ M.causalComplement B = ⊤ := by
+  have h : M.causalComplement (B ⊔ M.causalComplement B) = M.causalComplement ⊤ := by
+    rw [causalComplement_sup, causalComplement_causalComplement, inf_comm,
+      inf_causalComplement, causalComplement_top]
+  simpa [causalComplement_causalComplement] using congrArg M.causalComplement h
 
 /-! ### Causally complete regions are causally convex -/
 

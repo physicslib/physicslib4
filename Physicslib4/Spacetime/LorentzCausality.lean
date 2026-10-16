@@ -343,14 +343,15 @@ theorem causalSegmentPrecedes_smul (g : InhomogeneousLorentzGroup)
 
 /-- **A Lorentz transformation maps causal trips to causal trips**, hence
 preserves causal precedence: if `p ≺ q` then `g • p ≺ g • q`. Lifts
-`causalSegmentPrecedes_smul` along the transitive closure. -/
+`causalSegmentPrecedes_smul` along the reflexive-transitive closure; the reflexive case
+is `g • p ≺ g • p`. -/
 theorem causallyPrecedes_smul (g : InhomogeneousLorentzGroup)
     {p q : StandardMinkowskiSpacetime.Carrier}
     (h : CausallyPrecedes StandardMinkowskiSpacetime
           standardMinkowskiTimeOrientation p q) :
     CausallyPrecedes StandardMinkowskiSpacetime standardMinkowskiTimeOrientation
       (g • p) (g • q) :=
-  Relation.TransGen.lift (fun x => g • x)
+  Relation.ReflTransGen.lift (fun x => g • x)
     (fun _ _ hs => causalSegmentPrecedes_smul g hs) _ _ h
 
 /-- **Causal precedence is Lorentz invariant.** -/
