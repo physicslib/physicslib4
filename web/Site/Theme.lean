@@ -15,8 +15,8 @@ The physicslib4 site uses the Lean FRO look from `verso-web-components`: its sty
 * The accent colour (`--color-primary` and its derived shades) is a deep teal, `#0f766e`.
 * Highlighted Lean code is coloured (keywords, constants, bound variables); see `siteCss`.
 
-The tutorial, a manual-genre book, reuses `colorTheme`, `siteCss` and `headerWith`
-(`Tutorial.Theme`).
+The tutorial and the reference manual, manual-genre books, reuse `colorTheme`, `siteCss` and
+`headerWith` (`Book.Theme`).
 -/
 
 open Verso Genre Blog Output Html Template Multi
@@ -244,7 +244,7 @@ def navItem (active : Bool) (title url : String) : Html :=
   {{ <li class=s!"nav-item{if active then " active" else ""}"><a class="nav-link" href={{url}}>{{title}}</a></li> }}
 
 /--
-The header shared by the website and the tutorial: the wordmark (linking to `home`) on the left;
+The header shared by the website and the books: the wordmark (linking to `home`) on the left;
 the navigation `links`, GitHub and the theme switch on the right. `isActive` picks the navigation
 entry of the current page by its title.
 -/
@@ -280,12 +280,12 @@ def headerWith (home : String) (links : Array (String × String)) (isActive : St
   </header>
 }}
 
-/-- The website header; the reference-manual entry is active on the reference-manual page. -/
-def header (path : Path) : Html :=
-  headerWith "./" navLinks fun title => title == "Reference manual" && path == #["manual"]
+/-- The website header. No navigation entry is active: each one leads out of the website. -/
+def header : Html :=
+  headerWith "./" navLinks fun _ => false
 
 /--
-The footer shared by the website and the tutorial, using the `verso-web-components` footer classes.
+The footer shared by the website and the books, using the `verso-web-components` footer classes.
 `home` and `links` are as in `headerWith`.
 -/
 def footerWith (home : String) (links : Array (String × String)) : Html :=
@@ -341,14 +341,13 @@ def headConfig : HeadConfig := {
 
 /-- The outer HTML template, modelled on `Verso.Web.Theme.primaryTemplate`. -/
 def primaryTemplate : TemplateM Html := do
-  let path ← currentPath
   let headHtml ← Verso.Web.Theme.head "physicslib4" s!"physicslib4: {tagline}" headConfig colorTheme
     (extraHead := {{ <style>{{ .text false siteCss }}</style> }})
   return {{
     <html lang="en">
       {{ headHtml }}
       <body>
-        {{ header path }}
+        {{ header }}
         {{ ← param "content" }}
         {{ footer }}
         <script>

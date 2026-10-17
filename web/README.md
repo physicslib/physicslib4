@@ -1,16 +1,17 @@
-# physicslib4 website and tutorial
+# physicslib4 website, tutorial and reference manual
 
-Two documents written with [Verso](https://github.com/leanprover/verso):
+Three documents written with [Verso](https://github.com/leanprover/verso):
 
-- the website: the physicslib4 landing page and a stub reference-manual page, in Verso's website
-  (`VersoBlog`) genre, styled with
+- the website: the physicslib4 landing page, in Verso's website (`VersoBlog`) genre, styled with
   [verso-web-components](https://github.com/leanprover/verso-web-components), the components behind
   lean-lang.org;
-- the tutorial: a book in Verso's manual (`VersoManual`) genre, with one chapter per file.
+- the tutorial: a book in Verso's manual (`VersoManual`) genre, with one chapter per file;
+- the reference manual: a second manual-genre book, with one chapter per section of Chapter 10 of
+  the blueprint.
 
-Both share one look: the verso-web-components design tokens with a deep-teal accent, and the same
-header with the "physicslib4" wordmark and the navigation Tutorial, Reference manual, Blueprint,
-API docs.
+All three share one look: the verso-web-components design tokens with a deep-teal accent, and the
+same header with the "physicslib4" wordmark and the navigation Tutorial, Reference manual,
+Blueprint, API docs.
 
 This directory is a Lake package of its own. It requires physicslib4 from `..`, so the Lean
 examples on the page are elaborated against the library itself.
@@ -19,14 +20,18 @@ examples on the page are elaborated against the library itself.
 
 - `lakefile.toml`, `lean-toolchain`: the package and its pinned Verso and verso-web-components versions.
 - `Main.lean`: the site structure and the `generate-site` executable.
-- `Site/Links.lean`: the tagline, the navigation links of the website and the tutorial, and the URLs
-  of the blueprint and API docs.
+- `Site/Links.lean`: the tagline, the navigation links of the website and the books, and the URLs
+  of the blueprint and API docs (`apiDocsUrl` for one declaration).
 - `Site/Theme.lean`: the website theme (header, footer, design tokens, accent colour, code colours).
-  The header, the design tokens and the stylesheet are also used by the tutorial.
+  The header, the design tokens and the stylesheet are also used by the books.
 - `Site/Components.lean`: the landing-page directives (hero, sections, code gallery, feature cards),
   built on verso-web-components.
 - `Site/Diagram.lean`: the causal-diamond diagram, as inline SVG.
-- `Site/FrontPage.lean`: the landing page. `Site/Manual.lean`: the reference-manual stub page.
+- `Site/FrontPage.lean`: the landing page.
+- `Book/Theme.lean`: what the two books share: their stylesheet (the website's, plus `bookCss`, which
+  restyles the manual genre), their HTML configuration `Book.config` and `Book.replaceHeader`,
+  which puts the website header on every page.
+- `Book/Meta.lean`: the role `apiDocs`, a link to the API docs of a declaration.
 - `TutorialMain.lean`: the `generate-tutorial` executable.
 - `Tutorial.lean`: the tutorial's title page; it includes the chapters.
 - `Tutorial/AQFTInBrief.lean`: chapter 1, "AQFT in brief".
@@ -38,8 +43,14 @@ examples on the page are elaborated against the library itself.
 - `Tutorial/Meta.lean`: the directives `exercise`, `solution` (collapsible), `figure`, and `goals`,
   which shows the proof state after every tactic of the Lean block it wraps.
 - `Tutorial/Papers.lean`: the works cited with the manual genre's `citet`, `citep` and `citehere`.
-- `Tutorial/Theme.lean`: the tutorial's configuration and styles, built from `Site/Theme.lean`.
-- `static_files/`: the "p4" wordmark icons (favicon and Apple touch icon), used by both.
+- `Tutorial/Theme.lean`: the tutorial's configuration and header, built from `Book/Theme.lean`.
+- `ManualMain.lean`: the `generate-manual` executable.
+- `Manual.lean`: the reference manual's title page; it includes the chapters.
+- `Manual/HaagKastler.lean`: "The Haag–Kastler axioms in Minkowski spacetime" (in preparation).
+- `Manual/FeatureTests.lean`: a draft-only chapter showing `{docstring}`, `#check` and `apiDocs`;
+  built only with `--draft`.
+- `Manual/Theme.lean`: the manual's configuration and header, built from `Book/Theme.lean`.
+- `static_files/`: the "p4" wordmark icons (favicon and Apple touch icon), used by all three.
 
 ## Writing the tutorial
 
@@ -87,6 +98,47 @@ from `Tutorial.lean` with `{include 1 Tutorial.<Name>}`. Each chapter is one HTM
   books, and it builds no collected bibliography: books, and a further-reading list, are written as
   ordinary Markdown lists with links.
 
+## Writing the reference manual
+
+A chapter is a module `Manual/<Name>.lean`, included from `Manual.lean` with
+`{include 1 Manual.<Name>}`; each chapter is one HTML page. A chapter gives its page a readable file
+name in its metadata (`file := "Haag-Kastler-axioms-in-Minkowski-spacetime"`); otherwise the name is
+made from the title, with `___` for an en dash. The markup of the tutorial applies (maths, Lean
+blocks, citations; the directives of `Tutorial.Meta` are available by importing it). Declarations
+are shown in two ways, both elaborated against the library, so a renamed declaration breaks the
+build:
+
+- Definitions and structures: `{docstring Physicslib4.AQFT.HaagKastler.LocalNet}` on a line of its
+  own shows a box with the signature, the docstring and, for a structure, the constructor and the
+  fields with their types and docstrings. Fields inherited from a parent structure are hidden; the
+  parent is listed under "Extends" with a checkbox that shows them. `+hideFields` and
+  `+hideStructureConstructor` drop the fields and the constructor. Field types that do not fit wrap
+  with a hanging indent. The docstring is rendered as Markdown, and its code spans are highlighted
+  as Lean.
+- Theorems: `#check` in a named `lean` block, with its output in a `leanOutput` block and the
+  manual's own prose around it. Verso prints messages 120 columns wide; longer lines wrap at the
+  width of the text column. Opening the namespace shortens the names:
+
+  ````
+  ```lean (name := checkEinstein)
+  open Physicslib4 AQFT HaagKastler in
+  #check HaagKastlerNet.einstein_causality
+  ```
+
+  ```leanOutput checkEinstein
+  ...
+  ```
+  ````
+
+- Links to the API docs: `{apiDocs Physicslib4.AQFT.HaagKastler.LocalNet}[]` shows the name in code
+  type, `{apiDocs Physicslib4.AQFT.HaagKastler.LocalNet}[the local net]` the given text. The link is
+  `Site.apiDocsUrl`: doc-gen4's page of the declaring module, anchored by the full name, for example
+  `https://physicslib.github.io/physicslib4/docs/Physicslib4/AQFT/HaagKastler/LocalAlgebras.html#Physicslib4.AQFT.HaagKastler.LocalNet`.
+  It works for Mathlib declarations too.
+
+A chapter that uses library declarations imports the library modules it needs and opens
+`Verso.Genre.Manual.InlineLean` and `Book`.
+
 ## Build and view locally
 
 From the repository root:
@@ -94,63 +146,74 @@ From the repository root:
 ```sh
 cd web
 lake exe cache get        # Mathlib build cache, first time only
-lake build                # both executables
+lake build                # the three executables
 lake exe generate-site --output _out/site
 lake exe generate-tutorial --output _out/tutorial            # writes _out/tutorial/html-multi/
 lake exe generate-tutorial --draft --output _out/tutorial-draft   # with the draft-only chapters
+lake exe generate-manual --output _out/manual                # writes _out/manual/html-multi/
+lake exe generate-manual --draft --output _out/manual-draft       # with the draft-only chapters
 cd ..
 ```
 
-The first `lake build` also builds physicslib4 if `../.lake` has no up-to-date build. The website
-and the tutorial link to each other through `../tutorial/` and `../site/`, so view them side by side,
-as they are published:
+The first `lake build` also builds physicslib4 if `../.lake` has no up-to-date build. A book's
+generator adds to its output directory without clearing it, so delete the directory first after
+renaming a chapter. The three documents link to each other through `../site/`, `../tutorial/` and
+`../manual/`, so view them side by side, as they are published:
 
 ```sh
 rm -rf /tmp/srv && mkdir -p /tmp/srv/physicslib4   # start clean: cp -R into an existing directory nests the copy
 cp -R web/_out/site /tmp/srv/physicslib4/site
 cp -R web/_out/tutorial/html-multi /tmp/srv/physicslib4/tutorial
+cp -R web/_out/manual/html-multi /tmp/srv/physicslib4/manual
 python3 -m http.server -d /tmp/srv
 ```
 
-and open <http://localhost:8000/physicslib4/site/> and <http://localhost:8000/physicslib4/tutorial/>.
+and open <http://localhost:8000/physicslib4/site/>, <http://localhost:8000/physicslib4/tutorial/> and
+<http://localhost:8000/physicslib4/manual/>.
 
 `.lake/` and `_out/` are ignored by git.
 
 ## Served from a sub-path
 
-The website is published at <https://physicslib.github.io/physicslib4/site/> and the tutorial at
-<https://physicslib.github.io/physicslib4/tutorial/>, under the project site that also hosts the
+The website is published at <https://physicslib.github.io/physicslib4/site/>, the tutorial at
+<https://physicslib.github.io/physicslib4/tutorial/> and the reference manual at
+<https://physicslib.github.io/physicslib4/manual/>, under the project site that also hosts the
 blueprint (`/physicslib4/blueprint/`) and the API docs (`/physicslib4/docs/`). The generated pages
 contain no root-relative URLs: each page carries a relative `<base href>` pointing at the root of its
-document (on the website `./` on the landing page and `.././` on `manual/`; in the tutorial `./` on
-the title page and `./../` on a chapter), and every local link and asset is relative to it. The
-website's Tutorial link and "Read the tutorial" button go to `../tutorial/`; the tutorial's wordmark
-and Reference manual link go to `../site/` and `../site/manual/`. Both therefore work under any
-common prefix, provided the URL ends in `/` (GitHub Pages redirects `/physicslib4/site` to
+document (`./` on the website's landing page; in a book `./` on the title page and `./../` on a
+chapter), and every local link and asset is relative to it. The website's Tutorial and Reference
+manual links go to `../tutorial/` and `../manual/`; in each book the wordmark goes to `../site/` and
+the link to the other book to `../tutorial/` or `../manual/`. They therefore work under any common
+prefix, provided the URL ends in `/` (GitHub Pages redirects `/physicslib4/site` to
 `/physicslib4/site/`). Links to the blueprint, the API docs and the blueprint guide pages are absolute
 (`Site/Links.lean`).
 
-The tutorial uses the manual genre's own page layout (title in the table of contents, search box,
-previous and next links). `Tutorial.replaceHeader`, a build step run after the HTML is written,
-swaps the manual genre's header for the website header. The book has no footer.
+The books use the manual genre's own page layout (title in the table of contents, search box,
+previous and next links). `Book.replaceHeader`, a build step run after the HTML is written, swaps
+the manual genre's header for the website header, with the book's own entry active. The books have
+no footer.
+
 ## Continuous integration
 
-- `.github/workflows/blueprint.yml` (pushes to `main`), step "Build the Verso site and tutorial into
-  home_page": after `lean-action` has built physicslib4, it runs `lake exe cache get`, `lake build`,
-  `lake exe generate-site --output ../home_page/site` and `lake exe generate-tutorial --output
-  _out/tutorial` in `web/`, copies `_out/tutorial/html-multi` to `home_page/tutorial/`, then removes
-  `web/.lake` and `web/_out`. The next step, `docgen-action`, builds the blueprint and the API docs
-  into `home_page/` and runs Jekyll there. The Verso files have no front matter and no names starting
-  with `_`, `.`, `#` or `~`, so Jekyll copies them unchanged to `_site/site/` and `_site/tutorial/`,
-  which are deployed as `/physicslib4/site/` and `/physicslib4/tutorial/`. (Jekyll also renders the
-  search component's `-verso-search/licenses.md` as an extra `licenses.html` beside it.)
-  `home_page/site/` and `home_page/tutorial/` are ignored by git.
+- `.github/workflows/blueprint.yml` (pushes to `main`), step "Build the Verso site, tutorial and
+  manual into home_page": after `lean-action` has built physicslib4, it runs `lake exe cache get`,
+  `lake build`, `lake exe generate-site --output ../home_page/site`, `lake exe generate-tutorial
+  --output _out/tutorial` and `lake exe generate-manual --output _out/manual` in `web/`, copies
+  `_out/tutorial/html-multi` and `_out/manual/html-multi` to `home_page/tutorial/` and
+  `home_page/manual/`, then removes `web/.lake` and `web/_out`. The next step, `docgen-action`,
+  builds the blueprint and the API docs into `home_page/` and runs Jekyll there. The Verso files have
+  no front matter and no names starting with `_`, `.`, `#` or `~`, so Jekyll copies them unchanged to
+  `_site/site/`, `_site/tutorial/` and `_site/manual/`, which are deployed as `/physicslib4/site/`,
+  `/physicslib4/tutorial/` and `/physicslib4/manual/`. (Jekyll also renders each book's
+  `-verso-search/licenses.md` as an extra `licenses.html` beside it.) `home_page/site/`,
+  `home_page/tutorial/` and `home_page/manual/` are ignored by git.
 - `.github/workflows/lean_action_ci.yml` (every push and pull request, when `web/`, the library or the
-  toolchain changes), step "Build the Verso site and tutorial": the same builds into `web/_out/`, with
-  no deployment, followed by a check that no page of either uses a root-relative `href` or `src`.
+  toolchain changes), step "Build the Verso site, tutorial and manual": the same builds into
+  `web/_out/`, with no deployment, followed by a check that no page of the three uses a
+  root-relative `href` or `src`.
 
 In both, `lake exe cache get` only unpacks Mathlib from the cache that `lean-action` has already
 downloaded, and the physicslib4 build in `../.lake/build` is reused through the `path = ".."`
 dependency, so neither Mathlib nor physicslib4 is rebuilt. `lake build` compiles Verso and
-verso-web-components, and the native code of the modules that the two executables link (including
+verso-web-components, and the native code of the modules that the three executables link (including
 Mathlib's), which accounts for most of its time.

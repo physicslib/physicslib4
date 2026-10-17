@@ -40,11 +40,6 @@ def diagrams : List (String × Html) := [
 
 block_extension Block.exercise where
   traverse _ _ _ := pure none
-  -- Long Lean messages (`#check` and `leanOutput` blocks) wrap instead of overflowing, as on the
-  -- website (`Site/Theme.lean`). Every chapter has exercises, so the rule reaches every page.
-  extraCss := [r##"
-pre.hl.lean.lean-output { white-space: pre-wrap; overflow-wrap: anywhere; }
-"##]
   toTeX := some fun _ goB _ _ contents => contents.mapM goB
   toHtml := some fun _ goB _ _ contents => do
     return {{

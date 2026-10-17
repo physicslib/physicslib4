@@ -45,13 +45,14 @@ jobs:
           lint: true
           mk_all-check: true
 
-      # The Verso site and tutorial (`web/`, a Lake package requiring physicslib4 from `..`) are
-      # written to `home_page/site/` and `home_page/tutorial/`; the Jekyll build in docgen-action
-      # copies them unchanged to `/site/` and `/tutorial/`. `generate-tutorial` writes the book to
+      # The Verso site, tutorial and reference manual (`web/`, a Lake package requiring physicslib4
+      # from `..`) are written to `home_page/site/`, `home_page/tutorial/` and `home_page/manual/`;
+      # the Jekyll build in docgen-action copies them unchanged to `/site/`, `/tutorial/` and
+      # `/manual/`. `generate-tutorial` and `generate-manual` write each book to
       # `<output>/html-multi/`, which is copied into place. `lake exe cache get` unpacks Mathlib from
       # the cache the step above downloaded, and the physicslib4 build in `../.lake/build` is reused,
       # so neither is rebuilt. `web/.lake` is removed afterwards to free disk space for the API docs.
-      - name: Build the Verso site and tutorial into home_page
+      - name: Build the Verso site, tutorial and manual into home_page
         working-directory: web
         run: |
           set -euo pipefail
@@ -61,6 +62,9 @@ jobs:
           ~/.elan/bin/lake exe generate-tutorial --output _out/tutorial
           rm -rf ../home_page/tutorial
           cp -R _out/tutorial/html-multi ../home_page/tutorial
+          ~/.elan/bin/lake exe generate-manual --output _out/manual
+          rm -rf ../home_page/manual
+          cp -R _out/manual/html-multi ../home_page/manual
           rm -rf .lake _out
 
       - name: Compile blueprint and documentation
