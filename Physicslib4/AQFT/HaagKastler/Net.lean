@@ -61,32 +61,33 @@ open scoped Pointwise
 universe u
 
 /--
-A *Haag-Kastler net* on (the Alexandrov-basis sets of) Minkowski
-spacetime: the data of Axiom 1 (`def:local-algebras`) together with
-proofs of Axioms 2, 3 and 5 (`def:isotony`,
-`def:local-commutativity`, `def:lorentz-covariance`).
+A Haag–Kastler net on Minkowski spacetime: a net of local algebras satisfying Axioms 1, 2, 3 and 5.
 
-Blueprint reference: `def:haag-kastler-net`.
+The structure bundles the local algebras B ↦ 𝔘(B) of Axiom 1, the isotony family of Axiom 2, and
+proofs of local commutativity (Axiom 3) and Lorentz covariance (Axiom 5). Theorems about a theory
+take a `HaagKastlerNet` as hypothesis and use each axiom as a field.
+
+Two things are not fields. The quasilocal algebra is constructed from the net, as
+`HaagKastlerNet.quasilocal`. Axiom 4, that every physical observable is a quasilocal observable,
+relates the formalism to the world rather than constraining the net; it is the separate structure
+`ObservableCorrespondence`. Primitivity, the sixth axiom of 1964, is not adopted.
+`nonempty_haagKastlerNet` shows that the axioms are consistent.
+
+Blueprint: def:haag-kastler-net
 -/
 structure HaagKastlerNet where
-  /-- The underlying assignment `B ↦ 𝔘(B)` (Axiom 1).
+  /-- The local algebras B ↦ 𝔘(B) (Axiom 1).
 
-  Written `LocalNet.{u}` rather than `LocalNet` so that this structure is
-  universe polymorphic. Left implicit, the universe of `LocalNet` would be pinned
-  here, and every net in the development would be forced to have its local
-  algebras in one fixed universe, and the universe polymorphism of
-  `QuasilocalAlgebra.carrier` would be lost at the bundling level. -/
+  Implementation note: the universe is named, as `LocalNet.{u}`, so that `HaagKastlerNet` takes it
+  as a parameter and nets with algebras in any universe are allowed. -/
   U : LocalNet.{u}
-  /-- *Isotony*: inclusions of Alexandrov-basis sets induce unital
-  `*`-monomorphisms of the corresponding local algebras
-  (Axiom 2). -/
+  /-- The isotony embeddings i(B₁, B₂) : 𝔘(B₁) → 𝔘(B₂) (Axiom 2). -/
   isotony : Isotony U
-  /-- *Local commutativity*: for completely-spacelike basis sets `B₁`, `B₂` and every
-  basis set `B ⊇ B₁ ∪ B₂`, the isotony images of `𝔘(B₁)` and `𝔘(B₂)` commute in `𝔘(B)`
-  (Axiom 3). -/
+  /-- Local commutativity (Axiom 3): for completely spacelike diamonds B₁, B₂ and every diamond
+  B ⊇ B₁ ∪ B₂, the images of 𝔘(B₁) and 𝔘(B₂) in 𝔘(B) commute. -/
   localCommutativity : LocalCommutativity U isotony
-  /-- *Lorentz covariance*: the inhomogeneous Lorentz group acts on
-  the net and the action commutes with isotony (Axiom 5). -/
+  /-- Lorentz covariance (Axiom 5): the identity component of the Poincaré group acts on the net,
+  compatibly with isotony. -/
   lorentzCovariance : LorentzCovariance U isotony
 
 namespace HaagKastlerNet
@@ -126,13 +127,14 @@ theorem isotony_trans
     ∃ φ : StarAlgHom ℂ (N.algebra B₁) (N.algebra B₃), Function.Injective φ :=
   N.isotony.trans hB₁ hB₂ hB₃ h₁₂ h₂₃
 
-/-- The *canonical quasilocal algebra* `𝔘` of the net.
+/-- The quasilocal algebra 𝔘 of the net, with its embeddings ι_B : 𝔘(B) → 𝔘.
 
-This is *constructed*, not assumed. The witness is `exists_quasilocalAlgebra`
-(`thrm:quasilocal-algebra-exists`), which builds `𝔘` from the net alone as the
-completion of the directed colimit of the local algebras. The net therefore
-carries no quasilocal-completeness field: the existence of `𝔘` is a theorem,
-and Axiom 4 is a physical bridge principle (`ObservableBridge.lean`). -/
+The algebra is constructed, not assumed: `exists_quasilocalAlgebra` builds one from the local
+algebras and isotony alone, as the completion of their directed colimit, and this definition
+chooses it. Results about the net's quasilocal observables, representations and states are stated
+for this algebra.
+
+Blueprint: thrm:quasilocal-algebra-exists -/
 noncomputable def quasilocal : QuasilocalAlgebra N.U N.isotony :=
   Classical.choice (exists_quasilocalAlgebra N.U N.isotony)
 
@@ -150,9 +152,11 @@ theorem isometry_ι {B : Set StandardMinkowskiSpacetime.Carrier}
     Isometry (N.quasilocal.ι hB) :=
   N.quasilocal.isometry_ι hB
 
-/-- The *covariance equivalence* `𝔘(B) ≃⋆ₐ[ℂ] 𝔘(L·B)` implementing the
-action of a Lorentz transformation `L` on the net, chosen from the
-existence witness provided by Axiom 5 (`lorentzCovariance`). -/
+/-- The *-isomorphism α_L : 𝔘(B) → 𝔘(LB) by which a Poincaré transformation L acts on the net.
+
+Axiom 5 (`lorentzCovariance`) asserts that such a family exists; this definition chooses one.
+`covEquiv_one`, `covEquiv_mul` and `covEquiv_isotony` restate the three conditions of the axiom for
+it. -/
 noncomputable def covEquiv (L : InhomogeneousLorentzGroup)
     (B : Set StandardMinkowskiSpacetime.Carrier) :
     StarAlgEquiv ℂ (N.algebra B) (N.algebra (L • B)) :=

@@ -33,14 +33,27 @@ open Physicslib4.GNS
 variable (N : HaagKastlerNet)
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- The local observable operators of a region `B` in a representation `π`: the
-image `π(𝔘(B))` of the local algebra. -/
+/-- The local operators of a diamond B in a representation π: the image π(ι_B(𝔘(B))).
+
+Here π is a *-representation of the quasilocal algebra 𝔘 on a Hilbert space H, and ι_B embeds the
+local algebra 𝔘(B) in 𝔘. The result is a set of bounded operators on H, written π(𝔘(B)) for short.
+
+Blueprint: def:local-von-neumann -/
 def localOperators (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) : Set (H →L[ℂ] H) :=
   Set.range fun a : N.U.algebra B => π (N.quasilocal.ι hB a)
 
-/-- The **local von Neumann algebra** `R(B) = π(𝔘(B))''`, the bicommutant of the
-local observable operators (the commutant being `Set.centralizer`). -/
+/-- The local von Neumann algebra R(B) = π(𝔘(B))'' of a diamond B, as a set of operators.
+
+As you will recall, the commutant S' of a set S of bounded operators is the set of bounded
+operators commuting with every element of S, and the bicommutant S'' is the commutant of S'. By von
+Neumann's bicommutant theorem, π(𝔘(B))'' is the weak operator closure of the unital *-algebra
+π(𝔘(B)), and it is in general larger. `localVonNeumannAlgebra` is the same set as a bundled von
+Neumann algebra.
+
+Implementation note: the commutant is Mathlib's `Set.centralizer` in the bounded operators on H.
+
+Blueprint: def:local-von-neumann -/
 def localVonNeumann (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
     Set (H →L[ℂ] H) :=
@@ -128,9 +141,15 @@ theorem localOperators_selfAdjoint (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H 
   rintro x ⟨a, rfl⟩
   exact ⟨star a, by simp only [map_star]⟩
 
-/-- The **local von Neumann algebra** `R(B)` as a genuine `VonNeumannAlgebra`: the
-bicommutant of the self-adjoint set of local observable operators. Its underlying
-set is `localVonNeumann π B`. -/
+/-- The local von Neumann algebra R(B) = π(𝔘(B))'' of a diamond B, as a von Neumann algebra.
+
+The local operators π(𝔘(B)) form a self-adjoint set, and the bicommutant of a self-adjoint set is a
+von Neumann algebra (`Physicslib4.GNS.vonNeumannOfSelfAdjoint`). This is that algebra, an element
+of Mathlib's `VonNeumannAlgebra`; its underlying set is `localVonNeumann`
+(`coe_localVonNeumannAlgebra`). Inclusions and commutants of local algebras are stated for it with
+`≤` and `VonNeumannAlgebra.commutant`.
+
+Blueprint: def:local-von-neumann-algebra -/
 noncomputable def localVonNeumannAlgebra (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
     VonNeumannAlgebra H :=
@@ -196,11 +215,12 @@ theorem localVonNeumannAlgebra_separating
   refine N.localVonNeumann_separating π hB₁ hB₂ hs hcyc ?_ hRΩ
   rwa [← SetLike.mem_coe, coe_localVonNeumannAlgebra] at hR
 
-/-- **The net of von Neumann algebras as an order-preserving map.** Packaging
-isotony, the assignment `B ↦ R(B)` is a monotone map from the poset of basis
-regions (ordered by inclusion) to the von Neumann algebras of `B(H)`. This is the
-statement that the local net is a functor on the inclusion poset: containment of
-regions is sent to containment of algebras. -/
+/-- The net of local von Neumann algebras B ↦ R(B) in a representation π, as a monotone map.
+
+The map sends each diamond B to R(B) = π(𝔘(B))'' and is monotone, B₁ ⊆ B₂ implying R(B₁) ≤ R(B₂)
+(`localVonNeumannAlgebra_mono`): this is isotony for the von Neumann algebras.
+
+Blueprint: def:von-neumann-net -/
 noncomputable def vonNeumannNet (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) :
     {B : Set StandardMinkowskiSpacetime.Carrier // IsAlexandrovBasisSet B} →o
       VonNeumannAlgebra H where

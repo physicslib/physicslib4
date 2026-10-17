@@ -101,27 +101,37 @@ theorem isOneParameterSubgroup_translationFlow
     change translationSub ((s + t) • n) = translationSub (s • n) * translationSub (t • n)
     rw [add_smul, translationSub_mul]
 
-/-- **Concrete future-timelike-translation predicate.** A one-parameter subgroup `γ`
-is a future-timelike translation when it is the translation flow `t ↦ (id, t • n)` in
-a future-pointing timelike direction `n` — i.e. `n` lies in the forward Minkowski
-cone at the origin. This is the value with which the abstract `ftl` parameter of
-`IsVacuumState` is meant to be discharged. -/
+/-- A one-parameter subgroup γ is a future-timelike translation: γ(t) = (1, tn), n future timelike.
+
+That is, γ is the translation flow t ↦ (1, tn) (`translationFlow`) in a direction n that lies in
+the open forward light cone at the origin. These are the subgroups on which the spectrum condition
+of a vacuum state is imposed (`HaagKastlerNet.IsVacuumStateConcrete`).
+
+Blueprint: def:future-timelike-translation -/
 def IsFutureTimelikeTranslation (γ : ℝ → InhomogeneousLorentzGroup) : Prop :=
   ∃ n : StandardMinkowskiSpacetime.Carrier,
     (n : SpacetimeModel) ∈ minkowskiForwardCone 0 ∧ γ = translationFlow n
 
-/-- **Vacuum state.** A state `ω` on the quasilocal algebra is a *vacuum state*
-(relative to the future-timelike-translation predicate `ftl`) when:
+/-- A vacuum state: a Poincaré-invariant state satisfying the spectrum condition.
 
-1. it is invariant under the covariance action (`IsInvariantState`); and
-2. in a GNS representation `(H, π, Ω)` reproducing `ω` and implementing the action
-   by unitaries `U`, every future-timelike translation one-parameter subgroup `γ`
-   has positive energy: `t ↦ U (γ t)` satisfies `IsPositiveEnergy`, i.e. it is a
-   strongly continuous one-parameter unitary group with positive generator.
+A state ω on the quasilocal algebra is a vacuum state, relative to a predicate `ftl` that selects
+the future-timelike translation subgroups, when
 
-This packages the two *necessary* vacuum conditions — invariance and the spectrum
-condition. The predicate `ftl` is a parameter; `IsVacuumStateConcrete` fixes it to
-`IsFutureTimelikeTranslation`. -/
+1. ω is invariant under the action of the Poincaré group (`IsInvariantState`); and
+2. there is a representation (K, π, Ω) reproducing ω, ω(a) = ⟨Ω, π(a)Ω⟩, with unitaries U(L)
+   implementing the action, U(L)π(a)Ω = π(β_L a)Ω, such that for every one-parameter subgroup γ
+   selected by `ftl` the unitary group t ↦ U(γ(t)) has positive energy (`AQFT.IsPositiveEnergy`):
+   it is strongly continuous and its generator, the energy in the direction of γ, is positive.
+
+Condition 2 is the spectrum condition. Positive energy along every future-timelike translation is
+equivalent to the textbook form, that the joint spectrum of the energy-momentum operators lies in
+the closed forward light cone; that form needs a joint spectral measure for commuting unbounded
+operators, which the library does not have. These are necessary conditions for a vacuum; the
+library constructs no vacuum state of a nontrivial net.
+
+`IsVacuumStateConcrete` fixes `ftl` to `IsFutureTimelikeTranslation`.
+
+Blueprint: def:vacuum-state -/
 def HaagKastlerNet.IsVacuumState (N : HaagKastlerNet.{u})
     (ftl : (ℝ → InhomogeneousLorentzGroup) → Prop)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
@@ -171,12 +181,13 @@ theorem HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant
         Physicslib4.GNS.gnsVonNeumann π = Set.univ :=
   IsInvariantState.exists_gns_irreducible_covariant N h.invariant hpure
 
-/-- **Vacuum state with the concrete spectrum condition.** Specializes
-`IsVacuumState` to the concrete future-timelike-translation predicate
-`IsFutureTimelikeTranslation`, so the spectrum condition is imposed on exactly the
-one-parameter translation subgroups `t ↦ (id, t • n)` with `n` future-pointing
-timelike. This discharges the abstract `ftl` parameter with its intended value, so a
-concrete vacuum state depends on no free predicate. -/
+/-- A vacuum state, with the spectrum condition imposed on the future-timelike translations.
+
+This is `IsVacuumState` with its predicate fixed to `IsFutureTimelikeTranslation`: positive energy
+is required of exactly the translation subgroups t ↦ (1, tn) with n in the open forward light
+cone. The definition has no free parameter.
+
+Blueprint: def:vacuum-state-concrete -/
 def HaagKastlerNet.IsVacuumStateConcrete (N : HaagKastlerNet)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
   N.IsVacuumState IsFutureTimelikeTranslation ω

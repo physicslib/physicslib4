@@ -26,45 +26,29 @@ open Physicslib4
 open scoped Pointwise
 
 /--
-**Axiom 5 (Lorentz Covariance).** A local net `U` is *Lorentz
-covariant* if the inhomogeneous Lorentz group acts on the assignment
-`B ↦ U.algebra B` and the action
+Axiom 5 (Lorentz covariance): the Poincaré group acts on the net, compatibly with isotony.
 
-(1) sends the identity element of the Lorentz group to the identity
-    automorphism,
-(2) is multiplicative in the group element, i.e.
-    `α (L' · L) = α L' ∘ α L`, and
-(3) *commutes with isotony*.
+The axiom asks for a unital *-isomorphism α_L : 𝔘(B) → 𝔘(LB) for every element L of the identity
+component of the Poincaré group (`InhomogeneousLorentzGroup`) and every region B, where LB is the
+image of B under L, such that
 
-Concretely, there exists, for every group element
-`L : InhomogeneousLorentzGroup` and every Alexandrov-basis set `B`, a
-`*`-algebra equivalence `α L B : U.algebra B ≃⋆ₐ[ℂ] U.algebra (L • B)`,
-such that
+1. α_1 is the identity;
+2. α_(L'L) = α_L' ∘ α_L; and
+3. α_L commutes with isotony: α_L ∘ i(B₁, B₂) = i(LB₁, LB₂) ∘ α_L for diamonds B₁ ⊆ B₂, where i
+   is the isotony family of Axiom 2.
 
-(1) [identity] for every basis set `B` and every `a : U.algebra B`,
-    `α 1 B a = a` (modulo the canonical identification
-    `U.algebra (1 • B) = U.algebra B` coming from `one_smul`);
+In condition 3, LB₁ and LB₂ are diamonds with LB₁ ⊆ LB₂ because L preserves chronological
+precedence (`isAlexandrovBasisSet_smul`, `Set.smul_set_mono`), so no further hypothesis is
+needed. The predicate takes the isotony family as a parameter, so the action respects the net's own
+embeddings.
+`HaagKastlerNet.covEquiv` chooses the maps α_L, and `HaagKastlerNet.action` extends them to
+automorphisms of the quasilocal algebra.
 
-(2) [composition] for every pair `L, L' : InhomogeneousLorentzGroup`,
-    every basis set `B` and every `a : U.algebra B`,
-    `α (L' * L) B a = α L' (L • B) (α L B a)` (modulo the canonical
-    identification `U.algebra ((L' * L) • B) = U.algebra (L' • (L • B))`
-    coming from `mul_smul`); and
+Implementation note: 𝔘(1B) and 𝔘(B), and 𝔘((L'L)B) and 𝔘(L'(LB)), are different types that are
+equal only propositionally, so conditions 1 and 2 transport along those equalities (`one_smul`,
+`mul_smul`) with `Eq.mp`.
 
-(3) [isotony] for every `L`, every inclusion `B₁ ⊆ B₂`, and every
-    element `a : U.algebra B₁`, the action of `L` commutes with the
-    isotony inclusion:
-    `α L B₂ (i.map a) = i.map (α L B₁ a)`, where the right-hand `i.map`
-    is the Axiom 2 embedding for `L • B₁ ⊆ L • B₂`. Neither that inclusion nor
-    the fact that `L • B₁` and `L • B₂` are basis sets is a hypothesis: they are
-    `Set.smul_set_mono h` and `isAlexandrovBasisSet_smul`. The isotony family `i` is the one of
-    Axiom 2, taken as a parameter, not a separately chosen family.
-
-The cross-fiber identifications in conditions (1) and (2) are
-implemented as `Eq.mpr` of the obvious congruence
-`U.algebra _ = U.algebra _` produced from `one_smul`/`mul_smul`.
-
-Blueprint reference: `def:lorentz-covariance`.
+Blueprint: def:lorentz-covariance
 -/
 def LorentzCovariance (U : LocalNet) (i : Isotony U) : Prop :=
   ∃ α : ∀ (L : InhomogeneousLorentzGroup)

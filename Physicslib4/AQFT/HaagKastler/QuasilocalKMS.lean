@@ -43,9 +43,14 @@ namespace HaagKastlerNet
 
 variable (N : HaagKastlerNet)
 
-/-- The one-parameter automorphism family of the quasilocal algebra `𝔘` induced by
-a one-parameter subgroup `t ↦ L_t` of the inhomogeneous Lorentz group, via the
-covariance action `β_L`. -/
+/-- The automorphisms t ↦ β_(L_t) of the quasilocal algebra along a curve t ↦ L_t of Poincaré
+transformations.
+
+Here β_L is the action `HaagKastlerNet.action` of L on 𝔘. When t ↦ L_t is a one-parameter subgroup,
+for instance the time translations, this is a one-parameter group of automorphisms, the dynamics of
+the theory (`isOneParameterAut_flowAut`).
+
+Blueprint: def:flow-aut-covariance -/
 noncomputable def flowAut (flow : ℝ → InhomogeneousLorentzGroup) (t : ℝ) :
     N.quasilocal.carrier ≃⋆ₐ[ℂ] N.quasilocal.carrier :=
   N.action (flow t)
@@ -63,9 +68,16 @@ theorem isOneParameterAut_flowAut (flow : ℝ → InhomogeneousLorentzGroup)
   · change N.action (flow (s + t)) a = N.action (flow s) (N.action (flow t) a)
     rw [hadd s t]; exact N.action_mul_apply (flow t) (flow s) a
 
-/-- A state `ω` on the quasilocal algebra `𝔘` is a *KMS state for the covariance
-flow* `flow` at inverse temperature `β` if it satisfies the KMS condition for the
-induced one-parameter automorphism group `flowAut`. -/
+/-- A state ω on the quasilocal algebra is a KMS state at inverse temperature β for a flow t ↦ L_t.
+
+As you will recall, the Kubo–Martin–Schwinger condition characterises thermal equilibrium: for
+all a, b the correlation function t ↦ ω(a τ_t(b)) extends to a bounded continuous function on the
+strip 0 ≤ Im z ≤ β, holomorphic inside, whose values on Im z = β are ω(τ_t(b) a). This definition
+is the general KMS condition `AQFT.IsKMSState` for the automorphisms τ_t = β_(L_t) of 𝔘
+(`flowAut`). In Minkowski spacetime every Poincaré transformation acts on the single algebra 𝔘, so
+any one-parameter subgroup may serve as the dynamics.
+
+Blueprint: def:kms-state-for-flow-covariance -/
 def IsKMSStateForFlow (flow : ℝ → InhomogeneousLorentzGroup) (β : ℝ)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
   AQFT.IsKMSState (N.flowAut flow) β ω
@@ -84,15 +96,20 @@ theorem IsKMSStateForFlow.convexCombo (flow : ℝ → InhomogeneousLorentzGroup)
   AQFT.IsKMSState.convexCombo s hs0 hs1 h₁ h₂
 
 open scoped InnerProductSpace in
-/-- **Ground state for a covariance flow.** A state `ω` on the quasilocal algebra `𝔘` is
-a *ground state* for a one-parameter subgroup `t ↦ L_t` of the inhomogeneous Lorentz group
-(e.g. a translation or boost flow) when it is invariant under the flow and, in a GNS
-representation `(K, π, Ω)` reproducing `ω` and implementing the flow by unitaries `U`
-fixing `Ω`, the one-parameter unitary group `t ↦ U t` has positive energy
-(`AQFT.IsPositiveEnergy`): it is strongly continuous with positive generator. This is the
-ground-state (`β → ∞`, spectrum-condition) counterpart of `IsKMSStateForFlow`: the
-stationary state whose flow generator (the Hamiltonian, for a timelike flow) is
-positive. -/
+/-- A ground state for a flow t ↦ L_t: a flow-invariant state in which the flow has a positive
+generator.
+
+A state ω on the quasilocal algebra is a ground state for t ↦ L_t when
+
+1. ω(β_(L_t) a) = ω(a) for all t and a; and
+2. there is a representation (K, π, Ω) reproducing ω, with unitaries U(t) that fix Ω and implement
+   the flow, U(t)π(a)Ω = π(β_(L_t) a)Ω, such that t ↦ U(t) has positive energy
+   (`AQFT.IsPositiveEnergy`): it is strongly continuous with positive generator.
+
+For a timelike translation the generator is the Hamiltonian. The ground state is the
+zero-temperature counterpart of the KMS states of `IsKMSStateForFlow`.
+
+Blueprint: def:ground-state-for-flow-covariance -/
 def IsGroundStateForFlow.{u} (N : HaagKastlerNet.{u})
     (flow : ℝ → InhomogeneousLorentzGroup)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=

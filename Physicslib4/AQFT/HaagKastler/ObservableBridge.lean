@@ -69,34 +69,30 @@ open Physicslib4.GNS
 universe u v
 
 /--
-**Axiom 4 (Quasilocal Completeness), as a bridge principle.**
+Axiom 4 (quasilocal completeness): every physical observable is a quasilocal observable.
 
-An `ObservableCorrespondence` for a quasilocal algebra `Q` is the data of
+Unlike the other axioms, this one relates the formalism to the world: a physical observable is a
+quantity that can be measured, not a mathematical object. The structure therefore takes the
+physical observables as an uninterpreted type `Observable`, with a map `measure` that sends each
+to the element of the quasilocal algebra 𝔘 answering it, and asks that every such element be
+self-adjoint. Then π(measure o) is a quasilocal observable in every representation π
+(`isQuasilocalObservable_measure`).
 
-* `Observable`, the type of physical observables -- an uninterpreted primitive,
-  standing for the quantities a physicist can actually measure;
-* `measure`, assigning to each physical observable the element of the quasilocal
-  algebra `𝔘` that answers it;
+The inclusion runs one way only. The axiom says the formalism is not too small: nothing measurable
+lies outside 𝔘. It does not say that every self-adjoint element of 𝔘 is measured by some
+procedure. Accordingly the structure is easy to inhabit (`ObservableCorrespondence.maximal`), no
+theorem about nets uses it, and `HaagKastlerNet` does not contain it.
 
-subject to the single condition that every value of `measure` is self-adjoint,
-which is what it means for it to be a quasilocal observable at the algebra level.
-
-Nothing here is proved about the world, which is as it should be for a bridge
-principle: the content of Axiom 4 is precisely that such a correspondence exists
-for the physical observables, and that is an interpretive postulate, not a theorem.
-
-Blueprint reference: `def:quasilocal-completeness`.
+Blueprint: def:quasilocal-completeness
 -/
 structure ObservableCorrespondence {U : LocalNet.{u}} {i : Isotony U}
     (Q : QuasilocalAlgebra U i) where
-  /-- The physical observables, taken as an abstract primitive. -/
+  /-- The physical observables, an uninterpreted type. -/
   Observable : Type v
-  /-- The correspondence: the element of `𝔘` answering a physical observable. -/
+  /-- The element of the quasilocal algebra 𝔘 that answers each physical observable. -/
   measure : Observable → Q.carrier
-  /-- *Axiom 4.* Every physical observable corresponds to a quasilocal
-  observable. At the algebra level this is self-adjointness of its image; that it
-  is then a quasilocal observable in the sense of `def:quasilocal-observable`, in
-  *every* representation, is `isQuasilocalObservable_measure`. -/
+  /-- The axiom: every physical observable corresponds to a self-adjoint element of 𝔘, and hence
+  to a quasilocal observable in every representation (`isQuasilocalObservable_measure`). -/
   isSelfAdjoint_measure : ∀ o : Observable, IsSelfAdjoint (measure o)
 
 /--

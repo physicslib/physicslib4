@@ -56,23 +56,15 @@ open Physicslib4.GNS
 universe u v
 
 /--
-**Quasilocal Observable** (blueprint label `def:quasilocal-observable`).
+An operator T is a quasilocal observable in a representation π if T = π(a) with a self-adjoint.
 
-Fix a quasilocal algebra `Q` for a local net `U` and a GNS
-`*`-representation `π : Q.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)` of the
-quasilocal algebra `𝔘 = Q.carrier` on a complex Hilbert space `H`
-(in practice obtained from `Physicslib4.GNS.gns_construction`
-applied to a state `ω` on `Q.carrier`). A bounded operator
-`T : H →L[ℂ] H` is a *quasilocal observable* if it is the image
-`T = π a` of some *self-adjoint* element `a` of the quasilocal
-algebra.
+Here π is a *-representation of the quasilocal algebra 𝔘 on a Hilbert space H, in practice the GNS
+representation of a state (`Physicslib4.GNS.gns_construction`), and a is a self-adjoint element of
+𝔘. Such an operator is self-adjoint (`IsQuasilocalObservable.isSelfAdjoint`); conversely the
+quasilocal observables are exactly the self-adjoint operators in the range of π
+(`isQuasilocalObservable_iff`).
 
-By `IsQuasilocalObservable.isSelfAdjoint`, every quasilocal
-observable is self-adjoint, matching the blueprint's "the image
-`π_ω(a)` of a self-adjoint member `a` of the quasilocal algebra
-`𝔘` ... is self-adjoint and thus corresponds to an observable".
-
-Blueprint reference: `def:quasilocal-observable`.
+Blueprint: def:quasilocal-observable
 -/
 def IsQuasilocalObservable {U : LocalNet} {i : Isotony U} (Q : QuasilocalAlgebra U i)
     {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]

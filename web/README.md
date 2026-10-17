@@ -114,7 +114,11 @@ build:
   parent is listed under "Extends" with a checkbox that shows them. `+hideFields` and
   `+hideStructureConstructor` drop the fields and the constructor. Field types that do not fit wrap
   with a hanging indent. The docstring is rendered as Markdown, and its code spans are highlighted
-  as Lean.
+  as Lean. Code spans are elaborated in the chapter's own scope, not the declaration's, so a name
+  written relative to a library namespace (`QuasilocalAlgebra`, `HaagKastlerNet.quasilocal`) is
+  resolved and linked only if the chapter opens that namespace: a chapter therefore opens the
+  namespaces of the declarations it shows, before `#doc` (`open Physicslib4.AQFT.HaagKastler`).
+  Field names and file names in code spans stay unresolved and are shown as plain code.
 - Theorems: `#check` in a named `lean` block, with its output in a `leanOutput` block and the
   manual's own prose around it. Verso prints messages 120 columns wide; longer lines wrap at the
   width of the text column. Opening the namespace shortens the names:

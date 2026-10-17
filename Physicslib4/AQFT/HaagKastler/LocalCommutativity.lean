@@ -50,16 +50,22 @@ namespace HaagKastler
 open Physicslib4
 
 /--
-**Axiom 3 (Local Commutativity).** A local net `U`, with Axiom 2 isotony family `i`,
-satisfies *local commutativity* if whenever two Alexandrov-basis sets `B₁`, `B₂` are
-completely spacelike and both contained in an Alexandrov-basis set `B`, their images in
-`𝔘(B)` under the isotony embeddings `i.map` commute pointwise.
+Axiom 3 (local commutativity): observables of completely spacelike diamonds commute.
 
-In Minkowski spacetime a containing basis set always exists
-(`Spacetime.alexandrovBasis_directed`), so the condition is never vacuous. The
-equivalent form in a quasilocal algebra is `localCommutativity_iff_exists_commute_ι`.
+Let B₁ and B₂ be completely spacelike diamonds: every point of one is spacelike to every point of
+the other. To multiply an element of 𝔘(B₁) by one of 𝔘(B₂), both must lie in one algebra. The
+axiom takes any diamond B containing both and asks that
 
-Blueprint reference: `def:local-commutativity`.
+i(B₁, B)(a₁) i(B₂, B)(a₂) = i(B₂, B)(a₂) i(B₁, B)(a₁)
+
+in 𝔘(B) for all a₁ ∈ 𝔘(B₁) and a₂ ∈ 𝔘(B₂), where i is the isotony family of Axiom 2. In
+Minkowski spacetime such a B always exists (`Spacetime.alexandrovBasis_directed`), so the
+condition is never vacuous. The statement uses the net and isotony only. It is equivalent to the
+commutation of ι_B₁(a₁) and ι_B₂(a₂) in a quasilocal algebra
+(`localCommutativity_iff_exists_commute_ι`), and then holds in every quasilocal algebra
+(`LocalCommutativity.commute_ι`).
+
+Blueprint: def:local-commutativity
 -/
 def LocalCommutativity (U : LocalNet) (i : Isotony U) : Prop :=
   ∀ ⦃B₁ B₂ B : Set StandardMinkowskiSpacetime.Carrier⦄

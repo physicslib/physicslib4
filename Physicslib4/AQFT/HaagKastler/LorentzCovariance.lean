@@ -80,24 +80,31 @@ namespace HaagKastler
 open Physicslib4
 open scoped Pointwise
 
-/-- The identity component of the inhomogeneous Lorentz group
-acting on Minkowski spacetime, as the set of pairs `(L, t)` where
-`L` is an `ℝ`-linear automorphism of the spacetime carrier lying
-in `SO(1,3)↑` (Lorentz, proper, orthochronous) and `t` is a
-translation vector. The group law is composition of the affine
-maps `x ↦ L x + t`. -/
+/-- The identity component of the Poincaré group, the symmetry group of Axiom 5.
+
+An element is a pair (Λ, a) of a proper orthochronous Lorentz transformation Λ ∈ SO(1,3)↑ and a
+translation a, acting on Minkowski spacetime by x ↦ Λx + a. The product is the composition of
+these affine maps, (Λ₁, a₁)(Λ₂, a₂) = (Λ₁Λ₂, a₁ + Λ₁a₂). Haag and Kastler call the Poincaré group
+the inhomogeneous Lorentz group. Space and time reflections are not included: a theory need not be
+invariant under them (the weak interaction violates parity), and time reversal would act
+antilinearly.
+
+The group carries the topology induced by its embedding g ↦ (Λ, Λ⁻¹, a) into a space of bounded
+operators and vectors, and is a topological group.
+
+Blueprint: def:inhomogeneous-lorentz-group -/
 structure InhomogeneousLorentzGroup where
-  /-- The "Lorentz part": an `ℝ`-linear automorphism of the
-  Minkowski spacetime carrier. -/
+  /-- The Lorentz transformation Λ, a real-linear automorphism of spacetime. -/
   linear : StandardMinkowskiSpacetime.Carrier ≃ₗ[ℝ]
               StandardMinkowskiSpacetime.Carrier
-  /-- The translation part: a vector in the spacetime carrier. -/
+  /-- The translation a. -/
   translation : StandardMinkowskiSpacetime.Carrier
-  /-- The linear part preserves the Minkowski form. -/
+  /-- Λ preserves the Minkowski form. -/
   isLorentz : IsLorentz linear
-  /-- The linear part is proper (determinant `1`). -/
+  /-- Λ is proper: its determinant is 1. -/
   isProper : IsProper linear
-  /-- The linear part is orthochronous (preserves the direction of time). -/
+  /-- Λ is orthochronous: it preserves the direction of time, (Λe₀)⁰ > 0 for the unit time
+  vector e₀. -/
   isOrthochronous : IsOrthochronous linear
 
 namespace InhomogeneousLorentzGroup

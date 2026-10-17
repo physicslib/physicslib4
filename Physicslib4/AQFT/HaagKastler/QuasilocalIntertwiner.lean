@@ -457,7 +457,16 @@ noncomputable def lift (N : HaagKastlerNet)
     (L : InhomogeneousLorentzGroup) : N.QuasilocalLift N.quasilocal L :=
   quasilocalLift N N.quasilocal L
 
-/-- The covariance `*`-automorphism `β_L` of the quasilocal algebra. -/
+/-- The automorphism β_L of the quasilocal algebra 𝔘 by which a Poincaré transformation L acts.
+
+Axiom 5 gives *-isomorphisms α_L : 𝔘(B) → 𝔘(LB) between local algebras. They fit together into a
+single *-automorphism β_L of 𝔘 with β_L(ι_B a) = ι_(LB)(α_L a) (`action_ι`): β_L is defined by
+this formula on the union of the local images, which is a dense *-subalgebra since the diamonds
+are directed, and extended by continuity. It is unique
+(`QuasilocalLift.unique`), and L ↦ β_L is a group homomorphism (`action_one`, `action_mul`,
+`actionHom`).
+
+Blueprint: def:covariant-quasilocal-algebra -/
 noncomputable def action (N : HaagKastlerNet)
     (L : InhomogeneousLorentzGroup) : N.quasilocal.carrier ≃⋆ₐ[ℂ] N.quasilocal.carrier :=
   (N.lift L).β
@@ -521,10 +530,14 @@ noncomputable def actionHom (N : HaagKastlerNet) :
 @[simp] theorem actionHom_apply (N : HaagKastlerNet)
     (L : InhomogeneousLorentzGroup) : N.actionHom L = N.action L := rfl
 
-/-- A state `ω` on the quasilocal algebra is *(Poincaré-)invariant* if it is a
-fixed point of the dual covariance action: `ω(β_L a) = ω(a)` for every Lorentz
-transformation `L` and every observable `a`. This is the invariance part of the
-vacuum conditions; the spectrum condition is imposed separately. -/
+/-- A state ω on the quasilocal algebra is Poincaré invariant if ω(β_L a) = ω(a) for all L and a.
+
+Here β_L is the automorphism `HaagKastlerNet.action` by which L acts on 𝔘. Invariance is the first
+of the two conditions on a vacuum state (`HaagKastlerNet.IsVacuumState`); the second is the
+spectrum condition. In the GNS representation of an invariant state the action is implemented by
+unitaries U(L) that fix the cyclic vector (`IsInvariantState.exists_gns_unitary`).
+
+Blueprint: def:invariant-state -/
 def IsInvariantState (N : HaagKastlerNet)
     (ω : Physicslib4.GNS.State N.quasilocal.carrier) : Prop :=
   ∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),

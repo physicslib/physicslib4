@@ -78,76 +78,57 @@ open Physicslib4
 universe u
 
 /--
-**Quasilocal Algebra (data).** For a local net `U`, a
-`QuasilocalAlgebra U` is the data of an ambient unital C*-algebra
-`carrier` — the *quasilocal algebra* `𝔘` — together with a family
-of unital `*`-monomorphisms `ι B : U.algebra B →⋆ₐ[ℂ] carrier`,
-one for every subset `B` of Minkowski spacetime, such that
+A quasilocal algebra of a net: a C*-algebra 𝔘 in which the local algebras embed with dense union.
 
-* each `ι B` is injective when `B` is an Alexandrov-basis set
-  (so the local algebras embed faithfully), and
-* the union of the images `Set.range (ι B)` over all
-  Alexandrov-basis sets `B` is *dense* in `carrier`.
+Take the local algebras 𝔘(B) of all diamonds, identify each element of 𝔘(B₁) with its images under
+the isotony maps of Axiom 2, and complete in norm. The result is the C*-algebra 𝔘 of the
+quasilocal observables, those approximated in norm by observables of bounded regions. This
+structure records what characterises it: a unital C*-algebra 𝔘 with an injective unital
+*-homomorphism ι_B : 𝔘(B) → 𝔘 for each diamond B, such that
 
-The density condition encodes the blueprint's "taking the
-completion of the set-theoretic union of all `𝔘(B)` one obtains
-the C*-algebra `𝔘`": every element of `carrier` is the norm-limit
-of a sequence of elements coming from the local algebras.
+* ι_B₂ ∘ i(B₁, B₂) = ι_B₁ for B₁ ⊆ B₂ (the embeddings respect isotony), and
+* the union of the images ι_B(𝔘(B)) is dense in 𝔘.
 
-Blueprint reference: `def:quasilocal-algebra`.
+Every net satisfying Axiom 2 has one, built as the completion of the directed colimit of its local
+algebras (`exists_quasilocalAlgebra`), and `HaagKastlerNet.quasilocal` chooses one for each net. So
+the structure describes a constructed object; it is not an extra hypothesis on the net.
+
+Implementation note: Mathlib has no direct limit of C*-algebras, so the construction is carried out
+in `QuasilocalColimit.lean` and `QuasilocalExistence.lean`; this structure is the interface that
+the rest of the library uses.
+
+Blueprint: def:quasilocal-algebra
 -/
 structure QuasilocalAlgebra (U : LocalNet.{u}) (i : Isotony U) where
-  /-- The underlying type of the quasilocal algebra `𝔘`, in the *same* universe
-  as the net's local algebras.
+  /-- The quasilocal algebra 𝔘, a type in the universe of the net's local algebras.
 
-  It must not be pinned to `Type 0`. `LocalNet.algebra` is universe polymorphic,
-  so a `Type 0` carrier would make this structure *uninhabitable* for a net whose
-  local algebras live in a higher universe: no `Type 0` type can hold injective
-  copies of them, and the existence claim would fail on size grounds alone. This
-  is the twin of the over-quantification defect recorded on `ι` below.
-
-  The carrier is tied to the net's universe rather than given a free one. That
-  costs no generality: `dense_range` forces `𝔘` to be the closure of the union of
-  the images of the local algebras, so any quasilocal algebra is already of their
-  size, and a free universe would only add copies of the same algebra higher up.
-  It does buy something important -- a free universe is constrained by no field,
-  so it could not be inferred, and the quasilocal form of Axiom 3
-  (`localCommutativity_iff_exists_commute_ι`) would become a *family* of `Prop`s indexed
-  by a universe, so that its equivalence with Axiom 3 would depend on that index. -/
+  Implementation note: a carrier fixed in `Type 0` could not contain injective copies of local
+  algebras in a higher universe, and a free universe could not be inferred and would make the
+  quasilocal form of Axiom 3 depend on it. Tying it to the net's universe loses nothing, since
+  density makes 𝔘 the closure of the images of the local algebras. -/
   carrier : Type u
-  /-- The `CStarAlgebra` instance on `carrier`. -/
+  /-- The quasilocal algebra 𝔘 is a unital C*-algebra. -/
   instCStarAlgebra : CStarAlgebra carrier
-  /-- The family of unital `*`-homomorphisms `ι hB : 𝔘(B) →⋆ₐ[ℂ] 𝔘`
-  embedding each local algebra into the quasilocal algebra.
+  /-- The embedding ι_B : 𝔘(B) → 𝔘 of the local algebra of a diamond B, a unital *-homomorphism.
 
-  The family is indexed by *Alexandrov-basis sets only*, matching `Isotony.map`.
-  It must not be total over all subsets: `LocalNet.algebra` assigns a type to
-  every subset, including non-basis ones, so a total `ι` would demand an
-  embedding of those junk fibres into `𝔘` as well. Since `dense_range` below
-  constrains `𝔘` using the basis sets alone, a net carrying a large algebra on a
-  non-basis subset would then make this structure *uninhabitable* — density would
-  force `𝔘` small while a unital `*`-homomorphism out of a simple algebra is
-  automatically injective and would force it large. -/
+  Implementation note: ι is defined on diamonds only, as `Isotony.map` is. An embedding of the
+  algebras of all subsets would make the structure impossible to build for some nets: density
+  bounds 𝔘 by the algebras of the diamonds, while a unital *-homomorphism from a large simple
+  algebra on some other subset into the nonzero algebra 𝔘 would be injective, so 𝔘 would have to
+  be large too (blueprint: thrm:quasilocal-algebra-exists, first design note). -/
   ι : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄,
         IsAlexandrovBasisSet B → StarAlgHom ℂ (U.algebra B) carrier
-  /-- Each embedding `ι hB` is injective, i.e. every local algebra `𝔘(B)`
-  embeds faithfully into `𝔘`. -/
+  /-- Each embedding ι_B is injective: every local algebra embeds faithfully in 𝔘. -/
   ι_injective : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄
                   (hB : IsAlexandrovBasisSet B), Function.Injective (ι hB)
-  /-- The union of the images of all local algebras, ranging over
-  Alexandrov-basis sets, is dense in the quasilocal algebra. This is
-  the blueprint's "completion of the set-theoretic union". -/
+  /-- The union of the images ι_B(𝔘(B)) over all diamonds B is dense in 𝔘: 𝔘 is the completion of
+  the union of the local algebras. -/
   dense_range : Dense (⋃ (B : Set StandardMinkowskiSpacetime.Carrier)
                           (hB : IsAlexandrovBasisSet B),
                           Set.range (ι hB))
-  /-- *Isotony coherence* (the cocone condition): the embeddings into `𝔘` respect
-  the Axiom 2 isotony family, `ι B₂ ∘ i.map = ι B₁`. An element of `𝔘(B₁)` thus
-  embeds into the quasilocal algebra `𝔘` independently of the basis set used to
-  view it, which is exactly what makes `ι` well defined on the colimit.
-
-  The structure is parametrised by the Axiom 2 datum `i` and uses `i.map`, so
-  there is a single isotony family in the development and the cocone condition
-  relates `ι` to *that* family. -/
+  /-- The embeddings respect isotony: ι_B₂ ∘ i(B₁, B₂) = ι_B₁ for B₁ ⊆ B₂, with i the isotony
+  family of Axiom 2. An element of 𝔘(B₁) therefore has the same image in 𝔘 whichever larger diamond
+  it is viewed in. This is the cocone condition of the directed colimit. -/
   ι_inclusion : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
                   (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
                   (h : B₁ ⊆ B₂) (a : U.algebra B₁),
