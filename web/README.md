@@ -29,8 +29,10 @@ examples on the page are elaborated against the library itself.
 - `Site/FrontPage.lean`: the landing page. `Site/Manual.lean`: the reference-manual stub page.
 - `TutorialMain.lean`: the `generate-tutorial` executable.
 - `Tutorial.lean`: the tutorial's title page; it includes the chapters.
-- `Tutorial/AQFTInBrief.lean`: chapter 1, "AQFT in brief" (in preparation).
+- `Tutorial/AQFTInBrief.lean`: chapter 1, "AQFT in brief".
 - `Tutorial/LeanInBrief.lean`: chapter 2, "Lean in brief".
+- `Tutorial/WorkedExamples.lean`: chapter 3, "Worked examples".
+- `Tutorial/DoingItYourself.lean`: chapter 4, "Doing it yourself".
 - `Tutorial/FeatureTests.lean`: a draft-only chapter showing the markup for maths, exercises,
   figures and citations; built only with `--draft`.
 - `Tutorial/Meta.lean`: the directives `exercise`, `solution` (collapsible), `figure`, and `goals`,

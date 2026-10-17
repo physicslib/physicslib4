@@ -86,16 +86,9 @@ The blueprint annotates every node with the Lean declarations that realise it, s
 
 ## Contributing
 
-1. Make sure you have [installed Lean](https://leanprover-community.github.io/get_started.html).
-2. Download the repository using `git clone https://github.com/physicslib/physicslib4.git`.
-3. Run `lake exe cache get!` to download built dependencies (this speeds up the build process).
-4. Run `lake build` to build all files in this repository.
+Contributions are welcome. The tutorial's chapter ["Doing it yourself"](https://physicslib.github.io/physicslib4/tutorial/Doing-it-yourself/) explains how to install Lean, build the library, add a result to the blueprint and the library, run the checks, and open a pull request.
 
 The project targets Lean and Mathlib v4.35.0, as pinned by `lean-toolchain` and `lakefile.toml`.
-
-For more on getting started with Lean, visit the [Lean community website](https://leanprover-community.github.io) and the [Mathlib documentation](https://leanprover-community.github.io/mathlib4_docs/).
-
-Contributions are welcome. If you would like to contribute, please add your work to a new branch and open a pull request. Your PR will need to pass the relevant status checks, be approved by a reviewer, and have no conflicts with the base branch before it can be merged.
 
 ## Acknowledgements
 

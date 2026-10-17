@@ -50,17 +50,13 @@ Requires [Lean 4](https://leanprover-community.github.io/get_started.html) and [
 ```bash
 git clone https://github.com/physicslib/physicslib4.git
 cd physicslib4
-lake exe cache get!   # download prebuilt dependencies
+lake exe cache get    # download prebuilt dependencies
 lake build            # build the project
 ```
 
 ## Contributing
 
-Contributions are welcome. The blueprint is the canonical guide to what is stated and what is proved.
-
-1. Consult the [blueprint](https://physicslib.github.io/physicslib4/blueprint/) and [dependency graph](https://physicslib.github.io/physicslib4/blueprint/dep_graph_document.html) to see how each item is linked to its Lean declarations.
-2. Create a new branch and open a pull request against `main`.
-3. PRs must pass all status checks, be approved by a reviewer, and have no conflicts with the base branch before merging.
+Contributions are welcome. The blueprint is the canonical guide to what is stated and what is proved. The tutorial's chapter ["Doing it yourself"](https://physicslib.github.io/physicslib4/tutorial/Doing-it-yourself/) explains how to set up Lean, add a result to the blueprint and the library, and run the checks; a pull request against `main` is merged once it passes all status checks, has no conflicts with `main`, and is approved by a reviewer.
 
 ## Acknowledgements
 
