@@ -170,11 +170,17 @@ theorem lorentzPath_mfderivWithin (g : InhomogeneousLorentzGroup)
   rw [hgoalfun, hcomp2.fderivWithin hu]
   rfl
 
-/-- The **Lorentz pushforward** of a smooth path on standard Minkowski
-spacetime: `g` acts on each point of the path by the affine map
-`x ↦ g.linear x + g.translation`. The parameter space is unchanged; the new
-path is smooth (affine composition) with non-vanishing derivative (`g.linear`
-is injective). -/
+/-- The Lorentz pushforward g μ of a smooth path in standard Minkowski spacetime, for
+g = (Λ, a) in the inhomogeneous Lorentz group: s ↦ Λμ(s) + a.
+
+The parameter space is unchanged and the velocity is Λμ̇(s) (`lorentzPath_mfderivWithin`), non-zero
+because Λ is invertible. The pushforward of a causal, future-oriented geodesic is again one, with
+endpoints g·p and g·q (`lorentzPath_isCausal`, `lorentzPath_isFutureOriented`,
+`lorentzPath_isGeodesic`), so causal precedence is Poincaré invariant: g·p ≺ g·q exactly when
+p ≺ q (`causallyPrecedes_smul_iff`). It is the Minkowski counterpart of the pushforward of a path
+under an isometry (`Spacetime.Isometry.pushforwardPath`).
+
+Blueprint: def:lorentz-path -/
 noncomputable def lorentzPath (g : InhomogeneousLorentzGroup)
     (μ : StandardMinkowskiSpacetime.SmoothPath) :
     StandardMinkowskiSpacetime.SmoothPath where

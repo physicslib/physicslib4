@@ -43,19 +43,28 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
   {H : Type*} [TopologicalSpace H] (I : ModelWithCorners ℝ E H)
   (M : Type*) [TopologicalSpace M] [ChartedSpace H M] [IsManifold I ∞ M]
 
-/-- A **pseudo-Riemannian metric** on `M`: a smooth section `g` of the bundle of continuous
-bilinear forms on `TM` that is symmetric and nondegenerate at every point. No positivity is
-required.
+/-- A pseudo-Riemannian metric on a manifold M: a smooth field of symmetric, non-degenerate
+bilinear forms g_x on the tangent spaces TₓM.
 
-Blueprint reference: `def:pseudo-riemannian-metric`. -/
+No signature is imposed, so Riemannian and Lorentzian metrics are both examples; the metric of
+a spacetime is one (`Spacetime.toPseudoRiemannianMetric`). Non-degeneracy makes v ↦ g_x(v, ·) an
+isomorphism of TₓM onto its dual (`bijective_val`, `flatEquiv`), the index lowering of physics
+notation. The Levi-Civita connection and geodesics are built on this structure
+(`PseudoRiemannianMetric.leviCivita`), and they do not use the signature.
+
+Implementation note: Mathlib's `Bundle.ContMDiffRiemannianMetric` requires positivity, so it is
+not reused; the field `contMDiff` has the same bundle-section shape as its smoothness field.
+
+Blueprint: def:pseudo-riemannian-metric -/
 structure PseudoRiemannianMetric where
-  /-- The bilinear form `g_x` on `T_xM`. -/
+  /-- The metric g: at each point x, a continuous bilinear form g_x on TₓM. -/
   val : ∀ x : M, TangentSpace I x →L[ℝ] TangentSpace I x →L[ℝ] ℝ
-  /-- Symmetry: `g_x(v, w) = g_x(w, v)`. -/
+  /-- g is symmetric: g_x(v, w) = g_x(w, v). -/
   symm : ∀ (x : M) (v w : TangentSpace I x), val x v w = val x w v
-  /-- Nondegeneracy: if `g_x(v, w) = 0` for all `w`, then `v = 0`. -/
+  /-- g is non-degenerate: if g_x(v, w) = 0 for every w, then v = 0. -/
   nondegenerate : ∀ (x : M) (v : TangentSpace I x), (∀ w, val x v w = 0) → v = 0
-  /-- Smoothness of `g` as a section of the bundle of bilinear forms on `TM`. -/
+  /-- g is smooth: a `C^∞` section of the bundle of continuous bilinear forms on the tangent
+  bundle. -/
   contMDiff : ContMDiff I (I.prod 𝓘(ℝ, E →L[ℝ] E →L[ℝ] ℝ)) ∞
     (fun x ↦ TotalSpace.mk' (E →L[ℝ] E →L[ℝ] ℝ)
       (E := fun x ↦ TangentSpace I x →L[ℝ] TangentSpace I x →L[ℝ] ℝ) x (val x))
@@ -140,9 +149,14 @@ end Geometry
 
 attribute [local instance] Spacetime.topology Spacetime.chartedSpace Spacetime.isManifold
 
-/-- The metric of a spacetime is a pseudo-Riemannian metric on its manifold.
+/-- The metric of a spacetime, as a pseudo-Riemannian metric on its manifold.
 
-Blueprint reference: `def:pseudo-riemannian-metric`. -/
+The fields are those of the spacetime (`Spacetime.val`, `Spacetime.symm`,
+`Spacetime.nondegenerate`, `Spacetime.contMDiff`); the Lorentzian condition is forgotten. This
+gives a spacetime the general API, in particular its Levi-Civita connection
+`M.toPseudoRiemannianMetric.leviCivita`, which `Spacetime.IsGeodesic` uses.
+
+Blueprint: def:pseudo-riemannian-metric -/
 def Spacetime.toPseudoRiemannianMetric (M : Spacetime) :
     Geometry.PseudoRiemannianMetric M.model M.Carrier where
   val := M.val

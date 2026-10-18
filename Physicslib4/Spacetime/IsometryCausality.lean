@@ -135,8 +135,14 @@ chronological precedence forward. Whether every identity-component isometry
 has this property is not decided here; `orientedIdentityComponent` includes
 it as a condition. -/
 
-/-- An isometry `g` *preserves the future orientation* `t` if its differential
-sends future-pointing tangent vectors to future-pointing tangent vectors. -/
+/-- An isometry g preserves the future orientation t: its differential sends future-pointing
+tangent vectors to future-pointing tangent vectors.
+
+Such an isometry carries trips to trips, so p ≪ q implies g(p) ≪ g(q)
+(`chronologicallyPrecedes_pushforward`). The property holds for the identity and is closed under
+composition; the subgroup asks it of g and of g⁻¹ (`futureOrientationPreserving`).
+
+Blueprint: lmm:isometry-preserves-chronology -/
 def PreservesFutureOrientation (g : Isometry M) (t : M.TimeOrientation) : Prop :=
   ∀ (x : M.Carrier) (v : TangentSpace M.model x),
     M.IsFuturePointing t v →
@@ -173,11 +179,13 @@ theorem preservesFutureOrientation_mul {g h : Isometry M} {t : M.TimeOrientation
   rw [← hcomp] at key
   exact key
 
-/-- The **future-orientation-preserving isometries**: those `g` for which both
-`g` and `g⁻¹` preserve the future orientation `t`. Bundling the inverse makes
-this a genuine subgroup using only the identity and composition lemmas, with no
-appeal to the (C⁰) group topology. This is the group over which Axiom 5's
-isometric covariance is intended to range. -/
+/-- The subgroup of isometries g such that g and g⁻¹ both preserve the future orientation t.
+
+Implementation note: asking the condition of g⁻¹ as well makes this a subgroup using only the
+identity and composition lemmas, with no appeal to the group topology. Its intersection with
+`identityComponent` is `orientedIdentityComponent`, the group of Axiom 5.
+
+Blueprint: lmm:isometry-preserves-basis-sets -/
 noncomputable def futureOrientationPreserving (M : Spacetime) (t : M.TimeOrientation) :
     Subgroup (Isometry M) where
   carrier := {g | g.PreservesFutureOrientation t ∧ g⁻¹.PreservesFutureOrientation t}
@@ -198,11 +206,23 @@ noncomputable def futureOrientationPreserving (M : Spacetime) (t : M.TimeOrienta
       g.PreservesFutureOrientation t ∧ g⁻¹.PreservesFutureOrientation t :=
   Iff.rfl
 
-/-- The **oriented identity component**: the identity-component isometries that
-also preserve the future orientation. This is the identity-component group of
-Axiom 5: every identity-component isometry preserves the future orientation, but
-the proof needs a Myers–Steenrod-type rigidity theorem that Mathlib does not
-provide, so orientation preservation is part of the definition instead. -/
+/-- The oriented identity component: the isometries in the identity component that preserve the
+time orientation t.
+
+This is the group of "isometries connected to the identity" of Axiom 5 in curved spacetime, the
+group `Isom` of `LorentzianSpacetime.toAbstractIdentityComponent`. Its members carry trips to
+trips and chronological diamonds to chronological diamonds, with
+φ(I⁺(p) ∩ I⁻(q)) = I⁺(φ(p)) ∩ I⁻(φ(q))
+(`alexandrovBasis_image_of_mem_orientedIdentityComponent`), which is what makes the Axiom 5 maps
+𝔘(B) → 𝔘(φ(B)) well defined.
+
+Implementation note: the group is `identityComponent` intersected with
+`futureOrientationPreserving`. Every isometry in the identity component preserves the future
+orientation, so the intersection is the whole identity component, but the proof needs a
+Myers–Steenrod-type rigidity theorem that Mathlib does not provide, so orientation preservation
+is part of the definition instead.
+
+Blueprint: lmm:isometry-preserves-basis-sets -/
 noncomputable def orientedIdentityComponent (M : Spacetime) (t : M.TimeOrientation) :
     Subgroup (Isometry M) :=
   Isometry.identityComponent M ⊓ futureOrientationPreserving M t

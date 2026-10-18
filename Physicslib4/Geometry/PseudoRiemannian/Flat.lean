@@ -57,9 +57,16 @@ theorem isCovariantDerivativeOn_fderiv :
     rw [mvfderiv_eq_fderiv]
     exact h
 
-/-- The **flat connection** on `E`: `∇_v σ = Dσ(v)`.
+/-- The flat connection on a vector space E: the ordinary directional derivative,
+∇_v σ = Dσ(v).
 
-Blueprint reference: `lmm:minkowski-directional-derivative-levi-civita`. -/
+On E viewed as a manifold over itself the tangent bundle is trivial, and differentiating the
+components of a vector field is a covariant derivative (`isCovariantDerivativeOn_fderiv`); all its
+Christoffel symbols vanish. For a metric that is the same bilinear form at every point, such as
+the Minkowski metric, it is the Levi-Civita connection (`isLeviCivitaFor_flatConnection`), so the
+geodesics of Minkowski spacetime are the straight lines traversed at constant velocity.
+
+Blueprint: lmm:minkowski-directional-derivative-levi-civita -/
 noncomputable def flatConnection :
     _root_.CovariantDerivative 𝓘(ℝ, E) E (TangentSpace 𝓘(ℝ, E) : E → Type _) where
   toFun σ x := fderiv ℝ (fun y ↦ (σ y : E)) x

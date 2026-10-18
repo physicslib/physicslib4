@@ -36,8 +36,15 @@ namespace Spacetime
 section SpacetimeLevel
 variable (M : Spacetime) (t : M.TimeOrientation)
 
-/-- The **spacelike complement** `B^⊥` of a region `B`, with respect to a time
-orientation `t`: the points completely spacelike-separated from all of `B`. -/
+/-- The spacelike complement B⊥ of a region B, for a time orientation t: the points spacelike
+related to every point of B.
+
+A point x lies in B⊥ when {x} and B are completely spacelike, that is, when no causal trip joins
+x to any point of B in either direction. Since no point is spacelike related to itself,
+B ∩ B⊥ = ∅ (`disjoint_spacelikeComplement`); B⊥ is causally convex
+(`spacelikeComplement_isCausallyConvex`). The same construction on a Lorentzian spacetime, with
+its own time orientation, is `LorentzianSpacetime.spacelikeComplement`, which carries the
+lattice theory. -/
 def spacelikeComplement (B : Set M.Carrier) : Set M.Carrier :=
   {x | Spacetime.IsCompletelySpacelike M t {x} B}
 
@@ -99,8 +106,19 @@ namespace LorentzianSpacetime
 
 variable (M : LorentzianSpacetime)
 
-/-- The **spacelike complement** `B^⊥` of a region `B`: the points completely
-spacelike-separated from all of `B`. -/
+/-- The spacelike complement B⊥ of a region B of a Lorentzian spacetime: the points spacelike
+related to every point of B.
+
+By Einstein causality, observables localised in B⊥ commute with those localised in B: B⊥ is the
+geometric side of locality and of Haag duality. Complementation is antitone
+(`spacelikeComplement_antitone`), B ⊆ B⊥⊥ (`subset_spacelikeComplement_spacelikeComplement`),
+B⊥⊥⊥ = B⊥ (`spacelikeComplement_spacelikeComplement_spacelikeComplement`) and B ∩ B⊥ = ∅
+(`disjoint_spacelikeComplement`). Moreover B₁ ⊆ B₂⊥ exactly when B₁ and B₂ are completely
+spacelike (`subset_spacelikeComplement_iff`), so complementation is the Galois connection of the
+relation "spacelike related". The spacelike complement of the whole spacetime is empty
+(`spacelikeComplement_univ`), and that of the empty set is the whole spacetime.
+
+Blueprint: def:spacelike-complement -/
 def spacelikeComplement (B : Set M.Carrier) : Set M.Carrier :=
   {x | M.IsCompletelySpacelike {x} B}
 
@@ -186,8 +204,21 @@ Causal precedence is reflexive, so no point is spacelike to itself and
 orthocomplementation: besides being an order-reversing involution, it satisfies
 `B ⊓ B^⊥ = ⊥` and `B ⊔ B^⊥ = ⊤` (`inf_causalComplement`, `sup_causalComplement`). -/
 
-/-- The **causal closure operator** `B ↦ B^⊥⊥` on the regions of `M`: monotone,
-extensive (`B ⊆ B^⊥⊥`), and idempotent (`B^⊥⊥⊥⊥ = B^⊥⊥`). -/
+/-- The causal closure B ↦ B⊥⊥ of a region: its double spacelike complement, as a closure
+operator.
+
+The causal closure is monotone, extensive (B ⊆ B⊥⊥) and idempotent (B⊥⊥⊥⊥ = B⊥⊥). Physically,
+B⊥⊥ is the largest region whose physics is determined by B through causality. In Minkowski
+spacetime, for example, the causal closure of a ball in a time slice is the double cone over the
+ball (a standard fact, not formalised here).
+
+Implementation note: Mathlib's `ClosureOperator` bundles the three laws as fields, so they are
+proved in constructing this term, from `spacelikeComplement_antitone`,
+`subset_spacelikeComplement_spacelikeComplement` and
+`spacelikeComplement_spacelikeComplement_spacelikeComplement`; `causalClosure_apply` unfolds it
+to B⊥⊥.
+
+Blueprint: def:causal-closure -/
 noncomputable def causalClosure : ClosureOperator (Set M.Carrier) :=
   ClosureOperator.mk'
     (fun B => M.spacelikeComplement (M.spacelikeComplement B))
@@ -199,8 +230,16 @@ noncomputable def causalClosure : ClosureOperator (Set M.Carrier) :=
 @[simp] theorem causalClosure_apply (B : Set M.Carrier) :
     M.causalClosure B = M.spacelikeComplement (M.spacelikeComplement B) := rfl
 
-/-- A region is **causally complete** if it equals its own double complement,
-`B^⊥⊥ = B` (equivalently, it is a closed element of `causalClosure`). -/
+/-- A region B is causally complete: it equals its causal closure, B⊥⊥ = B.
+
+The causally complete regions are the fixed points of `causalClosure`
+(`isCausallyComplete_iff_isClosed`). Every spacelike complement B⊥ is causally complete
+(`isCausallyComplete_spacelikeComplement`), causally complete regions are closed under
+intersections and are causally convex (`isCausallyConvex_of_isCausallyComplete`). They are a
+common choice of index set for the local algebras of algebraic quantum field theory; the
+Haag–Kastler net of the library is indexed by diamonds instead.
+
+Blueprint: def:causally-complete-region -/
 def IsCausallyComplete (B : Set M.Carrier) : Prop :=
   M.spacelikeComplement (M.spacelikeComplement B) = B
 
@@ -262,8 +301,20 @@ theorem isCausallyComplete_iInter {ι : Sort*} (B : ι → Set M.Carrier)
     exact hxBi
   · exact M.subset_spacelikeComplement_spacelikeComplement (⋂ i, B i)
 
-/-- The **causally complete regions**, i.e. the closed elements of the causal
-closure operator (`B^⊥⊥ = B`). Ordered by inclusion. -/
+/-- The type of causally complete regions of a Lorentzian spacetime, ordered by inclusion.
+
+They form a complete lattice: the meet is the intersection, and the join of a family is the
+causal closure of its union. The causal complement B ↦ B⊥ (`causalComplement`) is an
+orthocomplementation of this lattice: an order-reversing involution with B ⊓ B⊥ = ⊥ and
+B ⊔ B⊥ = ⊤ (`inf_causalComplement`, `sup_causalComplement`), so the De Morgan laws hold
+(`causalComplement_sup`, `causalComplement_iSup`, ...).
+
+Implementation note: the type is Mathlib's `ClosureOperator.Closeds` of `causalClosure`, so an
+element is a pair of a set B and a proof that B⊥⊥ = B. The `CompleteLattice` instance is
+transported from the closure operator along its Galois insertion
+(`ClosureOperator.gi`) and is anonymous.
+
+Blueprint: thrm:causally-complete-lattice -/
 abbrev CausallyCompleteRegion : Type _ := M.causalClosure.Closeds
 
 /-- The causally complete regions form a **complete lattice** (meets are
@@ -272,8 +323,15 @@ closure operator via its Galois insertion. -/
 noncomputable instance : CompleteLattice M.CausallyCompleteRegion :=
   M.causalClosure.gi.liftCompleteLattice
 
-/-- The spacelike complement as an **order-reversing involution** on the complete
-lattice of causally complete regions (the causal complement). -/
+/-- The causal complement of a causally complete region B: its spacelike complement B⊥, again
+causally complete.
+
+On the lattice `CausallyCompleteRegion` it is an order-reversing involution, (B⊥)⊥ = B
+(`causalComplement_causalComplement`, `causalComplement_antitone`), and an orthocomplement:
+B ⊓ B⊥ = ⊥ and B ⊔ B⊥ = ⊤ (`inf_causalComplement`, `sup_causalComplement`). The underlying set is
+`spacelikeComplement` (`causalComplement_coe`).
+
+Blueprint: thrm:causally-complete-lattice -/
 def causalComplement (B : M.CausallyCompleteRegion) : M.CausallyCompleteRegion :=
   ⟨M.spacelikeComplement B.1,
     M.isCausallyComplete_iff_isClosed.mp (M.isCausallyComplete_spacelikeComplement B.1)⟩

@@ -66,18 +66,23 @@ attribute [instance] Spacetime.topology Spacetime.hausdorff Spacetime.connected
 open Bundle in
 open scoped Manifold ContDiff Topology in
 /--
-A smooth path `μ` is a **geodesic** (affinely parametrised) if its velocity is parallel for the
-Levi-Civita connection `∇` of the spacetime metric: for every interior parameter `s` and every
-smooth vector field `X` that agrees with the velocity `μ'` along `μ` near `s`,
-`(∇_X X)(μ s) = 0`.
+A smooth path is a geodesic: its velocity is parallel along it for the Levi-Civita connection,
+∇_(μ̇) μ̇ = 0.
 
-No chart enters the definition. It is well defined because `(∇_X X)(μ s)` depends only on `X`
-along `μ` (`SmoothPath.covDeriv_eq_of_eventuallyEq`), and it is not vacuous because such an `X`
-exists near every interior parameter (`SmoothPath.exists_vectorField_eq_tangent`); the interior
-of the parameter space is non-empty. The condition is imposed only at interior parameters, which
-avoids extending the path past the endpoints of its parameter space.
+Precisely, for every interior parameter s of Σ and every smooth vector field X on M with
+X(μ(t)) = μ̇(t) for t near s, the covariant derivative (∇_X X)(μ(s)) vanishes, where ∇ is the
+Levi-Civita connection of the metric (`Geometry.PseudoRiemannianMetric.leviCivita`). This is
+the geodesic equation μ̈ + Γ(μ̇, μ̇) = 0 written without charts or Christoffel symbols.
 
-Blueprint reference: `def:geodesic`.
+The condition is on the path, not on its curve: geodesics are affinely parametrised, and a
+reparametrisation μ ∘ σ is again a geodesic only when σ is affine.
+
+The value (∇_X X)(μ(s)) depends only on X along μ (`SmoothPath.covDeriv_eq_of_eventuallyEq`), and
+such an X exists near every interior parameter (`SmoothPath.exists_vectorField_eq_tangent`), so
+the condition is neither ambiguous nor vacuous. It is imposed only at interior parameters; at an
+endpoint of Σ it follows by continuity.
+
+Blueprint: def:geodesic
 -/
 def IsGeodesic (μ : M.SmoothPath) : Prop :=
   ∀ s ∈ interior μ.parameterSpace, ∀ X : Π x : M.Carrier, TangentSpace M.model x,
@@ -88,19 +93,15 @@ def IsGeodesic (μ : M.SmoothPath) : Prop :=
 /-! ### Trips and chronological precedence -/
 
 /--
-A *trip segment* from `p` to `q` in a spacetime `M` is a smooth curve `c`
-together with a representative smooth path `μ` that
+A trip segment from p to q: a smooth curve with a representative that is a future-oriented
+timelike geodesic from p to q.
 
-* is future-oriented and timelike;
-* is a geodesic (`IsGeodesic`);
-* has past endpoint `p` and future endpoint `q`.
+The representative path μ is timelike, future-oriented for the time orientation t, a geodesic
+(`IsGeodesic`), and has past endpoint p and future endpoint q; so its parameter space is a
+compact interval [a, b], with μ(a) = p and μ(b) = q. Physically, it is the worldline of a
+free-falling massive particle from p to q. A trip is a finite chain of trip segments (`IsTrip`).
 
-This is a single geodesic piece; a full (piecewise) trip is a finite chain
-of such segments (see `IsTrip`).
-
-A `TimeOrientation` argument `t` is required to talk about
-future-orientation. The endpoints `p, q : M.Carrier` are given as
-parameters.
+Blueprint: def:trip
 -/
 def IsTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
     (c : SmoothCurve M) : Prop :=
@@ -112,24 +113,37 @@ def IsTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
     IsPastEndpoint M rep.toPath p ∧
     IsFutureEndpoint M rep.toPath q
 
-/-- *Single-segment chronological precedence*: `p` and `q` are joined by one
-future-oriented timelike geodesic segment. -/
+/-- Single-segment chronological precedence: some trip segment runs from p to q.
+
+Chronological precedence ≪ is the transitive closure of this relation (`IsTrip`). -/
 def SegmentPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
   ∃ c : SmoothCurve M, IsTripSegment M t p q c
 
 /--
-A *trip* from `p` to `q`: a curve which is *piecewise* a future-oriented
-timelike geodesic, i.e. a finite chain of trip segments joined at matching
-endpoints. This is encoded as the transitive closure of single-segment
-precedence, which is exactly "there is a finite ascending sequence
-`p = x₀, x₁, …, xₙ = q` with each consecutive pair joined by a
-future-oriented timelike geodesic segment". This genuinely piecewise form
-is what makes chronological precedence transitive by concatenation. -/
+There is a trip from p to q: a finite chain of one or more trip segments, joined at matching
+endpoints.
+
+That is, there are points p = x₀, x₁, …, xₙ = q with n ≥ 1, each consecutive pair joined by a
+future-oriented timelike geodesic segment (`SegmentPrecedes`). A trip is a broken timelike
+geodesic, so concatenating trips gives a trip, and chronological precedence is transitive
+(`chronologicallyPrecedes_trans`).
+
+Implementation note: the chain is the transitive closure `Relation.TransGen` of
+`SegmentPrecedes`; the trip is not stored as a curve.
+
+Blueprint: def:trip
+-/
 def IsTrip (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
   Relation.TransGen (SegmentPrecedes M t) p q
 
-/-- *Chronological precedence*: `p ≪ q` iff there exists a trip from `p`
-to `q`, relative to a fixed time orientation. -/
+/-- Chronological precedence p ≪ q: there is a trip from p to q, for the time orientation t.
+
+In standard Minkowski spacetime p ≪ q exactly when q - p lies in the open future light cone
+(`chronologicalFuture_standardMinkowski`). The relation
+is transitive, and irreflexive when there is no closed causal curve
+(`chronologicallyPrecedes_irrefl`). The notation is `p ≪[M, t] q`.
+
+Blueprint: def:trip -/
 def ChronologicallyPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
   IsTrip M t p q
 
@@ -139,12 +153,14 @@ def ChronologicallyPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
 /-! ### Causal trips and causal precedence -/
 
 /--
-A *causal trip segment* from `p` to `q` in a spacetime `M` is a smooth curve
-`c` together with a representative smooth path `μ` that
+A causal trip segment from p to q: a smooth curve with a representative that is a
+future-oriented causal geodesic from p to q.
 
-* is future-oriented and causal;
-* is a geodesic (`IsGeodesic`);
-* has past endpoint `p` and future endpoint `q`.
+This is `IsTripSegment` with "timelike" weakened to "causal": the velocity is timelike or null
+at every parameter (and never zero). Physically, it is the worldline of a free-falling particle,
+massive or massless, from p to q.
+
+Blueprint: def:causal-trip
 -/
 def IsCausalTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
     (c : SmoothCurve M) : Prop :=
@@ -156,27 +172,42 @@ def IsCausalTripSegment (t : M.TimeOrientation) (p q : M.Carrier)
     IsPastEndpoint M rep.toPath p ∧
     IsFutureEndpoint M rep.toPath q
 
-/-- *Single-segment causal precedence*: `p` and `q` are joined by one
-future-oriented causal geodesic segment. -/
+/-- Single-segment causal precedence: some causal trip segment runs from p to q.
+
+Causal trips are chains of one or more such steps (`IsCausalTrip`), and causal precedence ≺
+allows chains of zero or more (`CausallyPrecedes`). -/
 def CausalSegmentPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
   ∃ c : SmoothCurve M, IsCausalTripSegment M t p q c
 
-/-- A *causal trip* from `p` to `q`: a curve which is piecewise a
-future-oriented causal geodesic, i.e. a finite chain of causal trip
-segments. Encoded as the transitive closure of single-segment causal
-precedence. -/
+/-- There is a causal trip from p to q: a finite chain of one or more causal trip segments.
+
+This relation is strict: it asks for at least one segment, a genuine curve with non-vanishing
+velocity, so `IsCausalTrip t p p` means a closed causal curve through p, which
+`NoClosedCausalCurve` forbids. The reflexive relation is causal precedence ≺
+(`CausallyPrecedes`), and p ≺ q exactly when p = q or there is a causal trip from p to q
+(`causallyPrecedes_iff_eq_or_isCausalTrip`).
+
+Implementation note: the chain is the transitive closure `Relation.TransGen` of
+`CausalSegmentPrecedes`.
+
+Blueprint: def:causal-trip -/
 def IsCausalTrip (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
   Relation.TransGen (CausalSegmentPrecedes M t) p q
 
-/-- *Causal precedence*: `p ≺ q` iff `p = q` or there exists a causal trip from `p`
-to `q`, relative to a fixed time orientation. It is encoded as the reflexive-transitive
-closure of single-segment causal precedence: a chain of zero or more causal trip segments.
+/-- Causal precedence p ≺ q: p = q, or there is a causal trip from p to q.
 
-The relation is **reflexive**: `p ≺ p` holds by the trivial chain of no segments
-(`causallyPrecedes_refl`). This is the Hawking–Ellis convention `p ∈ J^±(p)`, in which a
-causal curve may be degenerate. The strict relation, a genuine causal curve of one or more
-segments, is `IsCausalTrip`; the two are related by
-`causallyPrecedes_iff_eq_or_isCausalTrip`. -/
+The relation is reflexive: p ≺ p holds for every p, by the chain of no segments
+(`causallyPrecedes_refl`). This is the Hawking–Ellis convention p ∈ J⁺(p), in which the trivial
+case p = q plays the role of a degenerate causal curve. The strict relation, one or more
+segments, is `IsCausalTrip` (`causallyPrecedes_iff_eq_or_isCausalTrip`). Causal precedence is
+transitive (`causallyPrecedes_trans`), and it is antisymmetric, hence a partial order, when there
+is no closed causal curve (`causallyPrecedes_antisymm`). Chronological precedence implies it
+(`causallyPrecedes_of_chronologicallyPrecedes`). The notation is `p ≺[M, t] q`.
+
+Implementation note: the relation is the reflexive-transitive closure `Relation.ReflTransGen` of
+`CausalSegmentPrecedes`, a chain of zero or more causal trip segments.
+
+Blueprint: def:causal-trip -/
 def CausallyPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
   Relation.ReflTransGen (M.CausalSegmentPrecedes t) p q
 
@@ -185,12 +216,19 @@ def CausallyPrecedes (t : M.TimeOrientation) (p q : M.Carrier) : Prop :=
 
 /-! ### Chronological and causal futures and pasts -/
 
-/-- The *chronological future* `I^+(p)` of a point `p`. -/
+/-- The chronological future I⁺(p) = {q | p ≪ q} of a point p.
+
+In standard Minkowski spacetime I⁺(p) is the open future light cone of p
+(`chronologicalFuture_standardMinkowski`). When there is no closed causal curve, p ∉ I⁺(p).
+
+Blueprint: def:chronological-future-and-chronological-past -/
 def chronologicalFuture (t : M.TimeOrientation) (p : M.Carrier) :
     Set M.Carrier :=
   {q | ChronologicallyPrecedes M t p q}
 
-/-- The *chronological past* `I^-(p)` of a point `p`. -/
+/-- The chronological past I⁻(p) = {q | q ≪ p} of a point p.
+
+Blueprint: def:chronological-future-and-chronological-past -/
 def chronologicalPast (t : M.TimeOrientation) (p : M.Carrier) :
     Set M.Carrier :=
   {q | ChronologicallyPrecedes M t q p}
@@ -207,11 +245,22 @@ def chronologicalPastSet (t : M.TimeOrientation) (S : Set M.Carrier) :
     Set M.Carrier :=
   ⋃ p ∈ S, chronologicalPast M t p
 
-/-- The *causal future* `J^+(p)` of a point `p`. -/
+/-- The causal future J⁺(p) = {q | p ≺ q} of a point p.
+
+Since ≺ is reflexive, p ∈ J⁺(p). It contains the chronological future I⁺(p)
+(`chronologicalFuture_subset_causalFuture`). In Minkowski spacetime J⁺(p) is the closed future
+light cone of p, the points reached from p by a future-directed timelike or null straight line,
+together with p itself.
+
+Blueprint: def:causal-future-and-causal-past -/
 def causalFuture (t : M.TimeOrientation) (p : M.Carrier) : Set M.Carrier :=
   {q | CausallyPrecedes M t p q}
 
-/-- The *causal past* `J^-(p)` of a point `p`. -/
+/-- The causal past J⁻(p) = {q | q ≺ p} of a point p.
+
+Since ≺ is reflexive, p ∈ J⁻(p).
+
+Blueprint: def:causal-future-and-causal-past -/
 def causalPast (t : M.TimeOrientation) (p : M.Carrier) : Set M.Carrier :=
   {q | CausallyPrecedes M t q p}
 
@@ -229,15 +278,25 @@ def causalPastSet (t : M.TimeOrientation) (S : Set M.Carrier) :
 
 /-! ### Spacelike relatedness -/
 
-/-- Two points `p₁, p₂` of a spacetime are *spacelike related* if
-`p₂ ∉ J^+(p₁) ∪ J^-(p₁)`. Since `≺` is reflexive, no point is spacelike related to
-itself (`isSpacelikeRelated_irrefl`). -/
+/-- Two points are spacelike related: neither causally precedes the other,
+p₂ ∉ J⁺(p₁) ∪ J⁻(p₁).
+
+No causal trip joins the two points in either direction, so no signal can pass between them.
+The relation is symmetric (`isSpacelikeRelated_comm`). Since ≺ is reflexive, no point is
+spacelike related to itself (`isSpacelikeRelated_irrefl`).
+
+Blueprint: def:spacelike-related -/
 def IsSpacelikeRelated (t : M.TimeOrientation) (p₁ p₂ : M.Carrier) : Prop :=
   p₂ ∉ causalFuture M t p₁ ∪ causalPast M t p₁
 
-/-- Two subsets `O₁, O₂` of a spacetime are *completely spacelike* with
-respect to each other if every point of `O₁` is spacelike related to every
-point of `O₂`. -/
+/-- Two regions are completely spacelike: every point of O₁ is spacelike related to every point
+of O₂.
+
+This is the separation under which observables of the two regions commute in the Haag–Kastler
+axioms (Einstein causality). The relation is symmetric (`isCompletelySpacelike_comm`), and
+completely spacelike regions are disjoint, since no point is spacelike related to itself.
+
+Blueprint: def:completely-spacelike -/
 def IsCompletelySpacelike (t : M.TimeOrientation) (O₁ O₂ : Set M.Carrier) :
     Prop :=
   ∀ p₁ ∈ O₁, ∀ p₂ ∈ O₂, IsSpacelikeRelated M t p₁ p₂
@@ -330,12 +389,15 @@ theorem chronologicalPast_subset_causalPast (t : M.TimeOrientation)
 
 /-! ### Causal-order refinements under the causality condition -/
 
-/-- **The causality condition (no closed causal curve).** A spacetime satisfies the
-causality condition when there is no closed causal curve: no causal trip
-(`IsCausalTrip`, a chain of one or more causal segments) runs from a point `p` back to
-`p`. The condition is not `¬ (p ≺ p)`, which fails in every spacetime because `≺` is
-reflexive. It is strictly weaker than strong causality and strictly stronger than the
-chronology condition `¬ (p ≪ p)`. -/
+/-- The causality condition: no causal trip runs from a point back to itself.
+
+A closed causal curve through p is a causal trip from p to p (`IsCausalTrip`, one or more
+segments), and the condition forbids it for every p. The condition is not ¬(p ≺ p), which fails
+in every spacetime because ≺ is reflexive. It is strictly weaker than strong causality and
+strictly stronger than the chronology condition ¬(p ≪ p). Under it, ≪ is irreflexive and ≺ is a
+partial order (`chronologicallyPrecedes_irrefl`, `causallyPrecedes_antisymm`).
+
+Blueprint: def:no-closed-causal-curve -/
 def NoClosedCausalCurve (t : M.TimeOrientation) : Prop :=
   ∀ p : M.Carrier, ¬ M.IsCausalTrip t p p
 
@@ -471,15 +533,36 @@ theorem causalPastSet_mono (t : M.TimeOrientation)
 
 /-! ### Alexandrov topology -/
 
-/-- The basis sets generating the Alexandrov topology: all sets of the
-form `I^+(p) ∩ I^-(q)` for `p, q ∈ M`. -/
+/-- The Alexandrov basis: the family of all chronological diamonds I⁺(p) ∩ I⁻(q), for points p
+and q.
+
+These sets generate the Alexandrov topology (`alexandrovTopology`), and they are the regions to
+which the Haag–Kastler axioms assign local algebras. The family contains the empty set, for
+example I⁺(p) ∩ I⁻(p) in a causal spacetime. Its members are exactly the sets
+`chronologicalDiamond t p q` (`mem_alexandrovBasis_iff_eq_chronologicalDiamond`). The blueprint
+defines the family within the node def:alexandrov-topology. -/
 def alexandrovBasis (t : M.TimeOrientation) : Set (Set M.Carrier) :=
   {U | ∃ p q : M.Carrier, U = chronologicalFuture M t p ∩ chronologicalPast M t q}
 
 /--
-The *Alexandrov topology* on a spacetime `M`, with respect to a chosen
-time orientation `t`: the topology generated by the basis `alexandrovBasis`
-consisting of all intersections of chronological futures and pasts.
+The Alexandrov topology of a spacetime with a time orientation: the topology generated by the
+chronological diamonds I⁺(p) ∩ I⁻(q).
+
+It is defined by the causal structure alone, without reference to the manifold topology. On
+standard Minkowski spacetime it equals the Euclidean topology of ℝ⁴
+(`alexandrov_eq_euclidean_standardMinkowski`), and the diamonds form a basis
+(`isTopologicalBasis_alexandrovBasis_standardMinkowski`). In general it need not be Hausdorff; a
+Lorentzian spacetime (`LorentzianSpacetime`) is a spacetime with a time orientation whose
+Alexandrov topology is Hausdorff, and there the diamonds form a basis whenever they are
+downward directed (`LorentzianSpacetime.isTopologicalBasis_alexandrovBasis`).
+
+Implementation note: `TopologicalSpace.generateFrom` treats `alexandrovBasis` as a subbasis; that
+it is a basis is a theorem. The topology is a reducible `def`, not an instance, so that it does
+not compete with the manifold topology `Spacetime.topology` on the same type;
+`MinkowskiSpacetime` is built on the type synonym `MinkowskiSpacetimeCarrier`, which carries it
+as an instance.
+
+Blueprint: def:alexandrov-topology
 -/
 @[reducible] def alexandrovTopology (t : M.TimeOrientation) :
     TopologicalSpace M.Carrier :=
@@ -594,12 +677,24 @@ theorem isOpen_chronologicalPast (t : M.TimeOrientation) (p : M.Carrier)
 
 /-! ### Causal and chronological diamonds -/
 
-/-- The *causal diamond* `J^+(p) ∩ J^-(q)` of two points `p, q`. -/
+/-- The causal diamond J⁺(p) ∩ J⁻(q) of two points: the points x with p ≺ x and x ≺ q.
+
+It is causally convex (`causalDiamond_isCausallyConvex`) and contains the chronological diamond
+(`chronologicalDiamond_subset_causalDiamond`). Since ≺ is reflexive, it contains p and q whenever
+p ≺ q; in Minkowski spacetime it is the closed double cone between p and q.
+
+Blueprint: def:causal-diamond -/
 def causalDiamond (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carrier :=
   causalFuture M t p ∩ causalPast M t q
 
-/-- The *chronological diamond* (Alexandrov diamond) `I^+(p) ∩ I^-(q)` of two points
-`p, q`. -/
+/-- The chronological (Alexandrov) diamond I⁺(p) ∩ I⁻(q) of two points: the points x with p ≪ x
+and x ≪ q.
+
+In Minkowski spacetime it is the open double cone between p and q, empty unless p ≪ q. The
+chronological diamonds are the members of `alexandrovBasis` and the regions of the Haag–Kastler
+net.
+
+Blueprint: def:causal-diamond -/
 def chronologicalDiamond (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carrier :=
   chronologicalFuture M t p ∩ chronologicalPast M t q
 
@@ -664,8 +759,14 @@ theorem mem_alexandrovBasis_iff_eq_chronologicalDiamond (t : M.TimeOrientation)
 
 /-! ### Causal convexity -/
 
-/-- A region `C` is *causally convex* if it contains every point causally between two
-of its own points: whenever `p, r ∈ C`, `p ≺ q` and `q ≺ r`, then `q ∈ C`. -/
+/-- A region C is causally convex: it contains every point causally between two of its points,
+so p, r ∈ C with p ≺ q ≺ r give q ∈ C.
+
+Informally, every causal curve that leaves C never returns to it. Causal diamonds and causally
+complete regions are causally convex (`causalDiamond_isCausallyConvex`,
+`LorentzianSpacetime.isCausallyConvex_of_isCausallyComplete`).
+
+Blueprint: def:causally-convex-region -/
 def IsCausallyConvex (t : M.TimeOrientation) (C : Set M.Carrier) : Prop :=
   ∀ ⦃p q r : M.Carrier⦄, p ∈ C → r ∈ C →
     M.CausallyPrecedes t p q → M.CausallyPrecedes t q r → q ∈ C

@@ -79,46 +79,48 @@ attribute [instance] Spacetime.topology Spacetime.hausdorff Spacetime.connected
 /-! ### Paths -/
 
 /--
-A *path* in a spacetime `M` is a continuous map `μ : Σ → M.Carrier` whose
-domain `Σ`, called the *parameter space*, is a closed, connected subset of
-`ℝ` containing more than one point.
+A path in a spacetime: a continuous map μ : Σ → M on a closed interval Σ of ℝ with more than one
+point.
 
-Following the blueprint we store `Σ` as a `Set ℝ` along with proofs that it
-is closed, connected and not a singleton (i.e. contains more than one
-point).
+The parameter space Σ is a closed, connected subset of ℝ with at least two points, that is, a
+non-degenerate closed interval, bounded or not: [a, b], [a, ∞), (-∞, b] or ℝ. A path is a
+parametrised object; the unparametrised curve is its class under reparametrisation (`Curve`).
+
+Implementation note: Σ is stored as a `Set ℝ` with proofs of the three conditions, and μ as a
+function on all of ℝ that is continuous on Σ; its values off Σ are never used.
+
+Blueprint: def:paths
 -/
 structure Path where
-  /-- The parameter space, a subset of `ℝ`. -/
+  /-- The parameter space Σ ⊆ ℝ. -/
   parameterSpace : Set ℝ
-  /-- The parameter space is closed in `ℝ`. -/
+  /-- Σ is closed in ℝ. -/
   isClosed : IsClosed parameterSpace
-  /-- The parameter space is connected. -/
+  /-- Σ is connected (so it is an interval) and non-empty. -/
   isConnected : IsConnected parameterSpace
-  /-- The parameter space contains at least two distinct points. -/
+  /-- Σ has at least two distinct points. -/
   nontrivial : ∃ s t, s ∈ parameterSpace ∧ t ∈ parameterSpace ∧ s ≠ t
-  /-- The underlying continuous map `Σ → M.Carrier`. -/
+  /-- The map μ, defined on all of ℝ; only its values on Σ matter. -/
   toFun : ℝ → M.Carrier
-  /-- Continuity of the underlying map on the parameter space. -/
+  /-- μ is continuous on Σ. -/
   continuousOn : ContinuousOn toFun parameterSpace
 
 /--
-A *smooth path* in a spacetime `M` is a path `μ : Σ → M` which is smooth and
-has a non-vanishing derivative along `Σ`.
+A smooth path: a path μ : Σ → M that is `C^∞` on Σ and whose velocity vanishes nowhere on Σ.
 
-The smoothness condition is `ContMDiffOn` on the parameter space, relative to
-the identity model with corners on `ℝ` and the spacetime's model. The
-non-vanishing-derivative condition states that the manifold derivative
-`mfderiv` of `μ`, applied to the basis vector `1 : ℝ`, is non-zero at every
-point of `Σ`.
+The velocity μ̇(s) is the derivative of μ at s along Σ (`SmoothPath.tangent`), one-sided at an
+endpoint of Σ. Requiring μ̇(s) ≠ 0 everywhere, endpoints included, excludes paths that stop,
+such as constant paths, so a smooth path whose velocity is null moves along the light cone.
+
+Blueprint: def:paths
 -/
 structure SmoothPath extends M.Path where
-  /-- Smoothness of the underlying map on the parameter space. -/
+  /-- μ is `C^∞` on Σ. -/
   smoothOn :
     ContMDiffOn (modelWithCornersSelf ℝ ℝ) M.model ∞ toFun parameterSpace
-  /-- The tangent vector along the path is non-vanishing on the parameter
-  space: the manifold derivative of `toFun` within the parameter space,
-  applied to `1 : ℝ`, is non-zero at every point of the parameter space,
-  endpoints included. -/
+  /-- The velocity vanishes nowhere: μ̇(s) ≠ 0 for every s ∈ Σ, endpoints included.
+
+  The velocity is the derivative of μ within Σ (`mfderivWithin`) applied to 1 ∈ ℝ. -/
   nonvanishing : ∀ s ∈ parameterSpace,
     mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model toFun parameterSpace s
         (1 : ℝ) ≠ 0
@@ -147,9 +149,11 @@ theorem Path.uniqueDiffOn_parameterSpace (μ : M.Path) :
 
 /-! ### Tangent vector -/
 
-/-- The **tangent vector** of a smooth path `μ` at parameter `s`: the manifold
-derivative of `μ` along its parameter space, applied to the basis vector `1 : ℝ`.
-This is the object all the causal predicates below are phrased in terms of. -/
+/-- The velocity μ̇(s) of a smooth path at the parameter s, a tangent vector at μ(s).
+
+It is the derivative of μ within the parameter space Σ applied to the unit vector 1 ∈ ℝ, so
+at an endpoint of Σ it is a one-sided derivative. The causal type and the time orientation of a
+path are conditions on μ̇(s). -/
 noncomputable def SmoothPath.tangent {M : Spacetime} (μ : M.SmoothPath) (s : ℝ) :
     TangentSpace M.model (μ.toFun s) :=
   mfderivWithin (modelWithCornersSelf ℝ ℝ) M.model μ.toFun μ.parameterSpace s (1 : ℝ)
@@ -457,18 +461,32 @@ theorem equivalence_orientedSmoothPathEquiv : Equivalence M.OrientedSmoothPathEq
 
 /-! ### Curves -/
 
-/-- A *curve* in a spacetime is an equivalence class of paths under
-parameter reparametrisation by homeomorphisms. We package this as a
-`Quot` over the relation `PathEquiv`, which is an equivalence relation
-(`equivalence_pathEquiv`), so its classes are exactly the fibres of `Curve.ofPath`
-(`Quot.eqvGen_exact` together with `Equivalence.eqvGen_iff`). -/
+/-- A curve in a spacetime: a path up to reparametrisation by homeomorphisms of the parameter
+space.
+
+Two paths μ₁ : Σ₁ → M and μ₂ : Σ₂ → M define the same curve when μ₂ ∘ φ = μ₁ for some
+homeomorphism φ : Σ₁ → Σ₂ (`PathEquiv`). Informally, a curve remembers the points of a path
+and the order in which they are traversed, up to reversal, but not the speed.
+
+Implementation note: the type is the quotient `Quot` by `PathEquiv`. Since `PathEquiv` is an
+equivalence relation (`equivalence_pathEquiv`), the classes are exactly the fibres of
+`Curve.ofPath` (`Quot.eqvGen_exact` with `Equivalence.eqvGen_iff`).
+
+Blueprint: def:curves -/
 def Curve : Type := Quot M.PathEquiv
 
-/-- A *smooth curve* in a spacetime is an equivalence class of smooth paths
-under parameter reparametrisation by diffeomorphisms. `SmoothPathEquiv` is an
-equivalence relation (`equivalence_smoothPathEquiv`), so its classes are exactly
-the fibres of `SmoothCurve.ofPath` (`Quot.eqvGen_exact` together with
-`Equivalence.eqvGen_iff`). -/
+/-- A smooth curve in a spacetime: a smooth path up to reparametrisation by diffeomorphisms of
+the parameter space.
+
+The reparametrisations (`SmoothPathEquiv`) may reverse the direction of the parameter, so a
+smooth curve has a causal type (timelike, causal) but no time orientation; the finer quotient by
+orientation-preserving reparametrisations is `OrientedSmoothCurve`.
+
+Implementation note: the type is the quotient `Quot` by `SmoothPathEquiv`, an equivalence
+relation (`equivalence_smoothPathEquiv`), so the classes are exactly the fibres of
+`SmoothCurve.ofPath`.
+
+Blueprint: def:curves -/
 def SmoothCurve : Type := Quot M.SmoothPathEquiv
 
 /-- Constructor: every smooth path determines a smooth curve. -/
@@ -562,13 +580,16 @@ theorem SmoothPath.isPastPointing_reparam {M : Spacetime} (μ₁ μ₂ : M.Smoot
     show μ₁.toFun s = μ₂.toFun (φ s) from (heq s hs).symm]
   exact M.isPastPointing_smul_iff t hφ' (μ₂.tangent (φ s))
 
-/-- A smooth path is timelike if its tangent vector is timelike at every
-point of the parameter space. -/
+/-- A smooth path is timelike when its velocity μ̇(s) is timelike for every s in the parameter
+space. -/
 def SmoothPath.IsTimelike (μ : M.SmoothPath) : Prop :=
   ∀ s ∈ μ.parameterSpace, M.IsTimelike (μ.tangent s)
 
-/-- A smooth path is *causal* if its tangent vector is either timelike or
-null at every point of the parameter space. -/
+/-- A smooth path is causal when its velocity μ̇(s) is timelike or null for every s in the
+parameter space.
+
+The type may change along the path: a causal path can be timelike on one stretch and null on
+another. Since μ̇(s) ≠ 0, a null velocity is a non-zero light-like vector. -/
 def SmoothPath.IsCausal (μ : M.SmoothPath) : Prop :=
   ∀ s ∈ μ.parameterSpace,
     M.IsTimelike (μ.tangent s) ∨ M.IsNull (μ.tangent s)
@@ -631,46 +652,62 @@ theorem SmoothPath.isCausal_iff_of_smoothPathEquiv {M : Spacetime}
     exact hiff.mpr (h₂ _ (hφmaps hs))
 
 /--
-A *timelike smooth curve* is a smooth curve all of whose representative
-smooth paths are timelike. Since the timelike condition is invariant under
-reparametrisation by an orientation-preserving diffeomorphism but not
-orientation-reversing ones — and since the underlying tangent vector
-condition `g(v,v) < 0` is invariant under non-zero scaling — we state the
-predicate by existential quantification over a representative.
+A smooth curve is timelike when it has a timelike representative path.
+
+Every representative is then timelike (`isTimelikeSmoothCurve_ofPath_iff`): a reparametrisation
+φ multiplies the velocity by φ' ≠ 0, and g(cv, cv) = c² g(v, v) has the sign of g(v, v).
+
+Blueprint: def:timelike-and-causal-smooth-curves
 -/
 def IsTimelikeSmoothCurve (c : SmoothCurve M) : Prop :=
   ∃ μ : M.SmoothPath, c = SmoothCurve.ofPath M μ ∧ SmoothPath.IsTimelike M μ
 
-/-- A *causal smooth curve* is a smooth curve all of whose representative
-smooth paths are causal. -/
+/-- A smooth curve is causal when it has a causal representative path.
+
+As for `IsTimelikeSmoothCurve`, every representative is then causal
+(`isCausalSmoothCurve_ofPath_iff`).
+
+Blueprint: def:timelike-and-causal-smooth-curves -/
 def IsCausalSmoothCurve (c : SmoothCurve M) : Prop :=
   ∃ μ : M.SmoothPath, c = SmoothCurve.ofPath M μ ∧ SmoothPath.IsCausal M μ
 
 /-! ### Future and past oriented smooth curves -/
 
-/-- A smooth path is *future-oriented* with respect to a time orientation `t`
-if its tangent vector is future-pointing at every parameter point. -/
+/-- A smooth path is future-oriented for a time orientation t when its velocity μ̇(s) is
+future-pointing for every s in the parameter space.
+
+A future-oriented path is causal (future-pointing vectors are timelike or null) and runs toward
+the future as the parameter increases. -/
 def SmoothPath.IsFutureOriented (μ : M.SmoothPath) (t : M.TimeOrientation) :
     Prop :=
   ∀ s ∈ μ.parameterSpace, M.IsFuturePointing t (μ.tangent s)
 
-/-- A smooth path is *past-oriented* with respect to a time orientation `t`
-if its tangent vector is past-pointing at every parameter point. -/
+/-- A smooth path is past-oriented for a time orientation t when its velocity μ̇(s) is
+past-pointing for every s in the parameter space. -/
 def SmoothPath.IsPastOriented (μ : M.SmoothPath) (t : M.TimeOrientation) :
     Prop :=
   ∀ s ∈ μ.parameterSpace, M.IsPastPointing t (μ.tangent s)
 
-/-- A *future-oriented smooth curve* is a smooth curve admitting a
-future-oriented representative smooth path (relative to a fixed time
-orientation `t`). -/
+/-- A smooth curve is future-oriented for a time orientation t when it has a future-oriented
+representative path.
+
+A smooth curve does not fix the direction of its parameter, so the reversed representative of a
+future-oriented curve is past-oriented, and the curve is then both future- and past-oriented
+in this sense. The time orientation of a curve is well defined only on `OrientedSmoothCurve`
+(`IsFutureOrientedCurve`).
+
+Blueprint: def:future-and-past-oriented-smooth-curves -/
 def IsFutureOrientedSmoothCurve (t : M.TimeOrientation) (c : SmoothCurve M) :
     Prop :=
   ∃ μ : M.SmoothPath,
     c = SmoothCurve.ofPath M μ ∧ SmoothPath.IsFutureOriented M μ t
 
-/-- A *past-oriented smooth curve* is a smooth curve admitting a
-past-oriented representative smooth path (relative to a fixed time
-orientation `t`). -/
+/-- A smooth curve is past-oriented for a time orientation t when it has a past-oriented
+representative path.
+
+See `IsFutureOrientedSmoothCurve` for why this does not exclude being future-oriented.
+
+Blueprint: def:future-and-past-oriented-smooth-curves -/
 def IsPastOrientedSmoothCurve (t : M.TimeOrientation) (c : SmoothCurve M) :
     Prop :=
   ∃ μ : M.SmoothPath,
@@ -781,12 +818,19 @@ orientation-reversing reparametrisations, so it does not descend to `SmoothCurve
 It does descend to the finer quotient by `OrientedSmoothPathEquiv`, which is the
 correct home for future/past-oriented curves. -/
 
-/-- An *oriented smooth curve*: an equivalence class of smooth paths under
-orientation-preserving reparametrisation. Finer than `SmoothCurve` (which also
-allows orientation-reversing reparametrisations), it is the natural domain on which
-the time orientation of a curve is well-defined. `OrientedSmoothPathEquiv` is an
-equivalence relation (`equivalence_orientedSmoothPathEquiv`), so the classes are
-exactly the fibres of `OrientedSmoothCurve.ofPath`. -/
+/-- An oriented smooth curve: a smooth path up to orientation-preserving reparametrisation.
+
+The reparametrisations (`OrientedSmoothPathEquiv`) have positive derivative, φ' > 0, so they
+multiply the velocity by a positive number and preserve future- and past-pointing vectors. Being
+future-oriented or past-oriented is therefore a property of the oriented curve
+(`isFutureOrientedCurve_ofPath_iff`), which `SmoothCurve` cannot provide. Forgetting the
+orientation gives `OrientedSmoothCurve.toSmoothCurve`.
+
+Implementation note: the type is the quotient `Quot` by `OrientedSmoothPathEquiv`, an
+equivalence relation (`equivalence_orientedSmoothPathEquiv`), so the classes are exactly the
+fibres of `OrientedSmoothCurve.ofPath`.
+
+Blueprint: def:oriented-smooth-curve -/
 def OrientedSmoothCurve : Type := Quot M.OrientedSmoothPathEquiv
 
 /-- Every smooth path determines an oriented smooth curve. -/
@@ -915,24 +959,31 @@ theorem IsPastOrientedCurve.isCausal_toSmoothCurve {t : M.TimeOrientation}
 /-! ### Endpoints -/
 
 /--
-A point `p` of a spacetime `M` is an *endpoint* of a path `μ : Σ → M` if it
-lies in the image of the topological frontier of `Σ` (i.e. its boundary
-`∂Σ` in `ℝ`) under `μ`.
+A point p is an endpoint of a path μ : Σ → M when p = μ(s) for some s in the boundary ∂Σ of the
+parameter space in ℝ.
+
+Endpoints do not depend on the parametrisation (`IsEndpoint.of_pathEquiv`), but which endpoint
+is the past one and which the future one does; see `IsPastEndpoint` and `IsFutureEndpoint`.
+
+Blueprint: def:endpoints
 -/
 def IsEndpoint (μ : M.Path) (p : M.Carrier) : Prop :=
   ∃ s ∈ frontier μ.parameterSpace, μ.toFun s = p
 
 /--
-For a path `μ`, a *past endpoint* is the image under `μ` of the lesser of the
-two boundary components of `∂Σ`. No smoothness or causal condition is involved;
-trips apply it to the smooth timelike or causal paths representing their segments.
+A point p is a past endpoint of a path μ : Σ → M when p = μ(s) for the least element s of Σ.
 
-We capture this as: there exists a value `s ∈ Σ` such that every other
-`s' ∈ Σ` satisfies `s ≤ s'`, and `μ s = p`. Quantifying over the parameter
-space (rather than its frontier `∂Σ`) ensures the witness is a genuine
-minimum of `Σ`, which on a closed connected `Σ ⊆ ℝ` forces `Σ` to be
-bounded below; together with `IsFutureEndpoint` this excludes half-lines and
-pins `Σ` down to a compact closed interval `[a, b]`.
+The condition asks for an s ∈ Σ with s ≤ s' for every s' ∈ Σ, so Σ must be bounded below. A
+path with both a past and a future endpoint therefore has Σ = [a, b] with a < b
+(`parameterSpace_eq_Icc_of_endpoints`). No smoothness or causal condition is involved; trips
+apply the notion to their future-oriented segments, so the past endpoint is where the segment
+starts.
+
+Implementation note: the definition quantifies over Σ rather than over its boundary ∂Σ, because
+Σ need not have two boundary points (for example Σ = [0, ∞) or Σ = ℝ), and then "the lesser
+boundary point" would not be defined.
+
+Blueprint: def:endpoints
 -/
 def IsPastEndpoint (μ : M.Path) (p : M.Carrier) : Prop :=
   ∃ s ∈ μ.parameterSpace,
@@ -940,10 +991,12 @@ def IsPastEndpoint (μ : M.Path) (p : M.Carrier) : Prop :=
     (∀ s' ∈ μ.parameterSpace, s ≤ s')
 
 /--
-For a path `μ`, a *future endpoint* is the image under `μ` of the greater
-of the two boundary components of `∂Σ`. Quantifying over the parameter
-space (rather than `∂Σ`) ensures the witness is a genuine maximum, forcing
-boundedness above; see `IsPastEndpoint` for the dual.
+A point q is a future endpoint of a path μ : Σ → M when q = μ(s) for the greatest element s of
+Σ.
+
+This is the dual of `IsPastEndpoint`: it forces Σ to be bounded above.
+
+Blueprint: def:endpoints
 -/
 def IsFutureEndpoint (μ : M.Path) (p : M.Carrier) : Prop :=
   ∃ s ∈ μ.parameterSpace,
