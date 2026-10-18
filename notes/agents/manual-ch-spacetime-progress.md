@@ -142,3 +142,56 @@ declarations the chapter shows with `{docstring}`, in `Physicslib4/Spacetime/` a
   LorentzianSpacetime 3+3; Isometry 1+2; IsometryTopology 1; IsometryCausality 3; Minkowski 6;
   LorentzCausality 1; Geometry Basic 2+4, LeviCivita 4+2, Flat 1), plus the Minkowski.lean module
   docstring.
+
+## Part B: the chapter text, `web/Manual/Spacetime.lean` (2026-10-18)
+
+- B0: skeleton, imports and the namespaces opened before `#doc` (`Physicslib4`, `Spacetime`,
+  `Spacetime.LorentzianSpacetime`, `Geometry`, `Geometry.PseudoRiemannianMetric`). Included in
+  `web/Manual.lean` before the Haag–Kastler chapter, since the book follows the Chapter 10
+  numbering (10.5 before 10.6).
+- B1: Overview (five parts, list of main results). Built (`lake build`,
+  `generate-manual`).
+- B2: Design, eight subsections (structure; Minkowski and the Alexandrov topology; paths and
+  curves; causal precedence by curves, ≺ reflexive and `IsCausalTrip` strict; diamonds and the
+  basis theorem's hypotheses, downward vs upward directedness; causal complements and the
+  orthocomplemented lattice; symmetries, isometries and the oriented identity component (D3, linked to
+  the blueprint's formalization note in def:isometric-covariance-in-curved-spacetime, not the
+  memo); the pseudo-Riemannian layer). Checked: dilation lemma names, `AlongPath` lemma names, the
+  Levi-Civita layer does not assume `Boundaryless` (so "any finite-dimensional smooth manifold").
+  Dropped a claim that the lattice is non-distributive (not in the blueprint) and a mention of Haag
+  duality (not formalised). Built.
+- B3: Main definitions, part 1: "Spacetimes and time orientations", "Paths, curves and geodesics",
+  "Causal relations", "Diamonds and the Alexandrov topology". Statements taken from a scratch
+  `lake env lean` run in /tmp (outside the repo), then confirmed by the Verso build. Added the import
+  of `LorentzOrthogonal` for an `apiDocs` link; shortened a `#check` line to 60 columns. Built.
+- B4: Main definitions, part 2: "Minkowski space" (three boxes, three `#check`s, the basis and
+  geodesic theorems linked) and "Causal complements" (five boxes, `inf_`/`sup_causalComplement`).
+  Opened `Spacetime.Isometry` and `Geometry.CovariantDerivative` before `#doc` for the later
+  docstrings. Checked the proof sketch of `chronologicalFuture_standardMinkowski` against the
+  lemma names in `Minkowski.lean`. Built.
+- B5: Main definitions, part 3: "The Lorentz group and isometries" (seven boxes, two `#check`s)
+  and "The Levi-Civita connection and geodesics" (four boxes, three `#check`s). The file-level
+  opens also shorten the names in `#check` output (`IsLeviCivitaFor`, `orientedIdentityComponent`
+  printed without prefix); the `leanOutput` blocks follow the build. Checked `CrossIsometry` (two
+  spacetimes, ψ*g₂ = g₁), `Isometry.mfderiv_leviCivita_mpullback`; replaced a link to the home
+  page's section page with the blueprint's Section 10.7. Built.
+- B6: "Where to look": all 21 files of the two directories grouped in five lists, each with an
+  `apiDocs` link (imports added for `LorentzCone`, `MinkowskiDilation`, `CrossMetricIsometry`, since
+  the role resolves the name). Built.
+- B7: full reread and checks. Fixed: the claim that bracketed `Spacetime` fields are found
+  automatically (they are, because the library files register them with `attribute [instance]`;
+  the text now says so); "the empty set is in `alexandrovBasis`" restricted to Minkowski space (in
+  general it needs a pair with an empty diamond); `chronologicalDiamond M t p q`. All 50 blueprint
+  anchors exist in `blueprint/web`; the chapter-2 anchor and the tutorial and Haag–Kastler anchors
+  exist in the built HTML. `check_temporal_wording.py`: OK. Build and `generate-manual`: pass.
+- Counts: 37 docstring boxes, 19 `#check`s; about 4,300 words of prose by a raw token count
+  (Overview ~470, Design ~2,150, Main ~1,270, Where to look ~360), which includes URLs and inline
+  maths, so somewhat over the 4,000 target in raw tokens.
+- Doubts for the reviewer: (1) docstring code spans that name `Isometry` or `LorentzianSpacetime`
+  stay unresolved (ambiguous with Mathlib's `Isometry` and with other namespaces), as do field
+  names; the unknown-token count is comparable to the Haag–Kastler chapter. (2) The D3 paragraph
+  calls the oriented identity component "a convention, not a restriction"; check this matches the
+  intended reading of CLAUDE.md's `**Restriction:**` rule. (3) The Design section is long
+  (~2,150 words); the curve and causal-precedence parts could be shortened if the conventions
+  chapter takes them over. (4) `standardMinkowski_isGeodesic_iff` is linked, not printed, because
+  its `#check` output shows a `have` from a `show` in the statement.
