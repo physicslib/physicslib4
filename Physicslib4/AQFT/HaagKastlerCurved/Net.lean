@@ -56,37 +56,39 @@ open scoped Pointwise
 universe u v
 
 /--
-A *Haag-Kastler net* on (the Alexandrov-basis sets of) a Lorentzian
-spacetime `M`: the data of Axiom 1
-(`def:local-algebras-in-curved-spacetime`) together with proofs of
-Axioms 2-5.
+A Haag–Kastler net on a curved spacetime M: a net of local algebras satisfying Axioms 1 to 5.
 
-`HaagKastlerNet.{u, v} M` has its spacetime `M` in universe `u` and its
-local algebras in universe `v`, independent of `u`.
+The structure bundles the local algebras B ↦ 𝔘(B) of Axiom 1, the isotony family of Axiom 2, and
+proofs of local commutativity (Axiom 3), local completeness (Axiom 4) and isometric covariance
+(Axiom 5). Theorems about a theory on M take a `HaagKastlerNet M` as hypothesis and use each axiom
+as a field. Unlike the Minkowski net, there is no quasilocal algebra: results are stated in the
+algebra 𝔘(B) of a basis set B containing the regions involved, or in a representation of it.
+Axiom 4, read locally, is a field here and holds for every net (`localAlgebra_of`).
+`nonempty_haagKastlerNet` shows that the axioms are consistent over every spacetime.
 
-Blueprint reference: `def:haag-kastler-net-in-curved-spacetime`.
+Implementation note: `HaagKastlerNet.{u, v} M` has its spacetime M in universe u and its local
+algebras in universe v, independent of u.
+
+Blueprint: def:haag-kastler-net-in-curved-spacetime
 -/
 structure HaagKastlerNet (M : LorentzianSpacetime.{u}) where
-  /-- The underlying assignment `B ↦ 𝔘(B)` (Axiom 1).
+  /-- The local algebras B ↦ 𝔘(B) (Axiom 1).
 
-  Written `LocalNet.{u, v}` rather than `LocalNet` so that the universe `v`
-  of the local algebras is a parameter of this structure, as in the
-  Minkowski `HaagKastlerNet`. -/
+  Implementation note: the universe is named, as `LocalNet.{u, v}`, so that `HaagKastlerNet`
+  takes the universe v of the algebras as a parameter, as in the Minkowski net. -/
   U : LocalNet.{u, v} M
-  /-- *Isotony*: the chosen functorial family of unital `*`-monomorphisms
-  implementing inclusions of basis sets (Axiom 2). This is data, carrying the
-  identity and composition laws. -/
+  /-- The isotony embeddings i(B₁, B₂) : 𝔘(B₁) → 𝔘(B₂), with their identity and composition laws
+  (Axiom 2). -/
   isotony : Isotony U
-  /-- *Local commutativity*: completely-spacelike basis sets commute
-  inside any common containing basis algebra (Axiom 3). This *consumes* the
-  Axiom 2 family rather than introducing its own: it asserts only the
-  commutation condition. -/
+  /-- Local commutativity (Axiom 3): for completely spacelike basis sets B₁, B₂ and every basis
+  set B ⊇ B₁ ∪ B₂, the images of 𝔘(B₁) and 𝔘(B₂) in 𝔘(B) under the embeddings of `isotony`
+  commute. -/
   localCommutativity : LocalCommutativity U isotony
-  /-- *Local algebra*: all observables are local observables
-  (Axiom 4). -/
+  /-- Local completeness (Axiom 4): in every representation of a local algebra 𝔘(B), every
+  self-adjoint operator in its range is a local observable. -/
   localAlgebra : LocalAlgebra U
-  /-- *Isometric covariance*: the identity-component isometry group
-  acts on the net and commutes with isotony (Axiom 5). -/
+  /-- Isometric covariance (Axiom 5): the isometries connected to the identity act on the net,
+  compatibly with `isotony`. -/
   isometricCovariance : IsometricCovariance U isotony
 
 namespace HaagKastlerNet
@@ -125,9 +127,13 @@ theorem isotony_trans ⦃B₁ B₂ B₃ : Set M.Carrier⦄
     ∃ φ : StarAlgHom ℂ (N.algebra B₁) (N.algebra B₃), Function.Injective φ :=
   N.isotony.trans hB₁ hB₂ hB₃ h₁₂ h₂₃
 
-/-- The *covariance equivalence* `𝔘(B) ≃⋆ₐ[ℂ] 𝔘(φ·B)` implementing the
-action of an identity-component isometry `φ` on the net, chosen from the
-existence witness provided by Axiom 5 (`isometricCovariance`). -/
+/-- The *-isomorphism α_φ : 𝔘(B) → 𝔘(φ(B)) by which an isometry φ acts on the net.
+
+Axiom 5 (`isometricCovariance`) asserts that such a family exists; this definition chooses one.
+`covEquiv_one`, `covEquiv_mul` and `covEquiv_commIsotony` restate the three conditions of
+Axiom 5 for it.
+
+Blueprint: the maps α_φ of def:isometric-covariance-in-curved-spacetime -/
 noncomputable def covEquiv (φ : M.Isom) (B : Set M.Carrier) :
     StarAlgEquiv ℂ (N.algebra B) (N.algebra (φ • B)) :=
   N.isometricCovariance.choose φ B
@@ -175,11 +181,14 @@ theorem covEquiv_mul (φ φ' : M.Isom) (B : Set M.Carrier) (a : N.algebra B) :
             ((N.covEquiv φ B : N.algebra B → N.algebra (φ • B)) a)) :=
   N.isometricCovariance.choose_spec.2.1 φ φ' B a
 
-/-- The *isotony embeddings* of the net: the chosen family supplied by Axiom 2
-(`isotony`).
+/-- The isotony embedding i(B₁, B₂) : 𝔘(B₁) → 𝔘(B₂) of the net, for basis sets B₁ ⊆ B₂.
 
-This is the Axiom 2 family itself, so `commIsotony_self` and `commIsotony_comp`
-below hold for every net. -/
+This is the Axiom 2 family itself (`isotony.map`), so it is injective and satisfies the identity
+and composition laws for every net (`commIsotony_injective`, `commIsotony_self`,
+`commIsotony_comp`). Results about nested regions B₁ ⊆ B₂ ⊆ B compare algebras through these
+embeddings into a common 𝔘(B).
+
+Blueprint: the maps i of def:isotony-in-curved-spacetime -/
 noncomputable def commIsotony ⦃B₁ B₂ : Set M.Carrier⦄
     (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂) :
     StarAlgHom ℂ (N.U.algebra B₁) (N.U.algebra B₂) :=
@@ -320,9 +329,12 @@ trivial Lorentzian spacetime, the *trivial net* assigning `ℂ` to
 every region satisfies all of Axioms 1-5.
 -/
 
-/-- A *trivial Lorentzian spacetime* used purely to witness joint
-satisfiability of the axioms: a one-point carrier, every set a basis
-set, trivial spacelike relation, and the trivial isometry group. -/
+/-- A one-point instance of the abstract spacetime interface, with the trivial isometry group.
+
+Every set is a basis set and every two sets are completely spacelike. This shows that the
+interface asks for no geometry: in a geometric spacetime no point is spacelike to itself, so
+completely spacelike regions are disjoint, but the interface imposes no such condition. This
+spacetime is a test case for the interface, not a model of a physical spacetime. -/
 def trivialSpacetime : LorentzianSpacetime where
   Carrier := Unit
   IsBasisSet := fun _ => True
@@ -335,18 +347,24 @@ def trivialSpacetime : LorentzianSpacetime where
       mul_smul := fun _ _ _ => rfl }
   isBasisSet_smul := fun _ _ _ => trivial
 
-/-- The *trivial local net* over **any** abstract Lorentzian spacetime: every
-region is assigned the C*-algebra `ℂ`, with the empty-region normalisation the
-identity isomorphism.
+/-- The trivial local net over any spacetime M: the algebra ℂ for every region.
 
-Its algebras live in universe `0`, because `ℂ : Type`. -/
+The normalisation 𝔘(∅) = ℂ·1 is the identity of ℂ. Together with the identity maps for isotony
+and covariance it satisfies all five axioms (`trivialHaagKastlerNet`).
+
+Implementation note: its algebras live in universe 0, because `ℂ : Type`.
+
+Blueprint: the trivial net of thrm:haag-kastler-net-in-curved-spacetime-nonempty -/
 noncomputable def trivialLocalNet (M : LorentzianSpacetime.{u}) : LocalNet.{u, 0} M where
   algebra := fun _ => ℂ
   instCStarAlgebra := fun _ => inferInstance
   emptyEquivComplex := StarAlgEquiv.refl ℂ ℂ
 
-/-- The trivial net's Axiom 2 data: every local algebra is `ℂ` and every
-inclusion is implemented by the identity, which is trivially functorial. -/
+/-- The isotony family of the trivial net: the identity map ℂ → ℂ for every inclusion.
+
+The identity is injective and the identity and composition laws hold by definition.
+
+Blueprint: the trivial net of thrm:haag-kastler-net-in-curved-spacetime-nonempty -/
 def trivialLocalNetIsotony (M : LorentzianSpacetime) :
     Isotony (trivialLocalNet M) where
   map := fun _ _ _ _ _ => StarAlgHom.id ℂ ℂ
@@ -379,8 +397,17 @@ theorem trivialLocalNet_isometricCovariance (M : LorentzianSpacetime) :
   · intro _ _ _ _; rfl
   · intro _ _ _ _ _ _ _; rfl
 
-/-- The trivial net over any abstract Lorentzian spacetime, bundled as a
-Haag-Kastler net, with its algebras in universe `0`. -/
+/-- The trivial Haag–Kastler net over any spacetime M: ℂ for every region, identity maps
+throughout.
+
+Each axiom holds for a simple reason. Isotony holds because the identity is functorial; local
+commutativity because ℂ is commutative; local completeness because it holds for every net
+(`localAlgebra_of`); and isometric covariance because every α_φ is the identity of ℂ, so its
+three conditions hold by definition.
+
+Implementation note: its algebras live in universe 0, because `ℂ : Type`.
+
+Blueprint: the trivial net of thrm:haag-kastler-net-in-curved-spacetime-nonempty -/
 noncomputable def trivialHaagKastlerNet (M : LorentzianSpacetime.{u}) :
     HaagKastlerNet.{u, 0} M where
   U := trivialLocalNet M
@@ -389,15 +416,19 @@ noncomputable def trivialHaagKastlerNet (M : LorentzianSpacetime.{u}) :
   localAlgebra := trivialLocalNet_localAlgebra M
   isometricCovariance := trivialLocalNet_isometricCovariance M
 
-/-- **The curved-spacetime Haag-Kastler axioms are jointly satisfiable over
-every Lorentzian spacetime.** The trivial net (every region ↦ `ℂ`) is a
-Haag-Kastler net.
+/-- The curved-spacetime Haag–Kastler axioms are consistent: every spacetime carries a net.
 
-Stated with the algebras in universe `0` because the witness is built from `ℂ`,
-which lives in `Type`. Consistency of the axioms needs only one model, so
-nothing is lost; a witness in an arbitrary universe would come from a `ULift`
-of this one. The same choice is made for the Minkowski
-`HaagKastler.nonempty_haagKastlerNet`. -/
+The witness is the trivial net (`trivialHaagKastlerNet`), which assigns ℂ to every region. The
+statement is for an arbitrary instance M of the abstract interface;
+`Spacetime.LorentzianSpacetime.nonempty_haagKastlerNet_identityComponent` specialises it to a
+geometric spacetime.
+
+Implementation note: the net has its algebras in universe 0 because the witness is built from ℂ,
+which lives in `Type`. Consistency of the axioms needs only one model, so nothing is lost; a
+witness in an arbitrary universe would come from a `ULift` of this one. The Minkowski
+`HaagKastler.nonempty_haagKastlerNet` makes the same choice.
+
+Blueprint: the abstract form of thrm:haag-kastler-net-in-curved-spacetime-nonempty -/
 theorem nonempty_haagKastlerNet (M : LorentzianSpacetime.{u}) :
     Nonempty (HaagKastlerNet.{u, 0} M) :=
   ⟨trivialHaagKastlerNet M⟩

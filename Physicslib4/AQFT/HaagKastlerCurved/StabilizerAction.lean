@@ -68,9 +68,21 @@ theorem algCongr_apply {B₁ B₂ : Set M.Carrier} (h : B₁ = B₂) (a : N.alge
     N.algCongr h a = cast (congrArg N.algebra h) a := by
   subst h; simp [algCongr]
 
-/-- **Stabilizer automorphism.** For an isometry `φ` fixing the region `B`
-(`φ·B = B`), the covariance equivalence `covEquiv φ B` lands back in `𝔘(B)` and
-is therefore an automorphism of the single algebra `𝔘(B)`. -/
+/-- The stabilizer automorphism α̂_φ of 𝔘(B), for an isometry φ that fixes the region B.
+
+The covariance isomorphisms α_φ : 𝔘(B) → 𝔘(φ(B)) of Axiom 5 map between different local
+algebras, and curved spacetime has no quasilocal algebra on which they could act together. When
+φ(B) = B, however, α_φ maps 𝔘(B) back to itself, and so is a *-automorphism α̂_φ of the single
+algebra 𝔘(B). The isometries fixing B form its stabilizer subgroup Stab(B), on which these
+automorphisms form a group action (`stabAut_one`, `stabAut_mul`). Physically Stab(B) stands in for
+the global symmetry group: typically a Killing flow, such as the stationary flow of a black-hole
+exterior or the boost of a de Sitter static patch, or a group of spatial symmetries.
+
+Implementation note: α̂_φ is `covEquiv φ B` followed by the identification 𝔘(φ • B) = 𝔘(B) along
+the hypothesis h : φ • B = B (`algCongr`). `stabAutHom` is the same map indexed by elements of
+`MulAction.stabilizer M.Isom B`.
+
+Blueprint: def:stabilizer-action-in-curved-spacetime -/
 noncomputable def stabAut {B : Set M.Carrier} (φ : M.Isom) (h : φ • B = B) :
     N.algebra B ≃⋆ₐ[ℂ] N.algebra B :=
   (N.covEquiv φ B).trans (N.algCongr h)
@@ -102,8 +114,14 @@ theorem stabAut_mul {B : Set M.Carrier} (φ φ' : M.Isom)
     N.covEquiv_congr_region hφ φ' (N.covEquiv φ B a)]
   simp only [eq_mp_eq_cast, cast_cast]
 
-/-- The stabilizer automorphism as a function on the stabilizer subgroup
-`Stab(B) = {φ : φ·B = B}`, packaged so the monoid-action laws are syntactic. -/
+/-- The stabilizer automorphism g ↦ α̂_g, as a function on the stabilizer subgroup Stab(B).
+
+Stab(B) = {φ : φ(B) = B} is Mathlib's `MulAction.stabilizer M.Isom B`, and α̂_g is `stabAut` at the
+underlying isometry of g. Indexing by subgroup elements makes the action laws α̂_1 = id and
+α̂_(g'g) = α̂_g' ∘ α̂_g (`stabAutHom_one`, `stabAutHom_mul`) statements without side hypotheses.
+The GNS and KMS results use this form.
+
+Blueprint: the action of def:stabilizer-action-in-curved-spacetime, indexed by Stab(B) -/
 noncomputable def stabAutHom (B : Set M.Carrier)
     (φ : ↥(MulAction.stabilizer M.Isom B)) : N.algebra B ≃⋆ₐ[ℂ] N.algebra B :=
   N.stabAut φ.val (MulAction.mem_stabilizer_iff.mp φ.2)
@@ -119,12 +137,17 @@ theorem stabAutHom_mul (B : Set M.Carrier)
     (MulAction.mem_stabilizer_iff.mp g'.2)
     (MulAction.mem_stabilizer_iff.mp (g' * g).2) a
 
-/-- The stabilizer action packaged as a **group homomorphism** from the stabilizer
-subgroup `Stab(B)` to the `*`-automorphism group of the local algebra `𝔘(B)`,
-`g ↦ α̂_g`. This bundles `stabAutHom_one` and `stabAutHom_mul`; the target's group
-law is composition (`f * g = g.trans f`, `StarAlgEquiv.aut`). It exhibits the
-stabilizer action as a unitary-free representation of `Stab(B)` by `*`-automorphisms
-of `𝔘(B)` — the curved counterpart of the Minkowski `actionHom`. -/
+/-- The stabilizer action g ↦ α̂_g as a group homomorphism from Stab(B) to the group of
+*-automorphisms of 𝔘(B).
+
+This bundles the action laws `stabAutHom_one` and `stabAutHom_mul`: Stab(B) acts on the single
+algebra 𝔘(B) by *-automorphisms. It is the curved counterpart of the Minkowski `actionHom`,
+which acts on the quasilocal algebra; here the action is on one region's algebra only.
+
+Implementation note: the group law of the automorphisms is composition, f * g = g.trans f
+(`StarAlgEquiv.aut`). The structure is a `MonoidHom`, which for groups is a group homomorphism.
+
+Blueprint: the group action of lmm:stabilizer-action-laws-in-curved-spacetime -/
 noncomputable def stabAutMonoidHom (B : Set M.Carrier) :
     ↥(MulAction.stabilizer M.Isom B) →* (N.algebra B ≃⋆ₐ[ℂ] N.algebra B) where
   toFun := N.stabAutHom B

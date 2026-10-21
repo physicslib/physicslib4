@@ -68,17 +68,19 @@ universe u v
 variable {M : LorentzianSpacetime.{u}}
 
 /--
-**Local Observable** (blueprint `def:local-observable`).
+A local observable of a representation π of 𝔘(B): an operator π(a) with a self-adjoint in 𝔘(B).
 
-Fix a local net `U`, an Alexandrov-basis set `B`, and a GNS
-`*`-representation `π : 𝔘(B) →⋆ₐ[ℂ] (H →L[ℂ] H)` of the local
-algebra `𝔘(B) = U.algebra B` on a complex Hilbert space `H` (in
-practice obtained from `gns_construction` applied to a state `ω` on
-`𝔘(B)`). A bounded operator `T : H →L[ℂ] H` is a *local observable*
-if it is the image `T = π a` of some self-adjoint element `a` of the
-local algebra.
+Fix a region B and a *-representation π of its local algebra 𝔘(B) by bounded operators on a
+Hilbert space H; the blueprint's case is the GNS representation π_ω of a state ω on 𝔘(B)
+(`gns_construction`). A bounded operator T on H is a local observable when T = π(a) for some
+self-adjoint a ∈ 𝔘(B). Such a T is self-adjoint (`IsLocalObservable.isSelfAdjoint`), since π
+preserves the adjoint, so it is an observable in the quantum-mechanical sense, and it is
+measured in B. Conversely, every self-adjoint operator in the range of π is a local observable
+(`isLocalObservable_iff`).
 
-Blueprint reference: `def:local-observable`.
+Implementation note: π is any unital *-homomorphism 𝔘(B) → B(H), not only a GNS representation.
+
+Blueprint: def:local-observable
 -/
 def IsLocalObservable {U : LocalNet M} {B : Set M.Carrier}
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
@@ -111,20 +113,23 @@ theorem exists_isLocalObservable {U : LocalNet.{u, v} M} {B : Set M.Carrier}
     IsLocalObservable.isSelfAdjoint ⟨a, ha, rfl⟩⟩
 
 /--
-**Axiom 4 (Local Algebra), curved spacetime.** A local net `U` on a
-Lorentzian spacetime `M` satisfies the *local algebra* axiom if, in
-every GNS representation `π` of every local algebra `𝔘(B)`, every
-self-adjoint operator in the range of `π` is a local observable.
+Axiom 4 in curved spacetime (local completeness): each observable of a local representation is
+a local observable.
 
-This is the curved reading of "all observables are local
-observables": the observables of the theory are exactly the images
-of self-adjoint local elements.
+The blueprint's axiom says that all observables are local observables. Curved spacetime has no
+quasilocal algebra, so there is no single algebra in which "all observables" live; the axiom is
+read locally instead. For every basis set B, every *-representation π of 𝔘(B) on a Hilbert space
+H, and every self-adjoint operator T in the range of π, T is a local observable: T = π(a) for a
+self-adjoint a ∈ 𝔘(B).
 
-The Hilbert spaces `H` range over the universe `v` of the local
-algebras, which is the universe of the GNS spaces that
-`gns_construction` produces for them (as in the Minkowski net).
+Read this way the axiom holds for every local net (`localAlgebra_of`): if T = π(b) is
+self-adjoint, then T is also the image of the self-adjoint part (b + b*)/2 of b.
 
-Blueprint reference: `def:local-completeness-in-curved-spacetime`.
+Implementation note: the Hilbert spaces H range over `Type v`, the universe of the local
+algebras, which is where `gns_construction` puts the GNS spaces of their states (as in the
+Minkowski net). π is any unital *-homomorphism 𝔘(B) → B(H).
+
+Blueprint: def:local-completeness-in-curved-spacetime
 -/
 def LocalAlgebra (U : LocalNet.{u, v} M) : Prop :=
   ∀ ⦃B : Set M.Carrier⦄, M.IsBasisSet B →
@@ -208,9 +213,13 @@ theorem isLocalObservable_iff {T : H →L[ℂ] H} :
 
 end Observables
 
-/-- The set of *local observables* on the GNS Hilbert space `H` for the
-representation `π`: all bounded operators of the form `π a` with `a` a
-self-adjoint element of the local algebra. -/
+/-- The set of local observables of a representation π of 𝔘(B): the operators π(a) with a
+self-adjoint.
+
+It equals the set of self-adjoint operators in the range of π (`localObservables_eq`), contains
+the identity and is closed under sums and real multiples.
+
+Blueprint: the local observables of def:local-observable -/
 def localObservables {U : LocalNet M} {B : Set M.Carrier} {H : Type*}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
     (π : U.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) : Set (H →L[ℂ] H) :=

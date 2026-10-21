@@ -51,27 +51,28 @@ universe u v
 variable (M : LorentzianSpacetime.{u})
 
 /--
-**Axiom 1 (Local Algebras), curved spacetime.** The *data* of a
-Haag-Kastler local net on a Lorentzian spacetime `M`: an assignment,
-for every subset `B` of `M` (thought of as an Alexandrov-basis set,
-with the empty set covering the normalisation `𝔘(∅) = ℂ · 1`), of a
-unital C*-algebra `algebra B`.
+Axiom 1 in curved spacetime (local algebras): a unital C*-algebra 𝔘(B) for each region B of M.
 
-The `𝔘(∅) = ℂ` normalisation is captured by the field
-`emptyEquivComplex` exhibiting a `StarAlgEquiv` between `algebra ∅`
-and `ℂ`.
+The algebra 𝔘(B) is the abstract algebra of the observables that can be measured in the region B
+of the spacetime M. The regions that matter are the causal diamonds, the basis sets
+`M.IsBasisSet` of the Alexandrov topology, and the axioms that follow quantify over those only.
+The empty region is assigned the one-dimensional algebra ℂ·1 of multiples of the unit. The shape
+is that of the Minkowski net, with Minkowski space replaced by the abstract spacetime M.
 
-Blueprint reference: `def:local-algebras-in-curved-spacetime`.
+Implementation note: `algebra` is defined on every subset of M, so that it is a plain function; its
+values on sets that are not basis sets are never used. The normalisation 𝔘(∅) = ℂ·1 is a
+*-isomorphism `emptyEquivComplex` onto ℂ. The algebras live in a universe v that is independent
+of the universe u of the points: `LocalNet.{u, v} M` has algebras in `Type v`.
+
+Blueprint: def:local-algebras-in-curved-spacetime
 -/
 structure LocalNet where
-  /-- The C*-algebra `𝔘(B)` assigned to a (would-be Alexandrov-basis)
-  region `B`. It lives in the universe `v`, independent of the
-  universe of `M.Carrier`. -/
+  /-- The local algebra 𝔘(B) of a region B, in `Type v`. Only its values on basis sets are
+  constrained by the axioms. -/
   algebra : Set M.Carrier → Type v
-  /-- The `CStarAlgebra` instance on each fiber `𝔘(B)`. -/
+  /-- Each local algebra 𝔘(B) is a unital C*-algebra. -/
   instCStarAlgebra : ∀ B, CStarAlgebra (algebra B)
-  /-- Normalisation: `𝔘(∅) = ℂ · 1`, encoded as a `*`-algebra
-  isomorphism `algebra ∅ ≃⋆ₐ[ℂ] ℂ`. -/
+  /-- The normalisation 𝔘(∅) = ℂ·1: a *-isomorphism from the algebra of the empty region onto ℂ. -/
   emptyEquivComplex : StarAlgEquiv ℂ (algebra ∅) ℂ
 
 attribute [instance] LocalNet.instCStarAlgebra

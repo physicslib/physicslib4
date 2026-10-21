@@ -61,17 +61,23 @@ namespace Spacetime
 namespace LorentzianSpacetime
 
 /--
-The relabelling bijection of carriers underlying general covariance: the
-diffeomorphism `ψ`, read as a bijection from the carrier of the pullback
-Lorentzian spacetime `ψ^*L` to the carrier of `L`.
+The relabelling bijection of general covariance: a diffeomorphism ψ of M, read as a map from the
+points of ψ*L to the points of L.
 
-The two carriers are definitionally equal (`pullback` changes only the metric
-and the time orientation), but the blueprint insists that the two spacetimes be
-related by *data* rather than by a type equality; this is that datum.
+The pullback ψ*L has the same manifold as L, with the pulled-back metric ψ*g and time orientation
+ψ*t. As a map from ψ*L to L, the diffeomorphism ψ is an isometry, and it carries the causal
+diamonds of ψ*L to those of L (`toAbstractIdentityComponent_pullback_isBasisSet`). It is ψ, not
+its inverse, that does this. General covariance compares the nets over ψ*L and over L along this
+bijection.
 
-Stated with `.Carrier` rather than `.toAbstractIdentityComponent.Carrier`: the two are
-definitionally equal, but `toAbstractIdentityComponent_Carrier` is a `simp` lemma, so only the
-former leaves `pullbackCarrierEquiv_apply` in simp-normal form.
+Implementation note: the two carriers are definitionally equal (`pullback` changes only the
+metric and the time orientation), but the blueprint relates the two spacetimes by data rather
+than by a type equality, and this is that datum. The type is stated with `.Carrier` rather than
+`.toAbstractIdentityComponent.Carrier`: the two are definitionally equal, but
+`toAbstractIdentityComponent_Carrier` is a `simp` lemma, so only the former leaves
+`pullbackCarrierEquiv_apply` in simp-normal form.
+
+Blueprint: def:general-covariance-in-curved-spacetime
 -/
 noncomputable def pullbackCarrierEquiv (L : LorentzianSpacetime)
     (ψ : Diffeo L.toSpacetime L.toSpacetime) :
@@ -113,74 +119,87 @@ namespace AQFT
 namespace HaagKastlerCurved
 
 /--
-**Equivalence of Haag-Kastler nets** (`def:net-equivalence-in-curved-spacetime`).
+An equivalence of two Haag–Kastler nets along a bijection e of their spacetimes: *-isomorphisms
+Θ_B : 𝔘₁(B) → 𝔘₂(e(B)) compatible with isotony.
 
-Let `M₁`, `M₂` be abstract Lorentzian spacetimes, let `e` be a bijection of
-their carriers which maps basis sets to basis sets (hypothesis `he`), and let
-`N₁`, `N₂` be Haag-Kastler nets over `M₁` and `M₂`. An *equivalence of nets
-along `e`* is a chosen family of unital `*`-isomorphisms
+Let M₁ and M₂ be spacetimes, e a bijection from the points of M₁ to those of M₂ that maps basis
+sets to basis sets (hypothesis `he`), and N₁, N₂ Haag–Kastler nets over M₁ and M₂. An equivalence
+of N₁ and N₂ along e chooses, for each basis set B of M₁, a unital *-isomorphism
 
-`Θ_B : 𝔘₁(B) ≃⋆ₐ[ℂ] 𝔘₂(e(B))`,
+Θ_B : 𝔘₁(B) → 𝔘₂(e(B)),
 
-one for each basis set `B` of `M₁` — well typed precisely because of `he` — such
-that for every inclusion `B₁ ⊆ B₂` of basis sets of `M₁` the square formed with
-the Axiom 2 isotony embeddings `HaagKastlerNet.commIsotony` of the two nets
-commutes.
+which makes sense because e(B) is a basis set of M₂. The isomorphisms must be compatible with the
+isotony embeddings i₁ and i₂ of the two nets (`HaagKastlerNet.commIsotony`): whenever B₁ ⊆ B₂ are
+basis sets of M₁,
 
-Naturality needs no separate coherence hypothesis: the square is attached to a
-single inclusion and never composes two embeddings, and in any case Axiom 2
-carries the identity and composition laws itself.
+Θ_(B₂) ∘ i₁(B₁, B₂) = i₂(e(B₁), e(B₂)) ∘ Θ_(B₁).
 
-Blueprint reference: `def:net-equivalence-in-curved-spacetime`.
+The two nets then describe the same physics, with the region B of M₁ corresponding to the region
+e(B) of M₂.
+
+The family Θ is data, not an existence statement, since the square refers to the chosen maps. The
+definition mentions no metric and no isometry: all it asks of e is that it carry basis sets to
+basis sets. The square is attached to a single inclusion, so no coherence hypothesis is needed;
+Axiom 2 carries the identity and composition laws of the embeddings in any case.
+
+Implementation note: the spacetimes are related by the bijection e rather than by an equality of
+their carriers, which would be an equality of types and could not be transported along.
+
+Blueprint: def:net-equivalence-in-curved-spacetime
 -/
 structure NetEquivalence {M₁ M₂ : LorentzianSpacetime}
     (e : M₁.Carrier ≃ M₂.Carrier)
     (he : ∀ ⦃B : Set M₁.Carrier⦄, M₁.IsBasisSet B → M₂.IsBasisSet (⇑e '' B))
     (N₁ : HaagKastlerNet M₁) (N₂ : HaagKastlerNet M₂) where
-  /-- The chosen unital `*`-isomorphism `Θ_B : 𝔘₁(B) ≃⋆ₐ[ℂ] 𝔘₂(e(B))`, one for
-  each basis set `B` of `M₁`. -/
+  /-- The unital *-isomorphism Θ_B : 𝔘₁(B) → 𝔘₂(e(B)), for each basis set B of M₁. -/
   theta : ∀ ⦃B : Set M₁.Carrier⦄, M₁.IsBasisSet B →
     StarAlgEquiv ℂ (N₁.algebra B) (N₂.algebra (⇑e '' B))
-  /-- **Naturality.** For basis sets `B₁ ⊆ B₂` of `M₁`, the square formed by
-  `Θ_{B₁}`, `Θ_{B₂}` and the two nets' isotony embeddings commutes. -/
+  /-- Naturality: with i₁ and i₂ the isotony embeddings of the two nets, every inclusion
+  B₁ ⊆ B₂ of basis sets of M₁ gives Θ_(B₂) ∘ i₁(B₁, B₂) = i₂(e(B₁), e(B₂)) ∘ Θ_(B₁). -/
   naturality : ∀ ⦃B₁ B₂ : Set M₁.Carrier⦄ (h₁ : M₁.IsBasisSet B₁)
       (h₂ : M₁.IsBasisSet B₂) (h : B₁ ⊆ B₂) (a : N₁.algebra B₁),
     theta h₂ (N₁.commIsotony h₁ h₂ h a)
       = N₂.commIsotony (he h₁) (he h₂) (Set.image_mono h) (theta h₁ a)
 
 /--
-**A net theory** (`def:general-covariance-in-curved-spacetime`, first half): a
-section of the family of Haag-Kastler nets over geometric Lorentzian
-spacetimes, assigning to every `L` a net `𝔘_L` over the abstract spacetime
-interface `L.toAbstractIdentityComponent` it induces.
+A net theory: a choice of Haag–Kastler net 𝔘_L over every geometric Lorentzian spacetime L.
 
-Quantifying over *all* Lorentzian spacetimes, rather than over the metrics on
-one fixed carrier, is what makes general covariance a statement about the
-theory: the pullback of any `L` is again an object of the same family, so both
-sides of the equivalence are always in scope.
+A quantum field theory in curved spacetime is not one net but a rule assigning a net to each
+background. Here the rule is a function L ↦ 𝔘_L from geometric Lorentzian spacetimes to nets over
+the abstract interfaces they induce (`toAbstractIdentityComponent`). Quantifying over all
+Lorentzian spacetimes, rather than over the metrics on one fixed manifold, is what makes general
+covariance (`IsGenerallyCovariant`) a statement about the theory: the pullback of any L is again a
+Lorentzian spacetime, so both nets that general covariance compares are values of the same
+function.
 
-The nets of a net theory share one universe for their local algebras, the
-universe parameter of `NetTheory`.
+Implementation note: the spacetimes have their points in `Type`, and the nets of a net theory
+share one universe for their local algebras, the universe parameter of `NetTheory`.
+
+Blueprint: def:general-covariance-in-curved-spacetime
 -/
 abbrev NetTheory :=
   ∀ L : Spacetime.LorentzianSpacetime, HaagKastlerNet L.toAbstractIdentityComponent
 
 /--
-**General covariance** (`def:general-covariance-in-curved-spacetime`).
+General covariance: a net theory assigns equivalent nets to diffeomorphism-related backgrounds.
 
-A net theory `𝔘` is *generally covariant* when, for every geometric Lorentzian
-spacetime `L` with underlying spacetime `(M, g, t)` and every `C^∞`
-diffeomorphism `ψ` of `M`, the nets `𝔘_{ψ^*L}` and `𝔘_L` are equivalent in the
-sense of `NetEquivalence` along the relabelling bijection `e := ψ` of the common
-carrier.
+The gauge group of general relativity is the diffeomorphism group of M, acting on all fields,
+the metric included. For a Lorentzian spacetime L with manifold M, metric g and time orientation
+t, and a smooth diffeomorphism ψ of M, the pullback ψ*L, with metric ψ*g and time orientation ψ*t,
+differs from L only by a relabelling of the points. A net theory 𝔘 is generally covariant when
+the nets 𝔘_(ψ*L) and 𝔘_L are equivalent (`NetEquivalence`) for every such L and ψ, along ψ read as
+a bijection from the points of ψ*L to those of L (`pullbackCarrierEquiv`). That ψ carries the
+diamonds of ψ*L to those of L is `toAbstractIdentityComponent_pullback_isBasisSet`.
 
-This is a *postulate*, encoding Leibniz equivalence: the choice of
-representative within a diffeomorphism class is gauge and can have no
-observable consequences. It is a property of the section `L ↦ 𝔘_L`, not an
-extra field of `HaagKastlerNet`, and it says nothing about backgrounds that are
-not diffeomorphism-related.
+This is a postulate, not a consequence of Axioms 1 to 5, which each constrain a single net over a
+single spacetime. It encodes Leibniz equivalence, the resolution of the hole argument: the choice
+of representative within a diffeomorphism class is gauge and can have no observable consequences.
+It is a property of the theory L ↦ 𝔘_L, not an extra field of `HaagKastlerNet`, and it says
+nothing about backgrounds that are not related by a diffeomorphism. Unlike Axiom 5, it is not
+restricted to diffeomorphisms connected to the identity, since it compares two nets rather than
+making a group act on one.
 
-Blueprint reference: `def:general-covariance-in-curved-spacetime`.
+Blueprint: def:general-covariance-in-curved-spacetime
 -/
 def IsGenerallyCovariant (𝔘 : NetTheory) : Prop :=
   ∀ (L : Spacetime.LorentzianSpacetime)

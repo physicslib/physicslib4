@@ -51,18 +51,25 @@ namespace Spacetime
 namespace LorentzianSpacetime
 
 /--
-The abstract Haag-Kastler interface induced by a concrete Lorentzian
-spacetime, with the isometry group taken to be the **oriented identity
-component** (identity-component isometries that also preserve the future
-orientation), as in Axiom 5. For these isometries basis-set preservation is a
-theorem (`Spacetime.LorentzianSpacetime.isBasisSet_smul`), which supplies the
-interface field `isBasisSet_smul`.
+The abstract spacetime interface of a geometric Lorentzian spacetime L, the bridge to the curved
+axioms.
 
-Implementation note: the oriented identity component is the group of isometries
-connected to the identity named in the blueprint. That an isometry connected to
-the identity preserves the future orientation needs a Myers–Steenrod-type rigidity
-theorem that Mathlib does not provide, so orientation preservation is included in
-the definition of the group rather than proved.
+The pieces of the interface are read off L. The points are those of the manifold. The basis sets
+are the causal diamonds I⁺(p) ∩ I⁻(q) of the Alexandrov topology for the time orientation of L.
+Two regions are completely spacelike when every point of the one is spacelike to every point of
+the other. The isometry group is the group of isometries of L connected to the identity, taken as
+the oriented identity component: the isometries in the identity component of the isometry group
+that also preserve the future orientation. These isometries carry diamonds to diamonds
+(`Spacetime.LorentzianSpacetime.isBasisSet_smul`), which supplies the one axiom of the interface.
+Every result proved over the interface, the curved axioms included, then applies to L.
+
+Implementation note: the oriented identity component is the group of isometries connected to the
+identity named in the blueprint. That an isometry connected to the identity preserves the future
+orientation needs a Myers–Steenrod-type rigidity theorem that Mathlib does not provide, so
+orientation preservation is included in the definition of the group rather than proved.
+
+Blueprint: the group of def:isometric-covariance-in-curved-spacetime (formalization note) and
+lmm:axiom5-basis-preservation
 -/
 noncomputable def toAbstractIdentityComponent (L : LorentzianSpacetime) :
     AQFT.HaagKastlerCurved.LorentzianSpacetime where
@@ -92,10 +99,13 @@ can be rewritten to the concrete subgroup. -/
       = ↥(Spacetime.Isometry.orientedIdentityComponent L.toSpacetime
           L.timeOrientation) := rfl
 
-/-- The abstract isometry group of the bridge inherits the subspace topology of the
-oriented identity-component subgroup, discharging the `[TopologicalSpace M.Isom]`
-hypothesis of the curved covariance/KMS results automatically over a concrete
-spacetime. -/
+/-- The topology on the isometry group of the bridge: the subspace topology of the oriented
+identity component.
+
+The abstract interface carries no topology, so the strongly continuous stabilizer and KMS results
+take `[TopologicalSpace M.Isom]` as a hypothesis. Over a geometric spacetime this instance supplies
+it: the isometry group has the topology induced by φ ↦ (φ, φ⁻¹) into C(M, M) × C(M, M) with the
+compact-open topology, and the subgroup inherits it. -/
 noncomputable instance instTopologicalSpaceToAbstractIdentityComponentIsom
     (L : LorentzianSpacetime) :
     TopologicalSpace (L.toAbstractIdentityComponent).Isom :=

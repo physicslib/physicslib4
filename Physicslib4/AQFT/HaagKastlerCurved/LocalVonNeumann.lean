@@ -35,16 +35,33 @@ open Physicslib4.GNS
 variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- The local observable operators of a subregion `B' ⊆ B` in a representation `π`
-of the containing algebra `𝔘(B)`: the image `π(𝔘(B'))` of the local algebra under
-the isotony embedding. -/
+/-- The local operators of a basis set B' ⊆ B in a representation π of 𝔘(B): the image
+π(i(B', B)(𝔘(B'))).
+
+Curved spacetime has no quasilocal algebra, so π is a *-representation of the local algebra 𝔘(B)
+of a basis set B containing B', on a Hilbert space H, and the isotony embedding i(B', B) of
+Axiom 2 carries 𝔘(B') into 𝔘(B). The result is a set of bounded operators on H, written
+π(𝔘(B')) for short.
+
+Blueprint: def:local-von-neumann-in-curved-spacetime -/
 def localOperators {B : Set M.Carrier} (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B)
     (h : B' ⊆ B) : Set (H →L[ℂ] H) :=
   Set.range fun a : N.algebra B' => π (N.commIsotony hB' hB h a)
 
-/-- The **local von Neumann algebra** `R(B') = π(𝔘(B'))''`, the bicommutant of the
-local observable operators (the commutant being `Set.centralizer`). -/
+/-- The local von Neumann algebra R(B') = π(𝔘(B'))'' of a basis set B' ⊆ B, as a set of
+operators.
+
+The commutant S' of a set S of bounded operators is the set of bounded operators commuting with
+every element of S, and the bicommutant S'' is the commutant of S'. By the bicommutant theorem of
+von Neumann, π(𝔘(B'))'' is the weak operator closure of the unital *-algebra π(𝔘(B')), which it
+generally contains strictly. Everything is relative to the representation π of the containing
+algebra 𝔘(B).
+`localVonNeumannAlgebra` is the same set as a bundled von Neumann algebra.
+
+Implementation note: the commutant is Mathlib's `Set.centralizer` in the bounded operators on H.
+
+Blueprint: def:local-von-neumann-in-curved-spacetime -/
 def localVonNeumann {B : Set M.Carrier} (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B)
     (h : B' ⊆ B) : Set (H →L[ℂ] H) :=
@@ -141,9 +158,16 @@ theorem localOperators_selfAdjoint {B : Set M.Carrier}
   rintro x ⟨a, rfl⟩
   exact ⟨star a, by simp only [map_star]⟩
 
-/-- The **local von Neumann algebra** `R(B')` as a genuine `VonNeumannAlgebra`: the
-bicommutant of the self-adjoint set of local observable operators inside `B(H)`.
-Its underlying set is `localVonNeumann π hB' hB h`. -/
+/-- The local von Neumann algebra R(B') = π(𝔘(B'))'' of a basis set B' ⊆ B, as a von Neumann
+algebra.
+
+The local operators π(𝔘(B')) form a self-adjoint set, since π and the isotony embedding preserve
+the adjoint, and the bicommutant of a self-adjoint set is a von Neumann algebra
+(`Physicslib4.GNS.vonNeumannOfSelfAdjoint`). This is that algebra, an element of Mathlib's
+`VonNeumannAlgebra`; its underlying set is `localVonNeumann` (`coe_localVonNeumannAlgebra`).
+Microcausality and isotony are stated for it with the order `≤` and `VonNeumannAlgebra.commutant`.
+
+Blueprint: def:local-von-neumann-algebra-in-curved-spacetime -/
 noncomputable def localVonNeumannAlgebra {B : Set M.Carrier}
     (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B) (h : B' ⊆ B) :
@@ -197,15 +221,18 @@ theorem localVonNeumannAlgebra_separating {B : Set M.Carrier}
   refine N.localVonNeumann_separating hB π hB₁ hB₂ hs h₁ h₂ hcyc ?_ hRΩ
   rwa [← SetLike.mem_coe, coe_localVonNeumannAlgebra] at hR
 
-/-- **The net of von Neumann algebras as an order-preserving map (curved spacetime).**
-Fixing a containing basis region `B` and a representation `π` of `𝔘(B)`, the assignment
-`B' ↦ R(B')` is a monotone map from the poset of basis subregions of `B` (ordered by
-inclusion) to the von Neumann algebras of `B(H)`. This is the curved counterpart of the
-Minkowski `vonNeumannNet`: the local net restricted to a containing region is a functor on
-the inclusion poset, sending containment of regions to containment of algebras.
+/-- The net of local von Neumann algebras B' ↦ R(B') inside a basis set B, as a monotone map.
 
-Monotonicity carries no coherence hypothesis. The factorisation it rests on is the
-composition law of Axiom 2 (`commIsotony_comp`). -/
+Fix a basis set B and a representation π of 𝔘(B). The map sends each basis set B' ⊆ B to
+R(B') = π(𝔘(B'))'' and is monotone: B₁ ⊆ B₂ implies R(B₁) ≤ R(B₂) (`localVonNeumannAlgebra_mono`).
+This is the curved counterpart of the Minkowski `vonNeumannNet`, with the net restricted to the
+basis subsets of one containing region because there is no quasilocal algebra.
+
+Monotonicity needs no extra hypothesis. It rests on the embedding of 𝔘(B₁) in 𝔘(B) factoring
+through 𝔘(B₂), which is the composition law of Axiom 2 (`commIsotony_comp`) and so holds for every
+net.
+
+Blueprint: def:von-neumann-net-in-curved-spacetime -/
 noncomputable def vonNeumannNet {B : Set M.Carrier} (hB : M.IsBasisSet B)
     (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H)) :
     {B' : Set M.Carrier // M.IsBasisSet B' ∧ B' ⊆ B} →o VonNeumannAlgebra H where
@@ -213,12 +240,21 @@ noncomputable def vonNeumannNet {B : Set M.Carrier} (hB : M.IsBasisSet B)
   monotone' B₁ B₂ h :=
     N.localVonNeumannAlgebra_mono hB π B₁.2.1 B₂.2.1 h B₂.2.2
 
-/-- The **relative commutant** of a nested pair `R(B₁) ⊆ R(B₂)` of subregions of a
-containing region `B`, in a representation `π` of `𝔘(B)`: the von Neumann algebra
-`R(B₁)' ∩ R(B₂)`, built as the meet of the star-subalgebras of the commutant of
-`R(B₁)` and of `R(B₂)`. Its underlying set is `R(B₁)' ∩ R(B₂)`. Curved counterpart
-of the Minkowski relative commutant; the basic object of local-algebra inclusion
-theory. -/
+/-- The relative commutant R(B₁)' ∩ R(B₂) of two basis sets B₁, B₂ ⊆ B, as a von Neumann
+algebra.
+
+It consists of the operators of R(B₂) that commute with all of R(B₁). For a nested pair
+B₁ ⊆ B₂ it is the basic object of the theory of inclusions R(B₁) ⊆ R(B₂) of local algebras: the
+inclusion is irreducible when it contains only the scalars (`IsIrreducibleInclusion`), and it
+always contains the centre of R(B₂) (`center_le_relativeCommutant`). As for the other local von
+Neumann algebras, everything is relative to a representation π of a containing algebra 𝔘(B).
+
+Implementation note: the definition does not require B₁ ⊆ B₂. Mathlib's `VonNeumannAlgebra` has
+no meet, so the algebra is built by hand as the meet of the *-subalgebras R(B₁)' and R(B₂); it is
+closed under taking the bicommutant because it is the commutant of R(B₁) ∪ R(B₂)'. Its underlying
+set is R(B₁)' ∩ R(B₂) (`coe_relativeCommutant`).
+
+Blueprint: def:relative-commutant-in-curved-spacetime -/
 noncomputable def relativeCommutant {B : Set M.Carrier}
     (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
@@ -287,9 +323,16 @@ theorem center_le_relativeCommutant {B : Set M.Carrier}
     N.localVonNeumann_mono hB π hB₁ hB₂ h₁₂ h₂
   exact ⟨Set.centralizer_subset hsub hx2, hx1⟩
 
-/-- The inclusion `R(B₁) ⊆ R(B₂)` of subregions of `B` is **irreducible** when its
-relative commutant is trivial: `R(B₁)' ∩ R(B₂) = ℂ·1`. Curved counterpart of the
-subfactor-theoretic notion of an irreducible inclusion. -/
+/-- The inclusion R(B₁) ⊆ R(B₂) is irreducible: its relative commutant R(B₁)' ∩ R(B₂) is ℂ·1.
+
+This is the notion of an irreducible inclusion from subfactor theory: no operator of R(B₂) other
+than a scalar commutes with all of R(B₁). For nested basis sets B₁ ⊆ B₂ ⊆ B it forces R(B₂) to be a
+factor (`isFactor_of_isIrreducibleInclusion`), and the inclusion of R(B₂) in itself is irreducible
+exactly when R(B₂) is a factor (`isIrreducibleInclusion_self_iff_isFactor`).
+
+Implementation note: ℂ·1 is `scalarOperators H`, and the definition does not require B₁ ⊆ B₂.
+
+Blueprint: def:irreducible-inclusion-in-curved-spacetime -/
 def IsIrreducibleInclusion {B : Set M.Carrier}
     (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B₁ B₂ : Set M.Carrier⦄ (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂)
