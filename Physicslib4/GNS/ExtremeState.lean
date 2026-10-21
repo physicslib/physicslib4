@@ -446,10 +446,11 @@ states (`mem_extremePoints_iff_isExtremePoint`, `isPure_iff_isExtremePoint`), so
 `Convex` and `extremePoints` apply to it.
 
 Implementation note: the set is the image of `State A` in `A →L[ℂ] ℂ`, regarded as a real vector
-space through `NormedSpace.complexToReal`, with the norm topology. The weak-* compact version, to
-which the Krein–Milman theorem applies, is `weakStateSet`.
+space through `NormedSpace.complexToReal`, with the norm topology. The weak-* compact version is
+`weakStateSet`; mathematically the Krein–Milman theorem applies to it, and the library proves the
+compactness, not the application.
 
-Blueprint: thrm:state-space-convex-bridge
+Blueprint: the state space of thrm:state-space-convex-bridge
 -/
 def stateSpace : Set (A →L[ℂ] ℂ) := Set.range (State.toContinuousLinearMap : State A → _)
 

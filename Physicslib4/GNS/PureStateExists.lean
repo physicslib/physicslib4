@@ -50,8 +50,9 @@ The state space in the weak-* topology: the positive functionals φ on A with φ
 
 In the weak-* topology, functionals converge when their values φ(a) converge for every a: a
 sequence of states converges when all expectation values do. For a positive functional
-φ(1) = 1 is the same as ‖φ‖ = 1, so these are exactly the states (`State.toWeakDual` and
-`State.toWeakDual_mem_weakStateSet`). By the Banach–Alaoglu theorem the set is weak-* compact
+φ(1) = 1 is the same as ‖φ‖ = 1, so mathematically these are exactly the states; the library
+proves that every state lies in the set (`State.toWeakDual`, `State.toWeakDual_mem_weakStateSet`),
+not the converse. By the Banach–Alaoglu theorem the set is weak-* compact
 (`isCompact_weakStateSet`), which with the Krein–Milman theorem gives the existence of pure
 states; the library proves the compactness, not the existence.
 

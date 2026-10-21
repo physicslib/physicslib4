@@ -473,13 +473,13 @@ theorem pi_mem_gnsVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (a : 
 /--
 Quasi-equivalence: a *-isomorphism π₁(A)'' → π₂(A)'' sending π₁(a) to π₂(a) for every a.
 
-Quasi-equivalent representations generate the same von Neumann algebra up to isomorphism, and
-so have the same normal states (the states given by density matrices); they may differ in
-multiplicity, as a representation and its amplification do (the library does not prove
-this). The normal states of a
-representation are its folium, so quasi-equivalence means having the same folium.
-Quasi-equivalence is an equivalence relation (`QuasiEquiv.refl`, `QuasiEquiv.symm`,
-`QuasiEquiv.trans`) and is coarser than unitary equivalence (`UnitaryEquiv.quasiEquiv`).
+Quasi-equivalent representations generate the same von Neumann algebra up to isomorphism.
+Mathematically, they therefore have the same normal states (the states given by density matrices),
+which form the folium of a representation, so quasi-equivalence means having the same folium; they
+may differ in multiplicity, as a representation and its amplification do. The library proves none of
+these three facts. Quasi-equivalence is an equivalence relation (`QuasiEquiv.refl`,
+`QuasiEquiv.symm`, `QuasiEquiv.trans`) and is coarser than unitary equivalence
+(`UnitaryEquiv.quasiEquiv`).
 
 Implementation note: the isomorphism is a `StarAlgEquiv` between the underlying *-subalgebras of
 the bundled algebras `gnsVonNeumannAlgebra π₁` and `gnsVonNeumannAlgebra π₂`; normality (weak

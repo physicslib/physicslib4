@@ -184,7 +184,7 @@ second makes the local algebras of a net a directed system, and it is what the q
 algebra and the Minkowski form of Axiom 3 use (blueprint
 [lmm:minkowski-diamonds-upward-directed](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:minkowski-diamonds-upward-directed)).
 In a curved spacetime two diamonds need not lie in a common diamond, which is why the
-[Haag–Kastler chapter](../Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Design--Local-commutativity-in-a-common-diamond) states
+[Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Design--Local-commutativity-in-a-common-diamond) states
 Axiom 3 in a common diamond.
 
 A diamond can be empty: $`I^+(p) \cap I^-(q)` is empty unless $`p \ll q`, so on Minkowski space
@@ -651,7 +651,7 @@ The three conditions on a linear automorphism of $`\mathbb{R}^4`:
 
 Their closure properties are `isLorentz_trans`, `isLorentz_symm` and the like. The group
 `AQFT.HaagKastler.InhomogeneousLorentzGroup` of pairs $`(\Lambda, a)` is shown in the
-[Haag–Kastler chapter](../Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Main-definitions-and-theorems--The-axioms).
+[Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Main-definitions-and-theorems--The-axioms).
 Its action on smooth paths:
 
 {docstring Physicslib4.lorentzPath}

@@ -82,7 +82,7 @@ a + b and ia + b.
 Implementation note: ω is only linear (`A →ₗ[ℂ] ℂ`); continuity, normalisation and a unit are not
 needed, and A is any complex *-ring with compatible scalar action.
 
-Blueprint: lmm:cauchy-schwarz-inequality
+Blueprint: the Hermitian symmetry used in lmm:cauchy-schwarz-inequality
 -/
 theorem omega_star_swap_conj
     (ω : A →ₗ[ℂ] ℂ) (hω : ∀ a : A, 0 ≤ ω (star a * a)) (a b : A) :

@@ -39,8 +39,8 @@ Two unitarily equivalent representations differ only by a change of basis of the
 U π₁(a) U⁻¹ = π₂(a), so they describe the same physics. It is an equivalence relation
 (`UnitaryEquiv.refl`, `UnitaryEquiv.symm`, `UnitaryEquiv.trans`) and preserves irreducibility and
 the factor property (`UnitaryEquiv.isIrreducible_iff`, `UnitaryEquiv.isFactor_iff`). The GNS
-representation of a state is unique up to unitary equivalence (`gns_unique`), and the classes of
-irreducible representations of the algebra of observables are the superselection sectors.
+representation of a state is unique up to unitary equivalence (`gns_unique`), and superselection
+sectors are classes of irreducible representations of the algebra of observables.
 
 Implementation note: U is a linear isometric equivalence `H₁ ≃ₗᵢ[ℂ] H₂`, which for Hilbert spaces
 is the same as a unitary operator, and the intertwining is U(π₁(a)x) = π₂(a)(Ux) for all x ∈ H₁.
