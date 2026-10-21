@@ -25,15 +25,15 @@ In 1964, Rudolf Haag and Daniel Kastler introduced a set of axioms for Algebraic
 
 ## Overview
 
-The blueprint is 345 pages long and splits cleanly in two.
+The blueprint is 346 pages long and splits cleanly in two.
 
 **Chapters 1–9 are mathematical background and are not formalised in Lean.** They motivate and analyse each of the original Haag–Kastler axioms in turn, and then generalise them to curved spacetime. Along the way they cite twelve supporting results, numbered 1 through 12 — Gelfand–Naimark, the Bounded Linear Transformation Theorem, the existence of a Lorentz metric, and so on. These are quoted from the literature where needed; none of them carries a Lean declaration.
 
-**Chapter 10 collects the formalisation-ready content, and it is the content of Chapter 10 that is formalised in Lean.** Its items are numbered consecutively, running from Definition 13 through Definition 690, and comprise **675 declarations in total: 153 definitions, 159 theorems, 259 lemmas, 99 propositions, and 5 corollaries**, mapped onto **1,202 distinct Lean declarations** (where Mathlib already supplies a result, the blueprint names the Mathlib declaration directly). Three further numbered items — Conventions 22, 213 and 260, standing hypotheses of the two spectral-theory sections — share the numbering but are conventions rather than declarations, and are not counted. Chapter 10 is divided into eight top-level sections, §10.1 through §10.8.
+**Chapter 10 collects the formalisation-ready content, and it is the content of Chapter 10 that is formalised in Lean.** Its items are numbered consecutively, running from Definition 13 through Definition 692, and comprise **677 declarations in total: 154 definitions, 160 theorems, 259 lemmas, 99 propositions, and 5 corollaries**, mapped onto **1,219 distinct Lean declarations** (where Mathlib already supplies a result, the blueprint names the Mathlib declaration directly). Three further numbered items — Conventions 22, 213 and 260, standing hypotheses of the two spectral-theory sections — share the numbering but are conventions rather than declarations, and are not counted. Chapter 10 is divided into eight top-level sections, §10.1 through §10.8.
 
-**All 675 are formalised, statements and proofs alike, and the Lean contains no `sorry`.** Of the 522 theorems, lemmas, propositions and corollaries in Chapter 10, 482 carry a written proof in the blueprint; the other 40, in §10.2, §10.3 and §10.4, are standard results quoted from the literature (Heine–Borel, Stone–Weierstrass, dominated convergence, the Bochner integral and the like) that the blueprint states in full but deliberately does not prove. All 522 proofs are formalised in Lean, including the 40 quoted results, which are linked to the Mathlib declarations that supply them.
+**All 677 are formalised, statements and proofs alike, and the Lean contains no `sorry`.** Of the 523 theorems, lemmas, propositions and corollaries in Chapter 10, 483 carry a written proof in the blueprint; the other 40, in §10.2, §10.3 and §10.4, are standard results quoted from the literature (Heine–Borel, Stone–Weierstrass, dominated convergence, the Bochner integral and the like) that the blueprint states in full but deliberately does not prove. All 523 proofs are formalised in Lean, including the 40 quoted results, which are linked to the Mathlib declarations that supply them.
 
-At a glance, the 675 declarations break down by top-level section as follows (click a section to see its items):
+At a glance, the 677 declarations break down by top-level section as follows (click a section to see its items):
 
 | Section | Topic | Pages | Definitions | Theorems | Lemmas | Propositions | Corollaries | Total | Formalised |
 |---|---|---|---|---|---|---|---|---|---|
@@ -41,11 +41,11 @@ At a glance, the 675 declarations break down by top-level section as follows (cl
 | [§10.2](sec10-2-spectral.html) | Spectral Theorems (bounded) | 39–156 | 25 | 24 | 27 | 67 | 1 | 144 | 144 |
 | [§10.3](sec10-3-unbounded.html) | Unbounded Spectral Theorems | 156–236 | 27 | 13 | 50 | 30 | 3 | 123 | 123 |
 | [§10.4](sec10-4-stone.html) | Stone's Theorem | 236–250 | 3 | 2 | 34 | 2 | 0 | 41 | 41 |
-| [§10.5](sec10-5-spacetime.html) | Spacetime and causal structure | 250–289 | 37 | 18 | 90 | 0 | 1 | 146 | 146 |
-| [§10.6](sec10-6-haag-kastler.html) | Haag–Kastler Axioms (Minkowski) | 289–330 | 40 | 71 | 51 | 0 | 0 | 162 | 162 |
-| [§10.7](sec10-7-curved.html) | Haag–Kastler Axioms (curved spacetime) | 330–340 | 17 | 30 | 4 | 0 | 0 | 51 | 51 |
-| [§10.8](sec10-8-general-covariance.html) | General Covariance | 340–343 | 2 | 0 | 0 | 0 | 0 | 2 | 2 |
-| **Total** | | | **153** | **159** | **259** | **99** | **5** | **675** | **675** |
+| [§10.5](sec10-5-spacetime.html) | Spacetime and causal structure | 250–290 | 37 | 18 | 90 | 0 | 1 | 146 | 146 |
+| [§10.6](sec10-6-haag-kastler.html) | Haag–Kastler Axioms (Minkowski) | 290–331 | 41 | 72 | 51 | 0 | 0 | 164 | 164 |
+| [§10.7](sec10-7-curved.html) | Haag–Kastler Axioms (curved spacetime) | 331–341 | 17 | 30 | 4 | 0 | 0 | 51 | 51 |
+| [§10.8](sec10-8-general-covariance.html) | General Covariance | 341–344 | 2 | 0 | 0 | 0 | 0 | 2 | 2 |
+| **Total** | | | **154** | **160** | **259** | **99** | **5** | **677** | **677** |
 
 ## Explore
 
@@ -56,15 +56,15 @@ At a glance, the 675 declarations break down by top-level section as follows (cl
   - [§10.2 Spectral Theorems (pp. 39–156)](sec10-2-spectral.html)
   - [§10.3 Unbounded Spectral Theorems (pp. 156–236)](sec10-3-unbounded.html)
   - [§10.4 Stone's Theorem (pp. 236–250)](sec10-4-stone.html)
-  - [§10.5 Spacetime and causal structure (pp. 250–289)](sec10-5-spacetime.html)
-  - [§10.6 Haag–Kastler Axioms in Minkowski spacetime (pp. 289–330)](sec10-6-haag-kastler.html)
-  - [§10.7 Haag–Kastler Axioms in curved spacetime (pp. 330–340)](sec10-7-curved.html)
-  - [§10.8 General Covariance: Nets on Pullback-Related Metrics (pp. 340–343)](sec10-8-general-covariance.html)
+  - [§10.5 Spacetime and causal structure (pp. 250–290)](sec10-5-spacetime.html)
+  - [§10.6 Haag–Kastler Axioms in Minkowski spacetime (pp. 290–331)](sec10-6-haag-kastler.html)
+  - [§10.7 Haag–Kastler Axioms in curved spacetime (pp. 331–341)](sec10-7-curved.html)
+  - [§10.8 General Covariance: Nets on Pullback-Related Metrics (pp. 341–344)](sec10-8-general-covariance.html)
 
 ## Highlights
 
 - **The Haag–Kastler axioms in Minkowski spacetime** ([§10.6](sec10-6-haag-kastler.html), [the axioms at a glance](axioms.html)). Five axioms, Definitions 476, 477, 494, 498 and 516: local C\*-algebras on the Alexandrov diamonds; isotony as a family of embeddings with identity and composition laws, so that the net is a functor on the inclusion order; local commutativity of completely spacelike local algebras in every diamond containing both; Axiom 4 as the bridge principle relating physical observables to quasilocal ones; and Lorentz covariance. They are bundled as a Haag–Kastler net (Definition 517, `Physicslib4.AQFT.HaagKastler.HaagKastlerNet`), and the quasilocal algebra of a net is constructed from the net alone, as a directed colimit followed by completion (Theorem 499, `Physicslib4.AQFT.HaagKastler.exists_quasilocalAlgebra`).
-- **The Haag–Kastler axioms in Lorentzian spacetime** ([§10.7](sec10-7-curved.html)). The same five axioms on a Lorentzian spacetime, Definitions 638–643, with isometric covariance under the identity component of the isometry group in place of Lorentz covariance, and with commutation and completeness stated relative to a common containing region, since a quasilocal algebra need not exist. They are bundled as `Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet` (Definition 644), and general covariance (Definition 690, [§10.8](sec10-8-general-covariance.html)) relates the nets over diffeomorphism-related spacetimes.
+- **The Haag–Kastler axioms in Lorentzian spacetime** ([§10.7](sec10-7-curved.html)). The same five axioms on a Lorentzian spacetime, Definitions 640–645, with isometric covariance under the identity component of the isometry group in place of Lorentz covariance, and with commutation and completeness stated relative to a common containing region, since a quasilocal algebra need not exist. They are bundled as `Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet` (Definition 646), and general covariance (Definition 692, [§10.8](sec10-8-general-covariance.html)) relates the nets over diffeomorphism-related spacetimes.
 - **The spectral theorem for bounded self-adjoint operators** ([§10.2](sec10-2-spectral.html)). Every bounded self-adjoint operator $$A$$ on a Hilbert space is $$\int_{\sigma(A)} \lambda \, d\mu^A(\lambda)$$ for a unique projection-valued measure $$\mu^A$$ on its spectrum (Theorem 162, `Physicslib4.Spectral.existsUnique_spectralMeasure`), obtained through the continuous functional calculus, an operator-valued Riesz representation theorem and the bounded Borel functional calculus.
 - **The spectral theorem for unbounded self-adjoint operators** ([§10.3](sec10-3-unbounded.html)). Every self-adjoint operator $$A$$, bounded or not, is $$\int_{\mathbb{R}} \lambda \, d\mu^A(\lambda)$$ for a unique projection-valued measure $$\mu^A$$ on $$\mathbb{R}$$, concentrated on the spectrum (Theorem 285, `Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_unbounded`). The proof passes through the Cayley transform and the spectral theorem for bounded normal operators; the resulting functional calculus (Definition 287) underlies Stone's theorem in [§10.4](sec10-4-stone.html).
 
@@ -74,7 +74,7 @@ The blueprint annotates every node with the Lean declarations that realise it, s
 
 **Formalised, but the Lean is shaped differently from the prose (one place).** The node below carries Lean declarations and a formalised proof; the caveat is one of presentation, not of coverage or content.
 
-- **Axiom 5 in curved spacetime (Definition 643).** "Isometries connected to the identity" and "identity-component isometries preserving the future orientation" describe the same group, but the inclusion of the former in the latter rests on a Myers–Steenrod-type rigidity result that Mathlib does not provide. The Lean therefore intersects the identity component with the explicitly orientation-preserving subgroup. This is an implementation choice and does not alter the mathematical content of the axiom.
+- **Axiom 5 in curved spacetime (Definition 645).** "Isometries connected to the identity" and "identity-component isometries preserving the future orientation" describe the same group, but the inclusion of the former in the latter rests on a Myers–Steenrod-type rigidity result that Mathlib does not provide. The Lean therefore intersects the identity component with the explicitly orientation-preserving subgroup. This is an implementation choice and does not alter the mathematical content of the axiom.
 
 ## Useful links
 

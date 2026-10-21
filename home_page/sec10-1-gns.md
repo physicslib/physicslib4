@@ -27,9 +27,9 @@ Every entry links to its node in the web blueprint and names the principal Lean 
 
 ### §10.1.2 Auxiliary Results Used in the Proof (p. 35)
 
-- [**Lemma 16**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cauchy-schwarz-inequality) — Cauchy–Schwarz Inequality · `Physicslib4.GNS.cauchy_schwarz_inequality`
-- [**Lemma 17**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lmm1) — The two descriptions of the GNS left ideal $$\mathcal{N}$$ agree · `Physicslib4.GNS.lmm1`
-- [**Lemma 18**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lmm2) — $$\mathcal{N}$$ is a closed linear subspace · `Physicslib4.GNS.lmm2`
+- [**Lemma 16**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cauchy-schwarz-inequality) — Cauchy–Schwarz Inequality · `Physicslib4.GNS.cauchy_schwarz_inequality` (+1 more)
+- [**Lemma 17**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lmm1) — The two descriptions of the GNS left ideal $$\mathcal{N}$$ agree · `Physicslib4.GNS.lmm1` (+2 more)
+- [**Lemma 18**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lmm2) — $$\mathcal{N}$$ is a closed linear subspace · `Physicslib4.GNS.lmm2` (+1 more)
 
 
 [Home](./) · **§10.1 GNS** · [§10.2 Spectral](sec10-2-spectral.html) · [§10.3 Unbounded](sec10-3-unbounded.html) · [§10.4 Stone](sec10-4-stone.html) · [§10.5 Spacetime](sec10-5-spacetime.html) · [§10.6 Minkowski](sec10-6-haag-kastler.html) · [§10.7 Curved](sec10-7-curved.html) · [§10.8 Covariance](sec10-8-general-covariance.html) · [Axioms](axioms.html) · [Guide](guide.html)

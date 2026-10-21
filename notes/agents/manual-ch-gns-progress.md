@@ -287,3 +287,19 @@ chapter text) is a later step. Appended after each file.
   Design (both are in the `State` box).
 - Word counts: Overview 424, Design 1,194, Main 936, Where to look 299. Web build and
   generate-manual pass; `check_temporal_wording.py` OK. Nothing committed.
+
+### Step A13 blueprint nodes (2026-10-21)
+
+- `def:generated-von-neumann-algebra` (haag-kastler-axioms.tex, before thrm:irreducible-factor):
+  π(A)'' as a set (`gnsVonNeumann`) and bundled (`gnsVonNeumannAlgebra`);
+  `\uses{lmm:bicommutant-of-selfadjoint-is-von-neumann}` (no separate representation node exists).
+  Added to statement `\uses` of thrm:irreducible-factor, thrm:irreducible-generates-all,
+  thrm:gns-generates-all-bundled, thrm:pure-factor, thrm:pure-generates-all,
+  lmm:pullback-image-invariants, thrm:double-commutant-duality, thrm:commutant-factor-duality,
+  thrm:irreducible-covariant-representation. leanDeclaration recorded.
+- `thrm:invariant-state-gns-unitary-general` (before thrm:invariant-state-gns-unitary): G a monoid,
+  four Lean forms. lmm:weak-continuity-implies-strong moved up (unchanged) to precede it. Proof
+  uses gns_construction (existence, not uniqueness). Added to proof `\uses` of
+  thrm:invariant-state-gns-unitary, thrm:invariant-state-gns-unitary-strongly-continuous and both
+  curved stabilizer nodes (Lean proofs apply the general theorems). leanDeclaration recorded.
+- refresh OK; validate: only the 14 known `conv:` errors.
