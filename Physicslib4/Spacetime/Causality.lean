@@ -539,8 +539,9 @@ and q.
 These sets generate the Alexandrov topology (`alexandrovTopology`), and they are the regions to
 which the Haag–Kastler axioms assign local algebras. The family contains the empty set, for
 example I⁺(p) ∩ I⁻(p) in a causal spacetime. Its members are exactly the sets
-`chronologicalDiamond t p q` (`mem_alexandrovBasis_iff_eq_chronologicalDiamond`). The blueprint
-defines the family within the node def:alexandrov-topology. -/
+`chronologicalDiamond t p q` (`mem_alexandrovBasis_iff_eq_chronologicalDiamond`).
+
+Blueprint: def:alexandrov-topology -/
 def alexandrovBasis (t : M.TimeOrientation) : Set (Set M.Carrier) :=
   {U | ∃ p q : M.Carrier, U = chronologicalFuture M t p ∩ chronologicalPast M t q}
 

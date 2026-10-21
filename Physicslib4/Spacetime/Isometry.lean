@@ -68,8 +68,8 @@ time orientation are `orientedIdentityComponent`.
 Implementation note: the diffeomorphism is Mathlib's `Diffeomorph`, so smoothness of φ and φ⁻¹ is
 built in, and dφ_x is the manifold derivative `mfderiv`.
 
-The blueprint describes isometries in lmm:isometry-pullback-metric; they have no node of their
-own.
+Blueprint: lmm:isometry-preserves-classification (isometries are described in
+lmm:isometry-pullback-metric)
 -/
 @[ext]
 structure Isometry (M : Spacetime) where

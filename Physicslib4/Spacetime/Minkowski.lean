@@ -632,7 +632,7 @@ With it, a timelike vector v is future-pointing exactly when its time component 
 All the causal notions of standard Minkowski spacetime in the library (≪, ≺, the diamonds, the
 Alexandrov topology and the Haag–Kastler axioms) use this time orientation.
 
-The blueprint defines it in the node def:lorentz-path.
+Blueprint: def:lorentz-path
 -/
 noncomputable def standardMinkowskiTimeOrientation :
     StandardMinkowskiSpacetime.TimeOrientation where
