@@ -258,7 +258,7 @@ theorem exists_future_between_standardMinkowski {q₁ q₂ x : SpacetimeModel}
   · rw [e0, e1, e2, e3]; linarith only [hc₂]
   · rw [e0, e1, e2, e3]; linarith only [pow_pos hε 2]
 
-/-- **Downward intersection property of the diamonds.** For two Alexandrov diamonds of
+/-- **Intersection property of the diamonds.** For two Alexandrov diamonds of
 standard Minkowski and a point `x` in their intersection, there is a diamond `B₃` with
 `x ∈ B₃ ⊆ B₁ ∩ B₂`. Uses past/future interpolation to build `B₃ = I⁺(a) ∩ I⁻(b)` and
 cone-nesting for the containment. -/
@@ -292,7 +292,7 @@ theorem alexandrovBasis_exists_subset_inter_standardMinkowski
 
 /-- **The Alexandrov diamonds are a topological basis on standard Minkowski.**
 Unconditionally: covering holds because every point has a chronological past and
-future point, and the downward intersection property is
+future point, and the intersection property is
 `alexandrovBasis_exists_subset_inter_standardMinkowski`; the generation condition is
 definitional. -/
 theorem isTopologicalBasis_alexandrovBasis_standardMinkowski :

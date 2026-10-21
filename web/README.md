@@ -118,7 +118,10 @@ build:
   written relative to a library namespace (`QuasilocalAlgebra`, `HaagKastlerNet.quasilocal`) is
   resolved and linked only if the chapter opens that namespace: a chapter therefore opens the
   namespaces of the declarations it shows, before `#doc` (`open Physicslib4.AQFT.HaagKastler`).
-  Field names and file names in code spans stay unresolved and are shown as plain code.
+  Field names and file names in code spans stay unresolved and are shown as plain code. A
+  highlighted structure name or field name links to the anchor of the structure's constructor
+  (`…___mk`) in the docstring box, not to the structure or the field; the hover text names the
+  right declaration. This is Verso's behaviour and affects every structure shown.
 - Theorems: `#check` in a named `lean` block, with its output in a `leanOutput` block and the
   manual's own prose around it. Verso prints messages 120 columns wide; longer lines wrap at the
   width of the text column. Opening the namespace shortens the names:

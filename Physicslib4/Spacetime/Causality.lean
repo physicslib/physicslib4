@@ -80,7 +80,7 @@ reparametrisation μ ∘ σ is again a geodesic only when σ is affine.
 The value (∇_X X)(μ(s)) depends only on X along μ (`SmoothPath.covDeriv_eq_of_eventuallyEq`), and
 such an X exists near every interior parameter (`SmoothPath.exists_vectorField_eq_tangent`), so
 the condition is neither ambiguous nor vacuous. It is imposed only at interior parameters; at an
-endpoint of Σ it follows by continuity.
+endpoint of Σ it would follow by continuity of the velocity, which the library does not state.
 
 Blueprint: def:geodesic
 -/
@@ -553,8 +553,12 @@ standard Minkowski spacetime it equals the Euclidean topology of ℝ⁴
 (`alexandrov_eq_euclidean_standardMinkowski`), and the diamonds form a basis
 (`isTopologicalBasis_alexandrovBasis_standardMinkowski`). In general it need not be Hausdorff; a
 Lorentzian spacetime (`LorentzianSpacetime`) is a spacetime with a time orientation whose
-Alexandrov topology is Hausdorff, and there the diamonds form a basis whenever they are
-downward directed (`LorentzianSpacetime.isTopologicalBasis_alexandrovBasis`).
+Alexandrov topology is Hausdorff, and there the diamonds form a basis whenever they have the
+intersection property: every point of the intersection of two diamonds lies in a diamond inside
+that intersection (`LorentzianSpacetime.isTopologicalBasis_alexandrovBasis`, for a spacetime
+with two points or more). In the standard theory the intersection property holds in every
+spacetime, since chronological futures are open in the manifold topology; this is not proved in
+the library, so the theorem takes it as the hypothesis `hdir`.
 
 Implementation note: `TopologicalSpace.generateFrom` treats `alexandrovBasis` as a subbasis; that
 it is a basis is a theorem. The topology is a reducible `def`, not an instance, so that it does

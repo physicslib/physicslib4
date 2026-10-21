@@ -136,8 +136,8 @@ noncomputable instance instContinuousSMul : ContinuousSMul (Isometry M) M.Carrie
     exact (continuous_toContinuousMap.comp continuous_fst).eval continuous_snd
 
 /--
-The identity component of the isometry group: the isometries that can be connected to the
-identity by a continuous path, or more precisely that lie in the connected component of 1.
+The identity component of the isometry group: the connected component of the identity, for the
+compact-open group topology.
 
 These are the isometries "connected to the identity" of Axiom 5 in curved spacetime. For
 Minkowski spacetime they are the proper orthochronous Poincaré transformations, while parity and

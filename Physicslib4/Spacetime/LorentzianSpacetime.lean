@@ -188,10 +188,15 @@ theorem sUnion_alexandrovBasis_eq_univ [Nontrivial M.Carrier] :
   exact Set.disjoint_left.mp hdisj ((key U hUo hxU).ge (Set.mem_univ y)) hyV
 
 /-- **The Alexandrov diamonds form a topological basis.** On a Lorentzian spacetime
-with at least two points, if the diamonds are downward-directed (the intersection
-property), they form a genuine `IsTopologicalBasis` for the Alexandrov topology. The
-covering condition is `sUnion_alexandrovBasis_eq_univ`; the generation condition is
-definitional. -/
+with at least two points, if the diamonds have the intersection property (`hdir`: every point
+of the intersection of two diamonds lies in a diamond inside that intersection), they form a
+genuine `IsTopologicalBasis` for the Alexandrov topology. The covering condition is
+`sUnion_alexandrovBasis_eq_univ`; the generation condition is definitional.
+
+In the standard theory the intersection property holds in every spacetime, since chronological
+futures are open in the manifold topology; this is not proved in the library, so it is a
+hypothesis here. On standard Minkowski spacetime it is proved
+(`alexandrovBasis_exists_subset_inter_standardMinkowski`). -/
 theorem isTopologicalBasis_alexandrovBasis [Nontrivial M.Carrier]
     (hdir : ∀ B₁ ∈ alexandrovBasis M.toSpacetime M.timeOrientation,
       ∀ B₂ ∈ alexandrovBasis M.toSpacetime M.timeOrientation,
