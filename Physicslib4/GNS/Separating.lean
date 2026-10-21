@@ -32,9 +32,21 @@ open scoped InnerProductSpace ComplexOrder
 variable {A : Type*} [CStarAlgebra A]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- **A faithful state's GNS vector is separating.** If `π` is a `*`-representation
-and `Ω` a vector reproducing a faithful state `ω` (i.e. `ω a = ⟪Ω, π a Ω⟫`), then
-`π(a) Ω = 0` implies `a = 0`. -/
+/--
+A vector reproducing a faithful state is separating: π(a)Ω = 0 forces a = 0.
+
+Let π be a representation of A on H and Ω a vector with ω(a) = ⟨Ω, π(a)Ω⟩ for a faithful state
+ω. If π(a)Ω = 0 then ω(a* a) = ‖π(a)Ω‖² = 0, and faithfulness gives a = 0. So distinct
+observables act differently on Ω. A vector that is both cyclic and separating is the starting
+datum of Tomita–Takesaki modular theory; in quantum field theory the Reeh–Schlieder theorem gives
+the vacuum this property for the algebras of bounded regions.
+
+Implementation note: "separating" is stated for the elements of A (π(a)Ω = 0 implies a = 0), not
+for the generated von Neumann algebra π(A)''. The result holds in any representation reproducing
+ω, not only the GNS one.
+
+Blueprint: thrm:separating-faithful
+-/
 theorem separating_of_faithful {ω : State A} (hω : ω.IsFaithful)
     (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
     (hrep : ∀ a : A, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ)
@@ -47,9 +59,17 @@ theorem separating_of_faithful {ω : State A} (hω : ω.IsFaithful)
   rw [hzero] at hpos
   exact lt_irrefl 0 hpos
 
-/-- **The GNS vector of a faithful state is cyclic and separating.** For a faithful
-state `ω` there is a GNS triple `(H, π, Ω)` reproducing `ω` whose cyclic vector
-`Ω` is separating for `π(A)`. -/
+/--
+The GNS vector of a faithful state is cyclic and separating.
+
+For a faithful state ω there is a representation (H, π, Ω) of A with Ω cyclic,
+ω(a) = ⟨Ω, π(a)Ω⟩ for all a, and π(a)Ω = 0 only for a = 0. It is the GNS triple of
+`gns_construction` together with `separating_of_faithful`.
+
+Implementation note: as in `gns_construction`, H lives in the universe of A.
+
+Blueprint: thrm:separating-faithful
+-/
 theorem exists_gns_separating.{u} {A : Type u} [CStarAlgebra A]
     (ω : State A) (hω : ω.IsFaithful) :
     ∃ (H : Type u)

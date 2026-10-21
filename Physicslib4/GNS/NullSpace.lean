@@ -38,18 +38,32 @@ open scoped ComplexOrder
 variable {A : Type*} [CStarAlgebra A]
 
 /--
-The *null set* of a state `ω` on a unital C*-algebra `A`:
-`N(ω) = { n ∈ A : ω (star n * n) = 0 }`.
+The null set N(ω) = { n ∈ A : ω(n* n) = 0 } of a state ω.
 
-Blueprint reference: the set `𝒩` in `lmm:lmm1` and `lmm:lmm2`.
+The GNS construction starts from the form ⟨a, b⟩ = ω(a* b) on A. It is positive semi-definite but
+not an inner product when ω is not faithful, because ⟨n, n⟩ = 0 for every n ∈ N(ω). The set N(ω)
+equals { n : ω(b* n) = 0 for all b } (`lmm1`), so it is a closed linear subspace (`lmm2`), and
+the form descends to a genuine inner product on A/N(ω). The GNS Hilbert space is the completion
+of A/N(ω). (The blueprint also uses that N(ω) is a left ideal, so that π(a)[b] = [ab] is well
+defined; the library does not state this.) A faithful state has N(ω) = {0}.
+
+Implementation note: `gns_construction` builds the GNS space with Mathlib's
+`PositiveLinearMap.GNS`, the completion of A with the seminorm a ↦ ω(a* a)^(1/2); the quotient by
+N(ω) happens inside that completion, so this file records the blueprint's lemmas about N(ω) and
+is not used by the construction.
+
+Blueprint: the set 𝒩 of lmm:lmm1 and lmm:lmm2
 -/
 def nullSet (ω : State A) : Set A := { n | ω (star n * n) = 0 }
 
 /--
-The *orthogonal set* of a state `ω` on a unital C*-algebra `A`:
-`N₁(ω) = { n ∈ A : ∀ b, ω (star b * n) = 0 }`.
+The set N₁(ω) = { n ∈ A : ω(b* n) = 0 for all b ∈ A } of a state ω.
 
-Blueprint reference: the set `𝒩₁` in `lmm:lmm1`.
+These are the elements orthogonal to all of A for the form ⟨b, n⟩ = ω(b* n). By the
+Cauchy–Schwarz inequality |ω(b* n)|² ≤ ω(b* b) ω(n* n), the set equals the null set N(ω)
+(`lmm1`).
+
+Blueprint: the set 𝒩₁ of lmm:lmm1
 -/
 def orthSet (ω : State A) : Set A := { n | ∀ b : A, ω (star b * n) = 0 }
 
@@ -93,11 +107,15 @@ theorem lmm1 (ω : State A) : nullSet ω = orthSet ω := by
     exact hn n
 
 /--
-The null set of a state `ω`, packaged as a `Submodule ℂ A`.
+The null set N(ω) of a state ω as a complex linear subspace of A.
 
-The linear-subspace content of `lmm:lmm2`: the carrier equals `nullSet ω`,
-and `nullSet ω` is closed under addition and under scalar multiplication
-by complex numbers, and contains `0`.
+Closure under sums and scalar multiples follows from N(ω) = N₁(ω) (`lmm1`), since N₁(ω) is
+plainly linear. The subspace is closed (`nullSubmodule_isClosed`), so the quotient A/N(ω) is a
+normed space.
+
+Implementation note: the carrier is `nullSet ω` by definition (`nullSubmodule_coe`).
+
+Blueprint: the subspace 𝒩 of lmm:lmm2
 -/
 def nullSubmodule (ω : State A) : Submodule ℂ A where
   carrier := nullSet ω

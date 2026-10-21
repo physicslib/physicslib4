@@ -71,14 +71,28 @@ theorem gns_operator_covariance {A : Type*} [CStarAlgebra A] {G : Type*}
   rw [show U g (π a ((U g).symm x)) = π (γ g a) (U g ((U g).symm x)) from
         congrFun hint ((U g).symm x), (U g).apply_symm_apply]
 
-/-- **GNS unitary representation of an invariant automorphism action.**
+/--
+A symmetry that leaves a state invariant is implemented by unitaries on its GNS space.
 
-For a unital C*-algebra `A`, a state `ω`, and a monoid-indexed family of
-`*`-automorphisms `γ g : A ≃⋆ₐ[ℂ] A` leaving `ω` invariant (`ω (γ g a) = ω a`),
-the action is implemented on the GNS space of `ω` by a unitary representation:
-there is a GNS triple `(H, π, Ω)` and unitaries `U g` with
-`U g (π a Ω) = π (γ g a) Ω`, `U g Ω = Ω`, `U (g' * g) = U g' ∘ U g`, and
-`U 1 = id`. -/
+Let γ_g, g ∈ G, be *-automorphisms of A with γ_(g'g) = γ_(g') ∘ γ_g and γ_1 = id, and let ω be
+an invariant state, ω(γ_g(a)) = ω(a). Then a GNS triple (H, π, Ω) of ω carries unitaries U(g)
+such that
+
+U(g) π(a)Ω = π(γ_g(a)) Ω,  U(g) Ω = Ω,  U(g'g) = U(g') U(g),  U(1) = 1,
+
+and U(g) π(a) U(g)⁻¹ = π(γ_g(a)) on all of H. This is Wigner's unitary implementation of a
+symmetry, obtained from the algebra and the state: the invariant state, such as the vacuum,
+becomes an invariant vector. U(g) is the extension of π(a)Ω ↦ π(γ_g(a))Ω, which preserves inner
+products because ω is invariant. The result is algebra-agnostic: for a Haag–Kastler net it
+applies to the quasilocal algebra with the Poincaré action β_L, and to a local algebra with the
+stabiliser of its region.
+
+Implementation note: G is a monoid, and U g is a linear isometric equivalence of H. Composition
+of unitaries is written `(U g).trans (U g')` for U(g') U(g). The bundled form with group
+homomorphisms is `exists_gns_unitaryRep_of_invariant`.
+
+Blueprint: the general form of thrm:invariant-state-gns-unitary
+-/
 theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
     {G : Type*} [Monoid G]
     (γ : G → (A ≃⋆ₐ[ℂ] A)) (ω : State A)
@@ -163,19 +177,21 @@ theorem exists_gns_unitary_of_invariant.{u} {A : Type u} [CStarAlgebra A]
     exact congrFun hfun x
   · exact fun g a x => gns_operator_covariance hcycdense hUcyc g a x
 
-/-- **Bundled GNS unitary representation of an invariant action.** The bundled form
-of `exists_gns_unitary_of_invariant`: the action enters as a group homomorphism
-`γ : G →* (A ≃⋆ₐ[ℂ] A)`, and the implementing unitaries are returned as a bundled
-group homomorphism `U : G →* (H ≃ₗᵢ[ℂ] H)` — a genuine unitary representation.
+/--
+The unitary implementation of an invariant symmetry, as a homomorphism into the unitary group.
 
-The group laws `U (g' * g) = U g' * U g` and `U 1 = 1` are carried by `U` itself
-(`map_mul`/`map_one`), so, unlike in `exists_gns_unitary_of_invariant`, they are
-not separate hypotheses on `γ` or clauses on `U`. What remains are the geometric
-clauses: the reproducing
-formula, the implementation `U g (π a Ω) = π (γ g a) Ω`, vacuum invariance
-`U g Ω = Ω`, operator covariance, and cyclicity. Both group structures use the
-composition convention `f * g = g.trans f` (`StarAlgEquiv.aut`,
-`LinearIsometryEquiv.instGroup`). -/
+This is `exists_gns_unitary_of_invariant` with the action given as a monoid homomorphism
+γ : G →* (A ≃⋆ₐ[ℂ] A) and the unitaries returned as a monoid homomorphism
+U : G →* (H ≃ₗᵢ[ℂ] H): a unitary representation of G on the GNS space. The laws U(g'g) =
+U(g') U(g) and U(1) = 1 are part of U; the statement keeps the reproducing formula, the
+implementation U(g)π(a)Ω = π(γ_g(a))Ω, the invariance U(g)Ω = Ω, operator covariance and the
+cyclicity of Ω.
+
+Implementation note: both groups multiply by composition, f * g = g.trans f
+(`StarAlgEquiv.aut`, `LinearIsometryEquiv.instGroup`).
+
+Blueprint: the general form of thrm:invariant-state-gns-unitary
+-/
 theorem exists_gns_unitaryRep_of_invariant.{u} {A : Type u} [CStarAlgebra A]
     {G : Type*} [Monoid G] (γ : G →* (A ≃⋆ₐ[ℂ] A)) (ω : State A)
     (hinv : ∀ (g : G) (a : A), ω (γ g a) = ω a) :
@@ -194,18 +210,18 @@ theorem exists_gns_unitaryRep_of_invariant.{u} {A : Type u} [CStarAlgebra A]
     { toFun := U, map_one' := honeU, map_mul' := fun a b => hmulU b a },
     hrepro, himpl, hΩ, hopcov, hcyc⟩
 
-/-- **Strongly continuous GNS unitary representation of an invariant action.**
+/--
+The unitary implementation of an invariant symmetry is strongly continuous if ω is.
 
-Strengthening of `exists_gns_unitary_of_invariant`: if, in addition, the index
-`G` carries a topology and the matrix coefficients `g ↦ ω(a⋆ · γ g b)` are
-continuous for all `a, b : A` (the weak-continuity hypothesis), then the
-implementing unitary representation `U` is *strongly continuous*:
-`g ↦ U g ψ` is continuous for every vector `ψ`.
+With the hypotheses of `exists_gns_unitary_of_invariant`, let G carry a topology and let the
+matrix coefficients g ↦ ω(a* γ_g(b)) be continuous for all a, b ∈ A. Then the unitaries can be
+chosen with g ↦ U(g)ψ continuous for every ψ ∈ H. Strong continuity is what Stone's theorem
+needs to produce self-adjoint generators, such as the Hamiltonian and momentum for spacetime
+translations. The proof notes that ⟨π(a)Ω, U(g)π(b)Ω⟩ = ω(a* γ_g(b)) and applies
+`strongContinuous_of_weak` on the dense set of vectors π(a)Ω.
 
-The proof feeds the analytic core `strongContinuous_of_weak`: the cyclic
-vectors `π a Ω` are dense, and the matrix coefficient `g ↦ ⟪π a Ω, U g (π b Ω)⟫`
-equals `g ↦ ω(a⋆ · γ g b)` (by the implementation property and the reproducing
-formula), which is continuous by hypothesis. -/
+Blueprint: the general form of thrm:invariant-state-gns-unitary-strongly-continuous
+-/
 theorem exists_gns_unitary_of_invariant_strongContinuous.{u} {A : Type u}
     [CStarAlgebra A] {G : Type*} [Monoid G] [TopologicalSpace G]
     (γ : G → (A ≃⋆ₐ[ℂ] A)) (ω : State A)
@@ -303,12 +319,16 @@ theorem exists_gns_unitary_of_invariant_strongContinuous.{u} {A : Type u}
     exact hwc a b
   · exact fun g a x => gns_operator_covariance hcycdense hUcyc g a x
 
-/-- **Bundled strongly continuous GNS unitary representation.** The bundled form of
-`exists_gns_unitary_of_invariant_strongContinuous`: the action enters as a group
-homomorphism `γ : G →* (A ≃⋆ₐ[ℂ] A)` and the strongly continuous implementing
-unitaries are returned as a bundled group homomorphism `U : G →* (H ≃ₗᵢ[ℂ] H)`. The
-group laws are carried by `U`; the strong-continuity clause `g ↦ U g ψ` continuous
-and the geometric clauses remain. -/
+/--
+A strongly continuous unitary representation implementing an invariant symmetry.
+
+This is `exists_gns_unitary_of_invariant_strongContinuous` with the action and the unitaries
+bundled as monoid homomorphisms, as in `exists_gns_unitaryRep_of_invariant`. The statement
+keeps the reproducing formula, the implementation, the invariance U(g)Ω = Ω, strong continuity
+and operator covariance.
+
+Blueprint: the general form of thrm:invariant-state-gns-unitary-strongly-continuous
+-/
 theorem exists_gns_unitaryRep_of_invariant_strongContinuous.{u} {A : Type u}
     [CStarAlgebra A] {G : Type*} [Monoid G] [TopologicalSpace G]
     (γ : G →* (A ≃⋆ₐ[ℂ] A)) (ω : State A)

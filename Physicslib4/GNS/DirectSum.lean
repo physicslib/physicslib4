@@ -61,7 +61,21 @@ omit [DecidableEq ι] in
 @[simp] theorem directSumFun_apply_coe (a : A) (x : lp H 2) (i : ι) :
     (directSumFun π a x) i = π i a (x i) := rfl
 
-/-- The **direct-sum representation** `⊕ᵢ πᵢ` on the ℓ²-direct sum `lp H 2`. -/
+/--
+The direct sum ⊕ᵢ πᵢ of a family of representations, acting on the Hilbert direct sum ⊕ᵢ Hᵢ.
+
+A vector of ⊕ᵢ Hᵢ is a family x = (xᵢ) with xᵢ ∈ Hᵢ and Σᵢ ‖xᵢ‖² < ∞, and the direct sum acts
+componentwise, (⊕ᵢ πᵢ)(a) x = (πᵢ(a) xᵢ)ᵢ: a block-diagonal operator with blocks πᵢ(a). It is
+bounded by ‖a‖, because each πᵢ(a) is (a *-homomorphism of C*-algebras is contractive). Each
+summand is a subrepresentation (`intertwines_single`), and the projection onto it lies in the
+commutant (`summandProj_mem_commutant`), so a direct sum of two nonzero representations is
+reducible (`not_isIrreducible_directSum`).
+
+Implementation note: the Hilbert direct sum is Mathlib's ℓ²-space `lp H 2`, and the operator is
+the diagonal `lpDiag` of the family πᵢ(a). The index type ι is arbitrary.
+
+Blueprint: def:direct-sum-representation
+-/
 noncomputable def directSum : A →⋆ₐ[ℂ] (lp H 2 →L[ℂ] lp H 2) where
   toFun := directSumFun π
   map_one' := by refine lpDiag_ext fun x i => ?_; simp [map_one]

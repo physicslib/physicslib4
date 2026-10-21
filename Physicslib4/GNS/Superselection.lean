@@ -44,7 +44,19 @@ variable {H₃ : Type*} [NormedAddCommGroup H₃] [InnerProductSpace ℂ H₃] [
 
 /-! ### Intertwiners -/
 
-/-- `T : H₁ →L H₂` **intertwines** `π₁` and `π₂` when `T π₁(a) = π₂(a) T`. -/
+/--
+An intertwiner from π₁ to π₂: a bounded operator T : H₁ → H₂ with T π₁(a) = π₂(a) T for all a.
+
+An intertwiner maps the action of A on H₁ to its action on H₂. Intertwiners form a vector space
+closed under composition and adjoints (`Intertwines.comp`, `Intertwines.adjoint`); a unitary
+intertwiner is a unitary equivalence. The intertwiners from π to itself are the commutant π(A)'
+(`intertwines_self_iff_mem_centralizer`), so π is irreducible exactly when they are the scalars.
+Two representations are disjoint when 0 is their only intertwiner (`AreDisjoint`).
+
+Implementation note: the condition is stated pointwise, T(π₁(a)x) = π₂(a)(Tx) for all x ∈ H₁.
+
+Blueprint: the intertwiners of def:disjoint-representations
+-/
 def Intertwines (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (π₂ : A →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂))
     (T : H₁ →L[ℂ] H₂) : Prop :=
   ∀ (a : A) (x : H₁), T (π₁ a x) = π₂ a (T x)
@@ -81,8 +93,19 @@ theorem Intertwines.adjoint {T : H₁ →L[ℂ] H₂} (hT : Intertwines π₁ π
 
 /-! ### Disjointness -/
 
-/-- Two representations are **disjoint** when the only operator intertwining them
-is `0`. -/
+/--
+Disjoint representations: the only intertwiner from π₁ to π₂ is 0.
+
+Disjoint representations have nothing in common: no nonzero subrepresentation of one is
+unitarily equivalent to a subrepresentation of the other. Disjointness is symmetric
+(`AreDisjoint.symm`), and unitarily equivalent representations on a nonzero space are never disjoint
+(`UnitaryEquiv.not_areDisjoint`). Two irreducible representations are either disjoint or
+unitarily equivalent (`areDisjoint_or_unitaryEquiv_of_isIrreducible`), so distinct
+superselection sectors give disjoint representations. Equilibrium (KMS) states of an infinite
+system at different temperatures typically give disjoint representations too.
+
+Blueprint: def:disjoint-representations
+-/
 def AreDisjoint (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (π₂ : A →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) :
     Prop :=
   ∀ T : H₁ →L[ℂ] H₂, Intertwines π₁ π₂ T → T = 0
@@ -253,10 +276,22 @@ theorem intertwines_self_iff_isScalar {π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H�
 
 /-! ### The commutant (self-intertwiner) von Neumann algebra -/
 
-/-- **The commutant `π(A)'` as a von Neumann algebra**: the algebra of
-self-intertwiners of `π` — its "gauge"/intertwiner algebra. The centralizer of
-`π(A)` is self-adjoint, and a commutant is always a von Neumann algebra
-(`S''' = S'`). -/
+/--
+The commutant π(A)' of a representation, as a von Neumann algebra.
+
+π(A)' consists of the bounded operators commuting with every π(a), that is, the intertwiners from
+π to itself (`mem_commutantVonNeumann_iff_intertwines`). It is a von Neumann algebra because π(A)
+is closed under adjoints and a commutant equals its own bicommutant (S''' = S'). π is
+irreducible exactly when π(A)' is the scalars
+(`isIrreducible_iff_commutantVonNeumann_eq_scalars`), and π(A)' and π(A)'' are each other's
+commutants (`commutant_gnsVonNeumannAlgebra`, `commutant_commutantVonNeumann`).
+
+Implementation note: the algebra is `vonNeumannOfSelfAdjoint` applied to the commutant
+`Set.centralizer (Set.range π)`, whose underlying set is again that commutant
+(`coe_commutantVonNeumann`).
+
+Blueprint: thrm:commutant-von-neumann
+-/
 noncomputable def commutantVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) :
     VonNeumannAlgebra H₁ :=
   vonNeumannOfSelfAdjoint (Set.centralizer (Set.range π))
@@ -435,8 +470,24 @@ theorem pi_mem_gnsVonNeumann (π : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (a : 
   exact Set.mem_centralizer_iff.mpr
     (fun M hM => (Set.mem_centralizer_iff.mp hM (π a) ⟨a, rfl⟩).symm)
 
-/-- Two representations are **quasi-equivalent** when there is a `*`-isomorphism of
-their generated von Neumann algebras carrying `π₁(a)` to `π₂(a)`. -/
+/--
+Quasi-equivalence: a *-isomorphism π₁(A)'' → π₂(A)'' sending π₁(a) to π₂(a) for every a.
+
+Quasi-equivalent representations generate the same von Neumann algebra up to isomorphism, and
+so have the same normal states (the states given by density matrices); they may differ in
+multiplicity, as a representation and its amplification do (the library does not prove
+this). The normal states of a
+representation are its folium, so quasi-equivalence means having the same folium.
+Quasi-equivalence is an equivalence relation (`QuasiEquiv.refl`, `QuasiEquiv.symm`,
+`QuasiEquiv.trans`) and is coarser than unitary equivalence (`UnitaryEquiv.quasiEquiv`).
+
+Implementation note: the isomorphism is a `StarAlgEquiv` between the underlying *-subalgebras of
+the bundled algebras `gnsVonNeumannAlgebra π₁` and `gnsVonNeumannAlgebra π₂`; normality (weak
+continuity) of the isomorphism is not required, since a *-isomorphism of von Neumann algebras is
+automatically normal.
+
+Blueprint: def:quasi-equivalence
+-/
 def QuasiEquiv (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (π₂ : A →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) :
     Prop :=
   ∃ Φ : (gnsVonNeumannAlgebra π₁).toStarSubalgebra

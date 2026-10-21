@@ -45,9 +45,21 @@ open scoped ComplexOrder
 
 variable {A : Type*} [CStarAlgebra A]
 
-/-- The state space realized inside the weak-* dual `WeakDual ℂ A`: the positive,
-normalized (`φ 1 = 1`) continuous functionals. For a positive functional, `φ 1 = 1` is
-equivalent to `‖φ‖ = 1`, so this is exactly the set of states. -/
+/--
+The state space in the weak-* topology: the positive functionals φ on A with φ(1) = 1.
+
+In the weak-* topology, functionals converge when their values φ(a) converge for every a: a
+sequence of states converges when all expectation values do. For a positive functional
+φ(1) = 1 is the same as ‖φ‖ = 1, so these are exactly the states (`State.toWeakDual` and
+`State.toWeakDual_mem_weakStateSet`). By the Banach–Alaoglu theorem the set is weak-* compact
+(`isCompact_weakStateSet`), which with the Krein–Milman theorem gives the existence of pure
+states; the library proves the compactness, not the existence.
+
+Implementation note: the set lives in Mathlib's `WeakDual ℂ A`, whose topology is the weak-*
+topology; `stateSpace` is the same set of functionals with the norm topology.
+
+Blueprint: thrm:state-space-weak-compact
+-/
 def weakStateSet : Set (WeakDual ℂ A) :=
   {φ | (∀ a : A, (0 : ℂ) ≤ φ (star a * a)) ∧ φ 1 = 1}
 

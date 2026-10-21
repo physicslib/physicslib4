@@ -197,7 +197,26 @@ noncomputable def rnLM {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} {�
     simp only [cycLM_apply, RingHom.id_apply, inner_smul_right,
       rnVec_inner hcyc hrep hψpos hψdom, mul_smul_comm, map_smul, smul_eq_mul]
 
-/-- The **Radon-Nikodym operator** `T` of a dominated functional `ψ`. -/
+/--
+The Radon–Nikodym operator T of a positive functional ψ dominated by ω, on the GNS space of ω.
+
+Let (H, π, Ω) be a cyclic representation reproducing ω and let 0 ≤ ψ(a* a) ≤ ω(a* a) for all
+a. Then T is the bounded operator with
+
+⟨π(a)Ω, T π(b)Ω⟩ = ψ(a* b) for all a, b ∈ A (`rnOp_inner`).
+
+It commutes with every π(c) (`rnOp_commute`) and reproduces ψ as ψ(a) = ⟨Ω, T π(a)Ω⟩
+(`rnOp_reproducing`), so it plays the role of a density dψ/dω inside the commutant π(A)'. This is
+the step from irreducibility to purity: if π(A)' is the scalars, T = t·1 and ψ = t ω
+(`isPure_of_isIrreducible`).
+
+Implementation note: T π(b)Ω is the Fréchet–Riesz vector `rnVec` of the functional
+π(a)Ω ↦ conj ψ(a* b), which is bounded by the Cauchy–Schwarz estimate `gns_form_norm_le`;
+T extends π(b)Ω ↦ T π(b)Ω from the dense cyclic vectors (`LinearMap.extendOfNorm`), with
+‖T π(b)Ω‖ ≤ ‖π(b)Ω‖ (`rnVec_norm_le`).
+
+Blueprint: thrm:gns-radon-nikodym-operator
+-/
 noncomputable def rnOp {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} {Ω : H}
     (hcyc : IsCyclicVector π Ω) (hrep : ∀ a : A, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ)
     {ψ : A →L[ℂ] ℂ} (hψpos : ∀ a : A, 0 ≤ ψ (star a * a))
@@ -275,8 +294,18 @@ theorem isPure_of_isIrreducible {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[�
   rw [rnOp_reproducing hcyc hrep hψpos hψdom a, hc,
     smul_apply, one_apply_eq_self, inner_smul_right, ← hrep a]
 
-/-- **The full GNS purity ⟺ irreducibility equivalence.** A state `ω` is pure if
-and only if its cyclic GNS representation is irreducible. -/
+/--
+A state is pure exactly when its GNS representation is irreducible.
+
+For any cyclic representation (H, π, Ω) reproducing ω, ω is pure if and only if every bounded
+operator commuting with π(A) is a scalar. One direction uses the Radon–Nikodym operator
+(`rnOp`): a functional dominated by ω comes from an element of π(A)'. The other decomposes an
+element of π(A)' into self-adjoint parts and rescales them into functionals dominated by ω
+(`isIrreducible_of_isPure`). Physically: a pure state, such as the vacuum of a theory with a
+unique vacuum, generates an irreducible representation, a single superselection sector.
+
+Blueprint: thrm:pure-iff-irreducible
+-/
 theorem isPure_iff_isIrreducible {ω : State A} {π : A →⋆ₐ[ℂ] (H →L[ℂ] H)} {Ω : H}
     (hcyc : IsCyclicVector π Ω) (hrep : ∀ a : A, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ) :
     IsPure ω ↔ IsIrreducible π :=
