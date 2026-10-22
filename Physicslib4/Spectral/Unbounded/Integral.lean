@@ -24,7 +24,7 @@ spectral subspace) is not all of `H`. These mirror `Physicslib4/Spectral/Forms.l
 
 ## Main definitions
 
-* `IsSesquilinearFormOn`, `polarizationOn`, `IsQuadraticFormOn`,
+* `SesquilinearFormOn`, `polarizationOn`, `IsQuadraticFormOn`,
   `IsBoundedQuadraticFormOn` — forms on a subspace.
 * `integralDomain`, `integralForm` — `W_f` and `Q_f`.
 * `pmapIntegral` — `∫ f dμ` as an unbounded operator.
@@ -66,43 +66,79 @@ section Forms
 variable {D D' : Submodule ℂ H}
 
 /--
-A *sesquilinear form on a subspace* `D` of `H`: conjugate linear in the first slot, linear
-in the second. Taking `D = ⊤` recovers `Physicslib4.Spectral.SesquilinearForm`.
+The type of sesquilinear forms L(φ, ψ) on a subspace D of H: maps D × D → ℂ that are
+conjugate-linear in φ and linear in ψ.
 
-Blueprint reference: `def:hall-sesquilinear-form-on-a-subspace`.
+The inner product ⟨φ, ψ⟩ and the matrix elements ⟨φ, Aψ⟩ of an operator are the basic
+examples. Forms on a subspace, rather than on all of H, are needed because the integral of an
+unbounded function is built from a form on its domain W_f (`integralDomain`), which is in
+general smaller than H. For D = H this is the notion of `Physicslib4.Spectral.SesquilinearForm`.
+
+Implementation note: as in `Physicslib4/Spectral/Forms.lean`, sesquilinearity is not a
+predicate on functions `D → D → ℂ` but Mathlib's type of bundled semilinear maps
+`D →ₗ⋆[ℂ] D →ₗ[ℂ] ℂ`. A raw function is sesquilinear when it agrees with some element of this
+type, which is how `IsQuadraticFormOn.isSesquilinear` is stated.
+
+Blueprint: def:hall-sesquilinear-form-on-a-subspace
 -/
 abbrev SesquilinearFormOn (D : Submodule ℂ H) := D →ₗ⋆[ℂ] D →ₗ[ℂ] ℂ
 
 /--
-The polarization formula for a form defined on a subspace.
+The polarization L(φ, ψ) of a function Q on a subspace D: the formula that recovers a
+sesquilinear form from its values on the diagonal.
 
-Blueprint reference: `def:hall-quadratic-form-on-a-subspace` (point 2).
+Explicitly, L(φ, ψ) = ½[Q(φ + ψ) − Q(φ) − Q(ψ)] − (i/2)[Q(φ + iψ) − Q(φ) − Q(iψ)]. If
+Q(ψ) = ⟨ψ, Tψ⟩ for a linear map T on D, then L(φ, ψ) = ⟨φ, Tψ⟩ (`polarizationOn_eq_inner`): the
+expectation values of an operator determine all its matrix elements. For a quadratic form Q
+the polarization is the associated sesquilinear form.
+
+Implementation note: defined for every function `Q : D → ℂ`; only for a quadratic form is it
+sesquilinear. The subspace version of `Physicslib4.Spectral.polarization`.
+
+Blueprint: def:hall-quadratic-form-on-a-subspace (point 2)
 -/
 noncomputable def polarizationOn {D : Submodule ℂ H} (Q : D → ℂ) : D → D → ℂ := fun φ ψ =>
   (1 / 2 : ℂ) * (Q (φ + ψ) - Q φ - Q ψ) -
     (Complex.I / 2) * (Q (φ + Complex.I • ψ) - Q φ - Q (Complex.I • ψ))
 
 /--
-A *quadratic form on the subspace* `D`: `|λ|²`-homogeneous, with sesquilinear
-polarization.
+A function Q on a subspace D of H is a quadratic form: Q(λψ) = |λ|²Q(ψ), and its polarization
+is sesquilinear.
 
-Blueprint reference: `def:hall-quadratic-form-on-a-subspace`.
+A quadratic form is the diagonal ψ ↦ L(ψ, ψ) of a sesquilinear form L, the way an expectation
+value ⟨ψ, Aψ⟩ is the diagonal of the matrix elements ⟨φ, Aψ⟩. The integral of an unbounded
+function f is first constructed as the quadratic form Q_f(ψ) = ∫ f dμ_ψ on W_f
+(`isQuadraticFormOn_integralForm`), and only then as an operator.
+
+Implementation note: no density or closedness of D is assumed. The subspace version of
+`Physicslib4.Spectral.IsQuadraticForm`.
+
+Blueprint: def:hall-quadratic-form-on-a-subspace
 -/
 structure IsQuadraticFormOn {D : Submodule ℂ H} (Q : D → ℂ) : Prop where
-  /-- `Q (λ • ψ) = |λ|² Q ψ`. -/
+  /-- Homogeneity of degree two: Q(λψ) = |λ|²Q(ψ) for every complex λ and ψ in D. -/
   smul : ∀ (l : ℂ) (ψ : D), Q (l • ψ) = (‖l‖ : ℂ) ^ 2 * Q ψ
-  /-- The polarization of `Q` is a sesquilinear form on `D`. -/
+  /-- The polarization of Q agrees with some sesquilinear form on D. -/
   isSesquilinear : ∃ L : SesquilinearFormOn D, ∀ φ ψ : D, L φ ψ = polarizationOn Q φ ψ
 
 /--
-A *bounded* quadratic form on the subspace `D`.
+A function Q on a subspace D of H is a bounded quadratic form: a quadratic form with
+|Q(ψ)| ≤ C‖ψ‖² for some constant C.
 
-Blueprint reference: `def:hall-quadratic-form-on-a-subspace` (final paragraph).
+A bounded quadratic form on all of H is the diagonal of a bounded operator
+(`Physicslib4.Spectral.IsBoundedQuadraticForm.toOperator`). For an unbounded f the integral
+form Q_f is a quadratic form on W_f that is in general not bounded, which is why the integral
+of f is an unbounded operator.
+
+Implementation note: the subspace version of `Physicslib4.Spectral.IsBoundedQuadraticForm`;
+the norm of ψ is that of H.
+
+Blueprint: def:hall-quadratic-form-on-a-subspace (final paragraph)
 -/
 structure IsBoundedQuadraticFormOn {D : Submodule ℂ H} (Q : D → ℂ) : Prop where
-  /-- The underlying form is quadratic. -/
+  /-- Q is a quadratic form on D. -/
   isQuadratic : IsQuadraticFormOn Q
-  /-- `|Q ψ| ≤ C ‖ψ‖²` for some real `C`. -/
+  /-- Boundedness: |Q(ψ)| ≤ C‖ψ‖² for some real C and every ψ in D. -/
   bounded : ∃ C : ℝ, ∀ ψ : D, ‖Q ψ‖ ≤ C * ‖(ψ : H)‖ ^ 2
 
 omit [CompleteSpace H] in
@@ -427,10 +463,23 @@ theorem assoc_zero : μ.assoc (0 : H) = 0 := by
   simp [assoc_apply_eq_norm_sq μ _ hE]
 
 /--
-The domain `W_f = {ψ | ∫ |f|² dμ_ψ < ∞}` of the integral of a possibly unbounded
-measurable `f`.
+The domain W_f = {ψ ∈ H : ∫ |f|² dμ_ψ < ∞} of the integral of a function f against a
+projection-valued measure μ.
 
-Blueprint reference: `prpstn:hall-10.2`.
+Here μ_ψ(E) = ⟨ψ, μ(E)ψ⟩ is the measure of ψ, a probability distribution when ‖ψ‖ = 1. If μ is
+the spectral measure of an observable A, the integral of f plays the role of f(A), and W_f is
+the set of ψ on which it is defined; there ‖(∫ f dμ)ψ‖² = ∫ |f|² dμ_ψ (`norm_sq_pmapIntegral`).
+For f(λ) = λ the condition says that the distribution of measured values of A in the state ψ
+has a finite second moment ∫ λ² dμ_ψ. For bounded measurable f, W_f = H
+(`integralDomain_eq_top_of_bddMeasurable`); for measurable f, W_f is dense
+(`dense_integralDomain`).
+
+Implementation note: membership is Mathlib's `MemLp f 2 (μ.assoc ψ)` (`mem_integralDomain`),
+which also asks f to be almost everywhere strongly measurable for μ_ψ; for measurable f this
+holds automatically and the condition is ∫ |f|² dμ_ψ < ∞. The domain is a submodule because
+μ_(φ+ψ) ≤ 2(μ_φ + μ_ψ) (`assoc_add_le`) and μ_(cψ) = |c|²μ_ψ (`assoc_smul`).
+
+Blueprint: prpstn:hall-10.2
 -/
 def integralDomain (f : X → ℂ) : Submodule ℂ H where
   carrier := {ψ : H | MemLp f 2 (μ.assoc ψ)}
@@ -457,9 +506,19 @@ theorem mem_integralDomain {f : X → ℂ} {ψ : H} :
     ψ ∈ integralDomain μ f ↔ MemLp f 2 (μ.assoc ψ) := Iff.rfl
 
 /--
-The quadratic form `Q_f (ψ) = ∫ f dμ_ψ` on `W_f`.
+The function Q_f(ψ) = ∫ f dμ_ψ on the domain W_f: the would-be expectation value
+⟨ψ, (∫ f dμ)ψ⟩.
 
-Blueprint reference: `prpstn:hall-10.2` (Part 1).
+In the spectral picture, Q_f(ψ) is the expectation value of f(A) in the state ψ, the average of
+f over the distribution μ_ψ of measured values. For measurable f it is a quadratic form on W_f
+(`isQuadraticFormOn_integralForm`), and its polarization L_f defines the operator: (∫ f dμ)ψ is
+the vector χ with L_f(φ, ψ) = ⟨φ, χ⟩ for all φ in W_f (`existsUnique_repr_integralForm`). For
+ψ in W_f the function f is μ_ψ-integrable, being square-integrable for a finite measure.
+
+Implementation note: the integral is Mathlib's Bochner integral against the measure
+`μ.assoc ψ`, which is 0 when f is not integrable.
+
+Blueprint: prpstn:hall-10.2 (Part 1)
 -/
 noncomputable def integralForm (f : X → ℂ) (ψ : integralDomain μ f) : ℂ :=
   ∫ x, f x ∂(μ.assoc (ψ : H))
@@ -666,9 +725,19 @@ theorem existsUnique_repr_integralForm {f : X → ℂ} (hf : Measurable f)
 
 open Classical in
 /--
-The vector representing `φ ↦ L_f(φ, ψ)`, extended by `0` when `f` is not measurable or no
-such vector exists. The measurability guard makes `pmapIntegral` linear by a direct
-argument; every result about `pmapIntegral` assumes `f` measurable anyway.
+The action ψ ↦ (∫ f dμ)ψ of the integral on W_f: the unique vector χ with
+L_f(φ, ψ) = ⟨φ, χ⟩ for every φ in W_f.
+
+Here L_f is the polarization of Q_f, so χ is fixed by its matrix elements against the dense
+subspace W_f. For measurable f such a χ exists and is unique (`existsUnique_repr_integralForm`):
+it is the limit of the bounded integrals of the truncations f·1_(|f| < n)
+(`tendsto_integral_truncation`).
+
+Implementation note: the value is 0 when f is not measurable or no unique χ exists. The
+measurability guard makes `pmapIntegral` linear by a direct argument, without a hypothesis;
+every result about the values of `pmapIntegral` assumes f measurable.
+
+Blueprint: prpstn:hall-10.1
 -/
 noncomputable def integralApply (f : X → ℂ) (ψ : integralDomain μ f) : H :=
   if h : Measurable f ∧ ∃! χ : H, ∀ φ : integralDomain μ f,
@@ -698,10 +767,22 @@ private theorem integralApply_smul (f : X → ℂ) (c : ℂ) (ψ : integralDomai
   · simp [integralApply, hf]
 
 /--
-The integral `∫ f dμ` of a possibly unbounded measurable `f`, as an unbounded operator
-with domain `W_f`.
+The integral ∫ f dμ of a possibly unbounded function f against a projection-valued measure μ,
+as an unbounded operator with domain W_f.
 
-Blueprint reference: `prpstn:hall-10.1`.
+The unbounded spectral theorem writes a self-adjoint A as A = ∫ λ dμ(λ) for a unique μ
+(`existsUnique_spectralMeasure_unbounded`), and the functional calculus f(A) is ∫ f dμ for that
+μ (`functionalCalculus`). For measurable f the integral is characterised by
+⟨ψ, (∫ f dμ)ψ⟩ = ∫ f dμ_ψ on W_f (`inner_self_pmapIntegral`), and any operator with domain W_f
+satisfying this identity equals it (`eq_pmapIntegral_of_inner_self`). It obeys
+‖(∫ f dμ)ψ‖² = ∫ |f|² dμ_ψ (`norm_sq_pmapIntegral`), agrees with the bounded integral
+`ProjectionValuedMeasure.integral` for bounded measurable f (`pmapIntegral_of_bddMeasurable`),
+and is self-adjoint for real-valued measurable f (`isSelfAdjoint_pmapIntegral_of_real`).
+
+Implementation note: a `LinearPMap` with domain `integralDomain μ f` and action
+`integralApply μ f`, which is 0 for non-measurable f.
+
+Blueprint: prpstn:hall-10.1
 -/
 noncomputable def pmapIntegral (f : X → ℂ) : H →ₗ.[ℂ] H where
   domain := integralDomain μ f
@@ -1123,10 +1204,17 @@ theorem range_subSmul_pmapIntegral_eq_top {f : X → ℂ} (hf : Measurable f)
   exact mem_range.2 ⟨⟨_, hψ⟩, he⟩
 
 /--
-The integral of a real-valued measurable function is a self-adjoint unbounded operator on
-`W_f`.
+The integral ∫ f dμ of a real-valued measurable function f is a self-adjoint operator on W_f.
 
-Blueprint reference: `prpstn:hall-10.3`.
+This is the unbounded counterpart of the fact that a real function of an observable is again
+an observable. It is what makes ∫ λ dμ(λ) self-adjoint in the unbounded spectral theorem. The
+proof shows that ∫ f dμ is symmetric (`isSymmetric_pmapIntegral_of_real`) and that
+∫ f dμ − c𝟙 maps W_f onto H for non-real c (`range_subSmul_pmapIntegral_eq_top`), with the
+bounded integral of 1/(f − c) as a right inverse.
+
+Implementation note: real-valuedness is the hypothesis that f has imaginary part 0 everywhere.
+
+Blueprint: prpstn:hall-10.3
 -/
 theorem isSelfAdjoint_pmapIntegral_of_real {f : X → ℂ} (hf : Measurable f)
     (hreal : ∀ x, (f x).im = 0) : IsSelfAdjoint (pmapIntegral μ f) := by
