@@ -624,7 +624,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{definition}[Finite Amplification]
     \label{def:finite-amplification}
-    \lean{Physicslib4.diagAmplification, Physicslib4.ampDiag, Physicslib4.toLp2}
+    \lean{Physicslib4.diagAmplification, Physicslib4.ampDiag, Physicslib4.toLp2, Physicslib4.lpDiag}
     \leanok
     For a finite index type $\iota$ let $H^\iota = \ell^2(\iota; H) = \bigoplus_{i \in \iota} H$, Mathlib's \texttt{lp (fun \_ : $\iota$ => H) 2}; at $p = 2$ this is again a complex Hilbert space. For $T \in \mathcal{B}(H)$ the diagonal operator $\mathrm{diag}(T) \in \mathcal{B}(H^\iota)$ acts by $(\mathrm{diag}(T)x)_j = T x_j$ (\texttt{Physicslib4.lpDiag} with the constant family $T$ and bound $\lVert T \rVert$). The \emph{$\iota$-fold amplification} of $\pi$ is $\pi^\iota(a) = \mathrm{diag}(\pi(a))$, the bound being $\lVert \pi(a) \rVert$ itself, so no norm on $\mathfrak{A}$ is needed. Write $\mathrm{ev}_j : H^\iota \to H$ for the $j$-th coordinate map (\texttt{lp.evalCLM}) and $\iota_k : H \to H^\iota$ for the $k$-th inclusion (\texttt{lp.singleContinuousLinearMap}).
 \end{definition}

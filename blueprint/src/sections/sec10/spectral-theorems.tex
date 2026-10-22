@@ -308,7 +308,7 @@ This is required to define the "spectrum" of an operator, which is required by m
 
 \begin{definition}[Resolvent and Spectrum]
     \label{def:bounded-operator-resolvent-and-spectrum}
-    \lean{Physicslib4.Spectral.mem_resolventSet_iff_isUnit_sub_smul, Physicslib4.Spectral.spectrum_eq_compl_resolventSet}
+    \lean{Physicslib4.Spectral.mem_resolventSet_iff_isUnit_sub_smul, Physicslib4.Spectral.spectrum_eq_compl_resolventSet, Physicslib4.Spectral.mul_resolvent_of_mem_resolventSet}
     \uses{def:identity-operator, def:bounded-operator-notation, def:bounded-inverse}
     \leanok
     For $A \in \mathcal{B}(\mathbf{H})$, the \textit{resolvent set} of $A$, denoted as $\rho(A)$, is the set of all $\lambda \in \mathbb{C}$ such that the operator $(A - \lambda \mathbf{1})$ has a bounded inverse. The \textit{spectrum} of $A$, denoted by $\sigma(A)$, is the complement of $A$'s resolvent set $\rho(A)$ in $\mathbb{C}$. For $\lambda$ in the resolvent set of $A$ the bounded inverse of $(A - \lambda \mathbf{1})$, which we notate as $(A - \lambda \mathbf{1})^{-1}$, is called the \textit{resolvent} of $A$ at $\lambda$.
@@ -453,7 +453,7 @@ Now, we can associate a positive, real-valued measure $\mu_\psi$ to a projection
 
 \begin{theorem}[Projection-Valued Measure's Associated Measure]
     \label{thrm:projection-valued-measures-associated-measure}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.existsUnique_assoc}
+    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.existsUnique_assoc, Physicslib4.Spectral.ProjectionValuedMeasure.assoc}
     \leanok
     Given a projection-valued measure $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ and any $\psi \in \mathbf{H}$ the map $\mu_\psi$ defined by
     \begin{align}
@@ -513,7 +513,7 @@ Projection-valued measures give rise to a type of integration known as "operator
 
 \begin{theorem}[Operator-Valued Integration]
     \label{thrm:operator-valued-integration}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.existsUnique_integral}
+    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.existsUnique_integral, Physicslib4.Spectral.ProjectionValuedMeasure.integral, Physicslib4.Spectral.BddMeasurable}
     \leanok
     Let $\Omega(X)$ be a $\sigma$-algebra on a set $X$ and let $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ be a projection-valued measure. Then there exists a unique linear map, denoted by
     \begin{align}
@@ -534,7 +534,7 @@ To streamline the proof of this theorem, we will introduce a few new terms
 
 \begin{definition}[(Bounded) Sesquilinear Form]
     \label{def:bounded-sesquilinear-form}
-    \lean{Physicslib4.Spectral.BoundedSesquilinearForm}
+    \lean{Physicslib4.Spectral.BoundedSesquilinearForm, Physicslib4.Spectral.SesquilinearForm}
     \leanok
     A \textit{sesquilinear form} on a Hilbert space $\mathbf{H}$ is a map $L : \mathbf{H} \times \mathbf{H} \rightarrow \mathbb{C}$ that is conjugate linear in the first factor and linear in the second factor. A sesquilinear form $L$ is a \textit{bounded sesquilinear form} if there exists a constant $C$ in $\mathbb{R}$ such that for all $\phi, \psi \in \mathbf{H}$
     \begin{align}
@@ -545,7 +545,7 @@ To streamline the proof of this theorem, we will introduce a few new terms
 
 \begin{definition}[(Bounded) Quadratic Form]
     \label{def:bounded-quadratic-form}
-    \lean{Physicslib4.Spectral.IsBoundedQuadraticForm}
+    \lean{Physicslib4.Spectral.IsBoundedQuadraticForm, Physicslib4.Spectral.IsQuadraticForm, Physicslib4.Spectral.polarization}
     \uses{def:bounded-sesquilinear-form}
     \leanok
     A \textit{quadratic form} on a Hilbert space $\mathbf{H}$ is a map $Q : \mathbf{H} \rightarrow \mathbb{C}$ with the following properties:
@@ -868,7 +868,7 @@ Our next step in the larger proof is establishing several propositions we will h
 
 \begin{proposition}[Properties of the Sesquilinear Form Associated to a Quadratic Form]
     \label{prpstn:hall-a.61}
-    \lean{Physicslib4.Spectral.polarization_diag, Physicslib4.Spectral.exists_bound_polarization, Physicslib4.Spectral.polarization_conj_symm}
+    \lean{Physicslib4.Spectral.polarization_diag, Physicslib4.Spectral.exists_bound_polarization, Physicslib4.Spectral.polarization_conj_symm, Physicslib4.Spectral.IsBoundedQuadraticForm.toSesq}
     \leanok
     If $Q$ is a quadratic form on $\mathbf{H}$ and $L$ is the associated sesquilinear form
     \begin{align}
@@ -1106,7 +1106,7 @@ The next in the set of "helper" propositions that we will prove is the propositi
 
 \begin{proposition}[A Bounded Quadratic Form Determines a Unique Bounded Operator]
     \label{prpstn:hall-a.63}
-    \lean{Physicslib4.Spectral.existsUnique_operator_of_isBoundedQuadraticForm, Physicslib4.Spectral.IsBoundedQuadraticForm.isSelfAdjoint_toOperator}
+    \lean{Physicslib4.Spectral.existsUnique_operator_of_isBoundedQuadraticForm, Physicslib4.Spectral.IsBoundedQuadraticForm.isSelfAdjoint_toOperator, Physicslib4.Spectral.IsBoundedQuadraticForm.toOperator}
     \leanok
     If $Q$ is a bounded quadratic form on $\mathbf{H}$, there is a unique $A \in \mathcal{B}(\mathbf{H})$ such that $Q(\psi) = \left< \psi, A\psi \right>$ for all $\psi \in \mathbf{H}$. If $Q(\psi)$ belongs to $\mathbb{R}$ for all $\psi \in \mathbf{H}$, then the operator $A$ is self-adjoint.
 \end{proposition}
@@ -3012,7 +3012,7 @@ Let's get started.
 
 \begin{proposition}[The Continuous Functional Calculus]
     \label{prpstn:hall-8.3}
-    \lean{Physicslib4.Spectral.existsUnique_realCalculus, Physicslib4.Spectral.realCalculus_polyOn}
+    \lean{Physicslib4.Spectral.existsUnique_realCalculus, Physicslib4.Spectral.realCalculus_polyOn, Physicslib4.Spectral.polyOn, Physicslib4.Spectral.realCalculus}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then there exists a unique bounded linear map from $C^0(\sigma(A); \mathbb{R})$---the space of continuous, real-valued functions on the spectrum $\sigma(A)$ of $A$---to $\mathcal{B}(\mathbf{H})$
     \begin{align}
@@ -3555,7 +3555,7 @@ is well-defined, in the sense that it does indeed take values in $\mathbb{R}$, a
 
 \begin{proposition}[The Measures Associated to a Self-Adjoint Operator]
     \label{prpstn:associated-measures-self-adjoint}
-    \lean{Physicslib4.Spectral.existsUnique_assocMeasure}
+    \lean{Physicslib4.Spectral.existsUnique_assocMeasure, Physicslib4.Spectral.assocFunctional, Physicslib4.Spectral.assocMeasure}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. For every $\psi \in \mathbf{H}$ there is a unique positive, real-valued measure $\mu_\psi$ on the Borel $\sigma$-algebra of $\sigma(A)$ such that
     \begin{align}
@@ -3869,7 +3869,7 @@ The key "engine" in proving the $Q_f$ is a bounded quadratic form is the \textbf
 
 \begin{theorem}[Bounded Convergence Theorem]
     \label{thrm:bounded-convergence-theorem}
-    \lean{Physicslib4.Spectral.tendsto_integral_of_boundedPointwiseLimit}
+    \lean{Physicslib4.Spectral.tendsto_integral_of_boundedPointwiseLimit, Physicslib4.Spectral.BoundedPointwiseLimit}
     \leanok
     Let $X$ be a set with finite measure $\mu(X) < \infty$ and $\{ f_i \}_{i \in \mathbb{N}}$ a sequence of uniformly bounded, complex valued functions on $X$ that converge pointwise to $f$, then
     \begin{align}
@@ -4295,7 +4295,7 @@ The next lemma uses the Monotone Class Theorem, which we state first.
 
 \begin{theorem}[Monotone Class Theorem]
     \label{thrm:monotone-class-theorem}
-    \lean{Physicslib4.Spectral.generateFrom_subset_of_isMonotoneClass}
+    \lean{Physicslib4.Spectral.generateFrom_subset_of_isMonotoneClass, Physicslib4.Spectral.IsMonotoneClass}
     \leanok
     Let $\mathcal{A}$ be an algebra of subsets of a set $X$, and let $\mathcal{M}$ be a monotone class, i.e. a collection of subsets of $X$ closed under countable increasing unions and countable decreasing intersections, such that $\mathcal{A} \subseteq \mathcal{M}$. Then $\sigma(\mathcal{A}) \subseteq \mathcal{M}$, where $\sigma(\mathcal{A})$ is the smallest $\sigma$-algebra containing $\mathcal{A}$.
 \end{theorem}
@@ -4307,7 +4307,7 @@ The next of these "utility" lemmas is the following:
 
 \begin{lemma}[Extension from an Algebra to the Generated $\sigma$-Algebra]
     \label{lmm:hall-prblm-8.3.3b}
-    \lean{Physicslib4.Spectral.IsBorelGenerating.indicator_mem}
+    \lean{Physicslib4.Spectral.IsBorelGenerating.indicator_mem, Physicslib4.Spectral.IsBorelGenerating}
     \leanok
     Let $X$ be a compact metric measurable space and $C^0(X; \mathbb{R})$ the set of continuous real-valued functions on $X$. Let $\mathcal{C}$ be the set of bounded, measurable, complex-valued functions on $X$ such that (1) $\mathcal{C}$ is a complex vector space, (2) $\mathcal{C}$ contains $C^0(X; \mathbb{R})$, and (3) $\mathcal{C}$ is closed under pointwise limits of uniformly bounded sequences. Finally let $\mathcal{L}_1$ be the set of all measurable sets $E$ in $X$ such that the indicator function $1_E$ belongs to $\mathcal{C}$. Then $\mathcal{L}_1$ contains all Borel sets in $X$.
 \end{lemma}
@@ -4822,7 +4822,7 @@ In what is the penultimate result required to prove the \textbf{Spectral Theorem
 
 \begin{theorem}[The Spectral Measure of a Self-Adjoint Operator]
     \label{thrm:hall-8.10}
-    \lean{Physicslib4.Spectral.exists_spectralMeasure}
+    \lean{Physicslib4.Spectral.exists_spectralMeasure, Physicslib4.Spectral.spectralMeasure}
     \leanok
     Suppose $A \in \mathcal{B}(\mathbf{H})$ is self-adjoint. For any measurable subset $E$ of the spectrum $\sigma(A)$ of $A$, define the operator $\mu^A(E)$ by
     \begin{align}
