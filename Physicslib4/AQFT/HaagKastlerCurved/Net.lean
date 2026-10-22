@@ -424,8 +424,8 @@ statement is for an arbitrary instance M of the abstract interface;
 geometric spacetime.
 
 Implementation note: the net has its algebras in universe 0 because the witness is built from ℂ,
-which lives in `Type`. Consistency of the axioms needs only one model, so nothing is lost; a
-witness in an arbitrary universe would come from a `ULift` of this one. The Minkowski
+which lives in `Type`. Consistency of the axioms needs only one model, so nothing is lost; the
+library gives no witness in other universes. The Minkowski
 `HaagKastler.nonempty_haagKastlerNet` makes the same choice.
 
 Blueprint: the abstract form of thrm:haag-kastler-net-in-curved-spacetime-nonempty -/

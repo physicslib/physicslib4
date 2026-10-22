@@ -210,3 +210,143 @@ Uncited declarations whose docstrings carry a descriptive Blueprint line:
   quantifying over a common containing basis set; the Minkowski Axiom 3 does the same, so the
   divergence is only the possible absence of such a set and of a quasilocal algebra.
 - `Net.lean` module docstring: claims `Nonempty (Σ M, HaagKastlerNet M)`; no such declaration.
+
+## Part B: the chapter `web/Manual/Curved.lean`
+
+Structure: one chapter, "The axioms in curved spacetime and general covariance" (plan chapters 7
+and 8 combined; the general-covariance material is three definitions and a relabelling map, so it
+is a subsection of Design and of Main, not a part of its own). Tag `curved`, file
+`The-axioms-in-curved-spacetime-and-general-covariance`; included in `web/Manual.lean` after
+`Manual.HaagKastler`, before `FeatureTests`.
+
+### Step B1: skeleton, introduction and Overview (2026-10-21)
+
+- Imports the 12 `HaagKastlerCurved` modules used. Opens `Physicslib4`, `Physicslib4.AQFT`,
+  `…HaagKastlerCurved`, `…HaagKastlerCurved.HaagKastlerNet`, `Physicslib4.Spacetime.LorentzianSpacetime`;
+  not `Physicslib4.Spacetime` (its `LorentzianSpacetime` would clash with the interface's).
+- Overview (~520 words): what changes in curved spacetime; the six axiom declarations; general
+  covariance as a property of a `NetTheory`; the list of proved results. Cross-chapter links via
+  `{ref "haag-kastler"}` and `{ref "haag-kastler-design"}` (tags, so base-relative).
+- Facts checked: no declaration uses `IsGenerallyCovariant`/`NetEquivalence` outside
+  `GeneralCovariance.lean`, so no theory is proved generally covariant (to be said in Main).
+- Built (`lake build`, `generate-manual`): OK, only pre-existing notices.
+
+### Step B2: Design (2026-10-21)
+
+- Six subsections: the interface (fields, the one law, no further conditions, `trivialSpacetime`,
+  `commute_of_spacelike_mono` takes monotonicity as a hypothesis); the bridge (pieces read off L;
+  D3 as an implementation choice, no Restriction marker; links the Spacetime chapter's Symmetries
+  subsection base-relatively); local algebras and universes (D8, `Type v`, trivial net v = 0);
+  Axiom 3 in a common containing basis set (Schwarzschild example from the tutorial and blueprint
+  ch. 9 Axiom 3; vacuous case; composition law; Axiom 4 read locally, a field, `localAlgebra_of`);
+  Axiom 5 and stabilisers; general covariance (bijection as data, `NetTheory` over all spacetimes,
+  dilations, postulate, not identity-component restricted, not BFV).
+- ~1,250 words of prose (1,309 tokens with markup). Moved the `Isom` topology instance to Main.
+- Checked: `orientedIdentityComponent` carrier is {g | g and g⁻¹ preserve the future orientation}
+  ∩ identity component; blueprint ch. 9 anchor `sctn:axiom-3-(local-commutativity)` (written with
+  %28/%29).
+- Built: OK.
+
+### Step B3: Main definitions and theorems (2026-10-21)
+
+- Five subsections: interface and bridge; the axioms; Einstein causality and local von Neumann
+  algebras; stabilisers, covariant states and KMS states; general covariance.
+- 20 `{docstring}` boxes (`LorentzianSpacetime`, `toAbstractIdentityComponent`, `LocalNet`,
+  `Isotony`, `LocalCommutativity`, `IsLocalObservable`, `LocalAlgebra`, `IsometricCovariance`,
+  `HaagKastlerNet`, `localVonNeumannAlgebra`, `stabAut`, `stabAutMonoidHom`, `localVonNeumannEquiv`,
+  `IsCovariantFamily`, `IsKMSStateForFlow`, `IsGroundStateForFlow`, `NetEquivalence`, `NetTheory`,
+  `pullbackCarrierEquiv`, `IsGenerallyCovariant`) and 6 `#check`s (`nonempty_haagKastlerNet`,
+  `nonempty_haagKastlerNet_identityComponent`, `einstein_causality`,
+  `localVonNeumannAlgebra_le_commutant`, `localVonNeumannAlgebra_mono`, `isOneParameterAut_flowAut`).
+  The stabiliser GNS unitary theorems, `lieConj_image_localVonNeumann` (prints `⋯` in its
+  conclusion), the Schlieder property and the purity results are linked with `apiDocs`, not printed.
+- "Not proved" statements: no Reeh–Schlieder theorem (grep: none in `Physicslib4/`); no concrete
+  Schwarzschild/de Sitter net, so Hartle–Hawking/Bunch–Davies are not proved KMS; no net theory
+  proved generally covariant (the trivial theory is, mathematically).
+- `nonempty_haagKastlerNet` prints without the algebra universe (0); said so in the prose.
+- ~1,100 words of prose. Built: OK.
+
+### Step B4: Where to look (2026-10-21)
+
+- Files grouped as axioms (7), consequences (7), general covariance (1, plus the Spacetime
+  pullback files); KMS and positive-energy files; links to the GNS chapter (`{ref "gns"}`), the
+  blueprint sections 10.7/10.8 and the home-page section pages `sec10-7-curved`,
+  `sec10-8-general-covariance` (both exist in `home_page/`). Built: OK.
+
+### Step B5: final checks and reread (2026-10-21)
+
+- Reread: reworded "every theorem is proved over the interface" (a few geometric forms are over
+  the bridge); the Schwarzschild argument now says the blueprint argues it informally and the
+  library does not formalise it; reflowed one long line.
+- `python3 scripts/check_temporal_wording.py`: OK (it does not scan `web/`; a manual grep of the
+  chapter for the same patterns finds nothing).
+- Links in the generated page: 116 checked, all resolve (blueprint anchors in
+  `blueprint/web/`, including the ch. 9 `sctn:axiom-3-(local-commutativity)`; API-doc paths are
+  the declaring files; tutorial anchors; base-relative manual links to the Spacetime Symmetries
+  subsection and the `spacetime-design`, `spacetime-main`, `gns-design`, `haag-kastler-design`
+  tags; home-page section pages). Chapter-level `{ref}` links point to existing pages.
+- Word counts (prose, maths and code excluded): introduction 92, Overview 401, Design 1,280,
+  Main 967, Where to look 278; total about 3,000. 20 docstring boxes, 6 `#check`s.
+- Final build: `lake build` and `generate-manual` succeed.
+
+## Part C: review fixes (`review-manual-ch-curved-2026-10-21.md`, 2026-10-22)
+
+### Group A: docstrings
+
+- A1: escaped the 13 `ψ*` in `pullbackCarrierEquiv` and `IsGenerallyCovariant` as `ψ\*`
+  (reflowed the second paragraph).
+- A2 (user's decision): `stabAut`, `flowAut`, `IsKMSStateForFlow` now say that the black-hole
+  exterior and de Sitter static patch are not diamonds (basis sets), that no such flow fixes a
+  nonempty diamond, so the axioms as stated place no constraint on their algebras, and that the
+  examples motivate the definitions but are not instances; `IsKMSStateForFlow` adds "the library
+  constructs neither state". The same correction in the module docstrings of
+  `StabilizerAction.lean` and `StabilizerKMS.lean` and in the docstring of
+  `IsKMSStateForFlow.exists_gns_unitary_strongContinuous`, which made the same claim.
+- A3: `IsometricCovariance` implementation note uses `1 • B`, `(φ'φ) • B`, `φ' • (φ • B)`.
+- A4: "a witness ... would come from a `ULift`" replaced by "the library gives no witness in other
+  universes", in both `HaagKastlerCurved.nonempty_haagKastlerNet` and the Minkowski
+  `HaagKastler.nonempty_haagKastlerNet` (consistency).
+- A5: follow-ups added below (not edited in this round).
+- Comments only: all 6 changed files identical to HEAD with comments stripped. No docstring line
+  over 100 characters or starting with a guarded keyword. `lake build`: OK, no new warnings;
+  `lake lint`: passed. No guard blocks.
+
+Follow-ups outside the passes (module docstrings), in addition to the two above:
+- `Isotony.lean`: calls `Isotony` "a `Prop`-valued predicate"; it is a structure carrying data.
+- `LocalAlgebra.lean`: says Axiom 4 holds "in **every** GNS representation"; π is any
+  representation.
+
+### Blueprint sentences (user's decision on A2; targeted edit)
+
+- `haag-kastler-axioms-in-curved-spacetime.tex`, four sentences: the "Physically Stab(B) is the
+  stand-in ..." sentence before def:stabilizer-action-in-curved-spacetime; the opening sentence and
+  the "precise sense in which ... thermal" sentence of the KMS subsection intro; and the last
+  sentence of thrm:kms-thermal-representation-in-curved-spacetime ("realized for the
+  Hartle-Hawking and Gibbons-Hawking states"). Each now says that those regions are not diamonds
+  (basis sets), no such flow fixes a nonempty diamond, so the axioms as stated place no constraint
+  on their algebras; the examples motivate the definitions but are not instances. (The FLRW
+  rotation example is kept as a separate sentence.)
+- `mcp__fuse__blueprint_refresh`: 677 entries, no errors. No `\lean{}` or node proposals applied.
+- Follow-up to the above: the FLRW rotation example is kept, as its own sentence, in the
+  blueprint and in the `StabilizerAction.lean` module docstring. Refreshed again: no errors.
+
+### Group B: chapter
+
+- B1: fixed by A1; the rendered page has no stray `<em>` (only the two intended `_net theory_`,
+  `_generally covariant_`), and ψ\*L renders as ψ*L.
+- B2: Design "Isometric covariance and stabilisers" uses the user's wording (not diamonds; no such
+  flow fixes a nonempty diamond; the axioms place no constraint on their algebras; motivation, not
+  instances), plus the memo's rotations remark and "definitions accept any B, axioms constrain
+  𝔘(B) only on basis sets". The Hartle–Hawking/Bunch–Davies "not proved" sentence adds the same
+  point and links the Design section (item 3).
+- B3: added after the microcausality `#check`, with the memo's term "additive-free locality" and
+  wording, linking `localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement_geometric`.
+- B4: one sentence with 6 `apiDocs` links (centre, factor, dichotomy, `unitaryEquiv_gns_covEquiv`,
+  `unitaryEquiv_gns_stabAut`, `isPure_precomp_stabAut_iff`).
+- B5: link to the GNS Design subsection "Covariance and unitary implementation".
+- B6: Minkowski link `localCommutativity_iff_exists_commute_ι` (needed the import
+  `Physicslib4.AQFT.HaagKastler.LocalCommutativity`).
+- B7: "preserved by the stabiliser". B8: Overview uses R(gB₁), g ∈ Stab(B).
+- B9: BFV cited with the DOI link (Commun. Math. Phys. 237 (2003) 31–68) and the tutorial link.
+- Built: `lake build`, `generate-manual` OK; 47 internal anchors resolve;
+  `check_temporal_wording.py` OK. Library `lake build` OK.

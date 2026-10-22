@@ -39,11 +39,14 @@ representation of `Stab(B)` on the GNS space of a `Stab(B)`-invariant state on
 ## Physical interpretation
 
 `Stab(B)` is the curved-spacetime stand-in for the global symmetry group: it is
-the subgroup acting on the single algebra one actually has. Concretely it is
-typically a Killing flow (e.g. the stationary `∂_t` flow of a Schwarzschild
-exterior, giving a KMS/Hartle-Hawking state, or the de Sitter static-patch boost
-giving the Gibbons-Hawking temperature) or a spatial-symmetry subgroup (e.g. the
-rotation subgroup fixing a comoving ball in an FLRW cosmology).
+the subgroup acting on the single algebra one actually has. The motivating
+examples are Killing flows (the stationary `∂_t` flow of a Schwarzschild
+exterior, with the Hartle-Hawking state, or the de Sitter static-patch boost,
+with the Gibbons-Hawking temperature). Those regions are not diamonds (basis
+sets), and no such flow fixes a nonempty diamond, so the axioms as stated place
+no constraint on their algebras: the examples motivate the definitions but are
+not instances of them. A spatial-symmetry subgroup (e.g. the rotation subgroup
+fixing a comoving ball in an FLRW cosmology) is also a stabilizer.
 -/
 
 namespace Physicslib4
@@ -70,13 +73,15 @@ theorem algCongr_apply {B₁ B₂ : Set M.Carrier} (h : B₁ = B₂) (a : N.alge
 
 /-- The stabilizer automorphism α̂_φ of 𝔘(B), for an isometry φ that fixes the region B.
 
-The covariance isomorphisms α_φ : 𝔘(B) → 𝔘(φ(B)) of Axiom 5 map between different local
-algebras, and curved spacetime has no quasilocal algebra on which they could act together. When
-φ(B) = B, however, α_φ maps 𝔘(B) back to itself, and so is a *-automorphism α̂_φ of the single
-algebra 𝔘(B). The isometries fixing B form its stabilizer subgroup Stab(B), on which these
-automorphisms form a group action (`stabAut_one`, `stabAut_mul`). Physically Stab(B) stands in for
-the global symmetry group: typically a Killing flow, such as the stationary flow of a black-hole
-exterior or the boost of a de Sitter static patch, or a group of spatial symmetries.
+The covariance isomorphisms α_φ : 𝔘(B) → 𝔘(φ(B)) of Axiom 5 map between different local algebras,
+and curved spacetime has no quasilocal algebra on which they could act together. When φ(B) = B,
+however, α_φ maps 𝔘(B) back to itself, and so is a *-automorphism α̂_φ of the single algebra 𝔘(B).
+The isometries fixing B form its stabilizer subgroup Stab(B), on which these automorphisms form a
+group action (`stabAut_one`, `stabAut_mul`). Physically Stab(B) stands in for the global symmetry
+group. The motivating examples are Killing flows, such as the stationary flow of a black-hole
+exterior or the boost of a de Sitter static patch. Those regions are not diamonds (basis sets), and
+no such flow fixes a nonempty diamond, so the axioms as stated place no constraint on their
+algebras: the examples motivate the definition but are not instances of it.
 
 Implementation note: α̂_φ is `covEquiv φ B` followed by the identification 𝔘(φ • B) = 𝔘(B) along
 the hypothesis h : φ • B = B (`algCongr`). `stabAutHom` is the same map indexed by elements of

@@ -74,10 +74,10 @@ isotony family as a parameter, so the action respects the net's own embeddings.
 `HaagKastlerNet.covEquiv` chooses the maps α_φ. There is no quasilocal algebra for them to act
 on; on a region fixed by φ they give automorphisms of its algebra (`HaagKastlerNet.stabAut`).
 
-Implementation note: 𝔘(1B) and 𝔘(B), and 𝔘((φ'φ)B) and 𝔘(φ'(φB)), are different types that are
-equal only propositionally, so conditions 1 and 2 transport along those equalities (`one_smul`,
-`mul_smul`) with `Eq.mp`. For a geometric spacetime, `M.Isom` is the oriented identity component
-of its isometry group (`toAbstractIdentityComponent`).
+Implementation note: 𝔘(1 • B) and 𝔘(B), and 𝔘((φ'φ) • B) and 𝔘(φ' • (φ • B)), are different types
+that are equal only propositionally, so conditions 1 and 2 transport along those equalities
+(`one_smul`, `mul_smul`) with `Eq.mp`. For a geometric spacetime, `M.Isom` is the oriented identity
+component of its isometry group (`toAbstractIdentityComponent`).
 
 Blueprint: def:isometric-covariance-in-curved-spacetime
 -/

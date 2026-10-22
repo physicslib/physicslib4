@@ -62,12 +62,12 @@ namespace LorentzianSpacetime
 
 /--
 The relabelling bijection of general covariance: a diffeomorphism ψ of M, read as a map from the
-points of ψ*L to the points of L.
+points of ψ\*L to the points of L.
 
-The pullback ψ*L has the same manifold as L, with the pulled-back metric ψ*g and time orientation
-ψ*t. As a map from ψ*L to L, the diffeomorphism ψ is an isometry, and it carries the causal
-diamonds of ψ*L to those of L (`toAbstractIdentityComponent_pullback_isBasisSet`). It is ψ, not
-its inverse, that does this. General covariance compares the nets over ψ*L and over L along this
+The pullback ψ\*L has the same manifold as L, with the pulled-back metric ψ\*g and time orientation
+ψ\*t. As a map from ψ\*L to L, the diffeomorphism ψ is an isometry, and it carries the causal
+diamonds of ψ\*L to those of L (`toAbstractIdentityComponent_pullback_isBasisSet`). It is ψ, not
+its inverse, that does this. General covariance compares the nets over ψ\*L and over L along this
 bijection.
 
 Implementation note: the two carriers are definitionally equal (`pullback` changes only the
@@ -183,13 +183,13 @@ abbrev NetTheory :=
 /--
 General covariance: a net theory assigns equivalent nets to diffeomorphism-related backgrounds.
 
-The gauge group of general relativity is the diffeomorphism group of M, acting on all fields,
-the metric included. For a Lorentzian spacetime L with manifold M, metric g and time orientation
-t, and a smooth diffeomorphism ψ of M, the pullback ψ*L, with metric ψ*g and time orientation ψ*t,
-differs from L only by a relabelling of the points. A net theory 𝔘 is generally covariant when
-the nets 𝔘_(ψ*L) and 𝔘_L are equivalent (`NetEquivalence`) for every such L and ψ, along ψ read as
-a bijection from the points of ψ*L to those of L (`pullbackCarrierEquiv`). That ψ carries the
-diamonds of ψ*L to those of L is `toAbstractIdentityComponent_pullback_isBasisSet`.
+The gauge group of general relativity is the diffeomorphism group of M, acting on all fields, the
+metric included. For a Lorentzian spacetime L with manifold M, metric g and time orientation t, and
+a smooth diffeomorphism ψ of M, the pullback ψ\*L, with metric ψ\*g and time orientation ψ\*t,
+differs from L only by a relabelling of the points. A net theory 𝔘 is generally covariant when the
+nets 𝔘_(ψ\*L) and 𝔘_L are equivalent (`NetEquivalence`) for every such L and ψ, along ψ read as a
+bijection from the points of ψ\*L to those of L (`pullbackCarrierEquiv`). That ψ carries the
+diamonds of ψ\*L to those of L is `toAbstractIdentityComponent_pullback_isBasisSet`.
 
 This is a postulate, not a consequence of Axioms 1 to 5, which each constrain a single net over a
 single spacetime. It encodes Leibniz equivalence, the resolution of the hole argument: the choice

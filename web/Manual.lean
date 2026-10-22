@@ -2,6 +2,7 @@ import VersoManual
 import Manual.GNS
 import Manual.Spacetime
 import Manual.HaagKastler
+import Manual.Curved
 import Manual.FeatureTests
 
 open Verso.Genre Manual
@@ -19,5 +20,7 @@ where they live. It has one chapter per section of Chapter 10 of the blueprint. 
 {include 1 Manual.Spacetime}
 
 {include 1 Manual.HaagKastler}
+
+{include 1 Manual.Curved}
 
 {include 1 Manual.FeatureTests}
