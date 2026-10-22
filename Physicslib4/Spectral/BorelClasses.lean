@@ -41,7 +41,7 @@ continuous functions, and the class `𝒞` of the bootstrap itself.
 * `Physicslib4.Spectral.IsBorelGenerating.indicator_mem` — `𝒞` contains the
   indicator of every Borel set. Together with
   `Physicslib4.Spectral.IsBorelGenerating.eq_bddMeasurable` this is the only place
-  the compact metric Borel context is needed; `IsBorelGenerating` itself is stated
+  the metric Borel context (no compactness) is needed; `IsBorelGenerating` itself is stated
   for an arbitrary topological measurable space.
 * `Physicslib4.Spectral.IsBorelGenerating.eq_bddMeasurable` — `𝒞` is exactly the set
   of bounded Borel functions.
@@ -399,8 +399,8 @@ end Borel
 
 The hypotheses on `𝒞` mention only bounded measurable functions, continuous
 real-valued functions and pointwise limits, so the definition is stated with no
-assumption on `X` beyond a topology and a `σ`-algebra. The compact metric Borel
-context is imposed on `IsBorelGenerating.indicator_mem` and
+assumption on `X` beyond a topology and a `σ`-algebra. The metric Borel context
+(no compactness) is imposed on `IsBorelGenerating.indicator_mem` and
 `IsBorelGenerating.eq_bddMeasurable` below, which are the statements that really
 need it (through `isClosed_mem_L0`, hence through the bump functions).
 -/

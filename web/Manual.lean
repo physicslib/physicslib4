@@ -1,5 +1,6 @@
 import VersoManual
 import Manual.GNS
+import Manual.Spectral
 import Manual.Spacetime
 import Manual.HaagKastler
 import Manual.Curved
@@ -16,6 +17,8 @@ where they live. It has one chapter per section of Chapter 10 of the blueprint. 
 [API documentation](https://physicslib.github.io/physicslib4/docs/) lists every declaration.
 
 {include 1 Manual.GNS}
+
+{include 1 Manual.Spectral}
 
 {include 1 Manual.Spacetime}
 

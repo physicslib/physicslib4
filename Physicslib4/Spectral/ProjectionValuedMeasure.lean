@@ -217,7 +217,7 @@ measurement of A in the state ψ gives a value in E. The values on measurable se
 (`inner_integral`).
 
 Implementation note: the measure is chosen from `existsUnique_assoc`, which also gives its
-uniqueness and finiteness (the `IsFiniteMeasure` instance).
+uniqueness and finiteness (the `MeasureTheory.IsFiniteMeasure` instance).
 
 Blueprint: the measure μ_ψ of thrm:projection-valued-measures-associated-measure
 -/

@@ -242,8 +242,8 @@ bounded linear map that does so (`existsUnique_realCalculus`). It is multiplicat
 self-adjoint, f ≥ 0 gives a non-negative operator, ‖f(A)‖ = sup |f| on σ(A), and
 σ(f(A)) = f(σ(A)) (`realCalculus_properties`).
 
-Implementation note: the definition is Mathlib's `cfcHom hA`, available because
-`Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap` makes `H →L[ℂ] H` a C⋆-algebra; it is not
+Implementation note: the definition is Mathlib's continuous functional calculus `cfcHom` at the
+hypothesis `hA`, available because Mathlib makes `H →L[ℂ] H` a C\*-algebra; it is not
 extracted from `existsUnique_realCalculus`. Its type, a `StarAlgHom` over ℝ, records that
 f ↦ f(A) is a \*-algebra homomorphism and not only an ℝ-linear map, which is part of
 prpstn:hall-8.4. σ(A) is Mathlib's real spectrum `spectrum ℝ A`.
@@ -342,7 +342,7 @@ theorem spectrum_realCalculus {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (f : C(
   cfcHom_map_spectrum hA f
 
 /--
-The four properties of the real-valued functional calculus: multiplicativity,
+The five properties of the real-valued functional calculus: multiplicativity,
 self-adjointness, non-negativity, and the norm and spectrum identities.
 
 This blueprint node is exactly the conjunction of the five statements above, so it

@@ -326,7 +326,7 @@ omit [CompleteSpace H] in
 For λ in the resolvent set, Mathlib's `resolvent A λ` is a right inverse of λ𝟙 − A.
 
 Implementation note: Mathlib's `resolvent A λ` is the inverse of λ𝟙 − A, so it is the negative
-of the blueprint's resolvent (A − λ𝟙)⁻¹. The library states only this right-inverse equation.
+of the blueprint's resolvent (A − λ𝟙)⁻¹. This project states only the right-inverse equation.
 
 Blueprint: the resolvent of def:bounded-operator-resolvent-and-spectrum
 -/

@@ -46,7 +46,13 @@ examples on the page are elaborated against the library itself.
 - `Tutorial/Theme.lean`: the tutorial's configuration and header, built from `Book/Theme.lean`.
 - `ManualMain.lean`: the `generate-manual` executable.
 - `Manual.lean`: the reference manual's title page; it includes the chapters.
-- `Manual/HaagKastler.lean`: "The Haag–Kastler axioms in Minkowski spacetime" (in preparation).
+- `Manual/GNS.lean`: "The GNS construction" (blueprint Section 10.1).
+- `Manual/Spectral.lean`: "Bounded spectral theory" (blueprint Section 10.2).
+- `Manual/Spacetime.lean`: "Spacetime and geometry" (blueprint Section 10.5).
+- `Manual/HaagKastler.lean`: "The Haag–Kastler axioms in Minkowski spacetime" (blueprint
+  Section 10.6).
+- `Manual/Curved.lean`: "The axioms in curved spacetime and general covariance" (blueprint
+  Sections 10.7–10.8).
 - `Manual/FeatureTests.lean`: a draft-only chapter showing `{docstring}`, `#check` and `apiDocs`;
   built only with `--draft`.
 - `Manual/Theme.lean`: the manual's configuration and header, built from `Book/Theme.lean`.

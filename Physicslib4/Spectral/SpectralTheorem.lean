@@ -944,7 +944,7 @@ f(A) = Σ_k f(λ_k) P_k. For example, the indicator of E gives the spectral proj
 f(λ) = e^(iλt) gives the operator written e^(itA). By `borelCalculus_eq_integral` it agrees with the
 operator `borelCalculus` obtained from the quadratic form Q_f, so the notation f(A) is
 unambiguous, and the properties proved for `borelCalculus` (linearity, multiplicativity,
-self-adjointness for real f) hold for it.
+self-adjointness for real f) transfer to it through that equation.
 
 Implementation note: the definition is `(spectralMeasure hA).integral f`, so it is 0 on
 functions that are not bounded and measurable.
