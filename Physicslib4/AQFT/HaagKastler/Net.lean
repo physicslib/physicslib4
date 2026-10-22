@@ -381,8 +381,8 @@ noncomputable def trivialHaagKastlerNet : HaagKastlerNet where
 region ↦ `ℂ`) is a Haag-Kastler net, so `HaagKastlerNet` is nonempty.
 
 Stated at universe `0` because the witness is built from `ℂ`, which lives in
-`Type`. Consistency of the axioms needs only one model, so nothing is lost; a
-witness in an arbitrary universe would come from a `ULift` of this one. -/
+`Type`. Consistency of the axioms needs only one model, so nothing is lost; the
+library gives no witness in other universes. -/
 theorem nonempty_haagKastlerNet : Nonempty HaagKastlerNet.{0} :=
   ⟨trivialHaagKastlerNet⟩
 
