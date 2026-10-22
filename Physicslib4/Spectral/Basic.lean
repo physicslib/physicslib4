@@ -228,8 +228,19 @@ threading a `Measurable f ∧ ∃ K, ∀ x, ‖f x‖ ≤ K` pair through every 
 -/
 
 /--
-The complex vector space of bounded, measurable, complex-valued functions on a
-measurable space `X`.
+The complex vector space of bounded measurable complex-valued functions on a measurable space X.
+
+A function f : X → ℂ belongs to it when f is measurable and |f(x)| ≤ C for some constant C and
+every x ∈ X. On the spectrum of an operator, with its Borel σ-algebra, these are the bounded Borel
+functions to which the Borel functional calculus applies: indicator functions 1_E of Borel sets E
+(the spectral projections), step functions, and every bounded continuous function.
+
+Implementation note: the class is a `Submodule ℂ (X → ℂ)`, so membership packages the two
+hypotheses `Measurable f` and `∃ C, ∀ x, ‖f x‖ ≤ C` (`mem_bddMeasurable`), and closure under sums
+and scalar multiples is part of the structure. It is the single spelling of "bounded Borel
+function" in the spectral files.
+
+Blueprint: the bounded Borel functions of def:hall-8.8 and thrm:operator-valued-integration
 -/
 def BddMeasurable (X : Type*) [MeasurableSpace X] : Submodule ℂ (X → ℂ) where
   carrier := {f | Measurable f ∧ ∃ C : ℝ, ∀ x, ‖f x‖ ≤ C}
@@ -278,20 +289,47 @@ Blueprint reference: `def:bounded-operator-resolvent-and-spectrum`.
 
 omit [CompleteSpace H] in
 /--
-`λ` lies in the resolvent set of `A` exactly when `A - λ𝟙` has a bounded inverse,
-which is the blueprint's definition.
+A complex number λ lies in the resolvent set ρ(A) exactly when A − λ𝟙 has a bounded inverse.
+
+The resolvent set of a bounded operator A is the set of λ ∈ ℂ for which A − λ𝟙 is invertible in
+the algebra of bounded operators, that is, has a two-sided inverse that is again bounded. The
+statement identifies Mathlib's resolvent set with that definition.
+
+Implementation note: Mathlib's `resolventSet ℂ A` is defined through λ𝟙 − A
+(`spectrum.mem_resolventSet_iff`); this theorem converts to the sign A − λ𝟙 by multiplying with
+the unit −1.
+
+Blueprint: def:bounded-operator-resolvent-and-spectrum
 -/
 theorem mem_resolventSet_iff_isUnit_sub_smul (A : H →L[ℂ] H) (lam : ℂ) :
     lam ∈ resolventSet ℂ A ↔ IsUnit (A - lam • (1 : H →L[ℂ] H)) := by
   rw [spectrum.mem_resolventSet_iff, Algebra.algebraMap_eq_smul_one, ← IsUnit.neg_iff, neg_sub]
 
 omit [CompleteSpace H] in
-/-- The spectrum is the complement of the resolvent set. -/
+/--
+The spectrum σ(A) of a bounded operator A is the complement of its resolvent set ρ(A).
+
+So λ ∈ σ(A) exactly when A − λ𝟙 has no bounded inverse. Every eigenvalue lies in the spectrum,
+but in infinite dimensions the spectrum can contain more: for a multiplication operator
+(Mψ)(x) = xψ(x) on L²([0, 1]) it is all of [0, 1], although M has no eigenvalues.
+
+Implementation note: Mathlib's `spectrum ℂ A` is by definition the complement of
+`resolventSet ℂ A`, so the proof is `rfl`.
+
+Blueprint: def:bounded-operator-resolvent-and-spectrum
+-/
 theorem spectrum_eq_compl_resolventSet (A : H →L[ℂ] H) :
     spectrum ℂ A = (resolventSet ℂ A)ᶜ := rfl
 
 omit [CompleteSpace H] in
-/-- For `λ` in the resolvent set, `resolvent A λ` inverts `λ𝟙 - A`. -/
+/--
+For λ in the resolvent set, Mathlib's `resolvent A λ` is a right inverse of λ𝟙 − A.
+
+Implementation note: Mathlib's `resolvent A λ` is the inverse of λ𝟙 − A, so it is the negative
+of the blueprint's resolvent (A − λ𝟙)⁻¹. The library states only this right-inverse equation.
+
+Blueprint: the resolvent of def:bounded-operator-resolvent-and-spectrum
+-/
 theorem mul_resolvent_of_mem_resolventSet (A : H →L[ℂ] H) {lam : ℂ}
     (h : lam ∈ resolventSet ℂ A) :
     (lam • (1 : H →L[ℂ] H) - A) * resolvent A lam = 1 := by
@@ -734,14 +772,18 @@ each signature.
 -/
 
 /--
-`BoundedPointwiseLimit f g b` says that the sequence of complex-valued functions
-`f : ℕ → α → ℂ` is dominated by `b` **uniformly in the index** and converges to `g`
-**pointwise** (not uniformly: the rate of convergence may depend on the point).
+A sequence of functions f_n : α → ℂ is bounded by b uniformly in n and converges pointwise to g.
 
-The dominating function `b` is almost always a constant `fun _ => M`; it is allowed
-to vary so that the same structure covers the quadratic bound
-`fun φ => C * ‖φ‖ ^ 2` used for families of quadratic forms in
+The hypotheses are |f_n(x)| ≤ b(x) for every n and every x, and f_n(x) → g(x) for every x. The
+convergence is pointwise, not uniform: its rate may depend on the point. This is the hypothesis
+of the bounded convergence theorem (`tendsto_integral_of_boundedPointwiseLimit`), which
+extends the functional calculus from continuous to bounded Borel functions.
+
+Implementation note: the bound b is usually a constant `fun _ => M`; it may vary so that the
+same predicate covers the quadratic bound `fun φ => C * ‖φ‖ ^ 2` for sequences of quadratic forms in
 `Physicslib4/Spectral/Forms.lean`.
+
+Blueprint: the hypotheses of thrm:bounded-convergence-theorem
 -/
 structure BoundedPointwiseLimit {α : Type*} (f : ℕ → α → ℂ) (g : α → ℂ) (b : α → ℝ) : Prop where
   /-- The sequence is dominated by `b`, uniformly in the index. -/

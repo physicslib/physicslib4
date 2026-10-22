@@ -61,11 +61,17 @@ open Filter Topology MeasureTheory
 -/
 
 /--
-A *bump function* for a closed set `E` supported in an open set `U ⊇ E`: a
-continuous function with values in `[0, 1]`, equal to `1` on `E`, and supported in
-`U`.
+A bump function for E inside U: a continuous f : X → [0, 1] with f = 1 on E and support in U.
 
-Blueprint reference: `def:bump-function`.
+Here E is meant to be closed and U an open set containing it. Bump functions are the continuous
+approximations to indicator functions: for a closed set E, bump functions for E inside shrinking
+neighbourhoods U_n converge pointwise to the indicator 1_E (`isClosed_mem_L0`). On a normal
+space, in particular a metric space, they exist by Urysohn's lemma (`exists_isBumpFunction`).
+
+Implementation note: the predicate takes any sets E and U; closedness, openness and E ⊆ U are
+hypotheses of `exists_isBumpFunction`.
+
+Blueprint: def:bump-function
 -/
 structure IsBumpFunction {X : Type*} [TopologicalSpace X] (E U : Set X) (f : C(X, ℝ)) :
     Prop where
@@ -97,8 +103,15 @@ theorem exists_isBumpFunction {X : Type*} [TopologicalSpace X] [NormalSpace X] {
 -/
 
 /--
-A *monotone class* on `X` is a family of subsets closed under countable increasing
-unions and countable decreasing intersections.
+A monotone class on X: a family of subsets closed under increasing unions and decreasing
+intersections of sequences.
+
+If E_1 ⊆ E_2 ⊆ ⋯ all lie in the family, so does ⋃ E_n; if E_1 ⊇ E_2 ⊇ ⋯ all lie in it, so
+does ⋂ E_n. The monotone class theorem (`generateFrom_subset_of_isMonotoneClass`) says that a
+monotone class containing an algebra of sets contains the σ-algebra it generates; this is how a
+property of indicator functions is extended from open sets to all Borel sets.
+
+Blueprint: the monotone classes of thrm:monotone-class-theorem
 -/
 structure IsMonotoneClass {X : Type*} (ℳ : Set (Set X)) : Prop where
   /-- Closure under countable increasing unions. -/
@@ -262,19 +275,19 @@ theorem generateFrom_subset_of_isMonotoneClass {X : Type*} {𝒜 ℳ : Set (Set 
 -/
 
 /--
-The blueprint's class `𝓛₀`: the sets whose indicator function is the *pointwise*
-limit of a uniformly bounded sequence of continuous real-valued functions.
+The class 𝓛₀ of sets E whose indicator 1_E is a pointwise limit of bounded continuous functions.
 
-The dependence of the rate of convergence on the point is essential: uniform
-convergence would force the indicator to be continuous.
+E ∈ 𝓛₀ when there are continuous f_n : X → ℝ and a constant C with |f_n(x)| ≤ C for all n and x,
+and f_n(x) → 1_E(x) for every x. The convergence is pointwise; uniform convergence would force
+1_E to be continuous, so E clopen. On a metric space 𝓛₀ contains every closed set
+(`isClosed_mem_L0`) and is an algebra of sets containing the open sets (`isSetAlgebra_L0`); the
+monotone class theorem then takes the bootstrap from 𝓛₀ to all Borel sets.
 
-The blueprint also asks that `E` be measurable. That is not recorded here: under
-`[BorelSpace X]` an indicator which is a pointwise limit of continuous functions is
-automatically measurable, hence so is `E` (see `measurableSet_of_mem_L0`), and
-carrying the conjunct would make every membership proof discharge a derivable
-obligation.
+Implementation note: the blueprint also asks that E be measurable. The definition omits this,
+since under the Borel σ-algebra every member is measurable (`measurableSet_of_mem_L0`); the
+extra conjunct would only add a derivable obligation to every membership proof.
 
-Blueprint reference: `def:L0-class`.
+Blueprint: def:L0-class
 -/
 -- `MeasurableSpace X` is unused in the body (only `TopologicalSpace X` is needed, via
 -- `C(X, ℝ)`); kept for parity with the other definitions in this file (see the docstring above
@@ -393,12 +406,21 @@ need it (through `isClosed_mem_L0`, hence through the bump functions).
 -/
 
 /--
-The blueprint's hypotheses on the class `𝒞` used to bootstrap from continuous to
-bounded Borel functions: `𝒞` consists of bounded measurable complex-valued
-functions, is a complex subspace, contains the continuous real-valued functions, and
-is closed under pointwise limits of uniformly bounded sequences.
+A class 𝒞 of bounded measurable functions that is a subspace, contains the continuous real
+functions, and is closed under bounded pointwise limits.
 
-Blueprint reference: the hypotheses (1)–(3) of `lmm:hall-prblm-8.3.3b`.
+These are the hypotheses of the bootstrap from continuous to bounded Borel functions. On a metric
+space with its Borel σ-algebra such a class contains the indicator of every Borel set
+(`IsBorelGenerating.indicator_mem`) and is in fact all bounded measurable functions
+(`IsBorelGenerating.eq_bddMeasurable`). This is how a property known for continuous f, such as
+multiplicativity of the functional calculus, is extended to every bounded Borel f: one shows that
+the functions with the property form such a class (`isBorelGenerating_F1Class`,
+`isBorelGenerating_F2Class`).
+
+Implementation note: the structure assumes only a topology and a σ-algebra on X; the metric and
+Borel hypotheses are on the two theorems, which do not need compactness.
+
+Blueprint: the hypotheses (1)–(3) of lmm:hall-prblm-8.3.3b
 -/
 structure IsBorelGenerating {X : Type*} [TopologicalSpace X] [MeasurableSpace X]
     (𝒞 : Set (X → ℂ)) : Prop where

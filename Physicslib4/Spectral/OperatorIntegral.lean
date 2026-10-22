@@ -448,8 +448,23 @@ theorem existsUnique_integral (μ : ProjectionValuedMeasure X H) :
 
 open Classical in
 /--
-The operator-valued integral `∫ f dμ`, defined to be `0` on functions that are not
-bounded and measurable.
+The operator-valued integral ∫ f dμ of a bounded measurable f : X → ℂ against a
+projection-valued measure μ.
+
+It is the bounded operator with ⟨ψ, (∫ f dμ)ψ⟩ = ∫ f dμ_ψ for every vector ψ
+(`inner_integral`), where μ_ψ(E) = ⟨ψ, μ(E)ψ⟩. For a step function f = Σ c_k 1_(E_k) it is
+Σ c_k μ(E_k), and in general a norm limit of such sums; the spectral theorem writes a
+self-adjoint operator as A = ∫ λ dμ^A(λ). The integral of 1_E is μ(E) (`integral_indicator`), it
+is linear (`integral_add`, `integral_smul`) and multiplicative (`integral_mul`), satisfies
+‖∫ f dμ‖ ≤ sup |f| (`norm_integral_le`), and sends the complex conjugate f̄ to the adjoint
+(`integral_conj`).
+
+Implementation note: the operator is chosen from the unique linear map of
+`existsUnique_integral`, built from the bounded quadratic form Q_f(ψ) = ∫ f dμ_ψ, so linearity is
+recovered by `integral_add` and `integral_smul` rather than definitional. On functions that are
+not bounded and measurable the integral is defined to be 0, so it is a total function.
+
+Blueprint: the integral ∫ f dμ of thrm:operator-valued-integration
 -/
 noncomputable def integral (μ : ProjectionValuedMeasure X H) (f : X → ℂ) : H →L[ℂ] H :=
   if h : f ∈ BddMeasurable X then (existsUnique_integral μ).choose ⟨f, h⟩ else 0

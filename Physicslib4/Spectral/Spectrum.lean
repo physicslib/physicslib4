@@ -107,28 +107,35 @@ theorem hasSum_geometric_inverse_one_sub {X : H →L[ℂ] H} (hX : ‖X‖ < 1) 
   hasSum_geom_series_inverse X hX
 
 /--
-The spectrum of a bounded operator is a compact subset of `ℂ`. Closedness and
-boundedness (parts (1) and (2) of `prpstn:hall-7.5`) are `IsCompact.isClosed` and
-`IsCompact.isBounded` applied to this.
+The spectrum σ(A) of a bounded operator A is a compact subset of ℂ.
 
-Parts (3) and (4) of the blueprint statement — that `σ(A)` is a metric space under
-the metric inherited from `ℂ`, and a measurable space for its Borel `σ`-algebra —
-are supplied in Lean by the subtype instances `Subtype.instMetricSpace`,
-`Subtype.instMeasurableSpace` and `Subtype.borelSpace`, so they carry no
-propositional content here.
+By the Heine–Borel theorem this says that σ(A) is closed and bounded, the first two claims of
+part (1) of prpstn:hall-7.5; they follow from this theorem by `IsCompact.isClosed` and
+`IsCompact.isBounded`. Compactness is what makes the continuous functions on σ(A) a good
+algebra for the functional calculus: they are bounded, and polynomials are dense among them
+(Stone–Weierstrass). No hypothesis H ≠ {0} is needed.
 
-Blueprint reference: `lmm:spectrum-is-compact-metric-measurable`.
+Implementation note: the proof is Mathlib's `spectrum.isCompact`. Parts (3) and (4) of the
+blueprint lemma, that σ(A) is a metric space with the metric of ℂ and a measurable space with its
+Borel σ-algebra, are the subtype instances `Subtype.instMetricSpace`,
+`Subtype.instMeasurableSpace` and `Subtype.borelSpace`, so they carry no propositional content.
+
+Blueprint: lmm:spectrum-is-compact-metric-measurable
 -/
 theorem isCompact_spectrum (A : H →L[ℂ] H) : IsCompact (spectrum ℂ A) :=
   spectrum.isCompact A
 
 /--
-For a non-zero Hilbert space, the spectrum of any bounded operator is non-empty.
-This is the one half of `lmm:spectrum-is-compact-metric-measurable` that uses the
-blueprint's standing convention `H ≠ {0}`, stated in the section preamble alongside
-`def:bounded-operator-notation`.
+On a nonzero Hilbert space the spectrum of every bounded operator is non-empty.
 
-Blueprint reference: `lmm:spectrum-is-compact-metric-measurable`.
+In finite dimensions this is the existence of an eigenvalue (the fundamental theorem of algebra);
+the general proof applies Liouville's theorem to the resolvent λ ↦ (A − λ𝟙)⁻¹. It fails on the
+zero space, where σ(A) = ∅.
+
+Implementation note: the proof is Mathlib's `spectrum.nonempty`. The blueprint's standing
+convention H ≠ {0} appears here, and only where it is used, as the hypothesis `Nontrivial H`.
+
+Blueprint: lmm:spectrum-is-compact-metric-measurable
 -/
 theorem spectrum_nonempty [Nontrivial H] (A : H →L[ℂ] H) : (spectrum ℂ A).Nonempty :=
   spectrum.nonempty A
@@ -345,9 +352,17 @@ theorem sq_norm_sub_smul_apply_le {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (a 
       rw [hlambda]
 
 /--
-The spectrum of a self-adjoint bounded operator is contained in the reals.
+The spectrum of a self-adjoint bounded operator is contained in the real line.
 
-Blueprint reference: `prpstn:hall-7.7`.
+Every λ ∈ σ(A) has imaginary part 0. This is the bounded-operator form of the physicist's
+statement that observables have real eigenvalues, extended to the whole spectrum, continuous
+part included. It is why the functional calculus of a self-adjoint operator uses functions on
+σ(A) ⊆ ℝ.
+
+Implementation note: the proof uses Mathlib's `IsSelfAdjoint.spectrumRestricts`, which says
+that every z in the complex spectrum equals its real part.
+
+Blueprint: prpstn:hall-7.7
 -/
 theorem spectrum_subset_real {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) :
     spectrum ℂ A ⊆ {z : ℂ | z.im = 0} := by

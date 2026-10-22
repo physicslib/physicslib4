@@ -63,19 +63,35 @@ variable {A : H →L[ℂ] H}
 -/
 
 /--
-The blueprint's `Q_f`: for a bounded Borel function `f` on `σ(A)` and `ψ ∈ H`,
-`Q_f(ψ) = ∫_{σ(A)} f dμ_ψ`.
+The quadratic form Q_f(ψ) = ∫ f dμ_ψ of a function f on the spectrum of a self-adjoint A.
 
-Blueprint reference: `def:hall-8.6`.
+Here μ_ψ is the measure of `assocMeasure`, with ⟨ψ, g(A)ψ⟩ = ∫ g dμ_ψ for continuous real g. For
+a unit vector ψ, Q_f(ψ) is the expectation value of the observable f(A) in the state ψ: the
+average of f over the distribution μ_ψ of measured values of A. For bounded Borel f it is a
+bounded quadratic form (`isBoundedQuadraticForm_borelForm`), and the Borel functional calculus
+defines f(A) as the operator with ⟨ψ, f(A)ψ⟩ = Q_f(ψ).
+
+Implementation note: the integral is the Bochner integral over Mathlib's real spectrum
+`spectrum ℝ A`; it is defined for every f, and is 0 when f is not integrable.
+
+Blueprint: def:hall-8.6
 -/
 noncomputable def borelForm (hA : IsSelfAdjoint A) (f : spectrum ℝ A → ℂ) (ψ : H) : ℂ :=
   ∫ l, f l ∂(assocMeasure hA ψ)
 
 /--
-The blueprint's class `𝓕`: the bounded Borel functions `f` on `σ(A)` for which `Q_f`
-is a bounded quadratic form.
+The class 𝓕 of bounded Borel functions f on σ(A) whose quadratic form Q_f is bounded.
 
-Blueprint reference: `def:F-class`.
+It is the class of the bootstrap that proves Q_f bounded for every bounded Borel f: 𝓕 is a
+complex subspace (`smul_add_mem_FClass`), contains the continuous real functions
+(`continuous_mem_FClass`; for them Q_f(ψ) = ⟨ψ, f(A)ψ⟩), and is closed under bounded pointwise
+limits (`mem_FClass_of_tendsto`). So it satisfies `IsBorelGenerating`, and is therefore every
+bounded Borel function; the proof of `isBoundedQuadraticForm_borelForm` makes this argument.
+
+Implementation note: 𝓕 is unrelated to the classes 𝓕₁ and 𝓕₂ (`F1Class`, `F2Class`), which
+concern multiplicativity.
+
+Blueprint: def:F-class
 -/
 def FClass (hA : IsSelfAdjoint A) : Set (spectrum ℝ A → ℂ) :=
   {f | f ∈ BddMeasurable (spectrum ℝ A) ∧ IsBoundedQuadraticForm (borelForm hA f)}
@@ -345,8 +361,23 @@ theorem existsUnique_borelCalculus (hA : IsSelfAdjoint A) {f : spectrum ℝ A �
 
 open Classical in
 /--
-The operator `f(A)` associated with a bounded Borel function `f` on `σ(A)`, extended
-by `0` to functions that are not bounded and measurable.
+The bounded Borel functional calculus f ↦ f(A) of a self-adjoint bounded operator A.
+
+For a bounded Borel function f on σ(A), f(A) is the unique bounded operator with
+⟨ψ, f(A)ψ⟩ = ∫ f dμ_ψ for every vector ψ (`inner_borelCalculus`, `existsUnique_borelCalculus`).
+It extends the continuous calculus to discontinuous functions; most importantly, the indicator
+1_E of a Borel set E gives the spectral projection 1_E(A), from which the spectral measure is
+built (`spectralMeasure`). The map is linear (`borelCalculus_add`, `borelCalculus_smul`) and
+multiplicative, (fg)(A) = f(A)g(A) (`borelCalculus_mul`), and f(A) is self-adjoint for real f
+(`isSelfAdjoint_borelCalculus`). On continuous real functions it agrees with `realCalculus`, and
+it is the integral against the spectral measure, f(A) = ∫ f dμ^A (`borelCalculus_eq_integral`).
+
+Implementation note: the operator is chosen from `existsUnique_borelCalculus`, whose proof takes
+`IsBoundedQuadraticForm.toOperator` of Q_f. On functions that are not bounded and measurable
+the value is defined to be 0 (`borelCalculus_of_notMem`). The agreement with `realCalculus` is
+proved as a private lemma of `Physicslib4/Spectral/SpectralTheorem.lean`.
+
+Blueprint: def:hall-8.8
 -/
 noncomputable def borelCalculus (hA : IsSelfAdjoint A) (f : spectrum ℝ A → ℂ) : H →L[ℂ] H :=
   if h : f ∈ BddMeasurable (spectrum ℝ A) then (existsUnique_borelCalculus hA h).choose else 0
@@ -452,10 +483,14 @@ theorem isSelfAdjoint_borelCalculus (hA : IsSelfAdjoint A) {f : spectrum ℝ A �
 -/
 
 /--
-The blueprint's class `𝓕₁`: the bounded Borel functions `f` on `σ(A)` for which
-`(fg)(A) = f(A) g(A)` for every *continuous* real `g`.
+The class 𝓕₁ of bounded Borel f on σ(A) with (fg)(A) = f(A)g(A) for every continuous real g.
 
-Blueprint reference: `def:F1-F2-classes` (first class).
+It is the first step of the proof that the Borel functional calculus is multiplicative. The class
+contains the continuous real functions, by multiplicativity of the continuous calculus, and
+satisfies `IsBorelGenerating` (`isBorelGenerating_F1Class`), so it is every bounded Borel function
+(`F1Class_eq_bddMeasurable`).
+
+Blueprint: def:F1-F2-classes
 -/
 def F1Class (hA : IsSelfAdjoint A) : Set (spectrum ℝ A → ℂ) :=
   {f | f ∈ BddMeasurable (spectrum ℝ A) ∧
@@ -464,10 +499,14 @@ def F1Class (hA : IsSelfAdjoint A) : Set (spectrum ℝ A → ℂ) :=
         borelCalculus hA f * borelCalculus hA (fun l => ((g l : ℝ) : ℂ))}
 
 /--
-The blueprint's class `𝓕₂`: the bounded Borel functions `g` on `σ(A)` for which
-`(fg)(A) = f(A) g(A)` for every *bounded Borel* `f`.
+The class 𝓕₂ of bounded Borel g on σ(A) with (fg)(A) = f(A)g(A) for every bounded Borel f.
 
-Blueprint reference: `def:F1-F2-classes` (second class).
+It is the second step of the proof that the Borel functional calculus is multiplicative. By
+𝓕₁ = all bounded Borel functions, 𝓕₂ contains the continuous real functions; it satisfies
+`IsBorelGenerating` (`isBorelGenerating_F2Class`), so it is every bounded Borel function
+(`F2Class_eq_bddMeasurable`), which is `borelCalculus_mul`.
+
+Blueprint: def:F1-F2-classes
 -/
 def F2Class (hA : IsSelfAdjoint A) : Set (spectrum ℝ A → ℂ) :=
   {g | g ∈ BddMeasurable (spectrum ℝ A) ∧

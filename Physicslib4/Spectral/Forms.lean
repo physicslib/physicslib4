@@ -73,20 +73,33 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteS
 -/
 
 /--
-A *sesquilinear form* on a complex Hilbert space `H`: conjugate linear in the first
-factor, linear in the second. This is Mathlib's semilinear map space
-`H →ₗ⋆[ℂ] H →ₗ[ℂ] ℂ`, the shape of `innerSL`.
+The sesquilinear forms on H: maps L(φ, ψ) conjugate linear in φ and linear in ψ.
 
-Blueprint reference: `def:bounded-sesquilinear-form` (first paragraph).
+So L(aφ, ψ) = a̅ L(φ, ψ) and L(φ, aψ) = a L(φ, ψ) for a ∈ ℂ, and L is additive in each slot. This
+is the physics convention, the one of the inner product ⟨φ, ψ⟩, and the matrix elements
+⟨φ, Aψ⟩ of any operator A form such a form. No boundedness is required.
+
+Implementation note: this is Mathlib's semilinear map space `H →ₗ⋆[ℂ] H →ₗ[ℂ] ℂ`, the shape of
+`innerSL`. A raw function F : H → H → ℂ is said to be sesquilinear by
+`∃ L : SesquilinearForm H, ∀ φ ψ, L φ ψ = F φ ψ`.
+
+Blueprint: the sesquilinear forms of def:bounded-sesquilinear-form
 -/
 abbrev SesquilinearForm (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H] :=
   H →ₗ⋆[ℂ] H →ₗ[ℂ] ℂ
 
 /--
-A *bounded sesquilinear form*: a sesquilinear form which is in addition continuous
-in each slot, equivalently satisfies `|L φ ψ| ≤ C ‖φ‖ ‖ψ‖`.
+The bounded sesquilinear forms on H: sesquilinear L with |L(φ, ψ)| ≤ C‖φ‖‖ψ‖ for some constant C.
 
-Blueprint reference: `def:bounded-sesquilinear-form`.
+The matrix elements L(φ, ψ) = ⟨φ, Aψ⟩ of a bounded operator A are the basic example, with
+C = ‖A‖. The polarization of a bounded quadratic form is one (`IsBoundedQuadraticForm.toSesq`),
+and this is how the spectral files turn quadratic forms into operators.
+
+Implementation note: this is Mathlib's space `H →L⋆[ℂ] H →L[ℂ] ℂ` of continuous conjugate-linear
+maps into the continuous linear functionals. Continuity of the outer map is the bound
+‖L φ‖ ≤ C‖φ‖ in the operator norm, which is the bound |L(φ, ψ)| ≤ C‖φ‖‖ψ‖.
+
+Blueprint: def:bounded-sesquilinear-form
 -/
 abbrev BoundedSesquilinearForm (H : Type*) [NormedAddCommGroup H]
     [InnerProductSpace ℂ H] :=
@@ -177,20 +190,31 @@ theorem exists_sesquilinearForm_of_tendsto {L : ℕ → SesquilinearForm H} {F :
 -/
 
 /--
-The sesquilinear form associated with a map `Q : H → ℂ` by the polarization
-formula of the blueprint.
+The polarization of a map Q : H → ℂ, the candidate sesquilinear form with diagonal Q.
 
-Blueprint reference: `def:bounded-quadratic-form` (point 2).
+It is L(φ, ψ) = ½ [Q(φ + ψ) − Q(φ) − Q(ψ)] − (i/2) [Q(φ + iψ) − Q(φ) − Q(iψ)]. For
+Q(ψ) = ⟨ψ, Aψ⟩ it gives back the matrix elements ⟨φ, Aψ⟩ (`polarization_inner`), and for a
+quadratic form it recovers Q on the diagonal, L(ψ, ψ) = Q(ψ) (`polarization_diag`). Whether L is
+sesquilinear is the second condition of `IsQuadraticForm`.
+
+Implementation note: the definition is the raw function `H → H → ℂ`; for a bounded quadratic form
+it is bundled as `IsBoundedQuadraticForm.toSesq`.
+
+Blueprint: the polarization L of def:bounded-quadratic-form
 -/
 noncomputable def polarization (Q : H → ℂ) : H → H → ℂ := fun φ ψ =>
   (1 / 2 : ℂ) * (Q (φ + ψ) - Q φ - Q ψ) -
     (Complex.I / 2) * (Q (φ + Complex.I • ψ) - Q φ - Q (Complex.I • ψ))
 
 /--
-A *quadratic form* on `H` is a map `Q : H → ℂ` that is `|λ|²`-homogeneous and
-whose polarization is sesquilinear.
+A quadratic form on H: a map Q : H → ℂ, |λ|²-homogeneous, whose polarization is sesquilinear.
 
-Blueprint reference: `def:bounded-quadratic-form`.
+The conditions are Q(λψ) = |λ|² Q(ψ) for λ ∈ ℂ and that the polarization of Q is a
+sesquilinear form. The prototype is the expectation-value map Q(ψ) = ⟨ψ, Aψ⟩ of an operator A.
+The spectral files build operators from quadratic forms: Q_f(ψ) = ∫ f dμ_ψ defines the
+operator-valued integral and the Borel functional calculus.
+
+Blueprint: the quadratic forms of def:bounded-quadratic-form
 -/
 structure IsQuadraticForm (Q : H → ℂ) : Prop where
   /-- `Q (λ • ψ) = |λ|² Q ψ`. -/
@@ -199,10 +223,15 @@ structure IsQuadraticForm (Q : H → ℂ) : Prop where
   isSesquilinear : ∃ L : SesquilinearForm H, ∀ φ ψ : H, L φ ψ = polarization Q φ ψ
 
 /--
-A *bounded quadratic form* is a quadratic form `Q` with `|Q φ| ≤ C ‖φ‖²` for some
-real constant `C`.
+A bounded quadratic form on H: a quadratic form Q with |Q(φ)| ≤ C‖φ‖² for some constant C.
 
-Blueprint reference: `def:bounded-quadratic-form`.
+Every bounded quadratic form is the expectation-value map of a unique bounded operator:
+Q(ψ) = ⟨ψ, Aψ⟩ for exactly one A (`existsUnique_operator_of_isBoundedQuadraticForm`; the
+operator is `IsBoundedQuadraticForm.toOperator`), and A is self-adjoint when Q is real-valued
+(`IsBoundedQuadraticForm.isSelfAdjoint_toOperator`). This is the route by which the
+operator-valued integral and the Borel functional calculus are defined.
+
+Blueprint: def:bounded-quadratic-form
 -/
 structure IsBoundedQuadraticForm (Q : H → ℂ) : Prop where
   /-- The underlying form is quadratic. -/
@@ -690,11 +719,17 @@ theorem polarization_inner (A : H →L[ℂ] H) (φ ψ : H) :
   ring
 
 /--
-The polarization of a bounded quadratic form, packaged as an element of
-`BoundedSesquilinearForm H`. Its value function is `polarization Q`
-(`IsBoundedQuadraticForm.toSesq_apply`), so nothing about it is left to choice: the
-`Exists.choose`s below only pick a sesquilinear structure and a bound for a form
-whose values are already pinned down.
+The polarization of a bounded quadratic form Q, as a bounded sesquilinear form.
+
+Its values are those of the polarization, L(φ, ψ) = `polarization Q φ ψ`
+(`IsBoundedQuadraticForm.toSesq_apply`), and it is bounded because Q is
+(`exists_bound_polarization`).
+
+Implementation note: the `Exists.choose`s in the definition only pick a sesquilinear structure
+and a bound for a form whose values are already fixed, so the result does not depend on a
+choice.
+
+Blueprint: the bounded sesquilinear form of prpstn:hall-a.61
 -/
 noncomputable def IsBoundedQuadraticForm.toSesq {Q : H → ℂ} (hQ : IsBoundedQuadraticForm Q) :
     BoundedSesquilinearForm H :=
@@ -710,14 +745,17 @@ theorem IsBoundedQuadraticForm.toSesq_apply {Q : H → ℂ} (hQ : IsBoundedQuadr
   hQ.isQuadratic.isSesquilinear.choose_spec φ ψ
 
 /--
-The bounded operator representing a bounded quadratic form: the Riesz
-representative of the bounded sesquilinear form `polarization Q`, in Mathlib's
-`InnerProductSpace.continuousLinearMapOfBilin`, transposed so that `Q ψ` is
-`⟪ψ, A ψ⟫` rather than `⟪A ψ, ψ⟫`.
+The bounded operator A representing a bounded quadratic form Q, with Q(ψ) = ⟨ψ, Aψ⟩ for all ψ.
 
-Downstream files should use `IsBoundedQuadraticForm.inner_toOperator` and
-`IsBoundedQuadraticForm.eq_toOperator`, which between them characterise
-`toOperator` completely, rather than unfolding it.
+The identity is `IsBoundedQuadraticForm.inner_toOperator`, and A is the only bounded operator
+satisfying it (`IsBoundedQuadraticForm.eq_toOperator`). The operator-valued integral and the
+Borel functional calculus are both constructed this way, from the quadratic forms Q_f.
+
+Implementation note: A is the adjoint of the Riesz representative of `toSesq` in Mathlib's
+`InnerProductSpace.continuousLinearMapOfBilin`, so that Q(ψ) is ⟨ψ, Aψ⟩ and not ⟨Aψ, ψ⟩. Other
+files use `inner_toOperator` and `eq_toOperator`, which characterise A, rather than unfolding it.
+
+Blueprint: the operator of prpstn:hall-a.63
 -/
 noncomputable def IsBoundedQuadraticForm.toOperator {Q : H → ℂ} (hQ : IsBoundedQuadraticForm Q) :
     H →L[ℂ] H :=
