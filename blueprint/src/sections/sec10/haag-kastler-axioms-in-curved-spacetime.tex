@@ -1,6 +1,28 @@
 \section{Haag Kastler Axioms in Curved Spacetime}\label{sctn:haag-kastler-axioms-in-curved-spacetime}
 Here we recount the axioms we've established for AQFT in Lorentzian spacetime.
 
+The axioms do not use the metric directly. They use only the following structure of the spacetime.
+
+\begin{definition}[Abstract Lorentzian Spacetime Interface]
+    \label{def:abstract-lorentzian-spacetime-interface}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.LorentzianSpacetime, Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent, Physicslib4.Spacetime.LorentzianSpacetime.instTopologicalSpaceToAbstractIdentityComponentIsom}
+    \uses{def:lorentzian-spacetime, def:alexandrov-topology, def:completely-spacelike, lmm:isometry-preserves-basis-sets}
+    \leanok
+    An \emph{abstract Lorentzian spacetime} $M$ consists of five pieces, the ones the curved axioms use:
+    \begin{itemize}
+        \item[(i)] a type of points, the \emph{carrier} of $M$;
+        \item[(ii)] a predicate on sets of points picking out the \emph{basis sets}, the regions to which Axiom 1 attaches local algebras;
+        \item[(iii)] a binary relation on sets of points, \emph{complete spacelike separation}, under which Axiom 3 makes local algebras commute;
+        \item[(iv)] a group $\mathrm{Isom}(M)$, the symmetry group of Axiom 5;
+        \item[(v)] an action $\varphi \cdot x$ of $\mathrm{Isom}(M)$ on the points, and hence the pointwise action $\varphi \cdot \mathbf{B} = \varphi(\mathbf{B})$ on sets of points.
+    \end{itemize}
+    These are subject to one law: every $\varphi \in \mathrm{Isom}(M)$ carries basis sets to basis sets, so that $\varphi(\mathbf{B})$ is a basis set whenever $\mathbf{B}$ is. This makes the Axiom 5 map $\mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$ a map between local algebras of basis sets. The interface imposes no other conditions, and every result proved over it applies to each of its instances.
+
+    A geometric Lorentzian spacetime $L$ (\ref{def:lorentzian-spacetime}) gives an instance, the \emph{concrete bridge}. Its carrier is the point set of $L$. Its basis sets are the diamonds $I^+(p) \cap I^-(q)$ of the Alexandrov topology (\ref{def:alexandrov-topology}) for the time orientation of $L$. Complete spacelike separation is that of \ref{def:completely-spacelike}: every point of the one set is spacelike to every point of the other. The group is the identity component of the isometry group of $L$ intersected with the future-orientation-preserving isometries, the \emph{oriented identity component}, acting on points by evaluation. The law is \ref{lmm:isometry-preserves-basis-sets}: these isometries carry diamonds to diamonds. Over the bridge the law reads as \ref{lmm:axiom5-basis-preservation}. The group carries the subspace topology of the isometry group, whose topology is induced by $\varphi \mapsto (\varphi, \varphi^{-1})$ into $C(L,L) \times C(L,L)$ with the compact-open topology; the abstract interface carries no topology, and the strongly continuous results over it take one as a hypothesis.
+
+    The oriented identity component equals the identity component: an isometry connected to the identity preserves the future orientation. The proof of this equality needs a Myers--Steenrod-type rigidity theorem, which Mathlib does not provide, so the bridge builds orientation preservation into the definition of its group (see the formalization note of \ref{def:isometric-covariance-in-curved-spacetime}). This is an implementation choice, not a restriction: the group is the group of isometries connected to the identity that Axiom 5 names.
+\end{definition}
+
 The first axiom states:
 
 \begin{definition}[Axiom 1: Local Algebras]
@@ -8,7 +30,7 @@ The first axiom states:
     \lean{Physicslib4.AQFT.HaagKastlerCurved.LocalNet}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalAlgebras.lean}
     \leanok
-    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past}
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:abstract-lorentzian-spacetime-interface}
     For any basis element $\mathbf{B}$ of the Alexandrov topology on a Lorentzian spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
     \begin{align}
         \mathbf{B} \longmapsto \mathfrak{U}(\mathbf{B}),
@@ -24,10 +46,10 @@ The second axiom can be immediately stated too.
 
 \begin{definition}[Axiom 2: Isotony]
     \label{def:isotony-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.Isotony}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.Isotony, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.commIsotony}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Isotony.lean}
     \leanok
-    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime}
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime, def:abstract-lorentzian-spacetime-interface}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
     
     Exactly as in the Minkowski case (\ref{def:isotony}), the axiom supplies as \emph{data} a family of unital $*$-monomorphisms
@@ -52,7 +74,7 @@ The next axiom can be stated as follows:
     \lean{Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalCommutativity.lean}
     \leanok
-    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime, def:isotony-in-curved-spacetime, def:completely-spacelike}
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime, def:isotony-in-curved-spacetime, def:completely-spacelike, def:abstract-lorentzian-spacetime-interface}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on a Lorentzian spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$. Assume Axiom 2 (\ref{def:isotony-in-curved-spacetime}), and let $i_{\mathbf{B}_1\mathbf{B}_2}$ denote its chosen isotony family.
 
     If $\mathbf{B_1}$ and $\mathbf{B_2}$ are completely spacelike, then for any Alexandrov topology basis element $\mathbf{B}$ such that $\mathbf{B_1}, \mathbf{B_2} \subseteq \mathbf{B}$ the algebras $\mathfrak{U}(\mathbf{B_1})$ and $\mathfrak{U}(\mathbf{B_2})$ commute in the C*-algebra $\mathfrak{U}(\mathbf{B})$: for any $a_1$ in $\mathfrak{U}(\mathbf{B_1})$ and $a_2$ in $\mathfrak{U}(\mathbf{B_2})$,
@@ -70,7 +92,7 @@ The next axiom has need of the following definition
 
 \begin{definition}[Local Observable]
     \label{def:local-observable}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.IsLocalObservable, Physicslib4.AQFT.HaagKastlerCurved.exists_isLocalObservable}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.IsLocalObservable, Physicslib4.AQFT.HaagKastlerCurved.exists_isLocalObservable, Physicslib4.AQFT.HaagKastlerCurved.localObservables}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/LocalAlgebra.lean}
     \leanok
     \uses{def:lorentzian-spacetime, thrm:gns-construction-theorem, def:local-algebras-in-curved-spacetime, def:state}
@@ -92,10 +114,10 @@ The final axiom states:
 
 \begin{definition}[Axiom 5: Isometric Covariance]
     \label{def:isometric-covariance-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.covEquiv}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/IsometricCovariance.lean}
     \leanok
-    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime, def:isotony-in-curved-spacetime}
+    \uses{def:alexandrov-topology, def:lorentzian-spacetime, def:chronological-future-and-chronological-past, def:local-algebras-in-curved-spacetime, def:isotony-in-curved-spacetime, def:abstract-lorentzian-spacetime-interface}
     Let $\mathbf{B}$ be any basis element of the Alexandrov topology on a Lorentzian spacetime $M$, i.e. any set of the form $I^+(p) \cap I^-(q)$.
     
     A member $\varphi$ of the group of isometries of $M$ connected to the identity acts on $\mathfrak{U}(\mathbf{B})$ as follows
@@ -131,14 +153,14 @@ The final axiom states:
     \label{def:haag-kastler-net-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Net.lean}
-    \uses{def:local-algebras-in-curved-spacetime, def:isotony-in-curved-spacetime, def:local-commutativity-in-curved-spacetime, def:local-completeness-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime}
+    \uses{def:local-algebras-in-curved-spacetime, def:isotony-in-curved-spacetime, def:local-commutativity-in-curved-spacetime, def:local-completeness-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime, def:abstract-lorentzian-spacetime-interface}
     \leanok
     A \emph{Haag-Kastler net in curved spacetime} on a Lorentzian spacetime is the bundling of the data of \ref{def:local-algebras-in-curved-spacetime} together with the properties of \ref{def:isotony-in-curved-spacetime}, \ref{def:local-commutativity-in-curved-spacetime}, \ref{def:local-completeness-in-curved-spacetime}, and \ref{def:isometric-covariance-in-curved-spacetime}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies the four remaining axioms. Theorems about AQFT in curved spacetime take an instance of this structure as a hypothesis and invoke each axiom as a projection.
 \end{definition}
 
 \begin{theorem}[The Curved Haag-Kastler Axioms are Jointly Satisfiable]
     \label{thrm:haag-kastler-net-in-curved-spacetime-nonempty}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.nonempty_haagKastlerNet_identityComponent, Physicslib4.Spacetime.LorentzianSpacetime.isometricCovariance_trivial_identityComponent, Physicslib4.Spacetime.LorentzianSpacetime.identityComponent_faithfulSMul}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.nonempty_haagKastlerNet_identityComponent, Physicslib4.Spacetime.LorentzianSpacetime.isometricCovariance_trivial_identityComponent, Physicslib4.Spacetime.LorentzianSpacetime.identityComponent_faithfulSMul, Physicslib4.AQFT.HaagKastlerCurved.nonempty_haagKastlerNet, Physicslib4.AQFT.HaagKastlerCurved.trivialHaagKastlerNet, Physicslib4.AQFT.HaagKastlerCurved.trivialLocalNet, Physicslib4.AQFT.HaagKastlerCurved.trivialLocalNetIsotony}
     \uses{def:lorentzian-spacetime, def:haag-kastler-net-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime}
     \leanok
     Let $M$ be a Lorentzian spacetime, with the group of Axiom 5 taken to be the isometries of $M$ connected to the identity (as in the formalization note of \ref{def:isometric-covariance-in-curved-spacetime}). The identity component of the isometry group acts faithfully on $M$: an isometry in it is determined by its action on points. So does its orientation-preserving subgroup, the group of Axiom 5. The trivial net, which assigns the C*-algebra $\mathbb{C}$ to every basis set and the identity map to every inclusion and every isometry, satisfies isometric covariance (\ref{def:isometric-covariance-in-curved-spacetime}). Moreover it satisfies all five axioms, so a Haag-Kastler net in curved spacetime (\ref{def:haag-kastler-net-in-curved-spacetime}) over $M$ exists. Existence holds for every abstract Lorentzian spacetime of the interface (\texttt{HaagKastlerCurved.nonempty\_haagKastlerNet}), and the concrete form specializes it.
@@ -559,7 +581,7 @@ They do, however, restrict to a genuine action by automorphisms of one fixed loc
 
 \begin{definition}[Stabilizer Action on a Local Algebra]
     \label{def:stabilizer-action-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutHom}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
     \leanok
     \uses{def:haag-kastler-net-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime}
@@ -568,7 +590,7 @@ They do, however, restrict to a genuine action by automorphisms of one fixed loc
 
 \begin{lemma}[The Stabilizer Action is a Group Action]
     \label{lmm:stabilizer-action-laws-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut_one, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut_mul}
+    \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut_one, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut_mul, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutMonoidHom}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/StabilizerAction.lean}
     \uses{def:stabilizer-action-in-curved-spacetime}
     \leanok

@@ -91,8 +91,7 @@ Implementation note: the group structure and the action are fields, declared ins
 interface is defined, so that with `open Pointwise` the image φ(B) is written `φ • B`. The points
 and the isometries live in one universe u.
 
-Blueprint: the spacetime of def:local-algebras-in-curved-spacetime, whose geometric form is
-the node def:lorentzian-spacetime
+Blueprint: def:abstract-lorentzian-spacetime-interface
 -/
 structure LorentzianSpacetime where
   /-- The points of the spacetime M. -/

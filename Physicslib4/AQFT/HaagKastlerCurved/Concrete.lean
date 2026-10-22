@@ -68,8 +68,7 @@ identity named in the blueprint. That an isometry connected to the identity pres
 orientation needs a Myers–Steenrod-type rigidity theorem that Mathlib does not provide, so
 orientation preservation is included in the definition of the group rather than proved.
 
-Blueprint: the group of def:isometric-covariance-in-curved-spacetime (formalization note) and
-lmm:axiom5-basis-preservation
+Blueprint: def:abstract-lorentzian-spacetime-interface
 -/
 noncomputable def toAbstractIdentityComponent (L : LorentzianSpacetime) :
     AQFT.HaagKastlerCurved.LorentzianSpacetime where

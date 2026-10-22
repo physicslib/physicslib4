@@ -350,3 +350,21 @@ Follow-ups outside the passes (module docstrings), in addition to the two above:
 - B9: BFV cited with the DOI link (Commun. Math. Phys. 237 (2003) 31–68) and the tutorial link.
 - Built: `lake build`, `generate-manual` OK; 47 internal anchors resolve;
   `check_temporal_wording.py` OK. Library `lake build` OK.
+
+### A(6).1: interface node `def:abstract-lorentzian-spacetime-interface` (blueprint agent, 2026-10-22)
+
+- Step 0 (checks): `def:lorentzian-spacetime`, `def:alexandrov-topology`, `def:completely-spacelike`,
+  `lmm:axiom5-basis-preservation` all live in `sec10/spacetime.tex` (earlier in chapter 10 order).
+  But `lmm:axiom5-basis-preservation` uses `def:isometric-covariance-in-curved-spacetime`, and
+  states the interface field for the bridge, so citing it from the new node would close a cycle
+  (node -> lmm -> Axiom 5 -> node). Replaced by `lmm:isometry-preserves-basis-sets`, which is the
+  lemma the bridge field actually uses (`L.isBasisSet_smul`, `orientedIdentityComponent`).
+- Step 1: node added at the head of `haag-kastler-axioms-in-curved-spacetime.tex`, before Axiom 1;
+  D3 stated briefly with a `\ref` to the Axiom 5 formalization note (kept).
+- Step 2: interface added to statement `\uses` of Axioms 1, 2, 3, 5 and
+  `def:haag-kastler-net-in-curved-spacetime`. Axiom 4 not changed: its statement text uses the
+  spacetime only through `def:local-observable` (which reaches it via Axiom 1).
+- Step 3: "Blueprint:" lines of `HaagKastlerCurved.LorentzianSpacetime` and
+  `toAbstractIdentityComponent` changed to `Blueprint: def:abstract-lorentzian-spacetime-interface`.
+- Step 4: `lake build` of `HaagKastlerCurved.Spacetime` and `.Concrete` OK. `blueprint_refresh` OK;
+  `blueprint_validate` shows only the 14 known `conv:` errors. `leanDeclaration` recorded.
