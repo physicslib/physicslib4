@@ -65,21 +65,47 @@ theorem unitary_mul_adjoint {U : H →L[ℂ] H} (hU : U ∈ unitary (H →L[ℂ]
 ### The scalar Cayley map
 -/
 
-/-- The unit circle with the point `1` removed. -/
+/--
+The unit circle in ℂ with the point 1 removed: the image of the real line under the Cayley map.
+
+The spectrum of a unitary operator lies on the unit circle. The Cayley map C sends ℝ
+bijectively onto this set (`bijOn_cayleyMap`), so the spectrum of the Cayley transform of a
+self-adjoint operator, with the point 1 removed, corresponds to the spectrum of the operator
+(`cayleyMap_image_spectrum`).
+
+Blueprint: lmm:cayley-map
+-/
 def unitCircleMinusOne : Set ℂ := {u : ℂ | ‖u‖ = 1} \ {1}
 
 /--
-The Cayley map `C(x) = (x + i)/(x - i)`.
+The Cayley map C(x) = (x + i)/(x − i), which sends the real line onto the unit circle with the
+point 1 removed.
 
-Blueprint reference: `lmm:cayley-map`.
+It is the scalar version of the Cayley transform: substituting a self-adjoint operator A for x
+gives the unitary operator U = (A + i𝟙)(A − i𝟙)⁻¹. Since |x + i| = |x − i| for real x, C(x) has
+modulus 1, and C(x) = 1 is impossible; as x runs from −∞ to +∞, C(x) goes once around the
+circle, starting and ending at 1. C is continuous (`continuous_cayleyMap`) and bijective onto
+`unitCircleMinusOne` (`bijOn_cayleyMap`), with inverse `cayleyInv`.
+
+Blueprint: lmm:cayley-map
 -/
 noncomputable def cayleyMap (x : ℝ) : ℂ := ((x : ℂ) + Complex.I) / ((x : ℂ) - Complex.I)
 
 /--
-The inverse Cayley map `D(u) = i (u + 1)/(u - 1)`, valued in `ℝ` because `D` is
-real-valued on the unit circle minus `1`.
+The inverse Cayley map D(u) = i(u + 1)/(u − 1), taken as a real number.
 
-Blueprint reference: `lmm:cayley-map`.
+On the unit circle with 1 removed, D is real-valued (`cayleyInv_ofReal`) and inverts the Cayley
+map C (`cayleyInv_cayleyMap`, `cayleyMap_cayleyInv`). Integrating D against the spectral
+measure of the Cayley transform U recovers the self-adjoint operator A
+(`pmapIntegral_cayleyInv_eq`); this is how the spectral theorem for A is obtained from that of
+U.
+
+Implementation note: the value is the real part of i(u + 1)/(u − 1), so that D is a total
+function ℂ → ℝ. Off the unit circle minus 1 the value has no meaning (at u = 1 it is 0, by
+Lean's convention for division by zero); it is continuous on `unitCircleMinusOne`
+(`continuousOn_cayleyInv`) and measurable on ℂ (`measurable_cayleyInv`).
+
+Blueprint: lmm:cayley-map
 -/
 noncomputable def cayleyInv (u : ℂ) : ℝ := (Complex.I * (u + 1) / (u - 1)).re
 
@@ -183,15 +209,25 @@ theorem bijOn_cayleyMap : Set.BijOn cayleyMap Set.univ unitCircleMinusOne :=
 -/
 
 /--
-`U` is the *Cayley transform* of the self-adjoint operator `A`, built from the bounded
-resolvent `B = (A - i 1)⁻¹`: `U ψ = (A + i 1) B ψ`.
+A bounded operator U is the Cayley transform of an operator A, with B the bounded inverse of
+A − i𝟙: U = (A + i𝟙)(A − i𝟙)⁻¹, that is Uψ = (A + i𝟙)Bψ for every ψ.
 
-Blueprint reference: `thrm:hall-10.28`.
+The Cayley transform turns an unbounded self-adjoint operator into a bounded unitary one, in the
+way the Cayley map turns the real line into the unit circle. For self-adjoint A the inverse B
+exists (i is not in the spectrum of A), U is unitary, U − 𝟙 is injective with range Dom(A), and
+A can be recovered as i(U + 𝟙)(U − 𝟙)⁻¹ (`exists_isCayleyTransform`). The spectral theorem for
+the bounded normal operator U then yields that of A.
+
+Implementation note: the structure records the inverse B as data alongside U, because the
+formula for U applies A to Bψ, which lies in Dom(A). The operator U is determined by A
+(`IsCayleyTransform.unitary_eq`).
+
+Blueprint: thrm:hall-10.28
 -/
 structure IsCayleyTransform (A : H →ₗ.[ℂ] H) (B U : H →L[ℂ] H) : Prop where
-  /-- `B` is the bounded two-sided inverse of `A - i 1`. -/
+  /-- B is the bounded two-sided inverse of A − i𝟙. -/
   isResolvent : IsResolvent A Complex.I B
-  /-- `U = (A + i 1) B`. -/
+  /-- Uψ = (A + i𝟙)Bψ = A(Bψ) + iBψ for every ψ. -/
   apply_eq : ∀ ψ : H, U ψ = A ⟨B ψ, isResolvent.mem_domain ψ⟩ + Complex.I • B ψ
 
 omit [CompleteSpace H] in
@@ -215,15 +251,21 @@ theorem norm_add_I_smul_eq_norm_sub_I_smul {A : H →ₗ.[ℂ] H} (hsym : IsSymm
   exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).mp (by linarith)
 
 /--
-**The Cayley transform.** For a self-adjoint `A` the point `i` lies in the resolvent set,
-and the resulting `U`:
+Every self-adjoint operator A has a Cayley transform U = (A + i𝟙)(A − i𝟙)⁻¹, and U is unitary.
 
-1. is unitary;
-2. has `U - 1` injective;
-3. has `Range(U - 1) = Dom(A)`, with `A ψ = i (U + 1)(U - 1)⁻¹ ψ` there;
-4. satisfies `U - 1 = 2i (A - i 1)⁻¹`.
+In detail, with B = (A − i𝟙)⁻¹, which exists because i is not in the spectrum of A:
 
-Blueprint reference: `thrm:hall-10.28`.
+1. U is unitary;
+2. U − 𝟙 is injective;
+3. the range of U − 𝟙 is Dom(A), and A(U − 𝟙)χ = i(U + 𝟙)χ for every χ, that is
+   A = i(U + 𝟙)(U − 𝟙)⁻¹ on Dom(A);
+4. U − 𝟙 = 2iB.
+
+Unitarity rests on ‖(A + i𝟙)ψ‖ = ‖(A − i𝟙)ψ‖ for ψ in Dom(A), which holds because A is
+symmetric (`norm_add_I_smul_eq_norm_sub_I_smul`). Point 3 does not say that 1 is outside the
+spectrum of U: (U − 𝟙)⁻¹ is defined only on Dom(A) and is unbounded when A is.
+
+Blueprint: thrm:hall-10.28
 -/
 theorem exists_isCayleyTransform {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
     ∃ B U : H →L[ℂ] H, IsCayleyTransform A B U ∧
@@ -348,10 +390,17 @@ private theorem mem_pmapResolventSet_iff_cayley {A : H →ₗ.[ℂ] H} {B U : H 
       exact hB.leftInverse φ
 
 /--
-Spectral mapping for the Cayley transform: `λ ∈ σ(A)` iff `C(λ) ∈ σ(U)`, and hence
-`C(σ(A)) = σ(U) \ {1}`.
+Spectral mapping for the Cayley transform: a real λ is in the spectrum of the self-adjoint
+operator A exactly when C(λ) is in the spectrum of its Cayley transform U.
 
-Blueprint reference: `lmm:cayley-spectral-mapping`.
+Together with the reality of the spectrum of A, this gives C(σ(A)) = σ(U) \ {1}
+(`cayleyMap_image_spectrum`), and it is what makes the spectral measure of A, obtained from that
+of U, concentrated on σ(A) (`spectralMeasure_concentrated`).
+
+Implementation note: the statement is about real λ; the spectrum of A is a set of complex
+numbers, contained in ℝ by `pmapSpectrum_subset_real`.
+
+Blueprint: lmm:cayley-spectral-mapping
 -/
 theorem mem_spectrum_iff_cayleyMap_mem_spectrum {A : H →ₗ.[ℂ] H}
     (_hA : IsSelfAdjoint A) {B U : H →L[ℂ] H} (hU : IsCayleyTransform A B U) (lam : ℝ) :
@@ -398,9 +447,16 @@ section Transport
 variable {Y Z : Type*} [MeasurableSpace Y] [MeasurableSpace Z]
 
 /--
-The restriction of a projection-valued measure to a measurable subset carrying full mass.
+The restriction of a projection-valued measure μ on Y to a measurable subset Y₀ whose
+complement has measure 0: the projection-valued measure on Y₀ sending E to μ(E).
 
-Blueprint reference: `lmm:borel-bijection-transports-pvm` (Part 1).
+When μ(Y \ Y₀) = 0 no state has any probability of a value outside Y₀, so nothing is lost by
+regarding μ as a measure on Y₀; in particular μ(Y₀) = 𝟙.
+
+Implementation note: Y₀ is a subtype, with the subspace σ-algebra; a set E of Y₀ goes to μ of
+its image in Y. The construction of `cayleyPVM` does not use this definition.
+
+Blueprint: lmm:borel-bijection-transports-pvm (Part 1)
 -/
 noncomputable def restrictPVM (μ : ProjectionValuedMeasure Y H) {Y₀ : Set Y}
     (hY₀ : MeasurableSet Y₀) (hmass : μ Y₀ᶜ = 0) : ProjectionValuedMeasure Y₀ H where
@@ -443,10 +499,19 @@ noncomputable def restrictPVM (μ : ProjectionValuedMeasure Y H) {Y₀ : Set Y}
     exact μ.apply_inter (hY₀.subtype_image hE) (hY₀.subtype_image hF)
 
 /--
-The transport of a projection-valued measure along a measurable bijection with measurable
-inverse.
+The transport of a projection-valued measure μ on Y along a measurable bijection T : Y → Z with
+measurable inverse: the projection-valued measure on Z sending F to μ(T⁻¹(F)).
 
-Blueprint reference: `lmm:borel-bijection-transports-pvm` (Part 2).
+This relabels the possible values of an observable by T without changing the projections. The
+measure it assigns to a vector ψ is the pushforward along T of the one μ assigns
+(`assoc_mapPVM`).
+
+Implementation note: measurability of the inverse ensures that T⁻¹(F) is non-measurable
+whenever F is, so that the transported measure is 0 on non-measurable sets, as
+`ProjectionValuedMeasure` requires. `pushforwardPVM` is the variant for a map that is not
+bijective. The construction of `cayleyPVM` does not use this definition.
+
+Blueprint: lmm:borel-bijection-transports-pvm (Part 2)
 -/
 noncomputable def mapPVM (μ : ProjectionValuedMeasure Y H) (T : Y → Z) (hT : Measurable T)
     (hbij : Function.Bijective T) (_hinv : Measurable (Equiv.ofBijective T hbij).symm) :
@@ -703,12 +768,21 @@ theorem pmapIntegral_cayleyInv_eq [Nontrivial H] {A : H →ₗ.[ℂ] H} (hA : Is
     rw [hx, hAeq, hy, he]
 
 /--
-The projection-valued measure on `ℝ` obtained by transporting `μ^U` along the Cayley map:
-`μ^A(E) = μ^U(C(E))`, spelled as the preimage of `E` under `D`. Non-measurable `E` are sent
-to `0`, as a projection-valued measure requires; the preimage of a non-Borel set under `D`
-can still carry mass.
+The projection-valued measure on ℝ obtained from a projection-valued measure μ(U) on the
+spectrum of a unitary U through the inverse Cayley map: a Borel set E goes to μ(U)(C(E)).
 
-Blueprint reference: `thrm:hall-10.30`.
+When U is the Cayley transform of a self-adjoint A and μ(U) its spectral measure, this is the
+spectral measure of A: ∫ λ dμ(λ) = A (`pmapIntegral_cayleyPVM_id`). The point 1 of the circle,
+which corresponds to no real number, carries no mass (`spectralMeasure_singleton_one_eq_zero`),
+so nothing of μ(U) is lost.
+
+Implementation note: C(E) is written as the set of u in σ(U) with D(u) in E, using
+`cayleyInv`; the two agree on the unit circle minus 1. Non-measurable E are sent to 0, as a
+projection-valued measure requires; the preimage of a non-Borel set under D can still carry
+mass. The blueprint builds the measure by restriction and transport (`restrictPVM`,
+`mapPVM`); this definition composes with D directly.
+
+Blueprint: thrm:hall-10.30
 -/
 noncomputable def cayleyPVM {U : H →L[ℂ] H} (μU : ProjectionValuedMeasure (spectrum ℂ U) H) :
     ProjectionValuedMeasure ℝ H where
@@ -791,10 +865,18 @@ section Pushforward
 variable {Y Z : Type*} [MeasurableSpace Y] [MeasurableSpace Z]
 
 /--
-The push-forward of a projection-valued measure along a measurable map (not necessarily
-bijective): `F ↦ μ(T⁻¹ F)` on measurable `F`, and `0` elsewhere.
+The pushforward of a projection-valued measure μ on Y along a measurable map T : Y → Z: the
+projection-valued measure on Z sending a measurable F to μ(T⁻¹(F)).
 
-Blueprint reference: `thrm:hall-10.4` (Step 3 of the uniqueness proof).
+For a bounded measurable g on Z the change of variables ∫ g d(T(\*)μ) = ∫ (g ∘ T) dμ holds
+(`integral_pushforwardPVM`). The uniqueness half of the unbounded spectral theorem uses it to
+move a second spectral measure ν of A, on ℝ, to the circle along the Cayley map, where it is
+compared with the spectral measure of the Cayley transform U.
+
+Implementation note: T need not be bijective, unlike `mapPVM`; in exchange non-measurable F are
+sent to 0 by an explicit case split.
+
+Blueprint: the change of variables in the uniqueness proof of thrm:hall-10.4 (Step 3)
 -/
 noncomputable def pushforwardPVM (μ : ProjectionValuedMeasure Y H) (T : Y → Z)
     (hT : Measurable T) : ProjectionValuedMeasure Z H where
@@ -925,11 +1007,23 @@ theorem eq_cayleyPVM_of_pmapIntegral_eq {A : H →ₗ.[ℂ] H} {B U : H →L[ℂ
   · rw [μ.apply_of_not_measurableSet hE, (cayleyPVM μU).apply_of_not_measurableSet hE]
 
 /--
-**Spectral theorem for unbounded self-adjoint operators.** An unbounded self-adjoint
-operator on `H` is the integral of the identity function against a unique projection-valued
-measure on `ℝ`.
+The spectral theorem for unbounded self-adjoint operators: for every self-adjoint A exactly one
+projection-valued measure μ on ℝ satisfies ∫ λ dμ(λ) = A.
 
-Blueprint reference: `thrm:hall-10.4`.
+This is the mathematical content of the statement that an observable, such as position,
+momentum or a Hamiltonian, has a spectral decomposition: μ(E) is the projection onto the
+states where the observable takes a value in E with certainty, and ⟨ψ, μ(E)ψ⟩ is the
+probability of a value in E for the unit vector ψ. The integral is the unbounded operator of
+`pmapIntegral`, domain included, so the equation also says that Dom(A) consists of the ψ with
+∫ λ² dμ(ψ)(λ) finite, where μ(ψ) is the measure E ↦ ⟨ψ, μ(E)ψ⟩. The measure is concentrated on the
+spectrum of A (`spectralMeasure_concentrated`).
+
+Implementation note: existence is `cayleyPVM` of the spectral measure of the Cayley transform
+of A (`exists_isCayleyTransform`, `existsUnique_spectralMeasure_normal`); uniqueness passes
+through `eq_cayleyPVM_of_pmapIntegral_eq`. The case H = {0} is treated separately. The measure
+itself is `spectralMeasure`.
+
+Blueprint: thrm:hall-10.4
 -/
 theorem existsUnique_spectralMeasure_unbounded {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
     ∃! μ : ProjectionValuedMeasure ℝ H,

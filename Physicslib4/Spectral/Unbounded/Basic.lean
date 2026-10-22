@@ -500,8 +500,9 @@ Taking adjoints reverses extension: if `C₁` extends `C₂` then `C₂*` extend
 
 The density hypothesis on `Dom(C₂)` (which forces density of `Dom(C₁) ⊇ Dom(C₂)`) is the
 blueprint's standing assumption that both are unbounded operators. It cannot be dropped:
-Mathlib's `LinearPMap.adjoint` is `0` on all of `H` when the domain is not dense, so for
-`C₂` with non-dense domain and `C₁` densely defined the conclusion would say `C₁† ≤ 0`.
+Mathlib's `LinearPMap.adjoint` is the zero map on its domain when the domain of the operator
+is not dense, so for `C₂` with non-dense domain and `C₁` densely defined the conclusion would
+say that `C₁†` is the zero map on its domain.
 
 Blueprint reference: `lmm:extension-reverses-adjoint-domains`.
 -/
