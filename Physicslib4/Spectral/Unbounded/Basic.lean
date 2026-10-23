@@ -715,7 +715,7 @@ Implementation note: T + i𝟙 is `subSmul T (-Complex.I)`. The parameter is nam
 λ is reserved in Lean. Domain and action are `subSmul_domain` and `subSmul_apply`, both by
 definition.
 
-Blueprint: the convention for A − λ𝟙 stated after def:hall-3.1
+Blueprint: def:hall-3.1
 -/
 def subSmul (T : H →ₗ.[ℂ] H) (lam : ℂ) : H →ₗ.[ℂ] H where
   domain := T.domain

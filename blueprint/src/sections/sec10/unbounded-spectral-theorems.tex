@@ -19,13 +19,14 @@ Recall from Section~\ref{sctn:spectral-theorems} that $\mathbf{H}$ denotes a sep
 
 \begin{definition}[Unbounded Operator]
     \label{def:hall-3.1}
-    \lean{LinearPMap, Physicslib4.Spectral.Unbounded.HasDenseDomain}
+    \lean{LinearPMap, Physicslib4.Spectral.Unbounded.HasDenseDomain, Physicslib4.Spectral.Unbounded.subSmul}
     \uses{def:bounded-operator-notation}
     \leanok
     Let $\mathbf{H}$ be a separable, complex Hilbert space. An \textit{unbounded operator} $A$ on $\mathbf{H}$ is a linear map $A : \text{Dom}(A) \to \mathbf{H}$, where $\text{Dom}(A)$, called the \textit{domain} of $A$, is a dense subspace of $\mathbf{H}$. Here "unbounded" means "not necessarily bounded": we permit the case $\text{Dom}(A) = \mathbf{H}$ together with $A \in \mathcal{B}(\mathbf{H})$, the set of bounded operators on $\mathbf{H}$, but do not require it.
+    For $\lambda \in \mathbb{C}$, $A - \lambda\mathbf{1}$ denotes the operator with domain $\text{Dom}(A)$ acting by $\psi \mapsto A\psi - \lambda\psi$; its domain is that of $A$, since $\lambda\mathbf{1}$ is defined on all of $\mathbf{H}$.
 \end{definition}
 
-The identity operator $\mathbf{1}$ and indicator functions $1_E$ are as fixed in Definition~\ref{def:identity-and-indicator} of Section~\ref{sctn:spectral-theorems}. One extension is needed here: when $A$ is an \textit{unbounded} operator, $A - \lambda\mathbf{1}$ denotes the operator with domain $\text{Dom}(A)$ acting by $\psi \mapsto A\psi - \lambda\psi$ — its domain is that of $A$, since $\lambda\mathbf{1}$ is defined on all of $\mathbf{H}$.
+The identity operator $\mathbf{1}$ and indicator functions $1_E$ are as fixed in Definition~\ref{def:identity-and-indicator} of Section~\ref{sctn:spectral-theorems}.
 
 Three standard facts about convergence of sequences and series are used at several points below. As with the other classical results imported here, we state them without proof.
 
