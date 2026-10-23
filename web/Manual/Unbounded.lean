@@ -38,7 +38,7 @@ As you will recall, the position operator $`(X\psi)(x) = x\,\psi(x)` and the mom
 $`P = -i\,d/dx` on $`L^2(\mathbb{R})` are not bounded, and cannot be defined on every
 square-integrable wave function: $`x\,\psi(x)` need not be square-integrable, and $`\psi` need not be
 differentiable. By the Hellinger–Toeplitz theorem, a symmetric operator defined on all of a Hilbert
-space is bounded, so any observable with unbounded spectrum, such as a Hamiltonian, has to live on a
+space is bounded, so any observable with unbounded spectrum, such as most Hamiltonians, has to live on a
 dense subspace, its _domain_. The domain is part of the operator: $`-i\,d/dx` on smooth compactly
 supported functions and on the Sobolev space $`H^1(\mathbb{R})` are different operators, and only the
 second is self-adjoint. The spectral theorem holds for self-adjoint operators, and the physicist's
@@ -97,10 +97,13 @@ namespace `Physicslib4.Spectral.Unbounded`, written without the prefix below.
 tag := "unbounded-design"
 %%%
 
-Where the library departs from the blueprint's route, this section says so and links the
-blueprint's formalization note. The conventions of the {ref "spectral-design"}[bounded chapter]
-carry over unchanged: bounded operators are `H →L[ℂ] H`, no declaration assumes $`H` separable,
-and bounded operators are obtained from bounded quadratic forms.
+Where the library departs from the blueprint's route, this section says so, and links the
+blueprint's formalization note where it has one. The conventions of the
+{ref "spectral-design"}[bounded chapter] carry over unchanged: bounded operators are
+`H →L[ℂ] H`, no result on the way to the spectral theorem assumes $`H` separable (only
+{apiDocs Physicslib4.Spectral.Unbounded.completeSpace_and_separableSpace_of_isClosed}[`completeSpace_and_separableSpace_of_isClosed`],
+the blueprint's lemma on closed subspaces, does), and bounded operators are obtained from bounded
+quadratic forms.
 
 ## Unbounded operators are Mathlib's partial linear maps
 
@@ -112,7 +115,7 @@ domains. Mathlib supplies the order `S ≤ T` ("$`T` extends $`S`"), the sum `S 
 intersection of the domains, the graph, closedness (`LinearPMap.IsClosed`), closability and the
 closure (`LinearPMap.IsClosable`, `LinearPMap.closure`). The graph lies in the plain product
 `H × H`: every use of it in the section is topological, so the inner product of the blueprint's
-product Hilbert space is not needed (formalization note of
+product Hilbert space is not needed (the remark on the Lean formalization in
 [def:product-hilbert-space](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:product-hilbert-space)).
 A bounded operator `B` becomes a partial map with domain all of $`H` as
 `(B : H →ₗ[ℂ] H).toPMap ⊤`.
@@ -135,15 +138,13 @@ the action of `T†` assumes `HasDenseDomain T`.
 Self-adjointness is Mathlib's `IsSelfAdjoint` for the star operation $`T \mapsto T^*` on
 `H →ₗ.[ℂ] H`, so `IsSelfAdjoint T` means `T† = T`, domains included. It implies a dense domain
 (`IsSelfAdjoint.dense_domain`), which is why theorems about self-adjoint operators, such as the
-spectral theorem, carry no separate density hypothesis. Essential self-adjointness is the
-structure `IsEssentiallySelfAdjoint`, with the blueprint's three conditions as fields.
+spectral theorem, carry no separate density hypothesis.
 
 ## The resolvent is a predicate
 
 For a bounded operator, $`\lambda` is in the resolvent set when $`A - \lambda\mathbf{1}` is a unit
 of the algebra `H →L[ℂ] H`. Partial maps form no ring, so the library spells out the bounded
-inverse of $`T - \lambda\mathbf{1}` as the predicate `IsResolvent T λ B` on a bounded `B`: it maps
-$`H` into the domain and inverts $`T - \lambda\mathbf{1}` from both sides. The resolvent set and the
+inverse of $`T - \lambda\mathbf{1}` as the predicate `IsResolvent T lam B` on a bounded `B`. The resolvent set and the
 spectrum are `pmapResolventSet T` and `pmapSpectrum T`; the prefix keeps them apart from Mathlib's
 `resolventSet` and `spectrum`, with which they agree on bounded operators
 (`pmapSpectrum_toPMap_top`). The operator $`T - \lambda\mathbf{1}` is `subSmul T lam` (`λ` is a
@@ -157,9 +158,8 @@ For a measurable $`f` that may be unbounded, the library follows the blueprint
 
 1. The domain $`W_f` is `integralDomain μ f`, the $`\psi` with `MemLp f 2 (μ.assoc ψ)`, Mathlib's
    "square-integrable for $`\mu_\psi`".
-2. On $`W_f`, $`Q_f(\psi) = \int f \, d\mu_\psi` is a quadratic form (`integralForm`). The forms on
-   a subspace (`IsQuadraticFormOn`, `polarizationOn`) mirror the bounded chapter's forms on all of
-   $`H`, since $`W_f` is in general a proper subspace.
+2. On $`W_f`, $`Q_f(\psi) = \int f \, d\mu_\psi` is a quadratic form on a subspace
+   (`integralForm`, `IsQuadraticFormOn`).
 3. $`(\int f \, d\mu)\psi` is the unique $`\chi` with $`L_f(\varphi, \psi) = \langle \varphi, \chi \rangle`
    for all $`\varphi` in the dense subspace $`W_f`, where $`L_f` is the polarization of $`Q_f`.
 
@@ -174,14 +174,14 @@ The blueprint proves that $`\int f \, d\mu` is self-adjoint for real $`f`
 by decomposing $`H` into the spectral subspaces where $`n - 1 \le |f| < n`, on which the operator is
 bounded, and applying its result on direct sums. The Lean proof avoids direct sums:
 $`\int f \, d\mu` is symmetric, and for non-real $`c` the bounded integral of $`(f - c)^{-1}` is
-a right inverse of $`\int f \, d\mu - c\mathbf{1}`, so the latter maps onto $`H`; a symmetric operator with this
-property is self-adjoint (formalization note of prpstn:hall-10.3). The direct-sum results,
-`isEssentiallySelfAdjoint_of_isDirectSumOperator` and its internal form, are formalised in their
+a right inverse of $`\int f \, d\mu - c\mathbf{1}`, so the latter maps onto $`H`; a symmetric
+operator with this property is self-adjoint (formalization note of prpstn:hall-10.3). The
+direct-sum results, {apiDocs Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isDirectSumOperator}[`isEssentiallySelfAdjoint_of_isDirectSumOperator`] and its internal form, are formalised in their
 own right; no proof outside their file uses them. The external direct sum is Mathlib's `lp G 2`.
 
 ## Normal operators and the abstract calculus
 
-The Cayley transform of a self-adjoint operator is unitary, normal but not self-adjoint, so the
+The Cayley transform of a self-adjoint operator is unitary, hence normal, but in general not self-adjoint, so the
 route to the unbounded theorem needs the spectral theorem for bounded normal operators. Normality
 is Mathlib's `IsStarNormal`, and the continuous functional calculus `normalCalculus` is Mathlib's
 `cfcHom`, as `realCalculus` is in the bounded case; the library adds the blueprint's
@@ -204,29 +204,29 @@ Section 10.2 is proved there by its own route and is not rederived from `abstrac
 
 The library proves the unbounded spectral theorem as the blueprint does, through the Cayley
 transform, which turns the unbounded problem into a bounded one. For self-adjoint $`A`,
-`exists_isCayleyTransform` gives a unitary $`U` with $`U - \mathbf{1}` injective with range
+{apiDocs Physicslib4.Spectral.Unbounded.exists_isCayleyTransform}[`exists_isCayleyTransform`] gives a unitary $`U` with $`U - \mathbf{1}` injective with range
 $`\mathrm{Dom}(A)`, and $`A = i(U + \mathbf{1})(U - \mathbf{1})^{-1}` on $`\mathrm{Dom}(A)`. The spectral
 measure $`\mu^U` lives on $`\sigma(U)`, inside the unit circle, and gives no mass to the point
 $`1`. With $`D(u) = i(u + 1)/(u - 1)` the inverse of the Cayley map,
 $`A = \int D \, d\mu^U`, and $`\mu^A(E) = \mu^U(D^{-1}(E))` is a projection-valued measure on
 $`\mathbb{R}` with $`A = \int \lambda \, d\mu^A`.
 
-Three choices differ from the blueprint's text:
+Three choices differ from the blueprint's text; the blueprint records only the second:
 
-* `cayleyPVM` composes with $`D` directly. The blueprint restricts $`\mu^U` to the circle without
-  $`1` and transports it along the Cayley map; the two constructions it uses, `restrictPVM` and
-  `mapPVM`, are formalised but not used.
+* {apiDocs Physicslib4.Spectral.Unbounded.cayleyPVM}[`cayleyPVM`] composes with $`D` directly. The blueprint restricts $`\mu^U` to the
+  circle without $`1` and transports it along the Cayley map; the two constructions it uses,
+  {apiDocs Physicslib4.Spectral.Unbounded.restrictPVM}[`restrictPVM`] and {apiDocs Physicslib4.Spectral.Unbounded.mapPVM}[`mapPVM`], are formalised but not used.
 * For uniqueness, a second measure $`\nu` with $`A = \int \lambda \, d\nu` is carried to the
-  circle along the Cayley map and compared there with $`\mu^U` (`eq_of_integral_id_eq_ambient`). The
-  blueprint transports $`\nu` along the bijection onto the circle without $`1`; the library pushes it
-  forward to the whole circle (`pushforwardPVM`), which needs no bijectivity.
+  circle along the Cayley map and compared there with $`\mu^U`
+  ({apiDocs Physicslib4.Spectral.Unbounded.eq_of_integral_id_eq_ambient}[`eq_of_integral_id_eq_ambient`]). The blueprint transports $`\nu` along the
+  bijection onto the circle without $`1`; the library pushes it forward to the whole circle
+  ({apiDocs Physicslib4.Spectral.Unbounded.pushforwardPVM}[`pushforwardPVM`]), which needs no bijectivity (formalization note after the proof
+  of [thrm:hall-10.4](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.4)).
 * The blueprint assumes $`H \neq \{0\}`. Some intermediate lemmas carry `Nontrivial H`; the
   spectral theorem treats $`H = \{0\}` separately and has no such hypothesis.
 
 The spectral measure lives on $`\mathbb{R}`, as in the blueprint, not on the spectrum as in the
-bounded case; that it is concentrated on $`\sigma(A)` is a separate theorem. Functions of $`A`
-are functions `f : ℝ → ℂ`, and the identity function is `fun x : ℝ => (x : ℂ)`, which Lean
-prints as `fun x => ↑x`.
+bounded case; that it is concentrated on $`\sigma(A)` is a separate theorem.
 
 # Main definitions and theorems
 %%%
@@ -246,9 +246,12 @@ and the files listed at the end of the chapter.
 ## Domains, adjoints and self-adjointness
 
 Blueprint: [def:hall-3.1][ub-31], [def:hall-9.1][ub-91], [prpstn:adjoint-well-defined][ub-adj],
-[def:hall-9.2][ub-92], [prpstn:hall-9.4][ub-94], [def:hall-9.5][ub-95],
+[def:hall-9.2][ub-92], [def:hall-9.3][ub-93], [prpstn:hall-9.4][ub-94], [def:hall-9.5][ub-95],
 [def:positive-unbounded-operator][ub-pos], [def:hall-9.6][ub-96], [def:hall-9.7][ub-97],
-[prpstn:hall-9.11][ub-911], [prpstn:hall-9.12][ub-912].
+[def:closed-linear-map-on-a-subspace][ub-clm], [prpstn:hall-9.8][ub-98],
+[prpstn:hall-9.10][ub-910], [prpstn:hall-9.11][ub-911],
+[def:kernel-of-an-unbounded-operator][ub-ker], [def:range-of-an-unbounded-operator][ub-ran],
+[prpstn:hall-9.12][ub-912], [prpstn:hall-9.13][ub-913].
 
 {docstring Physicslib4.Spectral.Unbounded.HasDenseDomain}
 
@@ -300,6 +303,13 @@ A self-adjoint operator plus a bounded self-adjoint one is self-adjoint on the s
 [ub-97]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.7
 [ub-911]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.11
 [ub-912]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.12
+[ub-93]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.3
+[ub-clm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:closed-linear-map-on-a-subspace
+[ub-98]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.8
+[ub-910]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.10
+[ub-ker]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kernel-of-an-unbounded-operator
+[ub-ran]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:range-of-an-unbounded-operator
+[ub-913]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.13
 
 ## The spectrum and essential self-adjointness
 
@@ -451,6 +461,7 @@ The truncations $`f \cdot 1_{|f| < n}` give $`(\int f \, d\mu)\psi` as a limit o
 ## Bounded normal operators
 
 Blueprint: [def:hall-10.19][ub-1019], [lmm:polynomials-in-normal-are-normal][ub-poly],
+[def:hall-7.14][ub-714],
 [def:hall-10.24][ub-1024], [lmm:hall-10.25][ub-1025] to [lmm:hall-10.27][ub-1027],
 [thrm:hall-10.23][ub-1023], [crllr:norm-of-polynomial-in-a-astar][ub-norm],
 [thrm:continuous-functional-calculus-normal][ub-cfcn].
@@ -484,6 +495,7 @@ and the spectral subspaces
 {apiDocs Physicslib4.Spectral.Unbounded.spectralSubspace}[`spectralSubspace`].
 
 [ub-1019]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.19
+[ub-714]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-7.14
 [ub-poly]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:polynomials-in-normal-are-normal
 [ub-1024]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.24
 [ub-1025]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.25
@@ -627,7 +639,7 @@ Physicslib4.Spectral.Unbounded.spectralMeasure_concentrated.{u_1} {H : Type u_1}
 
 Since $`f(A)` is by definition `pmapIntegral` for the spectral measure, the theorems of the
 integration subsection apply to it: for example, $`f(A)` is self-adjoint for real measurable
-$`f` by `isSelfAdjoint_pmapIntegral_of_real`. For bounded measurable $`f`, $`f(A)` is bounded
+$`f` by {apiDocs Physicslib4.Spectral.Unbounded.isSelfAdjoint_pmapIntegral_of_real}[`isSelfAdjoint_pmapIntegral_of_real`]. For bounded measurable $`f`, $`f(A)` is bounded
 and defined everywhere. The prefix `Unbounded.` below distinguishes the declarations from their
 bounded namesakes of the {ref "spectral"}[bounded chapter]:
 
@@ -656,7 +668,7 @@ The unitary group $`e^{itA}` of Stone's theorem is of this kind.
 tag := "unbounded-files"
 %%%
 
-The section is formalised in `Physicslib4/Spectral/Unbounded/`, one stage per file. Each entry links
+The section is formalised in `Physicslib4/Spectral/Unbounded/`, in eight files, by topic. Each entry links
 to the API documentation of a representative declaration, from which the rest of the file can be
 browsed.
 

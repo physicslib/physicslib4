@@ -364,3 +364,39 @@ pattern of `web/Manual/Spectral.lean`. Appended after each section.
    Step 3 (`mapPVM` onto S¹ \ {1}); the blueprint has no formalization note for it.
 4. "Hellinger–Toeplitz" and the Sobolev-space example are background reminders, not library
    facts; check the wording does not read as a library claim.
+
+# Part 4: review fixes (`review-manual-ch-unbounded-2026-10-23.md`)
+
+## Step 20: group A, docstrings (2026-10-23)
+
+- A1: `AbstractCalculus.lean` module docstring and `IsAbstractCalculus` docstring corrected as
+  the memo proposes (bounded normal case is the instance; the bounded self-adjoint theorem runs the
+  argument directly on σ(A) and is not derived from this file). Reworded twice to avoid lines
+  starting with the keywords `case` and `instance`.
+- A2: `existsUnique_adjoint_apply`: "keeps the domain `adjointDomain` but is the zero map there".
+- A3: `pushforwardPVM`: "∫ g dμ' = ∫ (g ∘ T) dμ, where μ' is the pushforward" (μ', not the memo's
+  ν, because the docstring's next sentence uses ν for the second spectral measure); Blueprint line
+  now "thrm:hall-10.4 (formalization note after its proof)", the note the coordinator added
+  (l. 3237). No `\lean{}` change.
+- A4: `functionalCalculus`: Ĥ and e^(−itĤ).
+- A5: proposals, for the lean-blueprint agent; nothing to apply here.
+- Comments only. `lake build`: succeeds, 54 non-module-system warnings (baseline), none in
+  `Spectral/Unbounded/`. `lake lint`: passed.
+
+## Step 21: group B, chapter (2026-10-23)
+
+- B1: fixed by A1; the rendered `IsAbstractCalculus` box now agrees with Design (checked in HTML).
+- B2: separability claim qualified, with a link to `completeSpace_and_separableSpace_of_isClosed`.
+- B3: "unitary, hence normal, but in general not self-adjoint".
+- B4: intro "links the blueprint's formalization note where it has one"; def:product-hilbert-space
+  cited as "the remark on the Lean formalization"; Cayley bullets introduced with "the blueprint
+  records only the second", and the pushforward bullet links the new note after the proof of
+  thrm:hall-10.4.
+- B5: Blueprint lines completed (def:hall-9.3, def:closed-linear-map-on-a-subspace, 9.8, 9.10,
+  kernel, range, 9.13; def:hall-7.14), with `[ub-..]` link definitions.
+- B6: memo's two cuts, plus two sentences the docstring boxes repeat (essential self-adjointness
+  fields; what `IsResolvent` asks). Design 1,292 words (own count).
+- B7 `IsResolvent T lam B`; B8 "in eight files, by topic"; B9 "most Hamiltonians"; B10 apiDocs on
+  the listed names.
+- `cd web && lake build && lake exe generate-manual`: succeed. 64 blueprint anchors all exist.
+  `check_temporal_wording.py` (now scanning `web/`): OK.

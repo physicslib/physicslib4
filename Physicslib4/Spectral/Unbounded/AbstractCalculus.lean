@@ -13,9 +13,9 @@ import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
 This file carries out, abstractly, the second stage of the spectral theorem: the input is
 a compact metric space `X` and an isometric `*`-homomorphism `Φ : C(X, ℂ) → 𝓑(H)`, with no
 operator in sight, and the output is a projection-valued measure `abstractPVM` on `X`
-integrating to `Φ`. The bounded self-adjoint case of
-`Physicslib4/Spectral/SpectralTheorem.lean` and the bounded normal case below are then two
-instances of the one statement.
+integrating to `Φ`. The bounded normal case below is an instance of it. The bounded
+self-adjoint case of `Physicslib4/Spectral/SpectralTheorem.lean` runs the same argument
+directly on X = σ(A), and is not derived from this file.
 
 ## Main definitions
 
@@ -71,8 +71,9 @@ H is an abstract continuous functional calculus: it is linear and multiplicative
 These are the properties of f ↦ f(A) for a bounded normal operator A on X = σ(A)
 (`normalCalculus`), with the operator itself forgotten. From such a Φ alone the file builds a
 projection-valued measure on X whose integrals reproduce Φ (`abstractPVM`), so the passage from
-a continuous functional calculus to a spectral measure is carried out once, for the
-self-adjoint and the normal case together.
+a continuous functional calculus to a spectral measure is carried out once, in general. The
+spectral theorem for bounded normal operators (`existsUnique_spectralMeasure_normal`) is its
+special case Φ = `normalCalculus`.
 
 Implementation note: the five properties are separate fields on an unbundled map rather than a
 bundled star-algebra homomorphism, as in the blueprint. X carries its Borel σ-algebra

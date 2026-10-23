@@ -97,8 +97,8 @@ on all of H this is the usual Hermitian conjugate A†.
 
 Implementation note: the adjoint is Mathlib's `LinearPMap.adjoint`, written `T†`, with domain
 `LinearPMap.adjointDomain` (continuity of ψ ↦ ⟨φ, Tψ⟩, which is boundedness). When `T.domain` is
-not dense, Mathlib's `T†` is the zero map on that domain; this is why the density hypothesis is
-needed here.
+not dense, Mathlib's `T†` keeps the domain `adjointDomain` but is the zero map there; this is
+why the density hypothesis is needed here.
 
 Blueprint: prpstn:adjoint-well-defined
 -/

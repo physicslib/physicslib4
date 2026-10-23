@@ -868,7 +868,7 @@ variable {Y Z : Type*} [MeasurableSpace Y] [MeasurableSpace Z]
 The pushforward of a projection-valued measure μ on Y along a measurable map T : Y → Z: the
 projection-valued measure on Z sending a measurable F to μ(T⁻¹(F)).
 
-For a bounded measurable g on Z the change of variables ∫ g d(T(\*)μ) = ∫ (g ∘ T) dμ holds
+For a bounded measurable g on Z, ∫ g dμ' = ∫ (g ∘ T) dμ, where μ' is the pushforward
 (`integral_pushforwardPVM`). The uniqueness half of the unbounded spectral theorem uses it to
 move a second spectral measure ν of A, on ℝ, to the circle along the Cayley map, where it is
 compared with the spectral measure of the Cayley transform U.
@@ -876,7 +876,7 @@ compared with the spectral measure of the Cayley transform U.
 Implementation note: T need not be bijective, unlike `mapPVM`; in exchange non-measurable F are
 sent to 0 by an explicit case split.
 
-Blueprint: the change of variables in the uniqueness proof of thrm:hall-10.4 (Step 3)
+Blueprint: thrm:hall-10.4 (formalization note after its proof)
 -/
 noncomputable def pushforwardPVM (μ : ProjectionValuedMeasure Y H) (T : Y → Z)
     (hT : Measurable T) : ProjectionValuedMeasure Z H where

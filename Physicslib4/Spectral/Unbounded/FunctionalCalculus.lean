@@ -90,8 +90,8 @@ The functional calculus of a self-adjoint operator A: the operator f(A) = ∫ f(
 measurable function f : ℝ → ℂ, possibly unbounded, with domain the vectors ψ for which
 ∫ |f|² is finite against the spectral distribution of ψ.
 
-This gives a meaning to any measurable function of an observable: the Hamiltonian H gives the
-time evolution e^(−itH), a position operator gives the projections onto regions of space, and
+This gives a meaning to any measurable function of an observable: the Hamiltonian Ĥ gives the
+time evolution e^(−itĤ), a position operator gives the projections onto regions of space, and
 so on. When f(λ) = λ one recovers A itself (`functionalCalculus_id`). A bounded f gives a
 bounded operator defined on all of H, equal to the bounded integral of f against μ(A)
 (`functionalCalculus_of_bddMeasurable`); this is the case of the unitary group e^(itA) of

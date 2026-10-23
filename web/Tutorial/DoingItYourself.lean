@@ -117,7 +117,7 @@ lake exe generate-tutorial --output _out/tutorial
 The first `lake build` in `web/` compiles Verso, the tool that renders these pages, and the native
 code of the modules it links, and takes a while. The last command writes the HTML to
 `web/_out/tutorial/html-multi/`, and `web/README.md` explains how to view it. Change an example so
-that it no longer checks, and the build stops there.
+that it fails to check, and the build stops there.
 
 :::::exercise
 _Needs a local setup._ Build the library, open `Physicslib4/AQFT/HaagKastler/Net.lean`, and find

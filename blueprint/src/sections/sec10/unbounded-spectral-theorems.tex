@@ -3234,6 +3234,8 @@ using injectivity for the first equality. The extension of $\mu^U$ to $S^1$ assi
 Finally, the restriction of $\mu^A$ to Borel subsets of $\sigma(A)$ is a projection-valued measure on $\sigma(A)$, by Part 1 of Lemma~\ref{lmm:borel-bijection-transports-pvm} applied with $Y = \mathbb{R}$ and $Y_0 = \sigma(A)$ (legitimate since $\mu^A(\mathbb{R}\setminus\sigma(A)) = 0$); and $\int_{\sigma(A)}\lambda\,d\mu^A(\lambda) = \int_{\mathbb{R}}\lambda\,d\mu^A(\lambda) = A$, the integrals agreeing because the two measures $\mu^A_\psi$ involved differ only on the $\mu^A_\psi$-null set $\mathbb{R}\setminus\sigma(A)$, so Lemma~\ref{lmm:integral-ignores-null-sets} applies.
 \end{proof}
 
+\noindent\textit{Formalization note.} Where the proof above transports $\nu$ to $S^1\setminus\{1\}$ by Part 2 of Lemma~\ref{lmm:borel-bijection-transports-pvm} and extends by zero, the Lean proof (\texttt{eq\_cayleyPVM\_of\_pmapIntegral\_eq}) pushes $\nu$ forward along $C$ directly to all of $S^1$ (\texttt{pushforwardPVM}, \texttt{integral\_pushforwardPVM}), which needs only measurability of $C$.
+
 With the spectral theorem in hand, every measurable function of a self-adjoint operator can be defined by integrating that function against the operator's spectral measure. This is the functional calculus for unbounded self-adjoint operators, and it is what gives meaning to expressions such as $e^{itA}$, the one-parameter unitary groups of Stone's Theorem. We first give the projection-valued measure of Theorem~\ref{thrm:hall-10.4} a name, so that it can be referred to.
 
 \begin{definition}[Spectral Measure of a Self-Adjoint Operator]
