@@ -238,3 +238,129 @@ checks as part 1 (`/tmp/dscheck/check.py`, `/tmp/dscheck/strip.py`).
 
 The part 1 proposal (`subSmul`) stands. Every other declaration whose docstring was rewritten
 in part 2 is already cited.
+
+# Part 3: the chapter `web/Manual/Unbounded.lean`
+
+Chapter "Unbounded operators and their spectral theorem" (blueprint §10.3), following the
+pattern of `web/Manual/Spectral.lean`. Appended after each section.
+
+## Step 12: reconnaissance (2026-10-23)
+
+- Read `.claude/CLAUDE.md`, the plan (chapter 3, pattern), `web/README.md`, `Manual/Spectral.lean`,
+  `Manual/GNS.lean` (header), the spectral and GNS review memos (cross-chapter links with
+  `{ref "tag"}`, never `../X`; no unbacked claims), this log, the headline docstrings of all
+  eight files of `Spectral/Unbounded/`, and the blueprint section's labels, subsections and
+  formalization notes (l. 1818 `prpstn:hall-10.3`, l. 2280 `lmm:hall-10.27`, l. 2329
+  `thrm:hall-10.23`).
+- Facts for the chapter: the library has the spectral theorem for *bounded* normal operators
+  (`existsUnique_spectralMeasure_normal`) and for *unbounded self-adjoint* operators; there is no
+  unbounded normal spectral theorem (blueprint has none either), so the chapter does not claim
+  one. The Lean spectral theorem goes through the Cayley transform, as the blueprint's; direct
+  sums are used by the blueprint's proof of prpstn:hall-10.3 only, and the Lean proof avoids them
+  (formalization note l. 1818). The bounded self-adjoint theorem of §10.2 is *not* derived from
+  `abstractPVM` in Lean (the AbstractCalculus module doc says the two are "instances of the one
+  statement"; only the normal case is, in Lean), so the chapter does not claim it.
+- Name clash: `spectralMeasure` and `functionalCalculus` exist in both `Physicslib4.Spectral` and
+  `Physicslib4.Spectral.Unbounded`; the chapter opens `Physicslib4.Spectral hiding
+  spectralMeasure functionalCalculus`, so docstring spans resolve to the unbounded ones.
+
+## Step 13: chapter header and Overview (2026-10-23)
+
+- Created `web/Manual/Unbounded.lean` (tag `unbounded`, file
+  `Unbounded-operators-and-their-spectral-theorem`), included after `Manual.Spectral` in
+  `web/Manual.lean` (import and `{include}`, blueprint order); added the line to the manual list
+  in `web/README.md`.
+- Overview (656 words; intro 76): reminder on position and momentum, Hellinger–Toeplitz as
+  background (a reminder, not a library claim), the theorem with its domain statement, the five
+  stages. States that the unbounded normal spectral theorem is neither in the blueprint nor
+  proved. Claims checked: `existsUnique_isSelfAdjoint_extension`, no `sorry` in
+  `Spectral/Unbounded/`, `abstractPVM_integral_continuous` (PVM from any abstract calculus).
+- Built: `lake build` and `generate-manual` succeed; no warnings from the chapter.
+
+## Step 14: Design (2026-10-23)
+
+- Design (1,330 words, trimmed from 1,485): partial maps (`LinearPMap`, domain equality in every
+  equation, plain product `H × H` per the def:product-hilbert-space note); density as
+  `HasDenseDomain`, symmetry density-free (blueprint remark is in the proof of
+  lmm:self-adjoint-maximally-symmetric, l. 471, not prpstn:hall-9.11); Mathlib's adjoint (zero
+  map on its domain when not dense); `IsSelfAdjoint` = `T† = T`; resolvent as a predicate, `pmap`
+  prefix, sign; the unbounded integral (three steps, measurability guard in `integralApply`);
+  self-adjointness of ∫ f dμ without direct sums (note of prpstn:hall-10.3); normal operators
+  (`cfcHom`, note of thrm:hall-10.23); the abstract calculus; why the Cayley transform, with three
+  departures (`cayleyPVM` composes with D; uniqueness via `pushforwardPVM` to the whole circle,
+  where blueprint Step 3 uses `mapPVM` onto S¹ \ {1}; H = {0} handled separately); measure on ℝ.
+- Dropped an unverified claim ("the library has no products of unbounded operators").
+- Built: `lake build` and `generate-manual` succeed.
+
+## Step 15: Main, first two subsections (2026-10-23)
+
+- "Domains, adjoints and self-adjointness": docstrings `HasDenseDomain`, `IsSymmetric`,
+  `IsPositive`, `IsEssentiallySelfAdjoint`; `#check existsUnique_isSelfAdjoint_extension`;
+  apiDocs links to the adjoint, closure, kernel/range and bounded-perturbation results.
+- "The spectrum and essential self-adjointness": docstrings `subSmul`, `IsResolvent`,
+  `pmapSpectrum`; `#check pmapSpectrum_subset_real`, `isEssentiallySelfAdjoint_iff_dense_range`.
+- `#check` outputs taken from `lake env lean` on a scratch file in /tmp (same 120-column width);
+  they match Verso's. Built: `lake build Manual.Unbounded` succeeds.
+
+## Step 16: Main, direct sums, integration, normal operators (2026-10-23)
+
+- "Direct sums": docstring `IsDirectSumOperator`; `#check
+  isEssentiallySelfAdjoint_of_isDirectSumOperator`; apiDocs for the internal form and
+  `isHilbertSum_of_isInternalOrthogonalDecomposition`.
+- "Integration against a projection-valued measure": docstrings `integralDomain`,
+  `integralApply`, `pmapIntegral`; `#check pmapIntegral_of_bddMeasurable`,
+  `isSelfAdjoint_pmapIntegral_of_real`.
+- "Bounded normal operators": docstrings `mvApply`, `normalCalculus`; `#check spectrum_mvApply`.
+- Built: `lake build Manual.Unbounded` succeeds.
+
+## Step 17: Main, abstract calculus, Cayley transform, spectral theorem (2026-10-23)
+
+- "The abstract functional calculus": docstrings `IsAbstractCalculus`, `abstractPVM`; `#check
+  existsUnique_spectralMeasure_normal`.
+- "The Cayley transform": docstrings `cayleyMap`, `IsCayleyTransform`, `cayleyPVM`;
+  `exists_isCayleyTransform` linked, not printed (six nested conjuncts), its content in prose;
+  `#check pmapIntegral_cayleyPVM_id`.
+- "The spectral theorem and the functional calculus": `#check
+  existsUnique_spectralMeasure_unbounded`, `spectralMeasure_concentrated`,
+  `functionalCalculus_of_bddMeasurable` (prints `Unbounded.functionalCalculus`, explained in the
+  prose); docstrings `spectralMeasure`, `functionalCalculus`.
+- Main: 876 words; 20 docstrings so far, 12 `#check`s. Built: `lake build Manual.Unbounded`
+  succeeds.
+
+## Step 18: Where to look (2026-10-23)
+
+- One entry per file of `Spectral/Unbounded/` (8), each with an apiDocs link; link to the bounded
+  chapter's file list (`{ref "spectral-files"}`), the blueprint section and the section page
+  `sec10-3-unbounded.html`. 220 words.
+- Built: `lake build` (all targets) and `generate-manual` succeed. Chapter total 3,158 words.
+
+## Step 19: final checks and reread (2026-10-23)
+
+- Rendering: docstring code spans checked in the HTML. Added `import Physicslib4.AQFT.PositiveEnergy`
+  so `Physicslib4.AQFT.IsPositiveEnergy` (in the `IsPositive` box) links. Remaining unlinked spans
+  are harmless (`T ↦ T†`, `T† = T`, `T.closure† = T.closure`, `MemLp f 2 (μ.assoc ψ)`, `pmap`:
+  unbound variables or a prefix). `functionalCalculus` and `spectralMeasure` in the boxes link to
+  the unbounded declarations (the `hiding` works).
+- Links: all 56 blueprint anchors exist in `blueprint/web/chptr-haag-kastler-axioms-blueprint.html`;
+  `{ref "spectral"}`, `spectral-design`, `spectral-main`, `spectral-files`, `unbounded-design`
+  resolve (chapter-tag anchors such as `#spectral` are Verso's page-top links, as in the other
+  chapters); 52 API-doc links point at the eight `Spectral/Unbounded/` modules; the section page
+  `sec10-3-unbounded.html` exists in `home_page/`.
+- `python3 scripts/check_temporal_wording.py`: OK (it does not scan `web/`; a manual grep of the
+  chapter finds no temporal wording). No unescaped asterisks.
+- Reread: Overview wording fixed ("treats", not "defines", for Mathlib's closures; Hamiltonian
+  written Ĥ to avoid a clash with the Hilbert space H); two long lines reflowed.
+- Totals: intro 76, Overview 663, Design 1,330, Main 876, Where to look 220; 3,165 words.
+  20 docstrings, 12 `#check`s. `lake build` and `generate-manual` succeed.
+
+## Doubts for the reviewer
+
+1. Design is 1,330 words, slightly over the ~1,300 target.
+2. The Design claims that the bounded self-adjoint theorem of §10.2 is not rederived from
+   `abstractPVM` (true in Lean: `Spectral/SpectralTheorem.lean` precedes it in the import graph);
+   the `AbstractCalculus.lean` module docstring says the two cases "are then two instances of the
+   one statement", which overstates this for the Lean code. Not edited (outside scope).
+3. Uniqueness: the chapter calls `pushforwardPVM` to the whole circle a departure from blueprint
+   Step 3 (`mapPVM` onto S¹ \ {1}); the blueprint has no formalization note for it.
+4. "Hellinger–Toeplitz" and the Sobolev-space example are background reminders, not library
+   facts; check the wording does not read as a library claim.

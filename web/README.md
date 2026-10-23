@@ -48,6 +48,8 @@ examples on the page are elaborated against the library itself.
 - `Manual.lean`: the reference manual's title page; it includes the chapters.
 - `Manual/GNS.lean`: "The GNS construction" (blueprint Section 10.1).
 - `Manual/Spectral.lean`: "Bounded spectral theory" (blueprint Section 10.2).
+- `Manual/Unbounded.lean`: "Unbounded operators and their spectral theorem" (blueprint
+  Section 10.3).
 - `Manual/Spacetime.lean`: "Spacetime and geometry" (blueprint Section 10.5).
 - `Manual/HaagKastler.lean`: "The Haag–Kastler axioms in Minkowski spacetime" (blueprint
   Section 10.6).
