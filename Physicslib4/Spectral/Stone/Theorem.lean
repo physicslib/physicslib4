@@ -200,11 +200,30 @@ theorem eq_of_eqOn_dense {S T : H →L[ℂ] H} {D : Submodule ℂ H} (hD : Dense
   DFunLike.coe_injective (Continuous.ext_on hD S.continuous T.continuous h)
 
 /--
-**Stone's theorem.** The infinitesimal generator `A` of a strongly continuous one-parameter
-unitary group `U` is densely defined and self-adjoint, and `U(t) = e^{itA}` for all `t`.
-Moreover `A` is the only self-adjoint operator with this property.
+Stone's theorem: the infinitesimal generator A of a strongly continuous one-parameter unitary
+group U is densely defined and self-adjoint, U(t) = e^(itA) for every t, and A is the only
+self-adjoint operator with this property.
 
-Blueprint reference: `thrm:hall-10.15`.
+Together with `generator_expUnitary` this gives a one-to-one correspondence between
+self-adjoint operators and strongly continuous one-parameter unitary groups: A ↦ e^(itA) one
+way, U ↦ its generator the other. It is why every continuous one-parameter symmetry of a quantum
+system comes with an observable: the Hamiltonian for time translations, momentum for spatial
+translations, angular momentum for rotations about an axis, up to sign and factors of ħ.
+
+The proof has three steps. The generator is essentially self-adjoint: its deficiency subspaces
+Ker(A\* ∓ i𝟙) are trivial, by an ODE argument along orbits
+(`isEssentiallySelfAdjoint_generator`). The orbits of U and of e^(itA^(cl)), for the closure
+A^(cl), agree on Dom(A), because their difference starts at 0 and has constant norm
+(`orbit_eq_expUnitary_closure`); so U(t) = e^(itA^(cl)), Dom(A) being dense. Finally the
+generator of e^(itA^(cl)) is A^(cl) (`generator_expUnitary`), so A = A^(cl) is self-adjoint.
+
+Implementation note: `expUnitary` takes a proof of self-adjointness as an argument, so the
+statement opens with `∃ hA : IsSelfAdjoint (generator U)` and writes e^(itA) as
+`expUnitary hA t`; U(t) = e^(itA) is an equality in `H ≃ₗᵢ[ℂ] H`. Uniqueness says that every
+self-adjoint B with U(t) = e^(itB) for all t equals the generator. The only assumption on H is
+completeness.
+
+Blueprint: thrm:hall-10.15
 -/
 theorem stone {U : ℝ → (H ≃ₗᵢ[ℂ] H)} (hU : IsOneParameterUnitaryGroup U)
     (hc : IsStronglyContinuous U) :

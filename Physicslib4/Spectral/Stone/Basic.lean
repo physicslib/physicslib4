@@ -39,32 +39,58 @@ open Filter
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /--
-A *one-parameter unitary group* on `H`: a family `U t` of unitary operators, `t ∈ ℝ`, with
-`U 0 = 1` and `U (s + t) = U s U t`. Unitaries are modelled as linear isometry equivalences,
-as elsewhere in the project.
+A family U(t), t ∈ ℝ, of unitary operators on H is a one-parameter unitary group: U(0) = 𝟙 and
+U(s + t) = U(s)U(t) for all real s and t.
 
-Blueprint reference: `def:hall-10.11`.
+Symmetries of a quantum system that depend on one real parameter, such as time translations,
+translations along a fixed direction or rotations about a fixed axis, act on the Hilbert
+space by unitary operators, and performing two of them in succession adds the parameters. The
+group law forces U(t)\* = U(t)⁻¹ = U(−t) (`IsOneParameterUnitaryGroup.adjoint_eq`). No
+continuity in t is assumed; that is `IsStronglyContinuous`, and Stone's theorem (`stone`) uses
+both.
+
+Implementation note: a unitary is a linear isometry equivalence `H ≃ₗᵢ[ℂ] H`, as elsewhere in
+the project, so each U(t) is unitary by its type and the structure records only the two group
+identities, stated vector by vector.
+
+Blueprint: def:hall-10.11
 -/
 structure IsOneParameterUnitaryGroup (U : ℝ → (H ≃ₗᵢ[ℂ] H)) : Prop where
-  /-- `U 0 = 1`. -/
+  /-- U(0) is the identity: U(0)ψ = ψ for every ψ. -/
   map_zero : ∀ ψ : H, U 0 ψ = ψ
-  /-- The group law `U (s + t) = U s U t`. -/
+  /-- The group law U(s + t) = U(s)U(t), applied to each vector ψ. -/
   map_add : ∀ (s t : ℝ) (ψ : H), U (s + t) ψ = U s (U t ψ)
 
 /--
-A family `U` is *strongly continuous* if `s ↦ U s ψ` is continuous for every `ψ`, i.e.
-`‖U t ψ - U s ψ‖ → 0` as `s → t`, for every `t`.
+A family U(t) of unitary operators is strongly continuous: t ↦ U(t)ψ is continuous for every
+vector ψ.
 
-Blueprint reference: `def:hall-10.11`.
+Strong continuity asks that each state vector move continuously, ‖U(t)ψ − U(s)ψ‖ → 0 as s → t,
+and not that U(s) → U(t) in operator norm. The weaker notion is the one physics needs: the
+translations (U(t)ψ)(x) = ψ(x + t) on L²(ℝ) are strongly continuous but not norm continuous. For
+a one-parameter unitary group, continuity at t = 0 already suffices
+(`isStronglyContinuous_iff_tendsto_zero`).
+
+Implementation note: the predicate applies to any family `U : ℝ → (H ≃ₗᵢ[ℂ] H)`; the group law
+is the separate hypothesis `IsOneParameterUnitaryGroup U`. Continuity is Mathlib's
+`Continuous`, for the norm topology of H.
+
+Blueprint: def:hall-10.11
 -/
 def IsStronglyContinuous (U : ℝ → (H ≃ₗᵢ[ℂ] H)) : Prop :=
   ∀ ψ : H, Continuous fun t : ℝ => U t ψ
 
 /--
-The difference quotient `(1/i) (U t ψ - ψ)/t` whose punctured limit at `0` defines the
+The difference quotient (1/i)(U(t)ψ − ψ)/t, whose limit as t → 0, t ≠ 0, defines the
 infinitesimal generator.
 
-Blueprint reference: `def:hall-10.13`.
+If U(t) = e^(itA), then formally (U(t)ψ − ψ)/t → iAψ as t → 0, and the factor 1/i recovers Aψ.
+That factor fixes the sign convention: e^(itA) has generator A.
+
+Implementation note: the quotient is written (it)⁻¹ • (U(t)ψ − ψ). At t = 0 it is 0, by Lean's
+convention 0⁻¹ = 0; the generator uses only the punctured limit, so this value plays no role.
+
+Blueprint: def:hall-10.13
 -/
 noncomputable def generatorQuotient (U : ℝ → (H ≃ₗᵢ[ℂ] H)) (ψ : H) (t : ℝ) : H :=
   (Complex.I * (t : ℂ))⁻¹ • (U t ψ - ψ)
@@ -80,10 +106,19 @@ theorem generatorQuotient_smul (U : ℝ → (H ≃ₗᵢ[ℂ] H)) (c : ℂ) (ψ 
   simp only [generatorQuotient, map_smul, ← smul_sub, smul_comm c]
 
 /--
-The domain of the infinitesimal generator: the vectors `ψ` for which the punctured limit of
-`generatorQuotient U ψ t` as `t → 0` exists.
+The domain of the infinitesimal generator: the vectors ψ for which the difference quotient
+(1/i)(U(t)ψ − ψ)/t has a limit as t → 0, t ≠ 0.
 
-Blueprint reference: `def:hall-10.13`.
+In other words, ψ is in the domain when its orbit t ↦ U(t)ψ has a derivative at t = 0 in the
+norm of H. This is a subspace, since the quotient is linear in ψ and limits are linear. In
+general it is not all of H: for the translations (U(t)ψ)(x) = ψ(x + t) on L²(ℝ) it consists of
+the ψ whose derivative ψ' is again square integrable. For a strongly continuous one-parameter
+unitary group it is dense (`hasDenseDomain_generator`).
+
+Implementation note: the limit is taken along the punctured neighbourhood filter `𝓝[≠] 0`,
+and the domain is a `Submodule ℂ H`.
+
+Blueprint: def:hall-10.13
 -/
 def generatorDomain (U : ℝ → (H ≃ₗᵢ[ℂ] H)) : Submodule ℂ H where
   carrier := {ψ | ∃ χ : H, Tendsto (generatorQuotient U ψ) (𝓝[≠] 0) (𝓝 χ)}
@@ -98,11 +133,23 @@ def generatorDomain (U : ℝ → (H ≃ₗᵢ[ℂ] H)) : Submodule ℂ H where
     exact ⟨c • χ, (funext (generatorQuotient_smul U c ψ)).symm ▸ h.const_smul c⟩
 
 /--
-The *infinitesimal generator* of `U`: `A ψ = lim_{t → 0, t ≠ 0} (1/i) (U t ψ - ψ)/t` on the
-subspace `generatorDomain U` where the limit exists. No continuity or density is assumed;
-density of the domain for a strongly continuous group is `lmm:hall-10.18`.
+The infinitesimal generator A of a family U(t) of unitaries: Aψ is the limit of
+(1/i)(U(t)ψ − ψ)/t as t → 0, t ≠ 0, on the subspace of vectors ψ where that limit exists.
 
-Blueprint reference: `def:hall-10.13`.
+Formally U(t) = e^(itA), and A is −i times the derivative of U(t) at t = 0. Stone's theorem
+(`stone`) makes this exact: for a strongly continuous one-parameter unitary group, A is
+self-adjoint and U(t) = e^(itA). Conversely, for self-adjoint A the group e^(itA) has generator
+A (`generator_expUnitary`). This is how observables arise from symmetries: the generator of the
+translations (U(t)ψ)(x) = ψ(x + t) on L²(ℝ) is the momentum operator −i d/dx, and in this sign
+convention a time evolution e^(−itĤ) has generator −Ĥ. The definition itself assumes nothing
+about U: no group law, no continuity, and no density of the domain. Those enter only the
+results about A; density of the domain is `hasDenseDomain_generator`.
+
+Implementation note: A is a `LinearPMap` (`H →ₗ.[ℂ] H`) with domain `generatorDomain U`, and
+its value is Mathlib's `limUnder` along the punctured filter `𝓝[≠] 0`, which is the limit
+wherever one exists. Membership and value are handled together by `exists_generator_eq_iff`.
+
+Blueprint: def:hall-10.13
 -/
 noncomputable def generator (U : ℝ → (H ≃ₗᵢ[ℂ] H)) : H →ₗ.[ℂ] H where
   domain := generatorDomain U
