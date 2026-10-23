@@ -50,6 +50,7 @@ examples on the page are elaborated against the library itself.
 - `Manual/Spectral.lean`: "Bounded spectral theory" (blueprint Section 10.2).
 - `Manual/Unbounded.lean`: "Unbounded operators and their spectral theorem" (blueprint
   Section 10.3).
+- `Manual/Stone.lean`: "Stone's theorem" (blueprint Section 10.4).
 - `Manual/Spacetime.lean`: "Spacetime and geometry" (blueprint Section 10.5).
 - `Manual/HaagKastler.lean`: "The Haag–Kastler axioms in Minkowski spacetime" (blueprint
   Section 10.6).

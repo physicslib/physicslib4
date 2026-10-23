@@ -2,6 +2,7 @@ import VersoManual
 import Manual.GNS
 import Manual.Spectral
 import Manual.Unbounded
+import Manual.Stone
 import Manual.Spacetime
 import Manual.HaagKastler
 import Manual.Curved
@@ -22,6 +23,8 @@ where they live. It has one chapter per section of Chapter 10 of the blueprint. 
 {include 1 Manual.Spectral}
 
 {include 1 Manual.Unbounded}
+
+{include 1 Manual.Stone}
 
 {include 1 Manual.Spacetime}
 

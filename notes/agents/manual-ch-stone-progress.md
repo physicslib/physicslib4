@@ -231,3 +231,70 @@ reference them):
 - `Physicslib4.restrictStarAlgEquiv`: a lemma node "Restriction of a `*`-automorphism", used
   for the bundled equivalence R(B) ≃ R(L·B) (`localVonNeumannEquiv`).
 Each docstring carries a descriptive "Blueprint: uncited (...)" line until then.
+
+# Part 3: the chapter `web/Manual/Stone.lean`, part 1 (header, intro, Overview, Design)
+
+## Step 11: reconnaissance (2026-10-23)
+
+- Read `.claude/CLAUDE.md`, the plan (chapter 4, per-chapter pattern), `web/README.md`,
+  `Manual/Unbounded.lean` and `Manual/Spectral.lean` (header, tags, link style),
+  `review-manual-ch-unbounded-2026-10-23.md` (no unbacked claims; do not promise formalization
+  notes that do not exist), this log, `stones-theorem.tex`, and the positive-energy and
+  weak-continuity entries of `haag-kastler-axioms.tex` (§10.6, l. 1898 and l. 1979–2100).
+- Facts for the chapter: `stones-theorem.tex` has no "Formalization note" paragraph; its Lean
+  remarks are inside entries (def:hall-10.13, lmm:generator-symmetry-identity, proof of
+  prpstn:hall-10.14), so Design links entries and says so. 79 `\leanok` for 79 environments in
+  §10.4; no `sorry` in `Spectral/Stone/`, `AQFT/PositiveEnergy.lean`,
+  `Analysis/StrongContinuity.lean`; no `SeparableSpace` or `Nontrivial` there. Filter DCT
+  (`tendsto_integral_filter_of_dominated_convergence`) is used in `Exponential.lean` only (bounds
+  2 and 2|λ|, squared 4 and 4λ²), not in the density proof, which uses
+  `HasCompactSupport.hasDerivAt_convolution_left` and
+  `ContDiffBump.convolution_tendsto_right_of_continuous`. No theorem identifies `expUnitary` with
+  `NormedSpace.exp` for bounded P; the chapter does not claim one. `strongContinuous_of_weak` is
+  used by `GNS/UnitaryRepresentation.lean` (and through it by the Minkowski and curved stabiliser
+  files).
+
+## Step 12: chapter header, intro and Overview (2026-10-23)
+
+- Created `web/Manual/Stone.lean` (tag `stone`, file `Stones-theorem`); import and `{include}`
+  after `Manual.Unbounded` in `web/Manual.lean` (blueprint order); line added to the manual list
+  in `web/README.md`. Imports `AQFT.PositiveEnergy`, `Analysis.StrongContinuity`,
+  `GNS.UnitaryRepresentation`, `AQFT.HaagKastler.VacuumState` (for the `apiDocs` links).
+- Intro 107 words; Overview 616: reminder on e^(−itĤ) and the Schrödinger equation (derivative
+  at 0 is −iĤ), definitions, sign convention (e^(−itĤ) has generator −Ĥ), the bijection, eight
+  parts (groups, generator, bounded case, e^(itA), density, Stone, positive energy, weak
+  continuity), status (no `sorry`; Mathlib for the four imported results; only completeness of
+  H), namespaces.
+- Placeholders under "Main definitions and theorems" and "Where to look": "This section is in
+  preparation."
+- Built: `lake build` and `generate-manual` succeed; page `Stones-theorem/index.html` renders
+  with no literal `\*`, `**`, `` $` ``, `{apiDocs` or `{ref`.
+
+## Step 13: Design (2026-10-23)
+
+- Design 1,148 words, seven subsections: unitarity / group law / continuity separate; the
+  generator (`LinearPMap`, `generatorDomain` where the punctured limit exists, `limUnder`,
+  `exists_generator_eq_iff`, 0⁻¹ = 0, density-free symmetry with the remark of
+  lmm:generator-symmetry-identity); the exponential through the functional calculus (links the
+  unbounded chapter; `functionalCalculus_expFun`; the `∃ hA` in `stone`; filter DCT for strong
+  continuity and the derivative at 0; maximality of self-adjoint operators); density by
+  convolution (Gårding as background); proof route and uniqueness (`generator_eq_of_eq_expUnitary`,
+  `exp_generator_unique`); positive energy as a property of the generator (three fields,
+  `isPositiveEnergy_iff_exists_exp`, vacuum and ground states); weak continuity
+  (`isStronglyContinuous_iff_tendsto_zero`, `strongContinuous_of_weak`, the GNS theorems).
+- Links: blueprint entries only (def:hall-10.13, lmm:generator-symmetry-identity,
+  prpstn:hall-10.14, lmm:hall-10.18, thrm:hall-10.15, thrm:positive-energy-iff-exp,
+  thrm:invariant-state-gns-unitary-general); chapters by `{ref}` (unbounded, unbounded-design,
+  haag-kastler, curved, gns-design). No internal memos linked.
+- Built: `lake build` and `generate-manual` succeed. `python3 scripts/check_temporal_wording.py`:
+  OK; a grep of the chapter for temporal words and version strings finds nothing.
+
+## For part 2
+
+- Main definitions and theorems (docstrings of `IsOneParameterUnitaryGroup`,
+  `IsStronglyContinuous`, `generator`, `expUnitary`, `average`, `IsPositiveEnergy`; `#check` of
+  `generator_expUnitary`, `hasDenseDomain_generator`, `stone`, `isPositiveEnergy_iff_exists_exp`,
+  `strongContinuous_of_weak`), with Blueprint lines; Where to look. Add the `open` lines for
+  docstring code spans (`Physicslib4.Spectral.Stone`, `Physicslib4.AQFT`, and
+  `Physicslib4.Spectral.Unbounded` hiding the bounded/unbounded name clashes as in
+  `Unbounded.lean`).
