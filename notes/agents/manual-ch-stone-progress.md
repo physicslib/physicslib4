@@ -130,3 +130,104 @@ thrm:hall-10.15).
 - Helper docstrings in `Spectral/Stone/` still use the older "Blueprint reference: `label`."
   form with backticks; the module docstrings cite labels in backticks too (left alone, as
   outside the headline scope).
+
+# Part 2: files outside `Spectral/Stone/`
+
+## Step 7: `AQFT/PositiveEnergy.lean` (2026-10-23)
+
+- Rewritten (7 docstrings): `IsPositiveEnergy`, `isPositiveEnergy_const_refl`,
+  `generator_eq_of_eq_expUnitary`, `IsPositiveEnergy.conj`, `IsPositiveEnergy.strongContinuous`,
+  `isPositiveEnergy_exp`, `isPositiveEnergy_iff_exists_exp`. The three field docstrings of
+  `IsPositiveEnergy` already met the format and are unchanged; `exp_generator_unique` (supporting
+  lemma) and the module docstring left alone.
+- Checked: the generator is unbounded (`generator V : H →ₗ.[ℂ] H`), no bounded-generator
+  restriction anywhere, no `**Restriction:**` line needed; `IsPositive` is symmetry plus
+  0 ≤ Re⟨ψ, Aψ⟩; `generator_refl` gives generator 0 on ⊤; `IsPositiveEnergy.conj` states only
+  the positive-energy conclusion (the form W A W⁻¹ on W Dom(A) is `mem_generator_conj_domain_iff`
+  and `generator_conj_apply`, used in the proof), so the docstring now says so;
+  `isPositiveEnergy_exp` takes Mathlib's `ContinuousLinearMap.IsPositive` and a pointwise
+  hypothesis, proof via `exists_isOneParameterUnitaryGroup_exp`, `isStronglyContinuous_of_eq_exp`,
+  `generator_eq_of_eq_exp`, `isPositive_toPMap_iff`; the iff goes through `stone` and
+  `generator_expUnitary`. `omit [CompleteSpace H]` on const, conj and strongContinuous (stated).
+  Vacuum/generator links: `HaagKastlerNet.IsVacuumState` (t ↦ U(γ(t)) for every
+  future-timelike translation γ) and `HaagKastlerNet.IsGroundStateForFlow` (Minkowski
+  `QuasilocalKMS.lean`, curved `StabilizerKMS.lean`) both use `IsPositiveEnergy`; the latter's
+  `exists_strongContinuous_unitary` uses `IsPositiveEnergy.strongContinuous`.
+- Corrected: `IsPositiveEnergy.conj` claimed "with generator W A W⁻¹ on W · Dom(A)" as if part
+  of the statement (now attributed to the two Stone lemmas). TeX-style e^{itA} replaced by
+  e^(itA). No mathematical errors otherwise.
+- Uncited: none (def:positive-energy, lmm:positive-energy-const, lmm:exp-generator-unique,
+  lmm:positive-energy-conj, lmm:positive-energy-strong-continuous,
+  lmm:positive-energy-exp-bounded, thrm:positive-energy-iff-exp).
+- Built: only the module-system import notices; checks clean (one "for"-initial line and one
+  long line reflowed); comments-only confirmed.
+
+## Step 8: `Operators/Conjugation.lean` (2026-10-23)
+
+- Rewritten (11 docstrings): `Units.conjMulEquiv`, `MulEquiv.image_centralizer`,
+  `MulEquiv.image_centralizer_centralizer`, `lieConj`, `exp_lieConj`, `scalarOperators`,
+  `IsFactor`, `IsFactor.conj`, `lieConj_apply_eq_conjStarAlgEquiv`, `norm_lieConj`,
+  `restrictStarAlgEquiv`. Helpers left alone: `conjMulEquiv_apply`, `lieConj_apply`,
+  `lieConj_smul`, `lieConj_one`, `lieConj_add`, `lieConj_star`, `lieConj_image_scalarOperators`;
+  module docstring left alone.
+- Checked: `lieConj` is `Units.conjMulEquiv` of `Uop.toContinuousLinearEquiv.toUnit` (only a
+  `MulEquiv`); `exp_lieConj` is `NormedSpace.exp_units_conj` and needs `CompleteSpace H`;
+  `IsFactor R` is `R ∩ Set.centralizer R = scalarOperators H` for any set R (so a factor contains
+  1); `IsFactor.conj` is used by both `localVonNeumann_isFactor_smul`;
+  `image_centralizer_centralizer` and `lieConj_apply_eq_conjStarAlgEquiv` by both
+  `GeometricCovariance.lean` files; `restrictStarAlgEquiv` by both `localVonNeumannEquiv`
+  (R(B) ≃⋆ₐ R(L·B)); `isFactor_of_isIrreducibleInclusion` exists. `omit [CompleteSpace H]` on
+  `IsFactor.conj` and `norm_lieConj` (stated). Schur's lemma and the central-projection
+  characterisation of factors are background, attached to no library name.
+- Corrected: `IsFactor` and `IsFactor.conj` called R "a von Neumann algebra"; the definition
+  takes any set of operators (now said). `restrictStarAlgEquiv` said e "carries S onto T"; the
+  hypotheses are the two inclusions e(S) ⊆ T and e⁻¹(T) ⊆ S (now stated). "Our bare-monoid
+  conjugation" (first person) removed.
+- Uncited (all 11): see the blueprint proposals at the end of this log.
+- Built: only the module-system notices and the pre-existing `Try this` at `exp_lieConj`'s
+  `simp only` (in the `HEAD` baseline); checks clean (three keyword-initial lines reflowed);
+  comments-only confirmed.
+
+## Step 9: `Analysis/StrongContinuity.lean` (2026-10-23)
+
+- Rewritten (1 docstring): `strongContinuous_of_weak`, the file's only declaration. The module
+  docstring and the step comments in the proof left alone.
+- Checked: X is any topological space, U any family `X → (H ≃ₗᵢ[ℂ] H)` (no group law), H not
+  assumed complete; the hypothesis is continuity of `⟪ξ, U x η⟫` for ξ, η ∈ D with D dense; the
+  three proof steps and the polarization identity match the code and the blueprint proof; the
+  user is `GNS.exists_gns_unitary_of_invariant_strongContinuous` (dense set π(a)Ω, matrix
+  coefficients ω(a\* γ_g(b))).
+- Corrected: none (old docstring accurate, but not in the format and without a Blueprint line).
+- Uncited: none (lmm:weak-continuity-implies-strong).
+- Built: only the module-system notices; checks clean (two keyword-initial lines reflowed);
+  comments-only confirmed.
+
+## Step 10: final checks, part 2 (2026-10-23)
+
+- `lake build`: succeeds; 210 warnings, identical (modulo line numbers) to the part-1 result, so
+  no new warnings. `lake lint`: passed. `python3 scripts/check_temporal_wording.py`: OK.
+- Comments-only: the three files identical to `HEAD` with comments stripped and whitespace
+  normalised. No edit was blocked by the lean-kit guard. No `**Restriction:**` lines were present
+  or needed (positive energy uses the unbounded generator throughout).
+- Totals: PositiveEnergy 7, Conjugation 11, StrongContinuity 1.
+
+## Blueprint proposals, part 2 (for the lean-blueprint agent)
+
+None of `Operators/Conjugation.lean` is in a `\lean{}` list. Proposed homes (all in
+`haag-kastler-axioms.tex`, near thrm:von-neumann-geometric-covariance; the curved chapter could
+reference them):
+- `Units.conjMulEquiv`, `Physicslib4.lieConj`, `Physicslib4.lieConj_apply_eq_conjStarAlgEquiv`,
+  `Physicslib4.norm_lieConj`, `Physicslib4.exp_lieConj`: a definition node
+  "Conjugation by a unitary" (T ↦ U T U⁻¹ as an automorphism of B(H), a `*`-automorphism,
+  isometric, commuting with exp).
+- `MulEquiv.image_centralizer`, `MulEquiv.image_centralizer_centralizer`: a lemma node
+  "Automorphisms preserve commutants and bicommutants", the "reusable core" already described in
+  prose in the proof of thrm:von-neumann-geometric-covariance; add it to that proof's `\uses{}`.
+- `Physicslib4.scalarOperators`, `Physicslib4.IsFactor`: a definition node "Factor" (center
+  R ∩ R' = ℂ𝟙), currently defined only inline in the statement of thrm:von-neumann-factor-orbit
+  and used by thrm:irreducible-inclusion-factor and thrm:self-inclusion-factor.
+- `Physicslib4.IsFactor.conj`: a lemma node "Unitary conjugation preserves factors", used by the
+  proof of thrm:von-neumann-factor-orbit.
+- `Physicslib4.restrictStarAlgEquiv`: a lemma node "Restriction of a `*`-automorphism", used
+  for the bundled equivalence R(B) ≃ R(L·B) (`localVonNeumannEquiv`).
+Each docstring carries a descriptive "Blueprint: uncited (...)" line until then.
