@@ -54,8 +54,9 @@ Let U(x), x ∈ X, be unitaries on H indexed by a topological space X, and D a d
 If x ↦ ⟨ξ, U(x)η⟩ is continuous for all ξ, η ∈ D, then x ↦ U(x)ψ is continuous in norm for every
 ψ ∈ H. Matrix elements are often all one can compute directly: for the unitaries implementing a
 symmetry in the GNS representation of an invariant state ω they are ω(a\* γ_x(b)) on the dense
-set of vectors π(a)Ω. This lemma upgrades their continuity to the strong continuity that the
-hypotheses of Stone's theorem require (`GNS.exists_gns_unitary_of_invariant_strongContinuous`).
+set of vectors π(a)Ω. This lemma upgrades their continuity to the strong continuity that
+Stone's theorem requires; this is how `GNS.exists_gns_unitary_of_invariant_strongContinuous`
+uses it.
 
 The proof has three steps. Because ‖U(x)η‖ = ‖η‖, approximating ξ by elements of D is
 uniform in x, so x ↦ ⟨ξ, U(x)η⟩ is continuous for every ξ ∈ H and η ∈ D. For η ∈ D,

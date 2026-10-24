@@ -8,6 +8,12 @@ import Physicslib4.AQFT.HaagKastler.VacuumState
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 open Book
+-- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
+-- written relative to the library's namespaces, resolve and link. `spectralMeasure` and
+-- `functionalCalculus` exist in both namespaces; the unbounded ones are meant here.
+open Physicslib4 Physicslib4.Spectral.Unbounded Physicslib4.Spectral.Stone Physicslib4.AQFT
+open Physicslib4.AQFT.HaagKastler
+open Physicslib4.Spectral hiding spectralMeasure functionalCalculus
 
 #doc (Manual) "Stone's theorem" =>
 
@@ -86,24 +92,25 @@ Every statement of Section 10.4 is proved in Lean, as are the positive-energy re
 weak-continuity lemma, with no `sorry`. The four standard results the blueprint states without
 proof (the Bochner integral, smooth approximate identities, two facts about derivatives, and the
 calculus of convolutions) are Mathlib theorems. Where a result assumes anything of $`H`, it is
-completeness; no result assumes $`H` separable or nonzero. The declarations of Section 10.4 are in the namespace
-`Physicslib4.Spectral.Stone`, positive energy is in `Physicslib4.AQFT`, and the weak-continuity
-lemma is in `Physicslib4`.
+completeness; no result assumes $`H` separable or nonzero. The declarations of Section 10.4 are
+in the namespace `Physicslib4.Spectral.Stone`, positive energy is in `Physicslib4.AQFT`, and the
+weak-continuity lemma is in `Physicslib4`.
 
 # Design
 %%%
 tag := "stone-design"
 %%%
 
-Section 10.4 of the blueprint has no paragraph labelled "Formalization note"; where one of its
-entries remarks on the Lean formalization, this section links that entry. The conventions of the
+Section 10.4 of the blueprint has no paragraph labelled "Formalization note"; its remarks on the
+Lean formalization sit inside entries, mostly naming the Mathlib results a proof uses, and this
+section links the entries it draws on. The conventions of the
 {ref "unbounded-design"}[unbounded chapter] carry over: an unbounded operator is a partial linear
 map `H →ₗ.[ℂ] H`, equality of operators includes equality of domains, symmetry assumes no density,
 and self-adjointness is Mathlib's `IsSelfAdjoint`.
 
 ## Unitarity, the group law and continuity are separate
 
-A unitary is a linear isometric equivalence `H ≃ₗᵢ[ℂ] H`, as everywhere in the library, so a
+A unitary is a linear isometry equivalence `H ≃ₗᵢ[ℂ] H`, as everywhere in the library, so a
 family of unitaries is a function `U : ℝ → (H ≃ₗᵢ[ℂ] H)` and is unitary by its type. The group law
 is the structure `IsOneParameterUnitaryGroup U`, whose two fields state $`U(0)\psi = \psi` and
 $`U(s + t)\psi = U(s)U(t)\psi` vector by vector. Strong continuity is the separate predicate
@@ -154,7 +161,9 @@ $`\|e^{itA}\psi - e^{isA}\psi\|^2 = \int |e^{it\lambda} - e^{is\lambda}|^2 \, d\
 and for $`\psi \in \mathrm{Dom}(A)` the squared error of the difference quotient is
 $`\int |g_t(\lambda) - \lambda|^2 \, d\mu^A_\psi(\lambda)`, with
 $`g_t(\lambda) = (e^{it\lambda} - 1)/(it)`. Both tend to $`0` by dominated convergence in Mathlib's
-filter form, `tendsto_integral_filter_of_dominated_convergence`, along $`s \to t` and along the
+filter form, `tendsto_integral_filter_of_dominated_convergence` (the proofs of
+[lmm:exp-strongly-continuous](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-strongly-continuous) and
+[lmm:exp-derivative-at-zero](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-derivative-at-zero)), along $`s \to t` and along the
 punctured filter at $`0`, with dominating functions $`4` and $`4\lambda^2`; the second is
 integrable because $`\psi \in \mathrm{Dom}(A)`. So the generator of $`e^{itA}` extends $`A`. It is
 symmetric, and a self-adjoint operator has no proper symmetric extension, so it equals $`A`
@@ -205,6 +214,9 @@ needs no self-adjointness hypothesis, since the generator is defined for every f
 theorem then gives the textbook form
 ([thrm:positive-energy-iff-exp](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-iff-exp)):
 $`V` has positive energy exactly when $`V(t) = e^{itA}` with $`A` positive and self-adjoint.
+For time translations the unitaries are $`U(t) = e^{it\hat H}`, in the convention
+$`U(a) = e^{iP\cdot a}`, the inverse of the Schrödinger evolution, so their generator is
+$`\hat H` and positive energy says $`\hat H \ge 0`.
 
 The definition refers to no spacetime. A vacuum state
 ({apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}[`HaagKastlerNet.IsVacuumState`])
@@ -236,11 +248,327 @@ see also the {ref "gns-design"}[GNS chapter]).
 tag := "stone-main"
 %%%
 
-This section is in preparation.
+Definitions are shown with their docstrings, which give the mathematics and the blueprint entry;
+theorems with their statements, as Lean prints them, and a line or two of explanation. Each
+subsection opens with the blueprint entries it covers. In the printed statements,
+`H ≃ₗᵢ[ℂ] H` is the type of unitaries, `H →ₗ.[ℂ] H` that of unbounded operators, and `↑` is a
+coercion (a bounded operator regarded as a linear map, a real number regarded as complex). Names
+in the printed statements are relative to the opened namespaces: `HasDenseDomain` and
+`IsPositive` are `Spectral.Unbounded.HasDenseDomain` and `Spectral.Unbounded.IsPositive`, and
+`generator` and `expUnitary` are in `Spectral.Stone`. The
+four standard results that the blueprint imports
+([thrm:bochner-integral][st-boch], [lmm:smooth-approximate-identity][st-sai],
+[prpstn:calculus-facts][st-calc], [lmm:convolution-facts][st-conv]) are Mathlib theorems, named
+in the blueprint. For the declarations not shown here, see the
+[API documentation](https://physicslib.github.io/physicslib4/docs/Physicslib4/Spectral/Stone/Theorem.html)
+and the files listed at the end of the chapter.
+
+[st-boch]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bochner-integral
+[st-sai]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:smooth-approximate-identity
+[st-calc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:calculus-facts
+[st-conv]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:convolution-facts
+
+## One-parameter unitary groups and their generators
+
+Blueprint: [def:hall-10.11][st-1011], [lmm:strongly-continuous-iff-at-zero][st-sc0],
+[lmm:unitary-group-inner-adjoint][st-adj], [def:hall-10.13][st-1013],
+[lmm:generator-spec][st-spec], [lmm:generator-symmetry-identity][st-sym],
+[lmm:generator-const][st-const], [lmm:conj-unitary-group][st-conj],
+[lmm:generator-conj][st-gconj], [lmm:orbit-hasDerivAt][st-orb],
+[lmm:generator-commutes][st-comm], [lmm:hall-10.17][st-1017].
+
+{docstring Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup}
+
+{docstring Physicslib4.Spectral.Stone.IsStronglyContinuous}
+
+{docstring Physicslib4.Spectral.Stone.generator}
+
+Continuity at $`t = 0` suffices
+({apiDocs Physicslib4.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero}[`isStronglyContinuous_iff_tendsto_zero`]),
+and $`U(t)^* = U(-t)`
+({apiDocs Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.adjoint_eq}[`IsOneParameterUnitaryGroup.adjoint_eq`]).
+The domain and value of the generator are characterised by the limit in
+{apiDocs Physicslib4.Spectral.Stone.exists_generator_eq_iff}[`exists_generator_eq_iff`], and the
+symmetry identity is
+{apiDocs Physicslib4.Spectral.Stone.isSymmetric_generator}[`isSymmetric_generator`]. For
+$`\psi \in \mathrm{Dom}(A)`, the orbit $`t \mapsto U(t)\psi` stays in the domain and has derivative
+$`iAU(t)\psi = iU(t)A\psi`
+({apiDocs Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator}[`IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator`]).
+The trivial group has generator $`0`
+({apiDocs Physicslib4.Spectral.Stone.generator_refl}[`generator_refl`]); the conjugated group
+$`WU(t)W^{-1}` is a strongly continuous one-parameter unitary group
+({apiDocs Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.conj}[`IsOneParameterUnitaryGroup.conj`],
+{apiDocs Physicslib4.Spectral.Stone.IsStronglyContinuous.conj}[`IsStronglyContinuous.conj`]) with
+generator $`WAW^{-1}` on $`W\,\mathrm{Dom}(A)`
+({apiDocs Physicslib4.Spectral.Stone.mem_generator_conj_domain_iff}[`mem_generator_conj_domain_iff`],
+{apiDocs Physicslib4.Spectral.Stone.generator_conj_apply}[`generator_conj_apply`]).
+
+[st-1011]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.11
+[st-sc0]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:strongly-continuous-iff-at-zero
+[st-adj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-group-inner-adjoint
+[st-1013]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.13
+[st-spec]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-spec
+[st-sym]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-symmetry-identity
+[st-const]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-const
+[st-conj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:conj-unitary-group
+[st-gconj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-conj
+[st-orb]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-hasDerivAt
+[st-comm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-commutes
+[st-1017]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.17
+
+## The bounded case
+
+Blueprint: [lmm:exp-bounded-unitary-group][st-ebg], [lmm:exp-bounded-hasDerivAt][st-ebd],
+[lmm:generator-exp-bounded][st-geb].
+
+For bounded self-adjoint $`P`, $`\exp(itP)` is Mathlib's `NormedSpace.exp` of $`(t\,i)P`. It is a
+one-parameter unitary group
+({apiDocs Physicslib4.Spectral.Stone.exists_isOneParameterUnitaryGroup_exp}[`exists_isOneParameterUnitaryGroup_exp`]),
+strongly continuous
+({apiDocs Physicslib4.Spectral.Stone.isStronglyContinuous_of_eq_exp}[`isStronglyContinuous_of_eq_exp`]),
+and its generator is $`P` on all of $`H`:
+
+```lean (name := checkGenExp)
+open Physicslib4 Spectral Stone in
+#check generator_eq_of_eq_exp
+```
+
+```leanOutput checkGenExp
+Physicslib4.Spectral.Stone.generator_eq_of_eq_exp.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H] {P : H →L[ℂ] H} {V : ℝ → H ≃ₗᵢ[ℂ] H}
+  (hV : ∀ (t : ℝ) (x : H), (V t) x = (NormedSpace.exp ((↑t * Complex.I) • P)) x) : generator V = (↑P).toPMap ⊤
+```
+
+`(↑P).toPMap ⊤` is $`P` as a partial map with domain $`H`. The statement assumes nothing of
+$`P`; self-adjointness is needed only for $`V` to exist.
+
+[st-ebg]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-unitary-group
+[st-ebd]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-hasDerivAt
+[st-geb]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-exp-bounded
+
+## The unitary group of a self-adjoint operator
+
+Blueprint: [lmm:exp-unitary][st-eu], [def:exp-unitary-group][st-eug],
+[lmm:exp-group-law][st-egl], [lmm:exp-strongly-continuous][st-esc],
+[lmm:functional-calculus-sub-bounded][st-fcs], [lmm:exp-quotient-norm-identity][st-eqn],
+[lmm:exp-derivative-at-zero][st-edz], [prpstn:hall-10.14][st-1014].
+
+{docstring Physicslib4.Spectral.Stone.expUnitary}
+
+The group law, strong continuity and the generator are one statement, the blueprint's
+Proposition 10.14:
+
+```lean (name := checkGenExpUnitary)
+open Physicslib4 Spectral Stone in
+#check generator_expUnitary
+```
+
+```leanOutput checkGenExpUnitary
+Physicslib4.Spectral.Stone.generator_expUnitary.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H] {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
+  IsOneParameterUnitaryGroup (expUnitary hA) ∧ IsStronglyContinuous (expUnitary hA) ∧ generator (expUnitary hA) = A
+```
+
+The last conjunct is an equality of partial maps, so $`\mathrm{Dom}(A)` is exactly the set of
+$`\psi` for which the difference quotient converges. The derivative of $`e^{itA}\psi` at $`0` is
+{apiDocs Physicslib4.Spectral.Stone.tendsto_generatorQuotient_expUnitary}[`tendsto_generatorQuotient_expUnitary`].
+
+[st-eu]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-unitary
+[st-eug]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:exp-unitary-group
+[st-egl]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-group-law
+[st-esc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-strongly-continuous
+[st-fcs]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:functional-calculus-sub-bounded
+[st-eqn]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-quotient-norm-identity
+[st-edz]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-derivative-at-zero
+[st-1014]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.14
+
+## Density of the generator's domain
+
+Blueprint: [lmm:averaging-translate][st-avt], [lmm:averaging-in-generator-domain][st-avd],
+[lmm:averaging-approximates][st-ava], [lmm:hall-10.18][st-1018].
+
+{docstring Physicslib4.Spectral.Stone.average}
+
+```lean (name := checkDense)
+open Physicslib4 Spectral Stone in
+#check hasDenseDomain_generator
+```
+
+```leanOutput checkDense
+Physicslib4.Spectral.Stone.hasDenseDomain_generator.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H] {U : ℝ → H ≃ₗᵢ[ℂ] H} (hU : IsOneParameterUnitaryGroup U) (hc : IsStronglyContinuous U) :
+  HasDenseDomain (generator U)
+```
+
+The two steps are
+{apiDocs Physicslib4.Spectral.Stone.average_mem_generator_domain}[`average_mem_generator_domain`]
+(an average against a compactly supported $`C^1` weight is in the domain) and
+{apiDocs Physicslib4.Spectral.Stone.tendsto_average_bump}[`tendsto_average_bump`] (averages
+against shrinking bumps tend to $`\psi`). Both assume strong continuity; the convolution formula
+{apiDocs Physicslib4.Spectral.Stone.average_eq_convolution}[`average_eq_convolution`] needs only
+the group law.
+
+[st-avt]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-translate
+[st-avd]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-in-generator-domain
+[st-ava]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-approximates
+[st-1018]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.18
+
+## Stone's theorem
+
+Blueprint: [lmm:linear-ode-scalar][st-ode], [lmm:orbit-inner-ode][st-oio],
+[lmm:bounded-exp-solution-zero][st-bes], [lmm:generator-ker-adjoint-trivial][st-ker],
+[lmm:generator-essentially-self-adjoint][st-esa], [lmm:orbit-difference-hasDerivAt][st-odd],
+[lmm:norm-const-of-symmetric-derivative][st-ncs], [lmm:orbits-agree-on-domain][st-oad],
+[lmm:agree-on-dense-subspace][st-ads], [thrm:hall-10.15][st-1015].
+
+```lean (name := checkStone)
+open Physicslib4 Spectral Stone in
+#check stone
+```
+
+```leanOutput checkStone
+Physicslib4.Spectral.Stone.stone.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  {U : ℝ → H ≃ₗᵢ[ℂ] H} (hU : IsOneParameterUnitaryGroup U) (hc : IsStronglyContinuous U) :
+  ∃ (hA : IsSelfAdjoint (generator U)),
+    HasDenseDomain (generator U) ∧
+      (∀ (t : ℝ), U t = expUnitary hA t) ∧
+        ∀ (B : H →ₗ.[ℂ] H) (hB : IsSelfAdjoint B), (∀ (t : ℝ), U t = expUnitary hB t) → B = generator U
+```
+
+The generator is self-adjoint and densely defined, $`U(t) = e^{itA}` for every $`t`, and every
+self-adjoint $`B` with $`U(t) = e^{itB}` is the generator. The steps of the proof are
+{apiDocs Physicslib4.Spectral.Stone.ker_adjoint_generator_subSmul_eq_bot}[`ker_adjoint_generator_subSmul_eq_bot`]
+(trivial deficiency subspaces),
+{apiDocs Physicslib4.Spectral.Stone.isEssentiallySelfAdjoint_generator}[`isEssentiallySelfAdjoint_generator`]
+and {apiDocs Physicslib4.Spectral.Stone.orbit_eq_expUnitary_closure}[`orbit_eq_expUnitary_closure`]
+(the orbits of $`U` and $`e^{itA^{(\mathrm{cl})}}` agree on $`\mathrm{Dom}(A)`).
+
+The self-adjointness proof `hA` is the first component of the existential, and the other
+conjuncts mention it. A proof that uses the theorem takes the components apart with `obtain`:
+
+```lean
+open Physicslib4 Spectral Stone in
+example {H : Type*} [NormedAddCommGroup H]
+    [InnerProductSpace ℂ H] [CompleteSpace H]
+    {U : ℝ → (H ≃ₗᵢ[ℂ] H)}
+    (hU : IsOneParameterUnitaryGroup U)
+    (hc : IsStronglyContinuous U) (t : ℝ) :
+    ∃ hA : IsSelfAdjoint (generator U),
+      U t = expUnitary hA t := by
+  obtain ⟨hA, -, hexp, -⟩ := stone hU hc
+  exact ⟨hA, hexp t⟩
+```
+
+[st-ode]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:linear-ode-scalar
+[st-oio]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-inner-ode
+[st-bes]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bounded-exp-solution-zero
+[st-ker]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-ker-adjoint-trivial
+[st-esa]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-essentially-self-adjoint
+[st-odd]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-difference-hasDerivAt
+[st-ncs]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:norm-const-of-symmetric-derivative
+[st-oad]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbits-agree-on-domain
+[st-ads]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:agree-on-dense-subspace
+[st-1015]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.15
+
+## Positive energy
+
+Blueprint: [def:positive-energy][st-pe], [lmm:positive-energy-const][st-pec],
+[lmm:exp-generator-unique][st-egu], [lmm:positive-conj][st-pc],
+[lmm:positive-energy-conj][st-pecj], [lmm:positive-energy-strong-continuous][st-pesc],
+[lmm:positive-energy-exp-bounded][st-peb], [thrm:positive-energy-iff-exp][st-pei],
+[thrm:positive-energy-api][st-pea].
+
+{docstring Physicslib4.AQFT.IsPositiveEnergy}
+
+The exponential form:
+
+```lean (name := checkPosExp)
+open Physicslib4 AQFT in
+#check isPositiveEnergy_iff_exists_exp
+```
+
+```leanOutput checkPosExp
+Physicslib4.AQFT.isPositiveEnergy_iff_exists_exp.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H] {V : ℝ → H ≃ₗᵢ[ℂ] H} :
+  IsPositiveEnergy V ↔ ∃ A, ∃ (hA : IsSelfAdjoint A), IsPositive A ∧ ∀ (t : ℝ), V t = expUnitary hA t
+```
+
+The operator $`A` is unique
+({apiDocs Physicslib4.AQFT.generator_eq_of_eq_expUnitary}[`generator_eq_of_eq_expUnitary`]).
+The trivial group has positive energy
+({apiDocs Physicslib4.AQFT.isPositiveEnergy_const_refl}[`isPositiveEnergy_const_refl`]), so does
+$`\exp(itP)` for a bounded positive $`P`
+({apiDocs Physicslib4.AQFT.isPositiveEnergy_exp}[`isPositiveEnergy_exp`]), and positive energy is
+preserved by unitary conjugation
+({apiDocs Physicslib4.AQFT.IsPositiveEnergy.conj}[`IsPositiveEnergy.conj`], with
+{apiDocs Physicslib4.Spectral.Unbounded.IsPositive.of_conj}[`IsPositive.of_conj`]).
+{apiDocs Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}[`IsPositiveEnergy.strongContinuous`]
+unpacks strong continuity. The blueprint collects these six results in
+[thrm:positive-energy-api][st-pea].
+
+[st-pe]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:positive-energy
+[st-pec]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-const
+[st-egu]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-generator-unique
+[st-pc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-conj
+[st-pecj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-conj
+[st-pesc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-strong-continuous
+[st-peb]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-exp-bounded
+[st-pei]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-iff-exp
+[st-pea]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-api
+
+## Weak continuity
+
+Blueprint: [lmm:weak-continuity-implies-strong][st-weak].
+
+```lean (name := checkWeak)
+open Physicslib4 in
+#check strongContinuous_of_weak
+```
+
+```leanOutput checkWeak
+Physicslib4.strongContinuous_of_weak.{u_1, u_2} {X : Type u_1} [TopologicalSpace X] {H : Type u_2}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] (U : X → H ≃ₗᵢ[ℂ] H) {D : Set H} (hD : Dense D)
+  (hweak : ∀ ξ ∈ D, ∀ η ∈ D, Continuous fun x => inner ℂ ξ ((U x) η)) (ψ : H) : Continuous fun x => (U x) ψ
+```
+
+`inner ℂ ξ ((U x) η)` is $`\langle \xi, U(x)\eta \rangle`. The GNS theorems that use it are
+{apiDocs Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous}[`exists_gns_unitary_of_invariant_strongContinuous`]
+and
+{apiDocs Physicslib4.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous}[`exists_gns_unitaryRep_of_invariant_strongContinuous`].
+
+[st-weak]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:weak-continuity-implies-strong
 
 # Where to look
 %%%
 tag := "stone-files"
 %%%
 
-This section is in preparation.
+Section 10.4 is formalised in `Physicslib4/Spectral/Stone/`, in five files, by topic. Each entry
+links to the API documentation of a representative declaration, from which the rest of the file
+can be browsed.
+
+* `Basic.lean`: one-parameter unitary groups, strong continuity, the generator and its domain,
+  the symmetry identity, orbits, the trivial group and conjugation, and the equation $`y' = cy`
+  ({apiDocs Physicslib4.Spectral.Stone.eq_mul_exp_of_hasDerivAt}[`eq_mul_exp_of_hasDerivAt`]),
+  {apiDocs Physicslib4.Spectral.Stone.generator}[`generator`].
+* `Bounded.lean`: the exponential series of a bounded self-adjoint operator and its generator,
+  {apiDocs Physicslib4.Spectral.Stone.generator_eq_of_eq_exp}[`generator_eq_of_eq_exp`].
+* `Exponential.lean`: the unitary group $`e^{itA}` of a self-adjoint operator and its generator,
+  {apiDocs Physicslib4.Spectral.Stone.generator_expUnitary}[`generator_expUnitary`].
+* `Density.lean`: averages of orbits and the density of the generator's domain,
+  {apiDocs Physicslib4.Spectral.Stone.hasDenseDomain_generator}[`hasDenseDomain_generator`].
+* `Theorem.lean`: essential self-adjointness of the generator and Stone's theorem,
+  {apiDocs Physicslib4.Spectral.Stone.stone}[`stone`].
+
+Two files outside the directory hold the results of Section 10.6 described here:
+
+* `Physicslib4/AQFT/PositiveEnergy.lean`: the positive-energy condition,
+  {apiDocs Physicslib4.AQFT.isPositiveEnergy_iff_exists_exp}[`isPositiveEnergy_iff_exists_exp`].
+* `Physicslib4/Analysis/StrongContinuity.lean`: weak continuity implies strong continuity,
+  {apiDocs Physicslib4.strongContinuous_of_weak}[`strongContinuous_of_weak`].
+
+The unbounded operators, the spectral measure and the functional calculus these files use are
+described in the {ref "unbounded-files"}[unbounded chapter]. The blueprint section is
+[Section 10.4](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:stones-theorem),
+and the [section page](https://physicslib.github.io/physicslib4/sec10-4-stone.html) lists each
+entry with the Lean declaration that formalises it.
