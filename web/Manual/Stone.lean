@@ -215,7 +215,8 @@ theorem then gives the textbook form
 ([thrm:positive-energy-iff-exp](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-iff-exp)):
 $`V` has positive energy exactly when $`V(t) = e^{itA}` with $`A` positive and self-adjoint.
 For time translations the unitaries are $`U(t) = e^{it\hat H}`, in the convention
-$`U(a) = e^{iP\cdot a}`, the inverse of the Schrödinger evolution, so their generator is
+$`U(a) = e^{-iP\cdot a}`, where $`P\cdot a = -P^0 a^0 + \vec P\cdot\vec a` uses the signature
+$`(-,+,+,+)` and $`P^0 = \hat H`; this is the inverse of the Schrödinger evolution, so their generator is
 $`\hat H` and positive energy says $`\hat H \ge 0`.
 
 The definition refers to no spacetime. A vacuum state

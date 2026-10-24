@@ -53,9 +53,10 @@ which the limit exists, and positive means symmetric with ⟨ψ, Aψ⟩ ≥ 0 fo
 The generator is in general unbounded, and the condition is imposed on it directly. By
 Stone's theorem A is then densely defined and self-adjoint and V(t) = e^(itA), so positive
 energy says exactly that V(t) = e^(itA) with A positive and self-adjoint
-(`isPositiveEnergy_iff_exists_exp`). For the unitaries of time translations, U(t) = e^(itĤ) in
-the convention U(a) = e^(iP·a) (the inverse of the Schrödinger evolution e^(−itĤ)), A is the
-Hamiltonian Ĥ, and the condition says that the energy is bounded below by 0.
+(`isPositiveEnergy_iff_exists_exp`). For the unitaries of time translations,
+U(t) = e^(itĤ) in the convention U(a) = e^(−iP·a), where P·a = −P⁰a⁰ + P⃗·a⃗ uses the
+signature (−,+,+,+) and P⁰ = Ĥ (the inverse of the Schrödinger evolution e^(−itĤ)). Then A
+is the Hamiltonian Ĥ, and the condition says that the energy is bounded below by 0.
 
 This is the form in which the library states the spectrum condition. A vacuum state
 (`HaagKastlerNet.IsVacuumState`) asks that t ↦ U(γ(t)) have positive energy for every
