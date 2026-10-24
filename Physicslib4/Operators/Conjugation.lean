@@ -46,7 +46,7 @@ and the automorphism is the induced change of frame on observables, A ↦ u A u�
 Implementation note: u is a `Units` element, so u⁻¹ is a genuine two-sided inverse. Only the
 multiplicative structure is recorded; `lieConj` specialises this to unitaries on a Hilbert space.
 
-Blueprint: uncited (conjugation by a unit as a multiplicative automorphism)
+Blueprint: def:unitary-conjugation
 -/
 def conjMulEquiv (u : Mˣ) : M ≃* M where
   toFun x := ↑u * x * ↑u⁻¹
@@ -84,7 +84,7 @@ algebras: conjugation by a unitary commutes with taking commutants.
 Implementation note: the centralizer is Mathlib's `Set.centralizer`, and only multiplication is
 used, so the statement holds in any `Mul` structure.
 
-Blueprint: uncited (a multiplicative automorphism maps centralizers to centralizers)
+Blueprint: lmm:automorphism-commutant
 -/
 theorem image_centralizer (φ : M ≃* M) (S : Set M) :
     φ '' Set.centralizer S = Set.centralizer (φ '' S) := by
@@ -114,8 +114,7 @@ geometric covariance from the net.
 Implementation note: the bicommutant is `Set.centralizer (Set.centralizer S)`; the lemma does
 not use the bicommutant theorem.
 
-Blueprint: uncited (used in the Lean proofs of thrm:von-neumann-geometric-covariance and
-thrm:von-neumann-geometric-covariance-in-curved-spacetime)
+Blueprint: lmm:automorphism-commutant
 -/
 theorem image_centralizer_centralizer (φ : M ≃* M) (S : Set M) :
     φ '' Set.centralizer (Set.centralizer S)
@@ -143,7 +142,7 @@ corresponding unit of `H →L[ℂ] H`, so only the multiplicative structure is i
 pointwise formula is `lieConj_apply`, and `lieConj_apply_eq_conjStarAlgEquiv` identifies it with
 Mathlib's `*`-algebra automorphism `LinearIsometryEquiv.conjStarAlgEquiv`.
 
-Blueprint: uncited (conjugation by a unitary on bounded operators)
+Blueprint: def:unitary-conjugation
 -/
 noncomputable def lieConj (Uop : H ≃ₗᵢ[ℂ] H) : (H →L[ℂ] H) ≃* (H →L[ℂ] H) :=
   Units.conjMulEquiv (Uop.toContinuousLinearEquiv.toUnit)
@@ -169,7 +168,7 @@ Implementation note: the exponential is Mathlib's `NormedSpace.exp`, and the pro
 `NormedSpace.exp_units_conj`, since `lieConj W` is conjugation by the unit W. The series
 converges because H is complete.
 
-Blueprint: uncited (conjugation commutes with the exponential)
+Blueprint: def:unitary-conjugation
 -/
 theorem exp_lieConj (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) :
     NormedSpace.exp (lieConj W A) = lieConj W (NormedSpace.exp A) := by
@@ -205,7 +204,7 @@ representation the commutant of its image is ℂ𝟙 itself (Schur's lemma).
 Implementation note: the set is `{T | ∃ c : ℂ, T = c • 1}` in `H →L[ℂ] H`, and needs no
 completeness of H.
 
-Blueprint: uncited (the scalar operators ℂ𝟙)
+Blueprint: def:factor
 -/
 def scalarOperators (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H] :
     Set (H →L[ℂ] H) :=
@@ -227,8 +226,7 @@ Implementation note: the definition applies to any set of operators, not only to
 algebras, with the commutant given by `Set.centralizer`; since the center must equal the
 scalars, a factor contains 𝟙.
 
-Blueprint: uncited (the factor property; it appears in the statement of
-thrm:von-neumann-factor-orbit)
+Blueprint: def:factor
 -/
 def IsFactor (R : Set (H →L[ℂ] H)) : Prop :=
   R ∩ Set.centralizer R = scalarOperators H
@@ -262,7 +260,7 @@ being a factor is constant along the orbit of a region under the symmetry group.
 
 Implementation note: U R U⁻¹ is the image `lieConj Uop '' R`, and H need not be complete.
 
-Blueprint: uncited (used in the proof of thrm:von-neumann-factor-orbit)
+Blueprint: lmm:factor-conj
 -/
 theorem IsFactor.conj (Uop : H ≃ₗᵢ[ℂ] H) {R : Set (H →L[ℂ] H)} (h : IsFactor R) :
     IsFactor (lieConj Uop '' R) := by
@@ -275,13 +273,13 @@ Conjugation by a unitary U, `lieConj U`, agrees on every operator with Mathlib's
 `*`-algebra automorphism `LinearIsometryEquiv.conjStarAlgEquiv U`.
 
 Both send T to U T U⁻¹. The point is that the second is a `*`-algebra automorphism, so the
-equation transfers linearity and preservation of adjoints to `lieConj U`, and lets the local
+equation transfers preservation of adjoints to `lieConj U` (`lieConj_star`), and lets the local
 algebras of a net be moved by a `*`-algebra equivalence (`restrictStarAlgEquiv`).
 
 Implementation note: `lieConj U` is only a `MulEquiv`; this lemma is the bridge to the
 `StarAlgEquiv`, used, for example, in `lieConj_star`.
 
-Blueprint: uncited (conjugation by a unitary is a `*`-automorphism)
+Blueprint: def:unitary-conjugation
 -/
 theorem lieConj_apply_eq_conjStarAlgEquiv (Uop : H ≃ₗᵢ[ℂ] H) (T : H →L[ℂ] H) :
     lieConj Uop T = LinearIsometryEquiv.conjStarAlgEquiv Uop T := by
@@ -307,7 +305,7 @@ of the C\*-algebra of bounded operators.
 Implementation note: both inequalities are proved by `ContinuousLinearMap.opNorm_le_bound`, and
 H need not be complete.
 
-Blueprint: uncited (conjugation by a unitary preserves the operator norm)
+Blueprint: def:unitary-conjugation
 -/
 theorem norm_lieConj (W : H ≃ₗᵢ[ℂ] H) (A : H →L[ℂ] H) :
     ‖lieConj W A‖ = ‖A‖ := by
@@ -332,7 +330,7 @@ R(L·B), and so gives a `*`-isomorphism between the two (`HaagKastlerNet.localVo
 Implementation note: the two inclusion hypotheses `hfwd` and `hbwd` make the restriction and its
 inverse well defined; `@[simps! apply]` generates the lemma that the restriction acts as e.
 
-Blueprint: uncited (restriction of a `*`-automorphism to subalgebras it maps onto each other)
+Blueprint: lmm:restrict-star-alg-equiv
 -/
 @[simps! apply]
 def restrictStarAlgEquiv {A : Type*} [Ring A] [StarRing A] [Algebra ℂ A] [StarModule ℂ A]

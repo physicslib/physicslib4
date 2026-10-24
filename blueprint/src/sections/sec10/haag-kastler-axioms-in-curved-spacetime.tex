@@ -324,7 +324,7 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
     \label{thrm:von-neumann-geometric-covariance-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumann, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localOperators, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutHom_commIsotony, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumannAlgebra}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeometricCovariance.lean}
-    \uses{def:local-von-neumann-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime, def:stabilizer-action-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime}
+    \uses{def:local-von-neumann-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime, def:stabilizer-action-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime, def:unitary-conjugation}
     \leanok
     The curved, stabilizer-subgroup analogue of geometric covariance. For $g \in \mathrm{Stab}(\mathbf{B})$, the implementing unitary $U(g)$ of the stabilizer GNS representation (\ref{thrm:gns-unitary-stabilizer-in-curved-spacetime}) conjugates the local von Neumann algebra of a subregion $\mathbf{B}_1 \subseteq \mathbf{B}$ onto that of $g \cdot \mathbf{B}_1$:
     \[ U(g)\, R(\mathbf{B}_1)\, U(g)^{-1} = R(g \cdot \mathbf{B}_1). \]
@@ -332,22 +332,22 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:local-von-neumann-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime, thrm:von-neumann-geometric-covariance, def:isometric-covariance-in-curved-spacetime, lmm:axiom5-basis-preservation}
-    There is no quasilocal algebra in curved spacetime, so the only symmetries acting on the containing algebra $\mathfrak{U}(\mathbf{B})$ are the stabilizer $\mathrm{Stab}(\mathbf{B}) = \{g : g \cdot \mathbf{B} = \mathbf{B}\}$. The proof reuses the shared conjugation core of \ref{thrm:von-neumann-geometric-covariance}: conjugation by a unit is a multiplicative automorphism, which maps centralizers --- hence bicommutants --- to those of the image. Hence $R(\mathbf{B}_1)$ and $R(g \cdot \mathbf{B}_1)$ are unitarily equivalent.
+    \uses{def:local-von-neumann-in-curved-spacetime, thrm:gns-unitary-stabilizer-in-curved-spacetime, thrm:von-neumann-geometric-covariance, def:isometric-covariance-in-curved-spacetime, lmm:axiom5-basis-preservation, def:unitary-conjugation, lmm:automorphism-commutant}
+    There is no quasilocal algebra in curved spacetime, so the only symmetries acting on the containing algebra $\mathfrak{U}(\mathbf{B})$ are the stabilizer $\mathrm{Stab}(\mathbf{B}) = \{g : g \cdot \mathbf{B} = \mathbf{B}\}$. The proof reuses the shared conjugation core of \ref{thrm:von-neumann-geometric-covariance}: conjugation by a unit is a multiplicative automorphism, which maps centralizers --- hence bicommutants --- to those of the image (\ref{lmm:automorphism-commutant}). Hence $R(\mathbf{B}_1)$ and $R(g \cdot \mathbf{B}_1)$ are unitarily equivalent.
 \end{proof}
 
 \begin{theorem}[Orbit-Invariance of Factoriality (Curved Spacetime)]
     \label{thrm:von-neumann-factor-orbit-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_isFactor_smul}
     \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeometricCovariance.lean}
-    \uses{def:local-von-neumann-in-curved-spacetime, def:stabilizer-action-in-curved-spacetime}
+    \uses{def:local-von-neumann-in-curved-spacetime, def:stabilizer-action-in-curved-spacetime, def:factor}
     \leanok
     If the local von Neumann algebra $R(\mathbf{B}_1)$ of a subregion is a factor, then so is $R(g \cdot \mathbf{B}_1)$ for every $g \in \mathrm{Stab}(\mathbf{B})$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thrm:von-neumann-geometric-covariance-in-curved-spacetime, thrm:von-neumann-factor-orbit}
-    Geometric covariance exhibits $R(g \cdot \mathbf{B}_1) = U(g) R(\mathbf{B}_1) U(g)^{-1}$, and conjugation by a unitary preserves the factor property; so being a factor is constant along the stabilizer orbit of a subregion.
+    \uses{thrm:von-neumann-geometric-covariance-in-curved-spacetime, thrm:von-neumann-factor-orbit, lmm:factor-conj}
+    Geometric covariance exhibits $R(g \cdot \mathbf{B}_1) = U(g) R(\mathbf{B}_1) U(g)^{-1}$, and conjugation by a unitary preserves the factor property (\ref{lmm:factor-conj}); so being a factor is constant along the stabilizer orbit of a subregion.
 \end{proof}
 
 \begin{theorem}[Geometric Covariance as a von Neumann Algebra Isomorphism (Curved Spacetime)]
@@ -360,8 +360,8 @@ The von Neumann net carries over to curved spacetime, again relative to a contai
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thrm:von-neumann-geometric-covariance-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime, thrm:von-neumann-covariance-iso}
-    It reuses the same restriction construction as the Minkowski case (\ref{thrm:von-neumann-covariance-iso}).
+    \uses{thrm:von-neumann-geometric-covariance-in-curved-spacetime, def:local-von-neumann-algebra-in-curved-spacetime, thrm:von-neumann-covariance-iso, def:unitary-conjugation, lmm:restrict-star-alg-equiv}
+    It reuses the same restriction construction as the Minkowski case (\ref{thrm:von-neumann-covariance-iso}), \ref{lmm:restrict-star-alg-equiv} applied to the conjugation $*$-automorphism of \ref{def:unitary-conjugation}.
 \end{proof}
 
 \subsection{Relative Commutants of Nested Local Algebras in Curved Spacetime}
@@ -424,6 +424,7 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
 
 \begin{theorem}[An Irreducible Inclusion has Factor Ambient (Curved Spacetime)]
     \label{thrm:irreducible-inclusion-factor-in-curved-spacetime}
+    \uses{def:factor}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isFactor_of_isIrreducibleInclusion}
     \leanok
     The curved mirror of \ref{thrm:irreducible-inclusion-factor}: for nested basis subregions $\mathbf{B}_1 \subseteq \mathbf{B}_2 \subseteq \mathbf{B}$, an irreducible inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ forces $R(\mathbf{B}_2)$ to be a factor.
@@ -437,7 +438,7 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
 \begin{theorem}[Self-Inclusion is Irreducible iff Factor (Curved Spacetime)]
     \label{thrm:self-inclusion-factor-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}
-    \uses{def:irreducible-inclusion-in-curved-spacetime}
+    \uses{def:irreducible-inclusion-in-curved-spacetime, def:factor}
     \leanok
     The curved mirror of \ref{thrm:self-inclusion-factor}: for a basis subregion $\mathbf{B}' \subseteq \mathbf{B}$ in a representation of $\mathfrak{U}(\mathbf{B})$, the trivial self-inclusion $R(\mathbf{B}') \subseteq R(\mathbf{B}')$ is irreducible if and only if $R(\mathbf{B}')$ is a factor.
 \end{theorem}
@@ -450,7 +451,7 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
 \begin{theorem}[Abelian Local von Neumann Algebras (Curved Spacetime)]
     \label{thrm:abelian-local-von-neumann-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_center_isAbelian, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_isAbelian_iff_eq_scalars_of_isFactor}
-    \uses{def:local-von-neumann-algebra-in-curved-spacetime}
+    \uses{def:local-von-neumann-algebra-in-curved-spacetime, def:factor}
     \leanok
     The general abelian/center facts, specialized to a curved local von Neumann algebra $R(\mathbf{B}')$ (for a basis subregion $\mathbf{B}' \subseteq \mathbf{B}$ in a representation of $\mathfrak{U}(\mathbf{B})$): its center $R(\mathbf{B}') \cap R(\mathbf{B}')'$ is abelian, and if $R(\mathbf{B}')$ is a factor then it is abelian if and only if it equals the scalars $\mathbb{C}\cdot 1$.
 \end{theorem}
@@ -463,7 +464,7 @@ As in Minkowski, the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq 
 \begin{theorem}[Center Duality for Local von Neumann Algebras (Curved Spacetime)]
     \label{thrm:center-duality-local-von-neumann-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_center_eq_commutant, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_isFactor_iff_center_eq_scalars}
-    \uses{def:local-von-neumann-algebra-in-curved-spacetime}
+    \uses{def:local-von-neumann-algebra-in-curved-spacetime, def:factor}
     \leanok
     The center-duality facts, specialized to a curved local von Neumann algebra $R(\mathbf{B}')$: it shares its center with its commutant, $Z(R(\mathbf{B}')) = Z(R(\mathbf{B}')')$, and it is a factor if and only if its center is the scalars $\mathbb{C}\cdot 1$.
 \end{theorem}
@@ -536,7 +537,7 @@ Each local algebra $\mathfrak{U}(\mathbf{B})$ of a Haag-Kastler net in curved sp
 \begin{theorem}[GNS covariance for curved local algebras]
     \label{thrm:gns-covariance-local-in-curved-spacetime}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.unitaryEquiv_gns_covEquiv, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isIrreducible_iff_gns_covEquiv, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isFactor_iff_gns_covEquiv}
-    \uses{def:haag-kastler-net-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback}
+    \uses{def:haag-kastler-net-in-curved-spacetime, def:isometric-covariance-in-curved-spacetime, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback, def:factor}
     \leanok
     The curved mirror of \ref{thrm:gns-covariance-local}. Let $\mathfrak{U}$ be a Haag-Kastler net in curved spacetime (\ref{def:haag-kastler-net-in-curved-spacetime}); the covariance equivalence $\alpha_\varphi : \mathfrak{U}(\mathbf{B}) \simeq \mathfrak{U}(\varphi\cdot\mathbf{B})$ of Axiom 5 (\ref{def:isometric-covariance-in-curved-spacetime}) is a $*$-isomorphism of local algebras. Let $\omega$ be a state on $\mathfrak{U}(\varphi\cdot\mathbf{B})$, so that $\omega \circ \alpha_\varphi$ is a state on $\mathfrak{U}(\mathbf{B})$ (\ref{def:state-pullback}); let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $\mathfrak{U}(\mathbf{B})$ reproducing $\omega \circ \alpha_\varphi$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $\mathfrak{U}(\varphi\cdot\mathbf{B})$ reproducing $\omega$. Then $\pi_1$ is unitarily equivalent to $\pi_2 \circ \alpha_\varphi$; moreover $\pi_1$ is irreducible if and only if $\pi_2$ is, and $\pi_1(\mathfrak{U}(\mathbf{B}))''$ is a factor if and only if $\pi_2(\mathfrak{U}(\varphi\cdot\mathbf{B}))''$ is. So the superselection type of a local state is constant along the isometry orbit of the region.
 \end{theorem}
@@ -663,7 +664,7 @@ They do, however, restrict to a genuine action by automorphisms of one fixed loc
 \begin{theorem}[GNS covariance along the stabilizer action]
     \label{thrm:gns-covariance-stabilizer-action}
     \lean{Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.unitaryEquiv_gns_stabAut, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isIrreducible_iff_gns_stabAut, Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isFactor_iff_gns_stabAut}
-    \uses{def:stabilizer-action-in-curved-spacetime, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback}
+    \uses{def:stabilizer-action-in-curved-spacetime, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback, def:factor}
     \leanok
     The curved counterpart of \ref{thrm:gns-covariance-quasilocal-action}. For $g$ in the stabilizer $\mathrm{Stab}(\mathbf{B})$ the stabilizer automorphism $\hat\alpha_g$ (\ref{def:stabilizer-action-in-curved-spacetime}) is a $*$-automorphism of the single local algebra $\mathfrak{U}(\mathbf{B})$. So for a state $\omega$ on $\mathfrak{U}(\mathbf{B})$, a cyclic representation reproducing $\omega \circ \hat\alpha_g$ is unitarily equivalent to $\pi_\omega \circ \hat\alpha_g$, is irreducible exactly when $\pi_\omega$ is, and generates a factor exactly when $\pi_\omega$ does. Since curved spacetime has no quasilocal algebra, the stabilizer subgroup replaces the full Lorentz group here: the superselection type of a local state is invariant under the symmetries of the region that fix it.
 \end{theorem}

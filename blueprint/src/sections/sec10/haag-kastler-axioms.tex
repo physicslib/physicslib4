@@ -923,11 +923,69 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     It is a direct repackaging of bundled microcausality (\ref{thrm:von-neumann-bundled-order}) through the Galois bridge $\mathbf{B}' \subseteq \mathbf{B}^\perp \iff \mathbf{B}', \mathbf{B}$ completely spacelike, staying strictly within the physically local (bounded, diamond) regions.
 \end{proof}
 
+\subsection{Conjugation by a Unitary}
+
+A symmetry that acts on state vectors by a unitary $U$ acts on observables by $T \mapsto U T U^{-1}$. This subsection collects the operator-algebraic facts about this conjugation that the covariance results below use, in Minkowski and in curved spacetime alike: it is an isometric $*$-automorphism of $\mathcal{B}(H)$, it commutes with taking commutants, it preserves factors, and it restricts to $*$-isomorphisms between local algebras.
+
+\begin{definition}[Conjugation by a Unitary]
+    \label{def:unitary-conjugation}
+    \lean{Units.conjMulEquiv, Units.conjMulEquiv_apply, Physicslib4.lieConj, Physicslib4.lieConj_apply, Physicslib4.lieConj_apply_eq_conjStarAlgEquiv, Physicslib4.lieConj_one, Physicslib4.lieConj_add, Physicslib4.lieConj_smul, Physicslib4.lieConj_star, Physicslib4.norm_lieConj, Physicslib4.exp_lieConj}
+    \leanok
+    Let $M$ be a monoid and $u$ a unit of $M$. \emph{Conjugation by $u$}, $x \mapsto u x u^{-1}$, is a multiplicative automorphism of $M$, with inverse $x \mapsto u^{-1} x u$. Let $H$ be a complex Hilbert space and $U : H \to H$ a unitary, that is, a surjective linear isometry. \emph{Conjugation by $U$} is the multiplicative automorphism $T \mapsto U T U^{-1}$ of $\mathcal{B}(H)$ given by conjugation by the unit $U$ of $\mathcal{B}(H)$; on vectors, $(U T U^{-1})x = U(T(U^{-1}x))$. It has the following properties.
+    \begin{enumerate}
+        \item It agrees on every operator with Mathlib's conjugation $*$-algebra automorphism \texttt{LinearIsometryEquiv.conjStarAlgEquiv}~$U$. In particular it fixes the identity operator $1$ and is additive, $\mathbb{C}$-linear and $*$-preserving, $U T^* U^{-1} = (U T U^{-1})^*$.
+        \item It preserves the operator norm, $\Vert U T U^{-1} \Vert = \Vert T \Vert$.
+        \item It commutes with the exponential, $\exp(U T U^{-1}) = U \exp(T)\, U^{-1}$.
+    \end{enumerate}
+\end{definition}
+
+\begin{lemma}[An Automorphism Maps Commutants to Commutants]
+    \label{lmm:automorphism-commutant}
+    \lean{MulEquiv.image_centralizer, MulEquiv.image_centralizer_centralizer}
+    \leanok
+    Let $\varphi$ be a multiplicative automorphism of a set $M$ with a multiplication, and $S \subseteq M$. Write $S' = \{x \in M : xs = sx \text{ for all } s \in S\}$ for the commutant (centralizer). Then $\varphi(S') = \varphi(S)'$, and consequently $\varphi(S'') = \varphi(S)''$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    An element $x$ commutes with $s$ exactly when $\varphi(x)$ commutes with $\varphi(s)$, since $\varphi(xs) = \varphi(x)\varphi(s)$ and $\varphi$ is injective. So $\varphi(x) \in \varphi(S)'$ if and only if $x \in S'$, and surjectivity of $\varphi$ gives $\varphi(S') = \varphi(S)'$. Applying this to $S'$ in place of $S$ gives $\varphi(S'') = \varphi(S')' = \varphi(S)''$.
+\end{proof}
+
+\begin{definition}[Scalar Operators; Factor]
+    \label{def:factor}
+    \lean{Physicslib4.scalarOperators, Physicslib4.IsFactor}
+    \leanok
+    The \emph{scalar operators} on a complex inner product space $H$ are the multiples $c \cdot 1$, $c \in \mathbb{C}$, of the identity; they form the set $\mathbb{C}\cdot 1 \subseteq \mathcal{B}(H)$. A set $R \subseteq \mathcal{B}(H)$ of bounded operators is a \emph{factor} when its center is exactly the scalars, $R \cap R' = \mathbb{C}\cdot 1$, where $R'$ is the commutant (centralizer) of $R$ in $\mathcal{B}(H)$. The definition applies to any set of operators, not only to von Neumann algebras; for a von Neumann algebra it is the usual notion of a factor. A factor contains the identity operator $1$.
+\end{definition}
+
+\begin{lemma}[Factors are Preserved by Unitary Conjugation]
+    \label{lmm:factor-conj}
+    \lean{Physicslib4.IsFactor.conj, Physicslib4.lieConj_image_scalarOperators}
+    \uses{def:factor, def:unitary-conjugation}
+    \leanok
+    If $R \subseteq \mathcal{B}(H)$ is a factor and $U$ is a unitary on $H$, then $U R U^{-1} = \{U T U^{-1} : T \in R\}$ is a factor.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:factor, def:unitary-conjugation, lmm:automorphism-commutant}
+    Write $\varphi(T) = U T U^{-1}$. By \ref{lmm:automorphism-commutant}, $\varphi(R') = \varphi(R)'$, and $\varphi$ is injective, so $\varphi(R) \cap \varphi(R)' = \varphi(R \cap R') = \varphi(\mathbb{C}\cdot 1)$. Finally $\varphi$ fixes every scalar operator, $U (c \cdot 1) U^{-1} = c \cdot 1$, so $\varphi(\mathbb{C}\cdot 1) = \mathbb{C}\cdot 1$.
+\end{proof}
+
+\begin{lemma}[Restricting a $*$-Automorphism to Star-Subalgebras]
+    \label{lmm:restrict-star-alg-equiv}
+    \lean{Physicslib4.restrictStarAlgEquiv}
+    \leanok
+    Let $A$ be a complex $*$-algebra, $e$ a $*$-algebra automorphism of $A$, and $S, T \subseteq A$ star-subalgebras such that $e(x) \in T$ for every $x \in S$ and $e^{-1}(y) \in S$ for every $y \in T$. Then $e$ restricts to a $*$-algebra isomorphism $S \cong T$, acting by $x \mapsto e(x)$, with inverse $y \mapsto e^{-1}(y)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The two inclusion hypotheses make $x \mapsto e(x)$ a map $S \to T$ and $y \mapsto e^{-1}(y)$ a map $T \to S$; they are mutually inverse because $e^{-1} \circ e$ and $e \circ e^{-1}$ are the identity. Products, sums, scalar multiples and adjoints are preserved because $e$ preserves them and the operations of $S$ and $T$ are those of $A$.
+\end{proof}
+
 \begin{theorem}[Geometric Covariance of the von Neumann Net]
     \label{thrm:von-neumann-geometric-covariance}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localVonNeumann, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localOperators}
     \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
-    \uses{def:local-von-neumann, def:covariant-quasilocal-algebra}
+    \uses{def:local-von-neumann, def:covariant-quasilocal-algebra, def:unitary-conjugation}
     \leanok
     In a covariant representation $\pi$ of the quasilocal algebra with the operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$, conjugation by the implementing unitary $U(L)$ carries the local von Neumann algebra of a region $\mathbf{B}$ onto that of the Lorentz-transformed region $L \cdot \mathbf{B}$:
     \[ U(L)\, R(\mathbf{B})\, U(L)^{-1} = R(L \cdot \mathbf{B}). \]
@@ -935,7 +993,7 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:local-von-neumann, def:covariant-quasilocal-algebra, thrm:irreducible-covariant-representation}
+    \uses{def:local-von-neumann, def:covariant-quasilocal-algebra, thrm:irreducible-covariant-representation, def:unitary-conjugation, lmm:automorphism-commutant}
     The proof rests on three ingredients, all already available: operator covariance (the last clause of \ref{thrm:irreducible-covariant-representation}); the fact that $\beta_L = $ the covariance action sends $\iota_{\mathbf{B}}(\mathfrak{U}(\mathbf{B}))$ onto $\iota_{L\cdot\mathbf{B}}(\mathfrak{U}(L\cdot\mathbf{B}))$ (from the action-on-generators identity and surjectivity of the covariance equivalence $\alpha_L$); and the algebraic fact that conjugation by a unit is a multiplicative automorphism, which therefore commutes with the bicommutant. The reusable core is that a multiplicative automorphism maps the centralizer of a set onto the centralizer of its image, hence maps bicommutants to bicommutants. In particular $R(\mathbf{B})$ and $R(L \cdot \mathbf{B})$ are unitarily equivalent (conjugate by $U(L)$), so any unitary-conjugation-invariant property of a local von Neumann algebra --- such as being a factor --- is constant along the Lorentz orbit of a region.
 \end{proof}
 
@@ -943,14 +1001,14 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
     \label{thrm:von-neumann-factor-orbit}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_isFactor_smul}
     \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
-    \uses{thrm:irreducible-factor}
+    \uses{thrm:irreducible-factor, def:factor}
     \leanok
-    If the local von Neumann algebra $R(\mathbf{B})$ is a \emph{factor} (its center $R(\mathbf{B}) \cap R(\mathbf{B})'$ is exactly the scalars), then so is $R(L \cdot \mathbf{B})$ for every Lorentz transformation $L$.
+    If the local von Neumann algebra $R(\mathbf{B})$ is a \emph{factor} (\ref{def:factor}: its center $R(\mathbf{B}) \cap R(\mathbf{B})'$ is exactly the scalars), then so is $R(L \cdot \mathbf{B})$ for every Lorentz transformation $L$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thrm:von-neumann-geometric-covariance}
-    Geometric covariance (\ref{thrm:von-neumann-geometric-covariance}) exhibits $R(L \cdot \mathbf{B}) = U(L) R(\mathbf{B}) U(L)^{-1}$; conjugation by a unitary is a multiplicative automorphism that carries the center onto the center and fixes the scalars, so it preserves the factor property. Thus being a factor is constant along the Lorentz orbit of a region.
+    \uses{thrm:von-neumann-geometric-covariance, lmm:factor-conj}
+    Geometric covariance (\ref{thrm:von-neumann-geometric-covariance}) exhibits $R(L \cdot \mathbf{B}) = U(L) R(\mathbf{B}) U(L)^{-1}$; conjugation by a unitary is a multiplicative automorphism that carries the center onto the center and fixes the scalars, so it preserves the factor property (\ref{lmm:factor-conj}). Thus being a factor is constant along the Lorentz orbit of a region.
 \end{proof}
 
 \begin{theorem}[Geometric Covariance as a von Neumann Algebra Isomorphism]
@@ -963,8 +1021,8 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:local-von-neumann-algebra, thrm:von-neumann-geometric-covariance}
-    The reusable ingredient is that a $*$-automorphism carrying the underlying set of one star-subalgebra onto another restricts to a star-algebra equivalence between them. This makes the unitary equivalence of orbit-related local algebras an explicit transportable object.
+    \uses{def:local-von-neumann-algebra, thrm:von-neumann-geometric-covariance, def:unitary-conjugation, lmm:restrict-star-alg-equiv}
+    The reusable ingredient is that a $*$-automorphism carrying the underlying set of one star-subalgebra onto another restricts to a star-algebra equivalence between them (\ref{lmm:restrict-star-alg-equiv}). This makes the unitary equivalence of orbit-related local algebras an explicit transportable object.
 \end{proof}
 
 \subsection{Relative Commutants of Nested Local Algebras}
@@ -1040,7 +1098,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 \begin{theorem}[An Irreducible Inclusion has Factor Ambient]
     \label{thrm:irreducible-inclusion-factor}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_of_isIrreducibleInclusion}
-    \uses{def:irreducible-inclusion}
+    \uses{def:irreducible-inclusion, def:factor}
     \leanok
     If $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and the inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is irreducible, then the ambient algebra $R(\mathbf{B}_2)$ is a factor (trivial center).
 \end{theorem}
@@ -1053,7 +1111,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 \begin{theorem}[Self-Inclusion is Irreducible iff Factor]
     \label{thrm:self-inclusion-factor}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}
-    \uses{def:irreducible-inclusion}
+    \uses{def:irreducible-inclusion, def:factor}
     \leanok
     The trivial self-inclusion $R(\mathbf{B}) \subseteq R(\mathbf{B})$ is irreducible if and only if $R(\mathbf{B})$ is a factor.
 \end{theorem}
@@ -1190,7 +1248,7 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
     \label{thrm:irreducible-factor}
     \lean{Physicslib4.GNS.center_gnsVonNeumann_eq_of_isIrreducible, Physicslib4.GNS.isFactor_gnsVonNeumann_of_isIrreducible}
     \leanfile{Physicslib4/GNS/Irreducibility.lean}
-    \uses{def:irreducible-representation, def:local-von-neumann, def:generated-von-neumann-algebra}
+    \uses{def:irreducible-representation, def:local-von-neumann, def:generated-von-neumann-algebra, def:factor}
     \leanok
     The von Neumann algebra $\pi(A)''$ generated by an irreducible representation has \emph{trivial center}: an operator lies in the center $\pi(A)'' \cap (\pi(A)'')'$ if and only if it is a scalar multiple of the identity. In the factor vocabulary this says that $\pi(A)''$ is a \emph{factor}, a von Neumann algebra whose center is exactly the scalars; that restatement is \texttt{isFactor\_gnsVonNeumann\_of\_isIrreducible}.
 \end{theorem}
@@ -1403,7 +1461,7 @@ The comparison of representations is the entry point to superselection theory. F
     \label{thrm:unitary-equiv-invariants}
     \lean{Physicslib4.GNS.UnitaryEquiv.isIrreducible_iff, Physicslib4.GNS.UnitaryEquiv.isFactor_iff}
     \leanfile{Physicslib4/GNS/UnitaryEquiv.lean}
-    \uses{def:unitary-equivalence, def:irreducible-representation, thrm:irreducible-factor}
+    \uses{def:unitary-equivalence, def:irreducible-representation, thrm:irreducible-factor, def:factor}
     \leanok
     Unitarily equivalent representations share their representation-theoretic type: $\pi_1$ is irreducible if and only if $\pi_2$ is, and the generated von Neumann algebra $\pi_1(A)''$ is a factor if and only if $\pi_2(A)''$ is.
 \end{theorem}
@@ -1470,7 +1528,7 @@ The comparison of representations is the entry point to superselection theory. F
 \begin{theorem}[Superselection type transports along a $*$-isomorphism]
     \label{thrm:gns-sector-transport}
     \lean{Physicslib4.GNS.isIrreducible_iff_of_gns_comp, Physicslib4.GNS.isFactor_iff_of_gns_comp}
-    \uses{thrm:gns-covariance-unitary-equiv, thrm:unitary-equiv-invariants, lmm:pullback-image-invariants, def:state-pullback}
+    \uses{thrm:gns-covariance-unitary-equiv, thrm:unitary-equiv-invariants, lmm:pullback-image-invariants, def:state-pullback, def:factor}
     \leanok
     Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$; let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing $\omega \circ \Phi$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then $\pi_1$ is irreducible if and only if $\pi_2$ is, and $\pi_1(A)''$ is a factor if and only if $\pi_2(B)''$ is. The chain is: $\pi_1$ is unitarily equivalent to $\pi_2 \circ \Phi$ (\ref{thrm:gns-covariance-unitary-equiv}), unitary equivalence preserves irreducibility and factoriality (\ref{thrm:unitary-equiv-invariants}), and $\pi_2 \circ \Phi$ has the same image algebra as $\pi_2$ (\ref{lmm:pullback-image-invariants}). Thus an isomorphism of the observable algebra carries superselection sectors to superselection sectors, preserving their type; together with the invariance of purity (\ref{thrm:pure-pullback-invariant}) it shows the whole sector structure is an invariant of the algebra, not of its presentation.
 \end{theorem}
@@ -1483,7 +1541,7 @@ The comparison of representations is the entry point to superselection theory. F
 \begin{theorem}[GNS covariance for local algebras]
     \label{thrm:gns-covariance-local}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.unitaryEquiv_gns_covEquiv, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducible_iff_gns_covEquiv, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_iff_gns_covEquiv}
-    \uses{def:haag-kastler-net, def:lorentz-covariance, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback}
+    \uses{def:haag-kastler-net, def:lorentz-covariance, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback, def:factor}
     \leanok
     Let $\mathfrak{U}$ be a Haag-Kastler net (\ref{def:haag-kastler-net}). The covariance equivalence $\alpha_L : \mathfrak{U}(\mathbf{B}) \simeq \mathfrak{U}(L\cdot\mathbf{B})$ supplied by Axiom 5 (\ref{def:lorentz-covariance}) is a $*$-isomorphism of local algebras, so the abstract GNS-covariance results apply to it region by region. Let $\omega$ be a state on $\mathfrak{U}(L\cdot\mathbf{B})$, so that $\omega \circ \alpha_L$ is a state on $\mathfrak{U}(\mathbf{B})$ (\ref{def:state-pullback}); let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $\mathfrak{U}(\mathbf{B})$ reproducing $\omega \circ \alpha_L$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $\mathfrak{U}(L\cdot\mathbf{B})$ reproducing $\omega$. Then $\pi_1$ is unitarily equivalent to $\pi_2 \circ \alpha_L$; moreover $\pi_1$ is irreducible if and only if $\pi_2$ is, and $\pi_1(\mathfrak{U}(\mathbf{B}))''$ is a factor if and only if $\pi_2(\mathfrak{U}(L\cdot\mathbf{B}))''$ is. In physical terms: the superselection type of a local state is constant along the Lorentz orbit of the region.
 \end{theorem}
@@ -1587,7 +1645,7 @@ The comparison of representations is the entry point to superselection theory. F
     \label{thrm:commutant-factor-duality}
     \lean{Physicslib4.GNS.isFactor_gnsVonNeumann_iff_isFactor_commutant, Physicslib4.GNS.commutantVonNeumann_eq_scalars_iff_gnsVonNeumann_eq_univ}
     \leanfile{Physicslib4/GNS/Superselection.lean}
-    \uses{thrm:commutant-von-neumann, def:generated-von-neumann-algebra}
+    \uses{thrm:commutant-von-neumann, def:generated-von-neumann-algebra, def:factor}
     \leanok
     A von Neumann algebra and its commutant share the same center. Consequently $\pi(A)''$ is a factor (trivial center) if and only if its commutant $\pi(A)'$ is a factor. Dually, at the extreme of triviality, the commutant collapses to the scalars $\pi(A)' = \mathbb{C}\cdot 1$ if and only if the generated algebra is everything $\pi(A)'' = \mathcal{B}(H)$.
 \end{theorem}
@@ -1672,7 +1730,7 @@ The comparison of representations is the entry point to superselection theory. F
 \begin{theorem}[A factor is abelian iff it is the scalars]
     \label{thrm:factor-abelian-iff-scalars}
     \lean{Physicslib4.GNS.isAbelian_iff_eq_scalars_of_isFactor}
-    \uses{def:von-neumann-center}
+    \uses{def:von-neumann-center, def:factor}
     \leanok
     A factor $R$ (a von Neumann algebra with trivial center $R \cap R' = \mathbb{C}\cdot 1$) is abelian if and only if it equals the scalars $\mathbb{C}\cdot 1$.
 \end{theorem}
@@ -1698,7 +1756,7 @@ The comparison of representations is the entry point to superselection theory. F
 \begin{theorem}[A von Neumann algebra is a factor iff its center is the scalars]
   \label{thrm:factor-iff-center-scalars}
   \lean{Physicslib4.GNS.isFactor_iff_center_eq_scalars}
-  \uses{def:von-neumann-center}
+  \uses{def:von-neumann-center, def:factor}
   \leanok
   A von Neumann algebra $R$ is a factor if and only if its center is the scalars, $Z(R) = R \cap R' = \mathbb{C}\cdot 1$.
 \end{theorem}
@@ -2161,7 +2219,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 \begin{theorem}[GNS covariance along the quasilocal action]
     \label{thrm:gns-covariance-quasilocal-action}
     \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.unitaryEquiv_gns_action, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducible_iff_gns_action, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_iff_gns_action}
-    \uses{def:covariant-quasilocal-algebra, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback}
+    \uses{def:covariant-quasilocal-algebra, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback, def:factor}
     \leanok
     The lifted covariance automorphism $\beta_L$ of the quasilocal algebra $\mathfrak{U}$ is a $*$-automorphism, hence in particular a $*$-isomorphism, so the abstract GNS-covariance results apply to it. Let $\omega$ be a state on $\mathfrak{U}$. A cyclic representation of $\mathfrak{U}$ reproducing the pullback state $\omega \circ \beta_L$ is unitarily equivalent to $\pi_\omega \circ \beta_L$ (\ref{thrm:gns-covariance-unitary-equiv}), is irreducible exactly when $\pi_\omega$ is, and generates a factor exactly when $\pi_\omega$ does (\ref{thrm:gns-sector-transport}). Whereas \ref{thrm:gns-covariance-local} moves between the algebras of two different regions, here the algebra is fixed and the Lorentz group acts on it: the conclusion is that the superselection type of a \emph{global} state is a Lorentz invariant. Together with the invariance of purity (\ref{thrm:purity-covariance-invariant}) this says the entire sector classification of global states is Lorentz invariant.
 \end{theorem}
