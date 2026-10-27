@@ -101,6 +101,9 @@ weak-continuity lemma is in `Physicslib4`.
 tag := "stone-design"
 %%%
 
+The sign conventions for generators and time translations are stated once in the conventions
+chapter, under {ref "conventions-signs"}[Sign and notational conventions].
+
 Section 10.4 of the blueprint has no paragraph labelled "Formalization note"; its remarks on the
 Lean formalization sit inside entries, mostly naming the Mathlib results a proof uses, and this
 section links the entries it draws on. The conventions of the

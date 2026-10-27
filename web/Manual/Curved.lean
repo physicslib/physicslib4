@@ -101,6 +101,11 @@ written without it below, except for the bridge and the pullback relabelling, wh
 tag := "curved-design"
 %%%
 
+The design decisions shared with the Minkowski axioms, the universes of a curved net and the
+group of Axiom 5 are summarised in the conventions chapter, under
+{ref "conventions-axioms"}[The axiom structures], {ref "conventions-universes"}[Universes] and
+{ref "conventions-implementation"}[Implementation choices].
+
 The blueprint is the specification, and its design and formalization notes record the reasons for
 the choices below. Where a choice is the one made for Minkowski spacetime, this section points to
 the {ref "haag-kastler-design"}[Design section] of the Haag–Kastler chapter instead of repeating it.

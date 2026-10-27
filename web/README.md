@@ -56,6 +56,10 @@ examples on the page are elaborated against the library itself.
   Section 10.6).
 - `Manual/Curved.lean`: "The axioms in curved spacetime and general covariance" (blueprint
   Sections 10.7–10.8).
+- `Manual/Conventions.lean`: "Conventions and design decisions", the library's conventions and
+  design decisions, each stated once with links to where it matters.
+- `Manual/NotProved.lean`: "Appendix: what the library does not prove", the standard facts the
+  chapters mark as not proved, in one list.
 - `Manual/FeatureTests.lean`: a draft-only chapter showing `{docstring}`, `#check` and `apiDocs`;
   built only with `--draft`.
 - `Manual/Theme.lean`: the manual's configuration and header, built from `Book/Theme.lean`.

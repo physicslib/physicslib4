@@ -97,6 +97,9 @@ The declarations are in the namespaces `Physicslib4`, `Physicslib4.Spacetime` an
 tag := "spacetime-design"
 %%%
 
+The conventions of the causal structure are stated once in the conventions chapter, under
+{ref "conventions-causal"}[Causal structure].
+
 The blueprint is the specification, and its entries record the reasons for the choices below. The
 reasons for the regions and topology of Minkowski space are set out at length in the blueprint's
 [chapter 2](https://physicslib.github.io/physicslib4/blueprint/chptr-axiom-0--minkowski-space-.html),
@@ -116,8 +119,8 @@ reading the Lean.
   `ChronologicallyPrecedes M t p q`, written `p ≪[M, t] q`.
 
 The blueprint entry [def:spacetime](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:spacetime)
-records the reasons for the smoothness clause and the regularity index; the conventions chapter
-explains the index.
+records the reasons for the smoothness clause and the regularity index; the
+{ref "conventions-causal"}[conventions chapter] explains the index.
 
 ## Minkowski space and the Alexandrov topology
 
@@ -155,7 +158,7 @@ So $`\prec` is reflexive, $`p \prec p` for every $`p`, while `IsCausalTrip` is s
 point is spacelike to itself, so a region and its spacelike complement are disjoint. And the
 causality condition `NoClosedCausalCurve` is stated with the strict relation, as "no causal trip
 from $`p` to $`p`"; stated as $`\lnot(p \prec p)` it would fail in every spacetime. The reasons
-for the reflexive convention are in the conventions chapter (blueprint
+for the reflexive convention are in the {ref "conventions-causal"}[conventions chapter] (blueprint
 [def:causal-trip](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:causal-trip)).
 
 The closure operators `Relation.TransGen` and `Relation.ReflTransGen` are what make transitivity
@@ -223,7 +226,8 @@ This is an implementation choice, not a restriction: the oriented identity compo
 identity component, but the proof needs a Myers–Steenrod-type rigidity theorem, which Mathlib does
 not provide, so the library puts orientation preservation into the definition (blueprint
 [def:isometric-covariance-in-curved-spacetime](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isometric-covariance-in-curved-spacetime),
-formalization note). The conventions chapter discusses it further.
+formalization note). The {ref "conventions-implementation"}[conventions chapter] discusses it
+further.
 
 Preserving the causal structure is weaker than being an isometry: a dilation
 $`x \mapsto \lambda x`, $`\lambda > 0`, maps diamonds to diamonds but scales $`\eta` by

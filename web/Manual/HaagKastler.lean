@@ -85,6 +85,10 @@ namespace `Physicslib4.AQFT.HaagKastler`, written without it below.
 tag := "haag-kastler-design"
 %%%
 
+The design decisions behind the axiom structures, and their universes, are summarised in the
+conventions chapter, under {ref "conventions-axioms"}[The axiom structures] and
+{ref "conventions-universes"}[Universes].
+
 The blueprint is the specification: each definition below is checked against its blueprint entry,
 which records the reasons for the choices made. This section collects those reasons.
 

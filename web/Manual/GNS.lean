@@ -93,6 +93,10 @@ written below without the prefix.
 tag := "gns-design"
 %%%
 
+The universe of the GNS Hilbert space and the library's use of Mathlib's GNS space are
+discussed in the conventions chapter, under {ref "conventions-universes"}[Universes] and
+{ref "conventions-implementation"}[Implementation choices].
+
 The blueprint is the specification, and its entries record the reasons for the choices below.
 
 ## States are a structure

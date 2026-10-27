@@ -68,6 +68,11 @@ _Present tense._ The blueprint, the docstrings and this manual describe the libr
 the present tense. Its history is kept in one place, `CHANGELOG.md` at the root of the
 repository.
 
+_Where the library stops._ The standard facts that the library does not prove, such as the
+Reeh–Schlieder theorem and the existence of pure states, are marked where they arise and collected
+in the {ref "not-proved"}[appendix]. Where a theorem depends on one of them, it is a hypothesis of
+that theorem.
+
 # Sign and notational conventions
 %%%
 tag := "conventions-signs"
@@ -92,9 +97,11 @@ $$`A\psi = \lim_{t \to 0,\ t \neq 0} \frac{1}{i}\,\frac{U(t)\psi - \psi}{t},`
 so that $`U(t) = e^{itA}` in Stone's theorem
 ([def:hall-10.13](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.13)).
 With this sign the Schrödinger evolution $`e^{-it\hat H}` has generator $`-\hat H`. The
-time-translation unitaries of a field theory are the inverse of that evolution,
-$`U(t) = e^{it\hat H}`, so their generator is $`\hat H` itself, and the spectrum condition,
-stated as positive energy, says $`\hat H \ge 0`. The
+translation unitaries of a field theory are $`U(a) = e^{-iP\cdot a}`, where
+$`P\cdot a = -P^0 a^0 + \vec P\cdot\vec a` is the pairing of signature $`(-,+,+,+)` and
+$`P^0 = \hat H`. For a time translation $`a = (t, \vec 0)` this gives $`U(t) = e^{it\hat H}`, the
+inverse of the Schrödinger evolution, so its generator is $`\hat H` itself, and the spectrum
+condition, stated as positive energy, says $`\hat H \ge 0`. The
 [Stone chapter](Stones-theorem/#physicslib4-reference-manual--Stone___s-theorem--Design--Positive-energy-is-a-property-of-the-generator)
 explains how positive energy is imposed on the generator directly, without assuming it bounded.
 
@@ -248,11 +255,125 @@ regions the axioms govern
 tag := "conventions-universes"
 %%%
 
-This section is in preparation.
+As you will recall from the
+[tutorial](../tutorial/Lean-in-brief/#physicslib4-tutorial--Lean-in-brief--Structures-and-type-classes--An-aside-on-universes),
+every Lean type lives in a universe, `Type 0 = Type`, `Type 1`, and so on, and a definition that
+quantifies over types must say in which universe they lie. Physics never notices universes, but a
+statement of the form "there is a Hilbert space with …" or "for every Hilbert space …" has to fix
+one. The library makes four choices.
+
+_GNS Hilbert spaces live in the universe of the algebra._ `gns_construction` asserts, for a state
+on a C\*-algebra `A : Type u`, the existence of a GNS triple whose Hilbert space is in `Type u`,
+because Mathlib's GNS space of `A` lives there. An existential needs some fixed universe, and this
+is the one in which the construction can be carried out. Uniqueness, `gns_unique`, compares two
+Hilbert spaces in arbitrary universes. Every later existential over a GNS space inherits the
+choice: the unitary implementation of a symmetry on the GNS space of a Minkowski net's quasilocal
+algebra, for example, yields a Hilbert space in the universe of that algebra
+([GNS chapter](The-GNS-construction/#physicslib4-reference-manual--The-GNS-construction--Design--The-construction-uses-Mathlib___s-GNS-space)).
+
+_A Minkowski net has one universe, that of its algebras._ `LocalNet.{u}` assigns local algebras in
+`Type u` to subsets of $`\mathbb{R}^4`, which is in `Type`. A quasilocal algebra of the net has its
+carrier in the same universe `Type u`: a smaller universe could not hold injective copies of the
+local algebras, and a free universe could not be inferred. `HaagKastlerNet` names the universe of
+its net, so it is a parameter
+([Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Design--Universes)).
+
+_A curved net's algebras have their own universe._ The spacetime interface
+`HaagKastlerCurved.LorentzianSpacetime.{u}` has its points and its isometries in `Type u`. A net
+over it, `LocalNet.{u, v} M` or `HaagKastlerNet.{u, v} M`, has its algebras in `Type v`,
+independent of `u`, so a spacetime in any universe can carry algebras in any universe. The Hilbert
+spaces that Axiom 4 quantifies over range over `Type v`, where `gns_construction` puts the GNS
+spaces of states on the local algebras. A geometric spacetime enters through
+`toAbstractIdentityComponent`, which produces an interface with points in `Type`, and a
+`NetTheory` assigns to every geometric spacetime a net whose algebras are all in one universe, the
+universe parameter of `NetTheory`
+([curved chapter](The-axioms-in-curved-spacetime-and-general-covariance/#physicslib4-reference-manual--The-axioms-in-curved-spacetime-and-general-covariance--Design--Local-algebras___-parallel-to-Minkowski)).
+
+_The trivial nets are in universe 0._ They assign $`\mathbb{C}` to every region, and
+$`\mathbb{C}` is in `Type`. The consistency theorems are therefore stated at universe 0:
+`HaagKastler.nonempty_haagKastlerNet` for `HaagKastlerNet.{0}` and
+`HaagKastlerCurved.nonempty_haagKastlerNet` for algebras in universe 0 over a spacetime in any
+universe. Consistency needs one model, so nothing is lost; the library gives no witness in other
+universes.
+
+_For a reader writing a net._ The algebras of physics, $`\mathbb{C}`, matrix algebras, the
+bounded operators on a Hilbert space `H : Type`, are in `Type`, so a net built from them has `u = 0` in Minkowski spacetime and `v = 0` in curved
+spacetime. Every general theorem of the library is universe-polymorphic and applies to it
+unchanged. Universe annotations matter only when a statement mixes objects from different
+universes: a Hilbert space obtained from a GNS existential is in the universe of the algebra, and
+a hypothesis about "every Hilbert space" in Axiom 4 of a curved net means every Hilbert space in
+the universe of its algebras.
 
 # Implementation choices
 %%%
 tag := "conventions-implementation"
 %%%
 
-This section is in preparation.
+Some choices concern only how an intended object is encoded. They do not change what the library
+states, but they show up when reading or using the Lean.
+
+## The group of the curved-spacetime Axiom 5
+
+The blueprint's Axiom 5 in curved spacetime asks for an action of the isometries connected to the
+identity, and these must map diamonds to diamonds. An isometry preserves the causal type of
+vectors, but one that reverses the time orientation maps $`I^+(p)` onto $`I^-(\varphi(p))`. The
+library therefore takes the group to be `Isometry.orientedIdentityComponent`: the isometries in
+the identity component of the isometry group (with the topology induced by
+$`\varphi \mapsto (\varphi, \varphi^{-1})` into $`C(M,M) \times C(M,M)`, compact-open on each
+factor) that, with their inverses, preserve the future orientation. Its members map diamonds to
+diamonds, which is the one law the spacetime interface requires.
+
+This is an implementation choice, not a restriction. An isometry connected to the identity
+preserves the future orientation, so the oriented identity component is the whole identity
+component, and the group is the one the axiom names. The proof of that equality needs a
+Myers–Steenrod-type rigidity theorem, which Mathlib does not provide, so the library puts
+orientation preservation into the definition instead of proving it, and no `**Restriction:**`
+line is needed
+([def:isometric-covariance-in-curved-spacetime](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isometric-covariance-in-curved-spacetime),
+formalization note; the
+[Spacetime chapter](Spacetime-and-geometry/#physicslib4-reference-manual--Spacetime-and-geometry--Design--Symmetries)
+and the
+[curved chapter](The-axioms-in-curved-spacetime-and-general-covariance/#physicslib4-reference-manual--The-axioms-in-curved-spacetime-and-general-covariance--Design--The-bridge-from-a-geometric-spacetime)).
+
+## Conventions inherited from Mathlib
+
+Where Mathlib has a notion, the library uses it, together with its conventions. Several of them
+differ from the textbook in how they treat degenerate cases. Lean functions are total, so Mathlib
+gives a definition a value, often $`0`, where the textbook leaves it undefined, and the theorems
+carry the hypothesis that excludes the degenerate case. You know one such convention already:
+$`0^{-1} = 0`.
+
+* _Unbounded operators are partial linear maps._ An unbounded operator is Mathlib's `LinearPMap`,
+  written `H →ₗ.[ℂ] H`: a domain submodule with a linear map on it. Equality of partial maps
+  includes equality of domains, so $`T^* = T` means what it should. Density of the domain is the
+  separate predicate `HasDenseDomain`, not part of the type
+  ([unbounded chapter](Unbounded-operators-and-their-spectral-theorem/#physicslib4-reference-manual--Unbounded-operators-and-their-spectral-theorem--Design--Unbounded-operators-are-Mathlib___s-partial-linear-maps)).
+* _The adjoint is defined for every operator._ Mathlib's `LinearPMap.adjoint` exists even when
+  the domain of $`T` is not dense; it then keeps its natural domain but is the zero map on it. The
+  textbook adjoint exists only for densely defined operators, so every theorem about the action of
+  $`T^*` assumes `HasDenseDomain T`. Self-adjointness is Mathlib's `IsSelfAdjoint` and implies a
+  dense domain
+  ([unbounded chapter](Unbounded-operators-and-their-spectral-theorem/#physicslib4-reference-manual--Unbounded-operators-and-their-spectral-theorem--Design--The-adjoint-is-Mathlib___s___-with-its-convention)).
+* _The integral of an unbounded function is guarded._ `integralApply μ f`, the action of
+  $`\int f \, d\mu` for a possibly unbounded $`f`, is chosen from an existence-and-uniqueness
+  statement and is $`0` when $`f` is not measurable or no unique value exists. The guard makes
+  `pmapIntegral μ f` a partial linear map for every $`f`; theorems about its values assume
+  `Measurable f`
+  ([unbounded chapter](Unbounded-operators-and-their-spectral-theorem/#physicslib4-reference-manual--Unbounded-operators-and-their-spectral-theorem--Design--The-integral-of-an-unbounded-function)).
+* _The zero representation is irreducible._ `IsIrreducible π` is the commutant form, every
+  operator commuting with all $`\pi(a)` is a multiple of $`\mathbf{1}`, as in the blueprint. On
+  the zero Hilbert space every operator is $`0 = 0 \cdot \mathbf{1}`, so the zero representation
+  counts as irreducible. The library keeps the definition as it is: results that need a nonzero
+  space assume `Nontrivial H` or a nonzero vector, and a GNS space is never zero, since
+  $`\|\Omega\|^2 = \omega(\mathbf{1}) = 1`
+  ([GNS chapter](The-GNS-construction/#physicslib4-reference-manual--The-GNS-construction--Design--Irreducibility___-purity-and-the-commutant)).
+* _The continuous functional calculus is Mathlib's._ `realCalculus hA` is Mathlib's `cfcHom hA`,
+  constructed independently of the blueprint's route through polynomials. The library adds the
+  blueprint's characterisation, that it is the unique bounded linear map sending each polynomial
+  $`p` to $`p(A)`
+  ([bounded chapter](Bounded-spectral-theory/#physicslib4-reference-manual--Bounded-spectral-theory--Design--The-continuous-calculus-is-Mathlib___s)).
+* _The GNS construction is Mathlib's._ The existence half of the GNS theorem uses Mathlib's GNS
+  space of a positive functional, `PositiveLinearMap.GNS`, with its left-multiplication
+  representation, instead of the blueprint's quotient-and-complete construction; the blueprint's
+  lemmas on the null space are formalised separately
+  ([GNS chapter](The-GNS-construction/#physicslib4-reference-manual--The-GNS-construction--Design--The-construction-uses-Mathlib___s-GNS-space)).

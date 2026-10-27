@@ -68,3 +68,67 @@ included last in `web/Manual.lean` (after `Manual.Curved`, before the draft-only
   chapter names `CHANGELOG.md` as plain code, as the tutorial does.
 - Not yet done (process step 2 of the plan): `web/README.md` entry, title-page link, pointers from
   each chapter's Design section; sections 5–6 and the "not proved" appendix.
+
+## Second half (2026-10-24)
+
+- Section 2 updated: the translation convention U(a) = e^{−iP·a}, P·a = −P⁰a⁰ + P⃗·a⃗, P⁰ = Ĥ, so
+  U(t) = e^{itĤ} for a = (t, 0⃗); matches the `IsPositiveEnergy` docstring and the Stone chapter.
+  Build passes.
+
+## Section 5: Universes (2026-10-27)
+
+- Written, ~540 words raw. Verified: `gns_construction.{u}` with H in `Type u` (GNS chapter
+  output); `QuasilocalIntertwiner.lean` existentials `∃ H : Type u`; Minkowski `LocalNet.{u}`,
+  quasilocal carrier in `Type u` (QuasilocalAlgebra.lean l. 103); curved interface `Carrier`,
+  `Isom : Type u` (Spacetime.lean l. 98, 107); `LocalNet.{u, v}`, `algebra : … → Type v`;
+  `LocalAlgebra` quantifies `H : Type v`; checked with `lake env lean` (pp.universes):
+  `toAbstractIdentityComponent : Spacetime.LorentzianSpacetime → LorentzianSpacetime.{0}`,
+  `NetTheory.{u_1}`; trivial-net consistency at universe 0 (Net.lean l. 383, curved Net.lean
+  l. 426–431).
+- `lake build` and `generate-manual` pass.
+
+## Section 6: Implementation choices (2026-10-27)
+
+- Written, ~650 words raw, two subsections (the group of the curved Axiom 5; conventions inherited
+  from Mathlib). Verified against the blueprint formalization note of
+  def:isometric-covariance-in-curved-spacetime and the Design sections of the spacetime, curved,
+  unbounded, GNS and bounded chapters (`LinearPMap`, `LinearPMap.adjoint` zero on its domain when
+  not dense, `integralApply` guard, `IsIrreducible` and the zero space (Irreducibility.lean
+  l. 53–55), `realCalculus = cfcHom`, `PositiveLinearMap.GNS`). No internal labels.
+- "Kept deliberately" for `IsIrreducible` follows the coordinator's brief; the docstring states the
+  behaviour and the `Nontrivial H` hypotheses but not the word "deliberately".
+- `lake build` and `generate-manual` pass.
+
+## Appendix: what the library does not prove (2026-10-27)
+
+- `web/Manual/NotProved.lean` (tag `not-proved`, file `What-the-library-does-not-prove`), included
+  in `web/Manual.lean` right after the conventions chapter. ~640 words raw, 13 items in four groups,
+  gathered by grepping `web/Manual/` for "not proved", "does not prove", "not formalise", "no lemma",
+  "Mathlib does not": pure states; quasi-equivalence with amplifications; unbounded normal spectral
+  theorem; Kaplansky density; intersection property (general spacetime); geodesic equation at
+  endpoints; oriented identity component = identity component (Myers–Steenrod); uniqueness of the
+  quasilocal algebra; Reeh–Schlieder; vacuum states of nontrivial nets; non-existence of a curved
+  quasilocal algebra (informal in the blueprint); Hartle–Hawking/Bunch–Davies as KMS; general
+  covariance of the trivial theory.
+- The intro's claim that a theorem depending on one of them takes it as a hypothesis: checked that
+  `Physicslib4/` has no `sorry` and no `axiom` declarations.
+- Conventions section 1 links the appendix ("Where the library stops"). `web/README.md` lists both
+  files.
+- `check_temporal_wording.py` OK. Link check of both generated pages: all blueprint anchors, section
+  pages, tutorial anchors and chapter-section anchors resolve. The three chapter-level `{ref}` links
+  (`#not-proved`, `#conventions`, `#curved`) reach the right page, but Verso emits no element with
+  the chapter tag as id, so the fragment lands at the top of the page; the existing chapters'
+  `{ref "haag-kastler"}` links behave the same.
+- `lake build` and `generate-manual` pass.
+
+## Links into the conventions chapter (2026-10-27)
+
+- Title page (`web/Manual.lean`): one sentence linking the conventions chapter and the appendix.
+- One sentence at the start of each Design section, linking the relevant conventions section: GNS
+  (Universes, Implementation choices), Spectral and Unbounded (Implementation choices), Stone
+  (Sign and notational conventions), Spacetime (Causal structure), Haag–Kastler (The axiom
+  structures, Universes), Curved (The axiom structures, Universes, Implementation choices).
+- Spacetime: the three plain-text "conventions chapter" pointers are now links (index → Causal
+  structure, reflexive ≺ → Causal structure, oriented identity component → Implementation choices).
+- `lake build`, `generate-manual` and `check_temporal_wording.py` pass. All 21 links to the two
+  new pages resolve (section anchors exist; the two chapter-level links open the page at the top).

@@ -97,6 +97,10 @@ namespace `Physicslib4.Spectral.Unbounded`, written without the prefix below.
 tag := "unbounded-design"
 %%%
 
+The conventions inherited from Mathlib, among them the adjoint of a partial map and the guarded
+integral, are collected in the conventions chapter under
+{ref "conventions-implementation"}[Implementation choices].
+
 Where the library departs from the blueprint's route, this section says so, and links the
 blueprint's formalization note where it has one. The conventions of the
 {ref "spectral-design"}[bounded chapter] carry over unchanged: bounded operators are

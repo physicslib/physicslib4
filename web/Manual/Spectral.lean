@@ -84,6 +84,9 @@ the namespace `Physicslib4.Spectral`, written without the prefix below.
 tag := "spectral-design"
 %%%
 
+The conventions inherited from Mathlib, among them `realCalculus` as Mathlib's `cfcHom`, are
+collected in the conventions chapter under {ref "conventions-implementation"}[Implementation choices].
+
 The blueprint is the specification. Where the library departs from the blueprint's route, this
 section says so; where the blueprint records the departure in a formalization note or a
 convention, the section links to it.
