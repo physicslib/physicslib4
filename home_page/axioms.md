@@ -20,20 +20,20 @@ Axiom 6 (Primitivity) from the original 1964 Haag–Kastler paper is not carried
 | 4. Quasilocal Completeness | Definition 498 | `Physicslib4.AQFT.HaagKastler.ObservableCorrespondence` |
 | 5. Lorentz Covariance | Definition 516 | `Physicslib4.AQFT.HaagKastler.LorentzCovariance` |
 
-**Curved spacetime** — bundled as `Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet` (Definition 644):
+**Curved spacetime** — bundled as `Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet` (Definition 652):
 
 | Axiom | Node | Lean |
 |---|---|---|
-| 1. Local Algebras | Definition 638 | `Physicslib4.AQFT.HaagKastlerCurved.LocalNet` |
-| 2. Isotony | Definition 639 | `Physicslib4.AQFT.HaagKastlerCurved.Isotony` |
-| 3. Local Commutativity | Definition 640 | `Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity` |
-| 4. Local Completeness | Definition 642 | `Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebra` |
-| 5. Isometric Covariance | Definition 643 | `Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance` |
+| 1. Local Algebras | Definition 646 | `Physicslib4.AQFT.HaagKastlerCurved.LocalNet` |
+| 2. Isotony | Definition 647 | `Physicslib4.AQFT.HaagKastlerCurved.Isotony` |
+| 3. Local Commutativity | Definition 648 | `Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity` |
+| 4. Local Completeness | Definition 650 | `Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebra` |
+| 5. Isometric Covariance | Definition 651 | `Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance` |
 
-**General Covariance (Definition 690, `Physicslib4.AQFT.HaagKastlerCurved.IsGenerallyCovariant`)** is deliberately *not* a sixth axiom. Axioms 1–5 each constrain a single net over a single fixed spacetime, whereas general covariance relates two nets over two spacetimes; it is therefore a property of the section $$L \mapsto \mathfrak{U}_L$$ assigning a net to every Lorentzian spacetime, not an extra field of the net structure.
+**General Covariance (Definition 698, `Physicslib4.AQFT.HaagKastlerCurved.IsGenerallyCovariant`)** is deliberately *not* a sixth axiom. Axioms 1–5 each constrain a single net over a single fixed spacetime, whereas general covariance relates two nets over two spacetimes; it is therefore a property of the section $$L \mapsto \mathfrak{U}_L$$ assigning a net to every Lorentzian spacetime, not an extra field of the net structure.
 
 ## Design notes
 
-- **Isotony supplies its embeddings as data.** Axiom 2 (Definitions 477 and 639) fixes the family $$i_{\mathbf{B}_1 \mathbf{B}_2}$$ together with identity and composition laws, making $$\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$$ a functor on the inclusion order. Axiom 3 uses that family rather than choosing witnesses of its own, and Axiom 5 (Definitions 516 and 643) states its coherence condition for the same family, so that covariance-compatibility of a quasilocal algebra is a lemma (Lemma 597) rather than a hypothesis. This is what makes the quasilocal colimit well posed in Minkowski spacetime, and it means that curved-spacetime statements about nested regions need no coherence hypotheses.
-- **Local commutativity is stated in a common containing diamond.** Definition 494 requires completely spacelike local algebras to commute in every local algebra $$\mathfrak{U}(\mathbf{B})$$ containing both, through the Axiom 2 isotony maps, exactly as Definition 640 does in curved spacetime; the two differ only in that a containing diamond always exists in Minkowski spacetime. Commutation in the quasilocal algebra is the equivalent form of Lemma 496 (`Physicslib4.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι`).
+- **Isotony supplies its embeddings as data.** Axiom 2 (Definitions 477 and 647) fixes the family $$i_{\mathbf{B}_1 \mathbf{B}_2}$$ together with identity and composition laws, making $$\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$$ a functor on the inclusion order. Axiom 3 uses that family rather than choosing witnesses of its own, and Axiom 5 (Definitions 516 and 651) states its coherence condition for the same family, so that covariance-compatibility of a quasilocal algebra is a lemma (Lemma 603) rather than a hypothesis. This is what makes the quasilocal colimit well posed in Minkowski spacetime, and it means that curved-spacetime statements about nested regions need no coherence hypotheses.
+- **Local commutativity is stated in a common containing diamond.** Definition 494 requires completely spacelike local algebras to commute in every local algebra $$\mathfrak{U}(\mathbf{B})$$ containing both, through the Axiom 2 isotony maps, exactly as Definition 648 does in curved spacetime; the two differ only in that a containing diamond always exists in Minkowski spacetime. Commutation in the quasilocal algebra is the equivalent form of Lemma 496 (`Physicslib4.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι`).
 - **Axiom 4 is a bridge principle; the quasilocal algebra is a theorem.** That a quasilocal algebra exists is Theorem 499 (`Physicslib4.AQFT.HaagKastler.exists_quasilocalAlgebra`), proved from the colimit-and-completion construction. Axiom 4 (Definition 498) is the bridge principle relating physical observables to quasilocal ones, which has, by design, no mathematical consumers.

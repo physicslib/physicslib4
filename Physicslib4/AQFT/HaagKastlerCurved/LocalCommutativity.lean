@@ -53,16 +53,25 @@ namespace HaagKastlerCurved
 variable {M : LorentzianSpacetime}
 
 /--
-**Axiom 3 (Local Commutativity), curved spacetime.** A local net `U`
-on a Lorentzian spacetime `M`, with Axiom 2 isotony family `i`, satisfies
-*local commutativity* if whenever two basis sets `B₁`, `B₂` are completely
-spacelike and both contained in a common basis set `B`, their images in `𝔘(B)`
-under the isotony embeddings `i.map` commute pointwise.
+Axiom 3 in curved spacetime (local commutativity): observables of completely spacelike basis sets
+commute in every basis set containing both.
 
-If no common containing basis set exists, no constraint is imposed,
-reflecting that there is then no algebra in which to compare them.
+Let B₁ and B₂ be completely spacelike basis sets. To multiply an element of 𝔘(B₁) by one of
+𝔘(B₂), both must lie in one algebra. As in Minkowski spacetime, the axiom takes any basis set B
+containing both, and asks that for all a₁ ∈ 𝔘(B₁) and a₂ ∈ 𝔘(B₂) the equation
 
-Blueprint reference: `def:local-commutativity-in-curved-spacetime`.
+i(B₁, B)(a₁) i(B₂, B)(a₂) = i(B₂, B)(a₂) i(B₁, B)(a₁)
+
+holds in 𝔘(B), where i is the isotony family of Axiom 2. The
+difference from Minkowski spacetime is that such a B need not exist, and there is no quasilocal
+algebra to fall back on. When no common containing basis set exists the condition is vacuous: the
+two algebras do not lie in a common algebra, so their commutation is not a meaningful question.
+
+The axiom asserts only the commutation. The embeddings, their injectivity and their identity and
+composition laws belong to Axiom 2, whose family is a parameter here, so results that factor a
+three-fold inclusion B₁ ⊆ B₂ ⊆ B need no separate coherence hypothesis.
+
+Blueprint: def:local-commutativity-in-curved-spacetime
 -/
 def LocalCommutativity (U : LocalNet M) (i : Isotony U) : Prop :=
   ∀ ⦃B₁ B₂ B : Set M.Carrier⦄

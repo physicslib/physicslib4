@@ -55,15 +55,28 @@ namespace Spacetime
 open scoped ContDiff
 
 /--
-An **isometry** of a spacetime `M`: a `C^∞` diffeomorphism whose
-manifold differential preserves the metric.
+An isometry of a spacetime: a `C^∞` diffeomorphism φ of M whose differential preserves the
+metric, g_(φ(x))(dφ_x v, dφ_x w) = g_x(v, w).
+
+Isometries are the symmetries of the geometry; for Minkowski spacetime they include the Poincaré
+transformations. They form a group under composition, (φ * ψ)(x) = φ(ψ(x)), acting faithfully on
+the points of M (`g • x`). An isometry preserves the causal type of tangent vectors
+(`isTimelike_mfderiv_iff`), but it may reverse the time orientation. The isometries "connected to
+the identity" of Axiom 5 are the subgroup `identityComponent`, and those that also preserve the
+time orientation are `orientedIdentityComponent`.
+
+Implementation note: the diffeomorphism is Mathlib's `Diffeomorph`, so smoothness of φ and φ⁻¹ is
+built in, and dφ_x is the manifold derivative `mfderiv`.
+
+Blueprint: lmm:isometry-preserves-classification (isometries are described in
+lmm:isometry-pullback-metric)
 -/
 @[ext]
 structure Isometry (M : Spacetime) where
-  /-- The underlying `C^∞` diffeomorphism of the spacetime. -/
+  /-- The diffeomorphism φ : M → M. -/
   toDiffeo : Diffeomorph M.model M.model M.Carrier M.Carrier ∞
-  /-- Metric preservation: `g_{φ(x)}(dφ_x v, dφ_x w) = g_x(v, w)`,
-  with `dφ_x` the manifold derivative `mfderiv`. -/
+  /-- φ preserves the metric: g_(φ(x))(dφ_x v, dφ_x w) = g_x(v, w), with dφ_x the manifold
+  derivative `mfderiv`. -/
   preserves : ∀ (x : M.Carrier) (v w : TangentSpace M.model x),
     M.val (toDiffeo x)
       (mfderiv M.model M.model toDiffeo x v)

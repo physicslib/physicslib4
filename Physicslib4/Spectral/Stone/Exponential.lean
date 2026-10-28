@@ -37,9 +37,16 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteS
   {A : H →ₗ.[ℂ] H}
 
 /--
-The function `f_t(λ) = e^{itλ}` on `ℝ`.
+The function f_t(λ) = e^(itλ) on ℝ, whose functional calculus is the unitary e^(itA).
 
-Blueprint reference: `def:exp-unitary-group`.
+For each real t it is continuous and of modulus 1, hence bounded and measurable
+(`expFun_mem_bddMeasurable`), so f_t(A) is a bounded operator for every self-adjoint A. On an
+eigenvector of A with eigenvalue λ, e^(itA) acts as multiplication by the phase e^(itλ).
+
+Implementation note: the function is `Complex.exp (Complex.I * ((t * x : ℝ) : ℂ))`, the product
+tλ formed in ℝ and then cast to ℂ.
+
+Blueprint: def:exp-unitary-group
 -/
 noncomputable def expFun (t : ℝ) (x : ℝ) : ℂ :=
   Complex.exp (Complex.I * ((t * x : ℝ) : ℂ))
@@ -74,11 +81,24 @@ theorem integral_expFun_mem_unitary (μ : ProjectionValuedMeasure ℝ H) (t : �
   exact ⟨rfl, rfl⟩
 
 /--
-The unitary `e^{itA} = f_t(A) = ∫ e^{itλ} dμ^A(λ)`, the bounded integral of `f_t` against the
-spectral measure of `A`, packaged as a linear isometry equivalence. That it is the functional
-calculus `f_t(A)` is `functionalCalculus_expFun`.
+The unitary operator e^(itA) of a self-adjoint operator A, defined by the spectral theorem as
+∫ e^(itλ) dμ(A)(λ).
 
-Blueprint reference: `def:exp-unitary-group`.
+When A is unbounded the exponential series makes no sense, since Aⁿψ need not be defined. The
+spectral theorem replaces it: e^(itA) integrates the function e^(itλ) against the spectral
+measure μ(A). Because |e^(itλ)| = 1 the result is a bounded operator defined on all of H, and
+it is unitary (`integral_expFun_mem_unitary`). As a function of t it is a strongly continuous
+one-parameter unitary group (`isOneParameterUnitaryGroup_expUnitary`,
+`isStronglyContinuous_expUnitary`) with infinitesimal generator A (`generator_expUnitary`). For
+a Hamiltonian Ĥ, the time evolution operator e^(−itĤ) is this unitary at the parameter −t.
+
+Implementation note: the operator is the bounded integral `ProjectionValuedMeasure.integral` of
+`expFun t` against `Unbounded.spectralMeasure hA`, made an element of `H ≃ₗᵢ[ℂ] H` by
+`Unitary.linearIsometryEquiv`. That it is the functional calculus f_t(A) is
+`functionalCalculus_expFun`. The definition takes the proof `hA` of self-adjointness as an
+argument, which is why `stone` states self-adjointness of the generator as an existential.
+
+Blueprint: def:exp-unitary-group
 -/
 noncomputable def expUnitary (hA : IsSelfAdjoint A) (t : ℝ) : H ≃ₗᵢ[ℂ] H :=
   Unitary.linearIsometryEquiv
@@ -89,9 +109,19 @@ theorem expUnitary_apply (hA : IsSelfAdjoint A) (t : ℝ) (ψ : H) :
   rfl
 
 /--
-`e^{itA}` is the functional calculus `f_t(A)`, defined on all of `H`.
+The unitary e^(itA) is the functional calculus f_t(A) of f_t(λ) = e^(itλ), an operator defined
+on all of H.
 
-Blueprint reference: `def:exp-unitary-group`.
+The functional calculus `Unbounded.functionalCalculus` allows unbounded functions and produces
+operators with a domain; for a bounded function such as f_t it agrees with the bounded
+integral that defines `expUnitary` (`functionalCalculus_of_bddMeasurable`). This identification
+is what lets results about bounded integrals against a projection-valued measure be used for
+e^(itA).
+
+Implementation note: the statement is an equality of `LinearPMap`s, with e^(itA) on the domain
+⊤ = H.
+
+Blueprint: def:exp-unitary-group
 -/
 theorem functionalCalculus_expFun (hA : IsSelfAdjoint A) (t : ℝ) :
     Unbounded.functionalCalculus hA (expFun t) =
@@ -301,11 +331,25 @@ theorem tendsto_generatorQuotient_expUnitary (hA : IsSelfAdjoint A) (ψ : A.doma
       norm_expFun_quotient_le t x]
 
 /--
-**Exponentiating a self-adjoint operator.** For self-adjoint `A`, `t ↦ e^{itA}` is a strongly
-continuous one-parameter unitary group whose infinitesimal generator is `A`, with equality of
-domains. The last conjunct is points 2 and 3 of the blueprint proposition together.
+Exponentiating a self-adjoint operator: for self-adjoint A, t ↦ e^(itA) is a strongly
+continuous one-parameter unitary group whose infinitesimal generator is A, domains included.
 
-Blueprint reference: `prpstn:hall-10.14`.
+This is the easier half of the correspondence between self-adjoint operators and strongly
+continuous one-parameter unitary groups; Stone's theorem (`stone`) is the other half. For ψ in
+Dom(A) the difference quotient (1/i)(e^(itA)ψ − ψ)/t tends to Aψ
+(`tendsto_generatorQuotient_expUnitary`), so the generator extends A. The generator is
+symmetric (`isSymmetric_generator`), and a self-adjoint operator has no proper symmetric
+extension (`eq_of_isSelfAdjoint_of_isSymmetric_of_le`), so the generator is A. In particular
+Dom(A) is exactly the set of ψ for which the difference quotient converges.
+
+Implementation note: the first two conjuncts are point 1 of the blueprint proposition; the
+third, the equality `generator (expUnitary hA) = A` of `LinearPMap`s, is points 2 and 3
+together. Strong continuity and the limit of the difference quotient are proved from norm
+identities that write ‖e^(isA)ψ − e^(itA)ψ‖² and the squared error of the difference quotient
+as integrals against the spectral distribution of ψ, and from dominated convergence in its
+filter form (`tendsto_integral_filter_of_dominated_convergence`).
+
+Blueprint: prpstn:hall-10.14
 -/
 theorem generator_expUnitary (hA : IsSelfAdjoint A) :
     IsOneParameterUnitaryGroup (expUnitary hA) ∧ IsStronglyContinuous (expUnitary hA) ∧

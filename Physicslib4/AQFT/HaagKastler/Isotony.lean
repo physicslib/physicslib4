@@ -40,40 +40,40 @@ namespace AQFT
 namespace HaagKastler
 
 /--
-**Axiom 2 (Isotony).** A local net `U` satisfies *isotony* if every
-inclusion `B₁ ⊆ B₂` between Alexandrov-basis sets of Minkowski
-spacetime is implemented by a *unital `*`-monomorphism*
-`𝔘(B₁) ↪ 𝔘(B₂)`.
+Axiom 2 (isotony): a chosen unital *-monomorphism 𝔘(B₁) → 𝔘(B₂) for each inclusion of diamonds.
 
-Blueprint reference: `def:isotony`.
+An observable measurable in a diamond B₁ is also measurable in any larger diamond B₂ ⊇ B₁. Since
+the local algebras are abstract, this is expressed by a map i(B₁, B₂) : 𝔘(B₁) → 𝔘(B₂), which is a
+unital *-homomorphism and injective. The maps are coherent: i(B, B) is the identity, and
+i(B₂, B₃) ∘ i(B₁, B₂) = i(B₁, B₃) for B₁ ⊆ B₂ ⊆ B₃. In other words B ↦ 𝔘(B) is a functor on the
+diamonds ordered by inclusion.
 
-The family is *chosen data*, not an existence statement: the identity and
-composition laws below are equations between the maps themselves, so there is
-nothing to state unless the maps are fixed. An axiom of the form "for each
-inclusion there exists some monomorphism" cannot express functoriality at all.
+The family is data, not an existence statement. The identity and composition laws are equations
+between the maps themselves, so they can only be stated once the maps are fixed. They are required
+rather than derived, since nothing about the spacetime constrains which monomorphism a net chooses.
+They make the local algebras a directed system, which is what makes their directed colimit, and so
+the quasilocal algebra (`exists_quasilocalAlgebra`), an algebra.
 
-`map_self` and `map_comp` say exactly that `B ↦ 𝔘(B)` is a functor on the
-inclusion order of basis sets. They are *required* rather than derived because
-they constrain the net's chosen embeddings, not the spacetime. Their payoff is
-that the local algebras form a genuine directed system, which is what gives the
-quasilocal algebra (`def:quasilocal-algebra`) its algebra structure.
+Implementation note: a unital *-homomorphism is Mathlib's `StarAlgHom`, which preserves the unit
+because it is an algebra homomorphism.
+
+Blueprint: def:isotony
 -/
 structure Isotony (U : LocalNet) where
-  /-- The chosen unital `*`-monomorphism implementing each inclusion of basis
-  sets. This is data, which is what makes the two laws below statable. -/
+  /-- The embedding i(B₁, B₂) : 𝔘(B₁) → 𝔘(B₂) of a diamond B₁ into a diamond B₂ ⊇ B₁. -/
   map : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄,
     IsAlexandrovBasisSet B₁ → IsAlexandrovBasisSet B₂ → B₁ ⊆ B₂ →
       StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂)
-  /-- Each chosen embedding is injective, i.e. a monomorphism. -/
+  /-- Each embedding is injective. -/
   injective : ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
     (h₁ : IsAlexandrovBasisSet B₁) (h₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂),
     Function.Injective (map h₁ h₂ h)
-  /-- **Identity law.** The embedding along `B ⊆ B` is the identity. -/
+  /-- The identity law: the embedding of a diamond in itself is the identity. -/
   map_self : ∀ ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄
     (h : IsAlexandrovBasisSet B),
     map h h (subset_refl B) = StarAlgHom.id ℂ (U.algebra B)
-  /-- **Composition law.** The embedding along `B₁ ⊆ B₃` factors through any
-  intermediate `B₂`. -/
+  /-- The composition law: for B₁ ⊆ B₂ ⊆ B₃, the embedding of B₁ in B₃ is the composite of the
+  embeddings of B₁ in B₂ and of B₂ in B₃. -/
   map_comp : ∀ ⦃B₁ B₂ B₃ : Set StandardMinkowskiSpacetime.Carrier⦄
     (h₁ : IsAlexandrovBasisSet B₁) (h₂ : IsAlexandrovBasisSet B₂)
     (h₃ : IsAlexandrovBasisSet B₃) (h₁₂ : B₁ ⊆ B₂) (h₂₃ : B₂ ⊆ B₃),

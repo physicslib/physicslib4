@@ -136,10 +136,21 @@ noncomputable instance instContinuousSMul : ContinuousSMul (Isometry M) M.Carrie
     exact (continuous_toContinuousMap.comp continuous_fst).eval continuous_snd
 
 /--
-The **identity-component subgroup** of the isometry group: the isometries
-*connected to the identity*, formalising the group used in Axiom 5
-(`def:isometric-covariance-in-curved-spacetime`). It is the connected
-component of `1`, a (normal) subgroup of the topological group.
+The identity component of the isometry group: the connected component of the identity, for the
+compact-open group topology.
+
+These are the isometries "connected to the identity" of Axiom 5 in curved spacetime. For
+Minkowski spacetime they are the proper orthochronous Poincaré transformations, while parity and
+time reversal lie in other components (a standard fact, not formalised here). Every isometry in
+the identity component preserves the time orientation, but the proof needs a Myers–Steenrod-type
+rigidity theorem that Mathlib does not provide; the axioms therefore use
+`orientedIdentityComponent`, which is the same group with orientation preservation built into
+its definition.
+
+Implementation note: the group topology is induced by g ↦ (g, g⁻¹) into C(M, M) × C(M, M), with
+the compact-open topology on each factor; using both g and g⁻¹ makes inversion continuous, and
+local compactness of M makes composition continuous, so `IsTopologicalGroup` holds and the
+connected component of 1 is a subgroup (`Subgroup.connectedComponentOfOne`).
 -/
 noncomputable def identityComponent (M : Spacetime) : Subgroup (Isometry M) :=
   Subgroup.connectedComponentOfOne (Isometry M)

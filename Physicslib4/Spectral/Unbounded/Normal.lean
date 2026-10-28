@@ -58,18 +58,35 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteS
 -/
 
 /--
-Substitution of `A` for `λ` and `A*` for `conj λ` in a two-variable polynomial. It is
-defined coefficientwise, so it needs no commutativity in `𝓑(H)`; the point of normality
-is that this assignment is then multiplicative, which is
-`normalCalculus_mul` below.
+The operator p(A, A\*) obtained by substituting a bounded operator A and its adjoint into a
+polynomial in two variables.
 
-Blueprint reference: the substitution `p ↦ p(A, A*)` of `lmm:polynomials-in-normal-are-normal`.
+A polynomial p(λ, λ̄) = Σ a(kl) λᵏ λ̄ˡ in a complex variable and its conjugate becomes the bounded
+operator p(A, A\*) = Σ a(kl) Aᵏ (A\*)ˡ, with all powers of A written to the left of the powers of
+A\*. For a normal A (one that commutes with its adjoint) the ordering does not matter, and
+p(A, A\*) is again normal and commutes with A and A\* (`isStarNormal_mvApply`,
+`commute_mvApply`). These are the operators from which the continuous functional calculus of a
+normal operator is built.
+
+Implementation note: the polynomial is an `MvPolynomial (Fin 2) ℂ`, whose first variable
+stands for λ and second for λ̄. The definition is the sum over the coefficients, so it needs no
+commutativity of A and A\* and makes sense for every bounded A; normality is used only in the
+theorems about it.
+
+Blueprint: lmm:polynomials-in-normal-are-normal
 -/
 noncomputable def mvApply (A : H →L[ℂ] H) (p : MvPolynomial (Fin 2) ℂ) : H →L[ℂ] H :=
   ∑ d ∈ p.support, p.coeff d • (A ^ d 0 * (ContinuousLinearMap.adjoint A) ^ d 1)
 
 /--
-The scalar function `λ ↦ p(λ, conj λ)` attached to a two-variable polynomial.
+The complex function λ ↦ p(λ, λ̄) defined by a polynomial in two variables.
+
+This is the scalar counterpart of `mvApply`: the same polynomial, with λ substituted for the
+first variable and its complex conjugate λ̄ for the second. By the two-variable spectral
+mapping theorem (`spectrum_mvApply`), for a normal A the spectrum of p(A, A\*) is the image of
+the spectrum of A under this function.
+
+Blueprint: lmm:polynomials-in-normal-are-normal
 -/
 noncomputable def mvEvalConj (p : MvPolynomial (Fin 2) ℂ) (lam : ℂ) : ℂ :=
   ∑ d ∈ p.support, p.coeff d * lam ^ d 0 * (starRingEnd ℂ lam) ^ d 1
@@ -137,11 +154,19 @@ section SpectralSubspace
 variable {X : Type*} [MeasurableSpace X]
 
 /--
-The spectral subspace attached to a measurable set `E` by a projection-valued measure: the
-range of the projection `μ E`. It is a closed subspace of `H`
-(`isClosed_range_of_isStarProjection`), hence itself a Hilbert space.
+The spectral subspace V(E) of a projection-valued measure μ and a measurable set E: the range of
+the projection μ(E).
 
-Blueprint reference: `def:hall-7.14`.
+When μ is the spectral measure of an observable A, V(E) consists of the states in which a
+measurement of A gives a value in E with certainty. Each V(E) is a closed subspace of H, because
+the range of an orthogonal projection is closed (`isClosed_range_of_isStarProjection`), and
+hence a Hilbert space in its own right.
+
+Implementation note: the measure is on an arbitrary measurable space X, so the definition
+covers both the self-adjoint and the normal case of the blueprint. The subspace is the range of
+the underlying linear map of `μ E`, as a `Submodule ℂ H`.
+
+Blueprint: def:hall-7.14
 -/
 def spectralSubspace (μ : ProjectionValuedMeasure X H) (E : Set X) : Submodule ℂ H :=
   LinearMap.range ((μ E : H →L[ℂ] H) : H →ₗ[ℂ] H)
@@ -149,10 +174,19 @@ def spectralSubspace (μ : ProjectionValuedMeasure X H) (E : Set X) : Submodule 
 end SpectralSubspace
 
 /--
-The bounded operator `∫ ι dμ` attached to a projection-valued measure on a compact subset
-`Y ⊆ ℂ`, where `ι` is the inclusion `Y ↪ ℂ`.
+The bounded operator ∫ λ dμ(λ) defined by a projection-valued measure μ on a subset Y of ℂ.
 
-Blueprint reference: `prpstn:hall-7.15`.
+It is the operator whose spectral measure μ is meant to be: the integral of the coordinate
+function λ ↦ λ against μ. On a compact Y this function is bounded and measurable
+(`coe_mem_bddMeasurable`), so the integral is a bounded operator. Its spectral subspaces are
+invariant under it (`mapsTo_pvmOperator_spectralSubspace`), and it acts on V(E) as
+multiplication by λ₀ up to an error ε when E lies within distance ε of λ₀
+(`norm_sub_smul_le_of_mem_spectralSubspace`).
+
+Implementation note: the definition takes any Y; compactness of Y is a hypothesis of the
+theorems about it.
+
+Blueprint: prpstn:hall-7.15
 -/
 noncomputable def pvmOperator {Y : Set ℂ} (μ : ProjectionValuedMeasure Y H) : H →L[ℂ] H :=
   μ.integral fun y : Y => (y : ℂ)
@@ -416,15 +450,23 @@ theorem norm_adjoint_sub_smul_apply {A : H →L[ℂ] H} [IsStarNormal A] (lam : 
   rw [← hadj, ← isStarNormal_iff_norm_eq_adjoint.mp hN]
 
 /--
-An `ε`-almost eigenvector for `A` with eigenvalue `λ`: a nonzero `ψ` with
-`‖(A - λ 1) ψ‖ < ε ‖ψ‖`.
+A vector ψ is an ε-almost eigenvector of a bounded operator A with eigenvalue λ: ψ is nonzero
+and ‖(A − λ𝟙)ψ‖ < ε‖ψ‖.
 
-Blueprint reference: `def:hall-10.24`.
+A point of the continuous spectrum, such as a value of the position operator, has no
+eigenvector, but it has approximate ones: wave packets sharply peaked at that point. For a
+normal A, λ lies in the spectrum exactly when, for every ε > 0, there is an ε-almost
+eigenvector with eigenvalue λ (`mem_spectrum_iff_forall_isAlmostEigenvector`).
+
+Implementation note: the definition places no condition on ε; the blueprint's ε > 0 is a
+hypothesis of the theorems that use it.
+
+Blueprint: def:hall-10.24
 -/
 structure IsAlmostEigenvector (A : H →L[ℂ] H) (lam : ℂ) (ε : ℝ) (ψ : H) : Prop where
-  /-- Almost eigenvectors are nonzero. -/
+  /-- The vector ψ is nonzero. -/
   ne_zero : ψ ≠ 0
-  /-- The defining strict inequality. -/
+  /-- The strict inequality ‖(A − λ𝟙)ψ‖ < ε‖ψ‖. -/
   norm_lt : ‖(A - lam • (1 : H →L[ℂ] H)) ψ‖ < ε * ‖ψ‖
 
 /--
@@ -845,14 +887,20 @@ private theorem continuous_mvEvalConj (p : MvPolynomial (Fin 2) ℂ) :
   unfold mvEvalConj; fun_prop
 
 /--
-**Spectral mapping for polynomials in `A` and `A*`.**
+The spectral mapping theorem for polynomials in a normal operator and its adjoint: the spectrum
+of p(A, A\*) is the set of values p(λ, λ̄) with λ in the spectrum of A.
 
-The proof does not follow the blueprint's almost-eigenvector argument (`lmm:hall-10.25` to
-`lmm:hall-10.27`). It identifies `mvApply A p` with the continuous functional calculus of `A`
-applied to `λ ↦ p(λ, conj λ)` (`mvApply_eq_cfc`) and uses Mathlib's spectral mapping theorem
-for the continuous functional calculus, `cfc_map_spectrum`.
+For a normal A this is the statement that p(A, A\*) acts on the spectrum the way the polynomial
+acts on numbers. It gives the norm of p(A, A\*) as the supremum of |p(λ, λ̄)| over the spectrum
+(`norm_mvApply`), the estimate on which the continuous functional calculus of a normal operator
+rests.
 
-Blueprint reference: `thrm:hall-10.23`.
+Implementation note: the proof does not follow the blueprint's almost-eigenvector argument
+(lmm:hall-10.25 to lmm:hall-10.27). It identifies `mvApply A p` with Mathlib's continuous
+functional calculus of A applied to λ ↦ p(λ, λ̄) (`mvApply_eq_cfc`) and uses Mathlib's spectral
+mapping theorem `cfc_map_spectrum`. The blueprint's hypothesis H ≠ {0} is not needed.
+
+Blueprint: thrm:hall-10.23
 -/
 theorem spectrum_mvApply {A : H →L[ℂ] H} [IsStarNormal A]
     (p : MvPolynomial (Fin 2) ℂ) :
@@ -876,18 +924,36 @@ theorem norm_mvApply [Nontrivial H] {A : H →L[ℂ] H} [IsStarNormal A]
 -/
 
 /--
-A two-variable polynomial restricted to `σ(A)`, as a continuous complex-valued function.
+The function λ ↦ p(λ, λ̄) on the spectrum of A, as a continuous function.
+
+This is `mvEvalConj` restricted to σ(A) and regarded as an element of C(σ(A), ℂ), the domain of
+the continuous functional calculus `normalCalculus`, which sends it to p(A, A\*)
+(`normalCalculus_mvPolyOn`).
+
+Blueprint: thrm:continuous-functional-calculus-normal
 -/
 noncomputable def mvPolyOn (A : H →L[ℂ] H) (p : MvPolynomial (Fin 2) ℂ) :
     C(spectrum ℂ A, ℂ) :=
   ⟨fun lam => mvEvalConj p (lam : ℂ), by unfold mvEvalConj; fun_prop⟩
 
 /--
-The continuous functional calculus `f ↦ f(A)` of a bounded normal operator: Mathlib's
-`cfcHom` for the predicate `IsStarNormal`, available because
-`Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap` makes `H →L[ℂ] H` a C⋆-algebra.
+The continuous functional calculus f ↦ f(A) of a bounded normal operator A, for continuous
+complex functions f on the spectrum of A.
 
-Blueprint reference: `thrm:continuous-functional-calculus-normal`.
+A bounded operator A is normal when it commutes with its adjoint, A A\* = A\* A; self-adjoint
+and unitary operators are the main examples. For such A every continuous f on σ(A) defines a
+bounded operator f(A). The map f ↦ f(A) is linear and multiplicative, sends f̄ to f(A)\*, is
+isometric (‖f(A)‖ = sup |f| on σ(A)), and sends 1 to 𝟙 and λ ↦ λ to A (`normalCalculus_mul`,
+`normalCalculus_star`, `norm_normalCalculus`, `normalCalculus_one_and_id`). It is the unique
+bounded linear map extending p ↦ p(A, A\*) (`existsUnique_normalCalculus`).
+
+Implementation note: the definition is Mathlib's continuous functional calculus `cfcHom` for
+the predicate `IsStarNormal`, available because Mathlib makes `H →L[ℂ] H` a C\*-algebra. It is a
+star-algebra homomorphism, so linearity, multiplicativity and the adjoint property hold by
+construction. Mathlib's construction replaces the blueprint's density argument through the
+two-variable spectral mapping theorem; `existsUnique_normalCalculus` connects the two.
+
+Blueprint: thrm:continuous-functional-calculus-normal
 -/
 noncomputable def normalCalculus {A : H →L[ℂ] H} (hA : IsStarNormal A) :
     C(spectrum ℂ A, ℂ) →⋆ₐ[ℂ] (H →L[ℂ] H) :=
@@ -910,10 +976,17 @@ theorem normalCalculus_mvPolyOn {A : H →L[ℂ] H} (hA : IsStarNormal A)
     ContinuousLinearMap.star_eq_adjoint, mvApply, ι]
 
 /--
-**The continuous functional calculus for a normal operator.** There is a unique bounded
-`ℂ`-linear map `C⁰(σ(A); ℂ) → 𝓑(H)` sending `p` to `p(A, A*)`.
+The continuous functional calculus of a normal operator is unique: exactly one bounded linear
+map from C(σ(A), ℂ) to the bounded operators sends each λ ↦ p(λ, λ̄) to p(A, A\*).
 
-Blueprint reference: `thrm:continuous-functional-calculus-normal`.
+The functions λ ↦ p(λ, λ̄) are dense in C(σ(A), ℂ) by the Stone–Weierstrass theorem, so a
+bounded linear map is fixed by its values on them. The map in question is `normalCalculus`.
+
+Implementation note: uniqueness comes from Mathlib's Stone–Weierstrass theorem in the form
+`ContinuousMap.elemental_id_eq_top`: the star-subalgebra generated by λ ↦ λ is dense. The
+blueprint's hypothesis H ≠ {0} is not needed.
+
+Blueprint: thrm:continuous-functional-calculus-normal
 -/
 theorem existsUnique_normalCalculus {A : H →L[ℂ] H} (hA : IsStarNormal A) :
     ∃! T : C(spectrum ℂ A, ℂ) →L[ℂ] (H →L[ℂ] H),

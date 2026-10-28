@@ -45,12 +45,20 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 
 namespace CovariantDerivative
 
-/-- A covariant derivative `∇` on `TM` is **compatible** with the pseudo-Riemannian metric `g`
-if `X g(σ, τ) = g(∇_X σ, τ) + g(σ, ∇_X τ)` at every point where the vector fields `X`, `σ`
-and `τ` are differentiable. This is the condition of Mathlib's
-`CovariantDerivative.isMetricCompatible_iff`, with `g` in place of the inner product.
+/-- A covariant derivative ∇ on the tangent bundle is compatible with the metric g: the Leibniz
+rule X(g(σ, τ)) = g(∇_X σ, τ) + g(σ, ∇_X τ) holds.
 
-Blueprint reference: `def:metric-compatible-connection`. -/
+The left side is the derivative of the function y ↦ g_y(σ(y), τ(y)) at x in the direction
+X(x); the identity is asked at every point x where X, σ and τ are differentiable. In index
+notation it is ∇_μ g_(νρ) = 0: parallel transport preserves inner products, and so the causal
+type of vectors.
+
+Implementation note: this is Mathlib's condition `CovariantDerivative.isMetricCompatible_iff`
+with g in place of the inner product. The covariant derivative is Mathlib's
+`CovariantDerivative`, a map sending a vector field Y to the field of linear maps
+(∇Y)_x : TₓM → TₓM, with ∇_X Y at x given by (∇Y)_x(X(x)).
+
+Blueprint: def:metric-compatible-connection -/
 def IsMetricCompatibleWith (g : PseudoRiemannianMetric I M)
     (cov : _root_.CovariantDerivative I E (TangentSpace I : M → Type _)) : Prop :=
   ∀ ⦃x : M⦄ ⦃X σ τ : Π x : M, TangentSpace I x⦄,
@@ -58,15 +66,25 @@ def IsMetricCompatibleWith (g : PseudoRiemannianMetric I M)
       (show ℝ from mfderiv I 𝓘(ℝ, ℝ) (fun y ↦ g.val y (σ y) (τ y)) x (X x))
         = g.val x (cov σ x (X x)) (τ x) + g.val x (σ x) (cov τ x (X x))
 
-/-- A covariant derivative on `TM` is a **Levi-Civita connection** for `g` if it is
-torsion-free and compatible with `g`.
+/-- A covariant derivative is a Levi-Civita connection of the metric g: it is torsion-free and
+compatible with g.
 
-Blueprint reference: `def:levi-civita-connection`. -/
+Torsion-free means ∇_X Y - ∇_Y X = [X, Y] for vector fields differentiable at the point, so the
+Christoffel symbols are symmetric, Γ^ρ_(μν) = Γ^ρ_(νμ). Every pseudo-Riemannian metric has a
+Levi-Civita connection (`PseudoRiemannianMetric.exists_isLeviCivitaFor`), and two of them agree
+on differentiable vector fields (`IsLeviCivitaFor.uniqueness`); the Koszul formula expresses it
+through g (`IsLeviCivitaFor.koszul`).
+
+Implementation note: the structure mirrors Mathlib's `CovariantDerivative.IsLeviCivitaConnection`,
+with g in place of the inner product. Uniqueness holds only on differentiable vector fields,
+since a covariant derivative is unconstrained on the others.
+
+Blueprint: def:levi-civita-connection -/
 structure IsLeviCivitaFor (g : PseudoRiemannianMetric I M)
     (cov : _root_.CovariantDerivative I E (TangentSpace I : M → Type _)) : Prop where
-  /-- Compatibility with `g`. -/
+  /-- ∇ is compatible with g (`IsMetricCompatibleWith`). -/
   isMetricCompatibleWith : IsMetricCompatibleWith g cov
-  /-- Vanishing torsion. -/
+  /-- ∇ is torsion-free: its torsion T(X, Y) = ∇_X Y - ∇_Y X - [X, Y] vanishes. -/
   torsion : cov.torsion = 0
 
 variable {g : PseudoRiemannianMetric I M}
@@ -280,7 +298,12 @@ theorem isCovariantDerivativeOn_leviCivitaAux :
     rw [g.symm x (Z x) (Y x)]
     ring
 
-/-- The covariant derivative constructed from the Koszul formula. -/
+/-- The Koszul connection of g: the covariant derivative defined by the Koszul formula.
+
+g(∇_X Y, Z) is set equal to the right-hand side of the Koszul formula (`koszulAux`), which is
+tensorial in X and Z, and the musical isomorphism `flatEquiv` solves for ∇_X Y. It is compatible
+with g and torsion-free (`isMetricCompatibleWith_koszulConnection`,
+`torsion_koszulConnection_eq_zero`), which proves that a Levi-Civita connection exists. -/
 noncomputable def koszulConnection :
     _root_.CovariantDerivative I E (TangentSpace I : M → Type _) where
   toFun := g.leviCivitaAux
@@ -351,10 +374,20 @@ theorem exists_isLeviCivitaFor (g : PseudoRiemannianMetric I M) :
   ⟨g.koszulConnection, g.isMetricCompatibleWith_koszulConnection,
     g.torsion_koszulConnection_eq_zero⟩
 
-/-- A choice of **Levi-Civita connection** of `g`. It is unique on differentiable vector fields
-(`CovariantDerivative.IsLeviCivitaFor.uniqueness`).
+/-- The Levi-Civita connection ∇ of the metric g.
 
-Blueprint reference: `thrm:levi-civita-exists-unique`. -/
+It is torsion-free and compatible with g (`isLeviCivitaFor_leviCivita`), and any other connection
+with these properties agrees with it on differentiable vector fields
+(`CovariantDerivative.IsLeviCivitaFor.uniqueness`). In coordinates its Christoffel symbols are
+Γ^ρ_(μν) = ½ g^(ρσ)(∂_μ g_(σν) + ∂_ν g_(σμ) - ∂_σ g_(μν)). Geodesics of a spacetime are defined
+with it (`Spacetime.IsGeodesic`). For a constant metric on a vector space, as in Minkowski
+spacetime, it is the ordinary directional derivative (`leviCivita_apply_eq_fderiv`).
+
+Implementation note: the connection is a choice (`Exists.choose`) from
+`exists_isLeviCivitaFor`, so its values on non-differentiable vector fields are unspecified;
+statements about it use only differentiable fields.
+
+Blueprint: thrm:levi-civita-exists-unique -/
 noncomputable def leviCivita (g : PseudoRiemannianMetric I M) :
     _root_.CovariantDerivative I E (TangentSpace I : M → Type _) :=
   g.exists_isLeviCivitaFor.choose

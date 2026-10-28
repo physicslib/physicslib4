@@ -13,9 +13,9 @@ import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
 This file carries out, abstractly, the second stage of the spectral theorem: the input is
 a compact metric space `X` and an isometric `*`-homomorphism `Φ : C(X, ℂ) → 𝓑(H)`, with no
 operator in sight, and the output is a projection-valued measure `abstractPVM` on `X`
-integrating to `Φ`. The bounded self-adjoint case of
-`Physicslib4/Spectral/SpectralTheorem.lean` and the bounded normal case below are then two
-instances of the one statement.
+integrating to `Φ`. The bounded normal case below is an instance of it. The bounded
+self-adjoint case of `Physicslib4/Spectral/SpectralTheorem.lean` runs the same argument
+directly on X = σ(A), and is not derived from this file.
 
 ## Main definitions
 
@@ -51,30 +51,46 @@ open Filter Topology ContinuousLinearMap MeasureTheory
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable {X : Type*} [MetricSpace X] [CompactSpace X] [MeasurableSpace X] [BorelSpace X]
 
-/-- A real-valued continuous function, viewed as a complex-valued one. -/
+/--
+A continuous real function on X, regarded as a continuous complex function.
+
+An abstract continuous functional calculus is defined on complex functions; the real ones are
+those whose operators are self-adjoint (`isSelfAdjoint_of_real`), and the measures μ(ψ) of
+`abstractMeasure` are characterised by their integrals of real functions.
+
+Blueprint: lmm:abstract-calculus-non-negative
+-/
 noncomputable def ofRealCM (f : C(X, ℝ)) : C(X, ℂ) :=
   ⟨fun x => (f x : ℂ), Complex.continuous_ofReal.comp f.continuous⟩
 
 /--
-An *abstract continuous functional calculus* on a compact metric space `X`: a map
-`C(X, ℂ) → 𝓑(H)` that is linear, multiplicative, intertwines conjugation with the adjoint,
-is isometric, and sends the constant function `1` to `1`.
+A map Φ from continuous complex functions on a compact metric space X to bounded operators on
+H is an abstract continuous functional calculus: it is linear and multiplicative, sends f̄ to
+Φ(f)\*, is isometric for the supremum norm, and sends the constant 1 to 𝟙.
 
-By `thrm:continuous-functional-calculus-normal` a bounded normal operator supplies one on
-`X = σ(A)`.
+These are the properties of f ↦ f(A) for a bounded normal operator A on X = σ(A)
+(`normalCalculus`), with the operator itself forgotten. From such a Φ alone the file builds a
+projection-valued measure on X whose integrals reproduce Φ (`abstractPVM`), so the passage from
+a continuous functional calculus to a spectral measure is carried out once, in general. The
+spectral theorem for bounded normal operators (`existsUnique_spectralMeasure_normal`) is its
+special case Φ = `normalCalculus`.
 
-Blueprint reference: `def:abstract-continuous-functional-calculus`.
+Implementation note: the five properties are separate fields on an unbundled map rather than a
+bundled star-algebra homomorphism, as in the blueprint. X carries its Borel σ-algebra
+(`BorelSpace X`).
+
+Blueprint: def:abstract-continuous-functional-calculus
 -/
 structure IsAbstractCalculus (Φ : C(X, ℂ) → H →L[ℂ] H) : Prop where
-  /-- `Φ` is `ℂ`-linear. -/
+  /-- Φ is linear: Φ(αf + βg) = αΦ(f) + βΦ(g). -/
   map_smul_add : ∀ (α β : ℂ) (f g : C(X, ℂ)), Φ (α • f + β • g) = α • Φ f + β • Φ g
-  /-- `Φ` is multiplicative. -/
+  /-- Φ is multiplicative: Φ(fg) = Φ(f)Φ(g). -/
   map_mul : ∀ f g : C(X, ℂ), Φ (f * g) = Φ f * Φ g
-  /-- `Φ` intertwines complex conjugation with the adjoint. -/
+  /-- Φ sends the complex conjugate f̄ to the adjoint Φ(f)\*. -/
   map_star : ∀ f : C(X, ℂ), Φ (star f) = ContinuousLinearMap.adjoint (Φ f)
-  /-- `Φ` is isometric for the supremum norm. -/
+  /-- Φ is isometric: ‖Φ(f)‖ = sup |f| over X. -/
   norm_map : ∀ f : C(X, ℂ), ‖Φ f‖ = ‖f‖
-  /-- `Φ` is unital. -/
+  /-- Φ sends the constant function 1 to the identity 𝟙. -/
   map_one : Φ 1 = 1
 
 variable {Φ : C(X, ℂ) → H →L[ℂ] H}
@@ -113,10 +129,19 @@ theorem inner_nonneg_of_nonneg (hΦ : IsAbstractCalculus Φ) {f : C(X, ℝ)} (hf
   exact inner_self_nonneg (𝕜 := ℂ)
 
 /--
-Riesz representation applied to the positive linear functional `f ↦ ⟪ψ, Φ(f) ψ⟫` supplies
-a unique finite positive Borel measure `μ_ψ` on `X`.
+For each vector ψ, exactly one finite Borel measure μ(ψ) on X has ∫ f dμ(ψ) = ⟨ψ, Φ(f)ψ⟩ for
+every continuous real function f.
 
-Blueprint reference: `def:abstract-associated-measures`.
+The map f ↦ ⟨ψ, Φ(f)ψ⟩ is real, linear and non-negative on non-negative f
+(`isSelfAdjoint_of_real`, `inner_nonneg_of_nonneg`), so the Riesz–Markov–Kakutani
+representation theorem turns it into a measure. In quantum-mechanical terms, for a unit vector
+ψ the measure μ(ψ) is the probability distribution of the observable described by Φ in the
+state ψ.
+
+Implementation note: existence is Mathlib's `RealRMK.rieszMeasure`; uniqueness is Mathlib's
+`Measure.ext_of_integral_eq_on_compactlySupported`.
+
+Blueprint: def:abstract-associated-measures
 -/
 theorem existsUnique_abstractMeasure (hΦ : IsAbstractCalculus Φ) (ψ : H) :
     ∃! ν : Measure X, IsFiniteMeasure ν ∧
@@ -153,9 +178,17 @@ theorem existsUnique_abstractMeasure (hΦ : IsAbstractCalculus Φ) (ψ : H) :
     exact (hνf f.toContinuousMap).trans (RealRMK.integral_rieszMeasure Λ f).symm
 
 /--
-The measure `μ_ψ` associated to `ψ` by an abstract continuous functional calculus.
+The measure μ(ψ) on X associated with a vector ψ by an abstract continuous functional calculus
+Φ: the Borel measure with ∫ f dμ(ψ) = ⟨ψ, Φ(f)ψ⟩ for continuous real f.
 
-Blueprint reference: `def:abstract-associated-measures`.
+It is a finite measure of total mass ‖ψ‖² (`abstractMeasure_univ`), and it is the measure
+⟨ψ, μ(E)ψ⟩ that the projection-valued measure `abstractPVM` assigns to ψ (`abstractPVM_assoc`).
+
+Implementation note: the measure is the one supplied by `existsUnique_abstractMeasure`,
+extracted with `Exists.choose`; its defining property is `integral_abstractMeasure`, and its
+finiteness is an instance.
+
+Blueprint: def:abstract-associated-measures
 -/
 noncomputable def abstractMeasure (hΦ : IsAbstractCalculus Φ) (ψ : H) : Measure X :=
   (existsUnique_abstractMeasure hΦ ψ).choose
@@ -188,9 +221,19 @@ theorem abstractMeasure_univ (hΦ : IsAbstractCalculus Φ) (ψ : H) :
   norm_cast
 
 /--
-The extended quadratic form `Q_f (ψ) = ∫ f dμ_ψ`, defined for bounded measurable `f`.
+The quadratic form Q(f)(ψ) = ∫ f dμ(ψ) of a function f on X, built from the measures of an
+abstract continuous functional calculus.
 
-Blueprint reference: `prpstn:abstract-extended-forms-are-bounded`.
+For continuous f it is the expectation value ⟨ψ, Φ(f)ψ⟩ (`abstractForm_continuous`). The point
+is that the right-hand side makes sense for every bounded measurable f, such as the indicator
+function of a set, where Φ(f) is not defined. For such f, Q(f) is a bounded quadratic form with
+|Q(f)(ψ)| ≤ sup |f| · ‖ψ‖² (`isBoundedQuadraticForm_abstractForm`, `norm_abstractForm_le`), and
+so is the expectation value of exactly one bounded operator, `extendedCalculus`.
+
+Implementation note: the definition is a Bochner integral and accepts any f : X → ℂ; the
+theorems about it assume `f ∈ BddMeasurable X`.
+
+Blueprint: prpstn:abstract-extended-forms-are-bounded
 -/
 noncomputable def abstractForm (hΦ : IsAbstractCalculus Φ) (f : X → ℂ) (ψ : H) : ℂ :=
   ∫ x, f x ∂(abstractMeasure hΦ ψ)
@@ -300,10 +343,20 @@ theorem abstractForm_continuous (hΦ : IsAbstractCalculus Φ) (f : C(X, ℂ)) (�
 
 open Classical in
 /--
-The extended calculus `Φ̃(f)`: the unique bounded operator whose quadratic form is `Q_f`,
-extended by `0` to functions that are not bounded and measurable.
+The extended calculus Φ̃(f) of a bounded measurable function f on X: the bounded operator with
+⟨ψ, Φ̃(f)ψ⟩ = ∫ f dμ(ψ) for every ψ.
 
-Blueprint reference: `def:abstract-extended-calculus`.
+It extends the abstract continuous functional calculus Φ from continuous to bounded measurable
+functions: Φ̃(f) = Φ(f) for continuous f (`extendedCalculus_continuous`). Like Φ it is linear,
+multiplicative and sends f̄ to Φ̃(f)\* (`extendedCalculus_smul_add`, `extendedCalculus_mul`,
+`extendedCalculus_conj`). Applied to indicator functions it gives the projections of the
+spectral measure (`abstractPVM`).
+
+Implementation note: the operator is `IsBoundedQuadraticForm.toOperator` of `abstractForm`.
+The definition takes any f : X → ℂ and returns 0 when f is not bounded and measurable, so
+that it is a total function.
+
+Blueprint: def:abstract-extended-calculus
 -/
 noncomputable def extendedCalculus (hΦ : IsAbstractCalculus Φ) (f : X → ℂ) : H →L[ℂ] H :=
   if h : f ∈ BddMeasurable X then
@@ -653,10 +706,22 @@ theorem hasSum_extendedCalculus_indicator (hΦ : IsAbstractCalculus Φ) (E : ℕ
     simpa [Real.sqrt_sq (norm_nonneg _)] using hsq.sqrt
 
 /--
-The projection-valued measure manufactured from an abstract continuous functional
-calculus: `μ^Φ(E) = Φ̃(1_E)`.
+The projection-valued measure on X defined by an abstract continuous functional calculus Φ:
+each measurable set E goes to the projection Φ̃(1(E)), the extended calculus of its indicator
+function.
 
-Blueprint reference: `thrm:abstract-calculus-yields-pvm`.
+Φ̃(1(E)) is a projection because 1(E)² = 1(E) and 1(E) is real. Countable additivity is a
+consequence of the convergence of ⟨φ, Φ̃(fₙ)ψ⟩ along bounded pointwise convergent sequences fₙ
+(`tendsto_inner_extendedCalculus`), applied to the indicators of the remainders of a disjoint
+union. Its integral is the extended calculus: ∫ f dμ = Φ̃(f) for bounded measurable f, and so
+∫ f dμ = Φ(f) for continuous f (`abstractPVM_integral`, `abstractPVM_integral_continuous`). For
+Φ the functional calculus of a normal operator A, this is the spectral measure of A.
+
+Implementation note: the value on a non-measurable set is 0, as the structure
+`ProjectionValuedMeasure` requires; it holds because `extendedCalculus` is 0 on functions that
+are not bounded and measurable.
+
+Blueprint: thrm:abstract-calculus-yields-pvm
 -/
 noncomputable def abstractPVM (hΦ : IsAbstractCalculus Φ) : ProjectionValuedMeasure X H where
   toFun E := extendedCalculus hΦ (E.indicator (1 : X → ℂ))
@@ -844,11 +909,19 @@ theorem apply_eq_apply_preimage_inclusion {A : H →L[ℂ] H} {Y : Set ℂ} [Com
   rfl
 
 /--
-**Spectral theorem for bounded normal operators.** A bounded normal operator on a nonzero
-Hilbert space is the integral of the identity function against a unique projection-valued
-measure on `σ(A)`.
+The spectral theorem for bounded normal operators: exactly one projection-valued measure μ on
+the spectrum of a bounded normal operator A satisfies ∫ λ dμ(λ) = A.
 
-Blueprint reference: `thrm:hall-10.20`.
+A normal A need not be self-adjoint, so its spectrum is a compact subset of ℂ rather than of ℝ;
+unitary operators, with spectrum on the unit circle, are the case used for the unbounded
+spectral theorem (through the Cayley transform). The measure is `abstractPVM` for the
+continuous functional calculus `normalCalculus` of A.
+
+Implementation note: the blueprint assumes H ≠ {0}; the Lean statement does not need it.
+Uniqueness is proved through `apply_eq_apply_preimage_inclusion`, which also gives the ambient
+form `eq_of_integral_id_eq_ambient`.
+
+Blueprint: thrm:hall-10.20
 -/
 theorem existsUnique_spectralMeasure_normal {A : H →L[ℂ] H}
     (hA : IsStarNormal A) :

@@ -62,15 +62,27 @@ attribute [instance] Spacetime.topology Spacetime.hausdorff Spacetime.connected
 
 /-! ### Classification of tangent vectors -/
 
-/-- A tangent vector `v ∈ T_pM` is *timelike* if `g|_p(v,v) < 0`. -/
+/-- A tangent vector v at a point x is timelike when g_x(v, v) < 0.
+
+With the signature (-, +, +, +), timelike vectors are the velocities of massive particles.
+
+Blueprint: def:timelike-spacelike-null-vectors -/
 def IsTimelike {x : M.Carrier} (v : TangentSpace M.model x) : Prop :=
   M.val x v v < 0
 
-/-- A tangent vector `v ∈ T_pM` is *spacelike* if `g|_p(v,v) > 0`. -/
+/-- A tangent vector v at a point x is spacelike when g_x(v, v) > 0.
+
+Blueprint: def:timelike-spacelike-null-vectors -/
 def IsSpacelike {x : M.Carrier} (v : TangentSpace M.model x) : Prop :=
   0 < M.val x v v
 
-/-- A tangent vector `v ∈ T_pM` is *null* if `g|_p(v,v) = 0`. -/
+/-- A tangent vector v at a point x is null when g_x(v, v) = 0.
+
+Every tangent vector is exactly one of timelike, null and spacelike
+(`isTimelike_or_isNull_or_isSpacelike`). The zero vector is null (`isNull_zero`); smooth paths
+have a non-vanishing velocity (`SmoothPath`), so a null curve moves along the light cone.
+
+Blueprint: def:timelike-spacelike-null-vectors -/
 def IsNull {x : M.Carrier} (v : TangentSpace M.model x) : Prop :=
   M.val x v v = 0
 
@@ -148,35 +160,34 @@ theorem isSpacelike_smul_iff {x : M.Carrier} {c : ℝ} (hc : c ≠ 0)
 /-! ### Time orientation -/
 
 /--
-A *time orientation* on a spacetime `M` is a smooth, non-vanishing,
-everywhere-timelike vector field on `M`.
+A time orientation of a spacetime: a smooth, nowhere-vanishing, everywhere timelike vector field.
 
-We unbundle the data as:
-* `field : ∀ x, T_xM`, the pointwise tangent vector;
-* `nonvanishing`: `field x ≠ 0` for all `x`;
-* `timelike_at`: `field x` is timelike at every `x`;
-* `smooth`: smoothness of the field as a section of the tangent bundle,
-  stated with `ContMDiff` into the total space (Mathlib's bundle-section
-  idiom). This is a genuine `Prop` field of the structure, discharged for
-  concrete time orientations — see `standardMinkowskiTimeOrientation` in
-  `Minkowski.lean`.
+A time orientation t decides at every point which half of the light cone is the future: a
+timelike vector v is future-pointing when g_x(t(x), v) < 0 (`Spacetime.IsFuturePointing`), that
+is, when it lies in the same half of the cone as t(x). A spacetime that has a time orientation is
+time-orientable (`Spacetime.IsTimeOrientable`). For standard Minkowski spacetime the usual choice
+is the constant field e₀ = ∂₀ (`standardMinkowskiTimeOrientation`).
+
+The causal relations of the library (≪, ≺, the futures and pasts I⁺(p), J⁺(p), and the
+Alexandrov topology) all take a time orientation as an argument.
+
+Blueprint: def:time-orientable
 -/
 structure TimeOrientation where
-  /-- The underlying tangent vector field. -/
+  /-- The vector field t: a tangent vector t(x) at each point x. -/
   field : ∀ x : M.Carrier, TangentSpace M.model x
-  /-- The field is everywhere non-zero. -/
+  /-- t vanishes nowhere: t(x) ≠ 0. -/
   nonvanishing : ∀ x : M.Carrier, field x ≠ 0
-  /-- The field is timelike at every point. -/
+  /-- t is timelike everywhere: g_x(t(x), t(x)) < 0. -/
   timelike_at : ∀ x : M.Carrier, M.IsTimelike (field x)
-  /-- The field is smooth as a section of the tangent bundle, stated in Mathlib's
-  **bundle-section** idiom, matching `Spacetime.contMDiff` for the metric.
+  /-- t is smooth: it is a `C^∞` section of the tangent bundle.
 
-  This is the form Mathlib's bundle API speaks natively: it is literally the
-  left-hand side of `Bundle.contMDiffAt_section`, and it is the shape required by
-  `ContMDiff.mpullback_vectorField` (whose `hV` hypothesis is a bundle-section
-  statement) and consumed by `ContMDiff.clm_bundle_apply₂`. A chart-local
-  double-`mfderiv` formulation would need a hand-built bridge in both
-  directions, since Mathlib relates `tangentCoordChange` to neither. -/
+  Implementation note: the statement is Mathlib's bundle-section idiom, matching the field
+  `Spacetime.contMDiff` of the metric. It is the left-hand side of `Bundle.contMDiffAt_section`,
+  the hypothesis of `ContMDiff.mpullback_vectorField` and an input of
+  `ContMDiff.clm_bundle_apply₂`. A chart-local double-`mfderiv` formulation would need a
+  hand-built bridge in both directions, since Mathlib relates `tangentCoordChange` to
+  neither. -/
   smooth : ContMDiff M.model M.model.tangent ∞
     (fun x ↦ Bundle.TotalSpace.mk' SpacetimeModel
       (E := fun x ↦ TangentSpace M.model x) x (field x))
@@ -186,9 +197,17 @@ def IsTimeOrientable : Prop := Nonempty M.TimeOrientation
 
 /-! ### Future and past pointing vectors -/
 
-/-- A timelike tangent vector `v` is *future-pointing* with respect to a time
-orientation `t` if `g|_p(t,v) < 0`. The blueprint also extends this notion to
-null vectors by taking limits of timelike future-pointing vectors. -/
+/-- A tangent vector is future-pointing for a time orientation t: timelike with
+g_x(t(x), v) < 0, or null and a limit of such vectors.
+
+A timelike v is future-pointing when g_x(t(x), v) < 0, so that v and t(x) lie in the same half
+of the light cone. A null v is future-pointing when it is the limit of a sequence of
+future-pointing timelike vectors, so the future-pointing null vectors form the boundary of the
+future timelike cone. The zero vector, the limit of ε t(x) as ε → 0, is both future- and
+past-pointing; curves exclude it by requiring a non-vanishing velocity (`SmoothPath`).
+Spacelike vectors are neither future- nor past-pointing.
+
+Blueprint: def:future-and-past-pointing-vectors -/
 def IsFuturePointing (t : M.TimeOrientation) {x : M.Carrier}
     (v : TangentSpace M.model x) : Prop :=
   (M.IsTimelike v ∧ M.val x (t.field x) v < 0) ∨
@@ -197,9 +216,13 @@ def IsFuturePointing (t : M.TimeOrientation) {x : M.Carrier}
       (∀ n, M.IsTimelike (vs n) ∧ M.val x (t.field x) (vs n) < 0) ∧
       Filter.Tendsto vs Filter.atTop (nhds v))
 
-/-- A timelike tangent vector `v` is *past-pointing* with respect to a time
-orientation `t` if `g|_p(t,v) > 0`. The blueprint also extends this notion to
-null vectors by taking limits of timelike past-pointing vectors. -/
+/-- A tangent vector is past-pointing for a time orientation t: timelike with
+g_x(t(x), v) > 0, or null and a limit of such vectors.
+
+This is the time reverse of `Spacetime.IsFuturePointing`: v is past-pointing exactly when -v is
+future-pointing (`isPastPointing_iff_isFuturePointing_neg`).
+
+Blueprint: def:future-and-past-pointing-vectors -/
 def IsPastPointing (t : M.TimeOrientation) {x : M.Carrier}
     (v : TangentSpace M.model x) : Prop :=
   (M.IsTimelike v ∧ 0 < M.val x (t.field x) v) ∨

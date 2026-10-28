@@ -8,6 +8,21 @@ file is where its history lives.
 
 The first release, 1.0, is in preparation.
 
+- Causal precedence `≺` is reflexive, as in Hawking–Ellis: `CausallyPrecedes` is the reflexive-transitive
+  closure of causal segment precedence, so `p ≺ p` and `p ∈ J^±(p)`. `IsCausalTrip` is the strict relation,
+  `NoClosedCausalCurve` excludes causal trips from a point to itself, and `isCausalTrip_asymm` replaces
+  `causallyPrecedes_asymm`. No point is spacelike-related to itself, and the lattice of causally complete
+  regions is orthocomplemented (`inf_causalComplement`, `sup_causalComplement`).
+
+- The project builds against Lean and Mathlib `v4.35.0` (doc-gen4 `v4.35.0`). Two proofs follow
+  Mathlib API changes: `isCovariantDerivativeOn_fderiv` (`mvfderiv_eq_fderiv`) and
+  `isAbelian_iff_le_commutant` (`IsConcreteLE.le_iff` replaces `SetLike.le_def`).
+
+- The web blueprint has the header, fonts, colours, deep-teal accent and light and dark theme of
+  the website, tutorial and reference manual: a local plasTeX package (`blueprint/src/webtheme/`)
+  replaces the page layouts and the dependency graph template, and `extra_styles.css` restyles the
+  pages, theorem boxes, table of contents and dependency graph page. The PDF is unchanged.
+
 ## Pre-1.0 development notes
 
 The project started in June 2026. The notes below summarise the changes made before the first

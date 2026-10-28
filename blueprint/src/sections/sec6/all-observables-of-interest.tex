@@ -29,12 +29,12 @@ These facts together with the following theorem (Lemma 4.1.4 of \href{https://do
 \end{theorem}
 \noindent imply that $\pi_\omega(\mathfrak{U})$ is strongly dense in $\pi_\omega(\mathfrak{U})''$.
 
-As $\pi_\omega(\mathfrak{U})$ is strongly dense in $\pi_\omega(\mathfrak{U})''$, the definition of strongly dense implies that if one is presented with any $A''$ in $\pi_\omega(\mathfrak{U})''$ then for any $\varepsilon$ such that $0 < \varepsilon$ there exists a $\pi_\omega(a)$ in $\pi_\omega(\mathfrak{U})$ such that
+As $\pi_\omega(\mathfrak{U})$ is strongly dense in $\pi_\omega(\mathfrak{U})''$, the definition of strongly dense implies that if one is presented with any $A''$ in $\pi_\omega(\mathfrak{U})''$ then for any finite set of vectors $\psi_1, \dots, \psi_n$ in $\mathcal{H}_\omega$ and any $\varepsilon$ such that $0 < \varepsilon$ there exists a $\pi_\omega(a)$ in $\pi_\omega(\mathfrak{U})$ such that
 \begin{align}
-    \| \pi_\omega(a)\psi - A''\psi \| < \varepsilon
+    \| \pi_\omega(a)\psi_k - A''\psi_k \| < \varepsilon
 \end{align}
-for all $\psi$ in $\mathcal{H}_\omega$. In other words the distance between the Hilbert space state $A''\psi$ and the Hilbert space state $\pi_\omega(a)\psi$ can be made as small as one likes.
+for $k = 1, \dots, n$. In other words, on any finitely many Hilbert space states $\psi_k$ the distance between $A''\psi_k$ and $\pi_\omega(a)\psi_k$ can be made as small as one likes. The approximation is not uniform over all of $\mathcal{H}_\omega$: that would be norm density, which fails in general because $\pi_\omega(\mathfrak{U})$ is norm-closed and can be strictly smaller than $\pi_\omega(\mathfrak{U})''$.
 
-This implies that experimentally one is unable to measure if one is working with the operators $\pi_\omega(\mathfrak{U})$ or with the operators $\pi_\omega(\mathfrak{U})''$. So there may indeed exist self-adjoint elements of $\pi_\omega(\mathfrak{U})'' \backslash \pi_\omega(\mathfrak{U})$, but physically they are indistinguishable from elements in $\pi_\omega(\mathfrak{U})$.
+Since an experiment probes finitely many states, this implies that experimentally one is unable to measure if one is working with the operators $\pi_\omega(\mathfrak{U})$ or with the operators $\pi_\omega(\mathfrak{U})''$. So there may indeed exist self-adjoint elements of $\pi_\omega(\mathfrak{U})'' \backslash \pi_\omega(\mathfrak{U})$, but physically they are indistinguishable from elements in $\pi_\omega(\mathfrak{U})$.
 
 So, in this sense $\mathfrak{U}$ ``contains all observables of interest''.

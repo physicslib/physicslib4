@@ -91,88 +91,82 @@ def LorentzianAt {V : Type*} [AddCommGroup V] [Module ℝ V]
     ∀ i j : Fin 4, g (b i) (b j) = lorentzSignature i j
 
 /--
-A *spacetime*, in the sense of the AQFT-in-Lean blueprint (section 10.5,
-`def:spacetime`), is a real, four-dimensional, connected, smooth, Hausdorff
-manifold `M` equipped with a globally defined smooth tensor field `g` of type
-`(0,2)` which is non-degenerate and Lorentzian.
+A spacetime: a connected four-dimensional smooth manifold with a Lorentzian metric.
 
-The underlying manifold data is bundled as the carrier type `Carrier` together
-with topological and smooth-manifold typeclass instances (Hausdorff,
-connected, `C^∞` `ChartedSpace` modelled on `SpacetimeModel = ℝ⁴`).
+A spacetime is a real, four-dimensional, connected, smooth, Hausdorff manifold M without
+boundary, together with a smooth symmetric tensor field g of type (0, 2) that is non-degenerate
+and Lorentzian: at every point x there is a basis of the tangent space TₓM in which g_x is
+diag(-1, 1, 1, 1). This is the signature convention (-, +, +, +), so a tangent vector v is
+timelike when g_x(v, v) < 0 (`Spacetime.IsTimelike`).
 
-The metric `g` is encoded as a family of continuous bilinear forms
-`val : ∀ x, TₓM →L[ℝ] TₓM →L[ℝ] ℝ`, with the following pointwise conditions:
+The structure carries no time orientation and no topology other than the manifold topology;
+these are separate data (`Spacetime.TimeOrientation`, `Spacetime.alexandrovTopology`,
+`Spacetime.LorentzianSpacetime`).
 
-* `symm`: each `val x` is symmetric;
-* `nondegenerate`: each `val x` is non-degenerate;
-* `lorentzian`: each `val x` is Lorentzian;
-* `contMDiff`: `g` is smooth, stated in Mathlib's bundle-section idiom as
-  `C^∞`-ness of `x ↦ TotalSpace.mk' _ x (val x)` as a section of the bundle of
-  continuous bilinear forms on the tangent bundle. This has the same shape as
-  `Bundle.ContMDiffRiemannianMetric.contMDiff`, so Mathlib's bundle API applies
-  directly — notably `ContMDiff.clm_bundle_apply₂`, giving smoothness of
-  `x ↦ g x (V x) (W x)` for smooth vector fields `V, W`.
+Implementation note: Mathlib has no Lorentzian metric type, so the manifold and its metric are
+unbundled into Mathlib primitives. The manifold is the type `Carrier` with instance fields for
+the topology, the Hausdorff and connectedness conditions, the charts modelled on
+`SpacetimeModel` (ℝ⁴) and `C^∞` smoothness. The metric is the family `val` of continuous
+bilinear forms on the tangent spaces, with the conditions `symm`, `nondegenerate`, `lorentzian`
+and `contMDiff`. Smoothness is stated as smoothness of a section of the bundle of bilinear forms
+on the tangent bundle, the same shape as `Bundle.ContMDiffRiemannianMetric.contMDiff`, so
+Mathlib's bundle API (`ContMDiff.clm_bundle_apply₂`) gives smoothness of x ↦ g_x(V(x), W(x))
+for smooth vector fields V and W. The general pseudo-Riemannian API is reached through
+`Spacetime.toPseudoRiemannianMetric`.
 
-The non-degeneracy is stated as: if `g x v w = 0` for every `w`, then `v = 0`.
-
-Blueprint reference: `def:spacetime`.
+Blueprint: def:spacetime
 -/
 structure Spacetime where
-  /-- The underlying point set of the spacetime manifold. -/
+  /-- The points of the spacetime manifold M. -/
   Carrier : Type*
-  /-- The topology on the carrier. -/
+  /-- The manifold topology of M. -/
   [topology : TopologicalSpace Carrier]
-  /-- The Hausdorff condition. -/
+  /-- M is Hausdorff. -/
   [hausdorff : T2Space Carrier]
-  /-- The connectedness condition. -/
+  /-- M is connected. -/
   [connected : ConnectedSpace Carrier]
-  /-- The chart structure giving the manifold a four-dimensional model space. -/
+  /-- The atlas of M, with charts valued in the model space ℝ⁴ (`SpacetimeModel`). -/
   [chartedSpace : ChartedSpace SpacetimeModel Carrier]
-  /-- The model with corners used to define the smooth structure on `Carrier`.
-  Typically the trivial / boundaryless one `modelWithCornersSelf ℝ (EuclideanSpace ℝ (Fin 4))`. -/
-  model : ModelWithCorners ℝ SpacetimeModel SpacetimeModel
-  /-- `Carrier` is a `C^∞` manifold modelled on `SpacetimeModel = ℝ⁴`.
+  /-- The model with corners of the smooth structure on M.
 
-  This is instance-implicit so that it is available to the later `contMDiff`
-  field: the bundle-section statement there needs the tangent bundle's
-  `FiberBundle` / `VectorBundle` instances, which are gated on `IsManifold`. -/
+  It is usually `modelWithCornersSelf ℝ SpacetimeModel`; the field `boundaryless` requires
+  only that it has no boundary. -/
+  model : ModelWithCorners ℝ SpacetimeModel SpacetimeModel
+  /-- M is a `C^∞` manifold modelled on ℝ⁴.
+
+  Implementation note: the field is instance-implicit because the field `contMDiff` needs the
+  tangent bundle's `FiberBundle` and `VectorBundle` instances, which require `IsManifold`. -/
   [isManifold : IsManifold model ∞ Carrier]
-  /-- The model has no boundary: chart targets are open in `SpacetimeModel`. The
-  pseudo-Riemannian layer (Levi-Civita connection, geodesics) uses open chart targets,
-  and a spacetime is a manifold without boundary. -/
+  /-- M has no boundary: chart targets are open in ℝ⁴.
+
+  The pseudo-Riemannian layer (the Levi-Civita connection and geodesics) uses open chart
+  targets. -/
   [boundaryless : model.Boundaryless]
-  /-- Each tangent space is finite-dimensional. -/
+  /-- Each tangent space TₓM is finite-dimensional. -/
   tangent_findim : ∀ x : Carrier, FiniteDimensional ℝ (TangentSpace model x)
-  /-- The metric tensor `g`, presented as a family of continuous bilinear forms
-  on the tangent spaces. -/
+  /-- The metric g: at each point x, a continuous bilinear form g_x on the tangent space TₓM. -/
   val : ∀ x : Carrier, TangentSpace model x →L[ℝ] TangentSpace model x →L[ℝ] ℝ
-  /-- Symmetry of `g`: `g x v w = g x w v`. -/
+  /-- g is symmetric: g_x(v, w) = g_x(w, v). -/
   symm : ∀ (x : Carrier) (v w : TangentSpace model x),
     val x v w = val x w v
-  /-- Non-degeneracy of `g`: if `g x v w = 0` for every `w`, then `v = 0`. -/
+  /-- g is non-degenerate: if g_x(v, w) = 0 for every w, then v = 0. -/
   nondegenerate : ∀ (x : Carrier) (v : TangentSpace model x),
     (∀ w : TangentSpace model x, val x v w = 0) → v = 0
-  /-- The Lorentzian condition at every point: there exists a basis of the
-  tangent space relative to which `g x` has Gram matrix `diag(-1, 1, 1, 1)`. -/
+  /-- g is Lorentzian: at every point x some basis of TₓM has Gram matrix diag(-1, 1, 1, 1)
+  (`LorentzianAt`). -/
   lorentzian : ∀ x : Carrier,
     LorentzianAt (fun v w : TangentSpace model x => val x v w)
-  /-- Smoothness of `g`, stated in Mathlib's **bundle-section** idiom: `g` is a
-  `C^∞` section of the bundle of continuous bilinear forms on the tangent
-  bundle, whose fibre at `x` is `TₓM →L[ℝ] TₓM →L[ℝ] ℝ`.
+  /-- g is smooth: it is a `C^∞` section of the bundle of continuous bilinear forms on the
+  tangent bundle, whose fibre at x is the space of bilinear forms on TₓM.
 
-  This is deliberately the same shape as `Bundle.ContMDiffRiemannianMetric.contMDiff`.
-  Mathlib has no pseudo-Riemannian metric class — `ContMDiffRiemannianMetric`
-  additionally carries `pos` and `isVonNBounded`, and the latter is not merely
-  unproven but *false* for a Lorentzian form, since `{v | g v v < 1}` contains
-  the whole light cone — so only the shape of that field is reused here, not the
-  class itself.
-
-  The payoff is that this is the form Mathlib's bundle API speaks natively: in
-  particular `ContMDiff.clm_bundle_apply₂` then gives smoothness of
-  `x ↦ g x (V x) (W x)` for smooth vector fields `V, W`, which is what causal
-  and geodesic arguments need. A chart-local `ContDiffWithinAt` formulation
-  would have no route to it, since Mathlib provides no lemma bridging the two
-  forms in either direction. -/
+  Implementation note: the statement has the shape of
+  `Bundle.ContMDiffRiemannianMetric.contMDiff`, so that Mathlib's bundle API applies; in
+  particular `ContMDiff.clm_bundle_apply₂` gives smoothness of x ↦ g_x(V(x), W(x)) for smooth
+  vector fields V and W, which causal and geodesic arguments need. Only the shape is reused,
+  not the class: `ContMDiffRiemannianMetric` also carries `pos` and `isVonNBounded`, and the
+  latter is false for a Lorentzian form, since {v | g(v, v) < 1} contains the whole light cone.
+  A chart-local `ContDiffWithinAt` formulation would give no route to the bundle API, since
+  Mathlib has no lemma relating the two forms. -/
   contMDiff : ContMDiff model
       (model.prod 𝓘(ℝ, SpacetimeModel →L[ℝ] SpacetimeModel →L[ℝ] ℝ)) ∞
       (fun x ↦ Bundle.TotalSpace.mk'

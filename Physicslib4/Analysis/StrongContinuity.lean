@@ -46,11 +46,30 @@ open Filter Topology
 variable {X : Type*} [TopologicalSpace X]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
-/-- **Weak continuity implies strong continuity** for a family of unitaries.
+/--
+A family of unitaries whose matrix elements are continuous on a dense set of vectors is strongly
+continuous.
 
-If `U : X → (H ≃ₗᵢ[ℂ] H)` has continuous matrix coefficients
-`x ↦ ⟪ξ, U x η⟫` for all `ξ, η` in a dense set `D ⊆ H`, then `x ↦ U x ψ` is
-continuous for every `ψ : H`. -/
+Let U(x), x ∈ X, be unitaries on H indexed by a topological space X, and D a dense subset of H.
+If x ↦ ⟨ξ, U(x)η⟩ is continuous for all ξ, η ∈ D, then x ↦ U(x)ψ is continuous in norm for every
+ψ ∈ H. Matrix elements are often all one can compute directly: for the unitaries implementing a
+symmetry in the GNS representation of an invariant state ω they are ω(a\* γ_x(b)) on the dense
+set of vectors π(a)Ω. This lemma upgrades their continuity to the strong continuity that
+Stone's theorem requires; this is how `GNS.exists_gns_unitary_of_invariant_strongContinuous`
+uses it.
+
+The proof has three steps. Because ‖U(x)η‖ = ‖η‖, approximating ξ by elements of D is
+uniform in x, so x ↦ ⟨ξ, U(x)η⟩ is continuous for every ξ ∈ H and η ∈ D. For η ∈ D,
+‖U(x)η − U(x₀)η‖² = 2‖η‖² − 2 Re⟨U(x₀)η, U(x)η⟩, which tends to 0 as x → x₀. Finally,
+taking η ∈ D close to ψ, ‖U(x)ψ − U(x)η‖ = ‖ψ − η‖ for every x, so x ↦ U(x)ψ is a uniform
+limit of continuous maps.
+
+Implementation note: unitaries are `H ≃ₗᵢ[ℂ] H`, and nothing is assumed about how U depends on x
+beyond the hypothesis: no group law and no completeness of H. The uniform limits use Mathlib's
+`continuous_of_uniform_approx_of_continuous`.
+
+Blueprint: lmm:weak-continuity-implies-strong
+-/
 theorem strongContinuous_of_weak
     (U : X → (H ≃ₗᵢ[ℂ] H)) {D : Set H} (hD : Dense D)
     (hweak : ∀ ξ ∈ D, ∀ η ∈ D, Continuous fun x => ⟪ξ, U x η⟫_ℂ) :

@@ -42,14 +42,35 @@ open Spectral.Stone
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- **Positive-energy condition.** A family `V : ℝ → (H ≃ₗᵢ[ℂ] H)` of unitaries has
-*positive energy* when it is a strongly continuous one-parameter unitary group whose
-infinitesimal generator `A` is a positive operator: `A` is symmetric and `⟪ψ, A ψ⟫ ≥ 0` on
-`Dom(A)`. By Stone's theorem `A` is then self-adjoint and `V(t) = e^{itA}`
-(`isPositiveEnergy_iff_exists_exp`). The positivity of the generator is the
-energy-positivity asserted by the spectrum condition.
+/--
+A one-parameter unitary group has positive energy when it is strongly continuous and its
+generator is a positive operator.
 
-Blueprint reference: `def:positive-energy`. -/
+For a family V(t), t ∈ ℝ, of unitaries on H this asks three things: V(0) = 𝟙 and
+V(s + t) = V(s)V(t); t ↦ V(t)ψ is continuous for every ψ; and the infinitesimal generator A
+is positive. Here Aψ is the limit of (V(t)ψ − ψ)/(it) as t → 0, defined on the vectors ψ for
+which the limit exists, and positive means symmetric with ⟨ψ, Aψ⟩ ≥ 0 for every ψ in Dom(A).
+The generator is in general unbounded, and the condition is imposed on it directly. By
+Stone's theorem A is then densely defined and self-adjoint and V(t) = e^(itA), so positive
+energy says exactly that V(t) = e^(itA) with A positive and self-adjoint
+(`isPositiveEnergy_iff_exists_exp`). For the unitaries of time translations,
+U(t) = e^(itĤ) in the convention U(a) = e^(−iP·a), where P·a = −P⁰a⁰ + P⃗·a⃗ uses the
+signature (−,+,+,+) and P⁰ = Ĥ (the inverse of the Schrödinger evolution e^(−itĤ)). Then A
+is the Hamiltonian Ĥ, and the condition says that the energy is bounded below by 0.
+
+This is the form in which the library states the spectrum condition. A vacuum state
+(`HaagKastlerNet.IsVacuumState`) asks that t ↦ U(γ(t)) have positive energy for every
+future-timelike translation subgroup γ, and a ground state for a flow
+(`HaagKastlerNet.IsGroundStateForFlow`, for a flow of Poincaré transformations in Minkowski
+spacetime or of isometries in curved spacetime) asks it of the unitary group implementing the
+flow. The definition refers to no spacetime.
+
+Implementation note: unitaries are `H ≃ₗᵢ[ℂ] H`, and the generator is `generator V`, an
+`H →ₗ.[ℂ] H`; positivity is `Spectral.Unbounded.IsPositive`, stated as 0 ≤ Re⟨ψ, Aψ⟩. The
+three conditions are the three fields, so each is available by projection.
+
+Blueprint: def:positive-energy
+-/
 structure IsPositiveEnergy (V : ℝ → (H ≃ₗᵢ[ℂ] H)) : Prop where
   /-- `V` is a one-parameter unitary group. -/
   isOneParameterUnitaryGroup : IsOneParameterUnitaryGroup V
@@ -59,10 +80,17 @@ structure IsPositiveEnergy (V : ℝ → (H ≃ₗᵢ[ℂ] H)) : Prop where
   isPositive_generator : Spectral.Unbounded.IsPositive (generator V)
 
 omit [CompleteSpace H] in
-/-- The constant (trivial) unitary group `t ↦ id` has positive energy, with generator `0`
-on all of `H`.
+/--
+The trivial unitary group, V(t) = 𝟙 for every t, has positive energy.
 
-Blueprint reference: `lmm:positive-energy-const`. -/
+Its generator is the zero operator on all of H (`generator_refl`), which is positive. This is
+the simplest example of the condition, the unitary group of a theory with no dynamics.
+
+Implementation note: the identity unitary is `LinearIsometryEquiv.refl ℂ H`. The lemma does
+not need H to be complete.
+
+Blueprint: lmm:positive-energy-const
+-/
 theorem isPositiveEnergy_const_refl :
     IsPositiveEnergy (fun _ : ℝ => LinearIsometryEquiv.refl ℂ H) := by
   refine ⟨isOneParameterUnitaryGroup_refl, isStronglyContinuous_refl, ?_⟩
@@ -99,22 +127,41 @@ theorem exp_generator_unique {P Q : H →L[ℂ] H}
   have key : Complex.I • P = Complex.I • Q := hP.unique hQ
   exact smul_right_injective (H →L[ℂ] H) Complex.I_ne_zero key
 
-/-- **Uniqueness of the generator.** If `V(t) = e^{itB}` for all `t`, with `B`
-self-adjoint, then `B` is the infinitesimal generator of `V`, with equality of domains. In
-particular the positive operator witnessing positive energy is unique.
+/--
+If V(t) = e^(itB) for every t, with B self-adjoint, then B is the generator of V.
 
-Blueprint reference: `lmm:exp-generator-unique`. -/
+The equality is of unbounded operators, so the domains agree as well. A unitary group therefore
+determines the self-adjoint operator that exponentiates to it, and in particular the positive
+self-adjoint operator in `isPositiveEnergy_iff_exists_exp` is unique. Positivity plays no role.
+The proof is the statement of `generator_expUnitary` that the generator of t ↦ e^(itB) is B.
+
+Implementation note: e^(itB) is `expUnitary hB t`, which takes the proof `hB` of
+self-adjointness, and the equality V(t) = e^(itB) is in `H ≃ₗᵢ[ℂ] H`. The bounded special case
+is `exp_generator_unique`.
+
+Blueprint: lmm:exp-generator-unique
+-/
 theorem generator_eq_of_eq_expUnitary {V : ℝ → (H ≃ₗᵢ[ℂ] H)} {B : H →ₗ.[ℂ] H}
     (hB : IsSelfAdjoint B) (h : ∀ t, V t = expUnitary hB t) : generator V = B := by
   obtain rfl : V = expUnitary hB := funext h
   exact (generator_expUnitary hB).2.2
 
 omit [CompleteSpace H] in
-/-- **Positive energy is a unitary invariant.** If `V` has positive energy, so does its
-conjugate `t ↦ W ∘ V t ∘ W⁻¹` by a unitary `W`, with generator `W A W⁻¹` on `W · Dom(A)`.
-Physically: the spectrum condition does not depend on the choice of unitary frame.
+/--
+If V has positive energy and W is unitary, then t ↦ W V(t) W⁻¹ has positive energy.
 
-Blueprint reference: `lmm:positive-energy-conj`. -/
+If A is the generator of V, the generator of the conjugated group is W A W⁻¹, with domain
+W Dom(A) (`mem_generator_conj_domain_iff`, `generator_conj_apply`), and conjugation by a unitary
+preserves positivity (`Spectral.Unbounded.IsPositive.of_conj`). Physically, the spectrum
+condition does not depend on the choice of unitary frame: unitarily equivalent descriptions of
+the same system agree on whether its energy is positive.
+
+Implementation note: W V(t) W⁻¹ is written `(W.symm.trans (V t)).trans W`, since `trans`
+composes left to right. The statement gives only the positive-energy conclusion; the form of
+the generator is in the two lemmas cited above. The lemma does not need H to be complete.
+
+Blueprint: lmm:positive-energy-conj
+-/
 theorem IsPositiveEnergy.conj (W : H ≃ₗᵢ[ℂ] H) {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
     (hV : IsPositiveEnergy V) :
     IsPositiveEnergy (fun t => (W.symm.trans (V t)).trans W) :=
@@ -123,19 +170,38 @@ theorem IsPositiveEnergy.conj (W : H ≃ₗᵢ[ℂ] H) {V : ℝ → (H ≃ₗᵢ
       (generator_conj_apply V W)⟩
 
 omit [CompleteSpace H] in
-/-- **A positive-energy group is strongly continuous**: `t ↦ V t x` is continuous for every
-`x`. This is part of the definition.
+/--
+A unitary group with positive energy is strongly continuous: t ↦ V(t)x is continuous for every
+x in H.
 
-Blueprint reference: `lmm:positive-energy-strong-continuous`. -/
+Strong continuity is one of the three conditions of positive energy, so this only unpacks the
+definition. It is stated separately for results on ground states that use only strong
+continuity, such as `HaagKastlerNet.IsGroundStateForFlow.exists_strongContinuous_unitary`.
+
+Implementation note: the proof is the field `isStronglyContinuous` applied to x. The lemma does
+not need H to be complete.
+
+Blueprint: lmm:positive-energy-strong-continuous
+-/
 theorem IsPositiveEnergy.strongContinuous {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
     (hV : IsPositiveEnergy V) (x : H) : Continuous (fun t : ℝ => V t x) :=
   hV.isStronglyContinuous x
 
-/-- **The bounded case.** If `P` is a bounded positive operator and `V(t) = exp(itP)` (the
-norm-convergent exponential series), then `V` has positive energy, with generator `P` on
-all of `H`.
+/--
+If P is a bounded positive operator and V(t) = exp(itP) for every t, then V has positive energy.
 
-Blueprint reference: `lmm:positive-energy-exp-bounded`. -/
+Here exp(itP) is the norm-convergent power series, so no spectral theorem is needed. A bounded
+positive operator is self-adjoint, so V is a one-parameter unitary group
+(`exists_isOneParameterUnitaryGroup_exp`); it is strongly continuous; and its generator is P
+on all of H (`generator_eq_of_eq_exp`), which is positive. An example is the group of time
+translations e^(itĤ) of a Hamiltonian Ĥ with nonnegative spectrum on a finite-dimensional space.
+
+Implementation note: the exponential is `NormedSpace.exp (((t : ℂ) * Complex.I) • P)`, the
+hypothesis on V is stated vector by vector, and positivity of P is Mathlib's
+`ContinuousLinearMap.IsPositive`. The unbounded form is `isPositiveEnergy_iff_exists_exp`.
+
+Blueprint: lmm:positive-energy-exp-bounded
+-/
 theorem isPositiveEnergy_exp {P : H →L[ℂ] H} (hP : P.IsPositive) {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
     (hV : ∀ (t : ℝ) (x : H), V t x = NormedSpace.exp (((t : ℂ) * Complex.I) • P) x) :
     IsPositiveEnergy V := by
@@ -145,10 +211,22 @@ theorem isPositiveEnergy_exp {P : H →L[ℂ] H} (hP : P.IsPositive) {V : ℝ �
   exact ⟨hgrp, isStronglyContinuous_of_eq_exp hV,
     (generator_eq_of_eq_exp hV) ▸ (Spectral.Unbounded.isPositive_toPMap_iff P).mpr hP⟩
 
-/-- **Positive energy in exponential form.** `V` has positive energy if and only if there is
-a positive self-adjoint operator `A` with `V(t) = e^{itA}` for all `t`.
+/--
+A family V of unitaries has positive energy if and only if V(t) = e^(itA) for every t, for some
+positive self-adjoint operator A.
 
-Blueprint reference: `thrm:positive-energy-iff-exp`. -/
+This is the textbook form of the condition: for time translations, e^(itĤ), it says that the
+Hamiltonian Ĥ is self-adjoint with nonnegative spectrum, here phrased as ⟨ψ, Aψ⟩ ≥ 0 on
+Dom(A). The operator A may be unbounded, and e^(itA) is defined by the spectral theorem.
+Forward, Stone's theorem (`stone`) makes the generator self-adjoint with V(t) = e^(itA), and it
+is positive by hypothesis. Backward, the group t ↦ e^(itA) is strongly continuous with generator A
+(`generator_expUnitary`). The operator A is unique (`generator_eq_of_eq_expUnitary`).
+
+Implementation note: since `expUnitary` takes a proof of self-adjointness, the right-hand side
+reads `∃ A, ∃ hA : IsSelfAdjoint A, Spectral.Unbounded.IsPositive A ∧ ∀ t, V t = expUnitary hA t`.
+
+Blueprint: thrm:positive-energy-iff-exp
+-/
 theorem isPositiveEnergy_iff_exists_exp {V : ℝ → (H ≃ₗᵢ[ℂ] H)} :
     IsPositiveEnergy V ↔ ∃ (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A),
       Spectral.Unbounded.IsPositive A ∧ ∀ t, V t = expUnitary hA t := by

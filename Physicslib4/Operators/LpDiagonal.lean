@@ -45,8 +45,23 @@ private theorem lpDiag_coord_bound (T : ∀ i, E i →L[𝕜] E i) {K : ℝ} (hK
   rw [lp.coeFn_smul, Pi.smul_apply, norm_smul, RCLike.norm_ofReal, abs_of_nonneg hK]
   exact (T i).le_of_opNorm_le (hTK i) _
 
-/-- The **diagonal operator** on the ℓ²-direct sum `lp E 2` induced by a uniformly
-bounded family `T i : E i →L[𝕜] E i`, acting coordinatewise. -/
+/--
+The diagonal operator ⊕_i T_i on the ℓ² direct sum of Hilbert spaces E_i, acting coordinatewise.
+
+A vector of the direct sum ⊕_i E_i is a family x = (x_i) with Σ_i ‖x_i‖² < ∞, and the operator
+sends it to (T_i x_i) (`lpDiag_apply_coe`). It is bounded when the T_i are uniformly bounded,
+‖T_i‖ ≤ K for all i, and then its norm is at most K. As a function of the family it respects
+identities, products, sums, scalar multiples and adjoints (`lpDiag_one`, `lpDiag_mul`,
+`lpDiag_add`, `lpDiag_smul`, `lpDiag_star`). With T_i = π_i(a) for representations π_i of a
+C\*-algebra it gives the direct-sum representation ⊕_i π_i, and with all T_i equal to π(a) the
+amplification of π.
+
+Implementation note: the direct sum is Mathlib's `lp E 2`, and the operator is built by
+`LinearMap.mkContinuous` with the bound K, which is an argument together with its proofs
+`0 ≤ K` and `‖T i‖ ≤ K`. The operator does not depend on the bound chosen (`lpDiag_congr`).
+
+Blueprint: the diagonal operator diag(T) of def:finite-amplification
+-/
 noncomputable def lpDiag (T : ∀ i, E i →L[𝕜] E i) {K : ℝ} (hK : 0 ≤ K)
     (hTK : ∀ i, ‖T i‖ ≤ K) : lp E 2 →L[𝕜] lp E 2 :=
   LinearMap.mkContinuous

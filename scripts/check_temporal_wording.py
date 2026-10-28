@@ -7,9 +7,9 @@ text ("as we previously proved") are allowed by POSITIONAL below; a line contain
 """
 import re, sys, pathlib
 
-ROOTS = ["blueprint/src/sections", "Physicslib4", "home_page", "README.md"]
+ROOTS = ["blueprint/src/sections", "Physicslib4", "home_page", "web", "README.md"]
 EXTS = {".tex", ".lean", ".md", ".html"}
-SKIP = re.compile(r"(^|/)(scratch_|_site/)")
+SKIP = re.compile(r"(^|/)(scratch_|_site/|\.lake/|_out/)")
 PATTERN = re.compile(
     r"[Rr]ecently completed|[Ff]ormerly|earlier version|earlier draft|[Ww]as withdrawn"
     r"|was once|has since been|is now a theorem|now (carries|supplies|consumes)"
@@ -25,6 +25,8 @@ POSITIONAL = re.compile(
     r"\b(we|We|as|As|which|that) (have )?previously\b"
     r"|\bpreviously (proved|proven|established|found|defined|shown|stated|derived|computed)\b"
 )
+# Words quoted in double quotes (e.g. a rule naming "previously") are mentions, not uses.
+QUOTED = re.compile(r'"[^"]*"')
 # A line may opt out of the check with this marker.
 ALLOW = "temporal-ok"
 # Version statements are allowed in exactly these places.
@@ -41,7 +43,7 @@ def files():
 bad = []
 for f in files():
     for n, line in enumerate(f.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
-        if PATTERN.search(POSITIONAL.sub("", line)) and ALLOW not in line:
+        if PATTERN.search(QUOTED.sub("", POSITIONAL.sub("", line))) and ALLOW not in line:
             bad.append(f"{f}:{n}: temporal wording: {line.strip()[:120]}")
         if VERSION.search(line) and str(f) not in VERSION_HOMES:
             bad.append(f"{f}:{n}: version string outside its single home: {line.strip()[:120]}")

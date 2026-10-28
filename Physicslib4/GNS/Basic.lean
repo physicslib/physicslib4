@@ -49,17 +49,25 @@ open scoped ComplexOrder
 variable (A : Type*) [CStarAlgebra A]
 
 /--
-A *state* on a unital C*-algebra `A` is a continuous linear functional
-`A →L[ℂ] ℂ` that is positive (sends every element of the form
-`star a * a` to a non-negative complex number) and normalised (operator
-norm equal to `1`).
+A state on a unital C*-algebra A: a positive, normalised continuous linear functional ω : A → ℂ.
 
-Blueprint reference: `def:state`.
+The number ω(a) is the expectation value of the observable a in the state ω. Positivity asks
+that ω(a* a) ≥ 0 for every a ∈ A, that is, ω(a* a) is real and non-negative. Normalisation asks
+that the operator norm ‖ω‖ is 1; for a positive functional on a nonzero algebra the norm is
+Re ω(1) (`norm_eq_re_apply_one_of_positive`), so this is the familiar ω(1) = 1. A density matrix
+ρ gives the state a ↦ tr(ρa) of the algebra of bounded operators on a Hilbert space, but the
+definition needs no Hilbert space: the GNS construction (`gns_construction`) produces one from ω.
+
+Implementation note: the structure extends `A →L[ℂ] ℂ`, and a `FunLike` instance lets one write
+`ω a`. Positivity uses Mathlib's partial order on ℂ (`ComplexOrder`), in which 0 ≤ z means that
+z is real and non-negative.
+
+Blueprint: def:state
 -/
 structure State extends A →L[ℂ] ℂ where
-  /-- Positivity: `ω (a* a) ≥ 0` for every `a ∈ A`. -/
+  /-- Positivity: ω(a* a) is real and non-negative for every a ∈ A. -/
   isPositive : ∀ a : A, 0 ≤ toContinuousLinearMap (star a * a)
-  /-- Normalisation: the operator norm of `ω` equals `1`. -/
+  /-- Normalisation: the operator norm ‖ω‖ equals 1. -/
   isNormalized : ‖toContinuousLinearMap‖ = 1
 
 namespace State
@@ -76,10 +84,15 @@ noncomputable instance : FunLike (State A) A ℂ where
     exact DFunLike.coe_injective h
 
 /--
-A state `ω` on a C*-algebra `A` is *faithful* if `ω (star a * a) = 0`
-implies `a = 0`. Equivalently, `a ≠ 0` implies `0 < ω (star a * a)`.
+A faithful state: ω(a* a) > 0 for every nonzero a ∈ A.
 
-Blueprint reference: `def:state` (faithfulness clause).
+Since ω(a* a) ≥ 0 always, this says that ω(a* a) = 0 only for a = 0: no nonzero observable has
+vanishing expectation of a* a. A faithful state has an injective GNS representation
+(`gns_construction`), and its cyclic vector is separating (`separating_of_faithful`). On a
+matrix algebra the Gibbs state a ↦ tr(e^(−βH) a)/Z is faithful, while a vector state
+a ↦ ⟨ψ, aψ⟩ is not: it vanishes on a* a whenever a annihilates the unit vector ψ.
+
+Blueprint: def:state
 -/
 def IsFaithful (ω : State A) : Prop :=
   ∀ a : A, a ≠ 0 → 0 < ω (star a * a)
@@ -109,11 +122,19 @@ variable {A}
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /--
-A vector `Ω : H` is *cyclic* for a representation
-`π : A →⋆ₐ[ℂ] (H →L[ℂ] H)` of `A` on the Hilbert space `H` when
-the set `{ π a Ω : a ∈ A }` is dense in `H`.
+A cyclic vector Ω for a representation π of A on H: the vectors π(a)Ω, a ∈ A, are dense in H.
 
-Blueprint reference: `def:cyclic-vector`.
+Every vector of H is then a limit of vectors obtained by acting on Ω with the represented
+algebra, as every state of a Fock space is obtained from the vacuum by acting with creation
+operators. The GNS representation of a state always has a cyclic vector (`gns_construction`),
+and a cyclic representation reproducing a state is determined by the state up to unitary
+equivalence (`gns_unique`).
+
+Implementation note: a representation is a unital *-homomorphism π : A →⋆ₐ[ℂ] (H →L[ℂ] H) into
+the bounded operators on a complex Hilbert space H. The blueprint allows any algebra A; here A is
+a unital C*-algebra, the case used throughout the project.
+
+Blueprint: def:cyclic-vector
 -/
 def IsCyclicVector (π : A →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H) : Prop :=
   Dense (Set.range fun a : A => π a Ω)

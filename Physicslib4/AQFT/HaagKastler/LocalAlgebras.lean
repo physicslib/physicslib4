@@ -52,38 +52,42 @@ namespace HaagKastler
 
 open Physicslib4
 
-/-- An *Alexandrov-basis set* of Minkowski spacetime: a subset of
-`StandardMinkowskiSpacetime.Carrier` of the form `I⁺(p) ∩ I⁻(q)`
-for some points `p, q`. We index over the underlying carrier of
-`StandardMinkowskiSpacetime` (which is defeq to
-`MinkowskiSpacetime.Carrier`) so that the Alexandrov-basis predicate
-and the completely-spacelike predicate (used in Axiom 3) talk about
-the same `Set`. -/
+/-- A set of Minkowski spacetime is an *Alexandrov-basis set* if it is a causal diamond.
+
+A causal diamond is a set I⁺(p) ∩ I⁻(q), the chronological future of a point p intersected with
+the chronological past of a point q. These sets form a basis of the Alexandrov topology, and they
+are the regions to which the Haag–Kastler axioms attach local algebras. The diamond is empty unless
+p chronologically precedes q, and the empty set is a basis set too.
+
+Implementation note: the predicate is stated on subsets of `StandardMinkowskiSpacetime.Carrier`,
+which is definitionally `MinkowskiSpacetime.Carrier`, so that it and the completely-spacelike
+predicate of Axiom 3 are about the same sets. -/
 def IsAlexandrovBasisSet (B : Set StandardMinkowskiSpacetime.Carrier) : Prop :=
   B ∈ Spacetime.alexandrovBasis StandardMinkowskiSpacetime
     standardMinkowskiTimeOrientation
 
 /--
-**Axiom 1 (Local Algebras).** The *data* of a Haag-Kastler local
-net: an assignment, for every subset `B` of Minkowski spacetime
-(thought of as an Alexandrov-basis set, with the empty set covering
-the normalisation `𝔘(∅) = ℂ · 1`), of a unital C*-algebra `algebra
-B`.
+Axiom 1 (local algebras): a unital C*-algebra 𝔘(B) for each region B of Minkowski spacetime.
 
-The "𝔘(∅) = ℂ" normalisation is captured by the field
-`emptyEquivComplex` exhibiting a `StarAlgEquiv` between
-`algebra ∅` and `ℂ`.
+The algebra 𝔘(B) is the abstract algebra of the observables that can be measured in B. The
+regions that matter are the causal diamonds (`IsAlexandrovBasisSet`), and the axioms that follow
+quantify over those only. The empty region is assigned the one-dimensional algebra ℂ·1 of
+multiples of the unit. The algebras are unital because Mathlib's `CStarAlgebra` is the class of
+unital C*-algebras.
 
-Blueprint reference: `def:local-algebras`.
+Implementation note: `algebra` is defined on every subset of spacetime, so that it is a plain
+function; its values on sets that are not diamonds are never used. The normalisation 𝔘(∅) = ℂ·1
+is a *-isomorphism `emptyEquivComplex` onto ℂ.
+
+Blueprint: def:local-algebras
 -/
 structure LocalNet where
-  /-- The C*-algebra `𝔘(B)` assigned to a (would-be Alexandrov-basis)
-  region `B`. -/
+  /-- The local algebra 𝔘(B) of a region B. Only its values on causal diamonds are constrained by
+  the axioms. -/
   algebra : Set StandardMinkowskiSpacetime.Carrier → Type*
-  /-- The `CStarAlgebra` instance on each fiber `𝔘(B)`. -/
+  /-- Each local algebra 𝔘(B) is a unital C*-algebra. -/
   instCStarAlgebra : ∀ B, CStarAlgebra (algebra B)
-  /-- Normalisation: `𝔘(∅) = ℂ · 1`, encoded as a `*`-algebra
-  isomorphism `algebra ∅ ≃⋆ₐ[ℂ] ℂ`. -/
+  /-- The normalisation 𝔘(∅) = ℂ·1: a *-isomorphism from the algebra of the empty region onto ℂ. -/
   emptyEquivComplex : StarAlgEquiv ℂ (algebra ∅) ℂ
 
 attribute [instance] LocalNet.instCStarAlgebra

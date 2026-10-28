@@ -604,27 +604,27 @@
 
 \begin{definition}[Causal Trip]
     \label{def:causal-trip}
-    \lean{Physicslib4.Spacetime.IsCausalTripSegment, Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes}
+    \lean{Physicslib4.Spacetime.IsCausalTripSegment, Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes, Physicslib4.Spacetime.causallyPrecedes_refl, Physicslib4.Spacetime.causallyPrecedes_iff_eq_or_isCausalTrip, Physicslib4.Spacetime.causallyPrecedes_of_isCausalTrip}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
     \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints, def:geodesic}
-    A \textit{causal trip segment} is a curve which is a future-oriented, causal geodesic (\ref{def:geodesic}). (Note a causal geodesic is possibly degenerate.) A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic: a finite chain of causal trip segments joined at matching endpoints. A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if there exists a causal trip from $p$ to $q$.
+    A \textit{causal trip segment} is a curve which is a future-oriented, causal geodesic (\ref{def:geodesic}). A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic: a finite chain of causal trip segments joined at matching endpoints. A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if $p = q$ or there exists a causal trip from $p$ to $q$; in particular a causal trip from $p$ to $q$ gives $p \prec q$. Thus $\prec$ is reflexive, $p \prec p$ for every $p$, as in Hawking--Ellis: the trivial case $p = q$ plays the role of a degenerate causal curve, while causal trips themselves are genuine curves, with nowhere-vanishing velocity. Formally $\prec$ is the reflexive-transitive closure of single-segment causal precedence, a chain of zero or more causal trip segments.
 \end{definition}
 
 \medskip
 
 \begin{theorem}[Transitivity of chronological and causal precedence]
     \label{thrm:precedence-transitive}
-    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.causallyPrecedes_trans}
+    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.isCausalTrip_trans, Physicslib4.Spacetime.causallyPrecedes_trans}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:trip, def:causal-trip}
     \leanok
-    Chronological precedence $\ll$ and causal precedence $\prec$ are transitive: if $p \ll q$ and $q \ll r$ then $p \ll r$, and likewise for $\prec$.
+    Chronological precedence $\ll$ and causal precedence $\prec$ are transitive: if $p \ll q$ and $q \ll r$ then $p \ll r$, and likewise for $\prec$. Likewise a causal trip from $p$ to $q$ and a causal trip from $q$ to $r$ give a causal trip from $p$ to $r$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:trip, def:causal-trip}
-    Two trips joined at the common point $q$ concatenate to a single piecewise trip; this is exactly the transitivity of the transitive closure.
+    Two trips (or two causal trips) joined at the common point $q$ concatenate to a single piecewise trip (or causal trip); this is exactly the transitivity of the transitive closure. For $\prec$, if either relation is the trivial case of equal points the claim is the other relation; otherwise both are causal trips, which concatenate. This is the transitivity of the reflexive-transitive closure.
 \end{proof}
 
 \medskip
@@ -635,23 +635,23 @@
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
     \uses{def:causal-trip}
-    A spacetime $M$ with time orientation $t$ satisfies the \emph{causality condition} --- equivalently, has \emph{no closed causal curve} --- when no point causally precedes itself: $\lnot(p \prec p)$ for every $p$. A closed causal curve through $p$ would be a causal trip from $p$ back to $p$, i.e.\ $p \prec p$, so its absence is exactly this condition. This is the standard causality condition, strictly weaker than strong causality and strictly stronger than the chronology condition ($\lnot(p \ll p)$ for all $p$).
+    A spacetime $M$ with time orientation $t$ satisfies the \emph{causality condition} --- equivalently, has \emph{no closed causal curve} --- when there is no causal trip from a point to itself: for every $p$ there is no causal trip from $p$ back to $p$. A closed causal curve through $p$ is exactly such a causal trip, so its absence is this condition. The condition is not $\lnot(p \prec p)$, which fails in every spacetime because $\prec$ is reflexive (\ref{def:causal-trip}). This is the standard causality condition, strictly weaker than strong causality and strictly stronger than the chronology condition ($\lnot(p \ll p)$ for all $p$).
 \end{definition}
 
 \medskip
 
 \begin{theorem}[Irreflexivity and Antisymmetry under Causality]
     \label{thrm:causal-order-refinements}
-    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_irrefl, Physicslib4.Spacetime.causallyPrecedes_asymm, Physicslib4.Spacetime.causallyPrecedes_antisymm}
+    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_irrefl, Physicslib4.Spacetime.isCausalTrip_asymm, Physicslib4.Spacetime.causallyPrecedes_antisymm}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:no-closed-causal-curve, def:trip}
     \leanok
-    Assume $M$ has no closed causal curve. Then chronological precedence is irreflexive, $\lnot(p \ll p)$ for every $p$, and causal precedence is asymmetric and antisymmetric: $p \prec q$ excludes $q \prec p$, and $p \prec q$ together with $q \prec p$ forces $p = q$. Thus, under the causality condition, $\prec$ is a strict partial order on the events of the spacetime.
+    Assume $M$ has no closed causal curve. Then chronological precedence is irreflexive, $\lnot(p \ll p)$ for every $p$; causal trips are asymmetric: a causal trip from $p$ to $q$ excludes a causal trip from $q$ to $p$; and causal precedence is antisymmetric: $p \prec q$ together with $q \prec p$ forces $p = q$. Thus, under the causality condition, the reflexive relation $\prec$ is a partial order on the events of the spacetime.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:no-closed-causal-curve, thrm:precedence-transitive, lmm:chronological-implies-causal}
-    For irreflexivity of chronological precedence, $p \ll p$ would give $p \prec p$ because chronological precedence implies causal precedence (\ref{lmm:chronological-implies-causal}), which the causality condition forbids. For asymmetry and antisymmetry, $p \prec q$ and $q \prec p$ cannot both hold, since transitivity (\ref{thrm:precedence-transitive}) would give the forbidden $p \prec p$.
+    \uses{def:no-closed-causal-curve, def:causal-trip, thrm:precedence-transitive, lmm:chronological-implies-causal}
+    For irreflexivity of chronological precedence, a trip from $p$ to $p$ is a causal trip from $p$ to $p$ (\ref{lmm:chronological-implies-causal}), which the causality condition forbids. For asymmetry of causal trips, a causal trip from $p$ to $q$ and one from $q$ to $p$ concatenate (\ref{thrm:precedence-transitive}) to the forbidden causal trip from $p$ to $p$. For antisymmetry, suppose $p \prec q$, $q \prec p$ and $p \neq q$; then both relations are causal trips (\ref{def:causal-trip}), which asymmetry excludes.
 \end{proof}
 
 \medskip
@@ -688,17 +688,18 @@
     \begin{align}
         J^-(S) = \bigcup\limits_{p \in S} J^-(p).
     \end{align}
+    Since $\prec$ is reflexive (\ref{def:causal-trip}), $p \in J^+(p)$ and $p \in J^-(p)$ for every $p$.
 \end{definition}
 
 \medskip
 
 \begin{lemma}[Chronological Precedence Implies Causal Precedence]
     \label{lmm:chronological-implies-causal}
-    \lean{Physicslib4.Spacetime.isCausal_of_isTimelike, Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture, Physicslib4.Spacetime.chronologicalPast_subset_causalPast}
+    \lean{Physicslib4.Spacetime.isCausal_of_isTimelike, Physicslib4.Spacetime.isCausalTrip_of_chronologicallyPrecedes, Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture, Physicslib4.Spacetime.chronologicalPast_subset_causalPast}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \uses{def:trip, def:causal-trip, def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
     \leanok
-    Every trip is a causal trip, so $p \ll q$ implies $p \prec q$. Consequently $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$.
+    Every trip is a causal trip, so $p \ll q$ gives a causal trip from $p$ to $q$, and hence $p \prec q$. Consequently $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -783,11 +784,11 @@
 
 \begin{definition}[Spacelike Related]
     \label{def:spacelike-related}
-    \lean{Physicslib4.Spacetime.IsSpacelikeRelated}
+    \lean{Physicslib4.Spacetime.IsSpacelikeRelated, Physicslib4.Spacetime.isSpacelikeRelated_irrefl}
     \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
     \uses{def:spacetime, def:causal-future-and-causal-past}
-    Consider two points $p_1$ and $p_2$ in a spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$.
+    Consider two points $p_1$ and $p_2$ in a spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$. Since $p \in J^+(p)$, no point is spacelike related to itself.
 \end{definition}
 
 \medskip
@@ -850,11 +851,11 @@
 
 \begin{definition}[Spacelike Complement of a Region]
     \label{def:spacelike-complement}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement, Physicslib4.Spacetime.disjoint_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.disjoint_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_univ}
     \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
     \leanok
-    \uses{def:completely-spacelike, def:lorentzian-spacetime}
-    The \emph{spacelike complement} $\mathbf{B}^\perp$ of a region $\mathbf{B}$ is the set of points completely spacelike-separated from all of $\mathbf{B}$: $\mathbf{B}^\perp = \{ x \mid \{x\} \text{ is completely spacelike to } \mathbf{B} \}$. It is the geometric substrate of locality and Haag duality.
+    \uses{def:completely-spacelike, def:lorentzian-spacetime, def:spacelike-related}
+    The \emph{spacelike complement} $\mathbf{B}^\perp$ of a region $\mathbf{B}$ is the set of points completely spacelike-separated from all of $\mathbf{B}$: $\mathbf{B}^\perp = \{ x \mid \{x\} \text{ is completely spacelike to } \mathbf{B} \}$. It is the geometric substrate of locality and Haag duality. Since no point is spacelike related to itself (\ref{def:spacelike-related}), a region and its spacelike complement are disjoint, $\mathbf{B} \cap \mathbf{B}^\perp = \emptyset$; in particular the spacelike complement of the whole spacetime is empty.
 \end{definition}
 
 \medskip
@@ -917,22 +918,6 @@
 
 \medskip
 
-\begin{theorem}[Lattice of causally complete regions]
-    \label{thrm:causally-complete-lattice}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.CausallyCompleteRegion, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_iff_isClosed, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_inter, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_iInter, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_coe, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_antitone}
-    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
-    \uses{def:causally-complete-region, def:causal-closure}
-    \leanok
-    The causally complete regions form a \emph{complete lattice} (meets are intersections, joins are causal closures of unions). The spacelike complement of any region is causally complete, causally complete regions are closed under intersection, and the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an \emph{order-reversing involution} on this lattice ($\mathbf{B}^{\perp\perp} = \mathbf{B}$). (The full orthocomplement law $\mathbf{B} \wedge \mathbf{B}^\perp = \bot$ does not hold at this generality, because the trip-based causal relation is irreflexive, so a point is spacelike-separated from itself; what holds is the complete lattice with an order-reversing De~Morgan involution.) In the formalization the \texttt{CompleteLattice} structure on the causally complete regions is transported from the causal closure operator along its Galois insertion and is declared as an anonymous \texttt{instance}, so it has no stable name that could be cited above; the lattice claim is therefore witnessed by the carrier abbreviation \texttt{CausallyCompleteRegion} together with the bridge \texttt{isCausallyComplete\_iff\_isClosed} identifying causally complete regions with the closed elements of that closure operator.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{def:causally-complete-region, def:causal-closure, lmm:causal-closure-is-closure-operator, lmm:spacelike-complement-order}
-    The lattice is obtained from the causal closure operator (\ref{lmm:causal-closure-is-closure-operator}) via its Galois insertion: the causally complete regions are exactly the fixed points of the closure operator, so meets are intersections and joins are the causal closures of unions. That the spacelike complement of any region is causally complete, and that complementation is an order-reversing involution on this lattice, are the antitonicity and the triple-complement identity of the spacelike complement (\ref{lmm:spacelike-complement-order}).
-\end{proof}
-
-\medskip
-
 \begin{lemma}[De Morgan Laws for the Spacelike Complement]
     \label{lmm:spacelike-complement-de-morgan}
     \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_union, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_iUnion}
@@ -952,6 +937,22 @@
     \leanok
     \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
     Unfold the spacelike complement pointwise: $x \in \mathbf{B}^\perp$ means the singleton $\{x\}$ is completely spacelike to $\mathbf{B}$. By the structural properties of complete spacelike separation (\ref{lmm:completely-spacelike-structural}), $\{x\}$ is completely spacelike to a union $\bigcup_i \mathbf{B}_i$ if and only if it is completely spacelike to each member $\mathbf{B}_i$. Hence membership in the complement of the union is the conjunction of membership in the individual complements, which is exactly membership in their intersection. The binary case is the special case of a two-element family.
+\end{proof}
+
+\medskip
+
+\begin{theorem}[Lattice of causally complete regions]
+    \label{thrm:causally-complete-lattice}
+    \lean{Physicslib4.Spacetime.LorentzianSpacetime.CausallyCompleteRegion, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_iff_isClosed, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_inter, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_iInter, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_coe, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.inf_causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.sup_causalComplement}
+    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \uses{def:causally-complete-region, def:causal-closure, def:spacelike-complement}
+    \leanok
+    The causally complete regions form a \emph{complete lattice} (meets are intersections, joins are causal closures of unions). The spacelike complement of any region is causally complete, causally complete regions are closed under intersection, and the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an \emph{order-reversing involution} on this lattice ($\mathbf{B}^{\perp\perp} = \mathbf{B}$). Moreover it is an \emph{orthocomplement}: $\mathbf{B} \wedge \mathbf{B}^\perp = \bot$ (non-contradiction) and $\mathbf{B} \vee \mathbf{B}^\perp = \top$ (excluded middle). So the causally complete regions form a complete orthocomplemented lattice. In the formalization the \texttt{CompleteLattice} structure on the causally complete regions is transported from the causal closure operator along its Galois insertion and is declared as an anonymous \texttt{instance}, so it has no stable name that could be cited above; the lattice claim is therefore witnessed by the carrier abbreviation \texttt{CausallyCompleteRegion} together with the bridge \texttt{isCausallyComplete\_iff\_isClosed} identifying causally complete regions with the closed elements of that closure operator.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:causally-complete-region, def:causal-closure, lmm:causal-closure-is-closure-operator, lmm:spacelike-complement-order, def:spacelike-complement, lmm:spacelike-complement-de-morgan}
+    The lattice is obtained from the causal closure operator (\ref{lmm:causal-closure-is-closure-operator}) via its Galois insertion: the causally complete regions are exactly the fixed points of the closure operator, so meets are intersections and joins are the causal closures of unions. That the spacelike complement of any region is causally complete, and that complementation is an order-reversing involution on this lattice, are the antitonicity and the triple-complement identity of the spacelike complement (\ref{lmm:spacelike-complement-order}). For non-contradiction, the meet $\mathbf{B} \wedge \mathbf{B}^\perp$ is the intersection $\mathbf{B} \cap \mathbf{B}^\perp$, which is empty (\ref{def:spacelike-complement}), and the least causally complete region is $\emptyset^{\perp\perp} = (\text{the whole spacetime})^\perp = \emptyset$, using $\emptyset^\perp = $ the whole spacetime (the empty-family case of \ref{lmm:spacelike-complement-de-morgan}). For excluded middle, the complement of the join $\mathbf{B} \vee \mathbf{B}^\perp$ is $(\mathbf{B} \cup \mathbf{B}^\perp)^{\perp\perp\perp} = (\mathbf{B} \cup \mathbf{B}^\perp)^\perp = \mathbf{B}^\perp \cap \mathbf{B}^{\perp\perp}$ (\ref{lmm:spacelike-complement-de-morgan}), which is $\mathbf{B}^\perp \wedge \mathbf{B} = \bot$ by non-contradiction; applying the involution gives $\mathbf{B} \vee \mathbf{B}^\perp = \bot^\perp = \top$.
 \end{proof}
 
 \medskip
@@ -1134,8 +1135,8 @@
 
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
-    \lean{Physicslib4.Spacetime.alexandrovTopology}
-    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \lean{Physicslib4.Spacetime.alexandrovTopology, Physicslib4.Spacetime.alexandrovBasis}
+    \leanfile{Physicslib4/Spacetime/Causality.lean}
     \leanok
     \uses{def:spacetime, def:chronological-future-and-chronological-past}
     \textit{Alexandrov topology} on a spacetime $M$ is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in $M$.
@@ -1328,7 +1329,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    The three conditions of a topological basis all hold. The intersection (downward-directedness) property is the standing hypothesis. The covering condition --- that the diamonds' union is the whole space --- is \ref{lmm:alexandrov-covering-hausdorff}. The topology-generation condition holds by definition, since the Alexandrov topology is \emph{defined} as the topology generated by the diamond subbasis. The directedness hypothesis is the genuinely geometric content: it is exactly the assertion that the Alexandrov topology has the diamonds as a base, and it is not implied by Hausdorffness alone; it is discharged for standard Minkowski in \ref{thrm:minkowski-alexandrov-basis}.
+    The three conditions of a topological basis all hold. The intersection property (every point of the intersection of two diamonds lies in a diamond inside that intersection) is the standing hypothesis. The covering condition --- that the diamonds' union is the whole space --- is \ref{lmm:alexandrov-covering-hausdorff}. The topology-generation condition holds by definition, since the Alexandrov topology is \emph{defined} as the topology generated by the diamond subbasis. In the standard theory the intersection property holds in every spacetime, since chronological futures are open in the manifold topology; this is not proved here, so the theorem takes it as a hypothesis. It is proved for standard Minkowski spacetime in \ref{thrm:minkowski-alexandrov-basis}.
 \end{proof}
 
 \medskip
@@ -1497,7 +1498,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Isometries Preserve the Causal Classification]
     \label{lmm:isometry-preserves-classification}
-    \lean{Physicslib4.Spacetime.Isometry.preserves_self, Physicslib4.Spacetime.Isometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.Isometry.isNull_mfderiv_iff, Physicslib4.Spacetime.Isometry.isSpacelike_mfderiv_iff}
+    \lean{Physicslib4.Spacetime.Isometry, Physicslib4.Spacetime.Isometry.preserves_self, Physicslib4.Spacetime.Isometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.Isometry.isNull_mfderiv_iff, Physicslib4.Spacetime.Isometry.isSpacelike_mfderiv_iff}
     \leanfile{Physicslib4/Spacetime/Isometry.lean}
     \uses{def:spacetime, def:timelike-spacelike-null-vectors}
     \leanok
@@ -1616,7 +1617,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{definition}[Lorentz Pushforward of a Smooth Path]
     \label{def:lorentz-path}
-    \lean{Physicslib4.lorentzPath}
+    \lean{Physicslib4.lorentzPath, Physicslib4.standardMinkowskiTimeOrientation}
     \uses{def:inhomogeneous-lorentz-group, def:paths, def:time-orientable, lmm:pushforward-path}
     \leanok
     For $g = (L, a)$ in the inhomogeneous Lorentz group and a smooth path $\mu : \Sigma \to \mathbb{R}^4$ in standard Minkowski spacetime, the \textit{Lorentz pushforward} of $\mu$ is the smooth path $g\mu : \Sigma \to \mathbb{R}^4$, $s \mapsto L\mu(s) + a$, on the same parameter space. It is the Minkowski instance of the pushforward of a path under an isometry (\ref{lmm:pushforward-path}). The \textit{standard time orientation} of standard Minkowski spacetime (\ref{def:time-orientable}) is the constant vector field $e_0 = \partial_0$.
@@ -1645,7 +1646,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 \begin{proof}
     \leanok
     \uses{lmm:lorentz-path-causal, lmm:isometry-preserves-geodesics, def:causal-trip}
-    If $\mu$ is a future-oriented causal geodesic from $p$ to $q$, then $g\mu$ is a future-oriented causal path from $g \cdot p$ to $g \cdot q$ (\ref{lmm:lorentz-path-causal}), and it is a geodesic (\ref{lmm:isometry-preserves-geodesics}). So $g$ maps causal trip segments to causal trip segments, and hence, segment by segment, causal trips to causal trips: $p \prec q$ implies $g \cdot p \prec g \cdot q$. The converse is the same statement for $g^{-1}$.
+    If $\mu$ is a future-oriented causal geodesic from $p$ to $q$, then $g\mu$ is a future-oriented causal path from $g \cdot p$ to $g \cdot q$ (\ref{lmm:lorentz-path-causal}), and it is a geodesic (\ref{lmm:isometry-preserves-geodesics}). So $g$ maps causal trip segments to causal trip segments, and hence, segment by segment, causal trips to causal trips. Together with the trivial case $p = q$, which gives $g \cdot p = g \cdot q$, this shows that $p \prec q$ implies $g \cdot p \prec g \cdot q$. The converse is the same statement for $g^{-1}$.
 \end{proof}
 
 \begin{corollary}[Lorentz Invariance of Spacelike Separation]
@@ -1928,7 +1929,7 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
 
 The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$, which is Mathlib's $\mathtt{VectorField.mpullback}\;I\;I\;\psi\;t$. Establishing that it is a time orientation splits into one smoothness statement and two pointwise conditions, and the smoothness statement is a single step. Since the \texttt{smooth} field of \ref{def:time-orientable} is itself the bundle-section condition, it is \emph{literally} the hypothesis of \texttt{ContMDiff.mpullback\_vectorField}, whose conclusion is in turn literally the field to be produced for the pullback: the transport along $\psi$ is applied directly, with no conversion on either side.
 
-\emph{Design note: why the smoothness fields are bundle-section conditions.} With a chart-local smoothness field, the smoothness argument would be a \emph{round trip} between two idioms --- chart-local hypothesis to bundle section, transport along $\psi$, bundle section back to chart-local goal --- and the dictionary between the two forms could not be reduced to Mathlib leaves, because Mathlib has no lemma packaging the $\mathrm{tangentCoordChange}$ round trip (the only $M$-side statement about it, \texttt{continuousOn\_tangentCoordChange}, gives mere continuity). With the bundle-section form there is no second idiom to translate to, so the \emph{time-orientation} smoothness chain below --- \ref{lmm:mpullback-vectorField-contMDiff-of-diffeo} and its consumers --- reduces entirely to Mathlib. The metric side's hom-bundle ingredient, smoothness of $x \mapsto d\psi_x$, reduces to Mathlib likewise, by the route given in \ref{lmm:pullback-metric-smooth-in-charts} (\texttt{ContMDiffAt.mfderiv\_const} plus the definitional $\mathtt{inTangentCoordinates}$/$\mathtt{inCoordinates}$ match), leaving there only two local algebraic helpers and no smoothness gap.
+\emph{Design note: why the smoothness fields are bundle-section conditions.} With a chart-local smoothness field, the smoothness argument would be a \emph{round trip} between two idioms --- chart-local hypothesis to bundle section, transport along $\psi$, bundle section back to chart-local goal --- and the dictionary between the two forms could not be reduced to Mathlib leaves, because Mathlib's statements about $\mathrm{tangentCoordChange}$ (\texttt{tangentCoordChange\_self}, \texttt{tangentCoordChange\_comp}, \texttt{hasFDerivWithinAt\_tangentCoordChange}, \texttt{continuousOn\_tangentCoordChange}) are pointwise identities, a differentiability statement and continuity, and none of them transfers smoothness between the chart form and the bundle form. With the bundle-section form there is no second idiom to translate to, so the \emph{time-orientation} smoothness chain below --- \ref{lmm:mpullback-vectorField-contMDiff-of-diffeo} and its consumers --- reduces entirely to Mathlib. The metric side's hom-bundle ingredient, smoothness of $x \mapsto d\psi_x$, reduces to Mathlib likewise, by the route given in \ref{lmm:pullback-metric-smooth-in-charts} (\texttt{ContMDiffAt.mfderiv\_const} plus the definitional $\mathtt{inTangentCoordinates}$/$\mathtt{inCoordinates}$ match), leaving there only two local algebraic helpers and no smoothness gap.
 
 \begin{lemma}[The Pullback of a Bundle-Smooth Vector Field Along a Diffeomorphism is Bundle-Smooth]
     \label{lmm:mpullback-vectorField-contMDiff-of-diffeo}

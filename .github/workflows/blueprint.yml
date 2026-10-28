@@ -45,8 +45,54 @@ jobs:
           lint: true
           mk_all-check: true
 
-      - name: Compile blueprint and documentation
+      # The Verso site, tutorial and reference manual (`web/`, a Lake package requiring physicslib4
+      # from `..`) are written to `home_page/site/`, `home_page/tutorial/` and `home_page/manual/`;
+      # the Jekyll build in docgen-action copies them unchanged to `/site/`, `/tutorial/` and
+      # `/manual/`. `generate-tutorial` and `generate-manual` write each book to
+      # `<output>/html-multi/`, which is copied into place. `lake exe cache get` unpacks Mathlib from
+      # the cache the step above downloaded, and the physicslib4 build in `../.lake/build` is reused,
+      # so neither is rebuilt. `web/.lake` is removed afterwards to free disk space for the API docs.
+      - name: Build the Verso site, tutorial and manual into home_page
+        working-directory: web
+        run: |
+          set -euo pipefail
+          ~/.elan/bin/lake exe cache get
+          ~/.elan/bin/lake build
+          ~/.elan/bin/lake exe generate-site --output ../home_page/site
+          ~/.elan/bin/lake exe generate-tutorial --output _out/tutorial
+          rm -rf ../home_page/tutorial
+          cp -R _out/tutorial/html-multi ../home_page/tutorial
+          ~/.elan/bin/lake exe generate-manual --output _out/manual
+          rm -rf ../home_page/manual
+          cp -R _out/manual/html-multi ../home_page/manual
+          rm -rf .lake _out
+
+      # The blueprint is built here, with the versions pinned in blueprint/requirements.txt, rather
+      # than by docgen-action, which installs leanblueprint unpinned. The commands and container
+      # match docgen-action's own blueprint step; the declaration check runs in lean_action_ci.yml.
+      - name: Build the blueprint into home_page
+        uses: xu-cheng/texlive-action@f886de8159e5952a131848a5fa9c3196a2132b5d # v2
+        with:
+          docker_image: ghcr.io/xu-cheng/texlive-full:20250401
+          run: |
+            apk update
+            apk add --update make py3-pip git pkgconfig graphviz graphviz-dev gcc musl-dev
+            git config --global --add safe.directory $GITHUB_WORKSPACE
+            git config --global --add safe.directory `pwd`
+            python3 -m venv env
+            source env/bin/activate
+            pip install --upgrade pip requests wheel
+            pip install pygraphviz --config-settings="--global-option=build_ext" --config-settings="--global-option=-L/usr/lib/graphviz/" --config-settings="--global-option=-R/usr/lib/graphviz/"
+            pip install -r blueprint/requirements.txt
+            leanblueprint pdf
+            mkdir -p home_page
+            cp blueprint/print/print.pdf home_page/blueprint.pdf
+            leanblueprint web
+            rm -rf home_page/blueprint
+            cp -r blueprint/web home_page/blueprint
+
+      - name: Compile documentation
         uses: leanprover-community/docgen-action@7b5b9a1822650bd45aaeb4182d94bceba2030f89 # 2026-04-14
         with:
-          blueprint: true
+          blueprint: false
           homepage: home_page

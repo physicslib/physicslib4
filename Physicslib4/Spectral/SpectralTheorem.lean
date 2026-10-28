@@ -406,9 +406,23 @@ theorem hasSum_borelCalculus_indicator (hA : IsSelfAdjoint A) (E : ℕ → Set (
 
 open Classical in
 /--
-The projection-valued measure `μ^A` of a self-adjoint operator `A`, built directly
-out of `μ^A(E) = 1_E(A)`: its four defining properties are the four `prpstn:mua-*`
-statements above.
+The spectral measure μ^A of a self-adjoint bounded operator A: the projection-valued measure
+E ↦ 1_E(A) on the Borel sets of σ(A).
+
+Each μ^A(E) is the spectral projection of A for the set E: in finite dimensions, the projection
+onto the span of the eigenvectors whose eigenvalues lie in E. For a unit vector ψ,
+⟨ψ, μ^A(E)ψ⟩ is the probability that a measurement of A in the state ψ gives a value in E. The
+spectral measure integrates the identity function to A, A = ∫ λ dμ^A(λ)
+(`spectralMeasure_integral_id`), and it is the only projection-valued measure on σ(A) that does
+(`existsUnique_spectralMeasure`, the spectral theorem). Integrating a bounded Borel f against it
+gives f(A) (`borelCalculus_eq_integral`).
+
+Implementation note: the definition takes 1_E(A) = `borelCalculus hA (E.indicator 1)` on
+measurable E and 0 otherwise (`spectralMeasure_apply`). The structure fields are discharged by
+the propositions prpstn:mua-projection, prpstn:mua-multiplicative, prpstn:mua-empty-and-whole
+and prpstn:mua-countably-additive. σ(A) is Mathlib's real spectrum `spectrum ℝ A`.
+
+Blueprint: the projection-valued measure μ^A of thrm:hall-8.10
 -/
 noncomputable def spectralMeasure (hA : IsSelfAdjoint A) :
     ProjectionValuedMeasure (spectrum ℝ A) H where
@@ -897,14 +911,19 @@ theorem pvm_eq_of_integral_id_eq (hA : IsSelfAdjoint A)
       rw [ν.integral_indicator hE]
 
 /--
-**The spectral theorem for bounded self-adjoint operators.** A self-adjoint
-`A ∈ 𝓑(H)` admits a unique projection-valued measure on the Borel `σ`-algebra of
-`σ(A)` with `∫ λ dμ^A(λ) = A`.
+The spectral theorem: a self-adjoint bounded A has a unique projection-valued measure μ^A on
+σ(A) with ∫ λ dμ^A(λ) = A.
 
-Existence is `spectralMeasure_integral_id` and uniqueness is
-`pvm_eq_of_integral_id_eq`, so this node is proved from its parts.
+This is the infinite-dimensional form of diagonalising a Hermitian matrix,
+A = Σ_k λ_k P_k with P_k the eigenprojections: the sum over eigenvalues becomes an integral over
+the spectrum against projection-valued weights, which also covers continuous spectrum. The
+measure μ^A is `spectralMeasure`.
 
-Blueprint reference: `thrm:spectral-theorem-for-bounded-operators`.
+Implementation note: existence is `spectralMeasure_integral_id` and uniqueness is
+`pvm_eq_of_integral_id_eq`. σ(A) is Mathlib's real spectrum `spectrum ℝ A` with its Borel
+σ-algebra, and λ is the function l ↦ (l : ℂ).
+
+Blueprint: thrm:spectral-theorem-for-bounded-operators
 -/
 theorem existsUnique_spectralMeasure (hA : IsSelfAdjoint A) :
     ∃! μ : ProjectionValuedMeasure (spectrum ℝ A) H,
@@ -917,12 +936,20 @@ theorem existsUnique_spectralMeasure (hA : IsSelfAdjoint A) :
   · rw [ν.apply_of_not_measurableSet hE, (spectralMeasure hA).apply_of_not_measurableSet hE]
 
 /--
-**Functional calculus.** For a bounded Borel `f` on `σ(A)`, the operator
-`f(A) = ∫ f dμ^A`. By `borelCalculus_eq_integral` this agrees with the operator
-obtained from the quadratic form `Q_f` in `Physicslib4/Spectral/BorelCalculus.lean`,
-so the notation `f(A)` is unambiguous.
+The functional calculus f(A) = ∫ f dμ^A of a self-adjoint bounded operator A, for bounded Borel f
+on σ(A).
 
-Blueprint reference: `def:functional-calculus`.
+This is the standard meaning of a function of an observable: in finite dimensions
+f(A) = Σ_k f(λ_k) P_k. For example, the indicator of E gives the spectral projection μ^A(E), and
+f(λ) = e^(iλt) gives the operator written e^(itA). By `borelCalculus_eq_integral` it agrees with the
+operator `borelCalculus` obtained from the quadratic form Q_f, so the notation f(A) is
+unambiguous, and the properties proved for `borelCalculus` (linearity, multiplicativity,
+self-adjointness for real f) transfer to it through that equation.
+
+Implementation note: the definition is `(spectralMeasure hA).integral f`, so it is 0 on
+functions that are not bounded and measurable.
+
+Blueprint: def:functional-calculus
 -/
 noncomputable def functionalCalculus (hA : IsSelfAdjoint A) (f : spectrum ℝ A → ℂ) :
     H →L[ℂ] H :=

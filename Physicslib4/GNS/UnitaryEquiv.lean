@@ -32,8 +32,21 @@ variable {H₁ : Type*} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [
 variable {H₂ : Type*} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
 variable {H₃ : Type*} [NormedAddCommGroup H₃] [InnerProductSpace ℂ H₃] [CompleteSpace H₃]
 
-/-- Two `*`-representations of `A` are **unitarily equivalent** when an isometric
-isomorphism of the underlying Hilbert spaces intertwines them. -/
+/--
+Unitary equivalence of representations: a unitary U : H₁ → H₂ with U π₁(a) = π₂(a) U for all a.
+
+Two unitarily equivalent representations differ only by a change of basis of the Hilbert space,
+U π₁(a) U⁻¹ = π₂(a), so they describe the same physics. It is an equivalence relation
+(`UnitaryEquiv.refl`, `UnitaryEquiv.symm`, `UnitaryEquiv.trans`) and preserves irreducibility and
+the factor property (`UnitaryEquiv.isIrreducible_iff`, `UnitaryEquiv.isFactor_iff`). The GNS
+representation of a state is unique up to unitary equivalence (`gns_unique`), and superselection
+sectors are classes of irreducible representations of the algebra of observables.
+
+Implementation note: U is a linear isometric equivalence `H₁ ≃ₗᵢ[ℂ] H₂`, which for Hilbert spaces
+is the same as a unitary operator, and the intertwining is U(π₁(a)x) = π₂(a)(Ux) for all x ∈ H₁.
+
+Blueprint: def:unitary-equivalence
+-/
 def UnitaryEquiv (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (π₂ : A →⋆ₐ[ℂ] (H₂ →L[ℂ] H₂)) :
     Prop :=
   ∃ U : H₁ ≃ₗᵢ[ℂ] H₂, ∀ (a : A) (x : H₁), U (π₁ a x) = π₂ a (U x)

@@ -37,30 +37,60 @@ open Filter Topology
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /--
-`B` is a bounded two-sided inverse of `T - λ 1`: it maps all of `H` into `Dom(T)`,
-inverts `T - λ 1` on the right everywhere, and on the left on `Dom(T)`.
+A bounded operator B is a two-sided inverse of T − λ𝟙: it maps H into Dom(T), and
+(T − λ𝟙)B = 𝟙 on H and B(T − λ𝟙) = 𝟙 on Dom(T).
 
-Blueprint reference: `def:hall-9.16`.
+For a bounded operator, λ is in the resolvent set when T − λ𝟙 has a bounded inverse. For an
+unbounded T the operator T − λ𝟙 is defined only on Dom(T), so "bounded inverse" has to be
+spelled out: B is defined and bounded on all of H, takes its values in Dom(T), and undoes
+T − λ𝟙 from both sides. Such a B is unique when it exists (`existsUnique_isResolvent`) and is
+written (T − λ𝟙)⁻¹. For a self-adjoint T and non-real λ it exists
+(`mem_pmapResolventSet_of_im_ne_zero`, whose proof bounds its norm by 1/|Im λ|).
+
+Implementation note: the inverse is a predicate on a candidate B rather than an inverse in a
+ring, because Mathlib gives the partial maps `H →ₗ.[ℂ] H` no ring structure. The sign follows
+the blueprint, B = (T − λ𝟙)⁻¹; Mathlib's `resolvent` for bounded operators inverts λ𝟙 − A
+instead, the negative, which is why `pmapResolventSet_toPMap_top` passes through −B.
+
+Blueprint: def:hall-9.16
 -/
 structure IsResolvent (T : H →ₗ.[ℂ] H) (lam : ℂ) (B : H →L[ℂ] H) : Prop where
-  /-- `B` lands in `Dom(T)`. -/
+  /-- B maps every vector of H into Dom(T). -/
   mem_domain : ∀ ψ : H, B ψ ∈ T.domain
-  /-- `(T - λ 1) B ψ = ψ` for all `ψ ∈ H`. -/
+  /-- B is a right inverse: (T − λ𝟙)Bψ = ψ for every ψ in H. -/
   rightInverse : ∀ ψ : H, T ⟨B ψ, mem_domain ψ⟩ - lam • B ψ = ψ
-  /-- `B (T - λ 1) ψ = ψ` for all `ψ ∈ Dom(T)`. -/
+  /-- B is a left inverse on the domain: B(T − λ𝟙)ψ = ψ for every ψ in Dom(T). -/
   leftInverse : ∀ ψ : T.domain, B (T ψ - lam • (ψ : H)) = (ψ : H)
 
 /--
-The resolvent set of an unbounded operator.
+The resolvent set ρ(T) of an operator T: the complex numbers λ for which T − λ𝟙 has a bounded
+inverse defined on all of H.
 
-Blueprint reference: `def:hall-9.16`.
+A number λ is in ρ(T) when some bounded B satisfies `IsResolvent T lam B`. For a bounded operator
+on all of H this is the usual resolvent set (`pmapResolventSet_toPMap_top`). Its complement is
+the spectrum σ(T) (`pmapSpectrum`).
+
+Implementation note: the prefix `pmap` (for `LinearPMap`) separates this from Mathlib's
+`resolventSet` for elements of an algebra.
+
+Blueprint: def:hall-9.16
 -/
 def pmapResolventSet (T : H →ₗ.[ℂ] H) : Set ℂ := {lam | ∃ B : H →L[ℂ] H, IsResolvent T lam B}
 
 /--
-The spectrum of an unbounded operator: the complement of its resolvent set.
+The spectrum σ(T) of an operator T: the complex numbers λ for which T − λ𝟙 has no bounded
+inverse defined on all of H.
 
-Blueprint reference: `def:hall-9.16`.
+For a self-adjoint observable, σ(T) is the set of values a measurement can return. Besides
+eigenvalues it can contain continuous spectrum, such as all of ℝ for the momentum operator on
+L²(ℝ): there T − λ𝟙 is injective, but its inverse is not bounded and defined on all of H.
+The spectrum of a self-adjoint operator is real (`pmapSpectrum_subset_real`), and for a bounded
+operator on all of H it is the usual spectrum (`pmapSpectrum_toPMap_top`).
+
+Implementation note: the complement of `pmapResolventSet`; the prefix `pmap` separates it from
+Mathlib's `spectrum`.
+
+Blueprint: def:hall-9.16
 -/
 def pmapSpectrum (T : H →ₗ.[ℂ] H) : Set ℂ := (pmapResolventSet T)ᶜ
 
@@ -232,12 +262,19 @@ theorem mem_pmapResolventSet_of_im_ne_zero {T : H →ₗ.[ℂ] H} (hsa : IsSelfA
     fun ψ => congrArg Subtype.val (e.symm_apply_apply ψ)⟩
 
 /--
-The spectrum of an unbounded self-adjoint operator is contained in the real line.
+The spectrum of a self-adjoint operator is contained in the real line.
 
-(Density of `Dom(T)` is not a separate hypothesis: it follows from self-adjointness, see
-`LinearPMap.IsSelfAdjoint.dense_domain`.)
+This is why self-adjoint operators model observables: every possible measured value is real.
+For non-real λ = a + ib the estimate |b| ‖ψ‖ ≤ ‖(T − λ𝟙)ψ‖ on Dom(T), which needs only symmetry
+(`abs_im_mul_norm_le_of_isSymmetric`), makes T − λ𝟙 injective with closed range; its range is
+also dense, because its orthogonal complement is Ker(T\* − λ̄𝟙) = Ker(T − λ̄𝟙) = {0}. So T − λ𝟙
+maps Dom(T) onto H and its inverse is bounded by 1/|b|.
 
-Blueprint reference: `thrm:hall-9.17`.
+Implementation note: density of `T.domain` is not a separate hypothesis, since it follows from
+self-adjointness (Mathlib's `IsSelfAdjoint.dense_domain`). The real line is the set of z with
+`z.im = 0`.
+
+Blueprint: thrm:hall-9.17
 -/
 theorem pmapSpectrum_subset_real {T : H →ₗ.[ℂ] H} (hsa : IsSelfAdjoint T) :
     pmapSpectrum T ⊆ {z : ℂ | z.im = 0} :=
@@ -301,10 +338,17 @@ theorem adjoint_eq_of_range_eq_top {S : H →ₗ.[ℂ] H} (hle : S ≤ S†) {mu
   exact (LinearPMap.eq_of_le_of_domain_eq hle (le_antisymm hle.1 hdom)).symm
 
 /--
-A symmetric operator is essentially self-adjoint if and only if the ranges of `T - i 1`
-and `T + i 1` are both dense in `H`. (Here `T + i 1` is `subSmul T (-i)`.)
+A densely defined symmetric operator T is essentially self-adjoint exactly when the ranges of
+T − i𝟙 and T + i𝟙 are both dense in H.
 
-Blueprint reference: `thrm:hall-9.21`.
+This is the working criterion for essential self-adjointness. To show that an operator written
+down on a convenient domain has a unique self-adjoint extension, it suffices to show that the
+equations (T ∓ i𝟙)ψ = φ can be solved for φ in a dense set of vectors. Equivalently, by
+Range(T ∓ i𝟙)ᗮ = Ker(T\* ± i𝟙), the adjoint T\* has no eigenvectors with eigenvalue ±i.
+
+Implementation note: T + i𝟙 is `subSmul T (-Complex.I)`.
+
+Blueprint: thrm:hall-9.21
 -/
 theorem isEssentiallySelfAdjoint_iff_dense_range {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (hsym : IsSymmetric T) :

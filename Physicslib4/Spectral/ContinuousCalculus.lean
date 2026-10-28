@@ -217,21 +217,38 @@ theorem dense_polynomial_spectrum (A : H →L[ℂ] H) :
 -/
 
 /--
-A real polynomial restricted to the spectrum of `A`, as a continuous real-valued
-function on `σ(A)`.
+A real polynomial p restricted to the spectrum of A, as a continuous real function on σ(A).
+
+The continuous functional calculus is pinned down by its values on these functions: it must send
+the restriction of p to the operator p(A) = a₀𝟙 + a₁A + ⋯ + a_n Aⁿ (`realCalculus_polyOn`), and
+these restrictions are dense in C⁰(σ(A); ℝ) by the Weierstrass approximation theorem.
+
+Implementation note: σ(A) here is Mathlib's real spectrum `spectrum ℝ A`, and the function is
+l ↦ p(l) bundled as a `ContinuousMap`.
+
+Blueprint: the restricted polynomials of prpstn:hall-8.3
 -/
 noncomputable def polyOn (A : H →L[ℂ] H) (p : Polynomial ℝ) : C(spectrum ℝ A, ℝ) :=
   ⟨fun l => p.eval (l : ℝ), p.continuous.comp continuous_subtype_val⟩
 
 /--
-The real-valued continuous functional calculus `f ↦ f(A)` of a self-adjoint
-operator: Mathlib's `cfcHom`, which is available because
-`Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap` makes `H →L[ℂ] H` a C⋆-algebra.
+The real continuous functional calculus f ↦ f(A) of a self-adjoint bounded operator A.
 
-Using `cfcHom` rather than extracting a map from `existsUnique_realCalculus` keeps
-the definition independent of any unproved statement, and records the fact — part
-of the blueprint's `prpstn:hall-8.4` — that `f ↦ f(A)` is a `*`-algebra
-homomorphism, not merely an `ℝ`-linear map.
+For a continuous real function f on the spectrum σ(A), f(A) is the norm limit of p_n(A) for any
+polynomials p_n converging to f uniformly on σ(A). In finite dimensions, where A has an
+orthonormal eigenbasis, f(A) multiplies each eigenvector by f of its eigenvalue. The map is
+linear, sends polynomials to the evident operators (`realCalculus_polyOn`), and is the unique
+bounded linear map that does so (`existsUnique_realCalculus`). It is multiplicative, f(A) is
+self-adjoint, f ≥ 0 gives a non-negative operator, ‖f(A)‖ = sup |f| on σ(A), and
+σ(f(A)) = f(σ(A)) (`realCalculus_properties`).
+
+Implementation note: the definition is Mathlib's continuous functional calculus `cfcHom` at the
+hypothesis `hA`, available because Mathlib makes `H →L[ℂ] H` a C\*-algebra; it is not
+extracted from `existsUnique_realCalculus`. Its type, a `StarAlgHom` over ℝ, records that
+f ↦ f(A) is a \*-algebra homomorphism and not only an ℝ-linear map, which is part of
+prpstn:hall-8.4. σ(A) is Mathlib's real spectrum `spectrum ℝ A`.
+
+Blueprint: the map f ↦ f(A) of prpstn:hall-8.3
 -/
 noncomputable def realCalculus {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) :
     C(spectrum ℝ A, ℝ) →⋆ₐ[ℝ] (H →L[ℂ] H) :=
@@ -325,7 +342,7 @@ theorem spectrum_realCalculus {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (f : C(
   cfcHom_map_spectrum hA f
 
 /--
-The four properties of the real-valued functional calculus: multiplicativity,
+The five properties of the real-valued functional calculus: multiplicativity,
 self-adjointness, non-negativity, and the norm and spectrum identities.
 
 This blueprint node is exactly the conjunction of the five statements above, so it
@@ -348,12 +365,19 @@ theorem realCalculus_properties {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) :
 -/
 
 /--
-The positive linear functional `f ↦ ⟪ψ, f(A) ψ⟫` on the compactly supported
-continuous real functions on `σ(A)` — every continuous function on the compact space
-`σ(A)` is compactly supported, so this is all of `C⁰(σ(A); ℝ)`.
+The positive linear functional Λ_ψ(f) = ⟨ψ, f(A)ψ⟩ on continuous real functions on σ(A).
 
-Positivity is `isPositive_realCalculus`, and the values are real because `f(A)` is
-self-adjoint.
+For a unit vector ψ, Λ_ψ(f) is the quantum expectation value of the observable f(A) in the state
+ψ. It is linear in f, real because f(A) is self-adjoint, and non-negative for f ≥ 0 because f(A)
+is then a non-negative operator (`isPositive_realCalculus`). The Riesz–Markov–Kakutani theorem
+makes it integration against a measure, `assocMeasure`.
+
+Implementation note: the functional is the real part of ⟨ψ, f(A)ψ⟩, bundled as a positive linear
+map on `CompactlySupportedContinuousMap (spectrum ℝ A) ℝ`, the domain of Mathlib's
+`RealRMK.rieszMeasure`; since σ(A) is compact, every continuous function on it is compactly
+supported.
+
+Blueprint: the functional Λ_ψ of prpstn:associated-measures-self-adjoint
 -/
 noncomputable def assocFunctional {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (ψ : H) :
     CompactlySupportedContinuousMap (spectrum ℝ A) ℝ →ₚ[ℝ] ℝ where
@@ -375,11 +399,18 @@ noncomputable def assocFunctional {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (ψ
     rw [RCLike.real_smul_eq_coe_smul (K := ℂ), inner_smul_real_right, Complex.smul_re]
 
 /--
-The finite positive measure `μ_ψ` on `σ(A)` associated with a self-adjoint operator
-and a vector; this is the measure entering the blueprint's `Q_f`.
+The finite positive Borel measure μ_ψ on σ(A) with ⟨ψ, f(A)ψ⟩ = ∫ f dμ_ψ for continuous real f.
 
-It is the Riesz–Markov–Kakutani measure of `assocFunctional hA ψ`, so it does not
-depend on the unproved `existsUnique_assocMeasure` below.
+For a unit vector ψ, μ_ψ is the probability distribution of the outcomes of a measurement of A in
+the state ψ: μ_ψ(E) is the probability of finding a value in E. Its total mass is ‖ψ‖²
+(`assocMeasure_univ`), the integral identity is `integral_assocMeasure`, and μ_ψ is the only
+finite measure with that identity (`existsUnique_assocMeasure`). It defines the quadratic form
+Q_f(ψ) = ∫ f dμ_ψ of the Borel functional calculus (`borelForm`).
+
+Implementation note: the measure is Mathlib's Riesz–Markov–Kakutani measure
+`RealRMK.rieszMeasure` of `assocFunctional hA ψ`, not a choice from `existsUnique_assocMeasure`.
+
+Blueprint: the measure μ_ψ of prpstn:associated-measures-self-adjoint
 -/
 noncomputable def assocMeasure {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (ψ : H) :
     Measure (spectrum ℝ A) :=
@@ -424,8 +455,9 @@ theorem integral_assocMeasure {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (ψ : H
 For self-adjoint `A` and every `ψ ∈ H` there is a unique finite positive Borel
 measure `μ_ψ` on `σ(A)` with `⟪ψ, f(A) ψ⟫ = ∫ f dμ_ψ` for all continuous real `f`.
 
-Existence is `assocMeasure` together with `integral_assocMeasure`; only uniqueness —
-which is the regularity half of Riesz–Markov–Kakutani — is left open.
+Existence is `assocMeasure` together with `integral_assocMeasure`; uniqueness is
+`Measure.ext_of_integral_eq_on_compactlySupported`, the uniqueness half of
+Riesz–Markov–Kakutani.
 
 Blueprint reference: `prpstn:associated-measures-self-adjoint`.
 -/

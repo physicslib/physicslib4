@@ -90,8 +90,20 @@ variable {H₀ : Type*} [NormedAddCommGroup H₀] [InnerProductSpace ℂ H₀] [
 variable {ι : Type*} [DecidableEq ι]
 variable (π : A →⋆ₐ[ℂ] (H₀ →L[ℂ] H₀))
 
-/-- The `ι`-fold **amplification** `ι · π := ⊕_{i : ι} π` of a representation, on the
-ℓ²-direct sum of `ι` copies of `H₀`. -/
+/--
+The amplification ι·π of a representation π: the direct sum of copies of π indexed by ι.
+
+It acts on the Hilbert direct sum ℓ²(ι, H₀) of copies of H₀, by π(a) in every copy, that is, on
+H₀ ⊗ ℓ²(ι) by π(a) ⊗ 1. It is π with multiplicity |ι|: π embeds in it as each summand
+(`amplification_intertwines_single`), and with two or more copies on a nonzero space it is
+reducible (`not_isIrreducible_directSum`).
+
+Implementation note: `amplification` is `directSum` of the constant family. That π and ι·π are
+quasi-equivalent is not proved; it needs the commutant of an amplification, (π ⊗ 1)' =
+π' ⊗ B(ℓ²(ι)), which Mathlib does not provide.
+
+Blueprint: def:amplification
+-/
 noncomputable def amplification :
     A →⋆ₐ[ℂ] (lp (fun _ : ι => H₀) 2 →L[ℂ] lp (fun _ : ι => H₀) 2) :=
   directSum (fun _ : ι => π)

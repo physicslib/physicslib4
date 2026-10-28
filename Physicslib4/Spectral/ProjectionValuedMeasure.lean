@@ -57,32 +57,46 @@ variable {X : Type*} [MeasurableSpace X]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /--
-A *projection-valued measure* on the measurable space `X` with values in `𝓑(H)`:
-each set is sent to a bounded orthogonal projection, non-measurable sets to `0`,
-all of `X` to the identity, the map is countably additive on pairwise disjoint
-measurable families, and it is multiplicative on intersections.
+A projection-valued measure on X: an assignment E ↦ μ(E) of orthogonal projections on H to
+measurable sets, with μ(X) = 𝟙, countably additive and multiplicative on intersections.
 
-The blueprint's `μ(∅) = 0` is not a field: it follows from `hasSum'` applied to the
-constant family `E j = ∅`, so requiring it would put a derivable obligation on every
-constructor.
+It is the object the spectral theorem attaches to a self-adjoint operator A, with μ(E) the
+spectral projection of A for the set E of possible measured values. The axioms:
+each μ(E) is a self-adjoint idempotent; μ(X) = 𝟙; for pairwise disjoint measurable E_1, E_2, …
+and every vector v, μ(⋃ E_j)v = Σ μ(E_j)v with convergence in the norm of H; and
+μ(E ∩ F) = μ(E)μ(F), so projections of disjoint sets have orthogonal ranges. For each vector ψ,
+E ↦ ⟨ψ, μ(E)ψ⟩ is then a finite positive measure (`assoc`), and bounded measurable functions
+can be integrated against μ to give operators (`integral`).
 
-Blueprint reference: `def:projection-valued-measure`.
+Implementation note: as in Mathlib's `MeasureTheory.VectorMeasure`, μ is a total function
+`Set X → H →L[ℂ] H` that is 0 on non-measurable sets, so the coercion carries no measurability
+side conditions. The blueprint's μ(∅) = 0 is not a field: countable additivity for the constant
+family E_j = ∅ implies it, and a field would add a derivable obligation to every constructor.
+Countable additivity is stated with Mathlib's `HasSum`, unordered summation; since the vectors
+μ(E_j)v are pairwise orthogonal, this is equivalent to convergence of the partial sums.
+The blueprint's equivalence of two projection-valued measures is equality
+(`ProjectionValuedMeasure.ext`).
+
+Blueprint: def:projection-valued-measure
 -/
 structure ProjectionValuedMeasure (X : Type*) [MeasurableSpace X] (H : Type*)
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] where
-  /-- The underlying assignment of operators to sets. -/
+  /-- The underlying assignment E ↦ μ(E) of operators to all subsets of X. -/
   toFun : Set X → H →L[ℂ] H
-  /-- Every value is a bounded orthogonal projection. -/
+  /-- Every value μ(E) is an orthogonal projection: self-adjoint and idempotent. -/
   isStarProjection' : ∀ E : Set X, IsStarProjection (toFun E)
-  /-- Non-measurable sets are sent to `0`, making the assignment canonical. -/
+  /-- Non-measurable sets are sent to 0, so μ is determined by its values on measurable sets. -/
   notMeasurable' : ∀ E : Set X, ¬MeasurableSet E → toFun E = 0
-  /-- All of `X` is sent to the identity operator. -/
+  /-- Normalisation: μ(X) is the identity operator. -/
   univ' : toFun Set.univ = 1
-  /-- Countable additivity, in the norm topology of `H`. -/
+  /--
+  Countable additivity: for pairwise disjoint measurable sets E_j and every vector v, the series
+  Σ μ(E_j)v converges in the norm of H to μ(⋃ E_j)v.
+  -/
   hasSum' : ∀ E : ℕ → Set X, (∀ j, MeasurableSet (E j)) →
     Pairwise (fun i j => Disjoint (E i) (E j)) →
     ∀ v : H, HasSum (fun j => toFun (E j) v) (toFun (⋃ j, E j) v)
-  /-- Multiplicativity on intersections. -/
+  /-- Multiplicativity: μ(E ∩ F) = μ(E)μ(F) for measurable E and F. -/
   inter' : ∀ E F : Set X, MeasurableSet E → MeasurableSet F →
     toFun (E ∩ F) = toFun E * toFun F
 
@@ -193,8 +207,19 @@ theorem existsUnique_assoc (μ : ProjectionValuedMeasure X H) (ψ : H) :
     _ = ν E := (hν_apply E hE).symm
 
 /--
-The positive finite measure `μ_ψ : E ↦ ⟪ψ, μ(E) ψ⟫` associated with a
-projection-valued measure `μ` and a vector `ψ`.
+The finite positive measure μ_ψ(E) = ⟨ψ, μ(E)ψ⟩ of a projection-valued measure μ and a vector ψ.
+
+Since μ(E) is an orthogonal projection, ⟨ψ, μ(E)ψ⟩ = ‖μ(E)ψ‖² ≥ 0, and countable additivity of μ
+makes E ↦ ‖μ(E)ψ‖² a measure; its total mass is ⟨ψ, ψ⟩ = ‖ψ‖², by `assoc_apply` with E = X.
+For a unit vector ψ and the spectral measure of an observable A, μ_ψ(E) is the probability that a
+measurement of A in the state ψ gives a value in E. The values on measurable sets are
+`assoc_apply`; the operator-valued integral satisfies ⟨ψ, (∫ f dμ)ψ⟩ = ∫ f dμ_ψ
+(`inner_integral`).
+
+Implementation note: the measure is chosen from `existsUnique_assoc`, which also gives its
+uniqueness and finiteness (the `MeasureTheory.IsFiniteMeasure` instance).
+
+Blueprint: the measure μ_ψ of thrm:projection-valued-measures-associated-measure
 -/
 noncomputable def assoc (μ : ProjectionValuedMeasure X H) (ψ : H) : Measure X :=
   (existsUnique_assoc μ ψ).choose

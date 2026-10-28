@@ -71,50 +71,46 @@ open scoped Pointwise
 universe u
 
 /--
-**Abstract Lorentzian spacetime interface** (blueprint
-`def:lorentzian-spacetime`, Chapter 10, `sec10/spacetime`).
+The abstract Lorentzian spacetime: exactly the structure that the curved-spacetime axioms use.
 
-This bundles exactly the structure the curved-spacetime Haag-Kastler
-axioms quantify over:
+The curved Haag–Kastler axioms never look at the metric directly. They need the points of the
+spacetime M; the causal diamonds B = I⁺(p) ∩ I⁻(q), which are the basis sets of the Alexandrov
+topology; the relation "B₁ and B₂ are completely spacelike", used by Axiom 3; and the group of
+isometries of M connected to the identity with its action on points, used by Axiom 5. The
+interface records these, together with the one fact Axiom 5 needs: an isometry φ carries a basis
+set B to a basis set φ(B), so that α_φ : 𝔘(B) → 𝔘(φ(B)) is a map between local algebras of basis
+sets.
 
-* `Carrier` — the points of the Lorentzian spacetime `M`;
-* `IsBasisSet` — the Alexandrov-basis "diamonds" `I⁺(p) ∩ I⁻(q)`;
-* `IsCompletelySpacelike` — the spacelike-separation relation on
-  basis sets (used by Axiom 3);
-* `Isom` with `instGroup`/`instAction` — the group of isometries of
-  `M` connected to the identity, acting on `Carrier` (used by
-  Axiom 5);
-* `isBasisSet_smul` — isometries carry basis sets to basis sets, so the
-  Axiom 5 action `𝔘(𝐁) → 𝔘(φ(𝐁))` lands in the local algebra of a basis set.
+The interface imposes no other conditions on these pieces. A geometric Lorentzian spacetime
+(`Physicslib4.Spacetime.LorentzianSpacetime`: a connected four-dimensional manifold with a
+Lorentzian metric, a time orientation and a Hausdorff Alexandrov topology) gives an instance
+through `Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent`, and every result
+proved over the interface applies to it.
 
-The full geometric content (smooth 4-manifold, Lorentzian metric,
-nowhere-vanishing time-orientation field, Hausdorff Alexandrov
-topology) lives in the geometric bundle described below.
+Implementation note: the group structure and the action are fields, declared instances once the
+interface is defined, so that with `open Pointwise` the image φ(B) is written `φ • B`. The points
+and the isometries live in one universe u.
 
-This is the *axiom-facing interface* form of the geometric bundle
-`Physicslib4.Spacetime.LorentzianSpacetime`: every such geometric
-Lorentzian spacetime instantiates this interface via
-`Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent`, which
-supplies `Carrier`, `IsBasisSet`, `IsCompletelySpacelike`, the oriented
-identity-component isometry group with its action, and the proof that those
-isometries preserve basis sets. Both declarations
-correspond to the same blueprint definition `def:lorentzian-spacetime`.
+Blueprint: def:abstract-lorentzian-spacetime-interface
 -/
 structure LorentzianSpacetime where
-  /-- The type of spacetime points of `M`. -/
+  /-- The points of the spacetime M. -/
   Carrier : Type u
-  /-- The Alexandrov-basis sets `𝐁 = I⁺(p) ∩ I⁻(q)` of `M`. -/
+  /-- The basis sets of the Alexandrov topology: the causal diamonds I⁺(p) ∩ I⁻(q). These are the
+  regions to which the axioms attach local algebras. -/
   IsBasisSet : Set Carrier → Prop
-  /-- Complete spacelike separation of two basis sets (Axiom 3). -/
+  /-- Complete spacelike separation of two regions, under which Axiom 3 makes their algebras
+  commute. For a geometric spacetime it holds when every point of the one region is spacelike to
+  every point of the other. -/
   IsCompletelySpacelike : Set Carrier → Set Carrier → Prop
-  /-- The group of isometries of `M` connected to the identity. -/
+  /-- The group of isometries of M connected to the identity: the symmetry group of Axiom 5. -/
   Isom : Type u
-  /-- The group structure on the identity-component isometries. -/
+  /-- The group structure of the isometries: composition, identity and inverse. -/
   instGroup : Group Isom
-  /-- The action of the isometries on spacetime points. -/
+  /-- The action φ • x = φ(x) of the isometries on the points of M. -/
   instAction : MulAction Isom Carrier
-  /-- Isometries carry basis sets to basis sets, so that the Axiom 5 action
-  `𝔘(𝐁) → 𝔘(φ(𝐁))` is between local algebras of basis sets. -/
+  /-- An isometry carries basis sets to basis sets, so that the Axiom 5 map
+  α_φ : 𝔘(B) → 𝔘(φ(B)) is a map between local algebras of basis sets. -/
   isBasisSet_smul : ∀ (φ : Isom) {B : Set Carrier}, IsBasisSet B → IsBasisSet (φ • B)
 
 attribute [instance] LorentzianSpacetime.instGroup LorentzianSpacetime.instAction

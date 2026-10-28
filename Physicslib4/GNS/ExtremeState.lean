@@ -122,10 +122,21 @@ theorem State.apply_one (ω : State A) : (ω 1 : ℂ) = 1 := by
   · change (ω.toContinuousLinearMap 1).im = (1 : ℂ).im
     rw [Complex.one_im]; exact him
 
-/-- A state `ω` is an **extreme point** of the state space if it is not a
-nontrivial convex combination of two distinct states: whenever
-`ω = t·ω₁ + (1-t)·ω₂` with `0 < t < 1` and `ω₁, ω₂` states, then `ω₁ = ω₂`
-(and hence both equal `ω`). -/
+/--
+An extreme point of the state space: ω is not a mixture t ω₁ + (1 − t) ω₂ of two distinct states.
+
+The states of A form a convex set: a mixture of states with weights t and 1 − t is a state
+(`State.convexCombo`). ω is extreme when ω = t ω₁ + (1 − t) ω₂ with 0 < t < 1 forces ω₁ = ω₂,
+and then both equal ω. Physically, an extreme state carries no classical uncertainty about which
+state the system is in. Extremality is equivalent to purity (`isPure_iff_isExtremePoint`) and to
+membership in Mathlib's `extremePoints` of the state space
+(`mem_extremePoints_iff_isExtremePoint`).
+
+Implementation note: the decomposition is stated pointwise, ω(a) = t ω₁(a) + (1 − t) ω₂(a) for all
+a ∈ A, with real t.
+
+Blueprint: def:extreme-state
+-/
 def State.IsExtremePoint (ω : State A) : Prop :=
   ∀ (ω₁ ω₂ : State A) (t : ℝ), 0 < t → t < 1 →
     (∀ a, (ω a : ℂ) = (t : ℂ) * ω₁ a + (1 - t : ℂ) * ω₂ a) → ω₁ = ω₂
@@ -302,10 +313,20 @@ noncomputable def starAlgEquivCLM (Φ : A ≃⋆ₐ[ℂ] A) : A →L[ℂ] A :=
 @[simp] theorem starAlgEquivCLM_apply (Φ : A ≃⋆ₐ[ℂ] A) (a : A) :
     starAlgEquivCLM Φ a = Φ a := rfl
 
-/-- The **pullback of a state along a `*`-automorphism** `Φ`: `a ↦ ω (Φ a)`. It is
-again a state - positivity is the `Φ`-equivariance of `star a * a`, and the
-normalization `‖ω ∘ Φ‖ = 1` follows since `Φ` is unital (`(ω∘Φ)(1) = ω(1) = 1`)
-and positive functionals have norm equal to their value at `1`. -/
+/--
+The pullback ω ∘ Φ of a state ω along a *-automorphism Φ of A: the state a ↦ ω(Φ(a)).
+
+If Φ is a symmetry of the observables, for instance the automorphism β_L of the quasilocal
+algebra induced by a Poincaré transformation L, then ω ∘ Φ is the transformed state. It is a
+state: positivity follows from Φ(a* a) = Φ(a)* Φ(a), and normalisation from Φ(1) = 1. Purity is
+preserved (`isPure_precomp_iff`). `State.comp` is the general pullback along a unital
+*-homomorphism between two algebras.
+
+Implementation note: Φ enters as a continuous linear map through `starAlgEquivCLM`; a
+*-automorphism of a C*-algebra is isometric.
+
+Blueprint: the pullback of thrm:purity-covariance-invariant
+-/
 noncomputable def State.precomp (ω : State A) (Φ : A ≃⋆ₐ[ℂ] A) : State A where
   toContinuousLinearMap := ω.toContinuousLinearMap.comp (starAlgEquivCLM Φ)
   isPositive := fun a => by
@@ -356,9 +377,16 @@ theorem isPure_precomp_of_isPure {ω : State A} (Φ : A ≃⋆ₐ[ℂ] A) (hpure
   rw [State.precomp_apply]
   exact hb
 
-/-- The **convex combination** `s·ω₁ + (1-s)·ω₂` of two states (`0 ≤ s ≤ 1`). It is
-again a state: positivity is clear, and normalization `‖·‖ = 1` follows since the
-combination is positive and evaluates to `s·1 + (1-s)·1 = 1` on the unit. -/
+/--
+The mixture s ω₁ + (1 − s) ω₂ of two states, for 0 ≤ s ≤ 1, as a state.
+
+Physically this is the state of a system prepared in ω₁ with probability s and in ω₂ with
+probability 1 − s. Positivity is clear, and the mixture takes the value s + (1 − s) = 1 on the
+unit; a positive functional has norm equal to its value at 1, so it is normalised. This shows
+that the state space is convex (`convex_stateSpace`).
+
+Blueprint: the convex combination of thrm:state-space-convex-bridge
+-/
 noncomputable def State.convexCombo (ω₁ ω₂ : State A) (s : ℝ) (hs0 : 0 ≤ s) (hs1 : s ≤ 1) :
     State A where
   toContinuousLinearMap :=
@@ -410,9 +438,20 @@ theorem State.toContinuousLinearMap_injective :
     ω.toContinuousLinearMap a = ω a := rfl
 
 variable (A) in
-/-- The **state space** of `A` realized as a subset of the real topological vector
-space `A →L[ℂ] ℂ` (which carries a real-module structure via
-`NormedSpace.complexToReal`): the image of all states under the coercion. -/
+/--
+The state space of A: the set of all states, as a subset of the continuous linear functionals.
+
+The states of A form a convex set (`convex_stateSpace`), whose extreme points are the pure
+states (`mem_extremePoints_iff_isExtremePoint`, `isPure_iff_isExtremePoint`), so Mathlib's
+`Convex` and `extremePoints` apply to it.
+
+Implementation note: the set is the image of `State A` in `A →L[ℂ] ℂ`, regarded as a real vector
+space through `NormedSpace.complexToReal`, with the norm topology. The weak-* compact version is
+`weakStateSet`; mathematically the Krein–Milman theorem applies to it, and the library proves the
+compactness, not the application.
+
+Blueprint: the state space of thrm:state-space-convex-bridge
+-/
 def stateSpace : Set (A →L[ℂ] ℂ) := Set.range (State.toContinuousLinearMap : State A → _)
 
 /-- **The state space is convex.** A real convex combination `a·ω₁ + b·ω₂`
@@ -480,12 +519,23 @@ noncomputable def starAlgHomCLM (π : A →⋆ₐ[ℂ] B) : A →L[ℂ] B :=
 @[simp] theorem starAlgHomCLM_apply (π : A →⋆ₐ[ℂ] B) (a : A) :
     starAlgHomCLM π a = π a := rfl
 
-/-- The **pullback of a state along a unital `*`-homomorphism** `π : A →⋆ₐ[ℂ] B`:
-`a ↦ ω (π a)`. It is again a state — positivity is the `*`-compatibility of
-`star a * a` (`π` is a `*`-hom), and the normalization `‖ω ∘ π‖ = 1` follows since
-`π` is unital (`(ω∘π)(1) = ω(1) = 1`) and positive functionals have norm equal to
-their value at `1`. This exhibits `A ↦ State A` as a contravariant functor: a
-`*`-homomorphism `π : A →⋆ₐ[ℂ] B` induces the pullback `State B → State A`. -/
+/--
+The pullback ω ∘ π of a state ω on B along a unital *-homomorphism π : A → B: a ↦ ω(π(a)).
+
+Positivity follows from π(a* a) = π(a)* π(a), and normalisation from π(1) = 1, since a positive
+functional has norm equal to its value at 1. The pullback is contravariantly functorial
+(`State.comp_id`, `State.comp_comp`): a *-homomorphism A → B gives a map from the states of B to
+the states of A. Along a *-isomorphism Φ, purity is preserved in both directions
+(`isPure_comp_iff`), and the GNS representation of ω ∘ Φ is that of ω composed with Φ, up to
+unitary equivalence (`unitaryEquiv_comp_of_gns`). An example is the restriction of a global
+state to a local algebra along the inclusion ι_B.
+
+Implementation note: π enters as a continuous linear map through `starAlgHomCLM`, since a
+*-homomorphism of C*-algebras is contractive. The automorphism case is also available as
+`State.precomp`.
+
+Blueprint: def:state-pullback
+-/
 noncomputable def State.comp (ω : State B) (π : A →⋆ₐ[ℂ] B) : State A where
   toContinuousLinearMap := ω.toContinuousLinearMap.comp (starAlgHomCLM π)
   isPositive := fun a => by

@@ -19,6 +19,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # history for the change check before the Verso site build
       - uses: leanprover/lean-action@434f25c2f80ded67bba02502ad3a86f25db50709 # 2025-07-02
         with:
           build: true
@@ -39,3 +41,46 @@ jobs:
 
       - name: Check documentation is in the present tense
         run: python3 scripts/check_temporal_wording.py
+
+      # The Verso site, tutorial and manual build takes several minutes, so it runs only when `web/`,
+      # the library or the toolchain changes. Without a usable base commit (new branch, manual run)
+      # it always runs.
+      - name: Check whether the Verso site, tutorial and manual need building
+        id: site
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          base="$BEFORE"
+          if [ "$EVENT" = "pull_request" ]; then base="$PR_BASE"; fi
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ] \
+             || ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
+            echo "build=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          if git diff --name-only "$base" HEAD \
+             | grep -qE '^(web/|Physicslib4/|Physicslib4\.lean$|lean-toolchain$|lakefile\.toml$|lake-manifest\.json$)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Builds the Verso site, tutorial and reference manual in `web/` without deploying them
+      # (deployment is in `blueprint.yml`). They are served from `/physicslib4/site/`,
+      # `/physicslib4/tutorial/` and `/physicslib4/manual/`, so their pages must not use
+      # root-relative URLs.
+      - name: Build the Verso site, tutorial and manual
+        if: steps.site.outputs.build == 'true'
+        working-directory: web
+        run: |
+          set -euo pipefail
+          ~/.elan/bin/lake exe cache get
+          ~/.elan/bin/lake build
+          ~/.elan/bin/lake exe generate-site --output _out/site
+          ~/.elan/bin/lake exe generate-tutorial --output _out/tutorial
+          ~/.elan/bin/lake exe generate-manual --output _out/manual
+          if grep -rnoE '(href|src)="/[^/][^"]*"' _out/site _out/tutorial/html-multi _out/manual/html-multi --include='*.html'; then
+            echo "Root-relative URLs found; they break under /physicslib4/site/, /physicslib4/tutorial/ and /physicslib4/manual/." >&2
+            exit 1
+          fi

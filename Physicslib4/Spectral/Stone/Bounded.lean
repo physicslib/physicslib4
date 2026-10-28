@@ -39,11 +39,21 @@ theorem hasDerivAt_exp_smul_I (P : H →L[ℂ] H) :
   rwa [hfeq] at hc
 
 /--
-For bounded self-adjoint `P`, `t ↦ exp(itP)` is a one-parameter unitary group: each
-`exp(itP)` is unitary, and the resulting family of linear isometry equivalences satisfies the
-group law.
+For a bounded self-adjoint operator P, the exponentials exp(itP), t ∈ ℝ, form a one-parameter
+unitary group.
 
-Blueprint reference: `lmm:exp-bounded-unitary-group`.
+Here exp(itP) is the power series Σ (itP)ⁿ/n!, which converges in operator norm because P is
+bounded. Self-adjointness makes itP skew-adjoint, (itP)\* = −itP, so each exp(itP) is unitary;
+and itP commutes with isP, so exp(i(s + t)P) = exp(isP) exp(itP). This case of Stone's theorem
+needs no spectral theory. A Hamiltonian on a finite-dimensional space, such as that of a spin in
+a magnetic field, is of this kind.
+
+Implementation note: the exponential is Mathlib's `NormedSpace.exp` applied to (t i) • P. The
+statement produces a family `V : ℝ → (H ≃ₗᵢ[ℂ] H)` agreeing with it pointwise; the proof
+shows that exp(itP) lies in Mathlib's `unitary (H →L[ℂ] H)` and converts it with
+`Unitary.linearIsometryEquiv`.
+
+Blueprint: lmm:exp-bounded-unitary-group
 -/
 theorem exists_isOneParameterUnitaryGroup_exp {P : H →L[ℂ] H} (hP : IsSelfAdjoint P) :
     ∃ V : ℝ → (H ≃ₗᵢ[ℂ] H), (∀ (t : ℝ) (x : H),
@@ -88,10 +98,20 @@ theorem isStronglyContinuous_of_eq_exp {P : H →L[ℂ] H} {V : ℝ → (H ≃�
     continuous_const
 
 /--
-A unitary family `V` with `V t = exp(itP)` has generator `P`, with domain `H`. As for
-`isStronglyContinuous_of_eq_exp`, no hypothesis on `P` is needed.
+If a unitary family V(t) equals exp(itP) for a bounded operator P, its infinitesimal generator
+is P, defined on all of H.
 
-Blueprint reference: `lmm:generator-exp-bounded`.
+The map t ↦ exp(itP) is differentiable in operator norm with derivative iP at t = 0
+(`hasDerivAt_exp_smul_I`), so the difference quotient (1/i)(V(t)ψ − ψ)/t tends to Pψ for every
+ψ. A bounded self-adjoint operator therefore generates exp(itP), as Stone's theorem predicts.
+Together with `isStronglyContinuous_of_eq_exp` this is the bounded case of the correspondence
+between self-adjoint operators and strongly continuous one-parameter unitary groups.
+
+Implementation note: the blueprint takes P self-adjoint, which is what makes exp(itP) unitary.
+Here unitarity is carried by the type of V, so no hypothesis on P is needed. The conclusion
+is an equality of `LinearPMap`s with the operator P on the domain ⊤ = H.
+
+Blueprint: lmm:generator-exp-bounded
 -/
 theorem generator_eq_of_eq_exp {P : H →L[ℂ] H} {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
     (hV : ∀ (t : ℝ) (x : H), V t x = NormedSpace.exp (((t : ℂ) * Complex.I) • P) x) :

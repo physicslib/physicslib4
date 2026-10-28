@@ -60,15 +60,21 @@ open Filter Topology
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /--
-The blueprint's *unbounded operator* on `H` is a linear map defined on a dense subspace
-of `H`. In Lean the underlying partial linear map is `T : H →ₗ.[ℂ] H`, and the density
-requirement on its domain is this predicate, carried as an explicit hypothesis wherever
-the blueprint's `Dom(A)` is required to be dense.
+The domain of a partially defined linear map T on H is dense: the condition that makes T an
+unbounded operator.
 
-Note that "unbounded" means "not necessarily bounded": the everywhere-defined bounded
-case is included.
+Position, momentum and most Hamiltonians of quantum mechanics cannot be defined on every vector
+of H, only on a subspace of it. An unbounded operator is therefore a pair: a subspace Dom(T) of
+H, its domain, and a linear map T : Dom(T) → H, with Dom(T) dense in H. "Unbounded" means "not
+necessarily bounded": a bounded operator defined on all of H is a special case. Density of
+Dom(T) is what makes the adjoint T\* well defined (`existsUnique_adjoint_apply`).
 
-Blueprint reference: `def:hall-3.1`.
+Implementation note: the pair (Dom(T), T) is Mathlib's `LinearPMap`, written `H →ₗ.[ℂ] H`, with
+domain `T.domain`. Density is not part of the type: it is this predicate, carried as an explicit
+hypothesis wherever the blueprint requires a dense domain. A self-adjoint operator has dense
+domain automatically (Mathlib's `IsSelfAdjoint.dense_domain`).
+
+Blueprint: def:hall-3.1
 -/
 def HasDenseDomain (T : H →ₗ.[ℂ] H) : Prop := Dense (T.domain : Set H)
 
@@ -81,10 +87,20 @@ that functional, and `A*` itself is `LinearPMap.adjoint`, written `T†`.
 -/
 
 /--
-The adjoint is well defined: for `φ` in `Dom(T*)` there is exactly one vector `χ` with
-`⟪φ, T ψ⟫ = ⟪χ, ψ⟫` for all `ψ ∈ Dom(T)`.
+The adjoint of a densely defined operator is well defined: for φ in Dom(T\*) exactly one vector χ
+satisfies ⟨φ, Tψ⟩ = ⟨χ, ψ⟩ for all ψ in Dom(T).
 
-Blueprint reference: `prpstn:adjoint-well-defined`.
+The adjoint T\* is defined on the vectors φ for which ψ ↦ ⟨φ, Tψ⟩ is bounded on Dom(T); the
+Riesz representation theorem then gives a vector χ with ⟨φ, Tψ⟩ = ⟨χ, ψ⟩, and T\*φ = χ. That χ is
+unique because a vector orthogonal to the dense subspace Dom(T) is 0. For a bounded operator
+on all of H this is the usual Hermitian conjugate A†.
+
+Implementation note: the adjoint is Mathlib's `LinearPMap.adjoint`, written `T†`, with domain
+`LinearPMap.adjointDomain` (continuity of ψ ↦ ⟨φ, Tψ⟩, which is boundedness). When `T.domain` is
+not dense, Mathlib's `T†` keeps the domain `adjointDomain` but is the zero map there; this is
+why the density hypothesis is needed here.
+
+Blueprint: prpstn:adjoint-well-defined
 -/
 theorem existsUnique_adjoint_apply {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) {φ : H}
     (hφ : φ ∈ (T†).domain) :
@@ -161,10 +177,21 @@ private theorem adjoint_eq_of_forall_inner_iff {S A : H →ₗ.[ℂ] H} (hS : Ha
 -/
 
 /--
-An unbounded operator `T` is *symmetric* if `⟪φ, T ψ⟫ = ⟪T φ, ψ⟫` for all `φ, ψ` in
-`Dom(T)`.
+An operator T is symmetric if ⟨φ, Tψ⟩ = ⟨Tφ, ψ⟩ for all φ and ψ in its domain.
 
-Blueprint reference: `def:hall-9.2`.
+This is the condition physicists usually call "Hermitian": it makes every expectation value
+⟨ψ, Tψ⟩ real. For an unbounded operator it is weaker than self-adjointness. A densely defined T
+is symmetric exactly when T\* extends T (`isSymmetric_iff_le_adjoint`), while self-adjointness
+asks T\* = T, including equal domains. The reality of the spectrum (`pmapSpectrum_subset_real`)
+and the spectral theorem need self-adjointness, so the gap between the two notions matters.
+
+Implementation note: no density of `T.domain` is assumed; the blueprint's operators have dense
+domain, supplied separately by `HasDenseDomain`. The predicate is Mathlib's
+`LinearPMap.IsFormalAdjoint` of `T` with itself, with the sides of the equation swapped
+(`isSymmetric_iff_isFormalAdjoint`). Self-adjointness is Mathlib's `IsSelfAdjoint` for the star
+operation `T ↦ T†` on `H →ₗ.[ℂ] H`, so it means `T† = T` (`LinearPMap.isSelfAdjoint_def`).
+
+Blueprint: def:hall-9.2
 -/
 def IsSymmetric (T : H →ₗ.[ℂ] H) : Prop :=
   ∀ φ ψ : T.domain, ⟪(φ : H), T ψ⟫_ℂ = ⟪T φ, (ψ : H)⟫_ℂ
@@ -193,12 +220,18 @@ theorem isSymmetric_iff_le_adjoint {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T
   exact (LinearPMap.adjoint_isFormalAdjoint hT (Submodule.inclusion hle.1 φ) ψ).symm
 
 /--
-An unbounded operator `A` is *positive* if it is symmetric (in the density-free sense of
-`IsSymmetric`) and `0 ≤ Re ⟪ψ, A ψ⟫` for every `ψ ∈ Dom(A)`. For symmetric `A` the number
-`⟪ψ, A ψ⟫` is real, so this is `⟪ψ, A ψ⟫ ≥ 0`. This mirrors Mathlib's
-`ContinuousLinearMap.IsPositive` (`isPositive_toPMap_iff`).
+An operator A is positive if it is symmetric and ⟨ψ, Aψ⟩ ≥ 0 for every ψ in its domain.
 
-Blueprint reference: `def:positive-unbounded-operator`.
+For a symmetric A the expectation value ⟨ψ, Aψ⟩ is real, so the condition says that every
+expectation value is non-negative. This is the notion in which the positive-energy condition of
+the Haag–Kastler axioms is phrased: a one-parameter unitary group has positive energy when its
+generator is positive (`Physicslib4.AQFT.IsPositiveEnergy`). For a bounded operator on all of H
+it agrees with the usual positivity (`isPositive_toPMap_iff`).
+
+Implementation note: the condition is stated as 0 ≤ Re⟨ψ, Aψ⟩, the form of Mathlib's
+`ContinuousLinearMap.IsPositive`. Symmetry is meant in the density-free sense of `IsSymmetric`.
+
+Blueprint: def:positive-unbounded-operator
 -/
 def IsPositive (A : H →ₗ.[ℂ] H) : Prop :=
   IsSymmetric A ∧ ∀ ψ : A.domain, 0 ≤ (⟪(ψ : H), A ψ⟫_ℂ).re
@@ -259,12 +292,22 @@ closability are `LinearPMap.IsClosed` and `LinearPMap.IsClosable`, and `A^cl` is
 
 omit [CompleteSpace H] in
 /--
-Sequential description of closedness for a linear map on a (not necessarily dense)
-subspace: `T` is closed (Mathlib's `LinearPMap.IsClosed`, i.e. its graph is closed in
-`H × H`) iff whenever `ψ n ∈ Dom(T)` with `ψ n → ψ` and `T ψ n → φ`, then `ψ ∈ Dom(T)` and
-`T ψ = φ`. No density of `Dom(T)` is assumed.
+An operator T is closed exactly when ψ_n → ψ and Tψ_n → φ, with every ψ_n in Dom(T), imply
+that ψ lies in Dom(T) and Tψ = φ.
 
-Blueprint reference: `def:closed-linear-map-on-a-subspace`.
+Closedness is the regularity condition that replaces continuity for unbounded operators. An
+operator that is not bounded is not continuous on its domain, but if T is closed then, whenever
+ψ_n → ψ and Tψ_n converges at all, the limit is Tψ. By definition T is closed when its graph
+{(ψ, Tψ) : ψ ∈ Dom(T)} is a closed subset of H × H; this theorem restates that with sequences.
+The adjoint of a densely defined operator is closed, so every self-adjoint operator is closed.
+A closable operator T, one whose graph has a closure that is again a graph, has a smallest
+closed extension, its closure T^(cl) (`closure_le_of_isClosed`).
+
+Implementation note: closedness, closability and closure are Mathlib's `LinearPMap.IsClosed`,
+`LinearPMap.IsClosable` and `LinearPMap.closure`, with the graph `LinearPMap.graph`. No density
+of `T.domain` is assumed, so the statement applies to adjoints, whose domains need not be dense.
+
+Blueprint: def:closed-linear-map-on-a-subspace
 -/
 theorem isClosed_iff_forall_tendsto {T : H →ₗ.[ℂ] H} :
     T.IsClosed ↔
@@ -394,17 +437,29 @@ theorem isSymmetric_closure {T : H →ₗ.[ℂ] H} (hsym : IsSymmetric T) (hc : 
       (continuous_snd.inner continuous_const)) (fun χ => step1 χ ψ) φ
 
 /--
-An unbounded operator is *essentially self-adjoint* if it is symmetric and closable with
-self-adjoint closure.
+An operator T is essentially self-adjoint if it is symmetric and closable, and its closure is
+self-adjoint.
 
-Blueprint reference: `def:hall-9.7`.
+In practice an observable is often first written down on a convenient small domain, for example
+the momentum operator −i d/dx on smooth compactly supported wave functions. There it is
+symmetric but not self-adjoint. Essential self-adjointness says that the domain is nevertheless
+big enough: the closure T^(cl) is self-adjoint, and it is the only self-adjoint extension of T
+(`existsUnique_isSelfAdjoint_extension`). A densely defined symmetric T is essentially
+self-adjoint exactly when T − i𝟙 and T + i𝟙 have dense ranges
+(`isEssentiallySelfAdjoint_iff_dense_range`).
+
+Implementation note: the closure is Mathlib's `LinearPMap.closure`, and self-adjointness is
+`T.closure† = T.closure`. The three conditions are kept as separate fields, as in the blueprint,
+although closability follows from symmetry for densely defined T (`isClosable_of_isSymmetric`).
+
+Blueprint: def:hall-9.7
 -/
 structure IsEssentiallySelfAdjoint (T : H →ₗ.[ℂ] H) : Prop where
-  /-- `T` is symmetric. -/
+  /-- T is symmetric: ⟨φ, Tψ⟩ = ⟨Tφ, ψ⟩ on Dom(T). -/
   isSymmetric : IsSymmetric T
-  /-- `T` is closable. -/
+  /-- T is closable: the closure of its graph in H × H is the graph of an operator. -/
   isClosable : T.IsClosable
-  /-- The closure of `T` is self-adjoint. -/
+  /-- The closure T^(cl) of T is self-adjoint. -/
   isSelfAdjoint_closure : IsSelfAdjoint T.closure
 
 /-!
@@ -445,8 +500,9 @@ Taking adjoints reverses extension: if `C₁` extends `C₂` then `C₂*` extend
 
 The density hypothesis on `Dom(C₂)` (which forces density of `Dom(C₁) ⊇ Dom(C₂)`) is the
 blueprint's standing assumption that both are unbounded operators. It cannot be dropped:
-Mathlib's `LinearPMap.adjoint` is `0` on all of `H` when the domain is not dense, so for
-`C₂` with non-dense domain and `C₁` densely defined the conclusion would say `C₁† ≤ 0`.
+Mathlib's `LinearPMap.adjoint` is the zero map on its domain when the domain of the operator
+is not dense, so for `C₂` with non-dense domain and `C₁` densely defined the conclusion would
+say that `C₁†` is the zero map on its domain.
 
 Blueprint reference: `lmm:extension-reverses-adjoint-domains`.
 -/
@@ -554,10 +610,17 @@ theorem adjoint_smul_id (lam : ℂ) :
 -/
 
 /--
-The kernel of an unbounded operator, as a subspace of `H`. A vector outside `Dom(T)` is
-never in `Ker(T)`.
+The kernel Ker(T) = {ψ ∈ Dom(T) : Tψ = 0} of an operator T, as a subspace of H.
 
-Blueprint reference: `def:kernel-of-an-unbounded-operator`.
+The restriction to Dom(T) is part of the definition: a vector outside Dom(T) is never in
+Ker(T). The kernel of T − λ𝟙 is the eigenspace of T for the eigenvalue λ, and
+Range(T)ᗮ = Ker(T\*) (`orthogonal_range_eq_ker_adjoint`) turns questions about the range of T
+into questions about the kernel of T\*.
+
+Implementation note: the kernel of the linear map `T.toFun : T.domain →ₗ[ℂ] H` lives in the
+subtype `T.domain`; this definition maps it into H. Membership is `mem_ker`.
+
+Blueprint: def:kernel-of-an-unbounded-operator
 -/
 def ker (T : H →ₗ.[ℂ] H) : Submodule ℂ H :=
   (LinearMap.ker T.toFun).map T.domain.subtype
@@ -569,9 +632,17 @@ theorem mem_ker {T : H →ₗ.[ℂ] H} {ψ : H} :
   ⟨fun ⟨⟨_, hx⟩, hk, he⟩ => he ▸ ⟨hx, hk⟩, fun ⟨h, h0⟩ => ⟨⟨ψ, h⟩, h0, rfl⟩⟩
 
 /--
-The range of an unbounded operator, as a subspace of `H`; the image of `Dom(T)`.
+The range Range(T) = {Tψ : ψ ∈ Dom(T)} of an operator T, as a subspace of H.
 
-Blueprint reference: `def:range-of-an-unbounded-operator`.
+Its orthogonal complement consists of the vectors orthogonal to Tψ for every ψ in Dom(T) (not
+every ψ in H), and it equals Ker(T\*) (`orthogonal_range_eq_ker_adjoint`). Density of the
+ranges of T − i𝟙 and T + i𝟙 characterises essential self-adjointness
+(`isEssentiallySelfAdjoint_iff_dense_range`).
+
+Implementation note: the range of the linear map `T.toFun : T.domain →ₗ[ℂ] H`, which already
+lies in H. Membership is `mem_range`, which holds by definition.
+
+Blueprint: def:range-of-an-unbounded-operator
 -/
 def range (T : H →ₗ.[ℂ] H) : Submodule ℂ H := LinearMap.range T.toFun
 
@@ -634,9 +705,17 @@ theorem isSelfAdjoint_add_of_isSelfAdjoint {T : H →ₗ.[ℂ] H}
     LinearPMap.isSelfAdjoint_def.mp hTsa, hB.adjoint_eq]
 
 /--
-The operator `T - λ 1`, with domain `Dom(T)`.
+The operator T − λ𝟙 for a complex number λ, with domain Dom(T) and action ψ ↦ Tψ − λψ.
 
-Blueprint reference: the convention fixed after `def:hall-3.1`.
+Since λ𝟙 is defined on all of H, the difference is defined exactly where T is. The resolvent
+set and spectrum of T are defined through the invertibility of T − λ𝟙 (`IsResolvent`), and
+the ranges of T − i𝟙 and T + i𝟙 decide essential self-adjointness.
+
+Implementation note: T + i𝟙 is `subSmul T (-Complex.I)`. The parameter is named `lam` because
+λ is reserved in Lean. Domain and action are `subSmul_domain` and `subSmul_apply`, both by
+definition.
+
+Blueprint: def:hall-3.1
 -/
 def subSmul (T : H →ₗ.[ℂ] H) (lam : ℂ) : H →ₗ.[ℂ] H where
   domain := T.domain

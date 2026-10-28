@@ -36,10 +36,22 @@ open Filter MeasureTheory
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /--
-The *average* `B_f ψ = ∫ f(τ) U(τ) ψ dτ` of the orbit of `ψ` against a real weight `f`, a
-Bochner integral with respect to Lebesgue measure.
+The average B_f ψ = ∫ f(τ) U(τ)ψ dτ of the orbit of a vector ψ against a real weight function
+f.
 
-Blueprint reference: `lmm:averaging-translate`.
+Averaging the orbit τ ↦ U(τ)ψ against a smooth bump f smooths it in the group parameter: the
+average lies in the domain of the generator when f is continuously differentiable with compact
+support (`average_mem_generator_domain`), and it tends to ψ as f concentrates at τ = 0
+(`tendsto_average_bump`). These two facts give density of the generator's domain
+(`hasDenseDomain_generator`). This is the one-parameter case of Gårding's smoothing argument.
+
+Implementation note: the integral is Mathlib's Bochner integral for Lebesgue measure on ℝ,
+which is 0 when the integrand is not integrable or H is not complete. The results that use the
+average assume U strongly continuous and f a compactly supported C¹ weight or a bump function.
+To use Mathlib's convolution calculus, the average is rewritten as a convolution f ⋆ g_ψ with
+g_ψ(x) = U(−x)ψ (`average_eq_convolution`, which holds for every f).
+
+Blueprint: lmm:averaging-translate
 -/
 noncomputable def average (U : ℝ → (H ≃ₗᵢ[ℂ] H)) (f : ℝ → ℝ) (ψ : H) : H :=
   ∫ τ, f τ • U τ ψ
@@ -105,11 +117,23 @@ theorem tendsto_average_bump [CompleteSpace H] {U : ℝ → (H ≃ₗᵢ[ℂ] H)
   rwa [hU.map_zero, neg_zero, eq_comm] at this
 
 /--
-**The generator is densely defined.** The infinitesimal generator of a strongly continuous
-one-parameter unitary group has dense domain, so it is an unbounded operator in the sense of
-`def:hall-3.1`.
+The infinitesimal generator of a strongly continuous one-parameter unitary group has dense
+domain.
 
-Blueprint reference: `lmm:hall-10.18`.
+Density is what makes the generator A an unbounded operator in the usual sense
+(`Unbounded.HasDenseDomain`), with a well-defined adjoint A\*; the proof of Stone's theorem
+uses it to show that A is essentially self-adjoint (`isEssentiallySelfAdjoint_generator`). The
+proof here approximates any ψ by averages B_f ψ of its orbit against narrow bump functions f:
+each average lies in Dom(A), and the averages tend to ψ as the bumps shrink to τ = 0.
+
+Implementation note: H is assumed complete, so that the Bochner integrals defining the averages
+are not the junk value 0. The bumps are Mathlib's normalised `ContDiffBump` functions at 0 with
+inner radius 1/(2(n + 1)) and outer radius 1/(n + 1), the blueprint's f_n reindexed from 0. The
+average in Dom(A) is `average_mem_generator_domain`, via the derivative of a convolution; the
+approximation is `tendsto_average_bump`, via
+`ContDiffBump.convolution_tendsto_right_of_continuous`.
+
+Blueprint: lmm:hall-10.18
 -/
 theorem hasDenseDomain_generator [CompleteSpace H] {U : ℝ → (H ≃ₗᵢ[ℂ] H)}
     (hU : IsOneParameterUnitaryGroup U)

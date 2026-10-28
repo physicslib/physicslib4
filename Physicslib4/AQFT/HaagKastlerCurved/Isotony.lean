@@ -34,40 +34,43 @@ namespace HaagKastlerCurved
 variable {M : LorentzianSpacetime}
 
 /--
-**Axiom 2 (Isotony), curved spacetime.** A local net `U` on a
-Lorentzian spacetime `M` satisfies *isotony* if every inclusion
-`B₁ ⊆ B₂` between Alexandrov-basis sets is implemented by a unital
-`*`-monomorphism `𝔘(B₁) ↪ 𝔘(B₂)`.
+Axiom 2 in curved spacetime (isotony): a chosen unital *-monomorphism 𝔘(B₁) → 𝔘(B₂) for each
+inclusion of basis sets.
 
-Blueprint reference: `def:isotony-in-curved-spacetime`.
+An observable measurable in a basis set B₁ is also measurable in any larger basis set B₂ ⊇ B₁.
+Since the local algebras are abstract, this is expressed by a map i(B₁, B₂) : 𝔘(B₁) → 𝔘(B₂), which
+is a unital *-homomorphism and injective. The maps are coherent: i(B, B) is the identity, and
+i(B₂, B₃) ∘ i(B₁, B₂) = i(B₁, B₃) for B₁ ⊆ B₂ ⊆ B₃. In other words B ↦ 𝔘(B) is a functor on the
+basis sets ordered by inclusion. The hypothesis is the non-strict inclusion B₁ ⊆ B₂; the case
+B₁ = B₂ is what makes the identity law expressible.
 
-The family is *chosen data*, not an existence statement: the identity and
-composition laws below are equations between the maps themselves, so there is
-nothing to state unless the maps are fixed. An axiom of the form "for each
-inclusion there exists some monomorphism" cannot express functoriality at all.
+The family is data, not an existence statement, exactly as in Minkowski spacetime: the identity
+and composition laws are equations between the maps themselves, so they can only be stated once
+the maps are fixed. They are required rather than derived, since nothing about the spacetime
+constrains which monomorphism a net chooses. Curved spacetime has no quasilocal algebra, so
+statements about nested regions B₁ ⊆ B₂ ⊆ B are made inside a common containing algebra 𝔘(B); the
+composition law makes the embedding of 𝔘(B₁) in 𝔘(B) factor through 𝔘(B₂) for every net. Axiom 3
+uses this same family.
 
-Conditions `map_self` and `map_comp` say exactly that `B ↦ 𝔘(B)` is a functor on
-the inclusion order of basis sets. They are *required* rather than derived
-because they constrain the net's chosen embeddings, not the spacetime: no
-geometric fact about Alexandrov diamonds determines which monomorphism a net
-picks for a given inclusion.
+Implementation note: a unital *-homomorphism is Mathlib's `StarAlgHom`, which preserves the unit
+because it is an algebra homomorphism.
+
+Blueprint: def:isotony-in-curved-spacetime
 -/
 structure Isotony (U : LocalNet M) where
-  /-- The chosen unital `*`-monomorphism implementing each inclusion of basis
-  sets. This is data, which is what makes the two laws below statable. -/
+  /-- The embedding i(B₁, B₂) : 𝔘(B₁) → 𝔘(B₂) of a basis set B₁ into a basis set B₂ ⊇ B₁. -/
   map : ∀ ⦃B₁ B₂ : Set M.Carrier⦄,
     M.IsBasisSet B₁ → M.IsBasisSet B₂ → B₁ ⊆ B₂ →
       StarAlgHom ℂ (U.algebra B₁) (U.algebra B₂)
-  /-- Each chosen embedding is injective, i.e. a monomorphism. -/
+  /-- Each embedding is injective. -/
   injective : ∀ ⦃B₁ B₂ : Set M.Carrier⦄
     (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h : B₁ ⊆ B₂),
     Function.Injective (map h₁ h₂ h)
-  /-- **Identity law.** The embedding along `B ⊆ B` is the identity. -/
+  /-- The identity law: the embedding of a basis set in itself is the identity. -/
   map_self : ∀ ⦃B : Set M.Carrier⦄ (h : M.IsBasisSet B),
     map h h (subset_refl B) = StarAlgHom.id ℂ (U.algebra B)
-  /-- **Composition law.** The embedding along `B₁ ⊆ B₃` factors through any
-  intermediate `B₂`. This is what lets a three-fold inclusion be factored
-  without carrying coherence as a separate hypothesis at each use site. -/
+  /-- The composition law: for B₁ ⊆ B₂ ⊆ B₃, the embedding of B₁ in B₃ is the composite of the
+  embeddings of B₁ in B₂ and of B₂ in B₃. -/
   map_comp : ∀ ⦃B₁ B₂ B₃ : Set M.Carrier⦄
     (h₁ : M.IsBasisSet B₁) (h₂ : M.IsBasisSet B₂) (h₃ : M.IsBasisSet B₃)
     (h₁₂ : B₁ ⊆ B₂) (h₂₃ : B₂ ⊆ B₃),

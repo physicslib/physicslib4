@@ -53,31 +53,33 @@ open scoped Pointwise
 variable {M : LorentzianSpacetime}
 
 /--
-**Axiom 5 (Isometric Covariance), curved spacetime.** A local net
-`U` on a Lorentzian spacetime `M` is *isometrically covariant* if the
-group `M.Isom` of identity-component isometries acts on the
-assignment `B ↦ U.algebra B` and the action
+Axiom 5 in curved spacetime (isometric covariance): the isometries connected to the identity act
+on the net, compatibly with isotony.
 
-(1) sends the identity isometry to the identity automorphism,
-(2) is multiplicative in the group element,
-    `α (φ' · φ) = α φ' ∘ α φ`, and
-(3) *commutes with isotony*.
+In curved spacetime the Poincaré group of the Minkowski axioms is replaced by the symmetries the
+spacetime actually has: the group `M.Isom` of isometries of M connected to the identity. A generic
+spacetime has no isometries other than the identity, and then the axiom says little. The axiom
+asks for a unital *-isomorphism α_φ : 𝔘(B) → 𝔘(φ(B)) for every such isometry φ and every region
+B, where φ(B) is the image of B under φ, such that
 
-Concretely, there exists, for every isometry `φ : M.Isom` and every
-Alexandrov-basis set `B`, a `*`-algebra equivalence
-`α φ B : U.algebra B ≃⋆ₐ[ℂ] U.algebra (φ • B)` such that (1) `α 1 B a = a`,
-(2) `α (φ' * φ) B a = α φ' (φ • B) (α φ B a)`, and (3) for every `φ` and
-inclusion `B₁ ⊆ B₂`, `α φ B₂ ∘ i.map = i.map ∘ α φ B₁`.
+1. α_1 is the identity;
+2. α_(φ'φ) = α_φ' ∘ α_φ; and
+3. α_φ commutes with the isotony family i of Axiom 2: whenever B₁ ⊆ B₂ are basis sets,
+   α_φ ∘ i(B₁, B₂) = i(φ(B₁), φ(B₂)) ∘ α_φ.
 
-In (3) neither the inclusion `φ • B₁ ⊆ φ • B₂` nor the fact that `φ • B₁` and `φ • B₂`
-are basis sets is a hypothesis: they are `Set.smul_set_mono h` and the interface field
-`LorentzianSpacetime.isBasisSet_smul`.
+In condition 3, φ(B₁) and φ(B₂) are basis sets with φ(B₁) ⊆ φ(B₂) because isometries preserve
+basis sets (the interface field `LorentzianSpacetime.isBasisSet_smul`) and images preserve
+inclusions (`Set.smul_set_mono`), so no further hypothesis is needed. The predicate takes the
+isotony family as a parameter, so the action respects the net's own embeddings.
+`HaagKastlerNet.covEquiv` chooses the maps α_φ. There is no quasilocal algebra for them to act
+on; on a region fixed by φ they give automorphisms of its algebra (`HaagKastlerNet.stabAut`).
 
-Condition (3) is stated for the isotony family `i` of Axiom 2, which this
-predicate takes as a parameter, not for a separately chosen family: the
-blueprint's Axiom 5 commutes with "the unital `*`-monomorphism `i` of Axiom 2".
+Implementation note: 𝔘(1 • B) and 𝔘(B), and 𝔘((φ'φ) • B) and 𝔘(φ' • (φ • B)), are different types
+that are equal only propositionally, so conditions 1 and 2 transport along those equalities
+(`one_smul`, `mul_smul`) with `Eq.mp`. For a geometric spacetime, `M.Isom` is the oriented identity
+component of its isometry group (`toAbstractIdentityComponent`).
 
-Blueprint reference: `def:isometric-covariance-in-curved-spacetime`.
+Blueprint: def:isometric-covariance-in-curved-spacetime
 -/
 def IsometricCovariance (U : LocalNet M) (i : Isotony U) : Prop :=
   ∃ α : ∀ (φ : M.Isom) (B : Set M.Carrier),

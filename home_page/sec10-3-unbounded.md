@@ -27,7 +27,7 @@ Each blueprint subsection below is collapsed; click a heading to see its items. 
 <details markdown="1">
 <summary>§10.3.1 · Unbounded Operators › Adjoint and Closure of an Unbounded Operator (p. 157) — 21 items</summary>
 
-- [**Definition 164**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-3.1) — Unbounded Operator · `LinearPMap` (+1 more)
+- [**Definition 164**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-3.1) — Unbounded Operator · `LinearPMap` (+2 more)
 - [**Proposition 165**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:convergence-facts) — Convergence Facts for Sequences and Series · `tendsto_atTop_ciSup` (+6 more)
 - [**Lemma 166**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-dense-testing) — Equality Testing on a Dense Subspace, First Slot · `Dense.eq_of_inner_left`
 - [**Lemma 167**](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-dense-testing-second-slot) — Equality Testing on a Dense Subspace, Second Slot · `Dense.eq_of_inner_right`

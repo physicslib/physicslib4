@@ -52,11 +52,25 @@ theorem isCyclicVector_comp_of_surjective {π : B →⋆ₐ[ℂ] (H →L[ℂ] H)
   rw [h]
   exact hcyc
 
-/-- **GNS covariance under a `*`-isomorphism.** For `Φ : A ≃⋆ₐ[ℂ] B` and a state
-`ω` on `B`: any cyclic representation `(H₁, π₁, Ω₁)` of `A` reproducing the pullback
-state `ω ∘ Φ`, and any cyclic representation `(H₂, π₂, Ω₂)` of `B` reproducing `ω`,
-are linked by a unitary `U : H₁ ≃ₗᵢ[ℂ] H₂` with `U Ω₁ = Ω₂` intertwining the
-representations *along* `Φ`: `U (π₁ a x) = π₂ (Φ a) (U x)`. -/
+/--
+GNS covariance: along a *-isomorphism Φ : A → B, the GNS data of ω ∘ Φ and of ω correspond.
+
+Let ω be a state on B, (H₁, π₁, Ω₁) a cyclic representation of A reproducing the pullback ω ∘ Φ
+(`State.comp`), and (H₂, π₂, Ω₂) a cyclic representation of B reproducing ω. Then there is a
+unitary U : H₁ → H₂ with UΩ₁ = Ω₂ and
+
+U π₁(a) = π₂(Φ(a)) U for all a ∈ A.
+
+So relabelling the observables by an isomorphism changes the GNS representation only by a
+unitary. The proof applies GNS uniqueness (`gns_unique`) to π₁ and to π₂ ∘ Φ, which has the
+same cyclic vector Ω₂ because Φ is surjective (`isCyclicVector_comp_of_surjective`). For a
+Haag–Kastler net, Φ can be the covariance isomorphism α_L of Axiom 5 between local algebras.
+
+Implementation note: U is a linear isometric equivalence `H₁ ≃ₗᵢ[ℂ] H₂`, and the intertwining is
+stated pointwise, U(π₁(a)x) = π₂(Φ(a))(Ux).
+
+Blueprint: thrm:gns-covariance
+-/
 theorem exists_unitary_of_gns_comp (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B)
     {H₁ : Type*} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
     (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (Ω₁ : H₁)
@@ -71,9 +85,16 @@ theorem exists_unitary_of_gns_comp (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B)
   gns_unique (ω.comp Φ.toStarAlgHom) π₁ Ω₁ hcyc₁ hrep₁ (π₂.comp Φ.toStarAlgHom) Ω₂
     (isCyclicVector_comp_of_surjective hcyc₂ Φ.surjective) fun a => hrep₂ (Φ a)
 
-/-- **The GNS representation of a pullback state.** Restated in the language of
-unitary equivalence: the GNS representation of `ω ∘ Φ` is unitarily equivalent to
-`π_ω ∘ Φ`. -/
+/--
+The GNS representation of a pullback state ω ∘ Φ is unitarily equivalent to π ∘ Φ.
+
+With the hypotheses of `exists_unitary_of_gns_comp`, π₁ and the composite π₂ ∘ Φ are unitarily
+equivalent representations of A (`UnitaryEquiv`). Since unitary equivalence preserves
+irreducibility and the factor property, the sector type is transported along Φ
+(`isIrreducible_iff_of_gns_comp`, `isFactor_iff_of_gns_comp`).
+
+Blueprint: thrm:gns-covariance-unitary-equiv
+-/
 theorem unitaryEquiv_comp_of_gns (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B)
     {H₁ : Type*} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
     (π₁ : A →⋆ₐ[ℂ] (H₁ →L[ℂ] H₁)) (Ω₁ : H₁)

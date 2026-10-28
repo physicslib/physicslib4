@@ -151,11 +151,20 @@ theorem localVonNeumann_isFactor_smul
   rw [← N.lieConj_image_localVonNeumann hB π Uop g hB₁ h₁ hcov]
   exact h.conj Uop
 
-/-- **Geometric covariance as a von Neumann algebra isomorphism (curved spacetime).**
-For `g ∈ Stab(B)`, conjugation by the implementing unitary `U(g)` is the
-`*`-isomorphism `R(B₁) ≃ R(g · B₁)` of local von Neumann algebras: it restricts the
-conjugation `*`-automorphism `T ↦ U(g) T U(g)⁻¹` of `B(H)`, whose image of `R(B₁)`
-is exactly `R(g · B₁)` by geometric covariance. -/
+/-- Conjugation by a unitary implementing a stabilizer element g, as a *-isomorphism
+R(B₁) ≅ R(g · B₁) of local von Neumann algebras.
+
+Suppose g fixes the basis set B (g ∈ Stab(B), so g · B = B), π is a representation of 𝔘(B), and
+U is a unitary on H with U π(a) U⁻¹ = π(α̂_g a) for all a ∈ 𝔘(B), where α̂_g is the stabilizer
+automorphism of 𝔘(B); the stabilizer GNS unitaries (`exists_gns_unitary_stabilizer`) are such
+unitaries. For a basis set B₁ ⊆ B, conjugation T ↦ U T U⁻¹ is a *-automorphism of the bounded
+operators on H, and by geometric covariance (`lieConj_image_localVonNeumann`) it maps R(B₁) onto
+R(g · B₁). This is its restriction, a *-isomorphism between the two algebras.
+
+Implementation note: the isomorphism is between the underlying *-subalgebras
+(`VonNeumannAlgebra.toStarSubalgebra`).
+
+Blueprint: thrm:von-neumann-covariance-iso-in-curved-spacetime -/
 noncomputable def localVonNeumannEquiv
     {B : Set M.Carrier} (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
     (Uop : H ≃ₗᵢ[ℂ] H) (g : ↥(MulAction.stabilizer M.Isom B))

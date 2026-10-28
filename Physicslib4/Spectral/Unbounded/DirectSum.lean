@@ -84,18 +84,29 @@ end External
 -/
 
 /--
-A sequence `K` of closed subspaces of `H` is an *internal orthogonal decomposition* of
-`H` if the subspaces are pairwise orthogonal and every vector of `H` is the sum of a
-norm-convergent series with `n`-th term in `K n`.
+A sequence K(0), K(1), … of closed subspaces splits H as an orthogonal direct sum: the
+subspaces are pairwise orthogonal and every vector is a norm-convergent series ψ = Σ ψₙ with
+ψₙ in K(n).
 
-Blueprint reference: `def:internal-orthogonal-decomposition`.
+This is how a Hilbert space is split into sectors inside itself, for example into the
+eigenspaces of a Hamiltonian with discrete spectrum, or into the n-particle subspaces of a Fock
+space. The decomposition ψ = Σ ψₙ is unique, ‖ψ‖² = Σ ‖ψₙ‖², and the map ψ ↦ (ψ₀, ψ₁, …)
+identifies H with the external direct sum of the K(n)
+(`isHilbertSum_of_isInternalOrthogonalDecomposition`).
+
+Implementation note: the summands are indexed by ℕ, as in the blueprint, and are
+`Submodule ℂ H`s. Mathlib's notion for the same situation is `IsHilbertSum` for the inclusions
+of the summands; this structure states the blueprint's definition directly, and
+`isHilbertSum_of_isInternalOrthogonalDecomposition` converts it.
+
+Blueprint: def:internal-orthogonal-decomposition
 -/
 structure IsInternalOrthogonalDecomposition (K : ℕ → Submodule ℂ H) : Prop where
-  /-- Each summand is closed. -/
+  /-- Each subspace K(n) is closed in H. -/
   isClosed : ∀ n, IsClosed ((K n : Set H))
-  /-- The summands are pairwise orthogonal. -/
+  /-- Vectors of different subspaces K(n) and K(m), n ≠ m, are orthogonal. -/
   orthogonal : ∀ {n m : ℕ}, n ≠ m → ∀ η ∈ K n, ∀ ζ ∈ K m, ⟪η, ζ⟫_ℂ = 0
-  /-- Every vector decomposes as a norm-convergent series with terms in the summands. -/
+  /-- Every ψ in H is the sum of a norm-convergent series Σ ψₙ with ψₙ in K(n). -/
   exists_hasSum : ∀ ψ : H, ∃ f : ∀ n, K n, HasSum (fun n => (f n : H)) ψ
 
 omit [CompleteSpace H] in
@@ -144,12 +155,17 @@ theorem hasSum_norm_sq_of_isInternalOrthogonalDecomposition {K : ℕ → Submodu
   hasSum_norm_sq_aux h hf
 
 /--
-An internal orthogonal decomposition exhibits `H` as the external direct sum of its
-summands; the identifying map `ψ ↦ (ψ₁, ψ₂, …)` is unitary. In Lean this is Mathlib's
-`IsHilbertSum` for the inclusions `(K n).subtypeₗᵢ`, and the unitary map is
-`IsHilbertSum.linearIsometryEquiv`.
+An internal orthogonal decomposition of H identifies H with the external direct sum of its
+subspaces, by a unitary map.
 
-Blueprint reference: `lmm:internal-decomposition-unitary` (Part 3).
+The map sends ψ to the sequence (ψ₀, ψ₁, …) of its components, which is square-summable because
+‖ψ‖² = Σ ‖ψₙ‖². It is linear, bijective and preserves inner products, so H and the external
+direct sum of the K(n) are the same Hilbert space for every purpose of quantum mechanics.
+
+Implementation note: the conclusion is Mathlib's `IsHilbertSum` for the inclusions
+`(K n).subtypeₗᵢ`; the unitary map is then `IsHilbertSum.linearIsometryEquiv`.
+
+Blueprint: lmm:internal-decomposition-unitary (Part 3)
 -/
 theorem isHilbertSum_of_isInternalOrthogonalDecomposition {K : ℕ → Submodule ℂ H}
     (h : IsInternalOrthogonalDecomposition K) :
@@ -171,27 +187,50 @@ variable {ι : Type*} {G : ι → Type*} [∀ i, NormedAddCommGroup (G i)]
 variable [∀ i, InnerProductSpace ℂ (G i)] [∀ i, CompleteSpace (G i)]
 
 /--
-The maximal domain `V` for the componentwise operator determined by a family `A` of
-bounded operators: the vectors whose components and images have square-summable norms.
+The domain V of the operator acting componentwise by a family of bounded operators Aᵢ on an
+external direct sum: the vectors ψ = (ψᵢ) with Σ (‖ψᵢ‖² + ‖Aᵢψᵢ‖²) finite.
 
-Blueprint reference: `prpstn:hall-9.26`.
+If each Aᵢ is bounded but their norms are not uniformly bounded, the sequence (Aᵢψᵢ) need not be
+square-summable, so the componentwise operator ψ ↦ (Aᵢψᵢ) is unbounded and V is the largest
+domain on which it makes sense. A Hamiltonian that is block-diagonal with respect to a
+decomposition into sectors, with energies growing from sector to sector, is of this kind.
+For self-adjoint Aᵢ, V is the domain of the closure and of the adjoint of any
+`IsDirectSumOperator` for the family (`domain_closure_eq_directSumDomain`,
+`domain_adjoint_eq_directSumDomain`).
+
+Implementation note: the external direct sum of the Hilbert spaces G(i) is Mathlib's
+`lp G 2`, and V is a set of its elements. The index type is arbitrary, not only ℕ.
+
+Blueprint: prpstn:hall-9.26
 -/
 def directSumDomain (A : ∀ i, G i →L[ℂ] G i) : Set (lp G 2) :=
   {ψ | Summable fun i => ‖ψ i‖ ^ 2 + ‖A i (ψ i)‖ ^ 2}
 
 /--
-`T` is *the componentwise operator determined by the family `A`*: it is symmetric, its
-domain contains the finite direct sum, and it acts by `A` componentwise there.
+An operator T on an external direct sum acts componentwise by a family of bounded operators
+Aᵢ: T is symmetric, its domain contains every vector with finitely many nonzero components,
+and on such vectors (Tψ)ᵢ = Aᵢψᵢ.
 
-Blueprint reference: `prpstn:hall-9.26`.
+This fixes T only on the finite direct sum, a dense subspace; T may be defined on more. When
+every Aᵢ is self-adjoint, T is essentially self-adjoint, and its closure and its adjoint are the
+same operator ψ ↦ (Aᵢψᵢ) on the domain V of `directSumDomain`
+(`isEssentiallySelfAdjoint_of_isDirectSumOperator`, `closure_apply_eq_of_isDirectSumOperator`,
+`adjoint_apply_eq_of_isDirectSumOperator`). So the componentwise operator has exactly one
+self-adjoint version, whichever dense domain it is first written on.
+
+Implementation note: the structure is a predicate on a given partial linear map `T` on
+`lp G 2`, rather than a construction of T, matching the blueprint's "suppose A is a symmetric
+operator ...".
+
+Blueprint: prpstn:hall-9.26
 -/
 structure IsDirectSumOperator (A : ∀ i, G i →L[ℂ] G i) (T : lp G 2 →ₗ.[ℂ] lp G 2) :
     Prop where
-  /-- `T` is symmetric. -/
+  /-- The operator T is symmetric. -/
   isSymmetric : IsSymmetric T
-  /-- The finite direct sum lies in `Dom(T)`. -/
+  /-- Every vector with finitely many nonzero components lies in the domain of T. -/
   memDomain : ∀ f : lp G 2, {i : ι | f i ≠ 0}.Finite → f ∈ T.domain
-  /-- On the finite direct sum, `T` acts componentwise by `A`. -/
+  /-- On a vector ψ with finitely many nonzero components, (Tψ)ᵢ = Aᵢψᵢ for every i. -/
   apply_eq : ∀ (f : lp G 2) (hf : {i : ι | f i ≠ 0}.Finite) (i : ι),
     (T ⟨f, memDomain f hf⟩) i = A i (f i)
 
@@ -316,10 +355,14 @@ private theorem mem_adjoint_of_mem_directSumDomain (hT : IsDirectSumOperator A T
   exact LinearPMap.mem_domain_of_mem_graph hmem
 
 /--
-A componentwise operator built from bounded self-adjoint pieces is essentially
-self-adjoint.
+An operator acting componentwise by bounded self-adjoint operators on an external direct sum is
+essentially self-adjoint.
 
-Blueprint reference: `prpstn:hall-9.26`.
+Each Aᵢ ∓ i𝟙 is surjective on its summand, because the spectrum of a bounded self-adjoint
+operator is real; so the ranges of T ∓ i𝟙 contain the dense finite direct sum, and the basic
+criterion for essential self-adjointness applies (`isEssentiallySelfAdjoint_iff_dense_range`).
+
+Blueprint: prpstn:hall-9.26
 -/
 theorem isEssentiallySelfAdjoint_of_isDirectSumOperator (hA : ∀ i, IsSelfAdjoint (A i))
     (hT : IsDirectSumOperator A T) : IsEssentiallySelfAdjoint T := by
@@ -394,28 +437,48 @@ section InternalDirectSumOperator
 variable {K : ℕ → Submodule ℂ H} [∀ n, CompleteSpace (K n)]
 
 /--
-The maximal domain for the internal componentwise operator determined by a family `A` of
-bounded operators on the summands.
+The domain V of the operator acting by bounded operators Aₙ on the subspaces K(n) of H: the
+vectors ψ = Σ ψₙ, with ψₙ in K(n), for which Σ (‖ψₙ‖² + ‖Aₙψₙ‖²) is finite.
 
-Blueprint reference: `prpstn:hall-9.26-internal`.
+This is `directSumDomain` transported to a decomposition of H into subspaces. For an internal
+orthogonal decomposition K and self-adjoint Aₙ, V is the domain of the closure and of the
+adjoint of any `IsInternalDirectSumOperator` for the family (`domain_closure_eq_internalDomain`,
+`domain_adjoint_eq_internalDomain`).
+
+Implementation note: the definition asks for some series Σ ψₙ converging to ψ with the
+summability condition; for an internal orthogonal decomposition that series is unique
+(`hasSum_injective_of_isInternalOrthogonalDecomposition`).
+
+Blueprint: prpstn:hall-9.26-internal
 -/
 def internalDomain (K : ℕ → Submodule ℂ H) (A : ∀ n, (K n) →L[ℂ] (K n)) : Set H :=
   {ψ | ∃ f : ∀ n, K n, HasSum (fun n => (f n : H)) ψ ∧
     Summable fun n => ‖(f n : H)‖ ^ 2 + ‖(A n (f n) : H)‖ ^ 2}
 
 /--
-`T` is the internal componentwise operator determined by `A`: symmetric, defined at least
-on the algebraic span `W₀` of the summands, and acting there by `A` summandwise.
+An operator T on H acts by bounded operators Aₙ on the subspaces K(n): T is symmetric, its
+domain contains every finite sum η₀ + … + η(N−1) with ηₙ in K(n), and T sends that sum to
+A₀η₀ + … + A(N−1)η(N−1).
 
-Blueprint reference: `prpstn:hall-9.26-internal`.
+This is `IsDirectSumOperator` for a decomposition of H into subspaces, the form in which the
+blueprint applies it. For an internal orthogonal decomposition K and self-adjoint Aₙ, T is
+essentially self-adjoint, and its closure and its adjoint both send ψ = Σ ψₙ in
+`internalDomain` to Σ Aₙψₙ (`isEssentiallySelfAdjoint_of_isInternalDirectSumOperator`,
+`hasSum_closure_apply_of_isInternalDirectSumOperator`,
+`hasSum_adjoint_apply_of_isInternalDirectSumOperator`).
+
+Implementation note: the finite sums are written as sums over `Finset.range N` of an arbitrary
+family η with η n in K(n); these are exactly the vectors of the algebraic span of the K(n).
+
+Blueprint: prpstn:hall-9.26-internal
 -/
 structure IsInternalDirectSumOperator (A : ∀ n, (K n) →L[ℂ] (K n))
     (T : H →ₗ.[ℂ] H) : Prop where
-  /-- `T` is symmetric. -/
+  /-- The operator T is symmetric. -/
   isSymmetric : IsSymmetric T
-  /-- Every finite sum of elements of the summands lies in `Dom(T)`. -/
+  /-- Every finite sum η₀ + … + η(N−1) with ηₙ in K(n) lies in the domain of T. -/
   memDomain : ∀ (N : ℕ) (η : ∀ n, K n), (∑ n ∈ Finset.range N, (η n : H)) ∈ T.domain
-  /-- On such a finite sum, `T` acts summandwise by `A`. -/
+  /-- T sends η₀ + … + η(N−1) to A₀η₀ + … + A(N−1)η(N−1). -/
   apply_eq : ∀ (N : ℕ) (η : ∀ n, K n),
     T ⟨∑ n ∈ Finset.range N, (η n : H), memDomain N η⟩ =
       ∑ n ∈ Finset.range N, (A n (η n) : H)
@@ -539,13 +602,19 @@ private theorem mem_adjoint_of_mem_internalDomain (hK : IsInternalOrthogonalDeco
   exact LinearPMap.mem_domain_of_mem_graph hmem
 
 /--
-The internal form of `prpstn:hall-9.26`: essential self-adjointness.
+An operator acting by bounded self-adjoint operators on the subspaces of an internal orthogonal
+decomposition is essentially self-adjoint.
 
-Remark: the instance `[∀ n, CompleteSpace (K n)]` (needed for `IsSelfAdjoint (A n)`, which
-uses the Hilbert adjoint on `K n →L[ℂ] K n`) is not a restriction: it follows from `hK.isClosed`
-via `IsClosed.completeSpace_coe`, so a caller can always supply it with `haveI`.
+This is the internal form of `isEssentiallySelfAdjoint_of_isDirectSumOperator`, with the same
+proof: each subspace K(n) lies in the ranges of T ∓ i𝟙, and the K(n) together span a dense
+subspace of H.
 
-Blueprint reference: `prpstn:hall-9.26-internal`.
+Implementation note: the instance `[∀ n, CompleteSpace (K n)]` (needed for
+`IsSelfAdjoint (A n)`, which uses the Hilbert adjoint on `K n →L[ℂ] K n`) is not a restriction:
+it follows from `hK.isClosed` via `IsClosed.completeSpace_coe`, so a caller can always supply
+it with `haveI`.
+
+Blueprint: prpstn:hall-9.26-internal
 -/
 theorem isEssentiallySelfAdjoint_of_isInternalDirectSumOperator
     (hK : IsInternalOrthogonalDecomposition K) (hA : ∀ n, IsSelfAdjoint (A n))

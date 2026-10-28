@@ -48,18 +48,25 @@ open scoped ComplexOrder
 open scoped InnerProductSpace
 
 /--
-**GNS Construction Theorem** (blueprint label `thrm:gns-construction-theorem`).
+The GNS construction: every state ω is the vector state of a cyclic representation (H, π, Ω).
 
-Let `ω` be a state over a unital C*-algebra `A`. Then there exist a complex
-Hilbert space `H`, a *-representation `π : A →⋆ₐ[ℂ] (H →L[ℂ] H)`, and a
-cyclic vector `Ω : H` for `π`, such that the reproducing formula
-`ω a = ⟪Ω, π a Ω⟫_ℂ` holds for every `a : A`. Moreover, if `ω` is faithful
-then `π` is injective.
+Given a state ω on a unital C*-algebra A, there are a complex Hilbert space H, a representation
+π of A by bounded operators on H and a vector Ω ∈ H such that
 
-The Hilbert space `H` lives in the same universe as `A`, which is the
-universe `f.GNS` lands in for `f : A →ₚ[ℂ] ℂ`.
+ω(a) = ⟨Ω, π(a)Ω⟩ for every a ∈ A,
 
-Uniqueness up to unitary equivalence is stated separately as `gns_unique`.
+and Ω is cyclic for π. If ω is faithful, π is injective. This is how a Hilbert space enters
+algebraic quantum field theory: the theory gives the algebra of observables and a state, such as
+the vacuum, and the GNS construction produces the Hilbert space on which the observables act as
+operators, with Ω representing the state. The construction completes A/N(ω) for the inner product
+⟨[a], [b]⟩ = ω(a* b) (`nullSet`), with π(a)[b] = [ab] and Ω = [1]. The triple is unique up to
+unitary equivalence (`gns_unique`).
+
+Implementation note: H is the space `PositiveLinearMap.GNS` that Mathlib builds from ω, and π is
+`PositiveLinearMap.gnsStarAlgHom`. The statement quantifies H in the universe of A, where that
+space lives.
+
+Blueprint: thrm:gns-construction-theorem
 -/
 theorem gns_construction.{u} {A : Type u} [CStarAlgebra A] (ω : State A) :
     ∃ (H : Type u)
@@ -150,15 +157,19 @@ theorem gns_construction.{u} {A : Type u} [CStarAlgebra A] (ω : State A) :
     exact lt_irrefl _ hpos
 
 /--
-**Uniqueness of the GNS triple, up to unitary equivalence**
-(blueprint label `thrm:gns-construction-theorem`, uniqueness clause).
+Uniqueness of the GNS triple: two cyclic representations reproducing ω are unitarily equivalent.
 
-Suppose two GNS-type triples `(H₁, π₁, Ω₁)` and `(H₂, π₂, Ω₂)` are both
-associated to the same state `ω` on the unital C*-algebra `A`, in the sense
-that each is a cyclic *-representation reproducing `ω` via its inner
-product. Then there exists a unitary (linear isometric) equivalence
-`U : H₁ ≃ₗᵢ[ℂ] H₂` intertwining the representations
-(`U (π₁ a x) = π₂ a (U x)` for all `a` and `x`) and sending `Ω₁` to `Ω₂`.
+Let (H₁, π₁, Ω₁) and (H₂, π₂, Ω₂) be representations of A with cyclic vectors, both reproducing
+the state ω: ω(a) = ⟨Ω₁, π₁(a)Ω₁⟩ = ⟨Ω₂, π₂(a)Ω₂⟩. Then there is a unitary U : H₁ → H₂ with
+UΩ₁ = Ω₂ and U π₁(a) = π₂(a) U for all a ∈ A. The map U sends π₁(a)Ω₁ to π₂(a)Ω₂; it preserves
+inner products, since both equal ω(a* b), and it extends from the dense orbits to the whole spaces.
+So the representation that a state determines is unique, and "the" GNS representation of ω is
+well defined up to unitary equivalence.
+
+Implementation note: U is a linear isometric equivalence `H₁ ≃ₗᵢ[ℂ] H₂`, and the two Hilbert
+spaces may live in different universes.
+
+Blueprint: thrm:gns-construction-theorem
 -/
 theorem gns_unique {A : Type*} [CStarAlgebra A] (ω : State A)
     {H₁ : Type*}

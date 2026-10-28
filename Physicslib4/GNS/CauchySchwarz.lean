@@ -73,12 +73,16 @@ private lemma omega_expand_smul_add
   ring
 
 /--
-**Hermitian symmetry for positive linear functionals on a `*`-algebra**
-(part 1 of `lmm:cauchy-schwarz-inequality`).
+Hermitian symmetry of a positive functional: ω(a* b) is the complex conjugate of ω(b* a).
 
-If `ω : A →ₗ[ℂ] ℂ` satisfies `0 ≤ ω (star a * a)` for every `a : A`, then
-`ω (star a * b) = star (ω (star b * a))` for all `a, b : A`, i.e.
-`ω(a*b) = conj(ω(b*a))`.
+A linear functional ω on a complex *-algebra is positive when ω(a* a) ≥ 0 for every a. The form
+⟨a, b⟩ = ω(a* b) is then Hermitian, as an inner product is. The proof applies positivity to
+a + b and ia + b.
+
+Implementation note: ω is only linear (`A →ₗ[ℂ] ℂ`); continuity, normalisation and a unit are not
+needed, and A is any complex *-ring with compatible scalar action.
+
+Blueprint: the Hermitian symmetry used in lmm:cauchy-schwarz-inequality
 -/
 theorem omega_star_swap_conj
     (ω : A →ₗ[ℂ] ℂ) (hω : ∀ a : A, 0 ≤ ω (star a * a)) (a b : A) :
@@ -110,18 +114,19 @@ theorem omega_star_swap_conj
   · rw [Complex.star_def, Complex.conj_im]; linarith
 
 /--
-**Cauchy-Schwarz inequality for positive linear functionals on a `*`-algebra**
-(`lmm:cauchy-schwarz-inequality`, primary entry point).
+The Cauchy–Schwarz inequality |ω(a* b)|² ≤ ω(a* a) ω(b* b) for a positive linear functional ω.
 
-Let `A` be a complex `*`-algebra (here packaged as a `NonUnitalNonAssocRing`
-with a compatible `StarRing` structure and `Module ℂ A`). If
-`ω : A →ₗ[ℂ] ℂ` satisfies `0 ≤ ω (star a * a)` for every `a : A`, then for
-all `a, b : A` we have
-`|ω(a*b)|² ≤ ω(a*a) · ω(b*b)`.
+The form ⟨a, b⟩ = ω(a* b) is a positive semi-definite Hermitian form on A, and this is the
+Cauchy–Schwarz inequality for it; it holds although the form may be degenerate. It is the key
+step in the GNS construction: if ω(n* n) = 0 then ω(b* n) = 0 for every b (`lmm1`). Every state
+is a positive functional, so the inequality applies to states.
 
-Because `ω (star a * a)` and `ω (star b * b)` are non-negative reals (by the
-positivity hypothesis), the inequality is stated using the real parts of
-these complex numbers and `Complex.normSq` for the left-hand side.
+Implementation note: ω is only linear (`A →ₗ[ℂ] ℂ`), not assumed continuous or normalised, and
+A is any complex *-ring with compatible scalar action. Since ω(a* a) and ω(b* b) are non-negative
+reals, the right-hand side is written with real parts, and the left-hand side is
+`Complex.normSq`.
+
+Blueprint: lmm:cauchy-schwarz-inequality
 -/
 theorem cauchy_schwarz_inequality
     (ω : A →ₗ[ℂ] ℂ) (hω : ∀ a : A, 0 ≤ ω (star a * a)) (a b : A) :

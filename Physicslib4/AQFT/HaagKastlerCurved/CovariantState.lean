@@ -53,10 +53,22 @@ namespace HaagKastlerNet
 variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
 
 /--
-A *covariant family of local states* assigns to every region `B` a state
-`ω B` on the local algebra `𝔘(B)` such that the state on `B` is the
-pullback of the state on the isometric image `φ·B` along the covariance
-equivalence: `ω B a = ω (φ·B) (α_φ a)` for all `φ`, `B`, and `a ∈ 𝔘(B)`.
+A covariant family of local states: a state ω_B on each 𝔘(B), carried into one another by the
+isometries.
+
+The family assigns to every region B a state ω_B on its local algebra 𝔘(B). It is covariant when
+ω_B(a) = ω_(φ(B))(α_φ a) for every isometry φ connected to the identity, every region B and every
+a ∈ 𝔘(B), where α_φ is the covariance isomorphism of Axiom 5 (`covEquiv`). Expectation values in a
+region and in its image under a symmetry of the spacetime are then the same. Curved spacetime
+has no quasilocal algebra, hence no single global state to be invariant; this local family is the
+available form of a covariant state. Mathematically, on a region fixed by φ the condition makes
+ω_B invariant under the stabilizer automorphism of 𝔘(B) (`stabAut`); the library has no separate
+lemma for this.
+
+Implementation note: the family is indexed by all subsets of M; only its values on basis sets are
+meaningful.
+
+Blueprint: def:covariant-state-family-in-curved-spacetime
 -/
 def IsCovariantFamily (ω : ∀ B : Set M.Carrier, State (N.algebra B)) : Prop :=
   ∀ (φ : M.Isom) (B : Set M.Carrier) (a : N.algebra B),
