@@ -15,7 +15,10 @@ website's look from the website's own theme code (`Site.Theme`), through this mo
   (`navbar.js`) and its theme switch script (`dark.js`), which stores the choice of light or dark
   mode in the browser, so the website and the books share it;
 * the header `Site.headerWith`, with the plain "physicslib4" wordmark and the same navigation as the
-  website. `replaceHeader` puts it in place of the manual genre's header once the HTML is written.
+  website, laid out by the website's `Site.headerCss`, so that it has the same size and position on
+  every page. `replaceHeader` puts it in place of the manual genre's header once the HTML is
+  written. The manual genre's search box sits at the top of the table of contents (`searchToToc`),
+  and on a phone the table-of-contents button sits in the header, left of the navigation button.
   The books have no footer: the manual genre's previous and next links close each page.
 
 `bookCss` maps the manual genre's own style variables to the design tokens, so that the table of
@@ -32,7 +35,7 @@ namespace Book
 /-- Styles shared by the books: the manual genre restyled with the website's design tokens. -/
 def bookCss : String := "
 :root {
-  --verso-header-height: 4.5rem;
+  --verso-header-height: var(--site-header-height);
   --verso-structure-font-family: var(--font-primary);
   --verso-text-font-family: var(--font-primary);
   --verso-code-font-family: 'Fira Code', monospace;
@@ -59,27 +62,31 @@ html { color-scheme: light; }
 html.dark-theme { color-scheme: dark; }
 body { background-color: var(--color-surface); color: var(--color-text); font-family: var(--font-primary); }
 
-/* The website header in place of the manual header */
-header.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 99; display: flex; align-items: center;
-  height: var(--verso-header-height); box-shadow: none; background-color: var(--color-bg-translucent);
-  border-bottom: 1px solid var(--color-border-nav); }
-header.site-header .navbar { flex: 1; min-width: 0; height: 100%; padding-top: 0; padding-bottom: 0; border-bottom: 0; }
-/* The manual genre's search box, which its script appends to the header */
-:root { --search-bar-width: 14rem; --verso-background-color: var(--color-surface); }
-header.site-header #search-wrapper { position: static; padding: 0 var(--space-8) 0 0; background: transparent; }
-header.site-header #search-wrapper .combobox .cb_edit { border: 1px solid var(--color-border-light); border-radius: var(--radius-md);
-  font-family: var(--font-primary); padding: 0.4rem 0.75rem; }
-header.site-header #search-wrapper .combobox .group.focus .cb_edit,
-header.site-header #search-wrapper .combobox .group .cb_edit:hover { outline: none; border-color: var(--color-primary); background-color: var(--color-surface); }
-@media (max-width: 1024px) { header.site-header #search-wrapper { display: none; } }
-.site-header .container { max-width: none; padding: 0 var(--space-4); margin: 0 auto; width: 100%; box-sizing: border-box; }
-.site-header ul, .site-header menu, .site-header li { margin: 0; padding: 0; list-style: none; }
-.site-header button { background: none; border: 0; font: inherit; color: inherit; cursor: pointer; }
-.site-header a { text-decoration: none; }
-.site-header .nav-link { font-family: var(--font-primary); font-size: var(--fs-base); }
+/* The website header in place of the manual header: its layout is `Site.headerCss`; here it is
+   only fixed to the top of the page, as the manual genre's layout requires */
+header.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 99; }
+/* On a phone the table-of-contents button sits in the header, left of the navigation button,
+   so that the wordmark keeps its place. Its lines have unequal lengths, like a list of contents,
+   to tell it apart from the navigation button */
 @media screen and (max-width: 700px) {
-  .site-header .nav-logo { margin-left: calc(var(--verso-burger-width) + 1.5rem); }
+  body { --verso-mobile-burger-width: 1.25rem; --verso-mobile-burger-height: 1.1rem; --verso-mobile-burger-line-width: 2px;
+    --verso-mobile-burger-line-radius: 1px; }
+  #toggle-toc-click { right: calc(var(--space-2) + var(--space-4) + 3.5rem); left: auto; align-items: flex-start; }
+  #toggle-toc-click .line2 { width: 70%; }
+  #toggle-toc-click .line3 { width: 85%; }
+  body:has(#toggle-toc:checked) #toggle-toc-click .line { width: 100%; }
 }
+/* The manual genre's search box, which its script appends to the header; `searchToToc` moves it
+   to the top of the table of contents */
+:root { --verso-background-color: var(--color-surface); }
+#toc #search-wrapper { position: relative; display: block; box-sizing: border-box; width: 100%; padding: var(--space-4) 0.5rem 0;
+  background: transparent; --search-bar-width: 100%; }
+#toc #search-wrapper .combobox, #toc #search-wrapper .combobox .group { width: 100%; }
+#toc #search-wrapper .combobox .cb_edit { border: 1px solid var(--color-border-light); border-radius: var(--radius-md);
+  font-family: var(--font-primary); font-size: var(--fs-sm); padding: 0.4rem 0.75rem; }
+#toc #search-wrapper .combobox .group.focus .cb_edit,
+#toc #search-wrapper .combobox .group .cb_edit:hover { outline: none; border-color: var(--color-primary); background-color: var(--color-surface); }
+#toc #search-wrapper ul[role=\"listbox\"] { border: 1px solid var(--color-border-light); border-radius: var(--radius-md); }
 
 /* Table of contents */
 #toc { border-right: 1px solid var(--color-border); }
@@ -131,7 +138,29 @@ that order (later rules override earlier ones of equal specificity).
 def themeCss : CssFile where
   filename := "physicslib4.css"
   contents := "\n".intercalate [
-    Site.colorTheme.toCSS, Static.navbar.css, Site.siteCss, bookCss]
+    Site.colorTheme.toCSS, Static.navbar.css, Site.siteCss, Site.headerCss, bookCss]
+
+/--
+A script that moves the manual genre's search box, which its search script appends to the
+`<header>` on page load, to the top of the table of contents, below the book title, so that the
+header row is the same as the website's. The search box keeps its event handlers when moved.
+-/
+def searchToToc : String := "
+document.addEventListener('DOMContentLoaded', () => {
+  const header = document.querySelector('header');
+  const toc = document.getElementById('toc');
+  if (!header || !toc) return;
+  const move = () => {
+    const search = header.querySelector('#search-wrapper');
+    if (!search) return false;
+    const title = toc.querySelector('.toc-title');
+    if (title) title.after(search); else toc.prepend(search);
+    return true;
+  };
+  if (move()) return;
+  const observer = new MutationObserver(() => { if (move()) observer.disconnect(); });
+  observer.observe(header, { childList: true });
+});"
 
 /--
 The HTML configuration of a book with the meta description `description`: one HTML page per
@@ -151,6 +180,7 @@ def config (description : String) : RenderConfig where
   extraJs := ({} : Std.HashSet JS)
     |>.insert "// dark.js points the favicon at /static/favicon-*.ico, which the books do not have; keep favicon.png.
 function updateFaviconForSystemTheme(theme) {}"
+    |>.insert searchToToc
   extraHead := #[
     {{ <link rel="preconnect" href="https://fonts.googleapis.com" /> }},
     {{ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" /> }},

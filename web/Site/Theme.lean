@@ -15,8 +15,8 @@ The physicslib4 site uses the Lean FRO look from `verso-web-components`: its sty
 * The accent colour (`--color-primary` and its derived shades) is a deep teal, `#0f766e`.
 * Highlighted Lean code is coloured (keywords, constants, bound variables); see `siteCss`.
 
-The tutorial and the reference manual, manual-genre books, reuse `colorTheme`, `siteCss` and
-`headerWith` (`Book.Theme`).
+The tutorial and the reference manual, manual-genre books, reuse `colorTheme`, `siteCss`,
+`headerCss` and `headerWith` (`Book.Theme`).
 -/
 
 open Verso Genre Blog Output Html Template Multi
@@ -239,6 +239,37 @@ a.feature-card:hover .feature-card-more { transform: translateX(3px); }
 }
 "
 
+/--
+The header's geometry and typography, shared by the website and the books (`Book.Theme`), so that
+the wordmark, the navigation and the icons have the same size and position on every page. The
+manual genre's stylesheet (`book.css`) styles `header`, links, lists and buttons differently from
+`verso-web-components`, so every property that affects the header's layout is set here, on
+selectors that outrank both: the height (`--site-header-height`, also the books' header height),
+the padding and maximum width of the row, the font family, size, weight and line height of the
+wordmark and the navigation links, and the list and button resets.
+-/
+def headerCss : String := "
+:root { --site-header-height: 4.5rem; }
+header.site-header { display: flex; align-items: center; box-sizing: border-box; height: var(--site-header-height);
+  margin: 0; padding: 0; box-shadow: none; background-color: var(--color-bg-translucent);
+  border-bottom: 1px solid var(--color-border-nav); font-family: var(--font-primary); font-size: 1rem; line-height: 1.2; }
+header.site-header .navbar { flex: 1; min-width: 0; height: 100%; box-sizing: border-box;
+  padding: 0 var(--space-8); border-bottom: 0; }
+header.site-header .navbar-container.container { max-width: min(var(--container-width), 100vw); padding: 0 var(--space-4);
+  margin: 0 auto; width: 100%; box-sizing: border-box; }
+header.site-header ul, header.site-header menu, header.site-header li { margin: 0; padding: 0; list-style: none; }
+header.site-header button { background: none; border: 0; margin: 0; font: inherit; color: inherit; cursor: pointer; }
+header.site-header a { text-decoration: none; }
+header.site-header .nav-logo.wordmark { font-family: var(--font-primary); font-size: 1.4rem; font-weight: 600; line-height: 1.2;
+  letter-spacing: 0.01em; margin: 0 var(--space-6) 0 0; padding: 0; }
+header.site-header .nav-link { font-family: var(--font-primary); font-size: 0.9rem; font-weight: 500; line-height: 1.2;
+  padding: var(--space-3) var(--space-4); margin: 0; }
+header.site-header .nav-link svg { width: 20px; height: 20px; }
+header.site-header .nav-toggle-label { font-size: var(--fs-xl); line-height: 1.2; padding: var(--space-3); }
+@media (max-width: 1024px) { header.site-header { background-color: var(--color-bg); } }
+@media (max-width: 768px) { header.site-header .navbar { padding: 0 var(--space-2); } }
+"
+
 /-- One navigation entry, marked active when `active` holds. -/
 def navItem (active : Bool) (title url : String) : Html :=
   {{ <li class=s!"nav-item{if active then " active" else ""}"><a class="nav-link" href={{url}}>{{title}}</a></li> }}
@@ -342,7 +373,7 @@ def headConfig : HeadConfig := {
 /-- The outer HTML template, modelled on `Verso.Web.Theme.primaryTemplate`. -/
 def primaryTemplate : TemplateM Html := do
   let headHtml ← Verso.Web.Theme.head "physicslib4" s!"physicslib4: {tagline}" headConfig colorTheme
-    (extraHead := {{ <style>{{ .text false siteCss }}</style> }})
+    (extraHead := {{ <style>{{ .text false (siteCss ++ headerCss) }}</style> }})
   return {{
     <html lang="en">
       {{ headHtml }}
