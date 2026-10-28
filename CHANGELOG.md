@@ -18,6 +18,11 @@ The first release, 1.0, is in preparation.
   Mathlib API changes: `isCovariantDerivativeOn_fderiv` (`mvfderiv_eq_fderiv`) and
   `isAbelian_iff_le_commutant` (`IsConcreteLE.le_iff` replaces `SetLike.le_def`).
 
+- The web blueprint has the header, fonts, colours, deep-teal accent and light and dark theme of
+  the website, tutorial and reference manual: a local plasTeX package (`blueprint/src/webtheme/`)
+  replaces the page layouts and the dependency graph template, and `extra_styles.css` restyles the
+  pages, theorem boxes, table of contents and dependency graph page. The PDF is unchanged.
+
 ## Pre-1.0 development notes
 
 The project started in June 2026. The notes below summarise the changes made before the first

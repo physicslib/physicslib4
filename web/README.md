@@ -213,6 +213,29 @@ previous and next links). `Book.replaceHeader`, a build step run after the HTML 
 the manual genre's header for the website header, with the book's own entry active. The books have
 no footer.
 
+## The web blueprint
+
+The web blueprint (`leanblueprint web`, published at
+<https://physicslib.github.io/physicslib4/blueprint/>) carries the same header, fonts, colours and
+light and dark theme. It is built by plasTeX, not Verso, so the header is kept in a second copy:
+
+- `blueprint/src/webtheme/site-header.html`: the header, with Blueprint as the active entry. Its
+  links are absolute URLs under `https://physicslib.github.io/physicslib4/`, so they also work in
+  `leanblueprint serve` and in a blueprint opened from disk; the Blueprint entry is `index.html`.
+- `blueprint/src/webtheme/physicslib4web.py`: a plasTeX package, loaded by `web.tex` and found
+  through `packages-dirs` in `plastex.cfg`, which puts the header on the chapter pages, the title
+  page (the layouts in `webtheme/templates/`) and the dependency graph page (`webtheme/dep_graph.html`,
+  selected by the `tpl=` option of the `blueprint` package). `blueprint/src/physicslib4web.sty` is
+  its empty LaTeX counterpart, needed because plasTeX draws the pictures of the web version with
+  LaTeX and the preamble of `web.tex`.
+- `blueprint/src/webtheme/physicslib4-theme.js`: the theme switch, with the website's
+  `localStorage` keys, so the three documents and the blueprint show the same theme.
+- `blueprint/src/extra_styles.css`: the design tokens and the header rules of `Site.headerCss`,
+  then the blueprint's own pages, theorem boxes, table of contents and dependency graph.
+
+A change to the header in `Site/Theme.lean` (`headerWith`, `headerCss`) or to the design tokens is
+copied to these files. The PDF (`print.tex`) loads none of them.
+
 ## Continuous integration
 
 - `.github/workflows/blueprint.yml` (pushes to `main`), step "Build the Verso site, tutorial and
