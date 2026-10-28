@@ -11,11 +11,12 @@ tag := "not-proved"
 file := "What-the-library-does-not-prove"
 %%%
 
-The chapters mark, where they arise, the standard facts that the library uses as hypotheses,
-states without proof in prose, or leaves out. This appendix collects them in one list, so that it
+The chapters mark, where they arise, the standard facts that the library takes as hypotheses,
+mentions in prose without proof, or leaves out. This appendix collects them in one list, so that it
 is clear where the library stops. Each item links to the place where it matters. The list
 describes the library as it is, and it changes as results are formalised. None of these facts is
-assumed silently: where a theorem depends on one, it is a hypothesis of that theorem.
+assumed silently: where a theorem depends on one, it is a hypothesis of that theorem or, for the
+group of the curved-spacetime Axiom 5, part of a definition.
 
 # Operator algebras and spectral theory
 %%%
@@ -60,7 +61,13 @@ tag := "not-proved-spacetime"
   component, the group of the curved-spacetime Axiom 5, is the whole identity component. The proof
   needs a Myers–Steenrod-type rigidity theorem, which Mathlib does not provide; the library builds
   orientation preservation into the definition instead
-  ({ref "conventions-implementation"}[conventions chapter]).
+  ([Spacetime chapter](Spacetime-and-geometry/#physicslib4-reference-manual--Spacetime-and-geometry--Design--Symmetries);
+  {ref "conventions-implementation"}[conventions chapter]).
+* _The isometries of Minkowski space connected to the identity are the proper orthochronous
+  Poincaré transformations._ This standard fact, with parity and time reversal in other
+  components, is not formalised; the Minkowski axioms use the proper orthochronous group
+  `InhomogeneousLorentzGroup` directly
+  ([Spacetime chapter](Spacetime-and-geometry/#physicslib4-reference-manual--Spacetime-and-geometry--Main-definitions-and-theorems--The-Lorentz-group-and-isometries)).
 
 # The axioms in Minkowski spacetime
 %%%
@@ -72,9 +79,14 @@ tag := "not-proved-minkowski"
   quasilocal algebra, but does not prove uniqueness
   ([Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Design--The-quasilocal-algebra-is-constructed)).
 * _The Reeh–Schlieder theorem._ In a vacuum representation the vacuum is cyclic for the algebra
-  of every region. The library does not prove it, so the Schlieder property takes cyclicity as a
-  hypothesis, in Minkowski and in curved spacetime
+  of every nonempty diamond. The library does not prove it, so the Schlieder property takes
+  cyclicity as a hypothesis, in Minkowski and in curved spacetime
   ([Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Main-definitions-and-theorems--Representations-and-local-von-Neumann-algebras)).
+* _The spectrum condition in its joint-spectrum form._ The library states the spectrum condition
+  as positive energy along every future-timelike translation. Its equivalence with the textbook
+  form, that the joint spectrum of the energy-momentum operators lies in the closed forward cone,
+  needs a joint spectral measure for commuting unbounded operators and is not formalised
+  ([Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Main-definitions-and-theorems--Symmetry-and-states)).
 * _Vacuum states of nontrivial nets._ The library defines vacuum states and proves their
   consequences that do not use the spectrum condition, but constructs no vacuum state of a
   nontrivial net

@@ -132,3 +132,25 @@ included last in `web/Manual.lean` (after `Manual.Curved`, before the draft-only
   structure, reflexive ≺ → Causal structure, oriented identity component → Implementation choices).
 - `lake build`, `generate-manual` and `check_temporal_wording.py` pass. All 21 links to the two
   new pages resolve (section anchors exist; the two chapter-level links open the page at the top).
+
+## Review fixes (`review-manual-ch-conventions-2026-10-27.md`), 2026-10-28
+
+- Chapter (C1–C8) applied with the memo's text: KMS heading "In curved spacetime, …" (C1); "a
+  quasilocal algebra need not exist, and the library constructs none" (C2); "settles them in
+  parallel … where the two differ, the paragraph says so" (C3); spectrum condition as positive
+  energy along every future-timelike translation t ↦ U(tn), generator P⁰n⁰ − P⃗·n⃗, Ĥ ≥ 0 for time
+  translations (C4; sign checked against U(a) = e^{−iP·a}); `M.IsCausalTrip t p q` (C5); "the sets
+  that generate the Alexandrov topology" (C6); "One such convention is Lean's 0⁻¹ = 0" (C7);
+  140-character prose line rewrapped (C8). Build passes.
+- Appendix (A1–A6): "every nonempty diamond" for Reeh–Schlieder (A1); new item "The spectrum
+  condition in its joint-spectrum form", linked to the Haag–Kastler chapter, Symmetry and states
+  (A2, from the `VacuumState.lean` docstring); A3: added "The isometries of Minkowski space connected
+  to the identity are the proper orthochronous Poincaré transformations" (IsometryTopology.lean
+  l. 142–144) under Spacetime; consciously omitted the Hausdorff/strong-causality equivalence
+  (blueprint chapter 9 context, not formalised by design) and "causal closure of a ball is its
+  double cone" (a docstring remark, not used anywhere); intro: "or, for the group of the
+  curved-spacetime Axiom 5, part of a definition" (A4) and "takes as hypotheses, mentions in prose
+  without proof, or leaves out" (A5); Spacetime "Symmetries" link added to the orientation item (A6).
+  L1 needs no action. Appendix now has 15 items.
+- `lake build`, `generate-manual`, `check_temporal_wording.py` pass; all links in both pages resolve
+  (chapter-level refs land at page top, as before).

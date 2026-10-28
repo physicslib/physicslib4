@@ -100,8 +100,10 @@ With this sign the Schrödinger evolution $`e^{-it\hat H}` has generator $`-\hat
 translation unitaries of a field theory are $`U(a) = e^{-iP\cdot a}`, where
 $`P\cdot a = -P^0 a^0 + \vec P\cdot\vec a` is the pairing of signature $`(-,+,+,+)` and
 $`P^0 = \hat H`. For a time translation $`a = (t, \vec 0)` this gives $`U(t) = e^{it\hat H}`, the
-inverse of the Schrödinger evolution, so its generator is $`\hat H` itself, and the spectrum
-condition, stated as positive energy, says $`\hat H \ge 0`. The
+inverse of the Schrödinger evolution, so its generator is $`\hat H` itself. The spectrum
+condition is stated as positive energy along every future-timelike translation
+$`t \mapsto U(tn)`, whose generator is $`P^0 n^0 - \vec P\cdot\vec n`; for time translations it
+says $`\hat H \ge 0`. The
 [Stone chapter](Stones-theorem/#physicslib4-reference-manual--Stone___s-theorem--Design--Positive-energy-is-a-property-of-the-generator)
 explains how positive energy is imposed on the generator directly, without assuming it bounded.
 
@@ -129,7 +131,7 @@ tag := "conventions-causal"
 
 _Causal precedence is reflexive._ On Minkowski space $`p \prec q` could be defined by vectors,
 $`q - p` causal and future-directed or zero. The library defines it by curves, as the blueprint
-does, so that one definition serves every spacetime. $`p \ll q` and `IsCausalTrip t p q` are
+does, so that one definition serves every spacetime. $`p \ll q` and `M.IsCausalTrip t p q` are
 chains of _one or more_ future-oriented timelike or causal geodesic segments, the transitive
 closure `Relation.TransGen` of single-segment precedence; $`p \prec q` is a chain of _zero or more_
 causal segments, the reflexive-transitive closure `Relation.ReflTransGen`. So $`\prec` is
@@ -193,11 +195,12 @@ tag := "conventions-axioms"
 
 As you will recall, the 1964 axioms leave several points open: which regions carry algebras, what
 "inclusion" of abstract algebras means, where two local observables are multiplied, and whether
-the global algebra is assumed or built. The library settles each the same way in Minkowski and in
-curved spacetime, so that the Minkowski axioms read as a special case.
+the global algebra is assumed or built. The library settles them in parallel in Minkowski and in
+curved spacetime, so that the Minkowski axioms read as a special case; where the two differ, the
+paragraph says so.
 
 _Regions are diamonds._ Algebras are attached to the chronological diamonds
-$`I^+(p) \cap I^-(q)`, the basic open sets of the Alexandrov topology, and the empty set counts
+$`I^+(p) \cap I^-(q)`, the sets that generate the Alexandrov topology, and the empty set counts
 as a diamond, with $`\mathfrak{U}(\emptyset) = \mathbb{C}\mathbf{1}`. The field `algebra` is a
 function on all subsets, but every axiom takes a proof that its regions are diamonds and constrains
 nothing else
@@ -237,10 +240,10 @@ $`\Lambda` proper and orthochronous. In curved spacetime it is the isometries co
 identity, encoded as the oriented identity component, which is discussed in the
 {ref "conventions-implementation"}[implementation choices] below.
 
-_KMS states and flows act on diamonds._ In Minkowski spacetime a one-parameter subgroup of the
+_In curved spacetime, KMS states and flows act on diamonds._ In Minkowski spacetime a one-parameter subgroup of the
 Poincaré group acts on the quasilocal algebra, and KMS and ground states are states of that
-algebra. In curved spacetime there is no such algebra, so a flow is a curve
-$`t \mapsto \varphi_t` in the stabiliser $`\mathrm{Stab}(\mathbf{B})` of a region, acting on
+algebra. In curved spacetime a quasilocal algebra need not exist, and the library constructs
+none, so a flow is a curve $`t \mapsto \varphi_t` in the stabiliser $`\mathrm{Stab}(\mathbf{B})` of a region, acting on
 $`\mathfrak{U}(\mathbf{B})`
 ([def:kms-state-for-flow-in-curved-spacetime](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kms-state-for-flow-in-curved-spacetime)).
 The examples that motivate these definitions, the stationary flow of a black-hole exterior and the
@@ -297,8 +300,8 @@ universe. Consistency needs one model, so nothing is lost; the library gives no 
 universes.
 
 _For a reader writing a net._ The algebras of physics, $`\mathbb{C}`, matrix algebras, the
-bounded operators on a Hilbert space `H : Type`, are in `Type`, so a net built from them has `u = 0` in Minkowski spacetime and `v = 0` in curved
-spacetime. Every general theorem of the library is universe-polymorphic and applies to it
+bounded operators on a Hilbert space `H : Type`, are in `Type`, so a net built from them has
+`u = 0` in Minkowski spacetime and `v = 0` in curved spacetime. Every general theorem of the library is universe-polymorphic and applies to it
 unchanged. Universe annotations matter only when a statement mixes objects from different
 universes: a Hilbert space obtained from a GNS existential is in the universe of the algebra, and
 a hypothesis about "every Hilbert space" in Axiom 4 of a curved net means every Hilbert space in
@@ -340,7 +343,7 @@ and the
 Where Mathlib has a notion, the library uses it, together with its conventions. Several of them
 differ from the textbook in how they treat degenerate cases. Lean functions are total, so Mathlib
 gives a definition a value, often $`0`, where the textbook leaves it undefined, and the theorems
-carry the hypothesis that excludes the degenerate case. You know one such convention already:
+carry the hypothesis that excludes the degenerate case. One such convention is Lean's
 $`0^{-1} = 0`.
 
 * _Unbounded operators are partial linear maps._ An unbounded operator is Mathlib's `LinearPMap`,
