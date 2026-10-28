@@ -236,6 +236,10 @@ light and dark theme. It is built by plasTeX, not Verso, so the header is kept i
 A change to the header in `Site/Theme.lean` (`headerWith`, `headerCss`) or to the design tokens is
 copied to these files. The PDF (`print.tex`) loads none of them.
 
+The layouts in `webtheme/` are copies of plasTeX's own, so CI builds the blueprint with the versions
+pinned in `blueprint/requirements.txt` (its own step in `.github/workflows/blueprint.yml`, not
+docgen-action's unpinned install). Raising a pin needs a local `leanblueprint web` check first.
+
 ## Continuous integration
 
 - `.github/workflows/blueprint.yml` (pushes to `main`), step "Build the Verso site, tutorial and
