@@ -4,6 +4,19 @@ Completes decision 3 of `scout-verso-site-2026-10-14.md` ("alongside first, then
 website (`/site/`), tutorial (`/tutorial/`) and reference manual (`/manual/`) are complete and
 reviewed.
 
+## Decisions recorded (2026-10-28)
+
+1. Timing: merge the current branch to `main` first, so `/site/`, `/tutorial/`, `/manual/` and the
+   restyled blueprint go live alongside Jekyll; switch only after they are seen working.
+2. Landing-page counts: generated at build time by a small script, never maintained by hand.
+3. Version statement: `README.md` alone. When Jekyll is removed, the statements in `home_page/index.md`
+   and `blueprint/src/sections/sec10/introduction.tex` go, `VERSION_HOMES` becomes README only, and
+   the project rule in `.claude/CLAUDE.md` is updated to match (the user approved that edit).
+4. Redirects from the old URLs are kept indefinitely.
+5. Deployment: option (b). Assemble the Pages artifact in the workflow (API docs, the blueprint, which
+   is already built in its own step, the Verso outputs at the root); this also allows restyling the
+   API docs. Jekyll and `docgen-action`'s deployment are removed.
+
 ## Current state
 
 - **Jekyll.** `home_page/` holds the Jekyll site: `index.md`, `guide.md`, `axioms.md` and the eight
