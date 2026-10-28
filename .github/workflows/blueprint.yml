@@ -91,6 +91,18 @@ jobs:
             rm -rf home_page/blueprint
             cp -r blueprint/web home_page/blueprint
 
+      # doc-gen4 starts many short `git` processes (source links) while a large build process holds
+      # memory; without swap and overcommit, those process starts fail with "error code 12, not
+      # enough memory". Swap plus vm.overcommit_memory=1 lets them start.
+      - name: Add swap and allow memory overcommit for doc-gen4
+        run: |
+          sudo fallocate -l 8G /docgen-swap
+          sudo chmod 600 /docgen-swap
+          sudo mkswap /docgen-swap
+          sudo swapon /docgen-swap
+          sudo sysctl -w vm.overcommit_memory=1
+          free -h
+
       - name: Compile documentation
         uses: leanprover-community/docgen-action@7b5b9a1822650bd45aaeb4182d94bceba2030f89 # 2026-04-14
         with:
