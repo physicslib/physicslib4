@@ -67,7 +67,7 @@ jobs:
           fi
 
       # Builds the Verso site, tutorial and reference manual in `web/` without deploying them
-      # (deployment is in `blueprint.yml`). They are served from `/physicslib4/site/`,
+      # (deployment is in `blueprint.yml`). They are served from `/physicslib4/`,
       # `/physicslib4/tutorial/` and `/physicslib4/manual/`, so their pages must not use
       # root-relative URLs.
       - name: Build the Verso site, tutorial and manual
@@ -81,6 +81,6 @@ jobs:
           ~/.elan/bin/lake exe generate-tutorial --output _out/tutorial
           ~/.elan/bin/lake exe generate-manual --output _out/manual
           if grep -rnoE '(href|src)="/[^/][^"]*"' _out/site _out/tutorial/html-multi _out/manual/html-multi --include='*.html'; then
-            echo "Root-relative URLs found; they break under /physicslib4/site/, /physicslib4/tutorial/ and /physicslib4/manual/." >&2
+            echo "Root-relative URLs found; they break under /physicslib4/, /physicslib4/tutorial/ and /physicslib4/manual/." >&2
             exit 1
           fi

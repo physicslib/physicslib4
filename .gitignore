@@ -10,10 +10,9 @@
 scratch_*
 blueprint/src/web.paux
 
-# The Verso site, generated into the Jekyll home page by CI (blueprint.yml).
-home_page/site/
-home_page/tutorial/
-home_page/manual/
+# The API docs package and the assembled Pages site, written by CI (blueprint.yml).
+/docbuild/
+/_site/
 
 # Python bytecode (blueprint/src/webtheme)
 __pycache__/

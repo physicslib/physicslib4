@@ -194,6 +194,7 @@ cp -R web/_out/site/. /tmp/srv/physicslib4/
 cp -R web/_out/tutorial/html-multi /tmp/srv/physicslib4/tutorial
 cp -R web/_out/manual/html-multi /tmp/srv/physicslib4/manual
 cp -R blueprint/web /tmp/srv/physicslib4/blueprint   # optional, after `leanblueprint web`
+cp blueprint/print/print.pdf /tmp/srv/physicslib4/blueprint.pdf   # optional, after `leanblueprint pdf`
 cp -R web/redirects/. /tmp/srv/physicslib4/
 python3 -m http.server -d /tmp/srv
 ```
@@ -254,23 +255,36 @@ A change to the header in `Site/Theme.lean` (`headerWith`, `headerCss`) or to th
 copied to these files. The PDF (`print.tex`) loads none of them.
 
 The layouts in `webtheme/` are copies of plasTeX's own, so CI builds the blueprint with the versions
-pinned in `blueprint/requirements.txt` (its own step in `.github/workflows/blueprint.yml`, not
-docgen-action's unpinned install). Raising a pin needs a local `leanblueprint web` check first.
+pinned in `blueprint/requirements.txt` (step "Build the blueprint" in
+`.github/workflows/blueprint.yml`). Raising a pin needs a local `leanblueprint web` check first.
 
 ## Continuous integration
 
-- `.github/workflows/blueprint.yml` (pushes to `main`), step "Build the Verso site, tutorial and
-  manual into home_page": after `lean-action` has built physicslib4, it runs `lake exe cache get`,
-  `lake build`, `lake exe generate-site --output ../home_page/site`, `lake exe generate-tutorial
-  --output _out/tutorial` and `lake exe generate-manual --output _out/manual` in `web/`, copies
-  `_out/tutorial/html-multi` and `_out/manual/html-multi` to `home_page/tutorial/` and
-  `home_page/manual/`, then removes `web/.lake` and `web/_out`. The next step, `docgen-action`,
-  builds the blueprint and the API docs into `home_page/` and runs Jekyll there. The Verso files have
-  no front matter and no names starting with `_`, `.`, `#` or `~`, so Jekyll copies them unchanged to
-  `_site/site/`, `_site/tutorial/` and `_site/manual/`, which are deployed as `/physicslib4/site/`,
-  `/physicslib4/tutorial/` and `/physicslib4/manual/`. (Jekyll also renders each book's
-  `-verso-search/licenses.md` as an extra `licenses.html` beside it.) `home_page/site/`,
-  `home_page/tutorial/` and `home_page/manual/` are ignored by git.
+- `.github/workflows/blueprint.yml` (pushes to `main`, and manual runs) builds and publishes the
+  whole site. Its `build` job:
+  1. builds and lints physicslib4 with `lean-action`;
+  2. step "Build the Verso site, tutorial and manual": runs `lake exe cache get`, `lake build`,
+     `lake exe generate-site --output _out/site`, `lake exe generate-tutorial --output _out/tutorial`
+     and `lake exe generate-manual --output _out/manual` in `web/`, then removes `web/.lake` to free
+     disk space;
+  3. builds the blueprint PDF and web version (`leanblueprint pdf`, `leanblueprint web`) in a
+     TeX Live container, with the versions pinned in `blueprint/requirements.txt`;
+  4. builds the API docs with doc-gen4 the way `leanprover-community/docgen-action` does: a
+     `docbuild/` Lake package requiring physicslib4 from `../` and doc-gen4 at the tag matching
+     `lean-toolchain`, sharing `../.lake/packages`, built with `lake build Physicslib4:docs` into
+     `docbuild/.lake/build/doc`; the API docs of the dependencies are cached, keyed by
+     `lake-manifest.json`. Swap and memory overcommit are switched on first, for doc-gen4's many
+     `git` processes;
+  5. step "Assemble the site": copies `web/_out/site/.` to `_site/`, `web/_out/tutorial/html-multi`
+     to `_site/tutorial`, `web/_out/manual/html-multi` to `_site/manual`, `blueprint/web` to
+     `_site/blueprint`, `blueprint/print/print.pdf` to `_site/blueprint.pdf` and the API docs to
+     `_site/docs`, then `web/redirects/.` over `_site/`;
+  6. uploads `_site/` with `actions/upload-pages-artifact`, which leaves out names starting with `.`.
+
+  A commented-out step between 5 and 6 marks where a post-processing script for the API docs
+  (`_site/docs/`) goes. The `deploy` job publishes the artifact with `actions/deploy-pages`, on
+  `main` only; a manual run on another branch builds and uploads the artifact without deploying
+  it. The local check in "Build and view locally" uses the same copy commands.
 - `.github/workflows/lean_action_ci.yml` (every push and pull request, when `web/`, the library or the
   toolchain changes), step "Build the Verso site, tutorial and manual": the same builds into
   `web/_out/`, with no deployment, followed by a check that no page of the three uses a

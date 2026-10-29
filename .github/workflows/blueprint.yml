@@ -11,15 +11,25 @@ concurrency:
   group: ${{ github.ref }}  # Group runs by the ref (branch or PR)
   cancel-in-progress: true  # Cancel any ongoing runs in the same group
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read          # Read access to repository contents
-  pages: write            # Write access to GitHub Pages
-  id-token: write         # Write access to ID tokens
 
+# The `build` job builds the library, the Verso website, tutorial and reference manual, the
+# blueprint and the API docs, assembles them into `_site/` in the published layout and uploads
+# `_site/` as the Pages artifact. The `deploy` job publishes it, on `main` only: a manual run on
+# another branch builds and uploads the artifact without deploying it.
+#
+# Published layout, under https://physicslib.github.io/physicslib4/:
+#   /              the Verso website (web/_out/site)
+#   /tutorial/     the tutorial (web/_out/tutorial/html-multi)
+#   /manual/       the reference manual (web/_out/manual/html-multi)
+#   /blueprint/    the web blueprint (blueprint/web)
+#   /blueprint.pdf the blueprint PDF (blueprint/print/print.pdf)
+#   /docs/         the API docs (docbuild/.lake/build/doc)
+#   web/redirects/ copied over the root: the redirect pages and 404.html
 jobs:
-  build_project:
-    runs-on: ubuntu-24.04 # docgen-action's Ruby setup (Jekyll) does not support ubuntu-26.04
+  build:
+    runs-on: ubuntu-latest
     name: Build project
     steps:
       - name: Cleanup to free disk space
@@ -34,7 +44,7 @@ jobs:
           swap-storage: false
 
       - name: Checkout project
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           fetch-depth: 0 # Fetch all history for all branches and tags
 
@@ -46,31 +56,27 @@ jobs:
           mk_all-check: true
 
       # The Verso site, tutorial and reference manual (`web/`, a Lake package requiring physicslib4
-      # from `..`) are written to `home_page/site/`, `home_page/tutorial/` and `home_page/manual/`;
-      # the Jekyll build in docgen-action copies them unchanged to `/site/`, `/tutorial/` and
-      # `/manual/`. `generate-tutorial` and `generate-manual` write each book to
-      # `<output>/html-multi/`, which is copied into place. `lake exe cache get` unpacks Mathlib from
-      # the cache the step above downloaded, and the physicslib4 build in `../.lake/build` is reused,
-      # so neither is rebuilt. `web/.lake` is removed afterwards to free disk space for the API docs.
-      - name: Build the Verso site, tutorial and manual into home_page
+      # from `..`) are written to `web/_out/`; `generate-tutorial` and `generate-manual` write each
+      # book to `<output>/html-multi/`. `lake exe cache get` unpacks Mathlib from the cache the step
+      # above downloaded, and the physicslib4 build in `../.lake/build` is reused, so neither is
+      # rebuilt. `web/.lake` is removed afterwards to free disk space for the API docs; `web/_out`
+      # stays for the assembly step.
+      - name: Build the Verso site, tutorial and manual
         working-directory: web
         run: |
           set -euo pipefail
           ~/.elan/bin/lake exe cache get
           ~/.elan/bin/lake build
-          ~/.elan/bin/lake exe generate-site --output ../home_page/site
+          ~/.elan/bin/lake exe generate-site --output _out/site
           ~/.elan/bin/lake exe generate-tutorial --output _out/tutorial
-          rm -rf ../home_page/tutorial
-          cp -R _out/tutorial/html-multi ../home_page/tutorial
           ~/.elan/bin/lake exe generate-manual --output _out/manual
-          rm -rf ../home_page/manual
-          cp -R _out/manual/html-multi ../home_page/manual
-          rm -rf .lake _out
+          rm -rf .lake
 
-      # The blueprint is built here, with the versions pinned in blueprint/requirements.txt, rather
-      # than by docgen-action, which installs leanblueprint unpinned. The commands and container
-      # match docgen-action's own blueprint step; the declaration check runs in lean_action_ci.yml.
-      - name: Build the blueprint into home_page
+      # The blueprint is built with the versions pinned in blueprint/requirements.txt. The container
+      # and the commands are those of docgen-action's blueprint step, apart from that pin; the
+      # declaration check runs in lean_action_ci.yml. The PDF is left in `blueprint/print/` and the
+      # web version in `blueprint/web/` for the assembly step.
+      - name: Build the blueprint
         uses: xu-cheng/texlive-action@f886de8159e5952a131848a5fa9c3196a2132b5d # v2
         with:
           docker_image: ghcr.io/xu-cheng/texlive-full:20250401
@@ -85,11 +91,7 @@ jobs:
             pip install pygraphviz --config-settings="--global-option=build_ext" --config-settings="--global-option=-L/usr/lib/graphviz/" --config-settings="--global-option=-R/usr/lib/graphviz/"
             pip install -r blueprint/requirements.txt
             leanblueprint pdf
-            mkdir -p home_page
-            cp blueprint/print/print.pdf home_page/blueprint.pdf
             leanblueprint web
-            rm -rf home_page/blueprint
-            cp -r blueprint/web home_page/blueprint
 
       # doc-gen4 starts many short `git` processes (source links) while a large build process holds
       # memory; without swap and overcommit, those process starts fail with "error code 12, not
@@ -103,8 +105,173 @@ jobs:
           sudo sysctl -w vm.overcommit_memory=1
           free -h
 
-      - name: Compile documentation
-        uses: leanprover-community/docgen-action@7b5b9a1822650bd45aaeb4182d94bceba2030f89 # 2026-04-14
+      # The API docs are built as leanprover-community/docgen-action builds them (at commit
+      # 7b5b9a1822650bd45aaeb4182d94bceba2030f89): the next three steps reproduce its
+      # `src/index.js` (project metadata and the cache paths), its `actions/cache` step and its
+      # `scripts/build_docs.sh`. Two differences: they also run on `workflow_dispatch` (docgen-action
+      # builds the API docs on `push` only), and the output stays in `docbuild/.lake/build/doc` for
+      # the assembly step instead of being copied into a Jekyll folder.
+      #
+      # This step: the package name, the docs facets (each default target with `:docs`) and the
+      # paths to cache, in docgen-action's order, so that a cache it saved under the same key is
+      # restored. A manifest package maps to its module names through docgen-action's table, else
+      # through the UpperCamelCase rule of `lake new`.
+      - name: Determine the project metadata for the API docs
+        id: docs-metadata
+        run: |
+          set -euo pipefail
+          python3 - <<'EOF'
+          import json, os, re, tomllib
+
+          known = {
+              "Cli": ["Cli"], "LeanSearchClient": ["LeanSearchClient"], "Qq": ["Qq"],
+              "aesop": ["Aesop"], "batteries": ["Batteries"], "importGraph": ["ImportGraph"],
+              "mathlib": ["Mathlib", "Archive", "Counterexamples"], "plausible": ["Plausible"],
+              "proofwidgets": ["ProofWidgets"],
+          }
+
+          def modules(pkg):
+              if pkg in known:
+                  return known[pkg]
+              return ["".join(p[:1].upper() + p[1:] for p in re.split(r"[-_]", pkg))]
+
+          with open("lakefile.toml", "rb") as f:
+              lakefile = tomllib.load(f)
+          with open("lake-manifest.json", encoding="utf-8") as f:
+              manifest = json.load(f)
+
+          deps = [m for p in manifest["packages"] for m in modules(p["name"])]
+          deps += ["Init", "Lake", "Lean", "Std"]
+          paths = [f"docbuild/.lake/build/doc/{d}" for d in deps]
+          paths.append("docbuild/.lake/build/doc-data")
+          paths.append("docbuild/.lake/build/doc/declarations/declaration-data.bmp")
+          paths.append("docbuild/.lake/build/api-docs.db")
+          paths.append("docbuild/.lake/build/doc-manifest.json")
+          for static in ["style.css", "favicon.svg", "declaration-data.js", "color-scheme.js",
+                         "nav.js", "jump-src.js", "expand-nav.js", "how-about.js", "search.js",
+                         "mathjax-config.js", "instances.js", "importedBy.js", "index.html",
+                         "404.html", "navbar.html", "search.html", "foundational_types.html",
+                         "references.html", "references.bib", "tactics.html", "find/index.html",
+                         "find/find.js"]:
+              paths.append(f"docbuild/.lake/build/doc/{static}")
+
+          facets = " ".join(f"{t}:docs" for t in lakefile["defaultTargets"])
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write(f"name={lakefile['name']}\n")
+              out.write(f"docs_facets={facets}\n")
+              out.write("cached_docbuild_dependencies<<DOCS_CACHE_PATHS_EOF\n")
+              out.write("\n".join(paths) + "\nDOCS_CACHE_PATHS_EOF\n")
+          print(f"name: {lakefile['name']}\ndocs facets: {facets}")
+          print("cache paths:\n" + "\n".join(paths))
+          EOF
+
+      - name: Cache the API docs of the dependencies
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
-          blueprint: false
-          homepage: home_page
+          path: ${{ steps.docs-metadata.outputs.cached_docbuild_dependencies }}
+          key: Docs-${{ hashFiles('lake-manifest.json', 'references.bib') }}
+
+      # `docbuild/` is a Lake package requiring physicslib4 from `../` and doc-gen4 at the revision
+      # matching `lean-toolchain` (a `v4.X.Y` or `v4.X.Y-rcZ` tag; `nightly-testing` for a nightly;
+      # `main` otherwise). It shares `../.lake/packages`, so Mathlib and physicslib4 are not rebuilt.
+      - name: Build the API docs
+        env:
+          NAME: ${{ steps.docs-metadata.outputs.name }}
+          DOCS_FACETS: ${{ steps.docs-metadata.outputs.docs_facets }}
+          REFERENCES: references.bib
+        run: |
+          set -euo pipefail
+          determine_doc_gen_rev() {
+            if [[ ! -f "lean-toolchain" ]]; then
+              echo "Warning: lean-toolchain file not found, falling back to main branch" >&2
+              echo "main"; return 0
+            fi
+            local content repository revision
+            content=$(< lean-toolchain)
+            repository=$(echo "$content" | cut -f1 -d:)
+            revision=$(echo "$content" | cut -f2 -d:)
+            if [[ "$repository" != "leanprover/lean4" ]]; then
+              echo "Warning: expected 'leanprover/lean4' in lean-toolchain, got '$repository'; using main" >&2
+              echo "main"; return 0
+            fi
+            if [[ "$revision" =~ ^v4\.[0-9]+\.[0-9]+(-rc[0-9]+)?$ ]]; then
+              echo "$revision"; return 0
+            fi
+            if [[ "$revision" == *"nightly"* ]]; then
+              echo "Warning: nightly toolchain '$revision', using the nightly-testing branch" >&2
+              echo "nightly-testing"; return 0
+            fi
+            echo "Warning: unexpected toolchain '$revision', using main" >&2
+            echo "main"
+          }
+          DOC_GEN_REV=$(determine_doc_gen_rev)
+          mkdir -p docbuild
+          cat <<EOF > docbuild/lakefile.toml
+          name = "docbuild"
+          reservoir = false
+          version = "0.1.0"
+          packagesDir = "../.lake/packages"
+
+          [[require]]
+          name = "$NAME"
+          path = "../"
+
+          [[require]]
+          scope = "leanprover"
+          name = "doc-gen4"
+          rev = "$DOC_GEN_REV"
+          EOF
+          cd docbuild
+          if [ -f "../$REFERENCES" ]; then
+            mkdir -p docs
+            cp "../$REFERENCES" ./docs/references.bib
+          fi
+          # docgen-action sets this to avoid a non-blocking error of Mathlib's post-update hook.
+          MATHLIB_NO_CACHE_ON_UPDATE=1 ~/.elan/bin/lake update "$NAME"
+          ~/.elan/bin/lake build $DOCS_FACETS
+
+      # The same commands are used for a local check of the layout; see web/README.md.
+      - name: Assemble the site
+        run: |
+          set -euo pipefail
+          SITE=_site
+          rm -rf "$SITE"
+          mkdir -p "$SITE"
+          cp -R web/_out/site/. "$SITE"/
+          cp -R web/_out/tutorial/html-multi "$SITE"/tutorial
+          cp -R web/_out/manual/html-multi "$SITE"/manual
+          cp -R blueprint/web "$SITE"/blueprint
+          cp blueprint/print/print.pdf "$SITE"/blueprint.pdf
+          cp -R docbuild/.lake/build/doc "$SITE"/docs
+          cp -R web/redirects/. "$SITE"/
+          du -sh "$SITE" "$SITE"/*/
+
+      # Hook for the API docs post-processing (plan stage 6): a script that rewrites the HTML under
+      # `_site/docs/` in place (the shared header, the site's stylesheet). Until that script exists
+      # the step stays commented out, so the API docs are published as doc-gen4 writes them.
+      #
+      # - name: Post-process the API docs
+      #   run: python3 scripts/postprocess_api_docs.py _site/docs
+
+      # upload-pages-artifact leaves out files and directories whose names start with `.`
+      # (for example plasTeX's `blueprint/.cache/`).
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
+        with:
+          path: _site/
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy to GitHub Pages
+    permissions:
+      pages: write            # Write access to GitHub Pages
+      id-token: write         # Write access to ID tokens
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
