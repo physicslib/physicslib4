@@ -63,6 +63,8 @@ examples on the page are elaborated against the library itself.
 - `Manual/FeatureTests.lean`: a draft-only chapter showing `{docstring}`, `#check` and `apiDocs`;
   built only with `--draft`.
 - `Manual/Theme.lean`: the manual's configuration and header, built from `Book/Theme.lean`.
+- `docs-theme/`: the header, stylesheet and theme script that `scripts/restyle_api_docs.py` puts on
+  the API docs; see "The API docs" below.
 - `static_files/`: the "p4" wordmark icons (favicon and Apple touch icon), used by all three.
 - `redirects/`: static pages copied over the root of the published site, with the same paths as
   there, so that links to these addresses keep working. `guide.html`, `axioms.html`, the eight
@@ -258,6 +260,35 @@ The layouts in `webtheme/` are copies of plasTeX's own, so CI builds the bluepri
 pinned in `blueprint/requirements.txt` (step "Build the blueprint" in
 `.github/workflows/blueprint.yml`). Raising a pin needs a local `leanblueprint web` check first.
 
+## The API docs
+
+The API docs (doc-gen4, published at <https://physicslib.github.io/physicslib4/docs/>) carry the
+same header, fonts, colours and light and dark theme. doc-gen4 has no theme mechanism, so
+`scripts/restyle_api_docs.py DOCS_DIR` (Python 3, standard library only) rewrites its HTML after the
+build. On every page it puts the header in place of doc-gen4's top bar, moves doc-gen4's search form
+(with its autocomplete and its results page) into the header between the wordmark and the links,
+and moves the module name to the top of a module page's text. Every page and the module list
+(`navbar.html`, a frame) load the site's fonts and three files the script copies into `DOCS_DIR`.
+The header is kept in a third copy:
+
+- `docs-theme/site-header.html`: the header, with API docs as the active entry and links absolute
+  under `/physicslib4/`, so that they work at any depth under `docs/`. In place of the blueprint's
+  table-of-contents button it has the button for doc-gen4's module list on narrow screens (a label
+  for doc-gen4's checkbox `nav_toggle`); the line `SEARCH_FORM` marks where the search form goes.
+- `docs-theme/physicslib4-docs.css`: the design tokens and header rules, copied from
+  `blueprint/src/extra_styles.css`, then doc-gen4's own CSS variables, fonts and colours mapped to
+  the site's, and doc-gen4's rules for bare `header` and `nav` elements undone on the header.
+- `docs-theme/physicslib4-docs.js`: keeps doc-gen4's colour scheme (the attribute `data-theme` and
+  the key `theme`, read by doc-gen4's `color-scheme.js`) and the module-list frame in step with the
+  site's theme, which `blueprint/src/webtheme/physicslib4-theme.js` (also copied) sets. doc-gen4's
+  own colour-scheme picker at the foot of the module list is hidden: the header's switch takes its
+  place.
+
+A change to the header or the design tokens is copied to these files as well. The script marks the
+pages it rewrites and leaves marked pages alone, so a second run changes nothing; it takes about a
+second on the 5,904 pages of the API docs. To check it locally, run it on a copy of the API docs
+placed at `/tmp/srv/physicslib4/docs` in the layout of "Build and view locally".
+
 ## Continuous integration
 
 - `.github/workflows/blueprint.yml` (pushes to `main`, and manual runs) builds and publishes the
@@ -279,10 +310,11 @@ pinned in `blueprint/requirements.txt` (step "Build the blueprint" in
      to `_site/tutorial`, `web/_out/manual/html-multi` to `_site/manual`, `blueprint/web` to
      `_site/blueprint`, `blueprint/print/print.pdf` to `_site/blueprint.pdf` and the API docs to
      `_site/docs`, then `web/redirects/.` over `_site/`;
-  6. uploads `_site/` with `actions/upload-pages-artifact`, which leaves out names starting with `.`.
+  6. step "Restyle the API docs": runs `python3 scripts/restyle_api_docs.py _site/docs` (see "The
+     API docs"); it rewrites the copy in `_site/`, so the cached doc-gen4 output is not changed;
+  7. uploads `_site/` with `actions/upload-pages-artifact`, which leaves out names starting with `.`.
 
-  A commented-out step between 5 and 6 marks where a post-processing script for the API docs
-  (`_site/docs/`) goes. The `deploy` job publishes the artifact with `actions/deploy-pages`, on
+  The `deploy` job publishes the artifact with `actions/deploy-pages`, on
   `main` only; a manual run on another branch builds and uploads the artifact without deploying
   it. The local check in "Build and view locally" uses the same copy commands.
 - `.github/workflows/lean_action_ci.yml` (every push and pull request, when `web/`, the library or the

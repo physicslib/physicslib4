@@ -23,6 +23,11 @@ The first release, 1.0, is in preparation.
   replaces the page layouts and the dependency graph template, and `extra_styles.css` restyles the
   pages, theorem boxes, table of contents and dependency graph page. The PDF is unchanged.
 
+- The API docs have the header, fonts, colours and light and dark theme of the rest of the site:
+  `scripts/restyle_api_docs.py`, run in the publishing workflow, puts the shared header on every
+  doc-gen4 page with doc-gen4's search in it, and links the stylesheet and theme script in
+  `web/docs-theme/`. doc-gen4's colour scheme follows the site's theme switch.
+
 ## Pre-1.0 development notes
 
 The project started in June 2026. The notes below summarise the changes made before the first

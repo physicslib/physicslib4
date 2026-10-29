@@ -25,7 +25,7 @@ permissions:
 #   /manual/       the reference manual (web/_out/manual/html-multi)
 #   /blueprint/    the web blueprint (blueprint/web)
 #   /blueprint.pdf the blueprint PDF (blueprint/print/print.pdf)
-#   /docs/         the API docs (docbuild/.lake/build/doc)
+#   /docs/         the API docs (docbuild/.lake/build/doc), restyled by scripts/restyle_api_docs.py
 #   web/redirects/ copied over the root: the redirect pages and 404.html
 jobs:
   build:
@@ -246,12 +246,12 @@ jobs:
           cp -R web/redirects/. "$SITE"/
           du -sh "$SITE" "$SITE"/*/
 
-      # Hook for the API docs post-processing (plan stage 6): a script that rewrites the HTML under
-      # `_site/docs/` in place (the shared header, the site's stylesheet). Until that script exists
-      # the step stays commented out, so the API docs are published as doc-gen4 writes them.
-      #
-      # - name: Post-process the API docs
-      #   run: python3 scripts/postprocess_api_docs.py _site/docs
+      # The API docs get the look of the rest of the site: the script rewrites the HTML under
+      # `_site/docs/` in place (the shared header with doc-gen4's search in it, the site's fonts,
+      # colours and theme switch), from the files in `web/docs-theme/`. It works on the copy in
+      # `_site/`, so the cached doc-gen4 output is left as doc-gen4 writes it.
+      - name: Restyle the API docs
+        run: python3 scripts/restyle_api_docs.py _site/docs
 
       # upload-pages-artifact leaves out files and directories whose names start with `.`
       # (for example plasTeX's `blueprint/.cache/`).
