@@ -674,6 +674,4 @@ The blueprint sections are
 [Section 10.1](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:gns-construction-details)
 and the representation-theory subsections of
 [Section 10.6](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:haag-kastler-axioms),
-and the section pages for [Section 10.1](https://physicslib.github.io/physicslib4/sec10-1-gns.html)
-and [Section 10.6](https://physicslib.github.io/physicslib4/sec10-6-haag-kastler.html) list each
-entry with the Lean declaration that formalises it.
+and each entry there links to the Lean declarations that formalise it.

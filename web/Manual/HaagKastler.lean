@@ -726,5 +726,4 @@ representations are in `Physicslib4/GNS/`.
 
 The blueprint section is
 [Section 10.6](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html),
-and the [section page](https://physicslib.github.io/physicslib4/sec10-6-haag-kastler.html) lists
-each of its entries with the Lean declaration that formalises it.
+and each entry there links to the Lean declarations that formalise it.

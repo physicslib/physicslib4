@@ -8,6 +8,9 @@ file is where its history lives.
 
 The first release, 1.0, is in preparation.
 
+- The Jekyll home page is retired: the Verso website is served at the root, with redirects from the
+  old page URLs, and the Lean and Mathlib versions are stated in `README.md` alone.
+
 - Causal precedence `≺` is reflexive, as in Hawking–Ellis: `CausallyPrecedes` is the reflexive-transitive
   closure of causal segment precedence, so `p ≺ p` and `p ∈ J^±(p)`. `IsCausalTrip` is the strict relation,
   `NoClosedCausalCurve` excludes causal trips from a point to itself, and `isCausalTrip_asymm` replaces
@@ -22,6 +25,11 @@ The first release, 1.0, is in preparation.
   the website, tutorial and reference manual: a local plasTeX package (`blueprint/src/webtheme/`)
   replaces the page layouts and the dependency graph template, and `extra_styles.css` restyles the
   pages, theorem boxes, table of contents and dependency graph page. The PDF is unchanged.
+
+- The API docs have the header, fonts, colours and light and dark theme of the rest of the site:
+  `scripts/restyle_api_docs.py`, run in the publishing workflow, puts the shared header on every
+  doc-gen4 page with doc-gen4's search in it, and links the stylesheet and theme script in
+  `web/docs-theme/`. doc-gen4's colour scheme follows the site's theme switch.
 
 ## Pre-1.0 development notes
 

@@ -637,5 +637,4 @@ the file can be browsed.
 The subdirectories `Unbounded/` and `Stone/` formalise Sections 10.3 and 10.4 of the blueprint.
 The blueprint section is
 [Section 10.2](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:spectral-theorems),
-and the [section page](https://physicslib.github.io/physicslib4/sec10-2-spectral.html) lists each
-entry with the Lean declaration that formalises it.
+and each entry there links to the Lean declarations that formalise it.

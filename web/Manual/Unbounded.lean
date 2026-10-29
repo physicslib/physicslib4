@@ -702,5 +702,4 @@ browsed.
 The bounded theory these files build on is in the top-level files of `Physicslib4/Spectral/`,
 described in the {ref "spectral-files"}[bounded chapter]. The blueprint section is
 [Section 10.3](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:unbounded-spectral-theorems),
-and the [section page](https://physicslib.github.io/physicslib4/sec10-3-unbounded.html) lists each
-entry with the Lean declaration that formalises it.
+and each entry there links to the Lean declarations that formalise it.

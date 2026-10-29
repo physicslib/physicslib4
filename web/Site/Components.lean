@@ -81,32 +81,34 @@ structure FeatureCard where
   sections : Array String
   url : String
 
-/-- The feature cards, one per area of the formalisation, linking to the blueprint guide pages. -/
+/-- The feature cards, one per area of the formalisation, linking to the top of the matching
+reference-manual chapter. The spectral card covers two chapters and links to the first, "Bounded
+spectral theory"; a card is a single link, so its section tags are not links. -/
 def featureCards : Array FeatureCard := #[
   { title := "Haag–Kastler axioms in Minkowski spacetime."
     desc := "Local C*-algebras on causal diamonds, isotony, local commutativity, Lorentz covariance, and the quasilocal algebra."
     sections := #["§10.6"]
-    url := sectionUrl "sec10-6-haag-kastler" },
+    url := manualChapterUrl "Haag-Kastler-axioms-in-Minkowski-spacetime" },
   { title := "The axioms in curved spacetime."
     desc := "The same axioms on a Lorentzian spacetime, with isometric covariance and general covariance across backgrounds."
     sections := #["§10.7", "§10.8"]
-    url := sectionUrl "sec10-7-curved" },
+    url := manualChapterUrl "The-axioms-in-curved-spacetime-and-general-covariance" },
   { title := "The GNS construction."
     desc := "From a state on a C*-algebra to a cyclic Hilbert-space representation, unique up to unitary equivalence."
     sections := #["§10.1"]
-    url := sectionUrl "sec10-1-gns" },
+    url := manualChapterUrl "The-GNS-construction" },
   { title := "Spectral theorems."
     desc := "Projection-valued measures for bounded and for unbounded self-adjoint operators, with their functional calculi."
     sections := #["§10.2", "§10.3"]
-    url := sectionUrl "sec10-2-spectral" },
+    url := manualChapterUrl "Bounded-spectral-theory" },
   { title := "Stone's theorem."
     desc := "Every strongly continuous one-parameter unitary group has the form U(t) = exp(itA) for a unique self-adjoint generator A."
     sections := #["§10.4"]
-    url := sectionUrl "sec10-4-stone" },
+    url := manualChapterUrl "Stones-theorem" },
   { title := "Spacetime geometry."
     desc := "Causal structure, the Levi-Civita connection and geodesics on Lorentzian manifolds."
     sections := #["§10.5"]
-    url := sectionUrl "sec10-5-spacetime" }
+    url := manualChapterUrl "Spacetime-and-geometry" }
 ]
 
 /--

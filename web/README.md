@@ -63,7 +63,17 @@ examples on the page are elaborated against the library itself.
 - `Manual/FeatureTests.lean`: a draft-only chapter showing `{docstring}`, `#check` and `apiDocs`;
   built only with `--draft`.
 - `Manual/Theme.lean`: the manual's configuration and header, built from `Book/Theme.lean`.
+- `docs-theme/`: the header, stylesheet and theme script that `scripts/restyle_api_docs.py` puts on
+  the API docs; see "The API docs" below.
 - `static_files/`: the "p4" wordmark icons (favicon and Apple touch icon), used by all three.
+- `redirects/`: static pages copied over the root of the published site, with the same paths as
+  there, so that links to these addresses keep working. `guide.html`, `axioms.html`, the eight
+  `sec10-*.html` section pages and `site/index.html` each hold a page that redirects at once
+  (`<meta http-equiv="refresh">`, with `<link rel="canonical">` and a link) to its place in the
+  reference manual or, for `site/`, to the website at `../`. Their URLs are relative. `404.html` is the
+  site's "page not found" page: GitHub Pages serves it at any depth, so it is self-contained (the
+  design tokens, header rules and theme script of the web blueprint, inlined) and its links are
+  absolute paths under `/physicslib4/`.
 
 ## Writing the tutorial
 
@@ -177,36 +187,46 @@ cd ..
 
 The first `lake build` also builds physicslib4 if `../.lake` has no up-to-date build. A book's
 generator adds to its output directory without clearing it, so delete the directory first after
-renaming a chapter. The three documents link to each other through `../site/`, `../tutorial/` and
-`../manual/`, so view them side by side, as they are published:
+renaming a chapter. The website links to the books through `tutorial/` and `manual/`, and the books
+link back through `../`, so view them in the published layout, the website at the root:
 
 ```sh
-rm -rf /tmp/srv && mkdir -p /tmp/srv/physicslib4   # start clean: cp -R into an existing directory nests the copy
-cp -R web/_out/site /tmp/srv/physicslib4/site
+rm -rf /tmp/srv && mkdir -p /tmp/srv/physicslib4
+cp -R web/_out/site/. /tmp/srv/physicslib4/
 cp -R web/_out/tutorial/html-multi /tmp/srv/physicslib4/tutorial
 cp -R web/_out/manual/html-multi /tmp/srv/physicslib4/manual
+cp -R blueprint/web /tmp/srv/physicslib4/blueprint   # optional, after `leanblueprint web`
+cp blueprint/print/print.pdf /tmp/srv/physicslib4/blueprint.pdf   # optional, after `leanblueprint pdf`
+cp -R web/redirects/. /tmp/srv/physicslib4/
 python3 -m http.server -d /tmp/srv
 ```
 
-and open <http://localhost:8000/physicslib4/site/>, <http://localhost:8000/physicslib4/tutorial/> and
-<http://localhost:8000/physicslib4/manual/>.
+and open <http://localhost:8000/physicslib4/>, <http://localhost:8000/physicslib4/tutorial/> and
+<http://localhost:8000/physicslib4/manual/>. (`cp -R dir/. target/` copies the contents of `dir`;
+the tutorial and manual targets are new directories, so `cp -R` creates them.) `http.server` answers
+a missing page with its own error page, not `404.html`; open
+<http://localhost:8000/physicslib4/404.html> to see the latter.
 
 `.lake/` and `_out/` are ignored by git.
 
 ## Served from a sub-path
 
-The website is published at <https://physicslib.github.io/physicslib4/site/>, the tutorial at
-<https://physicslib.github.io/physicslib4/tutorial/> and the reference manual at
-<https://physicslib.github.io/physicslib4/manual/>, under the project site that also hosts the
-blueprint (`/physicslib4/blueprint/`) and the API docs (`/physicslib4/docs/`). The generated pages
+The website is published at the root of the project site, <https://physicslib.github.io/physicslib4/>,
+the tutorial at <https://physicslib.github.io/physicslib4/tutorial/> and the reference manual at
+<https://physicslib.github.io/physicslib4/manual/>, beside the blueprint (`/physicslib4/blueprint/`,
+with `/physicslib4/blueprint.pdf`) and the API docs (`/physicslib4/docs/`). The pages of
+`redirects/` are copied over the root. The generated pages
 contain no root-relative URLs: each page carries a relative `<base href>` pointing at the root of its
 document (`./` on the website's landing page; in a book `./` on the title page and `./../` on a
 chapter), and every local link and asset is relative to it. The website's Tutorial and Reference
-manual links go to `../tutorial/` and `../manual/`; in each book the wordmark goes to `../site/` and
-the link to the other book to `../tutorial/` or `../manual/`. They therefore work under any common
-prefix, provided the URL ends in `/` (GitHub Pages redirects `/physicslib4/site` to
-`/physicslib4/site/`). Links to the blueprint, the API docs and the blueprint guide pages are absolute
-(`Site/Links.lean`).
+manual links go to `tutorial/` and `manual/` (`Site.tutorialPath`, `Site.manualPath`); in each book
+the wordmark goes to `../` (`Site.siteFromBook`) and the link to the other book to `../tutorial/` or
+`../manual/` (`Site.tutorialFromBook`, `Site.manualFromBook`). They therefore work under any prefix,
+provided the URL ends in `/` (GitHub Pages redirects `/physicslib4` to `/physicslib4/`). The feature
+cards link to the top of reference-manual chapters through `Site.manualChapterUrl`
+(`manual/<chapter>/`); the caption links of the code gallery, plain text in `Site/FrontPage.lean`,
+write the same paths directly. Links to the
+blueprint and the API docs are absolute (`Site/Links.lean`).
 
 The books use the manual genre's own page layout (title in the table of contents, search box,
 previous and next links). `Book.replaceHeader`, a build step run after the HTML is written, swaps
@@ -237,23 +257,66 @@ A change to the header in `Site/Theme.lean` (`headerWith`, `headerCss`) or to th
 copied to these files. The PDF (`print.tex`) loads none of them.
 
 The layouts in `webtheme/` are copies of plasTeX's own, so CI builds the blueprint with the versions
-pinned in `blueprint/requirements.txt` (its own step in `.github/workflows/blueprint.yml`, not
-docgen-action's unpinned install). Raising a pin needs a local `leanblueprint web` check first.
+pinned in `blueprint/requirements.txt` (step "Build the blueprint" in
+`.github/workflows/blueprint.yml`). Raising a pin needs a local `leanblueprint web` check first.
+
+## The API docs
+
+The API docs (doc-gen4, published at <https://physicslib.github.io/physicslib4/docs/>) carry the
+same header, fonts, colours and light and dark theme. doc-gen4 has no theme mechanism, so
+`scripts/restyle_api_docs.py DOCS_DIR` (Python 3, standard library only) rewrites its HTML after the
+build. On every page it puts the header in place of doc-gen4's top bar, moves doc-gen4's search form
+(with its autocomplete and its results page) into the header between the wordmark and the links,
+and moves the module name to the top of a module page's text. Every page and the module list
+(`navbar.html`, a frame) load the site's fonts and three files the script copies into `DOCS_DIR`.
+The header is kept in a third copy:
+
+- `docs-theme/site-header.html`: the header, with API docs as the active entry and links absolute
+  under `/physicslib4/`, so that they work at any depth under `docs/`. In place of the blueprint's
+  table-of-contents button it has the button for doc-gen4's module list on narrow screens (a label
+  for doc-gen4's checkbox `nav_toggle`); the line `SEARCH_FORM` marks where the search form goes.
+- `docs-theme/physicslib4-docs.css`: the design tokens and header rules, copied from
+  `blueprint/src/extra_styles.css`, then doc-gen4's own CSS variables, fonts and colours mapped to
+  the site's, and doc-gen4's rules for bare `header` and `nav` elements undone on the header.
+- `docs-theme/physicslib4-docs.js`: keeps doc-gen4's colour scheme (the attribute `data-theme` and
+  the key `theme`, read by doc-gen4's `color-scheme.js`) and the module-list frame in step with the
+  site's theme, which `blueprint/src/webtheme/physicslib4-theme.js` (also copied) sets. doc-gen4's
+  own colour-scheme picker at the foot of the module list is hidden: the header's switch takes its
+  place.
+
+A change to the header or the design tokens is copied to these files as well. The script marks the
+pages it rewrites and leaves marked pages alone, so a second run changes nothing; it takes about a
+second on the 5,904 pages of the API docs. To check it locally, run it on a copy of the API docs
+placed at `/tmp/srv/physicslib4/docs` in the layout of "Build and view locally".
 
 ## Continuous integration
 
-- `.github/workflows/blueprint.yml` (pushes to `main`), step "Build the Verso site, tutorial and
-  manual into home_page": after `lean-action` has built physicslib4, it runs `lake exe cache get`,
-  `lake build`, `lake exe generate-site --output ../home_page/site`, `lake exe generate-tutorial
-  --output _out/tutorial` and `lake exe generate-manual --output _out/manual` in `web/`, copies
-  `_out/tutorial/html-multi` and `_out/manual/html-multi` to `home_page/tutorial/` and
-  `home_page/manual/`, then removes `web/.lake` and `web/_out`. The next step, `docgen-action`,
-  builds the blueprint and the API docs into `home_page/` and runs Jekyll there. The Verso files have
-  no front matter and no names starting with `_`, `.`, `#` or `~`, so Jekyll copies them unchanged to
-  `_site/site/`, `_site/tutorial/` and `_site/manual/`, which are deployed as `/physicslib4/site/`,
-  `/physicslib4/tutorial/` and `/physicslib4/manual/`. (Jekyll also renders each book's
-  `-verso-search/licenses.md` as an extra `licenses.html` beside it.) `home_page/site/`,
-  `home_page/tutorial/` and `home_page/manual/` are ignored by git.
+- `.github/workflows/blueprint.yml` (pushes to `main`, and manual runs) builds and publishes the
+  whole site. Its `build` job:
+  1. builds and lints physicslib4 with `lean-action`;
+  2. step "Build the Verso site, tutorial and manual": runs `lake exe cache get`, `lake build`,
+     `lake exe generate-site --output _out/site`, `lake exe generate-tutorial --output _out/tutorial`
+     and `lake exe generate-manual --output _out/manual` in `web/`, then removes `web/.lake` to free
+     disk space;
+  3. builds the blueprint PDF and web version (`leanblueprint pdf`, `leanblueprint web`) in a
+     TeX Live container, with the versions pinned in `blueprint/requirements.txt`;
+  4. builds the API docs with doc-gen4 the way `leanprover-community/docgen-action` does: a
+     `docbuild/` Lake package requiring physicslib4 from `../` and doc-gen4 at the tag matching
+     `lean-toolchain`, sharing `../.lake/packages`, built with `lake build Physicslib4:docs` into
+     `docbuild/.lake/build/doc`; the API docs of the dependencies are cached, keyed by
+     `lake-manifest.json`. Swap and memory overcommit are switched on first, for doc-gen4's many
+     `git` processes;
+  5. step "Assemble the site": copies `web/_out/site/.` to `_site/`, `web/_out/tutorial/html-multi`
+     to `_site/tutorial`, `web/_out/manual/html-multi` to `_site/manual`, `blueprint/web` to
+     `_site/blueprint`, `blueprint/print/print.pdf` to `_site/blueprint.pdf` and the API docs to
+     `_site/docs`, then `web/redirects/.` over `_site/`;
+  6. step "Restyle the API docs": runs `python3 scripts/restyle_api_docs.py _site/docs` (see "The
+     API docs"); it rewrites the copy in `_site/`, so the cached doc-gen4 output is not changed;
+  7. uploads `_site/` with `actions/upload-pages-artifact`, which leaves out names starting with `.`.
+
+  The `deploy` job publishes the artifact with `actions/deploy-pages`, on
+  `main` only; a manual run on another branch builds and uploads the artifact without deploying
+  it. The local check in "Build and view locally" uses the same copy commands.
 - `.github/workflows/lean_action_ci.yml` (every push and pull request, when `web/`, the library or the
   toolchain changes), step "Build the Verso site, tutorial and manual": the same builds into
   `web/_out/`, with no deployment, followed by a check that no page of the three uses a

@@ -51,7 +51,7 @@ example (g : InhomogeneousLorentzGroup) (p q : 𝕄) :
 
 With 𝕄 for Minkowski space and ≺ for causal precedence: the statement of `causallyPrecedes_smul_iff`.
 
-https://physicslib.github.io/physicslib4/sec10-5-spacetime.html
+manual/Spacetime-and-geometry/
 
 Consistent axioms
 
@@ -64,7 +64,7 @@ example : Nonempty HaagKastlerNet.{0} :=
 
 A Haag–Kastler net exists, so the axioms are consistent.
 
-https://physicslib.github.io/physicslib4/sec10-6-haag-kastler.html
+manual/Haag-Kastler-axioms-in-Minkowski-spacetime/
 
 :::::
 

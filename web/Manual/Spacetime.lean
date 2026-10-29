@@ -882,5 +882,4 @@ The pseudo-Riemannian layer, in `Physicslib4/Geometry/PseudoRiemannian/`:
 
 The blueprint section is
 [Section 10.5](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:spacetime),
-and the [section page](https://physicslib.github.io/physicslib4/sec10-5-spacetime.html) lists
-each of its entries with the Lean declaration that formalises it.
+and each entry there links to the Lean declarations that formalise it.
