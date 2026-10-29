@@ -7,7 +7,7 @@ text ("as we previously proved") are allowed by POSITIONAL below; a line contain
 """
 import re, sys, pathlib
 
-ROOTS = ["blueprint/src/sections", "Physicslib4", "home_page", "web", "README.md"]
+ROOTS = ["blueprint/src/sections", "Physicslib4", "web", "README.md"]
 EXTS = {".tex", ".lean", ".md", ".html"}
 SKIP = re.compile(r"(^|/)(scratch_|_site/|\.lake/|_out/)")
 PATTERN = re.compile(
@@ -31,7 +31,7 @@ QUOTED = re.compile(r'"[^"]*"')
 ALLOW = "temporal-ok"
 # Version statements are allowed in exactly these places.
 VERSION = re.compile(r"\bv4\.\d+\.\d+\b")
-VERSION_HOMES = {"blueprint/src/sections/sec10/introduction.tex", "home_page/index.md", "README.md"}
+VERSION_HOMES = {"README.md"}
 
 def files():
     for r in ROOTS:

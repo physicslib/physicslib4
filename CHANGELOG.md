@@ -8,6 +8,9 @@ file is where its history lives.
 
 The first release, 1.0, is in preparation.
 
+- The Jekyll home page is retired: the Verso website is served at the root, with redirects from the
+  old page URLs, and the Lean and Mathlib versions are stated in `README.md` alone.
+
 - Causal precedence `≺` is reflexive, as in Hawking–Ellis: `CausallyPrecedes` is the reflexive-transitive
   closure of causal segment precedence, so `p ≺ p` and `p ∈ J^±(p)`. `IsCausalTrip` is the strict relation,
   `NoClosedCausalCurve` excludes causal trips from a point to itself, and `isCausalTrip_asymm` replaces
