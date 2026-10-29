@@ -200,12 +200,11 @@ nav.toc a.toc-title:hover { color: var(--color-primary); }
 span.expand-toc { color: var(--color-text-light); font-size: 75%; }
 span.toc_ref { color: var(--color-text-light); }
 
-/* Text column: as in the books, left-aligned beside the table of contents */
+/* Text column: as in the books, centred in the space beside the table of contents */
 div.content { padding: var(--space-6); line-height: 1.45; }
-div.content-wrapper { max-width: var(--text-width); }
+div.content-wrapper { max-width: var(--text-width); margin-left: auto; margin-right: auto; }
 @media (min-width: 1024px) {
   div.content { padding: var(--space-6) var(--space-6) var(--space-8); }
-  div.content-wrapper { margin-left: 0; margin-right: auto; }
 }
 div.content > p, div.main-text p { margin: var(--space-4) 0; }
 ol, ul { font-size: var(--fs-base); }
