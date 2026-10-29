@@ -64,6 +64,14 @@ examples on the page are elaborated against the library itself.
   built only with `--draft`.
 - `Manual/Theme.lean`: the manual's configuration and header, built from `Book/Theme.lean`.
 - `static_files/`: the "p4" wordmark icons (favicon and Apple touch icon), used by all three.
+- `redirects/`: static pages copied over the root of the published site, with the same paths as
+  there, so that links to these addresses keep working. `guide.html`, `axioms.html`, the eight
+  `sec10-*.html` section pages and `site/index.html` each hold a page that redirects at once
+  (`<meta http-equiv="refresh">`, with `<link rel="canonical">` and a link) to its place in the
+  reference manual or, for `site/`, to the website at `../`. Their URLs are relative. `404.html` is the
+  site's "page not found" page: GitHub Pages serves it at any depth, so it is self-contained (the
+  design tokens, header rules and theme script of the web blueprint, inlined) and its links are
+  absolute paths under `/physicslib4/`.
 
 ## Writing the tutorial
 
@@ -177,37 +185,44 @@ cd ..
 
 The first `lake build` also builds physicslib4 if `../.lake` has no up-to-date build. A book's
 generator adds to its output directory without clearing it, so delete the directory first after
-renaming a chapter. The three documents link to each other through `../site/`, `../tutorial/` and
-`../manual/`, so view them side by side, as they are published:
+renaming a chapter. The website links to the books through `tutorial/` and `manual/`, and the books
+link back through `../`, so view them in the published layout, the website at the root:
 
 ```sh
-rm -rf /tmp/srv && mkdir -p /tmp/srv/physicslib4   # start clean: cp -R into an existing directory nests the copy
-cp -R web/_out/site /tmp/srv/physicslib4/site
+rm -rf /tmp/srv && mkdir -p /tmp/srv/physicslib4
+cp -R web/_out/site/. /tmp/srv/physicslib4/
 cp -R web/_out/tutorial/html-multi /tmp/srv/physicslib4/tutorial
 cp -R web/_out/manual/html-multi /tmp/srv/physicslib4/manual
+cp -R blueprint/web /tmp/srv/physicslib4/blueprint   # optional, after `leanblueprint web`
+cp -R web/redirects/. /tmp/srv/physicslib4/
 python3 -m http.server -d /tmp/srv
 ```
 
-and open <http://localhost:8000/physicslib4/site/>, <http://localhost:8000/physicslib4/tutorial/> and
-<http://localhost:8000/physicslib4/manual/>.
+and open <http://localhost:8000/physicslib4/>, <http://localhost:8000/physicslib4/tutorial/> and
+<http://localhost:8000/physicslib4/manual/>. (`cp -R dir/. target/` copies the contents of `dir`;
+the tutorial and manual targets are new directories, so `cp -R` creates them.) `http.server` answers
+a missing page with its own error page, not `404.html`; open
+<http://localhost:8000/physicslib4/404.html> to see the latter.
 
 `.lake/` and `_out/` are ignored by git.
 
 ## Served from a sub-path
 
-The website is published at <https://physicslib.github.io/physicslib4/site/>, the tutorial at
-<https://physicslib.github.io/physicslib4/tutorial/> and the reference manual at
-<https://physicslib.github.io/physicslib4/manual/>, under the project site that also hosts the
-blueprint (`/physicslib4/blueprint/`) and the API docs (`/physicslib4/docs/`). The generated pages
+The website is published at the root of the project site, <https://physicslib.github.io/physicslib4/>,
+the tutorial at <https://physicslib.github.io/physicslib4/tutorial/> and the reference manual at
+<https://physicslib.github.io/physicslib4/manual/>, beside the blueprint (`/physicslib4/blueprint/`,
+with `/physicslib4/blueprint.pdf`) and the API docs (`/physicslib4/docs/`). The pages of
+`redirects/` are copied over the root. The generated pages
 contain no root-relative URLs: each page carries a relative `<base href>` pointing at the root of its
 document (`./` on the website's landing page; in a book `./` on the title page and `./../` on a
 chapter), and every local link and asset is relative to it. The website's Tutorial and Reference
-manual links go to `../tutorial/` and `../manual/`; in each book the wordmark goes to `../site/` and
-the link to the other book to `../tutorial/` or `../manual/`. They therefore work under any common
-prefix, provided the URL ends in `/` (GitHub Pages redirects `/physicslib4/site` to
-`/physicslib4/site/`). The feature cards link to the top of
-reference-manual chapters through `Site.manualChapterUrl` (`../manual/<chapter>/`); the caption links
-of the code gallery, plain text in `Site/FrontPage.lean`, write the same paths directly. Links to the
+manual links go to `tutorial/` and `manual/` (`Site.tutorialPath`, `Site.manualPath`); in each book
+the wordmark goes to `../` (`Site.siteFromBook`) and the link to the other book to `../tutorial/` or
+`../manual/` (`Site.tutorialFromBook`, `Site.manualFromBook`). They therefore work under any prefix,
+provided the URL ends in `/` (GitHub Pages redirects `/physicslib4` to `/physicslib4/`). The feature
+cards link to the top of reference-manual chapters through `Site.manualChapterUrl`
+(`manual/<chapter>/`); the caption links of the code gallery, plain text in `Site/FrontPage.lean`,
+write the same paths directly. Links to the
 blueprint and the API docs are absolute (`Site/Links.lean`).
 
 The books use the manual genre's own page layout (title in the table of contents, search box,

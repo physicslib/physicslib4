@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>physicslib4: page not found</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/physicslib4/favicon.png">
+<link rel="apple-touch-icon" href="/physicslib4/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
+<!-- The 404 page of the project site. GitHub Pages serves it at any depth, so every link is an
+     absolute path under /physicslib4/. The design tokens and header rules are those of
+     blueprint/src/extra_styles.css (sections 1 and 2), the header that of
+     blueprint/src/webtheme/site-header.html with no active entry, and the theme script that of
+     blueprint/src/webtheme/physicslib4-theme.js. -->
+<script>
+// Light and dark theme of the blueprint, shared with the physicslib4 website and books.
+//
+// The theme is the class `light-theme` or `dark-theme` on <html>, as on the website. The
+// choice is kept in localStorage under the keys of the website's theme script (`theme-local`,
+// the reader's choice; `theme-system`, the system preference it was made under), so a reader
+// who switches theme on one of the documents sees the same theme on the others. Loaded in the
+// <head>, before the page is drawn.
+(function () {
+  function get(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function set(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* storage unavailable */ }
+  }
+  function apply(theme) {
+    var root = document.documentElement;
+    root.classList.toggle('dark-theme', theme === 'dark');
+    root.classList.toggle('light-theme', theme !== 'dark');
+  }
+
+  var media = window.matchMedia('(prefers-color-scheme: dark)');
+  var system = media.matches ? 'dark' : 'light';
+  var storedSystem = get('theme-system');
+  var local = get('theme-local');
+  if (storedSystem !== system && (!local || local === storedSystem)) {
+    // The system preference changed and the reader had not overridden the old one: follow it.
+    set('theme-local', system);
+    apply(system);
+  } else {
+    apply(local || system);
+  }
+
+  media.addEventListener('change', function (e) {
+    var newSystem = e.matches ? 'dark' : 'light';
+    var oldSystem = get('theme-system');
+    var current = get('theme-local');
+    if (newSystem !== oldSystem) {
+      set('theme-system', newSystem);
+      if (!current || current === oldSystem) {
+        set('theme-local', newSystem);
+        apply(newSystem);
+      }
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.change-theme').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var theme = document.documentElement.classList.contains('dark-theme') ? 'light' : 'dark';
+        set('theme-local', theme);
+        apply(theme);
+      });
+    });
+  });
+})();
+</script>
+<style>
+/* ── 1. Design tokens ───────────────────────────────────────────────────────── */
+
+:root {
+  --font-primary: 'Open Sans', Arial, sans-serif;
+  --font-code: 'Fira Code', monospace;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 2rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --radius-md: 0.5rem;
+  --container-width: 1240px;
+  --transition-base: 0.3s;
+  --site-header-height: 4.5rem;
+  --toc-width: 18rem;
+  --text-width: 47rem;
+
+  --color-surface: #fff;
+  --color-primary: #0f766e;
+  --color-primary-light: #14b8a6;
+  --color-secondary: #607D8B;
+  --color-text: #333;
+  --color-text-light: #64748b;
+  --color-bg: #F9FBFD;
+  --color-bg-translucent: rgba(249, 251, 253, 0.81);
+  --color-border: #E4EBF3;
+  --color-border-nav: #E4EBF3;
+  --color-border-light: #D1D9E2;
+  --color-hover: rgba(15, 118, 110, 0.08);
+  --color-active: rgba(15, 118, 110, 0.12);
+  --color-link: var(--color-primary);
+  --color-link-hover: #0d9488;
+  --color-shadow: rgba(35, 55, 139, 0.1);
+  --card-bg: #fff;
+  --code-bg: #f3f6f9;
+}
+
+.dark-theme {
+  --color-surface: #121212;
+  --color-primary: #0d9488;
+  --color-primary-light: #5eead4;
+  --color-secondary: #aabfc9;
+  --color-text: #eee;
+  --color-text-light: #bbb;
+  --color-bg: #181818;
+  --color-bg-translucent: rgba(24, 24, 24, 0.85);
+  --color-border: #333;
+  --color-border-nav: #333;
+  --color-border-light: #444;
+  --color-hover: rgba(45, 212, 191, 0.14);
+  --color-active: rgba(45, 212, 191, 0.16);
+  --color-link: #5eead4;
+  --color-link-hover: #5eead4;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --card-bg: #1f1f1f;
+  --code-bg: #262626;
+}
+
+html { color-scheme: light; }
+html.dark-theme { color-scheme: dark; }
+
+/* ── 2. The website header ──────────────────────────────────────────────────── */
+
+body > header.site-header {
+  display: flex; flex-shrink: 0; align-items: center; box-sizing: border-box;
+  height: var(--site-header-height); margin: 0; padding: 0; box-shadow: none; text-shadow: none;
+  position: relative; z-index: 1000; justify-content: flex-start;
+  background-color: var(--color-bg-translucent); color: var(--color-text);
+  border-bottom: 1px solid var(--color-border-nav);
+  font-family: var(--font-primary); font-size: 1rem; font-weight: 400; line-height: 1.2;
+}
+header.site-header * { box-sizing: border-box; }
+header.site-header .navbar {
+  display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1;
+  flex: 1; min-width: 0; height: 100%; padding: 0 var(--space-8); border-bottom: 0;
+}
+header.site-header .navbar-container.container {
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: min(var(--container-width), 100vw); width: 100%; margin: 0 auto; padding: 0 var(--space-4);
+}
+header.site-header ul, header.site-header menu, header.site-header li {
+  margin: 0; padding: 0; list-style: none; font-size: inherit;
+}
+header.site-header button { background: none; border: 0; margin: 0; font: inherit; color: inherit; cursor: pointer; }
+header.site-header a, header.site-header a:visited { text-decoration: none; }
+header.site-header .nav-logo.wordmark {
+  display: flex; align-items: center; color: var(--color-text);
+  font-family: var(--font-primary); font-size: 1.4rem; font-weight: 600; line-height: 1.2;
+  letter-spacing: 0.01em; margin: 0 var(--space-6) 0 0; padding: 0;
+}
+header.site-header .nav-logo.wordmark:hover { color: var(--color-primary); }
+header.site-header .desktop-menu {
+  display: flex; justify-content: space-between; align-items: center; width: 100%; gap: var(--space-6);
+}
+header.site-header .desktop-menu-part { display: flex; align-items: center; gap: var(--space-2); }
+header.site-header .nav-item { display: flex; align-items: center; }
+header.site-header .nav-link {
+  display: flex; align-items: center; justify-content: center; gap: 10px; position: relative;
+  color: var(--color-text); background: transparent; border: none; border-radius: var(--radius-md);
+  font-family: var(--font-primary); font-size: 0.9rem; font-weight: 500; line-height: 1.2;
+  padding: var(--space-3) var(--space-4); margin: 0; white-space: nowrap; cursor: pointer;
+  transition: all var(--transition-base);
+}
+header.site-header .nav-link::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: var(--radius-md);
+  background: var(--color-hover); opacity: 0; transition: opacity var(--transition-base);
+}
+header.site-header .nav-link:hover { color: var(--color-primary); }
+header.site-header .nav-link:hover::before { opacity: 1; }
+header.site-header .nav-link svg { width: 20px; height: 20px; }
+header.site-header .nav-item.active .nav-link { background-color: var(--color-active); color: var(--color-primary); }
+.dark-theme header.site-header .nav-link svg { fill: var(--color-text); stroke: var(--color-text); }
+.dark-theme header.site-header .nav-item.active .nav-link,
+.dark-theme header.site-header .nav-link:hover { color: #5eead4; }
+
+/* Narrow screens: the navigation button and, beside it, the table-of-contents button */
+header.site-header .nav-toggle { display: none; align-items: center; }
+header.site-header .nav-toggle-checkbox { display: none; }
+header.site-header .nav-toggle-label {
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  font-size: var(--fs-xl); line-height: 1.2; padding: var(--space-3); color: var(--color-text);
+}
+header.site-header .toc-toggle-button { display: flex; align-items: center; padding: var(--space-3); color: var(--color-text); }
+header.site-header .toc-toggle-button svg { width: 1.25rem; height: 1.25rem; }
+body:not(:has(nav.toc)) header.site-header .toc-toggle-button { display: none; }
+header.site-header .mobile-nav {
+  display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100;
+  background-color: var(--color-bg); border-bottom: 1px solid var(--color-border);
+  padding: var(--space-4) var(--space-8);
+}
+header.site-header .mobile-nav .nav-list { display: flex; flex-direction: column; width: 100%; }
+header.site-header .mobile-nav .nav-item { margin: var(--space-1) 0; width: 100%; }
+header.site-header .mobile-nav .nav-link { width: 100%; justify-content: flex-start; padding: var(--space-2) var(--space-4); }
+
+@media (max-width: 1024px) {
+  body > header.site-header { background-color: var(--color-bg); }
+  header.site-header .desktop-menu { display: none; }
+  header.site-header .nav-toggle { display: flex; }
+  header.site-header .navbar:has(.nav-toggle-checkbox:checked) .mobile-nav { display: block; }
+}
+@media (max-width: 768px) {
+  header.site-header .navbar { padding: 0 var(--space-2); }
+}
+
+/* ── 3. Page ────────────────────────────────────────────────────────────────── */
+
+body {
+  margin: 0; font-family: var(--font-primary); color: var(--color-text);
+  background-color: var(--color-surface); line-height: 1.6;
+}
+main { max-width: var(--text-width); margin: 0 auto; padding: var(--space-8) var(--space-4); }
+h1 { font-size: var(--fs-xl); font-weight: 600; margin: var(--space-8) 0 var(--space-4); }
+a { color: var(--color-link); }
+a:hover { color: var(--color-link-hover); }
+main ul { padding-left: var(--space-6); }
+::selection { color: #fff; background: var(--color-primary); }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <nav class="navbar" role="navigation" aria-label="Primary navigation">
+    <div class="navbar-container container">
+      <a class="nav-logo wordmark" href="/physicslib4/">physicslib4</a>
+      <div class="nav-toggle">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox"><label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">☰</label>
+      </div>
+      <menu class="desktop-menu">
+        <ul class="desktop-menu-part"></ul>
+        <ul class="desktop-menu-part">
+          <li class="nav-item"><a class="nav-link" href="/physicslib4/tutorial/">Tutorial</a></li>
+          <li class="nav-item"><a class="nav-link" href="/physicslib4/manual/">Reference manual</a></li>
+          <li class="nav-item"><a class="nav-link" href="/physicslib4/blueprint/">Blueprint</a></li>
+          <li class="nav-item"><a class="nav-link" href="/physicslib4/docs/">API docs</a></li>
+          <li class="nav-item"><a class="nav-link" href="https://github.com/physicslib/physicslib4" aria-label="GitHub"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25"><g data-name="Layer 2"><rect width="24" height="24" opacity="0"></rect><path d="M16.24 22a1 1 0 0 1-1-1v-2.6a2.15 2.15 0 0 0-.54-1.66 1 1 0 0 1 .61-1.67C17.75 14.78 20 14 20 9.77a4 4 0 0 0-.67-2.22 2.75 2.75 0 0 1-.41-2.06 3.71 3.71 0 0 0 0-1.41 7.65 7.65 0 0 0-2.09 1.09 1 1 0 0 1-.84.15 10.15 10.15 0 0 0-5.52 0 1 1 0 0 1-.84-.15 7.4 7.4 0 0 0-2.11-1.09 3.52 3.52 0 0 0 0 1.41 2.84 2.84 0 0 1-.43 2.08 4.07 4.07 0 0 0-.67 2.23c0 3.89 1.88 4.93 4.7 5.29a1 1 0 0 1 .82.66 1 1 0 0 1-.21 1 2.06 2.06 0 0 0-.55 1.56V21a1 1 0 0 1-2 0v-.57a6 6 0 0 1-5.27-2.09 3.9 3.9 0 0 0-1.16-.88 1 1 0 1 1 .5-1.94 4.93 4.93 0 0 1 2 1.36c1 1 2 1.88 3.9 1.52a3.89 3.89 0 0 1 .23-1.58c-2.06-.52-5-2-5-7a6 6 0 0 1 1-3.33.85.85 0 0 0 .13-.62 5.69 5.69 0 0 1 .33-3.21 1 1 0 0 1 .63-.57c.34-.1 1.56-.3 3.87 1.2a12.16 12.16 0 0 1 5.69 0c2.31-1.5 3.53-1.31 3.86-1.2a1 1 0 0 1 .63.57 5.71 5.71 0 0 1 .33 3.22.75.75 0 0 0 .11.57 6 6 0 0 1 1 3.34c0 5.07-2.92 6.54-5 7a4.28 4.28 0 0 1 .22 1.67V21a1 1 0 0 1-.94 1z"></path></g></svg></a></li>
+          <li class="nav-item"><button class="nav-link change-theme" aria-label="Change theme"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25"><g data-name="Layer 2"><g data-name="moon"><rect width="24" height="24" opacity="0"></rect><path d="M12.3 22h-.1a10.31 10.31 0 0 1-7.34-3.15 10.46 10.46 0 0 1-.26-14 10.13 10.13 0 0 1 4-2.74 1 1 0 0 1 1.06.22 1 1 0 0 1 .24 1 8.4 8.4 0 0 0 1.94 8.81 8.47 8.47 0 0 0 8.83 1.94 1 1 0 0 1 1.27 1.29A10.16 10.16 0 0 1 19.6 19a10.28 10.28 0 0 1-7.3 3zM7.46 4.92a7.93 7.93 0 0 0-1.37 1.22 8.44 8.44 0 0 0 .2 11.32A8.29 8.29 0 0 0 12.22 20h.08a8.34 8.34 0 0 0 6.78-3.49A10.37 10.37 0 0 1 7.46 4.92z"></path></g></g></svg></button></li>
+        </ul>
+      </menu>
+    </div>
+    <menu class="mobile-nav">
+      <ul class="nav-list">
+        <li class="nav-item"><a class="nav-link" href="/physicslib4/tutorial/">Tutorial</a></li>
+        <li class="nav-item"><a class="nav-link" href="/physicslib4/manual/">Reference manual</a></li>
+        <li class="nav-item"><a class="nav-link" href="/physicslib4/blueprint/">Blueprint</a></li>
+        <li class="nav-item"><a class="nav-link" href="/physicslib4/docs/">API docs</a></li>
+        <li class="nav-item"><a class="nav-link" href="https://github.com/physicslib/physicslib4">GitHub</a></li>
+      </ul>
+    </menu>
+  </nav>
+</header>
+<main>
+<h1>Page not found</h1>
+<p>There is no page at this address. The physicslib4 documents are here:</p>
+<ul>
+<li><a href="/physicslib4/">the physicslib4 home page</a>;</li>
+<li><a href="/physicslib4/tutorial/">the tutorial</a>;</li>
+<li><a href="/physicslib4/manual/">the reference manual</a>;</li>
+<li><a href="/physicslib4/blueprint/">the blueprint</a>;</li>
+<li><a href="/physicslib4/docs/">the API docs</a>.</li>
+</ul>
+</main>
+</body>
+</html>
