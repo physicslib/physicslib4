@@ -181,9 +181,8 @@ The repository has four parts.
   library.
 * `blueprint/src/`: the blueprint's LaTeX source; chapter 10 is in `sections/sec10/`, one file per
   section.
-* `web/`: these pages, and the project's website.
-* `home_page/`: the project's home page, with a guide to the blueprint, a page per section of
-  chapter 10 and a summary of the axioms.
+* `web/`: the project's website, this tutorial and the reference manual, which follows the
+  sections of chapter 10 and collects the library's conventions.
 
 The published versions are linked from the header of this page: the blueprint, with its dependency
 graph, and the API documentation, generated from the docstrings.

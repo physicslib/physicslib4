@@ -14,6 +14,17 @@ Supersedes the stage list of `plan-retire-jekyll-2026-10-28.md`; its recorded de
    away, keeping search, navigation and the theme switch working).
 3. The first full run of the API docs restyle may be on `main`.
 
+## Decisions after the content audit (2026-10-29)
+
+Audit: `audit-jekyll-content-2026-10-29.md`.
+- Approved gaps: only the two for the manual's conventions chapter (a map of blueprint Chapters 1–9,
+  noting that their items have no Lean; rewriting the sentence about the section pages).
+- Not approved: the landing-page gaps (status section with counts, Highlights, acknowledgements and
+  maintainer, the 1964 paper and dependency-graph links) and the optional curved-chapter item. Stage 3
+  therefore adds no counts to the landing page, so no count generator is needed.
+- `guide.html` redirects to the manual's conventions chapter.
+- Stage 3 also fixes the 13 links in `web/` and the tutorial bullet that point at Jekyll pages.
+
 ## Goals (from the user, 2026-10-29)
 
 1. **API docs (`/docs/`) styled like the rest of the site.** The same fonts and colours, and the same

@@ -652,6 +652,4 @@ The general definitions these files use, the KMS condition `AQFT.IsKMSState` and
 [Section 10.7](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:haag-kastler-axioms-in-curved-spacetime)
 and
 [Section 10.8](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:general-covariance-in-curved-spacetime),
-and the section pages for [Section 10.7](https://physicslib.github.io/physicslib4/sec10-7-curved.html)
-and [Section 10.8](https://physicslib.github.io/physicslib4/sec10-8-general-covariance.html) list
-each entry with the Lean declaration that formalises it.
+and each entry there links to the Lean declarations that formalise it.

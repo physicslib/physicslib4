@@ -43,8 +43,9 @@ def manualPath : String := "../manual/"
 /--
 The top of a reference-manual chapter, relative to the root of the website, given the chapter's
 page name, e.g. `manualChapterUrl "The-GNS-construction"`. The website is served at
-`/physicslib4/site/` and the manual at `/physicslib4/manual/`; this is the one place that encodes
-where the website sits relative to the manual.
+`/physicslib4/site/` and the manual at `/physicslib4/manual/`. The feature cards use this
+function; the caption links of the code gallery in `Site/FrontPage.lean` are plain text in the page's
+markup and write the same `../manual/` prefix directly.
 -/
 def manualChapterUrl (slug : String) : String := "../manual/" ++ slug ++ "/"
 

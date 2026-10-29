@@ -574,5 +574,4 @@ Two files outside the directory hold the results of Section 10.6 described here:
 The unbounded operators, the spectral measure and the functional calculus these files use are
 described in the {ref "unbounded-files"}[unbounded chapter]. The blueprint section is
 [Section 10.4](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:stones-theorem),
-and the [section page](https://physicslib.github.io/physicslib4/sec10-4-stone.html) lists each
-entry with the Lean declaration that formalises it.
+and each entry there links to the Lean declarations that formalise it.
