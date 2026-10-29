@@ -15,7 +15,7 @@ def tagline : String := "A Lean 4 formalisation of the mathematical foundations 
 /-- The project's GitHub repository. -/
 def githubUrl : String := "https://github.com/physicslib/physicslib4"
 
-/-- The published site that hosts the blueprint, the API docs and the blueprint guide pages. -/
+/-- The published site that hosts the blueprint and the API docs. -/
 def publishedRoot : String := "https://physicslib.github.io/physicslib4/"
 
 /-- The blueprint. -/
@@ -24,8 +24,6 @@ def blueprintUrl : String := publishedRoot ++ "blueprint/"
 /-- The API documentation. -/
 def docsUrl : String := publishedRoot ++ "docs/"
 
-/-- A blueprint guide page for one section of Chapter 10, e.g. `sectionUrl "sec10-1-gns"`. -/
-def sectionUrl (page : String) : String := publishedRoot ++ page ++ ".html"
 
 /--
 The API documentation of the declaration `decl`, defined in the module `module`. doc-gen4 writes
@@ -41,6 +39,14 @@ def tutorialPath : String := "../tutorial/"
 
 /-- The reference manual, a separate book (`Manual/`), relative to the root of the website or a book. -/
 def manualPath : String := "../manual/"
+
+/--
+The top of a reference-manual chapter, relative to the root of the website, given the chapter's
+page name, e.g. `manualChapterUrl "The-GNS-construction"`. The website is served at
+`/physicslib4/site/` and the manual at `/physicslib4/manual/`; this is the one place that encodes
+where the website sits relative to the manual.
+-/
+def manualChapterUrl (slug : String) : String := "../manual/" ++ slug ++ "/"
 
 /-- The website root, relative to the root of a book. -/
 def siteFromBook : String := "../site/"
