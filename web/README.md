@@ -205,8 +205,9 @@ chapter), and every local link and asset is relative to it. The website's Tutori
 manual links go to `../tutorial/` and `../manual/`; in each book the wordmark goes to `../site/` and
 the link to the other book to `../tutorial/` or `../manual/`. They therefore work under any common
 prefix, provided the URL ends in `/` (GitHub Pages redirects `/physicslib4/site` to
-`/physicslib4/site/`). Links to the blueprint, the API docs and the blueprint guide pages are absolute
-(`Site/Links.lean`).
+`/physicslib4/site/`). The feature cards link to the top of
+reference-manual chapters through `Site.manualChapterUrl` (`../manual/<chapter>/`). Links to the
+blueprint and the API docs are absolute (`Site/Links.lean`).
 
 The books use the manual genre's own page layout (title in the table of contents, search box,
 previous and next links). `Book.replaceHeader`, a build step run after the HTML is written, swaps
