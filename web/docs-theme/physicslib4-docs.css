@@ -273,6 +273,10 @@ main > .docs-page-name {
   font-family: var(--font-code), 'JuliaMono', monospace; font-size: var(--fs-sm); line-height: 1.4;
 }
 
+/* The welcome page (index.html, the only page whose text is one heading and one line), centred
+   like the books' title pages */
+main:has(> a#top:first-child + h1 + p:last-child) { text-align: center; }
+
 /* Declarations: definitions and instances in the accent colour, the other kinds in doc-gen4's */
 .def, .instance { border-left-color: var(--color-primary); border-top-color: var(--color-primary); }
 .decl > div { border-radius: 0 var(--radius-md) var(--radius-md) 0; }
