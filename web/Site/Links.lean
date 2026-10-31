@@ -11,7 +11,7 @@ same place from every page: `tutorial/`, `manual/` and `about/` from the website
 namespace Site
 
 /-- The tagline, shown under the wordmark and in the page metadata. -/
-def tagline : String := "A Lean 4 formalisation of the mathematical foundations of physics"
+def tagline : String := "Solving Hilbert's 6th problem in Lean 4"
 
 /-- The project's GitHub repository. -/
 def githubUrl : String := "https://github.com/physicslib/physicslib4"
