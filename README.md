@@ -11,11 +11,13 @@ Official website at <https://physicslib.github.io/physicslib4/>.
   </picture>
 </p>
 
-<p align="center"><em>Axiom 3 in one picture: the diamonds B₁ and B₂ are spacelike separated inside B, so their observables commute.</em></p>
+<p align="center"><em>Algebraic quantum field theory's axiom 3 in one picture: the diamonds B₁ and B₂ are spacelike separated inside B, so their observables commute.</em></p>
 
 # What's physicslib4?
 
-physicslib4 aims to formalise axiomatic physical theories in the [Lean 4 theorem prover](https://leanprover-community.github.io). The library covers algebraic quantum field theory: the [Haag–Kastler axioms](https://doi.org/10.1063/1.1704187) in Minkowski and curved spacetime, the GNS construction, spectral theory and Stone's theorem.
+physicslib4 aims to formalise axiomatic physical theories in the [Lean 4 theorem prover](https://leanprover-community.github.io).
+
+The library currently covers algebraic quantum field theory: the [Haag–Kastler axioms](https://doi.org/10.1063/1.1704187) in Minkowski and curved spacetime, the GNS construction, spectral theory and Stone's theorem.
 
 ## Goal
 
