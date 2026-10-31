@@ -10,8 +10,8 @@ Three documents written with [Verso](https://github.com/leanprover/verso):
   the blueprint.
 
 All three share one look: the verso-web-components design tokens with a deep-teal accent, and the
-same header with the "physicslib4" wordmark and the navigation Tutorial, Reference manual,
-Blueprint, API docs.
+same header with the "physicslib4" wordmark and the navigation About, Tutorial, Roadmap, Get involved,
+Reference manual, Blueprint, API docs.
 
 This directory is a Lake package of its own. It requires physicslib4 from `..`, so the Lean
 examples on the page are elaborated against the library itself.
@@ -24,10 +24,14 @@ examples on the page are elaborated against the library itself.
   of the blueprint and API docs (`apiDocsUrl` for one declaration).
 - `Site/Theme.lean`: the website theme (header, footer, design tokens, accent colour, code colours).
   The header, the design tokens and the stylesheet are also used by the books.
-- `Site/Components.lean`: the landing-page directives (hero, sections, code gallery, feature cards),
+- `Site/Components.lean`: the page directives (hero, sections, code gallery, feature cards, `pageToc`,
+  `anchoredHeading`, and the Get Involved page's `sideFigure`, `contributeSteps`, `contributeCards` and
+  `callout`),
   built on verso-web-components.
 - `Site/Diagram.lean`: the causal-diamond diagram, as inline SVG.
 - `Site/FrontPage.lean`: the landing page.
+- `Site/About.lean`, `Site/Roadmap.lean`, `Site/GetInvolved.lean`: the About, Roadmap and Get Involved
+  pages, at `about/`, `roadmap/` and `get-involved/`.
 - `Book/Theme.lean`: what the two books share: their stylesheet (the website's, plus `bookCss`, which
   restyles the manual genre), their HTML configuration `Book.config` and `Book.replaceHeader`,
   which puts the website header on every page.

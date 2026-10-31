@@ -152,6 +152,9 @@ header.site-header .mobile-nav .nav-list { display: flex; flex-direction: column
 header.site-header .mobile-nav .nav-item { margin: var(--space-1) 0; width: 100%; }
 header.site-header .mobile-nav .nav-link { width: 100%; justify-content: flex-start; padding: var(--space-2) var(--space-4); }
 
+header.site-header .desktop-menu .nav-link { padding-left: var(--space-2); padding-right: var(--space-2); }
+@media (max-width: 1150px) { header.site-header .navbar { padding: 0 var(--space-2); } }
+@media (max-width: 1150px) { header.site-header .desktop-menu .nav-link { padding-left: var(--space-1); padding-right: var(--space-1); font-size: 0.85rem; } }
 @media (max-width: 1024px) {
   body > header.site-header { background-color: var(--color-bg); }
   header.site-header .desktop-menu { display: none; }

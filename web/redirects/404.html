@@ -213,6 +213,8 @@ header.site-header .mobile-nav .nav-list { display: flex; flex-direction: column
 header.site-header .mobile-nav .nav-item { margin: var(--space-1) 0; width: 100%; }
 header.site-header .mobile-nav .nav-link { width: 100%; justify-content: flex-start; padding: var(--space-2) var(--space-4); }
 
+header.site-header .desktop-menu .nav-link { padding-left: var(--space-2); padding-right: var(--space-2); }
+@media (max-width: 1150px) { header.site-header .navbar { padding: 0 var(--space-2); } }
 @media (max-width: 1024px) {
   body > header.site-header { background-color: var(--color-bg); }
   header.site-header .desktop-menu { display: none; }
@@ -248,7 +250,10 @@ main ul { padding-left: var(--space-6); }
       <menu class="desktop-menu">
         <ul class="desktop-menu-part"></ul>
         <ul class="desktop-menu-part">
+          <li class="nav-item"><a class="nav-link" href="/physicslib4/about/">About</a></li>
           <li class="nav-item"><a class="nav-link" href="/physicslib4/tutorial/">Tutorial</a></li>
+          <li class="nav-item"><a class="nav-link" href="/physicslib4/roadmap/">Roadmap</a></li>
+          <li class="nav-item"><a class="nav-link" href="/physicslib4/get-involved/">Get involved</a></li>
           <li class="nav-item"><a class="nav-link" href="/physicslib4/manual/">Reference manual</a></li>
           <li class="nav-item"><a class="nav-link" href="/physicslib4/blueprint/">Blueprint</a></li>
           <li class="nav-item"><a class="nav-link" href="/physicslib4/docs/">API docs</a></li>
@@ -259,7 +264,10 @@ main ul { padding-left: var(--space-6); }
     </div>
     <menu class="mobile-nav">
       <ul class="nav-list">
+        <li class="nav-item"><a class="nav-link" href="/physicslib4/about/">About</a></li>
         <li class="nav-item"><a class="nav-link" href="/physicslib4/tutorial/">Tutorial</a></li>
+        <li class="nav-item"><a class="nav-link" href="/physicslib4/roadmap/">Roadmap</a></li>
+        <li class="nav-item"><a class="nav-link" href="/physicslib4/get-involved/">Get involved</a></li>
         <li class="nav-item"><a class="nav-link" href="/physicslib4/manual/">Reference manual</a></li>
         <li class="nav-item"><a class="nav-link" href="/physicslib4/blueprint/">Blueprint</a></li>
         <li class="nav-item"><a class="nav-link" href="/physicslib4/docs/">API docs</a></li>

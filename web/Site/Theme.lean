@@ -228,6 +228,42 @@ a.feature-card:hover { border-color: var(--color-primary); box-shadow: 0 6px 18p
 .feature-card-more { color: var(--color-primary); font-size: var(--fs-sm); font-weight: 600; white-space: nowrap; transition: transform var(--transition-base); }
 a.feature-card:hover .feature-card-more { transform: translateX(3px); }
 
+.post-content:has(.page-toc) { position: relative; }
+.post-content h2[id] { scroll-margin-top: calc(var(--site-header-height) + var(--space-4)); }
+.page-toc { position: absolute; left: calc(100% + var(--space-8)); top: 6rem; width: 12rem; }
+@media (max-width: 1279px) { .page-toc { display: none; } }
+.page-toc ul { list-style: none; margin: 0; padding: 0; }
+.page-toc li { margin: 0 0 var(--space-4); }
+.post-content .page-toc a { color: var(--color-text) !important; background: none !important; text-decoration: none; font-size: var(--fs-sm); }
+.post-content .page-toc a:hover { color: var(--color-primary) !important; }
+
+.side-figure { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--space-8); align-items: center; }
+.side-figure-image { margin: 0; }
+.side-figure-image figcaption { font-size: var(--fs-sm); line-height: 1.45; color: var(--color-text-light); text-align: center; margin-top: var(--space-2); }
+
+.post-content ol.steps { list-style: none; margin: var(--space-6) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-5); position: relative; }
+.steps::before { content: ''; position: absolute; top: 1.2rem; left: 1.2rem; right: 25%; border-top: 2px solid var(--color-border-light); }
+.post-content .steps li.step { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; padding: 0; position: relative; }
+.step-number { display: flex; align-items: center; justify-content: center; width: 2.4rem; height: 2.4rem; border-radius: 50%;
+  background: var(--testimonial-bg); color: var(--testimonial-text); font-weight: 700; }
+.step-title { line-height: 1.3; margin-top: var(--space-2); }
+.step-text { font-size: var(--fs-sm); line-height: 1.5; color: var(--color-text-light); }
+
+.contribute-grid { margin-top: var(--space-6); }
+.post-content a.contribute-card { padding: var(--space-6); color: var(--color-text) !important; background: var(--card-bg) !important; }
+.contribute-card .feature-card-text { margin: 0 0 var(--space-2); font-size: var(--fs-sm); }
+.contribute-card .feature-card-text strong { font-size: var(--fs-base); }
+.card-icon { display: block; width: 2rem; height: 2rem; margin-bottom: var(--space-3); fill: none; stroke: var(--color-primary); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.dark-theme .card-icon { stroke: #5eead4; }
+
+.callout { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); margin-top: var(--space-12);
+  padding: var(--space-8); border-radius: var(--radius-lg); background: var(--testimonial-bg); color: var(--testimonial-text); }
+.post-content .callout h3.callout-heading { margin: 0 0 var(--space-2); font-size: var(--fs-lg); color: inherit; }
+.post-content .callout p { margin: 0; color: inherit; }
+.post-content .callout-text a { color: inherit !important; text-decoration: underline; background: none !important; }
+.post-content a.callout-button { flex: none; padding: var(--space-3) var(--space-6); border-radius: var(--radius-md); background: #fff !important; color: #0f766e !important; font-weight: 600; text-decoration: none; }
+.post-content a.callout-button:hover { background: #ccfbf1 !important; }
+
 .nav-item.active .nav-link { background-color: rgba(15, 118, 110, 0.12); color: var(--color-primary); }
 .dark-theme .nav-item.active .nav-link { background-color: rgba(45, 212, 191, 0.16); color: #5eead4; }
 .dark-theme .nav-link:hover { color: #5eead4; }
@@ -236,6 +272,11 @@ a.feature-card:hover .feature-card-more { transform: translateX(3px); }
 @media (max-width: 900px) {
   .landing-hero { grid-template-columns: 1fr; padding-top: var(--space-10); }
   .feature-grid { grid-template-columns: 1fr; }
+  .side-figure { grid-template-columns: 1fr; }
+  .side-figure-image { max-width: 280px; justify-self: center; }
+  .post-content ol.steps { grid-template-columns: 1fr; }
+  .steps::before { display: none; }
+  .callout { flex-direction: column; align-items: flex-start; }
 }
 "
 
@@ -266,6 +307,8 @@ header.site-header .nav-link { font-family: var(--font-primary); font-size: 0.9r
   padding: var(--space-3) var(--space-4); margin: 0; }
 header.site-header .nav-link svg { width: 20px; height: 20px; }
 header.site-header .nav-toggle-label { font-size: var(--fs-xl); line-height: 1.2; padding: var(--space-3); }
+header.site-header .desktop-menu .nav-link { padding-left: var(--space-2); padding-right: var(--space-2); }
+@media (max-width: 1150px) { header.site-header .navbar { padding: 0 var(--space-2); } }
 @media (max-width: 1024px) { header.site-header { background-color: var(--color-bg); } }
 @media (max-width: 768px) { header.site-header .navbar { padding: 0 var(--space-2); } }
 "
@@ -311,13 +354,18 @@ def headerWith (home : String) (links : Array (String × String)) (isActive : St
   </header>
 }}
 
-/-- The website header. No navigation entry is active: each one leads out of the website. -/
-def header : Html :=
-  headerWith "./" navLinks fun _ => false
+/--
+The website header on the page at `path`. The entry of the current page is active; the entries of
+the books, the blueprint and the API docs lead out of the website.
+-/
+def header (path : Array String) : Html :=
+  let current := path[0]?.map (· ++ "/")
+  headerWith "./" navLinks fun title =>
+    navLinks.any fun (t, u) => t == title && some u == current
 
 /--
-The footer shared by the website and the books, using the `verso-web-components` footer classes.
-`home` and `links` are as in `headerWith`.
+The footer of the website, using the `verso-web-components` footer classes. `home` is as in
+`headerWith`; `links` are the documentation links.
 -/
 def footerWith (home : String) (links : Array (String × String)) : Html :=
   let link (title url : String) : Html :=
@@ -337,6 +385,9 @@ def footerWith (home : String) (links : Array (String × String)) : Html :=
         <nav class="footer-column" aria-label="Project">
           <h3 class="footer-heading">"Project"</h3>
           <ul class="footer-links">
+            {{ link "About" aboutPath }}
+            {{ link "Roadmap" roadmapPath }}
+            {{ link "Get involved" getInvolvedPath }}
             {{ link "GitHub" githubUrl }}
             {{ link "Blueprint (PDF)" (publishedRoot ++ "blueprint.pdf") }}
           </ul>
@@ -356,7 +407,7 @@ def footerWith (home : String) (links : Array (String × String)) : Html :=
   }}
 
 /-- The website footer. -/
-def footer : Html := footerWith "./" navLinks
+def footer : Html := footerWith "./" (docLinksFrom tutorialPath manualPath)
 
 /--
 Page metadata for the `<head>`. The icons are a plain "p4" wordmark tile in the accent colour
@@ -378,7 +429,7 @@ def primaryTemplate : TemplateM Html := do
     <html lang="en">
       {{ headHtml }}
       <body>
-        {{ header }}
+        {{ header (← currentPath) }}
         {{ ← param "content" }}
         {{ footer }}
         <script>
