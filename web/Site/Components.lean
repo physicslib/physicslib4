@@ -19,6 +19,100 @@ open Verso.Web Components
 
 namespace Site
 
+/-- The list of a page's sections, beside the text; the contents of the directive are a list of links. -/
+block_component +directive pageToc where
+  toHtml _ _ _ goB contents := do
+    return {{ <nav class="page-toc" aria-label="On this page">{{ ← contents.mapM goB }}</nav> }}
+
+/--
+A section heading with a fixed anchor, the target of a `pageToc` link. The directive has no contents;
+the text of the section follows it.
+-/
+block_component +directive anchoredHeading (anchor : String) (heading : String) where
+  toHtml _ _ _ _ _ := do
+    return {{ <h2 id={{ anchor }}>{{ heading }}</h2> }}
+
+/-- Text beside the causal-diamond diagram; the argument is the diagram's caption. -/
+block_component +directive sideFigure (caption : String) where
+  toHtml _ _ _ goB contents := do
+    return {{
+      <div class="side-figure">
+        <div class="side-figure-text">{{ ← contents.mapM goB }}</div>
+        <figure class="side-figure-image">
+          {{ diamondDiagram }}
+          <figcaption>{{ caption }}</figcaption>
+        </figure>
+      </div>
+    }}
+
+/-- The steps of a contribution, as a numbered row. -/
+def contributeStepList : Array (String × String) := #[
+  ("Set up Lean", "Install Lean, clone the repository and build the library."),
+  ("Write it in the blueprint", "State the result and its informal proof, with its dependencies."),
+  ("Prove it in Lean", "Add the declaration to the library and link it to its blueprint entry."),
+  ("Open a pull request", "It is merged once it passes all status checks, has no conflicts with main, and is approved by a reviewer.")
+]
+
+/-- The row of numbered contribution steps. -/
+block_component +directive contributeSteps where
+  toHtml _ _ _ _ _ := do
+    let items : Array Html := contributeStepList.mapIdx fun i (title, desc) => {{
+      <li class="step">
+        <span class="step-number" aria-hidden="true">{{ toString (i + 1) }}</span>
+        <strong class="step-title">{{ title }}</strong>
+        <span class="step-text">{{ desc }}</span>
+      </li>
+    }}
+    return {{ <ol class="steps">{{ items }}</ol> }}
+
+/-- A line icon of the Get Involved cards, from its SVG path data. -/
+def cardIcon (path : String) : Html := {{
+  <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <path d={{ path }} />
+  </svg>
+}}
+
+/-- The cards of the Get Involved page: icon path, title, description, link text and link. -/
+def contributeCardList : Array (String × String × String × String × String) := #[
+  ("M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2zM4 21a2 2 0 0 1 2-2h14v2",
+    "Learn the library", "The tutorial introduces AQFT and Lean, with worked examples and exercises.",
+    "Read the tutorial", tutorialPath),
+  ("M6 2h9l5 5v15H6zM15 2v5h5M9 12h8M9 16h8",
+    "See what is stated", "The blueprint gives every definition and theorem in mathematical prose, linked to its Lean.",
+    "Open the blueprint", blueprintUrl),
+  ("M8 6a3 3 0 1 1-3-3 3 3 0 0 1 3 3zM8 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3zM22 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3zM5 9v6M19 15V9a3 3 0 0 0-3-3h-4",
+    "Contribute on GitHub", "The source of the library, the blueprint and this website, developed in public.",
+    "Go to the repository", githubUrl)
+]
+
+/-- The grid of cards of the Get Involved page, in the style of the landing page's feature cards. -/
+block_component +directive contributeCards where
+  toHtml _ _ _ _ _ := do
+    let cards : Array Html := contributeCardList.map fun (icon, title, desc, label, url) => {{
+      <a class="feature-card contribute-card" href={{ url }}>
+        <div>
+          {{ cardIcon icon }}
+          <p class="feature-card-text"><strong>{{ title }}</strong></p>
+          <p class="feature-card-text">{{ desc }}</p>
+        </div>
+        <div class="feature-card-footer"><span class="feature-card-more">{{ label }}" →"</span></div>
+      </a>
+    }}
+    return {{ <div class="feature-grid contribute-grid">{{ cards }}</div> }}
+
+/-- A coloured band with a heading, the contents of the directive and a button. -/
+block_component +directive callout (heading : String) (label : String) (url : String) where
+  toHtml _ _ _ goB contents := do
+    return {{
+      <aside class="callout">
+        <div class="callout-text">
+          <h3 class="callout-heading">{{ heading }}</h3>
+          {{ ← contents.mapM goB }}
+        </div>
+        <a class="callout-button" href={{ url }}>{{ label }}</a>
+      </aside>
+    }}
+
 /--
 The hero: wordmark, tagline, the contents of the directive (one sentence), the three call-to-action
 buttons, and the causal-diamond diagram.

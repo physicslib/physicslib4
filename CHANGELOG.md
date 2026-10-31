@@ -8,6 +8,8 @@ file is where its history lives.
 
 The first release, 1.0, is in preparation.
 
+- The website has About, Roadmap and Get Involved pages, and the header on every page links to them.
+
 - The Jekyll home page is retired: the Verso website is served at the root, with redirects from the
   old page URLs, and the Lean and Mathlib versions are stated in `README.md` alone. The blueprint's
   text column and the API docs' welcome page are centred as in the books, and the web blueprint's

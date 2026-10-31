@@ -9,7 +9,10 @@ used in the tutorial only. Both are 1+1-dimensional (time up, space to the right
 The landing-page diagram shows the setting of Axiom 3, local commutativity: a causal diamond `B`
 containing two smaller, spacelike-separated diamonds `B₁` and `B₂`. The dashed lines are the light
 cones of `B₁`: its causal future and past, which `B₂` avoids. Colours come from CSS classes in
-`Site.Theme.siteCss`, so the diagrams follow light and dark mode.
+`Site.Theme.siteCss`, so the diagrams follow light and dark mode. The repository's `README.md` cannot use
+inline SVG or these classes, so it shows standalone copies of `diamondDiagram`,
+`static_files/axiom3-diagram-light.svg` and `static_files/axiom3-diagram-dark.svg`; a change to the
+diagram is made in those files too.
 -/
 
 open Verso Output Html
