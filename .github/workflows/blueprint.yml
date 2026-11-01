@@ -113,9 +113,12 @@ jobs:
       # the assembly step instead of being copied into a Jekyll folder.
       #
       # This step: the package name, the docs facets (each default target with `:docs`) and the
-      # paths to cache, in docgen-action's order, so that a cache it saved under the same key is
-      # restored. A manifest package maps to its module names through docgen-action's table, else
-      # through the UpperCamelCase rule of `lake new`.
+      # paths to cache. A manifest package maps to its module names through docgen-action's table,
+      # else through the UpperCamelCase rule of `lake new`.
+      #
+      # The cached `doc-data` holds Lake's record of the docs built for this project too, so the
+      # project's own pages are cached with it. Without them, a run whose Lean sources match the
+      # cache replays that record and regenerates no pages, and the project's pages are missing.
       - name: Determine the project metadata for the API docs
         id: docs-metadata
         run: |
@@ -143,6 +146,9 @@ jobs:
           deps = [m for p in manifest["packages"] for m in modules(p["name"])]
           deps += ["Init", "Lake", "Lean", "Std"]
           paths = [f"docbuild/.lake/build/doc/{d}" for d in deps]
+          for lib in lakefile["lean_lib"]:
+              paths.append(f"docbuild/.lake/build/doc/{lib['name']}")
+              paths.append(f"docbuild/.lake/build/doc/{lib['name']}.html")
           paths.append("docbuild/.lake/build/doc-data")
           paths.append("docbuild/.lake/build/doc/declarations/declaration-data.bmp")
           paths.append("docbuild/.lake/build/api-docs.db")
@@ -244,6 +250,18 @@ jobs:
           cp blueprint/print/print.pdf "$SITE"/blueprint.pdf
           cp -R docbuild/.lake/build/doc "$SITE"/docs
           cp -R web/redirects/. "$SITE"/
+          # Stop before deploying if the API docs lack a page of the library: the root module's
+          # page and the page of each module it imports.
+          modules=$(sed -n 's/^import \(Physicslib4\.[^ ]*\).*/\1/p' Physicslib4.lean)
+          test -n "$modules"
+          missing=0
+          for page in Physicslib4.html $(echo "$modules" | sed 's/\./\//g; s/$/.html/'); do
+            if [ ! -f "$SITE/docs/$page" ]; then
+              echo "::error::API docs page missing: docs/$page"
+              missing=$((missing + 1))
+            fi
+          done
+          test "$missing" -eq 0
           du -sh "$SITE" "$SITE"/*/
 
       # The API docs get the look of the rest of the site: the script rewrites the HTML under
