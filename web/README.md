@@ -307,13 +307,13 @@ placed at `/tmp/srv/physicslib4/docs` in the layout of "Build and view locally".
   4. builds the API docs with doc-gen4 the way `leanprover-community/docgen-action` does: a
      `docbuild/` Lake package requiring physicslib4 from `../` and doc-gen4 at the tag matching
      `lean-toolchain`, sharing `../.lake/packages`, built with `lake build Physicslib4:docs` into
-     `docbuild/.lake/build/doc`; the API docs of the dependencies are cached, keyed by
-     `lake-manifest.json`. Swap and memory overcommit are switched on first, for doc-gen4's many
+     `docbuild/.lake/build/doc`; the API docs are cached, keyed by `lake-manifest.json`. Swap and memory overcommit are switched on first, for doc-gen4's many
      `git` processes;
   5. step "Assemble the site": copies `web/_out/site/.` to `_site/`, `web/_out/tutorial/html-multi`
      to `_site/tutorial`, `web/_out/manual/html-multi` to `_site/manual`, `blueprint/web` to
      `_site/blueprint`, `blueprint/print/print.pdf` to `_site/blueprint.pdf` and the API docs to
-     `_site/docs`, then `web/redirects/.` over `_site/`;
+     `_site/docs`, then `web/redirects/.` over `_site/`, and stops
+     the run if the API docs lack the page of the library's root module or of a module it imports;
   6. step "Restyle the API docs": runs `python3 scripts/restyle_api_docs.py _site/docs` (see "The
      API docs"); it rewrites the copy in `_site/`, so the cached doc-gen4 output is not changed;
   7. uploads `_site/` with `actions/upload-pages-artifact`, which leaves out names starting with `.`.
