@@ -133,7 +133,7 @@ block_component +directive hero where
         <figure class="landing-hero-figure">
           {{ diamondDiagram }}
           <figcaption>
-            "Axiom 3 in one picture: the diamonds B₁ and B₂ are spacelike separated inside B, so their observables commute."
+            "Algebraic quantum field theory's axiom 3 in one picture: the diamonds B₁ and B₂ are spacelike separated inside B, so their observables commute."
           </figcaption>
         </figure>
       </section>
