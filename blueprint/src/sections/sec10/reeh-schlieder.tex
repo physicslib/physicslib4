@@ -1,0 +1,403 @@
+\section{The Reeh--Schlieder Theorem}\label{sctn:reeh-schlieder}
+
+In a vacuum representation the vacuum vector is cyclic not only for the quasilocal algebra but for the algebra of every nonempty diamond: states prepared by local operations in an arbitrarily small region approximate every state of the theory. The section proves this in two stages. The main theorem, which assumes no additivity property of the net, says that the vectors obtained from a diamond's algebra already approximate those obtained from all translates of a smaller diamond's algebra. Three corollaries then give cyclicity under successively stronger hypotheses: cyclicity for the translation-generated algebras, the von Neumann form of weak additivity, and weak additivity itself. The proof uses the spectrum condition through analytic continuation in one complex variable at a time, along one future-timelike direction at a time, so it needs neither a joint spectral measure for the energy--momentum operators nor any structure beyond the positive energy of \ref{def:positive-energy}. The section concerns Haag--Kastler nets in Minkowski spacetime only.
+
+\subsection{Analytic Preliminaries}
+
+The lemmas of this subsection concern a single positive self-adjoint operator and functions of one complex variable; they involve no net.
+
+\begin{lemma}[A Positive Operator Has No Spectrum in $(-n, -1/n)$]
+    \label{lmm:positive-spectral-support-interval}
+    \uses{def:spectral-measure, def:positive-unbounded-operator}
+    Let $A$ be a positive self-adjoint operator with spectral measure $\mu^A$. Then $\mu^A((-n, -1/n)) = 0$ for every integer $n \ge 1$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:range-membership-concentrates-measure, lmm:associated-measure-total-mass, prpstn:hall-10.2, def:spectral-measure}
+    Let $\psi$ be in the range of $\mu^A((-n, -1/n))$. By Lemma~\ref{lmm:range-membership-concentrates-measure}, $\mu^A_\psi$ is concentrated on $(-n, -1/n)$, and it has total mass $\|\psi\|^2$ (Lemma~\ref{lmm:associated-measure-total-mass}). So $\int \lambda^2 \, d\mu^A_\psi \le n^2\|\psi\|^2 < \infty$, that is, $\psi \in \text{Dom}(A)$ (\ref{def:spectral-measure}), and by Proposition~\ref{prpstn:hall-10.2}, $\left< \psi, A\psi \right> = \int \lambda \, d\mu^A_\psi(\lambda) \le -\|\psi\|^2/n$. Positivity of $A$ forces $\psi = 0$. A projection with zero range is zero.
+\end{proof}
+
+\begin{lemma}[Spectral Support of a Positive Operator]
+    \label{lmm:positive-spectral-support}
+    \uses{def:spectral-measure, def:positive-unbounded-operator}
+    The spectral measure $\mu^A$ of a positive self-adjoint operator $A$ satisfies $\mu^A((-\infty, 0)) = 0$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:positive-spectral-support-interval, thrm:projection-valued-measures-associated-measure, def:projection-valued-measure}
+    Let $\psi \in H$. The scalar measure $\mu^A_\psi(E) = \left< \psi, \mu^A(E)\psi \right>$ is a positive measure (Theorem~\ref{thrm:projection-valued-measures-associated-measure}), and $\mu^A_\psi((-n, -1/n)) = 0$ for every $n \ge 1$ by Lemma~\ref{lmm:positive-spectral-support-interval}. The intervals $(-n, -1/n)$ increase to $(-\infty, 0)$, so continuity of measures from below (in Mathlib, \texttt{tendsto\_measure\_iUnion\_atTop}) gives $\mu^A_\psi((-\infty, 0)) = 0$. Since $P = \mu^A((-\infty, 0))$ is an orthogonal projection (\ref{def:projection-valued-measure}), $\|P\psi\|^2 = \left< \psi, P\psi \right> = \mu^A_\psi((-\infty, 0)) = 0$. So $P\psi = 0$ for every $\psi$, and $P = 0$.
+\end{proof}
+
+\begin{lemma}[Matrix Coefficients of $e^{itA}$ by Polarization]
+    \label{lmm:exp-matrix-coefficient-polarization}
+    \uses{def:exp-unitary-group, def:spectral-measure}
+    Let $A$ be a self-adjoint operator on $H$ and $\chi, \varphi \in H$. There are vectors $\psi_0, \dots, \psi_3 \in H$ and constants $c_0, \dots, c_3 \in \mathbb{C}$, independent of $t$, with
+    \begin{align}
+        \left< \chi, e^{itA}\varphi \right> = \sum_{k=0}^{3} c_k \int_{\mathbb{R}} e^{it\lambda} \, d\mu^A_{\psi_k}(\lambda) \qquad \text{for all } t \in \mathbb{R}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{thrm:operator-valued-integration, def:exp-unitary-group}
+    Take $\psi_k = \chi + i^k\varphi$ and the constants of the polarization identity, which writes $\left< \chi, T\varphi \right>$ as a fixed combination of the diagonal terms $\left< \psi_k, T\psi_k \right>$ for any bounded $T$. For $T = e^{itA} = \int e^{it\lambda} \, d\mu^A$ (\ref{def:exp-unitary-group}), each diagonal term is $\int e^{it\lambda} \, d\mu^A_{\psi_k}$ by Theorem~\ref{thrm:operator-valued-integration}.
+\end{proof}
+
+\begin{lemma}[Boundedness and Continuity of the Fourier--Laplace Transform]
+    \label{lmm:fourier-laplace-continuous}
+    Let $\nu$ be a finite positive Borel measure on $\mathbb{R}$ with $\nu((-\infty, 0)) = 0$, and let $G(z) = \int e^{iz\lambda} \, d\nu(\lambda)$. Then $G$ is defined, bounded by $\nu(\mathbb{R})$, and continuous on $\{\operatorname{Im} z \ge 0\}$.
+\end{lemma}
+\begin{proof}
+    For $\lambda \ge 0$ and $\operatorname{Im} z \ge 0$, $\lvert e^{iz\lambda} \rvert = e^{-\lambda \operatorname{Im} z} \le 1$, and $\nu$ is carried by $[0, \infty)$. So the integrand is dominated by the $\nu$-integrable constant $1$, which gives the bound, and continuity follows by dominated convergence since $z \mapsto e^{iz\lambda}$ is continuous.
+\end{proof}
+
+\begin{lemma}[Holomorphy of the Fourier--Laplace Transform]
+    \label{lmm:fourier-laplace-holomorphic}
+    Let $\nu$ and $G$ be as in Lemma~\ref{lmm:fourier-laplace-continuous}. Then $G$ is holomorphic on $\{\operatorname{Im} z > 0\}$.
+\end{lemma}
+\begin{proof}
+    Fix $z_0$ with $\operatorname{Im} z_0 > 0$ and let $\delta = \operatorname{Im} z_0 / 2$. On the neighbourhood $\{\operatorname{Im} z > \delta\}$ of $z_0$ the $z$-derivative of the integrand is $i\lambda e^{iz\lambda}$, and for $\lambda \ge 0$, $\lvert i\lambda e^{iz\lambda} \rvert \le \lambda e^{-\lambda\delta} \le 1/(e\delta)$, a $\nu$-integrable constant. Differentiation under the integral sign (in Mathlib, \texttt{hasDerivAt\_integral\_of\_dominated\_loc\_of\_deriv\_le}) gives complex differentiability at $z_0$.
+\end{proof}
+
+\begin{lemma}[Holomorphic Extension under Positive Energy]
+    \label{lmm:positive-energy-holomorphic}
+    \uses{def:positive-energy}
+    Let $V$ be a family of unitary operators on $H$, indexed by $\mathbb{R}$, with positive energy, and let $\chi, \varphi \in H$. Then $t \mapsto \left< \chi, V(t)\varphi \right>$ is the restriction to $\mathbb{R}$ of a function that is holomorphic on $\{\operatorname{Im} z > 0\}$ and bounded and continuous on $\{\operatorname{Im} z \ge 0\}$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:positive-energy-iff-exp, lmm:exp-matrix-coefficient-polarization, lmm:positive-spectral-support, lmm:associated-measure-total-mass, lmm:fourier-laplace-continuous, lmm:fourier-laplace-holomorphic}
+    By Theorem~\ref{thrm:positive-energy-iff-exp}, $V(t) = e^{itA}$ with $A$ positive and self-adjoint. By Lemma~\ref{lmm:exp-matrix-coefficient-polarization}, $\left< \chi, V(t)\varphi \right> = \sum_k c_k \int e^{it\lambda} \, d\mu^A_{\psi_k}$. Each $\mu^A_{\psi_k}$ is finite (Lemma~\ref{lmm:associated-measure-total-mass}) and vanishes on $(-\infty, 0)$ (Lemma~\ref{lmm:positive-spectral-support}). The function $\sum_k c_k G_k(z)$, with $G_k$ the Fourier--Laplace transform of $\mu^A_{\psi_k}$, has the required properties by Lemmas~\ref{lmm:fourier-laplace-continuous} and~\ref{lmm:fourier-laplace-holomorphic}.
+\end{proof}
+
+\begin{lemma}[Removability of a Horizontal Line]
+    \label{lmm:horizontal-line-removable}
+    \lean{Physicslib4.differentiableOn_of_continuousOn_off_horizontal_line}
+    \leanok
+    Let $U \subseteq \mathbb{C}$ be open, $\ell \in \mathbb{R}$, and $f$ a function on $U$ with values in a complex Banach space. If $f$ is continuous on $U$ and complex-differentiable on $U \setminus \{\operatorname{Im} z = \ell\}$, then $f$ is complex-differentiable on $U$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By Morera's theorem (in Mathlib, \texttt{Complex.isConservativeOn\_and\_continuousOn\_iff\_isDifferentiableOn}) it suffices that the integral of $f$ around the boundary of every rectangle in $U$ vanishes. For a rectangle meeting the line, split it along the line and approximate each half by rectangles off the line; the integrals over those vanish by the Cauchy--Goursat theorem, and continuity of $f$ passes to the limit.
+\end{proof}
+
+\begin{lemma}[The Reflection Domain is Open]
+    \label{lmm:reflection-domain-open}
+    For an open interval $I \subseteq \mathbb{R}$, the set $D = \{\operatorname{Im} z \ne 0\} \cup I$ is open in $\mathbb{C}$.
+\end{lemma}
+\begin{proof}
+    $D$ is the complement of $\mathbb{R} \setminus I$, which is closed in $\mathbb{R}$ and hence in $\mathbb{C}$, since $\mathbb{R}$ is closed in $\mathbb{C}$.
+\end{proof}
+
+\begin{lemma}[The Reflection Domain is Connected]
+    \label{lmm:reflection-domain-connected}
+    For a nonempty open interval $I \subseteq \mathbb{R}$, the set $D = \{\operatorname{Im} z \ne 0\} \cup I$ is connected.
+\end{lemma}
+\begin{proof}
+    $D = S_+ \cup S_-$ with $S_+ = \{\operatorname{Im} z > 0\} \cup I$ and $S_- = \{\operatorname{Im} z < 0\} \cup I$. Each is convex: a segment between two points of $I$ stays in the interval $I$, and a segment with an endpoint off the real axis has all its other points strictly on that endpoint's side. Convex sets are preconnected (in Mathlib, \texttt{Convex.isPreconnected}), and two preconnected sets sharing the nonempty set $I$ have preconnected union (\texttt{IsPreconnected.union}).
+\end{proof}
+
+\begin{lemma}[Continuity of the Reflected Function]
+    \label{lmm:schwarz-reflection-continuous}
+    Let $f$ be continuous on $\{\operatorname{Im} z \ge 0\}$ and zero on an open interval $I \subseteq \mathbb{R}$. Let $g(z) = f(z)$ for $\operatorname{Im} z \ge 0$ and $g(z) = \overline{f(\bar z)}$ for $\operatorname{Im} z < 0$. Then $g$ is continuous on $D = \{\operatorname{Im} z \ne 0\} \cup I$.
+\end{lemma}
+\begin{proof}
+    $D$ is covered by the two pieces $D \cap \{\operatorname{Im} z \ge 0\}$ and $D \cap \{\operatorname{Im} z \le 0\}$, each closed in $D$. On the first, $g = f$ is continuous. On the second, $g$ agrees with the continuous function $z \mapsto \overline{f(\bar z)}$: off the axis by definition, and on $I$ because there both equal $0$. A function continuous on each of two relatively closed pieces covering $D$ is continuous on $D$.
+\end{proof}
+
+\begin{lemma}[Schwarz Reflection across a Zero Interval]
+    \label{lmm:schwarz-reflection-zero}
+    \uses{lmm:horizontal-line-removable}
+    Let $f$ be continuous on $\{\operatorname{Im} z \ge 0\}$, holomorphic on $\{\operatorname{Im} z > 0\}$, and zero on an open interval $I \subseteq \mathbb{R}$. Let $g(z) = f(z)$ for $\operatorname{Im} z \ge 0$ and $g(z) = \overline{f(\bar z)}$ for $\operatorname{Im} z < 0$. Then $g$ is holomorphic on $D = \{\operatorname{Im} z \ne 0\} \cup I$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:horizontal-line-removable, lmm:reflection-domain-open, lmm:schwarz-reflection-continuous}
+    Off the real axis $g$ is holomorphic: on the upper half-plane it is $f$, and on the lower half-plane it is the conjugate reflection of a holomorphic function (in Mathlib, \texttt{DifferentiableAt.conj\_conj}). $g$ is continuous on $D$ by Lemma~\ref{lmm:schwarz-reflection-continuous}, and $D$ is open by Lemma~\ref{lmm:reflection-domain-open}. Lemma~\ref{lmm:horizontal-line-removable} with $\ell = 0$ gives holomorphy on all of $D$.
+\end{proof}
+
+\begin{lemma}[Vanishing on an Edge]
+    \label{lmm:edge-vanishing}
+    Let $f$ be continuous on the closed upper half-plane $\{\operatorname{Im} z \ge 0\}$, holomorphic on the open upper half-plane, and zero on a nonempty open interval $I = (a, b)$, $a < b$, of the real axis. Then $f$ vanishes on the closed upper half-plane.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:schwarz-reflection-zero, lmm:reflection-domain-open, lmm:reflection-domain-connected}
+    The reflected function $g$ of Lemma~\ref{lmm:schwarz-reflection-zero} is holomorphic, hence analytic (in Mathlib, \texttt{DifferentiableOn.analyticOnNhd}), on the set $D$, which is open and connected (Lemmas~\ref{lmm:reflection-domain-open} and~\ref{lmm:reflection-domain-connected}). It vanishes on $I$, so every point of $I$ is an accumulation point of zeros, and the identity theorem (\texttt{AnalyticOnNhd.eqOn\_zero\_of\_preconnected\_of\_frequently\_eq\_zero}) gives $g = 0$ on $D$. Hence $f = 0$ on the open upper half-plane, and on its closure by continuity.
+\end{proof}
+
+\subsection{The Theorem and its Corollaries}
+
+Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with embeddings $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}$ (\ref{def:quasilocal-algebra}) and covariance action $L \mapsto \beta_L$ (\ref{def:covariant-quasilocal-algebra}). A \emph{diamond} is an Alexandrov basis set $I^+(p) \cap I^-(q)$ (\ref{def:causal-diamond}); the empty set is one. Axiom 1 assigns the empty diamond the trivial algebra $\mathbb{C}\mathbf{1}$, and every translate of the empty set is empty, so its translation-generated algebra is $\mathbb{C}\mathbf{1}$; the additivity conditions and the cyclicity statements below therefore quantify over nonempty diamonds. For $x \in \mathbb{R}^4$ we write $\beta_x = \beta_{\mathrm{translationSub}(x)}$ for the translation automorphism and $\mathbf{B} + x = \mathrm{translationSub}(x) \cdot \mathbf{B}$ for the translate of a diamond, again a diamond (\ref{def:future-timelike-translation}). A family of unitaries indexed by translations is written $x \mapsto U(x)$, and a \emph{future-timelike translation subgroup} of it is $t \mapsto U(tn)$ with $n$ future-pointing timelike. For a $*$-representation $\pi$ of $\mathfrak{U}$ on $H$, $\pi(\mathfrak{U}(\mathbf{B}))$ is the set of local observable operators of \ref{def:local-von-neumann}.
+
+\begin{definition}[Translation-Generated Algebra]
+    \label{def:translation-generated-algebra}
+    \uses{def:covariant-quasilocal-algebra, def:causal-diamond, def:future-timelike-translation}
+    For a diamond $\mathbf{B}$, $\mathfrak{A}_{\mathbf{B}}$ is the C*-subalgebra of the quasilocal algebra $\mathfrak{U}$ generated by the translates $\iota_{\mathbf{B}+x}(\mathfrak{U}(\mathbf{B}+x))$, $x \in \mathbb{R}^4$: the norm closure of the $*$-algebra they generate.
+\end{definition}
+
+\begin{definition}[Weak Additivity]
+    \label{def:weak-additivity}
+    \uses{def:translation-generated-algebra}
+    A Haag--Kastler net is \emph{weakly additive} if $\mathfrak{A}_{\mathbf{B}} = \mathfrak{U}$ for every nonempty diamond $\mathbf{B}$.
+\end{definition}
+
+\begin{definition}[Weak Additivity, von Neumann Form]
+    \label{def:weak-additivity-von-neumann}
+    \uses{def:translation-generated-algebra}
+    A $*$-representation $\pi$ of $\mathfrak{U}$ satisfies \emph{weak additivity in the von Neumann sense} if $\pi(\mathfrak{U}) \subseteq \pi(\mathfrak{A}_{\mathbf{B}})''$ for every nonempty diamond $\mathbf{B}$, the commutant being taken in $\mathcal{B}(H)$.
+\end{definition}
+
+\begin{lemma}[Weak Additivity Implies the von Neumann Form]
+    \label{lmm:weak-additivity-von-neumann}
+    \uses{def:weak-additivity, def:weak-additivity-von-neumann}
+    If the net is weakly additive, every $*$-representation of $\mathfrak{U}$ satisfies weak additivity in the von Neumann sense.
+\end{lemma}
+\begin{proof}
+    \uses{def:weak-additivity, def:weak-additivity-von-neumann}
+    For a nonempty diamond $\mathbf{B}$, $\pi(\mathfrak{U}) = \pi(\mathfrak{A}_{\mathbf{B}}) \subseteq \pi(\mathfrak{A}_{\mathbf{B}})''$, since every set lies in its bicommutant.
+\end{proof}
+
+\begin{lemma}[Translate of a Diamond]
+    \label{lmm:diamond-translate}
+    \uses{def:causal-diamond, def:future-timelike-translation}
+    For all $p, q, x \in \mathbb{R}^4$, $\mathrm{translationSub}(x) \cdot (I^+(p) \cap I^-(q)) = I^+(p + x) \cap I^-(q + x)$.
+\end{lemma}
+\begin{proof}
+    \uses{def:inhomogeneous-lorentz-group, lmm:minkowski-chronological-open}
+    $\mathrm{translationSub}(x) = (\mathrm{id}, x)$ acts on points by $y \mapsto y + x$, by the affine action $(L, a) \cdot y = Ly + a$ of \ref{def:inhomogeneous-lorentz-group}. On standard Minkowski spacetime $a \ll b$ says that $b - a$ lies in the open forward cone (\ref{lmm:minkowski-chronological-open}), which is unchanged when $a$ and $b$ are both translated by $x$. So $y \in I^+(p) \cap I^-(q)$ if and only if $y + x \in I^+(p + x) \cap I^-(q + x)$.
+\end{proof}
+
+\begin{lemma}[Translates of a Smaller Diamond]
+    \label{lmm:diamond-small-translates}
+    \uses{def:causal-diamond, def:future-timelike-translation}
+    For every nonempty diamond $\mathbf{B}$ there are a nonempty diamond $\mathbf{B}_1$ and an open neighbourhood $V$ of $0$ in $\mathbb{R}^4$ with $\mathbf{B}_1 + x \subseteq \mathbf{B}$ for every $x \in V$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:diamond-translate, thrm:precedence-transitive, lmm:minkowski-future-between, lmm:minkowski-chronological-open}
+    Write $\mathbf{B} = I^+(p) \cap I^-(q)$; it is nonempty, so $p \ll q$ by transitivity of $\ll$ (\ref{thrm:precedence-transitive}). Lemma~\ref{lmm:minkowski-future-between}, applied twice, gives $p \ll p' \ll q' \ll q$; take $\mathbf{B}_1 = I^+(p') \cap I^-(q')$, nonempty by the same lemma applied to $p' \ll q'$. Since $I^+(p)$ and $I^-(q)$ are open (\ref{lmm:minkowski-chronological-open}), there is an open neighbourhood $V$ of $0$ with $p \ll p' + x$ and $q' + x \ll q$ for $x \in V$. For such $x$, $\mathbf{B}_1 + x = I^+(p'+x) \cap I^-(q'+x) \subseteq \mathbf{B}$ by Lemma~\ref{lmm:diamond-translate} and transitivity of $\ll$.
+\end{proof}
+
+\begin{lemma}[Spreading Along One Timelike Direction]
+    \label{lmm:timelike-spreading-direction}
+    \uses{def:positive-energy, def:future-timelike-translation}
+    Let $x \mapsto U(x)$ be unitaries on $H$ indexed by the translations $\mathbb{R}^4$, and $K_0 \subseteq H$ a closed subspace invariant under every $U(x)$, on which $U(x+y) = U(x)U(y)$. Let $n$ be future-pointing timelike with $t \mapsto U(tn)$ of positive energy, $\chi \in H$ and $\varphi \in K_0$. If $h(x) = \left< \chi, U(x)\varphi \right>$ vanishes on an open set $W$, it vanishes on $W + \mathbb{R}n$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:positive-energy-holomorphic, lmm:edge-vanishing}
+    Let $v \in W$. Since $\varphi \in K_0$, $h(v + tn) = \left< \chi, U(tn)U(v)\varphi \right>$, which vanishes for $t$ in a nonempty open interval around $0$ because $W$ is open. By Lemma~\ref{lmm:positive-energy-holomorphic} it is the boundary value of a function holomorphic on the upper half-plane and continuous on its closure, so by Lemma~\ref{lmm:edge-vanishing} it vanishes for all $t$.
+\end{proof}
+
+\begin{lemma}[A Basis of Future-Timelike Vectors]
+    \label{lmm:future-timelike-basis}
+    \uses{def:future-timelike-translation}
+    The vectors $n_0 = e_0$ and $n_i = e_0 + \tfrac{1}{2}e_i$, $i = 1, 2, 3$, are future-pointing timelike and form a basis of $\mathbb{R}^4$.
+\end{lemma}
+\begin{proof}
+    Each has time component $1 > 0$ and spatial length at most $\tfrac{1}{2} < 1$, so lies in the open forward cone. They span, since $e_i = 2(n_i - n_0)$, and four spanning vectors in $\mathbb{R}^4$ form a basis.
+\end{proof}
+
+\begin{lemma}[Spreading Along Timelike Directions]
+    \label{lmm:timelike-spreading}
+    \uses{def:positive-energy, def:future-timelike-translation}
+    Let $U$ and $K_0$ be as in Lemma~\ref{lmm:timelike-spreading-direction}, and suppose every future-timelike translation subgroup $t \mapsto U(tn)$ has positive energy. If $\chi \in H$, $\varphi \in K_0$, and $x \mapsto \left< \chi, U(x)\varphi \right>$ vanishes on a nonempty open set $W$, it vanishes identically.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:timelike-spreading-direction, lmm:future-timelike-basis}
+    Apply Lemma~\ref{lmm:timelike-spreading-direction} successively with $n_0, \dots, n_3$ of Lemma~\ref{lmm:future-timelike-basis}; each set $W + \mathbb{R}n_0 + \dots + \mathbb{R}n_j$ is open, being a union of translates of $W$. The final set is $W + \mathbb{R}^4 = \mathbb{R}^4$, since the $n_j$ form a basis and $W$ is nonempty.
+\end{proof}
+
+\begin{lemma}[Agreement on the Cyclic Subspace]
+    \label{lmm:agree-on-cyclic-subspace}
+    Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$, and $K_0$ the closure of $\pi(\mathfrak{U})\Omega$. Bounded operators $S, T$ on $H$ with $S\pi(a)\Omega = T\pi(a)\Omega$ for every $a \in \mathfrak{U}$ agree on $K_0$.
+\end{lemma}
+\begin{proof}
+    $\{\xi : S\xi = T\xi\}$ is closed, since $S - T$ is continuous, and contains $\pi(\mathfrak{U})\Omega$.
+\end{proof}
+
+\begin{lemma}[The Cyclic Subspace is Invariant]
+    \label{lmm:translations-cyclic-subspace-invariant}
+    \uses{def:covariant-quasilocal-algebra, def:future-timelike-translation}
+    Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$, and $x \mapsto U(x)$ unitaries with $U(x)\pi(a)\Omega = \pi(\beta_x a)\Omega$ for all translations $x$ and all $a \in \mathfrak{U}$. Let $K_0$ be the closure of $\pi(\mathfrak{U})\Omega$. Then $U(x)\Omega = \Omega$, and $K_0$ is invariant under every $\pi(a)$ and every $U(x)$.
+\end{lemma}
+\begin{proof}
+    Take $a = 1$: $U(x)\Omega = \pi(\beta_x 1)\Omega = \Omega$. The operators $\pi(a)$ and $U(x)$ map $\pi(\mathfrak{U})\Omega$ into itself, since $\pi(a)\pi(b)\Omega = \pi(ab)\Omega$ and $U(x)\pi(b)\Omega = \pi(\beta_x b)\Omega$; being continuous, they map its closure $K_0$ into $K_0$.
+\end{proof}
+
+\begin{lemma}[Intertwining on the Cyclic Subspace]
+    \label{lmm:translations-intertwine-cyclic-subspace}
+    \uses{lmm:translations-cyclic-subspace-invariant}
+    Under the hypotheses of Lemma~\ref{lmm:translations-cyclic-subspace-invariant}, $U(x)\pi(a) = \pi(\beta_x a)U(x)$ on $K_0$ for every translation $x$ and every $a \in \mathfrak{U}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:agree-on-cyclic-subspace}
+    On $\pi(b)\Omega$, $U(x)\pi(a)\pi(b)\Omega = \pi(\beta_x(ab))\Omega = \pi(\beta_x a)\pi(\beta_x b)\Omega = \pi(\beta_x a)U(x)\pi(b)\Omega$, as $\beta_x$ is multiplicative. Lemma~\ref{lmm:agree-on-cyclic-subspace} extends this to $K_0$.
+\end{proof}
+
+\begin{lemma}[Group Law on the Cyclic Subspace]
+    \label{lmm:translations-group-law-cyclic-subspace}
+    \uses{lmm:translations-cyclic-subspace-invariant}
+    Under the hypotheses of Lemma~\ref{lmm:translations-cyclic-subspace-invariant}, $U(x+y) = U(x)U(y)$ on $K_0$ for all translations $x, y$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:agree-on-cyclic-subspace, lmm:quasilocal-action-coherence, def:future-timelike-translation}
+    Since $\mathrm{translationSub}(x+y) = \mathrm{translationSub}(x)\,\mathrm{translationSub}(y)$ (\ref{def:future-timelike-translation}) and $\beta$ is a group action (\ref{lmm:quasilocal-action-coherence}), $\beta_{x+y} = \beta_x\beta_y$. So $U(x+y)\pi(a)\Omega = \pi(\beta_x\beta_y a)\Omega = U(x)\pi(\beta_y a)\Omega = U(x)U(y)\pi(a)\Omega$, and Lemma~\ref{lmm:agree-on-cyclic-subspace} extends this to $K_0$.
+\end{proof}
+
+\begin{lemma}[Translations on the Cyclic Subspace]
+    \label{lmm:covariant-translations-cyclic-subspace}
+    \uses{def:covariant-quasilocal-algebra, def:future-timelike-translation}
+    Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$, and $x \mapsto U(x)$ unitaries with $U(x)\pi(a)\Omega = \pi(\beta_x a)\Omega$ for all translations $x$ and all $a \in \mathfrak{U}$. Let $K_0$ be the closure of $\pi(\mathfrak{U})\Omega$. Then $U(x)\Omega = \Omega$; $K_0$ is invariant under every $\pi(a)$ and $U(x)$; and on $K_0$, $U(x)\pi(a) = \pi(\beta_x a)U(x)$ and $U(x+y) = U(x)U(y)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:translations-cyclic-subspace-invariant, lmm:translations-intertwine-cyclic-subspace, lmm:translations-group-law-cyclic-subspace}
+    The conjunction of Lemmas~\ref{lmm:translations-cyclic-subspace-invariant}, \ref{lmm:translations-intertwine-cyclic-subspace} and~\ref{lmm:translations-group-law-cyclic-subspace}.
+\end{proof}
+
+\begin{lemma}[Translated Products]
+    \label{lmm:reeh-schlieder-translated-products}
+    \uses{lmm:covariant-translations-cyclic-subspace, def:future-timelike-translation}
+    Under the hypotheses of Lemma~\ref{lmm:covariant-translations-cyclic-subspace}, for $a_1, \dots, a_n \in \mathfrak{U}$ and $\xi_1, \dots, \xi_n \in \mathbb{R}^4$,
+    \begin{align}
+        U(\xi_1)\pi(a_1)U(\xi_2)\pi(a_2) \cdots U(\xi_n)\pi(a_n)\Omega = \pi(\beta_{x_1}a_1 \, \beta_{x_2}a_2 \cdots \beta_{x_n}a_n)\Omega, \qquad x_k = \xi_1 + \dots + \xi_k.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:quasilocal-action-coherence, def:future-timelike-translation}
+    Induction on $n$, peeling off the leftmost pair. For $n = 1$ this is the hypothesis. For $n > 1$, the induction hypothesis applied to $a_2, \dots, a_n$ and $\xi_2, \dots, \xi_n$ writes the vector to the right of $U(\xi_1)\pi(a_1)$ as $\pi(b)\Omega$ with $b = \beta_{\xi_2}a_2 \cdots \beta_{\xi_2 + \dots + \xi_n}a_n$. Then $U(\xi_1)\pi(a_1 b)\Omega = \pi(\beta_{\xi_1}a_1 \, \beta_{\xi_1}b)\Omega$, and $\beta_{\xi_1}\beta_y = \beta_{\xi_1 + y}$ (\ref{lmm:quasilocal-action-coherence}, with $\mathrm{translationSub}(\xi_1 + y) = \mathrm{translationSub}(\xi_1)\,\mathrm{translationSub}(y)$) gives the claim.
+\end{proof}
+
+\begin{lemma}[Translates of a Local Subalgebra]
+    \label{lmm:translate-local-subalgebra}
+    \uses{def:covariant-quasilocal-algebra, def:future-timelike-translation}
+    For diamonds $\mathbf{B}_1, \mathbf{B}$ and $x \in \mathbb{R}^4$, $\beta_x\,\iota_{\mathbf{B}_1}(\mathfrak{U}(\mathbf{B}_1)) = \iota_{\mathbf{B}_1 + x}(\mathfrak{U}(\mathbf{B}_1 + x))$, and if $\mathbf{B}_1 + x \subseteq \mathbf{B}$ this set is contained in $\iota_{\mathbf{B}}(\mathfrak{U}(\mathbf{B}))$.
+\end{lemma}
+\begin{proof}
+    \uses{def:quasilocal-lift, def:quasilocal-algebra, def:lorentz-covariance}
+    By \ref{def:quasilocal-lift}, $\beta_x\,\iota_{\mathbf{B}_1}(c) = \iota_{\mathbf{B}_1 + x}(\alpha_x c)$, and $\alpha_x : \mathfrak{U}(\mathbf{B}_1) \to \mathfrak{U}(\mathbf{B}_1 + x)$ is a $*$-isomorphism (\ref{def:lorentz-covariance}), so the two sets agree. If $\mathbf{B}_1 + x \subseteq \mathbf{B}$, the cocone condition $\iota_{\mathbf{B}} \circ i_{\mathbf{B}_1 + x,\,\mathbf{B}} = \iota_{\mathbf{B}_1 + x}$ of \ref{def:quasilocal-algebra} gives the inclusion.
+\end{proof}
+
+\begin{lemma}[Small Partial Sums]
+    \label{lmm:neighbourhood-partial-sums}
+    For every neighbourhood $V$ of $0$ in $\mathbb{R}^4$ and every $n \ge 1$ there is an open neighbourhood $V_0$ of $0$ such that $\xi_1 + \dots + \xi_k \in V$ whenever $1 \le k \le n$ and $\xi_1, \dots, \xi_k \in V_0$.
+\end{lemma}
+\begin{proof}
+    Take $V_0$ the open ball of radius $r/n$, where the ball of radius $r$ lies in $V$: a sum of $k \le n$ vectors of norm less than $r/n$ has norm less than $r$.
+\end{proof}
+
+\begin{lemma}[Correlation Functions Vanish near the Origin]
+    \label{lmm:reeh-schlieder-vanishing-near-origin}
+    \uses{lmm:covariant-translations-cyclic-subspace, def:local-von-neumann}
+    Let $\pi$, $\Omega$ and $U$ be as in Lemma~\ref{lmm:covariant-translations-cyclic-subspace}. Let $\mathbf{B}_1$ and $\mathbf{B}$ be diamonds with $\mathbf{B}_1 + x \subseteq \mathbf{B}$ for every $x$ in an open neighbourhood $V$ of $0$, let $\psi \in H$ be orthogonal to $\pi(\mathfrak{U}(\mathbf{B}))\Omega$, and let $a_1, \dots, a_n \in \iota_{\mathbf{B}_1}(\mathfrak{U}(\mathbf{B}_1))$. Write
+    \begin{align}
+        F(\xi_1, \dots, \xi_n) = \left< \psi, U(\xi_1)\pi(a_1)U(\xi_2)\pi(a_2) \cdots U(\xi_n)\pi(a_n)\Omega \right>.
+    \end{align}
+    Let $V_0 \subseteq \mathbb{R}^4$ be an open set such that every partial sum $\xi_1 + \dots + \xi_k$, $k \le n$, of elements of $V_0$ lies in $V$. Then $F = 0$ whenever $\xi_1, \dots, \xi_n \in V_0$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reeh-schlieder-translated-products, lmm:translate-local-subalgebra}
+    By Lemma~\ref{lmm:reeh-schlieder-translated-products}, $F = \left< \psi, \pi(\beta_{x_1}a_1 \cdots \beta_{x_n}a_n)\Omega \right>$ with $x_k = \xi_1 + \dots + \xi_k$, which lies in $V$ by the choice of $V_0$. By Lemma~\ref{lmm:translate-local-subalgebra} each factor lies in the subalgebra $\iota_{\mathbf{B}}(\mathfrak{U}(\mathbf{B}))$, so the product does, and $F = 0$ by the choice of $\psi$.
+\end{proof}
+
+\begin{lemma}[Factorization in One Variable]
+    \label{lmm:reeh-schlieder-factorization}
+    \uses{lmm:covariant-translations-cyclic-subspace}
+    In the setting of Lemma~\ref{lmm:reeh-schlieder-vanishing-near-origin}, fix $1 \le k \le n$ and all variables except $\xi_k$. Then $F = \left< \chi, U(\xi_k)\varphi \right>$ as a function of $\xi_k$, with $\chi = (U(\xi_1)\pi(a_1) \cdots U(\xi_{k-1})\pi(a_{k-1}))^*\psi \in H$ and $\varphi = \pi(a_k)U(\xi_{k+1})\pi(a_{k+1}) \cdots U(\xi_n)\pi(a_n)\Omega \in K_0$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:covariant-translations-cyclic-subspace}
+    The identity is the definition of the adjoint. $\Omega \in K_0$, and $K_0$ is invariant under every $\pi(a)$ and $U(x)$ (Lemma~\ref{lmm:covariant-translations-cyclic-subspace}), so $\varphi \in K_0$.
+\end{proof}
+
+\begin{lemma}[Vanishing of the Correlation Functions]
+    \label{lmm:reeh-schlieder-correlations-vanish}
+    \uses{lmm:covariant-translations-cyclic-subspace, def:local-von-neumann, def:future-timelike-translation}
+    Let $\pi$, $\Omega$, $U$, $\mathbf{B}_1$, $\mathbf{B}$, $V$, $\psi$, $a_1, \dots, a_n$ and $F$ be as in Lemma~\ref{lmm:reeh-schlieder-vanishing-near-origin}, and suppose moreover that every future-timelike translation subgroup $t \mapsto U(tn)$ has positive energy. Then $F$ vanishes identically on $(\mathbb{R}^4)^n$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:neighbourhood-partial-sums, lmm:reeh-schlieder-vanishing-near-origin, lmm:reeh-schlieder-factorization, lmm:timelike-spreading, lmm:covariant-translations-cyclic-subspace}
+    Choose an open neighbourhood $V_0$ of $0$ whose partial sums of at most $n$ elements lie in $V$ (Lemma~\ref{lmm:neighbourhood-partial-sums}); it is nonempty. Let $P(k)$ say that $F = 0$ whenever $\xi_{k+1}, \dots, \xi_n \in V_0$, the earlier variables being arbitrary. $P(0)$ is Lemma~\ref{lmm:reeh-schlieder-vanishing-near-origin}. Given $P(k-1)$, fix $\xi_j$ for $j \ne k$ with $\xi_{k+1}, \dots, \xi_n \in V_0$. By Lemma~\ref{lmm:reeh-schlieder-factorization}, $F = \left< \chi, U(\xi_k)\varphi \right>$ with $\varphi \in K_0$; it vanishes for $\xi_k \in V_0$ by $P(k-1)$, hence for all $\xi_k$ by Lemma~\ref{lmm:timelike-spreading}, applied with the closed subspace $K_0$ of Lemma~\ref{lmm:covariant-translations-cyclic-subspace}. This is $P(k)$, and $P(n)$ is the claim.
+\end{proof}
+
+\begin{lemma}[Orthogonality on Monomials]
+    \label{lmm:reeh-schlieder-monomial-orthogonal}
+    \uses{lmm:reeh-schlieder-correlations-vanish}
+    In the setting of Lemma~\ref{lmm:reeh-schlieder-correlations-vanish}, for every $n \ge 0$, all $y_1, \dots, y_n \in \mathbb{R}^4$ and all $a_1, \dots, a_n \in \iota_{\mathbf{B}_1}(\mathfrak{U}(\mathbf{B}_1))$, $\left< \psi, \pi(\beta_{y_1}a_1 \cdots \beta_{y_n}a_n)\Omega \right> = 0$, the empty product being $1$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reeh-schlieder-translated-products, lmm:reeh-schlieder-correlations-vanish, def:quasilocal-algebra}
+    For $n = 0$ the claim is $\left< \psi, \Omega \right> = 0$, which holds because $\Omega = \pi(\iota_{\mathbf{B}}(1))\Omega \in \pi(\mathfrak{U}(\mathbf{B}))\Omega$, $\iota_{\mathbf{B}}$ being unital (\ref{def:quasilocal-algebra}). For $n \ge 1$, set $\xi_1 = y_1$ and $\xi_k = y_k - y_{k-1}$; Lemma~\ref{lmm:reeh-schlieder-translated-products} identifies the inner product with $F(\xi_1, \dots, \xi_n)$, which is $0$ by Lemma~\ref{lmm:reeh-schlieder-correlations-vanish}.
+\end{proof}
+
+\begin{lemma}[Orthogonality on the Generated $*$-Algebra]
+    \label{lmm:reeh-schlieder-star-algebra-orthogonal}
+    \uses{lmm:reeh-schlieder-correlations-vanish}
+    In the setting of Lemma~\ref{lmm:reeh-schlieder-correlations-vanish}, $\psi$ is orthogonal to $\pi(P)\Omega$ for every $P$ in the $*$-algebra generated by the translates $\iota_{\mathbf{B}_1 + y}(\mathfrak{U}(\mathbf{B}_1 + y))$, $y \in \mathbb{R}^4$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:translate-local-subalgebra, lmm:reeh-schlieder-monomial-orthogonal}
+    Each translate is a $*$-subalgebra, so the generating set $S$ is closed under $*$ and the $*$-algebra it generates is the algebra it generates (in Mathlib, \texttt{StarSubalgebra.adjoin\_eq\_starClosure\_adjoin}). That algebra is the linear span of the finite products of elements of $S$, the empty product included (\texttt{Algebra.adjoin\_eq\_span}). By Lemma~\ref{lmm:translate-local-subalgebra} each such product has the form $\beta_{y_1}a_1 \cdots \beta_{y_n}a_n$ with $a_k \in \iota_{\mathbf{B}_1}(\mathfrak{U}(\mathbf{B}_1))$, so $\psi$ is orthogonal to $\pi(\cdot)\Omega$ of it by Lemma~\ref{lmm:reeh-schlieder-monomial-orthogonal}. Linearity gives the claim.
+\end{proof}
+
+\begin{theorem}[Reeh--Schlieder]
+    \label{thrm:reeh-schlieder}
+    \uses{def:translation-generated-algebra, def:local-von-neumann, def:covariant-quasilocal-algebra, def:positive-energy, def:future-timelike-translation}
+    Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$, and $x \mapsto U(x)$ unitaries with $U(x)\pi(a)\Omega = \pi(\beta_x a)\Omega$ for all translations $x$ and all $a \in \mathfrak{U}$, such that every future-timelike translation subgroup $t \mapsto U(tn)$ has positive energy. Let $\mathbf{B}_1$ and $\mathbf{B}$ be diamonds with $\mathbf{B}_1 + x \subseteq \mathbf{B}$ for every $x$ in an open neighbourhood of $0$. Then $\pi(\mathfrak{A}_{\mathbf{B}_1})\Omega$ lies in the closure of $\pi(\mathfrak{U}(\mathbf{B}))\Omega$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:reeh-schlieder-star-algebra-orthogonal, def:translation-generated-algebra}
+    The closure of the subspace $\pi(\mathfrak{U}(\mathbf{B}))\Omega$ is the orthogonal complement of its orthogonal complement, so it suffices that every $\psi$ orthogonal to $\pi(\mathfrak{U}(\mathbf{B}))\Omega$ is orthogonal to $\pi(P)\Omega$ for every $P \in \mathfrak{A}_{\mathbf{B}_1}$. This holds on the generated $*$-algebra by Lemma~\ref{lmm:reeh-schlieder-star-algebra-orthogonal}, and $P \mapsto \left< \psi, \pi(P)\Omega \right>$ is continuous, so it holds on the norm closure $\mathfrak{A}_{\mathbf{B}_1}$.
+\end{proof}
+
+\begin{corollary}[Reeh--Schlieder under Cyclicity for the Translation-Generated Algebras]
+    \label{crllr:reeh-schlieder-cyclic}
+    \uses{thrm:reeh-schlieder, def:cyclic-vector}
+    Under the hypotheses of Theorem~\ref{thrm:reeh-schlieder} on $\pi$, $\Omega$ and $U$, if $\Omega$ is cyclic for $\pi(\mathfrak{A}_{\mathbf{B}'})$ for every nonempty diamond $\mathbf{B}'$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$.
+\end{corollary}
+\begin{proof}
+    \uses{thrm:reeh-schlieder, lmm:diamond-small-translates}
+    Choose a nonempty $\mathbf{B}_1$ for $\mathbf{B}$ by Lemma~\ref{lmm:diamond-small-translates}. By Theorem~\ref{thrm:reeh-schlieder} the closure of $\pi(\mathfrak{U}(\mathbf{B}))\Omega$ contains $\pi(\mathfrak{A}_{\mathbf{B}_1})\Omega$, which is dense by hypothesis.
+\end{proof}
+
+\begin{lemma}[Closure of a Bicommutant Orbit]
+    \label{lmm:bicommutant-orbit-closure}
+    \uses{def:translation-generated-algebra}
+    Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$ and $\mathbf{B}$ a diamond. Then $\pi(\mathfrak{A}_{\mathbf{B}})''\Omega$ lies in the closure of $\pi(\mathfrak{A}_{\mathbf{B}})\Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:bicommutant-single-vector, def:quasilocal-algebra}
+    $\mathfrak{A}_{\mathbf{B}}$ contains $\iota_{\mathbf{B}}(1) = 1$, since $\iota_{\mathbf{B}}$ is unital (\ref{def:quasilocal-algebra}), so it is a unital $*$-subalgebra of $\mathfrak{U}$ and the restriction of $\pi$ to it is a unital $*$-algebra homomorphism. Apply Lemma~\ref{lmm:bicommutant-single-vector} to this restriction.
+\end{proof}
+
+\begin{corollary}[Reeh--Schlieder under the von Neumann Form of Weak Additivity]
+    \label{crllr:reeh-schlieder-von-neumann}
+    \uses{thrm:reeh-schlieder, def:weak-additivity-von-neumann, def:cyclic-vector}
+    Under the hypotheses of Theorem~\ref{thrm:reeh-schlieder} on $\pi$, $\Omega$ and $U$, if $\pi$ satisfies weak additivity in the von Neumann sense and $\Omega$ is cyclic for $\pi(\mathfrak{U})$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$.
+\end{corollary}
+\begin{proof}
+    \uses{crllr:reeh-schlieder-cyclic, lmm:bicommutant-orbit-closure}
+    For every nonempty diamond $\mathbf{B}'$, the closure of $\pi(\mathfrak{A}_{\mathbf{B}'})\Omega$ contains $\pi(\mathfrak{A}_{\mathbf{B}'})''\Omega$ (Lemma~\ref{lmm:bicommutant-orbit-closure}), hence $\pi(\mathfrak{U})\Omega$, which is dense. So $\Omega$ is cyclic for every such $\pi(\mathfrak{A}_{\mathbf{B}'})$; apply Corollary~\ref{crllr:reeh-schlieder-cyclic}.
+\end{proof}
+
+\begin{corollary}[Reeh--Schlieder under Weak Additivity]
+    \label{crllr:reeh-schlieder-weak-additivity}
+    \uses{thrm:reeh-schlieder, def:weak-additivity, def:cyclic-vector}
+    Under the hypotheses of Theorem~\ref{thrm:reeh-schlieder} on $\pi$, $\Omega$ and $U$, if the net is weakly additive and $\Omega$ is cyclic for $\pi(\mathfrak{U})$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$.
+\end{corollary}
+\begin{proof}
+    \uses{crllr:reeh-schlieder-von-neumann, lmm:weak-additivity-von-neumann}
+    By Lemma~\ref{lmm:weak-additivity-von-neumann}, $\pi$ satisfies weak additivity in the von Neumann sense; apply Corollary~\ref{crllr:reeh-schlieder-von-neumann}.
+\end{proof}
+
+\begin{corollary}[Reeh--Schlieder for a Vacuum State]
+    \label{crllr:reeh-schlieder-vacuum}
+    \uses{def:vacuum-state-concrete, def:weak-additivity, def:cyclic-vector}
+    Let the net be weakly additive and let $\omega$ be a vacuum state in the sense of \ref{def:vacuum-state-concrete}, witnessed by a representation $(K, \pi, \Omega)$ reproducing $\omega$ and unitaries $U(L)$ with $U(L)\pi(a)\Omega = \pi(\beta_L a)\Omega$, such that $t \mapsto U(\gamma(t))$ has positive energy for every future-timelike translation subgroup $\gamma$. If $\Omega$ is cyclic for $\pi(\mathfrak{U})$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$. The statement holds for any such witnessing data, not only for a distinguished representation.
+\end{corollary}
+\begin{proof}
+    \uses{crllr:reeh-schlieder-weak-additivity, def:future-timelike-translation}
+    Write $U(x)$ for $U(\mathrm{translationSub}(x))$. Then the implementation condition for $L = \mathrm{translationSub}(x)$ is the hypothesis $U(x)\pi(a)\Omega = \pi(\beta_x a)\Omega$ of Theorem~\ref{thrm:reeh-schlieder}, and for $n$ future-pointing timelike, $\mathrm{translationFlow}(n)$ is a future-timelike translation subgroup (\ref{def:future-timelike-translation}) with $U(\mathrm{translationFlow}(n)(t)) = U(tn)$, so each $t \mapsto U(tn)$ has positive energy. Apply Corollary~\ref{crllr:reeh-schlieder-weak-additivity}.
+\end{proof}
+
+\begin{corollary}[The Vacuum is Separating]
+    \label{crllr:reeh-schlieder-separating}
+    \uses{crllr:reeh-schlieder-cyclic, def:local-von-neumann, def:completely-spacelike}
+    Under the hypotheses of Corollary~\ref{crllr:reeh-schlieder-cyclic}, $\Omega$ is separating for the local von Neumann algebra $R(\mathbf{C})$ of every diamond $\mathbf{C}$ that is completely spacelike to some nonempty diamond $\mathbf{B}$: every $R \in R(\mathbf{C})$ with $R\Omega = 0$ is zero.
+\end{corollary}
+\begin{proof}
+    \uses{crllr:reeh-schlieder-cyclic, thrm:statistical-independence}
+    $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ by Corollary~\ref{crllr:reeh-schlieder-cyclic}; apply Theorem~\ref{thrm:statistical-independence}.
+\end{proof}
