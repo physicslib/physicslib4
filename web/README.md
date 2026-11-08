@@ -60,6 +60,7 @@ examples on the page are elaborated against the library itself.
   Section 10.6).
 - `Manual/Curved.lean`: "The axioms in curved spacetime and general covariance" (blueprint
   Sections 10.7–10.8).
+- `Manual/ReehSchlieder.lean`: "The Reeh–Schlieder theorem" (blueprint Section 10.9).
 - `Manual/Conventions.lean`: "Conventions and design decisions", the library's conventions and
   design decisions, each stated once with links to where it matters.
 - `Manual/NotProved.lean`: "Appendix: what the library does not prove", the standard facts the
