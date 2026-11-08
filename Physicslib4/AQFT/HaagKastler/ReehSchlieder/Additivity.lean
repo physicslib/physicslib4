@@ -265,24 +265,20 @@ theorem reeh_schlieder_cyclic_of_weaklyAdditive {N : HaagKastlerNet}
     Dense ((fun T => T Ω) '' N.localOperators π hB) :=
   reeh_schlieder_cyclic_of_vonNeumann π Ω U hU hpos (hwa.isWeaklyAdditiveVonNeumann π) hcyc hB hne
 
-/-- **Reeh–Schlieder for a vacuum state.** Let the net be weakly additive and `ω` a vacuum state
-(`IsVacuumStateConcrete`), and let `(π, Ω, U)` be any data of the kind witnessing the vacuum
-conditions: `π` reproduces `ω`, the unitaries `U(L)` implement the Poincaré action on `π(𝔘)Ω`, and
-`t ↦ U(γ(t))` has positive energy for every future-timelike translation subgroup `γ`. If `Ω` is
-cyclic for `π(𝔘)`, then `Ω` is cyclic for `π(𝔘(B))` for every nonempty diamond `B`.
+/-- **Reeh–Schlieder for a vacuum state.** Let the net be weakly additive, and let `(π, Ω, U)`
+satisfy the implementation and spectrum conditions of a vacuum state (`IsVacuumStateConcrete`): the
+unitaries `U(L)` implement the Poincaré action on `π(𝔘)Ω`, and `t ↦ U(γ(t))` has positive energy
+for every future-timelike translation subgroup `γ`. If `Ω` is cyclic for `π(𝔘)`, then `Ω` is
+cyclic for `π(𝔘(B))` for every nonempty diamond `B`.
 
-The witnessing data are explicit binders mirroring the conjuncts of the existential in
-`IsVacuumState`, so the statement applies to every witness, not only to one chosen from `hω`.
-The binder groups are the net with weak additivity (`hwa`), the state with its vacuum property
-(`ω`, `hω`), the witness (`π`, `Ω`, `U`, `hrep`, `hU`, `hpos`), the cyclicity `hcyc`, and the
-nonempty diamond (`hB`, `hne`).
+The hypotheses mirror the implementation and spectrum conjuncts of the existential in
+`IsVacuumState`, so the statement applies to the witnessing data of every vacuum state; the state
+itself and the condition that `π` reproduces it are not needed.
 
 Blueprint: crllr:reeh-schlieder-vacuum -/
 theorem reeh_schlieder_cyclic_of_vacuum {N : HaagKastlerNet} (hwa : N.IsWeaklyAdditive)
-    {ω : GNS.State N.quasilocal.carrier} (hω : N.IsVacuumStateConcrete ω)
     (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H)
     (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H))
-    (hrep : ∀ a : N.quasilocal.carrier, (ω a : ℂ) = ⟪Ω, π a Ω⟫_ℂ)
     (hU : ∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
       U L (π a Ω) = π (N.action L a) Ω)
     (hpos : ∀ γ : ℝ → InhomogeneousLorentzGroup,

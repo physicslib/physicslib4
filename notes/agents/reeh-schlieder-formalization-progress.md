@@ -28,3 +28,4 @@
 - 2026-11-08: proved inner_monomial_eq_zero (Correlations.lean complete) and inner_adjoin_translates_eq_zero. 32 of 41 proved; remaining: reeh_schlieder + 5 corollaries.
 - 2026-11-08: proved reeh_schlieder (main theorem) and reeh_schlieder_cyclic. 34 of 41 proved; remaining: the von Neumann, weak-additivity, vacuum and separating corollaries.
 - 2026-11-08: proved the four remaining corollaries (von Neumann, separating, weak additivity, vacuum). §10.9 complete: all 41 nodes proved; full lake build of Physicslib4 succeeds with 0 sorry warnings. Remaining cleanup: unused hI/hIc in EdgeVanishing.lean; unused hω/hrep in reeh_schlieder_cyclic_of_vacuum (blueprint rewording would allow dropping them).
+- 2026-11-08: crllr:reeh-schlieder-vacuum reworded (implementation and spectrum conditions of a vacuum state); reeh_schlieder_cyclic_of_vacuum drops ω, hω, hrep. Full build: 0 sorry, no warnings in Additivity.lean.

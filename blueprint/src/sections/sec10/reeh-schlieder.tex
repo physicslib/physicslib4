@@ -498,7 +498,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
     \lean{Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vacuum}
     \uses{def:vacuum-state-concrete, def:weak-additivity, def:cyclic-vector}
     \leanok
-    Let the net be weakly additive and let $\omega$ be a vacuum state in the sense of \ref{def:vacuum-state-concrete}, witnessed by a representation $(K, \pi, \Omega)$ reproducing $\omega$ and unitaries $U(L)$ with $U(L)\pi(a)\Omega = \pi(\beta_L a)\Omega$, such that $t \mapsto U(\gamma(t))$ has positive energy for every future-timelike translation subgroup $\gamma$. If $\Omega$ is cyclic for $\pi(\mathfrak{U})$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$. The statement holds for any such witnessing data, not only for a distinguished representation.
+    Let the net be weakly additive, and let $(K, \pi, \Omega)$ be a representation and $U(L)$ unitaries satisfying the implementation and spectrum conditions of a vacuum state (\ref{def:vacuum-state-concrete}): $U(L)\pi(a)\Omega = \pi(\beta_L a)\Omega$ for every $L$ and $a$, and $t \mapsto U(\gamma(t))$ has positive energy for every future-timelike translation subgroup $\gamma$. If $\Omega$ is cyclic for $\pi(\mathfrak{U})$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$. In particular this holds for the witnessing data of any vacuum state $\omega$ with $\Omega$ cyclic; the state itself, and the condition that the representation reproduces it, play no role.
 \end{corollary}
 \begin{proof}
     \leanok
