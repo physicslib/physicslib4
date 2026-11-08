@@ -106,7 +106,8 @@ the present tense. Its history is kept in one place, `CHANGELOG.md` at the root 
 repository.
 
 _Where the library stops._ The standard facts that the library does not prove, such as the
-Reeh–Schlieder theorem and the existence of pure states, are marked where they arise and collected
+existence of pure states and the intersection property for general spacetimes, are marked where
+they arise and collected
 in the {ref "not-proved"}[appendix]. Where a theorem depends on one of them, it is a hypothesis of
 that theorem.
 

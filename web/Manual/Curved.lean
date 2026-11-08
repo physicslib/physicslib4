@@ -445,7 +445,8 @@ Schlieder property,
 {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_separating}[`localVonNeumannAlgebra_separating`],
 says that if $`\mathbf{B}_1` and $`\mathbf{B}_2` are completely spacelike and $`\Omega` is cyclic
 for the local operators of $`\mathbf{B}_1`, then $`\Omega` is separating for $`R(\mathbf{B}_2)`.
-The library has no Reeh–Schlieder theorem, so cyclicity is a hypothesis. The
+The library's Reeh–Schlieder theorem ({ref "reeh-schlieder"}[The Reeh–Schlieder theorem]) is for
+Minkowski spacetime, so here cyclicity is a hypothesis. The
 relative commutant $`R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)` is
 {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant}[`relativeCommutant`];
 the inclusion of $`R(\mathbf{B}')` in itself is irreducible exactly when $`R(\mathbf{B}')` is a

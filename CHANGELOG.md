@@ -8,6 +8,13 @@ file is where its history lives.
 
 The first release, 1.0, is in preparation.
 
+- The blueprint has a section on the Reeh–Schlieder theorem (§10.9): a main theorem with no additivity
+  hypothesis, and corollaries under cyclicity for the translation-generated algebras, the von Neumann
+  form of weak additivity, and weak additivity. All of it is formalized and proved in Lean
+  (`Physicslib4/AQFT/HaagKastler/ReehSchlieder/`, with the analytic lemmas in
+  `Physicslib4/AQFT/PositiveEnergyHolomorphic.lean` and `Physicslib4/Analysis/EdgeVanishing.lean`),
+  and the reference manual has a chapter on it.
+
 - The website has About, Roadmap and Get Involved pages, and the header on every page links to them.
 
 - The Jekyll home page is retired: the Verso website is served at the root, with redirects from the

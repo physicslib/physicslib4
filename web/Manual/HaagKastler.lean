@@ -465,8 +465,10 @@ Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant.
 Statistical independence (the Schlieder property): if $`\mathbf{B}_1` and $`\mathbf{B}_2` are
 completely spacelike and a vector $`\Omega` is cyclic for the local operators of $`\mathbf{B}_1`,
 then $`\Omega` is separating for $`R(\mathbf{B}_2)`, so an element of $`R(\mathbf{B}_2)` that
-annihilates $`\Omega` is zero. In a vacuum representation the cyclicity is the content of the
-Reeh–Schlieder theorem, which the library does not prove; it is a hypothesis here.
+annihilates $`\Omega` is zero. In a vacuum representation of a weakly additive net, with
+$`\Omega` cyclic for $`\pi(\mathfrak{U})`, the cyclicity is supplied by the
+Reeh–Schlieder theorem ({ref "reeh-schlieder"}[The Reeh–Schlieder theorem]), and the corollary
+`reeh_schlieder_separating` combines the two; here cyclicity is a hypothesis.
 
 ```lean (name := checkSeparating)
 open Physicslib4 AQFT HaagKastler in
@@ -604,8 +606,9 @@ The library proves the consequences of a vacuum state that do not use the spectr
 invariant (`HaagKastlerNet.IsVacuumState.invariant`), and if it is pure its GNS representation is
 covariant and irreducible
 ({apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant}[`IsVacuumState.exists_gns_irreducible_covariant`]).
-It does not construct a vacuum state of a nontrivial net, and it does not prove the Reeh–Schlieder
-theorem.
+It does not construct a vacuum state of a nontrivial net. The consequences that do use the spectrum
+condition, the Reeh–Schlieder theorem and its corollaries, are in
+{ref "reeh-schlieder"}[The Reeh–Schlieder theorem].
 
 Thermal equilibrium is described by KMS states. In Minkowski spacetime every Poincaré
 transformation acts on the one algebra $`\mathfrak{U}`, so a one-parameter subgroup $`t \mapsto

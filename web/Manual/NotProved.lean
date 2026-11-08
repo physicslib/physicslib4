@@ -78,10 +78,11 @@ tag := "not-proved-minkowski"
   C\*-algebras are isometric; the library constructs one and states its results for every
   quasilocal algebra, but does not prove uniqueness
   ([Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Design--The-quasilocal-algebra-is-constructed)).
-* _The Reeh–Schlieder theorem._ In a vacuum representation the vacuum is cyclic for the algebra
-  of every nonempty diamond. The library does not prove it, so the Schlieder property takes
-  cyclicity as a hypothesis, in Minkowski and in curved spacetime
-  ([Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Main-definitions-and-theorems--Representations-and-local-von-Neumann-algebras)).
+* _The Reeh–Schlieder theorem in curved spacetime._ The library proves the Reeh–Schlieder theorem
+  in Minkowski spacetime ({ref "reeh-schlieder"}[The Reeh–Schlieder theorem]). In curved spacetime,
+  where the axioms carry no spectrum condition, it does not, so the curved Schlieder property takes
+  cyclicity as a hypothesis
+  ([curved chapter](The-axioms-in-curved-spacetime-and-general-covariance/)).
 * _The spectrum condition in its joint-spectrum form._ The library states the spectrum condition
   as positive energy along every future-timelike translation. Its equivalence with the textbook
   form, that the joint spectrum of the energy-momentum operators lies in the closed forward cone,
