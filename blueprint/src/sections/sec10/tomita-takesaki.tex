@@ -12,7 +12,9 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
 
 \begin{definition}[Antilinear and Antiunitary Operators]
     \label{def:antiunitary-operator}
+    \lean{LinearIsometryEquiv}
     \uses{def:unitary-operator}
+    \leanok
     A map $W : \mathbf{H} \to \mathbf{H}$ is \emph{antilinear} if $W(\alpha\phi + \psi) = \overline{\alpha}\, W\phi + W\psi$ for all $\alpha \in \mathbb{C}$ and $\phi, \psi \in \mathbf{H}$. An \emph{antiunitary operator} is an antilinear bijection $W$ of $\mathbf{H}$ onto $\mathbf{H}$ with
     \begin{align}
         \left< W\phi, W\psi \right> = \overline{\left< \phi, \psi \right>} = \left< \psi, \phi \right> \qquad \text{for all } \phi, \psi \in \mathbf{H}.
@@ -24,7 +26,9 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
 
 \begin{lemma}[Antiunitary Operators are Isometric]
     \label{lmm:antiunitary-isometric}
+    \lean{Physicslib4.Modular.antiunitary_isometric}
     \uses{def:antiunitary-operator}
+    \leanok
     An antiunitary operator $W$ is isometric and continuous, and $W^{-1}$ is antiunitary. For a Lean \texttt{LinearIsometryEquiv} these are supplied by Mathlib (\texttt{norm\_map}, \texttt{continuous}, \texttt{symm}).
 \end{lemma}
 \begin{proof}
@@ -33,16 +37,21 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
 
 \begin{lemma}[Composition Rules for Antiunitary Operators]
     \label{lmm:antiunitary-composition}
+    \lean{Physicslib4.Modular.antiunitary_composition}
     \uses{def:antiunitary-operator, def:unitary-operator}
+    \leanok
     Let $W, W_1, W_2$ be antiunitary and $U$ unitary. Then $WU$ and $UW$ are antiunitary, and $W_1W_2$ is unitary.
 \end{lemma}
 \begin{proof}
+    \leanok
     Each composite is a bijection; a composite of two antilinear maps is linear, and a composite of a linear and an antilinear map is antilinear. The inner-product identities follow by applying the defining identities of the two factors in turn; two conjugations cancel.
 \end{proof}
 
 \begin{lemma}[A Conjugate-Linear Isometry Conjugates Inner Products]
     \label{lmm:conjugate-linear-isometry-inner}
+    \lean{Physicslib4.Modular.inner_map_map_of_conjLinearIsometry}
     \uses{def:antiunitary-operator}
+    \leanok
     Let $W : \mathbf{H} \to \mathbf{H}$ be antilinear and norm-preserving, not necessarily bijective. Then $\left< W\phi, W\psi \right> = \overline{\left< \phi, \psi \right>}$ for all $\phi, \psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -52,7 +61,9 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
 
 \begin{lemma}[An Antilinear Isometric Bijection is Antiunitary]
     \label{lmm:antilinear-isometry-antiunitary}
+    \lean{Physicslib4.Modular.exists_antiunitary_of_bijective}
     \uses{def:antiunitary-operator}
+    \leanok
     An antilinear norm-preserving bijection $W$ of $\mathbf{H}$ is antiunitary. In particular every Lean \texttt{LinearIsometryEquiv (starRingEnd \ensuremath{\mathbb{C}})} is antiunitary in the sense of Definition~\ref{def:antiunitary-operator}.
 \end{lemma}
 \begin{proof}
@@ -62,7 +73,9 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
 
 \begin{definition}[Reference Conjugation]
     \label{def:reference-conjugation}
+    \lean{Physicslib4.Modular.referenceConjugation}
     \uses{def:antiunitary-operator}
+    \leanok
     Fix a Hilbert basis $(e_i)_{i \in I}$ of $\mathbf{H}$ (it exists by Mathlib's \texttt{exists\_hilbertBasis}; no separability is needed here). The \emph{reference conjugation} is the map $C : \mathbf{H} \to \mathbf{H}$ that conjugates coordinates,
     \begin{align}
         C\Big( \sum_{i \in I} c_i e_i \Big) = \sum_{i \in I} \overline{c_i}\, e_i, \qquad (c_i) \in \ell^2(I).
@@ -72,7 +85,9 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
 
 \begin{lemma}[Properties of the Reference Conjugation]
     \label{lmm:reference-conjugation-properties}
+    \lean{Physicslib4.Modular.referenceConjugation_properties}
     \uses{def:reference-conjugation, def:antiunitary-operator}
+    \leanok
     The reference conjugation $C$ is antilinear and isometric, satisfies $C(C\phi) = \phi$ for all $\phi$, and $\left< C\phi, C\psi \right> = \overline{\left< \phi, \psi \right>}$ for all $\phi, \psi \in \mathbf{H}$. In particular $C$ is an antiunitary involution.
 \end{lemma}
 \begin{proof}
@@ -86,13 +101,17 @@ The setting follows the project's commutant convention (\ref{def:local-von-neuma
 
 \begin{definition}[Von Neumann Algebra in the Commutant Convention]
     \label{def:von-neumann-algebra-commutant-convention}
+    \lean{Physicslib4.Modular.IsVonNeumannSet}
     \uses{def:local-von-neumann, lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    \leanok
     A \emph{von Neumann algebra on $\mathbf{H}$} is a set $\mathcal{M} \subset \mathcal{B}(\mathbf{H})$ that is self-adjoint ($a \in \mathcal{M}$ implies $a^* \in \mathcal{M}$) and equal to its bicommutant, $\mathcal{M} = \mathcal{M}''$. Every local von Neumann algebra $R(\mathbf{B})$ of \ref{def:local-von-neumann} is one, by Lemma~\ref{lmm:bicommutant-of-selfadjoint-is-von-neumann}.
 \end{definition}
 
 \begin{lemma}[The Commutant of a Von Neumann Algebra]
     \label{lmm:commutant-von-neumann-algebra}
+    \lean{Physicslib4.Modular.isVonNeumannSet_centralizer}
     \uses{def:von-neumann-algebra-commutant-convention}
+    \leanok
     If $\mathcal{M}$ is a von Neumann algebra on $\mathbf{H}$, then so is $\mathcal{M}'$, and $(\mathcal{M}')' = \mathcal{M}$. Both $\mathcal{M}$ and $\mathcal{M}'$ are unital $*$-subalgebras of $\mathcal{B}(\mathbf{H})$.
 \end{lemma}
 \begin{proof}
@@ -102,18 +121,24 @@ The setting follows the project's commutant convention (\ref{def:local-von-neuma
 
 \begin{definition}[Separating Vector]
     \label{def:separating-vector}
+    \lean{Physicslib4.Modular.IsSeparatingVector}
+    \leanok
     A vector $\Omega \in \mathbf{H}$ is \emph{separating} for a set $\mathcal{S} \subset \mathcal{B}(\mathbf{H})$ if $a \in \mathcal{S}$ and $a\Omega = 0$ imply $a = 0$.
 \end{definition}
 
 \begin{definition}[Cyclic and Separating Vector]
     \label{def:cyclic-separating-vector}
+    \lean{Physicslib4.Modular.IsCyclicSeparatingVector}
     \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-vector}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$. A vector $\Omega \in \mathbf{H}$ is \emph{cyclic and separating} for $\mathcal{M}$ if $\Omega$ is cyclic (\ref{def:cyclic-vector}, for the inclusion representation) both for $\mathcal{M}$ and for $\mathcal{M}'$: the subspaces $\mathcal{M}\Omega$ and $\mathcal{M}'\Omega$ are dense in $\mathbf{H}$.
 \end{definition}
 
 \begin{lemma}[Cyclic for the Commutant Implies Separating]
     \label{lmm:cyclic-commutant-separating}
+    \lean{Physicslib4.Modular.isSeparatingVector_of_isCyclicSeparatingVector}
     \uses{def:cyclic-separating-vector, def:separating-vector}
+    \leanok
     If $\Omega$ is cyclic and separating for $\mathcal{M}$, then $\Omega$ is separating for $\mathcal{M}$ and for $\mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -127,7 +152,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{lemma}[The Tomita Pre-Operators are Well Defined]
     \label{lmm:tomita-pre-operators-well-defined}
+    \lean{Physicslib4.Modular.tomitaPre_wellDefined}
     \uses{def:cyclic-separating-vector}
+    \leanok
     If $a, b \in \mathcal{M}$ and $a\Omega = b\Omega$, then $a^*\Omega = b^*\Omega$. The same holds for $a, b \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -137,7 +164,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{definition}[The Tomita Pre-Operators $S_0$ and $F_0$]
     \label{def:tomita-pre-operators}
+    \lean{Physicslib4.Modular.tomitaPre}
     \uses{def:antiunitary-operator, def:cyclic-separating-vector, lmm:tomita-pre-operators-well-defined, lmm:commutant-von-neumann-algebra}
+    \leanok
     The antilinear operators $S_0$ and $F_0$ on $\mathbf{H}$ are
     \begin{align}
         \text{Dom}(S_0) = \mathcal{M}\Omega, \quad S_0(a\Omega) = a^*\Omega \quad (a \in \mathcal{M}); \qquad \text{Dom}(F_0) = \mathcal{M}'\Omega, \quad F_0(b\Omega) = b^*\Omega \quad (b \in \mathcal{M}').
@@ -147,7 +176,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{lemma}[Dense Domains and Involutivity of $S_0$ and $F_0$]
     \label{lmm:tomita-pre-operators-dense-involutive}
+    \lean{Physicslib4.Modular.tomitaPre_dense_involutive}
     \uses{def:tomita-pre-operators}
+    \leanok
     $\text{Dom}(S_0)$ and $\text{Dom}(F_0)$ are dense in $\mathbf{H}$. Moreover $S_0$ maps $\mathcal{M}\Omega$ onto itself with $S_0 S_0 x = x$ for all $x \in \mathcal{M}\Omega$, and likewise for $F_0$ on $\mathcal{M}'\Omega$.
 \end{lemma}
 \begin{proof}
@@ -157,7 +188,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{lemma}[The Adjoint Relation between $S_0$ and $F_0$]
     \label{lmm:tomita-adjoint-relation}
+    \lean{Physicslib4.Modular.tomitaPre_adjoint_relation}
     \uses{def:tomita-pre-operators}
+    \leanok
     For all $x \in \text{Dom}(S_0)$ and $y \in \text{Dom}(F_0)$,
     \begin{align}
         \left< y, S_0 x \right> = \left< x, F_0 y \right>.
@@ -174,13 +207,29 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{definition}[The Linearized Pre-Operator $S_0'$]
     \label{def:linearized-tomita-pre-operator}
+    \lean{Physicslib4.Modular.linearizedTomitaPre}
     \uses{def:tomita-pre-operators, def:reference-conjugation, def:hall-3.1}
+    \leanok
     The \emph{linearized Tomita pre-operator} is $S_0' = C \circ S_0$, with $\text{Dom}(S_0') = \mathcal{M}\Omega$ and $S_0'(a\Omega) = C(a^*\Omega)$. As a composite of two antilinear maps it is linear, so it is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}; it is densely defined by Lemma~\ref{lmm:tomita-pre-operators-dense-involutive}.
 \end{definition}
 
+\begin{lemma}[Values of the Pre-Operators]
+    \label{lmm:tomita-pre-operators-apply}
+    \lean{Physicslib4.Modular.tomitaPre_apply, Physicslib4.Modular.linearizedTomitaPre_domain, Physicslib4.Modular.linearizedTomitaPre_apply, Physicslib4.Modular.span_eq_of_isVonNeumannSet}
+    \uses{def:tomita-pre-operators, def:linearized-tomita-pre-operator, def:von-neumann-algebra-commutant-convention}
+    \leanok
+    Let $\mathcal{M}$ be a von Neumann algebra and $\Omega$ cyclic and separating. Then $S_0(a\Omega) = a^*\Omega$ for every $a \in \mathcal{M}$ and $F_0(b\Omega) = b^*\Omega$ for every $b \in \mathcal{M}'$; $\text{Dom}(S_0') = \text{Dom}(S_0) = \mathcal{M}\Omega$; and $S_0' x = C(S_0 x)$ for every $x \in \text{Dom}(S_0')$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-pre-operators-well-defined, lmm:commutant-von-neumann-algebra}
+    $\mathcal{M}$ and $\mathcal{M}'$ are linear subspaces, so their linear spans are themselves and the domains are $\mathcal{M}\Omega$ and $\mathcal{M}'\Omega$. For $a \in \mathcal{M}$ the value $S_0(a\Omega)$ is $c^*\Omega$ for some $c \in \mathcal{M}$ with $c\Omega = a\Omega$, which is $a^*\Omega$ by Lemma~\ref{lmm:tomita-pre-operators-well-defined}; likewise for $F_0$. The graph of $S_0'$ is $\{(a\Omega, C(a^*\Omega)) : a \in \mathcal{M}\}$, which is the graph of $C \circ S_0$.
+\end{proof}
+
 \begin{lemma}[The Adjoint of $S_0'$ Extends $F_0 C$]
     \label{lmm:linearized-adjoint-extends}
+    \lean{Physicslib4.Modular.linearizedTomitaPre_adjoint_extends}
     \uses{def:linearized-tomita-pre-operator, def:hall-9.1, def:hall-9.3}
+    \leanok
     $C(\mathcal{M}'\Omega) \subset \text{Dom}\big( (S_0')^* \big)$ and $(S_0')^* C y = F_0 y$ for every $y \in \mathcal{M}'\Omega$; that is, $(S_0')^*$ is an extension of $F_0 \circ C$. In particular $(S_0')^*$ is densely defined.
 \end{lemma}
 \begin{proof}
@@ -194,7 +243,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{lemma}[A Densely Defined Adjoint Gives Closability]
     \label{lmm:closable-of-dense-adjoint}
+    \lean{Physicslib4.Modular.isClosable_of_dense_adjoint}
     \uses{def:hall-9.1, def:hall-9.6}
+    \leanok
     Let $A$ be a densely defined operator on $\mathbf{H}$ whose adjoint $A^*$ is densely defined. Then $A$ is closable.
 \end{lemma}
 \begin{proof}
@@ -204,7 +255,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{corollary}[$S_0'$ is Closable]
     \label{crllr:linearized-tomita-closable}
+    \lean{Physicslib4.Modular.linearizedTomitaPre_isClosable}
     \uses{def:linearized-tomita-pre-operator, def:hall-9.6}
+    \leanok
     The linearized pre-operator $S_0'$ is closable.
 \end{corollary}
 \begin{proof}
@@ -214,7 +267,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{definition}[The Tomita Operator]
     \label{def:tomita-operator}
+    \lean{Physicslib4.Modular.tomitaOperator}
     \uses{crllr:linearized-tomita-closable, def:reference-conjugation, def:hall-9.6}
+    \leanok
     Let $S' = (S_0')^{\text{cl}}$ be the closure of $S_0'$ (\ref{def:hall-9.6}). The \emph{Tomita operator} is the antilinear operator
     \begin{align}
         S = C \circ S', \qquad \text{Dom}(S) = \text{Dom}(S').
@@ -223,7 +278,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{lemma}[The Graph of $S$ is the Closure of the Graph of $S_0$]
     \label{lmm:tomita-operator-independent-of-c}
+    \lean{Physicslib4.Modular.tomitaOperator_graph_eq_closure}
     \uses{def:tomita-operator, def:tomita-pre-operators}
+    \leanok
     $\Gamma(S)$ is the closure of $\Gamma(S_0)$ in $\mathbf{H} \times \mathbf{H}$. In particular $S$ and $\text{Dom}(S)$ do not depend on the choice of the reference conjugation $C$.
 \end{lemma}
 \begin{proof}
@@ -233,7 +290,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{lemma}[The Graph of $S$ is Symmetric under the Flip]
     \label{lmm:tomita-graph-flip}
+    \lean{Physicslib4.Modular.tomitaOperator_graph_swap}
     \uses{def:tomita-operator}
+    \leanok
     If $(\phi, \psi) \in \Gamma(S)$, then $(\psi, \phi) \in \Gamma(S)$.
 \end{lemma}
 \begin{proof}
@@ -243,7 +302,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{theorem}[The Tomita Operator is an Involution]
     \label{thrm:tomita-operator-involution}
+    \lean{Physicslib4.Modular.tomitaOperator_involution}
     \uses{def:tomita-operator}
+    \leanok
     $S$ is injective, $S$ maps $\text{Dom}(S)$ onto $\text{Dom}(S)$, and $S S \phi = \phi$ for all $\phi \in \text{Dom}(S)$ (so $S^{-1} = S$, Lemma~\ref{lmm:tomita-inverse-is-self}). The domain and the range of $S$ are dense in $\mathbf{H}$.
 \end{theorem}
 \begin{proof}
@@ -253,7 +314,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{corollary}[Properties of $S'$]
     \label{crllr:linearized-tomita-properties}
+    \lean{Physicslib4.Modular.linearizedTomita_closure_properties}
     \uses{def:tomita-operator, def:hall-9.6, def:kernel-of-an-unbounded-operator, def:range-of-an-unbounded-operator}
+    \leanok
     $S'$ is closed, densely defined and injective, and its range is dense in $\mathbf{H}$.
 \end{corollary}
 \begin{proof}
