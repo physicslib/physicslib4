@@ -39,8 +39,8 @@ is a two-sided inverse of `W`; `W.symm` is again an antiunitary by its type.
 Blueprint: lmm:antiunitary-isometric -/
 theorem antiunitary_isometric (W : H ≃ₗᵢ⋆[ℂ] H) :
     (∀ x, ‖W x‖ = ‖x‖) ∧ Continuous W ∧
-      (∀ x, W.symm (W x) = x) ∧ (∀ x, W (W.symm x) = x) := by
-  sorry
+      (∀ x, W.symm (W x) = x) ∧ (∀ x, W (W.symm x) = x) :=
+  ⟨W.norm_map, W.continuous, W.symm_apply_apply, W.apply_symm_apply⟩
 
 /-- A conjugate-linear norm-preserving map `W`, not necessarily bijective, conjugates
 inner products: `⟪W x, W y⟫ = conj ⟪x, y⟫`.
@@ -49,7 +49,17 @@ theorem inner_map_map_of_conjLinearIsometry {E F : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℂ E] [NormedAddCommGroup F] [InnerProductSpace ℂ F]
     (W : E →ₗᵢ⋆[ℂ] F) (x y : E) :
     ⟪W x, W y⟫_ℂ = conj ⟪x, y⟫_ℂ := by
-  sorry
+  have hI : ∀ v : E, W ((RCLike.I : ℂ) • v) = -((RCLike.I : ℂ) • W v) := fun v => by
+    rw [LinearIsometry.map_smulₛₗ]; simp [neg_smul]
+  rw [inner_eq_sum_norm_sq_div_four (W x), inner_eq_sum_norm_sq_div_four x]
+  have h1 : W x - (RCLike.I : ℂ) • W y = W (x + (RCLike.I : ℂ) • y) := by
+    rw [W.map_add, hI, sub_eq_add_neg]
+  have h2 : W x + (RCLike.I : ℂ) • W y = W (x - (RCLike.I : ℂ) • y) := by
+    rw [W.map_sub, hI, sub_neg_eq_add]
+  rw [← W.map_add, ← W.map_sub, h1, h2]
+  simp only [LinearIsometry.norm_map]
+  simp [RCLike.I, Complex.conj_I, map_ofNat]
+  ring
 
 /-- For antiunitaries `W, W₁, W₂` and a unitary `U`, the composites `W U` and `U W` are
 antiunitary and `W₁ W₂` is unitary, each realised by `LinearIsometryEquiv.trans`.
@@ -65,14 +75,16 @@ underlying map of some `U : H ≃ₗᵢ⋆[ℂ] H`, and `⟪W x, W y⟫ = conj �
 Blueprint: lmm:antilinear-isometry-antiunitary -/
 theorem exists_antiunitary_of_bijective (W : H →ₗ⋆[ℂ] H) (hnorm : ∀ x, ‖W x‖ = ‖x‖)
     (hbij : Function.Bijective W) :
-    ∃ U : H ≃ₗᵢ⋆[ℂ] H, ⇑U = ⇑W ∧ ∀ x y, ⟪U x, U y⟫_ℂ = conj ⟪x, y⟫_ℂ := by
-  sorry
+    ∃ U : H ≃ₗᵢ⋆[ℂ] H, ⇑U = ⇑W ∧ ∀ x y, ⟪U x, U y⟫_ℂ = conj ⟪x, y⟫_ℂ :=
+  let U : H ≃ₗᵢ⋆[ℂ] H := ⟨LinearEquiv.ofBijective W hbij, hnorm⟩
+  ⟨U, rfl, inner_map_map_of_conjLinearIsometry U.toLinearIsometry⟩
 
 /-- A densely defined operator `T` whose adjoint `T.adjoint` is densely defined is closable.
 Blueprint: lmm:closable-of-dense-adjoint -/
 theorem isClosable_of_dense_adjoint [CompleteSpace H] {T : H →ₗ.[ℂ] H}
     (hT : Dense (T.domain : Set H)) (hT' : Dense (T.adjoint.domain : Set H)) :
-    T.IsClosable := by
-  sorry
+    T.IsClosable :=
+  (T.adjoint.adjoint_isClosed hT').isClosable.leIsClosable
+    ((T.adjoint_isFormalAdjoint hT).le_adjoint hT')
 
 end Physicslib4.Modular

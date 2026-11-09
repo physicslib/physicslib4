@@ -32,6 +32,7 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
     An antiunitary operator $W$ is isometric and continuous, and $W^{-1}$ is antiunitary. For a Lean \texttt{LinearIsometryEquiv} these are supplied by Mathlib (\texttt{norm\_map}, \texttt{continuous}, \texttt{symm}).
 \end{lemma}
 \begin{proof}
+    \leanok
     The case $\phi = \psi$ of the defining identity gives $\|W\phi\|^2 = \|\phi\|^2$, and $\|W\phi - W\psi\| = \|W(\phi - \psi)\| = \|\phi - \psi\|$ gives continuity. Applying $W^{-1}$ to $W(\overline{\alpha}\phi + \psi) = \alpha W\phi + W\psi$ shows that $W^{-1}$ is antilinear, and the defining identity for $W^{-1}\phi, W^{-1}\psi$ reads $\left< \phi, \psi \right> = \overline{\left< W^{-1}\phi, W^{-1}\psi \right>}$.
 \end{proof}
 
@@ -55,6 +56,7 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
     Let $W : \mathbf{H} \to \mathbf{H}$ be antilinear and norm-preserving, not necessarily bijective. Then $\left< W\phi, W\psi \right> = \overline{\left< \phi, \psi \right>}$ for all $\phi, \psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:polarization-identity}
     The polarization identity (Proposition~\ref{prpstn:polarization-identity}) expresses $\left< \phi, \psi \right>$ through the norms $\|\psi + i^k\phi\|$. Since $W$ sends $\psi + i^k\phi$ to $W\psi + (-i)^kW\phi$ and preserves norms, reindexing the polarization sum gives $\left< W\phi, W\psi \right> = \overline{\left< \phi, \psi \right>}$.
 \end{proof}
@@ -67,6 +69,7 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
     An antilinear norm-preserving bijection $W$ of $\mathbf{H}$ is antiunitary. In particular every Lean \texttt{LinearIsometryEquiv (starRingEnd \ensuremath{\mathbb{C}})} is antiunitary in the sense of Definition~\ref{def:antiunitary-operator}.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:conjugate-linear-isometry-inner}
     The inner-product identity is Lemma~\ref{lmm:conjugate-linear-isometry-inner}; bijectivity is assumed.
 \end{proof}
@@ -91,6 +94,7 @@ Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product 
     The reference conjugation $C$ is antilinear and isometric, satisfies $C(C\phi) = \phi$ for all $\phi$, and $\left< C\phi, C\psi \right> = \overline{\left< \phi, \psi \right>}$ for all $\phi, \psi \in \mathbf{H}$. In particular $C$ is an antiunitary involution.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:conjugate-linear-isometry-inner, lmm:antilinear-isometry-antiunitary}
     Coordinatewise conjugation $\kappa$ on $\ell^2(I)$ is antilinear, preserves $\sum_i |c_i|^2$ and satisfies $\kappa(\kappa c) = c$; conjugating by the unitary $R$ transfers these three properties to $C$. Lemma~\ref{lmm:conjugate-linear-isometry-inner} gives the inner-product identity, and $C(C\phi) = \phi$ makes $C$ a bijection, hence antiunitary (Lemma~\ref{lmm:antilinear-isometry-antiunitary}).
 \end{proof}
@@ -115,6 +119,7 @@ The setting follows the project's commutant convention (\ref{def:local-von-neuma
     If $\mathcal{M}$ is a von Neumann algebra on $\mathbf{H}$, then so is $\mathcal{M}'$, and $(\mathcal{M}')' = \mathcal{M}$. Both $\mathcal{M}$ and $\mathcal{M}'$ are unital $*$-subalgebras of $\mathcal{B}(\mathbf{H})$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:bicommutant-of-selfadjoint-is-von-neumann}
     $(\mathcal{M}')' = \mathcal{M}'' = \mathcal{M}$ by hypothesis. By Lemma~\ref{lmm:bicommutant-of-selfadjoint-is-von-neumann}, the commutant of a self-adjoint set is a self-adjoint subalgebra, and $\mathcal{M}''' = \mathcal{M}'$; so $\mathcal{M}'$ is self-adjoint and equal to its bicommutant, and $\mathcal{M} = (\mathcal{M}')'$ is a self-adjoint subalgebra. A centralizer contains $\mathbf{1}$.
 \end{proof}
@@ -142,6 +147,7 @@ The setting follows the project's commutant convention (\ref{def:local-von-neuma
     If $\Omega$ is cyclic and separating for $\mathcal{M}$, then $\Omega$ is separating for $\mathcal{M}$ and for $\mathcal{M}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-von-neumann-algebra}
     Let $a \in \mathcal{M}$ with $a\Omega = 0$. For $b \in \mathcal{M}'$, $a b\Omega = b a\Omega = 0$, so the bounded operator $a$ vanishes on the dense subspace $\mathcal{M}'\Omega$ and hence $a = 0$; this is the abstract mechanism of Theorem~\ref{thrm:statistical-independence}. The same argument with $\mathcal{M}$ and $\mathcal{M}'$ exchanged, using $(\mathcal{M}')' = \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}) and cyclicity for $\mathcal{M}$, gives the second claim.
 \end{proof}
@@ -158,6 +164,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     If $a, b \in \mathcal{M}$ and $a\Omega = b\Omega$, then $a^*\Omega = b^*\Omega$. The same holds for $a, b \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:cyclic-commutant-separating, lmm:commutant-von-neumann-algebra}
     $a - b \in \mathcal{M}$ and $(a - b)\Omega = 0$, so $a = b$ because $\Omega$ is separating for $\mathcal{M}$ (Lemma~\ref{lmm:cyclic-commutant-separating}); hence $a^* = b^*$. For $\mathcal{M}'$ the argument is the same.
 \end{proof}
@@ -182,6 +189,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     $\text{Dom}(S_0)$ and $\text{Dom}(F_0)$ are dense in $\mathbf{H}$. Moreover $S_0$ maps $\mathcal{M}\Omega$ onto itself with $S_0 S_0 x = x$ for all $x \in \mathcal{M}\Omega$, and likewise for $F_0$ on $\mathcal{M}'\Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:cyclic-separating-vector}
     Density is the cyclicity of $\Omega$ for $\mathcal{M}$ and $\mathcal{M}'$ (\ref{def:cyclic-separating-vector}). For $a \in \mathcal{M}$, $S_0 S_0 (a\Omega) = S_0(a^*\Omega) = a^{**}\Omega = a\Omega$, so $S_0$ is its own inverse on $\mathcal{M}\Omega$ and in particular onto.
 \end{proof}
@@ -197,6 +205,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     Write $x = a\Omega$ with $a \in \mathcal{M}$ and $y = b\Omega$ with $b \in \mathcal{M}'$. Since $ab = ba$,
     \begin{align}
         \left< b\Omega, a^*\Omega \right> = \left< ab\Omega, \Omega \right> = \left< ba\Omega, \Omega \right> = \left< a\Omega, b^*\Omega \right>.
@@ -221,6 +230,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     Let $\mathcal{M}$ be a von Neumann algebra and $\Omega$ cyclic and separating. Then $S_0(a\Omega) = a^*\Omega$ for every $a \in \mathcal{M}$ and $F_0(b\Omega) = b^*\Omega$ for every $b \in \mathcal{M}'$; $\text{Dom}(S_0') = \text{Dom}(S_0) = \mathcal{M}\Omega$; and $S_0' x = C(S_0 x)$ for every $x \in \text{Dom}(S_0')$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-pre-operators-well-defined, lmm:commutant-von-neumann-algebra}
     $\mathcal{M}$ and $\mathcal{M}'$ are linear subspaces, so their linear spans are themselves and the domains are $\mathcal{M}\Omega$ and $\mathcal{M}'\Omega$. For $a \in \mathcal{M}$ the value $S_0(a\Omega)$ is $c^*\Omega$ for some $c \in \mathcal{M}$ with $c\Omega = a\Omega$, which is $a^*\Omega$ by Lemma~\ref{lmm:tomita-pre-operators-well-defined}; likewise for $F_0$. The graph of $S_0'$ is $\{(a\Omega, C(a^*\Omega)) : a \in \mathcal{M}\}$, which is the graph of $C \circ S_0$.
 \end{proof}
@@ -233,6 +243,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     $C(\mathcal{M}'\Omega) \subset \text{Dom}\big( (S_0')^* \big)$ and $(S_0')^* C y = F_0 y$ for every $y \in \mathcal{M}'\Omega$; that is, $(S_0')^*$ is an extension of $F_0 \circ C$. In particular $(S_0')^*$ is densely defined.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-relation, lmm:reference-conjugation-properties, lmm:characterizing-adjoint-domain-membership, lmm:tomita-pre-operators-dense-involutive}
     For $x \in \mathcal{M}\Omega$, Lemma~\ref{lmm:reference-conjugation-properties} and Lemma~\ref{lmm:tomita-adjoint-relation} give
     \begin{align}
@@ -249,6 +260,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     Let $A$ be a densely defined operator on $\mathbf{H}$ whose adjoint $A^*$ is densely defined. Then $A$ is closable.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:closure-linearity-and-sequential-description, lmm:hall-dense-testing, prpstn:continuity-of-norm-and-inner-product}
     By Proposition~\ref{prpstn:closure-linearity-and-sequential-description} it suffices that $(0, \eta) \in \overline{\Gamma(A)}$ implies $\eta = 0$. Take $\psi_n \in \text{Dom}(A)$ with $\psi_n \to 0$ and $A\psi_n \to \eta$. For $\phi \in \text{Dom}(A^*)$, $\left< \phi, \eta \right> = \lim_n \left< \phi, A\psi_n \right> = \lim_n \left< A^*\phi, \psi_n \right> = 0$, so $\eta = 0$ by Lemma~\ref{lmm:hall-dense-testing}, $\text{Dom}(A^*)$ being dense.
 \end{proof}
@@ -261,6 +273,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     The linearized pre-operator $S_0'$ is closable.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:linearized-adjoint-extends, lmm:closable-of-dense-adjoint}
     $S_0'$ is densely defined, and $(S_0')^*$ is densely defined by Lemma~\ref{lmm:linearized-adjoint-extends}; apply Lemma~\ref{lmm:closable-of-dense-adjoint}.
 \end{proof}
@@ -284,6 +297,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     $\Gamma(S)$ is the closure of $\Gamma(S_0)$ in $\mathbf{H} \times \mathbf{H}$. In particular $S$ and $\text{Dom}(S)$ do not depend on the choice of the reference conjugation $C$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:reference-conjugation-properties, prpstn:closure-linearity-and-sequential-description, lmm:componentwise-convergence}
     The map $\Phi(\phi, \psi) = (\phi, C\psi)$ is an isometric real-linear bijection of $\mathbf{H} \times \mathbf{H}$ (Lemma~\ref{lmm:reference-conjugation-properties} and Lemma~\ref{lmm:componentwise-convergence}), hence a homeomorphism, so it maps closures to closures. Since $C(C\psi) = \psi$, $\Phi$ maps $\Gamma(S_0')$ onto $\Gamma(S_0)$ and $\Gamma(S') = \overline{\Gamma(S_0')}$ (Proposition~\ref{prpstn:closure-linearity-and-sequential-description}) onto $\Gamma(S)$. The closure of $\Gamma(S_0)$ involves only $\mathcal{M}$ and $\Omega$.
 \end{proof}
@@ -296,6 +310,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     If $(\phi, \psi) \in \Gamma(S)$, then $(\psi, \phi) \in \Gamma(S)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-operator-independent-of-c, lmm:tomita-pre-operators-dense-involutive}
     The flip $(\phi, \psi) \mapsto (\psi, \phi)$ is an isometric bijection of $\mathbf{H} \times \mathbf{H}$. It maps $\Gamma(S_0)$ onto itself by Lemma~\ref{lmm:tomita-pre-operators-dense-involutive}, hence maps its closure, which is $\Gamma(S)$ by Lemma~\ref{lmm:tomita-operator-independent-of-c}, onto itself.
 \end{proof}
@@ -308,6 +323,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     $S$ is injective, $S$ maps $\text{Dom}(S)$ onto $\text{Dom}(S)$, and $S S \phi = \phi$ for all $\phi \in \text{Dom}(S)$ (so $S^{-1} = S$, Lemma~\ref{lmm:tomita-inverse-is-self}). The domain and the range of $S$ are dense in $\mathbf{H}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-graph-flip, lmm:tomita-pre-operators-dense-involutive}
     For $\phi \in \text{Dom}(S)$, Lemma~\ref{lmm:tomita-graph-flip} applied to $(\phi, S\phi)$ gives $S\phi \in \text{Dom}(S)$ and $S S\phi = \phi$. This makes $S$ a bijection of $\text{Dom}(S)$ onto itself, so its range is its domain, which contains the dense set $\mathcal{M}\Omega$ (Lemma~\ref{lmm:tomita-pre-operators-dense-involutive}).
 \end{proof}
@@ -320,6 +336,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     $S'$ is closed, densely defined and injective, and its range is dense in $\mathbf{H}$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{thrm:tomita-operator-involution, lmm:reference-conjugation-properties, prpstn:closure-linearity-and-sequential-description}
     $S'$ is a closure, hence closed, and its domain contains $\mathcal{M}\Omega$. Since $S' = CS$ with $C$ an isometric bijection, $S'\phi = 0$ forces $S\phi = 0$, so $\phi = 0$ by Theorem~\ref{thrm:tomita-operator-involution}, and $\text{Range}(S') = C(\text{Range}(S))$ is dense.
 \end{proof}
