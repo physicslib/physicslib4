@@ -1,0 +1,959 @@
+\section{Tomita--Takesaki Theory}\label{sctn:tomita-takesaki}
+
+Let $\mathcal{M}$ be a von Neumann algebra on a Hilbert space with a vector $\Omega$ that is cyclic and separating for $\mathcal{M}$. The map $a\Omega \mapsto a^*\Omega$ on $\mathcal{M}\Omega$ is antilinear, densely defined and closable, and the polar decomposition of its closure $S = J\Delta^{1/2}$ produces the \emph{modular operator} $\Delta$, a positive, self-adjoint and injective operator, and the \emph{modular conjugation} $J$, an antiunitary involution with $J\Delta J = \Delta^{-1}$. Tomita's theorem states that $\Delta^{it}\mathcal{M}\Delta^{-it} = \mathcal{M}$ for every real $t$ and that $J\mathcal{M}J = \mathcal{M}'$. The section is pure operator algebra; it involves no net.
+
+The section first constructs the Tomita operator $S$ (Subsection~\ref{sbsctn:tomita-operator}) and then $\Delta$ and $J$ (Subsection~\ref{sbsctn:modular-operator-conjugation}). It continues with the auxiliary results that J.~Sorce's short proof of Tomita's theorem (\emph{J. Funct. Anal.}, 2024) cites, Carlson's theorem from complex analysis, Sorce's proof of $\Delta^{it}\mathcal{M}\Delta^{-it} = \mathcal{M}$, and the proof of $J\mathcal{M}J = \mathcal{M}'$ following Bratteli and Robinson, \emph{Operator Algebras and Quantum Statistical Mechanics~1}, \S2.5.2.
+
+Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product $\left< \cdot, \cdot \right>$ is conjugate-linear in the first slot and linear in the second. Section~\ref{sctn:unbounded-spectral-theorems} assumes $\mathbf{H}$ separable, but the results of that section used here hold without separability, as their Lean forms do. The theory of unbounded operators in that section concerns linear operators. The Tomita operator is antilinear, and the section reduces it to a linear operator by composing with a fixed antiunitary involution $C$, a \emph{reference conjugation}. The reference conjugation is an implementation device: the Tomita operator, the modular operator and the modular conjugation do not depend on it (Lemma~\ref{lmm:tomita-operator-independent-of-c} and Theorem~\ref{thrm:modular-objects-independent-of-c}).
+
+\subsection{The Tomita Operator}\label{sbsctn:tomita-operator}
+
+\subsubsection{Antiunitary Operators and a Reference Conjugation}
+
+\begin{definition}[Antilinear and Antiunitary Operators]
+    \label{def:antiunitary-operator}
+    \uses{def:unitary-operator}
+    A map $W : \mathbf{H} \to \mathbf{H}$ is \emph{antilinear} if $W(\alpha\phi + \psi) = \overline{\alpha}\, W\phi + W\psi$ for all $\alpha \in \mathbb{C}$ and $\phi, \psi \in \mathbf{H}$. An \emph{antiunitary operator} is an antilinear bijection $W$ of $\mathbf{H}$ onto $\mathbf{H}$ with
+    \begin{align}
+        \left< W\phi, W\psi \right> = \overline{\left< \phi, \psi \right>} = \left< \psi, \phi \right> \qquad \text{for all } \phi, \psi \in \mathbf{H}.
+    \end{align}
+    An \emph{antilinear operator} on $\mathbf{H}$ is a pair of a subspace $\text{Dom}(A) \subset \mathbf{H}$ and an antilinear map $A : \text{Dom}(A) \to \mathbf{H}$; its graph $\Gamma(A) = \{ (\psi, A\psi) \mid \psi \in \text{Dom}(A) \}$ is a real subspace of $\mathbf{H} \times \mathbf{H}$.
+
+    In the Lean, an antiunitary operator is Mathlib's conjugate-linear isometric equivalence $\mathbf{H} \simeq_{\ell i \star}[\mathbb{C}]\, \mathbf{H}$ (\texttt{LinearIsometryEquiv (starRingEnd \ensuremath{\mathbb{C}})}), and a conjugate-linear norm-preserving map whose bijectivity is not yet known is $\mathbf{H} \to_{\ell i \star}[\mathbb{C}]\, \mathbf{H}$. Mathlib supplies conjugate-linearity, norm preservation, continuity and the inverse (\texttt{symm}); the inner-product identity above is Lemma~\ref{lmm:conjugate-linear-isometry-inner}, and Lemma~\ref{lmm:antilinear-isometry-antiunitary} identifies the two notions. Identities such as $C^2 = \mathbf{1}$ and $J^2 = \mathbf{1}$ are stated pointwise, $C(C\phi) = \phi$ for all $\phi$.
+\end{definition}
+
+\begin{lemma}[Antiunitary Operators are Isometric]
+    \label{lmm:antiunitary-isometric}
+    \uses{def:antiunitary-operator}
+    An antiunitary operator $W$ is isometric and continuous, and $W^{-1}$ is antiunitary. For a Lean \texttt{LinearIsometryEquiv} these are supplied by Mathlib (\texttt{norm\_map}, \texttt{continuous}, \texttt{symm}).
+\end{lemma}
+\begin{proof}
+    The case $\phi = \psi$ of the defining identity gives $\|W\phi\|^2 = \|\phi\|^2$, and $\|W\phi - W\psi\| = \|W(\phi - \psi)\| = \|\phi - \psi\|$ gives continuity. Applying $W^{-1}$ to $W(\overline{\alpha}\phi + \psi) = \alpha W\phi + W\psi$ shows that $W^{-1}$ is antilinear, and the defining identity for $W^{-1}\phi, W^{-1}\psi$ reads $\left< \phi, \psi \right> = \overline{\left< W^{-1}\phi, W^{-1}\psi \right>}$.
+\end{proof}
+
+\begin{lemma}[Composition Rules for Antiunitary Operators]
+    \label{lmm:antiunitary-composition}
+    \uses{def:antiunitary-operator, def:unitary-operator}
+    Let $W, W_1, W_2$ be antiunitary and $U$ unitary. Then $WU$ and $UW$ are antiunitary, and $W_1W_2$ is unitary.
+\end{lemma}
+\begin{proof}
+    Each composite is a bijection; a composite of two antilinear maps is linear, and a composite of a linear and an antilinear map is antilinear. The inner-product identities follow by applying the defining identities of the two factors in turn; two conjugations cancel.
+\end{proof}
+
+\begin{lemma}[A Conjugate-Linear Isometry Conjugates Inner Products]
+    \label{lmm:conjugate-linear-isometry-inner}
+    \uses{def:antiunitary-operator}
+    Let $W : \mathbf{H} \to \mathbf{H}$ be antilinear and norm-preserving, not necessarily bijective. Then $\left< W\phi, W\psi \right> = \overline{\left< \phi, \psi \right>}$ for all $\phi, \psi \in \mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:polarization-identity}
+    The polarization identity (Proposition~\ref{prpstn:polarization-identity}) expresses $\left< \phi, \psi \right>$ through the norms $\|\psi + i^k\phi\|$. Since $W$ sends $\psi + i^k\phi$ to $W\psi + (-i)^kW\phi$ and preserves norms, reindexing the polarization sum gives $\left< W\phi, W\psi \right> = \overline{\left< \phi, \psi \right>}$.
+\end{proof}
+
+\begin{lemma}[An Antilinear Isometric Bijection is Antiunitary]
+    \label{lmm:antilinear-isometry-antiunitary}
+    \uses{def:antiunitary-operator}
+    An antilinear norm-preserving bijection $W$ of $\mathbf{H}$ is antiunitary. In particular every Lean \texttt{LinearIsometryEquiv (starRingEnd \ensuremath{\mathbb{C}})} is antiunitary in the sense of Definition~\ref{def:antiunitary-operator}.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:conjugate-linear-isometry-inner}
+    The inner-product identity is Lemma~\ref{lmm:conjugate-linear-isometry-inner}; bijectivity is assumed.
+\end{proof}
+
+\begin{definition}[Reference Conjugation]
+    \label{def:reference-conjugation}
+    \uses{def:antiunitary-operator}
+    Fix a Hilbert basis $(e_i)_{i \in I}$ of $\mathbf{H}$ (it exists by Mathlib's \texttt{exists\_hilbertBasis}; no separability is needed here). The \emph{reference conjugation} is the map $C : \mathbf{H} \to \mathbf{H}$ that conjugates coordinates,
+    \begin{align}
+        C\Big( \sum_{i \in I} c_i e_i \Big) = \sum_{i \in I} \overline{c_i}\, e_i, \qquad (c_i) \in \ell^2(I).
+    \end{align}
+    Equivalently, $C = R^{-1} \circ \kappa \circ R$, where $R : \mathbf{H} \to \ell^2(I)$ is the unitary coordinate map of the basis (\texttt{HilbertBasis.repr}) and $\kappa$ is coordinatewise complex conjugation on $\ell^2(I)$.
+\end{definition}
+
+\begin{lemma}[Properties of the Reference Conjugation]
+    \label{lmm:reference-conjugation-properties}
+    \uses{def:reference-conjugation, def:antiunitary-operator}
+    The reference conjugation $C$ is antilinear and isometric, satisfies $C(C\phi) = \phi$ for all $\phi$, and $\left< C\phi, C\psi \right> = \overline{\left< \phi, \psi \right>}$ for all $\phi, \psi \in \mathbf{H}$. In particular $C$ is an antiunitary involution.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:conjugate-linear-isometry-inner, lmm:antilinear-isometry-antiunitary}
+    Coordinatewise conjugation $\kappa$ on $\ell^2(I)$ is antilinear, preserves $\sum_i |c_i|^2$ and satisfies $\kappa(\kappa c) = c$; conjugating by the unitary $R$ transfers these three properties to $C$. Lemma~\ref{lmm:conjugate-linear-isometry-inner} gives the inner-product identity, and $C(C\phi) = \phi$ makes $C$ a bijection, hence antiunitary (Lemma~\ref{lmm:antilinear-isometry-antiunitary}).
+\end{proof}
+
+\subsubsection{The Setting}
+
+The setting follows the project's commutant convention (\ref{def:local-von-neumann}): for a set $\mathcal{S} \subset \mathcal{B}(\mathbf{H})$, the commutant $\mathcal{S}'$ is the centralizer $\{ b \in \mathcal{B}(\mathbf{H}) \mid ba = ab \text{ for all } a \in \mathcal{S} \}$.
+
+\begin{definition}[Von Neumann Algebra in the Commutant Convention]
+    \label{def:von-neumann-algebra-commutant-convention}
+    \uses{def:local-von-neumann, lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    A \emph{von Neumann algebra on $\mathbf{H}$} is a set $\mathcal{M} \subset \mathcal{B}(\mathbf{H})$ that is self-adjoint ($a \in \mathcal{M}$ implies $a^* \in \mathcal{M}$) and equal to its bicommutant, $\mathcal{M} = \mathcal{M}''$. Every local von Neumann algebra $R(\mathbf{B})$ of \ref{def:local-von-neumann} is one, by Lemma~\ref{lmm:bicommutant-of-selfadjoint-is-von-neumann}.
+\end{definition}
+
+\begin{lemma}[The Commutant of a Von Neumann Algebra]
+    \label{lmm:commutant-von-neumann-algebra}
+    \uses{def:von-neumann-algebra-commutant-convention}
+    If $\mathcal{M}$ is a von Neumann algebra on $\mathbf{H}$, then so is $\mathcal{M}'$, and $(\mathcal{M}')' = \mathcal{M}$. Both $\mathcal{M}$ and $\mathcal{M}'$ are unital $*$-subalgebras of $\mathcal{B}(\mathbf{H})$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    $(\mathcal{M}')' = \mathcal{M}'' = \mathcal{M}$ by hypothesis. By Lemma~\ref{lmm:bicommutant-of-selfadjoint-is-von-neumann}, the commutant of a self-adjoint set is a self-adjoint subalgebra, and $\mathcal{M}''' = \mathcal{M}'$; so $\mathcal{M}'$ is self-adjoint and equal to its bicommutant, and $\mathcal{M} = (\mathcal{M}')'$ is a self-adjoint subalgebra. A centralizer contains $\mathbf{1}$.
+\end{proof}
+
+\begin{definition}[Separating Vector]
+    \label{def:separating-vector}
+    A vector $\Omega \in \mathbf{H}$ is \emph{separating} for a set $\mathcal{S} \subset \mathcal{B}(\mathbf{H})$ if $a \in \mathcal{S}$ and $a\Omega = 0$ imply $a = 0$.
+\end{definition}
+
+\begin{definition}[Cyclic and Separating Vector]
+    \label{def:cyclic-separating-vector}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-vector}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$. A vector $\Omega \in \mathbf{H}$ is \emph{cyclic and separating} for $\mathcal{M}$ if $\Omega$ is cyclic (\ref{def:cyclic-vector}, for the inclusion representation) both for $\mathcal{M}$ and for $\mathcal{M}'$: the subspaces $\mathcal{M}\Omega$ and $\mathcal{M}'\Omega$ are dense in $\mathbf{H}$.
+\end{definition}
+
+\begin{lemma}[Cyclic for the Commutant Implies Separating]
+    \label{lmm:cyclic-commutant-separating}
+    \uses{def:cyclic-separating-vector, def:separating-vector}
+    If $\Omega$ is cyclic and separating for $\mathcal{M}$, then $\Omega$ is separating for $\mathcal{M}$ and for $\mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-von-neumann-algebra}
+    Let $a \in \mathcal{M}$ with $a\Omega = 0$. For $b \in \mathcal{M}'$, $a b\Omega = b a\Omega = 0$, so the bounded operator $a$ vanishes on the dense subspace $\mathcal{M}'\Omega$ and hence $a = 0$; this is the abstract mechanism of Theorem~\ref{thrm:statistical-independence}. The same argument with $\mathcal{M}$ and $\mathcal{M}'$ exchanged, using $(\mathcal{M}')' = \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}) and cyclicity for $\mathcal{M}$, gives the second claim.
+\end{proof}
+
+For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{H}$, $\Omega$ is cyclic and separating for $\mathcal{M}$, and $C$ is a reference conjugation.
+
+\subsubsection{The Antilinear Pre-Operators}
+
+\begin{lemma}[The Tomita Pre-Operators are Well Defined]
+    \label{lmm:tomita-pre-operators-well-defined}
+    \uses{def:cyclic-separating-vector}
+    If $a, b \in \mathcal{M}$ and $a\Omega = b\Omega$, then $a^*\Omega = b^*\Omega$. The same holds for $a, b \in \mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:cyclic-commutant-separating, lmm:commutant-von-neumann-algebra}
+    $a - b \in \mathcal{M}$ and $(a - b)\Omega = 0$, so $a = b$ because $\Omega$ is separating for $\mathcal{M}$ (Lemma~\ref{lmm:cyclic-commutant-separating}); hence $a^* = b^*$. For $\mathcal{M}'$ the argument is the same.
+\end{proof}
+
+\begin{definition}[The Tomita Pre-Operators $S_0$ and $F_0$]
+    \label{def:tomita-pre-operators}
+    \uses{def:antiunitary-operator, def:cyclic-separating-vector, lmm:tomita-pre-operators-well-defined, lmm:commutant-von-neumann-algebra}
+    The antilinear operators $S_0$ and $F_0$ on $\mathbf{H}$ are
+    \begin{align}
+        \text{Dom}(S_0) = \mathcal{M}\Omega, \quad S_0(a\Omega) = a^*\Omega \quad (a \in \mathcal{M}); \qquad \text{Dom}(F_0) = \mathcal{M}'\Omega, \quad F_0(b\Omega) = b^*\Omega \quad (b \in \mathcal{M}').
+    \end{align}
+    They are well defined by Lemma~\ref{lmm:tomita-pre-operators-well-defined}, take values in $\mathcal{M}\Omega$ and $\mathcal{M}'\Omega$ because both algebras are self-adjoint (Lemma~\ref{lmm:commutant-von-neumann-algebra}), and are antilinear because $(\alpha a + b)^* = \overline{\alpha} a^* + b^*$.
+\end{definition}
+
+\begin{lemma}[Dense Domains and Involutivity of $S_0$ and $F_0$]
+    \label{lmm:tomita-pre-operators-dense-involutive}
+    \uses{def:tomita-pre-operators}
+    $\text{Dom}(S_0)$ and $\text{Dom}(F_0)$ are dense in $\mathbf{H}$. Moreover $S_0$ maps $\mathcal{M}\Omega$ onto itself with $S_0 S_0 x = x$ for all $x \in \mathcal{M}\Omega$, and likewise for $F_0$ on $\mathcal{M}'\Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{def:cyclic-separating-vector}
+    Density is the cyclicity of $\Omega$ for $\mathcal{M}$ and $\mathcal{M}'$ (\ref{def:cyclic-separating-vector}). For $a \in \mathcal{M}$, $S_0 S_0 (a\Omega) = S_0(a^*\Omega) = a^{**}\Omega = a\Omega$, so $S_0$ is its own inverse on $\mathcal{M}\Omega$ and in particular onto.
+\end{proof}
+
+\begin{lemma}[The Adjoint Relation between $S_0$ and $F_0$]
+    \label{lmm:tomita-adjoint-relation}
+    \uses{def:tomita-pre-operators}
+    For all $x \in \text{Dom}(S_0)$ and $y \in \text{Dom}(F_0)$,
+    \begin{align}
+        \left< y, S_0 x \right> = \left< x, F_0 y \right>.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    Write $x = a\Omega$ with $a \in \mathcal{M}$ and $y = b\Omega$ with $b \in \mathcal{M}'$. Since $ab = ba$,
+    \begin{align}
+        \left< b\Omega, a^*\Omega \right> = \left< ab\Omega, \Omega \right> = \left< ba\Omega, \Omega \right> = \left< a\Omega, b^*\Omega \right>.
+    \end{align}
+\end{proof}
+
+\subsubsection{Linearization and Closure}
+
+\begin{definition}[The Linearized Pre-Operator $S_0'$]
+    \label{def:linearized-tomita-pre-operator}
+    \uses{def:tomita-pre-operators, def:reference-conjugation, def:hall-3.1}
+    The \emph{linearized Tomita pre-operator} is $S_0' = C \circ S_0$, with $\text{Dom}(S_0') = \mathcal{M}\Omega$ and $S_0'(a\Omega) = C(a^*\Omega)$. As a composite of two antilinear maps it is linear, so it is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}; it is densely defined by Lemma~\ref{lmm:tomita-pre-operators-dense-involutive}.
+\end{definition}
+
+\begin{lemma}[The Adjoint of $S_0'$ Extends $F_0 C$]
+    \label{lmm:linearized-adjoint-extends}
+    \uses{def:linearized-tomita-pre-operator, def:hall-9.1, def:hall-9.3}
+    $C(\mathcal{M}'\Omega) \subset \text{Dom}\big( (S_0')^* \big)$ and $(S_0')^* C y = F_0 y$ for every $y \in \mathcal{M}'\Omega$; that is, $(S_0')^*$ is an extension of $F_0 \circ C$. In particular $(S_0')^*$ is densely defined.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-relation, lmm:reference-conjugation-properties, lmm:characterizing-adjoint-domain-membership, lmm:tomita-pre-operators-dense-involutive}
+    For $x \in \mathcal{M}\Omega$, Lemma~\ref{lmm:reference-conjugation-properties} and Lemma~\ref{lmm:tomita-adjoint-relation} give
+    \begin{align}
+        \left< Cy, S_0'x \right> = \left< Cy, C S_0 x \right> = \overline{\left< y, S_0x \right>} = \overline{\left< x, F_0y \right>} = \left< F_0 y, x \right>,
+    \end{align}
+    which is the defining relation of the adjoint (Lemma~\ref{lmm:characterizing-adjoint-domain-membership}). The set $C(\mathcal{M}'\Omega)$ is dense because $C$ is an isometric bijection and $\mathcal{M}'\Omega$ is dense.
+\end{proof}
+
+\begin{lemma}[A Densely Defined Adjoint Gives Closability]
+    \label{lmm:closable-of-dense-adjoint}
+    \uses{def:hall-9.1, def:hall-9.6}
+    Let $A$ be a densely defined operator on $\mathbf{H}$ whose adjoint $A^*$ is densely defined. Then $A$ is closable.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:closure-linearity-and-sequential-description, lmm:hall-dense-testing, prpstn:continuity-of-norm-and-inner-product}
+    By Proposition~\ref{prpstn:closure-linearity-and-sequential-description} it suffices that $(0, \eta) \in \overline{\Gamma(A)}$ implies $\eta = 0$. Take $\psi_n \in \text{Dom}(A)$ with $\psi_n \to 0$ and $A\psi_n \to \eta$. For $\phi \in \text{Dom}(A^*)$, $\left< \phi, \eta \right> = \lim_n \left< \phi, A\psi_n \right> = \lim_n \left< A^*\phi, \psi_n \right> = 0$, so $\eta = 0$ by Lemma~\ref{lmm:hall-dense-testing}, $\text{Dom}(A^*)$ being dense.
+\end{proof}
+
+\begin{corollary}[$S_0'$ is Closable]
+    \label{crllr:linearized-tomita-closable}
+    \uses{def:linearized-tomita-pre-operator, def:hall-9.6}
+    The linearized pre-operator $S_0'$ is closable.
+\end{corollary}
+\begin{proof}
+    \uses{lmm:linearized-adjoint-extends, lmm:closable-of-dense-adjoint}
+    $S_0'$ is densely defined, and $(S_0')^*$ is densely defined by Lemma~\ref{lmm:linearized-adjoint-extends}; apply Lemma~\ref{lmm:closable-of-dense-adjoint}.
+\end{proof}
+
+\begin{definition}[The Tomita Operator]
+    \label{def:tomita-operator}
+    \uses{crllr:linearized-tomita-closable, def:reference-conjugation, def:hall-9.6}
+    Let $S' = (S_0')^{\text{cl}}$ be the closure of $S_0'$ (\ref{def:hall-9.6}). The \emph{Tomita operator} is the antilinear operator
+    \begin{align}
+        S = C \circ S', \qquad \text{Dom}(S) = \text{Dom}(S').
+    \end{align}
+\end{definition}
+
+\begin{lemma}[The Graph of $S$ is the Closure of the Graph of $S_0$]
+    \label{lmm:tomita-operator-independent-of-c}
+    \uses{def:tomita-operator, def:tomita-pre-operators}
+    $\Gamma(S)$ is the closure of $\Gamma(S_0)$ in $\mathbf{H} \times \mathbf{H}$. In particular $S$ and $\text{Dom}(S)$ do not depend on the choice of the reference conjugation $C$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reference-conjugation-properties, prpstn:closure-linearity-and-sequential-description, lmm:componentwise-convergence}
+    The map $\Phi(\phi, \psi) = (\phi, C\psi)$ is an isometric real-linear bijection of $\mathbf{H} \times \mathbf{H}$ (Lemma~\ref{lmm:reference-conjugation-properties} and Lemma~\ref{lmm:componentwise-convergence}), hence a homeomorphism, so it maps closures to closures. Since $C(C\psi) = \psi$, $\Phi$ maps $\Gamma(S_0')$ onto $\Gamma(S_0)$ and $\Gamma(S') = \overline{\Gamma(S_0')}$ (Proposition~\ref{prpstn:closure-linearity-and-sequential-description}) onto $\Gamma(S)$. The closure of $\Gamma(S_0)$ involves only $\mathcal{M}$ and $\Omega$.
+\end{proof}
+
+\begin{lemma}[The Graph of $S$ is Symmetric under the Flip]
+    \label{lmm:tomita-graph-flip}
+    \uses{def:tomita-operator}
+    If $(\phi, \psi) \in \Gamma(S)$, then $(\psi, \phi) \in \Gamma(S)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-operator-independent-of-c, lmm:tomita-pre-operators-dense-involutive}
+    The flip $(\phi, \psi) \mapsto (\psi, \phi)$ is an isometric bijection of $\mathbf{H} \times \mathbf{H}$. It maps $\Gamma(S_0)$ onto itself by Lemma~\ref{lmm:tomita-pre-operators-dense-involutive}, hence maps its closure, which is $\Gamma(S)$ by Lemma~\ref{lmm:tomita-operator-independent-of-c}, onto itself.
+\end{proof}
+
+\begin{theorem}[The Tomita Operator is an Involution]
+    \label{thrm:tomita-operator-involution}
+    \uses{def:tomita-operator}
+    $S$ is injective, $S$ maps $\text{Dom}(S)$ onto $\text{Dom}(S)$, and $S S \phi = \phi$ for all $\phi \in \text{Dom}(S)$ (so $S^{-1} = S$, Lemma~\ref{lmm:tomita-inverse-is-self}). The domain and the range of $S$ are dense in $\mathbf{H}$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:tomita-graph-flip, lmm:tomita-pre-operators-dense-involutive}
+    For $\phi \in \text{Dom}(S)$, Lemma~\ref{lmm:tomita-graph-flip} applied to $(\phi, S\phi)$ gives $S\phi \in \text{Dom}(S)$ and $S S\phi = \phi$. This makes $S$ a bijection of $\text{Dom}(S)$ onto itself, so its range is its domain, which contains the dense set $\mathcal{M}\Omega$ (Lemma~\ref{lmm:tomita-pre-operators-dense-involutive}).
+\end{proof}
+
+\begin{corollary}[Properties of $S'$]
+    \label{crllr:linearized-tomita-properties}
+    \uses{def:tomita-operator, def:hall-9.6, def:kernel-of-an-unbounded-operator, def:range-of-an-unbounded-operator}
+    $S'$ is closed, densely defined and injective, and its range is dense in $\mathbf{H}$.
+\end{corollary}
+\begin{proof}
+    \uses{thrm:tomita-operator-involution, lmm:reference-conjugation-properties, prpstn:closure-linearity-and-sequential-description}
+    $S'$ is a closure, hence closed, and its domain contains $\mathcal{M}\Omega$. Since $S' = CS$ with $C$ an isometric bijection, $S'\phi = 0$ forces $S\phi = 0$, so $\phi = 0$ by Theorem~\ref{thrm:tomita-operator-involution}, and $\text{Range}(S') = C(\text{Range}(S))$ is dense.
+\end{proof}
+
+\subsection{The Modular Operator and the Modular Conjugation}\label{sbsctn:modular-operator-conjugation}
+
+The modular operator is $\Delta = (S')^*S'$ and the modular conjugation comes from the polar decomposition of $S'$. The subsection first supplies the general results on unbounded operators that this needs: von Neumann's theorem that $T^*T$ is self-adjoint, a composition law and a core property for the functional calculus of Definition~\ref{def:hall-10.5}, the absolute value $|T|$, and the polar decomposition of a closed operator.
+
+\subsubsection{Products of Operators and von Neumann's Theorem}
+
+\begin{definition}[Product of Operators]
+    \label{def:product-of-unbounded-operators}
+    \uses{def:hall-3.1, def:antiunitary-operator, def:hall-9.6}
+    Let $A$ and $B$ be operators on $\mathbf{H}$, each linear or antilinear. Their \emph{product} $AB$ is the operator with
+    \begin{align}
+        \text{Dom}(AB) = \{ \psi \in \text{Dom}(B) \mid B\psi \in \text{Dom}(A) \}, \qquad (AB)\psi = A(B\psi).
+    \end{align}
+    Equivalently, $(\psi, \chi) \in \Gamma(AB)$ if and only if there is $\eta$ with $(\psi, \eta) \in \Gamma(B)$ and $(\eta, \chi) \in \Gamma(A)$. An everywhere-defined map, such as a unitary or antiunitary operator, is regarded as an operator with domain $\mathbf{H}$; thus $\text{Dom}(WA) = \text{Dom}(A)$ and $\text{Dom}(AW) = W^{-1}(\text{Dom}(A))$ for a bijection $W$. Products, and the inverses of Definition~\ref{def:inverse-of-operator}, are partial maps that need not be densely defined; the density requirement of Definition~\ref{def:hall-3.1} is not imposed on them. Equality of operators includes equality of domains.
+\end{definition}
+
+\begin{definition}[Core]
+    \label{def:core}
+    \uses{def:hall-9.6}
+    Let $A$ be a closed operator on $\mathbf{H}$. A subspace $D \subset \text{Dom}(A)$ is a \emph{core} for $A$ if $\Gamma(A\vert_D)$ is dense in $\Gamma(A)$: for every $\psi \in \text{Dom}(A)$ there are $\psi_n \in D$ with $\psi_n \to \psi$ and $A\psi_n \to A\psi$.
+\end{definition}
+
+For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a closed, densely defined operator on $\mathbf{H}$ and $D = T^*T$.
+
+\begin{definition}[The Operator $T^*T$]
+    \label{def:adjoint-product-operator}
+    \uses{def:product-of-unbounded-operators, def:hall-9.1}
+    Let $T$ be a densely defined operator on $\mathbf{H}$. The operator $T^*T$ is the product (\ref{def:product-of-unbounded-operators}) of $T^*$ with $T$:
+    \begin{align}
+        \text{Dom}(T^*T) = \{ x \in \text{Dom}(T) \mid Tx \in \text{Dom}(T^*) \}, \qquad (T^*T)x = T^*(Tx).
+    \end{align}
+    In the Lean this is a definition, the composite of \texttt{T\ensuremath{^\dagger}} with the restriction of $T$ to $\text{Dom}(T^*T)$ (\texttt{LinearPMap.comp} with \texttt{LinearPMap.domRestrict}), not a hypothesis characterising its graph; its graph is $\{(x, z) \mid \exists w,\ (x, w) \in \Gamma(T),\ (w, z) \in \Gamma(T^*)\}$.
+\end{definition}
+
+\begin{lemma}[Solvability of $x + T^*Tx = y$]
+    \label{lmm:von-neumann-solvability}
+    \uses{def:adjoint-product-operator, def:hall-9.1, def:hall-9.6}
+    For every $y \in \mathbf{H}$ there is $x \in \text{Dom}(T^*T)$ with $x + T^*Tx = y$.
+\end{lemma}
+\begin{proof}
+    \uses{def:product-hilbert-space, prpstn:hall-a.49, lmm:characterizing-adjoint-domain-membership}
+    $\Gamma(T)$ is a closed subspace of $\mathbf{H} \times \mathbf{H}$ (\ref{def:product-hilbert-space}), so by Proposition~\ref{prpstn:hall-a.49}, $(y, 0) = (x, Tx) + (u, v)$ with $x \in \text{Dom}(T)$ and $(u, v) \perp \Gamma(T)$. Orthogonality says $\left< v, Tx' \right> = \left< -u, x' \right>$ for all $x' \in \text{Dom}(T)$, so $v \in \text{Dom}(T^*)$ with $T^*v = -u$ (Lemma~\ref{lmm:characterizing-adjoint-domain-membership}). The components give $Tx = -v \in \text{Dom}(T^*)$, hence $T^*Tx = u$, and $y = x + u = x + T^*Tx$.
+\end{proof}
+
+\begin{lemma}[The Form of $T^*T$]
+    \label{lmm:von-neumann-form}
+    \uses{def:adjoint-product-operator, def:hall-9.1}
+    For $x \in \text{Dom}(T^*T)$ and $x' \in \text{Dom}(T)$, $\left< x', T^*Tx \right> = \left< Tx', Tx \right>$. In particular $\left< x, T^*Tx \right> = \|Tx\|^2 \ge 0$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:characterizing-adjoint-domain-membership}
+    The defining relation of the adjoint for $\phi = Tx \in \text{Dom}(T^*)$ and $\psi = x'$ reads $\left< Tx, Tx' \right> = \left< T^*Tx, x' \right>$; take complex conjugates.
+\end{proof}
+
+\begin{lemma}[$T^*T$ is Densely Defined]
+    \label{lmm:von-neumann-dense-domain}
+    \uses{def:adjoint-product-operator}
+    $\text{Dom}(T^*T)$ is dense in $\mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:von-neumann-solvability, lmm:von-neumann-form, crllr:trivial-complement-characterizes-density}
+    Let $y \perp \text{Dom}(T^*T)$ and write $y = x + T^*Tx$ (Lemma~\ref{lmm:von-neumann-solvability}). Then $0 = \left< x, y \right> = \|x\|^2 + \|Tx\|^2$ by Lemma~\ref{lmm:von-neumann-form}, so $x = 0$ and $y = 0$; conclude by Corollary~\ref{crllr:trivial-complement-characterizes-density}.
+\end{proof}
+
+\begin{lemma}[Self-Adjointness from a Surjective Shift]
+    \label{lmm:self-adjoint-of-range-eq-top}
+    \uses{def:hall-9.1, def:hall-9.3, def:hall-9.5, def:range-of-an-unbounded-operator, def:kernel-of-an-unbounded-operator}
+    Let $A$ be a densely defined operator such that $A^*$ is an extension of $A$, and let $\mu \in \mathbb{C}$ satisfy $\text{Range}(A - \mu\mathbf{1}) = \mathbf{H}$ and $\text{Ker}(A^* - \mu\mathbf{1}) = \{0\}$. Then $A^* = A$; that is, $A$ is self-adjoint. In Lean this is \texttt{adjoint\_eq\_of\_range\_eq\_top}.
+\end{lemma}
+\begin{proof}
+    \uses{def:hall-9.3}
+    Let $\phi \in \text{Dom}(A^*)$ and pick $\chi \in \text{Dom}(A)$ with $(A - \mu\mathbf{1})\chi = (A^* - \mu\mathbf{1})\phi$. Since $A^*$ extends $A$, $(A^* - \mu\mathbf{1})(\phi - \chi) = 0$, so $\phi = \chi \in \text{Dom}(A)$. Hence $\text{Dom}(A^*) = \text{Dom}(A)$, and $A^* = A$ there.
+\end{proof}
+
+\begin{lemma}[$T^*T$ is Symmetric and Positive]
+    \label{lmm:von-neumann-symmetric-positive}
+    \uses{def:adjoint-product-operator, def:hall-9.2, def:hall-9.3, def:positive-unbounded-operator}
+    $D$ is symmetric, $D^*$ is an extension of $D$, and $D$ is positive.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:von-neumann-form, lmm:von-neumann-dense-domain, prpstn:hall-9.4}
+    For $x, x' \in \text{Dom}(D)$, Lemma~\ref{lmm:von-neumann-form} gives $\left< x', Dx \right> = \left< Tx', Tx \right> = \overline{\left< x, Dx' \right>} = \left< Dx', x \right>$, and $\left< x, Dx \right> = \|Tx\|^2 \ge 0$. $D$ is densely defined (Lemma~\ref{lmm:von-neumann-dense-domain}), so Proposition~\ref{prpstn:hall-9.4} gives $D \subset D^*$.
+\end{proof}
+
+\begin{lemma}[$D^* + \mathbf{1}$ is Injective]
+    \label{lmm:von-neumann-kernel}
+    \uses{def:adjoint-product-operator, def:kernel-of-an-unbounded-operator}
+    $\text{Ker}(D^* + \mathbf{1}) = \{0\}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:von-neumann-solvability, lmm:von-neumann-dense-domain, prpstn:hall-9.12, prpstn:hall-9.13, lmm:adjoint-of-scalar-multiple-of-identity}
+    By Propositions~\ref{prpstn:hall-9.12} and~\ref{prpstn:hall-9.13} with Lemma~\ref{lmm:adjoint-of-scalar-multiple-of-identity}, $\text{Ker}(D^* + \mathbf{1}) = \text{Range}(D + \mathbf{1})^\perp$, and $\text{Range}(D + \mathbf{1}) = \mathbf{H}$ by Lemma~\ref{lmm:von-neumann-solvability}.
+\end{proof}
+
+\begin{theorem}[von Neumann's Theorem]
+    \label{thrm:von-neumann-adjoint-product}
+    \uses{def:adjoint-product-operator, def:hall-9.5, def:positive-unbounded-operator}
+    $T^*T$ is a positive, self-adjoint, densely defined operator.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:self-adjoint-of-range-eq-top, lmm:von-neumann-symmetric-positive, lmm:von-neumann-kernel, lmm:von-neumann-solvability, lmm:von-neumann-dense-domain}
+    Apply Lemma~\ref{lmm:self-adjoint-of-range-eq-top} to $D$ with $\mu = -1$: $D$ is densely defined (Lemma~\ref{lmm:von-neumann-dense-domain}), $D \subset D^*$ (Lemma~\ref{lmm:von-neumann-symmetric-positive}), $\text{Range}(D + \mathbf{1}) = \mathbf{H}$ (Lemma~\ref{lmm:von-neumann-solvability}) and $\text{Ker}(D^* + \mathbf{1}) = \{0\}$ (Lemma~\ref{lmm:von-neumann-kernel}). Positivity is Lemma~\ref{lmm:von-neumann-symmetric-positive}.
+\end{proof}
+
+\begin{lemma}[$\text{Dom}(T^*T)$ is a Core for $T$]
+    \label{lmm:core-of-adjoint-product}
+    \uses{def:core, def:adjoint-product-operator}
+    $\text{Dom}(T^*T)$ is a core for $T$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:von-neumann-solvability, lmm:von-neumann-form, crllr:trivial-complement-characterizes-density}
+    $\Gamma(T)$ is closed in $\mathbf{H} \times \mathbf{H}$, hence complete (Mathlib's \texttt{IsClosed.completeSpace\_coe}), so it is a Hilbert space. If $(y, Ty) \in \Gamma(T)$ is orthogonal to $(x, Tx)$ for every $x \in \text{Dom}(T^*T)$, then by Lemma~\ref{lmm:von-neumann-form}, $0 = \left< y, x \right> + \left< Ty, Tx \right> = \left< y, x + T^*Tx \right>$, and $x + T^*Tx$ ranges over all of $\mathbf{H}$ (Lemma~\ref{lmm:von-neumann-solvability}); so $y = 0$. Corollary~\ref{crllr:trivial-complement-characterizes-density} in $\Gamma(T)$ gives density.
+\end{proof}
+
+\subsubsection{The Composition Law of the Functional Calculus}
+
+The results of this paragraph concern a projection-valued measure $\mu$ on a measurable space $(X, \Sigma)$ (the $\sigma$-algebra is written $\Sigma$ rather than $\Omega(X)$ as in Section~\ref{sctn:unbounded-spectral-theorems}, because $\Omega$ is the cyclic vector) and the operators $\int_X f \, d\mu$ of Proposition~\ref{prpstn:hall-10.1}, with domains $W_f$ (Proposition~\ref{prpstn:hall-10.2}). For a self-adjoint $A$ and $\mu = \mu^A$ they are statements about the functional calculus $f(A) = \int f \, d\mu^A$ of Definition~\ref{def:hall-10.5}. Write $h(\mu) = \int_X h \, d\mu$ for short.
+
+\begin{lemma}[Bounded Approximants are Close to the Truncations]
+    \label{lmm:fc-difference-to-truncation}
+    \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    Let $h$ be measurable, $\psi \in W_h$, and let $h_n$ be bounded measurable functions with $h_n \to h$ pointwise and $|h_n| \le |h|$. With the truncations $t_n = h \cdot 1_{\{|h| < n\}}$, $\|h_n(\mu)\psi - t_n(\mu)\psi\| \to 0$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:norm-identity-bounded-integral, thrm:dominated-convergence-theorem, thrm:operator-valued-integration}
+    By linearity of the bounded integral and Lemma~\ref{lmm:norm-identity-bounded-integral}, $\|h_n(\mu)\psi - t_n(\mu)\psi\|^2 = \int |h_n - t_n|^2 \, d\mu_\psi$. The integrand tends to $0$ pointwise and is dominated by $4|h|^2$, which is $\mu_\psi$-integrable because $\psi \in W_h$; apply Theorem~\ref{thrm:dominated-convergence-theorem}.
+\end{proof}
+
+\begin{lemma}[Dominated Convergence for the Spectral Integral]
+    \label{lmm:fc-dominated-convergence}
+    \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    Let $h$ be measurable, $\psi \in W_h$, and let $h_n$ be bounded measurable functions with $h_n \to h$ pointwise and $|h_n| \le |h|$. Then $h_n(\mu)\psi \to h(\mu)\psi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:fc-difference-to-truncation, lmm:truncations-converge}
+    $t_n(\mu)\psi \to h(\mu)\psi$ by Lemma~\ref{lmm:truncations-converge}, and $h_n(\mu)\psi - t_n(\mu)\psi \to 0$ by Lemma~\ref{lmm:fc-difference-to-truncation}.
+\end{proof}
+
+\begin{lemma}[Composition with a Bounded Function on the Left]
+    \label{lmm:fc-bounded-left-composition}
+    \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    Let $u$ be bounded measurable, $h$ measurable and $\psi \in W_h$. Then $\psi \in W_{uh}$ and $u(\mu)\,h(\mu)\psi = (uh)(\mu)\psi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:fc-dominated-convergence, lmm:truncations-converge, prpstn:integral-multiplicative}
+    $|uh|^2 \le \sup|u|^2 |h|^2$ gives $\psi \in W_{uh}$. With $t_n$ the truncations of $h$, $u(\mu) t_n(\mu)\psi = (u t_n)(\mu)\psi$ by multiplicativity of the bounded integral (Proposition~\ref{prpstn:integral-multiplicative}). The left side tends to $u(\mu)h(\mu)\psi$ by Lemma~\ref{lmm:truncations-converge} and continuity of $u(\mu)$, the right side to $(uh)(\mu)\psi$ by Lemma~\ref{lmm:fc-dominated-convergence}.
+\end{proof}
+
+\begin{lemma}[The Associated Measure of $h(\mu)\psi$]
+    \label{lmm:fc-associated-measure}
+    \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    Let $h$ be measurable, not necessarily bounded, and $\psi \in W_h$. Then for every $E \in \Sigma$,
+    \begin{align}
+        \mu_{h(\mu)\psi}(E) = \int_E |h|^2 \, d\mu_\psi;
+    \end{align}
+    that is, $\mu_{h(\mu)\psi}$ is the measure with density $|h|^2$ with respect to $\mu_\psi$ (in Mathlib, $\mu_\psi$\texttt{.withDensity} $|h|^2$). This extends Lemma~\ref{lmm:associated-measure-of-image} from bounded to unbounded $h$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:fc-bounded-left-composition, lmm:associated-measure-of-image, prpstn:hall-10.2}
+    $\mu_{h(\mu)\psi}(E) = \|\mu(E)h(\mu)\psi\|^2 = \|(1_E h)(\mu)\psi\|^2$ by Lemma~\ref{lmm:fc-bounded-left-composition} with $u = 1_E$, and the norm identity of Proposition~\ref{prpstn:hall-10.2} gives $\int |1_E h|^2 \, d\mu_\psi$.
+\end{proof}
+
+\begin{lemma}[The Domain of a Composite]
+    \label{lmm:fc-composition-domain}
+    \uses{prpstn:hall-10.2}
+    Let $f, g$ be measurable and $\psi \in W_g$. Then $g(\mu)\psi \in W_f$ if and only if $\psi \in W_{fg}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:fc-associated-measure}
+    By Lemma~\ref{lmm:fc-associated-measure}, $\mu_{g(\mu)\psi}$ has density $|g|^2$ with respect to $\mu_\psi$, so integration against a measure with a density (Mathlib's \texttt{lintegral\_withDensity\_eq\_lintegral\_mul}) gives $\int |f|^2 \, d\mu_{g(\mu)\psi} = \int |f|^2 |g|^2 \, d\mu_\psi = \int |fg|^2 \, d\mu_\psi$.
+\end{proof}
+
+\begin{theorem}[Composition Law of the Functional Calculus]
+    \label{thrm:fc-composition}
+    \uses{def:product-of-unbounded-operators, prpstn:hall-10.1, def:hall-9.3}
+    For measurable $f, g$, the operator $(fg)(\mu)$ is an extension of $f(\mu)\,g(\mu)$, and
+    \begin{align}
+        \text{Dom}\big( f(\mu)\,g(\mu) \big) = W_g \cap W_{fg}.
+    \end{align}
+    In particular $f(A)\,g(A) \subset (fg)(A)$ for a self-adjoint $A$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:fc-composition-domain, lmm:fc-bounded-left-composition, lmm:fc-dominated-convergence, lmm:truncations-converge}
+    The domain identity is Lemma~\ref{lmm:fc-composition-domain}. Let $\psi$ be in it and $E_n = \{|f| < n\}$. Applying Lemma~\ref{lmm:fc-bounded-left-composition} twice, $\mu(E_n)\,(fg)(\mu)\psi = (1_{E_n} f g)(\mu)\psi = (1_{E_n} f)(\mu)\,g(\mu)\psi$. As $n \to \infty$ the left side tends to $(fg)(\mu)\psi$ (Lemma~\ref{lmm:fc-dominated-convergence} with $h = 1$) and the right side to $f(\mu)g(\mu)\psi$ (Lemma~\ref{lmm:truncations-converge}).
+\end{proof}
+
+\begin{lemma}[Spectral Projections Commute with $h(\mu)$]
+    \label{lmm:fc-commutes-with-projections}
+    \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    Let $h$ be measurable, $\psi \in W_h$ and $E \in \Sigma$. Then $\mu(E)\psi \in W_h$ and $h(\mu)\mu(E)\psi = \mu(E)h(\mu)\psi$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:fc-composition, lmm:fc-bounded-left-composition}
+    $\mu(E) = 1_E(\mu)$ is defined on all of $\mathbf{H}$, and $\psi \in W_{h 1_E}$ by Lemma~\ref{lmm:fc-bounded-left-composition}. Theorem~\ref{thrm:fc-composition} with $f = h$, $g = 1_E$ gives $\mu(E)\psi \in W_h$ and $h(\mu)\mu(E)\psi = (h1_E)(\mu)\psi = (1_E h)(\mu)\psi$, which is $\mu(E)h(\mu)\psi$ by Lemma~\ref{lmm:fc-bounded-left-composition}.
+\end{proof}
+
+\begin{lemma}[A Real Function of $A$ is Closed]
+    \label{lmm:fc-real-closed}
+    \uses{def:hall-10.5, def:hall-9.6}
+    Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable. Then $f(A)$ is self-adjoint, hence closed.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:hall-10.3, prpstn:hall-9.8}
+    $f(A)$ is self-adjoint by Proposition~\ref{prpstn:hall-10.3}, so it equals its adjoint, whose graph is closed (Proposition~\ref{prpstn:hall-9.8}).
+\end{proof}
+
+\begin{lemma}[$\text{Dom}(A)$ Gives a Core for Every $f(A)$]
+    \label{lmm:fc-core}
+    \uses{def:core, def:hall-10.5, def:spectral-measure, lmm:fc-real-closed}
+    Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable, so that $f(A)$ is closed (Lemma~\ref{lmm:fc-real-closed}). Then $\text{Dom}(A) \cap \text{Dom}(f(A))$ is a core for $f(A)$. More precisely, for $\psi \in \text{Dom}(f(A))$ and $E_n = \{ \lambda \mid |\lambda| < n \}$, the vectors $\mu^A(E_n)\psi$ lie in $\text{Dom}(A) \cap \text{Dom}(f(A))$, and $\mu^A(E_n)\psi \to \psi$, $f(A)\mu^A(E_n)\psi \to f(A)\psi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:fc-commutes-with-projections, lmm:bounded-on-set-range-in-domain, lmm:fc-dominated-convergence}
+    $\mu^A(E_n)\psi \in W_\iota = \text{Dom}(A)$ by Lemma~\ref{lmm:bounded-on-set-range-in-domain}, and $\mu^A(E_n)\psi \in W_f$ with $f(A)\mu^A(E_n)\psi = \mu^A(E_n)f(A)\psi$ by Lemma~\ref{lmm:fc-commutes-with-projections}. Lemma~\ref{lmm:fc-dominated-convergence} with $h = 1$ and $h_n = 1_{E_n}$ gives $\mu^A(E_n)\chi \to \chi$ for every $\chi$, applied to $\chi = \psi$ and $\chi = f(A)\psi$.
+\end{proof}
+
+\begin{lemma}[The Pushforward is a Projection-Valued Measure]
+    \label{lmm:pushforward-pvm-is-pvm}
+    \uses{def:projection-valued-measure}
+    Let $\varphi : X \to Y$ be measurable and set $\varphi_*\mu(F) = \mu(\varphi^{-1}(F))$. Then $\varphi_*\mu$ is a projection-valued measure on $Y$, and $(\varphi_*\mu)_\psi = \varphi_*(\mu_\psi)$ for every $\psi \in \mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    Preimages preserve complements, intersections and countable disjoint unions, so the axioms of Definition~\ref{def:projection-valued-measure} transfer; $(\varphi_*\mu)_\psi(F) = \left< \psi, \mu(\varphi^{-1}F)\psi \right> = \mu_\psi(\varphi^{-1}F)$.
+\end{proof}
+
+\begin{lemma}[Domains and Forms under Pushforward]
+    \label{lmm:pushforward-pvm-domain}
+    \uses{lmm:pushforward-pvm-is-pvm, prpstn:hall-10.2}
+    For measurable $g : Y \to \mathbb{C}$, $W^{\varphi_*\mu}_g = W^\mu_{g \circ \varphi}$, and $\int_Y g \, d(\varphi_*\mu)_\psi = \int_X (g \circ \varphi) \, d\mu_\psi$ for $\psi$ in this domain.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:pushforward-pvm-is-pvm}
+    By Lemma~\ref{lmm:pushforward-pvm-is-pvm} and the pushforward integration formula (Mathlib's \texttt{lintegral\_map} for $\int |g|^2$, which gives the domains, and \texttt{integral\_map} for the complex integral $\int g$, which is defined because $g \in L^2$ of the finite measure $\mu_\psi$).
+\end{proof}
+
+\begin{lemma}[Spectral Integrals under Pushforward]
+    \label{lmm:pushforward-pvm}
+    \uses{lmm:pushforward-pvm-is-pvm, prpstn:hall-10.1}
+    For measurable $g : Y \to \mathbb{C}$, $\int_Y g \, d(\varphi_*\mu) = \int_X (g \circ \varphi) \, d\mu$, including equality of domains.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:pushforward-pvm-domain, prpstn:hall-10.1, prpstn:hall-10.2}
+    The domains agree and the quadratic forms $\int g \, d(\varphi_*\mu)_\psi$ and $\int (g \circ \varphi) \, d\mu_\psi$ agree (Lemma~\ref{lmm:pushforward-pvm-domain}); polarization gives equal sesquilinear forms, and the uniqueness clause of Proposition~\ref{prpstn:hall-10.1} identifies the operators.
+\end{proof}
+
+\begin{corollary}[A Function of a Function of $A$]
+    \label{crllr:fc-of-fc}
+    \uses{def:spectral-measure, def:hall-10.5}
+    Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable. Then $f(A)$ is self-adjoint with spectral measure $\mu^{f(A)} = f_*\mu^A$, and $g(f(A)) = (g \circ f)(A)$ for every measurable $g : \mathbb{R} \to \mathbb{C}$.
+\end{corollary}
+\begin{proof}
+    \uses{lmm:pushforward-pvm, prpstn:hall-10.3, thrm:hall-10.4}
+    $f(A)$ is self-adjoint by Proposition~\ref{prpstn:hall-10.3}. Lemma~\ref{lmm:pushforward-pvm} with $g(\lambda) = \lambda$ gives $\int \lambda \, d(f_*\mu^A) = f(A)$, so $\mu^{f(A)} = f_*\mu^A$ by the uniqueness in Theorem~\ref{thrm:hall-10.4}; Lemma~\ref{lmm:pushforward-pvm} for general $g$ gives the last claim.
+\end{proof}
+
+\subsubsection{The Absolute Value of a Closed Operator}
+
+Write $s(\lambda) = \sqrt{\max(\lambda, 0)}$, a real, non-negative, measurable function on $\mathbb{R}$. For a positive self-adjoint $A$, $A^{1/2} \equiv s(A)$.
+
+\begin{definition}[Absolute Value]
+    \label{def:absolute-value}
+    \uses{def:adjoint-product-operator, thrm:von-neumann-adjoint-product, def:hall-10.5}
+    For a closed, densely defined operator $T$ on $\mathbf{H}$, the \emph{absolute value} of $T$ is $|T| \equiv (T^*T)^{1/2} = s(T^*T)$, the functional calculus of the self-adjoint operator $T^*T$ (Theorem~\ref{thrm:von-neumann-adjoint-product}).
+\end{definition}
+
+For the next four results, $T$ is a closed, densely defined operator on $\mathbf{H}$ and $D = T^*T$.
+
+\begin{lemma}[$\text{Dom}(T^*T) \subset \text{Dom}(|T|)$]
+    \label{lmm:adjoint-product-domain-in-sqrt-domain}
+    \uses{def:absolute-value}
+    Every $x \in \text{Dom}(D)$ lies in $\text{Dom}(|T|)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:positive-spectral-support, thrm:von-neumann-adjoint-product, lmm:l2-implies-l1, thrm:hall-10.4, def:spectral-measure}
+    By Lemma~\ref{lmm:positive-spectral-support}, $\mu^D_x$ is concentrated on $[0, \infty)$, where $s^2(\lambda) = \lambda$. Since $x \in \text{Dom}(D) = W_\iota$ (Theorem~\ref{thrm:hall-10.4}), $\int \lambda^2 \, d\mu^D_x < \infty$, and Lemma~\ref{lmm:l2-implies-l1} gives $\int s^2 \, d\mu^D_x = \int \lambda \, d\mu^D_x < \infty$; so $x \in W_s$.
+\end{proof}
+
+\begin{lemma}[The Norm Identity on $\text{Dom}(T^*T)$]
+    \label{lmm:absolute-value-norm-on-core}
+    \uses{def:absolute-value, lmm:adjoint-product-domain-in-sqrt-domain}
+    For $x \in \text{Dom}(D)$, $\||T|x\| = \|Tx\|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:adjoint-product-domain-in-sqrt-domain, lmm:positive-spectral-support, prpstn:hall-10.2, thrm:hall-10.4, lmm:von-neumann-form}
+    By Proposition~\ref{prpstn:hall-10.2}, Lemma~\ref{lmm:positive-spectral-support} and $D = \int \lambda \, d\mu^D$ (Theorem~\ref{thrm:hall-10.4}), $\||T|x\|^2 = \int s^2 \, d\mu^D_x = \int \lambda \, d\mu^D_x = \left< x, Dx \right>$, which is $\|Tx\|^2$ by Lemma~\ref{lmm:von-neumann-form}.
+\end{proof}
+
+\begin{lemma}[$|T|$ is Closed and Positive, with Core $\text{Dom}(T^*T)$]
+    \label{lmm:absolute-value-closed}
+    \uses{def:absolute-value, def:core, def:positive-unbounded-operator}
+    $|T|$ is a positive self-adjoint operator, hence closed, and $\text{Dom}(D)$ is a core for $|T|$.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:hall-10.3, prpstn:hall-10.2, prpstn:hall-9.8, lmm:fc-core, lmm:adjoint-product-domain-in-sqrt-domain}
+    $|T|$ is self-adjoint by Proposition~\ref{prpstn:hall-10.3}, so it equals its adjoint, whose graph is closed (Proposition~\ref{prpstn:hall-9.8}); it is positive since $\left< \psi, |T|\psi \right> = \int s \, d\mu^D_\psi \ge 0$ (Proposition~\ref{prpstn:hall-10.2}). By Lemma~\ref{lmm:fc-core}, $\text{Dom}(D) \cap \text{Dom}(|T|)$ is a core, and it equals $\text{Dom}(D)$ by Lemma~\ref{lmm:adjoint-product-domain-in-sqrt-domain}.
+\end{proof}
+
+\begin{lemma}[Transfer of Domains through a Core, One Direction]
+    \label{lmm:closure-transfer-one-direction}
+    \uses{def:core, def:hall-9.6}
+    Let $A$ and $B$ be closed operators on $\mathbf{H}$ and $D$ a core for $A$ with $D \subset \text{Dom}(B)$ and $\|A\psi\| = \|B\psi\|$ for $\psi \in D$. Then $\text{Dom}(A) \subset \text{Dom}(B)$ and $\|A\psi\| = \|B\psi\|$ for $\psi \in \text{Dom}(A)$.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:closure-linearity-and-sequential-description, prpstn:continuity-of-norm-and-inner-product}
+    Let $\psi \in \text{Dom}(A)$ and take $\psi_n \in D$ with $\psi_n \to \psi$, $A\psi_n \to A\psi$. Since $\|B\psi_n - B\psi_m\| = \|A\psi_n - A\psi_m\|$, $(B\psi_n)$ is Cauchy and converges; $B$ is closed, so $\psi \in \text{Dom}(B)$ and $B\psi_n \to B\psi$, and the norms pass to the limit.
+\end{proof}
+
+\begin{lemma}[Transfer of Domains through a Common Core]
+    \label{lmm:closure-transfer-common-core}
+    \uses{def:core, def:hall-9.6}
+    Let $A$ and $B$ be closed operators on $\mathbf{H}$ and $D$ a subspace that is a core for both, with $\|A\psi\| = \|B\psi\|$ for $\psi \in D$. Then $\text{Dom}(A) = \text{Dom}(B)$ and $\|A\psi\| = \|B\psi\|$ for all $\psi$ in it.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:closure-transfer-one-direction}
+    Apply Lemma~\ref{lmm:closure-transfer-one-direction} to $(A, B)$ and to $(B, A)$.
+\end{proof}
+
+\begin{theorem}[Domain and Norm of $|T|$]
+    \label{thrm:absolute-value-domain}
+    \uses{def:absolute-value}
+    $|T|$ is positive and self-adjoint, $\text{Dom}(|T|) = \text{Dom}(T)$, and $\||T|\psi\| = \|T\psi\|$ for every $\psi \in \text{Dom}(T)$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:closure-transfer-common-core, lmm:core-of-adjoint-product, lmm:absolute-value-closed, lmm:absolute-value-norm-on-core}
+    Apply Lemma~\ref{lmm:closure-transfer-common-core} to $T$ and $|T|$ with the common core $\text{Dom}(D)$ (Lemmas~\ref{lmm:core-of-adjoint-product} and~\ref{lmm:absolute-value-closed}), on which the norms agree by Lemma~\ref{lmm:absolute-value-norm-on-core}.
+\end{proof}
+
+\begin{lemma}[Uniqueness of the Positive Square Root]
+    \label{lmm:positive-square-root-unique}
+    \uses{def:product-of-unbounded-operators, def:positive-unbounded-operator, def:hall-10.5}
+    Let $P$ be a positive self-adjoint operator. Then $PP$ is self-adjoint and $(PP)^{1/2} = P$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:fc-composition, crllr:fc-of-fc, lmm:positive-spectral-support, lmm:integral-ignores-null-sets, thrm:hall-10.4}
+    With $q(\lambda) = \lambda^2$, Theorem~\ref{thrm:fc-composition} gives $PP \subset q(P)$ with $\text{Dom}(PP) = W_\iota \cap W_q = W_q$ (as $\lambda^2 \le 1 + \lambda^4$ and $\mu^P_\psi$ is finite), so $PP = q(P)$, which is self-adjoint. By Corollary~\ref{crllr:fc-of-fc}, $s(q(P)) = (s \circ q)(P)$, and $s \circ q = |\lambda|$ agrees with $\lambda$ off the $\mu^P$-null set $(-\infty, 0)$ (Lemma~\ref{lmm:positive-spectral-support}); so $(s \circ q)(P) = P$ by Lemma~\ref{lmm:integral-ignores-null-sets} and Theorem~\ref{thrm:hall-10.4}.
+\end{proof}
+
+\subsubsection{Polar Decomposition}
+
+For the next three results, $T$ is a closed, densely defined, injective operator on $\mathbf{H}$ with dense range.
+
+\begin{lemma}[$|T|$ is Injective with Dense Range]
+    \label{lmm:absolute-value-injective-dense-range}
+    \uses{def:absolute-value, def:kernel-of-an-unbounded-operator, def:range-of-an-unbounded-operator}
+    $|T|$ is injective and $\text{Range}(|T|)$ is dense in $\mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:absolute-value-domain, prpstn:hall-9.12, crllr:trivial-complement-characterizes-density}
+    If $|T|\psi = 0$, then $\|T\psi\| = 0$ by Theorem~\ref{thrm:absolute-value-domain}, so $\psi = 0$. Since $|T|$ is self-adjoint, $\text{Range}(|T|)^\perp = \text{Ker}(|T|^*) = \text{Ker}(|T|) = \{0\}$ (Proposition~\ref{prpstn:hall-9.12}).
+\end{proof}
+
+\begin{lemma}[The Isometry on the Range of $|T|$]
+    \label{lmm:polar-isometry-on-range}
+    \uses{def:absolute-value, def:range-of-an-unbounded-operator}
+    The assignment $V_0(|T|\psi) = T\psi$, for $\psi \in \text{Dom}(T)$, is a well-defined, linear and isometric map from $\text{Range}(|T|)$ to $\mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:absolute-value-domain}
+    $\text{Dom}(|T|) = \text{Dom}(T)$ and $\||T|\psi\| = \|T\psi\|$ (Theorem~\ref{thrm:absolute-value-domain}). If $|T|\psi = |T|\psi'$, then $\|T\psi - T\psi'\| = \||T|(\psi - \psi')\| = 0$, so $V_0$ is well defined; linearity and isometry follow from those of $T$ and $|T|$ and the norm identity.
+\end{proof}
+
+\begin{lemma}[The Isometry of the Polar Decomposition]
+    \label{lmm:polar-isometry}
+    \uses{def:absolute-value, def:product-of-unbounded-operators}
+    There is a unique $V \in \mathcal{B}(\mathbf{H})$ with $V|T|\psi = T\psi$ for all $\psi \in \text{Dom}(T)$. It is isometric, and $T = V|T|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:polar-isometry-on-range, lmm:absolute-value-injective-dense-range, thrm:bounded-linear-transformation-theorem, thrm:absolute-value-domain}
+    $V_0$ of Lemma~\ref{lmm:polar-isometry-on-range} has dense domain (Lemma~\ref{lmm:absolute-value-injective-dense-range}), so it has a unique bounded extension $V$ (Theorem~\ref{thrm:bounded-linear-transformation-theorem}), isometric by continuity of the norm. The equality $\text{Dom}(|T|) = \text{Dom}(T)$ (Theorem~\ref{thrm:absolute-value-domain}) gives $T = V|T|$.
+\end{proof}
+
+\begin{theorem}[Polar Decomposition]
+    \label{thrm:polar-decomposition}
+    \uses{def:absolute-value, def:unitary-operator, def:product-of-unbounded-operators}
+    The isometry $V$ of Lemma~\ref{lmm:polar-isometry} is unitary, and $T = V|T|$ with $|T|$ positive, self-adjoint and injective.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:polar-isometry, lmm:absolute-value-injective-dense-range, thrm:absolute-value-domain, prpstn:polarization-identity}
+    The range of an isometry on a complete space is complete, hence closed; it contains the dense set $\text{Range}(T)$, so $V$ is onto. An isometry preserves inner products by Proposition~\ref{prpstn:polarization-identity}, so $V$ is unitary. The other claims are Theorem~\ref{thrm:absolute-value-domain} and Lemma~\ref{lmm:absolute-value-injective-dense-range}.
+\end{proof}
+
+\begin{lemma}[Adjoint of a Unitary Times an Operator]
+    \label{lmm:adjoint-unitary-product}
+    \uses{def:unitary-operator, def:product-of-unbounded-operators, def:hall-9.1}
+    Let $U$ be unitary and $P$ densely defined. Then $(UP)^* = P^*U^{-1}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:characterizing-adjoint-domain-membership}
+    $\left< \phi, UP\psi \right> = \left< U^{-1}\phi, P\psi \right>$ for $\psi \in \text{Dom}(P) = \text{Dom}(UP)$, so by Lemma~\ref{lmm:characterizing-adjoint-domain-membership}, $\phi \in \text{Dom}((UP)^*)$ if and only if $U^{-1}\phi \in \text{Dom}(P^*)$, and then $(UP)^*\phi = P^*U^{-1}\phi$.
+\end{proof}
+
+\begin{theorem}[Uniqueness of the Polar Decomposition]
+    \label{thrm:polar-decomposition-unique}
+    \uses{thrm:polar-decomposition, def:positive-unbounded-operator}
+    Let $T$ be closed, densely defined and injective with dense range, and suppose $T = UP$ with $U$ unitary and $P$ positive and self-adjoint. Then $P = |T|$ and $U = V$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:adjoint-unitary-product, lmm:positive-square-root-unique, lmm:absolute-value-injective-dense-range, lmm:polar-isometry}
+    By Lemma~\ref{lmm:adjoint-unitary-product}, $T^*T = PU^{-1}UP = PP$, so $|T| = (PP)^{1/2} = P$ by Lemma~\ref{lmm:positive-square-root-unique}. Then $U$ and $V$ agree on the dense set $\text{Range}(|T|)$ (Lemmas~\ref{lmm:polar-isometry} and~\ref{lmm:absolute-value-injective-dense-range}), and both are continuous.
+\end{proof}
+
+\subsubsection{Inverses and Antiunitary Conjugation}
+
+\begin{definition}[Inverse of an Injective Operator]
+    \label{def:inverse-of-operator}
+    \uses{def:hall-9.6, def:antiunitary-operator, def:kernel-of-an-unbounded-operator, def:range-of-an-unbounded-operator}
+    Let $A$ be an injective operator on $\mathbf{H}$, linear or antilinear. Its \emph{inverse} $A^{-1}$ is the operator whose graph is the flip of $\Gamma(A)$,
+    \begin{align}
+        \Gamma(A^{-1}) = \{ (A\psi, \psi) \mid \psi \in \text{Dom}(A) \}, \qquad \text{Dom}(A^{-1}) = \text{Range}(A).
+    \end{align}
+    It is a partial map of the same kind as $A$ and need not be densely defined. For linear $A$ this is Mathlib's \texttt{LinearPMap.inverse}.
+\end{definition}
+
+\begin{lemma}[Inverse of a Product with a Bijection]
+    \label{lmm:inverse-of-product-with-bijection}
+    \uses{def:inverse-of-operator, def:product-of-unbounded-operators, def:unitary-operator, def:antiunitary-operator}
+    Let $A$ be injective and $W$ unitary or antiunitary. Then $WA$ is injective and $(WA)^{-1} = A^{-1}W^{-1}$.
+\end{lemma}
+\begin{proof}
+    \uses{def:inverse-of-operator, def:product-of-unbounded-operators}
+    $WA$ is injective because $W$ is. Both sides have domain $\text{Range}(WA) = W(\text{Range}(A)) = \{ \phi \mid W^{-1}\phi \in \text{Range}(A) \}$, and for $\phi = WA\psi$ both send $\phi$ to $\psi$.
+\end{proof}
+
+\begin{lemma}[An Injective Self-Adjoint Operator has no Atom at $0$]
+    \label{lmm:injective-no-atom-at-zero}
+    \uses{def:spectral-measure, def:kernel-of-an-unbounded-operator}
+    If $A$ is self-adjoint and injective, then $\mu^A(\{0\}) = 0$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:bounded-on-set-range-in-domain, lmm:range-membership-concentrates-measure, prpstn:hall-10.2}
+    Let $\psi \in \text{Range}(\mu^A(\{0\}))$. Then $\psi \in \text{Dom}(A)$ (Lemma~\ref{lmm:bounded-on-set-range-in-domain}), $\mu^A_\psi$ is concentrated on $\{0\}$ (Lemma~\ref{lmm:range-membership-concentrates-measure}), and $\|A\psi\|^2 = \int \lambda^2 \, d\mu^A_\psi = 0$ (Proposition~\ref{prpstn:hall-10.2}); so $\psi = 0$.
+\end{proof}
+
+\begin{lemma}[$\iota^-(A)$ Inverts $A$ on $\text{Dom}(A)$]
+    \label{lmm:inverse-fc-extends}
+    \uses{def:hall-10.5, def:spectral-measure}
+    Let $A$ be self-adjoint and injective, and let $\iota^{-}(\lambda) = 1/\lambda$ for $\lambda \ne 0$ and $\iota^{-}(0) = 0$. For $\psi \in \text{Dom}(A)$, $A\psi \in \text{Dom}(\iota^{-}(A))$ and $\iota^{-}(A)A\psi = \psi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:injective-no-atom-at-zero, thrm:fc-composition, lmm:integral-ignores-null-sets, lmm:functional-calculus-bounded, thrm:hall-10.4}
+    $\iota^{-}\iota = 1$ off the $\mu^A$-null set $\{0\}$ (Lemma~\ref{lmm:injective-no-atom-at-zero}), so $(\iota^{-}\iota)(A) = \mathbf{1}$ (Lemmas~\ref{lmm:integral-ignores-null-sets} and~\ref{lmm:functional-calculus-bounded}). Theorem~\ref{thrm:fc-composition} with $f = \iota^{-}$, $g = \iota$ gives $\text{Dom}(\iota^{-}(A)A) = W_\iota \cap W_{\iota^-\iota} = \text{Dom}(A)$ and $\iota^{-}(A)A\psi = \psi$.
+\end{proof}
+
+\begin{lemma}[$\text{Dom}(\iota^-(A)) \subset \text{Range}(A)$]
+    \label{lmm:inverse-fc-domain}
+    \uses{lmm:inverse-fc-extends, def:range-of-an-unbounded-operator}
+    Under the hypotheses of Lemma~\ref{lmm:inverse-fc-extends}, every $\phi \in \text{Dom}(\iota^{-}(A))$ satisfies $\iota^-(A)\phi \in \text{Dom}(A)$ and $A\iota^{-}(A)\phi = \phi$; in particular $\text{Dom}(\iota^{-}(A)) \subset \text{Range}(A)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:injective-no-atom-at-zero, thrm:fc-composition, lmm:integral-ignores-null-sets, lmm:functional-calculus-bounded, thrm:hall-10.4}
+    As in Lemma~\ref{lmm:inverse-fc-extends}, $(\iota\iota^{-})(A) = \mathbf{1}$, and Theorem~\ref{thrm:fc-composition} with $f = \iota$, $g = \iota^{-}$ gives $\text{Dom}(A\,\iota^{-}(A)) = W_{\iota^-} \cap W_{\iota\iota^-} = W_{\iota^-}$ and $A\iota^{-}(A)\phi = \phi$.
+\end{proof}
+
+\begin{lemma}[The Inverse by the Functional Calculus]
+    \label{lmm:inverse-functional-calculus}
+    \uses{def:hall-10.5, def:inverse-of-operator, lmm:inverse-fc-extends}
+    Let $A$ be self-adjoint and injective. Then $A^{-1} = \iota^{-}(A)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:inverse-fc-extends, lmm:inverse-fc-domain, def:inverse-of-operator}
+    By Lemma~\ref{lmm:inverse-fc-extends}, $\iota^{-}(A)$ is an extension of $A^{-1}$ (Definition~\ref{def:inverse-of-operator}), and by Lemma~\ref{lmm:inverse-fc-domain} its domain is contained in $\text{Range}(A) = \text{Dom}(A^{-1})$.
+\end{proof}
+
+\begin{lemma}[The Square Root is Positive and Self-Adjoint]
+    \label{lmm:square-root-positive}
+    \uses{def:hall-10.5, def:positive-unbounded-operator}
+    Let $A$ be self-adjoint. Then $A^{1/2} = s(A)$ is positive and self-adjoint.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:hall-10.2, prpstn:hall-10.3}
+    $s \ge 0$ is real and measurable: self-adjointness is Proposition~\ref{prpstn:hall-10.3}, and $\left< \psi, A^{1/2}\psi \right> = \int s \, d\mu^A_\psi \ge 0$ by Proposition~\ref{prpstn:hall-10.2}.
+\end{proof}
+
+\begin{lemma}[The Square Root of an Injective Positive Operator is Injective]
+    \label{lmm:square-root-injective}
+    \uses{def:hall-10.5, def:positive-unbounded-operator, def:kernel-of-an-unbounded-operator}
+    Let $A$ be positive, self-adjoint and injective. Then $A^{1/2}$ is injective.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:hall-10.2, lmm:positive-spectral-support, lmm:injective-no-atom-at-zero, lmm:associated-measure-total-mass}
+    Let $A^{1/2}\psi = 0$. By Proposition~\ref{prpstn:hall-10.2}, $0 = \|A^{1/2}\psi\|^2 = \int \max(\lambda, 0) \, d\mu^A_\psi$, and a nonnegative integral vanishes only if the integrand vanishes almost everywhere (Mathlib's \texttt{lintegral\_eq\_zero\_iff}); so $\mu^A_\psi((0, \infty)) = 0$. Also $\mu^A((-\infty, 0]) = 0$ (Lemmas~\ref{lmm:positive-spectral-support} and~\ref{lmm:injective-no-atom-at-zero}). Hence $\|\psi\|^2 = \mu^A_\psi(\mathbb{R}) = 0$ (Lemma~\ref{lmm:associated-measure-total-mass}).
+\end{proof}
+
+\begin{lemma}[The Inverse Square Root is Positive]
+    \label{lmm:inverse-square-root-positive}
+    \uses{def:hall-10.5, def:positive-unbounded-operator}
+    Let $A$ be self-adjoint and $r(\lambda) = \lambda^{-1/2}$ for $\lambda > 0$, $r(\lambda) = 0$ otherwise. Then $A^{-1/2} \equiv r(A)$ is positive and self-adjoint.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:hall-10.2, prpstn:hall-10.3}
+    $r \ge 0$ is real and measurable: self-adjointness is Proposition~\ref{prpstn:hall-10.3}, and $\left< \psi, r(A)\psi \right> = \int r \, d\mu^A_\psi \ge 0$ by Proposition~\ref{prpstn:hall-10.2}.
+\end{proof}
+
+\begin{corollary}[The Inverse Square Root]
+    \label{crllr:inverse-square-root}
+    \uses{lmm:square-root-positive, lmm:square-root-injective, lmm:inverse-square-root-positive, def:inverse-of-operator}
+    Let $A$ be positive, self-adjoint and injective. Then $(A^{1/2})^{-1} = A^{-1/2}$.
+\end{corollary}
+\begin{proof}
+    \uses{lmm:square-root-injective, lmm:inverse-functional-calculus, crllr:fc-of-fc}
+    $A^{1/2}$ is injective (Lemma~\ref{lmm:square-root-injective}), so $(A^{1/2})^{-1} = \iota^{-}(A^{1/2}) = (\iota^{-} \circ s)(A)$ by Lemma~\ref{lmm:inverse-functional-calculus} and Corollary~\ref{crllr:fc-of-fc}, and $\iota^{-} \circ s = r$ everywhere.
+\end{proof}
+
+\begin{lemma}[The Square of the Square Root]
+    \label{lmm:square-of-square-root}
+    \uses{def:hall-10.5, def:positive-unbounded-operator}
+    Let $A$ be positive and self-adjoint and $q(\lambda) = \lambda^2$. Then $q(A^{1/2}) = A$.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:fc-of-fc, lmm:positive-spectral-support, lmm:integral-ignores-null-sets, thrm:hall-10.4}
+    By Corollary~\ref{crllr:fc-of-fc}, $q(A^{1/2}) = (q \circ s)(A)$, and $q \circ s = \lambda$ off the $\mu^A$-null set $(-\infty, 0)$ (Lemma~\ref{lmm:positive-spectral-support}); so $(q \circ s)(A) = \int \lambda \, d\mu^A = A$ by Lemma~\ref{lmm:integral-ignores-null-sets} and Theorem~\ref{thrm:hall-10.4}.
+\end{proof}
+
+\begin{lemma}[The Square of the Inverse Square Root]
+    \label{lmm:square-of-inverse-square-root}
+    \uses{lmm:inverse-square-root-positive, def:inverse-of-operator}
+    Let $A$ be positive, self-adjoint and injective, and $q(\lambda) = \lambda^2$. Then $q(A^{-1/2}) = A^{-1}$.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:fc-of-fc, lmm:positive-spectral-support, lmm:injective-no-atom-at-zero, lmm:integral-ignores-null-sets, lmm:inverse-functional-calculus}
+    By Corollary~\ref{crllr:fc-of-fc}, $q(A^{-1/2}) = (q \circ r)(A)$, and $q \circ r = \iota^{-}$ off $(-\infty, 0]$, which is $\mu^A$-null (Lemmas~\ref{lmm:positive-spectral-support} and~\ref{lmm:injective-no-atom-at-zero}); so $(q \circ r)(A) = \iota^-(A) = A^{-1}$ by Lemmas~\ref{lmm:integral-ignores-null-sets} and~\ref{lmm:inverse-functional-calculus}.
+\end{proof}
+
+\begin{lemma}[Antiunitary Conjugation of a Projection-Valued Measure]
+    \label{lmm:antiunitary-conjugate-pvm-is-pvm}
+    \uses{def:antiunitary-operator, def:projection-valued-measure}
+    Let $W$ be antiunitary and $\mu$ a projection-valued measure on $X$. Then $\nu(E) = W\mu(E)W^{-1}$ is a projection-valued measure with $\nu_\psi = \mu_{W^{-1}\psi}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:antiunitary-isometric}
+    Each $\nu(E)$ is linear and bounded (Lemma~\ref{lmm:antiunitary-isometric}), and $\left< \phi, \nu(E)\psi \right> = \left< \mu(E)W^{-1}\psi, W^{-1}\phi \right>$ shows that it is a self-adjoint idempotent and that $\nu_\psi(E) = \mu_{W^{-1}\psi}(E)$; continuity of $W$ transfers countable additivity.
+\end{proof}
+
+\begin{lemma}[Domains under Antiunitary Conjugation]
+    \label{lmm:antiunitary-conjugate-pvm-domain}
+    \uses{lmm:antiunitary-conjugate-pvm-is-pvm, prpstn:hall-10.2}
+    With $\nu$ as in Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm}, $W^\nu_f = W(W^\mu_f)$ for every measurable $f$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:antiunitary-conjugate-pvm-is-pvm}
+    $\int |f|^2 \, d\nu_\psi = \int |f|^2 \, d\mu_{W^{-1}\psi}$ by Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm}, so $\psi \in W^\nu_f$ if and only if $W^{-1}\psi \in W^\mu_f$.
+\end{proof}
+
+\begin{lemma}[Spectral Integrals under Antiunitary Conjugation]
+    \label{lmm:antiunitary-conjugate-pvm}
+    \uses{lmm:antiunitary-conjugate-pvm-is-pvm, def:product-of-unbounded-operators, prpstn:hall-10.1}
+    With $\nu$ as in Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm} and $f$ real and measurable, $\int f \, d\nu = W\big( \int f \, d\mu \big) W^{-1}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:antiunitary-conjugate-pvm-domain, prpstn:hall-10.1, prpstn:hall-10.2}
+    Both sides are linear with domain $W(W^\mu_f)$ (Lemma~\ref{lmm:antiunitary-conjugate-pvm-domain}). The quadratic form of the right side is $\overline{\int f \, d\mu_{W^{-1}\psi}} = \int f \, d\nu_\psi$, since $f$ is real; polarization and the uniqueness in Proposition~\ref{prpstn:hall-10.1} give equality.
+\end{proof}
+
+\begin{lemma}[Spectral Measure of an Antiunitary Conjugate]
+    \label{lmm:antiunitary-conjugate-spectral-measure}
+    \uses{def:antiunitary-operator, def:product-of-unbounded-operators, def:spectral-measure}
+    Let $W$ be antiunitary and $A$ self-adjoint. Then $WAW^{-1}$ is self-adjoint with spectral measure $W\mu^A(\cdot)W^{-1}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:antiunitary-conjugate-pvm-is-pvm, lmm:antiunitary-conjugate-pvm, prpstn:hall-10.3, thrm:hall-10.4}
+    With $\nu$ as in Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm}, Lemma~\ref{lmm:antiunitary-conjugate-pvm} with $f(\lambda) = \lambda$ shows $WAW^{-1} = \int \lambda \, d\nu$, self-adjoint by Proposition~\ref{prpstn:hall-10.3}; the uniqueness in Theorem~\ref{thrm:hall-10.4} gives $\mu^{WAW^{-1}} = \nu$.
+\end{proof}
+
+\begin{corollary}[Antiunitary Conjugation and the Functional Calculus]
+    \label{crllr:antiunitary-conjugate-functional-calculus}
+    \uses{lmm:antiunitary-conjugate-spectral-measure, def:hall-10.5}
+    Let $W$ be antiunitary and $A$ self-adjoint. Then $Wf(A)W^{-1} = f(WAW^{-1})$ for every real measurable $f$.
+\end{corollary}
+\begin{proof}
+    \uses{lmm:antiunitary-conjugate-spectral-measure, lmm:antiunitary-conjugate-pvm}
+    $f(WAW^{-1}) = \int f \, d\nu$ by Lemma~\ref{lmm:antiunitary-conjugate-spectral-measure}, which is $Wf(A)W^{-1}$ by Lemma~\ref{lmm:antiunitary-conjugate-pvm}.
+\end{proof}
+
+\begin{lemma}[Antiunitary Conjugation Preserves Positivity and Injectivity]
+    \label{lmm:antiunitary-conjugate-positive}
+    \uses{def:antiunitary-operator, def:product-of-unbounded-operators, def:positive-unbounded-operator}
+    Let $W$ be antiunitary and $A$ an operator. If $A$ is positive, or injective, so is $WAW^{-1}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:conjugate-linear-isometry-inner}
+    By Lemma~\ref{lmm:conjugate-linear-isometry-inner}, $\left< \psi, WAW^{-1}\psi \right>$ is the complex conjugate of $\left< W^{-1}\psi, AW^{-1}\psi \right> \ge 0$. Injectivity holds because $W$ and $W^{-1}$ are injective.
+\end{proof}
+
+\subsubsection{The Modular Operator and the Modular Conjugation}
+
+\begin{definition}[The Modular Operator]
+    \label{def:modular-operator}
+    \uses{def:tomita-operator, def:adjoint-product-operator, def:absolute-value}
+    The \emph{modular operator} of $(\mathcal{M}, \Omega)$ is $\Delta = (S')^*S'$ (Definition~\ref{def:adjoint-product-operator}), and $\Delta^{1/2} = s(\Delta) = |S'|$.
+\end{definition}
+
+\begin{theorem}[Properties of the Modular Operator]
+    \label{thrm:modular-operator-properties}
+    \uses{def:modular-operator, def:hall-9.5, def:positive-unbounded-operator}
+    $\Delta$ is positive, self-adjoint, densely defined and injective. Moreover $\text{Dom}(\Delta^{1/2}) = \text{Dom}(S)$ and $\|\Delta^{1/2}\psi\| = \|S\psi\|$ for $\psi \in \text{Dom}(S)$.
+\end{theorem}
+\begin{proof}
+    \uses{crllr:linearized-tomita-properties, thrm:von-neumann-adjoint-product, thrm:absolute-value-domain, lmm:von-neumann-form, lmm:reference-conjugation-properties}
+    $S'$ is closed and densely defined (Corollary~\ref{crllr:linearized-tomita-properties}), so Theorems~\ref{thrm:von-neumann-adjoint-product} and~\ref{thrm:absolute-value-domain} apply, with $\|S'\psi\| = \|CS\psi\| = \|S\psi\|$ and $\text{Dom}(S') = \text{Dom}(S)$. If $\Delta\psi = 0$, then $\|S'\psi\|^2 = \left< \psi, \Delta\psi \right> = 0$ (Lemma~\ref{lmm:von-neumann-form}), so $\psi = 0$ by injectivity of $S'$.
+\end{proof}
+
+\begin{lemma}[An Intrinsic Description of $\Delta$]
+    \label{lmm:modular-operator-intrinsic}
+    \uses{def:modular-operator}
+    $\psi \in \text{Dom}(\Delta)$ with $\Delta\psi = \chi$ if and only if $\psi \in \text{Dom}(S)$ and $\left< S\phi, S\psi \right> = \left< \chi, \phi \right>$ for every $\phi \in \text{Dom}(S)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:characterizing-adjoint-domain-membership, lmm:reference-conjugation-properties}
+    By Lemma~\ref{lmm:characterizing-adjoint-domain-membership}, $S'\psi \in \text{Dom}((S')^*)$ with $(S')^*S'\psi = \chi$ if and only if $\left< S'\psi, S'\phi \right> = \left< \chi, \phi \right>$ for all $\phi \in \text{Dom}(S')$, and $\left< S'\psi, S'\phi \right> = \left< CS\psi, CS\phi \right> = \left< S\phi, S\psi \right>$ by Lemma~\ref{lmm:reference-conjugation-properties}.
+\end{proof}
+
+\begin{definition}[The Modular Conjugation]
+    \label{def:modular-conjugation}
+    \uses{def:modular-operator, thrm:polar-decomposition, crllr:linearized-tomita-properties}
+    Let $V$ be the unitary of the polar decomposition $S' = V|S'| = V\Delta^{1/2}$ (Theorem~\ref{thrm:polar-decomposition}, applicable by Corollary~\ref{crllr:linearized-tomita-properties}). The \emph{modular conjugation} is $J = CV$.
+\end{definition}
+
+\begin{theorem}[$S = J\Delta^{1/2}$]
+    \label{thrm:modular-conjugation-polar}
+    \uses{def:modular-conjugation, def:antiunitary-operator, def:product-of-unbounded-operators}
+    $J$ is antiunitary and $S = J\Delta^{1/2}$, including $\text{Dom}(S) = \text{Dom}(\Delta^{1/2})$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:antiunitary-composition, thrm:polar-decomposition, lmm:reference-conjugation-properties}
+    $J$ is antiunitary by Lemma~\ref{lmm:antiunitary-composition}. Since $C(C\phi) = \phi$ for all $\phi$, $S = CS' = CV\Delta^{1/2} = J\Delta^{1/2}$ by Theorem~\ref{thrm:polar-decomposition}.
+\end{proof}
+
+\begin{lemma}[An Intrinsic Description of $J$]
+    \label{lmm:modular-conjugation-intrinsic}
+    \uses{def:modular-conjugation}
+    $J$ is the only continuous map $\mathbf{H} \to \mathbf{H}$ with $J\Delta^{1/2}\psi = S\psi$ for all $\psi \in \text{Dom}(\Delta^{1/2})$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:modular-conjugation-polar, lmm:absolute-value-injective-dense-range, crllr:linearized-tomita-properties}
+    Theorem~\ref{thrm:modular-conjugation-polar} gives the identity, and two continuous maps with this property agree on the dense set $\text{Range}(\Delta^{1/2}) = \text{Range}(|S'|)$ (Lemma~\ref{lmm:absolute-value-injective-dense-range}).
+\end{proof}
+
+\begin{theorem}[$\Delta$ and $J$ do not Depend on the Reference Conjugation]
+    \label{thrm:modular-objects-independent-of-c}
+    \uses{def:modular-operator, def:modular-conjugation, def:reference-conjugation}
+    The operators $\Delta$, $\Delta^{1/2}$ and $J$ are the same for every choice of the reference conjugation $C$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:tomita-operator-independent-of-c, lmm:modular-operator-intrinsic, lmm:modular-conjugation-intrinsic}
+    $S$ and $\text{Dom}(S)$ do not depend on $C$ (Lemma~\ref{lmm:tomita-operator-independent-of-c}), so neither does $\Delta$ by Lemma~\ref{lmm:modular-operator-intrinsic}, nor $\Delta^{1/2} = s(\Delta)$, nor $J$ by Lemma~\ref{lmm:modular-conjugation-intrinsic}.
+\end{proof}
+
+\begin{lemma}[$S^{-1} = S$]
+    \label{lmm:tomita-inverse-is-self}
+    \uses{def:tomita-operator, def:inverse-of-operator}
+    $S$ is injective and $S^{-1} = S$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:tomita-operator-involution, lmm:tomita-graph-flip}
+    $S$ is injective by Theorem~\ref{thrm:tomita-operator-involution}, and the flip of $\Gamma(S)$ is $\Gamma(S)$ by Lemma~\ref{lmm:tomita-graph-flip} (applied in both directions).
+\end{proof}
+
+\begin{lemma}[$S$ as $J^{-1}$ Times a Conjugated Operator]
+    \label{lmm:tomita-inverse-as-product}
+    \uses{def:modular-conjugation, def:modular-operator, lmm:inverse-square-root-positive, def:product-of-unbounded-operators}
+    Let $P = J\Delta^{-1/2}J^{-1}$. Then $S = J^{-1}P$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-inverse-is-self, thrm:modular-conjugation-polar, lmm:inverse-of-product-with-bijection, crllr:inverse-square-root, thrm:modular-operator-properties}
+    By Lemma~\ref{lmm:tomita-inverse-is-self}, Theorem~\ref{thrm:modular-conjugation-polar} and Lemma~\ref{lmm:inverse-of-product-with-bijection}, $S = S^{-1} = (J\Delta^{1/2})^{-1} = (\Delta^{1/2})^{-1}J^{-1}$, which is $\Delta^{-1/2}J^{-1} = J^{-1}P$ by Corollary~\ref{crllr:inverse-square-root} for the positive, self-adjoint, injective $\Delta$ (Theorem~\ref{thrm:modular-operator-properties}).
+\end{proof}
+
+\begin{lemma}[A Second Polar Decomposition of $S'$]
+    \label{lmm:tomita-inverse-polar}
+    \uses{lmm:tomita-inverse-as-product}
+    With $P = J\Delta^{-1/2}J^{-1}$, $P$ is positive and self-adjoint, $CJ^{-1}$ is unitary, and $S' = (CJ^{-1})P$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-inverse-as-product, lmm:inverse-square-root-positive, lmm:antiunitary-conjugate-spectral-measure, lmm:antiunitary-conjugate-positive, lmm:antiunitary-isometric, lmm:antiunitary-composition, lmm:reference-conjugation-properties}
+    $S' = CS = (CJ^{-1})P$ by Lemma~\ref{lmm:tomita-inverse-as-product} and $C(C\phi) = \phi$. $P$ is positive and self-adjoint by Lemmas~\ref{lmm:inverse-square-root-positive}, \ref{lmm:antiunitary-conjugate-spectral-measure} and~\ref{lmm:antiunitary-conjugate-positive}, and $CJ^{-1}$ is unitary by Lemmas~\ref{lmm:antiunitary-isometric} and~\ref{lmm:antiunitary-composition}.
+\end{proof}
+
+\begin{theorem}[$J$ is an Involution and $J\Delta^{1/2}J = \Delta^{-1/2}$]
+    \label{thrm:modular-conjugation-involution}
+    \uses{def:modular-conjugation, def:modular-operator, crllr:inverse-square-root}
+    $J(J\phi) = \phi$ for every $\phi \in \mathbf{H}$, and $J\Delta^{1/2}J = \Delta^{-1/2}$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:tomita-inverse-polar, thrm:polar-decomposition-unique, crllr:linearized-tomita-properties, lmm:reference-conjugation-properties}
+    By Lemma~\ref{lmm:tomita-inverse-polar} and Theorem~\ref{thrm:polar-decomposition-unique}, applied to $S'$ (Corollary~\ref{crllr:linearized-tomita-properties}), $CJ^{-1} = V = C^{-1}J = CJ$ and $J\Delta^{-1/2}J^{-1} = |S'| = \Delta^{1/2}$. The first gives $J^{-1} = J$, that is $J(J\phi) = \phi$ for every $\phi$; conjugating the second by $J$ gives $J\Delta^{1/2}J = \Delta^{-1/2}$.
+\end{proof}
+
+\begin{corollary}[$J\Delta J = \Delta^{-1}$]
+    \label{crllr:modular-conjugation-inverts}
+    \uses{def:modular-conjugation, def:modular-operator, def:inverse-of-operator}
+    $J\Delta J = \Delta^{-1}$.
+\end{corollary}
+\begin{proof}
+    \uses{thrm:modular-conjugation-involution, crllr:antiunitary-conjugate-functional-calculus, lmm:square-of-square-root, lmm:square-of-inverse-square-root, thrm:modular-operator-properties, thrm:hall-10.4}
+    $\Delta = q(\Delta^{1/2})$ and $\Delta^{-1} = q(\Delta^{-1/2})$ by Lemmas~\ref{lmm:square-of-square-root} and~\ref{lmm:square-of-inverse-square-root} (Theorem~\ref{thrm:modular-operator-properties}). With $J = J^{-1}$, Corollary~\ref{crllr:antiunitary-conjugate-functional-calculus} and Theorem~\ref{thrm:modular-conjugation-involution} give $J\Delta J = q(J\Delta^{1/2}J) = q(\Delta^{-1/2}) = \Delta^{-1}$.
+\end{proof}

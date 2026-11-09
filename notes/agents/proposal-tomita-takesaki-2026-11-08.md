@@ -122,7 +122,15 @@ substantial but routine.
 ## Decisions needed
 
 - **D1. Representation.** Option K (recommended), R, C or P.
-- **D2. New definitions** (guard approval needed): C; the Tomita operator S₀ and its closure S; Δ;
+- **D2a (decided 2026-11-09). Antiunitaries** are Mathlib's conjugate-linear isometric equivalences
+  `H ≃ₗᵢ⋆[ℂ] H` (`LinearIsometryEquiv (starRingEnd ℂ)`), with `H →ₗᵢ⋆[ℂ] H` only where bijectivity
+  is not yet known; J² = 1 is stated pointwise (∀ x, J (J x) = x). No new Lean definition is needed
+  for "antiunitary". Two facts Mathlib lacks become the first lemmas: ⟨Cx, Cy⟩ = conj⟨x, y⟩, and a
+  conjugate-linear norm-preserving bijection is antiunitary.
+- **D2b (decided 2026-11-09). T\*T gets a Lean definition** (the product of a partial map with its
+  adjoint, domain {x ∈ Dom T | Tx ∈ Dom T†}), not a graph hypothesis. Needs guard approval for the
+  file that holds it when stage 2 is formalized.
+- **D2. Other new definitions** (guard approval needed): C; the Tomita operator S₀ and its closure S; Δ;
   J; the tidy operators; probably a predicate "cyclic and separating" or a reuse of
   `IsCyclicVector` and `IsSeparating`. All in new files under `Physicslib4/Operators/Modular/` (or
   similar), approved file by file as for `Additivity.lean`.
