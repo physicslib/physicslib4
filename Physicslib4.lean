@@ -117,4 +117,5 @@ import Physicslib4.Spectral.Unbounded.DirectSum
 import Physicslib4.Spectral.Unbounded.FunctionalCalculus
 import Physicslib4.Spectral.Unbounded.Integral
 import Physicslib4.Spectral.Unbounded.Normal
+import Physicslib4.Spectral.Unbounded.Polar
 import Physicslib4.Spectral.Unbounded.Spectrum

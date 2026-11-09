@@ -349,7 +349,9 @@ The modular operator is $\Delta = (S')^*S'$ and the modular conjugation comes fr
 
 \begin{definition}[Product of Operators]
     \label{def:product-of-unbounded-operators}
+    \lean{Physicslib4.Spectral.Unbounded.pmapMul}
     \uses{def:hall-3.1, def:antiunitary-operator, def:hall-9.6}
+    \leanok
     Let $A$ and $B$ be operators on $\mathbf{H}$, each linear or antilinear. Their \emph{product} $AB$ is the operator with
     \begin{align}
         \text{Dom}(AB) = \{ \psi \in \text{Dom}(B) \mid B\psi \in \text{Dom}(A) \}, \qquad (AB)\psi = A(B\psi).
@@ -359,7 +361,9 @@ The modular operator is $\Delta = (S')^*S'$ and the modular conjugation comes fr
 
 \begin{definition}[Core]
     \label{def:core}
+    \lean{LinearPMap.HasCore}
     \uses{def:hall-9.6}
+    \leanok
     Let $A$ be a closed operator on $\mathbf{H}$. A subspace $D \subset \text{Dom}(A)$ is a \emph{core} for $A$ if $\Gamma(A\vert_D)$ is dense in $\Gamma(A)$: for every $\psi \in \text{Dom}(A)$ there are $\psi_n \in D$ with $\psi_n \to \psi$ and $A\psi_n \to A\psi$.
 \end{definition}
 
@@ -367,7 +371,9 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
 
 \begin{definition}[The Operator $T^*T$]
     \label{def:adjoint-product-operator}
+    \lean{Physicslib4.Spectral.Unbounded.adjointMulSelf}
     \uses{def:product-of-unbounded-operators, def:hall-9.1}
+    \leanok
     Let $T$ be a densely defined operator on $\mathbf{H}$. The operator $T^*T$ is the product (\ref{def:product-of-unbounded-operators}) of $T^*$ with $T$:
     \begin{align}
         \text{Dom}(T^*T) = \{ x \in \text{Dom}(T) \mid Tx \in \text{Dom}(T^*) \}, \qquad (T^*T)x = T^*(Tx).
@@ -377,7 +383,9 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
 
 \begin{lemma}[Solvability of $x + T^*Tx = y$]
     \label{lmm:von-neumann-solvability}
+    \lean{Physicslib4.Spectral.Unbounded.exists_add_adjointMulSelf_eq}
     \uses{def:adjoint-product-operator, def:hall-9.1, def:hall-9.6}
+    \leanok
     For every $y \in \mathbf{H}$ there is $x \in \text{Dom}(T^*T)$ with $x + T^*Tx = y$.
 \end{lemma}
 \begin{proof}
@@ -387,7 +395,9 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
 
 \begin{lemma}[The Form of $T^*T$]
     \label{lmm:von-neumann-form}
+    \lean{Physicslib4.Spectral.Unbounded.inner_adjointMulSelf}
     \uses{def:adjoint-product-operator, def:hall-9.1}
+    \leanok
     For $x \in \text{Dom}(T^*T)$ and $x' \in \text{Dom}(T)$, $\left< x', T^*Tx \right> = \left< Tx', Tx \right>$. In particular $\left< x, T^*Tx \right> = \|Tx\|^2 \ge 0$.
 \end{lemma}
 \begin{proof}
@@ -397,7 +407,9 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
 
 \begin{lemma}[$T^*T$ is Densely Defined]
     \label{lmm:von-neumann-dense-domain}
+    \lean{Physicslib4.Spectral.Unbounded.hasDenseDomain_adjointMulSelf}
     \uses{def:adjoint-product-operator}
+    \leanok
     $\text{Dom}(T^*T)$ is dense in $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -420,7 +432,9 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
 
 \begin{lemma}[$T^*T$ is Symmetric and Positive]
     \label{lmm:von-neumann-symmetric-positive}
+    \lean{Physicslib4.Spectral.Unbounded.adjointMulSelf_symmetric_positive}
     \uses{def:adjoint-product-operator, def:hall-9.2, def:hall-9.3, def:positive-unbounded-operator}
+    \leanok
     $D$ is symmetric, $D^*$ is an extension of $D$, and $D$ is positive.
 \end{lemma}
 \begin{proof}
@@ -430,7 +444,9 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
 
 \begin{lemma}[$D^* + \mathbf{1}$ is Injective]
     \label{lmm:von-neumann-kernel}
+    \lean{Physicslib4.Spectral.Unbounded.ker_subSmul_adjoint_adjointMulSelf}
     \uses{def:adjoint-product-operator, def:kernel-of-an-unbounded-operator}
+    \leanok
     $\text{Ker}(D^* + \mathbf{1}) = \{0\}$.
 \end{lemma}
 \begin{proof}
@@ -440,7 +456,9 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
 
 \begin{theorem}[von Neumann's Theorem]
     \label{thrm:von-neumann-adjoint-product}
+    \lean{Physicslib4.Spectral.Unbounded.isSelfAdjoint_adjointMulSelf}
     \uses{def:adjoint-product-operator, def:hall-9.5, def:positive-unbounded-operator}
+    \leanok
     $T^*T$ is a positive, self-adjoint, densely defined operator.
 \end{theorem}
 \begin{proof}
@@ -450,7 +468,9 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
 
 \begin{lemma}[$\text{Dom}(T^*T)$ is a Core for $T$]
     \label{lmm:core-of-adjoint-product}
+    \lean{Physicslib4.Spectral.Unbounded.hasCore_domain_adjointMulSelf}
     \uses{def:core, def:adjoint-product-operator}
+    \leanok
     $\text{Dom}(T^*T)$ is a core for $T$.
 \end{lemma}
 \begin{proof}
@@ -580,7 +600,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[The Pushforward is a Projection-Valued Measure]
     \label{lmm:pushforward-pvm-is-pvm}
+    \lean{Physicslib4.Spectral.Unbounded.assoc_pushforwardPVM}
     \uses{def:projection-valued-measure}
+    \leanok
     Let $\varphi : X \to Y$ be measurable and set $\varphi_*\mu(F) = \mu(\varphi^{-1}(F))$. Then $\varphi_*\mu$ is a projection-valued measure on $Y$, and $(\varphi_*\mu)_\psi = \varphi_*(\mu_\psi)$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -589,7 +611,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[Domains and Forms under Pushforward]
     \label{lmm:pushforward-pvm-domain}
+    \lean{Physicslib4.Spectral.Unbounded.integralDomain_pushforwardPVM}
     \uses{lmm:pushforward-pvm-is-pvm, prpstn:hall-10.2}
+    \leanok
     For measurable $g : Y \to \mathbb{C}$, $W^{\varphi_*\mu}_g = W^\mu_{g \circ \varphi}$, and $\int_Y g \, d(\varphi_*\mu)_\psi = \int_X (g \circ \varphi) \, d\mu_\psi$ for $\psi$ in this domain.
 \end{lemma}
 \begin{proof}
@@ -599,7 +623,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[Spectral Integrals under Pushforward]
     \label{lmm:pushforward-pvm}
+    \lean{Physicslib4.Spectral.Unbounded.pmapIntegral_pushforwardPVM}
     \uses{lmm:pushforward-pvm-is-pvm, prpstn:hall-10.1}
+    \leanok
     For measurable $g : Y \to \mathbb{C}$, $\int_Y g \, d(\varphi_*\mu) = \int_X (g \circ \varphi) \, d\mu$, including equality of domains.
 \end{lemma}
 \begin{proof}
@@ -609,7 +635,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{corollary}[A Function of a Function of $A$]
     \label{crllr:fc-of-fc}
+    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_functionalCalculus}
     \uses{def:spectral-measure, def:hall-10.5}
+    \leanok
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable. Then $f(A)$ is self-adjoint with spectral measure $\mu^{f(A)} = f_*\mu^A$, and $g(f(A)) = (g \circ f)(A)$ for every measurable $g : \mathbb{R} \to \mathbb{C}$.
 \end{corollary}
 \begin{proof}
@@ -623,7 +651,9 @@ Write $s(\lambda) = \sqrt{\max(\lambda, 0)}$, a real, non-negative, measurable f
 
 \begin{definition}[Absolute Value]
     \label{def:absolute-value}
+    \lean{Physicslib4.Spectral.Unbounded.absoluteValue}
     \uses{def:adjoint-product-operator, thrm:von-neumann-adjoint-product, def:hall-10.5}
+    \leanok
     For a closed, densely defined operator $T$ on $\mathbf{H}$, the \emph{absolute value} of $T$ is $|T| \equiv (T^*T)^{1/2} = s(T^*T)$, the functional calculus of the self-adjoint operator $T^*T$ (Theorem~\ref{thrm:von-neumann-adjoint-product}).
 \end{definition}
 
@@ -631,7 +661,9 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
 
 \begin{lemma}[$\text{Dom}(T^*T) \subset \text{Dom}(|T|)$]
     \label{lmm:adjoint-product-domain-in-sqrt-domain}
+    \lean{Physicslib4.Spectral.Unbounded.adjointMulSelf_domain_le_absoluteValue}
     \uses{def:absolute-value}
+    \leanok
     Every $x \in \text{Dom}(D)$ lies in $\text{Dom}(|T|)$.
 \end{lemma}
 \begin{proof}
@@ -641,7 +673,9 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
 
 \begin{lemma}[The Norm Identity on $\text{Dom}(T^*T)$]
     \label{lmm:absolute-value-norm-on-core}
+    \lean{Physicslib4.Spectral.Unbounded.norm_absoluteValue_of_mem_adjointMulSelf}
     \uses{def:absolute-value, lmm:adjoint-product-domain-in-sqrt-domain}
+    \leanok
     For $x \in \text{Dom}(D)$, $\||T|x\| = \|Tx\|$.
 \end{lemma}
 \begin{proof}
@@ -651,7 +685,9 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
 
 \begin{lemma}[$|T|$ is Closed and Positive, with Core $\text{Dom}(T^*T)$]
     \label{lmm:absolute-value-closed}
+    \lean{Physicslib4.Spectral.Unbounded.absoluteValue_closed}
     \uses{def:absolute-value, def:core, def:positive-unbounded-operator}
+    \leanok
     $|T|$ is a positive self-adjoint operator, hence closed, and $\text{Dom}(D)$ is a core for $|T|$.
 \end{lemma}
 \begin{proof}
@@ -661,7 +697,9 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
 
 \begin{lemma}[Transfer of Domains through a Core, One Direction]
     \label{lmm:closure-transfer-one-direction}
+    \lean{Physicslib4.Spectral.Unbounded.domain_le_of_hasCore_norm_eq}
     \uses{def:core, def:hall-9.6}
+    \leanok
     Let $A$ and $B$ be closed operators on $\mathbf{H}$ and $D$ a core for $A$ with $D \subset \text{Dom}(B)$ and $\|A\psi\| = \|B\psi\|$ for $\psi \in D$. Then $\text{Dom}(A) \subset \text{Dom}(B)$ and $\|A\psi\| = \|B\psi\|$ for $\psi \in \text{Dom}(A)$.
 \end{lemma}
 \begin{proof}
@@ -671,7 +709,9 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
 
 \begin{lemma}[Transfer of Domains through a Common Core]
     \label{lmm:closure-transfer-common-core}
+    \lean{Physicslib4.Spectral.Unbounded.domain_eq_of_hasCore_norm_eq}
     \uses{def:core, def:hall-9.6}
+    \leanok
     Let $A$ and $B$ be closed operators on $\mathbf{H}$ and $D$ a subspace that is a core for both, with $\|A\psi\| = \|B\psi\|$ for $\psi \in D$. Then $\text{Dom}(A) = \text{Dom}(B)$ and $\|A\psi\| = \|B\psi\|$ for all $\psi$ in it.
 \end{lemma}
 \begin{proof}
@@ -681,7 +721,9 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
 
 \begin{theorem}[Domain and Norm of $|T|$]
     \label{thrm:absolute-value-domain}
+    \lean{Physicslib4.Spectral.Unbounded.absoluteValue_domain}
     \uses{def:absolute-value}
+    \leanok
     $|T|$ is positive and self-adjoint, $\text{Dom}(|T|) = \text{Dom}(T)$, and $\||T|\psi\| = \|T\psi\|$ for every $\psi \in \text{Dom}(T)$.
 \end{theorem}
 \begin{proof}
@@ -691,7 +733,9 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
 
 \begin{lemma}[Uniqueness of the Positive Square Root]
     \label{lmm:positive-square-root-unique}
+    \lean{Physicslib4.Spectral.Unbounded.sqrt_pmapMul_self}
     \uses{def:product-of-unbounded-operators, def:positive-unbounded-operator, def:hall-10.5}
+    \leanok
     Let $P$ be a positive self-adjoint operator. Then $PP$ is self-adjoint and $(PP)^{1/2} = P$.
 \end{lemma}
 \begin{proof}
@@ -705,7 +749,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[$|T|$ is Injective with Dense Range]
     \label{lmm:absolute-value-injective-dense-range}
+    \lean{Physicslib4.Spectral.Unbounded.absoluteValue_injective_denseRange}
     \uses{def:absolute-value, def:kernel-of-an-unbounded-operator, def:range-of-an-unbounded-operator}
+    \leanok
     $|T|$ is injective and $\text{Range}(|T|)$ is dense in $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -715,7 +761,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[The Isometry on the Range of $|T|$]
     \label{lmm:polar-isometry-on-range}
+    \lean{Physicslib4.Spectral.Unbounded.exists_polarIsometry_on_range}
     \uses{def:absolute-value, def:range-of-an-unbounded-operator}
+    \leanok
     The assignment $V_0(|T|\psi) = T\psi$, for $\psi \in \text{Dom}(T)$, is a well-defined, linear and isometric map from $\text{Range}(|T|)$ to $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -725,7 +773,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[The Isometry of the Polar Decomposition]
     \label{lmm:polar-isometry}
+    \lean{Physicslib4.Spectral.Unbounded.existsUnique_polarIsometry}
     \uses{def:absolute-value, def:product-of-unbounded-operators}
+    \leanok
     There is a unique $V \in \mathcal{B}(\mathbf{H})$ with $V|T|\psi = T\psi$ for all $\psi \in \text{Dom}(T)$. It is isometric, and $T = V|T|$.
 \end{lemma}
 \begin{proof}
@@ -735,7 +785,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{theorem}[Polar Decomposition]
     \label{thrm:polar-decomposition}
+    \lean{Physicslib4.Spectral.Unbounded.polar_decomposition}
     \uses{def:absolute-value, def:unitary-operator, def:product-of-unbounded-operators}
+    \leanok
     The isometry $V$ of Lemma~\ref{lmm:polar-isometry} is unitary, and $T = V|T|$ with $|T|$ positive, self-adjoint and injective.
 \end{theorem}
 \begin{proof}
@@ -745,7 +797,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[Adjoint of a Unitary Times an Operator]
     \label{lmm:adjoint-unitary-product}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_unitary_compPMap}
     \uses{def:unitary-operator, def:product-of-unbounded-operators, def:hall-9.1}
+    \leanok
     Let $U$ be unitary and $P$ densely defined. Then $(UP)^* = P^*U^{-1}$.
 \end{lemma}
 \begin{proof}
@@ -755,7 +809,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{theorem}[Uniqueness of the Polar Decomposition]
     \label{thrm:polar-decomposition-unique}
+    \lean{Physicslib4.Spectral.Unbounded.polar_decomposition_unique}
     \uses{thrm:polar-decomposition, def:positive-unbounded-operator}
+    \leanok
     Let $T$ be closed, densely defined and injective with dense range, and suppose $T = UP$ with $U$ unitary and $P$ positive and self-adjoint. Then $P = |T|$ and $U = V$.
 \end{theorem}
 \begin{proof}
@@ -767,7 +823,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{definition}[Inverse of an Injective Operator]
     \label{def:inverse-of-operator}
+    \lean{LinearPMap.inverse}
     \uses{def:hall-9.6, def:antiunitary-operator, def:kernel-of-an-unbounded-operator, def:range-of-an-unbounded-operator}
+    \leanok
     Let $A$ be an injective operator on $\mathbf{H}$, linear or antilinear. Its \emph{inverse} $A^{-1}$ is the operator whose graph is the flip of $\Gamma(A)$,
     \begin{align}
         \Gamma(A^{-1}) = \{ (A\psi, \psi) \mid \psi \in \text{Dom}(A) \}, \qquad \text{Dom}(A^{-1}) = \text{Range}(A).
@@ -777,7 +835,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[Inverse of a Product with a Bijection]
     \label{lmm:inverse-of-product-with-bijection}
+    \lean{Physicslib4.Spectral.Unbounded.inverse_unitary_compPMap}
     \uses{def:inverse-of-operator, def:product-of-unbounded-operators, def:unitary-operator, def:antiunitary-operator}
+    \leanok
     Let $A$ be injective and $W$ unitary or antiunitary. Then $WA$ is injective and $(WA)^{-1} = A^{-1}W^{-1}$.
 \end{lemma}
 \begin{proof}
@@ -787,7 +847,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[An Injective Self-Adjoint Operator has no Atom at $0$]
     \label{lmm:injective-no-atom-at-zero}
+    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure_singleton_zero}
     \uses{def:spectral-measure, def:kernel-of-an-unbounded-operator}
+    \leanok
     If $A$ is self-adjoint and injective, then $\mu^A(\{0\}) = 0$.
 \end{lemma}
 \begin{proof}
@@ -797,7 +859,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[$\iota^-(A)$ Inverts $A$ on $\text{Dom}(A)$]
     \label{lmm:inverse-fc-extends}
+    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_inv_apply_self}
     \uses{def:hall-10.5, def:spectral-measure}
+    \leanok
     Let $A$ be self-adjoint and injective, and let $\iota^{-}(\lambda) = 1/\lambda$ for $\lambda \ne 0$ and $\iota^{-}(0) = 0$. For $\psi \in \text{Dom}(A)$, $A\psi \in \text{Dom}(\iota^{-}(A))$ and $\iota^{-}(A)A\psi = \psi$.
 \end{lemma}
 \begin{proof}
@@ -807,7 +871,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[$\text{Dom}(\iota^-(A)) \subset \text{Range}(A)$]
     \label{lmm:inverse-fc-domain}
+    \lean{Physicslib4.Spectral.Unbounded.self_apply_functionalCalculus_inv}
     \uses{lmm:inverse-fc-extends, def:range-of-an-unbounded-operator}
+    \leanok
     Under the hypotheses of Lemma~\ref{lmm:inverse-fc-extends}, every $\phi \in \text{Dom}(\iota^{-}(A))$ satisfies $\iota^-(A)\phi \in \text{Dom}(A)$ and $A\iota^{-}(A)\phi = \phi$; in particular $\text{Dom}(\iota^{-}(A)) \subset \text{Range}(A)$.
 \end{lemma}
 \begin{proof}
@@ -817,7 +883,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[The Inverse by the Functional Calculus]
     \label{lmm:inverse-functional-calculus}
+    \lean{Physicslib4.Spectral.Unbounded.inverse_eq_functionalCalculus_inv}
     \uses{def:hall-10.5, def:inverse-of-operator, lmm:inverse-fc-extends}
+    \leanok
     Let $A$ be self-adjoint and injective. Then $A^{-1} = \iota^{-}(A)$.
 \end{lemma}
 \begin{proof}
@@ -827,7 +895,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[The Square Root is Positive and Self-Adjoint]
     \label{lmm:square-root-positive}
+    \lean{Physicslib4.Spectral.Unbounded.sqrt_functionalCalculus_positive}
     \uses{def:hall-10.5, def:positive-unbounded-operator}
+    \leanok
     Let $A$ be self-adjoint. Then $A^{1/2} = s(A)$ is positive and self-adjoint.
 \end{lemma}
 \begin{proof}
@@ -837,7 +907,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[The Square Root of an Injective Positive Operator is Injective]
     \label{lmm:square-root-injective}
+    \lean{Physicslib4.Spectral.Unbounded.ker_sqrt_functionalCalculus}
     \uses{def:hall-10.5, def:positive-unbounded-operator, def:kernel-of-an-unbounded-operator}
+    \leanok
     Let $A$ be positive, self-adjoint and injective. Then $A^{1/2}$ is injective.
 \end{lemma}
 \begin{proof}
@@ -847,7 +919,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[The Inverse Square Root is Positive]
     \label{lmm:inverse-square-root-positive}
+    \lean{Physicslib4.Spectral.Unbounded.inv_sqrt_functionalCalculus_positive}
     \uses{def:hall-10.5, def:positive-unbounded-operator}
+    \leanok
     Let $A$ be self-adjoint and $r(\lambda) = \lambda^{-1/2}$ for $\lambda > 0$, $r(\lambda) = 0$ otherwise. Then $A^{-1/2} \equiv r(A)$ is positive and self-adjoint.
 \end{lemma}
 \begin{proof}
@@ -857,7 +931,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{corollary}[The Inverse Square Root]
     \label{crllr:inverse-square-root}
+    \lean{Physicslib4.Spectral.Unbounded.inverse_sqrt_functionalCalculus}
     \uses{lmm:square-root-positive, lmm:square-root-injective, lmm:inverse-square-root-positive, def:inverse-of-operator}
+    \leanok
     Let $A$ be positive, self-adjoint and injective. Then $(A^{1/2})^{-1} = A^{-1/2}$.
 \end{corollary}
 \begin{proof}
@@ -867,7 +943,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[The Square of the Square Root]
     \label{lmm:square-of-square-root}
+    \lean{Physicslib4.Spectral.Unbounded.sq_sqrt_functionalCalculus}
     \uses{def:hall-10.5, def:positive-unbounded-operator}
+    \leanok
     Let $A$ be positive and self-adjoint and $q(\lambda) = \lambda^2$. Then $q(A^{1/2}) = A$.
 \end{lemma}
 \begin{proof}
@@ -877,7 +955,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[The Square of the Inverse Square Root]
     \label{lmm:square-of-inverse-square-root}
+    \lean{Physicslib4.Spectral.Unbounded.sq_inv_sqrt_functionalCalculus}
     \uses{lmm:inverse-square-root-positive, def:inverse-of-operator}
+    \leanok
     Let $A$ be positive, self-adjoint and injective, and $q(\lambda) = \lambda^2$. Then $q(A^{-1/2}) = A^{-1}$.
 \end{lemma}
 \begin{proof}
@@ -887,7 +967,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[Antiunitary Conjugation of a Projection-Valued Measure]
     \label{lmm:antiunitary-conjugate-pvm-is-pvm}
+    \lean{Physicslib4.Spectral.Unbounded.exists_antiunitaryConj_pvm}
     \uses{def:antiunitary-operator, def:projection-valued-measure}
+    \leanok
     Let $W$ be antiunitary and $\mu$ a projection-valued measure on $X$. Then $\nu(E) = W\mu(E)W^{-1}$ is a projection-valued measure with $\nu_\psi = \mu_{W^{-1}\psi}$.
 \end{lemma}
 \begin{proof}
@@ -897,7 +979,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[Domains under Antiunitary Conjugation]
     \label{lmm:antiunitary-conjugate-pvm-domain}
+    \lean{Physicslib4.Spectral.Unbounded.mem_integralDomain_antiunitaryConj}
     \uses{lmm:antiunitary-conjugate-pvm-is-pvm, prpstn:hall-10.2}
+    \leanok
     With $\nu$ as in Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm}, $W^\nu_f = W(W^\mu_f)$ for every measurable $f$.
 \end{lemma}
 \begin{proof}
@@ -907,7 +991,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[Spectral Integrals under Antiunitary Conjugation]
     \label{lmm:antiunitary-conjugate-pvm}
+    \lean{Physicslib4.Spectral.Unbounded.pmapIntegral_antiunitaryConj}
     \uses{lmm:antiunitary-conjugate-pvm-is-pvm, def:product-of-unbounded-operators, prpstn:hall-10.1}
+    \leanok
     With $\nu$ as in Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm} and $f$ real and measurable, $\int f \, d\nu = W\big( \int f \, d\mu \big) W^{-1}$.
 \end{lemma}
 \begin{proof}
@@ -917,7 +1003,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[Spectral Measure of an Antiunitary Conjugate]
     \label{lmm:antiunitary-conjugate-spectral-measure}
+    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure_antiunitaryConj}
     \uses{def:antiunitary-operator, def:product-of-unbounded-operators, def:spectral-measure}
+    \leanok
     Let $W$ be antiunitary and $A$ self-adjoint. Then $WAW^{-1}$ is self-adjoint with spectral measure $W\mu^A(\cdot)W^{-1}$.
 \end{lemma}
 \begin{proof}
@@ -927,7 +1015,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{corollary}[Antiunitary Conjugation and the Functional Calculus]
     \label{crllr:antiunitary-conjugate-functional-calculus}
+    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_antiunitaryConj}
     \uses{lmm:antiunitary-conjugate-spectral-measure, def:hall-10.5}
+    \leanok
     Let $W$ be antiunitary and $A$ self-adjoint. Then $Wf(A)W^{-1} = f(WAW^{-1})$ for every real measurable $f$.
 \end{corollary}
 \begin{proof}
@@ -937,7 +1027,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[Antiunitary Conjugation Preserves Positivity and Injectivity]
     \label{lmm:antiunitary-conjugate-positive}
+    \lean{Physicslib4.Spectral.Unbounded.antiunitaryConj_positive_injective}
     \uses{def:antiunitary-operator, def:product-of-unbounded-operators, def:positive-unbounded-operator}
+    \leanok
     Let $W$ be antiunitary and $A$ an operator. If $A$ is positive, or injective, so is $WAW^{-1}$.
 \end{lemma}
 \begin{proof}
