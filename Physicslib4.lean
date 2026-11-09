@@ -112,6 +112,7 @@ import Physicslib4.Spectral.Stone.Theorem
 import Physicslib4.Spectral.Unbounded.AbstractCalculus
 import Physicslib4.Spectral.Unbounded.Basic
 import Physicslib4.Spectral.Unbounded.Cayley
+import Physicslib4.Spectral.Unbounded.Composition
 import Physicslib4.Spectral.Unbounded.DirectSum
 import Physicslib4.Spectral.Unbounded.FunctionalCalculus
 import Physicslib4.Spectral.Unbounded.Integral

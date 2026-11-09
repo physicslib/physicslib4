@@ -407,10 +407,13 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
 
 \begin{lemma}[Self-Adjointness from a Surjective Shift]
     \label{lmm:self-adjoint-of-range-eq-top}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_eq_of_range_eq_top}
     \uses{def:hall-9.1, def:hall-9.3, def:hall-9.5, def:range-of-an-unbounded-operator, def:kernel-of-an-unbounded-operator}
+    \leanok
     Let $A$ be a densely defined operator such that $A^*$ is an extension of $A$, and let $\mu \in \mathbb{C}$ satisfy $\text{Range}(A - \mu\mathbf{1}) = \mathbf{H}$ and $\text{Ker}(A^* - \mu\mathbf{1}) = \{0\}$. Then $A^* = A$; that is, $A$ is self-adjoint. In Lean this is \texttt{adjoint\_eq\_of\_range\_eq\_top}.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-9.3}
     Let $\phi \in \text{Dom}(A^*)$ and pick $\chi \in \text{Dom}(A)$ with $(A - \mu\mathbf{1})\chi = (A^* - \mu\mathbf{1})\phi$. Since $A^*$ extends $A$, $(A^* - \mu\mathbf{1})(\phi - \chi) = 0$, so $\phi = \chi \in \text{Dom}(A)$. Hence $\text{Dom}(A^*) = \text{Dom}(A)$, and $A^* = A$ there.
 \end{proof}
@@ -461,7 +464,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[Bounded Approximants are Close to the Truncations]
     \label{lmm:fc-difference-to-truncation}
+    \lean{Physicslib4.Spectral.Unbounded.tendsto_norm_integral_sub_truncation}
     \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    \leanok
     Let $h$ be measurable, $\psi \in W_h$, and let $h_n$ be bounded measurable functions with $h_n \to h$ pointwise and $|h_n| \le |h|$. With the truncations $t_n = h \cdot 1_{\{|h| < n\}}$, $\|h_n(\mu)\psi - t_n(\mu)\psi\| \to 0$.
 \end{lemma}
 \begin{proof}
@@ -471,7 +476,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[Dominated Convergence for the Spectral Integral]
     \label{lmm:fc-dominated-convergence}
+    \lean{Physicslib4.Spectral.Unbounded.tendsto_integral_apply_of_dominated}
     \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    \leanok
     Let $h$ be measurable, $\psi \in W_h$, and let $h_n$ be bounded measurable functions with $h_n \to h$ pointwise and $|h_n| \le |h|$. Then $h_n(\mu)\psi \to h(\mu)\psi$.
 \end{lemma}
 \begin{proof}
@@ -481,7 +488,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[Composition with a Bounded Function on the Left]
     \label{lmm:fc-bounded-left-composition}
+    \lean{Physicslib4.Spectral.Unbounded.integral_apply_pmapIntegral}
     \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    \leanok
     Let $u$ be bounded measurable, $h$ measurable and $\psi \in W_h$. Then $\psi \in W_{uh}$ and $u(\mu)\,h(\mu)\psi = (uh)(\mu)\psi$.
 \end{lemma}
 \begin{proof}
@@ -491,7 +500,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[The Associated Measure of $h(\mu)\psi$]
     \label{lmm:fc-associated-measure}
+    \lean{Physicslib4.Spectral.Unbounded.assoc_pmapIntegral}
     \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    \leanok
     Let $h$ be measurable, not necessarily bounded, and $\psi \in W_h$. Then for every $E \in \Sigma$,
     \begin{align}
         \mu_{h(\mu)\psi}(E) = \int_E |h|^2 \, d\mu_\psi;
@@ -505,7 +516,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[The Domain of a Composite]
     \label{lmm:fc-composition-domain}
+    \lean{Physicslib4.Spectral.Unbounded.pmapIntegral_mem_integralDomain_iff}
     \uses{prpstn:hall-10.2}
+    \leanok
     Let $f, g$ be measurable and $\psi \in W_g$. Then $g(\mu)\psi \in W_f$ if and only if $\psi \in W_{fg}$.
 \end{lemma}
 \begin{proof}
@@ -515,7 +528,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{theorem}[Composition Law of the Functional Calculus]
     \label{thrm:fc-composition}
+    \lean{Physicslib4.Spectral.Unbounded.pmapIntegral_comp}
     \uses{def:product-of-unbounded-operators, prpstn:hall-10.1, def:hall-9.3}
+    \leanok
     For measurable $f, g$, the operator $(fg)(\mu)$ is an extension of $f(\mu)\,g(\mu)$, and
     \begin{align}
         \text{Dom}\big( f(\mu)\,g(\mu) \big) = W_g \cap W_{fg}.
@@ -529,7 +544,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[Spectral Projections Commute with $h(\mu)$]
     \label{lmm:fc-commutes-with-projections}
+    \lean{Physicslib4.Spectral.Unbounded.pmapIntegral_apply_projection}
     \uses{prpstn:hall-10.1, prpstn:hall-10.2}
+    \leanok
     Let $h$ be measurable, $\psi \in W_h$ and $E \in \Sigma$. Then $\mu(E)\psi \in W_h$ and $h(\mu)\mu(E)\psi = \mu(E)h(\mu)\psi$.
 \end{lemma}
 \begin{proof}
@@ -539,7 +556,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[A Real Function of $A$ is Closed]
     \label{lmm:fc-real-closed}
+    \lean{Physicslib4.Spectral.Unbounded.isSelfAdjoint_functionalCalculus_of_real}
     \uses{def:hall-10.5, def:hall-9.6}
+    \leanok
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable. Then $f(A)$ is self-adjoint, hence closed.
 \end{lemma}
 \begin{proof}
@@ -549,7 +568,9 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
 
 \begin{lemma}[$\text{Dom}(A)$ Gives a Core for Every $f(A)$]
     \label{lmm:fc-core}
+    \lean{Physicslib4.Spectral.Unbounded.hasCore_functionalCalculus}
     \uses{def:core, def:hall-10.5, def:spectral-measure, lmm:fc-real-closed}
+    \leanok
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable, so that $f(A)$ is closed (Lemma~\ref{lmm:fc-real-closed}). Then $\text{Dom}(A) \cap \text{Dom}(f(A))$ is a core for $f(A)$. More precisely, for $\psi \in \text{Dom}(f(A))$ and $E_n = \{ \lambda \mid |\lambda| < n \}$, the vectors $\mu^A(E_n)\psi$ lie in $\text{Dom}(A) \cap \text{Dom}(f(A))$, and $\mu^A(E_n)\psi \to \psi$, $f(A)\mu^A(E_n)\psi \to f(A)\psi$.
 \end{lemma}
 \begin{proof}
