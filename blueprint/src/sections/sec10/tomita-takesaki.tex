@@ -490,6 +490,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     Let $h$ be measurable, $\psi \in W_h$, and let $h_n$ be bounded measurable functions with $h_n \to h$ pointwise and $|h_n| \le |h|$. With the truncations $t_n = h \cdot 1_{\{|h| < n\}}$, $\|h_n(\mu)\psi - t_n(\mu)\psi\| \to 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:norm-identity-bounded-integral, thrm:dominated-convergence-theorem, thrm:operator-valued-integration}
     By linearity of the bounded integral and Lemma~\ref{lmm:norm-identity-bounded-integral}, $\|h_n(\mu)\psi - t_n(\mu)\psi\|^2 = \int |h_n - t_n|^2 \, d\mu_\psi$. The integrand tends to $0$ pointwise and is dominated by $4|h|^2$, which is $\mu_\psi$-integrable because $\psi \in W_h$; apply Theorem~\ref{thrm:dominated-convergence-theorem}.
 \end{proof}
@@ -502,6 +503,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     Let $h$ be measurable, $\psi \in W_h$, and let $h_n$ be bounded measurable functions with $h_n \to h$ pointwise and $|h_n| \le |h|$. Then $h_n(\mu)\psi \to h(\mu)\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-difference-to-truncation, lmm:truncations-converge}
     $t_n(\mu)\psi \to h(\mu)\psi$ by Lemma~\ref{lmm:truncations-converge}, and $h_n(\mu)\psi - t_n(\mu)\psi \to 0$ by Lemma~\ref{lmm:fc-difference-to-truncation}.
 \end{proof}
@@ -514,6 +516,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     Let $u$ be bounded measurable, $h$ measurable and $\psi \in W_h$. Then $\psi \in W_{uh}$ and $u(\mu)\,h(\mu)\psi = (uh)(\mu)\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-dominated-convergence, lmm:truncations-converge, prpstn:integral-multiplicative}
     $|uh|^2 \le \sup|u|^2 |h|^2$ gives $\psi \in W_{uh}$. With $t_n$ the truncations of $h$, $u(\mu) t_n(\mu)\psi = (u t_n)(\mu)\psi$ by multiplicativity of the bounded integral (Proposition~\ref{prpstn:integral-multiplicative}). The left side tends to $u(\mu)h(\mu)\psi$ by Lemma~\ref{lmm:truncations-converge} and continuity of $u(\mu)$, the right side to $(uh)(\mu)\psi$ by Lemma~\ref{lmm:fc-dominated-convergence}.
 \end{proof}
@@ -530,6 +533,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     that is, $\mu_{h(\mu)\psi}$ is the measure with density $|h|^2$ with respect to $\mu_\psi$ (in Mathlib, $\mu_\psi$\texttt{.withDensity} $|h|^2$). This extends Lemma~\ref{lmm:associated-measure-of-image} from bounded to unbounded $h$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-bounded-left-composition, lmm:associated-measure-of-image, prpstn:hall-10.2}
     $\mu_{h(\mu)\psi}(E) = \|\mu(E)h(\mu)\psi\|^2 = \|(1_E h)(\mu)\psi\|^2$ by Lemma~\ref{lmm:fc-bounded-left-composition} with $u = 1_E$, and the norm identity of Proposition~\ref{prpstn:hall-10.2} gives $\int |1_E h|^2 \, d\mu_\psi$.
 \end{proof}
@@ -542,6 +546,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     Let $f, g$ be measurable and $\psi \in W_g$. Then $g(\mu)\psi \in W_f$ if and only if $\psi \in W_{fg}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-associated-measure}
     By Lemma~\ref{lmm:fc-associated-measure}, $\mu_{g(\mu)\psi}$ has density $|g|^2$ with respect to $\mu_\psi$, so integration against a measure with a density (Mathlib's \texttt{lintegral\_withDensity\_eq\_lintegral\_mul}) gives $\int |f|^2 \, d\mu_{g(\mu)\psi} = \int |f|^2 |g|^2 \, d\mu_\psi = \int |fg|^2 \, d\mu_\psi$.
 \end{proof}
@@ -558,6 +563,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     In particular $f(A)\,g(A) \subset (fg)(A)$ for a self-adjoint $A$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-composition-domain, lmm:fc-bounded-left-composition, lmm:fc-dominated-convergence, lmm:truncations-converge}
     The domain identity is Lemma~\ref{lmm:fc-composition-domain}. Let $\psi$ be in it and $E_n = \{|f| < n\}$. Applying Lemma~\ref{lmm:fc-bounded-left-composition} twice, $\mu(E_n)\,(fg)(\mu)\psi = (1_{E_n} f g)(\mu)\psi = (1_{E_n} f)(\mu)\,g(\mu)\psi$. As $n \to \infty$ the left side tends to $(fg)(\mu)\psi$ (Lemma~\ref{lmm:fc-dominated-convergence} with $h = 1$) and the right side to $f(\mu)g(\mu)\psi$ (Lemma~\ref{lmm:truncations-converge}).
 \end{proof}
@@ -570,6 +576,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     Let $h$ be measurable, $\psi \in W_h$ and $E \in \Sigma$. Then $\mu(E)\psi \in W_h$ and $h(\mu)\mu(E)\psi = \mu(E)h(\mu)\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:fc-composition, lmm:fc-bounded-left-composition}
     $\mu(E) = 1_E(\mu)$ is defined on all of $\mathbf{H}$, and $\psi \in W_{h 1_E}$ by Lemma~\ref{lmm:fc-bounded-left-composition}. Theorem~\ref{thrm:fc-composition} with $f = h$, $g = 1_E$ gives $\mu(E)\psi \in W_h$ and $h(\mu)\mu(E)\psi = (h1_E)(\mu)\psi = (1_E h)(\mu)\psi$, which is $\mu(E)h(\mu)\psi$ by Lemma~\ref{lmm:fc-bounded-left-composition}.
 \end{proof}
@@ -582,6 +589,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable. Then $f(A)$ is self-adjoint, hence closed.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-10.3, prpstn:hall-9.8}
     $f(A)$ is self-adjoint by Proposition~\ref{prpstn:hall-10.3}, so it equals its adjoint, whose graph is closed (Proposition~\ref{prpstn:hall-9.8}).
 \end{proof}
@@ -594,6 +602,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable, so that $f(A)$ is closed (Lemma~\ref{lmm:fc-real-closed}). Then $\text{Dom}(A) \cap \text{Dom}(f(A))$ is a core for $f(A)$. More precisely, for $\psi \in \text{Dom}(f(A))$ and $E_n = \{ \lambda \mid |\lambda| < n \}$, the vectors $\mu^A(E_n)\psi$ lie in $\text{Dom}(A) \cap \text{Dom}(f(A))$, and $\mu^A(E_n)\psi \to \psi$, $f(A)\mu^A(E_n)\psi \to f(A)\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-commutes-with-projections, lmm:bounded-on-set-range-in-domain, lmm:fc-dominated-convergence}
     $\mu^A(E_n)\psi \in W_\iota = \text{Dom}(A)$ by Lemma~\ref{lmm:bounded-on-set-range-in-domain}, and $\mu^A(E_n)\psi \in W_f$ with $f(A)\mu^A(E_n)\psi = \mu^A(E_n)f(A)\psi$ by Lemma~\ref{lmm:fc-commutes-with-projections}. Lemma~\ref{lmm:fc-dominated-convergence} with $h = 1$ and $h_n = 1_{E_n}$ gives $\mu^A(E_n)\chi \to \chi$ for every $\chi$, applied to $\chi = \psi$ and $\chi = f(A)\psi$.
 \end{proof}
