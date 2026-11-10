@@ -782,6 +782,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     $|T|$ is injective and $\text{Range}(|T|)$ is dense in $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:absolute-value-domain, prpstn:hall-9.12, crllr:trivial-complement-characterizes-density}
     If $|T|\psi = 0$, then $\|T\psi\| = 0$ by Theorem~\ref{thrm:absolute-value-domain}, so $\psi = 0$. Since $|T|$ is self-adjoint, $\text{Range}(|T|)^\perp = \text{Ker}(|T|^*) = \text{Ker}(|T|) = \{0\}$ (Proposition~\ref{prpstn:hall-9.12}).
 \end{proof}
@@ -794,6 +795,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     The assignment $V_0(|T|\psi) = T\psi$, for $\psi \in \text{Dom}(T)$, is a well-defined, linear and isometric map from $\text{Range}(|T|)$ to $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:absolute-value-domain}
     $\text{Dom}(|T|) = \text{Dom}(T)$ and $\||T|\psi\| = \|T\psi\|$ (Theorem~\ref{thrm:absolute-value-domain}). If $|T|\psi = |T|\psi'$, then $\|T\psi - T\psi'\| = \||T|(\psi - \psi')\| = 0$, so $V_0$ is well defined; linearity and isometry follow from those of $T$ and $|T|$ and the norm identity.
 \end{proof}
@@ -806,6 +808,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     There is a unique $V \in \mathcal{B}(\mathbf{H})$ with $V|T|\psi = T\psi$ for all $\psi \in \text{Dom}(T)$. It is isometric, and $T = V|T|$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:polar-isometry-on-range, lmm:absolute-value-injective-dense-range, thrm:bounded-linear-transformation-theorem, thrm:absolute-value-domain}
     $V_0$ of Lemma~\ref{lmm:polar-isometry-on-range} has dense domain (Lemma~\ref{lmm:absolute-value-injective-dense-range}), so it has a unique bounded extension $V$ (Theorem~\ref{thrm:bounded-linear-transformation-theorem}), isometric by continuity of the norm. The equality $\text{Dom}(|T|) = \text{Dom}(T)$ (Theorem~\ref{thrm:absolute-value-domain}) gives $T = V|T|$.
 \end{proof}
@@ -818,6 +821,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     The isometry $V$ of Lemma~\ref{lmm:polar-isometry} is unitary, and $T = V|T|$ with $|T|$ positive, self-adjoint and injective.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:polar-isometry, lmm:absolute-value-injective-dense-range, thrm:absolute-value-domain, prpstn:polarization-identity}
     The range of an isometry on a complete space is complete, hence closed; it contains the dense set $\text{Range}(T)$, so $V$ is onto. An isometry preserves inner products by Proposition~\ref{prpstn:polarization-identity}, so $V$ is unitary. The other claims are Theorem~\ref{thrm:absolute-value-domain} and Lemma~\ref{lmm:absolute-value-injective-dense-range}.
 \end{proof}
@@ -830,6 +834,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $U$ be unitary and $P$ densely defined. Then $(UP)^* = P^*U^{-1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:characterizing-adjoint-domain-membership}
     $\left< \phi, UP\psi \right> = \left< U^{-1}\phi, P\psi \right>$ for $\psi \in \text{Dom}(P) = \text{Dom}(UP)$, so by Lemma~\ref{lmm:characterizing-adjoint-domain-membership}, $\phi \in \text{Dom}((UP)^*)$ if and only if $U^{-1}\phi \in \text{Dom}(P^*)$, and then $(UP)^*\phi = P^*U^{-1}\phi$.
 \end{proof}
@@ -842,6 +847,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $T$ be closed, densely defined and injective with dense range, and suppose $T = UP$ with $U$ unitary and $P$ positive and self-adjoint. Then $P = |T|$ and $U = V$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:adjoint-unitary-product, lmm:positive-square-root-unique, lmm:absolute-value-injective-dense-range, lmm:polar-isometry}
     By Lemma~\ref{lmm:adjoint-unitary-product}, $T^*T = PU^{-1}UP = PP$, so $|T| = (PP)^{1/2} = P$ by Lemma~\ref{lmm:positive-square-root-unique}. Then $U$ and $V$ agree on the dense set $\text{Range}(|T|)$ (Lemmas~\ref{lmm:polar-isometry} and~\ref{lmm:absolute-value-injective-dense-range}), and both are continuous.
 \end{proof}

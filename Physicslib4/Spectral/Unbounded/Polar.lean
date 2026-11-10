@@ -774,7 +774,18 @@ Blueprint: lmm:absolute-value-injective-dense-range
 theorem absoluteValue_injective_denseRange {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (hcl : T.IsClosed) (hinj : ker T = ⊥) :
     ker (absoluteValue T hT hcl) = ⊥ ∧ Dense (range (absoluteValue T hT hcl) : Set H) := by
-  sorry
+  obtain ⟨-, hsa, hd, hn⟩ := absoluteValue_domain hT hcl
+  have hker : ker (absoluteValue T hT hcl) = ⊥ := by
+    rw [Submodule.eq_bot_iff] at hinj ⊢
+    rintro ψ hψ
+    obtain ⟨h₁, h0⟩ := mem_ker.1 hψ
+    have h₂ : ψ ∈ T.domain := hd ▸ h₁
+    refine hinj ψ (mem_ker.2 ⟨h₂, norm_eq_zero.1 ?_⟩)
+    rw [← hn ψ h₁ h₂, h0, norm_zero]
+  refine ⟨hker, ?_⟩
+  rw [Submodule.dense_iff_topologicalClosure_eq_top, Submodule.topologicalClosure_eq_top_iff,
+    orthogonal_range_eq_ker_adjoint (absoluteValue_closed hT hcl).2.1.dense_domain,
+    LinearPMap.isSelfAdjoint_def.mp hsa, hker]
 
 /--
 For a closed, densely defined, injective `T`, the assignment
@@ -788,7 +799,27 @@ theorem exists_polarIsometry_on_range {T : H →ₗ.[ℂ] H} (hT : HasDenseDomai
       ∀ (ψ : H) (h₁ : ψ ∈ T.domain) (h₂ : ψ ∈ (absoluteValue T hT hcl).domain),
         V₀ ⟨absoluteValue T hT hcl ⟨ψ, h₂⟩,
           LinearMap.mem_range_self (absoluteValue T hT hcl).toFun ⟨ψ, h₂⟩⟩ = T ⟨ψ, h₁⟩ := by
-  sorry
+  obtain ⟨-, -, hd, hn⟩ := absoluteValue_domain hT hcl
+  set A := absoluteValue T hT hcl
+  let B : A.domain →ₗ[ℂ] H := T.toFun.comp (Submodule.inclusion hd.le)
+  have hBA : ∀ ψ : A.domain, ‖B ψ‖ = ‖A.toFun ψ‖ := fun ψ => (hn ψ ψ.2 (hd ▸ ψ.2)).symm
+  have hker : LinearMap.ker A.toFun ≤ LinearMap.ker B := fun ψ h => by
+    rw [LinearMap.mem_ker] at h ⊢
+    rw [← norm_eq_zero, hBA, h, norm_zero]
+  let L : range A →ₗ[ℂ] H := (LinearMap.ker A.toFun).liftQ B hker ∘ₗ
+    (LinearMap.quotKerEquivRange A.toFun).symm.toLinearMap
+  have hL : ∀ ψ : A.domain, L ⟨A.toFun ψ, LinearMap.mem_range_self _ ψ⟩ = B ψ := by
+    intro ψ
+    have : (LinearMap.quotKerEquivRange A.toFun).symm ⟨A.toFun ψ, LinearMap.mem_range_self _ ψ⟩
+        = Submodule.Quotient.mk ψ := by
+      rw [LinearEquiv.symm_apply_eq]; rfl
+    change (LinearMap.ker A.toFun).liftQ B hker
+      ((LinearMap.quotKerEquivRange A.toFun).symm ⟨A.toFun ψ, LinearMap.mem_range_self _ ψ⟩) = B ψ
+    rw [this]
+    rfl
+  refine ⟨{ L with norm_map' := ?_ }, fun ψ h₁ h₂ => hL ⟨ψ, h₂⟩⟩
+  rintro ⟨_, ψ, rfl⟩
+  exact (congrArg norm (hL ψ)).trans (hBA ψ)
 
 /--
 For a closed, densely defined, injective `T`, there is a unique bounded `V`
@@ -805,7 +836,34 @@ theorem existsUnique_polarIsometry {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T
     ∀ V : H →L[ℂ] H,
       (∀ (ψ : H) (h₁ : ψ ∈ T.domain) (h₂ : ψ ∈ (absoluteValue T hT hcl).domain),
         V (absoluteValue T hT hcl ⟨ψ, h₂⟩) = T ⟨ψ, h₁⟩) → ∀ x, ‖V x‖ = ‖x‖ := by
-  sorry
+  set A := absoluteValue T hT hcl
+  obtain ⟨-, -, hd, -⟩ := absoluteValue_domain hT hcl
+  obtain ⟨V₀, hV₀⟩ := exists_polarIsometry_on_range hT hcl hinj
+  have hden := (absoluteValue_injective_denseRange hT hcl hinj).2
+  have hdr : DenseRange (range A).subtypeL := hden.denseRange_val
+  have hui : IsUniformInducing (range A).subtypeL :=
+    isUniformEmbedding_subtype_val.isUniformInducing
+  let V := V₀.toContinuousLinearMap.extend (range A).subtypeL
+  have hVe : ∀ x : range A, V x = V₀ x := fun x =>
+    ContinuousLinearMap.extend_eq V₀.toContinuousLinearMap hdr hui x
+  have hP : ∀ V' : H →L[ℂ] H, (∀ (ψ : H) (h₁ : ψ ∈ T.domain) (h₂ : ψ ∈ A.domain),
+      V' (A ⟨ψ, h₂⟩) = T ⟨ψ, h₁⟩) ↔ ∀ x : range A, V' x = V₀ x := by
+    intro V'
+    constructor
+    · rintro h ⟨_, ψ, rfl⟩
+      exact (h ψ (hd ▸ ψ.2) ψ.2).trans (hV₀ ψ _ ψ.2).symm
+    · intro h ψ h₁ h₂
+      exact (h _).trans (hV₀ ψ h₁ h₂)
+  have huniq : ∀ V' : H →L[ℂ] H, (∀ x : range A, V' x = V₀ x) → V' = V := fun V' h =>
+    ContinuousLinearMap.ext (congrFun (hdr.equalizer V'.continuous V.continuous
+      (funext fun x => (h x).trans (hVe x).symm)))
+  have hiso : ∀ x, ‖V x‖ = ‖x‖ := fun x =>
+    hdr.induction_on x (isClosed_eq (continuous_norm.comp V.continuous) continuous_norm)
+      fun a => by
+        change ‖V a‖ = ‖(a : H)‖
+        rw [hVe, LinearIsometry.norm_map, Submodule.norm_coe]
+  exact ⟨⟨V, (hP V).2 hVe, fun V' h => huniq V' ((hP V').1 h)⟩,
+    fun V' h x => huniq V' ((hP V').1 h) ▸ hiso x⟩
 
 /--
 **Polar decomposition.** For a closed, densely defined, injective `T` with dense range, there is
@@ -823,7 +881,19 @@ theorem polar_decomposition {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (hcl 
         V (absoluteValue T hT hcl ⟨ψ, h₂⟩) = T ⟨ψ, h₁⟩) ∧
       IsPositive (absoluteValue T hT hcl) ∧ IsSelfAdjoint (absoluteValue T hT hcl) ∧
       ker (absoluteValue T hT hcl) = ⊥ := by
-  sorry
+  obtain ⟨⟨V, hV, -⟩, hiso⟩ := existsUnique_polarIsometry hT hcl hinj
+  obtain ⟨hp, hsa, hd, -⟩ := absoluteValue_domain hT hcl
+  let L : H →ₗᵢ[ℂ] H := { V.toLinearMap with norm_map' := hiso V hV }
+  have hsurj : Function.Surjective L := by
+    have hsub : (range T : Set H) ⊆ Set.range L := by
+      rintro _ ⟨ψ, rfl⟩
+      exact ⟨_, hV ψ ψ.2 (by rw [hd]; exact ψ.2)⟩
+    have hcl' : IsClosed (Set.range L) := (Isometry.isClosedEmbedding L.isometry).isClosed_range
+    have := hran.closure_eq ▸ closure_minimal hsub hcl'
+    exact fun y => this (Set.mem_univ y)
+  exact ⟨LinearIsometryEquiv.ofSurjective L hsurj, hd, fun ψ h₁ h₂ => hV ψ h₁ h₂, hp, hsa,
+    (absoluteValue_injective_denseRange hT hcl hinj).1⟩
+
 
 /--
 For a unitary `U` and a densely defined `P`, `(U P)† = P† U⁻¹`. Here `U P` is
@@ -835,7 +905,31 @@ Blueprint: lmm:adjoint-unitary-product
 theorem adjoint_unitary_compPMap (U : H ≃ₗᵢ[ℂ] H) {P : H →ₗ.[ℂ] H} (hP : HasDenseDomain P) :
     (U.toLinearEquiv.toLinearMap.compPMap P)† =
       pmapMul (P†) (U.symm.toLinearEquiv.toLinearMap.toPMap ⊤) := by
-  sorry
+  set Q := U.toLinearEquiv.toLinearMap.compPMap P
+  have hQ : Dense (Q.domain : Set H) := hP
+  have key : ∀ (y : H) (x : P.domain), ⟪y, Q ⟨x, x.2⟩⟫_ℂ = ⟪U.symm y, P x⟫_ℂ := fun y x => by
+    rw [← U.inner_map_map (U.symm y), U.apply_symm_apply]; rfl
+  have hdom : ∀ y : H, y ∈ Q†.domain ↔ U.symm y ∈ P†.domain := fun y => by
+    constructor
+    · intro hy
+      refine LinearPMap.mem_adjoint_domain_of_exists _ ⟨Q† ⟨y, hy⟩, fun x => ?_⟩
+      rw [← key]
+      exact LinearPMap.adjoint_isFormalAdjoint hQ ⟨y, hy⟩ ⟨x, x.2⟩
+    · intro hy
+      refine LinearPMap.mem_adjoint_domain_of_exists _ ⟨P† ⟨U.symm y, hy⟩, fun x => ?_⟩
+      rw [key y ⟨x, x.2⟩]
+      exact LinearPMap.adjoint_isFormalAdjoint hP ⟨U.symm y, hy⟩ ⟨x, x.2⟩
+  have hdom' : Q†.domain = (pmapMul (P†) (U.symm.toLinearEquiv.toLinearMap.toPMap ⊤)).domain := by
+    ext y
+    rw [hdom, mem_domain_pmapMul_iff]
+    exact ⟨fun h => ⟨Submodule.mem_top, h⟩, fun ⟨_, h⟩ => h⟩
+  refine LinearPMap.ext hdom' fun y hy1 hy2 => ?_
+  have hy : U.symm y ∈ P†.domain := (hdom y).1 hy1
+  rw [pmapMul_apply _ _ ⟨y, hy2⟩ hy]
+  refine LinearPMap.adjoint_apply_eq hQ ⟨y, hy1⟩ fun z => ?_
+  change _ = ⟪y, Q ⟨z, z.2⟩⟫_ℂ
+  rw [key y ⟨z, z.2⟩]
+  exact LinearPMap.adjoint_isFormalAdjoint hP ⟨U.symm y, hy⟩ ⟨z, z.2⟩
 
 /--
 **Uniqueness of the polar decomposition.** Let `T` be closed and densely defined, and
@@ -852,7 +946,47 @@ theorem polar_decomposition_unique {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T
     P = absoluteValue T hT hcl ∧
       ∀ (ψ : H) (h₁ : ψ ∈ T.domain) (h₂ : ψ ∈ (absoluteValue T hT hcl).domain),
         U (absoluteValue T hT hcl ⟨ψ, h₂⟩) = T ⟨ψ, h₁⟩ := by
-  sorry
+  subst hTUP
+  have hPadj : P† = P := LinearPMap.isSelfAdjoint_def.mp hP
+  have hdP : HasDenseDomain P := hT
+  have heq : adjointMulSelf (U.toLinearEquiv.toLinearMap.compPMap P) = pmapMul P P := by
+    unfold adjointMulSelf
+    rw [adjoint_unitary_compPMap U hdP, hPadj]
+    refine LinearPMap.ext ?_ fun x hx hx' => ?_
+    · ext x
+      simp only [mem_domain_pmapMul_iff]
+      constructor
+      · rintro ⟨h1, _, h2⟩
+        refine ⟨h1, ?_⟩
+        convert h2 using 1
+        simp [LinearMap.compPMap_apply, LinearMap.toPMap_apply]
+        rfl
+      · rintro ⟨h1, h2⟩
+        refine ⟨h1, Submodule.mem_top, ?_⟩
+        convert h2 using 1
+        simp [LinearMap.compPMap_apply, LinearMap.toPMap_apply]
+        rfl
+    · obtain ⟨h1, h2⟩ := (mem_domain_pmapMul_iff _ _ _).1 hx'
+      rw [pmapMul_apply _ _ ⟨x, hx'⟩ h2]
+      obtain ⟨h3, h4⟩ := (mem_domain_pmapMul_iff _ _ _).1 hx
+      rw [pmapMul_apply _ _ ⟨x, hx⟩ h4]
+      obtain ⟨_, h5⟩ := (mem_domain_pmapMul_iff _ _ _).1 h4
+      rw [pmapMul_apply _ _ ⟨_, h4⟩ h5]
+      congr 2
+      simp [LinearMap.compPMap_apply, LinearMap.toPMap_apply]
+      rfl
+  obtain ⟨hPP, hsq⟩ := sqrt_pmapMul_self hP hpos
+  have htr : ∀ {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B), A = B →
+      functionalCalculus hA (fun x => ((Real.sqrt x : ℝ) : ℂ)) =
+        functionalCalculus hB (fun x => ((Real.sqrt x : ℝ) : ℂ)) := by
+    rintro _ _ _ _ rfl; rfl
+  have habs : P = absoluteValue _ hT hcl :=
+    (hsq.symm.trans (htr hPP _ heq.symm))
+  refine ⟨habs, fun ψ h₁ h₂ => ?_⟩
+  have hval : ∀ A : H →ₗ.[ℂ] H, P = A → ∀ h₂ h₁, A ⟨ψ, h₂⟩ = P ⟨ψ, h₁⟩ := by
+    rintro _ rfl _ _; rfl
+  rw [hval _ habs h₂ h₁, LinearMap.compPMap_apply]
+  rfl
 
 /-!
 ### Inverses
