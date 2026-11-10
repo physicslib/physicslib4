@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.Spectral.Unbounded.Basic
 import Physicslib4.Spectral.Unbounded.Spectrum
 import Physicslib4.Spectral.Unbounded.Composition
+import Physicslib4.Operators.Modular.Antiunitary
 
 /-!
 # Products of unbounded operators and von Neumann's theorem
@@ -1339,7 +1340,55 @@ Blueprint: lmm:antiunitary-conjugate-pvm-is-pvm
 theorem exists_antiunitaryConj_pvm (W : H ≃ₗᵢ⋆[ℂ] H) (μ : ProjectionValuedMeasure X H) :
     ∃ ν : ProjectionValuedMeasure X H, (∀ E x, ν E x = W (μ E (W.symm x))) ∧
       ∀ ψ, ν.assoc ψ = μ.assoc (W.symm ψ) := by
-  sorry
+  have hinner : ∀ x y : H, ⟪W x, W y⟫_ℂ = (starRingEnd ℂ) ⟪x, y⟫_ℂ := fun x y => by
+    have hI : ∀ v : H, W ((RCLike.I : ℂ) • v) = -((RCLike.I : ℂ) • W v) := fun v => by
+      rw [LinearIsometryEquiv.map_smulₛₗ]; simp [neg_smul]
+    rw [inner_eq_sum_norm_sq_div_four (W x), inner_eq_sum_norm_sq_div_four x]
+    have h1 : W x - (RCLike.I : ℂ) • W y = W (x + (RCLike.I : ℂ) • y) := by
+      rw [W.map_add, hI, sub_eq_add_neg]
+    have h2 : W x + (RCLike.I : ℂ) • W y = W (x - (RCLike.I : ℂ) • y) := by
+      rw [W.map_sub, hI, sub_neg_eq_add]
+    rw [← W.map_add, ← W.map_sub, h1, h2]
+    simp only [LinearIsometryEquiv.norm_map]
+    simp [map_div₀, map_sub, map_add, map_mul, Complex.conj_ofReal, map_ofNat]
+    ring
+  let C : Set X → H →L[ℂ] H := fun E =>
+    (W.toContinuousLinearEquiv : H →SL[starRingEnd ℂ] H).comp
+      ((μ E).comp (W.symm.toContinuousLinearEquiv : H →SL[starRingEnd ℂ] H))
+  have hC : ∀ E x, C E x = W (μ E (W.symm x)) := fun _ _ => rfl
+  have hsymm : ∀ E (x y : H), ⟪C E x, y⟫_ℂ = ⟪x, C E y⟫_ℂ := fun E x y => by
+    have hP := (μ.isStarProjection_apply E).isSelfAdjoint
+    rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric] at hP
+    have hP' : ⟪μ E (W.symm x), W.symm y⟫_ℂ = ⟪W.symm x, μ E (W.symm y)⟫_ℂ := hP _ _
+    rw [hC, hC, ← W.apply_symm_apply y, hinner, W.symm_apply_apply, hP',
+      ← hinner, W.apply_symm_apply]
+  refine ⟨⟨C, fun E => ?_, fun E hE => ?_, ?_, fun E hE hdisj v => ?_, fun E F hE hF => ?_⟩,
+    fun E x => rfl, fun ψ => ?_⟩
+  · refine ⟨?_, ?_⟩
+    · refine ContinuousLinearMap.ext fun x => ?_
+      change W (μ E (W.symm (W (μ E (W.symm x))))) = W (μ E (W.symm x))
+      rw [W.symm_apply_apply]
+      exact congrArg W
+        (ContinuousLinearMap.ext_iff.1 (μ.isStarProjection_apply E).isIdempotentElem.eq _)
+    · exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 (hsymm E)
+  · ext x; simp [hC, μ.apply_of_not_measurableSet hE]
+  · ext x; simp [hC, μ.apply_univ]
+  · simp only [hC]
+    exact (μ.hasSum_apply E hE hdisj (W.symm v)).map W W.continuous
+  · ext x
+    simp [hC, μ.apply_inter hE hF]
+  · ext F hF
+    rw [← ENNReal.toReal_eq_toReal_iff' (measure_ne_top _ _) (measure_ne_top _ _),
+      ProjectionValuedMeasure.assoc_apply _ _ hF, ProjectionValuedMeasure.assoc_apply _ _ hF]
+    change (⟪ψ, C F ψ⟫_ℂ).re = _
+    rw [hC, ← W.apply_symm_apply ψ, hinner, W.symm_apply_apply, Complex.conj_re]
+
+/-- With `ν(E) = W μ(E) W⁻¹`, the associated measures satisfy `ν_x = μ_{W⁻¹x}`. -/
+private theorem acd_assoc (W : H ≃ₗᵢ⋆[ℂ] H) {μ ν : ProjectionValuedMeasure X H}
+    (hν : ∀ E x, ν E x = W (μ E (W.symm x))) (x : H) : ν.assoc x = μ.assoc (W.symm x) := by
+  ext E hE
+  rw [assoc_apply_eq_norm_sq _ _ hE, assoc_apply_eq_norm_sq _ _ hE, hν,
+    LinearIsometryEquiv.norm_map]
 
 /--
 With `ν(E) = W μ(E) W⁻¹`, the domains satisfy `W^ν_f = W(W^μ_f)` for measurable `f`:
@@ -1350,7 +1399,7 @@ Blueprint: lmm:antiunitary-conjugate-pvm-domain
 theorem mem_integralDomain_antiunitaryConj (W : H ≃ₗᵢ⋆[ℂ] H) {μ ν : ProjectionValuedMeasure X H}
     (hν : ∀ E x, ν E x = W (μ E (W.symm x))) {f : X → ℂ} (hf : Measurable f) (x : H) :
     x ∈ integralDomain ν f ↔ W.symm x ∈ integralDomain μ f := by
-  sorry
+  rw [mem_integralDomain, mem_integralDomain, acd_assoc W hν]
 
 /--
 With `ν(E) = W μ(E) W⁻¹` and `f` real and measurable, `∫ f dν = W (∫ f dμ) W⁻¹`.
@@ -1361,9 +1410,32 @@ theorem pmapIntegral_antiunitaryConj (W : H ≃ₗᵢ⋆[ℂ] H) {μ ν : Projec
     (hν : ∀ E x, ν E x = W (μ E (W.symm x))) {f : X → ℝ} (hf : Measurable f) :
     pmapIntegral ν (fun x => (f x : ℂ)) =
       antiunitaryConj W (pmapIntegral μ fun x => (f x : ℂ)) := by
-  sorry
+  have hf' : Measurable fun x => (f x : ℂ) := Complex.measurable_ofReal.comp hf
+  refine (eq_pmapIntegral_of_inner_self ν hf' _ (Submodule.ext fun x =>
+    (mem_integralDomain_antiunitaryConj W hν hf' x).symm) fun ψ => ?_).symm
+  have hψ : W.symm (ψ : H) ∈ integralDomain μ fun x => (f x : ℂ) := ψ.2
+  change ⟪(ψ : H), W (pmapIntegral μ (fun x => (f x : ℂ)) ⟨W.symm ψ, hψ⟩)⟫_ℂ = _
+  have hW : ∀ z, ⟪(ψ : H), W z⟫_ℂ = starRingEnd ℂ ⟪W.symm ψ, z⟫_ℂ := fun z => by
+    simpa using Modular.inner_map_map_of_conjLinearIsometry W.toLinearIsometry (W.symm ψ) z
+  rw [hW]
+  refine (congrArg (starRingEnd ℂ) (inner_self_pmapIntegral μ hf' ⟨W.symm ψ, hψ⟩)).trans ?_
+  rw [acd_assoc W hν, integral_complex_ofReal, Complex.conj_ofReal]
 
 end AntiunitaryPVM
+
+/-- The conjugated spectral measure `W μ^A(·) W⁻¹` integrates the identity to `W A W⁻¹`, so
+`W A W⁻¹` is self-adjoint with this spectral measure. -/
+private theorem acs_exists (W : H ≃ₗᵢ⋆[ℂ] H) {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
+    ∃ h : IsSelfAdjoint (antiunitaryConj W A), ∃ ν : ProjectionValuedMeasure ℝ H,
+      (∀ E x, ν E x = W (spectralMeasure hA E (W.symm x))) ∧ ν = spectralMeasure h := by
+  obtain ⟨ν, hν, -⟩ := exists_antiunitaryConj_pvm W (spectralMeasure hA)
+  have hid : pmapIntegral ν (fun x : ℝ => ((id x : ℝ) : ℂ)) = antiunitaryConj W A := by
+    rw [pmapIntegral_antiunitaryConj W hν measurable_id]
+    exact congrArg _ (pmapIntegral_spectralMeasure hA)
+  have h : IsSelfAdjoint (antiunitaryConj W A) :=
+    hid ▸ isSelfAdjoint_pmapIntegral_of_real ν (Complex.measurable_ofReal.comp measurable_id)
+      fun _ => Complex.ofReal_im _
+  exact ⟨h, ν, hν, eq_spectralMeasure_of_pmapIntegral h hid⟩
 
 /--
 For an antiunitary `W` and a self-adjoint `A`, `W A W⁻¹` is self-adjoint, with spectral measure
@@ -1375,7 +1447,8 @@ theorem spectralMeasure_antiunitaryConj (W : H ≃ₗᵢ⋆[ℂ] H) {A : H →�
     (hA : IsSelfAdjoint A) :
     ∃ h : IsSelfAdjoint (antiunitaryConj W A),
       ∀ E x, spectralMeasure h E x = W (spectralMeasure hA E (W.symm x)) := by
-  sorry
+  obtain ⟨h, ν, hν, hνeq⟩ := acs_exists W hA
+  exact ⟨h, fun E x => hνeq ▸ hν E x⟩
 
 /--
 For an antiunitary `W` and a self-adjoint `A`, `W f(A) W⁻¹ = f(W A W⁻¹)` for every real
@@ -1388,7 +1461,11 @@ theorem functionalCalculus_antiunitaryConj (W : H ≃ₗᵢ⋆[ℂ] H) {A : H �
     ∃ h : IsSelfAdjoint (antiunitaryConj W A), ∀ f : ℝ → ℝ, Measurable f →
       antiunitaryConj W (functionalCalculus hA fun x => (f x : ℂ)) =
         functionalCalculus h fun x => (f x : ℂ) := by
-  sorry
+  obtain ⟨h, ν, hν, hνeq⟩ := acs_exists W hA
+  refine ⟨h, fun f hf => ?_⟩
+  change _ = pmapIntegral (spectralMeasure h) _
+  rw [← hνeq, pmapIntegral_antiunitaryConj W hν hf]
+  rfl
 
 omit [CompleteSpace H] in
 /--
@@ -1400,7 +1477,27 @@ Blueprint: lmm:antiunitary-conjugate-positive
 theorem antiunitaryConj_positive_injective (W : H ≃ₗᵢ⋆[ℂ] H) {A : H →ₗ.[ℂ] H} :
     (IsPositive A → IsPositive (antiunitaryConj W A)) ∧
       (ker A = ⊥ → ker (antiunitaryConj W A) = ⊥) := by
-  sorry
+  have happ : ∀ x : (antiunitaryConj W A).domain,
+      antiunitaryConj W A x = W (A ⟨W.symm x, x.2⟩) := fun _ => rfl
+  have hinner : ∀ x y : H, ⟪W x, W y⟫_ℂ = starRingEnd ℂ ⟪x, y⟫_ℂ :=
+    Modular.inner_map_map_of_conjLinearIsometry W.toLinearIsometry
+  have hL : ∀ x z : H, ⟪x, W z⟫_ℂ = starRingEnd ℂ ⟪W.symm x, z⟫_ℂ := fun x z => by
+    rw [← hinner, W.apply_symm_apply]
+  have hR : ∀ x z : H, ⟪W z, x⟫_ℂ = starRingEnd ℂ ⟪z, W.symm x⟫_ℂ := fun x z => by
+    rw [← hinner, W.apply_symm_apply]
+  refine ⟨fun ⟨hs, hp⟩ => ⟨fun φ ψ => ?_, fun ψ => ?_⟩, fun hA => ?_⟩
+  · rw [happ, happ, hL, hR]
+    exact congrArg _ (hs ⟨_, φ.2⟩ ⟨_, ψ.2⟩)
+  · rw [happ, hL, Complex.conj_re]
+    exact hp ⟨_, ψ.2⟩
+  · rw [eq_bot_iff]
+    rintro _ ⟨x, hx, rfl⟩
+    have h0 : A ⟨W.symm x, x.2⟩ = 0 := by
+      have hx' : antiunitaryConj W A x = 0 := hx
+      exact W.map_eq_zero_iff.mp ((happ x).symm.trans hx')
+    have hmem : W.symm x ∈ ker A := ⟨⟨_, x.2⟩, h0, rfl⟩
+    rw [hA, Submodule.mem_bot, LinearIsometryEquiv.map_eq_zero_iff] at hmem
+    simpa using hmem
 
 end Unbounded
 end Spectral

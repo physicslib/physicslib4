@@ -1017,6 +1017,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $W$ be antiunitary and $\mu$ a projection-valued measure on $X$. Then $\nu(E) = W\mu(E)W^{-1}$ is a projection-valued measure with $\nu_\psi = \mu_{W^{-1}\psi}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:antiunitary-isometric}
     Each $\nu(E)$ is linear and bounded (Lemma~\ref{lmm:antiunitary-isometric}), and $\left< \phi, \nu(E)\psi \right> = \left< \mu(E)W^{-1}\psi, W^{-1}\phi \right>$ shows that it is a self-adjoint idempotent and that $\nu_\psi(E) = \mu_{W^{-1}\psi}(E)$; continuity of $W$ transfers countable additivity.
 \end{proof}
@@ -1029,6 +1030,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     With $\nu$ as in Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm}, $W^\nu_f = W(W^\mu_f)$ for every measurable $f$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:antiunitary-conjugate-pvm-is-pvm}
     $\int |f|^2 \, d\nu_\psi = \int |f|^2 \, d\mu_{W^{-1}\psi}$ by Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm}, so $\psi \in W^\nu_f$ if and only if $W^{-1}\psi \in W^\mu_f$.
 \end{proof}
@@ -1041,6 +1043,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     With $\nu$ as in Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm} and $f$ real and measurable, $\int f \, d\nu = W\big( \int f \, d\mu \big) W^{-1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:antiunitary-conjugate-pvm-domain, prpstn:hall-10.1, prpstn:hall-10.2}
     Both sides are linear with domain $W(W^\mu_f)$ (Lemma~\ref{lmm:antiunitary-conjugate-pvm-domain}). The quadratic form of the right side is $\overline{\int f \, d\mu_{W^{-1}\psi}} = \int f \, d\nu_\psi$, since $f$ is real; polarization and the uniqueness in Proposition~\ref{prpstn:hall-10.1} give equality.
 \end{proof}
@@ -1053,6 +1056,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $W$ be antiunitary and $A$ self-adjoint. Then $WAW^{-1}$ is self-adjoint with spectral measure $W\mu^A(\cdot)W^{-1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:antiunitary-conjugate-pvm-is-pvm, lmm:antiunitary-conjugate-pvm, prpstn:hall-10.3, thrm:hall-10.4}
     With $\nu$ as in Lemma~\ref{lmm:antiunitary-conjugate-pvm-is-pvm}, Lemma~\ref{lmm:antiunitary-conjugate-pvm} with $f(\lambda) = \lambda$ shows $WAW^{-1} = \int \lambda \, d\nu$, self-adjoint by Proposition~\ref{prpstn:hall-10.3}; the uniqueness in Theorem~\ref{thrm:hall-10.4} gives $\mu^{WAW^{-1}} = \nu$.
 \end{proof}
@@ -1065,6 +1069,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $W$ be antiunitary and $A$ self-adjoint. Then $Wf(A)W^{-1} = f(WAW^{-1})$ for every real measurable $f$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:antiunitary-conjugate-spectral-measure, lmm:antiunitary-conjugate-pvm}
     $f(WAW^{-1}) = \int f \, d\nu$ by Lemma~\ref{lmm:antiunitary-conjugate-spectral-measure}, which is $Wf(A)W^{-1}$ by Lemma~\ref{lmm:antiunitary-conjugate-pvm}.
 \end{proof}
@@ -1077,6 +1082,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $W$ be antiunitary and $A$ an operator. If $A$ is positive, or injective, so is $WAW^{-1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:conjugate-linear-isometry-inner}
     By Lemma~\ref{lmm:conjugate-linear-isometry-inner}, $\left< \psi, WAW^{-1}\psi \right>$ is the complex conjugate of $\left< W^{-1}\psi, AW^{-1}\psi \right> \ge 0$. Injectivity holds because $W$ and $W^{-1}$ are injective.
 \end{proof}
