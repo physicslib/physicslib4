@@ -1105,6 +1105,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     $\Delta$ is positive, self-adjoint, densely defined and injective. Moreover $\text{Dom}(\Delta^{1/2}) = \text{Dom}(S)$ and $\|\Delta^{1/2}\psi\| = \|S\psi\|$ for $\psi \in \text{Dom}(S)$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{crllr:linearized-tomita-properties, thrm:von-neumann-adjoint-product, thrm:absolute-value-domain, lmm:von-neumann-form, lmm:reference-conjugation-properties}
     $S'$ is closed and densely defined (Corollary~\ref{crllr:linearized-tomita-properties}), so Theorems~\ref{thrm:von-neumann-adjoint-product} and~\ref{thrm:absolute-value-domain} apply, with $\|S'\psi\| = \|CS\psi\| = \|S\psi\|$ and $\text{Dom}(S') = \text{Dom}(S)$. If $\Delta\psi = 0$, then $\|S'\psi\|^2 = \left< \psi, \Delta\psi \right> = 0$ (Lemma~\ref{lmm:von-neumann-form}), so $\psi = 0$ by injectivity of $S'$.
 \end{proof}
@@ -1117,6 +1118,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     $\psi \in \text{Dom}(\Delta)$ with $\Delta\psi = \chi$ if and only if $\psi \in \text{Dom}(S)$ and $\left< S\phi, S\psi \right> = \left< \chi, \phi \right>$ for every $\phi \in \text{Dom}(S)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:characterizing-adjoint-domain-membership, lmm:reference-conjugation-properties}
     By Lemma~\ref{lmm:characterizing-adjoint-domain-membership}, $S'\psi \in \text{Dom}((S')^*)$ with $(S')^*S'\psi = \chi$ if and only if $\left< S'\psi, S'\phi \right> = \left< \chi, \phi \right>$ for all $\phi \in \text{Dom}(S')$, and $\left< S'\psi, S'\phi \right> = \left< CS\psi, CS\phi \right> = \left< S\phi, S\psi \right>$ by Lemma~\ref{lmm:reference-conjugation-properties}.
 \end{proof}
@@ -1137,6 +1139,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     $J$ is antiunitary and $S = J\Delta^{1/2}$, including $\text{Dom}(S) = \text{Dom}(\Delta^{1/2})$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:antiunitary-composition, thrm:polar-decomposition, lmm:reference-conjugation-properties}
     $J$ is antiunitary by Lemma~\ref{lmm:antiunitary-composition}. Since $C(C\phi) = \phi$ for all $\phi$, $S = CS' = CV\Delta^{1/2} = J\Delta^{1/2}$ by Theorem~\ref{thrm:polar-decomposition}.
 \end{proof}
@@ -1149,6 +1152,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     $J$ is the only continuous map $\mathbf{H} \to \mathbf{H}$ with $J\Delta^{1/2}\psi = S\psi$ for all $\psi \in \text{Dom}(\Delta^{1/2})$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-conjugation-polar, lmm:absolute-value-injective-dense-range, crllr:linearized-tomita-properties}
     Theorem~\ref{thrm:modular-conjugation-polar} gives the identity, and two continuous maps with this property agree on the dense set $\text{Range}(\Delta^{1/2}) = \text{Range}(|S'|)$ (Lemma~\ref{lmm:absolute-value-injective-dense-range}).
 \end{proof}
@@ -1161,6 +1165,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     The operators $\Delta$, $\Delta^{1/2}$ and $J$ are the same for every choice of the reference conjugation $C$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-operator-independent-of-c, lmm:modular-operator-intrinsic, lmm:modular-conjugation-intrinsic}
     $S$ and $\text{Dom}(S)$ do not depend on $C$ (Lemma~\ref{lmm:tomita-operator-independent-of-c}), so neither does $\Delta$ by Lemma~\ref{lmm:modular-operator-intrinsic}, nor $\Delta^{1/2} = s(\Delta)$, nor $J$ by Lemma~\ref{lmm:modular-conjugation-intrinsic}.
 \end{proof}
@@ -1173,6 +1178,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     $S$ is injective and $S^{-1} = S$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:tomita-operator-involution, lmm:tomita-graph-flip}
     $S$ is injective by Theorem~\ref{thrm:tomita-operator-involution}, and the flip of $\Gamma(S)$ is $\Gamma(S)$ by Lemma~\ref{lmm:tomita-graph-flip} (applied in both directions).
 \end{proof}
@@ -1185,6 +1191,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $P = J\Delta^{-1/2}J^{-1}$. Then $S = J^{-1}P$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-inverse-is-self, thrm:modular-conjugation-polar, lmm:inverse-of-product-with-bijection, crllr:inverse-square-root, thrm:modular-operator-properties}
     By Lemma~\ref{lmm:tomita-inverse-is-self}, Theorem~\ref{thrm:modular-conjugation-polar} and Lemma~\ref{lmm:inverse-of-product-with-bijection}, $S = S^{-1} = (J\Delta^{1/2})^{-1} = (\Delta^{1/2})^{-1}J^{-1}$, which is $\Delta^{-1/2}J^{-1} = J^{-1}P$ by Corollary~\ref{crllr:inverse-square-root} for the positive, self-adjoint, injective $\Delta$ (Theorem~\ref{thrm:modular-operator-properties}).
 \end{proof}
@@ -1197,6 +1204,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     With $P = J\Delta^{-1/2}J^{-1}$, $P$ is positive and self-adjoint, $CJ^{-1}$ is unitary, and $S' = (CJ^{-1})P$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-inverse-as-product, lmm:inverse-square-root-positive, lmm:antiunitary-conjugate-spectral-measure, lmm:antiunitary-conjugate-positive, lmm:antiunitary-isometric, lmm:antiunitary-composition, lmm:reference-conjugation-properties}
     $S' = CS = (CJ^{-1})P$ by Lemma~\ref{lmm:tomita-inverse-as-product} and $C(C\phi) = \phi$. $P$ is positive and self-adjoint by Lemmas~\ref{lmm:inverse-square-root-positive}, \ref{lmm:antiunitary-conjugate-spectral-measure} and~\ref{lmm:antiunitary-conjugate-positive}, and $CJ^{-1}$ is unitary by Lemmas~\ref{lmm:antiunitary-isometric} and~\ref{lmm:antiunitary-composition}.
 \end{proof}
@@ -1209,6 +1217,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     $J(J\phi) = \phi$ for every $\phi \in \mathbf{H}$, and $J\Delta^{1/2}J = \Delta^{-1/2}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-inverse-polar, thrm:polar-decomposition-unique, crllr:linearized-tomita-properties, lmm:reference-conjugation-properties}
     By Lemma~\ref{lmm:tomita-inverse-polar} and Theorem~\ref{thrm:polar-decomposition-unique}, applied to $S'$ (Corollary~\ref{crllr:linearized-tomita-properties}), $CJ^{-1} = V = C^{-1}J = CJ$ and $J\Delta^{-1/2}J^{-1} = |S'| = \Delta^{1/2}$. The first gives $J^{-1} = J$, that is $J(J\phi) = \phi$ for every $\phi$; conjugating the second by $J$ gives $J\Delta^{1/2}J = \Delta^{-1/2}$.
 \end{proof}
@@ -1221,6 +1230,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     $J\Delta J = \Delta^{-1}$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-conjugation-involution, crllr:antiunitary-conjugate-functional-calculus, lmm:square-of-square-root, lmm:square-of-inverse-square-root, thrm:modular-operator-properties, thrm:hall-10.4}
     $\Delta = q(\Delta^{1/2})$ and $\Delta^{-1} = q(\Delta^{-1/2})$ by Lemmas~\ref{lmm:square-of-square-root} and~\ref{lmm:square-of-inverse-square-root} (Theorem~\ref{thrm:modular-operator-properties}). With $J = J^{-1}$, Corollary~\ref{crllr:antiunitary-conjugate-functional-calculus} and Theorem~\ref{thrm:modular-conjugation-involution} give $J\Delta J = q(J\Delta^{1/2}J) = q(\Delta^{-1/2}) = \Delta^{-1}$.
 \end{proof}
