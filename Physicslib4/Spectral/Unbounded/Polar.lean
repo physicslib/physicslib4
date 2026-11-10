@@ -789,13 +789,13 @@ theorem absoluteValue_injective_denseRange {T : H →ₗ.[ℂ] H} (hT : HasDense
     LinearPMap.isSelfAdjoint_def.mp hsa, hker]
 
 /--
-For a closed, densely defined, injective `T`, the assignment
+For a closed, densely defined `T`, the assignment
 `V₀(|T|ψ) = Tψ` (`ψ ∈ Dom T`) is a well-defined linear isometry from `Range |T|` to `H`.
 
 Blueprint: lmm:polar-isometry-on-range
 -/
 theorem exists_polarIsometry_on_range {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
-    (hcl : T.IsClosed) (hinj : ker T = ⊥) :
+    (hcl : T.IsClosed) :
     ∃ V₀ : range (absoluteValue T hT hcl) →ₗᵢ[ℂ] H,
       ∀ (ψ : H) (h₁ : ψ ∈ T.domain) (h₂ : ψ ∈ (absoluteValue T hT hcl).domain),
         V₀ ⟨absoluteValue T hT hcl ⟨ψ, h₂⟩,
@@ -839,7 +839,7 @@ theorem existsUnique_polarIsometry {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T
         V (absoluteValue T hT hcl ⟨ψ, h₂⟩) = T ⟨ψ, h₁⟩) → ∀ x, ‖V x‖ = ‖x‖ := by
   set A := absoluteValue T hT hcl
   obtain ⟨-, -, hd, -⟩ := absoluteValue_domain hT hcl
-  obtain ⟨V₀, hV₀⟩ := exists_polarIsometry_on_range hT hcl hinj
+  obtain ⟨V₀, hV₀⟩ := exists_polarIsometry_on_range hT hcl
   have hden := (absoluteValue_injective_denseRange hT hcl hinj).2
   have hdr : DenseRange (range A).subtypeL := hden.denseRange_val
   have hui : IsUniformInducing (range A).subtypeL :=
@@ -996,6 +996,7 @@ The inverse of an injective operator is Mathlib's `LinearPMap.inverse`, with gra
 `Γ(A)` and domain `Range A`.
 -/
 
+omit [CompleteSpace H] in
 /--
 For an injective `A` and a unitary `U`, `U A` is injective and `(U A)⁻¹ = A⁻¹ U⁻¹`, where `U⁻¹`
 is regarded as an operator with domain `H`.
@@ -1391,13 +1392,13 @@ private theorem acd_assoc (W : H ≃ₗᵢ⋆[ℂ] H) {μ ν : ProjectionValuedM
     LinearIsometryEquiv.norm_map]
 
 /--
-With `ν(E) = W μ(E) W⁻¹`, the domains satisfy `W^ν_f = W(W^μ_f)` for measurable `f`:
+With `ν(E) = W μ(E) W⁻¹`, the domains satisfy `W^ν_f = W(W^μ_f)`:
 `x ∈ W^ν_f ↔ W⁻¹x ∈ W^μ_f`.
 
 Blueprint: lmm:antiunitary-conjugate-pvm-domain
 -/
 theorem mem_integralDomain_antiunitaryConj (W : H ≃ₗᵢ⋆[ℂ] H) {μ ν : ProjectionValuedMeasure X H}
-    (hν : ∀ E x, ν E x = W (μ E (W.symm x))) {f : X → ℂ} (hf : Measurable f) (x : H) :
+    (hν : ∀ E x, ν E x = W (μ E (W.symm x))) (f : X → ℂ) (x : H) :
     x ∈ integralDomain ν f ↔ W.symm x ∈ integralDomain μ f := by
   rw [mem_integralDomain, mem_integralDomain, acd_assoc W hν]
 
@@ -1412,7 +1413,7 @@ theorem pmapIntegral_antiunitaryConj (W : H ≃ₗᵢ⋆[ℂ] H) {μ ν : Projec
       antiunitaryConj W (pmapIntegral μ fun x => (f x : ℂ)) := by
   have hf' : Measurable fun x => (f x : ℂ) := Complex.measurable_ofReal.comp hf
   refine (eq_pmapIntegral_of_inner_self ν hf' _ (Submodule.ext fun x =>
-    (mem_integralDomain_antiunitaryConj W hν hf' x).symm) fun ψ => ?_).symm
+    (mem_integralDomain_antiunitaryConj W hν _ x).symm) fun ψ => ?_).symm
   have hψ : W.symm (ψ : H) ∈ integralDomain μ fun x => (f x : ℂ) := ψ.2
   change ⟪(ψ : H), W (pmapIntegral μ (fun x => (f x : ℂ)) ⟨W.symm ψ, hψ⟩)⟫_ℂ = _
   have hW : ∀ z, ⟪(ψ : H), W z⟫_ℂ = starRingEnd ℂ ⟪W.symm ψ, z⟫_ℂ := fun z => by
