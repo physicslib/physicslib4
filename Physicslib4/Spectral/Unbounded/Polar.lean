@@ -65,8 +65,9 @@ The domain of the product `B A` is `{x ∈ Dom A | Ax ∈ Dom B}`, and on it `(B
 Blueprint: def:product-of-unbounded-operators
 -/
 theorem mem_domain_pmapMul_iff (B A : H →ₗ.[ℂ] H) (x : H) :
-    x ∈ (pmapMul B A).domain ↔ ∃ hx : x ∈ A.domain, A ⟨x, hx⟩ ∈ B.domain := by
-  sorry
+    x ∈ (pmapMul B A).domain ↔ ∃ hx : x ∈ A.domain, A ⟨x, hx⟩ ∈ B.domain :=
+  ⟨fun ⟨⟨q, hq, hqx⟩, hx⟩ => ⟨hx, by subst hqx; exact hq⟩,
+    fun ⟨hx, h⟩ => ⟨⟨⟨x, hx⟩, h, rfl⟩, hx⟩⟩
 
 omit [CompleteSpace H] in
 /--
@@ -77,7 +78,8 @@ Blueprint: def:product-of-unbounded-operators
 theorem pmapMul_apply (B A : H →ₗ.[ℂ] H) (x : (pmapMul B A).domain)
     (hx : A ⟨x, pmapMul_domain_le B A x.2⟩ ∈ B.domain) :
     pmapMul B A x = B ⟨A ⟨x, pmapMul_domain_le B A x.2⟩, hx⟩ := by
-  sorry
+  change B ⟨A.domRestrict _ x, _⟩ = _
+  congr 2
 
 omit [CompleteSpace H] in
 /--
@@ -88,7 +90,28 @@ Blueprint: def:product-of-unbounded-operators
 -/
 theorem mem_graph_pmapMul_iff (B A : H →ₗ.[ℂ] H) (x z : H) :
     (x, z) ∈ (pmapMul B A).graph ↔ ∃ w, (x, w) ∈ A.graph ∧ (w, z) ∈ B.graph := by
-  sorry
+  constructor
+  · intro h
+    obtain ⟨y, hy1, hy2⟩ := LinearPMap.mem_graph_iff _ |>.mp h
+    obtain ⟨q, hq, hyq⟩ := y.2.1
+    refine ⟨A q, ?_, ?_⟩
+    · exact (LinearPMap.mem_graph_iff _).mpr ⟨q, hyq.trans hy1, rfl⟩
+    · refine (LinearPMap.mem_graph_iff _).mpr ⟨⟨A q, hq⟩, rfl, ?_⟩
+      rw [← hy2]
+      change _ = B ⟨A.domRestrict _ y, _⟩
+      congr 2
+      exact (A.domRestrict_apply (y := q) hyq.symm).symm
+  · rintro ⟨w, hxw, hwz⟩
+    obtain ⟨q, hq1, hq2⟩ := (LinearPMap.mem_graph_iff _).mp hxw
+    obtain ⟨r, hr1, hr2⟩ := (LinearPMap.mem_graph_iff _).mp hwz
+    simp only at hq1 hq2 hr1 hr2
+    have hd : (q : H) ∈ (pmapMul B A).domain :=
+      ⟨⟨q, show A q ∈ B.domain from hq2 ▸ hr1 ▸ r.2, rfl⟩, q.2⟩
+    refine (LinearPMap.mem_graph_iff _).mpr ⟨⟨q, hd⟩, hq1, ?_⟩
+    rw [← hr2]
+    change B ⟨A.domRestrict _ ⟨q, hd⟩, _⟩ = _
+    congr 2
+    exact (A.domRestrict_apply (x := ⟨q, hd⟩) (y := q) rfl).trans (hq2.trans hr1.symm)
 
 /--
 The operator `T†T`: the product of `T†` with `T`, with domain `{x ∈ Dom T | Tx ∈ Dom T†}` and
@@ -99,6 +122,110 @@ Blueprint: def:adjoint-product-operator
 noncomputable def adjointMulSelf (T : H →ₗ.[ℂ] H) : H →ₗ.[ℂ] H :=
   pmapMul (T†) T
 
+/-- Key existence lemma: `1 + T†T` maps onto `H`. -/
+private theorem vN_key {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (hcl : T.IsClosed) (y : H) :
+    ∃ x w z : H, (x, w) ∈ T.graph ∧ (w, z) ∈ T†.graph ∧ x + z = y := by
+  let e : WithLp 2 (H × H) →ₗ[ℂ] H × H := (WithLp.linearEquiv 2 ℂ (H × H)).toLinearMap
+  let G : Submodule ℂ (WithLp 2 (H × H)) := T.graph.comap e
+  have hG : IsClosed (G : Set (WithLp 2 (H × H))) :=
+    hcl.preimage (WithLp.prod_continuous_ofLp 2 H H)
+  obtain ⟨⟨g, k⟩, ⟨hg, hk, hsum⟩, -⟩ := existsUnique_add_mem_orthogonal hG (WithLp.toLp 2 (y, 0))
+  have hg' : ((WithLp.ofLp g).1, (WithLp.ofLp g).2) ∈ T.graph := hg
+  have hk' : ∀ u v, (u, v) ∈ T.graph →
+      ⟪u, (WithLp.ofLp k).1⟫_ℂ + ⟪v, (WithLp.ofLp k).2⟫_ℂ = 0 := by
+    intro u v huv
+    have := (Submodule.mem_orthogonal G k).mp hk (WithLp.toLp 2 (u, v)) huv
+    simpa [WithLp.prod_inner_apply] using this
+  have hadj : ((WithLp.ofLp k).2, -(WithLp.ofLp k).1) ∈ T†.graph := by
+    rw [LinearPMap.adjoint_graph_eq_graph_adjoint hT, Submodule.mem_adjoint_iff]
+    intro a b hab
+    have := hk' a b hab
+    simp only [inner_neg_right, sub_neg_eq_add]
+    rw [add_comm]; exact this
+  have h1 : y = (WithLp.ofLp g).1 + (WithLp.ofLp k).1 := by
+    have := congrArg (fun p => (WithLp.ofLp p).1) hsum; simpa using this
+  have h2 : (0 : H) = (WithLp.ofLp g).2 + (WithLp.ofLp k).2 := by
+    have := congrArg (fun p => (WithLp.ofLp p).2) hsum; simpa using this
+  refine ⟨(WithLp.ofLp g).1, (WithLp.ofLp g).2, (WithLp.ofLp k).1, hg', ?_, h1.symm⟩
+  have hc : (WithLp.ofLp g).2 = -(WithLp.ofLp k).2 := eq_neg_of_add_eq_zero_left h2.symm
+  rw [hc]
+  convert T†.graph.neg_mem hadj using 1
+  simp
+
+/-- `⟪u, T†w⟫ = ⟪Tu, w⟫` in graph form. -/
+private theorem vN_inner {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) {w z u v : H}
+    (hwz : (w, z) ∈ T†.graph) (huv : (u, v) ∈ T.graph) : ⟪u, z⟫_ℂ = ⟪v, w⟫_ℂ := by
+  rw [LinearPMap.adjoint_graph_eq_graph_adjoint hT, Submodule.mem_adjoint_iff] at hwz
+  exact (sub_eq_zero.mp (hwz u v huv)).symm
+
+/-- von Neumann: for closed densely defined `T`, the operator `S = T†T` (characterised by its
+graph) is self-adjoint, positive, and densely defined. -/
+private theorem vN_main {T S : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (hcl : T.IsClosed)
+    (hS : ∀ x z : H, (x, z) ∈ S.graph ↔ ∃ w, (x, w) ∈ T.graph ∧ (w, z) ∈ T†.graph) :
+    IsSelfAdjoint S ∧ HasDenseDomain S ∧ IsPositive S ∧ ker (subSmul (S†) (-1)) = ⊥ := by
+  -- for `x ∈ Dom S` and `(u, v) ∈ Γ(T)`: `⟪u, S x⟫ = ⟪v, T x⟫`
+  have hinner : ∀ (x : S.domain) u v, (u, v) ∈ T.graph →
+      ∃ w, (x.1, w) ∈ T.graph ∧ ⟪u, S x⟫_ℂ = ⟪v, w⟫_ℂ := by
+    intro x u v huv
+    obtain ⟨w, hxw, hwz⟩ := (hS _ _).mp (S.mem_graph x)
+    exact ⟨w, hxw, vN_inner hT hwz huv⟩
+  have hsym : IsSymmetric S := by
+    intro x x'
+    obtain ⟨w, hxw, -⟩ := (hS _ _).mp (S.mem_graph x)
+    obtain ⟨w', hxw', e1⟩ := hinner x' x w hxw
+    obtain ⟨w'', hxw'', e2⟩ := hinner x x' w' hxw'
+    have : w'' = w := T.mem_graph_snd_inj hxw'' hxw rfl
+    subst this
+    rw [e1, ← inner_conj_symm (S x) (x' : H), e2, inner_conj_symm]
+  have hpos : ∀ x : S.domain, ∃ w, (x.1, w) ∈ T.graph ∧ ⟪x.1, S x⟫_ℂ = ⟪w, w⟫_ℂ := by
+    intro x
+    obtain ⟨w, hxw, -⟩ := (hS _ _).mp (S.mem_graph x)
+    obtain ⟨w', hxw', e⟩ := hinner x x w hxw
+    exact ⟨w, hxw, (T.mem_graph_snd_inj hxw' hxw rfl) ▸ e⟩
+  have hdense : HasDenseDomain S := by
+    refine dense_iff_orthogonal_eq_bot.mpr (Submodule.eq_bot_iff _ |>.mpr fun y hy => ?_)
+    obtain ⟨x, w, z, hxw, hwz, rfl⟩ := vN_key hT hcl y
+    have hxS : (x, z) ∈ S.graph := (hS _ _).mpr ⟨w, hxw, hwz⟩
+    obtain ⟨xs, hxs1, hxs2⟩ := S.mem_graph_iff.mp hxS
+    simp only at hxs1 hxs2
+    obtain ⟨w', hxw', e⟩ := hpos xs
+    have hw : w' = w := T.mem_graph_snd_inj hxw' hxw hxs1
+    rw [hxs1, hxs2, hw] at e
+    have h0 : ⟪x, x + z⟫_ℂ = 0 :=
+      inner_eq_zero_symm.mp ((Submodule.mem_orthogonal' _ _).mp hy x (hxs1 ▸ xs.2))
+    rw [inner_add_right, e] at h0
+    have hre := congrArg Complex.re h0
+    simp only [← RCLike.re_to_complex, map_add, map_zero, inner_self_eq_norm_sq] at hre
+    have hx : x = 0 := by
+      have := sq_nonneg ‖w‖; have := sq_nonneg ‖x‖
+      exact norm_eq_zero.mp (by nlinarith)
+    subst hx
+    have hw0 : w = 0 := T.graph_fst_eq_zero_snd hxw rfl
+    subst hw0
+    simpa using T†.graph_fst_eq_zero_snd hwz rfl
+  have hr : range (subSmul S (-1)) = ⊤ := by
+    refine Submodule.eq_top_iff'.mpr fun y => ?_
+    obtain ⟨x, w, z, hxw, hwz, rfl⟩ := vN_key hT hcl y
+    obtain ⟨xs, hxs1, hxs2⟩ := S.mem_graph_iff.mp ((hS _ _).mpr ⟨w, hxw, hwz⟩)
+    refine mem_range.mpr ⟨⟨xs, xs.2⟩, ?_⟩
+    change S xs - (-1 : ℂ) • (xs : H) = _
+    simp only at hxs1 hxs2
+    rw [hxs1, hxs2]; simp [add_comm]
+  have hk : ker (subSmul (S†) (-1)) = ⊥ := by
+    have := orthogonal_range_subSmul hdense (-1)
+    rw [hr, Submodule.top_orthogonal_eq_bot] at this
+    simpa using this.symm
+  have hle : S ≤ S† := (isSymmetric_iff_le_adjoint hdense).mp hsym
+  refine ⟨adjoint_eq_of_range_eq_top hle hr hk, hdense, ⟨hsym, fun x => ?_⟩, hk⟩
+  obtain ⟨w, -, e⟩ := hpos x
+  rw [e]
+  exact inner_self_nonneg (𝕜 := ℂ)
+
+/-- The graph characterisation of `T†T`. -/
+private theorem vN_graph (T : H →ₗ.[ℂ] H) (x z : H) :
+    (x, z) ∈ (adjointMulSelf T).graph ↔ ∃ w, (x, w) ∈ T.graph ∧ (w, z) ∈ T†.graph :=
+  mem_graph_pmapMul_iff (T†) T x z
+
 /--
 For a closed, densely defined `T` and every `y ∈ H` there is `x ∈ Dom(T†T)` with
 `x + T†T x = y`.
@@ -108,7 +235,10 @@ Blueprint: lmm:von-neumann-solvability
 theorem exists_add_adjointMulSelf_eq {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (hcl : T.IsClosed) (y : H) :
     ∃ x : (adjointMulSelf T).domain, (x : H) + adjointMulSelf T x = y := by
-  sorry
+  obtain ⟨x, w, z, hxw, hwz, rfl⟩ := vN_key hT hcl y
+  obtain ⟨xs, hxs1, hxs2⟩ :=
+    (adjointMulSelf T).mem_graph_iff.mp ((vN_graph T _ _).mpr ⟨w, hxw, hwz⟩)
+  exact ⟨xs, by simp only at hxs1 hxs2; rw [hxs1, hxs2]⟩
 
 /--
 For a densely defined `T`, `x ∈ Dom(T†T)` and `x' ∈ Dom T`, `⟪x', T†T x⟫ = ⟪T x', T x⟫`; in
@@ -121,7 +251,14 @@ theorem inner_adjointMulSelf {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (∀ x' : T.domain, ⟪(x' : H), adjointMulSelf T x⟫_ℂ =
         ⟪T x', T ⟨x, pmapMul_domain_le _ _ x.2⟩⟫_ℂ) ∧
       ⟪(x : H), adjointMulSelf T x⟫_ℂ = (‖T ⟨x, pmapMul_domain_le _ _ x.2⟩‖ ^ 2 : ℂ) := by
-  sorry
+  obtain ⟨w, hxw, hwz⟩ := (vN_graph T _ _).mp ((adjointMulSelf T).mem_graph x)
+  have hw : w = T ⟨x, pmapMul_domain_le _ _ x.2⟩ :=
+    T.mem_graph_snd_inj hxw (T.mem_graph ⟨x, pmapMul_domain_le _ _ x.2⟩) rfl
+  subst hw
+  have h1 : ∀ x' : T.domain, ⟪(x' : H), adjointMulSelf T x⟫_ℂ =
+      ⟪T x', T ⟨x, pmapMul_domain_le _ _ x.2⟩⟫_ℂ := fun x' => vN_inner hT hwz (T.mem_graph x')
+  refine ⟨h1, ?_⟩
+  exact (h1 ⟨x, pmapMul_domain_le _ _ x.2⟩).trans (inner_self_eq_norm_sq_to_K _)
 
 /--
 For a closed, densely defined `T`, the domain of `T†T` is dense.
@@ -129,8 +266,8 @@ For a closed, densely defined `T`, the domain of `T†T` is dense.
 Blueprint: lmm:von-neumann-dense-domain
 -/
 theorem hasDenseDomain_adjointMulSelf {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
-    (hcl : T.IsClosed) : HasDenseDomain (adjointMulSelf T) := by
-  sorry
+    (hcl : T.IsClosed) : HasDenseDomain (adjointMulSelf T) :=
+  (vN_main hT hcl (vN_graph T)).2.1
 
 /--
 For a closed, densely defined `T`, the operator `D = T†T` is symmetric, `D†` extends `D`, and
@@ -142,7 +279,8 @@ theorem adjointMulSelf_symmetric_positive {T : H →ₗ.[ℂ] H} (hT : HasDenseD
     (hcl : T.IsClosed) :
     IsSymmetric (adjointMulSelf T) ∧ adjointMulSelf T ≤ (adjointMulSelf T)† ∧
       IsPositive (adjointMulSelf T) := by
-  sorry
+  obtain ⟨-, hd, hp, -⟩ := vN_main hT hcl (vN_graph T)
+  exact ⟨hp.1, (isSymmetric_iff_le_adjoint hd).mp hp.1, hp⟩
 
 /--
 For a closed, densely defined `T` and `D = T†T`, the operator `D† + 1` is injective:
@@ -151,8 +289,8 @@ For a closed, densely defined `T` and `D = T†T`, the operator `D† + 1` is in
 Blueprint: lmm:von-neumann-kernel
 -/
 theorem ker_subSmul_adjoint_adjointMulSelf {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
-    (hcl : T.IsClosed) : ker (subSmul ((adjointMulSelf T)†) (-1)) = ⊥ := by
-  sorry
+    (hcl : T.IsClosed) : ker (subSmul ((adjointMulSelf T)†) (-1)) = ⊥ :=
+  (vN_main hT hcl (vN_graph T)).2.2.2
 
 /--
 **von Neumann's theorem.** For a closed, densely defined `T`, the operator `T†T` is
@@ -164,7 +302,8 @@ theorem isSelfAdjoint_adjointMulSelf {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain
     (hcl : T.IsClosed) :
     IsSelfAdjoint (adjointMulSelf T) ∧ HasDenseDomain (adjointMulSelf T) ∧
       IsPositive (adjointMulSelf T) := by
-  sorry
+  obtain ⟨h1, h2, h3, -⟩ := vN_main hT hcl (vN_graph T)
+  exact ⟨h1, h2, h3⟩
 
 /--
 For a closed, densely defined `T`, the domain of `T†T` is a core for `T`: the closure of the
@@ -174,7 +313,51 @@ Blueprint: lmm:core-of-adjoint-product
 -/
 theorem hasCore_domain_adjointMulSelf {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (hcl : T.IsClosed) : T.HasCore (adjointMulSelf T).domain := by
-  sorry
+  have hle : ∀ R : H →ₗ.[ℂ] H, R ≤ T → R.graph.topologicalClosure ≤ T.graph := fun R h =>
+    Submodule.topologicalClosure_minimal _ (LinearPMap.le_graph_of_le h) hcl
+  refine ⟨pmapMul_domain_le _ _, ?_⟩
+  set R := T.domRestrict (adjointMulSelf T).domain
+  have hR : R.IsClosable := hcl.isClosable.leIsClosable LinearPMap.domRestrict_le
+  refine LinearPMap.eq_of_eq_graph ?_
+  rw [← hR.graph_closure_eq_closure_graph]
+  refine le_antisymm (hle R LinearPMap.domRestrict_le) fun p hp => ?_
+  let e : WithLp 2 (H × H) →ₗ[ℂ] H × H := (WithLp.linearEquiv 2 ℂ (H × H)).toLinearMap
+  let G : Submodule ℂ (WithLp 2 (H × H)) := R.graph.topologicalClosure.comap e
+  have hG : IsClosed (G : Set (WithLp 2 (H × H))) :=
+    R.graph.isClosed_topologicalClosure.preimage (WithLp.prod_continuous_ofLp 2 H H)
+  obtain ⟨⟨g, k⟩, ⟨hg, hk, hsum⟩, -⟩ := existsUnique_add_mem_orthogonal hG (WithLp.toLp 2 p)
+  have hg' : WithLp.ofLp g ∈ R.graph.topologicalClosure := hg
+  have hkp : WithLp.ofLp k = p - WithLp.ofLp g := by
+    have hk2 : k = WithLp.toLp 2 p - g := by rw [hsum]; simp
+    rw [hk2]; rfl
+  have hkT : ((WithLp.ofLp k).1, (WithLp.ofLp k).2) ∈ T.graph := by
+    rw [Prod.mk.eta, hkp]
+    exact T.graph.sub_mem hp (hle R LinearPMap.domRestrict_le hg')
+  have hk' : ∀ u v, (u, v) ∈ R.graph →
+      ⟪u, (WithLp.ofLp k).1⟫_ℂ + ⟪v, (WithLp.ofLp k).2⟫_ℂ = 0 := by
+    intro u v huv
+    have := (Submodule.mem_orthogonal G k).mp hk (WithLp.toLp 2 (u, v))
+      (R.graph.le_topologicalClosure huv)
+    simpa [WithLp.prod_inner_apply] using this
+  obtain ⟨ka, hka1, hka2⟩ := T.mem_graph_iff.mp hkT
+  simp only at hka1 hka2
+  obtain ⟨x, hx⟩ := exists_add_adjointMulSelf_eq hT hcl (ka : H)
+  have hxR : ((x : H), T ⟨x, pmapMul_domain_le _ _ x.2⟩) ∈ R.graph :=
+    R.mem_graph_iff.mpr ⟨⟨x, x.2, pmapMul_domain_le _ _ x.2⟩, rfl, T.domRestrict_apply rfl⟩
+  have e1 := hk' _ _ hxR
+  rw [← hka1, ← hka2] at e1
+  have e2 := (inner_adjointMulSelf hT x).1 ka
+  have h0 : ⟪(ka : H), (ka : H)⟫_ℂ = 0 := by
+    calc ⟪(ka : H), (ka : H)⟫_ℂ = ⟪(ka : H), (x : H) + adjointMulSelf T x⟫_ℂ := by rw [hx]
+      _ = (starRingEnd ℂ) (⟪(x : H), (ka : H)⟫_ℂ + ⟪T ⟨x, pmapMul_domain_le _ _ x.2⟩, T ka⟫_ℂ) := by
+        rw [inner_add_right, e2, map_add, inner_conj_symm, inner_conj_symm]
+      _ = 0 := by rw [e1, map_zero]
+  have hka0 : ka = 0 := Subtype.ext (inner_self_eq_zero.mp h0)
+  have ha : (WithLp.ofLp k).1 = 0 := by rw [← hka1, hka0]; rfl
+  have hb : (WithLp.ofLp k).2 = 0 := by rw [← hka2, hka0]; simp
+  have hpg : p = WithLp.ofLp g := by
+    rw [← sub_eq_zero, ← hkp]; exact Prod.ext ha hb
+  exact hpg ▸ hg'
 
 /-!
 ### Pushforward of a projection-valued measure

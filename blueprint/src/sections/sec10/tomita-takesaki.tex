@@ -389,6 +389,7 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
     For every $y \in \mathbf{H}$ there is $x \in \text{Dom}(T^*T)$ with $x + T^*Tx = y$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:product-hilbert-space, prpstn:hall-a.49, lmm:characterizing-adjoint-domain-membership}
     $\Gamma(T)$ is a closed subspace of $\mathbf{H} \times \mathbf{H}$ (\ref{def:product-hilbert-space}), so by Proposition~\ref{prpstn:hall-a.49}, $(y, 0) = (x, Tx) + (u, v)$ with $x \in \text{Dom}(T)$ and $(u, v) \perp \Gamma(T)$. Orthogonality says $\left< v, Tx' \right> = \left< -u, x' \right>$ for all $x' \in \text{Dom}(T)$, so $v \in \text{Dom}(T^*)$ with $T^*v = -u$ (Lemma~\ref{lmm:characterizing-adjoint-domain-membership}). The components give $Tx = -v \in \text{Dom}(T^*)$, hence $T^*Tx = u$, and $y = x + u = x + T^*Tx$.
 \end{proof}
@@ -401,6 +402,7 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
     For $x \in \text{Dom}(T^*T)$ and $x' \in \text{Dom}(T)$, $\left< x', T^*Tx \right> = \left< Tx', Tx \right>$. In particular $\left< x, T^*Tx \right> = \|Tx\|^2 \ge 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:characterizing-adjoint-domain-membership}
     The defining relation of the adjoint for $\phi = Tx \in \text{Dom}(T^*)$ and $\psi = x'$ reads $\left< Tx, Tx' \right> = \left< T^*Tx, x' \right>$; take complex conjugates.
 \end{proof}
@@ -413,6 +415,7 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
     $\text{Dom}(T^*T)$ is dense in $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:von-neumann-solvability, lmm:von-neumann-form, crllr:trivial-complement-characterizes-density}
     Let $y \perp \text{Dom}(T^*T)$ and write $y = x + T^*Tx$ (Lemma~\ref{lmm:von-neumann-solvability}). Then $0 = \left< x, y \right> = \|x\|^2 + \|Tx\|^2$ by Lemma~\ref{lmm:von-neumann-form}, so $x = 0$ and $y = 0$; conclude by Corollary~\ref{crllr:trivial-complement-characterizes-density}.
 \end{proof}
@@ -438,6 +441,7 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
     $D$ is symmetric, $D^*$ is an extension of $D$, and $D$ is positive.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:von-neumann-form, lmm:von-neumann-dense-domain, prpstn:hall-9.4}
     For $x, x' \in \text{Dom}(D)$, Lemma~\ref{lmm:von-neumann-form} gives $\left< x', Dx \right> = \left< Tx', Tx \right> = \overline{\left< x, Dx' \right>} = \left< Dx', x \right>$, and $\left< x, Dx \right> = \|Tx\|^2 \ge 0$. $D$ is densely defined (Lemma~\ref{lmm:von-neumann-dense-domain}), so Proposition~\ref{prpstn:hall-9.4} gives $D \subset D^*$.
 \end{proof}
@@ -450,6 +454,7 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
     $\text{Ker}(D^* + \mathbf{1}) = \{0\}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:von-neumann-solvability, lmm:von-neumann-dense-domain, prpstn:hall-9.12, prpstn:hall-9.13, lmm:adjoint-of-scalar-multiple-of-identity}
     By Propositions~\ref{prpstn:hall-9.12} and~\ref{prpstn:hall-9.13} with Lemma~\ref{lmm:adjoint-of-scalar-multiple-of-identity}, $\text{Ker}(D^* + \mathbf{1}) = \text{Range}(D + \mathbf{1})^\perp$, and $\text{Range}(D + \mathbf{1}) = \mathbf{H}$ by Lemma~\ref{lmm:von-neumann-solvability}.
 \end{proof}
@@ -462,6 +467,7 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
     $T^*T$ is a positive, self-adjoint, densely defined operator.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:self-adjoint-of-range-eq-top, lmm:von-neumann-symmetric-positive, lmm:von-neumann-kernel, lmm:von-neumann-solvability, lmm:von-neumann-dense-domain}
     Apply Lemma~\ref{lmm:self-adjoint-of-range-eq-top} to $D$ with $\mu = -1$: $D$ is densely defined (Lemma~\ref{lmm:von-neumann-dense-domain}), $D \subset D^*$ (Lemma~\ref{lmm:von-neumann-symmetric-positive}), $\text{Range}(D + \mathbf{1}) = \mathbf{H}$ (Lemma~\ref{lmm:von-neumann-solvability}) and $\text{Ker}(D^* + \mathbf{1}) = \{0\}$ (Lemma~\ref{lmm:von-neumann-kernel}). Positivity is Lemma~\ref{lmm:von-neumann-symmetric-positive}.
 \end{proof}
@@ -474,6 +480,7 @@ For the results from here to Lemma~\ref{lmm:core-of-adjoint-product}, $T$ is a c
     $\text{Dom}(T^*T)$ is a core for $T$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:von-neumann-solvability, lmm:von-neumann-form, crllr:trivial-complement-characterizes-density}
     $\Gamma(T)$ is closed in $\mathbf{H} \times \mathbf{H}$, hence complete (Mathlib's \texttt{IsClosed.completeSpace\_coe}), so it is a Hilbert space. If $(y, Ty) \in \Gamma(T)$ is orthogonal to $(x, Tx)$ for every $x \in \text{Dom}(T^*T)$, then by Lemma~\ref{lmm:von-neumann-form}, $0 = \left< y, x \right> + \left< Ty, Tx \right> = \left< y, x + T^*Tx \right>$, and $x + T^*Tx$ ranges over all of $\mathbf{H}$ (Lemma~\ref{lmm:von-neumann-solvability}); so $y = 0$. Corollary~\ref{crllr:trivial-complement-characterizes-density} in $\Gamma(T)$ gives density.
 \end{proof}
