@@ -72,6 +72,7 @@ import Physicslib4.Operators.Conjugation
 import Physicslib4.Operators.DensityTheorem
 import Physicslib4.Operators.LpDiagonal
 import Physicslib4.Operators.Modular.Antiunitary
+import Physicslib4.Operators.Modular.Modular
 import Physicslib4.Operators.Modular.Tomita
 import Physicslib4.Operators.ReducingSubspace
 import Physicslib4.Spacetime.AlongPath

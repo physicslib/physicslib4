@@ -36,11 +36,10 @@ The product `B A` of two partial linear maps: its domain is
 `{x ∈ Dom A | Ax ∈ Dom B}` and `(B A) x = B (A x)`. It is `B.comp` applied to the restriction of
 `A` to the subspace `(Dom B).comap A`, pushed into `H`. The product need not be densely defined.
 
-**Restriction:** `pmapMul` takes complex-linear factors only, while the blueprint node also
-allows antilinear ones. Mathlib's `LinearPMap` is semilinear (`E →ₛₗ.[σ] F`), and the general form
-is waiting on a semilinear version of this product (the semilinear `LinearPMap.comp` applied to
-the restricted domain). It is not needed downstream: the Tomita operator is handled through the
-linear operator `S₀′ = C ∘ S₀`.
+Implementation note: `pmapMul` takes complex-linear factors because every product the section
+needs is linear. The antilinear Tomita operator is handled through the linear `S₀′ = C ∘ S₀`, and
+composites with an antiunitary operator through `antiunitaryConj`, built from Mathlib's
+semilinear `LinearPMap.comp` and `LinearMap.compPMap`.
 
 Blueprint: def:product-of-unbounded-operators
 -/
@@ -349,28 +348,29 @@ theorem sqrt_pmapMul_self {P : H →ₗ.[ℂ] H} (hP : IsSelfAdjoint P) (hpos : 
 ### Polar decomposition
 
 For the next results, `T` is closed, densely defined and injective with dense range. Injectivity
-is `ker T = ⊥` and dense range is `Dense (range T)`, with the project's `ker` and `range`.
+is `ker T = ⊥` and dense range is `Dense (range T)`, with the project's `ker` and `range`. Each
+statement carries only the hypotheses its proof uses.
 -/
 
 /--
-For a closed, densely defined, injective `T` with dense range, `|T|` is injective and its range
+For a closed, densely defined, injective `T`, `|T|` is injective and its range
 is dense.
 
 Blueprint: lmm:absolute-value-injective-dense-range
 -/
 theorem absoluteValue_injective_denseRange {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
-    (hcl : T.IsClosed) (hinj : ker T = ⊥) (hran : Dense (range T : Set H)) :
+    (hcl : T.IsClosed) (hinj : ker T = ⊥) :
     ker (absoluteValue T hT hcl) = ⊥ ∧ Dense (range (absoluteValue T hT hcl) : Set H) := by
   sorry
 
 /--
-For a closed, densely defined, injective `T` with dense range, the assignment
+For a closed, densely defined, injective `T`, the assignment
 `V₀(|T|ψ) = Tψ` (`ψ ∈ Dom T`) is a well-defined linear isometry from `Range |T|` to `H`.
 
 Blueprint: lmm:polar-isometry-on-range
 -/
 theorem exists_polarIsometry_on_range {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
-    (hcl : T.IsClosed) (hinj : ker T = ⊥) (hran : Dense (range T : Set H)) :
+    (hcl : T.IsClosed) (hinj : ker T = ⊥) :
     ∃ V₀ : range (absoluteValue T hT hcl) →ₗᵢ[ℂ] H,
       ∀ (ψ : H) (h₁ : ψ ∈ T.domain) (h₂ : ψ ∈ (absoluteValue T hT hcl).domain),
         V₀ ⟨absoluteValue T hT hcl ⟨ψ, h₂⟩,
@@ -378,14 +378,14 @@ theorem exists_polarIsometry_on_range {T : H →ₗ.[ℂ] H} (hT : HasDenseDomai
   sorry
 
 /--
-For a closed, densely defined, injective `T` with dense range, there is a unique bounded `V`
+For a closed, densely defined, injective `T`, there is a unique bounded `V`
 with `V |T| ψ = T ψ` for all `ψ ∈ Dom T`, and it is isometric. Together with
 `Dom |T| = Dom T` (`absoluteValue_domain`) this says `T = V|T|`.
 
 Blueprint: lmm:polar-isometry
 -/
 theorem existsUnique_polarIsometry {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
-    (hcl : T.IsClosed) (hinj : ker T = ⊥) (hran : Dense (range T : Set H)) :
+    (hcl : T.IsClosed) (hinj : ker T = ⊥) :
     (∃! V : H →L[ℂ] H,
       ∀ (ψ : H) (h₁ : ψ ∈ T.domain) (h₂ : ψ ∈ (absoluteValue T hT hcl).domain),
         V (absoluteValue T hT hcl ⟨ψ, h₂⟩) = T ⟨ψ, h₁⟩) ∧
@@ -425,14 +425,15 @@ theorem adjoint_unitary_compPMap (U : H ≃ₗᵢ[ℂ] H) {P : H →ₗ.[ℂ] H}
   sorry
 
 /--
-**Uniqueness of the polar decomposition.** Let `T` be closed, densely defined and injective with
-dense range, and `T = U P` with `U` unitary and `P` positive and self-adjoint. Then `P = |T|`,
-and `U |T| ψ = T ψ` for `ψ ∈ Dom T`, so `U` is the isometry `V` of `lmm:polar-isometry`.
+**Uniqueness of the polar decomposition.** Let `T` be closed and densely defined, and
+`T = U P` with `U` unitary and `P` positive and self-adjoint. Then `P = |T|`, and `U |T| ψ = T ψ`
+for `ψ ∈ Dom T`, so `U` is the isometry `V` of `lmm:polar-isometry`.
+The blueprint also assumes `T` injective with dense range; the proof does not use it.
 
 Blueprint: thrm:polar-decomposition-unique
 -/
 theorem polar_decomposition_unique {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
-    (hcl : T.IsClosed) (hinj : ker T = ⊥) (hran : Dense (range T : Set H))
+    (hcl : T.IsClosed)
     (U : H ≃ₗᵢ[ℂ] H) {P : H →ₗ.[ℂ] H} (hP : IsSelfAdjoint P) (hpos : IsPositive P)
     (hTUP : T = U.toLinearEquiv.toLinearMap.compPMap P) :
     P = absoluteValue T hT hcl ∧
@@ -451,9 +452,9 @@ The inverse of an injective operator is Mathlib's `LinearPMap.inverse`, with gra
 For an injective `A` and a unitary `U`, `U A` is injective and `(U A)⁻¹ = A⁻¹ U⁻¹`, where `U⁻¹`
 is regarded as an operator with domain `H`.
 
-**Restriction:** `U` is unitary; the blueprint node also allows an antiunitary `W`, for which
-`W A` is antilinear. The general form is waiting on an inverse of semilinear partial maps
-(Mathlib's `LinearPMap.inverse` is for linear maps only).
+Implementation note: `U` is unitary by design. For an antiunitary `W` the composite `W A` is
+antilinear and Mathlib's `LinearPMap.inverse` is for linear maps; the one consumer of the
+antiunitary case, `lmm:tomita-inverse-as-product`, states and proves it pointwise.
 
 Blueprint: lmm:inverse-of-product-with-bijection
 -/
@@ -582,7 +583,7 @@ with domain `W(Dom A) = {x | W⁻¹x ∈ Dom A}` and `(W A W⁻¹) x = W (A (W�
 semilinear composite `W ∘ A ∘ W⁻¹` (`LinearPMap.comp`, `LinearMap.compPMap`), whose ring
 homomorphism `conj ∘ id ∘ conj` is the identity.
 
-Blueprint: lmm:antiunitary-conjugate-spectral-measure
+Blueprint: def:product-of-unbounded-operators
 -/
 noncomputable def antiunitaryConj (W : H ≃ₗᵢ⋆[ℂ] H) (A : H →ₗ.[ℂ] H) : H →ₗ.[ℂ] H :=
   W.toLinearEquiv.toLinearMap.compPMap

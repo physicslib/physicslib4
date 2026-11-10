@@ -1041,13 +1041,17 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{definition}[The Modular Operator]
     \label{def:modular-operator}
+    \lean{Physicslib4.Modular.modularOperator}
     \uses{def:tomita-operator, def:adjoint-product-operator, def:absolute-value}
+    \leanok
     The \emph{modular operator} of $(\mathcal{M}, \Omega)$ is $\Delta = (S')^*S'$ (Definition~\ref{def:adjoint-product-operator}), and $\Delta^{1/2} = s(\Delta) = |S'|$.
 \end{definition}
 
 \begin{theorem}[Properties of the Modular Operator]
     \label{thrm:modular-operator-properties}
+    \lean{Physicslib4.Modular.modularOperator_properties}
     \uses{def:modular-operator, def:hall-9.5, def:positive-unbounded-operator}
+    \leanok
     $\Delta$ is positive, self-adjoint, densely defined and injective. Moreover $\text{Dom}(\Delta^{1/2}) = \text{Dom}(S)$ and $\|\Delta^{1/2}\psi\| = \|S\psi\|$ for $\psi \in \text{Dom}(S)$.
 \end{theorem}
 \begin{proof}
@@ -1057,7 +1061,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[An Intrinsic Description of $\Delta$]
     \label{lmm:modular-operator-intrinsic}
+    \lean{Physicslib4.Modular.mem_modularOperator_iff}
     \uses{def:modular-operator}
+    \leanok
     $\psi \in \text{Dom}(\Delta)$ with $\Delta\psi = \chi$ if and only if $\psi \in \text{Dom}(S)$ and $\left< S\phi, S\psi \right> = \left< \chi, \phi \right>$ for every $\phi \in \text{Dom}(S)$.
 \end{lemma}
 \begin{proof}
@@ -1067,13 +1073,17 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{definition}[The Modular Conjugation]
     \label{def:modular-conjugation}
+    \lean{Physicslib4.Modular.modularConjugation}
     \uses{def:modular-operator, thrm:polar-decomposition, crllr:linearized-tomita-properties}
+    \leanok
     Let $V$ be the unitary of the polar decomposition $S' = V|S'| = V\Delta^{1/2}$ (Theorem~\ref{thrm:polar-decomposition}, applicable by Corollary~\ref{crllr:linearized-tomita-properties}). The \emph{modular conjugation} is $J = CV$.
 \end{definition}
 
 \begin{theorem}[$S = J\Delta^{1/2}$]
     \label{thrm:modular-conjugation-polar}
+    \lean{Physicslib4.Modular.tomitaOperator_eq_modularConjugation_sqrt}
     \uses{def:modular-conjugation, def:antiunitary-operator, def:product-of-unbounded-operators}
+    \leanok
     $J$ is antiunitary and $S = J\Delta^{1/2}$, including $\text{Dom}(S) = \text{Dom}(\Delta^{1/2})$.
 \end{theorem}
 \begin{proof}
@@ -1083,7 +1093,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[An Intrinsic Description of $J$]
     \label{lmm:modular-conjugation-intrinsic}
+    \lean{Physicslib4.Modular.eq_modularConjugation_of_continuous}
     \uses{def:modular-conjugation}
+    \leanok
     $J$ is the only continuous map $\mathbf{H} \to \mathbf{H}$ with $J\Delta^{1/2}\psi = S\psi$ for all $\psi \in \text{Dom}(\Delta^{1/2})$.
 \end{lemma}
 \begin{proof}
@@ -1093,7 +1105,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{theorem}[$\Delta$ and $J$ do not Depend on the Reference Conjugation]
     \label{thrm:modular-objects-independent-of-c}
+    \lean{Physicslib4.Modular.modular_objects_independent_of_conjugation}
     \uses{def:modular-operator, def:modular-conjugation, def:reference-conjugation}
+    \leanok
     The operators $\Delta$, $\Delta^{1/2}$ and $J$ are the same for every choice of the reference conjugation $C$.
 \end{theorem}
 \begin{proof}
@@ -1103,7 +1117,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[$S^{-1} = S$]
     \label{lmm:tomita-inverse-is-self}
+    \lean{Physicslib4.Modular.tomitaOperator_inverse_eq_self}
     \uses{def:tomita-operator, def:inverse-of-operator}
+    \leanok
     $S$ is injective and $S^{-1} = S$.
 \end{lemma}
 \begin{proof}
@@ -1113,7 +1129,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[$S$ as $J^{-1}$ Times a Conjugated Operator]
     \label{lmm:tomita-inverse-as-product}
+    \lean{Physicslib4.Modular.tomitaOperator_eq_symm_conj_invSqrt}
     \uses{def:modular-conjugation, def:modular-operator, lmm:inverse-square-root-positive, def:product-of-unbounded-operators}
+    \leanok
     Let $P = J\Delta^{-1/2}J^{-1}$. Then $S = J^{-1}P$.
 \end{lemma}
 \begin{proof}
@@ -1123,7 +1141,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{lemma}[A Second Polar Decomposition of $S'$]
     \label{lmm:tomita-inverse-polar}
+    \lean{Physicslib4.Modular.linearizedTomita_closure_eq_unitary_conj_invSqrt}
     \uses{lmm:tomita-inverse-as-product}
+    \leanok
     With $P = J\Delta^{-1/2}J^{-1}$, $P$ is positive and self-adjoint, $CJ^{-1}$ is unitary, and $S' = (CJ^{-1})P$.
 \end{lemma}
 \begin{proof}
@@ -1133,7 +1153,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{theorem}[$J$ is an Involution and $J\Delta^{1/2}J = \Delta^{-1/2}$]
     \label{thrm:modular-conjugation-involution}
+    \lean{Physicslib4.Modular.modularConjugation_involution}
     \uses{def:modular-conjugation, def:modular-operator, crllr:inverse-square-root}
+    \leanok
     $J(J\phi) = \phi$ for every $\phi \in \mathbf{H}$, and $J\Delta^{1/2}J = \Delta^{-1/2}$.
 \end{theorem}
 \begin{proof}
@@ -1143,7 +1165,9 @@ For the next three results, $T$ is a closed, densely defined, injective operator
 
 \begin{corollary}[$J\Delta J = \Delta^{-1}$]
     \label{crllr:modular-conjugation-inverts}
+    \lean{Physicslib4.Modular.modularConjugation_conj_modularOperator}
     \uses{def:modular-conjugation, def:modular-operator, def:inverse-of-operator}
+    \leanok
     $J\Delta J = \Delta^{-1}$.
 \end{corollary}
 \begin{proof}
