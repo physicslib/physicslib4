@@ -1009,7 +1009,56 @@ theorem inverse_unitary_compPMap (U : H ≃ₗᵢ[ℂ] H) {A : H →ₗ.[ℂ] H}
     ker (U.toLinearEquiv.toLinearMap.compPMap A) = ⊥ ∧
       (U.toLinearEquiv.toLinearMap.compPMap A).inverse =
         pmapMul A.inverse (U.symm.toLinearEquiv.toLinearMap.toPMap ⊤) := by
-  sorry
+  have hA' : A.ker = ⊥ := hA
+  have hk : ker (U.toLinearEquiv.toLinearMap.compPMap A) = ⊥ := by
+    refine eq_bot_iff.mpr fun x hx => ?_
+    obtain ⟨h, h0⟩ := mem_ker.mp hx
+    have h1 : A ⟨x, h⟩ = 0 := U.map_eq_zero_iff.mp h0
+    exact hA ▸ mem_ker.mpr ⟨h, h1⟩
+  refine ⟨hk, LinearPMap.eq_of_eq_graph ?_⟩
+  rw [LinearPMap.inverse_graph hk]
+  ext ⟨y, x⟩
+  rw [mem_graph_pmapMul_iff, LinearPMap.inverse_graph hA']
+  simp only [Submodule.mem_map, LinearPMap.mem_graph_iff, LinearEquiv.coe_coe,
+    LinearEquiv.prodComm_apply]
+  constructor
+  · rintro ⟨⟨p1, p2⟩, ⟨z, rfl, rfl⟩, he⟩
+    simp only [Prod.swap_prod_mk, Prod.mk.injEq] at he
+    obtain ⟨rfl, rfl⟩ := he
+    exact ⟨A z, ⟨⟨_, trivial⟩, rfl, U.symm_apply_apply _⟩, (z, A z), ⟨z, rfl, rfl⟩, rfl⟩
+  · intro h
+    obtain ⟨w, ⟨y1, hy1, hw⟩, ⟨q1, q2⟩, ⟨z, hq1, hq2⟩, he⟩ := h
+    simp only [Prod.swap_prod_mk, Prod.mk.injEq] at he hq1 hq2
+    obtain ⟨rfl, rfl⟩ := he
+    subst hq1 hy1
+    have hz : A z = U.symm y1 := hq2.trans hw.symm
+    refine ⟨(z, y1), ⟨z, rfl, ?_⟩, rfl⟩
+    change U (A z) = y1
+    rw [hz]
+    exact U.apply_symm_apply _
+
+omit [CompleteSpace H] in
+private theorem inv_apply_congr {T S : H →ₗ.[ℂ] H} (hTS : T = S) {x : T.domain}
+    {y : S.domain} (h : (x : H) = y) : T x = S y := by
+  subst hTS; exact congrArg T (Subtype.ext h)
+
+private theorem inv_measurable : Measurable fun x : ℝ => ((x⁻¹ : ℝ) : ℂ) :=
+  Complex.measurable_ofReal.comp measurable_inv
+
+private theorem inv_one_bdd : (1 : ℝ → ℂ) ∈ BddMeasurable ℝ :=
+  ⟨measurable_const, 1, fun _ => by simp⟩
+
+private theorem inv_null {μ : ProjectionValuedMeasure ℝ H} (hμ : μ {0} = 0) {f : ℝ → ℂ}
+    (hf : Measurable f) (h1 : ∀ x : ℝ, x ≠ 0 → f x = 1) :
+    integralDomain μ f = ⊤ ∧ ∀ ψ : integralDomain μ f, pmapIntegral μ f ψ = ψ := by
+  have hd := integralDomain_congr_of_null μ (measurableSet_singleton 0) hμ (g := 1)
+    fun x hx => h1 x hx
+  refine ⟨hd.trans (integralDomain_eq_top_of_bddMeasurable μ inv_one_bdd), fun ψ => ?_⟩
+  rw [inv_apply_congr ((pmapIntegral_congr_of_null μ hf measurable_const
+    (measurableSet_singleton 0) hμ fun x hx => h1 x hx).trans
+    (pmapIntegral_of_bddMeasurable μ inv_one_bdd)) (y := ⟨ψ, trivial⟩) rfl]
+  change μ.integral 1 ψ = ψ
+  simp [μ.integral_one]
 
 /--
 For a self-adjoint injective `A`, the spectral measure has no atom at `0`: `μ^A({0}) = 0`.
@@ -1018,7 +1067,39 @@ Blueprint: lmm:injective-no-atom-at-zero
 -/
 theorem spectralMeasure_singleton_zero {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     (hinj : ker A = ⊥) : spectralMeasure hA {0} = 0 := by
-  sorry
+  set μ := spectralMeasure hA
+  have hι : Measurable fun x : ℝ => (x : ℂ) := Complex.measurable_ofReal
+  have hA' : pmapIntegral μ (fun x : ℝ => (x : ℂ)) = A := functionalCalculus_id hA
+  have hdomA : A.domain = integralDomain μ (fun x : ℝ => (x : ℂ)) :=
+    (congrArg LinearPMap.domain hA').symm
+  have h0 : MeasurableSet ({0} : Set ℝ) := measurableSet_singleton 0
+  set g : ℝ → ℂ := ({0} : Set ℝ).indicator 1 with hgdef
+  have hg : g ∈ BddMeasurable ℝ := ⟨measurable_const.indicator h0, 1, fun x => by
+    unfold g Set.indicator; split_ifs <;> simp⟩
+  have hz : (fun x : ℝ => (x : ℂ)) * g = fun _ => 0 :=
+    funext fun x => by by_cases hx : x = 0 <;> simp [g, hx]
+  have hbdd : (fun x : ℝ => (x : ℂ)) * g ∈ BddMeasurable ℝ := by
+    rw [hz]; exact ⟨measurable_const, 0, fun _ => by simp⟩
+  refine ContinuousLinearMap.ext fun ψ => ?_
+  have hψ : ψ ∈ integralDomain μ g := by
+    rw [integralDomain_eq_top_of_bddMeasurable μ hg]; trivial
+  have hval : pmapIntegral μ g ⟨ψ, hψ⟩ = μ {0} ψ := by
+    rw [inv_apply_congr (pmapIntegral_of_bddMeasurable μ hg) (y := ⟨ψ, trivial⟩) rfl]
+    change μ.integral g ψ = _
+    rw [hgdef, μ.integral_indicator h0]
+  have hy : pmapIntegral μ g ⟨ψ, hψ⟩ ∈ integralDomain μ (fun x : ℝ => (x : ℂ)) :=
+    (pmapIntegral_mem_integralDomain_iff μ hι hg.1 _).2
+      (by rw [integralDomain_eq_top_of_bddMeasurable μ hbdd]; trivial)
+  obtain ⟨hfg, hc⟩ := (pmapIntegral_comp μ hι hg.1).2 _ hy
+  have hzero : pmapIntegral μ ((fun x : ℝ => (x : ℂ)) * g) ⟨ψ, hfg⟩ = 0 := by
+    rw [inv_apply_congr (pmapIntegral_of_bddMeasurable μ hbdd) (y := ⟨ψ, trivial⟩) rfl]
+    change μ.integral _ ψ = 0
+    rw [hz, integral_const_eq_smul_one]; simp
+  have hmem : μ {0} ψ ∈ A.domain := by rw [hdomA, ← hval]; exact hy
+  have hker : μ {0} ψ ∈ ker A :=
+    mem_ker.2 ⟨hmem, (inv_apply_congr hA'.symm hval.symm).trans (hc.symm.trans hzero)⟩
+  rw [hinj] at hker
+  simpa using hker
 
 /--
 For a self-adjoint injective `A` and `ι⁻(λ) = λ⁻¹` (with `ι⁻(0) = 0`, Lean's `0⁻¹ = 0`): for
@@ -1030,7 +1111,20 @@ theorem functionalCalculus_inv_apply_self {A : H →ₗ.[ℂ] H} (hA : IsSelfAdj
     (hinj : ker A = ⊥) (ψ : A.domain) :
     ∃ h : A ψ ∈ (functionalCalculus hA fun x => ((x⁻¹ : ℝ) : ℂ)).domain,
       functionalCalculus hA (fun x => ((x⁻¹ : ℝ) : ℂ)) ⟨A ψ, h⟩ = ψ := by
-  sorry
+  set μ := spectralMeasure hA
+  have hι : Measurable fun x : ℝ => (x : ℂ) := Complex.measurable_ofReal
+  have hA' : pmapIntegral μ (fun x : ℝ => (x : ℂ)) = A := functionalCalculus_id hA
+  have hdomA : A.domain = integralDomain μ (fun x : ℝ => (x : ℂ)) :=
+    (congrArg LinearPMap.domain hA').symm
+  obtain ⟨hd, hone⟩ := inv_null (spectralMeasure_singleton_zero hA hinj)
+    (inv_measurable.mul hι) fun x hx => by simp [hx]
+  have hψ : (ψ : H) ∈ integralDomain μ (fun x : ℝ => (x : ℂ)) := hdomA ▸ ψ.2
+  have hval : A ψ = pmapIntegral μ (fun x : ℝ => (x : ℂ)) ⟨ψ, hψ⟩ := inv_apply_congr hA'.symm rfl
+  have hy := (pmapIntegral_mem_integralDomain_iff μ inv_measurable hι ⟨ψ, hψ⟩).2
+    (by rw [hd]; trivial)
+  obtain ⟨hfg, hc⟩ := (pmapIntegral_comp μ inv_measurable hι).2 _ hy
+  exact ⟨by rw [hval]; exact hy,
+    (inv_apply_congr (S := pmapIntegral μ _) rfl hval).trans (hc.symm.trans (hone _))⟩
 
 /--
 For a self-adjoint injective `A` and `ι⁻(λ) = λ⁻¹`: every `φ ∈ Dom ι⁻(A)` has
@@ -1044,7 +1138,22 @@ theorem self_apply_functionalCalculus_inv {A : H →ₗ.[ℂ] H} (hA : IsSelfAdj
       ∃ h : functionalCalculus hA (fun x => ((x⁻¹ : ℝ) : ℂ)) φ ∈ A.domain,
         A ⟨_, h⟩ = φ) ∧
     (functionalCalculus hA fun x => ((x⁻¹ : ℝ) : ℂ)).domain ≤ range A := by
-  sorry
+  set μ := spectralMeasure hA
+  have hι : Measurable fun x : ℝ => (x : ℂ) := Complex.measurable_ofReal
+  have hA' : pmapIntegral μ (fun x : ℝ => (x : ℂ)) = A := functionalCalculus_id hA
+  have hdomA : A.domain = integralDomain μ (fun x : ℝ => (x : ℂ)) :=
+    (congrArg LinearPMap.domain hA').symm
+  obtain ⟨hd, hone⟩ := inv_null (spectralMeasure_singleton_zero hA hinj)
+    (hι.mul inv_measurable) fun x hx => by simp [hx]
+  have h1 : ∀ φ : (functionalCalculus hA fun x => ((x⁻¹ : ℝ) : ℂ)).domain,
+      ∃ h : functionalCalculus hA (fun x => ((x⁻¹ : ℝ) : ℂ)) φ ∈ A.domain, A ⟨_, h⟩ = φ := by
+    intro φ
+    have hy := (pmapIntegral_mem_integralDomain_iff μ hι inv_measurable φ).2
+      (by rw [hd]; trivial)
+    obtain ⟨hfg, hc⟩ := (pmapIntegral_comp μ hι inv_measurable).2 φ hy
+    exact ⟨by rw [hdomA]; exact hy,
+      (inv_apply_congr hA'.symm rfl).trans (hc.symm.trans (hone _))⟩
+  exact ⟨h1, fun φ hφ => let ⟨h, e⟩ := h1 ⟨φ, hφ⟩; ⟨⟨_, h⟩, e⟩⟩
 
 /--
 For a self-adjoint injective `A`, `A⁻¹ = ι⁻(A)` with `ι⁻(λ) = λ⁻¹`.
@@ -1054,7 +1163,27 @@ Blueprint: lmm:inverse-functional-calculus
 theorem inverse_eq_functionalCalculus_inv {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     (hinj : ker A = ⊥) :
     A.inverse = functionalCalculus hA fun x => ((x⁻¹ : ℝ) : ℂ) := by
-  sorry
+  have h3 := self_apply_functionalCalculus_inv hA hinj
+  refine LinearPMap.ext (le_antisymm (fun x hx => ?_)
+    (by rw [LinearPMap.inverse_domain]; exact h3.2))
+    fun x hx hy => ?_
+  · rw [LinearPMap.inverse_domain] at hx
+    obtain ⟨ψ, rfl⟩ := hx
+    exact (functionalCalculus_inv_apply_self hA hinj ψ).1
+  · obtain ⟨h, e⟩ := h3.1 ⟨x, hy⟩
+    exact LinearPMap.inverse_apply_eq (y := ⟨x, hx⟩) hinj e
+
+open MeasureTheory in
+/-- A non-negative real function of a self-adjoint operator is a positive operator. -/
+private theorem sqp_isPositive {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {f : ℝ → ℝ}
+    (hf : Measurable f) (h0 : ∀ x, 0 ≤ f x) :
+    IsPositive (functionalCalculus hA fun x => (f x : ℂ)) := by
+  have hf' : Measurable fun x => (f x : ℂ) := Complex.measurable_ofReal.comp hf
+  refine ⟨isSymmetric_pmapIntegral_of_real _ hf' fun x => Complex.ofReal_im _, fun ψ => ?_⟩
+  have h := inner_self_pmapIntegral (spectralMeasure hA) hf' ψ
+  change 0 ≤ (⟪(ψ : H), pmapIntegral (spectralMeasure hA) _ ψ⟫_ℂ).re
+  rw [h, integral_complex_ofReal, Complex.ofReal_re]
+  exact integral_nonneg h0
 
 /--
 For a self-adjoint `A`, `A^{1/2} = s(A)` (with `s = Real.sqrt`, which is `0` on `(-∞, 0]`) is
@@ -1065,7 +1194,8 @@ Blueprint: lmm:square-root-positive
 theorem sqrt_functionalCalculus_positive {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
     IsPositive (functionalCalculus hA fun x => ((Real.sqrt x : ℝ) : ℂ)) ∧
       IsSelfAdjoint (functionalCalculus hA fun x => ((Real.sqrt x : ℝ) : ℂ)) := by
-  sorry
+  exact ⟨sqp_isPositive hA Real.continuous_sqrt.measurable Real.sqrt_nonneg,
+    (isSelfAdjoint_functionalCalculus_of_real hA Real.continuous_sqrt.measurable).1⟩
 
 /--
 For a positive, self-adjoint, injective `A`, `A^{1/2}` is injective.
@@ -1075,7 +1205,36 @@ Blueprint: lmm:square-root-injective
 theorem ker_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     (hpos : IsPositive A) (hinj : ker A = ⊥) :
     ker (functionalCalculus hA fun x => ((Real.sqrt x : ℝ) : ℂ)) = ⊥ := by
-  sorry
+  set μ := spectralMeasure hA
+  have hf : Measurable fun x : ℝ => ((Real.sqrt x : ℝ) : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
+  refine (Submodule.eq_bot_iff _).2 fun ψ hψ => ?_
+  obtain ⟨h, h0⟩ := mem_ker.1 hψ
+  have hn := norm_sq_pmapIntegral μ hf ⟨ψ, h⟩
+  change ‖functionalCalculus hA _ ⟨ψ, h⟩‖ ^ 2 = _ at hn
+  rw [h0, norm_zero, zero_pow two_ne_zero, eq_comm] at hn
+  have hg := (MeasureTheory.integral_eq_zero_iff_of_nonneg (fun x => by positivity)
+    (h.integrable_norm_pow two_ne_zero)).1 hn
+  have h1 : ∀ᵐ x ∂(μ.assoc ψ), x ∉ Set.Iio 0 := by
+    rw [MeasureTheory.ae_iff]
+    simp only [not_not, Set.ofPred_mem_eq]
+    rw [assoc_apply_eq_norm_sq _ ψ measurableSet_Iio, abs_spectralMeasure_Iio_zero_eq_zero hA hpos]
+    simp
+  have h2 : ∀ᵐ x ∂(μ.assoc ψ), x ∉ ({0} : Set ℝ) := by
+    rw [MeasureTheory.ae_iff]
+    simp only [not_not, Set.ofPred_mem_eq]
+    rw [assoc_apply_eq_norm_sq _ ψ (measurableSet_singleton 0),
+      spectralMeasure_singleton_zero hA hinj]
+    simp
+  have hF : ∀ᵐ x ∂(μ.assoc ψ), False := (hg.and (h1.and h2)).mono fun x ⟨hx, hx1, hx2⟩ => by
+    simp only [Set.mem_Iio, not_lt, Set.mem_singleton_iff] at hx1 hx2
+    have : Real.sqrt x = 0 := by simpa using hx
+    exact hx2 (le_antisymm (Real.sqrt_eq_zero'.1 this) hx1)
+  have hν : μ.assoc ψ = 0 := MeasureTheory.ae_eq_bot.1 (Filter.eventually_false_iff_eq_bot.1 hF)
+  have hu := assoc_univ_eq μ ψ
+  rw [hν, MeasureTheory.Measure.coe_zero, Pi.zero_apply, eq_comm, ENNReal.ofReal_eq_zero] at hu
+  have : ‖ψ‖ = 0 := by nlinarith [norm_nonneg ψ]
+  simpa using this
 
 /--
 For a self-adjoint `A` and `r(λ) = λ^{-1/2}` for `λ > 0`, `r(λ) = 0` otherwise (written
@@ -1086,7 +1245,9 @@ Blueprint: lmm:inverse-square-root-positive
 theorem inv_sqrt_functionalCalculus_positive {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
     IsPositive (functionalCalculus hA fun x => (((Real.sqrt x)⁻¹ : ℝ) : ℂ)) ∧
       IsSelfAdjoint (functionalCalculus hA fun x => (((Real.sqrt x)⁻¹ : ℝ) : ℂ)) := by
-  sorry
+  exact ⟨sqp_isPositive hA Real.continuous_sqrt.measurable.inv
+      fun x => inv_nonneg.2 (Real.sqrt_nonneg x),
+    (isSelfAdjoint_functionalCalculus_of_real hA Real.continuous_sqrt.measurable.inv).1⟩
 
 /--
 For a positive, self-adjoint, injective `A`, `(A^{1/2})⁻¹ = A^{-1/2}`.
@@ -1097,7 +1258,10 @@ theorem inverse_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoi
     (hpos : IsPositive A) (hinj : ker A = ⊥) :
     (functionalCalculus hA fun x => ((Real.sqrt x : ℝ) : ℂ)).inverse =
       functionalCalculus hA fun x => (((Real.sqrt x)⁻¹ : ℝ) : ℂ) := by
-  sorry
+  have hms : Measurable Real.sqrt := Real.continuous_sqrt.measurable
+  obtain ⟨hfA, -, hcomp⟩ := functionalCalculus_functionalCalculus hA hms
+  rw [inverse_eq_functionalCalculus_inv hfA (ker_sqrt_functionalCalculus hA hpos hinj)]
+  exact hcomp (fun x => ((x⁻¹ : ℝ) : ℂ)) (Complex.measurable_ofReal.comp measurable_inv)
 
 /--
 For a positive, self-adjoint `A` and `q(λ) = λ²`, `q(A^{1/2}) = A`.
@@ -1107,7 +1271,15 @@ Blueprint: lmm:square-of-square-root
 theorem sq_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     (hpos : IsPositive A) :
     functionalCalculus (sqrt_functionalCalculus_positive hA).2 (fun x => (x : ℂ) ^ 2) = A := by
-  sorry
+  have hms : Measurable Real.sqrt := Real.continuous_sqrt.measurable
+  obtain ⟨hfA, -, hcomp⟩ := functionalCalculus_functionalCalculus hA hms
+  have hq : Measurable fun x : ℝ => (x : ℂ) ^ 2 := Complex.measurable_ofReal.pow_const 2
+  rw [hcomp _ hq]
+  conv_rhs => rw [← functionalCalculus_id hA]
+  refine pmapIntegral_congr_of_null _ (hq.comp hms) Complex.measurable_ofReal measurableSet_Iio
+    (abs_spectralMeasure_Iio_zero_eq_zero hA hpos) fun x hx => ?_
+  simp only [Set.mem_Iio, not_lt] at hx
+  simp only [Function.comp, ← Complex.ofReal_pow, Real.sq_sqrt hx]
 
 /--
 For a positive, self-adjoint, injective `A` and `q(λ) = λ²`, `q(A^{-1/2}) = A⁻¹`.
@@ -1118,7 +1290,15 @@ theorem sq_inv_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoin
     (hpos : IsPositive A) (hinj : ker A = ⊥) :
     functionalCalculus (inv_sqrt_functionalCalculus_positive hA).2 (fun x => (x : ℂ) ^ 2) =
       A.inverse := by
-  sorry
+  have hms : Measurable fun x : ℝ => (Real.sqrt x)⁻¹ := Real.continuous_sqrt.measurable.inv
+  obtain ⟨hfA, -, hcomp⟩ := functionalCalculus_functionalCalculus hA hms
+  have hq : Measurable fun x : ℝ => (x : ℂ) ^ 2 := Complex.measurable_ofReal.pow_const 2
+  rw [hcomp _ hq, inverse_eq_functionalCalculus_inv hA hinj]
+  refine pmapIntegral_congr_of_null _ (hq.comp hms)
+    (Complex.measurable_ofReal.comp measurable_inv) measurableSet_Iio
+    (abs_spectralMeasure_Iio_zero_eq_zero hA hpos) fun x hx => ?_
+  simp only [Set.mem_Iio, not_lt] at hx
+  simp only [Function.comp, ← Complex.ofReal_pow, inv_pow, Real.sq_sqrt hx]
 
 /-!
 ### Antiunitary conjugation

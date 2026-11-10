@@ -874,6 +874,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $A$ be injective and $W$ unitary or antiunitary. Then $WA$ is injective and $(WA)^{-1} = A^{-1}W^{-1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:inverse-of-operator, def:product-of-unbounded-operators}
     $WA$ is injective because $W$ is. Both sides have domain $\text{Range}(WA) = W(\text{Range}(A)) = \{ \phi \mid W^{-1}\phi \in \text{Range}(A) \}$, and for $\phi = WA\psi$ both send $\phi$ to $\psi$.
 \end{proof}
@@ -886,6 +887,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     If $A$ is self-adjoint and injective, then $\mu^A(\{0\}) = 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:bounded-on-set-range-in-domain, lmm:range-membership-concentrates-measure, prpstn:hall-10.2}
     Let $\psi \in \text{Range}(\mu^A(\{0\}))$. Then $\psi \in \text{Dom}(A)$ (Lemma~\ref{lmm:bounded-on-set-range-in-domain}), $\mu^A_\psi$ is concentrated on $\{0\}$ (Lemma~\ref{lmm:range-membership-concentrates-measure}), and $\|A\psi\|^2 = \int \lambda^2 \, d\mu^A_\psi = 0$ (Proposition~\ref{prpstn:hall-10.2}); so $\psi = 0$.
 \end{proof}
@@ -898,6 +900,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $A$ be self-adjoint and injective, and let $\iota^{-}(\lambda) = 1/\lambda$ for $\lambda \ne 0$ and $\iota^{-}(0) = 0$. For $\psi \in \text{Dom}(A)$, $A\psi \in \text{Dom}(\iota^{-}(A))$ and $\iota^{-}(A)A\psi = \psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:injective-no-atom-at-zero, thrm:fc-composition, lmm:integral-ignores-null-sets, lmm:functional-calculus-bounded, thrm:hall-10.4}
     $\iota^{-}\iota = 1$ off the $\mu^A$-null set $\{0\}$ (Lemma~\ref{lmm:injective-no-atom-at-zero}), so $(\iota^{-}\iota)(A) = \mathbf{1}$ (Lemmas~\ref{lmm:integral-ignores-null-sets} and~\ref{lmm:functional-calculus-bounded}). Theorem~\ref{thrm:fc-composition} with $f = \iota^{-}$, $g = \iota$ gives $\text{Dom}(\iota^{-}(A)A) = W_\iota \cap W_{\iota^-\iota} = \text{Dom}(A)$ and $\iota^{-}(A)A\psi = \psi$.
 \end{proof}
@@ -910,6 +913,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Under the hypotheses of Lemma~\ref{lmm:inverse-fc-extends}, every $\phi \in \text{Dom}(\iota^{-}(A))$ satisfies $\iota^-(A)\phi \in \text{Dom}(A)$ and $A\iota^{-}(A)\phi = \phi$; in particular $\text{Dom}(\iota^{-}(A)) \subset \text{Range}(A)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:injective-no-atom-at-zero, thrm:fc-composition, lmm:integral-ignores-null-sets, lmm:functional-calculus-bounded, thrm:hall-10.4}
     As in Lemma~\ref{lmm:inverse-fc-extends}, $(\iota\iota^{-})(A) = \mathbf{1}$, and Theorem~\ref{thrm:fc-composition} with $f = \iota$, $g = \iota^{-}$ gives $\text{Dom}(A\,\iota^{-}(A)) = W_{\iota^-} \cap W_{\iota\iota^-} = W_{\iota^-}$ and $A\iota^{-}(A)\phi = \phi$.
 \end{proof}
@@ -922,6 +926,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $A$ be self-adjoint and injective. Then $A^{-1} = \iota^{-}(A)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:inverse-fc-extends, lmm:inverse-fc-domain, def:inverse-of-operator}
     By Lemma~\ref{lmm:inverse-fc-extends}, $\iota^{-}(A)$ is an extension of $A^{-1}$ (Definition~\ref{def:inverse-of-operator}), and by Lemma~\ref{lmm:inverse-fc-domain} its domain is contained in $\text{Range}(A) = \text{Dom}(A^{-1})$.
 \end{proof}
@@ -934,6 +939,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $A$ be self-adjoint. Then $A^{1/2} = s(A)$ is positive and self-adjoint.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-10.2, prpstn:hall-10.3}
     $s \ge 0$ is real and measurable: self-adjointness is Proposition~\ref{prpstn:hall-10.3}, and $\left< \psi, A^{1/2}\psi \right> = \int s \, d\mu^A_\psi \ge 0$ by Proposition~\ref{prpstn:hall-10.2}.
 \end{proof}
@@ -946,6 +952,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $A$ be positive, self-adjoint and injective. Then $A^{1/2}$ is injective.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-10.2, lmm:positive-spectral-support, lmm:injective-no-atom-at-zero, lmm:associated-measure-total-mass}
     Let $A^{1/2}\psi = 0$. By Proposition~\ref{prpstn:hall-10.2}, $0 = \|A^{1/2}\psi\|^2 = \int \max(\lambda, 0) \, d\mu^A_\psi$, and a nonnegative integral vanishes only if the integrand vanishes almost everywhere (Mathlib's \texttt{lintegral\_eq\_zero\_iff}); so $\mu^A_\psi((0, \infty)) = 0$. Also $\mu^A((-\infty, 0]) = 0$ (Lemmas~\ref{lmm:positive-spectral-support} and~\ref{lmm:injective-no-atom-at-zero}). Hence $\|\psi\|^2 = \mu^A_\psi(\mathbb{R}) = 0$ (Lemma~\ref{lmm:associated-measure-total-mass}).
 \end{proof}
@@ -958,6 +965,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $A$ be self-adjoint and $r(\lambda) = \lambda^{-1/2}$ for $\lambda > 0$, $r(\lambda) = 0$ otherwise. Then $A^{-1/2} \equiv r(A)$ is positive and self-adjoint.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-10.2, prpstn:hall-10.3}
     $r \ge 0$ is real and measurable: self-adjointness is Proposition~\ref{prpstn:hall-10.3}, and $\left< \psi, r(A)\psi \right> = \int r \, d\mu^A_\psi \ge 0$ by Proposition~\ref{prpstn:hall-10.2}.
 \end{proof}
@@ -970,6 +978,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $A$ be positive, self-adjoint and injective. Then $(A^{1/2})^{-1} = A^{-1/2}$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:square-root-injective, lmm:inverse-functional-calculus, crllr:fc-of-fc}
     $A^{1/2}$ is injective (Lemma~\ref{lmm:square-root-injective}), so $(A^{1/2})^{-1} = \iota^{-}(A^{1/2}) = (\iota^{-} \circ s)(A)$ by Lemma~\ref{lmm:inverse-functional-calculus} and Corollary~\ref{crllr:fc-of-fc}, and $\iota^{-} \circ s = r$ everywhere.
 \end{proof}
@@ -982,6 +991,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $A$ be positive and self-adjoint and $q(\lambda) = \lambda^2$. Then $q(A^{1/2}) = A$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{crllr:fc-of-fc, lmm:positive-spectral-support, lmm:integral-ignores-null-sets, thrm:hall-10.4}
     By Corollary~\ref{crllr:fc-of-fc}, $q(A^{1/2}) = (q \circ s)(A)$, and $q \circ s = \lambda$ off the $\mu^A$-null set $(-\infty, 0)$ (Lemma~\ref{lmm:positive-spectral-support}); so $(q \circ s)(A) = \int \lambda \, d\mu^A = A$ by Lemma~\ref{lmm:integral-ignores-null-sets} and Theorem~\ref{thrm:hall-10.4}.
 \end{proof}
@@ -994,6 +1004,7 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     Let $A$ be positive, self-adjoint and injective, and $q(\lambda) = \lambda^2$. Then $q(A^{-1/2}) = A^{-1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{crllr:fc-of-fc, lmm:positive-spectral-support, lmm:injective-no-atom-at-zero, lmm:integral-ignores-null-sets, lmm:inverse-functional-calculus}
     By Corollary~\ref{crllr:fc-of-fc}, $q(A^{-1/2}) = (q \circ r)(A)$, and $q \circ r = \iota^{-}$ off $(-\infty, 0]$, which is $\mu^A$-null (Lemmas~\ref{lmm:positive-spectral-support} and~\ref{lmm:injective-no-atom-at-zero}); so $(q \circ r)(A) = \iota^-(A) = A^{-1}$ by Lemmas~\ref{lmm:integral-ignores-null-sets} and~\ref{lmm:inverse-functional-calculus}.
 \end{proof}
