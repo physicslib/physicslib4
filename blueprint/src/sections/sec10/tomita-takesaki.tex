@@ -622,6 +622,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     Let $\varphi : X \to Y$ be measurable and set $\varphi_*\mu(F) = \mu(\varphi^{-1}(F))$. Then $\varphi_*\mu$ is a projection-valued measure on $Y$, and $(\varphi_*\mu)_\psi = \varphi_*(\mu_\psi)$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Preimages preserve complements, intersections and countable disjoint unions, so the axioms of Definition~\ref{def:projection-valued-measure} transfer; $(\varphi_*\mu)_\psi(F) = \left< \psi, \mu(\varphi^{-1}F)\psi \right> = \mu_\psi(\varphi^{-1}F)$.
 \end{proof}
 
@@ -633,6 +634,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     For measurable $g : Y \to \mathbb{C}$, $W^{\varphi_*\mu}_g = W^\mu_{g \circ \varphi}$, and $\int_Y g \, d(\varphi_*\mu)_\psi = \int_X (g \circ \varphi) \, d\mu_\psi$ for $\psi$ in this domain.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:pushforward-pvm-is-pvm}
     By Lemma~\ref{lmm:pushforward-pvm-is-pvm} and the pushforward integration formula (Mathlib's \texttt{lintegral\_map} for $\int |g|^2$, which gives the domains, and \texttt{integral\_map} for the complex integral $\int g$, which is defined because $g \in L^2$ of the finite measure $\mu_\psi$).
 \end{proof}
@@ -645,6 +647,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     For measurable $g : Y \to \mathbb{C}$, $\int_Y g \, d(\varphi_*\mu) = \int_X (g \circ \varphi) \, d\mu$, including equality of domains.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:pushforward-pvm-domain, prpstn:hall-10.1, prpstn:hall-10.2}
     The domains agree and the quadratic forms $\int g \, d(\varphi_*\mu)_\psi$ and $\int (g \circ \varphi) \, d\mu_\psi$ agree (Lemma~\ref{lmm:pushforward-pvm-domain}); polarization gives equal sesquilinear forms, and the uniqueness clause of Proposition~\ref{prpstn:hall-10.1} identifies the operators.
 \end{proof}
@@ -657,6 +660,7 @@ The results of this paragraph concern a projection-valued measure $\mu$ on a mea
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable. Then $f(A)$ is self-adjoint with spectral measure $\mu^{f(A)} = f_*\mu^A$, and $g(f(A)) = (g \circ f)(A)$ for every measurable $g : \mathbb{R} \to \mathbb{C}$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:pushforward-pvm, prpstn:hall-10.3, thrm:hall-10.4}
     $f(A)$ is self-adjoint by Proposition~\ref{prpstn:hall-10.3}. Lemma~\ref{lmm:pushforward-pvm} with $g(\lambda) = \lambda$ gives $\int \lambda \, d(f_*\mu^A) = f(A)$, so $\mu^{f(A)} = f_*\mu^A$ by the uniqueness in Theorem~\ref{thrm:hall-10.4}; Lemma~\ref{lmm:pushforward-pvm} for general $g$ gives the last claim.
 \end{proof}
@@ -683,6 +687,7 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
     Every $x \in \text{Dom}(D)$ lies in $\text{Dom}(|T|)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:positive-spectral-support, thrm:von-neumann-adjoint-product, lmm:l2-implies-l1, thrm:hall-10.4, def:spectral-measure}
     By Lemma~\ref{lmm:positive-spectral-support}, $\mu^D_x$ is concentrated on $[0, \infty)$, where $s^2(\lambda) = \lambda$. Since $x \in \text{Dom}(D) = W_\iota$ (Theorem~\ref{thrm:hall-10.4}), $\int \lambda^2 \, d\mu^D_x < \infty$, and Lemma~\ref{lmm:l2-implies-l1} gives $\int s^2 \, d\mu^D_x = \int \lambda \, d\mu^D_x < \infty$; so $x \in W_s$.
 \end{proof}
@@ -695,6 +700,7 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
     For $x \in \text{Dom}(D)$, $\||T|x\| = \|Tx\|$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:adjoint-product-domain-in-sqrt-domain, lmm:positive-spectral-support, prpstn:hall-10.2, thrm:hall-10.4, lmm:von-neumann-form}
     By Proposition~\ref{prpstn:hall-10.2}, Lemma~\ref{lmm:positive-spectral-support} and $D = \int \lambda \, d\mu^D$ (Theorem~\ref{thrm:hall-10.4}), $\||T|x\|^2 = \int s^2 \, d\mu^D_x = \int \lambda \, d\mu^D_x = \left< x, Dx \right>$, which is $\|Tx\|^2$ by Lemma~\ref{lmm:von-neumann-form}.
 \end{proof}
@@ -707,6 +713,7 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
     $|T|$ is a positive self-adjoint operator, hence closed, and $\text{Dom}(D)$ is a core for $|T|$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-10.3, prpstn:hall-10.2, prpstn:hall-9.8, lmm:fc-core, lmm:adjoint-product-domain-in-sqrt-domain}
     $|T|$ is self-adjoint by Proposition~\ref{prpstn:hall-10.3}, so it equals its adjoint, whose graph is closed (Proposition~\ref{prpstn:hall-9.8}); it is positive since $\left< \psi, |T|\psi \right> = \int s \, d\mu^D_\psi \ge 0$ (Proposition~\ref{prpstn:hall-10.2}). By Lemma~\ref{lmm:fc-core}, $\text{Dom}(D) \cap \text{Dom}(|T|)$ is a core, and it equals $\text{Dom}(D)$ by Lemma~\ref{lmm:adjoint-product-domain-in-sqrt-domain}.
 \end{proof}
@@ -719,6 +726,7 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
     Let $A$ and $B$ be closed operators on $\mathbf{H}$ and $D$ a core for $A$ with $D \subset \text{Dom}(B)$ and $\|A\psi\| = \|B\psi\|$ for $\psi \in D$. Then $\text{Dom}(A) \subset \text{Dom}(B)$ and $\|A\psi\| = \|B\psi\|$ for $\psi \in \text{Dom}(A)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:closure-linearity-and-sequential-description, prpstn:continuity-of-norm-and-inner-product}
     Let $\psi \in \text{Dom}(A)$ and take $\psi_n \in D$ with $\psi_n \to \psi$, $A\psi_n \to A\psi$. Since $\|B\psi_n - B\psi_m\| = \|A\psi_n - A\psi_m\|$, $(B\psi_n)$ is Cauchy and converges; $B$ is closed, so $\psi \in \text{Dom}(B)$ and $B\psi_n \to B\psi$, and the norms pass to the limit.
 \end{proof}
@@ -731,6 +739,7 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
     Let $A$ and $B$ be closed operators on $\mathbf{H}$ and $D$ a subspace that is a core for both, with $\|A\psi\| = \|B\psi\|$ for $\psi \in D$. Then $\text{Dom}(A) = \text{Dom}(B)$ and $\|A\psi\| = \|B\psi\|$ for all $\psi$ in it.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:closure-transfer-one-direction}
     Apply Lemma~\ref{lmm:closure-transfer-one-direction} to $(A, B)$ and to $(B, A)$.
 \end{proof}
@@ -743,6 +752,7 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
     $|T|$ is positive and self-adjoint, $\text{Dom}(|T|) = \text{Dom}(T)$, and $\||T|\psi\| = \|T\psi\|$ for every $\psi \in \text{Dom}(T)$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:closure-transfer-common-core, lmm:core-of-adjoint-product, lmm:absolute-value-closed, lmm:absolute-value-norm-on-core}
     Apply Lemma~\ref{lmm:closure-transfer-common-core} to $T$ and $|T|$ with the common core $\text{Dom}(D)$ (Lemmas~\ref{lmm:core-of-adjoint-product} and~\ref{lmm:absolute-value-closed}), on which the norms agree by Lemma~\ref{lmm:absolute-value-norm-on-core}.
 \end{proof}
@@ -755,6 +765,7 @@ For the next four results, $T$ is a closed, densely defined operator on $\mathbf
     Let $P$ be a positive self-adjoint operator. Then $PP$ is self-adjoint and $(PP)^{1/2} = P$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:fc-composition, crllr:fc-of-fc, lmm:positive-spectral-support, lmm:integral-ignores-null-sets, thrm:hall-10.4}
     With $q(\lambda) = \lambda^2$, Theorem~\ref{thrm:fc-composition} gives $PP \subset q(P)$ with $\text{Dom}(PP) = W_\iota \cap W_q = W_q$ (as $\lambda^2 \le 1 + \lambda^4$ and $\mu^P_\psi$ is finite), so $PP = q(P)$, which is self-adjoint. By Corollary~\ref{crllr:fc-of-fc}, $s(q(P)) = (s \circ q)(P)$, and $s \circ q = |\lambda|$ agrees with $\lambda$ off the $\mu^P$-null set $(-\infty, 0)$ (Lemma~\ref{lmm:positive-spectral-support}); so $(s \circ q)(P) = P$ by Lemma~\ref{lmm:integral-ignores-null-sets} and Theorem~\ref{thrm:hall-10.4}.
 \end{proof}

@@ -382,7 +382,10 @@ Blueprint: lmm:pushforward-pvm-is-pvm
 theorem assoc_pushforwardPVM (μ : ProjectionValuedMeasure X H) {φ : X → Y}
     (hφ : Measurable φ) (ψ : H) :
     (pushforwardPVM μ φ hφ).assoc ψ = (μ.assoc ψ).map φ := by
-  sorry
+  ext F hF
+  rw [Measure.map_apply hφ hF, ← ENNReal.toReal_eq_toReal_iff' (measure_ne_top _ _)
+    (measure_ne_top _ _), ProjectionValuedMeasure.assoc_apply _ _ hF,
+    ProjectionValuedMeasure.assoc_apply _ _ (hφ hF), pushforwardPVM_apply μ hφ hF]
 
 /--
 For measurable `g : Y → ℂ`, the domains agree, `W^{φ_*μ}_g = W^μ_{g ∘ φ}`, and
@@ -395,7 +398,11 @@ theorem integralDomain_pushforwardPVM (μ : ProjectionValuedMeasure X H) {φ : X
     integralDomain (pushforwardPVM μ φ hφ) g = integralDomain μ (g ∘ φ) ∧
       ∀ ψ ∈ integralDomain (pushforwardPVM μ φ hφ) g,
         ∫ y, g y ∂((pushforwardPVM μ φ hφ).assoc ψ) = ∫ x, g (φ x) ∂(μ.assoc ψ) := by
-  sorry
+  refine ⟨Submodule.ext fun ψ => ?_, fun ψ _ => ?_⟩
+  · rw [mem_integralDomain, mem_integralDomain, assoc_pushforwardPVM μ hφ ψ]
+    exact memLp_map_measure_iff hg.aestronglyMeasurable hφ.aemeasurable
+  · rw [assoc_pushforwardPVM μ hφ ψ]
+    exact integral_map hφ.aemeasurable hg.aestronglyMeasurable
 
 /--
 For measurable `g : Y → ℂ`, `∫ g d(φ_*μ) = ∫ (g ∘ φ) dμ` as partial maps, including equality of
@@ -406,7 +413,10 @@ Blueprint: lmm:pushforward-pvm
 theorem pmapIntegral_pushforwardPVM (μ : ProjectionValuedMeasure X H) {φ : X → Y}
     (hφ : Measurable φ) {g : Y → ℂ} (hg : Measurable g) :
     pmapIntegral (pushforwardPVM μ φ hφ) g = pmapIntegral μ (g ∘ φ) := by
-  sorry
+  obtain ⟨hdom, hint⟩ := integralDomain_pushforwardPVM μ hφ hg
+  refine eq_pmapIntegral_of_inner_self μ (hg.comp hφ) _ hdom fun ψ => ?_
+  rw [inner_self_pmapIntegral _ hg ψ, hint ψ ψ.2]
+  rfl
 
 end Pushforward
 
@@ -423,7 +433,13 @@ theorem functionalCalculus_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSel
       spectralMeasure hfA = pushforwardPVM (spectralMeasure hA) f hf ∧
         ∀ g : ℝ → ℂ, Measurable g →
           functionalCalculus hfA g = functionalCalculus hA (g ∘ f) := by
-  sorry
+  have hfA := (isSelfAdjoint_functionalCalculus_of_real hA hf).1
+  have hμ : pushforwardPVM (spectralMeasure hA) f hf = spectralMeasure hfA :=
+    eq_spectralMeasure_of_pmapIntegral hfA
+      (pmapIntegral_pushforwardPVM _ hf Complex.measurable_ofReal)
+  refine ⟨hfA, hμ.symm, fun g hg => ?_⟩
+  change pmapIntegral (spectralMeasure hfA) g = pmapIntegral (spectralMeasure hA) (g ∘ f)
+  rw [← hμ, pmapIntegral_pushforwardPVM _ hf hg]
 
 /-!
 ### The absolute value of a closed operator
@@ -442,6 +458,68 @@ noncomputable def absoluteValue (T : H →ₗ.[ℂ] H) (hT : HasDenseDomain T) (
     H →ₗ.[ℂ] H :=
   functionalCalculus (isSelfAdjoint_adjointMulSelf hT hcl).1 fun x => ((Real.sqrt x : ℝ) : ℂ)
 
+open MeasureTheory in
+/-- A positive self-adjoint operator has no spectral weight on `(−n, −1/n)`. -/
+private theorem abs_spectralMeasure_Ioo_neg_eq_zero {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+    (hpos : IsPositive A) (n : ℕ) (hn : 1 ≤ n) :
+    spectralMeasure hA (Set.Ioo (-(n : ℝ)) (-(1 / (n : ℝ)))) = 0 := by
+  set μ := spectralMeasure hA
+  set E := Set.Ioo (-(n : ℝ)) (-(1 / (n : ℝ)))
+  have hE : MeasurableSet E := measurableSet_Ioo
+  have hf : Measurable (fun x : ℝ => (x : ℂ)) := Complex.measurable_ofReal
+  have hpos' : IsPositive (pmapIntegral μ (fun x : ℝ => (x : ℂ))) :=
+    (pmapIntegral_spectralMeasure hA).symm ▸ hpos
+  have hn' : (0 : ℝ) < 1 / n := by positivity
+  ext ψ
+  set η := μ E ψ
+  have hη : η ∈ Set.range (μ E) := ⟨ψ, rfl⟩
+  have hdom := range_subset_integralDomain μ hf hE (c := n) (fun x hx => by
+    rw [Complex.norm_real, Real.norm_eq_abs, abs_le]
+    exact ⟨hx.1.le, hx.2.le.trans (by linarith)⟩) hη
+  have h1 : 0 ≤ (∫ x, (x : ℂ) ∂(μ.assoc η)).re := (hpos'.2 ⟨η, hdom⟩).trans_eq
+    (congrArg Complex.re (inner_self_pmapIntegral μ hf ⟨η, hdom⟩))
+  have hae : ∀ᵐ x ∂(μ.assoc η), x ∈ E :=
+    (ae_iff (p := fun x => x ∈ E)).mpr (assoc_compl_eq_zero μ hE hη)
+  have hint : Integrable (fun x : ℝ => x) (μ.assoc η) := by
+    simpa using (MemLp.integrable one_le_two (mem_integralDomain μ |>.mp hdom)).re
+  have h2 : ∫ x, x ∂(μ.assoc η) ≤ ∫ _, -(1 / (n : ℝ)) ∂(μ.assoc η) :=
+    integral_mono_ae hint (integrable_const _) (hae.mono fun x hx => hx.2.le)
+  rw [integral_const, smul_eq_mul, measureReal_def, assoc_univ_eq,
+    ENNReal.toReal_ofReal (by positivity)] at h2
+  have h3 : (∫ x, (x : ℂ) ∂(μ.assoc η)).re = ∫ x, x ∂(μ.assoc η) := by
+    rw [integral_complex_ofReal]; rfl
+  simp only [h3] at h1
+  have : ‖η‖ ^ 2 = 0 := by nlinarith [sq_nonneg ‖η‖]
+  simpa using this
+
+/-- For a positive self-adjoint operator, every associated measure vanishes on `(−∞, 0)`. -/
+private theorem abs_assoc_Iio_zero {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+    (hpos : IsPositive A) (ψ : H) : (spectralMeasure hA).assoc ψ (Set.Iio 0) = 0 := by
+  have hU : Set.Iio (0 : ℝ) ⊆
+      ⋃ n : ℕ, Set.Ioo (-((n + 1 : ℕ) : ℝ)) (-(1 / ((n + 1 : ℕ) : ℝ))) := by
+    intro x (hx : x < 0)
+    obtain ⟨n, hn⟩ := exists_nat_gt (-x + 1 / (-x))
+    have hx' : 0 < 1 / (-x) := one_div_pos.2 (neg_pos.2 hx)
+    have hn1 : (0 : ℝ) < ((n + 1 : ℕ) : ℝ) := by positivity
+    refine Set.mem_iUnion.2 ⟨n, ?_, ?_⟩ <;> push_cast at hn1 ⊢
+    · linarith
+    · have : 1 / (n + 1 : ℝ) < -x := (one_div_lt hn1 (by linarith)).2 (by linarith)
+      linarith
+  exact MeasureTheory.measure_mono_null hU (MeasureTheory.measure_iUnion_null fun n => by
+    rw [assoc_apply_eq_norm_sq _ ψ measurableSet_Ioo,
+      abs_spectralMeasure_Ioo_neg_eq_zero hA hpos (n + 1) (by omega)]
+    simp)
+
+/-- The spectral measure of a positive self-adjoint operator vanishes on `(−∞, 0)`. -/
+private theorem abs_spectralMeasure_Iio_zero_eq_zero {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
+    (hpos : IsPositive A) : spectralMeasure hA (Set.Iio 0) = 0 := by
+  ext ψ
+  have h0 := abs_assoc_Iio_zero hA hpos ψ
+  rw [assoc_apply_eq_norm_sq _ ψ measurableSet_Iio, ENNReal.ofReal_eq_zero] at h0
+  have : ‖spectralMeasure hA (Set.Iio 0) ψ‖ = 0 := by
+    nlinarith [norm_nonneg (spectralMeasure hA (Set.Iio 0) ψ)]
+  simpa using this
+
 /--
 For a closed, densely defined `T`, every `x ∈ Dom(T†T)` lies in `Dom |T|`.
 
@@ -449,7 +527,20 @@ Blueprint: lmm:adjoint-product-domain-in-sqrt-domain
 -/
 theorem adjointMulSelf_domain_le_absoluteValue {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T)
     (hcl : T.IsClosed) : (adjointMulSelf T).domain ≤ (absoluteValue T hT hcl).domain := by
-  sorry
+  intro x hx
+  have hA := (isSelfAdjoint_adjointMulSelf hT hcl).1
+  rw [domain_eq_integralDomain_spectralMeasure hA, mem_integralDomain] at hx
+  change MeasureTheory.MemLp (fun t : ℝ => ((Real.sqrt t : ℝ) : ℂ)) 2 ((spectralMeasure hA).assoc x)
+  refine ((MeasureTheory.memLp_const (1 : ℝ)).add hx.norm).of_le
+    (Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable).aestronglyMeasurable
+    (Filter.Eventually.of_forall fun t => ?_)
+  simp only [Complex.norm_real, Real.norm_eq_abs, Pi.add_apply]
+  have h2 : Real.sqrt t ^ 2 ≤ |t| := by
+    rcases le_total 0 t with h | h
+    · rw [Real.sq_sqrt h]; exact le_abs_self t
+    · rw [Real.sqrt_eq_zero'.mpr h]; simp
+  rw [abs_of_nonneg (Real.sqrt_nonneg t), abs_of_nonneg (by positivity)]
+  nlinarith [sq_nonneg (Real.sqrt t - 1)]
 
 /--
 For a closed, densely defined `T` and `x ∈ Dom(T†T)`, `‖|T| x‖ = ‖T x‖`.
@@ -460,7 +551,31 @@ theorem norm_absoluteValue_of_mem_adjointMulSelf {T : H →ₗ.[ℂ] H} (hT : Ha
     (hcl : T.IsClosed) (x : (adjointMulSelf T).domain) :
     ‖absoluteValue T hT hcl ⟨x, adjointMulSelf_domain_le_absoluteValue hT hcl x.2⟩‖ =
       ‖T ⟨x, pmapMul_domain_le _ _ x.2⟩‖ := by
-  sorry
+  have hA := (isSelfAdjoint_adjointMulSelf hT hcl).1
+  set μ := spectralMeasure hA
+  have hsq : Measurable fun t : ℝ => ((Real.sqrt t : ℝ) : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
+  have hid : Measurable fun t : ℝ => (t : ℂ) := Complex.measurable_ofReal
+  have hxid : (x : H) ∈ integralDomain μ (fun t : ℝ => (t : ℂ)) :=
+    domain_eq_integralDomain_spectralMeasure hA ▸ x.2
+  have h1 := norm_sq_pmapIntegral μ hsq ⟨x, adjointMulSelf_domain_le_absoluteValue hT hcl x.2⟩
+  have h2 := inner_self_pmapIntegral μ hid ⟨x, hxid⟩
+  have key : ∀ (B : H →ₗ.[ℂ] H) (_ : pmapIntegral μ (fun t : ℝ => (t : ℂ)) = B)
+      (h' : (x : H) ∈ B.domain), pmapIntegral μ _ ⟨x, hxid⟩ = B ⟨x, h'⟩ := by
+    intro B hB h'; subst hB; rfl
+  have h4 : ⟪(x : H), adjointMulSelf T x⟫_ℂ = ∫ t, (t : ℂ) ∂(μ.assoc x) := by
+    rw [← key _ (pmapIntegral_spectralMeasure hA) x.2]; exact h2
+  rw [(inner_adjointMulSelf hT x).2, integral_complex_ofReal] at h4
+  have hae : ∀ᵐ t ∂(μ.assoc x), ‖((Real.sqrt t : ℝ) : ℂ)‖ ^ 2 = t := by
+    refine MeasureTheory.ae_iff.2 (MeasureTheory.measure_mono_null (fun t ht => ?_)
+      (abs_assoc_Iio_zero hA (isSelfAdjoint_adjointMulSelf hT hcl).2.2 x))
+    by_contra h
+    exact ht (by rw [Complex.norm_real, Real.norm_eq_abs, sq_abs,
+      Real.sq_sqrt (not_lt.mp h)])
+  rw [MeasureTheory.integral_congr_ae hae] at h1
+  have h3 : ‖T ⟨x, pmapMul_domain_le _ _ x.2⟩‖ ^ 2 = ∫ t, t ∂(μ.assoc x) := by exact_mod_cast h4
+  rw [← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]
+  exact h1.trans h3.symm
 
 /--
 For a closed, densely defined `T`, `|T|` is positive and self-adjoint, hence closed, and
@@ -472,9 +587,24 @@ theorem absoluteValue_closed {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (hcl
     IsPositive (absoluteValue T hT hcl) ∧ IsSelfAdjoint (absoluteValue T hT hcl) ∧
       (absoluteValue T hT hcl).IsClosed ∧
       (absoluteValue T hT hcl).HasCore (adjointMulSelf T).domain := by
-  sorry
+  have hA := (isSelfAdjoint_adjointMulSelf hT hcl).1
+  have hsqrt : Measurable Real.sqrt := Real.continuous_sqrt.measurable
+  have hsq : Measurable fun t : ℝ => ((Real.sqrt t : ℝ) : ℂ) := Complex.measurable_ofReal.comp hsqrt
+  obtain ⟨hsa, hcl'⟩ := isSelfAdjoint_functionalCalculus_of_real hA hsqrt
+  refine ⟨⟨(isSymmetric_iff_le_adjoint hsa.dense_domain).mpr
+    (LinearPMap.isSelfAdjoint_def.mp hsa).ge, fun ψ => ?_⟩, hsa, hcl', ?_⟩
+  · change 0 ≤ (⟪(ψ : H), pmapIntegral (spectralMeasure hA)
+      (fun t : ℝ => ((Real.sqrt t : ℝ) : ℂ)) ψ⟫_ℂ).re
+    rw [inner_self_pmapIntegral _ hsq ψ, integral_complex_ofReal, Complex.ofReal_re]
+    exact MeasureTheory.integral_nonneg fun t => Real.sqrt_nonneg t
+  · have h := (hasCore_functionalCalculus hA hsqrt).1
+    have he : (adjointMulSelf T).domain ⊓
+        (functionalCalculus hA fun x => ((Real.sqrt x : ℝ) : ℂ)).domain =
+          (adjointMulSelf T).domain :=
+      inf_eq_left.mpr (adjointMulSelf_domain_le_absoluteValue hT hcl)
+    rw [he] at h
+    exact h
 
-omit [CompleteSpace H] in
 /--
 Let `A` and `B` be closed and `D` a core for `A` with `D ⊆ Dom B` and `‖Aψ‖ = ‖Bψ‖` for
 `ψ ∈ D`. Then `Dom A ⊆ Dom B` and `‖Aψ‖ = ‖Bψ‖` for every `ψ ∈ Dom A`.
@@ -487,9 +617,49 @@ theorem domain_le_of_hasCore_norm_eq {A B : H →ₗ.[ℂ] H} (hA : A.IsClosed) 
       ‖A ⟨ψ, hψA⟩‖ = ‖B ⟨ψ, hψB⟩‖) :
     A.domain ≤ B.domain ∧ ∀ (ψ : H) (hψA : ψ ∈ A.domain) (hψB : ψ ∈ B.domain),
       ‖A ⟨ψ, hψA⟩‖ = ‖B ⟨ψ, hψB⟩‖ := by
-  sorry
+  suffices key : ∀ ψ (hψ : ψ ∈ A.domain), ∃ χ, (ψ, χ) ∈ B.graph ∧ ‖A ⟨ψ, hψ⟩‖ = ‖χ‖ by
+    refine ⟨fun ψ hψ => ?_, fun ψ hψA hψB => ?_⟩
+    · obtain ⟨χ, hχ, -⟩ := key ψ hψ
+      obtain ⟨z, hz, -⟩ := B.mem_graph_iff.1 hχ
+      have hz' : (z : H) = ψ := hz
+      exact hz' ▸ z.2
+    · obtain ⟨χ, hχ, hn⟩ := key ψ hψA
+      obtain ⟨z, hz, hzχ⟩ := B.mem_graph_iff.1 hχ
+      have hzχ' : B z = χ := hzχ
+      rw [hn, ← hzχ']
+      exact congrArg (‖B ·‖) (Subtype.ext hz)
+  intro ψ hψ
+  have hmem : (ψ, A ⟨ψ, hψ⟩) ∈ (A.domRestrict D).graph.topologicalClosure := by
+    rw [(hA.isClosable.leIsClosable (A.domRestrict_le)).graph_closure_eq_closure_graph,
+      hD.closure_eq]
+    exact A.mem_graph ⟨ψ, hψ⟩
+  obtain ⟨u, hu, hlim⟩ := mem_closure_iff_seq_limit.1 hmem
+  choose y hy1 hy2 using fun n => (A.domRestrict D).mem_graph_iff.1 (hu n)
+  set a : ℕ → H := fun n => A ⟨y n, (y n).2.2⟩ with ha_def
+  set b : ℕ → H := fun n => B ⟨y n, hDB (y n).2.1⟩ with hb_def
+  have hau : ∀ n, a n = (u n).2 := fun n => by
+    rw [← hy2 n]; exact (LinearPMap.domRestrict_apply rfl).symm
+  have hx : Filter.Tendsto (fun n => ((y n : H))) Filter.atTop (nhds ψ) := by
+    exact ((continuous_fst.tendsto _).comp hlim).congr fun n => (hy1 n).symm
+  have ha : Filter.Tendsto a Filter.atTop (nhds (A ⟨ψ, hψ⟩)) := by
+    exact ((continuous_snd.tendsto _).comp hlim).congr fun n => (hau n).symm
+  have hdist : ∀ m n, dist (b m) (b n) = dist (a m) (a n) := fun m n => by
+    have := hnorm ((y m : H) - y n) (sub_mem (y m).2.2 (y n).2.2)
+      (sub_mem (hDB (y m).2.1) (hDB (y n).2.1)) (sub_mem (y m).2.1 (y n).2.1)
+    rw [dist_eq_norm, dist_eq_norm, ha_def, hb_def]
+    dsimp only
+    rw [← LinearPMap.map_sub, ← LinearPMap.map_sub]
+    exact this.symm
+  have hb : CauchySeq b := Metric.cauchySeq_iff.2 fun ε hε =>
+    (Metric.cauchySeq_iff.1 ha.cauchySeq ε hε).imp fun N h m hm n hn =>
+      (hdist m n) ▸ h m hm n hn
+  obtain ⟨χ, hχ⟩ := cauchySeq_tendsto_of_complete hb
+  refine ⟨χ, hB.mem_of_tendsto (hx.prodMk_nhds hχ)
+    (Filter.Eventually.of_forall fun n => B.mem_graph ⟨y n, hDB (y n).2.1⟩), ?_⟩
+  refine tendsto_nhds_unique ha.norm ?_
+  have : ∀ n, ‖a n‖ = ‖b n‖ := fun n => hnorm _ _ _ (y n).2.1
+  simpa only [this] using hχ.norm
 
-omit [CompleteSpace H] in
 /--
 Let `A` and `B` be closed and `D` a common core with `‖Aψ‖ = ‖Bψ‖` for `ψ ∈ D`. Then
 `Dom A = Dom B` and `‖Aψ‖ = ‖Bψ‖` for every `ψ` in it.
@@ -502,7 +672,10 @@ theorem domain_eq_of_hasCore_norm_eq {A B : H →ₗ.[ℂ] H} (hA : A.IsClosed) 
       ‖A ⟨ψ, hψA⟩‖ = ‖B ⟨ψ, hψB⟩‖) :
     A.domain = B.domain ∧ ∀ (ψ : H) (hψA : ψ ∈ A.domain) (hψB : ψ ∈ B.domain),
       ‖A ⟨ψ, hψA⟩‖ = ‖B ⟨ψ, hψB⟩‖ := by
-  sorry
+  have h1 := domain_le_of_hasCore_norm_eq hA hB hDA hDB.le_domain hnorm
+  have h2 := domain_le_of_hasCore_norm_eq hB hA hDB hDA.le_domain
+    fun ψ hψB hψA hψ => (hnorm ψ hψA hψB hψ).symm
+  exact ⟨le_antisymm h1.1 h2.1, h1.2⟩
 
 /--
 For a closed, densely defined `T`, `|T|` is positive and self-adjoint, `Dom |T| = Dom T`, and
@@ -515,7 +688,11 @@ theorem absoluteValue_domain {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (hcl
       (absoluteValue T hT hcl).domain = T.domain ∧
       ∀ (ψ : H) (h₁ : ψ ∈ (absoluteValue T hT hcl).domain) (h₂ : ψ ∈ T.domain),
         ‖absoluteValue T hT hcl ⟨ψ, h₁⟩‖ = ‖T ⟨ψ, h₂⟩‖ := by
-  sorry
+  obtain ⟨hp, hsa, hc, hcore⟩ := absoluteValue_closed hT hcl
+  obtain ⟨hd, hn⟩ := domain_eq_of_hasCore_norm_eq hc hcl hcore
+    (hasCore_domain_adjointMulSelf hT hcl)
+    fun ψ _ _ hψ => norm_absoluteValue_of_mem_adjointMulSelf hT hcl ⟨ψ, hψ⟩
+  exact ⟨hp, hsa, hd, hn⟩
 
 /--
 For a positive self-adjoint `P`, the product `P P` is self-adjoint and `(P P)^{1/2} = P`.
@@ -525,7 +702,60 @@ Blueprint: lmm:positive-square-root-unique
 theorem sqrt_pmapMul_self {P : H →ₗ.[ℂ] H} (hP : IsSelfAdjoint P) (hpos : IsPositive P) :
     ∃ hPP : IsSelfAdjoint (pmapMul P P),
       functionalCalculus hPP (fun x => ((Real.sqrt x : ℝ) : ℂ)) = P := by
-  sorry
+  set μ := spectralMeasure hP
+  set i : ℝ → ℂ := fun x => (x : ℂ)
+  have hi : Measurable i := Complex.measurable_ofReal
+  have hid : pmapIntegral μ i = P := functionalCalculus_id hP
+  -- `W_{x²} ⊆ W_x`, since `|x| ≤ 1 + |x|²` and the measures are finite
+  have hdom : ∀ ψ, ψ ∈ integralDomain μ (i * i) → ψ ∈ integralDomain μ i := fun ψ h => by
+    have : MeasureTheory.IsFiniteMeasure (μ.assoc ψ) :=
+      ⟨by rw [assoc_univ_eq]; exact ENNReal.ofReal_lt_top⟩
+    rw [mem_integralDomain] at h ⊢
+    refine ((MeasureTheory.memLp_const (1 : ℂ)).add h).of_le hi.aestronglyMeasurable
+      (Filter.Eventually.of_forall fun x => ?_)
+    change ‖(x : ℂ)‖ ≤ ‖(1 : ℂ) + (x : ℂ) * (x : ℂ)‖
+    rw [← Complex.ofReal_mul, ← Complex.ofReal_one, ← Complex.ofReal_add, Complex.norm_real,
+      Complex.norm_real, Real.norm_eq_abs, Real.norm_eq_abs,
+      abs_of_nonneg (by nlinarith [mul_self_nonneg x] : (0 : ℝ) ≤ 1 + x * x)]
+    nlinarith [abs_nonneg x, abs_mul_abs_self x, sq_nonneg (|x| - 1)]
+  have hsq : pmapMul P P = functionalCalculus hP fun x => ((x ^ 2 : ℝ) : ℂ) := by
+    have hfun : (fun x : ℝ => ((x ^ 2 : ℝ) : ℂ)) = i * i := by
+      funext x; simp [i, sq]
+    rw [functionalCalculus, hfun]
+    have key : pmapMul (pmapIntegral μ i) (pmapIntegral μ i) = pmapIntegral μ (i * i) := by
+      obtain ⟨-, hval⟩ := pmapIntegral_comp μ hi hi
+      refine LinearPMap.ext ?_ fun x hx hx' => ?_
+      · ext ψ
+        rw [mem_domain_pmapMul_iff]
+        constructor
+        · rintro ⟨h1, h2⟩
+          exact (pmapIntegral_mem_integralDomain_iff μ hi hi ⟨ψ, h1⟩).1 h2
+        · intro h
+          exact ⟨hdom ψ h, (pmapIntegral_mem_integralDomain_iff μ hi hi ⟨ψ, hdom ψ h⟩).2 h⟩
+      · obtain ⟨h1, h2⟩ := (mem_domain_pmapMul_iff _ _ _).1 hx
+        rw [pmapMul_apply _ _ ⟨x, hx⟩ h2]
+        obtain ⟨hfg, he⟩ := hval ⟨x, h1⟩ h2
+        exact he.symm
+    rw [hid] at key
+    exact key
+  have hsa := (isSelfAdjoint_functionalCalculus_of_real hP (f := fun x => x ^ 2)
+    (measurable_id.pow_const 2)).1
+  refine ⟨hsq ▸ hsa, ?_⟩
+  obtain ⟨hfA, -, hcomp⟩ := functionalCalculus_functionalCalculus hP
+    (f := fun x => x ^ 2) (measurable_id.pow_const 2)
+  have htr : ∀ {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B), A = B →
+      functionalCalculus hA (fun x => ((Real.sqrt x : ℝ) : ℂ)) =
+        functionalCalculus hB (fun x => ((Real.sqrt x : ℝ) : ℂ)) := by
+    rintro _ _ _ _ rfl; rfl
+  rw [htr _ hfA hsq, hcomp (fun x => ((Real.sqrt x : ℝ) : ℂ))
+    (Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable)]
+  conv_rhs => rw [← functionalCalculus_id hP]
+  refine pmapIntegral_congr_of_null μ
+    ((Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable).comp
+      (measurable_id.pow_const 2)) hi measurableSet_Iio
+    (abs_spectralMeasure_Iio_zero_eq_zero hP hpos) fun x hx => ?_
+  simp only [Set.mem_Iio, not_lt] at hx
+  simp [Function.comp, Real.sqrt_sq hx]
 
 /-!
 ### Polar decomposition
