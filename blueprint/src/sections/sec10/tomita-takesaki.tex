@@ -1243,7 +1243,9 @@ Takesaki's lemma states that, for $z \in \mathbb{C} \setminus [0, \infty)$ and $
 
 \begin{lemma}[The Commutant Extension Map is Well Defined]
     \label{lmm:commutant-extension-well-defined}
+    \lean{Physicslib4.Modular.commutantExtension_linearMap}
     \uses{def:cyclic-separating-vector, lmm:commutant-von-neumann-algebra}
+    \leanok
     Let $\psi \in \mathbf{H}$ and $c \ge 0$ satisfy $\|b'\psi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$. Then there is a unique linear map $T_0 : \mathcal{M}'\Omega \to \mathbf{H}$ with $T_0(b'\Omega) = b'\psi$ for every $b' \in \mathcal{M}'$, and $\|T_0\eta\| \le c\|\eta\|$ for every $\eta \in \mathcal{M}'\Omega$.
 \end{lemma}
 \begin{proof}
@@ -1253,7 +1255,9 @@ Takesaki's lemma states that, for $z \in \mathbb{C} \setminus [0, \infty)$ and $
 
 \begin{lemma}[The Commutant Extension Map Extends to a Bounded Operator]
     \label{lmm:commutant-extension-bounded}
+    \lean{Physicslib4.Modular.commutantExtension_bounded}
     \uses{lmm:commutant-extension-well-defined}
+    \leanok
     In the situation of Lemma~\ref{lmm:commutant-extension-well-defined}, there is a unique $T \in \mathcal{B}(\mathbf{H})$ that extends $T_0$, and $\|T\| \le c$.
 \end{lemma}
 \begin{proof}
@@ -1263,7 +1267,9 @@ Takesaki's lemma states that, for $z \in \mathbb{C} \setminus [0, \infty)$ and $
 
 \begin{lemma}[The Extension Lies in $\mathcal{M}$]
     \label{lmm:commutant-extension-in-algebra}
+    \lean{Physicslib4.Modular.commutantExtension_mem}
     \uses{lmm:commutant-extension-bounded, def:von-neumann-algebra-commutant-convention}
+    \leanok
     The operator $T$ of Lemma~\ref{lmm:commutant-extension-bounded} commutes with every $d' \in \mathcal{M}'$, and hence $T \in \mathcal{M}'' = \mathcal{M}$.
 \end{lemma}
 \begin{proof}
@@ -1273,7 +1279,9 @@ Takesaki's lemma states that, for $z \in \mathbb{C} \setminus [0, \infty)$ and $
 
 \begin{lemma}[Commutant Extension Lemma]
     \label{lmm:commutant-extension}
+    \lean{Physicslib4.Modular.commutantExtension}
     \uses{def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\Omega$ cyclic and separating for $\mathcal{M}$. If $\psi \in \mathbf{H}$ and $c \ge 0$ satisfy $\|b'\psi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$, then there is a unique $a \in \mathcal{M}$ with $a\Omega = \psi$, and $\|a\| \le c$.
 \end{lemma}
 \begin{proof}
@@ -1287,6 +1295,8 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
 
 \begin{lemma}[Properties of the Scalar Function $r_z$]
     \label{lmm:resolvent-function-props}
+    \lean{Physicslib4.Modular.resolventFunction_properties}
+    \leanok
     Let $z \in \mathbb{C} \setminus [0, \infty)$. Then $d(z) > 0$, $r_z$ is measurable, $|r_z(\lambda)| \le 1/d(z)$ for every $\lambda \in \mathbb{R}$, $\overline{r_z(\lambda)} = r_{\overline{z}}(\lambda)$ for every $\lambda \in \mathbb{R}$, and $(z - \lambda)\,r_z(\lambda) = 1_{[0, \infty)}(\lambda)$ for every $\lambda \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -1295,7 +1305,9 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
 
 \begin{lemma}[The Bounded Operator $r_z(\Delta)$]
     \label{lmm:modular-resolvent-bounded}
+    \lean{Physicslib4.Modular.modularResolvent_bounded}
     \uses{def:modular-operator, def:hall-10.5, lmm:resolvent-function-props}
+    \leanok
     Let $z \in \mathbb{C} \setminus [0, \infty)$. Then $r_z(\Delta)$ is a bounded operator defined on all of $\mathbf{H}$ with $\|r_z(\Delta)\| \le 1/d(z)$ and $r_z(\Delta)^* = r_{\overline{z}}(\Delta)$.
 \end{lemma}
 \begin{proof}
@@ -1305,7 +1317,9 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
 
 \begin{lemma}[The Function $z - \iota$ of $\Delta$]
     \label{lmm:modular-z-minus-fc}
+    \lean{Physicslib4.Modular.modularOperator_functionalCalculus_const_sub}
     \uses{def:modular-operator, def:hall-10.5}
+    \leanok
     Let $z \in \mathbb{C}$. Then $W_{z - \iota} = \text{Dom}(\Delta)$, and $(z - \iota)(\Delta)\psi = z\psi - \Delta\psi$ for every $\psi \in \text{Dom}(\Delta)$.
 \end{lemma}
 \begin{proof}
@@ -1315,7 +1329,9 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
 
 \begin{lemma}[$1_{[0, \infty)}(\Delta) = \mathbf{1}$]
     \label{lmm:modular-indicator-nonneg-one}
+    \lean{Physicslib4.Modular.modularOperator_functionalCalculus_indicator_Ici}
     \uses{def:modular-operator, def:hall-10.5}
+    \leanok
     $1_{[0, \infty)}(\Delta) = \mathbf{1}$.
 \end{lemma}
 \begin{proof}
@@ -1325,7 +1341,9 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
 
 \begin{lemma}[$r_z(\Delta)$ is a Right Inverse of $z - \Delta$]
     \label{lmm:modular-resolvent-right-inverse}
+    \lean{Physicslib4.Modular.modularResolvent_rightInverse}
     \uses{lmm:modular-resolvent-bounded}
+    \leanok
     Let $z \in \mathbb{C} \setminus [0, \infty)$ and $\xi \in \mathbf{H}$. Then $r_z(\Delta)\xi \in \text{Dom}(\Delta)$ and $z\, r_z(\Delta)\xi - \Delta r_z(\Delta)\xi = \xi$.
 \end{lemma}
 \begin{proof}
@@ -1335,7 +1353,9 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
 
 \begin{lemma}[$r_z(\Delta)$ is a Left Inverse of $z - \Delta$]
     \label{lmm:modular-resolvent-left-inverse}
+    \lean{Physicslib4.Modular.modularResolvent_leftInverse}
     \uses{lmm:modular-resolvent-bounded}
+    \leanok
     Let $z \in \mathbb{C} \setminus [0, \infty)$ and $\psi \in \text{Dom}(\Delta)$. Then $r_z(\Delta)(z\psi - \Delta\psi) = \psi$.
 \end{lemma}
 \begin{proof}
@@ -1345,7 +1365,9 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
 
 \begin{corollary}[The Resolvent of $\Delta$]
     \label{crllr:modular-resolvent}
+    \lean{Physicslib4.Modular.modularResolvent_isResolvent}
     \uses{def:hall-9.16, lmm:uniqueness-of-resolvent, lmm:modular-resolvent-bounded}
+    \leanok
     Every $z \in \mathbb{C} \setminus [0, \infty)$ lies in the resolvent set of $\Delta$ (\ref{def:hall-9.16}), and $(\Delta - z\mathbf{1})^{-1} = -r_z(\Delta)$. We write $(z - \Delta)^{-1} = r_z(\Delta)$. Thus $(z - \Delta)^{-1} \in \mathcal{B}(\mathbf{H})$, $\|(z - \Delta)^{-1}\| \le 1/d(z)$ and $\big( (z - \Delta)^{-1} \big)^* = (\overline{z} - \Delta)^{-1}$.
 \end{corollary}
 \begin{proof}
@@ -1357,6 +1379,8 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
 
 \begin{lemma}[An Elementary Inequality]
     \label{lmm:takesaki-elementary-inequality}
+    \lean{Physicslib4.Modular.takesaki_elementary_inequality}
+    \leanok
     Let $z \in \mathbb{C} \setminus [0, \infty)$. Then $|z| - \operatorname{Re} z > 0$, and for all real $p, q \ge 0$,
     \begin{align}
         |zp - q| \ge \sqrt{2(|z| - \operatorname{Re} z)\, pq}.
@@ -1377,7 +1401,9 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
 
 \begin{lemma}[$\mathcal{K}_c$ is Closed and Convex]
     \label{lmm:takesaki-ball-closed-convex}
+    \lean{Physicslib4.Modular.takesakiBall_closure_isClosed_convex}
     \uses{lmm:commutant-von-neumann-algebra}
+    \leanok
     $\mathcal{K}_c$ is closed and convex, and $0 \in \mathcal{K}_c$.
 \end{lemma}
 \begin{proof}
@@ -1387,7 +1413,9 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
 
 \begin{lemma}[Vectors in $\mathcal{K}_c$ Satisfy the Commutant Bound]
     \label{lmm:takesaki-ball-closure-bound}
+    \lean{Physicslib4.Modular.takesakiBall_closure_bound}
     \uses{lmm:commutant-von-neumann-algebra}
+    \leanok
     Every $\xi \in \mathcal{K}_c$ satisfies $\|b'\xi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -1397,6 +1425,8 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
 
 \begin{lemma}[Separation from a Closed Convex Set]
     \label{lmm:takesaki-separation}
+    \lean{Physicslib4.Modular.exists_re_inner_add_le_of_not_mem_convex}
+    \leanok
     Let $\mathcal{K} \subset \mathbf{H}$ be nonempty, closed and convex, and $\xi \notin \mathcal{K}$. Then there are $\phi \in \mathbf{H}$ and $\gamma > 0$ with $\operatorname{Re}\left< \phi, k \right> + \gamma \le \operatorname{Re}\left< \phi, \xi \right>$ for every $k \in \mathcal{K}$.
 \end{lemma}
 \begin{proof}
@@ -1405,7 +1435,9 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
 
 \begin{lemma}[The Resolvent Vector $\chi$]
     \label{lmm:takesaki-transfer-resolvent}
+    \lean{Physicslib4.Modular.takesaki_transfer_resolvent}
     \uses{crllr:modular-resolvent, def:tomita-operator}
+    \leanok
     Let $\phi \in \mathbf{H}$ and $\chi = (\overline{z} - \Delta)^{-1}\phi$. Then $\chi \in \text{Dom}(\Delta) \subset \text{Dom}(S)$, $\overline{z}\chi - \Delta\chi = \phi$, and $\left< \phi, \psi \right> = \left< \chi, a'\Omega \right>$.
 \end{lemma}
 \begin{proof}
@@ -1415,7 +1447,9 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
 
 \begin{lemma}[Transfer through the Resolvent]
     \label{lmm:takesaki-transfer}
+    \lean{Physicslib4.Modular.takesaki_transfer}
     \uses{lmm:takesaki-transfer-resolvent, def:tomita-operator}
+    \leanok
     Let $\phi \in \mathbf{H}$ and $\chi = (\overline{z} - \Delta)^{-1}\phi$. Then for every $a \in \mathcal{M}$,
     \begin{align}
         \left< \phi, a\Omega \right> = z\left< \chi, a\Omega \right> - \left< a^*\Omega, S\chi \right>.
@@ -1429,7 +1463,9 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
 
 \begin{lemma}[$\mathcal{M}\Omega$ is a Core for $S$]
     \label{lmm:tomita-core}
+    \lean{Physicslib4.Modular.tomitaOperator_exists_seq_tendsto}
     \uses{def:tomita-operator}
+    \leanok
     For every $\chi \in \text{Dom}(S)$ there are $h_n \in \mathcal{M}$ with $h_n\Omega \to \chi$ and $h_n^*\Omega \to S\chi$.
 \end{lemma}
 \begin{proof}
@@ -1439,6 +1475,8 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
 
 \begin{lemma}[$G$ is Lipschitz, Uniformly on $\mathcal{B}_c$]
     \label{lmm:takesaki-G-lipschitz}
+    \lean{Physicslib4.Modular.takesakiG_lipschitz}
+    \leanok
     For all $u, v, u_1, v_1 \in \mathbf{H}$ and $a \in \mathcal{B}_c$,
     \begin{align}
         |G(u, v; a) - G(u_1, v_1; a)| \le \big( \|a'\Omega\| + |z|c\|\Omega\| \big)\|u - u_1\| + c\|\Omega\|\,\|v - v_1\|.
@@ -1450,7 +1488,9 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
 
 \begin{lemma}[Uniform Approximation of $G$ from $\mathcal{M}\Omega$]
     \label{lmm:takesaki-uniform-approximation}
+    \lean{Physicslib4.Modular.takesakiG_uniform_approximation}
     \uses{def:tomita-operator}
+    \leanok
     Let $\chi \in \text{Dom}(S)$ and $\delta > 0$. Then there is $h \in \mathcal{M}$ with $|G(\chi, S\chi; a) - G(h\Omega, h^*\Omega; a)| < \delta$ for every $a \in \mathcal{B}_c$.
 \end{lemma}
 \begin{proof}
@@ -1465,7 +1505,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[Functional Calculus Stays in $\mathcal{M}$]
     \label{lmm:cfc-mem-von-neumann}
+    \lean{Physicslib4.Modular.cfc_mem_of_isVonNeumannSet}
     \uses{def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $x \in \mathcal{M}$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$. Then $f(x) \in \mathcal{M}$, where $f(x)$ is the continuous functional calculus of the C*-algebra $\mathcal{B}(\mathbf{H})$ (Mathlib's \texttt{cfc}).
 \end{lemma}
 \begin{proof}
@@ -1475,7 +1517,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[Shifted Powers of $h^*h$]
     \label{lmm:takesaki-shifted-powers}
+    \lean{Physicslib4.Modular.takesakiShiftedPow_mem}
     \uses{lmm:cfc-mem-von-neumann}
+    \leanok
     Let $h \in \mathcal{M}$, $\varepsilon > 0$ and $s, t \in \mathbb{R}$. Then $P_\varepsilon^s \in \mathcal{M}$, $P_\varepsilon^s$ is self-adjoint, $P_\varepsilon^sP_\varepsilon^t = P_\varepsilon^{s+t}$, $P_\varepsilon^0 = \mathbf{1}$, $P_\varepsilon^sP = PP_\varepsilon^s$, and $\|P_\varepsilon^s\| \le \varepsilon^s$ if $s \le 0$.
 \end{lemma}
 \begin{proof}
@@ -1485,7 +1529,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[An Approximate Polar Decomposition]
     \label{lmm:takesaki-approximate-polar}
+    \lean{Physicslib4.Modular.takesaki_approximate_polar}
     \uses{lmm:takesaki-shifted-powers}
+    \leanok
     Let $h \in \mathcal{M}$ and $\varepsilon > 0$. Then $u_\varepsilon, x_\varepsilon \in \mathcal{M}$, $x_\varepsilon^* = hP_\varepsilon^{-1/4}$, and
     \begin{align}
         h^* = P_\varepsilon^{1/4}x_\varepsilon, \qquad h^*u_\varepsilon = x_\varepsilon x_\varepsilon^*, \qquad u_\varepsilon h^* = x_\varepsilon^*x_\varepsilon.
@@ -1498,7 +1544,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[Norms in the Approximate Polar Decomposition]
     \label{lmm:takesaki-approx-polar-norms}
+    \lean{Physicslib4.Modular.takesaki_approx_polar_norms}
     \uses{lmm:takesaki-approximate-polar}
+    \leanok
     Let $h \in \mathcal{M}$ and $\varepsilon > 0$. Then $\|u_\varepsilon\| \le 1$ and $\|x_\varepsilon\|^2 \le \|h\|$.
 \end{lemma}
 \begin{proof}
@@ -1508,7 +1556,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[A Bound for $\|P_\varepsilon^{1/4}\Omega\|$]
     \label{lmm:takesaki-shifted-root-bound}
+    \lean{Physicslib4.Modular.takesaki_shifted_root_bound}
     \uses{lmm:takesaki-approximate-polar}
+    \leanok
     Let $h \in \mathcal{M}$ and $\varepsilon > 0$. Then $\|P_\varepsilon^{1/4}\Omega\|^2 \le p_\varepsilon^2 + \sqrt{\varepsilon}\|\Omega\|^2$.
 \end{lemma}
 \begin{proof}
@@ -1518,7 +1568,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[An Upper Bound for $\left< h\Omega, a'\Omega \right>$]
     \label{lmm:takesaki-numerator-bound}
+    \lean{Physicslib4.Modular.takesaki_numerator_bound}
     \uses{lmm:takesaki-approximate-polar}
+    \leanok
     For $h \in \mathcal{M}$ and $\varepsilon > 0$, $|\left< h\Omega, a'\Omega \right>| \le \|a'\|\, \big( p_\varepsilon + \varepsilon^{1/4}\|\Omega\| \big)\, q_\varepsilon$.
 \end{lemma}
 \begin{proof}
@@ -1532,6 +1584,8 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[A Complex Rotation]
     \label{lmm:complex-rotation-choice}
+    \lean{Physicslib4.Modular.exists_norm_le_re_mul_eq_mul_norm}
+    \leanok
     For $w \in \mathbb{C}$ and $c \ge 0$ there is $s \in \mathbb{C}$ with $|s| \le c$ and $\operatorname{Re}(sw) = c|w|$.
 \end{lemma}
 \begin{proof}
@@ -1540,7 +1594,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[Inner Products of the Test Elements]
     \label{lmm:takesaki-test-inner-products}
+    \lean{Physicslib4.Modular.takesaki_test_inner_products}
     \uses{lmm:takesaki-approximate-polar}
+    \leanok
     For $h \in \mathcal{M}$, $\varepsilon > 0$ and $s \in \mathbb{C}$, $\left< h\Omega, s u_\varepsilon\Omega \right> = sp_\varepsilon^2$ and $\left< (s u_\varepsilon)^*\Omega, h^*\Omega \right> = sq_\varepsilon^2$.
 \end{lemma}
 \begin{proof}
@@ -1550,7 +1606,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[A Test Element in $\mathcal{B}_c$]
     \label{lmm:takesaki-test-element}
+    \lean{Physicslib4.Modular.takesaki_test_element}
     \uses{lmm:takesaki-approximate-polar}
+    \leanok
     For $h \in \mathcal{M}$ and $\varepsilon > 0$ there is $a \in \mathcal{B}_c$ with
     \begin{align}
         \operatorname{Re}\big( z\left< h\Omega, a\Omega \right> - \left< a^*\Omega, h^*\Omega \right> \big) \ge \|a'\|\,p_\varepsilon q_\varepsilon.
@@ -1563,7 +1621,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[The Key Estimate]
     \label{lmm:takesaki-key-estimate}
+    \lean{Physicslib4.Modular.takesaki_key_estimate}
     \uses{lmm:takesaki-test-element}
+    \leanok
     For every $h \in \mathcal{M}$ and $\delta > 0$ there is $a \in \mathcal{B}_c$ with $G(h\Omega, h^*\Omega; a) \le \delta$.
 \end{lemma}
 \begin{proof}
@@ -1576,7 +1636,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{lemma}[The Resolvent Vector Lies in $\mathcal{K}_c$]
     \label{lmm:takesaki-resolvent-in-ball-closure}
+    \lean{Physicslib4.Modular.takesaki_resolvent_mem_ball_closure}
     \uses{crllr:modular-resolvent, lmm:takesaki-ball-closed-convex, lmm:takesaki-ball-closure-bound}
+    \leanok
     $\psi \in \mathcal{K}_c$.
 \end{lemma}
 \begin{proof}
@@ -1586,7 +1648,9 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
 
 \begin{theorem}[Takesaki's Lemma]
     \label{thrm:takesaki-lemma}
+    \lean{Physicslib4.Modular.takesaki_lemma}
     \uses{crllr:modular-resolvent, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$, $\Omega$ cyclic and separating for $\mathcal{M}$, and $\Delta$ its modular operator. For every $z \in \mathbb{C} \setminus [0, \infty)$ and $a' \in \mathcal{M}'$ there is a unique $a \in \mathcal{M}$ with
     \begin{align}
         a\Omega = (z - \Delta)^{-1}a'\Omega, \qquad \text{and} \qquad \|a\| \le \frac{\|a'\|}{\sqrt{2(|z| - \operatorname{Re} z)}}.
@@ -1607,7 +1671,9 @@ The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ o
 
 \begin{lemma}[An Intrinsic Description of $S^*$]
     \label{lmm:tomita-adjoint-intrinsic}
+    \lean{Physicslib4.Modular.mem_tomitaAdjoint_iff}
     \uses{def:tomita-operator, def:hall-9.1}
+    \leanok
     Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $\left< \xi, S\zeta \right> = \left< \zeta, \eta \right>$ for every $\zeta \in \text{Dom}(S)$.
 \end{lemma}
 \begin{proof}
@@ -1617,7 +1683,9 @@ The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ o
 
 \begin{lemma}[$S^*$ Tested on $\mathcal{M}\Omega$]
     \label{lmm:tomita-adjoint-intrinsic-core}
+    \lean{Physicslib4.Modular.mem_tomitaAdjoint_iff_inner_algebra}
     \uses{def:tomita-operator, def:hall-9.1}
+    \leanok
     Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if
     \begin{align}
         \left< \xi, x^*\Omega \right> = \left< x\Omega, \eta \right> \qquad \text{for every } x \in \mathcal{M}.
@@ -1630,7 +1698,9 @@ The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ o
 
 \begin{lemma}[The Graph of $S^*$ is Closed]
     \label{lmm:tomita-adjoint-graph-closed}
+    \lean{Physicslib4.Modular.tomitaAdjoint_graph_isClosed}
     \uses{def:tomita-operator, def:hall-9.1}
+    \leanok
     The set $\Gamma(S^*) = \{ (\xi, \eta) \in \mathbf{H} \times \mathbf{H} \mid C\xi \in \text{Dom}((S')^*),\ (S')^*C\xi = \eta \}$ is closed in $\mathbf{H} \times \mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -1640,7 +1710,9 @@ The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ o
 
 \begin{lemma}[$S^*$ Extends the Closure of $F_0$]
     \label{lmm:tomita-adjoint-extends-closure}
+    \lean{Physicslib4.Modular.mem_tomitaAdjoint_of_mem_closure_graph}
     \uses{def:tomita-operator, def:tomita-pre-operators, def:hall-9.1}
+    \leanok
     The closure of $\Gamma(F_0)$ in $\mathbf{H} \times \mathbf{H}$ is contained in $\Gamma(S^*)$: if $(\xi, \eta)$ lies in the closure of $\{ (b'\Omega, b'^*\Omega) \mid b' \in \mathcal{M}' \}$, then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$.
 \end{lemma}
 \begin{proof}
@@ -1650,11 +1722,21 @@ The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ o
 
 \subsubsection{Operators Commuting with a Unitary}
 
-Let $U$ be unitary and $A$ an operator on $\mathbf{H}$. Say that $U$ \emph{commutes with} $A$ if, for every $\psi \in \text{Dom}(A)$, the vectors $U\psi$ and $U^{-1}\psi$ lie in $\text{Dom}(A)$ and $AU\psi = UA\psi$, $AU^{-1}\psi = U^{-1}A\psi$; for $A \in \mathcal{B}(\mathbf{H})$ the condition says $UA = AU$. Unitary conjugation enters only through the antiunitaries $C$ and $UC$ (Lemmas~\ref{lmm:reference-conjugation-properties} and~\ref{lmm:antiunitary-composition}): for an operator $B$, $(UC)\big(CBC^{-1}\big)(UC)^{-1}$ denotes the conjugate by the antiunitary $UC$ of the conjugate $CBC^{-1}$ by $C$ (\ref{def:product-of-unbounded-operators}). Its domain is $\{ \phi \mid C^{-1}(UC)^{-1}\phi \in \text{Dom}(B) \}$ and its value at such $\phi$ is $UC\,C\,B\,C^{-1}(UC)^{-1}\phi$.
+\begin{definition}[A Unitary Commuting with an Operator]
+    \label{def:unitary-commutes}
+    \lean{Physicslib4.Spectral.Unbounded.UnitaryCommutes}
+    \uses{def:unitary-operator}
+    \leanok
+    Let $U$ be unitary and $A$ an operator on $\mathbf{H}$. $U$ \emph{commutes with} $A$ if, for every $\psi \in \text{Dom}(A)$, the vectors $U\psi$ and $U^{-1}\psi$ lie in $\text{Dom}(A)$ and $AU\psi = UA\psi$, $AU^{-1}\psi = U^{-1}A\psi$.
+\end{definition}
+
+For $A \in \mathcal{B}(\mathbf{H})$ the condition of Definition~\ref{def:unitary-commutes} says $UA = AU$. Unitary conjugation enters only through the antiunitaries $C$ and $UC$ (Lemmas~\ref{lmm:reference-conjugation-properties} and~\ref{lmm:antiunitary-composition}): for an operator $B$, $(UC)\big(CBC^{-1}\big)(UC)^{-1}$ denotes the conjugate by the antiunitary $UC$ of the conjugate $CBC^{-1}$ by $C$ (\ref{def:product-of-unbounded-operators}). Its domain is $\{ \phi \mid C^{-1}(UC)^{-1}\phi \in \text{Dom}(B) \}$ and its value at such $\phi$ is $UC\,C\,B\,C^{-1}(UC)^{-1}\phi$.
 
 \begin{lemma}[The Double Conjugate by a Commuting Unitary]
     \label{lmm:commuting-unitary-double-conjugate}
-    \uses{def:unitary-operator, def:reference-conjugation, def:product-of-unbounded-operators}
+    \lean{Physicslib4.Spectral.Unbounded.antiunitaryConj_trans_antiunitaryConj_of_commute}
+    \uses{def:unitary-operator, def:reference-conjugation, def:product-of-unbounded-operators, def:unitary-commutes}
+    \leanok
     Let $U$ be a unitary that commutes with an operator $A$. Then $(UC)\big(CAC^{-1}\big)(UC)^{-1} = A$, including domains.
 \end{lemma}
 \begin{proof}
@@ -1664,7 +1746,9 @@ Let $U$ be unitary and $A$ an operator on $\mathbf{H}$. Say that $U$ \emph{commu
 
 \begin{lemma}[Unitary Conjugation and the Functional Calculus]
     \label{lmm:unitary-conjugate-functional-calculus}
-    \uses{def:unitary-operator, def:reference-conjugation, def:product-of-unbounded-operators, def:hall-10.5}
+    \lean{Physicslib4.Spectral.Unbounded.antiunitaryConj_trans_functionalCalculus_of_commute}
+    \uses{def:unitary-operator, def:reference-conjugation, def:product-of-unbounded-operators, def:hall-10.5, def:unitary-commutes}
+    \leanok
     Let $A$ be self-adjoint and $U$ a unitary that commutes with $A$. Then $(UC)\big(Cf(A)C^{-1}\big)(UC)^{-1} = f(A)$, including domains, for every real measurable $f$.
 \end{lemma}
 \begin{proof}
@@ -1678,7 +1762,9 @@ Let $U$ be unitary and $A$ an operator on $\mathbf{H}$. Say that $U$ \emph{commu
 
 \begin{lemma}[One Half of the Adjoint Commutation]
     \label{lmm:commuting-unitary-adjoint-half}
-    \uses{def:unitary-operator, def:hall-9.1}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_commute_of_symm_commute}
+    \uses{def:unitary-operator, def:hall-9.1, def:unitary-commutes}
+    \leanok
     Let $c$ be a densely defined operator and $V$ a unitary such that, for every $\psi \in \text{Dom}(c)$, $V^{-1}\psi \in \text{Dom}(c)$ and $cV^{-1}\psi = V^{-1}c\psi$. Then, for every $\phi \in \text{Dom}(c^*)$, $V\phi \in \text{Dom}(c^*)$ and $c^*V\phi = Vc^*\phi$.
 \end{lemma}
 \begin{proof}
@@ -1692,7 +1778,9 @@ Let $U$ be unitary and $A$ an operator on $\mathbf{H}$. Say that $U$ \emph{commu
 
 \begin{lemma}[A Commuting Unitary Commutes with the Adjoint]
     \label{lmm:commuting-unitary-adjoint}
-    \uses{def:unitary-operator, def:hall-9.1}
+    \lean{Physicslib4.Spectral.Unbounded.adjoint_commute_of_commute}
+    \uses{def:unitary-operator, def:hall-9.1, def:unitary-commutes}
+    \leanok
     Let $c$ be a densely defined operator and $U$ a unitary that commutes with $c$. Then $U$ commutes with $c^*$.
 \end{lemma}
 \begin{proof}
@@ -1702,7 +1790,9 @@ Let $U$ be unitary and $A$ an operator on $\mathbf{H}$. Say that $U$ \emph{commu
 
 \begin{lemma}[A Commuting Unitary Commutes with $c^*c$]
     \label{lmm:commuting-unitary-adjoint-product}
-    \uses{def:unitary-operator, def:adjoint-product-operator}
+    \lean{Physicslib4.Spectral.Unbounded.adjointMulSelf_commute_of_commute}
+    \uses{def:unitary-operator, def:adjoint-product-operator, def:unitary-commutes}
+    \leanok
     Let $c$ be a densely defined operator and $U$ a unitary that commutes with $c$. Then $U$ commutes with $c^*c$.
 \end{lemma}
 \begin{proof}
@@ -1712,7 +1802,9 @@ Let $U$ be unitary and $A$ an operator on $\mathbf{H}$. Say that $U$ \emph{commu
 
 \begin{lemma}[A Commuting Unitary Commutes with Bounded Functions of $c^*c$]
     \label{lmm:commuting-unitary-bounded-function}
-    \uses{def:unitary-operator, def:adjoint-product-operator, def:hall-10.5}
+    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_adjointMulSelf_commute_of_commute}
+    \uses{def:unitary-operator, def:adjoint-product-operator, def:hall-10.5, def:unitary-commutes}
+    \leanok
     Let $c$ be a closed, densely defined operator, $D = c^*c$, and $U$ a unitary that commutes with $c$. Then $Uf(D) = f(D)U$ for every bounded real measurable $f$.
 \end{lemma}
 \begin{proof}
@@ -1730,6 +1822,8 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[The Scalar Functions $h_n$ and $k_n$]
     \label{lmm:approximant-functions}
+    \lean{Physicslib4.Spectral.Unbounded.approximant_functions}
+    \leanok
     For every $n \ge 1$, $h_n$ and $k_n$ are real, continuous and measurable, $0 < h_n \le 1$, $0 \le k_n \le n$ and $k_n \le s$. For every $\lambda \in \mathbb{R}$, $h_n(\lambda) \to 1$ and $k_n(\lambda) \to s(\lambda)$ as $n \to \infty$.
 \end{lemma}
 \begin{proof}
@@ -1738,7 +1832,9 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[The Bounded Operators $R_n$ and $K_n$]
     \label{lmm:approximant-bounded}
+    \lean{Physicslib4.Spectral.Unbounded.approximant_bounded}
     \uses{def:absolute-value, def:hall-10.5}
+    \leanok
     For every $n \ge 1$, $R_n$ and $K_n$ are bounded operators defined on all of $\mathbf{H}$, $R_n$ is self-adjoint, $\|R_n\| \le 1$ and $\|K_n\| \le n$.
 \end{lemma}
 \begin{proof}
@@ -1748,7 +1844,9 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[$R_n$ Maps into $\text{Dom}(c)$]
     \label{lmm:approximant-range}
+    \lean{Physicslib4.Spectral.Unbounded.approximant_range}
     \uses{lmm:approximant-bounded, def:absolute-value}
+    \leanok
     For every $n \ge 1$ and $\psi \in \mathbf{H}$, $R_n\psi \in \text{Dom}(|c|) = \text{Dom}(c)$, $|c|R_n\psi = K_n\psi$, and $\|cR_n\psi\| = \|K_n\psi\| \le n\|\psi\|$.
 \end{lemma}
 \begin{proof}
@@ -1758,7 +1856,9 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[Convergence of the Approximants]
     \label{lmm:approximant-convergence}
+    \lean{Physicslib4.Spectral.Unbounded.approximant_convergence}
     \uses{lmm:approximant-bounded, def:absolute-value}
+    \leanok
     $R_n\phi \to \phi$ for every $\phi \in \mathbf{H}$, and $K_n\psi \to |c|\psi$ for every $\psi \in \text{Dom}(c)$, as $n \to \infty$.
 \end{lemma}
 \begin{proof}
@@ -1768,7 +1868,9 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[The Bounded Operators $cR_n$]
     \label{lmm:approximant-operator}
+    \lean{Physicslib4.Spectral.Unbounded.approximant_operator}
     \uses{lmm:approximant-range}
+    \leanok
     For every $n \ge 1$ there is a unique $x_n \in \mathcal{B}(\mathbf{H})$ with $x_n\psi = cR_n\psi$ for every $\psi \in \mathbf{H}$, and $\|x_n\| \le n$. Moreover $x_n^*\phi = R_nc^*\phi$ for every $\phi \in \text{Dom}(c^*)$.
 \end{lemma}
 \begin{proof}
@@ -1778,7 +1880,9 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[A Commuting Unitary Commutes with $cR_n$]
     \label{lmm:approximant-operator-commutes}
-    \uses{lmm:approximant-operator, def:unitary-operator}
+    \lean{Physicslib4.Spectral.Unbounded.approximant_operator_commute}
+    \uses{lmm:approximant-operator, def:unitary-operator, def:unitary-commutes}
+    \leanok
     Let $U$ be a unitary that commutes with $c$. Then $Ux_n = x_nU$ for every $n \ge 1$.
 \end{lemma}
 \begin{proof}
@@ -1790,7 +1894,9 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[A Unitary from a Self-Adjoint Contraction]
     \label{lmm:von-neumann-unitary-of-contraction}
+    \lean{Physicslib4.Modular.self_add_I_smul_cfcSqrt_mem_of_isVonNeumannSet}
     \uses{def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    \leanok
     Let $a \in \mathcal{M}$ be self-adjoint with $\|a\| \le 1$. Then $u = a + i\sqrt{\mathbf{1} - a^2}$, with the square root of the continuous functional calculus of $\mathcal{B}(\mathbf{H})$ (Mathlib's \texttt{CFC.sqrt}), is unitary, and $u, u^* \in \mathcal{M}$.
 \end{lemma}
 \begin{proof}
@@ -1800,7 +1906,9 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[Real and Imaginary Parts in a Von Neumann Algebra]
     \label{lmm:von-neumann-real-imaginary-part}
+    \lean{Physicslib4.Modular.realPart_imaginaryPart_mem_of_isVonNeumannSet}
     \uses{def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $y \in \mathcal{M}$. Then the real part $\Re y = \tfrac{1}{2}(y + y^*)$ and the imaginary part $\Im y = -\tfrac{i}{2}(y - y^*)$ of $y$ in $\mathcal{B}(\mathbf{H})$ (Mathlib's \texttt{realPart} and \texttt{imaginaryPart}) lie in $\mathcal{M}$.
 \end{lemma}
 \begin{proof}
@@ -1810,7 +1918,9 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[Unitaries Span a Von Neumann Algebra]
     \label{lmm:von-neumann-span-unitaries}
+    \lean{Physicslib4.Modular.exists_unitary_decomposition_of_isVonNeumannSet}
     \uses{def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    \leanok
     Let $x \in \mathcal{M}$ with $x \ne 0$. Then there are unitaries $u_1, u_2$ with $u_1, u_1^*, u_2, u_2^* \in \mathcal{M}$ and $x = \tfrac{\|x\|}{2}\big(u_1 + u_1^* + i(u_2 + u_2^*)\big)$.
 \end{lemma}
 \begin{proof}
@@ -1820,7 +1930,9 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
 
 \begin{lemma}[Commuting with the Unitaries of $\mathcal{M}$]
     \label{lmm:commutant-of-unitaries}
+    \lean{Physicslib4.Modular.mem_centralizer_of_commute_unitary}
     \uses{def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    \leanok
     If $b \in \mathcal{B}(\mathbf{H})$ satisfies $ub = bu$ for every unitary $u \in \mathcal{M}$, then $b \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -1837,7 +1949,9 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 
 \begin{lemma}[The Operator $x\Omega \mapsto x\xi$]
     \label{lmm:tomita-adjoint-left-map}
+    \lean{Physicslib4.Modular.tomitaAdjoint_leftMap_existsUnique}
     \uses{def:cyclic-separating-vector, lmm:commutant-von-neumann-algebra}
+    \leanok
     There is a unique linear operator $a_0$ with $\text{Dom}(a_0) = \mathcal{M}\Omega$ and $a_0(x\Omega) = x\xi$ for every $x \in \mathcal{M}$. It is densely defined.
 \end{lemma}
 \begin{proof}
@@ -1847,7 +1961,9 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 
 \begin{lemma}[The Adjoint of $a_0$]
     \label{lmm:tomita-adjoint-left-map-adjoint}
+    \lean{Physicslib4.Modular.tomitaAdjoint_leftMap_adjoint}
     \uses{lmm:tomita-adjoint-left-map, def:hall-9.1}
+    \leanok
     For every $y \in \mathcal{M}$, $y\Omega \in \text{Dom}(a_0^*)$ and $a_0^*(y\Omega) = y\eta$. In particular $a_0^*$ is densely defined.
 \end{lemma}
 \begin{proof}
@@ -1861,7 +1977,9 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 
 \begin{lemma}[The Closure $c$ of $a_0$]
     \label{lmm:tomita-adjoint-closure-props}
+    \lean{Physicslib4.Modular.tomitaAdjoint_leftMap_closure_props}
     \uses{lmm:tomita-adjoint-left-map, def:hall-9.6, def:hall-9.1}
+    \leanok
     $a_0$ is closable. Its closure $c = a_0^{\text{cl}}$ is closed and densely defined, $\mathcal{M}\Omega \subset \text{Dom}(c)$ with $c(x\Omega) = x\xi$ for $x \in \mathcal{M}$, so $c\Omega = \xi$; and $\Omega \in \text{Dom}(c^*)$ with $c^*\Omega = \eta$.
 \end{lemma}
 \begin{proof}
@@ -1871,7 +1989,9 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 
 \begin{lemma}[The Unitaries of $\mathcal{M}$ Commute with $c$]
     \label{lmm:tomita-adjoint-closure-commutes}
-    \uses{lmm:tomita-adjoint-closure-props, def:unitary-operator}
+    \lean{Physicslib4.Modular.tomitaAdjoint_leftMap_closure_commute}
+    \uses{lmm:tomita-adjoint-closure-props, def:unitary-operator, def:unitary-commutes}
+    \leanok
     Every unitary $u \in \mathcal{M}$ commutes with $c$.
 \end{lemma}
 \begin{proof}
@@ -1881,7 +2001,9 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 
 \begin{lemma}[The Approximants Lie in $\mathcal{M}'$]
     \label{lmm:tomita-adjoint-approximants-commutant}
+    \lean{Physicslib4.Modular.tomitaAdjoint_approximant_mem_centralizer}
     \uses{lmm:tomita-adjoint-closure-props, lmm:approximant-operator}
+    \leanok
     With $c$ as in Lemma~\ref{lmm:tomita-adjoint-closure-props} and $x_n$ the operators of Lemma~\ref{lmm:approximant-operator} for this $c$, $x_n \in \mathcal{M}'$ for every $n \ge 1$.
 \end{lemma}
 \begin{proof}
@@ -1891,7 +2013,9 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 
 \begin{lemma}[Convergence of the Approximants on $\Omega$]
     \label{lmm:tomita-adjoint-approximants-converge}
+    \lean{Physicslib4.Modular.tomitaAdjoint_approximant_tendsto}
     \uses{lmm:tomita-adjoint-closure-props, lmm:approximant-operator}
+    \leanok
     With $c$ and $x_n$ as in Lemma~\ref{lmm:tomita-adjoint-approximants-commutant}, $x_n\Omega \to \xi$ and $x_n^*\Omega \to \eta$ as $n \to \infty$.
 \end{lemma}
 \begin{proof}
@@ -1905,7 +2029,9 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 
 \begin{theorem}[$S^* = \overline{F_0}$]
     \label{thrm:tomita-adjoint-eq-closure}
+    \lean{Physicslib4.Modular.mem_tomitaAdjoint_iff_mem_closure_graph}
     \uses{def:tomita-operator, def:tomita-pre-operators, def:hall-9.1}
+    \leanok
     Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $(\xi, \eta)$ lies in the closure of $\Gamma(F_0) = \{ (b'\Omega, b'^*\Omega) \mid b' \in \mathcal{M}' \}$ in $\mathbf{H} \times \mathbf{H}$. That is, the antilinear adjoint $S^*$ of $S$ is the closure of $F_0$, and $\mathcal{M}'\Omega$ is a core for $S^*$.
 \end{theorem}
 \begin{proof}
@@ -1917,7 +2043,9 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 
 \begin{lemma}[$S^* = \Delta^{1/2}J$]
     \label{lmm:tomita-adjoint-sqrt-conjugation}
+    \lean{Physicslib4.Modular.mem_tomitaAdjoint_iff_modularOperatorSqrt}
     \uses{def:tomita-operator, def:modular-operator, def:modular-conjugation}
+    \leanok
     Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $J\xi \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}J\xi = \eta$.
 \end{lemma}
 \begin{proof}
@@ -1927,7 +2055,9 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 
 \begin{corollary}[$S^* = J\Delta^{-1/2}$]
     \label{crllr:tomita-adjoint-polar}
+    \lean{Physicslib4.Modular.mem_tomitaAdjoint_iff_modularOperatorInvSqrt}
     \uses{def:tomita-operator, def:modular-operator, def:modular-conjugation, lmm:inverse-square-root-positive}
+    \leanok
     Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $\xi \in \text{Dom}(\Delta^{-1/2})$ and $\eta = J\Delta^{-1/2}\xi$. In particular the closure of $F_0$ is $J\Delta^{-1/2}$ (Theorem~\ref{thrm:tomita-adjoint-eq-closure}).
 \end{corollary}
 \begin{proof}
@@ -1941,7 +2071,9 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
 
 \begin{lemma}[$\Omega$ is Cyclic and Separating for $\mathcal{M}'$]
     \label{lmm:commutant-cyclic-separating}
+    \lean{Physicslib4.Modular.isCyclicSeparatingVector_centralizer}
     \uses{def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    \leanok
     $\mathcal{M}'$ is a von Neumann algebra on $\mathbf{H}$, and $\Omega$ is cyclic and separating for $\mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -1951,7 +2083,9 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
 
 \begin{lemma}[The Tomita Operator of $\mathcal{M}'$ is $S^*$]
     \label{lmm:commutant-tomita-operator}
+    \lean{Physicslib4.Modular.tomitaOperator_centralizer_iff}
     \uses{lmm:commutant-cyclic-separating, def:tomita-operator}
+    \leanok
     Let $\xi, \eta \in \mathbf{H}$. Then $\xi \in \text{Dom}(S_{\mathcal{M}'})$ and $S_{\mathcal{M}'}\xi = \eta$ if and only if $\xi \in \text{Dom}(\Delta^{-1/2})$ and $\eta = J\Delta^{-1/2}\xi$, if and only if $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$.
 \end{lemma}
 \begin{proof}
@@ -1961,7 +2095,9 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
 
 \begin{lemma}[An Intrinsic Description of $\Delta_{\mathcal{M}'}$]
     \label{lmm:commutant-modular-operator-intrinsic}
+    \lean{Physicslib4.Modular.mem_modularOperator_centralizer_iff}
     \uses{lmm:commutant-cyclic-separating, def:modular-operator, lmm:inverse-square-root-positive}
+    \leanok
     $\psi \in \text{Dom}(\Delta_{\mathcal{M}'})$ with $\Delta_{\mathcal{M}'}\psi = \chi$ if and only if $\psi \in \text{Dom}(\Delta^{-1/2})$ and $\left< \Delta^{-1/2}\psi, \Delta^{-1/2}\phi \right> = \left< \chi, \phi \right>$ for every $\phi \in \text{Dom}(\Delta^{-1/2})$.
 \end{lemma}
 \begin{proof}
@@ -1971,7 +2107,9 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
 
 \begin{lemma}[The Domain of $f(A)f(A)$]
     \label{lmm:fc-domain-square}
+    \lean{Physicslib4.Spectral.Unbounded.pmapMul_functionalCalculus_self}
     \uses{def:hall-10.5, def:product-of-unbounded-operators}
+    \leanok
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable. Then $W_{f^2} \subset W_f$, and $f(A)f(A) = (f^2)(A)$, including domains.
 \end{lemma}
 \begin{proof}
@@ -1981,7 +2119,9 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
 
 \begin{lemma}[$A^{-1/2}A^{-1/2} = A^{-1}$]
     \label{lmm:inverse-square-root-product}
+    \lean{Physicslib4.Spectral.Unbounded.pmapMul_inv_sqrt_functionalCalculus}
     \uses{lmm:inverse-square-root-positive, def:inverse-of-operator, def:product-of-unbounded-operators}
+    \leanok
     Let $A$ be positive, self-adjoint and injective. Then the product $A^{-1/2}A^{-1/2}$ equals $A^{-1}$, including domains.
 \end{lemma}
 \begin{proof}
@@ -1991,7 +2131,9 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
 
 \begin{lemma}[$\Delta_{\mathcal{M}'} = \Delta^{-1}$]
     \label{lmm:commutant-modular-operator}
+    \lean{Physicslib4.Modular.modularOperator_centralizer}
     \uses{lmm:commutant-cyclic-separating, def:modular-operator, def:inverse-of-operator}
+    \leanok
     $\Delta_{\mathcal{M}'} = \Delta^{-1}$, including domains.
 \end{lemma}
 \begin{proof}
@@ -2001,7 +2143,9 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
 
 \begin{lemma}[The Square Root of the Inverse]
     \label{lmm:sqrt-of-inverse}
+    \lean{Physicslib4.Spectral.Unbounded.sqrt_functionalCalculus_inverse}
     \uses{lmm:inverse-square-root-positive, def:inverse-of-operator}
+    \leanok
     Let $A$ be positive, self-adjoint and injective. Then $A^{-1}$ is self-adjoint and $(A^{-1})^{1/2} = s(A^{-1}) = A^{-1/2}$.
 \end{lemma}
 \begin{proof}
@@ -2011,7 +2155,9 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
 
 \begin{lemma}[$J_{\mathcal{M}'} = J$]
     \label{lmm:commutant-modular-conjugation}
+    \lean{Physicslib4.Modular.modularOperatorSqrt_modularConjugation_centralizer}
     \uses{lmm:commutant-cyclic-separating, def:modular-conjugation}
+    \leanok
     $\Delta_{\mathcal{M}'}^{1/2} = \Delta^{-1/2}$ and $J_{\mathcal{M}'} = J$.
 \end{lemma}
 \begin{proof}
@@ -2021,7 +2167,9 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
 
 \begin{theorem}[The Modular Objects of $(\mathcal{M}', \Omega)$]
     \label{thrm:commutant-modular-objects}
+    \lean{Physicslib4.Modular.commutant_modular_objects}
     \uses{lmm:commutant-cyclic-separating, def:tomita-operator, def:modular-operator, def:modular-conjugation, def:inverse-of-operator}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\Omega$ cyclic and separating for $\mathcal{M}$, with Tomita operator $S$, modular operator $\Delta$ and modular conjugation $J$. Then $\Omega$ is cyclic and separating for $\mathcal{M}'$, and the Tomita operator, the modular operator and the modular conjugation of $(\mathcal{M}', \Omega)$ are
     \begin{align}
         S_{\mathcal{M}'} = S^* = J\Delta^{-1/2}, \qquad \Delta_{\mathcal{M}'} = \Delta^{-1}, \qquad \Delta_{\mathcal{M}'}^{1/2} = \Delta^{-1/2}, \qquad J_{\mathcal{M}'} = J,

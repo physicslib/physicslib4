@@ -1,0 +1,342 @@
+/-
+Copyright (c) 2026 Lean Community. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Lean Community
+-/
+import Physicslib4.Operators.Modular.Takesaki
+import Physicslib4.Spectral.Unbounded.Commuting
+
+/-!
+# The adjoint of the Tomita operator and the modular objects of the commutant
+
+For a von Neumann algebra `M` with a cyclic and separating vector `Ω` and a reference
+conjugation `C`, this file states van Daele's proof that the antilinear adjoint `S*` of the
+Tomita operator is the closure of `F₀`, that `S* = J Δ^{-1/2}`, and that the Tomita operator,
+modular operator and modular conjugation of `(M′, Ω)` are `S*`, `Δ⁻¹` and `J`.
+
+## Representation
+
+* **The antilinear adjoint.** `S*` is `(S′)† C`, with `S′ = (linearizedTomitaPre M Ω C).closure`.
+  The statement "`(ξ, η) ∈ Γ(S*)`" is written
+  `∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+    (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η`,
+  and `Γ(S*)` is the set of pairs `p : H × H` satisfying it.
+* **The graph of `F₀`.** `Γ(F₀)` is `(fun b => (b Ω, star b Ω)) '' Set.centralizer M`.
+* **The operator `a₀`.** The operator `x Ω ↦ x ξ` (`x ∈ M`) has no definition; statements about
+  it quantify over a partial linear map `a₀` with `a₀.domain = tomitaPreDomain M Ω` and
+  `a₀ (x Ω) = x ξ` for `x ∈ M`, which determine it (`tomitaAdjoint_leftMap_existsUnique`). Its
+  closure is `c = a₀.closure`, and the approximants `x_n` of `approximant_operator` for `c` are
+  bounded operators characterized by `x_n ψ = c (R_n ψ)`.
+* **Unitaries.** A unitary in `M` that commutes with an unbounded operator is a
+  `U : H ≃ₗᵢ[ℂ] H` with `(U : H →L[ℂ] H) ∈ M`, and "commutes" is spelled out as in
+  `Commuting.lean`. Statements about bounded operators use Mathlib's `unitary (H →L[ℂ] H)`.
+* **The commutant.** The modular objects of `(M′, Ω)` are the definitions of `Tomita.lean` and
+  `Modular.lean` applied to `Set.centralizer M` with the same `C`; the proofs of their
+  hypotheses are those of `isCyclicSeparatingVector_centralizer`.
+-/
+
+namespace Physicslib4.Modular
+
+open scoped InnerProductSpace ComplexStarModule
+open Physicslib4.Spectral.Unbounded
+open Filter Topology
+
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-! ### The antilinear adjoint of `S` -/
+
+/-- `(ξ, η) ∈ Γ(S*)` if and only if `⟪ξ, S ζ⟫ = ⟪ζ, η⟫` for every `ζ ∈ Dom S`.
+Blueprint: lmm:tomita-adjoint-intrinsic -/
+theorem mem_tomitaAdjoint_iff {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M)
+    (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (ξ η : H) :
+    (∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
+      ∀ ζ : (linearizedTomitaPre M Ω C).closure.domain,
+        ⟪ξ, tomitaOperator M Ω C ζ⟫_ℂ = ⟪(ζ : H), η⟫_ℂ := by
+  sorry
+
+/-- `(ξ, η) ∈ Γ(S*)` if and only if `⟪ξ, x* Ω⟫ = ⟪x Ω, η⟫` for every `x ∈ M`.
+Blueprint: lmm:tomita-adjoint-intrinsic-core -/
+theorem mem_tomitaAdjoint_iff_inner_algebra {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (ξ η : H) :
+    (∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
+      ∀ x ∈ M, ⟪ξ, star x Ω⟫_ℂ = ⟪x Ω, η⟫_ℂ := by
+  sorry
+
+/-- The graph `Γ(S*) = {(ξ, η) | C ξ ∈ Dom (S′)†, (S′)† (C ξ) = η}` is closed in `H × H`.
+Blueprint: lmm:tomita-adjoint-graph-closed -/
+theorem tomitaAdjoint_graph_isClosed {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M)
+    (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) :
+    IsClosed {p : H × H | ∃ h : C p.1 ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C p.1, h⟩ = p.2} := by
+  sorry
+
+/-- The closure of `Γ(F₀) = {(b′ Ω, b′* Ω) | b′ ∈ M′}` is contained in `Γ(S*)`.
+Blueprint: lmm:tomita-adjoint-extends-closure -/
+theorem mem_tomitaAdjoint_of_mem_closure_graph {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {ξ η : H}
+    (hξη : (ξ, η) ∈ closure ((fun b : H →L[ℂ] H => (b Ω, star b Ω)) '' Set.centralizer M)) :
+    ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η := by
+  sorry
+
+/-! ### Unitaries of a von Neumann algebra -/
+
+/-- For self-adjoint `a ∈ M` with `‖a‖ ≤ 1`, `u = a + i √(1 - a²)` is unitary and `u, u* ∈ M`.
+Blueprint: lmm:von-neumann-unitary-of-contraction -/
+theorem self_add_I_smul_cfcSqrt_mem_of_isVonNeumannSet {M : Set (H →L[ℂ] H)}
+    (hM : IsVonNeumannSet M) {a : H →L[ℂ] H} (ha : a ∈ M) (hsa : IsSelfAdjoint a)
+    (hnorm : ‖a‖ ≤ 1) :
+    a + Complex.I • CFC.sqrt (1 - a ^ 2) ∈ unitary (H →L[ℂ] H) ∧
+      a + Complex.I • CFC.sqrt (1 - a ^ 2) ∈ M ∧
+      star (a + Complex.I • CFC.sqrt (1 - a ^ 2)) ∈ M := by
+  sorry
+
+/-- For `y ∈ M`, the real part `ℜ y` and the imaginary part `ℑ y` lie in `M`.
+Blueprint: lmm:von-neumann-real-imaginary-part -/
+theorem realPart_imaginaryPart_mem_of_isVonNeumannSet {M : Set (H →L[ℂ] H)}
+    (hM : IsVonNeumannSet M) {y : H →L[ℂ] H} (hy : y ∈ M) :
+    ((ℜ y : selfAdjoint (H →L[ℂ] H)) : H →L[ℂ] H) ∈ M ∧
+      ((ℑ y : selfAdjoint (H →L[ℂ] H)) : H →L[ℂ] H) ∈ M := by
+  sorry
+
+/-- A nonzero `x ∈ M` is `x = (‖x‖ / 2) (u₁ + u₁* + i (u₂ + u₂*))` for unitaries `u₁, u₂` with
+`u₁, u₁*, u₂, u₂* ∈ M`.
+Blueprint: lmm:von-neumann-span-unitaries -/
+theorem exists_unitary_decomposition_of_isVonNeumannSet {M : Set (H →L[ℂ] H)}
+    (hM : IsVonNeumannSet M) {x : H →L[ℂ] H} (hx : x ∈ M) (hx0 : x ≠ 0) :
+    ∃ u₁ ∈ unitary (H →L[ℂ] H), ∃ u₂ ∈ unitary (H →L[ℂ] H),
+      u₁ ∈ M ∧ star u₁ ∈ M ∧ u₂ ∈ M ∧ star u₂ ∈ M ∧
+      x = ‖x‖ • (2⁻¹ : ℝ) • (u₁ + star u₁ + Complex.I • (u₂ + star u₂)) := by
+  sorry
+
+/-- A bounded `b` with `u b = b u` for every unitary `u ∈ M` lies in `M′`.
+Blueprint: lmm:commutant-of-unitaries -/
+theorem mem_centralizer_of_commute_unitary {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet M)
+    {b : H →L[ℂ] H} (hb : ∀ u ∈ unitary (H →L[ℂ] H), u ∈ M → u * b = b * u) :
+    b ∈ Set.centralizer M := by
+  sorry
+
+/-! ### `M′ Ω` is a core for `S*` -/
+
+/-- There is a unique partial linear map `a₀` with `Dom a₀ = M Ω` and `a₀ (x Ω) = x ξ` for
+`x ∈ M`, and it is densely defined.
+Blueprint: lmm:tomita-adjoint-left-map -/
+theorem tomitaAdjoint_leftMap_existsUnique {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (ξ : H) :
+    (∃! a₀ : H →ₗ.[ℂ] H, a₀.domain = tomitaPreDomain M Ω ∧
+      ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ) ∧
+      ∀ a₀ : H →ₗ.[ℂ] H, a₀.domain = tomitaPreDomain M Ω →
+        (∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ) → HasDenseDomain a₀ := by
+  sorry
+
+/-- For `(ξ, η) ∈ Γ(S*)` and `y ∈ M`, `y Ω ∈ Dom a₀†` with `a₀† (y Ω) = y η`, and `a₀†` is
+densely defined.
+Blueprint: lmm:tomita-adjoint-left-map-adjoint -/
+theorem tomitaAdjoint_leftMap_adjoint {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M)
+    (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) {ξ η : H}
+    (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
+    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
+    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ) :
+    (∀ y ∈ M, ∃ h : y Ω ∈ a₀.adjoint.domain, a₀.adjoint ⟨y Ω, h⟩ = y η) ∧
+      HasDenseDomain a₀.adjoint := by
+  sorry
+
+/-- For `(ξ, η) ∈ Γ(S*)`, `a₀` is closable, and its closure `c` is closed and densely defined,
+with `c (x Ω) = x ξ` for `x ∈ M`, `c Ω = ξ`, `Ω ∈ Dom c†` and `c† Ω = η`.
+Blueprint: lmm:tomita-adjoint-closure-props -/
+theorem tomitaAdjoint_leftMap_closure_props {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {ξ η : H}
+    (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
+    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
+    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ) :
+    a₀.IsClosable ∧ a₀.closure.IsClosed ∧ HasDenseDomain a₀.closure ∧
+      (∀ x ∈ M, ∃ h : x Ω ∈ a₀.closure.domain, a₀.closure ⟨x Ω, h⟩ = x ξ) ∧
+      (∃ h : Ω ∈ a₀.closure.domain, a₀.closure ⟨Ω, h⟩ = ξ) ∧
+      ∃ h : Ω ∈ a₀.closure.adjoint.domain, a₀.closure.adjoint ⟨Ω, h⟩ = η := by
+  sorry
+
+/-- For `(ξ, η) ∈ Γ(S*)`, every unitary `U` in `M` commutes with the closure `c` of `a₀`.
+Blueprint: lmm:tomita-adjoint-closure-commutes -/
+theorem tomitaAdjoint_leftMap_closure_commute {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {ξ η : H}
+    (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
+    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
+    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ)
+    (U : H ≃ₗᵢ[ℂ] H) (hU : (U.toContinuousLinearEquiv : H →L[ℂ] H) ∈ M) :
+    Spectral.Unbounded.UnitaryCommutes U a₀.closure := by
+  sorry
+
+/-- For `(ξ, η) ∈ Γ(S*)`, the approximant `x_n` (`x_n ψ = c R_n ψ`) of the closure `c` of `a₀`
+lies in `M′` for `n ≥ 1`.
+Blueprint: lmm:tomita-adjoint-approximants-commutant -/
+theorem tomitaAdjoint_approximant_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {ξ η : H}
+    (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
+    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
+    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ)
+    (hc : HasDenseDomain a₀.closure) (hcl : a₀.closure.IsClosed) (n : ℕ) (hn : 1 ≤ n)
+    (x : H →L[ℂ] H)
+    (hx : ∀ ψ : (functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
+        fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)).domain,
+      ∃ h : functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
+          (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ψ ∈ a₀.closure.domain,
+        x ψ = a₀.closure ⟨_, h⟩) :
+    x ∈ Set.centralizer M := by
+  sorry
+
+/-- For `(ξ, η) ∈ Γ(S*)` and the approximants `x_n` of the closure `c` of `a₀`,
+`x_n Ω → ξ` and `x_n* Ω → η`.
+Blueprint: lmm:tomita-adjoint-approximants-converge -/
+theorem tomitaAdjoint_approximant_tendsto {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {ξ η : H}
+    (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
+    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
+    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ)
+    (hc : HasDenseDomain a₀.closure) (hcl : a₀.closure.IsClosed) (x : ℕ → H →L[ℂ] H)
+    (hx : ∀ n : ℕ, 1 ≤ n → ∀ ψ : (functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
+        fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)).domain,
+      ∃ h : functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
+          (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ψ ∈ a₀.closure.domain,
+        x n ψ = a₀.closure ⟨_, h⟩) :
+    Tendsto (fun n => x n Ω) atTop (𝓝 ξ) ∧
+      Tendsto (fun n => ContinuousLinearMap.adjoint (x n) Ω) atTop (𝓝 η) := by
+  sorry
+
+/-- `(ξ, η) ∈ Γ(S*)` if and only if `(ξ, η)` lies in the closure of
+`Γ(F₀) = {(b′ Ω, b′* Ω) | b′ ∈ M′}`: `S*` is the closure of `F₀`.
+Blueprint: thrm:tomita-adjoint-eq-closure -/
+theorem mem_tomitaAdjoint_iff_mem_closure_graph {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (ξ η : H) :
+    (∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
+      (ξ, η) ∈ closure ((fun b : H →L[ℂ] H => (b Ω, star b Ω)) '' Set.centralizer M) := by
+  sorry
+
+/-! ### The polar decomposition of `S*` -/
+
+/-- `S* = Δ^{1/2} J`: `(ξ, η) ∈ Γ(S*)` if and only if `J ξ ∈ Dom Δ^{1/2}` and
+`Δ^{1/2} (J ξ) = η`.
+Blueprint: lmm:tomita-adjoint-sqrt-conjugation -/
+theorem mem_tomitaAdjoint_iff_modularOperatorSqrt {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (ξ η : H) :
+    (∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
+      ∃ h : modularConjugation hM hΩ C hC ξ ∈ (modularOperatorSqrt hM hΩ C hC).domain,
+        modularOperatorSqrt hM hΩ C hC ⟨_, h⟩ = η := by
+  sorry
+
+/-- `S* = J Δ^{-1/2}`: `(ξ, η) ∈ Γ(S*)` if and only if `ξ ∈ Dom Δ^{-1/2}` and
+`η = J Δ^{-1/2} ξ`; in particular the closure of `F₀` is `J Δ^{-1/2}`.
+Blueprint: crllr:tomita-adjoint-polar -/
+theorem mem_tomitaAdjoint_iff_modularOperatorInvSqrt {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (ξ η : H) :
+    ((∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
+      ∃ h : ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain,
+        η = modularConjugation hM hΩ C hC (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h⟩)) ∧
+    ((ξ, η) ∈ closure ((fun b : H →L[ℂ] H => (b Ω, star b Ω)) '' Set.centralizer M) ↔
+      ∃ h : ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain,
+        η = modularConjugation hM hΩ C hC (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h⟩)) := by
+  sorry
+
+/-! ### The modular objects of the commutant -/
+
+/-- `M′` is a von Neumann algebra and `Ω` is cyclic and separating for `M′`.
+Blueprint: lmm:commutant-cyclic-separating -/
+theorem isCyclicSeparatingVector_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) :
+    IsVonNeumannSet (Set.centralizer M) ∧ IsCyclicSeparatingVector (Set.centralizer M) Ω := by
+  sorry
+
+/-- `(ξ, η) ∈ Γ(S_{M′})` if and only if `ξ ∈ Dom Δ^{-1/2}` and `η = J Δ^{-1/2} ξ`, if and only
+if `(ξ, η) ∈ Γ(S*)`.
+Blueprint: lmm:commutant-tomita-operator -/
+theorem tomitaOperator_centralizer_iff {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (ξ η : H) :
+    ((∃ h : ξ ∈ (linearizedTomitaPre (Set.centralizer M) Ω C).closure.domain,
+        tomitaOperator (Set.centralizer M) Ω C ⟨ξ, h⟩ = η) ↔
+      ∃ h : ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain,
+        η = modularConjugation hM hΩ C hC (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h⟩)) ∧
+    ((∃ h : ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain,
+        η = modularConjugation hM hΩ C hC (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h⟩)) ↔
+      ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) := by
+  sorry
+
+/-- `ψ ∈ Dom Δ_{M′}` with `Δ_{M′} ψ = χ` if and only if `ψ ∈ Dom Δ^{-1/2}` and
+`⟪Δ^{-1/2} ψ, Δ^{-1/2} φ⟫ = ⟪χ, φ⟫` for every `φ ∈ Dom Δ^{-1/2}`.
+Blueprint: lmm:commutant-modular-operator-intrinsic -/
+theorem mem_modularOperator_centralizer_iff {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (ψ χ : H) :
+    (∃ h : ψ ∈ (modularOperator (Set.centralizer M) Ω C).domain,
+        modularOperator (Set.centralizer M) Ω C ⟨ψ, h⟩ = χ) ↔
+      ∃ h : ψ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain,
+        ∀ φ : (modularOperatorInvSqrt hM hΩ C hC).domain,
+          ⟪modularOperatorInvSqrt hM hΩ C hC ⟨ψ, h⟩, modularOperatorInvSqrt hM hΩ C hC φ⟫_ℂ =
+            ⟪χ, (φ : H)⟫_ℂ := by
+  sorry
+
+/-- `Δ_{M′} = Δ⁻¹`, including domains.
+Blueprint: lmm:commutant-modular-operator -/
+theorem modularOperator_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) :
+    modularOperator (Set.centralizer M) Ω C = (modularOperator M Ω C).inverse := by
+  sorry
+
+/-- `Δ_{M′}^{1/2} = Δ^{-1/2}` and `J_{M′} = J`.
+Blueprint: lmm:commutant-modular-conjugation -/
+theorem modularOperatorSqrt_modularConjugation_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) :
+    modularOperatorSqrt (isCyclicSeparatingVector_centralizer hM hΩ).1
+        (isCyclicSeparatingVector_centralizer hM hΩ).2 C hC =
+      modularOperatorInvSqrt hM hΩ C hC ∧
+    ∀ x, modularConjugation (isCyclicSeparatingVector_centralizer hM hΩ).1
+        (isCyclicSeparatingVector_centralizer hM hΩ).2 C hC x =
+      modularConjugation hM hΩ C hC x := by
+  sorry
+
+/-- The modular objects of `(M′, Ω)`: `Ω` is cyclic and separating for `M′`,
+`Γ(S_{M′}) = Γ(S*) = Γ(J Δ^{-1/2})`, `Δ_{M′} = Δ⁻¹`, `Δ_{M′}^{1/2} = Δ^{-1/2}` and `J_{M′} = J`.
+Blueprint: thrm:commutant-modular-objects -/
+theorem commutant_modular_objects {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) :
+    IsCyclicSeparatingVector (Set.centralizer M) Ω ∧
+    Set.range (fun x : (linearizedTomitaPre (Set.centralizer M) Ω C).closure.domain =>
+        ((x : H), tomitaOperator (Set.centralizer M) Ω C x)) =
+      {p : H × H | ∃ h : C p.1 ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C p.1, h⟩ = p.2} ∧
+    {p : H × H | ∃ h : C p.1 ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C p.1, h⟩ = p.2} =
+      {p : H × H | ∃ h : p.1 ∈ (modularOperatorInvSqrt hM hΩ C hC).domain,
+        p.2 = modularConjugation hM hΩ C hC (modularOperatorInvSqrt hM hΩ C hC ⟨p.1, h⟩)} ∧
+    modularOperator (Set.centralizer M) Ω C = (modularOperator M Ω C).inverse ∧
+    modularOperatorSqrt (isCyclicSeparatingVector_centralizer hM hΩ).1
+        (isCyclicSeparatingVector_centralizer hM hΩ).2 C hC =
+      modularOperatorInvSqrt hM hΩ C hC ∧
+    ∀ x, modularConjugation (isCyclicSeparatingVector_centralizer hM hΩ).1
+        (isCyclicSeparatingVector_centralizer hM hΩ).2 C hC x =
+      modularConjugation hM hΩ C hC x := by
+  sorry
+
+end Physicslib4.Modular

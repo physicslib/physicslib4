@@ -73,7 +73,9 @@ import Physicslib4.Operators.DensityTheorem
 import Physicslib4.Operators.LpDiagonal
 import Physicslib4.Operators.Modular.Antiunitary
 import Physicslib4.Operators.Modular.Modular
+import Physicslib4.Operators.Modular.Takesaki
 import Physicslib4.Operators.Modular.Tomita
+import Physicslib4.Operators.Modular.TomitaAdjoint
 import Physicslib4.Operators.ReducingSubspace
 import Physicslib4.Spacetime.AlongPath
 import Physicslib4.Spacetime.Basic
@@ -113,6 +115,7 @@ import Physicslib4.Spectral.Stone.Theorem
 import Physicslib4.Spectral.Unbounded.AbstractCalculus
 import Physicslib4.Spectral.Unbounded.Basic
 import Physicslib4.Spectral.Unbounded.Cayley
+import Physicslib4.Spectral.Unbounded.Commuting
 import Physicslib4.Spectral.Unbounded.Composition
 import Physicslib4.Spectral.Unbounded.DirectSum
 import Physicslib4.Spectral.Unbounded.FunctionalCalculus
