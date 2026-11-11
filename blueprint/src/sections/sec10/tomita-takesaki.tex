@@ -1596,3 +1596,439 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     \uses{lmm:takesaki-elementary-inequality, lmm:takesaki-resolvent-in-ball-closure, lmm:takesaki-ball-closure-bound, lmm:commutant-extension}
     The constant $c$ is well defined by Lemma~\ref{lmm:takesaki-elementary-inequality}. By Lemmas~\ref{lmm:takesaki-resolvent-in-ball-closure} and~\ref{lmm:takesaki-ball-closure-bound}, $\|b'\psi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$, and the commutant extension lemma (Lemma~\ref{lmm:commutant-extension}) gives the unique $a \in \mathcal{M}$ with $a\Omega = \psi$ and $\|a\| \le c$.
 \end{proof}
+
+\subsection{The Adjoint of the Tomita Operator}\label{sbsctn:tomita-adjoint}
+
+This subsection proves that the antilinear adjoint of $S$ is the closure of $F_0$, and hence that the Tomita operator of $(\mathcal{M}', \Omega)$ is $S^*$, with modular operator $\Delta^{-1}$ and modular conjugation $J$. This is Theorem~13.1.3 and Corollary~13.1.4 of V.~F.~R.~Jones, \emph{von Neumann algebras}, Berkeley lecture notes, Chapter~13, a result of Takesaki, in the presentation of van Daele's proof of Tomita's theorem (A.~van Daele, \emph{J. Funct. Anal.} 15 (1974) 378--393) that Jones follows. The inclusion of the closure of $F_0$ in $S^*$ is the adjoint relation of Lemma~\ref{lmm:tomita-adjoint-relation}. For the converse, Jones takes, for $\xi \in \text{Dom}(S^*)$, the closure $c$ of $x\Omega \mapsto x\xi$ ($x \in \mathcal{M}$), an operator affiliated with $\mathcal{M}'$, and cuts it off with its polar decomposition. The partial isometry of that polar decomposition need not be unitary; the proof below uses instead the bounded operators $c(\mathbf{1} + |c|/n)^{-1}$; these commute with the unitaries of $\mathcal{M}$, so they lie in $\mathcal{M}'$.
+
+The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ of $S' = CS$. Write $S^*$ for the antilinear operator $(S')^*C$, with $\text{Dom}(S^*) = \{ \xi \in \mathbf{H} \mid C\xi \in \text{Dom}((S')^*) \}$ and $S^*\xi = (S')^*C\xi$, and $\Gamma(S^*)$ for its graph. Lemma~\ref{lmm:tomita-adjoint-intrinsic} shows that $\Gamma(S^*)$ is described by $S$ alone, so $S^*$ does not depend on $C$. Write $\Gamma(F_0) = \{ (b'\Omega, b'^*\Omega) \mid b' \in \mathcal{M}' \}$ for the graph of $F_0$ (Lemma~\ref{lmm:tomita-pre-operators-apply}).
+
+\subsubsection{The Antilinear Adjoint of $S$}
+
+\begin{lemma}[An Intrinsic Description of $S^*$]
+    \label{lmm:tomita-adjoint-intrinsic}
+    \uses{def:tomita-operator, def:hall-9.1}
+    Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $\left< \xi, S\zeta \right> = \left< \zeta, \eta \right>$ for every $\zeta \in \text{Dom}(S)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:characterizing-adjoint-domain-membership, lmm:reference-conjugation-properties, crllr:linearized-tomita-properties}
+    $\text{Dom}(S') = \text{Dom}(S)$, which is dense (Corollary~\ref{crllr:linearized-tomita-properties}), and $S'\zeta = CS\zeta$. By Lemma~\ref{lmm:characterizing-adjoint-domain-membership}, the left side holds if and only if $\left< C\xi, CS\zeta \right> = \left< \eta, \zeta \right>$ for every $\zeta \in \text{Dom}(S)$. By Lemma~\ref{lmm:reference-conjugation-properties}, $\left< C\xi, CS\zeta \right> = \overline{\left< \xi, S\zeta \right>}$, and $\left< \eta, \zeta \right> = \overline{\left< \zeta, \eta \right>}$; take complex conjugates.
+\end{proof}
+
+\begin{lemma}[$S^*$ Tested on $\mathcal{M}\Omega$]
+    \label{lmm:tomita-adjoint-intrinsic-core}
+    \uses{def:tomita-operator, def:hall-9.1}
+    Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if
+    \begin{align}
+        \left< \xi, x^*\Omega \right> = \left< x\Omega, \eta \right> \qquad \text{for every } x \in \mathcal{M}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-intrinsic, lmm:tomita-pre-operators-apply, lmm:tomita-operator-independent-of-c, lmm:tomita-core, prpstn:continuity-of-norm-and-inner-product}
+    For $x \in \mathcal{M}$, $(x\Omega, x^*\Omega) \in \Gamma(S_0) \subset \Gamma(S)$ (Lemmas~\ref{lmm:tomita-pre-operators-apply} and~\ref{lmm:tomita-operator-independent-of-c}), so the condition is the case $\zeta = x\Omega$ of Lemma~\ref{lmm:tomita-adjoint-intrinsic}. Conversely, for $\zeta \in \text{Dom}(S)$ take $h_n \in \mathcal{M}$ with $h_n\Omega \to \zeta$ and $h_n^*\Omega \to S\zeta$ (Lemma~\ref{lmm:tomita-core}); the condition for $x = h_n$ passes to the limit (Proposition~\ref{prpstn:continuity-of-norm-and-inner-product}) and gives $\left< \xi, S\zeta \right> = \left< \zeta, \eta \right>$.
+\end{proof}
+
+\begin{lemma}[The Graph of $S^*$ is Closed]
+    \label{lmm:tomita-adjoint-graph-closed}
+    \uses{def:tomita-operator, def:hall-9.1}
+    The set $\Gamma(S^*) = \{ (\xi, \eta) \in \mathbf{H} \times \mathbf{H} \mid C\xi \in \text{Dom}((S')^*),\ (S')^*C\xi = \eta \}$ is closed in $\mathbf{H} \times \mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-intrinsic-core}
+    By Lemma~\ref{lmm:tomita-adjoint-intrinsic-core}, $\Gamma(S^*)$ is the intersection over $x \in \mathcal{M}$ of the sets $\{ (\xi, \eta) \mid \left< \xi, x^*\Omega \right> = \left< x\Omega, \eta \right> \}$. Each is the set where two continuous functions of $(\xi, \eta)$ agree (Mathlib's \texttt{isClosed\_eq}, with \texttt{continuous\_inner}), hence closed, and an intersection of closed sets is closed (Mathlib's \texttt{isClosed\_iInter}).
+\end{proof}
+
+\begin{lemma}[$S^*$ Extends the Closure of $F_0$]
+    \label{lmm:tomita-adjoint-extends-closure}
+    \uses{def:tomita-operator, def:tomita-pre-operators, def:hall-9.1}
+    The closure of $\Gamma(F_0)$ in $\mathbf{H} \times \mathbf{H}$ is contained in $\Gamma(S^*)$: if $(\xi, \eta)$ lies in the closure of $\{ (b'\Omega, b'^*\Omega) \mid b' \in \mathcal{M}' \}$, then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-relation, lmm:tomita-pre-operators-apply, lmm:tomita-adjoint-intrinsic-core, lmm:tomita-adjoint-graph-closed}
+    For $b' \in \mathcal{M}'$ and $x \in \mathcal{M}$, the adjoint relation (Lemma~\ref{lmm:tomita-adjoint-relation}, with Lemma~\ref{lmm:tomita-pre-operators-apply}) reads $\left< b'\Omega, x^*\Omega \right> = \left< x\Omega, b'^*\Omega \right>$, so $(b'\Omega, b'^*\Omega) \in \Gamma(S^*)$ by Lemma~\ref{lmm:tomita-adjoint-intrinsic-core}. $\Gamma(S^*)$ is closed (Lemma~\ref{lmm:tomita-adjoint-graph-closed}), so it contains the closure (Mathlib's \texttt{closure\_minimal}).
+\end{proof}
+
+\subsubsection{Operators Commuting with a Unitary}
+
+Let $U$ be unitary and $A$ an operator on $\mathbf{H}$. Say that $U$ \emph{commutes with} $A$ if, for every $\psi \in \text{Dom}(A)$, the vectors $U\psi$ and $U^{-1}\psi$ lie in $\text{Dom}(A)$ and $AU\psi = UA\psi$, $AU^{-1}\psi = U^{-1}A\psi$; for $A \in \mathcal{B}(\mathbf{H})$ the condition says $UA = AU$. Unitary conjugation enters only through the antiunitaries $C$ and $UC$ (Lemmas~\ref{lmm:reference-conjugation-properties} and~\ref{lmm:antiunitary-composition}): for an operator $B$, $(UC)\big(CBC^{-1}\big)(UC)^{-1}$ denotes the conjugate by the antiunitary $UC$ of the conjugate $CBC^{-1}$ by $C$ (\ref{def:product-of-unbounded-operators}). Its domain is $\{ \phi \mid C^{-1}(UC)^{-1}\phi \in \text{Dom}(B) \}$ and its value at such $\phi$ is $UC\,C\,B\,C^{-1}(UC)^{-1}\phi$.
+
+\begin{lemma}[The Double Conjugate by a Commuting Unitary]
+    \label{lmm:commuting-unitary-double-conjugate}
+    \uses{def:unitary-operator, def:reference-conjugation, def:product-of-unbounded-operators}
+    Let $U$ be a unitary that commutes with an operator $A$. Then $(UC)\big(CAC^{-1}\big)(UC)^{-1} = A$, including domains.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reference-conjugation-properties, lmm:antiunitary-composition}
+    $C^{-1} = C$ because $C(C\phi) = \phi$ (Lemma~\ref{lmm:reference-conjugation-properties}), so $C^{-1}(UC)^{-1}\phi = C(CU^{-1}\phi) = U^{-1}\phi$ and $UC\,C\chi = U\chi$. Hence the left side has domain $\{ \phi \mid U^{-1}\phi \in \text{Dom}(A) \}$ and value $UAU^{-1}\phi$ there. If $\phi \in \text{Dom}(A)$ then $U^{-1}\phi \in \text{Dom}(A)$ and $UAU^{-1}\phi = UU^{-1}A\phi = A\phi$; if $U^{-1}\phi \in \text{Dom}(A)$ then $\phi = U(U^{-1}\phi) \in \text{Dom}(A)$. The two operators have the same graph (Mathlib's \texttt{LinearPMap.ext}).
+\end{proof}
+
+\begin{lemma}[Unitary Conjugation and the Functional Calculus]
+    \label{lmm:unitary-conjugate-functional-calculus}
+    \uses{def:unitary-operator, def:reference-conjugation, def:product-of-unbounded-operators, def:hall-10.5}
+    Let $A$ be self-adjoint and $U$ a unitary that commutes with $A$. Then $(UC)\big(Cf(A)C^{-1}\big)(UC)^{-1} = f(A)$, including domains, for every real measurable $f$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reference-conjugation-properties, lmm:antiunitary-composition, lmm:antiunitary-conjugate-spectral-measure, crllr:antiunitary-conjugate-functional-calculus, lmm:commuting-unitary-double-conjugate}
+    $C$ and $UC$ are antiunitary (Lemmas~\ref{lmm:reference-conjugation-properties} and~\ref{lmm:antiunitary-composition}). $B = CAC^{-1}$ is self-adjoint (Lemma~\ref{lmm:antiunitary-conjugate-spectral-measure}), and Corollary~\ref{crllr:antiunitary-conjugate-functional-calculus}, applied to $C$ and $A$ and then to $UC$ and $B$, gives
+    \begin{align}
+        (UC)\big(Cf(A)C^{-1}\big)(UC)^{-1} = (UC)f(B)(UC)^{-1} = f\big((UC)B(UC)^{-1}\big).
+    \end{align}
+    $(UC)B(UC)^{-1} = A$ by Lemma~\ref{lmm:commuting-unitary-double-conjugate}.
+\end{proof}
+
+\begin{lemma}[One Half of the Adjoint Commutation]
+    \label{lmm:commuting-unitary-adjoint-half}
+    \uses{def:unitary-operator, def:hall-9.1}
+    Let $c$ be a densely defined operator and $V$ a unitary such that, for every $\psi \in \text{Dom}(c)$, $V^{-1}\psi \in \text{Dom}(c)$ and $cV^{-1}\psi = V^{-1}c\psi$. Then, for every $\phi \in \text{Dom}(c^*)$, $V\phi \in \text{Dom}(c^*)$ and $c^*V\phi = Vc^*\phi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:characterizing-adjoint-domain-membership}
+    Let $\phi \in \text{Dom}(c^*)$. For $\psi \in \text{Dom}(c)$, since $V^* = V^{-1}$,
+    \begin{align}
+        \left< V\phi, c\psi \right> = \left< \phi, V^{-1}c\psi \right> = \left< \phi, cV^{-1}\psi \right> = \left< c^*\phi, V^{-1}\psi \right> = \left< Vc^*\phi, \psi \right>.
+    \end{align}
+    By Lemma~\ref{lmm:characterizing-adjoint-domain-membership}, $V\phi \in \text{Dom}(c^*)$ and $c^*V\phi = Vc^*\phi$.
+\end{proof}
+
+\begin{lemma}[A Commuting Unitary Commutes with the Adjoint]
+    \label{lmm:commuting-unitary-adjoint}
+    \uses{def:unitary-operator, def:hall-9.1}
+    Let $c$ be a densely defined operator and $U$ a unitary that commutes with $c$. Then $U$ commutes with $c^*$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commuting-unitary-adjoint-half}
+    Apply Lemma~\ref{lmm:commuting-unitary-adjoint-half} with $V = U$, whose hypothesis is the $U^{-1}$ half of the commutation of $U$ with $c$, and with $V = U^{-1}$, whose hypothesis is the $U$ half since $(U^{-1})^{-1} = U$.
+\end{proof}
+
+\begin{lemma}[A Commuting Unitary Commutes with $c^*c$]
+    \label{lmm:commuting-unitary-adjoint-product}
+    \uses{def:unitary-operator, def:adjoint-product-operator}
+    Let $c$ be a densely defined operator and $U$ a unitary that commutes with $c$. Then $U$ commutes with $c^*c$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commuting-unitary-adjoint}
+    Let $\psi \in \text{Dom}(c^*c)$, so $\psi \in \text{Dom}(c)$ and $c\psi \in \text{Dom}(c^*)$. Then $U\psi \in \text{Dom}(c)$ with $cU\psi = Uc\psi \in \text{Dom}(c^*)$ and $c^*cU\psi = c^*Uc\psi = Uc^*c\psi$ by Lemma~\ref{lmm:commuting-unitary-adjoint}; likewise for $U^{-1}$.
+\end{proof}
+
+\begin{lemma}[A Commuting Unitary Commutes with Bounded Functions of $c^*c$]
+    \label{lmm:commuting-unitary-bounded-function}
+    \uses{def:unitary-operator, def:adjoint-product-operator, def:hall-10.5}
+    Let $c$ be a closed, densely defined operator, $D = c^*c$, and $U$ a unitary that commutes with $c$. Then $Uf(D) = f(D)U$ for every bounded real measurable $f$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commuting-unitary-adjoint-product, lmm:unitary-conjugate-functional-calculus, thrm:von-neumann-adjoint-product, lmm:functional-calculus-bounded, lmm:reference-conjugation-properties}
+    $D$ is self-adjoint (Theorem~\ref{thrm:von-neumann-adjoint-product}) and $U$ commutes with $D$ (Lemma~\ref{lmm:commuting-unitary-adjoint-product}), so $(UC)\big(Cf(D)C^{-1}\big)(UC)^{-1} = f(D)$ by Lemma~\ref{lmm:unitary-conjugate-functional-calculus}. $f(D)$ is defined on all of $\mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}). Evaluate both sides at $U\psi$: since $C^{-1}(UC)^{-1}U\psi = C(CU^{-1}U\psi) = \psi$ (Lemma~\ref{lmm:reference-conjugation-properties}), the left side is $UC\,C\,f(D)\psi = Uf(D)\psi$, and the right side is $f(D)U\psi$.
+\end{proof}
+
+\subsubsection{Bounded Approximants of a Closed Operator}
+
+For the next six results, $c$ is a closed, densely defined operator on $\mathbf{H}$, $D = c^*c$ and $|c| = s(D)$ (Definition~\ref{def:absolute-value}). For an integer $n \ge 1$ let
+\begin{align}
+    h_n(\lambda) = \frac{n}{n + s(\lambda)}, \qquad k_n(\lambda) = s(\lambda)h_n(\lambda), \qquad R_n = h_n(D), \qquad K_n = k_n(D).
+\end{align}
+Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
+
+\begin{lemma}[The Scalar Functions $h_n$ and $k_n$]
+    \label{lmm:approximant-functions}
+    For every $n \ge 1$, $h_n$ and $k_n$ are real, continuous and measurable, $0 < h_n \le 1$, $0 \le k_n \le n$ and $k_n \le s$. For every $\lambda \in \mathbb{R}$, $h_n(\lambda) \to 1$ and $k_n(\lambda) \to s(\lambda)$ as $n \to \infty$.
+\end{lemma}
+\begin{proof}
+    $s$ is continuous and non-negative (Mathlib's \texttt{Real.continuous\_sqrt} and \texttt{continuous\_max}), so $n + s > 0$ and $h_n$, $k_n$ are continuous, hence measurable (Mathlib's \texttt{Continuous.measurable}). $0 < h_n \le 1$ because $0 < n \le n + s$; $k_n = ns/(n + s)$ is at most $n$ and at most $s$. For fixed $\lambda$, $h_n(\lambda) = (1 + s(\lambda)/n)^{-1}$ and $s(\lambda)/n \to 0$ (Mathlib's \texttt{tendsto\_const\_div\_atTop\_nhds\_zero\_nat}), so $h_n(\lambda) \to 1$ by continuity of $t \mapsto (1 + t)^{-1}$ at $0$, and $k_n(\lambda) = s(\lambda)h_n(\lambda) \to s(\lambda)$.
+\end{proof}
+
+\begin{lemma}[The Bounded Operators $R_n$ and $K_n$]
+    \label{lmm:approximant-bounded}
+    \uses{def:absolute-value, def:hall-10.5}
+    For every $n \ge 1$, $R_n$ and $K_n$ are bounded operators defined on all of $\mathbf{H}$, $R_n$ is self-adjoint, $\|R_n\| \le 1$ and $\|K_n\| \le n$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:approximant-functions, thrm:von-neumann-adjoint-product, lmm:functional-calculus-bounded, prpstn:integral-norm-bound, prpstn:integral-conjugation}
+    $D$ is self-adjoint (Theorem~\ref{thrm:von-neumann-adjoint-product}), and $h_n$, $k_n$ are bounded, real and measurable (Lemma~\ref{lmm:approximant-functions}). Lemma~\ref{lmm:functional-calculus-bounded} identifies $R_n$ and $K_n$ with bounded integrals; Proposition~\ref{prpstn:integral-norm-bound} with $0 < h_n \le 1$ and $0 \le k_n \le n$ gives the norm bounds, and Proposition~\ref{prpstn:integral-conjugation} gives $R_n^* = R_n$.
+\end{proof}
+
+\begin{lemma}[$R_n$ Maps into $\text{Dom}(c)$]
+    \label{lmm:approximant-range}
+    \uses{lmm:approximant-bounded, def:absolute-value}
+    For every $n \ge 1$ and $\psi \in \mathbf{H}$, $R_n\psi \in \text{Dom}(|c|) = \text{Dom}(c)$, $|c|R_n\psi = K_n\psi$, and $\|cR_n\psi\| = \|K_n\psi\| \le n\|\psi\|$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:von-neumann-adjoint-product, thrm:fc-composition, lmm:approximant-functions, lmm:approximant-bounded, lmm:functional-calculus-bounded, thrm:absolute-value-domain}
+    $D$ is self-adjoint (Theorem~\ref{thrm:von-neumann-adjoint-product}). Theorem~\ref{thrm:fc-composition} with $f = s$ and $g = h_n$ gives $\text{Dom}(s(D)h_n(D)) = W_{h_n} \cap W_{k_n}$, which is $\mathbf{H}$ because $h_n$ and $k_n$ are bounded (Lemmas~\ref{lmm:approximant-functions} and~\ref{lmm:functional-calculus-bounded}), and $s(D)h_n(D)\psi = k_n(D)\psi$. Theorem~\ref{thrm:absolute-value-domain} gives $\text{Dom}(|c|) = \text{Dom}(c)$ and $\|cR_n\psi\| = \||c|R_n\psi\|$, and $\|K_n\| \le n$ (Lemma~\ref{lmm:approximant-bounded}).
+\end{proof}
+
+\begin{lemma}[Convergence of the Approximants]
+    \label{lmm:approximant-convergence}
+    \uses{lmm:approximant-bounded, def:absolute-value}
+    $R_n\phi \to \phi$ for every $\phi \in \mathbf{H}$, and $K_n\psi \to |c|\psi$ for every $\psi \in \text{Dom}(c)$, as $n \to \infty$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:fc-dominated-convergence, lmm:approximant-functions, lmm:functional-calculus-bounded, prpstn:integral-of-indicator, def:projection-valued-measure, thrm:absolute-value-domain}
+    Apply Lemma~\ref{lmm:fc-dominated-convergence} to $\mu^D$ twice, with the bounds and limits of Lemma~\ref{lmm:approximant-functions}. First $h = 1$ and the $h_n$: here $W_1 = \mathbf{H}$ and $1(D) = \mu^D(\mathbb{R}) = \mathbf{1}$ (Lemma~\ref{lmm:functional-calculus-bounded}, Proposition~\ref{prpstn:integral-of-indicator} and Definition~\ref{def:projection-valued-measure}). Second $h = s$ and the $k_n$, for $\psi \in W_s = \text{Dom}(|c|) = \text{Dom}(c)$ (Theorem~\ref{thrm:absolute-value-domain}).
+\end{proof}
+
+\begin{lemma}[The Bounded Operators $cR_n$]
+    \label{lmm:approximant-operator}
+    \uses{lmm:approximant-range}
+    For every $n \ge 1$ there is a unique $x_n \in \mathcal{B}(\mathbf{H})$ with $x_n\psi = cR_n\psi$ for every $\psi \in \mathbf{H}$, and $\|x_n\| \le n$. Moreover $x_n^*\phi = R_nc^*\phi$ for every $\phi \in \text{Dom}(c^*)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:approximant-range, lmm:approximant-bounded, def:hall-9.1}
+    $\psi \mapsto cR_n\psi$ is defined on all of $\mathbf{H}$ (Lemma~\ref{lmm:approximant-range}) and linear, as a composite of the linear $R_n$ with the linear $c$, and $\|cR_n\psi\| \le n\|\psi\|$ (Lemma~\ref{lmm:approximant-range}); Mathlib's \texttt{LinearMap.mkContinuous} gives $x_n$ with $\|x_n\| \le n$. For $\phi \in \text{Dom}(c^*)$ and $\psi \in \mathbf{H}$, the definition of the adjoint (\ref{def:hall-9.1}) and $R_n^* = R_n$ (Lemma~\ref{lmm:approximant-bounded}) give $\left< \phi, x_n\psi \right> = \left< c^*\phi, R_n\psi \right> = \left< R_nc^*\phi, \psi \right>$. Since $\left< x_n^*\phi, \psi \right> = \left< \phi, x_n\psi \right>$ (Mathlib's \texttt{ContinuousLinearMap.adjoint\_inner\_left}) for every $\psi$, $x_n^*\phi = R_nc^*\phi$ (Mathlib's \texttt{ext\_inner\_right}).
+\end{proof}
+
+\begin{lemma}[A Commuting Unitary Commutes with $cR_n$]
+    \label{lmm:approximant-operator-commutes}
+    \uses{lmm:approximant-operator, def:unitary-operator}
+    Let $U$ be a unitary that commutes with $c$. Then $Ux_n = x_nU$ for every $n \ge 1$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commuting-unitary-bounded-function, lmm:approximant-functions, lmm:approximant-range, lmm:approximant-operator}
+    $UR_n = R_nU$ by Lemma~\ref{lmm:commuting-unitary-bounded-function} with the bounded real measurable $h_n$ (Lemma~\ref{lmm:approximant-functions}). For $\psi \in \mathbf{H}$, $R_n\psi \in \text{Dom}(c)$ (Lemma~\ref{lmm:approximant-range}), so $Ux_n\psi = UcR_n\psi = cUR_n\psi = cR_nU\psi = x_nU\psi$.
+\end{proof}
+
+\subsubsection{Unitaries of a Von Neumann Algebra}
+
+\begin{lemma}[A Unitary from a Self-Adjoint Contraction]
+    \label{lmm:von-neumann-unitary-of-contraction}
+    \uses{def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    Let $a \in \mathcal{M}$ be self-adjoint with $\|a\| \le 1$. Then $u = a + i\sqrt{\mathbf{1} - a^2}$, with the square root of the continuous functional calculus of $\mathcal{B}(\mathbf{H})$ (Mathlib's \texttt{CFC.sqrt}), is unitary, and $u, u^* \in \mathcal{M}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:cfc-mem-von-neumann, lmm:commutant-von-neumann-algebra}
+    $u$ is unitary by Mathlib's \texttt{IsSelfAdjoint.self\_add\_I\_smul\_cfcSqrt\_sub\_sq\_mem\_unitary} (for the Loewner order of $\mathcal{B}(\mathbf{H})$, \texttt{ContinuousLinearMap.instStarOrderedRing}). Since $\|a\| \le 1$, $\mathbf{1} - a^2 \ge 0$, so $\sqrt{\mathbf{1} - a^2}$ is the continuous functional calculus of the self-adjoint $\mathbf{1} - a^2 \in \mathcal{M}$ with the real function $\sqrt{\cdot}$ (Mathlib's \texttt{CFC.sqrt\_eq\_real\_sqrt}), which lies in $\mathcal{M}$ by Lemma~\ref{lmm:cfc-mem-von-neumann}. $\mathcal{M}$ is a self-adjoint subalgebra (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $u, u^* \in \mathcal{M}$.
+\end{proof}
+
+\begin{lemma}[Real and Imaginary Parts in a Von Neumann Algebra]
+    \label{lmm:von-neumann-real-imaginary-part}
+    \uses{def:von-neumann-algebra-commutant-convention}
+    Let $y \in \mathcal{M}$. Then the real part $\Re y = \tfrac{1}{2}(y + y^*)$ and the imaginary part $\Im y = -\tfrac{i}{2}(y - y^*)$ of $y$ in $\mathcal{B}(\mathbf{H})$ (Mathlib's \texttt{realPart} and \texttt{imaginaryPart}) lie in $\mathcal{M}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-von-neumann-algebra}
+    Mathlib's \texttt{realPart\_apply\_coe} and \texttt{imaginaryPart\_apply\_coe} give the two formulas. $\mathcal{M}$ is a complex linear subspace closed under adjoints (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $y^* \in \mathcal{M}$ and both combinations lie in $\mathcal{M}$.
+\end{proof}
+
+\begin{lemma}[Unitaries Span a Von Neumann Algebra]
+    \label{lmm:von-neumann-span-unitaries}
+    \uses{def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    Let $x \in \mathcal{M}$ with $x \ne 0$. Then there are unitaries $u_1, u_2$ with $u_1, u_1^*, u_2, u_2^* \in \mathcal{M}$ and $x = \tfrac{\|x\|}{2}\big(u_1 + u_1^* + i(u_2 + u_2^*)\big)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:von-neumann-unitary-of-contraction, lmm:von-neumann-real-imaginary-part, lmm:commutant-von-neumann-algebra}
+    Mathlib's \texttt{CStarAlgebra.norm\_smul\_two\_inv\_smul\_add\_four\_unitary}, in the C*-algebra $\mathcal{B}(\mathbf{H})$, gives the formula with $u_1$ and $u_2$ the unitaries $a + i\sqrt{\mathbf{1} - a^2}$ (Mathlib's \texttt{selfAdjoint.unitarySelfAddISMul}) for the self-adjoint contractions $a = \Re y$ and $a = \Im y$, $y = \|x\|^{-1}x$. Here $y \in \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\Re y, \Im y \in \mathcal{M}$ (Lemma~\ref{lmm:von-neumann-real-imaginary-part}), and Lemma~\ref{lmm:von-neumann-unitary-of-contraction} gives $u_1, u_1^*, u_2, u_2^* \in \mathcal{M}$.
+\end{proof}
+
+\begin{lemma}[Commuting with the Unitaries of $\mathcal{M}$]
+    \label{lmm:commutant-of-unitaries}
+    \uses{def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    If $b \in \mathcal{B}(\mathbf{H})$ satisfies $ub = bu$ for every unitary $u \in \mathcal{M}$, then $b \in \mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:von-neumann-span-unitaries}
+    Let $x \in \mathcal{M}$; for $x = 0$, $xb = 0 = bx$. Otherwise write $x = \tfrac{\|x\|}{2}\big(u_1 + u_1^* + i(u_2 + u_2^*)\big)$ with $u_1, u_1^*, u_2, u_2^*$ unitaries in $\mathcal{M}$ (Lemma~\ref{lmm:von-neumann-span-unitaries}). Each of the four commutes with $b$, so $xb = bx$, and $b$ lies in the centralizer of $\mathcal{M}$.
+\end{proof}
+
+\subsubsection{$\mathcal{M}'\Omega$ is a Core for $S^*$}
+
+For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$; by Lemma~\ref{lmm:tomita-adjoint-intrinsic-core},
+\begin{align}
+    \left< \xi, x^*\Omega \right> = \left< x\Omega, \eta \right> \qquad \text{for every } x \in \mathcal{M}. \label{eq:tomita-adjoint-pair}
+\end{align}
+
+\begin{lemma}[The Operator $x\Omega \mapsto x\xi$]
+    \label{lmm:tomita-adjoint-left-map}
+    \uses{def:cyclic-separating-vector, lmm:commutant-von-neumann-algebra}
+    There is a unique linear operator $a_0$ with $\text{Dom}(a_0) = \mathcal{M}\Omega$ and $a_0(x\Omega) = x\xi$ for every $x \in \mathcal{M}$. It is densely defined.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:cyclic-commutant-separating, lmm:commutant-von-neumann-algebra, def:cyclic-separating-vector}
+    $\mathcal{M}$ is a linear subspace (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\mathcal{M}\Omega$ is the range of the linear map $x \mapsto x\Omega$, and $x \mapsto x\xi$ is linear. The first map is injective because $\Omega$ is separating for $\mathcal{M}$ (Lemma~\ref{lmm:cyclic-commutant-separating}), so $a_0$ is the second map composed with the inverse of the first on its range (Mathlib's \texttt{LinearEquiv.ofInjective}). $\mathcal{M}\Omega$ is dense because $\Omega$ is cyclic for $\mathcal{M}$ (\ref{def:cyclic-separating-vector}).
+\end{proof}
+
+\begin{lemma}[The Adjoint of $a_0$]
+    \label{lmm:tomita-adjoint-left-map-adjoint}
+    \uses{lmm:tomita-adjoint-left-map, def:hall-9.1}
+    For every $y \in \mathcal{M}$, $y\Omega \in \text{Dom}(a_0^*)$ and $a_0^*(y\Omega) = y\eta$. In particular $a_0^*$ is densely defined.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-left-map, lmm:tomita-adjoint-intrinsic-core, lmm:characterizing-adjoint-domain-membership, lmm:commutant-von-neumann-algebra}
+    Let $x \in \mathcal{M}$. Then $x^*y \in \mathcal{M}$ and $(y^*x)^* = x^*y$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so \eqref{eq:tomita-adjoint-pair} for $y^*x$ gives
+    \begin{align}
+        \left< a_0(x\Omega), y\Omega \right> = \left< x\xi, y\Omega \right> = \left< \xi, x^*y\Omega \right> = \left< y^*x\Omega, \eta \right> = \left< x\Omega, y\eta \right>.
+    \end{align}
+    Taking complex conjugates, $\left< y\Omega, a_0(x\Omega) \right> = \left< y\eta, x\Omega \right>$ for every $x \in \mathcal{M}$, so Lemma~\ref{lmm:characterizing-adjoint-domain-membership} gives the claim. $\mathcal{M}\Omega$ is dense (Lemma~\ref{lmm:tomita-adjoint-left-map}).
+\end{proof}
+
+\begin{lemma}[The Closure $c$ of $a_0$]
+    \label{lmm:tomita-adjoint-closure-props}
+    \uses{lmm:tomita-adjoint-left-map, def:hall-9.6, def:hall-9.1}
+    $a_0$ is closable. Its closure $c = a_0^{\text{cl}}$ is closed and densely defined, $\mathcal{M}\Omega \subset \text{Dom}(c)$ with $c(x\Omega) = x\xi$ for $x \in \mathcal{M}$, so $c\Omega = \xi$; and $\Omega \in \text{Dom}(c^*)$ with $c^*\Omega = \eta$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-left-map-adjoint, lmm:tomita-adjoint-left-map, lmm:closable-of-dense-adjoint, prpstn:hall-9.10}
+    $a_0^*$ is densely defined (Lemma~\ref{lmm:tomita-adjoint-left-map-adjoint}), so $a_0$ is closable (Lemma~\ref{lmm:closable-of-dense-adjoint}); its closure is closed, extends $a_0$, and so is densely defined (Lemma~\ref{lmm:tomita-adjoint-left-map}), and $\mathbf{1} \in \mathcal{M}$ gives $c\Omega = \xi$. By Proposition~\ref{prpstn:hall-9.10}, $c^* = a_0^*$, so $c^*\Omega = a_0^*(\mathbf{1}\Omega) = \eta$ by Lemma~\ref{lmm:tomita-adjoint-left-map-adjoint} with $y = \mathbf{1}$.
+\end{proof}
+
+\begin{lemma}[The Unitaries of $\mathcal{M}$ Commute with $c$]
+    \label{lmm:tomita-adjoint-closure-commutes}
+    \uses{lmm:tomita-adjoint-closure-props, def:unitary-operator}
+    Every unitary $u \in \mathcal{M}$ commutes with $c$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-closure-props, prpstn:closure-linearity-and-sequential-description, lmm:commutant-von-neumann-algebra}
+    $u^{-1} = u^*$ is also a unitary in $\mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so it suffices to show, for every unitary $w \in \mathcal{M}$ and $\psi \in \text{Dom}(c)$, that $w\psi \in \text{Dom}(c)$ and $cw\psi = wc\psi$. Take $y_n \in \mathcal{M}$ with $y_n\Omega \to \psi$ and $y_n\xi \to c\psi$ (Proposition~\ref{prpstn:closure-linearity-and-sequential-description} and Lemma~\ref{lmm:tomita-adjoint-closure-props}). Then $wy_n \in \mathcal{M}$, $wy_n\Omega \to w\psi$ and $c(wy_n\Omega) = wy_n\xi \to wc\psi$ by continuity of $w$; since $c$ is closed, $w\psi \in \text{Dom}(c)$ and $cw\psi = wc\psi$.
+\end{proof}
+
+\begin{lemma}[The Approximants Lie in $\mathcal{M}'$]
+    \label{lmm:tomita-adjoint-approximants-commutant}
+    \uses{lmm:tomita-adjoint-closure-props, lmm:approximant-operator}
+    With $c$ as in Lemma~\ref{lmm:tomita-adjoint-closure-props} and $x_n$ the operators of Lemma~\ref{lmm:approximant-operator} for this $c$, $x_n \in \mathcal{M}'$ for every $n \ge 1$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-closure-commutes, lmm:approximant-operator-commutes, lmm:commutant-of-unitaries}
+    Every unitary $u \in \mathcal{M}$ commutes with $c$ (Lemma~\ref{lmm:tomita-adjoint-closure-commutes}), so $ux_n = x_nu$ (Lemma~\ref{lmm:approximant-operator-commutes}); apply Lemma~\ref{lmm:commutant-of-unitaries}.
+\end{proof}
+
+\begin{lemma}[Convergence of the Approximants on $\Omega$]
+    \label{lmm:tomita-adjoint-approximants-converge}
+    \uses{lmm:tomita-adjoint-closure-props, lmm:approximant-operator}
+    With $c$ and $x_n$ as in Lemma~\ref{lmm:tomita-adjoint-approximants-commutant}, $x_n\Omega \to \xi$ and $x_n^*\Omega \to \eta$ as $n \to \infty$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-closure-props, lmm:approximant-operator, lmm:approximant-range, lmm:approximant-convergence, thrm:absolute-value-domain}
+    $\Omega \in \text{Dom}(c)$ with $c\Omega = \xi$, and $\Omega \in \text{Dom}(c^*)$ with $c^*\Omega = \eta$ (Lemma~\ref{lmm:tomita-adjoint-closure-props}). Since $R_n\Omega - \Omega \in \text{Dom}(c)$ (Lemma~\ref{lmm:approximant-range}), Theorem~\ref{thrm:absolute-value-domain} and Lemma~\ref{lmm:approximant-range} give
+    \begin{align}
+        \|x_n\Omega - \xi\| = \|c(R_n\Omega - \Omega)\| = \||c|(R_n\Omega - \Omega)\| = \|K_n\Omega - |c|\Omega\|,
+    \end{align}
+    which tends to $0$ by Lemma~\ref{lmm:approximant-convergence}. By Lemma~\ref{lmm:approximant-operator}, $x_n^*\Omega = R_nc^*\Omega = R_n\eta$, which tends to $\eta$ by Lemma~\ref{lmm:approximant-convergence}.
+\end{proof}
+
+\begin{theorem}[$S^* = \overline{F_0}$]
+    \label{thrm:tomita-adjoint-eq-closure}
+    \uses{def:tomita-operator, def:tomita-pre-operators, def:hall-9.1}
+    Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $(\xi, \eta)$ lies in the closure of $\Gamma(F_0) = \{ (b'\Omega, b'^*\Omega) \mid b' \in \mathcal{M}' \}$ in $\mathbf{H} \times \mathbf{H}$. That is, the antilinear adjoint $S^*$ of $S$ is the closure of $F_0$, and $\mathcal{M}'\Omega$ is a core for $S^*$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-extends-closure, lmm:tomita-adjoint-approximants-commutant, lmm:tomita-adjoint-approximants-converge, lmm:componentwise-convergence, thrm:sequential-closedness}
+    The reverse implication is Lemma~\ref{lmm:tomita-adjoint-extends-closure}. For the forward one, the operators $x_n$ of Lemma~\ref{lmm:tomita-adjoint-approximants-commutant} lie in $\mathcal{M}'$, so $(x_n\Omega, x_n^*\Omega) \in \Gamma(F_0)$, and $(x_n\Omega, x_n^*\Omega) \to (\xi, \eta)$ by Lemmas~\ref{lmm:tomita-adjoint-approximants-converge} and~\ref{lmm:componentwise-convergence}. Hence $(\xi, \eta)$ lies in the closure of $\Gamma(F_0)$ (Theorem~\ref{thrm:sequential-closedness}).
+\end{proof}
+
+\subsubsection{The Polar Decomposition of $S^*$}
+
+\begin{lemma}[$S^* = \Delta^{1/2}J$]
+    \label{lmm:tomita-adjoint-sqrt-conjugation}
+    \uses{def:tomita-operator, def:modular-operator, def:modular-conjugation}
+    Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $J\xi \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}J\xi = \eta$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-intrinsic, thrm:modular-conjugation-polar, thrm:modular-conjugation-involution, lmm:antilinear-isometry-antiunitary, lmm:square-root-positive, thrm:modular-operator-properties, lmm:characterizing-adjoint-domain-membership}
+    By Theorem~\ref{thrm:modular-conjugation-polar}, $\text{Dom}(S) = \text{Dom}(\Delta^{1/2})$ and $S\zeta = J\Delta^{1/2}\zeta$. Since $J(J\xi) = \xi$ (Theorem~\ref{thrm:modular-conjugation-involution}) and $J$ is antiunitary (Lemma~\ref{lmm:antilinear-isometry-antiunitary}), $\left< \xi, J\Delta^{1/2}\zeta \right> = \overline{\left< J\xi, \Delta^{1/2}\zeta \right>}$. So the condition of Lemma~\ref{lmm:tomita-adjoint-intrinsic} becomes $\left< J\xi, \Delta^{1/2}\zeta \right> = \left< \eta, \zeta \right>$ for all $\zeta \in \text{Dom}(\Delta^{1/2})$, which by Lemma~\ref{lmm:characterizing-adjoint-domain-membership} says $J\xi \in \text{Dom}((\Delta^{1/2})^*)$ with $(\Delta^{1/2})^*J\xi = \eta$; and $(\Delta^{1/2})^* = \Delta^{1/2}$ (Lemma~\ref{lmm:square-root-positive} and Theorem~\ref{thrm:modular-operator-properties}).
+\end{proof}
+
+\begin{corollary}[$S^* = J\Delta^{-1/2}$]
+    \label{crllr:tomita-adjoint-polar}
+    \uses{def:tomita-operator, def:modular-operator, def:modular-conjugation, lmm:inverse-square-root-positive}
+    Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $\xi \in \text{Dom}(\Delta^{-1/2})$ and $\eta = J\Delta^{-1/2}\xi$. In particular the closure of $F_0$ is $J\Delta^{-1/2}$ (Theorem~\ref{thrm:tomita-adjoint-eq-closure}).
+\end{corollary}
+\begin{proof}
+    \uses{lmm:tomita-adjoint-sqrt-conjugation, thrm:modular-conjugation-involution, def:product-of-unbounded-operators}
+    By Theorem~\ref{thrm:modular-conjugation-involution}, $J\Delta^{1/2}J = \Delta^{-1/2}$ including domains (\ref{def:product-of-unbounded-operators}): $J\xi \in \text{Dom}(\Delta^{1/2})$ if and only if $\xi \in \text{Dom}(\Delta^{-1/2})$, and then $J\Delta^{1/2}J\xi = \Delta^{-1/2}\xi$, so $\Delta^{1/2}J\xi = J\Delta^{-1/2}\xi$ because $J(J\phi) = \phi$. Combine with Lemma~\ref{lmm:tomita-adjoint-sqrt-conjugation}.
+\end{proof}
+
+\subsubsection{The Modular Objects of the Commutant}
+
+Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$ and $J_{\mathcal{M}'}$ for the Tomita operator, the modular operator, its square root and the modular conjugation of $(\mathcal{M}', \Omega)$ (Definitions~\ref{def:tomita-operator}, \ref{def:modular-operator} and~\ref{def:modular-conjugation}, with the same reference conjugation $C$; by Lemma~\ref{lmm:tomita-operator-independent-of-c} and Theorem~\ref{thrm:modular-objects-independent-of-c} the choice does not matter). They are defined by Lemma~\ref{lmm:commutant-cyclic-separating}.
+
+\begin{lemma}[$\Omega$ is Cyclic and Separating for $\mathcal{M}'$]
+    \label{lmm:commutant-cyclic-separating}
+    \uses{def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    $\mathcal{M}'$ is a von Neumann algebra on $\mathbf{H}$, and $\Omega$ is cyclic and separating for $\mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-von-neumann-algebra}
+    $\mathcal{M}'$ is a von Neumann algebra and $(\mathcal{M}')' = \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}). So the two density conditions of \ref{def:cyclic-separating-vector} for $\mathcal{M}'$, density of $\mathcal{M}'\Omega$ and of $(\mathcal{M}')'\Omega = \mathcal{M}\Omega$, are those for $\mathcal{M}$ in the other order.
+\end{proof}
+
+\begin{lemma}[The Tomita Operator of $\mathcal{M}'$ is $S^*$]
+    \label{lmm:commutant-tomita-operator}
+    \uses{lmm:commutant-cyclic-separating, def:tomita-operator}
+    Let $\xi, \eta \in \mathbf{H}$. Then $\xi \in \text{Dom}(S_{\mathcal{M}'})$ and $S_{\mathcal{M}'}\xi = \eta$ if and only if $\xi \in \text{Dom}(\Delta^{-1/2})$ and $\eta = J\Delta^{-1/2}\xi$, if and only if $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-cyclic-separating, lmm:tomita-operator-independent-of-c, lmm:tomita-pre-operators-apply, thrm:tomita-adjoint-eq-closure, crllr:tomita-adjoint-polar}
+    By Lemma~\ref{lmm:tomita-pre-operators-apply} for $(\mathcal{M}', \Omega)$, the graph of its pre-operator $S_0$ is $\{ (b'\Omega, b'^*\Omega) \mid b' \in \mathcal{M}' \} = \Gamma(F_0)$, so Lemma~\ref{lmm:tomita-operator-independent-of-c} for $(\mathcal{M}', \Omega)$ identifies $\Gamma(S_{\mathcal{M}'})$ with the closure of $\Gamma(F_0)$. Theorem~\ref{thrm:tomita-adjoint-eq-closure} and Corollary~\ref{crllr:tomita-adjoint-polar} give the two equivalences.
+\end{proof}
+
+\begin{lemma}[An Intrinsic Description of $\Delta_{\mathcal{M}'}$]
+    \label{lmm:commutant-modular-operator-intrinsic}
+    \uses{lmm:commutant-cyclic-separating, def:modular-operator, lmm:inverse-square-root-positive}
+    $\psi \in \text{Dom}(\Delta_{\mathcal{M}'})$ with $\Delta_{\mathcal{M}'}\psi = \chi$ if and only if $\psi \in \text{Dom}(\Delta^{-1/2})$ and $\left< \Delta^{-1/2}\psi, \Delta^{-1/2}\phi \right> = \left< \chi, \phi \right>$ for every $\phi \in \text{Dom}(\Delta^{-1/2})$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-operator-intrinsic, lmm:commutant-tomita-operator, lmm:antilinear-isometry-antiunitary, thrm:modular-conjugation-polar}
+    Lemma~\ref{lmm:modular-operator-intrinsic} for $(\mathcal{M}', \Omega)$ describes $\Delta_{\mathcal{M}'}$ by $\psi \in \text{Dom}(S_{\mathcal{M}'})$ and $\left< S_{\mathcal{M}'}\phi, S_{\mathcal{M}'}\psi \right> = \left< \chi, \phi \right>$ for $\phi \in \text{Dom}(S_{\mathcal{M}'})$. By Lemma~\ref{lmm:commutant-tomita-operator}, $\text{Dom}(S_{\mathcal{M}'}) = \text{Dom}(\Delta^{-1/2})$ and $S_{\mathcal{M}'} = J\Delta^{-1/2}$ there, and $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar} and Lemma~\ref{lmm:antilinear-isometry-antiunitary}), so $\left< J\Delta^{-1/2}\phi, J\Delta^{-1/2}\psi \right> = \left< \Delta^{-1/2}\psi, \Delta^{-1/2}\phi \right>$.
+\end{proof}
+
+\begin{lemma}[The Domain of $f(A)f(A)$]
+    \label{lmm:fc-domain-square}
+    \uses{def:hall-10.5, def:product-of-unbounded-operators}
+    Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable. Then $W_{f^2} \subset W_f$, and $f(A)f(A) = (f^2)(A)$, including domains.
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:hall-10.2, def:projection-valued-measure, thrm:fc-composition}
+    Let $\psi \in W_{f^2}$. Since $|f|^2 \le 1 + |f|^4$ and $\mu^A_\psi(\mathbb{R}) = \|\psi\|^2 < \infty$ (Definition~\ref{def:projection-valued-measure}), $\int |f|^2 \, d\mu^A_\psi \le \|\psi\|^2 + \int |f^2|^2 \, d\mu^A_\psi < \infty$, so $\psi \in W_f$ (Proposition~\ref{prpstn:hall-10.2}). Theorem~\ref{thrm:fc-composition} with $g = f$ gives $f(A)f(A) \subset (f^2)(A)$ with $\text{Dom}(f(A)f(A)) = W_f \cap W_{f^2} = W_{f^2} = \text{Dom}((f^2)(A))$, so the two operators are equal.
+\end{proof}
+
+\begin{lemma}[$A^{-1/2}A^{-1/2} = A^{-1}$]
+    \label{lmm:inverse-square-root-product}
+    \uses{lmm:inverse-square-root-positive, def:inverse-of-operator, def:product-of-unbounded-operators}
+    Let $A$ be positive, self-adjoint and injective. Then the product $A^{-1/2}A^{-1/2}$ equals $A^{-1}$, including domains.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:fc-domain-square, crllr:fc-of-fc, lmm:square-of-inverse-square-root}
+    With $r$ as in Lemma~\ref{lmm:inverse-square-root-positive}, real and measurable, $A^{-1/2} = r(A)$, and Lemma~\ref{lmm:fc-domain-square} gives $r(A)r(A) = (r^2)(A)$. With $q(\lambda) = \lambda^2$, $(r^2)(A) = (q \circ r)(A) = q(r(A))$ by Corollary~\ref{crllr:fc-of-fc}, and $q(A^{-1/2}) = A^{-1}$ by Lemma~\ref{lmm:square-of-inverse-square-root}.
+\end{proof}
+
+\begin{lemma}[$\Delta_{\mathcal{M}'} = \Delta^{-1}$]
+    \label{lmm:commutant-modular-operator}
+    \uses{lmm:commutant-cyclic-separating, def:modular-operator, def:inverse-of-operator}
+    $\Delta_{\mathcal{M}'} = \Delta^{-1}$, including domains.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-modular-operator-intrinsic, lmm:characterizing-adjoint-domain-membership, lmm:inverse-square-root-positive, lmm:inverse-square-root-product, thrm:modular-operator-properties}
+    Write $P = \Delta^{-1/2}$, which is self-adjoint (Lemma~\ref{lmm:inverse-square-root-positive}). By Lemma~\ref{lmm:characterizing-adjoint-domain-membership} and $P^* = P$, the condition of Lemma~\ref{lmm:commutant-modular-operator-intrinsic} says $\psi \in \text{Dom}(P)$, $P\psi \in \text{Dom}(P)$ and $PP\psi = \chi$, that is $\psi \in \text{Dom}(PP)$ and $PP\psi = \chi$. $PP = \Delta^{-1}$ by Lemma~\ref{lmm:inverse-square-root-product} for the positive, self-adjoint, injective $\Delta$ (Theorem~\ref{thrm:modular-operator-properties}).
+\end{proof}
+
+\begin{lemma}[The Square Root of the Inverse]
+    \label{lmm:sqrt-of-inverse}
+    \uses{lmm:inverse-square-root-positive, def:inverse-of-operator}
+    Let $A$ be positive, self-adjoint and injective. Then $A^{-1}$ is self-adjoint and $(A^{-1})^{1/2} = s(A^{-1}) = A^{-1/2}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:inverse-functional-calculus, crllr:fc-of-fc}
+    $A^{-1} = \iota^-(A)$ (Lemma~\ref{lmm:inverse-functional-calculus}) with $\iota^-$ real and measurable (Mathlib's \texttt{measurable\_inv}), so Corollary~\ref{crllr:fc-of-fc} gives that $A^{-1}$ is self-adjoint and $s(\iota^-(A)) = (s \circ \iota^-)(A)$. Here $\iota^-$ is Mathlib's \texttt{Inv.inv} on $\mathbb{R}$, with $0^{-1} = 0$. For $\lambda > 0$, $s(\lambda^{-1}) = (\sqrt{\lambda})^{-1} = (\lambda^{1/2})^{-1} = \lambda^{-1/2} = r(\lambda)$ (Mathlib's \texttt{Real.sqrt\_inv}, \texttt{Real.sqrt\_eq\_rpow} and \texttt{Real.rpow\_neg}); for $\lambda \le 0$, $\iota^-(\lambda) \le 0$, so $s(\iota^-(\lambda)) = 0 = r(\lambda)$. Hence $s \circ \iota^- = r$.
+\end{proof}
+
+\begin{lemma}[$J_{\mathcal{M}'} = J$]
+    \label{lmm:commutant-modular-conjugation}
+    \uses{lmm:commutant-cyclic-separating, def:modular-conjugation}
+    $\Delta_{\mathcal{M}'}^{1/2} = \Delta^{-1/2}$ and $J_{\mathcal{M}'} = J$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-modular-operator, lmm:sqrt-of-inverse, thrm:modular-operator-properties, lmm:modular-conjugation-intrinsic, lmm:commutant-tomita-operator, lmm:antiunitary-isometric}
+    $\Delta_{\mathcal{M}'}^{1/2} = s(\Delta_{\mathcal{M}'}) = s(\Delta^{-1}) = \Delta^{-1/2}$ by Lemmas~\ref{lmm:commutant-modular-operator} and~\ref{lmm:sqrt-of-inverse} (Theorem~\ref{thrm:modular-operator-properties}). By Lemma~\ref{lmm:modular-conjugation-intrinsic} for $(\mathcal{M}', \Omega)$, $J_{\mathcal{M}'}$ is the only continuous map with $J_{\mathcal{M}'}\Delta_{\mathcal{M}'}^{1/2}\psi = S_{\mathcal{M}'}\psi$ for $\psi \in \text{Dom}(\Delta_{\mathcal{M}'}^{1/2})$. $J$ is continuous (Lemma~\ref{lmm:antiunitary-isometric}) and $J\Delta^{-1/2}\psi = S_{\mathcal{M}'}\psi$ for $\psi \in \text{Dom}(\Delta^{-1/2})$ (Lemma~\ref{lmm:commutant-tomita-operator}), so $J_{\mathcal{M}'} = J$.
+\end{proof}
+
+\begin{theorem}[The Modular Objects of $(\mathcal{M}', \Omega)$]
+    \label{thrm:commutant-modular-objects}
+    \uses{lmm:commutant-cyclic-separating, def:tomita-operator, def:modular-operator, def:modular-conjugation, def:inverse-of-operator}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\Omega$ cyclic and separating for $\mathcal{M}$, with Tomita operator $S$, modular operator $\Delta$ and modular conjugation $J$. Then $\Omega$ is cyclic and separating for $\mathcal{M}'$, and the Tomita operator, the modular operator and the modular conjugation of $(\mathcal{M}', \Omega)$ are
+    \begin{align}
+        S_{\mathcal{M}'} = S^* = J\Delta^{-1/2}, \qquad \Delta_{\mathcal{M}'} = \Delta^{-1}, \qquad \Delta_{\mathcal{M}'}^{1/2} = \Delta^{-1/2}, \qquad J_{\mathcal{M}'} = J,
+    \end{align}
+    where $S_{\mathcal{M}'} = S^*$ means $\Gamma(S_{\mathcal{M}'}) = \Gamma(S^*)$, and the equalities of operators include domains.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:commutant-cyclic-separating, lmm:commutant-tomita-operator, lmm:commutant-modular-operator, lmm:commutant-modular-conjugation}
+    Lemma~\ref{lmm:commutant-cyclic-separating} gives the hypotheses for $(\mathcal{M}', \Omega)$. The four identities are Lemmas~\ref{lmm:commutant-tomita-operator}, \ref{lmm:commutant-modular-operator} and~\ref{lmm:commutant-modular-conjugation}.
+\end{proof}
