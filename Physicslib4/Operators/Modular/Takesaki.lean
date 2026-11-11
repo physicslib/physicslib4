@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.Operators.Modular.Modular
 import Physicslib4.Spectral.Unbounded.Spectrum
+import Physicslib4.Spectral.Stone.Exponential
 
 /-!
 # Takesaki's lemma: the commutant extension lemma and the resolvent of `Δ`
@@ -46,7 +47,48 @@ theorem commutantExtension_linearMap {M : Set (H →L[ℂ] H)} {Ω : H}
         (∀ (b : H →L[ℂ] H) (hb : b ∈ Set.centralizer M),
           T₀ ⟨b Ω, Submodule.subset_span ⟨b, hb, rfl⟩⟩ = b ψ) →
         ∀ η, ‖T₀ η‖ ≤ c * ‖(η : H)‖ := by
-  sorry
+  set V := Submodule.span ℂ ((fun b => b Ω) '' Set.centralizer M)
+  have hsmul : ∀ (a : ℂ) b, b ∈ Set.centralizer M → a • b ∈ Set.centralizer M :=
+    fun a b hb m hm => by rw [smul_mul_assoc, mul_smul_comm, hb m hm]
+  have hrep : ∀ η : V, ∃ b ∈ Set.centralizer M, b Ω = (η : H) := by
+    rintro ⟨η, hη⟩
+    induction hη using Submodule.span_induction with
+    | mem x hx => obtain ⟨b, hb, rfl⟩ := hx; exact ⟨b, hb, rfl⟩
+    | zero => exact ⟨0, Set.zero_mem_centralizer, rfl⟩
+    | add x y _ _ hx hy =>
+      obtain ⟨b, hb, hbx⟩ := hx; obtain ⟨b', hb', hby⟩ := hy
+      exact ⟨b + b', Set.add_mem_centralizer hb hb', by simp [hbx, hby]⟩
+    | smul a x _ hx =>
+      obtain ⟨b, hb, hbx⟩ := hx
+      exact ⟨a • b, hsmul a b hb, by simp [hbx]⟩
+  have hwd : ∀ b ∈ Set.centralizer M, ∀ b' ∈ Set.centralizer M, b Ω = b' Ω → b ψ = b' ψ := by
+    intro b hb b' hb' h
+    have hsub : b - b' ∈ Set.centralizer M := by
+      simpa [sub_eq_add_neg] using Set.add_mem_centralizer hb (hsmul (-1) b' hb')
+    have h1 := hψ (b - b') hsub
+    simp only [sub_apply, h, sub_self, norm_zero, mul_zero] at h1
+    exact sub_eq_zero.mp (norm_le_zero_iff.mp h1)
+  have hbound : ∀ T₀ : V →ₗ[ℂ] H, (∀ (b : H →L[ℂ] H) (hb : b ∈ Set.centralizer M),
+      T₀ ⟨b Ω, Submodule.subset_span ⟨b, hb, rfl⟩⟩ = b ψ) → ∀ η, ‖T₀ η‖ ≤ c * ‖(η : H)‖ := by
+    intro T₀ hT₀ η
+    obtain ⟨b, hb, hη⟩ := hrep η
+    have : η = ⟨b Ω, Submodule.subset_span ⟨b, hb, rfl⟩⟩ := Subtype.ext hη.symm
+    rw [this, hT₀ b hb]
+    exact hψ b hb
+  refine ⟨?_, hbound⟩
+  choose f hf hfΩ using hrep
+  refine ⟨{ toFun := fun η => f η ψ, map_add' := ?_, map_smul' := ?_ }, ?_, ?_⟩
+  · intro x y
+    rw [← add_apply]
+    exact hwd _ (hf _) _ (Set.add_mem_centralizer (hf x) (hf y)) (by simp [hfΩ])
+  · intro a x
+    rw [RingHom.id_apply, ← smul_apply]
+    exact hwd _ (hf _) _ (hsmul a _ (hf x)) (by simp [hfΩ])
+  · intro b hb
+    exact hwd _ (hf _) _ hb (hfΩ _)
+  · intro T₁ hT₁
+    ext η
+    exact (congrArg T₁ (Subtype.ext (hfΩ η).symm)).trans (hT₁ _ (hf η))
 
 /--
 Under the commutant bound, there is a unique bounded `T` with `T (b' Ω) = b' ψ` for all
@@ -62,7 +104,23 @@ theorem commutantExtension_bounded {M : Set (H →L[ℂ] H)} {Ω : H}
     (hψ : ∀ b ∈ Set.centralizer M, ‖b ψ‖ ≤ c * ‖b Ω‖) :
     ∃ T : H →L[ℂ] H, (∀ b ∈ Set.centralizer M, T (b Ω) = b ψ) ∧ ‖T‖ ≤ c ∧
       ∀ T' : H →L[ℂ] H, (∀ b ∈ Set.centralizer M, T' (b Ω) = b ψ) → T' = T := by
-  sorry
+  set S := Submodule.span ℂ ((fun b => b Ω) '' Set.centralizer M)
+  obtain ⟨⟨T₀, hT₀, -⟩, hbd⟩ := commutantExtension_linearMap hM hΩ hc hψ
+  let T₁ : S →L[ℂ] H := T₀.mkContinuous c (hbd T₀ hT₀)
+  have hdr : DenseRange S.subtypeL := (hΩ.2.mono Submodule.subset_span).denseRange_val
+  have hui : IsUniformInducing S.subtypeL := isUniformEmbedding_subtype_val.isUniformInducing
+  let T := T₁.extend S.subtypeL
+  have hT : ∀ b ∈ Set.centralizer M, T (b Ω) = b ψ := fun b hb =>
+    (ContinuousLinearMap.extend_eq T₁ hdr hui ⟨b Ω, Submodule.subset_span ⟨b, hb, rfl⟩⟩).trans
+      (hT₀ b hb)
+  refine ⟨T, hT, ?_, fun T' hT' => ContinuousLinearMap.ext (congrFun
+    (hΩ.2.denseRange_val.equalizer T'.continuous T.continuous
+      (funext fun ⟨_, hx⟩ => by
+        obtain ⟨b, hb, rfl⟩ := hx
+        exact (hT' b hb).trans (hT b hb).symm)))⟩
+  calc ‖T‖ ≤ (1 : NNReal) * ‖T₁‖ :=
+        ContinuousLinearMap.opNorm_extend_le (N := 1) T₁ hdr fun x => by simp
+    _ ≤ c := by rw [NNReal.coe_one, one_mul]; exact T₀.mkContinuous_norm_le hc _
 
 /--
 A bounded `T` with `T (b' Ω) = b' ψ` for all `b' ∈ M'` commutes with every `d' ∈ M'`, and so
@@ -77,7 +135,14 @@ theorem commutantExtension_mem {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) {ψ : H} (T : H →L[ℂ] H)
     (hT : ∀ b ∈ Set.centralizer M, T (b Ω) = b ψ) :
     (∀ d ∈ Set.centralizer M, T * d = d * T) ∧ T ∈ M := by
-  sorry
+  have key : ∀ d ∈ Set.centralizer M, T * d = d * T := fun d hd =>
+    DFunLike.coe_injective <| Continuous.ext_on hΩ.2 (T * d).continuous
+      (d * T).continuous <| by
+        rintro _ ⟨b, hb, rfl⟩
+        change T (d (b Ω)) = d (T (b Ω))
+        rw [hT b hb]
+        exact hT _ (Set.mul_mem_centralizer hd hb)
+  exact ⟨key, hM.2 ▸ Set.mem_centralizer_iff.mpr fun d hd => (key d hd).symm⟩
 
 /--
 The commutant extension lemma: if `‖b' ψ‖ ≤ c ‖b' Ω‖` for all `b' ∈ M'`, then `ψ = a Ω` for a
@@ -89,7 +154,14 @@ theorem commutantExtension {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) {ψ : H} {c : ℝ} (hc : 0 ≤ c)
     (hψ : ∀ b ∈ Set.centralizer M, ‖b ψ‖ ≤ c * ‖b Ω‖) :
     ∃ a ∈ M, a Ω = ψ ∧ ‖a‖ ≤ c ∧ ∀ a' ∈ M, a' Ω = ψ → a' = a := by
-  sorry
+  obtain ⟨T, hT, hTc, -⟩ := commutantExtension_bounded hM hΩ hc hψ
+  have hTΩ : T Ω = ψ := hT 1 Set.one_mem_centralizer
+  have hTM := (commutantExtension_mem hM hΩ T hT).2
+  refine ⟨T, hTM, hTΩ, hTc, fun a' ha' h => ?_⟩
+  obtain ⟨A, hA⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+  rw [← hA] at ha' hTM
+  exact sub_eq_zero.mp <| (isSeparatingVector_of_isCyclicSeparatingVector hΩ).1 _
+    (hA ▸ sub_mem ha' hTM) (by rw [sub_apply, h, hTΩ, sub_self])
 
 /--
 For `z ∉ [0, ∞)`: `d(z) > 0`, `r_z` is measurable, `|r_z| ≤ 1/d(z)`, `conj r_z = r_{z̄}` and
@@ -106,7 +178,28 @@ theorem resolventFunction_properties {z : ℂ} (hz : z ∉ ((↑) : ℝ → ℂ)
         (Set.Ici (0 : ℝ)).indicator (fun t : ℝ => (conj z - t)⁻¹) t) ∧
       ∀ t : ℝ, (z - t) * (Set.Ici (0 : ℝ)).indicator (fun t : ℝ => (z - t)⁻¹) t =
         (Set.Ici (0 : ℝ)).indicator 1 t := by
-  sorry
+  set S : Set ℂ := ((↑) : ℝ → ℂ) '' Set.Ici 0
+  have hS : IsClosed S := Complex.isometry_ofReal.isClosedEmbedding.isClosedMap _ isClosed_Ici
+  have hd : 0 < Metric.infDist z S :=
+    (hS.notMem_iff_infDist_pos ⟨0, 0, Set.self_mem_Ici, rfl⟩).1 hz
+  have hne : ∀ t : ℝ, 0 ≤ t → z - t ≠ 0 := fun t ht h =>
+    hz ⟨t, ht, (sub_eq_zero.1 h).symm⟩
+  refine ⟨hd, ?_, fun t => ?_, fun t => ?_, fun t => ?_⟩
+  · exact (Measurable.inv (by fun_prop)).indicator measurableSet_Ici
+  · by_cases ht : t ∈ Set.Ici (0 : ℝ)
+    · rw [Set.indicator_of_mem ht, norm_inv, one_div]
+      refine inv_anti₀ hd ?_
+      rw [← dist_eq_norm]
+      exact Metric.infDist_le_dist_of_mem ⟨t, ht, rfl⟩
+    · rw [Set.indicator_of_notMem ht, norm_zero]
+      positivity
+  · by_cases ht : t ∈ Set.Ici (0 : ℝ)
+    · simp [Set.indicator_of_mem ht, map_inv₀, map_sub, Complex.conj_ofReal]
+    · simp [Set.indicator_of_notMem ht]
+  · by_cases ht : t ∈ Set.Ici (0 : ℝ)
+    · rw [Set.indicator_of_mem ht, Set.indicator_of_mem ht, mul_inv_cancel₀ (hne t ht)]
+      rfl
+    · simp [Set.indicator_of_notMem ht]
 
 /--
 For `z ∉ [0, ∞)`, `r_z(Δ)` is the bounded operator `∫ r_z dμ^Δ` on all of `H`, with
@@ -129,7 +222,14 @@ theorem modularResolvent_bounded {M : Set (H →L[ℂ] H)} {Ω : H}
           ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹)) =
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
         ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (conj z - t)⁻¹) := by
-  sorry
+  obtain ⟨-, hmeas, hbd, hconj, -⟩ := resolventFunction_properties hz
+  have hf : ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹) ∈
+      Spectral.BddMeasurable ℝ := ⟨hmeas, _, hbd⟩
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  refine ⟨(functionalCalculus_of_bddMeasurable _ hf).2,
+    (μ.norm_integral_le hf).trans (ciSup_le hbd), ?_⟩
+  rw [← μ.integral_conj hf]
+  exact congrArg μ.integral (funext hconj)
 
 /--
 For `z ∈ ℂ`, `W_{z - ι} = Dom Δ` and `(z - ι)(Δ) ψ = z ψ - Δ ψ` for `ψ ∈ Dom Δ`.
@@ -145,7 +245,33 @@ theorem modularOperator_functionalCalculus_const_sub {M : Set (H →L[ℂ] H)} {
           fun t : ℝ => z - t).domain) (h₂ : ψ ∈ (modularOperator M Ω C).domain),
         functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) (fun t : ℝ => z - t)
           ⟨ψ, h₁⟩ = z • ψ - modularOperator M Ω C ⟨ψ, h₂⟩ := by
-  sorry
+  set hA := modularOperator_isSelfAdjoint hM hΩ C hC
+  have hg : (fun _ : ℝ => z) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨measurable_const, ‖z‖, fun _ => le_rfl⟩
+  have hsub : functionalCalculus hA (fun t : ℝ => z - t) =
+      functionalCalculus hA (fun _ : ℝ => z) - modularOperator M Ω C := by
+    have h :=
+      Spectral.Stone.functionalCalculus_sub_of_bddMeasurable hA Complex.measurable_ofReal hg
+    rwa [functionalCalculus_id hA] at h
+  obtain ⟨hgdom, hgval⟩ := functionalCalculus_of_bddMeasurable hA hg
+  have hdom : (functionalCalculus hA fun t : ℝ => z - t).domain =
+      (modularOperator M Ω C).domain := by
+    rw [hsub, LinearPMap.sub_domain, hgdom, top_inf_eq]
+  refine ⟨hdom, fun ψ h₁ h₂ => ?_⟩
+  have hψg : ψ ∈ (functionalCalculus hA fun _ : ℝ => z).domain := by rw [hgdom]; trivial
+  have e1 := (LinearPMap.ext_iff.mp hsub).2 (x := ψ) (hf := h₁) (hg := ⟨hψg, h₂⟩)
+  have e2 := (LinearPMap.ext_iff.mp hgval).2 (x := ψ) (hf := hψg) (hg := Submodule.mem_top)
+  have hconst : (Spectral.Unbounded.spectralMeasure hA).integral (fun _ : ℝ => z) = z • 1 := by
+    rw [show (fun _ : ℝ => z) = z • (1 : ℝ → ℂ) by ext; simp,
+      Spectral.ProjectionValuedMeasure.integral_smul _ _ (f := 1)
+        ⟨measurable_const, 1, fun _ => by simp⟩,
+      Spectral.ProjectionValuedMeasure.integral_one]
+  have e2' : functionalCalculus hA (fun _ : ℝ => z) ⟨ψ, hψg⟩ = z • ψ := by
+    rw [e2]
+    change (Spectral.Unbounded.spectralMeasure hA).integral (fun _ : ℝ => z) ψ = z • ψ
+    rw [hconst]; simp
+  rw [e1, LinearPMap.sub_apply]
+  exact congrArg (· - _) e2'
 
 /--
 `1_{[0, ∞)}(Δ) = 𝟙`.
@@ -157,7 +283,14 @@ theorem modularOperator_functionalCalculus_indicator_Ici {M : Set (H →L[ℂ] H
     (hC : ∀ x, C (C x) = x) :
     functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) ((Set.Ici (0 : ℝ)).indicator 1) =
       (LinearMap.id : H →ₗ[ℂ] H).toPMap ⊤ := by
-  sorry
+  have hpos := (modularOperator_properties hM hΩ C hC).1
+  have hone : (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ := ⟨measurable_const, 1, fun _ => by simp⟩
+  refine (pmapIntegral_congr_of_null _ (g := 1) (measurable_const.indicator measurableSet_Ici)
+    measurable_const measurableSet_Iio
+    (spectralMeasure_Iio_zero_eq_zero_of_isPositive _ hpos) fun x hx => ?_).trans ?_
+  · exact Set.indicator_of_mem (Set.mem_Ici.2 (not_lt.1 hx)) _
+  · rw [pmapIntegral_of_bddMeasurable _ hone, Spectral.ProjectionValuedMeasure.integral_one]
+    rfl
 
 /--
 For `z ∉ [0, ∞)` and `ξ ∈ H`, `r_z(Δ) ξ ∈ Dom Δ` and `z r_z(Δ) ξ - Δ r_z(Δ) ξ = ξ`.
@@ -172,7 +305,40 @@ theorem modularResolvent_rightInverse {M : Set (H →L[ℂ] H)} {Ω : H}
       z • (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
           ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹) ξ -
         modularOperator M Ω C ⟨_, h⟩ = ξ := by
-  sorry
+  set hA := modularOperator_isSelfAdjoint hM hΩ C hC
+  set μ := spectralMeasure hA
+  set r : ℝ → ℂ := (Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹
+  obtain ⟨-, hrm, hrb, -, hgr⟩ := resolventFunction_properties hz
+  have hr : r ∈ Spectral.BddMeasurable ℝ := ⟨hrm, _, hrb⟩
+  have hgm : Measurable fun t : ℝ => z - (t : ℂ) := by fun_prop
+  have hfun : (fun t : ℝ => z - (t : ℂ)) * r = (Set.Ici (0 : ℝ)).indicator 1 := funext hgr
+  have hξ : ξ ∈ integralDomain μ r := by
+    rw [integralDomain_eq_top_of_bddMeasurable μ hr]; trivial
+  have hpr : pmapIntegral μ r ⟨ξ, hξ⟩ = μ.integral r ξ := by
+    obtain ⟨-, hext⟩ := LinearPMap.ext_iff.mp (pmapIntegral_of_bddMeasurable μ hr)
+    rw [@hext ξ hξ Submodule.mem_top]; rfl
+  have hη : pmapIntegral μ r ⟨ξ, hξ⟩ ∈ integralDomain μ (fun t : ℝ => z - (t : ℂ)) := by
+    refine (pmapIntegral_mem_integralDomain_iff μ hgm hrm ⟨ξ, hξ⟩).2 ?_
+    have h1 : (Set.Ici (0 : ℝ)).indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+      ⟨measurable_const.indicator measurableSet_Ici, 1, fun t => by
+        by_cases ht : t ∈ Set.Ici (0 : ℝ) <;> simp [ht]⟩
+    rw [hfun, integralDomain_eq_top_of_bddMeasurable μ h1]
+    trivial
+  obtain ⟨hfg, hcomp⟩ := (pmapIntegral_comp μ hgm hrm).2 ⟨ξ, hξ⟩ hη
+  obtain ⟨hdom, hval⟩ := modularOperator_functionalCalculus_const_sub hM hΩ C hC z
+  have hηD : μ.integral r ξ ∈ (modularOperator M Ω C).domain := by
+    rw [← hpr, ← hdom]; exact hη
+  refine ⟨hηD, ?_⟩
+  have hI := modularOperator_functionalCalculus_indicator_Ici hM hΩ C hC
+  rw [← hfun] at hI
+  have hξ1 := (LinearPMap.ext_iff.mp hI).2 (x := ξ) (hf := hfg) (hg := Submodule.mem_top)
+  have h₁ : μ.integral r ξ ∈ (functionalCalculus hA fun t : ℝ => z - t).domain := by
+    rw [hdom]; exact hηD
+  rw [← hval _ h₁ hηD]
+  calc functionalCalculus hA (fun t : ℝ => z - t) ⟨μ.integral r ξ, h₁⟩
+      = pmapIntegral μ (fun t : ℝ => z - (t : ℂ)) ⟨_, hη⟩ :=
+        congrArg (functionalCalculus hA _) (Subtype.ext hpr.symm)
+    _ = ξ := hcomp.symm.trans hξ1
 
 /--
 For `z ∉ [0, ∞)` and `ψ ∈ Dom Δ`, `r_z(Δ) (z ψ - Δ ψ) = ψ`.
@@ -186,7 +352,24 @@ theorem modularResolvent_leftInverse {M : Set (H →L[ℂ] H)} {Ω : H}
     (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
         ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹)
         (z • (ψ : H) - modularOperator M Ω C ψ) = ψ := by
-  sorry
+  set hA := modularOperator_isSelfAdjoint hM hΩ C hC
+  set μ := spectralMeasure hA
+  obtain ⟨-, hmeas, hbd, -, hmul⟩ := resolventFunction_properties hz
+  obtain ⟨hdom, hval⟩ := modularOperator_functionalCalculus_const_sub hM hΩ C hC z
+  have hψ : (ψ : H) ∈ integralDomain μ fun t : ℝ => z - t := by
+    rw [← functionalCalculus_domain hA, hdom]; exact ψ.2
+  obtain ⟨hψ', e⟩ := integral_apply_pmapIntegral μ (u := (Set.Ici (0 : ℝ)).indicator
+    fun t : ℝ => (z - t)⁻¹) ⟨hmeas, _, hbd⟩ (by fun_prop) ⟨ψ, hψ⟩
+  have e1 : pmapIntegral μ (fun t : ℝ => z - t) ⟨ψ, hψ⟩ = z • (ψ : H) - modularOperator M Ω C ψ :=
+    hval ψ hψ ψ.2
+  rw [← e1]
+  refine e.trans ?_
+  have key : ∀ (f : ℝ → ℂ) (hf : f = (Set.Ici (0 : ℝ)).indicator 1)
+      (h : (ψ : H) ∈ integralDomain μ f), pmapIntegral μ f ⟨ψ, h⟩ = ψ := by
+    rintro f rfl h
+    exact (LinearPMap.ext_iff.mp (modularOperator_functionalCalculus_indicator_Ici hM hΩ C hC)).2
+      (x := ψ) (hf := h) (hg := Submodule.mem_top)
+  exact key _ (funext fun t => (mul_comm _ _).trans (hmul t)) hψ'
 
 /--
 Every `z ∉ [0, ∞)` is in the resolvent set of `Δ`, with `(Δ - z𝟙)⁻¹ = -r_z(Δ)`; so
@@ -212,7 +395,23 @@ theorem modularResolvent_isResolvent {M : Set (H →L[ℂ] H)} {Ω : H}
           ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹)) =
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
         ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (conj z - t)⁻¹) := by
-  sorry
+  set R := (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+    ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹)
+  have hres : IsResolvent (modularOperator M Ω C) z (-R) := by
+    refine ⟨fun ψ => ?_, fun ψ => ?_, fun ψ => ?_⟩
+    · exact (modularOperator M Ω C).domain.neg_mem
+        (modularResolvent_rightInverse hM hΩ C hC hz ψ).1
+    · obtain ⟨h, hψ⟩ := modularResolvent_rightInverse hM hΩ C hC hz ψ
+      have hneg : (⟨(-R) ψ, (modularOperator M Ω C).domain.neg_mem h⟩ :
+          (modularOperator M Ω C).domain) = -⟨R ψ, h⟩ := rfl
+      rw [hneg, LinearPMap.map_neg, neg_apply, smul_neg, neg_sub_neg]
+      exact hψ
+    · have := modularResolvent_leftInverse hM hΩ C hC hz ψ
+      rw [neg_apply, ← neg_sub, map_neg, neg_neg]
+      exact this
+  obtain ⟨-, hnorm, hadj⟩ := modularResolvent_bounded hM hΩ C hC hz
+  exact ⟨⟨_, hres⟩, fun B => ⟨fun hB => (existsUnique_isResolvent ⟨_, hres⟩).unique hB hres,
+    fun hB => hB ▸ hres⟩, hnorm, hadj⟩
 
 /-! ### Takesaki's lemma
 

@@ -512,8 +512,8 @@ private theorem abs_assoc_Iio_zero {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     simp)
 
 /-- The spectral measure of a positive self-adjoint operator vanishes on `(−∞, 0)`. -/
-private theorem abs_spectralMeasure_Iio_zero_eq_zero {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
-    (hpos : IsPositive A) : spectralMeasure hA (Set.Iio 0) = 0 := by
+theorem spectralMeasure_Iio_zero_eq_zero_of_isPositive {A : H →ₗ.[ℂ] H}
+    (hA : IsSelfAdjoint A) (hpos : IsPositive A) : spectralMeasure hA (Set.Iio 0) = 0 := by
   ext ψ
   have h0 := abs_assoc_Iio_zero hA hpos ψ
   rw [assoc_apply_eq_norm_sq _ ψ measurableSet_Iio, ENNReal.ofReal_eq_zero] at h0
@@ -754,7 +754,7 @@ theorem sqrt_pmapMul_self {P : H →ₗ.[ℂ] H} (hP : IsSelfAdjoint P) (hpos : 
   refine pmapIntegral_congr_of_null μ
     ((Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable).comp
       (measurable_id.pow_const 2)) hi measurableSet_Iio
-    (abs_spectralMeasure_Iio_zero_eq_zero hP hpos) fun x hx => ?_
+    (spectralMeasure_Iio_zero_eq_zero_of_isPositive hP hpos) fun x hx => ?_
   simp only [Set.mem_Iio, not_lt] at hx
   simp [Function.comp, Real.sqrt_sq hx]
 
@@ -1220,7 +1220,8 @@ theorem ker_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A
   have h1 : ∀ᵐ x ∂(μ.assoc ψ), x ∉ Set.Iio 0 := by
     rw [MeasureTheory.ae_iff]
     simp only [not_not, Set.ofPred_mem_eq]
-    rw [assoc_apply_eq_norm_sq _ ψ measurableSet_Iio, abs_spectralMeasure_Iio_zero_eq_zero hA hpos]
+    rw [assoc_apply_eq_norm_sq _ ψ measurableSet_Iio,
+      spectralMeasure_Iio_zero_eq_zero_of_isPositive hA hpos]
     simp
   have h2 : ∀ᵐ x ∂(μ.assoc ψ), x ∉ ({0} : Set ℝ) := by
     rw [MeasureTheory.ae_iff]
@@ -1279,7 +1280,7 @@ theorem sq_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
   rw [hcomp _ hq]
   conv_rhs => rw [← functionalCalculus_id hA]
   refine pmapIntegral_congr_of_null _ (hq.comp hms) Complex.measurable_ofReal measurableSet_Iio
-    (abs_spectralMeasure_Iio_zero_eq_zero hA hpos) fun x hx => ?_
+    (spectralMeasure_Iio_zero_eq_zero_of_isPositive hA hpos) fun x hx => ?_
   simp only [Set.mem_Iio, not_lt] at hx
   simp only [Function.comp, ← Complex.ofReal_pow, Real.sq_sqrt hx]
 
@@ -1298,7 +1299,7 @@ theorem sq_inv_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoin
   rw [hcomp _ hq, inverse_eq_functionalCalculus_inv hA hinj]
   refine pmapIntegral_congr_of_null _ (hq.comp hms)
     (Complex.measurable_ofReal.comp measurable_inv) measurableSet_Iio
-    (abs_spectralMeasure_Iio_zero_eq_zero hA hpos) fun x hx => ?_
+    (spectralMeasure_Iio_zero_eq_zero_of_isPositive hA hpos) fun x hx => ?_
   simp only [Set.mem_Iio, not_lt] at hx
   simp only [Function.comp, ← Complex.ofReal_pow, inv_pow, Real.sq_sqrt hx]
 

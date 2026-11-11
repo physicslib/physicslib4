@@ -1249,6 +1249,7 @@ Takesaki's lemma states that, for $z \in \mathbb{C} \setminus [0, \infty)$ and $
     Let $\psi \in \mathbf{H}$ and $c \ge 0$ satisfy $\|b'\psi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$. Then there is a unique linear map $T_0 : \mathcal{M}'\Omega \to \mathbf{H}$ with $T_0(b'\Omega) = b'\psi$ for every $b' \in \mathcal{M}'$, and $\|T_0\eta\| \le c\|\eta\|$ for every $\eta \in \mathcal{M}'\Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-von-neumann-algebra}
     $\mathcal{M}'$ is a linear subspace (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\mathcal{M}'\Omega$ is the range of the linear map $b' \mapsto b'\Omega$, and $b' \mapsto b'\psi$ is linear. If $b'\Omega = d'\Omega$, the hypothesis applied to $b' - d' \in \mathcal{M}'$ gives $\|(b' - d')\psi\| \le c\|(b' - d')\Omega\| = 0$, so $b'\psi = d'\psi$: the kernel of the first map lies in the kernel of the second, and $T_0$ is the induced map on the range. The norm bound is the hypothesis.
 \end{proof}
@@ -1261,6 +1262,7 @@ Takesaki's lemma states that, for $z \in \mathbb{C} \setminus [0, \infty)$ and $
     In the situation of Lemma~\ref{lmm:commutant-extension-well-defined}, there is a unique $T \in \mathcal{B}(\mathbf{H})$ that extends $T_0$, and $\|T\| \le c$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-extension-well-defined, def:cyclic-separating-vector}
     $\mathcal{M}'\Omega$ is dense because $\Omega$ is cyclic for $\mathcal{M}'$ (\ref{def:cyclic-separating-vector}). A bounded linear map on a dense subspace extends uniquely to a bounded operator on the completion with the same bound (Mathlib's \texttt{ContinuousLinearMap.extend} and \texttt{ContinuousLinearMap.opNorm\_extend\_le}).
 \end{proof}
@@ -1273,6 +1275,7 @@ Takesaki's lemma states that, for $z \in \mathbb{C} \setminus [0, \infty)$ and $
     The operator $T$ of Lemma~\ref{lmm:commutant-extension-bounded} commutes with every $d' \in \mathcal{M}'$, and hence $T \in \mathcal{M}'' = \mathcal{M}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-extension-bounded, lmm:commutant-von-neumann-algebra, def:cyclic-separating-vector}
     For $b' \in \mathcal{M}'$, $d'b' \in \mathcal{M}'$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $Td'(b'\Omega) = d'b'\psi = d'T(b'\Omega)$. The bounded operators $Td'$ and $d'T$ agree on the dense set $\mathcal{M}'\Omega$, hence are equal. So $T$ lies in the centralizer of $\mathcal{M}'$, which is $\mathcal{M}$ by \ref{def:von-neumann-algebra-commutant-convention}.
 \end{proof}
@@ -1285,6 +1288,7 @@ Takesaki's lemma states that, for $z \in \mathbb{C} \setminus [0, \infty)$ and $
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\Omega$ cyclic and separating for $\mathcal{M}$. If $\psi \in \mathbf{H}$ and $c \ge 0$ satisfy $\|b'\psi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$, then there is a unique $a \in \mathcal{M}$ with $a\Omega = \psi$, and $\|a\| \le c$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-extension-bounded, lmm:commutant-extension-in-algebra, lmm:cyclic-commutant-separating}
     Take $a = T$ (Lemmas~\ref{lmm:commutant-extension-bounded} and~\ref{lmm:commutant-extension-in-algebra}); since $\mathbf{1} \in \mathcal{M}'$, $a\Omega = T(\mathbf{1}\Omega) = \mathbf{1}\psi = \psi$, and $\|a\| \le c$. If also $\tilde{a} \in \mathcal{M}$ and $\tilde{a}\Omega = \psi$, then $(a - \tilde{a})\Omega = 0$ with $a - \tilde{a} \in \mathcal{M}$, so $a = \tilde{a}$ because $\Omega$ is separating for $\mathcal{M}$ (Lemma~\ref{lmm:cyclic-commutant-separating}).
 \end{proof}
@@ -1300,6 +1304,7 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
     Let $z \in \mathbb{C} \setminus [0, \infty)$. Then $d(z) > 0$, $r_z$ is measurable, $|r_z(\lambda)| \le 1/d(z)$ for every $\lambda \in \mathbb{R}$, $\overline{r_z(\lambda)} = r_{\overline{z}}(\lambda)$ for every $\lambda \in \mathbb{R}$, and $(z - \lambda)\,r_z(\lambda) = 1_{[0, \infty)}(\lambda)$ for every $\lambda \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $[0, \infty)$ is closed, nonempty and does not contain $z$, so $d(z) > 0$ (Mathlib's \texttt{IsClosed.notMem\_iff\_infDist\_pos}). $r_z$ is the indicator of the measurable set $[0, \infty)$ times the measurable function $\lambda \mapsto (z - \lambda)^{-1}$ (Mathlib's \texttt{Measurable.inv} and \texttt{Measurable.indicator}). For $\lambda \ge 0$, $|z - \lambda| \ge d(z)$ (Mathlib's \texttt{Metric.infDist\_le\_dist\_of\_mem}), so $|r_z(\lambda)| \le 1/d(z)$; for $\lambda < 0$, $r_z(\lambda) = 0$. Since $\lambda$ is real, $\overline{(z - \lambda)^{-1}} = (\overline{z} - \lambda)^{-1}$ (Mathlib's \texttt{Complex.conj\_ofReal}), and $\overline{z} \notin [0, \infty)$. For $\lambda \ge 0$, $z \ne \lambda$, so $(z - \lambda)(z - \lambda)^{-1} = 1$; for $\lambda < 0$, both sides are $0$.
 \end{proof}
 
@@ -1311,6 +1316,7 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
     Let $z \in \mathbb{C} \setminus [0, \infty)$. Then $r_z(\Delta)$ is a bounded operator defined on all of $\mathbf{H}$ with $\|r_z(\Delta)\| \le 1/d(z)$ and $r_z(\Delta)^* = r_{\overline{z}}(\Delta)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:resolvent-function-props, thrm:modular-operator-properties, lmm:functional-calculus-bounded, prpstn:integral-norm-bound, prpstn:integral-conjugation}
     $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}) and $r_z$ is bounded and measurable (Lemma~\ref{lmm:resolvent-function-props}), so Lemma~\ref{lmm:functional-calculus-bounded} gives the bounded operator, and Proposition~\ref{prpstn:integral-norm-bound} with $|r_z| \le 1/d(z)$ gives the norm bound. Since $\overline{r_z} = r_{\overline{z}}$, Proposition~\ref{prpstn:integral-conjugation} gives the adjoint.
 \end{proof}
@@ -1323,6 +1329,7 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
     Let $z \in \mathbb{C}$. Then $W_{z - \iota} = \text{Dom}(\Delta)$, and $(z - \iota)(\Delta)\psi = z\psi - \Delta\psi$ for every $\psi \in \text{Dom}(\Delta)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-operator-properties, thrm:hall-10.4, lmm:functional-calculus-sub-bounded, lmm:functional-calculus-bounded, thrm:operator-valued-integration, prpstn:integral-of-indicator, def:projection-valued-measure}
     $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}). Lemma~\ref{lmm:functional-calculus-sub-bounded}, with the bounded constant function $z$ and $f = \iota$, gives $W_{z - \iota} = W_\iota$ and $(z - \iota)(\Delta)\psi = z(\Delta)\psi - \iota(\Delta)\psi$ for $\psi \in W_\iota$. By Theorem~\ref{thrm:hall-10.4}, $\iota(\Delta) = \int_{\mathbb{R}} \lambda \, d\mu^\Delta(\lambda) = \Delta$ as operators with domains, so $W_\iota = \text{Dom}(\Delta)$ and $\iota(\Delta)\psi = \Delta\psi$. The constant function $z$ is bounded, so $z(\Delta)$ is the bounded integral (Lemma~\ref{lmm:functional-calculus-bounded}), and by linearity of that integral (Theorem~\ref{thrm:operator-valued-integration}) and Proposition~\ref{prpstn:integral-of-indicator}, $z(\Delta) = z\,\mu^\Delta(\mathbb{R}) = z\mathbf{1}$ (Definition~\ref{def:projection-valued-measure}).
 \end{proof}
@@ -1335,6 +1342,7 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
     $1_{[0, \infty)}(\Delta) = \mathbf{1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-operator-properties, lmm:positive-spectral-support, lmm:integral-ignores-null-sets, prpstn:integral-of-indicator, def:projection-valued-measure}
     $\Delta$ is positive and self-adjoint (Theorem~\ref{thrm:modular-operator-properties}), so $\mu^\Delta((-\infty, 0)) = 0$ (Lemma~\ref{lmm:positive-spectral-support}). The functions $1_{[0, \infty)}$ and $1_{\mathbb{R}}$ agree off $(-\infty, 0)$, so $1_{[0, \infty)}(\Delta) = 1_{\mathbb{R}}(\Delta)$ (Lemma~\ref{lmm:integral-ignores-null-sets}), and $1_{\mathbb{R}}(\Delta) = \mu^\Delta(\mathbb{R}) = \mathbf{1}$ (Proposition~\ref{prpstn:integral-of-indicator} and Definition~\ref{def:projection-valued-measure}).
 \end{proof}
@@ -1347,6 +1355,7 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
     Let $z \in \mathbb{C} \setminus [0, \infty)$ and $\xi \in \mathbf{H}$. Then $r_z(\Delta)\xi \in \text{Dom}(\Delta)$ and $z\, r_z(\Delta)\xi - \Delta r_z(\Delta)\xi = \xi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-resolvent-bounded, lmm:resolvent-function-props, lmm:modular-z-minus-fc, lmm:modular-indicator-nonneg-one, lmm:fc-composition-domain, thrm:fc-composition, lmm:functional-calculus-bounded}
     Let $g = z - \iota$. Then $g\,r_z = 1_{[0, \infty)}$ is bounded and measurable, so $W_{g r_z} = W_{r_z} = \mathbf{H}$ (Lemmas~\ref{lmm:resolvent-function-props} and~\ref{lmm:functional-calculus-bounded}). Lemma~\ref{lmm:fc-composition-domain} gives $r_z(\Delta)\xi \in W_g = \text{Dom}(\Delta)$ (Lemma~\ref{lmm:modular-z-minus-fc}). Theorem~\ref{thrm:fc-composition} and Lemma~\ref{lmm:modular-indicator-nonneg-one} give $g(\Delta)r_z(\Delta)\xi = 1_{[0, \infty)}(\Delta)\xi = \xi$, and $g(\Delta)r_z(\Delta)\xi = z\,r_z(\Delta)\xi - \Delta r_z(\Delta)\xi$ by Lemma~\ref{lmm:modular-z-minus-fc}.
 \end{proof}
@@ -1359,6 +1368,7 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
     Let $z \in \mathbb{C} \setminus [0, \infty)$ and $\psi \in \text{Dom}(\Delta)$. Then $r_z(\Delta)(z\psi - \Delta\psi) = \psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:resolvent-function-props, lmm:modular-z-minus-fc, lmm:modular-indicator-nonneg-one, lmm:fc-bounded-left-composition}
     With $g = z - \iota$, $\psi \in W_g$ and $z\psi - \Delta\psi = g(\Delta)\psi$ by Lemma~\ref{lmm:modular-z-minus-fc}. Lemma~\ref{lmm:fc-bounded-left-composition} with the bounded measurable $u = r_z$ (Lemma~\ref{lmm:resolvent-function-props}) gives $r_z(\Delta)g(\Delta)\psi = (r_z g)(\Delta)\psi = 1_{[0, \infty)}(\Delta)\psi$, which is $\psi$ by Lemma~\ref{lmm:modular-indicator-nonneg-one}.
 \end{proof}
@@ -1371,6 +1381,7 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
     Every $z \in \mathbb{C} \setminus [0, \infty)$ lies in the resolvent set of $\Delta$ (\ref{def:hall-9.16}), and $(\Delta - z\mathbf{1})^{-1} = -r_z(\Delta)$. We write $(z - \Delta)^{-1} = r_z(\Delta)$. Thus $(z - \Delta)^{-1} \in \mathcal{B}(\mathbf{H})$, $\|(z - \Delta)^{-1}\| \le 1/d(z)$ and $\big( (z - \Delta)^{-1} \big)^* = (\overline{z} - \Delta)^{-1}$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-resolvent-right-inverse, lmm:modular-resolvent-left-inverse, lmm:modular-resolvent-bounded, lmm:uniqueness-of-resolvent}
     $B = -r_z(\Delta)$ is bounded, and properties 1 and 2 of Definition~\ref{def:hall-9.16} for $B$ are Lemmas~\ref{lmm:modular-resolvent-right-inverse} and~\ref{lmm:modular-resolvent-left-inverse}, multiplied by $-1$. Uniqueness is Lemma~\ref{lmm:uniqueness-of-resolvent}; the norm bound and the adjoint are Lemma~\ref{lmm:modular-resolvent-bounded}.
 \end{proof}
