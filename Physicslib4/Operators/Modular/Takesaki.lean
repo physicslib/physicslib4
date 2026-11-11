@@ -531,7 +531,13 @@ theorem takesaki_transfer_resolvent {M : Set (H →L[ℂ] H)} {Ω : H}
       conj z • χ - modularOperator M Ω C ⟨χ, h⟩ = φ ∧
       ⟪φ, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
         ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹) (a' Ω)⟫_ℂ = ⟪χ, a' Ω⟫_ℂ := by
-  sorry
+  have hz' : conj z ∉ ((↑) : ℝ → ℂ) '' Set.Ici 0 := by
+    rintro ⟨t, ht, hzt⟩
+    exact hz ⟨t, ht, by rw [← Complex.conj_ofReal, hzt, Complex.conj_conj]⟩
+  obtain ⟨h, hinv⟩ := modularResolvent_rightInverse hM hΩ C hC hz' φ
+  subst hχ
+  refine ⟨h, pmapMul_domain_le _ _ h, hinv, ?_⟩
+  rw [← ContinuousLinearMap.adjoint_inner_left, (modularResolvent_bounded hM hΩ C hC hz).2.2]
 
 /--
 For `χ = (z̄ - Δ)⁻¹ φ` and `a ∈ M`, `⟪φ, a Ω⟫ = z ⟪χ, a Ω⟫ - ⟪a* Ω, S χ⟫`, and hence
@@ -551,7 +557,22 @@ theorem takesaki_transfer {M : Set (H →L[ℂ] H)} {Ω : H}
           (⟪φ, a Ω⟫_ℂ).re =
         (⟪χ, a' Ω⟫_ℂ).re -
           (z * ⟪χ, a Ω⟫_ℂ - ⟪star a Ω, tomitaOperator M Ω C ⟨χ, hS⟩⟫_ℂ).re := by
-  sorry
+  obtain ⟨h, hS, hinv, hres⟩ := takesaki_transfer_resolvent hM hΩ C hC hz a' φ χ hχ
+  obtain ⟨_, hΔ⟩ := (mem_modularOperator_iff hM hΩ C hC χ _).1 ⟨h, rfl⟩
+  refine ⟨hS, fun a ha => ?_⟩
+  have hmem : (a Ω, star a Ω) ∈ Set.range (fun x : (linearizedTomitaPre M Ω C).closure.domain =>
+      ((x : H), tomitaOperator M Ω C x)) := by
+    rw [tomitaOperator_graph_eq_closure hM hΩ C hC]
+    exact subset_closure ⟨⟨a Ω, Submodule.mem_map_of_mem (Submodule.subset_span ha)⟩,
+      Prod.ext rfl ((tomitaPre_apply hM hΩ).1 a ha)⟩
+  obtain ⟨x, hx⟩ := hmem
+  have hx1 : (x : H) = a Ω := congrArg Prod.fst hx
+  have hx2 : tomitaOperator M Ω C x = star a Ω := congrArg Prod.snd hx
+  have key := hΔ x
+  rw [hx1, hx2] at key
+  have h1 : ⟪φ, a Ω⟫_ℂ = z * ⟪χ, a Ω⟫_ℂ - ⟪star a Ω, tomitaOperator M Ω C ⟨χ, hS⟩⟫_ℂ := by
+    rw [key, ← hinv, inner_sub_left, inner_smul_left, Complex.conj_conj]
+  exact ⟨h1, by rw [hres, h1]⟩
 
 /--
 `M Ω` is a core for `S`: for `χ ∈ Dom S` there are `h_n ∈ M` with `h_n Ω → χ` and
@@ -565,7 +586,25 @@ theorem tomitaOperator_exists_seq_tendsto {M : Set (H →L[ℂ] H)} {Ω : H}
     ∃ h : ℕ → H →L[ℂ] H, (∀ n, h n ∈ M) ∧
       Filter.Tendsto (fun n => h n Ω) Filter.atTop (nhds (χ : H)) ∧
       Filter.Tendsto (fun n => star (h n) Ω) Filter.atTop (nhds (tomitaOperator M Ω C χ)) := by
-  sorry
+  have hmem : ((χ : H), tomitaOperator M Ω C χ) ∈
+      closure (Set.range (fun x : tomitaPreDomain M Ω => ((x : H), tomitaPre M Ω x))) :=
+    tomitaOperator_graph_eq_closure hM hΩ C hC ▸ ⟨χ, rfl⟩
+  obtain ⟨u, hu, hlim⟩ := mem_closure_iff_seq_limit.mp hmem
+  choose x hx using hu
+  have hrep : ∀ n, ∃ a ∈ M, a Ω = (x n : H) ∧ star a Ω = tomitaPre M Ω (x n) := by
+    intro n
+    obtain ⟨a, ha, hax⟩ := Submodule.mem_map.mp (x n).2
+    have ha' : a ∈ M := (span_eq_of_isVonNeumannSet hM).subset ha
+    refine ⟨a, ha', hax, ?_⟩
+    have e : x n = ⟨a Ω, Submodule.mem_map_of_mem (Submodule.subset_span ha')⟩ :=
+      Subtype.ext hax.symm
+    rw [e]
+    exact ((tomitaPre_apply hM hΩ).1 a ha').symm
+  choose h hhM hh1 hh2 using hrep
+  have hu' : u = fun n => (h n Ω, star (h n) Ω) := by
+    funext n; rw [← hx n, hh1, hh2]
+  rw [hu', Prod.tendsto_iff] at hlim
+  exact ⟨h, hhM, hlim⟩
 
 /--
 `G` is Lipschitz in `(u, v)`, uniformly in `a ∈ 𝓑_c`:
@@ -578,7 +617,29 @@ theorem takesakiG_lipschitz {M : Set (H →L[ℂ] H)} {Ω : H} (z : ℂ) (a' : H
     |((⟪u, a' Ω⟫_ℂ).re - (z * ⟪u, a Ω⟫_ℂ - ⟪star a Ω, v⟫_ℂ).re) -
         ((⟪u₁, a' Ω⟫_ℂ).re - (z * ⟪u₁, a Ω⟫_ℂ - ⟪star a Ω, v₁⟫_ℂ).re)| ≤
       (‖a' Ω‖ + ‖z‖ * c * ‖Ω‖) * ‖u - u₁‖ + c * ‖Ω‖ * ‖v - v₁‖ := by
-  sorry
+  have hΩ : ‖a Ω‖ ≤ c * ‖Ω‖ :=
+    (a.le_opNorm Ω).trans (mul_le_mul_of_nonneg_right hac (norm_nonneg _))
+  have hΩ' : ‖star a Ω‖ ≤ c * ‖Ω‖ :=
+    ((star a).le_opNorm Ω).trans
+      (mul_le_mul_of_nonneg_right (by rwa [norm_star]) (norm_nonneg _))
+  have key : ((⟪u, a' Ω⟫_ℂ).re - (z * ⟪u, a Ω⟫_ℂ - ⟪star a Ω, v⟫_ℂ).re) -
+        ((⟪u₁, a' Ω⟫_ℂ).re - (z * ⟪u₁, a Ω⟫_ℂ - ⟪star a Ω, v₁⟫_ℂ).re) =
+      (⟪u - u₁, a' Ω⟫_ℂ - z * ⟪u - u₁, a Ω⟫_ℂ + ⟪star a Ω, v - v₁⟫_ℂ).re := by
+    simp only [inner_sub_left, inner_sub_right, Complex.add_re, Complex.sub_re, mul_sub]
+    ring
+  rw [key]
+  refine (Complex.abs_re_le_norm _).trans ?_
+  refine (norm_add_le _ _).trans ?_
+  refine (add_le_add (norm_sub_le _ _) le_rfl).trans ?_
+  rw [norm_mul]
+  have h1 := norm_inner_le_norm (𝕜 := ℂ) (u - u₁) (a' Ω)
+  have h2' : ‖⟪u - u₁, a Ω⟫_ℂ‖ ≤ ‖u - u₁‖ * (c * ‖Ω‖) :=
+    (norm_inner_le_norm (𝕜 := ℂ) _ _).trans (mul_le_mul_of_nonneg_left hΩ (norm_nonneg _))
+  have h3' : ‖⟪star a Ω, v - v₁⟫_ℂ‖ ≤ c * ‖Ω‖ * ‖v - v₁‖ :=
+    (norm_inner_le_norm (𝕜 := ℂ) _ _).trans (mul_le_mul_of_nonneg_right hΩ' (norm_nonneg _))
+  have h4 : ‖z‖ * ‖⟪u - u₁, a Ω⟫_ℂ‖ ≤ ‖z‖ * (‖u - u₁‖ * (c * ‖Ω‖)) :=
+    mul_le_mul_of_nonneg_left h2' (norm_nonneg _)
+  nlinarith [h1, h4, h3', norm_nonneg (a' Ω)]
 
 /--
 For `χ ∈ Dom S` and `δ > 0` there is `h ∈ M` with `|G(χ, S χ; a) - G(h Ω, h* Ω; a)| < δ` for
@@ -594,7 +655,26 @@ theorem takesakiG_uniform_approximation {M : Set (H →L[ℂ] H)} {Ω : H}
       |((⟪(χ : H), a' Ω⟫_ℂ).re -
           (z * ⟪(χ : H), a Ω⟫_ℂ - ⟪star a Ω, tomitaOperator M Ω C χ⟫_ℂ).re) -
         ((⟪h Ω, a' Ω⟫_ℂ).re - (z * ⟪h Ω, a Ω⟫_ℂ - ⟪star a Ω, star h Ω⟫_ℂ).re)| < δ := by
-  sorry
+  obtain ⟨h, hhM, h1, h2⟩ := tomitaOperator_exists_seq_tendsto hM hΩ C hC χ
+  set A := ‖a' Ω‖ + ‖z‖ * |c| * ‖Ω‖
+  set B := |c| * ‖Ω‖
+  have hA : 0 ≤ A := by positivity
+  have hB : 0 ≤ B := by positivity
+  have hε : 0 < δ / (A + B + 1) := by positivity
+  obtain ⟨n, hn1, hn2⟩ := ((Metric.tendsto_nhds.mp h1 _ hε).and
+    (Metric.tendsto_nhds.mp h2 _ hε)).exists
+  refine ⟨h n, hhM n, fun a ha hac => ?_⟩
+  have hc : 0 ≤ c := (norm_nonneg a).trans hac
+  have hL := takesakiG_lipschitz (Ω := Ω) z a' (χ : H) (tomitaOperator M Ω C χ) (h n Ω)
+    (star (h n) Ω) ha hac
+  rw [dist_comm, dist_eq_norm] at hn1 hn2
+  have hAc : ‖a' Ω‖ + ‖z‖ * c * ‖Ω‖ = A := by simp [A, abs_of_nonneg hc]
+  have hBc : c * ‖Ω‖ = B := by simp [B, abs_of_nonneg hc]
+  rw [hAc, hBc] at hL
+  have hδ' : (A + B + 1) * (δ / (A + B + 1)) = δ := mul_div_cancel₀ _ (by positivity)
+  refine hL.trans_lt ?_
+  nlinarith [mul_le_mul_of_nonneg_left hn1.le hA, mul_le_mul_of_nonneg_left hn2.le hB,
+    norm_nonneg ((χ : H) - h n Ω)]
 
 /--
 For self-adjoint `x ∈ M` and `f : ℝ → ℝ`, the continuous functional calculus `f(x)` lies in `M`.

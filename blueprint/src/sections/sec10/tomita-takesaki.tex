@@ -1456,6 +1456,7 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
     Let $\phi \in \mathbf{H}$ and $\chi = (\overline{z} - \Delta)^{-1}\phi$. Then $\chi \in \text{Dom}(\Delta) \subset \text{Dom}(S)$, $\overline{z}\chi - \Delta\chi = \phi$, and $\left< \phi, \psi \right> = \left< \chi, a'\Omega \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{crllr:modular-resolvent, lmm:modular-resolvent-right-inverse, def:adjoint-product-operator}
     $\overline{z} \notin [0, \infty)$, so Lemma~\ref{lmm:modular-resolvent-right-inverse} (for $\overline{z}$) gives $\chi \in \text{Dom}(\Delta)$ and $\overline{z}\chi - \Delta\chi = \phi$, and $\text{Dom}(\Delta) \subset \text{Dom}(S)$ by Definition~\ref{def:adjoint-product-operator}. By the adjoint formula of Corollary~\ref{crllr:modular-resolvent}, $\left< \phi, (z - \Delta)^{-1}a'\Omega \right> = \left< (\overline{z} - \Delta)^{-1}\phi, a'\Omega \right>$.
 \end{proof}
@@ -1472,6 +1473,7 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
     In particular $\operatorname{Re}\left< \phi, \psi \right> - \operatorname{Re}\left< \phi, a\Omega \right> = G(\chi, S\chi; a)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-transfer-resolvent, lmm:modular-operator-intrinsic, lmm:tomita-operator-independent-of-c, lmm:tomita-pre-operators-apply}
     By Lemma~\ref{lmm:takesaki-transfer-resolvent}, $\phi = \overline{z}\chi - \Delta\chi$, and the inner product is conjugate-linear in its first slot, so $\left< \phi, a\Omega \right> = z\left< \chi, a\Omega \right> - \left< \Delta\chi, a\Omega \right>$. Since $(a\Omega, a^*\Omega) \in \Gamma(S_0) \subset \Gamma(S)$ (Lemmas~\ref{lmm:tomita-pre-operators-apply} and~\ref{lmm:tomita-operator-independent-of-c}), $a\Omega \in \text{Dom}(S)$ and $S(a\Omega) = a^*\Omega$. The forward direction of Lemma~\ref{lmm:modular-operator-intrinsic}, for the vector $\chi \in \text{Dom}(\Delta)$ and its image $\Delta\chi$, tested against the vector $a\Omega \in \text{Dom}(S)$, gives $\left< a^*\Omega, S\chi \right> = \left< \Delta\chi, a\Omega \right>$. The last claim follows by taking real parts and using $\left< \phi, \psi \right> = \left< \chi, a'\Omega \right>$ (Lemma~\ref{lmm:takesaki-transfer-resolvent}).
 \end{proof}
@@ -1484,6 +1486,7 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
     For every $\chi \in \text{Dom}(S)$ there are $h_n \in \mathcal{M}$ with $h_n\Omega \to \chi$ and $h_n^*\Omega \to S\chi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-operator-independent-of-c, lmm:tomita-pre-operators-apply, thrm:sequential-closedness, lmm:componentwise-convergence}
     $(\chi, S\chi) \in \Gamma(S)$, the closure of $\Gamma(S_0) = \{ (h\Omega, h^*\Omega) \mid h \in \mathcal{M} \}$ (Lemmas~\ref{lmm:tomita-operator-independent-of-c} and~\ref{lmm:tomita-pre-operators-apply}). Take a sequence in $\Gamma(S_0)$ converging to it (Theorem~\ref{thrm:sequential-closedness}) and use Lemma~\ref{lmm:componentwise-convergence}.
 \end{proof}
@@ -1498,6 +1501,7 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     By linearity, $G(u, v; a) - G(u_1, v_1; a) = \operatorname{Re}\left< u - u_1, a'\Omega \right> - \operatorname{Re}\big( z\left< u - u_1, a\Omega \right> \big) + \operatorname{Re}\left< a^*\Omega, v - v_1 \right>$. Since $\|a\| \le c$ and $\|a^*\| = \|a\|$ (Mathlib's \texttt{norm\_star}), $\|a\Omega\| \le c\|\Omega\|$ and $\|a^*\Omega\| \le c\|\Omega\|$. Bound each term by the Cauchy--Schwarz inequality (Mathlib's \texttt{norm\_inner\_le\_norm}) and $|\operatorname{Re} w| \le |w|$.
 \end{proof}
 
@@ -1509,6 +1513,7 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
     Let $\chi \in \text{Dom}(S)$ and $\delta > 0$. Then there is $h \in \mathcal{M}$ with $|G(\chi, S\chi; a) - G(h\Omega, h^*\Omega; a)| < \delta$ for every $a \in \mathcal{B}_c$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-core, lmm:takesaki-G-lipschitz}
     Let $L = \|a'\Omega\| + |z|c\|\Omega\| + c\|\Omega\| + 1 > 0$. Take $h_n$ from Lemma~\ref{lmm:tomita-core} and, by Mathlib's \texttt{Metric.tendsto\_atTop}, $n$ with $\|h_n\Omega - \chi\| < \delta/L$ and $\|h_n^*\Omega - S\chi\| < \delta/L$. For $h = h_n$, Lemma~\ref{lmm:takesaki-G-lipschitz} bounds the difference by $(L - 1)\delta/L < \delta$, for every $a \in \mathcal{B}_c$.
 \end{proof}
