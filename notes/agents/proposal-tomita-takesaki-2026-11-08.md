@@ -1,7 +1,7 @@
 # Proposal: a Tomita–Takesaki section (§10.10)
 
 Status: proposal. Decisions recorded 2026-11-08: D1 Option K, D3 the project's commutant
-convention, D5 Bratteli–Robinson §2.5.2, D6 new section 10.10 — all approved. D2 and D4 open.
+convention, D5 Bratteli–Robinson §2.5.2, D6 new section 10.10 — all approved. D4 decided 2026-11-10 (L2.2 replaced; see below). D2 open.
 Stage-2 trial done (2026-11-08): von Neumann's theorem (T†T self-adjoint, positive, dense
 domain for closed densely defined T) is FEASIBLE: proved in a spike, about 125 lines, no sorry, via
 the existing criterion `adjoint_eq_of_range_eq_top`; verified code in `tomita-stage2-trial.md`.
@@ -137,8 +137,26 @@ substantial but routine.
 - **D3. Setting.** Mathlib's `VonNeumannAlgebra` structure, or a set of operators equal to its
   bicommutant using the project's `Set.centralizer` convention (as `localVonNeumann` does).
   Recommended: the project convention, for consistency with the local von Neumann algebras.
-- **D4. Scope of stage 3.** Formalize L2.2 in full, or only what §3 actually uses (recommended:
-  decide after a close reading of the published version).
+- **D4 (decided 2026-11-10). Scope of stage 3: L2.2 is not formalized.** Close reading of
+  arXiv:2309.16762v3 (the published version, with Prop. 3.12): L2.2 is used once, in the proof of
+  Thm 3.3, and only to produce an operator a_{λ,n} with a_{λ,n}Ω = ψ that commutes with A′ on A′Ω.
+  The proof then only ever evaluates a_{λ,n} on A′Ω, as b′ ↦ b′ψ, and shows that this map is bounded.
+  So L2.2 is replaced by an elementary **commutant extension lemma**: if ψ ∈ H and
+  ‖b′ψ‖ ≤ c‖b′Ω‖ for all b′ ∈ A′, then there is a unique a ∈ A with aΩ = ψ, and ‖a‖ ≤ c.
+  Proof: b′Ω ↦ b′ψ is well defined because Ω is separating for A′. It is bounded, so it extends
+  from the dense A′Ω to all of H. The extension commutes with A′, so it lies in A″ = A.
+  No affiliated unbounded operators and no description of Dom S are needed. Takesaki's lemma
+  (L2.6) ends with the same step. The other cited lemmas:
+  - **L2.6 (Takesaki's lemma)** is formalized in full, for every z ∉ [0, ∞), since Thm 3.3
+    evaluates it on a contour around the positive real axis.
+  - **L2.8** (operator-valued contour integrals) is used once, in Prop. 3.1, for the bounded
+    cut-offs Δ_(m). It is replaced by a scalar route: spectral-measure integrals, Fubini, and a
+    scalar Cauchy formula.
+  - **L2.4** (strip analyticity) is used once, in Thm 3.11, and is formalized in the form that
+    proof needs.
+
+  Stage 3 is drafted in two batches: 3a, the commutant extension lemma and Takesaki's lemma;
+  then 3b, L2.4 and the scalar replacement for L2.8.
 - **D5. Source for J M J = M′: Bratteli–Robinson, *Operator Algebras and Quantum Statistical
   Mechanics 1*, §2.5.2 (around Theorem 2.5.14; check the exact numbering in the edition used).**
   Chosen because Sorce describes his proof as similar to theirs for bounded Δ, so their notation and

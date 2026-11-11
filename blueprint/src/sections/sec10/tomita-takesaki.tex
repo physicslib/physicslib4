@@ -1234,3 +1234,365 @@ For the next three results, $T$ is a closed, densely defined, injective operator
     \uses{thrm:modular-conjugation-involution, crllr:antiunitary-conjugate-functional-calculus, lmm:square-of-square-root, lmm:square-of-inverse-square-root, thrm:modular-operator-properties, thrm:hall-10.4}
     $\Delta = q(\Delta^{1/2})$ and $\Delta^{-1} = q(\Delta^{-1/2})$ by Lemmas~\ref{lmm:square-of-square-root} and~\ref{lmm:square-of-inverse-square-root} (Theorem~\ref{thrm:modular-operator-properties}). With $J = J^{-1}$, Corollary~\ref{crllr:antiunitary-conjugate-functional-calculus} and Theorem~\ref{thrm:modular-conjugation-involution} give $J\Delta J = q(J\Delta^{1/2}J) = q(\Delta^{-1/2}) = \Delta^{-1}$.
 \end{proof}
+
+\subsection{Takesaki's Lemma}\label{sbsctn:takesaki-lemma}
+
+Takesaki's lemma states that, for $z \in \mathbb{C} \setminus [0, \infty)$ and $a' \in \mathcal{M}'$, the vector $(z - \Delta)^{-1}a'\Omega$ is of the form $a\Omega$ for a unique $a \in \mathcal{M}$, with $\|a\| \le \|a'\| / \sqrt{2(|z| - \operatorname{Re} z)}$. This is Lemma~2.6 of Sorce's proof of Tomita's theorem (J.~Sorce, \emph{A short proof of Tomita's theorem}, \emph{J. Funct. Anal.} (2024), arXiv:2309.16762), which cites it without proof. The statement and the constant are those of a second paper, J.~Sorce, \emph{An intuitive construction of modular flow}, \emph{JHEP} 12 (2023) 079 (arXiv:2309.16766), Lemma~4.1, whose proof uses an operator affiliated with $\mathcal{M}$ and its spectral projections. The proof below uses only bounded operators. It follows the Hahn--Banach argument of M.~A.~Rieffel and A.~van Daele, \emph{A bounded operator approach to Tomita--Takesaki theory}, \emph{Pacific J. Math.} 69 (1977) 187--221, Section~4, Lemma~4.3, which adapts the proof of Sakai's linear Radon--Nikodym theorem. Two changes keep the argument inside the Hilbert space: the separation takes place in $\mathbf{H}$ rather than in the predual of $\mathcal{M}$, and an approximate polar decomposition $h(\varepsilon + h^*h)^{-1/2}$ from the continuous functional calculus replaces the polar decomposition of $h$. The last step is the commutant extension lemma (Lemma~\ref{lmm:commutant-extension}). The same lemma takes the place of Lemma~2.2 of Sorce's proof of Tomita's theorem, a description of $\text{Dom}(S)$ by affiliated operators, in the proof of his Theorem~3.3.
+
+\subsubsection{The Commutant Extension Lemma}
+
+\begin{lemma}[The Commutant Extension Map is Well Defined]
+    \label{lmm:commutant-extension-well-defined}
+    \uses{def:cyclic-separating-vector, lmm:commutant-von-neumann-algebra}
+    Let $\psi \in \mathbf{H}$ and $c \ge 0$ satisfy $\|b'\psi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$. Then there is a unique linear map $T_0 : \mathcal{M}'\Omega \to \mathbf{H}$ with $T_0(b'\Omega) = b'\psi$ for every $b' \in \mathcal{M}'$, and $\|T_0\eta\| \le c\|\eta\|$ for every $\eta \in \mathcal{M}'\Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-von-neumann-algebra}
+    $\mathcal{M}'$ is a linear subspace (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\mathcal{M}'\Omega$ is the range of the linear map $b' \mapsto b'\Omega$, and $b' \mapsto b'\psi$ is linear. If $b'\Omega = d'\Omega$, the hypothesis applied to $b' - d' \in \mathcal{M}'$ gives $\|(b' - d')\psi\| \le c\|(b' - d')\Omega\| = 0$, so $b'\psi = d'\psi$: the kernel of the first map lies in the kernel of the second, and $T_0$ is the induced map on the range. The norm bound is the hypothesis.
+\end{proof}
+
+\begin{lemma}[The Commutant Extension Map Extends to a Bounded Operator]
+    \label{lmm:commutant-extension-bounded}
+    \uses{lmm:commutant-extension-well-defined}
+    In the situation of Lemma~\ref{lmm:commutant-extension-well-defined}, there is a unique $T \in \mathcal{B}(\mathbf{H})$ that extends $T_0$, and $\|T\| \le c$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-extension-well-defined, def:cyclic-separating-vector}
+    $\mathcal{M}'\Omega$ is dense because $\Omega$ is cyclic for $\mathcal{M}'$ (\ref{def:cyclic-separating-vector}). A bounded linear map on a dense subspace extends uniquely to a bounded operator on the completion with the same bound (Mathlib's \texttt{ContinuousLinearMap.extend} and \texttt{ContinuousLinearMap.opNorm\_extend\_le}).
+\end{proof}
+
+\begin{lemma}[The Extension Lies in $\mathcal{M}$]
+    \label{lmm:commutant-extension-in-algebra}
+    \uses{lmm:commutant-extension-bounded, def:von-neumann-algebra-commutant-convention}
+    The operator $T$ of Lemma~\ref{lmm:commutant-extension-bounded} commutes with every $d' \in \mathcal{M}'$, and hence $T \in \mathcal{M}'' = \mathcal{M}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-extension-bounded, lmm:commutant-von-neumann-algebra, def:cyclic-separating-vector}
+    For $b' \in \mathcal{M}'$, $d'b' \in \mathcal{M}'$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $Td'(b'\Omega) = d'b'\psi = d'T(b'\Omega)$. The bounded operators $Td'$ and $d'T$ agree on the dense set $\mathcal{M}'\Omega$, hence are equal. So $T$ lies in the centralizer of $\mathcal{M}'$, which is $\mathcal{M}$ by \ref{def:von-neumann-algebra-commutant-convention}.
+\end{proof}
+
+\begin{lemma}[Commutant Extension Lemma]
+    \label{lmm:commutant-extension}
+    \uses{def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\Omega$ cyclic and separating for $\mathcal{M}$. If $\psi \in \mathbf{H}$ and $c \ge 0$ satisfy $\|b'\psi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$, then there is a unique $a \in \mathcal{M}$ with $a\Omega = \psi$, and $\|a\| \le c$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-extension-bounded, lmm:commutant-extension-in-algebra, lmm:cyclic-commutant-separating}
+    Take $a = T$ (Lemmas~\ref{lmm:commutant-extension-bounded} and~\ref{lmm:commutant-extension-in-algebra}); since $\mathbf{1} \in \mathcal{M}'$, $a\Omega = T(\mathbf{1}\Omega) = \mathbf{1}\psi = \psi$, and $\|a\| \le c$. If also $\tilde{a} \in \mathcal{M}$ and $\tilde{a}\Omega = \psi$, then $(a - \tilde{a})\Omega = 0$ with $a - \tilde{a} \in \mathcal{M}$, so $a = \tilde{a}$ because $\Omega$ is separating for $\mathcal{M}$ (Lemma~\ref{lmm:cyclic-commutant-separating}).
+\end{proof}
+
+\subsubsection{The Resolvent of the Modular Operator}
+
+For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$, and let $r_z : \mathbb{R} \to \mathbb{C}$ be $r_z(\lambda) = (z - \lambda)^{-1}$ for $\lambda \ge 0$ and $r_z(\lambda) = 0$ for $\lambda < 0$. Write $\iota(\lambda) = \lambda$, and write $z - \iota$ for the function $\lambda \mapsto z - \lambda$.
+
+\begin{lemma}[Properties of the Scalar Function $r_z$]
+    \label{lmm:resolvent-function-props}
+    Let $z \in \mathbb{C} \setminus [0, \infty)$. Then $d(z) > 0$, $r_z$ is measurable, $|r_z(\lambda)| \le 1/d(z)$ for every $\lambda \in \mathbb{R}$, $\overline{r_z(\lambda)} = r_{\overline{z}}(\lambda)$ for every $\lambda \in \mathbb{R}$, and $(z - \lambda)\,r_z(\lambda) = 1_{[0, \infty)}(\lambda)$ for every $\lambda \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    $[0, \infty)$ is closed, nonempty and does not contain $z$, so $d(z) > 0$ (Mathlib's \texttt{IsClosed.notMem\_iff\_infDist\_pos}). $r_z$ is the indicator of the measurable set $[0, \infty)$ times the measurable function $\lambda \mapsto (z - \lambda)^{-1}$ (Mathlib's \texttt{Measurable.inv} and \texttt{Measurable.indicator}). For $\lambda \ge 0$, $|z - \lambda| \ge d(z)$ (Mathlib's \texttt{Metric.infDist\_le\_dist\_of\_mem}), so $|r_z(\lambda)| \le 1/d(z)$; for $\lambda < 0$, $r_z(\lambda) = 0$. Since $\lambda$ is real, $\overline{(z - \lambda)^{-1}} = (\overline{z} - \lambda)^{-1}$ (Mathlib's \texttt{Complex.conj\_ofReal}), and $\overline{z} \notin [0, \infty)$. For $\lambda \ge 0$, $z \ne \lambda$, so $(z - \lambda)(z - \lambda)^{-1} = 1$; for $\lambda < 0$, both sides are $0$.
+\end{proof}
+
+\begin{lemma}[The Bounded Operator $r_z(\Delta)$]
+    \label{lmm:modular-resolvent-bounded}
+    \uses{def:modular-operator, def:hall-10.5, lmm:resolvent-function-props}
+    Let $z \in \mathbb{C} \setminus [0, \infty)$. Then $r_z(\Delta)$ is a bounded operator defined on all of $\mathbf{H}$ with $\|r_z(\Delta)\| \le 1/d(z)$ and $r_z(\Delta)^* = r_{\overline{z}}(\Delta)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:resolvent-function-props, thrm:modular-operator-properties, lmm:functional-calculus-bounded, prpstn:integral-norm-bound, prpstn:integral-conjugation}
+    $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}) and $r_z$ is bounded and measurable (Lemma~\ref{lmm:resolvent-function-props}), so Lemma~\ref{lmm:functional-calculus-bounded} gives the bounded operator, and Proposition~\ref{prpstn:integral-norm-bound} with $|r_z| \le 1/d(z)$ gives the norm bound. Since $\overline{r_z} = r_{\overline{z}}$, Proposition~\ref{prpstn:integral-conjugation} gives the adjoint.
+\end{proof}
+
+\begin{lemma}[The Function $z - \iota$ of $\Delta$]
+    \label{lmm:modular-z-minus-fc}
+    \uses{def:modular-operator, def:hall-10.5}
+    Let $z \in \mathbb{C}$. Then $W_{z - \iota} = \text{Dom}(\Delta)$, and $(z - \iota)(\Delta)\psi = z\psi - \Delta\psi$ for every $\psi \in \text{Dom}(\Delta)$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:modular-operator-properties, thrm:hall-10.4, lmm:functional-calculus-sub-bounded, lmm:functional-calculus-bounded, thrm:operator-valued-integration, prpstn:integral-of-indicator, def:projection-valued-measure}
+    $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}). Lemma~\ref{lmm:functional-calculus-sub-bounded}, with the bounded constant function $z$ and $f = \iota$, gives $W_{z - \iota} = W_\iota$ and $(z - \iota)(\Delta)\psi = z(\Delta)\psi - \iota(\Delta)\psi$ for $\psi \in W_\iota$. By Theorem~\ref{thrm:hall-10.4}, $\iota(\Delta) = \int_{\mathbb{R}} \lambda \, d\mu^\Delta(\lambda) = \Delta$ as operators with domains, so $W_\iota = \text{Dom}(\Delta)$ and $\iota(\Delta)\psi = \Delta\psi$. The constant function $z$ is bounded, so $z(\Delta)$ is the bounded integral (Lemma~\ref{lmm:functional-calculus-bounded}), and by linearity of that integral (Theorem~\ref{thrm:operator-valued-integration}) and Proposition~\ref{prpstn:integral-of-indicator}, $z(\Delta) = z\,\mu^\Delta(\mathbb{R}) = z\mathbf{1}$ (Definition~\ref{def:projection-valued-measure}).
+\end{proof}
+
+\begin{lemma}[$1_{[0, \infty)}(\Delta) = \mathbf{1}$]
+    \label{lmm:modular-indicator-nonneg-one}
+    \uses{def:modular-operator, def:hall-10.5}
+    $1_{[0, \infty)}(\Delta) = \mathbf{1}$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:modular-operator-properties, lmm:positive-spectral-support, lmm:integral-ignores-null-sets, prpstn:integral-of-indicator, def:projection-valued-measure}
+    $\Delta$ is positive and self-adjoint (Theorem~\ref{thrm:modular-operator-properties}), so $\mu^\Delta((-\infty, 0)) = 0$ (Lemma~\ref{lmm:positive-spectral-support}). The functions $1_{[0, \infty)}$ and $1_{\mathbb{R}}$ agree off $(-\infty, 0)$, so $1_{[0, \infty)}(\Delta) = 1_{\mathbb{R}}(\Delta)$ (Lemma~\ref{lmm:integral-ignores-null-sets}), and $1_{\mathbb{R}}(\Delta) = \mu^\Delta(\mathbb{R}) = \mathbf{1}$ (Proposition~\ref{prpstn:integral-of-indicator} and Definition~\ref{def:projection-valued-measure}).
+\end{proof}
+
+\begin{lemma}[$r_z(\Delta)$ is a Right Inverse of $z - \Delta$]
+    \label{lmm:modular-resolvent-right-inverse}
+    \uses{lmm:modular-resolvent-bounded}
+    Let $z \in \mathbb{C} \setminus [0, \infty)$ and $\xi \in \mathbf{H}$. Then $r_z(\Delta)\xi \in \text{Dom}(\Delta)$ and $z\, r_z(\Delta)\xi - \Delta r_z(\Delta)\xi = \xi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-resolvent-bounded, lmm:resolvent-function-props, lmm:modular-z-minus-fc, lmm:modular-indicator-nonneg-one, lmm:fc-composition-domain, thrm:fc-composition, lmm:functional-calculus-bounded}
+    Let $g = z - \iota$. Then $g\,r_z = 1_{[0, \infty)}$ is bounded and measurable, so $W_{g r_z} = W_{r_z} = \mathbf{H}$ (Lemmas~\ref{lmm:resolvent-function-props} and~\ref{lmm:functional-calculus-bounded}). Lemma~\ref{lmm:fc-composition-domain} gives $r_z(\Delta)\xi \in W_g = \text{Dom}(\Delta)$ (Lemma~\ref{lmm:modular-z-minus-fc}). Theorem~\ref{thrm:fc-composition} and Lemma~\ref{lmm:modular-indicator-nonneg-one} give $g(\Delta)r_z(\Delta)\xi = 1_{[0, \infty)}(\Delta)\xi = \xi$, and $g(\Delta)r_z(\Delta)\xi = z\,r_z(\Delta)\xi - \Delta r_z(\Delta)\xi$ by Lemma~\ref{lmm:modular-z-minus-fc}.
+\end{proof}
+
+\begin{lemma}[$r_z(\Delta)$ is a Left Inverse of $z - \Delta$]
+    \label{lmm:modular-resolvent-left-inverse}
+    \uses{lmm:modular-resolvent-bounded}
+    Let $z \in \mathbb{C} \setminus [0, \infty)$ and $\psi \in \text{Dom}(\Delta)$. Then $r_z(\Delta)(z\psi - \Delta\psi) = \psi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:resolvent-function-props, lmm:modular-z-minus-fc, lmm:modular-indicator-nonneg-one, lmm:fc-bounded-left-composition}
+    With $g = z - \iota$, $\psi \in W_g$ and $z\psi - \Delta\psi = g(\Delta)\psi$ by Lemma~\ref{lmm:modular-z-minus-fc}. Lemma~\ref{lmm:fc-bounded-left-composition} with the bounded measurable $u = r_z$ (Lemma~\ref{lmm:resolvent-function-props}) gives $r_z(\Delta)g(\Delta)\psi = (r_z g)(\Delta)\psi = 1_{[0, \infty)}(\Delta)\psi$, which is $\psi$ by Lemma~\ref{lmm:modular-indicator-nonneg-one}.
+\end{proof}
+
+\begin{corollary}[The Resolvent of $\Delta$]
+    \label{crllr:modular-resolvent}
+    \uses{def:hall-9.16, lmm:uniqueness-of-resolvent, lmm:modular-resolvent-bounded}
+    Every $z \in \mathbb{C} \setminus [0, \infty)$ lies in the resolvent set of $\Delta$ (\ref{def:hall-9.16}), and $(\Delta - z\mathbf{1})^{-1} = -r_z(\Delta)$. We write $(z - \Delta)^{-1} = r_z(\Delta)$. Thus $(z - \Delta)^{-1} \in \mathcal{B}(\mathbf{H})$, $\|(z - \Delta)^{-1}\| \le 1/d(z)$ and $\big( (z - \Delta)^{-1} \big)^* = (\overline{z} - \Delta)^{-1}$.
+\end{corollary}
+\begin{proof}
+    \uses{lmm:modular-resolvent-right-inverse, lmm:modular-resolvent-left-inverse, lmm:modular-resolvent-bounded, lmm:uniqueness-of-resolvent}
+    $B = -r_z(\Delta)$ is bounded, and properties 1 and 2 of Definition~\ref{def:hall-9.16} for $B$ are Lemmas~\ref{lmm:modular-resolvent-right-inverse} and~\ref{lmm:modular-resolvent-left-inverse}, multiplied by $-1$. Uniqueness is Lemma~\ref{lmm:uniqueness-of-resolvent}; the norm bound and the adjoint are Lemma~\ref{lmm:modular-resolvent-bounded}.
+\end{proof}
+
+\subsubsection{Takesaki's Lemma}
+
+\begin{lemma}[An Elementary Inequality]
+    \label{lmm:takesaki-elementary-inequality}
+    Let $z \in \mathbb{C} \setminus [0, \infty)$. Then $|z| - \operatorname{Re} z > 0$, and for all real $p, q \ge 0$,
+    \begin{align}
+        |zp - q| \ge \sqrt{2(|z| - \operatorname{Re} z)\, pq}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    $\operatorname{Re} z \le |z|$, with equality only for $z \in [0, \infty)$ (Mathlib's \texttt{Complex.re\_le\_norm} and \texttt{Complex.re\_eq\_norm}). Expanding, $|zp - q|^2 = |z|^2p^2 - 2(\operatorname{Re} z)pq + q^2$, and $|z|^2p^2 + q^2 \ge 2|z|pq$ because $(|z|p - q)^2 \ge 0$; so $|zp - q|^2 \ge 2(|z| - \operatorname{Re} z)pq$. Take square roots.
+\end{proof}
+
+For the rest of the subsection fix $z \in \mathbb{C} \setminus [0, \infty)$ and $a' \in \mathcal{M}'$, and let
+\begin{align}
+    c = \frac{\|a'\|}{\sqrt{2(|z| - \operatorname{Re} z)}}, \qquad \psi = (z - \Delta)^{-1}a'\Omega, \qquad \mathcal{B}_c = \{ a \in \mathcal{M} \mid \|a\| \le c \},
+\end{align}
+and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid a \in \mathcal{B}_c \}$ in $\mathbf{H}$. For $u, v \in \mathbf{H}$ and $a \in \mathcal{M}$ write
+\begin{align}
+    G(u, v; a) = \operatorname{Re} \left< u, a'\Omega \right> - \operatorname{Re}\big( z\left< u, a\Omega \right> - \left< a^*\Omega, v \right> \big).
+\end{align}
+
+\begin{lemma}[$\mathcal{K}_c$ is Closed and Convex]
+    \label{lmm:takesaki-ball-closed-convex}
+    \uses{lmm:commutant-von-neumann-algebra}
+    $\mathcal{K}_c$ is closed and convex, and $0 \in \mathcal{K}_c$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-von-neumann-algebra, def:von-neumann-algebra-commutant-convention}
+    $\mathcal{M}$ is a linear subspace (Lemma~\ref{lmm:commutant-von-neumann-algebra} and \ref{def:von-neumann-algebra-commutant-convention}), so $\mathcal{B}_c$, its intersection with a ball, is convex, and so is the image $\mathcal{B}_c\Omega$ under the linear map $a \mapsto a\Omega$. Its closure $\mathcal{K}_c$ is closed and convex (Mathlib's \texttt{isClosed\_closure} and \texttt{Convex.closure}). Since $c \ge 0$, $0 \in \mathcal{B}_c$, so $0 = 0\Omega \in \mathcal{K}_c$.
+\end{proof}
+
+\begin{lemma}[Vectors in $\mathcal{K}_c$ Satisfy the Commutant Bound]
+    \label{lmm:takesaki-ball-closure-bound}
+    \uses{lmm:commutant-von-neumann-algebra}
+    Every $\xi \in \mathcal{K}_c$ satisfies $\|b'\xi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    \uses{def:von-neumann-algebra-commutant-convention, thrm:sequential-closedness}
+    For $a \in \mathcal{B}_c$, $b'a = ab'$ (\ref{def:von-neumann-algebra-commutant-convention}), so $\|b'a\Omega\| = \|ab'\Omega\| \le c\|b'\Omega\|$. If $a_n\Omega \to \xi$ with $a_n \in \mathcal{B}_c$ (Theorem~\ref{thrm:sequential-closedness}), then $b'a_n\Omega \to b'\xi$ by continuity of $b'$, and the bound passes to the limit.
+\end{proof}
+
+\begin{lemma}[Separation from a Closed Convex Set]
+    \label{lmm:takesaki-separation}
+    Let $\mathcal{K} \subset \mathbf{H}$ be nonempty, closed and convex, and $\xi \notin \mathcal{K}$. Then there are $\phi \in \mathbf{H}$ and $\gamma > 0$ with $\operatorname{Re}\left< \phi, k \right> + \gamma \le \operatorname{Re}\left< \phi, \xi \right>$ for every $k \in \mathcal{K}$.
+\end{lemma}
+\begin{proof}
+    Regard $\mathbf{H}$ as a real inner product space with $\left< u, v \right>_{\mathbb{R}} = \operatorname{Re}\left< u, v \right>$ (Mathlib's \texttt{InnerProductSpace.rclikeToReal} and \texttt{real\_inner\_eq\_re\_inner}). Let $v \in \mathcal{K}$ be the nearest point to $\xi$ (Mathlib's \texttt{exists\_norm\_eq\_iInf\_of\_complete\_convex}) and $\phi = \xi - v \ne 0$. Then $\operatorname{Re}\left< \phi, k - v \right> \le 0$ for $k \in \mathcal{K}$ (Mathlib's \texttt{norm\_eq\_iInf\_iff\_real\_inner\_le\_zero}), and $\operatorname{Re}\left< \phi, \xi - v \right> = \|\phi\|^2$; take $\gamma = \|\phi\|^2$.
+\end{proof}
+
+\begin{lemma}[The Resolvent Vector $\chi$]
+    \label{lmm:takesaki-transfer-resolvent}
+    \uses{crllr:modular-resolvent, def:tomita-operator}
+    Let $\phi \in \mathbf{H}$ and $\chi = (\overline{z} - \Delta)^{-1}\phi$. Then $\chi \in \text{Dom}(\Delta) \subset \text{Dom}(S)$, $\overline{z}\chi - \Delta\chi = \phi$, and $\left< \phi, \psi \right> = \left< \chi, a'\Omega \right>$.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:modular-resolvent, lmm:modular-resolvent-right-inverse, def:adjoint-product-operator}
+    $\overline{z} \notin [0, \infty)$, so Lemma~\ref{lmm:modular-resolvent-right-inverse} (for $\overline{z}$) gives $\chi \in \text{Dom}(\Delta)$ and $\overline{z}\chi - \Delta\chi = \phi$, and $\text{Dom}(\Delta) \subset \text{Dom}(S)$ by Definition~\ref{def:adjoint-product-operator}. By the adjoint formula of Corollary~\ref{crllr:modular-resolvent}, $\left< \phi, (z - \Delta)^{-1}a'\Omega \right> = \left< (\overline{z} - \Delta)^{-1}\phi, a'\Omega \right>$.
+\end{proof}
+
+\begin{lemma}[Transfer through the Resolvent]
+    \label{lmm:takesaki-transfer}
+    \uses{lmm:takesaki-transfer-resolvent, def:tomita-operator}
+    Let $\phi \in \mathbf{H}$ and $\chi = (\overline{z} - \Delta)^{-1}\phi$. Then for every $a \in \mathcal{M}$,
+    \begin{align}
+        \left< \phi, a\Omega \right> = z\left< \chi, a\Omega \right> - \left< a^*\Omega, S\chi \right>.
+    \end{align}
+    In particular $\operatorname{Re}\left< \phi, \psi \right> - \operatorname{Re}\left< \phi, a\Omega \right> = G(\chi, S\chi; a)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-transfer-resolvent, lmm:modular-operator-intrinsic, lmm:tomita-operator-independent-of-c, lmm:tomita-pre-operators-apply}
+    By Lemma~\ref{lmm:takesaki-transfer-resolvent}, $\phi = \overline{z}\chi - \Delta\chi$, and the inner product is conjugate-linear in its first slot, so $\left< \phi, a\Omega \right> = z\left< \chi, a\Omega \right> - \left< \Delta\chi, a\Omega \right>$. Since $(a\Omega, a^*\Omega) \in \Gamma(S_0) \subset \Gamma(S)$ (Lemmas~\ref{lmm:tomita-pre-operators-apply} and~\ref{lmm:tomita-operator-independent-of-c}), $a\Omega \in \text{Dom}(S)$ and $S(a\Omega) = a^*\Omega$. The forward direction of Lemma~\ref{lmm:modular-operator-intrinsic}, for the vector $\chi \in \text{Dom}(\Delta)$ and its image $\Delta\chi$, tested against the vector $a\Omega \in \text{Dom}(S)$, gives $\left< a^*\Omega, S\chi \right> = \left< \Delta\chi, a\Omega \right>$. The last claim follows by taking real parts and using $\left< \phi, \psi \right> = \left< \chi, a'\Omega \right>$ (Lemma~\ref{lmm:takesaki-transfer-resolvent}).
+\end{proof}
+
+\begin{lemma}[$\mathcal{M}\Omega$ is a Core for $S$]
+    \label{lmm:tomita-core}
+    \uses{def:tomita-operator}
+    For every $\chi \in \text{Dom}(S)$ there are $h_n \in \mathcal{M}$ with $h_n\Omega \to \chi$ and $h_n^*\Omega \to S\chi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-operator-independent-of-c, lmm:tomita-pre-operators-apply, thrm:sequential-closedness, lmm:componentwise-convergence}
+    $(\chi, S\chi) \in \Gamma(S)$, the closure of $\Gamma(S_0) = \{ (h\Omega, h^*\Omega) \mid h \in \mathcal{M} \}$ (Lemmas~\ref{lmm:tomita-operator-independent-of-c} and~\ref{lmm:tomita-pre-operators-apply}). Take a sequence in $\Gamma(S_0)$ converging to it (Theorem~\ref{thrm:sequential-closedness}) and use Lemma~\ref{lmm:componentwise-convergence}.
+\end{proof}
+
+\begin{lemma}[$G$ is Lipschitz, Uniformly on $\mathcal{B}_c$]
+    \label{lmm:takesaki-G-lipschitz}
+    For all $u, v, u_1, v_1 \in \mathbf{H}$ and $a \in \mathcal{B}_c$,
+    \begin{align}
+        |G(u, v; a) - G(u_1, v_1; a)| \le \big( \|a'\Omega\| + |z|c\|\Omega\| \big)\|u - u_1\| + c\|\Omega\|\,\|v - v_1\|.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    By linearity, $G(u, v; a) - G(u_1, v_1; a) = \operatorname{Re}\left< u - u_1, a'\Omega \right> - \operatorname{Re}\big( z\left< u - u_1, a\Omega \right> \big) + \operatorname{Re}\left< a^*\Omega, v - v_1 \right>$. Since $\|a\| \le c$ and $\|a^*\| = \|a\|$ (Mathlib's \texttt{norm\_star}), $\|a\Omega\| \le c\|\Omega\|$ and $\|a^*\Omega\| \le c\|\Omega\|$. Bound each term by the Cauchy--Schwarz inequality (Mathlib's \texttt{norm\_inner\_le\_norm}) and $|\operatorname{Re} w| \le |w|$.
+\end{proof}
+
+\begin{lemma}[Uniform Approximation of $G$ from $\mathcal{M}\Omega$]
+    \label{lmm:takesaki-uniform-approximation}
+    \uses{def:tomita-operator}
+    Let $\chi \in \text{Dom}(S)$ and $\delta > 0$. Then there is $h \in \mathcal{M}$ with $|G(\chi, S\chi; a) - G(h\Omega, h^*\Omega; a)| < \delta$ for every $a \in \mathcal{B}_c$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-core, lmm:takesaki-G-lipschitz}
+    Let $L = \|a'\Omega\| + |z|c\|\Omega\| + c\|\Omega\| + 1 > 0$. Take $h_n$ from Lemma~\ref{lmm:tomita-core} and, by Mathlib's \texttt{Metric.tendsto\_atTop}, $n$ with $\|h_n\Omega - \chi\| < \delta/L$ and $\|h_n^*\Omega - S\chi\| < \delta/L$. For $h = h_n$, Lemma~\ref{lmm:takesaki-G-lipschitz} bounds the difference by $(L - 1)\delta/L < \delta$, for every $a \in \mathcal{B}_c$.
+\end{proof}
+
+The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mathcal{M}$ and $\varepsilon > 0$ let $P = h^*h$ and, for $s \in \mathbb{R}$, $P_\varepsilon^s = f_s(P)$ in the continuous functional calculus of Mathlib, with $f_s(t) = (\varepsilon + \max(t, 0))^s$. Put
+\begin{align}
+    u_\varepsilon = hP_\varepsilon^{-1/2}, \qquad x_\varepsilon = P_\varepsilon^{-1/4}h^*, \qquad p_\varepsilon = \|x_\varepsilon^*\Omega\|, \qquad q_\varepsilon = \|x_\varepsilon\Omega\|.
+\end{align}
+
+\begin{lemma}[Functional Calculus Stays in $\mathcal{M}$]
+    \label{lmm:cfc-mem-von-neumann}
+    \uses{def:von-neumann-algebra-commutant-convention}
+    Let $x \in \mathcal{M}$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$. Then $f(x) \in \mathcal{M}$, where $f(x)$ is the continuous functional calculus of the C*-algebra $\mathcal{B}(\mathbf{H})$ (Mathlib's \texttt{cfc}).
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-von-neumann-algebra}
+    Every $d' \in \mathcal{M}'$ commutes with $x$, so it commutes with $f(x)$ (Mathlib's \texttt{Commute.cfc\_real}). Hence $f(x)$ lies in the centralizer of $\mathcal{M}'$, which is $\mathcal{M}$.
+\end{proof}
+
+\begin{lemma}[Shifted Powers of $h^*h$]
+    \label{lmm:takesaki-shifted-powers}
+    \uses{lmm:cfc-mem-von-neumann}
+    Let $h \in \mathcal{M}$, $\varepsilon > 0$ and $s, t \in \mathbb{R}$. Then $P_\varepsilon^s \in \mathcal{M}$, $P_\varepsilon^s$ is self-adjoint, $P_\varepsilon^sP_\varepsilon^t = P_\varepsilon^{s+t}$, $P_\varepsilon^0 = \mathbf{1}$, $P_\varepsilon^sP = PP_\varepsilon^s$, and $\|P_\varepsilon^s\| \le \varepsilon^s$ if $s \le 0$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:cfc-mem-von-neumann, lmm:commutant-von-neumann-algebra}
+    $P = h^*h \in \mathcal{M}$ is self-adjoint (Lemma~\ref{lmm:commutant-von-neumann-algebra}), and $f_s$ is real-valued and continuous because $\varepsilon + \max(t, 0) \ge \varepsilon > 0$. Lemma~\ref{lmm:cfc-mem-von-neumann} gives $P_\varepsilon^s \in \mathcal{M}$, and Mathlib's \texttt{IsSelfAdjoint.cfc} gives self-adjointness. Since $f_sf_t = f_{s+t}$ (Mathlib's \texttt{Real.rpow\_add}) and $f_0 = 1$, Mathlib's \texttt{cfc\_mul} and \texttt{cfc\_one} give the product rule and $P_\varepsilon^0 = \mathbf{1}$. $P = \iota(P)$ (Mathlib's \texttt{cfc\_id}), so $P_\varepsilon^s$ commutes with $P$ (Mathlib's \texttt{cfc\_commute\_cfc}). For $s \le 0$, $|f_s(t)| \le \varepsilon^s$ for all $t$ (Mathlib's \texttt{Real.rpow\_le\_rpow\_of\_nonpos}), so $\|P_\varepsilon^s\| \le \varepsilon^s$ (Mathlib's \texttt{norm\_cfc\_le}).
+\end{proof}
+
+\begin{lemma}[An Approximate Polar Decomposition]
+    \label{lmm:takesaki-approximate-polar}
+    \uses{lmm:takesaki-shifted-powers}
+    Let $h \in \mathcal{M}$ and $\varepsilon > 0$. Then $u_\varepsilon, x_\varepsilon \in \mathcal{M}$, $x_\varepsilon^* = hP_\varepsilon^{-1/4}$, and
+    \begin{align}
+        h^* = P_\varepsilon^{1/4}x_\varepsilon, \qquad h^*u_\varepsilon = x_\varepsilon x_\varepsilon^*, \qquad u_\varepsilon h^* = x_\varepsilon^*x_\varepsilon.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-shifted-powers, lmm:commutant-von-neumann-algebra}
+    Membership follows from Lemma~\ref{lmm:takesaki-shifted-powers} and closure of $\mathcal{M}$ under products and adjoints (Lemma~\ref{lmm:commutant-von-neumann-algebra}); $x_\varepsilon^* = hP_\varepsilon^{-1/4}$ because $P_\varepsilon^{-1/4}$ is self-adjoint. By the product rule and $P_\varepsilon^0 = \mathbf{1}$ (Lemma~\ref{lmm:takesaki-shifted-powers}): $P_\varepsilon^{1/4}x_\varepsilon = P_\varepsilon^0h^* = h^*$; $u_\varepsilon h^* = hP_\varepsilon^{-1/4}P_\varepsilon^{-1/4}h^* = x_\varepsilon^*x_\varepsilon$; and, since $P$ commutes with $P_\varepsilon^{-1/4}$, $h^*u_\varepsilon = PP_\varepsilon^{-1/4}P_\varepsilon^{-1/4} = P_\varepsilon^{-1/4}h^*hP_\varepsilon^{-1/4} = x_\varepsilon x_\varepsilon^*$.
+\end{proof}
+
+\begin{lemma}[Norms in the Approximate Polar Decomposition]
+    \label{lmm:takesaki-approx-polar-norms}
+    \uses{lmm:takesaki-approximate-polar}
+    Let $h \in \mathcal{M}$ and $\varepsilon > 0$. Then $\|u_\varepsilon\| \le 1$ and $\|x_\varepsilon\|^2 \le \|h\|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-shifted-powers, lmm:takesaki-approximate-polar}
+    $P \ge 0$ (Mathlib's \texttt{star\_mul\_self\_nonneg}), so $\sigma(P) \subset [0, \|P\|]$ (Mathlib's \texttt{spectrum\_nonneg\_of\_nonneg} and \texttt{spectrum.norm\_le\_norm\_of\_mem}), and $\|P\| = \|h\|^2$ (Mathlib's \texttt{CStarRing.norm\_star\_mul\_self}). By the C*-identity, $\|u_\varepsilon\|^2 = \|u_\varepsilon^*u_\varepsilon\| = \|P_\varepsilon^{-1/2}PP_\varepsilon^{-1/2}\|$ and $\|x_\varepsilon\|^2 = \|x_\varepsilon x_\varepsilon^*\| = \|P_\varepsilon^{-1/4}PP_\varepsilon^{-1/4}\|$ (Mathlib's \texttt{CStarRing.norm\_self\_mul\_star} and Lemma~\ref{lmm:takesaki-approximate-polar}). By \texttt{cfc\_mul} and \texttt{cfc\_id} these operators are $g(P)$ and $k(P)$ with $g(t) = t(\varepsilon + \max(t, 0))^{-1}$ and $k(t) = t(\varepsilon + \max(t, 0))^{-1/2}$. On $[0, \|P\|]$, $0 \le g \le 1$ and $0 \le k(t) \le \sqrt{t} \le \|h\|$, so Mathlib's \texttt{norm\_cfc\_le} gives both bounds.
+\end{proof}
+
+\begin{lemma}[A Bound for $\|P_\varepsilon^{1/4}\Omega\|$]
+    \label{lmm:takesaki-shifted-root-bound}
+    \uses{lmm:takesaki-approximate-polar}
+    Let $h \in \mathcal{M}$ and $\varepsilon > 0$. Then $\|P_\varepsilon^{1/4}\Omega\|^2 \le p_\varepsilon^2 + \sqrt{\varepsilon}\|\Omega\|^2$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-shifted-powers, lmm:takesaki-approximate-polar}
+    By Lemma~\ref{lmm:takesaki-shifted-powers}, $P_\varepsilon^{1/4}$ is self-adjoint and $P_\varepsilon^{1/4}P_\varepsilon^{1/4} = P_\varepsilon^{1/2}$, so $\|P_\varepsilon^{1/4}\Omega\|^2 = \left< \Omega, P_\varepsilon^{1/2}\Omega \right>$. Since $P = h^*h \ge 0$, $\sigma(P) \subset [0, \infty)$ (Mathlib's \texttt{star\_mul\_self\_nonneg} and \texttt{spectrum\_nonneg\_of\_nonneg}), and on $\sigma(P)$, $f_1(t) = \varepsilon + t$ (Mathlib's \texttt{Real.rpow\_one}), so $P_\varepsilon^1 = \varepsilon\mathbf{1} + P$ (Mathlib's \texttt{cfc\_congr}, \texttt{cfc\_add}, \texttt{cfc\_const} and \texttt{cfc\_id}), and $P_\varepsilon^{1/2} = P_\varepsilon^1P_\varepsilon^{-1/2} = PP_\varepsilon^{-1/2} + \varepsilon P_\varepsilon^{-1/2}$. Here $PP_\varepsilon^{-1/2} = h^*u_\varepsilon = x_\varepsilon x_\varepsilon^*$ (Lemma~\ref{lmm:takesaki-approximate-polar}), so $\left< \Omega, PP_\varepsilon^{-1/2}\Omega \right> = \|x_\varepsilon^*\Omega\|^2 = p_\varepsilon^2$. By the Cauchy--Schwarz inequality and $\|P_\varepsilon^{-1/2}\| \le \varepsilon^{-1/2}$, $|\left< \Omega, \varepsilon P_\varepsilon^{-1/2}\Omega \right>| \le \sqrt{\varepsilon}\|\Omega\|^2$. Take real parts.
+\end{proof}
+
+\begin{lemma}[An Upper Bound for $\left< h\Omega, a'\Omega \right>$]
+    \label{lmm:takesaki-numerator-bound}
+    \uses{lmm:takesaki-approximate-polar}
+    For $h \in \mathcal{M}$ and $\varepsilon > 0$, $|\left< h\Omega, a'\Omega \right>| \le \|a'\|\, \big( p_\varepsilon + \varepsilon^{1/4}\|\Omega\| \big)\, q_\varepsilon$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-shifted-powers, lmm:takesaki-approximate-polar, lmm:takesaki-shifted-root-bound, lmm:commutant-von-neumann-algebra, def:von-neumann-algebra-commutant-convention}
+    By Lemma~\ref{lmm:takesaki-approximate-polar}, $h^* = P_\varepsilon^{1/4}x_\varepsilon$ with $x_\varepsilon \in \mathcal{M}$, so $a' \in \mathcal{M}'$ commutes with $x_\varepsilon$ (\ref{def:von-neumann-algebra-commutant-convention} and Lemma~\ref{lmm:commutant-von-neumann-algebra}), and $P_\varepsilon^{1/4}$ is self-adjoint (Lemma~\ref{lmm:takesaki-shifted-powers}). Hence
+    \begin{align}
+        \left< h\Omega, a'\Omega \right> = \left< \Omega, h^*a'\Omega \right> = \left< P_\varepsilon^{1/4}\Omega, a'x_\varepsilon\Omega \right>.
+    \end{align}
+    By the Cauchy--Schwarz inequality its modulus is at most $\|P_\varepsilon^{1/4}\Omega\|\,\|a'\|\,q_\varepsilon$, and $\|P_\varepsilon^{1/4}\Omega\| \le \sqrt{p_\varepsilon^2 + \sqrt{\varepsilon}\|\Omega\|^2} \le p_\varepsilon + \varepsilon^{1/4}\|\Omega\|$ (Lemma~\ref{lmm:takesaki-shifted-root-bound}).
+\end{proof}
+
+\begin{lemma}[A Complex Rotation]
+    \label{lmm:complex-rotation-choice}
+    For $w \in \mathbb{C}$ and $c \ge 0$ there is $s \in \mathbb{C}$ with $|s| \le c$ and $\operatorname{Re}(sw) = c|w|$.
+\end{lemma}
+\begin{proof}
+    If $w = 0$, take $s = 0$. Otherwise take $s = c\overline{w}/|w|$: then $|s| = c$ (Mathlib's \texttt{Complex.norm\_conj}) and $sw = c|w|^2/|w| = c|w|$ (Mathlib's \texttt{Complex.conj\_mul'}), which is real.
+\end{proof}
+
+\begin{lemma}[Inner Products of the Test Elements]
+    \label{lmm:takesaki-test-inner-products}
+    \uses{lmm:takesaki-approximate-polar}
+    For $h \in \mathcal{M}$, $\varepsilon > 0$ and $s \in \mathbb{C}$, $\left< h\Omega, s u_\varepsilon\Omega \right> = sp_\varepsilon^2$ and $\left< (s u_\varepsilon)^*\Omega, h^*\Omega \right> = sq_\varepsilon^2$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-approximate-polar}
+    By Lemma~\ref{lmm:takesaki-approximate-polar}, $\left< h\Omega, su_\varepsilon\Omega \right> = s\left< \Omega, h^*u_\varepsilon\Omega \right> = s\left< \Omega, x_\varepsilon x_\varepsilon^*\Omega \right> = s\|x_\varepsilon^*\Omega\|^2$. Since $(su_\varepsilon)^* = \overline{s}u_\varepsilon^*$ and the inner product is conjugate-linear in its first slot, $\left< (su_\varepsilon)^*\Omega, h^*\Omega \right> = s\left< \Omega, u_\varepsilon h^*\Omega \right> = s\left< \Omega, x_\varepsilon^*x_\varepsilon\Omega \right> = s\|x_\varepsilon\Omega\|^2$.
+\end{proof}
+
+\begin{lemma}[A Test Element in $\mathcal{B}_c$]
+    \label{lmm:takesaki-test-element}
+    \uses{lmm:takesaki-approximate-polar}
+    For $h \in \mathcal{M}$ and $\varepsilon > 0$ there is $a \in \mathcal{B}_c$ with
+    \begin{align}
+        \operatorname{Re}\big( z\left< h\Omega, a\Omega \right> - \left< a^*\Omega, h^*\Omega \right> \big) \ge \|a'\|\,p_\varepsilon q_\varepsilon.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:complex-rotation-choice, lmm:takesaki-test-inner-products, lmm:takesaki-approximate-polar, lmm:takesaki-approx-polar-norms, lmm:takesaki-elementary-inequality, lmm:commutant-von-neumann-algebra}
+    Let $w = zp_\varepsilon^2 - q_\varepsilon^2$, take $s$ from Lemma~\ref{lmm:complex-rotation-choice}, and let $a = su_\varepsilon$. Then $a \in \mathcal{M}$ (Lemmas~\ref{lmm:takesaki-approximate-polar} and~\ref{lmm:commutant-von-neumann-algebra}) and $\|a\| \le |s|\|u_\varepsilon\| \le c$ (Lemma~\ref{lmm:takesaki-approx-polar-norms}), so $a \in \mathcal{B}_c$. By Lemma~\ref{lmm:takesaki-test-inner-products} the left side is $\operatorname{Re}(sw) = c|w|$. Lemma~\ref{lmm:takesaki-elementary-inequality} with $p_\varepsilon^2, q_\varepsilon^2$ gives $|w| \ge \sqrt{2(|z| - \operatorname{Re} z)}\,p_\varepsilon q_\varepsilon$, and $c\sqrt{2(|z| - \operatorname{Re} z)} = \|a'\|$.
+\end{proof}
+
+\begin{lemma}[The Key Estimate]
+    \label{lmm:takesaki-key-estimate}
+    \uses{lmm:takesaki-test-element}
+    For every $h \in \mathcal{M}$ and $\delta > 0$ there is $a \in \mathcal{B}_c$ with $G(h\Omega, h^*\Omega; a) \le \delta$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-numerator-bound, lmm:takesaki-test-element, lmm:takesaki-approx-polar-norms}
+    Choose $\varepsilon > 0$ with $\varepsilon^{1/4}\|a'\|\,\|h\|^{1/2}\|\Omega\|^2 \le \delta$ and take $a$ from Lemma~\ref{lmm:takesaki-test-element}. By Lemmas~\ref{lmm:takesaki-numerator-bound} and~\ref{lmm:takesaki-approx-polar-norms} ($q_\varepsilon \le \|x_\varepsilon\|\|\Omega\| \le \|h\|^{1/2}\|\Omega\|$),
+    \begin{align}
+        G(h\Omega, h^*\Omega; a) \le \|a'\|(p_\varepsilon + \varepsilon^{1/4}\|\Omega\|)q_\varepsilon - \|a'\|p_\varepsilon q_\varepsilon \le \varepsilon^{1/4}\|a'\|\,\|h\|^{1/2}\|\Omega\|^2 \le \delta.
+    \end{align}
+\end{proof}
+
+\begin{lemma}[The Resolvent Vector Lies in $\mathcal{K}_c$]
+    \label{lmm:takesaki-resolvent-in-ball-closure}
+    \uses{crllr:modular-resolvent, lmm:takesaki-ball-closed-convex, lmm:takesaki-ball-closure-bound}
+    $\psi \in \mathcal{K}_c$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-ball-closed-convex, lmm:takesaki-separation, lmm:takesaki-transfer-resolvent, lmm:takesaki-transfer, lmm:takesaki-uniform-approximation, lmm:takesaki-key-estimate}
+    Suppose not. $\mathcal{K}_c$ is nonempty, closed and convex (Lemma~\ref{lmm:takesaki-ball-closed-convex}), so Lemma~\ref{lmm:takesaki-separation} gives $\phi$ and $\gamma > 0$ with $\operatorname{Re}\left< \phi, \psi \right> - \operatorname{Re}\left< \phi, a\Omega \right> \ge \gamma$ for all $a \in \mathcal{B}_c$. With $\chi = (\overline{z} - \Delta)^{-1}\phi \in \text{Dom}(S)$ (Lemma~\ref{lmm:takesaki-transfer-resolvent}), Lemma~\ref{lmm:takesaki-transfer} gives $G(\chi, S\chi; a) \ge \gamma$ for all $a \in \mathcal{B}_c$. Lemma~\ref{lmm:takesaki-uniform-approximation} with $\delta = \gamma/2$ gives $h \in \mathcal{M}$ with $G(h\Omega, h^*\Omega; a) > \gamma/2$ for all $a \in \mathcal{B}_c$, contradicting Lemma~\ref{lmm:takesaki-key-estimate} with $\delta = \gamma/2$.
+\end{proof}
+
+\begin{theorem}[Takesaki's Lemma]
+    \label{thrm:takesaki-lemma}
+    \uses{crllr:modular-resolvent, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$, $\Omega$ cyclic and separating for $\mathcal{M}$, and $\Delta$ its modular operator. For every $z \in \mathbb{C} \setminus [0, \infty)$ and $a' \in \mathcal{M}'$ there is a unique $a \in \mathcal{M}$ with
+    \begin{align}
+        a\Omega = (z - \Delta)^{-1}a'\Omega, \qquad \text{and} \qquad \|a\| \le \frac{\|a'\|}{\sqrt{2(|z| - \operatorname{Re} z)}}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{lmm:takesaki-elementary-inequality, lmm:takesaki-resolvent-in-ball-closure, lmm:takesaki-ball-closure-bound, lmm:commutant-extension}
+    The constant $c$ is well defined by Lemma~\ref{lmm:takesaki-elementary-inequality}. By Lemmas~\ref{lmm:takesaki-resolvent-in-ball-closure} and~\ref{lmm:takesaki-ball-closure-bound}, $\|b'\psi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$, and the commutant extension lemma (Lemma~\ref{lmm:commutant-extension}) gives the unique $a \in \mathcal{M}$ with $a\Omega = \psi$ and $\|a\| \le c$.
+\end{proof}
