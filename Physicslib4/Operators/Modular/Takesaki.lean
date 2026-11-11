@@ -441,7 +441,18 @@ Blueprint: lmm:takesaki-elementary-inequality
 theorem takesaki_elementary_inequality {z : ℂ} (hz : z ∉ ((↑) : ℝ → ℂ) '' Set.Ici 0) :
     0 < ‖z‖ - z.re ∧ ∀ p q : ℝ, 0 ≤ p → 0 ≤ q →
       Real.sqrt (2 * (‖z‖ - z.re) * p * q) ≤ ‖z * (p : ℂ) - (q : ℂ)‖ := by
-  sorry
+  have hr : ‖z‖ ^ 2 = z.re ^ 2 + z.im ^ 2 := by
+    rw [Complex.sq_norm, Complex.normSq_apply]; ring
+  have hr0 : 0 ≤ ‖z‖ := norm_nonneg z
+  refine ⟨?_, fun p q hp hq => ?_⟩
+  · by_contra h
+    have ha : ‖z‖ ≤ z.re := by linarith
+    have hb : z.im = 0 := by nlinarith [sq_nonneg z.im]
+    exact hz ⟨z.re, Set.mem_Ici.mpr (hr0.trans ha), Complex.ext (by simp) (by simp [hb])⟩
+  · have hw : ‖z * (p : ℂ) - (q : ℂ)‖ ^ 2 = ‖z‖ ^ 2 * p ^ 2 - 2 * z.re * p * q + q ^ 2 := by
+      rw [Complex.sq_norm, Complex.normSq_apply, hr]; simp; ring
+    rw [← Real.sqrt_sq (norm_nonneg (z * (p : ℂ) - (q : ℂ)))]
+    exact Real.sqrt_le_sqrt (by rw [hw]; nlinarith [sq_nonneg (‖z‖ * p - q)])
 
 /--
 `𝒦_c = closure {a Ω | a ∈ M, ‖a‖ ≤ c}` is closed and convex, and contains `0` when `c ≥ 0`.
@@ -453,7 +464,17 @@ theorem takesakiBall_closure_isClosed_convex {M : Set (H →L[ℂ] H)} (hM : IsV
     IsClosed (closure ((fun a : H →L[ℂ] H => a Ω) '' {a ∈ M | ‖a‖ ≤ c})) ∧
       Convex ℝ (closure ((fun a : H →L[ℂ] H => a Ω) '' {a ∈ M | ‖a‖ ≤ c})) ∧
       (0 : H) ∈ closure ((fun a : H →L[ℂ] H => a Ω) '' {a ∈ M | ‖a‖ ≤ c}) := by
-  sorry
+  obtain ⟨A, hA⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+  have hconv : Convex ℝ {a ∈ M | ‖a‖ ≤ c} := by
+    have : {a ∈ M | ‖a‖ ≤ c} = M ∩ Metric.closedBall 0 c := by
+      ext a; simp
+    rw [this, ← hA]
+    exact (A.toSubalgebra.toSubmodule.restrictScalars ℝ).convex.inter (convex_closedBall 0 c)
+  refine ⟨isClosed_closure, (hconv.linear_image
+    ((ContinuousLinearMap.apply ℂ H Ω).toLinearMap.restrictScalars ℝ)).closure,
+    subset_closure ⟨0, ⟨?_, by simpa using hc⟩, by simp⟩⟩
+  rw [← hA]
+  exact zero_mem A
 
 /--
 Every `ξ ∈ 𝒦_c` satisfies `‖b' ξ‖ ≤ c ‖b' Ω‖` for all `b' ∈ M'`.
@@ -463,7 +484,15 @@ Blueprint: lmm:takesaki-ball-closure-bound
 theorem takesakiBall_closure_bound {M : Set (H →L[ℂ] H)} {Ω : H} {c : ℝ} {ξ : H}
     (hξ : ξ ∈ closure ((fun a : H →L[ℂ] H => a Ω) '' {a ∈ M | ‖a‖ ≤ c})) :
     ∀ b ∈ Set.centralizer M, ‖b ξ‖ ≤ c * ‖b Ω‖ := by
-  sorry
+  intro b hb
+  refine closure_minimal (t := {x | ‖b x‖ ≤ c * ‖b Ω‖}) ?_
+    (isClosed_le (by fun_prop) continuous_const) hξ
+  rintro _ ⟨a, ⟨ha, hac⟩, rfl⟩
+  have hab : b (a Ω) = a (b Ω) := by
+    simpa using congrArg (fun T : H →L[ℂ] H => T Ω) (Set.mem_centralizer_iff.1 hb a ha).symm
+  change ‖b (a Ω)‖ ≤ c * ‖b Ω‖
+  rw [hab]
+  exact (a.le_opNorm _).trans (mul_le_mul_of_nonneg_right hac (norm_nonneg _))
 
 /--
 A point `ξ` outside a nonempty closed convex `K ⊆ H` is strictly separated from `K`:
@@ -474,7 +503,18 @@ Blueprint: lmm:takesaki-separation
 theorem exists_re_inner_add_le_of_not_mem_convex {K : Set H} (hne : K.Nonempty)
     (hcl : IsClosed K) (hconv : Convex ℝ K) {ξ : H} (hξ : ξ ∉ K) :
     ∃ φ : H, ∃ γ > 0, ∀ k ∈ K, (⟪φ, k⟫_ℂ).re + γ ≤ (⟪φ, ξ⟫_ℂ).re := by
-  sorry
+  let _ := InnerProductSpace.rclikeToReal ℂ H
+  obtain ⟨k₀, hk₀, hmin⟩ :=
+    exists_norm_eq_iInf_of_complete_convex hne hcl.isComplete hconv ξ
+  have hle := (norm_eq_iInf_iff_real_inner_le_zero hconv hk₀).1 hmin
+  have hne0 : ξ - k₀ ≠ 0 := sub_ne_zero.2 fun h => hξ (h ▸ hk₀)
+  refine ⟨ξ - k₀, ‖ξ - k₀‖ ^ 2, pow_pos (norm_pos_iff.2 hne0) 2, fun k hk => ?_⟩
+  have h1 := hle k hk
+  rw [real_inner_eq_re_inner, inner_sub_right, map_sub] at h1
+  have h2 := inner_self_eq_norm_sq (𝕜 := ℂ) (ξ - k₀)
+  rw [inner_sub_right, map_sub] at h2
+  change RCLike.re ⟪ξ - k₀, k⟫_ℂ + _ ≤ RCLike.re ⟪ξ - k₀, ξ⟫_ℂ
+  linarith
 
 /--
 For `χ = (z̄ - Δ)⁻¹ φ`: `χ ∈ Dom Δ ⊆ Dom S`, `z̄ χ - Δ χ = φ` and `⟪φ, ψ⟫ = ⟪χ, a' Ω⟫`.
@@ -563,7 +603,8 @@ Blueprint: lmm:cfc-mem-von-neumann
 -/
 theorem cfc_mem_of_isVonNeumannSet {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet M)
     {x : H →L[ℂ] H} (hx : x ∈ M) (hsa : IsSelfAdjoint x) (f : ℝ → ℝ) : cfc f x ∈ M := by
-  sorry
+  rw [← hM.2]
+  exact fun d hd => ((Commute.cfc_real (hd x hx) f).eq).symm
 
 /--
 For `h ∈ M` and `ε > 0`, `P_ε^s ∈ M`. The other conjuncts of the blueprint lemma are
@@ -574,7 +615,11 @@ Blueprint: lmm:takesaki-shifted-powers
 -/
 theorem takesakiShiftedPow_mem {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet M)
     {h : H →L[ℂ] H} (hh : h ∈ M) {ε : ℝ} (hε : 0 < ε) (s : ℝ) : P[h, ε, s] ∈ M := by
-  sorry
+  obtain ⟨A, hA⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+  have hP : star h * h ∈ M := by
+    rw [← hA] at hh ⊢
+    exact mul_mem (star_mem hh) hh
+  exact cfc_mem_of_isVonNeumannSet hM hP (IsSelfAdjoint.star_mul_self h) _
 
 /--
 `P_ε^s` is self-adjoint (a conjunct of `takesakiShiftedPow_mem`).
@@ -582,8 +627,8 @@ theorem takesakiShiftedPow_mem {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet M
 Blueprint: lmm:takesaki-shifted-powers
 -/
 theorem takesakiShiftedPow_isSelfAdjoint (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) (s : ℝ) :
-    IsSelfAdjoint (P[h, ε, s]) := by
-  sorry
+    IsSelfAdjoint (P[h, ε, s]) :=
+  cfc_predicate _ _
 
 /--
 `P_ε^s P_ε^t = P_ε^{s+t}` (a conjunct of `takesakiShiftedPow_mem`).
@@ -592,7 +637,12 @@ Blueprint: lmm:takesaki-shifted-powers
 -/
 theorem takesakiShiftedPow_mul (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) (s t : ℝ) :
     P[h, ε, s] * P[h, ε, t] = P[h, ε, s + t] := by
-  sorry
+  have hpos : ∀ x : ℝ, 0 < ε + max x 0 := fun x => add_pos_of_pos_of_nonneg hε (le_max_right _ _)
+  have hc : ∀ r : ℝ, Continuous fun x : ℝ => (ε + max x 0) ^ r := fun r =>
+    (continuous_const.add (continuous_id.max continuous_const)).rpow_const
+      fun x => Or.inl (hpos x).ne'
+  rw [← cfc_mul _ _ _ (hc s).continuousOn (hc t).continuousOn]
+  exact cfc_congr fun x _ => (Real.rpow_add (hpos x) s t).symm
 
 /--
 `P_ε^0 = 𝟙` (a conjunct of `takesakiShiftedPow_mem`).
@@ -601,7 +651,8 @@ Blueprint: lmm:takesaki-shifted-powers
 -/
 theorem takesakiShiftedPow_zero (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) :
     P[h, ε, 0] = 1 := by
-  sorry
+  simp only [Real.rpow_zero]
+  exact cfc_const_one ℝ (star h * h)
 
 /--
 `P_ε^s` commutes with `P = h* h` (a conjunct of `takesakiShiftedPow_mem`).
@@ -609,8 +660,8 @@ theorem takesakiShiftedPow_zero (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) :
 Blueprint: lmm:takesaki-shifted-powers
 -/
 theorem takesakiShiftedPow_commute (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) (s : ℝ) :
-    P[h, ε, s] * (star h * h) = (star h * h) * P[h, ε, s] := by
-  sorry
+    P[h, ε, s] * (star h * h) = (star h * h) * P[h, ε, s] :=
+  ((Commute.refl _).cfc_real _).eq
 
 /--
 `‖P_ε^s‖ ≤ ε^s` for `s ≤ 0` (a conjunct of `takesakiShiftedPow_mem`).
@@ -619,7 +670,10 @@ Blueprint: lmm:takesaki-shifted-powers
 -/
 theorem takesakiShiftedPow_norm_le (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) {s : ℝ} (hs : s ≤ 0) :
     ‖P[h, ε, s]‖ ≤ ε ^ s := by
-  sorry
+  refine norm_cfc_le (Real.rpow_pos_of_pos hε s).le fun t _ => ?_
+  have hpos : 0 < ε + max t 0 := by positivity
+  rw [Real.norm_eq_abs, abs_of_pos (Real.rpow_pos_of_pos hpos s)]
+  exact Real.rpow_le_rpow_of_nonpos hε (le_add_of_nonneg_right (le_max_right t 0)) hs
 
 /--
 The approximate polar decomposition: `u_ε, x_ε ∈ M`, `x_ε* = h P_ε^{-1/4}`, `h* = P_ε^{1/4} x_ε`,
@@ -636,7 +690,26 @@ theorem takesaki_approximate_polar {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannS
         (P[h, ε, -(1/4)] * star h) * star (P[h, ε, -(1/4)] * star h) ∧
       (h * P[h, ε, -(1/2)]) * star h =
         star (P[h, ε, -(1/4)] * star h) * (P[h, ε, -(1/4)] * star h) := by
-  sorry
+  obtain ⟨A, hA⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+  have hQQ : P[h, ε, -(1/4)] * P[h, ε, -(1/4)] = P[h, ε, -(1/2)] := by
+    rw [takesakiShiftedPow_mul h hε]; norm_num
+  have hstar : star (P[h, ε, -(1/4)] * star h) = h * P[h, ε, -(1/4)] := by
+    rw [star_mul, star_star, (takesakiShiftedPow_isSelfAdjoint h hε _).star_eq]
+  have hP := takesakiShiftedPow_commute h hε (-(1/4))
+  have hQ : ∀ s : ℝ, P[h, ε, s] ∈ A := fun s => by
+    rw [← SetLike.mem_coe, hA]; exact takesakiShiftedPow_mem hM hh hε s
+  rw [← hA] at hh
+  refine ⟨?_, ?_, hstar, ?_, ?_, ?_⟩
+  · rw [← hA]; exact mul_mem hh (hQ _)
+  · rw [← hA]; exact mul_mem (hQ _) (star_mem hh)
+  · rw [← mul_assoc, takesakiShiftedPow_mul h hε, show (1/4 : ℝ) + -(1/4) = 0 by norm_num,
+      takesakiShiftedPow_zero h hε, one_mul]
+  · rw [hstar, ← hQQ]
+    calc star h * (h * (P[h, ε, -(1/4)] * P[h, ε, -(1/4)]))
+        = (star h * h * P[h, ε, -(1/4)]) * P[h, ε, -(1/4)] := by noncomm_ring
+      _ = P[h, ε, -(1/4)] * star h * (h * P[h, ε, -(1/4)]) := by
+        rw [← hP]; noncomm_ring
+  · rw [hstar, ← hQQ]; noncomm_ring
 
 /--
 `‖u_ε‖ ≤ 1` and `‖x_ε‖² ≤ ‖h‖`.
@@ -645,7 +718,58 @@ Blueprint: lmm:takesaki-approx-polar-norms
 -/
 theorem takesaki_approx_polar_norms (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) :
     ‖h * P[h, ε, -(1/2)]‖ ≤ 1 ∧ ‖P[h, ε, -(1/4)] * star h‖ ^ 2 ≤ ‖h‖ := by
-  sorry
+  have hpos : ∀ x : ℝ, 0 < ε + max x 0 := fun x => add_pos_of_pos_of_nonneg hε (le_max_right _ _)
+  have hc : ∀ r : ℝ, Continuous fun x : ℝ => (ε + max x 0) ^ r := fun r =>
+    (continuous_const.add (continuous_id.max continuous_const)).rpow_const
+      fun x => Or.inl (hpos x).ne'
+  have hspec : ∀ x ∈ spectrum ℝ (star h * h), 0 ≤ x ∧ x ≤ ‖h‖ ^ 2 := fun x hx =>
+    ⟨spectrum_nonneg_of_nonneg (star_mul_self_nonneg h) hx, by
+      have := spectrum.norm_le_norm_mul_of_mem hx
+      rw [CStarRing.norm_star_mul_self, Real.norm_of_nonneg
+        (spectrum_nonneg_of_nonneg (star_mul_self_nonneg h) hx)] at this
+      have h1 : ‖(1 : H →L[ℂ] H)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+      nlinarith [norm_nonneg h, mul_self_nonneg ‖h‖]⟩
+  -- `R P R = cfc (f_s · id · f_s) P`
+  have hsand : ∀ s : ℝ, P[h, ε, s] * (star h * h) * P[h, ε, s] =
+      cfc (fun x : ℝ => (ε + max x 0) ^ s * x * (ε + max x 0) ^ s) (star h * h) := by
+    intro s
+    rw [cfc_mul (fun x : ℝ => (ε + max x 0) ^ s * x) (fun x : ℝ => (ε + max x 0) ^ s) _
+        ((hc s).mul continuous_id).continuousOn (hc s).continuousOn,
+      cfc_mul (fun x : ℝ => (ε + max x 0) ^ s) (fun x : ℝ => x) _ (hc s).continuousOn
+        continuous_id.continuousOn, cfc_id' ℝ (star h * h)]
+  have hR : ∀ s : ℝ, star (P[h, ε, s]) = P[h, ε, s] := fun s =>
+    (cfc_predicate (fun t : ℝ => (ε + max t 0) ^ s) (star h * h)).star_eq
+  refine ⟨?_, ?_⟩
+  · have h2 : ‖h * P[h, ε, -(1/2)]‖ * ‖h * P[h, ε, -(1/2)]‖ ≤ 1 := by
+      rw [← CStarRing.norm_star_mul_self, star_mul, hR, mul_assoc, ← mul_assoc (star h),
+        ← mul_assoc, hsand]
+      refine norm_cfc_le zero_le_one fun x hx => ?_
+      obtain ⟨hx0, -⟩ := hspec x hx
+      have hb := hpos x
+      rw [max_eq_left hx0] at hb ⊢
+      have hb2 : ((ε + x) ^ (-(1/2) : ℝ)) ^ 2 * (ε + x) = 1 := by
+        rw [← Real.rpow_natCast, ← Real.rpow_mul hb.le]; norm_num
+        rw [Real.rpow_neg_one, inv_mul_cancel₀ hb.ne']
+      have hb0 : 0 ≤ (ε + x) ^ (-(1/2) : ℝ) := Real.rpow_nonneg hb.le _
+      rw [Real.norm_of_nonneg (by positivity)]
+      nlinarith
+    nlinarith [norm_nonneg (h * P[h, ε, -(1/2)])]
+  · rw [sq, ← norm_star (P[h, ε, -(1/4)] * star h), ← CStarRing.norm_star_mul_self, star_star,
+      star_mul, star_star, hR, mul_assoc, ← mul_assoc (star h), ← mul_assoc, hsand]
+    refine norm_cfc_le (norm_nonneg h) fun x hx => ?_
+    obtain ⟨hx0, hxh⟩ := hspec x hx
+    have hb := hpos x
+    rw [max_eq_left hx0] at hb ⊢
+    have ha4 : ((ε + x) ^ (-(1/4) : ℝ)) ^ 4 * (ε + x) = 1 := by
+      rw [← Real.rpow_natCast, ← Real.rpow_mul hb.le]; norm_num
+      rw [Real.rpow_neg_one, inv_mul_cancel₀ hb.ne']
+    have ha0 : 0 ≤ (ε + x) ^ (-(1/4) : ℝ) := Real.rpow_nonneg hb.le _
+    have hf0 : 0 ≤ (ε + x) ^ (-(1/4) : ℝ) * x * (ε + x) ^ (-(1/4) : ℝ) := by positivity
+    rw [Real.norm_of_nonneg hf0, ← pow_le_pow_iff_left₀ hf0 (norm_nonneg h) two_ne_zero]
+    have : ((ε + x) ^ (-(1/4) : ℝ) * x * (ε + x) ^ (-(1/4) : ℝ)) ^ 2 =
+        ((ε + x) ^ (-(1/4) : ℝ)) ^ 4 * x ^ 2 := by ring
+    rw [this]
+    nlinarith [mul_nonneg (mul_nonneg (pow_nonneg ha0 4) hε.le) hx0]
 
 /--
 `‖P_ε^{1/4} Ω‖² ≤ p_ε² + √ε ‖Ω‖²`.
@@ -676,7 +800,15 @@ Blueprint: lmm:complex-rotation-choice
 -/
 theorem exists_norm_le_re_mul_eq_mul_norm (w : ℂ) {c : ℝ} (hc : 0 ≤ c) :
     ∃ s : ℂ, ‖s‖ ≤ c ∧ (s * w).re = c * ‖w‖ := by
-  sorry
+  rcases eq_or_ne w 0 with rfl | hw
+  · exact ⟨0, by simpa using hc, by simp⟩
+  have hn : ‖w‖ ≠ 0 := norm_ne_zero_iff.mpr hw
+  refine ⟨((c / ‖w‖ : ℝ) : ℂ) * starRingEnd ℂ w, le_of_eq ?_, ?_⟩
+  · rw [norm_mul, Complex.norm_conj, Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg (div_nonneg hc (norm_nonneg _)), div_mul_cancel₀ _ hn]
+  · rw [mul_assoc, Complex.conj_mul', ← Complex.ofReal_pow, ← Complex.ofReal_mul,
+      Complex.ofReal_re]
+    field_simp
 
 /--
 For `s ∈ ℂ`, `⟪h Ω, s u_ε Ω⟫ = s p_ε²` and `⟪(s u_ε)* Ω, h* Ω⟫ = s q_ε²`.

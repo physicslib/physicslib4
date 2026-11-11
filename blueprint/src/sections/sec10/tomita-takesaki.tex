@@ -1398,6 +1398,7 @@ For $z \in \mathbb{C} \setminus [0, \infty)$ let $d(z) = \inf_{t \ge 0} |z - t|$
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     $\operatorname{Re} z \le |z|$, with equality only for $z \in [0, \infty)$ (Mathlib's \texttt{Complex.re\_le\_norm} and \texttt{Complex.re\_eq\_norm}). Expanding, $|zp - q|^2 = |z|^2p^2 - 2(\operatorname{Re} z)pq + q^2$, and $|z|^2p^2 + q^2 \ge 2|z|pq$ because $(|z|p - q)^2 \ge 0$; so $|zp - q|^2 \ge 2(|z| - \operatorname{Re} z)pq$. Take square roots.
 \end{proof}
 
@@ -1418,6 +1419,7 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
     $\mathcal{K}_c$ is closed and convex, and $0 \in \mathcal{K}_c$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-von-neumann-algebra, def:von-neumann-algebra-commutant-convention}
     $\mathcal{M}$ is a linear subspace (Lemma~\ref{lmm:commutant-von-neumann-algebra} and \ref{def:von-neumann-algebra-commutant-convention}), so $\mathcal{B}_c$, its intersection with a ball, is convex, and so is the image $\mathcal{B}_c\Omega$ under the linear map $a \mapsto a\Omega$. Its closure $\mathcal{K}_c$ is closed and convex (Mathlib's \texttt{isClosed\_closure} and \texttt{Convex.closure}). Since $c \ge 0$, $0 \in \mathcal{B}_c$, so $0 = 0\Omega \in \mathcal{K}_c$.
 \end{proof}
@@ -1430,6 +1432,7 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
     Every $\xi \in \mathcal{K}_c$ satisfies $\|b'\xi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:von-neumann-algebra-commutant-convention, thrm:sequential-closedness}
     For $a \in \mathcal{B}_c$, $b'a = ab'$ (\ref{def:von-neumann-algebra-commutant-convention}), so $\|b'a\Omega\| = \|ab'\Omega\| \le c\|b'\Omega\|$. If $a_n\Omega \to \xi$ with $a_n \in \mathcal{B}_c$ (Theorem~\ref{thrm:sequential-closedness}), then $b'a_n\Omega \to b'\xi$ by continuity of $b'$, and the bound passes to the limit.
 \end{proof}
@@ -1441,6 +1444,7 @@ and let $\mathcal{K}_c$ be the closure of $\mathcal{B}_c\Omega = \{ a\Omega \mid
     Let $\mathcal{K} \subset \mathbf{H}$ be nonempty, closed and convex, and $\xi \notin \mathcal{K}$. Then there are $\phi \in \mathbf{H}$ and $\gamma > 0$ with $\operatorname{Re}\left< \phi, k \right> + \gamma \le \operatorname{Re}\left< \phi, \xi \right>$ for every $k \in \mathcal{K}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Regard $\mathbf{H}$ as a real inner product space with $\left< u, v \right>_{\mathbb{R}} = \operatorname{Re}\left< u, v \right>$ (Mathlib's \texttt{InnerProductSpace.rclikeToReal} and \texttt{real\_inner\_eq\_re\_inner}). Let $v \in \mathcal{K}$ be the nearest point to $\xi$ (Mathlib's \texttt{exists\_norm\_eq\_iInf\_of\_complete\_convex}) and $\phi = \xi - v \ne 0$. Then $\operatorname{Re}\left< \phi, k - v \right> \le 0$ for $k \in \mathcal{K}$ (Mathlib's \texttt{norm\_eq\_iInf\_iff\_real\_inner\_le\_zero}), and $\operatorname{Re}\left< \phi, \xi - v \right> = \|\phi\|^2$; take $\gamma = \|\phi\|^2$.
 \end{proof}
 
@@ -1522,6 +1526,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     Let $x \in \mathcal{M}$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$. Then $f(x) \in \mathcal{M}$, where $f(x)$ is the continuous functional calculus of the C*-algebra $\mathcal{B}(\mathbf{H})$ (Mathlib's \texttt{cfc}).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-von-neumann-algebra}
     Every $d' \in \mathcal{M}'$ commutes with $x$, so it commutes with $f(x)$ (Mathlib's \texttt{Commute.cfc\_real}). Hence $f(x)$ lies in the centralizer of $\mathcal{M}'$, which is $\mathcal{M}$.
 \end{proof}
@@ -1534,6 +1539,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     Let $h \in \mathcal{M}$, $\varepsilon > 0$ and $s, t \in \mathbb{R}$. Then $P_\varepsilon^s \in \mathcal{M}$, $P_\varepsilon^s$ is self-adjoint, $P_\varepsilon^sP_\varepsilon^t = P_\varepsilon^{s+t}$, $P_\varepsilon^0 = \mathbf{1}$, $P_\varepsilon^sP = PP_\varepsilon^s$, and $\|P_\varepsilon^s\| \le \varepsilon^s$ if $s \le 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:cfc-mem-von-neumann, lmm:commutant-von-neumann-algebra}
     $P = h^*h \in \mathcal{M}$ is self-adjoint (Lemma~\ref{lmm:commutant-von-neumann-algebra}), and $f_s$ is real-valued and continuous because $\varepsilon + \max(t, 0) \ge \varepsilon > 0$. Lemma~\ref{lmm:cfc-mem-von-neumann} gives $P_\varepsilon^s \in \mathcal{M}$, and Mathlib's \texttt{IsSelfAdjoint.cfc} gives self-adjointness. Since $f_sf_t = f_{s+t}$ (Mathlib's \texttt{Real.rpow\_add}) and $f_0 = 1$, Mathlib's \texttt{cfc\_mul} and \texttt{cfc\_one} give the product rule and $P_\varepsilon^0 = \mathbf{1}$. $P = \iota(P)$ (Mathlib's \texttt{cfc\_id}), so $P_\varepsilon^s$ commutes with $P$ (Mathlib's \texttt{cfc\_commute\_cfc}). For $s \le 0$, $|f_s(t)| \le \varepsilon^s$ for all $t$ (Mathlib's \texttt{Real.rpow\_le\_rpow\_of\_nonpos}), so $\|P_\varepsilon^s\| \le \varepsilon^s$ (Mathlib's \texttt{norm\_cfc\_le}).
 \end{proof}
@@ -1549,6 +1555,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-shifted-powers, lmm:commutant-von-neumann-algebra}
     Membership follows from Lemma~\ref{lmm:takesaki-shifted-powers} and closure of $\mathcal{M}$ under products and adjoints (Lemma~\ref{lmm:commutant-von-neumann-algebra}); $x_\varepsilon^* = hP_\varepsilon^{-1/4}$ because $P_\varepsilon^{-1/4}$ is self-adjoint. By the product rule and $P_\varepsilon^0 = \mathbf{1}$ (Lemma~\ref{lmm:takesaki-shifted-powers}): $P_\varepsilon^{1/4}x_\varepsilon = P_\varepsilon^0h^* = h^*$; $u_\varepsilon h^* = hP_\varepsilon^{-1/4}P_\varepsilon^{-1/4}h^* = x_\varepsilon^*x_\varepsilon$; and, since $P$ commutes with $P_\varepsilon^{-1/4}$, $h^*u_\varepsilon = PP_\varepsilon^{-1/4}P_\varepsilon^{-1/4} = P_\varepsilon^{-1/4}h^*hP_\varepsilon^{-1/4} = x_\varepsilon x_\varepsilon^*$.
 \end{proof}
@@ -1561,6 +1568,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     Let $h \in \mathcal{M}$ and $\varepsilon > 0$. Then $\|u_\varepsilon\| \le 1$ and $\|x_\varepsilon\|^2 \le \|h\|$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-shifted-powers, lmm:takesaki-approximate-polar}
     $P \ge 0$ (Mathlib's \texttt{star\_mul\_self\_nonneg}), so $\sigma(P) \subset [0, \|P\|]$ (Mathlib's \texttt{spectrum\_nonneg\_of\_nonneg} and \texttt{spectrum.norm\_le\_norm\_of\_mem}), and $\|P\| = \|h\|^2$ (Mathlib's \texttt{CStarRing.norm\_star\_mul\_self}). By the C*-identity, $\|u_\varepsilon\|^2 = \|u_\varepsilon^*u_\varepsilon\| = \|P_\varepsilon^{-1/2}PP_\varepsilon^{-1/2}\|$ and $\|x_\varepsilon\|^2 = \|x_\varepsilon x_\varepsilon^*\| = \|P_\varepsilon^{-1/4}PP_\varepsilon^{-1/4}\|$ (Mathlib's \texttt{CStarRing.norm\_self\_mul\_star} and Lemma~\ref{lmm:takesaki-approximate-polar}). By \texttt{cfc\_mul} and \texttt{cfc\_id} these operators are $g(P)$ and $k(P)$ with $g(t) = t(\varepsilon + \max(t, 0))^{-1}$ and $k(t) = t(\varepsilon + \max(t, 0))^{-1/2}$. On $[0, \|P\|]$, $0 \le g \le 1$ and $0 \le k(t) \le \sqrt{t} \le \|h\|$, so Mathlib's \texttt{norm\_cfc\_le} gives both bounds.
 \end{proof}
@@ -1600,6 +1608,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     For $w \in \mathbb{C}$ and $c \ge 0$ there is $s \in \mathbb{C}$ with $|s| \le c$ and $\operatorname{Re}(sw) = c|w|$.
 \end{lemma}
 \begin{proof}
+    \leanok
     If $w = 0$, take $s = 0$. Otherwise take $s = c\overline{w}/|w|$: then $|s| = c$ (Mathlib's \texttt{Complex.norm\_conj}) and $sw = c|w|^2/|w| = c|w|$ (Mathlib's \texttt{Complex.conj\_mul'}), which is real.
 \end{proof}
 
