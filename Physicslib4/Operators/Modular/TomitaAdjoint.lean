@@ -22,14 +22,14 @@ modular operator and modular conjugation of `(M′, Ω)` are `S*`, `Δ⁻¹` and
     (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η`,
   and `Γ(S*)` is the set of pairs `p : H × H` satisfying it.
 * **The graph of `F₀`.** `Γ(F₀)` is `(fun b => (b Ω, star b Ω)) '' Set.centralizer M`.
-* **The operator `a₀`.** The operator `x Ω ↦ x ξ` (`x ∈ M`) has no definition; statements about
-  it quantify over a partial linear map `a₀` with `a₀.domain = tomitaPreDomain M Ω` and
-  `a₀ (x Ω) = x ξ` for `x ∈ M`, which determine it (`tomitaAdjoint_leftMap_existsUnique`). Its
-  closure is `c = a₀.closure`, and the approximants `x_n` of `approximant_operator` for `c` are
-  bounded operators characterized by `x_n ψ = c (R_n ψ)`.
+* **The operator `a₀`.** The operator `x Ω ↦ x ξ` (`x ∈ M`) is `tomitaLeftMap M Ω ξ`, the
+  partial linear map with graph `{(x Ω, x ξ) : x ∈ span M}`; `tomitaLeftMap_properties` gives
+  its domain and values. Its closure is `c = (tomitaLeftMap M Ω ξ).closure`, and the
+  approximants `x_n` of `approximant_operator` for `c` are bounded operators characterized by
+  `x_n ψ = c (R_n ψ)`.
 * **Unitaries.** A unitary in `M` that commutes with an unbounded operator is a
-  `U : H ≃ₗᵢ[ℂ] H` with `(U : H →L[ℂ] H) ∈ M`, and "commutes" is spelled out as in
-  `Commuting.lean`. Statements about bounded operators use Mathlib's `unitary (H →L[ℂ] H)`.
+  `U : H ≃ₗᵢ[ℂ] H` with `(U : H →L[ℂ] H) ∈ M`, and "commutes" is `UnitaryCommutes U A`
+  from `Commuting.lean`. Statements about bounded operators use Mathlib's `unitary (H →L[ℂ] H)`.
 * **The commutant.** The modular objects of `(M′, Ω)` are the definitions of `Tomita.lean` and
   `Modular.lean` applied to `Set.centralizer M` with the same `C`; the proofs of their
   hypotheses are those of `isCyclicSeparatingVector_centralizer`.
@@ -122,15 +122,22 @@ theorem mem_centralizer_of_commute_unitary {M : Set (H →L[ℂ] H)} (hM : IsVon
 
 /-! ### `M′ Ω` is a core for `S*` -/
 
-/-- There is a unique partial linear map `a₀` with `Dom a₀ = M Ω` and `a₀ (x Ω) = x ξ` for
-`x ∈ M`, and it is densely defined.
+/-- The operator `a₀ : x Ω ↦ x ξ` on `M Ω`, as the partial linear map with graph
+`{(x Ω, x ξ) : x ∈ span M}`. It acts as `x Ω ↦ x ξ` when `Ω` is separating
+(`tomitaLeftMap_properties`).
+Blueprint: def:tomita-left-map -/
+noncomputable def tomitaLeftMap (M : Set (H →L[ℂ] H)) (Ω ξ : H) : H →ₗ.[ℂ] H :=
+  ((Submodule.span ℂ M).map
+    ((ContinuousLinearMap.apply ℂ H Ω).toLinearMap.prod
+      (ContinuousLinearMap.apply ℂ H ξ).toLinearMap)).toLinearPMap
+
+/-- `Dom a₀ = M Ω`, `a₀ (x Ω) = x ξ` for `x ∈ M`, and `a₀` is densely defined.
 Blueprint: lmm:tomita-adjoint-left-map -/
-theorem tomitaAdjoint_leftMap_existsUnique {M : Set (H →L[ℂ] H)} {Ω : H}
+theorem tomitaLeftMap_properties {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (ξ : H) :
-    (∃! a₀ : H →ₗ.[ℂ] H, a₀.domain = tomitaPreDomain M Ω ∧
-      ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ) ∧
-      ∀ a₀ : H →ₗ.[ℂ] H, a₀.domain = tomitaPreDomain M Ω →
-        (∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ) → HasDenseDomain a₀ := by
+    (tomitaLeftMap M Ω ξ).domain = tomitaPreDomain M Ω ∧
+      (∀ x ∈ M, ∃ h : x Ω ∈ (tomitaLeftMap M Ω ξ).domain, tomitaLeftMap M Ω ξ ⟨x Ω, h⟩ = x ξ) ∧
+      HasDenseDomain (tomitaLeftMap M Ω ξ) := by
   sorry
 
 /-- For `(ξ, η) ∈ Γ(S*)` and `y ∈ M`, `y Ω ∈ Dom a₀†` with `a₀† (y Ω) = y η`, and `a₀†` is
@@ -139,11 +146,10 @@ Blueprint: lmm:tomita-adjoint-left-map-adjoint -/
 theorem tomitaAdjoint_leftMap_adjoint {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M)
     (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) {ξ η : H}
     (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
-      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
-    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
-    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ) :
-    (∀ y ∈ M, ∃ h : y Ω ∈ a₀.adjoint.domain, a₀.adjoint ⟨y Ω, h⟩ = y η) ∧
-      HasDenseDomain a₀.adjoint := by
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) :
+    (∀ y ∈ M, ∃ h : y Ω ∈ (tomitaLeftMap M Ω ξ).adjoint.domain,
+        (tomitaLeftMap M Ω ξ).adjoint ⟨y Ω, h⟩ = y η) ∧
+      HasDenseDomain (tomitaLeftMap M Ω ξ).adjoint := by
   sorry
 
 /-- For `(ξ, η) ∈ Γ(S*)`, `a₀` is closable, and its closure `c` is closed and densely defined,
@@ -153,13 +159,15 @@ theorem tomitaAdjoint_leftMap_closure_props {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {ξ η : H}
     (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
-      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
-    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
-    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ) :
-    a₀.IsClosable ∧ a₀.closure.IsClosed ∧ HasDenseDomain a₀.closure ∧
-      (∀ x ∈ M, ∃ h : x Ω ∈ a₀.closure.domain, a₀.closure ⟨x Ω, h⟩ = x ξ) ∧
-      (∃ h : Ω ∈ a₀.closure.domain, a₀.closure ⟨Ω, h⟩ = ξ) ∧
-      ∃ h : Ω ∈ a₀.closure.adjoint.domain, a₀.closure.adjoint ⟨Ω, h⟩ = η := by
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) :
+    (tomitaLeftMap M Ω ξ).IsClosable ∧ (tomitaLeftMap M Ω ξ).closure.IsClosed ∧
+      HasDenseDomain (tomitaLeftMap M Ω ξ).closure ∧
+      (∀ x ∈ M, ∃ h : x Ω ∈ (tomitaLeftMap M Ω ξ).closure.domain,
+        (tomitaLeftMap M Ω ξ).closure ⟨x Ω, h⟩ = x ξ) ∧
+      (∃ h : Ω ∈ (tomitaLeftMap M Ω ξ).closure.domain,
+        (tomitaLeftMap M Ω ξ).closure ⟨Ω, h⟩ = ξ) ∧
+      ∃ h : Ω ∈ (tomitaLeftMap M Ω ξ).closure.adjoint.domain,
+        (tomitaLeftMap M Ω ξ).closure.adjoint ⟨Ω, h⟩ = η := by
   sorry
 
 /-- For `(ξ, η) ∈ Γ(S*)`, every unitary `U` in `M` commutes with the closure `c` of `a₀`.
@@ -169,10 +177,8 @@ theorem tomitaAdjoint_leftMap_closure_commute {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {ξ η : H}
     (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
       (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
-    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
-    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ)
     (U : H ≃ₗᵢ[ℂ] H) (hU : (U.toContinuousLinearEquiv : H →L[ℂ] H) ∈ M) :
-    Spectral.Unbounded.UnitaryCommutes U a₀.closure := by
+    UnitaryCommutes U (tomitaLeftMap M Ω ξ).closure := by
   sorry
 
 /-- For `(ξ, η) ∈ Γ(S*)`, the approximant `x_n` (`x_n ψ = c R_n ψ`) of the closure `c` of `a₀`
@@ -183,15 +189,14 @@ theorem tomitaAdjoint_approximant_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω 
     (hC : ∀ x, C (C x) = x) {ξ η : H}
     (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
       (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
-    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
-    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ)
-    (hc : HasDenseDomain a₀.closure) (hcl : a₀.closure.IsClosed) (n : ℕ) (hn : 1 ≤ n)
+    (hc : HasDenseDomain (tomitaLeftMap M Ω ξ).closure)
+    (hcl : (tomitaLeftMap M Ω ξ).closure.IsClosed) (n : ℕ) (hn : 1 ≤ n)
     (x : H →L[ℂ] H)
     (hx : ∀ ψ : (functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
         fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)).domain,
       ∃ h : functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
-          (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ψ ∈ a₀.closure.domain,
-        x ψ = a₀.closure ⟨_, h⟩) :
+          (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ψ ∈ (tomitaLeftMap M Ω ξ).closure.domain,
+        x ψ = (tomitaLeftMap M Ω ξ).closure ⟨_, h⟩) :
     x ∈ Set.centralizer M := by
   sorry
 
@@ -203,14 +208,13 @@ theorem tomitaAdjoint_approximant_tendsto {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {ξ η : H}
     (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
       (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
-    (a₀ : H →ₗ.[ℂ] H) (ha₀ : a₀.domain = tomitaPreDomain M Ω)
-    (ha₀x : ∀ x ∈ M, ∃ h : x Ω ∈ a₀.domain, a₀ ⟨x Ω, h⟩ = x ξ)
-    (hc : HasDenseDomain a₀.closure) (hcl : a₀.closure.IsClosed) (x : ℕ → H →L[ℂ] H)
+    (hc : HasDenseDomain (tomitaLeftMap M Ω ξ).closure)
+    (hcl : (tomitaLeftMap M Ω ξ).closure.IsClosed) (x : ℕ → H →L[ℂ] H)
     (hx : ∀ n : ℕ, 1 ≤ n → ∀ ψ : (functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
         fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)).domain,
       ∃ h : functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
-          (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ψ ∈ a₀.closure.domain,
-        x n ψ = a₀.closure ⟨_, h⟩) :
+          (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ψ ∈ (tomitaLeftMap M Ω ξ).closure.domain,
+        x n ψ = (tomitaLeftMap M Ω ξ).closure ⟨_, h⟩) :
     Tendsto (fun n => x n Ω) atTop (𝓝 ξ) ∧
       Tendsto (fun n => ContinuousLinearMap.adjoint (x n) Ω) atTop (𝓝 η) := by
   sorry

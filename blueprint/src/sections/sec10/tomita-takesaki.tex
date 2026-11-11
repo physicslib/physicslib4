@@ -1947,22 +1947,30 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     \left< \xi, x^*\Omega \right> = \left< x\Omega, \eta \right> \qquad \text{for every } x \in \mathcal{M}. \label{eq:tomita-adjoint-pair}
 \end{align}
 
+\begin{definition}[The Operator $x\Omega \mapsto x\xi$]
+    \label{def:tomita-left-map}
+    \lean{Physicslib4.Modular.tomitaLeftMap}
+    \uses{def:cyclic-separating-vector, def:hall-9.1}
+    \leanok
+    For $\xi \in \mathbf{H}$, $a_0$ is the operator whose graph is the subspace $\{ (x\Omega, x\xi) \mid x \in \text{span}\,\mathcal{M} \}$ of $\mathbf{H} \times \mathbf{H}$ (Mathlib's \texttt{Submodule.toLinearPMap}, as for $S_0'$ in~\ref{def:linearized-tomita-pre-operator}). Lemma~\ref{lmm:tomita-adjoint-left-map} shows that this subspace is a graph when $\Omega$ is cyclic and separating.
+\end{definition}
+
 \begin{lemma}[The Operator $x\Omega \mapsto x\xi$]
     \label{lmm:tomita-adjoint-left-map}
-    \lean{Physicslib4.Modular.tomitaAdjoint_leftMap_existsUnique}
-    \uses{def:cyclic-separating-vector, lmm:commutant-von-neumann-algebra}
+    \lean{Physicslib4.Modular.tomitaLeftMap_properties}
+    \uses{def:cyclic-separating-vector, lmm:commutant-von-neumann-algebra, def:tomita-left-map}
     \leanok
-    There is a unique linear operator $a_0$ with $\text{Dom}(a_0) = \mathcal{M}\Omega$ and $a_0(x\Omega) = x\xi$ for every $x \in \mathcal{M}$. It is densely defined.
+    $\text{Dom}(a_0) = \mathcal{M}\Omega$, $a_0(x\Omega) = x\xi$ for every $x \in \mathcal{M}$, and $a_0$ is densely defined.
 \end{lemma}
 \begin{proof}
     \uses{lmm:cyclic-commutant-separating, lmm:commutant-von-neumann-algebra, def:cyclic-separating-vector}
-    $\mathcal{M}$ is a linear subspace (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\mathcal{M}\Omega$ is the range of the linear map $x \mapsto x\Omega$, and $x \mapsto x\xi$ is linear. The first map is injective because $\Omega$ is separating for $\mathcal{M}$ (Lemma~\ref{lmm:cyclic-commutant-separating}), so $a_0$ is the second map composed with the inverse of the first on its range (Mathlib's \texttt{LinearEquiv.ofInjective}). $\mathcal{M}\Omega$ is dense because $\Omega$ is cyclic for $\mathcal{M}$ (\ref{def:cyclic-separating-vector}).
+    $\mathcal{M}$ is a linear subspace (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\mathcal{M}\Omega$ is the range of the linear map $x \mapsto x\Omega$, and $x \mapsto x\xi$ is linear. The first map is injective because $\Omega$ is separating for $\mathcal{M}$ (Lemma~\ref{lmm:cyclic-commutant-separating}), so the subspace of~\ref{def:tomita-left-map} is the graph of the second map composed with the inverse of the first on its range (Mathlib's \texttt{LinearEquiv.ofInjective}), and \texttt{Submodule.toLinearPMap} returns that operator. $\mathcal{M}\Omega$ is dense because $\Omega$ is cyclic for $\mathcal{M}$ (\ref{def:cyclic-separating-vector}).
 \end{proof}
 
 \begin{lemma}[The Adjoint of $a_0$]
     \label{lmm:tomita-adjoint-left-map-adjoint}
     \lean{Physicslib4.Modular.tomitaAdjoint_leftMap_adjoint}
-    \uses{lmm:tomita-adjoint-left-map, def:hall-9.1}
+    \uses{lmm:tomita-adjoint-left-map, def:hall-9.1, def:tomita-left-map}
     \leanok
     For every $y \in \mathcal{M}$, $y\Omega \in \text{Dom}(a_0^*)$ and $a_0^*(y\Omega) = y\eta$. In particular $a_0^*$ is densely defined.
 \end{lemma}
@@ -1978,7 +1986,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
 \begin{lemma}[The Closure $c$ of $a_0$]
     \label{lmm:tomita-adjoint-closure-props}
     \lean{Physicslib4.Modular.tomitaAdjoint_leftMap_closure_props}
-    \uses{lmm:tomita-adjoint-left-map, def:hall-9.6, def:hall-9.1}
+    \uses{lmm:tomita-adjoint-left-map, def:hall-9.6, def:hall-9.1, def:tomita-left-map}
     \leanok
     $a_0$ is closable. Its closure $c = a_0^{\text{cl}}$ is closed and densely defined, $\mathcal{M}\Omega \subset \text{Dom}(c)$ with $c(x\Omega) = x\xi$ for $x \in \mathcal{M}$, so $c\Omega = \xi$; and $\Omega \in \text{Dom}(c^*)$ with $c^*\Omega = \eta$.
 \end{lemma}
