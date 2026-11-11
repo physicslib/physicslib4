@@ -2,6 +2,9 @@
 
 Status: proposal. Decisions recorded 2026-11-08: D1 Option K, D3 the project's commutant
 convention, D5 Bratteli–Robinson §2.5.2, D6 new section 10.10 — all approved. D4 decided 2026-11-10 (L2.2 replaced; see below). D2 open.
+**Route revised 2026-11-11 (option B, approved): stages 4–5 follow van Daele's proof, not Sorce §3.**
+Sorce's Prop. 3.1 is false (`gap-sorce-proposition-3-1-2026-11-11.md`). See "Route (revised)" below;
+the revised stages 3b, 4 and 5 replace the old stages 3 (L2.4, L2.8), 4, 5 and 6.
 Stage-2 trial done (2026-11-08): von Neumann's theorem (T†T self-adjoint, positive, dense
 domain for closed densely defined T) is FEASIBLE: proved in a spike, about 125 lines, no sorry, via
 the existing criterion `adjoint_eq_of_range_eq_top`; verified code in `tomita-stage2-trial.md`.
@@ -18,12 +21,11 @@ polar decomposition, available Mathlib and project API).
 
 For a von Neumann algebra M on a complex Hilbert space H with a cyclic and separating vector Ω:
 
-1. **Tomita's theorem, first half:** the modular flow preserves M, Δ^{it} M Δ^{−it} = M for all real
-   t. This follows J. Sorce, "A short proof of Tomita's theorem", arXiv:2309.16762, published in
-   J. Funct. Anal. (2024). Use the published version: the author strengthened one proposition
-   (Prop. 3.12) for it.
-2. **Tomita's theorem, second half:** J M J = M′. Sorce does not prove this. Source: Bratteli–Robinson
-   vol. 1, §2.5.2 (decision D5).
+1. **Tomita's theorem:** J M J = M′ and Δ^{it} M Δ^{−it} = M for all real t, both proved together
+   by van Daele's method (see "Route (revised)"). The earlier plan followed J. Sorce, "A short proof
+   of Tomita's theorem", arXiv:2309.16762 (J. Funct. Anal. 2024) for the second identity and
+   Bratteli–Robinson for the first; Sorce's §3 has a gap, so it is not used beyond Takesaki's lemma.
+2. **Takesaki's lemma** (Sorce's L2.6) remains the analytic input; it is drafted (stage 3a).
 3. **Application (optional, later):** combined with the Reeh–Schlieder corollaries, every local von
    Neumann algebra R(B) of a weakly additive net in a vacuum representation has a modular flow and a
    modular conjugation.
@@ -50,6 +52,56 @@ the net.
   - Thm 3.11: F(z) = [Δ^{−z} a Δ^{z}, b′] vanishes, by Phragmén–Lindelöf and Carlson;
   - P3.12: the commutant of the tidy operators is M′;
   - Cor 3.13: all of M is preserved.
+
+## Route (revised 2026-11-11): van Daele's proof
+
+**Source checked:** V. F. R. Jones, *von Neumann algebras*, Berkeley lecture notes (2009 version,
+math.berkeley.edu/~vfr/VonNeumann2009.pdf), Chapter 13, which proves Tomita's theorem "using a method
+of van Daele", following notes of Haagerup. Read in full for this revision. The original is
+A. van Daele, J. Funct. Anal. 15 (1974) 378–393. Sorce's arXiv:2309.16766, Appendix C, outlines the
+same proof. Bratteli–Robinson vol. 1 §2.5.2 is said to present van Daele's proof as well, but **its
+text could not be accessed, so no Bratteli–Robinson statement or number is confirmed**; the
+blueprint cites Jones (with van Daele as the original) unless the user supplies the BR text.
+
+Jones's chain, with M a von Neumann algebra, Ω cyclic and separating, S the Tomita operator,
+F := S\* (antilinear adjoint), S = JΔ^{1/2}:
+- **Lemma 13.1.1:** F₀ ⊆ S₀\* and S₀ ⊆ F₀\* (done: stage 1).
+- **Thm 13.1.3 (Takesaki):** S\* = F̄₀, the closure of F₀(x′Ω) = x′\*Ω. Proof: for ξ ∈ Dom F₀\*, the
+  closure c of x′Ω ↦ x′ξ is affiliated with M; with c = u|c| and cut-offs f_n(|c|) ∈ M, the vectors
+  u f_n(|c|)Ω → ξ with S-images → F₀\*ξ. So F₀\* ⊆ S, hence F₀\* = S, S\* = F̄₀. Needed only for the
+  final symmetry step (applying the result to M′, whose modular objects are J and Δ^{−1}).
+- **Cor 13.1.4:** the polar decomposition of F is JΔ^{−1/2}.
+- **Lemma 13.1.5:** for λ > 0 and a′ ∈ M′ there is a ∈ M with aΩ ∈ Dom F and
+  a′Ω = (λS + λ^{−1}F)aΩ. Jones proves it from a Sakai-type lemma (his Lemma 8.2.1: weak\*
+  compactness, Hahn–Banach, polar decomposition). **Here it follows from Takesaki's lemma (stage 3a)
+  at z = −λ^{−2}:** with S = JΔ^{1/2}, F = JΔ^{−1/2} and a′Ω = F(a′\*Ω), the equation is equivalent to
+  aΩ = λ(1 + λ²Δ)^{−1}a′\*Ω = −λ^{−1}(z − Δ)^{−1}a′\*Ω, and the bound gives ‖a‖ ≤ ‖a′‖/2, as in Jones.
+- **Cor 13.1.6:** for ξ ∈ Dom Δ^{1/2} ∩ Dom Δ^{−1/2} there are a_n ∈ M with a_nΩ → ξ, Δ^{±1/2}a_nΩ →
+  Δ^{±1/2}ξ (from 13.1.5 and the boundedness of Δ^{±1/2}(Δ^{1/2} + Δ^{−1/2})^{−1}).
+- **Lemma 13.1.7:** for ξ, η ∈ Dom S ∩ Dom F: λ⟨SaSξ, η⟩ + λ^{−1}⟨FaFξ, η⟩ = ⟨a′ξ, η⟩.
+- **Exercise 13.2.1 (strip formula):** for f bounded and continuous on −1/2 ≤ Re z ≤ 1/2 and
+  holomorphic inside, f(0) = ∫ (f(1/2 + it) + f(−1/2 + it)) / (2 cosh πt) dt.
+- **Prop 13.2.2:** a = ∫ λ^{2it} Δ^{it}Ja′JΔ^{−it} / (2 cosh πt) dt, weakly. Proof on the dense
+  subspace H₀ of vectors with bounded spectral support in (0, ∞), where z ↦ Δ^zξ is entire, applying
+  the strip formula to f(z) = λ^{2z}⟨aΔ^{−z}ξ, Δ^{z̄}η⟩.
+- **Thm 13.2.3:** for λ = e^{θ/2} the left side lies in M for every θ, so conjugating by a unitary
+  u ∈ M′ leaves all Fourier transforms of t ↦ ⟨Δ^{it}Ja′JΔ^{−it}ξ, η⟩/(2 cosh πt) unchanged.
+  Fourier uniqueness gives Δ^{it}Ja′JΔ^{−it} ∈ M; t = 0 gives JM′J ⊆ M; the same for M′ (using
+  Thm 13.1.3) gives JMJ ⊆ M′. Hence JMJ = M′ and Δ^{it}MΔ^{−it} = M.
+
+**Consequences for the plan:**
+- Stage 3a (commutant extension, Takesaki's lemma) is reused unchanged. Only z = −λ^{−2} < 0 is
+  needed; the general-z proof stays (already reviewed).
+- Sorce's L2.4 and L2.8 are not needed. Stage 3b as previously planned is dropped.
+- Carlson's theorem and Phragmén–Lindelöf are not needed. The complex analysis is the strip formula
+  (rectangle Cauchy theorem plus ∫ dt/cosh πt = 1) and Fourier uniqueness for continuous integrable
+  functions (expected from Mathlib's `Continuous.fourier_inversion` applied with 𝓕g = 0; to be
+  confirmed by the explorer).
+- J M J = M′ comes out of the same argument, so the old stage 6 (D5's four-step argument) is dropped.
+- One direction of the old L2.2 returns, for M′: Thm 13.1.3's affiliated-operator argument. It needs
+  the polar decomposition of a closed operator that is not injective (a partial isometry; stage 2
+  covers only the injective, dense-range case) and the invariance of |c| and its functional calculus
+  under unitaries commuting with c.
 
 ## Representation of antilinear operators (from the scout)
 
@@ -99,25 +151,31 @@ Reeh–Schlieder.
      - spectral support of positive operators. That is proved:
        `Physicslib4.AQFT.spectralMeasure_Iio_zero_eq_zero` in
        `Physicslib4/AQFT/PositiveEnergyHolomorphic.lean`.
-3. **The cited lemmas of §2** (about 25–40 nodes):
-   - L2.2: the domain of S through closed operators affiliated with M. Possibly avoidable; check
-     whether §3 needs it in full or only one direction;
-   - Takesaki's lemma L2.6: resolvent and quadratic-form estimates, plus a commutant Radon–Nikodym
-     step. Related library results are in `GNS/RadonNikodym.lean`;
-   - L2.4 and L2.8, possibly replaced by scalar spectral-measure integrals rather than
-     operator-valued contour integrals.
-4. **Complex analysis** (about 10–20 nodes):
-   - Carlson's theorem, which is absent from Mathlib: a function of exponential type less than π on
-     the right half-plane that vanishes at the non-negative integers is zero;
-   - Phragmén–Lindelöf: Mathlib's `PhragmenLindelof` file (vertical-strip and sector forms).
-5. **Sorce §3** (about 30–50 nodes). Thm 3.3 and Thm 3.11 are each split into several nodes. Result:
-   Δ^{it} M Δ^{−it} = M.
-6. **J M J = M′** (about 20–40 nodes, following Bratteli–Robinson §2.5.2; see D5), and optionally the application to local von
-   Neumann algebras via Reeh–Schlieder (about 5–10 nodes).
+3. **Takesaki's lemma and S\* = F̄₀** (revised 2026-11-11):
+   - **3a (drafted, reviewed PASS, 32 nodes):** the commutant extension lemma, the resolvent of Δ,
+     and Takesaki's lemma for z ∉ [0, ∞).
+   - **3b (about 15–20 nodes):** Jones Thm 13.1.3 and Cor 13.1.4: S\* = F̄₀, so the polar
+     decomposition of F̄₀ is JΔ^{−1/2}. Needs: the partial-isometry polar decomposition of a closed
+     operator (extending stage 2); for ξ ∈ Dom S\*, the closure c of xΩ ↦ xξ (x ∈ M), which commutes
+     with the unitaries of M; and unitary invariance of |c| and of bounded functions of |c|, so that
+     f(|c|) and the partial isometry lie in M′.
+4. **Complex analysis** (about 8–12 nodes): the strip formula (Jones Exercise 13.2.1) via Mathlib's
+   rectangle Cauchy theorem off a countable set applied to (f(z) − f(0))/sin πz, the vanishing of
+   the horizontal sides, and ∫ dt/cosh πt = 1 (antiderivative arctan(sinh πt)/π); Fourier
+   uniqueness for continuous integrable functions on ℝ.
+5. **van Daele's theorem** (about 30–40 nodes):
+   - Δ^{it} as a strongly continuous unitary group from the functional calculus; the dense
+     subspace H₀ (bounded spectral support in (0, ∞)), invariant under J and every Δ^z, with
+     z ↦ Δ^zξ entire (reusing the parameter-integral holomorphy tools of
+     `PositiveEnergyHolomorphic.lean`);
+   - Lemma 13.1.5 from Takesaki's lemma at z = −λ^{−2}; Cor 13.1.6; Lemma 13.1.7;
+   - Prop 13.2.2 on H₀, extended to all vectors by boundedness;
+   - Thm 13.2.3: Δ^{it}JM′JΔ^{−it} ⊆ M, then JMJ = M′ and Δ^{it}MΔ^{−it} = M.
+6. **Optional application** (about 5–10 nodes): modular objects for the local von Neumann algebras
+   R(B) of a weakly additive net in a vacuum representation, via the Reeh–Schlieder corollaries.
 
-**Total:** roughly 145–240 nodes, against 41 for Reeh–Schlieder. Stages 1–2 are the gate: if
-von Neumann's theorem and the functional-calculus composition law go through, the rest is
-substantial but routine.
+**Total (revised):** stages 1–2 done (about 94 nodes); remaining about 85–110 nodes including 3a,
+against roughly 145–240 for the Sorce route. Carlson's theorem is no longer on the critical path.
 
 ## Decisions needed
 
@@ -157,6 +215,10 @@ substantial but routine.
 
   Stage 3 is drafted in two batches: 3a, the commutant extension lemma and Takesaki's lemma;
   then 3b, L2.4 and the scalar replacement for L2.8.
+
+  **Superseded in part 2026-11-11 (route revision):** Sorce's §3 is not followed, so L2.4 and the
+  L2.8 replacement are dropped. L2.6 (stage 3a) stays. One direction of L2.2's circle of ideas
+  returns as Jones Thm 13.1.3 (S\* = F̄₀), stage 3b.
 - **D5. Source for J M J = M′: Bratteli–Robinson, *Operator Algebras and Quantum Statistical
   Mechanics 1*, §2.5.2 (around Theorem 2.5.14; check the exact numbering in the edition used).**
   Chosen because Sorce describes his proof as similar to theirs for bounded Δ, so their notation and
@@ -190,6 +252,10 @@ substantial but routine.
 
   Before drafting stage 6: confirm the exact statements in Bratteli–Robinson, and check whether
   Sorce's published version cites a source for this half.
+
+  **Superseded 2026-11-11:** van Daele's proof yields J M J = M′ together with the modular
+  invariance, so the four-step argument above is not needed. The checked source is Jones's notes,
+  Ch. 13; the Bratteli–Robinson text was not accessible and none of its numbering is confirmed.
 - **D6. Placement.** A new section 10.10, `sections/sec10/tomita-takesaki.tex`, after Reeh–Schlieder;
   nothing is renumbered.
 
@@ -200,9 +266,12 @@ substantial but routine.
 - **Cores and domains:** P3.10 and the domain arguments around Δ^z are delicate.
 - **Choice of C:** results about J and Δ must not depend on it, which needs a uniqueness argument
   for the polar decomposition.
-- **Carlson's theorem:** a self-contained but non-trivial complex-analysis proof.
+- **Carlson's theorem:** no longer needed (route revision 2026-11-11).
+- **S\* = F̄₀ (stage 3b):** the affiliated-operator argument needs a partial-isometry polar
+  decomposition and unitary invariance of the functional calculus; the main new infrastructure.
+- **Operator-valued Fourier integrals:** avoided by working with matrix elements throughout.
 - **The paper's citations:** Sorce relies on cited lemmas (§2) whose standard proofs may be longer
-  than the paper itself.
+  than the paper itself. (Moot after the route revision, except for Takesaki's lemma.)
 - **Budget:** at the Reeh–Schlieder pace, this is several weeks of sessions. Stages should end in
   commits, and progress logs must be kept per stage.
 
