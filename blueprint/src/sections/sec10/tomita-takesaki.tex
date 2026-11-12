@@ -1725,6 +1725,7 @@ The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ o
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-intrinsic, lmm:tomita-pre-operators-apply, lmm:tomita-operator-independent-of-c, lmm:tomita-core, prpstn:continuity-of-norm-and-inner-product}
     For $x \in \mathcal{M}$, $(x\Omega, x^*\Omega) \in \Gamma(S_0) \subset \Gamma(S)$ (Lemmas~\ref{lmm:tomita-pre-operators-apply} and~\ref{lmm:tomita-operator-independent-of-c}), so the condition is the case $\zeta = x\Omega$ of Lemma~\ref{lmm:tomita-adjoint-intrinsic}. Conversely, for $\zeta \in \text{Dom}(S)$ take $h_n \in \mathcal{M}$ with $h_n\Omega \to \zeta$ and $h_n^*\Omega \to S\zeta$ (Lemma~\ref{lmm:tomita-core}); the condition for $x = h_n$ passes to the limit (Proposition~\ref{prpstn:continuity-of-norm-and-inner-product}) and gives $\left< \xi, S\zeta \right> = \left< \zeta, \eta \right>$.
 \end{proof}
@@ -1750,6 +1751,7 @@ The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ o
     The closure of $\Gamma(F_0)$ in $\mathbf{H} \times \mathbf{H}$ is contained in $\Gamma(S^*)$: if $(\xi, \eta)$ lies in the closure of $\{ (b'\Omega, b'^*\Omega) \mid b' \in \mathcal{M}' \}$, then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-relation, lmm:tomita-pre-operators-apply, lmm:tomita-adjoint-intrinsic-core, lmm:tomita-adjoint-graph-closed}
     For $b' \in \mathcal{M}'$ and $x \in \mathcal{M}$, the adjoint relation (Lemma~\ref{lmm:tomita-adjoint-relation}, with Lemma~\ref{lmm:tomita-pre-operators-apply}) reads $\left< b'\Omega, x^*\Omega \right> = \left< x\Omega, b'^*\Omega \right>$, so $(b'\Omega, b'^*\Omega) \in \Gamma(S^*)$ by Lemma~\ref{lmm:tomita-adjoint-intrinsic-core}. $\Gamma(S^*)$ is closed (Lemma~\ref{lmm:tomita-adjoint-graph-closed}), so it contains the closure (Mathlib's \texttt{closure\_minimal}).
 \end{proof}

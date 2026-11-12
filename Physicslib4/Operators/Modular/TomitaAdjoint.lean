@@ -79,7 +79,23 @@ theorem mem_tomitaAdjoint_iff_inner_algebra {M : Set (H →L[ℂ] H)} {Ω : H}
     (∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
         (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
       ∀ x ∈ M, ⟪ξ, star x Ω⟫_ℂ = ⟪x Ω, η⟫_ℂ := by
-  sorry
+  rw [mem_tomitaAdjoint_iff hM hΩ C hC]
+  constructor
+  · intro h a ha
+    have hmem : (a Ω, star a Ω) ∈ Set.range (fun x : (linearizedTomitaPre M Ω C).closure.domain =>
+        ((x : H), tomitaOperator M Ω C x)) := by
+      rw [tomitaOperator_graph_eq_closure hM hΩ C hC]
+      exact subset_closure ⟨⟨a Ω, Submodule.mem_map_of_mem (Submodule.subset_span ha)⟩,
+        Prod.ext rfl ((tomitaPre_apply hM hΩ).1 a ha)⟩
+    obtain ⟨x, hx⟩ := hmem
+    have hx1 : (x : H) = a Ω := congrArg Prod.fst hx
+    have hx2 : tomitaOperator M Ω C x = star a Ω := congrArg Prod.snd hx
+    rw [← hx1, ← hx2]
+    exact h x
+  · intro h ζ
+    obtain ⟨u, huM, h1, h2⟩ := tomitaOperator_exists_seq_tendsto hM hΩ C hC ζ
+    exact tendsto_nhds_unique (tendsto_const_nhds.inner h2)
+      ((h1.inner tendsto_const_nhds).congr fun n => (h (u n) (huM n)).symm)
 
 /-- The graph `Γ(S*) = {(ξ, η) | C ξ ∈ Dom (S′)†, (S′)† (C ξ) = η}` is closed in `H × H`.
 Blueprint: lmm:tomita-adjoint-graph-closed -/
@@ -103,7 +119,16 @@ theorem mem_tomitaAdjoint_of_mem_closure_graph {M : Set (H →L[ℂ] H)} {Ω : H
     (hξη : (ξ, η) ∈ closure ((fun b : H →L[ℂ] H => (b Ω, star b Ω)) '' Set.centralizer M)) :
     ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
       (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η := by
-  sorry
+  refine closure_minimal (Set.image_subset_iff.mpr fun b hb => ?_)
+    (tomitaAdjoint_graph_isClosed hM hΩ C hC) hξη
+  refine (mem_tomitaAdjoint_iff hM hΩ C hC _ _).2 fun ζ => ?_
+  obtain ⟨x, hx, h1, h2⟩ := tomitaOperator_exists_seq_tendsto hM hΩ C hC ζ
+  have key : ∀ n, ⟪b Ω, star (x n) Ω⟫_ℂ = ⟪x n Ω, star b Ω⟫_ℂ := fun n => by
+    rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_inner_right, ContinuousLinearMap.adjoint_inner_right,
+      ← mul_apply_eq_comp, ← mul_apply_eq_comp, Set.mem_centralizer_iff.mp hb _ (hx n)]
+  exact tendsto_nhds_unique (tendsto_const_nhds.inner h2)
+    ((h1.inner tendsto_const_nhds).congr fun n => (key n).symm)
 
 /-! ### Unitaries of a von Neumann algebra -/
 
