@@ -302,7 +302,18 @@ theorem tomitaAdjoint_leftMap_closure_props {M : Set (H →L[ℂ] H)} {Ω : H}
         (tomitaLeftMap M Ω ξ).closure ⟨Ω, h⟩ = ξ) ∧
       ∃ h : Ω ∈ (tomitaLeftMap M Ω ξ).closure.adjoint.domain,
         (tomitaLeftMap M Ω ξ).closure.adjoint ⟨Ω, h⟩ = η := by
-  sorry
+  obtain ⟨-, hval, hd⟩ := tomitaLeftMap_properties hM hΩ ξ
+  obtain ⟨hadj, hd'⟩ := tomitaAdjoint_leftMap_adjoint hM hΩ C hC hξη
+  have hcl : (tomitaLeftMap M Ω ξ).IsClosable := isClosable_of_dense_adjoint hd hd'
+  have hle := (tomitaLeftMap M Ω ξ).le_closure
+  have hcval : ∀ x ∈ M, ∃ h : x Ω ∈ (tomitaLeftMap M Ω ξ).closure.domain,
+      (tomitaLeftMap M Ω ξ).closure ⟨x Ω, h⟩ = x ξ := fun x hx => by
+    obtain ⟨h, hv⟩ := hval x hx
+    exact ⟨hle.1 h, (hle.2 (x := ⟨x Ω, h⟩) rfl).symm.trans hv⟩
+  have h1 : (1 : H →L[ℂ] H) ∈ M := hM.2 ▸ Set.one_mem_centralizer
+  refine ⟨hcl, hcl.closure_isClosed, hasDenseDomain_closure hd hcl, hcval, hcval 1 h1, ?_⟩
+  rw [adjoint_closure_eq_adjoint hd hcl]
+  exact hadj 1 h1
 
 /-- For `(ξ, η) ∈ Γ(S*)`, every unitary `U` in `M` commutes with the closure `c` of `a₀`.
 Blueprint: lmm:tomita-adjoint-closure-commutes -/
@@ -313,7 +324,54 @@ theorem tomitaAdjoint_leftMap_closure_commute {M : Set (H →L[ℂ] H)} {Ω : H}
       (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
     (U : H ≃ₗᵢ[ℂ] H) (hU : (U.toContinuousLinearEquiv : H →L[ℂ] H) ∈ M) :
     UnitaryCommutes U (tomitaLeftMap M Ω ξ).closure := by
-  sorry
+  set f := tomitaLeftMap M Ω ξ
+  -- a bounded operator commuting with `f` commutes with its closure
+  have hcl : ∀ V : H →L[ℂ] H,
+      (∀ x (hx : x ∈ f.domain), ∃ h : V x ∈ f.domain, f ⟨V x, h⟩ = V (f ⟨x, hx⟩)) →
+      ∀ x (hx : x ∈ f.closure.domain),
+        ∃ h : V x ∈ f.closure.domain, f.closure ⟨V x, h⟩ = V (f.closure ⟨x, hx⟩) := by
+    intro V hV
+    by_cases hf : f.IsClosable
+    · intro x hx
+      let P : H × H →L[ℂ] H × H := V.prodMap V
+      have hsub : f.graph.map (P : H × H →ₗ[ℂ] H × H) ≤ f.graph := by
+        rintro _ ⟨p, hp, rfl⟩
+        obtain ⟨y, hy1, hy2⟩ := (LinearPMap.mem_graph_iff f).1 hp
+        obtain ⟨h, he⟩ := hV y y.2
+        exact (LinearPMap.mem_graph_iff f).2 ⟨⟨_, h⟩, by simp [P, hy1], by simp [P, he, hy2]⟩
+      have hmem : P (x, f.closure ⟨x, hx⟩) ∈ f.closure.graph := by
+        rw [← hf.graph_closure_eq_closure_graph]
+        exact Submodule.topologicalClosure_mono hsub
+          (Submodule.topologicalClosure_map P f.graph (Submodule.mem_map_of_mem
+            (hf.graph_closure_eq_closure_graph ▸ f.closure.mem_graph ⟨x, hx⟩)))
+      obtain ⟨y, hy1, hy2⟩ := (LinearPMap.mem_graph_iff _).1 hmem
+      obtain ⟨y, hy⟩ := y
+      simp only [P, ContinuousLinearMap.coe_prodMap', Prod.map_apply] at hy1 hy2
+      subst hy1
+      exact ⟨hy, hy2⟩
+    · rw [LinearPMap.closure_def' hf]
+      exact hV
+  obtain ⟨hdom, hval, -⟩ := tomitaLeftMap_properties hM hΩ ξ
+  have hmul : ∀ a ∈ M, ∀ b ∈ M, a * b ∈ M := fun a ha b hb => by
+    rw [← hM.2] at ha hb ⊢
+    exact Set.mul_mem_centralizer ha hb
+  -- a unitary in `M` commutes with `a₀`
+  have h0 : ∀ V : H →L[ℂ] H, V ∈ M →
+      ∀ x (hx : x ∈ f.domain), ∃ h : V x ∈ f.domain, f ⟨V x, h⟩ = V (f ⟨x, hx⟩) := by
+    intro V hV x hx
+    have hx' := hx
+    rw [hdom] at hx'
+    obtain ⟨a, ha, rfl⟩ := hx'
+    have ha' : a ∈ M := span_eq_of_isVonNeumannSet hM ▸ ha
+    obtain ⟨h1, e1⟩ := hval (V * a) (hmul V hV a ha')
+    obtain ⟨h2, e2⟩ := hval a ha'
+    refine ⟨h1, ?_⟩
+    exact e1.trans (congrArg V e2.symm)
+  have hUs : (U.symm.toContinuousLinearEquiv : H →L[ℂ] H) ∈ M := by
+    have := hM.1 _ hU
+    rwa [show (U.toContinuousLinearEquiv : H →L[ℂ] H) = (U : H →L[ℂ] H) from rfl,
+      LinearIsometryEquiv.star_eq_symm] at this
+  exact ⟨hcl _ (h0 _ hU), hcl _ (h0 _ hUs)⟩
 
 /-- For `(ξ, η) ∈ Γ(S*)`, the approximant `x_n` (`x_n ψ = c R_n ψ`) of the closure `c` of `a₀`
 lies in `M′` for `n ≥ 1`.

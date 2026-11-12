@@ -2045,6 +2045,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     $a_0$ is closable. Its closure $c = a_0^{\text{cl}}$ is closed and densely defined, $\mathcal{M}\Omega \subset \text{Dom}(c)$ with $c(x\Omega) = x\xi$ for $x \in \mathcal{M}$, so $c\Omega = \xi$; and $\Omega \in \text{Dom}(c^*)$ with $c^*\Omega = \eta$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-left-map-adjoint, lmm:tomita-adjoint-left-map, lmm:closable-of-dense-adjoint, prpstn:hall-9.10}
     $a_0^*$ is densely defined (Lemma~\ref{lmm:tomita-adjoint-left-map-adjoint}), so $a_0$ is closable (Lemma~\ref{lmm:closable-of-dense-adjoint}); its closure is closed, extends $a_0$, and so is densely defined (Lemma~\ref{lmm:tomita-adjoint-left-map}), and $\mathbf{1} \in \mathcal{M}$ gives $c\Omega = \xi$. By Proposition~\ref{prpstn:hall-9.10}, $c^* = a_0^*$, so $c^*\Omega = a_0^*(\mathbf{1}\Omega) = \eta$ by Lemma~\ref{lmm:tomita-adjoint-left-map-adjoint} with $y = \mathbf{1}$.
 \end{proof}
@@ -2057,6 +2058,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     Every unitary $u \in \mathcal{M}$ commutes with $c$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-closure-props, prpstn:closure-linearity-and-sequential-description, lmm:commutant-von-neumann-algebra}
     $u^{-1} = u^*$ is also a unitary in $\mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so it suffices to show, for every unitary $w \in \mathcal{M}$ and $\psi \in \text{Dom}(c)$, that $w\psi \in \text{Dom}(c)$ and $cw\psi = wc\psi$. Take $y_n \in \mathcal{M}$ with $y_n\Omega \to \psi$ and $y_n\xi \to c\psi$ (Proposition~\ref{prpstn:closure-linearity-and-sequential-description} and Lemma~\ref{lmm:tomita-adjoint-closure-props}). Then $wy_n \in \mathcal{M}$, $wy_n\Omega \to w\psi$ and $c(wy_n\Omega) = wy_n\xi \to wc\psi$ by continuity of $w$; since $c$ is closed, $w\psi \in \text{Dom}(c)$ and $cw\psi = wc\psi$.
 \end{proof}
