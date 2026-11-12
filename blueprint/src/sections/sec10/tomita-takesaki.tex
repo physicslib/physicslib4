@@ -1709,6 +1709,7 @@ The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ o
     Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $\left< \xi, S\zeta \right> = \left< \zeta, \eta \right>$ for every $\zeta \in \text{Dom}(S)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:characterizing-adjoint-domain-membership, lmm:reference-conjugation-properties, crllr:linearized-tomita-properties}
     $\text{Dom}(S') = \text{Dom}(S)$, which is dense (Corollary~\ref{crllr:linearized-tomita-properties}), and $S'\zeta = CS\zeta$. By Lemma~\ref{lmm:characterizing-adjoint-domain-membership}, the left side holds if and only if $\left< C\xi, CS\zeta \right> = \left< \eta, \zeta \right>$ for every $\zeta \in \text{Dom}(S)$. By Lemma~\ref{lmm:reference-conjugation-properties}, $\left< C\xi, CS\zeta \right> = \overline{\left< \xi, S\zeta \right>}$, and $\left< \eta, \zeta \right> = \overline{\left< \zeta, \eta \right>}$; take complex conjugates.
 \end{proof}
@@ -1736,6 +1737,7 @@ The antilinear adjoint of $S$ is expressed through the linear adjoint $(S')^*$ o
     The set $\Gamma(S^*) = \{ (\xi, \eta) \in \mathbf{H} \times \mathbf{H} \mid C\xi \in \text{Dom}((S')^*),\ (S')^*C\xi = \eta \}$ is closed in $\mathbf{H} \times \mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-intrinsic-core}
     By Lemma~\ref{lmm:tomita-adjoint-intrinsic-core}, $\Gamma(S^*)$ is the intersection over $x \in \mathcal{M}$ of the sets $\{ (\xi, \eta) \mid \left< \xi, x^*\Omega \right> = \left< x\Omega, \eta \right> \}$. Each is the set where two continuous functions of $(\xi, \eta)$ agree (Mathlib's \texttt{isClosed\_eq}, with \texttt{continuous\_inner}), hence closed, and an intersection of closed sets is closed (Mathlib's \texttt{isClosed\_iInter}).
 \end{proof}

@@ -54,7 +54,22 @@ theorem mem_tomitaAdjoint_iff {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeum
         (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
       ∀ ζ : (linearizedTomitaPre M Ω C).closure.domain,
         ⟪ξ, tomitaOperator M Ω C ζ⟫_ℂ = ⟪(ζ : H), η⟫_ℂ := by
-  sorry
+  set T := (linearizedTomitaPre M Ω C).closure
+  have hd : Dense (T.domain : Set H) := (linearizedTomita_closure_properties hM hΩ C hC).2.1
+  have key : ∀ ζ : T.domain,
+      ⟪ξ, tomitaOperator M Ω C ζ⟫_ℂ = starRingEnd ℂ ⟪C ξ, T ζ⟫_ℂ := fun ζ => by
+    have := inner_map_map_of_conjLinearIsometry C.toLinearIsometry (C ξ) (T ζ)
+    simp only [LinearIsometryEquiv.coe_toLinearIsometry,
+      hC] at this
+    exact this
+  constructor
+  · rintro ⟨h, rfl⟩ ζ
+    rw [key, ← LinearPMap.adjoint_isFormalAdjoint hd ⟨C ξ, h⟩ ζ, inner_conj_symm]
+  · intro hζ
+    have h' : ∀ ζ : T.domain, ⟪η, (ζ : H)⟫_ℂ = ⟪C ξ, T ζ⟫_ℂ := fun ζ => by
+      rw [← inner_conj_symm, ← hζ, key, RCLike.conj_conj]
+    have hmem : C ξ ∈ T.adjoint.domain := LinearPMap.mem_adjoint_domain_of_exists _ ⟨η, h'⟩
+    exact ⟨hmem, LinearPMap.adjoint_apply_eq hd ⟨C ξ, hmem⟩ h'⟩
 
 /-- `(ξ, η) ∈ Γ(S*)` if and only if `⟪ξ, x* Ω⟫ = ⟪x Ω, η⟫` for every `x ∈ M`.
 Blueprint: lmm:tomita-adjoint-intrinsic-core -/
@@ -72,7 +87,13 @@ theorem tomitaAdjoint_graph_isClosed {M : Set (H →L[ℂ] H)} {Ω : H} (hM : Is
     (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) :
     IsClosed {p : H × H | ∃ h : C p.1 ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
       (linearizedTomitaPre M Ω C).closure.adjoint ⟨C p.1, h⟩ = p.2} := by
-  sorry
+  have hcl : IsClosed ((linearizedTomitaPre M Ω C).closure.adjoint.graph : Set (H × H)) :=
+    LinearPMap.adjoint_isClosed (tomitaOperator_involution hM hΩ C hC).2.2.1
+  convert hcl.preimage (C.continuous.prodMap continuous_id) using 1
+  ext ⟨x, y⟩
+  simp only [Set.mem_ofPred_eq, Set.mem_preimage, Prod.map, id, SetLike.mem_coe,
+    LinearPMap.mem_graph_iff]
+  exact ⟨fun ⟨h, e⟩ => ⟨⟨C x, h⟩, rfl, e⟩, fun ⟨⟨z, hz⟩, e1, e2⟩ => by subst e1; exact ⟨hz, e2⟩⟩
 
 /-- The closure of `Γ(F₀) = {(b′ Ω, b′* Ω) | b′ ∈ M′}` is contained in `Γ(S*)`.
 Blueprint: lmm:tomita-adjoint-extends-closure -/
