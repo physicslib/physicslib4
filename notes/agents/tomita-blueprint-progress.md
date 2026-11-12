@@ -26,3 +26,12 @@
 - 2026-11-11: batch 3b review pass 1: REVISE (statements true; antiunitaryConj formulation for unitary conjugation, two oversized proofs). Writer pass 2 started.
 - 2026-11-11: batch 3b writer pass 2: B1 (antiunitaryConj formulation; new lmm:commuting-unitary-double-conjugate), B2 (new lmm:fc-domain-square; cites lmm:square-of-inverse-square-root), B3 (new lmm:von-neumann-real-imaginary-part; explicit formula, x != 0) and all non-blocking items applied; new lmm:commuting-unitary-adjoint-half. 38 nodes; refresh (888 entries), validate (only the 14 known `conv:` errors).
 - 2026-11-11: batch 3b review pass 2: PASS (38 nodes). leanblueprint pdf (no undefined references) and web checked.
+
+## Stage 4
+
+- 2026-11-12: drafting stage 4 (strip formula, Fourier uniqueness): writer started.
+- 2026-11-12: stage 4 drafted: subsection "The Strip Formula and Fourier Uniqueness" (sbsctn:strip-formula, 20 nodes): ∫dt/cosh πt = 1 via 2 arctan(e^t), 1/cosh x ≤ 2(1+x²)^{-1}, g = dslope f 0 / dslope sin(π·) 0, rectangle Cauchy theorem, horizontal sides O(1/T), thrm:strip-formula (Jones Ex. 13.2.1), thrm:fourier-uniqueness via Continuous.fourierInv_fourier_eq; refresh (910 entries), validate (only the 14 known `conv:` errors).
+- 2026-11-12: stage 4 review pass 1: REVISE (math correct; fourierInv_zero has no instance for plain functions; ofReal step; two oversized proofs). Writer pass 2 started (no new definition blocks; no file split).
+- 2026-11-12: stage 4 writer pass 2 done (24 nodes, 914 entries): fourier-uniqueness uses Real.fourierInv_eq + smul_zero + integral_zero for F⁻0 = 0; added lmm:strip-boundary-split (Integrable.ofReal, integral_ofReal), lmm:strip-rectangle-subset, lmm:strip-vertical-sides, lmm:hasDerivAt-two-arctan-exp (+ .mono_right nhdsWithin_le_nhds note); dropped K ≥ 0 and the unused f-hypotheses; validate: only the 14 known `conv:` errors.
+- 2026-11-12: stage 4 review pass 2: PASS (24 nodes).
+- 2026-11-12: definition blocks added for g (def:strip-quotient), V± (def:strip-vertical-integrals), H (def:strip-horizontal-integral); 27 nodes. Validate/pdf OK. Committed.

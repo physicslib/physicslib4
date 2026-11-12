@@ -2258,3 +2258,271 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
     \uses{lmm:commutant-cyclic-separating, lmm:commutant-tomita-operator, lmm:commutant-modular-operator, lmm:commutant-modular-conjugation}
     Lemma~\ref{lmm:commutant-cyclic-separating} gives the hypotheses for $(\mathcal{M}', \Omega)$. The four identities are Lemmas~\ref{lmm:commutant-tomita-operator}, \ref{lmm:commutant-modular-operator} and~\ref{lmm:commutant-modular-conjugation}.
 \end{proof}
+
+\subsection{The Strip Formula and Fourier Uniqueness}\label{sbsctn:strip-formula}
+
+This subsection proves two results of scalar analysis that van Daele's proof of Tomita's theorem uses: the strip formula of Exercise~13.2.1 of V.~F.~R.~Jones, \emph{von Neumann algebras}, Berkeley lecture notes, Chapter~13, and the uniqueness of the Fourier transform of a continuous integrable function on $\mathbb{R}$, which the proof of Jones's Theorem~13.2.3 uses. Throughout, $\mathcal{S} = \{z \in \mathbb{C} : -\tfrac{1}{2} \le \operatorname{Re} z \le \tfrac{1}{2}\}$ is the closed strip, $\mathcal{S}^\circ = \{z \in \mathbb{C} : -\tfrac{1}{2} < \operatorname{Re} z < \tfrac{1}{2}\}$ its interior, and $f : \mathbb{C} \to \mathbb{C}$ and $M \ge 0$ satisfy
+\begin{align}
+    f \text{ is continuous on } \mathcal{S}, \qquad f \text{ is complex differentiable on } \mathcal{S}^\circ, \qquad \|f(z)\| \le M \text{ for } z \in \mathcal{S}. \label{eq:strip-hypotheses}
+\end{align}
+We write $s(z) = \sin(\pi z)$.
+
+\begin{definition}[The Strip Quotient]
+    \label{def:strip-quotient}
+    For $f : \mathbb{C} \to \mathbb{C}$, the strip quotient of $f$ is $g = \operatorname{dslope}(f, 0) / \operatorname{dslope}(s, 0)$, where Mathlib's $\operatorname{dslope}(h, 0)$ is $z \mapsto (h(z) - h(0))/z$ for $z \ne 0$ and $h'(0)$ at $z = 0$.
+\end{definition}
+
+\begin{definition}[The Vertical Side Integrals]
+    \label{def:strip-vertical-integrals}
+    For $f : \mathbb{C} \to \mathbb{C}$ and $T \in \mathbb{R}$,
+    \begin{align}
+        V_\pm(T) = \int_{-T}^{T} \frac{f(\pm\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt. \label{eq:strip-sides}
+    \end{align}
+\end{definition}
+
+\begin{definition}[The Horizontal Side Integral]
+    \label{def:strip-horizontal-integral}
+    \uses{def:strip-quotient}
+    For $f : \mathbb{C} \to \mathbb{C}$ with strip quotient $g$ and $T \in \mathbb{R}$,
+    $H(T) = \int_{-1/2}^{1/2} g(x + iT) \, dx - \int_{-1/2}^{1/2} g(x - iT) \, dx$.
+\end{definition}
+
+The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ on $[-\tfrac{1}{2}, \tfrac{1}{2}] \times [-T, T]$ and lets $T \to \infty$.
+
+\subsubsection{Integrals of $1/\cosh$}
+
+\begin{lemma}[A Bound on $1/\cosh$]
+    \label{lmm:inv-cosh-le}
+    For every $x \in \mathbb{R}$, $1/\cosh x \le 2(1 + x^2)^{-1}$.
+\end{lemma}
+\begin{proof}
+    For real $y$, $\sinh(y)^2 = |\sinh y|^2 = \sinh(|y|)^2 \ge |y|^2 = y^2$, since $|y| \le \sinh |y|$ (Mathlib's \texttt{Real.abs\_sinh} and \texttt{Real.self\_le\_sinh\_iff}). With $y = x/2$, Mathlib's \texttt{Real.cosh\_two\_mul} and \texttt{Real.cosh\_sq'} give $\cosh x = \cosh(y)^2 + \sinh(y)^2 = 1 + 2\sinh(y)^2 \ge 1 + x^2/2 \ge (1 + x^2)/2 > 0$, so $1/\cosh x \le 2(1 + x^2)^{-1}$.
+\end{proof}
+
+\begin{lemma}[Integrability of $1/\cosh(\pi t)$]
+    \label{lmm:inv-cosh-pi-integrable}
+    The functions $t \mapsto 1/\cosh t$ and $t \mapsto 1/\cosh(\pi t)$ are integrable on $\mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:inv-cosh-le}
+    $t \mapsto 1/\cosh t$ is continuous (Mathlib's \texttt{Real.cosh\_pos}), hence measurable, and bounded by the integrable function $2(1 + t^2)^{-1}$ (Lemma~\ref{lmm:inv-cosh-le}; Mathlib's \texttt{integrable\_inv\_one\_add\_sq} and \texttt{Integrable.const\_mul}), so it is integrable (Mathlib's \texttt{Integrable.mono'}). Composition with $t \mapsto \pi t$ preserves integrability (Mathlib's \texttt{Integrable.comp\_mul\_left'}, $\pi \ne 0$).
+\end{proof}
+
+\begin{lemma}[Functions Dominated by $1/\cosh(\pi t)$]
+    \label{lmm:cosh-dominated-integrable}
+    Let $h : \mathbb{R} \to \mathbb{C}$ be continuous, and let $K \in \mathbb{R}$ with $\|h(t)\| \le K/\cosh(\pi t)$ for every $t \in \mathbb{R}$. Then $h$ is integrable on $\mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:inv-cosh-pi-integrable}
+    $t \mapsto K/\cosh(\pi t) = K \cdot (1/\cosh(\pi t))$ is integrable (Lemma~\ref{lmm:inv-cosh-pi-integrable}; Mathlib's \texttt{Integrable.const\_mul}) and $h$ is continuous, hence a.e.\ strongly measurable, so $h$ is integrable (Mathlib's \texttt{Integrable.mono'}).
+\end{proof}
+
+\begin{lemma}[The Derivative of $2\arctan(e^t)$]
+    \label{lmm:hasDerivAt-two-arctan-exp}
+    For every $t \in \mathbb{R}$, the function $F(t) = 2\arctan(e^t)$ has derivative $F'(t) = 1/\cosh t$.
+\end{lemma}
+\begin{proof}
+    By Mathlib's \texttt{Real.hasDerivAt\_exp}, \texttt{HasDerivAt.arctan} and \texttt{HasDerivAt.const\_mul}, $F'(t) = 2 \cdot \frac{1}{1 + (e^t)^2} \cdot e^t$. Since $e^t > 0$ (\texttt{Real.exp\_pos}), this equals $2/(e^{-t} + e^t) = 1/\cosh t$ (Mathlib's \texttt{Real.cosh\_eq}, \texttt{Real.exp\_neg}; \texttt{field\_simp}).
+\end{proof}
+
+\begin{lemma}[$\int_{\mathbb{R}} dt/\cosh t = \pi$]
+    \label{lmm:integral-inv-cosh}
+    $\int_{\mathbb{R}} \frac{dt}{\cosh t} = \pi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:inv-cosh-pi-integrable, lmm:hasDerivAt-two-arctan-exp}
+    Let $F(t) = 2\arctan(e^t)$, so $F' = 1/\cosh$ (Lemma~\ref{lmm:hasDerivAt-two-arctan-exp}). As $t \to -\infty$, $e^t \to 0$ (\texttt{Real.tendsto\_exp\_atBot}), so $F(t) \to 2\arctan 0 = 0$ (\texttt{Real.continuous\_arctan}, \texttt{Real.arctan\_zero}); as $t \to \infty$, $e^t \to \infty$ (\texttt{Real.tendsto\_exp\_atTop}), so $F(t) \to 2 \cdot \pi/2 = \pi$ (\texttt{Real.tendsto\_arctan\_atTop}, whose target $\mathcal{N}_{<}(\pi/2)$ is weakened to $\mathcal{N}(\pi/2)$ by \texttt{.mono\_right nhdsWithin\_le\_nhds}; then \texttt{Tendsto.const\_mul}). With $1/\cosh$ integrable (Lemma~\ref{lmm:inv-cosh-pi-integrable}), Mathlib's \texttt{MeasureTheory.integral\_of\_hasDerivAt\_of\_tendsto} gives $\int_{\mathbb{R}} dt/\cosh t = \pi - 0$.
+\end{proof}
+
+\begin{lemma}[$\int_{\mathbb{R}} dt/\cosh(\pi t) = 1$]
+    \label{lmm:integral-inv-cosh-pi}
+    $\int_{\mathbb{R}} \frac{dt}{\cosh(\pi t)} = 1$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:integral-inv-cosh}
+    Mathlib's \texttt{MeasureTheory.Measure.integral\_comp\_mul\_left} gives $\int_{\mathbb{R}} \frac{dt}{\cosh(\pi t)} = |\pi^{-1}| \int_{\mathbb{R}} \frac{du}{\cosh u} = \pi^{-1} \cdot \pi = 1$ by Lemma~\ref{lmm:integral-inv-cosh}.
+\end{proof}
+
+\subsubsection{The Sine on the Strip}
+
+\begin{lemma}[$\sin$ on the Boundary Lines]
+    \label{lmm:sin-strip-boundary}
+    For $t \in \mathbb{R}$, $\sin(\pi(\tfrac{1}{2} + it)) = \cosh(\pi t)$ and $\sin(\pi(-\tfrac{1}{2} + it)) = -\cosh(\pi t)$.
+\end{lemma}
+\begin{proof}
+    Write $\pi(\pm\tfrac{1}{2} + it) = \pm\tfrac{\pi}{2} + (\pi t)i$. Mathlib's \texttt{Complex.sin\_add\_mul\_I} gives $\sin(\pm\tfrac{\pi}{2})\cosh(\pi t) + \cos(\pm\tfrac{\pi}{2})\sinh(\pi t) i$, and $\sin(\pm\tfrac{\pi}{2}) = \pm 1$, $\cos(\pm\tfrac{\pi}{2}) = 0$ (Mathlib's \texttt{Complex.sin\_pi\_div\_two}, \texttt{Complex.cos\_pi\_div\_two}, \texttt{Complex.sin\_neg}, \texttt{Complex.cos\_neg}). The complex $\cosh$ of the real $\pi t$ is the real one (\texttt{Complex.ofReal\_cosh}).
+\end{proof}
+
+\begin{lemma}[A Lower Bound for $|\sin|$]
+    \label{lmm:sin-norm-lower-bound}
+    For $x, y \in \mathbb{R}$, $|\sin(x + iy)| \ge |y|$.
+\end{lemma}
+\begin{proof}
+    By Mathlib's \texttt{Complex.sin\_add\_mul\_I} and \texttt{Complex.ofReal\_sin}, \texttt{Complex.ofReal\_cos}, \texttt{Complex.ofReal\_sinh}, \texttt{Complex.ofReal\_cosh}, $\sin(x + iy) = \sin x \cosh y + i\cos x \sinh y$ with real $\sin x \cosh y$ and $\cos x \sinh y$. Hence (\texttt{Complex.sq\_norm}, \texttt{Complex.normSq\_add\_mul\_I}, \texttt{Real.cosh\_sq'}, \texttt{Real.sin\_sq\_add\_cos\_sq}) $|\sin(x + iy)|^2 = \sin^2 x(1 + \sinh^2 y) + \cos^2 x \sinh^2 y = \sin^2 x + \sinh^2 y \ge \sinh^2 y \ge y^2$, the last step as in the proof of Lemma~\ref{lmm:inv-cosh-le} (\texttt{Real.abs\_sinh}, \texttt{Real.self\_le\_sinh\_iff}). Hence $|y| \le |\sin(x + iy)|$ (Mathlib's \texttt{abs\_le\_of\_sq\_le\_sq}, \texttt{norm\_nonneg}).
+\end{proof}
+
+\begin{lemma}[Zeros of $\sin(\pi z)$ in the Strip]
+    \label{lmm:sin-pi-zero-strip}
+    If $z \in \mathcal{S}$ and $\sin(\pi z) = 0$, then $z = 0$.
+\end{lemma}
+\begin{proof}
+    By Mathlib's \texttt{Complex.sin\_eq\_zero\_iff}, $\pi z = k\pi$ for some $k \in \mathbb{Z}$, so $z = k$ ($\pi \ne 0$). Then $|k| = |\operatorname{Re} z| \le \tfrac{1}{2}$, so $k = 0$.
+\end{proof}
+
+\subsubsection{The Quotient $g$}
+
+\begin{lemma}[The Quotient off $0$]
+    \uses{def:strip-quotient}
+    \label{lmm:strip-quotient-formula}
+    Let $f : \mathbb{C} \to \mathbb{C}$ be any function; no hypothesis of~\eqref{eq:strip-hypotheses} is needed. For $z \ne 0$ with $\sin(\pi z) \ne 0$, $g(z) = (f(z) - f(0))/\sin(\pi z)$. In particular, for $t \in \mathbb{R}$,
+    \[ g(\tfrac{1}{2} + it) = \frac{f(\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)}, \qquad g(-\tfrac{1}{2} + it) = -\frac{f(-\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)}. \]
+\end{lemma}
+\begin{proof}
+    \uses{lmm:sin-strip-boundary}
+    For $z \ne 0$, Mathlib's \texttt{dslope\_of\_ne} and \texttt{slope\_def\_field} give $g(z) = \frac{(f(z) - f(0))/z}{(\sin(\pi z) - \sin 0)/z}$, which equals $(f(z) - f(0))/\sin(\pi z)$ since $z \ne 0$ and $\sin 0 = 0$. On the lines $\operatorname{Re} z = \pm\tfrac{1}{2}$, $z \ne 0$ and $\sin(\pi z) = \pm\cosh(\pi t) \ne 0$ (Lemma~\ref{lmm:sin-strip-boundary}; Mathlib's \texttt{Real.cosh\_pos}).
+\end{proof}
+
+\begin{lemma}[The Denominator of $g$ on the Strip]
+    \uses{def:strip-quotient}
+    \label{lmm:strip-denominator-ne-zero}
+    For $z \in \mathcal{S}$, $\operatorname{dslope}(s, 0)(z) \ne 0$. This statement involves only $s(z) = \sin(\pi z)$, not $f$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:sin-pi-zero-strip}
+    At $z = 0$, Mathlib's \texttt{dslope\_same} gives $s'(0) = \pi\cos 0 = \pi \ne 0$ (\texttt{Complex.hasDerivAt\_sin}, \texttt{HasDerivAt.comp}, \texttt{Complex.cos\_zero}). For $z \ne 0$, $\operatorname{dslope}(s, 0)(z) = \sin(\pi z)/z$ (\texttt{dslope\_of\_ne}, \texttt{slope\_def\_field}), and $\sin(\pi z) \ne 0$ by Lemma~\ref{lmm:sin-pi-zero-strip}.
+\end{proof}
+
+\begin{lemma}[$g$ is Continuous on $\mathcal{S}$ and Holomorphic on $\mathcal{S}^\circ$]
+    \uses{def:strip-quotient}
+    \label{lmm:strip-quotient-regular}
+    Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then $g$ is continuous on $\mathcal{S}$ and complex differentiable on $\mathcal{S}^\circ$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-denominator-ne-zero}
+    $\mathcal{S}^\circ$ is open (Mathlib's \texttt{Complex.continuous\_re}, \texttt{isOpen\_lt}) and contains $0$, so $\mathcal{S}^\circ$ and $\mathcal{S}$ are neighbourhoods of $0$, and $f$ is differentiable at $0$. Mathlib's \texttt{continuousOn\_dslope} makes $\operatorname{dslope}(f, 0)$ and $\operatorname{dslope}(s, 0)$ continuous on $\mathcal{S}$, and \texttt{Complex.differentiableOn\_dslope} makes them complex differentiable on $\mathcal{S}^\circ$ ($s$ is entire: \texttt{Complex.differentiable\_sin}). The denominator does not vanish on $\mathcal{S}$ (Lemma~\ref{lmm:strip-denominator-ne-zero}), so \texttt{ContinuousOn.div} and \texttt{DifferentiableOn.div} conclude.
+\end{proof}
+
+\begin{lemma}[$g$ on Horizontal Lines]
+    \uses{def:strip-quotient}
+    \label{lmm:strip-quotient-horizontal-bound}
+    Let $f$ be as in~\eqref{eq:strip-hypotheses}, $T > 0$ and $x \in [-\tfrac{1}{2}, \tfrac{1}{2}]$. Then $\|g(x \pm iT)\| \le 2M/(\pi T)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-quotient-formula, lmm:sin-norm-lower-bound}
+    $z = x \pm iT$ lies in $\mathcal{S}$ and $z \ne 0$. By Lemma~\ref{lmm:sin-norm-lower-bound}, $|\sin(\pi z)| = |\sin(\pi x + i(\pm\pi T))| \ge \pi T > 0$, so Lemma~\ref{lmm:strip-quotient-formula} applies and $\|g(z)\| = \|f(z) - f(0)\|/|\sin(\pi z)| \le 2M/(\pi T)$ (\texttt{norm\_sub\_le}, \texttt{div\_le\_div\_of\_nonneg\_left}).
+\end{proof}
+
+\subsubsection{The Contour Argument}
+
+\begin{lemma}[The Rectangle Lies in the Strip]
+    \label{lmm:strip-rectangle-subset}
+    Let $T > 0$, and let $z_0 = -\tfrac{1}{2} - iT$ and $w_0 = \tfrac{1}{2} + iT$. Then the closed rectangle $[[\operatorname{Re} z_0, \operatorname{Re} w_0]] \times_{\mathbb{C}} [[\operatorname{Im} z_0, \operatorname{Im} w_0]] = [-\tfrac{1}{2}, \tfrac{1}{2}] \times_{\mathbb{C}} [-T, T]$ is contained in $\mathcal{S}$, and the open rectangle $(\min(\operatorname{Re} z_0, \operatorname{Re} w_0), \max(\operatorname{Re} z_0, \operatorname{Re} w_0)) \times_{\mathbb{C}} (\min(\operatorname{Im} z_0, \operatorname{Im} w_0), \max(\operatorname{Im} z_0, \operatorname{Im} w_0)) = (-\tfrac{1}{2}, \tfrac{1}{2}) \times_{\mathbb{C}} (-T, T)$ is contained in $\mathcal{S}^\circ$. Here $s \times_{\mathbb{C}} t = \{z : \operatorname{Re} z \in s,\ \operatorname{Im} z \in t\}$.
+\end{lemma}
+\begin{proof}
+    The corners have $\operatorname{Re} z_0 = -\tfrac{1}{2} \le \tfrac{1}{2} = \operatorname{Re} w_0$ and $\operatorname{Im} z_0 = -T \le T = \operatorname{Im} w_0$ (\texttt{Complex.add\_re}, \texttt{Complex.mul\_I\_re} and the like; \texttt{simp}), so Mathlib's \texttt{Set.uIcc\_of\_le}, \texttt{min\_eq\_left} and \texttt{max\_eq\_right} turn the intervals into $[-\tfrac{1}{2}, \tfrac{1}{2}]$, $[-T, T]$, $(-\tfrac{1}{2}, \tfrac{1}{2})$ and $(-T, T)$. A point $z$ of either rectangle satisfies $\operatorname{Re} z \in [-\tfrac{1}{2}, \tfrac{1}{2}]$, respectively $\operatorname{Re} z \in (-\tfrac{1}{2}, \tfrac{1}{2})$ (\texttt{Complex.mem\_reProdIm}), which is membership in $\mathcal{S}$, respectively $\mathcal{S}^\circ$.
+\end{proof}
+
+\begin{lemma}[The Vertical Sides of the Rectangle]
+    \uses{def:strip-quotient, def:strip-vertical-integrals}
+    \label{lmm:strip-vertical-sides}
+    Let $f : \mathbb{C} \to \mathbb{C}$ and $T > 0$. With $V_\pm$ as in~\eqref{eq:strip-sides},
+    \[ \int_{-T}^{T} g(\tfrac{1}{2} + it)\,dt = V_+(T), \qquad \int_{-T}^{T} g(-\tfrac{1}{2} + it)\,dt = -V_-(T). \]
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-quotient-formula}
+    By Lemma~\ref{lmm:strip-quotient-formula} the integrands agree pointwise with $(f(\tfrac{1}{2} + it) - f(0))/\cosh(\pi t)$ and $-(f(-\tfrac{1}{2} + it) - f(0))/\cosh(\pi t)$, so Mathlib's \texttt{intervalIntegral.integral\_congr} rewrites both integrals; \texttt{intervalIntegral.integral\_neg} pulls out the sign in the second.
+\end{proof}
+
+\begin{lemma}[The Rectangle Identity]
+    \uses{def:strip-vertical-integrals, def:strip-horizontal-integral}
+    \label{lmm:strip-rectangle-identity}
+    Let $f$ be as in~\eqref{eq:strip-hypotheses} and $T > 0$. With $V_\pm$ and $H$ as in~\eqref{eq:strip-sides}, $i\,(V_+(T) + V_-(T)) = H(T)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-quotient-regular, lmm:strip-rectangle-subset, lmm:strip-vertical-sides}
+    By Lemmas~\ref{lmm:strip-rectangle-subset} and~\ref{lmm:strip-quotient-regular} (\texttt{ContinuousOn.mono}, \texttt{DifferentiableOn.mono}), Mathlib's \texttt{Complex.integral\_boundary\_rect\_eq\_zero\_of\_continuousOn\_of\_differentiableOn} applies to $g$ with corners $-\tfrac{1}{2} - iT$ and $\tfrac{1}{2} + iT$:
+    \[ \int_{-1/2}^{1/2} g(x - iT)\,dx - \int_{-1/2}^{1/2} g(x + iT)\,dx + i\int_{-T}^{T} g(\tfrac{1}{2} + it)\,dt - i\int_{-T}^{T} g(-\tfrac{1}{2} + it)\,dt = 0. \]
+    Lemma~\ref{lmm:strip-vertical-sides} replaces the third integral by $V_+(T)$ and the fourth by $-V_-(T)$, and \texttt{linear\_combination} gives $i(V_+(T) + V_-(T)) = H(T)$.
+\end{proof}
+
+\begin{lemma}[The Horizontal Sides Vanish]
+    \uses{def:strip-horizontal-integral}
+    \label{lmm:strip-horizontal-vanish}
+    Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then $H(T) \to 0$ as $T \to \infty$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-quotient-horizontal-bound}
+    For $T > 0$, Lemma~\ref{lmm:strip-quotient-horizontal-bound} and Mathlib's \texttt{intervalIntegral.norm\_integral\_le\_of\_norm\_le\_const} bound each integral in $H(T)$ by $2M/(\pi T) \cdot 1$, so $\|H(T)\| \le (4M/\pi) T^{-1}$. Since $T^{-1} \to 0$ (\texttt{tendsto\_inv\_atTop\_zero}, \texttt{Tendsto.const\_mul}), \texttt{squeeze\_zero\_norm'} (\texttt{eventually\_gt\_atTop}) gives $H(T) \to 0$.
+\end{proof}
+
+\begin{lemma}[Integrability on the Boundary Lines]
+    \label{lmm:strip-boundary-integrable}
+    Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then $t \mapsto (f(\pm\tfrac{1}{2} + it) - f(0))/\cosh(\pi t)$ and $t \mapsto f(\pm\tfrac{1}{2} + it)/\cosh(\pi t)$ are integrable on $\mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:cosh-dominated-integrable}
+    $t \mapsto \pm\tfrac{1}{2} + it$ is continuous with values in $\mathcal{S}$, so $t \mapsto f(\pm\tfrac{1}{2} + it)$ is continuous (\texttt{ContinuousOn.comp\_continuous}) and bounded by $M$; $\cosh(\pi t) > 0$ is continuous. The numerators are bounded by $2M$ and $M$, so Lemma~\ref{lmm:cosh-dominated-integrable} with $K = 2M$ and $K = M$ applies.
+\end{proof}
+
+\begin{lemma}[The Vertical Sides Converge]
+    \uses{def:strip-vertical-integrals}
+    \label{lmm:strip-vertical-limit}
+    Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then, as $T \to \infty$,
+    \[ V_+(T) + V_-(T) \to \int_{\mathbb{R}} \frac{f(\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt + \int_{\mathbb{R}} \frac{f(-\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt. \]
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-boundary-integrable}
+    Both integrands are integrable (Lemma~\ref{lmm:strip-boundary-integrable}), and $-T \to -\infty$, $T \to \infty$ (\texttt{tendsto\_neg\_atTop\_atBot}, \texttt{tendsto\_id}), so Mathlib's \texttt{MeasureTheory.intervalIntegral\_tendsto\_integral} gives the convergence of $V_+$ and $V_-$ separately; \texttt{Filter.Tendsto.add} combines them.
+\end{proof}
+
+\begin{lemma}[The Boundary Integral Vanishes]
+    \label{lmm:strip-boundary-integral-zero}
+    Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then
+    \[ \int_{\mathbb{R}} \frac{f(\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt + \int_{\mathbb{R}} \frac{f(-\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt = 0. \]
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-rectangle-identity, lmm:strip-horizontal-vanish, lmm:strip-vertical-limit}
+    For $T > 0$, $V_+(T) + V_-(T) = -i\,H(T)$ (Lemma~\ref{lmm:strip-rectangle-identity}), which tends to $-i \cdot 0 = 0$ (Lemma~\ref{lmm:strip-horizontal-vanish}; \texttt{Tendsto.const\_mul}, \texttt{Tendsto.congr'} with \texttt{eventually\_gt\_atTop}). By Lemma~\ref{lmm:strip-vertical-limit} and uniqueness of limits (\texttt{tendsto\_nhds\_unique}), the sum of the two integrals is $0$.
+\end{proof}
+
+\begin{lemma}[Splitting off $f(0)$]
+    \label{lmm:strip-boundary-split}
+    Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then, for each choice of sign,
+    \[ \int_{\mathbb{R}} \frac{f(\pm\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt = \int_{\mathbb{R}} \frac{f(\pm\tfrac{1}{2} + it)}{\cosh(\pi t)} \, dt - f(0). \]
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-boundary-integrable, lmm:inv-cosh-pi-integrable, lmm:integral-inv-cosh-pi}
+    Pointwise, $\frac{f(\pm\frac{1}{2} + it) - f(0)}{\cosh(\pi t)} = \frac{f(\pm\frac{1}{2} + it)}{\cosh(\pi t)} - f(0) \cdot \frac{1}{\cosh(\pi t)}$ (\texttt{sub\_div}, \texttt{div\_eq\_mul\_one\_div}), where the complex $\cosh(\pi t)$ is the cast of the real one (\texttt{Complex.ofReal\_cosh}, \texttt{Complex.ofReal\_mul}). The first term is integrable by Lemma~\ref{lmm:strip-boundary-integrable}; the second is the constant $f(0)$ times the cast of the real integrable function $1/\cosh(\pi t)$ (Lemma~\ref{lmm:inv-cosh-pi-integrable}; Mathlib's \texttt{MeasureTheory.Integrable.ofReal} and \texttt{Integrable.const\_mul}). Mathlib's \texttt{MeasureTheory.integral\_sub} splits the integral, and \texttt{MeasureTheory.integral\_const\_mul} and \texttt{integral\_ofReal} give $\int_{\mathbb{R}} f(0) \cdot \frac{1}{\cosh(\pi t)} \, dt = f(0) \cdot \int_{\mathbb{R}} \frac{dt}{\cosh(\pi t)} = f(0)$ by Lemma~\ref{lmm:integral-inv-cosh-pi}.
+\end{proof}
+
+\begin{theorem}[The Strip Formula]
+    \label{thrm:strip-formula}
+    Let $f : \mathbb{C} \to \mathbb{C}$ be continuous and bounded on $\mathcal{S} = \{z : -\tfrac{1}{2} \le \operatorname{Re} z \le \tfrac{1}{2}\}$ (that is, there is $M$ with $\|f(z)\| \le M$ for every $z \in \mathcal{S}$) and complex differentiable on its interior. Then
+    \[ f(0) = \int_{\mathbb{R}} \frac{f(\tfrac{1}{2} + it) + f(-\tfrac{1}{2} + it)}{2\cosh(\pi t)} \, dt. \]
+    This is Exercise~13.2.1 of Jones's notes.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:strip-boundary-integral-zero, lmm:strip-boundary-split, lmm:strip-boundary-integrable}
+    Choose $M$ bounding $\|f\|$ on $\mathcal{S}$, so~\eqref{eq:strip-hypotheses} holds. Rewriting both integrals of Lemma~\ref{lmm:strip-boundary-integral-zero} by Lemma~\ref{lmm:strip-boundary-split} gives $\int_{\mathbb{R}} \frac{f(\frac{1}{2} + it)}{\cosh(\pi t)}dt + \int_{\mathbb{R}} \frac{f(-\frac{1}{2} + it)}{\cosh(\pi t)}dt = 2f(0)$. With both integrands integrable (Lemma~\ref{lmm:strip-boundary-integrable}), \texttt{MeasureTheory.integral\_add} (with \texttt{add\_div}) and \texttt{MeasureTheory.integral\_div} (with \texttt{div\_div}) turn the left side into $2\int_{\mathbb{R}} \frac{f(\frac{1}{2} + it) + f(-\frac{1}{2} + it)}{2\cosh(\pi t)} dt$; dividing by $2$ concludes.
+\end{proof}
+
+\subsubsection{Fourier Uniqueness}
+
+Mathlib's Fourier transform of $h : \mathbb{R} \to \mathbb{C}$ is $\mathcal{F}h(w) = \int_{\mathbb{R}} e^{-2\pi i v w} h(v) \, dv$ (\texttt{Real.fourier\_real\_eq\_integral\_exp\_smul}), and $\mathcal{F}^{-}$ is its inverse transform. For continuous $h$ with $\|h(t)\| \le K/\cosh(\pi t)$, integrability is Lemma~\ref{lmm:cosh-dominated-integrable}.
+
+\begin{lemma}[Vanishing Fourier Integrals]
+    \label{lmm:fourier-transform-eq-zero}
+    Let $h : \mathbb{R} \to \mathbb{C}$ satisfy $\int_{\mathbb{R}} e^{i\theta t} h(t) \, dt = 0$ for every $\theta \in \mathbb{R}$. Then $\mathcal{F}h = 0$.
+\end{lemma}
+\begin{proof}
+    For $w \in \mathbb{R}$, Mathlib's \texttt{Real.fourier\_real\_eq\_integral\_exp\_smul} gives $\mathcal{F}h(w) = \int_{\mathbb{R}} e^{(-2\pi v w) i} \cdot h(v) \, dv$, which is the hypothesis at $\theta = -2\pi w$ (\texttt{smul\_eq\_mul}, \texttt{Complex.ofReal\_mul}, \texttt{Complex.ofReal\_neg}; \texttt{ring\_nf} in the exponent).
+\end{proof}
+
+\begin{theorem}[Fourier Uniqueness]
+    \label{thrm:fourier-uniqueness}
+    Let $h : \mathbb{R} \to \mathbb{C}$ be continuous and integrable with $\int_{\mathbb{R}} e^{i\theta t} h(t) \, dt = 0$ for every $\theta \in \mathbb{R}$. Then $h = 0$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:fourier-transform-eq-zero}
+    $\mathcal{F}h = 0$ by Lemma~\ref{lmm:fourier-transform-eq-zero}, which is integrable (\texttt{MeasureTheory.integrable\_zero}). Mathlib's \texttt{Continuous.fourierInv\_fourier\_eq} gives $h = \mathcal{F}^{-}(\mathcal{F}h) = \mathcal{F}^{-}(0)$. Finally $\mathcal{F}^{-}(0) = 0$ pointwise: for $w \in \mathbb{R}$, Mathlib's \texttt{Real.fourierInv\_eq} gives $\mathcal{F}^{-}(0)(w) = \int_{\mathbb{R}} \mathbf{e}(v w) \cdot 0 \, dv$, which is $\int_{\mathbb{R}} 0 \, dv = 0$ by \texttt{smul\_zero} and \texttt{MeasureTheory.integral\_zero} (\texttt{funext}).
+\end{proof}
