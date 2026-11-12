@@ -597,7 +597,19 @@ theorem sqrt_functionalCalculus_inverse {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoi
     ∃ h : IsSelfAdjoint A.inverse,
       functionalCalculus h (fun x => ((Real.sqrt x : ℝ) : ℂ)) =
         functionalCalculus hA fun x => (((Real.sqrt x)⁻¹ : ℝ) : ℂ) := by
-  sorry
+  obtain ⟨hfA, -, hcomp⟩ := functionalCalculus_functionalCalculus hA (f := fun x => x⁻¹)
+    measurable_inv
+  have he := inverse_eq_functionalCalculus_inv hA hinj
+  have htr : ∀ {B C : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (hC : IsSelfAdjoint C), B = C →
+      functionalCalculus hB (fun x => ((Real.sqrt x : ℝ) : ℂ)) =
+        functionalCalculus hC (fun x => ((Real.sqrt x : ℝ) : ℂ)) := by
+    rintro _ _ _ _ rfl; rfl
+  refine ⟨he ▸ hfA, (htr _ hfA he).trans ?_⟩
+  rw [hcomp (fun x => ((Real.sqrt x : ℝ) : ℂ))
+    (Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable)]
+  congr 1
+  funext x
+  simp [Real.sqrt_inv]
 
 end Unbounded
 end Spectral

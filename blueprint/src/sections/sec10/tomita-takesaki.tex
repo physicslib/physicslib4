@@ -1983,6 +1983,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     If $b \in \mathcal{B}(\mathbf{H})$ satisfies $ub = bu$ for every unitary $u \in \mathcal{M}$, then $b \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:von-neumann-span-unitaries}
     Let $x \in \mathcal{M}$; for $x = 0$, $xb = 0 = bx$. Otherwise write $x = \tfrac{\|x\|}{2}\big(u_1 + u_1^* + i(u_2 + u_2^*)\big)$ with $u_1, u_1^*, u_2, u_2^*$ unitaries in $\mathcal{M}$ (Lemma~\ref{lmm:von-neumann-span-unitaries}). Each of the four commutes with $b$, so $xb = bx$, and $b$ lies in the centralizer of $\mathcal{M}$.
 \end{proof}
@@ -2206,6 +2207,7 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
     Let $A$ be positive, self-adjoint and injective. Then $A^{-1}$ is self-adjoint and $(A^{-1})^{1/2} = s(A^{-1}) = A^{-1/2}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:inverse-functional-calculus, crllr:fc-of-fc}
     $A^{-1} = \iota^-(A)$ (Lemma~\ref{lmm:inverse-functional-calculus}) with $\iota^-$ real and measurable (Mathlib's \texttt{measurable\_inv}), so Corollary~\ref{crllr:fc-of-fc} gives that $A^{-1}$ is self-adjoint and $s(\iota^-(A)) = (s \circ \iota^-)(A)$. Here $\iota^-$ is Mathlib's \texttt{Inv.inv} on $\mathbb{R}$, with $0^{-1} = 0$. For $\lambda > 0$, $s(\lambda^{-1}) = (\sqrt{\lambda})^{-1} = (\lambda^{1/2})^{-1} = \lambda^{-1/2} = r(\lambda)$ (Mathlib's \texttt{Real.sqrt\_inv}, \texttt{Real.sqrt\_eq\_rpow} and \texttt{Real.rpow\_neg}); for $\lambda \le 0$, $\iota^-(\lambda) \le 0$, so $s(\iota^-(\lambda)) = 0 = r(\lambda)$. Hence $s \circ \iota^- = r$.
 \end{proof}

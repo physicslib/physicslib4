@@ -147,7 +147,17 @@ Blueprint: lmm:commutant-of-unitaries -/
 theorem mem_centralizer_of_commute_unitary {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet M)
     {b : H →L[ℂ] H} (hb : ∀ u ∈ unitary (H →L[ℂ] H), u ∈ M → u * b = b * u) :
     b ∈ Set.centralizer M := by
-  sorry
+  refine Set.mem_centralizer_iff.2 fun x hx => ?_
+  rcases eq_or_ne x 0 with rfl | hx0
+  · simp
+  obtain ⟨u₁, hu₁, u₂, hu₂, h₁, h₁', h₂, h₂', hx'⟩ :=
+    exists_unitary_decomposition_of_isVonNeumannSet hM hx hx0
+  have c₁ := hb _ hu₁ h₁
+  have c₁' := hb _ (Unitary.star_mem hu₁) h₁'
+  have c₂ := hb _ hu₂ h₂
+  have c₂' := hb _ (Unitary.star_mem hu₂) h₂'
+  rw [hx']
+  simp only [smul_mul_assoc, mul_smul_comm, add_mul, mul_add, c₁, c₁', c₂, c₂']
 
 /-! ### `M′ Ω` is a core for `S*` -/
 
