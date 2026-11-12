@@ -2071,6 +2071,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     With $c$ as in Lemma~\ref{lmm:tomita-adjoint-closure-props} and $x_n$ the operators of Lemma~\ref{lmm:approximant-operator} for this $c$, $x_n \in \mathcal{M}'$ for every $n \ge 1$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-closure-commutes, lmm:approximant-operator-commutes, lmm:commutant-of-unitaries}
     Every unitary $u \in \mathcal{M}$ commutes with $c$ (Lemma~\ref{lmm:tomita-adjoint-closure-commutes}), so $ux_n = x_nu$ (Lemma~\ref{lmm:approximant-operator-commutes}); apply Lemma~\ref{lmm:commutant-of-unitaries}.
 \end{proof}
@@ -2083,6 +2084,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     With $c$ and $x_n$ as in Lemma~\ref{lmm:tomita-adjoint-approximants-commutant}, $x_n\Omega \to \xi$ and $x_n^*\Omega \to \eta$ as $n \to \infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-closure-props, lmm:approximant-operator, lmm:approximant-range, lmm:approximant-convergence, thrm:absolute-value-domain}
     $\Omega \in \text{Dom}(c)$ with $c\Omega = \xi$, and $\Omega \in \text{Dom}(c^*)$ with $c^*\Omega = \eta$ (Lemma~\ref{lmm:tomita-adjoint-closure-props}). Since $R_n\Omega - \Omega \in \text{Dom}(c)$ (Lemma~\ref{lmm:approximant-range}), Theorem~\ref{thrm:absolute-value-domain} and Lemma~\ref{lmm:approximant-range} give
     \begin{align}

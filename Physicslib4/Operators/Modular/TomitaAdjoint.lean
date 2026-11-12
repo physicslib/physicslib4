@@ -390,7 +390,11 @@ theorem tomitaAdjoint_approximant_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω 
           (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ψ ∈ (tomitaLeftMap M Ω ξ).closure.domain,
         x ψ = (tomitaLeftMap M Ω ξ).closure ⟨_, h⟩) :
     x ∈ Set.centralizer M := by
-  sorry
+  refine mem_centralizer_of_commute_unitary hM fun u hu huM => ?_
+  let U : H ≃ₗᵢ[ℂ] H := Unitary.linearIsometryEquiv ⟨u, hu⟩
+  have hcomm := approximant_operator_commute hc hcl U
+    (tomitaAdjoint_leftMap_closure_commute hM hΩ C hC hξη U huM) n hn x hx
+  exact ContinuousLinearMap.ext hcomm
 
 /-- For `(ξ, η) ∈ Γ(S*)` and the approximants `x_n` of the closure `c` of `a₀`,
 `x_n Ω → ξ` and `x_n* Ω → η`.
@@ -409,7 +413,47 @@ theorem tomitaAdjoint_approximant_tendsto {M : Set (H →L[ℂ] H)} {Ω : H}
         x n ψ = (tomitaLeftMap M Ω ξ).closure ⟨_, h⟩) :
     Tendsto (fun n => x n Ω) atTop (𝓝 ξ) ∧
       Tendsto (fun n => ContinuousLinearMap.adjoint (x n) Ω) atTop (𝓝 η) := by
-  sorry
+  have hsub : ∀ (T : H →ₗ.[ℂ] H) (a b : H) (ha : a ∈ T.domain) (hb : b ∈ T.domain),
+      T ⟨a - b, T.domain.sub_mem ha hb⟩ = T ⟨a, ha⟩ - T ⟨b, hb⟩ := fun T a b ha hb =>
+    T.toFun.map_sub ⟨a, ha⟩ ⟨b, hb⟩
+  set c := (tomitaLeftMap M Ω ξ).closure
+  obtain ⟨-, -, -, -, ⟨hΩc, hcΩ⟩, hΩa, hcaΩ⟩ :=
+    tomitaAdjoint_leftMap_closure_props hM hΩ C hC hξη
+  obtain ⟨-, -, -, hnorm⟩ := absoluteValue_domain hc hcl
+  obtain ⟨hRall, hKall⟩ := approximant_convergence hc hcl
+  obtain ⟨hK', hΩabs, hKt⟩ := hKall Ω hΩc
+  obtain ⟨hRη, hRt⟩ := hRall η
+  constructor
+  · rw [tendsto_iff_norm_sub_tendsto_zero]
+    refine (tendsto_iff_norm_sub_tendsto_zero.1 hKt).congr' ?_
+    filter_upwards [eventually_ge_atTop 1] with n hn
+    obtain ⟨hR, hK, h₁, -, habs, -, -⟩ := approximant_range hc hcl n hn Ω
+    obtain ⟨h, hxn⟩ := hx n hn ⟨Ω, hR⟩
+    have e1 : c ⟨_, h⟩ - c ⟨Ω, hΩc⟩ = c ⟨_, c.domain.sub_mem h hΩc⟩ :=
+      (hsub c _ _ h hΩc).symm
+    rw [hcΩ, ← hxn] at e1
+    have e2 : absoluteValue c hc hcl ⟨_, (absoluteValue c hc hcl).domain.sub_mem h₁ hΩabs⟩ =
+        functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
+            (fun x => ((Real.sqrt x * (n / (n + Real.sqrt x)) : ℝ) : ℂ)) ⟨Ω, hK' n⟩ -
+          absoluteValue c hc hcl ⟨Ω, hΩabs⟩ := by
+      rw [← habs]; exact hsub _ _ _ h₁ hΩabs
+    rw [e1, ← hnorm _ ((absoluteValue c hc hcl).domain.sub_mem h₁ hΩabs)
+      (c.domain.sub_mem h hΩc), e2]
+  · refine hRt.congr' ?_
+    filter_upwards [eventually_ge_atTop 1] with n hn
+    obtain ⟨x', -, huniq, -, hadj⟩ := approximant_operator hc hcl n hn
+    rw [huniq (x n) (hx n hn)]
+    obtain ⟨h, e⟩ := hadj ⟨Ω, hΩa⟩
+    rw [e]
+    have key : ∀ (y : H) (hy : y = η) (h' : y ∈ (functionalCalculus
+        (isSelfAdjoint_adjointMulSelf hc hcl).1
+        fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)).domain),
+        functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
+          (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ⟨y, h'⟩ =
+        functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
+          (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ⟨η, hRη n⟩ := by
+      rintro _ rfl _; rfl
+    exact (key _ hcaΩ h).symm
 
 /-- `(ξ, η) ∈ Γ(S*)` if and only if `(ξ, η)` lies in the closure of
 `Γ(F₀) = {(b′ Ω, b′* Ω) | b′ ∈ M′}`: `S*` is the closure of `F₀`.
