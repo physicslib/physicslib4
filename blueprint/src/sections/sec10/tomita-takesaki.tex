@@ -1586,6 +1586,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     Let $h \in \mathcal{M}$ and $\varepsilon > 0$. Then $\|P_\varepsilon^{1/4}\Omega\|^2 \le p_\varepsilon^2 + \sqrt{\varepsilon}\|\Omega\|^2$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-shifted-powers, lmm:takesaki-approximate-polar}
     By Lemma~\ref{lmm:takesaki-shifted-powers}, $P_\varepsilon^{1/4}$ is self-adjoint and $P_\varepsilon^{1/4}P_\varepsilon^{1/4} = P_\varepsilon^{1/2}$, so $\|P_\varepsilon^{1/4}\Omega\|^2 = \left< \Omega, P_\varepsilon^{1/2}\Omega \right>$. Since $P = h^*h \ge 0$, $\sigma(P) \subset [0, \infty)$ (Mathlib's \texttt{star\_mul\_self\_nonneg} and \texttt{spectrum\_nonneg\_of\_nonneg}), and on $\sigma(P)$, $f_1(t) = \varepsilon + t$ (Mathlib's \texttt{Real.rpow\_one}), so $P_\varepsilon^1 = \varepsilon\mathbf{1} + P$ (Mathlib's \texttt{cfc\_congr}, \texttt{cfc\_add}, \texttt{cfc\_const} and \texttt{cfc\_id}), and $P_\varepsilon^{1/2} = P_\varepsilon^1P_\varepsilon^{-1/2} = PP_\varepsilon^{-1/2} + \varepsilon P_\varepsilon^{-1/2}$. Here $PP_\varepsilon^{-1/2} = h^*u_\varepsilon = x_\varepsilon x_\varepsilon^*$ (Lemma~\ref{lmm:takesaki-approximate-polar}), so $\left< \Omega, PP_\varepsilon^{-1/2}\Omega \right> = \|x_\varepsilon^*\Omega\|^2 = p_\varepsilon^2$. By the Cauchy--Schwarz inequality and $\|P_\varepsilon^{-1/2}\| \le \varepsilon^{-1/2}$, $|\left< \Omega, \varepsilon P_\varepsilon^{-1/2}\Omega \right>| \le \sqrt{\varepsilon}\|\Omega\|^2$. Take real parts.
 \end{proof}
@@ -1598,6 +1599,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     For $h \in \mathcal{M}$ and $\varepsilon > 0$, $|\left< h\Omega, a'\Omega \right>| \le \|a'\|\, \big( p_\varepsilon + \varepsilon^{1/4}\|\Omega\| \big)\, q_\varepsilon$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-shifted-powers, lmm:takesaki-approximate-polar, lmm:takesaki-shifted-root-bound, lmm:commutant-von-neumann-algebra, def:von-neumann-algebra-commutant-convention}
     By Lemma~\ref{lmm:takesaki-approximate-polar}, $h^* = P_\varepsilon^{1/4}x_\varepsilon$ with $x_\varepsilon \in \mathcal{M}$, so $a' \in \mathcal{M}'$ commutes with $x_\varepsilon$ (\ref{def:von-neumann-algebra-commutant-convention} and Lemma~\ref{lmm:commutant-von-neumann-algebra}), and $P_\varepsilon^{1/4}$ is self-adjoint (Lemma~\ref{lmm:takesaki-shifted-powers}). Hence
     \begin{align}
@@ -1625,6 +1627,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     For $h \in \mathcal{M}$, $\varepsilon > 0$ and $s \in \mathbb{C}$, $\left< h\Omega, s u_\varepsilon\Omega \right> = sp_\varepsilon^2$ and $\left< (s u_\varepsilon)^*\Omega, h^*\Omega \right> = sq_\varepsilon^2$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-approximate-polar}
     By Lemma~\ref{lmm:takesaki-approximate-polar}, $\left< h\Omega, su_\varepsilon\Omega \right> = s\left< \Omega, h^*u_\varepsilon\Omega \right> = s\left< \Omega, x_\varepsilon x_\varepsilon^*\Omega \right> = s\|x_\varepsilon^*\Omega\|^2$. Since $(su_\varepsilon)^* = \overline{s}u_\varepsilon^*$ and the inner product is conjugate-linear in its first slot, $\left< (su_\varepsilon)^*\Omega, h^*\Omega \right> = s\left< \Omega, u_\varepsilon h^*\Omega \right> = s\left< \Omega, x_\varepsilon^*x_\varepsilon\Omega \right> = s\|x_\varepsilon\Omega\|^2$.
 \end{proof}
@@ -1640,6 +1643,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:complex-rotation-choice, lmm:takesaki-test-inner-products, lmm:takesaki-approximate-polar, lmm:takesaki-approx-polar-norms, lmm:takesaki-elementary-inequality, lmm:commutant-von-neumann-algebra}
     Let $w = zp_\varepsilon^2 - q_\varepsilon^2$, take $s$ from Lemma~\ref{lmm:complex-rotation-choice}, and let $a = su_\varepsilon$. Then $a \in \mathcal{M}$ (Lemmas~\ref{lmm:takesaki-approximate-polar} and~\ref{lmm:commutant-von-neumann-algebra}) and $\|a\| \le |s|\|u_\varepsilon\| \le c$ (Lemma~\ref{lmm:takesaki-approx-polar-norms}), so $a \in \mathcal{B}_c$. By Lemma~\ref{lmm:takesaki-test-inner-products} the left side is $\operatorname{Re}(sw) = c|w|$. Lemma~\ref{lmm:takesaki-elementary-inequality} with $p_\varepsilon^2, q_\varepsilon^2$ gives $|w| \ge \sqrt{2(|z| - \operatorname{Re} z)}\,p_\varepsilon q_\varepsilon$, and $c\sqrt{2(|z| - \operatorname{Re} z)} = \|a'\|$.
 \end{proof}
@@ -1652,6 +1656,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     For every $h \in \mathcal{M}$ and $\delta > 0$ there is $a \in \mathcal{B}_c$ with $G(h\Omega, h^*\Omega; a) \le \delta$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-numerator-bound, lmm:takesaki-test-element, lmm:takesaki-approx-polar-norms}
     Choose $\varepsilon > 0$ with $\varepsilon^{1/4}\|a'\|\,\|h\|^{1/2}\|\Omega\|^2 \le \delta$ and take $a$ from Lemma~\ref{lmm:takesaki-test-element}. By Lemmas~\ref{lmm:takesaki-numerator-bound} and~\ref{lmm:takesaki-approx-polar-norms} ($q_\varepsilon \le \|x_\varepsilon\|\|\Omega\| \le \|h\|^{1/2}\|\Omega\|$),
     \begin{align}

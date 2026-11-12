@@ -859,7 +859,73 @@ Blueprint: lmm:takesaki-shifted-root-bound
 theorem takesaki_shifted_root_bound (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) (Ω : H) :
     ‖P[h, ε, 1/4] Ω‖ ^ 2 ≤
       ‖star (P[h, ε, -(1/4)] * star h) Ω‖ ^ 2 + Real.sqrt ε * ‖Ω‖ ^ 2 := by
-  sorry
+  have hpos : ∀ x : ℝ, 0 < ε + max x 0 := fun x => add_pos_of_pos_of_nonneg hε (le_max_right _ _)
+  have hc : ∀ r : ℝ, Continuous fun x : ℝ => (ε + max x 0) ^ r := fun r =>
+    (continuous_const.add (continuous_id.max continuous_const)).rpow_const
+      fun x => Or.inl (hpos x).ne'
+  have hR : ∀ s : ℝ, star (P[h, ε, s]) = P[h, ε, s] := fun s =>
+    (takesakiShiftedPow_isSelfAdjoint h hε s).star_eq
+  -- `P_ε^{1/2} = P_ε^{-1/4} P P_ε^{-1/4} + ε P_ε^{-1/2}`
+  have hdec : P[h, ε, 1/4] * P[h, ε, 1/4] =
+      P[h, ε, -(1/4)] * (star h * h) * P[h, ε, -(1/4)] + ε • P[h, ε, -(1/2)] := by
+    have hs : P[h, ε, -(1/4)] * (star h * h) * P[h, ε, -(1/4)] =
+        cfc (fun x : ℝ => (ε + max x 0) ^ (-(1/4) : ℝ) * x * (ε + max x 0) ^ (-(1/4) : ℝ))
+          (star h * h) := by
+      rw [cfc_mul (fun x : ℝ => (ε + max x 0) ^ (-(1/4) : ℝ) * x)
+          (fun x : ℝ => (ε + max x 0) ^ (-(1/4) : ℝ)) _
+          ((hc _).mul continuous_id).continuousOn (hc _).continuousOn,
+        cfc_mul (fun x : ℝ => (ε + max x 0) ^ (-(1/4) : ℝ)) (fun x : ℝ => x) _
+          (hc _).continuousOn continuous_id.continuousOn, cfc_id' ℝ (star h * h)]
+    rw [takesakiShiftedPow_mul h hε, hs,
+      ← cfc_smul ε (fun x : ℝ => (ε + max x 0) ^ (-(1/2) : ℝ)) _ (hc _).continuousOn,
+      ← cfc_add _
+        (fun x : ℝ => (ε + max x 0) ^ (-(1/4) : ℝ) * x * (ε + max x 0) ^ (-(1/4) : ℝ))
+        (fun x : ℝ => ε • (ε + max x 0) ^ (-(1/2) : ℝ))
+        (((hc _).mul continuous_id).mul (hc _)).continuousOn
+        ((hc _).const_smul ε).continuousOn]
+    refine cfc_congr fun x hx => ?_
+    have hx0 : 0 ≤ x := spectrum_nonneg_of_nonneg (star_mul_self_nonneg h) hx
+    have hb := hpos x
+    rw [max_eq_left hx0] at hb ⊢
+    have e1 : (ε + x) ^ (1/4 + 1/4 : ℝ) = (ε + x) * (ε + x) ^ (-(1/2) : ℝ) := by
+      rw [← Real.rpow_one_add' hb.le (by norm_num)]; norm_num
+    have e2 : (ε + x) ^ (-(1/4) : ℝ) * (ε + x) ^ (-(1/4) : ℝ) = (ε + x) ^ (-(1/2) : ℝ) := by
+      rw [← Real.rpow_add hb]; norm_num
+    simp only [smul_eq_mul]
+    rw [e1]
+    linear_combination (-x) * e2
+  set Q := P[h, ε, 1/4]
+  set R := P[h, ε, -(1/4)]
+  have hstar : star (R * star h) = h * R := by rw [star_mul, star_star, hR]
+  rw [hstar]
+  have key : ‖Q Ω‖ ^ 2 = ‖(h * R) Ω‖ ^ 2 + RCLike.re ⟪Ω, (ε • P[h, ε, -(1/2)]) Ω⟫_ℂ := by
+    have hsym : ∀ s : ℝ, ∀ x y : H, ⟪x, P[h, ε, s] y⟫_ℂ = ⟪P[h, ε, s] x, y⟫_ℂ := fun s x y =>
+      ((takesakiShiftedPow_isSelfAdjoint h hε s).isSymmetric x y).symm
+    have hh : ∀ x y : H, ⟪x, star h y⟫_ℂ = ⟪h x, y⟫_ℂ := fun x y => by
+      rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_right]
+    have e1 : ‖Q Ω‖ ^ 2 = RCLike.re ⟪Ω, (Q * Q) Ω⟫_ℂ := by
+      change _ = RCLike.re ⟪Ω, Q (Q Ω)⟫_ℂ
+      rw [hsym, inner_self_eq_norm_sq]
+    have e2 : ‖(h * R) Ω‖ ^ 2 = RCLike.re ⟪Ω, (R * (star h * h) * R) Ω⟫_ℂ := by
+      change ‖h (R Ω)‖ ^ 2 = RCLike.re ⟪Ω, R (star h (h (R Ω)))⟫_ℂ
+      rw [hsym, hh, inner_self_eq_norm_sq]
+    rw [e1, e2, hdec]
+    change RCLike.re ⟪Ω, _ + _⟫_ℂ = _
+    rw [inner_add_right, map_add]; rfl
+  rw [key]
+  have hb : RCLike.re ⟪Ω, (ε • P[h, ε, -(1/2)]) Ω⟫_ℂ ≤ Real.sqrt ε * ‖Ω‖ ^ 2 := by
+    refine (RCLike.re_le_norm _).trans ((norm_inner_le_norm _ _).trans ?_)
+    have hn : ‖ε • P[h, ε, -(1/2)]‖ ≤ Real.sqrt ε := by
+      rw [norm_smul, Real.norm_of_nonneg hε.le, Real.sqrt_eq_rpow]
+      calc ε * ‖P[h, ε, -(1/2)]‖ ≤ ε * ε ^ (-(1/2) : ℝ) :=
+            mul_le_mul_of_nonneg_left (takesakiShiftedPow_norm_le h hε (by norm_num)) hε.le
+        _ = ε ^ (1/2 : ℝ) := by
+            rw [← Real.rpow_one_add' hε.le (by norm_num)]; norm_num
+    calc ‖Ω‖ * ‖(ε • P[h, ε, -(1/2)]) Ω‖ ≤ ‖Ω‖ * (‖ε • P[h, ε, -(1/2)]‖ * ‖Ω‖) :=
+          mul_le_mul_of_nonneg_left (ContinuousLinearMap.le_opNorm _ _) (norm_nonneg _)
+      _ ≤ ‖Ω‖ * (Real.sqrt ε * ‖Ω‖) := by gcongr
+      _ = Real.sqrt ε * ‖Ω‖ ^ 2 := by ring
+  linarith
 
 /--
 For `a' ∈ M'`, `h ∈ M` and `ε > 0`, `|⟪h Ω, a' Ω⟫| ≤ ‖a'‖ (p_ε + ε^{1/4} ‖Ω‖) q_ε`.
@@ -871,7 +937,29 @@ theorem takesaki_numerator_bound {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet
     {ε : ℝ} (hε : 0 < ε) :
     ‖⟪h Ω, a' Ω⟫_ℂ‖ ≤ ‖a'‖ * (‖star (P[h, ε, -(1/4)] * star h) Ω‖ + ε ^ (1/4 : ℝ) * ‖Ω‖) *
       ‖(P[h, ε, -(1/4)] * star h) Ω‖ := by
-  sorry
+  obtain ⟨-, hxM, -, hpol, -, -⟩ := takesaki_approximate_polar hM hh hε
+  set x := P[h, ε, -(1/4)] * star h
+  set R := P[h, ε, 1/4]
+  have hRsa : star R = R := (takesakiShiftedPow_isSelfAdjoint h hε _).star_eq
+  have hh' : h = star x * R := by
+    rw [← star_star h, hpol, star_mul, hRsa]
+  have hcomm : x * a' = a' * x := ha' x hxM
+  have key : ⟪h Ω, a' Ω⟫_ℂ = ⟪R Ω, a' (x Ω)⟫_ℂ := by
+    rw [hh', mul_apply_eq_comp, ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_inner_left, ← mul_apply_eq_comp x a', hcomm,
+      mul_apply_eq_comp]
+  have hroot : ‖R Ω‖ ≤ ‖star x Ω‖ + ε ^ (1/4 : ℝ) * ‖Ω‖ := by
+    have hb := takesaki_shifted_root_bound h hε Ω
+    have h4 : (ε ^ (1/4 : ℝ)) ^ 2 = Real.sqrt ε := by
+      rw [Real.sqrt_eq_rpow, ← Real.rpow_natCast, ← Real.rpow_mul hε.le]; norm_num
+    have he : 0 ≤ ε ^ (1/4 : ℝ) := Real.rpow_nonneg hε.le _
+    rw [← pow_le_pow_iff_left₀ (norm_nonneg _) (by positivity) two_ne_zero]
+    nlinarith [mul_nonneg (mul_nonneg (norm_nonneg (star x Ω)) he) (norm_nonneg Ω)]
+  rw [key]
+  calc ‖⟪R Ω, a' (x Ω)⟫_ℂ‖ ≤ ‖R Ω‖ * ‖a' (x Ω)‖ := norm_inner_le_norm _ _
+    _ ≤ (‖star x Ω‖ + ε ^ (1/4 : ℝ) * ‖Ω‖) * (‖a'‖ * ‖x Ω‖) :=
+      mul_le_mul hroot (a'.le_opNorm _) (norm_nonneg _) (by positivity)
+    _ = _ := by ring
 
 /--
 For `w ∈ ℂ` and `c ≥ 0` there is `s ∈ ℂ` with `|s| ≤ c` and `Re (s w) = c |w|`.
@@ -900,7 +988,35 @@ theorem takesaki_test_inner_products (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < �
         s * ((‖star (P[h, ε, -(1/4)] * star h) Ω‖ ^ 2 : ℝ) : ℂ) ∧
       ⟪star (s • (h * P[h, ε, -(1/2)])) Ω, star h Ω⟫_ℂ =
         s * ((‖(P[h, ε, -(1/4)] * star h) Ω‖ ^ 2 : ℝ) : ℂ) := by
-  sorry
+  have hQQ : P[h, ε, -(1/4)] * P[h, ε, -(1/4)] = P[h, ε, -(1/2)] := by
+    rw [takesakiShiftedPow_mul h hε]; norm_num
+  have hstar : star (P[h, ε, -(1/4)] * star h) = h * P[h, ε, -(1/4)] := by
+    rw [star_mul, star_star, (takesakiShiftedPow_isSelfAdjoint h hε _).star_eq]
+  have hP := takesakiShiftedPow_commute h hε (-(1/4))
+  have h1 : star h * (h * P[h, ε, -(1/2)]) =
+      (P[h, ε, -(1/4)] * star h) * star (P[h, ε, -(1/4)] * star h) := by
+    rw [hstar, ← hQQ]
+    calc star h * (h * (P[h, ε, -(1/4)] * P[h, ε, -(1/4)]))
+        = (star h * h * P[h, ε, -(1/4)]) * P[h, ε, -(1/4)] := by noncomm_ring
+      _ = P[h, ε, -(1/4)] * star h * (h * P[h, ε, -(1/4)]) := by
+        rw [← hP]; noncomm_ring
+  have h2 : (h * P[h, ε, -(1/2)]) * star h =
+      star (P[h, ε, -(1/4)] * star h) * (P[h, ε, -(1/4)] * star h) := by
+    rw [hstar, ← hQQ]; noncomm_ring
+  set u := h * P[h, ε, -(1/2)]
+  set x := P[h, ε, -(1/4)] * star h
+  constructor
+  · rw [smul_apply, inner_smul_right, ContinuousLinearMap.star_eq_adjoint,
+      ← ContinuousLinearMap.adjoint_inner_right, ← ContinuousLinearMap.star_eq_adjoint,
+      ← mul_apply_eq_comp, h1, mul_apply_eq_comp, ContinuousLinearMap.star_eq_adjoint,
+      ← ContinuousLinearMap.adjoint_inner_left, inner_self_eq_norm_sq_to_K]
+    simp
+  · rw [star_smul, smul_apply, inner_smul_left, Complex.star_def, Complex.conj_conj,
+      ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left,
+      ← mul_apply_eq_comp, h2,
+      mul_apply_eq_comp, ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_inner_right, inner_self_eq_norm_sq_to_K]
+    simp
 
 /--
 For `h ∈ M` and `ε > 0` there is `a ∈ 𝓑_c` with
@@ -914,7 +1030,32 @@ theorem takesaki_test_element {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet M)
     ∃ a ∈ M, ‖a‖ ≤ ‖a'‖ / Real.sqrt (2 * (‖z‖ - z.re)) ∧
       ‖a'‖ * ‖star (P[h, ε, -(1/4)] * star h) Ω‖ * ‖(P[h, ε, -(1/4)] * star h) Ω‖ ≤
         (z * ⟪h Ω, a Ω⟫_ℂ - ⟪star a Ω, star h Ω⟫_ℂ).re := by
-  sorry
+  obtain ⟨hδ, hineq⟩ := takesaki_elementary_inequality hz
+  set p := ‖star (P[h, ε, -(1/4)] * star h) Ω‖
+  set q := ‖(P[h, ε, -(1/4)] * star h) Ω‖
+  set k := Real.sqrt (2 * (‖z‖ - z.re))
+  have hk : 0 < k := Real.sqrt_pos.mpr (by linarith)
+  have hc : 0 ≤ ‖a'‖ / k := div_nonneg (norm_nonneg _) hk.le
+  set w : ℂ := z * ((p ^ 2 : ℝ) : ℂ) - ((q ^ 2 : ℝ) : ℂ)
+  obtain ⟨s, hs, hsw⟩ := exists_norm_le_re_mul_eq_mul_norm w hc
+  obtain ⟨A, hA⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+  have hu := (takesaki_approximate_polar hM hh hε).1
+  rw [← hA] at hu
+  refine ⟨s • (h * P[h, ε, -(1/2)]), by rw [← hA]; exact A.smul_mem hu s, ?_, ?_⟩
+  · calc ‖s • (h * P[h, ε, -(1/2)])‖ ≤ ‖s‖ * 1 :=
+          (norm_smul_le _ _).trans
+            (mul_le_mul_of_nonneg_left (takesaki_approx_polar_norms h hε).1 (norm_nonneg _))
+      _ ≤ ‖a'‖ / k := by rw [mul_one]; exact hs
+  · obtain ⟨h1, h2⟩ := takesaki_test_inner_products h hε Ω s
+    rw [h1, h2, show z * (s * ((p ^ 2 : ℝ) : ℂ)) - s * ((q ^ 2 : ℝ) : ℂ) = s * w by
+      simp only [w]; ring, hsw]
+    have hw : k * p * q ≤ ‖w‖ := by
+      have := hineq (p ^ 2) (q ^ 2) (sq_nonneg _) (sq_nonneg _)
+      rwa [show 2 * (‖z‖ - z.re) * p ^ 2 * q ^ 2 = (k * p * q) ^ 2 by
+        rw [mul_pow, mul_pow, Real.sq_sqrt (by linarith)],
+        Real.sqrt_sq (by positivity)] at this
+    calc ‖a'‖ * p * q = ‖a'‖ / k * (k * p * q) := by field_simp
+      _ ≤ ‖a'‖ / k * ‖w‖ := mul_le_mul_of_nonneg_left hw hc
 
 /--
 The key estimate: for `h ∈ M` and `δ > 0` there is `a ∈ 𝓑_c` with `G(h Ω, h* Ω; a) ≤ δ`.
@@ -926,7 +1067,29 @@ theorem takesaki_key_estimate {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet M)
     (ha' : a' ∈ Set.centralizer M) {h : H →L[ℂ] H} (hh : h ∈ M) {δ : ℝ} (hδ : 0 < δ) :
     ∃ a ∈ M, ‖a‖ ≤ ‖a'‖ / Real.sqrt (2 * (‖z‖ - z.re)) ∧
       (⟪h Ω, a' Ω⟫_ℂ).re - (z * ⟪h Ω, a Ω⟫_ℂ - ⟪star a Ω, star h Ω⟫_ℂ).re ≤ δ := by
-  sorry
+  set K := ‖a'‖ * Real.sqrt ‖h‖ * ‖Ω‖ ^ 2 + 1
+  have hK : 0 < K := by positivity
+  set ε := (δ / K) ^ 4
+  have hε : 0 < ε := by positivity
+  have he : ε ^ (1/4 : ℝ) = δ / K := by
+    rw [show (1/4 : ℝ) = ((4 : ℕ) : ℝ)⁻¹ by norm_num]
+    exact Real.pow_rpow_inv_natCast (by positivity) (by norm_num)
+  obtain ⟨a, haM, han, hlow⟩ := takesaki_test_element hM Ω hz a' hh hε
+  refine ⟨a, haM, han, ?_⟩
+  have hnum := takesaki_numerator_bound hM Ω ha' hh hε
+  rw [he] at hnum
+  set x := P[h, ε, -(1/4)] * star h
+  have hx : ‖x‖ ≤ Real.sqrt ‖h‖ := Real.le_sqrt_of_sq_le (takesaki_approx_polar_norms h hε).2
+  have hq : ‖x Ω‖ ≤ Real.sqrt ‖h‖ * ‖Ω‖ :=
+    (x.le_opNorm Ω).trans (mul_le_mul_of_nonneg_right hx (norm_nonneg _))
+  have hre := (RCLike.re_le_norm (⟪h Ω, a' Ω⟫_ℂ)).trans hnum
+  have hdK : δ / K * K = δ := div_mul_cancel₀ _ hK.ne'
+  have h1 : ‖a'‖ * ‖x Ω‖ * ‖Ω‖ ≤ ‖a'‖ * Real.sqrt ‖h‖ * ‖Ω‖ ^ 2 := by
+    calc ‖a'‖ * ‖x Ω‖ * ‖Ω‖ ≤ ‖a'‖ * (Real.sqrt ‖h‖ * ‖Ω‖) * ‖Ω‖ := by gcongr
+      _ = _ := by ring
+  have hdk0 : 0 ≤ δ / K := by positivity
+  change RCLike.re ⟪h Ω, a' Ω⟫_ℂ - _ ≤ δ
+  nlinarith [mul_le_mul_of_nonneg_left h1 hdk0]
 
 /--
 The resolvent vector `ψ = (z - Δ)⁻¹ a' Ω` lies in `𝒦_c`.
