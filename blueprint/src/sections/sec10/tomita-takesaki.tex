@@ -1672,6 +1672,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     $\psi \in \mathcal{K}_c$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-ball-closed-convex, lmm:takesaki-separation, lmm:takesaki-transfer-resolvent, lmm:takesaki-transfer, lmm:takesaki-uniform-approximation, lmm:takesaki-key-estimate}
     Suppose not. $\mathcal{K}_c$ is nonempty, closed and convex (Lemma~\ref{lmm:takesaki-ball-closed-convex}), so Lemma~\ref{lmm:takesaki-separation} gives $\phi$ and $\gamma > 0$ with $\operatorname{Re}\left< \phi, \psi \right> - \operatorname{Re}\left< \phi, a\Omega \right> \ge \gamma$ for all $a \in \mathcal{B}_c$. With $\chi = (\overline{z} - \Delta)^{-1}\phi \in \text{Dom}(S)$ (Lemma~\ref{lmm:takesaki-transfer-resolvent}), Lemma~\ref{lmm:takesaki-transfer} gives $G(\chi, S\chi; a) \ge \gamma$ for all $a \in \mathcal{B}_c$. Lemma~\ref{lmm:takesaki-uniform-approximation} with $\delta = \gamma/2$ gives $h \in \mathcal{M}$ with $G(h\Omega, h^*\Omega; a) > \gamma/2$ for all $a \in \mathcal{B}_c$, contradicting Lemma~\ref{lmm:takesaki-key-estimate} with $\delta = \gamma/2$.
 \end{proof}
@@ -1687,6 +1688,7 @@ The next lemmas bound $G(h\Omega, h^*\Omega; \cdot)$ from below. For $h \in \mat
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-elementary-inequality, lmm:takesaki-resolvent-in-ball-closure, lmm:takesaki-ball-closure-bound, lmm:commutant-extension}
     The constant $c$ is well defined by Lemma~\ref{lmm:takesaki-elementary-inequality}. By Lemmas~\ref{lmm:takesaki-resolvent-in-ball-closure} and~\ref{lmm:takesaki-ball-closure-bound}, $\|b'\psi\| \le c\|b'\Omega\|$ for all $b' \in \mathcal{M}'$, and the commutant extension lemma (Lemma~\ref{lmm:commutant-extension}) gives the unique $a \in \mathcal{M}$ with $a\Omega = \psi$ and $\|a\| \le c$.
 \end{proof}

@@ -1104,7 +1104,18 @@ theorem takesaki_resolvent_mem_ball_closure {M : Set (H →L[ℂ] H)} {Ω : H}
         ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹) (a' Ω) ∈
       closure ((fun a : H →L[ℂ] H => a Ω) ''
         {a ∈ M | ‖a‖ ≤ ‖a'‖ / Real.sqrt (2 * (‖z‖ - z.re))}) := by
-  sorry
+  have hc : 0 ≤ ‖a'‖ / Real.sqrt (2 * (‖z‖ - z.re)) := by positivity
+  obtain ⟨hcl, hconv, h0⟩ := takesakiBall_closure_isClosed_convex hM Ω hc
+  by_contra hψ
+  obtain ⟨φ, γ, hγ, hsep⟩ := exists_re_inner_add_le_of_not_mem_convex ⟨0, h0⟩ hcl hconv hψ
+  obtain ⟨hS, htr⟩ := takesaki_transfer hM hΩ C hC hz a' φ _ rfl
+  obtain ⟨h, hhM, happrox⟩ :=
+    takesakiG_uniform_approximation hM hΩ C hC z a' _ ⟨_, hS⟩ (half_pos hγ)
+  obtain ⟨a, haM, hac, hle⟩ := takesaki_key_estimate hM Ω hz ha' hhM (half_pos hγ)
+  have h1 := hsep (a Ω) (subset_closure ⟨a, ⟨haM, hac⟩, rfl⟩)
+  have h2 := (htr a haM).2
+  have h3 := (abs_lt.1 (happrox a haM hac)).2
+  linarith
 
 /--
 Takesaki's lemma: for `z ∉ [0, ∞)` and `a' ∈ M'`, `(z - Δ)⁻¹ a' Ω = a Ω` for a unique `a ∈ M`,
@@ -1123,7 +1134,8 @@ theorem takesaki_lemma {M : Set (H →L[ℂ] H)} {Ω : H}
         ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹) (a' Ω) ∧
       ‖a‖ ≤ ‖a'‖ / Real.sqrt (2 * (‖z‖ - z.re)) ∧
       ∀ ã ∈ M, ã Ω = (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
-        ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹) (a' Ω) → ã = a := by
-  sorry
+        ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (z - t)⁻¹) (a' Ω) → ã = a :=
+  commutantExtension hM hΩ (by positivity) <| takesakiBall_closure_bound <|
+    takesaki_resolvent_mem_ball_closure hM hΩ C hC hz ha'
 
 end Physicslib4.Modular
