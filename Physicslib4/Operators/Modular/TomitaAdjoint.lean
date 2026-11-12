@@ -710,7 +710,24 @@ theorem modularOperatorSqrt_modularConjugation_centralizer {M : Set (H →L[ℂ]
     ∀ x, modularConjugation (isCyclicSeparatingVector_centralizer hM hΩ).1
         (isCyclicSeparatingVector_centralizer hM hΩ).2 C hC x =
       modularConjugation hM hΩ C hC x := by
-  sorry
+  obtain ⟨hM', hΩ'⟩ := isCyclicSeparatingVector_centralizer hM hΩ
+  obtain ⟨hpos, hsa, -, hker, -, -⟩ := modularOperator_properties hM hΩ C hC
+  obtain ⟨h, heq⟩ := sqrt_functionalCalculus_inverse hsa hpos hker
+  have htr : ∀ {B D : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (hD : IsSelfAdjoint D), B = D →
+      functionalCalculus hB (fun x => ((Real.sqrt x : ℝ) : ℂ)) =
+        functionalCalculus hD (fun x => ((Real.sqrt x : ℝ) : ℂ)) := by
+    rintro _ _ _ _ rfl; rfl
+  have h1 : modularOperatorSqrt hM' hΩ' C hC = modularOperatorInvSqrt hM hΩ C hC :=
+    (htr (modularOperator_isSelfAdjoint hM' hΩ' C hC) h
+      (modularOperator_centralizer hM hΩ C hC)).trans heq
+  have happ : ∀ {P Q : H →ₗ.[ℂ] H} (hPQ : P = Q) (ψ : H) (hP : ψ ∈ P.domain)
+      (hQ : ψ ∈ Q.domain), P ⟨ψ, hP⟩ = Q ⟨ψ, hQ⟩ := by
+    rintro _ _ rfl _ _ _; rfl
+  refine ⟨h1, fun x => (eq_modularConjugation_of_continuous hM' hΩ' C hC
+    (modularConjugation hM hΩ C hC) (modularConjugation hM hΩ C hC).continuous
+    (fun ψ h₁ h₂ => ?_) x).symm⟩
+  obtain ⟨h₄, h₅⟩ := ((tomitaOperator_centralizer_iff hM hΩ C hC ψ _).1.mp ⟨h₁, rfl⟩)
+  rw [h₅, happ h1 ψ h₂ h₄]
 
 /-- The modular objects of `(M′, Ω)`: `Ω` is cyclic and separating for `M′`,
 `Γ(S_{M′}) = Γ(S*) = Γ(J Δ^{-1/2})`, `Δ_{M′} = Δ⁻¹`, `Δ_{M′}^{1/2} = Δ^{-1/2}` and `J_{M′} = J`.
@@ -734,6 +751,19 @@ theorem commutant_modular_objects {M : Set (H →L[ℂ] H)} {Ω : H}
     ∀ x, modularConjugation (isCyclicSeparatingVector_centralizer hM hΩ).1
         (isCyclicSeparatingVector_centralizer hM hΩ).2 C hC x =
       modularConjugation hM hΩ C hC x := by
-  sorry
+  have hT := tomitaOperator_centralizer_iff hM hΩ C hC
+  refine ⟨(isCyclicSeparatingVector_centralizer hM hΩ).2, ?_, ?_,
+    modularOperator_centralizer hM hΩ C hC,
+    modularOperatorSqrt_modularConjugation_centralizer hM hΩ C hC⟩
+  · ext ⟨ξ, η⟩
+    constructor
+    · rintro ⟨x, hx⟩
+      cases hx
+      exact ((hT _ _).1.trans (hT _ _).2).mp ⟨x.2, rfl⟩
+    · intro h
+      obtain ⟨h, e⟩ := ((hT ξ η).1.trans (hT ξ η).2).mpr h
+      exact ⟨⟨ξ, h⟩, Prod.ext rfl e⟩
+  · ext ⟨ξ, η⟩
+    exact (hT ξ η).2.symm
 
 end Physicslib4.Modular
