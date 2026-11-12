@@ -223,7 +223,25 @@ theorem tomitaLeftMap_properties {M : Set (H →L[ℂ] H)} {Ω : H}
     (tomitaLeftMap M Ω ξ).domain = tomitaPreDomain M Ω ∧
       (∀ x ∈ M, ∃ h : x Ω ∈ (tomitaLeftMap M Ω ξ).domain, tomitaLeftMap M Ω ξ ⟨x Ω, h⟩ = x ξ) ∧
       HasDenseDomain (tomitaLeftMap M Ω ξ) := by
-  sorry
+  have hdom : (tomitaLeftMap M Ω ξ).domain = tomitaPreDomain M Ω := by
+    rw [tomitaLeftMap, Submodule.toLinearPMap_domain, ← Submodule.map_comp]
+    rfl
+  have hg : ∀ (p : H × H) (_ : p ∈ (Submodule.span ℂ M).map
+      ((ContinuousLinearMap.apply ℂ H Ω).toLinearMap.prod
+        (ContinuousLinearMap.apply ℂ H ξ).toLinearMap)) (_ : p.1 = 0), p.2 = 0 := by
+    rintro _ ⟨a, ha, rfl⟩ h
+    have ha' : a ∈ M := span_eq_of_isVonNeumannSet hM ▸ ha
+    change a ξ = 0
+    rw [(isSeparatingVector_of_isCyclicSeparatingVector hΩ).1 a ha' h, zero_apply]
+  refine ⟨hdom, fun x hx => ?_, ?_⟩
+  · have hxd : x Ω ∈ (tomitaLeftMap M Ω ξ).domain :=
+      hdom ▸ Submodule.mem_map_of_mem (Submodule.subset_span hx)
+    refine ⟨hxd, ?_⟩
+    have h1 := Submodule.mem_graph_toLinearPMap hg ⟨x Ω, hxd⟩
+    have h2 := Submodule.sub_mem _ h1 (Submodule.mem_map_of_mem (Submodule.subset_span hx))
+    exact sub_eq_zero.mp (hg _ h2 (sub_self _))
+  · rw [HasDenseDomain, hdom]
+    exact (tomitaPre_dense_involutive hM hΩ).1
 
 /-- For `(ξ, η) ∈ Γ(S*)` and `y ∈ M`, `y Ω ∈ Dom a₀†` with `a₀† (y Ω) = y η`, and `a₀†` is
 densely defined.
@@ -235,7 +253,38 @@ theorem tomitaAdjoint_leftMap_adjoint {M : Set (H →L[ℂ] H)} {Ω : H} (hM : I
     (∀ y ∈ M, ∃ h : y Ω ∈ (tomitaLeftMap M Ω ξ).adjoint.domain,
         (tomitaLeftMap M Ω ξ).adjoint ⟨y Ω, h⟩ = y η) ∧
       HasDenseDomain (tomitaLeftMap M Ω ξ).adjoint := by
-  sorry
+  obtain ⟨hdom, hval, hd⟩ := tomitaLeftMap_properties hM hΩ ξ
+  have hcore := (mem_tomitaAdjoint_iff_inner_algebra hM hΩ C hC ξ η).1 hξη
+  obtain ⟨A, hA⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+  have hspan : (Submodule.span ℂ M : Set (H →L[ℂ] H)) = M := by
+    rw [← hA]; exact congrArg _ (Submodule.span_eq (A.toSubalgebra.toSubmodule))
+  have key : ∀ y ∈ M, ∃ h : y Ω ∈ (tomitaLeftMap M Ω ξ).adjoint.domain,
+      (tomitaLeftMap M Ω ξ).adjoint ⟨y Ω, h⟩ = y η := by
+    intro y hy
+    have h' : ∀ ζ : (tomitaLeftMap M Ω ξ).domain,
+        ⟪y η, (ζ : H)⟫_ℂ = ⟪y Ω, tomitaLeftMap M Ω ξ ζ⟫_ℂ := by
+      rintro ⟨ζ, hζ⟩
+      have hζ' : ζ ∈ tomitaPreDomain M Ω := hdom ▸ hζ
+      obtain ⟨x, hx, rfl⟩ := Submodule.mem_map.1 hζ'
+      have hxM : x ∈ M := hspan ▸ hx
+      obtain ⟨hx', hxv⟩ := hval x hxM
+      have hz : star y * x ∈ M := by
+        rw [← hA] at hy hxM ⊢
+        exact mul_mem (star_mem (show y ∈ A from hy)) (show x ∈ A from hxM)
+      have := hcore _ hz
+      simp only [ContinuousLinearMap.coe_coe, ContinuousLinearMap.apply_apply] at hxv ⊢
+      have e1 : ⟪y η, x Ω⟫_ℂ = ⟪η, (star y * x) Ω⟫_ℂ := by
+        rw [mul_apply_eq_comp, ContinuousLinearMap.star_eq_adjoint,
+          ContinuousLinearMap.adjoint_inner_right]
+      have e2 : ⟪y Ω, x ξ⟫_ℂ = ⟪(star (star y * x)) Ω, ξ⟫_ℂ := by
+        rw [star_mul, star_star, mul_apply_eq_comp, ContinuousLinearMap.star_eq_adjoint,
+          ContinuousLinearMap.adjoint_inner_left]
+      rw [hxv, e1, e2, ← inner_conj_symm, ← this, inner_conj_symm]
+    have hmem := LinearPMap.mem_adjoint_domain_of_exists _ ⟨y η, h'⟩
+    exact ⟨hmem, LinearPMap.adjoint_apply_eq hd ⟨y Ω, hmem⟩ h'⟩
+  refine ⟨key, hΩ.1.mono ?_⟩
+  rintro _ ⟨y, hy, rfl⟩
+  exact (key y hy).1
 
 /-- For `(ξ, η) ∈ Γ(S*)`, `a₀` is closable, and its closure `c` is closed and densely defined,
 with `c (x Ω) = x ξ` for `x ∈ M`, `c Ω = ξ`, `Ω ∈ Dom c†` and `c† Ω = η`.

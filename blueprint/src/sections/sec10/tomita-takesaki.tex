@@ -2015,6 +2015,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     $\text{Dom}(a_0) = \mathcal{M}\Omega$, $a_0(x\Omega) = x\xi$ for every $x \in \mathcal{M}$, and $a_0$ is densely defined.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:cyclic-commutant-separating, lmm:commutant-von-neumann-algebra, def:cyclic-separating-vector}
     $\mathcal{M}$ is a linear subspace (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\mathcal{M}\Omega$ is the range of the linear map $x \mapsto x\Omega$, and $x \mapsto x\xi$ is linear. The first map is injective because $\Omega$ is separating for $\mathcal{M}$ (Lemma~\ref{lmm:cyclic-commutant-separating}), so the subspace of~\ref{def:tomita-left-map} is the graph of the second map composed with the inverse of the first on its range (Mathlib's \texttt{LinearEquiv.ofInjective}), and \texttt{Submodule.toLinearPMap} returns that operator. $\mathcal{M}\Omega$ is dense because $\Omega$ is cyclic for $\mathcal{M}$ (\ref{def:cyclic-separating-vector}).
 \end{proof}
@@ -2027,6 +2028,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     For every $y \in \mathcal{M}$, $y\Omega \in \text{Dom}(a_0^*)$ and $a_0^*(y\Omega) = y\eta$. In particular $a_0^*$ is densely defined.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-left-map, lmm:tomita-adjoint-intrinsic-core, lmm:characterizing-adjoint-domain-membership, lmm:commutant-von-neumann-algebra}
     Let $x \in \mathcal{M}$. Then $x^*y \in \mathcal{M}$ and $(y^*x)^* = x^*y$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so \eqref{eq:tomita-adjoint-pair} for $y^*x$ gives
     \begin{align}
