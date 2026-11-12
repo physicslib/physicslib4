@@ -1,0 +1,272 @@
+/-
+Copyright (c) 2026 Lean Community. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Lean Community
+-/
+import Mathlib.Analysis.Calculus.DSlope
+import Mathlib.Analysis.Complex.CauchyIntegral
+import Mathlib.Analysis.Complex.RemovableSingularity
+import Mathlib.Analysis.Fourier.Inversion
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.ArctanDeriv
+import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+import Mathlib.MeasureTheory.Integral.IntegralEqImproper
+
+/-!
+# The strip formula and Fourier uniqueness
+
+Two results of scalar analysis that van Daele's proof of Tomita's theorem uses.
+
+* `strip_formula` — for f continuous and bounded on the closed strip
+  S = {z | -1/2 ≤ Re z ≤ 1/2} and holomorphic on its interior,
+  f(0) = ∫ (f(1/2 + it) + f(-1/2 + it)) / (2 cosh(πt)) dt
+  (Exercise 13.2.1 of V. F. R. Jones, *von Neumann algebras*).
+* `eq_zero_of_integral_exp_mul_eq_zero` — a continuous integrable h : ℝ → ℂ all of whose
+  integrals ∫ e^{iθt} h(t) dt vanish is zero.
+
+The proof of the strip formula applies the Cauchy theorem for rectangles to the strip quotient
+`stripQuotient f` = dslope f 0 / dslope (sin (π ·)) 0 on [-1/2, 1/2] × [-T, T] and lets T → ∞.
+The closed strip is written `Complex.re ⁻¹' Set.Icc (-1/2) (1/2)` and its interior
+`Complex.re ⁻¹' Set.Ioo (-1/2) (1/2)`.
+-/
+
+namespace Physicslib4
+
+open Complex MeasureTheory Filter Set
+open scoped Real Topology Interval FourierTransform
+
+/-- The strip quotient g = dslope f 0 / dslope (z ↦ sin(πz)) 0 of f.
+
+Blueprint: def:strip-quotient -/
+noncomputable def stripQuotient (f : ℂ → ℂ) : ℂ → ℂ :=
+  dslope f 0 / dslope (fun z => Complex.sin (π * z)) 0
+
+/-- The vertical side integral ∫_{-T}^{T} (f(σ + it) - f(0)) / cosh(πt) dt; the blueprint's
+V₊(T) and V₋(T) are the cases σ = 1/2 and σ = -1/2.
+
+Blueprint: def:strip-vertical-integrals -/
+noncomputable def stripVerticalIntegral (f : ℂ → ℂ) (σ T : ℝ) : ℂ :=
+  ∫ t in -T..T, (f (σ + t * I) - f 0) / (Real.cosh (π * t) : ℂ)
+
+/-- The horizontal side integral H(T) = ∫_{-1/2}^{1/2} g(x + iT) dx - ∫_{-1/2}^{1/2} g(x - iT) dx
+of the strip quotient g of f.
+
+Blueprint: def:strip-horizontal-integral -/
+noncomputable def stripHorizontalIntegral (f : ℂ → ℂ) (T : ℝ) : ℂ :=
+  (∫ x in (-1/2 : ℝ)..1/2, stripQuotient f (x + T * I)) -
+    ∫ x in (-1/2 : ℝ)..1/2, stripQuotient f (x - T * I)
+
+/-- 1/cosh x ≤ 2 (1 + x²)⁻¹.
+
+Blueprint: lmm:inv-cosh-le -/
+theorem inv_cosh_le (x : ℝ) : 1 / Real.cosh x ≤ 2 * (1 + x ^ 2)⁻¹ := by
+  sorry
+
+/-- t ↦ 1/cosh t and t ↦ 1/cosh(πt) are integrable on ℝ.
+
+Blueprint: lmm:inv-cosh-pi-integrable -/
+theorem integrable_inv_cosh :
+    Integrable (fun t : ℝ => 1 / Real.cosh t) ∧
+      Integrable (fun t : ℝ => 1 / Real.cosh (π * t)) := by
+  sorry
+
+/-- A continuous h : ℝ → ℂ with ‖h t‖ ≤ K / cosh(πt) is integrable.
+
+Blueprint: lmm:cosh-dominated-integrable -/
+theorem integrable_of_norm_le_div_cosh {h : ℝ → ℂ} (hc : Continuous h) (K : ℝ)
+    (hK : ∀ t, ‖h t‖ ≤ K / Real.cosh (π * t)) : Integrable h := by
+  sorry
+
+/-- The derivative of t ↦ 2 arctan(eᵗ) is 1/cosh t.
+
+Blueprint: lmm:hasDerivAt-two-arctan-exp -/
+theorem hasDerivAt_two_mul_arctan_exp (t : ℝ) :
+    HasDerivAt (fun t => 2 * Real.arctan (Real.exp t)) (1 / Real.cosh t) t := by
+  sorry
+
+/-- ∫ dt / cosh t = π.
+
+Blueprint: lmm:integral-inv-cosh -/
+theorem integral_inv_cosh : ∫ t : ℝ, 1 / Real.cosh t = π := by
+  sorry
+
+/-- ∫ dt / cosh(πt) = 1.
+
+Blueprint: lmm:integral-inv-cosh-pi -/
+theorem integral_inv_cosh_pi_mul : ∫ t : ℝ, 1 / Real.cosh (π * t) = 1 := by
+  sorry
+
+/-- sin(π(1/2 + it)) = cosh(πt) and sin(π(-1/2 + it)) = -cosh(πt).
+
+Blueprint: lmm:sin-strip-boundary -/
+theorem sin_pi_mul_strip_boundary (t : ℝ) :
+    Complex.sin (π * (1 / 2 + t * I)) = Real.cosh (π * t) ∧
+      Complex.sin (π * (-1 / 2 + t * I)) = -Real.cosh (π * t) := by
+  sorry
+
+/-- |y| ≤ ‖sin(x + iy)‖.
+
+Blueprint: lmm:sin-norm-lower-bound -/
+theorem abs_le_norm_sin_add_mul_I (x y : ℝ) : |y| ≤ ‖Complex.sin (x + y * I)‖ := by
+  sorry
+
+/-- The only zero of sin(πz) in the closed strip is z = 0.
+
+Blueprint: lmm:sin-pi-zero-strip -/
+theorem eq_zero_of_sin_pi_mul_eq_zero {z : ℂ} (hz : z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2))
+    (h : Complex.sin (π * z) = 0) : z = 0 := by
+  sorry
+
+/-- Off 0 and off the zeros of sin(πz), the strip quotient is (f(z) - f(0)) / sin(πz); on the
+lines Re z = ±1/2 it is ±(f(z) - f(0)) / cosh(πt).
+
+Blueprint: lmm:strip-quotient-formula -/
+theorem stripQuotient_eq (f : ℂ → ℂ) :
+    (∀ z : ℂ, z ≠ 0 → Complex.sin (π * z) ≠ 0 →
+        stripQuotient f z = (f z - f 0) / Complex.sin (π * z)) ∧
+      ∀ t : ℝ,
+        stripQuotient f (1 / 2 + t * I) = (f (1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ) ∧
+          stripQuotient f (-1 / 2 + t * I) =
+            -((f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) := by
+  sorry
+
+/-- The denominator dslope (z ↦ sin(πz)) 0 of the strip quotient does not vanish on the strip.
+
+Blueprint: lmm:strip-denominator-ne-zero -/
+theorem dslope_sin_pi_mul_ne_zero {z : ℂ} (hz : z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2)) :
+    dslope (fun z => Complex.sin (π * z)) 0 z ≠ 0 := by
+  sorry
+
+/-- The strip quotient of f is continuous on the closed strip and holomorphic on its interior.
+
+Blueprint: lmm:strip-quotient-regular -/
+theorem stripQuotient_regular {f : ℂ → ℂ} (hc : ContinuousOn f (re ⁻¹' Icc (-1 / 2) (1 / 2)))
+    (hd : DifferentiableOn ℂ f (re ⁻¹' Ioo (-1 / 2) (1 / 2))) :
+    ContinuousOn (stripQuotient f) (re ⁻¹' Icc (-1 / 2) (1 / 2)) ∧
+      DifferentiableOn ℂ (stripQuotient f) (re ⁻¹' Ioo (-1 / 2) (1 / 2)) := by
+  sorry
+
+/-- On the horizontal lines Im z = ±T, ‖g(x ± iT)‖ ≤ 2M / (πT).
+
+Blueprint: lmm:strip-quotient-horizontal-bound -/
+theorem norm_stripQuotient_horizontal_le {f : ℂ → ℂ} {M : ℝ}
+    (hM : ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) {T : ℝ} (hT : 0 < T) {x : ℝ}
+    (hx : x ∈ Icc (-1 / 2 : ℝ) (1 / 2)) :
+    ‖stripQuotient f (x + T * I)‖ ≤ 2 * M / (π * T) ∧
+      ‖stripQuotient f (x - T * I)‖ ≤ 2 * M / (π * T) := by
+  sorry
+
+/-- The closed rectangle with corners -1/2 - iT and 1/2 + iT lies in the closed strip and the
+open rectangle in the open strip, in the form Mathlib's rectangle Cauchy theorem uses.
+
+Blueprint: lmm:strip-rectangle-subset -/
+theorem strip_rectangle_subset {T : ℝ} (hT : 0 < T) :
+    [[(-1 / 2 - T * I : ℂ).re, (1 / 2 + T * I : ℂ).re]] ×ℂ
+        [[(-1 / 2 - T * I : ℂ).im, (1 / 2 + T * I : ℂ).im]] ⊆ re ⁻¹' Icc (-1 / 2) (1 / 2) ∧
+      Ioo (min (-1 / 2 - T * I : ℂ).re (1 / 2 + T * I : ℂ).re)
+          (max (-1 / 2 - T * I : ℂ).re (1 / 2 + T * I : ℂ).re) ×ℂ
+        Ioo (min (-1 / 2 - T * I : ℂ).im (1 / 2 + T * I : ℂ).im)
+          (max (-1 / 2 - T * I : ℂ).im (1 / 2 + T * I : ℂ).im) ⊆
+        re ⁻¹' Ioo (-1 / 2) (1 / 2) := by
+  sorry
+
+/-- The vertical sides of the rectangle: ∫_{-T}^{T} g(1/2 + it) dt = V₊(T) and
+∫_{-T}^{T} g(-1/2 + it) dt = -V₋(T).
+
+Blueprint: lmm:strip-vertical-sides -/
+theorem integral_stripQuotient_vertical (f : ℂ → ℂ) (T : ℝ) :
+    (∫ t in -T..T, stripQuotient f (1 / 2 + t * I)) = stripVerticalIntegral f (1 / 2) T ∧
+      (∫ t in -T..T, stripQuotient f (-1 / 2 + t * I)) =
+        -stripVerticalIntegral f (-1 / 2) T := by
+  sorry
+
+/-- The rectangle identity i (V₊(T) + V₋(T)) = H(T).
+
+Blueprint: lmm:strip-rectangle-identity -/
+theorem strip_rectangle_identity {f : ℂ → ℂ}
+    (hc : ContinuousOn f (re ⁻¹' Icc (-1 / 2) (1 / 2)))
+    (hd : DifferentiableOn ℂ f (re ⁻¹' Ioo (-1 / 2) (1 / 2))) {T : ℝ} (hT : 0 < T) :
+    I * (stripVerticalIntegral f (1 / 2) T + stripVerticalIntegral f (-1 / 2) T) =
+      stripHorizontalIntegral f T := by
+  sorry
+
+/-- The horizontal side integral H(T) tends to 0 as T → ∞.
+
+Blueprint: lmm:strip-horizontal-vanish -/
+theorem tendsto_stripHorizontalIntegral {f : ℂ → ℂ} {M : ℝ}
+    (hM : ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
+    Tendsto (stripHorizontalIntegral f) atTop (𝓝 0) := by
+  sorry
+
+/-- t ↦ (f(±1/2 + it) - f(0)) / cosh(πt) and t ↦ f(±1/2 + it) / cosh(πt) are integrable.
+
+Blueprint: lmm:strip-boundary-integrable -/
+theorem strip_boundary_integrable {f : ℂ → ℂ} {M : ℝ}
+    (hc : ContinuousOn f (re ⁻¹' Icc (-1 / 2) (1 / 2)))
+    (hM : ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
+    Integrable (fun t : ℝ => (f (1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) ∧
+      Integrable (fun t : ℝ => f (1 / 2 + t * I) / (Real.cosh (π * t) : ℂ)) ∧
+      Integrable (fun t : ℝ => (f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) ∧
+      Integrable (fun t : ℝ => f (-1 / 2 + t * I) / (Real.cosh (π * t) : ℂ)) := by
+  sorry
+
+/-- V₊(T) + V₋(T) converges to the sum of the two boundary integrals over ℝ as T → ∞.
+
+Blueprint: lmm:strip-vertical-limit -/
+theorem tendsto_stripVerticalIntegral {f : ℂ → ℂ} {M : ℝ}
+    (hc : ContinuousOn f (re ⁻¹' Icc (-1 / 2) (1 / 2)))
+    (hM : ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
+    Tendsto (fun T => stripVerticalIntegral f (1 / 2) T + stripVerticalIntegral f (-1 / 2) T)
+      atTop
+      (𝓝 ((∫ t : ℝ, (f (1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) +
+        ∫ t : ℝ, (f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ))) := by
+  sorry
+
+/-- The two boundary integrals of (f(±1/2 + it) - f(0)) / cosh(πt) sum to 0.
+
+Blueprint: lmm:strip-boundary-integral-zero -/
+theorem strip_boundary_integral_eq_zero {f : ℂ → ℂ} {M : ℝ}
+    (hc : ContinuousOn f (re ⁻¹' Icc (-1 / 2) (1 / 2)))
+    (hd : DifferentiableOn ℂ f (re ⁻¹' Ioo (-1 / 2) (1 / 2)))
+    (hM : ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
+    (∫ t : ℝ, (f (1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) +
+      ∫ t : ℝ, (f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ) = 0 := by
+  sorry
+
+/-- ∫ (f(±1/2 + it) - f(0)) / cosh(πt) dt = ∫ f(±1/2 + it) / cosh(πt) dt - f(0).
+
+Blueprint: lmm:strip-boundary-split -/
+theorem strip_boundary_integral_sub {f : ℂ → ℂ} {M : ℝ}
+    (hc : ContinuousOn f (re ⁻¹' Icc (-1 / 2) (1 / 2)))
+    (hM : ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
+    (∫ t : ℝ, (f (1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) =
+        (∫ t : ℝ, f (1 / 2 + t * I) / (Real.cosh (π * t) : ℂ)) - f 0 ∧
+      (∫ t : ℝ, (f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) =
+        (∫ t : ℝ, f (-1 / 2 + t * I) / (Real.cosh (π * t) : ℂ)) - f 0 := by
+  sorry
+
+/-- The strip formula: for f continuous and bounded on the closed strip and holomorphic on its
+interior, f(0) = ∫ (f(1/2 + it) + f(-1/2 + it)) / (2 cosh(πt)) dt.
+
+Blueprint: thrm:strip-formula -/
+theorem strip_formula {f : ℂ → ℂ} (hc : ContinuousOn f (re ⁻¹' Icc (-1 / 2) (1 / 2)))
+    (hd : DifferentiableOn ℂ f (re ⁻¹' Ioo (-1 / 2) (1 / 2)))
+    (hb : ∃ M, ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
+    f 0 = ∫ t : ℝ, (f (1 / 2 + t * I) + f (-1 / 2 + t * I)) / (2 * (Real.cosh (π * t) : ℂ)) := by
+  sorry
+
+/-- If ∫ e^{iθt} h(t) dt = 0 for every θ, the Fourier transform of h vanishes.
+
+Blueprint: lmm:fourier-transform-eq-zero -/
+theorem fourier_eq_zero_of_integral_exp_mul_eq_zero {h : ℝ → ℂ}
+    (hh : ∀ θ : ℝ, ∫ t : ℝ, Complex.exp (θ * t * I) * h t = 0) : 𝓕 h = 0 := by
+  sorry
+
+/-- Fourier uniqueness: a continuous integrable h : ℝ → ℂ with ∫ e^{iθt} h(t) dt = 0 for every
+θ is zero.
+
+Blueprint: thrm:fourier-uniqueness -/
+theorem eq_zero_of_integral_exp_mul_eq_zero {h : ℝ → ℂ} (hc : Continuous h) (hi : Integrable h)
+    (hh : ∀ θ : ℝ, ∫ t : ℝ, Complex.exp (θ * t * I) * h t = 0) : h = 0 := by
+  sorry
+
+end Physicslib4

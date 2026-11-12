@@ -2269,11 +2269,15 @@ We write $s(z) = \sin(\pi z)$.
 
 \begin{definition}[The Strip Quotient]
     \label{def:strip-quotient}
+    \lean{Physicslib4.stripQuotient}
+    \leanok
     For $f : \mathbb{C} \to \mathbb{C}$, the strip quotient of $f$ is $g = \operatorname{dslope}(f, 0) / \operatorname{dslope}(s, 0)$, where Mathlib's $\operatorname{dslope}(h, 0)$ is $z \mapsto (h(z) - h(0))/z$ for $z \ne 0$ and $h'(0)$ at $z = 0$.
 \end{definition}
 
 \begin{definition}[The Vertical Side Integrals]
     \label{def:strip-vertical-integrals}
+    \lean{Physicslib4.stripVerticalIntegral}
+    \leanok
     For $f : \mathbb{C} \to \mathbb{C}$ and $T \in \mathbb{R}$,
     \begin{align}
         V_\pm(T) = \int_{-T}^{T} \frac{f(\pm\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt. \label{eq:strip-sides}
@@ -2282,7 +2286,9 @@ We write $s(z) = \sin(\pi z)$.
 
 \begin{definition}[The Horizontal Side Integral]
     \label{def:strip-horizontal-integral}
+    \lean{Physicslib4.stripHorizontalIntegral}
     \uses{def:strip-quotient}
+    \leanok
     For $f : \mathbb{C} \to \mathbb{C}$ with strip quotient $g$ and $T \in \mathbb{R}$,
     $H(T) = \int_{-1/2}^{1/2} g(x + iT) \, dx - \int_{-1/2}^{1/2} g(x - iT) \, dx$.
 \end{definition}
@@ -2293,6 +2299,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[A Bound on $1/\cosh$]
     \label{lmm:inv-cosh-le}
+    \lean{Physicslib4.inv_cosh_le}
+    \leanok
     For every $x \in \mathbb{R}$, $1/\cosh x \le 2(1 + x^2)^{-1}$.
 \end{lemma}
 \begin{proof}
@@ -2301,6 +2309,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[Integrability of $1/\cosh(\pi t)$]
     \label{lmm:inv-cosh-pi-integrable}
+    \lean{Physicslib4.integrable_inv_cosh}
+    \leanok
     The functions $t \mapsto 1/\cosh t$ and $t \mapsto 1/\cosh(\pi t)$ are integrable on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -2310,6 +2320,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[Functions Dominated by $1/\cosh(\pi t)$]
     \label{lmm:cosh-dominated-integrable}
+    \lean{Physicslib4.integrable_of_norm_le_div_cosh}
+    \leanok
     Let $h : \mathbb{R} \to \mathbb{C}$ be continuous, and let $K \in \mathbb{R}$ with $\|h(t)\| \le K/\cosh(\pi t)$ for every $t \in \mathbb{R}$. Then $h$ is integrable on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -2319,6 +2331,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[The Derivative of $2\arctan(e^t)$]
     \label{lmm:hasDerivAt-two-arctan-exp}
+    \lean{Physicslib4.hasDerivAt_two_mul_arctan_exp}
+    \leanok
     For every $t \in \mathbb{R}$, the function $F(t) = 2\arctan(e^t)$ has derivative $F'(t) = 1/\cosh t$.
 \end{lemma}
 \begin{proof}
@@ -2327,6 +2341,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[$\int_{\mathbb{R}} dt/\cosh t = \pi$]
     \label{lmm:integral-inv-cosh}
+    \lean{Physicslib4.integral_inv_cosh}
+    \leanok
     $\int_{\mathbb{R}} \frac{dt}{\cosh t} = \pi$.
 \end{lemma}
 \begin{proof}
@@ -2336,6 +2352,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[$\int_{\mathbb{R}} dt/\cosh(\pi t) = 1$]
     \label{lmm:integral-inv-cosh-pi}
+    \lean{Physicslib4.integral_inv_cosh_pi_mul}
+    \leanok
     $\int_{\mathbb{R}} \frac{dt}{\cosh(\pi t)} = 1$.
 \end{lemma}
 \begin{proof}
@@ -2347,6 +2365,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[$\sin$ on the Boundary Lines]
     \label{lmm:sin-strip-boundary}
+    \lean{Physicslib4.sin_pi_mul_strip_boundary}
+    \leanok
     For $t \in \mathbb{R}$, $\sin(\pi(\tfrac{1}{2} + it)) = \cosh(\pi t)$ and $\sin(\pi(-\tfrac{1}{2} + it)) = -\cosh(\pi t)$.
 \end{lemma}
 \begin{proof}
@@ -2355,6 +2375,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[A Lower Bound for $|\sin|$]
     \label{lmm:sin-norm-lower-bound}
+    \lean{Physicslib4.abs_le_norm_sin_add_mul_I}
+    \leanok
     For $x, y \in \mathbb{R}$, $|\sin(x + iy)| \ge |y|$.
 \end{lemma}
 \begin{proof}
@@ -2363,6 +2385,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[Zeros of $\sin(\pi z)$ in the Strip]
     \label{lmm:sin-pi-zero-strip}
+    \lean{Physicslib4.eq_zero_of_sin_pi_mul_eq_zero}
+    \leanok
     If $z \in \mathcal{S}$ and $\sin(\pi z) = 0$, then $z = 0$.
 \end{lemma}
 \begin{proof}
@@ -2374,6 +2398,9 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 \begin{lemma}[The Quotient off $0$]
     \uses{def:strip-quotient}
     \label{lmm:strip-quotient-formula}
+    \lean{Physicslib4.stripQuotient_eq}
+    \uses{def:strip-quotient}
+    \leanok
     Let $f : \mathbb{C} \to \mathbb{C}$ be any function; no hypothesis of~\eqref{eq:strip-hypotheses} is needed. For $z \ne 0$ with $\sin(\pi z) \ne 0$, $g(z) = (f(z) - f(0))/\sin(\pi z)$. In particular, for $t \in \mathbb{R}$,
     \[ g(\tfrac{1}{2} + it) = \frac{f(\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)}, \qquad g(-\tfrac{1}{2} + it) = -\frac{f(-\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)}. \]
 \end{lemma}
@@ -2385,6 +2412,9 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 \begin{lemma}[The Denominator of $g$ on the Strip]
     \uses{def:strip-quotient}
     \label{lmm:strip-denominator-ne-zero}
+    \lean{Physicslib4.dslope_sin_pi_mul_ne_zero}
+    \uses{def:strip-quotient}
+    \leanok
     For $z \in \mathcal{S}$, $\operatorname{dslope}(s, 0)(z) \ne 0$. This statement involves only $s(z) = \sin(\pi z)$, not $f$.
 \end{lemma}
 \begin{proof}
@@ -2395,6 +2425,9 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 \begin{lemma}[$g$ is Continuous on $\mathcal{S}$ and Holomorphic on $\mathcal{S}^\circ$]
     \uses{def:strip-quotient}
     \label{lmm:strip-quotient-regular}
+    \lean{Physicslib4.stripQuotient_regular}
+    \uses{def:strip-quotient}
+    \leanok
     Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then $g$ is continuous on $\mathcal{S}$ and complex differentiable on $\mathcal{S}^\circ$.
 \end{lemma}
 \begin{proof}
@@ -2405,6 +2438,9 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 \begin{lemma}[$g$ on Horizontal Lines]
     \uses{def:strip-quotient}
     \label{lmm:strip-quotient-horizontal-bound}
+    \lean{Physicslib4.norm_stripQuotient_horizontal_le}
+    \uses{def:strip-quotient}
+    \leanok
     Let $f$ be as in~\eqref{eq:strip-hypotheses}, $T > 0$ and $x \in [-\tfrac{1}{2}, \tfrac{1}{2}]$. Then $\|g(x \pm iT)\| \le 2M/(\pi T)$.
 \end{lemma}
 \begin{proof}
@@ -2416,6 +2452,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[The Rectangle Lies in the Strip]
     \label{lmm:strip-rectangle-subset}
+    \lean{Physicslib4.strip_rectangle_subset}
+    \leanok
     Let $T > 0$, and let $z_0 = -\tfrac{1}{2} - iT$ and $w_0 = \tfrac{1}{2} + iT$. Then the closed rectangle $[[\operatorname{Re} z_0, \operatorname{Re} w_0]] \times_{\mathbb{C}} [[\operatorname{Im} z_0, \operatorname{Im} w_0]] = [-\tfrac{1}{2}, \tfrac{1}{2}] \times_{\mathbb{C}} [-T, T]$ is contained in $\mathcal{S}$, and the open rectangle $(\min(\operatorname{Re} z_0, \operatorname{Re} w_0), \max(\operatorname{Re} z_0, \operatorname{Re} w_0)) \times_{\mathbb{C}} (\min(\operatorname{Im} z_0, \operatorname{Im} w_0), \max(\operatorname{Im} z_0, \operatorname{Im} w_0)) = (-\tfrac{1}{2}, \tfrac{1}{2}) \times_{\mathbb{C}} (-T, T)$ is contained in $\mathcal{S}^\circ$. Here $s \times_{\mathbb{C}} t = \{z : \operatorname{Re} z \in s,\ \operatorname{Im} z \in t\}$.
 \end{lemma}
 \begin{proof}
@@ -2425,6 +2463,9 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 \begin{lemma}[The Vertical Sides of the Rectangle]
     \uses{def:strip-quotient, def:strip-vertical-integrals}
     \label{lmm:strip-vertical-sides}
+    \lean{Physicslib4.integral_stripQuotient_vertical}
+    \uses{def:strip-quotient, def:strip-vertical-integrals}
+    \leanok
     Let $f : \mathbb{C} \to \mathbb{C}$ and $T > 0$. With $V_\pm$ as in~\eqref{eq:strip-sides},
     \[ \int_{-T}^{T} g(\tfrac{1}{2} + it)\,dt = V_+(T), \qquad \int_{-T}^{T} g(-\tfrac{1}{2} + it)\,dt = -V_-(T). \]
 \end{lemma}
@@ -2436,6 +2477,9 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 \begin{lemma}[The Rectangle Identity]
     \uses{def:strip-vertical-integrals, def:strip-horizontal-integral}
     \label{lmm:strip-rectangle-identity}
+    \lean{Physicslib4.strip_rectangle_identity}
+    \uses{def:strip-vertical-integrals, def:strip-horizontal-integral}
+    \leanok
     Let $f$ be as in~\eqref{eq:strip-hypotheses} and $T > 0$. With $V_\pm$ and $H$ as in~\eqref{eq:strip-sides}, $i\,(V_+(T) + V_-(T)) = H(T)$.
 \end{lemma}
 \begin{proof}
@@ -2448,6 +2492,9 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 \begin{lemma}[The Horizontal Sides Vanish]
     \uses{def:strip-horizontal-integral}
     \label{lmm:strip-horizontal-vanish}
+    \lean{Physicslib4.tendsto_stripHorizontalIntegral}
+    \uses{def:strip-horizontal-integral}
+    \leanok
     Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then $H(T) \to 0$ as $T \to \infty$.
 \end{lemma}
 \begin{proof}
@@ -2457,6 +2504,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[Integrability on the Boundary Lines]
     \label{lmm:strip-boundary-integrable}
+    \lean{Physicslib4.strip_boundary_integrable}
+    \leanok
     Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then $t \mapsto (f(\pm\tfrac{1}{2} + it) - f(0))/\cosh(\pi t)$ and $t \mapsto f(\pm\tfrac{1}{2} + it)/\cosh(\pi t)$ are integrable on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -2467,6 +2516,9 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 \begin{lemma}[The Vertical Sides Converge]
     \uses{def:strip-vertical-integrals}
     \label{lmm:strip-vertical-limit}
+    \lean{Physicslib4.tendsto_stripVerticalIntegral}
+    \uses{def:strip-vertical-integrals}
+    \leanok
     Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then, as $T \to \infty$,
     \[ V_+(T) + V_-(T) \to \int_{\mathbb{R}} \frac{f(\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt + \int_{\mathbb{R}} \frac{f(-\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt. \]
 \end{lemma}
@@ -2477,6 +2529,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[The Boundary Integral Vanishes]
     \label{lmm:strip-boundary-integral-zero}
+    \lean{Physicslib4.strip_boundary_integral_eq_zero}
+    \leanok
     Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then
     \[ \int_{\mathbb{R}} \frac{f(\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt + \int_{\mathbb{R}} \frac{f(-\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt = 0. \]
 \end{lemma}
@@ -2487,6 +2541,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{lemma}[Splitting off $f(0)$]
     \label{lmm:strip-boundary-split}
+    \lean{Physicslib4.strip_boundary_integral_sub}
+    \leanok
     Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then, for each choice of sign,
     \[ \int_{\mathbb{R}} \frac{f(\pm\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt = \int_{\mathbb{R}} \frac{f(\pm\tfrac{1}{2} + it)}{\cosh(\pi t)} \, dt - f(0). \]
 \end{lemma}
@@ -2497,6 +2553,8 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
 
 \begin{theorem}[The Strip Formula]
     \label{thrm:strip-formula}
+    \lean{Physicslib4.strip_formula}
+    \leanok
     Let $f : \mathbb{C} \to \mathbb{C}$ be continuous and bounded on $\mathcal{S} = \{z : -\tfrac{1}{2} \le \operatorname{Re} z \le \tfrac{1}{2}\}$ (that is, there is $M$ with $\|f(z)\| \le M$ for every $z \in \mathcal{S}$) and complex differentiable on its interior. Then
     \[ f(0) = \int_{\mathbb{R}} \frac{f(\tfrac{1}{2} + it) + f(-\tfrac{1}{2} + it)}{2\cosh(\pi t)} \, dt. \]
     This is Exercise~13.2.1 of Jones's notes.
@@ -2512,6 +2570,8 @@ Mathlib's Fourier transform of $h : \mathbb{R} \to \mathbb{C}$ is $\mathcal{F}h(
 
 \begin{lemma}[Vanishing Fourier Integrals]
     \label{lmm:fourier-transform-eq-zero}
+    \lean{Physicslib4.fourier_eq_zero_of_integral_exp_mul_eq_zero}
+    \leanok
     Let $h : \mathbb{R} \to \mathbb{C}$ satisfy $\int_{\mathbb{R}} e^{i\theta t} h(t) \, dt = 0$ for every $\theta \in \mathbb{R}$. Then $\mathcal{F}h = 0$.
 \end{lemma}
 \begin{proof}
@@ -2520,6 +2580,8 @@ Mathlib's Fourier transform of $h : \mathbb{R} \to \mathbb{C}$ is $\mathcal{F}h(
 
 \begin{theorem}[Fourier Uniqueness]
     \label{thrm:fourier-uniqueness}
+    \lean{Physicslib4.eq_zero_of_integral_exp_mul_eq_zero}
+    \leanok
     Let $h : \mathbb{R} \to \mathbb{C}$ be continuous and integrable with $\int_{\mathbb{R}} e^{i\theta t} h(t) \, dt = 0$ for every $\theta \in \mathbb{R}$. Then $h = 0$.
 \end{theorem}
 \begin{proof}
