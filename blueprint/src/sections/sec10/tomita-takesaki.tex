@@ -1772,6 +1772,7 @@ For $A \in \mathcal{B}(\mathbf{H})$ the condition of Definition~\ref{def:unitary
     Let $U$ be a unitary that commutes with an operator $A$. Then $(UC)\big(CAC^{-1}\big)(UC)^{-1} = A$, including domains.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:reference-conjugation-properties, lmm:antiunitary-composition}
     $C^{-1} = C$ because $C(C\phi) = \phi$ (Lemma~\ref{lmm:reference-conjugation-properties}), so $C^{-1}(UC)^{-1}\phi = C(CU^{-1}\phi) = U^{-1}\phi$ and $UC\,C\chi = U\chi$. Hence the left side has domain $\{ \phi \mid U^{-1}\phi \in \text{Dom}(A) \}$ and value $UAU^{-1}\phi$ there. If $\phi \in \text{Dom}(A)$ then $U^{-1}\phi \in \text{Dom}(A)$ and $UAU^{-1}\phi = UU^{-1}A\phi = A\phi$; if $U^{-1}\phi \in \text{Dom}(A)$ then $\phi = U(U^{-1}\phi) \in \text{Dom}(A)$. The two operators have the same graph (Mathlib's \texttt{LinearPMap.ext}).
 \end{proof}
@@ -1784,6 +1785,7 @@ For $A \in \mathcal{B}(\mathbf{H})$ the condition of Definition~\ref{def:unitary
     Let $A$ be self-adjoint and $U$ a unitary that commutes with $A$. Then $(UC)\big(Cf(A)C^{-1}\big)(UC)^{-1} = f(A)$, including domains, for every real measurable $f$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:reference-conjugation-properties, lmm:antiunitary-composition, lmm:antiunitary-conjugate-spectral-measure, crllr:antiunitary-conjugate-functional-calculus, lmm:commuting-unitary-double-conjugate}
     $C$ and $UC$ are antiunitary (Lemmas~\ref{lmm:reference-conjugation-properties} and~\ref{lmm:antiunitary-composition}). $B = CAC^{-1}$ is self-adjoint (Lemma~\ref{lmm:antiunitary-conjugate-spectral-measure}), and Corollary~\ref{crllr:antiunitary-conjugate-functional-calculus}, applied to $C$ and $A$ and then to $UC$ and $B$, gives
     \begin{align}
@@ -1800,6 +1802,7 @@ For $A \in \mathcal{B}(\mathbf{H})$ the condition of Definition~\ref{def:unitary
     Let $c$ be a densely defined operator and $V$ a unitary such that, for every $\psi \in \text{Dom}(c)$, $V^{-1}\psi \in \text{Dom}(c)$ and $cV^{-1}\psi = V^{-1}c\psi$. Then, for every $\phi \in \text{Dom}(c^*)$, $V\phi \in \text{Dom}(c^*)$ and $c^*V\phi = Vc^*\phi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:characterizing-adjoint-domain-membership}
     Let $\phi \in \text{Dom}(c^*)$. For $\psi \in \text{Dom}(c)$, since $V^* = V^{-1}$,
     \begin{align}
@@ -1816,6 +1819,7 @@ For $A \in \mathcal{B}(\mathbf{H})$ the condition of Definition~\ref{def:unitary
     Let $c$ be a densely defined operator and $U$ a unitary that commutes with $c$. Then $U$ commutes with $c^*$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commuting-unitary-adjoint-half}
     Apply Lemma~\ref{lmm:commuting-unitary-adjoint-half} with $V = U$, whose hypothesis is the $U^{-1}$ half of the commutation of $U$ with $c$, and with $V = U^{-1}$, whose hypothesis is the $U$ half since $(U^{-1})^{-1} = U$.
 \end{proof}
@@ -1828,6 +1832,7 @@ For $A \in \mathcal{B}(\mathbf{H})$ the condition of Definition~\ref{def:unitary
     Let $c$ be a densely defined operator and $U$ a unitary that commutes with $c$. Then $U$ commutes with $c^*c$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commuting-unitary-adjoint}
     Let $\psi \in \text{Dom}(c^*c)$, so $\psi \in \text{Dom}(c)$ and $c\psi \in \text{Dom}(c^*)$. Then $U\psi \in \text{Dom}(c)$ with $cU\psi = Uc\psi \in \text{Dom}(c^*)$ and $c^*cU\psi = c^*Uc\psi = Uc^*c\psi$ by Lemma~\ref{lmm:commuting-unitary-adjoint}; likewise for $U^{-1}$.
 \end{proof}
@@ -1840,6 +1845,7 @@ For $A \in \mathcal{B}(\mathbf{H})$ the condition of Definition~\ref{def:unitary
     Let $c$ be a closed, densely defined operator, $D = c^*c$, and $U$ a unitary that commutes with $c$. Then $Uf(D) = f(D)U$ for every bounded real measurable $f$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commuting-unitary-adjoint-product, lmm:unitary-conjugate-functional-calculus, thrm:von-neumann-adjoint-product, lmm:functional-calculus-bounded, lmm:reference-conjugation-properties}
     $D$ is self-adjoint (Theorem~\ref{thrm:von-neumann-adjoint-product}) and $U$ commutes with $D$ (Lemma~\ref{lmm:commuting-unitary-adjoint-product}), so $(UC)\big(Cf(D)C^{-1}\big)(UC)^{-1} = f(D)$ by Lemma~\ref{lmm:unitary-conjugate-functional-calculus}. $f(D)$ is defined on all of $\mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}). Evaluate both sides at $U\psi$: since $C^{-1}(UC)^{-1}U\psi = C(CU^{-1}U\psi) = \psi$ (Lemma~\ref{lmm:reference-conjugation-properties}), the left side is $UC\,C\,f(D)\psi = Uf(D)\psi$, and the right side is $f(D)U\psi$.
 \end{proof}
@@ -1859,6 +1865,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     For every $n \ge 1$, $h_n$ and $k_n$ are real, continuous and measurable, $0 < h_n \le 1$, $0 \le k_n \le n$ and $k_n \le s$. For every $\lambda \in \mathbb{R}$, $h_n(\lambda) \to 1$ and $k_n(\lambda) \to s(\lambda)$ as $n \to \infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $s$ is continuous and non-negative (Mathlib's \texttt{Real.continuous\_sqrt} and \texttt{continuous\_max}), so $n + s > 0$ and $h_n$, $k_n$ are continuous, hence measurable (Mathlib's \texttt{Continuous.measurable}). $0 < h_n \le 1$ because $0 < n \le n + s$; $k_n = ns/(n + s)$ is at most $n$ and at most $s$. For fixed $\lambda$, $h_n(\lambda) = (1 + s(\lambda)/n)^{-1}$ and $s(\lambda)/n \to 0$ (Mathlib's \texttt{tendsto\_const\_div\_atTop\_nhds\_zero\_nat}), so $h_n(\lambda) \to 1$ by continuity of $t \mapsto (1 + t)^{-1}$ at $0$, and $k_n(\lambda) = s(\lambda)h_n(\lambda) \to s(\lambda)$.
 \end{proof}
 
@@ -1870,6 +1877,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     For every $n \ge 1$, $R_n$ and $K_n$ are bounded operators defined on all of $\mathbf{H}$, $R_n$ is self-adjoint, $\|R_n\| \le 1$ and $\|K_n\| \le n$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:approximant-functions, thrm:von-neumann-adjoint-product, lmm:functional-calculus-bounded, prpstn:integral-norm-bound, prpstn:integral-conjugation}
     $D$ is self-adjoint (Theorem~\ref{thrm:von-neumann-adjoint-product}), and $h_n$, $k_n$ are bounded, real and measurable (Lemma~\ref{lmm:approximant-functions}). Lemma~\ref{lmm:functional-calculus-bounded} identifies $R_n$ and $K_n$ with bounded integrals; Proposition~\ref{prpstn:integral-norm-bound} with $0 < h_n \le 1$ and $0 \le k_n \le n$ gives the norm bounds, and Proposition~\ref{prpstn:integral-conjugation} gives $R_n^* = R_n$.
 \end{proof}
@@ -1882,6 +1890,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     For every $n \ge 1$ and $\psi \in \mathbf{H}$, $R_n\psi \in \text{Dom}(|c|) = \text{Dom}(c)$, $|c|R_n\psi = K_n\psi$, and $\|cR_n\psi\| = \|K_n\psi\| \le n\|\psi\|$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:von-neumann-adjoint-product, thrm:fc-composition, lmm:approximant-functions, lmm:approximant-bounded, lmm:functional-calculus-bounded, thrm:absolute-value-domain}
     $D$ is self-adjoint (Theorem~\ref{thrm:von-neumann-adjoint-product}). Theorem~\ref{thrm:fc-composition} with $f = s$ and $g = h_n$ gives $\text{Dom}(s(D)h_n(D)) = W_{h_n} \cap W_{k_n}$, which is $\mathbf{H}$ because $h_n$ and $k_n$ are bounded (Lemmas~\ref{lmm:approximant-functions} and~\ref{lmm:functional-calculus-bounded}), and $s(D)h_n(D)\psi = k_n(D)\psi$. Theorem~\ref{thrm:absolute-value-domain} gives $\text{Dom}(|c|) = \text{Dom}(c)$ and $\|cR_n\psi\| = \||c|R_n\psi\|$, and $\|K_n\| \le n$ (Lemma~\ref{lmm:approximant-bounded}).
 \end{proof}
@@ -1894,6 +1903,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     $R_n\phi \to \phi$ for every $\phi \in \mathbf{H}$, and $K_n\psi \to |c|\psi$ for every $\psi \in \text{Dom}(c)$, as $n \to \infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-dominated-convergence, lmm:approximant-functions, lmm:functional-calculus-bounded, prpstn:integral-of-indicator, def:projection-valued-measure, thrm:absolute-value-domain}
     Apply Lemma~\ref{lmm:fc-dominated-convergence} to $\mu^D$ twice, with the bounds and limits of Lemma~\ref{lmm:approximant-functions}. First $h = 1$ and the $h_n$: here $W_1 = \mathbf{H}$ and $1(D) = \mu^D(\mathbb{R}) = \mathbf{1}$ (Lemma~\ref{lmm:functional-calculus-bounded}, Proposition~\ref{prpstn:integral-of-indicator} and Definition~\ref{def:projection-valued-measure}). Second $h = s$ and the $k_n$, for $\psi \in W_s = \text{Dom}(|c|) = \text{Dom}(c)$ (Theorem~\ref{thrm:absolute-value-domain}).
 \end{proof}
@@ -1906,6 +1916,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     For every $n \ge 1$ there is a unique $x_n \in \mathcal{B}(\mathbf{H})$ with $x_n\psi = cR_n\psi$ for every $\psi \in \mathbf{H}$, and $\|x_n\| \le n$. Moreover $x_n^*\phi = R_nc^*\phi$ for every $\phi \in \text{Dom}(c^*)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:approximant-range, lmm:approximant-bounded, def:hall-9.1}
     $\psi \mapsto cR_n\psi$ is defined on all of $\mathbf{H}$ (Lemma~\ref{lmm:approximant-range}) and linear, as a composite of the linear $R_n$ with the linear $c$, and $\|cR_n\psi\| \le n\|\psi\|$ (Lemma~\ref{lmm:approximant-range}); Mathlib's \texttt{LinearMap.mkContinuous} gives $x_n$ with $\|x_n\| \le n$. For $\phi \in \text{Dom}(c^*)$ and $\psi \in \mathbf{H}$, the definition of the adjoint (\ref{def:hall-9.1}) and $R_n^* = R_n$ (Lemma~\ref{lmm:approximant-bounded}) give $\left< \phi, x_n\psi \right> = \left< c^*\phi, R_n\psi \right> = \left< R_nc^*\phi, \psi \right>$. Since $\left< x_n^*\phi, \psi \right> = \left< \phi, x_n\psi \right>$ (Mathlib's \texttt{ContinuousLinearMap.adjoint\_inner\_left}) for every $\psi$, $x_n^*\phi = R_nc^*\phi$ (Mathlib's \texttt{ext\_inner\_right}).
 \end{proof}
@@ -1918,6 +1929,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     Let $U$ be a unitary that commutes with $c$. Then $Ux_n = x_nU$ for every $n \ge 1$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commuting-unitary-bounded-function, lmm:approximant-functions, lmm:approximant-range, lmm:approximant-operator}
     $UR_n = R_nU$ by Lemma~\ref{lmm:commuting-unitary-bounded-function} with the bounded real measurable $h_n$ (Lemma~\ref{lmm:approximant-functions}). For $\psi \in \mathbf{H}$, $R_n\psi \in \text{Dom}(c)$ (Lemma~\ref{lmm:approximant-range}), so $Ux_n\psi = UcR_n\psi = cUR_n\psi = cR_nU\psi = x_nU\psi$.
 \end{proof}
