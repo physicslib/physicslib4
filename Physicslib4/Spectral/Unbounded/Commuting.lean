@@ -577,7 +577,14 @@ theorem pmapMul_inv_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfA
     pmapMul (functionalCalculus hA fun x => (((Real.sqrt x)⁻¹ : ℝ) : ℂ))
         (functionalCalculus hA fun x => (((Real.sqrt x)⁻¹ : ℝ) : ℂ)) =
       A.inverse := by
-  sorry
+  have hf : Measurable fun x : ℝ => (Real.sqrt x)⁻¹ := Real.continuous_sqrt.measurable.inv
+  rw [(pmapMul_functionalCalculus_self hA hf).2, inverse_eq_functionalCalculus_inv hA hinj]
+  refine pmapIntegral_congr_of_null _
+    (Complex.measurable_ofReal.comp (hf.pow_const 2))
+    (Complex.measurable_ofReal.comp measurable_inv) measurableSet_Iio
+    (spectralMeasure_Iio_zero_eq_zero_of_isPositive hA hpos) fun x hx => ?_
+  rw [Set.mem_Iio, not_lt] at hx
+  rw [inv_pow, Real.sq_sqrt hx]
 
 /--
 For a positive, self-adjoint, injective `A`, `A⁻¹` is self-adjoint and

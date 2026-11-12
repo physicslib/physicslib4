@@ -127,7 +127,20 @@ theorem exists_unitary_decomposition_of_isVonNeumannSet {M : Set (H →L[ℂ] H)
     ∃ u₁ ∈ unitary (H →L[ℂ] H), ∃ u₂ ∈ unitary (H →L[ℂ] H),
       u₁ ∈ M ∧ star u₁ ∈ M ∧ u₂ ∈ M ∧ star u₂ ∈ M ∧
       x = ‖x‖ • (2⁻¹ : ℝ) • (u₁ + star u₁ + Complex.I • (u₂ + star u₂)) := by
-  sorry
+  have h := CStarAlgebra.norm_smul_two_inv_smul_add_four_unitary x hx0
+  extract_lets u₁ u₂ at h
+  have hy : ‖x‖⁻¹ • x ∈ M := by
+    obtain ⟨A, rfl⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+    rw [RCLike.real_smul_eq_coe_smul (K := ℂ)]
+    exact A.smul_mem (show x ∈ A from hx) _
+  obtain ⟨hre, him⟩ := realPart_imaginaryPart_mem_of_isVonNeumannSet hM hy
+  obtain ⟨-, h₁, h₁'⟩ := self_add_I_smul_cfcSqrt_mem_of_isVonNeumannSet hM hre
+    (ℜ (‖x‖⁻¹ • x)).2 (by
+      simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx0)] using! realPart.norm_le x)
+  obtain ⟨-, h₂, h₂'⟩ := self_add_I_smul_cfcSqrt_mem_of_isVonNeumannSet hM him
+    (ℑ (‖x‖⁻¹ • x)).2 (by
+      simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx0)] using! imaginaryPart.norm_le x)
+  exact ⟨u₁, u₁.2, u₂, u₂.2, h₁, h₁', h₂, h₂', h⟩
 
 /-- A bounded `b` with `u b = b u` for every unitary `u ∈ M` lies in `M′`.
 Blueprint: lmm:commutant-of-unitaries -/

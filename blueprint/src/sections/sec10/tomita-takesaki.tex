@@ -1970,6 +1970,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     Let $x \in \mathcal{M}$ with $x \ne 0$. Then there are unitaries $u_1, u_2$ with $u_1, u_1^*, u_2, u_2^* \in \mathcal{M}$ and $x = \tfrac{\|x\|}{2}\big(u_1 + u_1^* + i(u_2 + u_2^*)\big)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:von-neumann-unitary-of-contraction, lmm:von-neumann-real-imaginary-part, lmm:commutant-von-neumann-algebra}
     Mathlib's \texttt{CStarAlgebra.norm\_smul\_two\_inv\_smul\_add\_four\_unitary}, in the C*-algebra $\mathcal{B}(\mathbf{H})$, gives the formula with $u_1$ and $u_2$ the unitaries $a + i\sqrt{\mathbf{1} - a^2}$ (Mathlib's \texttt{selfAdjoint.unitarySelfAddISMul}) for the self-adjoint contractions $a = \Re y$ and $a = \Im y$, $y = \|x\|^{-1}x$. Here $y \in \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\Re y, \Im y \in \mathcal{M}$ (Lemma~\ref{lmm:von-neumann-real-imaginary-part}), and Lemma~\ref{lmm:von-neumann-unitary-of-contraction} gives $u_1, u_1^*, u_2, u_2^* \in \mathcal{M}$.
 \end{proof}
@@ -2180,6 +2181,7 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
     Let $A$ be positive, self-adjoint and injective. Then the product $A^{-1/2}A^{-1/2}$ equals $A^{-1}$, including domains.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-domain-square, crllr:fc-of-fc, lmm:square-of-inverse-square-root}
     With $r$ as in Lemma~\ref{lmm:inverse-square-root-positive}, real and measurable, $A^{-1/2} = r(A)$, and Lemma~\ref{lmm:fc-domain-square} gives $r(A)r(A) = (r^2)(A)$. With $q(\lambda) = \lambda^2$, $(r^2)(A) = (q \circ r)(A) = q(r(A))$ by Corollary~\ref{crllr:fc-of-fc}, and $q(A^{-1/2}) = A^{-1}$ by Lemma~\ref{lmm:square-of-inverse-square-root}.
 \end{proof}
