@@ -44,6 +44,7 @@ def UnitaryCommutes (U : H ≃ₗᵢ[ℂ] H) (A : H →ₗ.[ℂ] H) : Prop :=
 ### Operators commuting with a unitary
 -/
 
+omit [CompleteSpace H] in
 /--
 If the unitary `U` commutes with `A`, then `(UC)(CAC⁻¹)(UC)⁻¹ = A`, including domains.
 
@@ -364,7 +365,7 @@ theorem approximant_convergence {c : H →ₗ.[ℂ] H} (hc : HasDenseDomain c) (
         fun x => ((n / (n + Real.sqrt x) : ℝ) : ℂ)).domain,
       Tendsto (fun n : ℕ => functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
         (fun x => ((n / (n + Real.sqrt x) : ℝ) : ℂ)) ⟨φ, hR n⟩) atTop (𝓝 φ)) ∧
-    ∀ ψ (hψ : ψ ∈ c.domain),
+    ∀ ψ, ψ ∈ c.domain →
       ∃ hK : ∀ n : ℕ, ψ ∈ (functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
           fun x => ((Real.sqrt x * (n / (n + Real.sqrt x)) : ℝ) : ℂ)).domain,
       ∃ h : ψ ∈ (absoluteValue c hc hcl).domain,
@@ -587,13 +588,13 @@ theorem pmapMul_inv_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfA
   rw [inv_pow, Real.sq_sqrt hx]
 
 /--
-For a positive, self-adjoint, injective `A`, `A⁻¹` is self-adjoint and
+For a self-adjoint, injective `A`, `A⁻¹` is self-adjoint and
 `(A⁻¹)^{1/2} = s(A⁻¹) = A^{-1/2}`.
 
 Blueprint: lmm:sqrt-of-inverse
 -/
 theorem sqrt_functionalCalculus_inverse {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
-    (hpos : IsPositive A) (hinj : ker A = ⊥) :
+    (hinj : ker A = ⊥) :
     ∃ h : IsSelfAdjoint A.inverse,
       functionalCalculus h (fun x => ((Real.sqrt x : ℝ) : ℂ)) =
         functionalCalculus hA fun x => (((Real.sqrt x)⁻¹ : ℝ) : ℂ) := by

@@ -28,6 +28,7 @@ open Physicslib4.Spectral.Unbounded
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
+omit [CompleteSpace H] in
 /--
 Under the commutant bound `‖b' ψ‖ ≤ c ‖b' Ω‖`, `b' Ω ↦ b' ψ` is a well-defined linear map
 `T₀ : M' Ω → H`, unique, with `‖T₀ η‖ ≤ c ‖η‖`.
@@ -37,8 +38,7 @@ since `M'` is a linear subspace.
 
 Blueprint: lmm:commutant-extension-well-defined
 -/
-theorem commutantExtension_linearMap {M : Set (H →L[ℂ] H)} {Ω : H}
-    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) {ψ : H} {c : ℝ} (hc : 0 ≤ c)
+theorem commutantExtension_linearMap {M : Set (H →L[ℂ] H)} {Ω : H} {ψ : H} {c : ℝ}
     (hψ : ∀ b ∈ Set.centralizer M, ‖b ψ‖ ≤ c * ‖b Ω‖) :
     (∃! T₀ : Submodule.span ℂ ((fun b => b Ω) '' Set.centralizer M) →ₗ[ℂ] H,
       ∀ (b : H →L[ℂ] H) (hb : b ∈ Set.centralizer M),
@@ -100,12 +100,12 @@ Implementation note: extending `T₀` of `commutantExtension_linearMap` is state
 Blueprint: lmm:commutant-extension-bounded
 -/
 theorem commutantExtension_bounded {M : Set (H →L[ℂ] H)} {Ω : H}
-    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) {ψ : H} {c : ℝ} (hc : 0 ≤ c)
+    (hΩ : IsCyclicSeparatingVector M Ω) {ψ : H} {c : ℝ} (hc : 0 ≤ c)
     (hψ : ∀ b ∈ Set.centralizer M, ‖b ψ‖ ≤ c * ‖b Ω‖) :
     ∃ T : H →L[ℂ] H, (∀ b ∈ Set.centralizer M, T (b Ω) = b ψ) ∧ ‖T‖ ≤ c ∧
       ∀ T' : H →L[ℂ] H, (∀ b ∈ Set.centralizer M, T' (b Ω) = b ψ) → T' = T := by
   set S := Submodule.span ℂ ((fun b => b Ω) '' Set.centralizer M)
-  obtain ⟨⟨T₀, hT₀, -⟩, hbd⟩ := commutantExtension_linearMap hM hΩ hc hψ
+  obtain ⟨⟨T₀, hT₀, -⟩, hbd⟩ := commutantExtension_linearMap hψ
   let T₁ : S →L[ℂ] H := T₀.mkContinuous c (hbd T₀ hT₀)
   have hdr : DenseRange S.subtypeL := (hΩ.2.mono Submodule.subset_span).denseRange_val
   have hui : IsUniformInducing S.subtypeL := isUniformEmbedding_subtype_val.isUniformInducing
@@ -154,7 +154,7 @@ theorem commutantExtension {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) {ψ : H} {c : ℝ} (hc : 0 ≤ c)
     (hψ : ∀ b ∈ Set.centralizer M, ‖b ψ‖ ≤ c * ‖b Ω‖) :
     ∃ a ∈ M, a Ω = ψ ∧ ‖a‖ ≤ c ∧ ∀ a' ∈ M, a' Ω = ψ → a' = a := by
-  obtain ⟨T, hT, hTc, -⟩ := commutantExtension_bounded hM hΩ hc hψ
+  obtain ⟨T, hT, hTc, -⟩ := commutantExtension_bounded hΩ hc hψ
   have hTΩ : T Ω = ψ := hT 1 Set.one_mem_centralizer
   have hTM := (commutantExtension_mem hM hΩ T hT).2
   refine ⟨T, hTM, hTΩ, hTc, fun a' ha' h => ?_⟩
@@ -476,6 +476,7 @@ theorem takesakiBall_closure_isClosed_convex {M : Set (H →L[ℂ] H)} (hM : IsV
   rw [← hA]
   exact zero_mem A
 
+omit [CompleteSpace H] in
 /--
 Every `ξ ∈ 𝒦_c` satisfies `‖b' ξ‖ ≤ c ‖b' Ω‖` for all `b' ∈ M'`.
 
@@ -607,13 +608,13 @@ theorem tomitaOperator_exists_seq_tendsto {M : Set (H →L[ℂ] H)} {Ω : H}
   exact ⟨h, hhM, hlim⟩
 
 /--
-`G` is Lipschitz in `(u, v)`, uniformly in `a ∈ 𝓑_c`:
+`G` is Lipschitz in `(u, v)`, uniformly in `a` with `‖a‖ ≤ c`:
 `|G(u, v; a) - G(u₁, v₁; a)| ≤ (‖a' Ω‖ + |z| c ‖Ω‖) ‖u - u₁‖ + c ‖Ω‖ ‖v - v₁‖`.
 
 Blueprint: lmm:takesaki-G-lipschitz
 -/
-theorem takesakiG_lipschitz {M : Set (H →L[ℂ] H)} {Ω : H} (z : ℂ) (a' : H →L[ℂ] H) {c : ℝ}
-    (u v u₁ v₁ : H) {a : H →L[ℂ] H} (ha : a ∈ M) (hac : ‖a‖ ≤ c) :
+theorem takesakiG_lipschitz {Ω : H} (z : ℂ) (a' : H →L[ℂ] H) {c : ℝ}
+    (u v u₁ v₁ : H) {a : H →L[ℂ] H} (hac : ‖a‖ ≤ c) :
     |((⟪u, a' Ω⟫_ℂ).re - (z * ⟪u, a Ω⟫_ℂ - ⟪star a Ω, v⟫_ℂ).re) -
         ((⟪u₁, a' Ω⟫_ℂ).re - (z * ⟪u₁, a Ω⟫_ℂ - ⟪star a Ω, v₁⟫_ℂ).re)| ≤
       (‖a' Ω‖ + ‖z‖ * c * ‖Ω‖) * ‖u - u₁‖ + c * ‖Ω‖ * ‖v - v₁‖ := by
@@ -666,7 +667,7 @@ theorem takesakiG_uniform_approximation {M : Set (H →L[ℂ] H)} {Ω : H}
   refine ⟨h n, hhM n, fun a ha hac => ?_⟩
   have hc : 0 ≤ c := (norm_nonneg a).trans hac
   have hL := takesakiG_lipschitz (Ω := Ω) z a' (χ : H) (tomitaOperator M Ω C χ) (h n Ω)
-    (star (h n) Ω) ha hac
+    (star (h n) Ω) hac
   rw [dist_comm, dist_eq_norm] at hn1 hn2
   have hAc : ‖a' Ω‖ + ‖z‖ * c * ‖Ω‖ = A := by simp [A, abs_of_nonneg hc]
   have hBc : c * ‖Ω‖ = B := by simp [B, abs_of_nonneg hc]
@@ -682,31 +683,31 @@ For self-adjoint `x ∈ M` and `f : ℝ → ℝ`, the continuous functional calc
 Blueprint: lmm:cfc-mem-von-neumann
 -/
 theorem cfc_mem_of_isVonNeumannSet {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet M)
-    {x : H →L[ℂ] H} (hx : x ∈ M) (hsa : IsSelfAdjoint x) (f : ℝ → ℝ) : cfc f x ∈ M := by
+    {x : H →L[ℂ] H} (hx : x ∈ M) (f : ℝ → ℝ) : cfc f x ∈ M := by
   rw [← hM.2]
   exact fun d hd => ((Commute.cfc_real (hd x hx) f).eq).symm
 
 /--
-For `h ∈ M` and `ε > 0`, `P_ε^s ∈ M`. The other conjuncts of the blueprint lemma are
+For `h ∈ M`, `P_ε^s ∈ M`. The other conjuncts of the blueprint lemma are
 `takesakiShiftedPow_isSelfAdjoint`, `takesakiShiftedPow_mul`, `takesakiShiftedPow_zero`,
 `takesakiShiftedPow_commute` and `takesakiShiftedPow_norm_le`.
 
 Blueprint: lmm:takesaki-shifted-powers
 -/
 theorem takesakiShiftedPow_mem {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet M)
-    {h : H →L[ℂ] H} (hh : h ∈ M) {ε : ℝ} (hε : 0 < ε) (s : ℝ) : P[h, ε, s] ∈ M := by
+    {h : H →L[ℂ] H} (hh : h ∈ M) (ε s : ℝ) : P[h, ε, s] ∈ M := by
   obtain ⟨A, hA⟩ := (isVonNeumannSet_centralizer hM).2.2.1
   have hP : star h * h ∈ M := by
     rw [← hA] at hh ⊢
     exact mul_mem (star_mem hh) hh
-  exact cfc_mem_of_isVonNeumannSet hM hP (IsSelfAdjoint.star_mul_self h) _
+  exact cfc_mem_of_isVonNeumannSet hM hP _
 
 /--
 `P_ε^s` is self-adjoint (a conjunct of `takesakiShiftedPow_mem`).
 
 Blueprint: lmm:takesaki-shifted-powers
 -/
-theorem takesakiShiftedPow_isSelfAdjoint (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) (s : ℝ) :
+theorem takesakiShiftedPow_isSelfAdjoint (h : H →L[ℂ] H) (ε s : ℝ) :
     IsSelfAdjoint (P[h, ε, s]) :=
   cfc_predicate _ _
 
@@ -729,7 +730,7 @@ theorem takesakiShiftedPow_mul (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) (s 
 
 Blueprint: lmm:takesaki-shifted-powers
 -/
-theorem takesakiShiftedPow_zero (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) :
+theorem takesakiShiftedPow_zero (h : H →L[ℂ] H) (ε : ℝ) :
     P[h, ε, 0] = 1 := by
   simp only [Real.rpow_zero]
   exact cfc_const_one ℝ (star h * h)
@@ -739,7 +740,7 @@ theorem takesakiShiftedPow_zero (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) :
 
 Blueprint: lmm:takesaki-shifted-powers
 -/
-theorem takesakiShiftedPow_commute (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε) (s : ℝ) :
+theorem takesakiShiftedPow_commute (h : H →L[ℂ] H) (ε s : ℝ) :
     P[h, ε, s] * (star h * h) = (star h * h) * P[h, ε, s] :=
   ((Commute.refl _).cfc_real _).eq
 
@@ -774,16 +775,16 @@ theorem takesaki_approximate_polar {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannS
   have hQQ : P[h, ε, -(1/4)] * P[h, ε, -(1/4)] = P[h, ε, -(1/2)] := by
     rw [takesakiShiftedPow_mul h hε]; norm_num
   have hstar : star (P[h, ε, -(1/4)] * star h) = h * P[h, ε, -(1/4)] := by
-    rw [star_mul, star_star, (takesakiShiftedPow_isSelfAdjoint h hε _).star_eq]
-  have hP := takesakiShiftedPow_commute h hε (-(1/4))
+    rw [star_mul, star_star, (takesakiShiftedPow_isSelfAdjoint h ε _).star_eq]
+  have hP := takesakiShiftedPow_commute h ε (-(1/4))
   have hQ : ∀ s : ℝ, P[h, ε, s] ∈ A := fun s => by
-    rw [← SetLike.mem_coe, hA]; exact takesakiShiftedPow_mem hM hh hε s
+    rw [← SetLike.mem_coe, hA]; exact takesakiShiftedPow_mem hM hh ε s
   rw [← hA] at hh
   refine ⟨?_, ?_, hstar, ?_, ?_, ?_⟩
   · rw [← hA]; exact mul_mem hh (hQ _)
   · rw [← hA]; exact mul_mem (hQ _) (star_mem hh)
   · rw [← mul_assoc, takesakiShiftedPow_mul h hε, show (1/4 : ℝ) + -(1/4) = 0 by norm_num,
-      takesakiShiftedPow_zero h hε, one_mul]
+      takesakiShiftedPow_zero h ε, one_mul]
   · rw [hstar, ← hQQ]
     calc star h * (h * (P[h, ε, -(1/4)] * P[h, ε, -(1/4)]))
         = (star h * h * P[h, ε, -(1/4)]) * P[h, ε, -(1/4)] := by noncomm_ring
@@ -864,7 +865,7 @@ theorem takesaki_shifted_root_bound (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε
     (continuous_const.add (continuous_id.max continuous_const)).rpow_const
       fun x => Or.inl (hpos x).ne'
   have hR : ∀ s : ℝ, star (P[h, ε, s]) = P[h, ε, s] := fun s =>
-    (takesakiShiftedPow_isSelfAdjoint h hε s).star_eq
+    (takesakiShiftedPow_isSelfAdjoint h ε s).star_eq
   -- `P_ε^{1/2} = P_ε^{-1/4} P P_ε^{-1/4} + ε P_ε^{-1/2}`
   have hdec : P[h, ε, 1/4] * P[h, ε, 1/4] =
       P[h, ε, -(1/4)] * (star h * h) * P[h, ε, -(1/4)] + ε • P[h, ε, -(1/2)] := by
@@ -900,7 +901,7 @@ theorem takesaki_shifted_root_bound (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < ε
   rw [hstar]
   have key : ‖Q Ω‖ ^ 2 = ‖(h * R) Ω‖ ^ 2 + RCLike.re ⟪Ω, (ε • P[h, ε, -(1/2)]) Ω⟫_ℂ := by
     have hsym : ∀ s : ℝ, ∀ x y : H, ⟪x, P[h, ε, s] y⟫_ℂ = ⟪P[h, ε, s] x, y⟫_ℂ := fun s x y =>
-      ((takesakiShiftedPow_isSelfAdjoint h hε s).isSymmetric x y).symm
+      ((takesakiShiftedPow_isSelfAdjoint h ε s).isSymmetric x y).symm
     have hh : ∀ x y : H, ⟪x, star h y⟫_ℂ = ⟪h x, y⟫_ℂ := fun x y => by
       rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_right]
     have e1 : ‖Q Ω‖ ^ 2 = RCLike.re ⟪Ω, (Q * Q) Ω⟫_ℂ := by
@@ -940,7 +941,7 @@ theorem takesaki_numerator_bound {M : Set (H →L[ℂ] H)} (hM : IsVonNeumannSet
   obtain ⟨-, hxM, -, hpol, -, -⟩ := takesaki_approximate_polar hM hh hε
   set x := P[h, ε, -(1/4)] * star h
   set R := P[h, ε, 1/4]
-  have hRsa : star R = R := (takesakiShiftedPow_isSelfAdjoint h hε _).star_eq
+  have hRsa : star R = R := (takesakiShiftedPow_isSelfAdjoint h ε _).star_eq
   have hh' : h = star x * R := by
     rw [← star_star h, hpol, star_mul, hRsa]
   have hcomm : x * a' = a' * x := ha' x hxM
@@ -991,8 +992,8 @@ theorem takesaki_test_inner_products (h : H →L[ℂ] H) {ε : ℝ} (hε : 0 < �
   have hQQ : P[h, ε, -(1/4)] * P[h, ε, -(1/4)] = P[h, ε, -(1/2)] := by
     rw [takesakiShiftedPow_mul h hε]; norm_num
   have hstar : star (P[h, ε, -(1/4)] * star h) = h * P[h, ε, -(1/4)] := by
-    rw [star_mul, star_star, (takesakiShiftedPow_isSelfAdjoint h hε _).star_eq]
-  have hP := takesakiShiftedPow_commute h hε (-(1/4))
+    rw [star_mul, star_star, (takesakiShiftedPow_isSelfAdjoint h ε _).star_eq]
+  have hP := takesakiShiftedPow_commute h ε (-(1/4))
   have h1 : star h * (h * P[h, ε, -(1/2)]) =
       (P[h, ε, -(1/4)] * star h) * star (P[h, ε, -(1/4)] * star h) := by
     rw [hstar, ← hQQ]

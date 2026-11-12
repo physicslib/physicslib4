@@ -147,7 +147,7 @@ theorem self_add_I_smul_cfcSqrt_mem_of_isVonNeumannSet {M : Set (H →L[ℂ] H)}
       sq_le_one_iff₀ (by positivity)]
   have hs : CFC.sqrt (1 - a ^ 2) ∈ A := by
     rw [CFC.sqrt_eq_real_sqrt _ hnn, cfcₙ_eq_cfc]
-    exact cfc_mem_of_isVonNeumannSet hM (A.sub_mem A.one_mem (A.pow_mem ha' 2)) (by cfc_tac) _
+    exact cfc_mem_of_isVonNeumannSet hM (A.sub_mem A.one_mem (A.pow_mem ha' 2)) _
   have hmem : a + Complex.I • CFC.sqrt (1 - a ^ 2) ∈ A := A.add_mem ha' (A.smul_mem hs _)
   exact ⟨IsSelfAdjoint.self_add_I_smul_cfcSqrt_sub_sq_mem_unitary a hsa hnorm, hmem,
     star_mem hmem⟩
@@ -315,13 +315,10 @@ theorem tomitaAdjoint_leftMap_closure_props {M : Set (H →L[ℂ] H)} {Ω : H}
   rw [adjoint_closure_eq_adjoint hd hcl]
   exact hadj 1 h1
 
-/-- For `(ξ, η) ∈ Γ(S*)`, every unitary `U` in `M` commutes with the closure `c` of `a₀`.
+/-- Every unitary `U` in `M` commutes with the closure `c` of `a₀ : x Ω ↦ x ξ`.
 Blueprint: lmm:tomita-adjoint-closure-commutes -/
 theorem tomitaAdjoint_leftMap_closure_commute {M : Set (H →L[ℂ] H)} {Ω : H}
-    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
-    (hC : ∀ x, C (C x) = x) {ξ η : H}
-    (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
-      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) {ξ : H}
     (U : H ≃ₗᵢ[ℂ] H) (hU : (U.toContinuousLinearEquiv : H →L[ℂ] H) ∈ M) :
     UnitaryCommutes U (tomitaLeftMap M Ω ξ).closure := by
   set f := tomitaLeftMap M Ω ξ
@@ -373,14 +370,11 @@ theorem tomitaAdjoint_leftMap_closure_commute {M : Set (H →L[ℂ] H)} {Ω : H}
       LinearIsometryEquiv.star_eq_symm] at this
   exact ⟨hcl _ (h0 _ hU), hcl _ (h0 _ hUs)⟩
 
-/-- For `(ξ, η) ∈ Γ(S*)`, the approximant `x_n` (`x_n ψ = c R_n ψ`) of the closure `c` of `a₀`
-lies in `M′` for `n ≥ 1`.
+/-- When the closure `c` of `a₀` is closed and densely defined, the approximant `x_n`
+(`x_n ψ = c R_n ψ`) lies in `M′` for `n ≥ 1`.
 Blueprint: lmm:tomita-adjoint-approximants-commutant -/
 theorem tomitaAdjoint_approximant_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
-    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
-    (hC : ∀ x, C (C x) = x) {ξ η : H}
-    (hξη : ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
-      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η)
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) {ξ : H}
     (hc : HasDenseDomain (tomitaLeftMap M Ω ξ).closure)
     (hcl : (tomitaLeftMap M Ω ξ).closure.IsClosed) (n : ℕ) (hn : 1 ≤ n)
     (x : H →L[ℂ] H)
@@ -393,7 +387,7 @@ theorem tomitaAdjoint_approximant_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω 
   refine mem_centralizer_of_commute_unitary hM fun u hu huM => ?_
   let U : H ≃ₗᵢ[ℂ] H := Unitary.linearIsometryEquiv ⟨u, hu⟩
   have hcomm := approximant_operator_commute hc hcl U
-    (tomitaAdjoint_leftMap_closure_commute hM hΩ C hC hξη U huM) n hn x hx
+    (tomitaAdjoint_leftMap_closure_commute hM hΩ U huM) n hn x hx
   exact ContinuousLinearMap.ext hcomm
 
 /-- For `(ξ, η) ∈ Γ(S*)` and the approximants `x_n` of the closure `c` of `a₀`,
@@ -480,7 +474,7 @@ theorem mem_tomitaAdjoint_iff_mem_closure_graph {M : Set (H →L[ℂ] H)} {Ω : 
   obtain ⟨h1, h2⟩ := tomitaAdjoint_approximant_tendsto hM hΩ C hC hξη hc hcl x hxs
   refine mem_closure_of_tendsto (h1.prodMk_nhds h2) ?_
   filter_upwards [Filter.eventually_ge_atTop 1] with n hn
-  exact ⟨x n, tomitaAdjoint_approximant_mem_centralizer hM hΩ C hC hξη hc hcl n hn _ (hxs n hn),
+  exact ⟨x n, tomitaAdjoint_approximant_mem_centralizer hM hΩ hc hcl n hn _ (hxs n hn),
     by simp only [ContinuousLinearMap.star_eq_adjoint]⟩
 
 /-! ### The polar decomposition of `S*` -/
@@ -712,7 +706,7 @@ theorem modularOperatorSqrt_modularConjugation_centralizer {M : Set (H →L[ℂ]
       modularConjugation hM hΩ C hC x := by
   obtain ⟨hM', hΩ'⟩ := isCyclicSeparatingVector_centralizer hM hΩ
   obtain ⟨hpos, hsa, -, hker, -, -⟩ := modularOperator_properties hM hΩ C hC
-  obtain ⟨h, heq⟩ := sqrt_functionalCalculus_inverse hsa hpos hker
+  obtain ⟨h, heq⟩ := sqrt_functionalCalculus_inverse hsa hker
   have htr : ∀ {B D : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (hD : IsSelfAdjoint D), B = D →
       functionalCalculus hB (fun x => ((Real.sqrt x : ℝ) : ℂ)) =
         functionalCalculus hD (fun x => ((Real.sqrt x : ℝ) : ℂ)) := by
