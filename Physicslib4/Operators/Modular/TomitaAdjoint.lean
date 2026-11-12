@@ -573,7 +573,8 @@ Blueprint: lmm:commutant-cyclic-separating -/
 theorem isCyclicSeparatingVector_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) :
     IsVonNeumannSet (Set.centralizer M) ∧ IsCyclicSeparatingVector (Set.centralizer M) Ω := by
-  sorry
+  obtain ⟨h1, h2, -⟩ := isVonNeumannSet_centralizer hM
+  exact ⟨h1, hΩ.2, by rw [h2]; exact hΩ.1⟩
 
 /-- `(ξ, η) ∈ Γ(S_{M′})` if and only if `ξ ∈ Dom Δ^{-1/2}` and `η = J Δ^{-1/2} ξ`, if and only
 if `(ξ, η) ∈ Γ(S*)`.
@@ -589,7 +590,35 @@ theorem tomitaOperator_centralizer_iff {M : Set (H →L[ℂ] H)} {Ω : H}
         η = modularConjugation hM hΩ C hC (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h⟩)) ↔
       ∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
         (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) := by
-  sorry
+  obtain ⟨hM', hΩ'⟩ := isCyclicSeparatingVector_centralizer hM hΩ
+  have hF : Set.range (fun x : tomitaPreDomain (Set.centralizer M) Ω =>
+      ((x : H), tomitaPre (Set.centralizer M) Ω x)) =
+      (fun b : H →L[ℂ] H => (b Ω, star b Ω)) '' Set.centralizer M := by
+    ext p
+    constructor
+    · rintro ⟨x, rfl⟩
+      obtain ⟨b, hb, hbx⟩ := Submodule.mem_map.mp x.2
+      have hb' : b ∈ Set.centralizer M := (span_eq_of_isVonNeumannSet hM').subset hb
+      have e : x = ⟨b Ω, Submodule.mem_map_of_mem (Submodule.subset_span hb')⟩ :=
+        Subtype.ext hbx.symm
+      rw [e]
+      exact ⟨b, hb', Prod.ext rfl ((tomitaPre_apply hM hΩ).2 b hb').symm⟩
+    · rintro ⟨b, hb, rfl⟩
+      exact ⟨⟨b Ω, Submodule.mem_map_of_mem (Submodule.subset_span hb)⟩,
+        Prod.ext rfl ((tomitaPre_apply hM hΩ).2 b hb)⟩
+  have hA : (∃ h : ξ ∈ (linearizedTomitaPre (Set.centralizer M) Ω C).closure.domain,
+      tomitaOperator (Set.centralizer M) Ω C ⟨ξ, h⟩ = η) ↔
+      (ξ, η) ∈ closure ((fun b : H →L[ℂ] H => (b Ω, star b Ω)) '' Set.centralizer M) := by
+    rw [← hF, ← tomitaOperator_graph_eq_closure hM' hΩ' C hC]
+    constructor
+    · rintro ⟨h, rfl⟩
+      exact ⟨⟨ξ, h⟩, rfl⟩
+    · rintro ⟨x, hx⟩
+      obtain ⟨h1, h2⟩ := Prod.mk.inj hx
+      subst h1
+      exact ⟨x.2, h2⟩
+  obtain ⟨hB, hC'⟩ := mem_tomitaAdjoint_iff_modularOperatorInvSqrt hM hΩ C hC ξ η
+  exact ⟨hA.trans hC', hB.symm⟩
 
 /-- `ψ ∈ Dom Δ_{M′}` with `Δ_{M′} ψ = χ` if and only if `ψ ∈ Dom Δ^{-1/2}` and
 `⟪Δ^{-1/2} ψ, Δ^{-1/2} φ⟫ = ⟪χ, φ⟫` for every `φ ∈ Dom Δ^{-1/2}`.

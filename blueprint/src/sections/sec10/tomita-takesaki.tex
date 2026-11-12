@@ -2146,6 +2146,7 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
     $\mathcal{M}'$ is a von Neumann algebra on $\mathbf{H}$, and $\Omega$ is cyclic and separating for $\mathcal{M}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-von-neumann-algebra}
     $\mathcal{M}'$ is a von Neumann algebra and $(\mathcal{M}')' = \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}). So the two density conditions of \ref{def:cyclic-separating-vector} for $\mathcal{M}'$, density of $\mathcal{M}'\Omega$ and of $(\mathcal{M}')'\Omega = \mathcal{M}\Omega$, are those for $\mathcal{M}$ in the other order.
 \end{proof}
@@ -2158,6 +2159,7 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
     Let $\xi, \eta \in \mathbf{H}$. Then $\xi \in \text{Dom}(S_{\mathcal{M}'})$ and $S_{\mathcal{M}'}\xi = \eta$ if and only if $\xi \in \text{Dom}(\Delta^{-1/2})$ and $\eta = J\Delta^{-1/2}\xi$, if and only if $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-cyclic-separating, lmm:tomita-operator-independent-of-c, lmm:tomita-pre-operators-apply, thrm:tomita-adjoint-eq-closure, crllr:tomita-adjoint-polar}
     By Lemma~\ref{lmm:tomita-pre-operators-apply} for $(\mathcal{M}', \Omega)$, the graph of its pre-operator $S_0$ is $\{ (b'\Omega, b'^*\Omega) \mid b' \in \mathcal{M}' \} = \Gamma(F_0)$, so Lemma~\ref{lmm:tomita-operator-independent-of-c} for $(\mathcal{M}', \Omega)$ identifies $\Gamma(S_{\mathcal{M}'})$ with the closure of $\Gamma(F_0)$. Theorem~\ref{thrm:tomita-adjoint-eq-closure} and Corollary~\ref{crllr:tomita-adjoint-polar} give the two equivalences.
 \end{proof}
