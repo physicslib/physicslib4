@@ -112,7 +112,12 @@ theorem realPart_imaginaryPart_mem_of_isVonNeumannSet {M : Set (H →L[ℂ] H)}
     (hM : IsVonNeumannSet M) {y : H →L[ℂ] H} (hy : y ∈ M) :
     ((ℜ y : selfAdjoint (H →L[ℂ] H)) : H →L[ℂ] H) ∈ M ∧
       ((ℑ y : selfAdjoint (H →L[ℂ] H)) : H →L[ℂ] H) ∈ M := by
-  sorry
+  obtain ⟨A, rfl⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+  have hy' : y ∈ A := hy
+  rw [realPart_apply_coe, imaginaryPart_apply_coe, RCLike.real_smul_eq_coe_smul (K := ℂ),
+    RCLike.real_smul_eq_coe_smul (K := ℂ)]
+  have hs : star y ∈ A := star_mem hy'
+  exact ⟨A.smul_mem (A.add_mem hy' hs) _, A.smul_mem (A.smul_mem (A.sub_mem hy' hs) _) _⟩
 
 /-- A nonzero `x ∈ M` is `x = (‖x‖ / 2) (u₁ + u₁* + i (u₂ + u₂*))` for unitaries `u₁, u₂` with
 `u₁, u₁*, u₂, u₂* ∈ M`.

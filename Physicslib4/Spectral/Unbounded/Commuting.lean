@@ -533,7 +533,39 @@ theorem pmapMul_functionalCalculus_self {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoi
       pmapMul (functionalCalculus hA fun x => (f x : ℂ))
           (functionalCalculus hA fun x => (f x : ℂ)) =
         functionalCalculus hA fun x => ((f x ^ 2 : ℝ) : ℂ) := by
-  sorry
+  set μ := spectralMeasure hA
+  have hF : Measurable fun x => (f x : ℂ) := Complex.measurable_ofReal.comp hf
+  have hsq : ((fun x => (f x : ℂ)) * fun x => (f x : ℂ)) = fun x => ((f x ^ 2 : ℝ) : ℂ) := by
+    funext x; simp [sq]
+  have hdom : integralDomain μ (fun x => ((f x ^ 2 : ℝ) : ℂ)) ≤
+      integralDomain μ (fun x => (f x : ℂ)) := by
+    intro ψ hψ
+    rw [mem_integralDomain] at hψ ⊢
+    have : MeasureTheory.IsFiniteMeasure (μ.assoc ψ) :=
+      ⟨by rw [assoc_univ_eq]; exact ENNReal.ofReal_lt_top⟩
+    refine (hψ.add (MeasureTheory.memLp_const (1 : ℂ))).of_le hF.aestronglyMeasurable
+      (Eventually.of_forall fun x => ?_)
+    have h1 : ‖((f x ^ 2 : ℝ) : ℂ) + 1‖ = f x ^ 2 + 1 := by
+      rw [← Complex.ofReal_one, ← Complex.ofReal_add, Complex.norm_real,
+        Real.norm_of_nonneg (by positivity)]
+    rw [Pi.add_apply, h1, Complex.norm_real, Real.norm_eq_abs]
+    nlinarith [sq_abs (f x), abs_nonneg (f x)]
+  have hcomp := pmapIntegral_comp μ hF hF
+  refine ⟨hdom, LinearPMap.ext ?_ ?_⟩
+  · ext ψ
+    rw [mem_domain_pmapMul_iff]
+    have := Set.ext_iff.1 hcomp.1 ψ
+    simp only [Set.mem_ofPred_eq, Set.mem_inter_iff, SetLike.mem_coe, hsq] at this
+    exact this.trans ⟨fun h => h.2, fun h => ⟨hdom h, h⟩⟩
+  · intro ψ h1 h2
+    obtain ⟨hx, hy⟩ := (mem_domain_pmapMul_iff _ _ _).1 h1
+    rw [pmapMul_apply _ _ ⟨ψ, h1⟩ hy]
+    obtain ⟨hfg, e⟩ := hcomp.2 ⟨ψ, hx⟩ hy
+    have key : ∀ (g : ℝ → ℂ) (_ : g = fun x => ((f x ^ 2 : ℝ) : ℂ))
+        (h : ψ ∈ integralDomain μ g), pmapIntegral μ g ⟨ψ, h⟩ =
+          functionalCalculus hA (fun x => ((f x ^ 2 : ℝ) : ℂ)) ⟨ψ, h2⟩ := by
+      rintro _ rfl _; rfl
+    exact e.symm.trans (key _ hsq hfg)
 
 /--
 For a positive, self-adjoint, injective `A`, `A^{-1/2} A^{-1/2} = A⁻¹`, including domains.

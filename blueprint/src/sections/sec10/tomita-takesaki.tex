@@ -1957,6 +1957,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     Let $y \in \mathcal{M}$. Then the real part $\Re y = \tfrac{1}{2}(y + y^*)$ and the imaginary part $\Im y = -\tfrac{i}{2}(y - y^*)$ of $y$ in $\mathcal{B}(\mathbf{H})$ (Mathlib's \texttt{realPart} and \texttt{imaginaryPart}) lie in $\mathcal{M}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-von-neumann-algebra}
     Mathlib's \texttt{realPart\_apply\_coe} and \texttt{imaginaryPart\_apply\_coe} give the two formulas. $\mathcal{M}$ is a complex linear subspace closed under adjoints (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $y^* \in \mathcal{M}$ and both combinations lie in $\mathcal{M}$.
 \end{proof}
@@ -2166,6 +2167,7 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{R}$ measurable. Then $W_{f^2} \subset W_f$, and $f(A)f(A) = (f^2)(A)$, including domains.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-10.2, def:projection-valued-measure, thrm:fc-composition}
     Let $\psi \in W_{f^2}$. Since $|f|^2 \le 1 + |f|^4$ and $\mu^A_\psi(\mathbb{R}) = \|\psi\|^2 < \infty$ (Definition~\ref{def:projection-valued-measure}), $\int |f|^2 \, d\mu^A_\psi \le \|\psi\|^2 + \int |f^2|^2 \, d\mu^A_\psi < \infty$, so $\psi \in W_f$ (Proposition~\ref{prpstn:hall-10.2}). Theorem~\ref{thrm:fc-composition} with $g = f$ gives $f(A)f(A) \subset (f^2)(A)$ with $\text{Dom}(f(A)f(A)) = W_f \cap W_{f^2} = W_{f^2} = \text{Dom}((f^2)(A))$, so the two operators are equal.
 \end{proof}
