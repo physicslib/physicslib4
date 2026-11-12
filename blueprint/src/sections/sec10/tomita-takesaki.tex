@@ -2101,6 +2101,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $(\xi, \eta)$ lies in the closure of $\Gamma(F_0) = \{ (b'\Omega, b'^*\Omega) \mid b' \in \mathcal{M}' \}$ in $\mathbf{H} \times \mathbf{H}$. That is, the antilinear adjoint $S^*$ of $S$ is the closure of $F_0$, and $\mathcal{M}'\Omega$ is a core for $S^*$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-extends-closure, lmm:tomita-adjoint-approximants-commutant, lmm:tomita-adjoint-approximants-converge, lmm:componentwise-convergence, thrm:sequential-closedness}
     The reverse implication is Lemma~\ref{lmm:tomita-adjoint-extends-closure}. For the forward one, the operators $x_n$ of Lemma~\ref{lmm:tomita-adjoint-approximants-commutant} lie in $\mathcal{M}'$, so $(x_n\Omega, x_n^*\Omega) \in \Gamma(F_0)$, and $(x_n\Omega, x_n^*\Omega) \to (\xi, \eta)$ by Lemmas~\ref{lmm:tomita-adjoint-approximants-converge} and~\ref{lmm:componentwise-convergence}. Hence $(\xi, \eta)$ lies in the closure of $\Gamma(F_0)$ (Theorem~\ref{thrm:sequential-closedness}).
 \end{proof}

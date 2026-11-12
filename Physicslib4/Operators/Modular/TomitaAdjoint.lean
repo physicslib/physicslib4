@@ -464,7 +464,24 @@ theorem mem_tomitaAdjoint_iff_mem_closure_graph {M : Set (H →L[ℂ] H)} {Ω : 
     (∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
         (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
       (ξ, η) ∈ closure ((fun b : H →L[ℂ] H => (b Ω, star b Ω)) '' Set.centralizer M) := by
-  sorry
+  refine ⟨fun hξη => ?_, mem_tomitaAdjoint_of_mem_closure_graph hM hΩ C hC⟩
+  obtain ⟨-, hcl, hc, -⟩ := tomitaAdjoint_leftMap_closure_props hM hΩ C hC hξη
+  let x : ℕ → H →L[ℂ] H := fun n =>
+    if hn : 1 ≤ n then Classical.choose (approximant_operator hc hcl n hn) else 0
+  have hx : ∀ n (hn : 1 ≤ n), x n = Classical.choose (approximant_operator hc hcl n hn) :=
+    fun n hn => by simp only [x, hn, dite_true]
+  have hxs : ∀ n : ℕ, 1 ≤ n → ∀ ψ : (functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
+      fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)).domain,
+      ∃ h : functionalCalculus (isSelfAdjoint_adjointMulSelf hc hcl).1
+          (fun t => ((n / (n + Real.sqrt t) : ℝ) : ℂ)) ψ ∈ (tomitaLeftMap M Ω ξ).closure.domain,
+        x n ψ = (tomitaLeftMap M Ω ξ).closure ⟨_, h⟩ := fun n hn => by
+    rw [hx n hn]
+    exact (Classical.choose_spec (approximant_operator hc hcl n hn)).1
+  obtain ⟨h1, h2⟩ := tomitaAdjoint_approximant_tendsto hM hΩ C hC hξη hc hcl x hxs
+  refine mem_closure_of_tendsto (h1.prodMk_nhds h2) ?_
+  filter_upwards [Filter.eventually_ge_atTop 1] with n hn
+  exact ⟨x n, tomitaAdjoint_approximant_mem_centralizer hM hΩ C hC hξη hc hcl n hn _ (hxs n hn),
+    by simp only [ContinuousLinearMap.star_eq_adjoint]⟩
 
 /-! ### The polar decomposition of `S*` -/
 
