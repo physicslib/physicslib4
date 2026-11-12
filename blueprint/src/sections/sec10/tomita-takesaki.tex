@@ -1944,6 +1944,7 @@ Thus $R_n = (\mathbf{1} + |c|/n)^{-1}$.
     Let $a \in \mathcal{M}$ be self-adjoint with $\|a\| \le 1$. Then $u = a + i\sqrt{\mathbf{1} - a^2}$, with the square root of the continuous functional calculus of $\mathcal{B}(\mathbf{H})$ (Mathlib's \texttt{CFC.sqrt}), is unitary, and $u, u^* \in \mathcal{M}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:cfc-mem-von-neumann, lmm:commutant-von-neumann-algebra}
     $u$ is unitary by Mathlib's \texttt{IsSelfAdjoint.self\_add\_I\_smul\_cfcSqrt\_sub\_sq\_mem\_unitary} (for the Loewner order of $\mathcal{B}(\mathbf{H})$, \texttt{ContinuousLinearMap.instStarOrderedRing}). Since $\|a\| \le 1$, $\mathbf{1} - a^2 \ge 0$, so $\sqrt{\mathbf{1} - a^2}$ is the continuous functional calculus of the self-adjoint $\mathbf{1} - a^2 \in \mathcal{M}$ with the real function $\sqrt{\cdot}$ (Mathlib's \texttt{CFC.sqrt\_eq\_real\_sqrt}), which lies in $\mathcal{M}$ by Lemma~\ref{lmm:cfc-mem-von-neumann}. $\mathcal{M}$ is a self-adjoint subalgebra (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $u, u^* \in \mathcal{M}$.
 \end{proof}

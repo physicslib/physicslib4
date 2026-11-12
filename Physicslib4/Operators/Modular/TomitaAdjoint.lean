@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.Operators.Modular.Takesaki
 import Physicslib4.Spectral.Unbounded.Commuting
+import Mathlib.Analysis.CStarAlgebra.Unitary.Span
 
 /-!
 # The adjoint of the Tomita operator and the modular objects of the commutant
@@ -93,7 +94,17 @@ theorem self_add_I_smul_cfcSqrt_mem_of_isVonNeumannSet {M : Set (H →L[ℂ] H)}
     a + Complex.I • CFC.sqrt (1 - a ^ 2) ∈ unitary (H →L[ℂ] H) ∧
       a + Complex.I • CFC.sqrt (1 - a ^ 2) ∈ M ∧
       star (a + Complex.I • CFC.sqrt (1 - a ^ 2)) ∈ M := by
-  sorry
+  obtain ⟨A, rfl⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+  have ha' : a ∈ A := ha
+  have hnn : (0 : H →L[ℂ] H) ≤ 1 - a ^ 2 := by
+    rwa [sub_nonneg, ← CStarAlgebra.norm_le_one_iff_of_nonneg (a ^ 2), sq, hsa.norm_mul_self,
+      sq_le_one_iff₀ (by positivity)]
+  have hs : CFC.sqrt (1 - a ^ 2) ∈ A := by
+    rw [CFC.sqrt_eq_real_sqrt _ hnn, cfcₙ_eq_cfc]
+    exact cfc_mem_of_isVonNeumannSet hM (A.sub_mem A.one_mem (A.pow_mem ha' 2)) (by cfc_tac) _
+  have hmem : a + Complex.I • CFC.sqrt (1 - a ^ 2) ∈ A := A.add_mem ha' (A.smul_mem hs _)
+  exact ⟨IsSelfAdjoint.self_add_I_smul_cfcSqrt_sub_sq_mem_unitary a hsa hnorm, hmem,
+    star_mem hmem⟩
 
 /-- For `y ∈ M`, the real part `ℜ y` and the imaginary part `ℑ y` lie in `M`.
 Blueprint: lmm:von-neumann-real-imaginary-part -/
