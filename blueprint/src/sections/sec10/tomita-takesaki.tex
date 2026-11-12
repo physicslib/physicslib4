@@ -2172,6 +2172,7 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
     $\psi \in \text{Dom}(\Delta_{\mathcal{M}'})$ with $\Delta_{\mathcal{M}'}\psi = \chi$ if and only if $\psi \in \text{Dom}(\Delta^{-1/2})$ and $\left< \Delta^{-1/2}\psi, \Delta^{-1/2}\phi \right> = \left< \chi, \phi \right>$ for every $\phi \in \text{Dom}(\Delta^{-1/2})$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-operator-intrinsic, lmm:commutant-tomita-operator, lmm:antilinear-isometry-antiunitary, thrm:modular-conjugation-polar}
     Lemma~\ref{lmm:modular-operator-intrinsic} for $(\mathcal{M}', \Omega)$ describes $\Delta_{\mathcal{M}'}$ by $\psi \in \text{Dom}(S_{\mathcal{M}'})$ and $\left< S_{\mathcal{M}'}\phi, S_{\mathcal{M}'}\psi \right> = \left< \chi, \phi \right>$ for $\phi \in \text{Dom}(S_{\mathcal{M}'})$. By Lemma~\ref{lmm:commutant-tomita-operator}, $\text{Dom}(S_{\mathcal{M}'}) = \text{Dom}(\Delta^{-1/2})$ and $S_{\mathcal{M}'} = J\Delta^{-1/2}$ there, and $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar} and Lemma~\ref{lmm:antilinear-isometry-antiunitary}), so $\left< J\Delta^{-1/2}\phi, J\Delta^{-1/2}\psi \right> = \left< \Delta^{-1/2}\psi, \Delta^{-1/2}\phi \right>$.
 \end{proof}
@@ -2210,6 +2211,7 @@ Write $S_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}$, $\Delta_{\mathcal{M}'}^{1/2}$
     $\Delta_{\mathcal{M}'} = \Delta^{-1}$, including domains.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-modular-operator-intrinsic, lmm:characterizing-adjoint-domain-membership, lmm:inverse-square-root-positive, lmm:inverse-square-root-product, thrm:modular-operator-properties}
     Write $P = \Delta^{-1/2}$, which is self-adjoint (Lemma~\ref{lmm:inverse-square-root-positive}). By Lemma~\ref{lmm:characterizing-adjoint-domain-membership} and $P^* = P$, the condition of Lemma~\ref{lmm:commutant-modular-operator-intrinsic} says $\psi \in \text{Dom}(P)$, $P\psi \in \text{Dom}(P)$ and $PP\psi = \chi$, that is $\psi \in \text{Dom}(PP)$ and $PP\psi = \chi$. $PP = \Delta^{-1}$ by Lemma~\ref{lmm:inverse-square-root-product} for the positive, self-adjoint, injective $\Delta$ (Theorem~\ref{thrm:modular-operator-properties}).
 \end{proof}

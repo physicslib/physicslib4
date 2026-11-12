@@ -632,7 +632,33 @@ theorem mem_modularOperator_centralizer_iff {M : Set (H →L[ℂ] H)} {Ω : H}
         ∀ φ : (modularOperatorInvSqrt hM hΩ C hC).domain,
           ⟪modularOperatorInvSqrt hM hΩ C hC ⟨ψ, h⟩, modularOperatorInvSqrt hM hΩ C hC φ⟫_ℂ =
             ⟪χ, (φ : H)⟫_ℂ := by
-  sorry
+  obtain ⟨hM', hΩ'⟩ := isCyclicSeparatingVector_centralizer hM hΩ
+  set D := modularOperatorInvSqrt hM hΩ C hC
+  set J := modularConjugation hM hΩ C hC
+  set T := (linearizedTomitaPre (Set.centralizer M) Ω C).closure
+  have hJ : ∀ a b, ⟪J a, J b⟫_ℂ = ⟪b, a⟫_ℂ := fun a b =>
+    (inner_map_map_of_conjLinearIsometry J.toLinearIsometry a b).trans (inner_conj_symm _ _)
+  have hTD : ∀ x (h : x ∈ T.domain), ∃ h' : x ∈ D.domain,
+      tomitaOperator (Set.centralizer M) Ω C ⟨x, h⟩ = J (D ⟨x, h'⟩) := fun x h =>
+    ((tomitaOperator_centralizer_iff hM hΩ C hC x _).1.mp ⟨h, rfl⟩).imp fun _ e => e
+  have hDT : ∀ x (h' : x ∈ D.domain), ∃ h : x ∈ T.domain,
+      tomitaOperator (Set.centralizer M) Ω C ⟨x, h⟩ = J (D ⟨x, h'⟩) := fun x h' =>
+    (tomitaOperator_centralizer_iff hM hΩ C hC x _).1.mpr ⟨h', rfl⟩
+  rw [mem_modularOperator_iff hM' hΩ' C hC]
+  constructor
+  · rintro ⟨h, H⟩
+    obtain ⟨h', e⟩ := hTD ψ h
+    refine ⟨h', fun φ => ?_⟩
+    obtain ⟨hφ, eφ⟩ := hDT φ φ.2
+    have := H ⟨φ, hφ⟩
+    rw [eφ, e, hJ] at this
+    exact this
+  · rintro ⟨h', H⟩
+    obtain ⟨h, e⟩ := hDT ψ h'
+    refine ⟨h, fun φ => ?_⟩
+    obtain ⟨hφ, eφ⟩ := hTD φ φ.2
+    rw [eφ, e, hJ]
+    exact H ⟨φ, hφ⟩
 
 /-- `Δ_{M′} = Δ⁻¹`, including domains.
 Blueprint: lmm:commutant-modular-operator -/
@@ -640,7 +666,38 @@ theorem modularOperator_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) :
     modularOperator (Set.centralizer M) Ω C = (modularOperator M Ω C).inverse := by
-  sorry
+  obtain ⟨hpos, hsa, -, hker, -, -⟩ := modularOperator_properties hM hΩ C hC
+  set P := modularOperatorInvSqrt hM hΩ C hC
+  have hPsa : IsSelfAdjoint P := (inv_sqrt_functionalCalculus_positive hsa).2
+  have hPd : HasDenseDomain P := hPsa.dense_domain
+  have hPP : P.adjoint = P := hPsa.star_eq
+  have hg : ∀ (T : H →ₗ.[ℂ] H) x y, (x, y) ∈ T.graph ↔ ∃ h : x ∈ T.domain, T ⟨x, h⟩ = y :=
+    fun T x y => by
+      rw [LinearPMap.mem_graph_iff]
+      constructor
+      · rintro ⟨z, rfl, h2⟩
+        exact ⟨z.2, h2⟩
+      · rintro ⟨h, rfl⟩
+        exact ⟨⟨x, h⟩, rfl, rfl⟩
+  have key : ∀ w χ : H, (∀ φ : P.domain, ⟪w, P φ⟫_ℂ = ⟪χ, (φ : H)⟫_ℂ) ↔
+      ∃ h : w ∈ P.domain, P ⟨w, h⟩ = χ := fun w χ => by
+    have e : (∀ φ : P.domain, ⟪w, P φ⟫_ℂ = ⟪χ, (φ : H)⟫_ℂ) ↔
+        ∃ h : w ∈ P.adjoint.domain, P.adjoint ⟨w, h⟩ = χ :=
+      ⟨fun h => ⟨_, adjoint_apply_eq_of_forall_inner hPd
+          ((mem_adjoint_domain_iff_exists hPd w).mpr ⟨χ, h⟩) h⟩,
+        fun ⟨hw, e⟩ φ => e ▸ (LinearPMap.adjoint_isFormalAdjoint hPd ⟨w, hw⟩ φ).symm⟩
+    rw [hPP] at e
+    exact e
+  rw [← pmapMul_inv_sqrt_functionalCalculus hsa hpos hker]
+  refine LinearPMap.eq_of_eq_graph (Submodule.ext fun ⟨ψ, χ⟩ => ?_)
+  change (ψ, χ) ∈ (modularOperator (Set.centralizer M) Ω C).graph ↔ (ψ, χ) ∈ (pmapMul P P).graph
+  rw [mem_graph_pmapMul_iff, hg, mem_modularOperator_centralizer_iff hM hΩ C hC]
+  simp only [hg]
+  constructor
+  · rintro ⟨h, hφ⟩
+    exact ⟨_, ⟨h, rfl⟩, (key _ χ).mp hφ⟩
+  · rintro ⟨w, ⟨h, rfl⟩, hw⟩
+    exact ⟨h, (key _ χ).mpr hw⟩
 
 /-- `Δ_{M′}^{1/2} = Δ^{-1/2}` and `J_{M′} = J`.
 Blueprint: lmm:commutant-modular-conjugation -/
