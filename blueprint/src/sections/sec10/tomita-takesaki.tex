@@ -2116,6 +2116,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $J\xi \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}J\xi = \eta$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-intrinsic, thrm:modular-conjugation-polar, thrm:modular-conjugation-involution, lmm:antilinear-isometry-antiunitary, lmm:square-root-positive, thrm:modular-operator-properties, lmm:characterizing-adjoint-domain-membership}
     By Theorem~\ref{thrm:modular-conjugation-polar}, $\text{Dom}(S) = \text{Dom}(\Delta^{1/2})$ and $S\zeta = J\Delta^{1/2}\zeta$. Since $J(J\xi) = \xi$ (Theorem~\ref{thrm:modular-conjugation-involution}) and $J$ is antiunitary (Lemma~\ref{lmm:antilinear-isometry-antiunitary}), $\left< \xi, J\Delta^{1/2}\zeta \right> = \overline{\left< J\xi, \Delta^{1/2}\zeta \right>}$. So the condition of Lemma~\ref{lmm:tomita-adjoint-intrinsic} becomes $\left< J\xi, \Delta^{1/2}\zeta \right> = \left< \eta, \zeta \right>$ for all $\zeta \in \text{Dom}(\Delta^{1/2})$, which by Lemma~\ref{lmm:characterizing-adjoint-domain-membership} says $J\xi \in \text{Dom}((\Delta^{1/2})^*)$ with $(\Delta^{1/2})^*J\xi = \eta$; and $(\Delta^{1/2})^* = \Delta^{1/2}$ (Lemma~\ref{lmm:square-root-positive} and Theorem~\ref{thrm:modular-operator-properties}).
 \end{proof}
@@ -2128,6 +2129,7 @@ For the next six results fix $\xi, \eta \in \mathbf{H}$ with $C\xi \in \text{Dom
     Let $\xi, \eta \in \mathbf{H}$. Then $C\xi \in \text{Dom}((S')^*)$ and $(S')^*C\xi = \eta$ if and only if $\xi \in \text{Dom}(\Delta^{-1/2})$ and $\eta = J\Delta^{-1/2}\xi$. In particular the closure of $F_0$ is $J\Delta^{-1/2}$ (Theorem~\ref{thrm:tomita-adjoint-eq-closure}).
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-sqrt-conjugation, thrm:modular-conjugation-involution, def:product-of-unbounded-operators}
     By Theorem~\ref{thrm:modular-conjugation-involution}, $J\Delta^{1/2}J = \Delta^{-1/2}$ including domains (\ref{def:product-of-unbounded-operators}): $J\xi \in \text{Dom}(\Delta^{1/2})$ if and only if $\xi \in \text{Dom}(\Delta^{-1/2})$, and then $J\Delta^{1/2}J\xi = \Delta^{-1/2}\xi$, so $\Delta^{1/2}J\xi = J\Delta^{-1/2}\xi$ because $J(J\phi) = \phi$. Combine with Lemma~\ref{lmm:tomita-adjoint-sqrt-conjugation}.
 \end{proof}

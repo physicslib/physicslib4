@@ -495,7 +495,38 @@ theorem mem_tomitaAdjoint_iff_modularOperatorSqrt {M : Set (H →L[ℂ] H)} {Ω 
         (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
       ∃ h : modularConjugation hM hΩ C hC ξ ∈ (modularOperatorSqrt hM hΩ C hC).domain,
         modularOperatorSqrt hM hΩ C hC ⟨_, h⟩ = η := by
-  sorry
+  set A := modularOperatorSqrt hM hΩ C hC
+  set J := modularConjugation hM hΩ C hC
+  obtain ⟨hdomS, hJ⟩ := tomitaOperator_eq_modularConjugation_sqrt hM hΩ C hC
+  have hJJ : ∀ φ, J (J φ) = φ := (modularConjugation_involution hM hΩ C hC).1
+  have hyps := linearizedTomita_closure_polar_hyps hM hΩ C hC
+  have hadj : A.adjoint = A :=
+    LinearPMap.isSelfAdjoint_def.mp (absoluteValue_domain hyps.1 hyps.2.1).2.1
+  have hd : Dense (A.domain : Set H) :=
+    hdomS ▸ (linearizedTomita_closure_properties hM hΩ C hC).2.1
+  have hinner : ∀ y, ⟪ξ, J y⟫_ℂ = ⟪y, J ξ⟫_ℂ := fun y => by
+    have := inner_map_map_of_conjLinearIsometry J.toLinearIsometry (J ξ) y
+    simpa [hJJ] using this
+  rw [mem_tomitaAdjoint_iff hM hΩ C hC, ← hadj]
+  have hcond : (∀ ζ : (linearizedTomitaPre M Ω C).closure.domain,
+      ⟪ξ, tomitaOperator M Ω C ζ⟫_ℂ = ⟪(ζ : H), η⟫_ℂ) ↔
+      ∀ ζ : A.domain, ⟪η, (ζ : H)⟫_ℂ = ⟪J ξ, A ζ⟫_ℂ := by
+    constructor
+    · intro h ζ
+      have := h ⟨ζ, hdomS.ge ζ.2⟩
+      rw [hJ _ _ ζ.2, hinner] at this
+      simpa using congrArg (starRingEnd ℂ) this.symm
+    · intro h ζ
+      have := h ⟨ζ, hdomS.le ζ.2⟩
+      rw [hJ _ _ (hdomS.le ζ.2), hinner]
+      simpa using congrArg (starRingEnd ℂ) this.symm
+  rw [hcond]
+  constructor
+  · intro h
+    have hmem : J ξ ∈ A.adjoint.domain := LinearPMap.mem_adjoint_domain_of_exists _ ⟨η, h⟩
+    exact ⟨hmem, LinearPMap.adjoint_apply_eq hd ⟨J ξ, hmem⟩ h⟩
+  · rintro ⟨h, rfl⟩ ζ
+    exact LinearPMap.adjoint_isFormalAdjoint hd ⟨J ξ, h⟩ ζ
 
 /-- `S* = J Δ^{-1/2}`: `(ξ, η) ∈ Γ(S*)` if and only if `ξ ∈ Dom Δ^{-1/2}` and
 `η = J Δ^{-1/2} ξ`; in particular the closure of `F₀` is `J Δ^{-1/2}`.
@@ -510,7 +541,30 @@ theorem mem_tomitaAdjoint_iff_modularOperatorInvSqrt {M : Set (H →L[ℂ] H)} {
     ((ξ, η) ∈ closure ((fun b : H →L[ℂ] H => (b Ω, star b Ω)) '' Set.centralizer M) ↔
       ∃ h : ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain,
         η = modularConjugation hM hΩ C hC (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h⟩)) := by
-  sorry
+  set J := modularConjugation hM hΩ C hC
+  obtain ⟨hJJ, hconj⟩ := modularConjugation_involution hM hΩ C hC
+  have hJs : ∀ x, J.symm x = J x := fun x => by
+    conv_lhs => rw [← hJJ x]
+    exact J.symm_apply_apply _
+  have first : (∃ h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, h⟩ = η) ↔
+      ∃ h : ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain,
+        η = J (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h⟩) := by
+    rw [mem_tomitaAdjoint_iff_modularOperatorSqrt hM hΩ C hC ξ η, ← hconj]
+    constructor
+    · rintro ⟨h, rfl⟩
+      refine ⟨show J.symm ξ ∈ _ by rwa [hJs], ?_⟩
+      change _ = J (J _)
+      rw [hJJ]
+      congr 1
+      exact Subtype.ext (hJs ξ).symm
+    · rintro ⟨h, rfl⟩
+      refine ⟨show J ξ ∈ _ by rw [← hJs]; exact h, ?_⟩
+      change _ = J (J _)
+      rw [hJJ]
+      congr 1
+      exact Subtype.ext (hJs ξ).symm
+  exact ⟨first, (mem_tomitaAdjoint_iff_mem_closure_graph hM hΩ C hC ξ η).symm.trans first⟩
 
 /-! ### The modular objects of the commutant -/
 
