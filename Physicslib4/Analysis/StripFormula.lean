@@ -98,7 +98,11 @@ theorem integrable_of_norm_le_div_cosh {h : ℝ → ℂ} (hc : Continuous h) (K 
 Blueprint: lmm:hasDerivAt-two-arctan-exp -/
 theorem hasDerivAt_two_mul_arctan_exp (t : ℝ) :
     HasDerivAt (fun t => 2 * Real.arctan (Real.exp t)) (1 / Real.cosh t) t := by
-  sorry
+  refine (((Real.hasDerivAt_exp t).arctan).const_mul 2).congr_deriv ?_
+  rw [Real.cosh_eq, Real.exp_neg]
+  have := Real.exp_pos t
+  field_simp
+  ring
 
 /-- ∫ dt / cosh t = π.
 
@@ -141,7 +145,19 @@ theorem abs_le_norm_sin_add_mul_I (x y : ℝ) : |y| ≤ ‖Complex.sin (x + y * 
 Blueprint: lmm:sin-pi-zero-strip -/
 theorem eq_zero_of_sin_pi_mul_eq_zero {z : ℂ} (hz : z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2))
     (h : Complex.sin (π * z) = 0) : z = 0 := by
-  sorry
+  obtain ⟨k, hk⟩ := Complex.sin_eq_zero_iff.mp h
+  have hz' : z = k := by
+    have hπ : (π : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr Real.pi_ne_zero
+    exact mul_left_cancel₀ hπ (by rw [hk]; ring)
+  subst hz'
+  simp only [Set.mem_preimage, Complex.intCast_re, Set.mem_Icc] at hz
+  have h1 : (-1 : ℝ) < k := by linarith [hz.1]
+  have h2 : (k : ℝ) < 1 := by linarith [hz.2]
+  have : k = 0 := by
+    have := Int.cast_lt.mp (by simpa using h1 : ((-1 : ℤ) : ℝ) < k)
+    have := Int.cast_lt.mp (by simpa using h2 : (k : ℝ) < ((1 : ℤ) : ℝ))
+    omega
+  simp [this]
 
 /-- Off 0 and off the zeros of sin(πz), the strip quotient is (f(z) - f(0)) / sin(πz); on the
 lines Re z = ±1/2 it is ±(f(z) - f(0)) / cosh(πt).

@@ -174,3 +174,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:inv-cosh-pi-integrable (Physicslib4.integrable_inv_cosh): proved via inv_cosh_le + integrable_inv_one_add_sq (Integrable.mono'), then Integrable.comp_mul_left'.
 - lmm:sin-strip-boundary (`sin_pi_mul_strip_boundary`): proved via `Complex.sin_add_mul_I` at ±π/2 + (πt)i.
 - 2026-11-13: wave 2 proved (integrable_inv_cosh, sin_pi_mul_strip_boundary).
+- lmm:hasDerivAt-two-arctan-exp (Physicslib4.hasDerivAt_two_mul_arctan_exp): proved via HasDerivAt.arctan, const_mul, congr_deriv with cosh_eq/exp_neg/field_simp/ring.
+- lmm:sin-pi-zero-strip (`eq_zero_of_sin_pi_mul_eq_zero`): proved via `Complex.sin_eq_zero_iff`, `mul_left_cancel₀` to get z = k, then `Int.cast_lt` bounds and `omega`.
+- 2026-11-13: wave 3 proved (hasDerivAt_two_mul_arctan_exp, eq_zero_of_sin_pi_mul_eq_zero).

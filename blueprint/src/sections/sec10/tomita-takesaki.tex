@@ -2338,6 +2338,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     For every $t \in \mathbb{R}$, the function $F(t) = 2\arctan(e^t)$ has derivative $F'(t) = 1/\cosh t$.
 \end{lemma}
 \begin{proof}
+    \leanok
     By Mathlib's \texttt{Real.hasDerivAt\_exp}, \texttt{HasDerivAt.arctan} and \texttt{HasDerivAt.const\_mul}, $F'(t) = 2 \cdot \frac{1}{1 + (e^t)^2} \cdot e^t$. Since $e^t > 0$ (\texttt{Real.exp\_pos}), this equals $2/(e^{-t} + e^t) = 1/\cosh t$ (Mathlib's \texttt{Real.cosh\_eq}, \texttt{Real.exp\_neg}; \texttt{field\_simp}).
 \end{proof}
 
@@ -2394,6 +2395,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     If $z \in \mathcal{S}$ and $\sin(\pi z) = 0$, then $z = 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     By Mathlib's \texttt{Complex.sin\_eq\_zero\_iff}, $\pi z = k\pi$ for some $k \in \mathbb{Z}$, so $z = k$ ($\pi \ne 0$). Then $|k| = |\operatorname{Re} z| \le \tfrac{1}{2}$, so $k = 0$.
 \end{proof}
 
