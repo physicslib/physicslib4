@@ -2315,6 +2315,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     The functions $t \mapsto 1/\cosh t$ and $t \mapsto 1/\cosh(\pi t)$ are integrable on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:inv-cosh-le}
     $t \mapsto 1/\cosh t$ is continuous (Mathlib's \texttt{Real.cosh\_pos}), hence measurable, and bounded by the integrable function $2(1 + t^2)^{-1}$ (Lemma~\ref{lmm:inv-cosh-le}; Mathlib's \texttt{integrable\_inv\_one\_add\_sq} and \texttt{Integrable.const\_mul}), so it is integrable (Mathlib's \texttt{Integrable.mono'}). Composition with $t \mapsto \pi t$ preserves integrability (Mathlib's \texttt{Integrable.comp\_mul\_left'}, $\pi \ne 0$).
 \end{proof}
@@ -2371,6 +2372,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     For $t \in \mathbb{R}$, $\sin(\pi(\tfrac{1}{2} + it)) = \cosh(\pi t)$ and $\sin(\pi(-\tfrac{1}{2} + it)) = -\cosh(\pi t)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Write $\pi(\pm\tfrac{1}{2} + it) = \pm\tfrac{\pi}{2} + (\pi t)i$. Mathlib's \texttt{Complex.sin\_add\_mul\_I} gives $\sin(\pm\tfrac{\pi}{2})\cosh(\pi t) + \cos(\pm\tfrac{\pi}{2})\sinh(\pi t) i$, and $\sin(\pm\tfrac{\pi}{2}) = \pm 1$, $\cos(\pm\tfrac{\pi}{2}) = 0$ (Mathlib's \texttt{Complex.sin\_pi\_div\_two}, \texttt{Complex.cos\_pi\_div\_two}, \texttt{Complex.sin\_neg}, \texttt{Complex.cos\_neg}). The complex $\cosh$ of the real $\pi t$ is the real one (\texttt{Complex.ofReal\_cosh}).
 \end{proof}
 

@@ -171,3 +171,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - `lmm:sin-norm-lower-bound` (`Physicslib4.abs_le_norm_sin_add_mul_I`): proved via `Complex.sin_add_mul_I`, `normSq_add_mul_I`, `Real.cosh_sq`, `Real.abs_sinh`/`Real.self_le_sinh_iff`; adds import `Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp` to `StripFormula.lean`.
 - `lmm:inv-cosh-le` (`Physicslib4.inv_cosh_le`): proved via `Real.sum_le_exp_of_nonneg` (4 terms) giving 1 + |x|² ≤ exp |x|, then `Real.cosh_abs`, `Real.cosh_eq`, `inv_anti₀`; no new imports.
 - 2026-11-13: wave 1 proved (inv_cosh_le, abs_le_norm_sin_add_mul_I; DerivHyp import added).
+- lmm:inv-cosh-pi-integrable (Physicslib4.integrable_inv_cosh): proved via inv_cosh_le + integrable_inv_one_add_sq (Integrable.mono'), then Integrable.comp_mul_left'.
+- lmm:sin-strip-boundary (`sin_pi_mul_strip_boundary`): proved via `Complex.sin_add_mul_I` at ±π/2 + (πt)i.
+- 2026-11-13: wave 2 proved (integrable_inv_cosh, sin_pi_mul_strip_boundary).

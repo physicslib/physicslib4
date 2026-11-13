@@ -78,7 +78,13 @@ Blueprint: lmm:inv-cosh-pi-integrable -/
 theorem integrable_inv_cosh :
     Integrable (fun t : ℝ => 1 / Real.cosh t) ∧
       Integrable (fun t : ℝ => 1 / Real.cosh (π * t)) := by
-  sorry
+  have h : Integrable (fun t : ℝ => 1 / Real.cosh t) :=
+    (integrable_inv_one_add_sq.const_mul 2).mono'
+      (continuous_const.div Real.continuous_cosh
+        fun t => (Real.cosh_pos t).ne').aestronglyMeasurable
+      (Filter.Eventually.of_forall fun t => by
+        rw [Real.norm_of_nonneg (by positivity)]; exact inv_cosh_le t)
+  exact ⟨h, h.comp_mul_left' Real.pi_ne_zero⟩
 
 /-- A continuous h : ℝ → ℂ with ‖h t‖ ≤ K / cosh(πt) is integrable.
 
@@ -112,7 +118,11 @@ Blueprint: lmm:sin-strip-boundary -/
 theorem sin_pi_mul_strip_boundary (t : ℝ) :
     Complex.sin (π * (1 / 2 + t * I)) = Real.cosh (π * t) ∧
       Complex.sin (π * (-1 / 2 + t * I)) = -Real.cosh (π * t) := by
-  sorry
+  have h1 : (π : ℂ) * (1 / 2 + t * I) = (π / 2 : ℂ) + (π * t : ℝ) * I := by push_cast; ring
+  have h2 : (π : ℂ) * (-1 / 2 + t * I) = -(π / 2 : ℂ) + (π * t : ℝ) * I := by push_cast; ring
+  rw [h1, h2, Complex.sin_add_mul_I, Complex.sin_add_mul_I, Complex.sin_neg, Complex.cos_neg,
+    Complex.sin_pi_div_two, Complex.cos_pi_div_two, ofReal_cosh]
+  constructor <;> ring
 
 /-- |y| ≤ ‖sin(x + iy)‖.
 
