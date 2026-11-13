@@ -2713,12 +2713,21 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     For $\psi \in \mathbf{H}$, $E_n(E_n\psi) = E_n\psi$ because $E_n$ is idempotent (Definition~\ref{def:projection-valued-measure}), so $E_n\psi \in \mathcal{H}_0$, and $E_n\psi \to \psi$ by Lemma~\ref{lmm:modular-spectral-projections-converge}; so $\psi$ lies in the closure of $\mathcal{H}_0$ (Mathlib's \texttt{mem\_closure\_of\_tendsto}).
 \end{proof}
 
-\begin{lemma}[Logarithms and Powers on $K_n$]
+\begin{lemma}[Logarithms on $K_n$]
     \label{lmm:log-power-on-interval}
-    Let $n \ge 1$, $\lambda \in K_n$ and $z \in \mathbb{C}$. Then $\lambda > 0$, $|\log\lambda| \le \log n$, $\lambda^z = \exp(z\log\lambda)$, and $|\lambda^z| \le n^{|\operatorname{Re} z|}$.
+    Let $n \ge 1$ and $\lambda \in K_n$. Then $\lambda > 0$ and $|\log\lambda| \le \log n$.
 \end{lemma}
 \begin{proof}
-    $\lambda \ge 1/n > 0$. Monotonicity of $\log$ on $(0, \infty)$ (\texttt{Real.log\_le\_log}) and $\log(1/n) = -\log n$ (\texttt{one\_div}, \texttt{Real.log\_inv}) give $-\log n \le \log\lambda \le \log n$ (\texttt{abs\_le}). \texttt{Complex.cpow\_def\_of\_ne\_zero} and \texttt{Complex.ofReal\_log} give $\lambda^z = \exp(\log(\lambda)\, z)$. Finally $|\lambda^z| = \exp(\log\lambda \cdot \operatorname{Re} z)$ (\texttt{Complex.norm\_exp}), and $\log\lambda \cdot \operatorname{Re} z \le |\log\lambda|\,|\operatorname{Re} z| \le \log n \cdot |\operatorname{Re} z|$, whose exponential is $n^{|\operatorname{Re} z|}$ (\texttt{Real.rpow\_def\_of\_pos}, \texttt{Real.exp\_le\_exp}).
+    $\lambda \ge 1/n > 0$. Monotonicity of $\log$ on $(0, \infty)$ (\texttt{Real.log\_le\_log}) and $\log(1/n) = -\log n$ (\texttt{one\_div}, \texttt{Real.log\_inv}) give $-\log n \le \log\lambda \le \log n$ (\texttt{abs\_le}).
+\end{proof}
+
+\begin{lemma}[Powers on $K_n$]
+    \label{lmm:cpow-on-interval}
+    Let $n \ge 1$, $\lambda \in K_n$ and $z \in \mathbb{C}$. Then $\lambda^z = \exp(z\log\lambda)$ and $|\lambda^z| \le n^{|\operatorname{Re} z|}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:log-power-on-interval}
+    $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so \texttt{Complex.cpow\_def\_of\_ne\_zero} and \texttt{Complex.ofReal\_log} give $\lambda^z = \exp(\log(\lambda)\, z)$. Hence $|\lambda^z| = \exp(\log\lambda \cdot \operatorname{Re} z)$ (\texttt{Complex.norm\_exp}), and $\log\lambda \cdot \operatorname{Re} z \le |\log\lambda|\,|\operatorname{Re} z| \le \log n \cdot |\operatorname{Re} z|$ (Lemma~\ref{lmm:log-power-on-interval}), whose exponential is $n^{|\operatorname{Re} z|}$ (\texttt{Real.rpow\_def\_of\_pos}, \texttt{Real.exp\_le\_exp}).
 \end{proof}
 
 \begin{lemma}[The Functions $p_{z,n}$ and $q_{z,n}$ are Bounded]
@@ -2726,25 +2735,44 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $n \ge 1$ and $z \in \mathbb{C}$. Then $p_{z,n}$ and $q_{z,n}$ are measurable, $|p_{z,n}(\lambda)| \le n^{|\operatorname{Re} z|}$ and $|q_{z,n}(\lambda)| \le (\log n)\, n^{|\operatorname{Re} z|}$ for every $\lambda \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:log-power-on-interval}
-    Measurability: \texttt{Measurable.indicator} with \texttt{measurableSet\_Icc}, \texttt{Measurable.pow\_const} for $\lambda \mapsto (\lambda : \mathbb{C})^z$ (with \texttt{Complex.measurable\_ofReal} and the instance \texttt{Complex.hasMeasurablePow}), and \texttt{Real.measurable\_log}. Off $K_n$ both functions vanish; on $K_n$ the bounds are those of Lemma~\ref{lmm:log-power-on-interval}.
+    \uses{lmm:log-power-on-interval, lmm:cpow-on-interval}
+    Measurability: \texttt{Measurable.indicator} with \texttt{measurableSet\_Icc}, \texttt{Measurable.pow\_const} for $\lambda \mapsto (\lambda : \mathbb{C})^z$ (with \texttt{Complex.measurable\_ofReal} and the instance \texttt{Complex.hasMeasurablePow}), and \texttt{Real.measurable\_log}. Off $K_n$ both functions vanish; on $K_n$ the bounds are those of Lemmas~\ref{lmm:log-power-on-interval} and~\ref{lmm:cpow-on-interval}.
 \end{proof}
 
-\begin{lemma}[Identities for $p_{z,n}$]
+\begin{lemma}[Multiplicativity of $p_{z,n}$]
     \label{lmm:modular-power-function-identities}
+    For $n \ge 1$, $z, w \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $p_{z,n}(\lambda)\,p_{w,n}(\lambda) = p_{z+w,n}(\lambda)$. Moreover $p_{0,n} = 1_{K_n}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:log-power-on-interval}
+    Off $K_n$ both sides vanish. For $\lambda \in K_n$, $1_{K_n}(\lambda)^2 = 1 = 1_{K_n}(\lambda)$ and $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so $\lambda^z\lambda^w = \lambda^{z+w}$ by \texttt{Complex.cpow\_add} ($\lambda \ne 0$). For the second claim, $\lambda^0 = 1$ (\texttt{Complex.cpow\_zero}).
+\end{proof}
+
+\begin{lemma}[Conjugation of $p_{z,n}$]
+    \label{lmm:modular-power-function-conj}
+    For $n \ge 1$, $z \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $\overline{p_{z,n}(\lambda)} = p_{\overline{z},n}(\lambda)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:log-power-on-interval}
+    Off $K_n$ both sides vanish. For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so $\arg\lambda = 0 \ne \pi$ (\texttt{Complex.arg\_ofReal\_of\_nonneg}) and $\overline{\lambda} = \lambda$ (\texttt{Complex.conj\_ofReal}); \texttt{Complex.cpow\_conj} gives $\overline{\lambda^z} = \lambda^{\overline{z}}$, and $1_{K_n}(\lambda)$ is real.
+\end{proof}
+
+\begin{lemma}[The Shift $p_{z+it,n} = e_t\,p_{z,n}$]
+    \label{lmm:modular-power-function-shift}
     \uses{lmm:modular-unitary-group-fc}
-    For integers $1 \le n \le m$, $z, w \in \mathbb{C}$, $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$:
-    \begin{enumerate}
-        \item $p_{z,n}(\lambda)\,p_{w,n}(\lambda) = p_{z+w,n}(\lambda)$;
-        \item $\overline{p_{z,n}(\lambda)} = p_{\overline{z},n}(\lambda)$;
-        \item $p_{0,n} = 1_{K_n}$;
-        \item $p_{z+it,n}(\lambda) = e_t(\lambda)\,p_{z,n}(\lambda)$;
-        \item $p_{z,m}(\lambda)\,1_{K_n}(\lambda) = p_{z,n}(\lambda)$.
-    \end{enumerate}
+    For $n \ge 1$, $z \in \mathbb{C}$, $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $p_{z+it,n}(\lambda) = e_t(\lambda)\,p_{z,n}(\lambda)$.
 \end{lemma}
 \begin{proof}
     \uses{lmm:log-power-on-interval, lmm:modular-unitary-group-fc}
-    Off $K_n$ every side vanishes (for 5, $1_{K_n}(\lambda) = 0$), and $1_{K_n}^2 = 1_{K_n}$. For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}): (1) is \texttt{Complex.cpow\_add} ($\lambda \ne 0$); (2) is \texttt{Complex.cpow\_conj} with $\arg\lambda = 0 \ne \pi$ (\texttt{Complex.arg\_ofReal\_of\_nonneg}) and $\overline{\lambda} = \lambda$ (\texttt{Complex.conj\_ofReal}); (3) is \texttt{Complex.cpow\_zero}; (4) is \texttt{Complex.cpow\_add} with $\lambda^{it} = e_t(\lambda)$ (Lemma~\ref{lmm:modular-unitary-group-fc}); (5) holds because $K_n \subset K_m$, so $1_{K_m}(\lambda) = 1$.
+    Off $K_n$ both sides vanish. For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so $\lambda^{z+it} = \lambda^{it}\lambda^z$ by \texttt{Complex.cpow\_add} ($\lambda \ne 0$) and \texttt{add\_comm}, and $\lambda^{it} = e_t(\lambda)$ (Lemma~\ref{lmm:modular-unitary-group-fc}).
+\end{proof}
+
+\begin{lemma}[Restriction of $p_{z,m}$ to $K_n$]
+    \label{lmm:modular-power-function-restrict}
+    For integers $1 \le n \le m$, $z \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $p_{z,m}(\lambda)\,1_{K_n}(\lambda) = p_{z,n}(\lambda)$.
+\end{lemma}
+\begin{proof}
+    Off $K_n$ both sides vanish, since $1_{K_n}(\lambda) = 0$. For $\lambda \in K_n$, $K_n \subset K_m$ (\texttt{Set.Icc\_subset\_Icc} and \texttt{one\_div\_le\_one\_div\_of\_le}) gives $1_{K_m}(\lambda) = 1 = 1_{K_n}(\lambda)$, so both sides equal $\lambda^z$.
 \end{proof}
 
 \begin{lemma}[A Uniform Taylor Estimate]
@@ -2755,8 +2783,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     \end{align}
 \end{lemma}
 \begin{proof}
-    \uses{lmm:log-power-on-interval}
-    Off $K_n$ the left side is $0$. For $\lambda \in K_n$ let $L = \log\lambda$. By Lemma~\ref{lmm:log-power-on-interval} and \texttt{Complex.exp\_add}, the left side is $|\lambda^z|\,|e^{hL} - 1 - hL|$. Since $|hL| \le |h|\log n \le 1$, Mathlib's \texttt{Complex.norm\_exp\_sub\_one\_sub\_id\_le} gives $|e^{hL} - 1 - hL| \le |hL|^2 \le (\log n)^2|h|^2$, and $|\lambda^z| \le n^{|\operatorname{Re} z|}$ (Lemma~\ref{lmm:log-power-on-interval}).
+    \uses{lmm:log-power-on-interval, lmm:cpow-on-interval}
+    Off $K_n$ the left side is $0$. For $\lambda \in K_n$ let $L = \log\lambda$. By Lemma~\ref{lmm:cpow-on-interval} and \texttt{Complex.exp\_add}, the left side is $|\lambda^z|\,|e^{hL} - 1 - hL|$. Since $|hL| \le |h|\log n \le 1$ (Lemma~\ref{lmm:log-power-on-interval}), Mathlib's \texttt{Complex.norm\_exp\_sub\_one\_sub\_id\_le} gives $|e^{hL} - 1 - hL| \le |hL|^2 \le (\log n)^2|h|^2$, and $|\lambda^z| \le n^{|\operatorname{Re} z|}$ (Lemma~\ref{lmm:cpow-on-interval}).
 \end{proof}
 
 \begin{lemma}[The Bounded Operators $p_{z,n}(\Delta)$]
@@ -2765,8 +2793,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $n \ge 1$ and $z \in \mathbb{C}$. Then $p_{z,n}(\Delta)$ is a bounded operator defined on all of $\mathbf{H}$, equal to $\int p_{z,n} \, d\mu$, with $\|p_{z,n}(\Delta)\| \le n^{|\operatorname{Re} z|}$ and $p_{z,n}(\Delta)^* = p_{\overline{z},n}(\Delta)$. In particular $\|p_{z,n}(\Delta)\| \le n^{1/2}$ when $|\operatorname{Re} z| \le \tfrac{1}{2}$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:modular-power-function-bounds, lmm:modular-power-function-identities, lmm:functional-calculus-bounded, prpstn:integral-norm-bound, prpstn:integral-conjugation, thrm:modular-operator-properties}
-    $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}) and $p_{z,n}$ is bounded and measurable (Lemma~\ref{lmm:modular-power-function-bounds}), so Lemma~\ref{lmm:functional-calculus-bounded} gives the bounded operator. Proposition~\ref{prpstn:integral-norm-bound} with the pointwise bound (\texttt{ciSup\_le}) gives the norm bound, and Proposition~\ref{prpstn:integral-conjugation} with $\overline{p_{z,n}} = p_{\overline{z},n}$ (Lemma~\ref{lmm:modular-power-function-identities}) the adjoint. For $|\operatorname{Re} z| \le \tfrac{1}{2}$, $n^{|\operatorname{Re} z|} \le n^{1/2}$ (\texttt{Real.rpow\_le\_rpow\_of\_exponent\_le}, $n \ge 1$).
+    \uses{lmm:modular-power-function-bounds, lmm:modular-power-function-conj, lmm:functional-calculus-bounded, prpstn:integral-norm-bound, prpstn:integral-conjugation, thrm:modular-operator-properties}
+    $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}) and $p_{z,n}$ is bounded and measurable (Lemma~\ref{lmm:modular-power-function-bounds}), so Lemma~\ref{lmm:functional-calculus-bounded} gives the bounded operator. Proposition~\ref{prpstn:integral-norm-bound} with the pointwise bound (\texttt{ciSup\_le}) gives the norm bound, and Proposition~\ref{prpstn:integral-conjugation} with $\overline{p_{z,n}} = p_{\overline{z},n}$ (Lemma~\ref{lmm:modular-power-function-conj}) the adjoint. For $|\operatorname{Re} z| \le \tfrac{1}{2}$, $n^{|\operatorname{Re} z|} \le n^{1/2}$ (\texttt{Real.rpow\_le\_rpow\_of\_exponent\_le}, $n \ge 1$).
 \end{proof}
 
 \begin{lemma}[Products of the $p_{z,n}(\Delta)$]
@@ -2776,7 +2804,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 \end{lemma}
 \begin{proof}
     \uses{lmm:modular-power-function-identities, lmm:modular-power-function-bounds, prpstn:integral-multiplicative, prpstn:integral-of-indicator}
-    Proposition~\ref{prpstn:integral-multiplicative} with identity~1 of Lemma~\ref{lmm:modular-power-function-identities} gives the product rule, and identity~3 with Proposition~\ref{prpstn:integral-of-indicator} gives $p_{0,n}(\Delta) = \mu(K_n) = E_n$. The product rule with $w = 0$ (in either order, since $z + 0 = 0 + z$) gives $p_{z,n}(\Delta)E_n = E_np_{z,n}(\Delta) = p_{z,n}(\Delta)$, and with $w = -z$ gives $p_{z,n}(\Delta)p_{-z,n}(\Delta) = E_n$.
+    Proposition~\ref{prpstn:integral-multiplicative} with the first claim of Lemma~\ref{lmm:modular-power-function-identities} gives the product rule, and $p_{0,n} = 1_{K_n}$ (the second claim) with Proposition~\ref{prpstn:integral-of-indicator} gives $p_{0,n}(\Delta) = \mu(K_n) = E_n$. The product rule with $w = 0$ (in either order, since $z + 0 = 0 + z$) gives $p_{z,n}(\Delta)E_n = E_np_{z,n}(\Delta) = p_{z,n}(\Delta)$, and with $w = -z$ gives $p_{z,n}(\Delta)p_{-z,n}(\Delta) = E_n$.
 \end{proof}
 
 \begin{lemma}[$\Delta^{it}$ and the $p_{z,n}(\Delta)$]
@@ -2785,8 +2813,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $n \ge 1$, $z \in \mathbb{C}$ and $t \in \mathbb{R}$. Then $\Delta^{it}p_{z,n}(\Delta) = p_{z,n}(\Delta)\Delta^{it} = p_{z+it,n}(\Delta)$. In particular $\Delta^{it}E_n = E_n\Delta^{it}$, so $\Delta^{it}$ maps $\text{Range}(E_n)$ into itself, and $p_{x+it,n}(\Delta) = \Delta^{it}p_{x,n}(\Delta)$ for $x \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:modular-unitary-group-fc, lmm:modular-power-function-identities, lmm:modular-power-function-bounds, lmm:modular-power-operators-multiplicative, prpstn:integral-multiplicative}
-    $\Delta^{it} = \int e_t \, d\mu$ (Lemma~\ref{lmm:modular-unitary-group-fc}). Proposition~\ref{prpstn:integral-multiplicative}, the commutativity of pointwise multiplication, and identity~4 of Lemma~\ref{lmm:modular-power-function-identities} give $\Delta^{it}p_{z,n}(\Delta) = p_{z,n}(\Delta)\Delta^{it} = \int e_tp_{z,n} \, d\mu = p_{z+it,n}(\Delta)$. The case $z = 0$, with $p_{0,n}(\Delta) = E_n$ (Lemma~\ref{lmm:modular-power-operators-multiplicative}), gives $\Delta^{it}E_n = E_n\Delta^{it}$.
+    \uses{lmm:modular-unitary-group-fc, lmm:modular-power-function-shift, lmm:modular-power-function-bounds, lmm:modular-power-operators-multiplicative, prpstn:integral-multiplicative}
+    $\Delta^{it} = \int e_t \, d\mu$ (Lemma~\ref{lmm:modular-unitary-group-fc}). Proposition~\ref{prpstn:integral-multiplicative}, the commutativity of pointwise multiplication, and Lemma~\ref{lmm:modular-power-function-shift} give $\Delta^{it}p_{z,n}(\Delta) = p_{z,n}(\Delta)\Delta^{it} = \int e_tp_{z,n} \, d\mu = p_{z+it,n}(\Delta)$. The case $z = 0$, with $p_{0,n}(\Delta) = E_n$ (Lemma~\ref{lmm:modular-power-operators-multiplicative}), gives $\Delta^{it}E_n = E_n\Delta^{it}$.
 \end{proof}
 
 \begin{lemma}[$p_{z,n}(\Delta)$ does not Depend on $n$ on $\text{Range}(E_n)$]
@@ -2795,8 +2823,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $1 \le n \le m$, $z \in \mathbb{C}$ and $E_n\xi = \xi$. Then $p_{z,m}(\Delta)\xi = p_{z,n}(\Delta)\xi$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:modular-power-function-identities, lmm:modular-power-function-bounds, prpstn:integral-multiplicative, prpstn:integral-of-indicator}
-    By identity~5 of Lemma~\ref{lmm:modular-power-function-identities}, Proposition~\ref{prpstn:integral-multiplicative} and Proposition~\ref{prpstn:integral-of-indicator}, $p_{z,m}(\Delta)E_n = p_{z,n}(\Delta)$; apply it to $\xi = E_n\xi$.
+    \uses{lmm:modular-power-function-restrict, lmm:modular-power-function-bounds, prpstn:integral-multiplicative, prpstn:integral-of-indicator}
+    By Lemma~\ref{lmm:modular-power-function-restrict}, Proposition~\ref{prpstn:integral-multiplicative} and Proposition~\ref{prpstn:integral-of-indicator}, $p_{z,m}(\Delta)E_n = p_{z,n}(\Delta)$; apply it to $\xi = E_n\xi$.
 \end{proof}
 
 For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delta^z\xi = p_{z,n}(\Delta)\xi$ for any $n$ with $E_n\xi = \xi$. The next two results compare it with the functional calculus of the unbounded function $\lambda \mapsto \lambda^z$.
@@ -2818,7 +2846,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 \end{lemma}
 \begin{proof}
     \uses{lmm:modular-power-agrees-fc, def:absolute-value, lmm:log-power-on-interval}
-    $\Delta^{1/2} = s(\Delta)$ (Definitions~\ref{def:modular-operator} and~\ref{def:absolute-value}) and $\Delta^{-1/2} = r(\Delta)$ (Lemma~\ref{lmm:inverse-square-root-positive}). For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so $s(\lambda) = \sqrt{\lambda} = \lambda^{1/2}$ (\texttt{Real.sqrt\_eq\_rpow}, \texttt{Complex.ofReal\_cpow}) and $r(\lambda) = (\sqrt{\lambda})^{-1} = \lambda^{-1/2}$ (additionally \texttt{Real.rpow\_neg}). Apply Lemma~\ref{lmm:modular-power-agrees-fc} with $h = s$, $z = \tfrac{1}{2}$ and with $h = r$, $z = -\tfrac{1}{2}$.
+    $\Delta^{1/2} = s(\Delta)$ (Definitions~\ref{def:modular-operator} and~\ref{def:absolute-value}) and $\Delta^{-1/2} = r(\Delta)$ (Lemma~\ref{lmm:inverse-square-root-positive}). For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so $s(\lambda) = \sqrt{\max(\lambda, 0)} = \sqrt{\lambda} = \lambda^{1/2}$ (\texttt{max\_eq\_left}, \texttt{Real.sqrt\_eq\_rpow}, \texttt{Complex.ofReal\_cpow}) and $r(\lambda) = \lambda^{-1/2}$ by definition of $r$ (with \texttt{Complex.ofReal\_cpow}). Apply Lemma~\ref{lmm:modular-power-agrees-fc} with $h = s$, $z = \tfrac{1}{2}$ and with $h = r$, $z = -\tfrac{1}{2}$.
 \end{proof}
 
 \begin{corollary}[$\mathcal{H}_0 \subset \text{Dom}(S) \cap \text{Dom}(S^*)$]
@@ -2854,14 +2882,34 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     By Mathlib's \texttt{hasDerivAt\_iff\_isLittleO\_nhds\_zero} it suffices that $R(h) = p_{z+h,n}(\Delta) - p_{z,n}(\Delta) - h\,q_{z,n}(\Delta)$ is $o(h)$ as $h \to 0$. For $|h| \le 1/(1 + \log n)$, $|h|\log n \le 1$, so $\|R(h)\| \le n^{|\operatorname{Re} z|}(\log n)^2 |h|^2$ by Lemma~\ref{lmm:modular-power-difference-bound}; hence $R = O(h^2)$ (\texttt{Asymptotics.IsBigO.of\_bound}), and $h^2 = o(h)$ (\texttt{Asymptotics.isLittleO\_pow\_id}), so $R = o(h)$ (\texttt{Asymptotics.IsBigO.trans\_isLittleO}). Continuity follows from differentiability (\texttt{HasDerivAt.differentiableAt}, \texttt{Differentiable.continuous}).
 \end{proof}
 
-\begin{corollary}[Entire Matrix Coefficients]
-    \label{crllr:modular-power-matrix-coefficients}
+\begin{corollary}[Entire Vectors $\Delta^z\xi$]
+    \label{crllr:modular-power-vector-entire}
     \uses{lmm:modular-power-operators}
-    Let $n \ge 1$, $\xi, \eta \in \mathbf{H}$ and $a \in \mathcal{B}(\mathbf{H})$. Then the functions $z \mapsto \left< \eta, p_{z,n}(\Delta)\xi \right>$ and $z \mapsto \left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>$ are entire, and $z \mapsto p_{z,n}(\Delta)\xi$ is complex differentiable as a map $\mathbb{C} \to \mathbf{H}$.
+    Let $n \ge 1$ and $\xi, \eta \in \mathbf{H}$. Then $z \mapsto p_{z,n}(\Delta)\xi$ is complex differentiable as a map $\mathbb{C} \to \mathbf{H}$, and $z \mapsto \left< \eta, p_{z,n}(\Delta)\xi \right>$ is entire.
 \end{corollary}
 \begin{proof}
     \uses{thrm:modular-power-holomorphic}
-    $z \mapsto p_{-z,n}(\Delta)$ is differentiable by Theorem~\ref{thrm:modular-power-holomorphic} and the chain rule (\texttt{HasDerivAt.scomp} with \texttt{hasDerivAt\_neg}); products in the normed algebra $\mathcal{B}(\mathbf{H})$ of differentiable maps, and of a differentiable map with the constant $a$, are differentiable (\texttt{HasDerivAt.mul}, \texttt{HasDerivAt.const\_mul}). Composing with the continuous linear maps $T \mapsto T\xi$ and $T \mapsto \left< \eta, T\xi \right>$ on $\mathcal{B}(\mathbf{H})$ preserves differentiability (\texttt{HasDerivAt.clm\_apply}, \texttt{HasFDerivAt.comp\_hasDerivAt}).
+    Composing the differentiable map of Theorem~\ref{thrm:modular-power-holomorphic} with the continuous linear maps $T \mapsto T\xi$ and $T \mapsto \left< \eta, T\xi \right>$ on $\mathcal{B}(\mathbf{H})$ preserves differentiability (\texttt{HasDerivAt.clm\_apply}, \texttt{HasFDerivAt.comp\_hasDerivAt}).
+\end{proof}
+
+\begin{corollary}[Entire Matrix Coefficients]
+    \label{crllr:modular-power-matrix-coefficients}
+    \uses{lmm:modular-power-operators}
+    Let $n \ge 1$, $\xi, \eta \in \mathbf{H}$ and $a \in \mathcal{B}(\mathbf{H})$. Then $z \mapsto \left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>$ is entire.
+\end{corollary}
+\begin{proof}
+    \uses{thrm:modular-power-holomorphic}
+    $z \mapsto p_{-z,n}(\Delta)$ is differentiable by Theorem~\ref{thrm:modular-power-holomorphic} and the chain rule (\texttt{HasDerivAt.scomp} with \texttt{hasDerivAt\_neg}); products in the normed algebra $\mathcal{B}(\mathbf{H})$ of differentiable maps, and of a differentiable map with the constant $a$, are differentiable (\texttt{HasDerivAt.mul}, \texttt{HasDerivAt.const\_mul}). Composing with the continuous linear map $T \mapsto \left< \eta, T\xi \right>$ preserves differentiability (\texttt{HasDerivAt.clm\_apply}, \texttt{HasFDerivAt.comp\_hasDerivAt}).
+\end{proof}
+
+\begin{lemma}[Real and Imaginary Parts of a Bounded Function]
+    \label{lmm:fc-bounded-re-im}
+    \uses{def:hall-10.5}
+    Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable, with $u = \operatorname{Re} f$, $v = \operatorname{Im} f$ and $\overline{f}(\lambda) = \overline{f(\lambda)}$. Then $u$ and $v$ are real, bounded and measurable, $f(A) = u(A) + i\,v(A)$ and $\overline{f}(A) = u(A) - i\,v(A)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:functional-calculus-bounded, thrm:operator-valued-integration}
+    $u$ and $v$ are measurable (\texttt{Complex.measurable\_re.comp}, \texttt{Complex.measurable\_im.comp}) and bounded by the bound of $f$ (\texttt{Complex.abs\_re\_le\_norm}, \texttt{Complex.abs\_im\_le\_norm}), and $f = u + iv$, $\overline{f} = u - iv$ pointwise (\texttt{Complex.re\_add\_im}, \texttt{RCLike.conj\_eq\_re\_sub\_im}). All four functions are bounded, so their functional calculi are bounded integrals defined on all of $\mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}), and the bounded integral is linear (Theorem~\ref{thrm:operator-valued-integration}).
 \end{proof}
 
 \begin{lemma}[Antiunitary Conjugation of a Bounded Complex Function]
@@ -2870,8 +2918,8 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $W$ be antiunitary, $A$ self-adjoint, $B = WAW^{-1}$ (self-adjoint by Lemma~\ref{lmm:antiunitary-conjugate-spectral-measure}), and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $Wf(A)W^{-1}\psi = \overline{f}(B)\psi$ for every $\psi \in \mathbf{H}$, where $\overline{f}(\lambda) = \overline{f(\lambda)}$.
 \end{lemma}
 \begin{proof}
-    \uses{crllr:antiunitary-conjugate-functional-calculus, lmm:functional-calculus-bounded, thrm:operator-valued-integration, def:antiunitary-operator}
-    Write $f = u + iv$ with $u = \operatorname{Re} f$ and $v = \operatorname{Im} f$, real, bounded and measurable (\texttt{Complex.re\_add\_im}); then $\overline{f} = u - iv$. All functions involved are bounded, so their functional calculi are bounded integrals defined on all of $\mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}), and the bounded integral is linear (Theorem~\ref{thrm:operator-valued-integration}): $f(A) = u(A) + i\,v(A)$ and $\overline{f}(B) = u(B) - i\,v(B)$. Since $W$ is antilinear, $Wf(A)W^{-1}\psi = Wu(A)W^{-1}\psi - i\,Wv(A)W^{-1}\psi$, which is $u(B)\psi - i\,v(B)\psi$ by Corollary~\ref{crllr:antiunitary-conjugate-functional-calculus} for $u$ and $v$.
+    \uses{lmm:fc-bounded-re-im, crllr:antiunitary-conjugate-functional-calculus, def:antiunitary-operator}
+    With $u = \operatorname{Re} f$ and $v = \operatorname{Im} f$, Lemma~\ref{lmm:fc-bounded-re-im} gives $f(A) = u(A) + i\,v(A)$ and $\overline{f}(B) = u(B) - i\,v(B)$. Since $W$ is antilinear, $Wf(A)W^{-1}\psi = Wu(A)W^{-1}\psi - i\,Wv(A)W^{-1}\psi$, which is $u(B)\psi - i\,v(B)\psi$ by Corollary~\ref{crllr:antiunitary-conjugate-functional-calculus} for the real functions $u$ and $v$.
 \end{proof}
 
 \begin{lemma}[$J$ Conjugates Bounded Functions of $\Delta$]
@@ -2884,19 +2932,29 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     $J$ is antiunitary with $J^{-1} = J$ (Theorems~\ref{thrm:modular-conjugation-polar} and~\ref{thrm:modular-conjugation-involution}). Lemma~\ref{lmm:antiunitary-conjugate-bounded-fc} gives $Jf(\Delta)J = \overline{f}(J\Delta J)$. $J\Delta J = \Delta^{-1}$ (Corollary~\ref{crllr:modular-conjugation-inverts}), which is $\iota^-(\Delta)$ by Lemma~\ref{lmm:inverse-functional-calculus} ($\Delta$ is self-adjoint and injective, Theorem~\ref{thrm:modular-operator-properties}), and $\overline{f}(\iota^-(\Delta)) = (\overline{f} \circ \iota^-)(\Delta)$ by Corollary~\ref{crllr:fc-of-fc}, $\iota^-$ being real and measurable (\texttt{measurable\_inv}).
 \end{proof}
 
-\begin{lemma}[The Functions under $\lambda \mapsto 1/\lambda$]
+\begin{lemma}[$K_n$ is Invariant under $\lambda \mapsto 1/\lambda$]
     \label{lmm:modular-inverse-scalar-identities}
-    \uses{lmm:modular-unitary-group-fc}
-    For $n \ge 1$, $z \in \mathbb{C}$, $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$:
-    \begin{enumerate}
-        \item $1_{K_n}(\iota^-(\lambda)) = 1_{K_n}(\lambda)$;
-        \item $\overline{p_{z,n}(\iota^-(\lambda))} = p_{-\overline{z},n}(\lambda)$;
-        \item $\overline{e_t(\iota^-(\lambda))} = e_t(\lambda)$.
-    \end{enumerate}
+    For $n \ge 1$ and every $\lambda \in \mathbb{R}$, $1_{K_n}(\iota^-(\lambda)) = 1_{K_n}(\lambda)$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:log-power-on-interval}
-    (1) If $\lambda \le 0$ then $\iota^-(\lambda) \le 0 < 1/n$ (\texttt{inv\_nonpos}), so neither side is $1$. If $\lambda > 0$ then $1/n \le \lambda^{-1} \le n$ if and only if $1/n \le \lambda \le n$ (\texttt{inv\_le\_comm₀}, \texttt{le\_inv\_comm₀}). (2) By (1) both sides vanish off $K_n$. For $\lambda \in K_n$, $\lambda > 0$, and $\overline{(\lambda^{-1})^z} = (\lambda^{-1})^{\overline{z}} = (\lambda^{\overline{z}})^{-1} = \lambda^{-\overline{z}}$ by \texttt{Complex.cpow\_conj} (with \texttt{Complex.arg\_ofReal\_of\_nonneg} and \texttt{Complex.conj\_ofReal}), \texttt{Complex.inv\_cpow} (with \texttt{Complex.ofReal\_inv}) and \texttt{Complex.cpow\_neg}. (3) $\log(\lambda^{-1}) = -\log\lambda$ for every real $\lambda$ (\texttt{Real.log\_inv}), so $e_t(\iota^-(\lambda)) = e^{-it\log\lambda}$, whose conjugate is $e^{it\log\lambda}$ (\texttt{Complex.exp\_conj}, \texttt{Complex.conj\_ofReal}).
+    If $\lambda \le 0$ then $\iota^-(\lambda) \le 0 < 1/n$ (\texttt{inv\_nonpos}), so neither side is $1$. If $\lambda > 0$ then $1/n \le \lambda^{-1} \le n$ if and only if $1/n \le \lambda \le n$ (\texttt{inv\_le\_comm₀}, \texttt{le\_inv\_comm₀}).
+\end{proof}
+
+\begin{lemma}[$p_{z,n}$ under $\lambda \mapsto 1/\lambda$]
+    \label{lmm:modular-inverse-power-function}
+    For $n \ge 1$, $z \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $\overline{p_{z,n}(\iota^-(\lambda))} = p_{-\overline{z},n}(\lambda)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-inverse-scalar-identities, lmm:log-power-on-interval}
+    By Lemma~\ref{lmm:modular-inverse-scalar-identities} both sides vanish off $K_n$. For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), and $\overline{(\lambda^{-1})^z} = (\lambda^{-1})^{\overline{z}} = (\lambda^{\overline{z}})^{-1} = \lambda^{-\overline{z}}$ by \texttt{Complex.cpow\_conj} (with \texttt{Complex.arg\_ofReal\_of\_nonneg} and \texttt{Complex.conj\_ofReal}), \texttt{Complex.inv\_cpow} (with \texttt{Complex.ofReal\_inv}) and \texttt{Complex.cpow\_neg}.
+\end{proof}
+
+\begin{lemma}[$e_t$ under $\lambda \mapsto 1/\lambda$]
+    \label{lmm:modular-inverse-unitary-function}
+    For $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $\overline{e_t(\iota^-(\lambda))} = e_t(\lambda)$.
+\end{lemma}
+\begin{proof}
+    $\log(\lambda^{-1}) = -\log\lambda$ for every real $\lambda$ (\texttt{Real.log\_inv}), so $e_t(\iota^-(\lambda)) = e^{-it\log\lambda}$, whose conjugate is $e^{it\log\lambda}$ (\texttt{Complex.exp\_conj}, \texttt{Complex.conj\_ofReal}).
 \end{proof}
 
 \begin{lemma}[$J$ Preserves the Spectral Subspaces]
@@ -2906,7 +2964,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 \end{lemma}
 \begin{proof}
     \uses{lmm:modular-conjugation-bounded-fc, lmm:modular-inverse-scalar-identities, prpstn:integral-of-indicator, lmm:functional-calculus-bounded, thrm:modular-conjugation-involution}
-    $E_n = 1_{K_n}(\Delta)$ (Proposition~\ref{prpstn:integral-of-indicator} and Lemma~\ref{lmm:functional-calculus-bounded}), and $1_{K_n}$ is real, so Lemma~\ref{lmm:modular-conjugation-bounded-fc} and identity~1 of Lemma~\ref{lmm:modular-inverse-scalar-identities} give $JE_nJ = (1_{K_n} \circ \iota^-)(\Delta) = 1_{K_n}(\Delta) = E_n$. If $E_n\xi = \xi$, then $E_nJ\xi = J(JE_nJ)\xi = JE_n\xi = J\xi$, using $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}). So $J\mathcal{H}_0 \subset \mathcal{H}_0$, and applying $J$ again gives $\mathcal{H}_0 \subset J\mathcal{H}_0$.
+    $E_n = 1_{K_n}(\Delta)$ (Proposition~\ref{prpstn:integral-of-indicator} and Lemma~\ref{lmm:functional-calculus-bounded}), and $1_{K_n}$ is real, so Lemma~\ref{lmm:modular-conjugation-bounded-fc} and Lemma~\ref{lmm:modular-inverse-scalar-identities} give $JE_nJ = (1_{K_n} \circ \iota^-)(\Delta) = 1_{K_n}(\Delta) = E_n$. If $E_n\xi = \xi$, then $E_nJ\xi = J(JE_nJ)\xi = JE_n\xi = J\xi$, using $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}). So $J\mathcal{H}_0 \subset \mathcal{H}_0$, and applying $J$ again gives $\mathcal{H}_0 \subset J\mathcal{H}_0$.
 \end{proof}
 
 \begin{lemma}[$J$ Conjugates $\Delta^z$ to $\Delta^{-\overline{z}}$]
@@ -2915,6 +2973,6 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     For $n \ge 1$, $z \in \mathbb{C}$ and $t \in \mathbb{R}$, $Jp_{z,n}(\Delta)J = p_{-\overline{z},n}(\Delta)$ and $J\Delta^{it}J = \Delta^{it}$. In particular $Jp_{x,n}(\Delta)J = p_{-x,n}(\Delta)$ for real $x$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:modular-conjugation-bounded-fc, lmm:modular-inverse-scalar-identities, lmm:modular-power-function-bounds, lmm:modular-unitary-group-fc}
-    $p_{z,n}$ and $e_t$ are bounded and measurable (Lemmas~\ref{lmm:modular-power-function-bounds} and~\ref{lmm:modular-unitary-group-fc}). Lemma~\ref{lmm:modular-conjugation-bounded-fc} gives $Jp_{z,n}(\Delta)J = (\overline{p_{z,n}} \circ \iota^-)(\Delta)$ and $Je_t(\Delta)J = (\overline{e_t} \circ \iota^-)(\Delta)$, and identities~2 and~3 of Lemma~\ref{lmm:modular-inverse-scalar-identities} identify these functions with $p_{-\overline{z},n}$ and $e_t$ everywhere. Finally $\Delta^{it} = e_t(\Delta)$ (Lemma~\ref{lmm:modular-unitary-group-fc}).
+    \uses{lmm:modular-conjugation-bounded-fc, lmm:modular-inverse-power-function, lmm:modular-inverse-unitary-function, lmm:modular-power-function-bounds, lmm:modular-unitary-group-fc}
+    $p_{z,n}$ and $e_t$ are bounded and measurable (Lemmas~\ref{lmm:modular-power-function-bounds} and~\ref{lmm:modular-unitary-group-fc}). Lemma~\ref{lmm:modular-conjugation-bounded-fc} gives $Jp_{z,n}(\Delta)J = (\overline{p_{z,n}} \circ \iota^-)(\Delta)$ and $Je_t(\Delta)J = (\overline{e_t} \circ \iota^-)(\Delta)$, and Lemmas~\ref{lmm:modular-inverse-power-function} and~\ref{lmm:modular-inverse-unitary-function} identify these functions with $p_{-\overline{z},n}$ and $e_t$ everywhere. Finally $\Delta^{it} = e_t(\Delta)$ (Lemma~\ref{lmm:modular-unitary-group-fc}).
 \end{proof}
