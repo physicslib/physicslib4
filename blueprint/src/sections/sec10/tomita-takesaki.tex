@@ -2428,6 +2428,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     For $z \in \mathcal{S}$, $\operatorname{dslope}(s, 0)(z) \ne 0$. This statement involves only $s(z) = \sin(\pi z)$, not $f$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:sin-pi-zero-strip}
     At $z = 0$, Mathlib's \texttt{dslope\_same} gives $s'(0) = \pi\cos 0 = \pi \ne 0$ (\texttt{Complex.hasDerivAt\_sin}, \texttt{HasDerivAt.comp}, \texttt{Complex.cos\_zero}). For $z \ne 0$, $\operatorname{dslope}(s, 0)(z) = \sin(\pi z)/z$ (\texttt{dslope\_of\_ne}, \texttt{slope\_def\_field}), and $\sin(\pi z) \ne 0$ by Lemma~\ref{lmm:sin-pi-zero-strip}.
 \end{proof}
@@ -2596,6 +2597,7 @@ Mathlib's Fourier transform of $h : \mathbb{R} \to \mathbb{C}$ is $\mathcal{F}h(
     Let $h : \mathbb{R} \to \mathbb{C}$ be continuous and integrable with $\int_{\mathbb{R}} e^{i\theta t} h(t) \, dt = 0$ for every $\theta \in \mathbb{R}$. Then $h = 0$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:fourier-transform-eq-zero}
     $\mathcal{F}h = 0$ by Lemma~\ref{lmm:fourier-transform-eq-zero}, which is integrable (\texttt{MeasureTheory.integrable\_zero}). Mathlib's \texttt{Continuous.fourierInv\_fourier\_eq} gives $h = \mathcal{F}^{-}(\mathcal{F}h) = \mathcal{F}^{-}(0)$. Finally $\mathcal{F}^{-}(0) = 0$ pointwise: for $w \in \mathbb{R}$, Mathlib's \texttt{Real.fourierInv\_eq} gives $\mathcal{F}^{-}(0)(w) = \int_{\mathbb{R}} \mathbf{e}(v w) \cdot 0 \, dv$, which is $\int_{\mathbb{R}} 0 \, dv = 0$ by \texttt{smul\_zero} and \texttt{MeasureTheory.integral\_zero} (\texttt{funext}).
 \end{proof}

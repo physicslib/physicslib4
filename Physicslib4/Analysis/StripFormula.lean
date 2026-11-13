@@ -199,7 +199,13 @@ theorem stripQuotient_eq (f : ℂ → ℂ) :
 Blueprint: lmm:strip-denominator-ne-zero -/
 theorem dslope_sin_pi_mul_ne_zero {z : ℂ} (hz : z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2)) :
     dslope (fun z => Complex.sin (π * z)) 0 z ≠ 0 := by
-  sorry
+  rcases eq_or_ne z 0 with rfl | h0
+  · have hd : HasDerivAt (fun z : ℂ => Complex.sin (π * z)) (Complex.cos (π * 0) * (π * 1)) 0 :=
+      (Complex.hasDerivAt_sin _).comp 0 ((hasDerivAt_id _).const_mul _)
+    rw [dslope_same, hd.deriv]
+    simp [Real.pi_ne_zero]
+  · rw [dslope_of_ne _ h0, slope_def_field, mul_zero, Complex.sin_zero, sub_zero, sub_zero]
+    exact div_ne_zero (fun h => h0 (eq_zero_of_sin_pi_mul_eq_zero hz h)) h0
 
 /-- The strip quotient of f is continuous on the closed strip and holomorphic on its interior.
 
@@ -335,6 +341,9 @@ theorem fourier_eq_zero_of_integral_exp_mul_eq_zero {h : ℝ → ℂ}
 Blueprint: thrm:fourier-uniqueness -/
 theorem eq_zero_of_integral_exp_mul_eq_zero {h : ℝ → ℂ} (hc : Continuous h) (hi : Integrable h)
     (hh : ∀ θ : ℝ, ∫ t : ℝ, Complex.exp (θ * t * I) * h t = 0) : h = 0 := by
-  sorry
+  have h0 := fourier_eq_zero_of_integral_exp_mul_eq_zero hh
+  rw [← hc.fourierInv_fourier_eq hi (h0 ▸ integrable_zero _ _ _), h0]
+  funext v
+  simp [Real.fourierInv_eq]
 
 end Physicslib4

@@ -185,3 +185,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:fourier-transform-eq-zero (Physicslib4.fourier_eq_zero_of_integral_exp_mul_eq_zero): proved via Real.fourier_real_eq_integral_exp_smul with θ = -2πw.
 - lmm:strip-quotient-formula (Physicslib4.stripQuotient_eq): proved via dslope_of_ne + slope_def_field + div_div_div_cancel_right₀ and sin_pi_mul_strip_boundary.
 - 2026-11-13: proved stripQuotient_eq, fourier_eq_zero_of_integral_exp_mul_eq_zero.
+- lmm:strip-denominator-ne-zero (Physicslib4.dslope_sin_pi_mul_ne_zero): proved; z = 0 via dslope_same and HasDerivAt.deriv, z ≠ 0 via dslope_of_ne and eq_zero_of_sin_pi_mul_eq_zero.
+- thrm:fourier-uniqueness: proved `Physicslib4.eq_zero_of_integral_exp_mul_eq_zero` (Physicslib4/Analysis/StripFormula.lean) via `fourier_eq_zero_of_integral_exp_mul_eq_zero` + `Continuous.fourierInv_fourier_eq` + `Real.fourierInv_eq`.
+- 2026-11-13: proved dslope_sin_pi_mul_ne_zero, eq_zero_of_integral_exp_mul_eq_zero (Fourier uniqueness).
