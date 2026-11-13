@@ -2414,6 +2414,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     \[ g(\tfrac{1}{2} + it) = \frac{f(\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)}, \qquad g(-\tfrac{1}{2} + it) = -\frac{f(-\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)}. \]
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:sin-strip-boundary}
     For $z \ne 0$, Mathlib's \texttt{dslope\_of\_ne} and \texttt{slope\_def\_field} give $g(z) = \frac{(f(z) - f(0))/z}{(\sin(\pi z) - \sin 0)/z}$, which equals $(f(z) - f(0))/\sin(\pi z)$ since $z \ne 0$ and $\sin 0 = 0$. On the lines $\operatorname{Re} z = \pm\tfrac{1}{2}$, $z \ne 0$ and $\sin(\pi z) = \pm\cosh(\pi t) \ne 0$ (Lemma~\ref{lmm:sin-strip-boundary}; Mathlib's \texttt{Real.cosh\_pos}).
 \end{proof}
@@ -2584,6 +2585,7 @@ Mathlib's Fourier transform of $h : \mathbb{R} \to \mathbb{C}$ is $\mathcal{F}h(
     Let $h : \mathbb{R} \to \mathbb{C}$ satisfy $\int_{\mathbb{R}} e^{i\theta t} h(t) \, dt = 0$ for every $\theta \in \mathbb{R}$. Then $\mathcal{F}h = 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     For $w \in \mathbb{R}$, Mathlib's \texttt{Real.fourier\_real\_eq\_integral\_exp\_smul} gives $\mathcal{F}h(w) = \int_{\mathbb{R}} e^{(-2\pi v w) i} \cdot h(v) \, dv$, which is the hypothesis at $\theta = -2\pi w$ (\texttt{smul\_eq\_mul}, \texttt{Complex.ofReal\_mul}, \texttt{Complex.ofReal\_neg}; \texttt{ring\_nf} in the exponent).
 \end{proof}
 

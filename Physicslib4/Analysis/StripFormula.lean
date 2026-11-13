@@ -180,7 +180,19 @@ theorem stripQuotient_eq (f : ℂ → ℂ) :
         stripQuotient f (1 / 2 + t * I) = (f (1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ) ∧
           stripQuotient f (-1 / 2 + t * I) =
             -((f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) := by
-  sorry
+  have key : ∀ z : ℂ, z ≠ 0 → stripQuotient f z = (f z - f 0) / Complex.sin (π * z) := by
+    intro z hz
+    simp only [stripQuotient, Pi.div_apply, dslope_of_ne _ hz, slope_def_field, sub_zero,
+      mul_zero, Complex.sin_zero]
+    exact div_div_div_cancel_right₀ hz _ _
+  refine ⟨fun z hz _ => key z hz, fun t => ?_⟩
+  obtain ⟨h1, h2⟩ := sin_pi_mul_strip_boundary t
+  have n1 : (1 / 2 + t * I : ℂ) ≠ 0 := fun h => by
+    have := congrArg Complex.re h; norm_num at this
+  have n2 : (-1 / 2 + t * I : ℂ) ≠ 0 := fun h => by
+    have := congrArg Complex.re h; norm_num at this
+  rw [key _ n1, key _ n2, h1, h2, div_neg]
+  exact ⟨rfl, rfl⟩
 
 /-- The denominator dslope (z ↦ sin(πz)) 0 of the strip quotient does not vanish on the strip.
 
@@ -312,7 +324,10 @@ theorem strip_formula {f : ℂ → ℂ} (hc : ContinuousOn f (re ⁻¹' Icc (-1 
 Blueprint: lmm:fourier-transform-eq-zero -/
 theorem fourier_eq_zero_of_integral_exp_mul_eq_zero {h : ℝ → ℂ}
     (hh : ∀ θ : ℝ, ∫ t : ℝ, Complex.exp (θ * t * I) * h t = 0) : 𝓕 h = 0 := by
-  sorry
+  funext w
+  rw [Real.fourier_real_eq_integral_exp_smul, Pi.zero_apply, ← hh (-2 * π * w)]
+  congr 1; ext v
+  rw [smul_eq_mul]; push_cast; ring_nf
 
 /-- Fourier uniqueness: a continuous integrable h : ℝ → ℂ with ∫ e^{iθt} h(t) dt = 0 for every
 θ is zero.

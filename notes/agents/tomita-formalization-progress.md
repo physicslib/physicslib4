@@ -182,3 +182,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-13: wave 4 proved (integral_inv_cosh, integrable_of_norm_le_div_cosh).
 - lmm:integral-inv-cosh-pi (`Physicslib4.integral_inv_cosh_pi_mul`): proved by `Measure.integral_comp_mul_left` with a = π and `integral_inv_cosh`.
 - 2026-11-13: wave 5 proved (integral_inv_cosh_pi_mul). 1/cosh and sine lemmas done (9). StripFormula.lean: 15 sorries left.
+- lmm:fourier-transform-eq-zero (Physicslib4.fourier_eq_zero_of_integral_exp_mul_eq_zero): proved via Real.fourier_real_eq_integral_exp_smul with θ = -2πw.
+- lmm:strip-quotient-formula (Physicslib4.stripQuotient_eq): proved via dslope_of_ne + slope_def_field + div_div_div_cancel_right₀ and sin_pi_mul_strip_boundary.
+- 2026-11-13: proved stripQuotient_eq, fourier_eq_zero_of_integral_exp_mul_eq_zero.
