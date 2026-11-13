@@ -122,7 +122,9 @@ theorem integral_inv_cosh : ∫ t : ℝ, 1 / Real.cosh t = π := by
 
 Blueprint: lmm:integral-inv-cosh-pi -/
 theorem integral_inv_cosh_pi_mul : ∫ t : ℝ, 1 / Real.cosh (π * t) = 1 := by
-  sorry
+  rw [MeasureTheory.Measure.integral_comp_mul_left (fun t => 1 / Real.cosh t) π,
+    integral_inv_cosh, smul_eq_mul, abs_of_pos (inv_pos.2 Real.pi_pos),
+    inv_mul_cancel₀ Real.pi_ne_zero]
 
 /-- sin(π(1/2 + it)) = cosh(πt) and sin(π(-1/2 + it)) = -cosh(πt).
 

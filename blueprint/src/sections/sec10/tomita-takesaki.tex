@@ -2362,6 +2362,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     $\int_{\mathbb{R}} \frac{dt}{\cosh(\pi t)} = 1$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:integral-inv-cosh}
     Mathlib's \texttt{MeasureTheory.Measure.integral\_comp\_mul\_left} gives $\int_{\mathbb{R}} \frac{dt}{\cosh(\pi t)} = |\pi^{-1}| \int_{\mathbb{R}} \frac{du}{\cosh u} = \pi^{-1} \cdot \pi = 1$ by Lemma~\ref{lmm:integral-inv-cosh}.
 \end{proof}
