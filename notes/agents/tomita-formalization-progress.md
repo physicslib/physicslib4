@@ -177,3 +177,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:hasDerivAt-two-arctan-exp (Physicslib4.hasDerivAt_two_mul_arctan_exp): proved via HasDerivAt.arctan, const_mul, congr_deriv with cosh_eq/exp_neg/field_simp/ring.
 - lmm:sin-pi-zero-strip (`eq_zero_of_sin_pi_mul_eq_zero`): proved via `Complex.sin_eq_zero_iff`, `mul_left_cancel₀` to get z = k, then `Int.cast_lt` bounds and `omega`.
 - 2026-11-13: wave 3 proved (hasDerivAt_two_mul_arctan_exp, eq_zero_of_sin_pi_mul_eq_zero).
+- lmm:integral-inv-cosh: `Physicslib4.integral_inv_cosh` proved via `integral_of_hasDerivAt_of_tendsto` with antiderivative 2·arctan(eᵗ).
+- 2026-11-13: proved `integrable_of_norm_le_div_cosh` (lmm:cosh-dominated-integrable) via `Integrable.mono'` against `K * (1 / cosh (π t))` from `integrable_inv_cosh`.
+- 2026-11-13: wave 4 proved (integral_inv_cosh, integrable_of_norm_le_div_cosh).

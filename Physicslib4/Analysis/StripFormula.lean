@@ -90,8 +90,9 @@ theorem integrable_inv_cosh :
 
 Blueprint: lmm:cosh-dominated-integrable -/
 theorem integrable_of_norm_le_div_cosh {h : ℝ → ℂ} (hc : Continuous h) (K : ℝ)
-    (hK : ∀ t, ‖h t‖ ≤ K / Real.cosh (π * t)) : Integrable h := by
-  sorry
+    (hK : ∀ t, ‖h t‖ ≤ K / Real.cosh (π * t)) : Integrable h :=
+  (integrable_inv_cosh.2.const_mul K).mono' hc.aestronglyMeasurable
+    (Filter.Eventually.of_forall fun t => by rw [← div_eq_mul_one_div]; exact hK t)
 
 /-- The derivative of t ↦ 2 arctan(eᵗ) is 1/cosh t.
 
@@ -108,7 +109,14 @@ theorem hasDerivAt_two_mul_arctan_exp (t : ℝ) :
 
 Blueprint: lmm:integral-inv-cosh -/
 theorem integral_inv_cosh : ∫ t : ℝ, 1 / Real.cosh t = π := by
-  sorry
+  have htop : Tendsto (fun t => 2 * Real.arctan (Real.exp t)) atTop (𝓝 (2 * (π / 2))) :=
+    ((Real.tendsto_arctan_atTop.mono_right nhdsWithin_le_nhds).comp
+      Real.tendsto_exp_atTop).const_mul 2
+  have hbot : Tendsto (fun t => 2 * Real.arctan (Real.exp t)) atBot (𝓝 (2 * Real.arctan 0)) :=
+    ((Real.continuous_arctan.tendsto 0).comp Real.tendsto_exp_atBot).const_mul 2
+  rw [integral_of_hasDerivAt_of_tendsto hasDerivAt_two_mul_arctan_exp integrable_inv_cosh.1
+    hbot htop, Real.arctan_zero]
+  ring
 
 /-- ∫ dt / cosh(πt) = 1.
 

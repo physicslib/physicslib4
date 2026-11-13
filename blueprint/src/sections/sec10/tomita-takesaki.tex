@@ -2327,6 +2327,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     Let $h : \mathbb{R} \to \mathbb{C}$ be continuous, and let $K \in \mathbb{R}$ with $\|h(t)\| \le K/\cosh(\pi t)$ for every $t \in \mathbb{R}$. Then $h$ is integrable on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:inv-cosh-pi-integrable}
     $t \mapsto K/\cosh(\pi t) = K \cdot (1/\cosh(\pi t))$ is integrable (Lemma~\ref{lmm:inv-cosh-pi-integrable}; Mathlib's \texttt{Integrable.const\_mul}) and $h$ is continuous, hence a.e.\ strongly measurable, so $h$ is integrable (Mathlib's \texttt{Integrable.mono'}).
 \end{proof}
@@ -2349,6 +2350,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     $\int_{\mathbb{R}} \frac{dt}{\cosh t} = \pi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:inv-cosh-pi-integrable, lmm:hasDerivAt-two-arctan-exp}
     Let $F(t) = 2\arctan(e^t)$, so $F' = 1/\cosh$ (Lemma~\ref{lmm:hasDerivAt-two-arctan-exp}). As $t \to -\infty$, $e^t \to 0$ (\texttt{Real.tendsto\_exp\_atBot}), so $F(t) \to 2\arctan 0 = 0$ (\texttt{Real.continuous\_arctan}, \texttt{Real.arctan\_zero}); as $t \to \infty$, $e^t \to \infty$ (\texttt{Real.tendsto\_exp\_atTop}), so $F(t) \to 2 \cdot \pi/2 = \pi$ (\texttt{Real.tendsto\_arctan\_atTop}, whose target $\mathcal{N}_{<}(\pi/2)$ is weakened to $\mathcal{N}(\pi/2)$ by \texttt{.mono\_right nhdsWithin\_le\_nhds}; then \texttt{Tendsto.const\_mul}). With $1/\cosh$ integrable (Lemma~\ref{lmm:inv-cosh-pi-integrable}), Mathlib's \texttt{MeasureTheory.integral\_of\_hasDerivAt\_of\_tendsto} gives $\int_{\mathbb{R}} dt/\cosh t = \pi - 0$.
 \end{proof}
