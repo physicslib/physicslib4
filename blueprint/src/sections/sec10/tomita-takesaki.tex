@@ -302,6 +302,16 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     The map $\Phi(\phi, \psi) = (\phi, C\psi)$ is an isometric real-linear bijection of $\mathbf{H} \times \mathbf{H}$ (Lemma~\ref{lmm:reference-conjugation-properties} and Lemma~\ref{lmm:componentwise-convergence}), hence a homeomorphism, so it maps closures to closures. Since $C(C\psi) = \psi$, $\Phi$ maps $\Gamma(S_0')$ onto $\Gamma(S_0)$ and $\Gamma(S') = \overline{\Gamma(S_0')}$ (Proposition~\ref{prpstn:closure-linearity-and-sequential-description}) onto $\Gamma(S)$. The closure of $\Gamma(S_0)$ involves only $\mathcal{M}$ and $\Omega$.
 \end{proof}
 
+\begin{lemma}[$S$ on $\mathcal{M}\Omega$]
+    \label{lmm:tomita-operator-on-algebra}
+    \uses{def:tomita-operator, def:von-neumann-algebra-commutant-convention}
+    Let $c \in \mathcal{M}$. Then $c\Omega \in \text{Dom}(S)$ and $S(c\Omega) = c^*\Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-pre-operators-apply, lmm:tomita-operator-independent-of-c}
+    By Lemma~\ref{lmm:tomita-pre-operators-apply}, $c\Omega \in \text{Dom}(S_0)$ and $S_0(c\Omega) = c^*\Omega$, so $(c\Omega, c^*\Omega) \in \Gamma(S_0)$. This set is contained in its closure (\texttt{subset\_closure}), which is $\Gamma(S)$ by Lemma~\ref{lmm:tomita-operator-independent-of-c}.
+\end{proof}
+
 \begin{lemma}[The Graph of $S$ is Symmetric under the Flip]
     \label{lmm:tomita-graph-flip}
     \lean{Physicslib4.Modular.tomitaOperator_graph_swap}
@@ -2981,14 +2991,35 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's notes. Jones proves Lemma~13.1.5 with a Sakai-type Radon--Nikodym theorem; here it follows from Takesaki's lemma (Theorem~\ref{thrm:takesaki-lemma}) at $z = -\lambda^{-2}$. As in Subsection~\ref{sbsctn:tomita-adjoint}, $S^*$ denotes the antilinear operator $(S')^*C$: $\xi \in \text{Dom}(S^*)$ means $C\xi \in \text{Dom}((S')^*)$, and then $S^*\xi = (S')^*C\xi$. By Theorem~\ref{thrm:modular-conjugation-polar} and Corollary~\ref{crllr:tomita-adjoint-polar}, $\text{Dom}(S) = \text{Dom}(\Delta^{1/2})$ with $S = J\Delta^{1/2}$, and $\text{Dom}(S^*) = \text{Dom}(\Delta^{-1/2})$ with $S^* = J\Delta^{-1/2}$; in particular $\text{Dom}(S) \cap \text{Dom}(S^*) = \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$. The inner product is linear in the second slot, while Jones's is linear in the first, so Jones's $\left< u, v \right>$ appears here as $\left< v, u \right>$.
 
-\emph{Notation.} As before, $s(t) = \sqrt{\max(t, 0)}$, so $\Delta^{1/2} = s(\Delta)$ (Definition~\ref{def:modular-operator}), and $r(t) = t^{-1/2}$ for $t > 0$, $r(t) = 0$ otherwise, so $\Delta^{-1/2} = r(\Delta)$ (Lemma~\ref{lmm:inverse-square-root-positive}). For $\lambda > 0$ define $g_\lambda, v_\lambda, k_\lambda : \mathbb{R} \to \mathbb{C}$ by
-\begin{align}
-    g_\lambda(t) = \frac{\lambda}{1 + \lambda^2 t}, \qquad v_\lambda(t) = \frac{\lambda\sqrt{t}}{1 + \lambda^2 t}, \qquad k_\lambda(t) = \frac{\lambda t}{1 + \lambda^2 t} \qquad (t > 0),
-\end{align}
-and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate definitions are introduced; these are abbreviations for explicit functions.
+\emph{Notation.} As before, $s(t) = \sqrt{\max(t, 0)}$, so $\Delta^{1/2} = s(\Delta)$ (Definition~\ref{def:modular-operator}), and $r(t) = t^{-1/2}$ for $t > 0$, $r(t) = 0$ otherwise, so $\Delta^{-1/2} = r(\Delta)$ (Lemma~\ref{lmm:inverse-square-root-positive}). The functions $g_\lambda$, $v_\lambda$ and $k_\lambda$ of Definitions~\ref{def:van-daele-g}, \ref{def:van-daele-v} and~\ref{def:van-daele-k} are the bounded functions of $\Delta$ that the proofs below use.
+
+\begin{definition}[The Function $g_\lambda$]
+    \label{def:van-daele-g}
+    For $\lambda > 0$ real, $g_\lambda : \mathbb{R} \to \mathbb{C}$ is
+    \begin{align}
+        g_\lambda(t) = \frac{\lambda}{1 + \lambda^2 t} \quad (t > 0), \qquad g_\lambda(t) = 0 \quad (t \le 0).
+    \end{align}
+\end{definition}
+
+\begin{definition}[The Function $v_\lambda$]
+    \label{def:van-daele-v}
+    For $\lambda > 0$ real, $v_\lambda : \mathbb{R} \to \mathbb{C}$ is
+    \begin{align}
+        v_\lambda(t) = \frac{\lambda\sqrt{t}}{1 + \lambda^2 t} \quad (t > 0), \qquad v_\lambda(t) = 0 \quad (t \le 0).
+    \end{align}
+\end{definition}
+
+\begin{definition}[The Function $k_\lambda$]
+    \label{def:van-daele-k}
+    For $\lambda > 0$ real, $k_\lambda : \mathbb{R} \to \mathbb{C}$ is
+    \begin{align}
+        k_\lambda(t) = \frac{\lambda t}{1 + \lambda^2 t} \quad (t > 0), \qquad k_\lambda(t) = 0 \quad (t \le 0).
+    \end{align}
+\end{definition}
 
 \begin{lemma}[The Functions $g_\lambda$, $v_\lambda$, $k_\lambda$ are Bounded]
     \label{lmm:van-daele-functions-bounded}
+    \uses{def:van-daele-g, def:van-daele-v, def:van-daele-k}
     Let $\lambda > 0$. Then $g_\lambda$, $v_\lambda$ and $k_\lambda$ are measurable and real-valued, and for every $t \in \mathbb{R}$, $0 \le g_\lambda(t) \le \lambda$, $0 \le v_\lambda(t) \le \tfrac{1}{2}$ and $0 \le k_\lambda(t) \le \lambda^{-1}$.
 \end{lemma}
 \begin{proof}
@@ -2997,11 +3028,11 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
 
 \begin{lemma}[Identities between $g_\lambda$, $v_\lambda$, $k_\lambda$, $s$ and $r$]
     \label{lmm:van-daele-functions-identities}
+    \uses{def:van-daele-g, def:van-daele-v, def:van-daele-k}
     Let $\lambda > 0$. For every $t \in \mathbb{R}$,
     \begin{align}
-        s(t)g_\lambda(t) = v_\lambda(t), \qquad v_\lambda(t)s(t) = k_\lambda(t), \qquad k_\lambda(t)r(t) = v_\lambda(t), \qquad \lambda k_\lambda(t) + \lambda^{-1}g_\lambda(t) = 1_{(0, \infty)}(t),
+        s(t)g_\lambda(t) = v_\lambda(t), \qquad v_\lambda(t)s(t) = k_\lambda(t), \qquad k_\lambda(t)r(t) = v_\lambda(t), \qquad v_\lambda(t)r(t) = g_\lambda(t), \qquad \lambda k_\lambda(t) + \lambda^{-1}g_\lambda(t) = 1_{(0, \infty)}(t).
     \end{align}
-    and $v_\lambda(t)r(t) = g_\lambda(t)$ for every $t > 0$.
 \end{lemma}
 \begin{proof}
     For $t \le 0$ all of $s(t)$ (\texttt{max\_eq\_right}, \texttt{Real.sqrt\_zero}), $r(t)$, $g_\lambda(t)$, $v_\lambda(t)$, $k_\lambda(t)$ and $1_{(0,\infty)}(t)$ vanish. For $t > 0$, $s(t) = \sqrt{t}$ (\texttt{max\_eq\_left}), $r(t) = t^{-1/2} = (\sqrt{t})^{-1}$ (\texttt{Real.sqrt\_eq\_rpow}, \texttt{Real.rpow\_neg}) and $\sqrt{t}\sqrt{t} = t$, $\sqrt{t} > 0$ (\texttt{Real.mul\_self\_sqrt}, \texttt{Real.sqrt\_pos}); each identity is then an identity of rational expressions in $\lambda$ and $\sqrt{t}$ with nonzero denominators (\texttt{field\_simp}, \texttt{ring}). For the last one, $\lambda \cdot \lambda t + \lambda^{-1}\lambda = \lambda^2 t + 1$ over $1 + \lambda^2 t$.
@@ -3019,7 +3050,7 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
 
 \begin{lemma}[Takesaki's Lemma at $z = -\lambda^{-2}$: Scalars]
     \label{lmm:van-daele-resolvent-point}
-    \uses{lmm:resolvent-function-props}
+    \uses{lmm:resolvent-function-props, def:van-daele-g}
     Let $\lambda > 0$ and $z = -\lambda^{-2}$. Then $z \notin [0, \infty)$, $\sqrt{2(|z| - \operatorname{Re} z)} = 2\lambda^{-1}$, and $-\lambda^{-1}r_z(t) = g_\lambda(t)$ for every $t > 0$, with $r_z$ as in Lemma~\ref{lmm:resolvent-function-props}.
 \end{lemma}
 \begin{proof}
@@ -3028,7 +3059,7 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
 
 \begin{lemma}[$g_\lambda(\Delta)$ as a Resolvent]
     \label{lmm:van-daele-g-resolvent}
-    \uses{crllr:modular-resolvent, lmm:van-daele-functions-bounded}
+    \uses{crllr:modular-resolvent, lmm:van-daele-functions-bounded, def:van-daele-g}
     Let $\lambda > 0$ and $z = -\lambda^{-2}$. Then $g_\lambda(\Delta) = -\lambda^{-1}(z - \Delta)^{-1}$, a bounded operator defined on all of $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -3038,7 +3069,7 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
 
 \begin{lemma}[Bounded Functions Composed with $\Delta^{\pm 1/2}$]
     \label{lmm:van-daele-fc-products}
-    \uses{def:modular-operator, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded}
+    \uses{def:modular-operator, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-v, def:van-daele-k}
     Let $\lambda > 0$. For $\xi \in \text{Dom}(\Delta^{1/2})$,
     \begin{align}
         g_\lambda(\Delta)\Delta^{1/2}\xi = v_\lambda(\Delta)\xi, \qquad v_\lambda(\Delta)\Delta^{1/2}\xi = k_\lambda(\Delta)\xi,
@@ -3049,26 +3080,26 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
     \end{align}
 \end{lemma}
 \begin{proof}
-    \uses{lmm:fc-bounded-left-composition, lmm:van-daele-functions-identities, lmm:modular-fc-congr-positive, lmm:functional-calculus-bounded, thrm:modular-operator-properties}
-    $\Delta^{1/2} = s(\Delta)$ with $\text{Dom}(\Delta^{1/2}) = W_s$, and $\Delta^{-1/2} = r(\Delta)$ with domain $W_r$. Each identity is Lemma~\ref{lmm:fc-bounded-left-composition}, $u(\Delta)h(\Delta)\xi = (uh)(\Delta)\xi$, for the bounded measurable $u \in \{g_\lambda, v_\lambda, k_\lambda\}$ (Lemma~\ref{lmm:van-daele-functions-bounded}) and $h \in \{s, r\}$, followed by the pointwise identities $g_\lambda s = v_\lambda$, $v_\lambda s = k_\lambda$ and $k_\lambda r = v_\lambda$ of Lemma~\ref{lmm:van-daele-functions-identities} (\texttt{mul\_comm}, \texttt{funext}). For the last one, $v_\lambda r$ and $g_\lambda$ agree on $(0, \infty)$ (Lemma~\ref{lmm:van-daele-functions-identities}), so $(v_\lambda r)(\Delta) = g_\lambda(\Delta)$ by Lemma~\ref{lmm:modular-fc-congr-positive}.
+    \uses{lmm:fc-bounded-left-composition, lmm:van-daele-functions-identities, lmm:functional-calculus-bounded, thrm:modular-operator-properties}
+    $\Delta^{1/2} = s(\Delta)$ with $\text{Dom}(\Delta^{1/2}) = W_s$, and $\Delta^{-1/2} = r(\Delta)$ with domain $W_r$. Each identity is Lemma~\ref{lmm:fc-bounded-left-composition}, $u(\Delta)h(\Delta)\xi = (uh)(\Delta)\xi$, for the bounded measurable $u \in \{g_\lambda, v_\lambda, k_\lambda\}$ (Lemma~\ref{lmm:van-daele-functions-bounded}) and $h \in \{s, r\}$, followed by the pointwise identities $g_\lambda s = v_\lambda$, $v_\lambda s = k_\lambda$, $k_\lambda r = v_\lambda$ and $v_\lambda r = g_\lambda$ of Lemma~\ref{lmm:van-daele-functions-identities} (\texttt{mul\_comm}, \texttt{funext}).
 \end{proof}
 
 \begin{lemma}[$\Delta^{\pm 1/2}$ on the Range of $g_\lambda(\Delta)$]
     \label{lmm:van-daele-g-domains}
-    \uses{def:modular-operator, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded}
+    \uses{def:modular-operator, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-k}
     Let $\lambda > 0$ and $\psi \in \text{Dom}(\Delta^{-1/2})$. Then $g_\lambda(\Delta)\psi \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$, and
     \begin{align}
         \Delta^{1/2}g_\lambda(\Delta)\psi = k_\lambda(\Delta)\Delta^{-1/2}\psi, \qquad \Delta^{-1/2}g_\lambda(\Delta)\psi = g_\lambda(\Delta)\Delta^{-1/2}\psi.
     \end{align}
 \end{lemma}
 \begin{proof}
-    \uses{thrm:fc-composition, lmm:fc-bounded-left-composition, lmm:functional-calculus-bounded, lmm:van-daele-functions-identities, lmm:van-daele-fc-products}
+    \uses{thrm:fc-composition, lmm:fc-bounded-left-composition, lmm:functional-calculus-bounded, lmm:van-daele-functions-identities, lmm:van-daele-fc-products, def:van-daele-v}
     $W_{g_\lambda} = \mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}). First, $sg_\lambda = v_\lambda$ is bounded (Lemma~\ref{lmm:van-daele-functions-identities}), so $W_{sg_\lambda} = \mathbf{H}$ and Theorem~\ref{thrm:fc-composition} with $f = s$, $g = g_\lambda$ gives $g_\lambda(\Delta)\psi \in \text{Dom}(s(\Delta))$ and $s(\Delta)g_\lambda(\Delta)\psi = v_\lambda(\Delta)\psi$, which is $k_\lambda(\Delta)\Delta^{-1/2}\psi$ by Lemma~\ref{lmm:van-daele-fc-products}. Second, Lemma~\ref{lmm:fc-bounded-left-composition} with $u = g_\lambda$, $h = r$ gives $\psi \in W_{g_\lambda r}$ and $g_\lambda(\Delta)r(\Delta)\psi = (g_\lambda r)(\Delta)\psi$; since $rg_\lambda = g_\lambda r$, Theorem~\ref{thrm:fc-composition} with $f = r$, $g = g_\lambda$ gives $g_\lambda(\Delta)\psi \in \text{Dom}(r(\Delta))$ and $r(\Delta)g_\lambda(\Delta)\psi = (rg_\lambda)(\Delta)\psi = g_\lambda(\Delta)r(\Delta)\psi$.
 \end{proof}
 
 \begin{lemma}[$\lambda k_\lambda(\Delta) + \lambda^{-1}g_\lambda(\Delta) = \mathbf{1}$]
     \label{lmm:van-daele-partition-of-unity}
-    \uses{def:modular-operator, lmm:van-daele-functions-bounded}
+    \uses{def:modular-operator, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-k}
     Let $\lambda > 0$. Then $\lambda k_\lambda(\Delta) + \lambda^{-1}g_\lambda(\Delta) = \mathbf{1}$.
 \end{lemma}
 \begin{proof}
@@ -3088,7 +3119,7 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
 
 \begin{lemma}[The Element $a$ of Lemma~13.1.5]
     \label{lmm:van-daele-element}
-    \uses{def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention, def:modular-operator, lmm:van-daele-functions-bounded}
+    \uses{def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention, def:modular-operator, lmm:van-daele-functions-bounded, def:van-daele-g}
     Let $\lambda > 0$ and $a' \in \mathcal{M}'$. There is $a \in \mathcal{M}$ with $a\Omega = g_\lambda(\Delta)a'^*\Omega$ and $\|a\| \le \|a'\|/2$.
 \end{lemma}
 \begin{proof}
@@ -3098,7 +3129,7 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
 
 \begin{lemma}[Formulas for $a\Omega$ and $\Delta^{\pm 1/2}a\Omega$]
     \label{lmm:van-daele-element-formulas}
-    \uses{def:modular-operator, def:modular-conjugation, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded}
+    \uses{def:modular-operator, def:modular-conjugation, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-v, def:van-daele-k}
     Let $\lambda > 0$, $a' \in \mathcal{M}'$, and let $a \in \mathcal{M}$ satisfy $a\Omega = g_\lambda(\Delta)a'^*\Omega$. Put $\phi = J(a'\Omega)$. Then $a\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$ and
     \begin{align}
         a\Omega = v_\lambda(\Delta)\phi, \qquad \Delta^{1/2}a\Omega = k_\lambda(\Delta)\phi, \qquad \Delta^{-1/2}a\Omega = g_\lambda(\Delta)\phi.
@@ -3111,20 +3142,20 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
 
 \begin{lemma}[Jones's Lemma 13.1.5]
     \label{lmm:van-daele-commutant-equation}
-    \uses{def:tomita-operator, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention, def:modular-operator, lmm:van-daele-functions-bounded}
+    \uses{def:tomita-operator, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention, def:modular-operator, lmm:van-daele-functions-bounded, def:van-daele-g}
     Let $\lambda > 0$ and $a' \in \mathcal{M}'$. There is $a \in \mathcal{M}$ with $\|a\| \le \|a'\|/2$ and $a\Omega = g_\lambda(\Delta)a'^*\Omega$, such that $a\Omega \in \text{Dom}(S) \cap \text{Dom}(S^*)$ and
     \begin{align}
         a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega).
     \end{align}
 \end{lemma}
 \begin{proof}
-    \uses{lmm:van-daele-element, lmm:van-daele-element-formulas, lmm:van-daele-partition-of-unity, thrm:modular-conjugation-polar, crllr:tomita-adjoint-polar, thrm:modular-conjugation-involution}
+    \uses{lmm:van-daele-element, lmm:van-daele-element-formulas, lmm:van-daele-partition-of-unity, thrm:modular-conjugation-polar, crllr:tomita-adjoint-polar, thrm:modular-conjugation-involution, def:van-daele-k}
     Take $a$ from Lemma~\ref{lmm:van-daele-element} and $\phi = J(a'\Omega)$. By Lemma~\ref{lmm:van-daele-element-formulas}, $a\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2}) = \text{Dom}(S) \cap \text{Dom}(S^*)$, and $S(a\Omega) = J\Delta^{1/2}a\Omega = Jk_\lambda(\Delta)\phi$, $S^*(a\Omega) = J\Delta^{-1/2}a\Omega = Jg_\lambda(\Delta)\phi$ (Theorem~\ref{thrm:modular-conjugation-polar}, Corollary~\ref{crllr:tomita-adjoint-polar}). $J$ is additive and commutes with real scalars ($\overline{\lambda} = \lambda$), so $\lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega) = J\big((\lambda k_\lambda(\Delta) + \lambda^{-1}g_\lambda(\Delta))\phi\big) = J\phi$ by Lemma~\ref{lmm:van-daele-partition-of-unity}, and $J\phi = J(J(a'\Omega)) = a'\Omega$ (Theorem~\ref{thrm:modular-conjugation-involution}).
 \end{proof}
 
 \begin{lemma}[Inverting $\Delta^{1/2} + \Delta^{-1/2}$]
     \label{lmm:van-daele-inversion}
-    \uses{def:modular-operator, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded}
+    \uses{def:modular-operator, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-v, def:van-daele-k}
     Let $\xi \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$ and $\phi = \Delta^{1/2}\xi + \Delta^{-1/2}\xi$. Then
     \begin{align}
         v_1(\Delta)\phi = \xi, \qquad k_1(\Delta)\phi = \Delta^{1/2}\xi, \qquad g_1(\Delta)\phi = \Delta^{-1/2}\xi.
@@ -3140,6 +3171,16 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
     \end{align}
 \end{proof}
 
+\begin{lemma}[$J(\mathcal{M}'\Omega)$ is Dense]
+    \label{lmm:modular-conjugation-commutant-dense}
+    \uses{def:modular-conjugation, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    For every $\phi \in \mathbf{H}$ there are $a'_n \in \mathcal{M}'$ ($n \in \mathbb{N}$) with $J(a'_n\Omega) \to \phi$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:modular-conjugation-involution, lmm:antiunitary-isometric, thrm:modular-conjugation-polar}
+    $\mathcal{M}'\Omega$ is dense (Definition~\ref{def:cyclic-separating-vector}), so there are $a'_n \in \mathcal{M}'$ with $a'_n\Omega \to J\phi$ (\texttt{mem\_closure\_iff\_seq\_limit}, \texttt{Dense.closure\_eq}). $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}), hence continuous (Lemma~\ref{lmm:antiunitary-isometric}, \texttt{Continuous.tendsto}), and $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}), so $J(a'_n\Omega) \to \phi$.
+\end{proof}
+
 \begin{corollary}[Jones's Corollary 13.1.6]
     \label{crllr:van-daele-approximation}
     \uses{def:modular-operator, lmm:inverse-square-root-positive, def:cyclic-separating-vector}
@@ -3149,8 +3190,8 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
     \end{align}
 \end{corollary}
 \begin{proof}
-    \uses{lmm:van-daele-inversion, lmm:van-daele-element, lmm:van-daele-element-formulas, thrm:modular-conjugation-involution, lmm:antiunitary-isometric, thrm:modular-conjugation-polar}
-    Let $\phi = \Delta^{1/2}\xi + \Delta^{-1/2}\xi$. $\mathcal{M}'\Omega$ is dense (Definition~\ref{def:cyclic-separating-vector}), so there are $a'_n \in \mathcal{M}'$ with $a'_n\Omega \to J\phi$ (\texttt{mem\_closure\_iff\_seq\_limit}, \texttt{Dense.closure\_eq}). $J$ is continuous (Lemma~\ref{lmm:antiunitary-isometric}) with $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}), so $J(a'_n\Omega) \to \phi$. Lemmas~\ref{lmm:van-daele-element} and~\ref{lmm:van-daele-element-formulas} with $\lambda = 1$ give $a_n \in \mathcal{M}$ with $a_n\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$, $a_n\Omega = v_1(\Delta)J(a'_n\Omega)$, $\Delta^{1/2}a_n\Omega = k_1(\Delta)J(a'_n\Omega)$ and $\Delta^{-1/2}a_n\Omega = g_1(\Delta)J(a'_n\Omega)$. The bounded operators $v_1(\Delta)$, $k_1(\Delta)$, $g_1(\Delta)$ are continuous (\texttt{ContinuousLinearMap.continuous}, \texttt{Continuous.tendsto}), so these converge to $v_1(\Delta)\phi$, $k_1(\Delta)\phi$, $g_1(\Delta)\phi$, which are $\xi$, $\Delta^{1/2}\xi$, $\Delta^{-1/2}\xi$ by Lemma~\ref{lmm:van-daele-inversion}.
+    \uses{lmm:van-daele-inversion, lmm:van-daele-element, lmm:van-daele-element-formulas, lmm:modular-conjugation-commutant-dense, def:van-daele-g, def:van-daele-v, def:van-daele-k}
+    Let $\phi = \Delta^{1/2}\xi + \Delta^{-1/2}\xi$. Lemma~\ref{lmm:modular-conjugation-commutant-dense} gives $a'_n \in \mathcal{M}'$ with $J(a'_n\Omega) \to \phi$. Lemmas~\ref{lmm:van-daele-element} and~\ref{lmm:van-daele-element-formulas} with $\lambda = 1$ give $a_n \in \mathcal{M}$ with $a_n\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$, $a_n\Omega = v_1(\Delta)J(a'_n\Omega)$, $\Delta^{1/2}a_n\Omega = k_1(\Delta)J(a'_n\Omega)$ and $\Delta^{-1/2}a_n\Omega = g_1(\Delta)J(a'_n\Omega)$. The bounded operators $v_1(\Delta)$, $k_1(\Delta)$, $g_1(\Delta)$ are continuous (\texttt{ContinuousLinearMap.continuous}, \texttt{Continuous.tendsto}), so these converge to $v_1(\Delta)\phi$, $k_1(\Delta)\phi$, $g_1(\Delta)\phi$, which are $\xi$, $\Delta^{1/2}\xi$, $\Delta^{-1/2}\xi$ by Lemma~\ref{lmm:van-daele-inversion}.
 \end{proof}
 
 \begin{corollary}[Approximation in the Graphs of $S$ and $S^*$]
@@ -3173,16 +3214,14 @@ and $g_\lambda(t) = v_\lambda(t) = k_\lambda(t) = 0$ for $t \le 0$. No separate 
     By Lemma~\ref{lmm:commutant-tomita-operator}, $\Gamma(S^*) = \Gamma(S_{\mathcal{M}'})$, and $S_{\mathcal{M}'}$ is an involution by Theorem~\ref{thrm:tomita-operator-involution} for $(\mathcal{M}', \Omega)$, which satisfies its hypotheses by Lemma~\ref{lmm:commutant-cyclic-separating}.
 \end{proof}
 
-For the next three results, fix $\lambda > 0$, $a' \in \mathcal{M}'$ and $a \in \mathcal{M}$ with $a\Omega \in \text{Dom}(S^*)$ and $a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega)$, as provided by Lemma~\ref{lmm:van-daele-commutant-equation}.
-
 \begin{lemma}[The $S$-Term on $\mathcal{M}\Omega$]
     \label{lmm:van-daele-first-term}
     \uses{def:tomita-operator, def:tomita-pre-operators}
     Let $a, x, y \in \mathcal{M}$ with $y\Omega \in \text{Dom}(S^*)$. Then $\left< aS(x\Omega), S^*(y\Omega) \right> = \left< x^*y\Omega, S(a\Omega) \right>$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:tomita-pre-operators-apply, lmm:tomita-operator-independent-of-c, lmm:tomita-adjoint-intrinsic, lmm:commutant-von-neumann-algebra}
-    For $c \in \mathcal{M}$, $c\Omega \in \text{Dom}(S)$ and $S(c\Omega) = c^*\Omega$, because $\Gamma(S_0) \subset \Gamma(S)$ (Lemmas~\ref{lmm:tomita-pre-operators-apply} and~\ref{lmm:tomita-operator-independent-of-c}). So $aS(x\Omega) = ax^*\Omega$ with $ax^* \in \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), and Lemma~\ref{lmm:tomita-adjoint-intrinsic} with $\zeta = ax^*\Omega$ gives $\left< ax^*\Omega, S^*(y\Omega) \right> = \left< y\Omega, S(ax^*\Omega) \right> = \left< y\Omega, xa^*\Omega \right>$. Moving $x$ across (\texttt{ContinuousLinearMap.adjoint\_inner\_left}, \texttt{ContinuousLinearMap.star\_eq\_adjoint}) gives $\left< x^*y\Omega, a^*\Omega \right>$, and $a^*\Omega = S(a\Omega)$.
+    \uses{lmm:tomita-operator-on-algebra, lmm:tomita-adjoint-intrinsic, lmm:commutant-von-neumann-algebra}
+    For $c \in \mathcal{M}$, $c\Omega \in \text{Dom}(S)$ and $S(c\Omega) = c^*\Omega$ (Lemma~\ref{lmm:tomita-operator-on-algebra}). So $aS(x\Omega) = ax^*\Omega$ with $ax^* \in \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), and Lemma~\ref{lmm:tomita-adjoint-intrinsic} with $\zeta = ax^*\Omega$ gives $\left< ax^*\Omega, S^*(y\Omega) \right> = \left< y\Omega, S(ax^*\Omega) \right> = \left< y\Omega, xa^*\Omega \right>$. Moving $x$ across (\texttt{ContinuousLinearMap.adjoint\_inner\_left}, \texttt{ContinuousLinearMap.star\_eq\_adjoint}) gives $\left< x^*y\Omega, a^*\Omega \right>$, and $a^*\Omega = S(a\Omega)$.
 \end{proof}
 
 \begin{lemma}[The $S^*$-Term on $\mathcal{M}\Omega$]
@@ -3191,14 +3230,14 @@ For the next three results, fix $\lambda > 0$, $a' \in \mathcal{M}'$ and $a \in 
     Let $a, x, y \in \mathcal{M}$ with $x\Omega, a\Omega \in \text{Dom}(S^*)$. Then $\left< aS^*(x\Omega), S(y\Omega) \right> = \left< x^*y\Omega, S^*(a\Omega) \right>$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:tomita-pre-operators-apply, lmm:tomita-operator-independent-of-c, lmm:tomita-adjoint-intrinsic, lmm:tomita-adjoint-involution, lmm:commutant-von-neumann-algebra}
-    As in Lemma~\ref{lmm:van-daele-first-term}, $S(c\Omega) = c^*\Omega$ for $c \in \mathcal{M}$. So $\left< aS^*(x\Omega), y^*\Omega \right> = \left< S^*(x\Omega), a^*y^*\Omega \right> = \left< S^*(x\Omega), S(ya\Omega) \right>$. By Lemma~\ref{lmm:tomita-adjoint-involution}, $S^*(x\Omega) \in \text{Dom}(S^*)$ with $S^*S^*(x\Omega) = x\Omega$, so Lemma~\ref{lmm:tomita-adjoint-intrinsic} turns this into $\left< ya\Omega, x\Omega \right> = \left< a\Omega, y^*x\Omega \right> = \left< a\Omega, S(x^*y\Omega) \right>$, and Lemma~\ref{lmm:tomita-adjoint-intrinsic} again, with $a\Omega \in \text{Dom}(S^*)$, gives $\left< x^*y\Omega, S^*(a\Omega) \right>$.
+    \uses{lmm:tomita-operator-on-algebra, lmm:tomita-adjoint-intrinsic, lmm:tomita-adjoint-involution, lmm:commutant-von-neumann-algebra}
+    By Lemma~\ref{lmm:tomita-operator-on-algebra}, $c\Omega \in \text{Dom}(S)$ and $S(c\Omega) = c^*\Omega$ for $c \in \mathcal{M}$. So $\left< aS^*(x\Omega), y^*\Omega \right> = \left< S^*(x\Omega), a^*y^*\Omega \right> = \left< S^*(x\Omega), S(ya\Omega) \right>$. By Lemma~\ref{lmm:tomita-adjoint-involution}, $S^*(x\Omega) \in \text{Dom}(S^*)$ with $S^*S^*(x\Omega) = x\Omega$, so Lemma~\ref{lmm:tomita-adjoint-intrinsic} turns this into $\left< ya\Omega, x\Omega \right> = \left< a\Omega, y^*x\Omega \right> = \left< a\Omega, S(x^*y\Omega) \right>$, and Lemma~\ref{lmm:tomita-adjoint-intrinsic} again, with $a\Omega \in \text{Dom}(S^*)$, gives $\left< x^*y\Omega, S^*(a\Omega) \right>$.
 \end{proof}
 
 \begin{lemma}[Jones's Lemma 13.1.7 on $\mathcal{M}\Omega$]
     \label{lmm:van-daele-identity-algebra}
     \uses{def:tomita-operator}
-    With $\lambda$, $a'$, $a$ as above, let $x, y \in \mathcal{M}$ with $x\Omega, y\Omega \in \text{Dom}(S^*)$. Then
+    Let $\lambda > 0$, $a' \in \mathcal{M}'$ and $a \in \mathcal{M}$ with $a\Omega \in \text{Dom}(S^*)$ and $a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega)$ (Lemma~\ref{lmm:van-daele-commutant-equation}). Let $x, y \in \mathcal{M}$ with $x\Omega, y\Omega \in \text{Dom}(S^*)$. Then
     \begin{align}
         \lambda\left< aS(x\Omega), S^*(y\Omega) \right> + \lambda^{-1}\left< aS^*(x\Omega), S(y\Omega) \right> = \left< y\Omega, a'x\Omega \right>.
     \end{align}
@@ -3224,11 +3263,11 @@ For the next three results, fix $\lambda > 0$, $a' \in \mathcal{M}'$ and $a \in 
 \begin{lemma}[$S$ and $S^*$ after $J$]
     \label{lmm:tomita-operators-after-conjugation}
     \uses{def:tomita-operator, def:modular-conjugation, def:modular-operator, lmm:inverse-square-root-positive}
-    If $\xi \in \text{Dom}(\Delta^{-1/2})$, then $J\xi \in \text{Dom}(S)$ and $S(J\xi) = \Delta^{-1/2}\xi$. If $\xi \in \text{Dom}(\Delta^{1/2})$, then $J\xi \in \text{Dom}(S^*)$ and $S^*(J\xi) = \Delta^{1/2}\xi$. Hence $J$ maps $\text{Dom}(S) \cap \text{Dom}(S^*)$ onto itself.
+    If $\xi \in \text{Dom}(\Delta^{-1/2})$, then $J\xi \in \text{Dom}(S)$ and $S(J\xi) = \Delta^{-1/2}\xi$. If $\xi \in \text{Dom}(\Delta^{1/2})$, then $J\xi \in \text{Dom}(S^*)$ and $S^*(J\xi) = \Delta^{1/2}\xi$.
 \end{lemma}
 \begin{proof}
-    \uses{thrm:modular-conjugation-involution, thrm:modular-conjugation-polar, lmm:tomita-adjoint-sqrt-conjugation, crllr:tomita-adjoint-polar, def:product-of-unbounded-operators}
-    $J\Delta^{1/2}J = \Delta^{-1/2}$ including domains (Theorem~\ref{thrm:modular-conjugation-involution}, Definition~\ref{def:product-of-unbounded-operators}): for $\xi \in \text{Dom}(\Delta^{-1/2})$, $J\xi \in \text{Dom}(\Delta^{1/2}) = \text{Dom}(S)$ and $S(J\xi) = J\Delta^{1/2}J\xi = \Delta^{-1/2}\xi$ (Theorem~\ref{thrm:modular-conjugation-polar}). For $\xi \in \text{Dom}(\Delta^{1/2})$, $J(J\xi) = \xi \in \text{Dom}(\Delta^{1/2})$, so Lemma~\ref{lmm:tomita-adjoint-sqrt-conjugation} gives $J\xi \in \text{Dom}(S^*)$ and $S^*(J\xi) = \Delta^{1/2}J(J\xi) = \Delta^{1/2}\xi$. The last claim follows with $\text{Dom}(S) \cap \text{Dom}(S^*) = \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$ (Corollary~\ref{crllr:tomita-adjoint-polar}) and $J(J\xi) = \xi$.
+    \uses{thrm:modular-conjugation-involution, thrm:modular-conjugation-polar, lmm:tomita-adjoint-sqrt-conjugation, def:product-of-unbounded-operators}
+    $J\Delta^{1/2}J = \Delta^{-1/2}$ including domains (Theorem~\ref{thrm:modular-conjugation-involution}, Definition~\ref{def:product-of-unbounded-operators}): for $\xi \in \text{Dom}(\Delta^{-1/2})$, $J\xi \in \text{Dom}(\Delta^{1/2}) = \text{Dom}(S)$ and $S(J\xi) = J\Delta^{1/2}J\xi = \Delta^{-1/2}\xi$ (Theorem~\ref{thrm:modular-conjugation-polar}). For $\xi \in \text{Dom}(\Delta^{1/2})$, $J(J\xi) = \xi \in \text{Dom}(\Delta^{1/2})$, so Lemma~\ref{lmm:tomita-adjoint-sqrt-conjugation} gives $J\xi \in \text{Dom}(S^*)$ and $S^*(J\xi) = \Delta^{1/2}J(J\xi) = \Delta^{1/2}\xi$.
 \end{proof}
 
 \begin{corollary}[The Rearranged Identity]
@@ -3247,7 +3286,7 @@ For the next three results, fix $\lambda > 0$, $a' \in \mathcal{M}'$ and $a \in 
 
 \begin{corollary}[The Rearranged Identity on $\mathcal{H}_0$]
     \label{crllr:van-daele-rearranged-identity-H0}
-    \uses{def:modular-conjugation, lmm:modular-power-operators}
+    \uses{def:modular-conjugation, lmm:modular-power-operators, lmm:modular-spectral-projections-nested}
     Let $\lambda$, $a'$ and $a$ be as in Lemma~\ref{lmm:van-daele-sesquilinear-identity}, $n \ge 1$, and $\xi, \eta \in \mathbf{H}$ with $E_n\xi = \xi$ and $E_n\eta = \eta$. Then
     \begin{align}
         \left< \eta, Ja'J\xi \right> = \lambda\left< p_{1/2,n}(\Delta)\eta, a\,p_{-1/2,n}(\Delta)\xi \right> + \lambda^{-1}\left< p_{-1/2,n}(\Delta)\eta, a\,p_{1/2,n}(\Delta)\xi \right>.
