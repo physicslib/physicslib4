@@ -2526,6 +2526,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then $t \mapsto (f(\pm\tfrac{1}{2} + it) - f(0))/\cosh(\pi t)$ and $t \mapsto f(\pm\tfrac{1}{2} + it)/\cosh(\pi t)$ are integrable on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:cosh-dominated-integrable}
     $t \mapsto \pm\tfrac{1}{2} + it$ is continuous with values in $\mathcal{S}$, so $t \mapsto f(\pm\tfrac{1}{2} + it)$ is continuous (\texttt{ContinuousOn.comp\_continuous}) and bounded by $M$; $\cosh(\pi t) > 0$ is continuous. The numerators are bounded by $2M$ and $M$, so Lemma~\ref{lmm:cosh-dominated-integrable} with $K = 2M$ and $K = M$ applies.
 \end{proof}
@@ -2564,6 +2565,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     \[ \int_{\mathbb{R}} \frac{f(\pm\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt = \int_{\mathbb{R}} \frac{f(\pm\tfrac{1}{2} + it)}{\cosh(\pi t)} \, dt - f(0). \]
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-boundary-integrable, lmm:inv-cosh-pi-integrable, lmm:integral-inv-cosh-pi}
     Pointwise, $\frac{f(\pm\frac{1}{2} + it) - f(0)}{\cosh(\pi t)} = \frac{f(\pm\frac{1}{2} + it)}{\cosh(\pi t)} - f(0) \cdot \frac{1}{\cosh(\pi t)}$ (\texttt{sub\_div}, \texttt{div\_eq\_mul\_one\_div}), where the complex $\cosh(\pi t)$ is the cast of the real one (\texttt{Complex.ofReal\_cosh}, \texttt{Complex.ofReal\_mul}). The first term is integrable by Lemma~\ref{lmm:strip-boundary-integrable}; the second is the constant $f(0)$ times the cast of the real integrable function $1/\cosh(\pi t)$ (Lemma~\ref{lmm:inv-cosh-pi-integrable}; Mathlib's \texttt{MeasureTheory.Integrable.ofReal} and \texttt{Integrable.const\_mul}). Mathlib's \texttt{MeasureTheory.integral\_sub} splits the integral, and \texttt{MeasureTheory.integral\_const\_mul} and \texttt{integral\_ofReal} give $\int_{\mathbb{R}} f(0) \cdot \frac{1}{\cosh(\pi t)} \, dt = f(0) \cdot \int_{\mathbb{R}} \frac{dt}{\cosh(\pi t)} = f(0)$ by Lemma~\ref{lmm:integral-inv-cosh-pi}.
 \end{proof}

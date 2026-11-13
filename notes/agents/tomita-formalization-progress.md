@@ -197,3 +197,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:strip-horizontal-vanish: proved `Physicslib4.tendsto_stripHorizontalIntegral` (bound ‖H(T)‖ ≤ 4M/(πT) via `norm_stripQuotient_horizontal_le` and `squeeze_zero_norm'`).
 - lmm:strip-rectangle-identity (Physicslib4.strip_rectangle_identity): PROVED via rectangle Cauchy theorem + integral_stripQuotient_vertical + linear_combination.
 - 2026-11-13: proved strip_rectangle_identity, tendsto_stripHorizontalIntegral.
+- lmm:strip-boundary-integrable (Physicslib4.strip_boundary_integrable): proved via a local lemma for any boundary line Re σ ∈ [-1/2, 1/2] and constant c with ‖c‖ ≤ M, using integrable_of_norm_le_div_cosh with K = 2M.
+- lmm:strip-boundary-split (`Physicslib4.strip_boundary_integral_sub`): proved via `sub_div`, `integral_sub` with `strip_boundary_integrable`, and ∫ f(0)/cosh(πt) = f(0) from `integral_const_mul`, `integral_complex_ofReal`, `integral_inv_cosh_pi_mul`.
+- 2026-11-13: proved strip_boundary_integrable, strip_boundary_integral_sub.

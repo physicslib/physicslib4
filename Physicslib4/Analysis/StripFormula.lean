@@ -346,7 +346,23 @@ theorem strip_boundary_integrable {f : ℂ → ℂ} {M : ℝ}
       Integrable (fun t : ℝ => f (1 / 2 + t * I) / (Real.cosh (π * t) : ℂ)) ∧
       Integrable (fun t : ℝ => (f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) ∧
       Integrable (fun t : ℝ => f (-1 / 2 + t * I) / (Real.cosh (π * t) : ℂ)) := by
-  sorry
+  have key : ∀ σ : ℂ, σ.re ∈ Icc (-1 / 2 : ℝ) (1 / 2) → ∀ c : ℂ, ‖c‖ ≤ M →
+      Integrable (fun t : ℝ => (f (σ + t * I) - c) / (Real.cosh (π * t) : ℂ)) := by
+    intro σ hσ c hcM
+    have hmem : ∀ t : ℝ, σ + t * I ∈ re ⁻¹' Icc (-1 / 2) (1 / 2) := fun t => by simpa using hσ
+    have hfc : Continuous fun t : ℝ => f (σ + t * I) :=
+      hc.comp_continuous (by fun_prop) hmem
+    refine integrable_of_norm_le_div_cosh ((hfc.sub continuous_const).div (by fun_prop)
+      fun t => ofReal_ne_zero.2 (Real.cosh_pos _).ne') (2 * M) fun t => ?_
+    rw [norm_div, norm_real, Real.norm_of_nonneg (Real.cosh_pos _).le]
+    gcongr
+    linarith [norm_sub_le (f (σ + t * I)) c, hM _ (hmem t)]
+  have hM0 : ‖(0 : ℂ)‖ ≤ M := by simpa using (norm_nonneg _).trans (hM 0 (by norm_num))
+  have h1 : (1 / 2 : ℂ).re ∈ Icc (-1 / 2 : ℝ) (1 / 2) := by norm_num
+  have h2 : (-1 / 2 : ℂ).re ∈ Icc (-1 / 2 : ℝ) (1 / 2) := by norm_num
+  have hf0 := hM 0 (by norm_num)
+  exact ⟨key _ h1 _ hf0, by simpa using key _ h1 0 hM0, key _ h2 _ hf0,
+    by simpa using key _ h2 0 hM0⟩
 
 /-- V₊(T) + V₋(T) converges to the sum of the two boundary integrals over ℝ as T → ∞.
 
@@ -381,7 +397,17 @@ theorem strip_boundary_integral_sub {f : ℂ → ℂ} {M : ℝ}
         (∫ t : ℝ, f (1 / 2 + t * I) / (Real.cosh (π * t) : ℂ)) - f 0 ∧
       (∫ t : ℝ, (f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) =
         (∫ t : ℝ, f (-1 / 2 + t * I) / (Real.cosh (π * t) : ℂ)) - f 0 := by
-  sorry
+  have he : (fun t : ℝ => f 0 / (Real.cosh (π * t) : ℂ)) =
+      fun t => f 0 * ((1 / Real.cosh (π * t) : ℝ) : ℂ) := by
+    ext t; push_cast; ring
+  have hi : Integrable (fun t : ℝ => f 0 / (Real.cosh (π * t) : ℂ)) := by
+    rw [he]; exact integrable_inv_cosh.2.ofReal.const_mul (f 0)
+  have hk : ∫ t : ℝ, f 0 / (Real.cosh (π * t) : ℂ) = f 0 := by
+    rw [he, integral_const_mul, integral_complex_ofReal, integral_inv_cosh_pi_mul, ofReal_one,
+      mul_one]
+  obtain ⟨-, h2, -, h4⟩ := strip_boundary_integrable hc hM
+  simp_rw [sub_div]
+  exact ⟨by rw [integral_sub h2 hi, hk], by rw [integral_sub h4 hi, hk]⟩
 
 /-- The strip formula: for f continuous and bounded on the closed strip and holomorphic on its
 interior, f(0) = ∫ (f(1/2 + it) + f(-1/2 + it)) / (2 cosh(πt)) dt.
