@@ -35,3 +35,8 @@
 - 2026-11-12: stage 4 writer pass 2 done (24 nodes, 914 entries): fourier-uniqueness uses Real.fourierInv_eq + smul_zero + integral_zero for F⁻0 = 0; added lmm:strip-boundary-split (Integrable.ofReal, integral_ofReal), lmm:strip-rectangle-subset, lmm:strip-vertical-sides, lmm:hasDerivAt-two-arctan-exp (+ .mono_right nhdsWithin_le_nhds note); dropped K ≥ 0 and the unused f-hypotheses; validate: only the 14 known `conv:` errors.
 - 2026-11-12: stage 4 review pass 2: PASS (24 nodes).
 - 2026-11-12: definition blocks added for g (def:strip-quotient), V± (def:strip-vertical-integrals), H (def:strip-horizontal-integral); 27 nodes. Validate/pdf OK. Committed.
+
+## Stage 5
+
+- 2026-11-13: plan: 5a (Δ^{it}, spectral subspaces H₀, Δ^z entire on H₀, J H₀ = H₀), 5b (Jones 13.1.5–13.1.7), 5c (Prop 13.2.2, Thm 13.2.3). Batch 5a writer started.
+- 2026-11-13: batch 5a drafted: subsection "Van Daele's Theorem" (sbsctn:van-daele), subsubsection "Complex Powers of the Modular Operator" (28 nodes): Delta^{it} := e^{it log Delta} (new def:modular-unitary-group, needs approval), H_0 via E_n = mu([1/n, n]), p_{z,n}(Delta) = (1_{K_n} lambda^z)(Delta) entire in operator norm, Delta^{+-1/2} agreement, J E_n J = E_n, J p_{z,n} J = p_{-conj z,n}, J Delta^{it} J = Delta^{it}; refresh (945 entries), validate (only the 14 known `conv:` errors).
