@@ -40,3 +40,4 @@
 
 - 2026-11-13: plan: 5a (Δ^{it}, spectral subspaces H₀, Δ^z entire on H₀, J H₀ = H₀), 5b (Jones 13.1.5–13.1.7), 5c (Prop 13.2.2, Thm 13.2.3). Batch 5a writer started.
 - 2026-11-13: batch 5a drafted: subsection "Van Daele's Theorem" (sbsctn:van-daele), subsubsection "Complex Powers of the Modular Operator" (28 nodes): Delta^{it} := e^{it log Delta} (new def:modular-unitary-group, needs approval), H_0 via E_n = mu([1/n, n]), p_{z,n}(Delta) = (1_{K_n} lambda^z)(Delta) entire in operator norm, Delta^{+-1/2} agreement, J E_n J = E_n, J p_{z,n} J = p_{-conj z,n}, J Delta^{it} J = Delta^{it}; refresh (945 entries), validate (only the 14 known `conv:` errors).
+- 2026-11-13: batch 5a drafted (28 nodes; new def:modular-unitary-group needs user approval) and committed unreviewed (c99d6cc). Review attempts failed twice with an API authentication error (HTTP 403 Cloudflare); review pending.
