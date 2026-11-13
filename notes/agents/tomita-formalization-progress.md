@@ -200,3 +200,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:strip-boundary-integrable (Physicslib4.strip_boundary_integrable): proved via a local lemma for any boundary line Re σ ∈ [-1/2, 1/2] and constant c with ‖c‖ ≤ M, using integrable_of_norm_le_div_cosh with K = 2M.
 - lmm:strip-boundary-split (`Physicslib4.strip_boundary_integral_sub`): proved via `sub_div`, `integral_sub` with `strip_boundary_integrable`, and ∫ f(0)/cosh(πt) = f(0) from `integral_const_mul`, `integral_complex_ofReal`, `integral_inv_cosh_pi_mul`.
 - 2026-11-13: proved strip_boundary_integrable, strip_boundary_integral_sub.
+- lmm:strip-boundary-integral-zero (`Physicslib4.strip_boundary_integral_eq_zero`): proved via `tendsto_nhds_unique` comparing `(tendsto_stripVerticalIntegral).const_mul I` with `tendsto_stripHorizontalIntegral` congr'd through `strip_rectangle_identity` on `eventually_gt_atTop 0`, then `I_ne_zero`.
+- lmm:strip-vertical-limit (tendsto_stripVerticalIntegral): proved via intervalIntegral_tendsto_integral on both boundary integrands (integrability from strip_boundary_integrable) and Tendsto.add.
+- 2026-11-13: proved tendsto_stripVerticalIntegral, strip_boundary_integral_eq_zero.

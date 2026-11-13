@@ -374,7 +374,10 @@ theorem tendsto_stripVerticalIntegral {f : ℂ → ℂ} {M : ℝ}
       atTop
       (𝓝 ((∫ t : ℝ, (f (1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) +
         ∫ t : ℝ, (f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ))) := by
-  sorry
+  obtain ⟨h1, -, h3, -⟩ := strip_boundary_integrable hc hM
+  simp only [stripVerticalIntegral, ofReal_div, ofReal_one, ofReal_neg]
+  exact (intervalIntegral_tendsto_integral h1 tendsto_neg_atTop_atBot tendsto_id).add
+    (intervalIntegral_tendsto_integral h3 tendsto_neg_atTop_atBot tendsto_id)
 
 /-- The two boundary integrals of (f(±1/2 + it) - f(0)) / cosh(πt) sum to 0.
 
@@ -385,7 +388,13 @@ theorem strip_boundary_integral_eq_zero {f : ℂ → ℂ} {M : ℝ}
     (hM : ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
     (∫ t : ℝ, (f (1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ)) +
       ∫ t : ℝ, (f (-1 / 2 + t * I) - f 0) / (Real.cosh (π * t) : ℂ) = 0 := by
-  sorry
+  have h₁ := (tendsto_stripVerticalIntegral hc hM).const_mul I
+  have h₂ : Tendsto (fun T => I * (stripVerticalIntegral f (1 / 2) T +
+      stripVerticalIntegral f (-1 / 2) T)) atTop (𝓝 0) :=
+    (tendsto_stripHorizontalIntegral hM).congr' <| by
+      filter_upwards [eventually_gt_atTop 0] with T hT
+      exact (strip_rectangle_identity hc hd hT).symm
+  simpa [I_ne_zero] using tendsto_nhds_unique h₁ h₂
 
 /-- ∫ (f(±1/2 + it) - f(0)) / cosh(πt) dt = ∫ f(±1/2 + it) / cosh(πt) dt - f(0).
 

@@ -2541,6 +2541,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     \[ V_+(T) + V_-(T) \to \int_{\mathbb{R}} \frac{f(\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt + \int_{\mathbb{R}} \frac{f(-\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt. \]
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-boundary-integrable}
     Both integrands are integrable (Lemma~\ref{lmm:strip-boundary-integrable}), and $-T \to -\infty$, $T \to \infty$ (\texttt{tendsto\_neg\_atTop\_atBot}, \texttt{tendsto\_id}), so Mathlib's \texttt{MeasureTheory.intervalIntegral\_tendsto\_integral} gives the convergence of $V_+$ and $V_-$ separately; \texttt{Filter.Tendsto.add} combines them.
 \end{proof}
@@ -2553,6 +2554,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     \[ \int_{\mathbb{R}} \frac{f(\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt + \int_{\mathbb{R}} \frac{f(-\tfrac{1}{2} + it) - f(0)}{\cosh(\pi t)} \, dt = 0. \]
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-rectangle-identity, lmm:strip-horizontal-vanish, lmm:strip-vertical-limit}
     For $T > 0$, $V_+(T) + V_-(T) = -i\,H(T)$ (Lemma~\ref{lmm:strip-rectangle-identity}), which tends to $-i \cdot 0 = 0$ (Lemma~\ref{lmm:strip-horizontal-vanish}; \texttt{Tendsto.const\_mul}, \texttt{Tendsto.congr'} with \texttt{eventually\_gt\_atTop}). By Lemma~\ref{lmm:strip-vertical-limit} and uniqueness of limits (\texttt{tendsto\_nhds\_unique}), the sum of the two integrals is $0$.
 \end{proof}
