@@ -2637,7 +2637,7 @@ The proof of Jones's Proposition~13.2.2 works on the subspace $\mathcal{H}_0$ of
 \end{align}
 and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in Lemma~\ref{lmm:inverse-fc-extends}. For a bounded measurable $f : \mathbb{R} \to \mathbb{C}$, $f(\Delta)$ is a bounded operator defined on all of $\mathbf{H}$ and equals the bounded integral $\int f \, d\mu$ (Lemma~\ref{lmm:functional-calculus-bounded}). For a bounded operator $T$, $JTJ$ denotes the map $\psi \mapsto J(T(J\psi))$; since $J^{-1} = J$ (Theorem~\ref{thrm:modular-conjugation-involution}), it is the antiunitary conjugate $JTJ^{-1}$ of Definition~\ref{def:product-of-unbounded-operators}.
 
-\begin{lemma}[$\Delta$ has no Spectrum in $(-\infty, 0]$]
+\begin{lemma}[$\Delta$ has no Spectrum in {$(-\infty, 0]$}]
     \label{lmm:modular-spectral-support}
     \uses{def:modular-operator, def:spectral-measure}
     $\mu((-\infty, 0]) = 0$.
@@ -3296,4 +3296,267 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 \begin{proof}
     \uses{crllr:van-daele-rearranged-identity, lmm:modular-power-half}
     By Lemma~\ref{lmm:modular-power-half}, $\xi, \eta \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$ with $\Delta^{\pm 1/2}\xi = p_{\pm 1/2,n}(\Delta)\xi$ and $\Delta^{\pm 1/2}\eta = p_{\pm 1/2,n}(\Delta)\eta$. Substitute into Corollary~\ref{crllr:van-daele-rearranged-identity}.
+\end{proof}
+
+\subsubsection{Tomita's Theorem}
+
+This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, which are van Daele's argument (A.~van Daele, \emph{J. Funct. Anal.} 15 (1974) 378--393). Proposition~13.2.2 expresses the element $a$ of Lemma~\ref{lmm:van-daele-commutant-equation} as a weak integral of the operators $\Delta^{it}Ja'J\Delta^{-it}$; it is proved on $\text{Range}(E_n)$ by the strip formula (Theorem~\ref{thrm:strip-formula}) and extended to all vectors by dominated convergence. Theorem~13.2.3 then follows from Fourier uniqueness (Theorem~\ref{thrm:fourier-uniqueness}).
+
+\emph{Conventions.} For real $\lambda > 0$ and $w \in \mathbb{C}$, $\lambda^w$ is the principal complex power $(\lambda : \mathbb{C})^w$. For a bounded operator $T$, $JTJ$ is the bounded operator of Lemma~\ref{lmm:modular-conjugation-bounded-conjugate}, and $\Delta^{it}Ja'J\Delta^{-it}$ is a product of bounded operators. In this project's convention (inner product linear in the second slot), Jones's function $\lambda^{2z}\left< a\Delta^{-z}\xi, \Delta^{\overline{z}}\eta \right>$ becomes $\lambda^{2z}\left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>$, and the resulting formula carries the same factor $\lambda^{2it}$ as Jones's. A triple $(\lambda, a', a)$ \emph{satisfies the van Daele equation} if $\lambda > 0$, $a' \in \mathcal{M}'$, $a \in \mathcal{M}$, $a\Omega \in \text{Dom}(S^*)$ and $a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega)$; this abbreviates the hypotheses of Lemma~\ref{lmm:van-daele-sesquilinear-identity}, and Lemma~\ref{lmm:van-daele-commutant-equation} gives such an $a$ for every $\lambda > 0$ and $a' \in \mathcal{M}'$.
+
+\begin{lemma}[$J$ Conjugates Bounded Operators]
+    \label{lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:modular-conjugation}
+    Let $T, T' \in \mathcal{B}(\mathbf{H})$. Then $JTJ : \psi \mapsto J(T(J\psi))$ is a bounded linear operator with $\|JTJ\psi\| \le \|T\|\,\|\psi\|$ for every $\psi \in \mathbf{H}$. Moreover $J(JTJ)J = T$ and $(JTJ)(JT'J) = J(TT')J$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:modular-conjugation-polar, lmm:antilinear-isometry-antiunitary, lmm:antiunitary-isometric, thrm:modular-conjugation-involution}
+    $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}, Lemma~\ref{lmm:antilinear-isometry-antiunitary}), hence a continuous conjugate-linear isometry (Lemma~\ref{lmm:antiunitary-isometric}). The composite of two conjugate-linear continuous maps with a continuous linear map is continuous and linear (Mathlib's semilinear \texttt{ContinuousLinearMap.comp}, with the instance \texttt{RingHomInvPair (starRingEnd \ensuremath{\mathbb{C}}) (starRingEnd \ensuremath{\mathbb{C}})}). The bound is $\|J(T(J\psi))\| = \|T(J\psi)\| \le \|T\|\,\|J\psi\| = \|T\|\,\|\psi\|$ (\texttt{LinearIsometryEquiv.norm\_map}, \texttt{ContinuousLinearMap.le\_opNorm}). The two identities follow pointwise from $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}): $J(J(T(J(J\psi)))) = T\psi$ and $J(T(J(J(T'(J\psi))))) = J(TT'(J\psi))$ (\texttt{ContinuousLinearMap.ext}).
+\end{proof}
+
+\begin{lemma}[The Factor $\lambda^{2z}$ on the Strip]
+    \label{lmm:van-daele-phase-strip}
+    Let $\lambda > 0$. Then $z \mapsto \lambda^{2z}$ is entire, $\lambda^{0} = 1$, and $|\lambda^{2z}| = \lambda^{2\operatorname{Re} z} \le \max(\lambda, \lambda^{-1})$ whenever $|\operatorname{Re} z| \le \tfrac{1}{2}$.
+\end{lemma}
+\begin{proof}
+    Differentiability: Mathlib's \texttt{Differentiable.const\_cpow} with $(\lambda : \mathbb{C}) \ne 0$ (\texttt{Complex.ofReal\_ne\_zero}) and the differentiable map $z \mapsto 2z$. $\lambda^0 = 1$ is \texttt{Complex.cpow\_zero}. The modulus is \texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos} with $\operatorname{Re}(2z) = 2\operatorname{Re} z \in [-1, 1]$ (\texttt{abs\_le}). If $\lambda \ge 1$, $\lambda^{2\operatorname{Re} z} \le \lambda^1 = \lambda$ (\texttt{Real.rpow\_le\_rpow\_of\_exponent\_le}, \texttt{Real.rpow\_one}); if $\lambda < 1$, $\lambda^{2\operatorname{Re} z} \le \lambda^{-1}$ (\texttt{Real.rpow\_le\_rpow\_of\_exponent\_ge}, \texttt{Real.rpow\_neg\_one}); in both cases this is at most the maximum (\texttt{le\_max\_left}, \texttt{le\_max\_right}).
+\end{proof}
+
+\begin{lemma}[The Factor $\lambda^{2z}$ on the Boundary]
+    \label{lmm:van-daele-phase-boundary}
+    Let $\lambda > 0$ and $t \in \mathbb{R}$. Then $\lambda^{2(1/2 + it)} = \lambda \cdot \lambda^{2it}$, $\lambda^{2(-1/2 + it)} = \lambda^{-1}\lambda^{2it}$ and $|\lambda^{2it}| = 1$, and $t \mapsto \lambda^{2it}$ is continuous on $\mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    $2(\pm\tfrac{1}{2} + it) = \pm 1 + 2it$ (\texttt{ring}), so \texttt{Complex.cpow\_add} ($(\lambda : \mathbb{C}) \ne 0$) with \texttt{Complex.cpow\_one}, \texttt{Complex.cpow\_neg\_one} and \texttt{Complex.ofReal\_inv} gives the first two identities. $|\lambda^{2it}| = \lambda^{\operatorname{Re}(2it)} = \lambda^0 = 1$ (\texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos}, \texttt{Real.rpow\_zero}). Continuity: \texttt{Continuous.const\_cpow} with $(\lambda : \mathbb{C}) \ne 0$ and the continuous map $t \mapsto 2tI$ (\texttt{Complex.continuous\_ofReal}).
+\end{proof}
+
+\begin{lemma}[$\lambda^{2it}$ for $\lambda = e^{\theta/2}$]
+    \label{lmm:van-daele-phase-fourier}
+    Let $\theta \in \mathbb{R}$ and $\lambda = e^{\theta/2}$. Then $\lambda > 0$ and $\lambda^{2it} = e^{i\theta t}$ for every $t \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    $\lambda > 0$ is \texttt{Real.exp\_pos}. By \texttt{Complex.cpow\_def\_of\_ne\_zero}, $\lambda^{2it} = \exp(\log(\lambda)\cdot 2it)$, where the complex logarithm of the positive real $\lambda$ is $\log\lambda = \theta/2$ (\texttt{Complex.ofReal\_log}, \texttt{Real.log\_exp}); and $(\theta/2)\cdot 2it = \theta t i$ (\texttt{ring}).
+\end{proof}
+
+\begin{lemma}[The Integrand is Continuous]
+    \label{lmm:van-daele-integrand-continuous}
+    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $a' \in \mathcal{B}(\mathbf{H})$ and $\xi, \eta \in \mathbf{H}$. For every $t \in \mathbb{R}$, $\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right> = \left< \Delta^{-it}\eta, Ja'J\Delta^{-it}\xi \right>$, and $t \mapsto \left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>$ is continuous on $\mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-unitary-group-props}
+    $(\Delta^{it})^* = \Delta^{-it}$ (Lemma~\ref{lmm:modular-unitary-group-props}), so the identity is \texttt{ContinuousLinearMap.adjoint\_inner\_left} (with \texttt{ContinuousLinearMap.star\_eq\_adjoint}). For continuity, $t \mapsto \Delta^{-it}\psi$ is continuous for each $\psi$ by the strong continuity of Lemma~\ref{lmm:modular-unitary-group-props} composed with $t \mapsto -t$ (\texttt{continuous\_neg}); the bounded operator $Ja'J$ is continuous (\texttt{ContinuousLinearMap.continuous}, \texttt{Continuous.comp}); and the inner product of two continuous maps is continuous (\texttt{Continuous.inner}).
+\end{proof}
+
+\begin{lemma}[The Integrand is Bounded]
+    \label{lmm:van-daele-integrand-bound}
+    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $a' \in \mathcal{B}(\mathbf{H})$, $\xi, \eta \in \mathbf{H}$ and $t \in \mathbb{R}$. Then $\left| \left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right> \right| \le \|a'\|\,\|\xi\|\,\|\eta\|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-integrand-continuous, lmm:modular-unitary-group-props, lmm:modular-conjugation-bounded-conjugate}
+    By Lemma~\ref{lmm:van-daele-integrand-continuous} the left side is $|\left< \Delta^{-it}\eta, Ja'J\Delta^{-it}\xi \right>| \le \|\Delta^{-it}\eta\|\,\|Ja'J\Delta^{-it}\xi\|$ (\texttt{norm\_inner\_le\_norm}). $\Delta^{-it}$ is unitary (Lemma~\ref{lmm:modular-unitary-group-props}), so it preserves norms (\texttt{ContinuousLinearMap.norm\_map\_of\_mem\_unitary}, or \texttt{Unitary.norm\_map}), and $\|Ja'J\psi\| \le \|a'\|\,\|\psi\|$ (Lemma~\ref{lmm:modular-conjugation-bounded-conjugate}); multiply the bounds (\texttt{mul\_le\_mul\_of\_nonneg\_left}).
+\end{proof}
+
+\begin{lemma}[The Weighted Integrand is Integrable]
+    \label{lmm:van-daele-integrand-integrable}
+    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $\lambda > 0$, $a' \in \mathcal{B}(\mathbf{H})$, $\xi, \eta \in \mathbf{H}$, and
+    \begin{align}
+        F(t) = \frac{\lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>}{2\cosh(\pi t)}.
+    \end{align}
+    Then $F$ is continuous, $|F(t)| \le \|a'\|\,\|\xi\|\,\|\eta\| / (2\cosh(\pi t))$ for every $t$, and $F$ is integrable on $\mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-phase-boundary, lmm:van-daele-integrand-continuous, lmm:van-daele-integrand-bound, lmm:cosh-dominated-integrable}
+    The numerator is continuous (Lemmas~\ref{lmm:van-daele-phase-boundary} and~\ref{lmm:van-daele-integrand-continuous}, \texttt{Continuous.mul}) and the denominator is continuous and nonzero ($\cosh(\pi t) > 0$, \texttt{Real.cosh\_pos}, cast by \texttt{Complex.ofReal\_cosh}), so $F$ is continuous (\texttt{Continuous.div}). $|\lambda^{2it}| = 1$ (Lemma~\ref{lmm:van-daele-phase-boundary}) and Lemma~\ref{lmm:van-daele-integrand-bound} give the bound (\texttt{norm\_div}, \texttt{norm\_mul}). Lemma~\ref{lmm:cosh-dominated-integrable} with $K = \|a'\|\,\|\xi\|\,\|\eta\|/2$ gives integrability.
+\end{proof}
+
+\begin{lemma}[The Strip Function is Entire]
+    \label{lmm:van-daele-strip-function-entire}
+    \uses{lmm:modular-power-operators}
+    Let $\lambda > 0$, $n \ge 1$, $a \in \mathcal{B}(\mathbf{H})$ and $\xi, \eta \in \mathbf{H}$. Then
+    \begin{align}
+        f(z) = \lambda^{2z}\left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>
+    \end{align}
+    is complex differentiable at every $z \in \mathbb{C}$; in particular it is continuous.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-phase-strip, crllr:modular-power-matrix-coefficients}
+    Both factors are entire (Lemma~\ref{lmm:van-daele-phase-strip} and Corollary~\ref{crllr:modular-power-matrix-coefficients}), so their product is (\texttt{Differentiable.mul}), and it is continuous (\texttt{Differentiable.continuous}).
+\end{proof}
+
+\begin{lemma}[The Strip Function is Bounded on the Strip]
+    \label{lmm:van-daele-strip-function-bounded}
+    \uses{lmm:modular-power-operators}
+    Let $\lambda$, $n$, $a$, $\xi$, $\eta$ and $f$ be as in Lemma~\ref{lmm:van-daele-strip-function-entire}. Then $|f(z)| \le \max(\lambda, \lambda^{-1})\, n\,\|a\|\,\|\xi\|\,\|\eta\|$ whenever $|\operatorname{Re} z| \le \tfrac{1}{2}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-phase-strip, lmm:modular-power-operators}
+    $|\lambda^{2z}| \le \max(\lambda, \lambda^{-1})$ (Lemma~\ref{lmm:van-daele-phase-strip}). By \texttt{norm\_inner\_le\_norm} and \texttt{ContinuousLinearMap.le\_opNorm} (twice, with \texttt{ContinuousLinearMap.opNorm\_comp\_le}), $|\left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>| \le \|\eta\|\,\|p_{z,n}(\Delta)\|\,\|a\|\,\|p_{-z,n}(\Delta)\|\,\|\xi\|$, and $\|p_{\pm z,n}(\Delta)\| \le n^{1/2}$ since $|\operatorname{Re}(\pm z)| \le \tfrac{1}{2}$ (Lemma~\ref{lmm:modular-power-operators}); $n^{1/2}n^{1/2} = n$ (\texttt{Real.rpow\_add}, $n > 0$, and \texttt{Real.rpow\_one}). Multiply (\texttt{norm\_mul}, \texttt{mul\_le\_mul}).
+\end{proof}
+
+\begin{lemma}[The Strip Function at $0$]
+    \label{lmm:van-daele-strip-function-zero}
+    \uses{lmm:modular-power-operators, def:spectral-measure}
+    Let $\lambda$, $n$, $a$, $\xi$, $\eta$ and $f$ be as in Lemma~\ref{lmm:van-daele-strip-function-entire}, with $E_n\xi = \xi$ and $E_n\eta = \eta$. Then $f(0) = \left< \eta, a\xi \right>$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-phase-strip, lmm:modular-power-operators-multiplicative, lmm:modular-power-operators}
+    $\lambda^0 = 1$ (Lemma~\ref{lmm:van-daele-phase-strip}), $-0 = 0$ (\texttt{neg\_zero}) and $p_{0,n}(\Delta) = E_n$ (Lemma~\ref{lmm:modular-power-operators-multiplicative}), so $f(0) = \left< \eta, E_n a E_n\xi \right>$. $E_n^* = p_{\overline{0},n}(\Delta) = E_n$ (Lemma~\ref{lmm:modular-power-operators}, \texttt{map\_zero}), so this is $\left< E_n\eta, aE_n\xi \right> = \left< \eta, a\xi \right>$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}).
+\end{proof}
+
+\begin{lemma}[The Strip Function on Vertical Lines]
+    \label{lmm:van-daele-strip-function-shift}
+    \uses{lmm:modular-power-operators, def:modular-unitary-group}
+    Let $n \ge 1$, $a \in \mathcal{B}(\mathbf{H})$, $\xi, \eta \in \mathbf{H}$ and $x, t \in \mathbb{R}$. Then
+    \begin{align}
+        \left< \eta, p_{x+it,n}(\Delta)\,a\,p_{-(x+it),n}(\Delta)\xi \right> = \left< p_{x,n}(\Delta)\Delta^{-it}\eta, a\,p_{-x,n}(\Delta)\Delta^{-it}\xi \right>.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-power-operators, lmm:modular-power-unitary-group}
+    $p_{x+it,n}(\Delta)^* = p_{x-it,n}(\Delta)$ (Lemma~\ref{lmm:modular-power-operators}, \texttt{Complex.conj\_ofReal}), so \texttt{ContinuousLinearMap.adjoint\_inner\_left} moves it to the left slot. By Lemma~\ref{lmm:modular-power-unitary-group} with $-t$ in place of $t$, $p_{x-it,n}(\Delta) = p_{x,n}(\Delta)\Delta^{-it}$ and $p_{-(x+it),n}(\Delta) = p_{-x+i(-t),n}(\Delta) = p_{-x,n}(\Delta)\Delta^{-it}$ (\texttt{neg\_add}, \texttt{Complex.ofReal\_neg}, \texttt{ring\_nf} in the index).
+\end{proof}
+
+\begin{lemma}[The Strip Function on the Boundary]
+    \label{lmm:van-daele-strip-function-boundary}
+    \uses{lmm:modular-power-operators, def:modular-unitary-group, def:spectral-measure, lmm:modular-conjugation-bounded-conjugate}
+    Let $(\lambda, a', a)$ satisfy the van Daele equation, $n \ge 1$, $\xi, \eta \in \mathbf{H}$ with $E_n\xi = \xi$ and $E_n\eta = \eta$, and $f$ as in Lemma~\ref{lmm:van-daele-strip-function-entire}. Then for every $t \in \mathbb{R}$,
+    \begin{align}
+        f(\tfrac{1}{2} + it) + f(-\tfrac{1}{2} + it) = \lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-phase-boundary, lmm:van-daele-strip-function-shift, lmm:modular-power-unitary-group, crllr:van-daele-rearranged-identity-H0, lmm:van-daele-integrand-continuous}
+    Let $\xi_t = \Delta^{-it}\xi$ and $\eta_t = \Delta^{-it}\eta$. Since $\Delta^{-it}$ commutes with $E_n$ (Lemma~\ref{lmm:modular-power-unitary-group}), $E_n\xi_t = \xi_t$ and $E_n\eta_t = \eta_t$. By Lemmas~\ref{lmm:van-daele-phase-boundary} and~\ref{lmm:van-daele-strip-function-shift} (with $x = \tfrac{1}{2}$ and $x = -\tfrac{1}{2}$, \texttt{neg\_neg}), the left side is
+    \begin{align}
+        \lambda^{2it}\Big( \lambda\left< p_{1/2,n}(\Delta)\eta_t, a\,p_{-1/2,n}(\Delta)\xi_t \right> + \lambda^{-1}\left< p_{-1/2,n}(\Delta)\eta_t, a\,p_{1/2,n}(\Delta)\xi_t \right> \Big),
+    \end{align}
+    which is $\lambda^{2it}\left< \eta_t, Ja'J\xi_t \right>$ by Corollary~\ref{crllr:van-daele-rearranged-identity-H0} (\texttt{mul\_add}, \texttt{mul\_left\_comm}), and $\left< \eta_t, Ja'J\xi_t \right> = \left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>$ by Lemma~\ref{lmm:van-daele-integrand-continuous}.
+\end{proof}
+
+\begin{proposition}[Jones's Proposition 13.2.2 on $\text{Range}(E_n)$]
+    \label{prpstn:van-daele-integral-formula-H0}
+    \uses{def:tomita-operator, def:modular-unitary-group, def:spectral-measure, lmm:modular-conjugation-bounded-conjugate}
+    Let $(\lambda, a', a)$ satisfy the van Daele equation, $n \ge 1$ and $\xi, \eta \in \mathbf{H}$ with $E_n\xi = \xi$ and $E_n\eta = \eta$. Then
+    \begin{align}
+        \left< \eta, a\xi \right> = \int_{\mathbb{R}} \frac{\lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>}{2\cosh(\pi t)} \, dt.
+    \end{align}
+\end{proposition}
+\begin{proof}
+    \uses{thrm:strip-formula, lmm:van-daele-strip-function-entire, lmm:van-daele-strip-function-bounded, lmm:van-daele-strip-function-zero, lmm:van-daele-strip-function-boundary}
+    Let $f$ be the function of Lemma~\ref{lmm:van-daele-strip-function-entire}. It is continuous on the strip and complex differentiable on its interior (Lemma~\ref{lmm:van-daele-strip-function-entire}; \texttt{Continuous.continuousOn}, \texttt{Differentiable.differentiableOn}) and bounded there (Lemma~\ref{lmm:van-daele-strip-function-bounded}), so Theorem~\ref{thrm:strip-formula} gives $f(0) = \int_{\mathbb{R}} (f(\tfrac{1}{2} + it) + f(-\tfrac{1}{2} + it))/(2\cosh(\pi t)) \, dt$. Rewrite the left side by Lemma~\ref{lmm:van-daele-strip-function-zero} and the integrand by Lemma~\ref{lmm:van-daele-strip-function-boundary} (\texttt{MeasureTheory.integral\_congr\_ae} with \texttt{Filter.Eventually.of\_forall}, or \texttt{funext}).
+\end{proof}
+
+\begin{lemma}[Continuity of the Integral in the Vectors]
+    \label{lmm:van-daele-integral-continuity}
+    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $\lambda > 0$, $a' \in \mathcal{B}(\mathbf{H})$, and for $\xi, \eta \in \mathbf{H}$ let $I(\eta, \xi) = \int_{\mathbb{R}} \lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right> / (2\cosh(\pi t)) \, dt$. Let $\xi_m \to \xi$ and $\eta_m \to \eta$ in $\mathbf{H}$ ($m \in \mathbb{N}$), and $K \ge 0$ with $\|\xi_m\|\,\|\eta_m\| \le K$ for every $m$. Then $I(\eta_m, \xi_m) \to I(\eta, \xi)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-integrand-integrable, lmm:van-daele-integrand-continuous, lmm:inv-cosh-pi-integrable}
+    Apply Mathlib's \texttt{MeasureTheory.tendsto\_integral\_of\_dominated\_convergence} with the bound $t \mapsto \|a'\|K/(2\cosh(\pi t))$. Each integrand is continuous, hence a.e.\ strongly measurable (Lemma~\ref{lmm:van-daele-integrand-integrable}, \texttt{Continuous.aestronglyMeasurable}), and is dominated by the bound (Lemma~\ref{lmm:van-daele-integrand-integrable} with $\|\xi_m\|\,\|\eta_m\| \le K$). The bound is integrable (Lemma~\ref{lmm:inv-cosh-pi-integrable}, \texttt{Integrable.const\_mul}, \texttt{Integrable.div\_const}). For fixed $t$, $\left< \eta_m, \Delta^{it}Ja'J\Delta^{-it}\xi_m \right> = \left< \Delta^{-it}\eta_m, Ja'J\Delta^{-it}\xi_m \right>$ (Lemma~\ref{lmm:van-daele-integrand-continuous}) converges to the same expression for $\eta, \xi$, since bounded operators are continuous (\texttt{ContinuousLinearMap.continuous}, \texttt{Continuous.tendsto}) and the inner product is jointly continuous (\texttt{Filter.Tendsto.inner}); multiplying by $\lambda^{2it}$ and dividing by $2\cosh(\pi t)$ preserve the limit (\texttt{Filter.Tendsto.const\_mul}, \texttt{Filter.Tendsto.div\_const}).
+\end{proof}
+
+\begin{proposition}[Jones's Proposition 13.2.2]
+    \label{prpstn:van-daele-integral-formula}
+    \uses{def:tomita-operator, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $(\lambda, a', a)$ satisfy the van Daele equation. For all $\xi, \eta \in \mathbf{H}$,
+    \begin{align}
+        \left< \eta, a\xi \right> = \int_{\mathbb{R}} \frac{\lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>}{2\cosh(\pi t)} \, dt.
+    \end{align}
+\end{proposition}
+\begin{proof}
+    \uses{prpstn:van-daele-integral-formula-H0, lmm:van-daele-integral-continuity, lmm:modular-spectral-projections-converge, lmm:modular-power-operators, lmm:modular-power-operators-multiplicative, def:projection-valued-measure}
+    Let $\xi_m = E_m\xi$ and $\eta_m = E_m\eta$ for $m \ge 1$. $E_m$ is idempotent (Definition~\ref{def:projection-valued-measure}), so $E_m\xi_m = \xi_m$ and $E_m\eta_m = \eta_m$, and Proposition~\ref{prpstn:van-daele-integral-formula-H0} gives $\left< \eta_m, a\xi_m \right> = I(\eta_m, \xi_m)$ in the notation of Lemma~\ref{lmm:van-daele-integral-continuity}. $\xi_m \to \xi$ and $\eta_m \to \eta$ (Lemma~\ref{lmm:modular-spectral-projections-converge}), and $\|E_m\| = \|p_{0,m}(\Delta)\| \le m^0 = 1$ (Lemmas~\ref{lmm:modular-power-operators-multiplicative} and~\ref{lmm:modular-power-operators}), so $\|\xi_m\|\,\|\eta_m\| \le \|\xi\|\,\|\eta\|$. Hence $I(\eta_m, \xi_m) \to I(\eta, \xi)$ (Lemma~\ref{lmm:van-daele-integral-continuity}), while $\left< \eta_m, a\xi_m \right> \to \left< \eta, a\xi \right>$ (\texttt{Filter.Tendsto.inner}); limits are unique (\texttt{tendsto\_nhds\_unique}). The index shift $m \ge 1$ is handled by \texttt{Filter.tendsto\_add\_atTop\_iff\_nat}.
+\end{proof}
+
+\begin{lemma}[The Commutator Integrand]
+    \label{lmm:van-daele-commutator-integrand}
+    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $a', b' \in \mathcal{B}(\mathbf{H})$, $\xi, \eta \in \mathbf{H}$, and
+    \begin{align}
+        h(t) = \frac{\left< \eta, (\Delta^{it}Ja'J\Delta^{-it}b' - b'\Delta^{it}Ja'J\Delta^{-it})\xi \right>}{2\cosh(\pi t)}.
+    \end{align}
+    Then $h(t) = \big(\left< \eta, \Delta^{it}Ja'J\Delta^{-it}(b'\xi) \right> - \left< b'^*\eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>\big)/(2\cosh(\pi t))$ for every $t$, and $h$ is continuous and integrable on $\mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-integrand-continuous, lmm:van-daele-integrand-bound, lmm:cosh-dominated-integrable}
+    The identity is \texttt{ContinuousLinearMap.sub\_apply}, \texttt{inner\_sub\_right} and $\left< \eta, b'\psi \right> = \left< b'^*\eta, \psi \right>$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}, \texttt{ContinuousLinearMap.star\_eq\_adjoint}). Both inner products are continuous in $t$ (Lemma~\ref{lmm:van-daele-integrand-continuous}) and $\cosh(\pi t) > 0$ (\texttt{Real.cosh\_pos}), so $h$ is continuous (\texttt{Continuous.sub}, \texttt{Continuous.div}). By Lemma~\ref{lmm:van-daele-integrand-bound} and $\|b'^*\| = \|b'\|$ (\texttt{norm\_star}), $|h(t)| \le \|a'\|\,\|b'\|\,\|\xi\|\,\|\eta\|/\cosh(\pi t)$ (\texttt{norm\_sub\_le}), so $h$ is integrable by Lemma~\ref{lmm:cosh-dominated-integrable}.
+\end{proof}
+
+\begin{lemma}[The Fourier Integrals of the Commutator Vanish]
+    \label{lmm:van-daele-commutator-fourier}
+    \uses{def:von-neumann-algebra-commutant-convention, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $a', b' \in \mathcal{M}'$, $\xi, \eta \in \mathbf{H}$, and $h$ as in Lemma~\ref{lmm:van-daele-commutator-integrand}. Then $\int_{\mathbb{R}} e^{i\theta t}h(t) \, dt = 0$ for every $\theta \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-phase-fourier, lmm:van-daele-commutant-equation, prpstn:van-daele-integral-formula, lmm:van-daele-commutator-integrand, lmm:van-daele-integrand-integrable}
+    Let $\lambda = e^{\theta/2} > 0$, so $e^{i\theta t} = \lambda^{2it}$ (Lemma~\ref{lmm:van-daele-phase-fourier}), and take $a \in \mathcal{M}$ from Lemma~\ref{lmm:van-daele-commutant-equation}, so that $(\lambda, a', a)$ satisfies the van Daele equation. By Lemma~\ref{lmm:van-daele-commutator-integrand} (\texttt{mul\_sub}, \texttt{sub\_div}), $e^{i\theta t}h(t) = F_1(t) - F_2(t)$, where $F_1$ and $F_2$ are the integrands of Proposition~\ref{prpstn:van-daele-integral-formula} for the pairs $(b'\xi, \eta)$ and $(\xi, b'^*\eta)$; both are integrable (Lemma~\ref{lmm:van-daele-integrand-integrable}), so \texttt{MeasureTheory.integral\_sub} and Proposition~\ref{prpstn:van-daele-integral-formula} give $\int e^{i\theta t}h(t) \, dt = \left< \eta, ab'\xi \right> - \left< b'^*\eta, a\xi \right> = \left< \eta, ab'\xi \right> - \left< \eta, b'a\xi \right>$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}). This is $0$ because $b' \in \mathcal{M}'$ commutes with $a \in \mathcal{M}$.
+\end{proof}
+
+\begin{lemma}[$\Delta^{it}Ja'J\Delta^{-it}$ Commutes with $\mathcal{M}'$]
+    \label{lmm:van-daele-conjugate-commutes}
+    \uses{def:von-neumann-algebra-commutant-convention, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $a', b' \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $(\Delta^{it}Ja'J\Delta^{-it})\,b' = b'\,(\Delta^{it}Ja'J\Delta^{-it})$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-commutator-integrand, lmm:van-daele-commutator-fourier, thrm:fourier-uniqueness}
+    Write $X = \Delta^{it}Ja'J\Delta^{-it}b' - b'\Delta^{it}Ja'J\Delta^{-it}$ and fix $\xi \in \mathbf{H}$, $\eta = X\xi$. The function $h$ of Lemma~\ref{lmm:van-daele-commutator-integrand} for $\xi, \eta$ is continuous and integrable, and its Fourier integrals vanish (Lemma~\ref{lmm:van-daele-commutator-fourier}), so $h = 0$ by Theorem~\ref{thrm:fourier-uniqueness} (\texttt{congrFun}). At $t$, $2\cosh(\pi t) \ne 0$ (\texttt{Real.cosh\_pos}), so $\left< X\xi, X\xi \right> = 0$ (\texttt{div\_eq\_zero\_iff}), hence $X\xi = 0$ (\texttt{inner\_self\_eq\_zero}). As $\xi$ is arbitrary, $X = 0$ (\texttt{ContinuousLinearMap.ext}, \texttt{sub\_eq\_zero}).
+\end{proof}
+
+\begin{lemma}[$\Delta^{it}J\mathcal{M}'J\Delta^{-it} \subset \mathcal{M}$]
+    \label{lmm:van-daele-conjugate-in-algebra}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $a' \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $\Delta^{it}Ja'J\Delta^{-it} \in \mathcal{M}$. In particular ($t = 0$) $Ja'J \in \mathcal{M}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:van-daele-conjugate-commutes, lmm:commutant-von-neumann-algebra, lmm:modular-unitary-group-props}
+    By Lemma~\ref{lmm:van-daele-conjugate-commutes}, $\Delta^{it}Ja'J\Delta^{-it}$ lies in the centralizer of $\mathcal{M}'$, which is $(\mathcal{M}')' = \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}). For $t = 0$, $\Delta^{i0} = \mathbf{1}$ (Lemma~\ref{lmm:modular-unitary-group-props}; \texttt{neg\_zero}, \texttt{one\_mul}, \texttt{mul\_one}).
+\end{proof}
+
+\begin{corollary}[$J\mathcal{M}J \subset \mathcal{M}'$]
+    \label{crllr:van-daele-algebra-conjugate}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-conjugation, lmm:modular-conjugation-bounded-conjugate}
+    Let $x \in \mathcal{M}$. Then $JxJ \in \mathcal{M}'$.
+\end{corollary}
+\begin{proof}
+    \uses{lmm:van-daele-conjugate-in-algebra, thrm:commutant-modular-objects, lmm:commutant-von-neumann-algebra}
+    By Theorem~\ref{thrm:commutant-modular-objects}, $\mathcal{M}'$ is a von Neumann algebra with cyclic and separating vector $\Omega$, and its modular conjugation is $J_{\mathcal{M}'} = J$. The case $t = 0$ of Lemma~\ref{lmm:van-daele-conjugate-in-algebra} for $(\mathcal{M}', \Omega)$, applied to $x \in \mathcal{M} = (\mathcal{M}')'$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), gives $J_{\mathcal{M}'}xJ_{\mathcal{M}'} = JxJ \in \mathcal{M}'$.
+\end{proof}
+
+\begin{lemma}[$J\mathcal{M}J = \mathcal{M}'$]
+    \label{lmm:tomita-modular-conjugation-commutant}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-conjugation, lmm:modular-conjugation-bounded-conjugate}
+    $\{ JxJ \mid x \in \mathcal{M} \} = \mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:van-daele-algebra-conjugate, lmm:van-daele-conjugate-in-algebra, lmm:modular-conjugation-bounded-conjugate}
+    $\subset$ is Corollary~\ref{crllr:van-daele-algebra-conjugate}. For $a' \in \mathcal{M}'$, $x = Ja'J \in \mathcal{M}$ (Lemma~\ref{lmm:van-daele-conjugate-in-algebra}, $t = 0$) and $JxJ = a'$ (Lemma~\ref{lmm:modular-conjugation-bounded-conjugate}), so $\supset$ holds (\texttt{Set.Subset.antisymm}).
+\end{proof}
+
+\begin{lemma}[$\Delta^{it}\mathcal{M}\Delta^{-it} = \mathcal{M}$]
+    \label{lmm:tomita-modular-automorphism}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group}
+    For every $t \in \mathbb{R}$, $\{ \Delta^{it}x\Delta^{-it} \mid x \in \mathcal{M} \} = \mathcal{M}$.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:van-daele-algebra-conjugate, lmm:van-daele-conjugate-in-algebra, lmm:modular-conjugation-bounded-conjugate, lmm:modular-unitary-group-props}
+    Inclusion $\subset$ for every $s \in \mathbb{R}$: for $x \in \mathcal{M}$, $a' = JxJ \in \mathcal{M}'$ (Corollary~\ref{crllr:van-daele-algebra-conjugate}) and $Ja'J = x$ (Lemma~\ref{lmm:modular-conjugation-bounded-conjugate}), so $\Delta^{is}x\Delta^{-is} = \Delta^{is}Ja'J\Delta^{-is} \in \mathcal{M}$ (Lemma~\ref{lmm:van-daele-conjugate-in-algebra}). Inclusion $\supset$: for $x \in \mathcal{M}$, $y = \Delta^{-it}x\Delta^{it} \in \mathcal{M}$ by the first inclusion with $s = -t$ (\texttt{neg\_neg}), and $\Delta^{it}y\Delta^{-it} = x$ by the group law and $\Delta^{i0} = \mathbf{1}$ (Lemma~\ref{lmm:modular-unitary-group-props}; \texttt{mul\_assoc}, \texttt{add\_neg\_cancel}).
+\end{proof}
+
+\begin{theorem}[Tomita's Theorem]
+    \label{thrm:tomita}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-operator, def:modular-conjugation, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, modular operator $\Delta$ and modular conjugation $J$. Then
+    \begin{enumerate}
+        \item $J\mathcal{M}J = \mathcal{M}'$, that is, $\{ JxJ \mid x \in \mathcal{M} \} = \mathcal{M}'$;
+        \item $\Delta^{it}\mathcal{M}\Delta^{-it} = \mathcal{M}$ for every $t \in \mathbb{R}$, that is, $\{ \Delta^{it}x\Delta^{-it} \mid x \in \mathcal{M} \} = \mathcal{M}$.
+    \end{enumerate}
+    This is Theorem~13.2.3 of Jones's notes; the proof is van Daele's.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:tomita-modular-conjugation-commutant, lmm:tomita-modular-automorphism}
+    Part (i) is Lemma~\ref{lmm:tomita-modular-conjugation-commutant} and part (ii) is Lemma~\ref{lmm:tomita-modular-automorphism}.
 \end{proof}
