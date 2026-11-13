@@ -191,3 +191,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:strip-quotient-regular (Physicslib4.stripQuotient_regular): proved via continuousOn_dslope / Complex.differentiableOn_dslope and ContinuousOn.div / DifferentiableOn.div with dslope_sin_pi_mul_ne_zero.
 - lmm:strip-quotient-horizontal-bound (Physicslib4.norm_stripQuotient_horizontal_le): proved via stripQuotient_eq, abs_le_norm_sin_add_mul_I, norm_sub_le, div_le_div₀, with a helper over s = ±T.
 - 2026-11-13: proved stripQuotient_regular, norm_stripQuotient_horizontal_le. StripFormula.lean: 9 sorries left (rectangle and limit lemmas, strip_formula).
+- lmm:strip-vertical-sides (integral_stripQuotient_vertical): proved via stripQuotient_eq boundary forms, integral_neg, push_cast.
+- lmm:strip-rectangle-subset (strip_rectangle_subset): proved by rewriting the corner real parts to ∓1/2 (uIcc_of_le, min_eq_left, max_eq_right) and taking the real-part conjunct of mem_reProdIm.
+- 2026-11-13: proved strip_rectangle_subset (hT unused), integral_stripQuotient_vertical.

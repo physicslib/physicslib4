@@ -2470,6 +2470,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     Let $T > 0$, and let $z_0 = -\tfrac{1}{2} - iT$ and $w_0 = \tfrac{1}{2} + iT$. Then the closed rectangle $[[\operatorname{Re} z_0, \operatorname{Re} w_0]] \times_{\mathbb{C}} [[\operatorname{Im} z_0, \operatorname{Im} w_0]] = [-\tfrac{1}{2}, \tfrac{1}{2}] \times_{\mathbb{C}} [-T, T]$ is contained in $\mathcal{S}$, and the open rectangle $(\min(\operatorname{Re} z_0, \operatorname{Re} w_0), \max(\operatorname{Re} z_0, \operatorname{Re} w_0)) \times_{\mathbb{C}} (\min(\operatorname{Im} z_0, \operatorname{Im} w_0), \max(\operatorname{Im} z_0, \operatorname{Im} w_0)) = (-\tfrac{1}{2}, \tfrac{1}{2}) \times_{\mathbb{C}} (-T, T)$ is contained in $\mathcal{S}^\circ$. Here $s \times_{\mathbb{C}} t = \{z : \operatorname{Re} z \in s,\ \operatorname{Im} z \in t\}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The corners have $\operatorname{Re} z_0 = -\tfrac{1}{2} \le \tfrac{1}{2} = \operatorname{Re} w_0$ and $\operatorname{Im} z_0 = -T \le T = \operatorname{Im} w_0$ (\texttt{Complex.add\_re}, \texttt{Complex.mul\_I\_re} and the like; \texttt{simp}), so Mathlib's \texttt{Set.uIcc\_of\_le}, \texttt{min\_eq\_left} and \texttt{max\_eq\_right} turn the intervals into $[-\tfrac{1}{2}, \tfrac{1}{2}]$, $[-T, T]$, $(-\tfrac{1}{2}, \tfrac{1}{2})$ and $(-T, T)$. A point $z$ of either rectangle satisfies $\operatorname{Re} z \in [-\tfrac{1}{2}, \tfrac{1}{2}]$, respectively $\operatorname{Re} z \in (-\tfrac{1}{2}, \tfrac{1}{2})$ (\texttt{Complex.mem\_reProdIm}), which is membership in $\mathcal{S}$, respectively $\mathcal{S}^\circ$.
 \end{proof}
 
@@ -2483,6 +2484,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     \[ \int_{-T}^{T} g(\tfrac{1}{2} + it)\,dt = V_+(T), \qquad \int_{-T}^{T} g(-\tfrac{1}{2} + it)\,dt = -V_-(T). \]
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-quotient-formula}
     By Lemma~\ref{lmm:strip-quotient-formula} the integrands agree pointwise with $(f(\tfrac{1}{2} + it) - f(0))/\cosh(\pi t)$ and $-(f(-\tfrac{1}{2} + it) - f(0))/\cosh(\pi t)$, so Mathlib's \texttt{intervalIntegral.integral\_congr} rewrites both integrals; \texttt{intervalIntegral.integral\_neg} pulls out the sign in the second.
 \end{proof}

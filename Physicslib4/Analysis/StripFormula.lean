@@ -272,7 +272,11 @@ theorem strip_rectangle_subset {T : ℝ} (hT : 0 < T) :
         Ioo (min (-1 / 2 - T * I : ℂ).im (1 / 2 + T * I : ℂ).im)
           (max (-1 / 2 - T * I : ℂ).im (1 / 2 + T * I : ℂ).im) ⊆
         re ⁻¹' Ioo (-1 / 2) (1 / 2) := by
-  sorry
+  have hre₁ : (-1 / 2 - T * I : ℂ).re = -1 / 2 := by simp
+  have hre₂ : (1 / 2 + T * I : ℂ).re = 1 / 2 := by simp
+  have hle : (-1 / 2 : ℝ) ≤ 1 / 2 := by norm_num
+  rw [hre₁, hre₂, uIcc_of_le hle, min_eq_left hle, max_eq_right hle]
+  exact ⟨fun z hz => (mem_reProdIm.1 hz).1, fun z hz => (mem_reProdIm.1 hz).1⟩
 
 /-- The vertical sides of the rectangle: ∫_{-T}^{T} g(1/2 + it) dt = V₊(T) and
 ∫_{-T}^{T} g(-1/2 + it) dt = -V₋(T).
@@ -282,7 +286,9 @@ theorem integral_stripQuotient_vertical (f : ℂ → ℂ) (T : ℝ) :
     (∫ t in -T..T, stripQuotient f (1 / 2 + t * I)) = stripVerticalIntegral f (1 / 2) T ∧
       (∫ t in -T..T, stripQuotient f (-1 / 2 + t * I)) =
         -stripVerticalIntegral f (-1 / 2) T := by
-  sorry
+  simp only [stripVerticalIntegral, (stripQuotient_eq f).2, intervalIntegral.integral_neg]
+  push_cast
+  exact ⟨rfl, rfl⟩
 
 /-- The rectangle identity i (V₊(T) + V₋(T)) = H(T).
 
