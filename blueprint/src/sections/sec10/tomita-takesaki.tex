@@ -2498,6 +2498,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     Let $f$ be as in~\eqref{eq:strip-hypotheses} and $T > 0$. With $V_\pm$ and $H$ as in~\eqref{eq:strip-sides}, $i\,(V_+(T) + V_-(T)) = H(T)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-quotient-regular, lmm:strip-rectangle-subset, lmm:strip-vertical-sides}
     By Lemmas~\ref{lmm:strip-rectangle-subset} and~\ref{lmm:strip-quotient-regular} (\texttt{ContinuousOn.mono}, \texttt{DifferentiableOn.mono}), Mathlib's \texttt{Complex.integral\_boundary\_rect\_eq\_zero\_of\_continuousOn\_of\_differentiableOn} applies to $g$ with corners $-\tfrac{1}{2} - iT$ and $\tfrac{1}{2} + iT$:
     \[ \int_{-1/2}^{1/2} g(x - iT)\,dx - \int_{-1/2}^{1/2} g(x + iT)\,dx + i\int_{-T}^{T} g(\tfrac{1}{2} + it)\,dt - i\int_{-T}^{T} g(-\tfrac{1}{2} + it)\,dt = 0. \]
@@ -2513,6 +2514,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then $H(T) \to 0$ as $T \to \infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-quotient-horizontal-bound}
     For $T > 0$, Lemma~\ref{lmm:strip-quotient-horizontal-bound} and Mathlib's \texttt{intervalIntegral.norm\_integral\_le\_of\_norm\_le\_const} bound each integral in $H(T)$ by $2M/(\pi T) \cdot 1$, so $\|H(T)\| \le (4M/\pi) T^{-1}$. Since $T^{-1} \to 0$ (\texttt{tendsto\_inv\_atTop\_zero}, \texttt{Tendsto.const\_mul}), \texttt{squeeze\_zero\_norm'} (\texttt{eventually\_gt\_atTop}) gives $H(T) \to 0$.
 \end{proof}

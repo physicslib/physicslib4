@@ -194,3 +194,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:strip-vertical-sides (integral_stripQuotient_vertical): proved via stripQuotient_eq boundary forms, integral_neg, push_cast.
 - lmm:strip-rectangle-subset (strip_rectangle_subset): proved by rewriting the corner real parts to ∓1/2 (uIcc_of_le, min_eq_left, max_eq_right) and taking the real-part conjunct of mem_reProdIm.
 - 2026-11-13: proved strip_rectangle_subset (hT unused), integral_stripQuotient_vertical.
+- lmm:strip-horizontal-vanish: proved `Physicslib4.tendsto_stripHorizontalIntegral` (bound ‖H(T)‖ ≤ 4M/(πT) via `norm_stripQuotient_horizontal_le` and `squeeze_zero_norm'`).
+- lmm:strip-rectangle-identity (Physicslib4.strip_rectangle_identity): PROVED via rectangle Cauchy theorem + integral_stripQuotient_vertical + linear_combination.
+- 2026-11-13: proved strip_rectangle_identity, tendsto_stripHorizontalIntegral.

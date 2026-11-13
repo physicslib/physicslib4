@@ -298,7 +298,21 @@ theorem strip_rectangle_identity {f : ℂ → ℂ}
     (hd : DifferentiableOn ℂ f (re ⁻¹' Ioo (-1 / 2) (1 / 2))) {T : ℝ} (hT : 0 < T) :
     I * (stripVerticalIntegral f (1 / 2) T + stripVerticalIntegral f (-1 / 2) T) =
       stripHorizontalIntegral f T := by
-  sorry
+  obtain ⟨hgc, hgd⟩ := stripQuotient_regular hc hd
+  obtain ⟨hs1, hs2⟩ := strip_rectangle_subset hT
+  have h := Complex.integral_boundary_rect_eq_zero_of_continuousOn_of_differentiableOn
+    (stripQuotient f) (-1 / 2 - T * I) (1 / 2 + T * I) (hgc.mono hs1) (hgd.mono hs2)
+  have hre₁ : (-1 / 2 - T * I : ℂ).re = -1 / 2 := by simp
+  have hre₂ : (1 / 2 + T * I : ℂ).re = 1 / 2 := by simp
+  have him₁ : (-1 / 2 - T * I : ℂ).im = -T := by simp
+  have him₂ : (1 / 2 + T * I : ℂ).im = T := by simp
+  rw [hre₁, hre₂, him₁, him₂] at h
+  obtain ⟨hv1, hv2⟩ := integral_stripQuotient_vertical f T
+  push_cast at h
+  rw [hv1, hv2] at h
+  simp only [smul_eq_mul, neg_mul, ← sub_eq_add_neg] at h
+  rw [stripHorizontalIntegral]
+  linear_combination h
 
 /-- The horizontal side integral H(T) tends to 0 as T → ∞.
 
@@ -306,7 +320,21 @@ Blueprint: lmm:strip-horizontal-vanish -/
 theorem tendsto_stripHorizontalIntegral {f : ℂ → ℂ} {M : ℝ}
     (hM : ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
     Tendsto (stripHorizontalIntegral f) atTop (𝓝 0) := by
-  sorry
+  have hlim : Tendsto (fun T : ℝ => 4 * M / π * T⁻¹) atTop (𝓝 0) := by
+    simpa using tendsto_inv_atTop_zero.const_mul (4 * M / π)
+  refine squeeze_zero_norm' ?_ hlim
+  filter_upwards [eventually_gt_atTop 0] with T hT
+  have hsub : Ι (-1 / 2 : ℝ) (1 / 2) ⊆ Icc (-1 / 2) (1 / 2) :=
+    uIoc_subset_uIcc.trans (uIcc_of_le (by norm_num)).subset
+  have h₁ := intervalIntegral.norm_integral_le_of_norm_le_const fun x hx =>
+    (norm_stripQuotient_horizontal_le hM hT (hsub hx)).1
+  have h₂ := intervalIntegral.norm_integral_le_of_norm_le_const fun x hx =>
+    (norm_stripQuotient_horizontal_le hM hT (hsub hx)).2
+  have hT' : 4 * M / π * T⁻¹ =
+      2 * M / (π * T) * |1 / 2 - -1 / 2| + 2 * M / (π * T) * |1 / 2 - -1 / 2| := by
+    norm_num; field_simp; ring
+  rw [hT']
+  exact (norm_sub_le _ _).trans (add_le_add h₁ h₂)
 
 /-- t ↦ (f(±1/2 + it) - f(0)) / cosh(πt) and t ↦ f(±1/2 + it) / cosh(πt) are integrable.
 
