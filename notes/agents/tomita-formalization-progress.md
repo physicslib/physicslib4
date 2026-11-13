@@ -164,3 +164,10 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 
 - 2026-11-12: sbsctn:strip-formula formalized as 27 sorry'd declarations (3 defs stripQuotient, stripVerticalIntegral, stripHorizontalIntegral; 24 lemmas/theorems ending in strip_formula and eq_zero_of_integral_exp_mul_eq_zero) in Physicslib4/Analysis/StripFormula.lean (Mathlib imports only), recorded and marked formalized.
 - 2026-11-12: stage 4 statements reviewed: PASS (memo review-strip-formula-statements-2026-11-12.md).
+
+## Stage 4 (proofs)
+
+- 2026-11-12: statements committed. Waves of two: (inv_cosh_le, abs_le_norm_sin_add_mul_I), (integrable_inv_cosh, sin_pi_mul_strip_boundary), (hasDerivAt_two_mul_arctan_exp, eq_zero_of_sin_pi_mul_eq_zero), (integral_inv_cosh, integrable_of_norm_le_div_cosh), (integral_inv_cosh_pi_mul).
+- `lmm:sin-norm-lower-bound` (`Physicslib4.abs_le_norm_sin_add_mul_I`): proved via `Complex.sin_add_mul_I`, `normSq_add_mul_I`, `Real.cosh_sq`, `Real.abs_sinh`/`Real.self_le_sinh_iff`; adds import `Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp` to `StripFormula.lean`.
+- `lmm:inv-cosh-le` (`Physicslib4.inv_cosh_le`): proved via `Real.sum_le_exp_of_nonneg` (4 terms) giving 1 + |x|² ≤ exp |x|, then `Real.cosh_abs`, `Real.cosh_eq`, `inv_anti₀`; no new imports.
+- 2026-11-13: wave 1 proved (inv_cosh_le, abs_le_norm_sin_add_mul_I; DerivHyp import added).

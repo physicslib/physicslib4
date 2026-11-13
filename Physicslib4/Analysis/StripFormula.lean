@@ -9,6 +9,7 @@ import Mathlib.Analysis.Complex.RemovableSingularity
 import Mathlib.Analysis.Fourier.Inversion
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.ArctanDeriv
 import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
 import Mathlib.MeasureTheory.Integral.IntegralEqImproper
 
 /-!
@@ -59,7 +60,17 @@ noncomputable def stripHorizontalIntegral (f : ℂ → ℂ) (T : ℝ) : ℂ :=
 
 Blueprint: lmm:inv-cosh-le -/
 theorem inv_cosh_le (x : ℝ) : 1 / Real.cosh x ≤ 2 * (1 + x ^ 2)⁻¹ := by
-  sorry
+  have ha : 0 ≤ |x| := abs_nonneg x
+  have hexp : 1 + |x| ^ 2 ≤ Real.exp |x| := by
+    have h := Real.sum_le_exp_of_nonneg ha 4
+    simp only [Finset.sum_range_succ, Finset.sum_range_zero, Nat.factorial] at h
+    norm_num at h
+    nlinarith [mul_nonneg ha (sq_nonneg (|x| - 3 / 2)), sq_abs x]
+  have hc : (1 + x ^ 2) / 2 ≤ Real.cosh x := by
+    rw [← Real.cosh_abs, Real.cosh_eq, ← sq_abs x]
+    linarith [Real.exp_pos (-|x|)]
+  rw [one_div, ← div_eq_mul_inv, ← inv_div]
+  exact inv_anti₀ (by positivity) hc
 
 /-- t ↦ 1/cosh t and t ↦ 1/cosh(πt) are integrable on ℝ.
 
@@ -107,7 +118,13 @@ theorem sin_pi_mul_strip_boundary (t : ℝ) :
 
 Blueprint: lmm:sin-norm-lower-bound -/
 theorem abs_le_norm_sin_add_mul_I (x y : ℝ) : |y| ≤ ‖Complex.sin (x + y * I)‖ := by
-  sorry
+  have hsh : |y| ≤ |Real.sinh y| := by
+    rw [Real.abs_sinh]; exact Real.self_le_sinh_iff.mpr (abs_nonneg y)
+  have hsq : y ^ 2 ≤ ‖Complex.sin (x + y * I)‖ ^ 2 := by
+    rw [Complex.sq_norm, Complex.sin_add_mul_I, ← ofReal_sin, ← ofReal_cosh, ← ofReal_cos,
+      ← ofReal_sinh, ← ofReal_mul, ← ofReal_mul, normSq_add_mul_I]
+    nlinarith [sq_le_sq.mpr hsh, Real.cosh_sq y, Real.sin_sq_add_cos_sq x, sq_nonneg (Real.sin x)]
+  simpa using sq_le_sq.mp hsq
 
 /-- The only zero of sin(πz) in the closed strip is z = 0.
 

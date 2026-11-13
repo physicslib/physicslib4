@@ -2304,6 +2304,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     For every $x \in \mathbb{R}$, $1/\cosh x \le 2(1 + x^2)^{-1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     For real $y$, $\sinh(y)^2 = |\sinh y|^2 = \sinh(|y|)^2 \ge |y|^2 = y^2$, since $|y| \le \sinh |y|$ (Mathlib's \texttt{Real.abs\_sinh} and \texttt{Real.self\_le\_sinh\_iff}). With $y = x/2$, Mathlib's \texttt{Real.cosh\_two\_mul} and \texttt{Real.cosh\_sq'} give $\cosh x = \cosh(y)^2 + \sinh(y)^2 = 1 + 2\sinh(y)^2 \ge 1 + x^2/2 \ge (1 + x^2)/2 > 0$, so $1/\cosh x \le 2(1 + x^2)^{-1}$.
 \end{proof}
 
@@ -2380,6 +2381,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     For $x, y \in \mathbb{R}$, $|\sin(x + iy)| \ge |y|$.
 \end{lemma}
 \begin{proof}
+    \leanok
     By Mathlib's \texttt{Complex.sin\_add\_mul\_I} and \texttt{Complex.ofReal\_sin}, \texttt{Complex.ofReal\_cos}, \texttt{Complex.ofReal\_sinh}, \texttt{Complex.ofReal\_cosh}, $\sin(x + iy) = \sin x \cosh y + i\cos x \sinh y$ with real $\sin x \cosh y$ and $\cos x \sinh y$. Hence (\texttt{Complex.sq\_norm}, \texttt{Complex.normSq\_add\_mul\_I}, \texttt{Real.cosh\_sq'}, \texttt{Real.sin\_sq\_add\_cos\_sq}) $|\sin(x + iy)|^2 = \sin^2 x(1 + \sinh^2 y) + \cos^2 x \sinh^2 y = \sin^2 x + \sinh^2 y \ge \sinh^2 y \ge y^2$, the last step as in the proof of Lemma~\ref{lmm:inv-cosh-le} (\texttt{Real.abs\_sinh}, \texttt{Real.self\_le\_sinh\_iff}). Hence $|y| \le |\sin(x + iy)|$ (Mathlib's \texttt{abs\_le\_of\_sq\_le\_sq}, \texttt{norm\_nonneg}).
 \end{proof}
 
