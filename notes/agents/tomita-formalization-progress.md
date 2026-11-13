@@ -188,3 +188,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:strip-denominator-ne-zero (Physicslib4.dslope_sin_pi_mul_ne_zero): proved; z = 0 via dslope_same and HasDerivAt.deriv, z ≠ 0 via dslope_of_ne and eq_zero_of_sin_pi_mul_eq_zero.
 - thrm:fourier-uniqueness: proved `Physicslib4.eq_zero_of_integral_exp_mul_eq_zero` (Physicslib4/Analysis/StripFormula.lean) via `fourier_eq_zero_of_integral_exp_mul_eq_zero` + `Continuous.fourierInv_fourier_eq` + `Real.fourierInv_eq`.
 - 2026-11-13: proved dslope_sin_pi_mul_ne_zero, eq_zero_of_integral_exp_mul_eq_zero (Fourier uniqueness).
+- lmm:strip-quotient-regular (Physicslib4.stripQuotient_regular): proved via continuousOn_dslope / Complex.differentiableOn_dslope and ContinuousOn.div / DifferentiableOn.div with dslope_sin_pi_mul_ne_zero.
+- lmm:strip-quotient-horizontal-bound (Physicslib4.norm_stripQuotient_horizontal_le): proved via stripQuotient_eq, abs_le_norm_sin_add_mul_I, norm_sub_le, div_le_div₀, with a helper over s = ±T.
+- 2026-11-13: proved stripQuotient_regular, norm_stripQuotient_horizontal_le. StripFormula.lean: 9 sorries left (rectangle and limit lemmas, strip_formula).

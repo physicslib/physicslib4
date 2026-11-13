@@ -214,7 +214,18 @@ theorem stripQuotient_regular {f : ℂ → ℂ} (hc : ContinuousOn f (re ⁻¹' 
     (hd : DifferentiableOn ℂ f (re ⁻¹' Ioo (-1 / 2) (1 / 2))) :
     ContinuousOn (stripQuotient f) (re ⁻¹' Icc (-1 / 2) (1 / 2)) ∧
       DifferentiableOn ℂ (stripQuotient f) (re ⁻¹' Ioo (-1 / 2) (1 / 2)) := by
-  sorry
+  have hO : re ⁻¹' Ioo (-1 / 2 : ℝ) (1 / 2) ∈ 𝓝 (0 : ℂ) :=
+    (isOpen_Ioo.preimage Complex.continuous_re).mem_nhds (by norm_num)
+  have hS : re ⁻¹' Icc (-1 / 2 : ℝ) (1 / 2) ∈ 𝓝 (0 : ℂ) :=
+    mem_of_superset hO (preimage_mono Ioo_subset_Icc_self)
+  have hs : Differentiable ℂ (fun z : ℂ => Complex.sin (π * z)) :=
+    Complex.differentiable_sin.comp (differentiable_id.const_mul _)
+  have hne := fun z hz => dslope_sin_pi_mul_ne_zero (z := z) hz
+  refine ⟨((continuousOn_dslope hS).2 ⟨hc, hd.differentiableAt hO⟩).div
+    ((continuousOn_dslope hS).2 ⟨hs.continuous.continuousOn, hs 0⟩) hne,
+    ((Complex.differentiableOn_dslope hO).2 hd).div
+    ((Complex.differentiableOn_dslope hO).2 hs.differentiableOn)
+    fun z hz => hne z (Ioo_subset_Icc_self hz)⟩
 
 /-- On the horizontal lines Im z = ±T, ‖g(x ± iT)‖ ≤ 2M / (πT).
 
@@ -224,7 +235,30 @@ theorem norm_stripQuotient_horizontal_le {f : ℂ → ℂ} {M : ℝ}
     (hx : x ∈ Icc (-1 / 2 : ℝ) (1 / 2)) :
     ‖stripQuotient f (x + T * I)‖ ≤ 2 * M / (π * T) ∧
       ‖stripQuotient f (x - T * I)‖ ≤ 2 * M / (π * T) := by
-  sorry
+  have hM0 : 0 ≤ M := (norm_nonneg _).trans (hM 0 (by norm_num))
+  have key : ∀ s : ℝ, |s| = T → ‖stripQuotient f (x + s * I)‖ ≤ 2 * M / (π * T) := by
+    intro s hs
+    have hz : (x + s * I : ℂ) ≠ 0 := fun h => by
+      have := congrArg Complex.im h
+      simp only [add_im, ofReal_im, mul_im, ofReal_re, I_im, mul_one, I_re, mul_zero,
+        add_zero, zero_im, zero_add] at this
+      rw [this, abs_zero] at hs; linarith
+    have hsin : π * T ≤ ‖Complex.sin (π * (x + s * I))‖ := by
+      have h := abs_le_norm_sin_add_mul_I (π * x) (π * s)
+      rw [abs_mul, abs_of_pos Real.pi_pos, hs] at h
+      convert h using 3; push_cast; ring
+    have hpos : 0 < π * T := mul_pos Real.pi_pos hT
+    have hne : Complex.sin (π * (x + s * I)) ≠ 0 := fun h => by
+      rw [h, norm_zero] at hsin; linarith
+    have hnum : ‖f (x + s * I) - f 0‖ ≤ 2 * M := by
+      have h1 := hM (x + s * I) (by simpa using hx)
+      have h2 := hM 0 (by norm_num)
+      linarith [norm_sub_le (f (x + s * I)) (f 0)]
+    rw [(stripQuotient_eq f).1 _ hz hne, norm_div]
+    exact div_le_div₀ (by linarith) hnum hpos hsin
+  refine ⟨key T (abs_of_pos hT), ?_⟩
+  have := key (-T) (by rw [abs_neg, abs_of_pos hT])
+  simpa [sub_eq_add_neg] using this
 
 /-- The closed rectangle with corners -1/2 - iT and 1/2 + iT lies in the closed strip and the
 open rectangle in the open strip, in the form Mathlib's rectangle Cauchy theorem uses.

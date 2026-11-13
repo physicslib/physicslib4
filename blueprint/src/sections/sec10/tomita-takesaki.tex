@@ -2442,6 +2442,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     Let $f$ be as in~\eqref{eq:strip-hypotheses}. Then $g$ is continuous on $\mathcal{S}$ and complex differentiable on $\mathcal{S}^\circ$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-denominator-ne-zero}
     $\mathcal{S}^\circ$ is open (Mathlib's \texttt{Complex.continuous\_re}, \texttt{isOpen\_lt}) and contains $0$, so $\mathcal{S}^\circ$ and $\mathcal{S}$ are neighbourhoods of $0$, and $f$ is differentiable at $0$. Mathlib's \texttt{continuousOn\_dslope} makes $\operatorname{dslope}(f, 0)$ and $\operatorname{dslope}(s, 0)$ continuous on $\mathcal{S}$, and \texttt{Complex.differentiableOn\_dslope} makes them complex differentiable on $\mathcal{S}^\circ$ ($s$ is entire: \texttt{Complex.differentiable\_sin}). The denominator does not vanish on $\mathcal{S}$ (Lemma~\ref{lmm:strip-denominator-ne-zero}), so \texttt{ContinuousOn.div} and \texttt{DifferentiableOn.div} conclude.
 \end{proof}
@@ -2455,6 +2456,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     Let $f$ be as in~\eqref{eq:strip-hypotheses}, $T > 0$ and $x \in [-\tfrac{1}{2}, \tfrac{1}{2}]$. Then $\|g(x \pm iT)\| \le 2M/(\pi T)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-quotient-formula, lmm:sin-norm-lower-bound}
     $z = x \pm iT$ lies in $\mathcal{S}$ and $z \ne 0$. By Lemma~\ref{lmm:sin-norm-lower-bound}, $|\sin(\pi z)| = |\sin(\pi x + i(\pm\pi T))| \ge \pi T > 0$, so Lemma~\ref{lmm:strip-quotient-formula} applies and $\|g(z)\| = \|f(z) - f(0)\|/|\sin(\pi z)| \le 2M/(\pi T)$ (\texttt{norm\_sub\_le}, \texttt{div\_le\_div\_of\_nonneg\_left}).
 \end{proof}
