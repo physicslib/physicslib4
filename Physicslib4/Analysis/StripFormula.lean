@@ -264,7 +264,7 @@ theorem norm_stripQuotient_horizontal_le {f : ℂ → ℂ} {M : ℝ}
 open rectangle in the open strip, in the form Mathlib's rectangle Cauchy theorem uses.
 
 Blueprint: lmm:strip-rectangle-subset -/
-theorem strip_rectangle_subset {T : ℝ} (hT : 0 < T) :
+theorem strip_rectangle_subset (T : ℝ) :
     [[(-1 / 2 - T * I : ℂ).re, (1 / 2 + T * I : ℂ).re]] ×ℂ
         [[(-1 / 2 - T * I : ℂ).im, (1 / 2 + T * I : ℂ).im]] ⊆ re ⁻¹' Icc (-1 / 2) (1 / 2) ∧
       Ioo (min (-1 / 2 - T * I : ℂ).re (1 / 2 + T * I : ℂ).re)
@@ -295,11 +295,11 @@ theorem integral_stripQuotient_vertical (f : ℂ → ℂ) (T : ℝ) :
 Blueprint: lmm:strip-rectangle-identity -/
 theorem strip_rectangle_identity {f : ℂ → ℂ}
     (hc : ContinuousOn f (re ⁻¹' Icc (-1 / 2) (1 / 2)))
-    (hd : DifferentiableOn ℂ f (re ⁻¹' Ioo (-1 / 2) (1 / 2))) {T : ℝ} (hT : 0 < T) :
+    (hd : DifferentiableOn ℂ f (re ⁻¹' Ioo (-1 / 2) (1 / 2))) (T : ℝ) :
     I * (stripVerticalIntegral f (1 / 2) T + stripVerticalIntegral f (-1 / 2) T) =
       stripHorizontalIntegral f T := by
   obtain ⟨hgc, hgd⟩ := stripQuotient_regular hc hd
-  obtain ⟨hs1, hs2⟩ := strip_rectangle_subset hT
+  obtain ⟨hs1, hs2⟩ := strip_rectangle_subset T
   have h := Complex.integral_boundary_rect_eq_zero_of_continuousOn_of_differentiableOn
     (stripQuotient f) (-1 / 2 - T * I) (1 / 2 + T * I) (hgc.mono hs1) (hgd.mono hs2)
   have hre₁ : (-1 / 2 - T * I : ℂ).re = -1 / 2 := by simp
@@ -391,9 +391,8 @@ theorem strip_boundary_integral_eq_zero {f : ℂ → ℂ} {M : ℝ}
   have h₁ := (tendsto_stripVerticalIntegral hc hM).const_mul I
   have h₂ : Tendsto (fun T => I * (stripVerticalIntegral f (1 / 2) T +
       stripVerticalIntegral f (-1 / 2) T)) atTop (𝓝 0) :=
-    (tendsto_stripHorizontalIntegral hM).congr' <| by
-      filter_upwards [eventually_gt_atTop 0] with T hT
-      exact (strip_rectangle_identity hc hd hT).symm
+    (tendsto_stripHorizontalIntegral hM).congr' <|
+      Eventually.of_forall fun T => (strip_rectangle_identity hc hd T).symm
   simpa [I_ne_zero] using tendsto_nhds_unique h₁ h₂
 
 /-- ∫ (f(±1/2 + it) - f(0)) / cosh(πt) dt = ∫ f(±1/2 + it) / cosh(πt) dt - f(0).
@@ -426,7 +425,17 @@ theorem strip_formula {f : ℂ → ℂ} (hc : ContinuousOn f (re ⁻¹' Icc (-1 
     (hd : DifferentiableOn ℂ f (re ⁻¹' Ioo (-1 / 2) (1 / 2)))
     (hb : ∃ M, ∀ z ∈ re ⁻¹' Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
     f 0 = ∫ t : ℝ, (f (1 / 2 + t * I) + f (-1 / 2 + t * I)) / (2 * (Real.cosh (π * t) : ℂ)) := by
-  sorry
+  obtain ⟨M, hM⟩ := hb
+  obtain ⟨-, h₁, -, h₂⟩ := strip_boundary_integrable hc hM
+  obtain ⟨s₁, s₂⟩ := strip_boundary_integral_sub hc hM
+  have h₀ := strip_boundary_integral_eq_zero hc hd hM
+  rw [s₁, s₂] at h₀
+  have e : (fun t : ℝ => (f (1 / 2 + t * I) + f (-1 / 2 + t * I)) /
+      (2 * (Real.cosh (π * t) : ℂ))) = fun t : ℝ => (f (1 / 2 + t * I) /
+      (Real.cosh (π * t) : ℂ) + f (-1 / 2 + t * I) / (Real.cosh (π * t) : ℂ)) / 2 := by
+    ext t; ring
+  rw [e, integral_div, integral_add h₁ h₂]
+  linear_combination (-1 / 2 : ℂ) * h₀
 
 /-- If ∫ e^{iθt} h(t) dt = 0 for every θ, the Fourier transform of h vanishes.
 

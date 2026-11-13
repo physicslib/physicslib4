@@ -203,3 +203,5 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:strip-boundary-integral-zero (`Physicslib4.strip_boundary_integral_eq_zero`): proved via `tendsto_nhds_unique` comparing `(tendsto_stripVerticalIntegral).const_mul I` with `tendsto_stripHorizontalIntegral` congr'd through `strip_rectangle_identity` on `eventually_gt_atTop 0`, then `I_ne_zero`.
 - lmm:strip-vertical-limit (tendsto_stripVerticalIntegral): proved via intervalIntegral_tendsto_integral on both boundary integrands (integrability from strip_boundary_integrable) and Tendsto.add.
 - 2026-11-13: proved tendsto_stripVerticalIntegral, strip_boundary_integral_eq_zero.
+- thrm:strip-formula: proved `Physicslib4.strip_formula` from strip_boundary_integral_eq_zero, strip_boundary_integral_sub and strip_boundary_integrable (integral_add, integral_div, linear_combination).
+- 2026-11-13: proved strip_formula; dropped unused hT from strip_rectangle_subset and strip_rectangle_identity. Stage 4 complete: StripFormula.lean has no sorry and no warnings (only Mathlib module-system import notices); full build OK.

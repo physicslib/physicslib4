@@ -2581,6 +2581,7 @@ The proof of the strip formula applies the Cauchy theorem for rectangles to $g$ 
     This is Exercise~13.2.1 of Jones's notes.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-boundary-integral-zero, lmm:strip-boundary-split, lmm:strip-boundary-integrable}
     Choose $M$ bounding $\|f\|$ on $\mathcal{S}$, so~\eqref{eq:strip-hypotheses} holds. Rewriting both integrals of Lemma~\ref{lmm:strip-boundary-integral-zero} by Lemma~\ref{lmm:strip-boundary-split} gives $\int_{\mathbb{R}} \frac{f(\frac{1}{2} + it)}{\cosh(\pi t)}dt + \int_{\mathbb{R}} \frac{f(-\frac{1}{2} + it)}{\cosh(\pi t)}dt = 2f(0)$. With both integrands integrable (Lemma~\ref{lmm:strip-boundary-integrable}), \texttt{MeasureTheory.integral\_add} (with \texttt{add\_div}) and \texttt{MeasureTheory.integral\_div} (with \texttt{div\_div}) turn the left side into $2\int_{\mathbb{R}} \frac{f(\frac{1}{2} + it) + f(-\frac{1}{2} + it)}{2\cosh(\pi t)} dt$; dividing by $2$ concludes.
 \end{proof}
