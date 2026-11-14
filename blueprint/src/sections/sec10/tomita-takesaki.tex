@@ -3461,6 +3461,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     This is the formula at the start of the proof of Jones's Proposition~13.2.2, written in this project's inner product convention.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-sesquilinear-identity, lmm:tomita-operators-after-conjugation, thrm:modular-conjugation-polar, lmm:antilinear-isometry-antiunitary, thrm:modular-conjugation-involution, lmm:modular-conjugation-bounded-conjugate}
     By Lemma~\ref{lmm:tomita-operators-after-conjugation}, $J\xi, J\eta \in \text{Dom}(S) \cap \text{Dom}(S^*)$ with $S(J\xi) = \Delta^{-1/2}\xi$, $S^*(J\xi) = \Delta^{1/2}\xi$, and likewise for $\eta$. Lemma~\ref{lmm:van-daele-sesquilinear-identity} for $J\xi$, $J\eta$ gives $\lambda\left< a\Delta^{-1/2}\xi, \Delta^{1/2}\eta \right> + \lambda^{-1}\left< a\Delta^{1/2}\xi, \Delta^{-1/2}\eta \right> = \left< J\eta, a'J\xi \right>$. Since $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}, Lemma~\ref{lmm:antilinear-isometry-antiunitary}) and $a'J\xi = J(Ja'J\xi)$ (Theorem~\ref{thrm:modular-conjugation-involution}), $\left< J\eta, J(Ja'J\xi) \right> = \left< Ja'J\xi, \eta \right>$. Taking complex conjugates (\texttt{inner\_conj\_symm}; $\lambda$ is real) gives the claim.
 \end{proof}
@@ -3477,6 +3478,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     For $\xi, \eta \in \mathcal{H}_0$ a common $n$ exists by Lemma~\ref{lmm:modular-spectral-projections-nested}.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{crllr:van-daele-rearranged-identity, lmm:modular-power-half}
     By Lemma~\ref{lmm:modular-power-half}, $\xi, \eta \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$ with $\Delta^{\pm 1/2}\xi = p_{\pm 1/2,n}(\Delta)\xi$ and $\Delta^{\pm 1/2}\eta = p_{\pm 1/2,n}(\Delta)\eta$. Substitute into Corollary~\ref{crllr:van-daele-rearranged-identity}.
 \end{proof}

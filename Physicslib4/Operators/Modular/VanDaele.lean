@@ -1551,7 +1551,23 @@ theorem IsVanDaeleTriple.inner_modularConjugationConj {M : Set (H →L[ℂ] H)} 
           a (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, hξ₂⟩)⟫_ℂ +
         (l⁻¹ : ℂ) * ⟪modularOperatorInvSqrt hM hΩ C hC ⟨η, hη₂⟩,
           a (modularOperatorSqrt hM hΩ C hC ⟨ξ, hξ₁⟩)⟫_ℂ := by
-  sorry
+  set J := modularConjugation hM hΩ C hC
+  obtain ⟨h1, h2⟩ := tomitaOperator_modularConjugation hM hΩ C hC
+  obtain ⟨hξS, eξS⟩ := h1 ⟨ξ, hξ₂⟩
+  obtain ⟨hηS, eηS⟩ := h1 ⟨η, hη₂⟩
+  obtain ⟨hξS', eξS'⟩ := h2 ⟨ξ, hξ₁⟩
+  obtain ⟨hηS', eηS'⟩ := h2 ⟨η, hη₁⟩
+  have key := htriple.inner_identity hM hΩ C hC hξS hξS' hηS hηS'
+  rw [eξS, eηS, eξS', eηS'] at key
+  have hJJ : ∀ φ, J (J φ) = φ := (modularConjugation_involution hM hΩ C hC).1
+  have hR : ⟪J η, a' (J ξ)⟫_ℂ = conj ⟪η, modularConjugationConj hM hΩ C hC a' ξ⟫_ℂ := by
+    have := inner_map_map_of_conjLinearIsometry J.toLinearIsometry (J η) (a' (J ξ))
+    simp only [LinearIsometryEquiv.coe_toLinearIsometry, hJJ] at this
+    rw [show modularConjugationConj hM hΩ C hC a' ξ = J (a' (J ξ)) from rfl, this,
+      Complex.conj_conj]
+  rw [hR] at key
+  rw [← Complex.conj_conj ⟪η, modularConjugationConj hM hΩ C hC a' ξ⟫_ℂ, ← key]
+  simp [map_add, map_mul, Complex.conj_ofReal, inner_conj_symm]
 
 /-- For a van Daele triple `(λ, a', a)`, `n ≥ 1` and `E_n ξ = ξ`, `E_n η = η`,
 `⟪η, J a' J ξ⟫ = λ ⟪p_{1/2,n}(Δ) η, a p_{-1/2,n}(Δ) ξ⟫ + λ⁻¹ ⟪p_{-1/2,n}(Δ) η, a p_{1/2,n}(Δ) ξ⟫`.
@@ -1571,7 +1587,9 @@ theorem IsVanDaeleTriple.inner_modularConjugationConj_indicatorCpow {M : Set (H 
             p[(-1 / 2 : ℂ), n] η,
           a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
             p[(1 / 2 : ℂ), n] ξ)⟫_ℂ := by
-  sorry
+  obtain ⟨hξ₁, hξ₂, eξ₁, eξ₂⟩ := modularOperatorSqrt_eq_indicatorCpow hM hΩ C hC hn hξ
+  obtain ⟨hη₁, hη₂, eη₁, eη₂⟩ := modularOperatorSqrt_eq_indicatorCpow hM hΩ C hC hn hη
+  rw [htriple.inner_modularConjugationConj hM hΩ C hC hξ₁ hξ₂ hη₁ hη₂, eξ₁, eξ₂, eη₁, eη₂]
 
 /-! ### Tomita's theorem: the strip function and the integral formula -/
 

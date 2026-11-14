@@ -313,3 +313,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-14: proved IsVanDaeleTriple.inner_identity_of_mem, tomitaOperator_modularConjugation.
 - lmm:van-daele-sesquilinear-identity: proved `IsVanDaeleTriple.inner_identity` (VanDaele.lean) by approximating ξ, η via `exists_tendsto_tomitaOperator_of_mem`, applying `inner_identity_of_mem` termwise, and `tendsto_nhds_unique`.
 - 2026-11-14: proved IsVanDaeleTriple.inner_identity (Jones Lemma 13.1.7).
+- crllr:van-daele-rearranged-identity-H0 (IsVanDaeleTriple.inner_modularConjugationConj_indicatorCpow): proved by rewriting IsVanDaeleTriple.inner_modularConjugationConj with modularOperatorSqrt_eq_indicatorCpow for ξ and η (same index n, nesting not needed); depends on inner_modularConjugationConj, which is still sorry.
+- crllr:van-daele-rearranged-identity (IsVanDaeleTriple.inner_modularConjugationConj): proved via inner_identity at Jξ, Jη, tomitaOperator_modularConjugation, and the antiunitary inner identity for J.
+- 2026-11-14: proved IsVanDaeleTriple.inner_modularConjugationConj, ..._indicatorCpow. Stage 5b complete.
