@@ -3140,6 +3140,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     Let $\lambda > 0$. Then $g_\lambda$, $v_\lambda$ and $k_\lambda$ are measurable and real-valued, and for every $t \in \mathbb{R}$, $0 \le g_\lambda(t) \le \lambda$, $0 \le v_\lambda(t) \le \tfrac{1}{2}$ and $0 \le k_\lambda(t) \le \lambda^{-1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Each function is the indicator of the measurable set $(0, \infty)$ (\texttt{measurableSet\_Ioi}) times a measurable function (\texttt{Measurable.indicator}, \texttt{Real.continuous\_sqrt}, \texttt{Measurable.div}). For $t > 0$ the denominator $1 + \lambda^2t$ is positive and is at least $1$, at least $\lambda^2 t$, and at least $2\lambda\sqrt{t}$ by \texttt{two\_mul\_le\_add\_sq} applied to $1$ and $\lambda\sqrt{t}$, with $(\sqrt{t})^2 = t$ (\texttt{Real.sq\_sqrt}). Dividing (\texttt{div\_le\_iff₀}) gives the three upper bounds; nonnegativity is clear.
 \end{proof}
 
@@ -3154,6 +3155,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     For $t \le 0$ all of $s(t)$ (\texttt{max\_eq\_right}, \texttt{Real.sqrt\_zero}), $r(t)$, $g_\lambda(t)$, $v_\lambda(t)$, $k_\lambda(t)$ and $1_{(0,\infty)}(t)$ vanish. For $t > 0$, $s(t) = \sqrt{t}$ (\texttt{max\_eq\_left}), $r(t) = t^{-1/2} = (\sqrt{t})^{-1}$ (\texttt{Real.sqrt\_eq\_rpow}, \texttt{Real.rpow\_neg}) and $\sqrt{t}\sqrt{t} = t$, $\sqrt{t} > 0$ (\texttt{Real.mul\_self\_sqrt}, \texttt{Real.sqrt\_pos}); each identity is then an identity of rational expressions in $\lambda$ and $\sqrt{t}$ with nonzero denominators (\texttt{field\_simp}, \texttt{ring}). For the last one, $\lambda \cdot \lambda t + \lambda^{-1}\lambda = \lambda^2 t + 1$ over $1 + \lambda^2 t$.
 \end{proof}
 

@@ -922,7 +922,21 @@ theorem vanDaele_functions_bounded {l : ℝ} (hl : 0 < l) :
         ((vanDaeleG l t).im = 0 ∧ 0 ≤ (vanDaeleG l t).re ∧ (vanDaeleG l t).re ≤ l) ∧
         ((vanDaeleV l t).im = 0 ∧ 0 ≤ (vanDaeleV l t).re ∧ (vanDaeleV l t).re ≤ 1 / 2) ∧
         ((vanDaeleK l t).im = 0 ∧ 0 ≤ (vanDaeleK l t).re ∧ (vanDaeleK l t).re ≤ l⁻¹) := by
-  sorry
+  refine ⟨(Complex.measurable_ofReal.comp (by fun_prop)).indicator measurableSet_Ioi,
+    (Complex.measurable_ofReal.comp (by fun_prop)).indicator measurableSet_Ioi,
+    (Complex.measurable_ofReal.comp (by fun_prop)).indicator measurableSet_Ioi, fun t => ?_⟩
+  by_cases ht : 0 < t
+  · have hd : 0 < 1 + l ^ 2 * t := by positivity
+    have hs := Real.sq_sqrt ht.le
+    simp only [vanDaeleG, vanDaeleV, vanDaeleK, Set.indicator_of_mem (Set.mem_Ioi.2 ht),
+      Complex.ofReal_re, Complex.ofReal_im]
+    refine ⟨⟨trivial, by positivity, div_le_self hl.le (by nlinarith [sq_nonneg l])⟩,
+      ⟨trivial, by positivity, ?_⟩, ⟨trivial, by positivity, ?_⟩⟩
+    · rw [div_le_iff₀ hd]; nlinarith [sq_nonneg (l * Real.sqrt t - 1)]
+    · rw [div_le_iff₀ hd, mul_add, mul_one, ← mul_assoc, show l⁻¹ * l ^ 2 = l by field_simp]
+      linarith [inv_pos.2 hl]
+  · simp [vanDaeleG, vanDaeleV, vanDaeleK, Set.indicator_of_notMem (show t ∉ Set.Ioi 0 from ht),
+      hl.le]
 
 /-- With `s(t) = √t` and `r(t) = (√t)⁻¹`: `s g_λ = v_λ`, `v_λ s = k_λ`, `k_λ r = v_λ`,
 `v_λ r = g_λ` and `λ k_λ + λ⁻¹ g_λ = 1_{(0, ∞)}`.
@@ -934,7 +948,17 @@ theorem vanDaele_functions_identities {l : ℝ} (hl : 0 < l) (t : ℝ) :
       vanDaeleV l t * (((Real.sqrt t)⁻¹ : ℝ) : ℂ) = vanDaeleG l t ∧
       (l : ℂ) * vanDaeleK l t + (l⁻¹ : ℂ) * vanDaeleG l t =
         (Set.Ioi (0 : ℝ)).indicator 1 t := by
-  sorry
+  by_cases ht : 0 < t
+  · have hs := Real.sqrt_pos.2 ht
+    have hss := Real.mul_self_sqrt ht.le
+    have hd : (0 : ℝ) < 1 + l ^ 2 * t := by positivity
+    simp only [vanDaeleG, vanDaeleV, vanDaeleK, Set.indicator_of_mem (Set.mem_Ioi.2 ht),
+      Pi.one_apply]
+    refine ⟨?_, ?_, ?_, ?_, ?_⟩ <;> norm_cast <;> field_simp
+    all_goals nlinarith
+  · have h0 : Real.sqrt t = 0 := Real.sqrt_eq_zero'.2 (not_lt.1 ht)
+    simp [vanDaeleG, vanDaeleV, vanDaeleK,
+      Set.indicator_of_notMem (show t ∉ Set.Ioi (0 : ℝ) from ht), h0]
 
 /-- If measurable `f`, `h` agree on `(0, ∞)`, then `W_f = W_h` and `f(Δ) = h(Δ)`.
 Blueprint: lmm:modular-fc-congr-positive -/

@@ -277,3 +277,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-14: proved differentiable_modularOperator_indicatorCpow_apply, modularConjugation_indicatorCpow_modularConjugation.
 - crllr:modular-power-matrix-coefficients (`differentiable_inner_modularOperator_indicatorCpow_conj`, VanDaele.lean): proved via `DifferentiableAt.clm_apply` chains on `hasDerivAt_modularOperator_indicatorCpow` (composed with `differentiableAt_id.neg` for p_{-z}) and `innerSL ℂ η`.
 - 2026-11-14: proved differentiable_inner_modularOperator_indicatorCpow_conj. Stage 5a complete (36/36).
+- lmm:van-daele-functions-identities (vanDaele_functions_identities): proved by case split on 0 < t; indicator unfolding, norm_cast, field_simp, nlinarith; t ≤ 0 by simp with √t = 0.
+- lmm:van-daele-functions-bounded (`vanDaele_functions_bounded`): proved (measurability via indicator of ofReal ∘ fun_prop; bounds via div_le_iff₀, nlinarith with (l√t-1)² ≥ 0).
+- 2026-11-14: 5b proving: proved vanDaele_functions_bounded, vanDaele_functions_identities.
