@@ -13,3 +13,7 @@ Blocking splits:
 Recommended: split the pointwise limit out of `lmm:van-daele-integral-continuity`; split the real inequality λ^s ≤ max(λ, λ⁻¹) out of `lmm:van-daele-phase-strip`.
 
 Proposals needing the user's decision (not applied): `def:modular-conjugation-conjugate` (JTJ as a definition), `def:van-daele-triple` (the van Daele equation as a Prop, used in ≥ 5 statements); moving `sbsctn:van-daele` to its own file (the user has declined this).
+
+## Pass 2: PASS
+
+All four blocking findings and both recommended splits resolved; new nodes correct (Mathlib rpow lemmas match); `\uses` right; the preamble sentence making (M, Ω) arbitrary suffices for applying `lmm:van-daele-conjugate-in-algebra` to (M′, Ω) (only the t = 0 case is needed). Stage 5 blueprint (5a–5c) is ready to formalize.
