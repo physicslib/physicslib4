@@ -272,3 +272,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-conjugation-spectral-projections: proved `modularConjugation_spectralMeasure_Icc` (E_n = ∫1_{K_n}, modularConjugation_integral_modularConjugation + indicator_Icc_inv; J H₀ = H₀ via J∘J = id).
 - thrm:modular-power-holomorphic: proved `hasDerivAt_modularOperator_indicatorCpow` (hasDerivAt_iff_isLittleO_nhds_zero + eventual Taylor bound norm_modularOperator_indicatorCpow_taylor, IsBigO.of_bound, isLittleO_pow_id; continuity from HasDerivAt.continuousAt).
 - 2026-11-14: proved hasDerivAt_modularOperator_indicatorCpow, modularConjugation_spectralMeasure_Icc.
+- lmm:modular-conjugation-powers (`modularConjugation_indicatorCpow_modularConjugation`, VanDaele.lean): proved via `modularConjugation_integral_modularConjugation` with `conj_indicatorCpow_inv` / `conj_exp_log_inv`, and `modularUnitaryGroup_eq_functionalCalculus` for Δ^{it}.
+- crllr:modular-power-vector-entire (`differentiable_modularOperator_indicatorCpow_apply`): proved via `HasDerivAt.clm_apply` on `hasDerivAt_modularOperator_indicatorCpow` and composition with `innerSL ℂ η`.
+- 2026-11-14: proved differentiable_modularOperator_indicatorCpow_apply, modularConjugation_indicatorCpow_modularConjugation.

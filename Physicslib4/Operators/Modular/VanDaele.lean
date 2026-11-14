@@ -683,7 +683,11 @@ theorem differentiable_modularOperator_indicatorCpow_apply {M : Set (H →L[ℂ]
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, n] ξ) ∧
     Differentiable ℂ (fun z : ℂ =>
       ⟪η, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, n] ξ⟫_ℂ) := by
-  sorry
+  have h1 : Differentiable ℂ (fun z : ℂ =>
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, n] ξ) :=
+    fun z => (((hasDerivAt_modularOperator_indicatorCpow hM hΩ C hC hn).1 z).clm_apply
+      (hasDerivAt_const z ξ)).differentiableAt
+  exact ⟨h1, fun z => ((innerSL ℂ η).differentiableAt).comp z (h1 z)⟩
 
 /-- `z ↦ ⟪η, p_{z,n}(Δ) a p_{-z,n}(Δ) ξ⟫` is entire.
 Blueprint: crllr:modular-power-matrix-coefficients -/
@@ -834,7 +838,26 @@ theorem modularConjugation_indicatorCpow_modularConjugation {M : Set (H →L[ℂ
         ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[x, n]
           (modularConjugation hM hΩ C hC ψ)) =
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[-x, n] ψ := by
-  sorry
+  have hp : ∀ (w : ℂ) (ψ : H), modularConjugation hM hΩ C hC
+      ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[w, n]
+        (modularConjugation hM hΩ C hC ψ)) =
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[-conj w, n] ψ := by
+    intro w ψ
+    obtain ⟨hm, -, hbd⟩ := indicatorCpow_bounds hn w
+    rw [modularConjugation_integral_modularConjugation hM hΩ C hC ⟨hm, _, fun x => (hbd x).1⟩ ψ]
+    congr 2
+    funext x
+    exact conj_indicatorCpow_inv hn w x
+  refine ⟨hp z, fun ψ => ?_, fun x ψ => by simpa using hp x ψ⟩
+  obtain ⟨hem, hen, -, hU, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM hΩ C hC t
+  have h1 : ∀ φ, modularUnitaryGroup hM hΩ C hC t φ =
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral e[t] φ :=
+    fun φ => by rw [← hU]; rfl
+  rw [h1, h1, modularConjugation_integral_modularConjugation hM hΩ C hC
+    ⟨hem, 1, fun x => (hen x).le⟩ ψ]
+  congr 2
+  funext x
+  exact conj_exp_log_inv t x
 
 /-! ### The Tomita operator on `M Ω` -/
 

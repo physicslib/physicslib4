@@ -2979,6 +2979,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $n \ge 1$ and $\xi, \eta \in \mathbf{H}$. Then $z \mapsto p_{z,n}(\Delta)\xi$ is complex differentiable as a map $\mathbb{C} \to \mathbf{H}$, and $z \mapsto \left< \eta, p_{z,n}(\Delta)\xi \right>$ is entire.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-power-holomorphic}
     Composing the differentiable map of Theorem~\ref{thrm:modular-power-holomorphic} with the continuous linear maps $T \mapsto T\xi$ and $T \mapsto \left< \eta, T\xi \right>$ on $\mathcal{B}(\mathbf{H})$ preserves differentiability (\texttt{HasDerivAt.clm\_apply}, \texttt{HasFDerivAt.comp\_hasDerivAt}).
 \end{proof}
@@ -3089,6 +3090,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     For $n \ge 1$, $z \in \mathbb{C}$ and $t \in \mathbb{R}$, $Jp_{z,n}(\Delta)J = p_{-\overline{z},n}(\Delta)$ and $J\Delta^{it}J = \Delta^{it}$. In particular $Jp_{x,n}(\Delta)J = p_{-x,n}(\Delta)$ for real $x$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-conjugation-bounded-fc, lmm:modular-inverse-power-function, lmm:modular-inverse-unitary-function, lmm:modular-power-function-bounds, lmm:modular-unitary-group-fc}
     $p_{z,n}$ and $e_t$ are bounded and measurable (Lemmas~\ref{lmm:modular-power-function-bounds} and~\ref{lmm:modular-unitary-group-fc}). Lemma~\ref{lmm:modular-conjugation-bounded-fc} gives $Jp_{z,n}(\Delta)J = (\overline{p_{z,n}} \circ \iota^-)(\Delta)$ and $Je_t(\Delta)J = (\overline{e_t} \circ \iota^-)(\Delta)$, and Lemmas~\ref{lmm:modular-inverse-power-function} and~\ref{lmm:modular-inverse-unitary-function} identify these functions with $p_{-\overline{z},n}$ and $e_t$ everywhere. Finally $\Delta^{it} = e_t(\Delta)$ (Lemma~\ref{lmm:modular-unitary-group-fc}).
 \end{proof}
