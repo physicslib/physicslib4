@@ -3386,6 +3386,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     Let $a, x, y \in \mathcal{M}$ with $y\Omega \in \text{Dom}(S^*)$. Then $\left< aS(x\Omega), S^*(y\Omega) \right> = \left< x^*y\Omega, S(a\Omega) \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-operator-on-algebra, lmm:tomita-adjoint-intrinsic, lmm:commutant-von-neumann-algebra}
     For $c \in \mathcal{M}$, $c\Omega \in \text{Dom}(S)$ and $S(c\Omega) = c^*\Omega$ (Lemma~\ref{lmm:tomita-operator-on-algebra}). So $aS(x\Omega) = ax^*\Omega$ with $ax^* \in \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), and Lemma~\ref{lmm:tomita-adjoint-intrinsic} with $\zeta = ax^*\Omega$ gives $\left< ax^*\Omega, S^*(y\Omega) \right> = \left< y\Omega, S(ax^*\Omega) \right> = \left< y\Omega, xa^*\Omega \right>$. Moving $x$ across (\texttt{ContinuousLinearMap.adjoint\_inner\_left}, \texttt{ContinuousLinearMap.star\_eq\_adjoint}) gives $\left< x^*y\Omega, a^*\Omega \right>$, and $a^*\Omega = S(a\Omega)$.
 \end{proof}
@@ -3398,6 +3399,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     Let $a, x, y \in \mathcal{M}$ with $x\Omega, a\Omega \in \text{Dom}(S^*)$. Then $\left< aS^*(x\Omega), S(y\Omega) \right> = \left< x^*y\Omega, S^*(a\Omega) \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-operator-on-algebra, lmm:tomita-adjoint-intrinsic, lmm:tomita-adjoint-involution, lmm:commutant-von-neumann-algebra}
     By Lemma~\ref{lmm:tomita-operator-on-algebra}, $c\Omega \in \text{Dom}(S)$ and $S(c\Omega) = c^*\Omega$ for $c \in \mathcal{M}$. So $\left< aS^*(x\Omega), y^*\Omega \right> = \left< S^*(x\Omega), a^*y^*\Omega \right> = \left< S^*(x\Omega), S(ya\Omega) \right>$. By Lemma~\ref{lmm:tomita-adjoint-involution}, $S^*(x\Omega) \in \text{Dom}(S^*)$ with $S^*S^*(x\Omega) = x\Omega$, so Lemma~\ref{lmm:tomita-adjoint-intrinsic} turns this into $\left< ya\Omega, x\Omega \right> = \left< a\Omega, y^*x\Omega \right> = \left< a\Omega, S(x^*y\Omega) \right>$, and Lemma~\ref{lmm:tomita-adjoint-intrinsic} again, with $a\Omega \in \text{Dom}(S^*)$, gives $\left< x^*y\Omega, S^*(a\Omega) \right>$.
 \end{proof}

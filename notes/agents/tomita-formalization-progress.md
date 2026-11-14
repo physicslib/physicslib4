@@ -305,3 +305,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-14: proved exists_tendsto_modularOperatorSqrt_of_mem (Jones Cor 13.1.6), tomitaAdjoint_involutive.
 - crllr:van-daele-approximation-tomita (exists_tendsto_tomitaOperator_of_mem): proved by transporting exists_tendsto_modularOperatorSqrt_of_mem through S = JΔ^{1/2} and S* = JΔ^{-1/2} with continuity of J.
 - 2026-11-14: proved exists_tendsto_tomitaOperator_of_mem.
+- lmm:van-daele-first-term (`inner_tomitaOperator_tomitaAdjoint_of_mem`): proved via `tomitaOperator_apply_of_mem` on x, a, a·x*, and `mem_tomitaAdjoint_iff` with ζ = (a x*)Ω, then `adjoint_inner_left`.
+- lmm:van-daele-second-term (inner_tomitaAdjoint_tomitaOperator_of_mem): proved via mem_tomitaAdjoint_iff_inner_algebra applied to (S*xΩ, xΩ) (from tomitaAdjoint_involutive) and (aΩ, S*aΩ), with tomitaOperator_apply_of_mem for S(yΩ).
+- 2026-11-14: proved inner_tomitaOperator_tomitaAdjoint_of_mem (hy unused), inner_tomitaAdjoint_tomitaOperator_of_mem.

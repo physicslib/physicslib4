@@ -1402,7 +1402,16 @@ theorem inner_tomitaOperator_tomitaAdjoint_of_mem {M : Set (H →L[ℂ] H)} {Ω 
     ⟪a (tomitaOperator M Ω C ⟨x Ω, hxS⟩),
         (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (y Ω), hyS'⟩⟫_ℂ =
       ⟪(star x * y) Ω, tomitaOperator M Ω C ⟨a Ω, haS⟩⟫_ℂ := by
-  sorry
+  have hmul : a * star x ∈ M := by
+    rw [← hM.2]
+    exact Set.mul_mem_centralizer (hM.2.symm ▸ ha) (hM.2.symm ▸ hM.1 x hx)
+  obtain ⟨_, ex⟩ := tomitaOperator_apply_of_mem hM hΩ C hC hx
+  obtain ⟨_, ea⟩ := tomitaOperator_apply_of_mem hM hΩ C hC ha
+  obtain ⟨hz, ez⟩ := tomitaOperator_apply_of_mem hM hΩ C hC hmul
+  have key := (mem_tomitaAdjoint_iff hM hΩ C hC (y Ω) _).1 ⟨hyS', rfl⟩ ⟨_, hz⟩
+  rw [ex, ea, ← mul_apply_eq_comp, ← key, ez, star_mul, star_star, mul_apply_eq_comp,
+    mul_apply_eq_comp, ContinuousLinearMap.star_eq_adjoint x,
+    ContinuousLinearMap.adjoint_inner_left]
 
 /-- For `a, x, y ∈ M` with `x Ω, a Ω ∈ Dom S*`, `⟪a S*(x Ω), S(y Ω)⟫ = ⟪x* y Ω, S*(a Ω)⟫`.
 Blueprint: lmm:van-daele-second-term -/
@@ -1415,7 +1424,19 @@ theorem inner_tomitaAdjoint_tomitaOperator_of_mem {M : Set (H →L[ℂ] H)} {Ω 
     ⟪a ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C (x Ω), hxS'⟩),
         tomitaOperator M Ω C ⟨y Ω, hyS⟩⟫_ℂ =
       ⟪(star x * y) Ω, (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (a Ω), haS'⟩⟫_ℂ := by
-  sorry
+  obtain ⟨A, hA⟩ := (isVonNeumannSet_centralizer hM).2.2.1
+  have hmul : ∀ {u v}, u ∈ M → v ∈ M → u * v ∈ M := fun hu hv => by
+    rw [← hA] at hu hv ⊢; exact A.mul_mem hu hv
+  obtain ⟨hyS₀, hSy⟩ := tomitaOperator_apply_of_mem hM hΩ C hC hy
+  obtain ⟨h₂, e₂⟩ := tomitaAdjoint_involutive hM hΩ C hC hxS'
+  have hX := (mem_tomitaAdjoint_iff_inner_algebra hM hΩ C hC _ _).1 ⟨h₂, e₂⟩
+  have hA' := (mem_tomitaAdjoint_iff_inner_algebra hM hΩ C hC _ _).1 ⟨haS', rfl⟩
+  have e₁ : star a (star y Ω) = star (y * a) Ω := by rw [star_mul]; rfl
+  have e₃ : star (star x * y) Ω = star y (x Ω) := by rw [star_mul, star_star]; rfl
+  rw [hSy, ← ContinuousLinearMap.adjoint_inner_right, ← ContinuousLinearMap.star_eq_adjoint, e₁,
+    hX _ (hmul hy ha), ← hA' _ (hmul (hM.1 x hx) hy), e₃, ContinuousLinearMap.star_eq_adjoint,
+    ContinuousLinearMap.adjoint_inner_right]
+  rfl
 
 /-- For a van Daele triple `(λ, a', a)` and `x, y ∈ M` with `x Ω, y Ω ∈ Dom S*`,
 `λ ⟪a S(x Ω), S*(y Ω)⟫ + λ⁻¹ ⟪a S*(x Ω), S(y Ω)⟫ = ⟪y Ω, a' x Ω⟫`.
