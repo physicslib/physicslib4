@@ -3255,6 +3255,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     Let $b' \in \mathcal{M}'$. Then $b'\Omega \in \text{Dom}(S^*) = \text{Dom}(\Delta^{-1/2})$, $S^*(b'\Omega) = J\Delta^{-1/2}b'\Omega = b'^*\Omega$, and $\Delta^{-1/2}b'\Omega = J(b'^*\Omega)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-extends-closure, crllr:tomita-adjoint-polar, thrm:modular-conjugation-involution}
     $(b'\Omega, b'^*\Omega)$ lies in $\Gamma(F_0)$, hence in its closure (\texttt{subset\_closure}), so Lemma~\ref{lmm:tomita-adjoint-extends-closure} gives $C(b'\Omega) \in \text{Dom}((S')^*)$ and $(S')^*C(b'\Omega) = b'^*\Omega$. Corollary~\ref{crllr:tomita-adjoint-polar} gives $b'\Omega \in \text{Dom}(\Delta^{-1/2})$ and $b'^*\Omega = J\Delta^{-1/2}b'\Omega$; applying $J$ and $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}) gives the last identity.
 \end{proof}
@@ -3267,6 +3268,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     Let $\lambda > 0$ and $a' \in \mathcal{M}'$. There is $a \in \mathcal{M}$ with $a\Omega = g_\lambda(\Delta)a'^*\Omega$ and $\|a\| \le \|a'\|/2$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:takesaki-lemma, lmm:van-daele-resolvent-point, lmm:van-daele-g-resolvent, lmm:commutant-von-neumann-algebra}
     $a'^* \in \mathcal{M}'$ and $\mathcal{M}$ is a linear subspace (Lemma~\ref{lmm:commutant-von-neumann-algebra}), and $\|a'^*\| = \|a'\|$ (\texttt{norm\_star}). Let $z = -\lambda^{-2} \notin [0, \infty)$ (Lemma~\ref{lmm:van-daele-resolvent-point}). Takesaki's lemma (Theorem~\ref{thrm:takesaki-lemma}) for $a'^*$ gives $b \in \mathcal{M}$ with $b\Omega = (z - \Delta)^{-1}a'^*\Omega$ and $\|b\| \le \|a'\|/(2\lambda^{-1}) = \lambda\|a'\|/2$ (Lemma~\ref{lmm:van-daele-resolvent-point}). Put $a = -\lambda^{-1}b \in \mathcal{M}$. Then $a\Omega = -\lambda^{-1}(z - \Delta)^{-1}a'^*\Omega = g_\lambda(\Delta)a'^*\Omega$ (Lemma~\ref{lmm:van-daele-g-resolvent}) and $\|a\| = \lambda^{-1}\|b\| \le \|a'\|/2$ (\texttt{norm\_smul}).
 \end{proof}

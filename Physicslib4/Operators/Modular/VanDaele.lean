@@ -1194,7 +1194,9 @@ theorem tomitaAdjoint_apply_of_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω : H
           star b' Ω ∧
         modularOperatorInvSqrt hM hΩ C hC ⟨b' Ω, h⟩ =
           modularConjugation hM hΩ C hC (star b' Ω) := by
-  sorry
+  have h1 := mem_tomitaAdjoint_of_mem_closure_graph hM hΩ C hC (subset_closure ⟨b', hb', rfl⟩)
+  obtain ⟨h, he⟩ := (mem_tomitaAdjoint_iff_modularOperatorInvSqrt hM hΩ C hC _ _).1.1 h1
+  exact ⟨h1, h, he.symm, by rw [he, (modularConjugation_involution hM hΩ C hC).1]⟩
 
 /-- For `λ > 0` and `a' ∈ M′` there is `a ∈ M` with `a Ω = g_λ(Δ) a'* Ω` and `‖a‖ ≤ ‖a'‖ / 2`.
 Blueprint: lmm:van-daele-element -/
@@ -1204,7 +1206,15 @@ theorem exists_vanDaele_element {M : Set (H →L[ℂ] H)} {Ω : H}
     (ha' : a' ∈ Set.centralizer M) :
     ∃ a ∈ M, a Ω = (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
         (vanDaeleG l) (star a' Ω) ∧ ‖a‖ ≤ ‖a'‖ / 2 := by
-  sorry
+  obtain ⟨hz, hc, -⟩ := vanDaele_resolvent_point hl
+  obtain ⟨hM', -, ⟨A, hA⟩, -⟩ := isVonNeumannSet_centralizer hM
+  obtain ⟨b, hb, hbΩ, hbn, -⟩ := takesaki_lemma hM hΩ C hC hz (hM'.1 _ ha')
+  rw [hc, norm_star] at hbn
+  refine ⟨-(l⁻¹ : ℂ) • b, by subst hA; exact A.smul_mem hb _, ?_, ?_⟩
+  · rw [(modularOperator_vanDaeleG_eq_resolvent hM hΩ C hC hl).2, smul_apply, hbΩ, smul_apply]
+  · rw [norm_smul, norm_neg, norm_inv, Complex.norm_real, Real.norm_of_nonneg hl.le]
+    calc l⁻¹ * ‖b‖ ≤ l⁻¹ * (‖a'‖ / (2 * l⁻¹)) := mul_le_mul_of_nonneg_left hbn (by positivity)
+      _ = ‖a'‖ / 2 := by field_simp
 
 /-- If `a ∈ M` and `a Ω = g_λ(Δ) a'* Ω`, then with `φ = J (a' Ω)`,
 `a Ω ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}`, `a Ω = v_λ(Δ) φ`, `Δ^{1/2} a Ω = k_λ(Δ) φ` and

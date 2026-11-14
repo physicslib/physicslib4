@@ -291,3 +291,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-14: proved modularOperator_vanDaeleG_eq_resolvent, modularOperator_vanDaele_partition_of_unity.
 - lmm:van-daele-g-domains (`modularOperator_vanDaeleG_domains`): proved via `pmapIntegral_mem_integralDomain_iff`/`pmapIntegral_comp` (s·g_λ = v_λ, r·g_λ = g_λ·r) and `integral_apply_pmapIntegral`, with `modularOperator_vanDaele_products`.
 - 2026-11-14: proved modularOperator_vanDaeleG_domains.
+- lmm:tomita-adjoint-on-commutant (`tomitaAdjoint_apply_of_mem_centralizer`, VanDaele.lean): proved via `mem_tomitaAdjoint_of_mem_closure_graph` + `subset_closure`, `mem_tomitaAdjoint_iff_modularOperatorInvSqrt`, `modularConjugation_involution`.
+- lmm:van-daele-element (`exists_vanDaele_element`): proved via `takesaki_lemma` at z = -l⁻² on a'*, scaled by -l⁻¹ (`vanDaele_resolvent_point`, `modularOperator_vanDaeleG_eq_resolvent`).
+- 2026-11-14: proved tomitaAdjoint_apply_of_mem_centralizer, exists_vanDaele_element.
