@@ -212,14 +212,35 @@ theorem indicatorCpow_bounds {n : ℕ} (hn : 1 ≤ n) (z : ℂ) :
     Measurable p[z, n] ∧ Measurable q[z, n] ∧
       ∀ x : ℝ, ‖p[z, n] x‖ ≤ (n : ℝ) ^ |z.re| ∧
         ‖q[z, n] x‖ ≤ Real.log n * (n : ℝ) ^ |z.re| := by
-  sorry
+  have hmc : Measurable fun x : ℝ => (x : ℂ) ^ z :=
+    Complex.measurable_ofReal.pow_const z
+  refine ⟨hmc.indicator measurableSet_Icc,
+    ((Complex.measurable_ofReal.comp Real.measurable_log).mul hmc).indicator measurableSet_Icc,
+    fun x => ?_⟩
+  have h0 : (0 : ℝ) ≤ (n : ℝ) ^ |z.re| := Real.rpow_nonneg (Nat.cast_nonneg n) _
+  by_cases hx : x ∈ K[n]
+  · obtain ⟨-, hlog⟩ := pos_abs_log_le_of_mem_Icc hn hx
+    have hc := (cpow_of_mem_Icc hn hx z).2
+    rw [Set.indicator_of_mem hx, Set.indicator_of_mem hx, norm_mul, Complex.norm_real,
+      Real.norm_eq_abs]
+    exact ⟨hc, mul_le_mul hlog hc (norm_nonneg _) ((abs_nonneg _).trans hlog)⟩
+  · rw [Set.indicator_of_notMem hx, Set.indicator_of_notMem hx, norm_zero]
+    exact ⟨h0, mul_nonneg (Real.log_nonneg (by exact_mod_cast hn)) h0⟩
 
 /-- `p_{z,n} p_{w,n} = p_{z+w,n}` pointwise, and `p_{0,n} = 1_{K_n}`.
 Blueprint: lmm:modular-power-function-identities -/
 theorem indicatorCpow_mul {n : ℕ} (hn : 1 ≤ n) (z w : ℂ) :
     (∀ x : ℝ, p[z, n] x * p[w, n] x = p[z + w, n] x) ∧
       p[0, n] = (K[n]).indicator 1 := by
-  sorry
+  refine ⟨fun x => ?_, funext fun x => ?_⟩
+  · by_cases hx : x ∈ K[n]
+    · have hx0 := (pos_abs_log_le_of_mem_Icc hn hx).1
+      simp only [Set.indicator_of_mem hx]
+      exact (Complex.cpow_add z w (Complex.ofReal_ne_zero.mpr hx0.ne')).symm
+    · simp only [Set.indicator_of_notMem hx, zero_mul]
+  · by_cases hx : x ∈ K[n]
+    · simp only [Set.indicator_of_mem hx, Complex.cpow_zero, Pi.one_apply]
+    · simp only [Set.indicator_of_notMem hx]
 
 /-- `conj (p_{z,n}(λ)) = p_{conj z,n}(λ)`.
 Blueprint: lmm:modular-power-function-conj -/

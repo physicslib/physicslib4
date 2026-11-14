@@ -230,3 +230,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-14: proved `pos_abs_log_le_of_mem_Icc` (lmm:log-power-on-interval) via Real.log_le_log on both ends, Real.log_inv, abs_le.
 - lmm:cpow-on-interval (`Physicslib4.Modular.cpow_of_mem_Icc`, VanDaele.lean): proved via `Complex.cpow_def_of_ne_zero`, `Complex.norm_cpow_eq_rpow_re_of_pos`, `Real.rpow_def_of_pos` and `pos_abs_log_le_of_mem_Icc`.
 - 2026-11-14: proved pos_abs_log_le_of_mem_Icc, cpow_of_mem_Icc.
+- indicatorCpow_mul (lmm:modular-power-function-identities): proved by case split on K_n, Complex.cpow_add and Complex.cpow_zero.
+- lmm:modular-power-function-bounds (`indicatorCpow_bounds`): proved via `Measurable.indicator`, `Measurable.pow_const`, and pointwise case split using `cpow_of_mem_Icc` / `pos_abs_log_le_of_mem_Icc`.
+- 2026-11-14: proved indicatorCpow_bounds, indicatorCpow_mul.

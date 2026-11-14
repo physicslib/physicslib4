@@ -2775,6 +2775,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $n \ge 1$ and $z \in \mathbb{C}$. Then $p_{z,n}$ and $q_{z,n}$ are measurable, $|p_{z,n}(\lambda)| \le n^{|\operatorname{Re} z|}$ and $|q_{z,n}(\lambda)| \le (\log n)\, n^{|\operatorname{Re} z|}$ for every $\lambda \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:log-power-on-interval, lmm:cpow-on-interval}
     Measurability: \texttt{Measurable.indicator} with \texttt{measurableSet\_Icc}, \texttt{Measurable.pow\_const} for $\lambda \mapsto (\lambda : \mathbb{C})^z$ (with \texttt{Complex.measurable\_ofReal} and the instance \texttt{Complex.hasMeasurablePow}), and \texttt{Real.measurable\_log}. Off $K_n$ both functions vanish; on $K_n$ the bounds are those of Lemmas~\ref{lmm:log-power-on-interval} and~\ref{lmm:cpow-on-interval}.
 \end{proof}
@@ -2786,6 +2787,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     For $n \ge 1$, $z, w \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $p_{z,n}(\lambda)\,p_{w,n}(\lambda) = p_{z+w,n}(\lambda)$. Moreover $p_{0,n} = 1_{K_n}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:log-power-on-interval}
     Off $K_n$ both sides vanish. For $\lambda \in K_n$, $1_{K_n}(\lambda)^2 = 1 = 1_{K_n}(\lambda)$ and $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so $\lambda^z\lambda^w = \lambda^{z+w}$ by \texttt{Complex.cpow\_add} ($\lambda \ne 0$). For the second claim, $\lambda^0 = 1$ (\texttt{Complex.cpow\_zero}).
 \end{proof}
