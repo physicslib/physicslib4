@@ -248,3 +248,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-inverse-unitary-function (`Physicslib4.Modular.conj_exp_log_inv`): proved via `Real.log_inv`, `Complex.exp_conj`, `Complex.conj_I`, `Complex.conj_ofReal`, then `ring`.
 - lmm:modular-log-self-adjoint (`isSelfAdjoint_modularOperator_log`, VanDaele.lean): proved as `(isSelfAdjoint_functionalCalculus_of_real _ Real.measurable_log).1`.
 - 2026-11-14: proved conj_exp_log_inv, isSelfAdjoint_modularOperator_log.
+- lmm:modular-unitary-group-props (modularUnitaryGroup_properties): PROVED via isOneParameterUnitaryGroup_expUnitary, isStronglyContinuous_expUnitary, IsOneParameterUnitaryGroup.adjoint_eq; symm from the group law.
+- lmm:modular-unitary-group-fc (modularUnitaryGroup_eq_functionalCalculus): PROVED via functionalCalculus_functionalCalculus (log) + functionalCalculus_expFun + functionalCalculus_of_bddMeasurable.
+- 2026-11-14: proved modularUnitaryGroup_properties, modularUnitaryGroup_eq_functionalCalculus.

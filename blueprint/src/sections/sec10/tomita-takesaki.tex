@@ -2694,6 +2694,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Each $\Delta^{it}$ is unitary, $\Delta^{i0} = \mathbf{1}$, $\Delta^{i(s+t)} = \Delta^{is}\Delta^{it}$ for $s, t \in \mathbb{R}$, $t \mapsto \Delta^{it}$ is strongly continuous, and $(\Delta^{it})^* = (\Delta^{it})^{-1} = \Delta^{-it}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:exp-group-law, lmm:exp-strongly-continuous, lmm:unitary-group-inner-adjoint}
     Lemma~\ref{lmm:exp-group-law} for $\log\Delta$ gives unitarity and the group law, Lemma~\ref{lmm:exp-strongly-continuous} the strong continuity, and Lemma~\ref{lmm:unitary-group-inner-adjoint} the adjoint; $\Delta^{it}\Delta^{-it} = \Delta^{-it}\Delta^{it} = \Delta^{i0} = \mathbf{1}$ gives the inverse.
 \end{proof}
@@ -2706,6 +2707,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     For $t \in \mathbb{R}$, $e_t$ is measurable with $|e_t(\lambda)| = 1$ for every $\lambda$, and $\Delta^{it} = e_t(\Delta) = \int e_t \, d\mu$. For $\lambda > 0$, $e_t(\lambda) = \lambda^{it}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:exp-unitary-group, crllr:fc-of-fc, lmm:functional-calculus-bounded, lmm:modular-log-self-adjoint, thrm:modular-operator-properties}
     With $f_t(x) = e^{itx}$, $e_t = f_t \circ \ell$, which is measurable (\texttt{Real.measurable\_log}) of modulus $1$ (\texttt{Complex.norm\_exp\_I\_mul\_ofReal}). By Definition~\ref{def:exp-unitary-group}, $\Delta^{it} = f_t(\log\Delta) = f_t(\ell(\Delta))$, which is $(f_t \circ \ell)(\Delta)$ by Corollary~\ref{crllr:fc-of-fc}, and Lemma~\ref{lmm:functional-calculus-bounded} identifies it with the bounded integral. For $\lambda > 0$, $\lambda^{it} = \exp(\log(\lambda)\, it)$ by \texttt{Complex.cpow\_def\_of\_ne\_zero} and \texttt{Complex.ofReal\_log}.
 \end{proof}

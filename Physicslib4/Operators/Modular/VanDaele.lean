@@ -119,7 +119,12 @@ theorem modularUnitaryGroup_properties {M : Set (H →L[ℂ] H)} {Ω : H}
             (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap =
           (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap ∧
         (modularUnitaryGroup hM hΩ C hC t).symm = modularUnitaryGroup hM hΩ C hC (-t) := by
-  sorry
+  have hU := isOneParameterUnitaryGroup_expUnitary (isSelfAdjoint_modularOperator_log hM hΩ C hC)
+  refine ⟨hU, isStronglyContinuous_expUnitary _, fun t => ⟨hU.adjoint_eq t, ?_⟩⟩
+  ext x
+  refine (modularUnitaryGroup hM hΩ C hC t).injective ?_
+  rw [LinearIsometryEquiv.apply_symm_apply]
+  exact ((hU.map_add t (-t) x).symm.trans (by rw [add_neg_cancel, hU.map_zero])).symm
 
 /-- `e_t` is measurable of modulus one, `Δ^{it} = e_t(Δ) = ∫ e_t dμ`, and `e_t(λ) = λ^{it}` for
 `λ > 0`.
@@ -133,7 +138,25 @@ theorem modularUnitaryGroup_eq_functionalCalculus {M : Set (H →L[ℂ] H)} {Ω 
       (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap =
         (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral e[t] ∧
       ∀ x : ℝ, 0 < x → e[t] x = (x : ℂ) ^ (Complex.I * t) := by
-  sorry
+  set hΔ := modularOperator_isSelfAdjoint hM hΩ C hC
+  have hfun : expFun t ∘ Real.log = e[t] := by
+    funext x; simp only [Function.comp_apply, expFun]; push_cast; ring_nf
+  have hmeas : Measurable e[t] := hfun ▸ (expFun_mem_bddMeasurable t).1.comp Real.measurable_log
+  have hnorm : ∀ x : ℝ, ‖e[t] x‖ = 1 := fun x => by
+    rw [← hfun]; exact Complex.norm_exp_I_mul_ofReal _
+  have hbdd : e[t] ∈ Spectral.BddMeasurable ℝ := ⟨hmeas, 1, fun x => (hnorm x).le⟩
+  have hfc : functionalCalculus hΔ e[t] =
+      (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toLinearMap.toPMap ⊤ := by
+    obtain ⟨hfA, -, hcomp⟩ := functionalCalculus_functionalCalculus hΔ Real.measurable_log
+    rw [← hfun, ← hcomp _ (expFun_mem_bddMeasurable t).1, functionalCalculus_expFun]
+    rfl
+  refine ⟨hmeas, hnorm, hfc, ?_, fun x hx => ?_⟩
+  · have h := hfc.symm.trans (functionalCalculus_of_bddMeasurable hΔ hbdd).2
+    ext ξ
+    obtain ⟨-, hx⟩ := LinearPMap.ext_iff.1 h
+    simpa using @hx ξ Submodule.mem_top Submodule.mem_top
+  · rw [Complex.cpow_def_of_ne_zero (by exact_mod_cast hx.ne'), ← Complex.ofReal_log hx.le]
+    ring_nf
 
 /-! ### The spectral projections `E_n` and the subspace `H₀` -/
 
