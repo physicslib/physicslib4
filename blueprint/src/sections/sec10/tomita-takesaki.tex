@@ -2953,6 +2953,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-power-taylor, lmm:modular-power-function-bounds, lmm:functional-calculus-bounded, thrm:operator-valued-integration, prpstn:integral-norm-bound}
     By Lemma~\ref{lmm:functional-calculus-bounded} the three operators are bounded integrals of bounded measurable functions (Lemma~\ref{lmm:modular-power-function-bounds}), and by linearity of the bounded integral (Theorem~\ref{thrm:operator-valued-integration}) the left side is $\|\int (p_{z+h,n} - p_{z,n} - h\,q_{z,n}) \, d\mu\|$. Proposition~\ref{prpstn:integral-norm-bound} with the pointwise bound of Lemma~\ref{lmm:modular-power-taylor} (\texttt{ciSup\_le}) concludes.
 \end{proof}
@@ -3027,6 +3028,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $f : \mathbb{R} \to \mathbb{C}$ be bounded and measurable. Then $Jf(\Delta)J = (\overline{f} \circ \iota^-)(\Delta)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:antiunitary-conjugate-bounded-fc, thrm:modular-conjugation-involution, crllr:modular-conjugation-inverts, lmm:inverse-functional-calculus, crllr:fc-of-fc, thrm:modular-operator-properties, thrm:modular-conjugation-polar}
     $J$ is antiunitary with $J^{-1} = J$ (Theorems~\ref{thrm:modular-conjugation-polar} and~\ref{thrm:modular-conjugation-involution}). Lemma~\ref{lmm:antiunitary-conjugate-bounded-fc} gives $Jf(\Delta)J = \overline{f}(J\Delta J)$. $J\Delta J = \Delta^{-1}$ (Corollary~\ref{crllr:modular-conjugation-inverts}), which is $\iota^-(\Delta)$ by Lemma~\ref{lmm:inverse-functional-calculus} ($\Delta$ is self-adjoint and injective, Theorem~\ref{thrm:modular-operator-properties}), and $\overline{f}(\iota^-(\Delta)) = (\overline{f} \circ \iota^-)(\Delta)$ by Corollary~\ref{crllr:fc-of-fc}, $\iota^-$ being real and measurable (\texttt{measurable\_inv}).
 \end{proof}

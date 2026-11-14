@@ -633,7 +633,19 @@ theorem norm_modularOperator_indicatorCpow_taylor {M : Set (H →L[ℂ] H)} {Ω 
         (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, n] -
         h • (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral q[z, n]‖ ≤
       (n : ℝ) ^ |z.re| * Real.log n ^ 2 * ‖h‖ ^ 2 := by
-  sorry
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  obtain ⟨hpm, hqm, hbd⟩ := indicatorCpow_bounds hn z
+  have hp : p[z, n] ∈ Spectral.BddMeasurable ℝ := ⟨hpm, _, fun x => (hbd x).1⟩
+  have hq : h • q[z, n] ∈ Spectral.BddMeasurable ℝ :=
+    Submodule.smul_mem _ h ⟨hqm, _, fun x => (hbd x).2⟩
+  have hF : p[z + h, n] - p[z, n] - h • q[z, n] ∈ Spectral.BddMeasurable ℝ :=
+    sub_mem (sub_mem (let ⟨hm, _, hb⟩ := indicatorCpow_bounds hn (z + h)
+      ⟨hm, _, fun x => (hb x).1⟩) hp) hq
+  have e : p[z + h, n] = (p[z + h, n] - p[z, n] - h • q[z, n]) + (p[z, n] + h • q[z, n]) := by
+    abel
+  rw [e, μ.integral_add hF (add_mem hp hq), μ.integral_add hp hq,
+    μ.integral_smul h ⟨hqm, _, fun x => (hbd x).2⟩, sub_sub, add_sub_cancel_right]
+  exact (μ.norm_integral_le hF).trans (ciSup_le fun x => indicatorCpow_taylor hn z h hh x)
 
 /-- `z ↦ p_{z,n}(Δ)` is complex differentiable in operator norm with derivative `q_{z,n}(Δ)`, and
 is continuous.
@@ -683,7 +695,27 @@ theorem modularConjugation_integral_modularConjugation {M : Set (H →L[ℂ] H)}
           (modularConjugation hM hΩ C hC ψ)) =
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
         (fun x => conj (f x⁻¹)) ψ := by
-  sorry
+  set J := modularConjugation hM hΩ C hC
+  have hsa := modularOperator_isSelfAdjoint hM hΩ C hC
+  have hJJ := (modularConjugation_involution hM hΩ C hC).1
+  have hJs : J.symm ψ = J ψ := by
+    conv_lhs => rw [← hJJ ψ]
+    exact J.symm_apply_apply _
+  obtain ⟨h, hint⟩ := integral_antiunitaryConj J hsa
+  obtain ⟨hfA, hμ, -⟩ := functionalCalculus_functionalCalculus hsa (f := fun x => x⁻¹)
+    measurable_inv
+  have he : antiunitaryConj J (modularOperator M Ω C) =
+      functionalCalculus hsa fun x => ((x⁻¹ : ℝ) : ℂ) :=
+    (modularConjugation_conj_modularOperator hM hΩ C hC).trans
+      (inverse_eq_functionalCalculus_inv hsa (modularOperator_properties hM hΩ C hC).2.2.2.1)
+  have htr : ∀ {B D : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (hD : IsSelfAdjoint D), B = D →
+      spectralMeasure hB = spectralMeasure hD := by
+    rintro _ _ _ _ rfl; rfl
+  have hg : (fun x => conj (f x)) ∈ Physicslib4.Spectral.BddMeasurable ℝ :=
+    ⟨Complex.continuous_conj.measurable.comp hf.1, hf.2.choose,
+      fun x => by simpa using hf.2.choose_spec x⟩
+  rw [← hJs, hint f hf ψ, htr h hfA he, hμ, integral_pushforwardPVM _ _ hg]
+  rfl
 
 /-- `1_{K_n}(ι⁻(λ)) = 1_{K_n}(λ)`.
 Blueprint: lmm:modular-inverse-scalar-identities -/
