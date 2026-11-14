@@ -227,3 +227,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-14: proved `modularOperator_functionalCalculus_indicator_Ioi` (lmm:modular-indicator-positive-one), mirroring the `_Ici` proof with null set `Iic 0` from `modularOperator_spectralMeasure_Iic_zero`.
 - 2026-11-14: proved `modularOperator_spectralMeasure_Iic_zero` (lmm:modular-spectral-support): subadditivity of the associated measure on `Iio 0 ∪ {0}`, with `spectralMeasure_Iio_zero_eq_zero_of_isPositive` and `spectralMeasure_singleton_zero`.
 - 2026-11-14: proved modularOperator_spectralMeasure_Iic_zero, modularOperator_functionalCalculus_indicator_Ioi.
+- 2026-11-14: proved `pos_abs_log_le_of_mem_Icc` (lmm:log-power-on-interval) via Real.log_le_log on both ends, Real.log_inv, abs_le.
+- lmm:cpow-on-interval (`Physicslib4.Modular.cpow_of_mem_Icc`, VanDaele.lean): proved via `Complex.cpow_def_of_ne_zero`, `Complex.norm_cpow_eq_rpow_re_of_pos`, `Real.rpow_def_of_pos` and `pos_abs_log_le_of_mem_Icc`.
+- 2026-11-14: proved pos_abs_log_le_of_mem_Icc, cpow_of_mem_Icc.

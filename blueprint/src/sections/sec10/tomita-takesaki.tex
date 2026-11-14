@@ -2752,6 +2752,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $n \ge 1$ and $\lambda \in K_n$. Then $\lambda > 0$ and $|\log\lambda| \le \log n$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $\lambda \ge 1/n > 0$. Monotonicity of $\log$ on $(0, \infty)$ (\texttt{Real.log\_le\_log}) and $\log(1/n) = -\log n$ (\texttt{one\_div}, \texttt{Real.log\_inv}) give $-\log n \le \log\lambda \le \log n$ (\texttt{abs\_le}).
 \end{proof}
 
@@ -2762,6 +2763,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $n \ge 1$, $\lambda \in K_n$ and $z \in \mathbb{C}$. Then $\lambda^z = \exp(z\log\lambda)$ and $|\lambda^z| \le n^{|\operatorname{Re} z|}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:log-power-on-interval}
     $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so \texttt{Complex.cpow\_def\_of\_ne\_zero} and \texttt{Complex.ofReal\_log} give $\lambda^z = \exp(\log(\lambda)\, z)$. Hence $|\lambda^z| = \exp(\log\lambda \cdot \operatorname{Re} z)$ (\texttt{Complex.norm\_exp}), and $\log\lambda \cdot \operatorname{Re} z \le |\log\lambda|\,|\operatorname{Re} z| \le \log n \cdot |\operatorname{Re} z|$ (Lemma~\ref{lmm:log-power-on-interval}), whose exponential is $n^{|\operatorname{Re} z|}$ (\texttt{Real.rpow\_def\_of\_pos}, \texttt{Real.exp\_le\_exp}).
 \end{proof}

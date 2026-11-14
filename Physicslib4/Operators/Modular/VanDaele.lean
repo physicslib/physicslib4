@@ -182,13 +182,28 @@ theorem dense_modularSpectralSubspace {M : Set (H →L[ℂ] H)} {Ω : H}
 Blueprint: lmm:log-power-on-interval -/
 theorem pos_abs_log_le_of_mem_Icc {n : ℕ} (hn : 1 ≤ n) {x : ℝ} (hx : x ∈ K[n]) :
     0 < x ∧ |Real.log x| ≤ Real.log n := by
-  sorry
+  have h1 : 0 < 1 / (n : ℝ) := by
+    have : (0 : ℝ) < n := by exact_mod_cast hn
+    positivity
+  have hx0 : 0 < x := h1.trans_le hx.1
+  refine ⟨hx0, abs_le.2 ⟨?_, Real.log_le_log hx0 hx.2⟩⟩
+  have := Real.log_le_log h1 hx.1
+  rwa [one_div, Real.log_inv] at this
 
 /-- For `n ≥ 1`, `λ ∈ K_n` and `z ∈ ℂ`, `λ^z = exp(z log λ)` and `|λ^z| ≤ n^{|Re z|}`.
 Blueprint: lmm:cpow-on-interval -/
 theorem cpow_of_mem_Icc {n : ℕ} (hn : 1 ≤ n) {x : ℝ} (hx : x ∈ K[n]) (z : ℂ) :
     (x : ℂ) ^ z = Complex.exp (z * Real.log x) ∧ ‖(x : ℂ) ^ z‖ ≤ (n : ℝ) ^ |z.re| := by
-  sorry
+  obtain ⟨hx0, hlog⟩ := pos_abs_log_le_of_mem_Icc hn hx
+  refine ⟨?_, ?_⟩
+  · rw [Complex.cpow_def_of_ne_zero (Complex.ofReal_ne_zero.mpr hx0.ne'),
+      ← Complex.ofReal_log hx0.le, mul_comm]
+  · rw [Complex.norm_cpow_eq_rpow_re_of_pos hx0, Real.rpow_def_of_pos hx0,
+      Real.rpow_def_of_pos (by exact_mod_cast hn)]
+    refine Real.exp_le_exp.mpr ?_
+    calc Real.log x * z.re ≤ |Real.log x * z.re| := le_abs_self _
+      _ = |Real.log x| * |z.re| := abs_mul _ _
+      _ ≤ Real.log n * |z.re| := mul_le_mul_of_nonneg_right hlog (abs_nonneg _)
 
 /-- `p_{z,n}` and `q_{z,n}` are measurable, `|p_{z,n}| ≤ n^{|Re z|}` and
 `|q_{z,n}| ≤ (log n) n^{|Re z|}`.
