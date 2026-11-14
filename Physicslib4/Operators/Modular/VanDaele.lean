@@ -981,7 +981,28 @@ theorem vanDaele_resolvent_point {l : ℝ} (hl : 0 < l) :
       ∀ t : ℝ, 0 < t →
         -(l⁻¹ : ℂ) * (Set.Ici (0 : ℝ)).indicator (fun t : ℝ => (-((l : ℂ) ^ 2)⁻¹ - t)⁻¹) t =
           vanDaeleG l t := by
-  sorry
+  have hz : -((l : ℂ) ^ 2)⁻¹ = ((-(l ^ 2)⁻¹ : ℝ) : ℂ) := by push_cast; ring
+  have hpos : 0 < (l ^ 2)⁻¹ := by positivity
+  refine ⟨?_, ?_, fun t ht => ?_⟩
+  · rintro ⟨t, ht, h⟩
+    rw [hz] at h
+    have := Complex.ofReal_injective h
+    rw [Set.mem_Ici] at ht
+    linarith
+  · rw [hz, Complex.norm_real, Complex.ofReal_re, Real.norm_eq_abs, abs_of_neg (by linarith),
+      Real.sqrt_eq_iff_mul_self_eq_of_pos (by positivity)]
+    field_simp
+    ring
+  · rw [Set.indicator_of_mem (Set.mem_Ici.2 ht.le), vanDaeleG,
+      Set.indicator_of_mem (Set.mem_Ioi.2 ht)]
+    have h1 : (1 + l ^ 2 * t) ≠ 0 := by positivity
+    have h2 : (1 + (l : ℂ) ^ 2 * t) ≠ 0 := by exact_mod_cast h1
+    have h3 : (l : ℂ) ≠ 0 := by exact_mod_cast hl.ne'
+    have h4 : (-1 - (l : ℂ) ^ 2 * t) ≠ 0 := by
+      rw [show (-1 - (l : ℂ) ^ 2 * t) = -(1 + (l : ℂ) ^ 2 * t) by ring]; exact neg_ne_zero.2 h2
+    push_cast
+    field_simp
+    ring
 
 /-- For `λ > 0` and `z = -λ⁻²`, `g_λ(Δ) = -λ⁻¹ (z - Δ)⁻¹`, a bounded operator on all of `H`.
 Blueprint: lmm:van-daele-g-resolvent -/
@@ -1016,7 +1037,32 @@ theorem modularOperator_vanDaele_products {M : Set (H →L[ℂ] H)} {Ω : H}
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleV l)
           (modularOperatorInvSqrt hM hΩ C hC ξ) =
         (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l) ξ := by
-  sorry
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  have key : ∀ (u f h : ℝ → ℂ), u ∈ Spectral.BddMeasurable ℝ → f ∈ Spectral.BddMeasurable ℝ →
+      Measurable h → u * h = f → ∀ ψ : integralDomain μ h,
+        μ.integral u (pmapIntegral μ h ψ) = μ.integral f ψ := by
+    rintro u f h hu hf hh rfl ψ
+    obtain ⟨hψ, e⟩ := integral_apply_pmapIntegral μ hu hh ψ
+    rw [e]
+    obtain ⟨-, he⟩ := LinearPMap.ext_iff.1 (pmapIntegral_of_bddMeasurable μ hf)
+    exact he (x := ψ) (hf := hψ) (hg := trivial)
+  obtain ⟨hgm, hvm, hkm, hb⟩ := vanDaele_functions_bounded hl
+  have bdd : ∀ {u : ℝ → ℂ} {c : ℝ}, Measurable u →
+      (∀ t, (u t).im = 0 ∧ 0 ≤ (u t).re ∧ (u t).re ≤ c) → u ∈ Spectral.BddMeasurable ℝ :=
+    fun hm hu => ⟨hm, _, fun t => (Complex.norm_le_abs_re_add_abs_im _).trans (by
+      rw [(hu t).1, abs_zero, add_zero, abs_of_nonneg (hu t).2.1]; exact (hu t).2.2)⟩
+  have hg := bdd hgm fun t => (hb t).1
+  have hv := bdd hvm fun t => (hb t).2.1
+  have hk := bdd hkm fun t => (hb t).2.2
+  have hs : Measurable fun x : ℝ => ((Real.sqrt x : ℝ) : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
+  have hr : Measurable fun x : ℝ => (((Real.sqrt x)⁻¹ : ℝ) : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable.inv
+  have I := vanDaele_functions_identities hl
+  exact ⟨fun ξ => ⟨key _ _ _ hg hv hs (funext fun t => (mul_comm _ _).trans (I t).1) ξ,
+      key _ _ _ hv hk hs (funext fun t => (I t).2.1) ξ⟩,
+    fun ξ => ⟨key _ _ _ hk hv hr (funext fun t => (I t).2.2.1) ξ,
+      key _ _ _ hv hg hr (funext fun t => (I t).2.2.2.1) ξ⟩⟩
 
 /-- For `ψ ∈ Dom Δ^{-1/2}`, `g_λ(Δ) ψ ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}` with
 `Δ^{1/2} g_λ(Δ) ψ = k_λ(Δ) Δ^{-1/2} ψ` and `Δ^{-1/2} g_λ(Δ) ψ = g_λ(Δ) Δ^{-1/2} ψ`.

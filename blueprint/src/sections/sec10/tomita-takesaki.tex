@@ -3179,6 +3179,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     Let $\lambda > 0$ and $z = -\lambda^{-2}$. Then $z \notin [0, \infty)$, $\sqrt{2(|z| - \operatorname{Re} z)} = 2\lambda^{-1}$, and $-\lambda^{-1}r_z(t) = g_\lambda(t)$ for every $t > 0$, with $r_z$ as in Lemma~\ref{lmm:resolvent-function-props}.
 \end{lemma}
 \begin{proof}
+    \leanok
     $z$ is real and negative, so $z \notin [0, \infty)$, $|z| = \lambda^{-2}$ and $\operatorname{Re} z = -\lambda^{-2}$ (\texttt{Complex.norm\_real}, \texttt{Real.norm\_of\_nonpos}, \texttt{Complex.ofReal\_re}). Hence $2(|z| - \operatorname{Re} z) = 4\lambda^{-2} = (2\lambda^{-1})^2$, whose square root is $2\lambda^{-1}$ (\texttt{Real.sqrt\_sq}). For $t > 0$, $r_z(t) = (-\lambda^{-2} - t)^{-1} = -\lambda^2/(1 + \lambda^2t)$, so $-\lambda^{-1}r_z(t) = \lambda/(1 + \lambda^2 t)$ (\texttt{field\_simp}).
 \end{proof}
 
@@ -3209,6 +3210,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-bounded-left-composition, lmm:van-daele-functions-identities, lmm:functional-calculus-bounded, thrm:modular-operator-properties}
     $\Delta^{1/2} = s(\Delta)$ with $\text{Dom}(\Delta^{1/2}) = W_s$, and $\Delta^{-1/2} = r(\Delta)$ with domain $W_r$. Each identity is Lemma~\ref{lmm:fc-bounded-left-composition}, $u(\Delta)h(\Delta)\xi = (uh)(\Delta)\xi$, for the bounded measurable $u \in \{g_\lambda, v_\lambda, k_\lambda\}$ (Lemma~\ref{lmm:van-daele-functions-bounded}) and $h \in \{s, r\}$, followed by the pointwise identities $g_\lambda s = v_\lambda$, $v_\lambda s = k_\lambda$, $k_\lambda r = v_\lambda$ and $v_\lambda r = g_\lambda$ of Lemma~\ref{lmm:van-daele-functions-identities} (\texttt{mul\_comm}, \texttt{funext}).
 \end{proof}

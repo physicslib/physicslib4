@@ -280,3 +280,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-functions-identities (vanDaele_functions_identities): proved by case split on 0 < t; indicator unfolding, norm_cast, field_simp, nlinarith; t ≤ 0 by simp with √t = 0.
 - lmm:van-daele-functions-bounded (`vanDaele_functions_bounded`): proved (measurability via indicator of ofReal ∘ fun_prop; bounds via div_le_iff₀, nlinarith with (l√t-1)² ≥ 0).
 - 2026-11-14: 5b proving: proved vanDaele_functions_bounded, vanDaele_functions_identities.
+- 2026-11-14: proved `vanDaele_resolvent_point` (lmm:van-daele-resolvent-point) in VanDaele.lean (z = -l⁻² cast to a negative real; field_simp/ring).
+- `modularOperator_vanDaele_products` (lmm:van-daele-fc-products): proved via `integral_apply_pmapIntegral` + `pmapIntegral_of_bddMeasurable` and the pointwise `vanDaele_functions_identities`.
+- 2026-11-14: proved vanDaele_resolvent_point, modularOperator_vanDaele_products.
