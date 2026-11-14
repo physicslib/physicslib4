@@ -254,3 +254,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-spectral-projections-nested (modularSpectralProjection_nested): proved via PVM apply_inter and K_n ⊆ K_m; subspace part via max k l.
 - lmm:modular-power-operators (`modularOperator_indicatorCpow`): proved via `functionalCalculus_of_bddMeasurable`, `norm_integral_le` + `ciSup_le`, `integral_conj` + `indicatorCpow_conj`, and `Real.rpow_le_rpow_of_exponent_le`.
 - 2026-11-14: proved modularSpectralProjection_nested, modularOperator_indicatorCpow.
+- lmm:modular-power-operators-multiplicative (`modularOperator_indicatorCpow_mul`): proved via `integral_mul` + `indicatorCpow_mul`, `integral_indicator` for p_0 = E_n; the other conjuncts follow by rewriting with these.
+- lmm:modular-spectral-projections-converge (`tendsto_modularSpectralProjection`): proved via dominated convergence (`tendsto_integral_apply_of_dominated`) with 1_{K_{n+1}} → 1_{(0,∞)}, limit identified by `modularOperator_functionalCalculus_indicator_Ioi`, index shifted by `tendsto_add_atTop_iff_nat`.
+- 2026-11-14: proved tendsto_modularSpectralProjection, modularOperator_indicatorCpow_mul.

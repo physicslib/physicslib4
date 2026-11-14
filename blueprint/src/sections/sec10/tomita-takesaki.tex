@@ -2733,6 +2733,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     For every $\psi \in \mathbf{H}$, $E_n\psi \to \psi$ as $n \to \infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-dominated-convergence, lmm:modular-indicator-positive-one, prpstn:integral-of-indicator, lmm:functional-calculus-bounded}
     Apply Lemma~\ref{lmm:fc-dominated-convergence} to $\mu$ with $h = 1_{(0, \infty)}$ and $h_n = 1_{K_n}$, so $|h_n| \le |h|$, and $W_h = \mathbf{H}$ since $h$ is bounded. Pointwise convergence: for $\lambda \le 0$, $h_n(\lambda) = 0 = h(\lambda)$; for $\lambda > 0$, choose $N > \max(\lambda, 1/\lambda)$ (Mathlib's \texttt{exists\_nat\_gt}), so $\lambda \in K_n$ for $n \ge N$ and $h_n(\lambda) = 1 = h(\lambda)$ eventually (\texttt{tendsto\_atTop\_of\_eventually\_const}). Hence $h_n(\Delta)\psi \to h(\Delta)\psi$, where $h_n(\Delta) = E_n$ (Proposition~\ref{prpstn:integral-of-indicator} and Lemma~\ref{lmm:functional-calculus-bounded}) and $h(\Delta) = \mathbf{1}$ (Lemma~\ref{lmm:modular-indicator-positive-one}).
 \end{proof}
@@ -2868,6 +2869,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $n \ge 1$ and $z, w \in \mathbb{C}$. Then $p_{z,n}(\Delta)\,p_{w,n}(\Delta) = p_{z+w,n}(\Delta)$ and $p_{0,n}(\Delta) = E_n$. Consequently $E_n\,p_{z,n}(\Delta) = p_{z,n}(\Delta)\,E_n = p_{z,n}(\Delta)$, so $p_{z,n}(\Delta)$ maps $\mathbf{H}$ into $\text{Range}(E_n)$, and $p_{z,n}(\Delta)\,p_{-z,n}(\Delta)\xi = \xi$ whenever $E_n\xi = \xi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-power-function-identities, lmm:modular-power-function-bounds, prpstn:integral-multiplicative, prpstn:integral-of-indicator}
     Proposition~\ref{prpstn:integral-multiplicative} with the first claim of Lemma~\ref{lmm:modular-power-function-identities} gives the product rule, and $p_{0,n} = 1_{K_n}$ (the second claim) with Proposition~\ref{prpstn:integral-of-indicator} gives $p_{0,n}(\Delta) = \mu(K_n) = E_n$. The product rule with $w = 0$ (in either order, since $z + 0 = 0 + z$) gives $p_{z,n}(\Delta)E_n = E_np_{z,n}(\Delta) = p_{z,n}(\Delta)$, and with $w = -z$ gives $p_{z,n}(\Delta)p_{-z,n}(\Delta) = E_n$.
 \end{proof}

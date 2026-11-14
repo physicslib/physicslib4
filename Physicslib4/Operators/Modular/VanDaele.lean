@@ -207,7 +207,41 @@ theorem tendsto_modularSpectralProjection {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) (ψ : H) :
     Tendsto (fun n : ℕ => spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] ψ)
       atTop (𝓝 ψ) := by
-  sorry
+  set hA := modularOperator_isSelfAdjoint hM hΩ C hC
+  have hI := modularOperator_functionalCalculus_indicator_Ioi hM hΩ C hC
+  have hψ : ψ ∈ (functionalCalculus hA ((Set.Ioi (0 : ℝ)).indicator 1)).domain := by
+    rw [hI]; trivial
+  have hval : functionalCalculus hA ((Set.Ioi (0 : ℝ)).indicator 1) ⟨ψ, hψ⟩ = ψ := by
+    obtain ⟨-, h⟩ := LinearPMap.ext_iff.1 hI
+    exact h (x := ψ) (hf := hψ) (hg := trivial)
+  have key := tendsto_integral_apply_of_dominated (spectralMeasure hA)
+    (h := (Set.Ioi (0 : ℝ)).indicator (1 : ℝ → ℂ))
+    (measurable_const.indicator measurableSet_Ioi) ⟨ψ, hψ⟩
+    (hn := fun n : ℕ => K[n + 1].indicator (1 : ℝ → ℂ))
+    (fun n => ⟨measurable_const.indicator measurableSet_Icc, 1, fun x =>
+      (norm_indicator_le_norm_self _ _).trans (by simp)⟩)
+    (fun x => ?_) (fun n x => ?_)
+  · rw [← tendsto_add_atTop_iff_nat 1]
+    convert key using 2 with n
+    · rw [Spectral.ProjectionValuedMeasure.integral_indicator _ measurableSet_Icc]
+      push_cast; rfl
+    · exact hval.symm
+  · rcases le_or_gt x 0 with hx | hx
+    · rw [Set.indicator_of_notMem (show x ∉ Set.Ioi (0 : ℝ) from not_lt.2 hx)]
+      refine tendsto_const_nhds.congr fun n => (Set.indicator_of_notMem ?_ _).symm
+      exact fun h => (lt_of_lt_of_le (by positivity) h.1).not_ge hx
+    · rw [Set.indicator_of_mem (Set.mem_Ioi.2 hx)]
+      obtain ⟨N, hN⟩ := exists_nat_gt (max x x⁻¹)
+      refine tendsto_const_nhds.congr' (eventually_atTop.2 ⟨N, fun n hn => ?_⟩)
+      have hn' : (N : ℝ) ≤ n := by exact_mod_cast hn
+      have h1 : x < n + 1 := by linarith [le_max_left x x⁻¹]
+      have h2 : x⁻¹ < n + 1 := by linarith [le_max_right x x⁻¹]
+      refine (Set.indicator_of_mem
+        (show x ∈ Set.Icc (1 / ((n : ℝ) + 1)) (n + 1) from ⟨?_, h1.le⟩) _).symm
+      rw [one_div]
+      exact (inv_lt_of_inv_lt₀ hx h2).le
+  · exact norm_indicator_le_of_subset (show Set.Icc (1 / ((n : ℝ) + 1)) (n + 1) ⊆ Set.Ioi 0 from
+      fun y hy => lt_of_lt_of_le (by positivity) hy.1) _ _
 
 /-- `H₀ = {ξ | E_n ξ = ξ for some n ≥ 1}` is dense in `H`.
 Blueprint: lmm:modular-H0-dense -/
@@ -405,7 +439,20 @@ theorem modularOperator_indicatorCpow_mul {M : Set (H →L[ℂ] H)} {Ω : H}
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, n]
         ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[-z, n] ξ) =
         ξ := by
-  sorry
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  have hb : ∀ z : ℂ, p[z, n] ∈ Spectral.BddMeasurable ℝ := fun z =>
+    let ⟨hm, _, hbd⟩ := indicatorCpow_bounds hn z
+    ⟨hm, _, fun x => (hbd x).1⟩
+  have hmul : ∀ z w : ℂ, μ.integral p[z, n] * μ.integral p[w, n] = μ.integral p[z + w, n] :=
+    fun z w => by
+      rw [← μ.integral_mul (hb z) (hb w)]
+      exact congrArg _ (funext (indicatorCpow_mul hn z w).1)
+  have h0 : μ.integral p[0, n] = μ K[n] := by
+    rw [(indicatorCpow_mul hn 0 0).2, μ.integral_indicator measurableSet_Icc]
+  have hE : μ K[n] * μ.integral p[z, n] = μ.integral p[z, n] := by rw [← h0, hmul, zero_add]
+  refine ⟨hmul z w, h0, hE, by rw [← h0, hmul, add_zero],
+    fun ψ => ⟨μ.integral p[z, n] ψ, by simpa using DFunLike.congr_fun hE ψ⟩, fun ξ hξ => ?_⟩
+  exact (DFunLike.congr_fun (hmul z (-z)) ξ).trans (by rw [add_neg_cancel, h0, hξ])
 
 /-- `Δ^{it} p_{z,n}(Δ) = p_{z,n}(Δ) Δ^{it} = p_{z+it,n}(Δ)`; in particular `Δ^{it}` commutes with
 `E_n` and maps `Range(E_n)` into itself, and `p_{x+it,n}(Δ) = Δ^{it} p_{x,n}(Δ)` for real `x`.
