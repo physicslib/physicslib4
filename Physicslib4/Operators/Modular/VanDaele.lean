@@ -1111,7 +1111,43 @@ theorem modularOperator_vanDaeleG_domains {M : Set (H →L[ℂ] H)} {Ω : H}
         modularOperatorInvSqrt hM hΩ C hC ⟨_, h₂⟩ =
           (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l)
             (modularOperatorInvSqrt hM hΩ C hC ψ) := by
-  sorry
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  have bddApp : ∀ {f : ℝ → ℂ}, f ∈ Spectral.BddMeasurable ℝ → ∀ (x : H)
+      (hx : x ∈ integralDomain μ f), pmapIntegral μ f ⟨x, hx⟩ = μ.integral f x := by
+    intro f hf x hx
+    obtain ⟨-, he⟩ := LinearPMap.ext_iff.1 (pmapIntegral_of_bddMeasurable μ hf)
+    exact he (x := x) (hf := hx) (hg := trivial)
+  have comp : ∀ {f u w : ℝ → ℂ}, Measurable f → u ∈ Spectral.BddMeasurable ℝ → f * u = w →
+      ∀ (x : H) (hx : x ∈ integralDomain μ w), ∃ h : μ.integral u x ∈ integralDomain μ f,
+        pmapIntegral μ f ⟨_, h⟩ = pmapIntegral μ w ⟨x, hx⟩ := by
+    rintro f u w hf hu rfl x hx
+    have hxu : x ∈ integralDomain μ u := by
+      rw [integralDomain_eq_top_of_bddMeasurable μ hu]; trivial
+    have hy := (pmapIntegral_mem_integralDomain_iff μ hf hu.1 ⟨x, hxu⟩).2 hx
+    obtain ⟨hfg, e2⟩ := (pmapIntegral_comp μ hf hu.1).2 ⟨x, hxu⟩ hy
+    have e := bddApp hu x hxu
+    exact ⟨e ▸ hy, (congrArg (pmapIntegral μ f) (Subtype.ext e.symm)).trans e2.symm⟩
+  obtain ⟨hgm, hvm, -, hb⟩ := vanDaele_functions_bounded hl
+  have bdd : ∀ {u : ℝ → ℂ} {c : ℝ}, Measurable u →
+      (∀ t, (u t).im = 0 ∧ 0 ≤ (u t).re ∧ (u t).re ≤ c) → u ∈ Spectral.BddMeasurable ℝ :=
+    fun hm hu => ⟨hm, _, fun t => (Complex.norm_le_abs_re_add_abs_im _).trans (by
+      rw [(hu t).1, abs_zero, add_zero, abs_of_nonneg (hu t).2.1]; exact (hu t).2.2)⟩
+  have hg := bdd hgm fun t => (hb t).1
+  have hv := bdd hvm fun t => (hb t).2.1
+  have hs : Measurable fun x : ℝ => ((Real.sqrt x : ℝ) : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
+  have hr : Measurable fun x : ℝ => (((Real.sqrt x)⁻¹ : ℝ) : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable.inv
+  have I := vanDaele_functions_identities hl
+  have hψv : (ψ : H) ∈ integralDomain μ (vanDaeleV l) := by
+    rw [integralDomain_eq_top_of_bddMeasurable μ hv]; trivial
+  obtain ⟨h₁, e₁⟩ := comp hs hg (funext fun t => (I t).1) ψ hψv
+  obtain ⟨hψgr, e₂'⟩ := integral_apply_pmapIntegral μ hg hr ψ
+  obtain ⟨h₂, e₂⟩ := comp hr hg (mul_comm _ _) ψ hψgr
+  refine ⟨h₁, h₂, ?_, ?_⟩
+  · exact e₁.trans ((bddApp hv _ _).trans ((modularOperator_vanDaele_products hM hΩ C hC hl).2
+      ψ).1.symm)
+  · exact e₂.trans e₂'.symm
 
 /-- For `λ > 0`, `λ k_λ(Δ) + λ⁻¹ g_λ(Δ) = 𝟙`.
 Blueprint: lmm:van-daele-partition-of-unity -/

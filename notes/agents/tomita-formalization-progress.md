@@ -289,3 +289,5 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-partition-of-unity: proved `modularOperator_vanDaele_partition_of_unity` (VanDaele.lean) via `integral_smul`/`integral_add`, the pointwise identity in `vanDaele_functions_identities`, and `modularOperator_functionalCalculus_indicator_Ioi` with `pmapIntegral_of_bddMeasurable`.
 - lmm:van-daele-g-resolvent (modularOperator_vanDaeleG_eq_resolvent): proved via vanDaele_resolvent_point, modularOperator_functionalCalculus_congr_pos, functionalCalculus_of_bddMeasurable and integral_smul.
 - 2026-11-14: proved modularOperator_vanDaeleG_eq_resolvent, modularOperator_vanDaele_partition_of_unity.
+- lmm:van-daele-g-domains (`modularOperator_vanDaeleG_domains`): proved via `pmapIntegral_mem_integralDomain_iff`/`pmapIntegral_comp` (s·g_λ = v_λ, r·g_λ = g_λ·r) and `integral_apply_pmapIntegral`, with `modularOperator_vanDaele_products`.
+- 2026-11-14: proved modularOperator_vanDaeleG_domains.

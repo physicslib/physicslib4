@@ -3229,6 +3229,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:fc-composition, lmm:fc-bounded-left-composition, lmm:functional-calculus-bounded, lmm:van-daele-functions-identities, lmm:van-daele-fc-products, def:van-daele-v}
     $W_{g_\lambda} = \mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}). First, $sg_\lambda = v_\lambda$ is bounded (Lemma~\ref{lmm:van-daele-functions-identities}), so $W_{sg_\lambda} = \mathbf{H}$ and Theorem~\ref{thrm:fc-composition} with $f = s$, $g = g_\lambda$ gives $g_\lambda(\Delta)\psi \in \text{Dom}(s(\Delta))$ and $s(\Delta)g_\lambda(\Delta)\psi = v_\lambda(\Delta)\psi$, which is $k_\lambda(\Delta)\Delta^{-1/2}\psi$ by Lemma~\ref{lmm:van-daele-fc-products}. Second, Lemma~\ref{lmm:fc-bounded-left-composition} with $u = g_\lambda$, $h = r$ gives $\psi \in W_{g_\lambda r}$ and $g_\lambda(\Delta)r(\Delta)\psi = (g_\lambda r)(\Delta)\psi$; since $rg_\lambda = g_\lambda r$, Theorem~\ref{thrm:fc-composition} with $f = r$, $g = g_\lambda$ gives $g_\lambda(\Delta)\psi \in \text{Dom}(r(\Delta))$ and $r(\Delta)g_\lambda(\Delta)\psi = (rg_\lambda)(\Delta)\psi = g_\lambda(\Delta)r(\Delta)\psi$.
 \end{proof}
