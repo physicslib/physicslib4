@@ -2824,6 +2824,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     For integers $1 \le n \le m$, $z \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $p_{z,m}(\lambda)\,1_{K_n}(\lambda) = p_{z,n}(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Off $K_n$ both sides vanish, since $1_{K_n}(\lambda) = 0$. For $\lambda \in K_n$, $K_n \subset K_m$ (\texttt{Set.Icc\_subset\_Icc} and \texttt{one\_div\_le\_one\_div\_of\_le}) gives $1_{K_m}(\lambda) = 1 = 1_{K_n}(\lambda)$, so both sides equal $\lambda^z$.
 \end{proof}
 
@@ -2837,6 +2838,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:log-power-on-interval, lmm:cpow-on-interval}
     Off $K_n$ the left side is $0$. For $\lambda \in K_n$ let $L = \log\lambda$. By Lemma~\ref{lmm:cpow-on-interval} and \texttt{Complex.exp\_add}, the left side is $|\lambda^z|\,|e^{hL} - 1 - hL|$. Since $|hL| \le |h|\log n \le 1$ (Lemma~\ref{lmm:log-power-on-interval}), Mathlib's \texttt{Complex.norm\_exp\_sub\_one\_sub\_id\_le} gives $|e^{hL} - 1 - hL| \le |hL|^2 \le (\log n)^2|h|^2$, and $|\lambda^z| \le n^{|\operatorname{Re} z|}$ (Lemma~\ref{lmm:cpow-on-interval}).
 \end{proof}

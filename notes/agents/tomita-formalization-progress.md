@@ -236,3 +236,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-power-function-conj (`Physicslib4.Modular.indicatorCpow_conj`): proved via by_cases on K_n, `Complex.cpow_conj` with `arg_ofReal_of_nonneg`, and `Complex.conj_ofReal`.
 - lmm:modular-power-function-shift (`indicatorCpow_add_I_mul`): proved by cases on K_n membership; on K_n uses `Complex.cpow_add`, `Complex.cpow_def_of_ne_zero`, `Complex.ofReal_log`.
 - 2026-11-14: proved indicatorCpow_conj, indicatorCpow_add_I_mul.
+- lmm:modular-power-function-restrict (`indicatorCpow_mul_indicator`): proved by case split on `x ∈ K[n]`, using `K[n] ⊆ K[m]` via `one_div_le_one_div_of_le`.
+- lmm:modular-power-taylor (`indicatorCpow_taylor`): proved by case split on `x ∈ K[n]`; on K_n rewrites the remainder as `x^z * (exp(L h) - 1 - L h)` via `Complex.cpow_add`/`cpow_def_of_ne_zero`/`ofReal_log`, then `Complex.norm_exp_sub_one_sub_id_le` and `cpow_of_mem_Icc`.
+- 2026-11-14: proved indicatorCpow_mul_indicator, indicatorCpow_taylor. Spectral support + scalar cpow lemmas of 5a done (10).

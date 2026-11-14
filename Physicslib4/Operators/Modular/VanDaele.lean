@@ -269,7 +269,13 @@ theorem indicatorCpow_add_I_mul {n : ℕ} (hn : 1 ≤ n) (z : ℂ) (t x : ℝ) :
 Blueprint: lmm:modular-power-function-restrict -/
 theorem indicatorCpow_mul_indicator {n m : ℕ} (hn : 1 ≤ n) (hnm : n ≤ m) (z : ℂ) (x : ℝ) :
     p[z, m] x * (K[n]).indicator 1 x = p[z, n] x := by
-  sorry
+  by_cases hx : x ∈ K[n]
+  · have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
+    have hnm' : (n : ℝ) ≤ m := by exact_mod_cast hnm
+    have hxm : x ∈ K[m] :=
+      ⟨(one_div_le_one_div_of_le hn0 hnm').trans hx.1, hx.2.trans hnm'⟩
+    simp only [Set.indicator_of_mem hx, Set.indicator_of_mem hxm, Pi.one_apply, mul_one]
+  · simp only [Set.indicator_of_notMem hx, mul_zero]
 
 /-- For `|h| log n ≤ 1`, `|p_{z+h,n}(λ) - p_{z,n}(λ) - h q_{z,n}(λ)| ≤ n^{|Re z|} (log n)² |h|²`.
 Blueprint: lmm:modular-power-taylor -/
@@ -277,7 +283,27 @@ theorem indicatorCpow_taylor {n : ℕ} (hn : 1 ≤ n) (z h : ℂ) (hh : ‖h‖ 
     (x : ℝ) :
     ‖p[z + h, n] x - p[z, n] x - h * q[z, n] x‖ ≤
       (n : ℝ) ^ |z.re| * Real.log n ^ 2 * ‖h‖ ^ 2 := by
-  sorry
+  by_cases hx : x ∈ K[n]
+  · obtain ⟨hx0, hlog⟩ := pos_abs_log_le_of_mem_Icc hn hx
+    have hx0' : (x : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hx0.ne'
+    simp only [Set.indicator_of_mem hx]
+    have key : (x : ℂ) ^ (z + h) - (x : ℂ) ^ z - h * ((Real.log x : ℂ) * (x : ℂ) ^ z) =
+        (x : ℂ) ^ z * (Complex.exp ((Real.log x : ℂ) * h) - 1 - (Real.log x : ℂ) * h) := by
+      rw [Complex.cpow_add _ _ hx0', Complex.cpow_def_of_ne_zero hx0' h,
+        ← Complex.ofReal_log hx0.le]
+      ring
+    have hhL : ‖(Real.log x : ℂ) * h‖ ≤ ‖h‖ * Real.log n := by
+      rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, mul_comm]
+      exact mul_le_mul_of_nonneg_left hlog (norm_nonneg _)
+    rw [key, norm_mul]
+    calc _ ≤ (n : ℝ) ^ |z.re| * ‖(Real.log x : ℂ) * h‖ ^ 2 :=
+          mul_le_mul (cpow_of_mem_Icc hn hx z).2
+            (Complex.norm_exp_sub_one_sub_id_le (hhL.trans hh)) (norm_nonneg _)
+            (Real.rpow_nonneg (Nat.cast_nonneg n) _)
+      _ ≤ (n : ℝ) ^ |z.re| * (‖h‖ * Real.log n) ^ 2 := by gcongr
+      _ = _ := by ring
+  · simp only [Set.indicator_of_notMem hx, sub_zero, mul_zero, norm_zero]
+    positivity
 
 /-! ### The bounded operators `p_{z,n}(Δ)` -/
 
