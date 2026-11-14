@@ -260,3 +260,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-H0-dense (`dense_modularSpectralSubspace`): proved via `mem_closure_of_tendsto` with `tendsto_modularSpectralProjection`, eventually n ≥ 1, and idempotence E_n E_n = E_n from `modularSpectralProjection_nested` (m = n).
 - lmm:modular-power-unitary-group (modularUnitaryGroup_indicatorCpow): proved via Δ^{it} = ∫ e_t dμ, integral_mul and indicatorCpow_add_I_mul; E_n = p_{0,n}(Δ) gives commutation and range invariance.
 - 2026-11-14: proved dense_modularSpectralSubspace, modularUnitaryGroup_indicatorCpow.
+- lmm:modular-power-consistent (`modularOperator_indicatorCpow_consistent`): proved via p_{z,m}(Δ) E_n = ∫ p_{z,m}·1_{K_n} dμ = p_{z,n}(Δ) (`integral_indicator`, `integral_mul`, `indicatorCpow_mul_indicator`), applied to ξ = E_n ξ.
+- lmm:modular-power-agrees-fc (modularOperator_functionalCalculus_eq_indicatorCpow): PROVED via pmapIntegral_comp with g = 1_{K_n}, h·g = p_{z,n}.
+- 2026-11-14: proved modularOperator_indicatorCpow_consistent, modularOperator_functionalCalculus_eq_indicatorCpow.

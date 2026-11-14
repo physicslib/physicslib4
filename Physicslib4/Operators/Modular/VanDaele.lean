@@ -517,7 +517,16 @@ theorem modularOperator_indicatorCpow_consistent {M : Set (H →L[ℂ] H)} {Ω :
     (hξ : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] ξ = ξ) :
     (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, m] ξ =
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, n] ξ := by
-  sorry
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  obtain ⟨hm, -, hbd⟩ := indicatorCpow_bounds (hn.trans hnm) z
+  have hK : (K[n]).indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨measurable_const.indicator measurableSet_Icc, 1, fun x =>
+      (norm_indicator_le_norm_self _ _).trans (by simp)⟩
+  have h : μ.integral p[z, m] * μ K[n] = μ.integral p[z, n] := by
+    rw [← μ.integral_indicator measurableSet_Icc, ← μ.integral_mul ⟨hm, _, fun x => (hbd x).1⟩ hK]
+    exact congrArg _ (funext (indicatorCpow_mul_indicator hn hnm z))
+  rw [← h]
+  exact congrArg _ hξ.symm
 
 /-- If `h` is measurable with `h(λ) = λ^z` on `K_n` and `E_n ξ = ξ`, then `ξ ∈ Dom h(Δ)` and
 `h(Δ) ξ = p_{z,n}(Δ) ξ`.
@@ -530,7 +539,36 @@ theorem modularOperator_functionalCalculus_eq_indicatorCpow {M : Set (H →L[ℂ
     ∃ hdom : ξ ∈ (functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) h).domain,
       functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) h ⟨ξ, hdom⟩ =
         (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, n] ξ := by
-  sorry
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  set g : ℝ → ℂ := K[n].indicator 1
+  have hg : g ∈ Spectral.BddMeasurable ℝ :=
+    ⟨measurable_const.indicator measurableSet_Icc, 1, fun x => by
+      by_cases hx : x ∈ K[n]
+      · simp only [g, Set.indicator_of_mem hx, Pi.one_apply, norm_one, le_refl]
+      · simp only [g, Set.indicator_of_notMem hx, norm_zero, zero_le_one]⟩
+  obtain ⟨hpm, -, hpb⟩ := indicatorCpow_bounds hn z
+  have hp : p[z, n] ∈ Spectral.BddMeasurable ℝ := ⟨hpm, _, fun x => (hpb x).1⟩
+  have hfg : h * g = p[z, n] := funext fun x => by
+    by_cases hx : x ∈ K[n]
+    · simp only [Pi.mul_apply, g, Set.indicator_of_mem hx, Pi.one_apply, mul_one, hK x hx]
+    · simp only [Pi.mul_apply, g, Set.indicator_of_notMem hx, mul_zero]
+  have hξg : ξ ∈ integralDomain μ g := by
+    rw [integralDomain_eq_top_of_bddMeasurable μ hg]; trivial
+  have hgξ : pmapIntegral μ g ⟨ξ, hξg⟩ = ξ := by
+    obtain ⟨-, he⟩ := LinearPMap.ext_iff.1 (pmapIntegral_of_bddMeasurable μ hg)
+    refine (he (x := ξ) (hf := hξg) (hg := trivial)).trans ?_
+    exact (congrArg (fun T : H →L[ℂ] H => T ξ) (μ.integral_indicator measurableSet_Icc)).trans hξ
+  have hmem : ξ ∈ integralDomain μ (h * g) := by
+    rw [hfg, integralDomain_eq_top_of_bddMeasurable μ hp]; trivial
+  have hy := (pmapIntegral_mem_integralDomain_iff μ hmeas hg.1 ⟨ξ, hξg⟩).2 hmem
+  obtain ⟨hfg', hc⟩ := (pmapIntegral_comp μ hmeas hg.1).2 ⟨ξ, hξg⟩ hy
+  have hp' : ∀ (f : ℝ → ℂ) (e : f = p[z, n]) (hx : ξ ∈ integralDomain μ f),
+      pmapIntegral μ f ⟨ξ, hx⟩ = μ.integral p[z, n] ξ := by
+    rintro f rfl hx
+    obtain ⟨-, he⟩ := LinearPMap.ext_iff.1 (pmapIntegral_of_bddMeasurable μ hp)
+    exact he (x := ξ) (hf := hx) (hg := trivial)
+  exact ⟨hgξ ▸ hy, (congrArg (pmapIntegral μ h) (Subtype.ext hgξ.symm)).trans
+    (hc.symm.trans (hp' _ hfg _))⟩
 
 /-- If `E_n ξ = ξ`, then `ξ ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}`, `Δ^{1/2} ξ = p_{1/2,n}(Δ) ξ` and
 `Δ^{-1/2} ξ = p_{-1/2,n}(Δ) ξ`.

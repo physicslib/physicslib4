@@ -2896,6 +2896,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $1 \le n \le m$, $z \in \mathbb{C}$ and $E_n\xi = \xi$. Then $p_{z,m}(\Delta)\xi = p_{z,n}(\Delta)\xi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-power-function-restrict, lmm:modular-power-function-bounds, prpstn:integral-multiplicative, prpstn:integral-of-indicator}
     By Lemma~\ref{lmm:modular-power-function-restrict}, Proposition~\ref{prpstn:integral-multiplicative} and Proposition~\ref{prpstn:integral-of-indicator}, $p_{z,m}(\Delta)E_n = p_{z,n}(\Delta)$; apply it to $\xi = E_n\xi$.
 \end{proof}
@@ -2910,6 +2911,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $n \ge 1$, $z \in \mathbb{C}$, and let $h : \mathbb{R} \to \mathbb{C}$ be measurable with $h(\lambda) = \lambda^z$ for every $\lambda \in K_n$ (for example $h(\lambda) = \lambda^z$ for $\lambda > 0$ and $h(\lambda) = 0$ otherwise). If $E_n\xi = \xi$, then $\xi \in \text{Dom}(h(\Delta))$ and $h(\Delta)\xi = p_{z,n}(\Delta)\xi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:fc-composition, lmm:functional-calculus-bounded, prpstn:integral-of-indicator, lmm:modular-power-function-bounds}
     $h\,1_{K_n} = p_{z,n}$ pointwise, and both $1_{K_n}$ and $p_{z,n}$ are bounded (Lemma~\ref{lmm:modular-power-function-bounds}), so $W_{1_{K_n}} \cap W_{h1_{K_n}} = \mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}). Theorem~\ref{thrm:fc-composition} with $f = h$ and $g = 1_{K_n}$ gives $1_{K_n}(\Delta)\xi \in \text{Dom}(h(\Delta))$ and $h(\Delta)1_{K_n}(\Delta)\xi = p_{z,n}(\Delta)\xi$. Since $1_{K_n}(\Delta)\xi = E_n\xi = \xi$ (Proposition~\ref{prpstn:integral-of-indicator}), this is the claim.
 \end{proof}
