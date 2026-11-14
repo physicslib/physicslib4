@@ -242,3 +242,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-inverse-scalar-identities (`indicator_Icc_inv`): proved by case split on the sign of x (`inv_le_inv₀`, `inv_le_comm₀`, `inv_nonpos`).
 - lmm:fc-bounded-re-im: proved `integral_eq_re_add_I_mul_im` (Polar.lean) via pointwise re/im decomposition and `ProjectionValuedMeasure.integral_add`/`integral_smul`.
 - 2026-11-14: proved indicator_Icc_inv, integral_eq_re_add_I_mul_im (Polar).
+- lmm:modular-inverse-power-function (`conj_indicatorCpow_inv`): proved; membership iff from `indicator_Icc_inv`, then `Complex.inv_cpow`, `Complex.cpow_neg`, `Complex.cpow_conj` on K_n.
+- lmm:antiunitary-conjugate-bounded-fc (`integral_antiunitaryConj`, Polar.lean): proved via Re/Im split, `functionalCalculus_antiunitaryConj` + `functionalCalculus_of_bddMeasurable` for real parts, antilinearity of W.
+- 2026-11-14: proved conj_indicatorCpow_inv, integral_antiunitaryConj (Polar.lean now sorry-free).

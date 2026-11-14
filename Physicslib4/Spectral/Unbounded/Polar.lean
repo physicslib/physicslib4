@@ -1544,7 +1544,22 @@ theorem integral_antiunitaryConj (W : H ≃ₗᵢ⋆[ℂ] H) {A : H →ₗ.[ℂ]
     ∃ h : IsSelfAdjoint (antiunitaryConj W A), ∀ f : ℝ → ℂ, f ∈ BddMeasurable ℝ → ∀ ψ : H,
       W ((spectralMeasure hA).integral f (W.symm ψ)) =
         (spectralMeasure h).integral (fun x => starRingEnd ℂ (f x)) ψ := by
-  sorry
+  obtain ⟨h, hfc⟩ := functionalCalculus_antiunitaryConj W hA
+  have key : ∀ g : ℝ → ℝ, (fun x => (g x : ℂ)) ∈ BddMeasurable ℝ → ∀ ψ : H,
+      W ((spectralMeasure hA).integral (fun x => (g x : ℂ)) (W.symm ψ)) =
+        (spectralMeasure h).integral (fun x => (g x : ℂ)) ψ := fun g hg ψ => by
+    have hgm : Measurable g := by
+      simpa [Function.comp_def] using Complex.measurable_re.comp hg.1
+    have e := hfc g hgm
+    rw [(functionalCalculus_of_bddMeasurable hA hg).2,
+      (functionalCalculus_of_bddMeasurable h hg).2] at e
+    obtain ⟨hd, hv⟩ := LinearPMap.ext_iff.mp e
+    exact @hv ψ (hd ▸ Submodule.mem_top) Submodule.mem_top
+  refine ⟨h, fun f hf ψ => ?_⟩
+  obtain ⟨hu, hv, e1, -⟩ := integral_eq_re_add_I_mul_im hA hf
+  obtain ⟨-, -, -, e2⟩ := integral_eq_re_add_I_mul_im h hf
+  rw [e1, e2, add_apply, smul_apply, map_add, LinearIsometryEquiv.map_smulₛₗ, key _ hu,
+    key _ hv, Complex.conj_I, sub_apply, smul_apply, neg_smul, sub_eq_add_neg]
 
 end Unbounded
 end Spectral

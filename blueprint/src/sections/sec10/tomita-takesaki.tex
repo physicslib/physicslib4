@@ -3001,6 +3001,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $W$ be antiunitary, $A$ self-adjoint, $B = WAW^{-1}$ (self-adjoint by Lemma~\ref{lmm:antiunitary-conjugate-spectral-measure}), and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $Wf(A)W^{-1}\psi = \overline{f}(B)\psi$ for every $\psi \in \mathbf{H}$, where $\overline{f}(\lambda) = \overline{f(\lambda)}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-bounded-re-im, crllr:antiunitary-conjugate-functional-calculus, def:antiunitary-operator}
     With $u = \operatorname{Re} f$ and $v = \operatorname{Im} f$, Lemma~\ref{lmm:fc-bounded-re-im} gives $f(A) = u(A) + i\,v(A)$ and $\overline{f}(B) = u(B) - i\,v(B)$. Since $W$ is antilinear, $Wf(A)W^{-1}\psi = Wu(A)W^{-1}\psi - i\,Wv(A)W^{-1}\psi$, which is $u(B)\psi - i\,v(B)\psi$ by Corollary~\ref{crllr:antiunitary-conjugate-functional-calculus} for the real functions $u$ and $v$.
 \end{proof}
@@ -3035,6 +3036,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     For $n \ge 1$, $z \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $\overline{p_{z,n}(\iota^-(\lambda))} = p_{-\overline{z},n}(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-inverse-scalar-identities, lmm:log-power-on-interval}
     By Lemma~\ref{lmm:modular-inverse-scalar-identities} both sides vanish off $K_n$. For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), and $\overline{(\lambda^{-1})^z} = (\lambda^{-1})^{\overline{z}} = (\lambda^{\overline{z}})^{-1} = \lambda^{-\overline{z}}$ by \texttt{Complex.cpow\_conj} (with \texttt{Complex.arg\_ofReal\_of\_nonneg} and \texttt{Complex.conj\_ofReal}), \texttt{Complex.inv\_cpow} (with \texttt{Complex.ofReal\_inv}) and \texttt{Complex.cpow\_neg}.
 \end{proof}

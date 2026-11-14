@@ -525,7 +525,22 @@ theorem indicator_Icc_inv {n : ℕ} (hn : 1 ≤ n) (x : ℝ) :
 Blueprint: lmm:modular-inverse-power-function -/
 theorem conj_indicatorCpow_inv {n : ℕ} (hn : 1 ≤ n) (z : ℂ) (x : ℝ) :
     conj (p[z, n] x⁻¹) = p[-conj z, n] x := by
-  sorry
+  have hmem : x⁻¹ ∈ K[n] ↔ x ∈ K[n] := by
+    have h := indicator_Icc_inv hn x
+    simp only [Set.indicator_apply, Pi.one_apply] at h
+    split_ifs at h with h1 h2 h2
+    · exact iff_of_true h1 h2
+    · exact absurd h one_ne_zero
+    · exact absurd h zero_ne_one
+    · exact iff_of_false h1 h2
+  by_cases hx : x ∈ K[n]
+  · have hx0 := (pos_abs_log_le_of_mem_Icc hn hx).1
+    have harg : (x : ℂ).arg ≠ Real.pi := by
+      rw [Complex.arg_ofReal_of_nonneg hx0.le]; exact Real.pi_ne_zero.symm
+    rw [Set.indicator_of_mem (hmem.2 hx), Set.indicator_of_mem hx, Complex.ofReal_inv,
+      Complex.inv_cpow _ _ harg, map_inv₀, Complex.cpow_neg, Complex.cpow_conj _ _ harg,
+      Complex.conj_ofReal]
+  · rw [Set.indicator_of_notMem (mt hmem.1 hx), Set.indicator_of_notMem hx, map_zero]
 
 /-- `conj (e_t(ι⁻(λ))) = e_t(λ)`.
 Blueprint: lmm:modular-inverse-unitary-function -/
