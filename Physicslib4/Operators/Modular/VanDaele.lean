@@ -95,8 +95,8 @@ theorem isSelfAdjoint_modularOperator_log {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) :
     IsSelfAdjoint (functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC)
-      fun x => (Real.log x : ℂ)) := by
-  sorry
+      fun x => (Real.log x : ℂ)) :=
+  (isSelfAdjoint_functionalCalculus_of_real _ Real.measurable_log).1
 
 /-- The modular unitary group `Δ^{it} = e^{it log Δ}`, the unitary `expUnitary` of the
 self-adjoint operator `log Δ`.
@@ -546,7 +546,8 @@ theorem conj_indicatorCpow_inv {n : ℕ} (hn : 1 ≤ n) (z : ℂ) (x : ℝ) :
 Blueprint: lmm:modular-inverse-unitary-function -/
 theorem conj_exp_log_inv (t x : ℝ) :
     conj (e[t] x⁻¹) = e[t] x := by
-  sorry
+  simp only [Real.log_inv, ← Complex.exp_conj, map_mul, Complex.conj_I, Complex.conj_ofReal]
+  congr 1; push_cast; ring
 
 /-- `J E_n J = E_n`; hence `E_n ξ = ξ` implies `E_n J ξ = J ξ`, and `J H₀ = H₀`.
 Blueprint: lmm:modular-conjugation-spectral-projections -/

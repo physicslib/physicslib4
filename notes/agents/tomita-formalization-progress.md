@@ -245,3 +245,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-inverse-power-function (`conj_indicatorCpow_inv`): proved; membership iff from `indicator_Icc_inv`, then `Complex.inv_cpow`, `Complex.cpow_neg`, `Complex.cpow_conj` on K_n.
 - lmm:antiunitary-conjugate-bounded-fc (`integral_antiunitaryConj`, Polar.lean): proved via Re/Im split, `functionalCalculus_antiunitaryConj` + `functionalCalculus_of_bddMeasurable` for real parts, antilinearity of W.
 - 2026-11-14: proved conj_indicatorCpow_inv, integral_antiunitaryConj (Polar.lean now sorry-free).
+- lmm:modular-inverse-unitary-function (`Physicslib4.Modular.conj_exp_log_inv`): proved via `Real.log_inv`, `Complex.exp_conj`, `Complex.conj_I`, `Complex.conj_ofReal`, then `ring`.
+- lmm:modular-log-self-adjoint (`isSelfAdjoint_modularOperator_log`, VanDaele.lean): proved as `(isSelfAdjoint_functionalCalculus_of_real _ Real.measurable_log).1`.
+- 2026-11-14: proved conj_exp_log_inv, isSelfAdjoint_modularOperator_log.

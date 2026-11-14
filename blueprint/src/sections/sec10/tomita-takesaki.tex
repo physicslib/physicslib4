@@ -2673,6 +2673,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $\ell : \mathbb{R} \to \mathbb{R}$ be $\ell(\lambda) = \log\lambda$. Then $\log\Delta \equiv \ell(\Delta)$ is self-adjoint.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-real-closed, thrm:modular-operator-properties}
     $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}) and $\ell$ is real and measurable (Mathlib's \texttt{Real.measurable\_log}), so Lemma~\ref{lmm:fc-real-closed} applies.
 \end{proof}
@@ -3048,6 +3049,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     For $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $\overline{e_t(\iota^-(\lambda))} = e_t(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $\log(\lambda^{-1}) = -\log\lambda$ for every real $\lambda$ (\texttt{Real.log\_inv}), so $e_t(\iota^-(\lambda)) = e^{-it\log\lambda}$, whose conjugate is $e^{it\log\lambda}$ (\texttt{Complex.exp\_conj}, \texttt{Complex.conj\_ofReal}).
 \end{proof}
 
