@@ -257,3 +257,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-power-operators-multiplicative (`modularOperator_indicatorCpow_mul`): proved via `integral_mul` + `indicatorCpow_mul`, `integral_indicator` for p_0 = E_n; the other conjuncts follow by rewriting with these.
 - lmm:modular-spectral-projections-converge (`tendsto_modularSpectralProjection`): proved via dominated convergence (`tendsto_integral_apply_of_dominated`) with 1_{K_{n+1}} → 1_{(0,∞)}, limit identified by `modularOperator_functionalCalculus_indicator_Ioi`, index shifted by `tendsto_add_atTop_iff_nat`.
 - 2026-11-14: proved tendsto_modularSpectralProjection, modularOperator_indicatorCpow_mul.
+- lmm:modular-H0-dense (`dense_modularSpectralSubspace`): proved via `mem_closure_of_tendsto` with `tendsto_modularSpectralProjection`, eventually n ≥ 1, and idempotence E_n E_n = E_n from `modularSpectralProjection_nested` (m = n).
+- lmm:modular-power-unitary-group (modularUnitaryGroup_indicatorCpow): proved via Δ^{it} = ∫ e_t dμ, integral_mul and indicatorCpow_add_I_mul; E_n = p_{0,n}(Δ) gives commutation and range invariance.
+- 2026-11-14: proved dense_modularSpectralSubspace, modularUnitaryGroup_indicatorCpow.

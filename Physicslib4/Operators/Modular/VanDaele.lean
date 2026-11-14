@@ -250,7 +250,10 @@ theorem dense_modularSpectralSubspace {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) :
     Dense {ξ : H | ∃ n : ℕ, 1 ≤ n ∧
       spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] ξ = ξ} := by
-  sorry
+  refine fun ψ => mem_closure_of_tendsto (tendsto_modularSpectralProjection hM hΩ C hC ψ) ?_
+  filter_upwards [Filter.eventually_ge_atTop 1] with n hn
+  exact ⟨n, hn, congrArg (fun T : H →L[ℂ] H => T ψ)
+    (modularSpectralProjection_nested hM hΩ C hC hn le_rfl).1⟩
 
 /-! ### The functions `p_{z,n}`, `q_{z,n}` and `e_t` -/
 
@@ -482,7 +485,29 @@ theorem modularUnitaryGroup_indicatorCpow {M : Set (H →L[ℂ] H)} {Ω : H}
           p[(x : ℂ) + Complex.I * t, n] =
         (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap *
           (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[x, n] := by
-  sorry
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  obtain ⟨hem, hen, -, hU, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM hΩ C hC t
+  have he : e[t] ∈ Spectral.BddMeasurable ℝ := ⟨hem, 1, fun x => (hen x).le⟩
+  have hb : ∀ z : ℂ, p[z, n] ∈ Spectral.BddMeasurable ℝ := fun z =>
+    let ⟨hm, _, hbd⟩ := indicatorCpow_bounds hn z
+    ⟨hm, _, fun x => (hbd x).1⟩
+  have hl : ∀ z : ℂ, (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap *
+      μ.integral p[z, n] = μ.integral p[z + Complex.I * t, n] := fun z => by
+    rw [hU, ← μ.integral_mul he (hb z)]
+    exact congrArg _ (funext fun x => (indicatorCpow_add_I_mul hn z t x).symm)
+  have hr : ∀ z : ℂ, μ.integral p[z, n] *
+      (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap =
+      μ.integral p[z + Complex.I * t, n] := fun z => by
+    rw [hU, ← μ.integral_mul (hb z) he]
+    exact congrArg _ (funext fun x =>
+      ((indicatorCpow_add_I_mul hn z t x).trans (mul_comm _ _)).symm)
+  have h0 := (modularOperator_indicatorCpow_mul hM hΩ C hC hn 0 0).2.1
+  have hE : (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap * μ K[n] =
+      μ K[n] * (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap := by
+    rw [← h0, hl, hr]
+  refine ⟨hl z, hr z, hE, ?_, fun x => (hl x).symm⟩
+  rintro _ ⟨ψ, rfl⟩
+  exact ⟨modularUnitaryGroup hM hΩ C hC t ψ, (DFunLike.congr_fun hE ψ).symm⟩
 
 /-- For `1 ≤ n ≤ m` and `E_n ξ = ξ`, `p_{z,m}(Δ) ξ = p_{z,n}(Δ) ξ`.
 Blueprint: lmm:modular-power-consistent -/

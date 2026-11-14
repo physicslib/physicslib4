@@ -2746,6 +2746,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     $\mathcal{H}_0$ is dense in $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-spectral-projections-converge, def:projection-valued-measure}
     For $\psi \in \mathbf{H}$, $E_n(E_n\psi) = E_n\psi$ because $E_n$ is idempotent (Definition~\ref{def:projection-valued-measure}), so $E_n\psi \in \mathcal{H}_0$, and $E_n\psi \to \psi$ by Lemma~\ref{lmm:modular-spectral-projections-converge}; so $\psi$ lies in the closure of $\mathcal{H}_0$ (Mathlib's \texttt{mem\_closure\_of\_tendsto}).
 \end{proof}
@@ -2882,6 +2883,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $n \ge 1$, $z \in \mathbb{C}$ and $t \in \mathbb{R}$. Then $\Delta^{it}p_{z,n}(\Delta) = p_{z,n}(\Delta)\Delta^{it} = p_{z+it,n}(\Delta)$. In particular $\Delta^{it}E_n = E_n\Delta^{it}$, so $\Delta^{it}$ maps $\text{Range}(E_n)$ into itself, and $p_{x+it,n}(\Delta) = \Delta^{it}p_{x,n}(\Delta)$ for $x \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-unitary-group-fc, lmm:modular-power-function-shift, lmm:modular-power-function-bounds, lmm:modular-power-operators-multiplicative, prpstn:integral-multiplicative}
     $\Delta^{it} = \int e_t \, d\mu$ (Lemma~\ref{lmm:modular-unitary-group-fc}). Proposition~\ref{prpstn:integral-multiplicative}, the commutativity of pointwise multiplication, and Lemma~\ref{lmm:modular-power-function-shift} give $\Delta^{it}p_{z,n}(\Delta) = p_{z,n}(\Delta)\Delta^{it} = \int e_tp_{z,n} \, d\mu = p_{z+it,n}(\Delta)$. The case $z = 0$, with $p_{0,n}(\Delta) = E_n$ (Lemma~\ref{lmm:modular-power-operators-multiplicative}), gives $\Delta^{it}E_n = E_n\Delta^{it}$.
 \end{proof}
