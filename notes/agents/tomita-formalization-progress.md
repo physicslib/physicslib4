@@ -239,3 +239,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-power-function-restrict (`indicatorCpow_mul_indicator`): proved by case split on `x ∈ K[n]`, using `K[n] ⊆ K[m]` via `one_div_le_one_div_of_le`.
 - lmm:modular-power-taylor (`indicatorCpow_taylor`): proved by case split on `x ∈ K[n]`; on K_n rewrites the remainder as `x^z * (exp(L h) - 1 - L h)` via `Complex.cpow_add`/`cpow_def_of_ne_zero`/`ofReal_log`, then `Complex.norm_exp_sub_one_sub_id_le` and `cpow_of_mem_Icc`.
 - 2026-11-14: proved indicatorCpow_mul_indicator, indicatorCpow_taylor. Spectral support + scalar cpow lemmas of 5a done (10).
+- lmm:modular-inverse-scalar-identities (`indicator_Icc_inv`): proved by case split on the sign of x (`inv_le_inv₀`, `inv_le_comm₀`, `inv_nonpos`).
+- lmm:fc-bounded-re-im: proved `integral_eq_re_add_I_mul_im` (Polar.lean) via pointwise re/im decomposition and `ProjectionValuedMeasure.integral_add`/`integral_smul`.
+- 2026-11-14: proved indicator_Icc_inv, integral_eq_re_add_I_mul_im (Polar).

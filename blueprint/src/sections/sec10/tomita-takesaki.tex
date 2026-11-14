@@ -2988,6 +2988,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable, with $u = \operatorname{Re} f$, $v = \operatorname{Im} f$ and $\overline{f}(\lambda) = \overline{f(\lambda)}$. Then $u$ and $v$ are real, bounded and measurable, $f(A) = u(A) + i\,v(A)$ and $\overline{f}(A) = u(A) - i\,v(A)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:functional-calculus-bounded, thrm:operator-valued-integration}
     $u$ and $v$ are measurable (\texttt{Complex.measurable\_re.comp}, \texttt{Complex.measurable\_im.comp}) and bounded by the bound of $f$ (\texttt{Complex.abs\_re\_le\_norm}, \texttt{Complex.abs\_im\_le\_norm}), and $f = u + iv$, $\overline{f} = u - iv$ pointwise (\texttt{Complex.re\_add\_im}, \texttt{RCLike.conj\_eq\_re\_sub\_im}). All four functions are bounded, so their functional calculi are bounded integrals defined on all of $\mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}), and the bounded integral is linear (Theorem~\ref{thrm:operator-valued-integration}).
 \end{proof}
@@ -3023,6 +3024,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     For $n \ge 1$ and every $\lambda \in \mathbb{R}$, $1_{K_n}(\iota^-(\lambda)) = 1_{K_n}(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     If $\lambda \le 0$ then $\iota^-(\lambda) \le 0 < 1/n$ (\texttt{inv\_nonpos}), so neither side is $1$. If $\lambda > 0$ then $1/n \le \lambda^{-1} \le n$ if and only if $1/n \le \lambda \le n$ (\texttt{inv\_le\_comm₀}, \texttt{le\_inv\_comm₀}).
 \end{proof}
 

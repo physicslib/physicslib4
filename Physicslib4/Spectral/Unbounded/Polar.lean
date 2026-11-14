@@ -1515,7 +1515,25 @@ theorem integral_eq_re_add_I_mul_im {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A
       (spectralMeasure hA).integral (fun x => starRingEnd ℂ (f x)) =
         (spectralMeasure hA).integral (fun x => ((f x).re : ℂ)) -
           Complex.I • (spectralMeasure hA).integral (fun x => ((f x).im : ℂ)) := by
-  sorry
+  obtain ⟨hm, C, hC⟩ := hf
+  have hu : (fun x => ((f x).re : ℂ)) ∈ BddMeasurable ℝ :=
+    ⟨Complex.measurable_ofReal.comp (Complex.measurable_re.comp hm), C, fun x => by
+      simpa [Complex.norm_real] using (Complex.abs_re_le_norm (f x)).trans (hC x)⟩
+  have hv : (fun x => ((f x).im : ℂ)) ∈ BddMeasurable ℝ :=
+    ⟨Complex.measurable_ofReal.comp (Complex.measurable_im.comp hm), C, fun x => by
+      simpa [Complex.norm_real] using (Complex.abs_im_le_norm (f x)).trans (hC x)⟩
+  have hIv := (BddMeasurable ℝ).smul_mem Complex.I hv
+  have hIv' := (BddMeasurable ℝ).smul_mem (-Complex.I) hv
+  have h1 : f = (fun x => ((f x).re : ℂ)) + Complex.I • (fun x => ((f x).im : ℂ)) := by
+    funext x; simp [mul_comm Complex.I, Complex.re_add_im]
+  have h2 : (fun x => starRingEnd ℂ (f x)) =
+      (fun x => ((f x).re : ℂ)) + (-Complex.I) • (fun x => ((f x).im : ℂ)) := by
+    funext x; apply Complex.ext <;> simp
+  refine ⟨hu, hv, ?_, ?_⟩
+  · conv_lhs => rw [h1]
+    rw [(spectralMeasure hA).integral_add hu hIv, (spectralMeasure hA).integral_smul _ hv]
+  · rw [h2, (spectralMeasure hA).integral_add hu hIv', (spectralMeasure hA).integral_smul _ hv,
+      neg_smul, sub_eq_add_neg]
 
 /--
 For an antiunitary `W`, a self-adjoint `A` and bounded measurable `f`,

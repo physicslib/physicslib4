@@ -511,7 +511,15 @@ theorem modularConjugation_integral_modularConjugation {M : Set (H →L[ℂ] H)}
 Blueprint: lmm:modular-inverse-scalar-identities -/
 theorem indicator_Icc_inv {n : ℕ} (hn : 1 ≤ n) (x : ℝ) :
     (K[n]).indicator (1 : ℝ → ℂ) x⁻¹ = (K[n]).indicator (1 : ℝ → ℂ) x := by
-  sorry
+  have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
+  have hmem : x⁻¹ ∈ K[n] ↔ x ∈ K[n] := by
+    simp only [Set.mem_Icc, one_div]
+    rcases le_or_gt x 0 with hx | hx
+    · have := inv_pos.2 hn0
+      constructor <;> rintro ⟨h1, -⟩ <;> [linarith [inv_nonpos.2 hx]; linarith]
+    · rw [inv_le_inv₀ hn0 hx, inv_le_comm₀ hx hn0]
+      exact And.comm
+  simp only [Set.indicator_apply, hmem, Pi.one_apply]
 
 /-- `conj (p_{z,n}(ι⁻(λ))) = p_{-conj z,n}(λ)`.
 Blueprint: lmm:modular-inverse-power-function -/
