@@ -294,3 +294,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:tomita-adjoint-on-commutant (`tomitaAdjoint_apply_of_mem_centralizer`, VanDaele.lean): proved via `mem_tomitaAdjoint_of_mem_closure_graph` + `subset_closure`, `mem_tomitaAdjoint_iff_modularOperatorInvSqrt`, `modularConjugation_involution`.
 - lmm:van-daele-element (`exists_vanDaele_element`): proved via `takesaki_lemma` at z = -l⁻² on a'*, scaled by -l⁻¹ (`vanDaele_resolvent_point`, `modularOperator_vanDaeleG_eq_resolvent`).
 - 2026-11-14: proved tomitaAdjoint_apply_of_mem_centralizer, exists_vanDaele_element.
+- lmm:van-daele-element-formulas (`vanDaele_element_formulas`): proved via `tomitaAdjoint_apply_of_mem_centralizer` on star a' (star-closure of M'), `modularOperator_vanDaeleG_domains`, `modularOperator_vanDaele_products`.
+- lmm:van-daele-commutant-equation (`exists_isVanDaeleTriple`): proved from `exists_vanDaele_element`, `vanDaele_element_formulas`, S = JΔ^{1/2}, S* = JΔ^{-1/2}, partition of unity and J² = 1.
+- 2026-11-14: proved vanDaele_element_formulas (ha unused), exists_isVanDaeleTriple (Jones Lemma 13.1.5).

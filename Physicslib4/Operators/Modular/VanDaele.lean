@@ -1236,7 +1236,14 @@ theorem vanDaele_element_formulas {M : Set (H →L[ℂ] H)} {Ω : H}
         modularOperatorInvSqrt hM hΩ C hC ⟨a Ω, h₂⟩ =
           (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l)
             (modularConjugation hM hΩ C hC (a' Ω)) := by
-  sorry
+  obtain ⟨-, h, -, hJ⟩ := tomitaAdjoint_apply_of_mem_centralizer hM hΩ C hC
+    ((isVonNeumannSet_centralizer hM).1.1 _ ha')
+  rw [star_star] at hJ
+  obtain ⟨h₁, h₂, e₁, e₂⟩ := modularOperator_vanDaeleG_domains hM hΩ C hC hl ⟨_, h⟩
+  have e := ((modularOperator_vanDaele_products hM hΩ C hC hl).2 ⟨_, h⟩).2
+  simp only [hJ] at e e₁ e₂
+  rw [← haΩ] at h₁ h₂ e
+  exact ⟨h₁, h₂, e.symm, by convert e₁ using 3, by convert e₂ using 3⟩
 
 /-- For `λ > 0` and `a' ∈ M′` there is `a` with `(λ, a', a)` a van Daele triple,
 `‖a‖ ≤ ‖a'‖ / 2` and `a Ω = g_λ(Δ) a'* Ω`.
@@ -1248,7 +1255,21 @@ theorem exists_isVanDaeleTriple {M : Set (H →L[ℂ] H)} {Ω : H}
     ∃ a : H →L[ℂ] H, IsVanDaeleTriple M Ω C l a' a ∧ ‖a‖ ≤ ‖a'‖ / 2 ∧
       a Ω = (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
         (vanDaeleG l) (star a' Ω) := by
-  sorry
+  obtain ⟨a, ha, haΩ, hn⟩ := exists_vanDaele_element hM hΩ C hC hl ha'
+  obtain ⟨h₁, h₂, -, e₁, e₂⟩ := vanDaele_element_formulas hM hΩ C hC hl ha' ha haΩ
+  obtain ⟨hdom, hS⟩ := tomitaOperator_eq_modularConjugation_sqrt hM hΩ C hC
+  have hS1 : a Ω ∈ (linearizedTomitaPre M Ω C).closure.domain := hdom ▸ h₁
+  obtain ⟨hS', e₃⟩ :=
+    (mem_tomitaAdjoint_iff_modularOperatorInvSqrt hM hΩ C hC (a Ω) _).1.2 ⟨h₂, rfl⟩
+  refine ⟨a, ⟨hl, ha', ha, hS1, hS', ?_⟩, hn, haΩ⟩
+  set J := modularConjugation hM hΩ C hC
+  have hp := congrArg (fun T => T (J (a' Ω)))
+    (modularOperator_vanDaele_partition_of_unity hM hΩ C hC hl)
+  simp only [add_apply, smul_apply, one_apply_eq_self] at hp
+  have hsm : ∀ (r : ℝ) x, (r : ℂ) • J x = J ((r : ℂ) • x) := fun r x => by
+    rw [J.map_smulₛₗ, Complex.conj_ofReal]
+  rw [e₃, hS _ hS1 h₁, e₁, e₂, hsm, ← Complex.ofReal_inv, hsm, ← map_add, Complex.ofReal_inv, hp,
+    (modularConjugation_involution hM hΩ C hC).1]
 
 /-! ### Van Daele's approximation and sesquilinear identities -/
 

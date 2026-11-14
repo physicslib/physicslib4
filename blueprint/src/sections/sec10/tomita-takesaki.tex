@@ -3284,6 +3284,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-adjoint-on-commutant, lmm:commutant-von-neumann-algebra, lmm:van-daele-fc-products, lmm:van-daele-g-domains}
     Let $\psi = a'^*\Omega$. Since $a'^* \in \mathcal{M}'$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}) and $a'^{**} = a'$ (\texttt{star\_star}), Lemma~\ref{lmm:tomita-adjoint-on-commutant} gives $\psi \in \text{Dom}(\Delta^{-1/2})$ and $\Delta^{-1/2}\psi = J(a'\Omega) = \phi$. The first identity is $g_\lambda(\Delta)\psi = v_\lambda(\Delta)\Delta^{-1/2}\psi$ (Lemma~\ref{lmm:van-daele-fc-products}); the domain statement and the other two are Lemma~\ref{lmm:van-daele-g-domains}.
 \end{proof}
@@ -3296,6 +3297,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     Let $\lambda > 0$ and $a' \in \mathcal{M}'$. There is $a \in \mathcal{B}(\mathbf{H})$ such that $(\lambda, a', a)$ is a van Daele triple (Definition~\ref{def:van-daele-triple}), $\|a\| \le \|a'\|/2$ and $a\Omega = g_\lambda(\Delta)a'^*\Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-element, lmm:van-daele-element-formulas, lmm:van-daele-partition-of-unity, thrm:modular-conjugation-polar, crllr:tomita-adjoint-polar, thrm:modular-conjugation-involution, def:van-daele-k, def:van-daele-triple}
     Take $a$ from Lemma~\ref{lmm:van-daele-element} and $\phi = J(a'\Omega)$. By Lemma~\ref{lmm:van-daele-element-formulas}, $a\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2}) = \text{Dom}(S) \cap \text{Dom}(S^*)$, and $S(a\Omega) = J\Delta^{1/2}a\Omega = Jk_\lambda(\Delta)\phi$, $S^*(a\Omega) = J\Delta^{-1/2}a\Omega = Jg_\lambda(\Delta)\phi$ (Theorem~\ref{thrm:modular-conjugation-polar}, Corollary~\ref{crllr:tomita-adjoint-polar}). $J$ is additive and commutes with real scalars ($\overline{\lambda} = \lambda$), so $\lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega) = J\big((\lambda k_\lambda(\Delta) + \lambda^{-1}g_\lambda(\Delta))\phi\big) = J\phi$ by Lemma~\ref{lmm:van-daele-partition-of-unity}, and $J\phi = J(J(a'\Omega)) = a'\Omega$ (Theorem~\ref{thrm:modular-conjugation-involution}). Since $a \in \mathcal{M}$ and $\|a\| \le \|a'\|/2$ (Lemma~\ref{lmm:van-daele-element}), $(\lambda, a', a)$ is a van Daele triple with the stated properties.
 \end{proof}
