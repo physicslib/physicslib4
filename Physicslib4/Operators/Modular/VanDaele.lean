@@ -873,7 +873,14 @@ theorem tomitaOperator_apply_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {c : H →L[ℂ] H} (hc : c ∈ M) :
     ∃ h : c Ω ∈ (linearizedTomitaPre M Ω C).closure.domain,
       tomitaOperator M Ω C ⟨c Ω, h⟩ = star c Ω := by
-  sorry
+  have hmem : (c Ω, star c Ω) ∈ Set.range (fun x : (linearizedTomitaPre M Ω C).closure.domain =>
+      ((x : H), tomitaOperator M Ω C x)) := by
+    rw [tomitaOperator_graph_eq_closure hM hΩ C hC]
+    exact subset_closure ⟨⟨c Ω, Submodule.mem_map_of_mem (Submodule.subset_span hc)⟩,
+      Prod.ext rfl ((tomitaPre_apply hM hΩ).1 c hc)⟩
+  obtain ⟨⟨y, hy⟩, hx⟩ := hmem
+  obtain ⟨rfl, h2⟩ := Prod.mk.inj hx
+  exact ⟨hy, h2⟩
 
 /-! ### Conjugation of bounded operators by `J` and van Daele triples -/
 
@@ -970,7 +977,10 @@ theorem modularOperator_functionalCalculus_congr_pos {M : Set (H →L[ℂ] H)} {
         integralDomain (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)) h ∧
       functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) f =
         functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) h := by
-  sorry
+  have hN := modularOperator_spectralMeasure_Iic_zero hM hΩ C hC
+  have hfh' : ∀ t ∉ Set.Iic (0 : ℝ), f t = h t := fun t ht => hfh t (not_le.1 ht)
+  exact ⟨integralDomain_congr_of_null _ measurableSet_Iic hN hfh',
+    pmapIntegral_congr_of_null _ hf hh measurableSet_Iic hN hfh'⟩
 
 /-- For `λ > 0` and `z = -λ⁻²`: `z ∉ [0, ∞)`, `√(2(|z| - Re z)) = 2λ⁻¹`, and
 `-λ⁻¹ r_z(t) = g_λ(t)` for `t > 0`.

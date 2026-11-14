@@ -310,6 +310,7 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
     Let $c \in \mathcal{M}$. Then $c\Omega \in \text{Dom}(S)$ and $S(c\Omega) = c^*\Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-pre-operators-apply, lmm:tomita-operator-independent-of-c}
     By Lemma~\ref{lmm:tomita-pre-operators-apply}, $c\Omega \in \text{Dom}(S_0)$ and $S_0(c\Omega) = c^*\Omega$, so $(c\Omega, c^*\Omega) \in \Gamma(S_0)$. This set is contained in its closure (\texttt{subset\_closure}), which is $\Gamma(S)$ by Lemma~\ref{lmm:tomita-operator-independent-of-c}.
 \end{proof}
@@ -3167,6 +3168,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     Let $f, h : \mathbb{R} \to \mathbb{C}$ be measurable with $f(t) = h(t)$ for every $t > 0$. Then $W_f = W_h$ and $f(\Delta) = h(\Delta)$, including domains.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-spectral-support, lmm:integral-ignores-null-sets}
     $f$ and $h$ agree off the measurable set $N = (-\infty, 0]$ (\texttt{measurableSet\_Iic}), and $\mu(N) = 0$ by Lemma~\ref{lmm:modular-spectral-support}. Apply Lemma~\ref{lmm:integral-ignores-null-sets} to $\mu = \mu^\Delta$.
 \end{proof}

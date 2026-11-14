@@ -283,3 +283,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-14: proved `vanDaele_resolvent_point` (lmm:van-daele-resolvent-point) in VanDaele.lean (z = -l⁻² cast to a negative real; field_simp/ring).
 - `modularOperator_vanDaele_products` (lmm:van-daele-fc-products): proved via `integral_apply_pmapIntegral` + `pmapIntegral_of_bddMeasurable` and the pointwise `vanDaele_functions_identities`.
 - 2026-11-14: proved vanDaele_resolvent_point, modularOperator_vanDaele_products.
+- lmm:tomita-operator-on-algebra (`tomitaOperator_apply_of_mem`, VanDaele.lean): proved via `tomitaOperator_graph_eq_closure` + `tomitaPre_apply` + `subset_closure`.
+- lmm:modular-fc-congr-positive: proved `modularOperator_functionalCalculus_congr_pos` (VanDaele.lean) via `integralDomain_congr_of_null` and `pmapIntegral_congr_of_null` on the null set `Iic 0`.
+- 2026-11-14: proved tomitaOperator_apply_of_mem, modularOperator_functionalCalculus_congr_pos.
