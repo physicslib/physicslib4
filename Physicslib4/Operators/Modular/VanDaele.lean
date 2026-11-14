@@ -1025,7 +1025,28 @@ theorem modularOperator_vanDaeleG_eq_resolvent {M : Set (H →L[ℂ] H)} {Ω : H
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l) =
         -(l⁻¹ : ℂ) • (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
           ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (-((l : ℂ) ^ 2)⁻¹ - t)⁻¹) := by
-  sorry
+  set hA := modularOperator_isSelfAdjoint hM hΩ C hC
+  obtain ⟨hz, -, hpt⟩ := vanDaele_resolvent_point hl
+  obtain ⟨hd, hrm, hrb, -, -⟩ := resolventFunction_properties hz
+  obtain ⟨hgm, -, -, hgb⟩ := vanDaele_functions_bounded hl
+  have hr : ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (-((l : ℂ) ^ 2)⁻¹ - t)⁻¹) ∈
+      Spectral.BddMeasurable ℝ := ⟨hrm, _, hrb⟩
+  have hg : vanDaeleG l ∈ Spectral.BddMeasurable ℝ := by
+    refine ⟨hgm, l, fun t => ?_⟩
+    obtain ⟨⟨him, hre0, hrel⟩, -, -⟩ := hgb t
+    calc ‖vanDaeleG l t‖ ≤ |(vanDaeleG l t).re| + |(vanDaeleG l t).im| :=
+          Complex.norm_le_abs_re_add_abs_im _
+      _ ≤ l := by rw [him, abs_zero, add_zero, abs_of_nonneg hre0]; exact hrel
+  have hsr := (Spectral.BddMeasurable ℝ).smul_mem (-(l⁻¹ : ℂ)) hr
+  have hfc := (modularOperator_functionalCalculus_congr_pos hM hΩ C hC hgm hsr.1
+    (fun t ht => (hpt t ht).symm)).2
+  have h1 := (functionalCalculus_of_bddMeasurable hA hg).2
+  refine ⟨h1, ?_⟩
+  rw [h1, (functionalCalculus_of_bddMeasurable hA hsr).2] at hfc
+  rw [← (spectralMeasure hA).integral_smul _ hr]
+  ext x
+  obtain ⟨-, h⟩ := LinearPMap.ext_iff.1 hfc
+  exact h (x := x) (hf := Submodule.mem_top) (hg := Submodule.mem_top)
 
 /-- For `ξ ∈ Dom Δ^{1/2}`, `g_λ(Δ) Δ^{1/2} ξ = v_λ(Δ) ξ` and `v_λ(Δ) Δ^{1/2} ξ = k_λ(Δ) ξ`; for
 `ξ ∈ Dom Δ^{-1/2}`, `k_λ(Δ) Δ^{-1/2} ξ = v_λ(Δ) ξ` and `v_λ(Δ) Δ^{-1/2} ξ = g_λ(Δ) ξ`.
@@ -1101,7 +1122,28 @@ theorem modularOperator_vanDaele_partition_of_unity {M : Set (H →L[ℂ] H)} {�
           (vanDaeleK l) +
         (l⁻¹ : ℂ) • (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
           (vanDaeleG l) = 1 := by
-  sorry
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  obtain ⟨hgm, -, hkm, hb⟩ := vanDaele_functions_bounded hl
+  have bdd : ∀ {u : ℝ → ℂ} {c : ℝ}, Measurable u →
+      (∀ t, (u t).im = 0 ∧ 0 ≤ (u t).re ∧ (u t).re ≤ c) → u ∈ Spectral.BddMeasurable ℝ :=
+    fun hm hu => ⟨hm, _, fun t => (Complex.norm_le_abs_re_add_abs_im _).trans (by
+      rw [(hu t).1, abs_zero, add_zero, abs_of_nonneg (hu t).2.1]; exact (hu t).2.2)⟩
+  have hg := bdd hgm fun t => (hb t).1
+  have hk := bdd hkm fun t => (hb t).2.2
+  have hind : (Set.Ioi (0 : ℝ)).indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨measurable_const.indicator measurableSet_Ioi, 1, fun t => by
+      by_cases ht : t ∈ Set.Ioi (0 : ℝ) <;> simp [ht]⟩
+  have hsum : (l : ℂ) • vanDaeleK l + (l⁻¹ : ℂ) • vanDaeleG l =
+      (Set.Ioi (0 : ℝ)).indicator 1 :=
+    funext fun t => (vanDaele_functions_identities hl t).2.2.2.2
+  have h := modularOperator_functionalCalculus_indicator_Ioi hM hΩ C hC
+  rw [functionalCalculus, pmapIntegral_of_bddMeasurable _ hind] at h
+  rw [← μ.integral_smul _ hk, ← μ.integral_smul _ hg,
+    ← μ.integral_add ((Spectral.BddMeasurable ℝ).smul_mem _ hk)
+      ((Spectral.BddMeasurable ℝ).smul_mem _ hg), hsum]
+  ext x
+  obtain ⟨-, he⟩ := LinearPMap.ext_iff.1 h
+  simpa using he (x := x) (hf := trivial) (hg := trivial)
 
 /-- For `b' ∈ M′`, `b' Ω ∈ Dom S* = Dom Δ^{-1/2}`, `S* (b' Ω) = J Δ^{-1/2} b' Ω = b'* Ω` and
 `Δ^{-1/2} b' Ω = J (b'* Ω)`.
