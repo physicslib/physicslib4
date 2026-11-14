@@ -77,6 +77,7 @@ import Physicslib4.Operators.Modular.Modular
 import Physicslib4.Operators.Modular.Takesaki
 import Physicslib4.Operators.Modular.Tomita
 import Physicslib4.Operators.Modular.TomitaAdjoint
+import Physicslib4.Operators.Modular.VanDaele
 import Physicslib4.Operators.ReducingSubspace
 import Physicslib4.Spacetime.AlongPath
 import Physicslib4.Spacetime.Basic

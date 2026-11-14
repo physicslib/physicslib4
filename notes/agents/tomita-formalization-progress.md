@@ -205,3 +205,10 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-13: proved tendsto_stripVerticalIntegral, strip_boundary_integral_eq_zero.
 - thrm:strip-formula: proved `Physicslib4.strip_formula` from strip_boundary_integral_eq_zero, strip_boundary_integral_sub and strip_boundary_integrable (integral_add, integral_div, linear_combination).
 - 2026-11-13: proved strip_formula; dropped unused hT from strip_rectangle_subset and strip_rectangle_identity. Stage 4 complete: StripFormula.lean has no sorry and no warnings (only Mathlib module-system import notices); full build OK.
+
+## Stage 5 (statements)
+
+- 2026-11-14: defs JTJ and van Daele triple added (approved), pushed (7d677ae). 5a batch i (23 nodes, spectral support .. crllr:modular-H0-tomita-domains) started in Operators/Modular/VanDaele.lean.
+- 2026-11-14: 5a batch i statements written in Operators/Modular/VanDaele.lean (24 nodes incl. def modularUnitaryGroup, all sorry); module builds; metadata recorded, status formalized.
+- 2026-11-14: 5a remaining 12 nodes (lmm:modular-power-difference-bound .. lmm:modular-conjugation-powers) written, all sorry: 10 in Operators/Modular/VanDaele.lean, lmm:fc-bounded-re-im and lmm:antiunitary-conjugate-bounded-fc in Spectral/Unbounded/Polar.lean; J-conjugation stated pointwise; module builds; metadata recorded, status formalized.
+- 2026-11-14: stage 5a statements reviewed: PASS (36 labels; modularUnitaryGroup = expUnitary of log Δ; arbitrary pair throughout). Optional: unused hn in indicatorCpow_conj, conj_indicatorCpow_inv, indicator_Icc_inv, indicatorCpow_mul_indicator.

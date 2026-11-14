@@ -1501,6 +1501,33 @@ theorem antiunitaryConj_positive_injective (W : H ≃ₗᵢ⋆[ℂ] H) {A : H �
     rw [hA, Submodule.mem_bot, LinearIsometryEquiv.map_eq_zero_iff] at hmem
     simpa using hmem
 
+/--
+For bounded measurable `f` with `u = Re f`, `v = Im f`: `u`, `v` are bounded measurable,
+`f(A) = u(A) + i v(A)` and `f̄(A) = u(A) - i v(A)`, written as bounded integrals.
+Blueprint: lmm:fc-bounded-re-im
+-/
+theorem integral_eq_re_add_I_mul_im {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {f : ℝ → ℂ}
+    (hf : f ∈ BddMeasurable ℝ) :
+    (fun x => ((f x).re : ℂ)) ∈ BddMeasurable ℝ ∧ (fun x => ((f x).im : ℂ)) ∈ BddMeasurable ℝ ∧
+      (spectralMeasure hA).integral f =
+        (spectralMeasure hA).integral (fun x => ((f x).re : ℂ)) +
+          Complex.I • (spectralMeasure hA).integral (fun x => ((f x).im : ℂ)) ∧
+      (spectralMeasure hA).integral (fun x => starRingEnd ℂ (f x)) =
+        (spectralMeasure hA).integral (fun x => ((f x).re : ℂ)) -
+          Complex.I • (spectralMeasure hA).integral (fun x => ((f x).im : ℂ)) := by
+  sorry
+
+/--
+For an antiunitary `W`, a self-adjoint `A` and bounded measurable `f`,
+`W f(A) W⁻¹ ψ = f̄(W A W⁻¹) ψ`, written as bounded integrals.
+Blueprint: lmm:antiunitary-conjugate-bounded-fc
+-/
+theorem integral_antiunitaryConj (W : H ≃ₗᵢ⋆[ℂ] H) {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
+    ∃ h : IsSelfAdjoint (antiunitaryConj W A), ∀ f : ℝ → ℂ, f ∈ BddMeasurable ℝ → ∀ ψ : H,
+      W ((spectralMeasure hA).integral f (W.symm ψ)) =
+        (spectralMeasure h).integral (fun x => starRingEnd ℂ (f x)) ψ := by
+  sorry
+
 end Unbounded
 end Spectral
 end Physicslib4

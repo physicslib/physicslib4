@@ -2639,7 +2639,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[$\Delta$ has no Spectrum in {$(-\infty, 0]$}]
     \label{lmm:modular-spectral-support}
+    \lean{Physicslib4.Modular.modularOperator_spectralMeasure_Iic_zero}
     \uses{def:modular-operator, def:spectral-measure}
+    \leanok
     $\mu((-\infty, 0]) = 0$.
 \end{lemma}
 \begin{proof}
@@ -2649,7 +2651,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[$1_{(0, \infty)}(\Delta) = \mathbf{1}$]
     \label{lmm:modular-indicator-positive-one}
+    \lean{Physicslib4.Modular.modularOperator_functionalCalculus_indicator_Ioi}
     \uses{def:modular-operator, def:hall-10.5}
+    \leanok
     $1_{(0, \infty)}(\Delta) = \mathbf{1}$.
 \end{lemma}
 \begin{proof}
@@ -2659,7 +2663,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[The Logarithm of $\Delta$]
     \label{lmm:modular-log-self-adjoint}
+    \lean{Physicslib4.Modular.isSelfAdjoint_modularOperator_log}
     \uses{def:modular-operator, def:hall-10.5}
+    \leanok
     Let $\ell : \mathbb{R} \to \mathbb{R}$ be $\ell(\lambda) = \log\lambda$. Then $\log\Delta \equiv \ell(\Delta)$ is self-adjoint.
 \end{lemma}
 \begin{proof}
@@ -2669,13 +2675,17 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{definition}[The Modular Unitary Group]
     \label{def:modular-unitary-group}
+    \lean{Physicslib4.Modular.modularUnitaryGroup}
     \uses{def:modular-operator, def:exp-unitary-group, lmm:modular-log-self-adjoint}
+    \leanok
     For $t \in \mathbb{R}$, $\Delta^{it} \equiv e^{it\log\Delta}$, the unitary of Definition~\ref{def:exp-unitary-group} for the self-adjoint operator $\log\Delta$ (Lemma~\ref{lmm:modular-log-self-adjoint}).
 \end{definition}
 
 \begin{lemma}[$\Delta^{it}$ is a Strongly Continuous Unitary Group]
     \label{lmm:modular-unitary-group-props}
+    \lean{Physicslib4.Modular.modularUnitaryGroup_properties}
     \uses{def:modular-unitary-group, def:hall-10.11}
+    \leanok
     Each $\Delta^{it}$ is unitary, $\Delta^{i0} = \mathbf{1}$, $\Delta^{i(s+t)} = \Delta^{is}\Delta^{it}$ for $s, t \in \mathbb{R}$, $t \mapsto \Delta^{it}$ is strongly continuous, and $(\Delta^{it})^* = (\Delta^{it})^{-1} = \Delta^{-it}$.
 \end{lemma}
 \begin{proof}
@@ -2685,7 +2695,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[$\Delta^{it}$ as a Bounded Function of $\Delta$]
     \label{lmm:modular-unitary-group-fc}
+    \lean{Physicslib4.Modular.modularUnitaryGroup_eq_functionalCalculus}
     \uses{def:modular-unitary-group, def:hall-10.5}
+    \leanok
     For $t \in \mathbb{R}$, $e_t$ is measurable with $|e_t(\lambda)| = 1$ for every $\lambda$, and $\Delta^{it} = e_t(\Delta) = \int e_t \, d\mu$. For $\lambda > 0$, $e_t(\lambda) = \lambda^{it}$.
 \end{lemma}
 \begin{proof}
@@ -2695,7 +2707,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[The Projections $E_n$ Increase]
     \label{lmm:modular-spectral-projections-nested}
+    \lean{Physicslib4.Modular.modularSpectralProjection_nested}
     \uses{def:modular-operator, def:spectral-measure}
+    \leanok
     For integers $1 \le n \le m$, $E_mE_n = E_nE_m = E_n$. Hence $E_n\xi = \xi$ implies $E_m\xi = \xi$, and $\mathcal{H}_0$ is a linear subspace: if $E_n\xi = \xi$ and $E_m\eta = \eta$, then $E_k(\alpha\xi + \beta\eta) = \alpha\xi + \beta\eta$ with $k = \max(n, m)$.
 \end{lemma}
 \begin{proof}
@@ -2705,7 +2719,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[$E_n \to \mathbf{1}$ Strongly]
     \label{lmm:modular-spectral-projections-converge}
+    \lean{Physicslib4.Modular.tendsto_modularSpectralProjection}
     \uses{def:modular-operator, def:spectral-measure}
+    \leanok
     For every $\psi \in \mathbf{H}$, $E_n\psi \to \psi$ as $n \to \infty$.
 \end{lemma}
 \begin{proof}
@@ -2715,7 +2731,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[$\mathcal{H}_0$ is Dense]
     \label{lmm:modular-H0-dense}
+    \lean{Physicslib4.Modular.dense_modularSpectralSubspace}
     \uses{def:modular-operator, def:spectral-measure}
+    \leanok
     $\mathcal{H}_0$ is dense in $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -2725,6 +2743,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[Logarithms on $K_n$]
     \label{lmm:log-power-on-interval}
+    \lean{Physicslib4.Modular.pos_abs_log_le_of_mem_Icc}
+    \leanok
     Let $n \ge 1$ and $\lambda \in K_n$. Then $\lambda > 0$ and $|\log\lambda| \le \log n$.
 \end{lemma}
 \begin{proof}
@@ -2733,6 +2753,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[Powers on $K_n$]
     \label{lmm:cpow-on-interval}
+    \lean{Physicslib4.Modular.cpow_of_mem_Icc}
+    \leanok
     Let $n \ge 1$, $\lambda \in K_n$ and $z \in \mathbb{C}$. Then $\lambda^z = \exp(z\log\lambda)$ and $|\lambda^z| \le n^{|\operatorname{Re} z|}$.
 \end{lemma}
 \begin{proof}
@@ -2742,6 +2764,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[The Functions $p_{z,n}$ and $q_{z,n}$ are Bounded]
     \label{lmm:modular-power-function-bounds}
+    \lean{Physicslib4.Modular.indicatorCpow_bounds}
+    \leanok
     Let $n \ge 1$ and $z \in \mathbb{C}$. Then $p_{z,n}$ and $q_{z,n}$ are measurable, $|p_{z,n}(\lambda)| \le n^{|\operatorname{Re} z|}$ and $|q_{z,n}(\lambda)| \le (\log n)\, n^{|\operatorname{Re} z|}$ for every $\lambda \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -2751,6 +2775,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[Multiplicativity of $p_{z,n}$]
     \label{lmm:modular-power-function-identities}
+    \lean{Physicslib4.Modular.indicatorCpow_mul}
+    \leanok
     For $n \ge 1$, $z, w \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $p_{z,n}(\lambda)\,p_{w,n}(\lambda) = p_{z+w,n}(\lambda)$. Moreover $p_{0,n} = 1_{K_n}$.
 \end{lemma}
 \begin{proof}
@@ -2760,6 +2786,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[Conjugation of $p_{z,n}$]
     \label{lmm:modular-power-function-conj}
+    \lean{Physicslib4.Modular.indicatorCpow_conj}
+    \leanok
     For $n \ge 1$, $z \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $\overline{p_{z,n}(\lambda)} = p_{\overline{z},n}(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -2769,7 +2797,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[The Shift $p_{z+it,n} = e_t\,p_{z,n}$]
     \label{lmm:modular-power-function-shift}
+    \lean{Physicslib4.Modular.indicatorCpow_add_I_mul}
     \uses{lmm:modular-unitary-group-fc}
+    \leanok
     For $n \ge 1$, $z \in \mathbb{C}$, $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $p_{z+it,n}(\lambda) = e_t(\lambda)\,p_{z,n}(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -2779,6 +2809,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[Restriction of $p_{z,m}$ to $K_n$]
     \label{lmm:modular-power-function-restrict}
+    \lean{Physicslib4.Modular.indicatorCpow_mul_indicator}
+    \leanok
     For integers $1 \le n \le m$, $z \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $p_{z,m}(\lambda)\,1_{K_n}(\lambda) = p_{z,n}(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -2787,6 +2819,8 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[A Uniform Taylor Estimate]
     \label{lmm:modular-power-taylor}
+    \lean{Physicslib4.Modular.indicatorCpow_taylor}
+    \leanok
     Let $n \ge 1$, $z, h \in \mathbb{C}$ with $|h| \log n \le 1$. Then for every $\lambda \in \mathbb{R}$,
     \begin{align}
         \left| p_{z+h,n}(\lambda) - p_{z,n}(\lambda) - h\,q_{z,n}(\lambda) \right| \le n^{|\operatorname{Re} z|} (\log n)^2 |h|^2.
@@ -2799,7 +2833,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[The Bounded Operators $p_{z,n}(\Delta)$]
     \label{lmm:modular-power-operators}
+    \lean{Physicslib4.Modular.modularOperator_indicatorCpow}
     \uses{def:modular-operator, def:hall-10.5, lmm:modular-power-function-bounds}
+    \leanok
     Let $n \ge 1$ and $z \in \mathbb{C}$. Then $p_{z,n}(\Delta)$ is a bounded operator defined on all of $\mathbf{H}$, equal to $\int p_{z,n} \, d\mu$, with $\|p_{z,n}(\Delta)\| \le n^{|\operatorname{Re} z|}$ and $p_{z,n}(\Delta)^* = p_{\overline{z},n}(\Delta)$. In particular $\|p_{z,n}(\Delta)\| \le n^{1/2}$ when $|\operatorname{Re} z| \le \tfrac{1}{2}$.
 \end{lemma}
 \begin{proof}
@@ -2809,7 +2845,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[Products of the $p_{z,n}(\Delta)$]
     \label{lmm:modular-power-operators-multiplicative}
+    \lean{Physicslib4.Modular.modularOperator_indicatorCpow_mul}
     \uses{lmm:modular-power-operators}
+    \leanok
     Let $n \ge 1$ and $z, w \in \mathbb{C}$. Then $p_{z,n}(\Delta)\,p_{w,n}(\Delta) = p_{z+w,n}(\Delta)$ and $p_{0,n}(\Delta) = E_n$. Consequently $E_n\,p_{z,n}(\Delta) = p_{z,n}(\Delta)\,E_n = p_{z,n}(\Delta)$, so $p_{z,n}(\Delta)$ maps $\mathbf{H}$ into $\text{Range}(E_n)$, and $p_{z,n}(\Delta)\,p_{-z,n}(\Delta)\xi = \xi$ whenever $E_n\xi = \xi$.
 \end{lemma}
 \begin{proof}
@@ -2819,7 +2857,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[$\Delta^{it}$ and the $p_{z,n}(\Delta)$]
     \label{lmm:modular-power-unitary-group}
+    \lean{Physicslib4.Modular.modularUnitaryGroup_indicatorCpow}
     \uses{lmm:modular-power-operators, def:modular-unitary-group}
+    \leanok
     Let $n \ge 1$, $z \in \mathbb{C}$ and $t \in \mathbb{R}$. Then $\Delta^{it}p_{z,n}(\Delta) = p_{z,n}(\Delta)\Delta^{it} = p_{z+it,n}(\Delta)$. In particular $\Delta^{it}E_n = E_n\Delta^{it}$, so $\Delta^{it}$ maps $\text{Range}(E_n)$ into itself, and $p_{x+it,n}(\Delta) = \Delta^{it}p_{x,n}(\Delta)$ for $x \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -2829,7 +2869,9 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
 
 \begin{lemma}[$p_{z,n}(\Delta)$ does not Depend on $n$ on $\text{Range}(E_n)$]
     \label{lmm:modular-power-consistent}
+    \lean{Physicslib4.Modular.modularOperator_indicatorCpow_consistent}
     \uses{lmm:modular-power-operators}
+    \leanok
     Let $1 \le n \le m$, $z \in \mathbb{C}$ and $E_n\xi = \xi$. Then $p_{z,m}(\Delta)\xi = p_{z,n}(\Delta)\xi$.
 \end{lemma}
 \begin{proof}
@@ -2841,7 +2883,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[Agreement with the Unbounded Functional Calculus]
     \label{lmm:modular-power-agrees-fc}
+    \lean{Physicslib4.Modular.modularOperator_functionalCalculus_eq_indicatorCpow}
     \uses{lmm:modular-power-operators, def:hall-10.5}
+    \leanok
     Let $n \ge 1$, $z \in \mathbb{C}$, and let $h : \mathbb{R} \to \mathbb{C}$ be measurable with $h(\lambda) = \lambda^z$ for every $\lambda \in K_n$ (for example $h(\lambda) = \lambda^z$ for $\lambda > 0$ and $h(\lambda) = 0$ otherwise). If $E_n\xi = \xi$, then $\xi \in \text{Dom}(h(\Delta))$ and $h(\Delta)\xi = p_{z,n}(\Delta)\xi$.
 \end{lemma}
 \begin{proof}
@@ -2851,7 +2895,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[$\Delta^{\pm 1/2}$ on $\text{Range}(E_n)$]
     \label{lmm:modular-power-half}
+    \lean{Physicslib4.Modular.modularOperatorSqrt_eq_indicatorCpow}
     \uses{lmm:modular-power-operators, def:modular-operator, lmm:inverse-square-root-positive}
+    \leanok
     Let $n \ge 1$ and $E_n\xi = \xi$. Then $\xi \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$, $\Delta^{1/2}\xi = p_{1/2,n}(\Delta)\xi$ and $\Delta^{-1/2}\xi = p_{-1/2,n}(\Delta)\xi$.
 \end{lemma}
 \begin{proof}
@@ -2861,7 +2907,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{corollary}[$\mathcal{H}_0 \subset \text{Dom}(S) \cap \text{Dom}(S^*)$]
     \label{crllr:modular-H0-tomita-domains}
+    \lean{Physicslib4.Modular.tomita_mem_domains_of_modularSpectralSubspace}
     \uses{def:tomita-operator, def:modular-conjugation, lmm:modular-power-operators}
+    \leanok
     Let $n \ge 1$ and $E_n\xi = \xi$. Then $\xi \in \text{Dom}(S)$ with $S\xi = Jp_{1/2,n}(\Delta)\xi$, and $C\xi \in \text{Dom}((S')^*)$ with $(S')^*C\xi = Jp_{-1/2,n}(\Delta)\xi$; that is, $\xi \in \text{Dom}(S^*)$ with $S^*\xi = Jp_{-1/2,n}(\Delta)\xi$.
 \end{corollary}
 \begin{proof}
@@ -2871,7 +2919,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[The Difference Quotient Estimate]
     \label{lmm:modular-power-difference-bound}
+    \lean{Physicslib4.Modular.norm_modularOperator_indicatorCpow_taylor}
     \uses{lmm:modular-power-operators}
+    \leanok
     Let $n \ge 1$ and $z, h \in \mathbb{C}$ with $|h|\log n \le 1$. Then
     \begin{align}
         \left\| p_{z+h,n}(\Delta) - p_{z,n}(\Delta) - h\,q_{z,n}(\Delta) \right\| \le n^{|\operatorname{Re} z|}(\log n)^2|h|^2.
@@ -2884,7 +2934,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{theorem}[$z \mapsto p_{z,n}(\Delta)$ is Entire]
     \label{thrm:modular-power-holomorphic}
+    \lean{Physicslib4.Modular.hasDerivAt_modularOperator_indicatorCpow}
     \uses{lmm:modular-power-operators}
+    \leanok
     Let $n \ge 1$. The map $z \mapsto p_{z,n}(\Delta)$ from $\mathbb{C}$ to $\mathcal{B}(\mathbf{H})$, with the operator norm, is complex differentiable at every $z \in \mathbb{C}$, with derivative $q_{z,n}(\Delta)$. In particular it is continuous.
 \end{theorem}
 \begin{proof}
@@ -2894,7 +2946,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{corollary}[Entire Vectors $\Delta^z\xi$]
     \label{crllr:modular-power-vector-entire}
+    \lean{Physicslib4.Modular.differentiable_modularOperator_indicatorCpow_apply}
     \uses{lmm:modular-power-operators}
+    \leanok
     Let $n \ge 1$ and $\xi, \eta \in \mathbf{H}$. Then $z \mapsto p_{z,n}(\Delta)\xi$ is complex differentiable as a map $\mathbb{C} \to \mathbf{H}$, and $z \mapsto \left< \eta, p_{z,n}(\Delta)\xi \right>$ is entire.
 \end{corollary}
 \begin{proof}
@@ -2904,7 +2958,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{corollary}[Entire Matrix Coefficients]
     \label{crllr:modular-power-matrix-coefficients}
+    \lean{Physicslib4.Modular.differentiable_inner_modularOperator_indicatorCpow_conj}
     \uses{lmm:modular-power-operators}
+    \leanok
     Let $n \ge 1$, $\xi, \eta \in \mathbf{H}$ and $a \in \mathcal{B}(\mathbf{H})$. Then $z \mapsto \left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>$ is entire.
 \end{corollary}
 \begin{proof}
@@ -2914,7 +2970,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[Real and Imaginary Parts of a Bounded Function]
     \label{lmm:fc-bounded-re-im}
+    \lean{Physicslib4.Spectral.Unbounded.integral_eq_re_add_I_mul_im}
     \uses{def:hall-10.5}
+    \leanok
     Let $A$ be self-adjoint and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable, with $u = \operatorname{Re} f$, $v = \operatorname{Im} f$ and $\overline{f}(\lambda) = \overline{f(\lambda)}$. Then $u$ and $v$ are real, bounded and measurable, $f(A) = u(A) + i\,v(A)$ and $\overline{f}(A) = u(A) - i\,v(A)$.
 \end{lemma}
 \begin{proof}
@@ -2924,7 +2982,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[Antiunitary Conjugation of a Bounded Complex Function]
     \label{lmm:antiunitary-conjugate-bounded-fc}
+    \lean{Physicslib4.Spectral.Unbounded.integral_antiunitaryConj}
     \uses{def:antiunitary-operator, def:product-of-unbounded-operators, def:hall-10.5, lmm:antiunitary-conjugate-spectral-measure}
+    \leanok
     Let $W$ be antiunitary, $A$ self-adjoint, $B = WAW^{-1}$ (self-adjoint by Lemma~\ref{lmm:antiunitary-conjugate-spectral-measure}), and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $Wf(A)W^{-1}\psi = \overline{f}(B)\psi$ for every $\psi \in \mathbf{H}$, where $\overline{f}(\lambda) = \overline{f(\lambda)}$.
 \end{lemma}
 \begin{proof}
@@ -2934,7 +2994,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[$J$ Conjugates Bounded Functions of $\Delta$]
     \label{lmm:modular-conjugation-bounded-fc}
+    \lean{Physicslib4.Modular.modularConjugation_integral_modularConjugation}
     \uses{def:modular-conjugation, def:modular-operator, def:hall-10.5}
+    \leanok
     Let $f : \mathbb{R} \to \mathbb{C}$ be bounded and measurable. Then $Jf(\Delta)J = (\overline{f} \circ \iota^-)(\Delta)$.
 \end{lemma}
 \begin{proof}
@@ -2944,6 +3006,8 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[$K_n$ is Invariant under $\lambda \mapsto 1/\lambda$]
     \label{lmm:modular-inverse-scalar-identities}
+    \lean{Physicslib4.Modular.indicator_Icc_inv}
+    \leanok
     For $n \ge 1$ and every $\lambda \in \mathbb{R}$, $1_{K_n}(\iota^-(\lambda)) = 1_{K_n}(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -2952,6 +3016,8 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[$p_{z,n}$ under $\lambda \mapsto 1/\lambda$]
     \label{lmm:modular-inverse-power-function}
+    \lean{Physicslib4.Modular.conj_indicatorCpow_inv}
+    \leanok
     For $n \ge 1$, $z \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $\overline{p_{z,n}(\iota^-(\lambda))} = p_{-\overline{z},n}(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -2961,6 +3027,8 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[$e_t$ under $\lambda \mapsto 1/\lambda$]
     \label{lmm:modular-inverse-unitary-function}
+    \lean{Physicslib4.Modular.conj_exp_log_inv}
+    \leanok
     For $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $\overline{e_t(\iota^-(\lambda))} = e_t(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -2969,7 +3037,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[$J$ Preserves the Spectral Subspaces]
     \label{lmm:modular-conjugation-spectral-projections}
+    \lean{Physicslib4.Modular.modularConjugation_spectralMeasure_Icc}
     \uses{def:modular-conjugation, def:modular-operator, def:spectral-measure}
+    \leanok
     For $n \ge 1$, $JE_nJ = E_n$. Hence $E_n\xi = \xi$ implies $E_nJ\xi = J\xi$, and $J\mathcal{H}_0 = \mathcal{H}_0$.
 \end{lemma}
 \begin{proof}
@@ -2979,7 +3049,9 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
 
 \begin{lemma}[$J$ Conjugates $\Delta^z$ to $\Delta^{-\overline{z}}$]
     \label{lmm:modular-conjugation-powers}
+    \lean{Physicslib4.Modular.modularConjugation_indicatorCpow_modularConjugation}
     \uses{def:modular-conjugation, lmm:modular-power-operators, def:modular-unitary-group}
+    \leanok
     For $n \ge 1$, $z \in \mathbb{C}$ and $t \in \mathbb{R}$, $Jp_{z,n}(\Delta)J = p_{-\overline{z},n}(\Delta)$ and $J\Delta^{it}J = \Delta^{it}$. In particular $Jp_{x,n}(\Delta)J = p_{-x,n}(\Delta)$ for real $x$.
 \end{lemma}
 \begin{proof}
