@@ -1477,7 +1477,18 @@ theorem IsVanDaeleTriple.inner_identity {M : Set (H →L[ℂ] H)} {Ω : H}
       (l⁻¹ : ℂ) * ⟪a ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, hξS'⟩),
         tomitaOperator M Ω C ⟨η, hηS⟩⟫_ℂ =
       ⟪η, a' ξ⟫_ℂ := by
-  sorry
+  obtain ⟨x, hx, hxS, hxS', hx0, hx1, hx2⟩ :=
+    exists_tendsto_tomitaOperator_of_mem hM hΩ C hC hξS hξS'
+  obtain ⟨y, hy, hyS, hyS', hy0, hy1, hy2⟩ :=
+    exists_tendsto_tomitaOperator_of_mem hM hΩ C hC hηS hηS'
+  have ha := fun {f : ℕ → H} {v : H} (h : Tendsto f atTop (𝓝 v)) =>
+    (a.continuous.tendsto v).comp h
+  have hL := (((ha hx1).inner (𝕜 := ℂ) hy2).const_mul (l : ℂ)).add
+    (((ha hx2).inner (𝕜 := ℂ) hy1).const_mul (l⁻¹ : ℂ))
+  have hR := Filter.Tendsto.inner (𝕜 := ℂ) hy0 ((a'.continuous.tendsto ξ).comp hx0)
+  exact tendsto_nhds_unique hL (hR.congr fun n =>
+    (htriple.inner_identity_of_mem hM hΩ C hC (hx n) (hy n) (hxS n) (hxS' n) (hyS n)
+      (hyS' n)).symm)
 
 /-- For `ξ ∈ Dom Δ^{-1/2}`, `J ξ ∈ Dom S` and `S (J ξ) = Δ^{-1/2} ξ`; for `ξ ∈ Dom Δ^{1/2}`,
 `J ξ ∈ Dom S*` and `S* (J ξ) = Δ^{1/2} ξ`.

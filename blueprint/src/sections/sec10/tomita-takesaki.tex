@@ -3431,6 +3431,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{crllr:van-daele-approximation-tomita, lmm:van-daele-identity-algebra, prpstn:continuity-of-norm-and-inner-product}
     Corollary~\ref{crllr:van-daele-approximation-tomita} gives $x_n, y_n \in \mathcal{M}$ with $x_n\Omega, y_n\Omega \in \text{Dom}(S) \cap \text{Dom}(S^*)$, $x_n\Omega \to \xi$, $S(x_n\Omega) \to S\xi$, $S^*(x_n\Omega) \to S^*\xi$, and likewise $y_n$ for $\eta$. Lemma~\ref{lmm:van-daele-identity-algebra} holds for $x_n, y_n$. The bounded operators $a$ and $a'$ are continuous, and the inner product is jointly continuous (\texttt{Filter.Tendsto.inner}), so both sides converge to the corresponding sides for $\xi, \eta$; limits are unique (\texttt{tendsto\_nhds\_unique}).
 \end{proof}
