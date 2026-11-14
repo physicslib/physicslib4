@@ -1454,7 +1454,13 @@ theorem IsVanDaeleTriple.inner_identity_of_mem {M : Set (H →L[ℂ] H)} {Ω : H
       (l⁻¹ : ℂ) * ⟪a ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C (x Ω), hxS'⟩),
         tomitaOperator M Ω C ⟨y Ω, hyS⟩⟫_ℂ =
       ⟪y Ω, a' (x Ω)⟫_ℂ := by
-  sorry
+  obtain ⟨-, ha', ha, hS, hS', heq⟩ := htriple
+  have hcomm : x (a' Ω) = a' (x Ω) :=
+    congrArg (fun T : H →L[ℂ] H => T Ω) (Set.mem_centralizer_iff.1 ha' x hx)
+  rw [inner_tomitaOperator_tomitaAdjoint_of_mem hM hΩ C hC ha hx hy hS hxS hyS',
+    inner_tomitaAdjoint_tomitaOperator_of_mem hM hΩ C hC ha hx hy hS' hxS' hyS,
+    ← inner_smul_right, ← inner_smul_right, ← inner_add_right, ← heq, mul_apply_eq_comp,
+    ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left, hcomm]
 
 /-- For a van Daele triple `(λ, a', a)` and `ξ, η ∈ Dom S ∩ Dom S*`,
 `λ ⟪a S ξ, S* η⟫ + λ⁻¹ ⟪a S* ξ, S η⟫ = ⟪η, a' ξ⟫`.
@@ -1488,7 +1494,36 @@ theorem tomitaOperator_modularConjugation {M : Set (H →L[ℂ] H)} {Ω : H}
           (linearizedTomitaPre M Ω C).closure.adjoint.domain,
         (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (modularConjugation hM hΩ C hC ξ), h⟩ =
           modularOperatorSqrt hM hΩ C hC ξ := by
-  sorry
+  set J := modularConjugation hM hΩ C hC
+  obtain ⟨hJJ, hconj⟩ := modularConjugation_involution hM hΩ C hC
+  obtain ⟨hdom, hS⟩ := tomitaOperator_eq_modularConjugation_sqrt hM hΩ C hC
+  have hJs : ∀ x, J.symm x = J x := fun x => by
+    conv_lhs => rw [← hJJ x]
+    exact J.symm_apply_apply _
+  have key : ∀ (A : H →ₗ.[ℂ] H) (_ : antiunitaryConj J (modularOperatorSqrt hM hΩ C hC) = A)
+      (x : A.domain), ∃ h : J x ∈ (modularOperatorSqrt hM hΩ C hC).domain,
+        A x = J (modularOperatorSqrt hM hΩ C hC ⟨J x, h⟩) := by
+    rintro A rfl x
+    have hx : J.symm x ∈ (modularOperatorSqrt hM hΩ C hC).domain := x.2
+    refine ⟨by rw [← hJs]; exact hx, ?_⟩
+    change J (modularOperatorSqrt hM hΩ C hC ⟨J.symm x, hx⟩) = _
+    congr 2
+    exact Subtype.ext (hJs x)
+  refine ⟨fun ξ => ?_, fun ξ => ?_⟩
+  · obtain ⟨h, e⟩ := key _ hconj ξ
+    exact ⟨hdom ▸ h, by rw [hS _ _ h, e]⟩
+  · have hmem : J ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain := by
+      rw [← hconj]
+      change J.symm (J ξ) ∈ (modularOperatorSqrt hM hΩ C hC).domain
+      rw [hJs, hJJ]
+      exact ξ.2
+    obtain ⟨h, e⟩ := key _ hconj ⟨J ξ, hmem⟩
+    refine ((mem_tomitaAdjoint_iff_modularOperatorInvSqrt hM hΩ C hC (J ξ) _).1.2
+      ⟨hmem, ?_⟩)
+    change _ = J (modularOperatorInvSqrt hM hΩ C hC ⟨J ξ, hmem⟩)
+    rw [e, hJJ]
+    congr 1
+    exact Subtype.ext (hJJ ξ).symm
 
 /-- For a van Daele triple `(λ, a', a)` and `ξ, η ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}`,
 `⟪η, J a' J ξ⟫ = λ ⟪Δ^{1/2} η, a Δ^{-1/2} ξ⟫ + λ⁻¹ ⟪Δ^{-1/2} η, a Δ^{1/2} ξ⟫`.

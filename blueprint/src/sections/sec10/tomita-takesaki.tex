@@ -3415,6 +3415,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-first-term, lmm:van-daele-second-term}
     By Lemmas~\ref{lmm:van-daele-first-term} and~\ref{lmm:van-daele-second-term} and linearity in the second slot (\texttt{inner\_add\_right}, \texttt{inner\_smul\_right}), the left side is $\left< x^*y\Omega, \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega) \right> = \left< x^*y\Omega, a'\Omega \right> = \left< y\Omega, xa'\Omega \right>$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}), and $xa' = a'x$ because $a' \in \mathcal{M}'$.
 \end{proof}
@@ -3442,6 +3443,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     If $\xi \in \text{Dom}(\Delta^{-1/2})$, then $J\xi \in \text{Dom}(S)$ and $S(J\xi) = \Delta^{-1/2}\xi$. If $\xi \in \text{Dom}(\Delta^{1/2})$, then $J\xi \in \text{Dom}(S^*)$ and $S^*(J\xi) = \Delta^{1/2}\xi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-conjugation-involution, thrm:modular-conjugation-polar, lmm:tomita-adjoint-sqrt-conjugation, def:product-of-unbounded-operators}
     $J\Delta^{1/2}J = \Delta^{-1/2}$ including domains (Theorem~\ref{thrm:modular-conjugation-involution}, Definition~\ref{def:product-of-unbounded-operators}): for $\xi \in \text{Dom}(\Delta^{-1/2})$, $J\xi \in \text{Dom}(\Delta^{1/2}) = \text{Dom}(S)$ and $S(J\xi) = J\Delta^{1/2}J\xi = \Delta^{-1/2}\xi$ (Theorem~\ref{thrm:modular-conjugation-polar}). For $\xi \in \text{Dom}(\Delta^{1/2})$, $J(J\xi) = \xi \in \text{Dom}(\Delta^{1/2})$, so Lemma~\ref{lmm:tomita-adjoint-sqrt-conjugation} gives $J\xi \in \text{Dom}(S^*)$ and $S^*(J\xi) = \Delta^{1/2}J(J\xi) = \Delta^{1/2}\xi$.
 \end{proof}

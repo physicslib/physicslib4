@@ -308,3 +308,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-first-term (`inner_tomitaOperator_tomitaAdjoint_of_mem`): proved via `tomitaOperator_apply_of_mem` on x, a, a·x*, and `mem_tomitaAdjoint_iff` with ζ = (a x*)Ω, then `adjoint_inner_left`.
 - lmm:van-daele-second-term (inner_tomitaAdjoint_tomitaOperator_of_mem): proved via mem_tomitaAdjoint_iff_inner_algebra applied to (S*xΩ, xΩ) (from tomitaAdjoint_involutive) and (aΩ, S*aΩ), with tomitaOperator_apply_of_mem for S(yΩ).
 - 2026-11-14: proved inner_tomitaOperator_tomitaAdjoint_of_mem (hy unused), inner_tomitaAdjoint_tomitaOperator_of_mem.
+- lmm:van-daele-identity-algebra (`IsVanDaeleTriple.inner_identity_of_mem`): proved via the first/second-term lemmas, the triple equation, the adjoint move and commutation of a' ∈ M' with x ∈ M.
+- lmm:tomita-operators-after-conjugation (`tomitaOperator_modularConjugation`, VanDaele.lean): proved from `modularConjugation_involution` (J² = 1, JΔ^{1/2}J = Δ^{-1/2}), `tomitaOperator_eq_modularConjugation_sqrt` and `mem_tomitaAdjoint_iff_modularOperatorInvSqrt`.
+- 2026-11-14: proved IsVanDaeleTriple.inner_identity_of_mem, tomitaOperator_modularConjugation.
