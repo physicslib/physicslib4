@@ -658,7 +658,21 @@ theorem hasDerivAt_modularOperator_indicatorCpow {M : Set (H →L[ℂ] H)} {Ω :
       ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral q[z, n]) z) ∧
     Continuous (fun w : ℂ =>
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[w, n]) := by
-  sorry
+  have hd : ∀ z : ℂ, HasDerivAt (fun w : ℂ =>
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[w, n])
+      ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral q[z, n]) z := by
+    intro z
+    rw [hasDerivAt_iff_isLittleO_nhds_zero]
+    have hev : ∀ᶠ h : ℂ in nhds 0, ‖h‖ * Real.log n ≤ 1 := by
+      have : Filter.Tendsto (fun h : ℂ => ‖h‖ * Real.log n) (nhds 0) (nhds 0) := by
+        simpa using (tendsto_norm_zero (E := ℂ)).mul_const (Real.log n)
+      exact this.eventually (ge_mem_nhds zero_lt_one)
+    refine (Asymptotics.IsBigO.of_bound ((n : ℝ) ^ |z.re| * Real.log n ^ 2) ?_).trans_isLittleO
+      (Asymptotics.isLittleO_pow_id (by norm_num : 1 < 2))
+    filter_upwards [hev] with h hh
+    rw [norm_pow]
+    exact norm_modularOperator_indicatorCpow_taylor hM hΩ C hC hn z h hh
+  exact ⟨hd, continuous_iff_continuousAt.2 fun z => (hd z).continuousAt⟩
 
 /-- `z ↦ p_{z,n}(Δ) ξ` is complex differentiable and `z ↦ ⟪η, p_{z,n}(Δ) ξ⟫` is entire.
 Blueprint: crllr:modular-power-vector-entire -/
@@ -777,7 +791,31 @@ theorem modularConjugation_spectralMeasure_Icc {M : Set (H →L[ℂ] H)} {Ω : H
           spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[m] ξ = ξ} =
       {ξ : H | ∃ m : ℕ, 1 ≤ m ∧
         spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[m] ξ = ξ} := by
-  sorry
+  set J := modularConjugation hM hΩ C hC
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  have hJJ := (modularConjugation_involution hM hΩ C hC).1
+  have key : ∀ m : ℕ, 1 ≤ m → ∀ ψ : H, J (μ K[m] (J ψ)) = μ K[m] ψ := by
+    intro m hm ψ
+    have hK : (K[m]).indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+      ⟨measurable_const.indicator measurableSet_Icc, 1, fun x =>
+        (norm_indicator_le_norm_self _ _).trans (by simp)⟩
+    rw [← μ.integral_indicator measurableSet_Icc,
+      modularConjugation_integral_modularConjugation hM hΩ C hC hK ψ]
+    congr 2
+    funext x
+    rw [indicator_Icc_inv hm x]
+    simp only [Set.indicator_apply, Pi.one_apply]
+    split_ifs <;> simp
+  have step : ∀ m : ℕ, 1 ≤ m → ∀ ξ : H, μ K[m] ξ = ξ → μ K[m] (J ξ) = J ξ := by
+    intro m hm ξ hξ
+    rw [← key m hm (J ξ), hJJ, hξ]
+  refine ⟨key n hn, step n hn, ?_⟩
+  ext ξ
+  constructor
+  · rintro ⟨η, ⟨m, hm, hη⟩, rfl⟩
+    exact ⟨m, hm, step m hm η hη⟩
+  · rintro ⟨m, hm, hξ⟩
+    exact ⟨J ξ, ⟨m, hm, step m hm ξ hξ⟩, hJJ ξ⟩
 
 /-- `J p_{z,n}(Δ) J = p_{-conj z,n}(Δ)` and `J Δ^{it} J = Δ^{it}`; in particular
 `J p_{x,n}(Δ) J = p_{-x,n}(Δ)` for real `x`. Stated pointwise.

@@ -269,3 +269,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-power-difference-bound (norm_modularOperator_indicatorCpow_taylor): proved via integral_add/integral_smul linearity, then norm_integral_le + ciSup_le with indicatorCpow_taylor.
 - lmm:modular-conjugation-bounded-fc (`modularConjugation_integral_modularConjugation`, VanDaele.lean): PROVED via integral_antiunitaryConj + JΔJ = Δ⁻¹ = ι⁻(Δ) + spectral-measure pushforward (functionalCalculus_functionalCalculus, integral_pushforwardPVM).
 - 2026-11-14: proved norm_modularOperator_indicatorCpow_taylor, modularConjugation_integral_modularConjugation.
+- lmm:modular-conjugation-spectral-projections: proved `modularConjugation_spectralMeasure_Icc` (E_n = ∫1_{K_n}, modularConjugation_integral_modularConjugation + indicator_Icc_inv; J H₀ = H₀ via J∘J = id).
+- thrm:modular-power-holomorphic: proved `hasDerivAt_modularOperator_indicatorCpow` (hasDerivAt_iff_isLittleO_nhds_zero + eventual Taylor bound norm_modularOperator_indicatorCpow_taylor, IsBigO.of_bound, isLittleO_pow_id; continuity from HasDerivAt.continuousAt).
+- 2026-11-14: proved hasDerivAt_modularOperator_indicatorCpow, modularConjugation_spectralMeasure_Icc.

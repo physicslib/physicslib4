@@ -2966,6 +2966,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $n \ge 1$. The map $z \mapsto p_{z,n}(\Delta)$ from $\mathbb{C}$ to $\mathcal{B}(\mathbf{H})$, with the operator norm, is complex differentiable at every $z \in \mathbb{C}$, with derivative $q_{z,n}(\Delta)$. In particular it is continuous.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-power-difference-bound}
     By Mathlib's \texttt{hasDerivAt\_iff\_isLittleO\_nhds\_zero} it suffices that $R(h) = p_{z+h,n}(\Delta) - p_{z,n}(\Delta) - h\,q_{z,n}(\Delta)$ is $o(h)$ as $h \to 0$. For $|h| \le 1/(1 + \log n)$, $|h|\log n \le 1$, so $\|R(h)\| \le n^{|\operatorname{Re} z|}(\log n)^2 |h|^2$ by Lemma~\ref{lmm:modular-power-difference-bound}; hence $R = O(h^2)$ (\texttt{Asymptotics.IsBigO.of\_bound}), and $h^2 = o(h)$ (\texttt{Asymptotics.isLittleO\_pow\_id}), so $R = o(h)$ (\texttt{Asymptotics.IsBigO.trans\_isLittleO}). Continuity follows from differentiability (\texttt{HasDerivAt.differentiableAt}, \texttt{Differentiable.continuous}).
 \end{proof}
@@ -3075,6 +3076,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     For $n \ge 1$, $JE_nJ = E_n$. Hence $E_n\xi = \xi$ implies $E_nJ\xi = J\xi$, and $J\mathcal{H}_0 = \mathcal{H}_0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-conjugation-bounded-fc, lmm:modular-inverse-scalar-identities, prpstn:integral-of-indicator, lmm:functional-calculus-bounded, thrm:modular-conjugation-involution}
     $E_n = 1_{K_n}(\Delta)$ (Proposition~\ref{prpstn:integral-of-indicator} and Lemma~\ref{lmm:functional-calculus-bounded}), and $1_{K_n}$ is real, so Lemma~\ref{lmm:modular-conjugation-bounded-fc} and Lemma~\ref{lmm:modular-inverse-scalar-identities} give $JE_nJ = (1_{K_n} \circ \iota^-)(\Delta) = 1_{K_n}(\Delta) = E_n$. If $E_n\xi = \xi$, then $E_nJ\xi = J(JE_nJ)\xi = JE_n\xi = J\xi$, using $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}). So $J\mathcal{H}_0 \subset \mathcal{H}_0$, and applying $J$ again gives $\mathcal{H}_0 \subset J\mathcal{H}_0$.
 \end{proof}
