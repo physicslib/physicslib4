@@ -2799,6 +2799,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     For $n \ge 1$, $z \in \mathbb{C}$ and every $\lambda \in \mathbb{R}$, $\overline{p_{z,n}(\lambda)} = p_{\overline{z},n}(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:log-power-on-interval}
     Off $K_n$ both sides vanish. For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so $\arg\lambda = 0 \ne \pi$ (\texttt{Complex.arg\_ofReal\_of\_nonneg}) and $\overline{\lambda} = \lambda$ (\texttt{Complex.conj\_ofReal}); \texttt{Complex.cpow\_conj} gives $\overline{\lambda^z} = \lambda^{\overline{z}}$, and $1_{K_n}(\lambda)$ is real.
 \end{proof}
@@ -2811,6 +2812,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     For $n \ge 1$, $z \in \mathbb{C}$, $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $p_{z+it,n}(\lambda) = e_t(\lambda)\,p_{z,n}(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:log-power-on-interval, lmm:modular-unitary-group-fc}
     Off $K_n$ both sides vanish. For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so $\lambda^{z+it} = \lambda^{it}\lambda^z$ by \texttt{Complex.cpow\_add} ($\lambda \ne 0$) and \texttt{add\_comm}, and $\lambda^{it} = e_t(\lambda)$ (Lemma~\ref{lmm:modular-unitary-group-fc}).
 \end{proof}

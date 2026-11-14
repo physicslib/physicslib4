@@ -233,3 +233,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - indicatorCpow_mul (lmm:modular-power-function-identities): proved by case split on K_n, Complex.cpow_add and Complex.cpow_zero.
 - lmm:modular-power-function-bounds (`indicatorCpow_bounds`): proved via `Measurable.indicator`, `Measurable.pow_const`, and pointwise case split using `cpow_of_mem_Icc` / `pos_abs_log_le_of_mem_Icc`.
 - 2026-11-14: proved indicatorCpow_bounds, indicatorCpow_mul.
+- lmm:modular-power-function-conj (`Physicslib4.Modular.indicatorCpow_conj`): proved via by_cases on K_n, `Complex.cpow_conj` with `arg_ofReal_of_nonneg`, and `Complex.conj_ofReal`.
+- lmm:modular-power-function-shift (`indicatorCpow_add_I_mul`): proved by cases on K_n membership; on K_n uses `Complex.cpow_add`, `Complex.cpow_def_of_ne_zero`, `Complex.ofReal_log`.
+- 2026-11-14: proved indicatorCpow_conj, indicatorCpow_add_I_mul.

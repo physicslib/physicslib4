@@ -246,13 +246,24 @@ theorem indicatorCpow_mul {n : ℕ} (hn : 1 ≤ n) (z w : ℂ) :
 Blueprint: lmm:modular-power-function-conj -/
 theorem indicatorCpow_conj {n : ℕ} (hn : 1 ≤ n) (z : ℂ) (x : ℝ) :
     conj (p[z, n] x) = p[conj z, n] x := by
-  sorry
+  by_cases hx : x ∈ K[n]
+  · have hx0 := (pos_abs_log_le_of_mem_Icc hn hx).1
+    have harg : (x : ℂ).arg ≠ Real.pi := by
+      rw [Complex.arg_ofReal_of_nonneg hx0.le]; exact Real.pi_ne_zero.symm
+    simp only [Set.indicator_of_mem hx]
+    rw [Complex.cpow_conj _ _ harg, Complex.conj_ofReal]
+  · simp only [Set.indicator_of_notMem hx, map_zero]
 
 /-- `p_{z+it,n}(λ) = e_t(λ) p_{z,n}(λ)`.
 Blueprint: lmm:modular-power-function-shift -/
 theorem indicatorCpow_add_I_mul {n : ℕ} (hn : 1 ≤ n) (z : ℂ) (t x : ℝ) :
     p[z + Complex.I * t, n] x = e[t] x * p[z, n] x := by
-  sorry
+  by_cases hx : x ∈ K[n]
+  · have hx0 : (x : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (pos_abs_log_le_of_mem_Icc hn hx).1.ne'
+    simp only [Set.indicator_of_mem hx]
+    rw [Complex.cpow_add _ _ hx0, mul_comm, Complex.cpow_def_of_ne_zero hx0 (Complex.I * t),
+      ← Complex.ofReal_log (pos_abs_log_le_of_mem_Icc hn hx).1.le, mul_comm (Real.log x : ℂ)]
+  · simp only [Set.indicator_of_notMem hx, mul_zero]
 
 /-- For `1 ≤ n ≤ m`, `p_{z,m}(λ) 1_{K_n}(λ) = p_{z,n}(λ)`.
 Blueprint: lmm:modular-power-function-restrict -/
