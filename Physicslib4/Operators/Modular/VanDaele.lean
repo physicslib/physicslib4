@@ -698,7 +698,12 @@ theorem differentiable_inner_modularOperator_indicatorCpow_conj {M : Set (H →L
       ⟪η, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, n]
         (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[-z, n]
           ξ))⟫_ℂ) := by
-  sorry
+  have hd : Differentiable ℂ (fun w : ℂ =>
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[w, n]) :=
+    fun z => ((hasDerivAt_modularOperator_indicatorCpow hM hΩ C hC hn).1 z).differentiableAt
+  exact fun z => (innerSL ℂ η).differentiableAt.comp z ((hd z).clm_apply
+    ((differentiableAt_const a).clm_apply (((hd (-z)).comp z differentiableAt_id.neg).clm_apply
+      (differentiableAt_const ξ))))
 
 /-! ### Conjugation by `J` -/
 

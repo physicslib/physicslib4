@@ -2992,6 +2992,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $n \ge 1$, $\xi, \eta \in \mathbf{H}$ and $a \in \mathcal{B}(\mathbf{H})$. Then $z \mapsto \left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>$ is entire.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-power-holomorphic}
     $z \mapsto p_{-z,n}(\Delta)$ is differentiable by Theorem~\ref{thrm:modular-power-holomorphic} and the chain rule (\texttt{HasDerivAt.scomp} with \texttt{hasDerivAt\_neg}); products in the normed algebra $\mathcal{B}(\mathbf{H})$ of differentiable maps, and of a differentiable map with the constant $a$, are differentiable (\texttt{HasDerivAt.mul}, \texttt{HasDerivAt.const\_mul}). Composing with the continuous linear map $T \mapsto \left< \eta, T\xi \right>$ preserves differentiability (\texttt{HasDerivAt.clm\_apply}, \texttt{HasFDerivAt.comp\_hasDerivAt}).
 \end{proof}

@@ -275,3 +275,5 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-conjugation-powers (`modularConjugation_indicatorCpow_modularConjugation`, VanDaele.lean): proved via `modularConjugation_integral_modularConjugation` with `conj_indicatorCpow_inv` / `conj_exp_log_inv`, and `modularUnitaryGroup_eq_functionalCalculus` for Δ^{it}.
 - crllr:modular-power-vector-entire (`differentiable_modularOperator_indicatorCpow_apply`): proved via `HasDerivAt.clm_apply` on `hasDerivAt_modularOperator_indicatorCpow` and composition with `innerSL ℂ η`.
 - 2026-11-14: proved differentiable_modularOperator_indicatorCpow_apply, modularConjugation_indicatorCpow_modularConjugation.
+- crllr:modular-power-matrix-coefficients (`differentiable_inner_modularOperator_indicatorCpow_conj`, VanDaele.lean): proved via `DifferentiableAt.clm_apply` chains on `hasDerivAt_modularOperator_indicatorCpow` (composed with `differentiableAt_id.neg` for p_{-z}) and `innerSL ℂ η`.
+- 2026-11-14: proved differentiable_inner_modularOperator_indicatorCpow_conj. Stage 5a complete (36/36).
