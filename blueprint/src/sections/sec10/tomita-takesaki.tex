@@ -2924,6 +2924,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $n \ge 1$ and $E_n\xi = \xi$. Then $\xi \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$, $\Delta^{1/2}\xi = p_{1/2,n}(\Delta)\xi$ and $\Delta^{-1/2}\xi = p_{-1/2,n}(\Delta)\xi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-power-agrees-fc, def:absolute-value, lmm:log-power-on-interval}
     $\Delta^{1/2} = s(\Delta)$ (Definitions~\ref{def:modular-operator} and~\ref{def:absolute-value}) and $\Delta^{-1/2} = r(\Delta)$ (Lemma~\ref{lmm:inverse-square-root-positive}). For $\lambda \in K_n$, $\lambda > 0$ (Lemma~\ref{lmm:log-power-on-interval}), so $s(\lambda) = \sqrt{\max(\lambda, 0)} = \sqrt{\lambda} = \lambda^{1/2}$ (\texttt{max\_eq\_left}, \texttt{Real.sqrt\_eq\_rpow}, \texttt{Complex.ofReal\_cpow}) and $r(\lambda) = \lambda^{-1/2}$ by definition of $r$ (with \texttt{Complex.ofReal\_cpow}). Apply Lemma~\ref{lmm:modular-power-agrees-fc} with $h = s$, $z = \tfrac{1}{2}$ and with $h = r$, $z = -\tfrac{1}{2}$.
 \end{proof}
@@ -2936,6 +2937,7 @@ For $\xi \in \mathcal{H}_0$ and $z \in \mathbb{C}$ this justifies writing $\Delt
     Let $n \ge 1$ and $E_n\xi = \xi$. Then $\xi \in \text{Dom}(S)$ with $S\xi = Jp_{1/2,n}(\Delta)\xi$, and $C\xi \in \text{Dom}((S')^*)$ with $(S')^*C\xi = Jp_{-1/2,n}(\Delta)\xi$; that is, $\xi \in \text{Dom}(S^*)$ with $S^*\xi = Jp_{-1/2,n}(\Delta)\xi$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-power-half, thrm:modular-conjugation-polar, crllr:tomita-adjoint-polar}
     By Lemma~\ref{lmm:modular-power-half}, $\xi \in \text{Dom}(\Delta^{1/2}) = \text{Dom}(S)$ and $S\xi = J\Delta^{1/2}\xi = Jp_{1/2,n}(\Delta)\xi$ (Theorem~\ref{thrm:modular-conjugation-polar}); and $\xi \in \text{Dom}(\Delta^{-1/2})$, so Corollary~\ref{crllr:tomita-adjoint-polar} with $\eta = J\Delta^{-1/2}\xi = Jp_{-1/2,n}(\Delta)\xi$ gives the second claim.
 \end{proof}

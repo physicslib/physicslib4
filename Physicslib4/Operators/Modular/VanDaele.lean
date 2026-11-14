@@ -585,7 +585,20 @@ theorem modularOperatorSqrt_eq_indicatorCpow {M : Set (H →L[ℂ] H)} {Ω : H}
         modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩ =
           (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
             p[(-1 / 2 : ℂ), n] ξ := by
-  sorry
+  have hpos : ∀ x ∈ K[n], 0 < x := fun x hx =>
+    lt_of_lt_of_le (one_div_pos.2 (by exact_mod_cast hn)) hx.1
+  obtain ⟨h₁, e₁⟩ := modularOperator_functionalCalculus_eq_indicatorCpow hM hΩ C hC hn (1 / 2)
+    (h := fun x => ((Real.sqrt x : ℝ) : ℂ))
+    (Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable)
+    (fun x hx => by
+      rw [Real.sqrt_eq_rpow, Complex.ofReal_cpow (hpos x hx).le]; norm_num) hξ
+  obtain ⟨h₂, e₂⟩ := modularOperator_functionalCalculus_eq_indicatorCpow hM hΩ C hC hn (-1 / 2)
+    (h := fun x => (((Real.sqrt x)⁻¹ : ℝ) : ℂ))
+    (Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable.inv)
+    (fun x hx => by
+      rw [Real.sqrt_eq_rpow, ← Real.rpow_neg (hpos x hx).le,
+        Complex.ofReal_cpow (hpos x hx).le]; norm_num) hξ
+  exact ⟨h₁, h₂, e₁, e₂⟩
 
 /-- If `E_n ξ = ξ`, then `ξ ∈ Dom S` with `S ξ = J p_{1/2,n}(Δ) ξ`, and `C ξ ∈ Dom (S′)*` with
 `(S′)* C ξ = J p_{-1/2,n}(Δ) ξ`, that is, `ξ ∈ Dom S*` with `S* ξ = J p_{-1/2,n}(Δ) ξ`.
@@ -604,7 +617,10 @@ theorem tomita_mem_domains_of_modularSpectralSubspace {M : Set (H →L[ℂ] H)} 
         modularConjugation hM hΩ C hC
           ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
             p[(-1 / 2 : ℂ), n] ξ) := by
-  sorry
+  obtain ⟨h₁, h₂, e₁, e₂⟩ := modularOperatorSqrt_eq_indicatorCpow hM hΩ C hC hn hξ
+  obtain ⟨hdom, hS⟩ := tomitaOperator_eq_modularConjugation_sqrt hM hΩ C hC
+  refine ⟨⟨hdom ▸ h₁, (hS ξ _ h₁).trans (by rw [e₁])⟩, ?_⟩
+  exact ((mem_tomitaAdjoint_iff_modularOperatorInvSqrt hM hΩ C hC ξ _).1.2 ⟨h₂, by rw [e₂]⟩)
 
 /-! ### Holomorphy of `z ↦ p_{z,n}(Δ)` -/
 

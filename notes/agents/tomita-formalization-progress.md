@@ -263,3 +263,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-power-consistent (`modularOperator_indicatorCpow_consistent`): proved via p_{z,m}(Δ) E_n = ∫ p_{z,m}·1_{K_n} dμ = p_{z,n}(Δ) (`integral_indicator`, `integral_mul`, `indicatorCpow_mul_indicator`), applied to ξ = E_n ξ.
 - lmm:modular-power-agrees-fc (modularOperator_functionalCalculus_eq_indicatorCpow): PROVED via pmapIntegral_comp with g = 1_{K_n}, h·g = p_{z,n}.
 - 2026-11-14: proved modularOperator_indicatorCpow_consistent, modularOperator_functionalCalculus_eq_indicatorCpow.
+- lmm:modular-power-half (`modularOperatorSqrt_eq_indicatorCpow`): PROVED by applying `modularOperator_functionalCalculus_eq_indicatorCpow` with h = √λ (z = 1/2; `modularOperatorSqrt` = `absoluteValue` is definitionally that functional calculus) and h = (√λ)⁻¹ (z = −1/2), via `Real.sqrt_eq_rpow`, `Real.rpow_neg`, `Complex.ofReal_cpow`.
+- crllr:modular-H0-tomita-domains (`tomita_mem_domains_of_modularSpectralSubspace`): PROVED by combining `modularOperatorSqrt_eq_indicatorCpow` with `tomitaOperator_eq_modularConjugation_sqrt` (S = JΔ^{1/2}) and `mem_tomitaAdjoint_iff_modularOperatorInvSqrt` (S* = JΔ^{-1/2}).
+- 2026-11-14: proved modularOperatorSqrt_eq_indicatorCpow, tomita_mem_domains_of_modularSpectralSubspace. Spectral-projection and p_{z,n}(Δ) operator lemmas done (10).
