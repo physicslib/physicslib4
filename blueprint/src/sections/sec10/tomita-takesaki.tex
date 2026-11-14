@@ -2635,7 +2635,7 @@ The proof of Jones's Proposition~13.2.2 works on the subspace $\mathcal{H}_0$ of
 \begin{align}
     e_t(\lambda) = e^{it\log\lambda}, \qquad p_{z,n}(\lambda) = 1_{K_n}(\lambda)\,\lambda^z, \qquad q_{z,n}(\lambda) = 1_{K_n}(\lambda)\,(\log\lambda)\,\lambda^z,
 \end{align}
-and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in Lemma~\ref{lmm:inverse-fc-extends}. For a bounded measurable $f : \mathbb{R} \to \mathbb{C}$, $f(\Delta)$ is a bounded operator defined on all of $\mathbf{H}$ and equals the bounded integral $\int f \, d\mu$ (Lemma~\ref{lmm:functional-calculus-bounded}). For a bounded operator $T$, $JTJ$ denotes the map $\psi \mapsto J(T(J\psi))$; since $J^{-1} = J$ (Theorem~\ref{thrm:modular-conjugation-involution}), it is the antiunitary conjugate $JTJ^{-1}$ of Definition~\ref{def:product-of-unbounded-operators}.
+and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in Lemma~\ref{lmm:inverse-fc-extends}. For a bounded measurable $f : \mathbb{R} \to \mathbb{C}$, $f(\Delta)$ is a bounded operator defined on all of $\mathbf{H}$ and equals the bounded integral $\int f \, d\mu$ (Lemma~\ref{lmm:functional-calculus-bounded}). For a bounded operator $T$, $JTJ$ is the bounded operator $\psi \mapsto J(T(J\psi))$ of Definition~\ref{def:modular-conjugation-conjugate}; since $J^{-1} = J$ (Theorem~\ref{thrm:modular-conjugation-involution}), it is the antiunitary conjugate $JTJ^{-1}$ of Definition~\ref{def:product-of-unbounded-operators}.
 
 \begin{lemma}[$\Delta$ has no Spectrum in {$(-\infty, 0]$}]
     \label{lmm:modular-spectral-support}
@@ -3142,15 +3142,12 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Jones's Lemma 13.1.5]
     \label{lmm:van-daele-commutant-equation}
-    \uses{def:tomita-operator, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention, def:modular-operator, lmm:van-daele-functions-bounded, def:van-daele-g}
-    Let $\lambda > 0$ and $a' \in \mathcal{M}'$. There is $a \in \mathcal{M}$ with $\|a\| \le \|a'\|/2$ and $a\Omega = g_\lambda(\Delta)a'^*\Omega$, such that $a\Omega \in \text{Dom}(S) \cap \text{Dom}(S^*)$ and
-    \begin{align}
-        a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega).
-    \end{align}
+    \uses{def:tomita-operator, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention, def:modular-operator, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-triple}
+    Let $\lambda > 0$ and $a' \in \mathcal{M}'$. There is $a \in \mathcal{B}(\mathbf{H})$ such that $(\lambda, a', a)$ is a van Daele triple (Definition~\ref{def:van-daele-triple}), $\|a\| \le \|a'\|/2$ and $a\Omega = g_\lambda(\Delta)a'^*\Omega$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:van-daele-element, lmm:van-daele-element-formulas, lmm:van-daele-partition-of-unity, thrm:modular-conjugation-polar, crllr:tomita-adjoint-polar, thrm:modular-conjugation-involution, def:van-daele-k}
-    Take $a$ from Lemma~\ref{lmm:van-daele-element} and $\phi = J(a'\Omega)$. By Lemma~\ref{lmm:van-daele-element-formulas}, $a\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2}) = \text{Dom}(S) \cap \text{Dom}(S^*)$, and $S(a\Omega) = J\Delta^{1/2}a\Omega = Jk_\lambda(\Delta)\phi$, $S^*(a\Omega) = J\Delta^{-1/2}a\Omega = Jg_\lambda(\Delta)\phi$ (Theorem~\ref{thrm:modular-conjugation-polar}, Corollary~\ref{crllr:tomita-adjoint-polar}). $J$ is additive and commutes with real scalars ($\overline{\lambda} = \lambda$), so $\lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega) = J\big((\lambda k_\lambda(\Delta) + \lambda^{-1}g_\lambda(\Delta))\phi\big) = J\phi$ by Lemma~\ref{lmm:van-daele-partition-of-unity}, and $J\phi = J(J(a'\Omega)) = a'\Omega$ (Theorem~\ref{thrm:modular-conjugation-involution}).
+    \uses{lmm:van-daele-element, lmm:van-daele-element-formulas, lmm:van-daele-partition-of-unity, thrm:modular-conjugation-polar, crllr:tomita-adjoint-polar, thrm:modular-conjugation-involution, def:van-daele-k, def:van-daele-triple}
+    Take $a$ from Lemma~\ref{lmm:van-daele-element} and $\phi = J(a'\Omega)$. By Lemma~\ref{lmm:van-daele-element-formulas}, $a\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2}) = \text{Dom}(S) \cap \text{Dom}(S^*)$, and $S(a\Omega) = J\Delta^{1/2}a\Omega = Jk_\lambda(\Delta)\phi$, $S^*(a\Omega) = J\Delta^{-1/2}a\Omega = Jg_\lambda(\Delta)\phi$ (Theorem~\ref{thrm:modular-conjugation-polar}, Corollary~\ref{crllr:tomita-adjoint-polar}). $J$ is additive and commutes with real scalars ($\overline{\lambda} = \lambda$), so $\lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega) = J\big((\lambda k_\lambda(\Delta) + \lambda^{-1}g_\lambda(\Delta))\phi\big) = J\phi$ by Lemma~\ref{lmm:van-daele-partition-of-unity}, and $J\phi = J(J(a'\Omega)) = a'\Omega$ (Theorem~\ref{thrm:modular-conjugation-involution}). Since $a \in \mathcal{M}$ and $\|a\| \le \|a'\|/2$ (Lemma~\ref{lmm:van-daele-element}), $(\lambda, a', a)$ is a van Daele triple with the stated properties.
 \end{proof}
 
 \begin{lemma}[Inverting $\Delta^{1/2} + \Delta^{-1/2}$]
@@ -3272,7 +3269,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{corollary}[The Rearranged Identity]
     \label{crllr:van-daele-rearranged-identity}
-    \uses{def:modular-conjugation, def:modular-operator, lmm:inverse-square-root-positive}
+    \uses{def:modular-conjugation, def:modular-conjugation-conjugate, def:modular-operator, lmm:inverse-square-root-positive}
     Let $\lambda$, $a'$ and $a$ be as in Lemma~\ref{lmm:van-daele-sesquilinear-identity}. For all $\xi, \eta \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$,
     \begin{align}
         \left< \eta, Ja'J\xi \right> = \lambda\left< \Delta^{1/2}\eta, a\Delta^{-1/2}\xi \right> + \lambda^{-1}\left< \Delta^{-1/2}\eta, a\Delta^{1/2}\xi \right>.
@@ -3280,13 +3277,13 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     This is the formula at the start of the proof of Jones's Proposition~13.2.2, written in this project's inner product convention.
 \end{corollary}
 \begin{proof}
-    \uses{lmm:van-daele-sesquilinear-identity, lmm:tomita-operators-after-conjugation, thrm:modular-conjugation-polar, lmm:antilinear-isometry-antiunitary, thrm:modular-conjugation-involution}
+    \uses{lmm:van-daele-sesquilinear-identity, lmm:tomita-operators-after-conjugation, thrm:modular-conjugation-polar, lmm:antilinear-isometry-antiunitary, thrm:modular-conjugation-involution, lmm:modular-conjugation-bounded-conjugate}
     By Lemma~\ref{lmm:tomita-operators-after-conjugation}, $J\xi, J\eta \in \text{Dom}(S) \cap \text{Dom}(S^*)$ with $S(J\xi) = \Delta^{-1/2}\xi$, $S^*(J\xi) = \Delta^{1/2}\xi$, and likewise for $\eta$. Lemma~\ref{lmm:van-daele-sesquilinear-identity} for $J\xi$, $J\eta$ gives $\lambda\left< a\Delta^{-1/2}\xi, \Delta^{1/2}\eta \right> + \lambda^{-1}\left< a\Delta^{1/2}\xi, \Delta^{-1/2}\eta \right> = \left< J\eta, a'J\xi \right>$. Since $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}, Lemma~\ref{lmm:antilinear-isometry-antiunitary}) and $a'J\xi = J(Ja'J\xi)$ (Theorem~\ref{thrm:modular-conjugation-involution}), $\left< J\eta, J(Ja'J\xi) \right> = \left< Ja'J\xi, \eta \right>$. Taking complex conjugates (\texttt{inner\_conj\_symm}; $\lambda$ is real) gives the claim.
 \end{proof}
 
 \begin{corollary}[The Rearranged Identity on $\mathcal{H}_0$]
     \label{crllr:van-daele-rearranged-identity-H0}
-    \uses{def:modular-conjugation, lmm:modular-power-operators, lmm:modular-spectral-projections-nested}
+    \uses{def:modular-conjugation, def:modular-conjugation-conjugate, lmm:modular-power-operators, lmm:modular-spectral-projections-nested}
     Let $\lambda$, $a'$ and $a$ be as in Lemma~\ref{lmm:van-daele-sesquilinear-identity}, $n \ge 1$, and $\xi, \eta \in \mathbf{H}$ with $E_n\xi = \xi$ and $E_n\eta = \eta$. Then
     \begin{align}
         \left< \eta, Ja'J\xi \right> = \lambda\left< p_{1/2,n}(\Delta)\eta, a\,p_{-1/2,n}(\Delta)\xi \right> + \lambda^{-1}\left< p_{-1/2,n}(\Delta)\eta, a\,p_{1/2,n}(\Delta)\xi \right>.
@@ -3302,21 +3299,37 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, which are van Daele's argument (A.~van Daele, \emph{J. Funct. Anal.} 15 (1974) 378--393). Proposition~13.2.2 expresses the element $a$ of Lemma~\ref{lmm:van-daele-commutant-equation} as a weak integral of the operators $\Delta^{it}Ja'J\Delta^{-it}$; it is proved on $\text{Range}(E_n)$ by the strip formula (Theorem~\ref{thrm:strip-formula}) and extended to all vectors by dominated convergence. Theorem~13.2.3 then follows from Fourier uniqueness (Theorem~\ref{thrm:fourier-uniqueness}).
 
-\emph{Conventions.} For real $\lambda > 0$ and $w \in \mathbb{C}$, $\lambda^w$ is the principal complex power $(\lambda : \mathbb{C})^w$. For a bounded operator $T$, $JTJ$ is the bounded operator of Lemma~\ref{lmm:modular-conjugation-bounded-conjugate}, and $\Delta^{it}Ja'J\Delta^{-it}$ is a product of bounded operators. In this project's convention (inner product linear in the second slot), Jones's function $\lambda^{2z}\left< a\Delta^{-z}\xi, \Delta^{\overline{z}}\eta \right>$ becomes $\lambda^{2z}\left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>$, and the resulting formula carries the same factor $\lambda^{2it}$ as Jones's. A triple $(\lambda, a', a)$ \emph{satisfies the van Daele equation} if $\lambda > 0$, $a' \in \mathcal{M}'$, $a \in \mathcal{M}$, $a\Omega \in \text{Dom}(S^*)$ and $a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega)$; this abbreviates the hypotheses of Lemma~\ref{lmm:van-daele-sesquilinear-identity}, and Lemma~\ref{lmm:van-daele-commutant-equation} gives such an $a$ for every $\lambda > 0$ and $a' \in \mathcal{M}'$.
+\emph{Conventions.} For real $\lambda > 0$ and $w \in \mathbb{C}$, $\lambda^w$ is the principal complex power $(\lambda : \mathbb{C})^w$. For a bounded operator $T$, $JTJ$ is the bounded operator of Definition~\ref{def:modular-conjugation-conjugate}, and $\Delta^{it}Ja'J\Delta^{-it}$ is a product of bounded operators. In this project's convention (inner product linear in the second slot), Jones's function $\lambda^{2z}\left< a\Delta^{-z}\xi, \Delta^{\overline{z}}\eta \right>$ becomes $\lambda^{2z}\left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>$, and the resulting formula carries the same factor $\lambda^{2it}$ as Jones's. Van Daele triples are those of Definition~\ref{def:van-daele-triple}.
+
+\begin{definition}[Conjugation of a Bounded Operator by $J$]
+    \label{def:modular-conjugation-conjugate}
+    \uses{def:modular-conjugation, lmm:antiunitary-isometric}
+    Let $T \in \mathcal{B}(\mathbf{H})$ and let $J$ be the modular conjugation of the pair $(\mathcal{M}, \Omega)$. The operator $JTJ \in \mathcal{B}(\mathbf{H})$ is the composite $\psi \mapsto J(T(J\psi))$. It is a bounded linear operator because it is the semilinear composite of the continuous conjugate-linear isometry $J$ (Lemma~\ref{lmm:antiunitary-isometric}), the continuous linear map $T$, and $J$ again, in which the two conjugations cancel (Mathlib's semilinear \texttt{ContinuousLinearMap.comp}, with the instance \texttt{RingHomCompTriple (starRingEnd \ensuremath{\mathbb{C}}) (starRingEnd \ensuremath{\mathbb{C}}) (RingHom.id \ensuremath{\mathbb{C}})}); Lemma~\ref{lmm:modular-conjugation-bounded-conjugate} records its values and norm.
+\end{definition}
 
 \begin{lemma}[$J$ Conjugates Bounded Operators]
     \label{lmm:modular-conjugation-bounded-conjugate}
-    \uses{def:modular-conjugation}
-    Let $T \in \mathcal{B}(\mathbf{H})$. There is a bounded linear operator $JTJ \in \mathcal{B}(\mathbf{H})$ with $(JTJ)\psi = J(T(J\psi))$ for every $\psi \in \mathbf{H}$, and $\|JTJ\| \le \|T\|$. It is unique, since a bounded operator is determined by its values.
+    \uses{def:modular-conjugation-conjugate}
+    Let $T \in \mathcal{B}(\mathbf{H})$. Then $JTJ$ is a bounded linear operator with $(JTJ)\psi = J(T(J\psi))$ for every $\psi \in \mathbf{H}$, and $\|JTJ\| \le \|T\|$. It is the unique bounded operator with these values, since a bounded operator is determined by its values.
 \end{lemma}
 \begin{proof}
     \uses{thrm:modular-conjugation-polar, lmm:antilinear-isometry-antiunitary, lmm:antiunitary-isometric}
-    $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}, Lemma~\ref{lmm:antilinear-isometry-antiunitary}), hence a continuous conjugate-linear isometry (Lemma~\ref{lmm:antiunitary-isometric}). The composite of two conjugate-linear continuous maps with a continuous linear map is continuous and linear (Mathlib's semilinear \texttt{ContinuousLinearMap.comp}, with the instance \texttt{RingHomInvPair (starRingEnd \ensuremath{\mathbb{C}}) (starRingEnd \ensuremath{\mathbb{C}})}). For the bound, $\|J(T(J\psi))\| = \|T(J\psi)\| \le \|T\|\,\|J\psi\| = \|T\|\,\|\psi\|$ (\texttt{LinearIsometryEquiv.norm\_map}, \texttt{ContinuousLinearMap.le\_opNorm}), so $\|JTJ\| \le \|T\|$ by \texttt{ContinuousLinearMap.opNorm\_le\_bound} with $\|T\| \ge 0$ (\texttt{norm\_nonneg}). Uniqueness is \texttt{ContinuousLinearMap.ext}.
+    $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}, Lemma~\ref{lmm:antilinear-isometry-antiunitary}), hence a continuous conjugate-linear isometry (Lemma~\ref{lmm:antiunitary-isometric}). So the composite $\psi \mapsto J(T(J\psi))$ of Definition~\ref{def:modular-conjugation-conjugate} is additive, $\mathbb{C}$-linear ($J(T(J(c\psi))) = J(\overline{c}\,T(J\psi)) = c\,J(T(J\psi))$) and continuous, which is the semilinear \texttt{ContinuousLinearMap.comp}; its values are \texttt{ContinuousLinearMap.comp\_apply}. For the bound, $\|J(T(J\psi))\| = \|T(J\psi)\| \le \|T\|\,\|J\psi\| = \|T\|\,\|\psi\|$ (\texttt{LinearIsometryEquiv.norm\_map}, \texttt{ContinuousLinearMap.le\_opNorm}), so $\|JTJ\| \le \|T\|$ by \texttt{ContinuousLinearMap.opNorm\_le\_bound} with $\|T\| \ge 0$ (\texttt{norm\_nonneg}). Uniqueness is \texttt{ContinuousLinearMap.ext}.
 \end{proof}
+
+\begin{definition}[Van Daele Triple]
+    \label{def:van-daele-triple}
+    \uses{def:tomita-operator, def:von-neumann-algebra-commutant-convention}
+    A triple $(\lambda, a', a)$ with $\lambda \in \mathbb{R}$ and $a', a \in \mathcal{B}(\mathbf{H})$ is a \emph{van Daele triple} (for the pair $(\mathcal{M}, \Omega)$) if $\lambda > 0$, $a' \in \mathcal{M}'$, $a \in \mathcal{M}$, $a\Omega \in \text{Dom}(S) \cap \text{Dom}(S^*)$ and
+    \begin{align}
+        a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega).
+    \end{align}
+    A van Daele triple satisfies the hypotheses of Lemma~\ref{lmm:van-daele-sesquilinear-identity}, and Lemma~\ref{lmm:van-daele-commutant-equation} gives, for every $\lambda > 0$ and $a' \in \mathcal{M}'$, an $a$ with $(\lambda, a', a)$ a van Daele triple.
+\end{definition}
 
 \begin{lemma}[Identities for $JTJ$]
     \label{lmm:modular-conjugation-bounded-conjugate-identities}
-    \uses{lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:modular-conjugation-conjugate}
     Let $T, T' \in \mathcal{B}(\mathbf{H})$. Then $J(JTJ)J = T$ and $(JTJ)(JT'J) = J(TT')J$.
 \end{lemma}
 \begin{proof}
@@ -3359,7 +3372,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[The Integrand is Continuous]
     \label{lmm:van-daele-integrand-continuous}
-    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $a' \in \mathcal{B}(\mathbf{H})$ and $\xi, \eta \in \mathbf{H}$. For every $t \in \mathbb{R}$, $\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right> = \left< \Delta^{-it}\eta, Ja'J\Delta^{-it}\xi \right>$, and $t \mapsto \left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>$ is continuous on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -3369,7 +3382,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[The Integrand is Bounded]
     \label{lmm:van-daele-integrand-bound}
-    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $a' \in \mathcal{B}(\mathbf{H})$, $\xi, \eta \in \mathbf{H}$ and $t \in \mathbb{R}$. Then $\left| \left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right> \right| \le \|a'\|\,\|\xi\|\,\|\eta\|$.
 \end{lemma}
 \begin{proof}
@@ -3379,7 +3392,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[The Weighted Integrand is Integrable]
     \label{lmm:van-daele-integrand-integrable}
-    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $\lambda > 0$, $a' \in \mathcal{B}(\mathbf{H})$, $\xi, \eta \in \mathbf{H}$, and
     \begin{align}
         F(t) = \frac{\lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>}{2\cosh(\pi t)}.
@@ -3440,8 +3453,8 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[The Strip Function on the Boundary]
     \label{lmm:van-daele-strip-function-boundary}
-    \uses{lmm:modular-power-operators, def:modular-unitary-group, def:spectral-measure, lmm:modular-conjugation-bounded-conjugate}
-    Let $(\lambda, a', a)$ satisfy the van Daele equation, $n \ge 1$, $\xi, \eta \in \mathbf{H}$ with $E_n\xi = \xi$ and $E_n\eta = \eta$, and $f$ as in Lemma~\ref{lmm:van-daele-strip-function-entire}. Then for every $t \in \mathbb{R}$,
+    \uses{lmm:modular-power-operators, def:modular-unitary-group, def:spectral-measure, def:modular-conjugation-conjugate, def:van-daele-triple}
+    Let $(\lambda, a', a)$ be a van Daele triple (Definition~\ref{def:van-daele-triple}), $n \ge 1$, $\xi, \eta \in \mathbf{H}$ with $E_n\xi = \xi$ and $E_n\eta = \eta$, and $f$ as in Lemma~\ref{lmm:van-daele-strip-function-entire}. Then for every $t \in \mathbb{R}$,
     \begin{align}
         f(\tfrac{1}{2} + it) + f(-\tfrac{1}{2} + it) = \lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>.
     \end{align}
@@ -3457,8 +3470,8 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{proposition}[Jones's Proposition 13.2.2 on $\text{Range}(E_n)$]
     \label{prpstn:van-daele-integral-formula-H0}
-    \uses{def:tomita-operator, def:modular-unitary-group, def:spectral-measure, lmm:modular-conjugation-bounded-conjugate}
-    Let $(\lambda, a', a)$ satisfy the van Daele equation, $n \ge 1$ and $\xi, \eta \in \mathbf{H}$ with $E_n\xi = \xi$ and $E_n\eta = \eta$. Then
+    \uses{def:tomita-operator, def:modular-unitary-group, def:spectral-measure, def:modular-conjugation-conjugate, def:van-daele-triple}
+    Let $(\lambda, a', a)$ be a van Daele triple (Definition~\ref{def:van-daele-triple}), $n \ge 1$ and $\xi, \eta \in \mathbf{H}$ with $E_n\xi = \xi$ and $E_n\eta = \eta$. Then
     \begin{align}
         \left< \eta, a\xi \right> = \int_{\mathbb{R}} \frac{\lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>}{2\cosh(\pi t)} \, dt.
     \end{align}
@@ -3470,7 +3483,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[Pointwise Continuity of the Integrand in the Vectors]
     \label{lmm:van-daele-integrand-vector-limit}
-    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $\lambda > 0$, $a' \in \mathcal{B}(\mathbf{H})$ and $t \in \mathbb{R}$, and let $\xi_m \to \xi$ and $\eta_m \to \eta$ in $\mathbf{H}$ ($m \in \mathbb{N}$). Then
     \begin{align}
         \frac{\lambda^{2it}\left< \eta_m, \Delta^{it}Ja'J\Delta^{-it}\xi_m \right>}{2\cosh(\pi t)} \to \frac{\lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>}{2\cosh(\pi t)} \quad (m \to \infty).
@@ -3482,7 +3495,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[Continuity of the Integral in the Vectors]
     \label{lmm:van-daele-integral-continuity}
-    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $\lambda > 0$, $a' \in \mathcal{B}(\mathbf{H})$, and for $\xi, \eta \in \mathbf{H}$ let $I(\eta, \xi) = \int_{\mathbb{R}} \lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right> / (2\cosh(\pi t)) \, dt$. Let $\xi_m \to \xi$ and $\eta_m \to \eta$ in $\mathbf{H}$ ($m \in \mathbb{N}$), and $K \ge 0$ with $\|\xi_m\|\,\|\eta_m\| \le K$ for every $m$. Then $I(\eta_m, \xi_m) \to I(\eta, \xi)$.
 \end{lemma}
 \begin{proof}
@@ -3502,8 +3515,8 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{proposition}[Jones's Proposition 13.2.2]
     \label{prpstn:van-daele-integral-formula}
-    \uses{def:tomita-operator, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
-    Let $(\lambda, a', a)$ satisfy the van Daele equation. For all $\xi, \eta \in \mathbf{H}$,
+    \uses{def:tomita-operator, def:modular-unitary-group, def:modular-conjugation-conjugate, def:van-daele-triple}
+    Let $(\lambda, a', a)$ be a van Daele triple (Definition~\ref{def:van-daele-triple}). For all $\xi, \eta \in \mathbf{H}$,
     \begin{align}
         \left< \eta, a\xi \right> = \int_{\mathbb{R}} \frac{\lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>}{2\cosh(\pi t)} \, dt.
     \end{align}
@@ -3515,7 +3528,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[The Commutator Integrand]
     \label{lmm:van-daele-commutator-integrand}
-    \uses{def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $a', b' \in \mathcal{B}(\mathbf{H})$, $\xi, \eta \in \mathbf{H}$, and
     \begin{align}
         h(t) = \frac{\left< \eta, (\Delta^{it}Ja'J\Delta^{-it}b' - b'\Delta^{it}Ja'J\Delta^{-it})\xi \right>}{2\cosh(\pi t)}.
@@ -3529,8 +3542,8 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[The Weighted Commutator Integral Vanishes]
     \label{lmm:van-daele-commutator-integral-zero}
-    \uses{def:von-neumann-algebra-commutant-convention, def:tomita-operator, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
-    Let $(\lambda, a', a)$ satisfy the van Daele equation, $b' \in \mathcal{M}'$, $\xi, \eta \in \mathbf{H}$, and $h$ as in Lemma~\ref{lmm:van-daele-commutator-integrand}. Then $\int_{\mathbb{R}} \lambda^{2it}h(t) \, dt = 0$.
+    \uses{def:von-neumann-algebra-commutant-convention, def:tomita-operator, def:modular-unitary-group, def:modular-conjugation-conjugate, def:van-daele-triple}
+    Let $(\lambda, a', a)$ be a van Daele triple (Definition~\ref{def:van-daele-triple}), $b' \in \mathcal{M}'$, $\xi, \eta \in \mathbf{H}$, and $h$ as in Lemma~\ref{lmm:van-daele-commutator-integrand}. Then $\int_{\mathbb{R}} \lambda^{2it}h(t) \, dt = 0$.
 \end{lemma}
 \begin{proof}
     \uses{prpstn:van-daele-integral-formula, lmm:van-daele-commutator-integrand, lmm:van-daele-integrand-integrable}
@@ -3539,17 +3552,17 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[The Fourier Integrals of the Commutator Vanish]
     \label{lmm:van-daele-commutator-fourier}
-    \uses{def:von-neumann-algebra-commutant-convention, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:von-neumann-algebra-commutant-convention, def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $a', b' \in \mathcal{M}'$, $\xi, \eta \in \mathbf{H}$, and $h$ as in Lemma~\ref{lmm:van-daele-commutator-integrand}. Then $\int_{\mathbb{R}} e^{i\theta t}h(t) \, dt = 0$ for every $\theta \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
-    \uses{lmm:van-daele-phase-fourier, lmm:van-daele-commutant-equation, lmm:van-daele-commutator-integral-zero}
-    Let $\lambda = e^{\theta/2} > 0$, so $e^{i\theta t} = \lambda^{2it}$ for every $t$ (Lemma~\ref{lmm:van-daele-phase-fourier}; rewrite the integrand by \texttt{funext}), and take $a \in \mathcal{M}$ from Lemma~\ref{lmm:van-daele-commutant-equation}, so that $(\lambda, a', a)$ satisfies the van Daele equation. Lemma~\ref{lmm:van-daele-commutator-integral-zero} gives $\int \lambda^{2it}h(t) \, dt = 0$.
+    \uses{lmm:van-daele-phase-fourier, lmm:van-daele-commutant-equation, lmm:van-daele-commutator-integral-zero, def:van-daele-triple}
+    Let $\lambda = e^{\theta/2} > 0$, so $e^{i\theta t} = \lambda^{2it}$ for every $t$ (Lemma~\ref{lmm:van-daele-phase-fourier}; rewrite the integrand by \texttt{funext}), and take $a \in \mathcal{M}$ from Lemma~\ref{lmm:van-daele-commutant-equation}, so that $(\lambda, a', a)$ is a van Daele triple. Lemma~\ref{lmm:van-daele-commutator-integral-zero} gives $\int \lambda^{2it}h(t) \, dt = 0$.
 \end{proof}
 
 \begin{lemma}[$\Delta^{it}Ja'J\Delta^{-it}$ Commutes with $\mathcal{M}'$]
     \label{lmm:van-daele-conjugate-commutes}
-    \uses{def:von-neumann-algebra-commutant-convention, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:von-neumann-algebra-commutant-convention, def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $a', b' \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $(\Delta^{it}Ja'J\Delta^{-it})\,b' = b'\,(\Delta^{it}Ja'J\Delta^{-it})$.
 \end{lemma}
 \begin{proof}
@@ -3559,7 +3572,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[$\Delta^{it}J\mathcal{M}'J\Delta^{-it} \subset \mathcal{M}$]
     \label{lmm:van-daele-conjugate-in-algebra}
-    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $\mathcal{M}$ be any von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, with modular operator $\Delta$ and modular conjugation $J$ (of the pair $(\mathcal{M}, \Omega)$), and let $a' \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $\Delta^{it}Ja'J\Delta^{-it} \in \mathcal{M}$. In particular ($t = 0$) $Ja'J \in \mathcal{M}$.
 \end{lemma}
 \begin{proof}
@@ -3569,7 +3582,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{corollary}[$J\mathcal{M}J \subset \mathcal{M}'$]
     \label{crllr:van-daele-algebra-conjugate}
-    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-conjugation, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-conjugation, def:modular-conjugation-conjugate}
     Let $x \in \mathcal{M}$. Then $JxJ \in \mathcal{M}'$.
 \end{corollary}
 \begin{proof}
@@ -3579,7 +3592,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{lemma}[$J\mathcal{M}J = \mathcal{M}'$]
     \label{lmm:tomita-modular-conjugation-commutant}
-    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-conjugation, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-conjugation, def:modular-conjugation-conjugate}
     $\{ JxJ \mid x \in \mathcal{M} \} = \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -3593,7 +3606,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     For every $s \in \mathbb{R}$ and $x \in \mathcal{M}$, $\Delta^{is}x\Delta^{-is} \in \mathcal{M}$.
 \end{lemma}
 \begin{proof}
-    \uses{crllr:van-daele-algebra-conjugate, lmm:van-daele-conjugate-in-algebra, lmm:modular-conjugation-bounded-conjugate-identities}
+    \uses{def:modular-conjugation-conjugate, crllr:van-daele-algebra-conjugate, lmm:van-daele-conjugate-in-algebra, lmm:modular-conjugation-bounded-conjugate-identities}
     $a' = JxJ \in \mathcal{M}'$ (Corollary~\ref{crllr:van-daele-algebra-conjugate}) and $Ja'J = x$ (Lemma~\ref{lmm:modular-conjugation-bounded-conjugate-identities}), so $\Delta^{is}x\Delta^{-is} = \Delta^{is}Ja'J\Delta^{-is} \in \mathcal{M}$ (Lemma~\ref{lmm:van-daele-conjugate-in-algebra}).
 \end{proof}
 
@@ -3609,7 +3622,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{theorem}[Tomita's Theorem]
     \label{thrm:tomita}
-    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-operator, def:modular-conjugation, def:modular-unitary-group, lmm:modular-conjugation-bounded-conjugate}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-operator, def:modular-conjugation, def:modular-unitary-group, def:modular-conjugation-conjugate}
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, modular operator $\Delta$ and modular conjugation $J$. Then
     \begin{enumerate}
         \item $J\mathcal{M}J = \mathcal{M}'$, that is, $\{ JxJ \mid x \in \mathcal{M} \} = \mathcal{M}'$;
