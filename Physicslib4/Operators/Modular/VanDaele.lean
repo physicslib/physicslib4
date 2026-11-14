@@ -879,4 +879,428 @@ theorem IsVanDaeleTriple.inner_modularConjugationConj_indicatorCpow {M : Set (H 
             p[(1 / 2 : ℂ), n] ξ)⟫_ℂ := by
   sorry
 
+/-! ### Tomita's theorem: the strip function and the integral formula -/
+
+/-- `J T J` is the unique bounded operator with `(J T J) ψ = J (T (J ψ))`, and `‖J T J‖ ≤ ‖T‖`.
+Blueprint: lmm:modular-conjugation-bounded-conjugate -/
+theorem modularConjugationConj_apply {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (T : H →L[ℂ] H) :
+    (∀ ψ : H, modularConjugationConj hM hΩ C hC T ψ =
+      modularConjugation hM hΩ C hC (T (modularConjugation hM hΩ C hC ψ))) ∧
+    ‖modularConjugationConj hM hΩ C hC T‖ ≤ ‖T‖ ∧
+    ∀ T' : H →L[ℂ] H,
+      (∀ ψ : H, T' ψ = modularConjugation hM hΩ C hC (T (modularConjugation hM hΩ C hC ψ))) →
+      T' = modularConjugationConj hM hΩ C hC T := by
+  sorry
+
+/-- `J (J T J) J = T` and `(J T J)(J T′ J) = J (T T′) J`.
+Blueprint: lmm:modular-conjugation-bounded-conjugate-identities -/
+theorem modularConjugationConj_identities {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (T T' : H →L[ℂ] H) :
+    modularConjugationConj hM hΩ C hC (modularConjugationConj hM hΩ C hC T) = T ∧
+      modularConjugationConj hM hΩ C hC T * modularConjugationConj hM hΩ C hC T' =
+        modularConjugationConj hM hΩ C hC (T * T') := by
+  sorry
+
+/-- For `λ > 0` and `|s| ≤ 1`, `λ^s ≤ max(λ, λ⁻¹)`.
+Blueprint: lmm:van-daele-rpow-le-max -/
+theorem rpow_le_max_inv {l s : ℝ} (hl : 0 < l) (hs : |s| ≤ 1) : l ^ s ≤ max l l⁻¹ := by
+  sorry
+
+/-- For `λ > 0`, `z ↦ λ^{2z}` is entire, `λ^0 = 1`, and `|λ^{2z}| = λ^{2 Re z} ≤ max(λ, λ⁻¹)` for
+`|Re z| ≤ 1/2`.
+Blueprint: lmm:van-daele-phase-strip -/
+theorem vanDaele_phase_strip {l : ℝ} (hl : 0 < l) :
+    Differentiable ℂ (fun z : ℂ => (l : ℂ) ^ (2 * z)) ∧ (l : ℂ) ^ (2 * (0 : ℂ)) = 1 ∧
+      ∀ z : ℂ, |z.re| ≤ 1 / 2 →
+        ‖(l : ℂ) ^ (2 * z)‖ = l ^ (2 * z.re) ∧ l ^ (2 * z.re) ≤ max l l⁻¹ := by
+  sorry
+
+/-- For `λ > 0`, `λ^{2(1/2 + it)} = λ λ^{2it}`, `λ^{2(-1/2 + it)} = λ⁻¹ λ^{2it}`, `|λ^{2it}| = 1`,
+and `t ↦ λ^{2it}` is continuous.
+Blueprint: lmm:van-daele-phase-boundary -/
+theorem vanDaele_phase_boundary {l : ℝ} (hl : 0 < l) :
+    (∀ t : ℝ,
+      (l : ℂ) ^ (2 * ((1 / 2 : ℂ) + Complex.I * t)) = l * (l : ℂ) ^ (2 * (Complex.I * t)) ∧
+      (l : ℂ) ^ (2 * ((-1 / 2 : ℂ) + Complex.I * t)) =
+        (l⁻¹ : ℂ) * (l : ℂ) ^ (2 * (Complex.I * t)) ∧
+      ‖(l : ℂ) ^ (2 * (Complex.I * t))‖ = 1) ∧
+    Continuous (fun t : ℝ => (l : ℂ) ^ (2 * (Complex.I * t))) := by
+  sorry
+
+/-- For `λ = e^{θ/2}`, `λ > 0` and `λ^{2it} = e^{iθt}`.
+Blueprint: lmm:van-daele-phase-fourier -/
+theorem vanDaele_phase_fourier (θ : ℝ) :
+    0 < Real.exp (θ / 2) ∧
+      ∀ t : ℝ, ((Real.exp (θ / 2) : ℝ) : ℂ) ^ (2 * (Complex.I * t)) =
+        Complex.exp (Complex.I * θ * t) := by
+  sorry
+
+/-- `⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫ = ⟪Δ^{-it} η, J a′ J Δ^{-it} ξ⟫`, continuous in `t`.
+Blueprint: lmm:van-daele-integrand-continuous -/
+theorem continuous_inner_modularUnitaryGroup_conj {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (a' : H →L[ℂ] H) (ξ η : H) :
+    (∀ t : ℝ, ⟪η, modularUnitaryGroup hM hΩ C hC t
+        (modularConjugationConj hM hΩ C hC a'
+          (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ =
+      ⟪modularUnitaryGroup hM hΩ C hC (-t) η,
+        modularConjugationConj hM hΩ C hC a' (modularUnitaryGroup hM hΩ C hC (-t) ξ)⟫_ℂ) ∧
+    Continuous (fun t : ℝ => ⟪η, modularUnitaryGroup hM hΩ C hC t
+        (modularConjugationConj hM hΩ C hC a'
+          (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ) := by
+  sorry
+
+/-- `|⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫| ≤ ‖a′‖ ‖ξ‖ ‖η‖`.
+Blueprint: lmm:van-daele-integrand-bound -/
+theorem norm_inner_modularUnitaryGroup_conj_le {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (a' : H →L[ℂ] H) (ξ η : H) (t : ℝ) :
+    ‖⟪η, modularUnitaryGroup hM hΩ C hC t
+      (modularConjugationConj hM hΩ C hC a'
+        (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ‖ ≤
+      ‖a'‖ * ‖ξ‖ * ‖η‖ := by
+  sorry
+
+/-- `F(t) = λ^{2it} ⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫ / (2 cosh πt)` is continuous, bounded by
+`‖a′‖ ‖ξ‖ ‖η‖ / (2 cosh πt)`, and integrable.
+Blueprint: lmm:van-daele-integrand-integrable -/
+theorem vanDaele_integrand_integrable {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) (a' : H →L[ℂ] H) (ξ η : H) :
+    Continuous (fun t : ℝ => (l : ℂ) ^ (2 * (Complex.I * t)) *
+        ⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
+        ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) ∧
+    (∀ t : ℝ, ‖(l : ℂ) ^ (2 * (Complex.I * t)) *
+        ⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
+        ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)‖ ≤
+      ‖a'‖ * ‖ξ‖ * ‖η‖ / (2 * Real.cosh (Real.pi * t))) ∧
+    MeasureTheory.Integrable (fun t : ℝ => (l : ℂ) ^ (2 * (Complex.I * t)) *
+        ⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
+        ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) := by
+  sorry
+
+/-- `f(z) = λ^{2z} ⟪η, p_{z,n}(Δ) a p_{-z,n}(Δ) ξ⟫` is entire, hence continuous.
+Blueprint: lmm:van-daele-strip-function-entire -/
+theorem differentiable_vanDaele_strip_function {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) {n : ℕ} (hn : 1 ≤ n)
+    (a : H →L[ℂ] H) (ξ η : H) :
+    Differentiable ℂ (fun z : ℂ => (l : ℂ) ^ (2 * z) *
+        ⟪η, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[z, n]
+          (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[-z, n] ξ))⟫_ℂ) ∧
+    Continuous (fun z : ℂ => (l : ℂ) ^ (2 * z) *
+        ⟪η, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[z, n]
+          (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[-z, n] ξ))⟫_ℂ) := by
+  sorry
+
+/-- `|f(z)| ≤ max(λ, λ⁻¹) n ‖a‖ ‖ξ‖ ‖η‖` for `|Re z| ≤ 1/2`.
+Blueprint: lmm:van-daele-strip-function-bounded -/
+theorem norm_vanDaele_strip_function_le {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) {n : ℕ} (hn : 1 ≤ n)
+    (a : H →L[ℂ] H) (ξ η : H) {z : ℂ} (hz : |z.re| ≤ 1 / 2) :
+    ‖(l : ℂ) ^ (2 * z) *
+      ⟪η, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          p[z, n]
+        (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          p[-z, n] ξ))⟫_ℂ‖ ≤
+      max l l⁻¹ * n * ‖a‖ * ‖ξ‖ * ‖η‖ := by
+  sorry
+
+/-- If `E_n ξ = ξ` and `E_n η = η`, then `f(0) = ⟪η, a ξ⟫`.
+Blueprint: lmm:van-daele-strip-function-zero -/
+theorem vanDaele_strip_function_zero {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) {n : ℕ} (hn : 1 ≤ n)
+    (a : H →L[ℂ] H) {ξ η : H}
+    (hξ : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] ξ = ξ)
+    (hη : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] η = η) :
+    (l : ℂ) ^ (2 * (0 : ℂ)) *
+      ⟪η, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          p[(0 : ℂ), n]
+        (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          p[-(0 : ℂ), n] ξ))⟫_ℂ =
+      ⟪η, a ξ⟫_ℂ := by
+  sorry
+
+/-- `⟪η, p_{x+it,n}(Δ) a p_{-(x+it),n}(Δ) ξ⟫ = ⟪p_{x,n}(Δ) Δ^{-it} η, a p_{-x,n}(Δ) Δ^{-it} ξ⟫`.
+Blueprint: lmm:van-daele-strip-function-shift -/
+theorem inner_modularOperator_indicatorCpow_conj_add_I_mul {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {n : ℕ} (hn : 1 ≤ n)
+    (a : H →L[ℂ] H) (ξ η : H) (x t : ℝ) :
+    ⟪η, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+        p[(x : ℂ) + Complex.I * t, n]
+      (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+        p[-((x : ℂ) + Complex.I * t), n] ξ))⟫_ℂ =
+      ⟪(spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[(x : ℂ), n]
+          (modularUnitaryGroup hM hΩ C hC (-t) η),
+        a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[-(x : ℂ), n]
+          (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ := by
+  sorry
+
+/-- For a van Daele triple `(λ, a′, a)` and `E_n ξ = ξ`, `E_n η = η`,
+`f(1/2 + it) + f(-1/2 + it) = λ^{2it} ⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫`.
+Blueprint: lmm:van-daele-strip-function-boundary -/
+theorem IsVanDaeleTriple.strip_function_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H}
+    (htriple : IsVanDaeleTriple M Ω C l a' a) {n : ℕ} (hn : 1 ≤ n) {ξ η : H}
+    (hξ : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] ξ = ξ)
+    (hη : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] η = η) (t : ℝ) :
+    (l : ℂ) ^ (2 * ((1 / 2 : ℂ) + Complex.I * t)) *
+      ⟪η, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          p[((1 / 2 : ℂ) + Complex.I * t), n]
+        (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          p[-((1 / 2 : ℂ) + Complex.I * t), n] ξ))⟫_ℂ +
+      (l : ℂ) ^ (2 * ((-1 / 2 : ℂ) + Complex.I * t)) *
+        ⟪η, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[((-1 / 2 : ℂ) + Complex.I * t), n]
+          (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[-((-1 / 2 : ℂ) + Complex.I * t), n] ξ))⟫_ℂ =
+      (l : ℂ) ^ (2 * (Complex.I * t)) *
+        ⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ := by
+  sorry
+
+/-- For a van Daele triple `(λ, a′, a)` and `E_n ξ = ξ`, `E_n η = η`,
+`⟪η, a ξ⟫ = ∫ λ^{2it} ⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫ / (2 cosh πt) dt`.
+Blueprint: prpstn:van-daele-integral-formula-H0 -/
+theorem IsVanDaeleTriple.inner_eq_integral_of_spectral {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H}
+    (htriple : IsVanDaeleTriple M Ω C l a' a) {n : ℕ} (hn : 1 ≤ n) {ξ η : H}
+    (hξ : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] ξ = ξ)
+    (hη : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] η = η) :
+    ⟪η, a ξ⟫_ℂ = ∫ t : ℝ, (l : ℂ) ^ (2 * (Complex.I * t)) *
+        ⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
+        ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) := by
+  sorry
+
+/-- If `ξ_m → ξ` and `η_m → η`, then `λ^{2it} ⟪η_m, Δ^{it} J a′ J Δ^{-it} ξ_m⟫ / (2 cosh πt)`
+converges to the same expression for `ξ, η`.
+Blueprint: lmm:van-daele-integrand-vector-limit -/
+theorem tendsto_vanDaele_integrand {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) (a' : H →L[ℂ] H) (t : ℝ)
+    {ξs ηs : ℕ → H} {ξ η : H} (hξ : Tendsto ξs atTop (𝓝 ξ)) (hη : Tendsto ηs atTop (𝓝 η)) :
+    Tendsto (fun m : ℕ => (l : ℂ) ^ (2 * (Complex.I * t)) *
+          ⟪ηs m, modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) (ξs m)))⟫_ℂ /
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ))
+      atTop (𝓝 ((l : ℂ) ^ (2 * (Complex.I * t)) *
+          ⟪η, modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ))) := by
+  sorry
+
+/-- If `ξ_m → ξ`, `η_m → η` and `‖ξ_m‖ ‖η_m‖ ≤ K`, then
+`∫ λ^{2it} ⟪η_m, Δ^{it} J a′ J Δ^{-it} ξ_m⟫ / (2 cosh πt) dt` converges to the same integral for
+`ξ, η`.
+Blueprint: lmm:van-daele-integral-continuity -/
+theorem tendsto_vanDaele_integral {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) (a' : H →L[ℂ] H)
+    {ξs ηs : ℕ → H} {ξ η : H} (hξ : Tendsto ξs atTop (𝓝 ξ)) (hη : Tendsto ηs atTop (𝓝 η))
+    {K : ℝ} (hK : ∀ m, ‖ξs m‖ * ‖ηs m‖ ≤ K) :
+    Tendsto (fun m : ℕ => ∫ t : ℝ, (l : ℂ) ^ (2 * (Complex.I * t)) *
+          ⟪ηs m, modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) (ξs m)))⟫_ℂ /
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ))
+      atTop (𝓝 (∫ t : ℝ, (l : ℂ) ^ (2 * (Complex.I * t)) *
+          ⟪η, modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ))) := by
+  sorry
+
+/-- `ψ_m = E_{m+1} ψ` satisfies `E_{m+1} ψ_m = ψ_m` and `‖ψ_m‖ ≤ ‖ψ‖`, and `ψ_m → ψ`.
+Blueprint: lmm:modular-spectral-approximants -/
+theorem modularSpectralProjection_approximants {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (ψ : H) :
+    (∀ m : ℕ, spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[(m + 1 : ℕ)]
+        (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[(m + 1 : ℕ)] ψ) =
+        spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[(m + 1 : ℕ)] ψ ∧
+      ‖spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[(m + 1 : ℕ)] ψ‖ ≤ ‖ψ‖) ∧
+    Tendsto
+      (fun m : ℕ => spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[(m + 1 : ℕ)] ψ)
+      atTop (𝓝 ψ) := by
+  sorry
+
+/-- For a van Daele triple `(λ, a′, a)` and all `ξ, η`,
+`⟪η, a ξ⟫ = ∫ λ^{2it} ⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫ / (2 cosh πt) dt`.
+Blueprint: prpstn:van-daele-integral-formula -/
+theorem IsVanDaeleTriple.inner_eq_integral {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H}
+    (htriple : IsVanDaeleTriple M Ω C l a' a) (ξ η : H) :
+    ⟪η, a ξ⟫_ℂ = ∫ t : ℝ, (l : ℂ) ^ (2 * (Complex.I * t)) *
+        ⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
+        ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) := by
+  sorry
+
+/-- `h(t) = ⟪η, (Δ^{it} J a′ J Δ^{-it} b′ - b′ Δ^{it} J a′ J Δ^{-it}) ξ⟫ / (2 cosh πt)` equals
+`(⟪η, Δ^{it} J a′ J Δ^{-it} b′ ξ⟫ - ⟪b′* η, Δ^{it} J a′ J Δ^{-it} ξ⟫) / (2 cosh πt)`, and is
+continuous and integrable.
+Blueprint: lmm:van-daele-commutator-integrand -/
+theorem vanDaele_commutator_integrand {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (a' b' : H →L[ℂ] H) (ξ η : H) :
+    (∀ t : ℝ, ⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ))) -
+        b' (modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
+        ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) =
+      (⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ)))⟫_ℂ -
+        ⟪star b' η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ) /
+        ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) ∧
+    Continuous (fun t : ℝ => ⟪η, modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ))) -
+          b' (modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) ∧
+    MeasureTheory.Integrable (fun t : ℝ => ⟪η, modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ))) -
+          b' (modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) := by
+  sorry
+
+/-- For a van Daele triple `(λ, a′, a)` and `b′ ∈ M′`, `∫ λ^{2it} h(t) dt = 0`.
+Blueprint: lmm:van-daele-commutator-integral-zero -/
+theorem IsVanDaeleTriple.integral_commutator_eq_zero {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H}
+    (htriple : IsVanDaeleTriple M Ω C l a' a) {b' : H →L[ℂ] H} (hb' : b' ∈ Set.centralizer M)
+    (ξ η : H) :
+    ∫ t : ℝ, (l : ℂ) ^ (2 * (Complex.I * t)) *
+      (⟪η, modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ))) -
+          b' (modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) = 0 := by
+  sorry
+
+/-- For `a′, b′ ∈ M′` and every `θ`, `∫ e^{iθt} h(t) dt = 0`.
+Blueprint: lmm:van-daele-commutator-fourier -/
+theorem integral_exp_mul_vanDaele_commutator_eq_zero {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {a' b' : H →L[ℂ] H} (ha' : a' ∈ Set.centralizer M)
+    (hb' : b' ∈ Set.centralizer M) (ξ η : H) (θ : ℝ) :
+    ∫ t : ℝ, Complex.exp (Complex.I * θ * t) *
+      (⟪η, modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ))) -
+          b' (modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) = 0 := by
+  sorry
+
+/-- For `a′, b′ ∈ M′`, `Δ^{it} J a′ J Δ^{-it}` commutes with `b′`.
+Blueprint: lmm:van-daele-conjugate-commutes -/
+theorem modularUnitaryGroup_conj_commute {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {a' b' : H →L[ℂ] H} (ha' : a' ∈ Set.centralizer M)
+    (hb' : b' ∈ Set.centralizer M) (t : ℝ) :
+    ((modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
+      modularConjugationConj hM hΩ C hC a' ∘L
+      (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) * b' =
+      b' * ((modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
+        modularConjugationConj hM hΩ C hC a' ∘L
+        (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) := by
+  sorry
+
+/-- For `a′ ∈ M′`, `Δ^{it} J a′ J Δ^{-it} ∈ M`; in particular `J a′ J ∈ M`.
+Blueprint: lmm:van-daele-conjugate-in-algebra -/
+theorem modularUnitaryGroup_conj_mem {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {a' : H →L[ℂ] H} (ha' : a' ∈ Set.centralizer M) (t : ℝ) :
+    ((modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
+      modularConjugationConj hM hΩ C hC a' ∘L
+      (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) ∈ M ∧
+      modularConjugationConj hM hΩ C hC a' ∈ M := by
+  sorry
+
+/-- For `x ∈ M`, `J x J ∈ M′`.
+Blueprint: crllr:van-daele-algebra-conjugate -/
+theorem modularConjugationConj_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {x : H →L[ℂ] H} (hx : x ∈ M) :
+    modularConjugationConj hM hΩ C hC x ∈ Set.centralizer M := by
+  sorry
+
+/-- `{J x J | x ∈ M} = M′`.
+Blueprint: lmm:tomita-modular-conjugation-commutant -/
+theorem modularConjugationConj_image {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) :
+    (fun x => modularConjugationConj hM hΩ C hC x) '' M = Set.centralizer M := by
+  sorry
+
+/-- For every `s` and `x ∈ M`, `Δ^{is} x Δ^{-is} ∈ M`.
+Blueprint: lmm:tomita-modular-automorphism-subset -/
+theorem modularUnitaryGroup_conj_mem_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (s : ℝ) {x : H →L[ℂ] H} (hx : x ∈ M) :
+    ((modularUnitaryGroup hM hΩ C hC s).toLinearIsometry.toContinuousLinearMap ∘L
+      x ∘L (modularUnitaryGroup hM hΩ C hC (-s)).toLinearIsometry.toContinuousLinearMap) ∈ M := by
+  sorry
+
+/-- For every `t`, `{Δ^{it} x Δ^{-it} | x ∈ M} = M`.
+Blueprint: lmm:tomita-modular-automorphism -/
+theorem modularUnitaryGroup_conj_image {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (t : ℝ) :
+    (fun x => (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
+        x ∘L (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) '' M =
+      M := by
+  sorry
+
+/-- Tomita's theorem: `J M J = M′` and `Δ^{it} M Δ^{-it} = M` for every real `t`.
+Blueprint: thrm:tomita -/
+theorem tomita_theorem {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) :
+    (fun x => modularConjugationConj hM hΩ C hC x) '' M = Set.centralizer M ∧
+      ∀ t : ℝ,
+        (fun x => (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
+          x ∘L (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) '' M =
+          M := by
+  sorry
+
 end Physicslib4.Modular
