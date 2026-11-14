@@ -220,3 +220,10 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-14: 5c batch A (15 nodes: lmm:modular-conjugation-bounded-conjugate .. prpstn:van-daele-integral-formula-H0) written in Operators/Modular/VanDaele.lean, all sorry; strip function f(z) inlined as λ^{2z}⟪η, p_{z,n}(Δ) a p_{-z,n}(Δ) ξ⟫; boundary and integral formula take IsVanDaeleTriple; module builds; metadata recorded, status formalized.
 - 2026-11-14: 5c remaining 14 nodes (lmm:van-daele-integrand-vector-limit .. thrm:tomita) written in Operators/Modular/VanDaele.lean, all sorry; h(t) written in applied form, Δ^{it} X Δ^{-it} as CLM composition via toLinearIsometry.toContinuousLinearMap, thrm:tomita as tomita_theorem (two set-image equalities); module builds; metadata recorded, status formalized.
 - 2026-11-14: stage 5c statements reviewed: PASS (29 labels, ending in tomita_theorem). Prover note: strip_formula uses t*I and 2*(cosh:ℂ), Fourier uniqueness uses exp(θ*t*I); the batch uses I*t and exp(I*θ*t) — rewriting needed. Stage 5 fully formalized (statements).
+
+## Stage 5 (proofs)
+
+- 2026-11-14: 5a proving started: spectral support + scalar cpow lemmas, two per wave.
+- 2026-11-14: proved `modularOperator_functionalCalculus_indicator_Ioi` (lmm:modular-indicator-positive-one), mirroring the `_Ici` proof with null set `Iic 0` from `modularOperator_spectralMeasure_Iic_zero`.
+- 2026-11-14: proved `modularOperator_spectralMeasure_Iic_zero` (lmm:modular-spectral-support): subadditivity of the associated measure on `Iio 0 ∪ {0}`, with `spectralMeasure_Iio_zero_eq_zero_of_isPositive` and `spectralMeasure_singleton_zero`.
+- 2026-11-14: proved modularOperator_spectralMeasure_Iic_zero, modularOperator_functionalCalculus_indicator_Ioi.

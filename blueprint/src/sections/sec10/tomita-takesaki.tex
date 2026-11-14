@@ -2647,6 +2647,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     $\mu((-\infty, 0]) = 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-operator-properties, lmm:positive-spectral-support, lmm:injective-no-atom-at-zero, thrm:projection-valued-measures-associated-measure, def:projection-valued-measure}
     $\mu((-\infty, 0)) = 0$ by Lemma~\ref{lmm:positive-spectral-support} and $\mu(\{0\}) = 0$ by Lemma~\ref{lmm:injective-no-atom-at-zero}, both applicable by Theorem~\ref{thrm:modular-operator-properties}. For $\psi \in \mathbf{H}$, $(-\infty, 0] = (-\infty, 0) \cup \{0\}$ gives $\mu_\psi((-\infty, 0]) \le \mu_\psi((-\infty, 0)) + \mu_\psi(\{0\}) = 0$ (Mathlib's \texttt{measure\_union\_le}), and $\|\mu((-\infty, 0])\psi\|^2 = \mu_\psi((-\infty, 0])$ because $\mu((-\infty, 0])$ is an orthogonal projection (Definition~\ref{def:projection-valued-measure}). So $\mu((-\infty, 0])\psi = 0$ for every $\psi$.
 \end{proof}
@@ -2659,6 +2660,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     $1_{(0, \infty)}(\Delta) = \mathbf{1}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-spectral-support, lmm:integral-ignores-null-sets, prpstn:integral-of-indicator, def:projection-valued-measure}
     The functions $1_{(0, \infty)}$ and $1_{\mathbb{R}}$ agree off $(-\infty, 0]$, which is $\mu$-null by Lemma~\ref{lmm:modular-spectral-support}, so $1_{(0, \infty)}(\Delta) = 1_{\mathbb{R}}(\Delta)$ (Lemma~\ref{lmm:integral-ignores-null-sets}), and $1_{\mathbb{R}}(\Delta) = \mu(\mathbb{R}) = \mathbf{1}$ (Proposition~\ref{prpstn:integral-of-indicator} and Definition~\ref{def:projection-valued-measure}).
 \end{proof}

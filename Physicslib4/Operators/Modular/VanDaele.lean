@@ -57,7 +57,22 @@ theorem modularOperator_spectralMeasure_Iic_zero {M : Set (H →L[ℂ] H)} {Ω :
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) :
     spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) (Set.Iic 0) = 0 := by
-  sorry
+  obtain ⟨hpos, -, -, hker, -⟩ := modularOperator_properties hM hΩ C hC
+  set hA := modularOperator_isSelfAdjoint hM hΩ C hC
+  ext ψ
+  have h := MeasureTheory.measure_union_le (μ := (spectralMeasure hA).assoc ψ)
+    (Set.Iio (0 : ℝ)) {0}
+  rw [Set.Iio_union_right, assoc_apply_eq_norm_sq _ ψ measurableSet_Iic,
+    assoc_apply_eq_norm_sq _ ψ measurableSet_Iio,
+    assoc_apply_eq_norm_sq _ ψ (measurableSet_singleton 0),
+    spectralMeasure_Iio_zero_eq_zero_of_isPositive hA hpos,
+    spectralMeasure_singleton_zero hA hker] at h
+  simp only [zero_apply, norm_zero, ne_eq, OfNat.ofNat_ne_zero,
+    not_false_eq_true, zero_pow, ENNReal.ofReal_zero, add_zero, nonpos_iff_eq_zero,
+    ENNReal.ofReal_eq_zero] at h
+  have : ‖spectralMeasure hA (Set.Iic 0) ψ‖ = 0 := by
+    nlinarith [norm_nonneg (spectralMeasure hA (Set.Iic 0) ψ)]
+  simpa using this
 
 /-- `1_{(0, ∞)}(Δ) = 𝟙`.
 Blueprint: lmm:modular-indicator-positive-one -/
@@ -66,7 +81,13 @@ theorem modularOperator_functionalCalculus_indicator_Ioi {M : Set (H →L[ℂ] H
     (hC : ∀ x, C (C x) = x) :
     functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) ((Set.Ioi (0 : ℝ)).indicator 1) =
       (LinearMap.id : H →ₗ[ℂ] H).toPMap ⊤ := by
-  sorry
+  have hone : (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ := ⟨measurable_const, 1, fun _ => by simp⟩
+  refine (pmapIntegral_congr_of_null _ (g := 1) (measurable_const.indicator measurableSet_Ioi)
+    measurable_const measurableSet_Iic
+    (modularOperator_spectralMeasure_Iic_zero hM hΩ C hC) fun x hx => ?_).trans ?_
+  · exact Set.indicator_of_mem (Set.mem_Ioi.2 (not_le.1 hx)) _
+  · rw [pmapIntegral_of_bddMeasurable _ hone, Spectral.ProjectionValuedMeasure.integral_one]
+    rfl
 
 /-- `log Δ = ℓ(Δ)`, with `ℓ = Real.log`, is self-adjoint.
 Blueprint: lmm:modular-log-self-adjoint -/
