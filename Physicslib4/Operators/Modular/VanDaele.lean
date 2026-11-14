@@ -470,4 +470,413 @@ theorem modularConjugation_indicatorCpow_modularConjugation {M : Set (H →L[ℂ
       (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[-x, n] ψ := by
   sorry
 
+/-! ### The Tomita operator on `M Ω` -/
+
+/-- For `c ∈ M`, `c Ω ∈ Dom S` and `S (c Ω) = c* Ω`.
+Blueprint: lmm:tomita-operator-on-algebra -/
+theorem tomitaOperator_apply_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {c : H →L[ℂ] H} (hc : c ∈ M) :
+    ∃ h : c Ω ∈ (linearizedTomitaPre M Ω C).closure.domain,
+      tomitaOperator M Ω C ⟨c Ω, h⟩ = star c Ω := by
+  sorry
+
+/-! ### Conjugation of bounded operators by `J` and van Daele triples -/
+
+/-- The bounded operator `J T J : ψ ↦ J (T (J ψ))`.
+Blueprint: def:modular-conjugation-conjugate -/
+noncomputable def modularConjugationConj {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (T : H →L[ℂ] H) : H →L[ℂ] H :=
+  (((modularConjugation hM hΩ C hC).toContinuousLinearEquiv : H →SL[starRingEnd ℂ] H).comp
+    T).comp ((modularConjugation hM hΩ C hC).toContinuousLinearEquiv : H →SL[starRingEnd ℂ] H)
+
+/-- `(λ, a', a)` is a van Daele triple: `λ > 0`, `a' ∈ M′`, `a ∈ M`,
+`a Ω ∈ Dom S ∩ Dom S*` and `a' Ω = λ S (a Ω) + λ⁻¹ S* (a Ω)`.
+Blueprint: def:van-daele-triple -/
+def IsVanDaeleTriple (M : Set (H →L[ℂ] H)) (Ω : H) (C : H ≃ₗᵢ⋆[ℂ] H) (l : ℝ)
+    (a' a : H →L[ℂ] H) : Prop :=
+  0 < l ∧ a' ∈ Set.centralizer M ∧ a ∈ M ∧
+    ∃ (hS : a Ω ∈ (linearizedTomitaPre M Ω C).closure.domain)
+      (hS' : C (a Ω) ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain),
+      a' Ω = (l : ℂ) • tomitaOperator M Ω C ⟨a Ω, hS⟩ +
+        (l⁻¹ : ℂ) • (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (a Ω), hS'⟩
+
+/-! ### The functions `g_λ`, `v_λ` and `k_λ` -/
+
+/-- `g_λ(t) = λ / (1 + λ² t)` for `t > 0` and `0` otherwise.
+Blueprint: def:van-daele-g -/
+noncomputable def vanDaeleG (l : ℝ) : ℝ → ℂ :=
+  (Set.Ioi (0 : ℝ)).indicator fun t => ((l / (1 + l ^ 2 * t) : ℝ) : ℂ)
+
+/-- `v_λ(t) = λ √t / (1 + λ² t)` for `t > 0` and `0` otherwise.
+Blueprint: def:van-daele-v -/
+noncomputable def vanDaeleV (l : ℝ) : ℝ → ℂ :=
+  (Set.Ioi (0 : ℝ)).indicator fun t => ((l * Real.sqrt t / (1 + l ^ 2 * t) : ℝ) : ℂ)
+
+/-- `k_λ(t) = λ t / (1 + λ² t)` for `t > 0` and `0` otherwise.
+Blueprint: def:van-daele-k -/
+noncomputable def vanDaeleK (l : ℝ) : ℝ → ℂ :=
+  (Set.Ioi (0 : ℝ)).indicator fun t => ((l * t / (1 + l ^ 2 * t) : ℝ) : ℂ)
+
+/-- For `λ > 0`, `g_λ`, `v_λ`, `k_λ` are measurable and real, with `0 ≤ g_λ ≤ λ`,
+`0 ≤ v_λ ≤ 1/2` and `0 ≤ k_λ ≤ λ⁻¹`.
+Blueprint: lmm:van-daele-functions-bounded -/
+theorem vanDaele_functions_bounded {l : ℝ} (hl : 0 < l) :
+    Measurable (vanDaeleG l) ∧ Measurable (vanDaeleV l) ∧ Measurable (vanDaeleK l) ∧
+      ∀ t : ℝ,
+        ((vanDaeleG l t).im = 0 ∧ 0 ≤ (vanDaeleG l t).re ∧ (vanDaeleG l t).re ≤ l) ∧
+        ((vanDaeleV l t).im = 0 ∧ 0 ≤ (vanDaeleV l t).re ∧ (vanDaeleV l t).re ≤ 1 / 2) ∧
+        ((vanDaeleK l t).im = 0 ∧ 0 ≤ (vanDaeleK l t).re ∧ (vanDaeleK l t).re ≤ l⁻¹) := by
+  sorry
+
+/-- With `s(t) = √t` and `r(t) = (√t)⁻¹`: `s g_λ = v_λ`, `v_λ s = k_λ`, `k_λ r = v_λ`,
+`v_λ r = g_λ` and `λ k_λ + λ⁻¹ g_λ = 1_{(0, ∞)}`.
+Blueprint: lmm:van-daele-functions-identities -/
+theorem vanDaele_functions_identities {l : ℝ} (hl : 0 < l) (t : ℝ) :
+    ((Real.sqrt t : ℝ) : ℂ) * vanDaeleG l t = vanDaeleV l t ∧
+      vanDaeleV l t * ((Real.sqrt t : ℝ) : ℂ) = vanDaeleK l t ∧
+      vanDaeleK l t * (((Real.sqrt t)⁻¹ : ℝ) : ℂ) = vanDaeleV l t ∧
+      vanDaeleV l t * (((Real.sqrt t)⁻¹ : ℝ) : ℂ) = vanDaeleG l t ∧
+      (l : ℂ) * vanDaeleK l t + (l⁻¹ : ℂ) * vanDaeleG l t =
+        (Set.Ioi (0 : ℝ)).indicator 1 t := by
+  sorry
+
+/-- If measurable `f`, `h` agree on `(0, ∞)`, then `W_f = W_h` and `f(Δ) = h(Δ)`.
+Blueprint: lmm:modular-fc-congr-positive -/
+theorem modularOperator_functionalCalculus_congr_pos {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {f h : ℝ → ℂ} (hf : Measurable f) (hh : Measurable h)
+    (hfh : ∀ t : ℝ, 0 < t → f t = h t) :
+    integralDomain (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)) f =
+        integralDomain (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)) h ∧
+      functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) f =
+        functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) h := by
+  sorry
+
+/-- For `λ > 0` and `z = -λ⁻²`: `z ∉ [0, ∞)`, `√(2(|z| - Re z)) = 2λ⁻¹`, and
+`-λ⁻¹ r_z(t) = g_λ(t)` for `t > 0`.
+Blueprint: lmm:van-daele-resolvent-point -/
+theorem vanDaele_resolvent_point {l : ℝ} (hl : 0 < l) :
+    -((l : ℂ) ^ 2)⁻¹ ∉ ((↑) : ℝ → ℂ) '' Set.Ici 0 ∧
+      Real.sqrt (2 * (‖-((l : ℂ) ^ 2)⁻¹‖ - (-((l : ℂ) ^ 2)⁻¹).re)) = 2 * l⁻¹ ∧
+      ∀ t : ℝ, 0 < t →
+        -(l⁻¹ : ℂ) * (Set.Ici (0 : ℝ)).indicator (fun t : ℝ => (-((l : ℂ) ^ 2)⁻¹ - t)⁻¹) t =
+          vanDaeleG l t := by
+  sorry
+
+/-- For `λ > 0` and `z = -λ⁻²`, `g_λ(Δ) = -λ⁻¹ (z - Δ)⁻¹`, a bounded operator on all of `H`.
+Blueprint: lmm:van-daele-g-resolvent -/
+theorem modularOperator_vanDaeleG_eq_resolvent {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) :
+    functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC) (vanDaeleG l) =
+        (((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          (vanDaeleG l) : H →ₗ[ℂ] H).toPMap ⊤) ∧
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l) =
+        -(l⁻¹ : ℂ) • (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          ((Set.Ici (0 : ℝ)).indicator fun t : ℝ => (-((l : ℂ) ^ 2)⁻¹ - t)⁻¹) := by
+  sorry
+
+/-- For `ξ ∈ Dom Δ^{1/2}`, `g_λ(Δ) Δ^{1/2} ξ = v_λ(Δ) ξ` and `v_λ(Δ) Δ^{1/2} ξ = k_λ(Δ) ξ`; for
+`ξ ∈ Dom Δ^{-1/2}`, `k_λ(Δ) Δ^{-1/2} ξ = v_λ(Δ) ξ` and `v_λ(Δ) Δ^{-1/2} ξ = g_λ(Δ) ξ`.
+Blueprint: lmm:van-daele-fc-products -/
+theorem modularOperator_vanDaele_products {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) :
+    (∀ ξ : (modularOperatorSqrt hM hΩ C hC).domain,
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l)
+          (modularOperatorSqrt hM hΩ C hC ξ) =
+        (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleV l) ξ ∧
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleV l)
+          (modularOperatorSqrt hM hΩ C hC ξ) =
+        (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleK l) ξ) ∧
+    ∀ ξ : (modularOperatorInvSqrt hM hΩ C hC).domain,
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleK l)
+          (modularOperatorInvSqrt hM hΩ C hC ξ) =
+        (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleV l) ξ ∧
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleV l)
+          (modularOperatorInvSqrt hM hΩ C hC ξ) =
+        (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l) ξ := by
+  sorry
+
+/-- For `ψ ∈ Dom Δ^{-1/2}`, `g_λ(Δ) ψ ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}` with
+`Δ^{1/2} g_λ(Δ) ψ = k_λ(Δ) Δ^{-1/2} ψ` and `Δ^{-1/2} g_λ(Δ) ψ = g_λ(Δ) Δ^{-1/2} ψ`.
+Blueprint: lmm:van-daele-g-domains -/
+theorem modularOperator_vanDaeleG_domains {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) (ψ : (modularOperatorInvSqrt hM hΩ C hC).domain) :
+    ∃ (h₁ : (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l) ψ ∈
+        (modularOperatorSqrt hM hΩ C hC).domain)
+      (h₂ : (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l) ψ ∈
+        (modularOperatorInvSqrt hM hΩ C hC).domain),
+      modularOperatorSqrt hM hΩ C hC ⟨_, h₁⟩ =
+          (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleK l)
+            (modularOperatorInvSqrt hM hΩ C hC ψ) ∧
+        modularOperatorInvSqrt hM hΩ C hC ⟨_, h₂⟩ =
+          (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l)
+            (modularOperatorInvSqrt hM hΩ C hC ψ) := by
+  sorry
+
+/-- For `λ > 0`, `λ k_λ(Δ) + λ⁻¹ g_λ(Δ) = 𝟙`.
+Blueprint: lmm:van-daele-partition-of-unity -/
+theorem modularOperator_vanDaele_partition_of_unity {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) :
+    (l : ℂ) • (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          (vanDaeleK l) +
+        (l⁻¹ : ℂ) • (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+          (vanDaeleG l) = 1 := by
+  sorry
+
+/-- For `b' ∈ M′`, `b' Ω ∈ Dom S* = Dom Δ^{-1/2}`, `S* (b' Ω) = J Δ^{-1/2} b' Ω = b'* Ω` and
+`Δ^{-1/2} b' Ω = J (b'* Ω)`.
+Blueprint: lmm:tomita-adjoint-on-commutant -/
+theorem tomitaAdjoint_apply_of_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {b' : H →L[ℂ] H} (hb' : b' ∈ Set.centralizer M) :
+    (∃ h : C (b' Ω) ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+      (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (b' Ω), h⟩ = star b' Ω) ∧
+    ∃ h : b' Ω ∈ (modularOperatorInvSqrt hM hΩ C hC).domain,
+      modularConjugation hM hΩ C hC (modularOperatorInvSqrt hM hΩ C hC ⟨b' Ω, h⟩) =
+          star b' Ω ∧
+        modularOperatorInvSqrt hM hΩ C hC ⟨b' Ω, h⟩ =
+          modularConjugation hM hΩ C hC (star b' Ω) := by
+  sorry
+
+/-- For `λ > 0` and `a' ∈ M′` there is `a ∈ M` with `a Ω = g_λ(Δ) a'* Ω` and `‖a‖ ≤ ‖a'‖ / 2`.
+Blueprint: lmm:van-daele-element -/
+theorem exists_vanDaele_element {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) {a' : H →L[ℂ] H}
+    (ha' : a' ∈ Set.centralizer M) :
+    ∃ a ∈ M, a Ω = (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+        (vanDaeleG l) (star a' Ω) ∧ ‖a‖ ≤ ‖a'‖ / 2 := by
+  sorry
+
+/-- If `a ∈ M` and `a Ω = g_λ(Δ) a'* Ω`, then with `φ = J (a' Ω)`,
+`a Ω ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}`, `a Ω = v_λ(Δ) φ`, `Δ^{1/2} a Ω = k_λ(Δ) φ` and
+`Δ^{-1/2} a Ω = g_λ(Δ) φ`.
+Blueprint: lmm:van-daele-element-formulas -/
+theorem vanDaele_element_formulas {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) {a' a : H →L[ℂ] H}
+    (ha' : a' ∈ Set.centralizer M) (ha : a ∈ M)
+    (haΩ : a Ω = (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+      (vanDaeleG l) (star a' Ω)) :
+    ∃ (h₁ : a Ω ∈ (modularOperatorSqrt hM hΩ C hC).domain)
+      (h₂ : a Ω ∈ (modularOperatorInvSqrt hM hΩ C hC).domain),
+      a Ω = (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleV l)
+          (modularConjugation hM hΩ C hC (a' Ω)) ∧
+        modularOperatorSqrt hM hΩ C hC ⟨a Ω, h₁⟩ =
+          (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleK l)
+            (modularConjugation hM hΩ C hC (a' Ω)) ∧
+        modularOperatorInvSqrt hM hΩ C hC ⟨a Ω, h₂⟩ =
+          (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG l)
+            (modularConjugation hM hΩ C hC (a' Ω)) := by
+  sorry
+
+/-- For `λ > 0` and `a' ∈ M′` there is `a` with `(λ, a', a)` a van Daele triple,
+`‖a‖ ≤ ‖a'‖ / 2` and `a Ω = g_λ(Δ) a'* Ω`.
+Blueprint: lmm:van-daele-commutant-equation -/
+theorem exists_isVanDaeleTriple {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) {a' : H →L[ℂ] H}
+    (ha' : a' ∈ Set.centralizer M) :
+    ∃ a : H →L[ℂ] H, IsVanDaeleTriple M Ω C l a' a ∧ ‖a‖ ≤ ‖a'‖ / 2 ∧
+      a Ω = (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+        (vanDaeleG l) (star a' Ω) := by
+  sorry
+
+/-! ### Van Daele's approximation and sesquilinear identities -/
+
+/-- For `ξ ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}` and `φ = Δ^{1/2} ξ + Δ^{-1/2} ξ`, `v_1(Δ) φ = ξ`,
+`k_1(Δ) φ = Δ^{1/2} ξ` and `g_1(Δ) φ = Δ^{-1/2} ξ`.
+Blueprint: lmm:van-daele-inversion -/
+theorem modularOperator_vanDaele_inversion {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {ξ : H} (h₁ : ξ ∈ (modularOperatorSqrt hM hΩ C hC).domain)
+    (h₂ : ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain) :
+    (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleV 1)
+        (modularOperatorSqrt hM hΩ C hC ⟨ξ, h₁⟩ + modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩) =
+      ξ ∧
+    (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleK 1)
+        (modularOperatorSqrt hM hΩ C hC ⟨ξ, h₁⟩ + modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩) =
+      modularOperatorSqrt hM hΩ C hC ⟨ξ, h₁⟩ ∧
+    (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG 1)
+        (modularOperatorSqrt hM hΩ C hC ⟨ξ, h₁⟩ + modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩) =
+      modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩ := by
+  sorry
+
+/-- Every `φ ∈ H` is a limit `J (a'_n Ω) → φ` with `a'_n ∈ M′`.
+Blueprint: lmm:modular-conjugation-commutant-dense -/
+theorem exists_tendsto_modularConjugation_centralizer {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (φ : H) :
+    ∃ a' : ℕ → H →L[ℂ] H, (∀ n, a' n ∈ Set.centralizer M) ∧
+      Tendsto (fun n => modularConjugation hM hΩ C hC (a' n Ω)) atTop (𝓝 φ) := by
+  sorry
+
+/-- For `ξ ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}` there are `a_n ∈ M` with
+`a_n Ω ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}`, `a_n Ω → ξ`, `Δ^{1/2} a_n Ω → Δ^{1/2} ξ` and
+`Δ^{-1/2} a_n Ω → Δ^{-1/2} ξ`.
+Blueprint: crllr:van-daele-approximation -/
+theorem exists_tendsto_modularOperatorSqrt_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {ξ : H} (h₁ : ξ ∈ (modularOperatorSqrt hM hΩ C hC).domain)
+    (h₂ : ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain) :
+    ∃ a : ℕ → H →L[ℂ] H, (∀ n, a n ∈ M) ∧
+      ∃ (ha₁ : ∀ n, a n Ω ∈ (modularOperatorSqrt hM hΩ C hC).domain)
+        (ha₂ : ∀ n, a n Ω ∈ (modularOperatorInvSqrt hM hΩ C hC).domain),
+        Tendsto (fun n => a n Ω) atTop (𝓝 ξ) ∧
+        Tendsto (fun n => modularOperatorSqrt hM hΩ C hC ⟨a n Ω, ha₁ n⟩) atTop
+          (𝓝 (modularOperatorSqrt hM hΩ C hC ⟨ξ, h₁⟩)) ∧
+        Tendsto (fun n => modularOperatorInvSqrt hM hΩ C hC ⟨a n Ω, ha₂ n⟩) atTop
+          (𝓝 (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩)) := by
+  sorry
+
+/-- For `ξ ∈ Dom S ∩ Dom S*` there are `a_n ∈ M` with `a_n Ω ∈ Dom S ∩ Dom S*`, `a_n Ω → ξ`,
+`S (a_n Ω) → S ξ` and `S* (a_n Ω) → S* ξ`.
+Blueprint: crllr:van-daele-approximation-tomita -/
+theorem exists_tendsto_tomitaOperator_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {ξ : H} (hS : ξ ∈ (linearizedTomitaPre M Ω C).closure.domain)
+    (hS' : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain) :
+    ∃ a : ℕ → H →L[ℂ] H, (∀ n, a n ∈ M) ∧
+      ∃ (haS : ∀ n, a n Ω ∈ (linearizedTomitaPre M Ω C).closure.domain)
+        (haS' : ∀ n, C (a n Ω) ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain),
+        Tendsto (fun n => a n Ω) atTop (𝓝 ξ) ∧
+        Tendsto (fun n => tomitaOperator M Ω C ⟨a n Ω, haS n⟩) atTop
+          (𝓝 (tomitaOperator M Ω C ⟨ξ, hS⟩)) ∧
+        Tendsto (fun n => (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (a n Ω), haS' n⟩) atTop
+          (𝓝 ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, hS'⟩)) := by
+  sorry
+
+/-- If `ξ ∈ Dom S*`, then `S* ξ ∈ Dom S*` and `S* S* ξ = ξ`.
+Blueprint: lmm:tomita-adjoint-involution -/
+theorem tomitaAdjoint_involutive {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {ξ : H}
+    (hξ : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain) :
+    ∃ h : C ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, hξ⟩) ∈
+        (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+      (linearizedTomitaPre M Ω C).closure.adjoint
+        ⟨C ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, hξ⟩), h⟩ = ξ := by
+  sorry
+
+/-- For `a, x, y ∈ M` with `y Ω ∈ Dom S*`, `⟪a S(x Ω), S*(y Ω)⟫ = ⟪x* y Ω, S(a Ω)⟫`.
+Blueprint: lmm:van-daele-first-term -/
+theorem inner_tomitaOperator_tomitaAdjoint_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {a x y : H →L[ℂ] H} (ha : a ∈ M) (hx : x ∈ M) (hy : y ∈ M)
+    (haS : a Ω ∈ (linearizedTomitaPre M Ω C).closure.domain)
+    (hxS : x Ω ∈ (linearizedTomitaPre M Ω C).closure.domain)
+    (hyS' : C (y Ω) ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain) :
+    ⟪a (tomitaOperator M Ω C ⟨x Ω, hxS⟩),
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (y Ω), hyS'⟩⟫_ℂ =
+      ⟪(star x * y) Ω, tomitaOperator M Ω C ⟨a Ω, haS⟩⟫_ℂ := by
+  sorry
+
+/-- For `a, x, y ∈ M` with `x Ω, a Ω ∈ Dom S*`, `⟪a S*(x Ω), S(y Ω)⟫ = ⟪x* y Ω, S*(a Ω)⟫`.
+Blueprint: lmm:van-daele-second-term -/
+theorem inner_tomitaAdjoint_tomitaOperator_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {a x y : H →L[ℂ] H} (ha : a ∈ M) (hx : x ∈ M) (hy : y ∈ M)
+    (haS' : C (a Ω) ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain)
+    (hxS' : C (x Ω) ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain)
+    (hyS : y Ω ∈ (linearizedTomitaPre M Ω C).closure.domain) :
+    ⟪a ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C (x Ω), hxS'⟩),
+        tomitaOperator M Ω C ⟨y Ω, hyS⟩⟫_ℂ =
+      ⟪(star x * y) Ω, (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (a Ω), haS'⟩⟫_ℂ := by
+  sorry
+
+/-- For a van Daele triple `(λ, a', a)` and `x, y ∈ M` with `x Ω, y Ω ∈ Dom S*`,
+`λ ⟪a S(x Ω), S*(y Ω)⟫ + λ⁻¹ ⟪a S*(x Ω), S(y Ω)⟫ = ⟪y Ω, a' x Ω⟫`.
+Blueprint: lmm:van-daele-identity-algebra -/
+theorem IsVanDaeleTriple.inner_identity_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H} (htriple : IsVanDaeleTriple M Ω C l a' a)
+    {x y : H →L[ℂ] H} (hx : x ∈ M) (hy : y ∈ M)
+    (hxS : x Ω ∈ (linearizedTomitaPre M Ω C).closure.domain)
+    (hxS' : C (x Ω) ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain)
+    (hyS : y Ω ∈ (linearizedTomitaPre M Ω C).closure.domain)
+    (hyS' : C (y Ω) ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain) :
+    (l : ℂ) * ⟪a (tomitaOperator M Ω C ⟨x Ω, hxS⟩),
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (y Ω), hyS'⟩⟫_ℂ +
+      (l⁻¹ : ℂ) * ⟪a ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C (x Ω), hxS'⟩),
+        tomitaOperator M Ω C ⟨y Ω, hyS⟩⟫_ℂ =
+      ⟪y Ω, a' (x Ω)⟫_ℂ := by
+  sorry
+
+/-- For a van Daele triple `(λ, a', a)` and `ξ, η ∈ Dom S ∩ Dom S*`,
+`λ ⟪a S ξ, S* η⟫ + λ⁻¹ ⟪a S* ξ, S η⟫ = ⟪η, a' ξ⟫`.
+Blueprint: lmm:van-daele-sesquilinear-identity -/
+theorem IsVanDaeleTriple.inner_identity {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H} (htriple : IsVanDaeleTriple M Ω C l a' a)
+    {ξ η : H} (hξS : ξ ∈ (linearizedTomitaPre M Ω C).closure.domain)
+    (hξS' : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain)
+    (hηS : η ∈ (linearizedTomitaPre M Ω C).closure.domain)
+    (hηS' : C η ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain) :
+    (l : ℂ) * ⟪a (tomitaOperator M Ω C ⟨ξ, hξS⟩),
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C η, hηS'⟩⟫_ℂ +
+      (l⁻¹ : ℂ) * ⟪a ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, hξS'⟩),
+        tomitaOperator M Ω C ⟨η, hηS⟩⟫_ℂ =
+      ⟪η, a' ξ⟫_ℂ := by
+  sorry
+
+/-- For `ξ ∈ Dom Δ^{-1/2}`, `J ξ ∈ Dom S` and `S (J ξ) = Δ^{-1/2} ξ`; for `ξ ∈ Dom Δ^{1/2}`,
+`J ξ ∈ Dom S*` and `S* (J ξ) = Δ^{1/2} ξ`.
+Blueprint: lmm:tomita-operators-after-conjugation -/
+theorem tomitaOperator_modularConjugation {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) :
+    (∀ ξ : (modularOperatorInvSqrt hM hΩ C hC).domain,
+      ∃ h : modularConjugation hM hΩ C hC ξ ∈ (linearizedTomitaPre M Ω C).closure.domain,
+        tomitaOperator M Ω C ⟨modularConjugation hM hΩ C hC ξ, h⟩ =
+          modularOperatorInvSqrt hM hΩ C hC ξ) ∧
+    ∀ ξ : (modularOperatorSqrt hM hΩ C hC).domain,
+      ∃ h : C (modularConjugation hM hΩ C hC ξ) ∈
+          (linearizedTomitaPre M Ω C).closure.adjoint.domain,
+        (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (modularConjugation hM hΩ C hC ξ), h⟩ =
+          modularOperatorSqrt hM hΩ C hC ξ := by
+  sorry
+
+/-- For a van Daele triple `(λ, a', a)` and `ξ, η ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}`,
+`⟪η, J a' J ξ⟫ = λ ⟪Δ^{1/2} η, a Δ^{-1/2} ξ⟫ + λ⁻¹ ⟪Δ^{-1/2} η, a Δ^{1/2} ξ⟫`.
+Blueprint: crllr:van-daele-rearranged-identity -/
+theorem IsVanDaeleTriple.inner_modularConjugationConj {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H} (htriple : IsVanDaeleTriple M Ω C l a' a)
+    {ξ η : H} (hξ₁ : ξ ∈ (modularOperatorSqrt hM hΩ C hC).domain)
+    (hξ₂ : ξ ∈ (modularOperatorInvSqrt hM hΩ C hC).domain)
+    (hη₁ : η ∈ (modularOperatorSqrt hM hΩ C hC).domain)
+    (hη₂ : η ∈ (modularOperatorInvSqrt hM hΩ C hC).domain) :
+    ⟪η, modularConjugationConj hM hΩ C hC a' ξ⟫_ℂ =
+      (l : ℂ) * ⟪modularOperatorSqrt hM hΩ C hC ⟨η, hη₁⟩,
+          a (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, hξ₂⟩)⟫_ℂ +
+        (l⁻¹ : ℂ) * ⟪modularOperatorInvSqrt hM hΩ C hC ⟨η, hη₂⟩,
+          a (modularOperatorSqrt hM hΩ C hC ⟨ξ, hξ₁⟩)⟫_ℂ := by
+  sorry
+
+/-- For a van Daele triple `(λ, a', a)`, `n ≥ 1` and `E_n ξ = ξ`, `E_n η = η`,
+`⟪η, J a' J ξ⟫ = λ ⟪p_{1/2,n}(Δ) η, a p_{-1/2,n}(Δ) ξ⟫ + λ⁻¹ ⟪p_{-1/2,n}(Δ) η, a p_{1/2,n}(Δ) ξ⟫`.
+Blueprint: crllr:van-daele-rearranged-identity-H0 -/
+theorem IsVanDaeleTriple.inner_modularConjugationConj_indicatorCpow {M : Set (H →L[ℂ] H)}
+    {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H} (htriple : IsVanDaeleTriple M Ω C l a' a)
+    {n : ℕ} (hn : 1 ≤ n) {ξ η : H}
+    (hξ : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] ξ = ξ)
+    (hη : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] η = η) :
+    ⟪η, modularConjugationConj hM hΩ C hC a' ξ⟫_ℂ =
+      (l : ℂ) * ⟪(spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[(1 / 2 : ℂ), n] η,
+          a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[(-1 / 2 : ℂ), n] ξ)⟫_ℂ +
+        (l⁻¹ : ℂ) * ⟪(spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[(-1 / 2 : ℂ), n] η,
+          a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+            p[(1 / 2 : ℂ), n] ξ)⟫_ℂ := by
+  sorry
+
 end Physicslib4.Modular

@@ -304,7 +304,9 @@ For the rest of the section, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{
 
 \begin{lemma}[$S$ on $\mathcal{M}\Omega$]
     \label{lmm:tomita-operator-on-algebra}
+    \lean{Physicslib4.Modular.tomitaOperator_apply_of_mem}
     \uses{def:tomita-operator, def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $c \in \mathcal{M}$. Then $c\Omega \in \text{Dom}(S)$ and $S(c\Omega) = c^*\Omega$.
 \end{lemma}
 \begin{proof}
@@ -3067,6 +3069,8 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{definition}[The Function $g_\lambda$]
     \label{def:van-daele-g}
+    \lean{Physicslib4.Modular.vanDaeleG}
+    \leanok
     For $\lambda > 0$ real, $g_\lambda : \mathbb{R} \to \mathbb{C}$ is
     \begin{align}
         g_\lambda(t) = \frac{\lambda}{1 + \lambda^2 t} \quad (t > 0), \qquad g_\lambda(t) = 0 \quad (t \le 0).
@@ -3075,6 +3079,8 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{definition}[The Function $v_\lambda$]
     \label{def:van-daele-v}
+    \lean{Physicslib4.Modular.vanDaeleV}
+    \leanok
     For $\lambda > 0$ real, $v_\lambda : \mathbb{R} \to \mathbb{C}$ is
     \begin{align}
         v_\lambda(t) = \frac{\lambda\sqrt{t}}{1 + \lambda^2 t} \quad (t > 0), \qquad v_\lambda(t) = 0 \quad (t \le 0).
@@ -3083,6 +3089,8 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{definition}[The Function $k_\lambda$]
     \label{def:van-daele-k}
+    \lean{Physicslib4.Modular.vanDaeleK}
+    \leanok
     For $\lambda > 0$ real, $k_\lambda : \mathbb{R} \to \mathbb{C}$ is
     \begin{align}
         k_\lambda(t) = \frac{\lambda t}{1 + \lambda^2 t} \quad (t > 0), \qquad k_\lambda(t) = 0 \quad (t \le 0).
@@ -3091,7 +3099,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[The Functions $g_\lambda$, $v_\lambda$, $k_\lambda$ are Bounded]
     \label{lmm:van-daele-functions-bounded}
+    \lean{Physicslib4.Modular.vanDaele_functions_bounded}
     \uses{def:van-daele-g, def:van-daele-v, def:van-daele-k}
+    \leanok
     Let $\lambda > 0$. Then $g_\lambda$, $v_\lambda$ and $k_\lambda$ are measurable and real-valued, and for every $t \in \mathbb{R}$, $0 \le g_\lambda(t) \le \lambda$, $0 \le v_\lambda(t) \le \tfrac{1}{2}$ and $0 \le k_\lambda(t) \le \lambda^{-1}$.
 \end{lemma}
 \begin{proof}
@@ -3100,7 +3110,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Identities between $g_\lambda$, $v_\lambda$, $k_\lambda$, $s$ and $r$]
     \label{lmm:van-daele-functions-identities}
+    \lean{Physicslib4.Modular.vanDaele_functions_identities}
     \uses{def:van-daele-g, def:van-daele-v, def:van-daele-k}
+    \leanok
     Let $\lambda > 0$. For every $t \in \mathbb{R}$,
     \begin{align}
         s(t)g_\lambda(t) = v_\lambda(t), \qquad v_\lambda(t)s(t) = k_\lambda(t), \qquad k_\lambda(t)r(t) = v_\lambda(t), \qquad v_\lambda(t)r(t) = g_\lambda(t), \qquad \lambda k_\lambda(t) + \lambda^{-1}g_\lambda(t) = 1_{(0, \infty)}(t).
@@ -3112,7 +3124,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Functions of $\Delta$ only see $(0, \infty)$]
     \label{lmm:modular-fc-congr-positive}
+    \lean{Physicslib4.Modular.modularOperator_functionalCalculus_congr_pos}
     \uses{def:modular-operator, def:hall-10.5}
+    \leanok
     Let $f, h : \mathbb{R} \to \mathbb{C}$ be measurable with $f(t) = h(t)$ for every $t > 0$. Then $W_f = W_h$ and $f(\Delta) = h(\Delta)$, including domains.
 \end{lemma}
 \begin{proof}
@@ -3122,7 +3136,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Takesaki's Lemma at $z = -\lambda^{-2}$: Scalars]
     \label{lmm:van-daele-resolvent-point}
+    \lean{Physicslib4.Modular.vanDaele_resolvent_point}
     \uses{lmm:resolvent-function-props, def:van-daele-g}
+    \leanok
     Let $\lambda > 0$ and $z = -\lambda^{-2}$. Then $z \notin [0, \infty)$, $\sqrt{2(|z| - \operatorname{Re} z)} = 2\lambda^{-1}$, and $-\lambda^{-1}r_z(t) = g_\lambda(t)$ for every $t > 0$, with $r_z$ as in Lemma~\ref{lmm:resolvent-function-props}.
 \end{lemma}
 \begin{proof}
@@ -3131,7 +3147,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[$g_\lambda(\Delta)$ as a Resolvent]
     \label{lmm:van-daele-g-resolvent}
+    \lean{Physicslib4.Modular.modularOperator_vanDaeleG_eq_resolvent}
     \uses{crllr:modular-resolvent, lmm:van-daele-functions-bounded, def:van-daele-g}
+    \leanok
     Let $\lambda > 0$ and $z = -\lambda^{-2}$. Then $g_\lambda(\Delta) = -\lambda^{-1}(z - \Delta)^{-1}$, a bounded operator defined on all of $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -3141,7 +3159,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Bounded Functions Composed with $\Delta^{\pm 1/2}$]
     \label{lmm:van-daele-fc-products}
+    \lean{Physicslib4.Modular.modularOperator_vanDaele_products}
     \uses{def:modular-operator, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-v, def:van-daele-k}
+    \leanok
     Let $\lambda > 0$. For $\xi \in \text{Dom}(\Delta^{1/2})$,
     \begin{align}
         g_\lambda(\Delta)\Delta^{1/2}\xi = v_\lambda(\Delta)\xi, \qquad v_\lambda(\Delta)\Delta^{1/2}\xi = k_\lambda(\Delta)\xi,
@@ -3158,7 +3178,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[$\Delta^{\pm 1/2}$ on the Range of $g_\lambda(\Delta)$]
     \label{lmm:van-daele-g-domains}
+    \lean{Physicslib4.Modular.modularOperator_vanDaeleG_domains}
     \uses{def:modular-operator, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-k}
+    \leanok
     Let $\lambda > 0$ and $\psi \in \text{Dom}(\Delta^{-1/2})$. Then $g_\lambda(\Delta)\psi \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$, and
     \begin{align}
         \Delta^{1/2}g_\lambda(\Delta)\psi = k_\lambda(\Delta)\Delta^{-1/2}\psi, \qquad \Delta^{-1/2}g_\lambda(\Delta)\psi = g_\lambda(\Delta)\Delta^{-1/2}\psi.
@@ -3171,7 +3193,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[$\lambda k_\lambda(\Delta) + \lambda^{-1}g_\lambda(\Delta) = \mathbf{1}$]
     \label{lmm:van-daele-partition-of-unity}
+    \lean{Physicslib4.Modular.modularOperator_vanDaele_partition_of_unity}
     \uses{def:modular-operator, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-k}
+    \leanok
     Let $\lambda > 0$. Then $\lambda k_\lambda(\Delta) + \lambda^{-1}g_\lambda(\Delta) = \mathbf{1}$.
 \end{lemma}
 \begin{proof}
@@ -3181,7 +3205,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[$S^*$ on $\mathcal{M}'\Omega$]
     \label{lmm:tomita-adjoint-on-commutant}
+    \lean{Physicslib4.Modular.tomitaAdjoint_apply_of_mem_centralizer}
     \uses{def:tomita-operator, def:modular-conjugation, lmm:inverse-square-root-positive}
+    \leanok
     Let $b' \in \mathcal{M}'$. Then $b'\Omega \in \text{Dom}(S^*) = \text{Dom}(\Delta^{-1/2})$, $S^*(b'\Omega) = J\Delta^{-1/2}b'\Omega = b'^*\Omega$, and $\Delta^{-1/2}b'\Omega = J(b'^*\Omega)$.
 \end{lemma}
 \begin{proof}
@@ -3191,7 +3217,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[The Element $a$ of Lemma~13.1.5]
     \label{lmm:van-daele-element}
+    \lean{Physicslib4.Modular.exists_vanDaele_element}
     \uses{def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention, def:modular-operator, lmm:van-daele-functions-bounded, def:van-daele-g}
+    \leanok
     Let $\lambda > 0$ and $a' \in \mathcal{M}'$. There is $a \in \mathcal{M}$ with $a\Omega = g_\lambda(\Delta)a'^*\Omega$ and $\|a\| \le \|a'\|/2$.
 \end{lemma}
 \begin{proof}
@@ -3201,7 +3229,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Formulas for $a\Omega$ and $\Delta^{\pm 1/2}a\Omega$]
     \label{lmm:van-daele-element-formulas}
+    \lean{Physicslib4.Modular.vanDaele_element_formulas}
     \uses{def:modular-operator, def:modular-conjugation, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-v, def:van-daele-k}
+    \leanok
     Let $\lambda > 0$, $a' \in \mathcal{M}'$, and let $a \in \mathcal{M}$ satisfy $a\Omega = g_\lambda(\Delta)a'^*\Omega$. Put $\phi = J(a'\Omega)$. Then $a\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$ and
     \begin{align}
         a\Omega = v_\lambda(\Delta)\phi, \qquad \Delta^{1/2}a\Omega = k_\lambda(\Delta)\phi, \qquad \Delta^{-1/2}a\Omega = g_\lambda(\Delta)\phi.
@@ -3214,7 +3244,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Jones's Lemma 13.1.5]
     \label{lmm:van-daele-commutant-equation}
+    \lean{Physicslib4.Modular.exists_isVanDaeleTriple}
     \uses{def:tomita-operator, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention, def:modular-operator, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-triple}
+    \leanok
     Let $\lambda > 0$ and $a' \in \mathcal{M}'$. There is $a \in \mathcal{B}(\mathbf{H})$ such that $(\lambda, a', a)$ is a van Daele triple (Definition~\ref{def:van-daele-triple}), $\|a\| \le \|a'\|/2$ and $a\Omega = g_\lambda(\Delta)a'^*\Omega$.
 \end{lemma}
 \begin{proof}
@@ -3224,7 +3256,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Inverting $\Delta^{1/2} + \Delta^{-1/2}$]
     \label{lmm:van-daele-inversion}
+    \lean{Physicslib4.Modular.modularOperator_vanDaele_inversion}
     \uses{def:modular-operator, lmm:inverse-square-root-positive, lmm:van-daele-functions-bounded, def:van-daele-g, def:van-daele-v, def:van-daele-k}
+    \leanok
     Let $\xi \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$ and $\phi = \Delta^{1/2}\xi + \Delta^{-1/2}\xi$. Then
     \begin{align}
         v_1(\Delta)\phi = \xi, \qquad k_1(\Delta)\phi = \Delta^{1/2}\xi, \qquad g_1(\Delta)\phi = \Delta^{-1/2}\xi.
@@ -3242,7 +3276,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[$J(\mathcal{M}'\Omega)$ is Dense]
     \label{lmm:modular-conjugation-commutant-dense}
+    \lean{Physicslib4.Modular.exists_tendsto_modularConjugation_centralizer}
     \uses{def:modular-conjugation, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    \leanok
     For every $\phi \in \mathbf{H}$ there are $a'_n \in \mathcal{M}'$ ($n \in \mathbb{N}$) with $J(a'_n\Omega) \to \phi$.
 \end{lemma}
 \begin{proof}
@@ -3252,7 +3288,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{corollary}[Jones's Corollary 13.1.6]
     \label{crllr:van-daele-approximation}
+    \lean{Physicslib4.Modular.exists_tendsto_modularOperatorSqrt_of_mem}
     \uses{def:modular-operator, lmm:inverse-square-root-positive, def:cyclic-separating-vector}
+    \leanok
     Let $\xi \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$. There are $a_n \in \mathcal{M}$ ($n \in \mathbb{N}$) with $a_n\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$ for every $n$ and
     \begin{align}
         a_n\Omega \to \xi, \qquad \Delta^{1/2}a_n\Omega \to \Delta^{1/2}\xi, \qquad \Delta^{-1/2}a_n\Omega \to \Delta^{-1/2}\xi.
@@ -3265,7 +3303,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{corollary}[Approximation in the Graphs of $S$ and $S^*$]
     \label{crllr:van-daele-approximation-tomita}
+    \lean{Physicslib4.Modular.exists_tendsto_tomitaOperator_of_mem}
     \uses{def:tomita-operator, def:cyclic-separating-vector}
+    \leanok
     Let $\xi \in \text{Dom}(S) \cap \text{Dom}(S^*)$. There are $a_n \in \mathcal{M}$ with $a_n\Omega \in \text{Dom}(S) \cap \text{Dom}(S^*)$ for every $n$, $a_n\Omega \to \xi$, $S(a_n\Omega) \to S\xi$ and $S^*(a_n\Omega) \to S^*\xi$.
 \end{corollary}
 \begin{proof}
@@ -3275,7 +3315,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[$S^*$ is an Involution]
     \label{lmm:tomita-adjoint-involution}
+    \lean{Physicslib4.Modular.tomitaAdjoint_involutive}
     \uses{def:tomita-operator}
+    \leanok
     If $\xi \in \text{Dom}(S^*)$, then $S^*\xi \in \text{Dom}(S^*)$ and $S^*S^*\xi = \xi$.
 \end{lemma}
 \begin{proof}
@@ -3285,7 +3327,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[The $S$-Term on $\mathcal{M}\Omega$]
     \label{lmm:van-daele-first-term}
+    \lean{Physicslib4.Modular.inner_tomitaOperator_tomitaAdjoint_of_mem}
     \uses{def:tomita-operator, def:tomita-pre-operators}
+    \leanok
     Let $a, x, y \in \mathcal{M}$ with $y\Omega \in \text{Dom}(S^*)$. Then $\left< aS(x\Omega), S^*(y\Omega) \right> = \left< x^*y\Omega, S(a\Omega) \right>$.
 \end{lemma}
 \begin{proof}
@@ -3295,7 +3339,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[The $S^*$-Term on $\mathcal{M}\Omega$]
     \label{lmm:van-daele-second-term}
+    \lean{Physicslib4.Modular.inner_tomitaAdjoint_tomitaOperator_of_mem}
     \uses{def:tomita-operator, def:tomita-pre-operators}
+    \leanok
     Let $a, x, y \in \mathcal{M}$ with $x\Omega, a\Omega \in \text{Dom}(S^*)$. Then $\left< aS^*(x\Omega), S(y\Omega) \right> = \left< x^*y\Omega, S^*(a\Omega) \right>$.
 \end{lemma}
 \begin{proof}
@@ -3305,7 +3351,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Jones's Lemma 13.1.7 on $\mathcal{M}\Omega$]
     \label{lmm:van-daele-identity-algebra}
-    \uses{def:tomita-operator}
+    \lean{Physicslib4.Modular.IsVanDaeleTriple.inner_identity_of_mem}
+    \uses{def:tomita-operator, def:van-daele-triple}
+    \leanok
     Let $\lambda > 0$, $a' \in \mathcal{M}'$ and $a \in \mathcal{M}$ with $a\Omega \in \text{Dom}(S^*)$ and $a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega)$ (Lemma~\ref{lmm:van-daele-commutant-equation}). Let $x, y \in \mathcal{M}$ with $x\Omega, y\Omega \in \text{Dom}(S^*)$. Then
     \begin{align}
         \lambda\left< aS(x\Omega), S^*(y\Omega) \right> + \lambda^{-1}\left< aS^*(x\Omega), S(y\Omega) \right> = \left< y\Omega, a'x\Omega \right>.
@@ -3318,7 +3366,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[Jones's Lemma 13.1.7]
     \label{lmm:van-daele-sesquilinear-identity}
-    \uses{def:tomita-operator}
+    \lean{Physicslib4.Modular.IsVanDaeleTriple.inner_identity}
+    \uses{def:tomita-operator, def:van-daele-triple}
+    \leanok
     Let $\lambda > 0$, $a' \in \mathcal{M}'$ and $a \in \mathcal{M}$ with $a\Omega \in \text{Dom}(S^*)$ and $a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega)$ (Lemma~\ref{lmm:van-daele-commutant-equation}). For all $\xi, \eta \in \text{Dom}(S) \cap \text{Dom}(S^*)$,
     \begin{align}
         \lambda\left< aS\xi, S^*\eta \right> + \lambda^{-1}\left< aS^*\xi, S\eta \right> = \left< \eta, a'\xi \right>.
@@ -3331,7 +3381,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{lemma}[$S$ and $S^*$ after $J$]
     \label{lmm:tomita-operators-after-conjugation}
+    \lean{Physicslib4.Modular.tomitaOperator_modularConjugation}
     \uses{def:tomita-operator, def:modular-conjugation, def:modular-operator, lmm:inverse-square-root-positive}
+    \leanok
     If $\xi \in \text{Dom}(\Delta^{-1/2})$, then $J\xi \in \text{Dom}(S)$ and $S(J\xi) = \Delta^{-1/2}\xi$. If $\xi \in \text{Dom}(\Delta^{1/2})$, then $J\xi \in \text{Dom}(S^*)$ and $S^*(J\xi) = \Delta^{1/2}\xi$.
 \end{lemma}
 \begin{proof}
@@ -3341,7 +3393,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{corollary}[The Rearranged Identity]
     \label{crllr:van-daele-rearranged-identity}
-    \uses{def:modular-conjugation, def:modular-conjugation-conjugate, def:modular-operator, lmm:inverse-square-root-positive}
+    \lean{Physicslib4.Modular.IsVanDaeleTriple.inner_modularConjugationConj}
+    \uses{def:modular-conjugation, def:modular-conjugation-conjugate, def:modular-operator, lmm:inverse-square-root-positive, def:van-daele-triple}
+    \leanok
     Let $\lambda$, $a'$ and $a$ be as in Lemma~\ref{lmm:van-daele-sesquilinear-identity}. For all $\xi, \eta \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$,
     \begin{align}
         \left< \eta, Ja'J\xi \right> = \lambda\left< \Delta^{1/2}\eta, a\Delta^{-1/2}\xi \right> + \lambda^{-1}\left< \Delta^{-1/2}\eta, a\Delta^{1/2}\xi \right>.
@@ -3355,7 +3409,9 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
 
 \begin{corollary}[The Rearranged Identity on $\mathcal{H}_0$]
     \label{crllr:van-daele-rearranged-identity-H0}
-    \uses{def:modular-conjugation, def:modular-conjugation-conjugate, lmm:modular-power-operators, lmm:modular-spectral-projections-nested}
+    \lean{Physicslib4.Modular.IsVanDaeleTriple.inner_modularConjugationConj_indicatorCpow}
+    \uses{def:modular-conjugation, def:modular-conjugation-conjugate, lmm:modular-power-operators, lmm:modular-spectral-projections-nested, def:van-daele-triple}
+    \leanok
     Let $\lambda$, $a'$ and $a$ be as in Lemma~\ref{lmm:van-daele-sesquilinear-identity}, $n \ge 1$, and $\xi, \eta \in \mathbf{H}$ with $E_n\xi = \xi$ and $E_n\eta = \eta$. Then
     \begin{align}
         \left< \eta, Ja'J\xi \right> = \lambda\left< p_{1/2,n}(\Delta)\eta, a\,p_{-1/2,n}(\Delta)\xi \right> + \lambda^{-1}\left< p_{-1/2,n}(\Delta)\eta, a\,p_{1/2,n}(\Delta)\xi \right>.
@@ -3375,7 +3431,9 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{definition}[Conjugation of a Bounded Operator by $J$]
     \label{def:modular-conjugation-conjugate}
+    \lean{Physicslib4.Modular.modularConjugationConj}
     \uses{def:modular-conjugation, lmm:antiunitary-isometric}
+    \leanok
     Let $T \in \mathcal{B}(\mathbf{H})$ and let $J$ be the modular conjugation of the pair $(\mathcal{M}, \Omega)$. The operator $JTJ \in \mathcal{B}(\mathbf{H})$ is the composite $\psi \mapsto J(T(J\psi))$. It is a bounded linear operator because it is the semilinear composite of the continuous conjugate-linear isometry $J$ (Lemma~\ref{lmm:antiunitary-isometric}), the continuous linear map $T$, and $J$ again, in which the two conjugations cancel (Mathlib's semilinear \texttt{ContinuousLinearMap.comp}, with the instance \texttt{RingHomCompTriple (starRingEnd \ensuremath{\mathbb{C}}) (starRingEnd \ensuremath{\mathbb{C}}) (RingHom.id \ensuremath{\mathbb{C}})}); Lemma~\ref{lmm:modular-conjugation-bounded-conjugate} records its values and norm.
 \end{definition}
 
@@ -3391,7 +3449,9 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
 
 \begin{definition}[Van Daele Triple]
     \label{def:van-daele-triple}
+    \lean{Physicslib4.Modular.IsVanDaeleTriple}
     \uses{def:tomita-operator, def:von-neumann-algebra-commutant-convention}
+    \leanok
     A triple $(\lambda, a', a)$ with $\lambda \in \mathbb{R}$ and $a', a \in \mathcal{B}(\mathbf{H})$ is a \emph{van Daele triple} (for the pair $(\mathcal{M}, \Omega)$) if $\lambda > 0$, $a' \in \mathcal{M}'$, $a \in \mathcal{M}$, $a\Omega \in \text{Dom}(S) \cap \text{Dom}(S^*)$ and
     \begin{align}
         a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega).
