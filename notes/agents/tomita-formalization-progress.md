@@ -300,3 +300,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-conjugation-commutant-dense (exists_tendsto_modularConjugation_centralizer): proved via density of M'Ω, mem_closure_iff_seq_limit, continuity of J and J∘J = id.
 - lmm:van-daele-inversion (modularOperator_vanDaele_inversion): proved via modularOperator_vanDaele_products at λ = 1, partition of unity (k₁ + g₁ = 1) and map_add.
 - 2026-11-14: proved modularOperator_vanDaele_inversion, exists_tendsto_modularConjugation_centralizer.
+- `tomitaAdjoint_involutive` (lmm:tomita-adjoint-involution): proved in VanDaele.lean via `tomitaOperator_centralizer_iff` (S* = S_{M'}) and `tomitaOperator_inverse_eq_self` applied to M'.
+- crllr:van-daele-approximation (exists_tendsto_modularOperatorSqrt_of_mem): proved via exists_tendsto_modularConjugation_centralizer, exists_vanDaele_element + vanDaele_element_formulas at λ = 1, continuity of the bounded functional calculus, and modularOperator_vanDaele_inversion.
+- 2026-11-14: proved exists_tendsto_modularOperatorSqrt_of_mem (Jones Cor 13.1.6), tomitaAdjoint_involutive.

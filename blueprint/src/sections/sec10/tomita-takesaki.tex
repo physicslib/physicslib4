@@ -3347,6 +3347,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     \end{align}
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-inversion, lmm:van-daele-element, lmm:van-daele-element-formulas, lmm:modular-conjugation-commutant-dense, def:van-daele-g, def:van-daele-v, def:van-daele-k}
     Let $\phi = \Delta^{1/2}\xi + \Delta^{-1/2}\xi$. Lemma~\ref{lmm:modular-conjugation-commutant-dense} gives $a'_n \in \mathcal{M}'$ with $J(a'_n\Omega) \to \phi$. Lemmas~\ref{lmm:van-daele-element} and~\ref{lmm:van-daele-element-formulas} with $\lambda = 1$ give $a_n \in \mathcal{M}$ with $a_n\Omega \in \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$, $a_n\Omega = v_1(\Delta)J(a'_n\Omega)$, $\Delta^{1/2}a_n\Omega = k_1(\Delta)J(a'_n\Omega)$ and $\Delta^{-1/2}a_n\Omega = g_1(\Delta)J(a'_n\Omega)$. The bounded operators $v_1(\Delta)$, $k_1(\Delta)$, $g_1(\Delta)$ are continuous (\texttt{ContinuousLinearMap.continuous}, \texttt{Continuous.tendsto}), so these converge to $v_1(\Delta)\phi$, $k_1(\Delta)\phi$, $g_1(\Delta)\phi$, which are $\xi$, $\Delta^{1/2}\xi$, $\Delta^{-1/2}\xi$ by Lemma~\ref{lmm:van-daele-inversion}.
 \end{proof}
@@ -3371,6 +3372,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     If $\xi \in \text{Dom}(S^*)$, then $S^*\xi \in \text{Dom}(S^*)$ and $S^*S^*\xi = \xi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-tomita-operator, lmm:commutant-cyclic-separating, thrm:tomita-operator-involution}
     By Lemma~\ref{lmm:commutant-tomita-operator}, $\Gamma(S^*) = \Gamma(S_{\mathcal{M}'})$, and $S_{\mathcal{M}'}$ is an involution by Theorem~\ref{thrm:tomita-operator-involution} for $(\mathcal{M}', \Omega)$, which satisfies its hypotheses by Lemma~\ref{lmm:commutant-cyclic-separating}.
 \end{proof}

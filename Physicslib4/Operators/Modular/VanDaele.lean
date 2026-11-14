@@ -1331,7 +1331,17 @@ theorem exists_tendsto_modularOperatorSqrt_of_mem {M : Set (H →L[ℂ] H)} {Ω 
           (𝓝 (modularOperatorSqrt hM hΩ C hC ⟨ξ, h₁⟩)) ∧
         Tendsto (fun n => modularOperatorInvSqrt hM hΩ C hC ⟨a n Ω, ha₂ n⟩) atTop
           (𝓝 (modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩)) := by
-  sorry
+  obtain ⟨a', ha', hlim⟩ := exists_tendsto_modularConjugation_centralizer hM hΩ C hC
+    (modularOperatorSqrt hM hΩ C hC ⟨ξ, h₁⟩ + modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩)
+  choose a ha haΩ _ using fun n => exists_vanDaele_element hM hΩ C hC one_pos (ha' n)
+  choose h₁' h₂' e₀ e₁ e₂ using fun n =>
+    vanDaele_element_formulas hM hΩ C hC one_pos (ha' n) (ha n) (haΩ n)
+  obtain ⟨i₀, i₁, i₂⟩ := modularOperator_vanDaele_inversion hM hΩ C hC h₁ h₂
+  have hT := fun T : H →L[ℂ] H => (T.continuous.tendsto _).comp hlim
+  refine ⟨a, ha, h₁', h₂', ?_, ?_, ?_⟩
+  · exact i₀ ▸ (hT _).congr fun n => (e₀ n).symm
+  · exact i₁ ▸ (hT _).congr fun n => (e₁ n).symm
+  · exact i₂ ▸ (hT _).congr fun n => (e₂ n).symm
 
 /-- For `ξ ∈ Dom S ∩ Dom S*` there are `a_n ∈ M` with `a_n Ω ∈ Dom S ∩ Dom S*`, `a_n Ω → ξ`,
 `S (a_n Ω) → S ξ` and `S* (a_n Ω) → S* ξ`.
@@ -1360,7 +1370,14 @@ theorem tomitaAdjoint_involutive {M : Set (H →L[ℂ] H)} {Ω : H}
         (linearizedTomitaPre M Ω C).closure.adjoint.domain,
       (linearizedTomitaPre M Ω C).closure.adjoint
         ⟨C ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, hξ⟩), h⟩ = ξ := by
-  sorry
+  obtain ⟨hM', hΩ'⟩ := isCyclicSeparatingVector_centralizer hM hΩ
+  set η := (linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, hξ⟩
+  obtain ⟨h1, e1⟩ := (tomitaOperator_centralizer_iff hM hΩ C hC ξ η).1.mpr
+    ((tomitaOperator_centralizer_iff hM hΩ C hC ξ η).2.mpr ⟨hξ, rfl⟩)
+  obtain ⟨h2, e2⟩ := (tomitaOperator_inverse_eq_self hM' hΩ' C hC).2.2 ⟨ξ, h1⟩
+  simp only [e1] at h2 e2
+  exact (tomitaOperator_centralizer_iff hM hΩ C hC η ξ).2.mp
+    ((tomitaOperator_centralizer_iff hM hΩ C hC η ξ).1.mp ⟨h2, e2⟩)
 
 /-- For `a, x, y ∈ M` with `y Ω ∈ Dom S*`, `⟪a S(x Ω), S*(y Ω)⟫ = ⟪x* y Ω, S(a Ω)⟫`.
 Blueprint: lmm:van-daele-first-term -/
