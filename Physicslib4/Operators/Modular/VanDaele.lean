@@ -1358,7 +1358,19 @@ theorem exists_tendsto_tomitaOperator_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
           (𝓝 (tomitaOperator M Ω C ⟨ξ, hS⟩)) ∧
         Tendsto (fun n => (linearizedTomitaPre M Ω C).closure.adjoint ⟨C (a n Ω), haS' n⟩) atTop
           (𝓝 ((linearizedTomitaPre M Ω C).closure.adjoint ⟨C ξ, hS'⟩)) := by
-  sorry
+  set J := modularConjugation hM hΩ C hC
+  obtain ⟨hD, hSJ⟩ := tomitaOperator_eq_modularConjugation_sqrt hM hΩ C hC
+  have hA := fun ζ η => (mem_tomitaAdjoint_iff_modularOperatorInvSqrt hM hΩ C hC ζ η).1
+  obtain ⟨h₂, e₂⟩ := (hA ξ _).mp ⟨hS', rfl⟩
+  obtain ⟨a, ha, ha₁, ha₂, h0, hl₁, hl₂⟩ :=
+    exists_tendsto_modularOperatorSqrt_of_mem hM hΩ C hC (hD ▸ hS) h₂
+  have hS'n := fun n => (hA (a n Ω) _).mpr ⟨ha₂ n, rfl⟩
+  choose haS' e₂n using hS'n
+  refine ⟨a, ha, fun n => hD ▸ ha₁ n, haS', h0, ?_, ?_⟩
+  · rw [hSJ ξ hS (hD ▸ hS)]
+    exact ((J.continuous.tendsto _).comp hl₁).congr fun n => (hSJ _ _ (ha₁ n)).symm
+  · rw [e₂]
+    exact ((J.continuous.tendsto _).comp hl₂).congr fun n => (e₂n n).symm
 
 /-- If `ξ ∈ Dom S*`, then `S* ξ ∈ Dom S*` and `S* S* ξ = ξ`.
 Blueprint: lmm:tomita-adjoint-involution -/

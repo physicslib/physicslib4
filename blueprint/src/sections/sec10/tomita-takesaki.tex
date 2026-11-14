@@ -3360,6 +3360,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     Let $\xi \in \text{Dom}(S) \cap \text{Dom}(S^*)$. There are $a_n \in \mathcal{M}$ with $a_n\Omega \in \text{Dom}(S) \cap \text{Dom}(S^*)$ for every $n$, $a_n\Omega \to \xi$, $S(a_n\Omega) \to S\xi$ and $S^*(a_n\Omega) \to S^*\xi$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{crllr:van-daele-approximation, thrm:modular-conjugation-polar, crllr:tomita-adjoint-polar, lmm:antiunitary-isometric}
     $\text{Dom}(S) \cap \text{Dom}(S^*) = \text{Dom}(\Delta^{1/2}) \cap \text{Dom}(\Delta^{-1/2})$, $S = J\Delta^{1/2}$ and $S^* = J\Delta^{-1/2}$ there (Theorem~\ref{thrm:modular-conjugation-polar}, Corollary~\ref{crllr:tomita-adjoint-polar}). Take $a_n$ from Corollary~\ref{crllr:van-daele-approximation} and apply the continuous map $J$ (Lemma~\ref{lmm:antiunitary-isometric}) to the last two convergences.
 \end{proof}

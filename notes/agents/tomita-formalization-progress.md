@@ -303,3 +303,5 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - `tomitaAdjoint_involutive` (lmm:tomita-adjoint-involution): proved in VanDaele.lean via `tomitaOperator_centralizer_iff` (S* = S_{M'}) and `tomitaOperator_inverse_eq_self` applied to M'.
 - crllr:van-daele-approximation (exists_tendsto_modularOperatorSqrt_of_mem): proved via exists_tendsto_modularConjugation_centralizer, exists_vanDaele_element + vanDaele_element_formulas at λ = 1, continuity of the bounded functional calculus, and modularOperator_vanDaele_inversion.
 - 2026-11-14: proved exists_tendsto_modularOperatorSqrt_of_mem (Jones Cor 13.1.6), tomitaAdjoint_involutive.
+- crllr:van-daele-approximation-tomita (exists_tendsto_tomitaOperator_of_mem): proved by transporting exists_tendsto_modularOperatorSqrt_of_mem through S = JΔ^{1/2} and S* = JΔ^{-1/2} with continuity of J.
+- 2026-11-14: proved exists_tendsto_tomitaOperator_of_mem.
