@@ -251,3 +251,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-unitary-group-props (modularUnitaryGroup_properties): PROVED via isOneParameterUnitaryGroup_expUnitary, isStronglyContinuous_expUnitary, IsOneParameterUnitaryGroup.adjoint_eq; symm from the group law.
 - lmm:modular-unitary-group-fc (modularUnitaryGroup_eq_functionalCalculus): PROVED via functionalCalculus_functionalCalculus (log) + functionalCalculus_expFun + functionalCalculus_of_bddMeasurable.
 - 2026-11-14: proved modularUnitaryGroup_properties, modularUnitaryGroup_eq_functionalCalculus.
+- lmm:modular-spectral-projections-nested (modularSpectralProjection_nested): proved via PVM apply_inter and K_n ⊆ K_m; subspace part via max k l.
+- lmm:modular-power-operators (`modularOperator_indicatorCpow`): proved via `functionalCalculus_of_bddMeasurable`, `norm_integral_le` + `ciSup_le`, `integral_conj` + `indicatorCpow_conj`, and `Real.rpow_le_rpow_of_exponent_le`.
+- 2026-11-14: proved modularSpectralProjection_nested, modularOperator_indicatorCpow.

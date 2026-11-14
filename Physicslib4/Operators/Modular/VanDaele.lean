@@ -179,7 +179,26 @@ theorem modularSpectralProjection_nested {M : Set (H →L[ℂ] H)} {Ω : H}
       spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[l] η = η →
       spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[max k l] (α • ξ + β • η) =
         α • ξ + β • η := by
-  sorry
+  set μ := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  have key : ∀ {n m : ℕ}, 1 ≤ n → n ≤ m →
+      μ K[m] * μ K[n] = μ K[n] ∧ μ K[n] * μ K[m] = μ K[n] := by
+    intro n m hn hnm
+    have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
+    have hnm' : (n : ℝ) ≤ m := by exact_mod_cast hnm
+    have hsub : K[n] ⊆ K[m] := Set.Icc_subset_Icc (one_div_le_one_div_of_le hn0 hnm') hnm'
+    rw [← μ.apply_inter measurableSet_Icc measurableSet_Icc,
+      ← μ.apply_inter measurableSet_Icc measurableSet_Icc, Set.inter_eq_right.2 hsub,
+      Set.inter_eq_left.2 hsub]
+    exact ⟨rfl, rfl⟩
+  have fix : ∀ {n m : ℕ}, 1 ≤ n → n ≤ m → ∀ ξ : H, μ K[n] ξ = ξ → μ K[m] ξ = ξ := by
+    intro n m hn hnm ξ hξ
+    rw [← hξ]
+    exact congrArg (fun T => T ξ) (key hn hnm).1
+  refine ⟨(key hn hnm).1, (key hn hnm).2, fix hn hnm, fun k l hk hl ξ η α β hξ hη => ?_⟩
+  have h1 := fix hk (le_max_left k l) ξ hξ
+  have h2 := fix hl (le_max_right k l) η hη
+  rw [Nat.cast_max] at h1 h2
+  rw [map_add, map_smul, map_smul, h1, h2]
 
 /-- `E_n ψ → ψ` as `n → ∞`, for every `ψ`.
 Blueprint: lmm:modular-spectral-projections-converge -/
@@ -349,7 +368,17 @@ theorem modularOperator_indicatorCpow {M : Set (H →L[ℂ] H)} {Ω : H}
       (|z.re| ≤ 1 / 2 →
         ‖(spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[z, n]‖ ≤
           (n : ℝ) ^ (1 / 2 : ℝ)) := by
-  sorry
+  set hA := modularOperator_isSelfAdjoint hM hΩ C hC
+  obtain ⟨hmeas, -, hbd⟩ := indicatorCpow_bounds hn z
+  have hf : p[z, n] ∈ Spectral.BddMeasurable ℝ := ⟨hmeas, _, fun x => (hbd x).1⟩
+  have hnorm : ‖(spectralMeasure hA).integral p[z, n]‖ ≤ (n : ℝ) ^ |z.re| :=
+    ((spectralMeasure hA).norm_integral_le hf).trans
+      (ciSup_le fun x => (hbd x).1)
+  obtain ⟨h1, h2⟩ := functionalCalculus_of_bddMeasurable hA hf
+  refine ⟨h1, h2, hnorm, ?_, fun hz => hnorm.trans
+    (Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast hn) (by linarith))⟩
+  rw [← (spectralMeasure hA).integral_conj hf]
+  exact congrArg _ (funext fun x => indicatorCpow_conj hn z x)
 
 /-- `p_{z,n}(Δ) p_{w,n}(Δ) = p_{z+w,n}(Δ)` and `p_{0,n}(Δ) = E_n`; hence
 `E_n p_{z,n}(Δ) = p_{z,n}(Δ) E_n = p_{z,n}(Δ)`, `p_{z,n}(Δ)` maps into `Range(E_n)`, and

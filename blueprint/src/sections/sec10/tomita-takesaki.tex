@@ -2720,6 +2720,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     For integers $1 \le n \le m$, $E_mE_n = E_nE_m = E_n$. Hence $E_n\xi = \xi$ implies $E_m\xi = \xi$, and $\mathcal{H}_0$ is a linear subspace: if $E_n\xi = \xi$ and $E_m\eta = \eta$, then $E_k(\alpha\xi + \beta\eta) = \alpha\xi + \beta\eta$ with $k = \max(n, m)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:projection-valued-measure}
     $K_n \subset K_m$ (\texttt{Set.Icc\_subset\_Icc} and \texttt{one\_div\_le\_one\_div\_of\_le}), so $\mu(K_m)\mu(K_n) = \mu(K_m \cap K_n) = \mu(K_n)$ and likewise in the other order, by the multiplicativity of a projection-valued measure (Definition~\ref{def:projection-valued-measure}). The rest follows by linearity of $E_k$.
 \end{proof}
@@ -2854,6 +2855,7 @@ and $\iota^-(\lambda) = 1/\lambda$ for $\lambda \ne 0$, $\iota^-(0) = 0$, as in 
     Let $n \ge 1$ and $z \in \mathbb{C}$. Then $p_{z,n}(\Delta)$ is a bounded operator defined on all of $\mathbf{H}$, equal to $\int p_{z,n} \, d\mu$, with $\|p_{z,n}(\Delta)\| \le n^{|\operatorname{Re} z|}$ and $p_{z,n}(\Delta)^* = p_{\overline{z},n}(\Delta)$. In particular $\|p_{z,n}(\Delta)\| \le n^{1/2}$ when $|\operatorname{Re} z| \le \tfrac{1}{2}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-power-function-bounds, lmm:modular-power-function-conj, lmm:functional-calculus-bounded, prpstn:integral-norm-bound, prpstn:integral-conjugation, thrm:modular-operator-properties}
     $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}) and $p_{z,n}$ is bounded and measurable (Lemma~\ref{lmm:modular-power-function-bounds}), so Lemma~\ref{lmm:functional-calculus-bounded} gives the bounded operator. Proposition~\ref{prpstn:integral-norm-bound} with the pointwise bound (\texttt{ciSup\_le}) gives the norm bound, and Proposition~\ref{prpstn:integral-conjugation} with $\overline{p_{z,n}} = p_{\overline{z},n}$ (Lemma~\ref{lmm:modular-power-function-conj}) the adjoint. For $|\operatorname{Re} z| \le \tfrac{1}{2}$, $n^{|\operatorname{Re} z|} \le n^{1/2}$ (\texttt{Real.rpow\_le\_rpow\_of\_exponent\_le}, $n \ge 1$).
 \end{proof}
