@@ -3313,6 +3313,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-fc-products, lmm:van-daele-partition-of-unity}
     By Lemma~\ref{lmm:van-daele-partition-of-unity} with $\lambda = 1$, $k_1(\Delta) + g_1(\Delta) = \mathbf{1}$. Using the four identities of Lemma~\ref{lmm:van-daele-fc-products} with $\lambda = 1$ and linearity of bounded operators,
     \begin{align}
@@ -3330,6 +3331,7 @@ This paragraph proves Lemma~13.1.5, Corollary~13.1.6 and Lemma~13.1.7 of Jones's
     For every $\phi \in \mathbf{H}$ there are $a'_n \in \mathcal{M}'$ ($n \in \mathbb{N}$) with $J(a'_n\Omega) \to \phi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-conjugation-involution, lmm:antiunitary-isometric, thrm:modular-conjugation-polar}
     $\mathcal{M}'\Omega$ is dense (Definition~\ref{def:cyclic-separating-vector}), so there are $a'_n \in \mathcal{M}'$ with $a'_n\Omega \to J\phi$ (\texttt{mem\_closure\_iff\_seq\_limit}, \texttt{Dense.closure\_eq}). $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}), hence continuous (Lemma~\ref{lmm:antiunitary-isometric}, \texttt{Continuous.tendsto}), and $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}), so $J(a'_n\Omega) \to \phi$.
 \end{proof}

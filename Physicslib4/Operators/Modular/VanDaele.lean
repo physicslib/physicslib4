@@ -1289,7 +1289,16 @@ theorem modularOperator_vanDaele_inversion {M : Set (H →L[ℂ] H)} {Ω : H}
     (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral (vanDaeleG 1)
         (modularOperatorSqrt hM hΩ C hC ⟨ξ, h₁⟩ + modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩) =
       modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩ := by
-  sorry
+  obtain ⟨P₁, P₂⟩ := modularOperator_vanDaele_products hM hΩ C hC one_pos
+  obtain ⟨gA, vA⟩ := P₁ ⟨ξ, h₁⟩
+  obtain ⟨kB, vB⟩ := P₂ ⟨ξ, h₂⟩
+  have hp : ∀ x, (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+      (vanDaeleK 1) x + (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
+      (vanDaeleG 1) x = x := fun x => by
+    simpa using congrArg (fun T => T x)
+      (modularOperator_vanDaele_partition_of_unity hM hΩ C hC one_pos)
+  exact ⟨by rw [map_add, vA, vB, hp], by rw [map_add, kB, ← gA, hp],
+    by rw [map_add, gA, ← kB, hp]⟩
 
 /-- Every `φ ∈ H` is a limit `J (a'_n Ω) → φ` with `a'_n ∈ M′`.
 Blueprint: lmm:modular-conjugation-commutant-dense -/
@@ -1298,7 +1307,13 @@ theorem exists_tendsto_modularConjugation_centralizer {M : Set (H →L[ℂ] H)} 
     (hC : ∀ x, C (C x) = x) (φ : H) :
     ∃ a' : ℕ → H →L[ℂ] H, (∀ n, a' n ∈ Set.centralizer M) ∧
       Tendsto (fun n => modularConjugation hM hΩ C hC (a' n Ω)) atTop (𝓝 φ) := by
-  sorry
+  set J := modularConjugation hM hΩ C hC
+  obtain ⟨x, hx, hlim⟩ := mem_closure_iff_seq_limit.1 (hΩ.2.closure_eq ▸ Set.mem_univ (J φ))
+  choose a' ha' hxa using hx
+  refine ⟨a', ha', ?_⟩
+  have h := (J.continuous.tendsto (J φ)).comp hlim
+  rw [(modularConjugation_involution hM hΩ C hC).1 φ] at h
+  simpa [Function.comp_def, hxa] using h
 
 /-- For `ξ ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}` there are `a_n ∈ M` with
 `a_n Ω ∈ Dom Δ^{1/2} ∩ Dom Δ^{-1/2}`, `a_n Ω → ξ`, `Δ^{1/2} a_n Ω → Δ^{1/2} ξ` and

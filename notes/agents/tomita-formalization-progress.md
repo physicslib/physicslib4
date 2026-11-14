@@ -297,3 +297,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-element-formulas (`vanDaele_element_formulas`): proved via `tomitaAdjoint_apply_of_mem_centralizer` on star a' (star-closure of M'), `modularOperator_vanDaeleG_domains`, `modularOperator_vanDaele_products`.
 - lmm:van-daele-commutant-equation (`exists_isVanDaeleTriple`): proved from `exists_vanDaele_element`, `vanDaele_element_formulas`, S = JΔ^{1/2}, S* = JΔ^{-1/2}, partition of unity and J² = 1.
 - 2026-11-14: proved vanDaele_element_formulas (ha unused), exists_isVanDaeleTriple (Jones Lemma 13.1.5).
+- lmm:modular-conjugation-commutant-dense (exists_tendsto_modularConjugation_centralizer): proved via density of M'Ω, mem_closure_iff_seq_limit, continuity of J and J∘J = id.
+- lmm:van-daele-inversion (modularOperator_vanDaele_inversion): proved via modularOperator_vanDaele_products at λ = 1, partition of unity (k₁ + g₁ = 1) and map_add.
+- 2026-11-14: proved modularOperator_vanDaele_inversion, exists_tendsto_modularConjugation_centralizer.
