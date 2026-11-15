@@ -353,3 +353,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-conjugate-commutes (`modularUnitaryGroup_conj_commute`): proved via Fourier uniqueness applied to the commutator integrand with η = (X_t b′ − b′X_t)ξ.
 - lmm:van-daele-commutator-fourier: proved `integral_exp_mul_vanDaele_commutator_eq_zero` (λ = e^{θ/2} via `vanDaele_phase_fourier`, `exists_isVanDaeleTriple`, `simp_rw [← hphase]`, then `IsVanDaeleTriple.integral_commutator_eq_zero`).
 - 2026-11-15: proved integral_exp_mul_vanDaele_commutator_eq_zero, modularUnitaryGroup_conj_commute.
+- crllr:van-daele-algebra-conjugate (`modularConjugationConj_mem_centralizer`): proved from `modularUnitaryGroup_conj_mem` (t = 0 conjunct) for (M′, Ω), with J_{M′} = J from `modularOperatorSqrt_modularConjugation_centralizer`; depends on the still-sorried `modularUnitaryGroup_conj_mem`.
+- lmm:van-daele-conjugate-in-algebra (`modularUnitaryGroup_conj_mem`): proved; `modularUnitaryGroup_conj_commute` puts X_t in M'' = M (hM.2), and the t = 0 conjunct follows from `map_zero` of the unitary group via `convert key 0` + `simp`.
+- 2026-11-15: proved modularUnitaryGroup_conj_mem, modularConjugationConj_mem_centralizer.

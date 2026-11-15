@@ -2215,7 +2215,17 @@ theorem modularUnitaryGroup_conj_mem {M : Set (H →L[ℂ] H)} {Ω : H}
       modularConjugationConj hM hΩ C hC a' ∘L
       (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) ∈ M ∧
       modularConjugationConj hM hΩ C hC a' ∈ M := by
-  sorry
+  have key : ∀ s : ℝ,
+      ((modularUnitaryGroup hM hΩ C hC s).toLinearIsometry.toContinuousLinearMap ∘L
+        modularConjugationConj hM hΩ C hC a' ∘L
+        (modularUnitaryGroup hM hΩ C hC (-s)).toLinearIsometry.toContinuousLinearMap) ∈ M :=
+    fun s => (Set.ext_iff.1 hM.2 _).1 (Set.mem_centralizer_iff.2 fun b' hb' =>
+      (modularUnitaryGroup_conj_commute hM hΩ C hC ha' hb' s).symm)
+  refine ⟨key t, ?_⟩
+  have h0 := (modularUnitaryGroup_properties hM hΩ C hC).1.map_zero
+  convert key 0 using 1
+  ext ξ
+  simp [neg_zero, h0]
 
 /-- For `x ∈ M`, `J x J ∈ M′`.
 Blueprint: crllr:van-daele-algebra-conjugate -/
@@ -2223,7 +2233,14 @@ theorem modularConjugationConj_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω : H
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {x : H →L[ℂ] H} (hx : x ∈ M) :
     modularConjugationConj hM hΩ C hC x ∈ Set.centralizer M := by
-  sorry
+  obtain ⟨hM', hΩ'⟩ := isCyclicSeparatingVector_centralizer hM hΩ
+  have hJ := (modularOperatorSqrt_modularConjugation_centralizer hM hΩ C hC).2
+  have key := (modularUnitaryGroup_conj_mem hM' hΩ' C hC (a' := x)
+    (by rw [hM.2]; exact hx) 0).2
+  convert key using 1
+  refine ContinuousLinearMap.ext fun ψ => ?_
+  rw [(modularConjugationConj_apply hM hΩ C hC x).1,
+    (modularConjugationConj_apply hM' hΩ' C hC x).1, hJ, hJ]
 
 /-- `{J x J | x ∈ M} = M′`.
 Blueprint: lmm:tomita-modular-conjugation-commutant -/

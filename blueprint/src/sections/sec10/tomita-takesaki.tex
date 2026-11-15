@@ -3839,6 +3839,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $\mathcal{M}$ be any von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, with modular operator $\Delta$ and modular conjugation $J$ (of the pair $(\mathcal{M}, \Omega)$), and let $a' \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $\Delta^{it}Ja'J\Delta^{-it} \in \mathcal{M}$. In particular ($t = 0$) $Ja'J \in \mathcal{M}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-conjugate-commutes, lmm:commutant-von-neumann-algebra, lmm:modular-unitary-group-props}
     By Lemma~\ref{lmm:van-daele-conjugate-commutes}, $\Delta^{it}Ja'J\Delta^{-it}$ lies in the centralizer of $\mathcal{M}'$, which is $(\mathcal{M}')' = \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}). For $t = 0$, $\Delta^{i0} = \mathbf{1}$ (Lemma~\ref{lmm:modular-unitary-group-props}; \texttt{neg\_zero}, \texttt{one\_mul}, \texttt{mul\_one}).
 \end{proof}
@@ -3851,6 +3852,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $x \in \mathcal{M}$. Then $JxJ \in \mathcal{M}'$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-conjugate-in-algebra, thrm:commutant-modular-objects, lmm:commutant-von-neumann-algebra}
     By Theorem~\ref{thrm:commutant-modular-objects}, $\mathcal{M}'$ is a von Neumann algebra with cyclic and separating vector $\Omega$, and its modular conjugation is $J_{\mathcal{M}'} = J$. The case $t = 0$ of Lemma~\ref{lmm:van-daele-conjugate-in-algebra} for $(\mathcal{M}', \Omega)$, applied to $x \in \mathcal{M} = (\mathcal{M}')'$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), gives $J_{\mathcal{M}'}xJ_{\mathcal{M}'} = JxJ \in \mathcal{M}'$.
 \end{proof}
