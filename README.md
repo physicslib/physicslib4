@@ -17,7 +17,7 @@ Official website at <https://physicslib.github.io/physicslib4/>.
 
 physicslib4 aims to formalise axiomatic physical theories in the [Lean 4 theorem prover](https://leanprover-community.github.io).
 
-The library currently covers algebraic quantum field theory: the [Haag–Kastler axioms](https://doi.org/10.1063/1.1704187) in Minkowski and curved spacetime, the GNS construction, spectral theory and Stone's theorem.
+The library covers algebraic quantum field theory: the [Haag–Kastler axioms](https://doi.org/10.1063/1.1704187) in Minkowski and curved spacetime, the GNS construction, spectral theory, Stone's theorem, the Reeh–Schlieder theorem and Tomita–Takesaki theory.
 
 ## Goal
 
