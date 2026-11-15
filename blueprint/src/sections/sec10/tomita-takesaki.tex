@@ -3964,6 +3964,7 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
     With $\mathfrak{A}$ and $\Omega$ as in Lemma~\ref{lmm:vector-functional-state}, $\|\omega_\Omega\| = 1$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:vector-functional-state}
     $\mathbf{H} \ne 0$ since $\Omega \ne 0$, so $\|\mathbf{1}\| = 1$ in $\mathfrak{A}$ (\texttt{norm\_one}), and $\omega_\Omega(\mathbf{1}) = \|\Omega\|^2 = 1 \le \|\omega_\Omega\|\,\|\mathbf{1}\|$ (\texttt{inner\_self\_eq\_norm\_sq\_to\_K}, \texttt{ContinuousLinearMap.le\_opNorm}). With $\|\omega_\Omega\| \le 1$ (Lemma~\ref{lmm:vector-functional-state}) this gives $\|\omega_\Omega\| = 1$ (\texttt{le\_antisymm}).
 \end{proof}
@@ -4147,6 +4148,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     For $z \in \mathbb{C}$, $u_z$ and $v_z$ are measurable, and for $z \in \mathcal{T}$, $|u_z(\lambda)| \le 1$ and $|v_z(\lambda)| \le 1$ for every $\lambda \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Measurability: \texttt{Measurable.indicator} with \texttt{measurableSet\_Ioo} and \texttt{measurableSet\_Ici}, and \texttt{Measurable.pow\_const} with \texttt{Complex.measurable\_ofReal}. Off the indicator sets both functions vanish. For $\lambda > 0$, $|\lambda^w| = \lambda^{\operatorname{Re} w}$ (\texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos}), and $\operatorname{Re}(-iz) = \operatorname{Im} z$. For $0 < \lambda < 1$, $\lambda^{\operatorname{Im} z} \le 1$ since $\operatorname{Im} z \ge 0$ (\texttt{Real.rpow\_le\_one}); for $\lambda \ge 1$, $\lambda^{\operatorname{Im} z - 1} \le 1$ since $\operatorname{Im} z \le 1$ (\texttt{Real.rpow\_le\_one\_of\_one\_le\_of\_nonpos}).
 \end{proof}
 

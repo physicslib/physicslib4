@@ -47,7 +47,17 @@ Blueprint: lmm:vector-functional-norm-one -/
 theorem norm_vectorFunctional (𝔄 : StarSubalgebra ℂ (H →L[ℂ] H)) {Ω : H} (hΩ : ‖Ω‖ = 1)
     (ω : 𝔄 →L[ℂ] ℂ) (hω : ∀ x : 𝔄, ω x = ⟪Ω, (x : H →L[ℂ] H) Ω⟫_ℂ) :
     ‖ω‖ = 1 := by
-  sorry
+  refine le_antisymm (ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_) ?_
+  · rw [hω]
+    calc ‖⟪Ω, (x : H →L[ℂ] H) Ω⟫_ℂ‖ ≤ ‖Ω‖ * ‖(x : H →L[ℂ] H) Ω‖ := norm_inner_le_norm _ _
+      _ ≤ ‖Ω‖ * (‖(x : H →L[ℂ] H)‖ * ‖Ω‖) :=
+          mul_le_mul_of_nonneg_left (ContinuousLinearMap.le_opNorm _ _) (norm_nonneg _)
+      _ = 1 * ‖x‖ := by rw [hΩ]; simp
+  · have h1 : ω 1 = 1 := by rw [hω]; simp [inner_self_eq_norm_sq_to_K, hΩ]
+    have hn : ‖(1 : 𝔄)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+    calc (1 : ℝ) = ‖ω 1‖ := by simp [h1]
+      _ ≤ ‖ω‖ * ‖(1 : 𝔄)‖ := ω.le_opNorm _
+      _ ≤ ‖ω‖ := mul_le_of_le_one_right (norm_nonneg _) hn
 
 /-- The *vector state* `ω_Ω(x) = ⟪Ω, xΩ⟫` of a unit vector `Ω` on a norm-closed unital
 `*`-subalgebra `𝔄` of `B(H)`, a C*-algebra by `StarSubalgebra.cstarAlgebra`. Positivity is

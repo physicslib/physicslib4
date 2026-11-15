@@ -197,7 +197,18 @@ Blueprint: lmm:takesaki-functions-bounded -/
 theorem takesaki_functions_bounded (z : ℂ) :
     Measurable u[z] ∧ Measurable v[z] ∧
       (z ∈ kmsStrip 1 → ∀ x : ℝ, ‖u[z] x‖ ≤ 1 ∧ ‖v[z] x‖ ≤ 1) := by
-  sorry
+  refine ⟨(Complex.measurable_ofReal.pow_const _).indicator measurableSet_Ioo,
+    (Complex.measurable_ofReal.pow_const _).indicator measurableSet_Ici, fun hz x => ?_⟩
+  obtain ⟨h0, h1⟩ : 0 ≤ z.im ∧ z.im ≤ 1 := by simpa [kmsStrip] using hz
+  constructor
+  · by_cases hx : x ∈ Set.Ioo (0 : ℝ) 1
+    · rw [Set.indicator_of_mem hx, Complex.norm_cpow_eq_rpow_re_of_pos hx.1]
+      exact Real.rpow_le_one hx.1.le hx.2.le (by simpa using h0)
+    · simp [hx]
+  · by_cases hx : x ∈ Set.Ici (1 : ℝ)
+    · rw [Set.indicator_of_mem hx, Complex.norm_cpow_eq_rpow_re_of_pos (by linarith [hx.out])]
+      exact Real.rpow_le_one_of_one_le_of_nonpos hx (by simp; linarith)
+    · simp [hx]
 
 /-- For `λ > 0`: `s(λ)² = λ`, `λ · λ^w = λ^{w+1}`, `|λ^w| = λ^{Re w}` and `e_{-t}(λ) = λ^{-it}`.
 Blueprint: lmm:takesaki-positive-scalar-identities -/
