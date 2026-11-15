@@ -3985,6 +3985,7 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
     For $t \in \mathbb{R}$ and $x \in \mathcal{M}$ put $\sigma_t(x) = \Delta^{it}x\Delta^{-it}$. Then $\sigma_t(x) \in \mathcal{M}$, $\sigma_t$ is linear, $\sigma_t(\mathbf{1}) = \mathbf{1}$, $\sigma_t(xy) = \sigma_t(x)\sigma_t(y)$, $\sigma_t(x^*) = \sigma_t(x)^*$, and $\sigma_{-t}(\sigma_t(x)) = \sigma_t(\sigma_{-t}(x)) = x$ for all $x, y \in \mathcal{M}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-modular-automorphism-subset, lmm:modular-unitary-group-props}
     $\sigma_t(x) \in \mathcal{M}$ is Lemma~\ref{lmm:tomita-modular-automorphism-subset}, and linearity is that of composition with fixed operators. By Lemma~\ref{lmm:modular-unitary-group-props}, $\Delta^{-it}\Delta^{it} = \Delta^{it}\Delta^{-it} = \mathbf{1}$, which gives $\sigma_t(\mathbf{1}) = \mathbf{1}$, multiplicativity, and the two inverse identities (\texttt{mul\_assoc}, \texttt{neg\_neg}); and $(\Delta^{it})^* = \Delta^{-it}$, so $(\Delta^{it}x\Delta^{-it})^* = \Delta^{it}x^*\Delta^{-it}$ (\texttt{star\_mul}, \texttt{star\_star}).
 \end{proof}
@@ -4127,6 +4128,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
     Let $x \in \mathcal{M}$. Then $x\Omega \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}x\Omega = Jx^*\Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-operator-on-algebra, thrm:modular-conjugation-polar, thrm:modular-conjugation-involution}
     $x\Omega \in \text{Dom}(S)$ with $S(x\Omega) = x^*\Omega$ (Lemma~\ref{lmm:tomita-operator-on-algebra}), and $\text{Dom}(S) = \text{Dom}(\Delta^{1/2})$ with $S = J\Delta^{1/2}$ (Theorem~\ref{thrm:modular-conjugation-polar}). So $J\Delta^{1/2}x\Omega = x^*\Omega$; apply $J$ and use $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}).
 \end{proof}

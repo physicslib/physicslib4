@@ -265,7 +265,11 @@ theorem modularOperatorSqrt_apply_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {x : H →L[ℂ] H} (hx : x ∈ M) :
     ∃ h : x Ω ∈ (Δs).domain, Δs ⟨x Ω, h⟩ = modularConjugation hM hΩ C hC (star x Ω) := by
-  sorry
+  obtain ⟨h₁, e⟩ := tomitaOperator_apply_of_mem hM hΩ C hC hx
+  obtain ⟨hdom, hS⟩ := tomitaOperator_eq_modularConjugation_sqrt hM hΩ C hC
+  have h₂ : x Ω ∈ (Δs).domain := hdom ▸ h₁
+  refine ⟨h₂, ?_⟩
+  rw [← e, hS _ h₁ h₂, (modularConjugation_involution hM hΩ C hC).1]
 
 /-! ### The scalar functions `u_z`, `v_z` and `g_t` -/
 
@@ -525,7 +529,22 @@ theorem modularAutomorphism_wellDefined {M : Set (H →L[ℂ] H)} {Ω : H}
       ∀ x : H →L[ℂ] H,
         U[-t] ∘L (U[t] ∘L x ∘L U[-t]) ∘L U[t] = x ∧
           U[t] ∘L (U[-t] ∘L x ∘L U[t]) ∘L U[-t] = x := by
-  sorry
+  have hU := modularUnitaryGroup_properties hM hΩ C hC
+  have h : ∀ a b : ℝ, a + b = 0 → ∀ v, modularUnitaryGroup hM hΩ C hC a
+      (modularUnitaryGroup hM hΩ C hC b v) = v := fun a b hab v => by
+    rw [← hU.1.map_add, hab, hU.1.map_zero]
+  have h₁ := h t (-t) (add_neg_cancel t)
+  have h₂ := h (-t) t (neg_add_cancel t)
+  refine ⟨fun x hx => modularUnitaryGroup_conj_mem_of_mem hM hΩ C hC t hx,
+    fun α β x y => ?_, ?_, fun x y => ?_, fun x => ?_, fun x => ⟨?_, ?_⟩⟩
+  · ext v; simp
+  · ext v; simp [h₁]
+  · ext v; simp [h₂]
+  · rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp, (hU.2.2 t).1,
+      (hU.2.2 (-t)).1, neg_neg, ContinuousLinearMap.comp_assoc]
+  · ext v; simp [h₂]
+  · ext v; simp [h₁]
 
 /-- The *modular algebra* of a von Neumann algebra `M`: the unital `*`-subalgebra
 `StarSubalgebra.centralizer ℂ M′` of `B(H)`, whose underlying set is `M`
