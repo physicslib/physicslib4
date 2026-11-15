@@ -462,7 +462,43 @@ theorem takesakiApproximant_eq_of_mem_strip {M : Set (H →L[ℂ] H)} {Ω : H}
     Gn[ξ, η, hξ, hη, n] z =
       ⟪ξ, (μΔ).integral u[z] (μΔ K[n] η)⟫_ℂ +
         ⟪Δs ⟨ξ, hξ⟩, (μΔ).integral v[z] (μΔ K[n] (Δs ⟨η, hη⟩))⟫_ℂ := by
-  sorry
+  set μ := μΔ
+  have hind : ∀ {S : Set ℝ}, MeasurableSet S →
+      S.indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+    fun {S} hS => ⟨measurable_const.indicator hS, 1, fun x => by
+      by_cases hx : x ∈ S <;> simp [hx]⟩
+  have hmove : ∀ {S : Set ℝ} (hS : MeasurableSet S) {f : ℝ → ℂ}
+      (hf : f ∈ Spectral.BddMeasurable ℝ) (a b : H),
+      ⟪μ S a, μ.integral f b⟫_ℂ = ⟪a, μ.integral (S.indicator 1 * f) b⟫_ℂ := by
+    intro S hS f hf a b
+    have hsa : μ S = ContinuousLinearMap.adjoint (μ S) := by
+      rw [← Spectral.ProjectionValuedMeasure.integral_indicator μ hS,
+        ← Spectral.ProjectionValuedMeasure.integral_conj μ (hind hS)]
+      congr 1; funext x; by_cases hx : x ∈ S <;> simp [hx]
+    rw [hsa, ContinuousLinearMap.adjoint_inner_left,
+      Spectral.ProjectionValuedMeasure.integral_mul μ (hind hS) hf,
+      Spectral.ProjectionValuedMeasure.integral_indicator μ hS]
+    rfl
+  have hK : MeasurableSet K[n] := measurableSet_Icc
+  have hcomp : ∀ {f : ℝ → ℂ} (_ : f ∈ Spectral.BddMeasurable ℝ) (b : H),
+      μ.integral f (μ K[n] b) = μ.integral (f * K[n].indicator 1) b := by
+    intro f hf b
+    rw [Spectral.ProjectionValuedMeasure.integral_mul μ hf (hind hK),
+      Spectral.ProjectionValuedMeasure.integral_indicator μ hK]
+    rfl
+  obtain ⟨hum, hvm, hb⟩ := takesaki_functions_bounded z
+  have hu : u[z] ∈ Spectral.BddMeasurable ℝ := ⟨hum, 1, fun x => (hb hz x).1⟩
+  have hv : v[z] ∈ Spectral.BddMeasurable ℝ := ⟨hvm, 1, fun x => (hb hz x).2⟩
+  have hp : ∀ w : ℂ, p[w, n] ∈ Spectral.BddMeasurable ℝ := fun w =>
+    ⟨(indicatorCpow_bounds hn w).1, _, fun x => ((indicatorCpow_bounds hn w).2.2 x).1⟩
+  have e1 : u[z] * K[n].indicator 1 = (Set.Ioo (0 : ℝ) 1).indicator 1 * p[-Complex.I * z, n] :=
+    funext fun x => (takesaki_functions_identities z n x).1
+  have e2 : v[z] * K[n].indicator 1 =
+      (Set.Ici (1 : ℝ)).indicator 1 * p[-Complex.I * z - 1, n] :=
+    funext fun x => (takesaki_functions_identities z n x).2
+  change ⟪μ _ ξ, _⟫_ℂ + ⟪μ _ _, _⟫_ℂ = _
+  rw [hmove measurableSet_Ioo (hp _), hmove measurableSet_Ici (hp _), hcomp hu, hcomp hv,
+    e1, e2]
 
 /-- On the closed strip,
 `|G_{ξ,η}(z) - G^n_{ξ,η}(z)| ≤ ‖ξ‖ ‖η - E_n η‖ + ‖Δ^{1/2}ξ‖ ‖Δ^{1/2}η - E_n Δ^{1/2}η‖` for

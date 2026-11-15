@@ -4262,6 +4262,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-functions-bounded, lmm:takesaki-functions-identities, lmm:modular-power-function-bounds, prpstn:integral-conjugation, prpstn:integral-multiplicative, prpstn:integral-of-indicator, lmm:functional-calculus-bounded}
     The indicators are real, so $1_{(0,1)}(\Delta)$ and $1_{[1,\infty)}(\Delta)$ are self-adjoint (Proposition~\ref{prpstn:integral-conjugation}) and move to the right slot (\texttt{ContinuousLinearMap.adjoint\_inner\_left}). All functions involved are bounded and measurable (Lemmas~\ref{lmm:takesaki-functions-bounded} and~\ref{lmm:modular-power-function-bounds}), so Proposition~\ref{prpstn:integral-multiplicative}, Lemma~\ref{lmm:takesaki-functions-identities} and $E_n = 1_{K_n}(\Delta)$ (Proposition~\ref{prpstn:integral-of-indicator}) give $1_{(0,1)}(\Delta)p_{-iz,n}(\Delta) = u_z(\Delta)E_n$ and $1_{[1,\infty)}(\Delta)p_{-iz-1,n}(\Delta) = v_z(\Delta)E_n$.
 \end{proof}
