@@ -4160,6 +4160,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     Let $\lambda > 0$, $w \in \mathbb{C}$ and $t \in \mathbb{R}$. Then $s(\lambda)^2 = \lambda$, $\lambda \cdot \lambda^w = \lambda^{w+1}$, $|\lambda^w| = \lambda^{\operatorname{Re} w}$ and $e_{-t}(\lambda) = \lambda^{-it}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-unitary-group-fc}
     $s(\lambda)^2 = \max(\lambda, 0) = \lambda$ (\texttt{Real.sq\_sqrt}, \texttt{max\_eq\_left}); $\lambda^{w+1} = \lambda^w\lambda^1$ (\texttt{Complex.cpow\_add}, $(\lambda : \mathbb{C}) \ne 0$, \texttt{Complex.cpow\_one}); the modulus is \texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos}; and $e_{-t}(\lambda) = \lambda^{-it}$ is Lemma~\ref{lmm:modular-unitary-group-fc} at $-t$.
 \end{proof}
@@ -4171,6 +4172,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     For $z \in \mathbb{C}$, $n \ge 1$ and every $\lambda \in \mathbb{R}$, $u_z(\lambda)1_{K_n}(\lambda) = 1_{(0,1)}(\lambda)\,p_{-iz,n}(\lambda)$ and $v_z(\lambda)1_{K_n}(\lambda) = 1_{[1,\infty)}(\lambda)\,p_{-iz-1,n}(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     By definition $p_{w,n}(\lambda) = 1_{K_n}(\lambda)\lambda^w$, so both identities are rearrangements of a product of two indicators and a power (\texttt{Set.indicator\_apply}, \texttt{mul\_comm}, \texttt{mul\_assoc}).
 \end{proof}
 

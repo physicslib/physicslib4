@@ -215,7 +215,13 @@ Blueprint: lmm:takesaki-positive-scalar-identities -/
 theorem takesaki_positive_scalar_identities {x : ℝ} (hx : 0 < x) (w : ℂ) (t : ℝ) :
     Real.sqrt x ^ 2 = x ∧ (x : ℂ) * (x : ℂ) ^ w = (x : ℂ) ^ (w + 1) ∧
       ‖(x : ℂ) ^ w‖ = x ^ w.re ∧ e[-t] x = (x : ℂ) ^ (-Complex.I * t) := by
-  sorry
+  have hx0 : (x : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hx.ne'
+  refine ⟨Real.sq_sqrt hx.le, ?_, Complex.norm_cpow_eq_rpow_re_of_pos hx w, ?_⟩
+  · rw [Complex.cpow_add _ _ hx0, Complex.cpow_one, mul_comm]
+  · rw [Complex.cpow_def_of_ne_zero hx0, ← Complex.ofReal_log hx.le]
+    dsimp only
+    congr 1
+    ring
 
 /-- `u_z 1_{K_n} = 1_{(0,1)} p_{-iz,n}` and `v_z 1_{K_n} = 1_{[1,∞)} p_{-iz-1,n}` pointwise.
 Blueprint: lmm:takesaki-functions-identities -/
@@ -223,7 +229,7 @@ theorem takesaki_functions_identities (z : ℂ) (n : ℕ) (x : ℝ) :
     u[z] x * (K[n]).indicator 1 x = (Set.Ioo (0 : ℝ) 1).indicator 1 x * p[-Complex.I * z, n] x ∧
       v[z] x * (K[n]).indicator 1 x =
         (Set.Ici (1 : ℝ)).indicator 1 x * p[-Complex.I * z - 1, n] x := by
-  sorry
+  constructor <;> simp only [Set.indicator] <;> split_ifs <;> simp
 
 /-- `u_t + s² v_t = 1_{(0,∞)} e_{-t}` pointwise, for real `t`.
 Blueprint: lmm:takesaki-functions-lower-sum -/
