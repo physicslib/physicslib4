@@ -1905,7 +1905,26 @@ theorem IsVanDaeleTriple.strip_function_boundary {M : Set (H →L[ℂ] H)} {Ω :
         ⟪η, modularUnitaryGroup hM hΩ C hC t
           (modularConjugationConj hM hΩ C hC a'
             (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ := by
-  sorry
+  set P := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  set U := modularUnitaryGroup hM hΩ C hC (-t)
+  have hE : ∀ ψ, P K[n] ψ = ψ → P K[n] (U ψ) = U ψ := fun ψ hψ => by
+    have h := DFunLike.congr_fun (modularUnitaryGroup_indicatorCpow hM hΩ C hC hn 0 (-t)).2.2.1 ψ
+    simp only [mul_apply_eq_comp] at h
+    rw [hψ] at h
+    exact h.symm
+  have hp := (vanDaele_phase_boundary htriple.1).1 t
+  have s1 := inner_modularOperator_indicatorCpow_conj_add_I_mul hM hΩ C hC hn a ξ η (1 / 2) t
+  have s2 := inner_modularOperator_indicatorCpow_conj_add_I_mul hM hΩ C hC hn a ξ η (-1 / 2) t
+  have key := htriple.inner_modularConjugationConj_indicatorCpow hM hΩ C hC hn (hE ξ hξ) (hE η hη)
+  have hc1 : (((1 / 2 : ℝ)) : ℂ) = 1 / 2 := by push_cast; ring
+  have hc2 : (((-1 / 2 : ℝ)) : ℂ) = -1 / 2 := by push_cast; ring
+  have hc3 : -((1 / 2 : ℂ)) = -1 / 2 := by ring
+  have hc4 : -((-1 / 2 : ℂ)) = 1 / 2 := by ring
+  rw [hc1, hc3] at s1
+  rw [hc2, hc4] at s2
+  rw [hp.1, hp.2.1, s1, s2, (continuous_inner_modularUnitaryGroup_conj hM hΩ C hC a' ξ η).1 t,
+    key]
+  ring
 
 /-- For a van Daele triple `(λ, a′, a)` and `E_n ξ = ξ`, `E_n η = η`,
 `⟪η, a ξ⟫ = ∫ λ^{2it} ⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫ / (2 cosh πt) dt`.

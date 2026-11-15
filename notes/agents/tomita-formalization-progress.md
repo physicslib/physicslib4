@@ -337,3 +337,5 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-strip-function-zero (vanDaele_strip_function_zero): proved via cpow_zero, p_{0,n}(Δ)* = p_{0,n}(Δ) = E_n, E_nξ = ξ, E_nη = η. (`hl` unused-variable warning; the signature is unchanged)
 - lmm:van-daele-strip-function-shift (`inner_modularOperator_indicatorCpow_conj_add_I_mul`): proved via the adjoint conjunct of `modularOperator_indicatorCpow` and `modularUnitaryGroup_indicatorCpow` at `-t`.
 - 2026-11-15: proved vanDaele_strip_function_zero (hl unused), inner_modularOperator_indicatorCpow_conj_add_I_mul.
+- lmm:van-daele-strip-function-boundary (IsVanDaeleTriple.strip_function_boundary): proved via vanDaele_phase_boundary, the shift lemma at x = ±1/2, Δ^{-it} preserving Range E_n, inner_modularConjugationConj_indicatorCpow, and continuous_inner_modularUnitaryGroup_conj.
+- 2026-11-15: proved IsVanDaeleTriple.strip_function_boundary.
