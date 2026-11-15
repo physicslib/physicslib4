@@ -3940,6 +3940,7 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
     The underlying set of the modular algebra is $\mathcal{M}$, and it is closed in the norm topology of $\mathcal{B}(\mathbf{H})$. Hence the modular algebra, with the norm, multiplication and involution of $\mathcal{B}(\mathbf{H})$, is a C$^*$-algebra.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-von-neumann-algebra}
     By \texttt{StarSubalgebra.coe\_centralizer} the underlying set is the centralizer of $\mathcal{M}' \cup (\mathcal{M}')^*$. $\mathcal{M}'$ is self-adjoint and $(\mathcal{M}')' = \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so this set is $\mathcal{M}$. A centralizer is closed in a topological algebra with separately continuous multiplication (\texttt{Set.isClosed\_centralizer}), and a closed $*$-subalgebra of the C$^*$-algebra $\mathcal{B}(\mathbf{H})$ is a C$^*$-algebra (\texttt{StarSubalgebra.cstarAlgebra}).
 \end{proof}
@@ -3951,6 +3952,7 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
     Let $\mathfrak{A}$ be a norm-closed unital $*$-subalgebra of $\mathcal{B}(\mathbf{H})$, regarded as a C$^*$-algebra, and let $\Omega \in \mathbf{H}$ with $\|\Omega\| = 1$. Then $\omega_\Omega(x) = \left< \Omega, x\Omega \right>$ ($x \in \mathfrak{A}$) is a continuous linear functional on $\mathfrak{A}$ with $\|\omega_\Omega\| \le 1$ and $0 \le \omega_\Omega(x^*x)$ for every $x \in \mathfrak{A}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Linearity is \texttt{inner\_add\_right}, \texttt{inner\_smul\_right} and \texttt{ContinuousLinearMap.add\_apply}. Bound: $|\omega_\Omega(x)| \le \|\Omega\|\,\|x\Omega\| \le \|x\|$ (\texttt{norm\_inner\_le\_norm}, \texttt{ContinuousLinearMap.le\_opNorm}, $\|\Omega\| = 1$), so $\omega_\Omega$ is continuous with $\|\omega_\Omega\| \le 1$ (\texttt{LinearMap.mkContinuous}, \texttt{ContinuousLinearMap.opNorm\_le\_bound}). Positivity: $\left< \Omega, x^*x\Omega \right> = \left< x\Omega, x\Omega \right> = \|x\Omega\|^2 \ge 0$ (\texttt{ContinuousLinearMap.adjoint\_inner\_right}, \texttt{ContinuousLinearMap.star\_eq\_adjoint}, \texttt{inner\_self\_eq\_norm\_sq\_to\_K}).
 \end{proof}
 

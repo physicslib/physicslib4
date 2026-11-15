@@ -348,7 +348,15 @@ theorem coe_starSubalgebra_centralizer_centralizer {M : Set (H →L[ℂ] H)}
         Set (H →L[ℂ] H)) = M ∧
       IsClosed ((StarSubalgebra.centralizer ℂ (Set.centralizer M) :
         StarSubalgebra ℂ (H →L[ℂ] H)) : Set (H →L[ℂ] H)) := by
-  sorry
+  have hstar : ∀ {S : Set (H →L[ℂ] H)}, (∀ a ∈ S, star a ∈ S) → S ∪ star S = S :=
+    fun hS => Set.union_eq_left.mpr fun a ha => by simpa using hS _ ha
+  have hA : (StarSubalgebra.centralizer ℂ M : Set (H →L[ℂ] H)) = Set.centralizer M := by
+    rw [StarSubalgebra.coe_centralizer, hstar hM.1]
+  refine ⟨?_, ?_⟩
+  · rw [StarSubalgebra.coe_centralizer, ← hA,
+      hstar fun a ha => star_mem (s := StarSubalgebra.centralizer ℂ M) ha, hA, hM.2]
+  · rw [StarSubalgebra.coe_centralizer]
+    exact Set.isClosed_centralizer _
 
 /-- For `t ∈ ℝ`, `σ_t(x) = Δ^{it} x Δ^{-it}` maps `M` into `M`, is linear, unital, multiplicative
 and `*`-preserving, with inverse `σ_{-t}`. The blueprint states the algebraic identities for

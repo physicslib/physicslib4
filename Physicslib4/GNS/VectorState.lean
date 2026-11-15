@@ -28,7 +28,19 @@ Blueprint: lmm:vector-functional-state -/
 theorem exists_vectorFunctional (𝔄 : StarSubalgebra ℂ (H →L[ℂ] H)) {Ω : H} (hΩ : ‖Ω‖ = 1) :
     ∃ ω : 𝔄 →L[ℂ] ℂ, (∀ x : 𝔄, ω x = ⟪Ω, (x : H →L[ℂ] H) Ω⟫_ℂ) ∧ ‖ω‖ ≤ 1 ∧
       ∀ x : 𝔄, 0 ≤ ω (star x * x) := by
-  sorry
+  refine ⟨(innerSL ℂ Ω).comp ((ContinuousLinearMap.apply ℂ H Ω).comp
+    { toLinearMap := 𝔄.subtype.toAlgHom.toLinearMap, cont := continuous_subtype_val }),
+    fun _ => rfl, ?_, fun x => ?_⟩
+  · refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
+    change ‖⟪Ω, (x : H →L[ℂ] H) Ω⟫_ℂ‖ ≤ 1 * ‖x‖
+    calc ‖⟪Ω, (x : H →L[ℂ] H) Ω⟫_ℂ‖ ≤ ‖Ω‖ * ‖(x : H →L[ℂ] H) Ω‖ := norm_inner_le_norm _ _
+      _ ≤ ‖Ω‖ * (‖(x : H →L[ℂ] H)‖ * ‖Ω‖) :=
+          mul_le_mul_of_nonneg_left (ContinuousLinearMap.le_opNorm _ _) (norm_nonneg _)
+      _ = 1 * ‖x‖ := by rw [hΩ]; simp
+  · change 0 ≤ ⟪Ω, star (x : H →L[ℂ] H) ((x : H →L[ℂ] H) Ω)⟫_ℂ
+    rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_right,
+      inner_self_eq_norm_sq_to_K]
+    exact pow_nonneg (RCLike.ofReal_nonneg.mpr (norm_nonneg _)) 2
 
 /-- With `𝔄` and `Ω` as in `exists_vectorFunctional`, the vector functional has norm `1`.
 Blueprint: lmm:vector-functional-norm-one -/
