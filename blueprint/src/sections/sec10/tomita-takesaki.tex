@@ -3926,13 +3926,17 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
 
 \begin{definition}[The Modular Algebra]
     \label{def:modular-algebra}
+    \lean{Physicslib4.Modular.modularAlgebra}
     \uses{def:von-neumann-algebra-commutant-convention, lmm:commutant-von-neumann-algebra}
+    \leanok
     The \emph{modular algebra} of $\mathcal{M}$ is the unital $*$-subalgebra of $\mathcal{B}(\mathbf{H})$ whose elements are those of the commutant of $\mathcal{M}'$: Mathlib's \texttt{StarSubalgebra.centralizer} $\mathbb{C}$ $\mathcal{M}'$, with $\mathcal{M}'$ the centralizer \texttt{Set.centralizer} $\mathcal{M}$. By Lemma~\ref{lmm:modular-algebra-closed} its underlying set is $\mathcal{M}$ and it is a C$^*$-algebra.
 \end{definition}
 
 \begin{lemma}[The Modular Algebra is a C$^*$-Algebra]
     \label{lmm:modular-algebra-closed}
+    \lean{Physicslib4.Modular.coe_starSubalgebra_centralizer_centralizer}
     \uses{def:modular-algebra}
+    \leanok
     The underlying set of the modular algebra is $\mathcal{M}$, and it is closed in the norm topology of $\mathcal{B}(\mathbf{H})$. Hence the modular algebra, with the norm, multiplication and involution of $\mathcal{B}(\mathbf{H})$, is a C$^*$-algebra.
 \end{lemma}
 \begin{proof}
@@ -3942,6 +3946,8 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
 
 \begin{lemma}[Vector Functionals are Positive and Bounded]
     \label{lmm:vector-functional-state}
+    \lean{Physicslib4.GNS.exists_vectorFunctional}
+    \leanok
     Let $\mathfrak{A}$ be a norm-closed unital $*$-subalgebra of $\mathcal{B}(\mathbf{H})$, regarded as a C$^*$-algebra, and let $\Omega \in \mathbf{H}$ with $\|\Omega\| = 1$. Then $\omega_\Omega(x) = \left< \Omega, x\Omega \right>$ ($x \in \mathfrak{A}$) is a continuous linear functional on $\mathfrak{A}$ with $\|\omega_\Omega\| \le 1$ and $0 \le \omega_\Omega(x^*x)$ for every $x \in \mathfrak{A}$.
 \end{lemma}
 \begin{proof}
@@ -3950,7 +3956,9 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
 
 \begin{lemma}[Vector Functionals have Norm One]
     \label{lmm:vector-functional-norm-one}
+    \lean{Physicslib4.GNS.norm_vectorFunctional}
     \uses{lmm:vector-functional-state}
+    \leanok
     With $\mathfrak{A}$ and $\Omega$ as in Lemma~\ref{lmm:vector-functional-state}, $\|\omega_\Omega\| = 1$.
 \end{lemma}
 \begin{proof}
@@ -3960,13 +3968,17 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
 
 \begin{definition}[Vector State]
     \label{def:vector-state}
+    \lean{Physicslib4.GNS.vectorState}
     \uses{def:state, lmm:vector-functional-state, lmm:vector-functional-norm-one}
+    \leanok
     Let $\mathfrak{A}$ be a norm-closed unital $*$-subalgebra of $\mathcal{B}(\mathbf{H})$ and $\Omega \in \mathbf{H}$ with $\|\Omega\| = 1$. The \emph{vector state} of $\Omega$ is the state (Definition~\ref{def:state}) $\omega_\Omega(x) = \left< \Omega, x\Omega \right>$ on $\mathfrak{A}$: it is a positive continuous linear functional by Lemma~\ref{lmm:vector-functional-state}, of norm $1$ by Lemma~\ref{lmm:vector-functional-norm-one}.
 \end{definition}
 
 \begin{lemma}[$\Delta^{it}\,\cdot\,\Delta^{-it}$ is a $*$-Automorphism of $\mathcal{M}$]
     \label{lmm:modular-automorphism-well-defined}
+    \lean{Physicslib4.Modular.modularAutomorphism_wellDefined}
     \uses{def:modular-algebra, def:modular-unitary-group, lmm:tomita-modular-automorphism}
+    \leanok
     For $t \in \mathbb{R}$ and $x \in \mathcal{M}$ put $\sigma_t(x) = \Delta^{it}x\Delta^{-it}$. Then $\sigma_t(x) \in \mathcal{M}$, $\sigma_t$ is linear, $\sigma_t(\mathbf{1}) = \mathbf{1}$, $\sigma_t(xy) = \sigma_t(x)\sigma_t(y)$, $\sigma_t(x^*) = \sigma_t(x)^*$, and $\sigma_{-t}(\sigma_t(x)) = \sigma_t(\sigma_{-t}(x)) = x$ for all $x, y \in \mathcal{M}$.
 \end{lemma}
 \begin{proof}
@@ -3976,13 +3988,17 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
 
 \begin{definition}[The Modular Automorphism Group]
     \label{def:modular-automorphism}
+    \lean{Physicslib4.Modular.modularAutomorphism}
     \uses{def:modular-algebra, def:modular-unitary-group, lmm:modular-algebra-closed, lmm:modular-automorphism-well-defined}
+    \leanok
     For $t \in \mathbb{R}$, the \emph{modular automorphism} $\sigma_t$ is the $*$-automorphism $x \mapsto \Delta^{it}x\Delta^{-it}$ of the modular algebra (Definition~\ref{def:modular-algebra}), with inverse $\sigma_{-t}$ (Lemma~\ref{lmm:modular-automorphism-well-defined}).
 \end{definition}
 
 \begin{lemma}[The Modular Automorphisms form a One-Parameter Group]
     \label{lmm:modular-automorphism-one-parameter}
+    \lean{Physicslib4.Modular.isOneParameterAut_modularAutomorphism}
     \uses{def:modular-automorphism, def:one-parameter-aut}
+    \leanok
     $t \mapsto \sigma_t$ is a one-parameter group of $*$-automorphisms of the modular algebra (Definition~\ref{def:one-parameter-aut}): $\sigma_0 = \mathrm{id}$ and $\sigma_{s+t} = \sigma_s \circ \sigma_t$ for $s, t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -3996,7 +4012,9 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[Spectral Moments of a Vector in the Domain]
     \label{lmm:spectral-moments}
+    \lean{Physicslib4.Modular.spectralMeasure_moments}
     \uses{def:spectral-measure, def:hall-9.5}
+    \leanok
     Let $A$ be self-adjoint with spectral measure $\mu^A$ and $\psi \in \text{Dom}(A)$. Then $1$, $\lambda$ and $\lambda^2$ are $\mu^A_\psi$-integrable, $\mu^A_\psi(\mathbb{R}) = \|\psi\|^2$, $\left< \psi, A\psi \right>$ is real,
     \begin{align}
         \int_{\mathbb{R}} \lambda \, d\mu^A_\psi(\lambda) = \operatorname{Re}\left< \psi, A\psi \right> \qquad\text{and}\qquad \int_{\mathbb{R}} \lambda^2 \, d\mu^A_\psi(\lambda) = \|A\psi\|^2.
@@ -4009,7 +4027,9 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[The Spectral Variance of a Vector]
     \label{lmm:spectral-eigenvector-variance}
+    \lean{Physicslib4.Modular.spectralMeasure_variance}
     \uses{def:spectral-measure, def:hall-9.5}
+    \leanok
     Let $A$ be self-adjoint with spectral measure $\mu^A$, $c \in \mathbb{R}$ and $\psi \in \text{Dom}(A)$. Then $\lambda \mapsto (\lambda - c)^2$ is $\mu^A_\psi$-integrable and
     \begin{align}
         \int_{\mathbb{R}} (\lambda - c)^2 \, d\mu^A_\psi(\lambda) = \|A\psi - c\psi\|^2.
@@ -4022,7 +4042,9 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[Spectral Projections of Null Sets]
     \label{lmm:pvm-null-set-vector}
+    \lean{Physicslib4.Modular.projectionValuedMeasure_apply_of_assoc_eq_zero}
     \uses{def:projection-valued-measure, thrm:projection-valued-measures-associated-measure}
+    \leanok
     Let $\mu$ be a projection-valued measure on $(X, \Omega(X))$, $\psi \in \mathbf{H}$ and $E \in \Omega(X)$. Then $\mu_\psi(E) = \|\mu(E)\psi\|^2$. Hence, if $\mu_\psi(E) = 0$, then $\mu(E)\psi = 0$ and $\mu(X \setminus E)\psi = \psi$.
 \end{lemma}
 \begin{proof}
@@ -4031,7 +4053,9 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[Eigenvectors lie in the Range of a Spectral Projection]
     \label{lmm:spectral-eigenvector-projection}
+    \lean{Physicslib4.Modular.spectralMeasure_singleton_apply_of_eigenvector}
     \uses{def:spectral-measure, def:hall-9.5}
+    \leanok
     Let $A$ be self-adjoint with spectral measure $\mu^A$, $c \in \mathbb{R}$, and $\psi \in \text{Dom}(A)$ with $A\psi = c\psi$. Then $\mu^A(\{c\})\psi = \psi$.
 \end{lemma}
 \begin{proof}
@@ -4041,7 +4065,9 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[Bounded Functions on Eigenvectors]
     \label{lmm:spectral-eigenvector-bounded-fc}
+    \lean{Physicslib4.Modular.spectralMeasure_integral_apply_of_eigenvector}
     \uses{def:spectral-measure, def:hall-10.5, def:hall-9.5}
+    \leanok
     Let $A$ be self-adjoint, $c \in \mathbb{R}$, $\psi \in \text{Dom}(A)$ with $A\psi = c\psi$, and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $f(A)\psi = f(c)\psi$.
 \end{lemma}
 \begin{proof}
@@ -4051,7 +4077,9 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[$\Delta\Omega = \Omega$]
     \label{lmm:modular-operator-fixes-omega}
+    \lean{Physicslib4.Modular.modularOperator_apply_self}
     \uses{def:modular-operator, def:cyclic-separating-vector}
+    \leanok
     $\Omega \in \text{Dom}(\Delta)$ and $\Delta\Omega = \Omega$.
 \end{lemma}
 \begin{proof}
@@ -4061,7 +4089,9 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[$\Delta^{it}\Omega = \Omega$]
     \label{lmm:modular-unitary-group-fixes-omega}
+    \lean{Physicslib4.Modular.modularUnitaryGroup_apply_self}
     \uses{def:modular-unitary-group, def:cyclic-separating-vector}
+    \leanok
     For every $t \in \mathbb{R}$, $\Delta^{it}\Omega = \Omega$.
 \end{lemma}
 \begin{proof}
@@ -4071,7 +4101,9 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[$J$ Commutes with $\Delta^{it}$]
     \label{lmm:modular-conjugation-commutes-unitary-group}
+    \lean{Physicslib4.Modular.modularConjugation_modularUnitaryGroup}
     \uses{def:modular-conjugation, def:modular-unitary-group}
+    \leanok
     For every $t \in \mathbb{R}$ and $\psi \in \mathbf{H}$, $J\Delta^{it}\psi = \Delta^{it}J\psi$.
 \end{lemma}
 \begin{proof}
@@ -4081,7 +4113,9 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[$\Delta^{1/2}x\Omega = Jx^*\Omega$]
     \label{lmm:modular-sqrt-on-algebra}
+    \lean{Physicslib4.Modular.modularOperatorSqrt_apply_of_mem}
     \uses{def:modular-operator, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $x \in \mathcal{M}$. Then $x\Omega \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}x\Omega = Jx^*\Omega$.
 \end{lemma}
 \begin{proof}
@@ -4106,6 +4140,8 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The Functions $u_z$ and $v_z$ are Bounded on the Strip]
     \label{lmm:takesaki-functions-bounded}
+    \lean{Physicslib4.Modular.takesaki_functions_bounded}
+    \leanok
     For $z \in \mathbb{C}$, $u_z$ and $v_z$ are measurable, and for $z \in \mathcal{T}$, $|u_z(\lambda)| \le 1$ and $|v_z(\lambda)| \le 1$ for every $\lambda \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -4114,7 +4150,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[Scalar Identities for $\lambda > 0$]
     \label{lmm:takesaki-positive-scalar-identities}
+    \lean{Physicslib4.Modular.takesaki_positive_scalar_identities}
     \uses{lmm:modular-unitary-group-fc}
+    \leanok
     Let $\lambda > 0$, $w \in \mathbb{C}$ and $t \in \mathbb{R}$. Then $s(\lambda)^2 = \lambda$, $\lambda \cdot \lambda^w = \lambda^{w+1}$, $|\lambda^w| = \lambda^{\operatorname{Re} w}$ and $e_{-t}(\lambda) = \lambda^{-it}$.
 \end{lemma}
 \begin{proof}
@@ -4124,6 +4162,8 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[$u_z$ and $v_z$ Cut Off to $K_n$]
     \label{lmm:takesaki-functions-identities}
+    \lean{Physicslib4.Modular.takesaki_functions_identities}
+    \leanok
     For $z \in \mathbb{C}$, $n \ge 1$ and every $\lambda \in \mathbb{R}$, $u_z(\lambda)1_{K_n}(\lambda) = 1_{(0,1)}(\lambda)\,p_{-iz,n}(\lambda)$ and $v_z(\lambda)1_{K_n}(\lambda) = 1_{[1,\infty)}(\lambda)\,p_{-iz-1,n}(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -4132,6 +4172,8 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The Lower Boundary Sum]
     \label{lmm:takesaki-functions-lower-sum}
+    \lean{Physicslib4.Modular.takesaki_functions_lower_sum}
+    \leanok
     For $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $u_t(\lambda) + s(\lambda)^2v_t(\lambda) = 1_{(0,\infty)}(\lambda)\,e_{-t}(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -4141,6 +4183,8 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The Upper Boundary Identities]
     \label{lmm:takesaki-functions-upper-identities}
+    \lean{Physicslib4.Modular.takesaki_functions_upper_identities}
+    \leanok
     For $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $s(\lambda)^2g_t(\lambda) = u_{t+i}(\lambda)$ and $g_t(\lambda) + v_{t+i}(\lambda) = 1_{(0,\infty)}(\lambda)\,e_{-t}(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -4150,7 +4194,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[Bounds for the Boundary Functions]
     \label{lmm:takesaki-functions-aux-bounds}
+    \lean{Physicslib4.Modular.takesaki_functions_aux_bounds}
     \uses{lmm:modular-unitary-group-fc}
+    \leanok
     For $t \in \mathbb{R}$, $g_t$ is measurable, and $|g_t(\lambda)|$, $|s(\lambda)v_t(\lambda)|$, $|s(\lambda)^2v_t(\lambda)|$, $|s(\lambda)g_t(\lambda)|$ and $|s(\lambda)^2g_t(\lambda)|$ are at most $1$ for every $\lambda \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -4160,7 +4206,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[Moving $\Delta^{1/2}$ across a Bounded Function]
     \label{lmm:modular-sqrt-transfer}
+    \lean{Physicslib4.Modular.inner_modularOperatorSqrt_integral}
     \uses{def:modular-operator, def:hall-10.5}
+    \leanok
     Let $f : \mathbb{R} \to \mathbb{C}$ be measurable with $f$, $sf$ and $s^2f$ bounded, and let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$. Then
     \begin{align}
         \left< \Delta^{1/2}\xi, f(\Delta)\Delta^{1/2}\eta \right> = \left< \xi, (s^2f)(\Delta)\eta \right>.
@@ -4173,7 +4221,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The Approximants are Entire]
     \label{lmm:takesaki-approximants-entire}
+    \lean{Physicslib4.Modular.differentiable_takesakiApproximant}
     \uses{lmm:modular-power-operators, def:modular-operator}
+    \leanok
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$ and $n \ge 1$. Then $z \mapsto G^n_{\xi,\eta}(z)$ is complex differentiable at every $z \in \mathbb{C}$; in particular it is continuous.
 \end{lemma}
 \begin{proof}
@@ -4183,7 +4233,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The Approximants on the Strip]
     \label{lmm:takesaki-approximants-strip}
+    \lean{Physicslib4.Modular.takesakiApproximant_eq_of_mem_strip}
     \uses{lmm:modular-power-operators, def:modular-operator, def:spectral-measure}
+    \leanok
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$, $n \ge 1$ and $z \in \mathcal{T}$. Then
     \begin{align}
         G^n_{\xi,\eta}(z) = \left< \xi, u_z(\Delta)E_n\eta \right> + \left< \Delta^{1/2}\xi, v_z(\Delta)E_n\Delta^{1/2}\eta \right>.
@@ -4196,7 +4248,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[Uniform Convergence of the Approximants]
     \label{lmm:takesaki-approximants-uniform}
+    \lean{Physicslib4.Modular.tendstoUniformlyOn_takesakiApproximant}
     \uses{def:modular-operator, def:spectral-measure}
+    \leanok
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$. For $n \ge 1$ and $z \in \mathcal{T}$,
     \begin{align}
         |G_{\xi,\eta}(z) - G^n_{\xi,\eta}(z)| \le \|\xi\|\,\|\eta - E_n\eta\| + \|\Delta^{1/2}\xi\|\,\|\Delta^{1/2}\eta - E_n\Delta^{1/2}\eta\|,
@@ -4210,7 +4264,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The KMS Function is Bounded and Analytic]
     \label{lmm:takesaki-function-analytic}
+    \lean{Physicslib4.Modular.takesakiFunction_analytic}
     \uses{def:modular-operator}
+    \leanok
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$. Then $G_{\xi,\eta}$ is continuous on $\mathcal{T}$, complex differentiable on $\mathcal{T}^\circ$, and $|G_{\xi,\eta}(z)| \le \|\xi\|\,\|\eta\| + \|\Delta^{1/2}\xi\|\,\|\Delta^{1/2}\eta\|$ for $z \in \mathcal{T}$.
 \end{lemma}
 \begin{proof}
@@ -4220,7 +4276,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The Lower Boundary Value]
     \label{lmm:takesaki-function-lower-boundary}
+    \lean{Physicslib4.Modular.takesakiFunction_lower_boundary}
     \uses{def:modular-operator, def:modular-unitary-group}
+    \leanok
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $G_{\xi,\eta}(t) = \left< \xi, \Delta^{-it}\eta \right>$.
 \end{lemma}
 \begin{proof}
@@ -4230,7 +4288,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The Upper Boundary Value]
     \label{lmm:takesaki-function-upper-boundary}
+    \lean{Physicslib4.Modular.takesakiFunction_upper_boundary}
     \uses{def:modular-operator, def:modular-unitary-group}
+    \leanok
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $G_{\xi,\eta}(t + i) = \left< \Delta^{1/2}\xi, \Delta^{-it}\Delta^{1/2}\eta \right>$.
 \end{lemma}
 \begin{proof}
@@ -4242,7 +4302,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The Lower Boundary Value as a Correlation]
     \label{lmm:takesaki-lower-boundary-state}
+    \lean{Physicslib4.Modular.inner_modularUnitaryGroup_lower_boundary}
     \uses{def:modular-unitary-group, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $a, b \in \mathcal{M}$ and $t \in \mathbb{R}$. Then $\left< a^*\Omega, \Delta^{-it}b\Omega \right> = \left< \Omega, a\,\Delta^{-it}b\Delta^{it}\,\Omega \right>$.
 \end{lemma}
 \begin{proof}
@@ -4252,7 +4314,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{lemma}[The Upper Boundary Value as a Correlation]
     \label{lmm:takesaki-upper-boundary-state}
+    \lean{Physicslib4.Modular.inner_modularUnitaryGroup_upper_boundary}
     \uses{def:modular-operator, def:modular-unitary-group, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $a, b \in \mathcal{M}$ and $t \in \mathbb{R}$. Then $\left< \Delta^{1/2}a^*\Omega, \Delta^{-it}\Delta^{1/2}b\Omega \right> = \left< \Omega, \Delta^{-it}b\Delta^{it}\,a\,\Omega \right>$.
 \end{lemma}
 \begin{proof}
@@ -4262,7 +4326,9 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
 
 \begin{theorem}[Takesaki's Theorem]
     \label{thrm:takesaki-kms}
+    \lean{Physicslib4.Modular.isKMSState_modularAutomorphism}
     \uses{def:kms-state, def:vector-state, def:modular-algebra, def:modular-automorphism, lmm:modular-algebra-closed, lmm:modular-automorphism-one-parameter, def:cyclic-separating-vector}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$ with $\|\Omega\| = 1$, let $\omega_\Omega$ be the vector state of $\Omega$ on the modular algebra (Definitions~\ref{def:vector-state} and~\ref{def:modular-algebra}), and let $\sigma_t$ be the modular automorphisms (Definition~\ref{def:modular-automorphism}). Then $\omega_\Omega$ is a KMS state (Definition~\ref{def:kms-state}) at inverse temperature $\beta = 1$ for the one-parameter automorphism group $t \mapsto \sigma_{-t}$: for all $a, b \in \mathcal{M}$ there is a function $F$, continuous and bounded on $0 \le \operatorname{Im} z \le 1$ and holomorphic on $0 < \operatorname{Im} z < 1$, with
     \begin{align}
         F(t) = \omega_\Omega(a\,\sigma_{-t}(b)), \qquad F(t + i) = \omega_\Omega(\sigma_{-t}(b)\,a) \qquad (t \in \mathbb{R}).

@@ -66,6 +66,7 @@ import Physicslib4.GNS.Separating
 import Physicslib4.GNS.Superselection
 import Physicslib4.GNS.UnitaryEquiv
 import Physicslib4.GNS.UnitaryRepresentation
+import Physicslib4.GNS.VectorState
 import Physicslib4.Geometry.PseudoRiemannian.Basic
 import Physicslib4.Geometry.PseudoRiemannian.Flat
 import Physicslib4.Geometry.PseudoRiemannian.LeviCivita
@@ -75,6 +76,7 @@ import Physicslib4.Operators.LpDiagonal
 import Physicslib4.Operators.Modular.Antiunitary
 import Physicslib4.Operators.Modular.Modular
 import Physicslib4.Operators.Modular.Takesaki
+import Physicslib4.Operators.Modular.TakesakiKMS
 import Physicslib4.Operators.Modular.Tomita
 import Physicslib4.Operators.Modular.TomitaAdjoint
 import Physicslib4.Operators.Modular.VanDaele
