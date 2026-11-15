@@ -1993,7 +1993,17 @@ theorem tendsto_vanDaele_integral {M : Set (H →L[ℂ] H)} {Ω : H}
             (modularConjugationConj hM hΩ C hC a'
               (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
           ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ))) := by
-  sorry
+  have hI := fun m => vanDaele_integrand_integrable hM hΩ C hC hl a' (ξs m) (ηs m)
+  refine MeasureTheory.tendsto_integral_of_dominated_convergence
+    (fun t => ‖a'‖ * K / 2 * (1 / Real.cosh (Real.pi * t)))
+    (fun m => (hI m).1.aestronglyMeasurable)
+    (integrable_inv_cosh.2.const_mul _) (fun m => Filter.Eventually.of_forall fun t => ?_)
+    (Filter.Eventually.of_forall fun t => tendsto_vanDaele_integrand hM hΩ C hC hl a' t hξ hη)
+  refine ((hI m).2.1 t).trans ?_
+  have hc := Real.cosh_pos (Real.pi * t)
+  rw [mul_one_div, div_div, mul_assoc]
+  exact div_le_div_of_nonneg_right (mul_le_mul_of_nonneg_left (hK m) (norm_nonneg _))
+    (by positivity)
 
 /-- `ψ_m = E_{m+1} ψ` satisfies `E_{m+1} ψ_m = ψ_m` and `‖ψ_m‖ ≤ ‖ψ‖`, and `ψ_m → ψ`.
 Blueprint: lmm:modular-spectral-approximants -/
@@ -2028,7 +2038,12 @@ theorem IsVanDaeleTriple.inner_eq_integral {M : Set (H →L[ℂ] H)} {Ω : H}
           (modularConjugationConj hM hΩ C hC a'
             (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
         ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) := by
-  sorry
+  obtain ⟨hξE, hξt⟩ := modularSpectralProjection_approximants hM hΩ C hC ξ
+  obtain ⟨hηE, hηt⟩ := modularSpectralProjection_approximants hM hΩ C hC η
+  refine tendsto_nhds_unique ((hηt.inner (((a.continuous.tendsto _).comp hξt))).congr
+    fun m => htriple.inner_eq_integral_of_spectral hM hΩ C hC (Nat.le_add_left 1 m)
+      (hξE m).1 (hηE m).1) (tendsto_vanDaele_integral hM hΩ C hC htriple.1 a' hξt hηt
+      (K := ‖ξ‖ * ‖η‖) fun m => mul_le_mul (hξE m).2 (hηE m).2 (norm_nonneg _) (norm_nonneg _))
 
 /-- `h(t) = ⟪η, (Δ^{it} J a′ J Δ^{-it} b′ - b′ Δ^{it} J a′ J Δ^{-it}) ξ⟫ / (2 cosh πt)` equals
 `(⟪η, Δ^{it} J a′ J Δ^{-it} b′ ξ⟫ - ⟪b′* η, Δ^{it} J a′ J Δ^{-it} ξ⟫) / (2 cosh πt)`, and is

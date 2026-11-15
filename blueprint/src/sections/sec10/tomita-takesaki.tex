@@ -3741,6 +3741,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $\lambda > 0$, $a' \in \mathcal{B}(\mathbf{H})$, and for $\xi, \eta \in \mathbf{H}$ let $I(\eta, \xi) = \int_{\mathbb{R}} \lambda^{2it}\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right> / (2\cosh(\pi t)) \, dt$. Let $\xi_m \to \xi$ and $\eta_m \to \eta$ in $\mathbf{H}$ ($m \in \mathbb{N}$), and $K \ge 0$ with $\|\xi_m\|\,\|\eta_m\| \le K$ for every $m$. Then $I(\eta_m, \xi_m) \to I(\eta, \xi)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-integrand-integrable, lmm:van-daele-integrand-vector-limit, lmm:inv-cosh-pi-integrable}
     Apply Mathlib's \texttt{MeasureTheory.tendsto\_integral\_of\_dominated\_convergence} with the bound $t \mapsto \|a'\|K/(2\cosh(\pi t))$. Each integrand is continuous, hence a.e.\ strongly measurable (Lemma~\ref{lmm:van-daele-integrand-integrable}, \texttt{Continuous.aestronglyMeasurable}), and is dominated by the bound (Lemma~\ref{lmm:van-daele-integrand-integrable} with $\|\xi_m\|\,\|\eta_m\| \le K$). The bound is integrable (Lemma~\ref{lmm:inv-cosh-pi-integrable}, \texttt{Integrable.const\_mul}, \texttt{Integrable.div\_const}). The pointwise limit is Lemma~\ref{lmm:van-daele-integrand-vector-limit} (\texttt{Filter.Eventually.of\_forall}).
 \end{proof}
@@ -3769,6 +3770,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     \end{align}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{prpstn:van-daele-integral-formula-H0, lmm:van-daele-integral-continuity, lmm:modular-spectral-approximants}
     Let $\xi_m = E_{m+1}\xi$ and $\eta_m = E_{m+1}\eta$ ($m \in \mathbb{N}$). By Lemma~\ref{lmm:modular-spectral-approximants}, $E_{m+1}\xi_m = \xi_m$ and $E_{m+1}\eta_m = \eta_m$, so Proposition~\ref{prpstn:van-daele-integral-formula-H0} with $n = m + 1$ gives $\left< \eta_m, a\xi_m \right> = I(\eta_m, \xi_m)$ in the notation of Lemma~\ref{lmm:van-daele-integral-continuity}. Also $\xi_m \to \xi$, $\eta_m \to \eta$ and $\|\xi_m\|\,\|\eta_m\| \le \|\xi\|\,\|\eta\|$ (\texttt{mul\_le\_mul}), so $I(\eta_m, \xi_m) \to I(\eta, \xi)$ (Lemma~\ref{lmm:van-daele-integral-continuity}), while $\left< \eta_m, a\xi_m \right> \to \left< \eta, a\xi \right>$ (\texttt{Filter.Tendsto.inner}); limits are unique (\texttt{tendsto\_nhds\_unique}).
 \end{proof}

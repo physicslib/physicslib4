@@ -344,3 +344,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:modular-spectral-approximants (`modularSpectralProjection_approximants`): proved via `modularSpectralProjection_nested` (n = m), `p_{0,n}(Δ) = E_n` with norm bound n^0 = 1, and `tendsto_modularSpectralProjection` shifted by one.
 - lmm:van-daele-integrand-vector-limit: proved `Physicslib4.Modular.tendsto_vanDaele_integrand` (term proof: `Tendsto.inner` with continuity of Δ^{it}, JTJ a′, Δ^{-it}, then `const_mul` / `div_const`).
 - 2026-11-15: proved tendsto_vanDaele_integrand (hl unused), modularSpectralProjection_approximants.
+- prpstn:van-daele-integral-formula (IsVanDaeleTriple.inner_eq_integral): proved via E_{m+1} approximants, inner_eq_integral_of_spectral, tendsto_vanDaele_integral (K = ‖ξ‖‖η‖) and tendsto_nhds_unique; depends on tendsto_vanDaele_integral being proved.
+- lmm:van-daele-integral-continuity (`tendsto_vanDaele_integral`): proved by dominated convergence with bound ‖a′‖K/2 · 1/cosh(πt), using `vanDaele_integrand_integrable` and `tendsto_vanDaele_integrand`.
+- 2026-11-15: proved tendsto_vanDaele_integral, IsVanDaeleTriple.inner_eq_integral (Jones Prop 13.2.2 for all vectors).
