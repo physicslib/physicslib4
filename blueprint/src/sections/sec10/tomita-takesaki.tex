@@ -2,7 +2,7 @@
 
 Let $\mathcal{M}$ be a von Neumann algebra on a Hilbert space with a vector $\Omega$ that is cyclic and separating for $\mathcal{M}$. The map $a\Omega \mapsto a^*\Omega$ on $\mathcal{M}\Omega$ is antilinear, densely defined and closable, and the polar decomposition of its closure $S = J\Delta^{1/2}$ produces the \emph{modular operator} $\Delta$, a positive, self-adjoint and injective operator, and the \emph{modular conjugation} $J$, an antiunitary involution with $J\Delta J = \Delta^{-1}$. Tomita's theorem states that $\Delta^{it}\mathcal{M}\Delta^{-it} = \mathcal{M}$ for every real $t$ and that $J\mathcal{M}J = \mathcal{M}'$. The section is pure operator algebra; it involves no net.
 
-The section first constructs the Tomita operator $S$ (Subsection~\ref{sbsctn:tomita-operator}) and then $\Delta$ and $J$ (Subsection~\ref{sbsctn:modular-operator-conjugation}). The proof of Tomita's theorem is van Daele's, as presented in V.~F.~R.~Jones's notes on von Neumann algebras, Chapter~13, and the remaining subsections supply its ingredients: Takesaki's lemma, which writes $(z - \Delta)^{-1}a'\Omega$ as $a\Omega$ with $a \in \mathcal{M}$ for $a' \in \mathcal{M}'$ and $z \notin [0, \infty)$ (Subsection~\ref{sbsctn:takesaki-lemma}); the description $S^* = \overline{F_0}$ of the adjoint of the Tomita operator, which yields the modular objects of $(\mathcal{M}', \Omega)$ (Subsection~\ref{sbsctn:tomita-adjoint}); a strip formula for a bounded holomorphic function and a uniqueness theorem for Fourier transforms (Subsection~\ref{sbsctn:strip-formula}). Subsection~\ref{sbsctn:van-daele} combines them: an integral formula expresses the element given by Takesaki's lemma through $\Delta^{it}Ja'J\Delta^{-it}$, Fourier uniqueness gives $\Delta^{it}J\mathcal{M}'J\Delta^{-it} \subseteq \mathcal{M}$, and the symmetry between $\mathcal{M}$ and $\mathcal{M}'$ completes both halves of the theorem.
+The section first constructs the Tomita operator $S$ (Subsection~\ref{sbsctn:tomita-operator}) and then $\Delta$ and $J$ (Subsection~\ref{sbsctn:modular-operator-conjugation}). The proof of Tomita's theorem is van Daele's, as presented in V.~F.~R.~Jones's notes on von Neumann algebras, Chapter~13, and the remaining subsections supply its ingredients: Takesaki's lemma, which writes $(z - \Delta)^{-1}a'\Omega$ as $a\Omega$ with $a \in \mathcal{M}$ for $a' \in \mathcal{M}'$ and $z \notin [0, \infty)$ (Subsection~\ref{sbsctn:takesaki-lemma}); the description $S^* = \overline{F_0}$ of the adjoint of the Tomita operator, which yields the modular objects of $(\mathcal{M}', \Omega)$ (Subsection~\ref{sbsctn:tomita-adjoint}); a strip formula for a bounded holomorphic function and a uniqueness theorem for Fourier transforms (Subsection~\ref{sbsctn:strip-formula}). Subsection~\ref{sbsctn:van-daele} combines them: an integral formula expresses the element given by Takesaki's lemma through $\Delta^{it}Ja'J\Delta^{-it}$, Fourier uniqueness gives $\Delta^{it}J\mathcal{M}'J\Delta^{-it} \subseteq \mathcal{M}$, and the symmetry between $\mathcal{M}$ and $\mathcal{M}'$ completes both halves of the theorem. Subsection~\ref{sbsctn:takesaki-kms} applies Tomita's theorem to prove Takesaki's theorem: the vector state of a unit cyclic and separating vector is a KMS state at inverse temperature $1$ for the reversed modular automorphism group $t \mapsto \sigma_{-t}$.
 
 Throughout, $\mathbf{H}$ denotes a complex Hilbert space, and its inner product $\left< \cdot, \cdot \right>$ is conjugate-linear in the first slot and linear in the second. Section~\ref{sctn:unbounded-spectral-theorems} assumes $\mathbf{H}$ separable, but the results of that section used here hold without separability, as their Lean forms do. The theory of unbounded operators in that section concerns linear operators. The Tomita operator is antilinear, and the section reduces it to a linear operator by composing with a fixed antiunitary involution $C$, a \emph{reference conjugation}. The reference conjugation is an implementation device: the Tomita operator, the modular operator and the modular conjugation do not depend on it (Lemma~\ref{lmm:tomita-operator-independent-of-c} and Theorem~\ref{thrm:modular-objects-independent-of-c}).
 
@@ -3913,3 +3913,364 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     \uses{lmm:tomita-modular-conjugation-commutant, lmm:tomita-modular-automorphism}
     Part (i) is Lemma~\ref{lmm:tomita-modular-conjugation-commutant} and part (ii) is Lemma~\ref{lmm:tomita-modular-automorphism}.
 \end{proof}
+
+\subsection{Takesaki's KMS Theorem}\label{sbsctn:takesaki-kms}
+
+This subsection proves Takesaki's theorem: the vector state of a unit cyclic and separating vector $\Omega$ is a KMS state (Definition~\ref{def:kms-state}) for the modular automorphism group $\sigma_t(x) = \Delta^{it}x\Delta^{-it}$ (M.~Takesaki, \emph{Tomita's Theory of Modular Hilbert Algebras and its Applications}, Lecture Notes in Mathematics 128, Springer, 1970; O.~Bratteli and D.~W.~Robinson, \emph{Operator Algebras and Quantum Statistical Mechanics 2}, Section~5.3, Theorem~5.3.10). Throughout, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, and $S$, $\Delta$, $J$, $\mu$, $E_n$, $e_t$ and $p_{z,n}$ are as in Subsection~\ref{sbsctn:van-daele}. As there, $s(\lambda) = \sqrt{\max(\lambda, 0)}$, so $\Delta^{1/2} = s(\Delta)$ (Definition~\ref{def:modular-operator}).
+
+The KMS condition of Definition~\ref{def:kms-state} asks for an interpolating function on the strip $0 \le \operatorname{Im} z \le \beta$, which is empty for $\beta < 0$. The function $t \mapsto \omega(a\,\sigma_t(b))$ continues analytically to the strip $-1 \le \operatorname{Im} z \le 0$, with boundary value $\omega(\sigma_t(b)\,a)$ on $\operatorname{Im} z = -1$; in the convention of Bratteli and Robinson, $\omega$ is a $(\sigma, -1)$-KMS state. Replacing $z$ by $-z$ turns this into the statement used here: $\omega$ is a $(t \mapsto \sigma_{-t}, 1)$-KMS state, that is, KMS at inverse temperature $1$ for the reversed modular flow (Theorem~\ref{thrm:takesaki-kms}).
+
+\subsubsection{The Modular Algebra, the Vector State and the Modular Flow}
+
+The KMS condition is a statement about a state on a C$^*$-algebra and a one-parameter group of $*$-automorphisms of it. This paragraph packages $\mathcal{M}$, the vector state of $\Omega$ and the maps $x \mapsto \Delta^{it}x\Delta^{-it}$ in that form.
+
+\begin{definition}[The Modular Algebra]
+    \label{def:modular-algebra}
+    \uses{def:von-neumann-algebra-commutant-convention, lmm:commutant-von-neumann-algebra}
+    The \emph{modular algebra} of $\mathcal{M}$ is the unital $*$-subalgebra of $\mathcal{B}(\mathbf{H})$ whose elements are those of the commutant of $\mathcal{M}'$: Mathlib's \texttt{StarSubalgebra.centralizer} $\mathbb{C}$ $\mathcal{M}'$, with $\mathcal{M}'$ the centralizer \texttt{Set.centralizer} $\mathcal{M}$. By Lemma~\ref{lmm:modular-algebra-closed} its underlying set is $\mathcal{M}$ and it is a C$^*$-algebra.
+\end{definition}
+
+\begin{lemma}[The Modular Algebra is a C$^*$-Algebra]
+    \label{lmm:modular-algebra-closed}
+    \uses{def:modular-algebra}
+    The underlying set of the modular algebra is $\mathcal{M}$, and it is closed in the norm topology of $\mathcal{B}(\mathbf{H})$. Hence the modular algebra, with the norm, multiplication and involution of $\mathcal{B}(\mathbf{H})$, is a C$^*$-algebra.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-von-neumann-algebra}
+    By \texttt{StarSubalgebra.coe\_centralizer} the underlying set is the centralizer of $\mathcal{M}' \cup (\mathcal{M}')^*$. $\mathcal{M}'$ is self-adjoint and $(\mathcal{M}')' = \mathcal{M}$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so this set is $\mathcal{M}$. A centralizer is closed in a topological algebra with separately continuous multiplication (\texttt{Set.isClosed\_centralizer}), and a closed $*$-subalgebra of the C$^*$-algebra $\mathcal{B}(\mathbf{H})$ is a C$^*$-algebra (\texttt{StarSubalgebra.cstarAlgebra}).
+\end{proof}
+
+\begin{lemma}[Vector Functionals are Positive and Bounded]
+    \label{lmm:vector-functional-state}
+    Let $\mathfrak{A}$ be a norm-closed unital $*$-subalgebra of $\mathcal{B}(\mathbf{H})$, regarded as a C$^*$-algebra, and let $\Omega \in \mathbf{H}$ with $\|\Omega\| = 1$. Then $\omega_\Omega(x) = \left< \Omega, x\Omega \right>$ ($x \in \mathfrak{A}$) is a continuous linear functional on $\mathfrak{A}$ with $\|\omega_\Omega\| \le 1$ and $0 \le \omega_\Omega(x^*x)$ for every $x \in \mathfrak{A}$.
+\end{lemma}
+\begin{proof}
+    Linearity is \texttt{inner\_add\_right}, \texttt{inner\_smul\_right} and \texttt{ContinuousLinearMap.add\_apply}. Bound: $|\omega_\Omega(x)| \le \|\Omega\|\,\|x\Omega\| \le \|x\|$ (\texttt{norm\_inner\_le\_norm}, \texttt{ContinuousLinearMap.le\_opNorm}, $\|\Omega\| = 1$), so $\omega_\Omega$ is continuous with $\|\omega_\Omega\| \le 1$ (\texttt{LinearMap.mkContinuous}, \texttt{ContinuousLinearMap.opNorm\_le\_bound}). Positivity: $\left< \Omega, x^*x\Omega \right> = \left< x\Omega, x\Omega \right> = \|x\Omega\|^2 \ge 0$ (\texttt{ContinuousLinearMap.adjoint\_inner\_right}, \texttt{ContinuousLinearMap.star\_eq\_adjoint}, \texttt{inner\_self\_eq\_norm\_sq\_to\_K}).
+\end{proof}
+
+\begin{lemma}[Vector Functionals have Norm One]
+    \label{lmm:vector-functional-norm-one}
+    \uses{lmm:vector-functional-state}
+    With $\mathfrak{A}$ and $\Omega$ as in Lemma~\ref{lmm:vector-functional-state}, $\|\omega_\Omega\| = 1$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:vector-functional-state}
+    $\mathbf{H} \ne 0$ since $\Omega \ne 0$, so $\|\mathbf{1}\| = 1$ in $\mathfrak{A}$ (\texttt{norm\_one}), and $\omega_\Omega(\mathbf{1}) = \|\Omega\|^2 = 1 \le \|\omega_\Omega\|\,\|\mathbf{1}\|$ (\texttt{inner\_self\_eq\_norm\_sq\_to\_K}, \texttt{ContinuousLinearMap.le\_opNorm}). With $\|\omega_\Omega\| \le 1$ (Lemma~\ref{lmm:vector-functional-state}) this gives $\|\omega_\Omega\| = 1$ (\texttt{le\_antisymm}).
+\end{proof}
+
+\begin{definition}[Vector State]
+    \label{def:vector-state}
+    \uses{def:state, lmm:vector-functional-state, lmm:vector-functional-norm-one}
+    Let $\mathfrak{A}$ be a norm-closed unital $*$-subalgebra of $\mathcal{B}(\mathbf{H})$ and $\Omega \in \mathbf{H}$ with $\|\Omega\| = 1$. The \emph{vector state} of $\Omega$ is the state (Definition~\ref{def:state}) $\omega_\Omega(x) = \left< \Omega, x\Omega \right>$ on $\mathfrak{A}$: it is a positive continuous linear functional by Lemma~\ref{lmm:vector-functional-state}, of norm $1$ by Lemma~\ref{lmm:vector-functional-norm-one}.
+\end{definition}
+
+\begin{lemma}[$\Delta^{it}\,\cdot\,\Delta^{-it}$ is a $*$-Automorphism of $\mathcal{M}$]
+    \label{lmm:modular-automorphism-well-defined}
+    \uses{def:modular-algebra, def:modular-unitary-group, lmm:tomita-modular-automorphism}
+    For $t \in \mathbb{R}$ and $x \in \mathcal{M}$ put $\sigma_t(x) = \Delta^{it}x\Delta^{-it}$. Then $\sigma_t(x) \in \mathcal{M}$, $\sigma_t$ is linear, $\sigma_t(\mathbf{1}) = \mathbf{1}$, $\sigma_t(xy) = \sigma_t(x)\sigma_t(y)$, $\sigma_t(x^*) = \sigma_t(x)^*$, and $\sigma_{-t}(\sigma_t(x)) = \sigma_t(\sigma_{-t}(x)) = x$ for all $x, y \in \mathcal{M}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-modular-automorphism-subset, lmm:modular-unitary-group-props}
+    $\sigma_t(x) \in \mathcal{M}$ is Lemma~\ref{lmm:tomita-modular-automorphism-subset}, and linearity is that of composition with fixed operators. By Lemma~\ref{lmm:modular-unitary-group-props}, $\Delta^{-it}\Delta^{it} = \Delta^{it}\Delta^{-it} = \mathbf{1}$, which gives $\sigma_t(\mathbf{1}) = \mathbf{1}$, multiplicativity, and the two inverse identities (\texttt{mul\_assoc}, \texttt{neg\_neg}); and $(\Delta^{it})^* = \Delta^{-it}$, so $(\Delta^{it}x\Delta^{-it})^* = \Delta^{it}x^*\Delta^{-it}$ (\texttt{star\_mul}, \texttt{star\_star}).
+\end{proof}
+
+\begin{definition}[The Modular Automorphism Group]
+    \label{def:modular-automorphism}
+    \uses{def:modular-algebra, def:modular-unitary-group, lmm:modular-algebra-closed, lmm:modular-automorphism-well-defined}
+    For $t \in \mathbb{R}$, the \emph{modular automorphism} $\sigma_t$ is the $*$-automorphism $x \mapsto \Delta^{it}x\Delta^{-it}$ of the modular algebra (Definition~\ref{def:modular-algebra}), with inverse $\sigma_{-t}$ (Lemma~\ref{lmm:modular-automorphism-well-defined}).
+\end{definition}
+
+\begin{lemma}[The Modular Automorphisms form a One-Parameter Group]
+    \label{lmm:modular-automorphism-one-parameter}
+    \uses{def:modular-automorphism, def:one-parameter-aut}
+    $t \mapsto \sigma_t$ is a one-parameter group of $*$-automorphisms of the modular algebra (Definition~\ref{def:one-parameter-aut}): $\sigma_0 = \mathrm{id}$ and $\sigma_{s+t} = \sigma_s \circ \sigma_t$ for $s, t \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-unitary-group-props}
+    $\Delta^{i0} = \mathbf{1}$ gives $\sigma_0(x) = x$. The group law $\Delta^{i(s+t)} = \Delta^{is}\Delta^{it}$ (Lemma~\ref{lmm:modular-unitary-group-props}), applied also to $-(s+t) = (-t) + (-s)$ (\texttt{neg\_add\_rev}), gives $\Delta^{i(s+t)}x\Delta^{-i(s+t)} = \Delta^{is}(\Delta^{it}x\Delta^{-it})\Delta^{-is}$ (\texttt{mul\_assoc}). Elements of the modular algebra are equal when their underlying operators are (\texttt{Subtype.ext}).
+\end{proof}
+
+\subsubsection{The Vector $\Omega$ is Invariant}
+
+The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta^{it}$. This paragraph proves $\Delta^{it}\Omega = \Omega$, by way of $\Delta\Omega = \Omega$ and general facts on eigenvectors of a self-adjoint operator, and records how $J$, $\Delta^{1/2}$ and $\Delta^{it}$ act on the vectors $x\Omega$.
+
+\begin{lemma}[Spectral Moments of a Vector in the Domain]
+    \label{lmm:spectral-moments}
+    \uses{def:spectral-measure, def:hall-9.5}
+    Let $A$ be self-adjoint with spectral measure $\mu^A$ and $\psi \in \text{Dom}(A)$. Then $1$, $\lambda$ and $\lambda^2$ are $\mu^A_\psi$-integrable, $\mu^A_\psi(\mathbb{R}) = \|\psi\|^2$, $\left< \psi, A\psi \right>$ is real,
+    \begin{align}
+        \int_{\mathbb{R}} \lambda \, d\mu^A_\psi(\lambda) = \operatorname{Re}\left< \psi, A\psi \right> \qquad\text{and}\qquad \int_{\mathbb{R}} \lambda^2 \, d\mu^A_\psi(\lambda) = \|A\psi\|^2.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{prpstn:hall-10.1, prpstn:hall-10.2, thrm:projection-valued-measures-associated-measure}
+    $\text{Dom}(A) = W_\iota$ for $\iota(\lambda) = \lambda$ and $A = \int \iota \, d\mu^A$ (Definition~\ref{def:spectral-measure}), so $\lambda^2 = |\iota|^2$ is $\mu^A_\psi$-integrable (Proposition~\ref{prpstn:hall-10.2}), and $\mu^A_\psi$ is a finite measure with $\mu^A_\psi(\mathbb{R}) = \left< \psi, \mu^A(\mathbb{R})\psi \right> = \|\psi\|^2$ (Theorem~\ref{thrm:projection-valued-measures-associated-measure}); hence $1$ and $\lambda$ ($|\lambda| \le 1 + \lambda^2$, \texttt{MeasureTheory.Integrable.mono}) are integrable. Proposition~\ref{prpstn:hall-10.1} gives $\|A\psi\|^2 = \int |\iota|^2 \, d\mu^A_\psi$ and $\left< \psi, A\psi \right> = \int \iota \, d\mu^A_\psi$, the complex integral of a real integrable function, which is real with real part $\int \lambda \, d\mu^A_\psi$ (\texttt{integral\_ofReal}).
+\end{proof}
+
+\begin{lemma}[The Spectral Variance of a Vector]
+    \label{lmm:spectral-eigenvector-variance}
+    \uses{def:spectral-measure, def:hall-9.5}
+    Let $A$ be self-adjoint with spectral measure $\mu^A$, $c \in \mathbb{R}$ and $\psi \in \text{Dom}(A)$. Then $\lambda \mapsto (\lambda - c)^2$ is $\mu^A_\psi$-integrable and
+    \begin{align}
+        \int_{\mathbb{R}} (\lambda - c)^2 \, d\mu^A_\psi(\lambda) = \|A\psi - c\psi\|^2.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:spectral-moments}
+    $(\lambda - c)^2 = \lambda^2 - 2c\lambda + c^2$ is a combination of the integrable functions of Lemma~\ref{lmm:spectral-moments}, so its integral is $\|A\psi\|^2 - 2c\operatorname{Re}\left< \psi, A\psi \right> + c^2\|\psi\|^2$ (\texttt{MeasureTheory.integral\_add}, \texttt{MeasureTheory.integral\_sub}, \texttt{MeasureTheory.integral\_const\_mul}, \texttt{MeasureTheory.integral\_const}). This is $\|A\psi - c\psi\|^2$ (\texttt{norm\_sub\_sq}, \texttt{norm\_smul}, \texttt{inner\_smul\_right}).
+\end{proof}
+
+\begin{lemma}[Spectral Projections of Null Sets]
+    \label{lmm:pvm-null-set-vector}
+    \uses{def:projection-valued-measure, thrm:projection-valued-measures-associated-measure}
+    Let $\mu$ be a projection-valued measure on $(X, \Omega(X))$, $\psi \in \mathbf{H}$ and $E \in \Omega(X)$. Then $\mu_\psi(E) = \|\mu(E)\psi\|^2$. Hence, if $\mu_\psi(E) = 0$, then $\mu(E)\psi = 0$ and $\mu(X \setminus E)\psi = \psi$.
+\end{lemma}
+\begin{proof}
+    $\mu(E)$ is an orthogonal projection (Definition~\ref{def:projection-valued-measure}), so $\mu_\psi(E) = \left< \psi, \mu(E)\psi \right> = \left< \mu(E)\psi, \mu(E)\psi \right> = \|\mu(E)\psi\|^2$ (Theorem~\ref{thrm:projection-valued-measures-associated-measure}, \texttt{ContinuousLinearMap.adjoint\_inner\_right}, \texttt{inner\_self\_eq\_norm\_sq\_to\_K}). If this is $0$, then $\mu(E)\psi = 0$ (\texttt{norm\_eq\_zero}), and $\mu(E) + \mu(X \setminus E) = \mu(X) = \mathbf{1}$ by additivity on the disjoint sets $E$ and $X \setminus E$ (Definition~\ref{def:projection-valued-measure}) gives $\mu(X \setminus E)\psi = \psi$.
+\end{proof}
+
+\begin{lemma}[Eigenvectors lie in the Range of a Spectral Projection]
+    \label{lmm:spectral-eigenvector-projection}
+    \uses{def:spectral-measure, def:hall-9.5}
+    Let $A$ be self-adjoint with spectral measure $\mu^A$, $c \in \mathbb{R}$, and $\psi \in \text{Dom}(A)$ with $A\psi = c\psi$. Then $\mu^A(\{c\})\psi = \psi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:spectral-eigenvector-variance, lmm:pvm-null-set-vector}
+    By Lemma~\ref{lmm:spectral-eigenvector-variance}, $\int (\lambda - c)^2 \, d\mu^A_\psi = 0$ with a nonnegative integrand, so $(\lambda - c)^2 = 0$ for $\mu^A_\psi$-almost every $\lambda$ (\texttt{MeasureTheory.integral\_eq\_zero\_iff\_of\_nonneg}), that is, $\mu^A_\psi(\mathbb{R} \setminus \{c\}) = 0$ (\texttt{MeasureTheory.ae\_iff}, \texttt{sub\_eq\_zero}). Lemma~\ref{lmm:pvm-null-set-vector} with $E = \mathbb{R} \setminus \{c\}$ gives $\mu^A(\{c\})\psi = \psi$ (\texttt{compl\_compl}).
+\end{proof}
+
+\begin{lemma}[Bounded Functions on Eigenvectors]
+    \label{lmm:spectral-eigenvector-bounded-fc}
+    \uses{def:spectral-measure, def:hall-10.5, def:hall-9.5}
+    Let $A$ be self-adjoint, $c \in \mathbb{R}$, $\psi \in \text{Dom}(A)$ with $A\psi = c\psi$, and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $f(A)\psi = f(c)\psi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:spectral-eigenvector-projection, lmm:functional-calculus-bounded, prpstn:integral-multiplicative, prpstn:integral-of-indicator, thrm:operator-valued-integration}
+    $f(A)$ is the bounded integral $\int f \, d\mu^A$ (Lemma~\ref{lmm:functional-calculus-bounded}). Pointwise $f\,1_{\{c\}} = f(c)\,1_{\{c\}}$ (\texttt{Set.indicator\_apply}), so by Propositions~\ref{prpstn:integral-multiplicative} and~\ref{prpstn:integral-of-indicator} and linearity (Theorem~\ref{thrm:operator-valued-integration}), $f(A)\mu^A(\{c\}) = f(c)\mu^A(\{c\})$. Apply this to $\psi = \mu^A(\{c\})\psi$ (Lemma~\ref{lmm:spectral-eigenvector-projection}).
+\end{proof}
+
+\begin{lemma}[$\Delta\Omega = \Omega$]
+    \label{lmm:modular-operator-fixes-omega}
+    \uses{def:modular-operator, def:cyclic-separating-vector}
+    $\Omega \in \text{Dom}(\Delta)$ and $\Delta\Omega = \Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-operator-on-algebra, lmm:tomita-adjoint-on-commutant, lmm:tomita-adjoint-intrinsic, lmm:modular-operator-intrinsic, lmm:commutant-von-neumann-algebra}
+    $\mathbf{1} \in \mathcal{M}$ and $\mathbf{1} \in \mathcal{M}'$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\Omega \in \text{Dom}(S)$ with $S\Omega = \Omega$ (Lemma~\ref{lmm:tomita-operator-on-algebra}) and $S^*\Omega = \Omega$, that is, $(S')^*C\Omega = \Omega$ (Lemma~\ref{lmm:tomita-adjoint-on-commutant}). By Lemma~\ref{lmm:tomita-adjoint-intrinsic} with $\xi = \eta = \Omega$, $\left< \Omega, S\zeta \right> = \left< \zeta, \Omega \right>$ for every $\zeta \in \text{Dom}(S)$; conjugating (\texttt{inner\_conj\_symm}), $\left< S\zeta, S\Omega \right> = \left< S\zeta, \Omega \right> = \left< \Omega, \zeta \right>$. Lemma~\ref{lmm:modular-operator-intrinsic} with $\psi = \chi = \Omega$ concludes.
+\end{proof}
+
+\begin{lemma}[$\Delta^{it}\Omega = \Omega$]
+    \label{lmm:modular-unitary-group-fixes-omega}
+    \uses{def:modular-unitary-group, def:cyclic-separating-vector}
+    For every $t \in \mathbb{R}$, $\Delta^{it}\Omega = \Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-operator-fixes-omega, lmm:spectral-eigenvector-bounded-fc, lmm:modular-unitary-group-fc, thrm:modular-operator-properties}
+    $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}) and $\Delta\Omega = 1 \cdot \Omega$ (Lemma~\ref{lmm:modular-operator-fixes-omega}). $\Delta^{it} = e_t(\Delta)$ with $e_t$ bounded and measurable (Lemma~\ref{lmm:modular-unitary-group-fc}), so Lemma~\ref{lmm:spectral-eigenvector-bounded-fc} with $c = 1$ gives $\Delta^{it}\Omega = e_t(1)\Omega$, and $e_t(1) = e^{it\log 1} = 1$ (\texttt{Real.log\_one}, \texttt{Complex.exp\_zero}).
+\end{proof}
+
+\begin{lemma}[$J$ Commutes with $\Delta^{it}$]
+    \label{lmm:modular-conjugation-commutes-unitary-group}
+    \uses{def:modular-conjugation, def:modular-unitary-group}
+    For every $t \in \mathbb{R}$ and $\psi \in \mathbf{H}$, $J\Delta^{it}\psi = \Delta^{it}J\psi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-conjugation-powers, thrm:modular-conjugation-involution}
+    By Lemma~\ref{lmm:modular-conjugation-powers} (with any $n \ge 1$), $J\Delta^{it}J\phi = \Delta^{it}\phi$ for every $\phi$. Take $\phi = J\psi$ and use $J(J\psi) = \psi$ (Theorem~\ref{thrm:modular-conjugation-involution}).
+\end{proof}
+
+\begin{lemma}[$\Delta^{1/2}x\Omega = Jx^*\Omega$]
+    \label{lmm:modular-sqrt-on-algebra}
+    \uses{def:modular-operator, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
+    Let $x \in \mathcal{M}$. Then $x\Omega \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}x\Omega = Jx^*\Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-operator-on-algebra, thrm:modular-conjugation-polar, thrm:modular-conjugation-involution}
+    $x\Omega \in \text{Dom}(S)$ with $S(x\Omega) = x^*\Omega$ (Lemma~\ref{lmm:tomita-operator-on-algebra}), and $\text{Dom}(S) = \text{Dom}(\Delta^{1/2})$ with $S = J\Delta^{1/2}$ (Theorem~\ref{thrm:modular-conjugation-polar}). So $J\Delta^{1/2}x\Omega = x^*\Omega$; apply $J$ and use $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}).
+\end{proof}
+
+\subsubsection{The Analytic Continuation}
+
+Formally, the KMS function is $z \mapsto \left< a^*\Omega, \Delta^{-iz}b\Omega \right>$ on the strip $0 \le \operatorname{Im} z \le 1$. On that strip $|\lambda^{-iz}| = \lambda^{\operatorname{Im} z} \le \max(1, \lambda)$ for $\lambda > 0$, so splitting the spectrum at $1$ and moving a factor $\lambda = s(\lambda)^2$ onto the two vectors writes it with bounded functions of $\Delta$. It is holomorphic as a uniform limit of the entire functions obtained by cutting off with $E_n$.
+
+\emph{Notation.} Let $\mathcal{T} = \{ z \in \mathbb{C} : 0 \le \operatorname{Im} z \le 1 \}$ and $\mathcal{T}^\circ = \{ z \in \mathbb{C} : 0 < \operatorname{Im} z < 1 \}$; these are the sets $\texttt{kmsStrip}\ 1$ and $\texttt{kmsStripInterior}\ 1$ of Definition~\ref{def:kms-state}. For $z \in \mathbb{C}$, $t \in \mathbb{R}$ and $\lambda \in \mathbb{R}$ let
+\begin{align}
+    u_z(\lambda) = 1_{(0,1)}(\lambda)\,\lambda^{-iz}, \qquad v_z(\lambda) = 1_{[1,\infty)}(\lambda)\,\lambda^{-iz-1}, \qquad g_t(\lambda) = 1_{(0,1)}(\lambda)\,e_{-t}(\lambda),
+\end{align}
+with the principal complex power. For $\xi, \eta \in \text{Dom}(\Delta^{1/2})$, $z \in \mathcal{T}$ and an integer $n \ge 1$ put
+\begin{align}
+    G_{\xi,\eta}(z) &= \left< \xi, u_z(\Delta)\eta \right> + \left< \Delta^{1/2}\xi, v_z(\Delta)\Delta^{1/2}\eta \right>, \\
+    G^n_{\xi,\eta}(z) &= \left< 1_{(0,1)}(\Delta)\xi, p_{-iz,n}(\Delta)\eta \right> + \left< 1_{[1,\infty)}(\Delta)\Delta^{1/2}\xi, p_{-iz-1,n}(\Delta)\Delta^{1/2}\eta \right>,
+\end{align}
+the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\eta}(z) = 0$; every claim about $G_{\xi,\eta}$ concerns $\mathcal{T}$ only, so this choice is immaterial. Here $u_z(\Delta)$ and $v_z(\Delta)$ are bounded operators by Lemma~\ref{lmm:takesaki-functions-bounded}.
+
+\begin{lemma}[The Functions $u_z$ and $v_z$ are Bounded on the Strip]
+    \label{lmm:takesaki-functions-bounded}
+    For $z \in \mathbb{C}$, $u_z$ and $v_z$ are measurable, and for $z \in \mathcal{T}$, $|u_z(\lambda)| \le 1$ and $|v_z(\lambda)| \le 1$ for every $\lambda \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    Measurability: \texttt{Measurable.indicator} with \texttt{measurableSet\_Ioo} and \texttt{measurableSet\_Ici}, and \texttt{Measurable.pow\_const} with \texttt{Complex.measurable\_ofReal}. Off the indicator sets both functions vanish. For $\lambda > 0$, $|\lambda^w| = \lambda^{\operatorname{Re} w}$ (\texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos}), and $\operatorname{Re}(-iz) = \operatorname{Im} z$. For $0 < \lambda < 1$, $\lambda^{\operatorname{Im} z} \le 1$ since $\operatorname{Im} z \ge 0$ (\texttt{Real.rpow\_le\_one}); for $\lambda \ge 1$, $\lambda^{\operatorname{Im} z - 1} \le 1$ since $\operatorname{Im} z \le 1$ (\texttt{Real.rpow\_le\_one\_of\_one\_le\_of\_nonpos}).
+\end{proof}
+
+\begin{lemma}[Scalar Identities for $\lambda > 0$]
+    \label{lmm:takesaki-positive-scalar-identities}
+    \uses{lmm:modular-unitary-group-fc}
+    Let $\lambda > 0$, $w \in \mathbb{C}$ and $t \in \mathbb{R}$. Then $s(\lambda)^2 = \lambda$, $\lambda \cdot \lambda^w = \lambda^{w+1}$, $|\lambda^w| = \lambda^{\operatorname{Re} w}$ and $e_{-t}(\lambda) = \lambda^{-it}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-unitary-group-fc}
+    $s(\lambda)^2 = \max(\lambda, 0) = \lambda$ (\texttt{Real.sq\_sqrt}, \texttt{max\_eq\_left}); $\lambda^{w+1} = \lambda^w\lambda^1$ (\texttt{Complex.cpow\_add}, $(\lambda : \mathbb{C}) \ne 0$, \texttt{Complex.cpow\_one}); the modulus is \texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos}; and $e_{-t}(\lambda) = \lambda^{-it}$ is Lemma~\ref{lmm:modular-unitary-group-fc} at $-t$.
+\end{proof}
+
+\begin{lemma}[$u_z$ and $v_z$ Cut Off to $K_n$]
+    \label{lmm:takesaki-functions-identities}
+    For $z \in \mathbb{C}$, $n \ge 1$ and every $\lambda \in \mathbb{R}$, $u_z(\lambda)1_{K_n}(\lambda) = 1_{(0,1)}(\lambda)\,p_{-iz,n}(\lambda)$ and $v_z(\lambda)1_{K_n}(\lambda) = 1_{[1,\infty)}(\lambda)\,p_{-iz-1,n}(\lambda)$.
+\end{lemma}
+\begin{proof}
+    By definition $p_{w,n}(\lambda) = 1_{K_n}(\lambda)\lambda^w$, so both identities are rearrangements of a product of two indicators and a power (\texttt{Set.indicator\_apply}, \texttt{mul\_comm}, \texttt{mul\_assoc}).
+\end{proof}
+
+\begin{lemma}[The Lower Boundary Sum]
+    \label{lmm:takesaki-functions-lower-sum}
+    For $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $u_t(\lambda) + s(\lambda)^2v_t(\lambda) = 1_{(0,\infty)}(\lambda)\,e_{-t}(\lambda)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-positive-scalar-identities}
+    For $\lambda \le 0$ every term vanishes (\texttt{Set.indicator\_of\_not\_mem}). For $0 < \lambda < 1$ both sides are $\lambda^{-it}$, and for $\lambda \ge 1$ both sides are $\lambda \cdot \lambda^{-it-1} = \lambda^{-it}$ (Lemma~\ref{lmm:takesaki-positive-scalar-identities}; \texttt{Set.indicator\_apply}, \texttt{split\_ifs}).
+\end{proof}
+
+\begin{lemma}[The Upper Boundary Identities]
+    \label{lmm:takesaki-functions-upper-identities}
+    For $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $s(\lambda)^2g_t(\lambda) = u_{t+i}(\lambda)$ and $g_t(\lambda) + v_{t+i}(\lambda) = 1_{(0,\infty)}(\lambda)\,e_{-t}(\lambda)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-positive-scalar-identities}
+    $-i(t + i) = 1 - it$ (\texttt{ring}), so $u_{t+i}(\lambda) = 1_{(0,1)}(\lambda)\lambda^{1-it}$ and $v_{t+i}(\lambda) = 1_{[1,\infty)}(\lambda)\lambda^{-it}$. Split into $\lambda \le 0$ (every term vanishes), $0 < \lambda < 1$ and $\lambda \ge 1$, and use $s(\lambda)^2 = \lambda$, $\lambda \cdot \lambda^{-it} = \lambda^{1-it}$ and $e_{-t}(\lambda) = \lambda^{-it}$ (Lemma~\ref{lmm:takesaki-positive-scalar-identities}; \texttt{Set.indicator\_apply}, \texttt{split\_ifs}).
+\end{proof}
+
+\begin{lemma}[Bounds for the Boundary Functions]
+    \label{lmm:takesaki-functions-aux-bounds}
+    \uses{lmm:modular-unitary-group-fc}
+    For $t \in \mathbb{R}$, $g_t$ is measurable, and $|g_t(\lambda)|$, $|s(\lambda)v_t(\lambda)|$, $|s(\lambda)^2v_t(\lambda)|$, $|s(\lambda)g_t(\lambda)|$ and $|s(\lambda)^2g_t(\lambda)|$ are at most $1$ for every $\lambda \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-positive-scalar-identities, lmm:modular-unitary-group-fc}
+    Measurability is \texttt{Measurable.indicator} with Lemma~\ref{lmm:modular-unitary-group-fc}, which also gives $|e_{-t}(\lambda)| = 1$. Off the indicator sets the functions vanish. By Lemma~\ref{lmm:takesaki-positive-scalar-identities}, on $\lambda \ge 1$, $|s(\lambda)v_t(\lambda)| = \lambda^{-1/2} \le 1$ and $|s(\lambda)^2v_t(\lambda)| = 1$, and on $0 < \lambda < 1$, $|s(\lambda)g_t(\lambda)| = \lambda^{1/2} \le 1$ and $|s(\lambda)^2g_t(\lambda)| = \lambda \le 1$ (\texttt{Real.sqrt\_le\_one}, \texttt{Real.rpow\_le\_one\_of\_one\_le\_of\_nonpos}).
+\end{proof}
+
+\begin{lemma}[Moving $\Delta^{1/2}$ across a Bounded Function]
+    \label{lmm:modular-sqrt-transfer}
+    \uses{def:modular-operator, def:hall-10.5}
+    Let $f : \mathbb{R} \to \mathbb{C}$ be measurable with $f$, $sf$ and $s^2f$ bounded, and let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$. Then
+    \begin{align}
+        \left< \Delta^{1/2}\xi, f(\Delta)\Delta^{1/2}\eta \right> = \left< \xi, (s^2f)(\Delta)\eta \right>.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:fc-bounded-left-composition, thrm:fc-composition, lmm:functional-calculus-bounded, lmm:fc-real-closed, thrm:modular-operator-properties}
+    The bounded functions have $W = \mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}). Lemma~\ref{lmm:fc-bounded-left-composition} with $u = f$, $h = s$ and $\eta \in W_s$ gives $f(\Delta)\Delta^{1/2}\eta = (fs)(\Delta)\eta$, and Theorem~\ref{thrm:fc-composition} with the pair $(s, fs)$ at $\eta \in W_{fs} \cap W_{s^2f}$ gives $(fs)(\Delta)\eta \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}(fs)(\Delta)\eta = (s^2f)(\Delta)\eta$. Since $s$ is real, $\Delta^{1/2} = s(\Delta)$ is self-adjoint (Lemma~\ref{lmm:fc-real-closed}, Theorem~\ref{thrm:modular-operator-properties}), so $\left< \Delta^{1/2}\xi, (fs)(\Delta)\eta \right> = \left< \xi, \Delta^{1/2}(fs)(\Delta)\eta \right>$.
+\end{proof}
+
+\begin{lemma}[The Approximants are Entire]
+    \label{lmm:takesaki-approximants-entire}
+    \uses{lmm:modular-power-operators, def:modular-operator}
+    Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$ and $n \ge 1$. Then $z \mapsto G^n_{\xi,\eta}(z)$ is complex differentiable at every $z \in \mathbb{C}$; in particular it is continuous.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:modular-power-vector-entire}
+    By Corollary~\ref{crllr:modular-power-vector-entire}, $w \mapsto \left< \phi, p_{w,n}(\Delta)\psi \right>$ is entire for all $\phi, \psi \in \mathbf{H}$. Compose with the entire maps $z \mapsto -iz$ and $z \mapsto -iz - 1$ (\texttt{Differentiable.comp}, \texttt{differentiable\_id.const\_mul}, \texttt{Differentiable.sub\_const}) and add (\texttt{Differentiable.add}); continuity is \texttt{Differentiable.continuous}.
+\end{proof}
+
+\begin{lemma}[The Approximants on the Strip]
+    \label{lmm:takesaki-approximants-strip}
+    \uses{lmm:modular-power-operators, def:modular-operator, def:spectral-measure}
+    Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$, $n \ge 1$ and $z \in \mathcal{T}$. Then
+    \begin{align}
+        G^n_{\xi,\eta}(z) = \left< \xi, u_z(\Delta)E_n\eta \right> + \left< \Delta^{1/2}\xi, v_z(\Delta)E_n\Delta^{1/2}\eta \right>.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-functions-bounded, lmm:takesaki-functions-identities, lmm:modular-power-function-bounds, prpstn:integral-conjugation, prpstn:integral-multiplicative, prpstn:integral-of-indicator, lmm:functional-calculus-bounded}
+    The indicators are real, so $1_{(0,1)}(\Delta)$ and $1_{[1,\infty)}(\Delta)$ are self-adjoint (Proposition~\ref{prpstn:integral-conjugation}) and move to the right slot (\texttt{ContinuousLinearMap.adjoint\_inner\_left}). All functions involved are bounded and measurable (Lemmas~\ref{lmm:takesaki-functions-bounded} and~\ref{lmm:modular-power-function-bounds}), so Proposition~\ref{prpstn:integral-multiplicative}, Lemma~\ref{lmm:takesaki-functions-identities} and $E_n = 1_{K_n}(\Delta)$ (Proposition~\ref{prpstn:integral-of-indicator}) give $1_{(0,1)}(\Delta)p_{-iz,n}(\Delta) = u_z(\Delta)E_n$ and $1_{[1,\infty)}(\Delta)p_{-iz-1,n}(\Delta) = v_z(\Delta)E_n$.
+\end{proof}
+
+\begin{lemma}[Uniform Convergence of the Approximants]
+    \label{lmm:takesaki-approximants-uniform}
+    \uses{def:modular-operator, def:spectral-measure}
+    Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$. For $n \ge 1$ and $z \in \mathcal{T}$,
+    \begin{align}
+        |G_{\xi,\eta}(z) - G^n_{\xi,\eta}(z)| \le \|\xi\|\,\|\eta - E_n\eta\| + \|\Delta^{1/2}\xi\|\,\|\Delta^{1/2}\eta - E_n\Delta^{1/2}\eta\|,
+    \end{align}
+    so $G^n_{\xi,\eta} \to G_{\xi,\eta}$ uniformly on $\mathcal{T}$ as $n \to \infty$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-approximants-strip, lmm:takesaki-functions-bounded, prpstn:integral-norm-bound, lmm:functional-calculus-bounded, lmm:modular-spectral-projections-converge}
+    By Lemma~\ref{lmm:takesaki-approximants-strip}, $G_{\xi,\eta}(z) - G^n_{\xi,\eta}(z) = \left< \xi, u_z(\Delta)(\eta - E_n\eta) \right> + \left< \Delta^{1/2}\xi, v_z(\Delta)(\Delta^{1/2}\eta - E_n\Delta^{1/2}\eta) \right>$ (\texttt{inner\_sub\_right}, \texttt{map\_sub}). $\|u_z(\Delta)\|, \|v_z(\Delta)\| \le 1$ (Lemma~\ref{lmm:takesaki-functions-bounded}, Proposition~\ref{prpstn:integral-norm-bound}), so \texttt{norm\_inner\_le\_norm} and \texttt{ContinuousLinearMap.le\_of\_opNorm\_le} give the bound. The bound does not depend on $z$ and tends to $0$ (Lemma~\ref{lmm:modular-spectral-projections-converge}), which is uniform convergence (\texttt{Metric.tendstoUniformlyOn\_iff}, \texttt{squeeze\_zero}).
+\end{proof}
+
+\begin{lemma}[The KMS Function is Bounded and Analytic]
+    \label{lmm:takesaki-function-analytic}
+    \uses{def:modular-operator}
+    Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$. Then $G_{\xi,\eta}$ is continuous on $\mathcal{T}$, complex differentiable on $\mathcal{T}^\circ$, and $|G_{\xi,\eta}(z)| \le \|\xi\|\,\|\eta\| + \|\Delta^{1/2}\xi\|\,\|\Delta^{1/2}\eta\|$ for $z \in \mathcal{T}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:takesaki-approximants-entire, lmm:takesaki-approximants-uniform, lmm:takesaki-functions-bounded, prpstn:integral-norm-bound}
+    A uniform limit of continuous functions is continuous (\texttt{TendstoUniformlyOn.continuousOn}, with Lemmas~\ref{lmm:takesaki-approximants-entire} and~\ref{lmm:takesaki-approximants-uniform}). $\mathcal{T}^\circ \subset \mathcal{T}$ is open (\texttt{isOpen\_lt} with \texttt{Complex.continuous\_im}), uniform convergence on it is locally uniform (\texttt{TendstoUniformlyOn.mono}, \texttt{TendstoUniformlyOn.tendstoLocallyUniformlyOn}), and a locally uniform limit of holomorphic functions is holomorphic (\texttt{TendstoLocallyUniformlyOn.differentiableOn}). The bound is \texttt{norm\_inner\_le\_norm} with $\|u_z(\Delta)\|, \|v_z(\Delta)\| \le 1$ (Lemma~\ref{lmm:takesaki-functions-bounded}, Proposition~\ref{prpstn:integral-norm-bound}).
+\end{proof}
+
+\begin{lemma}[The Lower Boundary Value]
+    \label{lmm:takesaki-function-lower-boundary}
+    \uses{def:modular-operator, def:modular-unitary-group}
+    Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $G_{\xi,\eta}(t) = \left< \xi, \Delta^{-it}\eta \right>$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-sqrt-transfer, lmm:takesaki-functions-lower-sum, lmm:takesaki-functions-aux-bounds, lmm:takesaki-functions-bounded, thrm:operator-valued-integration, prpstn:integral-multiplicative, lmm:modular-indicator-positive-one, lmm:modular-unitary-group-fc}
+    Lemma~\ref{lmm:modular-sqrt-transfer} with $f = v_t$ (admissible by Lemmas~\ref{lmm:takesaki-functions-bounded} and~\ref{lmm:takesaki-functions-aux-bounds}) gives $G_{\xi,\eta}(t) = \left< \xi, u_t(\Delta)\eta \right> + \left< \xi, (s^2v_t)(\Delta)\eta \right>$, which by linearity of the bounded integral (Theorem~\ref{thrm:operator-valued-integration}) and Lemma~\ref{lmm:takesaki-functions-lower-sum} is $\left< \xi, (1_{(0,\infty)}e_{-t})(\Delta)\eta \right>$. By Proposition~\ref{prpstn:integral-multiplicative}, $(1_{(0,\infty)}e_{-t})(\Delta) = 1_{(0,\infty)}(\Delta)\,e_{-t}(\Delta) = \Delta^{-it}$ (Lemmas~\ref{lmm:modular-indicator-positive-one} and~\ref{lmm:modular-unitary-group-fc}).
+\end{proof}
+
+\begin{lemma}[The Upper Boundary Value]
+    \label{lmm:takesaki-function-upper-boundary}
+    \uses{def:modular-operator, def:modular-unitary-group}
+    Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $G_{\xi,\eta}(t + i) = \left< \Delta^{1/2}\xi, \Delta^{-it}\Delta^{1/2}\eta \right>$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-sqrt-transfer, lmm:takesaki-functions-upper-identities, lmm:takesaki-functions-aux-bounds, lmm:takesaki-functions-bounded, thrm:operator-valued-integration, prpstn:integral-multiplicative, lmm:modular-indicator-positive-one, lmm:modular-unitary-group-fc}
+    By Lemma~\ref{lmm:takesaki-functions-upper-identities}, $u_{t+i} = s^2g_t$, so Lemma~\ref{lmm:modular-sqrt-transfer} with $f = g_t$ (admissible by Lemma~\ref{lmm:takesaki-functions-aux-bounds}) gives $\left< \xi, u_{t+i}(\Delta)\eta \right> = \left< \Delta^{1/2}\xi, g_t(\Delta)\Delta^{1/2}\eta \right>$. Hence $G_{\xi,\eta}(t + i) = \left< \Delta^{1/2}\xi, (g_t + v_{t+i})(\Delta)\Delta^{1/2}\eta \right>$ (Theorem~\ref{thrm:operator-valued-integration}, \texttt{inner\_add\_right}; $v_{t+i}$ is bounded and measurable by Lemma~\ref{lmm:takesaki-functions-bounded}), and by Lemma~\ref{lmm:takesaki-functions-upper-identities} $(g_t + v_{t+i})(\Delta) = (1_{(0,\infty)}e_{-t})(\Delta) = \Delta^{-it}$ as in Lemma~\ref{lmm:takesaki-function-lower-boundary}.
+\end{proof}
+
+\subsubsection{Takesaki's Theorem}
+
+\begin{lemma}[The Lower Boundary Value as a Correlation]
+    \label{lmm:takesaki-lower-boundary-state}
+    \uses{def:modular-unitary-group, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    Let $a, b \in \mathcal{M}$ and $t \in \mathbb{R}$. Then $\left< a^*\Omega, \Delta^{-it}b\Omega \right> = \left< \Omega, a\,\Delta^{-it}b\Delta^{it}\,\Omega \right>$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-unitary-group-fixes-omega}
+    $\Omega = \Delta^{it}\Omega$ (Lemma~\ref{lmm:modular-unitary-group-fixes-omega}), and $\left< a^*\Omega, \phi \right> = \left< \Omega, a\phi \right>$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}, \texttt{ContinuousLinearMap.star\_eq\_adjoint}).
+\end{proof}
+
+\begin{lemma}[The Upper Boundary Value as a Correlation]
+    \label{lmm:takesaki-upper-boundary-state}
+    \uses{def:modular-operator, def:modular-unitary-group, def:cyclic-separating-vector, def:von-neumann-algebra-commutant-convention}
+    Let $a, b \in \mathcal{M}$ and $t \in \mathbb{R}$. Then $\left< \Delta^{1/2}a^*\Omega, \Delta^{-it}\Delta^{1/2}b\Omega \right> = \left< \Omega, \Delta^{-it}b\Delta^{it}\,a\,\Omega \right>$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-sqrt-on-algebra, lmm:modular-conjugation-commutes-unitary-group, thrm:modular-conjugation-polar, def:antiunitary-operator, lmm:modular-unitary-group-fixes-omega, lmm:modular-unitary-group-props}
+    By Lemma~\ref{lmm:modular-sqrt-on-algebra} (for $a^*$ and $b$, both in $\mathcal{M}$, with $a^{**} = a$), the left side is $\left< Ja\Omega, \Delta^{-it}Jb^*\Omega \right> = \left< Ja\Omega, J\Delta^{-it}b^*\Omega \right>$ (Lemma~\ref{lmm:modular-conjugation-commutes-unitary-group} at $-t$). $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}), so this is $\left< \Delta^{-it}b^*\Omega, a\Omega \right>$ (Definition~\ref{def:antiunitary-operator}). Write $\Omega = \Delta^{it}\Omega$ in the left slot (Lemma~\ref{lmm:modular-unitary-group-fixes-omega}) and move $\Delta^{-it}b^*\Delta^{it}$ to the right slot as its adjoint $\Delta^{-it}b\Delta^{it}$ ($(\Delta^{it})^* = \Delta^{-it}$, Lemma~\ref{lmm:modular-unitary-group-props}; \texttt{ContinuousLinearMap.adjoint\_inner\_left}, \texttt{star\_mul}).
+\end{proof}
+
+\begin{theorem}[Takesaki's Theorem]
+    \label{thrm:takesaki-kms}
+    \uses{def:kms-state, def:vector-state, def:modular-algebra, def:modular-automorphism, lmm:modular-algebra-closed, lmm:modular-automorphism-one-parameter, def:cyclic-separating-vector}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$ with $\|\Omega\| = 1$, let $\omega_\Omega$ be the vector state of $\Omega$ on the modular algebra (Definitions~\ref{def:vector-state} and~\ref{def:modular-algebra}), and let $\sigma_t$ be the modular automorphisms (Definition~\ref{def:modular-automorphism}). Then $\omega_\Omega$ is a KMS state (Definition~\ref{def:kms-state}) at inverse temperature $\beta = 1$ for the one-parameter automorphism group $t \mapsto \sigma_{-t}$: for all $a, b \in \mathcal{M}$ there is a function $F$, continuous and bounded on $0 \le \operatorname{Im} z \le 1$ and holomorphic on $0 < \operatorname{Im} z < 1$, with
+    \begin{align}
+        F(t) = \omega_\Omega(a\,\sigma_{-t}(b)), \qquad F(t + i) = \omega_\Omega(\sigma_{-t}(b)\,a) \qquad (t \in \mathbb{R}).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{lmm:modular-sqrt-on-algebra, lmm:takesaki-function-analytic, lmm:takesaki-function-lower-boundary, lmm:takesaki-function-upper-boundary, lmm:takesaki-lower-boundary-state, lmm:takesaki-upper-boundary-state}
+    Fix $a, b$ in the modular algebra, so $a, b \in \mathcal{M}$ (Lemma~\ref{lmm:modular-algebra-closed}), and put $\xi = a^*\Omega$ and $\eta = b\Omega$, which lie in $\text{Dom}(\Delta^{1/2})$ (Lemma~\ref{lmm:modular-sqrt-on-algebra}). Take $F = G_{\xi,\eta}$. It is continuous, holomorphic and bounded on the required sets (Lemma~\ref{lmm:takesaki-function-analytic}). By Lemmas~\ref{lmm:takesaki-function-lower-boundary} and~\ref{lmm:takesaki-lower-boundary-state}, $F(t) = \left< \Omega, a\,\Delta^{-it}b\Delta^{it}\,\Omega \right> = \omega_\Omega(a\,\sigma_{-t}(b))$, and by Lemmas~\ref{lmm:takesaki-function-upper-boundary} and~\ref{lmm:takesaki-upper-boundary-state}, $F(t + i) = \left< \Omega, \Delta^{-it}b\Delta^{it}\,a\,\Omega \right> = \omega_\Omega(\sigma_{-t}(b)\,a)$, using $\sigma_{-t}(b) = \Delta^{-it}b\Delta^{it}$ (Definition~\ref{def:modular-automorphism}) and $\omega_\Omega(x) = \left< \Omega, x\Omega \right>$ (Definition~\ref{def:vector-state}).
+\end{proof}
+
+The normalization $\|\Omega\| = 1$ makes $\omega_\Omega$ a state; it is no restriction, since a cyclic and separating vector can be rescaled.
