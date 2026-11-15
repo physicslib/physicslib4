@@ -4185,6 +4185,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     For $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $u_t(\lambda) + s(\lambda)^2v_t(\lambda) = 1_{(0,\infty)}(\lambda)\,e_{-t}(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-positive-scalar-identities}
     For $\lambda \le 0$ every term vanishes (\texttt{Set.indicator\_of\_not\_mem}). For $0 < \lambda < 1$ both sides are $\lambda^{-it}$, and for $\lambda \ge 1$ both sides are $\lambda \cdot \lambda^{-it-1} = \lambda^{-it}$ (Lemma~\ref{lmm:takesaki-positive-scalar-identities}; \texttt{Set.indicator\_apply}, \texttt{split\_ifs}).
 \end{proof}
@@ -4196,6 +4197,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     For $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$, $s(\lambda)^2g_t(\lambda) = u_{t+i}(\lambda)$ and $g_t(\lambda) + v_{t+i}(\lambda) = 1_{(0,\infty)}(\lambda)\,e_{-t}(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-positive-scalar-identities}
     $-i(t + i) = 1 - it$ (\texttt{ring}), so $u_{t+i}(\lambda) = 1_{(0,1)}(\lambda)\lambda^{1-it}$ and $v_{t+i}(\lambda) = 1_{[1,\infty)}(\lambda)\lambda^{-it}$. Split into $\lambda \le 0$ (every term vanishes), $0 < \lambda < 1$ and $\lambda \ge 1$, and use $s(\lambda)^2 = \lambda$, $\lambda \cdot \lambda^{-it} = \lambda^{1-it}$ and $e_{-t}(\lambda) = \lambda^{-it}$ (Lemma~\ref{lmm:takesaki-positive-scalar-identities}; \texttt{Set.indicator\_apply}, \texttt{split\_ifs}).
 \end{proof}

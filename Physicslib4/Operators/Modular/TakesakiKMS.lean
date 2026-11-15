@@ -287,14 +287,41 @@ theorem takesaki_functions_identities (z : ℂ) (n : ℕ) (x : ℝ) :
 Blueprint: lmm:takesaki-functions-lower-sum -/
 theorem takesaki_functions_lower_sum (t x : ℝ) :
     u[(t : ℂ)] x + (Real.sqrt x : ℂ) ^ 2 * v[(t : ℂ)] x = (Set.Ioi (0 : ℝ)).indicator e[-t] x := by
-  sorry
+  rcases le_or_gt x 0 with hx | hx
+  · simp [Set.indicator, not_lt.mpr hx, Real.sqrt_eq_zero'.mpr hx]
+  obtain ⟨hs, hm, -, he⟩ := takesaki_positive_scalar_identities hx (-Complex.I * t - 1) t
+  beta_reduce at he
+  rw [Set.indicator_of_mem (Set.mem_Ioi.mpr hx), he]
+  rcases lt_or_ge x 1 with h1 | h1
+  · simp [Set.indicator, hx, h1, not_le.mpr h1]
+  · rw [Set.indicator_of_notMem (fun h => absurd h1 (not_le.mpr h.2)),
+      Set.indicator_of_mem (Set.mem_Ici.mpr h1), ← Complex.ofReal_pow, hs, hm, zero_add,
+      sub_add_cancel]
 
 /-- `s² g_t = u_{t+i}` and `g_t + v_{t+i} = 1_{(0,∞)} e_{-t}` pointwise, for real `t`.
 Blueprint: lmm:takesaki-functions-upper-identities -/
 theorem takesaki_functions_upper_identities (t x : ℝ) :
     (Real.sqrt x : ℂ) ^ 2 * g[t] x = u[(t : ℂ) + Complex.I] x ∧
       g[t] x + v[(t : ℂ) + Complex.I] x = (Set.Ioi (0 : ℝ)).indicator e[-t] x := by
-  sorry
+  rcases le_or_gt x 0 with h0 | h0
+  · have h1 : ¬ (1 : ℝ) ≤ x := by linarith
+    simp [Set.indicator, not_lt.2 h0, h1]
+  obtain ⟨hs, hm, -, he⟩ := takesaki_positive_scalar_identities h0 (-Complex.I * t) t
+  have he' : Complex.exp (Complex.I * ((-t : ℝ) : ℂ) * (Real.log x : ℂ)) =
+      (x : ℂ) ^ (-Complex.I * t) := by rw [← he]; push_cast; ring_nf
+  rcases lt_or_ge x 1 with h1 | h1
+  · have h1' : ¬ (1 : ℝ) ≤ x := by linarith
+    simp only [Set.indicator, Set.mem_Ioo, Set.mem_Ici, Set.mem_Ioi, h0, h1, h1', and_self,
+      ite_true, ite_false, add_zero]
+    refine ⟨?_, he'.trans he.symm⟩
+    rw [he', ← Complex.ofReal_pow, hs, hm]
+    congr 1
+    linear_combination Complex.I_sq
+  · have h1' : ¬ x < 1 := by linarith
+    simp only [Set.indicator, Set.mem_Ioo, Set.mem_Ici, Set.mem_Ioi, h0, h1, h1', and_false,
+      ite_true, ite_false, mul_zero, zero_add, true_and]
+    refine (congrArg _ ?_).trans he.symm
+    linear_combination -Complex.I_sq
 
 /-- `g_t` is measurable, and `|g_t|`, `|s v_t|`, `|s² v_t|`, `|s g_t|`, `|s² g_t|` are at most `1`.
 Blueprint: lmm:takesaki-functions-aux-bounds -/
