@@ -147,7 +147,24 @@ theorem spectralMeasure_variance {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (
     (hψ : ψ ∈ A.domain) :
     Integrable (fun x : ℝ => (x - c) ^ 2) ((spectralMeasure hA).assoc ψ) ∧
       ∫ x, (x - c) ^ 2 ∂((spectralMeasure hA).assoc ψ) = ‖A ⟨ψ, hψ⟩ - (c : ℂ) • ψ‖ ^ 2 := by
-  sorry
+  obtain ⟨h1, hx, hx2, huniv, -, hre, hsq⟩ := spectralMeasure_moments hA hψ
+  have hexp : (fun x : ℝ => (x - c) ^ 2) =
+      fun x => x ^ 2 - 2 * c * x + c ^ 2 * 1 := by
+    ext x; ring
+  have hi1 : Integrable (fun x : ℝ => x ^ 2 - 2 * c * x) ((spectralMeasure hA).assoc ψ) :=
+    hx2.sub (hx.const_mul (2 * c))
+  have hi2 := h1.const_mul (c ^ 2)
+  refine ⟨hexp ▸ hi1.add hi2, ?_⟩
+  have hone : ∫ _ : ℝ, (1 : ℝ) ∂((spectralMeasure hA).assoc ψ) = ‖ψ‖ ^ 2 := by
+    rw [integral_const, smul_eq_mul, mul_one, Measure.real, huniv,
+      ENNReal.toReal_ofReal (by positivity)]
+  rw [hexp, integral_add hi1 hi2, integral_sub hx2 (hx.const_mul _), integral_const_mul,
+    integral_const_mul, hone, hsq, hre, @norm_sub_sq ℂ, inner_smul_right, norm_smul,
+    Complex.norm_real, Real.norm_eq_abs, mul_pow, sq_abs]
+  rw [show RCLike.re ((c : ℂ) * ⟪A ⟨ψ, hψ⟩, ψ⟫_ℂ) = c * (⟪ψ, A ⟨ψ, hψ⟩⟫_ℂ).re from by
+    change ((c : ℂ) * _).re = _
+    rw [Complex.re_ofReal_mul, ← inner_conj_symm, Complex.conj_re]]
+  ring
 
 /-- For a projection-valued measure `μ` and measurable `E`, `μ_ψ(E) = ‖μ(E)ψ‖²`; hence
 `μ_ψ(E) = 0` gives `μ(E)ψ = 0` and `μ(Eᶜ)ψ = ψ`.
@@ -329,7 +346,35 @@ theorem takesaki_functions_aux_bounds (t : ℝ) :
     Measurable g[t] ∧ ∀ x : ℝ, ‖g[t] x‖ ≤ 1 ∧ ‖(Real.sqrt x : ℂ) * v[(t : ℂ)] x‖ ≤ 1 ∧
       ‖(Real.sqrt x : ℂ) ^ 2 * v[(t : ℂ)] x‖ ≤ 1 ∧ ‖(Real.sqrt x : ℂ) * g[t] x‖ ≤ 1 ∧
       ‖(Real.sqrt x : ℂ) ^ 2 * g[t] x‖ ≤ 1 := by
-  sorry
+  have hgm : Measurable g[t] :=
+    (Complex.measurable_exp.comp (measurable_const.mul
+      (Complex.measurable_ofReal.comp Real.measurable_log))).indicator measurableSet_Ioo
+  refine ⟨hgm, fun x => ?_⟩
+  have hs : ‖(Real.sqrt x : ℂ)‖ = Real.sqrt x := by
+    rw [Complex.norm_real, Real.norm_of_nonneg (Real.sqrt_nonneg x)]
+  by_cases hx : x ∈ Set.Ioo (0 : ℝ) 1
+  · have hv : v[(t : ℂ)] x = 0 := Set.indicator_of_notMem (fun h => absurd hx.2 (not_lt.mpr h)) _
+    have hg : ‖g[t] x‖ = 1 := by
+      rw [Set.indicator_of_mem hx, show Complex.I * ((-t : ℝ) : ℂ) * (Real.log x : ℂ) =
+        ((-t * Real.log x : ℝ) : ℂ) * Complex.I by push_cast; ring, Complex.norm_exp_ofReal_mul_I]
+    have hsx : Real.sqrt x ≤ 1 := Real.sqrt_le_one.mpr hx.2.le
+    have hsx2 : Real.sqrt x ^ 2 ≤ 1 := by rw [Real.sq_sqrt hx.1.le]; exact hx.2.le
+    simp only [hv, mul_zero, norm_zero, zero_le_one, norm_mul, norm_pow, hs, hg, mul_one,
+      true_and]
+    exact ⟨le_rfl, hsx, hsx2⟩
+  · have hg : g[t] x = 0 := Set.indicator_of_notMem hx _
+    simp only [hg, norm_zero, zero_le_one, mul_zero, true_and, and_true]
+    by_cases h1 : x ∈ Set.Ici (1 : ℝ)
+    · have hx0 : (0 : ℝ) < x := by linarith [h1.out]
+      have hv : ‖v[(t : ℂ)] x‖ = x⁻¹ := by
+        rw [Set.indicator_of_mem h1, Complex.norm_cpow_eq_rpow_re_of_pos hx0]
+        simp [Real.rpow_neg_one]
+      rw [norm_mul, norm_mul, norm_pow, hs, hv, Real.sq_sqrt hx0.le, mul_inv_cancel₀ hx0.ne']
+      refine ⟨?_, le_rfl⟩
+      rw [← div_eq_mul_inv, div_le_one hx0]
+      exact (Real.sqrt_le_left hx0.le).mpr (by nlinarith [h1.out])
+    · rw [Set.indicator_of_notMem h1]
+      simp
 
 /-! ### The KMS function and its approximants -/
 

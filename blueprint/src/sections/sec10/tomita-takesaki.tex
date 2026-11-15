@@ -4040,6 +4040,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:spectral-moments}
     $(\lambda - c)^2 = \lambda^2 - 2c\lambda + c^2$ is a combination of the integrable functions of Lemma~\ref{lmm:spectral-moments}, so its integral is $\|A\psi\|^2 - 2c\operatorname{Re}\left< \psi, A\psi \right> + c^2\|\psi\|^2$ (\texttt{MeasureTheory.integral\_add}, \texttt{MeasureTheory.integral\_sub}, \texttt{MeasureTheory.integral\_const\_mul}, \texttt{MeasureTheory.integral\_const}). This is $\|A\psi - c\psi\|^2$ (\texttt{norm\_sub\_sq}, \texttt{norm\_smul}, \texttt{inner\_smul\_right}).
 \end{proof}
@@ -4210,6 +4211,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     For $t \in \mathbb{R}$, $g_t$ is measurable, and $|g_t(\lambda)|$, $|s(\lambda)v_t(\lambda)|$, $|s(\lambda)^2v_t(\lambda)|$, $|s(\lambda)g_t(\lambda)|$ and $|s(\lambda)^2g_t(\lambda)|$ are at most $1$ for every $\lambda \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-positive-scalar-identities, lmm:modular-unitary-group-fc}
     Measurability is \texttt{Measurable.indicator} with Lemma~\ref{lmm:modular-unitary-group-fc}, which also gives $|e_{-t}(\lambda)| = 1$. Off the indicator sets the functions vanish. By Lemma~\ref{lmm:takesaki-positive-scalar-identities}, on $\lambda \ge 1$, $|s(\lambda)v_t(\lambda)| = \lambda^{-1/2} \le 1$ and $|s(\lambda)^2v_t(\lambda)| = 1$, and on $0 < \lambda < 1$, $|s(\lambda)g_t(\lambda)| = \lambda^{1/2} \le 1$ and $|s(\lambda)^2g_t(\lambda)| = \lambda \le 1$ (\texttt{Real.sqrt\_le\_one}, \texttt{Real.rpow\_le\_one\_of\_one\_le\_of\_nonpos}).
 \end{proof}
