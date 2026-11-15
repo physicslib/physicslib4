@@ -231,7 +231,14 @@ theorem modularOperator_apply_self {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) :
     ∃ h : Ω ∈ (modularOperator M Ω C).domain, modularOperator M Ω C ⟨Ω, h⟩ = Ω := by
-  sorry
+  have h1' : (1 : H →L[ℂ] H) ∈ Set.centralizer M := Set.one_mem_centralizer
+  have h1 : (1 : H →L[ℂ] H) ∈ M := hM.2 ▸ Set.one_mem_centralizer
+  obtain ⟨hS, hSΩ⟩ := tomitaOperator_apply_of_mem hM hΩ C hC h1
+  simp only [one_apply_eq_self, star_one] at hS hSΩ
+  have hadj := (mem_tomitaAdjoint_iff hM hΩ C hC Ω Ω).1 (by
+    simpa using (tomitaAdjoint_apply_of_mem_centralizer hM hΩ C hC h1').1)
+  refine (mem_modularOperator_iff hM hΩ C hC Ω Ω).2 ⟨hS, fun φ => ?_⟩
+  rw [hSΩ, ← inner_conj_symm, hadj φ, inner_conj_symm]
 
 /-- `Δ^{it}Ω = Ω` for every `t ∈ ℝ`.
 Blueprint: lmm:modular-unitary-group-fixes-omega -/
@@ -248,7 +255,9 @@ theorem modularConjugation_modularUnitaryGroup {M : Set (H →L[ℂ] H)} {Ω : H
     (hC : ∀ x, C (C x) = x) (t : ℝ) (ψ : H) :
     modularConjugation hM hΩ C hC (modularUnitaryGroup hM hΩ C hC t ψ) =
       modularUnitaryGroup hM hΩ C hC t (modularConjugation hM hΩ C hC ψ) := by
-  sorry
+  have h := (modularConjugation_indicatorCpow_modularConjugation hM hΩ C hC le_rfl 0 t).2.1
+    (modularConjugation hM hΩ C hC ψ)
+  rwa [(modularConjugation_involution hM hΩ C hC).1] at h
 
 /-- For `x ∈ M`, `xΩ ∈ Dom Δ^{1/2}` and `Δ^{1/2} xΩ = J x* Ω`.
 Blueprint: lmm:modular-sqrt-on-algebra -/

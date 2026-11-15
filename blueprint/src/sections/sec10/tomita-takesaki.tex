@@ -4089,6 +4089,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
     $\Omega \in \text{Dom}(\Delta)$ and $\Delta\Omega = \Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-operator-on-algebra, lmm:tomita-adjoint-on-commutant, lmm:tomita-adjoint-intrinsic, lmm:modular-operator-intrinsic, lmm:commutant-von-neumann-algebra}
     $\mathbf{1} \in \mathcal{M}$ and $\mathbf{1} \in \mathcal{M}'$ (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so $\Omega \in \text{Dom}(S)$ with $S\Omega = \Omega$ (Lemma~\ref{lmm:tomita-operator-on-algebra}) and $S^*\Omega = \Omega$, that is, $(S')^*C\Omega = \Omega$ (Lemma~\ref{lmm:tomita-adjoint-on-commutant}). By Lemma~\ref{lmm:tomita-adjoint-intrinsic} with $\xi = \eta = \Omega$, $\left< \Omega, S\zeta \right> = \left< \zeta, \Omega \right>$ for every $\zeta \in \text{Dom}(S)$; conjugating (\texttt{inner\_conj\_symm}), $\left< S\zeta, S\Omega \right> = \left< S\zeta, \Omega \right> = \left< \Omega, \zeta \right>$. Lemma~\ref{lmm:modular-operator-intrinsic} with $\psi = \chi = \Omega$ concludes.
 \end{proof}
@@ -4113,6 +4114,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
     For every $t \in \mathbb{R}$ and $\psi \in \mathbf{H}$, $J\Delta^{it}\psi = \Delta^{it}J\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-conjugation-powers, thrm:modular-conjugation-involution}
     By Lemma~\ref{lmm:modular-conjugation-powers} (with any $n \ge 1$), $J\Delta^{it}J\phi = \Delta^{it}\phi$ for every $\phi$. Take $\phi = J\psi$ and use $J(J\psi) = \psi$ (Theorem~\ref{thrm:modular-conjugation-involution}).
 \end{proof}

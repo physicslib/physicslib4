@@ -370,3 +370,4 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-15: KMS wave 4 proved spectralMeasure_moments, projectionValuedMeasure_apply_of_assoc_eq_zero.
 - 2026-11-15: KMS wave 5 proved takesaki_functions_lower_sum, takesaki_functions_upper_identities.
 - 2026-11-15: KMS wave 6 proved takesaki_functions_aux_bounds, spectralMeasure_variance.
+- 2026-11-15: KMS wave 7 proved modularOperator_apply_self, modularConjugation_modularUnitaryGroup.
