@@ -4024,6 +4024,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:hall-10.1, prpstn:hall-10.2, thrm:projection-valued-measures-associated-measure}
     $\text{Dom}(A) = W_\iota$ for $\iota(\lambda) = \lambda$ and $A = \int \iota \, d\mu^A$ (Definition~\ref{def:spectral-measure}), so $\lambda^2 = |\iota|^2$ is $\mu^A_\psi$-integrable (Proposition~\ref{prpstn:hall-10.2}), and $\mu^A_\psi$ is a finite measure with $\mu^A_\psi(\mathbb{R}) = \left< \psi, \mu^A(\mathbb{R})\psi \right> = \|\psi\|^2$ (Theorem~\ref{thrm:projection-valued-measures-associated-measure}); hence $1$ and $\lambda$ ($|\lambda| \le 1 + \lambda^2$, \texttt{MeasureTheory.Integrable.mono}) are integrable. Proposition~\ref{prpstn:hall-10.1} gives $\|A\psi\|^2 = \int |\iota|^2 \, d\mu^A_\psi$ and $\left< \psi, A\psi \right> = \int \iota \, d\mu^A_\psi$, the complex integral of a real integrable function, which is real with real part $\int \lambda \, d\mu^A_\psi$ (\texttt{integral\_ofReal}).
 \end{proof}
@@ -4051,6 +4052,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
     Let $\mu$ be a projection-valued measure on $(X, \Omega(X))$, $\psi \in \mathbf{H}$ and $E \in \Omega(X)$. Then $\mu_\psi(E) = \|\mu(E)\psi\|^2$. Hence, if $\mu_\psi(E) = 0$, then $\mu(E)\psi = 0$ and $\mu(X \setminus E)\psi = \psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $\mu(E)$ is an orthogonal projection (Definition~\ref{def:projection-valued-measure}), so $\mu_\psi(E) = \left< \psi, \mu(E)\psi \right> = \left< \mu(E)\psi, \mu(E)\psi \right> = \|\mu(E)\psi\|^2$ (Theorem~\ref{thrm:projection-valued-measures-associated-measure}, \texttt{ContinuousLinearMap.adjoint\_inner\_right}, \texttt{inner\_self\_eq\_norm\_sq\_to\_K}). If this is $0$, then $\mu(E)\psi = 0$ (\texttt{norm\_eq\_zero}), and $\mu(E) + \mu(X \setminus E) = \mu(X) = \mathbf{1}$ by additivity on the disjoint sets $E$ and $X \setminus E$ (Definition~\ref{def:projection-valued-measure}) gives $\mu(X \setminus E)\psi = \psi$.
 \end{proof}
 

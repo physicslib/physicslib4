@@ -117,7 +117,28 @@ theorem spectralMeasure_moments {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {�
       (⟪ψ, A ⟨ψ, hψ⟩⟫_ℂ).im = 0 ∧
       ∫ x, x ∂((spectralMeasure hA).assoc ψ) = (⟪ψ, A ⟨ψ, hψ⟩⟫_ℂ).re ∧
       ∫ x, x ^ 2 ∂((spectralMeasure hA).assoc ψ) = ‖A ⟨ψ, hψ⟩‖ ^ 2 := by
-  sorry
+  set μ := spectralMeasure hA
+  have : IsFiniteMeasure (μ.assoc ψ) := ⟨by rw [assoc_univ_eq]; exact ENNReal.ofReal_lt_top⟩
+  have hmeas : Measurable fun x : ℝ => (x : ℂ) := Complex.measurable_ofReal
+  have hψ' : ψ ∈ (pmapIntegral μ (fun x : ℝ => (x : ℂ))).domain :=
+    (domain_eq_integralDomain_spectralMeasure hA).le hψ
+  have key : ∀ (B : H →ₗ.[ℂ] H) (hB : B = pmapIntegral μ (fun x : ℝ => (x : ℂ)))
+      (h : ψ ∈ B.domain), B ⟨ψ, h⟩ = pmapIntegral μ (fun x : ℝ => (x : ℂ)) ⟨ψ, hψ'⟩ := by
+    rintro B rfl h; rfl
+  have hAψ := key A (pmapIntegral_spectralMeasure hA).symm hψ
+  have hint : Integrable (fun x : ℝ => (x : ℂ)) (μ.assoc ψ) :=
+    (mem_integralDomain μ).1 hψ' |>.integrable one_le_two
+  have hsq : ∀ x : ℝ, ‖(x : ℂ)‖ ^ 2 = x ^ 2 := fun x => by
+    rw [Complex.norm_real, Real.norm_eq_abs, sq_abs]
+  have hinner : ⟪ψ, A ⟨ψ, hψ⟩⟫_ℂ = ((∫ x, x ∂(μ.assoc ψ) : ℝ) : ℂ) := by
+    rw [hAψ]
+    exact (inner_self_pmapIntegral μ hmeas ⟨ψ, hψ'⟩).trans integral_ofReal
+  refine ⟨integrable_const _, ?_, ?_, assoc_univ_eq μ ψ, by rw [hinner, Complex.ofReal_im],
+    by rw [hinner, Complex.ofReal_re], ?_⟩
+  · simpa using hint.re
+  · simpa only [hsq] using ((mem_integralDomain μ).1 hψ').integrable_norm_pow two_ne_zero
+  · rw [hAψ]
+    exact ((norm_sq_pmapIntegral μ hmeas ⟨ψ, hψ'⟩).trans (by simp only [hsq])).symm
 
 /-- For `c ∈ ℝ` and `ψ ∈ Dom A`, `λ ↦ (λ - c)²` is `μ^A_ψ`-integrable and
 `∫ (λ - c)² dμ^A_ψ = ‖Aψ - cψ‖²`.
@@ -135,7 +156,38 @@ theorem projectionValuedMeasure_apply_of_assoc_eq_zero {X : Type*} [MeasurableSp
     (μ : Spectral.ProjectionValuedMeasure X H) (ψ : H) {E : Set X} (hE : MeasurableSet E) :
     μ.assoc ψ E = ENNReal.ofReal (‖μ E ψ‖ ^ 2) ∧
       (μ.assoc ψ E = 0 → μ E ψ = 0 ∧ μ Eᶜ ψ = ψ) := by
-  sorry
+  have h1 := Spectral.Unbounded.assoc_apply_eq_norm_sq μ ψ hE
+  refine ⟨h1, fun h0 => ?_⟩
+  have hE0 : μ E ψ = 0 := by
+    rw [h1, ENNReal.ofReal_eq_zero] at h0
+    exact norm_eq_zero.mp (pow_eq_zero_iff two_ne_zero |>.mp (le_antisymm h0 (sq_nonneg _)))
+  refine ⟨hE0, ?_⟩
+  have hempty : μ (∅ : Set X) ψ = 0 :=
+    (summable_const_iff (a := μ (∅ : Set X) ψ)).mp
+      (μ.hasSum_apply (fun _ : ℕ => (∅ : Set X)) (fun _ => MeasurableSet.empty)
+        (by intro k e; simp) ψ).summable
+  let F : ℕ → Set X := fun j => if j = 0 then E else if j = 1 then Eᶜ else ∅
+  have hF : ∀ j, MeasurableSet (F j) := fun j => by
+    simp only [F]; split_ifs
+    exacts [hE, hE.compl, MeasurableSet.empty]
+  have hdisj : Pairwise (fun i j => Disjoint (F i) (F j)) := by
+    intro i j hij
+    simp only [F]; split_ifs <;> first | omega | simp [disjoint_compl_right, disjoint_compl_left]
+  have hU : (⋃ j, F j) = Set.univ := by
+    refine Set.eq_univ_of_forall fun x => Set.mem_iUnion.mpr ?_
+    by_cases hx : x ∈ E
+    · exact ⟨0, by simp [F, hx]⟩
+    · exact ⟨1, by simp [F, hx]⟩
+  have hs := μ.hasSum_apply F hF hdisj ψ
+  rw [hU, μ.apply_univ] at hs
+  have hs' : HasSum (fun j => μ (F j) ψ) (μ Eᶜ ψ) := by
+    have : HasSum (fun j => μ (F j) ψ) (∑ j ∈ ({0, 1} : Finset ℕ), μ (F j) ψ) :=
+      hasSum_sum_of_ne_finset_zero (by
+      intro j hj
+      simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at hj
+      simp [F, hj.1, hj.2, hempty])
+    simpa [F, hE0] using this
+  exact (hs.unique hs').symm
 
 /-- If `ψ ∈ Dom A` and `Aψ = cψ` with `c ∈ ℝ`, then `μ^A({c})ψ = ψ`.
 Blueprint: lmm:spectral-eigenvector-projection -/

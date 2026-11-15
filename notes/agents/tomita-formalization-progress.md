@@ -367,3 +367,4 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-15: KMS wave 1 proved exists_vectorFunctional, coe_starSubalgebra_centralizer_centralizer.
 - 2026-11-15: KMS wave 2 proved norm_vectorFunctional, takesaki_functions_bounded.
 - 2026-11-15: KMS wave 3 proved takesaki_positive_scalar_identities, takesaki_functions_identities.
+- 2026-11-15: KMS wave 4 proved spectralMeasure_moments, projectionValuedMeasure_apply_of_assoc_eq_zero.
