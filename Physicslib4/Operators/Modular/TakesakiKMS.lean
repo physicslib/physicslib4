@@ -411,7 +411,33 @@ theorem inner_modularOperatorSqrt_integral {M : Set (H →L[ℂ] H)} {Ω : H}
     {ξ η : H} (hξ : ξ ∈ (Δs).domain) (hη : η ∈ (Δs).domain) :
     ⟪Δs ⟨ξ, hξ⟩, (μΔ).integral f (Δs ⟨η, hη⟩)⟫_ℂ =
       ⟪ξ, (μΔ).integral (fun x => (Real.sqrt x : ℂ) ^ 2 * f x) η⟫_ℂ := by
-  sorry
+  set μ := μΔ
+  have hs : Measurable fun x : ℝ => (Real.sqrt x : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
+  have hbdd : ∀ {g : ℝ → ℂ} (_ : g ∈ Spectral.BddMeasurable ℝ) (ψ : H)
+      (h : ψ ∈ integralDomain μ g), pmapIntegral μ g ⟨ψ, h⟩ = μ.integral g ψ := by
+    intro g hg ψ h
+    obtain ⟨-, he⟩ := LinearPMap.ext_iff.1 (pmapIntegral_of_bddMeasurable μ hg)
+    exact he (x := ψ) (hf := h) (hg := trivial)
+  have hcongr : ∀ {g g' : ℝ → ℂ} (_ : g = g') (h : η ∈ integralDomain μ g)
+      (h' : η ∈ integralDomain μ g'), pmapIntegral μ g ⟨η, h⟩ = pmapIntegral μ g' ⟨η, h'⟩ := by
+    rintro g _ rfl h h'; rfl
+  have hη' : η ∈ integralDomain μ (fun x => (Real.sqrt x : ℂ) * f x) := by
+    rw [integralDomain_eq_top_of_bddMeasurable μ hsf]; trivial
+  have hη'' : η ∈ integralDomain μ (fun x => (Real.sqrt x : ℂ) ^ 2 * f x) := by
+    rw [integralDomain_eq_top_of_bddMeasurable μ hs2f]; trivial
+  have hs2 : ((fun x : ℝ => (Real.sqrt x : ℂ)) * fun x => (Real.sqrt x : ℂ) * f x) =
+      fun x => (Real.sqrt x : ℂ) ^ 2 * f x := funext fun x => by simp [pow_two, mul_assoc]
+  obtain ⟨h1, e1⟩ := integral_apply_pmapIntegral μ hf hs ⟨η, hη⟩
+  have hy := (pmapIntegral_mem_integralDomain_iff μ hs hsf.1 ⟨η, hη'⟩).2 (hs2 ▸ hη'')
+  obtain ⟨h2, e2⟩ := (pmapIntegral_comp μ hs hsf.1).2 ⟨η, hη'⟩ hy
+  have hsym := isSymmetric_pmapIntegral_of_real μ hs (fun x => Complex.ofReal_im _)
+  have eA : μ.integral f (Δs ⟨η, hη⟩) = pmapIntegral μ (fun x => (Real.sqrt x : ℂ) * f x)
+      ⟨η, hη'⟩ := e1.trans (hcongr (funext fun x => mul_comm _ _) _ _)
+  rw [eA]
+  refine ((hsym ⟨ξ, hξ⟩ ⟨_, hy⟩).symm).trans ?_
+  congr 1
+  exact e2.symm.trans ((hcongr hs2 _ hη'').trans (hbdd hs2f η hη''))
 
 /-- For `ξ, η ∈ Dom Δ^{1/2}` and `n ≥ 1`, `G^n_{ξ,η}` is entire, hence continuous.
 Blueprint: lmm:takesaki-approximants-entire -/
@@ -420,7 +446,12 @@ theorem differentiable_takesakiApproximant {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {ξ η : H} (hξ : ξ ∈ (Δs).domain) (hη : η ∈ (Δs).domain)
     {n : ℕ} (hn : 1 ≤ n) :
     Differentiable ℂ Gn[ξ, η, hξ, hη, n] ∧ Continuous Gn[ξ, η, hξ, hη, n] := by
-  sorry
+  have hd : Differentiable ℂ Gn[ξ, η, hξ, hη, n] :=
+    ((differentiable_modularOperator_indicatorCpow_apply hM hΩ C hC hn _ _).2.comp
+        (differentiable_id.const_mul _)).add
+      ((differentiable_modularOperator_indicatorCpow_apply hM hΩ C hC hn _ _).2.comp
+        ((differentiable_id.const_mul _).sub_const _))
+  exact ⟨hd, hd.continuous⟩
 
 /-- On the closed strip, `G^n_{ξ,η}(z) = ⟪ξ, u_z(Δ) E_n η⟫ + ⟪Δ^{1/2}ξ, v_z(Δ) E_n Δ^{1/2}η⟫`.
 Blueprint: lmm:takesaki-approximants-strip -/

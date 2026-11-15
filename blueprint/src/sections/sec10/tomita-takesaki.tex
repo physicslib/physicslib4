@@ -4233,6 +4233,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-bounded-left-composition, thrm:fc-composition, lmm:functional-calculus-bounded, lmm:fc-real-closed, thrm:modular-operator-properties}
     The bounded functions have $W = \mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}). Lemma~\ref{lmm:fc-bounded-left-composition} with $u = f$, $h = s$ and $\eta \in W_s$ gives $f(\Delta)\Delta^{1/2}\eta = (fs)(\Delta)\eta$, and Theorem~\ref{thrm:fc-composition} with the pair $(s, fs)$ at $\eta \in W_{fs} \cap W_{s^2f}$ gives $(fs)(\Delta)\eta \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}(fs)(\Delta)\eta = (s^2f)(\Delta)\eta$. Since $s$ is real, $\Delta^{1/2} = s(\Delta)$ is self-adjoint (Lemma~\ref{lmm:fc-real-closed}, Theorem~\ref{thrm:modular-operator-properties}), so $\left< \Delta^{1/2}\xi, (fs)(\Delta)\eta \right> = \left< \xi, \Delta^{1/2}(fs)(\Delta)\eta \right>$.
 \end{proof}
@@ -4245,6 +4246,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$ and $n \ge 1$. Then $z \mapsto G^n_{\xi,\eta}(z)$ is complex differentiable at every $z \in \mathbb{C}$; in particular it is continuous.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{crllr:modular-power-vector-entire}
     By Corollary~\ref{crllr:modular-power-vector-entire}, $w \mapsto \left< \phi, p_{w,n}(\Delta)\psi \right>$ is entire for all $\phi, \psi \in \mathbf{H}$. Compose with the entire maps $z \mapsto -iz$ and $z \mapsto -iz - 1$ (\texttt{Differentiable.comp}, \texttt{differentiable\_id.const\_mul}, \texttt{Differentiable.sub\_const}) and add (\texttt{Differentiable.add}); continuity is \texttt{Differentiable.continuous}.
 \end{proof}
