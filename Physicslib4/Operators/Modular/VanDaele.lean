@@ -2248,7 +2248,11 @@ theorem modularConjugationConj_image {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) :
     (fun x => modularConjugationConj hM hΩ C hC x) '' M = Set.centralizer M := by
-  sorry
+  refine Set.Subset.antisymm ?_ fun b' hb' => ?_
+  · rintro _ ⟨x, hx, rfl⟩
+    exact modularConjugationConj_mem_centralizer hM hΩ C hC hx
+  · exact ⟨_, (modularUnitaryGroup_conj_mem hM hΩ C hC hb' 0).2,
+      (modularConjugationConj_identities hM hΩ C hC b' b').1⟩
 
 /-- For every `s` and `x ∈ M`, `Δ^{is} x Δ^{-is} ∈ M`.
 Blueprint: lmm:tomita-modular-automorphism-subset -/
@@ -2257,7 +2261,9 @@ theorem modularUnitaryGroup_conj_mem_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) (s : ℝ) {x : H →L[ℂ] H} (hx : x ∈ M) :
     ((modularUnitaryGroup hM hΩ C hC s).toLinearIsometry.toContinuousLinearMap ∘L
       x ∘L (modularUnitaryGroup hM hΩ C hC (-s)).toLinearIsometry.toContinuousLinearMap) ∈ M := by
-  sorry
+  have h := (modularUnitaryGroup_conj_mem hM hΩ C hC
+    (modularConjugationConj_mem_centralizer hM hΩ C hC hx) s).1
+  rwa [(modularConjugationConj_identities hM hΩ C hC x x).1] at h
 
 /-- For every `t`, `{Δ^{it} x Δ^{-it} | x ∈ M} = M`.
 Blueprint: lmm:tomita-modular-automorphism -/

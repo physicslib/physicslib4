@@ -356,3 +356,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - crllr:van-daele-algebra-conjugate (`modularConjugationConj_mem_centralizer`): proved from `modularUnitaryGroup_conj_mem` (t = 0 conjunct) for (M′, Ω), with J_{M′} = J from `modularOperatorSqrt_modularConjugation_centralizer`; depends on the still-sorried `modularUnitaryGroup_conj_mem`.
 - lmm:van-daele-conjugate-in-algebra (`modularUnitaryGroup_conj_mem`): proved; `modularUnitaryGroup_conj_commute` puts X_t in M'' = M (hM.2), and the t = 0 conjunct follows from `map_zero` of the unitary group via `convert key 0` + `simp`.
 - 2026-11-15: proved modularUnitaryGroup_conj_mem, modularConjugationConj_mem_centralizer.
+- lmm:tomita-modular-conjugation-commutant (`modularConjugationConj_image`): proved; ⊆ from `modularConjugationConj_mem_centralizer`, ⊇ via `modularUnitaryGroup_conj_mem` (t = 0 conjunct) and the involution conjunct of `modularConjugationConj_identities`.
+- lmm:tomita-modular-automorphism-subset (`modularUnitaryGroup_conj_mem_of_mem`): proved; apply `modularUnitaryGroup_conj_mem` to `a′ = JxJ ∈ M′` (`modularConjugationConj_mem_centralizer`), then rewrite `J(JxJ)J = x` with `modularConjugationConj_identities`.
+- 2026-11-15: proved modularConjugationConj_image (JMJ = M'), modularUnitaryGroup_conj_mem_of_mem.
