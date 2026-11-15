@@ -339,3 +339,5 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-15: proved vanDaele_strip_function_zero (hl unused), inner_modularOperator_indicatorCpow_conj_add_I_mul.
 - lmm:van-daele-strip-function-boundary (IsVanDaeleTriple.strip_function_boundary): proved via vanDaele_phase_boundary, the shift lemma at x = ±1/2, Δ^{-it} preserving Range E_n, inner_modularConjugationConj_indicatorCpow, and continuous_inner_modularUnitaryGroup_conj.
 - 2026-11-15: proved IsVanDaeleTriple.strip_function_boundary.
+- prpstn:van-daele-integral-formula-H0 (`IsVanDaeleTriple.inner_eq_integral_of_spectral`): proved via `strip_formula` applied to the van Daele strip function, with `vanDaele_strip_function_zero` and `IsVanDaeleTriple.strip_function_boundary`.
+- 2026-11-15: proved IsVanDaeleTriple.inner_eq_integral_of_spectral (Jones Prop 13.2.2 on H₀).

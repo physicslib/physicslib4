@@ -3713,6 +3713,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     \end{align}
 \end{proposition}
 \begin{proof}
+    \leanok
     \uses{thrm:strip-formula, lmm:van-daele-strip-function-entire, lmm:van-daele-strip-function-bounded, lmm:van-daele-strip-function-zero, lmm:van-daele-strip-function-boundary}
     Let $f$ be the function of Lemma~\ref{lmm:van-daele-strip-function-entire}. It is continuous on the strip and complex differentiable on its interior (Lemma~\ref{lmm:van-daele-strip-function-entire}; \texttt{Continuous.continuousOn}, \texttt{Differentiable.differentiableOn}) and bounded there (Lemma~\ref{lmm:van-daele-strip-function-bounded}), so Theorem~\ref{thrm:strip-formula} gives $f(0) = \int_{\mathbb{R}} (f(\tfrac{1}{2} + it) + f(-\tfrac{1}{2} + it))/(2\cosh(\pi t)) \, dt$. Rewrite the left side by Lemma~\ref{lmm:van-daele-strip-function-zero} and the integrand by Lemma~\ref{lmm:van-daele-strip-function-boundary} (\texttt{MeasureTheory.integral\_congr\_ae} with \texttt{Filter.Eventually.of\_forall}, or \texttt{funext}).
 \end{proof}

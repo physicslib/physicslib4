@@ -1940,7 +1940,17 @@ theorem IsVanDaeleTriple.inner_eq_integral_of_spectral {M : Set (H →L[ℂ] H)}
           (modularConjugationConj hM hΩ C hC a'
             (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
         ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) := by
-  sorry
+  have hl := htriple.1
+  obtain ⟨hd, hc⟩ := differentiable_vanDaele_strip_function hM hΩ C hC hl hn a ξ η
+  have h := strip_formula hc.continuousOn hd.differentiableOn
+    ⟨_, fun z hz => norm_vanDaele_strip_function_le hM hΩ C hC hl hn a ξ η
+      (abs_le.2 ⟨by linarith [hz.1], hz.2⟩)⟩
+  rw [← vanDaele_strip_function_zero hM hΩ C hC hl hn a hξ hη, h]
+  refine MeasureTheory.integral_congr_ae (Filter.Eventually.of_forall fun t => ?_)
+  simp only [mul_comm (t : ℂ) Complex.I]
+  rw [htriple.strip_function_boundary hM hΩ C hC hn hξ hη t]
+  push_cast
+  ring
 
 /-- If `ξ_m → ξ` and `η_m → η`, then `λ^{2it} ⟪η_m, Δ^{it} J a′ J Δ^{-it} ξ_m⟫ / (2 cosh πt)`
 converges to the same expression for `ξ, η`.
