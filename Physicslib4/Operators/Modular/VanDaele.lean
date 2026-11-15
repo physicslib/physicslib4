@@ -2172,7 +2172,10 @@ theorem integral_exp_mul_vanDaele_commutator_eq_zero {M : Set (H →L[ℂ] H)} {
             (modularConjugationConj hM hΩ C hC a'
               (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
           ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) = 0 := by
-  sorry
+  obtain ⟨hl, hphase⟩ := vanDaele_phase_fourier θ
+  obtain ⟨a, htriple, -⟩ := exists_isVanDaeleTriple hM hΩ C hC hl ha'
+  simp_rw [← hphase]
+  exact htriple.integral_commutator_eq_zero hM hΩ C hC hb' ξ η
 
 /-- For `a′, b′ ∈ M′`, `Δ^{it} J a′ J Δ^{-it}` commutes with `b′`.
 Blueprint: lmm:van-daele-conjugate-commutes -/
@@ -2186,7 +2189,22 @@ theorem modularUnitaryGroup_conj_commute {M : Set (H →L[ℂ] H)} {Ω : H}
       b' * ((modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
         modularConjugationConj hM hΩ C hC a' ∘L
         (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) := by
-  sorry
+  refine ContinuousLinearMap.ext fun ξ => ?_
+  set w := (((modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
+      modularConjugationConj hM hΩ C hC a' ∘L
+      (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) * b' -
+      b' * ((modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
+        modularConjugationConj hM hΩ C hC a' ∘L
+        (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap)) ξ with hw
+  obtain ⟨-, hc, hi⟩ := vanDaele_commutator_integrand hM hΩ C hC a' b' ξ w
+  have h0 := congrFun (eq_zero_of_integral_exp_mul_eq_zero hc hi fun θ => by
+    rw [← integral_exp_mul_vanDaele_commutator_eq_zero hM hΩ C hC ha' hb' ξ w θ]
+    congr 1; ext s; congr 2; ring) t
+  have hcosh : ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) ≠ 0 :=
+    Complex.ofReal_ne_zero.2 (by positivity)
+  have hww : ⟪w, w⟫_ℂ = 0 := (div_eq_zero_iff.1 h0).resolve_right hcosh
+  rw [← sub_eq_zero, ← sub_apply, ← hw]
+  exact inner_self_eq_zero.1 hww
 
 /-- For `a′ ∈ M′`, `Δ^{it} J a′ J Δ^{-it} ∈ M`; in particular `J a′ J ∈ M`.
 Blueprint: lmm:van-daele-conjugate-in-algebra -/

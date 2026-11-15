@@ -350,3 +350,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-commutator-integrand (vanDaele_commutator_integrand): proved via adjoint_inner_left split, continuity from continuous_inner_modularUnitaryGroup_conj (twice), integrability from integrable_of_norm_le_div_cosh with K = ‖a'‖‖b'‖‖ξ‖‖η‖.
 - lmm:van-daele-commutator-integral-zero: proved `IsVanDaeleTriple.integral_commutator_eq_zero` (split by `integral_sub` with `vanDaele_integrand_integrable`, two uses of `IsVanDaeleTriple.inner_eq_integral`, and `a b′ = b′ a` from the centralizer).
 - 2026-11-15: proved vanDaele_commutator_integrand, IsVanDaeleTriple.integral_commutator_eq_zero.
+- lmm:van-daele-conjugate-commutes (`modularUnitaryGroup_conj_commute`): proved via Fourier uniqueness applied to the commutator integrand with η = (X_t b′ − b′X_t)ξ.
+- lmm:van-daele-commutator-fourier: proved `integral_exp_mul_vanDaele_commutator_eq_zero` (λ = e^{θ/2} via `vanDaele_phase_fourier`, `exists_isVanDaeleTriple`, `simp_rw [← hphase]`, then `IsVanDaeleTriple.integral_commutator_eq_zero`).
+- 2026-11-15: proved integral_exp_mul_vanDaele_commutator_eq_zero, modularUnitaryGroup_conj_commute.

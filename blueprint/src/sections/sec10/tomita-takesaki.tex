@@ -3813,6 +3813,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $a', b' \in \mathcal{M}'$, $\xi, \eta \in \mathbf{H}$, and $h$ as in Lemma~\ref{lmm:van-daele-commutator-integrand}. Then $\int_{\mathbb{R}} e^{i\theta t}h(t) \, dt = 0$ for every $\theta \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-phase-fourier, lmm:van-daele-commutant-equation, lmm:van-daele-commutator-integral-zero, def:van-daele-triple}
     Let $\lambda = e^{\theta/2} > 0$, so $e^{i\theta t} = \lambda^{2it}$ for every $t$ (Lemma~\ref{lmm:van-daele-phase-fourier}; rewrite the integrand by \texttt{funext}), and take $a \in \mathcal{M}$ from Lemma~\ref{lmm:van-daele-commutant-equation}, so that $(\lambda, a', a)$ is a van Daele triple. Lemma~\ref{lmm:van-daele-commutator-integral-zero} gives $\int \lambda^{2it}h(t) \, dt = 0$.
 \end{proof}
@@ -3825,6 +3826,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $a', b' \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $(\Delta^{it}Ja'J\Delta^{-it})\,b' = b'\,(\Delta^{it}Ja'J\Delta^{-it})$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-commutator-integrand, lmm:van-daele-commutator-fourier, thrm:fourier-uniqueness}
     Write $X = \Delta^{it}Ja'J\Delta^{-it}b' - b'\Delta^{it}Ja'J\Delta^{-it}$ and fix $\xi \in \mathbf{H}$, $\eta = X\xi$. The function $h$ of Lemma~\ref{lmm:van-daele-commutator-integrand} for $\xi, \eta$ is continuous and integrable, and its Fourier integrals vanish (Lemma~\ref{lmm:van-daele-commutator-fourier}), so $h = 0$ by Theorem~\ref{thrm:fourier-uniqueness} (\texttt{congrFun}). At $t$, $2\cosh(\pi t) \ne 0$ (\texttt{Real.cosh\_pos}), so $\left< X\xi, X\xi \right> = 0$ (\texttt{div\_eq\_zero\_iff}), hence $X\xi = 0$ (\texttt{inner\_self\_eq\_zero}). As $\xi$ is arbitrary, $X = 0$ (\texttt{ContinuousLinearMap.ext}, \texttt{sub\_eq\_zero}).
 \end{proof}
