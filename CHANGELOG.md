@@ -23,7 +23,8 @@ The first release, 1.0, is in preparation.
   conjugation C, on which Δ and J do not depend. All of it is formalized and proved in Lean
   (`Physicslib4/Operators/Modular/`, with the unbounded-operator results in
   `Physicslib4/Spectral/Unbounded/Composition.lean`, `Polar.lean` and `Commuting.lean`, and the strip
-  formula in `Physicslib4/Analysis/StripFormula.lean`).
+  formula in `Physicslib4/Analysis/StripFormula.lean`),
+  and the reference manual has a chapter on it.
 
 - The website has About, Roadmap and Get Involved pages, and the header on every page links to them.
 
