@@ -3729,6 +3729,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     $\Delta^{it}Ja'J\Delta^{-it}$ is a bounded operator, hence continuous (\texttt{ContinuousLinearMap.continuous}, \texttt{Continuous.tendsto}), so $\Delta^{it}Ja'J\Delta^{-it}\xi_m \to \Delta^{it}Ja'J\Delta^{-it}\xi$, and the inner product is jointly continuous (\texttt{Filter.Tendsto.inner}); multiplying by $\lambda^{2it}$ and dividing by $2\cosh(\pi t)$ preserve the limit (\texttt{Filter.Tendsto.const\_mul}, \texttt{Filter.Tendsto.div\_const}).
 \end{proof}
 
@@ -3752,6 +3753,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $\psi \in \mathbf{H}$ and, for $m \in \mathbb{N}$, $\psi_m = E_{m+1}\psi$. Then $E_{m+1}\psi_m = \psi_m$ and $\|\psi_m\| \le \|\psi\|$ for every $m$, and $\psi_m \to \psi$ as $m \to \infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:projection-valued-measure, lmm:modular-power-operators, lmm:modular-power-operators-multiplicative, lmm:modular-spectral-projections-converge}
     $E_{m+1}$ is idempotent (Definition~\ref{def:projection-valued-measure}), so $E_{m+1}\psi_m = \psi_m$. $\|E_{m+1}\| = \|p_{0,m+1}(\Delta)\| \le (m+1)^0 = 1$ (Lemmas~\ref{lmm:modular-power-operators-multiplicative} and~\ref{lmm:modular-power-operators}, \texttt{Real.rpow\_zero}), so $\|\psi_m\| \le \|\psi\|$ (\texttt{ContinuousLinearMap.le\_of\_opNorm\_le}). $E_n\psi \to \psi$ (Lemma~\ref{lmm:modular-spectral-projections-converge}), and the index shift is \texttt{Filter.tendsto\_add\_atTop\_iff\_nat}.
 \end{proof}

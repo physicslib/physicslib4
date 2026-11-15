@@ -1968,8 +1968,11 @@ theorem tendsto_vanDaele_integrand {M : Set (H →L[ℂ] H)} {Ω : H}
           ⟪η, modularUnitaryGroup hM hΩ C hC t
             (modularConjugationConj hM hΩ C hC a'
               (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
-          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ))) := by
-  sorry
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ))) :=
+  ((hη.inner (((modularUnitaryGroup hM hΩ C hC t).continuous.tendsto _).comp
+    (((modularConjugationConj hM hΩ C hC a').continuous.tendsto _).comp
+      (((modularUnitaryGroup hM hΩ C hC (-t)).continuous.tendsto _).comp hξ)))).const_mul
+    _).div_const _
 
 /-- If `ξ_m → ξ`, `η_m → η` and `‖ξ_m‖ ‖η_m‖ ≤ K`, then
 `∫ λ^{2it} ⟪η_m, Δ^{it} J a′ J Δ^{-it} ξ_m⟫ / (2 cosh πt) dt` converges to the same integral for
@@ -2004,7 +2007,14 @@ theorem modularSpectralProjection_approximants {M : Set (H →L[ℂ] H)} {Ω : H
     Tendsto
       (fun m : ℕ => spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[(m + 1 : ℕ)] ψ)
       atTop (𝓝 ψ) := by
-  sorry
+  refine ⟨fun m => ⟨DFunLike.congr_fun (modularSpectralProjection_nested hM hΩ C hC
+      (Nat.le_add_left 1 m) le_rfl).1 ψ, ?_⟩,
+    (tendsto_add_atTop_iff_nat 1).mpr (tendsto_modularSpectralProjection hM hΩ C hC ψ)⟩
+  have hn := (modularOperator_indicatorCpow hM hΩ C hC (Nat.le_add_left 1 m) 0).2.2.1
+  rw [(modularOperator_indicatorCpow_mul hM hΩ C hC (Nat.le_add_left 1 m) 0 0).2.1,
+    Complex.zero_re, abs_zero, Real.rpow_zero] at hn
+  exact (ContinuousLinearMap.le_opNorm _ ψ).trans
+    (by simpa using mul_le_mul_of_nonneg_right hn (norm_nonneg ψ))
 
 /-- For a van Daele triple `(λ, a′, a)` and all `ξ, η`,
 `⟪η, a ξ⟫ = ∫ λ^{2it} ⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫ / (2 cosh πt) dt`.
