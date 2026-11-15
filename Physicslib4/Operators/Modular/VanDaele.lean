@@ -1798,7 +1798,9 @@ theorem differentiable_vanDaele_strip_function {M : Set (H →L[ℂ] H)} {Ω : H
             p[z, n]
           (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
             p[-z, n] ξ))⟫_ℂ) := by
-  sorry
+  have h := (vanDaele_phase_strip hl).1.mul
+    (differentiable_inner_modularOperator_indicatorCpow_conj hM hΩ C hC hn ξ η a)
+  exact ⟨h, h.continuous⟩
 
 /-- `|f(z)| ≤ max(λ, λ⁻¹) n ‖a‖ ‖ξ‖ ‖η‖` for `|Re z| ≤ 1/2`.
 Blueprint: lmm:van-daele-strip-function-bounded -/
@@ -1812,7 +1814,28 @@ theorem norm_vanDaele_strip_function_le {M : Set (H →L[ℂ] H)} {Ω : H}
         (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
           p[-z, n] ξ))⟫_ℂ‖ ≤
       max l l⁻¹ * n * ‖a‖ * ‖ξ‖ * ‖η‖ := by
-  sorry
+  set P := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  have hA := (modularOperator_indicatorCpow hM hΩ C hC hn z).2.2.2.2 hz
+  have hB := (modularOperator_indicatorCpow hM hΩ C hC hn (-z)).2.2.2.2
+    (by simpa using hz)
+  obtain ⟨hph, hmax⟩ := (vanDaele_phase_strip hl).2.2 z hz
+  set s := (n : ℝ) ^ (1 / 2 : ℝ)
+  have hs0 : 0 ≤ s := by positivity
+  have hs : s * s = n := by
+    rw [← Real.rpow_add (by exact_mod_cast hn)]; norm_num
+  have hin : ‖⟪η, P.integral p[z, n] (a (P.integral p[-z, n] ξ))⟫_ℂ‖ ≤
+      ‖η‖ * (s * (‖a‖ * (s * ‖ξ‖))) := by
+    refine (norm_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_left ?_ (norm_nonneg _))
+    refine ((P.integral p[z, n]).le_opNorm _).trans (mul_le_mul hA ?_ (norm_nonneg _) hs0)
+    refine (a.le_opNorm _).trans (mul_le_mul_of_nonneg_left ?_ (norm_nonneg _))
+    exact ((P.integral p[-z, n]).le_opNorm _).trans
+      (mul_le_mul_of_nonneg_right hB (norm_nonneg _))
+  rw [norm_mul, hph]
+  calc l ^ (2 * z.re) * ‖⟪η, P.integral p[z, n] (a (P.integral p[-z, n] ξ))⟫_ℂ‖
+      ≤ max l l⁻¹ * (‖η‖ * (s * (‖a‖ * (s * ‖ξ‖)))) :=
+        mul_le_mul hmax hin (norm_nonneg _) (by positivity)
+    _ = max l l⁻¹ * (s * s) * ‖a‖ * ‖ξ‖ * ‖η‖ := by ring
+    _ = max l l⁻¹ * n * ‖a‖ * ‖ξ‖ * ‖η‖ := by rw [hs]
 
 /-- If `E_n ξ = ξ` and `E_n η = η`, then `f(0) = ⟪η, a ξ⟫`.
 Blueprint: lmm:van-daele-strip-function-zero -/

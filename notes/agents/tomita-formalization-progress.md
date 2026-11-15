@@ -331,3 +331,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-15: proved continuous_inner_modularUnitaryGroup_conj, norm_inner_modularUnitaryGroup_conj_le.
 - lmm:van-daele-integrand-integrable (vanDaele_integrand_integrable): proved via integrable_of_norm_le_div_cosh with K = ‖a′‖‖ξ‖‖η‖/2; added import Physicslib4.Analysis.StripFormula to VanDaele.lean.
 - 2026-11-15: proved vanDaele_integrand_integrable (StripFormula import added). JTJ, phase and integrand lemmas of 5c done (9).
+- 2026-11-15: proved norm_vanDaele_strip_function_le (lmm:van-daele-strip-function-bounded) via Cauchy–Schwarz, le_opNorm, the n^{1/2} bounds of modularOperator_indicatorCpow and vanDaele_phase_strip; constant max(λ,λ⁻¹)·n·‖a‖‖ξ‖‖η‖ as stated.
+- 2026-11-15: proved differentiable_vanDaele_strip_function (lmm:van-daele-strip-function-entire) as the product of vanDaele_phase_strip and differentiable_inner_modularOperator_indicatorCpow_conj.
+- 2026-11-15: proved differentiable_vanDaele_strip_function, norm_vanDaele_strip_function_le.

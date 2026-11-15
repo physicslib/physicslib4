@@ -3635,6 +3635,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     is complex differentiable at every $z \in \mathbb{C}$; in particular it is continuous.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-phase-strip, crllr:modular-power-matrix-coefficients}
     Both factors are entire (Lemma~\ref{lmm:van-daele-phase-strip} and Corollary~\ref{crllr:modular-power-matrix-coefficients}), so their product is (\texttt{Differentiable.mul}), and it is continuous (\texttt{Differentiable.continuous}).
 \end{proof}
@@ -3647,6 +3648,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $\lambda$, $n$, $a$, $\xi$, $\eta$ and $f$ be as in Lemma~\ref{lmm:van-daele-strip-function-entire}. Then $|f(z)| \le \max(\lambda, \lambda^{-1})\, n\,\|a\|\,\|\xi\|\,\|\eta\|$ whenever $|\operatorname{Re} z| \le \tfrac{1}{2}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-phase-strip, lmm:modular-power-operators}
     $|\lambda^{2z}| \le \max(\lambda, \lambda^{-1})$ (Lemma~\ref{lmm:van-daele-phase-strip}). By \texttt{norm\_inner\_le\_norm} and \texttt{ContinuousLinearMap.le\_opNorm} (twice, with \texttt{ContinuousLinearMap.opNorm\_comp\_le}), $|\left< \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \right>| \le \|\eta\|\,\|p_{z,n}(\Delta)\|\,\|a\|\,\|p_{-z,n}(\Delta)\|\,\|\xi\|$, and $\|p_{\pm z,n}(\Delta)\| \le n^{1/2}$ since $|\operatorname{Re}(\pm z)| \le \tfrac{1}{2}$ (Lemma~\ref{lmm:modular-power-operators}); $n^{1/2}n^{1/2} = n$ (\texttt{Real.rpow\_add}, $n > 0$, and \texttt{Real.rpow\_one}). Multiply (\texttt{norm\_mul}, \texttt{mul\_le\_mul}).
 \end{proof}
