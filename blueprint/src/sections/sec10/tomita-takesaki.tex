@@ -3588,6 +3588,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $a' \in \mathcal{B}(\mathbf{H})$ and $\xi, \eta \in \mathbf{H}$. For every $t \in \mathbb{R}$, $\left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right> = \left< \Delta^{-it}\eta, Ja'J\Delta^{-it}\xi \right>$, and $t \mapsto \left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>$ is continuous on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-unitary-group-props}
     $(\Delta^{it})^* = \Delta^{-it}$ (Lemma~\ref{lmm:modular-unitary-group-props}), so the identity is \texttt{ContinuousLinearMap.adjoint\_inner\_left} (with \texttt{ContinuousLinearMap.star\_eq\_adjoint}). For continuity, $t \mapsto \Delta^{-it}\psi$ is continuous for each $\psi$ by the strong continuity of Lemma~\ref{lmm:modular-unitary-group-props} composed with $t \mapsto -t$ (\texttt{continuous\_neg}); the bounded operator $Ja'J$ is continuous (\texttt{ContinuousLinearMap.continuous}, \texttt{Continuous.comp}); and the inner product of two continuous maps is continuous (\texttt{Continuous.inner}).
 \end{proof}
@@ -3600,6 +3601,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $a' \in \mathcal{B}(\mathbf{H})$, $\xi, \eta \in \mathbf{H}$ and $t \in \mathbb{R}$. Then $\left| \left< \eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right> \right| \le \|a'\|\,\|\xi\|\,\|\eta\|$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-integrand-continuous, lmm:modular-unitary-group-props, lmm:modular-conjugation-bounded-conjugate}
     By Lemma~\ref{lmm:van-daele-integrand-continuous} the left side is $|\left< \Delta^{-it}\eta, Ja'J\Delta^{-it}\xi \right>| \le \|\Delta^{-it}\eta\|\,\|Ja'J\Delta^{-it}\xi\|$ (\texttt{norm\_inner\_le\_norm}). $\Delta^{-it}$ is unitary (Lemma~\ref{lmm:modular-unitary-group-props}), so it preserves norms (\texttt{ContinuousLinearMap.norm\_map\_of\_mem\_unitary}, or \texttt{Unitary.norm\_map}), and $\|Ja'J\psi\| \le \|Ja'J\|\,\|\psi\| \le \|a'\|\,\|\psi\|$ (\texttt{ContinuousLinearMap.le\_opNorm}, Lemma~\ref{lmm:modular-conjugation-bounded-conjugate}, \texttt{mul\_le\_mul\_of\_nonneg\_right}); multiply the bounds (\texttt{mul\_le\_mul\_of\_nonneg\_left}).
 \end{proof}

@@ -1703,7 +1703,21 @@ theorem continuous_inner_modularUnitaryGroup_conj {M : Set (H →L[ℂ] H)} {Ω 
     Continuous (fun t : ℝ => ⟪η, modularUnitaryGroup hM hΩ C hC t
         (modularConjugationConj hM hΩ C hC a'
           (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ) := by
-  sorry
+  have hp := modularUnitaryGroup_properties hM hΩ C hC
+  have h1 : ∀ t : ℝ, ⟪η, modularUnitaryGroup hM hΩ C hC t
+      (modularConjugationConj hM hΩ C hC a'
+        (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ =
+      ⟪modularUnitaryGroup hM hΩ C hC (-t) η,
+        modularConjugationConj hM hΩ C hC a' (modularUnitaryGroup hM hΩ C hC (-t) ξ)⟫_ℂ := by
+    intro t
+    have h := (hp.2.2 (-t)).2
+    rw [neg_neg] at h
+    rw [← h, ← LinearIsometryEquiv.inner_map_map (modularUnitaryGroup hM hΩ C hC (-t)),
+      LinearIsometryEquiv.apply_symm_apply]
+  refine ⟨h1, ?_⟩
+  simp_rw [h1]
+  exact ((hp.2.1 η).comp continuous_neg).inner
+    ((modularConjugationConj hM hΩ C hC a').continuous.comp ((hp.2.1 ξ).comp continuous_neg))
 
 /-- `|⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫| ≤ ‖a′‖ ‖ξ‖ ‖η‖`.
 Blueprint: lmm:van-daele-integrand-bound -/
@@ -1714,7 +1728,14 @@ theorem norm_inner_modularUnitaryGroup_conj_le {M : Set (H →L[ℂ] H)} {Ω : H
       (modularConjugationConj hM hΩ C hC a'
         (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ‖ ≤
       ‖a'‖ * ‖ξ‖ * ‖η‖ := by
-  sorry
+  have h := (modularConjugationConj hM hΩ C hC a').le_opNorm
+    (modularUnitaryGroup hM hΩ C hC (-t) ξ)
+  rw [LinearIsometryEquiv.norm_map] at h
+  have h' := h.trans (mul_le_mul_of_nonneg_right
+    (modularConjugationConj_apply hM hΩ C hC a').2.1 (norm_nonneg ξ))
+  refine (norm_inner_le_norm _ _).trans ?_
+  rw [LinearIsometryEquiv.norm_map, mul_comm]
+  exact mul_le_mul_of_nonneg_right h' (norm_nonneg η)
 
 /-- `F(t) = λ^{2it} ⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫ / (2 cosh πt)` is continuous, bounded by
 `‖a′‖ ‖ξ‖ ‖η‖ / (2 cosh πt)`, and integrable.

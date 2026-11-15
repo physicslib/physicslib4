@@ -326,3 +326,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-phase-fourier (`vanDaele_phase_fourier`): proved; `Complex.cpow_def_of_ne_zero`, `← Complex.ofReal_log`, `Real.log_exp`, then `congr 1; push_cast; ring`.
 - lmm:van-daele-phase-boundary: proved `vanDaele_phase_boundary` (cpow_add after mul_add, cpow_one/cpow_neg_one, norm_cpow_eq_rpow_re_of_pos, continuity via cpow_def_of_ne_zero + fun_prop).
 - 2026-11-15: proved vanDaele_phase_boundary, vanDaele_phase_fourier.
+- lmm:van-daele-integrand-bound (`norm_inner_modularUnitaryGroup_conj_le`): proved via Cauchy–Schwarz, `LinearIsometryEquiv.norm_map`, `le_opNorm` and `modularConjugationConj_apply` norm bound.
+- lmm:van-daele-integrand-continuous (`continuous_inner_modularUnitaryGroup_conj`): proved via (Δ^{-it})⁻¹ = Δ^{it} and `inner_map_map`, then strong continuity composed with `continuous_neg` and `Continuous.inner`.
+- 2026-11-15: proved continuous_inner_modularUnitaryGroup_conj, norm_inner_modularUnitaryGroup_conj_le.
