@@ -1851,7 +1851,12 @@ theorem vanDaele_strip_function_zero {M : Set (H →L[ℂ] H)} {Ω : H}
         (a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
           p[-(0 : ℂ), n] ξ))⟫_ℂ =
       ⟪η, a ξ⟫_ℂ := by
-  sorry
+  set P := spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)
+  have h0 := (modularOperator_indicatorCpow_mul hM hΩ C hC hn 0 0).2.1
+  have hadj := (modularOperator_indicatorCpow hM hΩ C hC hn 0).2.2.2.1
+  rw [map_zero] at hadj
+  rw [mul_zero, Complex.cpow_zero, one_mul, neg_zero, ← ContinuousLinearMap.adjoint_inner_left,
+    hadj, h0, hη, hξ]
 
 /-- `⟪η, p_{x+it,n}(Δ) a p_{-(x+it),n}(Δ) ξ⟫ = ⟪p_{x,n}(Δ) Δ^{-it} η, a p_{-x,n}(Δ) Δ^{-it} ξ⟫`.
 Blueprint: lmm:van-daele-strip-function-shift -/
@@ -1867,7 +1872,15 @@ theorem inner_modularOperator_indicatorCpow_conj_add_I_mul {M : Set (H →L[ℂ]
           (modularUnitaryGroup hM hΩ C hC (-t) η),
         a ((spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral p[-(x : ℂ), n]
           (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ := by
-  sorry
+  have h1 : conj ((x : ℂ) + Complex.I * t) = (x : ℂ) + Complex.I * ((-t : ℝ) : ℂ) := by
+    apply Complex.ext <;> simp
+  have h2 : -((x : ℂ) + Complex.I * t) = -(x : ℂ) + Complex.I * ((-t : ℝ) : ℂ) := by
+    push_cast; ring
+  have hadj := (modularOperator_indicatorCpow hM hΩ C hC hn ((x : ℂ) + Complex.I * t)).2.2.2.1
+  rw [h1, ← (modularUnitaryGroup_indicatorCpow hM hΩ C hC hn (x : ℂ) (-t)).2.1] at hadj
+  rw [h2, ← (modularUnitaryGroup_indicatorCpow hM hΩ C hC hn _ (-t)).2.1,
+    ← ContinuousLinearMap.adjoint_inner_left, hadj]
+  rfl
 
 /-- For a van Daele triple `(λ, a′, a)` and `E_n ξ = ξ`, `E_n η = η`,
 `f(1/2 + it) + f(-1/2 + it) = λ^{2it} ⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫`.

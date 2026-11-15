@@ -3661,6 +3661,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $\lambda$, $n$, $a$, $\xi$, $\eta$ and $f$ be as in Lemma~\ref{lmm:van-daele-strip-function-entire}, with $E_n\xi = \xi$ and $E_n\eta = \eta$. Then $f(0) = \left< \eta, a\xi \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-phase-strip, lmm:modular-power-operators-multiplicative, lmm:modular-power-operators}
     $\lambda^0 = 1$ (Lemma~\ref{lmm:van-daele-phase-strip}), $-0 = 0$ (\texttt{neg\_zero}) and $p_{0,n}(\Delta) = E_n$ (Lemma~\ref{lmm:modular-power-operators-multiplicative}), so $f(0) = \left< \eta, E_n a E_n\xi \right>$. $E_n^* = p_{\overline{0},n}(\Delta) = E_n$ (Lemma~\ref{lmm:modular-power-operators}, \texttt{map\_zero}), so this is $\left< E_n\eta, aE_n\xi \right> = \left< \eta, a\xi \right>$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}).
 \end{proof}
@@ -3676,6 +3677,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-power-operators, lmm:modular-power-unitary-group}
     $p_{x+it,n}(\Delta)^* = p_{x-it,n}(\Delta)$ (Lemma~\ref{lmm:modular-power-operators}, \texttt{Complex.conj\_ofReal}), so \texttt{ContinuousLinearMap.adjoint\_inner\_left} moves it to the left slot. By Lemma~\ref{lmm:modular-power-unitary-group} with $-t$ in place of $t$, $p_{x-it,n}(\Delta) = p_{x,n}(\Delta)\Delta^{-it}$ and $p_{-(x+it),n}(\Delta) = p_{-x+i(-t),n}(\Delta) = p_{-x,n}(\Delta)\Delta^{-it}$ (\texttt{neg\_add}, \texttt{Complex.ofReal\_neg}, \texttt{ring\_nf} in the index).
 \end{proof}

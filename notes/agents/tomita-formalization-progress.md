@@ -334,3 +334,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-15: proved norm_vanDaele_strip_function_le (lmm:van-daele-strip-function-bounded) via Cauchy–Schwarz, le_opNorm, the n^{1/2} bounds of modularOperator_indicatorCpow and vanDaele_phase_strip; constant max(λ,λ⁻¹)·n·‖a‖‖ξ‖‖η‖ as stated.
 - 2026-11-15: proved differentiable_vanDaele_strip_function (lmm:van-daele-strip-function-entire) as the product of vanDaele_phase_strip and differentiable_inner_modularOperator_indicatorCpow_conj.
 - 2026-11-15: proved differentiable_vanDaele_strip_function, norm_vanDaele_strip_function_le.
+- lmm:van-daele-strip-function-zero (vanDaele_strip_function_zero): proved via cpow_zero, p_{0,n}(Δ)* = p_{0,n}(Δ) = E_n, E_nξ = ξ, E_nη = η. (`hl` unused-variable warning; the signature is unchanged)
+- lmm:van-daele-strip-function-shift (`inner_modularOperator_indicatorCpow_conj_add_I_mul`): proved via the adjoint conjunct of `modularOperator_indicatorCpow` and `modularUnitaryGroup_indicatorCpow` at `-t`.
+- 2026-11-15: proved vanDaele_strip_function_zero (hl unused), inner_modularOperator_indicatorCpow_conj_add_I_mul.
