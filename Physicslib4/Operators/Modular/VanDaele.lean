@@ -1632,7 +1632,12 @@ theorem modularConjugationConj_identities {M : Set (H →L[ℂ] H)} {Ω : H}
 /-- For `λ > 0` and `|s| ≤ 1`, `λ^s ≤ max(λ, λ⁻¹)`.
 Blueprint: lmm:van-daele-rpow-le-max -/
 theorem rpow_le_max_inv {l s : ℝ} (hl : 0 < l) (hs : |s| ≤ 1) : l ^ s ≤ max l l⁻¹ := by
-  sorry
+  obtain ⟨hs₁, hs₂⟩ := abs_le.mp hs
+  rcases le_total 1 l with h | h
+  · exact (Real.rpow_le_rpow_of_exponent_le h hs₂).trans_eq (Real.rpow_one l) |>.trans
+      (le_max_left _ _)
+  · exact (Real.rpow_le_rpow_of_exponent_ge hl h hs₁).trans_eq (Real.rpow_neg_one l) |>.trans
+      (le_max_right _ _)
 
 /-- For `λ > 0`, `z ↦ λ^{2z}` is entire, `λ^0 = 1`, and `|λ^{2z}| = λ^{2 Re z} ≤ max(λ, λ⁻¹)` for
 `|Re z| ≤ 1/2`.
@@ -1641,7 +1646,15 @@ theorem vanDaele_phase_strip {l : ℝ} (hl : 0 < l) :
     Differentiable ℂ (fun z : ℂ => (l : ℂ) ^ (2 * z)) ∧ (l : ℂ) ^ (2 * (0 : ℂ)) = 1 ∧
       ∀ z : ℂ, |z.re| ≤ 1 / 2 →
         ‖(l : ℂ) ^ (2 * z)‖ = l ^ (2 * z.re) ∧ l ^ (2 * z.re) ≤ max l l⁻¹ := by
-  sorry
+  have hl0 : (l : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hl.ne'
+  refine ⟨?_, by simp, fun z hz => ⟨?_, ?_⟩⟩
+  · simp_rw [Complex.cpow_def_of_ne_zero hl0]
+    fun_prop
+  · rw [Complex.norm_cpow_eq_rpow_re_of_pos hl]
+    simp
+  · refine rpow_le_max_inv hl ?_
+    rw [abs_mul, abs_two]
+    linarith
 
 /-- For `λ > 0`, `λ^{2(1/2 + it)} = λ λ^{2it}`, `λ^{2(-1/2 + it)} = λ⁻¹ λ^{2it}`, `|λ^{2it}| = 1`,
 and `t ↦ λ^{2it}` is continuous.

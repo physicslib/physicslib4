@@ -320,3 +320,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - `modularConjugationConj_apply` (lmm:modular-conjugation-bounded-conjugate) proved: apply formula by `rfl`, norm bound via `opNorm_le_bound` and `LinearIsometryEquiv.norm_map`, uniqueness via `ContinuousLinearMap.ext`.
 - 2026-11-15: proved modularConjugationConj_identities (lmm:modular-conjugation-bounded-conjugate-identities) by ContinuousLinearMap.ext, unfolding by change, and J(Jφ) = φ.
 - 2026-11-15: proved modularConjugationConj_apply, modularConjugationConj_identities.
+- lmm:van-daele-rpow-le-max: proved `Physicslib4.Modular.rpow_le_max_inv` (case split on 1 ≤ λ; rpow exponent monotonicity, `Real.rpow_one` / `Real.rpow_neg_one`).
+- lmm:van-daele-phase-strip (`vanDaele_phase_strip`): proved; entire via `Complex.cpow_def_of_ne_zero` + `fun_prop` (`Differentiable.const_cpow` is not imported), norm via `Complex.norm_cpow_eq_rpow_re_of_pos`, bound via `rpow_le_max_inv`.
+- 2026-11-15: proved rpow_le_max_inv, vanDaele_phase_strip.

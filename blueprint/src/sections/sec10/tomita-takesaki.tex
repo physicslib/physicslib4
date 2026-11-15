@@ -3542,6 +3542,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $\lambda > 0$ and $s \in \mathbb{R}$ with $|s| \le 1$. Then $\lambda^s \le \max(\lambda, \lambda^{-1})$ (real power, Mathlib's \texttt{Real.rpow}).
 \end{lemma}
 \begin{proof}
+    \leanok
     $-1 \le s \le 1$ (\texttt{abs\_le}). If $\lambda \ge 1$, $\lambda^s \le \lambda^1 = \lambda$ (\texttt{Real.rpow\_le\_rpow\_of\_exponent\_le}, \texttt{Real.rpow\_one}); if $\lambda < 1$, $\lambda^s \le \lambda^{-1}$ (\texttt{Real.rpow\_le\_rpow\_of\_exponent\_ge}, \texttt{Real.rpow\_neg\_one}); in both cases this is at most the maximum (\texttt{le\_max\_left}, \texttt{le\_max\_right}).
 \end{proof}
 
@@ -3552,6 +3553,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $\lambda > 0$. Then $z \mapsto \lambda^{2z}$ is entire, $\lambda^{0} = 1$, and $|\lambda^{2z}| = \lambda^{2\operatorname{Re} z} \le \max(\lambda, \lambda^{-1})$ whenever $|\operatorname{Re} z| \le \tfrac{1}{2}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-rpow-le-max}
     Differentiability: Mathlib's \texttt{Differentiable.const\_cpow} with $(\lambda : \mathbb{C}) \ne 0$ (\texttt{Complex.ofReal\_ne\_zero}) and the differentiable map $z \mapsto 2z$. $\lambda^0 = 1$ is \texttt{Complex.cpow\_zero}. The modulus is \texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos} with $\operatorname{Re}(2z) = 2\operatorname{Re} z$ and $|2\operatorname{Re} z| \le 1$ (\texttt{abs\_mul}), so Lemma~\ref{lmm:van-daele-rpow-le-max} with $s = 2\operatorname{Re} z$ gives the bound.
 \end{proof}
