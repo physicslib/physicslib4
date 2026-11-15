@@ -2080,7 +2080,56 @@ theorem vanDaele_commutator_integrand {M : Set (H →L[ℂ] H)} {Ω : H}
             (modularConjugationConj hM hΩ C hC a'
               (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
           ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) := by
-  sorry
+  have h1 : ∀ t : ℝ, ⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ))) -
+        b' (modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
+        ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) =
+      (⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ)))⟫_ℂ -
+        ⟪star b' η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ) /
+        ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) := fun t => by
+    rw [inner_sub_right, ContinuousLinearMap.star_eq_adjoint,
+      ContinuousLinearMap.adjoint_inner_left]
+  have hcosh : ∀ t : ℝ, ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) ≠ 0 := fun t =>
+    Complex.ofReal_ne_zero.2 (by positivity)
+  have hc : Continuous (fun t : ℝ => ⟪η, modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ))) -
+          b' (modularUnitaryGroup hM hΩ C hC t
+            (modularConjugationConj hM hΩ C hC a'
+              (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
+          ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) := by
+    simp_rw [h1]
+    refine Continuous.div (((continuous_inner_modularUnitaryGroup_conj hM hΩ C hC a'
+      (b' ξ) η).2).sub (continuous_inner_modularUnitaryGroup_conj hM hΩ C hC a' ξ
+        (star b' η)).2) ?_ hcosh
+    fun_prop
+  refine ⟨h1, hc, integrable_of_norm_le_div_cosh hc (‖a'‖ * ‖b'‖ * ‖ξ‖ * ‖η‖) fun t => ?_⟩
+  rw [h1, norm_div, Complex.norm_real, Real.norm_of_nonneg (by positivity)]
+  have hA := norm_inner_modularUnitaryGroup_conj_le hM hΩ C hC a' (b' ξ) η t
+  have hB := norm_inner_modularUnitaryGroup_conj_le hM hΩ C hC a' ξ (star b' η) t
+  have hb1 := b'.le_opNorm ξ
+  have hb2 := (star b').le_opNorm η
+  rw [norm_star] at hb2
+  have hpos := Real.cosh_pos (Real.pi * t)
+  rw [div_le_div_iff₀ (by positivity) hpos]
+  have ha := norm_nonneg a'
+  have hx := norm_nonneg ξ
+  have hy := norm_nonneg η
+  calc _ ≤ (‖a'‖ * ‖b' ξ‖ * ‖η‖ + ‖a'‖ * ‖ξ‖ * ‖star b' η‖) * Real.cosh (Real.pi * t) :=
+        mul_le_mul_of_nonneg_right ((norm_sub_le _ _).trans (add_le_add hA hB)) hpos.le
+    _ ≤ (2 * (‖a'‖ * ‖b'‖ * ‖ξ‖ * ‖η‖)) * Real.cosh (Real.pi * t) := by
+        refine mul_le_mul_of_nonneg_right ?_ hpos.le
+        have e1 : ‖a'‖ * ‖b' ξ‖ * ‖η‖ ≤ ‖a'‖ * (‖b'‖ * ‖ξ‖) * ‖η‖ := by gcongr
+        have e2 : ‖a'‖ * ‖ξ‖ * ‖star b' η‖ ≤ ‖a'‖ * ‖ξ‖ * (‖b'‖ * ‖η‖) := by gcongr
+        nlinarith
+    _ = _ := by ring
 
 /-- For a van Daele triple `(λ, a′, a)` and `b′ ∈ M′`, `∫ λ^{2it} h(t) dt = 0`.
 Blueprint: lmm:van-daele-commutator-integral-zero -/
@@ -2097,7 +2146,17 @@ theorem IsVanDaeleTriple.integral_commutator_eq_zero {M : Set (H →L[ℂ] H)} {
             (modularConjugationConj hM hΩ C hC a'
               (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
           ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) = 0 := by
-  sorry
+  have hl := htriple.1
+  have hab : a * b' = b' * a := Set.mem_centralizer_iff.mp hb' a htriple.2.2.1
+  have hadj : ∀ w, ⟪η, b' w⟫_ℂ = ⟪star b' η, w⟫_ℂ := fun w => by
+    rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
+  simp only [inner_sub_right, hadj, sub_div, mul_sub, mul_div_assoc']
+  rw [MeasureTheory.integral_sub
+      (vanDaele_integrand_integrable hM hΩ C hC hl a' (b' ξ) η).2.2
+      (vanDaele_integrand_integrable hM hΩ C hC hl a' ξ (star b' η)).2.2]
+  rw [← htriple.inner_eq_integral hM hΩ C hC, ← htriple.inner_eq_integral hM hΩ C hC, ← hadj,
+    sub_eq_zero]
+  exact congrArg (⟪η, ·⟫_ℂ) (DFunLike.congr_fun hab ξ)
 
 /-- For `a′, b′ ∈ M′` and every `θ`, `∫ e^{iθt} h(t) dt = 0`.
 Blueprint: lmm:van-daele-commutator-fourier -/

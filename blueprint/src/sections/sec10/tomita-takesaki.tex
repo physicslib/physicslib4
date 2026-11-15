@@ -3787,6 +3787,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Then $h(t) = \big(\left< \eta, \Delta^{it}Ja'J\Delta^{-it}(b'\xi) \right> - \left< b'^*\eta, \Delta^{it}Ja'J\Delta^{-it}\xi \right>\big)/(2\cosh(\pi t))$ for every $t$, and $h$ is continuous and integrable on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-integrand-continuous, lmm:van-daele-integrand-bound, lmm:cosh-dominated-integrable}
     The identity is \texttt{ContinuousLinearMap.sub\_apply}, \texttt{inner\_sub\_right} and $\left< \eta, b'\psi \right> = \left< b'^*\eta, \psi \right>$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}, \texttt{ContinuousLinearMap.star\_eq\_adjoint}). Both inner products are continuous in $t$ (Lemma~\ref{lmm:van-daele-integrand-continuous}) and $\cosh(\pi t) > 0$ (\texttt{Real.cosh\_pos}), so $h$ is continuous (\texttt{Continuous.sub}, \texttt{Continuous.div}). By Lemma~\ref{lmm:van-daele-integrand-bound} and $\|b'^*\| = \|b'\|$ (\texttt{norm\_star}), $|h(t)| \le \|a'\|\,\|b'\|\,\|\xi\|\,\|\eta\|/\cosh(\pi t)$ (\texttt{norm\_sub\_le}), so $h$ is integrable by Lemma~\ref{lmm:cosh-dominated-integrable}.
 \end{proof}
@@ -3799,6 +3800,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $(\lambda, a', a)$ be a van Daele triple (Definition~\ref{def:van-daele-triple}), $b' \in \mathcal{M}'$, $\xi, \eta \in \mathbf{H}$, and $h$ as in Lemma~\ref{lmm:van-daele-commutator-integrand}. Then $\int_{\mathbb{R}} \lambda^{2it}h(t) \, dt = 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{prpstn:van-daele-integral-formula, lmm:van-daele-commutator-integrand, lmm:van-daele-integrand-integrable}
     By Lemma~\ref{lmm:van-daele-commutator-integrand} (\texttt{mul\_sub}, \texttt{sub\_div}), $\lambda^{2it}h(t) = F_1(t) - F_2(t)$, where $F_1$ and $F_2$ are the integrands of Proposition~\ref{prpstn:van-daele-integral-formula} for the pairs $(b'\xi, \eta)$ and $(\xi, b'^*\eta)$; both are integrable (Lemma~\ref{lmm:van-daele-integrand-integrable}), so \texttt{MeasureTheory.integral\_sub} and Proposition~\ref{prpstn:van-daele-integral-formula} (twice) give $\int \lambda^{2it}h(t) \, dt = \left< \eta, ab'\xi \right> - \left< b'^*\eta, a\xi \right> = \left< \eta, ab'\xi \right> - \left< \eta, b'a\xi \right>$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}). This is $0$ because $b' \in \mathcal{M}'$ commutes with $a \in \mathcal{M}$ (\texttt{sub\_self}).
 \end{proof}

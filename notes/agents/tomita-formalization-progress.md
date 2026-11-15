@@ -347,3 +347,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - prpstn:van-daele-integral-formula (IsVanDaeleTriple.inner_eq_integral): proved via E_{m+1} approximants, inner_eq_integral_of_spectral, tendsto_vanDaele_integral (K = ‖ξ‖‖η‖) and tendsto_nhds_unique; depends on tendsto_vanDaele_integral being proved.
 - lmm:van-daele-integral-continuity (`tendsto_vanDaele_integral`): proved by dominated convergence with bound ‖a′‖K/2 · 1/cosh(πt), using `vanDaele_integrand_integrable` and `tendsto_vanDaele_integrand`.
 - 2026-11-15: proved tendsto_vanDaele_integral, IsVanDaeleTriple.inner_eq_integral (Jones Prop 13.2.2 for all vectors).
+- lmm:van-daele-commutator-integrand (vanDaele_commutator_integrand): proved via adjoint_inner_left split, continuity from continuous_inner_modularUnitaryGroup_conj (twice), integrability from integrable_of_norm_le_div_cosh with K = ‖a'‖‖b'‖‖ξ‖‖η‖.
+- lmm:van-daele-commutator-integral-zero: proved `IsVanDaeleTriple.integral_commutator_eq_zero` (split by `integral_sub` with `vanDaele_integrand_integrable`, two uses of `IsVanDaeleTriple.inner_eq_integral`, and `a b′ = b′ a` from the centralizer).
+- 2026-11-15: proved vanDaele_commutator_integrand, IsVanDaeleTriple.integral_commutator_eq_zero.
