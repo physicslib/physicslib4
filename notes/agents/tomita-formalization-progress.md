@@ -323,3 +323,6 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-rpow-le-max: proved `Physicslib4.Modular.rpow_le_max_inv` (case split on 1 ≤ λ; rpow exponent monotonicity, `Real.rpow_one` / `Real.rpow_neg_one`).
 - lmm:van-daele-phase-strip (`vanDaele_phase_strip`): proved; entire via `Complex.cpow_def_of_ne_zero` + `fun_prop` (`Differentiable.const_cpow` is not imported), norm via `Complex.norm_cpow_eq_rpow_re_of_pos`, bound via `rpow_le_max_inv`.
 - 2026-11-15: proved rpow_le_max_inv, vanDaele_phase_strip.
+- lmm:van-daele-phase-fourier (`vanDaele_phase_fourier`): proved; `Complex.cpow_def_of_ne_zero`, `← Complex.ofReal_log`, `Real.log_exp`, then `congr 1; push_cast; ring`.
+- lmm:van-daele-phase-boundary: proved `vanDaele_phase_boundary` (cpow_add after mul_add, cpow_one/cpow_neg_one, norm_cpow_eq_rpow_re_of_pos, continuity via cpow_def_of_ne_zero + fun_prop).
+- 2026-11-15: proved vanDaele_phase_boundary, vanDaele_phase_fourier.

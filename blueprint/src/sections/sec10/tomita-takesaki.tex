@@ -3565,6 +3565,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $\lambda > 0$ and $t \in \mathbb{R}$. Then $\lambda^{2(1/2 + it)} = \lambda \cdot \lambda^{2it}$, $\lambda^{2(-1/2 + it)} = \lambda^{-1}\lambda^{2it}$ and $|\lambda^{2it}| = 1$, and $t \mapsto \lambda^{2it}$ is continuous on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $2(\pm\tfrac{1}{2} + it) = \pm 1 + 2it$ (\texttt{ring}), so \texttt{Complex.cpow\_add} ($(\lambda : \mathbb{C}) \ne 0$) with \texttt{Complex.cpow\_one}, \texttt{Complex.cpow\_neg\_one} and \texttt{Complex.ofReal\_inv} gives the first two identities. $|\lambda^{2it}| = \lambda^{\operatorname{Re}(2it)} = \lambda^0 = 1$ (\texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos}, \texttt{Real.rpow\_zero}). Continuity: \texttt{Continuous.const\_cpow} with $(\lambda : \mathbb{C}) \ne 0$ and the continuous map $t \mapsto 2tI$ (\texttt{Complex.continuous\_ofReal}).
 \end{proof}
 
@@ -3575,6 +3576,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $\theta \in \mathbb{R}$ and $\lambda = e^{\theta/2}$. Then $\lambda > 0$ and $\lambda^{2it} = e^{i\theta t}$ for every $t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $\lambda > 0$ is \texttt{Real.exp\_pos}. By \texttt{Complex.cpow\_def\_of\_ne\_zero}, $\lambda^{2it} = \exp(\log(\lambda)\cdot 2it)$, where the complex logarithm of the positive real $\lambda$ is $\log\lambda = \theta/2$ (\texttt{Complex.ofReal\_log}, \texttt{Real.log\_exp}); and $(\theta/2)\cdot 2it = \theta t i$ (\texttt{ring}).
 \end{proof}
 

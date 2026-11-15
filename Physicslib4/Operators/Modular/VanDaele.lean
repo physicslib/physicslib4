@@ -1666,7 +1666,16 @@ theorem vanDaele_phase_boundary {l : ℝ} (hl : 0 < l) :
         (l⁻¹ : ℂ) * (l : ℂ) ^ (2 * (Complex.I * t)) ∧
       ‖(l : ℂ) ^ (2 * (Complex.I * t))‖ = 1) ∧
     Continuous (fun t : ℝ => (l : ℂ) ^ (2 * (Complex.I * t))) := by
-  sorry
+  have h0 : (l : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hl.ne'
+  refine ⟨fun t => ⟨?_, ?_, ?_⟩, ?_⟩
+  · rw [mul_add, Complex.cpow_add _ _ h0, show (2 : ℂ) * (1 / 2) = 1 by norm_num,
+      Complex.cpow_one]
+  · rw [mul_add, Complex.cpow_add _ _ h0, show (2 : ℂ) * (-1 / 2) = -1 by norm_num,
+      Complex.cpow_neg_one]
+  · rw [Complex.norm_cpow_eq_rpow_re_of_pos hl]
+    simp
+  · simp_rw [Complex.cpow_def_of_ne_zero h0]
+    fun_prop
 
 /-- For `λ = e^{θ/2}`, `λ > 0` and `λ^{2it} = e^{iθt}`.
 Blueprint: lmm:van-daele-phase-fourier -/
@@ -1674,7 +1683,12 @@ theorem vanDaele_phase_fourier (θ : ℝ) :
     0 < Real.exp (θ / 2) ∧
       ∀ t : ℝ, ((Real.exp (θ / 2) : ℝ) : ℂ) ^ (2 * (Complex.I * t)) =
         Complex.exp (Complex.I * θ * t) := by
-  sorry
+  refine ⟨Real.exp_pos _, fun t => ?_⟩
+  rw [Complex.cpow_def_of_ne_zero (by exact_mod_cast (Real.exp_pos _).ne'),
+    ← Complex.ofReal_log (Real.exp_pos _).le, Real.log_exp]
+  congr 1
+  push_cast
+  ring
 
 /-- `⟪η, Δ^{it} J a′ J Δ^{-it} ξ⟫ = ⟪Δ^{-it} η, J a′ J Δ^{-it} ξ⟫`, continuous in `t`.
 Blueprint: lmm:van-daele-integrand-continuous -/
