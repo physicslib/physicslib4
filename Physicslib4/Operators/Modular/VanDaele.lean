@@ -1224,7 +1224,7 @@ Blueprint: lmm:van-daele-element-formulas -/
 theorem vanDaele_element_formulas {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) {a' a : H →L[ℂ] H}
-    (ha' : a' ∈ Set.centralizer M) (ha : a ∈ M)
+    (ha' : a' ∈ Set.centralizer M)
     (haΩ : a Ω = (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
       (vanDaeleG l) (star a' Ω)) :
     ∃ (h₁ : a Ω ∈ (modularOperatorSqrt hM hΩ C hC).domain)
@@ -1257,7 +1257,7 @@ theorem exists_isVanDaeleTriple {M : Set (H →L[ℂ] H)} {Ω : H}
       a Ω = (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
         (vanDaeleG l) (star a' Ω) := by
   obtain ⟨a, ha, haΩ, hn⟩ := exists_vanDaele_element hM hΩ C hC hl ha'
-  obtain ⟨h₁, h₂, -, e₁, e₂⟩ := vanDaele_element_formulas hM hΩ C hC hl ha' ha haΩ
+  obtain ⟨h₁, h₂, -, e₁, e₂⟩ := vanDaele_element_formulas hM hΩ C hC hl ha' haΩ
   obtain ⟨hdom, hS⟩ := tomitaOperator_eq_modularConjugation_sqrt hM hΩ C hC
   have hS1 : a Ω ∈ (linearizedTomitaPre M Ω C).closure.domain := hdom ▸ h₁
   obtain ⟨hS', e₃⟩ :=
@@ -1336,7 +1336,7 @@ theorem exists_tendsto_modularOperatorSqrt_of_mem {M : Set (H →L[ℂ] H)} {Ω 
     (modularOperatorSqrt hM hΩ C hC ⟨ξ, h₁⟩ + modularOperatorInvSqrt hM hΩ C hC ⟨ξ, h₂⟩)
   choose a ha haΩ _ using fun n => exists_vanDaele_element hM hΩ C hC one_pos (ha' n)
   choose h₁' h₂' e₀ e₁ e₂ using fun n =>
-    vanDaele_element_formulas hM hΩ C hC one_pos (ha' n) (ha n) (haΩ n)
+    vanDaele_element_formulas hM hΩ C hC one_pos (ha' n) (haΩ n)
   obtain ⟨i₀, i₁, i₂⟩ := modularOperator_vanDaele_inversion hM hΩ C hC h₁ h₂
   have hT := fun T : H →L[ℂ] H => (T.continuous.tendsto _).comp hlim
   refine ⟨a, ha, h₁', h₂', ?_, ?_, ?_⟩
@@ -1396,7 +1396,7 @@ theorem tomitaAdjoint_involutive {M : Set (H →L[ℂ] H)} {Ω : H}
 Blueprint: lmm:van-daele-first-term -/
 theorem inner_tomitaOperator_tomitaAdjoint_of_mem {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
-    (hC : ∀ x, C (C x) = x) {a x y : H →L[ℂ] H} (ha : a ∈ M) (hx : x ∈ M) (hy : y ∈ M)
+    (hC : ∀ x, C (C x) = x) {a x y : H →L[ℂ] H} (ha : a ∈ M) (hx : x ∈ M)
     (haS : a Ω ∈ (linearizedTomitaPre M Ω C).closure.domain)
     (hxS : x Ω ∈ (linearizedTomitaPre M Ω C).closure.domain)
     (hyS' : C (y Ω) ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain) :
@@ -1458,7 +1458,7 @@ theorem IsVanDaeleTriple.inner_identity_of_mem {M : Set (H →L[ℂ] H)} {Ω : H
   obtain ⟨-, ha', ha, hS, hS', heq⟩ := htriple
   have hcomm : x (a' Ω) = a' (x Ω) :=
     congrArg (fun T : H →L[ℂ] H => T Ω) (Set.mem_centralizer_iff.1 ha' x hx)
-  rw [inner_tomitaOperator_tomitaAdjoint_of_mem hM hΩ C hC ha hx hy hS hxS hyS',
+  rw [inner_tomitaOperator_tomitaAdjoint_of_mem hM hΩ C hC ha hx hS hxS hyS',
     inner_tomitaAdjoint_tomitaOperator_of_mem hM hΩ C hC ha hx hy hS' hxS' hyS,
     ← inner_smul_right, ← inner_smul_right, ← inner_add_right, ← heq, mul_apply_eq_comp,
     ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left, hcomm]
@@ -1841,7 +1841,7 @@ theorem norm_vanDaele_strip_function_le {M : Set (H →L[ℂ] H)} {Ω : H}
 Blueprint: lmm:van-daele-strip-function-zero -/
 theorem vanDaele_strip_function_zero {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
-    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) {n : ℕ} (hn : 1 ≤ n)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} {n : ℕ} (hn : 1 ≤ n)
     (a : H →L[ℂ] H) {ξ η : H}
     (hξ : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] ξ = ξ)
     (hη : spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC) K[n] η = η) :
@@ -1945,7 +1945,7 @@ theorem IsVanDaeleTriple.inner_eq_integral_of_spectral {M : Set (H →L[ℂ] H)}
   have h := strip_formula hc.continuousOn hd.differentiableOn
     ⟨_, fun z hz => norm_vanDaele_strip_function_le hM hΩ C hC hl hn a ξ η
       (abs_le.2 ⟨by linarith [hz.1], hz.2⟩)⟩
-  rw [← vanDaele_strip_function_zero hM hΩ C hC hl hn a hξ hη, h]
+  rw [← vanDaele_strip_function_zero (l := l) hM hΩ C hC hn a hξ hη, h]
   refine MeasureTheory.integral_congr_ae (Filter.Eventually.of_forall fun t => ?_)
   simp only [mul_comm (t : ℂ) Complex.I]
   rw [htriple.strip_function_boundary hM hΩ C hC hn hξ hη t]
@@ -1957,7 +1957,7 @@ converges to the same expression for `ξ, η`.
 Blueprint: lmm:van-daele-integrand-vector-limit -/
 theorem tendsto_vanDaele_integrand {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
-    (hC : ∀ x, C (C x) = x) {l : ℝ} (hl : 0 < l) (a' : H →L[ℂ] H) (t : ℝ)
+    (hC : ∀ x, C (C x) = x) {l : ℝ} (a' : H →L[ℂ] H) (t : ℝ)
     {ξs ηs : ℕ → H} {ξ η : H} (hξ : Tendsto ξs atTop (𝓝 ξ)) (hη : Tendsto ηs atTop (𝓝 η)) :
     Tendsto (fun m : ℕ => (l : ℂ) ^ (2 * (Complex.I * t)) *
           ⟪ηs m, modularUnitaryGroup hM hΩ C hC t
@@ -1998,7 +1998,7 @@ theorem tendsto_vanDaele_integral {M : Set (H →L[ℂ] H)} {Ω : H}
     (fun t => ‖a'‖ * K / 2 * (1 / Real.cosh (Real.pi * t)))
     (fun m => (hI m).1.aestronglyMeasurable)
     (integrable_inv_cosh.2.const_mul _) (fun m => Filter.Eventually.of_forall fun t => ?_)
-    (Filter.Eventually.of_forall fun t => tendsto_vanDaele_integrand hM hΩ C hC hl a' t hξ hη)
+    (Filter.Eventually.of_forall fun t => tendsto_vanDaele_integrand (l := l) hM hΩ C hC a' t hξ hη)
   refine ((hI m).2.1 t).trans ?_
   have hc := Real.cosh_pos (Real.pi * t)
   rw [mul_one_div, div_div, mul_assoc]
