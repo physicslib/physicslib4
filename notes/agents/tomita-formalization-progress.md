@@ -372,3 +372,4 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-15: KMS wave 6 proved takesaki_functions_aux_bounds, spectralMeasure_variance.
 - 2026-11-15: KMS wave 7 proved modularOperator_apply_self, modularConjugation_modularUnitaryGroup.
 - 2026-11-15: KMS wave 8 proved modularOperatorSqrt_apply_of_mem, modularAutomorphism_wellDefined.
+- 2026-11-15: KMS wave 9 proved spectralMeasure_singleton_apply_of_eigenvector, isOneParameterAut_modularAutomorphism.

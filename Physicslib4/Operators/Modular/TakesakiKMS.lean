@@ -211,7 +211,16 @@ Blueprint: lmm:spectral-eigenvector-projection -/
 theorem spectralMeasure_singleton_apply_of_eigenvector {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     {c : ℝ} {ψ : H} (hψ : ψ ∈ A.domain) (hAψ : A ⟨ψ, hψ⟩ = (c : ℂ) • ψ) :
     spectralMeasure hA {c} ψ = ψ := by
-  sorry
+  obtain ⟨hint, heq⟩ := spectralMeasure_variance hA c hψ
+  rw [hAψ, sub_self, norm_zero] at heq
+  have hae := (integral_eq_zero_iff_of_nonneg (fun x => sq_nonneg _) hint).1 (by simpa using heq)
+  have hnull : (spectralMeasure hA).assoc ψ {c}ᶜ = 0 := by
+    rw [Filter.EventuallyEq, ae_iff] at hae
+    refine measure_mono_null (fun x hx => ?_) hae
+    exact pow_ne_zero 2 (sub_ne_zero.2 hx)
+  have := ((projectionValuedMeasure_apply_of_assoc_eq_zero _ ψ
+    (measurableSet_singleton c).compl).2 hnull).2
+  rwa [compl_compl] at this
 
 /-- If `ψ ∈ Dom A`, `Aψ = cψ` with `c ∈ ℝ`, and `f` is bounded and measurable, then
 `f(A)ψ = f(c)ψ`, with `f(A)` the bounded integral `∫ f dμ^A` (equal to the functional calculus
@@ -605,7 +614,10 @@ theorem isOneParameterAut_modularAutomorphism {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) :
     Physicslib4.AQFT.IsOneParameterAut (modularAutomorphism hM hΩ C hC) := by
-  sorry
+  have hU := (modularUnitaryGroup_properties hM hΩ C hC).1
+  refine ⟨fun a => Subtype.ext ?_, fun s t a => Subtype.ext ?_⟩
+  · ext v; simp [hU.map_zero]
+  · ext v; simp [hU.map_add, neg_add_rev]
 
 /-- **Takesaki's theorem.** For a von Neumann algebra `M` with a cyclic and separating unit
 vector `Ω`, the vector state `ω_Ω` on the modular algebra is a KMS state at inverse temperature

@@ -4006,6 +4006,7 @@ The KMS condition is a statement about a state on a C$^*$-algebra and a one-para
     $t \mapsto \sigma_t$ is a one-parameter group of $*$-automorphisms of the modular algebra (Definition~\ref{def:one-parameter-aut}): $\sigma_0 = \mathrm{id}$ and $\sigma_{s+t} = \sigma_s \circ \sigma_t$ for $s, t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-unitary-group-props}
     $\Delta^{i0} = \mathbf{1}$ gives $\sigma_0(x) = x$. The group law $\Delta^{i(s+t)} = \Delta^{is}\Delta^{it}$ (Lemma~\ref{lmm:modular-unitary-group-props}), applied also to $-(s+t) = (-t) + (-s)$ (\texttt{neg\_add\_rev}), gives $\Delta^{i(s+t)}x\Delta^{-i(s+t)} = \Delta^{is}(\Delta^{it}x\Delta^{-it})\Delta^{-is}$ (\texttt{mul\_assoc}). Elements of the modular algebra are equal when their underlying operators are (\texttt{Subtype.ext}).
 \end{proof}
@@ -4066,6 +4067,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
     Let $A$ be self-adjoint with spectral measure $\mu^A$, $c \in \mathbb{R}$, and $\psi \in \text{Dom}(A)$ with $A\psi = c\psi$. Then $\mu^A(\{c\})\psi = \psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:spectral-eigenvector-variance, lmm:pvm-null-set-vector}
     By Lemma~\ref{lmm:spectral-eigenvector-variance}, $\int (\lambda - c)^2 \, d\mu^A_\psi = 0$ with a nonnegative integrand, so $(\lambda - c)^2 = 0$ for $\mu^A_\psi$-almost every $\lambda$ (\texttt{MeasureTheory.integral\_eq\_zero\_iff\_of\_nonneg}), that is, $\mu^A_\psi(\mathbb{R} \setminus \{c\}) = 0$ (\texttt{MeasureTheory.ae\_iff}, \texttt{sub\_eq\_zero}). Lemma~\ref{lmm:pvm-null-set-vector} with $E = \mathbb{R} \setminus \{c\}$ gives $\mu^A(\{c\})\psi = \psi$ (\texttt{compl\_compl}).
 \end{proof}
