@@ -3618,6 +3618,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Then $F$ is continuous, $|F(t)| \le \|a'\|\,\|\xi\|\,\|\eta\| / (2\cosh(\pi t))$ for every $t$, and $F$ is integrable on $\mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:van-daele-phase-boundary, lmm:van-daele-integrand-continuous, lmm:van-daele-integrand-bound, lmm:cosh-dominated-integrable}
     The numerator is continuous (Lemmas~\ref{lmm:van-daele-phase-boundary} and~\ref{lmm:van-daele-integrand-continuous}, \texttt{Continuous.mul}) and the denominator is continuous and nonzero ($\cosh(\pi t) > 0$, \texttt{Real.cosh\_pos}, cast by \texttt{Complex.ofReal\_cosh}), so $F$ is continuous (\texttt{Continuous.div}). $|\lambda^{2it}| = 1$ (Lemma~\ref{lmm:van-daele-phase-boundary}) and Lemma~\ref{lmm:van-daele-integrand-bound} give the bound (\texttt{norm\_div}, \texttt{norm\_mul}). Lemma~\ref{lmm:cosh-dominated-integrable} with $K = \|a'\|\,\|\xi\|\,\|\eta\|/2$ gives integrability.
 \end{proof}

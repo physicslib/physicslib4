@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.Operators.Modular.TomitaAdjoint
+import Physicslib4.Analysis.StripFormula
 
 /-!
 # Complex powers of the modular operator
@@ -1759,7 +1760,27 @@ theorem vanDaele_integrand_integrable {M : Set (H →L[ℂ] H)} {Ω : H}
           (modularConjugationConj hM hΩ C hC a'
             (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
         ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) := by
-  sorry
+  have hph := vanDaele_phase_boundary hl
+  have hpos : ∀ t : ℝ, 0 < 2 * Real.cosh (Real.pi * t) := fun t => by positivity
+  have hcont : Continuous (fun t : ℝ => (l : ℂ) ^ (2 * (Complex.I * t)) *
+      ⟪η, modularUnitaryGroup hM hΩ C hC t
+        (modularConjugationConj hM hΩ C hC a'
+          (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
+      ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) :=
+    (hph.2.mul (continuous_inner_modularUnitaryGroup_conj hM hΩ C hC a' ξ η).2).div
+      (by fun_prop) fun t => Complex.ofReal_ne_zero.mpr (hpos t).ne'
+  have hb : ∀ t : ℝ, ‖(l : ℂ) ^ (2 * (Complex.I * t)) *
+      ⟪η, modularUnitaryGroup hM hΩ C hC t
+        (modularConjugationConj hM hΩ C hC a'
+          (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ /
+      ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)‖ ≤
+      ‖a'‖ * ‖ξ‖ * ‖η‖ / (2 * Real.cosh (Real.pi * t)) := fun t => by
+    rw [norm_div, norm_mul, (hph.1 t).2.2, one_mul, Complex.norm_real,
+      Real.norm_of_nonneg (hpos t).le]
+    exact div_le_div_of_nonneg_right
+      (norm_inner_modularUnitaryGroup_conj_le hM hΩ C hC a' ξ η t) (hpos t).le
+  exact ⟨hcont, hb, integrable_of_norm_le_div_cosh hcont (‖a'‖ * ‖ξ‖ * ‖η‖ / 2)
+    fun t => by rw [div_div]; exact hb t⟩
 
 /-- `f(z) = λ^{2z} ⟪η, p_{z,n}(Δ) a p_{-z,n}(Δ) ξ⟫` is entire, hence continuous.
 Blueprint: lmm:van-daele-strip-function-entire -/

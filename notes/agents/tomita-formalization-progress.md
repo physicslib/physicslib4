@@ -329,3 +329,5 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:van-daele-integrand-bound (`norm_inner_modularUnitaryGroup_conj_le`): proved via Cauchy–Schwarz, `LinearIsometryEquiv.norm_map`, `le_opNorm` and `modularConjugationConj_apply` norm bound.
 - lmm:van-daele-integrand-continuous (`continuous_inner_modularUnitaryGroup_conj`): proved via (Δ^{-it})⁻¹ = Δ^{it} and `inner_map_map`, then strong continuity composed with `continuous_neg` and `Continuous.inner`.
 - 2026-11-15: proved continuous_inner_modularUnitaryGroup_conj, norm_inner_modularUnitaryGroup_conj_le.
+- lmm:van-daele-integrand-integrable (vanDaele_integrand_integrable): proved via integrable_of_norm_le_div_cosh with K = ‖a′‖‖ξ‖‖η‖/2; added import Physicslib4.Analysis.StripFormula to VanDaele.lean.
+- 2026-11-15: proved vanDaele_integrand_integrable (StripFormula import added). JTJ, phase and integrand lemmas of 5c done (9).
