@@ -3891,6 +3891,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     For every $t \in \mathbb{R}$, $\{ \Delta^{it}x\Delta^{-it} \mid x \in \mathcal{M} \} = \mathcal{M}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-modular-automorphism-subset, lmm:modular-unitary-group-props}
     Inclusion $\subset$ is Lemma~\ref{lmm:tomita-modular-automorphism-subset} with $s = t$. Inclusion $\supset$: for $x \in \mathcal{M}$, $y = \Delta^{-it}x\Delta^{it} \in \mathcal{M}$ by Lemma~\ref{lmm:tomita-modular-automorphism-subset} with $s = -t$ (\texttt{neg\_neg}), and $\Delta^{it}y\Delta^{-it} = x$ by the group law and $\Delta^{i0} = \mathbf{1}$ (Lemma~\ref{lmm:modular-unitary-group-props}; \texttt{mul\_assoc}, \texttt{add\_neg\_cancel}).
 \end{proof}
@@ -3908,6 +3909,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     This is Theorem~13.2.3 of Jones's notes; the proof is van Daele's.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-modular-conjugation-commutant, lmm:tomita-modular-automorphism}
     Part (i) is Lemma~\ref{lmm:tomita-modular-conjugation-commutant} and part (ii) is Lemma~\ref{lmm:tomita-modular-automorphism}.
 \end{proof}

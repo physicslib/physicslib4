@@ -359,3 +359,5 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - lmm:tomita-modular-conjugation-commutant (`modularConjugationConj_image`): proved; ⊆ from `modularConjugationConj_mem_centralizer`, ⊇ via `modularUnitaryGroup_conj_mem` (t = 0 conjunct) and the involution conjunct of `modularConjugationConj_identities`.
 - lmm:tomita-modular-automorphism-subset (`modularUnitaryGroup_conj_mem_of_mem`): proved; apply `modularUnitaryGroup_conj_mem` to `a′ = JxJ ∈ M′` (`modularConjugationConj_mem_centralizer`), then rewrite `J(JxJ)J = x` with `modularConjugationConj_identities`.
 - 2026-11-15: proved modularConjugationConj_image (JMJ = M'), modularUnitaryGroup_conj_mem_of_mem.
+- `thrm:tomita` (`tomita_theorem`): proved as the pair `⟨modularConjugationConj_image …, modularUnitaryGroup_conj_image …⟩`; it depends on `modularUnitaryGroup_conj_image`, which still has `sorry`.
+- lmm:tomita-modular-automorphism (`modularUnitaryGroup_conj_image`) proved: ⊆ by `modularUnitaryGroup_conj_mem_of_mem` (s = t); ⊇ via s = −t and the group law from `modularUnitaryGroup_properties`.

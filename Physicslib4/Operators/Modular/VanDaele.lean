@@ -2273,7 +2273,18 @@ theorem modularUnitaryGroup_conj_image {M : Set (H →L[ℂ] H)} {Ω : H}
     (fun x => (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
         x ∘L (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) '' M =
       M := by
-  sorry
+  refine Set.Subset.antisymm ?_ fun x hx => ?_
+  · rintro _ ⟨x, hx, rfl⟩
+    exact modularUnitaryGroup_conj_mem_of_mem hM hΩ C hC t hx
+  · have hU := (modularUnitaryGroup_properties hM hΩ C hC).1
+    have h : ∀ a b : ℝ, a + b = 0 → ∀ v, modularUnitaryGroup hM hΩ C hC a
+        (modularUnitaryGroup hM hΩ C hC b v) = v := fun a b hab v => by
+      rw [← hU.map_add, hab, hU.map_zero]
+    refine ⟨_, modularUnitaryGroup_conj_mem_of_mem hM hΩ C hC (-t) hx, ?_⟩
+    ext v
+    simp only [ContinuousLinearMap.comp_apply, LinearIsometry.coe_toContinuousLinearMap,
+      LinearIsometryEquiv.coe_toLinearIsometry]
+    rw [h (-(-t)) (-t) (by ring), h t (-t) (by ring)]
 
 /-- Tomita's theorem: `J M J = M′` and `Δ^{it} M Δ^{-it} = M` for every real `t`.
 Blueprint: thrm:tomita -/
@@ -2284,7 +2295,7 @@ theorem tomita_theorem {M : Set (H →L[ℂ] H)} {Ω : H}
       ∀ t : ℝ,
         (fun x => (modularUnitaryGroup hM hΩ C hC t).toLinearIsometry.toContinuousLinearMap ∘L
           x ∘L (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap) '' M =
-          M := by
-  sorry
+          M :=
+  ⟨modularConjugationConj_image hM hΩ C hC, modularUnitaryGroup_conj_image hM hΩ C hC⟩
 
 end Physicslib4.Modular
