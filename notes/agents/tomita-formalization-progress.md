@@ -316,3 +316,7 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - crllr:van-daele-rearranged-identity-H0 (IsVanDaeleTriple.inner_modularConjugationConj_indicatorCpow): proved by rewriting IsVanDaeleTriple.inner_modularConjugationConj with modularOperatorSqrt_eq_indicatorCpow for ξ and η (same index n, nesting not needed); depends on inner_modularConjugationConj, which is still sorry.
 - crllr:van-daele-rearranged-identity (IsVanDaeleTriple.inner_modularConjugationConj): proved via inner_identity at Jξ, Jη, tomitaOperator_modularConjugation, and the antiunitary inner identity for J.
 - 2026-11-14: proved IsVanDaeleTriple.inner_modularConjugationConj, ..._indicatorCpow. Stage 5b complete.
+- 2026-11-15: 5c proving started: JTJ, phase, integrand lemmas, two per wave.
+- `modularConjugationConj_apply` (lmm:modular-conjugation-bounded-conjugate) proved: apply formula by `rfl`, norm bound via `opNorm_le_bound` and `LinearIsometryEquiv.norm_map`, uniqueness via `ContinuousLinearMap.ext`.
+- 2026-11-15: proved modularConjugationConj_identities (lmm:modular-conjugation-bounded-conjugate-identities) by ContinuousLinearMap.ext, unfolding by change, and J(Jφ) = φ.
+- 2026-11-15: proved modularConjugationConj_apply, modularConjugationConj_identities.

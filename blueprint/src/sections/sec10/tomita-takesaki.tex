@@ -3505,6 +3505,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $T \in \mathcal{B}(\mathbf{H})$. Then $JTJ$ is a bounded linear operator with $(JTJ)\psi = J(T(J\psi))$ for every $\psi \in \mathbf{H}$, and $\|JTJ\| \le \|T\|$. It is the unique bounded operator with these values, since a bounded operator is determined by its values.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-conjugation-polar, lmm:antilinear-isometry-antiunitary, lmm:antiunitary-isometric}
     $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}, Lemma~\ref{lmm:antilinear-isometry-antiunitary}), hence a continuous conjugate-linear isometry (Lemma~\ref{lmm:antiunitary-isometric}). So the composite $\psi \mapsto J(T(J\psi))$ of Definition~\ref{def:modular-conjugation-conjugate} is additive, $\mathbb{C}$-linear ($J(T(J(c\psi))) = J(\overline{c}\,T(J\psi)) = c\,J(T(J\psi))$) and continuous, which is the semilinear \texttt{ContinuousLinearMap.comp}; its values are \texttt{ContinuousLinearMap.comp\_apply}. For the bound, $\|J(T(J\psi))\| = \|T(J\psi)\| \le \|T\|\,\|J\psi\| = \|T\|\,\|\psi\|$ (\texttt{LinearIsometryEquiv.norm\_map}, \texttt{ContinuousLinearMap.le\_opNorm}), so $\|JTJ\| \le \|T\|$ by \texttt{ContinuousLinearMap.opNorm\_le\_bound} with $\|T\| \ge 0$ (\texttt{norm\_nonneg}). Uniqueness is \texttt{ContinuousLinearMap.ext}.
 \end{proof}
@@ -3529,6 +3530,7 @@ This paragraph proves Proposition~13.2.2 and Theorem~13.2.3 of Jones's notes, wh
     Let $T, T' \in \mathcal{B}(\mathbf{H})$. Then $J(JTJ)J = T$ and $(JTJ)(JT'J) = J(TT')J$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-conjugation-bounded-conjugate, thrm:modular-conjugation-involution}
     Both sides of each identity are bounded operators, so it suffices to compare them at every $\psi$ (\texttt{ContinuousLinearMap.ext}). By Lemma~\ref{lmm:modular-conjugation-bounded-conjugate} and $J(J\phi) = \phi$ (Theorem~\ref{thrm:modular-conjugation-involution}), $J(J(T(J(J\psi)))) = T\psi$ and $J(T(J(J(T'(J\psi))))) = J(TT'(J\psi))$ (\texttt{ContinuousLinearMap.mul\_apply}).
 \end{proof}

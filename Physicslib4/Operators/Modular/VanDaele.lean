@@ -1604,7 +1604,12 @@ theorem modularConjugationConj_apply {M : Set (H →L[ℂ] H)} {Ω : H}
     ∀ T' : H →L[ℂ] H,
       (∀ ψ : H, T' ψ = modularConjugation hM hΩ C hC (T (modularConjugation hM hΩ C hC ψ))) →
       T' = modularConjugationConj hM hΩ C hC T := by
-  sorry
+  have h : ∀ ψ : H, modularConjugationConj hM hΩ C hC T ψ =
+      modularConjugation hM hΩ C hC (T (modularConjugation hM hΩ C hC ψ)) := fun _ => rfl
+  refine ⟨h, ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun ψ => ?_,
+    fun T' hT' => ContinuousLinearMap.ext fun ψ => (hT' ψ).trans (h ψ).symm⟩
+  rw [h, LinearIsometryEquiv.norm_map]
+  simpa only [LinearIsometryEquiv.norm_map] using T.le_opNorm (modularConjugation hM hΩ C hC ψ)
 
 /-- `J (J T J) J = T` and `(J T J)(J T′ J) = J (T T′) J`.
 Blueprint: lmm:modular-conjugation-bounded-conjugate-identities -/
@@ -1614,7 +1619,15 @@ theorem modularConjugationConj_identities {M : Set (H →L[ℂ] H)} {Ω : H}
     modularConjugationConj hM hΩ C hC (modularConjugationConj hM hΩ C hC T) = T ∧
       modularConjugationConj hM hΩ C hC T * modularConjugationConj hM hΩ C hC T' =
         modularConjugationConj hM hΩ C hC (T * T') := by
-  sorry
+  have hJ := (modularConjugation_involution hM hΩ C hC).1
+  refine ⟨ContinuousLinearMap.ext fun ψ => ?_, ContinuousLinearMap.ext fun ψ => ?_⟩
+  · change modularConjugation hM hΩ C hC (modularConjugation hM hΩ C hC
+      (T (modularConjugation hM hΩ C hC (modularConjugation hM hΩ C hC ψ)))) = T ψ
+    rw [hJ, hJ]
+  · change modularConjugation hM hΩ C hC (T (modularConjugation hM hΩ C hC
+      (modularConjugation hM hΩ C hC (T' (modularConjugation hM hΩ C hC ψ))))) =
+      modularConjugation hM hΩ C hC (T (T' (modularConjugation hM hΩ C hC ψ)))
+    rw [hJ]
 
 /-- For `λ > 0` and `|s| ≤ 1`, `λ^s ≤ max(λ, λ⁻¹)`.
 Blueprint: lmm:van-daele-rpow-le-max -/
