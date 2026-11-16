@@ -176,8 +176,7 @@ structure FeatureCard where
   url : String
 
 /-- The feature cards, one per area of the formalisation, linking to the top of the matching
-reference-manual chapter. The spectral card covers two chapters and links to the first, "Bounded
-spectral theory"; a card is a single link, so its section tags are not links. -/
+reference-manual chapter. A card is a single link, so its section tags are not links. -/
 def featureCards : Array FeatureCard := #[
   { title := "Haag–Kastler axioms in Minkowski spacetime."
     desc := "Local C*-algebras on causal diamonds, isotony, local commutativity, Lorentz covariance, and the quasilocal algebra."
@@ -191,10 +190,14 @@ def featureCards : Array FeatureCard := #[
     desc := "From a state on a C*-algebra to a cyclic Hilbert-space representation, unique up to unitary equivalence."
     sections := #["§10.1"]
     url := manualChapterUrl "The-GNS-construction" },
-  { title := "Spectral theorems."
-    desc := "Projection-valued measures for bounded and for unbounded self-adjoint operators, with their functional calculi."
-    sections := #["§10.2", "§10.3"]
+  { title := "The bounded spectral theorem."
+    desc := "Projection-valued measures for bounded self-adjoint and normal operators, with their functional calculus."
+    sections := #["§10.2"]
     url := manualChapterUrl "Bounded-spectral-theory" },
+  { title := "The unbounded spectral theorem."
+    desc := "Closed, densely defined and self-adjoint operators, their spectral measures and the functional calculus."
+    sections := #["§10.3"]
+    url := manualChapterUrl "Unbounded-operators-and-their-spectral-theorem" },
   { title := "Stone's theorem."
     desc := "Every strongly continuous one-parameter unitary group has the form U(t) = exp(itA) for a unique self-adjoint generator A."
     sections := #["§10.4"]
@@ -202,7 +205,15 @@ def featureCards : Array FeatureCard := #[
   { title := "Spacetime geometry."
     desc := "Causal structure, the Levi-Civita connection and geodesics on Lorentzian manifolds."
     sections := #["§10.5"]
-    url := manualChapterUrl "Spacetime-and-geometry" }
+    url := manualChapterUrl "Spacetime-and-geometry" },
+  { title := "The Reeh–Schlieder theorem."
+    desc := "The vacuum is cyclic for the algebra of every nonempty diamond, and separating for regions with spacelike room around them."
+    sections := #["§10.9"]
+    url := manualChapterUrl "The-Reeh-Schlieder-theorem" },
+  { title := "Tomita–Takesaki theory."
+    desc := "The modular operator and conjugation, Tomita's theorem JMJ = M′ and ΔⁱᵗMΔ⁻ⁱᵗ = M, and Takesaki's KMS theorem."
+    sections := #["§10.10"]
+    url := manualChapterUrl "Tomita-Takesaki-theory" }
 ]
 
 /--
