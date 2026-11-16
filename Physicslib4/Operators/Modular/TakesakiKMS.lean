@@ -711,7 +711,8 @@ theorem inner_modularUnitaryGroup_lower_boundary {M : Set (H →L[ℂ] H)} {Ω :
     (hC : ∀ x, C (C x) = x) (a b : H →L[ℂ] H) (t : ℝ) :
     ⟪star a Ω, modularUnitaryGroup hM hΩ C hC (-t) (b Ω)⟫_ℂ =
       ⟪Ω, a (modularUnitaryGroup hM hΩ C hC (-t) (b (modularUnitaryGroup hM hΩ C hC t Ω)))⟫_ℂ := by
-  sorry
+  rw [modularUnitaryGroup_apply_self, ContinuousLinearMap.star_eq_adjoint,
+    ContinuousLinearMap.adjoint_inner_left]
 
 /-- For `a, b ∈ M` and real `t`,
 `⟪Δ^{1/2} a*Ω, Δ^{-it} Δ^{1/2} bΩ⟫ = ⟪Ω, Δ^{-it} b Δ^{it} a Ω⟫`. The domain memberships
@@ -723,7 +724,20 @@ theorem inner_modularUnitaryGroup_upper_boundary {M : Set (H →L[ℂ] H)} {Ω :
     (ha' : star a Ω ∈ (Δs).domain) (hb' : b Ω ∈ (Δs).domain) :
     ⟪Δs ⟨star a Ω, ha'⟩, modularUnitaryGroup hM hΩ C hC (-t) (Δs ⟨b Ω, hb'⟩)⟫_ℂ =
       ⟪Ω, modularUnitaryGroup hM hΩ C hC (-t) (b (modularUnitaryGroup hM hΩ C hC t (a Ω)))⟫_ℂ := by
-  sorry
+  obtain ⟨h1, e1⟩ := modularOperatorSqrt_apply_of_mem hM hΩ C hC (hM.1 a ha)
+  obtain ⟨h2, e2⟩ := modularOperatorSqrt_apply_of_mem hM hΩ C hC hb
+  rw [star_star] at e1
+  have hJ : ∀ x y : H, ⟪modularConjugation hM hΩ C hC x, modularConjugation hM hΩ C hC y⟫_ℂ =
+      conj ⟪x, y⟫_ℂ :=
+    inner_map_map_of_conjLinearIsometry (modularConjugation hM hΩ C hC).toLinearIsometry
+  rw [e1, e2, ← modularConjugation_modularUnitaryGroup, hJ,
+    inner_conj_symm, ← LinearIsometryEquiv.inner_map_map (modularUnitaryGroup hM hΩ C hC t),
+    ← ((modularUnitaryGroup_properties hM hΩ C hC).2.2 t).2,
+    LinearIsometryEquiv.apply_symm_apply, ContinuousLinearMap.star_eq_adjoint,
+    ContinuousLinearMap.adjoint_inner_left,
+    ← LinearIsometryEquiv.inner_map_map (modularUnitaryGroup hM hΩ C hC t).symm,
+    ((modularUnitaryGroup_properties hM hΩ C hC).2.2 t).2,
+    modularUnitaryGroup_apply_self]
 
 /-! ### The modular algebra and the modular automorphisms -/
 

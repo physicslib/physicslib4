@@ -4335,6 +4335,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     Let $a, b \in \mathcal{M}$ and $t \in \mathbb{R}$. Then $\left< a^*\Omega, \Delta^{-it}b\Omega \right> = \left< \Omega, a\,\Delta^{-it}b\Delta^{it}\,\Omega \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-unitary-group-fixes-omega}
     $\Omega = \Delta^{it}\Omega$ (Lemma~\ref{lmm:modular-unitary-group-fixes-omega}), and $\left< a^*\Omega, \phi \right> = \left< \Omega, a\phi \right>$ (\texttt{ContinuousLinearMap.adjoint\_inner\_left}, \texttt{ContinuousLinearMap.star\_eq\_adjoint}).
 \end{proof}
@@ -4347,6 +4348,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     Let $a, b \in \mathcal{M}$ and $t \in \mathbb{R}$. Then $\left< \Delta^{1/2}a^*\Omega, \Delta^{-it}\Delta^{1/2}b\Omega \right> = \left< \Omega, \Delta^{-it}b\Delta^{it}\,a\,\Omega \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-sqrt-on-algebra, lmm:modular-conjugation-commutes-unitary-group, thrm:modular-conjugation-polar, def:antiunitary-operator, lmm:modular-unitary-group-fixes-omega, lmm:modular-unitary-group-props}
     By Lemma~\ref{lmm:modular-sqrt-on-algebra} (for $a^*$ and $b$, both in $\mathcal{M}$, with $a^{**} = a$), the left side is $\left< Ja\Omega, \Delta^{-it}Jb^*\Omega \right> = \left< Ja\Omega, J\Delta^{-it}b^*\Omega \right>$ (Lemma~\ref{lmm:modular-conjugation-commutes-unitary-group} at $-t$). $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}), so this is $\left< \Delta^{-it}b^*\Omega, a\Omega \right>$ (Definition~\ref{def:antiunitary-operator}). Write $\Omega = \Delta^{it}\Omega$ in the left slot (Lemma~\ref{lmm:modular-unitary-group-fixes-omega}) and move $\Delta^{-it}b^*\Delta^{it}$ to the right slot as its adjoint $\Delta^{-it}b\Delta^{it}$ ($(\Delta^{it})^* = \Delta^{-it}$, Lemma~\ref{lmm:modular-unitary-group-props}; \texttt{ContinuousLinearMap.adjoint\_inner\_left}, \texttt{star\_mul}).
 \end{proof}

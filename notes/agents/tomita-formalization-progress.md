@@ -378,3 +378,4 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-16: KMS wave 12 proved spectralMeasure_integral_apply_of_eigenvector, tendstoUniformlyOn_takesakiApproximant.
 - 2026-11-16: KMS wave 13 proved modularUnitaryGroup_apply_self, takesakiFunction_analytic.
 - 2026-11-16: KMS wave 14 proved takesakiFunction_lower_boundary, takesakiFunction_upper_boundary.
+- 2026-11-16: KMS wave 15 proved inner_modularUnitaryGroup_lower_boundary, inner_modularUnitaryGroup_upper_boundary.
