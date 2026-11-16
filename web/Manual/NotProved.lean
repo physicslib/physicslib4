@@ -41,11 +41,6 @@ tag := "not-proved-operators"
   refinement, which would also make the approximants self-adjoint, is not, and the library does
   not need it
   ([Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Main-definitions-and-theorems--Representations-and-local-von-Neumann-algebras)).
-* _The vector state is a KMS state for the modular flow._ The library proves Tomita's theorem, so
-  $`\sigma_t(x) = \Delta^{it}x\Delta^{-it}` is a flow on $`\mathcal{M}`, and it defines the KMS
-  condition, but it does not prove Takesaki's theorem that the state of $`\Omega` is a KMS state
-  for the reversed flow at inverse temperature $`1`
-  ({ref "tomita-takesaki-overview"}[Tomita–Takesaki chapter]).
 
 # Spacetime
 %%%

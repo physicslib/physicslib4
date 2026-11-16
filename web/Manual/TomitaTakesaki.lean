@@ -1,6 +1,7 @@
 import VersoManual
 import Book.Meta
 import Physicslib4.Operators.Modular.VanDaele
+import Physicslib4.Operators.Modular.TakesakiKMS
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
@@ -18,7 +19,7 @@ file := "Tomita-Takesaki-theory"
 
 This chapter describes how the library constructs the modular operator and the modular
 conjugation of a von Neumann algebra with a cyclic and separating vector, and how it proves
-Tomita's theorem. It corresponds to
+Tomita's theorem and Takesaki's KMS theorem. It corresponds to
 [Section 10.10](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:tomita-takesaki)
 of the blueprint. The section is pure operator algebra and involves no net. It builds on the
 {ref "unbounded"}[chapter on unbounded operators], which supplies closures, adjoints, the spectral
@@ -63,12 +64,13 @@ modular theory is central to the subject:
   defined purely algebraically, are then geometric, and the vacuum restricted to a wedge is thermal
   for the boost dynamics, the Unruh effect.
 
-Neither of the two is formalized in the library; they are mentioned as context. What the library
-proves is everything of Section 10.10, with no `sorry`: the construction of $`S`, $`\Delta` and
+The library proves the first, Takesaki's theorem, as the last result of the section
+({ref "tomita-takesaki-kms"}[below]); the Bisognano–Wichmann theorem is not formalized and is
+mentioned as context. What the library proves is everything of Section 10.10, with no `sorry`: the construction of $`S`, $`\Delta` and
 $`J`, their basic properties, Takesaki's lemma, the description $`S^* = \overline{F_0}` of the
 adjoint of the Tomita operator, the modular objects of the commutant, a strip formula for bounded
-holomorphic functions, the uniqueness of Fourier transforms, and Tomita's theorem,
-`tomita_theorem`. The modular theory is in the namespace `Physicslib4.Modular`, the general
+holomorphic functions, the uniqueness of Fourier transforms, Tomita's theorem,
+`tomita_theorem`, and Takesaki's theorem, `isKMSState_modularAutomorphism`. The modular theory is in the namespace `Physicslib4.Modular`, the general
 results on unbounded operators it needs in `Physicslib4.Spectral.Unbounded`, and the strip formula
 in `Physicslib4`.
 
@@ -504,6 +506,65 @@ Physicslib4.Modular.tomita_theorem.{u_1} {H : Type u_1} [NormedAddCommGroup H] [
 [bp-jtj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-conjugation-conjugate
 [bp-tt]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:tomita
 
+## Takesaki's KMS theorem
+%%%
+tag := "tomita-takesaki-kms"
+%%%
+
+The library's KMS condition, `Physicslib4.AQFT.IsKMSState`, is stated for a state on a
+C*-algebra and a one-parameter group of `*`-automorphisms. Three definitions put the modular
+objects in that form. The _modular algebra_ ([def:modular-algebra][bp-ma]) bundles the set
+$`\mathcal{M}` as a unital `*`-subalgebra of $`B(H)`; it is norm-closed, being a centralizer, so
+Mathlib's `StarSubalgebra.cstarAlgebra` makes it a C*-algebra:
+
+{docstring Physicslib4.Modular.modularAlgebra}
+
+The _vector state_ ([def:vector-state][bp-vs]) is defined for every norm-closed unital
+`*`-subalgebra of $`B(H)` and every unit vector:
+
+{docstring Physicslib4.GNS.vectorState}
+
+The _modular automorphism group_ ([def:modular-automorphism][bp-maut]) is
+$`\sigma_t(x) = \Delta^{it}x\Delta^{-it}`, a `*`-automorphism of the modular algebra by Tomita's
+theorem, and a one-parameter group
+({apiDocs Physicslib4.Modular.isOneParameterAut_modularAutomorphism}[`isOneParameterAut_modularAutomorphism`]):
+
+{docstring Physicslib4.Modular.modularAutomorphism}
+
+Takesaki's theorem ([thrm:takesaki-kms][bp-tkms]; Bratteli–Robinson, vol. 2, Theorem 5.3.10)
+states that the vector state of $`\Omega` is a KMS state at inverse temperature $`1` for the
+reversed flow $`t \mapsto \sigma_{-t}`. In Bratteli and Robinson's convention this is the KMS
+condition at $`\beta = -1` for $`\sigma`; the library's KMS strip $`0 \le \operatorname{Im} z \le
+\beta` is empty for negative $`\beta`, so the theorem is stated for the reversed flow.
+
+```lean (name := checkTakesakiKMS)
+open Physicslib4 Modular in
+#check isKMSState_modularAutomorphism
+```
+
+```leanOutput checkTakesakiKMS
+Physicslib4.Modular.isKMSState_modularAutomorphism.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω)
+  (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ (x : H), C (C x) = x) (hΩ1 : ‖Ω‖ = 1) :
+  AQFT.IsKMSState (fun t => modularAutomorphism hM hΩ C hC (-t)) 1 (GNS.vectorState (modularAlgebra M) Ω hΩ1)
+```
+
+For $`a, b` in the modular algebra the proof takes the function
+$`G(z) = \langle a^*\Omega, \Delta^{-iz} b\Omega \rangle` on the strip
+$`0 \le \operatorname{Im} z \le 1`. Splitting the spectrum of $`\Delta` at $`1` writes it as
+$`\langle \xi, u_z(\Delta)\eta \rangle + \langle \Delta^{1/2}\xi, v_z(\Delta)\Delta^{1/2}\eta \rangle`
+with bounded functions $`u_z` and $`v_z` of modulus at most $`1`, which gives the bound. The
+approximants obtained from the spectral cut-offs of van Daele's proof are entire and converge
+uniformly on the strip, which gives continuity and holomorphy. On the lower edge $`G(t)` is
+$`\omega(a\sigma_{-t}(b))`, using $`\Delta^{it}\Omega = \Omega`; on the upper edge
+$`\Delta^{1/2}x\Omega = Jx^*\Omega` and $`J\Delta^{it} = \Delta^{it}J` turn $`G(t + i)` into
+$`\omega(\sigma_{-t}(b)a)`.
+
+[bp-ma]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-algebra
+[bp-vs]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:vector-state
+[bp-maut]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-automorphism
+[bp-tkms]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:takesaki-kms
+
 ## A tour of the proof
 
 The proof of Tomita's theorem follows Jones's Chapter 13 in five steps.
@@ -582,7 +643,7 @@ $`\Delta^{it}x\Delta^{-it} \in \mathcal{M}`; the group law gives the reverse inc
 tag := "tomita-takesaki-files"
 %%%
 
-The modular theory is in `Physicslib4/Operators/Modular/`, in six files listed in dependency
+The modular theory is in `Physicslib4/Operators/Modular/`, in seven files listed in dependency
 order. Each entry links to the API documentation of a representative declaration.
 
 * `Antiunitary.lean`: antiunitary operators and closability from a densely defined adjoint,
@@ -601,6 +662,12 @@ order. Each entry links to the API documentation of a representative declaration
 * `VanDaele.lean`: complex powers of $`\Delta`, the modular unitary group, van Daele triples, the
   integral formula and Tomita's theorem,
   {apiDocs Physicslib4.Modular.tomita_theorem}[`tomita_theorem`].
+* `TakesakiKMS.lean`: the modular algebra, the modular automorphism group, eigenvectors of a
+  self-adjoint operator, the KMS function and Takesaki's theorem,
+  {apiDocs Physicslib4.Modular.isKMSState_modularAutomorphism}[`isKMSState_modularAutomorphism`].
+
+The vector state is in `Physicslib4/GNS/VectorState.lean`,
+{apiDocs Physicslib4.GNS.vectorState}[`vectorState`].
 
 The general results on unbounded operators are in three files of `Physicslib4/Spectral/Unbounded/`:
 

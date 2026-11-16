@@ -19,7 +19,10 @@ The first release, 1.0, is in preparation.
   modular operator Δ and modular conjugation J from the polar decomposition S = JΔ^{1/2}, Takesaki's
   lemma with a bounded-operator proof after Rieffel–van Daele, the identity S* = F̄₀, the strip formula
   with Fourier uniqueness, and Tomita's theorem, JMJ = M′ and Δ^{it}MΔ^{-it} = M, by van Daele's proof
-  as presented in Jones's notes, Ch. 13. The antilinear Tomita operator is handled through a reference
+  as presented in Jones's notes, Ch. 13. It ends with Takesaki's theorem: the vector state of a unit
+  cyclic and separating vector is a KMS state at inverse temperature 1 for the reversed modular flow,
+  stated with the modular algebra, the modular automorphism group and the vector state
+  (`Physicslib4/GNS/VectorState.lean`). The antilinear Tomita operator is handled through a reference
   conjugation C, on which Δ and J do not depend. All of it is formalized and proved in Lean
   (`Physicslib4/Operators/Modular/`, with the unbounded-operator results in
   `Physicslib4/Spectral/Unbounded/Composition.lean`, `Polar.lean` and `Commuting.lean`, and the strip
