@@ -395,6 +395,12 @@ $`0^{-1} = 0`.
   $`T^*` assumes `HasDenseDomain T`. Self-adjointness is Mathlib's `IsSelfAdjoint` and implies a
   dense domain
   ([unbounded chapter](Unbounded-operators-and-their-spectral-theorem/#physicslib4-reference-manual--Unbounded-operators-and-their-spectral-theorem--Design--The-adjoint-is-Mathlib___s___-with-its-convention)).
+* _Antilinear operators are made linear by a reference conjugation._ Mathlib's partial maps are
+  semilinear, but their graph, closure and adjoint exist only for linear ones. The antilinear
+  Tomita operator $`S` is therefore handled through the linear operator $`CS`, for a fixed
+  antiunitary involution $`C`. The modular operator and the modular conjugation take $`C` as an
+  argument, and a theorem shows that they do not depend on it
+  ({ref "tomita-takesaki-design"}[Tomita–Takesaki chapter]).
 * _The integral of an unbounded function is guarded._ `integralApply μ f`, the action of
   $`\int f \, d\mu` for a possibly unbounded $`f`, is chosen from an existence-and-uniqueness
   statement and is $`0` when $`f` is not measurable or no unique value exists. The guard makes

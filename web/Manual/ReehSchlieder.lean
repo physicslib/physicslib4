@@ -59,10 +59,11 @@ constantly:
   spacelike room around it annihilates the vacuum: a local detector placed in the vacuum has a
   nonzero probability of clicking.
 * _Modular theory._ A vector that is both cyclic and separating for a von Neumann algebra is
-  exactly the input of Tomita–Takesaki theory. The Reeh–Schlieder theorem therefore starts the
-  modular theory of local algebras, and through it the Bisognano–Wichmann theorem and the KMS
-  property of the vacuum restricted to a wedge. None of these is formalized in the library; they
-  are mentioned as context.
+  exactly the input of Tomita–Takesaki theory, which the library formalizes in the
+  {ref "tomita-takesaki"}[next chapter]. The Reeh–Schlieder theorem therefore starts the modular
+  theory of local algebras, and through it the Bisognano–Wichmann theorem and the KMS property of
+  the vacuum restricted to a wedge. These last two are not formalized in the library; they are
+  mentioned as context.
 
 The library proves the theorem in two stages, following the blueprint.
 

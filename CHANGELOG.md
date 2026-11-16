@@ -15,7 +15,25 @@ The first release, 1.0, is in preparation.
   `Physicslib4/AQFT/PositiveEnergyHolomorphic.lean` and `Physicslib4/Analysis/EdgeVanishing.lean`),
   and the reference manual has a chapter on it.
 
+- The blueprint has a section on Tomita–Takesaki theory (§10.10): the Tomita operator S, the
+  modular operator Δ and modular conjugation J from the polar decomposition S = JΔ^{1/2}, Takesaki's
+  lemma with a bounded-operator proof after Rieffel–van Daele, the identity S* = F̄₀, the strip formula
+  with Fourier uniqueness, and Tomita's theorem, JMJ = M′ and Δ^{it}MΔ^{-it} = M, by van Daele's proof
+  as presented in Jones's notes, Ch. 13. It ends with Takesaki's theorem: the vector state of a unit
+  cyclic and separating vector is a KMS state at inverse temperature 1 for the reversed modular flow,
+  stated with the modular algebra, the modular automorphism group and the vector state
+  (`Physicslib4/GNS/VectorState.lean`). The antilinear Tomita operator is handled through a reference
+  conjugation C, on which Δ and J do not depend. All of it is formalized and proved in Lean
+  (`Physicslib4/Operators/Modular/`, with the unbounded-operator results in
+  `Physicslib4/Spectral/Unbounded/Composition.lean`, `Polar.lean` and `Commuting.lean`, and the strip
+  formula in `Physicslib4/Analysis/StripFormula.lean`),
+  and the reference manual has a chapter on it.
+
 - The website has About, Roadmap and Get Involved pages, and the header on every page links to them.
+
+- The home page's "What is currently formalized" section has nine cards: the bounded and the unbounded
+  spectral theorems have a card each, and the Reeh–Schlieder theorem and Tomita–Takesaki theory have
+  cards of their own.
 
 - The Jekyll home page is retired: the Verso website is served at the root, with redirects from the
   old page URLs, and the Lean and Mathlib versions are stated in `README.md` alone. The blueprint's
