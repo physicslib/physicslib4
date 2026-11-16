@@ -379,3 +379,4 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-16: KMS wave 13 proved modularUnitaryGroup_apply_self, takesakiFunction_analytic.
 - 2026-11-16: KMS wave 14 proved takesakiFunction_lower_boundary, takesakiFunction_upper_boundary.
 - 2026-11-16: KMS wave 15 proved inner_modularUnitaryGroup_lower_boundary, inner_modularUnitaryGroup_upper_boundary.
+- 2026-11-16: KMS wave 16 proved isKMSState_modularAutomorphism; Takesaki's KMS theorem is fully proved (axioms: propext, Classical.choice, Quot.sound).

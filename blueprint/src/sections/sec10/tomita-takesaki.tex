@@ -4364,6 +4364,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-sqrt-on-algebra, lmm:takesaki-function-analytic, lmm:takesaki-function-lower-boundary, lmm:takesaki-function-upper-boundary, lmm:takesaki-lower-boundary-state, lmm:takesaki-upper-boundary-state}
     Fix $a, b$ in the modular algebra, so $a, b \in \mathcal{M}$ (Lemma~\ref{lmm:modular-algebra-closed}), and put $\xi = a^*\Omega$ and $\eta = b\Omega$, which lie in $\text{Dom}(\Delta^{1/2})$ (Lemma~\ref{lmm:modular-sqrt-on-algebra}). Take $F = G_{\xi,\eta}$. It is continuous, holomorphic and bounded on the required sets (Lemma~\ref{lmm:takesaki-function-analytic}). By Lemmas~\ref{lmm:takesaki-function-lower-boundary} and~\ref{lmm:takesaki-lower-boundary-state}, $F(t) = \left< \Omega, a\,\Delta^{-it}b\Delta^{it}\,\Omega \right> = \omega_\Omega(a\,\sigma_{-t}(b))$, and by Lemmas~\ref{lmm:takesaki-function-upper-boundary} and~\ref{lmm:takesaki-upper-boundary-state}, $F(t + i) = \left< \Omega, \Delta^{-it}b\Delta^{it}\,a\,\Omega \right> = \omega_\Omega(\sigma_{-t}(b)\,a)$, using $\sigma_{-t}(b) = \Delta^{-it}b\Delta^{it}$ (Definition~\ref{def:modular-automorphism}) and $\omega_\Omega(x) = \left< \Omega, x\Omega \right>$ (Definition~\ref{def:vector-state}).
 \end{proof}

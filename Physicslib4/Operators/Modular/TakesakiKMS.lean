@@ -870,6 +870,20 @@ theorem isKMSState_modularAutomorphism {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) (hΩ1 : ‖Ω‖ = 1) :
     Physicslib4.AQFT.IsKMSState (fun t => modularAutomorphism hM hΩ C hC (-t)) 1
       (Physicslib4.GNS.vectorState (modularAlgebra M) Ω hΩ1) := by
-  sorry
+  intro a b
+  have hmem : ∀ x : modularAlgebra M, (x : H →L[ℂ] H) ∈ M := fun x => by
+    simpa only [← SetLike.mem_coe, coe_modularAlgebra hM] using x.2
+  obtain ⟨h₁, -⟩ := modularOperatorSqrt_apply_of_mem hM hΩ C hC (hM.1 _ (hmem a))
+  obtain ⟨h₂, -⟩ := modularOperatorSqrt_apply_of_mem hM hΩ C hC (hmem b)
+  obtain ⟨hc, hd, hB⟩ := takesakiFunction_analytic hM hΩ C hC h₁ h₂
+  refine ⟨G[star (a : H →L[ℂ] H) Ω, (b : H →L[ℂ] H) Ω, h₁, h₂], hc, hd, ⟨_, hB⟩,
+    fun t => ?_, fun t => ?_⟩
+  · rw [takesakiFunction_lower_boundary, inner_modularUnitaryGroup_lower_boundary,
+      Physicslib4.GNS.vectorState_apply]
+    simp [neg_neg]
+  · rw [Complex.ofReal_one, one_mul, takesakiFunction_upper_boundary,
+      inner_modularUnitaryGroup_upper_boundary hM hΩ C hC (hmem a) (hmem b),
+      Physicslib4.GNS.vectorState_apply]
+    simp
 
 end Physicslib4.Modular
