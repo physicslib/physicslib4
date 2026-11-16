@@ -597,3 +597,19 @@ unitaries to equal the given boosts ([4]).
   the P̃ infrastructure.
 - Stage 3 sources: BGL's [7] (the Guido–Longo papers of 1995), to scout.
 
+
+---
+
+## Approved definitions (2026-11-16)
+
+The user approved the eight batch-2 blueprint definitions:
+- `def:right-wedge`
+- `def:left-wedge`
+- `def:wedge`
+- `def:boost-matrix`
+- `def:wedge-boost`
+- `def:continuous-one-parameter-subgroup`
+- `def:region-algebra`
+- `def:covariant-vacuum-representation`
+
+Their Lean `def`s still need lean-kit guard approval, file by file, at formalization time.

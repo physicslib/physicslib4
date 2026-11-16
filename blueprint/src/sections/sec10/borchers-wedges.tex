@@ -281,3 +281,507 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
     \uses{thrm:unitary-intertwines-modular-objects, lmm:unitary-commutes-of-conj-eq}
     Theorem~\ref{thrm:unitary-intertwines-modular-objects} with $\mathcal{M}_1 = \mathcal{M}_2 = \mathcal{M}$, $\Omega_1 = \Omega_2 = \Omega$ and the same reference conjugation for both gives $VAV^{-1} = A$, including domains, for $A = S, \Delta, \Delta^{1/2}, \Delta^{it}, J$. Lemma~\ref{lmm:unitary-commutes-of-conj-eq} turns each of these into the stated commutation; $\Delta^{it}$ and $J$ are everywhere defined.
 \end{proof}
+
+\subsection{Wedges}\label{sbsctn:wedges}
+
+Throughout this subsection the spacetime is standard Minkowski spacetime with its standard time orientation, with the coordinates and the closed forward cone $\overline{V}_+$ of Subsection~\ref{sbsctn:causal-precedence-minkowski}. Wedges are not a class of regions of the net axioms: Axioms 1--5 are indexed by diamonds only. A wedge is a subset of spacetime, used only to index the von Neumann algebras of Subsection~\ref{sbsctn:region-algebra}, which are built from the diamond algebras in a representation.
+
+\begin{definition}[The Right Wedge]
+    \label{def:right-wedge}
+    \uses{def:standard-minkowski-spacetime}
+    The \emph{right wedge} is the set
+    \begin{align}
+        W_R = \{ x \in \mathbb{R}^4 \mid |x^0| < x^1 \}.
+    \end{align}
+\end{definition}
+
+\begin{definition}[The Left Wedge]
+    \label{def:left-wedge}
+    \uses{def:standard-minkowski-spacetime}
+    The \emph{left wedge} is the set
+    \begin{align}
+        W_L = \{ x \in \mathbb{R}^4 \mid x^1 < -|x^0| \}.
+    \end{align}
+    It is the point reflection of the right wedge (\ref{def:right-wedge}): $x \in W_L$ if and only if $-x \in W_R$, so $W_L = -W_R$.
+\end{definition}
+
+\begin{lemma}[The Wedges in Light-Cone Coordinates]
+    \label{lmm:wedge-light-cone-coordinates}
+    \uses{def:right-wedge, def:left-wedge}
+    $x \in W_R$ if and only if $x^1 + x^0 > 0$ and $x^1 - x^0 > 0$. $x \in W_L$ if and only if $x^1 + x^0 < 0$ and $x^1 - x^0 < 0$.
+\end{lemma}
+\begin{proof}
+    $|x^0| < x^1$ is $-x^1 < x^0 < x^1$ (Mathlib's \texttt{abs\_lt}), and $x^1 < -|x^0|$ is $|x^0| < -x^1$, that is $x^1 < x^0 < -x^1$.
+\end{proof}
+
+\begin{lemma}[The Wedges are Open and Nonempty]
+    \label{lmm:wedge-open-nonempty}
+    \uses{def:right-wedge, def:left-wedge}
+    $W_R$ and $W_L$ are open in $\mathbb{R}^4$ and nonempty: $(0, 1, 0, 0) \in W_R$ and $(0, -1, 0, 0) \in W_L$.
+\end{lemma}
+\begin{proof}
+    $W_R$ is the set where the continuous map $x \mapsto |x^0|$ is less than the continuous map $x \mapsto x^1$, hence open (Mathlib's \texttt{isOpen\_lt}, with \texttt{continuous\_abs} and the continuity of the coordinate maps). The same argument applies to $W_L$ with $x \mapsto x^1$ and $x \mapsto -|x^0|$. The two points satisfy $|0| < 1$ and $-1 < -|0|$.
+\end{proof}
+
+\begin{lemma}[Poincar\'e Transformations Map Diamonds to Diamonds]
+    \label{lmm:poincare-maps-diamonds}
+    \uses{def:inhomogeneous-lorentz-group, def:causal-diamond}
+    Let $g$ be in the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}). For all $p, q \in \mathbb{R}^4$,
+    \begin{align}
+        g\big(I^+(p) \cap I^-(q)\big) = I^+(g p) \cap I^-(g q).
+    \end{align}
+    So $g\mathbf{B}$ is a diamond for every diamond $\mathbf{B}$, nonempty if $\mathbf{B}$ is.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:minkowski-chronological-open, lmm:orthochronous-preserves-future-timelike, lmm:lorentz-closure}
+    By the library lemma \texttt{chronologicallyPrecedes\_smul\_iff}, $gx \ll gy$ if and only if $x \ll y$. Its content: with $g = (L, a)$, $gy - gx = L(y - x)$, $x \ll y$ means that $y - x$ lies in the open forward cone (\ref{lmm:minkowski-chronological-open}), and $L$ and $L^{-1}$ preserve $\eta$ and are orthochronous (\ref{lmm:lorentz-closure}, \ref{lmm:orthochronous-preserves-future-timelike}). Hence $x \in I^+(p) \cap I^-(q)$ if and only if $gx \in I^+(gp) \cap I^-(gq)$, and $g$ is a bijection of $\mathbb{R}^4$. The diamond claim is the library lemma \texttt{isAlexandrovBasisSet\_smul}, which Axiom 5 (\ref{def:lorentz-covariance}) already uses.
+\end{proof}
+
+\begin{lemma}[Poincar\'e Transformations Preserve Inclusion]
+    \label{lmm:poincare-diamond-inclusion}
+    \uses{def:inhomogeneous-lorentz-group, def:causal-diamond}
+    For every $g$ in the inhomogeneous Lorentz group and all sets $\mathbf{O}_1, \mathbf{O}_2 \subseteq \mathbb{R}^4$, $g\mathbf{O}_1 \subseteq g\mathbf{O}_2$ if and only if $\mathbf{O}_1 \subseteq \mathbf{O}_2$. Consequently $\mathbf{B} \mapsto g\mathbf{B}$ is a bijection from the diamonds contained in $\mathbf{O}$ onto the diamonds contained in $g\mathbf{O}$, with inverse $\mathbf{B}' \mapsto g^{-1}\mathbf{B}'$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:poincare-maps-diamonds}
+    The equivalence is Mathlib's \texttt{Set.smul\_set\_subset\_smul\_set\_iff} for the group action. By \ref{lmm:poincare-maps-diamonds} for $g$ and $g^{-1}$, both maps send diamonds to diamonds, by the equivalence they respect containment in $\mathbf{O}$ and $g\mathbf{O}$, and they are mutually inverse by \texttt{inv\_smul\_smul} and \texttt{smul\_inv\_smul}.
+\end{proof}
+
+\begin{definition}[Wedge]
+    \label{def:wedge}
+    \uses{def:right-wedge, def:inhomogeneous-lorentz-group}
+    A set $W \subseteq \mathbb{R}^4$ is a \emph{wedge} if $W = gW_R$ for some $g$ in the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}).
+
+    The element $g$ is not unique: $gW_R = g'W_R$ whenever $g^{-1}g'$ lies in the stabiliser of $W_R$, which contains the boosts of \ref{def:wedge-boost}, the translations in the $x^2$ and $x^3$ directions (\ref{lmm:wedge-transverse-translations}) and the rotations of the $(x^2, x^3)$-plane. The results below are therefore stated for $W = gW_R$ with a given $g$, and objects attached to $W$ through $g$, such as the boosts $b_g(s)$ of \ref{def:wedge-boost}, are indexed by $g$ rather than by $W$.
+\end{definition}
+
+\begin{lemma}[A Rotation by $\pi$ is a Proper Orthochronous Lorentz Transformation]
+    \label{lmm:rotation-pi-lorentz}
+    \uses{def:lorentz-transformation}
+    Let $R$ be the linear map $(x^0, x^1, x^2, x^3) \mapsto (x^0, -x^1, -x^2, x^3)$, the rotation by $\pi$ in the $(x^1, x^2)$-plane. Then $R \in SO(1,3)^{\uparrow}$ (\ref{def:lorentz-transformation}) and $R^{-1} = R$.
+\end{lemma}
+\begin{proof}
+    $R$ is diagonal with entries $(1, -1, -1, 1)$, so $\eta(Rv, Rw) = \eta(v, w)$ term by term and $R \circ R = 1$. Its determinant is that of its matrix in the standard basis (Mathlib's \texttt{LinearMap.det\_toMatrix}), which is the product of the diagonal entries, $1$ (\texttt{Matrix.det\_diagonal}). Finally $(Re_0)^0 = 1 > 0$.
+\end{proof}
+
+\begin{lemma}[The Left Wedge is a Wedge]
+    \label{lmm:left-wedge-is-wedge}
+    \uses{def:left-wedge, def:wedge, lmm:rotation-pi-lorentz}
+    With $R$ as in \ref{lmm:rotation-pi-lorentz}, $(R, 0)W_R = W_L$. Hence $W_L$ is a wedge, and so is $gW_L = (g(R,0))W_R$ for every $g$ in the inhomogeneous Lorentz group.
+\end{lemma}
+\begin{proof}
+    \uses{def:right-wedge, def:inhomogeneous-lorentz-group}
+    Since $(Rx)^0 = x^0$ and $(Rx)^1 = -x^1$, $Rx \in W_L$ if and only if $|x^0| < x^1$, that is $x \in W_R$; as $R$ is a bijection, $RW_R = W_L$. The last claim is $g\big((R,0)W_R\big) = (g(R,0))W_R$ (\texttt{mul\_smul}).
+\end{proof}
+
+\begin{lemma}[A Coordinate Bound in the Open Forward Cone]
+    \label{lmm:open-cone-coordinate-bound}
+    \uses{def:lorentz-transformation}
+    If $\eta(v,v) < 0$ and $v^0 > 0$, then $|v^i| < v^0$ for $i = 1, 2, 3$.
+\end{lemma}
+\begin{proof}
+    $(v^i)^2 \le (v^1)^2 + (v^2)^2 + (v^3)^2 < (v^0)^2$ and $v^0 > 0$, so $|v^i| < v^0$ by Mathlib's \texttt{abs\_lt\_of\_sq\_lt\_sq}.
+\end{proof}
+
+\begin{lemma}[A Nonempty Diamond in the Right Wedge]
+    \label{lmm:wedges-contain-diamonds}
+    \uses{def:right-wedge, def:causal-diamond}
+    Let $p_+ = (-1, 2, 0, 0)$, $q_+ = (1, 2, 0, 0)$ and $\mathbf{B}_+ = I^+(p_+) \cap I^-(q_+)$. Then $\mathbf{B}_+$ is a nonempty diamond with $\mathbf{B}_+ \subseteq W_R$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:minkowski-chronological-open, lmm:open-cone-coordinate-bound}
+    By \ref{lmm:minkowski-chronological-open}, $x \in \mathbf{B}_+$ if and only if $x - p_+$ and $q_+ - x$ lie in the open forward cone. The point $(0, 2, 0, 0)$ lies in $\mathbf{B}_+$, since both differences are $(1, 0, 0, 0)$. For $x \in \mathbf{B}_+$, \ref{lmm:open-cone-coordinate-bound} applied to $x - p_+$ and to $q_+ - x$ gives $|x^1 - 2| < x^0 + 1$ and $|x^1 - 2| < 1 - x^0$. Hence $2 - x^1 < 1 - |x^0|$, that is $x^1 > 1 + |x^0| > |x^0|$, so $x \in W_R$.
+\end{proof}
+
+\begin{corollary}[Every Wedge Contains a Nonempty Diamond]
+    \label{crllr:wedge-contains-diamond}
+    \uses{def:wedge, def:left-wedge, def:causal-diamond, lmm:wedges-contain-diamonds, lmm:rotation-pi-lorentz}
+    Let $\mathbf{B}_+$ be as in \ref{lmm:wedges-contain-diamonds} and $\mathbf{B}_- = (R, 0)\mathbf{B}_+$ with $R$ as in \ref{lmm:rotation-pi-lorentz}. For every $g$ in the inhomogeneous Lorentz group, $g\mathbf{B}_+$ is a nonempty diamond contained in $gW_R$ and $g\mathbf{B}_-$ is a nonempty diamond contained in $gW_L$. In particular every wedge contains a nonempty diamond.
+\end{corollary}
+\begin{proof}
+    \uses{lmm:wedges-contain-diamonds, lmm:poincare-maps-diamonds, lmm:poincare-diamond-inclusion, lmm:left-wedge-is-wedge}
+    By \ref{lmm:poincare-maps-diamonds} and \ref{lmm:poincare-diamond-inclusion}, $g\mathbf{B}_+$ is a nonempty diamond contained in $gW_R$. Also $g\mathbf{B}_- = (g(R,0))\mathbf{B}_+$ is a nonempty diamond contained in $(g(R,0))W_R = gW_L$, by the same lemmas and \ref{lmm:left-wedge-is-wedge}.
+\end{proof}
+
+\begin{lemma}[Translations into the Right Wedge]
+    \label{lmm:wedge-translations}
+    \uses{def:right-wedge, def:future-timelike-translation}
+    Write $W_R + a = \mathrm{translationSub}(a)\,W_R = \{ x + a \mid x \in W_R \}$ (\ref{def:future-timelike-translation}). If $|a^0| \le a^1$, then $W_R + a \subseteq W_R$. In particular this holds for $a = t\,l_+$ and $a = -t\,l_-$ with $t \ge 0$, where $l_+ = (1, 1, 0, 0)$ and $l_- = (1, -1, 0, 0)$. The set $\{ a \mid |a^0| \le a^1 \}$ is the closure of $W_R$; this is not used.
+\end{lemma}
+\begin{proof}
+    Let $x \in W_R$. Then $|x^0 + a^0| \le |x^0| + |a^0| < x^1 + a^1$ (Mathlib's \texttt{abs\_add\_le}), so $x + a \in W_R$. For $a = t l_+$ and $a = -t l_-$, $a = (\pm t, t, 0, 0)$ with $|{\pm t}| = t$.
+\end{proof}
+
+\begin{lemma}[Transverse Translations of the Right Wedge]
+    \label{lmm:wedge-transverse-translations}
+    \uses{def:right-wedge, def:future-timelike-translation}
+    If $a^0 = a^1 = 0$, then $W_R + a = W_R$.
+\end{lemma}
+\begin{proof}
+    Membership in $W_R$ depends only on $x^0$ and $x^1$, which the translation does not change. So $W_R + a \subseteq W_R$, and likewise $W_R - a \subseteq W_R$, which gives $W_R \subseteq W_R + a$.
+\end{proof}
+
+\begin{lemma}[Opposite Wedges are Completely Spacelike]
+    \label{lmm:opposite-wedges-completely-spacelike}
+    \uses{def:right-wedge, def:left-wedge, def:completely-spacelike}
+    $W_R$ and $W_L$ are completely spacelike (\ref{def:completely-spacelike}) for the standard time orientation. More generally, for every $g$ in the inhomogeneous Lorentz group and all sets $\mathbf{O}_1 \subseteq gW_R$ and $\mathbf{O}_2 \subseteq gW_L$, in particular all diamonds, $\mathbf{O}_1$ and $\mathbf{O}_2$ are completely spacelike, and so are $\mathbf{O}_2$ and $\mathbf{O}_1$.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:completely-spacelike-of-coordinate-separation, crllr:spacelike-lorentz-invariant, lmm:completely-spacelike-structural, lmm:completely-spacelike-symm}
+    For $p \in W_R$ and $q \in W_L$, $p^1 > |p^0|$ and $-q^1 > |q^0|$, so $p^1 - q^1 > |p^0| + |q^0|$, and Corollary~\ref{crllr:completely-spacelike-of-coordinate-separation} gives the first claim. By \ref{crllr:spacelike-lorentz-invariant}, $gW_R$ and $gW_L$ are completely spacelike. Monotonicity (\ref{lmm:completely-spacelike-structural}) passes to the subsets, and symmetry (\ref{lmm:completely-spacelike-symm}) gives the reversed order.
+\end{proof}
+
+\subsubsection{Boosts}
+
+\begin{definition}[The Boost Matrices]
+    \label{def:boost-matrix}
+    \uses{def:standard-minkowski-spacetime}
+    For $s \in \mathbb{R}$, $\Lambda(s)$ is the linear map of $\mathbb{R}^4$
+    \begin{align}
+        \Lambda(s)(x^0, x^1, x^2, x^3) = \big(\cosh s\, x^0 + \sinh s\, x^1,\ \sinh s\, x^0 + \cosh s\, x^1,\ x^2,\ x^3\big).
+    \end{align}
+    Equivalently $\Lambda(s) = P_\perp + \cosh s\, P_\parallel + \sinh s\, K$, where $P_\parallel$ is the coordinate projection onto the $(x^0, x^1)$-plane, $P_\perp = 1 - P_\parallel$, and $K(x^0, x^1, x^2, x^3) = (x^1, x^0, 0, 0)$. The lightlike vectors $l_+ = (1, 1, 0, 0)$ and $l_- = (1, -1, 0, 0)$ span the $(x^0, x^1)$-plane.
+
+    \emph{Sign convention.} The parameter $s$ is the rapidity, with the sign fixed by $\Lambda(s)l_+ = e^{s}l_+$ and $\Lambda(s)l_- = e^{-s}l_-$ (\ref{lmm:boost-light-cone}). Brunetti, Guido and Longo (\emph{Rev. Math. Phys.} 7 (1995) 57--71) write $\Lambda_{W_1}(t)$ for the boost of $W_1 = W_R$ whose matrix on $(x^0, x^1)$ has rows $(\cosh 2\pi t, -\sinh 2\pi t)$ and $(-\sinh 2\pi t, \cosh 2\pi t)$. Their $\Lambda_{W_1}(t)$ is $\Lambda(-2\pi t)$ here. With $\Delta^{it} = e^{it\log\Delta}$ (\ref{def:modular-unitary-group}), their modular covariance $\Delta_{W}^{it}\mathcal{A}(\mathcal{O})\Delta_W^{-it} = \mathcal{A}(\Lambda_W(t)\mathcal{O})$ reads $\Delta_{W_R}^{it}R(\mathbf{B})\Delta_{W_R}^{-it} = R(b(-2\pi t)\mathbf{B})$ in this convention, and the Bisognano--Wichmann identification reads $\Delta_{W_R}^{it} = U(b(-2\pi t))$, with $b$ the boost of \ref{def:wedge-boost}.
+\end{definition}
+
+\begin{lemma}[The Boost Matrices Preserve the Minkowski Form]
+    \label{lmm:boost-matrix-lorentz}
+    \uses{def:boost-matrix, def:lorentz-transformation}
+    For every $s$, $\Lambda(s)$ is Lorentz: $\eta(\Lambda(s)v, \Lambda(s)w) = \eta(v, w)$ for all $v, w$.
+\end{lemma}
+\begin{proof}
+    Write $c = \cosh s$ and $\sigma = \sinh s$. Expanding,
+    \begin{align}
+        -(cv^0 + \sigma v^1)(cw^0 + \sigma w^1) + (\sigma v^0 + cv^1)(\sigma w^0 + cw^1) = (c^2 - \sigma^2)(-v^0w^0 + v^1w^1),
+    \end{align}
+    and $c^2 - \sigma^2 = 1$ (Mathlib's \texttt{Real.cosh\_sq\_sub\_sinh\_sq}). The terms $v^2w^2 + v^3w^3$ are unchanged.
+\end{proof}
+
+\begin{lemma}[The Boost Matrices are Proper]
+    \label{lmm:boost-matrix-proper}
+    \uses{def:boost-matrix, def:lorentz-transformation}
+    For every $s$, $\det \Lambda(s) = 1$.
+\end{lemma}
+\begin{proof}
+    The determinant is that of the matrix of $\Lambda(s)$ in the standard basis (Mathlib's \texttt{LinearMap.det\_toMatrix}). Expanding along the first row (\texttt{Matrix.det\_succ\_row\_zero}), and then along the remaining rows, gives $\cosh^2 s - \sinh^2 s$, which is $1$ by \texttt{Real.cosh\_sq\_sub\_sinh\_sq}.
+\end{proof}
+
+\begin{lemma}[The Boost Matrices are Orthochronous]
+    \label{lmm:boost-matrix-orthochronous}
+    \uses{def:boost-matrix, def:lorentz-transformation}
+    For every $s$, $(\Lambda(s)e_0)^0 > 0$.
+\end{lemma}
+\begin{proof}
+    $(\Lambda(s)e_0)^0 = \cosh s > 0$ (Mathlib's \texttt{Real.cosh\_pos}).
+\end{proof}
+
+\begin{lemma}[The Boost Matrices Form a One-Parameter Group]
+    \label{lmm:boost-matrix-group-law}
+    \uses{def:boost-matrix}
+    $\Lambda(0) = 1$ and $\Lambda(s + t) = \Lambda(s)\Lambda(t)$ for all $s, t$. In particular $\Lambda(s)$ is invertible with $\Lambda(s)^{-1} = \Lambda(-s)$.
+\end{lemma}
+\begin{proof}
+    $\cosh 0 = 1$ and $\sinh 0 = 0$. On the $(x^0, x^1)$-plane the product of the matrices of $\Lambda(s)$ and $\Lambda(t)$ has entries $\cosh s\cosh t + \sinh s\sinh t = \cosh(s+t)$ and $\sinh s\cosh t + \cosh s\sinh t = \sinh(s+t)$ (\texttt{Real.cosh\_add}, \texttt{Real.sinh\_add}), and both maps are the identity on $x^2, x^3$.
+\end{proof}
+
+\begin{lemma}[Boosts in Light-Cone Coordinates]
+    \label{lmm:boost-light-cone}
+    \uses{def:boost-matrix}
+    For every $s$ and $x$, with $y = \Lambda(s)x$,
+    \begin{align}
+        y^1 + y^0 = e^{s}(x^1 + x^0), \qquad y^1 - y^0 = e^{-s}(x^1 - x^0).
+    \end{align}
+    In particular $\Lambda(s)l_+ = e^{s}l_+$ and $\Lambda(s)l_- = e^{-s}l_-$.
+\end{lemma}
+\begin{proof}
+    $y^1 + y^0 = (\cosh s + \sinh s)(x^0 + x^1)$ and $y^1 - y^0 = (\cosh s - \sinh s)(x^1 - x^0)$, and $\cosh s + \sinh s = e^s$, $\cosh s - \sinh s = e^{-s}$ (\texttt{Real.cosh\_add\_sinh}, \texttt{Real.cosh\_sub\_sinh}). For $l_\pm$, the components $x^2, x^3$ vanish and are preserved, and $l_+$ has $x^1 - x^0 = 0$, $l_-$ has $x^1 + x^0 = 0$.
+\end{proof}
+
+\begin{definition}[Wedge Boosts]
+    \label{def:wedge-boost}
+    \uses{def:boost-matrix, lmm:boost-matrix-lorentz, lmm:boost-matrix-proper, lmm:boost-matrix-orthochronous, lmm:boost-matrix-group-law, def:inhomogeneous-lorentz-group}
+    For $s \in \mathbb{R}$, regard $\Lambda(s)$ as a linear automorphism of $\mathbb{R}^4$ (a \texttt{LinearEquiv}) with inverse $\Lambda(-s)$ (\ref{lmm:boost-matrix-group-law}). The \emph{boost of the right wedge} with rapidity $s$ is the element $b(s) = (\Lambda(s), 0)$ of the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}), which requires $\Lambda(s)$ to be Lorentz, proper and orthochronous (\ref{lmm:boost-matrix-lorentz}, \ref{lmm:boost-matrix-proper}, \ref{lmm:boost-matrix-orthochronous}). For $g$ in the inhomogeneous Lorentz group, the \emph{boost of the wedge $gW_R$ along $g$} is
+    \begin{align}
+        b_g(s) = g\, b(s)\, g^{-1}.
+    \end{align}
+    It is indexed by $g$, not by the wedge $gW_R$, so no well-definedness question arises (\ref{def:wedge}).
+\end{definition}
+
+\begin{lemma}[Boosts Preserve the Standard Wedges]
+    \label{lmm:boost-preserves-wedge}
+    \uses{def:wedge-boost, def:right-wedge, def:left-wedge}
+    For all $s$, $b(s)W_R = W_R$ and $b(s)W_L = W_L$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:wedge-light-cone-coordinates, lmm:boost-light-cone, lmm:boost-matrix-group-law}
+    By \ref{lmm:wedge-light-cone-coordinates} and \ref{lmm:boost-light-cone}, membership in $W_R$ (both light-cone coordinates positive) and in $W_L$ (both negative) is preserved by $\Lambda(s)$, since $e^{\pm s} > 0$. So $b(s)W_R \subseteq W_R$ for every $s$, and $W_R = b(s)b(-s)W_R \subseteq b(s)W_R$ by \ref{lmm:boost-matrix-group-law}. Likewise for $W_L$.
+\end{proof}
+
+\begin{lemma}[Conjugates Stabilise Transformed Sets]
+    \label{lmm:conjugate-stabilises-wedge}
+    \uses{def:inhomogeneous-lorentz-group, def:wedge-boost, def:causal-diamond}
+    Let $g, h$ be in the inhomogeneous Lorentz group and $W \subseteq \mathbb{R}^4$ with $hW = W$. Then $(ghg^{-1})(gW) = gW$, and for every diamond $\mathbf{B} \subseteq gW$, $(ghg^{-1})\mathbf{B}$ is a diamond contained in $gW$. In particular, for all $s$, $b_g(s)(gW_R) = gW_R$ and $b_g(s)(gW_L) = gW_L$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:poincare-maps-diamonds, lmm:poincare-diamond-inclusion, lmm:boost-preserves-wedge}
+    $(ghg^{-1})(gW) = g(hW) = gW$ by \texttt{mul\_smul} and \texttt{inv\_smul\_smul}. The diamond claim follows from \ref{lmm:poincare-maps-diamonds} and \ref{lmm:poincare-diamond-inclusion}. The last claim is the case $h = b(s)$, by \ref{lmm:boost-preserves-wedge}.
+\end{proof}
+
+\begin{definition}[Continuous One-Parameter Subgroup]
+    \label{def:continuous-one-parameter-subgroup}
+    \uses{def:inhomogeneous-lorentz-group, thrm:invariant-state-gns-unitary-strongly-continuous}
+    Give the inhomogeneous Lorentz group the topology of \ref{thrm:invariant-state-gns-unitary-strongly-continuous}, induced by $(L, a) \mapsto (L, L^{-1}, a)$; it is a topological group (in Lean, the instance \texttt{IsTopologicalGroup InhomogeneousLorentzGroup}). A map $\gamma : \mathbb{R} \to$ (inhomogeneous Lorentz group) is a \emph{continuous one-parameter subgroup} if $\gamma(0) = 1$, $\gamma(s + t) = \gamma(s)\gamma(t)$ for all $s, t$ (the library predicate \texttt{IsOneParameterSubgroup}, which has no continuity clause), and $\gamma$ is continuous.
+\end{definition}
+
+\begin{lemma}[The Boost Group Law]
+    \label{lmm:boost-group-law}
+    \uses{def:wedge-boost}
+    $b(0) = 1$ and $b(s + t) = b(s)b(t)$ for all $s, t$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:boost-matrix-group-law, def:inhomogeneous-lorentz-group}
+    By the product rule of \ref{def:inhomogeneous-lorentz-group}, $b(s)b(t) = (\Lambda(s)\Lambda(t), 0 + \Lambda(s)0) = (\Lambda(s)\Lambda(t), 0)$. Apply \ref{lmm:boost-matrix-group-law} and the extensionality of the group (\texttt{InhomogeneousLorentzGroup.ext}).
+\end{proof}
+
+\begin{lemma}[The Boost is a Continuous One-Parameter Subgroup]
+    \label{lmm:boost-continuous-subgroup}
+    \uses{def:wedge-boost, def:continuous-one-parameter-subgroup}
+    $s \mapsto b(s)$ is a continuous one-parameter subgroup (\ref{def:continuous-one-parameter-subgroup}).
+\end{lemma}
+\begin{proof}
+    \uses{lmm:boost-group-law, def:boost-matrix}
+    The group law is \ref{lmm:boost-group-law}. For continuity, by the definition of the induced topology (Mathlib's \texttt{continuous\_induced\_rng}) it suffices that $s \mapsto (\Lambda(s), \Lambda(-s), 0)$ is continuous, which holds because $\Lambda(s) = P_\perp + \cosh s\,P_\parallel + \sinh s\,K$ (\texttt{Real.continuous\_cosh}, \texttt{Real.continuous\_sinh}, \texttt{Continuous.smul}, \texttt{Continuous.add}).
+\end{proof}
+
+\begin{lemma}[Conjugates of Continuous One-Parameter Subgroups]
+    \label{lmm:conjugate-continuous-subgroup}
+    \uses{def:continuous-one-parameter-subgroup, def:wedge-boost}
+    If $\gamma$ is a continuous one-parameter subgroup and $g$ is in the inhomogeneous Lorentz group, then $s \mapsto g\gamma(s)g^{-1}$ is a continuous one-parameter subgroup. In particular so is $s \mapsto b_g(s)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:boost-continuous-subgroup, def:wedge-boost}
+    Conjugation by $g$ is a group homomorphism (Mathlib's \texttt{MulAut.conj}), which gives the group law, and it is continuous in a topological group (\texttt{continuous\_const.mul}, \texttt{Continuous.mul}), which gives continuity. The boost case uses \ref{lmm:boost-continuous-subgroup}.
+\end{proof}
+
+\begin{lemma}[Translation Flows are Continuous One-Parameter Subgroups]
+    \label{lmm:translation-flow-continuous-subgroup}
+    \uses{def:future-timelike-translation, def:continuous-one-parameter-subgroup}
+    For every $n \in \mathbb{R}^4$, $s \mapsto \mathrm{translationFlow}(n)(s) = (1, sn)$ is a continuous one-parameter subgroup.
+\end{lemma}
+\begin{proof}
+    The group law is the library lemma \texttt{isOneParameterSubgroup\_translationFlow} (\ref{def:future-timelike-translation}). By \texttt{continuous\_induced\_rng} it suffices that $s \mapsto (1, 1, sn)$ is continuous (\texttt{continuous\_const}, \texttt{continuous\_id.smul continuous\_const}).
+\end{proof}
+
+\subsection{The Algebra of a Region}\label{sbsctn:region-algebra}
+
+Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algebra $\mathfrak{U}$ of a Haag--Kastler net on a Hilbert space $\mathbf{H}$, and $R(\mathbf{B}) = \pi(\mathfrak{U}(\mathbf{B}))''$ is the local von Neumann algebra of a diamond $\mathbf{B}$ (\ref{def:local-von-neumann}). Commutants are centralizers in $\mathcal{B}(\mathbf{H})$, as in \ref{def:von-neumann-algebra-commutant-convention}.
+
+\begin{definition}[The Von Neumann Algebra of a Region]
+    \label{def:region-algebra}
+    \uses{def:local-von-neumann, def:causal-diamond, def:von-neumann-algebra-commutant-convention}
+    For an arbitrary set $\mathbf{O} \subseteq \mathbb{R}^4$, let
+    \begin{align}
+        \mathcal{S}(\mathbf{O}) = \bigcup_{\mathbf{B} \text{ diamond},\ \mathbf{B} \subseteq \mathbf{O}} R(\mathbf{B}), \qquad R(\mathbf{O}) = \mathcal{S}(\mathbf{O})''.
+    \end{align}
+    $R(\mathbf{O})$ is the \emph{von Neumann algebra of the region $\mathbf{O}$} in the representation $\pi$. It is a derived object, not part of the net axioms, and it exists only in a representation. The inclusion $\mathbf{B} \subseteq \mathbf{O}$ is plain inclusion, so $R(\mathbf{O})$ agrees with $R(\mathbf{B})$ when $\mathbf{O}$ is a diamond $\mathbf{B}$ (\ref{lmm:region-algebra-diamond}). A region containing no nonempty diamond has $R(\mathbf{O}) = \mathbb{C}\mathbf{1}$, from the empty diamond. The \emph{wedge algebras} are the $R(W)$ with $W$ a wedge (\ref{def:wedge}).
+\end{definition}
+
+\begin{lemma}[The Algebra of a Region is a Von Neumann Algebra]
+    \label{lmm:region-algebra-von-neumann}
+    \uses{def:region-algebra, def:von-neumann-algebra-commutant-convention}
+    For every $\mathbf{O}$, $\mathcal{S}(\mathbf{O})$ is self-adjoint and $R(\mathbf{O})$ is a von Neumann algebra on $\mathbf{H}$ (\ref{def:von-neumann-algebra-commutant-convention}).
+\end{lemma}
+\begin{proof}
+    \uses{lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    Each $R(\mathbf{B})$ is self-adjoint (\ref{def:von-neumann-algebra-commutant-convention}, by \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann}), so a union of them is self-adjoint. Lemma~\ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} applied to $\mathcal{S}(\mathbf{O})$ gives that $R(\mathbf{O}) = \mathcal{S}(\mathbf{O})''$ is self-adjoint and equal to its bicommutant.
+\end{proof}
+
+\begin{lemma}[Monotonicity of Region Algebras]
+    \label{lmm:region-algebra-mono}
+    \uses{def:region-algebra}
+    If $\mathbf{O}_1 \subseteq \mathbf{O}_2$, then $\mathcal{S}(\mathbf{O}_1) \subseteq \mathcal{S}(\mathbf{O}_2)$ and $R(\mathbf{O}_1) \subseteq R(\mathbf{O}_2)$.
+\end{lemma}
+\begin{proof}
+    Every diamond contained in $\mathbf{O}_1$ is contained in $\mathbf{O}_2$, which gives the first inclusion. The commutant is antitone (Mathlib's \texttt{Set.centralizer\_subset}), so the bicommutant is monotone.
+\end{proof}
+
+\begin{lemma}[Local Operators Lie in the Region Algebra]
+    \label{lmm:region-algebra-contains-local}
+    \uses{def:region-algebra, def:local-von-neumann}
+    If $\mathbf{B}$ is a diamond with $\mathbf{B} \subseteq \mathbf{O}$, then $\pi(\mathfrak{U}(\mathbf{B})) \subseteq R(\mathbf{B}) \subseteq R(\mathbf{O})$.
+\end{lemma}
+\begin{proof}
+    Every set lies in its bicommutant (Mathlib's \texttt{Set.subset\_centralizer\_centralizer}), which gives $\pi(\mathfrak{U}(\mathbf{B})) \subseteq R(\mathbf{B})$ and $\mathcal{S}(\mathbf{O}) \subseteq R(\mathbf{O})$; and $R(\mathbf{B}) \subseteq \mathcal{S}(\mathbf{O})$ by definition.
+\end{proof}
+
+\begin{lemma}[Agreement with the Local Von Neumann Algebras]
+    \label{lmm:region-algebra-diamond}
+    \uses{def:region-algebra, def:local-von-neumann}
+    For every diamond $\mathbf{B}$, the algebra of the region $\mathbf{B}$ (\ref{def:region-algebra}) equals the local von Neumann algebra $R(\mathbf{B})$ of \ref{def:local-von-neumann}.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:region-algebra-contains-local, thrm:von-neumann-isotony, lmm:bicommutant-of-selfadjoint-is-von-neumann}
+    Write $\widetilde{R}(\mathbf{B}) = \mathcal{S}(\mathbf{B})''$. Since $\mathbf{B} \subseteq \mathbf{B}$, \ref{lmm:region-algebra-contains-local} gives $R(\mathbf{B}) \subseteq \widetilde{R}(\mathbf{B})$. Conversely, every diamond $\mathbf{B}_1 \subseteq \mathbf{B}$ has $R(\mathbf{B}_1) \subseteq R(\mathbf{B})$ by isotony (\ref{thrm:von-neumann-isotony}), so $\mathcal{S}(\mathbf{B}) \subseteq R(\mathbf{B})$, and taking bicommutants, $\widetilde{R}(\mathbf{B}) \subseteq R(\mathbf{B})'' = R(\mathbf{B})$, the last equality by \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} (Mathlib's \texttt{Set.centralizer\_centralizer\_centralizer}).
+\end{proof}
+
+\begin{lemma}[Bicommutant of a Commuting Set]
+    \label{lmm:bicommutant-subset-commutant}
+    Let $\mathcal{S}, \mathcal{T} \subseteq \mathcal{B}(\mathbf{H})$ with $st = ts$ for all $s \in \mathcal{S}$ and $t \in \mathcal{T}$. Then $\mathcal{S}'' \subseteq \mathcal{T}'$, and $\mathcal{T}' = (\mathcal{T}'')'$.
+\end{lemma}
+\begin{proof}
+    The hypothesis says $\mathcal{T} \subseteq \mathcal{S}'$, so $\mathcal{S}'' = (\mathcal{S}')' \subseteq \mathcal{T}'$ by antitonicity of the commutant (Mathlib's \texttt{Set.centralizer\_subset}). The identity $\mathcal{T}''' = \mathcal{T}'$ is \texttt{Set.centralizer\_centralizer\_centralizer}.
+\end{proof}
+
+\begin{theorem}[Locality of Region Algebras]
+    \label{thrm:region-algebra-locality}
+    \uses{def:region-algebra, def:completely-spacelike}
+    Let $\mathbf{O}_1, \mathbf{O}_2 \subseteq \mathbb{R}^4$ be such that every diamond $\mathbf{B}_1 \subseteq \mathbf{O}_1$ and every diamond $\mathbf{B}_2 \subseteq \mathbf{O}_2$ are completely spacelike. Then $R(\mathbf{O}_1) \subseteq R(\mathbf{O}_2)'$. This holds in particular when $\mathbf{O}_1$ and $\mathbf{O}_2$ are completely spacelike.
+\end{theorem}
+\begin{proof}
+    \uses{thrm:von-neumann-microcausality, lmm:bicommutant-subset-commutant, lmm:completely-spacelike-structural}
+    Let $s \in R(\mathbf{B}_1)$ and $t \in R(\mathbf{B}_2)$ with diamonds $\mathbf{B}_i \subseteq \mathbf{O}_i$. By microcausality (\ref{thrm:von-neumann-microcausality}), $st = ts$. So $\mathcal{S}(\mathbf{O}_1)$ and $\mathcal{S}(\mathbf{O}_2)$ commute elementwise, and \ref{lmm:bicommutant-subset-commutant} gives $R(\mathbf{O}_1) \subseteq \mathcal{S}(\mathbf{O}_2)' = R(\mathbf{O}_2)'$. If $\mathbf{O}_1$ and $\mathbf{O}_2$ are completely spacelike, so are their subsets (\ref{lmm:completely-spacelike-structural}).
+\end{proof}
+
+\begin{corollary}[Locality of Opposite Wedge Algebras]
+    \label{crllr:opposite-wedge-locality}
+    \uses{def:region-algebra, def:right-wedge, def:left-wedge}
+    For every $g$ in the inhomogeneous Lorentz group, $R(gW_R) \subseteq R(gW_L)'$ and $R(gW_L) \subseteq R(gW_R)'$. In particular $R(W_R) \subseteq R(W_L)'$.
+\end{corollary}
+\begin{proof}
+    \uses{thrm:region-algebra-locality, lmm:opposite-wedges-completely-spacelike}
+    By \ref{lmm:opposite-wedges-completely-spacelike}, $gW_R$ and $gW_L$ are completely spacelike in either order. Apply \ref{thrm:region-algebra-locality}.
+\end{proof}
+
+\subsection{Covariant Vacuum Representations}\label{sbsctn:covariant-vacuum-representations}
+
+The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Section~\ref{sctn:reeh-schlieder}) require the implementation of the covariance action only on the vectors $\pi(a)\Omega$, and positive energy only along future-timelike translations. Borchers' theorem and its wedge corollary need operator-level implementation, the group law, invariance of $\Omega$, continuity along boosts and transverse translations, and positive energy along lightlike translations. These are collected in the following hypothesis structure. It is passed as a hypothesis, as the vacuum data are, and it changes no axiom.
+
+\begin{definition}[Covariant Vacuum Representation]
+    \label{def:covariant-vacuum-representation}
+    \uses{def:haag-kastler-net, def:covariant-quasilocal-algebra, def:inhomogeneous-lorentz-group, def:unitary-operator, def:positive-energy, def:cyclic-vector, def:future-timelike-translation, def:continuous-one-parameter-subgroup, lmm:closed-forward-cone-iff-norm}
+    Let $\mathfrak{U}$ be the quasilocal algebra of a Haag--Kastler net with covariance action $g \mapsto \beta_g$ (\ref{def:covariant-quasilocal-algebra}). A \emph{covariant vacuum representation} is a triple $(\pi, \Omega, U)$ of a $*$-representation $\pi$ of $\mathfrak{U}$ on a Hilbert space $\mathbf{H}$, a vector $\Omega \in \mathbf{H}$, and a map $U$ from the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}) to the unitary operators on $\mathbf{H}$ (\ref{def:unitary-operator}), in Lean \texttt{U : InhomogeneousLorentzGroup \ensuremath{\to} (H \ensuremath{\simeq_{\ell i}[\mathbb{C}]} H)} as for the vacuum data of \ref{def:vacuum-state}, such that:
+    \begin{enumerate}
+        \item \emph{group law}: $U(1) = 1$ and $U(L'L) = U(L')U(L)$ for all $L, L'$; in the library's form, \texttt{U 1 = LinearIsometryEquiv.refl} and \texttt{U (L' * L) = (U L).trans (U L')};
+        \item \emph{continuity}: for every continuous one-parameter subgroup $\gamma$ of the inhomogeneous Lorentz group (\ref{def:continuous-one-parameter-subgroup}), the map $t \mapsto U(\gamma(t))\psi$ is continuous for every $\psi \in \mathbf{H}$;
+        \item \emph{covariance}: $U(g)\,\pi(a)\,U(g)^{-1} = \pi(\beta_g a)$ for all $g$ and all $a \in \mathfrak{U}$;
+        \item \emph{invariance}: $U(g)\Omega = \Omega$ for all $g$;
+        \item \emph{spectrum condition}: for every $n$ in the closed forward cone $\overline{V}_+$ (Subsection~\ref{sbsctn:causal-precedence-minkowski}, \ref{lmm:closed-forward-cone-iff-norm}) with $n \neq 0$, lightlike directions included, $t \mapsto U(\mathrm{translationFlow}(n)(t)) = U((1, tn))$ has positive energy (\ref{def:positive-energy});
+        \item \emph{cyclicity}: $\Omega$ is cyclic for $\pi(\mathfrak{U})$ (\ref{def:cyclic-vector}).
+    \end{enumerate}
+    The continuity clause is required only along continuous one-parameter subgroups. The later results use it for the boost flows $s \mapsto b_g(s)$ and the translation flows (\ref{lmm:boost-continuous-subgroup}, \ref{lmm:conjugate-continuous-subgroup}, \ref{lmm:translation-flow-continuous-subgroup}); along nonzero future-causal directions it also follows from (5). The intended general form is strong continuity of $g \mapsto U(g)\psi$ on the whole group, which the GNS construction of an invariant state with continuous matrix coefficients supplies (\ref{thrm:invariant-state-gns-unitary-strongly-continuous}). This is recorded as a restriction of the Lean definition. The positive-energy clause includes the lightlike directions $n \in \partial V_+$. Deriving them from the timelike directions needs a strong-resolvent limit of the generators, and that argument is not formalized.
+\end{definition}
+
+\begin{lemma}[A Covariant Vacuum Representation Gives the Vacuum Hypotheses]
+    \label{lmm:covariant-vacuum-bridge}
+    \uses{def:covariant-vacuum-representation, def:vacuum-state-concrete, def:future-timelike-translation, def:positive-energy, lmm:closed-forward-cone-iff-norm}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation (\ref{def:covariant-vacuum-representation}). Then:
+    \begin{enumerate}
+        \item $U(g)\pi(a)\Omega = \pi(\beta_g a)\Omega$ for all $g$ and $a \in \mathfrak{U}$;
+        \item for every future-timelike translation subgroup $\gamma$ (\ref{def:future-timelike-translation}), $t \mapsto U(\gamma(t))$ has positive energy.
+    \end{enumerate}
+    These are the implementation and spectrum hypotheses of Corollary~\ref{crllr:reeh-schlieder-vacuum}. With $U(x) := U(\mathrm{translationSub}(x))$ for $x \in \mathbb{R}^4$ they give the hypotheses of Theorem~\ref{thrm:reeh-schlieder}: $U(x)\pi(a)\Omega = \pi(\beta_x a)\Omega$, and $t \mapsto U(tn)$ has positive energy for every future-pointing timelike $n$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:closed-forward-cone-iff-norm, def:future-timelike-translation}
+    (1) By covariance and invariance, $U(g)\pi(a)\Omega = U(g)\pi(a)U(g)^{-1}U(g)\Omega = \pi(\beta_g a)\Omega$. (2) $\gamma = \mathrm{translationFlow}(n)$ with $n$ in the open forward cone, $\eta(n,n) < 0$ and $n^0 > 0$ (\ref{def:future-timelike-translation}). Then $\eta(n,n) \le 0$ and $n^0 \ge 0$, so $n \in \overline{V}_+$ (equivalently $\|\vec n\| \le n^0$, \ref{lmm:closed-forward-cone-iff-norm}), and $n \neq 0$ since $n^0 > 0$. Clause (5) applies. The last sentence is the case $g = \mathrm{translationSub}(x)$ of (1), together with $\mathrm{translationFlow}(n)(t) = \mathrm{translationSub}(tn)$ (\ref{def:future-timelike-translation}).
+\end{proof}
+
+\begin{corollary}[Reeh--Schlieder in a Covariant Vacuum Representation]
+    \label{crllr:covariant-vacuum-reeh-schlieder}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:cyclic-vector}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation and let $\pi$ satisfy weak additivity in the von Neumann sense (\ref{def:weak-additivity-von-neumann}); by \ref{lmm:weak-additivity-von-neumann} this holds whenever the net is weakly additive. Then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$.
+\end{corollary}
+\begin{proof}
+    \uses{lmm:covariant-vacuum-bridge, crllr:reeh-schlieder-von-neumann}
+    By \ref{lmm:covariant-vacuum-bridge}, $\pi$, $\Omega$ and $x \mapsto U(\mathrm{translationSub}(x))$ satisfy the hypotheses of Theorem~\ref{thrm:reeh-schlieder}, and $\Omega$ is cyclic for $\pi(\mathfrak{U})$ by clause (6). Apply Corollary~\ref{crllr:reeh-schlieder-von-neumann}.
+\end{proof}
+
+\begin{lemma}[Reindexing the Generating Set of a Transformed Region]
+    \label{lmm:region-generating-set-reindex}
+    \uses{def:region-algebra, def:inhomogeneous-lorentz-group}
+    For every $*$-representation $\pi$, every $g$ in the inhomogeneous Lorentz group and every $\mathbf{O} \subseteq \mathbb{R}^4$,
+    \begin{align}
+        \bigcup_{\mathbf{B} \text{ diamond},\ \mathbf{B} \subseteq \mathbf{O}} R(g\mathbf{B}) = \mathcal{S}(g\mathbf{O}).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:poincare-maps-diamonds, lmm:poincare-diamond-inclusion}
+    Each $g\mathbf{B}$ is a diamond contained in $g\mathbf{O}$ (\ref{lmm:poincare-maps-diamonds}, \ref{lmm:poincare-diamond-inclusion}), which gives $\subseteq$. Conversely, a diamond $\mathbf{B}' \subseteq g\mathbf{O}$ is $g\mathbf{B}$ with $\mathbf{B} = g^{-1}\mathbf{B}'$ a diamond contained in $\mathbf{O}$, by the bijection of \ref{lmm:poincare-diamond-inclusion}, which gives $\supseteq$.
+\end{proof}
+
+\begin{lemma}[Covariance of the Generating Sets]
+    \label{lmm:region-generating-set-covariance}
+    \uses{def:covariant-vacuum-representation, def:region-algebra, def:unitary-conjugation}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation. For every $g$ and every $\mathbf{O} \subseteq \mathbb{R}^4$,
+    \begin{align}
+        U(g)\,\mathcal{S}(\mathbf{O})\,U(g)^{-1} = \mathcal{S}(g\mathbf{O}),
+    \end{align}
+    where $U(g)\mathcal{T}U(g)^{-1} = \{ U(g)TU(g)^{-1} \mid T \in \mathcal{T} \}$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:von-neumann-geometric-covariance, lmm:region-generating-set-reindex}
+    Conjugation commutes with unions (Mathlib's \texttt{Set.image\_iUnion\ensuremath{_2}}). For each diamond $\mathbf{B}$, $U(g)R(\mathbf{B})U(g)^{-1} = R(g\mathbf{B})$ by \ref{thrm:von-neumann-geometric-covariance}, whose hypothesis is the covariance clause (3). The union of the $R(g\mathbf{B})$ over the diamonds $\mathbf{B} \subseteq \mathbf{O}$ is $\mathcal{S}(g\mathbf{O})$ by \ref{lmm:region-generating-set-reindex}.
+\end{proof}
+
+\begin{theorem}[Covariance of Region Algebras]
+    \label{thrm:region-algebra-covariance}
+    \uses{def:covariant-vacuum-representation, def:region-algebra, def:unitary-conjugation}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation. For every $g$ and every $\mathbf{O} \subseteq \mathbb{R}^4$, $U(g)\,R(\mathbf{O})\,U(g)^{-1} = R(g\mathbf{O})$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:region-generating-set-covariance, lmm:automorphism-commutant, def:unitary-conjugation}
+    Conjugation by $U(g)$ is a multiplicative automorphism of $\mathcal{B}(\mathbf{H})$ (\ref{def:unitary-conjugation}), so it maps bicommutants to bicommutants (\ref{lmm:automorphism-commutant}): $U(g)\mathcal{S}(\mathbf{O})''U(g)^{-1} = \big(U(g)\mathcal{S}(\mathbf{O})U(g)^{-1}\big)''$, which is $\mathcal{S}(g\mathbf{O})''$ by \ref{lmm:region-generating-set-covariance}.
+\end{proof}
+
+\begin{lemma}[The Vacuum is Cyclic for Regions Containing a Diamond]
+    \label{lmm:region-algebra-cyclic}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:cyclic-vector}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense. If $\mathbf{O}$ contains a nonempty diamond, then $R(\mathbf{O})\Omega$ is dense in $\mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:covariant-vacuum-reeh-schlieder, lmm:region-algebra-contains-local}
+    Let $\mathbf{B} \subseteq \mathbf{O}$ be a nonempty diamond. $\pi(\mathfrak{U}(\mathbf{B}))\Omega$ is dense by \ref{crllr:covariant-vacuum-reeh-schlieder}, and it is contained in $R(\mathbf{O})\Omega$ by \ref{lmm:region-algebra-contains-local}. A set containing a dense set is dense (Mathlib's \texttt{Dense.mono}).
+\end{proof}
+
+\begin{lemma}[Cyclic and Separating from a Cyclic Subalgebra of the Commutant]
+    \label{lmm:cyclic-separating-of-commutant}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\mathcal{N} \subseteq \mathcal{M}'$ a set of operators. If $\mathcal{M}\Omega$ and $\mathcal{N}\Omega$ are dense in $\mathbf{H}$, then $\Omega$ is cyclic and separating for $\mathcal{M}$ (\ref{def:cyclic-separating-vector}).
+\end{lemma}
+\begin{proof}
+    $\mathcal{N}\Omega \subseteq \mathcal{M}'\Omega$, so $\mathcal{M}'\Omega$ is dense (Mathlib's \texttt{Dense.mono}). Together with the density of $\mathcal{M}\Omega$ this is \ref{def:cyclic-separating-vector}.
+\end{proof}
+
+\begin{theorem}[The Vacuum is Cyclic and Separating for Wedge Algebras]
+    \label{thrm:wedge-cyclic-separating}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:wedge, def:left-wedge, def:cyclic-separating-vector, def:tomita-operator, def:modular-operator, def:modular-unitary-group, def:modular-conjugation}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense (\ref{def:weak-additivity-von-neumann}), for instance because the net is weakly additive. Then for every $g$ in the inhomogeneous Lorentz group, $\Omega$ is cyclic and separating (\ref{def:cyclic-separating-vector}) for the von Neumann algebras $R(gW_R)$ and $R(gW_L)$. In particular $\Omega$ is cyclic and separating for $R(W)$ for every wedge $W$, and the modular objects $S_W$, $\Delta_W$, $\Delta_W^{it}$ and $J_W$ of $(R(W), \Omega)$ (Definitions~\ref{def:tomita-operator}, \ref{def:modular-operator}, \ref{def:modular-unitary-group} and~\ref{def:modular-conjugation}) are defined. They depend only on the set $W$ and on $\Omega$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:region-algebra-von-neumann, lmm:region-algebra-cyclic, crllr:wedge-contains-diamond, crllr:opposite-wedge-locality, lmm:cyclic-separating-of-commutant}
+    $R(gW_R)$ is a von Neumann algebra by \ref{lmm:region-algebra-von-neumann}. By \ref{crllr:wedge-contains-diamond}, $gW_R$ and $gW_L$ contain nonempty diamonds, so $R(gW_R)\Omega$ and $R(gW_L)\Omega$ are dense by \ref{lmm:region-algebra-cyclic}. By \ref{crllr:opposite-wedge-locality}, $R(gW_L) \subseteq R(gW_R)'$, and \ref{lmm:cyclic-separating-of-commutant} with $\mathcal{M} = R(gW_R)$ and $\mathcal{N} = R(gW_L)$ gives the claim. The same argument with $W_R$ and $W_L$ exchanged applies to $R(gW_L)$.
+\end{proof}
+
+\begin{corollary}[Poincar\'e Covariance of the Wedge Modular Objects]
+    \label{crllr:wedge-modular-covariance}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:tomita-operator, def:modular-unitary-group, def:modular-conjugation, def:modular-operator}
+    Under the hypotheses of \ref{thrm:wedge-cyclic-separating}, let $W$ be a wedge and $h$ in the inhomogeneous Lorentz group. Then $hW$ is a wedge, and, including domains,
+    \begin{align}
+        U(h)S_WU(h)^{-1} = S_{hW}, \quad U(h)\Delta_WU(h)^{-1} = \Delta_{hW}, \quad U(h)\Delta_W^{it}U(h)^{-1} = \Delta_{hW}^{it} \ (t \in \mathbb{R}), \quad U(h)J_WU(h)^{-1} = J_{hW}.
+    \end{align}
+\end{corollary}
+\begin{proof}
+    \uses{thrm:wedge-cyclic-separating, thrm:region-algebra-covariance, thrm:unitary-intertwines-modular-objects}
+    If $W = gW_R$, then $hW = (hg)W_R$ is a wedge. By \ref{thrm:wedge-cyclic-separating}, $\Omega$ is cyclic and separating for $R(W)$ and $R(hW)$. By \ref{thrm:region-algebra-covariance}, $U(h)R(W)U(h)^{-1} = R(hW)$, and $U(h)\Omega = \Omega$ by invariance. Theorem~\ref{thrm:unitary-intertwines-modular-objects} with $V = U(h)$, $\mathcal{M}_1 = R(W)$, $\mathcal{M}_2 = R(hW)$ and $\Omega_1 = \Omega_2 = \Omega$ gives the claims.
+\end{proof}
+
+\begin{corollary}[The Stabiliser of a Wedge Commutes with its Modular Objects]
+    \label{crllr:wedge-stabiliser-commutes-modular}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge-boost, def:modular-unitary-group, def:modular-conjugation}
+    Under the hypotheses of \ref{thrm:wedge-cyclic-separating}, let $g$ be in the inhomogeneous Lorentz group and $W = gW_R$. If $hW = W$, then $U(h)$ commutes with $\Delta_W^{it}$ for every $t$ and with $J_W$. This applies to $h = b_g(s)$ for every $s$, and, for $W = W_R$, to $h = b(s)$ and to the transverse translations $h = \mathrm{translationSub}(a)$ with $a^0 = a^1 = 0$.
+\end{corollary}
+\begin{proof}
+    \uses{thrm:wedge-cyclic-separating, thrm:region-algebra-covariance, crllr:unitary-commutes-modular-objects, lmm:conjugate-stabilises-wedge, lmm:boost-preserves-wedge, lmm:wedge-transverse-translations}
+    By \ref{thrm:region-algebra-covariance}, $U(h)R(W)U(h)^{-1} = R(hW) = R(W)$, and $U(h)\Omega = \Omega$, so Corollary~\ref{crllr:unitary-commutes-modular-objects} applies to $V = U(h)$ and $(R(W), \Omega)$, which is a standard pair by \ref{thrm:wedge-cyclic-separating}. The listed elements stabilise their wedges by \ref{lmm:conjugate-stabilises-wedge}, \ref{lmm:boost-preserves-wedge} and \ref{lmm:wedge-transverse-translations}.
+\end{proof}
