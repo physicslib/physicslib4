@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.Operators.Modular.VanDaele
 import Physicslib4.AQFT.KMS
 import Physicslib4.GNS.VectorState
+import Mathlib.Analysis.Complex.LocallyUniformLimit
 
 /-!
 # Takesaki's KMS theorem: the analytic ingredients
@@ -267,7 +268,14 @@ theorem modularUnitaryGroup_apply_self {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) (t : ℝ) :
     modularUnitaryGroup hM hΩ C hC t Ω = Ω := by
-  sorry
+  obtain ⟨hem, hen, -, hU, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM hΩ C hC t
+  obtain ⟨hd, hΔ⟩ := modularOperator_apply_self hM hΩ C hC
+  have h1 : modularUnitaryGroup hM hΩ C hC t Ω =
+      (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral e[t] Ω := by
+    rw [← hU]; rfl
+  rw [h1, spectralMeasure_integral_apply_of_eigenvector _ hd (c := 1) (by rw [hΔ]; simp)
+    ⟨hem, 1, fun x => (hen x).le⟩]
+  simp
 
 /-- `J Δ^{it} ψ = Δ^{it} J ψ` for every `t ∈ ℝ` and `ψ ∈ H`.
 Blueprint: lmm:modular-conjugation-commutes-unitary-group -/
@@ -565,7 +573,29 @@ theorem takesakiFunction_analytic {M : Set (H →L[ℂ] H)} {Ω : H}
     ContinuousOn G[ξ, η, hξ, hη] (kmsStrip 1) ∧
       DifferentiableOn ℂ G[ξ, η, hξ, hη] (kmsStripInterior 1) ∧
       ∀ z ∈ kmsStrip 1, ‖G[ξ, η, hξ, hη] z‖ ≤ ‖ξ‖ * ‖η‖ + ‖Δs ⟨ξ, hξ⟩‖ * ‖Δs ⟨η, hη⟩‖ := by
-  sorry
+  have hU := (tendstoUniformlyOn_takesakiApproximant hM hΩ C hC hξ hη).2
+  have hev : ∀ᶠ n : ℕ in atTop, Differentiable ℂ Gn[ξ, η, hξ, hη, n] :=
+    (eventually_ge_atTop 1).mono fun n hn =>
+      (differentiable_takesakiApproximant hM hΩ C hC hξ hη hn).1
+  have hsub : kmsStripInterior 1 ⊆ kmsStrip 1 := fun z hz => ⟨hz.1.le, hz.2.le⟩
+  have hopen : IsOpen (kmsStripInterior 1) :=
+    (isOpen_lt continuous_const Complex.continuous_im).inter
+      (isOpen_lt Complex.continuous_im continuous_const)
+  refine ⟨hU.continuousOn (hev.mono fun n hn => hn.continuous.continuousOn).frequently,
+    TendstoLocallyUniformlyOn.differentiableOn (hU.mono hsub).tendstoLocallyUniformlyOn
+      (hev.mono fun n hn => hn.differentiableOn) hopen, fun z hz => ?_⟩
+  have hop : ∀ {f : ℝ → ℂ}, Measurable f → (∀ x, ‖f x‖ ≤ 1) → ∀ a : H,
+      ‖(μΔ).integral f a‖ ≤ ‖a‖ := fun {f} hfm hf1 a => by
+    simpa using ((μΔ).integral f).le_of_opNorm_le
+      ((Spectral.ProjectionValuedMeasure.norm_integral_le (μΔ) ⟨hfm, 1, hf1⟩).trans
+        (ciSup_le hf1)) a
+  obtain ⟨hum, hvm, hb⟩ := takesaki_functions_bounded z
+  rw [Set.indicator_of_mem hz]
+  refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
+  · exact (norm_inner_le_norm _ _).trans
+      (mul_le_mul_of_nonneg_left (hop hum (fun x => (hb hz x).1) _) (norm_nonneg _))
+  · exact (norm_inner_le_norm _ _).trans
+      (mul_le_mul_of_nonneg_left (hop hvm (fun x => (hb hz x).2) _) (norm_nonneg _))
 
 /-- The lower boundary value: `G_{ξ,η}(t) = ⟪ξ, Δ^{-it}η⟫` for real `t`.
 Blueprint: lmm:takesaki-function-lower-boundary -/

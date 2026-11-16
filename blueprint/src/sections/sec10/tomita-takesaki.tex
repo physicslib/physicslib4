@@ -4106,6 +4106,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
     For every $t \in \mathbb{R}$, $\Delta^{it}\Omega = \Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-operator-fixes-omega, lmm:spectral-eigenvector-bounded-fc, lmm:modular-unitary-group-fc, thrm:modular-operator-properties}
     $\Delta$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}) and $\Delta\Omega = 1 \cdot \Omega$ (Lemma~\ref{lmm:modular-operator-fixes-omega}). $\Delta^{it} = e_t(\Delta)$ with $e_t$ bounded and measurable (Lemma~\ref{lmm:modular-unitary-group-fc}), so Lemma~\ref{lmm:spectral-eigenvector-bounded-fc} with $c = 1$ gives $\Delta^{it}\Omega = e_t(1)\Omega$, and $e_t(1) = e^{it\log 1} = 1$ (\texttt{Real.log\_one}, \texttt{Complex.exp\_zero}).
 \end{proof}
@@ -4293,6 +4294,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$. Then $G_{\xi,\eta}$ is continuous on $\mathcal{T}$, complex differentiable on $\mathcal{T}^\circ$, and $|G_{\xi,\eta}(z)| \le \|\xi\|\,\|\eta\| + \|\Delta^{1/2}\xi\|\,\|\Delta^{1/2}\eta\|$ for $z \in \mathcal{T}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-approximants-entire, lmm:takesaki-approximants-uniform, lmm:takesaki-functions-bounded, prpstn:integral-norm-bound}
     A uniform limit of continuous functions is continuous (\texttt{TendstoUniformlyOn.continuousOn}, with Lemmas~\ref{lmm:takesaki-approximants-entire} and~\ref{lmm:takesaki-approximants-uniform}). $\mathcal{T}^\circ \subset \mathcal{T}$ is open (\texttt{isOpen\_lt} with \texttt{Complex.continuous\_im}), uniform convergence on it is locally uniform (\texttt{TendstoUniformlyOn.mono}, \texttt{TendstoUniformlyOn.tendstoLocallyUniformlyOn}), and a locally uniform limit of holomorphic functions is holomorphic (\texttt{TendstoLocallyUniformlyOn.differentiableOn}). The bound is \texttt{norm\_inner\_le\_norm} with $\|u_z(\Delta)\|, \|v_z(\Delta)\| \le 1$ (Lemma~\ref{lmm:takesaki-functions-bounded}, Proposition~\ref{prpstn:integral-norm-bound}).
 \end{proof}
