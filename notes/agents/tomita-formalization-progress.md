@@ -375,3 +375,4 @@ Plan: batch A (3a: commutant extension + resolvent, 11 nodes), batch B (3a: Take
 - 2026-11-15: KMS wave 9 proved spectralMeasure_singleton_apply_of_eigenvector, isOneParameterAut_modularAutomorphism.
 - 2026-11-15: KMS wave 10 proved inner_modularOperatorSqrt_integral, differentiable_takesakiApproximant.
 - 2026-11-15: KMS wave 11 proved takesakiApproximant_eq_of_mem_strip.
+- 2026-11-16: KMS wave 12 proved spectralMeasure_integral_apply_of_eigenvector, tendstoUniformlyOn_takesakiApproximant.

@@ -230,7 +230,19 @@ theorem spectralMeasure_integral_apply_of_eigenvector {A : H →ₗ.[ℂ] H} (hA
     {c : ℝ} {ψ : H} (hψ : ψ ∈ A.domain) (hAψ : A ⟨ψ, hψ⟩ = (c : ℂ) • ψ) {f : ℝ → ℂ}
     (hf : f ∈ Spectral.BddMeasurable ℝ) :
     (spectralMeasure hA).integral f ψ = f c • ψ := by
-  sorry
+  set μ := spectralMeasure hA
+  have hμ := spectralMeasure_singleton_apply_of_eigenvector hA hψ hAψ
+  have hind : ({c} : Set ℝ).indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨measurable_const.indicator (measurableSet_singleton c), 1, fun x => by
+      by_cases hx : x = c <;> simp [hx]⟩
+  have key : f * ({c} : Set ℝ).indicator 1 = f c • ({c} : Set ℝ).indicator 1 :=
+    funext fun x => by by_cases hx : x = c <;> simp [hx]
+  calc μ.integral f ψ = μ.integral f (μ {c} ψ) := by rw [hμ]
+    _ = μ.integral (f * ({c} : Set ℝ).indicator 1) ψ := by
+      rw [μ.integral_mul hf hind, μ.integral_indicator (measurableSet_singleton c)]; rfl
+    _ = f c • ψ := by
+      rw [key, μ.integral_smul _ hind, μ.integral_indicator (measurableSet_singleton c),
+        smul_apply, hμ]
 
 /-! ### The invariance of `Ω` -/
 
@@ -513,7 +525,36 @@ theorem tendstoUniformlyOn_takesakiApproximant {M : Set (H →L[ℂ] H)} {Ω : H
           ‖Δs ⟨ξ, hξ⟩‖ * ‖Δs ⟨η, hη⟩ - μΔ K[n] (Δs ⟨η, hη⟩)‖) ∧
       TendstoUniformlyOn (fun n : ℕ => Gn[ξ, η, hξ, hη, n]) G[ξ, η, hξ, hη] atTop
         (kmsStrip 1) := by
-  sorry
+  set μ := μΔ
+  have hop : ∀ {f : ℝ → ℂ}, Measurable f → (∀ x, ‖f x‖ ≤ 1) → ∀ a : H,
+      ‖μ.integral f a‖ ≤ ‖a‖ := fun {f} hfm hf1 a => by
+    simpa using (μ.integral f).le_of_opNorm_le
+      ((Spectral.ProjectionValuedMeasure.norm_integral_le μ ⟨hfm, 1, hf1⟩).trans
+        (ciSup_le hf1)) a
+  have hbound : ∀ n : ℕ, 1 ≤ n → ∀ z ∈ kmsStrip 1,
+      ‖G[ξ, η, hξ, hη] z - Gn[ξ, η, hξ, hη, n] z‖ ≤
+        ‖ξ‖ * ‖η - μ K[n] η‖ + ‖Δs ⟨ξ, hξ⟩‖ * ‖Δs ⟨η, hη⟩ - μ K[n] (Δs ⟨η, hη⟩)‖ := by
+    intro n hn z hz
+    obtain ⟨hum, hvm, hb⟩ := takesaki_functions_bounded z
+    rw [takesakiApproximant_eq_of_mem_strip hM hΩ C hC hξ hη hn hz, Set.indicator_of_mem hz,
+      add_sub_add_comm, ← inner_sub_right, ← inner_sub_right, ← map_sub, ← map_sub]
+    refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
+    · exact (norm_inner_le_norm _ _).trans
+        (mul_le_mul_of_nonneg_left (hop hum (fun x => (hb hz x).1) _) (norm_nonneg _))
+    · exact (norm_inner_le_norm _ _).trans
+        (mul_le_mul_of_nonneg_left (hop hvm (fun x => (hb hz x).2) _) (norm_nonneg _))
+  refine ⟨hbound, ?_⟩
+  have hlim : Tendsto (fun n : ℕ => ‖ξ‖ * ‖η - μ K[n] η‖ +
+      ‖Δs ⟨ξ, hξ⟩‖ * ‖Δs ⟨η, hη⟩ - μ K[n] (Δs ⟨η, hη⟩)‖) atTop (𝓝 0) := by
+    have h : ∀ ψ : H, Tendsto (fun n : ℕ => ‖ψ - μ K[n] ψ‖) atTop (𝓝 0) := fun ψ => by
+      simpa [dist_eq_norm] using
+        (tendsto_const_nhds (x := ψ)).dist (tendsto_modularSpectralProjection hM hΩ C hC ψ)
+    simpa using ((h η).const_mul ‖ξ‖).add ((h (Δs ⟨η, hη⟩)).const_mul ‖Δs ⟨ξ, hξ⟩‖)
+  rw [Metric.tendstoUniformlyOn_iff]
+  intro ε hε
+  filter_upwards [hlim.eventually (gt_mem_nhds hε), eventually_ge_atTop 1] with n hn h1 z hz
+  rw [dist_eq_norm]
+  exact (hbound n h1 z hz).trans_lt hn
 
 /-- `G_{ξ,η}` is continuous on the closed strip, complex differentiable on the open strip, and
 bounded there by `‖ξ‖ ‖η‖ + ‖Δ^{1/2}ξ‖ ‖Δ^{1/2}η‖`.

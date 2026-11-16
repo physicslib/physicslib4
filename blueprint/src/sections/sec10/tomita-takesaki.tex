@@ -4080,6 +4080,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
     Let $A$ be self-adjoint, $c \in \mathbb{R}$, $\psi \in \text{Dom}(A)$ with $A\psi = c\psi$, and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $f(A)\psi = f(c)\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:spectral-eigenvector-projection, lmm:functional-calculus-bounded, prpstn:integral-multiplicative, prpstn:integral-of-indicator, thrm:operator-valued-integration}
     $f(A)$ is the bounded integral $\int f \, d\mu^A$ (Lemma~\ref{lmm:functional-calculus-bounded}). Pointwise $f\,1_{\{c\}} = f(c)\,1_{\{c\}}$ (\texttt{Set.indicator\_apply}), so by Propositions~\ref{prpstn:integral-multiplicative} and~\ref{prpstn:integral-of-indicator} and linearity (Theorem~\ref{thrm:operator-valued-integration}), $f(A)\mu^A(\{c\}) = f(c)\mu^A(\{c\})$. Apply this to $\psi = \mu^A(\{c\})\psi$ (Lemma~\ref{lmm:spectral-eigenvector-projection}).
 \end{proof}
@@ -4279,6 +4280,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     so $G^n_{\xi,\eta} \to G_{\xi,\eta}$ uniformly on $\mathcal{T}$ as $n \to \infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:takesaki-approximants-strip, lmm:takesaki-functions-bounded, prpstn:integral-norm-bound, lmm:functional-calculus-bounded, lmm:modular-spectral-projections-converge}
     By Lemma~\ref{lmm:takesaki-approximants-strip}, $G_{\xi,\eta}(z) - G^n_{\xi,\eta}(z) = \left< \xi, u_z(\Delta)(\eta - E_n\eta) \right> + \left< \Delta^{1/2}\xi, v_z(\Delta)(\Delta^{1/2}\eta - E_n\Delta^{1/2}\eta) \right>$ (\texttt{inner\_sub\_right}, \texttt{map\_sub}). $\|u_z(\Delta)\|, \|v_z(\Delta)\| \le 1$ (Lemma~\ref{lmm:takesaki-functions-bounded}, Proposition~\ref{prpstn:integral-norm-bound}), so \texttt{norm\_inner\_le\_norm} and \texttt{ContinuousLinearMap.le\_of\_opNorm\_le} give the bound. The bound does not depend on $z$ and tends to $0$ (Lemma~\ref{lmm:modular-spectral-projections-converge}), which is uniform convergence (\texttt{Metric.tendstoUniformlyOn\_iff}, \texttt{squeeze\_zero}).
 \end{proof}
