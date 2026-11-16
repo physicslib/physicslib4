@@ -122,6 +122,7 @@ import Physicslib4.Spectral.Unbounded.Cayley
 import Physicslib4.Spectral.Unbounded.Commuting
 import Physicslib4.Spectral.Unbounded.Composition
 import Physicslib4.Spectral.Unbounded.DirectSum
+import Physicslib4.Spectral.Unbounded.Eigenvector
 import Physicslib4.Spectral.Unbounded.FunctionalCalculus
 import Physicslib4.Spectral.Unbounded.Integral
 import Physicslib4.Spectral.Unbounded.Normal

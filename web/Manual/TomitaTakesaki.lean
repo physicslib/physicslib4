@@ -662,14 +662,14 @@ order. Each entry links to the API documentation of a representative declaration
 * `VanDaele.lean`: complex powers of $`\Delta`, the modular unitary group, van Daele triples, the
   integral formula and Tomita's theorem,
   {apiDocs Physicslib4.Modular.tomita_theorem}[`tomita_theorem`].
-* `TakesakiKMS.lean`: the modular algebra, the modular automorphism group, eigenvectors of a
-  self-adjoint operator, the KMS function and Takesaki's theorem,
+* `TakesakiKMS.lean`: the modular algebra, the modular automorphism group, the KMS function and
+  Takesaki's theorem,
   {apiDocs Physicslib4.Modular.isKMSState_modularAutomorphism}[`isKMSState_modularAutomorphism`].
 
 The vector state is in `Physicslib4/GNS/VectorState.lean`,
 {apiDocs Physicslib4.GNS.vectorState}[`vectorState`].
 
-The general results on unbounded operators are in three files of `Physicslib4/Spectral/Unbounded/`:
+The general results on unbounded operators are in four files of `Physicslib4/Spectral/Unbounded/`:
 
 * `Composition.lean`: the composition law and core property of the functional calculus,
   {apiDocs Physicslib4.Spectral.Unbounded.pmapIntegral_comp}[`pmapIntegral_comp`].
@@ -679,6 +679,9 @@ The general results on unbounded operators are in three files of `Physicslib4/Sp
 * `Commuting.lean`: unitaries commuting with an unbounded operator and the bounded approximants
   of a closed operator,
   {apiDocs Physicslib4.Spectral.Unbounded.approximant_operator}[`approximant_operator`].
+* `Eigenvector.lean`: the moments of the spectral measure and the action of bounded functions of a
+  self-adjoint operator on its eigenvectors,
+  {apiDocs Physicslib4.Spectral.Unbounded.spectralMeasure_integral_apply_of_eigenvector}[`spectralMeasure_integral_apply_of_eigenvector`].
 
 The strip formula and Fourier uniqueness are in `Physicslib4/Analysis/StripFormula.lean`,
 {apiDocs Physicslib4.strip_formula}[`strip_formula`].

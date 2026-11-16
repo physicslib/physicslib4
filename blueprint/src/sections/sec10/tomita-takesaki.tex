@@ -4017,7 +4017,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[Spectral Moments of a Vector in the Domain]
     \label{lmm:spectral-moments}
-    \lean{Physicslib4.Modular.spectralMeasure_moments}
+    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure_moments}
     \uses{def:spectral-measure, def:hall-9.5}
     \leanok
     Let $A$ be self-adjoint with spectral measure $\mu^A$ and $\psi \in \text{Dom}(A)$. Then $1$, $\lambda$ and $\lambda^2$ are $\mu^A_\psi$-integrable, $\mu^A_\psi(\mathbb{R}) = \|\psi\|^2$, $\left< \psi, A\psi \right>$ is real,
@@ -4033,7 +4033,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[The Spectral Variance of a Vector]
     \label{lmm:spectral-eigenvector-variance}
-    \lean{Physicslib4.Modular.spectralMeasure_variance}
+    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure_variance}
     \uses{def:spectral-measure, def:hall-9.5}
     \leanok
     Let $A$ be self-adjoint with spectral measure $\mu^A$, $c \in \mathbb{R}$ and $\psi \in \text{Dom}(A)$. Then $\lambda \mapsto (\lambda - c)^2$ is $\mu^A_\psi$-integrable and
@@ -4049,7 +4049,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[Spectral Projections of Null Sets]
     \label{lmm:pvm-null-set-vector}
-    \lean{Physicslib4.Modular.projectionValuedMeasure_apply_of_assoc_eq_zero}
+    \lean{Physicslib4.Spectral.Unbounded.projectionValuedMeasure_apply_of_assoc_eq_zero}
     \uses{def:projection-valued-measure, thrm:projection-valued-measures-associated-measure}
     \leanok
     Let $\mu$ be a projection-valued measure on $(X, \Omega(X))$, $\psi \in \mathbf{H}$ and $E \in \Omega(X)$. Then $\mu_\psi(E) = \|\mu(E)\psi\|^2$. Hence, if $\mu_\psi(E) = 0$, then $\mu(E)\psi = 0$ and $\mu(X \setminus E)\psi = \psi$.
@@ -4061,7 +4061,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[Eigenvectors lie in the Range of a Spectral Projection]
     \label{lmm:spectral-eigenvector-projection}
-    \lean{Physicslib4.Modular.spectralMeasure_singleton_apply_of_eigenvector}
+    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure_singleton_apply_of_eigenvector}
     \uses{def:spectral-measure, def:hall-9.5}
     \leanok
     Let $A$ be self-adjoint with spectral measure $\mu^A$, $c \in \mathbb{R}$, and $\psi \in \text{Dom}(A)$ with $A\psi = c\psi$. Then $\mu^A(\{c\})\psi = \psi$.
@@ -4074,7 +4074,7 @@ The boundary values of the KMS function involve $\Delta^{it}\Omega$ and $J\Delta
 
 \begin{lemma}[Bounded Functions on Eigenvectors]
     \label{lmm:spectral-eigenvector-bounded-fc}
-    \lean{Physicslib4.Modular.spectralMeasure_integral_apply_of_eigenvector}
+    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure_integral_apply_of_eigenvector}
     \uses{def:spectral-measure, def:hall-10.5, def:hall-9.5}
     \leanok
     Let $A$ be self-adjoint, $c \in \mathbb{R}$, $\psi \in \text{Dom}(A)$ with $A\psi = c\psi$, and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $f(A)\psi = f(c)\psi$.

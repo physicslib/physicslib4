@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.Operators.Modular.VanDaele
+import Physicslib4.Spectral.Unbounded.Eigenvector
 import Physicslib4.AQFT.KMS
 import Physicslib4.GNS.VectorState
 import Mathlib.Analysis.Complex.LocallyUniformLimit
@@ -15,7 +16,6 @@ For a von Neumann algebra `M` with a cyclic and separating vector `Ω`, this fil
 ingredients of Takesaki's theorem that the vector state of `Ω` is a KMS state at inverse
 temperature `1` for the reversed modular flow `t ↦ σ_{-t}`, `σ_t(x) = Δ^{it} x Δ^{-it}`:
 
-* general facts on eigenvectors of a self-adjoint operator and its spectral measure;
 * `ΔΩ = Ω`, `Δ^{it}Ω = Ω`, `J Δ^{it} = Δ^{it} J` and `Δ^{1/2} x Ω = J x* Ω` for `x ∈ M`;
 * the KMS function `G_{ξ,η}` on the strip `0 ≤ Im z ≤ 1`, its approximants `G^n_{ξ,η}`, and its
   boundary values;
@@ -103,147 +103,6 @@ local notation "Gn[" ξ ", " η ", " hξ ", " hη ", " n "]" =>
           (modularOperatorSqrt hM hΩ C hC ⟨ξ, hξ⟩),
         (spectralMeasure (modularOperator_isSelfAdjoint hM hΩ C hC)).integral
           p[-Complex.I * w - 1, n] (modularOperatorSqrt hM hΩ C hC ⟨η, hη⟩)⟫_ℂ
-
-/-! ### Eigenvectors of a self-adjoint operator -/
-
-/-- For `ψ ∈ Dom A`, the functions `1`, `λ` and `λ²` are `μ^A_ψ`-integrable, `μ^A_ψ(ℝ) = ‖ψ‖²`,
-`⟪ψ, Aψ⟫` is real, `∫ λ dμ^A_ψ = Re ⟪ψ, Aψ⟫` and `∫ λ² dμ^A_ψ = ‖Aψ‖²`.
-Blueprint: lmm:spectral-moments -/
-theorem spectralMeasure_moments {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {ψ : H}
-    (hψ : ψ ∈ A.domain) :
-    Integrable (fun _ : ℝ => (1 : ℝ)) ((spectralMeasure hA).assoc ψ) ∧
-      Integrable (fun x : ℝ => x) ((spectralMeasure hA).assoc ψ) ∧
-      Integrable (fun x : ℝ => x ^ 2) ((spectralMeasure hA).assoc ψ) ∧
-      (spectralMeasure hA).assoc ψ Set.univ = ENNReal.ofReal (‖ψ‖ ^ 2) ∧
-      (⟪ψ, A ⟨ψ, hψ⟩⟫_ℂ).im = 0 ∧
-      ∫ x, x ∂((spectralMeasure hA).assoc ψ) = (⟪ψ, A ⟨ψ, hψ⟩⟫_ℂ).re ∧
-      ∫ x, x ^ 2 ∂((spectralMeasure hA).assoc ψ) = ‖A ⟨ψ, hψ⟩‖ ^ 2 := by
-  set μ := spectralMeasure hA
-  have : IsFiniteMeasure (μ.assoc ψ) := ⟨by rw [assoc_univ_eq]; exact ENNReal.ofReal_lt_top⟩
-  have hmeas : Measurable fun x : ℝ => (x : ℂ) := Complex.measurable_ofReal
-  have hψ' : ψ ∈ (pmapIntegral μ (fun x : ℝ => (x : ℂ))).domain :=
-    (domain_eq_integralDomain_spectralMeasure hA).le hψ
-  have key : ∀ (B : H →ₗ.[ℂ] H) (hB : B = pmapIntegral μ (fun x : ℝ => (x : ℂ)))
-      (h : ψ ∈ B.domain), B ⟨ψ, h⟩ = pmapIntegral μ (fun x : ℝ => (x : ℂ)) ⟨ψ, hψ'⟩ := by
-    rintro B rfl h; rfl
-  have hAψ := key A (pmapIntegral_spectralMeasure hA).symm hψ
-  have hint : Integrable (fun x : ℝ => (x : ℂ)) (μ.assoc ψ) :=
-    (mem_integralDomain μ).1 hψ' |>.integrable one_le_two
-  have hsq : ∀ x : ℝ, ‖(x : ℂ)‖ ^ 2 = x ^ 2 := fun x => by
-    rw [Complex.norm_real, Real.norm_eq_abs, sq_abs]
-  have hinner : ⟪ψ, A ⟨ψ, hψ⟩⟫_ℂ = ((∫ x, x ∂(μ.assoc ψ) : ℝ) : ℂ) := by
-    rw [hAψ]
-    exact (inner_self_pmapIntegral μ hmeas ⟨ψ, hψ'⟩).trans integral_ofReal
-  refine ⟨integrable_const _, ?_, ?_, assoc_univ_eq μ ψ, by rw [hinner, Complex.ofReal_im],
-    by rw [hinner, Complex.ofReal_re], ?_⟩
-  · simpa using hint.re
-  · simpa only [hsq] using ((mem_integralDomain μ).1 hψ').integrable_norm_pow two_ne_zero
-  · rw [hAψ]
-    exact ((norm_sq_pmapIntegral μ hmeas ⟨ψ, hψ'⟩).trans (by simp only [hsq])).symm
-
-/-- For `c ∈ ℝ` and `ψ ∈ Dom A`, `λ ↦ (λ - c)²` is `μ^A_ψ`-integrable and
-`∫ (λ - c)² dμ^A_ψ = ‖Aψ - cψ‖²`.
-Blueprint: lmm:spectral-eigenvector-variance -/
-theorem spectralMeasure_variance {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (c : ℝ) {ψ : H}
-    (hψ : ψ ∈ A.domain) :
-    Integrable (fun x : ℝ => (x - c) ^ 2) ((spectralMeasure hA).assoc ψ) ∧
-      ∫ x, (x - c) ^ 2 ∂((spectralMeasure hA).assoc ψ) = ‖A ⟨ψ, hψ⟩ - (c : ℂ) • ψ‖ ^ 2 := by
-  obtain ⟨h1, hx, hx2, huniv, -, hre, hsq⟩ := spectralMeasure_moments hA hψ
-  have hexp : (fun x : ℝ => (x - c) ^ 2) =
-      fun x => x ^ 2 - 2 * c * x + c ^ 2 * 1 := by
-    ext x; ring
-  have hi1 : Integrable (fun x : ℝ => x ^ 2 - 2 * c * x) ((spectralMeasure hA).assoc ψ) :=
-    hx2.sub (hx.const_mul (2 * c))
-  have hi2 := h1.const_mul (c ^ 2)
-  refine ⟨hexp ▸ hi1.add hi2, ?_⟩
-  have hone : ∫ _ : ℝ, (1 : ℝ) ∂((spectralMeasure hA).assoc ψ) = ‖ψ‖ ^ 2 := by
-    rw [integral_const, smul_eq_mul, mul_one, Measure.real, huniv,
-      ENNReal.toReal_ofReal (by positivity)]
-  rw [hexp, integral_add hi1 hi2, integral_sub hx2 (hx.const_mul _), integral_const_mul,
-    integral_const_mul, hone, hsq, hre, @norm_sub_sq ℂ, inner_smul_right, norm_smul,
-    Complex.norm_real, Real.norm_eq_abs, mul_pow, sq_abs]
-  rw [show RCLike.re ((c : ℂ) * ⟪A ⟨ψ, hψ⟩, ψ⟫_ℂ) = c * (⟪ψ, A ⟨ψ, hψ⟩⟫_ℂ).re from by
-    change ((c : ℂ) * _).re = _
-    rw [Complex.re_ofReal_mul, ← inner_conj_symm, Complex.conj_re]]
-  ring
-
-/-- For a projection-valued measure `μ` and measurable `E`, `μ_ψ(E) = ‖μ(E)ψ‖²`; hence
-`μ_ψ(E) = 0` gives `μ(E)ψ = 0` and `μ(Eᶜ)ψ = ψ`.
-Blueprint: lmm:pvm-null-set-vector -/
-theorem projectionValuedMeasure_apply_of_assoc_eq_zero {X : Type*} [MeasurableSpace X]
-    (μ : Spectral.ProjectionValuedMeasure X H) (ψ : H) {E : Set X} (hE : MeasurableSet E) :
-    μ.assoc ψ E = ENNReal.ofReal (‖μ E ψ‖ ^ 2) ∧
-      (μ.assoc ψ E = 0 → μ E ψ = 0 ∧ μ Eᶜ ψ = ψ) := by
-  have h1 := Spectral.Unbounded.assoc_apply_eq_norm_sq μ ψ hE
-  refine ⟨h1, fun h0 => ?_⟩
-  have hE0 : μ E ψ = 0 := by
-    rw [h1, ENNReal.ofReal_eq_zero] at h0
-    exact norm_eq_zero.mp (pow_eq_zero_iff two_ne_zero |>.mp (le_antisymm h0 (sq_nonneg _)))
-  refine ⟨hE0, ?_⟩
-  have hempty : μ (∅ : Set X) ψ = 0 :=
-    (summable_const_iff (a := μ (∅ : Set X) ψ)).mp
-      (μ.hasSum_apply (fun _ : ℕ => (∅ : Set X)) (fun _ => MeasurableSet.empty)
-        (by intro k e; simp) ψ).summable
-  let F : ℕ → Set X := fun j => if j = 0 then E else if j = 1 then Eᶜ else ∅
-  have hF : ∀ j, MeasurableSet (F j) := fun j => by
-    simp only [F]; split_ifs
-    exacts [hE, hE.compl, MeasurableSet.empty]
-  have hdisj : Pairwise (fun i j => Disjoint (F i) (F j)) := by
-    intro i j hij
-    simp only [F]; split_ifs <;> first | omega | simp [disjoint_compl_right, disjoint_compl_left]
-  have hU : (⋃ j, F j) = Set.univ := by
-    refine Set.eq_univ_of_forall fun x => Set.mem_iUnion.mpr ?_
-    by_cases hx : x ∈ E
-    · exact ⟨0, by simp [F, hx]⟩
-    · exact ⟨1, by simp [F, hx]⟩
-  have hs := μ.hasSum_apply F hF hdisj ψ
-  rw [hU, μ.apply_univ] at hs
-  have hs' : HasSum (fun j => μ (F j) ψ) (μ Eᶜ ψ) := by
-    have : HasSum (fun j => μ (F j) ψ) (∑ j ∈ ({0, 1} : Finset ℕ), μ (F j) ψ) :=
-      hasSum_sum_of_ne_finset_zero (by
-      intro j hj
-      simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at hj
-      simp [F, hj.1, hj.2, hempty])
-    simpa [F, hE0] using this
-  exact (hs.unique hs').symm
-
-/-- If `ψ ∈ Dom A` and `Aψ = cψ` with `c ∈ ℝ`, then `μ^A({c})ψ = ψ`.
-Blueprint: lmm:spectral-eigenvector-projection -/
-theorem spectralMeasure_singleton_apply_of_eigenvector {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
-    {c : ℝ} {ψ : H} (hψ : ψ ∈ A.domain) (hAψ : A ⟨ψ, hψ⟩ = (c : ℂ) • ψ) :
-    spectralMeasure hA {c} ψ = ψ := by
-  obtain ⟨hint, heq⟩ := spectralMeasure_variance hA c hψ
-  rw [hAψ, sub_self, norm_zero] at heq
-  have hae := (integral_eq_zero_iff_of_nonneg (fun x => sq_nonneg _) hint).1 (by simpa using heq)
-  have hnull : (spectralMeasure hA).assoc ψ {c}ᶜ = 0 := by
-    rw [Filter.EventuallyEq, ae_iff] at hae
-    refine measure_mono_null (fun x hx => ?_) hae
-    exact pow_ne_zero 2 (sub_ne_zero.2 hx)
-  have := ((projectionValuedMeasure_apply_of_assoc_eq_zero _ ψ
-    (measurableSet_singleton c).compl).2 hnull).2
-  rwa [compl_compl] at this
-
-/-- If `ψ ∈ Dom A`, `Aψ = cψ` with `c ∈ ℝ`, and `f` is bounded and measurable, then
-`f(A)ψ = f(c)ψ`, with `f(A)` the bounded integral `∫ f dμ^A` (equal to the functional calculus
-by `functionalCalculus_of_bddMeasurable`).
-Blueprint: lmm:spectral-eigenvector-bounded-fc -/
-theorem spectralMeasure_integral_apply_of_eigenvector {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
-    {c : ℝ} {ψ : H} (hψ : ψ ∈ A.domain) (hAψ : A ⟨ψ, hψ⟩ = (c : ℂ) • ψ) {f : ℝ → ℂ}
-    (hf : f ∈ Spectral.BddMeasurable ℝ) :
-    (spectralMeasure hA).integral f ψ = f c • ψ := by
-  set μ := spectralMeasure hA
-  have hμ := spectralMeasure_singleton_apply_of_eigenvector hA hψ hAψ
-  have hind : ({c} : Set ℝ).indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
-    ⟨measurable_const.indicator (measurableSet_singleton c), 1, fun x => by
-      by_cases hx : x = c <;> simp [hx]⟩
-  have key : f * ({c} : Set ℝ).indicator 1 = f c • ({c} : Set ℝ).indicator 1 :=
-    funext fun x => by by_cases hx : x = c <;> simp [hx]
-  calc μ.integral f ψ = μ.integral f (μ {c} ψ) := by rw [hμ]
-    _ = μ.integral (f * ({c} : Set ℝ).indicator 1) ψ := by
-      rw [μ.integral_mul hf hind, μ.integral_indicator (measurableSet_singleton c)]; rfl
-    _ = f c • ψ := by
-      rw [key, μ.integral_smul _ hind, μ.integral_indicator (measurableSet_singleton c),
-        smul_apply, hμ]
 
 /-! ### The invariance of `Ω` -/
 
@@ -520,6 +379,21 @@ theorem takesakiApproximant_eq_of_mem_strip {M : Set (H →L[ℂ] H)} {Ω : H}
   rw [hmove measurableSet_Ioo (hp _), hmove measurableSet_Ici (hp _), hcomp hu, hcomp hv,
     e1, e2]
 
+/-- For `z` in the closed strip `0 ≤ Im z ≤ 1` and `a ∈ H`, `‖u_z(Δ)a‖ ≤ ‖a‖` and
+`‖v_z(Δ)a‖ ≤ ‖a‖`: the bounded integrals of `u_z` and `v_z` against the spectral measure of `Δ`
+have operator norm at most `1`, since `|u_z| ≤ 1` and `|v_z| ≤ 1` there. -/
+theorem norm_integral_takesaki_functions_apply_le {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) {z : ℂ} (hz : z ∈ kmsStrip 1) (a : H) :
+    ‖(μΔ).integral u[z] a‖ ≤ ‖a‖ ∧ ‖(μΔ).integral v[z] a‖ ≤ ‖a‖ := by
+  obtain ⟨hum, hvm, hb⟩ := takesaki_functions_bounded z
+  have hop : ∀ {f : ℝ → ℂ}, Measurable f → (∀ x, ‖f x‖ ≤ 1) → ‖(μΔ).integral f a‖ ≤ ‖a‖ :=
+    fun {f} hfm hf1 => by
+      simpa using ((μΔ).integral f).le_of_opNorm_le
+        ((Spectral.ProjectionValuedMeasure.norm_integral_le (μΔ) ⟨hfm, 1, hf1⟩).trans
+          (ciSup_le hf1)) a
+  exact ⟨hop hum fun x => (hb hz x).1, hop hvm fun x => (hb hz x).2⟩
+
 /-- On the closed strip,
 `|G_{ξ,η}(z) - G^n_{ξ,η}(z)| ≤ ‖ξ‖ ‖η - E_n η‖ + ‖Δ^{1/2}ξ‖ ‖Δ^{1/2}η - E_n Δ^{1/2}η‖` for
 `n ≥ 1`, so `G^n_{ξ,η} → G_{ξ,η}` uniformly on the strip.
@@ -534,23 +408,18 @@ theorem tendstoUniformlyOn_takesakiApproximant {M : Set (H →L[ℂ] H)} {Ω : H
       TendstoUniformlyOn (fun n : ℕ => Gn[ξ, η, hξ, hη, n]) G[ξ, η, hξ, hη] atTop
         (kmsStrip 1) := by
   set μ := μΔ
-  have hop : ∀ {f : ℝ → ℂ}, Measurable f → (∀ x, ‖f x‖ ≤ 1) → ∀ a : H,
-      ‖μ.integral f a‖ ≤ ‖a‖ := fun {f} hfm hf1 a => by
-    simpa using (μ.integral f).le_of_opNorm_le
-      ((Spectral.ProjectionValuedMeasure.norm_integral_le μ ⟨hfm, 1, hf1⟩).trans
-        (ciSup_le hf1)) a
   have hbound : ∀ n : ℕ, 1 ≤ n → ∀ z ∈ kmsStrip 1,
       ‖G[ξ, η, hξ, hη] z - Gn[ξ, η, hξ, hη, n] z‖ ≤
         ‖ξ‖ * ‖η - μ K[n] η‖ + ‖Δs ⟨ξ, hξ⟩‖ * ‖Δs ⟨η, hη⟩ - μ K[n] (Δs ⟨η, hη⟩)‖ := by
     intro n hn z hz
-    obtain ⟨hum, hvm, hb⟩ := takesaki_functions_bounded z
+    have hop := norm_integral_takesaki_functions_apply_le hM hΩ C hC hz
     rw [takesakiApproximant_eq_of_mem_strip hM hΩ C hC hξ hη hn hz, Set.indicator_of_mem hz,
       add_sub_add_comm, ← inner_sub_right, ← inner_sub_right, ← map_sub, ← map_sub]
     refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
     · exact (norm_inner_le_norm _ _).trans
-        (mul_le_mul_of_nonneg_left (hop hum (fun x => (hb hz x).1) _) (norm_nonneg _))
+        (mul_le_mul_of_nonneg_left (hop _).1 (norm_nonneg _))
     · exact (norm_inner_le_norm _ _).trans
-        (mul_le_mul_of_nonneg_left (hop hvm (fun x => (hb hz x).2) _) (norm_nonneg _))
+        (mul_le_mul_of_nonneg_left (hop _).2 (norm_nonneg _))
   refine ⟨hbound, ?_⟩
   have hlim : Tendsto (fun n : ℕ => ‖ξ‖ * ‖η - μ K[n] η‖ +
       ‖Δs ⟨ξ, hξ⟩‖ * ‖Δs ⟨η, hη⟩ - μ K[n] (Δs ⟨η, hη⟩)‖) atTop (𝓝 0) := by
@@ -584,18 +453,52 @@ theorem takesakiFunction_analytic {M : Set (H →L[ℂ] H)} {Ω : H}
   refine ⟨hU.continuousOn (hev.mono fun n hn => hn.continuous.continuousOn).frequently,
     TendstoLocallyUniformlyOn.differentiableOn (hU.mono hsub).tendstoLocallyUniformlyOn
       (hev.mono fun n hn => hn.differentiableOn) hopen, fun z hz => ?_⟩
-  have hop : ∀ {f : ℝ → ℂ}, Measurable f → (∀ x, ‖f x‖ ≤ 1) → ∀ a : H,
-      ‖(μΔ).integral f a‖ ≤ ‖a‖ := fun {f} hfm hf1 a => by
-    simpa using ((μΔ).integral f).le_of_opNorm_le
-      ((Spectral.ProjectionValuedMeasure.norm_integral_le (μΔ) ⟨hfm, 1, hf1⟩).trans
-        (ciSup_le hf1)) a
-  obtain ⟨hum, hvm, hb⟩ := takesaki_functions_bounded z
+  have hop := norm_integral_takesaki_functions_apply_le hM hΩ C hC hz
   rw [Set.indicator_of_mem hz]
   refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
-  · exact (norm_inner_le_norm _ _).trans
-      (mul_le_mul_of_nonneg_left (hop hum (fun x => (hb hz x).1) _) (norm_nonneg _))
-  · exact (norm_inner_le_norm _ _).trans
-      (mul_le_mul_of_nonneg_left (hop hvm (fun x => (hb hz x).2) _) (norm_nonneg _))
+  · exact (norm_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_left (hop _).1 (norm_nonneg _))
+  · exact (norm_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_left (hop _).2 (norm_nonneg _))
+
+/-- `μ((0,∞)) = 1` for the spectral measure `μ` of `Δ`: the spectral projection of `Δ` on
+`(0,∞)` is the identity, since `μ((-∞,0]) = 0` (`modularOperator_spectralMeasure_Iic_zero`). -/
+theorem modularOperator_spectralMeasure_Ioi_zero {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) :
+    μΔ (Set.Ioi 0) = 1 := by
+  have hind : ∀ {S : Set ℝ}, MeasurableSet S →
+      S.indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+    fun {S} hS => ⟨measurable_const.indicator hS, 1, fun x => by
+      by_cases hx : x ∈ S <;> simp [hx]⟩
+  have h := Spectral.ProjectionValuedMeasure.integral_add (μΔ)
+    (hind (measurableSet_Ioi (a := (0 : ℝ)))) (hind (measurableSet_Iic (a := (0 : ℝ))))
+  rw [Spectral.ProjectionValuedMeasure.integral_indicator (μΔ) measurableSet_Ioi,
+    Spectral.ProjectionValuedMeasure.integral_indicator (μΔ) measurableSet_Iic,
+    modularOperator_spectralMeasure_Iic_zero hM hΩ C hC, add_zero] at h
+  rw [← h, ← Spectral.ProjectionValuedMeasure.integral_one (μΔ)]
+  congr 1
+  funext x
+  by_cases hx : (0 : ℝ) < x
+  · simp [hx]
+  · simp [hx, not_lt.mp hx]
+
+/-- `(1_{(0,∞)} e_{-t})(Δ) = Δ^{-it}` as bounded operators, for real `t`: the bounded integral of
+`1_{(0,∞)} e_{-t}` against the spectral measure of `Δ` is `Δ^{-it}`, since `μ((0,∞)) = 1`. -/
+theorem integral_indicator_Ioi_modularUnitary {M : Set (H →L[ℂ] H)} {Ω : H}
+    (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (t : ℝ) :
+    (μΔ).integral ((Set.Ioi (0 : ℝ)).indicator e[-t]) = U[-t] := by
+  obtain ⟨hem, hen, -, heU, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM hΩ C hC (-t)
+  have hind : (Set.Ioi (0 : ℝ)).indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨measurable_const.indicator measurableSet_Ioi, 1, fun x => by
+      by_cases hx : x ∈ Set.Ioi (0 : ℝ) <;> simp [hx]⟩
+  have he : (Set.Ioi (0 : ℝ)).indicator e[-t] =
+      (Set.Ioi (0 : ℝ)).indicator 1 * fun x : ℝ =>
+        Complex.exp (Complex.I * ((-t : ℝ) : ℂ) * (Real.log x : ℂ)) := by
+    funext x
+    by_cases hx : x ∈ Set.Ioi (0 : ℝ) <;> simp [hx]
+  rw [he, Spectral.ProjectionValuedMeasure.integral_mul (μΔ) hind ⟨hem, 1, fun x => (hen x).le⟩,
+    Spectral.ProjectionValuedMeasure.integral_indicator (μΔ) measurableSet_Ioi,
+    modularOperator_spectralMeasure_Ioi_zero hM hΩ C hC, one_mul, heU]
 
 /-- The lower boundary value: `G_{ξ,η}(t) = ⟪ξ, Δ^{-it}η⟫` for real `t`.
 Blueprint: lmm:takesaki-function-lower-boundary -/
@@ -603,11 +506,6 @@ theorem takesakiFunction_lower_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {ξ η : H} (hξ : ξ ∈ (Δs).domain) (hη : η ∈ (Δs).domain) (t : ℝ) :
     G[ξ, η, hξ, hη] (t : ℂ) = ⟪ξ, modularUnitaryGroup hM hΩ C hC (-t) η⟫_ℂ := by
-  set μ := μΔ
-  have hind : ∀ {S : Set ℝ}, MeasurableSet S →
-      S.indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
-    fun {S} hS => ⟨measurable_const.indicator hS, 1, fun x => by
-      by_cases hx : x ∈ S <;> simp [hx]⟩
   obtain ⟨hum, hvm, hb⟩ := takesaki_functions_bounded (t : ℂ)
   have ht : (t : ℂ) ∈ kmsStrip 1 := by simp [kmsStrip]
   obtain ⟨-, hab⟩ := takesaki_functions_aux_bounds t
@@ -619,33 +517,15 @@ theorem takesakiFunction_lower_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
     ⟨hs.mul hvm, 1, fun x => (hab x).2.1⟩
   have hs2v : (fun x => (Real.sqrt x : ℂ) ^ 2 * v[(t : ℂ)] x) ∈ Spectral.BddMeasurable ℝ :=
     ⟨(hs.pow_const 2).mul hvm, 1, fun x => (hab x).2.2.1⟩
-  obtain ⟨hem, -, -, hU, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM hΩ C hC (-t)
-  have he : e[(-t : ℝ)] ∈ Spectral.BddMeasurable ℝ := ⟨hem, 1, fun x => by
-    beta_reduce
-    rw [show Complex.I * ((-t : ℝ) : ℂ) * (Real.log x : ℂ) =
-      ((-t * Real.log x : ℝ) : ℂ) * Complex.I by push_cast; ring, Complex.norm_exp_ofReal_mul_I]⟩
   have hsum : u[(t : ℂ)] + (fun x => (Real.sqrt x : ℂ) ^ 2 * v[(t : ℂ)] x) =
-      (Set.Ioi (0 : ℝ)).indicator 1 * e[(-t : ℝ)] := funext fun x => by
-    rw [Pi.add_apply, takesaki_functions_lower_sum, Pi.mul_apply]
-    by_cases hx : x ∈ Set.Ioi (0 : ℝ) <;> simp [hx]
-  have hIoi : μ (Set.Ioi 0) = 1 := by
-    have h1 := Spectral.ProjectionValuedMeasure.integral_add μ
-      (hind (measurableSet_Ioi (a := (0 : ℝ)))) (hind (measurableSet_Iic (a := (0 : ℝ))))
-    rw [Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Ioi,
-      Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Iic,
-      modularOperator_spectralMeasure_Iic_zero hM hΩ C hC, add_zero] at h1
-    rw [← h1, ← Spectral.ProjectionValuedMeasure.integral_one μ]
-    congr 1
-    funext x
-    by_cases hx : (0 : ℝ) < x
-    · simp [hx]
-    · simp [hx, not_lt.mp hx]
+      (Set.Ioi (0 : ℝ)).indicator e[-t] :=
+    funext fun x => takesaki_functions_lower_sum t x
   rw [Set.indicator_of_mem ht]
-  change ⟪ξ, μ.integral u[(t : ℂ)] η⟫_ℂ + ⟪Δs ⟨ξ, hξ⟩, μ.integral v[(t : ℂ)] (Δs ⟨η, hη⟩)⟫_ℂ = _
+  change ⟪ξ, (μΔ).integral u[(t : ℂ)] η⟫_ℂ +
+    ⟪Δs ⟨ξ, hξ⟩, (μΔ).integral v[(t : ℂ)] (Δs ⟨η, hη⟩)⟫_ℂ = _
   rw [inner_modularOperatorSqrt_integral hM hΩ C hC hv hsv hs2v hξ hη, ← inner_add_right,
-    ← add_apply, ← Spectral.ProjectionValuedMeasure.integral_add μ hu hs2v,
-    hsum, Spectral.ProjectionValuedMeasure.integral_mul μ (hind measurableSet_Ioi) he,
-    Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Ioi, hIoi, one_mul, ← hU]
+    ← add_apply, ← Spectral.ProjectionValuedMeasure.integral_add (μΔ) hu hs2v, hsum,
+    integral_indicator_Ioi_modularUnitary hM hΩ C hC t]
   rfl
 
 /-- The upper boundary value: `G_{ξ,η}(t + i) = ⟪Δ^{1/2}ξ, Δ^{-it} Δ^{1/2}η⟫` for real `t`.
@@ -655,7 +535,6 @@ theorem takesakiFunction_upper_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {ξ η : H} (hξ : ξ ∈ (Δs).domain) (hη : η ∈ (Δs).domain) (t : ℝ) :
     G[ξ, η, hξ, hη] ((t : ℂ) + Complex.I) =
       ⟪Δs ⟨ξ, hξ⟩, modularUnitaryGroup hM hΩ C hC (-t) (Δs ⟨η, hη⟩)⟫_ℂ := by
-  set μ := μΔ
   have hz : (t : ℂ) + Complex.I ∈ kmsStrip 1 := by simp [kmsStrip]
   have hs : Measurable fun x : ℝ => (Real.sqrt x : ℂ) :=
     Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
@@ -671,34 +550,10 @@ theorem takesakiFunction_upper_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
     funext fun x => (takesaki_functions_upper_identities t x).1
   have hsum : g[t] + v[(t : ℂ) + Complex.I] = (Set.Ioi (0 : ℝ)).indicator e[-t] :=
     funext fun x => (takesaki_functions_upper_identities t x).2
-  have hind : ∀ {S : Set ℝ}, MeasurableSet S →
-      S.indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
-    fun {S} hS => ⟨measurable_const.indicator hS, 1, fun x => by
-      by_cases hx : x ∈ S <;> simp [hx]⟩
-  obtain ⟨hem, hen, -, heU, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM hΩ C hC (-t)
-  have hpos : μ (Set.Ioi (0 : ℝ)) = 1 := by
-    have h := Spectral.ProjectionValuedMeasure.integral_add μ
-      (hind (measurableSet_Ioi (a := (0 : ℝ)))) (hind (measurableSet_Iic (a := (0 : ℝ))))
-    rw [Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Ioi,
-      Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Iic,
-      modularOperator_spectralMeasure_Iic_zero hM hΩ C hC, add_zero] at h
-    rw [← h, ← Spectral.ProjectionValuedMeasure.integral_one μ]
-    congr 1
-    funext x
-    by_cases hx : (0 : ℝ) < x <;> simp [Set.indicator, hx, not_lt.mp]
-  have hI : μ.integral ((Set.Ioi (0 : ℝ)).indicator e[-t]) = U[-t] := by
-    have he : (Set.Ioi (0 : ℝ)).indicator e[-t] =
-        (Set.Ioi (0 : ℝ)).indicator 1 * fun x : ℝ =>
-          Complex.exp (Complex.I * ((-t : ℝ) : ℂ) * (Real.log x : ℂ)) := by
-      funext x
-      by_cases hx : x ∈ Set.Ioi (0 : ℝ) <;> simp [hx]
-    rw [he, Spectral.ProjectionValuedMeasure.integral_mul μ (hind measurableSet_Ioi)
-      ⟨hem, 1, fun x => (hen x).le⟩,
-      Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Ioi, hpos, one_mul,
-      heU]
   rw [Set.indicator_of_mem hz, ← hu,
     ← inner_modularOperatorSqrt_integral hM hΩ C hC hg hsg hs2g hξ hη, ← inner_add_right,
-    ← add_apply, ← Spectral.ProjectionValuedMeasure.integral_add μ hg hv, hsum, hI]
+    ← add_apply, ← Spectral.ProjectionValuedMeasure.integral_add (μΔ) hg hv, hsum,
+    integral_indicator_Ioi_modularUnitary hM hΩ C hC t]
   rfl
 
 /-! ### The boundary values as correlations -/
