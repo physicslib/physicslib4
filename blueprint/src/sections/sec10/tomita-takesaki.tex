@@ -4307,6 +4307,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $G_{\xi,\eta}(t) = \left< \xi, \Delta^{-it}\eta \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-sqrt-transfer, lmm:takesaki-functions-lower-sum, lmm:takesaki-functions-aux-bounds, lmm:takesaki-functions-bounded, thrm:operator-valued-integration, prpstn:integral-multiplicative, lmm:modular-indicator-positive-one, lmm:modular-unitary-group-fc}
     Lemma~\ref{lmm:modular-sqrt-transfer} with $f = v_t$ (admissible by Lemmas~\ref{lmm:takesaki-functions-bounded} and~\ref{lmm:takesaki-functions-aux-bounds}) gives $G_{\xi,\eta}(t) = \left< \xi, u_t(\Delta)\eta \right> + \left< \xi, (s^2v_t)(\Delta)\eta \right>$, which by linearity of the bounded integral (Theorem~\ref{thrm:operator-valued-integration}) and Lemma~\ref{lmm:takesaki-functions-lower-sum} is $\left< \xi, (1_{(0,\infty)}e_{-t})(\Delta)\eta \right>$. By Proposition~\ref{prpstn:integral-multiplicative}, $(1_{(0,\infty)}e_{-t})(\Delta) = 1_{(0,\infty)}(\Delta)\,e_{-t}(\Delta) = \Delta^{-it}$ (Lemmas~\ref{lmm:modular-indicator-positive-one} and~\ref{lmm:modular-unitary-group-fc}).
 \end{proof}
@@ -4319,6 +4320,7 @@ the second for every $z \in \mathbb{C}$. For $z \notin \mathcal{T}$, $G_{\xi,\et
     Let $\xi, \eta \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $G_{\xi,\eta}(t + i) = \left< \Delta^{1/2}\xi, \Delta^{-it}\Delta^{1/2}\eta \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-sqrt-transfer, lmm:takesaki-functions-upper-identities, lmm:takesaki-functions-aux-bounds, lmm:takesaki-functions-bounded, thrm:operator-valued-integration, prpstn:integral-multiplicative, lmm:modular-indicator-positive-one, lmm:modular-unitary-group-fc}
     By Lemma~\ref{lmm:takesaki-functions-upper-identities}, $u_{t+i} = s^2g_t$, so Lemma~\ref{lmm:modular-sqrt-transfer} with $f = g_t$ (admissible by Lemma~\ref{lmm:takesaki-functions-aux-bounds}) gives $\left< \xi, u_{t+i}(\Delta)\eta \right> = \left< \Delta^{1/2}\xi, g_t(\Delta)\Delta^{1/2}\eta \right>$. Hence $G_{\xi,\eta}(t + i) = \left< \Delta^{1/2}\xi, (g_t + v_{t+i})(\Delta)\Delta^{1/2}\eta \right>$ (Theorem~\ref{thrm:operator-valued-integration}, \texttt{inner\_add\_right}; $v_{t+i}$ is bounded and measurable by Lemma~\ref{lmm:takesaki-functions-bounded}), and by Lemma~\ref{lmm:takesaki-functions-upper-identities} $(g_t + v_{t+i})(\Delta) = (1_{(0,\infty)}e_{-t})(\Delta) = \Delta^{-it}$ as in Lemma~\ref{lmm:takesaki-function-lower-boundary}.
 \end{proof}

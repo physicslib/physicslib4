@@ -603,7 +603,50 @@ theorem takesakiFunction_lower_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {ξ η : H} (hξ : ξ ∈ (Δs).domain) (hη : η ∈ (Δs).domain) (t : ℝ) :
     G[ξ, η, hξ, hη] (t : ℂ) = ⟪ξ, modularUnitaryGroup hM hΩ C hC (-t) η⟫_ℂ := by
-  sorry
+  set μ := μΔ
+  have hind : ∀ {S : Set ℝ}, MeasurableSet S →
+      S.indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+    fun {S} hS => ⟨measurable_const.indicator hS, 1, fun x => by
+      by_cases hx : x ∈ S <;> simp [hx]⟩
+  obtain ⟨hum, hvm, hb⟩ := takesaki_functions_bounded (t : ℂ)
+  have ht : (t : ℂ) ∈ kmsStrip 1 := by simp [kmsStrip]
+  obtain ⟨-, hab⟩ := takesaki_functions_aux_bounds t
+  have hu : u[(t : ℂ)] ∈ Spectral.BddMeasurable ℝ := ⟨hum, 1, fun x => (hb ht x).1⟩
+  have hv : v[(t : ℂ)] ∈ Spectral.BddMeasurable ℝ := ⟨hvm, 1, fun x => (hb ht x).2⟩
+  have hs : Measurable fun x : ℝ => (Real.sqrt x : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
+  have hsv : (fun x => (Real.sqrt x : ℂ) * v[(t : ℂ)] x) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨hs.mul hvm, 1, fun x => (hab x).2.1⟩
+  have hs2v : (fun x => (Real.sqrt x : ℂ) ^ 2 * v[(t : ℂ)] x) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨(hs.pow_const 2).mul hvm, 1, fun x => (hab x).2.2.1⟩
+  obtain ⟨hem, -, -, hU, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM hΩ C hC (-t)
+  have he : e[(-t : ℝ)] ∈ Spectral.BddMeasurable ℝ := ⟨hem, 1, fun x => by
+    beta_reduce
+    rw [show Complex.I * ((-t : ℝ) : ℂ) * (Real.log x : ℂ) =
+      ((-t * Real.log x : ℝ) : ℂ) * Complex.I by push_cast; ring, Complex.norm_exp_ofReal_mul_I]⟩
+  have hsum : u[(t : ℂ)] + (fun x => (Real.sqrt x : ℂ) ^ 2 * v[(t : ℂ)] x) =
+      (Set.Ioi (0 : ℝ)).indicator 1 * e[(-t : ℝ)] := funext fun x => by
+    rw [Pi.add_apply, takesaki_functions_lower_sum, Pi.mul_apply]
+    by_cases hx : x ∈ Set.Ioi (0 : ℝ) <;> simp [hx]
+  have hIoi : μ (Set.Ioi 0) = 1 := by
+    have h1 := Spectral.ProjectionValuedMeasure.integral_add μ
+      (hind (measurableSet_Ioi (a := (0 : ℝ)))) (hind (measurableSet_Iic (a := (0 : ℝ))))
+    rw [Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Ioi,
+      Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Iic,
+      modularOperator_spectralMeasure_Iic_zero hM hΩ C hC, add_zero] at h1
+    rw [← h1, ← Spectral.ProjectionValuedMeasure.integral_one μ]
+    congr 1
+    funext x
+    by_cases hx : (0 : ℝ) < x
+    · simp [hx]
+    · simp [hx, not_lt.mp hx]
+  rw [Set.indicator_of_mem ht]
+  change ⟪ξ, μ.integral u[(t : ℂ)] η⟫_ℂ + ⟪Δs ⟨ξ, hξ⟩, μ.integral v[(t : ℂ)] (Δs ⟨η, hη⟩)⟫_ℂ = _
+  rw [inner_modularOperatorSqrt_integral hM hΩ C hC hv hsv hs2v hξ hη, ← inner_add_right,
+    ← add_apply, ← Spectral.ProjectionValuedMeasure.integral_add μ hu hs2v,
+    hsum, Spectral.ProjectionValuedMeasure.integral_mul μ (hind measurableSet_Ioi) he,
+    Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Ioi, hIoi, one_mul, ← hU]
+  rfl
 
 /-- The upper boundary value: `G_{ξ,η}(t + i) = ⟪Δ^{1/2}ξ, Δ^{-it} Δ^{1/2}η⟫` for real `t`.
 Blueprint: lmm:takesaki-function-upper-boundary -/
@@ -612,7 +655,51 @@ theorem takesakiFunction_upper_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {ξ η : H} (hξ : ξ ∈ (Δs).domain) (hη : η ∈ (Δs).domain) (t : ℝ) :
     G[ξ, η, hξ, hη] ((t : ℂ) + Complex.I) =
       ⟪Δs ⟨ξ, hξ⟩, modularUnitaryGroup hM hΩ C hC (-t) (Δs ⟨η, hη⟩)⟫_ℂ := by
-  sorry
+  set μ := μΔ
+  have hz : (t : ℂ) + Complex.I ∈ kmsStrip 1 := by simp [kmsStrip]
+  have hs : Measurable fun x : ℝ => (Real.sqrt x : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
+  obtain ⟨hgm, hgb⟩ := takesaki_functions_aux_bounds t
+  obtain ⟨-, hvm, hb⟩ := takesaki_functions_bounded ((t : ℂ) + Complex.I)
+  have hg : g[t] ∈ Spectral.BddMeasurable ℝ := ⟨hgm, 1, fun x => (hgb x).1⟩
+  have hsg : (fun x => (Real.sqrt x : ℂ) * g[t] x) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨hs.mul hgm, 1, fun x => (hgb x).2.2.2.1⟩
+  have hs2g : (fun x => (Real.sqrt x : ℂ) ^ 2 * g[t] x) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨(hs.pow_const 2).mul hgm, 1, fun x => (hgb x).2.2.2.2⟩
+  have hv : v[(t : ℂ) + Complex.I] ∈ Spectral.BddMeasurable ℝ := ⟨hvm, 1, fun x => (hb hz x).2⟩
+  have hu : (fun x => (Real.sqrt x : ℂ) ^ 2 * g[t] x) = u[(t : ℂ) + Complex.I] :=
+    funext fun x => (takesaki_functions_upper_identities t x).1
+  have hsum : g[t] + v[(t : ℂ) + Complex.I] = (Set.Ioi (0 : ℝ)).indicator e[-t] :=
+    funext fun x => (takesaki_functions_upper_identities t x).2
+  have hind : ∀ {S : Set ℝ}, MeasurableSet S →
+      S.indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+    fun {S} hS => ⟨measurable_const.indicator hS, 1, fun x => by
+      by_cases hx : x ∈ S <;> simp [hx]⟩
+  obtain ⟨hem, hen, -, heU, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM hΩ C hC (-t)
+  have hpos : μ (Set.Ioi (0 : ℝ)) = 1 := by
+    have h := Spectral.ProjectionValuedMeasure.integral_add μ
+      (hind (measurableSet_Ioi (a := (0 : ℝ)))) (hind (measurableSet_Iic (a := (0 : ℝ))))
+    rw [Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Ioi,
+      Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Iic,
+      modularOperator_spectralMeasure_Iic_zero hM hΩ C hC, add_zero] at h
+    rw [← h, ← Spectral.ProjectionValuedMeasure.integral_one μ]
+    congr 1
+    funext x
+    by_cases hx : (0 : ℝ) < x <;> simp [Set.indicator, hx, not_lt.mp]
+  have hI : μ.integral ((Set.Ioi (0 : ℝ)).indicator e[-t]) = U[-t] := by
+    have he : (Set.Ioi (0 : ℝ)).indicator e[-t] =
+        (Set.Ioi (0 : ℝ)).indicator 1 * fun x : ℝ =>
+          Complex.exp (Complex.I * ((-t : ℝ) : ℂ) * (Real.log x : ℂ)) := by
+      funext x
+      by_cases hx : x ∈ Set.Ioi (0 : ℝ) <;> simp [hx]
+    rw [he, Spectral.ProjectionValuedMeasure.integral_mul μ (hind measurableSet_Ioi)
+      ⟨hem, 1, fun x => (hen x).le⟩,
+      Spectral.ProjectionValuedMeasure.integral_indicator μ measurableSet_Ioi, hpos, one_mul,
+      heU]
+  rw [Set.indicator_of_mem hz, ← hu,
+    ← inner_modularOperatorSqrt_integral hM hΩ C hC hg hsg hs2g hξ hη, ← inner_add_right,
+    ← add_apply, ← Spectral.ProjectionValuedMeasure.integral_add μ hg hv, hsum, hI]
+  rfl
 
 /-! ### The boundary values as correlations -/
 
