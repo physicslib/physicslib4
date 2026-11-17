@@ -387,6 +387,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     So $g\mathbf{B}$ is a diamond for every diamond $\mathbf{B}$, nonempty if $\mathbf{B}$ is.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:minkowski-chronological-open, lmm:orthochronous-preserves-future-timelike, lmm:lorentz-closure}
     By the library lemma \texttt{chronologicallyPrecedes\_smul\_iff}, $gx \ll gy$ if and only if $x \ll y$. Its content: with $g = (L, a)$, $gy - gx = L(y - x)$, $x \ll y$ means that $y - x$ lies in the open forward cone (\ref{lmm:minkowski-chronological-open}), and $L$ and $L^{-1}$ preserve $\eta$ and are orthochronous (\ref{lmm:lorentz-closure}, \ref{lmm:orthochronous-preserves-future-timelike}). Hence $x \in I^+(p) \cap I^-(q)$ if and only if $gx \in I^+(gp) \cap I^-(gq)$, and $g$ is a bijection of $\mathbb{R}^4$. The diamond claim is the library lemma \texttt{isAlexandrovBasisSet\_smul}, which Axiom 5 (\ref{def:lorentz-covariance}) already uses.
 \end{proof}

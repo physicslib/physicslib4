@@ -96,7 +96,18 @@ theorem smul_diamond_eq (g : InhomogeneousLorentzGroup) :
     (∀ p q : StandardMinkowskiSpacetime.Carrier, g • ◇[p, q] = ◇[g • p, g • q]) ∧
       ∀ B : Set StandardMinkowskiSpacetime.Carrier, IsAlexandrovBasisSet B →
         IsAlexandrovBasisSet (g • B) ∧ (B.Nonempty → (g • B).Nonempty) := by
-  sorry
+  refine ⟨fun p q => ?_, fun B hB => ⟨isAlexandrovBasisSet_smul g hB, fun h => h.smul_set⟩⟩
+  ext y
+  simp only [Set.mem_smul_set, Set.mem_inter_iff, Spacetime.chronologicalFuture,
+    Spacetime.chronologicalPast, Set.mem_ofPred_eq]
+  constructor
+  · rintro ⟨x, ⟨hxF, hxP⟩, rfl⟩
+    exact ⟨(chronologicallyPrecedes_smul_iff g p x).mpr hxF,
+      (chronologicallyPrecedes_smul_iff g x q).mpr hxP⟩
+  · rintro ⟨hyF, hyP⟩
+    refine ⟨g⁻¹ • y, ⟨?_, ?_⟩, smul_inv_smul g y⟩
+    · simpa using (chronologicallyPrecedes_smul_iff g p (g⁻¹ • y)).mp (by simpa using hyF)
+    · simpa using (chronologicallyPrecedes_smul_iff g (g⁻¹ • y) q).mp (by simpa using hyP)
 
 /-- A Poincaré transformation preserves inclusion: `g O₁ ⊆ g O₂ ↔ O₁ ⊆ O₂`. Consequently
 `B ↦ g B` is a bijection from the diamonds contained in `O` onto the diamonds contained in
@@ -261,7 +272,8 @@ theorem boostMatrix_apply (s : ℝ) (x : SpacetimeModel) :
     boostMatrix s x =
       !₂[Real.cosh s * x 0 + Real.sinh s * x 1, Real.sinh s * x 0 + Real.cosh s * x 1,
         x 2, x 3] := by
-  sorry
+  ext i
+  fin_cases i <;> simp [boostMatrix, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
 
 /-- The boost matrices preserve the Minkowski form: `η(Λ(s)v, Λ(s)w) = η(v, w)`.
 
