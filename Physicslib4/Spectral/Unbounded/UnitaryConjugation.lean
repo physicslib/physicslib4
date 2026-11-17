@@ -1,0 +1,113 @@
+/-
+Copyright (c) 2026 Lean Community. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Lean Community
+-/
+import Physicslib4.Spectral.Unbounded.Commuting
+
+/-!
+# Unitary conjugation of unbounded operators
+
+For a unitary `V` and an operator `A` on `H`, the conjugate `V A V⁻¹` has domain
+`{ψ | V⁻¹ψ ∈ Dom A}` and value `V (A (V⁻¹ψ))`. Its graph is the image of the graph of `A` under
+`Φ_V (φ, ψ) = (V φ, V ψ)`. The statements below say "`B = V A V⁻¹`, including domains" as the
+graph identity `B.graph = A.graph.map Φ_V`, which determines `B` (`LinearPMap.eq_of_eq_graph`).
+`Φ_V` is written `Φ[V]`, a local notation for `LinearMap.prodMap V V`.
+
+## Main statements
+
+* `image_closure_prodMap_unitary`: `Φ_V` is a homeomorphism of `H × H` and commutes with closure.
+* `graph_antiunitaryConj_trans_antiunitaryConj`: `(VC)(CAC⁻¹)(VC)⁻¹ = VAV⁻¹`.
+* `unitaryCommutes_of_graph_map_eq`: an operator invariant under conjugation by `V` commutes
+  with `V`.
+* `functionalCalculus_unitaryConj`: `V f(A) V⁻¹ = f(V A V⁻¹)` for real measurable `f`.
+* `functionalCalculus_unitaryConj_of_bounded`: the same for bounded measurable complex `f`.
+-/
+
+namespace Physicslib4
+namespace Spectral
+namespace Unbounded
+
+open scoped InnerProductSpace LinearPMap
+
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- The map `Φ_V (φ, ψ) = (V φ, V ψ)` of `H × H` induced by a unitary `V`. -/
+local notation "Φ[" V "]" =>
+  LinearMap.prodMap (LinearEquiv.toLinearMap (LinearIsometryEquiv.toLinearEquiv V))
+    (LinearEquiv.toLinearMap (LinearIsometryEquiv.toLinearEquiv V))
+
+omit [CompleteSpace H] in
+/-- For a unitary `V`, the map `Φ_V (φ, ψ) = (V φ, V ψ)` is a homeomorphism of `H × H`, so
+`Φ_V (closure G) = closure (Φ_V G)` for every `G ⊆ H × H`.
+
+Blueprint: lmm:unitary-conjugate-graph -/
+theorem image_closure_prodMap_unitary (V : H ≃ₗᵢ[ℂ] H) :
+    IsHomeomorph (Prod.map V V) ∧
+      ∀ G : Set (H × H), Prod.map V V '' closure G = closure (Prod.map V V '' G) := by
+  sorry
+
+omit [CompleteSpace H] in
+/-- For a unitary `V`, an antiunitary involution `C` and a linear operator `A`, the antiunitary
+`VC` satisfies `(VC)(CAC⁻¹)(VC)⁻¹ = VAV⁻¹`, including domains: the graph of the double conjugate
+is `Φ_V` of the graph of `A`. (`VC` is antiunitary by its type `H ≃ₗᵢ⋆[ℂ] H`.)
+
+Blueprint: lmm:unitary-conjugate-double-antiunitary -/
+theorem graph_antiunitaryConj_trans_antiunitaryConj (V : H ≃ₗᵢ[ℂ] H) (C : H ≃ₗᵢ⋆[ℂ] H)
+    (hC : ∀ x, C (C x) = x) (A : H →ₗ.[ℂ] H) :
+    (antiunitaryConj (C.trans V) (antiunitaryConj C A)).graph = A.graph.map Φ[V] := by
+  sorry
+
+omit [CompleteSpace H] in
+/-- A linear operator `A` with `V A V⁻¹ = A`, including domains, commutes with the unitary `V`:
+`V` and `V⁻¹` map `Dom A` into itself and commute with `A` there.
+
+The case of an everywhere-defined, possibly antilinear, map is
+`comm_of_unitary_conj_eq`.
+
+Blueprint: lmm:unitary-commutes-of-conj-eq -/
+theorem unitaryCommutes_of_graph_map_eq (V : H ≃ₗᵢ[ℂ] H) {A : H →ₗ.[ℂ] H}
+    (hA : A.graph.map Φ[V] = A.graph) :
+    UnitaryCommutes V A := by
+  sorry
+
+omit [CompleteSpace H] in
+/-- An everywhere-defined map `A : H → H`, linear or antilinear, with `V A V⁻¹ = A` commutes
+with the unitary `V`: `V (A ψ) = A (V ψ)` for every `ψ`.
+
+Blueprint: lmm:unitary-commutes-of-conj-eq -/
+theorem comm_of_unitary_conj_eq (V : H ≃ₗᵢ[ℂ] H) {A : H → H}
+    (hA : ∀ ψ, V (A (V.symm ψ)) = A ψ) :
+    ∀ ψ, V (A ψ) = A (V ψ) := by
+  sorry
+
+/-- Unitary conjugation transports the functional calculus: if `A` is self-adjoint and
+`B = V A V⁻¹`, including domains, then `B` is self-adjoint and `V f(A) V⁻¹ = f(B)`, including
+domains, for every real measurable `f`.
+
+The operator `V A V⁻¹` is named by its graph, `B.graph = Φ_V (A.graph)`, so that `f(B)` can be
+taken for any operator `B` known to equal `V A V⁻¹`.
+
+Blueprint: lmm:unitary-transport-functional-calculus -/
+theorem functionalCalculus_unitaryConj (V : H ≃ₗᵢ[ℂ] H) {A B : H →ₗ.[ℂ] H}
+    (hA : IsSelfAdjoint A) (hB : B.graph = A.graph.map Φ[V]) :
+    IsSelfAdjoint B ∧ ∀ (hB' : IsSelfAdjoint B) (f : ℝ → ℝ), Measurable f →
+      (functionalCalculus hB' fun x => (f x : ℂ)).graph =
+        (functionalCalculus hA fun x => (f x : ℂ)).graph.map Φ[V] := by
+  sorry
+
+/-- Unitary conjugation of a bounded complex function: if `A` is self-adjoint, `B = V A V⁻¹`
+(including domains, hence self-adjoint) and `f : ℝ → ℂ` is bounded and measurable, then
+`V f(A) V⁻¹ ψ = f(B) ψ` for every `ψ ∈ H`. Both `f(A)` and `f(B)` are everywhere defined, and
+the identity is stated as the graph identity `f(B) = V f(A) V⁻¹`.
+
+Blueprint: lmm:unitary-transport-bounded-fc -/
+theorem functionalCalculus_unitaryConj_of_bounded (V : H ≃ₗᵢ[ℂ] H) {A B : H →ₗ.[ℂ] H}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) (hAB : B.graph = A.graph.map Φ[V])
+    {f : ℝ → ℂ} (hf : Measurable f) (hfb : ∃ c, ∀ x, ‖f x‖ ≤ c) :
+    (functionalCalculus hB f).graph = (functionalCalculus hA f).graph.map Φ[V] := by
+  sorry
+
+end Unbounded
+end Spectral
+end Physicslib4

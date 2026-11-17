@@ -14,7 +14,9 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[Future-Pointing Tangent Vectors Lie in the Closed Forward Cone]
     \label{lmm:minkowski-future-pointing-closed-cone}
+    \lean{Physicslib4.standardMinkowski_futurePointing_mem_closedForwardCone}
     \uses{def:standard-minkowski-spacetime, def:lorentz-path, def:future-and-past-pointing-vectors, def:lorentz-transformation}
+    \leanok
     Let $v$ be a tangent vector at a point of standard Minkowski spacetime that is future-pointing with respect to $e_0$. Then $v \in \overline{V}_+$.
 \end{lemma}
 \begin{proof}
@@ -24,7 +26,9 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[The Closed Forward Cone in Norm Form]
     \label{lmm:closed-forward-cone-iff-norm}
+    \lean{Physicslib4.mem_closedForwardCone_iff_sqrt_le}
     \uses{def:lorentz-transformation}
+    \leanok
     A vector $v \in \mathbb{R}^4$ lies in $\overline{V}_+$ if and only if $\|\vec v\| \le v^0$. In particular every $v \in \overline{V}_+$ satisfies $|v^i| \le v^0$ for $i = 1, 2, 3$.
 \end{lemma}
 \begin{proof}
@@ -33,7 +37,9 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[The Closed Forward Cone is a Closed Convex Cone]
     \label{lmm:closed-forward-cone-closed-convex}
+    \lean{Physicslib4.closedForwardCone_isClosed_convexCone}
     \uses{def:lorentz-transformation}
+    \leanok
     The set $\overline{V}_+$ is closed in $\mathbb{R}^4$, contains $0$, and is closed under addition and under multiplication by nonnegative scalars.
 \end{lemma}
 \begin{proof}
@@ -43,7 +49,9 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[Integrals of Curves in the Closed Forward Cone]
     \label{lmm:interval-integral-closed-forward-cone}
+    \lean{Physicslib4.intervalIntegral_mem_closedForwardCone}
     \uses{lmm:closed-forward-cone-iff-norm}
+    \leanok
     Let $a \le b$ and let $f : \mathbb{R} \to \mathbb{R}^4$ be continuous on $[a,b]$ with $f(s) \in \overline{V}_+$ for every $s \in [a,b]$. Then $\int_a^b f(s)\,ds \in \overline{V}_+$.
 \end{lemma}
 \begin{proof}
@@ -57,7 +65,9 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[The Displacement along a Causal Trip Segment]
     \label{lmm:causal-trip-segment-displacement}
+    \lean{Physicslib4.standardMinkowski_causalTripSegment_displacement}
     \uses{def:causal-trip, def:standard-minkowski-spacetime, def:lorentz-path}
+    \leanok
     Let $p, q$ be points of standard Minkowski spacetime and let a causal trip segment run from $p$ to $q$ (\ref{def:causal-trip}). Then the segment has a representative smooth path $\mu$ with parameter space $[a,b]$, $a < b$, such that $\mu(a) = p$, $\mu(b) = q$, the tangent $\dot\mu$ is continuous on $[a,b]$ and future-pointing at every $s \in [a,b]$, and
     \begin{align}
         q - p = \int_a^b \dot\mu(s)\,ds.
@@ -70,7 +80,9 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[A Causal Trip Segment Ends in the Closed Forward Cone]
     \label{lmm:causal-trip-segment-closed-cone}
+    \lean{Physicslib4.standardMinkowski_causalTripSegment_sub_mem_closedForwardCone}
     \uses{def:causal-trip, def:standard-minkowski-spacetime, def:lorentz-path}
+    \leanok
     If a causal trip segment of standard Minkowski spacetime runs from $p$ to $q$, then $q - p \in \overline{V}_+$.
 \end{lemma}
 \begin{proof}
@@ -80,7 +92,9 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[Causal Precedence Places the Displacement in the Closed Forward Cone]
     \label{lmm:causal-precedence-closed-forward-cone}
+    \lean{Physicslib4.standardMinkowski_causallyPrecedes_sub_mem_closedForwardCone}
     \uses{def:causal-trip, def:standard-minkowski-spacetime, def:lorentz-path}
+    \leanok
     Let $p, q$ be points of standard Minkowski spacetime with $p \prec q$ for the standard time orientation. Then $q - p \in \overline{V}_+$.
 \end{lemma}
 \begin{proof}
@@ -90,7 +104,9 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[A Coordinate Criterion for Spacelike Separation]
     \label{lmm:spacelike-of-coordinate-separation}
+    \lean{Physicslib4.standardMinkowski_isSpacelikeRelated_of_coord}
     \uses{def:spacelike-related, def:standard-minkowski-spacetime, def:lorentz-path}
+    \leanok
     Let $p, q$ be points of standard Minkowski spacetime with
     \begin{align}
         p^1 - q^1 > |p^0| + |q^0|.
@@ -104,7 +120,9 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{corollary}[A Coordinate Criterion for Complete Spacelike Separation]
     \label{crllr:completely-spacelike-of-coordinate-separation}
+    \lean{Physicslib4.standardMinkowski_isCompletelySpacelike_of_coord}
     \uses{def:completely-spacelike, def:standard-minkowski-spacetime, def:lorentz-path}
+    \leanok
     Let $\mathbf{O}_1, \mathbf{O}_2$ be sets in standard Minkowski spacetime such that $p^1 - q^1 > |p^0| + |q^0|$ for every $p \in \mathbf{O}_1$ and every $q \in \mathbf{O}_2$. Then $\mathbf{O}_1$ and $\mathbf{O}_2$ are completely spacelike for the standard time orientation (\ref{def:completely-spacelike}).
 \end{corollary}
 \begin{proof}
@@ -122,7 +140,9 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[The Graph Map of a Unitary Commutes with Closure]
     \label{lmm:unitary-conjugate-graph}
+    \lean{Physicslib4.Spectral.Unbounded.image_closure_prodMap_unitary}
     \uses{def:unitary-operator, def:hall-9.6}
+    \leanok
     Let $V$ be unitary. Then $\Phi_V$ is a homeomorphism of $\mathbf{H} \times \mathbf{H}$, so $\Phi_V(\overline{G}) = \overline{\Phi_V(G)}$ for every subset $G \subset \mathbf{H} \times \mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -132,7 +152,9 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[Unitary Conjugation as a Double Antiunitary Conjugation]
     \label{lmm:unitary-conjugate-double-antiunitary}
+    \lean{Physicslib4.Spectral.Unbounded.graph_antiunitaryConj_trans_antiunitaryConj}
     \uses{def:unitary-operator, def:antiunitary-operator, def:product-of-unbounded-operators}
+    \leanok
     Let $V$ be unitary, $C$ an antiunitary operator with $C(C\phi) = \phi$ for all $\phi$, and $A$ an operator on $\mathbf{H}$. Then $VC$ is antiunitary and $(VC)\big(CAC^{-1}\big)(VC)^{-1} = VAV^{-1}$, including domains.
 \end{lemma}
 \begin{proof}
@@ -142,7 +164,9 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[An Operator Invariant under Unitary Conjugation Commutes with the Unitary]
     \label{lmm:unitary-commutes-of-conj-eq}
+    \lean{Physicslib4.Spectral.Unbounded.unitaryCommutes_of_graph_map_eq}
     \uses{def:unitary-operator, def:product-of-unbounded-operators, def:unitary-commutes}
+    \leanok
     Let $V$ be unitary and $A$ an operator on $\mathbf{H}$, linear or antilinear, with $VAV^{-1} = A$, including domains. Then $V$ commutes with $A$: for every $\psi \in \text{Dom}(A)$, $V\psi$ and $V^{-1}\psi$ lie in $\text{Dom}(A)$ with $AV\psi = VA\psi$ and $AV^{-1}\psi = V^{-1}A\psi$ (for linear $A$ this is Definition~\ref{def:unitary-commutes}). If moreover $\text{Dom}(A) = \mathbf{H}$, then $VA\psi = AV\psi$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -152,7 +176,9 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[Unitary Conjugation Transports the Functional Calculus]
     \label{lmm:unitary-transport-functional-calculus}
+    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_unitaryConj}
     \uses{def:unitary-operator, def:product-of-unbounded-operators, def:hall-10.5}
+    \leanok
     Let $A$ be self-adjoint and $V$ unitary. Then $VAV^{-1}$ is self-adjoint, and $Vf(A)V^{-1} = f(VAV^{-1})$, including domains, for every real measurable $f$.
 \end{lemma}
 \begin{proof}
@@ -165,7 +191,9 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[Unitary Conjugation of a Bounded Complex Function]
     \label{lmm:unitary-transport-bounded-fc}
+    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_unitaryConj_of_bounded}
     \uses{def:unitary-operator, def:product-of-unbounded-operators, def:hall-10.5}
+    \leanok
     Let $A$ be self-adjoint, $V$ unitary, and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $Vf(A)V^{-1}\psi = f(VAV^{-1})\psi$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -183,7 +211,9 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Pre-Operators]
     \label{lmm:unitary-intertwines-tomita-pre-operators}
+    \lean{Physicslib4.Modular.tomitaPre_graph_unitary_intertwine}
     \uses{def:tomita-pre-operators, def:unitary-operator}
+    \leanok
     $\Gamma(S_{0,2}) = \Phi_V(\Gamma(S_{0,1}))$. That is, $\text{Dom}(S_{0,2}) = V\big(\text{Dom}(S_{0,1})\big)$ and $S_{0,2}V\psi = VS_{0,1}\psi$ for $\psi \in \text{Dom}(S_{0,1})$.
 \end{lemma}
 \begin{proof}
@@ -193,7 +223,9 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Tomita Operators]
     \label{lmm:unitary-intertwines-tomita-operator}
+    \lean{Physicslib4.Modular.tomitaOperator_unitary_intertwine}
     \uses{def:tomita-operator, def:unitary-operator}
+    \leanok
     $\Gamma(S_2) = \Phi_V(\Gamma(S_1))$. That is, $VS_1V^{-1} = S_2$ including domains: $\psi \in \text{Dom}(S_1)$ if and only if $V\psi \in \text{Dom}(S_2)$, and then $S_2V\psi = VS_1\psi$.
 \end{lemma}
 \begin{proof}
@@ -206,7 +238,9 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Modular Operators]
     \label{lmm:unitary-intertwines-modular-operator}
+    \lean{Physicslib4.Modular.modularOperator_unitary_intertwine}
     \uses{def:modular-operator, def:unitary-operator, def:product-of-unbounded-operators}
+    \leanok
     For all $\psi, \chi \in \mathbf{H}$,
     \begin{align}
         \big( V\psi \in \text{Dom}(\Delta_2) \text{ and } \Delta_2V\psi = V\chi \big) \iff \big( \psi \in \text{Dom}(\Delta_1) \text{ and } \Delta_1\psi = \chi \big).
@@ -224,7 +258,9 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines Functions of the Modular Operators]
     \label{lmm:unitary-intertwines-modular-sqrt}
+    \lean{Physicslib4.Modular.modularOperator_functionalCalculus_unitary_intertwine}
     \uses{def:modular-operator, def:hall-10.5, def:unitary-operator, def:product-of-unbounded-operators}
+    \leanok
     $Vf(\Delta_1)V^{-1} = f(\Delta_2)$, including domains, for every real measurable $f$. In particular $V\Delta_1^{1/2}V^{-1} = \Delta_2^{1/2}$, including domains.
 \end{lemma}
 \begin{proof}
@@ -234,7 +270,9 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Modular Unitary Groups]
     \label{lmm:unitary-intertwines-modular-unitary-group}
+    \lean{Physicslib4.Modular.modularUnitaryGroup_unitary_intertwine}
     \uses{def:modular-unitary-group, def:unitary-operator}
+    \leanok
     $V\Delta_1^{it}V^{-1} = \Delta_2^{it}$ for every $t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -244,7 +282,9 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Modular Conjugations]
     \label{lmm:unitary-intertwines-modular-conjugation}
+    \lean{Physicslib4.Modular.modularConjugation_unitary_intertwine}
     \uses{def:modular-conjugation, def:unitary-operator}
+    \leanok
     $VJ_1V^{-1} = J_2$, that is, $VJ_1V^{-1}\phi = J_2\phi$ for every $\phi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -258,7 +298,9 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{theorem}[A Unitary between Standard Pairs Intertwines the Modular Objects]
     \label{thrm:unitary-intertwines-modular-objects}
+    \lean{Physicslib4.Modular.modular_objects_unitary_intertwine}
     \uses{def:tomita-operator, def:modular-operator, def:modular-unitary-group, def:modular-conjugation, def:unitary-operator, def:product-of-unbounded-operators}
+    \leanok
     Let $\mathcal{M}_1, \mathcal{M}_2$ be von Neumann algebras on $\mathbf{H}$ with cyclic and separating vectors $\Omega_1, \Omega_2$, and let $V$ be a unitary with $V\mathcal{M}_1V^{-1} = \mathcal{M}_2$ and $V\Omega_1 = \Omega_2$. Then, including domains,
     \begin{align}
         VS_1V^{-1} = S_2, \quad V\Delta_1V^{-1} = \Delta_2, \quad V\Delta_1^{1/2}V^{-1} = \Delta_2^{1/2}, \quad V\Delta_1^{it}V^{-1} = \Delta_2^{it} \ (t \in \mathbb{R}), \quad VJ_1V^{-1} = J_2.
@@ -271,7 +313,9 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{corollary}[A Unitary Preserving $\mathcal{M}$ and $\Omega$ Commutes with the Modular Objects]
     \label{crllr:unitary-commutes-modular-objects}
+    \lean{Physicslib4.Modular.modular_objects_unitary_commute}
     \uses{def:unitary-commutes, def:modular-operator, def:modular-unitary-group, def:modular-conjugation, def:tomita-operator}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, with Tomita operator $S$, modular operator $\Delta$ and modular conjugation $J$. Let $V$ be a unitary with $V\mathcal{M}V^{-1} = \mathcal{M}$ and $V\Omega = \Omega$. Then $V$ commutes with $\Delta$ and with $\Delta^{1/2}$ (\ref{def:unitary-commutes}), $V$ and $V^{-1}$ map $\text{Dom}(S)$ onto itself with $SV\psi = VS\psi$ for $\psi \in \text{Dom}(S)$, and
     \begin{align}
         V\Delta^{it} = \Delta^{it}V \quad (t \in \mathbb{R}), \qquad VJ = JV.

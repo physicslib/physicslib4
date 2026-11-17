@@ -74,6 +74,7 @@ import Physicslib4.Operators.Conjugation
 import Physicslib4.Operators.DensityTheorem
 import Physicslib4.Operators.LpDiagonal
 import Physicslib4.Operators.Modular.Antiunitary
+import Physicslib4.Operators.Modular.Intertwining
 import Physicslib4.Operators.Modular.Modular
 import Physicslib4.Operators.Modular.Takesaki
 import Physicslib4.Operators.Modular.TakesakiKMS
@@ -99,6 +100,7 @@ import Physicslib4.Spacetime.LorentzCone
 import Physicslib4.Spacetime.LorentzOrthogonal
 import Physicslib4.Spacetime.LorentzianSpacetime
 import Physicslib4.Spacetime.Minkowski
+import Physicslib4.Spacetime.MinkowskiCausalCone
 import Physicslib4.Spacetime.MinkowskiDilation
 import Physicslib4.Spacetime.MinkowskiDirected
 import Physicslib4.Spacetime.Pullback
@@ -128,3 +130,4 @@ import Physicslib4.Spectral.Unbounded.Integral
 import Physicslib4.Spectral.Unbounded.Normal
 import Physicslib4.Spectral.Unbounded.Polar
 import Physicslib4.Spectral.Unbounded.Spectrum
+import Physicslib4.Spectral.Unbounded.UnitaryConjugation
