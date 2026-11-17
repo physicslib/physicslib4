@@ -66,7 +66,8 @@ def leftWedge : Set StandardMinkowskiSpacetime.Carrier :=
 Blueprint: def:left-wedge -/
 theorem mem_leftWedge_iff_neg_mem_rightWedge (x : SpacetimeModel) :
     x ∈ leftWedge ↔ -x ∈ rightWedge := by
-  sorry
+  change x 1 < -|x 0| ↔ |(-x) 0| < (-x) 1
+  simp only [PiLp.neg_apply, abs_neg, lt_neg]
 
 /-- The wedges in light-cone coordinates: `x ∈ W_R` if and only if `x¹ + x⁰ > 0` and
 `x¹ - x⁰ > 0`, and `x ∈ W_L` if and only if `x¹ + x⁰ < 0` and `x¹ - x⁰ < 0`.
@@ -75,7 +76,11 @@ Blueprint: lmm:wedge-light-cone-coordinates -/
 theorem wedge_lightCone_coordinates (x : SpacetimeModel) :
     (x ∈ rightWedge ↔ 0 < x 1 + x 0 ∧ 0 < x 1 - x 0) ∧
       (x ∈ leftWedge ↔ x 1 + x 0 < 0 ∧ x 1 - x 0 < 0) := by
-  sorry
+  refine ⟨?_, ?_⟩
+  · change |x 0| < x 1 ↔ _
+    rw [abs_lt]; constructor <;> rintro ⟨h1, h2⟩ <;> constructor <;> linarith
+  · change x 1 < -|x 0| ↔ _
+    rw [lt_neg, abs_lt]; constructor <;> rintro ⟨h1, h2⟩ <;> constructor <;> linarith
 
 /-- `W_R` and `W_L` are open and nonempty: `(0, 1, 0, 0) ∈ W_R` and `(0, -1, 0, 0) ∈ W_L`.
 
