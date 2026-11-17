@@ -373,6 +373,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     $W_R$ and $W_L$ are open in $\mathbb{R}^4$ and nonempty: $(0, 1, 0, 0) \in W_R$ and $(0, -1, 0, 0) \in W_L$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $W_R$ is the set where the continuous map $x \mapsto |x^0|$ is less than the continuous map $x \mapsto x^1$, hence open (Mathlib's \texttt{isOpen\_lt}, with \texttt{continuous\_abs} and the continuity of the coordinate maps). The same argument applies to $W_L$ with $x \mapsto x^1$ and $x \mapsto -|x^0|$. The two points satisfy $|0| < 1$ and $-1 < -|0|$.
 \end{proof}
 
@@ -446,6 +447,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     If $\eta(v,v) < 0$ and $v^0 > 0$, then $|v^i| < v^0$ for $i = 1, 2, 3$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $(v^i)^2 \le (v^1)^2 + (v^2)^2 + (v^3)^2 < (v^0)^2$ and $v^0 > 0$, so $|v^i| < v^0$ by Mathlib's \texttt{abs\_lt\_of\_sq\_lt\_sq}.
 \end{proof}
 

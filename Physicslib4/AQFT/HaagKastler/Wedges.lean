@@ -89,7 +89,10 @@ theorem wedge_isOpen_nonempty :
     IsOpen rightWedge ∧ IsOpen leftWedge ∧
       (!₂[0, 1, 0, 0] : SpacetimeModel) ∈ rightWedge ∧
       (!₂[0, -1, 0, 0] : SpacetimeModel) ∈ leftWedge := by
-  sorry
+  have h0 : Continuous fun x : SpacetimeModel => x 0 := (EuclideanSpace.proj (0 : Fin 4)).continuous
+  have h1 : Continuous fun x : SpacetimeModel => x 1 := (EuclideanSpace.proj (1 : Fin 4)).continuous
+  refine ⟨isOpen_lt (continuous_abs.comp h0) h1, isOpen_lt h1 (continuous_abs.comp h0).neg,
+    show |(0 : ℝ)| < 1 by norm_num, show (-1 : ℝ) < -|(0 : ℝ)| by norm_num⟩
 
 /-! ### Poincaré transformations of diamonds -/
 
@@ -165,7 +168,12 @@ theorem leftWedge_isWedge :
 Blueprint: lmm:open-cone-coordinate-bound -/
 theorem abs_coord_lt_of_minkowskiForm_neg {v : SpacetimeModel} (hv : minkowskiForm v v < 0)
     (h0 : 0 < v 0) (i : Fin 4) (hi : i ≠ 0) : |v i| < v 0 := by
-  sorry
+  rw [minkowskiForm_apply] at hv
+  refine abs_lt_of_sq_lt_sq ?_ h0.le
+  have h1 := sq_nonneg (v 1)
+  have h2 := sq_nonneg (v 2)
+  have h3 := sq_nonneg (v 3)
+  fin_cases i <;> simp at hi ⊢ <;> nlinarith
 
 /-- The diamond `B₊ = I⁺(p₊) ∩ I⁻(q₊)` with `p₊ = (-1, 2, 0, 0)` and `q₊ = (1, 2, 0, 0)` is a
 nonempty diamond contained in the right wedge.
