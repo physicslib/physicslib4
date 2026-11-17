@@ -785,3 +785,527 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
     \uses{thrm:wedge-cyclic-separating, thrm:region-algebra-covariance, crllr:unitary-commutes-modular-objects, lmm:conjugate-stabilises-wedge, lmm:boost-preserves-wedge, lmm:wedge-transverse-translations}
     By \ref{thrm:region-algebra-covariance}, $U(h)R(W)U(h)^{-1} = R(hW) = R(W)$, and $U(h)\Omega = \Omega$, so Corollary~\ref{crllr:unitary-commutes-modular-objects} applies to $V = U(h)$ and $(R(W), \Omega)$, which is a standard pair by \ref{thrm:wedge-cyclic-separating}. The listed elements stabilise their wedges by \ref{lmm:conjugate-stabilises-wedge}, \ref{lmm:boost-preserves-wedge} and \ref{lmm:wedge-transverse-translations}.
 \end{proof}
+
+\subsection{Borchers' Theorem}\label{sbsctn:borchers-theorem}
+
+This subsection proves Borchers' theorem, a statement of pure operator algebra that involves no net: a positive-energy one-parameter unitary group that fixes $\Omega$ and maps a von Neumann algebra into itself for nonnegative times is dilated by the modular group and reversed by the modular conjugation (Theorem~\ref{thrm:borchers}). The theorem is Theorem~II.9 of H.-J.~Borchers, \emph{The CPT-theorem in two-dimensional theories of local observables}, Comm.\ Math.\ Phys.\ 143 (1992) 315--332, as cited by H.~Araki and L.~Zsid\'o, Rev.\ Math.\ Phys.\ 17 (2005) 491--543, Section~2(f). The proof follows M.~Florig, \emph{On Borchers' theorem}, Lett.\ Math.\ Phys.\ 46 (1998) 289--293, in the form of Theorem~2.2.1 of R.~Longo's \emph{Lectures on Conformal Nets}, Part~I (stated there for standard subspaces; Theorem~6.3.1 of Part~II deduces the von Neumann algebra case from it). It is carried out here directly for the von Neumann algebra. For $x = x^* \in \mathcal{M}$, $y = y^* \in \mathcal{M}'$ and $\tau \ge 0$, the function
+\begin{align}
+    F(z) = \left< \Delta^{-i\overline{z}}y\Omega, \ V(\tau e^{2\pi z})\,\Delta^{-iz}x\Omega \right>, \qquad 0 \le \operatorname{Im} z \le \tfrac{1}{2},
+\end{align}
+is bounded and continuous on the strip and holomorphic inside it, since $\operatorname{Im}(\tau e^{2\pi z}) \ge 0$ there. It is real on both boundary lines. A function with these properties is constant, and comparing its values at $s$, $0$ and $\tfrac{i}{2}$ gives both relations. All the complex analysis is in one variable. The strip lemmas of Section~\ref{sctn:haag-kastler-axioms} (\ref{thrm:strip-liouville-pos}, \ref{thrm:strip-uniqueness}) give constancy. The continuation of $V$ to the upper half-plane is built from its positive generator, and the powers $\Delta^{-iz}$ on the strip are written with bounded functions of $\Delta$ and cut off with the spectral projections $E_n$, as in the proof of Takesaki's theorem (Subsection~\ref{sbsctn:takesaki-kms}).
+
+\emph{Setting.} Throughout this subsection, $\mathcal{M}$ is a von Neumann algebra on $\mathbf{H}$ (\ref{def:von-neumann-algebra-commutant-convention}) and $\Omega$ is cyclic and separating for $\mathcal{M}$ (\ref{def:cyclic-separating-vector}). $\Delta$, $\Delta^{1/2}$, $\Delta^{it} = e^{it\log\Delta}$ and $J$ are its modular operator, its square root, its modular unitary group and its modular conjugation (Definitions~\ref{def:modular-operator}, \ref{def:modular-unitary-group} and~\ref{def:modular-conjugation}). $\mu$, $E_n = \mu(K_n)$ with $K_n = [1/n, n]$, $e_t$, $p_{z,n}$ and $s(\lambda) = \sqrt{\max(\lambda, 0)}$ are as in Subsections~\ref{sbsctn:van-daele} and~\ref{sbsctn:takesaki-kms}, so $\Delta^{1/2} = s(\Delta)$ and $\Delta^{it} = e_t(\Delta)$. For a bounded operator $T$, $JTJ$ is the bounded operator of \ref{def:modular-conjugation-conjugate}. $V(t)$, $t \in \mathbb{R}$, is a family of unitary operators on $\mathbf{H}$ with positive energy (\ref{def:positive-energy}), so in particular a one-parameter unitary group (\ref{def:hall-10.11}) with $V(t)^* = V(-t)$ (\ref{lmm:unitary-group-inner-adjoint}), such that
+\begin{enumerate}
+    \item[(B1)] $V(t)\Omega = \Omega$ for every $t \in \mathbb{R}$;
+    \item[(B2)] $V(t)\,x\,V(-t) \in \mathcal{M}$ for every $t \ge 0$ and every $x \in \mathcal{M}$.
+\end{enumerate}
+The theorem is stated with the positive-energy condition of \ref{def:positive-energy} rather than with an explicit generator. By Theorem~\ref{thrm:positive-energy-iff-exp} the two forms are equivalent, and the proof fixes a positive self-adjoint $P$ with $V(t) = e^{itP}$. Hypothesis (B2) is the elementwise form of $V(t)\mathcal{M}V(t)^* \subseteq \mathcal{M}$.
+
+\subsubsection{Functions Real on Both Edges of a Strip}
+
+For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{Im} z \le \beta \}$ and $\Sigma^\circ_\beta = \{ z \in \mathbb{C} : 0 < \operatorname{Im} z < \beta \}$. For $f : \mathbb{C} \to \mathbb{C}$ let $\Phi_f(z) = \overline{f(\overline{z})}$ if $\operatorname{Im} z < 0$ and $\Phi_f(z) = f(z)$ otherwise; this is the Schwarz reflection of $f$ across the real axis.
+
+\begin{lemma}[Continuity of the Reflection across a Real Edge]
+    \label{lmm:strip-reflection-continuous}
+    Let $\beta > 0$ and let $f$ be continuous on $\Sigma_\beta$ with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is continuous on $\{ z : -\beta \le \operatorname{Im} z \le \beta \}$.
+\end{lemma}
+\begin{proof}
+    Mathlib's \texttt{ContinuousOn.if} applies with the condition $\operatorname{Im} z < 0$. The closure of $\{\operatorname{Im} z < 0\}$ is $\{\operatorname{Im} z \le 0\}$, that of its complement is $\{\operatorname{Im} z \ge 0\}$, and the common frontier is the real axis (the library's \texttt{closure\_setOf\_im\_lt}, \texttt{closure\_setOf\_not\_im\_lt}, \texttt{frontier\_setOf\_im\_lt} in \texttt{Physicslib4/Analysis/HorizontalLineRemovable.lean}). On $\{-\beta \le \operatorname{Im} z \le 0\}$, $z \mapsto \overline{f(\overline{z})}$ is continuous, as $f$ composed with conjugation, which maps this set into $\Sigma_\beta$ (\texttt{Complex.continuous\_conj}, \texttt{ContinuousOn.comp}). On $\Sigma_\beta$, $f$ is continuous. On the real axis, $\overline{f(t)} = f(t)$ because $f(t)$ is real (\texttt{Complex.conj\_eq\_iff\_real}).
+\end{proof}
+
+\begin{lemma}[Holomorphy of the Reflection across a Real Edge]
+    \label{lmm:strip-reflection-holomorphic}
+    Let $\beta > 0$ and let $f$ be continuous on $\Sigma_\beta$, holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is holomorphic on $\{ z : -\beta < \operatorname{Im} z < \beta \}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:horizontal-line-removable, lmm:strip-reflection-continuous}
+    Apply the library's gluing lemma \texttt{Physicslib4.differentiableOn\_if\_of\_eqOn\_horizontal\_line}, which rests on Lemma~\ref{lmm:horizontal-line-removable}, with $U = \{-\beta < \operatorname{Im} z < \beta\}$ (open, \texttt{isOpen\_lt} with \texttt{Complex.continuous\_im}), $\ell = 0$, $g(z) = \overline{f(\overline{z})}$ and $h = f$. The continuity hypotheses hold as in Lemma~\ref{lmm:strip-reflection-continuous}. $h$ is holomorphic on $U \cap \{\operatorname{Im} z > 0\} = \Sigma^\circ_\beta$, and $g$ is holomorphic on $U \cap \{\operatorname{Im} z < 0\}$ as the conjugate reflection of a holomorphic function (Mathlib's \texttt{HasDerivAt.conj\_conj}). On the real axis $g(t) = \overline{f(t)} = f(t) = h(t)$.
+\end{proof}
+
+\begin{lemma}[Regularity of the Shifted Reflection]
+    \label{lmm:strip-shifted-reflection-regular}
+    Let $\beta > 0$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi$ is continuous and bounded on $\Sigma_{2\beta}$ and holomorphic on $\Sigma^\circ_{2\beta}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-reflection-continuous, lmm:strip-reflection-holomorphic}
+    $z \mapsto z - i\beta$ maps $\Sigma_{2\beta}$ onto $\{-\beta \le \operatorname{Im} z \le \beta\}$ and $\Sigma^\circ_{2\beta}$ onto its interior, so continuity and holomorphy follow from Lemmas~\ref{lmm:strip-reflection-continuous} and~\ref{lmm:strip-reflection-holomorphic} (\texttt{ContinuousOn.comp}, \texttt{DifferentiableOn.comp}). $|\Phi_f(z)| \le \sup_{\Sigma_\beta}|f|$ on the wider strip, since $|\overline{f(\overline{z})}| = |f(\overline{z})|$ (\texttt{Complex.norm\_conj}).
+\end{proof}
+
+\begin{lemma}[The Shifted Reflection has Equal Boundary Values]
+    \label{lmm:strip-real-boundary-periodic}
+    Let $\beta > 0$ and $f : \mathbb{C} \to \mathbb{C}$ with $f(t + i\beta) \in \mathbb{R}$ for every $t \in \mathbb{R}$, and let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi(t) = f(t + i\beta) = \Psi(t + 2i\beta)$ for every $t \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    For real $t$, $\operatorname{Im}(t - i\beta) < 0$, so $\Psi(t) = \overline{f(t + i\beta)} = f(t + i\beta)$ since $f(t + i\beta)$ is real (\texttt{Complex.conj\_eq\_iff\_real}); and $\operatorname{Im}(t + i\beta) \ge 0$, so $\Psi(t + 2i\beta) = \Phi_f(t + i\beta) = f(t + i\beta)$.
+\end{proof}
+
+\begin{lemma}[A Function Real on Both Edges of a Strip is Constant]
+    \label{lmm:strip-real-boundary-constant}
+    Let $\beta > 0$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ and $f(t + i\beta) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $f(z) = f(0)$ for every $z \in \Sigma_\beta$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-shifted-reflection-regular, lmm:strip-real-boundary-periodic, thrm:strip-liouville-pos, thrm:strip-uniqueness}
+    Let $\Psi(z) = \Phi_f(z - i\beta)$, admissible on $\Sigma_{2\beta}$ by Lemma~\ref{lmm:strip-shifted-reflection-regular} and with equal boundary values by Lemma~\ref{lmm:strip-real-boundary-periodic}. By Theorem~\ref{thrm:strip-liouville-pos} at width $2\beta$, $\Psi(t) = \Psi(0)$ for real $t$, and then also $\Psi(t + 2i\beta) = \Psi(t) = \Psi(0)$. Theorem~\ref{thrm:strip-uniqueness} applied to $\Psi$ and the constant function $\Psi(0)$ gives $\Psi = \Psi(0)$ on $\Sigma_{2\beta}$. For $z \in \Sigma_\beta$, $z + i\beta \in \Sigma_{2\beta}$ and $f(z) = \Phi_f(z) = \Psi(z + i\beta)$, so $f$ is constant on $\Sigma_\beta$, equal to $f(0)$. In Lean, Theorem~\ref{thrm:strip-uniqueness} is \texttt{Physicslib4.eqOn\_strip\_of\_eq\_boundary} in \texttt{Physicslib4/Analysis/StripPeriodicExtension.lean}, whose periodic-extension lemmas (\texttt{pext\_differentiable}, \texttt{pext\_eq\_of\_mem\_strip}) may be reused directly instead of passing through \texttt{StripLiouville}.
+\end{proof}
+
+\subsubsection{The Positive-Energy Group on the Upper Half-Plane}
+
+By Theorem~\ref{thrm:positive-energy-iff-exp}, $V(t) = e^{itP}$ (\ref{def:exp-unitary-group}) for a positive self-adjoint operator $P$ (\ref{def:positive-unbounded-operator}), fixed from now on, with spectral measure $\mu^P$ (\ref{def:spectral-measure}). For $w \in \mathbb{C}$ and $\lambda \in \mathbb{R}$ let
+\begin{align}
+    \varepsilon_w(\lambda) = 1_{[0,\infty)}(\lambda)\,e^{iw\lambda}, \qquad \delta_w(\lambda) = 1_{[0,\infty)}(\lambda)\,i\lambda\,e^{iw\lambda},
+\end{align}
+and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a bounded operator by Lemmas~\ref{lmm:half-plane-exp-bounds} and~\ref{lmm:functional-calculus-bounded}. For $\operatorname{Im} w < 0$ put $\widetilde{V}(w) = 0$; every claim below concerns $\operatorname{Im} w \ge 0$ only. Formally $\widetilde{V}(w) = e^{iwP}$.
+
+\begin{lemma}[Polynomial Times Exponential Decay]
+    \label{lmm:poly-exp-decay}
+    Let $a > 0$ and $\lambda \ge 0$. Then $\lambda e^{-a\lambda} \le 1/(ae)$ and $\lambda^2 e^{-a\lambda} \le 4/(ae)^2$.
+\end{lemma}
+\begin{proof}
+    For $x \in \mathbb{R}$, $x \le e^{x - 1}$ by Mathlib's \texttt{Real.add\_one\_le\_exp} at $x - 1$, so $xe^{-x} \le e^{-1}$ (\texttt{Real.exp\_sub}, \texttt{Real.exp\_neg}). With $x = a\lambda$ this is the first bound. The second is the square of the first with $a/2$ in place of $a$: $\lambda^2 e^{-a\lambda} = (\lambda e^{-(a/2)\lambda})^2 \le (2/(ae))^2$ (\texttt{Real.exp\_add}, \texttt{pow\_le\_pow\_left}).
+\end{proof}
+
+\begin{lemma}[Bounds for $\varepsilon_w$ and $\delta_w$]
+    \label{lmm:half-plane-exp-bounds}
+    \uses{lmm:poly-exp-decay}
+    For every $w \in \mathbb{C}$, $\varepsilon_w$ and $\delta_w$ are measurable. If $\operatorname{Im} w \ge 0$, then $|\varepsilon_w(\lambda)| \le 1$ for every $\lambda$. If $c = \operatorname{Im} w > 0$, then $|\delta_w(\lambda)| \le 1/(ce)$ for every $\lambda$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:poly-exp-decay}
+    Measurability: \texttt{Measurable.indicator} with \texttt{measurableSet\_Ici} and the continuity of $\lambda \mapsto e^{iw\lambda}$ and $\lambda \mapsto i\lambda e^{iw\lambda}$ (\texttt{Continuous.measurable}). Off $[0,\infty)$ both functions vanish. For $\lambda \ge 0$, $|e^{iw\lambda}| = e^{-\lambda\operatorname{Im} w}$ (\texttt{Complex.norm\_exp}, $\operatorname{Re}(iw\lambda) = -\lambda\operatorname{Im} w$), which is at most $1$ when $\operatorname{Im} w \ge 0$ (\texttt{Real.exp\_le\_one\_iff}), and $|\delta_w(\lambda)| = \lambda e^{-c\lambda} \le 1/(ce)$ by Lemma~\ref{lmm:poly-exp-decay}.
+\end{proof}
+
+\begin{lemma}[The Taylor Estimate for $\varepsilon_w$]
+    \label{lmm:half-plane-exp-taylor}
+    \uses{lmm:poly-exp-decay}
+    Let $c = \operatorname{Im} w > 0$ and $h \in \mathbb{C}$ with $|h| \le c/2$. Then for every $\lambda \in \mathbb{R}$,
+    \begin{align}
+        \left| \varepsilon_{w+h}(\lambda) - \varepsilon_w(\lambda) - h\,\delta_w(\lambda) \right| \le \frac{16}{(ce)^2}\,|h|^2.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:poly-exp-decay}
+    Off $[0, \infty)$ the left side is $0$. For $\lambda \ge 0$ it is $|e^{iw\lambda}|\,|e^{u} - 1 - u|$ with $u = ih\lambda$ (\texttt{Complex.exp\_add}). Mathlib's \texttt{Complex.norm\_exp\_sub\_sum\_le\_norm\_mul\_exp} with $n = 2$ gives $|e^u - 1 - u| \le |u|^2 e^{|u|}$ (\texttt{Finset.sum\_range\_succ}). With $|e^{iw\lambda}| = e^{-c\lambda}$ and $|u| = |h|\lambda \le c\lambda/2$, the left side is at most $|h|^2\lambda^2 e^{-c\lambda/2} \le |h|^2 \cdot 4/((c/2)e)^2$ by Lemma~\ref{lmm:poly-exp-decay}.
+\end{proof}
+
+\begin{lemma}[The Extension $\widetilde{V}$ is a Contraction Extending $V$]
+    \label{lmm:positive-energy-extension-operators}
+    \uses{def:positive-energy, def:exp-unitary-group, def:hall-10.5}
+    For $\operatorname{Im} w \ge 0$, $\widetilde{V}(w)$ is a bounded operator with $\|\widetilde{V}(w)\| \le 1$, equal to the bounded integral $\int \varepsilon_w \, d\mu^P$. For $t \in \mathbb{R}$, $\widetilde{V}(t) = V(t)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:half-plane-exp-bounds, lmm:functional-calculus-bounded, prpstn:integral-norm-bound, thrm:positive-energy-iff-exp, lmm:positive-spectral-support, lmm:integral-ignores-null-sets}
+    $\varepsilon_w$ is bounded and measurable (Lemma~\ref{lmm:half-plane-exp-bounds}), so Lemma~\ref{lmm:functional-calculus-bounded} identifies $\varepsilon_w(P)$ with the bounded integral, and Proposition~\ref{prpstn:integral-norm-bound} gives the norm bound. For real $t$, $V(t) = e^{itP} = f_t(P)$ with $f_t(\lambda) = e^{it\lambda}$ (Theorem~\ref{thrm:positive-energy-iff-exp}, Definition~\ref{def:exp-unitary-group}). $f_t$ and $\varepsilon_t$ agree off $(-\infty, 0)$, which is $\mu^P$-null by Lemma~\ref{lmm:positive-spectral-support}, so $f_t(P) = \varepsilon_t(P)$ by Lemma~\ref{lmm:integral-ignores-null-sets}.
+\end{proof}
+
+\begin{lemma}[$\widetilde{V}$ is Holomorphic on the Open Upper Half-Plane]
+    \label{lmm:positive-energy-extension-holomorphic}
+    \uses{lmm:positive-energy-extension-operators}
+    The map $w \mapsto \widetilde{V}(w)$ from $\{\operatorname{Im} w > 0\}$ to $\mathcal{B}(\mathbf{H})$, with the operator norm, is complex differentiable at every point, with derivative $\delta_w(P)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:half-plane-exp-taylor, lmm:half-plane-exp-bounds, lmm:functional-calculus-bounded, thrm:operator-valued-integration, prpstn:integral-norm-bound}
+    Fix $w$ with $c = \operatorname{Im} w > 0$; $\delta_w(P)$ is bounded by Lemmas~\ref{lmm:half-plane-exp-bounds} and~\ref{lmm:functional-calculus-bounded}. For $|h| \le c/2$, $\operatorname{Im}(w + h) > 0$, and by linearity of the bounded integral (Theorem~\ref{thrm:operator-valued-integration}) $R(h) = \widetilde{V}(w + h) - \widetilde{V}(w) - h\,\delta_w(P) = \int (\varepsilon_{w+h} - \varepsilon_w - h\delta_w) \, d\mu^P$, so $\|R(h)\| \le 16|h|^2/(ce)^2$ by Lemma~\ref{lmm:half-plane-exp-taylor} and Proposition~\ref{prpstn:integral-norm-bound}. Hence $R = O(h^2) = o(h)$ (\texttt{Asymptotics.IsBigO.of\_bound}, \texttt{Asymptotics.isLittleO\_pow\_id}, \texttt{Asymptotics.IsBigO.trans\_isLittleO}), which is the derivative by \texttt{hasDerivAt\_iff\_isLittleO\_nhds\_zero}, as in Theorem~\ref{thrm:modular-power-holomorphic}.
+\end{proof}
+
+\begin{lemma}[$\widetilde{V}$ is Strongly Continuous on the Closed Upper Half-Plane]
+    \label{lmm:positive-energy-extension-strongly-continuous}
+    \uses{lmm:positive-energy-extension-operators}
+    For every $\psi \in \mathbf{H}$, $w \mapsto \widetilde{V}(w)\psi$ is continuous on $\{\operatorname{Im} w \ge 0\}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:half-plane-exp-bounds, prpstn:hall-10.1, lmm:functional-calculus-bounded, thrm:operator-valued-integration, lmm:associated-measure-total-mass}
+    Fix $w_0$ with $\operatorname{Im} w_0 \ge 0$. For $\operatorname{Im} w \ge 0$, $\widetilde{V}(w)\psi - \widetilde{V}(w_0)\psi = (\varepsilon_w - \varepsilon_{w_0})(P)\psi$ by linearity (Theorem~\ref{thrm:operator-valued-integration}, Lemma~\ref{lmm:functional-calculus-bounded}), so by Proposition~\ref{prpstn:hall-10.1}, $\|\widetilde{V}(w)\psi - \widetilde{V}(w_0)\psi\|^2 = \int |\varepsilon_w - \varepsilon_{w_0}|^2 \, d\mu^P_\psi$. The integrand is bounded by $4$ (Lemma~\ref{lmm:half-plane-exp-bounds}), $\mu^P_\psi$ is finite (Lemma~\ref{lmm:associated-measure-total-mass}), and the integrand tends to $0$ pointwise as $w \to w_0$, since $w \mapsto e^{iw\lambda}$ is continuous. Dominated convergence along $\mathcal{N}_{\{\operatorname{Im} w \ge 0\}}(w_0)$ (Mathlib's \texttt{MeasureTheory.tendsto\_integral\_filter\_of\_dominated\_convergence}) gives the limit $0$.
+\end{proof}
+
+\begin{lemma}[The Dilation Map on the Strip]
+    \label{lmm:dilation-strip-half-plane}
+    Let $\tau \ge 0$ and $z \in \Sigma_{1/2}$. Then $\operatorname{Im}(\tau e^{2\pi z}) \ge 0$, with strict inequality if $\tau > 0$ and $z \in \Sigma^\circ_{1/2}$. For $t \in \mathbb{R}$, $\tau e^{2\pi(t + i/2)} = -\tau e^{2\pi t}$.
+\end{lemma}
+\begin{proof}
+    $\operatorname{Im}(\tau e^{2\pi z}) = \tau e^{2\pi\operatorname{Re} z}\sin(2\pi\operatorname{Im} z)$ (\texttt{Complex.exp\_im}, \texttt{Complex.mul\_im}), and $2\pi\operatorname{Im} z \in [0, \pi]$, where the sine is nonnegative (\texttt{Real.sin\_nonneg\_of\_nonneg\_of\_le\_pi}), positive on $(0, \pi)$ (\texttt{Real.sin\_pos\_of\_pos\_of\_lt\_pi}). Finally $e^{2\pi t + i\pi} = e^{2\pi t}e^{i\pi} = -e^{2\pi t}$ (\texttt{Complex.exp\_add}, \texttt{Complex.exp\_pi\_mul\_I}).
+\end{proof}
+
+\begin{lemma}[The Dilated Extension on the Strip]
+    \label{lmm:dilated-extension-analytic}
+    \uses{lmm:positive-energy-extension-operators}
+    Let $\tau \ge 0$. Then $z \mapsto \widetilde{V}(\tau e^{2\pi z})$ is complex differentiable, in the operator norm, at every $z \in \Sigma^\circ_{1/2}$, and $z \mapsto \widetilde{V}(\tau e^{2\pi z})\psi$ is continuous on $\Sigma_{1/2}$ for every $\psi \in \mathbf{H}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:dilation-strip-half-plane, lmm:positive-energy-extension-holomorphic, lmm:positive-energy-extension-strongly-continuous, lmm:positive-energy-extension-operators, def:hall-10.11}
+    If $\tau = 0$ the map is the constant $\widetilde{V}(0) = V(0) = \mathbf{1}$ (Lemma~\ref{lmm:positive-energy-extension-operators}, \ref{def:hall-10.11}). If $\tau > 0$, $z \mapsto \tau e^{2\pi z}$ is entire and maps $\Sigma^\circ_{1/2}$ into $\{\operatorname{Im} w > 0\}$ and $\Sigma_{1/2}$ into $\{\operatorname{Im} w \ge 0\}$ (Lemma~\ref{lmm:dilation-strip-half-plane}). The chain rule with Lemma~\ref{lmm:positive-energy-extension-holomorphic} (\texttt{DifferentiableAt.comp}) gives differentiability, and \texttt{ContinuousOn.comp} with Lemma~\ref{lmm:positive-energy-extension-strongly-continuous} gives continuity.
+\end{proof}
+
+\subsubsection{Powers of $\Delta$ on the Strip}
+
+For $\zeta \in \mathbb{C}$ and $\lambda \in \mathbb{R}$ let
+\begin{align}
+    k_\zeta(\lambda) = 1_{(0,\infty)}(\lambda)\,\frac{\lambda^{-i\zeta}}{1 + s(\lambda)}, \qquad c(\lambda) = \frac{1_{(0,\infty)}(\lambda)}{1 + s(\lambda)},
+\end{align}
+with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$ write $\varphi^\sharp = \varphi + \Delta^{1/2}\varphi$. On $\Sigma_{1/2}$, $k_\zeta(\Delta)\varphi^\sharp$ is a bounded-function expression for $\Delta^{-i\zeta}\varphi$: the factor $\lambda^{\operatorname{Im}\zeta}$ is at most $1 + s(\lambda)$ there.
+
+\begin{lemma}[Measurability of $k_\zeta$ and $c$]
+    \label{lmm:strip-power-functions-measurable}
+    For every $\zeta \in \mathbb{C}$ and $t \in \mathbb{R}$, $s$, $k_\zeta$, $c$ and $k_t s$ are measurable.
+\end{lemma}
+\begin{proof}
+    $s$ is continuous (\texttt{Real.continuous\_sqrt}, \texttt{Continuous.max}) hence measurable (\texttt{Continuous.measurable}); $\lambda \mapsto (\lambda : \mathbb{C})^{-i\zeta}$ is measurable (\texttt{Measurable.pow\_const} with \texttt{Complex.measurable\_ofReal}); \texttt{Measurable.div}, \texttt{Measurable.mul} and \texttt{Measurable.indicator} with \texttt{measurableSet\_Ioi} conclude.
+\end{proof}
+
+\begin{lemma}[The Power Bound on the Strip]
+    \label{lmm:strip-power-modulus-bound}
+    Let $\zeta \in \Sigma_{1/2}$ and $\lambda > 0$. Then $|\lambda^{-i\zeta}| = \lambda^{\operatorname{Im}\zeta} \le 1 + s(\lambda)$.
+\end{lemma}
+\begin{proof}
+    $|\lambda^{-i\zeta}| = \lambda^{\operatorname{Re}(-i\zeta)} = \lambda^{\operatorname{Im}\zeta}$ (\texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos}). If $\lambda \le 1$, $\lambda^{\operatorname{Im}\zeta} \le 1$ since $\operatorname{Im}\zeta \ge 0$ (\texttt{Real.rpow\_le\_one}); if $\lambda \ge 1$, $\lambda^{\operatorname{Im}\zeta} \le \lambda^{1/2} = s(\lambda)$ since $\operatorname{Im}\zeta \le \tfrac{1}{2}$ (\texttt{Real.rpow\_le\_rpow\_of\_exponent\_le}, \texttt{Real.sqrt\_eq\_rpow}). Either way the bound holds, as $s(\lambda) \ge 0$.
+\end{proof}
+
+\begin{lemma}[Bounds for $k_\zeta$ and $c$]
+    \label{lmm:strip-power-functions-bounded}
+    For every $t \in \mathbb{R}$, $|c(\lambda)| \le 1$ and $|k_t(\lambda)s(\lambda)| \le 1$ for every $\lambda$, and if $\zeta \in \Sigma_{1/2}$, then $|k_\zeta(\lambda)| \le 1$ for every $\lambda$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-power-modulus-bound}
+    Off $(0, \infty)$ the functions vanish. For $\lambda > 0$, $|k_\zeta(\lambda)| = |\lambda^{-i\zeta}|/(1 + s(\lambda)) \le 1$ by Lemma~\ref{lmm:strip-power-modulus-bound} (\texttt{div\_le\_one}); $|c(\lambda)| = 1/(1 + s(\lambda)) \le 1$; and $|k_t(\lambda)s(\lambda)| = s(\lambda)/(1 + s(\lambda)) \le 1$ since $|\lambda^{-it}| = 1$ (Lemma~\ref{lmm:strip-power-modulus-bound} with $\operatorname{Im} t = 0$).
+\end{proof}
+
+\begin{lemma}[Identities for $k_\zeta$]
+    \label{lmm:strip-power-functions-identities}
+    \uses{lmm:modular-unitary-group-fc}
+    For $\zeta \in \mathbb{C}$, $n \ge 1$, $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$:
+    \begin{align}
+        p_{-i\zeta,n}(\lambda)\,c(\lambda) = k_\zeta(\lambda)\,1_{K_n}(\lambda), \qquad k_t(\lambda)\,(1 + s(\lambda)) = 1_{(0,\infty)}(\lambda)\,e_{-t}(\lambda), \qquad k_{t + i/2}(\lambda) = k_t(\lambda)\,s(\lambda).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:log-power-on-interval, lmm:takesaki-positive-scalar-identities}
+    Off $(0, \infty)$ every term vanishes, and $K_n \subset (0, \infty)$ (Lemma~\ref{lmm:log-power-on-interval}), so the first identity is $\lambda^{-i\zeta}/(1 + s(\lambda))$ on both sides on $K_n$ and $0$ off it (\texttt{Set.indicator\_apply}, \texttt{split\_ifs}). For $\lambda > 0$: $1 + s(\lambda) \ne 0$ and $e_{-t}(\lambda) = \lambda^{-it}$ (Lemma~\ref{lmm:takesaki-positive-scalar-identities}), which gives the second (\texttt{div\_mul\_cancel\textsubscript{0}}); and $\lambda^{-i(t + i/2)} = \lambda^{-it + 1/2} = \lambda^{-it}\lambda^{1/2}$ (\texttt{Complex.cpow\_add}, $(\lambda : \mathbb{C}) \ne 0$) with $\lambda^{1/2} = s(\lambda)$ (\texttt{Complex.ofReal\_cpow}, \texttt{Real.sqrt\_eq\_rpow}), which gives the third.
+\end{proof}
+
+\begin{lemma}[The Lower Edge: $k_t(\Delta)\varphi^\sharp = \Delta^{-it}\varphi$]
+    \label{lmm:strip-power-lower-boundary}
+    \uses{def:modular-operator, def:modular-unitary-group, def:hall-10.5}
+    Let $\varphi \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $k_t(\Delta)\varphi^\sharp = \Delta^{-it}\varphi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-power-functions-measurable, lmm:strip-power-functions-bounded, lmm:strip-power-functions-identities, lmm:fc-bounded-left-composition, lmm:functional-calculus-bounded, thrm:operator-valued-integration, prpstn:integral-multiplicative, lmm:modular-indicator-positive-one, lmm:modular-unitary-group-fc}
+    $k_t(\Delta)\Delta^{1/2}\varphi = (k_ts)(\Delta)\varphi$ by Lemma~\ref{lmm:fc-bounded-left-composition} ($u = k_t$, $h = s$, $\varphi \in W_s = \text{Dom}(\Delta^{1/2})$), and $(k_ts)(\Delta)$ is the bounded integral since $k_ts$ is bounded (Lemmas~\ref{lmm:strip-power-functions-measurable}, \ref{lmm:strip-power-functions-bounded} and~\ref{lmm:functional-calculus-bounded}). By linearity of the bounded integral (Theorem~\ref{thrm:operator-valued-integration}) and Lemma~\ref{lmm:strip-power-functions-identities}, $k_t(\Delta)\varphi^\sharp = (k_t(1 + s))(\Delta)\varphi = (1_{(0,\infty)}e_{-t})(\Delta)\varphi$, which is $1_{(0,\infty)}(\Delta)\,e_{-t}(\Delta)\varphi = \Delta^{-it}\varphi$ (Proposition~\ref{prpstn:integral-multiplicative}, Lemmas~\ref{lmm:modular-indicator-positive-one} and~\ref{lmm:modular-unitary-group-fc}).
+\end{proof}
+
+\begin{lemma}[The Upper Edge: $k_{t+i/2}(\Delta)\varphi^\sharp = \Delta^{-it}\Delta^{1/2}\varphi$]
+    \label{lmm:strip-power-upper-boundary}
+    \uses{def:modular-operator, def:modular-unitary-group, def:hall-10.5}
+    Let $\varphi \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $k_{t + i/2}(\Delta)\varphi^\sharp = \Delta^{-it}\Delta^{1/2}\varphi$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-power-functions-measurable, lmm:strip-power-functions-bounded, lmm:strip-power-functions-identities, lmm:fc-bounded-left-composition, thrm:operator-valued-integration, prpstn:integral-multiplicative, lmm:modular-indicator-positive-one, lmm:modular-unitary-group-fc}
+    By Lemma~\ref{lmm:strip-power-functions-identities}, $k_{t+i/2} = k_ts$, and Lemma~\ref{lmm:fc-bounded-left-composition} gives $(k_ts)(\Delta)\varphi = k_t(\Delta)\Delta^{1/2}\varphi$. So $k_{t+i/2}(\Delta)\varphi^\sharp = k_t(\Delta)\Delta^{1/2}\varphi + (k_ts)(\Delta)\Delta^{1/2}\varphi = (k_t(1 + s))(\Delta)\Delta^{1/2}\varphi$ (Theorem~\ref{thrm:operator-valued-integration}), and $(k_t(1 + s))(\Delta) = \Delta^{-it}$ exactly as in Lemma~\ref{lmm:strip-power-lower-boundary}.
+\end{proof}
+
+\begin{lemma}[Cutting off $k_\zeta(\Delta)$]
+    \label{lmm:strip-power-cutoff}
+    \uses{lmm:modular-power-operators, def:spectral-measure}
+    Let $\chi \in \mathbf{H}$, $\zeta \in \mathbb{C}$ and $n \ge 1$. Then $p_{-i\zeta,n}(\Delta)\,c(\Delta)\chi = k_\zeta(\Delta)E_n\chi$. If $\zeta \in \Sigma_{1/2}$, then $\|k_\zeta(\Delta)\chi\| \le \|\chi\|$ and $\|k_\zeta(\Delta)\chi - p_{-i\zeta,n}(\Delta)c(\Delta)\chi\| \le \|\chi - E_n\chi\|$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-power-functions-identities, lmm:strip-power-functions-measurable, lmm:strip-power-functions-bounded, lmm:modular-power-function-bounds, prpstn:integral-multiplicative, prpstn:integral-of-indicator, prpstn:integral-norm-bound, lmm:functional-calculus-bounded}
+    All functions involved are bounded and measurable (Lemmas~\ref{lmm:strip-power-functions-measurable}, \ref{lmm:strip-power-functions-bounded} and~\ref{lmm:modular-power-function-bounds}), so Proposition~\ref{prpstn:integral-multiplicative}, the first identity of Lemma~\ref{lmm:strip-power-functions-identities} and $E_n = 1_{K_n}(\Delta)$ (Proposition~\ref{prpstn:integral-of-indicator}) give $p_{-i\zeta,n}(\Delta)c(\Delta) = k_\zeta(\Delta)E_n$. For $\zeta \in \Sigma_{1/2}$, $\|k_\zeta(\Delta)\| \le 1$ (Proposition~\ref{prpstn:integral-norm-bound}), and the difference is $k_\zeta(\Delta)(\chi - E_n\chi)$ (\texttt{map\_sub}).
+\end{proof}
+
+\subsubsection{The Borchers Function}
+
+Fix $\tau \ge 0$ and $\varphi, \psi \in \text{Dom}(\Delta^{1/2})$. For $z \in \mathbb{C}$ let $z^\flat = \overline{z} + \tfrac{i}{2}$; the map $z \mapsto z^\flat$ maps $\Sigma_{1/2}$ onto itself and exchanges its two boundary lines. For $z \in \Sigma_{1/2}$ and $n \ge 1$ put
+\begin{align}
+    F(z) &= \left< k_{z^\flat}(\Delta)\psi^\sharp, \ \widetilde{V}(\tau e^{2\pi z})\,k_z(\Delta)\varphi^\sharp \right>, \\
+    F_n(z) &= \left< p_{-iz^\flat,n}(\Delta)c(\Delta)\psi^\sharp, \ \widetilde{V}(\tau e^{2\pi z})\,p_{-iz,n}(\Delta)c(\Delta)\varphi^\sharp \right>,
+\end{align}
+and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigma_{1/2}$ only. Formally $F(z) = \left< \Delta^{-iz^\flat}\psi, \widetilde{V}(\tau e^{2\pi z})\Delta^{-iz}\varphi \right>$. With $\psi = Jy\Omega$, $y = y^* \in \mathcal{M}'$, and $\Delta^{1/2}Jy\Omega = y\Omega$, this is the function $\left< \Delta^{-i\overline{z}}y\Omega, V(\tau e^{2\pi z})\Delta^{-iz}\varphi \right>$ of the introduction.
+
+\begin{lemma}[Continuity of a Sandwiched Matrix Coefficient]
+    \label{lmm:sandwich-continuous}
+    Let $D \subseteq \mathbb{C}$, let $a, b : \mathbb{C} \to \mathbf{H}$ be continuous on $D$, and let $T : \mathbb{C} \to \mathcal{B}(\mathbf{H})$ satisfy $\|T(z)\| \le 1$ for $z \in D$, with $z \mapsto T(z)\chi$ continuous on $D$ for every $\chi \in \mathbf{H}$. Then $z \mapsto \left< a(z), T(z)b(z) \right>$ is continuous on $D$.
+\end{lemma}
+\begin{proof}
+    Fix $z_0 \in D$. $T(z)b(z) - T(z_0)b(z_0) = T(z)(b(z) - b(z_0)) + (T(z)b(z_0) - T(z_0)b(z_0))$, whose norm is at most $\|b(z) - b(z_0)\| + \|T(z)b(z_0) - T(z_0)b(z_0)\| \to 0$ as $z \to z_0$ in $D$ (\texttt{norm\_add\_le}, \texttt{ContinuousLinearMap.le\_of\_opNorm\_le}, \texttt{squeeze\_zero\_norm}). So $z \mapsto T(z)b(z)$ is continuous on $D$, and the inner product of two continuous maps is continuous (\texttt{ContinuousOn.inner}).
+\end{proof}
+
+\begin{lemma}[The Approximants are Continuous on the Strip]
+    \label{lmm:borchers-approximants-continuous}
+    \uses{lmm:modular-power-operators}
+    For $n \ge 1$, $F_n$ is continuous on $\Sigma_{1/2}$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:modular-power-holomorphic, lmm:dilated-extension-analytic, lmm:positive-energy-extension-operators, lmm:dilation-strip-half-plane, lmm:sandwich-continuous}
+    $z \mapsto p_{-iz^\flat,n}(\Delta)$ and $z \mapsto p_{-iz,n}(\Delta)$ are norm-continuous, as the continuous map of Theorem~\ref{thrm:modular-power-holomorphic} composed with the continuous maps $z \mapsto -i\overline{z} + \tfrac{1}{2}$ and $z \mapsto -iz$ (\texttt{Complex.continuous\_conj}). So the two vectors of $F_n$ are continuous in $z$ (\texttt{Continuous.clm\_apply}). $T(z) = \widetilde{V}(\tau e^{2\pi z})$ has $\|T(z)\| \le 1$ on $\Sigma_{1/2}$ (Lemmas~\ref{lmm:dilation-strip-half-plane} and~\ref{lmm:positive-energy-extension-operators}) and is strongly continuous there (Lemma~\ref{lmm:dilated-extension-analytic}), and Lemma~\ref{lmm:sandwich-continuous} with $D = \Sigma_{1/2}$ concludes; $F_n$ agrees with this expression on $\Sigma_{1/2}$ (\texttt{ContinuousOn.congr}).
+\end{proof}
+
+\begin{lemma}[The Approximants are Holomorphic Inside the Strip]
+    \label{lmm:borchers-approximants-holomorphic}
+    \uses{lmm:modular-power-operators}
+    For $n \ge 1$, $F_n$ is holomorphic on $\Sigma^\circ_{1/2}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-power-operators, thrm:modular-power-holomorphic, lmm:dilated-extension-analytic}
+    By Lemma~\ref{lmm:modular-power-operators}, $p_{-iz^\flat,n}(\Delta)^* = p_{iz + 1/2,n}(\Delta)$, since $\overline{-i\overline{z} + 1/2} = iz + \tfrac{1}{2}$. Moving it to the right slot (\texttt{ContinuousLinearMap.adjoint\_inner\_left}) gives, on $\Sigma_{1/2}$,
+    \begin{align}
+        F_n(z) = \left< c(\Delta)\psi^\sharp, \ p_{iz + 1/2,n}(\Delta)\,\widetilde{V}(\tau e^{2\pi z})\,p_{-iz,n}(\Delta)\,c(\Delta)\varphi^\sharp \right>.
+    \end{align}
+    The three operator-valued factors are complex differentiable at every $z \in \Sigma^\circ_{1/2}$ in the operator norm: the outer two by Theorem~\ref{thrm:modular-power-holomorphic} and the chain rule, the middle one by Lemma~\ref{lmm:dilated-extension-analytic}. Their product is differentiable in the normed algebra $\mathcal{B}(\mathbf{H})$ (\texttt{DifferentiableAt.mul}), and so is its image under the continuous linear map $T \mapsto \left< \alpha, T\beta \right>$ (\texttt{ContinuousLinearMap.differentiableAt}, \texttt{DifferentiableAt.comp}). $\Sigma^\circ_{1/2}$ is open, so $F_n$ agrees with this function near each of its points (\texttt{DifferentiableOn.congr}).
+\end{proof}
+
+\begin{lemma}[Uniform Convergence of the Approximants]
+    \label{lmm:borchers-approximants-uniform}
+    \uses{def:spectral-measure}
+    For $n \ge 1$ and $z \in \Sigma_{1/2}$,
+    \begin{align}
+        |F(z) - F_n(z)| \le \|\psi^\sharp - E_n\psi^\sharp\|\,\|\varphi^\sharp\| + \|\psi^\sharp\|\,\|\varphi^\sharp - E_n\varphi^\sharp\|,
+    \end{align}
+    so $F_n \to F$ uniformly on $\Sigma_{1/2}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-power-cutoff, lmm:positive-energy-extension-operators, lmm:dilation-strip-half-plane, lmm:modular-spectral-projections-converge}
+    For $z \in \Sigma_{1/2}$ also $z^\flat \in \Sigma_{1/2}$. Write $a = k_{z^\flat}(\Delta)\psi^\sharp$, $a_n = p_{-iz^\flat,n}(\Delta)c(\Delta)\psi^\sharp$, $b = k_z(\Delta)\varphi^\sharp$, $b_n = p_{-iz,n}(\Delta)c(\Delta)\varphi^\sharp$ and $T = \widetilde{V}(\tau e^{2\pi z})$. Then $F(z) - F_n(z) = \left< a - a_n, Tb \right> + \left< a_n, T(b - b_n) \right>$ (\texttt{inner\_sub\_left}, \texttt{inner\_sub\_right}). By Lemma~\ref{lmm:strip-power-cutoff}, $\|a - a_n\| \le \|\psi^\sharp - E_n\psi^\sharp\|$, $\|b\| \le \|\varphi^\sharp\|$, $\|a_n\| = \|k_{z^\flat}(\Delta)E_n\psi^\sharp\| \le \|\psi^\sharp\|$ ($\|E_n\| \le 1$) and $\|b - b_n\| \le \|\varphi^\sharp - E_n\varphi^\sharp\|$; and $\|T\| \le 1$ (Lemmas~\ref{lmm:dilation-strip-half-plane} and~\ref{lmm:positive-energy-extension-operators}). \texttt{norm\_inner\_le\_norm} gives the bound. It does not depend on $z$ and tends to $0$ (Lemma~\ref{lmm:modular-spectral-projections-converge}), which is uniform convergence (\texttt{Metric.tendstoUniformlyOn\_iff}, \texttt{squeeze\_zero}).
+\end{proof}
+
+\begin{lemma}[The Borchers Function is Bounded and Analytic]
+    \label{lmm:borchers-function-analytic}
+    $F$ is continuous on $\Sigma_{1/2}$, holomorphic on $\Sigma^\circ_{1/2}$, and $|F(z)| \le \|\psi^\sharp\|\,\|\varphi^\sharp\|$ for $z \in \Sigma_{1/2}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:borchers-approximants-continuous, lmm:borchers-approximants-holomorphic, lmm:borchers-approximants-uniform, lmm:strip-power-cutoff, lmm:positive-energy-extension-operators, lmm:dilation-strip-half-plane}
+    A uniform limit of continuous functions is continuous (\texttt{TendstoUniformlyOn.continuousOn}, Lemmas~\ref{lmm:borchers-approximants-continuous} and~\ref{lmm:borchers-approximants-uniform}). On the open set $\Sigma^\circ_{1/2}$ the convergence is locally uniform (\texttt{TendstoUniformlyOn.mono}, \texttt{TendstoUniformlyOn.tendstoLocallyUniformlyOn}), so $F$ is holomorphic there (\texttt{TendstoLocallyUniformlyOn.differentiableOn}, Lemma~\ref{lmm:borchers-approximants-holomorphic}). The bound is \texttt{norm\_inner\_le\_norm} with $\|k_\zeta(\Delta)\chi\| \le \|\chi\|$ for $\zeta \in \Sigma_{1/2}$ (Lemma~\ref{lmm:strip-power-cutoff}) and $\|\widetilde{V}(\tau e^{2\pi z})\| \le 1$ (Lemmas~\ref{lmm:dilation-strip-half-plane} and~\ref{lmm:positive-energy-extension-operators}).
+\end{proof}
+
+\begin{lemma}[The Boundary Values of the Borchers Function]
+    \label{lmm:borchers-function-boundary}
+    \uses{def:modular-operator, def:modular-unitary-group}
+    For $t \in \mathbb{R}$,
+    \begin{align}
+        F(t) = \left< \Delta^{-it}\Delta^{1/2}\psi, \ V(\tau e^{2\pi t})\,\Delta^{-it}\varphi \right>, \qquad F(t + \tfrac{i}{2}) = \left< \Delta^{-it}\psi, \ V(-\tau e^{2\pi t})\,\Delta^{-it}\Delta^{1/2}\varphi \right>.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:strip-power-lower-boundary, lmm:strip-power-upper-boundary, lmm:positive-energy-extension-operators, lmm:dilation-strip-half-plane}
+    For real $t$, $t^\flat = t + \tfrac{i}{2}$ and $(t + \tfrac{i}{2})^\flat = t$ (\texttt{Complex.conj\_ofReal}). Lemmas~\ref{lmm:strip-power-lower-boundary} and~\ref{lmm:strip-power-upper-boundary} evaluate the two vectors. $\widetilde{V}(\tau e^{2\pi t}) = V(\tau e^{2\pi t})$, and $\widetilde{V}(\tau e^{2\pi(t + i/2)}) = \widetilde{V}(-\tau e^{2\pi t}) = V(-\tau e^{2\pi t})$, by Lemmas~\ref{lmm:dilation-strip-half-plane} and~\ref{lmm:positive-energy-extension-operators}, the arguments being real (\texttt{Complex.ofReal\_exp}).
+\end{proof}
+
+\subsubsection{Reality on the Boundary}
+
+For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjugate}).
+
+\begin{lemma}[$J\Omega = \Omega$]
+    \label{lmm:modular-conjugation-fixes-omega}
+    \uses{def:modular-conjugation, def:modular-operator, def:cyclic-separating-vector}
+    $\Delta^{1/2}\Omega = \Omega$ and $J\Omega = \Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-operator-fixes-omega, lmm:spectral-eigenvector-projection, lmm:spectral-eigenvector-bounded-fc, lmm:modular-power-half, lmm:modular-power-function-bounds, lmm:modular-sqrt-on-algebra, thrm:modular-operator-properties}
+    $\Delta\Omega = \Omega$ (Lemma~\ref{lmm:modular-operator-fixes-omega}), so $E_1\Omega = \mu(\{1\})\Omega = \Omega$ (Lemma~\ref{lmm:spectral-eigenvector-projection}; $K_1 = \{1\}$). By Lemma~\ref{lmm:modular-power-half}, $\Delta^{1/2}\Omega = p_{1/2,1}(\Delta)\Omega$, which is $p_{1/2,1}(1)\Omega = \Omega$ by Lemma~\ref{lmm:spectral-eigenvector-bounded-fc} ($p_{1/2,1}$ bounded measurable by Lemma~\ref{lmm:modular-power-function-bounds}; \texttt{Complex.one\_cpow}). Lemma~\ref{lmm:modular-sqrt-on-algebra} with $x = \mathbf{1} \in \mathcal{M}$ gives $\Delta^{1/2}\Omega = J\Omega$.
+\end{proof}
+
+\begin{lemma}[$\Delta^{it}$ Preserves the Commutant]
+    \label{lmm:modular-group-preserves-commutant}
+    \uses{def:modular-unitary-group, def:von-neumann-algebra-commutant-convention}
+    For $t \in \mathbb{R}$ and $y \in \mathcal{M}'$, $\Delta^{it}y\Delta^{-it} \in \mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:tomita-modular-automorphism-subset, lmm:modular-unitary-group-props}
+    Let $x \in \mathcal{M}$ and $x' = \Delta^{-it}x\Delta^{it} \in \mathcal{M}$ (Lemma~\ref{lmm:tomita-modular-automorphism-subset} at $-t$). By Lemma~\ref{lmm:modular-unitary-group-props}, $\Delta^{it}\Delta^{-it} = \Delta^{-it}\Delta^{it} = \mathbf{1}$, so $x = \Delta^{it}x'\Delta^{-it}$ and $\Delta^{it}y\Delta^{-it}\,x = \Delta^{it}yx'\Delta^{-it} = \Delta^{it}x'y\Delta^{-it} = x\,\Delta^{it}y\Delta^{-it}$ (\texttt{mul\_assoc}).
+\end{proof}
+
+\begin{lemma}[$\Delta^{1/2}Jy\Omega = y^*\Omega$ for $y \in \mathcal{M}'$]
+    \label{lmm:commutant-vector-modular-sqrt}
+    \uses{def:modular-operator, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
+    Let $y \in \mathcal{M}'$. Then $Jy\Omega \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}Jy\Omega = y^*\Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:commutant-modular-objects, lmm:modular-sqrt-on-algebra, thrm:modular-conjugation-involution}
+    $\Omega$ is cyclic and separating for $\mathcal{M}'$, with $\Delta_{\mathcal{M}'}^{1/2} = \Delta^{-1/2}$ and $J_{\mathcal{M}'} = J$ (Theorem~\ref{thrm:commutant-modular-objects}). Lemma~\ref{lmm:modular-sqrt-on-algebra} for $(\mathcal{M}', \Omega)$ gives $y\Omega \in \text{Dom}(\Delta^{-1/2})$ and $\Delta^{-1/2}y\Omega = Jy^*\Omega$. By Theorem~\ref{thrm:modular-conjugation-involution}, $\Delta^{-1/2} = J\Delta^{1/2}J$ including domains, so $Jy\Omega \in \text{Dom}(\Delta^{1/2})$ and $J\Delta^{1/2}Jy\Omega = Jy^*\Omega$; apply $J$ and use $J(J\phi) = \phi$.
+\end{proof}
+
+\begin{lemma}[$V(-t)$ Maps the Commutant into Itself for $t \ge 0$]
+    \label{lmm:commutant-reverse-endomorphism}
+    \uses{def:positive-energy, def:von-neumann-algebra-commutant-convention}
+    Assume (B2). For $t \ge 0$ and $y \in \mathcal{M}'$, $V(-t)\,y\,V(t) \in \mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    \uses{def:hall-10.11}
+    Let $x \in \mathcal{M}$. $V(t)xV(-t) \in \mathcal{M}$ by (B2), so it commutes with $y$. With $V(-t)V(t) = V(t)V(-t) = \mathbf{1}$ (\ref{def:hall-10.11}), $V(-t)yV(t)\,x = V(-t)\,y\,(V(t)xV(-t))\,V(t) = V(-t)\,(V(t)xV(-t))\,y\,V(t) = x\,V(-t)yV(t)$ (\texttt{mul\_assoc}).
+\end{proof}
+
+\begin{lemma}[The Adjoint of the Reflected Group]
+    \label{lmm:reflected-group-adjoint}
+    \uses{def:modular-conjugation-conjugate}
+    For $t \in \mathbb{R}$, $W(t)^* = JV(t)J$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-conjugation-bounded-conjugate, thrm:modular-conjugation-polar, def:antiunitary-operator, lmm:unitary-group-inner-adjoint}
+    $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}) and $V(-t)^* = V(t)$ (\ref{lmm:unitary-group-inner-adjoint}), so for $\phi, \chi \in \mathbf{H}$, $\left< W(t)\phi, \chi \right> = \left< J\chi, V(-t)J\phi \right> = \left< V(t)J\chi, J\phi \right> = \left< \phi, JV(t)J\chi \right>$ (Definition~\ref{def:antiunitary-operator}, Lemma~\ref{lmm:modular-conjugation-bounded-conjugate}). This identifies the adjoint (\texttt{ContinuousLinearMap.eq\_adjoint\_iff}).
+\end{proof}
+
+\begin{lemma}[The Reflected Group is Unitary and Fixes $\Omega$]
+    \label{lmm:reflected-group-unitary}
+    \uses{def:modular-conjugation-conjugate, def:unitary-operator}
+    Assume (B1). For $t \ge 0$, $W(t)$ is unitary and $W(t)\Omega = \Omega$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reflected-group-adjoint, lmm:modular-conjugation-bounded-conjugate-identities, thrm:modular-conjugation-involution, lmm:modular-conjugation-fixes-omega, def:hall-10.11}
+    By Lemmas~\ref{lmm:reflected-group-adjoint} and~\ref{lmm:modular-conjugation-bounded-conjugate-identities}, $W(t)W(t)^* = J(V(-t)V(t))J = J\mathbf{1}J = \mathbf{1}$ and likewise $W(t)^*W(t) = \mathbf{1}$ (\ref{def:hall-10.11}, $J(J\phi) = \phi$ by Theorem~\ref{thrm:modular-conjugation-involution}). Finally $W(t)\Omega = JV(-t)J\Omega = JV(-t)\Omega = J\Omega = \Omega$ by (B1) and Lemma~\ref{lmm:modular-conjugation-fixes-omega}.
+\end{proof}
+
+\begin{lemma}[The Reflected Group Maps $\mathcal{M}$ into Itself]
+    \label{lmm:reflected-group-endomorphism}
+    \uses{def:modular-conjugation-conjugate, def:von-neumann-algebra-commutant-convention}
+    Assume (B2). For $t \ge 0$ and $x \in \mathcal{M}$, $W(t)\,x\,W(t)^* \in \mathcal{M}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:reflected-group-adjoint, lmm:tomita-modular-conjugation-commutant, lmm:commutant-reverse-endomorphism, lmm:modular-conjugation-bounded-conjugate-identities}
+    By Lemmas~\ref{lmm:reflected-group-adjoint} and~\ref{lmm:modular-conjugation-bounded-conjugate-identities}, $W(t)xW(t)^* = J\big(V(-t)\,(JxJ)\,V(t)\big)J$. $JxJ \in \mathcal{M}'$ (Lemma~\ref{lmm:tomita-modular-conjugation-commutant}), so $y' = V(-t)(JxJ)V(t) \in \mathcal{M}'$ (Lemma~\ref{lmm:commutant-reverse-endomorphism}). By Lemma~\ref{lmm:tomita-modular-conjugation-commutant} again, $y' = Jx''J$ for some $x'' \in \mathcal{M}$, and $Jy'J = x''$ (Lemma~\ref{lmm:modular-conjugation-bounded-conjugate-identities}).
+\end{proof}
+
+\begin{lemma}[Real Correlations of Self-Adjoint Elements]
+    \label{lmm:real-correlation}
+    \uses{def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    Let $X$ be a unitary with $X\Omega = \Omega$ and $XxX^* \in \mathcal{M}$ for every $x \in \mathcal{M}$. Then $\left< y\Omega, Xx\Omega \right> \in \mathbb{R}$ for every $x = x^* \in \mathcal{M}$ and $y = y^* \in \mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    Put $\tilde{x} = XxX^* \in \mathcal{M}$, which is self-adjoint (\texttt{star\_mul}, \texttt{star\_star}). $X^*X = \mathbf{1}$ and $X\Omega = \Omega$ give $Xx\Omega = \tilde{x}\Omega$. So $\left< y\Omega, Xx\Omega \right> = \left< \Omega, y\tilde{x}\Omega \right>$, and its conjugate is $\left< y\tilde{x}\Omega, \Omega \right> = \left< \Omega, \tilde{x}y\Omega \right> = \left< \Omega, y\tilde{x}\Omega \right>$, since $y\tilde{x} = \tilde{x}y$ (\texttt{inner\_conj\_symm}, \texttt{ContinuousLinearMap.adjoint\_inner\_left}). A complex number equal to its conjugate is real (\texttt{Complex.conj\_eq\_iff\_real}).
+\end{proof}
+
+\begin{lemma}[Real Correlations after a Modular Rotation]
+    \label{lmm:modular-rotated-correlation-real}
+    \uses{def:modular-unitary-group, def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    Let $X$ be as in Lemma~\ref{lmm:real-correlation}, $x = x^* \in \mathcal{M}$, $y = y^* \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $\left< \Delta^{-it}y\Omega, X\Delta^{-it}x\Omega \right> \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:real-correlation, lmm:tomita-modular-automorphism-subset, lmm:modular-group-preserves-commutant, lmm:modular-unitary-group-fixes-omega, lmm:modular-unitary-group-props}
+    $x_t = \Delta^{-it}x\Delta^{it} \in \mathcal{M}$ and $y_t = \Delta^{-it}y\Delta^{it} \in \mathcal{M}'$ (Lemmas~\ref{lmm:tomita-modular-automorphism-subset} and~\ref{lmm:modular-group-preserves-commutant}), both self-adjoint since $(\Delta^{it})^* = \Delta^{-it}$ (Lemma~\ref{lmm:modular-unitary-group-props}). As $\Delta^{it}\Omega = \Omega$ (Lemma~\ref{lmm:modular-unitary-group-fixes-omega}), $\Delta^{-it}x\Omega = x_t\Omega$ and $\Delta^{-it}y\Omega = y_t\Omega$. Apply Lemma~\ref{lmm:real-correlation} to $x_t$ and $y_t$.
+\end{proof}
+
+\begin{lemma}[The Upper Boundary Value is Real]
+    \label{lmm:borchers-upper-boundary-real}
+    \uses{def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:von-neumann-algebra-commutant-convention}
+    Assume (B1) and (B2). Let $x = x^* \in \mathcal{M}$, $y = y^* \in \mathcal{M}'$, $\tau \ge 0$ and $t \in \mathbb{R}$. Then
+    \begin{align}
+        \left< \Delta^{-it}Jy\Omega, \ V(-\tau)\,\Delta^{-it}Jx\Omega \right> = \overline{\left< \Delta^{-it}y\Omega, \ W(\tau)\,\Delta^{-it}x\Omega \right>},
+    \end{align}
+    and both sides are real.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-conjugation-commutes-unitary-group, thrm:modular-conjugation-involution, thrm:modular-conjugation-polar, def:antiunitary-operator, lmm:modular-rotated-correlation-real, lmm:reflected-group-unitary, lmm:reflected-group-endomorphism}
+    $\Delta^{-it}J\phi = J\Delta^{-it}\phi$ (Lemma~\ref{lmm:modular-conjugation-commutes-unitary-group}) and $V(-\tau)J\phi = J\,W(\tau)\phi$ ($J(J\phi) = \phi$, Theorem~\ref{thrm:modular-conjugation-involution}). So the left side is $\left< Ja, Jb \right>$ with $a = \Delta^{-it}y\Omega$ and $b = W(\tau)\Delta^{-it}x\Omega$, which is $\left< b, a \right> = \overline{\left< a, b \right>}$ since $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}, Definition~\ref{def:antiunitary-operator}). $\left< a, b \right>$ is real by Lemma~\ref{lmm:modular-rotated-correlation-real} with $X = W(\tau)$, which is admissible by Lemmas~\ref{lmm:reflected-group-unitary} and~\ref{lmm:reflected-group-endomorphism}.
+\end{proof}
+
+\subsubsection{The Theorem}
+
+In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-function-constant}, $\tau \ge 0$, $x = x^* \in \mathcal{M}$ and $y = y^* \in \mathcal{M}'$ are arbitrary, and $F$ is the Borchers function (defined before Lemma~\ref{lmm:sandwich-continuous}) with $\varphi = x\Omega$ and $\psi = Jy\Omega$. Both lie in $\text{Dom}(\Delta^{1/2})$, with $\Delta^{1/2}\varphi = Jx\Omega$ (Lemma~\ref{lmm:modular-sqrt-on-algebra}) and $\Delta^{1/2}\psi = y\Omega$ (Lemma~\ref{lmm:commutant-vector-modular-sqrt}).
+
+\begin{lemma}[The Borchers Function in Closed Form on the Edges]
+    \label{lmm:borchers-function-special-values}
+    \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
+    For $t \in \mathbb{R}$,
+    \begin{align}
+        F(t) = \left< y\Omega, \ \Delta^{it}V(\tau e^{2\pi t})\Delta^{-it}\,x\Omega \right> = \left< \Delta^{-it}y\Omega, \ V(\tau e^{2\pi t})\Delta^{-it}x\Omega \right>, \qquad F(t + \tfrac{i}{2}) = \left< \Delta^{-it}Jy\Omega, \ V(-\tau e^{2\pi t})\,\Delta^{-it}Jx\Omega \right>.
+    \end{align}
+    In particular $F(0) = \left< y\Omega, V(\tau)x\Omega \right>$ and $F(\tfrac{i}{2}) = \left< Jy\Omega, V(-\tau)Jx\Omega \right>$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:borchers-function-boundary, lmm:modular-sqrt-on-algebra, lmm:commutant-vector-modular-sqrt, lmm:modular-unitary-group-props}
+    Substitute $\Delta^{1/2}\psi = y\Omega$ and $\Delta^{1/2}\varphi = Jx\Omega$ ($x^* = x$; Lemmas~\ref{lmm:modular-sqrt-on-algebra} and~\ref{lmm:commutant-vector-modular-sqrt}) into Lemma~\ref{lmm:borchers-function-boundary}. The first form of $F(t)$ follows from $(\Delta^{-it})^* = \Delta^{it}$ (Lemma~\ref{lmm:modular-unitary-group-props}; \texttt{ContinuousLinearMap.adjoint\_inner\_left}). At $t = 0$, $\Delta^{i0} = \mathbf{1}$ and $e^0 = 1$.
+\end{proof}
+
+\begin{lemma}[The Borchers Function is Real on the Lower Edge]
+    \label{lmm:borchers-function-lower-edge-real}
+    \uses{def:modular-unitary-group, def:von-neumann-algebra-commutant-convention}
+    Assume (B1) and (B2). For $t \in \mathbb{R}$, $F(t) \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:borchers-function-special-values, lmm:modular-rotated-correlation-real, lmm:unitary-group-inner-adjoint}
+    By Lemma~\ref{lmm:borchers-function-special-values}, $F(t) = \left< \Delta^{-it}y\Omega, X\Delta^{-it}x\Omega \right>$ with $X = V(\tau e^{2\pi t})$. Since $\tau e^{2\pi t} \ge 0$, $X$ is unitary with $X^* = V(-\tau e^{2\pi t})$ (\ref{lmm:unitary-group-inner-adjoint}), $X\Omega = \Omega$ by (B1) and $XzX^* \in \mathcal{M}$ for $z \in \mathcal{M}$ by (B2). Lemma~\ref{lmm:modular-rotated-correlation-real} applies.
+\end{proof}
+
+\begin{lemma}[The Borchers Function is Real on the Upper Edge]
+    \label{lmm:borchers-function-upper-edge-real}
+    \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
+    Assume (B1) and (B2). For $t \in \mathbb{R}$, $F(t + \tfrac{i}{2}) \in \mathbb{R}$, and $F(\tfrac{i}{2}) = \left< y\Omega, W(\tau)x\Omega \right>$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:borchers-function-special-values, lmm:borchers-upper-boundary-real}
+    By Lemma~\ref{lmm:borchers-function-special-values}, $F(t + \tfrac{i}{2})$ is the left side of Lemma~\ref{lmm:borchers-upper-boundary-real} with $\tau e^{2\pi t} \ge 0$ in place of $\tau$, hence real. At $t = 0$ that lemma gives $F(\tfrac{i}{2}) = \overline{\left< y\Omega, W(\tau)x\Omega \right>}$, which equals $\left< y\Omega, W(\tau)x\Omega \right>$ because it is real (\texttt{Complex.conj\_eq\_iff\_real}).
+\end{proof}
+
+\begin{lemma}[The Borchers Function is Constant]
+    \label{lmm:borchers-function-constant}
+    \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
+    Assume (B1) and (B2). For $s \in \mathbb{R}$,
+    \begin{align}
+        \left< y\Omega, \ \Delta^{is}V(\tau e^{2\pi s})\Delta^{-is}\,x\Omega \right> = \left< y\Omega, V(\tau)\,x\Omega \right> = \left< y\Omega, W(\tau)\,x\Omega \right>.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:borchers-function-analytic, lmm:borchers-function-lower-edge-real, lmm:borchers-function-upper-edge-real, lmm:strip-real-boundary-constant, lmm:borchers-function-special-values}
+    By Lemmas~\ref{lmm:borchers-function-analytic}, \ref{lmm:borchers-function-lower-edge-real} and~\ref{lmm:borchers-function-upper-edge-real}, Lemma~\ref{lmm:strip-real-boundary-constant} with $\beta = \tfrac{1}{2}$ applies: $F(s) = F(0) = F(\tfrac{i}{2})$. The three values are the three sides of the claim (Lemmas~\ref{lmm:borchers-function-special-values} and~\ref{lmm:borchers-function-upper-edge-real}).
+\end{proof}
+
+\begin{lemma}[Bounded Operators are Determined by Self-Adjoint Matrix Coefficients]
+    \label{lmm:eq-of-self-adjoint-matrix-coefficients}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector}
+    Let $A, B \in \mathcal{B}(\mathbf{H})$ with $\left< y\Omega, Ax\Omega \right> = \left< y\Omega, Bx\Omega \right>$ for every $x = x^* \in \mathcal{M}$ and $y = y^* \in \mathcal{M}'$. Then $A = B$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:commutant-von-neumann-algebra}
+    $\mathcal{M}$ and $\mathcal{M}'$ are $*$-algebras (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so every $x \in \mathcal{M}$ is $x_1 + ix_2$ with $x_1 = \tfrac{1}{2}(x + x^*)$ and $x_2 = \tfrac{1}{2i}(x - x^*)$ self-adjoint in $\mathcal{M}$, and likewise for $y \in \mathcal{M}'$. By linearity in $x$ and conjugate linearity in $y$ the hypothesis holds for all $x \in \mathcal{M}$, $y \in \mathcal{M}'$. Then $(A - B)x\Omega$ is orthogonal to the dense set $\mathcal{M}'\Omega$ (\ref{def:cyclic-separating-vector}), hence $0$ (Mathlib's \texttt{Dense.eq\_zero\_of\_inner\_right}). So the continuous operator $A - B$ vanishes on the dense set $\mathcal{M}\Omega$, hence everywhere (\texttt{Continuous.ext\_on}).
+\end{proof}
+
+\begin{lemma}[Dilation for Nonnegative Times]
+    \label{lmm:borchers-dilation-nonneg}
+    \uses{def:modular-unitary-group}
+    Assume (B1) and (B2). For $t \ge 0$ and $s \in \mathbb{R}$, $\Delta^{is}V(t)\Delta^{-is} = V(e^{-2\pi s}t)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:borchers-function-constant, lmm:eq-of-self-adjoint-matrix-coefficients}
+    Put $\tau = e^{-2\pi s}t \ge 0$, so $\tau e^{2\pi s} = t$ (\texttt{Real.exp\_neg}, \texttt{Real.exp\_add}). Lemma~\ref{lmm:borchers-function-constant} gives $\left< y\Omega, \Delta^{is}V(t)\Delta^{-is}x\Omega \right> = \left< y\Omega, V(\tau)x\Omega \right>$ for all self-adjoint $x \in \mathcal{M}$, $y \in \mathcal{M}'$, and Lemma~\ref{lmm:eq-of-self-adjoint-matrix-coefficients} concludes.
+\end{proof}
+
+\begin{lemma}[Reflection for Nonnegative Times]
+    \label{lmm:borchers-reflection-nonneg}
+    \uses{def:modular-conjugation-conjugate}
+    Assume (B1) and (B2). For $\tau \ge 0$, $JV(-\tau)J = V(\tau)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:borchers-function-constant, lmm:eq-of-self-adjoint-matrix-coefficients}
+    $W(\tau) = JV(-\tau)J$, and Lemma~\ref{lmm:borchers-function-constant} gives $\left< y\Omega, W(\tau)x\Omega \right> = \left< y\Omega, V(\tau)x\Omega \right>$ for all self-adjoint $x \in \mathcal{M}$, $y \in \mathcal{M}'$. Lemma~\ref{lmm:eq-of-self-adjoint-matrix-coefficients} concludes.
+\end{proof}
+
+\begin{lemma}[Dilation for All Times]
+    \label{lmm:borchers-dilation-all}
+    \uses{def:modular-unitary-group}
+    Assume (B1) and (B2). For all $s, t \in \mathbb{R}$, $\Delta^{is}V(t)\Delta^{-is} = V(e^{-2\pi s}t)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:borchers-dilation-nonneg, lmm:modular-unitary-group-props, lmm:unitary-group-inner-adjoint}
+    For $t \ge 0$ this is Lemma~\ref{lmm:borchers-dilation-nonneg}. For $t < 0$, take adjoints in that lemma at $-t > 0$: $(\Delta^{is}V(-t)\Delta^{-is})^* = \Delta^{is}V(t)\Delta^{-is}$ and $V(-e^{-2\pi s}t)^* = V(e^{-2\pi s}t)$ (Lemmas~\ref{lmm:modular-unitary-group-props} and~\ref{lmm:unitary-group-inner-adjoint}; \texttt{star\_mul}, \texttt{mul\_assoc}).
+\end{proof}
+
+\begin{lemma}[Reflection for All Times]
+    \label{lmm:borchers-reflection-all}
+    \uses{def:modular-conjugation-conjugate}
+    Assume (B1) and (B2). For all $t \in \mathbb{R}$, $JV(t)J = V(-t)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:borchers-reflection-nonneg, lmm:modular-conjugation-bounded-conjugate-identities}
+    For $t \le 0$ this is Lemma~\ref{lmm:borchers-reflection-nonneg} with $\tau = -t$. For $t > 0$, conjugate $JV(-t)J = V(t)$ by $J$: $V(-t) = J(JV(-t)J)J = JV(t)J$ (Lemma~\ref{lmm:modular-conjugation-bounded-conjugate-identities}).
+\end{proof}
+
+\begin{theorem}[Borchers' Theorem]
+    \label{thrm:borchers}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:positive-energy, def:unitary-operator}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, modular unitary group $\Delta^{is}$ and modular conjugation $J$. Let $V(t)$, $t \in \mathbb{R}$, be a family of unitary operators on $\mathbf{H}$ with positive energy (\ref{def:positive-energy}), such that $V(t)\Omega = \Omega$ for all $t$ and $V(t)\,x\,V(-t) \in \mathcal{M}$ for all $t \ge 0$ and $x \in \mathcal{M}$. Then for all $s, t \in \mathbb{R}$,
+    \begin{align}
+        \Delta^{is}\,V(t)\,\Delta^{-is} = V(e^{-2\pi s}t), \qquad JV(t)J = V(-t).
+    \end{align}
+    This is Theorem~II.9 of Borchers (Comm.\ Math.\ Phys.\ 143 (1992)), with $\Delta^{is} = e^{is\log\Delta}$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:borchers-dilation-all, lmm:borchers-reflection-all}
+    The hypotheses are (B1) and (B2); apply Lemmas~\ref{lmm:borchers-dilation-all} and~\ref{lmm:borchers-reflection-all}.
+\end{proof}
