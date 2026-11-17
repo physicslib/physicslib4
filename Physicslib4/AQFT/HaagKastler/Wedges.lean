@@ -299,7 +299,7 @@ theorem boostMatrix_isProper (s : ℝ) : IsProper (boostMatrix s) := by
 
 Blueprint: lmm:boost-matrix-orthochronous -/
 theorem boostMatrix_isOrthochronous (s : ℝ) : IsOrthochronous (boostMatrix s) := by
-  sorry
+  simpa [IsOrthochronous, boostMatrix_apply] using Real.cosh_pos s
 
 /-- The boost matrices form a one-parameter group: `Λ(0) = 1` and `Λ(s + t) = Λ(s)Λ(t)`, and
 `Λ(s)⁻¹ = Λ(-s)`.
@@ -309,7 +309,17 @@ theorem boostMatrix_groupLaw :
     boostMatrix 0 = LinearEquiv.refl ℝ SpacetimeModel ∧
       (∀ s t : ℝ, boostMatrix (s + t) = (boostMatrix t).trans (boostMatrix s)) ∧
       ∀ s : ℝ, (boostMatrix s).symm = boostMatrix (-s) := by
-  sorry
+  refine ⟨LinearEquiv.ext fun x => ?_, fun s t => LinearEquiv.ext fun x => ?_, fun s => ?_⟩
+  · ext i
+    fin_cases i <;> simp [boostMatrix_apply]
+  · ext i
+    fin_cases i <;> simp [boostMatrix_apply, Real.cosh_add, Real.sinh_add] <;> ring
+  · refine LinearEquiv.ext fun x => (boostMatrix s).injective ?_
+    rw [LinearEquiv.apply_symm_apply]
+    ext i
+    fin_cases i <;> simp [boostMatrix_apply] <;>
+      first | linear_combination -x 0 * Real.cosh_sq_sub_sinh_sq s |
+        linear_combination -x 1 * Real.cosh_sq_sub_sinh_sq s
 
 /-- Boosts in light-cone coordinates: with `y = Λ(s)x`, `y¹ + y⁰ = eˢ(x¹ + x⁰)` and
 `y¹ - y⁰ = e⁻ˢ(x¹ - x⁰)`. In particular `Λ(s) l₊ = eˢ l₊` and `Λ(s) l₋ = e⁻ˢ l₋`.

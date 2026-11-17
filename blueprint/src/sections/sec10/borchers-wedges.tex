@@ -558,6 +558,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     For every $s$, $(\Lambda(s)e_0)^0 > 0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $(\Lambda(s)e_0)^0 = \cosh s > 0$ (Mathlib's \texttt{Real.cosh\_pos}).
 \end{proof}
 
@@ -569,6 +570,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     $\Lambda(0) = 1$ and $\Lambda(s + t) = \Lambda(s)\Lambda(t)$ for all $s, t$. In particular $\Lambda(s)$ is invertible with $\Lambda(s)^{-1} = \Lambda(-s)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $\cosh 0 = 1$ and $\sinh 0 = 0$. On the $(x^0, x^1)$-plane the product of the matrices of $\Lambda(s)$ and $\Lambda(t)$ has entries $\cosh s\cosh t + \sinh s\sinh t = \cosh(s+t)$ and $\sinh s\cosh t + \cosh s\sinh t = \sinh(s+t)$ (\texttt{Real.cosh\_add}, \texttt{Real.sinh\_add}), and both maps are the identity on $x^2, x^3$.
 \end{proof}
 
