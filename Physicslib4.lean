@@ -1,3 +1,4 @@
+import Physicslib4.AQFT.Borchers
 import Physicslib4.AQFT.HaagKastler.CovariantState
 import Physicslib4.AQFT.HaagKastler.CovariantVacuum
 import Physicslib4.AQFT.HaagKastler.EinsteinCausality
@@ -45,6 +46,7 @@ import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
 import Physicslib4.AQFT.HaagKastlerCurved.StabilizerKMS
 import Physicslib4.AQFT.KMS
 import Physicslib4.AQFT.PositiveEnergy
+import Physicslib4.AQFT.PositiveEnergyHalfPlane
 import Physicslib4.AQFT.PositiveEnergyHolomorphic
 import Physicslib4.Analysis.CStarCompletion
 import Physicslib4.Analysis.CStarDenseExtend
@@ -52,6 +54,7 @@ import Physicslib4.Analysis.EdgeVanishing
 import Physicslib4.Analysis.HorizontalLineRemovable
 import Physicslib4.Analysis.StripFormula
 import Physicslib4.Analysis.StripPeriodicExtension
+import Physicslib4.Analysis.StripRealBoundary
 import Physicslib4.Analysis.StrongContinuity
 import Physicslib4.Basic
 import Physicslib4.GNS.Amplification

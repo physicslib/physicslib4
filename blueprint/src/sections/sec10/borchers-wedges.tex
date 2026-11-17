@@ -938,7 +938,9 @@ is bounded and continuous on the strip and holomorphic inside it, since $\operat
 
 \begin{definition}[Half-Sided Translation]
     \label{def:half-sided-translation}
+    \lean{Physicslib4.Modular.IsHalfSidedTranslation}
     \uses{def:von-neumann-algebra-commutant-convention, def:positive-energy, def:hall-10.11, def:unitary-operator, lmm:unitary-group-inner-adjoint}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ (\ref{def:von-neumann-algebra-commutant-convention}), $\Omega \in \mathbf{H}$, and $V(t)$, $t \in \mathbb{R}$, a one-parameter unitary group on $\mathbf{H}$ (\ref{def:hall-10.11}). $V$ is a \emph{half-sided translation for $(\mathcal{M}, \Omega)$} if
     \begin{enumerate}
         \item[(P)] $V$ has positive energy (\ref{def:positive-energy});
@@ -956,6 +958,8 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
 
 \begin{lemma}[Continuity of the Reflection across a Real Edge]
     \label{lmm:strip-reflection-continuous}
+    \lean{Physicslib4.continuousOn_stripReflection}
+    \leanok
     Let $\beta > 0$ and let $f$ be continuous on $\Sigma_\beta$ with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is continuous on $\{ z : -\beta \le \operatorname{Im} z \le \beta \}$.
 \end{lemma}
 \begin{proof}
@@ -964,6 +968,8 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
 
 \begin{lemma}[Holomorphy of the Reflection across a Real Edge]
     \label{lmm:strip-reflection-holomorphic}
+    \lean{Physicslib4.differentiableOn_stripReflection}
+    \leanok
     Let $\beta > 0$ and let $f$ be continuous on $\Sigma_\beta$, holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is holomorphic on $\{ z : -\beta < \operatorname{Im} z < \beta \}$.
 \end{lemma}
 \begin{proof}
@@ -973,6 +979,8 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
 
 \begin{lemma}[Regularity of the Shifted Reflection]
     \label{lmm:strip-shifted-reflection-regular}
+    \lean{Physicslib4.stripShiftedReflection_regular}
+    \leanok
     Let $\beta > 0$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi$ is continuous and bounded on $\Sigma_{2\beta}$ and holomorphic on $\Sigma^\circ_{2\beta}$.
 \end{lemma}
 \begin{proof}
@@ -982,6 +990,8 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
 
 \begin{lemma}[The Shifted Reflection has Equal Boundary Values]
     \label{lmm:strip-real-boundary-periodic}
+    \lean{Physicslib4.stripShiftedReflection_boundary}
+    \leanok
     Let $\beta > 0$ and $f : \mathbb{C} \to \mathbb{C}$ with $f(t + i\beta) \in \mathbb{R}$ for every $t \in \mathbb{R}$, and let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi(t) = f(t + i\beta) = \Psi(t + 2i\beta)$ for every $t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -990,6 +1000,8 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
 
 \begin{lemma}[A Function Real on Both Edges of a Strip is Constant]
     \label{lmm:strip-real-boundary-constant}
+    \lean{Physicslib4.eq_of_real_strip_boundary}
+    \leanok
     Let $\beta > 0$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ and $f(t + i\beta) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $f(z) = f(0)$ for every $z \in \Sigma_\beta$.
 \end{lemma}
 \begin{proof}
@@ -1007,6 +1019,8 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[Polynomial Times Exponential Decay]
     \label{lmm:poly-exp-decay}
+    \lean{Physicslib4.AQFT.mul_exp_neg_le}
+    \leanok
     Let $a > 0$ and $\lambda \ge 0$. Then $\lambda e^{-a\lambda} \le 1/(ae)$ and $\lambda^2 e^{-a\lambda} \le 4/(ae)^2$.
 \end{lemma}
 \begin{proof}
@@ -1015,7 +1029,9 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[Bounds for $\varepsilon_w$ and $\delta_w$]
     \label{lmm:half-plane-exp-bounds}
+    \lean{Physicslib4.AQFT.halfPlaneExp_bounds}
     \uses{lmm:poly-exp-decay}
+    \leanok
     For every $w \in \mathbb{C}$, $\varepsilon_w$ and $\delta_w$ are measurable. If $\operatorname{Im} w \ge 0$, then $|\varepsilon_w(\lambda)| \le 1$ for every $\lambda$. If $c = \operatorname{Im} w > 0$, then $|\delta_w(\lambda)| \le 1/(ce)$ for every $\lambda$.
 \end{lemma}
 \begin{proof}
@@ -1025,7 +1041,9 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[The Taylor Estimate for $\varepsilon_w$]
     \label{lmm:half-plane-exp-taylor}
+    \lean{Physicslib4.AQFT.halfPlaneExp_taylor}
     \uses{lmm:poly-exp-decay}
+    \leanok
     Let $c = \operatorname{Im} w > 0$ and $h \in \mathbb{C}$ with $|h| \le c/2$. Then for every $\lambda \in \mathbb{R}$,
     \begin{align}
         \left| \varepsilon_{w+h}(\lambda) - \varepsilon_w(\lambda) - h\,\delta_w(\lambda) \right| \le \frac{16}{(ce)^2}\,|h|^2.
@@ -1038,7 +1056,9 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[The Extension $\widetilde{V}$ is a Contraction Extending $V$]
     \label{lmm:positive-energy-extension-operators}
+    \lean{Physicslib4.AQFT.positiveEnergyExtension_operators}
     \uses{def:positive-energy, def:exp-unitary-group, def:hall-10.5}
+    \leanok
     For $\operatorname{Im} w \ge 0$, $\widetilde{V}(w)$ is a bounded operator with $\|\widetilde{V}(w)\| \le 1$, equal to the bounded integral $\int \varepsilon_w \, d\mu^P$. For $t \in \mathbb{R}$, $\widetilde{V}(t) = V(t)$.
 \end{lemma}
 \begin{proof}
@@ -1048,7 +1068,9 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[$\widetilde{V}$ is Holomorphic on the Open Upper Half-Plane]
     \label{lmm:positive-energy-extension-holomorphic}
+    \lean{Physicslib4.AQFT.hasDerivAt_positiveEnergyExtension}
     \uses{lmm:positive-energy-extension-operators}
+    \leanok
     The map $w \mapsto \widetilde{V}(w)$ from $\{\operatorname{Im} w > 0\}$ to $\mathcal{B}(\mathbf{H})$, with the operator norm, is complex differentiable at every point, with derivative $\delta_w(P)$.
 \end{lemma}
 \begin{proof}
@@ -1058,7 +1080,9 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[$\widetilde{V}$ is Strongly Continuous on the Closed Upper Half-Plane]
     \label{lmm:positive-energy-extension-strongly-continuous}
+    \lean{Physicslib4.AQFT.continuousOn_positiveEnergyExtension_apply}
     \uses{lmm:positive-energy-extension-operators}
+    \leanok
     For every $\psi \in \mathbf{H}$, $w \mapsto \widetilde{V}(w)\psi$ is continuous on $\{\operatorname{Im} w \ge 0\}$.
 \end{lemma}
 \begin{proof}
@@ -1068,6 +1092,8 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[The Dilation Map on the Strip]
     \label{lmm:dilation-strip-half-plane}
+    \lean{Physicslib4.AQFT.dilation_strip_halfPlane}
+    \leanok
     Let $\tau \ge 0$ and $z \in \Sigma_{1/2}$. Then $\operatorname{Im}(\tau e^{2\pi z}) \ge 0$, with strict inequality if $\tau > 0$ and $z \in \Sigma^\circ_{1/2}$. For $t \in \mathbb{R}$, $\tau e^{2\pi(t + i/2)} = -\tau e^{2\pi t}$.
 \end{lemma}
 \begin{proof}
@@ -1076,7 +1102,9 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[The Dilated Extension on the Strip]
     \label{lmm:dilated-extension-analytic}
+    \lean{Physicslib4.AQFT.dilatedPositiveEnergyExtension_analytic}
     \uses{lmm:positive-energy-extension-operators}
+    \leanok
     Let $\tau \ge 0$. Then $z \mapsto \widetilde{V}(\tau e^{2\pi z})$ is complex differentiable, in the operator norm, at every $z \in \Sigma^\circ_{1/2}$, and $z \mapsto \widetilde{V}(\tau e^{2\pi z})\psi$ is continuous on $\Sigma_{1/2}$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
@@ -1094,6 +1122,8 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[Measurability of $k_\zeta$ and $c$]
     \label{lmm:strip-power-functions-measurable}
+    \lean{Physicslib4.Modular.stripPower_functions_measurable}
+    \leanok
     For every $\zeta \in \mathbb{C}$ and $t \in \mathbb{R}$, $s$, $k_\zeta$, $c$ and $k_t s$ are measurable.
 \end{lemma}
 \begin{proof}
@@ -1102,6 +1132,8 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[The Power Bound on the Strip]
     \label{lmm:strip-power-modulus-bound}
+    \lean{Physicslib4.Modular.norm_cpow_neg_I_mul_le}
+    \leanok
     Let $\zeta \in \Sigma_{1/2}$ and $\lambda > 0$. Then $|\lambda^{-i\zeta}| = \lambda^{\operatorname{Im}\zeta} \le 1 + s(\lambda)$.
 \end{lemma}
 \begin{proof}
@@ -1110,6 +1142,8 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[Bounds for $k_\zeta$ and $c$]
     \label{lmm:strip-power-functions-bounded}
+    \lean{Physicslib4.Modular.stripPower_functions_bounded}
+    \leanok
     For every $t \in \mathbb{R}$, $|c(\lambda)| \le 1$ and $|k_t(\lambda)s(\lambda)| \le 1$ for every $\lambda$, and if $\zeta \in \Sigma_{1/2}$, then $|k_\zeta(\lambda)| \le 1$ for every $\lambda$.
 \end{lemma}
 \begin{proof}
@@ -1119,7 +1153,9 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[Identities for $k_\zeta$]
     \label{lmm:strip-power-functions-identities}
+    \lean{Physicslib4.Modular.stripPower_functions_identities}
     \uses{lmm:modular-unitary-group-fc}
+    \leanok
     For $\zeta \in \mathbb{C}$, $n \ge 1$, $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$:
     \begin{align}
         p_{-i\zeta,n}(\lambda)\,c(\lambda) = k_\zeta(\lambda)\,1_{K_n}(\lambda), \qquad k_t(\lambda)\,(1 + s(\lambda)) = 1_{(0,\infty)}(\lambda)\,e_{-t}(\lambda), \qquad k_{t + i/2}(\lambda) = k_t(\lambda)\,s(\lambda).
@@ -1132,7 +1168,9 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[The Lower Edge: $k_t(\Delta)\varphi^\sharp = \Delta^{-it}\varphi$]
     \label{lmm:strip-power-lower-boundary}
+    \lean{Physicslib4.Modular.stripPower_lower_boundary}
     \uses{def:modular-operator, def:modular-unitary-group, def:hall-10.5}
+    \leanok
     Let $\varphi \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $k_t(\Delta)\varphi^\sharp = \Delta^{-it}\varphi$.
 \end{lemma}
 \begin{proof}
@@ -1142,7 +1180,9 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[The Upper Edge: $k_{t+i/2}(\Delta)\varphi^\sharp = \Delta^{-it}\Delta^{1/2}\varphi$]
     \label{lmm:strip-power-upper-boundary}
+    \lean{Physicslib4.Modular.stripPower_upper_boundary}
     \uses{def:modular-operator, def:modular-unitary-group, def:hall-10.5}
+    \leanok
     Let $\varphi \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $k_{t + i/2}(\Delta)\varphi^\sharp = \Delta^{-it}\Delta^{1/2}\varphi$.
 \end{lemma}
 \begin{proof}
@@ -1152,7 +1192,9 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[Cutting off $k_\zeta(\Delta)$]
     \label{lmm:strip-power-cutoff}
+    \lean{Physicslib4.Modular.stripPower_cutoff}
     \uses{lmm:modular-power-operators, def:spectral-measure}
+    \leanok
     Let $\chi \in \mathbf{H}$, $\zeta \in \mathbb{C}$ and $n \ge 1$. Then $p_{-i\zeta,n}(\Delta)\,c(\Delta)\chi = k_\zeta(\Delta)E_n\chi$. If $\zeta \in \Sigma_{1/2}$, then $\|k_\zeta(\Delta)\chi\| \le \|\chi\|$ and $\|k_\zeta(\Delta)\chi - p_{-i\zeta,n}(\Delta)c(\Delta)\chi\| \le \|\chi - E_n\chi\|$.
 \end{lemma}
 \begin{proof}
@@ -1171,6 +1213,8 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[Continuity of a Sandwiched Matrix Coefficient]
     \label{lmm:sandwich-continuous}
+    \lean{Physicslib4.Modular.continuousOn_inner_sandwich}
+    \leanok
     Let $D \subseteq \mathbb{C}$, let $a, b : \mathbb{C} \to \mathbf{H}$ be continuous on $D$, and let $T : \mathbb{C} \to \mathcal{B}(\mathbf{H})$ satisfy $\|T(z)\| \le 1$ for $z \in D$, with $z \mapsto T(z)\chi$ continuous on $D$ for every $\chi \in \mathbf{H}$. Then $z \mapsto \left< a(z), T(z)b(z) \right>$ is continuous on $D$.
 \end{lemma}
 \begin{proof}
@@ -1179,7 +1223,9 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[The Approximants are Continuous on the Strip]
     \label{lmm:borchers-approximants-continuous}
+    \lean{Physicslib4.Modular.continuousOn_borchersApproximant}
     \uses{lmm:modular-power-operators}
+    \leanok
     For $n \ge 1$, $F_n$ is continuous on $\Sigma_{1/2}$.
 \end{lemma}
 \begin{proof}
@@ -1189,7 +1235,9 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[The Approximants are Holomorphic Inside the Strip]
     \label{lmm:borchers-approximants-holomorphic}
+    \lean{Physicslib4.Modular.differentiableOn_borchersApproximant}
     \uses{lmm:modular-power-operators}
+    \leanok
     For $n \ge 1$, $F_n$ is holomorphic on $\Sigma^\circ_{1/2}$.
 \end{lemma}
 \begin{proof}
@@ -1203,7 +1251,9 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[Uniform Convergence of the Approximants]
     \label{lmm:borchers-approximants-uniform}
+    \lean{Physicslib4.Modular.borchersApproximant_tendstoUniformlyOn}
     \uses{def:spectral-measure}
+    \leanok
     For $n \ge 1$ and $z \in \Sigma_{1/2}$,
     \begin{align}
         |F(z) - F_n(z)| \le \|\psi^\sharp - E_n\psi^\sharp\|\,\|\varphi^\sharp\| + \|\psi^\sharp\|\,\|\varphi^\sharp - E_n\varphi^\sharp\|,
@@ -1217,6 +1267,8 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[The Borchers Function is Bounded and Analytic]
     \label{lmm:borchers-function-analytic}
+    \lean{Physicslib4.Modular.borchersFunction_analytic}
+    \leanok
     $F$ is continuous on $\Sigma_{1/2}$, holomorphic on $\Sigma^\circ_{1/2}$, and $|F(z)| \le \|\psi^\sharp\|\,\|\varphi^\sharp\|$ for $z \in \Sigma_{1/2}$.
 \end{lemma}
 \begin{proof}
@@ -1226,7 +1278,9 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[The Boundary Values of the Borchers Function]
     \label{lmm:borchers-function-boundary}
+    \lean{Physicslib4.Modular.borchersFunction_boundary}
     \uses{def:modular-operator, def:modular-unitary-group}
+    \leanok
     For $t \in \mathbb{R}$,
     \begin{align}
         F(t) = \left< \Delta^{-it}\Delta^{1/2}\psi, \ V(\tau e^{2\pi t})\,\Delta^{-it}\varphi \right>, \qquad F(t + \tfrac{i}{2}) = \left< \Delta^{-it}\psi, \ V(-\tau e^{2\pi t})\,\Delta^{-it}\Delta^{1/2}\varphi \right>.
@@ -1243,7 +1297,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[$J\Omega = \Omega$]
     \label{lmm:modular-conjugation-fixes-omega}
+    \lean{Physicslib4.Modular.modularConjugation_apply_self}
     \uses{def:modular-conjugation, def:modular-operator, def:cyclic-separating-vector}
+    \leanok
     $\Delta^{1/2}\Omega = \Omega$ and $J\Omega = \Omega$.
 \end{lemma}
 \begin{proof}
@@ -1253,7 +1309,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[$\Delta^{it}$ Preserves the Commutant]
     \label{lmm:modular-group-preserves-commutant}
+    \lean{Physicslib4.Modular.modularUnitaryGroup_conj_mem_centralizer}
     \uses{def:modular-unitary-group, def:von-neumann-algebra-commutant-convention}
+    \leanok
     For $t \in \mathbb{R}$ and $y \in \mathcal{M}'$, $\Delta^{it}y\Delta^{-it} \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -1263,7 +1321,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[$\Delta^{1/2}Jy\Omega = y^*\Omega$ for $y \in \mathcal{M}'$]
     \label{lmm:commutant-vector-modular-sqrt}
+    \lean{Physicslib4.Modular.modularOperatorSqrt_apply_of_mem_centralizer}
     \uses{def:modular-operator, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $y \in \mathcal{M}'$. Then $Jy\Omega \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}Jy\Omega = y^*\Omega$.
 \end{lemma}
 \begin{proof}
@@ -1273,7 +1333,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[$V(-t)$ Maps the Commutant into Itself for $t \ge 0$]
     \label{lmm:commutant-reverse-endomorphism}
+    \lean{Physicslib4.Modular.commutant_reverse_endomorphism}
     \uses{def:positive-energy, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
+    \leanok
     Assume clause (B2) of Definition~\ref{def:half-sided-translation}. For $t \ge 0$ and $y \in \mathcal{M}'$, $V(-t)\,y\,V(t) \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -1283,7 +1345,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[The Adjoint of the Reflected Group]
     \label{lmm:reflected-group-adjoint}
+    \lean{Physicslib4.Modular.reflectedGroup_adjoint}
     \uses{def:modular-conjugation-conjugate}
+    \leanok
     For $t \in \mathbb{R}$, $W(t)^* = JV(t)J$.
 \end{lemma}
 \begin{proof}
@@ -1293,7 +1357,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[The Reflected Group is Unitary and Fixes $\Omega$]
     \label{lmm:reflected-group-unitary}
+    \lean{Physicslib4.Modular.reflectedGroup_unitary}
     \uses{def:modular-conjugation-conjugate, def:unitary-operator, def:half-sided-translation}
+    \leanok
     Assume clause (B1) of Definition~\ref{def:half-sided-translation}. For $t \ge 0$, $W(t)$ is unitary and $W(t)\Omega = \Omega$.
 \end{lemma}
 \begin{proof}
@@ -1303,7 +1369,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[The Reflected Group Maps $\mathcal{M}$ into Itself]
     \label{lmm:reflected-group-endomorphism}
+    \lean{Physicslib4.Modular.reflectedGroup_conj_mem}
     \uses{def:modular-conjugation-conjugate, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
+    \leanok
     Assume clause (B2) of Definition~\ref{def:half-sided-translation}. For $t \ge 0$ and $x \in \mathcal{M}$, $W(t)\,x\,W(t)^* \in \mathcal{M}$.
 \end{lemma}
 \begin{proof}
@@ -1313,7 +1381,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[Real Correlations of Self-Adjoint Elements]
     \label{lmm:real-correlation}
+    \lean{Physicslib4.Modular.inner_unitary_apply_im_eq_zero}
     \uses{def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    \leanok
     Let $X$ be a unitary with $X\Omega = \Omega$ and $XxX^* \in \mathcal{M}$ for every $x \in \mathcal{M}$. Then $\left< y\Omega, Xx\Omega \right> \in \mathbb{R}$ for every $x = x^* \in \mathcal{M}$ and $y = y^* \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -1322,7 +1392,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[Real Correlations after a Modular Rotation]
     \label{lmm:modular-rotated-correlation-real}
+    \lean{Physicslib4.Modular.inner_modularRotated_im_eq_zero}
     \uses{def:modular-unitary-group, def:von-neumann-algebra-commutant-convention, def:unitary-operator}
+    \leanok
     Let $X$ be as in Lemma~\ref{lmm:real-correlation}, $x = x^* \in \mathcal{M}$, $y = y^* \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $\left< \Delta^{-it}y\Omega, X\Delta^{-it}x\Omega \right> \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -1332,7 +1404,9 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[The Upper Boundary Value is Real]
     \label{lmm:borchers-upper-boundary-real}
+    \lean{Physicslib4.Modular.borchers_upper_boundary_real}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
+    \leanok
     Assume clauses (B1) and (B2) of Definition~\ref{def:half-sided-translation}. Let $x = x^* \in \mathcal{M}$, $y = y^* \in \mathcal{M}'$, $\tau \ge 0$ and $t \in \mathbb{R}$. Then
     \begin{align}
         \left< \Delta^{-it}Jy\Omega, \ V(-\tau)\,\Delta^{-it}Jx\Omega \right> = \overline{\left< \Delta^{-it}y\Omega, \ W(\tau)\,\Delta^{-it}x\Omega \right>},
@@ -1350,7 +1424,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[The Borchers Function in Closed Form on the Edges]
     \label{lmm:borchers-function-special-values}
+    \lean{Physicslib4.Modular.borchersFunction_special_values}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
+    \leanok
     For $t \in \mathbb{R}$,
     \begin{align}
         F(t) = \left< y\Omega, \ \Delta^{it}V(\tau e^{2\pi t})\Delta^{-it}\,x\Omega \right> = \left< \Delta^{-it}y\Omega, \ V(\tau e^{2\pi t})\Delta^{-it}x\Omega \right>, \qquad F(t + \tfrac{i}{2}) = \left< \Delta^{-it}Jy\Omega, \ V(-\tau e^{2\pi t})\,\Delta^{-it}Jx\Omega \right>.
@@ -1364,7 +1440,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[The Borchers Function is Real on the Lower Edge]
     \label{lmm:borchers-function-lower-edge-real}
+    \lean{Physicslib4.Modular.borchersFunction_lower_edge_real}
     \uses{def:modular-unitary-group, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
+    \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $t \in \mathbb{R}$, $F(t) \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -1374,7 +1452,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[The Borchers Function is Real on the Upper Edge]
     \label{lmm:borchers-function-upper-edge-real}
+    \lean{Physicslib4.Modular.borchersFunction_upper_edge_real}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
+    \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $t \in \mathbb{R}$, $F(t + \tfrac{i}{2}) \in \mathbb{R}$, and $F(\tfrac{i}{2}) = \left< y\Omega, W(\tau)x\Omega \right>$.
 \end{lemma}
 \begin{proof}
@@ -1384,7 +1464,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[The Borchers Function is Constant]
     \label{lmm:borchers-function-constant}
+    \lean{Physicslib4.Modular.borchersFunction_constant}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
+    \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $s \in \mathbb{R}$,
     \begin{align}
         \left< y\Omega, \ \Delta^{is}V(\tau e^{2\pi s})\Delta^{-is}\,x\Omega \right> = \left< y\Omega, V(\tau)\,x\Omega \right> = \left< y\Omega, W(\tau)\,x\Omega \right>.
@@ -1397,7 +1479,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Bounded Operators are Determined by Self-Adjoint Matrix Coefficients]
     \label{lmm:eq-of-self-adjoint-matrix-coefficients}
+    \lean{Physicslib4.Modular.eq_of_selfAdjoint_matrix_coefficients}
     \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector}
+    \leanok
     Let $A, B \in \mathcal{B}(\mathbf{H})$ with $\left< y\Omega, Ax\Omega \right> = \left< y\Omega, Bx\Omega \right>$ for every $x = x^* \in \mathcal{M}$ and $y = y^* \in \mathcal{M}'$. Then $A = B$.
 \end{lemma}
 \begin{proof}
@@ -1407,7 +1491,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Dilation for Nonnegative Times]
     \label{lmm:borchers-dilation-nonneg}
+    \lean{Physicslib4.Modular.borchers_dilation_nonneg}
     \uses{def:modular-unitary-group, def:half-sided-translation}
+    \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $t \ge 0$ and $s \in \mathbb{R}$, $\Delta^{is}V(t)\Delta^{-is} = V(e^{-2\pi s}t)$.
 \end{lemma}
 \begin{proof}
@@ -1417,7 +1503,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Reflection for Nonnegative Times]
     \label{lmm:borchers-reflection-nonneg}
+    \lean{Physicslib4.Modular.borchers_reflection_nonneg}
     \uses{def:modular-conjugation-conjugate, def:half-sided-translation}
+    \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $\tau \ge 0$, $JV(-\tau)J = V(\tau)$.
 \end{lemma}
 \begin{proof}
@@ -1427,7 +1515,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Dilation for All Times]
     \label{lmm:borchers-dilation-all}
+    \lean{Physicslib4.Modular.borchers_dilation_all}
     \uses{def:modular-unitary-group, def:half-sided-translation}
+    \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For all $s, t \in \mathbb{R}$, $\Delta^{is}V(t)\Delta^{-is} = V(e^{-2\pi s}t)$.
 \end{lemma}
 \begin{proof}
@@ -1437,7 +1527,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Reflection for All Times]
     \label{lmm:borchers-reflection-all}
+    \lean{Physicslib4.Modular.borchers_reflection_all}
     \uses{def:modular-conjugation-conjugate, def:half-sided-translation}
+    \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For all $t \in \mathbb{R}$, $JV(t)J = V(-t)$.
 \end{lemma}
 \begin{proof}
@@ -1447,7 +1539,9 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{theorem}[Borchers' Theorem]
     \label{thrm:borchers}
+    \lean{Physicslib4.Modular.borchers}
     \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:half-sided-translation, def:unitary-operator}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, modular unitary group $\Delta^{is}$ and modular conjugation $J$. Let $V(t)$, $t \in \mathbb{R}$, be a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}): a positive-energy one-parameter unitary group with $V(t)\Omega = \Omega$ for all $t$ and $V(t)\,\mathcal{M}\,V(t)^* \subseteq \mathcal{M}$ for all $t \ge 0$. Then for all $s, t \in \mathbb{R}$,
     \begin{align}
         \Delta^{is}\,V(t)\,\Delta^{-is} = V(e^{-2\pi s}t), \qquad JV(t)J = V(-t).
