@@ -424,6 +424,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     Let $R$ be the linear map $(x^0, x^1, x^2, x^3) \mapsto (x^0, -x^1, -x^2, x^3)$, the rotation by $\pi$ in the $(x^1, x^2)$-plane. Then $R \in SO(1,3)^{\uparrow}$ (\ref{def:lorentz-transformation}) and $R^{-1} = R$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $R$ is diagonal with entries $(1, -1, -1, 1)$, so $\eta(Rv, Rw) = \eta(v, w)$ term by term and $R \circ R = 1$. Its determinant is that of its matrix in the standard basis (Mathlib's \texttt{LinearMap.det\_toMatrix}), which is the product of the diagonal entries, $1$ (\texttt{Matrix.det\_diagonal}). Finally $(Re_0)^0 = 1 > 0$.
 \end{proof}
 
@@ -483,6 +484,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     Write $W_R + a = \mathrm{translationSub}(a)\,W_R = \{ x + a \mid x \in W_R \}$ (\ref{def:future-timelike-translation}). If $|a^0| \le a^1$, then $W_R + a \subseteq W_R$. In particular this holds for $a = t\,l_+$ and $a = -t\,l_-$ with $t \ge 0$, where $l_+ = (1, 1, 0, 0)$ and $l_- = (1, -1, 0, 0)$. The set $\{ a \mid |a^0| \le a^1 \}$ is the closure of $W_R$; this is not used.
 \end{lemma}
 \begin{proof}
+    \leanok
     Let $x \in W_R$. Then $|x^0 + a^0| \le |x^0| + |a^0| < x^1 + a^1$ (Mathlib's \texttt{abs\_add\_le}), so $x + a \in W_R$. For $a = t l_+$ and $a = -t l_-$, $a = (\pm t, t, 0, 0)$ with $|{\pm t}| = t$.
 \end{proof}
 

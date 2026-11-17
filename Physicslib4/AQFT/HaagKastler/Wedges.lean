@@ -149,7 +149,32 @@ theorem exists_rotationPi_lorentz :
     ∃ R : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel,
       (∀ x : SpacetimeModel, R x = !₂[x 0, -x 1, -x 2, x 3]) ∧
         IsLorentz R ∧ IsProper R ∧ IsOrthochronous R ∧ R.symm = R := by
-  sorry
+  let M : Matrix (Fin 4) (Fin 4) ℝ := !![1, 0, 0, 0; 0, -1, 0, 0; 0, 0, -1, 0; 0, 0, 0, 1]
+  have hM : M * M = 1 := by
+    ext i j
+    fin_cases i <;> fin_cases j <;> simp [M, Matrix.mul_apply, Fin.sum_univ_four]
+  have hT : Matrix.toEuclideanCLM (𝕜 := ℝ) M * Matrix.toEuclideanCLM (𝕜 := ℝ) M = 1 := by
+    rw [← map_mul, hM, map_one]
+  let R : SpacetimeModel ≃ₗ[ℝ] SpacetimeModel :=
+    LinearEquiv.ofLinearMap (Matrix.toEuclideanCLM (𝕜 := ℝ) M).toLinearMap
+      (Matrix.toEuclideanCLM (𝕜 := ℝ) M).toLinearMap
+      (LinearMap.ext fun x => by simpa using congrArg (fun T => T x) hT)
+      (LinearMap.ext fun x => by simpa using congrArg (fun T => T x) hT)
+  have hR : ∀ x : SpacetimeModel, R x = !₂[x 0, -x 1, -x 2, x 3] := fun x => by
+    ext i
+    fin_cases i <;> simp [R, M, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
+  refine ⟨R, hR, fun v w => ?_, ?_, ?_, ?_⟩
+  · simp only [minkowskiForm_apply, hR]
+    simp
+  · change LinearMap.det (Matrix.toLin (EuclideanSpace.basisFun _ ℝ).toBasis
+      (EuclideanSpace.basisFun _ ℝ).toBasis M) = 1
+    rw [LinearMap.det_toLin]
+    simp [M, Matrix.det_succ_row_zero, Fin.sum_univ_succ, Fin.succAbove]
+  · simp [IsOrthochronous, hR]
+  · refine LinearEquiv.ext fun x => R.injective ?_
+    rw [LinearEquiv.apply_symm_apply]
+    ext i
+    fin_cases i <;> simp [hR]
 
 /-- The left wedge is a wedge: the element `(R, 0)`, with `R` the rotation by `π` in the
 `(x¹, x²)`-plane, maps `W_R` onto `W_L`. Hence `W_L` is a wedge, and so is `g W_L` for every `g`.
@@ -218,7 +243,12 @@ theorem translationSub_smul_rightWedge_subset :
       ∀ t : ℝ, 0 ≤ t →
         translationSub (t • l₊) • rightWedge ⊆ rightWedge ∧
           translationSub (-(t • l₋)) • rightWedge ⊆ rightWedge := by
-  sorry
+  have key : ∀ a : SpacetimeModel, |a 0| ≤ a 1 → translationSub a • rightWedge ⊆ rightWedge := by
+    rintro a ha _ ⟨(x : SpacetimeModel), hx, rfl⟩
+    change |x 0| < x 1 at hx
+    change |x 0 + a 0| < x 1 + a 1
+    linarith [abs_add_le (x 0) (a 0)]
+  refine ⟨key, fun t ht => ⟨key _ ?_, key _ ?_⟩⟩ <;> simp [abs_of_nonneg ht]
 
 /-- Transverse translations preserve the right wedge: if `a⁰ = a¹ = 0`, then `W_R + a = W_R`.
 
