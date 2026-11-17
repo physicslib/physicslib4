@@ -530,6 +530,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     For every $s$, $\Lambda(s)$ is Lorentz: $\eta(\Lambda(s)v, \Lambda(s)w) = \eta(v, w)$ for all $v, w$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Write $c = \cosh s$ and $\sigma = \sinh s$. Expanding,
     \begin{align}
         -(cv^0 + \sigma v^1)(cw^0 + \sigma w^1) + (\sigma v^0 + cv^1)(\sigma w^0 + cw^1) = (c^2 - \sigma^2)(-v^0w^0 + v^1w^1),
@@ -545,6 +546,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     For every $s$, $\det \Lambda(s) = 1$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The determinant is that of the matrix of $\Lambda(s)$ in the standard basis (Mathlib's \texttt{LinearMap.det\_toMatrix}). Expanding along the first row (\texttt{Matrix.det\_succ\_row\_zero}), and then along the remaining rows, gives $\cosh^2 s - \sinh^2 s$, which is $1$ by \texttt{Real.cosh\_sq\_sub\_sinh\_sq}.
 \end{proof}
 

@@ -279,13 +279,21 @@ theorem boostMatrix_apply (s : ℝ) (x : SpacetimeModel) :
 
 Blueprint: lmm:boost-matrix-lorentz -/
 theorem boostMatrix_isLorentz (s : ℝ) : IsLorentz (boostMatrix s) := by
-  sorry
+  intro v w
+  simp only [minkowskiForm_apply, boostMatrix_apply]
+  simp
+  linear_combination (-(v 0) * w 0 + v 1 * w 1) * Real.cosh_sq_sub_sinh_sq s
 
 /-- The boost matrices are proper: `det Λ(s) = 1`.
 
 Blueprint: lmm:boost-matrix-proper -/
 theorem boostMatrix_isProper (s : ℝ) : IsProper (boostMatrix s) := by
-  sorry
+  change LinearMap.det (Matrix.toLin (EuclideanSpace.basisFun _ ℝ).toBasis
+    (EuclideanSpace.basisFun _ ℝ).toBasis
+    !![Real.cosh s, Real.sinh s, 0, 0; Real.sinh s, Real.cosh s, 0, 0; 0, 0, 1, 0; 0, 0, 0, 1]) = 1
+  rw [LinearMap.det_toLin]
+  simp [Matrix.det_succ_row_zero, Fin.sum_univ_succ, Fin.succAbove]
+  linear_combination Real.cosh_sq_sub_sinh_sq s
 
 /-- The boost matrices are orthochronous: `(Λ(s)e₀)⁰ = cosh s > 0`.
 
