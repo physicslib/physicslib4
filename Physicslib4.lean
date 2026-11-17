@@ -1,4 +1,5 @@
 import Physicslib4.AQFT.HaagKastler.CovariantState
+import Physicslib4.AQFT.HaagKastler.CovariantVacuum
 import Physicslib4.AQFT.HaagKastler.EinsteinCausality
 import Physicslib4.AQFT.HaagKastler.GeometricCovariance
 import Physicslib4.AQFT.HaagKastler.Isotony
@@ -21,8 +22,10 @@ import Physicslib4.AQFT.HaagKastler.ReehSchlieder.Additivity
 import Physicslib4.AQFT.HaagKastler.ReehSchlieder.Correlations
 import Physicslib4.AQFT.HaagKastler.ReehSchlieder.CyclicSubspace
 import Physicslib4.AQFT.HaagKastler.ReehSchlieder.Translations
+import Physicslib4.AQFT.HaagKastler.RegionAlgebra
 import Physicslib4.AQFT.HaagKastler.StrongDensity
 import Physicslib4.AQFT.HaagKastler.VacuumState
+import Physicslib4.AQFT.HaagKastler.Wedges
 import Physicslib4.AQFT.HaagKastlerCurved.Concrete
 import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
 import Physicslib4.AQFT.HaagKastlerCurved.EinsteinCausality
