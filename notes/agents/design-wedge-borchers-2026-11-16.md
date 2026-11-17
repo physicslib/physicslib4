@@ -613,3 +613,14 @@ The user approved the eight batch-2 blueprint definitions:
 - `def:covariant-vacuum-representation`
 
 Their Lean `def`s still need lean-kit guard approval, file by file, at formalization time.
+
+## Approved definitions, second set (2026-11-17)
+
+The user approved five further definitions:
+- `IsWedgeModularCovariant`: (MC), taking explicit proofs and the reference conjugation C;
+- `IsInternalSymmetry`;
+- `IsHalfSidedTranslation`: the Borchers hypotheses (B1) and (B2);
+- `wedgeModularDefect`: Z(t);
+- `wedgeReflection`: j.
+
+Their Lean `def`s still need lean-kit guard approval.

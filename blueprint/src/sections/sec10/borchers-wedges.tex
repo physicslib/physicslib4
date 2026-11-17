@@ -1309,3 +1309,363 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
     \uses{lmm:borchers-dilation-all, lmm:borchers-reflection-all}
     The hypotheses are (B1) and (B2); apply Lemmas~\ref{lmm:borchers-dilation-all} and~\ref{lmm:borchers-reflection-all}.
 \end{proof}
+
+\subsection{The Wedge Corollary}\label{sbsctn:wedge-corollary}
+
+This subsection applies Borchers' theorem to the algebra of the right wedge and the lightlike translations along its edges. The result (Theorem~\ref{thrm:wedge-modular-translations}) is that $\Delta_{W_R}^{is}$ acts on the translations as the boost $b(-2\pi s)$ does, and $J_{W_R}$ as the reflection of the $(x^0, x^1)$-plane. This consequence of Borchers' theorem is drawn in Borchers' paper (\emph{Commun. Math. Phys.} 143 (1992) 315--332). It needs no assumption beyond a covariant vacuum representation with weak additivity. The unitary $Z(t) = \Delta_{W_R}^{it}U(b(2\pi t))$ measures how far $\Delta_{W_R}^{it}$ is from the boost $U(b(-2\pi t))$: it commutes with every translation and every boost of $W_R$, fixes $\Omega$, preserves $R(W_R)$, and is a strongly continuous one-parameter unitary group (Corollary~\ref{crllr:wedge-modular-defect}). The Bisognano--Wichmann identification $\Delta_{W_R}^{it} = U(b(-2\pi t))$ is the statement $Z \equiv \mathbf{1}$.
+
+The two lightlike directions behave differently. For $l_+ = (1, 1, 0, 0)$ the translations $U(t\,l_+)$ with $t \ge 0$ map $R(W_R)$ into itself and have positive generator, so Borchers' theorem applies directly. For $l_- = (1, -1, 0, 0)$ the generator is again positive, since $l_-$ is future-directed, but $W_R + t\,l_- \not\subseteq W_R$ for $t > 0$; it is the translations by $-t\,l_-$, $t \ge 0$, that map $W_R$ into itself (\ref{lmm:wedge-translations}). Borchers' theorem is therefore applied to the commutant $R(W_R)'$, whose modular group is $\Delta_{W_R}^{-is}$ (Corollary~\ref{crllr:borchers-reversed}), and the dilation of $l_-$ has the opposite sign, matching $\Lambda(-2\pi s)l_- = e^{2\pi s}l_-$ (\ref{lmm:boost-light-cone}).
+
+\emph{Notation.} For $a \in \mathbb{R}^4$ write
+\begin{align}
+    \alpha(a) = \tfrac{1}{2}(a^0 + a^1), \qquad \beta(a) = \tfrac{1}{2}(a^0 - a^1), \qquad a_\perp = (0, 0, a^2, a^3),
+\end{align}
+and let $j$ be the linear map $j(x^0, x^1, x^2, x^3) = (-x^0, -x^1, x^2, x^3)$ of $\mathbb{R}^4$, the reflection of the $(x^0, x^1)$-plane. It preserves the Minkowski form but is not orthochronous, so it is not in the inhomogeneous Lorentz group; it enters only through its action on translation vectors. These are notation, not new definitions.
+
+\emph{Setting.} From Lemma~\ref{lmm:translation-unitaries} on, $(\pi, \Omega, U)$ is a covariant vacuum representation (\ref{def:covariant-vacuum-representation}) and $\pi$ is weakly additive in the von Neumann sense (\ref{def:weak-additivity-von-neumann}). For $a \in \mathbb{R}^4$, $U(a) := U(\mathrm{translationSub}(a))$, as in \ref{lmm:covariant-vacuum-bridge}. $\mathcal{M} = R(W_R)$ is the algebra of the right wedge (\ref{def:region-algebra}), for which $\Omega$ is cyclic and separating (\ref{thrm:wedge-cyclic-separating}), and $\Delta^{is} = \Delta_{W_R}^{is}$ and $J = J_{W_R}$ are its modular unitary group and modular conjugation. $b(s)$ and $\Lambda(s)$ are the boost and its matrix (\ref{def:wedge-boost}, \ref{def:boost-matrix}).
+
+\subsubsection{Borchers' Theorem for the Commutant}
+
+In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, as in Subsection~\ref{sbsctn:borchers-theorem}.
+
+\begin{lemma}[The Modular Group of the Commutant]
+    \label{lmm:commutant-modular-unitary-group}
+    \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\Omega$ cyclic and separating for $\mathcal{M}$. Then $\Omega$ is cyclic and separating for $\mathcal{M}'$, and the modular unitary group and the modular conjugation of $(\mathcal{M}', \Omega)$ are $\Delta_{\mathcal{M}'}^{it} = \Delta^{-it}$ for every $t \in \mathbb{R}$ and $J_{\mathcal{M}'} = J$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:commutant-modular-objects, lmm:modular-unitary-group-fc, lmm:inverse-functional-calculus, crllr:fc-of-fc, thrm:modular-operator-properties}
+    By Theorem~\ref{thrm:commutant-modular-objects}, $\Omega$ is cyclic and separating for $\mathcal{M}'$, $\Delta_{\mathcal{M}'} = \Delta^{-1}$ and $J_{\mathcal{M}'} = J$. $\Delta$ is self-adjoint and injective (Theorem~\ref{thrm:modular-operator-properties}), so $\Delta^{-1} = \iota^{-}(\Delta)$ with $\iota^{-}(\lambda) = \lambda^{-1}$ ($0^{-1} = 0$; Lemma~\ref{lmm:inverse-functional-calculus}). By Lemma~\ref{lmm:modular-unitary-group-fc} for $(\mathcal{M}', \Omega)$ and Corollary~\ref{crllr:fc-of-fc} ($\iota^{-}$ is measurable, Mathlib's \texttt{measurable\_inv}),
+    \begin{align}
+        \Delta_{\mathcal{M}'}^{it} = e_t(\iota^{-}(\Delta)) = (e_t \circ \iota^{-})(\Delta) = e_{-t}(\Delta) = \Delta^{-it},
+    \end{align}
+    because $e_t(\lambda^{-1}) = e^{it\log(\lambda^{-1})} = e^{-it\log\lambda} = e_{-t}(\lambda)$ for every real $\lambda$ (\texttt{Real.log\_inv}), and the last step is Lemma~\ref{lmm:modular-unitary-group-fc} for $(\mathcal{M}, \Omega)$ at $-t$.
+\end{proof}
+
+\begin{lemma}[Reverse Endomorphisms Pass to the Commutant]
+    \label{lmm:unitary-reverse-endomorphism-commutant}
+    \uses{def:unitary-operator, def:von-neumann-algebra-commutant-convention}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, and let $X$ be a unitary with $X^*xX \in \mathcal{M}$ for every $x \in \mathcal{M}$. Then $XyX^* \in \mathcal{M}'$ for every $y \in \mathcal{M}'$.
+\end{lemma}
+\begin{proof}
+    Let $x \in \mathcal{M}$ and $x' = X^*xX \in \mathcal{M}$, so $x = Xx'X^*$ since $XX^* = X^*X = \mathbf{1}$. Then $x'y = yx'$ gives $XyX^*\,x = Xyx'X^* = Xx'yX^* = x\,XyX^*$ (\texttt{mul\_assoc}). This is the computation of Lemma~\ref{lmm:commutant-reverse-endomorphism} for a single unitary.
+\end{proof}
+
+\begin{corollary}[Borchers' Theorem for Negative Half-Lines]
+    \label{crllr:borchers-reversed}
+    \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:positive-energy, def:unitary-operator}
+    Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, modular unitary group $\Delta^{is}$ and modular conjugation $J$. Let $V(t)$, $t \in \mathbb{R}$, be a family of unitary operators with positive energy (\ref{def:positive-energy}) such that $V(t)\Omega = \Omega$ for all $t$ and $V(-t)\,x\,V(t) \in \mathcal{M}$ for all $t \ge 0$ and $x \in \mathcal{M}$. Then for all $s, t \in \mathbb{R}$,
+    \begin{align}
+        \Delta^{is}\,V(t)\,\Delta^{-is} = V(e^{2\pi s}t), \qquad JV(t)J = V(-t).
+    \end{align}
+\end{corollary}
+\begin{proof}
+    \uses{lmm:commutant-modular-unitary-group, lmm:unitary-reverse-endomorphism-commutant, lmm:commutant-von-neumann-algebra, lmm:unitary-group-inner-adjoint, thrm:borchers}
+    $\mathcal{M}'$ is a von Neumann algebra (Lemma~\ref{lmm:commutant-von-neumann-algebra}) with $\Omega$ cyclic and separating (Lemma~\ref{lmm:commutant-modular-unitary-group}). For $t \ge 0$, Lemma~\ref{lmm:unitary-reverse-endomorphism-commutant} with $X = V(t)$, $X^* = V(-t)$ (\ref{lmm:unitary-group-inner-adjoint}), gives $V(t)\,y\,V(-t) \in \mathcal{M}'$ for $y \in \mathcal{M}'$. So Theorem~\ref{thrm:borchers} applies to $(\mathcal{M}', \Omega, V)$: $\Delta_{\mathcal{M}'}^{is}V(t)\Delta_{\mathcal{M}'}^{-is} = V(e^{-2\pi s}t)$ and $J_{\mathcal{M}'}V(t)J_{\mathcal{M}'} = V(-t)$. By Lemma~\ref{lmm:commutant-modular-unitary-group}, $\Delta_{\mathcal{M}'}^{is} = \Delta^{-is}$ and $J_{\mathcal{M}'} = J$; replacing $s$ by $-s$ gives the claim.
+\end{proof}
+
+\subsubsection{Translations and Boosts}
+
+\begin{lemma}[Light-Cone Decomposition of a Vector]
+    \label{lmm:light-cone-decomposition}
+    \uses{def:boost-matrix}
+    For every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$, with $\alpha = \alpha(a)$ and $\beta = \beta(a)$,
+    \begin{align}
+        a = \alpha\,l_+ + \beta\,l_- + a_\perp, \qquad \Lambda(s)a = e^{s}\alpha\,l_+ + e^{-s}\beta\,l_- + a_\perp, \qquad j\,a = -\alpha\,l_+ - \beta\,l_- + a_\perp.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:boost-light-cone}
+    The first and third identities are checked componentwise: $\alpha + \beta = a^0$ and $\alpha - \beta = a^1$ (\texttt{ring}). The second follows from the first by linearity of $\Lambda(s)$, with $\Lambda(s)l_\pm = e^{\pm s}l_\pm$ (\ref{lmm:boost-light-cone}) and $\Lambda(s)a_\perp = a_\perp$ (\ref{def:boost-matrix}).
+\end{proof}
+
+\begin{lemma}[Poincar\'e Conjugation of a Translation]
+    \label{lmm:poincare-conjugates-translation}
+    \uses{def:inhomogeneous-lorentz-group, def:future-timelike-translation}
+    Let $g = (L, c)$ be in the inhomogeneous Lorentz group. For every $a \in \mathbb{R}^4$, $g\,\mathrm{translationSub}(a)\,g^{-1} = \mathrm{translationSub}(La)$. In particular $b(s)\,\mathrm{translationSub}(a)\,b(s)^{-1} = \mathrm{translationSub}(\Lambda(s)a)$.
+\end{lemma}
+\begin{proof}
+    \uses{def:wedge-boost}
+    By the product rule of \ref{def:inhomogeneous-lorentz-group}, $(L, c)(1, a) = (L, c + La)$ and $g^{-1} = (L^{-1}, -L^{-1}c)$, so $(L, c + La)(L^{-1}, -L^{-1}c) = (1, c + La - c) = (1, La)$ (\texttt{InhomogeneousLorentzGroup.ext}). For $b(s) = (\Lambda(s), 0)$ (\ref{def:wedge-boost}), $L = \Lambda(s)$.
+\end{proof}
+
+\begin{lemma}[The Translation Unitaries]
+    \label{lmm:translation-unitaries}
+    \uses{def:covariant-vacuum-representation, def:future-timelike-translation, def:inhomogeneous-lorentz-group}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation. Then $U(g)^{-1} = U(g^{-1})$ for every $g$; $U(0) = \mathbf{1}$, $U(a + a') = U(a)U(a')$ and $U(a)^{-1} = U(-a)$ for all $a, a' \in \mathbb{R}^4$; $U(\mathrm{translationFlow}(n)(t)) = U(tn)$; and for $g = (L, c)$,
+    \begin{align}
+        U(g)\,U(a)\,U(g)^{-1} = U(La).
+    \end{align}
+    In particular $U(b(s))U(a)U(b(s))^{-1} = U(\Lambda(s)a)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:poincare-conjugates-translation}
+    The group law of $U$ (clause (1)) gives $U(g)U(g^{-1}) = U(g^{-1})U(g) = U(1) = \mathbf{1}$. $\mathrm{translationSub}$ is a homomorphism from $(\mathbb{R}^4, +)$ and $\mathrm{translationFlow}(n)(t) = \mathrm{translationSub}(tn)$ (\ref{def:future-timelike-translation}), so the group law gives the translation identities. The last identity is the group law applied to Lemma~\ref{lmm:poincare-conjugates-translation}.
+\end{proof}
+
+\begin{lemma}[Light-Cone Factorisation of the Translation Unitaries]
+    \label{lmm:translation-light-cone-factorisation}
+    \uses{def:covariant-vacuum-representation, def:future-timelike-translation}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation. For every $a \in \mathbb{R}^4$, with $\alpha = \alpha(a)$ and $\beta = \beta(a)$,
+    \begin{align}
+        U(a) = U(\alpha\,l_+)\,U(\beta\,l_-)\,U(a_\perp).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lmm:light-cone-decomposition, lmm:translation-unitaries}
+    $a = \alpha\,l_+ + \beta\,l_- + a_\perp$ (\ref{lmm:light-cone-decomposition}), and $U(a + a') = U(a)U(a')$ applied twice (\ref{lmm:translation-unitaries}).
+\end{proof}
+
+\subsubsection{The Lightlike Translations along the Edge of the Right Wedge}
+
+\begin{lemma}[Lightlike Translations have Positive Energy]
+    \label{lmm:lightlike-translations-positive-energy}
+    \uses{def:covariant-vacuum-representation, def:positive-energy}
+    The families $t \mapsto U(t\,l_+)$ and $t \mapsto U(t\,l_-)$ have positive energy (\ref{def:positive-energy}), and $U(t\,l_\pm)\Omega = \Omega$ for every $t$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:closed-forward-cone-iff-norm, lmm:translation-unitaries}
+    $l_\pm$ has $\|\vec l_\pm\| = 1 \le 1 = l_\pm^0$, so $l_\pm \in \overline{V}_+$ (\ref{lmm:closed-forward-cone-iff-norm}), and $l_\pm \neq 0$. By the spectrum condition (clause (5)), $t \mapsto U(\mathrm{translationFlow}(l_\pm)(t))$ has positive energy, and this is $t \mapsto U(t\,l_\pm)$ by Lemma~\ref{lmm:translation-unitaries}. Invariance (clause (4)) gives $U(t\,l_\pm)\Omega = \Omega$.
+\end{proof}
+
+\begin{lemma}[Half-Sided Translations of the Right Wedge Algebra]
+    \label{lmm:wedge-half-sided-translations}
+    \uses{def:covariant-vacuum-representation, def:region-algebra, def:right-wedge}
+    For every $t \ge 0$ and $x \in R(W_R)$,
+    \begin{align}
+        U(t\,l_+)\,x\,U(-t\,l_+) \in R(W_R), \qquad U(-t\,l_-)\,x\,U(t\,l_-) \in R(W_R).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{thrm:region-algebra-covariance, lmm:wedge-translations, lmm:region-algebra-mono, lmm:translation-unitaries}
+    Let $a = t\,l_+$ or $a = -t\,l_-$. By Theorem~\ref{thrm:region-algebra-covariance} with $g = \mathrm{translationSub}(a)$ and $U(a)^{-1} = U(-a)$ (\ref{lmm:translation-unitaries}), $U(a)\,x\,U(-a) \in R(W_R + a)$. By Lemma~\ref{lmm:wedge-translations}, $W_R + a \subseteq W_R$, so $R(W_R + a) \subseteq R(W_R)$ (\ref{lmm:region-algebra-mono}).
+\end{proof}
+
+\begin{lemma}[The Wedge Modular Objects on the $l_+$ Translations]
+    \label{lmm:wedge-modular-plus}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:modular-conjugation-conjugate}
+    For all $s, t \in \mathbb{R}$, $\Delta^{is}U(t\,l_+)\Delta^{-is} = U(e^{-2\pi s}t\,l_+)$ and $J\,U(t\,l_+)\,J = U(-t\,l_+)$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:borchers, thrm:wedge-cyclic-separating, lmm:lightlike-translations-positive-energy, lmm:wedge-half-sided-translations}
+    Apply Theorem~\ref{thrm:borchers} to $\mathcal{M} = R(W_R)$, a von Neumann algebra with $\Omega$ cyclic and separating (\ref{thrm:wedge-cyclic-separating}), and $V(t) = U(t\,l_+)$. Positive energy and (B1) are Lemma~\ref{lmm:lightlike-translations-positive-energy}, and (B2) is the first half of Lemma~\ref{lmm:wedge-half-sided-translations}. The conclusion $V(e^{-2\pi s}t) = U(e^{-2\pi s}t\,l_+)$ is the claim.
+\end{proof}
+
+\begin{lemma}[The Wedge Modular Objects on the $l_-$ Translations]
+    \label{lmm:wedge-modular-minus}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:modular-conjugation-conjugate}
+    For all $s, t \in \mathbb{R}$, $\Delta^{is}U(t\,l_-)\Delta^{-is} = U(e^{2\pi s}t\,l_-)$ and $J\,U(t\,l_-)\,J = U(-t\,l_-)$.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:borchers-reversed, thrm:wedge-cyclic-separating, lmm:lightlike-translations-positive-energy, lmm:wedge-half-sided-translations}
+    Apply Corollary~\ref{crllr:borchers-reversed} to $\mathcal{M} = R(W_R)$ (\ref{thrm:wedge-cyclic-separating}) and $V(t) = U(t\,l_-)$. Positive energy and invariance of $\Omega$ are Lemma~\ref{lmm:lightlike-translations-positive-energy}. The hypothesis $V(-t)\,x\,V(t) \in \mathcal{M}$ for $t \ge 0$ reads $U(-t\,l_-)\,x\,U(t\,l_-) \in R(W_R)$, the second half of Lemma~\ref{lmm:wedge-half-sided-translations}.
+\end{proof}
+
+\subsubsection{All Translations}
+
+\begin{lemma}[The Wedge Modular Group on the Translations]
+    \label{lmm:wedge-modular-group-translations}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:boost-matrix}
+    For every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$, $\Delta^{is}U(a)\Delta^{-is} = U(\Lambda(-2\pi s)a)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:translation-light-cone-factorisation, lmm:light-cone-decomposition, lmm:translation-unitaries, lmm:wedge-modular-plus, lmm:wedge-modular-minus, crllr:wedge-stabiliser-commutes-modular, lmm:modular-unitary-group-props}
+    By Lemma~\ref{lmm:translation-light-cone-factorisation}, $U(a) = U(\alpha l_+)\,U(\beta l_-)\,U(a_\perp)$. Since $\Delta^{-is}\Delta^{is} = \mathbf{1}$ (\ref{lmm:modular-unitary-group-props}), conjugation by $\Delta^{is}$ is multiplicative. It sends $U(\alpha l_+)$ to $U(e^{-2\pi s}\alpha\,l_+)$ (\ref{lmm:wedge-modular-plus}), $U(\beta l_-)$ to $U(e^{2\pi s}\beta\,l_-)$ (\ref{lmm:wedge-modular-minus}), and fixes $U(a_\perp)$, which commutes with $\Delta^{is}$ (\ref{crllr:wedge-stabiliser-commutes-modular}, since $(a_\perp)^0 = (a_\perp)^1 = 0$). The product is $U(e^{-2\pi s}\alpha\,l_+ + e^{2\pi s}\beta\,l_- + a_\perp) = U(\Lambda(-2\pi s)a)$ by Lemmas~\ref{lmm:translation-unitaries} and~\ref{lmm:light-cone-decomposition}.
+\end{proof}
+
+\begin{lemma}[The Wedge Modular Conjugation on the Translations]
+    \label{lmm:wedge-modular-conjugation-translations}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-conjugation-conjugate}
+    For every $a \in \mathbb{R}^4$, $J\,U(a)\,J = U(j\,a)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:translation-light-cone-factorisation, lmm:light-cone-decomposition, lmm:translation-unitaries, lmm:wedge-modular-plus, lmm:wedge-modular-minus, crllr:wedge-stabiliser-commutes-modular, lmm:modular-conjugation-bounded-conjugate-identities, thrm:modular-conjugation-involution}
+    By Lemma~\ref{lmm:translation-light-cone-factorisation}, $U(a) = U(\alpha l_+)\,U(\beta l_-)\,U(a_\perp)$, and $T \mapsto JTJ$ is multiplicative (\ref{lmm:modular-conjugation-bounded-conjugate-identities}). It sends $U(\alpha l_+)$ to $U(-\alpha l_+)$ (\ref{lmm:wedge-modular-plus}) and $U(\beta l_-)$ to $U(-\beta l_-)$ (\ref{lmm:wedge-modular-minus}). It fixes $U(a_\perp)$: $U(a_\perp)J = JU(a_\perp)$ (\ref{crllr:wedge-stabiliser-commutes-modular}) and $J(J\phi) = \phi$ (\ref{thrm:modular-conjugation-involution}). The product is $U(-\alpha l_+ - \beta l_- + a_\perp) = U(j\,a)$ (\ref{lmm:translation-unitaries}, \ref{lmm:light-cone-decomposition}).
+\end{proof}
+
+\begin{theorem}[The Wedge Modular Objects Act Geometrically on the Translations]
+    \label{thrm:wedge-modular-translations}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:right-wedge, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:wedge-boost, def:boost-matrix, def:future-timelike-translation}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense, and let $\Delta^{is}$ and $J$ be the modular unitary group and modular conjugation of $(R(W_R), \Omega)$. Then for every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$,
+    \begin{align}
+        \Delta^{is}\,U(a)\,\Delta^{-is} = U(\Lambda(-2\pi s)a) = U(b(-2\pi s))\,U(a)\,U(b(-2\pi s))^{-1}, \qquad J\,U(a)\,J = U(j\,a),
+    \end{align}
+    with $j(x^0, x^1, x^2, x^3) = (-x^0, -x^1, x^2, x^3)$.
+\end{theorem}
+\begin{proof}
+    \uses{lmm:wedge-modular-group-translations, lmm:wedge-modular-conjugation-translations, lmm:translation-unitaries}
+    Lemmas~\ref{lmm:wedge-modular-group-translations} and~\ref{lmm:wedge-modular-conjugation-translations}; the middle expression is Lemma~\ref{lmm:translation-unitaries} with $g = b(-2\pi s)$.
+\end{proof}
+
+\begin{corollary}[The Modular Objects of Every Wedge on the Translations]
+    \label{crllr:wedge-modular-translations-general}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:wedge-boost, def:modular-unitary-group, def:modular-conjugation-conjugate}
+    Under the hypotheses of Theorem~\ref{thrm:wedge-modular-translations}, let $g = (L, c)$ be in the inhomogeneous Lorentz group and let $\Delta_{gW_R}^{is}$, $J_{gW_R}$ be the modular objects of $(R(gW_R), \Omega)$. Then for every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$,
+    \begin{align}
+        \Delta_{gW_R}^{is}\,U(a)\,\Delta_{gW_R}^{-is} = U(L\Lambda(-2\pi s)L^{-1}a) = U(b_g(-2\pi s))\,U(a)\,U(b_g(-2\pi s))^{-1}, \qquad J_{gW_R}\,U(a)\,J_{gW_R} = U(LjL^{-1}a).
+    \end{align}
+\end{corollary}
+\begin{proof}
+    \uses{crllr:wedge-modular-covariance, thrm:wedge-modular-translations, lmm:translation-unitaries}
+    By Corollary~\ref{crllr:wedge-modular-covariance} with $W = W_R$ and $h = g$, $\Delta_{gW_R}^{is} = U(g)\Delta^{is}U(g)^{-1}$ and $J_{gW_R} = U(g)JU(g)^{-1}$. By Lemma~\ref{lmm:translation-unitaries} for $g^{-1} = (L^{-1}, -L^{-1}c)$, $U(g)^{-1}U(a)U(g) = U(L^{-1}a)$. So $\Delta_{gW_R}^{is}U(a)\Delta_{gW_R}^{-is} = U(g)\,\Delta^{is}U(L^{-1}a)\Delta^{-is}\,U(g)^{-1} = U(g)U(\Lambda(-2\pi s)L^{-1}a)U(g)^{-1} = U(L\Lambda(-2\pi s)L^{-1}a)$ by Theorem~\ref{thrm:wedge-modular-translations} and Lemma~\ref{lmm:translation-unitaries}. The linear part of $b_g(-2\pi s) = g\,b(-2\pi s)\,g^{-1}$ is $L\Lambda(-2\pi s)L^{-1}$, which gives the middle expression. The same computation with $J$ gives the last identity.
+\end{proof}
+
+\subsubsection{The Defect $Z(t)$}
+
+For $t \in \mathbb{R}$ let
+\begin{align}
+    Z(t) = \Delta^{it}\,U(b(2\pi t)),
+\end{align}
+a unitary, as a product of unitaries (\ref{lmm:modular-unitary-group-props}), with $\Delta^{it} = Z(t)\,U(b(-2\pi t))$ since $U(b(2\pi t))U(b(-2\pi t)) = U(b(0)) = \mathbf{1}$ (\ref{lmm:boost-group-law}). This is notation for the results below, not a new definition.
+
+\begin{lemma}[The Defect Fixes the Vacuum and Preserves the Wedge Algebra]
+    \label{lmm:wedge-modular-defect-vacuum}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:modular-unitary-group, def:wedge-boost}
+    For every $t$, $Z(t)\Omega = \Omega$ and $Z(t)\,R(W_R)\,Z(t)^{-1} = R(W_R)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-unitary-group-fixes-omega, thrm:region-algebra-covariance, lmm:boost-preserves-wedge, thrm:tomita, thrm:wedge-cyclic-separating}
+    $U(b(2\pi t))\Omega = \Omega$ by invariance and $\Delta^{it}\Omega = \Omega$ (\ref{lmm:modular-unitary-group-fixes-omega}). $U(b(2\pi t))R(W_R)U(b(2\pi t))^{-1} = R(b(2\pi t)W_R) = R(W_R)$ by Theorem~\ref{thrm:region-algebra-covariance} and Lemma~\ref{lmm:boost-preserves-wedge}, and $\Delta^{it}R(W_R)\Delta^{-it} = R(W_R)$ by Tomita's theorem (\ref{thrm:tomita}, part (ii), applicable by \ref{thrm:wedge-cyclic-separating}). Conjugation by $Z(t)$ is the composite of these two conjugations (\texttt{Set.image\_image}).
+\end{proof}
+
+\begin{lemma}[The Defect Commutes with the Translations]
+    \label{lmm:wedge-modular-defect-translations}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost, lmm:modular-unitary-group-props}
+    For every $t \in \mathbb{R}$ and $a \in \mathbb{R}^4$, $Z(t)\,U(a) = U(a)\,Z(t)$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:translation-unitaries, thrm:wedge-modular-translations, lmm:boost-matrix-group-law}
+    By Lemma~\ref{lmm:translation-unitaries} and Theorem~\ref{thrm:wedge-modular-translations},
+    \begin{align}
+        Z(t)\,U(a)\,Z(t)^{-1} = \Delta^{it}\,U(b(2\pi t))U(a)U(b(2\pi t))^{-1}\,\Delta^{-it} = \Delta^{it}\,U(\Lambda(2\pi t)a)\,\Delta^{-it} = U(\Lambda(-2\pi t)\Lambda(2\pi t)a) = U(a),
+    \end{align}
+    the last step by $\Lambda(-2\pi t)\Lambda(2\pi t) = \Lambda(0) = 1$ (\ref{lmm:boost-matrix-group-law}).
+\end{proof}
+
+\begin{lemma}[The Defect Commutes with the Boosts]
+    \label{lmm:wedge-modular-defect-boosts}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost}
+    For all $s, t \in \mathbb{R}$, $Z(t)\,U(b(s)) = U(b(s))\,Z(t)$.
+\end{lemma}
+\begin{proof}
+    \uses{crllr:wedge-stabiliser-commutes-modular, lmm:boost-group-law}
+    $U(b(s))$ commutes with $\Delta^{it}$ by Corollary~\ref{crllr:wedge-stabiliser-commutes-modular}. It commutes with $U(b(2\pi t))$ because $b(s)b(2\pi t) = b(s + 2\pi t) = b(2\pi t)b(s)$ (\ref{lmm:boost-group-law}, \texttt{add\_comm}) and $U$ satisfies the group law.
+\end{proof}
+
+\begin{lemma}[The Defect is a One-Parameter Group]
+    \label{lmm:wedge-modular-defect-group}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost}
+    $Z(0) = \mathbf{1}$ and $Z(s + t) = Z(s)Z(t)$ for all $s, t \in \mathbb{R}$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-unitary-group-props, lmm:boost-group-law, crllr:wedge-stabiliser-commutes-modular}
+    $Z(0) = \Delta^{i0}U(b(0)) = \mathbf{1}\cdot U(1) = \mathbf{1}$ (\ref{lmm:modular-unitary-group-props}, \ref{lmm:boost-group-law}). By the group laws of $\Delta^{i\cdot}$, $b$ and $U$, $Z(s+t) = \Delta^{is}\,\Delta^{it}U(b(2\pi s))\,U(b(2\pi t))$ (\texttt{mul\_add}), and $\Delta^{it}U(b(2\pi s)) = U(b(2\pi s))\Delta^{it}$ (\ref{crllr:wedge-stabiliser-commutes-modular}) turns this into $Z(s)Z(t)$.
+\end{proof}
+
+\begin{lemma}[The Defect is Strongly Continuous]
+    \label{lmm:wedge-modular-defect-continuous}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost}
+    For every $\psi \in \mathbf{H}$, $t \mapsto Z(t)\psi$ is continuous.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:modular-unitary-group-props, lmm:boost-continuous-subgroup}
+    $\phi_t = U(b(2\pi t))\psi$ is continuous in $t$ by the continuity clause (2) for the continuous one-parameter subgroup $b$ (\ref{lmm:boost-continuous-subgroup}), composed with $t \mapsto 2\pi t$. $t \mapsto \Delta^{it}\phi$ is continuous for each $\phi$ (\ref{lmm:modular-unitary-group-props}). Since $\Delta^{it}$ is isometric,
+    \begin{align}
+        \|Z(t)\psi - Z(t_0)\psi\| \le \|\phi_t - \phi_{t_0}\| + \|\Delta^{it}\phi_{t_0} - \Delta^{it_0}\phi_{t_0}\|
+    \end{align}
+    (\texttt{norm\_sub\_le}, \texttt{LinearIsometryEquiv.norm\_map}), and both terms tend to $0$ as $t \to t_0$.
+\end{proof}
+
+\begin{corollary}[The Wedge Modular Group up to a Defect]
+    \label{crllr:wedge-modular-defect}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:modular-unitary-group, def:wedge-boost, def:hall-10.11, lmm:modular-unitary-group-props}
+    Under the hypotheses of Theorem~\ref{thrm:wedge-modular-translations}, $Z(t) = \Delta^{it}U(b(2\pi t))$ is a strongly continuous one-parameter unitary group (\ref{def:hall-10.11}) with $\Delta^{it} = Z(t)\,U(b(-2\pi t))$, and for all $t, s \in \mathbb{R}$ and $a \in \mathbb{R}^4$,
+    \begin{align}
+        Z(t)\Omega = \Omega, \qquad Z(t)\,R(W_R)\,Z(t)^{-1} = R(W_R), \qquad Z(t)U(a) = U(a)Z(t), \qquad Z(t)U(b(s)) = U(b(s))Z(t).
+    \end{align}
+\end{corollary}
+\begin{proof}
+    \uses{lmm:wedge-modular-defect-vacuum, lmm:wedge-modular-defect-translations, lmm:wedge-modular-defect-boosts, lmm:wedge-modular-defect-group, lmm:wedge-modular-defect-continuous, lmm:boost-group-law}
+    Lemmas~\ref{lmm:wedge-modular-defect-vacuum}, \ref{lmm:wedge-modular-defect-translations}, \ref{lmm:wedge-modular-defect-boosts}, \ref{lmm:wedge-modular-defect-group} and~\ref{lmm:wedge-modular-defect-continuous}. The factorisation of $\Delta^{it}$ is $U(b(2\pi t))U(b(-2\pi t)) = U(b(0)) = \mathbf{1}$ (\ref{lmm:boost-group-law} and the group law of $U$).
+\end{proof}
+
+\subsection{Bisognano--Wichmann up to an Internal Symmetry}\label{sbsctn:bw-internal}
+
+Theorem~\ref{thrm:wedge-modular-translations} fixes the action of $\Delta_{W_R}^{it}$ on the translations, but not on the local algebras. BW-a adds exactly that as a hypothesis. Throughout this subsection the setting of Subsection~\ref{sbsctn:wedge-corollary} is in force, with $\Delta^{it} = \Delta_{W_R}^{it}$, $J = J_{W_R}$ and $Z(t) = \Delta^{it}U(b(2\pi t))$. For a diamond $\mathbf{B}$ and $g$ in the inhomogeneous Lorentz group, $g\mathbf{B}$ is a diamond (\ref{lmm:poincare-maps-diamonds}), and $R(g\mathbf{B})$ is its local von Neumann algebra (\ref{def:local-von-neumann}), which is also its region algebra (\ref{lmm:region-algebra-diamond}). For a unitary $X$ and a set $\mathcal{T}$ of operators, $X\mathcal{T}X^{-1} = \{ XTX^{-1} \mid T \in \mathcal{T} \}$. The hypothesis is
+\begin{enumerate}
+    \item[(MC)] \emph{modular covariance for the right wedge}: for every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$, $\Delta^{it}\,R(\mathbf{B})\,\Delta^{-it} = R(b(-2\pi t)\mathbf{B})$.
+\end{enumerate}
+It is an equality of sets of operators and does not assert $\Delta^{it} = U(b(-2\pi t))$. It is Assumption~2.1 of Brunetti, Guido and Longo for the single wedge $W_R$, translated by their $\Lambda_{W_1}(t) = \Lambda(-2\pi t)$ (\ref{def:boost-matrix}); Lemma~\ref{lmm:modular-covariance-all-wedges} carries it to every wedge. A unitary $X$ with $X\Omega = \Omega$ and $XR(\mathbf{B})X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$ is called an \emph{internal symmetry} in the prose below. (MC) and this phrase are stated inline in the hypotheses and conclusions, not as definitions.
+
+\begin{lemma}[Internal Symmetries Preserve Every Region Algebra]
+    \label{lmm:internal-symmetry-normalizes-regions}
+    \uses{def:region-algebra, def:unitary-operator, def:unitary-conjugation}
+    Let $X$ be a unitary with $XR(\mathbf{B})X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$. Then $X\mathcal{S}(\mathbf{O})X^{-1} = \mathcal{S}(\mathbf{O})$ and $XR(\mathbf{O})X^{-1} = R(\mathbf{O})$ for every $\mathbf{O} \subseteq \mathbb{R}^4$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:automorphism-commutant}
+    Conjugation commutes with unions (Mathlib's \texttt{Set.image\_iUnion\ensuremath{_2}}), which gives the first identity from the hypothesis on each $R(\mathbf{B})$, $\mathbf{B} \subseteq \mathbf{O}$. Conjugation by $X$ is a multiplicative automorphism of $\mathcal{B}(\mathbf{H})$ (\ref{def:unitary-conjugation}), so it maps bicommutants to bicommutants (\ref{lmm:automorphism-commutant}), which gives the second, as in Theorem~\ref{thrm:region-algebra-covariance}.
+\end{proof}
+
+\begin{lemma}[Internal Symmetries Commute with the Wedge Modular Objects]
+    \label{lmm:internal-symmetry-commutes-wedge-modular}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:modular-unitary-group, def:modular-conjugation}
+    Let $X$ be a unitary with $X\Omega = \Omega$ and $XR(\mathbf{B})X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$. Then for every wedge $W$, $X\Delta_W^{is} = \Delta_W^{is}X$ for every $s \in \mathbb{R}$ and $XJ_W = J_WX$.
+\end{lemma}
+\begin{proof}
+    \uses{lmm:internal-symmetry-normalizes-regions, thrm:wedge-cyclic-separating, crllr:unitary-commutes-modular-objects}
+    By Lemma~\ref{lmm:internal-symmetry-normalizes-regions}, $XR(W)X^{-1} = R(W)$. $\Omega$ is cyclic and separating for the von Neumann algebra $R(W)$ (\ref{thrm:wedge-cyclic-separating}) and $X\Omega = \Omega$, so Corollary~\ref{crllr:unitary-commutes-modular-objects} applies.
+\end{proof}
+
+\begin{lemma}[Modular Covariance for Every Wedge]
+    \label{lmm:modular-covariance-all-wedges}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:wedge-boost, def:modular-unitary-group, def:local-von-neumann, lmm:poincare-maps-diamonds}
+    Assume (MC). Then for every $g$ in the inhomogeneous Lorentz group, every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$,
+    \begin{align}
+        \Delta_{gW_R}^{it}\,R(\mathbf{B})\,\Delta_{gW_R}^{-it} = R(b_g(-2\pi t)\mathbf{B}).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{crllr:wedge-modular-covariance, thrm:von-neumann-geometric-covariance, lmm:poincare-maps-diamonds, lmm:translation-unitaries}
+    By Corollary~\ref{crllr:wedge-modular-covariance}, $\Delta_{gW_R}^{it} = U(g)\Delta^{it}U(g)^{-1}$. By Theorem~\ref{thrm:von-neumann-geometric-covariance} for $g^{-1}$, with $U(g^{-1}) = U(g)^{-1}$ (\ref{lmm:translation-unitaries}), $U(g)^{-1}R(\mathbf{B})U(g) = R(g^{-1}\mathbf{B})$, where $g^{-1}\mathbf{B}$ is a diamond (\ref{lmm:poincare-maps-diamonds}). So the left side is $U(g)\,\Delta^{it}R(g^{-1}\mathbf{B})\Delta^{-it}\,U(g)^{-1} = U(g)\,R(b(-2\pi t)g^{-1}\mathbf{B})\,U(g)^{-1}$ by (MC), which is $R(g\,b(-2\pi t)\,g^{-1}\mathbf{B}) = R(b_g(-2\pi t)\mathbf{B})$ by Theorem~\ref{thrm:von-neumann-geometric-covariance} (\texttt{mul\_smul}).
+\end{proof}
+
+\begin{lemma}[Under (MC) the Defect Preserves Every Local Algebra]
+    \label{lmm:wedge-modular-defect-local}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:local-von-neumann, def:modular-unitary-group, def:wedge-boost, lmm:poincare-maps-diamonds, lmm:modular-unitary-group-props}
+    Assume (MC). Then $Z(t)\,R(\mathbf{B})\,Z(t)^{-1} = R(\mathbf{B})$ for every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$.
+\end{lemma}
+\begin{proof}
+    \uses{thrm:von-neumann-geometric-covariance, lmm:poincare-maps-diamonds, lmm:boost-group-law}
+    $Z(t)R(\mathbf{B})Z(t)^{-1} = \Delta^{it}\big(U(b(2\pi t))R(\mathbf{B})U(b(2\pi t))^{-1}\big)\Delta^{-it} = \Delta^{it}R(b(2\pi t)\mathbf{B})\Delta^{-it}$ by Theorem~\ref{thrm:von-neumann-geometric-covariance}, with $b(2\pi t)\mathbf{B}$ a diamond (\ref{lmm:poincare-maps-diamonds}). By (MC) for this diamond, this is $R(b(-2\pi t)b(2\pi t)\mathbf{B}) = R(\mathbf{B})$, since $b(-2\pi t)b(2\pi t) = b(0) = 1$ (\ref{lmm:boost-group-law}, \texttt{mul\_smul}, \texttt{one\_smul}).
+\end{proof}
+
+\begin{theorem}[Bisognano--Wichmann up to an Internal Symmetry (BW-a)]
+    \label{thrm:bisognano-wichmann-internal}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:right-wedge, def:local-von-neumann, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:wedge-boost, def:boost-matrix, lmm:poincare-maps-diamonds}
+    Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense, let $\Delta^{it}$ and $J$ be the modular unitary group and modular conjugation of $(R(W_R), \Omega)$, and assume (MC): $\Delta^{it}R(\mathbf{B})\Delta^{-it} = R(b(-2\pi t)\mathbf{B})$ for every $t$ and every diamond $\mathbf{B}$. Then for every $t \in \mathbb{R}$ the unitary $Z(t) = \Delta^{it}U(b(2\pi t))$ satisfies
+    \begin{align}
+        \Delta^{it} = Z(t)\,U(b(-2\pi t)), \qquad Z(t)\Omega = \Omega, \qquad Z(t)\,R(\mathbf{B})\,Z(t)^{-1} = R(\mathbf{B}) \text{ for every diamond } \mathbf{B}, \qquad Z(t)U(a) = U(a)Z(t) \text{ for every } a \in \mathbb{R}^4,
+    \end{align}
+    so $Z(t)$ is an internal symmetry that commutes with the translations. Moreover $J\,U(a)\,J = U(j\,a)$ for every $a \in \mathbb{R}^4$.
+\end{theorem}
+\begin{proof}
+    \uses{crllr:wedge-modular-defect, lmm:wedge-modular-defect-local, thrm:wedge-modular-translations}
+    The factorisation, $Z(t)\Omega = \Omega$ and the commutation with the translations are Corollary~\ref{crllr:wedge-modular-defect}. The local algebras are Lemma~\ref{lmm:wedge-modular-defect-local}, and the identity for $J$ is Theorem~\ref{thrm:wedge-modular-translations}.
+\end{proof}
+
+\begin{corollary}[The Internal Symmetry Commutes with All Wedge Modular Objects]
+    \label{crllr:bw-defect-commutes-wedge-modular}
+    \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:modular-unitary-group, def:modular-conjugation, def:wedge-boost, lmm:poincare-maps-diamonds}
+    Under the hypotheses of Theorem~\ref{thrm:bisognano-wichmann-internal}, for every $t \in \mathbb{R}$, every wedge $W$ and every $s \in \mathbb{R}$, $Z(t)$ commutes with $\Delta_W^{is}$ and with $J_W$. It also commutes with every boost $U(b(s))$, and $t \mapsto Z(t)$ is a strongly continuous one-parameter unitary group.
+\end{corollary}
+\begin{proof}
+    \uses{thrm:bisognano-wichmann-internal, lmm:internal-symmetry-commutes-wedge-modular, crllr:wedge-modular-defect}
+    By Theorem~\ref{thrm:bisognano-wichmann-internal}, $Z(t)$ fixes $\Omega$ and preserves every $R(\mathbf{B})$, so Lemma~\ref{lmm:internal-symmetry-commutes-wedge-modular} applies with $X = Z(t)$. The last two claims hold without (MC) and are part of Corollary~\ref{crllr:wedge-modular-defect}.
+\end{proof}
+
+\emph{Remarks.} Unconditional Bisognano--Wichmann, $\Delta_{W_R}^{it} = U(b(-2\pi t))$, is false for general Haag--Kastler nets, even with positive energy and a vacuum (Yngvason, \emph{Lett. Math. Phys.} 31 (1994) 127--141). BW-a states what can separate $\Delta_{W_R}^{it}$ from the boost under (MC): a strongly continuous one-parameter group $Z$ of internal symmetries commuting with the translations, the boosts of $W_R$ and all wedge modular objects. It excludes no theory with internal symmetries; in nets with a global gauge group, $Z(t)$ may lie in that group. Exact Bisognano--Wichmann for the canonical representation of the universal cover of the Poincar\'e group generated by the wedge modular groups, $U_{\mathrm{mod}}(\tilde\Lambda_W(t)) = \Delta_W^{it}$, is Theorem~2.3 of Brunetti, Guido and Longo (\emph{Rev. Math. Phys.} 7 (1995) 57--71); identifying it with the given $U$ needs their Corollary~2.8 and the distal split property. Their proof rests on the measurable cohomology of Polish group extensions (Moore), and it is not formalized here. The Lean statement of Theorem~\ref{thrm:bisognano-wichmann-internal} records this in its docstring:
+
+\begin{quote}
+    \textbf{Restriction:} assumes modular covariance (MC) for the right wedge and identifies $\Delta_{W_R}^{it}$ with the boost $U(b(-2\pi t))$ only up to an internal symmetry $Z(t)$. The intended form, exact Bisognano--Wichmann for a covariant representation, is Brunetti--Guido--Longo's Theorem~2.3 with their Corollary~2.8 under the distal split property, and is waiting on the measurable group cohomology of the Poincar\'e group and its universal cover.
+\end{quote}
