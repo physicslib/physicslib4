@@ -1583,7 +1583,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Modular Group of the Commutant]
     \label{lmm:commutant-modular-unitary-group}
+    \lean{Physicslib4.Modular.commutant_modularUnitaryGroup}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\Omega$ cyclic and separating for $\mathcal{M}$. Then $\Omega$ is cyclic and separating for $\mathcal{M}'$, and the modular unitary group and the modular conjugation of $(\mathcal{M}', \Omega)$ are $\Delta_{\mathcal{M}'}^{it} = \Delta^{-it}$ for every $t \in \mathbb{R}$ and $J_{\mathcal{M}'} = J$.
 \end{lemma}
 \begin{proof}
@@ -1597,7 +1599,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Reverse Endomorphisms Pass to the Commutant]
     \label{lmm:unitary-reverse-endomorphism-commutant}
+    \lean{Physicslib4.Modular.conj_mem_centralizer_of_adjoint_conj_mem}
     \uses{def:unitary-operator, def:von-neumann-algebra-commutant-convention}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, and let $X$ be a unitary with $X^*xX \in \mathcal{M}$ for every $x \in \mathcal{M}$. Then $XyX^* \in \mathcal{M}'$ for every $y \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
@@ -1606,7 +1610,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{corollary}[Borchers' Theorem for Negative Half-Lines]
     \label{crllr:borchers-reversed}
+    \lean{Physicslib4.Modular.borchers_reversed}
     \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:positive-energy, def:unitary-operator, def:half-sided-translation}
+    \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, modular unitary group $\Delta^{is}$ and modular conjugation $J$. Let $V(t)$, $t \in \mathbb{R}$, be a family of unitary operators with positive energy (\ref{def:positive-energy}) such that $V(t)\Omega = \Omega$ for all $t$ and $V(t)^*\,\mathcal{M}\,V(t) \subseteq \mathcal{M}$ for all $t \ge 0$, that is, $V(-t)\,x\,V(t) \in \mathcal{M}$ for all $t \ge 0$ and $x \in \mathcal{M}$. Then for all $s, t \in \mathbb{R}$,
     \begin{align}
         \Delta^{is}\,V(t)\,\Delta^{-is} = V(e^{2\pi s}t), \qquad JV(t)J = V(-t).
@@ -1635,7 +1641,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Poincar\'e Conjugation of a Translation]
     \label{lmm:poincare-conjugates-translation}
+    \lean{Physicslib4.AQFT.HaagKastler.conj_translationSub}
     \uses{def:inhomogeneous-lorentz-group, def:future-timelike-translation}
+    \leanok
     Let $g = (L, c)$ be in the inhomogeneous Lorentz group. For every $a \in \mathbb{R}^4$, $g\,\mathrm{translationSub}(a)\,g^{-1} = \mathrm{translationSub}(La)$. In particular $b(s)\,\mathrm{translationSub}(a)\,b(s)^{-1} = \mathrm{translationSub}(\Lambda(s)a)$.
 \end{lemma}
 \begin{proof}
@@ -1645,7 +1653,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Translation Unitaries]
     \label{lmm:translation-unitaries}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.translation_unitaries}
     \uses{def:covariant-vacuum-representation, def:future-timelike-translation, def:inhomogeneous-lorentz-group}
+    \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation. Then $U(g)^{-1} = U(g^{-1})$ for every $g$; $U(0) = \mathbf{1}$, $U(a + a') = U(a)U(a')$ and $U(a)^{-1} = U(-a)$ for all $a, a' \in \mathbb{R}^4$; $U(\mathrm{translationFlow}(n)(t)) = U(tn)$; and for $g = (L, c)$,
     \begin{align}
         U(g)\,U(a)\,U(g)^{-1} = U(La).
@@ -1659,7 +1669,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Light-Cone Factorisation of the Translation Unitaries]
     \label{lmm:translation-light-cone-factorisation}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.translation_lightCone_factorisation}
     \uses{def:covariant-vacuum-representation, def:future-timelike-translation}
+    \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation. For every $a \in \mathbb{R}^4$, with $\alpha = \alpha(a)$ and $\beta = \beta(a)$,
     \begin{align}
         U(a) = U(\alpha\,l_+)\,U(\beta\,l_-)\,U(a_\perp).
@@ -1674,7 +1686,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Lightlike Translations have Positive Energy]
     \label{lmm:lightlike-translations-positive-energy}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.lightlike_translations_positiveEnergy}
     \uses{def:covariant-vacuum-representation, def:positive-energy}
+    \leanok
     The families $t \mapsto U(t\,l_+)$ and $t \mapsto U(t\,l_-)$ have positive energy (\ref{def:positive-energy}), and $U(t\,l_\pm)\Omega = \Omega$ for every $t$.
 \end{lemma}
 \begin{proof}
@@ -1684,7 +1698,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Half-Sided Translations of the Right Wedge Algebra]
     \label{lmm:wedge-half-sided-translations}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_halfSidedTranslations}
     \uses{def:covariant-vacuum-representation, def:region-algebra, def:right-wedge, def:half-sided-translation}
+    \leanok
     For every $t \ge 0$ and $x \in R(W_R)$,
     \begin{align}
         U(t\,l_+)\,x\,U(-t\,l_+) \in R(W_R), \qquad U(-t\,l_-)\,x\,U(t\,l_-) \in R(W_R).
@@ -1698,7 +1714,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Wedge Modular Objects on the $l_+$ Translations]
     \label{lmm:wedge-modular-plus}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_plus}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:modular-conjugation-conjugate}
+    \leanok
     For all $s, t \in \mathbb{R}$, $\Delta^{is}U(t\,l_+)\Delta^{-is} = U(e^{-2\pi s}t\,l_+)$ and $J\,U(t\,l_+)\,J = U(-t\,l_+)$.
 \end{lemma}
 \begin{proof}
@@ -1708,7 +1726,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Wedge Modular Objects on the $l_-$ Translations]
     \label{lmm:wedge-modular-minus}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_minus}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:modular-conjugation-conjugate}
+    \leanok
     For all $s, t \in \mathbb{R}$, $\Delta^{is}U(t\,l_-)\Delta^{-is} = U(e^{2\pi s}t\,l_-)$ and $J\,U(t\,l_-)\,J = U(-t\,l_-)$.
 \end{lemma}
 \begin{proof}
@@ -1720,7 +1740,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Wedge Modular Group on the Translations]
     \label{lmm:wedge-modular-group-translations}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modularUnitaryGroup_translations}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:boost-matrix}
+    \leanok
     For every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$, $\Delta^{is}U(a)\Delta^{-is} = U(\Lambda(-2\pi s)a)$.
 \end{lemma}
 \begin{proof}
@@ -1874,7 +1896,9 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{lemma}[Internal Symmetries Preserve Every Region Algebra]
     \label{lmm:internal-symmetry-normalizes-regions}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.conj_image_region_of_conj_image_localVonNeumann}
     \uses{def:region-algebra, def:unitary-operator, def:unitary-conjugation, def:internal-symmetry}
+    \leanok
     Let $X$ be a unitary with $XR(\mathbf{B})X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$, the second condition of Definition~\ref{def:internal-symmetry}; $X\Omega = \Omega$ is not needed. Then $X\mathcal{S}(\mathbf{O})X^{-1} = \mathcal{S}(\mathbf{O})$ and $XR(\mathbf{O})X^{-1} = R(\mathbf{O})$ for every $\mathbf{O} \subseteq \mathbb{R}^4$.
 \end{lemma}
 \begin{proof}

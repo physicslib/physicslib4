@@ -1,4 +1,5 @@
 import Physicslib4.AQFT.Borchers
+import Physicslib4.AQFT.HaagKastler.BisognanoWichmann
 import Physicslib4.AQFT.HaagKastler.CovariantState
 import Physicslib4.AQFT.HaagKastler.CovariantVacuum
 import Physicslib4.AQFT.HaagKastler.EinsteinCausality
