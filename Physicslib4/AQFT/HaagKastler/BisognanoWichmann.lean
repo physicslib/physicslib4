@@ -117,6 +117,7 @@ namespace HaagKastler
 
 open scoped Pointwise
 open Physicslib4.Modular
+open Physicslib4.Spectral.Stone (IsOneParameterUnitaryGroup IsStronglyContinuous)
 
 /-- The lightlike vector `l₊ = (1, 1, 0, 0)`. -/
 local notation "l₊" => (!₂[1, 1, 0, 0] : SpacetimeModel)
@@ -136,6 +137,34 @@ theorem conj_translationSub :
       g * translationSub a * g⁻¹ = translationSub (g.linear a)) ∧
       ∀ (s : ℝ) (a : SpacetimeModel),
         wedgeBoost s * translationSub a * (wedgeBoost s)⁻¹ = translationSub (boostMatrix s a) := by
+  sorry
+
+/-- The wedge reflection `j(x⁰, x¹, x², x³) = (-x⁰, -x¹, x², x³)`, the reflection of the
+`(x⁰, x¹)`-plane. It preserves the Minkowski form and has determinant `1`, but it is not
+orthochronous, so `(j, 0)` is not an element of the inhomogeneous Lorentz group; `j` acts only on
+translation vectors.
+
+Blueprint: def:wedge-reflection -/
+noncomputable def wedgeReflection : SpacetimeModel →ₗ[ℝ] SpacetimeModel where
+  toFun x := !₂[-x 0, -x 1, x 2, x 3]
+  map_add' x y := by
+    ext i
+    fin_cases i <;> simp [add_comm]
+  map_smul' c x := by
+    ext i
+    fin_cases i <;> simp
+
+/-- Light-cone decomposition of a vector: with `α = (a⁰ + a¹)/2`, `β = (a⁰ - a¹)/2` and
+`a_⊥ = (0, 0, a², a³)`, `a = α l₊ + β l₋ + a_⊥`, `Λ(s) a = eˢ α l₊ + e⁻ˢ β l₋ + a_⊥` and
+`j a = -α l₊ - β l₋ + a_⊥`.
+
+Blueprint: lmm:light-cone-decomposition -/
+theorem lightCone_decomposition (a : SpacetimeModel) (s : ℝ) :
+    a = ((a 0 + a 1) / 2) • l₊ + ((a 0 - a 1) / 2) • l₋ + !₂[0, 0, a 2, a 3] ∧
+      boostMatrix s a = (Real.exp s * ((a 0 + a 1) / 2)) • l₊ +
+        (Real.exp (-s) * ((a 0 - a 1) / 2)) • l₋ + !₂[0, 0, a 2, a 3] ∧
+      wedgeReflection a =
+        (-((a 0 + a 1) / 2)) • l₊ + (-((a 0 - a 1) / 2)) • l₋ + !₂[0, 0, a 2, a 3] := by
   sorry
 
 namespace HaagKastlerNet
@@ -271,6 +300,335 @@ theorem conj_image_region_of_conj_image_localVonNeumann
     (O : Set StandardMinkowskiSpacetime.Carrier) :
     (fun a => conj[X] a) '' N.regionGeneratingSet π O = N.regionGeneratingSet π O ∧
       (fun a => conj[X] a) '' N.regionVonNeumann π O = N.regionVonNeumann π O := by
+  sorry
+
+/-! ### All translations -/
+
+/-- The wedge modular conjugation on the translations: for every `a ∈ ℝ⁴`, `J U(a) J = U(j a)`,
+with `J` the modular conjugation of `(R(W_R), Ω)` and `j` the wedge reflection.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`, which `IsCovariantVacuumRep.wedge_isCyclicSeparatingVector` supplies.
+
+Blueprint: lmm:wedge-modular-conjugation-translations -/
+theorem IsCovariantVacuumRep.wedge_modularConjugation_translations
+    (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (a : SpacetimeModel) :
+    𝒥R[Tr[a]] = Tr[wedgeReflection a] := by
+  sorry
+
+/-- The wedge modular objects act geometrically on the translations: with `Δ^{is}` and `J` the
+modular objects of `(R(W_R), Ω)`, for every `a ∈ ℝ⁴` and real `s`,
+`Δ^{is} U(a) Δ^{-is} = U(Λ(-2πs) a) = U(b(-2πs)) U(a) U(b(-2πs))⁻¹` and `J U(a) J = U(j a)`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`, which `IsCovariantVacuumRep.wedge_isCyclicSeparatingVector` supplies.
+
+Blueprint: thrm:wedge-modular-translations -/
+theorem IsCovariantVacuumRep.wedge_modular_translations (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (a : SpacetimeModel) (s : ℝ) :
+    Δ[s] ∘L Tr[a] ∘L Δ[-s] = Tr[boostMatrix (-(2 * Real.pi * s)) a] ∧
+      Tr[boostMatrix (-(2 * Real.pi * s)) a] =
+        (conj[U (wedgeBoost (-(2 * Real.pi * s)))] Tr[a]) ∧
+      𝒥R[Tr[a]] = Tr[wedgeReflection a] := by
+  sorry
+
+set_option hygiene false in
+/-- `Δ_{gW_R}^{is}` as a bounded operator, for the binders `N π g hΩg C hC` in scope. -/
+local notation "Δg[" s "]" =>
+  (modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π (g • rightWedge)).2 hΩg C hC
+    s).toLinearIsometry.toContinuousLinearMap
+
+set_option hygiene false in
+/-- The bounded operator `J_{gW_R} T J_{gW_R}`, for the binders `N π g hΩg C hC` in scope. -/
+local notation "𝒥g[" T "]" =>
+  modularConjugationConj (N.regionVonNeumann_isVonNeumannSet π (g • rightWedge)).2 hΩg C hC T
+
+/-- The modular objects of every wedge on the translations: for `g = (L, c)` in the inhomogeneous
+Lorentz group, with `Δ_{gW_R}^{is}` and `J_{gW_R}` the modular objects of `(R(gW_R), Ω)`, for
+every `a ∈ ℝ⁴` and real `s`,
+`Δ_{gW_R}^{is} U(a) Δ_{gW_R}^{-is} = U(L Λ(-2πs) L⁻¹ a) = U(b_g(-2πs)) U(a) U(b_g(-2πs))⁻¹` and
+`J_{gW_R} U(a) J_{gW_R} = U(L j L⁻¹ a)`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness of `(R(W_R), Ω)` and `(R(gW_R), Ω)`, the proofs `hΩ` and `hΩg`, which
+`IsCovariantVacuumRep.wedge_isCyclicSeparatingVector` supplies. `hΩ` does not appear in the
+conclusion; the proof transports the right-wedge result along `U(g)`.
+
+Blueprint: crllr:wedge-modular-translations-general -/
+theorem IsCovariantVacuumRep.wedge_modular_translations_general
+    (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (g : InhomogeneousLorentzGroup)
+    (hΩg : IsCyclicSeparatingVector (N.regionVonNeumann π (g • rightWedge)) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (a : SpacetimeModel) (s : ℝ) :
+    Δg[s] ∘L Tr[a] ∘L Δg[-s] =
+        Tr[g.linear (boostMatrix (-(2 * Real.pi * s)) (g.linear.symm a))] ∧
+      Tr[g.linear (boostMatrix (-(2 * Real.pi * s)) (g.linear.symm a))] =
+        (conj[U (wedgeBoostAlong g (-(2 * Real.pi * s)))] Tr[a]) ∧
+      𝒥g[Tr[a]] = Tr[g.linear (wedgeReflection (g.linear.symm a))] := by
+  sorry
+
+/-! ### The defect `Z(t)` -/
+
+/-- The wedge modular defect `Z(t) = Δ^{it} U(b(2πt))`, with `Δ^{it}` the modular unitary group of
+`(R(W_R), Ω)` formed with the reference conjugation `C` and `b` the boost of the right wedge. It
+measures how far `Δ^{it}` is from the boost `U(b(-2πt))`; the Bisognano–Wichmann identification
+`Δ^{it} = U(b(-2πt))` is the statement `Z ≡ 1`.
+
+The standardness of `(R(W_R), Ω)` enters as the proof `hΩ` that names the modular group; for a
+weakly additive covariant vacuum representation it is supplied by
+`IsCovariantVacuumRep.wedge_isCyclicSeparatingVector`.
+
+Blueprint: def:wedge-modular-defect -/
+noncomputable def wedgeModularDefect (N : HaagKastlerNet)
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) {Ω : H}
+    (U : InhomogeneousLorentzGroup → (H ≃ₗᵢ[ℂ] H))
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (t : ℝ) : H ≃ₗᵢ[ℂ] H :=
+  (U (wedgeBoost (2 * Real.pi * t))).trans
+    (modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC t)
+
+set_option hygiene false in
+/-- The wedge modular defect `Z(t)`, for the binders `N π U hΩ C hC` in scope. -/
+local notation "Z[" t "]" => wedgeModularDefect N π U hΩ C hC t
+
+/-- The defect fixes the vacuum and preserves the wedge algebra: `Z(t)Ω = Ω` and
+`Z(t) R(W_R) Z(t)⁻¹ = R(W_R)` for every `t`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`.
+
+Blueprint: lmm:wedge-modular-defect-vacuum -/
+theorem IsCovariantVacuumRep.wedgeModularDefect_vacuum (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (t : ℝ) :
+    Z[t] Ω = Ω ∧
+      (fun a => conj[Z[t]] a) '' N.regionVonNeumann π rightWedge =
+        N.regionVonNeumann π rightWedge := by
+  sorry
+
+/-- The defect commutes with the translations: `Z(t) U(a) = U(a) Z(t)` for every `t` and
+`a ∈ ℝ⁴`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`.
+
+Blueprint: lmm:wedge-modular-defect-translations -/
+theorem IsCovariantVacuumRep.wedgeModularDefect_translations (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (t : ℝ) (a : SpacetimeModel) (ψ : H) :
+    Z[t] (U (translationSub a) ψ) = U (translationSub a) (Z[t] ψ) := by
+  sorry
+
+/-- The defect commutes with the boosts: `Z(t) U(b(s)) = U(b(s)) Z(t)` for all real `s`, `t`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`.
+
+Blueprint: lmm:wedge-modular-defect-boosts -/
+theorem IsCovariantVacuumRep.wedgeModularDefect_boosts (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (t s : ℝ) (ψ : H) :
+    Z[t] (U (wedgeBoost s) ψ) = U (wedgeBoost s) (Z[t] ψ) := by
+  sorry
+
+/-- The defect is a one-parameter group: `Z(0) = 1` and `Z(s + t) = Z(s) Z(t)` for all real
+`s`, `t`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`.
+
+Blueprint: lmm:wedge-modular-defect-group -/
+theorem IsCovariantVacuumRep.wedgeModularDefect_group (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) :
+    Z[0] = LinearIsometryEquiv.refl ℂ H ∧ ∀ s t : ℝ, Z[s + t] = Z[t].trans Z[s] := by
+  sorry
+
+/-- The defect is strongly continuous: `t ↦ Z(t)ψ` is continuous for every `ψ`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`.
+
+Blueprint: lmm:wedge-modular-defect-continuous -/
+theorem IsCovariantVacuumRep.wedgeModularDefect_continuous (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (ψ : H) :
+    Continuous fun t : ℝ => Z[t] ψ := by
+  sorry
+
+/-- The wedge modular group up to a defect: `Z(t) = Δ^{it} U(b(2πt))` is a strongly continuous
+one-parameter unitary group with `Δ^{it} = Z(t) U(b(-2πt))`, and for all real `t`, `s` and
+`a ∈ ℝ⁴`, `Z(t)Ω = Ω`, `Z(t) R(W_R) Z(t)⁻¹ = R(W_R)`, `Z(t) U(a) = U(a) Z(t)` and
+`Z(t) U(b(s)) = U(b(s)) Z(t)`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`.
+
+Blueprint: crllr:wedge-modular-defect -/
+theorem IsCovariantVacuumRep.wedgeModularDefect_properties (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) :
+    IsOneParameterUnitaryGroup (N.wedgeModularDefect π U hΩ C hC) ∧
+      IsStronglyContinuous (N.wedgeModularDefect π U hΩ C hC) ∧
+      (∀ (t : ℝ) (ψ : H),
+        modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC t ψ =
+          Z[t] (U (wedgeBoost (-(2 * Real.pi * t))) ψ)) ∧
+      ∀ t : ℝ, Z[t] Ω = Ω ∧
+        (fun a => conj[Z[t]] a) '' N.regionVonNeumann π rightWedge =
+          N.regionVonNeumann π rightWedge ∧
+        (∀ (a : SpacetimeModel) (ψ : H),
+          Z[t] (U (translationSub a) ψ) = U (translationSub a) (Z[t] ψ)) ∧
+        ∀ (s : ℝ) (ψ : H), Z[t] (U (wedgeBoost s) ψ) = U (wedgeBoost s) (Z[t] ψ) := by
+  sorry
+
+/-! ### Bisognano–Wichmann up to an internal symmetry -/
+
+/-- Modular covariance for the right wedge (MC): for every real `t` and every diamond `B`,
+`Δ_{W_R}^{it} R(B) Δ_{W_R}^{-it} = R(b(-2πt) B)`, with `Δ_{W_R}^{it}` the modular unitary group of
+`(R(W_R), Ω)` formed with the reference conjugation `C`, `R(B)` the local von Neumann algebra and
+`b` the boost of the right wedge. `b(-2πt) B` is a diamond (`isAlexandrovBasisSet_smul`). The
+condition is an equality of sets of operators and does not involve the unitaries `U`; it does not
+assert `Δ_{W_R}^{it} = U(b(-2πt))`.
+
+The standardness of `(R(W_R), Ω)` enters as the proof `hΩ` that names the modular group.
+
+Blueprint: def:wedge-modular-covariance -/
+def IsWedgeModularCovariant (N : HaagKastlerNet)
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) {Ω : H}
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) : Prop :=
+  ∀ (t : ℝ) (B : Set StandardMinkowskiSpacetime.Carrier) (hB : IsAlexandrovBasisSet B),
+    (fun a => conj[modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C
+        hC t] a) '' N.localVonNeumann π hB =
+      N.localVonNeumann π (isAlexandrovBasisSet_smul (wedgeBoost (-(2 * Real.pi * t))) hB)
+
+/-- An internal symmetry of `(π, Ω)`: a unitary `X` with `XΩ = Ω` and `X R(B) X⁻¹ = R(B)` for
+every diamond `B`, with `R(B)` the local von Neumann algebra. Commutation with the translations is
+not part of the definition.
+
+Blueprint: def:internal-symmetry -/
+structure IsInternalSymmetry (N : HaagKastlerNet)
+    (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)) (Ω : H) (X : H ≃ₗᵢ[ℂ] H) : Prop where
+  /-- `XΩ = Ω`. -/
+  apply_vacuum : X Ω = Ω
+  /-- `X R(B) X⁻¹ = R(B)` for every diamond `B`. -/
+  conj_image_localVonNeumann : ∀ (B : Set StandardMinkowskiSpacetime.Carrier)
+    (hB : IsAlexandrovBasisSet B),
+    (fun a => conj[X] a) '' N.localVonNeumann π hB = N.localVonNeumann π hB
+
+set_option hygiene false in
+/-- `Δ_W^{is}` as a unitary, for the binders `N π W hΩW C hC` in scope. -/
+local notation "ΔW[" s "]" =>
+  modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π W).2 hΩW C hC s
+
+set_option hygiene false in
+/-- The modular conjugation `J_W`, for the binders `N π W hΩW C hC` in scope. -/
+local notation "𝒥W" => modularConjugation (N.regionVonNeumann_isVonNeumannSet π W).2 hΩW C hC
+
+/-- Internal symmetries commute with the wedge modular objects: if `X` is an internal symmetry of
+`(π, Ω)`, then `X Δ_W^{is} = Δ_W^{is} X` for every real `s` and `X J_W = J_W X`.
+
+The blueprint states this for every wedge `W` of a weakly additive covariant vacuum
+representation; these hypotheses enter only through the standardness of `(R(W), Ω)`, the proof
+`hΩW` that names the modular objects, which `IsCovariantVacuumRep.wedge_isCyclicSeparatingVector`
+supplies. The statement is made for every region `W` with that property.
+
+Blueprint: lmm:internal-symmetry-commutes-wedge-modular -/
+theorem IsInternalSymmetry.commute_modular {X : H ≃ₗᵢ[ℂ] H} (hX : N.IsInternalSymmetry π Ω X)
+    {W : Set StandardMinkowskiSpacetime.Carrier}
+    (hΩW : IsCyclicSeparatingVector (N.regionVonNeumann π W) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) :
+    (∀ (s : ℝ) (ψ : H), X (ΔW[s] ψ) = ΔW[s] (X ψ)) ∧ ∀ ψ : H, X (𝒥W ψ) = 𝒥W (X ψ) := by
+  sorry
+
+/-- Modular covariance for every wedge: under (MC), for every `g` in the inhomogeneous Lorentz
+group, every real `t` and every diamond `B`,
+`Δ_{gW_R}^{it} R(B) Δ_{gW_R}^{-it} = R(b_g(-2πt) B)`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness of `(R(W_R), Ω)` and `(R(gW_R), Ω)`, the proofs `hΩ` and `hΩg`.
+
+Blueprint: lmm:modular-covariance-all-wedges -/
+theorem IsCovariantVacuumRep.modularCovariant_all_wedges (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (hMC : N.IsWedgeModularCovariant π hΩ C hC)
+    (g : InhomogeneousLorentzGroup)
+    (hΩg : IsCyclicSeparatingVector (N.regionVonNeumann π (g • rightWedge)) Ω)
+    (t : ℝ) (B : Set StandardMinkowskiSpacetime.Carrier) (hB : IsAlexandrovBasisSet B) :
+    (fun a => conj[modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π (g • rightWedge)).2
+        hΩg C hC t] a) '' N.localVonNeumann π hB =
+      N.localVonNeumann π
+        (isAlexandrovBasisSet_smul (wedgeBoostAlong g (-(2 * Real.pi * t))) hB) := by
+  sorry
+
+/-- Under (MC) the defect preserves every local algebra: `Z(t) R(B) Z(t)⁻¹ = R(B)` for every real
+`t` and every diamond `B`.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`.
+
+Blueprint: lmm:wedge-modular-defect-local -/
+theorem IsCovariantVacuumRep.wedgeModularDefect_local (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (hMC : N.IsWedgeModularCovariant π hΩ C hC)
+    (t : ℝ) (B : Set StandardMinkowskiSpacetime.Carrier) (hB : IsAlexandrovBasisSet B) :
+    (fun a => conj[Z[t]] a) '' N.localVonNeumann π hB = N.localVonNeumann π hB := by
+  sorry
+
+/-- Bisognano–Wichmann up to an internal symmetry (BW-a): for a covariant vacuum representation
+satisfying modular covariance for the right wedge (MC), for every real `t` the wedge modular
+defect `Z(t) = Δ^{it} U(b(2πt))` satisfies `Δ^{it} = Z(t) U(b(-2πt))`, is an internal symmetry of
+`(π, Ω)` (`Z(t)Ω = Ω` and `Z(t) R(B) Z(t)⁻¹ = R(B)` for every diamond `B`), and commutes with the
+translations; moreover `J U(a) J = U(j a)` for every `a ∈ ℝ⁴`, with `j` the wedge reflection.
+
+The blueprint assumes `π` weakly additive in the von Neumann sense; it enters only through the
+standardness proof `hΩ`, which `IsCovariantVacuumRep.wedge_isCyclicSeparatingVector` supplies.
+
+**Restriction:** assumes modular covariance (MC) for the right wedge and identifies
+`Δ_{W_R}^{it}` with the boost `U(b(-2πt))` only up to an internal symmetry `Z(t)`. The intended
+form, exact Bisognano–Wichmann for a covariant representation, is Brunetti–Guido–Longo's
+Theorem 2.3 with their Corollary 2.8 under the distal split property, and is waiting on the
+measurable group cohomology of the Poincaré group and its universal cover.
+
+Blueprint: thrm:bisognano-wichmann-internal -/
+theorem IsCovariantVacuumRep.bisognanoWichmann_internal (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (hMC : N.IsWedgeModularCovariant π hΩ C hC) :
+    (∀ t : ℝ,
+      (∀ ψ : H,
+        modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC t ψ =
+          Z[t] (U (wedgeBoost (-(2 * Real.pi * t))) ψ)) ∧
+      N.IsInternalSymmetry π Ω Z[t] ∧
+      ∀ (a : SpacetimeModel) (ψ : H),
+        Z[t] (U (translationSub a) ψ) = U (translationSub a) (Z[t] ψ)) ∧
+    ∀ a : SpacetimeModel, 𝒥R[Tr[a]] = Tr[wedgeReflection a] := by
+  sorry
+
+/-- The internal symmetry commutes with all wedge modular objects: under (MC), for every real `t`,
+`Z(t)` commutes with `Δ_W^{is}` for every real `s` and with `J_W`; it commutes with every boost
+`U(b(s))`, and `t ↦ Z(t)` is a strongly continuous one-parameter unitary group.
+
+The blueprint states the commutation for every wedge `W` of a weakly additive covariant vacuum
+representation; these hypotheses enter only through the standardness of `(R(W_R), Ω)` and
+`(R(W), Ω)`, the proofs `hΩ` and `hΩW`. The statement is made for every region `W` with that
+property.
+
+Blueprint: crllr:bw-defect-commutes-wedge-modular -/
+theorem IsCovariantVacuumRep.wedgeModularDefect_commute_wedge_modular
+    (h : N.IsCovariantVacuumRep π Ω U)
+    (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
+    (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (hMC : N.IsWedgeModularCovariant π hΩ C hC) :
+    (∀ (t : ℝ) (W : Set StandardMinkowskiSpacetime.Carrier)
+        (hΩW : IsCyclicSeparatingVector (N.regionVonNeumann π W) Ω),
+      (∀ (s : ℝ) (ψ : H), Z[t] (ΔW[s] ψ) = ΔW[s] (Z[t] ψ)) ∧
+        ∀ ψ : H, Z[t] (𝒥W ψ) = 𝒥W (Z[t] ψ)) ∧
+      (∀ (t s : ℝ) (ψ : H), Z[t] (U (wedgeBoost s) ψ) = U (wedgeBoost s) (Z[t] ψ)) ∧
+      IsOneParameterUnitaryGroup (N.wedgeModularDefect π U hΩ C hC) ∧
+      IsStronglyContinuous (N.wedgeModularDefect π U hΩ C hC) := by
   sorry
 
 end HaagKastlerNet

@@ -1567,7 +1567,9 @@ These are notation. The reflection of the $(x^0, x^1)$-plane, which recurs in th
 
 \begin{definition}[The Wedge Reflection]
     \label{def:wedge-reflection}
+    \lean{Physicslib4.AQFT.HaagKastler.wedgeReflection}
     \uses{def:lorentz-transformation, def:inhomogeneous-lorentz-group}
+    \leanok
     The \emph{wedge reflection} is the linear map $j : \mathbb{R}^4 \to \mathbb{R}^4$,
     \begin{align}
         j(x^0, x^1, x^2, x^3) = (-x^0, -x^1, x^2, x^3),
@@ -1628,7 +1630,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Light-Cone Decomposition of a Vector]
     \label{lmm:light-cone-decomposition}
+    \lean{Physicslib4.AQFT.HaagKastler.lightCone_decomposition}
     \uses{def:boost-matrix, def:wedge-reflection}
+    \leanok
     For every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$, with $\alpha = \alpha(a)$, $\beta = \beta(a)$ and $j$ the wedge reflection (\ref{def:wedge-reflection}),
     \begin{align}
         a = \alpha\,l_+ + \beta\,l_- + a_\perp, \qquad \Lambda(s)a = e^{s}\alpha\,l_+ + e^{-s}\beta\,l_- + a_\perp, \qquad j\,a = -\alpha\,l_+ - \beta\,l_- + a_\perp.
@@ -1752,7 +1756,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Wedge Modular Conjugation on the Translations]
     \label{lmm:wedge-modular-conjugation-translations}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modularConjugation_translations}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-conjugation-conjugate, def:wedge-reflection}
+    \leanok
     For every $a \in \mathbb{R}^4$, $J\,U(a)\,J = U(j\,a)$, with $j$ the wedge reflection (\ref{def:wedge-reflection}).
 \end{lemma}
 \begin{proof}
@@ -1762,7 +1768,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{theorem}[The Wedge Modular Objects Act Geometrically on the Translations]
     \label{thrm:wedge-modular-translations}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_translations}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:right-wedge, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:wedge-boost, def:boost-matrix, def:future-timelike-translation, def:wedge-reflection}
+    \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense, and let $\Delta^{is}$ and $J$ be the modular unitary group and modular conjugation of $(R(W_R), \Omega)$. Then for every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$,
     \begin{align}
         \Delta^{is}\,U(a)\,\Delta^{-is} = U(\Lambda(-2\pi s)a) = U(b(-2\pi s))\,U(a)\,U(b(-2\pi s))^{-1}, \qquad J\,U(a)\,J = U(j\,a),
@@ -1776,7 +1784,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{corollary}[The Modular Objects of Every Wedge on the Translations]
     \label{crllr:wedge-modular-translations-general}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_translations_general}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:wedge-boost, def:modular-unitary-group, def:modular-conjugation-conjugate, def:wedge-reflection}
+    \leanok
     Under the hypotheses of Theorem~\ref{thrm:wedge-modular-translations}, with $j$ the wedge reflection (\ref{def:wedge-reflection}), let $g = (L, c)$ be in the inhomogeneous Lorentz group and let $\Delta_{gW_R}^{is}$, $J_{gW_R}$ be the modular objects of $(R(gW_R), \Omega)$. Then for every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$,
     \begin{align}
         \Delta_{gW_R}^{is}\,U(a)\,\Delta_{gW_R}^{-is} = U(L\Lambda(-2\pi s)L^{-1}a) = U(b_g(-2\pi s))\,U(a)\,U(b_g(-2\pi s))^{-1}, \qquad J_{gW_R}\,U(a)\,J_{gW_R} = U(LjL^{-1}a).
@@ -1791,7 +1801,9 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{definition}[The Wedge Modular Defect]
     \label{def:wedge-modular-defect}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.wedgeModularDefect}
     \uses{def:covariant-vacuum-representation, def:region-algebra, def:right-wedge, def:cyclic-separating-vector, def:antiunitary-operator, def:modular-unitary-group, def:wedge-boost}
+    \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation (\ref{def:covariant-vacuum-representation}) such that $R(W_R)$ (\ref{def:region-algebra}) is a von Neumann algebra with $\Omega$ cyclic and separating for it (\ref{def:cyclic-separating-vector}), and let $C$ be an antiunitary operator with $C(C\phi) = \phi$ for all $\phi$ (\ref{def:antiunitary-operator}). Let $\Delta^{it} = \Delta_{W_R}^{it}$ be the modular unitary group of $(R(W_R), \Omega)$ (\ref{def:modular-unitary-group}) formed with the reference conjugation $C$. The \emph{wedge modular defect} is the family
     \begin{align}
         Z(t) = \Delta^{it}\,U(b(2\pi t)), \qquad t \in \mathbb{R},
@@ -1803,7 +1815,9 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect Fixes the Vacuum and Preserves the Wedge Algebra]
     \label{lmm:wedge-modular-defect-vacuum}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_vacuum}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:modular-unitary-group, def:wedge-boost, def:wedge-modular-defect}
+    \leanok
     For every $t$, the wedge modular defect $Z(t)$ (\ref{def:wedge-modular-defect}) satisfies $Z(t)\Omega = \Omega$ and $Z(t)\,R(W_R)\,Z(t)^{-1} = R(W_R)$.
 \end{lemma}
 \begin{proof}
@@ -1813,7 +1827,9 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect Commutes with the Translations]
     \label{lmm:wedge-modular-defect-translations}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_translations}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost, lmm:modular-unitary-group-props, def:wedge-modular-defect}
+    \leanok
     For every $t \in \mathbb{R}$ and $a \in \mathbb{R}^4$, $Z(t)\,U(a) = U(a)\,Z(t)$.
 \end{lemma}
 \begin{proof}
@@ -1827,7 +1843,9 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect Commutes with the Boosts]
     \label{lmm:wedge-modular-defect-boosts}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_boosts}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost, def:wedge-modular-defect}
+    \leanok
     For all $s, t \in \mathbb{R}$, $Z(t)\,U(b(s)) = U(b(s))\,Z(t)$.
 \end{lemma}
 \begin{proof}
@@ -1837,7 +1855,9 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect is a One-Parameter Group]
     \label{lmm:wedge-modular-defect-group}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_group}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost, def:wedge-modular-defect}
+    \leanok
     $Z(0) = \mathbf{1}$ and $Z(s + t) = Z(s)Z(t)$ for all $s, t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
@@ -1847,7 +1867,9 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect is Strongly Continuous]
     \label{lmm:wedge-modular-defect-continuous}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_continuous}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost, def:wedge-modular-defect}
+    \leanok
     For every $\psi \in \mathbf{H}$, $t \mapsto Z(t)\psi$ is continuous.
 \end{lemma}
 \begin{proof}
@@ -1861,7 +1883,9 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{corollary}[The Wedge Modular Group up to a Defect]
     \label{crllr:wedge-modular-defect}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_properties}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:modular-unitary-group, def:wedge-boost, def:hall-10.11, lmm:modular-unitary-group-props, def:wedge-modular-defect}
+    \leanok
     Under the hypotheses of Theorem~\ref{thrm:wedge-modular-translations}, the wedge modular defect $Z(t) = \Delta^{it}U(b(2\pi t))$ (\ref{def:wedge-modular-defect}) is a strongly continuous one-parameter unitary group (\ref{def:hall-10.11}) with $\Delta^{it} = Z(t)\,U(b(-2\pi t))$, and for all $t, s \in \mathbb{R}$ and $a \in \mathbb{R}^4$,
     \begin{align}
         Z(t)\Omega = \Omega, \qquad Z(t)\,R(W_R)\,Z(t)^{-1} = R(W_R), \qquad Z(t)U(a) = U(a)Z(t), \qquad Z(t)U(b(s)) = U(b(s))Z(t).
@@ -1878,7 +1902,9 @@ Theorem~\ref{thrm:wedge-modular-translations} fixes the action of $\Delta_{W_R}^
 
 \begin{definition}[Modular Covariance for the Right Wedge (MC)]
     \label{def:wedge-modular-covariance}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWedgeModularCovariant}
     \uses{def:haag-kastler-net, def:local-von-neumann, def:region-algebra, def:right-wedge, def:cyclic-separating-vector, def:antiunitary-operator, def:modular-unitary-group, def:wedge-boost, def:causal-diamond, lmm:poincare-maps-diamonds}
+    \leanok
     Let $\mathfrak{U}$ be the quasilocal algebra of a Haag--Kastler net (\ref{def:haag-kastler-net}), $\pi$ a $*$-representation of $\mathfrak{U}$ on $\mathbf{H}$, and $\Omega \in \mathbf{H}$. Assume that $R(W_R)$ (\ref{def:region-algebra}) is a von Neumann algebra with $\Omega$ cyclic and separating for it (\ref{def:cyclic-separating-vector}), and let $C$ be an antiunitary operator with $C(C\phi) = \phi$ for all $\phi$ (\ref{def:antiunitary-operator}). Let $\Delta_{W_R}^{it}$ be the modular unitary group of $(R(W_R), \Omega)$ (\ref{def:modular-unitary-group}) formed with the reference conjugation $C$. Then $(\pi, \Omega)$ satisfies \emph{modular covariance for the right wedge}, (MC), if for every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$,
     \begin{align}
         \Delta_{W_R}^{it}\,R(\mathbf{B})\,\Delta_{W_R}^{-it} = R(b(-2\pi t)\mathbf{B}),
@@ -1890,7 +1916,9 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{definition}[Internal Symmetry]
     \label{def:internal-symmetry}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInternalSymmetry}
     \uses{def:haag-kastler-net, def:local-von-neumann, def:causal-diamond, def:unitary-operator}
+    \leanok
     Let $\mathfrak{U}$ be the quasilocal algebra of a Haag--Kastler net, $\pi$ a $*$-representation of $\mathfrak{U}$ on $\mathbf{H}$, and $\Omega \in \mathbf{H}$. A unitary $X$ on $\mathbf{H}$ (\ref{def:unitary-operator}) is an \emph{internal symmetry} of $(\pi, \Omega)$ if $X\Omega = \Omega$ and $X\,R(\mathbf{B})\,X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$, with $R(\mathbf{B})$ the local von Neumann algebra (\ref{def:local-von-neumann}). Commutation with the translations is not part of the definition; Theorem~\ref{thrm:bisognano-wichmann-internal} states it separately.
 \end{definition}
 
@@ -1908,7 +1936,9 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{lemma}[Internal Symmetries Commute with the Wedge Modular Objects]
     \label{lmm:internal-symmetry-commutes-wedge-modular}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInternalSymmetry.commute_modular}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:modular-unitary-group, def:modular-conjugation, def:internal-symmetry}
+    \leanok
     Let $X$ be an internal symmetry of $(\pi, \Omega)$ (\ref{def:internal-symmetry}): $X\Omega = \Omega$ and $XR(\mathbf{B})X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$. Then for every wedge $W$, $X\Delta_W^{is} = \Delta_W^{is}X$ for every $s \in \mathbb{R}$ and $XJ_W = J_WX$.
 \end{lemma}
 \begin{proof}
@@ -1918,7 +1948,9 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{lemma}[Modular Covariance for Every Wedge]
     \label{lmm:modular-covariance-all-wedges}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.modularCovariant_all_wedges}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:wedge-boost, def:modular-unitary-group, def:local-von-neumann, lmm:poincare-maps-diamonds, def:wedge-modular-covariance}
+    \leanok
     Assume that $(\pi, \Omega)$ satisfies modular covariance for the right wedge (MC) (\ref{def:wedge-modular-covariance}). Then for every $g$ in the inhomogeneous Lorentz group, every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$,
     \begin{align}
         \Delta_{gW_R}^{it}\,R(\mathbf{B})\,\Delta_{gW_R}^{-it} = R(b_g(-2\pi t)\mathbf{B}).
@@ -1931,7 +1963,9 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{lemma}[Under (MC) the Defect Preserves Every Local Algebra]
     \label{lmm:wedge-modular-defect-local}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_local}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:local-von-neumann, def:modular-unitary-group, def:wedge-boost, lmm:poincare-maps-diamonds, lmm:modular-unitary-group-props, def:wedge-modular-defect, def:wedge-modular-covariance}
+    \leanok
     Assume that $(\pi, \Omega)$ satisfies modular covariance for the right wedge (MC) (\ref{def:wedge-modular-covariance}). Then $Z(t)\,R(\mathbf{B})\,Z(t)^{-1} = R(\mathbf{B})$ for every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$.
 \end{lemma}
 \begin{proof}
@@ -1941,7 +1975,9 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{theorem}[Bisognano--Wichmann up to an Internal Symmetry (BW-a)]
     \label{thrm:bisognano-wichmann-internal}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.bisognanoWichmann_internal}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:right-wedge, def:local-von-neumann, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:wedge-boost, def:boost-matrix, lmm:poincare-maps-diamonds, def:wedge-modular-defect, def:wedge-modular-covariance, def:internal-symmetry, def:wedge-reflection}
+    \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense, let $\Delta^{it}$ and $J$ be the modular unitary group and modular conjugation of $(R(W_R), \Omega)$, and assume that $(\pi, \Omega)$ satisfies modular covariance for the right wedge (MC) (\ref{def:wedge-modular-covariance}): $\Delta^{it}R(\mathbf{B})\Delta^{-it} = R(b(-2\pi t)\mathbf{B})$ for every $t$ and every diamond $\mathbf{B}$. Then for every $t \in \mathbb{R}$ the wedge modular defect $Z(t) = \Delta^{it}U(b(2\pi t))$ (\ref{def:wedge-modular-defect}) satisfies
     \begin{align}
         \Delta^{it} = Z(t)\,U(b(-2\pi t)), \qquad Z(t)\Omega = \Omega, \qquad Z(t)\,R(\mathbf{B})\,Z(t)^{-1} = R(\mathbf{B}) \text{ for every diamond } \mathbf{B}, \qquad Z(t)U(a) = U(a)Z(t) \text{ for every } a \in \mathbb{R}^4,
@@ -1955,7 +1991,9 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{corollary}[The Internal Symmetry Commutes with All Wedge Modular Objects]
     \label{crllr:bw-defect-commutes-wedge-modular}
+    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_commute_wedge_modular}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:modular-unitary-group, def:modular-conjugation, def:wedge-boost, lmm:poincare-maps-diamonds, def:wedge-modular-defect, def:wedge-modular-covariance, def:internal-symmetry}
+    \leanok
     Under the hypotheses of Theorem~\ref{thrm:bisognano-wichmann-internal}, for every $t \in \mathbb{R}$, every wedge $W$ and every $s \in \mathbb{R}$, the internal symmetry $Z(t)$ (\ref{def:wedge-modular-defect}, \ref{def:internal-symmetry}) commutes with $\Delta_W^{is}$ and with $J_W$. It also commutes with every boost $U(b(s))$, and $t \mapsto Z(t)$ is a strongly continuous one-parameter unitary group.
 \end{corollary}
 \begin{proof}
