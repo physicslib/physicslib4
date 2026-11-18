@@ -459,7 +459,23 @@ noncomputable def wedgeBoostAlong (g : InhomogeneousLorentzGroup) (s : ℝ) :
 Blueprint: lmm:boost-preserves-wedge -/
 theorem wedgeBoost_smul_wedge (s : ℝ) :
     wedgeBoost s • rightWedge = rightWedge ∧ wedgeBoost s • leftWedge = leftWedge := by
-  sorry
+  have key : ∀ W : Set StandardMinkowskiSpacetime.Carrier,
+      (∀ (t : ℝ) (x : SpacetimeModel), x ∈ W → boostMatrix t x ∈ W) → wedgeBoost s • W = W :=
+    fun W h => Set.ext fun (y : SpacetimeModel) => ⟨fun ⟨(x : SpacetimeModel), hx, hxy⟩ => by
+      rw [← hxy]
+      exact (congrArg (fun z : SpacetimeModel => z ∈ W) (add_zero (boostMatrix s x))).mpr
+        (h s x hx), fun hy => ⟨boostMatrix (-s) y, h _ _ hy, by
+      change boostMatrix s (boostMatrix (-s) y) + 0 = y
+      rw [add_zero, ← boostMatrix_groupLaw.2.2, LinearEquiv.apply_symm_apply]⟩⟩
+  refine ⟨key _ fun t x hx => ?_, key _ fun t x hx => ?_⟩ <;>
+    obtain ⟨h1, h2⟩ := (boostMatrix_lightCone t).1 x
+  · rw [(wedge_lightCone_coordinates _).1, h1, h2]
+    rw [(wedge_lightCone_coordinates _).1] at hx
+    exact ⟨mul_pos (Real.exp_pos _) hx.1, mul_pos (Real.exp_pos _) hx.2⟩
+  · rw [(wedge_lightCone_coordinates _).2, h1, h2]
+    rw [(wedge_lightCone_coordinates _).2] at hx
+    exact ⟨mul_neg_of_pos_of_neg (Real.exp_pos _) hx.1,
+      mul_neg_of_pos_of_neg (Real.exp_pos _) hx.2⟩
 
 /-- Conjugates stabilise transformed sets: if `h W = W`, then `(g h g⁻¹)(g W) = g W`, and
 `(g h g⁻¹) B` is a diamond contained in `g W` for every diamond `B ⊆ g W`. In particular
@@ -504,7 +520,19 @@ theorem wedgeBoost_groupLaw :
 Blueprint: lmm:boost-continuous-subgroup -/
 theorem isContinuousOneParameterSubgroup_wedgeBoost :
     IsContinuousOneParameterSubgroup wedgeBoost := by
-  sorry
+  have hc : Continuous fun s : ℝ =>
+      LinearMap.toContinuousLinearMap (boostMatrix s : SpacetimeModel →ₗ[ℝ] SpacetimeModel) := by
+    refine continuous_clm_apply.2 fun x => ?_
+    simp only [LinearMap.coe_toContinuousLinearMap', LinearEquiv.coe_coe, boostMatrix_apply]
+    refine (PiLp.continuous_toLp 2 _).comp (continuous_pi fun i => ?_)
+    fin_cases i <;>
+      simp only [Fin.isValue, Fin.zero_eta, Fin.mk_one, Fin.reduceFinMk, Matrix.cons_val_zero,
+        Matrix.cons_val_one, Matrix.cons_val] <;> fun_prop
+  refine ⟨wedgeBoost_groupLaw, continuous_induced_rng.2 ?_⟩
+  change Continuous fun s : ℝ => (_, LinearMap.toContinuousLinearMap
+    ((boostMatrix s).symm : SpacetimeModel →ₗ[ℝ] SpacetimeModel), (0 : SpacetimeModel))
+  simp only [boostMatrix_groupLaw.2.2]
+  exact hc.prodMk ((hc.comp continuous_neg).prodMk continuous_const)
 
 /-- Conjugates of continuous one-parameter subgroups: if `γ` is a continuous one-parameter
 subgroup, so is `s ↦ g γ(s) g⁻¹`. In particular so is `s ↦ b_g(s)`.

@@ -619,6 +619,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     For all $s$, $b(s)W_R = W_R$ and $b(s)W_L = W_L$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:wedge-light-cone-coordinates, lmm:boost-light-cone, lmm:boost-matrix-group-law}
     By \ref{lmm:wedge-light-cone-coordinates} and \ref{lmm:boost-light-cone}, membership in $W_R$ (both light-cone coordinates positive) and in $W_L$ (both negative) is preserved by $\Lambda(s)$, since $e^{\pm s} > 0$. So $b(s)W_R \subseteq W_R$ for every $s$, and $W_R = b(s)b(-s)W_R \subseteq b(s)W_R$ by \ref{lmm:boost-matrix-group-law}. Likewise for $W_L$.
 \end{proof}
@@ -665,6 +666,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     $s \mapsto b(s)$ is a continuous one-parameter subgroup (\ref{def:continuous-one-parameter-subgroup}).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:boost-group-law, def:boost-matrix}
     The group law is \ref{lmm:boost-group-law}. For continuity, by the definition of the induced topology (Mathlib's \texttt{continuous\_induced\_rng}) it suffices that $s \mapsto (\Lambda(s), \Lambda(-s), 0)$ is continuous, which holds because $\Lambda(s) = P_\perp + \cosh s\,P_\parallel + \sinh s\,K$ (\texttt{Real.continuous\_cosh}, \texttt{Real.continuous\_sinh}, \texttt{Continuous.smul}, \texttt{Continuous.add}).
 \end{proof}
