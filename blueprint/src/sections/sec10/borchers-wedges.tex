@@ -1224,6 +1224,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
     For every $t \in \mathbb{R}$, $|c(\lambda)| \le 1$ and $|k_t(\lambda)s(\lambda)| \le 1$ for every $\lambda$, and if $\zeta \in \Sigma_{1/2}$, then $|k_\zeta(\lambda)| \le 1$ for every $\lambda$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-power-modulus-bound}
     Off $(0, \infty)$ the functions vanish. For $\lambda > 0$, $|k_\zeta(\lambda)| = |\lambda^{-i\zeta}|/(1 + s(\lambda)) \le 1$ by Lemma~\ref{lmm:strip-power-modulus-bound} (\texttt{div\_le\_one}); $|c(\lambda)| = 1/(1 + s(\lambda)) \le 1$; and $|k_t(\lambda)s(\lambda)| = s(\lambda)/(1 + s(\lambda)) \le 1$ since $|\lambda^{-it}| = 1$ (Lemma~\ref{lmm:strip-power-modulus-bound} with $\operatorname{Im} t = 0$).
 \end{proof}
@@ -1447,6 +1448,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     Assume clause (B1) of Definition~\ref{def:half-sided-translation}. For $t \ge 0$, $W(t)$ is unitary and $W(t)\Omega = \Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:reflected-group-adjoint, lmm:modular-conjugation-bounded-conjugate-identities, thrm:modular-conjugation-involution, lmm:modular-conjugation-fixes-omega, def:hall-10.11}
     By Lemmas~\ref{lmm:reflected-group-adjoint} and~\ref{lmm:modular-conjugation-bounded-conjugate-identities}, $W(t)W(t)^* = J(V(-t)V(t))J = J\mathbf{1}J = \mathbf{1}$ and likewise $W(t)^*W(t) = \mathbf{1}$ (\ref{def:hall-10.11}, $J(J\phi) = \phi$ by Theorem~\ref{thrm:modular-conjugation-involution}). Finally $W(t)\Omega = JV(-t)J\Omega = JV(-t)\Omega = J\Omega = \Omega$ by (B1) and Lemma~\ref{lmm:modular-conjugation-fixes-omega}.
 \end{proof}

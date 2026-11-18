@@ -203,7 +203,30 @@ Blueprint: lmm:strip-power-functions-bounded -/
 theorem stripPower_functions_bounded (t : ℝ) (ζ : ℂ) :
     (∀ x : ℝ, ‖cfn x‖ ≤ 1) ∧ (∀ x : ℝ, ‖k[(t : ℂ)] x * (Real.sqrt x : ℂ)‖ ≤ 1) ∧
       (ζ ∈ kmsStrip (1 / 2) → ∀ x : ℝ, ‖k[ζ] x‖ ≤ 1) := by
-  sorry
+  have hn : ∀ x : ℝ, ‖(1 + (Real.sqrt x : ℂ))‖ = 1 + Real.sqrt x := fun x => by
+    rw [← Complex.ofReal_one, ← Complex.ofReal_add, Complex.norm_of_nonneg
+      (by positivity)]
+  have hk : ∀ w ∈ kmsStrip (1 / 2), ∀ x : ℝ, ‖k[w] x‖ ≤ 1 := fun w hw x => by
+    rcases le_or_gt x 0 with hx | hx
+    · have hx' : x ∉ Set.Ioi (0 : ℝ) := not_lt.mpr hx
+      rw [Set.indicator_of_notMem hx']; simp
+    · rw [Set.indicator_of_mem (show x ∈ Set.Ioi (0 : ℝ) from hx), norm_div, hn,
+        div_le_one (by positivity)]
+      exact (norm_cpow_neg_I_mul_le hw hx).2
+  refine ⟨fun x => ?_, fun x => ?_, hk ζ⟩
+  · rcases le_or_gt x 0 with hx | hx
+    · have hx' : x ∉ Set.Ioi (0 : ℝ) := not_lt.mpr hx
+      rw [Set.indicator_of_notMem hx']; simp
+    · rw [Set.indicator_of_mem (show x ∈ Set.Ioi (0 : ℝ) from hx), norm_inv, hn]
+      exact inv_le_one_of_one_le₀ (by linarith [Real.sqrt_nonneg x])
+  · rcases le_or_gt x 0 with hx | hx
+    · have hx' : x ∉ Set.Ioi (0 : ℝ) := not_lt.mpr hx
+      rw [Set.indicator_of_notMem hx']; simp
+    · have h1 := (norm_cpow_neg_I_mul_le (ζ := (t : ℂ)) ⟨by simp, by simp⟩ hx).1
+      rw [Set.indicator_of_mem (show x ∈ Set.Ioi (0 : ℝ) from hx), norm_mul, norm_div, hn,
+        h1, Complex.ofReal_im, Real.rpow_zero, Complex.norm_of_nonneg (Real.sqrt_nonneg x),
+        one_div_mul_eq_div, div_le_one (by positivity)]
+      linarith
 
 /-- `p_{-iζ,n} c = k_ζ 1_{K_n}`, `k_t (1 + s) = 1_{(0,∞)} e_{-t}` and `k_{t+i/2} = k_t s`
 pointwise.
@@ -472,7 +495,20 @@ theorem reflectedGroup_unitary {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV : IsOneParameterUnitaryGroup V)
     (hB1 : ∀ t : ℝ, V t Ω = Ω) {t : ℝ} (ht : 0 ≤ t) :
     W[t] ∈ unitary (H →L[ℂ] H) ∧ W[t] Ω = Ω := by
-  sorry
+  obtain ⟨⟨-, -⟩, hJΩ⟩ := modularConjugation_apply_self hM hΩ C hC
+  have hJ := (modularConjugation_involution hM hΩ C hC).1
+  have hV2 : ∀ a b : ℝ, a + b = 0 → ∀ ψ, V a (V b ψ) = ψ := fun a b hab ψ => by
+    rw [← hV.map_add, hab, hV.map_zero]
+  refine ⟨Unitary.mem_iff.2 ⟨?_, ?_⟩, ?_⟩ <;>
+    try rw [ContinuousLinearMap.star_eq_adjoint, reflectedGroup_adjoint hM hΩ C hC hV t]
+  · ext ψ
+    change 𝒥 (V t (𝒥 (𝒥 (V (-t) (𝒥 ψ))))) = ψ
+    rw [hJ, hV2 t (-t) (by ring), hJ]
+  · ext ψ
+    change 𝒥 (V (-t) (𝒥 (𝒥 (V t (𝒥 ψ))))) = ψ
+    rw [hJ, hV2 (-t) t (by ring), hJ]
+  · change 𝒥 (V (-t) (𝒥 Ω)) = Ω
+    rw [hJΩ, hB1, hJΩ]
 
 /-- Under (B2), for `t ≥ 0` and `x ∈ M`, `W(t) x W(t)* ∈ M`.
 
