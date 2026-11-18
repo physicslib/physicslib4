@@ -238,7 +238,25 @@ theorem modularConjugation_unitary_intertwine {M₁ M₂ : Set (H →L[ℂ] H)} 
     (V : H ≃ₗᵢ[ℂ] H) (hV : (fun a => conj[V] a) '' M₁ = M₂) (hVΩ : V Ω₁ = Ω₂) :
     ∀ φ : H, V (modularConjugation hM₁ hΩ₁ C₁ hC₁ (V.symm φ)) =
       modularConjugation hM₂ hΩ₂ C₂ hC₂ φ := by
-  sorry
+  obtain ⟨-, hS⟩ := tomitaOperator_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ V hV hVΩ
+  have hG := (modularOperator_functionalCalculus_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂
+    V hV hVΩ).2
+  obtain ⟨hdom₁, hpol₁⟩ := tomitaOperator_eq_modularConjugation_sqrt hM₁ hΩ₁ C₁ hC₁
+  refine eq_modularConjugation_of_continuous hM₂ hΩ₂ C₂ hC₂ _
+    (V.continuous.comp ((modularConjugation hM₁ hΩ₁ C₁ hC₁).continuous.comp
+      V.symm.continuous)) fun ψ h₁ h₂ => ?_
+  have hmem : (ψ, modularOperatorSqrt hM₂ hΩ₂ C₂ hC₂ ⟨ψ, h₂⟩) ∈
+      (modularOperatorSqrt hM₂ hΩ₂ C₂ hC₂).graph :=
+    (LinearPMap.mem_graph_iff _).2 ⟨⟨ψ, h₂⟩, rfl, rfl⟩
+  rw [hG, Submodule.mem_map] at hmem
+  obtain ⟨⟨a, b⟩, hab, he⟩ := hmem
+  obtain ⟨⟨c, hc⟩, hca, hcb⟩ := (LinearPMap.mem_graph_iff _).1 hab
+  simp only [LinearMap.prodMap_apply, LinearEquiv.coe_coe,
+    LinearIsometryEquiv.coe_toLinearEquiv, Prod.mk.injEq] at he hca hcb
+  obtain ⟨rfl, hb⟩ := he
+  subst hca hcb
+  have hc₁ : c ∈ (linearizedTomitaPre M₁ Ω₁ C₁).closure.domain := hdom₁ ▸ hc
+  rw [← hb, LinearIsometryEquiv.symm_apply_apply, ← hpol₁ c hc₁ hc, hS c hc₁ h₁]
 
 /-- A unitary `V` between standard pairs, `V M₁ V⁻¹ = M₂` and `V Ω₁ = Ω₂`, intertwines the
 modular objects, including domains: `V S₁ V⁻¹ = S₂`, `V Δ₁ V⁻¹ = Δ₂`,
