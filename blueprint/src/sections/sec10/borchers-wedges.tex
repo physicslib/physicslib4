@@ -1239,6 +1239,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:log-power-on-interval, lmm:takesaki-positive-scalar-identities}
     Off $(0, \infty)$ every term vanishes, and $K_n \subset (0, \infty)$ (Lemma~\ref{lmm:log-power-on-interval}), so the first identity is $\lambda^{-i\zeta}/(1 + s(\lambda))$ on both sides on $K_n$ and $0$ off it (\texttt{Set.indicator\_apply}, \texttt{split\_ifs}). For $\lambda > 0$: $1 + s(\lambda) \ne 0$ and $e_{-t}(\lambda) = \lambda^{-it}$ (Lemma~\ref{lmm:takesaki-positive-scalar-identities}), which gives the second (\texttt{div\_mul\_cancel\textsubscript{0}}); and $\lambda^{-i(t + i/2)} = \lambda^{-it + 1/2} = \lambda^{-it}\lambda^{1/2}$ (\texttt{Complex.cpow\_add}, $(\lambda : \mathbb{C}) \ne 0$) with $\lambda^{1/2} = s(\lambda)$ (\texttt{Complex.ofReal\_cpow}, \texttt{Real.sqrt\_eq\_rpow}), which gives the third.
 \end{proof}
@@ -1295,6 +1296,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
     Let $D \subseteq \mathbb{C}$, let $a, b : \mathbb{C} \to \mathbf{H}$ be continuous on $D$, and let $T : \mathbb{C} \to \mathcal{B}(\mathbf{H})$ satisfy $\|T(z)\| \le 1$ for $z \in D$, with $z \mapsto T(z)\chi$ continuous on $D$ for every $\chi \in \mathbf{H}$. Then $z \mapsto \left< a(z), T(z)b(z) \right>$ is continuous on $D$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Fix $z_0 \in D$. $T(z)b(z) - T(z_0)b(z_0) = T(z)(b(z) - b(z_0)) + (T(z)b(z_0) - T(z_0)b(z_0))$, whose norm is at most $\|b(z) - b(z_0)\| + \|T(z)b(z_0) - T(z_0)b(z_0)\| \to 0$ as $z \to z_0$ in $D$ (\texttt{norm\_add\_le}, \texttt{ContinuousLinearMap.le\_of\_opNorm\_le}, \texttt{squeeze\_zero\_norm}). So $z \mapsto T(z)b(z)$ is continuous on $D$, and the inner product of two continuous maps is continuous (\texttt{ContinuousOn.inner}).
 \end{proof}
 

@@ -213,7 +213,29 @@ theorem stripPower_functions_identities (ζ : ℂ) (n : ℕ) (t x : ℝ) :
     p[-Complex.I * ζ, n] x * cfn x = k[ζ] x * (K[n]).indicator 1 x ∧
       k[(t : ℂ)] x * (1 + (Real.sqrt x : ℂ)) = (Set.Ioi (0 : ℝ)).indicator e[-t] x ∧
       k[(t : ℂ) + Complex.I / 2] x = k[(t : ℂ)] x * (Real.sqrt x : ℂ) := by
-  sorry
+  rcases le_or_gt x 0 with hx | hx
+  · have hx' : x ∉ Set.Ioi (0 : ℝ) := not_lt.mpr hx
+    refine ⟨?_, ?_, ?_⟩ <;> simp [Set.indicator_of_notMem hx']
+  · have hx' : x ∈ Set.Ioi (0 : ℝ) := hx
+    have hne : (1 + (Real.sqrt x : ℂ)) ≠ 0 := by
+      have : (0 : ℝ) < 1 + Real.sqrt x := by positivity
+      exact_mod_cast this.ne'
+    have hx0 : (x : ℂ) ≠ 0 := by exact_mod_cast hx.ne'
+    refine ⟨?_, ?_, ?_⟩
+    · by_cases hK : x ∈ K[n]
+      · rw [Set.indicator_of_mem hK, Set.indicator_of_mem hK, Set.indicator_of_mem hx',
+          Set.indicator_of_mem hx', Pi.one_apply, mul_one, div_eq_mul_inv]
+      · rw [Set.indicator_of_notMem hK, Set.indicator_of_notMem hK, zero_mul, mul_zero]
+    · rw [Set.indicator_of_mem hx', Set.indicator_of_mem hx', div_mul_cancel₀ _ hne,
+        Complex.cpow_def_of_ne_zero hx0, ← Complex.ofReal_log hx.le]
+      congr 1
+      ring
+    · rw [Set.indicator_of_mem hx', Set.indicator_of_mem hx']
+      have hs : (Real.sqrt x : ℂ) = (x : ℂ) ^ ((1 / 2 : ℝ) : ℂ) := by
+        rw [Real.sqrt_eq_rpow, Complex.ofReal_cpow hx.le]
+      rw [hs, div_mul_eq_mul_div, ← Complex.cpow_add _ _ hx0]
+      congr 2
+      push_cast; ring_nf; simp; ring
 
 /-- The lower edge: for `φ ∈ Dom Δ^{1/2}` and real `t`, `k_t(Δ)φ♯ = Δ^{-it}φ`.
 
@@ -257,7 +279,16 @@ theorem continuousOn_inner_sandwich {D : Set ℂ} {a b : ℂ → H} {T : ℂ →
     (ha : ContinuousOn a D) (hb : ContinuousOn b D) (hT : ∀ z ∈ D, ‖T z‖ ≤ 1)
     (hTc : ∀ χ : H, ContinuousOn (fun z => T z χ) D) :
     ContinuousOn (fun z => ⟪a z, T z (b z)⟫_ℂ) D := by
-  sorry
+  intro z₀ hz₀
+  have h1 : Filter.Tendsto (fun z => T z (b z) - T z (b z₀)) (nhdsWithin z₀ D) (nhds 0) := by
+    refine squeeze_zero_norm' (a := fun z => ‖b z - b z₀‖) ?_ ?_
+    · filter_upwards [self_mem_nhdsWithin] with z hz
+      rw [← map_sub]
+      exact ((T z).le_opNorm _).trans (mul_le_of_le_one_left (norm_nonneg _) (hT z hz))
+    · simpa using ((hb z₀ hz₀).sub (continuousWithinAt_const (b := b z₀))).norm.tendsto
+  have key : ContinuousWithinAt (fun z => T z (b z)) D z₀ := by
+    simpa [ContinuousWithinAt] using h1.add (hTc (b z₀) z₀ hz₀)
+  exact (ha z₀ hz₀).inner key
 
 /-- For `n ≥ 1`, the approximant `F_n` is continuous on the closed strip `0 ≤ Im z ≤ 1/2`.
 
