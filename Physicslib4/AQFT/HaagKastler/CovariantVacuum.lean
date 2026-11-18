@@ -132,8 +132,9 @@ Blueprint: crllr:covariant-vacuum-reeh-schlieder -/
 theorem IsCovariantVacuumRep.cyclic_localOperators (h : N.IsCovariantVacuumRep π Ω U)
     (hwa : N.IsWeaklyAdditiveVonNeumann π) {B : Set StandardMinkowskiSpacetime.Carrier}
     (hB : IsAlexandrovBasisSet B) (hne : B.Nonempty) :
-    Dense ((fun T => T Ω) '' N.localOperators π hB) := by
-  sorry
+    Dense ((fun T => T Ω) '' N.localOperators π hB) :=
+  reeh_schlieder_cyclic_of_vonNeumann π Ω (fun x => U (translationSub x))
+    h.vacuum_hypotheses.2.2.1 h.vacuum_hypotheses.2.2.2 hwa h.cyclic hB hne
 
 /-- Covariance of the generating sets: `U(g) S(O) U(g)⁻¹ = S(g O)` for every `g` and `O`.
 
