@@ -5,6 +5,7 @@ Authors: Lean Community
 -/
 import Physicslib4.AQFT.PositiveEnergy
 import Physicslib4.AQFT.KMS
+import Physicslib4.AQFT.PositiveEnergyHolomorphic
 
 /-!
 # The positive-energy group on the upper half-plane
@@ -147,7 +148,23 @@ theorem positiveEnergyExtension_operators {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV
         ∀ ψ : H, ∃ h : ψ ∈ (Spectral.Unbounded.functionalCalculus Psa ε[w]).domain,
           Spectral.Unbounded.functionalCalculus Psa ε[w] ⟨ψ, h⟩ = Ṽ[w] ψ) ∧
       ∀ t : ℝ, Ṽ[(t : ℂ)] = (V t).toLinearIsometry.toContinuousLinearMap := by
-  sorry
+  have hbdd : ∀ w : ℂ, 0 ≤ w.im → ε[w] ∈ Spectral.BddMeasurable ℝ := fun w hw =>
+    ⟨(halfPlaneExp_bounds w).1, 1, (halfPlaneExp_bounds w).2.2.1 hw⟩
+  refine ⟨fun w hw => ⟨(Spectral.ProjectionValuedMeasure.norm_integral_le _ (hbdd w hw)).trans
+    (ciSup_le ((halfPlaneExp_bounds w).2.2.1 hw)), fun ψ => ?_⟩, fun t => ?_⟩
+  · obtain ⟨hd, he⟩ := Spectral.Unbounded.functionalCalculus_of_bddMeasurable Psa (hbdd w hw)
+    exact ⟨hd ▸ Submodule.mem_top, (LinearPMap.ext_iff.1 he).2 (hg := Submodule.mem_top)⟩
+  · have hpm := Spectral.Unbounded.pmapIntegral_congr_of_null μP (halfPlaneExp_bounds t).1
+      (expFun_mem_bddMeasurable t).1 measurableSet_Iio
+      (spectralMeasure_Iio_zero_eq_zero _ hV.isPositive_generator) fun x hx => by
+        rw [Set.indicator_of_mem (Set.mem_Ici.2 (not_lt.1 hx)), expFun]
+        push_cast; ring_nf
+    rw [Spectral.Unbounded.pmapIntegral_of_bddMeasurable _ (hbdd t (by simp)),
+      Spectral.Unbounded.pmapIntegral_of_bddMeasurable _ (expFun_mem_bddMeasurable t)] at hpm
+    ext ψ
+    rw [(stone hV.isOneParameterUnitaryGroup hV.isStronglyContinuous).snd.2.1 t]
+    exact (LinearPMap.ext_iff.1 hpm).2 (x := ψ) (hf := Submodule.mem_top)
+      (hg := Submodule.mem_top)
 
 /-- On the open upper half-plane, `w ↦ Ṽ(w)` is complex differentiable in the operator norm,
 with derivative `δ_w(P)`.

@@ -1132,6 +1132,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
     For $\operatorname{Im} w \ge 0$, $\widetilde{V}(w)$ is a bounded operator with $\|\widetilde{V}(w)\| \le 1$, equal to the bounded integral $\int \varepsilon_w \, d\mu^P$. For $t \in \mathbb{R}$, $\widetilde{V}(t) = V(t)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:half-plane-exp-bounds, lmm:functional-calculus-bounded, prpstn:integral-norm-bound, thrm:positive-energy-iff-exp, lmm:positive-spectral-support, lmm:integral-ignores-null-sets}
     $\varepsilon_w$ is bounded and measurable (Lemma~\ref{lmm:half-plane-exp-bounds}), so Lemma~\ref{lmm:functional-calculus-bounded} identifies $\varepsilon_w(P)$ with the bounded integral, and Proposition~\ref{prpstn:integral-norm-bound} gives the norm bound. For real $t$, $V(t) = e^{itP} = f_t(P)$ with $f_t(\lambda) = e^{it\lambda}$ (Theorem~\ref{thrm:positive-energy-iff-exp}, Definition~\ref{def:exp-unitary-group}). $f_t$ and $\varepsilon_t$ agree off $(-\infty, 0)$, which is $\mu^P$-null by Lemma~\ref{lmm:positive-spectral-support}, so $f_t(P) = \varepsilon_t(P)$ by Lemma~\ref{lmm:integral-ignores-null-sets}.
 \end{proof}
