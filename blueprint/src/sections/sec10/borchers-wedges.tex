@@ -194,6 +194,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
     Let $A$ be self-adjoint and $V$ unitary. Then $VAV^{-1}$ is self-adjoint, and $Vf(A)V^{-1} = f(VAV^{-1})$, including domains, for every real measurable $f$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:reference-conjugation, lmm:reference-conjugation-properties, lmm:unitary-conjugate-double-antiunitary, lmm:antiunitary-conjugate-spectral-measure, crllr:antiunitary-conjugate-functional-calculus}
     Let $C$ be a reference conjugation (\ref{def:reference-conjugation}), an antiunitary involution by Lemma~\ref{lmm:reference-conjugation-properties}. By Lemma~\ref{lmm:antiunitary-conjugate-spectral-measure}, $B = CAC^{-1}$ is self-adjoint, and so is $(VC)B(VC)^{-1}$, which equals $VAV^{-1}$ by Lemma~\ref{lmm:unitary-conjugate-double-antiunitary}. Lemma~\ref{lmm:unitary-conjugate-double-antiunitary} applied to $f(A)$, then Corollary~\ref{crllr:antiunitary-conjugate-functional-calculus} for $C$ and $A$ and for $VC$ and $B$, give
     \begin{align}

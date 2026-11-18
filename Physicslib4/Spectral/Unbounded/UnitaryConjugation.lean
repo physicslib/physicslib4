@@ -139,7 +139,15 @@ theorem functionalCalculus_unitaryConj (V : H ≃ₗᵢ[ℂ] H) {A B : H →ₗ.
     IsSelfAdjoint B ∧ ∀ (hB' : IsSelfAdjoint B) (f : ℝ → ℝ), Measurable f →
       (functionalCalculus hB' fun x => (f x : ℂ)).graph =
         (functionalCalculus hA fun x => (f x : ℂ)).graph.map Φ[V] := by
-  sorry
+  obtain ⟨ι, b, -⟩ := exists_hilbertBasis ℂ H
+  let C : H ≃ₗᵢ⋆[ℂ] H := (b.repr.trans (starₗᵢ ℂ)).trans b.repr.symm
+  have hC : ∀ x, C (C x) = x := fun x => by simp [C]
+  obtain ⟨h1, e1⟩ := functionalCalculus_antiunitaryConj C hA
+  obtain ⟨h2, e2⟩ := functionalCalculus_antiunitaryConj (C.trans V) h1
+  obtain rfl : B = antiunitaryConj (C.trans V) (antiunitaryConj C A) :=
+    LinearPMap.eq_of_eq_graph (by rw [hB, graph_antiunitaryConj_trans_antiunitaryConj V C hC])
+  refine ⟨h2, fun _ f hf => ?_⟩
+  rw [← e2 f hf, ← e1 f hf, graph_antiunitaryConj_trans_antiunitaryConj V C hC]
 
 /-- Unitary conjugation of a bounded complex function: if `A` is self-adjoint, `B = V A V⁻¹`
 (including domains, hence self-adjoint) and `f : ℝ → ℂ` is bounded and measurable, then
