@@ -307,6 +307,10 @@ theorem modular_objects_unitary_commute {M : Set (H →L[ℂ] H)} {Ω : H}
     (∀ (t : ℝ) (ψ : H), V (modularUnitaryGroup hM hΩ C hC t ψ) =
       modularUnitaryGroup hM hΩ C hC t (V ψ)) ∧
     ∀ ψ : H, V (modularConjugation hM hΩ C hC ψ) = modularConjugation hM hΩ C hC (V ψ) := by
-  sorry
+  obtain ⟨⟨hD, hS⟩, hΔ, hΔs, hU, hJ⟩ :=
+    modular_objects_unitary_intertwine hM hM hΩ hΩ C C hC hC V hV hVΩ
+  exact ⟨unitaryCommutes_of_graph_map_eq V hΔ.symm, unitaryCommutes_of_graph_map_eq V hΔs.symm,
+    ⟨fun ψ => (hD ψ).symm, fun ψ h h' => hS ψ h h'⟩,
+    fun t => comm_of_unitary_conj_eq V (hU t), comm_of_unitary_conj_eq V hJ⟩
 
 end Physicslib4.Modular
