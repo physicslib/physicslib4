@@ -172,7 +172,13 @@ Blueprint: lmm:strip-power-functions-measurable -/
 theorem stripPower_functions_measurable (ζ : ℂ) (t : ℝ) :
     Measurable (fun x : ℝ => Real.sqrt x) ∧ Measurable k[ζ] ∧ Measurable cfn ∧
       Measurable (fun x : ℝ => k[(t : ℂ)] x * (Real.sqrt x : ℂ)) := by
-  sorry
+  have hs : Measurable (fun x : ℝ => (Real.sqrt x : ℂ)) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
+  have hk : ∀ w : ℂ, Measurable k[w] := fun w =>
+    ((Complex.measurable_ofReal.pow_const _).div (measurable_const.add hs)).indicator
+      measurableSet_Ioi
+  exact ⟨Real.continuous_sqrt.measurable, hk ζ,
+    (measurable_const.add hs).inv.indicator measurableSet_Ioi, (hk _).mul hs⟩
 
 /-- For `ζ` in the strip `0 ≤ Im ζ ≤ 1/2` and `λ > 0`, `|λ^{-iζ}| = λ^{Im ζ} ≤ 1 + s(λ)`.
 
@@ -180,7 +186,15 @@ Blueprint: lmm:strip-power-modulus-bound -/
 theorem norm_cpow_neg_I_mul_le {ζ : ℂ} (hζ : ζ ∈ kmsStrip (1 / 2)) {x : ℝ} (hx : 0 < x) :
     ‖(x : ℂ) ^ (-Complex.I * ζ)‖ = x ^ ζ.im ∧
       ‖(x : ℂ) ^ (-Complex.I * ζ)‖ ≤ 1 + Real.sqrt x := by
-  sorry
+  obtain ⟨h0, h1⟩ := hζ
+  have heq : ‖(x : ℂ) ^ (-Complex.I * ζ)‖ = x ^ ζ.im := by
+    rw [Complex.norm_cpow_eq_rpow_re_of_pos hx]; simp
+  refine ⟨heq, heq ▸ ?_⟩
+  rcases le_total x 1 with hx1 | hx1
+  · linarith [Real.rpow_le_one hx.le hx1 h0, Real.sqrt_nonneg x]
+  · have := Real.rpow_le_rpow_of_exponent_le hx1 h1
+    rw [← Real.sqrt_eq_rpow] at this
+    linarith
 
 /-- `|c| ≤ 1` and `|k_t s| ≤ 1` for real `t`, and `|k_ζ| ≤ 1` for `ζ` in the strip
 `0 ≤ Im ζ ≤ 1/2`.

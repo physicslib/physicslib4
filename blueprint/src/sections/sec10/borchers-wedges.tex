@@ -1202,6 +1202,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
     For every $\zeta \in \mathbb{C}$ and $t \in \mathbb{R}$, $s$, $k_\zeta$, $c$ and $k_t s$ are measurable.
 \end{lemma}
 \begin{proof}
+    \leanok
     $s$ is continuous (\texttt{Real.continuous\_sqrt}, \texttt{Continuous.max}) hence measurable (\texttt{Continuous.measurable}); $\lambda \mapsto (\lambda : \mathbb{C})^{-i\zeta}$ is measurable (\texttt{Measurable.pow\_const} with \texttt{Complex.measurable\_ofReal}); \texttt{Measurable.div}, \texttt{Measurable.mul} and \texttt{Measurable.indicator} with \texttt{measurableSet\_Ioi} conclude.
 \end{proof}
 
@@ -1212,6 +1213,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
     Let $\zeta \in \Sigma_{1/2}$ and $\lambda > 0$. Then $|\lambda^{-i\zeta}| = \lambda^{\operatorname{Im}\zeta} \le 1 + s(\lambda)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $|\lambda^{-i\zeta}| = \lambda^{\operatorname{Re}(-i\zeta)} = \lambda^{\operatorname{Im}\zeta}$ (\texttt{Complex.norm\_cpow\_eq\_rpow\_re\_of\_pos}). If $\lambda \le 1$, $\lambda^{\operatorname{Im}\zeta} \le 1$ since $\operatorname{Im}\zeta \ge 0$ (\texttt{Real.rpow\_le\_one}); if $\lambda \ge 1$, $\lambda^{\operatorname{Im}\zeta} \le \lambda^{1/2} = s(\lambda)$ since $\operatorname{Im}\zeta \le \tfrac{1}{2}$ (\texttt{Real.rpow\_le\_rpow\_of\_exponent\_le}, \texttt{Real.sqrt\_eq\_rpow}). Either way the bound holds, as $s(\lambda) \ge 0$.
 \end{proof}
 
