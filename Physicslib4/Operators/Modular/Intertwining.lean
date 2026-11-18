@@ -279,8 +279,13 @@ theorem modular_objects_unitary_intertwine {M₁ M₂ : Set (H →L[ℂ] H)} {Ω
     (∀ (t : ℝ) (ψ : H), V (modularUnitaryGroup hM₁ hΩ₁ C₁ hC₁ t (V.symm ψ)) =
       modularUnitaryGroup hM₂ hΩ₂ C₂ hC₂ t ψ) ∧
     ∀ φ : H, V (modularConjugation hM₁ hΩ₁ C₁ hC₁ (V.symm φ)) =
-      modularConjugation hM₂ hΩ₂ C₂ hC₂ φ := by
-  sorry
+      modularConjugation hM₂ hΩ₂ C₂ hC₂ φ :=
+  ⟨tomitaOperator_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ V hV hVΩ,
+    (modularOperator_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ V hV hVΩ).2,
+    (modularOperator_functionalCalculus_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ V hV
+      hVΩ).2,
+    modularUnitaryGroup_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ V hV hVΩ,
+    modularConjugation_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ V hV hVΩ⟩
 
 /-- A unitary `V` with `V M V⁻¹ = M` and `V Ω = Ω` commutes with the modular objects of `(M, Ω)`:
 it commutes with `Δ` and with `Δ^{1/2}` (`UnitaryCommutes`), `V` maps `Dom S` onto itself
