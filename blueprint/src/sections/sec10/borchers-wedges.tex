@@ -402,6 +402,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     For every $g$ in the inhomogeneous Lorentz group and all sets $\mathbf{O}_1, \mathbf{O}_2 \subseteq \mathbb{R}^4$, $g\mathbf{O}_1 \subseteq g\mathbf{O}_2$ if and only if $\mathbf{O}_1 \subseteq \mathbf{O}_2$. Consequently $\mathbf{B} \mapsto g\mathbf{B}$ is a bijection from the diamonds contained in $\mathbf{O}$ onto the diamonds contained in $g\mathbf{O}$, with inverse $\mathbf{B}' \mapsto g^{-1}\mathbf{B}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:poincare-maps-diamonds}
     The equivalence is Mathlib's \texttt{Set.smul\_set\_subset\_smul\_set\_iff} for the group action. By \ref{lmm:poincare-maps-diamonds} for $g$ and $g^{-1}$, both maps send diamonds to diamonds, by the equivalence they respect containment in $\mathbf{O}$ and $g\mathbf{O}$, and they are mutually inverse by \texttt{inv\_smul\_smul} and \texttt{smul\_inv\_smul}.
 \end{proof}
@@ -592,6 +593,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     In particular $\Lambda(s)l_+ = e^{s}l_+$ and $\Lambda(s)l_- = e^{-s}l_-$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $y^1 + y^0 = (\cosh s + \sinh s)(x^0 + x^1)$ and $y^1 - y^0 = (\cosh s - \sinh s)(x^1 - x^0)$, and $\cosh s + \sinh s = e^s$, $\cosh s - \sinh s = e^{-s}$ (\texttt{Real.cosh\_add\_sinh}, \texttt{Real.cosh\_sub\_sinh}). For $l_\pm$, the components $x^2, x^3$ vanish and are preserved, and $l_+$ has $x^1 - x^0 = 0$, $l_-$ has $x^1 + x^0 = 0$.
 \end{proof}
 

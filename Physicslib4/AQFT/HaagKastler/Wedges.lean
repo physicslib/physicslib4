@@ -129,7 +129,15 @@ theorem smul_diamond_subset_bijOn (g : InhomogeneousLorentzGroup)
         {B | IsAlexandrovBasisSet B ∧ B ⊆ g • O} ∧
       Set.InvOn (fun B => g⁻¹ • B) (fun B => g • B) {B | IsAlexandrovBasisSet B ∧ B ⊆ O}
         {B | IsAlexandrovBasisSet B ∧ B ⊆ g • O} := by
-  sorry
+  have hinv : Set.InvOn (fun B => g⁻¹ • B) (fun B => g • B) {B | IsAlexandrovBasisSet B ∧ B ⊆ O}
+      {B | IsAlexandrovBasisSet B ∧ B ⊆ g • O} :=
+    ⟨fun B _ => inv_smul_smul g B, fun B _ => smul_inv_smul g B⟩
+  refine ⟨Set.smul_set_subset_smul_set_iff, Set.InvOn.bijOn hinv ?_ ?_, hinv⟩
+  · exact fun B hB => ⟨isAlexandrovBasisSet_smul g hB.1, Set.smul_set_mono hB.2⟩
+  · intro B hB
+    refine ⟨isAlexandrovBasisSet_smul g⁻¹ hB.1, ?_⟩
+    rw [← Set.smul_set_subset_smul_set_iff (a := g), smul_inv_smul]
+    exact hB.2
 
 /-! ### Wedges -/
 
@@ -377,7 +385,16 @@ theorem boostMatrix_lightCone (s : ℝ) :
       boostMatrix s x 1 + boostMatrix s x 0 = Real.exp s * (x 1 + x 0) ∧
         boostMatrix s x 1 - boostMatrix s x 0 = Real.exp (-s) * (x 1 - x 0)) ∧
       boostMatrix s l₊ = Real.exp s • l₊ ∧ boostMatrix s l₋ = Real.exp (-s) • l₋ := by
-  sorry
+  have hp : Real.exp s = Real.cosh s + Real.sinh s := (Real.cosh_add_sinh s).symm
+  have hm : Real.exp (-s) = Real.cosh s - Real.sinh s := (Real.cosh_sub_sinh s).symm
+  refine ⟨fun x => ⟨?_, ?_⟩, ?_, ?_⟩ <;>
+    simp only [hp, hm, boostMatrix_apply, Fin.isValue, Matrix.cons_val_one, Matrix.cons_val_zero]
+  iterate 2 ring
+  all_goals
+    ext i
+    fin_cases i <;>
+      simp only [Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val,
+        Fin.zero_eta, Fin.mk_one, Fin.reduceFinMk, PiLp.smul_apply, smul_eq_mul] <;> ring
 
 /-- The boost of the right wedge with rapidity `s`, the element `b(s) = (Λ(s), 0)` of the
 inhomogeneous Lorentz group.
