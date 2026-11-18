@@ -1382,6 +1382,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     $\Delta^{1/2}\Omega = \Omega$ and $J\Omega = \Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-operator-fixes-omega, lmm:spectral-eigenvector-projection, lmm:spectral-eigenvector-bounded-fc, lmm:modular-power-half, lmm:modular-power-function-bounds, lmm:modular-sqrt-on-algebra, thrm:modular-operator-properties}
     $\Delta\Omega = \Omega$ (Lemma~\ref{lmm:modular-operator-fixes-omega}), so $E_1\Omega = \mu(\{1\})\Omega = \Omega$ (Lemma~\ref{lmm:spectral-eigenvector-projection}; $K_1 = \{1\}$). By Lemma~\ref{lmm:modular-power-half}, $\Delta^{1/2}\Omega = p_{1/2,1}(\Delta)\Omega$, which is $p_{1/2,1}(1)\Omega = \Omega$ by Lemma~\ref{lmm:spectral-eigenvector-bounded-fc} ($p_{1/2,1}$ bounded measurable by Lemma~\ref{lmm:modular-power-function-bounds}; \texttt{Complex.one\_cpow}). Lemma~\ref{lmm:modular-sqrt-on-algebra} with $x = \mathbf{1} \in \mathcal{M}$ gives $\Delta^{1/2}\Omega = J\Omega$.
 \end{proof}
@@ -1394,6 +1395,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     For $t \in \mathbb{R}$ and $y \in \mathcal{M}'$, $\Delta^{it}y\Delta^{-it} \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-modular-automorphism-subset, lmm:modular-unitary-group-props}
     Let $x \in \mathcal{M}$ and $x' = \Delta^{-it}x\Delta^{it} \in \mathcal{M}$ (Lemma~\ref{lmm:tomita-modular-automorphism-subset} at $-t$). By Lemma~\ref{lmm:modular-unitary-group-props}, $\Delta^{it}\Delta^{-it} = \Delta^{-it}\Delta^{it} = \mathbf{1}$, so $x = \Delta^{it}x'\Delta^{-it}$ and $\Delta^{it}y\Delta^{-it}\,x = \Delta^{it}yx'\Delta^{-it} = \Delta^{it}x'y\Delta^{-it} = x\,\Delta^{it}y\Delta^{-it}$ (\texttt{mul\_assoc}).
 \end{proof}

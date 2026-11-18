@@ -365,7 +365,26 @@ theorem modularConjugation_apply_self {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) :
     (∃ h : Ω ∈ (Δs).domain, Δs ⟨Ω, h⟩ = Ω) ∧ 𝒥 Ω = Ω := by
-  sorry
+  obtain ⟨hd, hΔ⟩ := modularOperator_apply_self hM hΩ C hC
+  have hev : modularOperator M Ω C ⟨Ω, hd⟩ = ((1 : ℝ) : ℂ) • Ω := by rw [hΔ]; simp
+  have hK : μΔ K[(1 : ℕ)] Ω = Ω := by
+    simpa using spectralMeasure_singleton_apply_of_eigenvector
+      (modularOperator_isSelfAdjoint hM hΩ C hC) hd hev
+  obtain ⟨h₁, -, e, -⟩ := modularOperatorSqrt_eq_indicatorCpow hM hΩ C hC le_rfl hK
+  have hp : p[(1 / 2 : ℂ), (1 : ℕ)] ∈ Physicslib4.Spectral.BddMeasurable ℝ := by
+    refine ⟨(by fun_prop : Measurable fun x : ℝ => (x : ℂ) ^ (1 / 2 : ℂ)).indicator
+      measurableSet_Icc, 1, fun x => ?_⟩
+    by_cases hx : x ∈ K[(1 : ℕ)]
+    · have hx1 : x = 1 := by simpa using hx
+      subst hx1; simp
+    · rw [Set.indicator_of_notMem hx]; simp
+  have hs : Δs ⟨Ω, h₁⟩ = Ω := by
+    rw [e, spectralMeasure_integral_apply_of_eigenvector _ hd hev hp]; simp
+  refine ⟨⟨h₁, hs⟩, ?_⟩
+  obtain ⟨h₂, e₂⟩ := modularOperatorSqrt_apply_of_mem hM hΩ C hC
+    (hM.2 ▸ Set.one_mem_centralizer : (1 : H →L[ℂ] H) ∈ M)
+  simp only [one_apply_eq_self, star_one] at h₂ e₂
+  exact e₂.symm.trans hs
 
 /-- For real `t` and `y ∈ M'`, `Δ^{it} y Δ^{-it} ∈ M'`.
 
@@ -374,7 +393,19 @@ theorem modularUnitaryGroup_conj_mem_centralizer {M : Set (H →L[ℂ] H)} {Ω :
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) (t : ℝ) {y : H →L[ℂ] H} (hy : y ∈ Set.centralizer M) :
     U[t] ∘L y ∘L U[-t] ∈ Set.centralizer M := by
-  sorry
+  have hU := (modularUnitaryGroup_properties hM hΩ C hC).1
+  have h : ∀ a b : ℝ, a + b = 0 → ∀ v, modularUnitaryGroup hM hΩ C hC a
+      (modularUnitaryGroup hM hΩ C hC b v) = v := fun a b hab v => by
+    rw [← hU.map_add, hab, hU.map_zero]
+  intro x hx
+  ext v
+  have hxy := congrArg (fun w => modularUnitaryGroup hM hΩ C hC t w)
+    (DFunLike.congr_fun (hy _ (modularUnitaryGroup_conj_mem_of_mem hM hΩ C hC (-t) hx))
+      (modularUnitaryGroup hM hΩ C hC (-t) v))
+  simp only [mul_apply_eq_comp, ContinuousLinearMap.comp_apply,
+    LinearIsometry.coe_toContinuousLinearMap, LinearIsometryEquiv.coe_toLinearIsometry] at hxy ⊢
+  rw [h (-(-t)) (-t) (by ring), h t (-t) (by ring), neg_neg] at hxy
+  exact hxy
 
 /-- For `y ∈ M'`, `J y Ω ∈ Dom Δ^{1/2}` and `Δ^{1/2} J y Ω = y* Ω`.
 
