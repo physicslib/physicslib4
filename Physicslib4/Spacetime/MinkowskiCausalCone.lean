@@ -230,7 +230,7 @@ Blueprint: crllr:completely-spacelike-of-coordinate-separation -/
 theorem standardMinkowski_isCompletelySpacelike_of_coord {O₁ O₂ : Set SpacetimeModel}
     (h : ∀ p ∈ O₁, ∀ q ∈ O₂, |p 0| + |q 0| < p 1 - q 1) :
     Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
-      standardMinkowskiTimeOrientation O₁ O₂ := by
-  sorry
+      standardMinkowskiTimeOrientation O₁ O₂ :=
+  fun p hp q hq => standardMinkowski_isSpacelikeRelated_of_coord (h p hp q hq)
 
 end Physicslib4
