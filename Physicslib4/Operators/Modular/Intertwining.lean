@@ -55,7 +55,29 @@ theorem tomitaPre_graph_unitary_intertwine {M₁ M₂ : Set (H →L[ℂ] H)} {Ω
     Set.range (fun x : tomitaPreDomain M₂ Ω₂ => ((x : H), tomitaPre M₂ Ω₂ x)) =
       Prod.map V V ''
         Set.range (fun x : tomitaPreDomain M₁ Ω₁ => ((x : H), tomitaPre M₁ Ω₁ x)) := by
-  sorry
+  have hG : ∀ (N : Set (H →L[ℂ] H)) (Ω : H), IsVonNeumannSet N → IsCyclicSeparatingVector N Ω →
+      Set.range (fun x : tomitaPreDomain N Ω => ((x : H), tomitaPre N Ω x)) =
+        (fun a : H →L[ℂ] H => (a Ω, star a Ω)) '' N := by
+    intro N Ω hN hΩ
+    ext p
+    constructor
+    · rintro ⟨x, rfl⟩
+      obtain ⟨a, ha, hx⟩ := Submodule.mem_map.mp x.2
+      have ha' : a ∈ N := span_eq_of_isVonNeumannSet hN ▸ ha
+      obtain rfl : x = ⟨a Ω, Submodule.mem_map_of_mem (Submodule.subset_span ha')⟩ :=
+        Subtype.ext hx.symm
+      exact ⟨a, ha', Prod.ext rfl ((tomitaPre_apply hN hΩ).1 a ha').symm⟩
+    · rintro ⟨a, ha, rfl⟩
+      exact ⟨⟨a Ω, Submodule.mem_map_of_mem (Submodule.subset_span ha)⟩,
+        Prod.ext rfl ((tomitaPre_apply hN hΩ).1 a ha)⟩
+  rw [hG M₂ Ω₂ hM₂ hΩ₂, hG M₁ Ω₁ hM₁ hΩ₁, ← hV, Set.image_image, Set.image_image]
+  refine Set.image_congr fun a _ => ?_
+  subst hVΩ
+  have h₁ : ContinuousLinearMap.adjoint V.toLinearIsometry.toContinuousLinearMap =
+      V.symm.toLinearIsometry.toContinuousLinearMap := V.adjoint_eq_symm
+  have h₂ : ContinuousLinearMap.adjoint V.symm.toLinearIsometry.toContinuousLinearMap =
+      V.toLinearIsometry.toContinuousLinearMap := V.symm.adjoint_eq_symm
+  simp [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp, h₁, h₂]
 
 /-- `V` intertwines the Tomita operators: `V S₁ V⁻¹ = S₂`, including domains. That is,
 `ψ ∈ Dom S₁` if and only if `V ψ ∈ Dom S₂`, and then `S₂ V ψ = V S₁ ψ`.

@@ -231,6 +231,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
     $\Gamma(S_{0,2}) = \Phi_V(\Gamma(S_{0,1}))$. That is, $\text{Dom}(S_{0,2}) = V\big(\text{Dom}(S_{0,1})\big)$ and $S_{0,2}V\psi = VS_{0,1}\psi$ for $\psi \in \text{Dom}(S_{0,1})$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:tomita-pre-operators-apply, def:unitary-conjugation}
     By Lemma~\ref{lmm:tomita-pre-operators-apply}, $\Gamma(S_{0,k}) = \{ (a\Omega_k, a^*\Omega_k) \mid a \in \mathcal{M}_k \}$. Every $b \in \mathcal{M}_2$ is $VaV^{-1}$ for some $a \in \mathcal{M}_1$, and conversely. For such $a$ and $b$, $b\Omega_2 = VaV^{-1}V\Omega_1 = Va\Omega_1$, and $b^* = Va^*V^{-1}$ because conjugation by a unitary preserves adjoints (\ref{def:unitary-conjugation}), so $b^*\Omega_2 = Va^*\Omega_1$. Hence $(b\Omega_2, b^*\Omega_2) = \Phi_V(a\Omega_1, a^*\Omega_1)$.
 \end{proof}
