@@ -281,6 +281,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
     $Vf(\Delta_1)V^{-1} = f(\Delta_2)$, including domains, for every real measurable $f$. In particular $V\Delta_1^{1/2}V^{-1} = \Delta_2^{1/2}$, including domains.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-operator-properties, lmm:unitary-transport-functional-calculus, lmm:unitary-intertwines-modular-operator}
     $\Delta_1$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}), so Lemma~\ref{lmm:unitary-transport-functional-calculus} gives $Vf(\Delta_1)V^{-1} = f(V\Delta_1V^{-1})$, and $V\Delta_1V^{-1} = \Delta_2$ by Lemma~\ref{lmm:unitary-intertwines-modular-operator}. The square root is the case $f = s$, $s(\lambda) = \sqrt{\lambda}$, since $\Delta_k^{1/2} = s(\Delta_k)$ (\ref{def:modular-operator}).
 \end{proof}
@@ -293,6 +294,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
     $V\Delta_1^{it}V^{-1} = \Delta_2^{it}$ for every $t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-unitary-group-fc, lmm:unitary-transport-bounded-fc, lmm:unitary-intertwines-modular-operator, thrm:modular-operator-properties}
     By Lemma~\ref{lmm:modular-unitary-group-fc}, $\Delta_k^{it} = e_t(\Delta_k)$ with $e_t(\lambda) = e^{it\log\lambda}$ bounded and measurable. $\Delta_1$ is self-adjoint (Theorem~\ref{thrm:modular-operator-properties}), so Lemma~\ref{lmm:unitary-transport-bounded-fc} gives $Ve_t(\Delta_1)V^{-1}\psi = e_t(V\Delta_1V^{-1})\psi$ for every $\psi$. This is $e_t(\Delta_2)\psi$ by Lemma~\ref{lmm:unitary-intertwines-modular-operator}.
 \end{proof}

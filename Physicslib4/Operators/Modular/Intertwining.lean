@@ -194,7 +194,10 @@ theorem modularOperator_functionalCalculus_unitary_intertwine
           fun x => (f x : ℂ)).graph.map Φ[V]) ∧
       (modularOperatorSqrt hM₂ hΩ₂ C₂ hC₂).graph =
         (modularOperatorSqrt hM₁ hΩ₁ C₁ hC₁).graph.map Φ[V] := by
-  sorry
+  have h := (functionalCalculus_unitaryConj V (modularOperator_isSelfAdjoint hM₁ hΩ₁ C₁ hC₁)
+    (modularOperator_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ V hV hVΩ).2).2
+    (modularOperator_isSelfAdjoint hM₂ hΩ₂ C₂ hC₂)
+  exact ⟨h, h Real.sqrt Real.continuous_sqrt.measurable⟩
 
 /-- `V` intertwines the modular unitary groups: `V Δ₁^{it} V⁻¹ = Δ₂^{it}` for every `t ∈ ℝ`.
 
@@ -206,7 +209,24 @@ theorem modularUnitaryGroup_unitary_intertwine {M₁ M₂ : Set (H →L[ℂ] H)}
     (V : H ≃ₗᵢ[ℂ] H) (hV : (fun a => conj[V] a) '' M₁ = M₂) (hVΩ : V Ω₁ = Ω₂) :
     ∀ (t : ℝ) (ψ : H), V (modularUnitaryGroup hM₁ hΩ₁ C₁ hC₁ t (V.symm ψ)) =
       modularUnitaryGroup hM₂ hΩ₂ C₂ hC₂ t ψ := by
-  sorry
+  intro t ψ
+  obtain ⟨hm, hn, hfc₁, -, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM₁ hΩ₁ C₁ hC₁ t
+  obtain ⟨-, -, hfc₂, -, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM₂ hΩ₂ C₂ hC₂ t
+  have hg := functionalCalculus_unitaryConj_of_bounded V
+    (modularOperator_isSelfAdjoint hM₁ hΩ₁ C₁ hC₁) (modularOperator_isSelfAdjoint hM₂ hΩ₂ C₂ hC₂)
+    (modularOperator_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ V hV hVΩ).2 hm
+    ⟨1, fun x => (hn x).le⟩
+  rw [hfc₁, hfc₂] at hg
+  have hmem : (V.symm ψ, modularUnitaryGroup hM₁ hΩ₁ C₁ hC₁ t (V.symm ψ)) ∈
+      ((modularUnitaryGroup hM₁ hΩ₁ C₁ hC₁ t).toLinearIsometry.toLinearMap.toPMap ⊤).graph :=
+    (LinearPMap.mem_graph_iff _).2 ⟨⟨V.symm ψ, Submodule.mem_top⟩, rfl, rfl⟩
+  have h2 := Submodule.mem_map_of_mem (f := Φ[V]) hmem
+  rw [← hg, LinearPMap.mem_graph_iff] at h2
+  obtain ⟨y, hy1, hy2⟩ := h2
+  simp only [LinearMap.toPMap_domain, LinearMap.prodMap_apply, LinearEquiv.coe_coe,
+    LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.apply_symm_apply] at hy1 hy2
+  rw [← hy2, ← hy1]
+  rfl
 
 /-- `V` intertwines the modular conjugations: `V J₁ V⁻¹ φ = J₂ φ` for every `φ ∈ H`.
 
