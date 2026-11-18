@@ -174,8 +174,12 @@ theorem regionVonNeumann_oppositeWedge_subset_centralizer
           Set.centralizer (N.regionVonNeumann π (g • leftWedge)) ∧
         N.regionVonNeumann π (g • leftWedge) ⊆
           Set.centralizer (N.regionVonNeumann π (g • rightWedge))) ∧
-      N.regionVonNeumann π rightWedge ⊆ Set.centralizer (N.regionVonNeumann π leftWedge) := by
-  sorry
+      N.regionVonNeumann π rightWedge ⊆ Set.centralizer (N.regionVonNeumann π leftWedge) :=
+  ⟨fun g => ⟨(N.regionVonNeumann_subset_centralizer π).2 _ _
+      (oppositeWedges_isCompletelySpacelike.2 g _ _ subset_rfl subset_rfl).1,
+    (N.regionVonNeumann_subset_centralizer π).2 _ _
+      (oppositeWedges_isCompletelySpacelike.2 g _ _ subset_rfl subset_rfl).2⟩,
+    (N.regionVonNeumann_subset_centralizer π).2 _ _ oppositeWedges_isCompletelySpacelike.1⟩
 
 /-- Reindexing the generating set of a transformed region: for every `g` and every `O`,
 `⋃ {R(g B) | B a diamond, B ⊆ O} = S(g O)`.
