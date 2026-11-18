@@ -1145,6 +1145,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
     The map $w \mapsto \widetilde{V}(w)$ from $\{\operatorname{Im} w > 0\}$ to $\mathcal{B}(\mathbf{H})$, with the operator norm, is complex differentiable at every point, with derivative $\delta_w(P)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:half-plane-exp-taylor, lmm:half-plane-exp-bounds, lmm:functional-calculus-bounded, thrm:operator-valued-integration, prpstn:integral-norm-bound}
     Fix $w$ with $c = \operatorname{Im} w > 0$; $\delta_w(P)$ is bounded by Lemmas~\ref{lmm:half-plane-exp-bounds} and~\ref{lmm:functional-calculus-bounded}. For $|h| \le c/2$, $\operatorname{Im}(w + h) > 0$, and by linearity of the bounded integral (Theorem~\ref{thrm:operator-valued-integration}) $R(h) = \widetilde{V}(w + h) - \widetilde{V}(w) - h\,\delta_w(P) = \int (\varepsilon_{w+h} - \varepsilon_w - h\delta_w) \, d\mu^P$, so $\|R(h)\| \le 16|h|^2/(ce)^2$ by Lemma~\ref{lmm:half-plane-exp-taylor} and Proposition~\ref{prpstn:integral-norm-bound}. Hence $R = O(h^2) = o(h)$ (\texttt{Asymptotics.IsBigO.of\_bound}, \texttt{Asymptotics.isLittleO\_pow\_id}, \texttt{Asymptotics.IsBigO.trans\_isLittleO}), which is the derivative by \texttt{hasDerivAt\_iff\_isLittleO\_nhds\_zero}, as in Theorem~\ref{thrm:modular-power-holomorphic}.
 \end{proof}
@@ -1157,6 +1158,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
     For every $\psi \in \mathbf{H}$, $w \mapsto \widetilde{V}(w)\psi$ is continuous on $\{\operatorname{Im} w \ge 0\}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:half-plane-exp-bounds, prpstn:hall-10.1, lmm:functional-calculus-bounded, thrm:operator-valued-integration, lmm:associated-measure-total-mass}
     Fix $w_0$ with $\operatorname{Im} w_0 \ge 0$. For $\operatorname{Im} w \ge 0$, $\widetilde{V}(w)\psi - \widetilde{V}(w_0)\psi = (\varepsilon_w - \varepsilon_{w_0})(P)\psi$ by linearity (Theorem~\ref{thrm:operator-valued-integration}, Lemma~\ref{lmm:functional-calculus-bounded}), so by Proposition~\ref{prpstn:hall-10.1}, $\|\widetilde{V}(w)\psi - \widetilde{V}(w_0)\psi\|^2 = \int |\varepsilon_w - \varepsilon_{w_0}|^2 \, d\mu^P_\psi$. The integrand is bounded by $4$ (Lemma~\ref{lmm:half-plane-exp-bounds}), $\mu^P_\psi$ is finite (Lemma~\ref{lmm:associated-measure-total-mass}), and the integrand tends to $0$ pointwise as $w \to w_0$, since $w \mapsto e^{iw\lambda}$ is continuous. Dominated convergence along $\mathcal{N}_{\{\operatorname{Im} w \ge 0\}}(w_0)$ (Mathlib's \texttt{MeasureTheory.tendsto\_integral\_filter\_of\_dominated\_convergence}) gives the limit $0$.
 \end{proof}

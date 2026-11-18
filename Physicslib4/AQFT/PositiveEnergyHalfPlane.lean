@@ -173,7 +173,39 @@ Blueprint: lmm:positive-energy-extension-holomorphic -/
 theorem hasDerivAt_positiveEnergyExtension {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV : IsPositiveEnergy V)
     {w : ℂ} (hw : 0 < w.im) :
     HasDerivAt (fun w' : ℂ => Ṽ[w']) ((μP).integral δ[w]) w := by
-  sorry
+  have hbdd : ∀ w' : ℂ, 0 ≤ w'.im → ε[w'] ∈ Spectral.BddMeasurable ℝ := fun w' hw' =>
+    ⟨(halfPlaneExp_bounds w').1, 1, (halfPlaneExp_bounds w').2.2.1 hw'⟩
+  have hδ : δ[w] ∈ Spectral.BddMeasurable ℝ :=
+    ⟨(halfPlaneExp_bounds w).2.1, _, (halfPlaneExp_bounds w).2.2.2 hw⟩
+  set C := 16 / (w.im * Real.exp 1) ^ 2
+  have key : ∀ h : ℂ, ‖h‖ ≤ w.im / 2 →
+      ‖Ṽ[w + h] - Ṽ[w] - h • (μP).integral δ[w]‖ ≤ C * ‖h ^ 2‖ := by
+    intro h hh
+    have hwh : 0 ≤ (w + h).im := by
+      have := Complex.abs_im_le_norm h
+      rw [Complex.add_im]; linarith [abs_le.1 this]
+    have hmem := (Spectral.BddMeasurable ℝ).sub_mem
+      ((Spectral.BddMeasurable ℝ).sub_mem (hbdd _ hwh) (hbdd _ hw.le))
+      ((Spectral.BddMeasurable ℝ).smul_mem h hδ)
+    have hsub : ∀ f g : ℝ → ℂ, f ∈ Spectral.BddMeasurable ℝ → g ∈ Spectral.BddMeasurable ℝ →
+        (μP).integral (f - g) = (μP).integral f - (μP).integral g := by
+      intro f g hf hg
+      have h1 := Spectral.ProjectionValuedMeasure.integral_add (μP)
+        ((Spectral.BddMeasurable ℝ).sub_mem hf hg) hg
+      rw [sub_add_cancel] at h1
+      rw [h1, add_sub_cancel_right]
+    rw [← Spectral.ProjectionValuedMeasure.integral_smul _ _ hδ,
+      ← hsub _ _ (hbdd _ hwh) (hbdd _ hw.le),
+      ← hsub _ _ ((Spectral.BddMeasurable ℝ).sub_mem (hbdd _ hwh) (hbdd _ hw.le))
+        ((Spectral.BddMeasurable ℝ).smul_mem h hδ)]
+    refine (Spectral.ProjectionValuedMeasure.norm_integral_le _ hmem).trans (ciSup_le fun x => ?_)
+    rw [norm_pow]
+    exact halfPlaneExp_taylor hw hh x
+  rw [hasDerivAt_iff_isLittleO_nhds_zero]
+  refine Asymptotics.IsBigO.trans_isLittleO ?_ (Asymptotics.isLittleO_pow_id one_lt_two)
+  refine Asymptotics.IsBigO.of_bound C ?_
+  filter_upwards [Metric.closedBall_mem_nhds (0 : ℂ) (half_pos hw)] with h hh
+  exact key h (by simpa using hh)
 
 /-- For every `ψ`, `w ↦ Ṽ(w)ψ` is continuous on the closed upper half-plane.
 
@@ -181,7 +213,46 @@ Blueprint: lmm:positive-energy-extension-strongly-continuous -/
 theorem continuousOn_positiveEnergyExtension_apply {V : ℝ → (H ≃ₗᵢ[ℂ] H)}
     (hV : IsPositiveEnergy V) (ψ : H) :
     ContinuousOn (fun w : ℂ => Ṽ[w] ψ) {w : ℂ | 0 ≤ w.im} := by
-  sorry
+  have hbdd : ∀ w : ℂ, 0 ≤ w.im → ε[w] ∈ Spectral.BddMeasurable ℝ := fun w hw =>
+    ⟨(halfPlaneExp_bounds w).1, 1, (halfPlaneExp_bounds w).2.2.1 hw⟩
+  intro w₀ hw₀
+  rw [ContinuousWithinAt, tendsto_iff_norm_sub_tendsto_zero]
+  have hsq : Filter.Tendsto (fun w : ℂ => ‖Ṽ[w] ψ - Ṽ[w₀] ψ‖ ^ 2)
+      (nhdsWithin w₀ {w : ℂ | 0 ≤ w.im}) (nhds 0) := by
+    have hev : ∀ᶠ w in nhdsWithin w₀ {w : ℂ | 0 ≤ w.im}, ‖Ṽ[w] ψ - Ṽ[w₀] ψ‖ ^ 2 =
+        ∫ x, ‖ε[w] x - ε[w₀] x‖ ^ 2 ∂((μP).assoc ψ) := by
+      filter_upwards [self_mem_nhdsWithin] with w hw
+      have hsub : (μP).integral (ε[w] + (-1 : ℂ) • ε[w₀]) = Ṽ[w] - Ṽ[w₀] := by
+        rw [Spectral.ProjectionValuedMeasure.integral_add _ (hbdd w hw)
+          ((Spectral.BddMeasurable ℝ).smul_mem _ (hbdd w₀ hw₀)),
+          Spectral.ProjectionValuedMeasure.integral_smul _ _ (hbdd w₀ hw₀), neg_one_smul,
+          ← sub_eq_add_neg]
+      rw [← sub_apply, ← hsub, Spectral.Unbounded.norm_sq_integral_apply _
+        ((Spectral.BddMeasurable ℝ).add_mem (hbdd w hw)
+          ((Spectral.BddMeasurable ℝ).smul_mem _ (hbdd w₀ hw₀)))]
+      simp [sub_eq_add_neg]
+    refine Filter.Tendsto.congr' (Filter.EventuallyEq.symm hev) ?_
+    have hlim := MeasureTheory.tendsto_integral_filter_of_dominated_convergence
+      (μ := (μP).assoc ψ) (l := nhdsWithin w₀ {w : ℂ | 0 ≤ w.im})
+      (F := fun w x => ‖ε[w] x - ε[w₀] x‖ ^ 2) (f := fun x => ‖ε[w₀] x - ε[w₀] x‖ ^ 2)
+      (fun _ => 4) ?_ ?_ (MeasureTheory.integrable_const _) ?_
+    · rwa [show (∫ x, ‖ε[w₀] x - ε[w₀] x‖ ^ 2 ∂((μP).assoc ψ)) = 0 by simp] at hlim
+    · exact Filter.Eventually.of_forall fun w => (((halfPlaneExp_bounds w).1.sub
+        (halfPlaneExp_bounds w₀).1).norm.pow_const 2).aestronglyMeasurable
+    · filter_upwards [self_mem_nhdsWithin] with w hw
+      refine MeasureTheory.ae_of_all _ fun x => ?_
+      have h1 := (halfPlaneExp_bounds w).2.2.1 hw x
+      have h2 := (halfPlaneExp_bounds w₀).2.2.1 hw₀ x
+      have h3 : ‖ε[w] x - ε[w₀] x‖ ≤ 2 := (norm_sub_le _ _).trans (by linarith)
+      rw [Real.norm_of_nonneg (by positivity)]
+      nlinarith [norm_nonneg (ε[w] x - ε[w₀] x)]
+    · refine MeasureTheory.ae_of_all _ fun x => ?_
+      have hc : Continuous fun w : ℂ => ε[w] x := by
+        by_cases hx : x ∈ Set.Ici (0 : ℝ)
+        · simp only [Set.indicator_of_mem hx]; fun_prop
+        · simp only [Set.indicator_of_notMem hx]; fun_prop
+      exact (((hc.sub continuous_const).norm.pow 2).tendsto w₀).mono_left nhdsWithin_le_nhds
+  simpa [Real.sqrt_sq (norm_nonneg _)] using hsq.sqrt
 
 /-- For `τ ≥ 0`, the dilation `z ↦ τ e^{2πz}` maps the strip `0 ≤ Im z ≤ 1/2` into the closed
 upper half-plane, and the open strip into the open upper half-plane if `τ > 0`; on the upper
