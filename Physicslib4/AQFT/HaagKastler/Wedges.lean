@@ -494,8 +494,10 @@ def IsContinuousOneParameterSubgroup (γ : ℝ → InhomogeneousLorentzGroup) : 
 
 Blueprint: lmm:boost-group-law -/
 theorem wedgeBoost_groupLaw :
-    wedgeBoost 0 = 1 ∧ ∀ s t : ℝ, wedgeBoost (s + t) = wedgeBoost s * wedgeBoost t := by
-  sorry
+    wedgeBoost 0 = 1 ∧ ∀ s t : ℝ, wedgeBoost (s + t) = wedgeBoost s * wedgeBoost t :=
+  ⟨InhomogeneousLorentzGroup.ext boostMatrix_groupLaw.1 rfl, fun s t =>
+    InhomogeneousLorentzGroup.ext (boostMatrix_groupLaw.2.1 s t)
+      ((zero_add _).symm.trans (congrArg _ (map_zero (boostMatrix s)).symm))⟩
 
 /-- The boost `s ↦ b(s)` is a continuous one-parameter subgroup.
 

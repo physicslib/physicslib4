@@ -652,6 +652,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     $b(0) = 1$ and $b(s + t) = b(s)b(t)$ for all $s, t$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:boost-matrix-group-law, def:inhomogeneous-lorentz-group}
     By the product rule of \ref{def:inhomogeneous-lorentz-group}, $b(s)b(t) = (\Lambda(s)\Lambda(t), 0 + \Lambda(s)0) = (\Lambda(s)\Lambda(t), 0)$. Apply \ref{lmm:boost-matrix-group-law} and the extensionality of the group (\texttt{InhomogeneousLorentzGroup.ext}).
 \end{proof}
