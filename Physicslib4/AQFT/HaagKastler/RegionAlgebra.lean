@@ -144,7 +144,24 @@ theorem regionVonNeumann_subset_centralizer (π : N.quasilocal.carrier →⋆ₐ
         Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
             standardMinkowskiTimeOrientation O₁ O₂ →
           N.regionVonNeumann π O₁ ⊆ Set.centralizer (N.regionVonNeumann π O₂) := by
-  sorry
+  have key : ∀ O₁ O₂ : Set StandardMinkowskiSpacetime.Carrier,
+      (∀ B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier, IsAlexandrovBasisSet B₁ →
+        IsAlexandrovBasisSet B₂ → B₁ ⊆ O₁ → B₂ ⊆ O₂ →
+          Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+            standardMinkowskiTimeOrientation B₁ B₂) →
+        N.regionVonNeumann π O₁ ⊆ Set.centralizer (N.regionVonNeumann π O₂) := by
+    intro O₁ O₂ h
+    have hc : ∀ s ∈ N.regionGeneratingSet π O₁, ∀ t ∈ N.regionGeneratingSet π O₂,
+        s * t = t * s := by
+      simp only [regionGeneratingSet, Set.mem_iUnion]
+      rintro s ⟨B₁, hB₁, hBO₁, hs⟩ t ⟨B₂, hB₂, hBO₂, ht⟩
+      exact (N.localVonNeumann_subset_centralizer π hB₁ hB₂
+        (h B₁ B₂ hB₁ hB₂ hBO₁ hBO₂) hs t ht).symm
+    obtain ⟨h₁, h₂⟩ := centralizer_centralizer_subset_centralizer_of_commute hc
+    rw [regionVonNeumann, regionVonNeumann, ← h₂]
+    exact h₁
+  exact ⟨key, fun O₁ O₂ hO => key O₁ O₂ fun B₁ B₂ _ _ h₁ h₂ =>
+    Spacetime.isCompletelySpacelike_mono _ _ h₁ h₂ hO⟩
 
 /-- Locality of opposite wedge algebras: for every `g`, `R(g W_R) ⊆ R(g W_L)'` and
 `R(g W_L) ⊆ R(g W_R)'`. In particular `R(W_R) ⊆ R(W_L)'`.
