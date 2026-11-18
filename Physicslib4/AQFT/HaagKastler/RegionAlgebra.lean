@@ -61,7 +61,18 @@ theorem regionVonNeumann_isVonNeumannSet (π : N.quasilocal.carrier →⋆ₐ[�
     (O : Set StandardMinkowskiSpacetime.Carrier) :
     (∀ a ∈ N.regionGeneratingSet π O, star a ∈ N.regionGeneratingSet π O) ∧
       IsVonNeumannSet (N.regionVonNeumann π O) := by
-  sorry
+  have hcent : ∀ {S : Set (H →L[ℂ] H)}, (∀ a ∈ S, star a ∈ S) →
+      (∀ a ∈ Set.centralizer S, star a ∈ Set.centralizer S) := fun {S} hS a ha => by
+    have hA : (StarSubalgebra.centralizer ℂ S : Set (H →L[ℂ] H)) = Set.centralizer S := by
+      rw [StarSubalgebra.coe_centralizer,
+        Set.union_eq_left.mpr fun b hb => by simpa using hS _ hb]
+    rw [← hA] at ha ⊢
+    exact star_mem ha
+  have hS : ∀ a ∈ N.regionGeneratingSet π O, star a ∈ N.regionGeneratingSet π O := by
+    simp only [regionGeneratingSet, Set.mem_iUnion]
+    rintro a ⟨B, hB, hBO, ha⟩
+    exact ⟨B, hB, hBO, hcent (hcent (N.localOperators_selfAdjoint π hB)) a ha⟩
+  exact ⟨hS, hcent (hcent hS), Set.centralizer_centralizer_centralizer _⟩
 
 /-- Monotonicity: if `O₁ ⊆ O₂`, then `S(O₁) ⊆ S(O₂)` and `R(O₁) ⊆ R(O₂)`.
 
@@ -70,7 +81,11 @@ theorem regionVonNeumann_mono (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[
     {O₁ O₂ : Set StandardMinkowskiSpacetime.Carrier} (h : O₁ ⊆ O₂) :
     N.regionGeneratingSet π O₁ ⊆ N.regionGeneratingSet π O₂ ∧
       N.regionVonNeumann π O₁ ⊆ N.regionVonNeumann π O₂ := by
-  sorry
+  have hS : N.regionGeneratingSet π O₁ ⊆ N.regionGeneratingSet π O₂ := fun x hx => by
+    simp only [regionGeneratingSet, Set.mem_iUnion] at hx ⊢
+    obtain ⟨B, hB, hBO, hx⟩ := hx
+    exact ⟨B, hB, hBO.trans h, hx⟩
+  exact ⟨hS, Set.centralizer_subset (Set.centralizer_subset hS)⟩
 
 /-- Local operators lie in the region algebra: if `B ⊆ O` is a diamond, then
 `π(𝔘(B)) ⊆ R(B) ⊆ R(O)`.

@@ -731,6 +731,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
     For every $\mathbf{O}$, $\mathcal{S}(\mathbf{O})$ is self-adjoint and $R(\mathbf{O})$ is a von Neumann algebra on $\mathbf{H}$ (\ref{def:von-neumann-algebra-commutant-convention}).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:bicommutant-of-selfadjoint-is-von-neumann}
     Each $R(\mathbf{B})$ is self-adjoint (\ref{def:von-neumann-algebra-commutant-convention}, by \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann}), so a union of them is self-adjoint. Lemma~\ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} applied to $\mathcal{S}(\mathbf{O})$ gives that $R(\mathbf{O}) = \mathcal{S}(\mathbf{O})''$ is self-adjoint and equal to its bicommutant.
 \end{proof}
@@ -743,6 +744,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
     If $\mathbf{O}_1 \subseteq \mathbf{O}_2$, then $\mathcal{S}(\mathbf{O}_1) \subseteq \mathcal{S}(\mathbf{O}_2)$ and $R(\mathbf{O}_1) \subseteq R(\mathbf{O}_2)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Every diamond contained in $\mathbf{O}_1$ is contained in $\mathbf{O}_2$, which gives the first inclusion. The commutant is antitone (Mathlib's \texttt{Set.centralizer\_subset}), so the bicommutant is monotone.
 \end{proof}
 
