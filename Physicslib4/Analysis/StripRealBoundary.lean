@@ -108,7 +108,25 @@ theorem stripShiftedReflection_regular {β : ℝ} (hβ : 0 < β) {f : ℂ → �
       (∃ C : ℝ, ∀ z ∈ Σ[2 * β], ‖Φ[f] (z - (β : ℂ) * Complex.I)‖ ≤ C) ∧
       DifferentiableOn ℂ (fun z : ℂ => Φ[f] (z - (β : ℂ) * Complex.I))
         (Σ°[2 * β]) := by
-  sorry
+  have him : ∀ z : ℂ, (z - (β : ℂ) * Complex.I).im = z.im - β := fun z => by simp
+  obtain ⟨C, hC⟩ := hfb
+  refine ⟨?_, ⟨C, fun z hz => ?_⟩, ?_⟩
+  · refine (continuousOn_stripReflection hβ hf hreal).comp
+      (continuous_id.sub continuous_const).continuousOn fun z hz => ?_
+    obtain ⟨h1, h2⟩ := hz
+    simp only [Set.mem_ofPred_eq, him]
+    constructor <;> linarith
+  · obtain ⟨h1, h2⟩ := hz
+    dsimp only
+    split_ifs with h <;> rw [him] at h
+    · rw [Complex.norm_conj]
+      exact hC _ ⟨by simp; linarith, by simp; linarith⟩
+    · exact hC _ ⟨by rw [him]; linarith, by rw [him]; linarith⟩
+  · refine (differentiableOn_stripReflection hβ hf hfd hreal).comp
+      (differentiableOn_id.sub (differentiableOn_const _)) fun z hz => ?_
+    obtain ⟨h1, h2⟩ := hz
+    simp only [Set.mem_ofPred_eq, him]
+    constructor <;> linarith
 
 /-- If `f` is real on the upper line `Im z = β`, the shifted reflection `Ψ(z) = Φ_f(z - iβ)` has
 `Ψ(t) = f(t + iβ) = Ψ(t + 2iβ)` for every real `t`.

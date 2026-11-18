@@ -1048,6 +1048,7 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
     Let $\beta > 0$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi$ is continuous and bounded on $\Sigma_{2\beta}$ and holomorphic on $\Sigma^\circ_{2\beta}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-reflection-continuous, lmm:strip-reflection-holomorphic}
     $z \mapsto z - i\beta$ maps $\Sigma_{2\beta}$ onto $\{-\beta \le \operatorname{Im} z \le \beta\}$ and $\Sigma^\circ_{2\beta}$ onto its interior, so continuity and holomorphy follow from Lemmas~\ref{lmm:strip-reflection-continuous} and~\ref{lmm:strip-reflection-holomorphic} (\texttt{ContinuousOn.comp}, \texttt{DifferentiableOn.comp}). $|\Phi_f(z)| \le \sup_{\Sigma_\beta}|f|$ on the wider strip, since $|\overline{f(\overline{z})}| = |f(\overline{z})|$ (\texttt{Complex.norm\_conj}).
 \end{proof}
