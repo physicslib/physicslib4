@@ -970,6 +970,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
     \end{align}
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{thrm:wedge-cyclic-separating, thrm:region-algebra-covariance, thrm:unitary-intertwines-modular-objects}
     If $W = gW_R$, then $hW = (hg)W_R$ is a wedge. By \ref{thrm:wedge-cyclic-separating}, $\Omega$ is cyclic and separating for $R(W)$ and $R(hW)$. By \ref{thrm:region-algebra-covariance}, $U(h)R(W)U(h)^{-1} = R(hW)$, and $U(h)\Omega = \Omega$ by invariance. Theorem~\ref{thrm:unitary-intertwines-modular-objects} with $V = U(h)$, $\mathcal{M}_1 = R(W)$, $\mathcal{M}_2 = R(hW)$ and $\Omega_1 = \Omega_2 = \Omega$ gives the claims.
 \end{proof}
@@ -982,6 +983,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
     Under the hypotheses of \ref{thrm:wedge-cyclic-separating}, let $g$ be in the inhomogeneous Lorentz group and $W = gW_R$. If $hW = W$, then $U(h)$ commutes with $\Delta_W^{it}$ for every $t$ and with $J_W$. This applies to $h = b_g(s)$ for every $s$, and, for $W = W_R$, to $h = b(s)$ and to the transverse translations $h = \mathrm{translationSub}(a)$ with $a^0 = a^1 = 0$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{thrm:wedge-cyclic-separating, thrm:region-algebra-covariance, crllr:unitary-commutes-modular-objects, lmm:conjugate-stabilises-wedge, lmm:boost-preserves-wedge, lmm:wedge-transverse-translations}
     By \ref{thrm:region-algebra-covariance}, $U(h)R(W)U(h)^{-1} = R(hW) = R(W)$, and $U(h)\Omega = \Omega$, so Corollary~\ref{crllr:unitary-commutes-modular-objects} applies to $V = U(h)$ and $(R(W), \Omega)$, which is a standard pair by \ref{thrm:wedge-cyclic-separating}. The listed elements stabilise their wedges by \ref{lmm:conjugate-stabilises-wedge}, \ref{lmm:boost-preserves-wedge} and \ref{lmm:wedge-transverse-translations}.
 \end{proof}

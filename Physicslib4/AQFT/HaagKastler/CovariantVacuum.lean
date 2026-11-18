@@ -257,7 +257,15 @@ theorem IsCovariantVacuumRep.wedge_modular_covariance (h : N.IsCovariantVacuumRe
       U k (modularConjugation (N.regionVonNeumann_isVonNeumannSet π W).2 hΩ₁ C₁ hC₁
           ((U k).symm φ)) =
         modularConjugation (N.regionVonNeumann_isVonNeumannSet π (k • W)).2 hΩ₂ C₂ hC₂ φ := by
-  sorry
+  obtain ⟨g, rfl⟩ := hW
+  have hV := h.conj_image_regionVonNeumann k (g • rightWedge)
+  obtain ⟨hS, -, -, hU, hJ⟩ := modular_objects_unitary_intertwine
+    (N.regionVonNeumann_isVonNeumannSet π _).2 (N.regionVonNeumann_isVonNeumannSet π _).2
+    hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ (U k) hV (h.invariant k)
+  exact ⟨⟨k * g, (mul_smul k g rightWedge).symm⟩, hS,
+    (modularOperator_unitary_intertwine (N.regionVonNeumann_isVonNeumannSet π _).2
+      (N.regionVonNeumann_isVonNeumannSet π _).2 hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ (U k) hV
+      (h.invariant k)).1, hU, hJ⟩
 
 /-- The stabiliser of a wedge commutes with its modular objects: if `k W = W`, then `U(k)`
 commutes with `Δ_W^{it}` for every `t` and with `J_W`. This applies to `k = b_g(s)` when
@@ -321,7 +329,14 @@ theorem IsCovariantVacuumRep.wedge_stabiliser_commute (h : N.IsCovariantVacuumRe
               (modularConjugation (N.regionVonNeumann_isVonNeumannSet π W).2 hΩ C hC ψ) =
             modularConjugation (N.regionVonNeumann_isVonNeumannSet π W).2 hΩ C hC
               (U (translationSub a) ψ)) := by
-  sorry
+  have key := fun (k : InhomogeneousLorentzGroup) (hk : k • W = W) =>
+    have r := modular_objects_unitary_commute (N.regionVonNeumann_isVonNeumannSet π W).2 hΩ C hC
+      (U k) (by rw [h.conj_image_regionVonNeumann, hk]) (h.invariant k)
+    And.intro r.2.2.2.1 r.2.2.2.2
+  refine ⟨key, fun g s hW => key _ ?_, fun hW => ⟨fun s => key _ ?_, fun a h0 h1 => key _ ?_⟩⟩
+  · rw [hW]; exact (conj_smul_stabilises.2 g s).1
+  · rw [hW]; exact (wedgeBoost_smul_wedge s).1
+  · rw [hW]; exact translationSub_smul_rightWedge_of_transverse h0 h1
 
 end HaagKastlerNet
 
