@@ -193,7 +193,32 @@ theorem leftWedge_isWedge :
         (∀ x : SpacetimeModel, r.linear x = !₂[x 0, -x 1, -x 2, x 3]) → r.translation = 0 →
           r • rightWedge = leftWedge) ∧
       IsWedge leftWedge ∧ ∀ g : InhomogeneousLorentzGroup, IsWedge (g • leftWedge) := by
-  sorry
+  have key : ∀ r : InhomogeneousLorentzGroup,
+      (∀ x : SpacetimeModel, r.linear x = !₂[x 0, -x 1, -x 2, x 3]) → r.translation = 0 →
+        r • rightWedge = leftWedge := by
+    intro r hr ht
+    refine Set.ext fun (y : SpacetimeModel) => ⟨?_, fun hy => ?_⟩
+    · rintro ⟨(x : SpacetimeModel), hx, rfl⟩
+      change |x 0| < x 1 at hx
+      change r.linear x + r.translation ∈ leftWedge
+      rw [ht, add_zero, hr]
+      change (!₂[x 0, -x 1, -x 2, x 3] : SpacetimeModel) 1 <
+        -|(!₂[x 0, -x 1, -x 2, x 3] : SpacetimeModel) 0|
+      simpa using hx
+    · change y 1 < -|y 0| at hy
+      refine ⟨!₂[y 0, -y 1, -y 2, y 3], ?_, ?_⟩
+      · change |(!₂[y 0, -y 1, -y 2, y 3] : SpacetimeModel) 0| <
+          (!₂[y 0, -y 1, -y 2, y 3] : SpacetimeModel) 1
+        simp only [Matrix.cons_val_zero, Matrix.cons_val_one]
+        linarith
+      · change r.linear !₂[y 0, -y 1, -y 2, y 3] + r.translation = y
+        rw [ht, add_zero, hr]
+        refine PiLp.ext fun i => ?_
+        fin_cases i <;> simp
+  obtain ⟨R, hR, hL, hP, hO, -⟩ := exists_rotationPi_lorentz
+  let r : InhomogeneousLorentzGroup := ⟨R, 0, hL, hP, hO⟩
+  have hr : r • rightWedge = leftWedge := key r hR rfl
+  exact ⟨key, ⟨r, hr.symm⟩, fun g => ⟨g * r, by rw [mul_smul, hr]⟩⟩
 
 /-- A coordinate bound in the open forward cone: if `η(v, v) < 0` and `v⁰ > 0`, then
 `|vⁱ| < v⁰` for `i = 1, 2, 3`.
@@ -217,7 +242,21 @@ theorem rightWedge_contains_diamond :
       (◇[(!₂[-1, 2, 0, 0] : SpacetimeModel), (!₂[1, 2, 0, 0] : SpacetimeModel)]).Nonempty ∧
       ◇[(!₂[-1, 2, 0, 0] : SpacetimeModel), (!₂[1, 2, 0, 0] : SpacetimeModel)] ⊆
         rightWedge := by
-  sorry
+  refine ⟨⟨_, _, rfl⟩, ⟨!₂[0, 2, 0, 0], ?_⟩, fun (x : SpacetimeModel) hx => ?_⟩
+  · rw [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski]
+    refine ⟨⟨?_, ?_⟩, ?_, ?_⟩ <;> simp
+  · rw [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski] at hx
+    obtain ⟨⟨h1, h2⟩, h3, h4⟩ := hx
+    simp at h1 h2 h3 h4
+    change |x 0| < x 1
+    have ha : |x 1 - 2| < x 0 + 1 :=
+      abs_lt_of_sq_lt_sq (by nlinarith [sq_nonneg (x 2), sq_nonneg (x 3)])
+      (by linarith)
+    have hb : |x 1 - 2| < 1 - x 0 :=
+      abs_lt_of_sq_lt_sq (by nlinarith [sq_nonneg (x 2), sq_nonneg (x 3)])
+      (by linarith)
+    rw [abs_lt] at ha hb ⊢
+    constructor <;> linarith
 
 /-- Every wedge contains a nonempty diamond. With `B₊` as in `rightWedge_contains_diamond` and
 `B₋ = (R, 0) B₊ = I⁺(-1, -2, 0, 0) ∩ I⁻(1, -2, 0, 0)`, for every `g` the set `g B₊` is a nonempty

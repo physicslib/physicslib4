@@ -437,6 +437,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     With $R$ as in \ref{lmm:rotation-pi-lorentz}, $(R, 0)W_R = W_L$. Hence $W_L$ is a wedge, and so is $gW_L = (g(R,0))W_R$ for every $g$ in the inhomogeneous Lorentz group.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:right-wedge, def:inhomogeneous-lorentz-group}
     Since $(Rx)^0 = x^0$ and $(Rx)^1 = -x^1$, $Rx \in W_L$ if and only if $|x^0| < x^1$, that is $x \in W_R$; as $R$ is a bijection, $RW_R = W_L$. The last claim is $g\big((R,0)W_R\big) = (g(R,0))W_R$ (\texttt{mul\_smul}).
 \end{proof}
@@ -461,6 +462,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     Let $p_+ = (-1, 2, 0, 0)$, $q_+ = (1, 2, 0, 0)$ and $\mathbf{B}_+ = I^+(p_+) \cap I^-(q_+)$. Then $\mathbf{B}_+$ is a nonempty diamond with $\mathbf{B}_+ \subseteq W_R$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:minkowski-chronological-open, lmm:open-cone-coordinate-bound}
     By \ref{lmm:minkowski-chronological-open}, $x \in \mathbf{B}_+$ if and only if $x - p_+$ and $q_+ - x$ lie in the open forward cone. The point $(0, 2, 0, 0)$ lies in $\mathbf{B}_+$, since both differences are $(1, 0, 0, 0)$. For $x \in \mathbf{B}_+$, \ref{lmm:open-cone-coordinate-bound} applied to $x - p_+$ and to $q_+ - x$ gives $|x^1 - 2| < x^0 + 1$ and $|x^1 - 2| < 1 - x^0$. Hence $2 - x^1 < 1 - |x^0|$, that is $x^1 > 1 + |x^0| > |x^0|$, so $x \in W_R$.
 \end{proof}
