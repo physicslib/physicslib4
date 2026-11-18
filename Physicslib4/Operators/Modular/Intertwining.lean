@@ -93,7 +93,33 @@ theorem tomitaOperator_unitary_intertwine {M₁ M₂ : Set (H →L[ℂ] H)} {Ω�
       ∀ (ψ : H) (h₁ : ψ ∈ (linearizedTomitaPre M₁ Ω₁ C₁).closure.domain)
         (h₂ : V ψ ∈ (linearizedTomitaPre M₂ Ω₂ C₂).closure.domain),
         tomitaOperator M₂ Ω₂ C₂ ⟨V ψ, h₂⟩ = V (tomitaOperator M₁ Ω₁ C₁ ⟨ψ, h₁⟩) := by
-  sorry
+  have key : Set.range (fun x : (linearizedTomitaPre M₂ Ω₂ C₂).closure.domain =>
+      ((x : H), tomitaOperator M₂ Ω₂ C₂ x)) = Prod.map V V '' Set.range
+        (fun x : (linearizedTomitaPre M₁ Ω₁ C₁).closure.domain =>
+          ((x : H), tomitaOperator M₁ Ω₁ C₁ x)) := by
+    rw [tomitaOperator_graph_eq_closure hM₂ hΩ₂ C₂ hC₂,
+      tomitaOperator_graph_eq_closure hM₁ hΩ₁ C₁ hC₁, (image_closure_prodMap_unitary V).2,
+      tomitaPre_graph_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ V hV hVΩ]
+  have mem : ∀ (ψ : H) (h₁ : ψ ∈ (linearizedTomitaPre M₁ Ω₁ C₁).closure.domain),
+      ∃ x : (linearizedTomitaPre M₂ Ω₂ C₂).closure.domain,
+        (x : H) = V ψ ∧ tomitaOperator M₂ Ω₂ C₂ x = V (tomitaOperator M₁ Ω₁ C₁ ⟨ψ, h₁⟩) := by
+    intro ψ h₁
+    obtain ⟨x, hx⟩ : (V ψ, V (tomitaOperator M₁ Ω₁ C₁ ⟨ψ, h₁⟩)) ∈ Set.range
+        (fun x : (linearizedTomitaPre M₂ Ω₂ C₂).closure.domain =>
+          ((x : H), tomitaOperator M₂ Ω₂ C₂ x)) := key ▸ ⟨_, ⟨⟨ψ, h₁⟩, rfl⟩, rfl⟩
+    exact ⟨x, congrArg Prod.fst hx, congrArg Prod.snd hx⟩
+  refine ⟨fun ψ => ⟨fun h₁ => ?_, fun h₂ => ?_⟩, fun ψ h₁ h₂ => ?_⟩
+  · obtain ⟨x, hx, -⟩ := mem ψ h₁
+    exact hx ▸ x.2
+  · have h : (V ψ, tomitaOperator M₂ Ω₂ C₂ ⟨V ψ, h₂⟩) ∈ Set.range
+        (fun x : (linearizedTomitaPre M₂ Ω₂ C₂).closure.domain =>
+          ((x : H), tomitaOperator M₂ Ω₂ C₂ x)) := ⟨⟨V ψ, h₂⟩, rfl⟩
+    rw [key] at h
+    obtain ⟨-, ⟨x, rfl⟩, hx⟩ := h
+    exact V.injective (congrArg Prod.fst hx) ▸ x.2
+  · obtain ⟨x, hx, hS⟩ := mem ψ h₁
+    obtain rfl : x = ⟨V ψ, h₂⟩ := Subtype.ext hx
+    exact hS
 
 /-- `V` intertwines the modular operators: for all `ψ, χ`, `V ψ ∈ Dom Δ₂` with `Δ₂ V ψ = V χ` if
 and only if `ψ ∈ Dom Δ₁` with `Δ₁ ψ = χ`. Consequently `V Δ₁ V⁻¹ = Δ₂`, including domains.
