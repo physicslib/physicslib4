@@ -169,7 +169,9 @@ theorem IsCovariantVacuumRep.cyclic_regionVonNeumann (h : N.IsCovariantVacuumRep
     (hO : ∃ B : Set StandardMinkowskiSpacetime.Carrier,
       IsAlexandrovBasisSet B ∧ B.Nonempty ∧ B ⊆ O) :
     Dense ((fun T => T Ω) '' N.regionVonNeumann π O) := by
-  sorry
+  obtain ⟨B, hB, hne, hBO⟩ := hO
+  have hs := N.localVonNeumann_subset_regionVonNeumann π hB hBO
+  exact (h.cyclic_localOperators hwa hB hne).mono (Set.image_mono (hs.1.trans hs.2))
 
 end HaagKastlerNet
 

@@ -916,6 +916,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense. If $\mathbf{O}$ contains a nonempty diamond, then $R(\mathbf{O})\Omega$ is dense in $\mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{crllr:covariant-vacuum-reeh-schlieder, lmm:region-algebra-contains-local}
     Let $\mathbf{B} \subseteq \mathbf{O}$ be a nonempty diamond. $\pi(\mathfrak{U}(\mathbf{B}))\Omega$ is dense by \ref{crllr:covariant-vacuum-reeh-schlieder}, and it is contained in $R(\mathbf{O})\Omega$ by \ref{lmm:region-algebra-contains-local}. A set containing a dense set is dense (Mathlib's \texttt{Dense.mono}).
 \end{proof}
