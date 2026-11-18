@@ -345,7 +345,13 @@ theorem oppositeWedges_isCompletelySpacelike :
               standardMinkowskiTimeOrientation O₁ O₂ ∧
             Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
               standardMinkowskiTimeOrientation O₂ O₁ := by
-  sorry
+  have h : Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime
+      standardMinkowskiTimeOrientation rightWedge leftWedge :=
+    standardMinkowski_isCompletelySpacelike_of_coord fun p (hp : |p 0| < p 1) q
+      (hq : q 1 < -|q 0|) => by linarith
+  refine ⟨h, fun g O₁ O₂ h₁ h₂ => ?_⟩
+  have h' := Spacetime.isCompletelySpacelike_mono _ _ h₁ h₂ (isCompletelySpacelike_smul g h)
+  exact ⟨h', (Spacetime.isCompletelySpacelike_comm _ _).mp h'⟩
 
 /-! ### Boosts -/
 
