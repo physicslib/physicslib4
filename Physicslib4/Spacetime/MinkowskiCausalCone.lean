@@ -52,7 +52,18 @@ Blueprint: lmm:closed-forward-cone-iff-norm -/
 theorem mem_closedForwardCone_iff_sqrt_le (v : SpacetimeModel) :
     (v ∈ closedV₊ ↔ Real.sqrt ((v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2) ≤ v 0) ∧
       (v ∈ closedV₊ → ∀ i : Fin 4, i ≠ 0 → |v i| ≤ v 0) := by
-  sorry
+  have key : v ∈ closedV₊ ↔ (v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2 ≤ (v 0) ^ 2 ∧ 0 ≤ v 0 := by
+    change (minkowskiForm v v ≤ 0 ∧ 0 ≤ v 0) ↔ _
+    rw [minkowskiForm_apply]
+    constructor <;> rintro ⟨h1, h2⟩ <;> exact ⟨by nlinarith, h2⟩
+  refine ⟨key.trans ((Real.sqrt_le_iff).trans and_comm).symm, fun h i hi => ?_⟩
+  obtain ⟨h1, h2⟩ := key.1 h
+  refine abs_le_of_sq_le_sq ?_ h2
+  fin_cases i
+  · exact absurd rfl hi
+  all_goals
+    simp only [Fin.mk_one, Fin.reduceFinMk]
+    nlinarith [sq_nonneg (v 1), sq_nonneg (v 2), sq_nonneg (v 3)]
 
 /-- The closed forward cone is a closed convex cone: it is closed in `ℝ⁴`, contains `0`, and is
 closed under addition and under multiplication by nonnegative scalars.
@@ -97,7 +108,14 @@ theorem standardMinkowski_causalTripSegment_displacement {p q : SpacetimeModel}
       (q - p : SpacetimeModel) = ∫ s in a..b,
         mfderivWithin (modelWithCornersSelf ℝ ℝ) StandardMinkowskiSpacetime.model
           μ.toFun μ.parameterSpace s (1 : ℝ) := by
-  sorry
+  obtain ⟨μ, hc_eq, -, hfut, -, hpast, hfuture⟩ := hc
+  obtain ⟨a, b, hab, hparam, ha, hb⟩ :=
+    standardMinkowski_smoothPath_parameterSpace_eq_Icc_of_endpoints μ hpast hfuture
+  refine ⟨μ, a, b, hc_eq, hab, hparam, ha, hb,
+    standardMinkowski_smoothPath_tangent_continuousOn μ hparam,
+    fun s hs => hfut s (hparam ▸ hs), ?_⟩
+  rw [← ha, ← hb]
+  exact standardMinkowski_smoothPath_fundamental_theorem_calculus μ hab hparam
 
 /-- If a causal trip segment of standard Minkowski spacetime runs from `p` to `q`, then `q - p`
 lies in the closed forward cone.

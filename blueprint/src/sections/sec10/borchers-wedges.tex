@@ -32,6 +32,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
     A vector $v \in \mathbb{R}^4$ lies in $\overline{V}_+$ if and only if $\|\vec v\| \le v^0$. In particular every $v \in \overline{V}_+$ satisfies $|v^i| \le v^0$ for $i = 1, 2, 3$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Since $\eta(v,v) = -(v^0)^2 + \|\vec v\|^2$, the condition $\eta(v,v) \le 0$ reads $\|\vec v\|^2 \le (v^0)^2$. Together with $v^0 \ge 0$ this is equivalent to $\|\vec v\| \le v^0$ (Mathlib's \texttt{abs\_le\_of\_sq\_le\_sq} and \texttt{pow\_le\_pow\_left\ensuremath{_0}}, with $\|\vec v\| \ge 0$). The component bound follows from $|v^i| \le \|\vec v\|$, that is $(v^i)^2 \le (v^1)^2 + (v^2)^2 + (v^3)^2$.
 \end{proof}
 
@@ -74,6 +75,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:causal-trip, def:future-and-past-oriented-smooth-curves, lmm:endpoint-parameter-space-eq-Icc, def:endpoints}
     By \ref{def:causal-trip} the segment has a representative $\mu$ that is future-oriented (\ref{def:future-and-past-oriented-smooth-curves}), with past endpoint $p$ and future endpoint $q$. By \ref{lmm:endpoint-parameter-space-eq-Icc} its parameter space is $[a,b]$ with $a < b$. The endpoint witnesses are a minimum and a maximum of $[a,b]$ (\ref{def:endpoints}), hence $a$ and $b$, so $\mu(a) = p$ and $\mu(b) = q$. Since $\mu$ is smooth on $[a,b]$, its tangent is continuous there (Mathlib's \texttt{ContDiffOn.continuousOn\_derivWithin}, with \texttt{uniqueDiffOn\_Icc}), and the fundamental theorem of calculus (\texttt{intervalIntegral.integral\_eq\_sub\_of\_hasDerivAt\_of\_le}) gives $\mu(b) - \mu(a) = \int_a^b \dot\mu(s)\,ds$. These steps use neither the geodesic condition nor timelikeness. They are the steps of the timelike case in the library, whose helper lemmas \texttt{standardMinkowski\_smoothPath\_parameterSpace\_eq\_Icc\_of\_endpoints}, \texttt{standardMinkowski\_smoothPath\_fundamental\_theorem\_calculus} and \texttt{standardMinkowski\_smoothPath\_tangent\_continuousOn} apply to every smooth path.
 \end{proof}
