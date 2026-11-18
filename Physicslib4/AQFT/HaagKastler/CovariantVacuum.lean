@@ -154,7 +154,10 @@ Blueprint: thrm:region-algebra-covariance -/
 theorem IsCovariantVacuumRep.conj_image_regionVonNeumann (h : N.IsCovariantVacuumRep π Ω U)
     (g : InhomogeneousLorentzGroup) (O : Set StandardMinkowskiSpacetime.Carrier) :
     (fun a => conj[U g] a) '' N.regionVonNeumann π O = N.regionVonNeumann π (g • O) := by
-  sorry
+  have hfun : (fun a => conj[U g] a) = Physicslib4.lieConj (U g) := by
+    funext a; ext x; simp
+  rw [regionVonNeumann, regionVonNeumann, ← h.conj_image_regionGeneratingSet g O, hfun,
+    (Physicslib4.lieConj (U g)).image_centralizer_centralizer]
 
 /-- The vacuum is cyclic for regions containing a nonempty diamond: if `π` is weakly additive in
 the von Neumann sense and `O` contains a nonempty diamond, then `R(O)Ω` is dense.
