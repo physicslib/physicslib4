@@ -496,6 +496,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     If $a^0 = a^1 = 0$, then $W_R + a = W_R$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Membership in $W_R$ depends only on $x^0$ and $x^1$, which the translation does not change. So $W_R + a \subseteq W_R$, and likewise $W_R - a \subseteq W_R$, which gives $W_R \subseteq W_R + a$.
 \end{proof}
 
@@ -626,6 +627,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     Let $g, h$ be in the inhomogeneous Lorentz group and $W \subseteq \mathbb{R}^4$ with $hW = W$. Then $(ghg^{-1})(gW) = gW$, and for every diamond $\mathbf{B} \subseteq gW$, $(ghg^{-1})\mathbf{B}$ is a diamond contained in $gW$. In particular, for all $s$, $b_g(s)(gW_R) = gW_R$ and $b_g(s)(gW_L) = gW_L$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:poincare-maps-diamonds, lmm:poincare-diamond-inclusion, lmm:boost-preserves-wedge}
     $(ghg^{-1})(gW) = g(hW) = gW$ by \texttt{mul\_smul} and \texttt{inv\_smul\_smul}. The diamond claim follows from \ref{lmm:poincare-maps-diamonds} and \ref{lmm:poincare-diamond-inclusion}. The last claim is the case $h = b(s)$, by \ref{lmm:boost-preserves-wedge}.
 \end{proof}

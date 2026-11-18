@@ -255,7 +255,11 @@ theorem translationSub_smul_rightWedge_subset :
 Blueprint: lmm:wedge-transverse-translations -/
 theorem translationSub_smul_rightWedge_of_transverse {a : SpacetimeModel} (h0 : a 0 = 0)
     (h1 : a 1 = 0) : translationSub a • rightWedge = rightWedge := by
-  sorry
+  refine (translationSub_smul_rightWedge_subset.1 a (by simp [h0, h1])).antisymm
+    fun (x : SpacetimeModel) (hx : |x 0| < x 1) => ⟨(x - a : SpacetimeModel), ?_, ?_⟩
+  · change |x 0 - a 0| < x 1 - a 1
+    simpa [h0, h1] using hx
+  · exact sub_add_cancel x a
 
 /-- Opposite wedges are completely spacelike: `W_R` and `W_L` are completely spacelike for the
 standard time orientation, and for every `g` and all sets `O₁ ⊆ g W_R` and `O₂ ⊆ g W_L`, the sets
@@ -415,7 +419,12 @@ theorem conj_smul_stabilises :
       ∀ (g : InhomogeneousLorentzGroup) (s : ℝ),
         wedgeBoostAlong g s • (g • rightWedge) = g • rightWedge ∧
           wedgeBoostAlong g s • (g • leftWedge) = g • leftWedge := by
-  sorry
+  have key : ∀ (g h : InhomogeneousLorentzGroup) (W : Set StandardMinkowskiSpacetime.Carrier),
+      h • W = W → (g * h * g⁻¹) • (g • W) = g • W := fun g h W hW => by
+    rw [smul_smul, inv_mul_cancel_right, mul_smul, hW]
+  refine ⟨fun g h W hW => ⟨key g h W hW, fun B hB hBW =>
+    ⟨(smul_diamond_eq _).2 B hB |>.1, (Set.smul_set_mono hBW).trans (key g h W hW).le⟩⟩,
+    fun g s => ⟨key g _ _ (wedgeBoost_smul_wedge s).1, key g _ _ (wedgeBoost_smul_wedge s).2⟩⟩
 
 /-- A continuous one-parameter subgroup of the inhomogeneous Lorentz group: `γ 0 = 1`,
 `γ (s + t) = γ s * γ t` (`IsOneParameterSubgroup`, which has no continuity clause), and `γ` is
