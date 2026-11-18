@@ -1071,6 +1071,7 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
     Let $\beta > 0$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ and $f(t + i\beta) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $f(z) = f(0)$ for every $z \in \Sigma_\beta$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-shifted-reflection-regular, lmm:strip-real-boundary-periodic, thrm:strip-liouville-pos, thrm:strip-uniqueness}
     Let $\Psi(z) = \Phi_f(z - i\beta)$, admissible on $\Sigma_{2\beta}$ by Lemma~\ref{lmm:strip-shifted-reflection-regular} and with equal boundary values by Lemma~\ref{lmm:strip-real-boundary-periodic}. By Theorem~\ref{thrm:strip-liouville-pos} at width $2\beta$, $\Psi(t) = \Psi(0)$ for real $t$, and then also $\Psi(t + 2i\beta) = \Psi(t) = \Psi(0)$. Theorem~\ref{thrm:strip-uniqueness} applied to $\Psi$ and the constant function $\Psi(0)$ gives $\Psi = \Psi(0)$ on $\Sigma_{2\beta}$. For $z \in \Sigma_\beta$, $z + i\beta \in \Sigma_{2\beta}$ and $f(z) = \Phi_f(z) = \Psi(z + i\beta)$, so $f$ is constant on $\Sigma_\beta$, equal to $f(0)$. In Lean, Theorem~\ref{thrm:strip-uniqueness} is \texttt{Physicslib4.eqOn\_strip\_of\_eq\_boundary} in \texttt{Physicslib4/Analysis/StripPeriodicExtension.lean}, whose periodic-extension lemmas (\texttt{pext\_differentiable}, \texttt{pext\_eq\_of\_mem\_strip}) may be reused directly instead of passing through \texttt{StripLiouville}.
 \end{proof}

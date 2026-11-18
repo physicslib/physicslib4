@@ -157,6 +157,32 @@ theorem eq_of_real_strip_boundary {β : ℝ} (hβ : 0 < β) {f : ℂ → ℂ}
     (hfd : DifferentiableOn ℂ f (Σ°[β])) (hreal₀ : ∀ t : ℝ, (f t).im = 0)
     (hrealβ : ∀ t : ℝ, (f ((t : ℂ) + (β : ℂ) * Complex.I)).im = 0) :
     ∀ z ∈ Σ[β], f z = f 0 := by
-  sorry
+  obtain ⟨hc, ⟨C, hC⟩, hd⟩ := stripShiftedReflection_regular hβ hf hfb hfd hreal₀
+  set Ψ := fun z : ℂ => Φ[f] (z - (β : ℂ) * Complex.I) with hΨ
+  have h2β : 0 < 2 * β := by linarith
+  have hper : ∀ t : ℝ, Ψ t = Ψ (t + ((2 * β : ℝ) : ℂ) * Complex.I) := fun t => by
+    obtain ⟨h1, h2⟩ := stripShiftedReflection_boundary hβ hrealβ t
+    exact h1.trans h2.symm
+  have hH := pext_differentiable h2β hc hd hper
+  have hbdd : Bornology.IsBounded (Set.range (pext (2 * β) Ψ)) := by
+    rw [isBounded_iff_forall_norm_le]
+    exact ⟨C, by
+      rintro _ ⟨w, rfl⟩
+      exact hC (pshift (2 * β) w) ⟨(pshift_im_mem h2β w).1, (pshift_im_mem h2β w).2.le⟩⟩
+  have key : ∀ w : ℂ, 0 ≤ w.im → w.im < 2 * β → Ψ w = Ψ ((β : ℂ) * Complex.I) :=
+    fun w h0 h1 => by
+      rw [← pext_eq_of_mem_strip (F := Ψ) h2β h0 h1,
+        ← pext_eq_of_mem_strip (F := Ψ) h2β (by simp; linarith) (by simp; linarith)]
+      exact hH.apply_eq_apply_of_bounded hbdd _ _
+  have hfΨ : ∀ z : ℂ, 0 ≤ z.im → f z = Ψ (z + (β : ℂ) * Complex.I) := fun z hz => by
+    simp only [hΨ, add_sub_cancel_right, not_lt.mpr hz, ↓reduceIte]
+  rintro z ⟨h0, h1⟩
+  rw [hfΨ 0 (by simp), zero_add]
+  rcases h1.lt_or_eq with h | h
+  · rw [hfΨ z h0]
+    exact key _ (by simp; linarith) (by simp; linarith)
+  · have hz : z = (z.re : ℂ) + (β : ℂ) * Complex.I := Complex.ext (by simp) (by simpa using h)
+    rw [hz, ← (stripShiftedReflection_boundary hβ hrealβ z.re).1]
+    exact key _ (by simp) (by simpa using h2β)
 
 end Physicslib4
