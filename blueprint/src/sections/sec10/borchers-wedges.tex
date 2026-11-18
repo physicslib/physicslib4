@@ -264,6 +264,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
     Consequently $V\Delta_1V^{-1} = \Delta_2$ including domains: $\psi \in \text{Dom}(\Delta_1)$ if and only if $V\psi \in \text{Dom}(\Delta_2)$, and then $\Delta_2V\psi = V\Delta_1\psi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-operator-intrinsic, lmm:unitary-intertwines-tomita-operator}
     By Lemma~\ref{lmm:modular-operator-intrinsic}, the left side holds if and only if $V\psi \in \text{Dom}(S_2)$ and $\left< S_2\phi', S_2V\psi \right> = \left< V\chi, \phi' \right>$ for every $\phi' \in \text{Dom}(S_2)$. By Lemma~\ref{lmm:unitary-intertwines-tomita-operator}, $V\psi \in \text{Dom}(S_2)$ if and only if $\psi \in \text{Dom}(S_1)$, the vectors $\phi'$ are exactly the $V\phi$ with $\phi \in \text{Dom}(S_1)$, and
     \begin{align}

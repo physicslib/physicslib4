@@ -134,7 +134,48 @@ theorem modularOperator_unitary_intertwine {M₁ M₂ : Set (H →L[ℂ] H)} {Ω
       (∃ h : V ψ ∈ (modularOperator M₂ Ω₂ C₂).domain, modularOperator M₂ Ω₂ C₂ ⟨V ψ, h⟩ = V χ) ↔
         ∃ h : ψ ∈ (modularOperator M₁ Ω₁ C₁).domain, modularOperator M₁ Ω₁ C₁ ⟨ψ, h⟩ = χ) ∧
       (modularOperator M₂ Ω₂ C₂).graph = (modularOperator M₁ Ω₁ C₁).graph.map Φ[V] := by
-  sorry
+  obtain ⟨hD, hS⟩ := tomitaOperator_unitary_intertwine hM₁ hM₂ hΩ₁ hΩ₂ C₁ C₂ hC₁ hC₂ V hV hVΩ
+  have hS' : ∀ φ' : (linearizedTomitaPre M₂ Ω₂ C₂).closure.domain,
+      ∃ φ : (linearizedTomitaPre M₁ Ω₁ C₁).closure.domain,
+        (φ' : H) = V φ ∧ tomitaOperator M₂ Ω₂ C₂ φ' = V (tomitaOperator M₁ Ω₁ C₁ φ) := by
+    rintro ⟨x, hx⟩
+    obtain ⟨ψ, rfl⟩ : ∃ ψ, x = V ψ := ⟨V.symm x, by simp⟩
+    exact ⟨⟨ψ, (hD ψ).2 hx⟩, rfl, hS _ _ hx⟩
+  have hiff : ∀ ψ χ : H,
+      (∃ h : V ψ ∈ (modularOperator M₂ Ω₂ C₂).domain, modularOperator M₂ Ω₂ C₂ ⟨V ψ, h⟩ = V χ) ↔
+        ∃ h : ψ ∈ (modularOperator M₁ Ω₁ C₁).domain, modularOperator M₁ Ω₁ C₁ ⟨ψ, h⟩ = χ := by
+    intro ψ χ
+    rw [mem_modularOperator_iff hM₂ hΩ₂ C₂ hC₂, mem_modularOperator_iff hM₁ hΩ₁ C₁ hC₁]
+    constructor
+    · rintro ⟨h₂, hφ⟩
+      have h₁ := (hD ψ).2 h₂
+      refine ⟨h₁, fun φ => ?_⟩
+      have := hφ ⟨V φ, (hD φ).1 φ.2⟩
+      rwa [hS _ φ.2, hS _ h₁, LinearIsometryEquiv.inner_map_map,
+        LinearIsometryEquiv.inner_map_map] at this
+    · rintro ⟨h₁, hφ⟩
+      refine ⟨(hD ψ).1 h₁, fun φ' => ?_⟩
+      obtain ⟨φ, hφ'1, hφ'2⟩ := hS' φ'
+      rw [hφ'2, hS _ h₁, hφ'1, LinearIsometryEquiv.inner_map_map,
+        LinearIsometryEquiv.inner_map_map]
+      exact hφ φ
+  refine ⟨hiff, ?_⟩
+  ext ⟨x, y⟩
+  simp only [Submodule.mem_map, LinearPMap.mem_graph_iff]
+  constructor
+  · rintro ⟨⟨z, hz⟩, rfl, rfl⟩
+    obtain ⟨ψ, rfl⟩ : ∃ ψ, z = V ψ := ⟨V.symm z, by simp⟩
+    obtain ⟨χ, hχ⟩ : ∃ χ, modularOperator M₂ Ω₂ C₂ ⟨V ψ, hz⟩ = V χ :=
+      ⟨V.symm (modularOperator M₂ Ω₂ C₂ ⟨V ψ, hz⟩), by simp⟩
+    obtain ⟨h, hh⟩ := (hiff ψ χ).1 ⟨hz, hχ⟩
+    exact ⟨(ψ, χ), ⟨⟨ψ, h⟩, rfl, hh⟩, by simp [hχ]⟩
+  · rintro ⟨⟨a, b⟩, ⟨⟨w, hw⟩, hwa, hwb⟩, hab⟩
+    simp only at hwa hwb
+    subst hwa hwb
+    simp only [LinearMap.prodMap_apply, Prod.mk.injEq] at hab
+    obtain ⟨rfl, rfl⟩ := hab
+    obtain ⟨h, hh⟩ := (hiff w _).2 ⟨hw, rfl⟩
+    exact ⟨⟨V w, h⟩, rfl, hh⟩
 
 /-- `V` intertwines functions of the modular operators: `V f(Δ₁) V⁻¹ = f(Δ₂)`, including domains,
 for every real measurable `f`. In particular `V Δ₁^{1/2} V⁻¹ = Δ₂^{1/2}`, including domains.
