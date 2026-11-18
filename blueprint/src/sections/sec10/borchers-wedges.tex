@@ -1408,6 +1408,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     Let $y \in \mathcal{M}'$. Then $Jy\Omega \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}Jy\Omega = y^*\Omega$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:commutant-modular-objects, lmm:modular-sqrt-on-algebra, thrm:modular-conjugation-involution}
     $\Omega$ is cyclic and separating for $\mathcal{M}'$, with $\Delta_{\mathcal{M}'}^{1/2} = \Delta^{-1/2}$ and $J_{\mathcal{M}'} = J$ (Theorem~\ref{thrm:commutant-modular-objects}). Lemma~\ref{lmm:modular-sqrt-on-algebra} for $(\mathcal{M}', \Omega)$ gives $y\Omega \in \text{Dom}(\Delta^{-1/2})$ and $\Delta^{-1/2}y\Omega = Jy^*\Omega$. By Theorem~\ref{thrm:modular-conjugation-involution}, $\Delta^{-1/2} = J\Delta^{1/2}J$ including domains, so $Jy\Omega \in \text{Dom}(\Delta^{1/2})$ and $J\Delta^{1/2}Jy\Omega = Jy^*\Omega$; apply $J$ and use $J(J\phi) = \phi$.
 \end{proof}
@@ -1420,6 +1421,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     Assume clause (B2) of Definition~\ref{def:half-sided-translation}. For $t \ge 0$ and $y \in \mathcal{M}'$, $V(-t)\,y\,V(t) \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:hall-10.11}
     Let $x \in \mathcal{M}$. $V(t)xV(-t) \in \mathcal{M}$ by (B2), so it commutes with $y$. With $V(-t)V(t) = V(t)V(-t) = \mathbf{1}$ (\ref{def:hall-10.11}), $V(-t)yV(t)\,x = V(-t)\,y\,(V(t)xV(-t))\,V(t) = V(-t)\,(V(t)xV(-t))\,y\,V(t) = x\,V(-t)yV(t)$ (\texttt{mul\_assoc}).
 \end{proof}

@@ -414,7 +414,20 @@ theorem modularOperatorSqrt_apply_of_mem_centralizer {M : Set (H →L[ℂ] H)} {
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {y : H →L[ℂ] H} (hy : y ∈ Set.centralizer M) :
     ∃ h : 𝒥 (y Ω) ∈ (Δs).domain, Δs ⟨𝒥 (y Ω), h⟩ = star y Ω := by
-  sorry
+  obtain ⟨hJ, hconj⟩ := modularConjugation_involution hM hΩ C hC
+  obtain ⟨-, h, he, -⟩ := tomitaAdjoint_apply_of_mem_centralizer hM hΩ C hC hy
+  rw [← hconj] at h
+  have hs : (𝒥).symm (y Ω) = 𝒥 (y Ω) := (𝒥).symm_apply_eq.2 (hJ _).symm
+  have h' : (𝒥).symm (y Ω) ∈ (Δs).domain := h
+  refine ⟨hs ▸ h', ?_⟩
+  have happ : ∀ {P Q : H →ₗ.[ℂ] H} (hPQ : P = Q) (ψ : H) (hP : ψ ∈ P.domain)
+      (hQ : ψ ∈ Q.domain), P ⟨ψ, hP⟩ = Q ⟨ψ, hQ⟩ := by
+    rintro _ _ rfl _ _ _; rfl
+  rw [← happ hconj (y Ω) h] at he
+  rw [← he]
+  change _ = 𝒥 (𝒥 (Δs ⟨(𝒥).symm (y Ω), h'⟩))
+  rw [hJ]
+  exact congrArg Δs (Subtype.ext hs.symm)
 
 /-- Under (B2), `V(-t) y V(t) ∈ M'` for `t ≥ 0` and `y ∈ M'`.
 
@@ -424,7 +437,13 @@ theorem commutant_reverse_endomorphism {M : Set (H →L[ℂ] H)} {V : ℝ → (H
     (hB2 : ∀ t : ℝ, 0 ≤ t → ∀ x ∈ M, V[t] ∘L x ∘L V[-t] ∈ M)
     {t : ℝ} (ht : 0 ≤ t) {y : H →L[ℂ] H} (hy : y ∈ Set.centralizer M) :
     V[-t] ∘L y ∘L V[t] ∈ Set.centralizer M := by
-  sorry
+  rw [Set.mem_centralizer_iff] at hy ⊢
+  intro x hx
+  have h2 : ∀ ψ, V (-t) (V t ψ) = ψ := fun ψ => by
+    rw [← hV.map_add, neg_add_cancel, hV.map_zero]
+  ext ψ
+  have key := congrArg (fun T : H →L[ℂ] H => V (-t) (T (V t ψ))) (hy _ (hB2 t ht x hx))
+  simpa [h2] using key
 
 /-- The adjoint of the reflected group: `W(t)* = J V(t) J`.
 
