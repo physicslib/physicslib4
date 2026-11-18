@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.Spacetime.Minkowski
+import Mathlib.Analysis.Convex.Integral
 
 /-!
 # Causal precedence in standard Minkowski spacetime
@@ -122,7 +123,21 @@ theorem intervalIntegral_mem_closedForwardCone {f : ℝ → SpacetimeModel} {a b
     (hab : a ≤ b) (hf : ContinuousOn f (Set.Icc a b))
     (hmem : ∀ s ∈ Set.Icc a b, f s ∈ closedV₊) :
     (∫ s in a..b, f s) ∈ closedV₊ := by
-  sorry
+  obtain ⟨hcl, h0, hadd, hsmul⟩ := closedForwardCone_isClosed_convexCone
+  rcases hab.eq_or_lt with rfl | hlt
+  · simp
+  have hconv : Convex ℝ closedV₊ := fun v hv w hw s t hs ht _ =>
+    hadd _ (hsmul s hs v hv) _ (hsmul t ht w hw)
+  have hvol : MeasureTheory.volume.real (Set.Ioc a b) = b - a := by
+    simp [MeasureTheory.measureReal_def, hab]
+  have havg := Convex.set_average_mem hconv hcl (μ := MeasureTheory.volume) (t := Set.Ioc a b)
+    (f := f) (by simp [hlt]) (by simp)
+    ((MeasureTheory.ae_restrict_iff' measurableSet_Ioc).2
+      (Filter.Eventually.of_forall fun s hs => hmem s (Set.Ioc_subset_Icc_self hs)))
+    (hf.integrableOn_Icc.mono_set Set.Ioc_subset_Icc_self)
+  rw [MeasureTheory.setAverage_eq, hvol] at havg
+  have := hsmul (b - a) (by linarith) _ havg
+  rwa [smul_inv_smul₀ (by linarith), ← intervalIntegral.integral_of_le hab] at this
 
 /-- A causal trip segment `c` of standard Minkowski spacetime from `p` to `q` has a
 representative smooth path `μ` with parameter space `[a, b]`, `a < b`, such that `μ(a) = p`,

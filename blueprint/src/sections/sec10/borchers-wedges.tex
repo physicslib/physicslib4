@@ -58,6 +58,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
     Let $a \le b$ and let $f : \mathbb{R} \to \mathbb{R}^4$ be continuous on $[a,b]$ with $f(s) \in \overline{V}_+$ for every $s \in [a,b]$. Then $\int_a^b f(s)\,ds \in \overline{V}_+$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:closed-forward-cone-iff-norm}
     The time coordinate and the spatial projection $v \mapsto \vec v$ are continuous linear maps, so they commute with the integral (Mathlib's \texttt{ContinuousLinearMap.intervalIntegral\_comp\_comm}; $f$ is integrable on $[a,b]$ because it is continuous there). By Lemma~\ref{lmm:closed-forward-cone-iff-norm}, $\|\vec f(s)\| \le f^0(s)$ on $[a,b]$, so
     \begin{align}
