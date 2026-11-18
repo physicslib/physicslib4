@@ -1025,6 +1025,7 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
     Let $\beta > 0$ and let $f$ be continuous on $\Sigma_\beta$ with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is continuous on $\{ z : -\beta \le \operatorname{Im} z \le \beta \}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Mathlib's \texttt{ContinuousOn.if} applies with the condition $\operatorname{Im} z < 0$. The closure of $\{\operatorname{Im} z < 0\}$ is $\{\operatorname{Im} z \le 0\}$, that of its complement is $\{\operatorname{Im} z \ge 0\}$, and the common frontier is the real axis (the library's \texttt{closure\_setOf\_im\_lt}, \texttt{closure\_setOf\_not\_im\_lt}, \texttt{frontier\_setOf\_im\_lt} in \texttt{Physicslib4/Analysis/HorizontalLineRemovable.lean}). On $\{-\beta \le \operatorname{Im} z \le 0\}$, $z \mapsto \overline{f(\overline{z})}$ is continuous, as $f$ composed with conjugation, which maps this set into $\Sigma_\beta$ (\texttt{Complex.continuous\_conj}, \texttt{ContinuousOn.comp}). On $\Sigma_\beta$, $f$ is continuous. On the real axis, $\overline{f(t)} = f(t)$ because $f(t)$ is real (\texttt{Complex.conj\_eq\_iff\_real}).
 \end{proof}
 
@@ -1057,6 +1058,7 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
     Let $\beta > 0$ and $f : \mathbb{C} \to \mathbb{C}$ with $f(t + i\beta) \in \mathbb{R}$ for every $t \in \mathbb{R}$, and let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi(t) = f(t + i\beta) = \Psi(t + 2i\beta)$ for every $t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     For real $t$, $\operatorname{Im}(t - i\beta) < 0$, so $\Psi(t) = \overline{f(t + i\beta)} = f(t + i\beta)$ since $f(t + i\beta)$ is real (\texttt{Complex.conj\_eq\_iff\_real}); and $\operatorname{Im}(t + i\beta) \ge 0$, so $\Psi(t + 2i\beta) = \Phi_f(t + i\beta) = f(t + i\beta)$.
 \end{proof}
 

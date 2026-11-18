@@ -40,7 +40,26 @@ Blueprint: lmm:strip-reflection-continuous -/
 theorem continuousOn_stripReflection {β : ℝ} (hβ : 0 < β) {f : ℂ → ℂ}
     (hf : ContinuousOn f (Σ[β])) (hreal : ∀ t : ℝ, (f t).im = 0) :
     ContinuousOn Φ[f] {z : ℂ | -β ≤ z.im ∧ z.im ≤ β} := by
-  sorry
+  have hcl : closure {z : ℂ | z.im < 0} ⊆ {z : ℂ | z.im ≤ 0} :=
+    closure_lt_subset_le Complex.continuous_im continuous_const
+  have hcl' : closure {z : ℂ | ¬ z.im < 0} ⊆ {z : ℂ | 0 ≤ z.im} := by
+    simp_rw [not_lt]
+    exact (isClosed_le continuous_const Complex.continuous_im).closure_subset
+  refine ContinuousOn.if ?_ ?_ ?_
+  · intro z ⟨_, hz⟩
+    have h0 : z.im = 0 := frontier_lt_subset_eq Complex.continuous_im continuous_const hz
+    have hz' : z = (z.re : ℂ) := Complex.ext rfl (by simpa using h0)
+    rw [hz', Complex.conj_ofReal, Complex.conj_eq_iff_im]
+    exact hreal _
+  · refine (Complex.continuous_conj.comp_continuousOn (hf.comp
+      Complex.continuous_conj.continuousOn ?_))
+    intro z ⟨hz, hz'⟩
+    have := hcl hz'
+    simp only [Set.mem_ofPred_eq] at hz this
+    exact ⟨by simp; linarith, by simp; linarith⟩
+  · refine hf.mono ?_
+    intro z ⟨hz, hz'⟩
+    exact ⟨hcl' hz', hz.2⟩
 
 /-- If `f` is continuous on `Σ_β`, holomorphic on `Σ°_β` and real on the real axis, its Schwarz
 reflection `Φ_f` is holomorphic on `{-β < Im z < β}`.
@@ -75,7 +94,16 @@ theorem stripShiftedReflection_boundary {β : ℝ} (hβ : 0 < β) {f : ℂ → �
     Φ[f] ((t : ℂ) - (β : ℂ) * Complex.I) = f ((t : ℂ) + (β : ℂ) * Complex.I) ∧
       Φ[f] ((t : ℂ) + (2 * β : ℝ) * Complex.I - (β : ℂ) * Complex.I) =
         f ((t : ℂ) + (β : ℂ) * Complex.I) := by
-  sorry
+  have h1 : ((t : ℂ) - (β : ℂ) * Complex.I).im < 0 := by simpa using hβ
+  have h2 : starRingEnd ℂ ((t : ℂ) - (β : ℂ) * Complex.I) = (t : ℂ) + (β : ℂ) * Complex.I := by
+    simp [map_sub]
+  have h3 : (t : ℂ) + ((2 * β : ℝ) : ℂ) * Complex.I - (β : ℂ) * Complex.I =
+      (t : ℂ) + (β : ℂ) * Complex.I := by push_cast; ring
+  refine ⟨?_, ?_⟩
+  · simp only [h1, h2, ↓reduceIte]
+    exact Complex.conj_eq_iff_im.mpr (hreal t)
+  · have h4 : ¬((t : ℂ) + (β : ℂ) * Complex.I).im < 0 := by simpa using hβ.le
+    simp only [h3, h4, ↓reduceIte]
 
 /-- A function continuous and bounded on `Σ_β`, holomorphic on `Σ°_β` and real on both boundary
 lines `Im z = 0` and `Im z = β` is constant on `Σ_β`.
