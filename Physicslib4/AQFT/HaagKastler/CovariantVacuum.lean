@@ -6,6 +6,7 @@ Authors: Lean Community
 import Physicslib4.AQFT.HaagKastler.RegionAlgebra
 import Physicslib4.AQFT.HaagKastler.ReehSchlieder.Additivity
 import Physicslib4.Operators.Modular.Intertwining
+import Physicslib4.AQFT.HaagKastler.GeometricCovariance
 
 /-!
 # Covariant vacuum representations
@@ -106,7 +107,23 @@ theorem IsCovariantVacuumRep.vacuum_hypotheses (h : N.IsCovariantVacuumRep π Ω
         U (translationSub x) (π a Ω) = π (N.action (translationSub x) a) Ω) ∧
       ∀ n : StandardMinkowskiSpacetime.Carrier, (n : SpacetimeModel) ∈ minkowskiForwardCone 0 →
         IsPositiveEnergy fun t : ℝ => U (translationSub (t • n)) := by
-  sorry
+  have hcov : ∀ (g : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier),
+      U g (π a Ω) = π (N.action g a) Ω := fun g a => by
+    simpa [(U g).symm_apply_eq.2 (h.invariant g).symm] using h.covariant g a Ω
+  have hpos : ∀ n : StandardMinkowskiSpacetime.Carrier,
+      (n : SpacetimeModel) ∈ minkowskiForwardCone 0 →
+        IsPositiveEnergy fun t : ℝ => U (translationSub (t • n)) := by
+    have key : ∀ m : SpacetimeModel, m ∈ minkowskiForwardCone 0 →
+        minkowskiForm m m ≤ 0 ∧ 0 ≤ m 0 ∧ m ≠ 0 := by
+      rintro m ⟨h1, h2⟩
+      simp only [WithLp.ofLp_zero, Pi.zero_apply, sub_zero] at h1 h2
+      refine ⟨?_, h1.le, ?_⟩
+      · rw [minkowskiForm_apply]; nlinarith
+      · rintro rfl; simp at h1
+    intro n hn
+    obtain ⟨k1, k2, k3⟩ := key _ hn
+    exact h.positiveEnergy _ k1 k2 k3
+  exact ⟨hcov, fun γ ⟨n, hn, hγ⟩ => hγ ▸ hpos n hn, fun x a => hcov _ a, hpos⟩
 
 /-- Reeh–Schlieder in a covariant vacuum representation: if `π` is weakly additive in the von
 Neumann sense, then `Ω` is cyclic for `π(𝔘(B))` for every nonempty diamond `B`.
@@ -124,7 +141,12 @@ Blueprint: lmm:region-generating-set-covariance -/
 theorem IsCovariantVacuumRep.conj_image_regionGeneratingSet (h : N.IsCovariantVacuumRep π Ω U)
     (g : InhomogeneousLorentzGroup) (O : Set StandardMinkowskiSpacetime.Carrier) :
     (fun a => conj[U g] a) '' N.regionGeneratingSet π O = N.regionGeneratingSet π (g • O) := by
-  sorry
+  have hfun : (fun a => conj[U g] a) = Physicslib4.lieConj (U g) := by
+    funext a; ext x; simp
+  rw [hfun, ← N.regionGeneratingSet_smul π g O, regionGeneratingSet]
+  simp only [Set.image_iUnion]
+  refine Set.iUnion_congr fun B => Set.iUnion_congr fun hB => Set.iUnion_congr fun _ => ?_
+  exact lieConj_image_localVonNeumann N π (U g) g hB (h.covariant g)
 
 /-- Covariance of region algebras: `U(g) R(O) U(g)⁻¹ = R(g O)` for every `g` and `O`.
 
@@ -154,8 +176,8 @@ Blueprint: lmm:cyclic-separating-of-commutant -/
 theorem isCyclicSeparatingVector_of_subset_centralizer {M 𝒩 : Set (H →L[ℂ] H)} {Ω : H}
     (h𝒩 : 𝒩 ⊆ Set.centralizer M)
     (hMΩ : Dense ((fun a => a Ω) '' M)) (h𝒩Ω : Dense ((fun b => b Ω) '' 𝒩)) :
-    IsCyclicSeparatingVector M Ω := by
-  sorry
+    IsCyclicSeparatingVector M Ω :=
+  ⟨hMΩ, h𝒩Ω.mono (Set.image_mono h𝒩)⟩
 
 namespace HaagKastlerNet
 

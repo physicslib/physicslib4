@@ -844,6 +844,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
     These are the implementation and spectrum hypotheses of Corollary~\ref{crllr:reeh-schlieder-vacuum}. With $U(x) := U(\mathrm{translationSub}(x))$ for $x \in \mathbb{R}^4$ they give the hypotheses of Theorem~\ref{thrm:reeh-schlieder}: $U(x)\pi(a)\Omega = \pi(\beta_x a)\Omega$, and $t \mapsto U(tn)$ has positive energy for every future-pointing timelike $n$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:closed-forward-cone-iff-norm, def:future-timelike-translation}
     (1) By covariance and invariance, $U(g)\pi(a)\Omega = U(g)\pi(a)U(g)^{-1}U(g)\Omega = \pi(\beta_g a)\Omega$. (2) $\gamma = \mathrm{translationFlow}(n)$ with $n$ in the open forward cone, $\eta(n,n) < 0$ and $n^0 > 0$ (\ref{def:future-timelike-translation}). Then $\eta(n,n) \le 0$ and $n^0 \ge 0$, so $n \in \overline{V}_+$ (equivalently $\|\vec n\| \le n^0$, \ref{lmm:closed-forward-cone-iff-norm}), and $n \neq 0$ since $n^0 > 0$. Clause (5) applies. The last sentence is the case $g = \mathrm{translationSub}(x)$ of (1), together with $\mathrm{translationFlow}(n)(t) = \mathrm{translationSub}(tn)$ (\ref{def:future-timelike-translation}).
 \end{proof}
@@ -888,6 +889,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
     where $U(g)\mathcal{T}U(g)^{-1} = \{ U(g)TU(g)^{-1} \mid T \in \mathcal{T} \}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:von-neumann-geometric-covariance, lmm:region-generating-set-reindex}
     Conjugation commutes with unions (Mathlib's \texttt{Set.image\_iUnion\ensuremath{_2}}). For each diamond $\mathbf{B}$, $U(g)R(\mathbf{B})U(g)^{-1} = R(g\mathbf{B})$ by \ref{thrm:von-neumann-geometric-covariance}, whose hypothesis is the covariance clause (3). The union of the $R(g\mathbf{B})$ over the diamonds $\mathbf{B} \subseteq \mathbf{O}$ is $\mathcal{S}(g\mathbf{O})$ by \ref{lmm:region-generating-set-reindex}.
 \end{proof}
@@ -924,6 +926,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\mathcal{N} \subseteq \mathcal{M}'$ a set of operators. If $\mathcal{M}\Omega$ and $\mathcal{N}\Omega$ are dense in $\mathbf{H}$, then $\Omega$ is cyclic and separating for $\mathcal{M}$ (\ref{def:cyclic-separating-vector}).
 \end{lemma}
 \begin{proof}
+    \leanok
     $\mathcal{N}\Omega \subseteq \mathcal{M}'\Omega$, so $\mathcal{M}'\Omega$ is dense (Mathlib's \texttt{Dense.mono}). Together with the density of $\mathcal{M}\Omega$ this is \ref{def:cyclic-separating-vector}.
 \end{proof}
 
