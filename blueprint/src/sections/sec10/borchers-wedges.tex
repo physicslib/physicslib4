@@ -756,6 +756,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
     If $\mathbf{B}$ is a diamond with $\mathbf{B} \subseteq \mathbf{O}$, then $\pi(\mathfrak{U}(\mathbf{B})) \subseteq R(\mathbf{B}) \subseteq R(\mathbf{O})$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Every set lies in its bicommutant (Mathlib's \texttt{Set.subset\_centralizer\_centralizer}), which gives $\pi(\mathfrak{U}(\mathbf{B})) \subseteq R(\mathbf{B})$ and $\mathcal{S}(\mathbf{O}) \subseteq R(\mathbf{O})$; and $R(\mathbf{B}) \subseteq \mathcal{S}(\mathbf{O})$ by definition.
 \end{proof}
 
@@ -778,6 +779,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
     Let $\mathcal{S}, \mathcal{T} \subseteq \mathcal{B}(\mathbf{H})$ with $st = ts$ for all $s \in \mathcal{S}$ and $t \in \mathcal{T}$. Then $\mathcal{S}'' \subseteq \mathcal{T}'$, and $\mathcal{T}' = (\mathcal{T}'')'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The hypothesis says $\mathcal{T} \subseteq \mathcal{S}'$, so $\mathcal{S}'' = (\mathcal{S}')' \subseteq \mathcal{T}'$ by antitonicity of the commutant (Mathlib's \texttt{Set.centralizer\_subset}). The identity $\mathcal{T}''' = \mathcal{T}'$ is \texttt{Set.centralizer\_centralizer\_centralizer}.
 \end{proof}
 

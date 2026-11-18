@@ -94,8 +94,10 @@ Blueprint: lmm:region-algebra-contains-local -/
 theorem localVonNeumann_subset_regionVonNeumann (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     {B O : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B) (hBO : B ⊆ O) :
     N.localOperators π hB ⊆ N.localVonNeumann π hB ∧
-      N.localVonNeumann π hB ⊆ N.regionVonNeumann π O := by
-  sorry
+      N.localVonNeumann π hB ⊆ N.regionVonNeumann π O :=
+  ⟨Set.subset_centralizer_centralizer,
+    fun _ hx => Set.subset_centralizer_centralizer
+      (Set.mem_iUnion₂.2 ⟨B, hB, Set.mem_iUnion.2 ⟨hBO, hx⟩⟩)⟩
 
 /-- On a diamond `B`, the algebra of the region `B` is the local von Neumann algebra `R(B)`.
 
@@ -114,8 +116,9 @@ Blueprint: lmm:bicommutant-subset-commutant -/
 theorem centralizer_centralizer_subset_centralizer_of_commute {S T : Set (H →L[ℂ] H)}
     (h : ∀ s ∈ S, ∀ t ∈ T, s * t = t * s) :
     Set.centralizer (Set.centralizer S) ⊆ Set.centralizer T ∧
-      Set.centralizer T = Set.centralizer (Set.centralizer (Set.centralizer T)) := by
-  sorry
+      Set.centralizer T = Set.centralizer (Set.centralizer (Set.centralizer T)) :=
+  ⟨Set.centralizer_subset fun t ht s hs => h s hs t ht,
+    (Set.centralizer_centralizer_centralizer T).symm⟩
 
 namespace HaagKastlerNet
 
