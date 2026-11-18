@@ -105,7 +105,11 @@ Blueprint: lmm:region-algebra-diamond -/
 theorem regionVonNeumann_of_isAlexandrovBasisSet (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B) :
     N.regionVonNeumann π B = N.localVonNeumann π hB := by
-  sorry
+  refine subset_antisymm ?_ (N.localVonNeumann_subset_regionVonNeumann π hB subset_rfl).2
+  have hS : N.regionGeneratingSet π B ⊆ N.localVonNeumann π hB :=
+    Set.iUnion₂_subset fun C hC => Set.iUnion_subset fun hCB => N.localVonNeumann_mono π hC hB hCB
+  have h := Set.centralizer_subset (Set.centralizer_subset hS)
+  rwa [localVonNeumann, Set.centralizer_centralizer_centralizer] at h
 
 end HaagKastlerNet
 
@@ -165,7 +169,19 @@ theorem regionGeneratingSet_smul (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H �
     ⋃ (B : Set StandardMinkowskiSpacetime.Carrier) (hB : IsAlexandrovBasisSet B) (_ : B ⊆ O),
         N.localVonNeumann π (isAlexandrovBasisSet_smul g hB) =
       N.regionGeneratingSet π (g • O) := by
-  sorry
+  ext T
+  simp only [regionGeneratingSet, Set.mem_iUnion]
+  constructor
+  · rintro ⟨B, hB, hBO, hT⟩
+    exact ⟨g • B, isAlexandrovBasisSet_smul g hB, Set.smul_set_mono hBO, hT⟩
+  · rintro ⟨C, hC, hCO, hT⟩
+    have hsub : g⁻¹ • C ⊆ O := by
+      rw [← Set.smul_set_subset_smul_set_iff (a := g), smul_inv_smul]; exact hCO
+    refine ⟨g⁻¹ • C, isAlexandrovBasisSet_smul g⁻¹ hC, hsub, ?_⟩
+    have key : ∀ D (h : IsAlexandrovBasisSet D), D = C →
+        N.localVonNeumann π h = N.localVonNeumann π hC := by
+      rintro _ _ rfl; rfl
+    rwa [key _ _ (smul_inv_smul g C)]
 
 end HaagKastlerNet
 

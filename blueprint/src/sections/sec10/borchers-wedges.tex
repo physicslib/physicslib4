@@ -768,6 +768,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
     For every diamond $\mathbf{B}$, the algebra of the region $\mathbf{B}$ (\ref{def:region-algebra}) equals the local von Neumann algebra $R(\mathbf{B})$ of \ref{def:local-von-neumann}.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:region-algebra-contains-local, thrm:von-neumann-isotony, lmm:bicommutant-of-selfadjoint-is-von-neumann}
     Write $\widetilde{R}(\mathbf{B}) = \mathcal{S}(\mathbf{B})''$. Since $\mathbf{B} \subseteq \mathbf{B}$, \ref{lmm:region-algebra-contains-local} gives $R(\mathbf{B}) \subseteq \widetilde{R}(\mathbf{B})$. Conversely, every diamond $\mathbf{B}_1 \subseteq \mathbf{B}$ has $R(\mathbf{B}_1) \subseteq R(\mathbf{B})$ by isotony (\ref{thrm:von-neumann-isotony}), so $\mathcal{S}(\mathbf{B}) \subseteq R(\mathbf{B})$, and taking bicommutants, $\widetilde{R}(\mathbf{B}) \subseteq R(\mathbf{B})'' = R(\mathbf{B})$, the last equality by \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} (Mathlib's \texttt{Set.centralizer\_centralizer\_centralizer}).
 \end{proof}
@@ -868,6 +869,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:poincare-maps-diamonds, lmm:poincare-diamond-inclusion}
     Each $g\mathbf{B}$ is a diamond contained in $g\mathbf{O}$ (\ref{lmm:poincare-maps-diamonds}, \ref{lmm:poincare-diamond-inclusion}), which gives $\subseteq$. Conversely, a diamond $\mathbf{B}' \subseteq g\mathbf{O}$ is $g\mathbf{B}$ with $\mathbf{B} = g^{-1}\mathbf{B}'$ a diamond contained in $\mathbf{O}$, by the bijection of \ref{lmm:poincare-diamond-inclusion}, which gives $\supseteq$.
 \end{proof}
