@@ -42,7 +42,19 @@ theorem standardMinkowski_futurePointing_mem_closedForwardCone (x v : SpacetimeM
     (hv : StandardMinkowskiSpacetime.IsFuturePointing standardMinkowskiTimeOrientation
       (x := x) v) :
     v ∈ closedV₊ := by
-  sorry
+  have he0 : ∀ w : SpacetimeModel,
+      minkowskiForm (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) w = -(w 0) :=
+    minkowskiForm_single_zero_left
+  change minkowskiForm v v ≤ 0 ∧ 0 ≤ v 0
+  rcases hv with ⟨h1, h2⟩ | ⟨h1, vs, hvs, hlim⟩
+  · have h2' : minkowskiForm (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) v < 0 := h2
+    rw [he0] at h2'
+    exact ⟨le_of_lt h1, by linarith⟩
+  · refine ⟨le_of_eq h1, ge_of_tendsto' (((PiLp.continuous_apply 2 _ 0).tendsto v).comp hlim)
+      fun n => ?_⟩
+    have h : minkowskiForm (EuclideanSpace.single (0 : Fin 4) (1 : ℝ)) (vs n) < 0 := (hvs n).2
+    rw [he0 (vs n : SpacetimeModel)] at h
+    exact (neg_neg_iff_pos.mp h).le
 
 /-- The closed forward cone in norm form: `v ∈ V̄₊` if and only if `‖v⃗‖ ≤ v⁰`, where
 `‖v⃗‖ = √((v¹)² + (v²)² + (v³)²)`. In particular every `v ∈ V̄₊` satisfies `|vⁱ| ≤ v⁰` for the
@@ -73,7 +85,34 @@ theorem closedForwardCone_isClosed_convexCone :
     IsClosed closedV₊ ∧ (0 : SpacetimeModel) ∈ closedV₊ ∧
       (∀ v ∈ closedV₊, ∀ w ∈ closedV₊, v + w ∈ closedV₊) ∧
       ∀ c : ℝ, 0 ≤ c → ∀ v ∈ closedV₊, c • v ∈ closedV₊ := by
-  sorry
+  have key : ∀ v : SpacetimeModel, v ∈ closedV₊ ↔
+      (v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2 ≤ (v 0) ^ 2 ∧ 0 ≤ v 0 := fun v => by
+    change (minkowskiForm v v ≤ 0 ∧ 0 ≤ v 0) ↔ _
+    rw [minkowskiForm_apply]
+    constructor <;> rintro ⟨h1, h2⟩ <;> exact ⟨by nlinarith, h2⟩
+  refine ⟨?_, ?_, fun v hv w hw => ?_, fun c hc v hv => ?_⟩
+  · exact (isClosed_le (minkowskiForm.continuous₂.comp (continuous_id.prodMk continuous_id))
+      continuous_const).inter (isClosed_le continuous_const (EuclideanSpace.proj 0).continuous)
+  · exact ⟨by simp, by simp⟩
+  · obtain ⟨hv1, hv2⟩ := (key v).1 hv
+    obtain ⟨hw1, hw2⟩ := (key w).1 hw
+    refine (key _).2 ⟨?_, by simp only [PiLp.add_apply]; linarith⟩
+    simp only [PiLp.add_apply]
+    have hp : (v 1 * w 1 + v 2 * w 2 + v 3 * w 3) ^ 2 ≤ (v 0 * w 0) ^ 2 := by
+      have hl : (v 1 * w 1 + v 2 * w 2 + v 3 * w 3) ^ 2 ≤
+          ((v 1) ^ 2 + (v 2) ^ 2 + (v 3) ^ 2) * ((w 1) ^ 2 + (w 2) ^ 2 + (w 3) ^ 2) := by
+        nlinarith [sq_nonneg (v 1 * w 2 - v 2 * w 1), sq_nonneg (v 1 * w 3 - v 3 * w 1),
+          sq_nonneg (v 2 * w 3 - v 3 * w 2)]
+      calc _ ≤ _ := hl
+        _ ≤ (v 0) ^ 2 * (w 0) ^ 2 :=
+          mul_le_mul hv1 hw1 (by positivity) (by positivity)
+        _ = _ := by ring
+    have := abs_le_of_sq_le_sq' hp (mul_nonneg hv2 hw2)
+    nlinarith [this.2]
+  · obtain ⟨hv1, hv2⟩ := (key v).1 hv
+    refine (key _).2 ⟨?_, by simp only [PiLp.smul_apply, smul_eq_mul]; positivity⟩
+    simp only [PiLp.smul_apply, smul_eq_mul]
+    nlinarith [mul_le_mul_of_nonneg_left hv1 (sq_nonneg c)]
 
 /-- If `f : ℝ → ℝ⁴` is continuous on `[a, b]`, `a ≤ b`, and takes values in the closed forward
 cone there, then `∫_a^b f(s) ds` lies in the closed forward cone.

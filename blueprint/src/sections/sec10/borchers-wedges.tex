@@ -20,6 +20,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
     Let $v$ be a tangent vector at a point of standard Minkowski spacetime that is future-pointing with respect to $e_0$. Then $v \in \overline{V}_+$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:future-and-past-pointing-vectors, def:standard-minkowski-spacetime}
     At every point $g(e_0, v) = \eta(e_0, v) = -v^0$. By \ref{def:future-and-past-pointing-vectors} there are two cases. If $v$ is timelike and future-pointing, then $\eta(v,v) < 0$ and $-v^0 < 0$. If $v$ is null and future-pointing, then $\eta(v,v) = 0$ and $v$ is the limit of vectors $v_n$ with $-v_n^0 < 0$. The coordinate $w \mapsto w^0$ is continuous, so $v^0 = \lim_n v_n^0 \ge 0$ (Mathlib's \texttt{ge\_of\_tendsto'}).
 \end{proof}
@@ -44,6 +45,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
     The set $\overline{V}_+$ is closed in $\mathbb{R}^4$, contains $0$, and is closed under addition and under multiplication by nonnegative scalars.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:closed-forward-cone-iff-norm}
     By Lemma~\ref{lmm:closed-forward-cone-iff-norm}, $\overline{V}_+$ is the set where the continuous map $v \mapsto \|\vec v\|$ is at most the continuous map $v \mapsto v^0$, hence closed (Mathlib's \texttt{isClosed\_le}). It contains $0$. For $v, w \in \overline{V}_+$ and $c \ge 0$, $\|\vec v + \vec w\| \le \|\vec v\| + \|\vec w\| \le v^0 + w^0$ (\texttt{norm\_add\_le}) and $\|c\vec v\| = c\|\vec v\| \le cv^0$ (\texttt{norm\_smul}).
 \end{proof}
