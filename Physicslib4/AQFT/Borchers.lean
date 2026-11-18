@@ -589,7 +589,36 @@ theorem eq_of_selfAdjoint_matrix_coefficients {M : Set (H →L[ℂ] H)} {Ω : H}
     (h : ∀ x ∈ M, IsSelfAdjoint x → ∀ y ∈ Set.centralizer M, IsSelfAdjoint y →
       ⟪y Ω, A (x Ω)⟫_ℂ = ⟪y Ω, B (x Ω)⟫_ℂ) :
     A = B := by
-  sorry
+  obtain ⟨-, -, ⟨S, hS⟩, ⟨S', hS'⟩⟩ := isVonNeumannSet_centralizer hM
+  have hparts : ∀ (T : StarSubalgebra ℂ (H →L[ℂ] H)) {a : H →L[ℂ] H}, a ∈ T →
+      (realPart a : H →L[ℂ] H) ∈ T ∧ (imaginaryPart a : H →L[ℂ] H) ∈ T := fun T a ha => by
+    rw [realPart_apply_coe, imaginaryPart_apply_coe, ← Complex.coe_smul, ← Complex.coe_smul]
+    exact ⟨SMulMemClass.smul_mem _ (add_mem ha (star_mem ha)),
+      SMulMemClass.smul_mem _ (SMulMemClass.smul_mem _ (sub_mem ha (star_mem ha)))⟩
+  have h1 : ∀ x ∈ M, ∀ y ∈ Set.centralizer M, ⟪y Ω, (A - B) (x Ω)⟫_ℂ = 0 := by
+    intro x hx y hy
+    rw [← hS] at hx
+    rw [← hS'] at hy
+    have key : ∀ x' ∈ S, IsSelfAdjoint x' → ∀ y' ∈ S', IsSelfAdjoint y' →
+        ⟪y' Ω, A (x' Ω) - B (x' Ω)⟫_ℂ = 0 := fun x' hx' hxs y' hy' hys => by
+      rw [inner_sub_right, sub_eq_zero]
+      exact h x' (hS ▸ hx') hxs y' (hS' ▸ hy') hys
+    rw [← realPart_add_I_smul_imaginaryPart x, ← realPart_add_I_smul_imaginaryPart y]
+    simp only [sub_apply, add_apply, smul_apply, map_add, map_smul,
+      inner_add_left, inner_add_right, inner_smul_left, inner_smul_right,
+      key _ (hparts S hx).1 (realPart x).2 _ (hparts S' hy).1 (realPart y).2,
+      key _ (hparts S hx).2 (imaginaryPart x).2 _ (hparts S' hy).1 (realPart y).2,
+      key _ (hparts S hx).1 (realPart x).2 _ (hparts S' hy).2 (imaginaryPart y).2,
+      key _ (hparts S hx).2 (imaginaryPart x).2 _ (hparts S' hy).2 (imaginaryPart y).2]
+    simp
+  have h2 : ∀ x ∈ M, (A - B) (x Ω) = 0 := fun x hx =>
+    hΩ.2.eq_zero_of_inner_right (𝕜 := ℂ) (by rintro _ ⟨y, hy, rfl⟩; exact h1 x hx y hy)
+  have h3 : A - B = 0 :=
+    ContinuousLinearMap.ext fun v => by
+      have := Continuous.ext_on hΩ.1 (A - B).continuous continuous_const
+        (by rintro _ ⟨x, hx, rfl⟩; exact h2 x hx)
+      exact congrFun this v
+  exact sub_eq_zero.mp h3
 
 /-! ### Borchers' theorem -/
 

@@ -1570,6 +1570,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
     Let $A, B \in \mathcal{B}(\mathbf{H})$ with $\left< y\Omega, Ax\Omega \right> = \left< y\Omega, Bx\Omega \right>$ for every $x = x^* \in \mathcal{M}$ and $y = y^* \in \mathcal{M}'$. Then $A = B$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-von-neumann-algebra}
     $\mathcal{M}$ and $\mathcal{M}'$ are $*$-algebras (Lemma~\ref{lmm:commutant-von-neumann-algebra}), so every $x \in \mathcal{M}$ is $x_1 + ix_2$ with $x_1 = \tfrac{1}{2}(x + x^*)$ and $x_2 = \tfrac{1}{2i}(x - x^*)$ self-adjoint in $\mathcal{M}$, and likewise for $y \in \mathcal{M}'$. By linearity in $x$ and conjugate linearity in $y$ the hypothesis holds for all $x \in \mathcal{M}$, $y \in \mathcal{M}'$. Then $(A - B)x\Omega$ is orthogonal to the dense set $\mathcal{M}'\Omega$ (\ref{def:cyclic-separating-vector}), hence $0$ (Mathlib's \texttt{Dense.eq\_zero\_of\_inner\_right}). So the continuous operator $A - B$ vanishes on the dense set $\mathcal{M}\Omega$, hence everywhere (\texttt{Continuous.ext\_on}).
 \end{proof}
