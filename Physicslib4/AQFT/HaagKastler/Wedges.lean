@@ -456,7 +456,12 @@ theorem isContinuousOneParameterSubgroup_conj :
     (∀ γ : ℝ → InhomogeneousLorentzGroup, IsContinuousOneParameterSubgroup γ →
       ∀ g : InhomogeneousLorentzGroup, IsContinuousOneParameterSubgroup fun s => g * γ s * g⁻¹) ∧
       ∀ g : InhomogeneousLorentzGroup, IsContinuousOneParameterSubgroup (wedgeBoostAlong g) := by
-  sorry
+  have h : ∀ γ : ℝ → InhomogeneousLorentzGroup, IsContinuousOneParameterSubgroup γ →
+      ∀ g : InhomogeneousLorentzGroup, IsContinuousOneParameterSubgroup fun s => g * γ s * g⁻¹ :=
+    fun γ ⟨⟨h0, hadd⟩, hc⟩ g =>
+      ⟨⟨by simp [h0], fun s t => by simp only [hadd, mul_assoc, inv_mul_cancel_left]⟩,
+        continuous_const.mul hc |>.mul continuous_const⟩
+  exact ⟨h, fun g => h _ isContinuousOneParameterSubgroup_wedgeBoost g⟩
 
 /-- Translation flows are continuous one-parameter subgroups: for every `n`,
 `s ↦ translationFlow n s = (1, s n)` is one.
@@ -465,7 +470,9 @@ Blueprint: lmm:translation-flow-continuous-subgroup -/
 theorem isContinuousOneParameterSubgroup_translationFlow
     (n : StandardMinkowskiSpacetime.Carrier) :
     IsContinuousOneParameterSubgroup (translationFlow n) := by
-  sorry
+  refine ⟨isOneParameterSubgroup_translationFlow n, continuous_induced_rng.2 ?_⟩
+  change Continuous fun t : ℝ => (_, _, t • n)
+  fun_prop
 
 end HaagKastler
 end AQFT

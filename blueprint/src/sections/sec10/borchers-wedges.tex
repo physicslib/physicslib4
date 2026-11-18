@@ -672,6 +672,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     If $\gamma$ is a continuous one-parameter subgroup and $g$ is in the inhomogeneous Lorentz group, then $s \mapsto g\gamma(s)g^{-1}$ is a continuous one-parameter subgroup. In particular so is $s \mapsto b_g(s)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:boost-continuous-subgroup, def:wedge-boost}
     Conjugation by $g$ is a group homomorphism (Mathlib's \texttt{MulAut.conj}), which gives the group law, and it is continuous in a topological group (\texttt{continuous\_const.mul}, \texttt{Continuous.mul}), which gives continuity. The boost case uses \ref{lmm:boost-continuous-subgroup}.
 \end{proof}
@@ -684,6 +685,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
     For every $n \in \mathbb{R}^4$, $s \mapsto \mathrm{translationFlow}(n)(s) = (1, sn)$ is a continuous one-parameter subgroup.
 \end{lemma}
 \begin{proof}
+    \leanok
     The group law is the library lemma \texttt{isOneParameterSubgroup\_translationFlow} (\ref{def:future-timelike-translation}). By \texttt{continuous\_induced\_rng} it suffices that $s \mapsto (1, 1, sn)$ is continuous (\texttt{continuous\_const}, \texttt{continuous\_id.smul continuous\_const}).
 \end{proof}
 
