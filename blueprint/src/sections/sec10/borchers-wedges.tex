@@ -1103,6 +1103,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
     For every $w \in \mathbb{C}$, $\varepsilon_w$ and $\delta_w$ are measurable. If $\operatorname{Im} w \ge 0$, then $|\varepsilon_w(\lambda)| \le 1$ for every $\lambda$. If $c = \operatorname{Im} w > 0$, then $|\delta_w(\lambda)| \le 1/(ce)$ for every $\lambda$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:poly-exp-decay}
     Measurability: \texttt{Measurable.indicator} with \texttt{measurableSet\_Ici} and the continuity of $\lambda \mapsto e^{iw\lambda}$ and $\lambda \mapsto i\lambda e^{iw\lambda}$ (\texttt{Continuous.measurable}). Off $[0,\infty)$ both functions vanish. For $\lambda \ge 0$, $|e^{iw\lambda}| = e^{-\lambda\operatorname{Im} w}$ (\texttt{Complex.norm\_exp}, $\operatorname{Re}(iw\lambda) = -\lambda\operatorname{Im} w$), which is at most $1$ when $\operatorname{Im} w \ge 0$ (\texttt{Real.exp\_le\_one\_iff}), and $|\delta_w(\lambda)| = \lambda e^{-c\lambda} \le 1/(ce)$ by Lemma~\ref{lmm:poly-exp-decay}.
 \end{proof}
@@ -1118,6 +1119,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:poly-exp-decay}
     Off $[0, \infty)$ the left side is $0$. For $\lambda \ge 0$ it is $|e^{iw\lambda}|\,|e^{u} - 1 - u|$ with $u = ih\lambda$ (\texttt{Complex.exp\_add}). Mathlib's \texttt{Complex.norm\_exp\_sub\_sum\_le\_norm\_mul\_exp} with $n = 2$ gives $|e^u - 1 - u| \le |u|^2 e^{|u|}$ (\texttt{Finset.sum\_range\_succ}). With $|e^{iw\lambda}| = e^{-c\lambda}$ and $|u| = |h|\lambda \le c\lambda/2$, the left side is at most $|h|^2\lambda^2 e^{-c\lambda/2} \le |h|^2 \cdot 4/((c/2)e)^2$ by Lemma~\ref{lmm:poly-exp-decay}.
 \end{proof}

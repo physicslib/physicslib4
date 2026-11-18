@@ -88,7 +88,19 @@ Blueprint: lmm:half-plane-exp-bounds -/
 theorem halfPlaneExp_bounds (w : ℂ) :
     Measurable ε[w] ∧ Measurable δ[w] ∧ (0 ≤ w.im → ∀ x : ℝ, ‖ε[w] x‖ ≤ 1) ∧
       (0 < w.im → ∀ x : ℝ, ‖δ[w] x‖ ≤ 1 / (w.im * Real.exp 1)) := by
-  sorry
+  have hre : ∀ x : ℝ, (Complex.I * w * (x : ℂ)).re = -(w.im * x) := fun x => by
+    simp [Complex.mul_re]
+  refine ⟨(by fun_prop : Measurable _).indicator measurableSet_Ici,
+    (by fun_prop : Measurable _).indicator measurableSet_Ici, fun hw x => ?_, fun hw x => ?_⟩
+  · by_cases hx : x ∈ Set.Ici (0 : ℝ)
+    · rw [Set.indicator_of_mem hx, Complex.norm_exp, hre, Real.exp_le_one_iff, neg_nonpos]
+      exact mul_nonneg hw hx
+    · rw [Set.indicator_of_notMem hx, norm_zero]; exact zero_le_one
+  · by_cases hx : x ∈ Set.Ici (0 : ℝ)
+    · rw [Set.indicator_of_mem hx, norm_mul, norm_mul, Complex.norm_exp, hre, Complex.norm_I,
+        one_mul, Complex.norm_real, Real.norm_of_nonneg hx]
+      exact (mul_exp_neg_le hw hx).1
+    · rw [Set.indicator_of_notMem hx, norm_zero]; positivity
 
 /-- The Taylor estimate: for `c = Im w > 0` and `|h| ≤ c/2`,
 `|ε_{w+h}(λ) - ε_w(λ) - h δ_w(λ)| ≤ 16|h|²/(ce)²` for every `λ`.
@@ -96,7 +108,33 @@ theorem halfPlaneExp_bounds (w : ℂ) :
 Blueprint: lmm:half-plane-exp-taylor -/
 theorem halfPlaneExp_taylor {w h : ℂ} (hw : 0 < w.im) (hh : ‖h‖ ≤ w.im / 2) (x : ℝ) :
     ‖ε[w + h] x - ε[w] x - h * δ[w] x‖ ≤ 16 / (w.im * Real.exp 1) ^ 2 * ‖h‖ ^ 2 := by
-  sorry
+  by_cases hx : 0 ≤ x
+  · simp only [Set.indicator_of_mem (Set.mem_Ici.2 hx)]
+    set u := Complex.I * h * (x : ℂ) with hu_def
+    have key : Complex.exp (Complex.I * (w + h) * x) - Complex.exp (Complex.I * w * x) -
+        h * (Complex.I * x * Complex.exp (Complex.I * w * x)) =
+        Complex.exp (Complex.I * w * x) * (Complex.exp u - 1 - u) := by
+      rw [show Complex.I * (w + h) * x = Complex.I * w * x + u by ring, Complex.exp_add]; ring
+    rw [key, norm_mul, Complex.norm_exp]
+    have hre : (Complex.I * w * x).re = -(w.im * x) := by simp
+    have hu : ‖u‖ = ‖h‖ * x := by simp [u, abs_of_nonneg hx]
+    have hr : ‖Complex.exp u - 1 - u‖ ≤ ‖u‖ ^ 2 * Real.exp ‖u‖ := by
+      have := Complex.norm_exp_sub_sum_le_norm_mul_exp u 2
+      simpa [Finset.sum_range_succ, sub_sub] using this
+    rw [hre, hu] at *
+    have hb := (mul_exp_neg_le (a := w.im / 2) (by positivity) hx).2
+    have he : Real.exp (-(w.im * x)) * Real.exp (‖h‖ * x) ≤ Real.exp (-(w.im / 2 * x)) := by
+      rw [← Real.exp_add]; apply Real.exp_le_exp.2; nlinarith
+    calc Real.exp (-(w.im * x)) * ‖Complex.exp u - 1 - u‖
+        ≤ Real.exp (-(w.im * x)) * ((‖h‖ * x) ^ 2 * Real.exp (‖h‖ * x)) :=
+          mul_le_mul_of_nonneg_left hr (Real.exp_pos _).le
+      _ = ‖h‖ ^ 2 * (x ^ 2 * (Real.exp (-(w.im * x)) * Real.exp (‖h‖ * x))) := by ring
+      _ ≤ ‖h‖ ^ 2 * (x ^ 2 * Real.exp (-(w.im / 2 * x))) := by gcongr
+      _ ≤ ‖h‖ ^ 2 * (4 / (w.im / 2 * Real.exp 1) ^ 2) := by gcongr
+      _ = 16 / (w.im * Real.exp 1) ^ 2 * ‖h‖ ^ 2 := by field_simp; ring
+  · simp only [Set.indicator_of_notMem (show x ∉ Set.Ici (0 : ℝ) from hx), sub_zero, mul_zero,
+      norm_zero]
+    positivity
 
 /-- For `Im w ≥ 0`, `Ṽ(w) = ε_w(P)` is a bounded operator with `‖Ṽ(w)‖ ≤ 1`, equal to the
 bounded integral `∫ ε_w dμ^P`: the functional calculus `ε_w(P)` is defined on all of `H` and
