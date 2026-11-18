@@ -64,7 +64,22 @@ Blueprint: lmm:poly-exp-decay -/
 theorem mul_exp_neg_le {a x : ℝ} (ha : 0 < a) (hx : 0 ≤ x) :
     x * Real.exp (-(a * x)) ≤ 1 / (a * Real.exp 1) ∧
       x ^ 2 * Real.exp (-(a * x)) ≤ 4 / (a * Real.exp 1) ^ 2 := by
-  sorry
+  have key : ∀ b : ℝ, 0 < b → x * Real.exp (-(b * x)) ≤ 1 / (b * Real.exp 1) := by
+    intro b hb
+    have h1 := Real.add_one_le_exp (b * x - 1)
+    rw [Real.exp_sub] at h1
+    have h2 := (le_div_iff₀ (Real.exp_pos 1)).1
+      (by linarith : b * x ≤ Real.exp (b * x) / Real.exp 1)
+    rw [Real.exp_neg, ← div_eq_mul_inv, div_le_div_iff₀ (Real.exp_pos _) (by positivity)]
+    nlinarith
+  refine ⟨key a ha, ?_⟩
+  have h3 : x ^ 2 * Real.exp (-(a * x)) = (x * Real.exp (-(a / 2 * x))) ^ 2 := by
+    rw [mul_pow, sq (Real.exp _), ← Real.exp_add]; ring_nf
+  have h4 := pow_le_pow_left₀ (by positivity) (key (a / 2) (by positivity)) 2
+  rw [h3]
+  refine h4.trans (le_of_eq ?_)
+  field_simp
+  ring
 
 /-- `ε_w` and `δ_w` are measurable; `|ε_w| ≤ 1` if `Im w ≥ 0`; and `|δ_w| ≤ 1/(ce)` if
 `c = Im w > 0`.
@@ -124,7 +139,22 @@ theorem dilation_strip_halfPlane {τ : ℝ} (hτ : 0 ≤ τ) :
         0 < ((τ : ℂ) * Complex.exp (2 * Real.pi * z)).im) ∧
       ∀ t : ℝ, (τ : ℂ) * Complex.exp (2 * Real.pi * ((t : ℂ) + Complex.I / 2)) =
         -((τ * Real.exp (2 * Real.pi * t) : ℝ) : ℂ) := by
-  sorry
+  have him (z : ℂ) : ((τ : ℂ) * Complex.exp (2 * Real.pi * z)).im =
+      τ * (Real.exp (2 * Real.pi * z.re) * Real.sin (2 * Real.pi * z.im)) := by
+    rw [Complex.im_ofReal_mul, Complex.exp_im]; simp
+  refine ⟨fun z hz => ?_, fun hτ' z hz => ?_, fun t => ?_⟩
+  · rw [him]
+    exact mul_nonneg hτ (mul_nonneg (Real.exp_pos _).le
+      (Real.sin_nonneg_of_nonneg_of_le_pi (by have := hz.1; positivity)
+        (by have := hz.2; nlinarith [Real.pi_pos])))
+  · rw [him]
+    exact mul_pos hτ' (mul_pos (Real.exp_pos _)
+      (Real.sin_pos_of_pos_of_lt_pi (by have := hz.1; positivity)
+        (by have := hz.2; nlinarith [Real.pi_pos])))
+  · have h : 2 * (Real.pi : ℂ) * ((t : ℂ) + Complex.I / 2) =
+        ((2 * Real.pi * t : ℝ) : ℂ) + Real.pi * Complex.I := by push_cast; ring
+    rw [h, Complex.exp_add, Complex.exp_pi_mul_I, ← Complex.ofReal_exp]
+    push_cast; ring
 
 /-- For `τ ≥ 0`, `z ↦ Ṽ(τ e^{2πz})` is complex differentiable in the operator norm on the open
 strip `0 < Im z < 1/2`, and `z ↦ Ṽ(τ e^{2πz})ψ` is continuous on the closed strip for every `ψ`.

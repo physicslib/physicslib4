@@ -1091,6 +1091,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
     Let $a > 0$ and $\lambda \ge 0$. Then $\lambda e^{-a\lambda} \le 1/(ae)$ and $\lambda^2 e^{-a\lambda} \le 4/(ae)^2$.
 \end{lemma}
 \begin{proof}
+    \leanok
     For $x \in \mathbb{R}$, $x \le e^{x - 1}$ by Mathlib's \texttt{Real.add\_one\_le\_exp} at $x - 1$, so $xe^{-x} \le e^{-1}$ (\texttt{Real.exp\_sub}, \texttt{Real.exp\_neg}). With $x = a\lambda$ this is the first bound. The second is the square of the first with $a/2$ in place of $a$: $\lambda^2 e^{-a\lambda} = (\lambda e^{-(a/2)\lambda})^2 \le (2/(ae))^2$ (\texttt{Real.exp\_add}, \texttt{pow\_le\_pow\_left}).
 \end{proof}
 
@@ -1164,6 +1165,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
     Let $\tau \ge 0$ and $z \in \Sigma_{1/2}$. Then $\operatorname{Im}(\tau e^{2\pi z}) \ge 0$, with strict inequality if $\tau > 0$ and $z \in \Sigma^\circ_{1/2}$. For $t \in \mathbb{R}$, $\tau e^{2\pi(t + i/2)} = -\tau e^{2\pi t}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     $\operatorname{Im}(\tau e^{2\pi z}) = \tau e^{2\pi\operatorname{Re} z}\sin(2\pi\operatorname{Im} z)$ (\texttt{Complex.exp\_im}, \texttt{Complex.mul\_im}), and $2\pi\operatorname{Im} z \in [0, \pi]$, where the sine is nonnegative (\texttt{Real.sin\_nonneg\_of\_nonneg\_of\_le\_pi}), positive on $(0, \pi)$ (\texttt{Real.sin\_pos\_of\_pos\_of\_lt\_pi}). Finally $e^{2\pi t + i\pi} = e^{2\pi t}e^{i\pi} = -e^{2\pi t}$ (\texttt{Complex.exp\_add}, \texttt{Complex.exp\_pi\_mul\_I}).
 \end{proof}
 
