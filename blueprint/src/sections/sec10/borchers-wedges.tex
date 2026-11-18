@@ -941,6 +941,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense (\ref{def:weak-additivity-von-neumann}), for instance because the net is weakly additive. Then for every $g$ in the inhomogeneous Lorentz group, $\Omega$ is cyclic and separating (\ref{def:cyclic-separating-vector}) for the von Neumann algebras $R(gW_R)$ and $R(gW_L)$. In particular $\Omega$ is cyclic and separating for $R(W)$ for every wedge $W$, and the modular objects $S_W$, $\Delta_W$, $\Delta_W^{it}$ and $J_W$ of $(R(W), \Omega)$ (Definitions~\ref{def:tomita-operator}, \ref{def:modular-operator}, \ref{def:modular-unitary-group} and~\ref{def:modular-conjugation}) are defined. They depend only on the set $W$ and on $\Omega$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:region-algebra-von-neumann, lmm:region-algebra-cyclic, crllr:wedge-contains-diamond, crllr:opposite-wedge-locality, lmm:cyclic-separating-of-commutant}
     $R(gW_R)$ is a von Neumann algebra by \ref{lmm:region-algebra-von-neumann}. By \ref{crllr:wedge-contains-diamond}, $gW_R$ and $gW_L$ contain nonempty diamonds, so $R(gW_R)\Omega$ and $R(gW_L)\Omega$ are dense by \ref{lmm:region-algebra-cyclic}. By \ref{crllr:opposite-wedge-locality}, $R(gW_L) \subseteq R(gW_R)'$, and \ref{lmm:cyclic-separating-of-commutant} with $\mathcal{M} = R(gW_R)$ and $\mathcal{N} = R(gW_L)$ gives the claim. The same argument with $W_R$ and $W_L$ exchanged applies to $R(gW_L)$.
 \end{proof}

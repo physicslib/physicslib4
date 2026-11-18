@@ -205,7 +205,15 @@ theorem IsCovariantVacuumRep.wedge_isCyclicSeparatingVector (h : N.IsCovariantVa
       ∀ W : Set StandardMinkowskiSpacetime.Carrier, IsWedge W →
         IsVonNeumannSet (N.regionVonNeumann π W) ∧
           IsCyclicSeparatingVector (N.regionVonNeumann π W) Ω := by
-  sorry
+  have key : ∀ g : InhomogeneousLorentzGroup,
+      IsCyclicSeparatingVector (N.regionVonNeumann π (g • rightWedge)) Ω ∧
+        IsCyclicSeparatingVector (N.regionVonNeumann π (g • leftWedge)) Ω := fun g =>
+    have hR := h.cyclic_regionVonNeumann hwa ⟨_, (wedge_contains_diamond.1 g).1⟩
+    have hL := h.cyclic_regionVonNeumann hwa ⟨_, (wedge_contains_diamond.1 g).2⟩
+    have hc := (N.regionVonNeumann_oppositeWedge_subset_centralizer π).1 g
+    ⟨isCyclicSeparatingVector_of_subset_centralizer hc.2 hR hL,
+      isCyclicSeparatingVector_of_subset_centralizer hc.1 hL hR⟩
+  exact ⟨key, fun W ⟨g, hg⟩ => hg ▸ ⟨(N.regionVonNeumann_isVonNeumannSet π _).2, (key g).1⟩⟩
 
 /-- Poincaré covariance of the wedge modular objects: for a wedge `W` and `h` in the
 inhomogeneous Lorentz group, `h W` is a wedge, and, including domains,
