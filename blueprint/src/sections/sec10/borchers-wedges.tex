@@ -91,6 +91,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
     If a causal trip segment of standard Minkowski spacetime runs from $p$ to $q$, then $q - p \in \overline{V}_+$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:causal-trip-segment-displacement, lmm:minkowski-future-pointing-closed-cone, lmm:interval-integral-closed-forward-cone}
     Lemma~\ref{lmm:causal-trip-segment-displacement} writes $q - p = \int_a^b \dot\mu(s)\,ds$ with $\dot\mu$ continuous and future-pointing on $[a,b]$. By Lemma~\ref{lmm:minkowski-future-pointing-closed-cone}, $\dot\mu(s) \in \overline{V}_+$ for every $s \in [a,b]$, and Lemma~\ref{lmm:interval-integral-closed-forward-cone} gives $q - p \in \overline{V}_+$.
 \end{proof}

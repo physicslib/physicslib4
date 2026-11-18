@@ -180,7 +180,11 @@ theorem standardMinkowski_causalTripSegment_sub_mem_closedForwardCone {p q : Spa
     (hc : Spacetime.IsCausalTripSegment StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation p q c) :
     (q - p : SpacetimeModel) ∈ closedV₊ := by
-  sorry
+  obtain ⟨μ, a, b, -, hab, -, -, -, hcont, hfut, hint⟩ :=
+    standardMinkowski_causalTripSegment_displacement hc
+  rw [hint]
+  exact intervalIntegral_mem_closedForwardCone hab.le hcont fun s hs =>
+    standardMinkowski_futurePointing_mem_closedForwardCone _ _ (hfut s hs)
 
 /-- Causal precedence `p ≺ q` in standard Minkowski spacetime, for the standard time orientation,
 places `q - p` in the closed forward cone.
