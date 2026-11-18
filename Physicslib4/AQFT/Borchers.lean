@@ -519,7 +519,18 @@ theorem reflectedGroup_conj_mem {M : Set (H →L[ℂ] H)} {Ω : H}
     (hB2 : ∀ t : ℝ, 0 ≤ t → ∀ x ∈ M, V[t] ∘L x ∘L V[-t] ∈ M)
     {t : ℝ} (ht : 0 ≤ t) {x : H →L[ℂ] H} (hx : x ∈ M) :
     W[t] ∘L x ∘L ContinuousLinearMap.adjoint W[t] ∈ M := by
-  sorry
+  have hJ := (modularConjugation_involution hM hΩ C hC).1
+  have himg := modularConjugationConj_image hM hΩ C hC
+  have hy : 𝒥[x] ∈ Set.centralizer M := himg ▸ ⟨x, hx, rfl⟩
+  obtain ⟨w, hw, hwe⟩ : V[-t] ∘L 𝒥[x] ∘L V[t] ∈ (fun x => 𝒥[x]) '' M :=
+    himg ▸ commutant_reverse_endomorphism hV hB2 ht hy
+  convert hw using 1
+  rw [reflectedGroup_adjoint hM hΩ C hC hV t]
+  ext ψ
+  have h := congrArg (fun T : H →L[ℂ] H => 𝒥 (T (𝒥 ψ))) hwe
+  simp only [ContinuousLinearMap.comp_apply, (modularConjugationConj_apply hM hΩ C hC _).1,
+    hJ] at h ⊢
+  exact h.symm
 
 /-- If `X` is unitary, `XΩ = Ω` and `X x X* ∈ M` for `x ∈ M`, then `⟪yΩ, X xΩ⟫` is real for
 self-adjoint `x ∈ M` and `y ∈ M'`.
@@ -564,7 +575,28 @@ theorem inner_modularRotated_im_eq_zero {M : Set (H →L[ℂ] H)} {Ω : H}
     {x y : H →L[ℂ] H} (hx : x ∈ M) (hxs : IsSelfAdjoint x)
     (hy : y ∈ Set.centralizer M) (hys : IsSelfAdjoint y) (t : ℝ) :
     (⟪U[-t] (y Ω), X (U[-t] (x Ω))⟫_ℂ).im = 0 := by
-  sorry
+  have hU := (modularUnitaryGroup_properties hM hΩ C hC).1
+  have hinv' : ∀ v, modularUnitaryGroup hM hΩ C hC t (modularUnitaryGroup hM hΩ C hC (-t) v) = v :=
+    fun v => by rw [← hU.map_add, add_neg_cancel, hU.map_zero]
+  have hΩt := modularUnitaryGroup_apply_self hM hΩ C hC t
+  -- conjugation by `Δ^{-it}` preserves self-adjointness
+  have hsa : ∀ z : H →L[ℂ] H, IsSelfAdjoint z → IsSelfAdjoint (U[-t] ∘L z ∘L U[t]) := by
+    intro z hz
+    rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric] at hz ⊢
+    intro a b
+    change ⟪modularUnitaryGroup hM hΩ C hC (-t) (z (modularUnitaryGroup hM hΩ C hC t a)), b⟫_ℂ =
+      ⟪a, modularUnitaryGroup hM hΩ C hC (-t) (z (modularUnitaryGroup hM hΩ C hC t b))⟫_ℂ
+    rw [← LinearIsometryEquiv.inner_map_map (modularUnitaryGroup hM hΩ C hC t), hinv',
+      show ⟪z (modularUnitaryGroup hM hΩ C hC t a), modularUnitaryGroup hM hΩ C hC t b⟫_ℂ = _ from
+        hz _ _,
+      ← LinearIsometryEquiv.inner_map_map (modularUnitaryGroup hM hΩ C hC t) a, hinv']
+    rfl
+  have hxM : U[-t] ∘L x ∘L U[t] ∈ M := by
+    simpa using modularUnitaryGroup_conj_mem_of_mem hM hΩ C hC (-t) hx
+  have hyM : U[-t] ∘L y ∘L U[t] ∈ Set.centralizer M := by
+    simpa using modularUnitaryGroup_conj_mem_centralizer hM hΩ C hC (-t) hy
+  have key := inner_unitary_apply_im_eq_zero hX hXΩ hXM hxM (hsa x hxs) hyM (hsa y hys)
+  simpa [hΩt] using key
 
 /-- Under (B1) and (B2), for self-adjoint `x ∈ M`, `y ∈ M'`, `τ ≥ 0` and real `t`,
 `⟪Δ^{-it}JyΩ, V(-τ)Δ^{-it}JxΩ⟫ = conj ⟪Δ^{-it}yΩ, W(τ)Δ^{-it}xΩ⟫`, and both sides are real.

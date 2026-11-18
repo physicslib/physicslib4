@@ -1461,6 +1461,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     Assume clause (B2) of Definition~\ref{def:half-sided-translation}. For $t \ge 0$ and $x \in \mathcal{M}$, $W(t)\,x\,W(t)^* \in \mathcal{M}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:reflected-group-adjoint, lmm:tomita-modular-conjugation-commutant, lmm:commutant-reverse-endomorphism, lmm:modular-conjugation-bounded-conjugate-identities}
     By Lemmas~\ref{lmm:reflected-group-adjoint} and~\ref{lmm:modular-conjugation-bounded-conjugate-identities}, $W(t)xW(t)^* = J\big(V(-t)\,(JxJ)\,V(t)\big)J$. $JxJ \in \mathcal{M}'$ (Lemma~\ref{lmm:tomita-modular-conjugation-commutant}), so $y' = V(-t)(JxJ)V(t) \in \mathcal{M}'$ (Lemma~\ref{lmm:commutant-reverse-endomorphism}). By Lemma~\ref{lmm:tomita-modular-conjugation-commutant} again, $y' = Jx''J$ for some $x'' \in \mathcal{M}$, and $Jy'J = x''$ (Lemma~\ref{lmm:modular-conjugation-bounded-conjugate-identities}).
 \end{proof}
@@ -1485,6 +1486,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     Let $X$ be as in Lemma~\ref{lmm:real-correlation}, $x = x^* \in \mathcal{M}$, $y = y^* \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $\left< \Delta^{-it}y\Omega, X\Delta^{-it}x\Omega \right> \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:real-correlation, lmm:tomita-modular-automorphism-subset, lmm:modular-group-preserves-commutant, lmm:modular-unitary-group-fixes-omega, lmm:modular-unitary-group-props}
     $x_t = \Delta^{-it}x\Delta^{it} \in \mathcal{M}$ and $y_t = \Delta^{-it}y\Delta^{it} \in \mathcal{M}'$ (Lemmas~\ref{lmm:tomita-modular-automorphism-subset} and~\ref{lmm:modular-group-preserves-commutant}), both self-adjoint since $(\Delta^{it})^* = \Delta^{-it}$ (Lemma~\ref{lmm:modular-unitary-group-props}). As $\Delta^{it}\Omega = \Omega$ (Lemma~\ref{lmm:modular-unitary-group-fixes-omega}), $\Delta^{-it}x\Omega = x_t\Omega$ and $\Delta^{-it}y\Omega = y_t\Omega$. Apply Lemma~\ref{lmm:real-correlation} to $x_t$ and $y_t$.
 \end{proof}
