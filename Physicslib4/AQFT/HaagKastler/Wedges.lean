@@ -278,7 +278,30 @@ theorem wedge_contains_diamond :
     ∀ W : Set StandardMinkowskiSpacetime.Carrier, IsWedge W →
       ∃ B : Set StandardMinkowskiSpacetime.Carrier,
         IsAlexandrovBasisSet B ∧ B.Nonempty ∧ B ⊆ W := by
-  sorry
+  have hR := rightWedge_contains_diamond
+  have hL : IsAlexandrovBasisSet
+        ◇[(!₂[-1, -2, 0, 0] : SpacetimeModel), (!₂[1, -2, 0, 0] : SpacetimeModel)] ∧
+      (◇[(!₂[-1, -2, 0, 0] : SpacetimeModel), (!₂[1, -2, 0, 0] : SpacetimeModel)]).Nonempty ∧
+      ◇[(!₂[-1, -2, 0, 0] : SpacetimeModel), (!₂[1, -2, 0, 0] : SpacetimeModel)] ⊆
+        leftWedge := by
+    refine ⟨⟨_, _, rfl⟩, ⟨!₂[0, -2, 0, 0], ?_⟩, fun (x : SpacetimeModel) hx => ?_⟩
+    · rw [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski]
+      refine ⟨⟨?_, ?_⟩, ?_, ?_⟩ <;> simp
+    · rw [chronologicalFuture_standardMinkowski, chronologicalPast_standardMinkowski] at hx
+      obtain ⟨⟨h1, h2⟩, h3, h4⟩ := hx
+      simp at h1 h2 h3 h4
+      change x 1 < -|x 0|
+      have ha : |x 1 + 2| < x 0 + 1 :=
+        abs_lt_of_sq_lt_sq (by nlinarith [sq_nonneg (x 2), sq_nonneg (x 3)]) (by linarith)
+      have hb : |x 1 + 2| < 1 - x 0 :=
+        abs_lt_of_sq_lt_sq (by nlinarith [sq_nonneg (x 2), sq_nonneg (x 3)]) (by linarith)
+      rw [abs_lt] at ha hb
+      rw [lt_neg, abs_lt]
+      constructor <;> linarith
+  refine ⟨fun g => ⟨⟨isAlexandrovBasisSet_smul g hR.1, hR.2.1.smul_set, Set.smul_set_mono hR.2.2⟩,
+    isAlexandrovBasisSet_smul g hL.1, hL.2.1.smul_set, Set.smul_set_mono hL.2.2⟩, ?_⟩
+  rintro W ⟨g, rfl⟩
+  exact ⟨_, isAlexandrovBasisSet_smul g hR.1, hR.2.1.smul_set, Set.smul_set_mono hR.2.2⟩
 
 /-- Translations into the right wedge: if `|a⁰| ≤ a¹`, then `W_R + a ⊆ W_R`, where
 `W_R + a = translationSub a • W_R`. In particular this holds for `a = t l₊` and `a = -t l₋` with
