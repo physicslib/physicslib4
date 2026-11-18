@@ -1182,6 +1182,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
     Let $\tau \ge 0$. Then $z \mapsto \widetilde{V}(\tau e^{2\pi z})$ is complex differentiable, in the operator norm, at every $z \in \Sigma^\circ_{1/2}$, and $z \mapsto \widetilde{V}(\tau e^{2\pi z})\psi$ is continuous on $\Sigma_{1/2}$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:dilation-strip-half-plane, lmm:positive-energy-extension-holomorphic, lmm:positive-energy-extension-strongly-continuous, lmm:positive-energy-extension-operators, def:hall-10.11}
     If $\tau = 0$ the map is the constant $\widetilde{V}(0) = V(0) = \mathbf{1}$ (Lemma~\ref{lmm:positive-energy-extension-operators}, \ref{def:hall-10.11}). If $\tau > 0$, $z \mapsto \tau e^{2\pi z}$ is entire and maps $\Sigma^\circ_{1/2}$ into $\{\operatorname{Im} w > 0\}$ and $\Sigma_{1/2}$ into $\{\operatorname{Im} w \ge 0\}$ (Lemma~\ref{lmm:dilation-strip-half-plane}). The chain rule with Lemma~\ref{lmm:positive-energy-extension-holomorphic} (\texttt{DifferentiableAt.comp}) gives differentiability, and \texttt{ContinuousOn.comp} with Lemma~\ref{lmm:positive-energy-extension-strongly-continuous} gives continuity.
 \end{proof}

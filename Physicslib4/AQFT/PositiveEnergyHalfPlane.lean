@@ -292,7 +292,15 @@ theorem dilatedPositiveEnergyExtension_analytic {V : ℝ → (H ≃ₗᵢ[ℂ] H
       DifferentiableAt ℂ (fun z' : ℂ => Ṽ[(τ : ℂ) * Complex.exp (2 * Real.pi * z')]) z) ∧
       ∀ ψ : H, ContinuousOn (fun z : ℂ => Ṽ[(τ : ℂ) * Complex.exp (2 * Real.pi * z)] ψ)
         (kmsStrip (1 / 2)) := by
-  sorry
+  refine ⟨fun z hz => ?_, fun ψ => ?_⟩
+  · rcases hτ.eq_or_lt with h0 | hpos
+    · subst h0; simp
+    · have hd : DifferentiableAt ℂ (fun z' : ℂ => (τ : ℂ) * Complex.exp (2 * Real.pi * z')) z := by
+        fun_prop
+      exact (hasDerivAt_positiveEnergyExtension hV
+        ((dilation_strip_halfPlane hτ).2.1 hpos z hz)).differentiableAt.comp z hd
+  · exact (continuousOn_positiveEnergyExtension_apply hV ψ).comp (by fun_prop)
+      fun z hz => (dilation_strip_halfPlane hτ).1 z hz
 
 end AQFT
 end Physicslib4
