@@ -121,6 +121,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
     Then $p$ and $q$ are spacelike related for the standard time orientation (\ref{def:spacelike-related}): neither $p \prec q$ nor $q \prec p$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:causal-precedence-closed-forward-cone, lmm:closed-forward-cone-iff-norm, def:spacelike-related, def:causal-future-and-causal-past}
     Suppose $x \prec y$ with $\{x, y\} = \{p, q\}$. Then $v = y - x \in \overline{V}_+$ by Lemma~\ref{lmm:causal-precedence-closed-forward-cone}, so $|v^1| \le v^0$ by Lemma~\ref{lmm:closed-forward-cone-iff-norm}. But $|v^1| = p^1 - q^1 > |p^0| + |q^0| \ge |v^0|$, a contradiction. Hence $q \notin J^+(p) \cup J^-(p)$ (\ref{def:causal-future-and-causal-past}).
 \end{proof}

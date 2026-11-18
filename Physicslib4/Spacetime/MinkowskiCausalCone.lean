@@ -210,7 +210,17 @@ theorem standardMinkowski_isSpacelikeRelated_of_coord {p q : SpacetimeModel}
     (hpq : |p 0| + |q 0| < p 1 - q 1) :
     Spacetime.IsSpacelikeRelated StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation p q := by
-  sorry
+  rintro (h | h)
+  · have h1 := (mem_closedForwardCone_iff_sqrt_le _).2
+      (standardMinkowski_causallyPrecedes_sub_mem_closedForwardCone h) 1 (by decide)
+    simp only [PiLp.sub_apply] at h1
+    have := (abs_le.1 h1).1
+    linarith [le_abs_self (p 0), neg_abs_le (p 0), le_abs_self (q 0), neg_abs_le (q 0)]
+  · have h1 := (mem_closedForwardCone_iff_sqrt_le _).2
+      (standardMinkowski_causallyPrecedes_sub_mem_closedForwardCone h) 1 (by decide)
+    simp only [PiLp.sub_apply] at h1
+    have := (abs_le.1 h1).2
+    linarith [le_abs_self (p 0), neg_abs_le (p 0), le_abs_self (q 0), neg_abs_le (q 0)]
 
 /-- A coordinate criterion for complete spacelike separation: if `p¹ - q¹ > |p⁰| + |q⁰|` for
 every `p ∈ O₁` and every `q ∈ O₂`, then `O₁` and `O₂` are completely spacelike for the standard
