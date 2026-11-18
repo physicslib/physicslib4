@@ -98,7 +98,23 @@ Blueprint: lmm:unitary-commutes-of-conj-eq -/
 theorem unitaryCommutes_of_graph_map_eq (V : H ≃ₗᵢ[ℂ] H) {A : H →ₗ.[ℂ] H}
     (hA : A.graph.map Φ[V] = A.graph) :
     UnitaryCommutes V A := by
-  sorry
+  refine ⟨fun x hx => ?_, fun x hx => ?_⟩
+  · have hm : ((V x, V (A ⟨x, hx⟩)) : H × H) ∈ A.graph :=
+      hA ▸ Submodule.mem_map_of_mem (f := Φ[V]) (A.mem_graph ⟨x, hx⟩)
+    obtain ⟨⟨y, hy⟩, h1, h2⟩ := (A.mem_graph_iff).1 hm
+    obtain rfl : y = V x := h1
+    exact ⟨hy, h2⟩
+  · have hm : ((x, A ⟨x, hx⟩) : H × H) ∈ A.graph.map Φ[V] := by
+      rw [hA]; exact A.mem_graph ⟨x, hx⟩
+    obtain ⟨p, hp, hpe⟩ := Submodule.mem_map.1 hm
+    obtain ⟨⟨z, hz⟩, h1, h2⟩ := (A.mem_graph_iff).1 hp
+    obtain ⟨e1, e2⟩ := Prod.ext_iff.1 hpe
+    simp only [LinearMap.prodMap_apply, LinearEquiv.coe_coe,
+      LinearIsometryEquiv.coe_toLinearEquiv] at e1 e2
+    have hz' : V.symm x = z := by rw [← e1, V.symm_apply_apply]; exact h1.symm
+    subst hz'
+    refine ⟨hz, ?_⟩
+    rw [h2, ← e2, V.symm_apply_apply]
 
 omit [CompleteSpace H] in
 /-- An everywhere-defined map `A : H → H`, linear or antilinear, with `V A V⁻¹ = A` commutes
@@ -107,8 +123,8 @@ with the unitary `V`: `V (A ψ) = A (V ψ)` for every `ψ`.
 Blueprint: lmm:unitary-commutes-of-conj-eq -/
 theorem comm_of_unitary_conj_eq (V : H ≃ₗᵢ[ℂ] H) {A : H → H}
     (hA : ∀ ψ, V (A (V.symm ψ)) = A ψ) :
-    ∀ ψ, V (A ψ) = A (V ψ) := by
-  sorry
+    ∀ ψ, V (A ψ) = A (V ψ) := fun ψ => by
+  rw [← hA (V ψ), V.symm_apply_apply]
 
 /-- Unitary conjugation transports the functional calculus: if `A` is self-adjoint and
 `B = V A V⁻¹`, including domains, then `B` is self-adjoint and `V f(A) V⁻¹ = f(B)`, including

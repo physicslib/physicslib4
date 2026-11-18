@@ -181,6 +181,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
     Let $V$ be unitary and $A$ an operator on $\mathbf{H}$, linear or antilinear, with $VAV^{-1} = A$, including domains. Then $V$ commutes with $A$: for every $\psi \in \text{Dom}(A)$, $V\psi$ and $V^{-1}\psi$ lie in $\text{Dom}(A)$ with $AV\psi = VA\psi$ and $AV^{-1}\psi = V^{-1}A\psi$ (for linear $A$ this is Definition~\ref{def:unitary-commutes}). If moreover $\text{Dom}(A) = \mathbf{H}$, then $VA\psi = AV\psi$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:product-of-unbounded-operators, def:unitary-commutes}
     Equality including domains says: $\psi \in \text{Dom}(A)$ if and only if $V^{-1}\psi \in \text{Dom}(A)$, and then $V(A(V^{-1}\psi)) = A\psi$. Let $\psi \in \text{Dom}(A)$. Then $V^{-1}\psi \in \text{Dom}(A)$ and $AV^{-1}\psi = V^{-1}A\psi$. Applying the equivalence to $V\psi$ gives $V\psi \in \text{Dom}(A)$ (since $V^{-1}V\psi = \psi \in \text{Dom}(A)$), and then $AV\psi = V(A(V^{-1}V\psi)) = VA\psi$. This is Definition~\ref{def:unitary-commutes}. The last claim is the case $\text{Dom}(A) = \mathbf{H}$ of $AV\psi = VA\psi$.
 \end{proof}
