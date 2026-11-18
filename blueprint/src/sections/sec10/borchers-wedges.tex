@@ -155,6 +155,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
     Let $V$ be unitary. Then $\Phi_V$ is a homeomorphism of $\mathbf{H} \times \mathbf{H}$, so $\Phi_V(\overline{G}) = \overline{\Phi_V(G)}$ for every subset $G \subset \mathbf{H} \times \mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:componentwise-convergence}
     $V$ is a homeomorphism of $\mathbf{H}$ (Mathlib's \texttt{LinearIsometryEquiv.toHomeomorph}), so $\Phi_V$ is a homeomorphism of the product (\texttt{Homeomorph.prodCongr}; the topology of $\mathbf{H} \times \mathbf{H}$ is the product topology, Lemma~\ref{lmm:componentwise-convergence}), and homeomorphisms map closures to closures (\texttt{Homeomorph.image\_closure}).
 \end{proof}
@@ -167,6 +168,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
     Let $V$ be unitary, $C$ an antiunitary operator with $C(C\phi) = \phi$ for all $\phi$, and $A$ an operator on $\mathbf{H}$. Then $VC$ is antiunitary and $(VC)\big(CAC^{-1}\big)(VC)^{-1} = VAV^{-1}$, including domains.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:antiunitary-composition, def:product-of-unbounded-operators}
     $VC$ is antiunitary by Lemma~\ref{lmm:antiunitary-composition}. Since $C^{-1} = C$, $C^{-1}(VC)^{-1}\phi = C(C(V^{-1}\phi)) = V^{-1}\phi$ and $VC(C\chi) = V\chi$. So the left side has domain $\{ \phi \mid V^{-1}\phi \in \text{Dom}(A) \}$ and value $VAV^{-1}\phi$ there, which is the right side. This is the computation in the proof of Lemma~\ref{lmm:commuting-unitary-double-conjugate}, before the commutation of $V$ with $A$ is used.
 \end{proof}

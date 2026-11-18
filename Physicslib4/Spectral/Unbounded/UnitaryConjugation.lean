@@ -44,8 +44,9 @@ omit [CompleteSpace H] in
 Blueprint: lmm:unitary-conjugate-graph -/
 theorem image_closure_prodMap_unitary (V : H ≃ₗᵢ[ℂ] H) :
     IsHomeomorph (Prod.map V V) ∧
-      ∀ G : Set (H × H), Prod.map V V '' closure G = closure (Prod.map V V '' G) := by
-  sorry
+      ∀ G : Set (H × H), Prod.map V V '' closure G = closure (Prod.map V V '' G) :=
+  let e := V.toHomeomorph.prodCongr V.toHomeomorph
+  ⟨e.isHomeomorph, e.image_closure⟩
 
 omit [CompleteSpace H] in
 /-- For a unitary `V`, an antiunitary involution `C` and a linear operator `A`, the antiunitary
@@ -56,7 +57,35 @@ Blueprint: lmm:unitary-conjugate-double-antiunitary -/
 theorem graph_antiunitaryConj_trans_antiunitaryConj (V : H ≃ₗᵢ[ℂ] H) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) (A : H →ₗ.[ℂ] H) :
     (antiunitaryConj (C.trans V) (antiunitaryConj C A)).graph = A.graph.map Φ[V] := by
-  sorry
+  have hCs : ∀ y, C.symm (C.symm y) = y := fun y => by
+    rw [C.symm_apply_eq.2 (hC y).symm, C.symm_apply_eq.2 (hC (C y)).symm, hC]
+  have hmem : ∀ x, x ∈ (antiunitaryConj (C.trans V) (antiunitaryConj C A)).domain ↔
+      V.symm x ∈ A.domain := fun x => by
+    change C.symm (C.symm (V.symm x)) ∈ A.domain ↔ _
+    rw [hCs]
+  have hval : ∀ x (hx : x ∈ (antiunitaryConj (C.trans V) (antiunitaryConj C A)).domain),
+      (antiunitaryConj (C.trans V) (antiunitaryConj C A)) ⟨x, hx⟩ =
+        V (A ⟨V.symm x, (hmem x).1 hx⟩) := fun x hx => by
+    change V (C (C (A ⟨C.symm (C.symm (V.symm x)), _⟩))) = _
+    rw [hC]
+    congr 3
+    exact hCs _
+  ext ⟨x, y⟩
+  rw [LinearPMap.mem_graph_iff, Submodule.mem_map]
+  constructor
+  · rintro ⟨⟨z, hz⟩, rfl, rfl⟩
+    refine ⟨(V.symm z, A ⟨V.symm z, (hmem z).1 hz⟩), A.mem_graph ⟨V.symm z, (hmem z).1 hz⟩, ?_⟩
+    simp [hval]
+  · rintro ⟨⟨a, b⟩, hab, he⟩
+    rw [LinearPMap.mem_graph_iff] at hab
+    obtain ⟨⟨a', ha'⟩, rfl, rfl⟩ := hab
+    simp only [LinearMap.prodMap_apply, Prod.mk.injEq] at he
+    obtain ⟨rfl, rfl⟩ := he
+    have hx : V a' ∈ (antiunitaryConj (C.trans V) (antiunitaryConj C A)).domain :=
+      (hmem _).2 (by simpa using ha')
+    refine ⟨⟨V a', hx⟩, rfl, ?_⟩
+    rw [hval]
+    simp
 
 omit [CompleteSpace H] in
 /-- A linear operator `A` with `V A V⁻¹ = A`, including domains, commutes with the unitary `V`:
