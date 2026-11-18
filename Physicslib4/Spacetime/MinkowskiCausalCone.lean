@@ -194,7 +194,13 @@ theorem standardMinkowski_causallyPrecedes_sub_mem_closedForwardCone {p q : Spac
     (hpq : Spacetime.CausallyPrecedes StandardMinkowskiSpacetime
       standardMinkowskiTimeOrientation p q) :
     (q - p : SpacetimeModel) ∈ closedV₊ := by
-  sorry
+  induction hpq with
+  | refl => simp
+  | tail _ hbc ih =>
+    obtain ⟨c, hc⟩ := hbc
+    rw [← sub_add_sub_cancel _ _ p]
+    exact closedForwardCone_isClosed_convexCone.2.2.1 _
+      (standardMinkowski_causalTripSegment_sub_mem_closedForwardCone hc) _ ih
 
 /-- A coordinate criterion for spacelike separation: if `p¹ - q¹ > |p⁰| + |q⁰|`, then `p` and `q`
 are spacelike related for the standard time orientation, that is, neither `p ≺ q` nor `q ≺ p`.

@@ -104,6 +104,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
     Let $p, q$ be points of standard Minkowski spacetime with $p \prec q$ for the standard time orientation. Then $q - p \in \overline{V}_+$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:causal-trip, lmm:causal-trip-segment-closed-cone, lmm:closed-forward-cone-closed-convex}
     The relation $\prec$ is the reflexive-transitive closure of single-segment causal precedence (\ref{def:causal-trip}), so it suffices to argue by induction along the chain (Mathlib's \texttt{Relation.ReflTransGen.head\_induction\_on}). If $q = p$, then $q - p = 0 \in \overline{V}_+$. Otherwise a causal trip segment runs from $p$ to some $r$ with $r \prec q$. Then $q - p = (r - p) + (q - r)$, where $r - p \in \overline{V}_+$ by Lemma~\ref{lmm:causal-trip-segment-closed-cone} and $q - r \in \overline{V}_+$ by the induction hypothesis. So $q - p \in \overline{V}_+$ by Lemma~\ref{lmm:closed-forward-cone-closed-convex}.
 \end{proof}
