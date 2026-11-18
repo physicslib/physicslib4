@@ -159,7 +159,37 @@ theorem functionalCalculus_unitaryConj_of_bounded (V : H ≃ₗᵢ[ℂ] H) {A B 
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) (hAB : B.graph = A.graph.map Φ[V])
     {f : ℝ → ℂ} (hf : Measurable f) (hfb : ∃ c, ∀ x, ‖f x‖ ≤ c) :
     (functionalCalculus hB f).graph = (functionalCalculus hA f).graph.map Φ[V] := by
-  sorry
+  have hfB : f ∈ BddMeasurable ℝ := ⟨hf, hfb⟩
+  obtain ⟨ι, b, -⟩ := exists_hilbertBasis ℂ H
+  let C : H ≃ₗᵢ⋆[ℂ] H := (b.repr.trans (starₗᵢ ℂ)).trans b.repr.symm
+  have hC : ∀ x, C (C x) = x := fun x => by simp [C]
+  have hCs : ∀ y, C.symm (C.symm y) = y := fun y => by
+    rw [C.symm_apply_eq.2 (hC y).symm, C.symm_apply_eq.2 (hC (C y)).symm, hC]
+  obtain ⟨h1, e1⟩ := integral_antiunitaryConj C hA
+  obtain ⟨h2, e2⟩ := integral_antiunitaryConj (C.trans V) h1
+  obtain rfl : B = antiunitaryConj (C.trans V) (antiunitaryConj C A) :=
+    LinearPMap.eq_of_eq_graph (by rw [hAB, graph_antiunitaryConj_trans_antiunitaryConj V C hC])
+  have hfc : (fun x => starRingEnd ℂ (f x)) ∈ BddMeasurable ℝ :=
+    ⟨Complex.continuous_conj.measurable.comp hf, hfb.imp fun c hc x => by simpa using hc x⟩
+  have key : ∀ ψ, (spectralMeasure hB).integral f ψ =
+      V ((spectralMeasure hA).integral f (V.symm ψ)) := fun ψ => by
+    have := e2 _ hfc ψ
+    simp only [Complex.conj_conj] at this
+    rw [← this, ← e1 f hfB]
+    simp [hCs, hC]
+  rw [(functionalCalculus_of_bddMeasurable hB hfB).2,
+    (functionalCalculus_of_bddMeasurable hA hfB).2]
+  ext ⟨x, y⟩
+  simp only [LinearPMap.mem_graph_iff, Submodule.mem_map]
+  constructor
+  · rintro ⟨⟨x, -⟩, rfl, rfl⟩
+    exact ⟨(V.symm x, (spectralMeasure hA).integral f (V.symm x)),
+      ⟨⟨V.symm x, Submodule.mem_top⟩, rfl, rfl⟩, by simp [key]⟩
+  · rintro ⟨⟨a, c⟩, hac, he⟩
+    simp only [LinearMap.prodMap_apply, Prod.mk.injEq] at he
+    obtain ⟨rfl, rfl⟩ := he
+    obtain ⟨⟨a', -⟩, rfl, rfl⟩ := hac
+    exact ⟨⟨_, Submodule.mem_top⟩, rfl, by simp [key]⟩
 
 end Unbounded
 end Spectral

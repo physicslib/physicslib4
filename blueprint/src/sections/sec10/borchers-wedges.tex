@@ -210,6 +210,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
     Let $A$ be self-adjoint, $V$ unitary, and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $Vf(A)V^{-1}\psi = f(VAV^{-1})\psi$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:fc-bounded-re-im, lmm:unitary-transport-functional-calculus, lmm:functional-calculus-bounded}
     $VAV^{-1}$ is self-adjoint by Lemma~\ref{lmm:unitary-transport-functional-calculus}. With $u = \operatorname{Re} f$ and $v = \operatorname{Im} f$, Lemma~\ref{lmm:fc-bounded-re-im} gives $f(A) = u(A) + i\,v(A)$ and $f(VAV^{-1}) = u(VAV^{-1}) + i\,v(VAV^{-1})$, all four operators being bounded and defined on all of $\mathbf{H}$ (Lemma~\ref{lmm:functional-calculus-bounded}). Since $V$ is linear, $Vf(A)V^{-1}\psi = Vu(A)V^{-1}\psi + i\,Vv(A)V^{-1}\psi$, which is $u(VAV^{-1})\psi + i\,v(VAV^{-1})\psi$ by Lemma~\ref{lmm:unitary-transport-functional-calculus} for the real functions $u$ and $v$.
 \end{proof}
