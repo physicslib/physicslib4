@@ -1036,6 +1036,7 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
     Let $\beta > 0$ and let $f$ be continuous on $\Sigma_\beta$, holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is holomorphic on $\{ z : -\beta < \operatorname{Im} z < \beta \}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:horizontal-line-removable, lmm:strip-reflection-continuous}
     Apply the library's gluing lemma \texttt{Physicslib4.differentiableOn\_if\_of\_eqOn\_horizontal\_line}, which rests on Lemma~\ref{lmm:horizontal-line-removable}, with $U = \{-\beta < \operatorname{Im} z < \beta\}$ (open, \texttt{isOpen\_lt} with \texttt{Complex.continuous\_im}), $\ell = 0$, $g(z) = \overline{f(\overline{z})}$ and $h = f$. The continuity hypotheses hold as in Lemma~\ref{lmm:strip-reflection-continuous}. $h$ is holomorphic on $U \cap \{\operatorname{Im} z > 0\} = \Sigma^\circ_\beta$, and $g$ is holomorphic on $U \cap \{\operatorname{Im} z < 0\}$ as the conjugate reflection of a holomorphic function (Mathlib's \texttt{HasDerivAt.conj\_conj}). On the real axis $g(t) = \overline{f(t)} = f(t) = h(t)$.
 \end{proof}

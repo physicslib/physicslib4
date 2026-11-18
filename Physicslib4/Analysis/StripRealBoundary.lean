@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Lean Community
 -/
 import Physicslib4.Analysis.StripPeriodicExtension
+import Mathlib.Analysis.Calculus.Deriv.Star
 
 /-!
 # Functions real on both edges of a strip
@@ -69,7 +70,31 @@ theorem differentiableOn_stripReflection {β : ℝ} (hβ : 0 < β) {f : ℂ → 
     (hf : ContinuousOn f (Σ[β])) (hfd : DifferentiableOn ℂ f (Σ°[β]))
     (hreal : ∀ t : ℝ, (f t).im = 0) :
     DifferentiableOn ℂ Φ[f] {z : ℂ | -β < z.im ∧ z.im < β} := by
-  sorry
+  have hU : IsOpen {z : ℂ | -β < z.im ∧ z.im < β} :=
+    (isOpen_lt continuous_const Complex.continuous_im).inter
+      (isOpen_lt Complex.continuous_im continuous_const)
+  have hO : IsOpen (Σ°[β]) :=
+    (isOpen_lt continuous_const Complex.continuous_im).inter
+      (isOpen_lt Complex.continuous_im continuous_const)
+  refine differentiableOn_if_of_eqOn_horizontal_line hU 0 ?_ ?_ ?_ ?_ ?_
+  · refine Complex.continuous_conj.comp_continuousOn
+      (hf.comp Complex.continuous_conj.continuousOn ?_)
+    intro z ⟨⟨_, h2⟩, h3⟩
+    simp only [Set.mem_ofPred_eq] at h3
+    exact ⟨by simp; linarith, by simp; linarith⟩
+  · exact hf.mono fun z ⟨⟨_, h2⟩, h3⟩ => ⟨h3, h2.le⟩
+  · intro z ⟨⟨h1, _⟩, h3⟩
+    simp only [Set.mem_ofPred_eq] at h3
+    have hz : starRingEnd ℂ z ∈ Σ°[β] := ⟨by simp; linarith, by simp; linarith⟩
+    have hd := (hfd.differentiableAt (hO.mem_nhds hz)).conj_conj
+    rw [Complex.conj_conj] at hd
+    exact DifferentiableAt.differentiableWithinAt hd
+  · intro z ⟨⟨_, h2⟩, h3⟩
+    exact (hfd.differentiableAt (hO.mem_nhds ⟨h3, h2⟩)).differentiableWithinAt
+  · intro z _ h0
+    have hz : z = (z.re : ℂ) := Complex.ext rfl (by simpa using h0)
+    rw [hz, Complex.conj_ofReal, Complex.conj_eq_iff_im]
+    exact hreal _
 
 /-- If `f` is continuous and bounded on `Σ_β`, holomorphic on `Σ°_β` and real on the real axis,
 the shifted reflection `Ψ(z) = Φ_f(z - iβ)` is continuous and bounded on `Σ_{2β}` and holomorphic
