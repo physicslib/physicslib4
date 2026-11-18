@@ -453,7 +453,16 @@ theorem reflectedGroup_adjoint {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV : IsOneParameterUnitaryGroup V)
     (t : ℝ) :
     ContinuousLinearMap.adjoint W[t] = 𝒥[V[t]] := by
-  sorry
+  have hJ := (modularConjugation_involution hM hΩ C hC).1
+  have hJi : ∀ a b, ⟪𝒥 a, 𝒥 b⟫_ℂ = ⟪b, a⟫_ℂ := fun a b =>
+    (inner_map_map_of_conjLinearIsometry (𝒥).toLinearIsometry a b).trans (inner_conj_symm _ _)
+  have hV2 : ∀ ψ, V (-t) (V t ψ) = ψ := fun ψ => by
+    rw [← hV.map_add, neg_add_cancel, hV.map_zero]
+  symm
+  rw [ContinuousLinearMap.eq_adjoint_iff]
+  intro x y
+  change ⟪𝒥 (V t (𝒥 x)), y⟫_ℂ = ⟪x, 𝒥 (V (-t) (𝒥 y))⟫_ℂ
+  rw [← hJ y, hJi, ← hJ x, hJi, hJ, hJ, ← LinearIsometryEquiv.inner_map_map (V (-t)), hV2]
 
 /-- Under (B1), for `t ≥ 0`, `W(t)` is unitary and `W(t)Ω = Ω`.
 
@@ -486,7 +495,26 @@ theorem inner_unitary_apply_im_eq_zero {M : Set (H →L[ℂ] H)} {Ω : H} {X : H
     {x y : H →L[ℂ] H} (hx : x ∈ M) (hxs : IsSelfAdjoint x)
     (hy : y ∈ Set.centralizer M) (hys : IsSelfAdjoint y) :
     (⟪y Ω, X (x Ω)⟫_ℂ).im = 0 := by
-  sorry
+  set x' := X ∘L x ∘L ContinuousLinearMap.adjoint X with hx'
+  have hXs : ContinuousLinearMap.adjoint X ∘L X = 1 := by
+    rw [← ContinuousLinearMap.star_eq_adjoint]; exact hX.1
+  have hXΩ' : ContinuousLinearMap.adjoint X Ω = Ω := by
+    simpa [hXΩ] using DFunLike.congr_fun hXs Ω
+  have h1 : X (x Ω) = x' Ω := by simp [hx', hXΩ']
+  have hxs' : ContinuousLinearMap.adjoint x' = x' := by
+    have := hxs.star_eq
+    rw [ContinuousLinearMap.star_eq_adjoint] at this
+    simp [hx', ContinuousLinearMap.adjoint_comp, this, ContinuousLinearMap.comp_assoc]
+  have hys' : ContinuousLinearMap.adjoint y = y := by
+    have := hys.star_eq
+    rwa [ContinuousLinearMap.star_eq_adjoint] at this
+  have hcomm : x' * y = y * x' := (Set.mem_centralizer_iff.mp hy) x' (hXM x hx)
+  rw [h1, ← Complex.conj_eq_iff_im, inner_conj_symm]
+  calc ⟪x' Ω, y Ω⟫_ℂ = ⟪Ω, x' (y Ω)⟫_ℂ := by
+        rw [← ContinuousLinearMap.adjoint_inner_left x' (y Ω) Ω, hxs']
+    _ = ⟪Ω, y (x' Ω)⟫_ℂ := congrArg _ (DFunLike.congr_fun hcomm Ω)
+    _ = ⟪y Ω, x' Ω⟫_ℂ := by
+        rw [← ContinuousLinearMap.adjoint_inner_left y (x' Ω) Ω, hys']
 
 /-- With `X` as in `inner_unitary_apply_im_eq_zero`, self-adjoint `x ∈ M`, `y ∈ M'` and real
 `t`, `⟪Δ^{-it}yΩ, X Δ^{-it}xΩ⟫` is real.

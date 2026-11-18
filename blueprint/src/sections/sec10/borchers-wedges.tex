@@ -1434,6 +1434,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     For $t \in \mathbb{R}$, $W(t)^* = JV(t)J$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-conjugation-bounded-conjugate, thrm:modular-conjugation-polar, def:antiunitary-operator, lmm:unitary-group-inner-adjoint}
     $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}) and $V(-t)^* = V(t)$ (\ref{lmm:unitary-group-inner-adjoint}), so for $\phi, \chi \in \mathbf{H}$, $\left< W(t)\phi, \chi \right> = \left< J\chi, V(-t)J\phi \right> = \left< V(t)J\chi, J\phi \right> = \left< \phi, JV(t)J\chi \right>$ (Definition~\ref{def:antiunitary-operator}, Lemma~\ref{lmm:modular-conjugation-bounded-conjugate}). This identifies the adjoint (\texttt{ContinuousLinearMap.eq\_adjoint\_iff}).
 \end{proof}
@@ -1470,6 +1471,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     Let $X$ be a unitary with $X\Omega = \Omega$ and $XxX^* \in \mathcal{M}$ for every $x \in \mathcal{M}$. Then $\left< y\Omega, Xx\Omega \right> \in \mathbb{R}$ for every $x = x^* \in \mathcal{M}$ and $y = y^* \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Put $\tilde{x} = XxX^* \in \mathcal{M}$, which is self-adjoint (\texttt{star\_mul}, \texttt{star\_star}). $X^*X = \mathbf{1}$ and $X\Omega = \Omega$ give $Xx\Omega = \tilde{x}\Omega$. So $\left< y\Omega, Xx\Omega \right> = \left< \Omega, y\tilde{x}\Omega \right>$, and its conjugate is $\left< y\tilde{x}\Omega, \Omega \right> = \left< \Omega, \tilde{x}y\Omega \right> = \left< \Omega, y\tilde{x}\Omega \right>$, since $y\tilde{x} = \tilde{x}y$ (\texttt{inner\_conj\_symm}, \texttt{ContinuousLinearMap.adjoint\_inner\_left}). A complex number equal to its conjugate is real (\texttt{Complex.conj\_eq\_iff\_real}).
 \end{proof}
 
