@@ -665,7 +665,17 @@ theorem IsCovariantVacuumRep.wedgeModularDefect_group (h : N.IsCovariantVacuumRe
     (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) :
     Z[0] = LinearIsometryEquiv.refl ℂ H ∧ ∀ s t : ℝ, Z[s + t] = Z[t].trans Z[s] := by
-  sorry
+  have hgrp := (modularUnitaryGroup_properties
+    (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC).1
+  refine ⟨LinearIsometryEquiv.ext fun ψ => ?_, fun s t => LinearIsometryEquiv.ext fun ψ => ?_⟩
+  · rw [wedgeModularDefect, LinearIsometryEquiv.trans_apply, mul_zero, wedgeBoost_groupLaw.1,
+      h.map_one, hgrp.map_zero]
+  · have hb : U (wedgeBoost (2 * Real.pi * (s + t))) ψ =
+        U (wedgeBoost (2 * Real.pi * s)) (U (wedgeBoost (2 * Real.pi * t)) ψ) := by
+      rw [← LinearIsometryEquiv.trans_apply, ← h.map_mul, mul_add, wedgeBoost_groupLaw.2]
+    rw [wedgeModularDefect, LinearIsometryEquiv.trans_apply, hb, hgrp.map_add,
+      ← (h.wedge_stabiliser_commute hΩ C hC).1 _ (wedgeBoost_smul_wedge _).1 |>.1 t]
+    rfl
 
 /-- The defect is strongly continuous: `t ↦ Z(t)ψ` is continuous for every `ψ`.
 

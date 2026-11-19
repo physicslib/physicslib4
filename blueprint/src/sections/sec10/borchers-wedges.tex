@@ -1987,6 +1987,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
     $Z(0) = \mathbf{1}$ and $Z(s + t) = Z(s)Z(t)$ for all $s, t \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-unitary-group-props, lmm:boost-group-law, crllr:wedge-stabiliser-commutes-modular}
     $Z(0) = \Delta^{i0}U(b(0)) = \mathbf{1}\cdot U(1) = \mathbf{1}$ (\ref{lmm:modular-unitary-group-props}, \ref{lmm:boost-group-law}). By the group laws of $\Delta^{i\cdot}$, $b$ and $U$, $Z(s+t) = \Delta^{is}\,\Delta^{it}U(b(2\pi s))\,U(b(2\pi t))$ (\texttt{mul\_add}), and $\Delta^{it}U(b(2\pi s)) = U(b(2\pi s))\Delta^{it}$ (\ref{crllr:wedge-stabiliser-commutes-modular}) turns this into $Z(s)Z(t)$.
 \end{proof}
