@@ -869,7 +869,23 @@ theorem IsCovariantVacuumRep.wedgeModularDefect_local (h : N.IsCovariantVacuumRe
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (hMC : N.IsWedgeModularCovariant π hΩ C hC)
     (t : ℝ) (B : Set StandardMinkowskiSpacetime.Carrier) (hB : IsAlexandrovBasisSet B) :
     (fun a => conj[Z[t]] a) '' N.localVonNeumann π hB = N.localVonNeumann π hB := by
-  sorry
+  have hcongr : ∀ {B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier}
+      (h₁ : IsAlexandrovBasisSet B₁) (h₂ : IsAlexandrovBasisSet B₂),
+      B₁ = B₂ → N.localVonNeumann π h₁ = N.localVonNeumann π h₂ := by
+    rintro _ _ _ _ rfl; rfl
+  have hfunU : (fun a => conj[U (wedgeBoost (2 * Real.pi * t))] a) =
+      Physicslib4.lieConj (U (wedgeBoost (2 * Real.pi * t))) := by
+    funext a; ext x; simp
+  have hfun : (fun a : H →L[ℂ] H => conj[Z[t]] a) =
+      (fun a : H →L[ℂ] H => conj[modularUnitaryGroup
+        (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC t] a) ∘
+        (fun a : H →L[ℂ] H => conj[U (wedgeBoost (2 * Real.pi * t))] a) := by
+    funext a; ext ψ
+    simp [wedgeModularDefect]
+  rw [hfun, Set.image_comp, hfunU, lieConj_image_localVonNeumann N π _ _ hB
+    (h.covariant (wedgeBoost (2 * Real.pi * t))), hMC]
+  exact hcongr _ _ (by rw [← mul_smul, ← wedgeBoost_groupLaw.2, neg_add_cancel,
+    wedgeBoost_groupLaw.1, one_smul])
 
 /-- Bisognano–Wichmann up to an internal symmetry (BW-a): for a covariant vacuum representation
 satisfying modular covariance for the right wedge (MC), for every real `t` the wedge modular

@@ -2101,6 +2101,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
     Assume that $(\pi, \Omega)$ satisfies modular covariance for the right wedge (MC) (\ref{def:wedge-modular-covariance}). Then $Z(t)\,R(\mathbf{B})\,Z(t)^{-1} = R(\mathbf{B})$ for every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:von-neumann-geometric-covariance, lmm:poincare-maps-diamonds, lmm:boost-group-law}
     $Z(t)R(\mathbf{B})Z(t)^{-1} = \Delta^{it}\big(U(b(2\pi t))R(\mathbf{B})U(b(2\pi t))^{-1}\big)\Delta^{-it} = \Delta^{it}R(b(2\pi t)\mathbf{B})\Delta^{-it}$ by Theorem~\ref{thrm:von-neumann-geometric-covariance}, with $b(2\pi t)\mathbf{B}$ a diamond (\ref{lmm:poincare-maps-diamonds}). By (MC) for this diamond, this is $R(b(-2\pi t)b(2\pi t)\mathbf{B}) = R(\mathbf{B})$, since $b(-2\pi t)b(2\pi t) = b(0) = 1$ (\ref{lmm:boost-group-law}, \texttt{mul\_smul}, \texttt{one\_smul}).
 \end{proof}
