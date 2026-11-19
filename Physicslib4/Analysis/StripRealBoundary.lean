@@ -38,7 +38,7 @@ local notation "Φ[" f "]" =>
 continuous on `{-β ≤ Im z ≤ β}`.
 
 Blueprint: lmm:strip-reflection-continuous -/
-theorem continuousOn_stripReflection {β : ℝ} (hβ : 0 < β) {f : ℂ → ℂ}
+theorem continuousOn_stripReflection {β : ℝ} {f : ℂ → ℂ}
     (hf : ContinuousOn f (Σ[β])) (hreal : ∀ t : ℝ, (f t).im = 0) :
     ContinuousOn Φ[f] {z : ℂ | -β ≤ z.im ∧ z.im ≤ β} := by
   have hcl : closure {z : ℂ | z.im < 0} ⊆ {z : ℂ | z.im ≤ 0} :=
@@ -66,7 +66,7 @@ theorem continuousOn_stripReflection {β : ℝ} (hβ : 0 < β) {f : ℂ → ℂ}
 reflection `Φ_f` is holomorphic on `{-β < Im z < β}`.
 
 Blueprint: lmm:strip-reflection-holomorphic -/
-theorem differentiableOn_stripReflection {β : ℝ} (hβ : 0 < β) {f : ℂ → ℂ}
+theorem differentiableOn_stripReflection {β : ℝ} {f : ℂ → ℂ}
     (hf : ContinuousOn f (Σ[β])) (hfd : DifferentiableOn ℂ f (Σ°[β]))
     (hreal : ∀ t : ℝ, (f t).im = 0) :
     DifferentiableOn ℂ Φ[f] {z : ℂ | -β < z.im ∧ z.im < β} := by
@@ -101,7 +101,7 @@ the shifted reflection `Ψ(z) = Φ_f(z - iβ)` is continuous and bounded on `Σ_
 on `Σ°_{2β}`.
 
 Blueprint: lmm:strip-shifted-reflection-regular -/
-theorem stripShiftedReflection_regular {β : ℝ} (hβ : 0 < β) {f : ℂ → ℂ}
+theorem stripShiftedReflection_regular {β : ℝ} {f : ℂ → ℂ}
     (hf : ContinuousOn f (Σ[β])) (hfb : ∃ C : ℝ, ∀ z ∈ Σ[β], ‖f z‖ ≤ C)
     (hfd : DifferentiableOn ℂ f (Σ°[β])) (hreal : ∀ t : ℝ, (f t).im = 0) :
     ContinuousOn (fun z : ℂ => Φ[f] (z - (β : ℂ) * Complex.I)) (Σ[2 * β]) ∧
@@ -111,7 +111,7 @@ theorem stripShiftedReflection_regular {β : ℝ} (hβ : 0 < β) {f : ℂ → �
   have him : ∀ z : ℂ, (z - (β : ℂ) * Complex.I).im = z.im - β := fun z => by simp
   obtain ⟨C, hC⟩ := hfb
   refine ⟨?_, ⟨C, fun z hz => ?_⟩, ?_⟩
-  · refine (continuousOn_stripReflection hβ hf hreal).comp
+  · refine (continuousOn_stripReflection hf hreal).comp
       (continuous_id.sub continuous_const).continuousOn fun z hz => ?_
     obtain ⟨h1, h2⟩ := hz
     simp only [Set.mem_ofPred_eq, him]
@@ -122,7 +122,7 @@ theorem stripShiftedReflection_regular {β : ℝ} (hβ : 0 < β) {f : ℂ → �
     · rw [Complex.norm_conj]
       exact hC _ ⟨by simp; linarith, by simp; linarith⟩
     · exact hC _ ⟨by rw [him]; linarith, by rw [him]; linarith⟩
-  · refine (differentiableOn_stripReflection hβ hf hfd hreal).comp
+  · refine (differentiableOn_stripReflection hf hfd hreal).comp
       (differentiableOn_id.sub (differentiableOn_const _)) fun z hz => ?_
     obtain ⟨h1, h2⟩ := hz
     simp only [Set.mem_ofPred_eq, him]
@@ -157,7 +157,7 @@ theorem eq_of_real_strip_boundary {β : ℝ} (hβ : 0 < β) {f : ℂ → ℂ}
     (hfd : DifferentiableOn ℂ f (Σ°[β])) (hreal₀ : ∀ t : ℝ, (f t).im = 0)
     (hrealβ : ∀ t : ℝ, (f ((t : ℂ) + (β : ℂ) * Complex.I)).im = 0) :
     ∀ z ∈ Σ[β], f z = f 0 := by
-  obtain ⟨hc, ⟨C, hC⟩, hd⟩ := stripShiftedReflection_regular hβ hf hfb hfd hreal₀
+  obtain ⟨hc, ⟨C, hC⟩, hd⟩ := stripShiftedReflection_regular hf hfb hfd hreal₀
   set Ψ := fun z : ℂ => Φ[f] (z - (β : ℂ) * Complex.I) with hΨ
   have h2β : 0 < 2 * β := by linarith
   have hper : ∀ t : ℝ, Ψ t = Ψ (t + ((2 * β : ℝ) : ℂ) * Complex.I) := fun t => by

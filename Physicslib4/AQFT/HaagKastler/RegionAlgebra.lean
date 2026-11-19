@@ -113,6 +113,7 @@ theorem regionVonNeumann_of_isAlexandrovBasisSet (π : N.quasilocal.carrier →�
 
 end HaagKastlerNet
 
+omit [CompleteSpace H] in
 /-- The bicommutant of a commuting set: if every `s ∈ S` commutes with every `t ∈ T`, then
 `S'' ⊆ T'`; moreover `T' = (T'')'`.
 

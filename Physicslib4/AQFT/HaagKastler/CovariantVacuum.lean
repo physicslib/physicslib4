@@ -175,6 +175,7 @@ theorem IsCovariantVacuumRep.cyclic_regionVonNeumann (h : N.IsCovariantVacuumRep
 
 end HaagKastlerNet
 
+omit [CompleteSpace H] in
 /-- Cyclic and separating from a cyclic subset of the commutant: if `𝒩 ⊆ M'` and `MΩ` and `𝒩Ω`
 are dense, then `Ω` is cyclic and separating for `M`.
 

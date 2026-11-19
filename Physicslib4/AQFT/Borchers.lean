@@ -363,6 +363,7 @@ theorem stripPower_cutoff {M : Set (H →L[ℂ] H)} {Ω : H}
 
 /-! ### The Borchers function -/
 
+omit [CompleteSpace H] in
 /-- If `a, b` are continuous on `D`, `‖T(z)‖ ≤ 1` on `D` and `z ↦ T(z)χ` is continuous on `D` for
 every `χ`, then `z ↦ ⟪a(z), T(z)b(z)⟫` is continuous on `D`.
 
@@ -634,6 +635,7 @@ theorem modularOperatorSqrt_apply_of_mem_centralizer {M : Set (H →L[ℂ] H)} {
   rw [hJ]
   exact congrArg Δs (Subtype.ext hs.symm)
 
+omit [CompleteSpace H] in
 /-- Under (B2), `V(-t) y V(t) ∈ M'` for `t ≥ 0` and `y ∈ M'`.
 
 Blueprint: lmm:commutant-reverse-endomorphism -/
@@ -669,13 +671,13 @@ theorem reflectedGroup_adjoint {M : Set (H →L[ℂ] H)} {Ω : H}
   change ⟪𝒥 (V t (𝒥 x)), y⟫_ℂ = ⟪x, 𝒥 (V (-t) (𝒥 y))⟫_ℂ
   rw [← hJ y, hJi, ← hJ x, hJi, hJ, hJ, ← LinearIsometryEquiv.inner_map_map (V (-t)), hV2]
 
-/-- Under (B1), for `t ≥ 0`, `W(t)` is unitary and `W(t)Ω = Ω`.
+/-- Under (B1), `W(t)` is unitary and `W(t)Ω = Ω` for every real `t`.
 
 Blueprint: lmm:reflected-group-unitary -/
 theorem reflectedGroup_unitary {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV : IsOneParameterUnitaryGroup V)
-    (hB1 : ∀ t : ℝ, V t Ω = Ω) {t : ℝ} (ht : 0 ≤ t) :
+    (hB1 : ∀ t : ℝ, V t Ω = Ω) (t : ℝ) :
     W[t] ∈ unitary (H →L[ℂ] H) ∧ W[t] Ω = Ω := by
   obtain ⟨⟨-, -⟩, hJΩ⟩ := modularConjugation_apply_self hM hΩ C hC
   have hJ := (modularConjugation_involution hM hΩ C hC).1
@@ -796,7 +798,7 @@ theorem borchers_upper_boundary_real {M : Set (H →L[ℂ] H)} {Ω : H}
   have hJ := (modularConjugation_involution hM hΩ C hC).1
   have hJi : ∀ a b, ⟪𝒥 a, 𝒥 b⟫_ℂ = ⟪b, a⟫_ℂ := fun a b =>
     (inner_map_map_of_conjLinearIsometry (𝒥).toLinearIsometry a b).trans (inner_conj_symm _ _)
-  obtain ⟨hWu, hWΩ⟩ := reflectedGroup_unitary hM hΩ C hC hV hB1 hτ
+  obtain ⟨hWu, hWΩ⟩ := reflectedGroup_unitary hM hΩ C hC hV hB1 τ
   refine ⟨?_, inner_modularRotated_im_eq_zero hM hΩ C hC hWu hWΩ
     (fun _ hz => reflectedGroup_conj_mem hM hΩ C hC hV hB2 hτ hz) hx hxs hy hys t⟩
   change _ = conj ⟪_, 𝒥 (V (-τ) (𝒥 _))⟫_ℂ
