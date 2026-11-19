@@ -1915,6 +1915,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     \end{align}
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{crllr:wedge-modular-covariance, thrm:wedge-modular-translations, lmm:translation-unitaries}
     By Corollary~\ref{crllr:wedge-modular-covariance} with $W = W_R$ and $h = g$, $\Delta_{gW_R}^{is} = U(g)\Delta^{is}U(g)^{-1}$ and $J_{gW_R} = U(g)JU(g)^{-1}$. By Lemma~\ref{lmm:translation-unitaries} for $g^{-1} = (L^{-1}, -L^{-1}c)$, $U(g)^{-1}U(a)U(g) = U(L^{-1}a)$. So $\Delta_{gW_R}^{is}U(a)\Delta_{gW_R}^{-is} = U(g)\,\Delta^{is}U(L^{-1}a)\Delta^{-is}\,U(g)^{-1} = U(g)U(\Lambda(-2\pi s)L^{-1}a)U(g)^{-1} = U(L\Lambda(-2\pi s)L^{-1}a)$ by Theorem~\ref{thrm:wedge-modular-translations} and Lemma~\ref{lmm:translation-unitaries}. The linear part of $b_g(-2\pi s) = g\,b(-2\pi s)\,g^{-1}$ is $L\Lambda(-2\pi s)L^{-1}$, which gives the middle expression. The same computation with $J$ gives the last identity.
 \end{proof}
@@ -1972,6 +1973,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
     For all $s, t \in \mathbb{R}$, $Z(t)\,U(b(s)) = U(b(s))\,Z(t)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{crllr:wedge-stabiliser-commutes-modular, lmm:boost-group-law}
     $U(b(s))$ commutes with $\Delta^{it}$ by Corollary~\ref{crllr:wedge-stabiliser-commutes-modular}. It commutes with $U(b(2\pi t))$ because $b(s)b(2\pi t) = b(s + 2\pi t) = b(2\pi t)b(s)$ (\ref{lmm:boost-group-law}, \texttt{add\_comm}) and $U$ satisfies the group law.
 \end{proof}

@@ -517,7 +517,46 @@ theorem IsCovariantVacuumRep.wedge_modular_translations_general
       Tr[g.linear (boostMatrix (-(2 * Real.pi * s)) (g.linear.symm a))] =
         (conj[U (wedgeBoostAlong g (-(2 * Real.pi * s)))] Tr[a]) ∧
       𝒥g[Tr[a]] = Tr[g.linear (wedgeReflection (g.linear.symm a))] := by
-  sorry
+  obtain ⟨hinv, -, -, -, -, hconj, -⟩ := h.translation_unitaries
+  obtain ⟨-, -, -, hU, hJ⟩ := h.wedge_modular_covariance (W := rightWedge)
+    ⟨1, (one_smul _ _).symm⟩ g hΩ hΩg C C hC hC
+  have hback : ∀ (b : SpacetimeModel) (χ : H),
+      (U g).symm (U (translationSub b) (U g χ)) = U (translationSub (g.linear.symm b)) χ :=
+    fun b χ => by
+      have := hconj g⁻¹ b χ
+      rwa [hinv g⁻¹, inv_inv, ← hinv g] at this
+  obtain ⟨hΔ, -, hJR⟩ := h.wedge_modular_translations hΩ C hC (g.linear.symm a) s
+  have hΔp : ∀ χ : H,
+      modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC s
+        (U (translationSub (g.linear.symm a))
+          (modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC (-s)
+            χ)) =
+        U (translationSub (boostMatrix (-(2 * Real.pi * s)) (g.linear.symm a))) χ :=
+    fun χ => DFunLike.congr_fun hΔ χ
+  have hJp : ∀ χ : H,
+      modularConjugation (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC
+        (U (translationSub (g.linear.symm a))
+          (modularConjugation (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC χ)) =
+        U (translationSub (wedgeReflection (g.linear.symm a))) χ :=
+    fun χ => DFunLike.congr_fun hJR χ
+  refine ⟨?_, ?_, ?_⟩
+  · ext ψ
+    change
+      modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π (g • rightWedge)).2 hΩg C hC s
+        (U (translationSub a)
+          (modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π (g • rightWedge)).2 hΩg C hC
+            (-s) ψ)) =
+      U (translationSub (g.linear (boostMatrix (-(2 * Real.pi * s)) (g.linear.symm a)))) ψ
+    rw [← hU s, ← hU (-s), hback, hΔp, hconj]
+  · ext ψ
+    exact (hconj (wedgeBoostAlong g (-(2 * Real.pi * s))) a ψ).symm
+  · ext ψ
+    change modularConjugation (N.regionVonNeumann_isVonNeumannSet π (g • rightWedge)).2 hΩg C hC
+        (U (translationSub a)
+          (modularConjugation (N.regionVonNeumann_isVonNeumannSet π (g • rightWedge)).2 hΩg C hC
+            ψ)) =
+      U (translationSub (g.linear (wedgeReflection (g.linear.symm a)))) ψ
+    rw [← hJ, ← hJ, hback, hJp, hconj]
 
 /-! ### The defect `Z(t)` -/
 
@@ -591,7 +630,12 @@ theorem IsCovariantVacuumRep.wedgeModularDefect_boosts (h : N.IsCovariantVacuumR
     (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (t s : ℝ) (ψ : H) :
     Z[t] (U (wedgeBoost s) ψ) = U (wedgeBoost s) (Z[t] ψ) := by
-  sorry
+  have hcomm : ∀ φ : H, U (wedgeBoost (2 * Real.pi * t)) (U (wedgeBoost s) φ) =
+      U (wedgeBoost s) (U (wedgeBoost (2 * Real.pi * t)) φ) := fun φ => by
+    rw [← LinearIsometryEquiv.trans_apply, ← LinearIsometryEquiv.trans_apply, ← h.map_mul,
+      ← h.map_mul, ← wedgeBoost_groupLaw.2, ← wedgeBoost_groupLaw.2, add_comm]
+  rw [wedgeModularDefect, LinearIsometryEquiv.trans_apply, LinearIsometryEquiv.trans_apply,
+    (h.wedge_stabiliser_commute hΩ C hC).1 _ (wedgeBoost_smul_wedge s).1 |>.1 t, hcomm]
 
 /-- The defect is a one-parameter group: `Z(0) = 1` and `Z(s + t) = Z(s) Z(t)` for all real
 `s`, `t`.
