@@ -1253,6 +1253,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
     Let $\varphi \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $k_t(\Delta)\varphi^\sharp = \Delta^{-it}\varphi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-power-functions-measurable, lmm:strip-power-functions-bounded, lmm:strip-power-functions-identities, lmm:fc-bounded-left-composition, lmm:functional-calculus-bounded, thrm:operator-valued-integration, prpstn:integral-multiplicative, lmm:modular-indicator-positive-one, lmm:modular-unitary-group-fc}
     $k_t(\Delta)\Delta^{1/2}\varphi = (k_ts)(\Delta)\varphi$ by Lemma~\ref{lmm:fc-bounded-left-composition} ($u = k_t$, $h = s$, $\varphi \in W_s = \text{Dom}(\Delta^{1/2})$), and $(k_ts)(\Delta)$ is the bounded integral since $k_ts$ is bounded (Lemmas~\ref{lmm:strip-power-functions-measurable}, \ref{lmm:strip-power-functions-bounded} and~\ref{lmm:functional-calculus-bounded}). By linearity of the bounded integral (Theorem~\ref{thrm:operator-valued-integration}) and Lemma~\ref{lmm:strip-power-functions-identities}, $k_t(\Delta)\varphi^\sharp = (k_t(1 + s))(\Delta)\varphi = (1_{(0,\infty)}e_{-t})(\Delta)\varphi$, which is $1_{(0,\infty)}(\Delta)\,e_{-t}(\Delta)\varphi = \Delta^{-it}\varphi$ (Proposition~\ref{prpstn:integral-multiplicative}, Lemmas~\ref{lmm:modular-indicator-positive-one} and~\ref{lmm:modular-unitary-group-fc}).
 \end{proof}
@@ -1265,6 +1266,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
     Let $\varphi \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $k_{t + i/2}(\Delta)\varphi^\sharp = \Delta^{-it}\Delta^{1/2}\varphi$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-power-functions-measurable, lmm:strip-power-functions-bounded, lmm:strip-power-functions-identities, lmm:fc-bounded-left-composition, thrm:operator-valued-integration, prpstn:integral-multiplicative, lmm:modular-indicator-positive-one, lmm:modular-unitary-group-fc}
     By Lemma~\ref{lmm:strip-power-functions-identities}, $k_{t+i/2} = k_ts$, and Lemma~\ref{lmm:fc-bounded-left-composition} gives $(k_ts)(\Delta)\varphi = k_t(\Delta)\Delta^{1/2}\varphi$. So $k_{t+i/2}(\Delta)\varphi^\sharp = k_t(\Delta)\Delta^{1/2}\varphi + (k_ts)(\Delta)\Delta^{1/2}\varphi = (k_t(1 + s))(\Delta)\Delta^{1/2}\varphi$ (Theorem~\ref{thrm:operator-valued-integration}), and $(k_t(1 + s))(\Delta) = \Delta^{-it}$ exactly as in Lemma~\ref{lmm:strip-power-lower-boundary}.
 \end{proof}

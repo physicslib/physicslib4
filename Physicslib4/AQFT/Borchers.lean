@@ -267,7 +267,27 @@ theorem stripPower_lower_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {φ : H} (hφ : φ ∈ (Δs).domain) (t : ℝ) :
     (μΔ).integral k[(t : ℂ)] ♯[φ, hφ] = U[-t] φ := by
-  sorry
+  set μ := μΔ
+  obtain ⟨-, hkm, -, hksm⟩ := stripPower_functions_measurable (t : ℂ) t
+  obtain ⟨-, hksb, hkb⟩ := stripPower_functions_bounded t (t : ℂ)
+  have hk : k[(t : ℂ)] ∈ Spectral.BddMeasurable ℝ :=
+    ⟨hkm, 1, hkb ⟨by simp, by simp⟩⟩
+  have hks : (fun x : ℝ => k[(t : ℂ)] x * (Real.sqrt x : ℂ)) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨hksm, 1, hksb⟩
+  have hs : Measurable fun x : ℝ => (Real.sqrt x : ℂ) :=
+    Complex.measurable_ofReal.comp Real.continuous_sqrt.measurable
+  obtain ⟨h1, e1⟩ := integral_apply_pmapIntegral μ hk hs ⟨φ, hφ⟩
+  obtain ⟨-, he⟩ := LinearPMap.ext_iff.1 (pmapIntegral_of_bddMeasurable μ hks)
+  have e2 : μ.integral k[(t : ℂ)] (Δs ⟨φ, hφ⟩) =
+      μ.integral (fun x : ℝ => k[(t : ℂ)] x * (Real.sqrt x : ℂ)) φ :=
+    e1.trans (he (x := φ) (hf := h1) (hg := trivial))
+  have hsum : k[(t : ℂ)] + (fun x : ℝ => k[(t : ℂ)] x * (Real.sqrt x : ℂ)) =
+      (Set.Ioi (0 : ℝ)).indicator e[-t] := funext fun x => by
+    rw [Pi.add_apply, ← (stripPower_functions_identities (t : ℂ) 1 t x).2.1]
+    ring
+  rw [map_add, e2, ← add_apply,
+    ← Spectral.ProjectionValuedMeasure.integral_add μ hk hks, hsum,
+    integral_indicator_Ioi_modularUnitary hM hΩ C hC t]
 
 /-- The upper edge: for `φ ∈ Dom Δ^{1/2}` and real `t`, `k_{t+i/2}(Δ)φ♯ = Δ^{-it}Δ^{1/2}φ`.
 
@@ -276,7 +296,29 @@ theorem stripPower_upper_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {φ : H} (hφ : φ ∈ (Δs).domain) (t : ℝ) :
     (μΔ).integral k[(t : ℂ) + Complex.I / 2] ♯[φ, hφ] = U[-t] (Δs ⟨φ, hφ⟩) := by
-  sorry
+  set μ := μΔ
+  obtain ⟨hs, hkm, -, hksm⟩ := stripPower_functions_measurable (t : ℂ) t
+  obtain ⟨-, hksb, hkb⟩ := stripPower_functions_bounded t (t : ℂ)
+  have hsC : Measurable fun x : ℝ => (Real.sqrt x : ℂ) :=
+    Complex.measurable_ofReal.comp hs
+  have hk : k[(t : ℂ)] ∈ Spectral.BddMeasurable ℝ :=
+    ⟨hkm, 1, hkb ⟨by simp, by simp⟩⟩
+  have hks : (k[(t : ℂ)] * fun x : ℝ => (Real.sqrt x : ℂ)) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨hksm, 1, hksb⟩
+  have hfun : k[(t : ℂ) + Complex.I / 2] = k[(t : ℂ)] * fun x : ℝ => (Real.sqrt x : ℂ) :=
+    funext fun x => (stripPower_functions_identities (t : ℂ) 0 t x).2.2
+  have hsum : k[(t : ℂ)] + (k[(t : ℂ)] * fun x : ℝ => (Real.sqrt x : ℂ)) =
+      (Set.Ioi (0 : ℝ)).indicator e[-t] := funext fun x => by
+    rw [← (stripPower_functions_identities (t : ℂ) 0 t x).2.1]
+    simp only [Pi.add_apply, Pi.mul_apply]; ring
+  obtain ⟨h1, e1⟩ := integral_apply_pmapIntegral μ hk hsC ⟨φ, hφ⟩
+  have hb : pmapIntegral μ (k[(t : ℂ)] * fun x : ℝ => (Real.sqrt x : ℂ)) ⟨φ, h1⟩ =
+      μ.integral (k[(t : ℂ)] * fun x : ℝ => (Real.sqrt x : ℂ)) φ := by
+    obtain ⟨-, he⟩ := LinearPMap.ext_iff.1 (pmapIntegral_of_bddMeasurable μ hks)
+    exact he (x := φ) (hf := h1) (hg := trivial)
+  rw [map_add, hfun, ← hb, ← e1, ← integral_indicator_Ioi_modularUnitary hM hΩ C hC t, ← hsum,
+    Spectral.ProjectionValuedMeasure.integral_add μ hk hks]
+  rfl
 
 /-- Cutting off `k_ζ(Δ)`: `p_{-iζ,n}(Δ)c(Δ)χ = k_ζ(Δ)E_nχ`, and for `ζ` in the strip
 `0 ≤ Im ζ ≤ 1/2`, `‖k_ζ(Δ)χ‖ ≤ ‖χ‖` and `‖k_ζ(Δ)χ - p_{-iζ,n}(Δ)c(Δ)χ‖ ≤ ‖χ - E_nχ‖`.
