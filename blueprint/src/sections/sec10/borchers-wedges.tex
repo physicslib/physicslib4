@@ -1869,6 +1869,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     For every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$, $\Delta^{is}U(a)\Delta^{-is} = U(\Lambda(-2\pi s)a)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:translation-light-cone-factorisation, lmm:light-cone-decomposition, lmm:translation-unitaries, lmm:wedge-modular-plus, lmm:wedge-modular-minus, crllr:wedge-stabiliser-commutes-modular, lmm:modular-unitary-group-props}
     By Lemma~\ref{lmm:translation-light-cone-factorisation}, $U(a) = U(\alpha l_+)\,U(\beta l_-)\,U(a_\perp)$. Since $\Delta^{-is}\Delta^{is} = \mathbf{1}$ (\ref{lmm:modular-unitary-group-props}), conjugation by $\Delta^{is}$ is multiplicative. It sends $U(\alpha l_+)$ to $U(e^{-2\pi s}\alpha\,l_+)$ (\ref{lmm:wedge-modular-plus}), $U(\beta l_-)$ to $U(e^{2\pi s}\beta\,l_-)$ (\ref{lmm:wedge-modular-minus}), and fixes $U(a_\perp)$, which commutes with $\Delta^{is}$ (\ref{crllr:wedge-stabiliser-commutes-modular}, since $(a_\perp)^0 = (a_\perp)^1 = 0$). The product is $U(e^{-2\pi s}\alpha\,l_+ + e^{2\pi s}\beta\,l_- + a_\perp) = U(\Lambda(-2\pi s)a)$ by Lemmas~\ref{lmm:translation-unitaries} and~\ref{lmm:light-cone-decomposition}.
 \end{proof}
@@ -1881,6 +1882,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     For every $a \in \mathbb{R}^4$, $J\,U(a)\,J = U(j\,a)$, with $j$ the wedge reflection (\ref{def:wedge-reflection}).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:translation-light-cone-factorisation, lmm:light-cone-decomposition, lmm:translation-unitaries, lmm:wedge-modular-plus, lmm:wedge-modular-minus, crllr:wedge-stabiliser-commutes-modular, lmm:modular-conjugation-bounded-conjugate-identities, thrm:modular-conjugation-involution}
     By Lemma~\ref{lmm:translation-light-cone-factorisation}, $U(a) = U(\alpha l_+)\,U(\beta l_-)\,U(a_\perp)$, and $T \mapsto JTJ$ is multiplicative (\ref{lmm:modular-conjugation-bounded-conjugate-identities}). It sends $U(\alpha l_+)$ to $U(-\alpha l_+)$ (\ref{lmm:wedge-modular-plus}) and $U(\beta l_-)$ to $U(-\beta l_-)$ (\ref{lmm:wedge-modular-minus}). It fixes $U(a_\perp)$: $U(a_\perp)J = JU(a_\perp)$ (\ref{crllr:wedge-stabiliser-commutes-modular}) and $J(J\phi) = \phi$ (\ref{thrm:modular-conjugation-involution}). The product is $U(-\alpha l_+ - \beta l_- + a_\perp) = U(j\,a)$ (\ref{lmm:translation-unitaries}, \ref{lmm:light-cone-decomposition}).
 \end{proof}

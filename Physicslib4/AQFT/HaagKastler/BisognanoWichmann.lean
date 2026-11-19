@@ -387,7 +387,28 @@ theorem IsCovariantVacuumRep.wedge_modularUnitaryGroup_translations
     (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (a : SpacetimeModel) (s : ℝ) :
     Δ[s] ∘L Tr[a] ∘L Δ[-s] = Tr[boostMatrix (-(2 * Real.pi * s)) a] := by
-  sorry
+  set Δ := modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC
+  have hgrp := (modularUnitaryGroup_properties
+    (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC).1
+  have hcancel : ∀ φ : H, Δ (-s) (Δ s φ) = φ := fun φ => by
+    rw [← hgrp.map_add, neg_add_cancel, hgrp.map_zero]
+  have hplus : ∀ (t : ℝ) (φ : H), Δ s (U (translationSub (t • l₊)) (Δ (-s) φ)) =
+      U (translationSub ((Real.exp (-(2 * Real.pi * s)) * t) • l₊)) φ := fun t φ =>
+    congrArg (fun T : H →L[ℂ] H => T φ) ((h.wedge_modular_plus hΩ C hC).1 s t)
+  have hminus : ∀ (t : ℝ) (φ : H), Δ s (U (translationSub (t • l₋)) (Δ (-s) φ)) =
+      U (translationSub ((Real.exp (2 * Real.pi * s) * t) • l₋)) φ := fun t φ =>
+    congrArg (fun T : H →L[ℂ] H => T φ) ((h.wedge_modular_minus hΩ C hC).1 s t)
+  have hperp : ∀ φ : H, U (translationSub !₂[0, 0, a 2, a 3]) (Δ (-s) φ) =
+      Δ (-s) (U (translationSub !₂[0, 0, a 2, a 3]) φ) :=
+    (h.wedge_stabiliser_commute hΩ C hC).1 _
+      (translationSub_smul_rightWedge_of_transverse (by simp) (by simp)) |>.1 (-s)
+  obtain ⟨-, -, hadd, -⟩ := h.translation_unitaries
+  ext ψ
+  change Δ s (U (translationSub a) (Δ (-s) ψ)) = U (translationSub _) ψ
+  rw [h.translation_lightCone_factorisation a, hperp,
+    ← hcancel (U (translationSub (((a 0 - a 1) / 2) • l₋)) _), hminus, hplus,
+    (lightCone_decomposition a _).2.1, hadd, LinearIsometryEquiv.trans_apply, hadd,
+    LinearIsometryEquiv.trans_apply, neg_neg]
 
 /-- A unitary `X` with `X R(B) X⁻¹ = R(B)` for every diamond `B` preserves every region:
 `X S(O) X⁻¹ = S(O)` and `X R(O) X⁻¹ = R(O)` for every `O ⊆ ℝ⁴`. The condition `XΩ = Ω` is not
@@ -422,7 +443,25 @@ theorem IsCovariantVacuumRep.wedge_modularConjugation_translations
     (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (a : SpacetimeModel) :
     𝒥R[Tr[a]] = Tr[wedgeReflection a] := by
-  sorry
+  set J := modularConjugation (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC
+  have hJJ : ∀ ψ, J (J ψ) = ψ :=
+    (modularConjugation_involution (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC).1
+  have hp : ∀ (t : ℝ) ψ, U (translationSub (t • l₊)) (J ψ) = J (U (translationSub (-(t • l₊))) ψ) :=
+    fun t ψ => by
+      have := congrArg (fun T : H →L[ℂ] H => J (T ψ)) ((h.wedge_modular_plus hΩ C hC).2 t)
+      simpa [modularConjugationConj, hJJ, J] using this
+  have hm : ∀ (t : ℝ) ψ, U (translationSub (t • l₋)) (J ψ) = J (U (translationSub (-(t • l₋))) ψ) :=
+    fun t ψ => by
+      have := congrArg (fun T : H →L[ℂ] H => J (T ψ)) ((h.wedge_modular_minus hΩ C hC).2 t)
+      simpa [modularConjugationConj, hJJ, J] using this
+  have ht := ((h.wedge_stabiliser_commute hΩ C hC).2.2 rfl).2 !₂[0, 0, a 2, a 3] (by simp)
+    (by simp)
+  obtain ⟨-, -, hadd, -⟩ := h.translation_unitaries
+  ext ψ
+  change J (U (translationSub a) (J ψ)) = U (translationSub (wedgeReflection a)) ψ
+  rw [h.translation_lightCone_factorisation a, ht.2, hm, hp, hJJ,
+    (lightCone_decomposition a 0).2.2, hadd, LinearIsometryEquiv.trans_apply, hadd,
+    LinearIsometryEquiv.trans_apply, neg_smul, neg_smul]
 
 /-- The wedge modular objects act geometrically on the translations: with `Δ^{is}` and `J` the
 modular objects of `(R(W_R), Ω)`, for every `a ∈ ℝ⁴` and real `s`,
