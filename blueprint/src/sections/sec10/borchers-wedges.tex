@@ -1841,6 +1841,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     For all $s, t \in \mathbb{R}$, $\Delta^{is}U(t\,l_+)\Delta^{-is} = U(e^{-2\pi s}t\,l_+)$ and $J\,U(t\,l_+)\,J = U(-t\,l_+)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:borchers, thrm:wedge-cyclic-separating, lmm:wedge-half-sided-translations}
     Apply Theorem~\ref{thrm:borchers} to $\mathcal{M} = R(W_R)$, a von Neumann algebra with $\Omega$ cyclic and separating (\ref{thrm:wedge-cyclic-separating}), and $V(t) = U(t\,l_+)$, a half-sided translation for $(R(W_R), \Omega)$ by Lemma~\ref{lmm:wedge-half-sided-translations}. The conclusion $V(e^{-2\pi s}t) = U(e^{-2\pi s}t\,l_+)$ is the claim.
 \end{proof}
@@ -1853,6 +1854,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     For all $s, t \in \mathbb{R}$, $\Delta^{is}U(t\,l_-)\Delta^{-is} = U(e^{2\pi s}t\,l_-)$ and $J\,U(t\,l_-)\,J = U(-t\,l_-)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{crllr:borchers-reversed, thrm:wedge-cyclic-separating, lmm:lightlike-translations-positive-energy, lmm:wedge-half-sided-translations}
     Apply Corollary~\ref{crllr:borchers-reversed} to $\mathcal{M} = R(W_R)$ (\ref{thrm:wedge-cyclic-separating}) and $V(t) = U(t\,l_-)$. Positive energy and invariance of $\Omega$ are Lemma~\ref{lmm:lightlike-translations-positive-energy}. The hypothesis $V(t)^*\,x\,V(t) = V(-t)\,x\,V(t) \in \mathcal{M}$ for $t \ge 0$ reads $U(-t\,l_-)\,x\,U(t\,l_-) \in R(W_R)$, the second half of Lemma~\ref{lmm:wedge-half-sided-translations}.
 \end{proof}

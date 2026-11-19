@@ -352,7 +352,9 @@ theorem IsCovariantVacuumRep.wedge_modular_plus (h : N.IsCovariantVacuumRep π �
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) :
     (∀ s t : ℝ, Δ[s] ∘L Tr[t • l₊] ∘L Δ[-s] = Tr[(Real.exp (-(2 * Real.pi * s)) * t) • l₊]) ∧
       ∀ t : ℝ, 𝒥R[Tr[t • l₊]] = Tr[-(t • l₊)] := by
-  sorry
+  obtain ⟨h1, h2⟩ := Physicslib4.Modular.borchers (N.regionVonNeumann_isVonNeumannSet π
+    rightWedge).2 hΩ C hC h.wedge_halfSidedTranslations.2
+  exact ⟨h1, fun t => by simpa only [neg_smul] using h2 t⟩
 
 /-- The wedge modular objects on the `l₋` translations: for all real `s`, `t`,
 `Δ^{is} U(t l₋) Δ^{-is} = U(e^{2πs} t l₋)` and `J U(t l₋) J = U(-t l₋)`, with `Δ^{is}` and `J`
@@ -367,7 +369,11 @@ theorem IsCovariantVacuumRep.wedge_modular_minus (h : N.IsCovariantVacuumRep π 
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) :
     (∀ s t : ℝ, Δ[s] ∘L Tr[t • l₋] ∘L Δ[-s] = Tr[(Real.exp (2 * Real.pi * s) * t) • l₋]) ∧
       ∀ t : ℝ, 𝒥R[Tr[t • l₋]] = Tr[-(t • l₋)] := by
-  sorry
+  obtain ⟨-, hpos, hinv⟩ := h.lightlike_translations_positiveEnergy
+  obtain ⟨hD, hJ⟩ := borchers_reversed (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC
+    hpos (fun t => (hinv t).2) fun t ht x hx => by
+      simpa only [neg_smul] using (h.wedge_halfSidedTranslations.1 t ht x hx).2
+  exact ⟨hD, fun t => by simpa only [neg_smul] using hJ t⟩
 
 /-- The wedge modular group on the translations: for every `a ∈ ℝ⁴` and real `s`,
 `Δ^{is} U(a) Δ^{-is} = U(Λ(-2πs) a)`, with `Δ^{is}` the modular unitary group of `(R(W_R), Ω)`.
