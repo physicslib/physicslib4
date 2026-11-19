@@ -1312,6 +1312,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
     For $n \ge 1$, $F_n$ is continuous on $\Sigma_{1/2}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:modular-power-holomorphic, lmm:dilated-extension-analytic, lmm:positive-energy-extension-operators, lmm:dilation-strip-half-plane, lmm:sandwich-continuous}
     $z \mapsto p_{-iz^\flat,n}(\Delta)$ and $z \mapsto p_{-iz,n}(\Delta)$ are norm-continuous, as the continuous map of Theorem~\ref{thrm:modular-power-holomorphic} composed with the continuous maps $z \mapsto -i\overline{z} + \tfrac{1}{2}$ and $z \mapsto -iz$ (\texttt{Complex.continuous\_conj}). So the two vectors of $F_n$ are continuous in $z$ (\texttt{Continuous.clm\_apply}). $T(z) = \widetilde{V}(\tau e^{2\pi z})$ has $\|T(z)\| \le 1$ on $\Sigma_{1/2}$ (Lemmas~\ref{lmm:dilation-strip-half-plane} and~\ref{lmm:positive-energy-extension-operators}) and is strongly continuous there (Lemma~\ref{lmm:dilated-extension-analytic}), and Lemma~\ref{lmm:sandwich-continuous} with $D = \Sigma_{1/2}$ concludes; $F_n$ agrees with this expression on $\Sigma_{1/2}$ (\texttt{ContinuousOn.congr}).
 \end{proof}
@@ -1324,6 +1325,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
     For $n \ge 1$, $F_n$ is holomorphic on $\Sigma^\circ_{1/2}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-power-operators, thrm:modular-power-holomorphic, lmm:dilated-extension-analytic}
     By Lemma~\ref{lmm:modular-power-operators}, $p_{-iz^\flat,n}(\Delta)^* = p_{iz + 1/2,n}(\Delta)$, since $\overline{-i\overline{z} + 1/2} = iz + \tfrac{1}{2}$. Moving it to the right slot (\texttt{ContinuousLinearMap.adjoint\_inner\_left}) gives, on $\Sigma_{1/2}$,
     \begin{align}

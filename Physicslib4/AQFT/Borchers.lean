@@ -391,7 +391,13 @@ theorem continuousOn_borchersApproximant {M : Set (H →L[ℂ] H)} {Ω : H}
     {τ : ℝ} (hτ : 0 ≤ τ) {φ ψ : H} (hφ : φ ∈ (Δs).domain) (hψ : ψ ∈ (Δs).domain)
     {n : ℕ} (hn : 1 ≤ n) :
     ContinuousOn Fn[τ, φ, ψ, hφ, hψ, n] (kmsStrip (1 / 2)) := by
-  sorry
+  have hP := (hasDerivAt_modularOperator_indicatorCpow hM hΩ C hC hn).2
+  refine ContinuousOn.congr (continuousOn_inner_sandwich ?_ ?_
+    (fun z hz => ((AQFT.positiveEnergyExtension_operators hV).1 _
+      ((AQFT.dilation_strip_halfPlane hτ).1 z hz)).1)
+    (AQFT.dilatedPositiveEnergyExtension_analytic hV hτ).2) fun z hz => Set.indicator_of_mem hz _
+  · exact ((hP.comp (by fun_prop)).clm_apply continuous_const).continuousOn
+  · exact ((hP.comp (by fun_prop)).clm_apply continuous_const).continuousOn
 
 /-- For `n ≥ 1`, the approximant `F_n` is holomorphic on the open strip `0 < Im z < 1/2`.
 
@@ -402,7 +408,35 @@ theorem differentiableOn_borchersApproximant {M : Set (H →L[ℂ] H)} {Ω : H}
     {τ : ℝ} (hτ : 0 ≤ τ) {φ ψ : H} (hφ : φ ∈ (Δs).domain) (hψ : ψ ∈ (Δs).domain)
     {n : ℕ} (hn : 1 ≤ n) :
     DifferentiableOn ℂ Fn[τ, φ, ψ, hφ, hψ, n] (kmsStripInterior (1 / 2)) := by
-  sorry
+  set μ := μΔ
+  have hP : ∀ w, DifferentiableAt ℂ (fun w : ℂ => μ.integral p[w, n]) w := fun w =>
+    ((hasDerivAt_modularOperator_indicatorCpow hM hΩ C hC hn).1 w).differentiableAt
+  have hg : DifferentiableOn ℂ (fun z : ℂ =>
+      ⟪μ.integral cfn ♯[ψ, hψ], (μ.integral p[Complex.I * z + 1 / 2, n] *
+        Ṽ[((τ : ℝ) : ℂ) * Complex.exp (2 * Real.pi * z)] * μ.integral p[-Complex.I * z, n])
+          (μ.integral cfn ♯[φ, hφ])⟫_ℂ) (kmsStripInterior (1 / 2)) := by
+    intro z hz
+    have h1 : DifferentiableAt ℂ (fun z : ℂ => μ.integral p[Complex.I * z + 1 / 2, n]) z :=
+      (hP _).comp z (by fun_prop)
+    have h3 : DifferentiableAt ℂ (fun z : ℂ => μ.integral p[-Complex.I * z, n]) z :=
+      (hP _).comp z (by fun_prop)
+    have h2 := (Physicslib4.AQFT.dilatedPositiveEnergyExtension_analytic hV hτ).1 z hz
+    have hprod := (h1.mul h2).mul h3
+    exact ((innerSL ℂ (μ.integral cfn ♯[ψ, hψ])).differentiableAt.comp z
+      ((ContinuousLinearMap.apply ℂ H (μ.integral cfn ♯[φ, hφ])).differentiableAt.comp z
+        hprod)).differentiableWithinAt
+  refine hg.congr fun z hz => ?_
+  rw [Set.indicator_of_mem (show z ∈ kmsStrip (1 / 2) from ⟨hz.1.le, hz.2.le⟩)]
+  rw [← ContinuousLinearMap.adjoint_inner_right,
+    (modularOperator_indicatorCpow hM hΩ C hC hn _).2.2.2.1]
+  have he : starRingEnd ℂ (-Complex.I * (starRingEnd ℂ z + Complex.I / 2)) =
+      Complex.I * z + 1 / 2 := by
+    rw [map_mul, map_add, map_div₀, map_neg, Complex.conj_I, Complex.conj_conj, map_ofNat]
+    ring_nf
+    rw [Complex.I_sq]
+    ring
+  rw [he]
+  rfl
 
 /-- For `n ≥ 1` and `z` in the closed strip,
 `|F(z) - F_n(z)| ≤ ‖ψ♯ - E_nψ♯‖ ‖φ♯‖ + ‖ψ♯‖ ‖φ♯ - E_nφ♯‖`, so `F_n → F` uniformly on the strip.
