@@ -1083,7 +1083,7 @@ theorem borchers {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV : IsHalfSidedTranslation M Ω V) :
     (∀ s t : ℝ, U[s] ∘L V[t] ∘L U[-s] = V[Real.exp (-(2 * Real.pi * s)) * t]) ∧
-      ∀ t : ℝ, 𝒥[V[t]] = V[-t] := by
-  sorry
+      ∀ t : ℝ, 𝒥[V[t]] = V[-t] :=
+  ⟨borchers_dilation_all hM hΩ C hC hV, borchers_reflection_all hM hΩ C hC hV⟩
 
 end Physicslib4.Modular
