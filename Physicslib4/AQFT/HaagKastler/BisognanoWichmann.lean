@@ -913,8 +913,11 @@ theorem IsCovariantVacuumRep.bisognanoWichmann_internal (h : N.IsCovariantVacuum
       N.IsInternalSymmetry π Ω Z[t] ∧
       ∀ (a : SpacetimeModel) (ψ : H),
         Z[t] (U (translationSub a) ψ) = U (translationSub a) (Z[t] ψ)) ∧
-    ∀ a : SpacetimeModel, 𝒥R[Tr[a]] = Tr[wedgeReflection a] := by
-  sorry
+    ∀ a : SpacetimeModel, 𝒥R[Tr[a]] = Tr[wedgeReflection a] :=
+  ⟨fun t => ⟨(h.wedgeModularDefect_properties hΩ C hC).2.2.1 t,
+    ⟨(h.wedgeModularDefect_vacuum hΩ C hC t).1, h.wedgeModularDefect_local hΩ C hC hMC t⟩,
+    h.wedgeModularDefect_translations hΩ C hC t⟩,
+    h.wedge_modularConjugation_translations hΩ C hC⟩
 
 /-- The internal symmetry commutes with all wedge modular objects: under (MC), for every real `t`,
 `Z(t)` commutes with `Δ_W^{is}` for every real `s` and with `J_W`; it commutes with every boost
