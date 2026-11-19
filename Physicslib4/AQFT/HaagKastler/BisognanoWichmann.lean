@@ -169,7 +169,16 @@ theorem conj_translationSub :
       g * translationSub a * g⁻¹ = translationSub (g.linear a)) ∧
       ∀ (s : ℝ) (a : SpacetimeModel),
         wedgeBoost s * translationSub a * (wedgeBoost s)⁻¹ = translationSub (boostMatrix s a) := by
-  sorry
+  have h : ∀ (g : InhomogeneousLorentzGroup) (a : SpacetimeModel),
+      g * translationSub a * g⁻¹ = translationSub (g.linear a) := fun g a => by
+    refine InhomogeneousLorentzGroup.ext ?_ ?_
+    · ext x
+      change g.linear (g.linear.symm x) = x
+      simp
+    · change g.translation + g.linear a + g.linear (-g.linear.symm g.translation) = g.linear a
+      rw [map_neg, LinearEquiv.apply_symm_apply]
+      abel
+  exact ⟨h, fun s a => h (wedgeBoost s) a⟩
 
 /-- The wedge reflection `j(x⁰, x¹, x², x³) = (-x⁰, -x¹, x², x³)`, the reflection of the
 `(x⁰, x¹)`-plane. It preserves the Minkowski form and has determinant `1`, but it is not
@@ -197,7 +206,8 @@ theorem lightCone_decomposition (a : SpacetimeModel) (s : ℝ) :
         (Real.exp (-s) * ((a 0 - a 1) / 2)) • l₋ + !₂[0, 0, a 2, a 3] ∧
       wedgeReflection a =
         (-((a 0 + a 1) / 2)) • l₊ + (-((a 0 - a 1) / 2)) • l₋ + !₂[0, 0, a 2, a 3] := by
-  sorry
+  refine ⟨?_, ?_, ?_⟩ <;> ext i <;> fin_cases i <;>
+    simp [boostMatrix_apply, wedgeReflection, Real.cosh_eq, Real.sinh_eq] <;> ring
 
 namespace HaagKastlerNet
 

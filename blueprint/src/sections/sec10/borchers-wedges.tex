@@ -1749,6 +1749,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:boost-light-cone}
     The first and third identities are checked componentwise: $\alpha + \beta = a^0$ and $\alpha - \beta = a^1$ (\texttt{ring}). The second follows from the first by linearity of $\Lambda(s)$, with $\Lambda(s)l_\pm = e^{\pm s}l_\pm$ (\ref{lmm:boost-light-cone}) and $\Lambda(s)a_\perp = a_\perp$ (\ref{def:boost-matrix}).
 \end{proof}
@@ -1761,6 +1762,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     Let $g = (L, c)$ be in the inhomogeneous Lorentz group. For every $a \in \mathbb{R}^4$, $g\,\mathrm{translationSub}(a)\,g^{-1} = \mathrm{translationSub}(La)$. In particular $b(s)\,\mathrm{translationSub}(a)\,b(s)^{-1} = \mathrm{translationSub}(\Lambda(s)a)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:wedge-boost}
     By the product rule of \ref{def:inhomogeneous-lorentz-group}, $(L, c)(1, a) = (L, c + La)$ and $g^{-1} = (L^{-1}, -L^{-1}c)$, so $(L, c + La)(L^{-1}, -L^{-1}c) = (1, c + La - c) = (1, La)$ (\texttt{InhomogeneousLorentzGroup.ext}). For $b(s) = (\Lambda(s), 0)$ (\ref{def:wedge-boost}), $L = \Lambda(s)$.
 \end{proof}
