@@ -1346,6 +1346,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
     so $F_n \to F$ uniformly on $\Sigma_{1/2}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-power-cutoff, lmm:positive-energy-extension-operators, lmm:dilation-strip-half-plane, lmm:modular-spectral-projections-converge}
     For $z \in \Sigma_{1/2}$ also $z^\flat \in \Sigma_{1/2}$. Write $a = k_{z^\flat}(\Delta)\psi^\sharp$, $a_n = p_{-iz^\flat,n}(\Delta)c(\Delta)\psi^\sharp$, $b = k_z(\Delta)\varphi^\sharp$, $b_n = p_{-iz,n}(\Delta)c(\Delta)\varphi^\sharp$ and $T = \widetilde{V}(\tau e^{2\pi z})$. Then $F(z) - F_n(z) = \left< a - a_n, Tb \right> + \left< a_n, T(b - b_n) \right>$ (\texttt{inner\_sub\_left}, \texttt{inner\_sub\_right}). By Lemma~\ref{lmm:strip-power-cutoff}, $\|a - a_n\| \le \|\psi^\sharp - E_n\psi^\sharp\|$, $\|b\| \le \|\varphi^\sharp\|$, $\|a_n\| = \|k_{z^\flat}(\Delta)E_n\psi^\sharp\| \le \|\psi^\sharp\|$ ($\|E_n\| \le 1$) and $\|b - b_n\| \le \|\varphi^\sharp - E_n\varphi^\sharp\|$; and $\|T\| \le 1$ (Lemmas~\ref{lmm:dilation-strip-half-plane} and~\ref{lmm:positive-energy-extension-operators}). \texttt{norm\_inner\_le\_norm} gives the bound. It does not depend on $z$ and tends to $0$ (Lemma~\ref{lmm:modular-spectral-projections-converge}), which is uniform convergence (\texttt{Metric.tendstoUniformlyOn\_iff}, \texttt{squeeze\_zero}).
 \end{proof}

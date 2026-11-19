@@ -452,7 +452,52 @@ theorem borchersApproximant_tendstoUniformlyOn {M : Set (H →L[ℂ] H)} {Ω : H
           ‖♯[ψ, hψ]‖ * ‖♯[φ, hφ] - μΔ K[n] ♯[φ, hφ]‖) ∧
       TendstoUniformlyOn (fun (n : ℕ) (z : ℂ) => Fn[τ, φ, ψ, hφ, hψ, n] z)
         F[τ, φ, ψ, hφ, hψ] atTop (kmsStrip (1 / 2)) := by
-  sorry
+  set μ := μΔ
+  have hbound : ∀ n : ℕ, 1 ≤ n → ∀ z ∈ kmsStrip (1 / 2),
+      ‖F[τ, φ, ψ, hφ, hψ] z - Fn[τ, φ, ψ, hφ, hψ, n] z‖ ≤
+        ‖♯[ψ, hψ] - μ K[n] ♯[ψ, hψ]‖ * ‖♯[φ, hφ]‖ +
+          ‖♯[ψ, hψ]‖ * ‖♯[φ, hφ] - μ K[n] ♯[φ, hφ]‖ := by
+    intro n hn z hz
+    have hz' : starRingEnd ℂ z + Complex.I / 2 ∈ kmsStrip (1 / 2) :=
+      ⟨by simp; linarith [hz.2], by simp; linarith [hz.1]⟩
+    have key : ∀ (a an b bn : H) (T : H →L[ℂ] H), ‖T‖ ≤ 1 →
+        ‖⟪a, T b⟫_ℂ - ⟪an, T bn⟫_ℂ‖ ≤ ‖a - an‖ * ‖b‖ + ‖an‖ * ‖b - bn‖ := by
+      intro a an b bn T hT
+      have hTx : ∀ x : H, ‖T x‖ ≤ ‖x‖ := fun x =>
+        (T.le_opNorm x).trans (mul_le_of_le_one_left (norm_nonneg _) hT)
+      have he : ⟪a, T b⟫_ℂ - ⟪an, T bn⟫_ℂ = ⟪a - an, T b⟫_ℂ + ⟪an, T (b - bn)⟫_ℂ := by
+        rw [inner_sub_left, map_sub, inner_sub_right]; ring
+      rw [he]
+      refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
+      · exact (norm_inner_le_norm _ _).trans
+          (mul_le_mul_of_nonneg_left (hTx _) (norm_nonneg _))
+      · exact (norm_inner_le_norm _ _).trans
+          (mul_le_mul_of_nonneg_left (hTx _) (norm_nonneg _))
+    obtain ⟨hA1, hA2⟩ := stripPower_cutoff hM hΩ C hC ♯[ψ, hψ] _ hz' hn
+    obtain ⟨-, hB2⟩ := stripPower_cutoff hM hΩ C hC ♯[φ, hφ] _ hz hn
+    obtain ⟨-, hE⟩ := stripPower_cutoff hM hΩ C hC (μ K[n] ♯[ψ, hψ]) _ hz' hn
+    have han : ‖μ.integral p[-Complex.I * (starRingEnd ℂ z + Complex.I / 2), n]
+        (μ.integral cfn ♯[ψ, hψ])‖ ≤ ‖♯[ψ, hψ]‖ := by
+      rw [hA1]
+      exact ((hE hz').1).trans
+        (Spectral.norm_apply_le_of_isStarProjection (μ.isStarProjection_apply _) _)
+    rw [Set.indicator_of_mem hz, Set.indicator_of_mem hz]
+    refine (key _ _ _ _ _ ((AQFT.positiveEnergyExtension_operators hV).1 _
+      ((AQFT.dilation_strip_halfPlane hτ).1 z hz)).1).trans (add_le_add ?_ ?_)
+    · exact mul_le_mul (hA2 hz').2 (hB2 hz).1 (norm_nonneg _) (norm_nonneg _)
+    · exact mul_le_mul han (hB2 hz).2 (norm_nonneg _) (norm_nonneg _)
+  refine ⟨hbound, ?_⟩
+  have hlim : Tendsto (fun n : ℕ => ‖♯[ψ, hψ] - μ K[n] ♯[ψ, hψ]‖ * ‖♯[φ, hφ]‖ +
+      ‖♯[ψ, hψ]‖ * ‖♯[φ, hφ] - μ K[n] ♯[φ, hφ]‖) atTop (𝓝 0) := by
+    have h : ∀ χ : H, Tendsto (fun n : ℕ => ‖χ - μ K[n] χ‖) atTop (𝓝 0) := fun χ => by
+      simpa [dist_eq_norm] using
+        (tendsto_const_nhds (x := χ)).dist (tendsto_modularSpectralProjection hM hΩ C hC χ)
+    simpa using ((h ♯[ψ, hψ]).mul_const ‖♯[φ, hφ]‖).add ((h ♯[φ, hφ]).const_mul ‖♯[ψ, hψ]‖)
+  rw [Metric.tendstoUniformlyOn_iff]
+  intro ε hε
+  filter_upwards [hlim.eventually (gt_mem_nhds hε), eventually_ge_atTop 1] with n hn h1 z hz
+  rw [dist_eq_norm]
+  exact (hbound n h1 z hz).trans_lt hn
 
 /-- The Borchers function `F` is continuous on the closed strip `0 ≤ Im z ≤ 1/2`, holomorphic on
 the open strip, and bounded there by `‖ψ♯‖ ‖φ♯‖`.
