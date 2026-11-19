@@ -137,7 +137,24 @@ theorem borchers_reversed {M : Set (H →L[ℂ] H)} {Ω : H}
     (hB2 : ∀ t : ℝ, 0 ≤ t → ∀ x ∈ M, V[-t] ∘L x ∘L V[t] ∈ M) :
     (∀ s t : ℝ, U[s] ∘L V[t] ∘L U[-s] = V[Real.exp (2 * Real.pi * s) * t]) ∧
       ∀ t : ℝ, 𝒥[V[t]] = V[-t] := by
-  sorry
+  have hc := isCyclicSeparatingVector_centralizer hM hΩ
+  obtain ⟨-, hU, hJ⟩ := commutant_modularUnitaryGroup hM hΩ C hC
+  have hV2 : ∀ a b : ℝ, a + b = 0 → ∀ ψ, V a (V b ψ) = ψ := fun a b hab ψ => by
+    rw [← hV.isOneParameterUnitaryGroup.map_add, hab, hV.isOneParameterUnitaryGroup.map_zero]
+  have hHST : IsHalfSidedTranslation (Set.centralizer M) Ω V := by
+    refine ⟨hV, hB1, fun t ht y hy => ?_⟩
+    rw [Set.mem_centralizer_iff] at hy ⊢
+    intro x hx
+    ext ψ
+    have key := congrArg (fun T : H →L[ℂ] H => V t (T (V (-t) ψ))) (hy _ (hB2 t ht x hx))
+    simpa [hV2 t (-t) (by ring), hV2 (-t) t (by ring)] using key
+  obtain ⟨hD, hR⟩ := borchers hc.1 hc.2 C hC hHST
+  refine ⟨fun s t => ?_, fun t => ?_⟩
+  · have h := hD (-s) t
+    simpa only [hU, neg_neg, mul_neg] using h
+  · rw [← hR t]
+    ext ψ
+    simp [modularConjugationConj, hJ]
 
 end Commutant
 
@@ -258,7 +275,9 @@ theorem IsCovariantVacuumRep.translation_lightCone_factorisation
       U (translationSub (((a 0 + a 1) / 2) • l₊))
         (U (translationSub (((a 0 - a 1) / 2) • l₋))
           (U (translationSub !₂[0, 0, a 2, a 3]) ψ)) := by
-  sorry
+  obtain ⟨-, -, hadd, -⟩ := h.translation_unitaries
+  conv_lhs => rw [(lightCone_decomposition a 0).1]
+  rw [hadd, LinearIsometryEquiv.trans_apply, hadd, LinearIsometryEquiv.trans_apply]
 
 /-- The lightlike translations `t ↦ U(t l₊)` and `t ↦ U(t l₋)` have positive energy, and
 `U(t l₊)Ω = U(t l₋)Ω = Ω` for every `t`.

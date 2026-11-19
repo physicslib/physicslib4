@@ -1732,6 +1732,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     The hypotheses do not make $V$ a half-sided translation for $(\mathcal{M}, \Omega)$, nor $t \mapsto V(-t)$, whose generator is negative. They make $V$ a half-sided translation for $(\mathcal{M}', \Omega)$ (\ref{def:half-sided-translation}), as the proof shows.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:commutant-modular-unitary-group, lmm:unitary-reverse-endomorphism-commutant, lmm:commutant-von-neumann-algebra, lmm:unitary-group-inner-adjoint, thrm:borchers, def:half-sided-translation}
     $\mathcal{M}'$ is a von Neumann algebra (Lemma~\ref{lmm:commutant-von-neumann-algebra}) with $\Omega$ cyclic and separating (Lemma~\ref{lmm:commutant-modular-unitary-group}). For $t \ge 0$, Lemma~\ref{lmm:unitary-reverse-endomorphism-commutant} with $X = V(t)$, $X^* = V(-t)$ (\ref{lmm:unitary-group-inner-adjoint}), gives $V(t)\,y\,V(t)^* \in \mathcal{M}'$ for $y \in \mathcal{M}'$. Together with positive energy and $V(t)\Omega = \Omega$, $V$ is a half-sided translation for $(\mathcal{M}', \Omega)$ (\ref{def:half-sided-translation}). So Theorem~\ref{thrm:borchers} applies to $(\mathcal{M}', \Omega, V)$: $\Delta_{\mathcal{M}'}^{is}V(t)\Delta_{\mathcal{M}'}^{-is} = V(e^{-2\pi s}t)$ and $J_{\mathcal{M}'}V(t)J_{\mathcal{M}'} = V(-t)$. By Lemma~\ref{lmm:commutant-modular-unitary-group}, $\Delta_{\mathcal{M}'}^{is} = \Delta^{-is}$ and $J_{\mathcal{M}'} = J$; replacing $s$ by $-s$ gives the claim.
 \end{proof}
@@ -1795,6 +1796,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:light-cone-decomposition, lmm:translation-unitaries}
     $a = \alpha\,l_+ + \beta\,l_- + a_\perp$ (\ref{lmm:light-cone-decomposition}), and $U(a + a') = U(a)U(a')$ applied twice (\ref{lmm:translation-unitaries}).
 \end{proof}
