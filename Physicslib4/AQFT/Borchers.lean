@@ -1006,7 +1006,13 @@ theorem borchers_dilation_nonneg {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV : IsHalfSidedTranslation M Ω V)
     {t : ℝ} (ht : 0 ≤ t) (s : ℝ) :
     U[s] ∘L V[t] ∘L U[-s] = V[Real.exp (-(2 * Real.pi * s)) * t] := by
-  sorry
+  have hτt : Real.exp (-(2 * Real.pi * s)) * t * Real.exp (2 * Real.pi * s) = t := by
+    rw [mul_right_comm, ← Real.exp_add, neg_add_cancel, Real.exp_zero, one_mul]
+  refine eq_of_selfAdjoint_matrix_coefficients hM hΩ fun x hx hxs y hy hys => ?_
+  have h := (borchersFunction_constant hM hΩ C hC hV (mul_nonneg (Real.exp_pos _).le ht) hx hxs
+    hy hys s).1
+  rw [hτt] at h
+  exact h
 
 /-- Reflection for nonnegative times: for a half-sided translation `V` and `τ ≥ 0`,
 `J V(-τ) J = V(τ)`.
@@ -1016,8 +1022,9 @@ theorem borchers_reflection_nonneg {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
     (hC : ∀ x, C (C x) = x) {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV : IsHalfSidedTranslation M Ω V)
     {τ : ℝ} (hτ : 0 ≤ τ) :
-    𝒥[V[-τ]] = V[τ] := by
-  sorry
+    𝒥[V[-τ]] = V[τ] :=
+  (eq_of_selfAdjoint_matrix_coefficients hM hΩ fun _ hx hxs _ hy hys =>
+    (borchersFunction_constant hM hΩ C hC hV hτ hx hxs hy hys 0).2).symm
 
 /-- Dilation for all times: for a half-sided translation `V` and all real `s, t`,
 `Δ^{is} V(t) Δ^{-is} = V(e^{-2πs} t)`.

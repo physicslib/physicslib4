@@ -1600,6 +1600,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $t \ge 0$ and $s \in \mathbb{R}$, $\Delta^{is}V(t)\Delta^{-is} = V(e^{-2\pi s}t)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:borchers-function-constant, lmm:eq-of-self-adjoint-matrix-coefficients}
     Put $\tau = e^{-2\pi s}t \ge 0$, so $\tau e^{2\pi s} = t$ (\texttt{Real.exp\_neg}, \texttt{Real.exp\_add}). Lemma~\ref{lmm:borchers-function-constant} gives $\left< y\Omega, \Delta^{is}V(t)\Delta^{-is}x\Omega \right> = \left< y\Omega, V(\tau)x\Omega \right>$ for all self-adjoint $x \in \mathcal{M}$, $y \in \mathcal{M}'$, and Lemma~\ref{lmm:eq-of-self-adjoint-matrix-coefficients} concludes.
 \end{proof}
@@ -1612,6 +1613,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $\tau \ge 0$, $JV(-\tau)J = V(\tau)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:borchers-function-constant, lmm:eq-of-self-adjoint-matrix-coefficients}
     $W(\tau) = JV(-\tau)J$, and Lemma~\ref{lmm:borchers-function-constant} gives $\left< y\Omega, W(\tau)x\Omega \right> = \left< y\Omega, V(\tau)x\Omega \right>$ for all self-adjoint $x \in \mathcal{M}$, $y \in \mathcal{M}'$. Lemma~\ref{lmm:eq-of-self-adjoint-matrix-coefficients} concludes.
 \end{proof}
