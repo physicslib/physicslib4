@@ -1358,6 +1358,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
     $F$ is continuous on $\Sigma_{1/2}$, holomorphic on $\Sigma^\circ_{1/2}$, and $|F(z)| \le \|\psi^\sharp\|\,\|\varphi^\sharp\|$ for $z \in \Sigma_{1/2}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:borchers-approximants-continuous, lmm:borchers-approximants-holomorphic, lmm:borchers-approximants-uniform, lmm:strip-power-cutoff, lmm:positive-energy-extension-operators, lmm:dilation-strip-half-plane}
     A uniform limit of continuous functions is continuous (\texttt{TendstoUniformlyOn.continuousOn}, Lemmas~\ref{lmm:borchers-approximants-continuous} and~\ref{lmm:borchers-approximants-uniform}). On the open set $\Sigma^\circ_{1/2}$ the convergence is locally uniform (\texttt{TendstoUniformlyOn.mono}, \texttt{TendstoUniformlyOn.tendstoLocallyUniformlyOn}), so $F$ is holomorphic there (\texttt{TendstoLocallyUniformlyOn.differentiableOn}, Lemma~\ref{lmm:borchers-approximants-holomorphic}). The bound is \texttt{norm\_inner\_le\_norm} with $\|k_\zeta(\Delta)\chi\| \le \|\chi\|$ for $\zeta \in \Sigma_{1/2}$ (Lemma~\ref{lmm:strip-power-cutoff}) and $\|\widetilde{V}(\tau e^{2\pi z})\| \le 1$ (Lemmas~\ref{lmm:dilation-strip-half-plane} and~\ref{lmm:positive-energy-extension-operators}).
 \end{proof}
@@ -1373,6 +1374,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-power-lower-boundary, lmm:strip-power-upper-boundary, lmm:positive-energy-extension-operators, lmm:dilation-strip-half-plane}
     For real $t$, $t^\flat = t + \tfrac{i}{2}$ and $(t + \tfrac{i}{2})^\flat = t$ (\texttt{Complex.conj\_ofReal}). Lemmas~\ref{lmm:strip-power-lower-boundary} and~\ref{lmm:strip-power-upper-boundary} evaluate the two vectors. $\widetilde{V}(\tau e^{2\pi t}) = V(\tau e^{2\pi t})$, and $\widetilde{V}(\tau e^{2\pi(t + i/2)}) = \widetilde{V}(-\tau e^{2\pi t}) = V(-\tau e^{2\pi t})$, by Lemmas~\ref{lmm:dilation-strip-half-plane} and~\ref{lmm:positive-energy-extension-operators}, the arguments being real (\texttt{Complex.ofReal\_exp}).
 \end{proof}

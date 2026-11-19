@@ -510,7 +510,27 @@ theorem borchersFunction_analytic {M : Set (H →L[ℂ] H)} {Ω : H}
     ContinuousOn F[τ, φ, ψ, hφ, hψ] (kmsStrip (1 / 2)) ∧
       DifferentiableOn ℂ F[τ, φ, ψ, hφ, hψ] (kmsStripInterior (1 / 2)) ∧
       ∀ z ∈ kmsStrip (1 / 2), ‖F[τ, φ, ψ, hφ, hψ] z‖ ≤ ‖♯[ψ, hψ]‖ * ‖♯[φ, hφ]‖ := by
-  sorry
+  have hU := (borchersApproximant_tendstoUniformlyOn hM hΩ C hC hV hτ hφ hψ).2
+  have hsub : kmsStripInterior (1 / 2) ⊆ kmsStrip (1 / 2) := fun z hz => ⟨hz.1.le, hz.2.le⟩
+  have hopen : IsOpen (kmsStripInterior (1 / 2)) :=
+    (isOpen_lt continuous_const Complex.continuous_im).inter
+      (isOpen_lt Complex.continuous_im continuous_const)
+  refine ⟨hU.continuousOn ((eventually_ge_atTop 1).mono fun n hn =>
+      continuousOn_borchersApproximant hM hΩ C hC hV hτ hφ hψ hn).frequently,
+    TendstoLocallyUniformlyOn.differentiableOn (hU.mono hsub).tendstoLocallyUniformlyOn
+      ((eventually_ge_atTop 1).mono fun n hn =>
+        differentiableOn_borchersApproximant hM hΩ C hC hV hτ hφ hψ hn) hopen,
+    fun z hz => ?_⟩
+  have hz' : starRingEnd ℂ z + Complex.I / 2 ∈ kmsStrip (1 / 2) :=
+    ⟨by simp; linarith [hz.2], by simp; linarith [hz.1]⟩
+  have hT := ((AQFT.positiveEnergyExtension_operators hV).1 _
+    ((AQFT.dilation_strip_halfPlane hτ).1 z hz)).1
+  rw [Set.indicator_of_mem hz]
+  refine (norm_inner_le_norm _ _).trans (mul_le_mul
+    ((stripPower_cutoff hM hΩ C hC ♯[ψ, hψ] _ hz' le_rfl).2 hz').1 ?_ (norm_nonneg _)
+    (norm_nonneg _))
+  exact (ContinuousLinearMap.le_of_opNorm_le _ hT _).trans (by
+    rw [one_mul]; exact ((stripPower_cutoff hM hΩ C hC ♯[φ, hφ] _ hz le_rfl).2 hz).1)
 
 /-- The boundary values of the Borchers function: for real `t`,
 `F(t) = ⟪Δ^{-it}Δ^{1/2}ψ, V(τe^{2πt})Δ^{-it}φ⟫` and
@@ -525,7 +545,21 @@ theorem borchersFunction_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
         ⟪U[-t] (Δs ⟨ψ, hψ⟩), V (τ * Real.exp (2 * Real.pi * t)) (U[-t] φ)⟫_ℂ ∧
       F[τ, φ, ψ, hφ, hψ] ((t : ℂ) + Complex.I / 2) =
         ⟪U[-t] ψ, V (-(τ * Real.exp (2 * Real.pi * t))) (U[-t] (Δs ⟨φ, hφ⟩))⟫_ℂ := by
-  sorry
+  have hV' := (AQFT.positiveEnergyExtension_operators hV).2
+  have h0 : (τ : ℂ) * Complex.exp (2 * Real.pi * (t : ℂ)) =
+      ((τ * Real.exp (2 * Real.pi * t) : ℝ) : ℂ) := by push_cast; rfl
+  refine ⟨?_, ?_⟩
+  · rw [Set.indicator_of_mem (show (t : ℂ) ∈ kmsStrip (1 / 2) from ⟨by simp, by simp⟩),
+      Complex.conj_ofReal, stripPower_upper_boundary hM hΩ C hC hψ t,
+      stripPower_lower_boundary hM hΩ C hC hφ t, h0, hV']
+    rfl
+  · have hc : starRingEnd ℂ ((t : ℂ) + Complex.I / 2) + Complex.I / 2 = (t : ℂ) := by
+      rw [map_add, map_div₀, Complex.conj_I, Complex.conj_ofReal, map_ofNat]; ring
+    rw [Set.indicator_of_mem (show (t : ℂ) + Complex.I / 2 ∈ kmsStrip (1 / 2) from
+        ⟨by simp, by simp⟩), hc, stripPower_lower_boundary hM hΩ C hC hψ t,
+      stripPower_upper_boundary hM hΩ C hC hφ t, (AQFT.dilation_strip_halfPlane hτ).2.2 t,
+      ← Complex.ofReal_neg, hV']
+    rfl
 
 /-! ### Reality on the boundary -/
 
