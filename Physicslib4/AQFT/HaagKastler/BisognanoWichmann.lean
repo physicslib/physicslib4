@@ -730,7 +730,16 @@ theorem IsCovariantVacuumRep.wedgeModularDefect_properties (h : N.IsCovariantVac
         (∀ (a : SpacetimeModel) (ψ : H),
           Z[t] (U (translationSub a) ψ) = U (translationSub a) (Z[t] ψ)) ∧
         ∀ (s : ℝ) (ψ : H), Z[t] (U (wedgeBoost s) ψ) = U (wedgeBoost s) (Z[t] ψ) := by
-  sorry
+  obtain ⟨h0, hadd⟩ := h.wedgeModularDefect_group hΩ C hC
+  refine ⟨⟨fun ψ => by rw [h0]; rfl, fun s t ψ => by rw [hadd]; rfl⟩,
+    h.wedgeModularDefect_continuous hΩ C hC, fun t ψ => ?_, fun t =>
+    ⟨(h.wedgeModularDefect_vacuum hΩ C hC t).1, (h.wedgeModularDefect_vacuum hΩ C hC t).2,
+      h.wedgeModularDefect_translations hΩ C hC t, h.wedgeModularDefect_boosts hΩ C hC t⟩⟩
+  have hb : U (wedgeBoost (2 * Real.pi * t)) (U (wedgeBoost (-(2 * Real.pi * t))) ψ) = ψ := by
+    rw [← LinearIsometryEquiv.trans_apply, ← h.map_mul, ← wedgeBoost_groupLaw.2, add_neg_cancel,
+      wedgeBoost_groupLaw.1, h.map_one]
+    rfl
+  rw [wedgeModularDefect, LinearIsometryEquiv.trans_apply, hb]
 
 /-! ### Bisognano–Wichmann up to an internal symmetry -/
 
@@ -814,7 +823,39 @@ theorem IsCovariantVacuumRep.modularCovariant_all_wedges (h : N.IsCovariantVacuu
         hΩg C hC t] a) '' N.localVonNeumann π hB =
       N.localVonNeumann π
         (isAlexandrovBasisSet_smul (wedgeBoostAlong g (-(2 * Real.pi * t))) hB) := by
-  sorry
+  have hcongr : ∀ {B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier}
+      (h₁ : IsAlexandrovBasisSet B₁) (h₂ : IsAlexandrovBasisSet B₂),
+      B₁ = B₂ → N.localVonNeumann π h₁ = N.localVonNeumann π h₂ := by
+    rintro _ _ _ _ rfl; rfl
+  have hinv : ∀ x, U g⁻¹ x = (U g).symm x := fun x => by
+    apply (U g).injective
+    rw [LinearIsometryEquiv.apply_symm_apply, ← LinearIsometryEquiv.trans_apply, ← h.map_mul,
+      mul_inv_cancel, h.map_one]; rfl
+  have hconj : ∀ (k : InhomogeneousLorentzGroup) {B' : Set StandardMinkowskiSpacetime.Carrier}
+      (hB' : IsAlexandrovBasisSet B'),
+      (fun a => conj[U k] a) '' N.localVonNeumann π hB' =
+        N.localVonNeumann π (isAlexandrovBasisSet_smul k hB') := fun k B' hB' => by
+    have hfun : (fun a => conj[U k] a) = Physicslib4.lieConj (U k) := by
+      funext a; ext x; simp
+    rw [hfun]; exact lieConj_image_localVonNeumann N π (U k) k hB' (h.covariant k)
+  obtain ⟨-, -, -, hU, -⟩ := h.wedge_modular_covariance (W := rightWedge) ⟨1, (one_smul _ _).symm⟩
+    g hΩ hΩg C C hC hC
+  have hfun : (fun a : H →L[ℂ] H => conj[modularUnitaryGroup
+      (N.regionVonNeumann_isVonNeumannSet π (g • rightWedge)).2 hΩg C hC t] a) =
+      (fun a : H →L[ℂ] H => conj[U g] a) ∘ (fun a : H →L[ℂ] H => conj[modularUnitaryGroup
+        (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC t] a) ∘
+        (fun a : H →L[ℂ] H => conj[U g⁻¹] a) := by
+    funext a; ext x
+    simp only [Function.comp_apply, ContinuousLinearMap.comp_apply,
+      LinearIsometry.coe_toContinuousLinearMap, LinearIsometryEquiv.coe_toLinearIsometry]
+    have hg : ∀ y, (U g⁻¹).symm y = U g y := fun y => by
+      rw [LinearIsometryEquiv.symm_apply_eq, hinv, LinearIsometryEquiv.symm_apply_apply]
+    rw [hg, hinv, hU]
+    congr 2
+    rw [LinearIsometryEquiv.symm_apply_eq, ← hU, LinearIsometryEquiv.symm_apply_apply,
+      LinearIsometryEquiv.apply_symm_apply, LinearIsometryEquiv.apply_symm_apply]
+  rw [hfun, Set.image_comp, Set.image_comp, hconj, hMC, hconj]
+  exact hcongr _ _ (by rw [wedgeBoostAlong, mul_smul, mul_smul])
 
 /-- Under (MC) the defect preserves every local algebra: `Z(t) R(B) Z(t)⁻¹ = R(B)` for every real
 `t` and every diamond `B`.

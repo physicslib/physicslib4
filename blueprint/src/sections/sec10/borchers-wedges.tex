@@ -2020,6 +2020,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
     \end{align}
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lmm:wedge-modular-defect-vacuum, lmm:wedge-modular-defect-translations, lmm:wedge-modular-defect-boosts, lmm:wedge-modular-defect-group, lmm:wedge-modular-defect-continuous, lmm:boost-group-law}
     Lemmas~\ref{lmm:wedge-modular-defect-vacuum}, \ref{lmm:wedge-modular-defect-translations}, \ref{lmm:wedge-modular-defect-boosts}, \ref{lmm:wedge-modular-defect-group} and~\ref{lmm:wedge-modular-defect-continuous}. The factorisation of $\Delta^{it}$ is $U(b(2\pi t))U(b(-2\pi t)) = U(b(0)) = \mathbf{1}$ (\ref{lmm:boost-group-law} and the group law of $U$).
 \end{proof}
@@ -2087,6 +2088,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{crllr:wedge-modular-covariance, thrm:von-neumann-geometric-covariance, lmm:poincare-maps-diamonds, lmm:translation-unitaries}
     By Corollary~\ref{crllr:wedge-modular-covariance}, $\Delta_{gW_R}^{it} = U(g)\Delta^{it}U(g)^{-1}$. By Theorem~\ref{thrm:von-neumann-geometric-covariance} for $g^{-1}$, with $U(g^{-1}) = U(g)^{-1}$ (\ref{lmm:translation-unitaries}), $U(g)^{-1}R(\mathbf{B})U(g) = R(g^{-1}\mathbf{B})$, where $g^{-1}\mathbf{B}$ is a diamond (\ref{lmm:poincare-maps-diamonds}). So the left side is $U(g)\,\Delta^{it}R(g^{-1}\mathbf{B})\Delta^{-it}\,U(g)^{-1} = U(g)\,R(b(-2\pi t)g^{-1}\mathbf{B})\,U(g)^{-1}$ by (MC), which is $R(g\,b(-2\pi t)\,g^{-1}\mathbf{B}) = R(b_g(-2\pi t)\mathbf{B})$ by Theorem~\ref{thrm:von-neumann-geometric-covariance} (\texttt{mul\_smul}).
 \end{proof}
