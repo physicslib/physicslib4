@@ -618,7 +618,24 @@ theorem IsCovariantVacuumRep.wedgeModularDefect_translations (h : N.IsCovariantV
     (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (t : ℝ) (a : SpacetimeModel) (ψ : H) :
     Z[t] (U (translationSub a) ψ) = U (translationSub a) (Z[t] ψ) := by
-  sorry
+  set Δ := modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC
+  have hgrp := (modularUnitaryGroup_properties
+    (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC).1
+  have hcancel : ∀ φ : H, Δ (-t) (Δ t φ) = φ := fun φ => by
+    rw [← hgrp.map_add, neg_add_cancel, hgrp.map_zero]
+  have hΔ : ∀ φ : H, Δ t (U (translationSub (boostMatrix (2 * Real.pi * t) a)) (Δ (-t) φ)) =
+      U (translationSub a) φ := fun φ => by
+    refine (DFunLike.congr_fun (h.wedge_modularUnitaryGroup_translations hΩ C hC
+      (boostMatrix (2 * Real.pi * t) a) t) φ).trans ?_
+    change U (translationSub (boostMatrix _ _)) φ = _
+    rw [← boostMatrix_groupLaw.2.2, LinearEquiv.symm_apply_apply]
+  have hb : U (wedgeBoost (2 * Real.pi * t)) (U (translationSub a) ψ) =
+      U (translationSub (boostMatrix (2 * Real.pi * t) a))
+        (U (wedgeBoost (2 * Real.pi * t)) ψ) := by
+    simpa using h.translation_unitaries.2.2.2.2.2.2 (2 * Real.pi * t) a
+      (U (wedgeBoost (2 * Real.pi * t)) ψ)
+  rw [wedgeModularDefect, LinearIsometryEquiv.trans_apply, LinearIsometryEquiv.trans_apply, hb,
+    ← hΔ, hcancel]
 
 /-- The defect commutes with the boosts: `Z(t) U(b(s)) = U(b(s)) Z(t)` for all real `s`, `t`.
 
@@ -660,7 +677,25 @@ theorem IsCovariantVacuumRep.wedgeModularDefect_continuous (h : N.IsCovariantVac
     (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) (ψ : H) :
     Continuous fun t : ℝ => Z[t] ψ := by
-  sorry
+  set V := modularUnitaryGroup (N.regionVonNeumann_isVonNeumannSet π rightWedge).2 hΩ C hC
+  have hV := (modularUnitaryGroup_properties (N.regionVonNeumann_isVonNeumannSet π rightWedge).2
+    hΩ C hC).2.1
+  have hg : Continuous fun t : ℝ => U (wedgeBoost (2 * Real.pi * t)) ψ :=
+    (h.continuous_apply _ isContinuousOneParameterSubgroup_wedgeBoost ψ).comp
+      (by fun_prop : Continuous fun t : ℝ => 2 * Real.pi * t)
+  refine continuous_iff_continuousAt.2 fun t₀ => ?_
+  refine tendsto_iff_dist_tendsto_zero.2 (squeeze_zero (fun _ => dist_nonneg) (fun t => ?_)
+    (g := fun t => dist (U (wedgeBoost (2 * Real.pi * t)) ψ)
+        (U (wedgeBoost (2 * Real.pi * t₀)) ψ) +
+      dist (V t (U (wedgeBoost (2 * Real.pi * t₀)) ψ))
+        (V t₀ (U (wedgeBoost (2 * Real.pi * t₀)) ψ))) ?_)
+  · simp only [wedgeModularDefect, LinearIsometryEquiv.trans_apply]
+    refine (dist_triangle _ (V t (U (wedgeBoost (2 * Real.pi * t₀)) ψ)) _).trans_eq ?_
+    rw [LinearIsometryEquiv.dist_map]
+  · have h1 := tendsto_iff_dist_tendsto_zero.1 (hg.tendsto t₀)
+    have h2 := tendsto_iff_dist_tendsto_zero.1
+      ((hV (U (wedgeBoost (2 * Real.pi * t₀)) ψ)).tendsto t₀)
+    simpa using h1.add h2
 
 /-- The wedge modular group up to a defect: `Z(t) = Δ^{it} U(b(2πt))` is a strongly continuous
 one-parameter unitary group with `Δ^{it} = Z(t) U(b(-2πt))`, and for all real `t`, `s` and
