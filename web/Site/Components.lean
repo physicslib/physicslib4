@@ -213,7 +213,11 @@ def featureCards : Array FeatureCard := #[
   { title := "Tomita–Takesaki theory."
     desc := "The modular operator and conjugation, Tomita's theorem JMJ = M′ and ΔⁱᵗMΔ⁻ⁱᵗ = M, and Takesaki's KMS theorem."
     sections := #["§10.10"]
-    url := manualChapterUrl "Tomita-Takesaki-theory" }
+    url := manualChapterUrl "Tomita-Takesaki-theory" },
+  { title := "Borchers' theorem and the wedge modular group."
+    desc := "Borchers' theorem for half-sided translations, the wedge modular group acting on translations as the boosts, and Bisognano–Wichmann up to an internal symmetry."
+    sections := #["§10.11"]
+    url := manualChapterUrl "Borchers-theorem-and-the-wedge-modular-group" }
 ]
 
 /--

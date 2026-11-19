@@ -1016,13 +1016,13 @@ The theorem is stated with the positive-energy condition of \ref{def:positive-en
 
 \subsubsection{Functions Real on Both Edges of a Strip}
 
-For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{Im} z \le \beta \}$ and $\Sigma^\circ_\beta = \{ z \in \mathbb{C} : 0 < \operatorname{Im} z < \beta \}$. For $f : \mathbb{C} \to \mathbb{C}$ let $\Phi_f(z) = \overline{f(\overline{z})}$ if $\operatorname{Im} z < 0$ and $\Phi_f(z) = f(z)$ otherwise; this is the Schwarz reflection of $f$ across the real axis.
+For $\beta \in \mathbb{R}$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{Im} z \le \beta \}$ and $\Sigma^\circ_\beta = \{ z \in \mathbb{C} : 0 < \operatorname{Im} z < \beta \}$. For $f : \mathbb{C} \to \mathbb{C}$ let $\Phi_f(z) = \overline{f(\overline{z})}$ if $\operatorname{Im} z < 0$ and $\Phi_f(z) = f(z)$ otherwise; this is the Schwarz reflection of $f$ across the real axis.
 
 \begin{lemma}[Continuity of the Reflection across a Real Edge]
     \label{lmm:strip-reflection-continuous}
     \lean{Physicslib4.continuousOn_stripReflection}
     \leanok
-    Let $\beta > 0$ and let $f$ be continuous on $\Sigma_\beta$ with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is continuous on $\{ z : -\beta \le \operatorname{Im} z \le \beta \}$.
+    Let $\beta \in \mathbb{R}$ and let $f$ be continuous on $\Sigma_\beta$ with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is continuous on $\{ z : -\beta \le \operatorname{Im} z \le \beta \}$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1033,7 +1033,7 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
     \label{lmm:strip-reflection-holomorphic}
     \lean{Physicslib4.differentiableOn_stripReflection}
     \leanok
-    Let $\beta > 0$ and let $f$ be continuous on $\Sigma_\beta$, holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is holomorphic on $\{ z : -\beta < \operatorname{Im} z < \beta \}$.
+    Let $\beta \in \mathbb{R}$ and let $f$ be continuous on $\Sigma_\beta$, holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is holomorphic on $\{ z : -\beta < \operatorname{Im} z < \beta \}$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1045,7 +1045,7 @@ For $\beta > 0$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \operatorname{
     \label{lmm:strip-shifted-reflection-regular}
     \lean{Physicslib4.stripShiftedReflection_regular}
     \leanok
-    Let $\beta > 0$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi$ is continuous and bounded on $\Sigma_{2\beta}$ and holomorphic on $\Sigma^\circ_{2\beta}$.
+    Let $\beta \in \mathbb{R}$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi$ is continuous and bounded on $\Sigma_{2\beta}$ and holomorphic on $\Sigma^\circ_{2\beta}$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1453,7 +1453,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     \lean{Physicslib4.Modular.reflectedGroup_unitary}
     \uses{def:modular-conjugation-conjugate, def:unitary-operator, def:half-sided-translation}
     \leanok
-    Assume clause (B1) of Definition~\ref{def:half-sided-translation}. For $t \ge 0$, $W(t)$ is unitary and $W(t)\Omega = \Omega$.
+    Assume clause (B1) of Definition~\ref{def:half-sided-translation}. For every $t \in \mathbb{R}$, $W(t)$ is unitary and $W(t)\Omega = \Omega$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1666,6 +1666,8 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 This subsection applies Borchers' theorem to the algebra of the right wedge and the lightlike translations along its edges. The result (Theorem~\ref{thrm:wedge-modular-translations}) is that $\Delta_{W_R}^{is}$ acts on the translations as the boost $b(-2\pi s)$ does, and $J_{W_R}$ as the reflection of the $(x^0, x^1)$-plane. This consequence of Borchers' theorem is drawn in Borchers' paper (\emph{Commun. Math. Phys.} 143 (1992) 315--332). It needs no assumption beyond a covariant vacuum representation with weak additivity. The unitary $Z(t) = \Delta_{W_R}^{it}U(b(2\pi t))$ measures how far $\Delta_{W_R}^{it}$ is from the boost $U(b(-2\pi t))$: it commutes with every translation and every boost of $W_R$, fixes $\Omega$, preserves $R(W_R)$, and is a strongly continuous one-parameter unitary group (Corollary~\ref{crllr:wedge-modular-defect}). The Bisognano--Wichmann identification $\Delta_{W_R}^{it} = U(b(-2\pi t))$ is the statement $Z \equiv \mathbf{1}$.
 
 The two lightlike directions behave differently. For $l_+ = (1, 1, 0, 0)$ the translations $U(t\,l_+)$ with $t \ge 0$ map $R(W_R)$ into itself and have positive generator, so Borchers' theorem applies directly. For $l_- = (1, -1, 0, 0)$ the generator is again positive, since $l_-$ is future-directed, but $W_R + t\,l_- \not\subseteq W_R$ for $t > 0$; it is the translations by $-t\,l_-$, $t \ge 0$, that map $W_R$ into itself (\ref{lmm:wedge-translations}). Borchers' theorem is therefore applied to the commutant $R(W_R)'$, whose modular group is $\Delta_{W_R}^{-is}$ (Corollary~\ref{crllr:borchers-reversed}), and the dilation of $l_-$ has the opposite sign, matching $\Lambda(-2\pi s)l_- = e^{2\pi s}l_-$ (\ref{lmm:boost-light-cone}).
+
+Weak additivity enters the results of this subsection and the next only through Theorem~\ref{thrm:wedge-cyclic-separating}, which makes $\Omega$ cyclic and separating for the wedge algebras. The Lean statements therefore take that standardness as their hypothesis in place of weak additivity; under weak additivity it is supplied by Theorem~\ref{thrm:wedge-cyclic-separating}, so the results as stated here follow. The commutation of an internal symmetry with the modular objects (Lemma~\ref{lmm:internal-symmetry-commutes-wedge-modular}, Corollary~\ref{crllr:bw-defect-commutes-wedge-modular}) holds in the same way for every region whose algebra has $\Omega$ as a cyclic and separating vector.
 
 \emph{Notation.} For $a \in \mathbb{R}^4$ write
 \begin{align}
