@@ -232,7 +232,21 @@ theorem IsCovariantVacuumRep.translation_unitaries (h : N.IsCovariantVacuumRep �
       ∀ (s : ℝ) (a : SpacetimeModel) (ψ : H),
         U (wedgeBoost s) (U (translationSub a) ((U (wedgeBoost s)).symm ψ)) =
           U (translationSub (boostMatrix s a)) ψ := by
-  sorry
+  have hinv : ∀ g : InhomogeneousLorentzGroup, (U g).symm = U g⁻¹ := fun g => by
+    ext ψ
+    conv_rhs => rw [← (U g).apply_symm_apply ψ]
+    rw [← LinearIsometryEquiv.trans_apply, ← h.map_mul, inv_mul_cancel, h.map_one]
+    rfl
+  have hconj : ∀ (g : InhomogeneousLorentzGroup) (a : SpacetimeModel) (ψ : H),
+      U g (U (translationSub a) ((U g).symm ψ)) = U (translationSub (g.linear a)) ψ :=
+    fun g a ψ => by
+      rw [← conj_translationSub.1 g a, hinv, h.map_mul, h.map_mul]
+      rfl
+  refine ⟨hinv, by rw [translationSub_zero, h.map_one], fun a a' =>
+    (congrArg U (translationSub_mul a a')).trans (h.map_mul _ _), fun a => by
+    rw [hinv]
+    rfl,
+    fun n t => rfl, hconj, fun s a ψ => hconj (wedgeBoost s) a ψ⟩
 
 /-- Light-cone factorisation of the translation unitaries: with `α = (a⁰ + a¹)/2`,
 `β = (a⁰ - a¹)/2` and `a_⊥ = (0, 0, a², a³)`, `U(a) = U(α l₊) U(β l₋) U(a_⊥)`.
@@ -255,7 +269,11 @@ theorem IsCovariantVacuumRep.lightlike_translations_positiveEnergy
     IsPositiveEnergy (fun t : ℝ => U (translationSub (t • l₊))) ∧
       IsPositiveEnergy (fun t : ℝ => U (translationSub (t • l₋))) ∧
       ∀ t : ℝ, U (translationSub (t • l₊)) Ω = Ω ∧ U (translationSub (t • l₋)) Ω = Ω := by
-  sorry
+  have hne : ∀ c : ℝ, (!₂[1, c, 0, 0] : SpacetimeModel) ≠ 0 := fun c h0 => by
+    simpa using congrArg (· 0) h0
+  refine ⟨h.positiveEnergy _ (by simp) (by simp) (hne 1),
+    h.positiveEnergy _ (by simp) (by simp) (hne (-1)),
+    fun t => ⟨h.invariant _, h.invariant _⟩⟩
 
 set_option hygiene false in
 /-- `U(a)` as a bounded operator, for the binder `U` in scope. -/

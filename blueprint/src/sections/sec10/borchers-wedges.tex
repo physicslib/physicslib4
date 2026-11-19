@@ -1779,6 +1779,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     In particular $U(b(s))U(a)U(b(s))^{-1} = U(\Lambda(s)a)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:poincare-conjugates-translation}
     The group law of $U$ (clause (1)) gives $U(g)U(g^{-1}) = U(g^{-1})U(g) = U(1) = \mathbf{1}$. $\mathrm{translationSub}$ is a homomorphism from $(\mathbb{R}^4, +)$ and $\mathrm{translationFlow}(n)(t) = \mathrm{translationSub}(tn)$ (\ref{def:future-timelike-translation}), so the group law gives the translation identities. The last identity is the group law applied to Lemma~\ref{lmm:poincare-conjugates-translation}.
 \end{proof}
@@ -1808,6 +1809,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     The families $t \mapsto U(t\,l_+)$ and $t \mapsto U(t\,l_-)$ have positive energy (\ref{def:positive-energy}), and $U(t\,l_\pm)\Omega = \Omega$ for every $t$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:closed-forward-cone-iff-norm, lmm:translation-unitaries}
     $l_\pm$ has $\|\vec l_\pm\| = 1 \le 1 = l_\pm^0$, so $l_\pm \in \overline{V}_+$ (\ref{lmm:closed-forward-cone-iff-norm}), and $l_\pm \neq 0$. By the spectrum condition (clause (5)), $t \mapsto U(\mathrm{translationFlow}(l_\pm)(t))$ has positive energy, and this is $t \mapsto U(t\,l_\pm)$ by Lemma~\ref{lmm:translation-unitaries}. Invariance (clause (4)) gives $U(t\,l_\pm)\Omega = \Omega$.
 \end{proof}
