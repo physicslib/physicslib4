@@ -653,7 +653,16 @@ theorem borchers_upper_boundary_real {M : Set (H →L[ℂ] H)} {Ω : H}
     ⟪U[-t] (𝒥 (y Ω)), V (-τ) (U[-t] (𝒥 (x Ω)))⟫_ℂ =
         conj ⟪U[-t] (y Ω), W[τ] (U[-t] (x Ω))⟫_ℂ ∧
       (⟪U[-t] (y Ω), W[τ] (U[-t] (x Ω))⟫_ℂ).im = 0 := by
-  sorry
+  have hJ := (modularConjugation_involution hM hΩ C hC).1
+  have hJi : ∀ a b, ⟪𝒥 a, 𝒥 b⟫_ℂ = ⟪b, a⟫_ℂ := fun a b =>
+    (inner_map_map_of_conjLinearIsometry (𝒥).toLinearIsometry a b).trans (inner_conj_symm _ _)
+  obtain ⟨hWu, hWΩ⟩ := reflectedGroup_unitary hM hΩ C hC hV hB1 hτ
+  refine ⟨?_, inner_modularRotated_im_eq_zero hM hΩ C hC hWu hWΩ
+    (fun _ hz => reflectedGroup_conj_mem hM hΩ C hC hV hB2 hτ hz) hx hxs hy hys t⟩
+  change _ = conj ⟪_, 𝒥 (V (-τ) (𝒥 _))⟫_ℂ
+  simp only [LinearIsometry.coe_toContinuousLinearMap, LinearIsometryEquiv.coe_toLinearIsometry,
+    ← modularConjugation_modularUnitaryGroup hM hΩ C hC]
+  rw [← hJ (modularUnitaryGroup hM hΩ C hC (-t) (y Ω)), hJi, hJ, inner_conj_symm]
 
 /-! ### The Borchers function on the edges -/
 

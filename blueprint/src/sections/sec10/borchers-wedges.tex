@@ -1505,6 +1505,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
     and both sides are real.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-conjugation-commutes-unitary-group, thrm:modular-conjugation-involution, thrm:modular-conjugation-polar, def:antiunitary-operator, lmm:modular-rotated-correlation-real, lmm:reflected-group-unitary, lmm:reflected-group-endomorphism}
     $\Delta^{-it}J\phi = J\Delta^{-it}\phi$ (Lemma~\ref{lmm:modular-conjugation-commutes-unitary-group}) and $V(-\tau)J\phi = J\,W(\tau)\phi$ ($J(J\phi) = \phi$, Theorem~\ref{thrm:modular-conjugation-involution}). So the left side is $\left< Ja, Jb \right>$ with $a = \Delta^{-it}y\Omega$ and $b = W(\tau)\Delta^{-it}x\Omega$, which is $\left< b, a \right> = \overline{\left< a, b \right>}$ since $J$ is antiunitary (Theorem~\ref{thrm:modular-conjugation-polar}, Definition~\ref{def:antiunitary-operator}). $\left< a, b \right>$ is real by Lemma~\ref{lmm:modular-rotated-correlation-real} with $X = W(\tau)$, which is admissible by Lemmas~\ref{lmm:reflected-group-unitary} and~\ref{lmm:reflected-group-endomorphism}.
 \end{proof}
