@@ -923,7 +923,26 @@ theorem borchersFunction_lower_edge_real {M : Set (H →L[ℂ] H)} {Ω : H}
     {τ : ℝ} (hτ : 0 ≤ τ) {x y : H →L[ℂ] H} (hx : x ∈ M) (hxs : IsSelfAdjoint x)
     (hy : y ∈ Set.centralizer M) (hys : IsSelfAdjoint y) (t : ℝ) :
     (Fxy[τ] (t : ℂ)).im = 0 := by
-  sorry
+  set s := τ * Real.exp (2 * Real.pi * t)
+  have hs0 : 0 ≤ s := mul_nonneg hτ (Real.exp_pos _).le
+  have hG := hV.isOneParameterUnitaryGroup
+  have hV2 : ∀ a b : ℝ, a + b = 0 → ∀ ψ, V a (V b ψ) = ψ := fun a b hab ψ => by
+    rw [← hG.map_add, hab, hG.map_zero]
+  have hadj : ContinuousLinearMap.adjoint V[s] = V[-s] := by
+    symm
+    rw [ContinuousLinearMap.eq_adjoint_iff]
+    intro a b
+    change ⟪V (-s) a, b⟫_ℂ = ⟪a, V s b⟫_ℂ
+    rw [← LinearIsometryEquiv.inner_map_map (V s), hV2 s (-s) (add_neg_cancel s)]
+  have hX : V[s] ∈ unitary (H →L[ℂ] H) := by
+    refine Unitary.mem_iff.2 ⟨?_, ?_⟩ <;> rw [ContinuousLinearMap.star_eq_adjoint, hadj] <;>
+      ext ψ
+    · exact hV2 (-s) s (neg_add_cancel s) ψ
+    · exact hV2 s (-s) (add_neg_cancel s) ψ
+  rw [((borchersFunction_special_values hM hΩ C hC hV.toIsPositiveEnergy hτ hx hxs hy hys).1
+    t).2.1]
+  exact inner_modularRotated_im_eq_zero hM hΩ C hC hX (hV.apply_self s)
+    (fun z hz => hadj ▸ hV.conj_mem s hs0 z hz) hx hxs hy hys t
 
 /-- For a half-sided translation `V`, self-adjoint `x ∈ M`, `y ∈ M'` and `τ ≥ 0`, the Borchers
 function with `φ = xΩ`, `ψ = JyΩ` is real on the upper edge, and `F(i/2) = ⟪yΩ, W(τ)xΩ⟫`.
@@ -936,7 +955,21 @@ theorem borchersFunction_upper_edge_real {M : Set (H →L[ℂ] H)} {Ω : H}
     (hy : y ∈ Set.centralizer M) (hys : IsSelfAdjoint y) :
     (∀ t : ℝ, (Fxy[τ] ((t : ℂ) + Complex.I / 2)).im = 0) ∧
       Fxy[τ] (Complex.I / 2) = ⟪y Ω, W[τ] (x Ω)⟫_ℂ := by
-  sorry
+  obtain ⟨hF, -, -⟩ := borchersFunction_special_values hM hΩ C hC hV.toIsPositiveEnergy hτ hx
+    hxs hy hys
+  have hB := fun (τ' : ℝ) (hτ' : 0 ≤ τ') (t : ℝ) => borchers_upper_boundary_real hM hΩ C hC
+    hV.isOneParameterUnitaryGroup hV.apply_self hV.conj_mem hx hxs hy hys hτ' t
+  have hU := (modularUnitaryGroup_properties hM hΩ C hC).1
+  refine ⟨fun t => ?_, ?_⟩
+  · obtain ⟨h1, h2⟩ := hB _ (mul_nonneg hτ (Real.exp_pos _).le) t
+    rw [(hF t).2.2, h1, Complex.conj_im, h2, neg_zero]
+  · obtain ⟨h1, h2⟩ := hB τ hτ 0
+    have h := (hF 0).2.2
+    simp only [Complex.ofReal_zero, zero_add, mul_zero, Real.exp_zero, mul_one] at h
+    rw [h, h1, Complex.conj_eq_iff_im.mpr h2]
+    change ⟪modularUnitaryGroup hM hΩ C hC (-0) (y Ω),
+      W[τ] (modularUnitaryGroup hM hΩ C hC (-0) (x Ω))⟫_ℂ = _
+    simp only [neg_zero, hU.map_zero]
 
 /-- For a half-sided translation `V`, self-adjoint `x ∈ M`, `y ∈ M'`, `τ ≥ 0` and real `s`,
 `⟪yΩ, Δ^{is}V(τe^{2πs})Δ^{-is}xΩ⟫ = ⟪yΩ, V(τ)xΩ⟫ = ⟪yΩ, W(τ)xΩ⟫`.

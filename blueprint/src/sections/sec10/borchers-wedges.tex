@@ -1545,6 +1545,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $t \in \mathbb{R}$, $F(t) \in \mathbb{R}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:borchers-function-special-values, lmm:modular-rotated-correlation-real, lmm:unitary-group-inner-adjoint}
     By Lemma~\ref{lmm:borchers-function-special-values}, $F(t) = \left< \Delta^{-it}y\Omega, X\Delta^{-it}x\Omega \right>$ with $X = V(\tau e^{2\pi t})$. Since $\tau e^{2\pi t} \ge 0$, $X$ is unitary with $X^* = V(-\tau e^{2\pi t})$ (\ref{lmm:unitary-group-inner-adjoint}), $X\Omega = \Omega$ by (B1) and $XzX^* \in \mathcal{M}$ for $z \in \mathcal{M}$ by (B2). Lemma~\ref{lmm:modular-rotated-correlation-real} applies.
 \end{proof}
@@ -1557,6 +1558,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $t \in \mathbb{R}$, $F(t + \tfrac{i}{2}) \in \mathbb{R}$, and $F(\tfrac{i}{2}) = \left< y\Omega, W(\tau)x\Omega \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:borchers-function-special-values, lmm:borchers-upper-boundary-real}
     By Lemma~\ref{lmm:borchers-function-special-values}, $F(t + \tfrac{i}{2})$ is the left side of Lemma~\ref{lmm:borchers-upper-boundary-real} with $\tau e^{2\pi t} \ge 0$ in place of $\tau$, hence real. At $t = 0$ that lemma gives $F(\tfrac{i}{2}) = \overline{\left< y\Omega, W(\tau)x\Omega \right>}$, which equals $\left< y\Omega, W(\tau)x\Omega \right>$ because it is real (\texttt{Complex.conj\_eq\_iff\_real}).
 \end{proof}
