@@ -982,7 +982,20 @@ theorem borchersFunction_constant {M : Set (H →L[ℂ] H)} {Ω : H}
     (hy : y ∈ Set.centralizer M) (hys : IsSelfAdjoint y) (s : ℝ) :
     ⟪y Ω, U[s] (V (τ * Real.exp (2 * Real.pi * s)) (U[-s] (x Ω)))⟫_ℂ = ⟪y Ω, V τ (x Ω)⟫_ℂ ∧
       ⟪y Ω, V τ (x Ω)⟫_ℂ = ⟪y Ω, W[τ] (x Ω)⟫_ℂ := by
-  sorry
+  obtain ⟨hF, h0, -⟩ := borchersFunction_special_values hM hΩ C hC hV.toIsPositiveEnergy hτ hx
+    hxs hy hys
+  obtain ⟨hup, hhalf⟩ := borchersFunction_upper_edge_real hM hΩ C hC hV hτ hx hxs hy hys
+  obtain ⟨hc, hd, hb⟩ := borchersFunction_analytic hM hΩ C hC hV.toIsPositiveEnergy hτ
+    (modularOperatorSqrt_apply_of_mem hM hΩ C hC hx).fst
+    (modularOperatorSqrt_apply_of_mem_centralizer hM hΩ C hC hy).fst
+  have key := Physicslib4.eq_of_real_strip_boundary (β := 1 / 2) (by norm_num) hc ⟨_, hb⟩ hd
+    (borchersFunction_lower_edge_real hM hΩ C hC hV hτ hx hxs hy hys)
+    (fun t => by convert hup t using 3; push_cast; ring)
+  refine ⟨?_, ?_⟩
+  · rw [← (hF s).1, ← h0]
+    exact key _ ⟨by simp, by simp⟩
+  · rw [← h0, ← hhalf]
+    exact (key _ ⟨by simp, by simp⟩).symm
 
 /-- Dilation for nonnegative times: for a half-sided translation `V`, `t ≥ 0` and real `s`,
 `Δ^{is} V(t) Δ^{-is} = V(e^{-2πs} t)`.
