@@ -1828,6 +1828,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     In particular $t \mapsto U(t\,l_+)$ is a half-sided translation for $(R(W_R), \Omega)$ (\ref{def:half-sided-translation}).
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:region-algebra-covariance, lmm:wedge-translations, lmm:region-algebra-mono, lmm:translation-unitaries, lmm:region-algebra-von-neumann, lmm:lightlike-translations-positive-energy}
     Let $a = t\,l_+$ or $a = -t\,l_-$. By Theorem~\ref{thrm:region-algebra-covariance} with $g = \mathrm{translationSub}(a)$ and $U(a)^{-1} = U(-a)$ (\ref{lmm:translation-unitaries}), $U(a)\,x\,U(-a) \in R(W_R + a)$. By Lemma~\ref{lmm:wedge-translations}, $W_R + a \subseteq W_R$, so $R(W_R + a) \subseteq R(W_R)$ (\ref{lmm:region-algebra-mono}). For the last claim, $R(W_R)$ is a von Neumann algebra (\ref{lmm:region-algebra-von-neumann}), (P) and (B1) are Lemma~\ref{lmm:lightlike-translations-positive-energy}, and (B2) is the first inclusion, with $U(t\,l_+)^* = U(-t\,l_+)$ (\ref{lmm:translation-unitaries}).
 \end{proof}
@@ -2046,6 +2047,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
     Let $X$ be a unitary with $XR(\mathbf{B})X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$, the second condition of Definition~\ref{def:internal-symmetry}; $X\Omega = \Omega$ is not needed. Then $X\mathcal{S}(\mathbf{O})X^{-1} = \mathcal{S}(\mathbf{O})$ and $XR(\mathbf{O})X^{-1} = R(\mathbf{O})$ for every $\mathbf{O} \subseteq \mathbb{R}^4$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:automorphism-commutant}
     Conjugation commutes with unions (Mathlib's \texttt{Set.image\_iUnion\ensuremath{_2}}), which gives the first identity from the hypothesis on each $R(\mathbf{B})$, $\mathbf{B} \subseteq \mathbf{O}$. Conjugation by $X$ is a multiplicative automorphism of $\mathcal{B}(\mathbf{H})$ (\ref{def:unitary-conjugation}), so it maps bicommutants to bicommutants (\ref{lmm:automorphism-commutant}), which gives the second, as in Theorem~\ref{thrm:region-algebra-covariance}.
 \end{proof}

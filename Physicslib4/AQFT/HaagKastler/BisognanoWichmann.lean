@@ -310,7 +310,23 @@ theorem IsCovariantVacuumRep.wedge_halfSidedTranslations (h : N.IsCovariantVacuu
         Tr[-(t • l₋)] ∘L x ∘L Tr[t • l₋] ∈ N.regionVonNeumann π rightWedge) ∧
       IsHalfSidedTranslation (N.regionVonNeumann π rightWedge) Ω
         (fun t : ℝ => U (translationSub (t • l₊))) := by
-  sorry
+  have key : ∀ a : SpacetimeModel, translationSub a • rightWedge ⊆ rightWedge →
+      ∀ x ∈ N.regionVonNeumann π rightWedge,
+        Tr[a] ∘L x ∘L Tr[-a] ∈ N.regionVonNeumann π rightWedge := by
+    intro a ha x hx
+    have hmem : (conj[U (translationSub a)] x) ∈ N.regionVonNeumann π rightWedge :=
+      (N.regionVonNeumann_mono π ha).2
+        (h.conj_image_regionVonNeumann (translationSub a) rightWedge ▸ ⟨x, hx, rfl⟩)
+    rwa [h.translation_unitaries.2.2.2.1 a] at hmem
+  have hW := translationSub_smul_rightWedge_subset.2
+  have hfirst : ∀ t : ℝ, 0 ≤ t → ∀ x ∈ N.regionVonNeumann π rightWedge,
+      Tr[t • l₊] ∘L x ∘L Tr[-(t • l₊)] ∈ N.regionVonNeumann π rightWedge :=
+    fun t ht => key _ (hW t ht).1
+  refine ⟨fun t ht x hx => ⟨hfirst t ht x hx, ?_⟩, ?_⟩
+  · simpa using key _ (hW t ht).2 x hx
+  · obtain ⟨hpos, -, hinv⟩ := h.lightlike_translations_positiveEnergy
+    exact ⟨hpos, fun t => (hinv t).1, fun t ht x hx => by
+      simpa only [neg_smul] using hfirst t ht x hx⟩
 
 set_option hygiene false in
 /-- `Δ_{W_R}^{is}` as a bounded operator, for the binders `N π hΩ C hC` in scope. -/
@@ -379,7 +395,12 @@ theorem conj_image_region_of_conj_image_localVonNeumann
     (O : Set StandardMinkowskiSpacetime.Carrier) :
     (fun a => conj[X] a) '' N.regionGeneratingSet π O = N.regionGeneratingSet π O ∧
       (fun a => conj[X] a) '' N.regionVonNeumann π O = N.regionVonNeumann π O := by
-  sorry
+  have hS : (fun a => conj[X] a) '' N.regionGeneratingSet π O = N.regionGeneratingSet π O := by
+    simp only [regionGeneratingSet, Set.image_iUnion, hX]
+  have hfun : (fun a => conj[X] a) = Physicslib4.lieConj X := by
+    funext a; ext x; simp
+  refine ⟨hS, ?_⟩
+  rw [regionVonNeumann, hfun, (Physicslib4.lieConj X).image_centralizer_centralizer, ← hfun, hS]
 
 /-! ### All translations -/
 
