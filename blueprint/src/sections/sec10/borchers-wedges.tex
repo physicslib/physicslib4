@@ -1532,6 +1532,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
     In particular $F(0) = \left< y\Omega, V(\tau)x\Omega \right>$ and $F(\tfrac{i}{2}) = \left< Jy\Omega, V(-\tau)Jx\Omega \right>$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:borchers-function-boundary, lmm:modular-sqrt-on-algebra, lmm:commutant-vector-modular-sqrt, lmm:modular-unitary-group-props}
     Substitute $\Delta^{1/2}\psi = y\Omega$ and $\Delta^{1/2}\varphi = Jx\Omega$ ($x^* = x$; Lemmas~\ref{lmm:modular-sqrt-on-algebra} and~\ref{lmm:commutant-vector-modular-sqrt}) into Lemma~\ref{lmm:borchers-function-boundary}. The first form of $F(t)$ follows from $(\Delta^{-it})^* = \Delta^{it}$ (Lemma~\ref{lmm:modular-unitary-group-props}; \texttt{ContinuousLinearMap.adjoint\_inner\_left}). At $t = 0$, $\Delta^{i0} = \mathbf{1}$ and $e^0 = 1$.
 \end{proof}

@@ -835,7 +835,39 @@ theorem borchersFunction_special_values {M : Set (H →L[ℂ] H)} {Ω : H}
       F[τ, x Ω, 𝒥 (y Ω), (modularOperatorSqrt_apply_of_mem hM hΩ C hC hx).fst,
           (modularOperatorSqrt_apply_of_mem_centralizer hM hΩ C hC hy).fst] (Complex.I / 2) =
         ⟪𝒥 (y Ω), V (-τ) (𝒥 (x Ω))⟫_ℂ := by
-  sorry
+  obtain ⟨h₁, e₁⟩ := modularOperatorSqrt_apply_of_mem hM hΩ C hC hx
+  obtain ⟨h₂, e₂⟩ := modularOperatorSqrt_apply_of_mem_centralizer hM hΩ C hC hy
+  rw [hxs.star_eq] at e₁
+  rw [hys.star_eq] at e₂
+  have hU := (modularUnitaryGroup_properties hM hΩ C hC).1
+  have hmain : ∀ t : ℝ,
+      F[τ, x Ω, 𝒥 (y Ω), h₁, h₂] (t : ℂ) =
+          ⟪y Ω, U[t] (V (τ * Real.exp (2 * Real.pi * t)) (U[-t] (x Ω)))⟫_ℂ ∧
+        F[τ, x Ω, 𝒥 (y Ω), h₁, h₂] (t : ℂ) =
+          ⟪U[-t] (y Ω), V (τ * Real.exp (2 * Real.pi * t)) (U[-t] (x Ω))⟫_ℂ ∧
+        F[τ, x Ω, 𝒥 (y Ω), h₁, h₂] ((t : ℂ) + Complex.I / 2) =
+          ⟪U[-t] (𝒥 (y Ω)), V (-(τ * Real.exp (2 * Real.pi * t))) (U[-t] (𝒥 (x Ω)))⟫_ℂ := by
+    intro t
+    obtain ⟨b₁, b₂⟩ := borchersFunction_boundary hM hΩ C hC hV hτ h₁ h₂ t
+    refine ⟨?_, by rw [b₁, e₂], by rw [b₂, e₁]⟩
+    rw [b₁, e₂]
+    change _ = ⟪y Ω, modularUnitaryGroup hM hΩ C hC t _⟫_ℂ
+    rw [← LinearIsometryEquiv.inner_map_map (modularUnitaryGroup hM hΩ C hC (-t)) (y Ω),
+      ← hU.map_add, neg_add_cancel, hU.map_zero]
+    rfl
+  refine ⟨hmain, ?_, ?_⟩
+  · have h := (hmain 0).2.1
+    simp only [Complex.ofReal_zero, mul_zero, Real.exp_zero, mul_one, neg_zero] at h
+    rw [h]
+    change ⟪modularUnitaryGroup hM hΩ C hC 0 (y Ω),
+      V τ (modularUnitaryGroup hM hΩ C hC 0 (x Ω))⟫_ℂ = _
+    simp only [hU.map_zero]
+  · have h := (hmain 0).2.2
+    simp only [Complex.ofReal_zero, zero_add, mul_zero, Real.exp_zero, mul_one, neg_zero] at h
+    rw [h]
+    change ⟪modularUnitaryGroup hM hΩ C hC 0 _,
+      V (-τ) (modularUnitaryGroup hM hΩ C hC 0 _)⟫_ℂ = _
+    simp only [hU.map_zero]
 
 /-! ### Determination by matrix coefficients -/
 
