@@ -1699,6 +1699,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\Omega$ cyclic and separating for $\mathcal{M}$. Then $\Omega$ is cyclic and separating for $\mathcal{M}'$, and the modular unitary group and the modular conjugation of $(\mathcal{M}', \Omega)$ are $\Delta_{\mathcal{M}'}^{it} = \Delta^{-it}$ for every $t \in \mathbb{R}$ and $J_{\mathcal{M}'} = J$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{thrm:commutant-modular-objects, lmm:modular-unitary-group-fc, lmm:inverse-functional-calculus, crllr:fc-of-fc, thrm:modular-operator-properties}
     By Theorem~\ref{thrm:commutant-modular-objects}, $\Omega$ is cyclic and separating for $\mathcal{M}'$, $\Delta_{\mathcal{M}'} = \Delta^{-1}$ and $J_{\mathcal{M}'} = J$. $\Delta$ is self-adjoint and injective (Theorem~\ref{thrm:modular-operator-properties}), so $\Delta^{-1} = \iota^{-}(\Delta)$ with $\iota^{-}(\lambda) = \lambda^{-1}$ ($0^{-1} = 0$; Lemma~\ref{lmm:inverse-functional-calculus}). By Lemma~\ref{lmm:modular-unitary-group-fc} for $(\mathcal{M}', \Omega)$ and Corollary~\ref{crllr:fc-of-fc} ($\iota^{-}$ is measurable, Mathlib's \texttt{measurable\_inv}),
     \begin{align}
@@ -1715,6 +1716,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, and let $X$ be a unitary with $X^*xX \in \mathcal{M}$ for every $x \in \mathcal{M}$. Then $XyX^* \in \mathcal{M}'$ for every $y \in \mathcal{M}'$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Let $x \in \mathcal{M}$ and $x' = X^*xX \in \mathcal{M}$, so $x = Xx'X^*$ since $XX^* = X^*X = \mathbf{1}$. Then $x'y = yx'$ gives $XyX^*\,x = Xyx'X^* = Xx'yX^* = x\,XyX^*$ (\texttt{mul\_assoc}). This is the computation of Lemma~\ref{lmm:commutant-reverse-endomorphism} for a single unitary.
 \end{proof}
 

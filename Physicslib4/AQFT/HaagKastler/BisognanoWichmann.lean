@@ -75,7 +75,30 @@ theorem commutant_modularUnitaryGroup {M : Set (H →L[ℂ] H)} {Ω : H}
         modularConjugation (isCyclicSeparatingVector_centralizer hM hΩ).1
             (isCyclicSeparatingVector_centralizer hM hΩ).2 C hC x =
           modularConjugation hM hΩ C hC x := by
-  sorry
+  open Physicslib4.Spectral.Unbounded in
+  obtain ⟨hΩ', -, -, hinv, -, hJ⟩ := commutant_modular_objects hM hΩ C hC
+  refine ⟨hΩ', fun t => ?_, hJ⟩
+  set hc := isCyclicSeparatingVector_centralizer hM hΩ
+  have hker := (modularOperator_properties hM hΩ C hC).2.2.2.1
+  have hΔ' : modularOperator (Set.centralizer M) Ω C =
+      functionalCalculus (modularOperator_isSelfAdjoint hM hΩ C hC)
+        fun x => ((x⁻¹ : ℝ) : ℂ) :=
+    hinv.trans (inverse_eq_functionalCalculus_inv _ hker)
+  obtain ⟨hfA, -, hcomp⟩ := functionalCalculus_functionalCalculus
+    (modularOperator_isSelfAdjoint hM hΩ C hC) measurable_inv
+  have hirr : ∀ {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) (g : ℝ → ℂ),
+      A = B → functionalCalculus hA g = functionalCalculus hB g := by
+    intro A B hA hB g h; subst h; rfl
+  obtain ⟨hm, -, hfc', -, -⟩ := modularUnitaryGroup_eq_functionalCalculus hc.1 hc.2 C hC t
+  obtain ⟨-, -, hfc, -, -⟩ := modularUnitaryGroup_eq_functionalCalculus hM hΩ C hC (-t)
+  have hfun : (fun x : ℝ => Complex.exp (Complex.I * (t : ℂ) * (Real.log x : ℂ))) ∘
+      (fun x : ℝ => x⁻¹) =
+      fun x : ℝ => Complex.exp (Complex.I * ((-t : ℝ) : ℂ) * (Real.log x : ℂ)) := by
+    funext x; simp only [Function.comp_apply, Real.log_inv]; push_cast; ring_nf
+  have h := hfc'.symm.trans ((hirr _ hfA _ hΔ').trans ((hcomp _ hm).trans (hfun ▸ hfc)))
+  ext ξ
+  obtain ⟨-, hx⟩ := LinearPMap.ext_iff.1 h
+  simpa using @hx ξ Submodule.mem_top Submodule.mem_top
 
 /-- Reverse endomorphisms pass to the commutant: if `X` is unitary and `X* x X ∈ M` for every
 `x ∈ M`, then `X y X* ∈ M'` for every `y ∈ M'`.
@@ -89,7 +112,16 @@ theorem conj_mem_centralizer_of_adjoint_conj_mem {M : Set (H →L[ℂ] H)} {X : 
     (hXM : ∀ x ∈ M, ContinuousLinearMap.adjoint X ∘L x ∘L X ∈ M)
     {y : H →L[ℂ] H} (hy : y ∈ Set.centralizer M) :
     X ∘L y ∘L ContinuousLinearMap.adjoint X ∈ Set.centralizer M := by
-  sorry
+  rw [Set.mem_centralizer_iff] at hy ⊢
+  intro x hx
+  have h1 : ∀ v, X (ContinuousLinearMap.adjoint X v) = v := fun v =>
+    congrArg (fun T : H →L[ℂ] H => T v) (Unitary.mul_star_self_of_mem hX)
+  have h2 : ∀ v, ContinuousLinearMap.adjoint X (X v) = v := fun v =>
+    congrArg (fun T : H →L[ℂ] H => T v) (Unitary.star_mul_self_of_mem hX)
+  ext ψ
+  have key := congrArg (fun T : H →L[ℂ] H => X (T (ContinuousLinearMap.adjoint X ψ)))
+    (hy _ (hXM x hx))
+  simpa [h1, h2] using key
 
 /-- Borchers' theorem for negative half-lines: let `V` be a family of unitaries with positive
 energy such that `V(t)Ω = Ω` for all `t` and `V(-t) x V(t) ∈ M` for all `t ≥ 0` and `x ∈ M`.
