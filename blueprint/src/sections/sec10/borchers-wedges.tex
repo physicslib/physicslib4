@@ -1899,6 +1899,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
     with $j(x^0, x^1, x^2, x^3) = (-x^0, -x^1, x^2, x^3)$ the wedge reflection (\ref{def:wedge-reflection}).
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lmm:wedge-modular-group-translations, lmm:wedge-modular-conjugation-translations, lmm:translation-unitaries}
     Lemmas~\ref{lmm:wedge-modular-group-translations} and~\ref{lmm:wedge-modular-conjugation-translations}; the middle expression is Lemma~\ref{lmm:translation-unitaries} with $g = b(-2\pi s)$.
 \end{proof}
@@ -1942,6 +1943,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
     For every $t$, the wedge modular defect $Z(t)$ (\ref{def:wedge-modular-defect}) satisfies $Z(t)\Omega = \Omega$ and $Z(t)\,R(W_R)\,Z(t)^{-1} = R(W_R)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:modular-unitary-group-fixes-omega, thrm:region-algebra-covariance, lmm:boost-preserves-wedge, thrm:tomita, thrm:wedge-cyclic-separating}
     $U(b(2\pi t))\Omega = \Omega$ by invariance and $\Delta^{it}\Omega = \Omega$ (\ref{lmm:modular-unitary-group-fixes-omega}). $U(b(2\pi t))R(W_R)U(b(2\pi t))^{-1} = R(b(2\pi t)W_R) = R(W_R)$ by Theorem~\ref{thrm:region-algebra-covariance} and Lemma~\ref{lmm:boost-preserves-wedge}, and $\Delta^{it}R(W_R)\Delta^{-it} = R(W_R)$ by Tomita's theorem (\ref{thrm:tomita}, part (ii), applicable by \ref{thrm:wedge-cyclic-separating}). Conjugation by $Z(t)$ is the composite of these two conjugations (\texttt{Set.image\_image}).
 \end{proof}

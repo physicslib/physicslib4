@@ -478,7 +478,10 @@ theorem IsCovariantVacuumRep.wedge_modular_translations (h : N.IsCovariantVacuum
       Tr[boostMatrix (-(2 * Real.pi * s)) a] =
         (conj[U (wedgeBoost (-(2 * Real.pi * s)))] Tr[a]) ∧
       𝒥R[Tr[a]] = Tr[wedgeReflection a] := by
-  sorry
+  refine ⟨h.wedge_modularUnitaryGroup_translations hΩ C hC a s, ?_,
+    h.wedge_modularConjugation_translations hΩ C hC a⟩
+  ext ψ
+  exact (h.translation_unitaries.2.2.2.2.2.2 _ a ψ).symm
 
 set_option hygiene false in
 /-- `Δ_{gW_R}^{is}` as a bounded operator, for the binders `N π g hΩg C hC` in scope. -/
@@ -553,7 +556,17 @@ theorem IsCovariantVacuumRep.wedgeModularDefect_vacuum (h : N.IsCovariantVacuumR
     Z[t] Ω = Ω ∧
       (fun a => conj[Z[t]] a) '' N.regionVonNeumann π rightWedge =
         N.regionVonNeumann π rightWedge := by
-  sorry
+  have hM := (N.regionVonNeumann_isVonNeumannSet π rightWedge).2
+  refine ⟨?_, ?_⟩
+  · rw [wedgeModularDefect, LinearIsometryEquiv.trans_apply, h.invariant,
+      modularUnitaryGroup_apply_self]
+  · have hfun : (fun a : H →L[ℂ] H => conj[Z[t]] a) =
+        (fun x : H →L[ℂ] H => Δ[t] ∘L x ∘L Δ[-t]) ∘
+          (fun a : H →L[ℂ] H => conj[U (wedgeBoost (2 * Real.pi * t))] a) := by
+      funext a; ext ψ
+      simp [wedgeModularDefect, ((modularUnitaryGroup_properties hM hΩ C hC).2.2 t).2]
+    rw [hfun, Set.image_comp, h.conj_image_regionVonNeumann, (wedgeBoost_smul_wedge _).1,
+      modularUnitaryGroup_conj_image]
 
 /-- The defect commutes with the translations: `Z(t) U(a) = U(a) Z(t)` for every `t` and
 `a ∈ ℝ⁴`.
