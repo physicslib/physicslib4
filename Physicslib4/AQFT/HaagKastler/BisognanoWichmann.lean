@@ -939,8 +939,10 @@ theorem IsCovariantVacuumRep.wedgeModularDefect_commute_wedge_modular
         ∀ ψ : H, Z[t] (𝒥W ψ) = 𝒥W (Z[t] ψ)) ∧
       (∀ (t s : ℝ) (ψ : H), Z[t] (U (wedgeBoost s) ψ) = U (wedgeBoost s) (Z[t] ψ)) ∧
       IsOneParameterUnitaryGroup (N.wedgeModularDefect π U hΩ C hC) ∧
-      IsStronglyContinuous (N.wedgeModularDefect π U hΩ C hC) := by
-  sorry
+      IsStronglyContinuous (N.wedgeModularDefect π U hΩ C hC) :=
+  ⟨fun t _ hΩW => ((h.bisognanoWichmann_internal hΩ C hC hMC).1 t).2.1.commute_modular hΩW C hC,
+    h.wedgeModularDefect_boosts hΩ C hC, (h.wedgeModularDefect_properties hΩ C hC).1,
+    (h.wedgeModularDefect_properties hΩ C hC).2.1⟩
 
 end HaagKastlerNet
 
