@@ -323,16 +323,43 @@ theorem stripPower_upper_boundary {M : Set (H →L[ℂ] H)} {Ω : H}
 /-- Cutting off `k_ζ(Δ)`: `p_{-iζ,n}(Δ)c(Δ)χ = k_ζ(Δ)E_nχ`, and for `ζ` in the strip
 `0 ≤ Im ζ ≤ 1/2`, `‖k_ζ(Δ)χ‖ ≤ ‖χ‖` and `‖k_ζ(Δ)χ - p_{-iζ,n}(Δ)c(Δ)χ‖ ≤ ‖χ - E_nχ‖`.
 
+**Restriction:** the equality is stated for `ζ` in the strip; for `ζ` outside it `k_ζ` is
+unbounded and the bounded integral takes its junk value `0`; the intended statement for all `ζ`
+needs `k_ζ(Δ)E_n` as an unbounded functional calculus composed with a bounded projection.
+
 Blueprint: lmm:strip-power-cutoff -/
 theorem stripPower_cutoff {M : Set (H →L[ℂ] H)} {Ω : H}
     (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
-    (hC : ∀ x, C (C x) = x) (χ : H) (ζ : ℂ) {n : ℕ} (hn : 1 ≤ n) :
+    (hC : ∀ x, C (C x) = x) (χ : H) (ζ : ℂ) (hζ : ζ ∈ kmsStrip (1 / 2)) {n : ℕ} (hn : 1 ≤ n) :
     (μΔ).integral p[-Complex.I * ζ, n] ((μΔ).integral cfn χ) = (μΔ).integral k[ζ] (μΔ K[n] χ) ∧
       (ζ ∈ kmsStrip (1 / 2) →
         ‖(μΔ).integral k[ζ] χ‖ ≤ ‖χ‖ ∧
           ‖(μΔ).integral k[ζ] χ - (μΔ).integral p[-Complex.I * ζ, n] ((μΔ).integral cfn χ)‖ ≤
             ‖χ - μΔ K[n] χ‖) := by
-  sorry
+  set μ := μΔ
+  obtain ⟨-, hkm, hcm, -⟩ := stripPower_functions_measurable ζ 0
+  obtain ⟨hcb, -, hkb⟩ := stripPower_functions_bounded 0 ζ
+  obtain ⟨hpm, -, hpb⟩ := indicatorCpow_bounds hn (-Complex.I * ζ)
+  have hp : p[-Complex.I * ζ, n] ∈ Spectral.BddMeasurable ℝ := ⟨hpm, _, fun x => (hpb x).1⟩
+  have hc : cfn ∈ Spectral.BddMeasurable ℝ := ⟨hcm, 1, hcb⟩
+  have hk : k[ζ] ∈ Spectral.BddMeasurable ℝ := ⟨hkm, 1, hkb hζ⟩
+  have hK : MeasurableSet K[n] := measurableSet_Icc
+  have hI : (K[n]).indicator (1 : ℝ → ℂ) ∈ Spectral.BddMeasurable ℝ :=
+    ⟨measurable_const.indicator hK, 1, fun x => (norm_indicator_le_norm_self _ x).trans (by simp)⟩
+  have h1 : μ.integral p[-Complex.I * ζ, n] (μ.integral cfn χ) = μ.integral k[ζ] (μ K[n] χ) := by
+    have he : p[-Complex.I * ζ, n] * cfn = k[ζ] * (K[n]).indicator 1 :=
+      funext fun x => (stripPower_functions_identities ζ n 0 x).1
+    rw [← Spectral.ProjectionValuedMeasure.integral_indicator μ hK,
+      ← ContinuousLinearMap.comp_apply, ← ContinuousLinearMap.comp_apply,
+      ← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
+      ← Spectral.ProjectionValuedMeasure.integral_mul μ hp hc,
+      ← Spectral.ProjectionValuedMeasure.integral_mul μ hk hI, he]
+  have hnorm : ∀ ψ : H, ‖μ.integral k[ζ] ψ‖ ≤ ‖ψ‖ := fun ψ =>
+    ((μ.integral k[ζ]).le_opNorm ψ).trans (mul_le_of_le_one_left (norm_nonneg _)
+      ((Spectral.ProjectionValuedMeasure.norm_integral_le μ hk).trans (ciSup_le (hkb hζ))))
+  refine ⟨h1, fun _ => ⟨hnorm χ, ?_⟩⟩
+  rw [h1, ← map_sub]
+  exact hnorm _
 
 /-! ### The Borchers function -/
 

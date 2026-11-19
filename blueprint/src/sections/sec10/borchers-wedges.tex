@@ -1279,6 +1279,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
     Let $\chi \in \mathbf{H}$, $\zeta \in \mathbb{C}$ and $n \ge 1$. Then $p_{-i\zeta,n}(\Delta)\,c(\Delta)\chi = k_\zeta(\Delta)E_n\chi$. If $\zeta \in \Sigma_{1/2}$, then $\|k_\zeta(\Delta)\chi\| \le \|\chi\|$ and $\|k_\zeta(\Delta)\chi - p_{-i\zeta,n}(\Delta)c(\Delta)\chi\| \le \|\chi - E_n\chi\|$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:strip-power-functions-identities, lmm:strip-power-functions-measurable, lmm:strip-power-functions-bounded, lmm:modular-power-function-bounds, prpstn:integral-multiplicative, prpstn:integral-of-indicator, prpstn:integral-norm-bound, lmm:functional-calculus-bounded}
     All functions involved are bounded and measurable (Lemmas~\ref{lmm:strip-power-functions-measurable}, \ref{lmm:strip-power-functions-bounded} and~\ref{lmm:modular-power-function-bounds}), so Proposition~\ref{prpstn:integral-multiplicative}, the first identity of Lemma~\ref{lmm:strip-power-functions-identities} and $E_n = 1_{K_n}(\Delta)$ (Proposition~\ref{prpstn:integral-of-indicator}) give $p_{-i\zeta,n}(\Delta)c(\Delta) = k_\zeta(\Delta)E_n$. For $\zeta \in \Sigma_{1/2}$, $\|k_\zeta(\Delta)\| \le 1$ (Proposition~\ref{prpstn:integral-norm-bound}), and the difference is $k_\zeta(\Delta)(\chi - E_n\chi)$ (\texttt{map\_sub}).
 \end{proof}
