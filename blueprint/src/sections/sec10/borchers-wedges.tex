@@ -1626,6 +1626,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For all $s, t \in \mathbb{R}$, $\Delta^{is}V(t)\Delta^{-is} = V(e^{-2\pi s}t)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:borchers-dilation-nonneg, lmm:modular-unitary-group-props, lmm:unitary-group-inner-adjoint}
     For $t \ge 0$ this is Lemma~\ref{lmm:borchers-dilation-nonneg}. For $t < 0$, take adjoints in that lemma at $-t > 0$: $(\Delta^{is}V(-t)\Delta^{-is})^* = \Delta^{is}V(t)\Delta^{-is}$ and $V(-e^{-2\pi s}t)^* = V(e^{-2\pi s}t)$ (Lemmas~\ref{lmm:modular-unitary-group-props} and~\ref{lmm:unitary-group-inner-adjoint}; \texttt{star\_mul}, \texttt{mul\_assoc}).
 \end{proof}
@@ -1638,6 +1639,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For all $t \in \mathbb{R}$, $JV(t)J = V(-t)$.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lmm:borchers-reflection-nonneg, lmm:modular-conjugation-bounded-conjugate-identities}
     For $t \le 0$ this is Lemma~\ref{lmm:borchers-reflection-nonneg} with $\tau = -t$. For $t > 0$, conjugate $JV(-t)J = V(t)$ by $J$: $V(-t) = J(JV(-t)J)J = JV(t)J$ (Lemma~\ref{lmm:modular-conjugation-bounded-conjugate-identities}).
 \end{proof}

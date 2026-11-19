@@ -1009,8 +1009,8 @@ theorem borchers_dilation_nonneg {M : Set (H →L[ℂ] H)} {Ω : H}
   have hτt : Real.exp (-(2 * Real.pi * s)) * t * Real.exp (2 * Real.pi * s) = t := by
     rw [mul_right_comm, ← Real.exp_add, neg_add_cancel, Real.exp_zero, one_mul]
   refine eq_of_selfAdjoint_matrix_coefficients hM hΩ fun x hx hxs y hy hys => ?_
-  have h := (borchersFunction_constant hM hΩ C hC hV (mul_nonneg (Real.exp_pos _).le ht) hx hxs
-    hy hys s).1
+  have h := (borchersFunction_constant hM hΩ C hC hV
+    (mul_nonneg (Real.exp_pos (-(2 * Real.pi * s))).le ht) hx hxs hy hys s).1
   rw [hτt] at h
   exact h
 
@@ -1035,7 +1035,27 @@ theorem borchers_dilation_all {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV : IsHalfSidedTranslation M Ω V)
     (s t : ℝ) :
     U[s] ∘L V[t] ∘L U[-s] = V[Real.exp (-(2 * Real.pi * s)) * t] := by
-  sorry
+  rcases le_or_gt 0 t with ht | ht
+  · exact borchers_dilation_nonneg hM hΩ C hC hV ht s
+  have hG := hV.isOneParameterUnitaryGroup
+  have hU := (modularUnitaryGroup_properties hM hΩ C hC).1
+  have hV2 : ∀ a b : ℝ, a + b = 0 → ∀ ψ, V a (V b ψ) = ψ := fun a b hab ψ => by
+    rw [← hG.map_add, hab, hG.map_zero]
+  have hN := fun φ =>
+    congrArg (· φ) (borchers_dilation_nonneg hM hΩ C hC hV (neg_nonneg.2 ht.le) s)
+  simp only [ContinuousLinearMap.comp_apply] at hN
+  ext ψ
+  simp only [ContinuousLinearMap.comp_apply]
+  set e := Real.exp (-(2 * Real.pi * s))
+  have h1 : V (-(e * t)) (U[s] (V t (U[-s] ψ))) = ψ := by
+    have := hN (U[s] (V t (U[-s] ψ)))
+    simp only [LinearIsometry.coe_toContinuousLinearMap,
+      LinearIsometryEquiv.coe_toLinearIsometry] at this ⊢
+    rw [show -(e * t) = e * -t by ring, ← this, ← hU.map_add, neg_add_cancel, hU.map_zero,
+      hV2 _ _ (neg_add_cancel t), ← hU.map_add, add_neg_cancel, hU.map_zero]
+  simp only [LinearIsometry.coe_toContinuousLinearMap,
+    LinearIsometryEquiv.coe_toLinearIsometry] at h1 ⊢
+  conv_rhs => rw [← h1, hV2 _ _ (add_neg_cancel _)]
 
 /-- Reflection for all times: for a half-sided translation `V` and all real `t`,
 `J V(t) J = V(-t)`.
@@ -1046,7 +1066,10 @@ theorem borchers_reflection_all {M : Set (H →L[ℂ] H)} {Ω : H}
     (hC : ∀ x, C (C x) = x) {V : ℝ → (H ≃ₗᵢ[ℂ] H)} (hV : IsHalfSidedTranslation M Ω V)
     (t : ℝ) :
     𝒥[V[t]] = V[-t] := by
-  sorry
+  rcases le_total 0 t with ht | ht
+  · rw [← borchers_reflection_nonneg hM hΩ C hC hV ht,
+      (modularConjugationConj_identities hM hΩ C hC _ 0).1]
+  · simpa only [neg_neg] using borchers_reflection_nonneg hM hΩ C hC hV (neg_nonneg.mpr ht)
 
 /-- **Borchers' theorem.** Let `M` be a von Neumann algebra with a cyclic and separating vector
 `Ω`, modular unitary group `Δ^{is}` and modular conjugation `J`, and let `V` be a half-sided
