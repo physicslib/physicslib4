@@ -62,6 +62,8 @@ examples on the page are elaborated against the library itself.
   Sections 10.7–10.8).
 - `Manual/ReehSchlieder.lean`: "The Reeh–Schlieder theorem" (blueprint Section 10.9).
 - `Manual/TomitaTakesaki.lean`: "Tomita–Takesaki theory" (blueprint Section 10.10).
+- `Manual/BorchersWedges.lean`: "Borchers' theorem and the wedge modular group" (blueprint
+  Section 10.11).
 - `Manual/Conventions.lean`: "Conventions and design decisions", the library's conventions and
   design decisions, each stated once with links to where it matters.
 - `Manual/NotProved.lean`: "Appendix: what the library does not prove", the standard facts the

@@ -62,8 +62,10 @@ constantly:
   exactly the input of Tomita–Takesaki theory, which the library formalizes in the
   {ref "tomita-takesaki"}[next chapter]. The Reeh–Schlieder theorem therefore starts the modular
   theory of local algebras, and through it the Bisognano–Wichmann theorem and the KMS property of
-  the vacuum restricted to a wedge. These last two are not formalized in the library; they are
-  mentioned as context.
+  the vacuum restricted to a wedge. The library proves the Bisognano–Wichmann theorem up to an
+  internal symmetry, under modular covariance, in the
+  {ref "borchers-wedges"}[chapter on Borchers' theorem]; exact Bisognano–Wichmann and the KMS
+  property of the vacuum for the boosts of a wedge are not formalized.
 
 The library proves the theorem in two stages, following the blueprint.
 

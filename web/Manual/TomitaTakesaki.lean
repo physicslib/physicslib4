@@ -65,8 +65,11 @@ modular theory is central to the subject:
   for the boost dynamics, the Unruh effect.
 
 The library proves the first, Takesaki's theorem, as the last result of the section
-({ref "tomita-takesaki-kms"}[below]); the Bisognano–Wichmann theorem is not formalized and is
-mentioned as context. What the library proves is everything of Section 10.10, with no `sorry`: the construction of $`S`, $`\Delta` and
+({ref "tomita-takesaki-kms"}[below]). The library has no Wightman fields and does not prove the
+Bisognano–Wichmann theorem in this form; for Haag–Kastler nets, where it is false in general, the
+{ref "borchers-wedges"}[next chapter] proves Borchers' theorem, its corollary for the wedge
+modular group, and the Bisognano–Wichmann theorem up to an internal symmetry under modular
+covariance. What the library proves is everything of Section 10.10, with no `sorry`: the construction of $`S`, $`\Delta` and
 $`J`, their basic properties, Takesaki's lemma, the description $`S^* = \overline{F_0}` of the
 adjoint of the Tomita operator, the modular objects of the commutant, a strip formula for bounded
 holomorphic functions, the uniqueness of Fourier transforms, Tomita's theorem,
