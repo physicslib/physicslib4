@@ -688,7 +688,11 @@ theorem IsInternalSymmetry.commute_modular {X : H ≃ₗᵢ[ℂ] H} (hX : N.IsIn
     (hΩW : IsCyclicSeparatingVector (N.regionVonNeumann π W) Ω)
     (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ x, C (C x) = x) :
     (∀ (s : ℝ) (ψ : H), X (ΔW[s] ψ) = ΔW[s] (X ψ)) ∧ ∀ ψ : H, X (𝒥W ψ) = 𝒥W (X ψ) := by
-  sorry
+  obtain ⟨-, -, -, hU, hJ⟩ := Physicslib4.Modular.modular_objects_unitary_commute
+    (N.regionVonNeumann_isVonNeumannSet π W).2 hΩW C hC X
+    (N.conj_image_region_of_conj_image_localVonNeumann π X hX.conj_image_localVonNeumann W).2
+    hX.apply_vacuum
+  exact ⟨hU, hJ⟩
 
 /-- Modular covariance for every wedge: under (MC), for every `g` in the inhomogeneous Lorentz
 group, every real `t` and every diamond `B`,
