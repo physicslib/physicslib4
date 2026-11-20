@@ -29,11 +29,25 @@ The first release, 1.0, is in preparation.
   formula in `Physicslib4/Analysis/StripFormula.lean`),
   and the reference manual has a chapter on it.
 
+- The blueprint has a section on Borchers' theorem and the wedge modular group (§10.11). It proves
+  Borchers' theorem (for a half-sided translation V of a standard pair, Δ^{is}V(t)Δ^{-is} = V(e^{-2πs}t)
+  and JV(t)J = V(-t)) by Florig's argument, the wedge corollary (the wedge modular group and
+  conjugation act on all translations as the boosts and the wedge reflection), and the
+  Bisognano–Wichmann theorem up to an internal symmetry: under modular covariance for the right wedge,
+  Δ^{it} = Z(t)U(b(-2πt)) with Z(t) an internal symmetry commuting with the translations. Wedges and the
+  algebra R(O) of a region are derived from the diamond algebras, and the vacuum representation is a
+  hypothesis structure, `IsCovariantVacuumRep`. All of it is formalized and proved in Lean
+  (`Physicslib4/AQFT/Borchers.lean`, `Physicslib4/AQFT/HaagKastler/Wedges.lean`, `RegionAlgebra.lean`,
+  `CovariantVacuum.lean` and `BisognanoWichmann.lean`, with supporting results in
+  `Physicslib4/Spacetime/MinkowskiCausalCone.lean`, `Physicslib4/Spectral/Unbounded/UnitaryConjugation.lean`,
+  `Physicslib4/Operators/Modular/Intertwining.lean`, `Physicslib4/Analysis/StripRealBoundary.lean` and
+  `Physicslib4/AQFT/PositiveEnergyHalfPlane.lean`), and the reference manual has a chapter on it.
+
 - The website has About, Roadmap and Get Involved pages, and the header on every page links to them.
 
-- The home page's "What is currently formalized" section has nine cards: the bounded and the unbounded
-  spectral theorems have a card each, and the Reeh–Schlieder theorem and Tomita–Takesaki theory have
-  cards of their own.
+- The home page's "What is currently formalized" section has ten cards: the bounded and the unbounded
+  spectral theorems have a card each, and the Reeh–Schlieder theorem, Tomita–Takesaki theory, and
+  Borchers' theorem with the wedge modular group have cards of their own.
 
 - The Jekyll home page is retired: the Verso website is served at the root, with redirects from the
   old page URLs, and the Lean and Mathlib versions are stated in `README.md` alone. The blueprint's

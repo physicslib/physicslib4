@@ -699,11 +699,14 @@ browsed.
   self-adjoint operator,
   {apiDocs Physicslib4.Spectral.Unbounded.functionalCalculus}[`functionalCalculus`].
 
-The same directory holds three files for Section 10.10, `Composition.lean`, `Polar.lean` and
-`Commuting.lean`: the composition law of the functional calculus, von Neumann's theorem on
-$`T^*T`, the absolute value and the polar decomposition of a closed operator, and operators
-commuting with a unitary. They are described in the
-{ref "tomita-takesaki-files"}[Tomita–Takesaki chapter].
+The same directory holds four files for Section 10.10, `Composition.lean`, `Polar.lean`,
+`Commuting.lean` and `Eigenvector.lean`: the composition law of the functional calculus, von
+Neumann's theorem on $`T^*T`, the absolute value and the polar decomposition of a closed operator,
+operators commuting with a unitary, and bounded functions of a self-adjoint operator on its
+eigenvectors. They are described in the {ref "tomita-takesaki-files"}[Tomita–Takesaki chapter].
+A fifth, `UnitaryConjugation.lean`, on unitary conjugation of unbounded operators and their
+functional calculus, serves Section 10.11 and is described in the
+{ref "borchers-wedges-files"}[chapter on Borchers' theorem].
 
 The bounded theory these files build on is in the top-level files of `Physicslib4/Spectral/`,
 described in the {ref "spectral-files"}[bounded chapter]. The blueprint section is

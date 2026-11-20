@@ -8,6 +8,7 @@ import Manual.HaagKastler
 import Manual.Curved
 import Manual.ReehSchlieder
 import Manual.TomitaTakesaki
+import Manual.BorchersWedges
 import Manual.Conventions
 import Manual.NotProved
 import Manual.FeatureTests
@@ -42,6 +43,8 @@ are listed in the {ref "not-proved"}[appendix].
 {include 1 Manual.ReehSchlieder}
 
 {include 1 Manual.TomitaTakesaki}
+
+{include 1 Manual.BorchersWedges}
 
 {include 1 Manual.Conventions}
 
