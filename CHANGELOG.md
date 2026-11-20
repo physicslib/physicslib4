@@ -45,9 +45,15 @@ The first release, 1.0, is in preparation.
 
 - The website has About, Roadmap and Get Involved pages, and the header on every page links to them.
 
-- The home page's "What is currently formalized" section has ten cards: the bounded and the unbounded
-  spectral theorems have a card each, and the Reeh–Schlieder theorem, Tomita–Takesaki theory, and
-  Borchers' theorem with the wedge modular group have cards of their own.
+- The home page's "What is currently formalised" section has eleven illustrated cards in four
+  horizontally scrolling rails (operator algebra and spectral theory, spacetime and axioms, modular
+  theory, structural theorems), with previous and next buttons: the bounded and the unbounded
+  spectral theorems have a card each, and the Reeh–Schlieder theorem, Tomita–Takesaki theory,
+  Borchers' theorem with the wedge modular group, and Bisognano–Wichmann up to an internal symmetry
+  have cards of their own. The hero has a background of boost orbits and the light cone, and the
+  "Checked by Lean" gallery has seven tabs: Lorentz invariance, consistent axioms, Reeh–Schlieder,
+  Tomita–Takesaki, Takesaki KMS, Borchers and Bisognano–Wichmann. The illustrations are written by
+  `scripts/gen_hero_background.py`.
 
 - The Jekyll home page is retired: the Verso website is served at the root, with redirects from the
   old page URLs, and the Lean and Mathlib versions are stated in `README.md` alone. The blueprint's

@@ -150,7 +150,11 @@ def colorTheme : ThemeConfig := {
 
 /--
 Additions to the `verso-web-components` stylesheets: the text wordmark, the landing-page layout, the
-spacetime diagram, and colours for highlighted Lean code. Colours come from the design tokens above.
+spacetime diagram, and colours for highlighted Lean code. The line drawings of the landing page (the
+hero background `hero-wedge.svg` is a CSS mask over a block filled with the accent colour, with holes
+over the hero's text and figure; the card illustrations are inline SVG in `currentColor` with two
+accent colours, `--card-accent-1` (amber) and `--card-accent-2` (indigo). All of them follow the
+light and dark themes. Colours come from the design tokens above.
 
 Verso marks up Lean code with `.keyword`, `.const` and `.var` token classes, but its defaults (and
 lean-lang.org) render all of them in the text colour, distinguished only by weight and slant. This
@@ -185,6 +189,20 @@ def siteCss : String := "
 
 main.landing { padding-bottom: var(--space-16); }
 .landing-hero { display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--space-12); align-items: center; padding-top: var(--space-16); }
+main.landing { overflow-x: clip; }
+.landing-hero { position: relative; isolation: isolate; }
+.landing-hero::before { content: ''; position: absolute; z-index: -1; pointer-events: none;
+  top: calc(-1 * var(--space-8)); bottom: calc(-1 * var(--space-12)); left: calc(50% - 50vw); right: calc(50% - 50vw);
+  background-color: var(--color-primary); opacity: 0.18;
+  --hero-mask-text: radial-gradient(ellipse 420px 300px at calc(50% - 330px) 50%, transparent 55%, #000 100%);
+  --hero-mask-figure: radial-gradient(ellipse 340px 340px at calc(50% + 330px) 48%, transparent 60%, #000 100%);
+  --hero-mask-fade: linear-gradient(to bottom, transparent 0%, #000 18%, #000 60%, transparent 100%);
+  -webkit-mask-image: url(hero-wedge.svg), var(--hero-mask-text), var(--hero-mask-figure), var(--hero-mask-fade);
+  mask-image: url(hero-wedge.svg), var(--hero-mask-text), var(--hero-mask-figure), var(--hero-mask-fade);
+  -webkit-mask-size: 1600px 900px, 100% 100%, 100% 100%, 100% 100%; mask-size: 1600px 900px, 100% 100%, 100% 100%, 100% 100%;
+  -webkit-mask-position: center; mask-position: center; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-composite: source-in, source-in, source-in; mask-composite: intersect; }
+.dark-theme .landing-hero::before { background-color: var(--color-primary-light); opacity: 0.12; }
 .landing-wordmark { font-size: var(--fs-2xl); font-weight: 600; line-height: 1.1; color: var(--color-text); margin: 0; }
 .landing-tagline { font-size: var(--fs-lg); color: var(--color-primary); margin: var(--space-3) 0 0; }
 .landing-lede p { font-size: var(--fs-md); color: var(--color-text-light); margin: var(--space-6) 0 0; line-height: 1.6; }
@@ -207,8 +225,11 @@ main.landing { padding-bottom: var(--space-16); }
 .landing-section-title { font-size: var(--fs-xl); font-weight: 600; color: var(--color-text); margin: 0 0 var(--space-6); }
 .landing-section > p { max-width: 46rem; line-height: 1.7; color: var(--color-text); }
 .landing-section a { color: var(--color-primary); }
-.landing-section .code-gallery-box { height: auto; }
-.landing-section .code-gallery-content { min-height: 0; font-size: 1rem; }
+.landing-section .code-gallery-box { height: auto; max-width: 1120px; margin-left: auto; margin-right: auto; }
+.landing-section .code-gallery-content { min-height: 0; font-size: 0.92rem; overflow-x: auto; }
+.landing-section .code-gallery-snippet pre, .landing-section .code-gallery-snippet code { white-space: pre; }
+.landing-section .code-gallery-tab { padding: var(--space-3) var(--space-5); }
+#example > p { font-size: var(--fs-sm); color: var(--color-text-light); margin: calc(-1 * var(--space-3)) auto 0; }
 .landing-section .code-gallery-snippet.visible-code { padding: var(--space-6) var(--space-8); }
 .code-gallery-run svg { fill: var(--color-primary); }
 .landing-section .code-gallery-box { margin-top: var(--space-6); }
@@ -227,6 +248,32 @@ a.feature-card:hover { border-color: var(--color-primary); box-shadow: 0 6px 18p
 .feature-card-tag { background: var(--color-hover); color: var(--color-primary); padding: 2px 10px; border-radius: var(--radius-pill); font-size: var(--fs-xs); font-weight: 600; }
 .feature-card-more { color: var(--color-primary); font-size: var(--fs-sm); font-weight: 600; white-space: nowrap; transition: transform var(--transition-base); }
 a.feature-card:hover .feature-card-more { transform: translateX(3px); }
+
+.feature-rails { display: flex; flex-direction: column; gap: var(--space-10); margin-top: var(--space-2); }
+.feature-rail-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-3); }
+.feature-rail-heading { margin: 0; font-size: var(--fs-lg); font-weight: 600; color: var(--color-text); text-align: left; }
+.feature-rail-controls { display: flex; gap: var(--space-2); }
+.feature-rail-controls[hidden] { display: none; }
+.feature-rail-button { display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; padding: 0;
+  border: 1px solid var(--color-border-light); border-radius: 50%; background: var(--card-bg); color: var(--color-primary);
+  font: inherit; font-size: 1rem; cursor: pointer; transition: border-color var(--transition-fast), opacity var(--transition-fast); }
+.feature-rail-button:hover:not(:disabled) { border-color: var(--color-primary); }
+.feature-rail-button:disabled { opacity: 0.35; cursor: default; }
+.feature-rail-button:focus-visible, .feature-rail-track:focus-visible, a.feature-card:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.feature-rail-track { display: flex; gap: var(--space-5); overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  padding: var(--space-2) 3px var(--space-4); scrollbar-width: thin; scrollbar-color: var(--color-border-light) transparent; }
+.feature-rail-item { flex: 0 0 clamp(280px, 36%, 420px); display: flex; scroll-snap-align: start; }
+a.feature-card.rail-card { flex: 1; justify-content: flex-start; gap: var(--space-3); padding: var(--space-5) var(--space-6) var(--space-6); text-align: left; }
+:root { --card-accent-1: #d97706; --card-accent-2: #4f46e5; }
+.dark-theme { --card-accent-1: #fbbf24; --card-accent-2: #a5b4fc; }
+.feature-card-art { display: block; width: 100%; height: 130px; margin-bottom: var(--space-2); color: var(--color-primary); }
+.dark-theme .feature-card-art { color: var(--color-primary-light); }
+.feature-card-svg { display: block; width: 100%; height: 100%; }
+.feature-card-svg .a1 { color: var(--card-accent-1); }
+.feature-card-svg .a2 { color: var(--card-accent-2); }
+.feature-card-title { font-size: var(--fs-md); font-weight: 700; line-height: 1.35; color: var(--color-text); }
+.feature-card-desc { font-size: var(--fs-sm); line-height: 1.55; color: var(--color-text-light); }
+.rail-card .feature-card-footer { margin-top: auto; padding-top: var(--space-2); }
 
 .post-content:has(.page-toc) { position: relative; }
 .post-content h2[id] { scroll-margin-top: calc(var(--site-header-height) + var(--space-4)); }
@@ -272,6 +319,9 @@ a.feature-card:hover .feature-card-more { transform: translateX(3px); }
 @media (max-width: 900px) {
   .landing-hero { grid-template-columns: 1fr; padding-top: var(--space-10); }
   .feature-grid { grid-template-columns: 1fr; }
+  .feature-rail-item { flex-basis: min(84%, 340px); }
+  .landing-hero::before { opacity: 0.12; --hero-mask-text: linear-gradient(#000, #000);
+    --hero-mask-figure: radial-gradient(ellipse 70% 40% at 50% 30%, transparent 30%, #000 75%); }
   .side-figure { grid-template-columns: 1fr; }
   .side-figure-image { max-width: 280px; justify-self: center; }
   .post-content ol.steps { grid-template-columns: 1fr; }

@@ -331,6 +331,9 @@ with every translation and every boost of $`W_R`
 [crllr:wedge-modular-defect](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:wedge-modular-defect)).
 
 ## Bisognano–Wichmann up to an internal symmetry
+%%%
+tag := "borchers-wedges-bw-internal"
+%%%
 
 {docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWedgeModularCovariant}
 
