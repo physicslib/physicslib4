@@ -160,6 +160,9 @@ Verso marks up Lean code with `.keyword`, `.const` and `.var` token classes, but
 lean-lang.org) render all of them in the text colour, distinguished only by weight and slant. This
 site gives them colours through Verso's `--verso-code-*-color` variables; inside the `codeGallery`
 box, whose stylesheet forces the text colour on every token, the same colours are reapplied.
+All snippets and captions of the gallery occupy one grid cell, and the inactive ones are hidden with
+`visibility` rather than `display`, so the box always has the height of its tallest tab and the
+sections below do not move when a tab is selected.
 -/
 def siteCss : String := "
 :root {
@@ -230,7 +233,12 @@ main.landing { overflow-x: clip; }
 .landing-section .code-gallery-snippet pre, .landing-section .code-gallery-snippet code { white-space: pre; }
 .landing-section .code-gallery-tab { padding: var(--space-3) var(--space-5); }
 #example > p { font-size: var(--fs-sm); color: var(--color-text-light); margin: calc(-1 * var(--space-3)) auto 0; }
-.landing-section .code-gallery-snippet.visible-code { padding: var(--space-6) var(--space-8); }
+.landing-section .code-gallery-content { display: grid; }
+.landing-section .code-gallery-snippet { display: block; grid-area: 1 / 1; visibility: hidden; padding: var(--space-6) var(--space-8); }
+.landing-section .code-gallery-snippet.visible-code { visibility: visible; padding: var(--space-6) var(--space-8); }
+.landing-section .code-gallery-footer-left { display: grid; width: 100%; }
+.landing-section .code-gallery-tip { display: flex; grid-area: 1 / 1; visibility: hidden; }
+.landing-section .code-gallery-tip.active { visibility: visible; }
 .code-gallery-run svg { fill: var(--color-primary); }
 .landing-section .code-gallery-box { margin-top: var(--space-6); }
 .landing-section.centered .landing-section-title { text-align: center; }
