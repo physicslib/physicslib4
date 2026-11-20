@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140" width="240" height="140" role="img" aria-label="A light cone">
+<title>A light cone</title>
+<path d="M120 138 L120 4 M122.17 8.5 L120 4 L117.83 8.5" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.45" fill="none"/>
+<g class="a1"><path d="M62 14 L178 130" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M178 14 L62 130" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M62 14 A58 11 0 0 0 178 14 A58 11 0 0 0 62 14 Z" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="currentColor" fill-opacity="0.14"/><path d="M62 130 A58 11 0 0 0 178 130" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M62 130 A58 11 0 0 1 178 130" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.45" fill="none" stroke-dasharray="3 3"/></g>
+<g class="a2"><path d="M120 72 C 128 52, 112 34, 124 10" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/></g>
+<path d="M117 72 a3 3 0 1 0 6 0 a3 3 0 1 0 -6 0 Z" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="none" fill="currentColor" fill-opacity="1"/>
+</svg>

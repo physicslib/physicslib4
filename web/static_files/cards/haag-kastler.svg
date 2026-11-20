@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140" width="240" height="140" role="img" aria-label="Nested causal diamonds">
+<title>Nested causal diamonds</title>
+<path d="M120 10 L180 70 L120 130 L60 70 Z" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="currentColor" fill-opacity="0.06"/>
+<g class="a1"><path d="M94 54 L114 74 L94 94 L74 74 Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="currentColor" fill-opacity="0.22"/></g>
+<g class="a2"><path d="M148 52 L166 70 L148 88 L130 70 Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="currentColor" fill-opacity="0.22"/><path d="M150 61 L159 70 L150 79 L141 70 Z" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.8" fill="currentColor" fill-opacity="0.3"/></g>
+<path d="M94 54 L114 34" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.45" fill="none" stroke-dasharray="3 3"/>
+<path d="M94 54 L74 34" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.45" fill="none" stroke-dasharray="3 3"/>
+<path d="M148 52 L166 34" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.45" fill="none" stroke-dasharray="3 3"/>
+<path d="M148 52 L130 34" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.45" fill="none" stroke-dasharray="3 3"/>
+</svg>

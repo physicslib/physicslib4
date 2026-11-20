@@ -24,11 +24,13 @@ examples on the page are elaborated against the library itself.
   of the blueprint and API docs (`apiDocsUrl` for one declaration).
 - `Site/Theme.lean`: the website theme (header, footer, design tokens, accent colour, code colours).
   The header, the design tokens and the stylesheet are also used by the books.
-- `Site/Components.lean`: the page directives (hero, sections, code gallery, feature cards, `pageToc`,
+- `Site/Components.lean`: the page directives (hero, sections, code gallery, the feature cards in
+  grouped rails, `pageToc`,
   `anchoredHeading`, and the Get Involved page's `sideFigure`, `contributeSteps`, `contributeCards` and
   `callout`),
   built on verso-web-components.
 - `Site/Diagram.lean`: the causal-diamond diagram, as inline SVG.
+- `Site/CardArt.lean`: the illustrations of the feature cards (generated; see `static_files/`).
 - `Site/FrontPage.lean`: the landing page.
 - `Site/About.lean`, `Site/Roadmap.lean`, `Site/GetInvolved.lean`: the About, Roadmap and Get Involved
   pages, at `about/`, `roadmap/` and `get-involved/`.
@@ -73,7 +75,13 @@ examples on the page are elaborated against the library itself.
 - `Manual/Theme.lean`: the manual's configuration and header, built from `Book/Theme.lean`.
 - `docs-theme/`: the header, stylesheet and theme script that `scripts/restyle_api_docs.py` puts on
   the API docs; see "The API docs" below.
-- `static_files/`: the "p4" wordmark icons (favicon and Apple touch icon), used by all three.
+- `static_files/`: the "p4" wordmark icons (favicon and Apple touch icon), used by all three, and
+  the landing page's hero background `hero-wedge.svg` (boost orbits and the light cone, a CSS mask
+  over the accent colour with holes over the hero's text and figure); `static_files/cards/` holds
+  standalone copies of the card illustrations. These, and `Site/CardArt.lean` (the card
+  illustrations as inline SVG, in `currentColor` with the accent colours `--card-accent-1` and
+  `--card-accent-2`), are written by `scripts/gen_hero_background.py`: run it from the repository
+  root after changing a drawing.
 - `redirects/`: static pages copied over the root of the published site, with the same paths as
   there, so that links to these addresses keep working. `guide.html`, `axioms.html`, the eight
   `sec10-*.html` section pages and `site/index.html` each hold a page that redirects at once

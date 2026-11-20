@@ -1,6 +1,7 @@
 import VersoBlog
 import VersoWeb.Components.Button
 import VersoWeb.Components.CodeGallery
+import Site.CardArt
 import Site.Diagram
 import Site.Links
 
@@ -168,78 +169,194 @@ def gallery : DirectiveExpanderOf Unit
     let contents ← stxs.mapM elabBlock
     ``(Verso.Web.Components.codeGallery #[ $contents,* ])
 
-/-- One feature card: title, description, blueprint sections and link. -/
+/-- The groups of feature cards, in the order of the rails on the landing page. -/
+inductive FeatureGroup where
+  | operators
+  | spacetime
+  | modular
+  | structural
+  deriving BEq
+
+/-- The heading of a rail of feature cards. -/
+def FeatureGroup.heading : FeatureGroup → String
+  | .operators => "Operator algebra and spectral theory"
+  | .spacetime => "Spacetime and axioms"
+  | .modular => "Modular theory"
+  | .structural => "Structural theorems"
+
+/-- The anchor of a rail of feature cards. -/
+def FeatureGroup.anchor : FeatureGroup → String
+  | .operators => "rail-operators"
+  | .spacetime => "rail-spacetime"
+  | .modular => "rail-modular"
+  | .structural => "rail-structural"
+
+/-- The groups of feature cards, in order. -/
+def featureGroups : Array FeatureGroup := #[.operators, .spacetime, .modular, .structural]
+
+/--
+One feature card: its group, title, description (at most two lines on the card), blueprint
+sections, link, and illustration, the name of a drawing in `Site.cardArt` (written by
+`scripts/gen_hero_background.py`).
+-/
 structure FeatureCard where
+  group : FeatureGroup
   title : String
   desc : String
   sections : Array String
   url : String
+  image : String
 
-/-- The feature cards, one per area of the formalisation, linking to the top of the matching
-reference-manual chapter. A card is a single link, so its section tags are not links. -/
+/-- The feature cards, one per area of the formalisation, linking to the matching
+reference-manual chapter or section. A card is a single link, so its section tags are not links. -/
 def featureCards : Array FeatureCard := #[
-  { title := "Haag–Kastler axioms in Minkowski spacetime."
-    desc := "Local C*-algebras on causal diamonds, isotony, local commutativity, Lorentz covariance, and the quasilocal algebra."
-    sections := #["§10.6"]
-    url := manualChapterUrl "Haag-Kastler-axioms-in-Minkowski-spacetime" },
-  { title := "The axioms in curved spacetime."
-    desc := "The same axioms on a Lorentzian spacetime, with isometric covariance and general covariance across backgrounds."
-    sections := #["§10.7", "§10.8"]
-    url := manualChapterUrl "The-axioms-in-curved-spacetime-and-general-covariance" },
-  { title := "The GNS construction."
-    desc := "From a state on a C*-algebra to a cyclic Hilbert-space representation, unique up to unitary equivalence."
+  { group := .operators
+    title := "The GNS construction"
+    desc := "From a state on a C*-algebra to a cyclic representation, unique up to unitary equivalence."
     sections := #["§10.1"]
-    url := manualChapterUrl "The-GNS-construction" },
-  { title := "The bounded spectral theorem."
-    desc := "Projection-valued measures for bounded self-adjoint and normal operators, with their functional calculus."
+    url := manualChapterUrl "The-GNS-construction"
+    image := "gns" },
+  { group := .operators
+    title := "The bounded spectral theorem"
+    desc := "Projection-valued measures and the functional calculus of bounded normal operators."
     sections := #["§10.2"]
-    url := manualChapterUrl "Bounded-spectral-theory" },
-  { title := "The unbounded spectral theorem."
-    desc := "Closed, densely defined and self-adjoint operators, their spectral measures and the functional calculus."
+    url := manualChapterUrl "Bounded-spectral-theory"
+    image := "spectral-bounded" },
+  { group := .operators
+    title := "The unbounded spectral theorem"
+    desc := "Closed and self-adjoint operators, their spectral measures and functional calculus."
     sections := #["§10.3"]
-    url := manualChapterUrl "Unbounded-operators-and-their-spectral-theorem" },
-  { title := "Stone's theorem."
-    desc := "Every strongly continuous one-parameter unitary group has the form U(t) = exp(itA) for a unique self-adjoint generator A."
+    url := manualChapterUrl "Unbounded-operators-and-their-spectral-theorem"
+    image := "spectral-unbounded" },
+  { group := .operators
+    title := "Stone's theorem"
+    desc := "Every strongly continuous unitary group is U(t) = exp(itA) for a unique self-adjoint A."
     sections := #["§10.4"]
-    url := manualChapterUrl "Stones-theorem" },
-  { title := "Spacetime geometry."
+    url := manualChapterUrl "Stones-theorem"
+    image := "stone" },
+  { group := .spacetime
+    title := "Spacetime geometry"
     desc := "Causal structure, the Levi-Civita connection and geodesics on Lorentzian manifolds."
     sections := #["§10.5"]
-    url := manualChapterUrl "Spacetime-and-geometry" },
-  { title := "The Reeh–Schlieder theorem."
-    desc := "The vacuum is cyclic for the algebra of every nonempty diamond, and separating for regions with spacelike room around them."
-    sections := #["§10.9"]
-    url := manualChapterUrl "The-Reeh-Schlieder-theorem" },
-  { title := "Tomita–Takesaki theory."
-    desc := "The modular operator and conjugation, Tomita's theorem JMJ = M′ and ΔⁱᵗMΔ⁻ⁱᵗ = M, and Takesaki's KMS theorem."
+    url := manualChapterUrl "Spacetime-and-geometry"
+    image := "spacetime" },
+  { group := .spacetime
+    title := "Haag–Kastler axioms in Minkowski spacetime"
+    desc := "Local C*-algebras on causal diamonds: isotony, local commutativity, Lorentz covariance."
+    sections := #["§10.6"]
+    url := manualChapterUrl "Haag-Kastler-axioms-in-Minkowski-spacetime"
+    image := "haag-kastler" },
+  { group := .spacetime
+    title := "The axioms in curved spacetime"
+    desc := "The same axioms on a Lorentzian spacetime, with isometric and general covariance."
+    sections := #["§10.7", "§10.8"]
+    url := manualChapterUrl "The-axioms-in-curved-spacetime-and-general-covariance"
+    image := "curved" },
+  { group := .modular
+    title := "Tomita–Takesaki theory"
+    desc := "The modular operator and conjugation, Tomita's theorem and Takesaki's KMS theorem."
     sections := #["§10.10"]
-    url := manualChapterUrl "Tomita-Takesaki-theory" },
-  { title := "Borchers' theorem and the wedge modular group."
-    desc := "Borchers' theorem for half-sided translations, the wedge modular group acting on translations as the boosts, and Bisognano–Wichmann up to an internal symmetry."
+    url := manualChapterUrl "Tomita-Takesaki-theory"
+    image := "tomita-takesaki" },
+  { group := .modular
+    title := "Borchers' theorem and the wedge modular group"
+    desc := "The modular group dilates half-sided translations; for a wedge it acts on them as boosts."
     sections := #["§10.11"]
-    url := manualChapterUrl "Borchers-theorem-and-the-wedge-modular-group" }
+    url := manualChapterUrl "Borchers-theorem-and-the-wedge-modular-group"
+    image := "borchers" },
+  { group := .structural
+    title := "The Reeh–Schlieder theorem"
+    desc := "The vacuum is cyclic for every nonempty diamond, and separating where there is spacelike room."
+    sections := #["§10.9"]
+    url := manualChapterUrl "The-Reeh-Schlieder-theorem"
+    image := "reeh-schlieder" },
+  { group := .structural
+    title := "Bisognano–Wichmann up to an internal symmetry"
+    desc := "Under modular covariance, the wedge modular group is the boost group up to an internal symmetry."
+    sections := #["§10.11"]
+    url := manualChapterUrl "Borchers-theorem-and-the-wedge-modular-group" ++
+      "#borchers-wedges-bw-internal"
+    image := "bisognano-wichmann" }
 ]
 
 /--
-The grid of feature cards. The markup is this site's own (`verso-web-components`' `learnCard` has a fixed
-"OPEN" label); the styles are in `Site.Theme.siteCss`. Each card is a single link.
+The script of the rails, run once the page is loaded (Verso puts the scripts of components in the
+`<head>`): it shows each rail's previous and next buttons (hidden without
+JavaScript, when the rail is a plain scrollable row), scrolls the rail by one card per click, and
+disables a button at the matching end of the rail. Rails whose cards all fit hide their buttons.
+-/
+def railScript : String := "
+document.addEventListener('DOMContentLoaded', function () {
+document.querySelectorAll('.feature-rail').forEach(function (rail) {
+  var track = rail.querySelector('.feature-rail-track');
+  var controls = rail.querySelector('.feature-rail-controls');
+  var prev = rail.querySelector('.feature-rail-prev');
+  var next = rail.querySelector('.feature-rail-next');
+  if (!track || !controls) return;
+  function step() {
+    var card = track.querySelector('.feature-card');
+    var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    return card ? card.getBoundingClientRect().width + gap : track.clientWidth;
+  }
+  function update() {
+    var max = track.scrollWidth - track.clientWidth;
+    controls.hidden = max <= 1;
+    prev.disabled = track.scrollLeft <= 1;
+    next.disabled = track.scrollLeft >= max - 1;
+  }
+  prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+  next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+  track.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+});
+});
+"
+
+/--
+One feature card, a single link. Its illustration is the inline SVG of `Site.cardArt`, drawn in
+`currentColor` with accent groups, so its colours follow the theme (`Site.siteCss`).
+-/
+def featureCardHtml (c : FeatureCard) : Html :=
+  let art := ((cardArt.lookup c.image).getD "")
+  {{
+    <a class="feature-card rail-card" href={{ c.url }}>
+      <span class="feature-card-art" aria-hidden="true">{{ Html.text false art }}</span>
+      <span class="feature-card-title">{{ c.title }}</span>
+      <span class="feature-card-desc">{{ c.desc }}</span>
+      <span class="feature-card-footer">
+        <span class="feature-card-tags">
+          {{ c.sections.map fun (t : String) => ({{ <span class="feature-card-tag">{{ t }}</span> }} : Html) }}
+        </span>
+        <span class="feature-card-more">"Read more →"</span>
+      </span>
+    </a>
+  }}
+
+/--
+The feature cards in four rails, one per `FeatureGroup`, each with a heading and a horizontally
+scrolling, scroll-snapping row of cards. The markup is this site's own (`verso-web-components`'
+`learnCard` has a fixed "OPEN" label); the styles are in `Site.Theme.siteCss`. Without JavaScript a
+rail is a scrollable row; with it, `railScript` adds previous and next buttons.
 -/
 block_component +directive features where
   toHtml _ _ _ _ _ := do
-    return {{
-      <div class="feature-grid">
-        {{ featureCards.map fun c => {{
-          <a class="feature-card" href={{ c.url }}>
-            <p class="feature-card-text"><strong>{{ c.title }}</strong>" "{{ c.desc }}</p>
-            <div class="feature-card-footer">
-              <div class="feature-card-tags">
-                {{ c.sections.map fun (t : String) => ({{ <span class="feature-card-tag">{{ t }}</span> }} : Html) }}
-              </div>
-              <span class="feature-card-more">"Read more →"</span>
-            </div>
-          </a>
-        }} }}
-      </div>
+    saveJs railScript
+    let rail (g : FeatureGroup) : Html := {{
+      <section class="feature-rail" aria-labelledby={{ g.anchor }}>
+        <div class="feature-rail-head">
+          <h3 class="feature-rail-heading" id={{ g.anchor }}>{{ g.heading }}</h3>
+          <div class="feature-rail-controls" hidden="">
+            <button type="button" class="feature-rail-button feature-rail-prev" aria-label=s!"Previous cards: {g.heading}">"←"</button>
+            <button type="button" class="feature-rail-button feature-rail-next" aria-label=s!"Next cards: {g.heading}">"→"</button>
+          </div>
+        </div>
+        <div class="feature-rail-track" role="list" tabindex="0" aria-label={{ g.heading }}>
+          {{ (featureCards.filter (·.group == g)).map fun c =>
+              ({{ <div class="feature-rail-item" role="listitem">{{ featureCardHtml c }}</div> }} : Html) }}
+        </div>
+      </section>
     }}
+    return {{ <div class="feature-rails">{{ featureGroups.map rail }}</div> }}
 
 end Site

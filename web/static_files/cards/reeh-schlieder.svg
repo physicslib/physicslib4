@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140" width="240" height="140" role="img" aria-label="A small diamond whose reach fills the plane">
+<title>A small diamond whose reach fills the plane</title>
+<path d="M120 -12 L202 70 L120 152 L38 70 Z" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.18" fill="none" stroke-dasharray="4 4"/>
+<path d="M120 6 L184 70 L120 134 L56 70 Z" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.3" fill="none" stroke-dasharray="4 4"/>
+<path d="M120 22 L168 70 L120 118 L72 70 Z" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.42" fill="none" stroke-dasharray="4 4"/>
+<path d="M120 36 L154 70 L120 104 L86 70 Z" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-opacity="0.54" fill="none" stroke-dasharray="4 4"/>
+<g class="a2"><path d="M135.56 85.56 L152.53 102.53 M147.81 100.88 L152.53 102.53 L150.88 97.81" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M104.44 85.56 L87.47 102.53 M89.12 97.81 L87.47 102.53 L92.19 100.88" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M104.44 54.44 L87.47 37.47 M92.19 39.12 L87.47 37.47 L89.12 42.19" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/><path d="M135.56 54.44 L152.53 37.47 M150.88 42.19 L152.53 37.47 L147.81 39.12" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="none"/></g>
+<g class="a1"><path d="M120 54 L136 70 L120 86 L104 70 Z" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" fill="currentColor" fill-opacity="0.3"/></g>
+</svg>
