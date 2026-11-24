@@ -179,7 +179,7 @@ prose still says Axiom 3 lives in 𝔘.
 
 ### Stage 2: Lean statements (orchestrator; protected definition)
 
-**`Physicslib4/AQFT/HaagKastler/LocalCommutativity.lean`:**
+**`Hilbert6/AQFT/HaagKastler/LocalCommutativity.lean`:**
 - New definition (D1(a)):
   ```lean
   def LocalCommutativity (U : LocalNet) (i : Isotony U) : Prop :=
@@ -201,11 +201,11 @@ prose still says Axiom 3 lives in 𝔘.
   `LocalCommutativity U i ↔ ∃ Q : QuasilocalAlgebra U i, ∀ ⦃B₁ B₂⦄ hB₁ hB₂, IsCompletelySpacelike … →
   ∀ a b, Commute (Q.ι hB₁ a) (Q.ι hB₂ b)`, i.e. the old definition's body.
   - The ← direction needs only the bridge; the → direction needs `exists_quasilocalAlgebra`.
-  - Import `Physicslib4.AQFT.HaagKastler.QuasilocalExistence`; no cycle, since QuasilocalExistence
+  - Import `Hilbert6.AQFT.HaagKastler.QuasilocalExistence`; no cycle, since QuasilocalExistence
     imports only QuasilocalAlgebra and QuasilocalColimit.
   - Optionally a companion `localCommutativity_iff_forall_commute_ι` (∀ Q).
 
-**`Physicslib4/AQFT/HaagKastler/Net.lean`:**
+**`Hilbert6/AQFT/HaagKastler/Net.lean`:**
 - `trivialLocalNet_localCommutativity` (line 345): the old proof builds `trivialQuasilocalAlgebra`.
   The new one is "the algebras are ℂ, so everything commutes".
 - `commute_ι_of_spacelike` (line 213) is unchanged, since it uses `commute_ι`. Its docstring ("Axiom

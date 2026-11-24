@@ -1,13 +1,13 @@
 # Review: sorry'd statements for `sbsctn:takesaki-kms`
 
-Files: `Physicslib4/Operators/Modular/TakesakiKMS.lean` (26 theorems),
-`Physicslib4/GNS/VectorState.lean` (2 theorems). Blueprint: end of
+Files: `Hilbert6/Operators/Modular/TakesakiKMS.lean` (26 theorems),
+`Hilbert6/GNS/VectorState.lean` (2 theorems). Blueprint: end of
 `blueprint/src/sections/sec10/tomita-takesaki.tex`.
 
 Scope: all 28 labels are recorded with `leanDeclaration`/`leanFile`, and none has a terminal
 assessment. The three definitions, `thrm:takesaki-kms` and `lmm:modular-automorphism-one-parameter`
 are deferred on purpose and are not reviewed here. Both files compile with only `sorry` warnings,
-and both are imported from `Physicslib4.lean`.
+and both are imported from `Hilbert6.lean`.
 
 ## Required fix
 

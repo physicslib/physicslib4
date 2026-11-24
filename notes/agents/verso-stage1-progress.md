@@ -31,9 +31,9 @@ Local only, no CI. Package lives in `web/`. Appended after each step.
 - `web/Main.lean` (`generate-site` exe, `blogMain`), `web/Site.lean`, `web/Site/Theme.lean` (vwc CSS/JS/head and
   design tokens; own header/footer with a text wordmark; teal `--color-primary` `#0f766e`, dark `#0d9488`),
   `web/Site/FrontPage.lean` (title, tagline, paragraph, blueprint and API-docs links, elaborated example).
-- Elaborated example works in-process: `import Physicslib4.AQFT.HaagKastler.Net`, `leanInit` + `lean` block with
-  `#check Physicslib4.AQFT.HaagKastler.trivialHaagKastlerNet`, and a `leanOutput` block that Verso checks against
-  the real output (`... : Physicslib4.AQFT.HaagKastler.HaagKastlerNet`).
+- Elaborated example works in-process: `import Hilbert6.AQFT.HaagKastler.Net`, `leanInit` + `lean` block with
+  `#check Hilbert6.AQFT.HaagKastler.trivialHaagKastlerNet`, and a `leanOutput` block that Verso checks against
+  the real output (`... : Hilbert6.AQFT.HaagKastler.HaagKastlerNet`).
 - `lake build` in `web/`: 6714 jobs, about 2 minutes (Verso and vwc compiled; physicslib4 oleans reused from
   `../.lake/build`, not rebuilt). `lake exe generate-site --output _out/site` writes `index.html`, `-verso-data/`
   (all 16 referenced CSS/JS files present) and `-verso-docs.json`. Served with `python3 -m http.server`; all

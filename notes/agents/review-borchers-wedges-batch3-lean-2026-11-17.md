@@ -1,9 +1,9 @@
 # Review: Lean statements for borchers-wedges batch 3 (2026-11-17)
 
 Files reviewed:
-- `Physicslib4/Analysis/StripRealBoundary.lean`
-- `Physicslib4/AQFT/PositiveEnergyHalfPlane.lean`
-- `Physicslib4/AQFT/Borchers.lean`
+- `Hilbert6/Analysis/StripRealBoundary.lean`
+- `Hilbert6/AQFT/PositiveEnergyHalfPlane.lean`
+- `Hilbert6/AQFT/Borchers.lean`
 
 38 of 47 labels are sorry'd. The other nine use `def:half-sided-translation` and are deferred until
 the guard is approved for `Borchers.lean`.
@@ -11,8 +11,8 @@ the guard is approved for `Borchers.lean`.
 ## Verdict
 
 **REVISE.** There was one required fix, now applied: `StripRealBoundary.lean` imported
-`Physicslib4.AQFT.KMS`, which made an Analysis file depend on AQFT.
-- It now imports `Physicslib4.Analysis.StripPeriodicExtension`.
+`Hilbert6.AQFT.KMS`, which made an Analysis file depend on AQFT.
+- It now imports `Hilbert6.Analysis.StripPeriodicExtension`.
 - It writes the strips literally, through local notations `Σ[β]` and `Σ°[β]` built with
   `Set.ofPred`. These agree definitionally with `kmsStrip`.
 

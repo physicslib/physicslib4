@@ -3,7 +3,7 @@
  "packages":
  [{"type": "path",
    "scope": "",
-   "name": "physicslib4",
+   "name": "hilbert6",
    "manifestFile": "lake-manifest.json",
    "inherited": false,
    "dir": "..",
@@ -199,6 +199,6 @@
    "inputRev": "master",
    "inherited": true,
    "configFile": "lakefile.toml"}],
- "name": "«physicslib4-web»",
+ "name": "«hilbert6-web»",
  "lakeDir": ".lake",
  "fixedToolchain": false}

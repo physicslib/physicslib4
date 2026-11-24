@@ -3,8 +3,8 @@
 Scope: `web/Manual/ReehSchlieder.lean`, and the edited passages in `web/Manual/NotProved.lean`,
 `web/Manual/HaagKastler.lean`, `web/Manual/Curved.lean` and `web/Manual/Conventions.lean`.
 Checked against `blueprint/src/sections/sec10/reeh-schlieder.tex` and the Lean statements and
-docstrings in `Physicslib4/AQFT/HaagKastler/ReehSchlieder/*.lean`,
-`Physicslib4/AQFT/PositiveEnergyHolomorphic.lean`, `Physicslib4/Analysis/EdgeVanishing.lean`, plus
+docstrings in `Hilbert6/AQFT/HaagKastler/ReehSchlieder/*.lean`,
+`Hilbert6/AQFT/PositiveEnergyHolomorphic.lean`, `Hilbert6/Analysis/EdgeVanishing.lean`, plus
 `PositiveEnergy.lean`, `LocalVonNeumann.lean` and `VacuumState.lean` where the chapter relies on them.
 
 VERDICT: REVISE (4 blocking findings, all one-sentence wording fixes; the mathematics and the
@@ -15,8 +15,8 @@ names are otherwise correct).
 - Blueprint links: all 16 labels used in the chapter (`sctn:`, `def:`, `lmm:`, `thrm:`, `crllr:`)
   exist as `\label{...}` in `reeh-schlieder.tex`.
 - Lean names: all 30 distinct `{docstring}` / `{apiDocs}` names exist with the exact fully
-  qualified name (namespaces checked: `Physicslib4.AQFT.HaagKastler[.HaagKastlerNet]`,
-  `Physicslib4.AQFT`, `Physicslib4`). None is `private`. `localVonNeumannAlgebra_separating` is in
+  qualified name (namespaces checked: `Hilbert6.AQFT.HaagKastler[.HaagKastlerNet]`,
+  `Hilbert6.AQFT`, `Hilbert6`). None is `private`. `localVonNeumannAlgebra_separating` is in
   `HaagKastlerNet` (`HaagKastler/LocalVonNeumann.lean:29,206`). The `#check` outputs come from the
   successful build.
 - No `sorry` in the six source files, so line 94 ("with no `sorry`") is accurate.

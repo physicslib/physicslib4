@@ -1,12 +1,12 @@
 import VersoBlog
 import Site.Components
-import Physicslib4.Spacetime.LorentzCausality
-import Physicslib4.AQFT.HaagKastler.Net
-import Physicslib4.AQFT.HaagKastler.ReehSchlieder.Additivity
-import Physicslib4.Operators.Modular.VanDaele
-import Physicslib4.Operators.Modular.TakesakiKMS
-import Physicslib4.AQFT.Borchers
-import Physicslib4.AQFT.HaagKastler.BisognanoWichmann
+import Hilbert6.Spacetime.LorentzCausality
+import Hilbert6.AQFT.HaagKastler.Net
+import Hilbert6.AQFT.HaagKastler.ReehSchlieder.Additivity
+import Hilbert6.Operators.Modular.VanDaele
+import Hilbert6.Operators.Modular.TakesakiKMS
+import Hilbert6.AQFT.Borchers
+import Hilbert6.AQFT.HaagKastler.BisognanoWichmann
 
 open Verso Genre Blog
 open Site
@@ -28,7 +28,7 @@ A Lean 4 formalisation of axiomatic physical theories.
 ```lean physicslib4 -show
 set_option linter.unusedVariables false
 
-open Physicslib4 Spacetime AQFT HaagKastler Modular GNS
+open Hilbert6 Spacetime AQFT HaagKastler Modular GNS
 
 /-- Minkowski space. -/
 local notation "𝕄" => StandardMinkowskiSpacetime.Carrier

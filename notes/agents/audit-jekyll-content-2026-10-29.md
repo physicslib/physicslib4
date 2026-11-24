@@ -11,7 +11,7 @@ README, Dropped.
 Facts checked against the current build: 683 Chapter 10 declarations (environment counts per
 `blueprint/src/sections/sec10/*.tex`: 6/144/123/41/146/169/52/2), 1,268 distinct names in
 `blueprint/lean_decls`, 348 PDF pages, numbering Definition 13 / Definition 517 / Definition 698
-(local `blueprint/web`), Lean v4.35.0, no `sorry` in `Physicslib4/`. All current today; all are
+(local `blueprint/web`), Lean v4.35.0, no `sorry` in `Hilbert6/`. All current today; all are
 counts that go stale and are to be generated at build time.
 
 ## home_page/index.md
@@ -189,7 +189,7 @@ Links that must change when the pages go, besides the redirects. These are not c
 
 - **S-1 (wrong for Minkowski).** `axioms.md` ("The five sharpened axioms in each setting, bundled
   together as a `HaagKastlerNet`") and Highlight I10 ("Five axioms… They are bundled as a
-  Haag–Kastler net") are wrong for Minkowski. `Physicslib4/AQFT/HaagKastler/Net.lean`
+  Haag–Kastler net") are wrong for Minkowski. `Hilbert6/AQFT/HaagKastler/Net.lean`
   `HaagKastlerNet` has four fields (U, isotony, localCommutativity, lorentzCovariance), and Axiom 4
   is the separate `ObservableCorrespondence`, as Manual HaagKastler states ("bundles the four").
   The curved net does bundle five (`localAlgebra` field).

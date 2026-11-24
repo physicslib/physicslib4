@@ -28,7 +28,7 @@ pages under `docs/`, 724 MB.
 
 ## Step 2: before screenshots
 
-`docs-restyle/before-1280-{light,dark}-kms.png` (`Physicslib4/AQFT/KMS.html`, served from
+`docs-restyle/before-1280-{light,dark}-kms.png` (`Hilbert6/AQFT/KMS.html`, served from
 `/tmp/docsdev` on port 8792, headless Chromium via playwright-core in `/tmp/pw`).
 
 ## Step 3: implementation
@@ -76,8 +76,8 @@ Header, identical on site / manual / blueprint / docs module page / docs index, 
 Function:
 - Search: typing `kmsStrip` gives 15 autocomplete results (panel 193,72, 416px wide, directly
   under the header); Enter opens `search.html?q=kmsStrip` with 15 results; ArrowDown + Enter
-  opens `KMS.html#Physicslib4.AQFT.kmsStripInterior`.
-- Anchor `#Physicslib4.AQFT.kmsStrip`: declaration top at 87.9px, below the 72px header;
+  opens `KMS.html#Hilbert6.AQFT.kmsStripInterior`.
+- Anchor `#Hilbert6.AQFT.kmsStrip`: declaration top at 87.9px, below the 72px header;
   its source link points at GitHub (`…/KMS.lean#L50-L51`).
 - Module list: current entry bold and scrolled into view; clicking `PositiveEnergy` opens it in the
   page. doc-gen4's picker hidden (`display: none`).

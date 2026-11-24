@@ -5,7 +5,7 @@ No blockers. 50 findings: 7 major, 23 minor, 20 nit (informational entries exclu
 
 ## Major
 
-- R13-8 / R11-1 / R13-7 / R10-1 / R01-5 / R14-2: no `**Restriction:**` line exists anywhere in `Physicslib4/`,
+- R13-8 / R11-1 / R13-7 / R10-1 / R01-5 / R14-2: no `**Restriction:**` line exists anywhere in `Hilbert6/`,
   yet several restrictions are unrecorded: oriented identity component in curved Axiom 5 (`Concrete.lean`);
   GNS witnesses pinned to `Type` rather than `Type u` (~14 declarations, incl. `IsGroundStateForFlow`, protected);
   `[Nontrivial A]` on `isCompact_weakStateSet`; `IsGeodesic` only for `Spacetime` (protected).

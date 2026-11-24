@@ -1,24 +1,24 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.GNS.Construction
-import Physicslib4.GNS.NullSpace
-import Physicslib4.GNS.CauchySchwarz
-import Physicslib4.GNS.Separating
-import Physicslib4.GNS.ExtremeState
-import Physicslib4.GNS.PureStateExists
-import Physicslib4.GNS.Superselection
-import Physicslib4.GNS.Amplification
-import Physicslib4.GNS.Covariance
-import Physicslib4.GNS.UnitaryRepresentation
+import Hilbert6.GNS.Construction
+import Hilbert6.GNS.NullSpace
+import Hilbert6.GNS.CauchySchwarz
+import Hilbert6.GNS.Separating
+import Hilbert6.GNS.ExtremeState
+import Hilbert6.GNS.PureStateExists
+import Hilbert6.GNS.Superselection
+import Hilbert6.GNS.Amplification
+import Hilbert6.GNS.Covariance
+import Hilbert6.GNS.UnitaryRepresentation
 -- Imported only so that names in the docstrings shown below resolve and link.
-import Physicslib4.Operators.DensityTheorem
+import Hilbert6.Operators.DensityTheorem
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 open Book
 -- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
 -- written relative to the library's namespaces, resolve and link.
-open Physicslib4 Physicslib4.GNS
+open Hilbert6 Hilbert6.GNS
 
 #doc (Manual) "The GNS construction" =>
 
@@ -85,7 +85,7 @@ From these the library proves, among other things:
   space, which is strongly continuous when the matrix coefficients are continuous.
 
 Two standard results are not proved: the existence of pure states, and the quasi-equivalence of a
-representation with its amplification. The declarations are in the namespace `Physicslib4.GNS`,
+representation with its amplification. The declarations are in the namespace `Hilbert6.GNS`,
 written below without the prefix.
 
 # Design
@@ -233,7 +233,7 @@ theorems with their statements, as Lean prints them, and a line or two of explan
 subsection opens with the blueprint entries it covers. In the printed statements,
 `inner ℂ x y` is the inner product $`\langle x, y \rangle`, linear in the second argument, and
 `(π a) Ω` is $`\pi(a)\Omega`. For the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Physicslib4/GNS/Basic.html) and
+[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/GNS/Basic.html) and
 the files listed at the end of the chapter.
 
 ## States
@@ -241,28 +241,28 @@ the files listed at the end of the chapter.
 Blueprint: [def:state][bp-state], [lmm:cauchy-schwarz-inequality][bp-cs], [lmm:lmm1][bp-l1],
 [lmm:lmm2][bp-l2].
 
-{docstring Physicslib4.GNS.State}
+{docstring Hilbert6.GNS.State}
 
-{docstring Physicslib4.GNS.State.IsFaithful}
+{docstring Hilbert6.GNS.State.IsFaithful}
 
 The Cauchy–Schwarz inequality is stated for any positive linear functional on a complex \*-ring,
 with no continuity, normalisation or unit. Since $`\omega(a^*a)` and $`\omega(b^*b)` are
 non-negative reals, the right-hand side uses real parts:
 
 ```lean (name := checkCS)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check cauchy_schwarz_inequality
 ```
 
 ```leanOutput checkCS
-Physicslib4.GNS.cauchy_schwarz_inequality.{u_1} {A : Type u_1} [NonUnitalNonAssocRing A] [StarRing A] [Module ℂ A]
+Hilbert6.GNS.cauchy_schwarz_inequality.{u_1} {A : Type u_1} [NonUnitalNonAssocRing A] [StarRing A] [Module ℂ A]
   [IsScalarTower ℂ A A] [SMulCommClass ℂ A A] [StarModule ℂ A] (ω : A →ₗ[ℂ] ℂ) (hω : ∀ (a : A), 0 ≤ ω (star a * a))
   (a b : A) : Complex.normSq (ω (star a * b)) ≤ (ω (star a * a)).re * (ω (star b * b)).re
 ```
 
 From it, the null set $`N(\omega)` equals $`\{n : \omega(b^*n) = 0 \text{ for all } b\}`
 (`lmm1`), so it is a closed linear subspace (`lmm2`,
-{apiDocs Physicslib4.GNS.nullSubmodule}[`nullSubmodule`]).
+{apiDocs Hilbert6.GNS.nullSubmodule}[`nullSubmodule`]).
 
 [bp-state]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:state
 [bp-cs]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cauchy-schwarz-inequality
@@ -274,7 +274,7 @@ From it, the null set $`N(\omega)` equals $`\{n : \omega(b^*n) = 0 \text{ for al
 Blueprint: [def:cyclic-vector][bp-cyc], [thrm:gns-construction-theorem][bp-gns],
 [thrm:separating-faithful][bp-sep].
 
-{docstring Physicslib4.GNS.IsCyclicVector}
+{docstring Hilbert6.GNS.IsCyclicVector}
 
 The existence half of the theorem. Lean prints the three anonymous instance arguments as
 `x : NormedAddCommGroup H`, `x_1 : InnerProductSpace ℂ H` and `x_2 : CompleteSpace H`; tutorial
@@ -282,12 +282,12 @@ The existence half of the theorem. Lean prints the three anonymous instance argu
 applies it to a state.
 
 ```lean (name := checkGNS)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check gns_construction
 ```
 
 ```leanOutput checkGNS
-Physicslib4.GNS.gns_construction.{u} {A : Type u} [CStarAlgebra A] (ω : State A) :
+Hilbert6.GNS.gns_construction.{u} {A : Type u} [CStarAlgebra A] (ω : State A) :
   ∃ H x x_1,
     ∃ (x_2 : CompleteSpace H),
       ∃ π Ω, IsCyclicVector π Ω ∧ (∀ (a : A), ω a = inner ℂ Ω ((π a) Ω)) ∧ (ω.IsFaithful → Function.Injective ⇑π)
@@ -298,12 +298,12 @@ a linear isometric equivalence, that maps $`\Omega_1` to $`\Omega_2` and intertw
 $`\pi_2`:
 
 ```lean (name := checkUnique)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check gns_unique
 ```
 
 ```leanOutput checkUnique
-Physicslib4.GNS.gns_unique.{u_1, u_2, u_3} {A : Type u_1} [CStarAlgebra A] (ω : State A) {H₁ : Type u_2}
+Hilbert6.GNS.gns_unique.{u_1, u_2, u_3} {A : Type u_1} [CStarAlgebra A] (ω : State A) {H₁ : Type u_2}
   [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁] (π₁ : A →⋆ₐ[ℂ] H₁ →L[ℂ] H₁) (Ω₁ : H₁)
   (hcyc₁ : IsCyclicVector π₁ Ω₁) (hrep₁ : ∀ (a : A), ω a = inner ℂ Ω₁ ((π₁ a) Ω₁)) {H₂ : Type u_3}
   [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂] (π₂ : A →⋆ₐ[ℂ] H₂ →L[ℂ] H₂) (Ω₂ : H₂)
@@ -315,18 +315,18 @@ For a faithful state the reproducing vector is separating, in any representation
 $`\|\pi(a)\Omega\|^2 = \omega(a^*a)`:
 
 ```lean (name := checkSep)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check separating_of_faithful
 ```
 
 ```leanOutput checkSep
-Physicslib4.GNS.separating_of_faithful.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {H : Type u_2} [NormedAddCommGroup H]
+Hilbert6.GNS.separating_of_faithful.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {H : Type u_2} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {ω : State A} (hω : ω.IsFaithful) (π : A →⋆ₐ[ℂ] H →L[ℂ] H) (Ω : H)
   (hrep : ∀ (a : A), ω a = inner ℂ Ω ((π a) Ω)) {a : A} (ha : (π a) Ω = 0) : a = 0
 ```
 
 The GNS form, a triple whose vector is both cyclic and separating, is
-{apiDocs Physicslib4.GNS.exists_gns_separating}[`exists_gns_separating`].
+{apiDocs Hilbert6.GNS.exists_gns_separating}[`exists_gns_separating`].
 
 [bp-cyc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:cyclic-vector
 [bp-gns]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:gns-construction-theorem
@@ -340,19 +340,19 @@ Blueprint: [def:irreducible-representation][bp-irr], [thrm:schur-lemma][bp-schur
 [def:extreme-state][bp-ext], [thrm:pure-iff-extreme][bp-pe],
 [thrm:state-space-weak-compact][bp-wc], [def:von-neumann-center][bp-ctr].
 
-{docstring Physicslib4.GNS.IsIrreducible}
+{docstring Hilbert6.GNS.IsIrreducible}
 
 In the printed statements Lean writes `GNS.IsIrreducible`, to distinguish it from Mathlib's
 `IsIrreducible`, irreducibility of a subset of a topological space. Irreducibility is the statement that the commutant, Mathlib's
 `Set.centralizer` of the image, is the set `scalarOperators H` of multiples of $`\mathbf{1}`:
 
 ```lean (name := checkCentralizer)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check isIrreducible_iff_centralizer
 ```
 
 ```leanOutput checkCentralizer
-Physicslib4.GNS.isIrreducible_iff_centralizer.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {H₁ : Type u_2}
+Hilbert6.GNS.isIrreducible_iff_centralizer.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {H₁ : Type u_2}
   [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁] {π : A →⋆ₐ[ℂ] H₁ →L[ℂ] H₁} :
   GNS.IsIrreducible π ↔ (Set.range ⇑π).centralizer = scalarOperators H₁
 ```
@@ -361,76 +361,75 @@ Equivalently, $`\pi(A)''` is all of $`B(H)`, because the commutant of the scalar
 the centre of $`B(H)` is the scalars:
 
 ```lean (name := checkUniv)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check isIrreducible_iff_gnsVonNeumann_eq_univ
 ```
 
 ```leanOutput checkUniv
-Physicslib4.GNS.isIrreducible_iff_gnsVonNeumann_eq_univ.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {H : Type u_2}
+Hilbert6.GNS.isIrreducible_iff_gnsVonNeumann_eq_univ.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {H : Type u_2}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {π : A →⋆ₐ[ℂ] H →L[ℂ] H} :
   GNS.IsIrreducible π ↔ gnsVonNeumann π = Set.univ
 ```
 
-{docstring Physicslib4.GNS.gnsVonNeumann}
+{docstring Hilbert6.GNS.gnsVonNeumann}
 
 The topological Schur lemma, `eq_smul_one_of_commute_of_cyclic`, says that in a cyclic
 representation an operator $`T` of $`\pi(A)'` with
 $`\langle \Omega, T\pi(a)\Omega \rangle = c\,\langle \Omega, \pi(a)\Omega \rangle` for all $`a` equals
 $`c\mathbf{1}`. The centre of a von Neumann algebra $`R` is
-{apiDocs Physicslib4.GNS.vonNeumannCenter}[`vonNeumannCenter R`], and $`R` is a factor
+{apiDocs Hilbert6.GNS.vonNeumannCenter}[`vonNeumannCenter R`], and $`R` is a factor
 (`IsFactor`) when the centre is the scalars. For an irreducible representation the centre of
 $`\pi(A)''` is the scalars (`center_gnsVonNeumann_eq_of_isIrreducible`), so it generates a factor
 (`isFactor_gnsVonNeumann_of_isIrreducible`).
 
-{docstring Physicslib4.GNS.IsPure}
+{docstring Hilbert6.GNS.IsPure}
 
 The headline theorem of the section, for any cyclic representation that reproduces $`\omega`:
 
 ```lean (name := checkPureIrr)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check isPure_iff_isIrreducible
 ```
 
 ```leanOutput checkPureIrr
-Physicslib4.GNS.isPure_iff_isIrreducible.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {H : Type u_2}
-  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {ω : State A} {π : A →⋆ₐ[ℂ] H →L[ℂ] H} {Ω : H}
-  (hcyc : IsCyclicVector π Ω) (hrep : ∀ (a : A), ω a = inner ℂ Ω ((π a) Ω)) : IsPure ω ↔ GNS.IsIrreducible π
+Hilbert6.GNS.isPure_iff_isIrreducible.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {H : Type u_2} [NormedAddCommGroup H]
+  [InnerProductSpace ℂ H] [CompleteSpace H] {ω : State A} {π : A →⋆ₐ[ℂ] H →L[ℂ] H} {Ω : H} (hcyc : IsCyclicVector π Ω)
+  (hrep : ∀ (a : A), ω a = inner ℂ Ω ((π a) Ω)) : IsPure ω ↔ GNS.IsIrreducible π
 ```
 
 From irreducible to pure, a dominated $`\psi` gives the Radon–Nikodym operator
-{apiDocs Physicslib4.GNS.rnOp}[`rnOp`] in $`\pi(A)'`, with
+{apiDocs Hilbert6.GNS.rnOp}[`rnOp`] in $`\pi(A)'`, with
 $`\psi(a) = \langle \Omega, T\pi(a)\Omega \rangle`, which irreducibility makes a scalar. From pure
 to irreducible, an element of $`\pi(A)'` splits into self-adjoint parts, which rescale into
 functionals dominated by $`\omega`. With the GNS triple, a pure state therefore gives a factor
 (`exists_gns_factor_of_isPure`) and $`\pi(A)'' = B(H)` (`exists_gns_generates_all_of_isPure`).
 
-{docstring Physicslib4.GNS.State.IsExtremePoint}
+{docstring Hilbert6.GNS.State.IsExtremePoint}
 
 ```lean (name := checkExtreme)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check isPure_iff_isExtremePoint
 ```
 
 ```leanOutput checkExtreme
-Physicslib4.GNS.isPure_iff_isExtremePoint.{u_1} {A : Type u_1} [CStarAlgebra A] (ω : State A) :
-  IsPure ω ↔ ω.IsExtremePoint
+Hilbert6.GNS.isPure_iff_isExtremePoint.{u_1} {A : Type u_1} [CStarAlgebra A] (ω : State A) : IsPure ω ↔ ω.IsExtremePoint
 ```
 
 The proof rests on $`\|\varphi\| = \mathrm{Re}\,\varphi(\mathbf{1})` for positive $`\varphi`,
 which fixes the weights of a mixture. Extremality agrees with Mathlib's `extremePoints` of
-{apiDocs Physicslib4.GNS.stateSpace}[`stateSpace A`]
+{apiDocs Hilbert6.GNS.stateSpace}[`stateSpace A`]
 (`mem_extremePoints_iff_isExtremePoint`), which is convex (`convex_stateSpace`). In the weak-\*
 topology:
 
-{docstring Physicslib4.GNS.weakStateSet}
+{docstring Hilbert6.GNS.weakStateSet}
 
 ```lean (name := checkCompact)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check isCompact_weakStateSet
 ```
 
 ```leanOutput checkCompact
-Physicslib4.GNS.isCompact_weakStateSet.{u_1} {A : Type u_1} [CStarAlgebra A] : IsCompact weakStateSet
+Hilbert6.GNS.isCompact_weakStateSet.{u_1} {A : Type u_1} [CStarAlgebra A] : IsCompact weakStateSet
 ```
 
 The proof is the Banach–Alaoglu theorem: the set is weak-\* closed and lies in the unit ball.
@@ -453,11 +452,11 @@ Blueprint: [def:unitary-equivalence][bp-ue], [thrm:unitary-equiv-invariants][bp-
 [thrm:irreducible-dichotomy][bp-dich], [thrm:pure-state-dichotomy][bp-pdich],
 [thrm:commutant-von-neumann][bp-cvn].
 
-{docstring Physicslib4.GNS.UnitaryEquiv}
+{docstring Hilbert6.GNS.UnitaryEquiv}
 
-{docstring Physicslib4.GNS.Intertwines}
+{docstring Hilbert6.GNS.Intertwines}
 
-{docstring Physicslib4.GNS.AreDisjoint}
+{docstring Hilbert6.GNS.AreDisjoint}
 
 Unitarily equivalent representations on a nonzero space are not disjoint
 (`UnitaryEquiv.not_areDisjoint`, which assumes `Nontrivial H₁`). For irreducible representations
@@ -465,12 +464,12 @@ the two notions are complementary: a nonzero intertwiner $`T` between irreducibl
 $`T^*T` and $`TT^*` scalar, so a multiple of $`T` is unitary.
 
 ```lean (name := checkDichotomy)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check areDisjoint_or_unitaryEquiv_of_isIrreducible
 ```
 
 ```leanOutput checkDichotomy
-Physicslib4.GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible.{u_1, u_2, u_3} {A : Type u_1} [CStarAlgebra A]
+Hilbert6.GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible.{u_1, u_2, u_3} {A : Type u_1} [CStarAlgebra A]
   {H₁ : Type u_2} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁] {H₂ : Type u_3}
   [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂] {π₁ : A →⋆ₐ[ℂ] H₁ →L[ℂ] H₁}
   {π₂ : A →⋆ₐ[ℂ] H₂ →L[ℂ] H₂} (h1 : GNS.IsIrreducible π₁) (h2 : GNS.IsIrreducible π₂) :
@@ -478,21 +477,21 @@ Physicslib4.GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible.{u_1, u_2, u_3} {A 
 ```
 
 For pure states, applied to their GNS representations, this is
-{apiDocs Physicslib4.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}[`exists_gns_areDisjoint_or_unitaryEquiv_of_isPure`]:
+{apiDocs Hilbert6.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}[`exists_gns_areDisjoint_or_unitaryEquiv_of_isPure`]:
 the GNS representations of two pure states are unitarily equivalent (the same superselection
 sector) or disjoint. Unitary equivalence
 preserves irreducibility and the factor property (`UnitaryEquiv.isIrreducible_iff`,
 `UnitaryEquiv.isFactor_iff`).
 
-{docstring Physicslib4.GNS.QuasiEquiv}
+{docstring Hilbert6.GNS.QuasiEquiv}
 
 ```lean (name := checkQuasi)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check UnitaryEquiv.quasiEquiv
 ```
 
 ```leanOutput checkQuasi
-Physicslib4.GNS.UnitaryEquiv.quasiEquiv.{u_1, u_2, u_3} {A : Type u_1} [CStarAlgebra A] {H₁ : Type u_2}
+Hilbert6.GNS.UnitaryEquiv.quasiEquiv.{u_1, u_2, u_3} {A : Type u_1} [CStarAlgebra A] {H₁ : Type u_2}
   [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁] {H₂ : Type u_3} [NormedAddCommGroup H₂]
   [InnerProductSpace ℂ H₂] [CompleteSpace H₂] {π₁ : A →⋆ₐ[ℂ] H₁ →L[ℂ] H₁} {π₂ : A →⋆ₐ[ℂ] H₂ →L[ℂ] H₂}
   (h : UnitaryEquiv π₁ π₂) : QuasiEquiv π₁ π₂
@@ -501,7 +500,7 @@ Physicslib4.GNS.UnitaryEquiv.quasiEquiv.{u_1, u_2, u_3} {A : Type u_1} [CStarAlg
 The commutant $`\pi(A)'`, the algebra of intertwiners from $`\pi` to itself, as a von Neumann
 algebra:
 
-{docstring Physicslib4.GNS.commutantVonNeumann}
+{docstring Hilbert6.GNS.commutantVonNeumann}
 
 [bp-ue]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:unitary-equivalence
 [bp-uei]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:unitary-equiv-invariants
@@ -516,22 +515,22 @@ algebra:
 Blueprint: [def:direct-sum-representation][bp-ds], [thrm:direct-sum-subrepresentation][bp-dss],
 [def:amplification][bp-amp], [thrm:direct-sum-reducible][bp-dsr].
 
-{docstring Physicslib4.GNS.directSum}
+{docstring Hilbert6.GNS.directSum}
 
-{docstring Physicslib4.GNS.amplification}
+{docstring Hilbert6.GNS.amplification}
 
 The projection onto one summand commutes with the direct sum
 (`summandProj_mem_commutant`), and it is not a scalar when its own summand and another summand
 are both nonzero:
 
 ```lean (name := checkReducible)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check not_isIrreducible_directSum
 ```
 
 ```leanOutput checkReducible
-Physicslib4.GNS.not_isIrreducible_directSum.{u_1, u_2, u_3} {A : Type u_1} [CStarAlgebra A] {ι : Type u_2}
-  [DecidableEq ι] {H : ι → Type u_3} [(i : ι) → NormedAddCommGroup (H i)] [(i : ι) → InnerProductSpace ℂ (H i)]
+Hilbert6.GNS.not_isIrreducible_directSum.{u_1, u_2, u_3} {A : Type u_1} [CStarAlgebra A] {ι : Type u_2} [DecidableEq ι]
+  {H : ι → Type u_3} [(i : ι) → NormedAddCommGroup (H i)] [(i : ι) → InnerProductSpace ℂ (H i)]
   [∀ (i : ι), CompleteSpace (H i)] (π : (i : ι) → A →⋆ₐ[ℂ] H i →L[ℂ] H i) {j k : ι} (hjk : j ≠ k) {v : H j} (hv : v ≠ 0)
   {w : H k} (hw : w ≠ 0) : ¬GNS.IsIrreducible (directSum π)
 ```
@@ -550,18 +549,18 @@ Blueprint: [def:state-pullback][bp-pb], [thrm:pure-pullback-invariant][bp-ppb],
 [thrm:invariant-state-gns-unitary-strongly-continuous][bp-invsc], of which the theorems below are the
 general form.
 
-{docstring Physicslib4.GNS.State.comp}
+{docstring Hilbert6.GNS.State.comp}
 
 Pulling back along a \*-isomorphism preserves purity in both directions:
 
 ```lean (name := checkPureComp)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check isPure_comp_iff
 ```
 
 ```leanOutput checkPureComp
-Physicslib4.GNS.isPure_comp_iff.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {B : Type u_2} [CStarAlgebra B]
-  (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B) : IsPure (ω.comp Φ.toStarAlgHom) ↔ IsPure ω
+Hilbert6.GNS.isPure_comp_iff.{u_1, u_2} {A : Type u_1} [CStarAlgebra A] {B : Type u_2} [CStarAlgebra B] (Φ : A ≃⋆ₐ[ℂ] B)
+  (ω : State B) : IsPure (ω.comp Φ.toStarAlgHom) ↔ IsPure ω
 ```
 
 The automorphism case, with `State.precomp`, is `isPure_precomp_iff`. The GNS data of
@@ -571,12 +570,12 @@ of $`B` reproducing $`\omega`, there is $`U` with $`U\Omega_1 = \Omega_2` and
 $`U\pi_1(a) = \pi_2(\Phi(a))U`:
 
 ```lean (name := checkCov)
-open Physicslib4 GNS in
+open Hilbert6 GNS in
 #check exists_unitary_of_gns_comp
 ```
 
 ```leanOutput checkCov
-Physicslib4.GNS.exists_unitary_of_gns_comp.{u_1, u_2, u_4, u_5} {A : Type u_1} [CStarAlgebra A] {B : Type u_2}
+Hilbert6.GNS.exists_unitary_of_gns_comp.{u_1, u_2, u_4, u_5} {A : Type u_1} [CStarAlgebra A] {B : Type u_2}
   [CStarAlgebra B] (Φ : A ≃⋆ₐ[ℂ] B) (ω : State B) {H₁ : Type u_4} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁]
   [CompleteSpace H₁] (π₁ : A →⋆ₐ[ℂ] H₁ →L[ℂ] H₁) (Ω₁ : H₁) (hcyc₁ : IsCyclicVector π₁ Ω₁)
   (hrep₁ : ∀ (a : A), (ω.comp Φ.toStarAlgHom) a = inner ℂ Ω₁ ((π₁ a) Ω₁)) {H₂ : Type u_5} [NormedAddCommGroup H₂]
@@ -586,12 +585,12 @@ Physicslib4.GNS.exists_unitary_of_gns_comp.{u_1, u_2, u_4, u_5} {A : Type u_1} [
 ```
 
 In the language of `UnitaryEquiv` this is
-{apiDocs Physicslib4.GNS.unitaryEquiv_comp_of_gns}[`unitaryEquiv_comp_of_gns`], and with it
+{apiDocs Hilbert6.GNS.unitaryEquiv_comp_of_gns}[`unitaryEquiv_comp_of_gns`], and with it
 irreducibility and the factor property transport along $`\Phi`
 (`isIrreducible_iff_of_gns_comp`, `isFactor_iff_of_gns_comp`).
 
 The unitary implementation of a symmetry that leaves $`\omega` invariant is
-{apiDocs Physicslib4.GNS.exists_gns_unitary_of_invariant}[`exists_gns_unitary_of_invariant`].
+{apiDocs Hilbert6.GNS.exists_gns_unitary_of_invariant}[`exists_gns_unitary_of_invariant`].
 For \*-automorphisms $`\gamma_g` of $`A`, $`g` in a monoid $`G`, with
 $`\gamma_{g'g} = \gamma_{g'} \circ \gamma_g`, $`\gamma_1 = \mathrm{id}` and
 $`\omega \circ \gamma_g = \omega`, it gives a GNS triple of $`\omega` and unitaries $`U(g)` with
@@ -599,12 +598,12 @@ $`\omega \circ \gamma_g = \omega`, it gives a GNS triple of $`\omega` and unitar
 $$`U(g)\,\pi(a)\Omega = \pi(\gamma_g(a))\,\Omega, \quad U(g)\,\Omega = \Omega, \quad U(g'g) = U(g')\,U(g), \quad U(1) = \mathbf{1},`
 
 and $`U(g)\,\pi(a)\,U(g)^{-1} = \pi(\gamma_g(a))` on all of $`H`.
-{apiDocs Physicslib4.GNS.exists_gns_unitaryRep_of_invariant}[`exists_gns_unitaryRep_of_invariant`]
+{apiDocs Hilbert6.GNS.exists_gns_unitaryRep_of_invariant}[`exists_gns_unitaryRep_of_invariant`]
 takes $`\gamma` and returns $`U` as monoid homomorphisms. When $`G` has a topology and the matrix
 coefficients $`g \mapsto \omega(a^*\gamma_g(b))` are continuous, $`g \mapsto U(g)\psi` is
 continuous for every $`\psi`
-({apiDocs Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous}[`exists_gns_unitary_of_invariant_strongContinuous`],
-{apiDocs Physicslib4.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous}[`exists_gns_unitaryRep_of_invariant_strongContinuous`]).
+({apiDocs Hilbert6.GNS.exists_gns_unitary_of_invariant_strongContinuous}[`exists_gns_unitary_of_invariant_strongContinuous`],
+{apiDocs Hilbert6.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous}[`exists_gns_unitaryRep_of_invariant_strongContinuous`]).
 These statements are long existentials over the Hilbert space and its structure, so they are
 linked rather than printed.
 
@@ -621,54 +620,54 @@ linked rather than printed.
 tag := "gns-files"
 %%%
 
-The section is formalised in `Physicslib4/GNS/`, one topic per file. Each entry links to the API
+The section is formalised in `Hilbert6/GNS/`, one topic per file. Each entry links to the API
 documentation of a representative declaration, from which the rest of the file can be browsed.
 
 States and the construction:
 
-* `Basic.lean`: states, faithful states and cyclic vectors, {apiDocs Physicslib4.GNS.State}[].
+* `Basic.lean`: states, faithful states and cyclic vectors, {apiDocs Hilbert6.GNS.State}[].
 * `CauchySchwarz.lean`: the Cauchy–Schwarz inequality for positive functionals,
-  {apiDocs Physicslib4.GNS.cauchy_schwarz_inequality}[`cauchy_schwarz_inequality`].
+  {apiDocs Hilbert6.GNS.cauchy_schwarz_inequality}[`cauchy_schwarz_inequality`].
 * `NullSpace.lean`: the null set $`N(\omega)` and its closed subspace,
-  {apiDocs Physicslib4.GNS.nullSubmodule}[`nullSubmodule`].
+  {apiDocs Hilbert6.GNS.nullSubmodule}[`nullSubmodule`].
 * `Construction.lean`: existence and uniqueness of the GNS triple,
-  {apiDocs Physicslib4.GNS.gns_construction}[`gns_construction`].
+  {apiDocs Hilbert6.GNS.gns_construction}[`gns_construction`].
 * `Separating.lean`: the vector of a faithful state is separating,
-  {apiDocs Physicslib4.GNS.separating_of_faithful}[`separating_of_faithful`].
+  {apiDocs Hilbert6.GNS.separating_of_faithful}[`separating_of_faithful`].
 
 Irreducibility and purity:
 
 * `Irreducibility.lean`: irreducibility, the Schur lemma, purity, $`\pi(A)''`, von Neumann
   algebras from self-adjoint sets, and the centre (`IsFactor` itself is in
-  `Operators/Conjugation.lean`), {apiDocs Physicslib4.GNS.IsIrreducible}[`IsIrreducible`].
+  `Operators/Conjugation.lean`), {apiDocs Hilbert6.GNS.IsIrreducible}[`IsIrreducible`].
 * `RadonNikodym.lean`: the Radon–Nikodym operator and purity equivalent to irreducibility,
-  {apiDocs Physicslib4.GNS.isPure_iff_isIrreducible}[`isPure_iff_isIrreducible`].
+  {apiDocs Hilbert6.GNS.isPure_iff_isIrreducible}[`isPure_iff_isIrreducible`].
 * `ExtremeState.lean`: extreme points, the state space, mixtures, and pullbacks of states,
-  {apiDocs Physicslib4.GNS.isPure_iff_isExtremePoint}[`isPure_iff_isExtremePoint`].
+  {apiDocs Hilbert6.GNS.isPure_iff_isExtremePoint}[`isPure_iff_isExtremePoint`].
 * `PureStateExists.lean`: the state space in the weak-\* topology and its compactness,
-  {apiDocs Physicslib4.GNS.isCompact_weakStateSet}[`isCompact_weakStateSet`].
+  {apiDocs Hilbert6.GNS.isCompact_weakStateSet}[`isCompact_weakStateSet`].
 
 Comparing representations:
 
 * `UnitaryEquiv.lean`: unitary equivalence and the invariance of irreducibility and the factor
-  property, {apiDocs Physicslib4.GNS.UnitaryEquiv}[`UnitaryEquiv`].
+  property, {apiDocs Hilbert6.GNS.UnitaryEquiv}[`UnitaryEquiv`].
 * `Superselection.lean`: intertwiners, disjointness, the dichotomy for irreducibles, the
   commutant as a von Neumann algebra, and quasi-equivalence,
-  {apiDocs Physicslib4.GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible}[`areDisjoint_or_unitaryEquiv_of_isIrreducible`].
+  {apiDocs Hilbert6.GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible}[`areDisjoint_or_unitaryEquiv_of_isIrreducible`].
 * `DirectSum.lean`: the direct sum and its summand projections,
-  {apiDocs Physicslib4.GNS.directSum}[`directSum`].
+  {apiDocs Hilbert6.GNS.directSum}[`directSum`].
 * `Amplification.lean`: amplification and the reducibility of direct sums,
-  {apiDocs Physicslib4.GNS.amplification}[`amplification`].
+  {apiDocs Hilbert6.GNS.amplification}[`amplification`].
 
 Covariance:
 
 * `Covariance.lean`: the GNS representation of a pulled-back state,
-  {apiDocs Physicslib4.GNS.exists_unitary_of_gns_comp}[`exists_unitary_of_gns_comp`].
+  {apiDocs Hilbert6.GNS.exists_unitary_of_gns_comp}[`exists_unitary_of_gns_comp`].
 * `UnitaryRepresentation.lean`: the unitary implementation of an invariant symmetry,
-  {apiDocs Physicslib4.GNS.exists_gns_unitaryRep_of_invariant}[`exists_gns_unitaryRep_of_invariant`].
+  {apiDocs Hilbert6.GNS.exists_gns_unitaryRep_of_invariant}[`exists_gns_unitaryRep_of_invariant`].
 
 The von Neumann density theorem, cited in the `gnsVonNeumann` docstring, is in
-`Physicslib4/Operators/DensityTheorem.lean` and is described in the
+`Hilbert6/Operators/DensityTheorem.lean` and is described in the
 [Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Main-definitions-and-theorems--Representations-and-local-von-Neumann-algebras).
 The blueprint sections are
 [Section 10.1](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:gns-construction-details)

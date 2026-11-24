@@ -18,8 +18,8 @@ Infrastructure for the reference manual as a second Verso manual-genre book at `
   `data-inherited-from` on their `section.subdocs`, so CSS can hide them; there is no flag for it.
 - API docs (doc-gen4, deployed): a declaration `N` of module `A.B.C` is at
   `docs/A/B/C.html#N`, the anchor being the full name, e.g.
-  `docs/Physicslib4/AQFT/HaagKastler/LocalAlgebras.html#Physicslib4.AQFT.HaagKastler.LocalNet` and
-  `docs/Physicslib4/AQFT/HaagKastler/EinsteinCausality.html#Physicslib4.AQFT.HaagKastler.HaagKastlerNet.einstein_causality`
+  `docs/Hilbert6/AQFT/HaagKastler/LocalAlgebras.html#Hilbert6.AQFT.HaagKastler.LocalNet` and
+  `docs/Hilbert6/AQFT/HaagKastler/EinsteinCausality.html#Hilbert6.AQFT.HaagKastler.HaagKastlerNet.einstein_causality`
   (both checked: page 200, anchor present). `docs/find/?pattern=N#doc` also resolves by name.
 
 ## Step 1: shared theme, book scaffold (2026-10-17)
@@ -42,20 +42,20 @@ Infrastructure for the reference manual as a second Verso manual-genre book at `
 
 ## Step 2: declaration display, draft chapter `Manual/FeatureTests.lean` (2026-10-17)
 
-- `{docstring Physicslib4.AQFT.HaagKastler.LocalNet}`: a box labelled "structure" with the
+- `{docstring Hilbert6.AQFT.HaagKastler.LocalNet}`: a box labelled "structure" with the
   signature, the docstring, "Constructor" and "Fields" (each field with its type and docstring).
   Builds without `allowMissing`.
 - Truncation: field types are pretty-printed at width 40 but a single long application does not
   break, and the box cut it off at the right edge (`HaagKastlerNet.localCommutativity :
-  Physicslib4.AQFT.HaagKastler.LocalCommutativity self.U self.isotony`). Fixed in `bookCss`: field
+  Hilbert6.AQFT.HaagKastler.LocalCommutativity self.U self.isotony`). Fixed in `bookCss`: field
   lines wrap with a hanging indent. Names in field types are printed fully qualified.
-- Inherited fields (`Physicslib4.GNS.State extends A →L[ℂ] ℂ`): Verso hides them by default and
+- Inherited fields (`Hilbert6.GNS.State extends A →L[ℂ] ℂ`): Verso hides them by default and
   lists the parent under "Extends" with a checkbox that shows them. No directive needed (an
   `ownFields` directive was tried and dropped). `+hideFields` hides all fields,
   `+hideStructureConstructor` the constructor (the `(x := true)` form is deprecated).
 - Docstring Markdown code spans are elaborated as Lean: `` `def:local-algebras` `` renders with
   `def` highlighted as a keyword. A point for the docstring pass.
-- `#check HaagKastlerNet.einstein_causality` (under `open Physicslib4 AQFT HaagKastler in`) with
+- `#check HaagKastlerNet.einstein_causality` (under `open Hilbert6 AQFT HaagKastler in`) with
   `leanOutput`: Verso prints messages at width 120 whatever `format.width` is (SubVerso uses
   `Std.Format.defWidth`); the shared `pre.hl.lean.lean-output` rule wraps them in the text column.
 - API-doc links checked live (page 200, anchor present) for `LocalNet`, `einstein_causality`, and

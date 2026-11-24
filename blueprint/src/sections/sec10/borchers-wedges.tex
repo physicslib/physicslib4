@@ -14,7 +14,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[Future-Pointing Tangent Vectors Lie in the Closed Forward Cone]
     \label{lmm:minkowski-future-pointing-closed-cone}
-    \lean{Physicslib4.standardMinkowski_futurePointing_mem_closedForwardCone}
+    \lean{Hilbert6.standardMinkowski_futurePointing_mem_closedForwardCone}
     \uses{def:standard-minkowski-spacetime, def:lorentz-path, def:future-and-past-pointing-vectors, def:lorentz-transformation}
     \leanok
     Let $v$ be a tangent vector at a point of standard Minkowski spacetime that is future-pointing with respect to $e_0$. Then $v \in \overline{V}_+$.
@@ -27,7 +27,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[The Closed Forward Cone in Norm Form]
     \label{lmm:closed-forward-cone-iff-norm}
-    \lean{Physicslib4.mem_closedForwardCone_iff_sqrt_le}
+    \lean{Hilbert6.mem_closedForwardCone_iff_sqrt_le}
     \uses{def:lorentz-transformation}
     \leanok
     A vector $v \in \mathbb{R}^4$ lies in $\overline{V}_+$ if and only if $\|\vec v\| \le v^0$. In particular every $v \in \overline{V}_+$ satisfies $|v^i| \le v^0$ for $i = 1, 2, 3$.
@@ -39,7 +39,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[The Closed Forward Cone is a Closed Convex Cone]
     \label{lmm:closed-forward-cone-closed-convex}
-    \lean{Physicslib4.closedForwardCone_isClosed_convexCone}
+    \lean{Hilbert6.closedForwardCone_isClosed_convexCone}
     \uses{def:lorentz-transformation}
     \leanok
     The set $\overline{V}_+$ is closed in $\mathbb{R}^4$, contains $0$, and is closed under addition and under multiplication by nonnegative scalars.
@@ -52,7 +52,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[Integrals of Curves in the Closed Forward Cone]
     \label{lmm:interval-integral-closed-forward-cone}
-    \lean{Physicslib4.intervalIntegral_mem_closedForwardCone}
+    \lean{Hilbert6.intervalIntegral_mem_closedForwardCone}
     \uses{lmm:closed-forward-cone-iff-norm}
     \leanok
     Let $a \le b$ and let $f : \mathbb{R} \to \mathbb{R}^4$ be continuous on $[a,b]$ with $f(s) \in \overline{V}_+$ for every $s \in [a,b]$. Then $\int_a^b f(s)\,ds \in \overline{V}_+$.
@@ -69,7 +69,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[The Displacement along a Causal Trip Segment]
     \label{lmm:causal-trip-segment-displacement}
-    \lean{Physicslib4.standardMinkowski_causalTripSegment_displacement}
+    \lean{Hilbert6.standardMinkowski_causalTripSegment_displacement}
     \uses{def:causal-trip, def:standard-minkowski-spacetime, def:lorentz-path}
     \leanok
     Let $p, q$ be points of standard Minkowski spacetime and let a causal trip segment run from $p$ to $q$ (\ref{def:causal-trip}). Then the segment has a representative smooth path $\mu$ with parameter space $[a,b]$, $a < b$, such that $\mu(a) = p$, $\mu(b) = q$, the tangent $\dot\mu$ is continuous on $[a,b]$ and future-pointing at every $s \in [a,b]$, and
@@ -85,7 +85,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[A Causal Trip Segment Ends in the Closed Forward Cone]
     \label{lmm:causal-trip-segment-closed-cone}
-    \lean{Physicslib4.standardMinkowski_causalTripSegment_sub_mem_closedForwardCone}
+    \lean{Hilbert6.standardMinkowski_causalTripSegment_sub_mem_closedForwardCone}
     \uses{def:causal-trip, def:standard-minkowski-spacetime, def:lorentz-path}
     \leanok
     If a causal trip segment of standard Minkowski spacetime runs from $p$ to $q$, then $q - p \in \overline{V}_+$.
@@ -98,7 +98,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[Causal Precedence Places the Displacement in the Closed Forward Cone]
     \label{lmm:causal-precedence-closed-forward-cone}
-    \lean{Physicslib4.standardMinkowski_causallyPrecedes_sub_mem_closedForwardCone}
+    \lean{Hilbert6.standardMinkowski_causallyPrecedes_sub_mem_closedForwardCone}
     \uses{def:causal-trip, def:standard-minkowski-spacetime, def:lorentz-path}
     \leanok
     Let $p, q$ be points of standard Minkowski spacetime with $p \prec q$ for the standard time orientation. Then $q - p \in \overline{V}_+$.
@@ -111,7 +111,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{lemma}[A Coordinate Criterion for Spacelike Separation]
     \label{lmm:spacelike-of-coordinate-separation}
-    \lean{Physicslib4.standardMinkowski_isSpacelikeRelated_of_coord}
+    \lean{Hilbert6.standardMinkowski_isSpacelikeRelated_of_coord}
     \uses{def:spacelike-related, def:standard-minkowski-spacetime, def:lorentz-path}
     \leanok
     Let $p, q$ be points of standard Minkowski spacetime with
@@ -128,7 +128,7 @@ This is notation, not a new definition. The lemmas below are the causal counterp
 
 \begin{corollary}[A Coordinate Criterion for Complete Spacelike Separation]
     \label{crllr:completely-spacelike-of-coordinate-separation}
-    \lean{Physicslib4.standardMinkowski_isCompletelySpacelike_of_coord}
+    \lean{Hilbert6.standardMinkowski_isCompletelySpacelike_of_coord}
     \uses{def:completely-spacelike, def:standard-minkowski-spacetime, def:lorentz-path}
     \leanok
     Let $\mathbf{O}_1, \mathbf{O}_2$ be sets in standard Minkowski spacetime such that $p^1 - q^1 > |p^0| + |q^0|$ for every $p \in \mathbf{O}_1$ and every $q \in \mathbf{O}_2$. Then $\mathbf{O}_1$ and $\mathbf{O}_2$ are completely spacelike for the standard time orientation (\ref{def:completely-spacelike}).
@@ -149,7 +149,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[The Graph Map of a Unitary Commutes with Closure]
     \label{lmm:unitary-conjugate-graph}
-    \lean{Physicslib4.Spectral.Unbounded.image_closure_prodMap_unitary}
+    \lean{Hilbert6.Spectral.Unbounded.image_closure_prodMap_unitary}
     \uses{def:unitary-operator, def:hall-9.6}
     \leanok
     Let $V$ be unitary. Then $\Phi_V$ is a homeomorphism of $\mathbf{H} \times \mathbf{H}$, so $\Phi_V(\overline{G}) = \overline{\Phi_V(G)}$ for every subset $G \subset \mathbf{H} \times \mathbf{H}$.
@@ -162,7 +162,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[Unitary Conjugation as a Double Antiunitary Conjugation]
     \label{lmm:unitary-conjugate-double-antiunitary}
-    \lean{Physicslib4.Spectral.Unbounded.graph_antiunitaryConj_trans_antiunitaryConj}
+    \lean{Hilbert6.Spectral.Unbounded.graph_antiunitaryConj_trans_antiunitaryConj}
     \uses{def:unitary-operator, def:antiunitary-operator, def:product-of-unbounded-operators}
     \leanok
     Let $V$ be unitary, $C$ an antiunitary operator with $C(C\phi) = \phi$ for all $\phi$, and $A$ an operator on $\mathbf{H}$. Then $VC$ is antiunitary and $(VC)\big(CAC^{-1}\big)(VC)^{-1} = VAV^{-1}$, including domains.
@@ -175,7 +175,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[An Operator Invariant under Unitary Conjugation Commutes with the Unitary]
     \label{lmm:unitary-commutes-of-conj-eq}
-    \lean{Physicslib4.Spectral.Unbounded.unitaryCommutes_of_graph_map_eq}
+    \lean{Hilbert6.Spectral.Unbounded.unitaryCommutes_of_graph_map_eq}
     \uses{def:unitary-operator, def:product-of-unbounded-operators, def:unitary-commutes}
     \leanok
     Let $V$ be unitary and $A$ an operator on $\mathbf{H}$, linear or antilinear, with $VAV^{-1} = A$, including domains. Then $V$ commutes with $A$: for every $\psi \in \text{Dom}(A)$, $V\psi$ and $V^{-1}\psi$ lie in $\text{Dom}(A)$ with $AV\psi = VA\psi$ and $AV^{-1}\psi = V^{-1}A\psi$ (for linear $A$ this is Definition~\ref{def:unitary-commutes}). If moreover $\text{Dom}(A) = \mathbf{H}$, then $VA\psi = AV\psi$ for every $\psi \in \mathbf{H}$.
@@ -188,7 +188,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[Unitary Conjugation Transports the Functional Calculus]
     \label{lmm:unitary-transport-functional-calculus}
-    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_unitaryConj}
+    \lean{Hilbert6.Spectral.Unbounded.functionalCalculus_unitaryConj}
     \uses{def:unitary-operator, def:product-of-unbounded-operators, def:hall-10.5}
     \leanok
     Let $A$ be self-adjoint and $V$ unitary. Then $VAV^{-1}$ is self-adjoint, and $Vf(A)V^{-1} = f(VAV^{-1})$, including domains, for every real measurable $f$.
@@ -204,7 +204,7 @@ Let $V$ be a unitary on $\mathbf{H}$ (\ref{def:unitary-operator}), so $V^{-1} = 
 
 \begin{lemma}[Unitary Conjugation of a Bounded Complex Function]
     \label{lmm:unitary-transport-bounded-fc}
-    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_unitaryConj_of_bounded}
+    \lean{Hilbert6.Spectral.Unbounded.functionalCalculus_unitaryConj_of_bounded}
     \uses{def:unitary-operator, def:product-of-unbounded-operators, def:hall-10.5}
     \leanok
     Let $A$ be self-adjoint, $V$ unitary, and $f : \mathbb{R} \to \mathbb{C}$ bounded and measurable. Then $Vf(A)V^{-1}\psi = f(VAV^{-1})\psi$ for every $\psi \in \mathbf{H}$.
@@ -225,7 +225,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Pre-Operators]
     \label{lmm:unitary-intertwines-tomita-pre-operators}
-    \lean{Physicslib4.Modular.tomitaPre_graph_unitary_intertwine}
+    \lean{Hilbert6.Modular.tomitaPre_graph_unitary_intertwine}
     \uses{def:tomita-pre-operators, def:unitary-operator}
     \leanok
     $\Gamma(S_{0,2}) = \Phi_V(\Gamma(S_{0,1}))$. That is, $\text{Dom}(S_{0,2}) = V\big(\text{Dom}(S_{0,1})\big)$ and $S_{0,2}V\psi = VS_{0,1}\psi$ for $\psi \in \text{Dom}(S_{0,1})$.
@@ -238,7 +238,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Tomita Operators]
     \label{lmm:unitary-intertwines-tomita-operator}
-    \lean{Physicslib4.Modular.tomitaOperator_unitary_intertwine}
+    \lean{Hilbert6.Modular.tomitaOperator_unitary_intertwine}
     \uses{def:tomita-operator, def:unitary-operator}
     \leanok
     $\Gamma(S_2) = \Phi_V(\Gamma(S_1))$. That is, $VS_1V^{-1} = S_2$ including domains: $\psi \in \text{Dom}(S_1)$ if and only if $V\psi \in \text{Dom}(S_2)$, and then $S_2V\psi = VS_1\psi$.
@@ -254,7 +254,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Modular Operators]
     \label{lmm:unitary-intertwines-modular-operator}
-    \lean{Physicslib4.Modular.modularOperator_unitary_intertwine}
+    \lean{Hilbert6.Modular.modularOperator_unitary_intertwine}
     \uses{def:modular-operator, def:unitary-operator, def:product-of-unbounded-operators}
     \leanok
     For all $\psi, \chi \in \mathbf{H}$,
@@ -275,7 +275,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines Functions of the Modular Operators]
     \label{lmm:unitary-intertwines-modular-sqrt}
-    \lean{Physicslib4.Modular.modularOperator_functionalCalculus_unitary_intertwine}
+    \lean{Hilbert6.Modular.modularOperator_functionalCalculus_unitary_intertwine}
     \uses{def:modular-operator, def:hall-10.5, def:unitary-operator, def:product-of-unbounded-operators}
     \leanok
     $Vf(\Delta_1)V^{-1} = f(\Delta_2)$, including domains, for every real measurable $f$. In particular $V\Delta_1^{1/2}V^{-1} = \Delta_2^{1/2}$, including domains.
@@ -288,7 +288,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Modular Unitary Groups]
     \label{lmm:unitary-intertwines-modular-unitary-group}
-    \lean{Physicslib4.Modular.modularUnitaryGroup_unitary_intertwine}
+    \lean{Hilbert6.Modular.modularUnitaryGroup_unitary_intertwine}
     \uses{def:modular-unitary-group, def:unitary-operator}
     \leanok
     $V\Delta_1^{it}V^{-1} = \Delta_2^{it}$ for every $t \in \mathbb{R}$.
@@ -301,7 +301,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{lemma}[$V$ Intertwines the Modular Conjugations]
     \label{lmm:unitary-intertwines-modular-conjugation}
-    \lean{Physicslib4.Modular.modularConjugation_unitary_intertwine}
+    \lean{Hilbert6.Modular.modularConjugation_unitary_intertwine}
     \uses{def:modular-conjugation, def:unitary-operator}
     \leanok
     $VJ_1V^{-1} = J_2$, that is, $VJ_1V^{-1}\phi = J_2\phi$ for every $\phi \in \mathbf{H}$.
@@ -318,7 +318,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{theorem}[A Unitary between Standard Pairs Intertwines the Modular Objects]
     \label{thrm:unitary-intertwines-modular-objects}
-    \lean{Physicslib4.Modular.modular_objects_unitary_intertwine}
+    \lean{Hilbert6.Modular.modular_objects_unitary_intertwine}
     \uses{def:tomita-operator, def:modular-operator, def:modular-unitary-group, def:modular-conjugation, def:unitary-operator, def:product-of-unbounded-operators}
     \leanok
     Let $\mathcal{M}_1, \mathcal{M}_2$ be von Neumann algebras on $\mathbf{H}$ with cyclic and separating vectors $\Omega_1, \Omega_2$, and let $V$ be a unitary with $V\mathcal{M}_1V^{-1} = \mathcal{M}_2$ and $V\Omega_1 = \Omega_2$. Then, including domains,
@@ -334,7 +334,7 @@ where $V\mathcal{M}_1V^{-1} = \{ VaV^{-1} \mid a \in \mathcal{M}_1 \}$.
 
 \begin{corollary}[A Unitary Preserving $\mathcal{M}$ and $\Omega$ Commutes with the Modular Objects]
     \label{crllr:unitary-commutes-modular-objects}
-    \lean{Physicslib4.Modular.modular_objects_unitary_commute}
+    \lean{Hilbert6.Modular.modular_objects_unitary_commute}
     \uses{def:unitary-commutes, def:modular-operator, def:modular-unitary-group, def:modular-conjugation, def:tomita-operator}
     \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, with Tomita operator $S$, modular operator $\Delta$ and modular conjugation $J$. Let $V$ be a unitary with $V\mathcal{M}V^{-1} = \mathcal{M}$ and $V\Omega = \Omega$. Then $V$ commutes with $\Delta$ and with $\Delta^{1/2}$ (\ref{def:unitary-commutes}), $V$ and $V^{-1}$ map $\text{Dom}(S)$ onto itself with $SV\psi = VS\psi$ for $\psi \in \text{Dom}(S)$, and
@@ -354,7 +354,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{definition}[The Right Wedge]
     \label{def:right-wedge}
-    \lean{Physicslib4.AQFT.HaagKastler.rightWedge}
+    \lean{Hilbert6.AQFT.HaagKastler.rightWedge}
     \uses{def:standard-minkowski-spacetime}
     \leanok
     The \emph{right wedge} is the set
@@ -365,7 +365,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{definition}[The Left Wedge]
     \label{def:left-wedge}
-    \lean{Physicslib4.AQFT.HaagKastler.leftWedge}
+    \lean{Hilbert6.AQFT.HaagKastler.leftWedge}
     \uses{def:standard-minkowski-spacetime}
     \leanok
     The \emph{left wedge} is the set
@@ -377,7 +377,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[The Wedges in Light-Cone Coordinates]
     \label{lmm:wedge-light-cone-coordinates}
-    \lean{Physicslib4.AQFT.HaagKastler.wedge_lightCone_coordinates}
+    \lean{Hilbert6.AQFT.HaagKastler.wedge_lightCone_coordinates}
     \uses{def:right-wedge, def:left-wedge}
     \leanok
     $x \in W_R$ if and only if $x^1 + x^0 > 0$ and $x^1 - x^0 > 0$. $x \in W_L$ if and only if $x^1 + x^0 < 0$ and $x^1 - x^0 < 0$.
@@ -389,7 +389,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[The Wedges are Open and Nonempty]
     \label{lmm:wedge-open-nonempty}
-    \lean{Physicslib4.AQFT.HaagKastler.wedge_isOpen_nonempty}
+    \lean{Hilbert6.AQFT.HaagKastler.wedge_isOpen_nonempty}
     \uses{def:right-wedge, def:left-wedge}
     \leanok
     $W_R$ and $W_L$ are open in $\mathbb{R}^4$ and nonempty: $(0, 1, 0, 0) \in W_R$ and $(0, -1, 0, 0) \in W_L$.
@@ -401,7 +401,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Poincar\'e Transformations Map Diamonds to Diamonds]
     \label{lmm:poincare-maps-diamonds}
-    \lean{Physicslib4.AQFT.HaagKastler.smul_diamond_eq}
+    \lean{Hilbert6.AQFT.HaagKastler.smul_diamond_eq}
     \uses{def:inhomogeneous-lorentz-group, def:causal-diamond}
     \leanok
     Let $g$ be in the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}). For all $p, q \in \mathbb{R}^4$,
@@ -418,7 +418,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Poincar\'e Transformations Preserve Inclusion]
     \label{lmm:poincare-diamond-inclusion}
-    \lean{Physicslib4.AQFT.HaagKastler.smul_diamond_subset_bijOn}
+    \lean{Hilbert6.AQFT.HaagKastler.smul_diamond_subset_bijOn}
     \uses{def:inhomogeneous-lorentz-group, def:causal-diamond}
     \leanok
     For every $g$ in the inhomogeneous Lorentz group and all sets $\mathbf{O}_1, \mathbf{O}_2 \subseteq \mathbb{R}^4$, $g\mathbf{O}_1 \subseteq g\mathbf{O}_2$ if and only if $\mathbf{O}_1 \subseteq \mathbf{O}_2$. Consequently $\mathbf{B} \mapsto g\mathbf{B}$ is a bijection from the diamonds contained in $\mathbf{O}$ onto the diamonds contained in $g\mathbf{O}$, with inverse $\mathbf{B}' \mapsto g^{-1}\mathbf{B}'$.
@@ -431,7 +431,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{definition}[Wedge]
     \label{def:wedge}
-    \lean{Physicslib4.AQFT.HaagKastler.IsWedge}
+    \lean{Hilbert6.AQFT.HaagKastler.IsWedge}
     \uses{def:right-wedge, def:inhomogeneous-lorentz-group}
     \leanok
     A set $W \subseteq \mathbb{R}^4$ is a \emph{wedge} if $W = gW_R$ for some $g$ in the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}).
@@ -441,7 +441,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[A Rotation by $\pi$ is a Proper Orthochronous Lorentz Transformation]
     \label{lmm:rotation-pi-lorentz}
-    \lean{Physicslib4.AQFT.HaagKastler.exists_rotationPi_lorentz}
+    \lean{Hilbert6.AQFT.HaagKastler.exists_rotationPi_lorentz}
     \uses{def:lorentz-transformation}
     \leanok
     Let $R$ be the linear map $(x^0, x^1, x^2, x^3) \mapsto (x^0, -x^1, -x^2, x^3)$, the rotation by $\pi$ in the $(x^1, x^2)$-plane. Then $R \in SO(1,3)^{\uparrow}$ (\ref{def:lorentz-transformation}) and $R^{-1} = R$.
@@ -453,7 +453,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[The Left Wedge is a Wedge]
     \label{lmm:left-wedge-is-wedge}
-    \lean{Physicslib4.AQFT.HaagKastler.leftWedge_isWedge}
+    \lean{Hilbert6.AQFT.HaagKastler.leftWedge_isWedge}
     \uses{def:left-wedge, def:wedge, lmm:rotation-pi-lorentz}
     \leanok
     With $R$ as in \ref{lmm:rotation-pi-lorentz}, $(R, 0)W_R = W_L$. Hence $W_L$ is a wedge, and so is $gW_L = (g(R,0))W_R$ for every $g$ in the inhomogeneous Lorentz group.
@@ -466,7 +466,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[A Coordinate Bound in the Open Forward Cone]
     \label{lmm:open-cone-coordinate-bound}
-    \lean{Physicslib4.AQFT.HaagKastler.abs_coord_lt_of_minkowskiForm_neg}
+    \lean{Hilbert6.AQFT.HaagKastler.abs_coord_lt_of_minkowskiForm_neg}
     \uses{def:lorentz-transformation}
     \leanok
     If $\eta(v,v) < 0$ and $v^0 > 0$, then $|v^i| < v^0$ for $i = 1, 2, 3$.
@@ -478,7 +478,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[A Nonempty Diamond in the Right Wedge]
     \label{lmm:wedges-contain-diamonds}
-    \lean{Physicslib4.AQFT.HaagKastler.rightWedge_contains_diamond}
+    \lean{Hilbert6.AQFT.HaagKastler.rightWedge_contains_diamond}
     \uses{def:right-wedge, def:causal-diamond}
     \leanok
     Let $p_+ = (-1, 2, 0, 0)$, $q_+ = (1, 2, 0, 0)$ and $\mathbf{B}_+ = I^+(p_+) \cap I^-(q_+)$. Then $\mathbf{B}_+$ is a nonempty diamond with $\mathbf{B}_+ \subseteq W_R$.
@@ -491,7 +491,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{corollary}[Every Wedge Contains a Nonempty Diamond]
     \label{crllr:wedge-contains-diamond}
-    \lean{Physicslib4.AQFT.HaagKastler.wedge_contains_diamond}
+    \lean{Hilbert6.AQFT.HaagKastler.wedge_contains_diamond}
     \uses{def:wedge, def:left-wedge, def:causal-diamond, lmm:wedges-contain-diamonds, lmm:rotation-pi-lorentz}
     \leanok
     Let $\mathbf{B}_+$ be as in \ref{lmm:wedges-contain-diamonds} and $\mathbf{B}_- = (R, 0)\mathbf{B}_+$ with $R$ as in \ref{lmm:rotation-pi-lorentz}. For every $g$ in the inhomogeneous Lorentz group, $g\mathbf{B}_+$ is a nonempty diamond contained in $gW_R$ and $g\mathbf{B}_-$ is a nonempty diamond contained in $gW_L$. In particular every wedge contains a nonempty diamond.
@@ -504,7 +504,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Translations into the Right Wedge]
     \label{lmm:wedge-translations}
-    \lean{Physicslib4.AQFT.HaagKastler.translationSub_smul_rightWedge_subset}
+    \lean{Hilbert6.AQFT.HaagKastler.translationSub_smul_rightWedge_subset}
     \uses{def:right-wedge, def:future-timelike-translation}
     \leanok
     Write $W_R + a = \mathrm{translationSub}(a)\,W_R = \{ x + a \mid x \in W_R \}$ (\ref{def:future-timelike-translation}). If $|a^0| \le a^1$, then $W_R + a \subseteq W_R$. In particular this holds for $a = t\,l_+$ and $a = -t\,l_-$ with $t \ge 0$, where $l_+ = (1, 1, 0, 0)$ and $l_- = (1, -1, 0, 0)$. The set $\{ a \mid |a^0| \le a^1 \}$ is the closure of $W_R$; this is not used.
@@ -516,7 +516,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Transverse Translations of the Right Wedge]
     \label{lmm:wedge-transverse-translations}
-    \lean{Physicslib4.AQFT.HaagKastler.translationSub_smul_rightWedge_of_transverse}
+    \lean{Hilbert6.AQFT.HaagKastler.translationSub_smul_rightWedge_of_transverse}
     \uses{def:right-wedge, def:future-timelike-translation}
     \leanok
     If $a^0 = a^1 = 0$, then $W_R + a = W_R$.
@@ -528,7 +528,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Opposite Wedges are Completely Spacelike]
     \label{lmm:opposite-wedges-completely-spacelike}
-    \lean{Physicslib4.AQFT.HaagKastler.oppositeWedges_isCompletelySpacelike}
+    \lean{Hilbert6.AQFT.HaagKastler.oppositeWedges_isCompletelySpacelike}
     \uses{def:right-wedge, def:left-wedge, def:completely-spacelike}
     \leanok
     $W_R$ and $W_L$ are completely spacelike (\ref{def:completely-spacelike}) for the standard time orientation. More generally, for every $g$ in the inhomogeneous Lorentz group and all sets $\mathbf{O}_1 \subseteq gW_R$ and $\mathbf{O}_2 \subseteq gW_L$, in particular all diamonds, $\mathbf{O}_1$ and $\mathbf{O}_2$ are completely spacelike, and so are $\mathbf{O}_2$ and $\mathbf{O}_1$.
@@ -543,7 +543,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{definition}[The Boost Matrices]
     \label{def:boost-matrix}
-    \lean{Physicslib4.AQFT.HaagKastler.boostMatrix}
+    \lean{Hilbert6.AQFT.HaagKastler.boostMatrix}
     \uses{def:standard-minkowski-spacetime}
     \leanok
     For $s \in \mathbb{R}$, $\Lambda(s)$ is the linear map of $\mathbb{R}^4$
@@ -557,7 +557,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[The Boost Matrices Preserve the Minkowski Form]
     \label{lmm:boost-matrix-lorentz}
-    \lean{Physicslib4.AQFT.HaagKastler.boostMatrix_isLorentz}
+    \lean{Hilbert6.AQFT.HaagKastler.boostMatrix_isLorentz}
     \uses{def:boost-matrix, def:lorentz-transformation}
     \leanok
     For every $s$, $\Lambda(s)$ is Lorentz: $\eta(\Lambda(s)v, \Lambda(s)w) = \eta(v, w)$ for all $v, w$.
@@ -573,7 +573,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[The Boost Matrices are Proper]
     \label{lmm:boost-matrix-proper}
-    \lean{Physicslib4.AQFT.HaagKastler.boostMatrix_isProper}
+    \lean{Hilbert6.AQFT.HaagKastler.boostMatrix_isProper}
     \uses{def:boost-matrix, def:lorentz-transformation}
     \leanok
     For every $s$, $\det \Lambda(s) = 1$.
@@ -585,7 +585,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[The Boost Matrices are Orthochronous]
     \label{lmm:boost-matrix-orthochronous}
-    \lean{Physicslib4.AQFT.HaagKastler.boostMatrix_isOrthochronous}
+    \lean{Hilbert6.AQFT.HaagKastler.boostMatrix_isOrthochronous}
     \uses{def:boost-matrix, def:lorentz-transformation}
     \leanok
     For every $s$, $(\Lambda(s)e_0)^0 > 0$.
@@ -597,7 +597,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[The Boost Matrices Form a One-Parameter Group]
     \label{lmm:boost-matrix-group-law}
-    \lean{Physicslib4.AQFT.HaagKastler.boostMatrix_groupLaw}
+    \lean{Hilbert6.AQFT.HaagKastler.boostMatrix_groupLaw}
     \uses{def:boost-matrix}
     \leanok
     $\Lambda(0) = 1$ and $\Lambda(s + t) = \Lambda(s)\Lambda(t)$ for all $s, t$. In particular $\Lambda(s)$ is invertible with $\Lambda(s)^{-1} = \Lambda(-s)$.
@@ -609,7 +609,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Boosts in Light-Cone Coordinates]
     \label{lmm:boost-light-cone}
-    \lean{Physicslib4.AQFT.HaagKastler.boostMatrix_lightCone}
+    \lean{Hilbert6.AQFT.HaagKastler.boostMatrix_lightCone}
     \uses{def:boost-matrix}
     \leanok
     For every $s$ and $x$, with $y = \Lambda(s)x$,
@@ -625,7 +625,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{definition}[Wedge Boosts]
     \label{def:wedge-boost}
-    \lean{Physicslib4.AQFT.HaagKastler.wedgeBoost}
+    \lean{Hilbert6.AQFT.HaagKastler.wedgeBoost}
     \uses{def:boost-matrix, lmm:boost-matrix-lorentz, lmm:boost-matrix-proper, lmm:boost-matrix-orthochronous, lmm:boost-matrix-group-law, def:inhomogeneous-lorentz-group}
     \leanok
     For $s \in \mathbb{R}$, regard $\Lambda(s)$ as a linear automorphism of $\mathbb{R}^4$ (a \texttt{LinearEquiv}) with inverse $\Lambda(-s)$ (\ref{lmm:boost-matrix-group-law}). The \emph{boost of the right wedge} with rapidity $s$ is the element $b(s) = (\Lambda(s), 0)$ of the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}), which requires $\Lambda(s)$ to be Lorentz, proper and orthochronous (\ref{lmm:boost-matrix-lorentz}, \ref{lmm:boost-matrix-proper}, \ref{lmm:boost-matrix-orthochronous}). For $g$ in the inhomogeneous Lorentz group, the \emph{boost of the wedge $gW_R$ along $g$} is
@@ -637,7 +637,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Boosts Preserve the Standard Wedges]
     \label{lmm:boost-preserves-wedge}
-    \lean{Physicslib4.AQFT.HaagKastler.wedgeBoost_smul_wedge}
+    \lean{Hilbert6.AQFT.HaagKastler.wedgeBoost_smul_wedge}
     \uses{def:wedge-boost, def:right-wedge, def:left-wedge}
     \leanok
     For all $s$, $b(s)W_R = W_R$ and $b(s)W_L = W_L$.
@@ -650,7 +650,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Conjugates Stabilise Transformed Sets]
     \label{lmm:conjugate-stabilises-wedge}
-    \lean{Physicslib4.AQFT.HaagKastler.conj_smul_stabilises}
+    \lean{Hilbert6.AQFT.HaagKastler.conj_smul_stabilises}
     \uses{def:inhomogeneous-lorentz-group, def:wedge-boost, def:causal-diamond}
     \leanok
     Let $g, h$ be in the inhomogeneous Lorentz group and $W \subseteq \mathbb{R}^4$ with $hW = W$. Then $(ghg^{-1})(gW) = gW$, and for every diamond $\mathbf{B} \subseteq gW$, $(ghg^{-1})\mathbf{B}$ is a diamond contained in $gW$. In particular, for all $s$, $b_g(s)(gW_R) = gW_R$ and $b_g(s)(gW_L) = gW_L$.
@@ -663,7 +663,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{definition}[Continuous One-Parameter Subgroup]
     \label{def:continuous-one-parameter-subgroup}
-    \lean{Physicslib4.AQFT.HaagKastler.IsContinuousOneParameterSubgroup}
+    \lean{Hilbert6.AQFT.HaagKastler.IsContinuousOneParameterSubgroup}
     \uses{def:inhomogeneous-lorentz-group, thrm:invariant-state-gns-unitary-strongly-continuous}
     \leanok
     Give the inhomogeneous Lorentz group the topology of \ref{thrm:invariant-state-gns-unitary-strongly-continuous}, induced by $(L, a) \mapsto (L, L^{-1}, a)$; it is a topological group (in Lean, the instance \texttt{IsTopologicalGroup InhomogeneousLorentzGroup}). A map $\gamma : \mathbb{R} \to$ (inhomogeneous Lorentz group) is a \emph{continuous one-parameter subgroup} if $\gamma(0) = 1$, $\gamma(s + t) = \gamma(s)\gamma(t)$ for all $s, t$ (the library predicate \texttt{IsOneParameterSubgroup}, which has no continuity clause), and $\gamma$ is continuous.
@@ -671,7 +671,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[The Boost Group Law]
     \label{lmm:boost-group-law}
-    \lean{Physicslib4.AQFT.HaagKastler.wedgeBoost_groupLaw}
+    \lean{Hilbert6.AQFT.HaagKastler.wedgeBoost_groupLaw}
     \uses{def:wedge-boost}
     \leanok
     $b(0) = 1$ and $b(s + t) = b(s)b(t)$ for all $s, t$.
@@ -684,7 +684,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[The Boost is a Continuous One-Parameter Subgroup]
     \label{lmm:boost-continuous-subgroup}
-    \lean{Physicslib4.AQFT.HaagKastler.isContinuousOneParameterSubgroup_wedgeBoost}
+    \lean{Hilbert6.AQFT.HaagKastler.isContinuousOneParameterSubgroup_wedgeBoost}
     \uses{def:wedge-boost, def:continuous-one-parameter-subgroup}
     \leanok
     $s \mapsto b(s)$ is a continuous one-parameter subgroup (\ref{def:continuous-one-parameter-subgroup}).
@@ -697,7 +697,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Conjugates of Continuous One-Parameter Subgroups]
     \label{lmm:conjugate-continuous-subgroup}
-    \lean{Physicslib4.AQFT.HaagKastler.isContinuousOneParameterSubgroup_conj}
+    \lean{Hilbert6.AQFT.HaagKastler.isContinuousOneParameterSubgroup_conj}
     \uses{def:continuous-one-parameter-subgroup, def:wedge-boost}
     \leanok
     If $\gamma$ is a continuous one-parameter subgroup and $g$ is in the inhomogeneous Lorentz group, then $s \mapsto g\gamma(s)g^{-1}$ is a continuous one-parameter subgroup. In particular so is $s \mapsto b_g(s)$.
@@ -710,7 +710,7 @@ Throughout this subsection the spacetime is standard Minkowski spacetime with it
 
 \begin{lemma}[Translation Flows are Continuous One-Parameter Subgroups]
     \label{lmm:translation-flow-continuous-subgroup}
-    \lean{Physicslib4.AQFT.HaagKastler.isContinuousOneParameterSubgroup_translationFlow}
+    \lean{Hilbert6.AQFT.HaagKastler.isContinuousOneParameterSubgroup_translationFlow}
     \uses{def:future-timelike-translation, def:continuous-one-parameter-subgroup}
     \leanok
     For every $n \in \mathbb{R}^4$, $s \mapsto \mathrm{translationFlow}(n)(s) = (1, sn)$ is a continuous one-parameter subgroup.
@@ -726,7 +726,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
 
 \begin{definition}[The Von Neumann Algebra of a Region]
     \label{def:region-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann}
     \uses{def:local-von-neumann, def:causal-diamond, def:von-neumann-algebra-commutant-convention}
     \leanok
     For an arbitrary set $\mathbf{O} \subseteq \mathbb{R}^4$, let
@@ -738,7 +738,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
 
 \begin{lemma}[The Algebra of a Region is a Von Neumann Algebra]
     \label{lmm:region-algebra-von-neumann}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_isVonNeumannSet}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_isVonNeumannSet}
     \uses{def:region-algebra, def:von-neumann-algebra-commutant-convention}
     \leanok
     For every $\mathbf{O}$, $\mathcal{S}(\mathbf{O})$ is self-adjoint and $R(\mathbf{O})$ is a von Neumann algebra on $\mathbf{H}$ (\ref{def:von-neumann-algebra-commutant-convention}).
@@ -751,7 +751,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
 
 \begin{lemma}[Monotonicity of Region Algebras]
     \label{lmm:region-algebra-mono}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_mono}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_mono}
     \uses{def:region-algebra}
     \leanok
     If $\mathbf{O}_1 \subseteq \mathbf{O}_2$, then $\mathcal{S}(\mathbf{O}_1) \subseteq \mathcal{S}(\mathbf{O}_2)$ and $R(\mathbf{O}_1) \subseteq R(\mathbf{O}_2)$.
@@ -763,7 +763,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
 
 \begin{lemma}[Local Operators Lie in the Region Algebra]
     \label{lmm:region-algebra-contains-local}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_subset_regionVonNeumann}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_subset_regionVonNeumann}
     \uses{def:region-algebra, def:local-von-neumann}
     \leanok
     If $\mathbf{B}$ is a diamond with $\mathbf{B} \subseteq \mathbf{O}$, then $\pi(\mathfrak{U}(\mathbf{B})) \subseteq R(\mathbf{B}) \subseteq R(\mathbf{O})$.
@@ -775,7 +775,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
 
 \begin{lemma}[Agreement with the Local Von Neumann Algebras]
     \label{lmm:region-algebra-diamond}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_of_isAlexandrovBasisSet}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_of_isAlexandrovBasisSet}
     \uses{def:region-algebra, def:local-von-neumann}
     \leanok
     For every diamond $\mathbf{B}$, the algebra of the region $\mathbf{B}$ (\ref{def:region-algebra}) equals the local von Neumann algebra $R(\mathbf{B})$ of \ref{def:local-von-neumann}.
@@ -788,7 +788,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
 
 \begin{lemma}[Bicommutant of a Commuting Set]
     \label{lmm:bicommutant-subset-commutant}
-    \lean{Physicslib4.AQFT.HaagKastler.centralizer_centralizer_subset_centralizer_of_commute}
+    \lean{Hilbert6.AQFT.HaagKastler.centralizer_centralizer_subset_centralizer_of_commute}
     \leanok
     Let $\mathcal{S}, \mathcal{T} \subseteq \mathcal{B}(\mathbf{H})$ with $st = ts$ for all $s \in \mathcal{S}$ and $t \in \mathcal{T}$. Then $\mathcal{S}'' \subseteq \mathcal{T}'$, and $\mathcal{T}' = (\mathcal{T}'')'$.
 \end{lemma}
@@ -799,7 +799,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
 
 \begin{theorem}[Locality of Region Algebras]
     \label{thrm:region-algebra-locality}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_subset_centralizer}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_subset_centralizer}
     \uses{def:region-algebra, def:completely-spacelike}
     \leanok
     Let $\mathbf{O}_1, \mathbf{O}_2 \subseteq \mathbb{R}^4$ be such that every diamond $\mathbf{B}_1 \subseteq \mathbf{O}_1$ and every diamond $\mathbf{B}_2 \subseteq \mathbf{O}_2$ are completely spacelike. Then $R(\mathbf{O}_1) \subseteq R(\mathbf{O}_2)'$. This holds in particular when $\mathbf{O}_1$ and $\mathbf{O}_2$ are completely spacelike.
@@ -812,7 +812,7 @@ Throughout this subsection $\pi$ is a $*$-representation of the quasilocal algeb
 
 \begin{corollary}[Locality of Opposite Wedge Algebras]
     \label{crllr:opposite-wedge-locality}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_oppositeWedge_subset_centralizer}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann_oppositeWedge_subset_centralizer}
     \uses{def:region-algebra, def:right-wedge, def:left-wedge}
     \leanok
     For every $g$ in the inhomogeneous Lorentz group, $R(gW_R) \subseteq R(gW_L)'$ and $R(gW_L) \subseteq R(gW_R)'$. In particular $R(W_R) \subseteq R(W_L)'$.
@@ -829,7 +829,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{definition}[Covariant Vacuum Representation]
     \label{def:covariant-vacuum-representation}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep}
     \uses{def:haag-kastler-net, def:covariant-quasilocal-algebra, def:inhomogeneous-lorentz-group, def:unitary-operator, def:positive-energy, def:cyclic-vector, def:future-timelike-translation, def:continuous-one-parameter-subgroup, lmm:closed-forward-cone-iff-norm}
     \leanok
     Let $\mathfrak{U}$ be the quasilocal algebra of a Haag--Kastler net with covariance action $g \mapsto \beta_g$ (\ref{def:covariant-quasilocal-algebra}). A \emph{covariant vacuum representation} is a triple $(\pi, \Omega, U)$ of a $*$-representation $\pi$ of $\mathfrak{U}$ on a Hilbert space $\mathbf{H}$, a vector $\Omega \in \mathbf{H}$, and a map $U$ from the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}) to the unitary operators on $\mathbf{H}$ (\ref{def:unitary-operator}), in Lean \texttt{U : InhomogeneousLorentzGroup \ensuremath{\to} (H \ensuremath{\simeq_{\ell i}[\mathbb{C}]} H)} as for the vacuum data of \ref{def:vacuum-state}, such that:
@@ -846,7 +846,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{lemma}[A Covariant Vacuum Representation Gives the Vacuum Hypotheses]
     \label{lmm:covariant-vacuum-bridge}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.vacuum_hypotheses}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.vacuum_hypotheses}
     \uses{def:covariant-vacuum-representation, def:vacuum-state-concrete, def:future-timelike-translation, def:positive-energy, lmm:closed-forward-cone-iff-norm}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation (\ref{def:covariant-vacuum-representation}). Then:
@@ -864,7 +864,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{corollary}[Reeh--Schlieder in a Covariant Vacuum Representation]
     \label{crllr:covariant-vacuum-reeh-schlieder}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.cyclic_localOperators}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.cyclic_localOperators}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:cyclic-vector}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation and let $\pi$ satisfy weak additivity in the von Neumann sense (\ref{def:weak-additivity-von-neumann}); by \ref{lmm:weak-additivity-von-neumann} this holds whenever the net is weakly additive. Then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$.
@@ -877,7 +877,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{lemma}[Reindexing the Generating Set of a Transformed Region]
     \label{lmm:region-generating-set-reindex}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.regionGeneratingSet_smul}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.regionGeneratingSet_smul}
     \uses{def:region-algebra, def:inhomogeneous-lorentz-group}
     \leanok
     For every $*$-representation $\pi$, every $g$ in the inhomogeneous Lorentz group and every $\mathbf{O} \subseteq \mathbb{R}^4$,
@@ -893,7 +893,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{lemma}[Covariance of the Generating Sets]
     \label{lmm:region-generating-set-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.conj_image_regionGeneratingSet}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.conj_image_regionGeneratingSet}
     \uses{def:covariant-vacuum-representation, def:region-algebra, def:unitary-conjugation}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation. For every $g$ and every $\mathbf{O} \subseteq \mathbb{R}^4$,
@@ -910,7 +910,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{theorem}[Covariance of Region Algebras]
     \label{thrm:region-algebra-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.conj_image_regionVonNeumann}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.conj_image_regionVonNeumann}
     \uses{def:covariant-vacuum-representation, def:region-algebra, def:unitary-conjugation}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation. For every $g$ and every $\mathbf{O} \subseteq \mathbb{R}^4$, $U(g)\,R(\mathbf{O})\,U(g)^{-1} = R(g\mathbf{O})$.
@@ -923,7 +923,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{lemma}[The Vacuum is Cyclic for Regions Containing a Diamond]
     \label{lmm:region-algebra-cyclic}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.cyclic_regionVonNeumann}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.cyclic_regionVonNeumann}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:cyclic-vector}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense. If $\mathbf{O}$ contains a nonempty diamond, then $R(\mathbf{O})\Omega$ is dense in $\mathbf{H}$.
@@ -936,7 +936,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{lemma}[Cyclic and Separating from a Cyclic Subalgebra of the Commutant]
     \label{lmm:cyclic-separating-of-commutant}
-    \lean{Physicslib4.AQFT.HaagKastler.isCyclicSeparatingVector_of_subset_centralizer}
+    \lean{Hilbert6.AQFT.HaagKastler.isCyclicSeparatingVector_of_subset_centralizer}
     \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector}
     \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\mathcal{N} \subseteq \mathcal{M}'$ a set of operators. If $\mathcal{M}\Omega$ and $\mathcal{N}\Omega$ are dense in $\mathbf{H}$, then $\Omega$ is cyclic and separating for $\mathcal{M}$ (\ref{def:cyclic-separating-vector}).
@@ -948,7 +948,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{theorem}[The Vacuum is Cyclic and Separating for Wedge Algebras]
     \label{thrm:wedge-cyclic-separating}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_isCyclicSeparatingVector}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_isCyclicSeparatingVector}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:wedge, def:left-wedge, def:cyclic-separating-vector, def:tomita-operator, def:modular-operator, def:modular-unitary-group, def:modular-conjugation}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense (\ref{def:weak-additivity-von-neumann}), for instance because the net is weakly additive. Then for every $g$ in the inhomogeneous Lorentz group, $\Omega$ is cyclic and separating (\ref{def:cyclic-separating-vector}) for the von Neumann algebras $R(gW_R)$ and $R(gW_L)$. In particular $\Omega$ is cyclic and separating for $R(W)$ for every wedge $W$, and the modular objects $S_W$, $\Delta_W$, $\Delta_W^{it}$ and $J_W$ of $(R(W), \Omega)$ (Definitions~\ref{def:tomita-operator}, \ref{def:modular-operator}, \ref{def:modular-unitary-group} and~\ref{def:modular-conjugation}) are defined. They depend only on the set $W$ and on $\Omega$.
@@ -961,7 +961,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{corollary}[Poincar\'e Covariance of the Wedge Modular Objects]
     \label{crllr:wedge-modular-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_covariance}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_covariance}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:tomita-operator, def:modular-unitary-group, def:modular-conjugation, def:modular-operator}
     \leanok
     Under the hypotheses of \ref{thrm:wedge-cyclic-separating}, let $W$ be a wedge and $h$ in the inhomogeneous Lorentz group. Then $hW$ is a wedge, and, including domains,
@@ -977,7 +977,7 @@ The vacuum data of \ref{def:vacuum-state} and the Reeh--Schlieder theorem (Secti
 
 \begin{corollary}[The Stabiliser of a Wedge Commutes with its Modular Objects]
     \label{crllr:wedge-stabiliser-commutes-modular}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_stabiliser_commute}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_stabiliser_commute}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge-boost, def:modular-unitary-group, def:modular-conjugation}
     \leanok
     Under the hypotheses of \ref{thrm:wedge-cyclic-separating}, let $g$ be in the inhomogeneous Lorentz group and $W = gW_R$. If $hW = W$, then $U(h)$ commutes with $\Delta_W^{it}$ for every $t$ and with $J_W$. This applies to $h = b_g(s)$ for every $s$, and, for $W = W_R$, to $h = b(s)$ and to the transverse translations $h = \mathrm{translationSub}(a)$ with $a^0 = a^1 = 0$.
@@ -1000,7 +1000,7 @@ is bounded and continuous on the strip and holomorphic inside it, since $\operat
 
 \begin{definition}[Half-Sided Translation]
     \label{def:half-sided-translation}
-    \lean{Physicslib4.Modular.IsHalfSidedTranslation}
+    \lean{Hilbert6.Modular.IsHalfSidedTranslation}
     \uses{def:von-neumann-algebra-commutant-convention, def:positive-energy, def:hall-10.11, def:unitary-operator, lmm:unitary-group-inner-adjoint}
     \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ (\ref{def:von-neumann-algebra-commutant-convention}), $\Omega \in \mathbf{H}$, and $V(t)$, $t \in \mathbb{R}$, a one-parameter unitary group on $\mathbf{H}$ (\ref{def:hall-10.11}). $V$ is a \emph{half-sided translation for $(\mathcal{M}, \Omega)$} if
@@ -1020,30 +1020,30 @@ For $\beta \in \mathbb{R}$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \op
 
 \begin{lemma}[Continuity of the Reflection across a Real Edge]
     \label{lmm:strip-reflection-continuous}
-    \lean{Physicslib4.continuousOn_stripReflection}
+    \lean{Hilbert6.continuousOn_stripReflection}
     \leanok
     Let $\beta \in \mathbb{R}$ and let $f$ be continuous on $\Sigma_\beta$ with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is continuous on $\{ z : -\beta \le \operatorname{Im} z \le \beta \}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Mathlib's \texttt{ContinuousOn.if} applies with the condition $\operatorname{Im} z < 0$. The closure of $\{\operatorname{Im} z < 0\}$ is $\{\operatorname{Im} z \le 0\}$, that of its complement is $\{\operatorname{Im} z \ge 0\}$, and the common frontier is the real axis (the library's \texttt{closure\_setOf\_im\_lt}, \texttt{closure\_setOf\_not\_im\_lt}, \texttt{frontier\_setOf\_im\_lt} in \texttt{Physicslib4/Analysis/HorizontalLineRemovable.lean}). On $\{-\beta \le \operatorname{Im} z \le 0\}$, $z \mapsto \overline{f(\overline{z})}$ is continuous, as $f$ composed with conjugation, which maps this set into $\Sigma_\beta$ (\texttt{Complex.continuous\_conj}, \texttt{ContinuousOn.comp}). On $\Sigma_\beta$, $f$ is continuous. On the real axis, $\overline{f(t)} = f(t)$ because $f(t)$ is real (\texttt{Complex.conj\_eq\_iff\_real}).
+    Mathlib's \texttt{ContinuousOn.if} applies with the condition $\operatorname{Im} z < 0$. The closure of $\{\operatorname{Im} z < 0\}$ is $\{\operatorname{Im} z \le 0\}$, that of its complement is $\{\operatorname{Im} z \ge 0\}$, and the common frontier is the real axis (the library's \texttt{closure\_setOf\_im\_lt}, \texttt{closure\_setOf\_not\_im\_lt}, \texttt{frontier\_setOf\_im\_lt} in \texttt{Hilbert6/Analysis/HorizontalLineRemovable.lean}). On $\{-\beta \le \operatorname{Im} z \le 0\}$, $z \mapsto \overline{f(\overline{z})}$ is continuous, as $f$ composed with conjugation, which maps this set into $\Sigma_\beta$ (\texttt{Complex.continuous\_conj}, \texttt{ContinuousOn.comp}). On $\Sigma_\beta$, $f$ is continuous. On the real axis, $\overline{f(t)} = f(t)$ because $f(t)$ is real (\texttt{Complex.conj\_eq\_iff\_real}).
 \end{proof}
 
 \begin{lemma}[Holomorphy of the Reflection across a Real Edge]
     \label{lmm:strip-reflection-holomorphic}
-    \lean{Physicslib4.differentiableOn_stripReflection}
+    \lean{Hilbert6.differentiableOn_stripReflection}
     \leanok
     Let $\beta \in \mathbb{R}$ and let $f$ be continuous on $\Sigma_\beta$, holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $\Phi_f$ is holomorphic on $\{ z : -\beta < \operatorname{Im} z < \beta \}$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{lmm:horizontal-line-removable, lmm:strip-reflection-continuous}
-    Apply the library's gluing lemma \texttt{Physicslib4.differentiableOn\_if\_of\_eqOn\_horizontal\_line}, which rests on Lemma~\ref{lmm:horizontal-line-removable}, with $U = \{-\beta < \operatorname{Im} z < \beta\}$ (open, \texttt{isOpen\_lt} with \texttt{Complex.continuous\_im}), $\ell = 0$, $g(z) = \overline{f(\overline{z})}$ and $h = f$. The continuity hypotheses hold as in Lemma~\ref{lmm:strip-reflection-continuous}. $h$ is holomorphic on $U \cap \{\operatorname{Im} z > 0\} = \Sigma^\circ_\beta$, and $g$ is holomorphic on $U \cap \{\operatorname{Im} z < 0\}$ as the conjugate reflection of a holomorphic function (Mathlib's \texttt{HasDerivAt.conj\_conj}). On the real axis $g(t) = \overline{f(t)} = f(t) = h(t)$.
+    Apply the library's gluing lemma \texttt{Hilbert6.differentiableOn\_if\_of\_eqOn\_horizontal\_line}, which rests on Lemma~\ref{lmm:horizontal-line-removable}, with $U = \{-\beta < \operatorname{Im} z < \beta\}$ (open, \texttt{isOpen\_lt} with \texttt{Complex.continuous\_im}), $\ell = 0$, $g(z) = \overline{f(\overline{z})}$ and $h = f$. The continuity hypotheses hold as in Lemma~\ref{lmm:strip-reflection-continuous}. $h$ is holomorphic on $U \cap \{\operatorname{Im} z > 0\} = \Sigma^\circ_\beta$, and $g$ is holomorphic on $U \cap \{\operatorname{Im} z < 0\}$ as the conjugate reflection of a holomorphic function (Mathlib's \texttt{HasDerivAt.conj\_conj}). On the real axis $g(t) = \overline{f(t)} = f(t) = h(t)$.
 \end{proof}
 
 \begin{lemma}[Regularity of the Shifted Reflection]
     \label{lmm:strip-shifted-reflection-regular}
-    \lean{Physicslib4.stripShiftedReflection_regular}
+    \lean{Hilbert6.stripShiftedReflection_regular}
     \leanok
     Let $\beta \in \mathbb{R}$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi$ is continuous and bounded on $\Sigma_{2\beta}$ and holomorphic on $\Sigma^\circ_{2\beta}$.
 \end{lemma}
@@ -1055,7 +1055,7 @@ For $\beta \in \mathbb{R}$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \op
 
 \begin{lemma}[The Shifted Reflection has Equal Boundary Values]
     \label{lmm:strip-real-boundary-periodic}
-    \lean{Physicslib4.stripShiftedReflection_boundary}
+    \lean{Hilbert6.stripShiftedReflection_boundary}
     \leanok
     Let $\beta > 0$ and $f : \mathbb{C} \to \mathbb{C}$ with $f(t + i\beta) \in \mathbb{R}$ for every $t \in \mathbb{R}$, and let $\Psi(z) = \Phi_f(z - i\beta)$. Then $\Psi(t) = f(t + i\beta) = \Psi(t + 2i\beta)$ for every $t \in \mathbb{R}$.
 \end{lemma}
@@ -1066,14 +1066,14 @@ For $\beta \in \mathbb{R}$ write $\Sigma_\beta = \{ z \in \mathbb{C} : 0 \le \op
 
 \begin{lemma}[A Function Real on Both Edges of a Strip is Constant]
     \label{lmm:strip-real-boundary-constant}
-    \lean{Physicslib4.eq_of_real_strip_boundary}
+    \lean{Hilbert6.eq_of_real_strip_boundary}
     \leanok
     Let $\beta > 0$ and let $f$ be continuous and bounded on $\Sigma_\beta$ and holomorphic on $\Sigma^\circ_\beta$, with $f(t) \in \mathbb{R}$ and $f(t + i\beta) \in \mathbb{R}$ for every $t \in \mathbb{R}$. Then $f(z) = f(0)$ for every $z \in \Sigma_\beta$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{lmm:strip-shifted-reflection-regular, lmm:strip-real-boundary-periodic, thrm:strip-liouville-pos, thrm:strip-uniqueness}
-    Let $\Psi(z) = \Phi_f(z - i\beta)$, admissible on $\Sigma_{2\beta}$ by Lemma~\ref{lmm:strip-shifted-reflection-regular} and with equal boundary values by Lemma~\ref{lmm:strip-real-boundary-periodic}. By Theorem~\ref{thrm:strip-liouville-pos} at width $2\beta$, $\Psi(t) = \Psi(0)$ for real $t$, and then also $\Psi(t + 2i\beta) = \Psi(t) = \Psi(0)$. Theorem~\ref{thrm:strip-uniqueness} applied to $\Psi$ and the constant function $\Psi(0)$ gives $\Psi = \Psi(0)$ on $\Sigma_{2\beta}$. For $z \in \Sigma_\beta$, $z + i\beta \in \Sigma_{2\beta}$ and $f(z) = \Phi_f(z) = \Psi(z + i\beta)$, so $f$ is constant on $\Sigma_\beta$, equal to $f(0)$. In Lean, Theorem~\ref{thrm:strip-uniqueness} is \texttt{Physicslib4.eqOn\_strip\_of\_eq\_boundary} in \texttt{Physicslib4/Analysis/StripPeriodicExtension.lean}, whose periodic-extension lemmas (\texttt{pext\_differentiable}, \texttt{pext\_eq\_of\_mem\_strip}) may be reused directly instead of passing through \texttt{StripLiouville}.
+    Let $\Psi(z) = \Phi_f(z - i\beta)$, admissible on $\Sigma_{2\beta}$ by Lemma~\ref{lmm:strip-shifted-reflection-regular} and with equal boundary values by Lemma~\ref{lmm:strip-real-boundary-periodic}. By Theorem~\ref{thrm:strip-liouville-pos} at width $2\beta$, $\Psi(t) = \Psi(0)$ for real $t$, and then also $\Psi(t + 2i\beta) = \Psi(t) = \Psi(0)$. Theorem~\ref{thrm:strip-uniqueness} applied to $\Psi$ and the constant function $\Psi(0)$ gives $\Psi = \Psi(0)$ on $\Sigma_{2\beta}$. For $z \in \Sigma_\beta$, $z + i\beta \in \Sigma_{2\beta}$ and $f(z) = \Phi_f(z) = \Psi(z + i\beta)$, so $f$ is constant on $\Sigma_\beta$, equal to $f(0)$. In Lean, Theorem~\ref{thrm:strip-uniqueness} is \texttt{Hilbert6.eqOn\_strip\_of\_eq\_boundary} in \texttt{Hilbert6/Analysis/StripPeriodicExtension.lean}, whose periodic-extension lemmas (\texttt{pext\_differentiable}, \texttt{pext\_eq\_of\_mem\_strip}) may be reused directly instead of passing through \texttt{StripLiouville}.
 \end{proof}
 
 \subsubsection{The Positive-Energy Group on the Upper Half-Plane}
@@ -1086,7 +1086,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[Polynomial Times Exponential Decay]
     \label{lmm:poly-exp-decay}
-    \lean{Physicslib4.AQFT.mul_exp_neg_le}
+    \lean{Hilbert6.AQFT.mul_exp_neg_le}
     \leanok
     Let $a > 0$ and $\lambda \ge 0$. Then $\lambda e^{-a\lambda} \le 1/(ae)$ and $\lambda^2 e^{-a\lambda} \le 4/(ae)^2$.
 \end{lemma}
@@ -1097,7 +1097,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[Bounds for $\varepsilon_w$ and $\delta_w$]
     \label{lmm:half-plane-exp-bounds}
-    \lean{Physicslib4.AQFT.halfPlaneExp_bounds}
+    \lean{Hilbert6.AQFT.halfPlaneExp_bounds}
     \uses{lmm:poly-exp-decay}
     \leanok
     For every $w \in \mathbb{C}$, $\varepsilon_w$ and $\delta_w$ are measurable. If $\operatorname{Im} w \ge 0$, then $|\varepsilon_w(\lambda)| \le 1$ for every $\lambda$. If $c = \operatorname{Im} w > 0$, then $|\delta_w(\lambda)| \le 1/(ce)$ for every $\lambda$.
@@ -1110,7 +1110,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[The Taylor Estimate for $\varepsilon_w$]
     \label{lmm:half-plane-exp-taylor}
-    \lean{Physicslib4.AQFT.halfPlaneExp_taylor}
+    \lean{Hilbert6.AQFT.halfPlaneExp_taylor}
     \uses{lmm:poly-exp-decay}
     \leanok
     Let $c = \operatorname{Im} w > 0$ and $h \in \mathbb{C}$ with $|h| \le c/2$. Then for every $\lambda \in \mathbb{R}$,
@@ -1126,7 +1126,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[The Extension $\widetilde{V}$ is a Contraction Extending $V$]
     \label{lmm:positive-energy-extension-operators}
-    \lean{Physicslib4.AQFT.positiveEnergyExtension_operators}
+    \lean{Hilbert6.AQFT.positiveEnergyExtension_operators}
     \uses{def:positive-energy, def:exp-unitary-group, def:hall-10.5}
     \leanok
     For $\operatorname{Im} w \ge 0$, $\widetilde{V}(w)$ is a bounded operator with $\|\widetilde{V}(w)\| \le 1$, equal to the bounded integral $\int \varepsilon_w \, d\mu^P$. For $t \in \mathbb{R}$, $\widetilde{V}(t) = V(t)$.
@@ -1139,7 +1139,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[$\widetilde{V}$ is Holomorphic on the Open Upper Half-Plane]
     \label{lmm:positive-energy-extension-holomorphic}
-    \lean{Physicslib4.AQFT.hasDerivAt_positiveEnergyExtension}
+    \lean{Hilbert6.AQFT.hasDerivAt_positiveEnergyExtension}
     \uses{lmm:positive-energy-extension-operators}
     \leanok
     The map $w \mapsto \widetilde{V}(w)$ from $\{\operatorname{Im} w > 0\}$ to $\mathcal{B}(\mathbf{H})$, with the operator norm, is complex differentiable at every point, with derivative $\delta_w(P)$.
@@ -1152,7 +1152,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[$\widetilde{V}$ is Strongly Continuous on the Closed Upper Half-Plane]
     \label{lmm:positive-energy-extension-strongly-continuous}
-    \lean{Physicslib4.AQFT.continuousOn_positiveEnergyExtension_apply}
+    \lean{Hilbert6.AQFT.continuousOn_positiveEnergyExtension_apply}
     \uses{lmm:positive-energy-extension-operators}
     \leanok
     For every $\psi \in \mathbf{H}$, $w \mapsto \widetilde{V}(w)\psi$ is continuous on $\{\operatorname{Im} w \ge 0\}$.
@@ -1165,7 +1165,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[The Dilation Map on the Strip]
     \label{lmm:dilation-strip-half-plane}
-    \lean{Physicslib4.AQFT.dilation_strip_halfPlane}
+    \lean{Hilbert6.AQFT.dilation_strip_halfPlane}
     \leanok
     Let $\tau \ge 0$ and $z \in \Sigma_{1/2}$. Then $\operatorname{Im}(\tau e^{2\pi z}) \ge 0$, with strict inequality if $\tau > 0$ and $z \in \Sigma^\circ_{1/2}$. For $t \in \mathbb{R}$, $\tau e^{2\pi(t + i/2)} = -\tau e^{2\pi t}$.
 \end{lemma}
@@ -1176,7 +1176,7 @@ and, for $\operatorname{Im} w \ge 0$, $\widetilde{V}(w) = \varepsilon_w(P)$, a b
 
 \begin{lemma}[The Dilated Extension on the Strip]
     \label{lmm:dilated-extension-analytic}
-    \lean{Physicslib4.AQFT.dilatedPositiveEnergyExtension_analytic}
+    \lean{Hilbert6.AQFT.dilatedPositiveEnergyExtension_analytic}
     \uses{lmm:positive-energy-extension-operators}
     \leanok
     Let $\tau \ge 0$. Then $z \mapsto \widetilde{V}(\tau e^{2\pi z})$ is complex differentiable, in the operator norm, at every $z \in \Sigma^\circ_{1/2}$, and $z \mapsto \widetilde{V}(\tau e^{2\pi z})\psi$ is continuous on $\Sigma_{1/2}$ for every $\psi \in \mathbf{H}$.
@@ -1197,7 +1197,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[Measurability of $k_\zeta$ and $c$]
     \label{lmm:strip-power-functions-measurable}
-    \lean{Physicslib4.Modular.stripPower_functions_measurable}
+    \lean{Hilbert6.Modular.stripPower_functions_measurable}
     \leanok
     For every $\zeta \in \mathbb{C}$ and $t \in \mathbb{R}$, $s$, $k_\zeta$, $c$ and $k_t s$ are measurable.
 \end{lemma}
@@ -1208,7 +1208,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[The Power Bound on the Strip]
     \label{lmm:strip-power-modulus-bound}
-    \lean{Physicslib4.Modular.norm_cpow_neg_I_mul_le}
+    \lean{Hilbert6.Modular.norm_cpow_neg_I_mul_le}
     \leanok
     Let $\zeta \in \Sigma_{1/2}$ and $\lambda > 0$. Then $|\lambda^{-i\zeta}| = \lambda^{\operatorname{Im}\zeta} \le 1 + s(\lambda)$.
 \end{lemma}
@@ -1219,7 +1219,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[Bounds for $k_\zeta$ and $c$]
     \label{lmm:strip-power-functions-bounded}
-    \lean{Physicslib4.Modular.stripPower_functions_bounded}
+    \lean{Hilbert6.Modular.stripPower_functions_bounded}
     \leanok
     For every $t \in \mathbb{R}$, $|c(\lambda)| \le 1$ and $|k_t(\lambda)s(\lambda)| \le 1$ for every $\lambda$, and if $\zeta \in \Sigma_{1/2}$, then $|k_\zeta(\lambda)| \le 1$ for every $\lambda$.
 \end{lemma}
@@ -1231,7 +1231,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[Identities for $k_\zeta$]
     \label{lmm:strip-power-functions-identities}
-    \lean{Physicslib4.Modular.stripPower_functions_identities}
+    \lean{Hilbert6.Modular.stripPower_functions_identities}
     \uses{lmm:modular-unitary-group-fc}
     \leanok
     For $\zeta \in \mathbb{C}$, $n \ge 1$, $t \in \mathbb{R}$ and every $\lambda \in \mathbb{R}$:
@@ -1247,7 +1247,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[The Lower Edge: $k_t(\Delta)\varphi^\sharp = \Delta^{-it}\varphi$]
     \label{lmm:strip-power-lower-boundary}
-    \lean{Physicslib4.Modular.stripPower_lower_boundary}
+    \lean{Hilbert6.Modular.stripPower_lower_boundary}
     \uses{def:modular-operator, def:modular-unitary-group, def:hall-10.5}
     \leanok
     Let $\varphi \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $k_t(\Delta)\varphi^\sharp = \Delta^{-it}\varphi$.
@@ -1260,7 +1260,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[The Upper Edge: $k_{t+i/2}(\Delta)\varphi^\sharp = \Delta^{-it}\Delta^{1/2}\varphi$]
     \label{lmm:strip-power-upper-boundary}
-    \lean{Physicslib4.Modular.stripPower_upper_boundary}
+    \lean{Hilbert6.Modular.stripPower_upper_boundary}
     \uses{def:modular-operator, def:modular-unitary-group, def:hall-10.5}
     \leanok
     Let $\varphi \in \text{Dom}(\Delta^{1/2})$ and $t \in \mathbb{R}$. Then $k_{t + i/2}(\Delta)\varphi^\sharp = \Delta^{-it}\Delta^{1/2}\varphi$.
@@ -1273,7 +1273,7 @@ with the principal complex power, and for $\varphi \in \text{Dom}(\Delta^{1/2})$
 
 \begin{lemma}[Cutting off $k_\zeta(\Delta)$]
     \label{lmm:strip-power-cutoff}
-    \lean{Physicslib4.Modular.stripPower_cutoff}
+    \lean{Hilbert6.Modular.stripPower_cutoff}
     \uses{lmm:modular-power-operators, def:spectral-measure}
     \leanok
     Let $\chi \in \mathbf{H}$, $\zeta \in \Sigma_{1/2}$ and $n \ge 1$. Then $p_{-i\zeta,n}(\Delta)\,c(\Delta)\chi = k_\zeta(\Delta)E_n\chi$, $\|k_\zeta(\Delta)\chi\| \le \|\chi\|$ and $\|k_\zeta(\Delta)\chi - p_{-i\zeta,n}(\Delta)c(\Delta)\chi\| \le \|\chi - E_n\chi\|$.
@@ -1295,7 +1295,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[Continuity of a Sandwiched Matrix Coefficient]
     \label{lmm:sandwich-continuous}
-    \lean{Physicslib4.Modular.continuousOn_inner_sandwich}
+    \lean{Hilbert6.Modular.continuousOn_inner_sandwich}
     \leanok
     Let $D \subseteq \mathbb{C}$, let $a, b : \mathbb{C} \to \mathbf{H}$ be continuous on $D$, and let $T : \mathbb{C} \to \mathcal{B}(\mathbf{H})$ satisfy $\|T(z)\| \le 1$ for $z \in D$, with $z \mapsto T(z)\chi$ continuous on $D$ for every $\chi \in \mathbf{H}$. Then $z \mapsto \left< a(z), T(z)b(z) \right>$ is continuous on $D$.
 \end{lemma}
@@ -1306,7 +1306,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[The Approximants are Continuous on the Strip]
     \label{lmm:borchers-approximants-continuous}
-    \lean{Physicslib4.Modular.continuousOn_borchersApproximant}
+    \lean{Hilbert6.Modular.continuousOn_borchersApproximant}
     \uses{lmm:modular-power-operators}
     \leanok
     For $n \ge 1$, $F_n$ is continuous on $\Sigma_{1/2}$.
@@ -1319,7 +1319,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[The Approximants are Holomorphic Inside the Strip]
     \label{lmm:borchers-approximants-holomorphic}
-    \lean{Physicslib4.Modular.differentiableOn_borchersApproximant}
+    \lean{Hilbert6.Modular.differentiableOn_borchersApproximant}
     \uses{lmm:modular-power-operators}
     \leanok
     For $n \ge 1$, $F_n$ is holomorphic on $\Sigma^\circ_{1/2}$.
@@ -1336,7 +1336,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[Uniform Convergence of the Approximants]
     \label{lmm:borchers-approximants-uniform}
-    \lean{Physicslib4.Modular.borchersApproximant_tendstoUniformlyOn}
+    \lean{Hilbert6.Modular.borchersApproximant_tendstoUniformlyOn}
     \uses{def:spectral-measure}
     \leanok
     For $n \ge 1$ and $z \in \Sigma_{1/2}$,
@@ -1353,7 +1353,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[The Borchers Function is Bounded and Analytic]
     \label{lmm:borchers-function-analytic}
-    \lean{Physicslib4.Modular.borchersFunction_analytic}
+    \lean{Hilbert6.Modular.borchersFunction_analytic}
     \leanok
     $F$ is continuous on $\Sigma_{1/2}$, holomorphic on $\Sigma^\circ_{1/2}$, and $|F(z)| \le \|\psi^\sharp\|\,\|\varphi^\sharp\|$ for $z \in \Sigma_{1/2}$.
 \end{lemma}
@@ -1365,7 +1365,7 @@ and $F(z) = F_n(z) = 0$ for $z \notin \Sigma_{1/2}$; every claim concerns $\Sigm
 
 \begin{lemma}[The Boundary Values of the Borchers Function]
     \label{lmm:borchers-function-boundary}
-    \lean{Physicslib4.Modular.borchersFunction_boundary}
+    \lean{Hilbert6.Modular.borchersFunction_boundary}
     \uses{def:modular-operator, def:modular-unitary-group}
     \leanok
     For $t \in \mathbb{R}$,
@@ -1385,7 +1385,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[$J\Omega = \Omega$]
     \label{lmm:modular-conjugation-fixes-omega}
-    \lean{Physicslib4.Modular.modularConjugation_apply_self}
+    \lean{Hilbert6.Modular.modularConjugation_apply_self}
     \uses{def:modular-conjugation, def:modular-operator, def:cyclic-separating-vector}
     \leanok
     $\Delta^{1/2}\Omega = \Omega$ and $J\Omega = \Omega$.
@@ -1398,7 +1398,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[$\Delta^{it}$ Preserves the Commutant]
     \label{lmm:modular-group-preserves-commutant}
-    \lean{Physicslib4.Modular.modularUnitaryGroup_conj_mem_centralizer}
+    \lean{Hilbert6.Modular.modularUnitaryGroup_conj_mem_centralizer}
     \uses{def:modular-unitary-group, def:von-neumann-algebra-commutant-convention}
     \leanok
     For $t \in \mathbb{R}$ and $y \in \mathcal{M}'$, $\Delta^{it}y\Delta^{-it} \in \mathcal{M}'$.
@@ -1411,7 +1411,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[$\Delta^{1/2}Jy\Omega = y^*\Omega$ for $y \in \mathcal{M}'$]
     \label{lmm:commutant-vector-modular-sqrt}
-    \lean{Physicslib4.Modular.modularOperatorSqrt_apply_of_mem_centralizer}
+    \lean{Hilbert6.Modular.modularOperatorSqrt_apply_of_mem_centralizer}
     \uses{def:modular-operator, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
     \leanok
     Let $y \in \mathcal{M}'$. Then $Jy\Omega \in \text{Dom}(\Delta^{1/2})$ and $\Delta^{1/2}Jy\Omega = y^*\Omega$.
@@ -1424,7 +1424,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[$V(-t)$ Maps the Commutant into Itself for $t \ge 0$]
     \label{lmm:commutant-reverse-endomorphism}
-    \lean{Physicslib4.Modular.commutant_reverse_endomorphism}
+    \lean{Hilbert6.Modular.commutant_reverse_endomorphism}
     \uses{def:positive-energy, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
     \leanok
     Assume clause (B2) of Definition~\ref{def:half-sided-translation}. For $t \ge 0$ and $y \in \mathcal{M}'$, $V(-t)\,y\,V(t) \in \mathcal{M}'$.
@@ -1437,7 +1437,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[The Adjoint of the Reflected Group]
     \label{lmm:reflected-group-adjoint}
-    \lean{Physicslib4.Modular.reflectedGroup_adjoint}
+    \lean{Hilbert6.Modular.reflectedGroup_adjoint}
     \uses{def:modular-conjugation-conjugate}
     \leanok
     For $t \in \mathbb{R}$, $W(t)^* = JV(t)J$.
@@ -1450,7 +1450,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[The Reflected Group is Unitary and Fixes $\Omega$]
     \label{lmm:reflected-group-unitary}
-    \lean{Physicslib4.Modular.reflectedGroup_unitary}
+    \lean{Hilbert6.Modular.reflectedGroup_unitary}
     \uses{def:modular-conjugation-conjugate, def:unitary-operator, def:half-sided-translation}
     \leanok
     Assume clause (B1) of Definition~\ref{def:half-sided-translation}. For every $t \in \mathbb{R}$, $W(t)$ is unitary and $W(t)\Omega = \Omega$.
@@ -1463,7 +1463,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[The Reflected Group Maps $\mathcal{M}$ into Itself]
     \label{lmm:reflected-group-endomorphism}
-    \lean{Physicslib4.Modular.reflectedGroup_conj_mem}
+    \lean{Hilbert6.Modular.reflectedGroup_conj_mem}
     \uses{def:modular-conjugation-conjugate, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
     \leanok
     Assume clause (B2) of Definition~\ref{def:half-sided-translation}. For $t \ge 0$ and $x \in \mathcal{M}$, $W(t)\,x\,W(t)^* \in \mathcal{M}$.
@@ -1476,7 +1476,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[Real Correlations of Self-Adjoint Elements]
     \label{lmm:real-correlation}
-    \lean{Physicslib4.Modular.inner_unitary_apply_im_eq_zero}
+    \lean{Hilbert6.Modular.inner_unitary_apply_im_eq_zero}
     \uses{def:von-neumann-algebra-commutant-convention, def:unitary-operator}
     \leanok
     Let $X$ be a unitary with $X\Omega = \Omega$ and $XxX^* \in \mathcal{M}$ for every $x \in \mathcal{M}$. Then $\left< y\Omega, Xx\Omega \right> \in \mathbb{R}$ for every $x = x^* \in \mathcal{M}$ and $y = y^* \in \mathcal{M}'$.
@@ -1488,7 +1488,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[Real Correlations after a Modular Rotation]
     \label{lmm:modular-rotated-correlation-real}
-    \lean{Physicslib4.Modular.inner_modularRotated_im_eq_zero}
+    \lean{Hilbert6.Modular.inner_modularRotated_im_eq_zero}
     \uses{def:modular-unitary-group, def:von-neumann-algebra-commutant-convention, def:unitary-operator}
     \leanok
     Let $X$ be as in Lemma~\ref{lmm:real-correlation}, $x = x^* \in \mathcal{M}$, $y = y^* \in \mathcal{M}'$ and $t \in \mathbb{R}$. Then $\left< \Delta^{-it}y\Omega, X\Delta^{-it}x\Omega \right> \in \mathbb{R}$.
@@ -1501,7 +1501,7 @@ For $t \in \mathbb{R}$ let $W(t) = JV(-t)J$ (\ref{def:modular-conjugation-conjug
 
 \begin{lemma}[The Upper Boundary Value is Real]
     \label{lmm:borchers-upper-boundary-real}
-    \lean{Physicslib4.Modular.borchers_upper_boundary_real}
+    \lean{Hilbert6.Modular.borchers_upper_boundary_real}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
     \leanok
     Assume clauses (B1) and (B2) of Definition~\ref{def:half-sided-translation}. Let $x = x^* \in \mathcal{M}$, $y = y^* \in \mathcal{M}'$, $\tau \ge 0$ and $t \in \mathbb{R}$. Then
@@ -1522,7 +1522,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[The Borchers Function in Closed Form on the Edges]
     \label{lmm:borchers-function-special-values}
-    \lean{Physicslib4.Modular.borchersFunction_special_values}
+    \lean{Hilbert6.Modular.borchersFunction_special_values}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention}
     \leanok
     For $t \in \mathbb{R}$,
@@ -1539,7 +1539,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[The Borchers Function is Real on the Lower Edge]
     \label{lmm:borchers-function-lower-edge-real}
-    \lean{Physicslib4.Modular.borchersFunction_lower_edge_real}
+    \lean{Hilbert6.Modular.borchersFunction_lower_edge_real}
     \uses{def:modular-unitary-group, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
     \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $t \in \mathbb{R}$, $F(t) \in \mathbb{R}$.
@@ -1552,7 +1552,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[The Borchers Function is Real on the Upper Edge]
     \label{lmm:borchers-function-upper-edge-real}
-    \lean{Physicslib4.Modular.borchersFunction_upper_edge_real}
+    \lean{Hilbert6.Modular.borchersFunction_upper_edge_real}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
     \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $t \in \mathbb{R}$, $F(t + \tfrac{i}{2}) \in \mathbb{R}$, and $F(\tfrac{i}{2}) = \left< y\Omega, W(\tau)x\Omega \right>$.
@@ -1565,7 +1565,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[The Borchers Function is Constant]
     \label{lmm:borchers-function-constant}
-    \lean{Physicslib4.Modular.borchersFunction_constant}
+    \lean{Hilbert6.Modular.borchersFunction_constant}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention, def:half-sided-translation}
     \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $s \in \mathbb{R}$,
@@ -1581,7 +1581,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Bounded Operators are Determined by Self-Adjoint Matrix Coefficients]
     \label{lmm:eq-of-self-adjoint-matrix-coefficients}
-    \lean{Physicslib4.Modular.eq_of_selfAdjoint_matrix_coefficients}
+    \lean{Hilbert6.Modular.eq_of_selfAdjoint_matrix_coefficients}
     \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector}
     \leanok
     Let $A, B \in \mathcal{B}(\mathbf{H})$ with $\left< y\Omega, Ax\Omega \right> = \left< y\Omega, Bx\Omega \right>$ for every $x = x^* \in \mathcal{M}$ and $y = y^* \in \mathcal{M}'$. Then $A = B$.
@@ -1594,7 +1594,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Dilation for Nonnegative Times]
     \label{lmm:borchers-dilation-nonneg}
-    \lean{Physicslib4.Modular.borchers_dilation_nonneg}
+    \lean{Hilbert6.Modular.borchers_dilation_nonneg}
     \uses{def:modular-unitary-group, def:half-sided-translation}
     \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $t \ge 0$ and $s \in \mathbb{R}$, $\Delta^{is}V(t)\Delta^{-is} = V(e^{-2\pi s}t)$.
@@ -1607,7 +1607,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Reflection for Nonnegative Times]
     \label{lmm:borchers-reflection-nonneg}
-    \lean{Physicslib4.Modular.borchers_reflection_nonneg}
+    \lean{Hilbert6.Modular.borchers_reflection_nonneg}
     \uses{def:modular-conjugation-conjugate, def:half-sided-translation}
     \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For $\tau \ge 0$, $JV(-\tau)J = V(\tau)$.
@@ -1620,7 +1620,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Dilation for All Times]
     \label{lmm:borchers-dilation-all}
-    \lean{Physicslib4.Modular.borchers_dilation_all}
+    \lean{Hilbert6.Modular.borchers_dilation_all}
     \uses{def:modular-unitary-group, def:half-sided-translation}
     \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For all $s, t \in \mathbb{R}$, $\Delta^{is}V(t)\Delta^{-is} = V(e^{-2\pi s}t)$.
@@ -1633,7 +1633,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{lemma}[Reflection for All Times]
     \label{lmm:borchers-reflection-all}
-    \lean{Physicslib4.Modular.borchers_reflection_all}
+    \lean{Hilbert6.Modular.borchers_reflection_all}
     \uses{def:modular-conjugation-conjugate, def:half-sided-translation}
     \leanok
     Assume that $V$ is a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}). For all $t \in \mathbb{R}$, $JV(t)J = V(-t)$.
@@ -1646,7 +1646,7 @@ In Lemmas~\ref{lmm:borchers-function-special-values} to~\ref{lmm:borchers-functi
 
 \begin{theorem}[Borchers' Theorem]
     \label{thrm:borchers}
-    \lean{Physicslib4.Modular.borchers}
+    \lean{Hilbert6.Modular.borchers}
     \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:half-sided-translation, def:unitary-operator}
     \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, modular unitary group $\Delta^{is}$ and modular conjugation $J$. Let $V(t)$, $t \in \mathbb{R}$, be a half-sided translation for $(\mathcal{M}, \Omega)$ (\ref{def:half-sided-translation}): a positive-energy one-parameter unitary group with $V(t)\Omega = \Omega$ for all $t$ and $V(t)\,\mathcal{M}\,V(t)^* \subseteq \mathcal{M}$ for all $t \ge 0$. Then for all $s, t \in \mathbb{R}$,
@@ -1677,7 +1677,7 @@ These are notation. The reflection of the $(x^0, x^1)$-plane, which recurs in th
 
 \begin{definition}[The Wedge Reflection]
     \label{def:wedge-reflection}
-    \lean{Physicslib4.AQFT.HaagKastler.wedgeReflection}
+    \lean{Hilbert6.AQFT.HaagKastler.wedgeReflection}
     \uses{def:lorentz-transformation, def:inhomogeneous-lorentz-group}
     \leanok
     The \emph{wedge reflection} is the linear map $j : \mathbb{R}^4 \to \mathbb{R}^4$,
@@ -1695,7 +1695,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Modular Group of the Commutant]
     \label{lmm:commutant-modular-unitary-group}
-    \lean{Physicslib4.Modular.commutant_modularUnitaryGroup}
+    \lean{Hilbert6.Modular.commutant_modularUnitaryGroup}
     \uses{def:modular-unitary-group, def:modular-conjugation, def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector}
     \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ and $\Omega$ cyclic and separating for $\mathcal{M}$. Then $\Omega$ is cyclic and separating for $\mathcal{M}'$, and the modular unitary group and the modular conjugation of $(\mathcal{M}', \Omega)$ are $\Delta_{\mathcal{M}'}^{it} = \Delta^{-it}$ for every $t \in \mathbb{R}$ and $J_{\mathcal{M}'} = J$.
@@ -1712,7 +1712,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Reverse Endomorphisms Pass to the Commutant]
     \label{lmm:unitary-reverse-endomorphism-commutant}
-    \lean{Physicslib4.Modular.conj_mem_centralizer_of_adjoint_conj_mem}
+    \lean{Hilbert6.Modular.conj_mem_centralizer_of_adjoint_conj_mem}
     \uses{def:unitary-operator, def:von-neumann-algebra-commutant-convention}
     \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, and let $X$ be a unitary with $X^*xX \in \mathcal{M}$ for every $x \in \mathcal{M}$. Then $XyX^* \in \mathcal{M}'$ for every $y \in \mathcal{M}'$.
@@ -1724,7 +1724,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{corollary}[Borchers' Theorem for Negative Half-Lines]
     \label{crllr:borchers-reversed}
-    \lean{Physicslib4.Modular.borchers_reversed}
+    \lean{Hilbert6.Modular.borchers_reversed}
     \uses{def:von-neumann-algebra-commutant-convention, def:cyclic-separating-vector, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:positive-energy, def:unitary-operator, def:half-sided-translation}
     \leanok
     Let $\mathcal{M}$ be a von Neumann algebra on $\mathbf{H}$ with a cyclic and separating vector $\Omega$, modular unitary group $\Delta^{is}$ and modular conjugation $J$. Let $V(t)$, $t \in \mathbb{R}$, be a family of unitary operators with positive energy (\ref{def:positive-energy}) such that $V(t)\Omega = \Omega$ for all $t$ and $V(t)^*\,\mathcal{M}\,V(t) \subseteq \mathcal{M}$ for all $t \ge 0$, that is, $V(-t)\,x\,V(t) \in \mathcal{M}$ for all $t \ge 0$ and $x \in \mathcal{M}$. Then for all $s, t \in \mathbb{R}$,
@@ -1743,7 +1743,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Light-Cone Decomposition of a Vector]
     \label{lmm:light-cone-decomposition}
-    \lean{Physicslib4.AQFT.HaagKastler.lightCone_decomposition}
+    \lean{Hilbert6.AQFT.HaagKastler.lightCone_decomposition}
     \uses{def:boost-matrix, def:wedge-reflection}
     \leanok
     For every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$, with $\alpha = \alpha(a)$, $\beta = \beta(a)$ and $j$ the wedge reflection (\ref{def:wedge-reflection}),
@@ -1759,7 +1759,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Poincar\'e Conjugation of a Translation]
     \label{lmm:poincare-conjugates-translation}
-    \lean{Physicslib4.AQFT.HaagKastler.conj_translationSub}
+    \lean{Hilbert6.AQFT.HaagKastler.conj_translationSub}
     \uses{def:inhomogeneous-lorentz-group, def:future-timelike-translation}
     \leanok
     Let $g = (L, c)$ be in the inhomogeneous Lorentz group. For every $a \in \mathbb{R}^4$, $g\,\mathrm{translationSub}(a)\,g^{-1} = \mathrm{translationSub}(La)$. In particular $b(s)\,\mathrm{translationSub}(a)\,b(s)^{-1} = \mathrm{translationSub}(\Lambda(s)a)$.
@@ -1772,7 +1772,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Translation Unitaries]
     \label{lmm:translation-unitaries}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.translation_unitaries}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.translation_unitaries}
     \uses{def:covariant-vacuum-representation, def:future-timelike-translation, def:inhomogeneous-lorentz-group}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation. Then $U(g)^{-1} = U(g^{-1})$ for every $g$; $U(0) = \mathbf{1}$, $U(a + a') = U(a)U(a')$ and $U(a)^{-1} = U(-a)$ for all $a, a' \in \mathbb{R}^4$; $U(\mathrm{translationFlow}(n)(t)) = U(tn)$; and for $g = (L, c)$,
@@ -1789,7 +1789,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Light-Cone Factorisation of the Translation Unitaries]
     \label{lmm:translation-light-cone-factorisation}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.translation_lightCone_factorisation}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.translation_lightCone_factorisation}
     \uses{def:covariant-vacuum-representation, def:future-timelike-translation}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation. For every $a \in \mathbb{R}^4$, with $\alpha = \alpha(a)$ and $\beta = \beta(a)$,
@@ -1807,7 +1807,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Lightlike Translations have Positive Energy]
     \label{lmm:lightlike-translations-positive-energy}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.lightlike_translations_positiveEnergy}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.lightlike_translations_positiveEnergy}
     \uses{def:covariant-vacuum-representation, def:positive-energy}
     \leanok
     The families $t \mapsto U(t\,l_+)$ and $t \mapsto U(t\,l_-)$ have positive energy (\ref{def:positive-energy}), and $U(t\,l_\pm)\Omega = \Omega$ for every $t$.
@@ -1820,7 +1820,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[Half-Sided Translations of the Right Wedge Algebra]
     \label{lmm:wedge-half-sided-translations}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_halfSidedTranslations}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_halfSidedTranslations}
     \uses{def:covariant-vacuum-representation, def:region-algebra, def:right-wedge, def:half-sided-translation}
     \leanok
     For every $t \ge 0$ and $x \in R(W_R)$,
@@ -1837,7 +1837,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Wedge Modular Objects on the $l_+$ Translations]
     \label{lmm:wedge-modular-plus}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_plus}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_plus}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:modular-conjugation-conjugate}
     \leanok
     For all $s, t \in \mathbb{R}$, $\Delta^{is}U(t\,l_+)\Delta^{-is} = U(e^{-2\pi s}t\,l_+)$ and $J\,U(t\,l_+)\,J = U(-t\,l_+)$.
@@ -1850,7 +1850,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Wedge Modular Objects on the $l_-$ Translations]
     \label{lmm:wedge-modular-minus}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_minus}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_minus}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:modular-conjugation-conjugate}
     \leanok
     For all $s, t \in \mathbb{R}$, $\Delta^{is}U(t\,l_-)\Delta^{-is} = U(e^{2\pi s}t\,l_-)$ and $J\,U(t\,l_-)\,J = U(-t\,l_-)$.
@@ -1865,7 +1865,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Wedge Modular Group on the Translations]
     \label{lmm:wedge-modular-group-translations}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modularUnitaryGroup_translations}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modularUnitaryGroup_translations}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:boost-matrix}
     \leanok
     For every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$, $\Delta^{is}U(a)\Delta^{-is} = U(\Lambda(-2\pi s)a)$.
@@ -1878,7 +1878,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{lemma}[The Wedge Modular Conjugation on the Translations]
     \label{lmm:wedge-modular-conjugation-translations}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modularConjugation_translations}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modularConjugation_translations}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-conjugation-conjugate, def:wedge-reflection}
     \leanok
     For every $a \in \mathbb{R}^4$, $J\,U(a)\,J = U(j\,a)$, with $j$ the wedge reflection (\ref{def:wedge-reflection}).
@@ -1891,7 +1891,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{theorem}[The Wedge Modular Objects Act Geometrically on the Translations]
     \label{thrm:wedge-modular-translations}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_translations}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_translations}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:right-wedge, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:wedge-boost, def:boost-matrix, def:future-timelike-translation, def:wedge-reflection}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense, and let $\Delta^{is}$ and $J$ be the modular unitary group and modular conjugation of $(R(W_R), \Omega)$. Then for every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$,
@@ -1908,7 +1908,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{corollary}[The Modular Objects of Every Wedge on the Translations]
     \label{crllr:wedge-modular-translations-general}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_translations_general}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_translations_general}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:wedge-boost, def:modular-unitary-group, def:modular-conjugation-conjugate, def:wedge-reflection}
     \leanok
     Under the hypotheses of Theorem~\ref{thrm:wedge-modular-translations}, with $j$ the wedge reflection (\ref{def:wedge-reflection}), let $g = (L, c)$ be in the inhomogeneous Lorentz group and let $\Delta_{gW_R}^{is}$, $J_{gW_R}$ be the modular objects of $(R(gW_R), \Omega)$. Then for every $a \in \mathbb{R}^4$ and $s \in \mathbb{R}$,
@@ -1926,7 +1926,7 @@ In the next three results, $\mathcal{M}$ is an arbitrary von Neumann algebra on 
 
 \begin{definition}[The Wedge Modular Defect]
     \label{def:wedge-modular-defect}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.wedgeModularDefect}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.wedgeModularDefect}
     \uses{def:covariant-vacuum-representation, def:region-algebra, def:right-wedge, def:cyclic-separating-vector, def:antiunitary-operator, def:modular-unitary-group, def:wedge-boost}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation (\ref{def:covariant-vacuum-representation}) such that $R(W_R)$ (\ref{def:region-algebra}) is a von Neumann algebra with $\Omega$ cyclic and separating for it (\ref{def:cyclic-separating-vector}), and let $C$ be an antiunitary operator with $C(C\phi) = \phi$ for all $\phi$ (\ref{def:antiunitary-operator}). Let $\Delta^{it} = \Delta_{W_R}^{it}$ be the modular unitary group of $(R(W_R), \Omega)$ (\ref{def:modular-unitary-group}) formed with the reference conjugation $C$. The \emph{wedge modular defect} is the family
@@ -1940,7 +1940,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect Fixes the Vacuum and Preserves the Wedge Algebra]
     \label{lmm:wedge-modular-defect-vacuum}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_vacuum}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_vacuum}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:modular-unitary-group, def:wedge-boost, def:wedge-modular-defect}
     \leanok
     For every $t$, the wedge modular defect $Z(t)$ (\ref{def:wedge-modular-defect}) satisfies $Z(t)\Omega = \Omega$ and $Z(t)\,R(W_R)\,Z(t)^{-1} = R(W_R)$.
@@ -1953,7 +1953,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect Commutes with the Translations]
     \label{lmm:wedge-modular-defect-translations}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_translations}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_translations}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost, lmm:modular-unitary-group-props, def:wedge-modular-defect}
     \leanok
     For every $t \in \mathbb{R}$ and $a \in \mathbb{R}^4$, $Z(t)\,U(a) = U(a)\,Z(t)$.
@@ -1970,7 +1970,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect Commutes with the Boosts]
     \label{lmm:wedge-modular-defect-boosts}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_boosts}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_boosts}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost, def:wedge-modular-defect}
     \leanok
     For all $s, t \in \mathbb{R}$, $Z(t)\,U(b(s)) = U(b(s))\,Z(t)$.
@@ -1983,7 +1983,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect is a One-Parameter Group]
     \label{lmm:wedge-modular-defect-group}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_group}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_group}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost, def:wedge-modular-defect}
     \leanok
     $Z(0) = \mathbf{1}$ and $Z(s + t) = Z(s)Z(t)$ for all $s, t \in \mathbb{R}$.
@@ -1996,7 +1996,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{lemma}[The Defect is Strongly Continuous]
     \label{lmm:wedge-modular-defect-continuous}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_continuous}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_continuous}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:modular-unitary-group, def:wedge-boost, def:wedge-modular-defect}
     \leanok
     For every $\psi \in \mathbf{H}$, $t \mapsto Z(t)\psi$ is continuous.
@@ -2013,7 +2013,7 @@ When $\pi$ is weakly additive in the von Neumann sense, the hypotheses on $R(W_R
 
 \begin{corollary}[The Wedge Modular Group up to a Defect]
     \label{crllr:wedge-modular-defect}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_properties}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_properties}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:modular-unitary-group, def:wedge-boost, def:hall-10.11, lmm:modular-unitary-group-props, def:wedge-modular-defect}
     \leanok
     Under the hypotheses of Theorem~\ref{thrm:wedge-modular-translations}, the wedge modular defect $Z(t) = \Delta^{it}U(b(2\pi t))$ (\ref{def:wedge-modular-defect}) is a strongly continuous one-parameter unitary group (\ref{def:hall-10.11}) with $\Delta^{it} = Z(t)\,U(b(-2\pi t))$, and for all $t, s \in \mathbb{R}$ and $a \in \mathbb{R}^4$,
@@ -2033,7 +2033,7 @@ Theorem~\ref{thrm:wedge-modular-translations} fixes the action of $\Delta_{W_R}^
 
 \begin{definition}[Modular Covariance for the Right Wedge (MC)]
     \label{def:wedge-modular-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWedgeModularCovariant}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsWedgeModularCovariant}
     \uses{def:haag-kastler-net, def:local-von-neumann, def:region-algebra, def:right-wedge, def:cyclic-separating-vector, def:antiunitary-operator, def:modular-unitary-group, def:wedge-boost, def:causal-diamond, lmm:poincare-maps-diamonds}
     \leanok
     Let $\mathfrak{U}$ be the quasilocal algebra of a Haag--Kastler net (\ref{def:haag-kastler-net}), $\pi$ a $*$-representation of $\mathfrak{U}$ on $\mathbf{H}$, and $\Omega \in \mathbf{H}$. Assume that $R(W_R)$ (\ref{def:region-algebra}) is a von Neumann algebra with $\Omega$ cyclic and separating for it (\ref{def:cyclic-separating-vector}), and let $C$ be an antiunitary operator with $C(C\phi) = \phi$ for all $\phi$ (\ref{def:antiunitary-operator}). Let $\Delta_{W_R}^{it}$ be the modular unitary group of $(R(W_R), \Omega)$ (\ref{def:modular-unitary-group}) formed with the reference conjugation $C$. Then $(\pi, \Omega)$ satisfies \emph{modular covariance for the right wedge}, (MC), if for every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$,
@@ -2047,7 +2047,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{definition}[Internal Symmetry]
     \label{def:internal-symmetry}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInternalSymmetry}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInternalSymmetry}
     \uses{def:haag-kastler-net, def:local-von-neumann, def:causal-diamond, def:unitary-operator}
     \leanok
     Let $\mathfrak{U}$ be the quasilocal algebra of a Haag--Kastler net, $\pi$ a $*$-representation of $\mathfrak{U}$ on $\mathbf{H}$, and $\Omega \in \mathbf{H}$. A unitary $X$ on $\mathbf{H}$ (\ref{def:unitary-operator}) is an \emph{internal symmetry} of $(\pi, \Omega)$ if $X\Omega = \Omega$ and $X\,R(\mathbf{B})\,X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$, with $R(\mathbf{B})$ the local von Neumann algebra (\ref{def:local-von-neumann}). Commutation with the translations is not part of the definition; Theorem~\ref{thrm:bisognano-wichmann-internal} states it separately.
@@ -2055,7 +2055,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{lemma}[Internal Symmetries Preserve Every Region Algebra]
     \label{lmm:internal-symmetry-normalizes-regions}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.conj_image_region_of_conj_image_localVonNeumann}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.conj_image_region_of_conj_image_localVonNeumann}
     \uses{def:region-algebra, def:unitary-operator, def:unitary-conjugation, def:internal-symmetry}
     \leanok
     Let $X$ be a unitary with $XR(\mathbf{B})X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$, the second condition of Definition~\ref{def:internal-symmetry}; $X\Omega = \Omega$ is not needed. Then $X\mathcal{S}(\mathbf{O})X^{-1} = \mathcal{S}(\mathbf{O})$ and $XR(\mathbf{O})X^{-1} = R(\mathbf{O})$ for every $\mathbf{O} \subseteq \mathbb{R}^4$.
@@ -2068,7 +2068,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{lemma}[Internal Symmetries Commute with the Wedge Modular Objects]
     \label{lmm:internal-symmetry-commutes-wedge-modular}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInternalSymmetry.commute_modular}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInternalSymmetry.commute_modular}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:modular-unitary-group, def:modular-conjugation, def:internal-symmetry}
     \leanok
     Let $X$ be an internal symmetry of $(\pi, \Omega)$ (\ref{def:internal-symmetry}): $X\Omega = \Omega$ and $XR(\mathbf{B})X^{-1} = R(\mathbf{B})$ for every diamond $\mathbf{B}$. Then for every wedge $W$, $X\Delta_W^{is} = \Delta_W^{is}X$ for every $s \in \mathbb{R}$ and $XJ_W = J_WX$.
@@ -2081,7 +2081,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{lemma}[Modular Covariance for Every Wedge]
     \label{lmm:modular-covariance-all-wedges}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.modularCovariant_all_wedges}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.modularCovariant_all_wedges}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:wedge-boost, def:modular-unitary-group, def:local-von-neumann, lmm:poincare-maps-diamonds, def:wedge-modular-covariance}
     \leanok
     Assume that $(\pi, \Omega)$ satisfies modular covariance for the right wedge (MC) (\ref{def:wedge-modular-covariance}). Then for every $g$ in the inhomogeneous Lorentz group, every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$,
@@ -2097,7 +2097,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{lemma}[Under (MC) the Defect Preserves Every Local Algebra]
     \label{lmm:wedge-modular-defect-local}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_local}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_local}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:local-von-neumann, def:modular-unitary-group, def:wedge-boost, lmm:poincare-maps-diamonds, lmm:modular-unitary-group-props, def:wedge-modular-defect, def:wedge-modular-covariance}
     \leanok
     Assume that $(\pi, \Omega)$ satisfies modular covariance for the right wedge (MC) (\ref{def:wedge-modular-covariance}). Then $Z(t)\,R(\mathbf{B})\,Z(t)^{-1} = R(\mathbf{B})$ for every $t \in \mathbb{R}$ and every diamond $\mathbf{B}$.
@@ -2110,7 +2110,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{theorem}[Bisognano--Wichmann up to an Internal Symmetry (BW-a)]
     \label{thrm:bisognano-wichmann-internal}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.bisognanoWichmann_internal}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.bisognanoWichmann_internal}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:region-algebra, def:right-wedge, def:local-von-neumann, def:modular-unitary-group, def:modular-conjugation, def:modular-conjugation-conjugate, def:wedge-boost, def:boost-matrix, lmm:poincare-maps-diamonds, def:wedge-modular-defect, def:wedge-modular-covariance, def:internal-symmetry, def:wedge-reflection}
     \leanok
     Let $(\pi, \Omega, U)$ be a covariant vacuum representation with $\pi$ weakly additive in the von Neumann sense, let $\Delta^{it}$ and $J$ be the modular unitary group and modular conjugation of $(R(W_R), \Omega)$, and assume that $(\pi, \Omega)$ satisfies modular covariance for the right wedge (MC) (\ref{def:wedge-modular-covariance}): $\Delta^{it}R(\mathbf{B})\Delta^{-it} = R(b(-2\pi t)\mathbf{B})$ for every $t$ and every diamond $\mathbf{B}$. Then for every $t \in \mathbb{R}$ the wedge modular defect $Z(t) = \Delta^{it}U(b(2\pi t))$ (\ref{def:wedge-modular-defect}) satisfies
@@ -2127,7 +2127,7 @@ The sign convention for $b$ is that of \ref{def:boost-matrix}. By Theorem~\ref{t
 
 \begin{corollary}[The Internal Symmetry Commutes with All Wedge Modular Objects]
     \label{crllr:bw-defect-commutes-wedge-modular}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_commute_wedge_modular}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedgeModularDefect_commute_wedge_modular}
     \uses{def:covariant-vacuum-representation, def:weak-additivity-von-neumann, def:wedge, def:modular-unitary-group, def:modular-conjugation, def:wedge-boost, lmm:poincare-maps-diamonds, def:wedge-modular-defect, def:wedge-modular-covariance, def:internal-symmetry}
     \leanok
     Under the hypotheses of Theorem~\ref{thrm:bisognano-wichmann-internal}, for every $t \in \mathbb{R}$, every wedge $W$ and every $s \in \mathbb{R}$, the internal symmetry $Z(t)$ (\ref{def:wedge-modular-defect}, \ref{def:internal-symmetry}) commutes with $\Delta_W^{is}$ and with $J_W$. It also commutes with every boost $U(b(s))$, and $t \mapsto Z(t)$ is a strongly continuous one-parameter unitary group.

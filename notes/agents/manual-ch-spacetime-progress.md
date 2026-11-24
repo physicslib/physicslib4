@@ -1,8 +1,8 @@
 # Reference manual, chapter "Spacetime and geometry": progress log
 
 Plan: `plan-verso-reference-manual-2026-10-17.md` (chapter 5). Part A is a docstring pass over the
-declarations the chapter shows with `{docstring}`, in `Physicslib4/Spacetime/` and
-`Physicslib4/Geometry/`; part B (the chapter text) is a later step. Appended after each file.
+declarations the chapter shows with `{docstring}`, in `Hilbert6/Spacetime/` and
+`Hilbert6/Geometry/`; part B (the chapter text) is a later step. Appended after each file.
 
 ## Step 0: reconnaissance (2026-10-17)
 
@@ -135,7 +135,7 @@ declarations the chapter shows with `{docstring}`, in `Physicslib4/Spacetime/` a
   guard; `lean_guard.py check --base HEAD` reports only the untracked `.claude/` files.
 - Full `lake build`: passes (3403 jobs); no new warnings (the only non-module-system warnings in
   `Spacetime/` are the pre-existing "Try this" hints in the untouched `CrossMetricIsometry.lean`).
-- `lake lint`: "Linting passed for Physicslib4." `python3 scripts/check_temporal_wording.py`: OK.
+- `lake lint`: "Linting passed for Hilbert6." `python3 scripts/check_temporal_wording.py`: OK.
 - No line over 100 characters; no docstring line starting with a Lean keyword in the edited text.
 - Count: 73 declaration docstrings and 38 field docstrings in 14 files (declarations+fields:
   Basic 1+15; CausalStructure 6+4; Curves 17+8; Causality 21; CausalComplement 6;
@@ -145,7 +145,7 @@ declarations the chapter shows with `{docstring}`, in `Physicslib4/Spacetime/` a
 
 ## Part B: the chapter text, `web/Manual/Spacetime.lean` (2026-10-18)
 
-- B0: skeleton, imports and the namespaces opened before `#doc` (`Physicslib4`, `Spacetime`,
+- B0: skeleton, imports and the namespaces opened before `#doc` (`Hilbert6`, `Spacetime`,
   `Spacetime.LorentzianSpacetime`, `Geometry`, `Geometry.PseudoRiemannianMetric`). Included in
   `web/Manual.lean` before the Haag–Kastler chapter, since the book follows the Chapter 10
   numbering (10.5 before 10.6).
@@ -326,7 +326,7 @@ The regularity index (from "A spacetime is a structure"):
   repeats) and B9. Web build and generate-manual pass.
 - 2c done (in the 2b rewrite): "This is an implementation choice, not a restriction"; no `**Restriction:**` marker in the chapter. Built with 2b.
 - 2d done: "closed when nonempty" → "on Minkowski space they are closed" (B3); endpoint continuity marked as not proved in the library (B5); "a causal diamond need not be causally complete" dropped, replaced by the citation `causalDiamond_isCausallyConvex` (B4). Web build and generate-manual pass.
-- 2e done: imports `Mathlib.Geometry.Manifold.VectorBundle.Riemannian` and `Physicslib4.AQFT.HaagKastlerCurved.Concrete` added (with a comment). They resolve `Bundle.ContMDiffRiemannianMetric`, `.contMDiff` and `toAbstractIdentityComponent` in the docstring boxes. Still unlinked: field names (`pos`, `isVonNBounded`, `Isom`, ...), the unqualified `ContMDiffRiemannianMetric` and the Mathlib-relative `IsLeviCivitaConnection`/`isMetricCompatible_iff` spans, and namespace names in `open … in` lines (`LorentzianSpacetime` there is now ambiguous with the AQFT namespace; harmless, Verso does not link them). Web build and generate-manual pass.
+- 2e done: imports `Mathlib.Geometry.Manifold.VectorBundle.Riemannian` and `Hilbert6.AQFT.HaagKastlerCurved.Concrete` added (with a comment). They resolve `Bundle.ContMDiffRiemannianMetric`, `.contMDiff` and `toAbstractIdentityComponent` in the docstring boxes. Still unlinked: field names (`pos`, `isVonNBounded`, `Isom`, ...), the unqualified `ContMDiffRiemannianMetric` and the Mathlib-relative `IsLeviCivitaConnection`/`isMetricCompatible_iff` spans, and namespace names in `open … in` lines (`LorentzianSpacetime` there is now ambiguous with the AQFT namespace; harmless, Verso does not link them). Web build and generate-manual pass.
 - 2f done: B2 "downward directed" → "the intersection property" in the remaining places (Main:
   basis theorem and Minkowski paragraph; "Where to look": `MinkowskiDirected.lean`). B11: sentence
   on pullback metrics and cross-metric isometries added after the cross-metric geodesic remark.
@@ -350,15 +350,15 @@ The regularity index (from "A spacetime is a structure"):
    directedness", which names a weaker property of the family, and the false "not implied by
    Hausdorffness alone".)
 2. `\lean{}` placements (reviewer's A(4)) and A6:
-   - def:alexandrov-topology (l. 1137): `\lean{Physicslib4.Spacetime.alexandrovTopology,
-     Physicslib4.Spacetime.alexandrovBasis}`; and correct `\leanfile` from
-     `Physicslib4/Spacetime/Minkowski.lean` to `Physicslib4/Spacetime/Causality.lean` (A6).
-   - def:lorentz-path (l. 1619): add `Physicslib4.standardMinkowskiTimeOrientation` (the node's
+   - def:alexandrov-topology (l. 1137): `\lean{Hilbert6.Spacetime.alexandrovTopology,
+     Hilbert6.Spacetime.alexandrovBasis}`; and correct `\leanfile` from
+     `Hilbert6/Spacetime/Minkowski.lean` to `Hilbert6/Spacetime/Causality.lean` (A6).
+   - def:lorentz-path (l. 1619): add `Hilbert6.standardMinkowskiTimeOrientation` (the node's
      last sentence defines it). Longer term: move that sentence into
      def:standard-minkowski-spacetime and list the declaration there.
-   - lmm:isometry-preserves-classification (l. 1500): add `Physicslib4.Spacetime.Isometry`; or,
+   - lmm:isometry-preserves-classification (l. 1500): add `Hilbert6.Spacetime.Isometry`; or,
      cleaner, a new def:isometry node carrying the definition now stated in
-     lmm:isometry-pullback-metric, listing `Physicslib4.Spacetime.Isometry`.
+     lmm:isometry-pullback-metric, listing `Hilbert6.Spacetime.Isometry`.
    Once listed, the three docstrings end with `Blueprint: <label>` instead of naming the node in
    prose (a docstring-only change, after the blueprint edit).
 

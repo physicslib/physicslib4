@@ -1,7 +1,7 @@
 # Audit of Mathlib-coverage claims against v4.35.0
 
 Scope: the 24 hits in `/tmp/claims.txt` plus a broader grep over
-`blueprint/src/sections/sec10`, `Physicslib4` (excluding `scratch_*`), `home_page`,
+`blueprint/src/sections/sec10`, `Hilbert6` (excluding `scratch_*`), `home_page`,
 `README.md` for other phrasings ("no Mathlib", "Mathlib provides", "would need",
 "waiting on", "**Restriction:**", etc.). No `**Restriction:**` markers are currently
 present in the tree.
@@ -16,7 +16,7 @@ claims) compile a standalone test file under `notes/agents/sources/` with
 - `blueprint/src/sections/sec10/spacetime.tex:27` — "Mathlib has no pseudo-Riemannian
   class, and `Bundle.ContMDiffRiemannianMetric` carries two further fields beyond
   `contMDiff` ... `pos` ... `isVonNBounded`..."
-- `Physicslib4/Spacetime/Basic.lean:35,164,174` — same claim, plus "Mathlib provides
+- `Hilbert6/Spacetime/Basic.lean:35,164,174` — same claim, plus "Mathlib provides
   no lemma bridging" chart-local and bundle-section smoothness forms.
 
 **STILL TRUE.** The Riemannian-bundle machinery was reorganized in this Mathlib
@@ -32,7 +32,7 @@ pseudo-Riemannian/indefinite-signature variant exists anywhere (grepped
 
 ## 2. Diffeomorph global `mfderiv`/`symm` round-trip
 
-- `blueprint/src/sections/sec10/spacetime.tex:1748` and `Physicslib4/Spacetime/Diffeo.lean:115`
+- `blueprint/src/sections/sec10/spacetime.tex:1748` and `Hilbert6/Spacetime/Diffeo.lean:115`
   — "Mathlib has no `Diffeomorph` analogue of this identity ... only
   `Diffeomorph.apply_symm_apply` at the level of points."
 
@@ -94,8 +94,8 @@ chart-to-bundle smoothness transfer needed here."
 ## 6. Myers–Steenrod rigidity theorem
 
 - `blueprint/src/sections/sec10/haag-kastler-axioms-in-curved-spacetime.tex:127`,
-  `home_page/index.md:77`, `Physicslib4/AQFT/HaagKastlerCurved/Concrete.lean:64`,
-  `Physicslib4/Spacetime/IsometryCausality.lean:204` — "Mathlib does not provide" a
+  `home_page/index.md:77`, `Hilbert6/AQFT/HaagKastlerCurved/Concrete.lean:64`,
+  `Hilbert6/Spacetime/IsometryCausality.lean:204` — "Mathlib does not provide" a
   Myers–Steenrod-type rigidity theorem (isometries connected to the identity
   preserve orientation / isometry group is a Lie group).
 
@@ -121,7 +121,7 @@ contrast is accurate.
 ## 8. No C*-completion construction anywhere in Mathlib
 
 - `blueprint/src/sections/sec10/haag-kastler-axioms.tex:212`,
-  `Physicslib4/Analysis/CStarCompletion.lean:24` — "no enveloping C*-algebra, no
+  `Hilbert6/Analysis/CStarCompletion.lean:24` — "no enveloping C*-algebra, no
   universal C*-algebra of a `*`-algebra, no full or reduced group C*-algebra."
 
 **STILL TRUE.** No file or declaration under `Mathlib/Analysis/CStarAlgebra/`
@@ -142,7 +142,7 @@ tree.
 ## 10. Von Neumann density theorem / Kaplansky density theorem
 
 - `blueprint/src/sections/sec10/haag-kastler-axioms.tex:726`,
-  `Physicslib4/AQFT/HaagKastler/StrongDensity.lean:73` — "Mathlib has the strong
+  `Hilbert6/AQFT/HaagKastler/StrongDensity.lean:73` — "Mathlib has the strong
   operator topology (`PointwiseConvergenceCLM`) and the double commutant property
   of bundled von Neumann algebras (`VonNeumannAlgebra.commutant_commutant`, not a
   density result), but not the von Neumann density theorem itself... The Kaplansky
@@ -159,7 +159,7 @@ theorems in ring/dimension theory) — no von Neumann/Kaplansky density theorem.
 
 ## 11. `VonNeumannAlgebra H` has no `⊤`
 
-- `Physicslib4/GNS/Irreducibility.lean:428` — "available even though Mathlib does
+- `Hilbert6/GNS/Irreducibility.lean:428` — "available even though Mathlib does
   not equip `VonNeumannAlgebra H` with a `⊤` element."
 
 **STILL TRUE.** `Mathlib/Analysis/VonNeumannAlgebra/Basic.lean` has only a
@@ -170,7 +170,7 @@ instance. Grepped for any `Top`/`CompleteLattice`/`SupSet` instance on
 
 ## 12. No packaged `State` type for C*-algebras
 
-- `Physicslib4/GNS/Basic.lean:32` — "Mathlib has no packaged `State` type for
+- `Hilbert6/GNS/Basic.lean:32` — "Mathlib has no packaged `State` type for
   C*-algebras."
 
 **STILL TRUE.** Grepped `^structure State|^def State` across all of Mathlib: the
@@ -179,7 +179,7 @@ only hits are unrelated tactic-internal `State` structures (`FunProp`, `GCongr`,
 
 ## 13. Amplification commutant theorem
 
-- `Physicslib4/GNS/Amplification.lean:28` — "the amplification commutant theorem
+- `Hilbert6/GNS/Amplification.lean:28` — "the amplification commutant theorem
   `(π ⊗ 1)' = π' ⊗ B(K)`... a von Neumann algebra result that Mathlib does not
   provide."
 
@@ -188,7 +188,7 @@ only hits are unrelated tactic-internal `State` structures (`FunProp`, `GCongr`,
 
 ## 14. KMS strip-Liouville / Schwarz reflection
 
-- `Physicslib4/AQFT/KMS.lean:82,102` — "Mathlib provides Liouville
+- `Hilbert6/AQFT/KMS.lean:82,102` — "Mathlib provides Liouville
   (`Differentiable.apply_eq_apply_of_bounded`) and Phragmén-Lindelöf for strips, but
   not the holomorphic gluing across a line... Mathlib does not package that
   reflection."
@@ -201,7 +201,7 @@ horizontal-line (or any) Schwarz reflection principle is packaged.
 
 ## 15. No single named type for smooth vector fields
 
-- `Physicslib4/Spacetime/CausalStructure.lean:34` — "Mathlib has no single named
+- `Hilbert6/Spacetime/CausalStructure.lean:34` — "Mathlib has no single named
   type for smooth vector fields."
 
 **STILL TRUE.** `Mathlib/Geometry/Manifold/VectorField/Pullback.lean` confirms the
@@ -211,7 +211,7 @@ no hits anywhere in Mathlib.
 
 ## 16. No C*-algebraic direct-limit / amalgamated-completion construction
 
-- `Physicslib4/AQFT/HaagKastler/QuasilocalAlgebra.lean:30` — "`Mathlib.Algebra.Colimit.DirectLimit`
+- `Hilbert6/AQFT/HaagKastler/QuasilocalAlgebra.lean:30` — "`Mathlib.Algebra.Colimit.DirectLimit`
   is purely algebraic... no C*-completion anywhere in `Mathlib.Analysis.CStarAlgebra`."
 
 **STILL TRUE.** Confirmed `DirectLimit.lean` has no norm/topology fields (only
@@ -222,7 +222,7 @@ colimit of C*-algebras.
 
 ## 17. Geodesics / Levi-Civita connection
 
-- `Physicslib4/Spacetime/Causality.lean:42` — "Mathlib has no geodesics and only a
+- `Hilbert6/Spacetime/Causality.lean:42` — "Mathlib has no geodesics and only a
   Riemannian Levi-Civita connection."
 
 **STILL TRUE.** Grepped `geodesic` (case-insensitive) across
@@ -231,7 +231,7 @@ colimit of C*-algebras.
 
 ## 18. `LocallyConvexSpace ℝ (WeakDual ℂ A)` does not synthesize
 
-- `Physicslib4/GNS/PureStateExists.lean:35` — "Concluding the existence of a pure
+- `Hilbert6/GNS/PureStateExists.lean:35` — "Concluding the existence of a pure
   state by Krein-Milman needs `LocallyConvexSpace ℝ (WeakDual ℂ A)`, which Mathlib
   does not synthesize."
 
@@ -247,7 +247,7 @@ Confirmed still absent.
 
 ## 19. WeakDual convex-combination application lemma
 
-- `Physicslib4/GNS/PureStateExists.lean:37` — "the extreme-point-to-state transfer
+- `Hilbert6/GNS/PureStateExists.lean:37` — "the extreme-point-to-state transfer
   also needs weak-* coercion-algebra lemmas (`(t • φ + (1-t) • ψ) a = t • φ a +
   (1-t) • ψ a`) which Mathlib does not provide for `WeakDual`."
 
@@ -263,7 +263,7 @@ it is a one-line `rfl`, not a proof obligation, if the docstring is ever revised
 
 ## 20. Heine–Borel dimension hypothesis (not a coverage gap, included for completeness)
 
-- `Physicslib4/Spectral/Spectrum.lean:51` — "the blueprint states it for `ℂⁿ` with
+- `Hilbert6/Spectral/Spectrum.lean:51` — "the blueprint states it for `ℂⁿ` with
   `n ≥ 1`; Mathlib has no dimension hypothesis, because what the proof uses is that
   the space is proper and Hausdorff."
 
@@ -273,7 +273,7 @@ it is a one-line `rfl`, not a proof obligation, if the docstring is ever revised
 
 ## 21. Adjoint facts "not stated in this form"
 
-- `Physicslib4/Spectral/Basic.lean:327` — vague claim that Mathlib's
+- `Hilbert6/Spectral/Basic.lean:327` — vague claim that Mathlib's
   `ContinuousLinearMap.eq_adjoint_iff` gives the defining property but not the
   packaged C*-identities/continuity facts recorded locally.
 

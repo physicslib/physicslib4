@@ -36,7 +36,7 @@ the curved API is unwanted.
 ### Stages for (b)
 
 1. Guard approvals: `python3 ~/.claude/lean-kit/lean_guard.py approve --file <f> --note D8` for each
-   file under `Physicslib4/AQFT/HaagKastlerCurved/` that changes (the subagent lists them first).
+   file under `Hilbert6/AQFT/HaagKastlerCurved/` that changes (the subagent lists them first).
 2. One prover: change the field, add universe parameters, change `∃ (H : Type)` to `Type v` in the 11
    GNS declarations listed in R13-7, then fix callers. Update the `Spacetime.lean` modelling note. Build,
    lint and axiom check.

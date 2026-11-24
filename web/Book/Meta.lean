@@ -9,7 +9,7 @@ import Site.Links
   book is built, so a renamed or removed declaration is a build error.
 
 ```
-{apiDocs Physicslib4.AQFT.HaagKastler.LocalNet}[]
+{apiDocs Hilbert6.AQFT.HaagKastler.LocalNet}[]
 ```
 -/
 

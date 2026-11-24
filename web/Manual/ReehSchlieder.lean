@@ -1,19 +1,19 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.AQFT.PositiveEnergyHolomorphic
-import Physicslib4.Analysis.EdgeVanishing
-import Physicslib4.AQFT.HaagKastler.ReehSchlieder.Translations
-import Physicslib4.AQFT.HaagKastler.ReehSchlieder.CyclicSubspace
-import Physicslib4.AQFT.HaagKastler.ReehSchlieder.Correlations
-import Physicslib4.AQFT.HaagKastler.ReehSchlieder.Additivity
+import Hilbert6.AQFT.PositiveEnergyHolomorphic
+import Hilbert6.Analysis.EdgeVanishing
+import Hilbert6.AQFT.HaagKastler.ReehSchlieder.Translations
+import Hilbert6.AQFT.HaagKastler.ReehSchlieder.CyclicSubspace
+import Hilbert6.AQFT.HaagKastler.ReehSchlieder.Correlations
+import Hilbert6.AQFT.HaagKastler.ReehSchlieder.Additivity
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 open Book
 -- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
 -- written relative to the library's namespaces, resolve and link.
-open Physicslib4 Physicslib4.AQFT Physicslib4.AQFT.HaagKastler
-open Physicslib4.AQFT.HaagKastler.HaagKastlerNet
+open Hilbert6 Hilbert6.AQFT Hilbert6.AQFT.HaagKastler
+open Hilbert6.AQFT.HaagKastler.HaagKastlerNet
 
 #doc (Manual) "The Reeh–Schlieder theorem" =>
 
@@ -96,9 +96,9 @@ for the implementation and spectrum data of a vacuum state. The separating form,
 algebra of every diamond completely spacelike to a nonempty diamond.
 
 Every statement of Section 10.9 is proved in Lean, with no `sorry`. The theorem and its
-corollaries are in the namespace `Physicslib4.AQFT.HaagKastler`, the holomorphic extension under
-positive energy is in `Physicslib4.AQFT`, and the complex-analysis lemma on vanishing on an edge is
-in `Physicslib4`.
+corollaries are in the namespace `Hilbert6.AQFT.HaagKastler`, the holomorphic extension under
+positive energy is in `Hilbert6.AQFT`, and the complex-analysis lemma on vanishing on an edge is
+in `Hilbert6`.
 
 # Design
 %%%
@@ -225,33 +225,33 @@ translates of the local algebra of $`\mathbf{B}`
 In Lean it is the topological closure of `StarAlgebra.adjoin` of the union of the ranges of the
 embeddings $`\iota_{\mathbf{B} + x}`:
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.translationGeneratedAlgebra}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.translationGeneratedAlgebra}
 
 Weak additivity
 ([def:weak-additivity](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:weak-additivity))
 says it is all of $`\mathfrak{U}`, written as equality with `⊤` in the lattice of star subalgebras:
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditive}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditive}
 
 The von Neumann form
 ([def:weak-additivity-von-neumann](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:weak-additivity-von-neumann))
 takes the commutant in the bounded operators on $`H` as Mathlib's `Set.centralizer`, as the local
 von Neumann algebras do:
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditiveVonNeumann}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditiveVonNeumann}
 
 The first implication between them
 ([lmm:weak-additivity-von-neumann](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:weak-additivity-von-neumann))
 holds for every representation:
 
 ```lean (name := checkWAVN)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check
   HaagKastlerNet.IsWeaklyAdditive.isWeaklyAdditiveVonNeumann
 ```
 
 ```leanOutput checkWAVN
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditive.isWeaklyAdditiveVonNeumann.{u_1, u_2} {H : Type u_1}
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditive.isWeaklyAdditiveVonNeumann.{u_1, u_2} {H : Type u_1}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet} (hN : N.IsWeaklyAdditive)
   (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) : N.IsWeaklyAdditiveVonNeumann π
 ```
@@ -269,12 +269,12 @@ $`A \in \mathfrak{A}_{\mathbf{B}_1}`, $`\pi(A)\Omega` lies in the closure of the
 $`\Omega` under the local algebra of $`\mathbf{B}`.
 
 ```lean (name := checkRS)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check reeh_schlieder
 ```
 
 ```leanOutput checkRS
-Physicslib4.AQFT.HaagKastler.reeh_schlieder.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.AQFT.HaagKastler.reeh_schlieder.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {N : HaagKastlerNet} (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) (Ω : H)
   (U : StandardMinkowskiSpacetime.Carrier → H ≃ₗᵢ[ℂ] H)
   (hU :
@@ -297,13 +297,13 @@ theorem. The conclusion uses `HaagKastlerNet.localOperators`, the set of operato
 $`\pi(\iota_{\mathbf{B}}(b))`.
 
 ```lean (name := checkRSCyclic)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check reeh_schlieder_cyclic
 ```
 
 ```leanOutput checkRSCyclic
-Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
-  [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet} (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) (Ω : H)
+Hilbert6.AQFT.HaagKastler.reeh_schlieder_cyclic.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H] {N : HaagKastlerNet} (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) (Ω : H)
   (U : StandardMinkowskiSpacetime.Carrier → H ≃ₗᵢ[ℂ] H)
   (hU :
     ∀ (x : StandardMinkowskiSpacetime.Carrier) (a : N.quasilocal.carrier),
@@ -321,12 +321,12 @@ Under the von Neumann form of weak additivity
 cyclicity for $`\pi(\mathfrak{U})` is `GNS.IsCyclicVector π Ω`, the predicate of the GNS chapter:
 
 ```lean (name := checkRSvN)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check reeh_schlieder_cyclic_of_vonNeumann
 ```
 
 ```leanOutput checkRSvN
-Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vonNeumann.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vonNeumann.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet} (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) (Ω : H)
   (U : StandardMinkowskiSpacetime.Carrier → H ≃ₗᵢ[ℂ] H)
   (hU :
@@ -341,12 +341,12 @@ Under weak additivity
 ([crllr:reeh-schlieder-weak-additivity](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:reeh-schlieder-weak-additivity)):
 
 ```lean (name := checkRSwa)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check reeh_schlieder_cyclic_of_weaklyAdditive
 ```
 
 ```leanOutput checkRSwa
-Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic_of_weaklyAdditive.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.AQFT.HaagKastler.reeh_schlieder_cyclic_of_weaklyAdditive.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet} (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) (Ω : H)
   (U : StandardMinkowskiSpacetime.Carrier → H ≃ₗᵢ[ℂ] H)
   (hU :
@@ -361,16 +361,16 @@ The vacuum form
 ([crllr:reeh-schlieder-vacuum](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:reeh-schlieder-vacuum))
 indexes the unitaries by the whole Poincaré group, as a vacuum state does. Its hypotheses `hU` and
 `hpos` are the implementation and spectrum conjuncts of
-{apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumStateConcrete}[`IsVacuumStateConcrete`],
+{apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumStateConcrete}[`IsVacuumStateConcrete`],
 with the spectrum condition quantified over future-timelike translation subgroups $`\gamma`:
 
 ```lean (name := checkRSvac)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check reeh_schlieder_cyclic_of_vacuum
 ```
 
 ```leanOutput checkRSvac
-Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vacuum.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vacuum.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet} (hwa : N.IsWeaklyAdditive)
   (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) (Ω : H) (U : InhomogeneousLorentzGroup → H ≃ₗᵢ[ℂ] H)
   (hU : ∀ (L : InhomogeneousLorentzGroup) (a : N.quasilocal.carrier), (U L) ((π a) Ω) = (π ((N.action L) a)) Ω)
@@ -386,18 +386,18 @@ Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vacuum.{u_1, u_2} {H : Typ
 The separating form
 ([crllr:reeh-schlieder-separating](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:reeh-schlieder-separating))
 combines `reeh_schlieder_cyclic` with
-{apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_separating}[`localVonNeumannAlgebra_separating`]
+{apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_separating}[`localVonNeumannAlgebra_separating`]
 of the Minkowski chapter: a vector cyclic for $`\pi(\mathfrak{U}(\mathbf{B}))` is separating for
 $`R(\mathbf{C})` when $`\mathbf{C}` is completely spacelike to $`\mathbf{B}`. The diamond
 $`\mathbf{C}` may be empty; $`\mathbf{B}` may not.
 
 ```lean (name := checkRSsep)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check reeh_schlieder_separating
 ```
 
 ```leanOutput checkRSsep
-Physicslib4.AQFT.HaagKastler.reeh_schlieder_separating.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.AQFT.HaagKastler.reeh_schlieder_separating.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet} (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) (Ω : H)
   (U : StandardMinkowskiSpacetime.Carrier → H ≃ₗᵢ[ℂ] H)
   (hU :
@@ -423,12 +423,12 @@ a matrix coefficient of a positive-energy group extends holomorphically to the u
 bounded and continuous up to the real axis.
 
 ```lean (name := checkHolo)
-open Physicslib4 AQFT in
+open Hilbert6 AQFT in
 #check IsPositiveEnergy.exists_holomorphic_extension
 ```
 
 ```leanOutput checkHolo
-Physicslib4.AQFT.IsPositiveEnergy.exists_holomorphic_extension.{u_1} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.AQFT.IsPositiveEnergy.exists_holomorphic_extension.{u_1} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {V : ℝ → H ≃ₗᵢ[ℂ] H} (hV : IsPositiveEnergy V) (χ φ : H) :
   ∃ F,
     DifferentiableOn ℂ F {z | 0 < z.im} ∧
@@ -437,60 +437,60 @@ Physicslib4.AQFT.IsPositiveEnergy.exists_holomorphic_extension.{u_1} {H : Type u
 
 Its proof writes $`V(t) = e^{itA}` by Stone's theorem and goes through the spectral measure of
 $`A`: it vanishes on $`(-\infty, 0)`
-({apiDocs Physicslib4.AQFT.spectralMeasure_Iio_zero_eq_zero}[`spectralMeasure_Iio_zero_eq_zero`]);
+({apiDocs Hilbert6.AQFT.spectralMeasure_Iio_zero_eq_zero}[`spectralMeasure_Iio_zero_eq_zero`]);
 polarization writes each matrix coefficient as a combination of Fourier transforms of finite
-measures ({apiDocs Physicslib4.AQFT.exists_inner_expUnitary_eq_sum}[`exists_inner_expUnitary_eq_sum`]);
+measures ({apiDocs Hilbert6.AQFT.exists_inner_expUnitary_eq_sum}[`exists_inner_expUnitary_eq_sum`]);
 and the Fourier–Laplace transform $`z \mapsto \int e^{iz\lambda}\,d\nu(\lambda)` of a finite measure
 carried by $`[0, \infty)` is bounded and continuous on the closed upper half-plane
-({apiDocs Physicslib4.AQFT.fourierLaplace_bounded_continuousOn}[`fourierLaplace_bounded_continuousOn`])
+({apiDocs Hilbert6.AQFT.fourierLaplace_bounded_continuousOn}[`fourierLaplace_bounded_continuousOn`])
 and holomorphic on the open one
-({apiDocs Physicslib4.AQFT.differentiableOn_fourierLaplace}[`differentiableOn_fourierLaplace`]).
+({apiDocs Hilbert6.AQFT.differentiableOn_fourierLaplace}[`differentiableOn_fourierLaplace`]).
 
 _Vanishing on an edge._ The uniqueness step
 ([lmm:edge-vanishing](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:edge-vanishing))
 is pure complex analysis, with no operators:
 
 ```lean (name := checkEdge)
-#check Physicslib4.eq_zero_of_eq_zero_on_Ioo
+#check Hilbert6.eq_zero_of_eq_zero_on_Ioo
 ```
 
 ```leanOutput checkEdge
-Physicslib4.eq_zero_of_eq_zero_on_Ioo {f : ℂ → ℂ} {a b : ℝ} (hab : a < b) (hf : ContinuousOn f {z | 0 ≤ z.im})
+Hilbert6.eq_zero_of_eq_zero_on_Ioo {f : ℂ → ℂ} {a b : ℝ} (hab : a < b) (hf : ContinuousOn f {z | 0 ≤ z.im})
   (hf' : DifferentiableOn ℂ f {z | 0 < z.im}) (hzero : ∀ x ∈ Set.Ioo a b, f ↑x = 0) (z : ℂ) : 0 ≤ z.im → f z = 0
 ```
 
 The proof reflects $`f` across the interval $`I`: the function equal to $`f(z)` for
 $`\operatorname{Im} z \ge 0` and to $`\overline{f(\bar z)}` below is holomorphic on
 $`\{\operatorname{Im} z \neq 0\} \cup I`
-({apiDocs Physicslib4.differentiableOn_schwarzReflection_of_eq_zero}[`differentiableOn_schwarzReflection_of_eq_zero`],
+({apiDocs Hilbert6.differentiableOn_schwarzReflection_of_eq_zero}[`differentiableOn_schwarzReflection_of_eq_zero`],
 via Morera's theorem across the real axis), a set that is open and connected
-({apiDocs Physicslib4.isConnected_im_ne_zero_union_image_ofReal}[`isConnected_im_ne_zero_union_image_ofReal`]),
+({apiDocs Hilbert6.isConnected_im_ne_zero_union_image_ofReal}[`isConnected_im_ne_zero_union_image_ofReal`]),
 so the identity theorem applies.
 
 _Timelike spreading._ Combining the two:
-{apiDocs Physicslib4.AQFT.HaagKastler.inner_translation_eq_zero_add_smul}[`inner_translation_eq_zero_add_smul`]
+{apiDocs Hilbert6.AQFT.HaagKastler.inner_translation_eq_zero_add_smul}[`inner_translation_eq_zero_add_smul`]
 spreads the vanishing of $`x \mapsto \langle \chi, U(x)\varphi \rangle` from an open set $`W` to
 $`W + \mathbb{R}n`, and
-{apiDocs Physicslib4.AQFT.HaagKastler.inner_translation_eq_zero}[`inner_translation_eq_zero`]
+{apiDocs Hilbert6.AQFT.HaagKastler.inner_translation_eq_zero}[`inner_translation_eq_zero`]
 iterates over the basis
-{apiDocs Physicslib4.AQFT.HaagKastler.futureTimelike_basis}[`futureTimelike_basis`] to reach all of
+{apiDocs Hilbert6.AQFT.HaagKastler.futureTimelike_basis}[`futureTimelike_basis`] to reach all of
 $`\mathbb{R}^4`
 ([lmm:timelike-spreading](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:timelike-spreading)).
 The group law is assumed only at the one vector $`\varphi`, hypothesis `hmul`, which is what the
 cyclic subspace supplies. The geometric lemmas of the same file give the translate of a diamond
-({apiDocs Physicslib4.AQFT.HaagKastler.translationSub_smul_diamond}[`translationSub_smul_diamond`]),
+({apiDocs Hilbert6.AQFT.HaagKastler.translationSub_smul_diamond}[`translationSub_smul_diamond`]),
 the smaller diamond with all small translates inside a given one
-({apiDocs Physicslib4.AQFT.HaagKastler.exists_diamond_translate_subset}[`exists_diamond_translate_subset`]),
+({apiDocs Hilbert6.AQFT.HaagKastler.exists_diamond_translate_subset}[`exists_diamond_translate_subset`]),
 and small partial sums
-({apiDocs Physicslib4.AQFT.HaagKastler.exists_isOpen_sum_mem_of_mem_nhds}[`exists_isOpen_sum_mem_of_mem_nhds`]).
+({apiDocs Hilbert6.AQFT.HaagKastler.exists_isOpen_sum_mem_of_mem_nhds}[`exists_isOpen_sum_mem_of_mem_nhds`]).
 
 _The cyclic subspace._ On $`K_0`, the closure of $`\pi(\mathfrak{U})\Omega`, the unitaries fix
 $`\Omega`, leave $`K_0` invariant together with every $`\pi(a)`, intertwine $`\pi` with $`\beta`,
 and satisfy the group law; the conjunction is
-{apiDocs Physicslib4.AQFT.HaagKastler.covariant_translations_cyclicSubspace}[`covariant_translations_cyclicSubspace`]
+{apiDocs Hilbert6.AQFT.HaagKastler.covariant_translations_cyclicSubspace}[`covariant_translations_cyclicSubspace`]
 ([lmm:covariant-translations-cyclic-subspace](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:covariant-translations-cyclic-subspace)).
 Each part reduces, through
-{apiDocs Physicslib4.AQFT.HaagKastler.apply_eq_of_mem_cyclicSubspace}[`apply_eq_of_mem_cyclicSubspace`],
+{apiDocs Hilbert6.AQFT.HaagKastler.apply_eq_of_mem_cyclicSubspace}[`apply_eq_of_mem_cyclicSubspace`],
 to an identity on the vectors $`\pi(a)\Omega`.
 
 _The correlation-function induction._ For $`\psi` orthogonal to $`\pi(\mathfrak{U}(\mathbf{B}))\Omega`
@@ -498,56 +498,56 @@ and $`a_1, \dots, a_n` in the local algebra of $`\mathbf{B}_1`, consider
 
 $$`F(\xi_1, \dots, \xi_n) = \langle \psi, U(\xi_1)\pi(a_1)U(\xi_2)\pi(a_2) \cdots U(\xi_n)\pi(a_n)\Omega \rangle.`
 
-By {apiDocs Physicslib4.AQFT.HaagKastler.translated_products_apply}[`translated_products_apply`]
+By {apiDocs Hilbert6.AQFT.HaagKastler.translated_products_apply}[`translated_products_apply`]
 the vector is $`\pi(\beta_{x_1}a_1 \cdots \beta_{x_n}a_n)\Omega` with partial sums
 $`x_k = \xi_1 + \dots + \xi_k`, so $`F` vanishes when all $`\xi_k` are small
-({apiDocs Physicslib4.AQFT.HaagKastler.inner_translated_products_eq_zero_of_mem}[`inner_translated_products_eq_zero_of_mem`]).
+({apiDocs Hilbert6.AQFT.HaagKastler.inner_translated_products_eq_zero_of_mem}[`inner_translated_products_eq_zero_of_mem`]).
 As a function of one $`\xi_k` with the others fixed, $`F` is a matrix coefficient
 $`\langle \chi, U(\xi_k)\varphi \rangle` with $`\varphi \in K_0`
-({apiDocs Physicslib4.AQFT.HaagKastler.inner_translated_products_update_eq_inner}[`inner_translated_products_update_eq_inner`]),
+({apiDocs Hilbert6.AQFT.HaagKastler.inner_translated_products_update_eq_inner}[`inner_translated_products_update_eq_inner`]),
 so timelike spreading frees the variables one at a time, from $`\xi_1` to $`\xi_n`, and $`F`
 vanishes identically
-({apiDocs Physicslib4.AQFT.HaagKastler.inner_translated_products_eq_zero}[`inner_translated_products_eq_zero`],
+({apiDocs Hilbert6.AQFT.HaagKastler.inner_translated_products_eq_zero}[`inner_translated_products_eq_zero`],
 [lmm:reeh-schlieder-correlations-vanish](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:reeh-schlieder-correlations-vanish)).
 Changing variables back gives orthogonality to every monomial in translated local elements
-({apiDocs Physicslib4.AQFT.HaagKastler.inner_monomial_eq_zero}[`inner_monomial_eq_zero`]), linearity
+({apiDocs Hilbert6.AQFT.HaagKastler.inner_monomial_eq_zero}[`inner_monomial_eq_zero`]), linearity
 to the \*-algebra they generate
-({apiDocs Physicslib4.AQFT.HaagKastler.inner_adjoin_translates_eq_zero}[`inner_adjoin_translates_eq_zero`]),
+({apiDocs Hilbert6.AQFT.HaagKastler.inner_adjoin_translates_eq_zero}[`inner_adjoin_translates_eq_zero`]),
 and continuity to its norm closure $`\mathfrak{A}_{\mathbf{B}_1}`, which is the main theorem. The
 corollaries add the bicommutant step
-{apiDocs Physicslib4.AQFT.HaagKastler.apply_mem_closure_translationGeneratedAlgebra}[`apply_mem_closure_translationGeneratedAlgebra`].
+{apiDocs Hilbert6.AQFT.HaagKastler.apply_mem_closure_translationGeneratedAlgebra}[`apply_mem_closure_translationGeneratedAlgebra`].
 
 # Where to look
 %%%
 tag := "reeh-schlieder-files"
 %%%
 
-The Reeh–Schlieder theorem is in `Physicslib4/AQFT/HaagKastler/ReehSchlieder/`, in four files
+The Reeh–Schlieder theorem is in `Hilbert6/AQFT/HaagKastler/ReehSchlieder/`, in four files
 listed in dependency order, and rests on two files outside it. Each entry links to the API
 documentation of a representative declaration.
 
 * `Translations.lean`: translates of diamonds, the future-timelike basis and timelike spreading,
-  {apiDocs Physicslib4.AQFT.HaagKastler.inner_translation_eq_zero}[`inner_translation_eq_zero`].
+  {apiDocs Hilbert6.AQFT.HaagKastler.inner_translation_eq_zero}[`inner_translation_eq_zero`].
 * `CyclicSubspace.lean`: the unitaries on the cyclic subspace,
-  {apiDocs Physicslib4.AQFT.HaagKastler.covariant_translations_cyclicSubspace}[`covariant_translations_cyclicSubspace`].
+  {apiDocs Hilbert6.AQFT.HaagKastler.covariant_translations_cyclicSubspace}[`covariant_translations_cyclicSubspace`].
 * `Correlations.lean`: the correlation functions and their vanishing,
-  {apiDocs Physicslib4.AQFT.HaagKastler.inner_translated_products_eq_zero}[`inner_translated_products_eq_zero`].
+  {apiDocs Hilbert6.AQFT.HaagKastler.inner_translated_products_eq_zero}[`inner_translated_products_eq_zero`].
 * `Additivity.lean`: the translation-generated algebras, the forms of weak additivity, the theorem
   and its corollaries,
-  {apiDocs Physicslib4.AQFT.HaagKastler.reeh_schlieder}[`reeh_schlieder`].
+  {apiDocs Hilbert6.AQFT.HaagKastler.reeh_schlieder}[`reeh_schlieder`].
 
 The analytic preliminaries:
 
-* `Physicslib4/AQFT/PositiveEnergyHolomorphic.lean`: the holomorphic extension under positive
+* `Hilbert6/AQFT/PositiveEnergyHolomorphic.lean`: the holomorphic extension under positive
   energy,
-  {apiDocs Physicslib4.AQFT.IsPositiveEnergy.exists_holomorphic_extension}[`IsPositiveEnergy.exists_holomorphic_extension`];
-  positive energy itself is in `Physicslib4/AQFT/PositiveEnergy.lean`.
-* `Physicslib4/Analysis/EdgeVanishing.lean`: Schwarz reflection and vanishing on an edge,
-  {apiDocs Physicslib4.eq_zero_of_eq_zero_on_Ioo}[`eq_zero_of_eq_zero_on_Ioo`].
+  {apiDocs Hilbert6.AQFT.IsPositiveEnergy.exists_holomorphic_extension}[`IsPositiveEnergy.exists_holomorphic_extension`];
+  positive energy itself is in `Hilbert6/AQFT/PositiveEnergy.lean`.
+* `Hilbert6/Analysis/EdgeVanishing.lean`: Schwarz reflection and vanishing on an edge,
+  {apiDocs Hilbert6.eq_zero_of_eq_zero_on_Ioo}[`eq_zero_of_eq_zero_on_Ioo`].
 
-The separating step uses `Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean`, and the bicommutant
-step for a single vector is in `Physicslib4/Operators/DensityTheorem.lean`,
-{apiDocs Physicslib4.apply_mem_closure_of_mem_bicommutant}[`apply_mem_closure_of_mem_bicommutant`].
+The separating step uses `Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean`, and the bicommutant
+step for a single vector is in `Hilbert6/Operators/DensityTheorem.lean`,
+{apiDocs Hilbert6.apply_mem_closure_of_mem_bicommutant}[`apply_mem_closure_of_mem_bicommutant`].
 
 The blueprint section is
 [Section 10.9](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:reeh-schlieder),

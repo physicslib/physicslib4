@@ -3,8 +3,8 @@ With that out of the way we can state the axioms. Each axiom below is presented 
 
 \begin{definition}[Axiom 1: Local Algebras]
     \label{def:local-algebras}
-    \lean{Physicslib4.AQFT.HaagKastler.LocalNet}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalAlgebras.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.LocalNet}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalAlgebras.lean}
     \leanok
     \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past}
     For any basis element $\mathbf{B}$ of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$, there is a corresponding abstract C*-algebra $\mathfrak{U}(\mathbf{B})$
@@ -20,8 +20,8 @@ With that out of the way we can state the axioms. Each axiom below is presented 
 
 \begin{definition}[Axiom 2: Isotony]
     \label{def:isotony}
-    \lean{Physicslib4.AQFT.HaagKastler.Isotony}
-    \leanfile{Physicslib4/AQFT/HaagKastler/Isotony.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.Isotony}
+    \leanfile{Hilbert6/AQFT/HaagKastler/Isotony.lean}
     \leanok
     \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past, def:local-algebras}
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$.
@@ -51,7 +51,7 @@ The quasilocal algebra of \ref{def:quasilocal-algebra} below rests on a chain of
 
 \begin{lemma}[Alexandrov Diamonds are Directed under Inclusion]
     \label{lmm:alexandrov-diamonds-isDirected}
-    \lean{Physicslib4.AQFT.HaagKastler.Diamond, Physicslib4.AQFT.HaagKastler.directedOn_alexandrovBasis, Physicslib4.AQFT.HaagKastler.instIsDirectedOrderDiamond}
+    \lean{Hilbert6.AQFT.HaagKastler.Diamond, Hilbert6.AQFT.HaagKastler.directedOn_alexandrovBasis, Hilbert6.AQFT.HaagKastler.instIsDirectedOrderDiamond}
     \uses{def:alexandrov-topology, lmm:minkowski-diamonds-upward-directed}
     \leanok
     The order-theoretic repackaging of \ref{lmm:minkowski-diamonds-upward-directed}: the set of Alexandrov diamonds on standard Minkowski spacetime is \texttt{DirectedOn (\ensuremath{\subseteq})}, and hence, viewed as a subtype ordered by inclusion, satisfies \texttt{IsDirectedOrder}.
@@ -64,7 +64,7 @@ The quasilocal algebra of \ref{def:quasilocal-algebra} below rests on a chain of
 
 \begin{lemma}[The Isotony Family is a Directed System]
     \label{lmm:isotony-directed-system}
-    \lean{Physicslib4.AQFT.HaagKastler.transitionHom, Physicslib4.AQFT.HaagKastler.instDirectedSystemIsotony}
+    \lean{Hilbert6.AQFT.HaagKastler.transitionHom, Hilbert6.AQFT.HaagKastler.instDirectedSystemIsotony}
     \uses{def:local-algebras, def:isotony}
     \leanok
     The isotony family $i_{\mathbf{B}_1\mathbf{B}_2}$ of Axiom 2 (\ref{def:isotony}), indexed by the diamonds ordered by inclusion, is a \emph{directed system} in Mathlib's sense: it satisfies \texttt{DirectedSystem}.
@@ -97,7 +97,7 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
 
 \begin{lemma}[The Colimit Norm is Well Defined]
     \label{lmm:quasilocal-colimit-norm-well-defined}
-    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalColimit, Physicslib4.AQFT.HaagKastler.norm_transitionHom, Physicslib4.AQFT.HaagKastler.colimitNorm, Physicslib4.AQFT.HaagKastler.colimitNorm_mk}
+    \lean{Hilbert6.AQFT.HaagKastler.QuasilocalColimit, Hilbert6.AQFT.HaagKastler.norm_transitionHom, Hilbert6.AQFT.HaagKastler.colimitNorm, Hilbert6.AQFT.HaagKastler.colimitNorm_mk}
     \uses{def:local-algebras, def:isotony, lmm:isotony-directed-system, lmm:alexandrov-diamonds-isDirected}
     \leanok
     Setting $\|[a]\| := \|a\|$ for a representative $a \in \mathfrak{U}(\mathbf{B})$ gives a well-defined function on the colimit $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$: the value depends neither on the diamond $\mathbf{B}$ nor on the representative $a$ chosen.
@@ -110,7 +110,7 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
 
 \begin{lemma}[Common Representatives for Two Colimit Elements]
     \label{lmm:quasilocal-colimit-common-representatives}
-    \lean{Physicslib4.AQFT.HaagKastler.exists_common_representatives}
+    \lean{Hilbert6.AQFT.HaagKastler.exists_common_representatives}
     \uses{def:local-algebras, def:isotony, lmm:isotony-directed-system, lmm:alexandrov-diamonds-isDirected}
     \leanok
     For any two elements $x, y$ of $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ there are a single diamond $\mathbf{B}$ and elements $a, b \in \mathfrak{U}(\mathbf{B})$ with $x = \iota_{\mathbf{B}}(a)$ and $y = \iota_{\mathbf{B}}(b)$.
@@ -125,7 +125,7 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
 
 \begin{lemma}[The Colimit Norm is a Ring Norm and a Normed-Space Norm]
     \label{lmm:quasilocal-colimit-norm-axioms}
-    \lean{Physicslib4.AQFT.HaagKastler.instNonemptyDiamond, Physicslib4.AQFT.HaagKastler.colimitRingNorm, Physicslib4.AQFT.HaagKastler.colimitNormedRing, Physicslib4.AQFT.HaagKastler.colimitNorm_smul}
+    \lean{Hilbert6.AQFT.HaagKastler.instNonemptyDiamond, Hilbert6.AQFT.HaagKastler.colimitRingNorm, Hilbert6.AQFT.HaagKastler.colimitNormedRing, Hilbert6.AQFT.HaagKastler.colimitNorm_smul}
     \uses{lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-common-representatives, def:local-algebras, def:isotony, lmm:alexandrov-diamonds-isDirected}
     \leanok
     The norm of \ref{lmm:quasilocal-colimit-norm-well-defined} satisfies the normed-$*$-algebra norm axioms on $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$: for all $x, y$ in the colimit and all $c \in \mathbb{C}$,
@@ -157,7 +157,7 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
 
 \begin{lemma}[The Quasilocal Union is a Normed $*$-Algebra]
     \label{lmm:quasilocal-union-normed-star-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.norm_eq_colimitNorm, Physicslib4.AQFT.HaagKastler.colimitNormedAlgebra}
+    \lean{Hilbert6.AQFT.HaagKastler.norm_eq_colimitNorm, Hilbert6.AQFT.HaagKastler.colimitNormedAlgebra}
     \uses{def:local-algebras, def:isotony, lmm:minkowski-diamonds-upward-directed, lmm:isotony-directed-system, lmm:quasilocal-colimit-norm-well-defined, lmm:quasilocal-colimit-norm-axioms}
     \leanok
     The colimit of the local algebras $\mathfrak{U}(\mathbf{B})$ (\ref{def:local-algebras}) along the isotony family of Axiom 2 (\ref{def:isotony}), taken over the upward-directed Alexandrov diamonds (\ref{lmm:minkowski-diamonds-upward-directed}), carries a well-defined normed $*$-algebra structure over $\mathbb{C}$. Explicitly it supplies, on the colimit, a \texttt{NormedRing} structure, a \texttt{StarRing} structure, a \texttt{NormedAlgebra \ensuremath{\mathbb{C}}} structure and a \texttt{StarModule \ensuremath{\mathbb{C}}} structure.
@@ -174,7 +174,7 @@ What is left for this blueprint is therefore only the \emph{norm} on the colimit
 
 \begin{lemma}[The Colimit Satisfies the C*-Inequality]
     \label{lmm:quasilocal-colimit-cstar-identity}
-    \lean{Physicslib4.AQFT.HaagKastler.colimitCStarRing}
+    \lean{Hilbert6.AQFT.HaagKastler.colimitCStarRing}
     \uses{lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-colimit-norm-well-defined, def:local-algebras}
     \leanok
     The normed $*$-algebra of \ref{lmm:quasilocal-union-normed-star-algebra} satisfies
@@ -195,7 +195,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{definition}[Standing Hypotheses for the Completion Results]
     \label{def:completion-standing-hypotheses}
-    \lean{Physicslib4.CStarCompletion}
+    \lean{Hilbert6.CStarCompletion}
     \leanok
     Throughout the remainder of this subsection, $A$ denotes a type carrying
     \begin{itemize}
@@ -214,7 +214,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{definition}[The Involution on a Completion]
     \label{def:completion-star}
-    \lean{Physicslib4.instStarCompletion, Physicslib4.star_completion_coe}
+    \lean{Hilbert6.instStarCompletion, Hilbert6.star_completion_coe}
     \uses{def:completion-standing-hypotheses}
     \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Define the involution on $\widehat{A}$ by
@@ -232,7 +232,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Involution Extends to the Completion]
     \label{lmm:star-extends-to-completion}
-    \lean{Physicslib4.instStarRingCompletion, Physicslib4.instStarModuleCompletion}
+    \lean{Hilbert6.instStarRingCompletion, Hilbert6.instStarModuleCompletion}
     \uses{def:completion-standing-hypotheses, def:completion-star}
     \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then the operation $\star_{\widehat{A}}$ of \ref{def:completion-star} is involutive, additive, anti-multiplicative and conjugate-linear over $\mathbb{C}$,
@@ -260,7 +260,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Completion Coercion as a Bundled $*$-Algebra Homomorphism]
     \label{lmm:completion-coe-star-alg-hom}
-    \lean{Physicslib4.coeStarAlgHom}
+    \lean{Hilbert6.coeStarAlgHom}
     \uses{def:completion-standing-hypotheses, lmm:star-extends-to-completion}
     \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then the canonical map $\eta : A \to \widehat{A}$ is a unital $*$-algebra homomorphism over $\mathbb{C}$, and can be bundled as a term of \texttt{StarAlgHom \ensuremath{\mathbb{C}}} $A$ $\widehat{A}$.
@@ -275,7 +275,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The C*-Inequality Passes to the Completion]
     \label{lmm:completion-cstar-identity}
-    \lean{Physicslib4.instCStarRingCompletion}
+    \lean{Hilbert6.instCStarRingCompletion}
     \uses{def:completion-standing-hypotheses, lmm:star-extends-to-completion}
     \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then $\widehat{A}$ satisfies
@@ -298,7 +298,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Completion is a Normed $\mathbb{C}$-Algebra]
     \label{lmm:completion-normed-algebra}
-    \lean{Physicslib4.instNormedAlgebraCompletion}
+    \lean{Hilbert6.instNormedAlgebraCompletion}
     \uses{def:completion-standing-hypotheses}
     \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then $\widehat{A}$ carries a \texttt{NormedAlgebra \ensuremath{\mathbb{C}} \ensuremath{\widehat{A}}} instance.
@@ -317,7 +317,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Completion of a C*-Normed $*$-Algebra is a C*-Algebra]
     \label{lmm:completion-of-cstar-normed-star-algebra}
-    \lean{Physicslib4.instCStarAlgebraCompletion}
+    \lean{Hilbert6.instCStarAlgebraCompletion}
     \uses{def:completion-standing-hypotheses, lmm:star-extends-to-completion, lmm:completion-cstar-identity, lmm:completion-normed-algebra}
     \leanok
     Let $A$ be as in \ref{def:completion-standing-hypotheses}. Then its completion $\widehat{A}$ is a C*-algebra.
@@ -338,7 +338,7 @@ The remaining results of this subsection have nothing to do with the quasilocal 
 
 \begin{lemma}[The Completion of the Quasilocal Colimit is a C*-Algebra]
     \label{lmm:quasilocal-completion-cstar}
-    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalCompletion, Physicslib4.AQFT.HaagKastler.quasilocalCompletionCStarAlgebra}
+    \lean{Hilbert6.AQFT.HaagKastler.QuasilocalCompletion, Hilbert6.AQFT.HaagKastler.quasilocalCompletionCStarAlgebra}
     \uses{lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-colimit-cstar-identity, def:completion-standing-hypotheses, lmm:completion-of-cstar-normed-star-algebra}
     \leanok
     The completion of the normed $*$-algebra of \ref{lmm:quasilocal-union-normed-star-algebra} is a C*-algebra.
@@ -363,13 +363,13 @@ This is the Bratteli--Robinson 2.2.6 material that Section~\ref{sctn:completion-
 
 It is not used, because of what it presupposes. \texttt{StarSubalgebra.cstarAlgebra} takes an \emph{ambient} \texttt{CStarAlgebra A} as a hypothesis and equips a closed $*$-subalgebra of it with the induced structure; it does not produce a C*-algebra out of nothing. So the shortcut requires an ambient C*-algebra containing isomorphic copies of every local algebra $\mathfrak{U}(\mathbf{B})$ to be given in advance --- and there is no physical justification for such an algebra. Nothing in the physics supplies one, nothing says where it would come from, so it cannot be assumed. That is the whole of the argument: the shortcut would have the blueprint assume $\mathfrak{U}$ rather than construct it from the net, and assuming it has no basis in the physics. The completion chain above starts from the net alone and \emph{builds} a C*-algebra, discharging the existence claim that \ref{def:quasilocal-algebra} makes.
 
-\emph{Dense-extension results.} \texttt{Physicslib4.AQFT.HaagKastler.dense\_adjoin\_iUnion\_range\_\ensuremath{\iota}} (in \texttt{QuasilocalIntertwiner.lean}) and \texttt{Physicslib4.exists\_starAlgHom\_extend\_of\_dense} (in \texttt{Physicslib4/Analysis/CStarDenseExtend.lean}) implement the dense-extension technique and both take the quasilocal algebra as given. Taking it as given is perfectly legitimate for a \emph{consumer} of the construction: these are downstream results about a quasilocal algebra, not competing constructions of one, and they apply to the quasilocal algebra constructed above. \texttt{CStarDenseExtend.lean} is the closest worked example in this repository of transporting star-structure across a dense embedding.
+\emph{Dense-extension results.} \texttt{Hilbert6.AQFT.HaagKastler.dense\_adjoin\_iUnion\_range\_\ensuremath{\iota}} (in \texttt{QuasilocalIntertwiner.lean}) and \texttt{Hilbert6.exists\_starAlgHom\_extend\_of\_dense} (in \texttt{Hilbert6/Analysis/CStarDenseExtend.lean}) implement the dense-extension technique and both take the quasilocal algebra as given. Taking it as given is perfectly legitimate for a \emph{consumer} of the construction: these are downstream results about a quasilocal algebra, not competing constructions of one, and they apply to the quasilocal algebra constructed above. \texttt{CStarDenseExtend.lean} is the closest worked example in this repository of transporting star-structure across a dense embedding.
 
 We next introduce the quasilocal algebra. Axiom 3 below does not need it, but has an equivalent form in it (\ref{lmm:local-commutativity-iff-quasilocal}), and Axiom 4 is stated through it.
 
 \begin{definition}[Quasilocal Algebra]
     \label{def:quasilocal-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra}
+    \lean{Hilbert6.AQFT.HaagKastler.QuasilocalAlgebra}
     \uses{def:local-algebras, def:isotony, lmm:minkowski-diamonds-upward-directed, lmm:quasilocal-union-normed-star-algebra, lmm:quasilocal-completion-cstar}
     \leanok
     Consider the union of all $\mathfrak{U}(\mathbf{B})$, taken along the isotony family of Axiom 2 (\ref{def:isotony}). This union is a normed *-algebra; taking its completion one obtains a C*-algebra denoted $\mathfrak{U}$, called the \textit{quasilocal algebra}.
@@ -391,7 +391,7 @@ We next introduce the quasilocal algebra. Axiom 3 below does not need it, but ha
 
 \begin{definition}[Axiom 3: Local Commutativity]
     \label{def:local-commutativity}
-    \lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity}
+    \lean{Hilbert6.AQFT.HaagKastler.LocalCommutativity}
     \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past, def:local-algebras, def:isotony, def:completely-spacelike, lmm:minkowski-diamonds-upward-directed}
     \leanok
     Let $\mathbf{B}_1$ and $\mathbf{B}_2$ be any two basis elements of the Alexandrov topology on Minkowski spacetime, i.e. any two sets of the form $I^+(p_1) \cap I^-(q_1)$ and $I^+(p_2) \cap I^-(q_2)$. Assume Axiom 2 (\ref{def:isotony}), and let $i_{\mathbf{B}_1\mathbf{B}_2}$ denote its chosen isotony family.
@@ -411,7 +411,7 @@ We next introduce the quasilocal algebra. Axiom 3 below does not need it, but ha
 
 \begin{lemma}[Local Commutativity Holds in Every Quasilocal Algebra]
     \label{lmm:local-commutativity-any-quasilocal}
-    \lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity.commute_ι, Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra.commute_ι_iff_commute_map}
+    \lean{Hilbert6.AQFT.HaagKastler.LocalCommutativity.commute_ι, Hilbert6.AQFT.HaagKastler.QuasilocalAlgebra.commute_ι_iff_commute_map}
     \uses{def:local-commutativity, def:quasilocal-algebra, def:completely-spacelike, lmm:minkowski-diamonds-upward-directed}
     \leanok
     Suppose the net satisfies Axiom 3 (\ref{def:local-commutativity}). Let $\mathfrak{U}'$ be any quasilocal algebra of the net (\ref{def:quasilocal-algebra}), with canonical embeddings $\iota'_{\mathbf{B}}$. Then for any completely spacelike basis sets $\mathbf{B}_1$, $\mathbf{B}_2$ and any $a_1 \in \mathfrak{U}(\mathbf{B}_1)$, $a_2 \in \mathfrak{U}(\mathbf{B}_2)$,
@@ -428,7 +428,7 @@ We next introduce the quasilocal algebra. Axiom 3 below does not need it, but ha
 
 \begin{lemma}[Local Commutativity in the Quasilocal Algebra]
     \label{lmm:local-commutativity-iff-quasilocal}
-    \lean{Physicslib4.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι}
+    \lean{Hilbert6.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι}
     \uses{def:local-commutativity, def:quasilocal-algebra, def:completely-spacelike}
     \leanok
     A net satisfies Axiom 3 (\ref{def:local-commutativity}) if and only if there is a quasilocal algebra $\mathfrak{U}$ (\ref{def:quasilocal-algebra}), with canonical embeddings $\iota_{\mathbf{B}}$, in which, for all completely spacelike basis sets $\mathbf{B}_1$, $\mathbf{B}_2$ and all $a_1 \in \mathfrak{U}(\mathbf{B}_1)$, $a_2 \in \mathfrak{U}(\mathbf{B}_2)$,
@@ -449,8 +449,8 @@ The next axiom makes use of the following new definition:
 
 \begin{definition}[Quasilocal Observable]
     \label{def:quasilocal-observable}
-    \lean{Physicslib4.AQFT.HaagKastler.IsQuasilocalObservable, Physicslib4.AQFT.HaagKastler.exists_isQuasilocalObservable}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalObservable.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.IsQuasilocalObservable, Hilbert6.AQFT.HaagKastler.exists_isQuasilocalObservable}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalObservable.lean}
     \leanok
     \uses{def:quasilocal-algebra, thrm:gns-construction-theorem, def:state}
     The image $\pi_\omega(a)$ of a self-adjoint member $a$ of the quasilocal algebra $\mathfrak{U}$ under a GNS *-homomorphism $\pi_\omega$ is self-adjoint and thus corresponds to an ``observable''. Any ``observable'' corresponding to such a self-adjoint $\pi_\omega(a)$ is called a \textit{quasilocal observable}.
@@ -460,7 +460,7 @@ The next axiom makes use of the following new definition:
 
 \begin{definition}[Axiom 4: Quasilocal Completeness]
     \label{def:quasilocal-completeness}
-    \lean{Physicslib4.AQFT.HaagKastler.ObservableCorrespondence}
+    \lean{Hilbert6.AQFT.HaagKastler.ObservableCorrespondence}
     \uses{def:quasilocal-observable}
     \leanok
     All ``observables'' are quasilocal observables.
@@ -473,7 +473,7 @@ The next axiom makes use of the following new definition:
 
     \emph{This is an interpretive postulate, not a mathematical condition.} Axioms 1, 2, 3 and 5 (\ref{def:local-algebras}, \ref{def:isotony}, \ref{def:local-commutativity}, \ref{def:lorentz-covariance}) are mathematical conditions on a net: each says something checkable about the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and its structure maps. This axiom is of a different kind. One of its two sides is not a mathematical object, so the statement relates the formalism to the world rather than constraining the formalism internally, and it is therefore not the sort of statement that can be proved or disproved inside the formalism. Consequently it should have no mathematical consumers: a theorem that appears to need Axiom 4 in fact needs the existence of the quasilocal algebra (\ref{thrm:quasilocal-algebra-exists}), not the physical correspondence. What keeps the correspondence \emph{tenable} in the presence of the larger bicommutants of \ref{def:local-von-neumann} is \ref{thrm:quasilocal-strongly-dense}.
 
-    \emph{Formalization note.} This node is encoded as \texttt{Physicslib4.AQFT.HaagKastler.ObservableCorrespondence}. It takes the physical observables as an abstract primitive, exactly as Axiom 1 (\ref{def:local-algebras}) takes the assignment \texttt{algebra} as abstract data rather than constructing it, and has three fields: \texttt{Observable}, the type of physical observables, uninterpreted; \texttt{measure}, assigning to each physical observable the element of the quasilocal algebra $\mathfrak{U}$ that answers it; and \texttt{isSelfAdjoint\_measure}, the axiom itself, that every value of \texttt{measure} is self-adjoint. Nothing is thereby proved about the world, which is as it should be for a bridge principle.
+    \emph{Formalization note.} This node is encoded as \texttt{Hilbert6.AQFT.HaagKastler.ObservableCorrespondence}. It takes the physical observables as an abstract primitive, exactly as Axiom 1 (\ref{def:local-algebras}) takes the assignment \texttt{algebra} as abstract data rather than constructing it, and has three fields: \texttt{Observable}, the type of physical observables, uninterpreted; \texttt{measure}, assigning to each physical observable the element of the quasilocal algebra $\mathfrak{U}$ that answers it; and \texttt{isSelfAdjoint\_measure}, the axiom itself, that every value of \texttt{measure} is self-adjoint. Nothing is thereby proved about the world, which is as it should be for a bridge principle.
 
     \emph{The encoding is representation-independent, deliberately.} The correspondence lands in the \emph{self-adjoint part of $\mathfrak{U}$} and not in the operators of a fixed GNS representation. Read literally through \ref{def:quasilocal-observable}, whose quasilocal observables are operators $\pi_\omega(a)$, the axiom would make its own truth depend on which state $\omega$ was chosen, which is unacceptable for a physical primitive. Landing in the algebra removes that dependence, and being a quasilocal observable \emph{in every representation} is then a theorem rather than an axiom schema indexed by a choice of state: for any $*$-representation $\pi$ of $\mathfrak{U}$, the operator $\pi(\texttt{measure}\,o)$ is a quasilocal observable in the sense of \ref{def:quasilocal-observable}, which is \texttt{isQuasilocalObservable\_measure}.
 
@@ -482,7 +482,7 @@ The next axiom makes use of the following new definition:
 
 \begin{theorem}[Existence of a Quasilocal Algebra]
     \label{thrm:quasilocal-algebra-exists}
-    \lean{Physicslib4.AQFT.HaagKastler.exists_quasilocalAlgebra}
+    \lean{Hilbert6.AQFT.HaagKastler.exists_quasilocalAlgebra}
     \uses{def:local-algebras, def:isotony, lmm:quasilocal-completion-cstar, lmm:quasilocal-colimit-norm-well-defined, lmm:star-extends-to-completion, lmm:quasilocal-embedding, lmm:quasilocal-embedding-injective, lmm:quasilocal-embedding-cocone, lmm:quasilocal-embeddings-dense}
     \leanok
     Every local net (\ref{def:local-algebras}) satisfying Axiom 2 (\ref{def:isotony}) admits a quasilocal algebra: there exist a C*-algebra $\mathfrak{U}$ and a family of unital $*$-homomorphisms $\iota_{\mathbf{B}} : \mathfrak{U}(\mathbf{B}) \to \mathfrak{U}$, indexed by the Alexandrov-basis sets, such that each $\iota_{\mathbf{B}}$ is injective, the family satisfies the cocone condition $\iota_{\mathbf{B}_2} \circ i_{\mathbf{B}_1 \mathbf{B}_2} = \iota_{\mathbf{B}_1}$ for $\mathbf{B}_1 \subseteq \mathbf{B}_2$, and the union of the images of the $\iota_{\mathbf{B}}$ is dense in $\mathfrak{U}$.
@@ -497,7 +497,7 @@ The next axiom makes use of the following new definition:
 
     Likewise \texttt{HaagKastlerNet} carries its universe, so no net in the development is confined to a single fixed universe. The satisfiability witness \texttt{nonempty\_haagKastlerNet} is stated at universe \texttt{0}, since it is built from $\mathbb{C}$; consistency of the axioms needs only one model. Nor is there a universe pin in the construction itself: \texttt{QuasilocalColimit} and \texttt{QuasilocalCompletion} are declared over \texttt{LocalNet.\{u\}} with result type \texttt{Type u}, so the colimit-and-completion development --- \texttt{colimitNorm}, \texttt{colimitRingNorm}, \texttt{colimitNormedAlgebra}, \texttt{colimitCStarRing} and \texttt{quasilocalCompletionCStarAlgebra}, that is, the $\mathfrak{U}$ that \ref{lmm:quasilocal-completion-cstar} supplies --- is available at every universe.
 
-    The node is formalized as \texttt{Physicslib4.AQFT.HaagKastler.exists\_quasilocalAlgebra}, assembled from \ref{lmm:completion-coe-star-alg-hom} above and the five embedding lemmas stated immediately below this node, \ref{lmm:quasilocal-embedding}, \ref{lmm:quasilocal-embedding-injective}, \ref{lmm:quasilocal-embedding-cocone}, \ref{lmm:quasilocal-colimit-union-of-insertions} and \ref{lmm:quasilocal-embeddings-dense}.
+    The node is formalized as \texttt{Hilbert6.AQFT.HaagKastler.exists\_quasilocalAlgebra}, assembled from \ref{lmm:completion-coe-star-alg-hom} above and the five embedding lemmas stated immediately below this node, \ref{lmm:quasilocal-embedding}, \ref{lmm:quasilocal-embedding-injective}, \ref{lmm:quasilocal-embedding-cocone}, \ref{lmm:quasilocal-colimit-union-of-insertions} and \ref{lmm:quasilocal-embeddings-dense}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -509,7 +509,7 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
 
 \begin{lemma}[The Canonical Embeddings into the Quasilocal Algebra]
     \label{lmm:quasilocal-embedding}
-    \lean{Physicslib4.AQFT.HaagKastler.colimitStarOf, Physicslib4.AQFT.HaagKastler.quasilocalEmbedding}
+    \lean{Hilbert6.AQFT.HaagKastler.colimitStarOf, Hilbert6.AQFT.HaagKastler.quasilocalEmbedding}
     \uses{def:local-algebras, def:isotony, lmm:quasilocal-completion-cstar, lmm:completion-coe-star-alg-hom}
     \leanok
     For each Alexandrov-basis set $\mathbf{B}$ the composite
@@ -526,7 +526,7 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
 
 \begin{lemma}[The Canonical Embeddings are Injective]
     \label{lmm:quasilocal-embedding-injective}
-    \lean{Physicslib4.AQFT.HaagKastler.quasilocalEmbedding_injective}
+    \lean{Hilbert6.AQFT.HaagKastler.quasilocalEmbedding_injective}
     \uses{def:isotony, lmm:quasilocal-embedding}
     \leanok
     For every Alexandrov-basis set $\mathbf{B}$ the map $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding} is injective.
@@ -539,7 +539,7 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
 
 \begin{lemma}[The Canonical Embeddings Form a Cocone]
     \label{lmm:quasilocal-embedding-cocone}
-    \lean{Physicslib4.AQFT.HaagKastler.quasilocalEmbedding_transitionHom}
+    \lean{Hilbert6.AQFT.HaagKastler.quasilocalEmbedding_transitionHom}
     \uses{def:isotony, lmm:quasilocal-embedding}
     \leanok
     For Alexandrov-basis sets $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and every $a \in \mathfrak{U}(\mathbf{B}_1)$,
@@ -556,7 +556,7 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
 
 \begin{lemma}[The Colimit is the Union of the Images of its Insertions]
     \label{lmm:quasilocal-colimit-union-of-insertions}
-    \lean{Physicslib4.AQFT.HaagKastler.exists_eq_colimitStarOf}
+    \lean{Hilbert6.AQFT.HaagKastler.exists_eq_colimitStarOf}
     \uses{def:isotony}
     \leanok
     Every element of $\varinjlim_{\mathbf{B}} \mathfrak{U}(\mathbf{B})$ is of the form $\texttt{DirectLimit.Algebra.of}\,(a)$ for some Alexandrov diamond $\mathbf{B}$ and some $a \in \mathfrak{U}(\mathbf{B})$; equivalently, the union of the ranges of the insertions, taken over the diamonds, is the whole colimit.
@@ -570,7 +570,7 @@ The proof just given cites five facts: \ref{lmm:quasilocal-completion-cstar} for
 
 \begin{lemma}[The Images of the Canonical Embeddings are Dense]
     \label{lmm:quasilocal-embeddings-dense}
-    \lean{Physicslib4.AQFT.HaagKastler.dense_iUnion_range_quasilocalEmbedding}
+    \lean{Hilbert6.AQFT.HaagKastler.dense_iUnion_range_quasilocalEmbedding}
     \uses{lmm:quasilocal-embedding, lmm:quasilocal-colimit-union-of-insertions}
     \leanok
     The union of the ranges of the $\iota_{\mathbf{B}}$ of \ref{lmm:quasilocal-embedding}, taken over the Alexandrov-basis sets, is dense in $\mathfrak{U}$.
@@ -587,7 +587,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[Reducing Subspaces Give Commuting Projections]
     \label{lmm:reducing-subspace-projection-commutes}
-    \lean{Physicslib4.commute_starProjection_of_invariant}
+    \lean{Hilbert6.commute_starProjection_of_invariant}
     \leanok
     Let $E$ be a complex Hilbert space, $K \subseteq E$ a closed subspace and $T \in \mathcal{B}(E)$ with $T K \subseteq K$ and $T^* K \subseteq K$. Then the orthogonal projection $P_K$ onto $K$ commutes with $T$: $P_K T = T P_K$.
 \end{lemma}
@@ -598,7 +598,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[Cyclic Subspaces Reduce the Representation]
     \label{lmm:cyclic-subspace-reduces}
-    \lean{Physicslib4.starProjection_cyclic_mem_centralizer}
+    \lean{Hilbert6.starProjection_cyclic_mem_centralizer}
     \uses{lmm:reducing-subspace-projection-commutes}
     \leanok
     Let $E$ be a complex Hilbert space, $\rho : \mathfrak{A} \to \mathcal{B}(E)$ a $*$-algebra homomorphism and $\xi \in E$. Let $K_\xi = \overline{\rho(\mathfrak{A})\xi}$, the closure of $\{\rho(a)\xi : a \in \mathfrak{A}\}$. Then $K_\xi$ is a closed subspace invariant under every $\rho(a)$ and every $\rho(a)^*$, and consequently its orthogonal projection $P_{K_\xi}$ lies in $\rho(\mathfrak{A})'$.
@@ -611,7 +611,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[The Bicommutant on a Single Vector]
     \label{lmm:bicommutant-single-vector}
-    \lean{Physicslib4.apply_mem_closure_of_mem_bicommutant}
+    \lean{Hilbert6.apply_mem_closure_of_mem_bicommutant}
     \uses{lmm:cyclic-subspace-reduces}
     \leanok
     Let $E$ be a complex Hilbert space and $\rho : \mathfrak{A} \to \mathcal{B}(E)$ a \emph{unital} $*$-algebra homomorphism. For $T \in \rho(\mathfrak{A})''$ and $\xi \in E$, $T\xi \in \overline{\rho(\mathfrak{A})\xi}$.
@@ -624,14 +624,14 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{definition}[Finite Amplification]
     \label{def:finite-amplification}
-    \lean{Physicslib4.diagAmplification, Physicslib4.ampDiag, Physicslib4.toLp2, Physicslib4.lpDiag}
+    \lean{Hilbert6.diagAmplification, Hilbert6.ampDiag, Hilbert6.toLp2, Hilbert6.lpDiag}
     \leanok
-    For a finite index type $\iota$ let $H^\iota = \ell^2(\iota; H) = \bigoplus_{i \in \iota} H$, Mathlib's \texttt{lp (fun \_ : $\iota$ => H) 2}; at $p = 2$ this is again a complex Hilbert space. For $T \in \mathcal{B}(H)$ the diagonal operator $\mathrm{diag}(T) \in \mathcal{B}(H^\iota)$ acts by $(\mathrm{diag}(T)x)_j = T x_j$ (\texttt{Physicslib4.lpDiag} with the constant family $T$ and bound $\lVert T \rVert$). The \emph{$\iota$-fold amplification} of $\pi$ is $\pi^\iota(a) = \mathrm{diag}(\pi(a))$, the bound being $\lVert \pi(a) \rVert$ itself, so no norm on $\mathfrak{A}$ is needed. Write $\mathrm{ev}_j : H^\iota \to H$ for the $j$-th coordinate map (\texttt{lp.evalCLM}) and $\iota_k : H \to H^\iota$ for the $k$-th inclusion (\texttt{lp.singleContinuousLinearMap}).
+    For a finite index type $\iota$ let $H^\iota = \ell^2(\iota; H) = \bigoplus_{i \in \iota} H$, Mathlib's \texttt{lp (fun \_ : $\iota$ => H) 2}; at $p = 2$ this is again a complex Hilbert space. For $T \in \mathcal{B}(H)$ the diagonal operator $\mathrm{diag}(T) \in \mathcal{B}(H^\iota)$ acts by $(\mathrm{diag}(T)x)_j = T x_j$ (\texttt{Hilbert6.lpDiag} with the constant family $T$ and bound $\lVert T \rVert$). The \emph{$\iota$-fold amplification} of $\pi$ is $\pi^\iota(a) = \mathrm{diag}(\pi(a))$, the bound being $\lVert \pi(a) \rVert$ itself, so no norm on $\mathfrak{A}$ is needed. Write $\mathrm{ev}_j : H^\iota \to H$ for the $j$-th coordinate map (\texttt{lp.evalCLM}) and $\iota_k : H \to H^\iota$ for the $k$-th inclusion (\texttt{lp.singleContinuousLinearMap}).
 \end{definition}
 
 \begin{lemma}[The Finite Amplification is a Unital $*$-Homomorphism]
     \label{lmm:finite-amplification-star-hom}
-    \lean{Physicslib4.diagAmplification}
+    \lean{Hilbert6.diagAmplification}
     \uses{def:finite-amplification}
     \leanok
     $\pi^\iota : \mathfrak{A} \to \mathcal{B}(H^\iota)$ is a unital $*$-algebra homomorphism.
@@ -639,12 +639,12 @@ The results of this subsection are general operator theory on a complex Hilbert 
 \begin{proof}
     \leanok
     \uses{def:finite-amplification}
-    Each law transfers from $\pi$ through the corresponding law for diagonal operators in \texttt{Physicslib4/Operators/LpDiagonal.lean}: \texttt{lpDiag\_one} with $\pi(1) = 1$, \texttt{lpDiag\_mul} with $\pi(ab) = \pi(a)\pi(b)$, \texttt{lpDiag\_add}, \texttt{lpDiag\_smul}, and \texttt{lpDiag\_star} with $\pi(a^*) = \pi(a)^*$.
+    Each law transfers from $\pi$ through the corresponding law for diagonal operators in \texttt{Hilbert6/Operators/LpDiagonal.lean}: \texttt{lpDiag\_one} with $\pi(1) = 1$, \texttt{lpDiag\_mul} with $\pi(ab) = \pi(a)\pi(b)$, \texttt{lpDiag\_add}, \texttt{lpDiag\_smul}, and \texttt{lpDiag\_star} with $\pi(a^*) = \pi(a)^*$.
 \end{proof}
 
 \begin{lemma}[Block Entries of the Amplified Commutant]
     \label{lmm:commutant-of-amplification-entries}
-    \lean{Physicslib4.blockEntry_mem_centralizer}
+    \lean{Hilbert6.blockEntry_mem_centralizer}
     \uses{def:finite-amplification}
     \leanok
     If $S \in (\pi^\iota(\mathfrak{A}))'$, then each block entry $S_{jk} = \mathrm{ev}_j \circ S \circ \iota_k \in \mathcal{B}(H)$ ($j, k \in \iota$) lies in $\pi(\mathfrak{A})'$.
@@ -657,7 +657,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[Block Expansion on the Amplified Space]
     \label{lmm:amplification-block-expansion}
-    \lean{Physicslib4.apply_eq_sum_blockEntry}
+    \lean{Hilbert6.apply_eq_sum_blockEntry}
     \uses{def:finite-amplification}
     \leanok
     For every $S \in \mathcal{B}(H^\iota)$, $x \in H^\iota$ and $j \in \iota$, $(Sx)_j = \sum_{k \in \iota} S_{jk}\, x_k$.
@@ -670,7 +670,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[Diagonal Operators in the Amplified Bicommutant]
     \label{lmm:diagonal-in-amplified-bicommutant}
-    \lean{Physicslib4.ampDiag_mem_bicommutant}
+    \lean{Hilbert6.ampDiag_mem_bicommutant}
     \uses{def:finite-amplification}
     \leanok
     If $T \in \pi(\mathfrak{A})''$ then $\mathrm{diag}(T) \in (\pi^\iota(\mathfrak{A}))''$.
@@ -683,7 +683,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[The Bicommutant on Finitely Many Vectors]
     \label{lmm:bicommutant-finite-vectors}
-    \lean{Physicslib4.exists_forall_norm_sub_lt_of_mem_bicommutant}
+    \lean{Hilbert6.exists_forall_norm_sub_lt_of_mem_bicommutant}
     \uses{def:finite-amplification}
     \leanok
     Let $\pi$ be unital. For $T \in \pi(\mathfrak{A})''$, a finite set $s \subseteq H$ and $\varepsilon > 0$, there is $a \in \mathfrak{A}$ with $\lVert T x - \pi(a) x \rVert < \varepsilon$ for every $x \in s$.
@@ -696,7 +696,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{lemma}[A Neighbourhood Basis for the Strong Operator Topology]
     \label{lmm:strong-neighbourhood-basis}
-    \lean{Physicslib4.AQFT.HaagKastler.hasBasis_nhds_ofFun}
+    \lean{Hilbert6.AQFT.HaagKastler.hasBasis_nhds_ofFun}
     \leanok
     In the strong operator topology on $\mathcal{B}(H)$ (\texttt{PointwiseConvergenceCLM}, reached through \texttt{UniformConvergenceCLM.ofFun} on finite sets), the neighbourhoods of an operator $T$ have as a basis the sets $\{S : \lVert Sx - Tx \rVert < \varepsilon \text{ for all } x \in s\}$, for $s \subseteq H$ finite and $\varepsilon > 0$.
 \end{lemma}
@@ -707,7 +707,7 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{theorem}[Quasilocal Observables are Strongly Dense in the Bicommutant]
     \label{thrm:quasilocal-strongly-dense}
-    \lean{Physicslib4.AQFT.HaagKastler.dense_range_in_bicommutant}
+    \lean{Hilbert6.AQFT.HaagKastler.dense_range_in_bicommutant}
     \uses{def:quasilocal-observable, def:local-von-neumann}
     \leanok
     Let $\pi$ be a \emph{unital} $*$-representation of the quasilocal algebra $\mathfrak{U}$ on a Hilbert space $H$. Then the image $\pi(\mathfrak{U})$ is dense in its bicommutant $\pi(\mathfrak{U})''$ in the strong operator topology.
@@ -730,8 +730,8 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{definition}[Axiom 5: Lorentz Covariance]
     \label{def:lorentz-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.LorentzCovariance}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LorentzCovarianceAxiom.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.LorentzCovariance}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LorentzCovarianceAxiom.lean}
     \uses{def:alexandrov-topology, def:minkowski-spacetime, def:chronological-future-and-chronological-past, def:local-algebras, def:isotony}
     \leanok
     Let $\mathbf{B}$ be any basis element of the Alexandrov topology on Minkowski spacetime, i.e. any set of the form $I^+(p) \cap I^-(q)$.
@@ -765,8 +765,8 @@ The results of this subsection are general operator theory on a complex Hilbert 
 
 \begin{definition}[Haag-Kastler Net]
     \label{def:haag-kastler-net}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet}
-    \leanfile{Physicslib4/AQFT/HaagKastler/Net.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet}
+    \leanfile{Hilbert6/AQFT/HaagKastler/Net.lean}
     \uses{def:local-algebras, def:isotony, def:local-commutativity, thrm:quasilocal-algebra-exists, def:lorentz-covariance}
     \leanok
     A \emph{Haag-Kastler net} on Minkowski spacetime is the bundling of the data of \ref{def:local-algebras} together with the properties of \ref{def:isotony}, \ref{def:local-commutativity}, and \ref{def:lorentz-covariance}. In the Lean formalization this is a single structure whose fields are the assignment $\mathbf{B} \mapsto \mathfrak{U}(\mathbf{B})$ and proofs that this assignment satisfies those three remaining axioms. Theorems about AQFT take an instance of this structure as a hypothesis and invoke each axiom as a projection.
@@ -784,8 +784,8 @@ Local commutativity (\ref{def:local-commutativity}) is an algebraic statement ab
 
 \begin{theorem}[Einstein Causality in a Representation]
     \label{thrm:einstein-causality}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.einstein_causality, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.exists_gns_einstein_causality}
-    \leanfile{Physicslib4/AQFT/HaagKastler/EinsteinCausality.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.einstein_causality, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.exists_gns_einstein_causality}
+    \leanfile{Hilbert6/AQFT/HaagKastler/EinsteinCausality.lean}
     \uses{def:haag-kastler-net, thrm:gns-construction-theorem, def:state}
     \leanok
     Let $\pi$ be any $*$-representation of the quasilocal algebra on a Hilbert space $H$. If $\mathbf{B}_1, \mathbf{B}_2$ are completely spacelike-separated basis regions, then for all $a \in \mathfrak{U}(\mathbf{B}_1)$ and $b \in \mathfrak{U}(\mathbf{B}_2)$ the operators $\pi(\iota_{\mathbf{B}_1} a)$ and $\pi(\iota_{\mathbf{B}_2} b)$ commute.
@@ -802,8 +802,8 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{definition}[Local von Neumann Algebra]
     \label{def:local-von-neumann}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localOperators, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localOperators, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean}
     \leanok
     \uses{def:haag-kastler-net, thrm:gns-construction-theorem}
     Let $\pi$ be a $*$-representation of the quasilocal algebra on $H$. The \emph{local observable operators} of a region $\mathbf{B}$ are the image $\pi(\mathfrak{U}(\mathbf{B})) = \{\pi(\iota_{\mathbf{B}} a) : a \in \mathfrak{U}(\mathbf{B})\}$. The \emph{local von Neumann algebra} $R(\mathbf{B})$ is the bicommutant $\pi(\mathfrak{U}(\mathbf{B}))''$.
@@ -811,20 +811,20 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{lemma}[The Bicommutant of a Self-Adjoint Set is a von Neumann Algebra]
     \label{lmm:bicommutant-of-selfadjoint-is-von-neumann}
-    \lean{Physicslib4.GNS.vonNeumannOfSelfAdjoint}
-    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \lean{Hilbert6.GNS.vonNeumannOfSelfAdjoint}
+    \leanfile{Hilbert6/GNS/Irreducibility.lean}
     \leanok
     Let $S$ be a self-adjoint set of bounded operators on a Hilbert space $H$, that is, $x \in S$ implies $x^* \in S$. Then the bicommutant $S''$ is a von Neumann algebra: it is a $*$-subalgebra of $\mathcal{B}(H)$, and it is bicommutant-closed, $S'''' = S''$. This is the general construction that bundles every local algebra below, applied to the self-adjoint set of local observable operators.
 \end{lemma}
 \begin{proof}
     \leanok
-    The commutant of a self-adjoint set is $*$-closed, which is Mathlib's \texttt{Set.star\_mem\_centralizer}: if $T \in S'$ and $x \in S$, then $x^* \in S$, so $T x^* = x^* T$, and taking adjoints gives $x T^* = T^* x$; hence $T^* \in S'$. So $S'$ is itself $*$-closed, and the centralizer of any set is a subalgebra of $\mathcal{B}(H)$ (Mathlib's \texttt{Subalgebra.centralizer}); combining the two makes $S'' = (S')'$ a $*$-subalgebra. (These two are exactly what $\mathtt{Physicslib4.GNS.starSubalgebraCentralizer}$ is assembled from. Mathlib's \texttt{StarSubalgebra.centralizer} is \emph{not} the right citation: its carrier is the centralizer of the star-closure $s \cup s^*$, not of $s$.) For bicommutant-closedness, the triple-commutant collapse $S''' = S'$ (Mathlib's \texttt{Set.centralizer\_centralizer\_centralizer}) gives, on taking one further commutant, $S'''' = (S''')' = (S')' = S''$.
+    The commutant of a self-adjoint set is $*$-closed, which is Mathlib's \texttt{Set.star\_mem\_centralizer}: if $T \in S'$ and $x \in S$, then $x^* \in S$, so $T x^* = x^* T$, and taking adjoints gives $x T^* = T^* x$; hence $T^* \in S'$. So $S'$ is itself $*$-closed, and the centralizer of any set is a subalgebra of $\mathcal{B}(H)$ (Mathlib's \texttt{Subalgebra.centralizer}); combining the two makes $S'' = (S')'$ a $*$-subalgebra. (These two are exactly what $\mathtt{Hilbert6.GNS.starSubalgebraCentralizer}$ is assembled from. Mathlib's \texttt{StarSubalgebra.centralizer} is \emph{not} the right citation: its carrier is the centralizer of the star-closure $s \cup s^*$, not of $s$.) For bicommutant-closedness, the triple-commutant collapse $S''' = S'$ (Mathlib's \texttt{Set.centralizer\_centralizer\_centralizer}) gives, on taking one further commutant, $S'''' = (S''')' = (S')' = S''$.
 \end{proof}
 
 \begin{definition}[$R(\mathbf{B})$ as a von Neumann Algebra]
     \label{def:local-von-neumann-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean}
     \leanok
     \uses{def:local-von-neumann, lmm:bicommutant-of-selfadjoint-is-von-neumann}
     The local algebra $R(\mathbf{B})$ is registered as a genuine \texttt{VonNeumannAlgebra} (Mathlib's bundled structure), not merely a set of operators: it is the bundled algebra supplied by \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} for the self-adjoint set $S = \pi(\mathfrak{U}(\mathbf{B}))$ of local observable operators (self-adjoint because $\pi$ and $\iota_{\mathbf{B}}$ are $*$-homomorphisms). Its underlying set is the bicommutant $\pi(\mathfrak{U}(\mathbf{B}))''$ of \ref{def:local-von-neumann}.
@@ -832,8 +832,8 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{theorem}[Microcausality at the von Neumann Level]
     \label{thrm:von-neumann-microcausality}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_subset_centralizer}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_subset_centralizer}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean}
     \uses{def:local-von-neumann}
     \leanok
     For completely spacelike-separated basis regions $\mathbf{B}_1, \mathbf{B}_2$, the local von Neumann algebras commute: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$.
@@ -846,8 +846,8 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{theorem}[Isotony of the von Neumann Net]
     \label{thrm:von-neumann-isotony}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_mono}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_mono}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean}
     \uses{def:local-von-neumann}
     \leanok
     For basis regions $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the local von Neumann algebras are nested: $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$.
@@ -860,8 +860,8 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{theorem}[Bundled von Neumann Microcausality and Isotony]
     \label{thrm:von-neumann-bundled-order}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_mono}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_mono}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean}
     \uses{def:local-von-neumann-algebra}
     \leanok
     Phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B})$ with its order $\le$ and Mathlib's commutant: for completely spacelike-separated regions $R(\mathbf{B}_1) \le R(\mathbf{B}_2)'$, and for $\mathbf{B}_1 \subseteq \mathbf{B}_2$, $R(\mathbf{B}_1) \le R(\mathbf{B}_2)$.
@@ -874,8 +874,8 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{definition}[The Net of von Neumann Algebras]
     \label{def:von-neumann-net}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.vonNeumannNet}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.vonNeumannNet}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean}
     \leanok
     \uses{def:local-von-neumann-algebra, thrm:von-neumann-bundled-order}
     Packaging isotony, the assignment $\mathbf{B} \mapsto R(\mathbf{B})$ is an order-preserving map from the poset of basis regions (ordered by inclusion) to the von Neumann algebras of $\mathcal{B}(H)$. This realizes \emph{the net} as a functor on the inclusion poset: containment of regions is sent to containment of algebras. It is the central object of the algebraic approach.
@@ -883,8 +883,8 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{theorem}[Statistical Independence (Schlieder Property)]
     \label{thrm:statistical-independence}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_separating, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.eq_zero_of_commute_of_cyclic}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_separating, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.eq_zero_of_commute_of_cyclic}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean}
     \uses{def:cyclic-vector}
     \leanok
     If $\Omega$ is cyclic for the local observables of $\mathbf{B}_1$, then for a spacelike-separated region $\mathbf{B}_2$ every $R \in R(\mathbf{B}_2)$ with $R\Omega = 0$ is zero, so $\Omega$ is separating for $R(\mathbf{B}_2)$. In Minkowski spacetime the cyclicity hypothesis is exactly the content of the Reeh-Schlieder theorem, which rests on the spectrum condition; here it is taken as an explicit hypothesis, mirroring the curved-spacetime version where no spectrum condition is available.
@@ -897,8 +897,8 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{theorem}[Statistical Independence, bundled]
     \label{thrm:statistical-independence-bundled}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_separating}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_separating}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean}
     \uses{def:local-von-neumann-algebra}
     \leanok
     The separating property phrased on the bundled \texttt{VonNeumannAlgebra} $R(\mathbf{B}_2)$: with $\Omega$ cyclic for the local observables of $\mathbf{B}_1$, every $R$ in the bundled algebra $R(\mathbf{B}_2)$ of a spacelike-separated region with $R\Omega = 0$ is zero.
@@ -911,8 +911,8 @@ The abstract C*-algebras $\mathfrak{U}(\mathbf{B})$ are a stepping stone; the ge
 
 \begin{theorem}[Additive-Free Locality via the Spacelike Complement]
     \label{thrm:additive-free-locality}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement}
-    \leanfile{Physicslib4/AQFT/HaagKastler/LocalVonNeumann.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement}
+    \leanfile{Hilbert6/AQFT/HaagKastler/LocalVonNeumann.lean}
     \uses{def:spacelike-complement}
     \leanok
     Locality expressed through the spacelike complement, without attaching any algebra to the unbounded complement: for basis sets $\mathbf{B}' \subseteq \mathbf{B}^\perp$, the local von Neumann algebra $R(\mathbf{B}')$ lies in the commutant $R(\mathbf{B})'$. No local algebra is ever attached to the unbounded complement.
@@ -929,7 +929,7 @@ A symmetry that acts on state vectors by a unitary $U$ acts on observables by $T
 
 \begin{definition}[Conjugation by a Unitary]
     \label{def:unitary-conjugation}
-    \lean{Units.conjMulEquiv, Units.conjMulEquiv_apply, Physicslib4.lieConj, Physicslib4.lieConj_apply, Physicslib4.lieConj_apply_eq_conjStarAlgEquiv, Physicslib4.lieConj_one, Physicslib4.lieConj_add, Physicslib4.lieConj_smul, Physicslib4.lieConj_star, Physicslib4.norm_lieConj, Physicslib4.exp_lieConj}
+    \lean{Units.conjMulEquiv, Units.conjMulEquiv_apply, Hilbert6.lieConj, Hilbert6.lieConj_apply, Hilbert6.lieConj_apply_eq_conjStarAlgEquiv, Hilbert6.lieConj_one, Hilbert6.lieConj_add, Hilbert6.lieConj_smul, Hilbert6.lieConj_star, Hilbert6.norm_lieConj, Hilbert6.exp_lieConj}
     \leanok
     Let $M$ be a monoid and $u$ a unit of $M$. \emph{Conjugation by $u$}, $x \mapsto u x u^{-1}$, is a multiplicative automorphism of $M$, with inverse $x \mapsto u^{-1} x u$. Let $H$ be a complex Hilbert space and $U : H \to H$ a unitary, that is, a surjective linear isometry. \emph{Conjugation by $U$} is the multiplicative automorphism $T \mapsto U T U^{-1}$ of $\mathcal{B}(H)$ given by conjugation by the unit $U$ of $\mathcal{B}(H)$; on vectors, $(U T U^{-1})x = U(T(U^{-1}x))$. It has the following properties.
     \begin{enumerate}
@@ -952,14 +952,14 @@ A symmetry that acts on state vectors by a unitary $U$ acts on observables by $T
 
 \begin{definition}[Scalar Operators; Factor]
     \label{def:factor}
-    \lean{Physicslib4.scalarOperators, Physicslib4.IsFactor}
+    \lean{Hilbert6.scalarOperators, Hilbert6.IsFactor}
     \leanok
     The \emph{scalar operators} on a complex inner product space $H$ are the multiples $c \cdot 1$, $c \in \mathbb{C}$, of the identity; they form the set $\mathbb{C}\cdot 1 \subseteq \mathcal{B}(H)$. A set $R \subseteq \mathcal{B}(H)$ of bounded operators is a \emph{factor} when its center is exactly the scalars, $R \cap R' = \mathbb{C}\cdot 1$, where $R'$ is the commutant (centralizer) of $R$ in $\mathcal{B}(H)$. The definition applies to any set of operators, not only to von Neumann algebras; for a von Neumann algebra it is the usual notion of a factor. A factor contains the identity operator $1$.
 \end{definition}
 
 \begin{lemma}[Factors are Preserved by Unitary Conjugation]
     \label{lmm:factor-conj}
-    \lean{Physicslib4.IsFactor.conj, Physicslib4.lieConj_image_scalarOperators}
+    \lean{Hilbert6.IsFactor.conj, Hilbert6.lieConj_image_scalarOperators}
     \uses{def:factor, def:unitary-conjugation}
     \leanok
     If $R \subseteq \mathcal{B}(H)$ is a factor and $U$ is a unitary on $H$, then $U R U^{-1} = \{U T U^{-1} : T \in R\}$ is a factor.
@@ -972,7 +972,7 @@ A symmetry that acts on state vectors by a unitary $U$ acts on observables by $T
 
 \begin{lemma}[Restricting a $*$-Automorphism to Star-Subalgebras]
     \label{lmm:restrict-star-alg-equiv}
-    \lean{Physicslib4.restrictStarAlgEquiv}
+    \lean{Hilbert6.restrictStarAlgEquiv}
     \leanok
     Let $A$ be a complex $*$-algebra, $e$ a $*$-algebra automorphism of $A$, and $S, T \subseteq A$ star-subalgebras such that $e(x) \in T$ for every $x \in S$ and $e^{-1}(y) \in S$ for every $y \in T$. Then $e$ restricts to a $*$-algebra isomorphism $S \cong T$, acting by $x \mapsto e(x)$, with inverse $y \mapsto e^{-1}(y)$.
 \end{lemma}
@@ -983,8 +983,8 @@ A symmetry that acts on state vectors by a unitary $U$ acts on observables by $T
 
 \begin{theorem}[Geometric Covariance of the von Neumann Net]
     \label{thrm:von-neumann-geometric-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localVonNeumann, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localOperators}
-    \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localVonNeumann, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localOperators}
+    \leanfile{Hilbert6/AQFT/HaagKastler/GeometricCovariance.lean}
     \uses{def:local-von-neumann, def:covariant-quasilocal-algebra, def:unitary-conjugation}
     \leanok
     In a covariant representation $\pi$ of the quasilocal algebra with the operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$, conjugation by the implementing unitary $U(L)$ carries the local von Neumann algebra of a region $\mathbf{B}$ onto that of the Lorentz-transformed region $L \cdot \mathbf{B}$:
@@ -999,8 +999,8 @@ A symmetry that acts on state vectors by a unitary $U$ acts on observables by $T
 
 \begin{theorem}[Orbit-Invariance of Factoriality]
     \label{thrm:von-neumann-factor-orbit}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_isFactor_smul}
-    \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann_isFactor_smul}
+    \leanfile{Hilbert6/AQFT/HaagKastler/GeometricCovariance.lean}
     \uses{thrm:irreducible-factor, def:factor}
     \leanok
     If the local von Neumann algebra $R(\mathbf{B})$ is a \emph{factor} (\ref{def:factor}: its center $R(\mathbf{B}) \cap R(\mathbf{B})'$ is exactly the scalars), then so is $R(L \cdot \mathbf{B})$ for every Lorentz transformation $L$.
@@ -1013,8 +1013,8 @@ A symmetry that acts on state vectors by a unitary $U$ acts on observables by $T
 
 \begin{theorem}[Geometric Covariance as a von Neumann Algebra Isomorphism]
     \label{thrm:von-neumann-covariance-iso}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannEquiv}
-    \leanfile{Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannEquiv}
+    \leanfile{Hilbert6/AQFT/HaagKastler/GeometricCovariance.lean}
     \uses{def:local-von-neumann-algebra}
     \leanok
     The geometric-covariance set equality is upgraded to a first-class \emph{$*$-algebra isomorphism} of the bundled local von Neumann algebras, $R(\mathbf{B}) \cong R(L \cdot \mathbf{B})$. It is the restriction of the conjugation $*$-automorphism $T \mapsto U(L) T U(L)^{-1}$ of $\mathcal{B}(H)$ (Mathlib's \texttt{conjStarAlgEquiv}, whose adjoint-is-inverse property makes conjugation by a unitary star-preserving) to $R(\mathbf{B})$, whose image is exactly $R(L \cdot \mathbf{B})$.
@@ -1031,7 +1031,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 
 \begin{definition}[Relative Commutant of a Nested Pair]
     \label{def:relative-commutant}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant}
     \uses{def:local-von-neumann-algebra, lmm:von-neumann-inter-general}
     \leanok
     For a representation $\pi$ of the quasilocal algebra and two basis regions $\mathbf{B}_1, \mathbf{B}_2$, the \emph{relative commutant} of the pair is the von Neumann algebra $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, the intersection of the commutant of the local von Neumann algebra $R(\mathbf{B}_1)$ with the local von Neumann algebra $R(\mathbf{B}_2)$. Since \texttt{VonNeumannAlgebra} carries no lattice meet $\sqcap$, this object is not an abstract infimum but is constructed by hand from the set $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$, which is then its underlying set; that the intersection of two von Neumann algebras is again a von Neumann algebra is the content of \ref{lmm:von-neumann-inter-general}, applied here to the pair $R(\mathbf{B}_1)'$, $R(\mathbf{B}_2)$ (which for $\mathbf{B}_1 \neq \mathbf{B}_2$ is \emph{not} a commutant pair, so the commutant-pair form \ref{lmm:von-neumann-inter-is-von-neumann} does not suffice here). Accordingly the Lean construction rewrites the intersection as the single commutant $(R(\mathbf{B}_1)'' \cup R(\mathbf{B}_2)')'$ via \texttt{Set.centralizer\_union} and closes it under \texttt{Set.centralizer\_centralizer\_centralizer}. This is the basic object of the theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$.
@@ -1039,7 +1039,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 
 \begin{theorem}[Antitonicity of the Commutant]
     \label{thrm:commutant-antitone}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.commutant_le_commutant_of_le}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.commutant_le_commutant_of_le}
     \leanok
     For bundled von Neumann algebras $M \le N$ on $H$, the commutants reverse the inclusion, $N' \le M'$.
 \end{theorem}
@@ -1050,7 +1050,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 
 \begin{theorem}[Relative Commutant Lies in the Larger Algebra]
     \label{thrm:relative-commutant-le-right}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant_le_right}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant_le_right}
     \uses{def:relative-commutant}
     \leanok
     The relative commutant is contained in the larger algebra, $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) \le R(\mathbf{B}_2)$.
@@ -1063,7 +1063,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 
 \begin{theorem}[Relative Commutant Commutes with the Smaller Algebra]
     \label{thrm:relative-commutant-coe-commutant}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant_coe_subset_commutant}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.relativeCommutant_coe_subset_commutant}
     \uses{def:relative-commutant}
     \leanok
     Every element of the relative commutant commutes with all of $R(\mathbf{B}_1)$: the underlying set of $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$ is contained in $R(\mathbf{B}_1)'$, that is $\uparrow\!\big(R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)\big) \subseteq R(\mathbf{B}_1)'$.
@@ -1076,7 +1076,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 
 \begin{theorem}[Relative Commutant Contains the Center]
     \label{thrm:relative-commutant-center}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.center_le_relativeCommutant}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.center_le_relativeCommutant}
     \uses{def:relative-commutant}
     \leanok
     When $\mathbf{B}_1 \subseteq \mathbf{B}_2$, the relative commutant contains the center of the ambient algebra: the underlying set of the center $R(\mathbf{B}_2) \cap R(\mathbf{B}_2)'$ is contained in that of $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$.
@@ -1089,7 +1089,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 
 \begin{definition}[Irreducible Inclusion]
     \label{def:irreducible-inclusion}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsIrreducibleInclusion}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsIrreducibleInclusion}
     \uses{def:relative-commutant}
     \leanok
     The inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is \emph{irreducible} when its relative commutant is trivial, $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2) = \mathbb{C}\cdot 1$ (the scalar operators). This is the subfactor-theoretic notion of an irreducible inclusion; the relative commutant always contains the scalars, so irreducibility is the statement that it contains nothing more.
@@ -1097,7 +1097,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 
 \begin{theorem}[An Irreducible Inclusion has Factor Ambient]
     \label{thrm:irreducible-inclusion-factor}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_of_isIrreducibleInclusion}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.isFactor_of_isIrreducibleInclusion}
     \uses{def:irreducible-inclusion, def:factor}
     \leanok
     If $\mathbf{B}_1 \subseteq \mathbf{B}_2$ and the inclusion $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ is irreducible, then the ambient algebra $R(\mathbf{B}_2)$ is a factor (trivial center).
@@ -1110,7 +1110,7 @@ The theory of subalgebra inclusions $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)$ 
 
 \begin{theorem}[Self-Inclusion is Irreducible iff Factor]
     \label{thrm:self-inclusion-factor}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}
     \uses{def:irreducible-inclusion, def:factor}
     \leanok
     The trivial self-inclusion $R(\mathbf{B}) \subseteq R(\mathbf{B})$ is irreducible if and only if $R(\mathbf{B})$ is a factor.
@@ -1128,16 +1128,16 @@ A representation is \emph{irreducible} when its commutant is trivial: the only o
 
 \begin{definition}[Irreducible Representation]
     \label{def:irreducible-representation}
-    \lean{Physicslib4.GNS.IsIrreducible}
-    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \lean{Hilbert6.GNS.IsIrreducible}
+    \leanfile{Hilbert6/GNS/Irreducibility.lean}
     \leanok
     A $*$-representation $\pi : A \to \mathcal{B}(H)$ is \emph{irreducible} if every bounded operator $T$ commuting with all $\pi(a)$ is a scalar multiple of the identity, $T = c \cdot 1$.
 \end{definition}
 
 \begin{theorem}[Topological Schur Lemma]
     \label{thrm:schur-lemma}
-    \lean{Physicslib4.GNS.eq_smul_one_of_commute_of_cyclic}
-    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \lean{Hilbert6.GNS.eq_smul_one_of_commute_of_cyclic}
+    \leanfile{Hilbert6/GNS/Irreducibility.lean}
     \uses{def:cyclic-vector}
     \leanok
     Let $\Omega$ be a cyclic vector for $\pi$. If $T$ commutes with every $\pi(a)$ and the diagonal coefficient $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ equals $c$ times $a \mapsto \langle \Omega, \pi(a)\Omega\rangle$, then $T = c \cdot 1$.
@@ -1150,8 +1150,8 @@ A representation is \emph{irreducible} when its commutant is trivial: the only o
 
 \begin{theorem}[Commutant Scalar iff Proportional Coefficient]
     \label{thrm:commutant-scalar-iff}
-    \lean{Physicslib4.GNS.isScalar_iff_coeff_proportional}
-    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \lean{Hilbert6.GNS.isScalar_iff_coeff_proportional}
+    \leanfile{Hilbert6/GNS/Irreducibility.lean}
     \uses{def:state, thrm:gns-construction-theorem}
     \leanok
     In a cyclic representation reproducing a state $\omega$, an operator $T$ commuting with all $\pi(a)$ is a scalar multiple of the identity if and only if its diagonal coefficient $a \mapsto \langle \Omega, T\,\pi(a)\Omega\rangle$ is a scalar multiple of $\omega$. This is the precise operator-theoretic bridge to purity: irreducibility (every commutant element is scalar) is exactly the statement that every commutant coefficient is proportional to $\omega$.
@@ -1164,8 +1164,8 @@ A representation is \emph{irreducible} when its commutant is trivial: the only o
 
 \begin{definition}[Pure State]
     \label{def:pure-state}
-    \lean{Physicslib4.GNS.IsPure}
-    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \lean{Hilbert6.GNS.IsPure}
+    \leanfile{Hilbert6/GNS/Irreducibility.lean}
     \leanok
     \uses{def:state}
     A state $\omega$ is \emph{pure} if every positive linear functional $\psi$ dominated by $\omega$ (that is, $0 \le \psi(a^*a) \le \omega(a^*a)$ for all $a$) is a scalar multiple of $\omega$. This order-theoretic characterization is the extreme-point notion of purity, phrased to avoid convex-combination and normalization bookkeeping.
@@ -1175,8 +1175,8 @@ One direction of the classical equivalence ``$\omega$ pure $\iff$ GNS representa
 
 \begin{theorem}[Pure Implies Irreducible]
     \label{thrm:pure-implies-irreducible}
-    \lean{Physicslib4.GNS.isIrreducible_of_isPure}
-    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \lean{Hilbert6.GNS.isIrreducible_of_isPure}
+    \leanfile{Hilbert6/GNS/Irreducibility.lean}
     \uses{def:pure-state, def:irreducible-representation}
     \leanok
     If $\omega$ is pure, then any cyclic representation reproducing $\omega$ (in particular its GNS representation) is irreducible.
@@ -1191,8 +1191,8 @@ The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS
 
 \begin{theorem}[The GNS Radon-Nikodym Form is Bounded]
     \label{thrm:gns-form-bound}
-    \lean{Physicslib4.GNS.gns_form_norm_le, Physicslib4.GNS.gns_form_well_defined}
-    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \lean{Hilbert6.GNS.gns_form_norm_le, Hilbert6.GNS.gns_form_well_defined}
+    \leanfile{Hilbert6/GNS/RadonNikodym.lean}
     \uses{def:pure-state}
     \leanok
     For a positive functional $\psi$ dominated by the state $\omega$ in its cyclic GNS representation, the form values obey $\Vert\psi(a^* b)\Vert \le \Vert\pi(a)\Omega\Vert\,\Vert\pi(b)\Omega\Vert$. In particular the form depends only on the GNS vectors $\pi(a)\Omega, \pi(b)\Omega$, not on the representatives $a, b$, so it is well-defined on the cyclic subspace.
@@ -1205,8 +1205,8 @@ The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS
 
 \begin{theorem}[The GNS Radon-Nikodym Operator]
     \label{thrm:gns-radon-nikodym-operator}
-    \lean{Physicslib4.GNS.rnOp, Physicslib4.GNS.rnOp_inner, Physicslib4.GNS.rnOp_commute, Physicslib4.GNS.rnOp_reproducing}
-    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \lean{Hilbert6.GNS.rnOp, Hilbert6.GNS.rnOp_inner, Hilbert6.GNS.rnOp_commute, Hilbert6.GNS.rnOp_reproducing}
+    \leanfile{Hilbert6/GNS/RadonNikodym.lean}
     \uses{thrm:gns-form-bound}
     \leanok
     The bounded form of \ref{thrm:gns-form-bound} is the inner product of an operator $T$ on the GNS space: there is a $T$ with $\langle \pi(a)\Omega, T\,\pi(b)\Omega\rangle = \psi(a^* b)$, this $T$ commutes with every $\pi(c)$, and $\psi(a) = \langle \Omega, T\,\pi(a)\Omega\rangle$.
@@ -1219,8 +1219,8 @@ The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS
 
 \begin{theorem}[Pure $\iff$ Irreducible]
     \label{thrm:pure-iff-irreducible}
-    \lean{Physicslib4.GNS.isPure_iff_isIrreducible}
-    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \lean{Hilbert6.GNS.isPure_iff_isIrreducible}
+    \leanfile{Hilbert6/GNS/RadonNikodym.lean}
     \leanok
     A state $\omega$ is pure if and only if its cyclic GNS representation is irreducible.
 \end{theorem}
@@ -1232,7 +1232,7 @@ The converse, irreducible $\Rightarrow$ pure, requires the other half of the GNS
 
 \begin{definition}[The von Neumann Algebra Generated by a Representation]
     \label{def:generated-von-neumann-algebra}
-    \lean{Physicslib4.GNS.gnsVonNeumann, Physicslib4.GNS.gnsVonNeumannAlgebra}
+    \lean{Hilbert6.GNS.gnsVonNeumann, Hilbert6.GNS.gnsVonNeumannAlgebra}
     \uses{lmm:bicommutant-of-selfadjoint-is-von-neumann}
     \leanok
     Let $A$ be a C*-algebra, $H$ a complex Hilbert space, and $\pi : A \to \mathcal{B}(H)$ a $*$-representation. The \emph{von Neumann algebra generated by $\pi$} is the bicommutant
@@ -1246,8 +1246,8 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
 
 \begin{theorem}[An Irreducible Representation Generates a Factor]
     \label{thrm:irreducible-factor}
-    \lean{Physicslib4.GNS.center_gnsVonNeumann_eq_of_isIrreducible, Physicslib4.GNS.isFactor_gnsVonNeumann_of_isIrreducible}
-    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \lean{Hilbert6.GNS.center_gnsVonNeumann_eq_of_isIrreducible, Hilbert6.GNS.isFactor_gnsVonNeumann_of_isIrreducible}
+    \leanfile{Hilbert6/GNS/Irreducibility.lean}
     \uses{def:irreducible-representation, def:local-von-neumann, def:generated-von-neumann-algebra, def:factor}
     \leanok
     The von Neumann algebra $\pi(A)''$ generated by an irreducible representation has \emph{trivial center}: an operator lies in the center $\pi(A)'' \cap (\pi(A)'')'$ if and only if it is a scalar multiple of the identity. In the factor vocabulary this says that $\pi(A)''$ is a \emph{factor}, a von Neumann algebra whose center is exactly the scalars; that restatement is \texttt{isFactor\_gnsVonNeumann\_of\_isIrreducible}.
@@ -1260,8 +1260,8 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
 
 \begin{theorem}[Irreducibility $\iff$ Generating $\mathcal{B}(H)$]
     \label{thrm:irreducible-generates-all}
-    \lean{Physicslib4.GNS.isIrreducible_iff_gnsVonNeumann_eq_univ, Physicslib4.GNS.gnsVonNeumann_eq_univ_of_isIrreducible}
-    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \lean{Hilbert6.GNS.isIrreducible_iff_gnsVonNeumann_eq_univ, Hilbert6.GNS.gnsVonNeumann_eq_univ_of_isIrreducible}
+    \leanfile{Hilbert6/GNS/Irreducibility.lean}
     \uses{def:irreducible-representation, def:local-von-neumann, def:generated-von-neumann-algebra}
     \leanok
     A representation is irreducible if and only if the von Neumann algebra $\pi(A)''$ it generates is \emph{all} of $\mathcal{B}(H)$: $\pi(A)'' = \mathcal{B}(H)$. This is the density (bicommutant-theorem) form of irreducibility, sharpening the factor statement \ref{thrm:irreducible-factor}.
@@ -1274,8 +1274,8 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
 
 \begin{theorem}[Bundled Density Form of Irreducibility]
     \label{thrm:gns-generates-all-bundled}
-    \lean{Physicslib4.GNS.coe_gnsVonNeumannAlgebra_eq_univ_of_isIrreducible, Physicslib4.GNS.gnsVonNeumannAlgebra_isGreatest_of_isIrreducible}
-    \leanfile{Physicslib4/GNS/Irreducibility.lean}
+    \lean{Hilbert6.GNS.coe_gnsVonNeumannAlgebra_eq_univ_of_isIrreducible, Hilbert6.GNS.gnsVonNeumannAlgebra_isGreatest_of_isIrreducible}
+    \leanfile{Hilbert6/GNS/Irreducibility.lean}
     \uses{def:local-von-neumann-algebra, lmm:bicommutant-of-selfadjoint-is-von-neumann, def:generated-von-neumann-algebra}
     \leanok
     The von Neumann algebra $\pi(A)''$ generated by a representation is bundled as a first-class \texttt{VonNeumannAlgebra} (\texttt{gnsVonNeumannAlgebra}); the bundling is \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} applied to the self-adjoint image $\pi(A)$. For an irreducible representation, this bundled algebra is all of $\mathcal{B}(H)$: its underlying set is everything, and equivalently it is the \emph{greatest} von Neumann algebra on $H$ (every $S$ satisfies $S \le \pi(A)''$). Mathlib's \texttt{VonNeumannAlgebra} carries no lattice $\top$, so the literal $\pi(A)'' = \top$ is phrased at the level of the underlying set together with the greatest-element statement under the existing $\le$.
@@ -1288,8 +1288,8 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
 
 \begin{theorem}[The GNS Representation of a Pure State is a Factor]
     \label{thrm:pure-factor}
-    \lean{Physicslib4.GNS.exists_gns_factor_of_isPure}
-    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \lean{Hilbert6.GNS.exists_gns_factor_of_isPure}
+    \leanfile{Hilbert6/GNS/RadonNikodym.lean}
     \uses{def:pure-state, thrm:gns-construction-theorem, def:generated-von-neumann-algebra}
     \leanok
     For a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra $\pi(A)''$ has trivial center, i.e. is a factor.
@@ -1302,8 +1302,8 @@ Irreducibility has a von Neumann algebraic reading: the representation generates
 
 \begin{theorem}[The GNS Representation of a Pure State Generates $\mathcal{B}(H)$]
     \label{thrm:pure-generates-all}
-    \lean{Physicslib4.GNS.exists_gns_generates_all_of_isPure}
-    \leanfile{Physicslib4/GNS/RadonNikodym.lean}
+    \lean{Hilbert6.GNS.exists_gns_generates_all_of_isPure}
+    \leanfile{Hilbert6/GNS/RadonNikodym.lean}
     \uses{def:pure-state, thrm:gns-construction-theorem, def:generated-von-neumann-algebra}
     \leanok
     The density (bicommutant-theorem) sharpening of \ref{thrm:pure-factor}: for a pure state $\omega$ there is a cyclic GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ whose generated von Neumann algebra is \emph{all} of $\mathcal{B}(H)$, $\pi(A)'' = \mathcal{B}(H)$.
@@ -1318,8 +1318,8 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 
 \begin{theorem}[Norm of a Positive Functional]
     \label{thrm:norm-positive-functional}
-    \lean{Physicslib4.GNS.norm_eq_re_apply_one_of_positive}
-    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \lean{Hilbert6.GNS.norm_eq_re_apply_one_of_positive}
+    \leanfile{Hilbert6/GNS/ExtremeState.lean}
     \leanok
     For a positive linear functional $\varphi$ on a unital C*-algebra, $\Vert\varphi\Vert = \mathrm{Re}\,\varphi(1)$. In particular every state satisfies $\omega(1) = 1$.
 \end{theorem}
@@ -1331,8 +1331,8 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 
 \begin{definition}[Extreme Point of the State Space]
     \label{def:extreme-state}
-    \lean{Physicslib4.GNS.State.IsExtremePoint}
-    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \lean{Hilbert6.GNS.State.IsExtremePoint}
+    \leanfile{Hilbert6/GNS/ExtremeState.lean}
     \leanok
     \uses{def:state}
     A state $\omega$ is an \emph{extreme point} of the (convex) state space if it is not a nontrivial convex combination of two distinct states: whenever $\omega = t\,\omega_1 + (1-t)\,\omega_2$ with $0 < t < 1$ and $\omega_1, \omega_2$ states, then $\omega_1 = \omega_2$.
@@ -1340,8 +1340,8 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 
 \begin{theorem}[Pure $\iff$ Extreme Point]
     \label{thrm:pure-iff-extreme}
-    \lean{Physicslib4.GNS.isPure_iff_isExtremePoint}
-    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \lean{Hilbert6.GNS.isPure_iff_isExtremePoint}
+    \leanfile{Hilbert6/GNS/ExtremeState.lean}
     \uses{def:pure-state, def:extreme-state}
     \leanok
     A state $\omega$ is pure if and only if it is an extreme point of the state space.
@@ -1354,8 +1354,8 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 
 \begin{theorem}[State-Space Convexity and the Extreme-Point Bridge]
     \label{thrm:state-space-convex-bridge}
-    \lean{Physicslib4.GNS.convex_stateSpace, Physicslib4.GNS.mem_extremePoints_iff_isExtremePoint, Physicslib4.GNS.State.convexCombo, Physicslib4.GNS.stateSpace}
-    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \lean{Hilbert6.GNS.convex_stateSpace, Hilbert6.GNS.mem_extremePoints_iff_isExtremePoint, Hilbert6.GNS.State.convexCombo, Hilbert6.GNS.stateSpace}
+    \leanfile{Hilbert6/GNS/ExtremeState.lean}
     \uses{def:state, def:extreme-state}
     \leanok
     Realizing the state space as the subset $\mathrm{stateSpace}(A) \subseteq A \to_L \mathbb{C}$ (the latter a real topological vector space via $\texttt{NormedSpace.complexToReal}$), it is convex: a real convex combination $a\,\omega_1 + b\,\omega_2$ of states is again a state, via $\texttt{State.convexCombo}$. Moreover a state $\omega$ lies in Mathlib's $\mathrm{extremePoints}_{\mathbb{R}}$ of the state space exactly when it is extreme in the sense of \ref{def:extreme-state}, connecting the purity characterizations to the Krein-Milman/Choquet API.
@@ -1368,7 +1368,7 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 
 \begin{definition}[Pullback of a State]
     \label{def:state-pullback}
-    \lean{Physicslib4.GNS.State.comp}
+    \lean{Hilbert6.GNS.State.comp}
     \uses{def:state}
     \leanok
     For a unital $*$-homomorphism $\pi : A \to B$ of C*-algebras and a state $\omega$ on $B$, the \emph{pullback} $\omega \circ \pi$ is the functional $a \mapsto \omega(\pi(a))$. It is again a state: positivity is the $*$-compatibility $\omega(\pi(a^* a)) = \omega(\pi(a)^*\pi(a)) \ge 0$, and normalization $\Vert\omega\circ\pi\Vert = 1$ follows from unitality $\pi(1) = 1$ together with \ref{thrm:norm-positive-functional}. Thus $A \mapsto \mathrm{State}(A)$ is contravariant in $A$: a $*$-homomorphism $\pi : A \to B$ induces the pullback $\mathrm{State}(B) \to \mathrm{State}(A)$.
@@ -1376,7 +1376,7 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 
 \begin{theorem}[Functoriality of the State Pullback]
     \label{thrm:state-pullback-functorial}
-    \lean{Physicslib4.GNS.State.comp_id, Physicslib4.GNS.State.comp_comp}
+    \lean{Hilbert6.GNS.State.comp_id, Hilbert6.GNS.State.comp_comp}
     \uses{def:state-pullback}
     \leanok
     The pullback is a contravariant functor on C*-algebras: pulling back along the identity $*$-homomorphism is the identity ($\omega \circ \mathrm{id} = \omega$), and pulling back along a composite reverses order, $\omega \circ (\pi_2 \circ \pi_1) = (\omega \circ \pi_2) \circ \pi_1$ for $\pi_1 : A \to B$, $\pi_2 : B \to C$ and $\omega$ a state on $C$.
@@ -1389,7 +1389,7 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 
 \begin{theorem}[Purity is Invariant under a $*$-Isomorphism]
     \label{thrm:pure-pullback-invariant}
-    \lean{Physicslib4.GNS.isPure_comp_iff}
+    \lean{Hilbert6.GNS.isPure_comp_iff}
     \uses{def:state-pullback, def:pure-state}
     \leanok
     For a $*$-isomorphism $\Phi : A \simeq B$ of C*-algebras and a state $\omega$ on $B$, the pullback $\omega \circ \Phi$ is pure if and only if $\omega$ is. This is the cross-algebra generalization of the $*$-automorphism case (purity is a covariance invariant); a $*$-isomorphism identifies the pure states of $A$ and $B$.
@@ -1402,8 +1402,8 @@ The order-theoretic definition of purity (\ref{def:pure-state}) coincides with t
 
 \begin{theorem}[Weak-* Compactness of the State Space]
     \label{thrm:state-space-weak-compact}
-    \lean{Physicslib4.GNS.isCompact_weakStateSet}
-    \leanfile{Physicslib4/GNS/PureStateExists.lean}
+    \lean{Hilbert6.GNS.isCompact_weakStateSet}
+    \leanfile{Hilbert6/GNS/PureStateExists.lean}
     \uses{def:state}
     \leanok
     The state space, realized inside the weak-* dual $\mathrm{WeakDual}\,\mathbb{C}\,A$ as the positive functionals with $\varphi(1) = 1$, is \emph{weak-* compact}. This is the analytic input for the existence of pure states via Krein-Milman.
@@ -1418,8 +1418,8 @@ These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Mink
 
 \begin{theorem}[Pure $\iff$ Extreme Point on the Quasilocal Algebra]
     \label{thrm:pure-iff-extreme-quasilocal}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.pure_iff_extreme}
-    \leanfile{Physicslib4/AQFT/HaagKastler/Purity.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.pure_iff_extreme}
+    \leanfile{Hilbert6/AQFT/HaagKastler/Purity.lean}
     \uses{def:pure-state, def:extreme-state, def:quasilocal-algebra, thrm:quasilocal-algebra-exists}
     \leanok
     A state $\omega$ on the canonical quasilocal algebra $\mathfrak{U}$ of a Haag-Kastler net is pure if and only if it is an extreme point of the state space of $\mathfrak{U}$.
@@ -1432,8 +1432,8 @@ These equivalences specialize to the quasilocal algebra $\mathfrak{U}$ of a Mink
 
 \begin{theorem}[Pure $\iff$ Irreducible GNS on the Quasilocal Algebra]
     \label{thrm:pure-iff-irreducible-quasilocal}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.exists_gns_pure_iff_irreducible}
-    \leanfile{Physicslib4/AQFT/HaagKastler/Purity.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.exists_gns_pure_iff_irreducible}
+    \leanfile{Hilbert6/AQFT/HaagKastler/Purity.lean}
     \uses{def:pure-state, def:irreducible-representation, thrm:gns-construction-theorem, def:quasilocal-algebra, thrm:quasilocal-algebra-exists}
     \leanok
     For a state $\omega$ on the quasilocal algebra $\mathfrak{U}$ there is a GNS triple $(H, \pi, \Omega)$ reproducing $\omega$ in which $\omega$ is pure if and only if the representation $\pi$ is irreducible.
@@ -1450,8 +1450,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{definition}[Unitary Equivalence of Representations]
     \label{def:unitary-equivalence}
-    \lean{Physicslib4.GNS.UnitaryEquiv}
-    \leanfile{Physicslib4/GNS/UnitaryEquiv.lean}
+    \lean{Hilbert6.GNS.UnitaryEquiv}
+    \leanfile{Hilbert6/GNS/UnitaryEquiv.lean}
     \leanok
     \uses{thrm:gns-construction-theorem}
     Two $*$-representations $\pi_1 : A \to \mathcal{B}(H_1)$ and $\pi_2 : A \to \mathcal{B}(H_2)$ are \emph{unitarily equivalent} when there is an isometric isomorphism $U : H_1 \simeq H_2$ of the underlying Hilbert spaces intertwining them: $U(\pi_1(a)\,x) = \pi_2(a)(U x)$. This is an equivalence relation --- reflexive, symmetric, and transitive.
@@ -1459,8 +1459,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[Irreducibility and Factoriality are Unitary Invariants]
     \label{thrm:unitary-equiv-invariants}
-    \lean{Physicslib4.GNS.UnitaryEquiv.isIrreducible_iff, Physicslib4.GNS.UnitaryEquiv.isFactor_iff}
-    \leanfile{Physicslib4/GNS/UnitaryEquiv.lean}
+    \lean{Hilbert6.GNS.UnitaryEquiv.isIrreducible_iff, Hilbert6.GNS.UnitaryEquiv.isFactor_iff}
+    \leanfile{Hilbert6/GNS/UnitaryEquiv.lean}
     \uses{def:unitary-equivalence, def:irreducible-representation, thrm:irreducible-factor, def:factor}
     \leanok
     Unitarily equivalent representations share their representation-theoretic type: $\pi_1$ is irreducible if and only if $\pi_2$ is, and the generated von Neumann algebra $\pi_1(A)''$ is a factor if and only if $\pi_2(A)''$ is.
@@ -1475,7 +1475,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{lemma}[Cyclicity pulls back along a surjective $*$-homomorphism]
     \label{lmm:cyclic-pullback-surjective}
-    \lean{Physicslib4.GNS.isCyclicVector_comp_of_surjective}
+    \lean{Hilbert6.GNS.isCyclicVector_comp_of_surjective}
     \uses{def:cyclic-vector, def:state-pullback}
     \leanok
     Let $\pi : B \to \mathcal{B}(H)$ be a $*$-representation with cyclic vector $\Omega$, and let $\Phi : A \to B$ be a surjective unital $*$-homomorphism. Here the pulled-back representation $\pi \circ \Phi$ of $A$ is the composite $*$-homomorphism (Mathlib's \texttt{StarAlgHom.comp}), just as the pullback of a state is fixed by \ref{def:state-pullback}. Then $\Omega$ is cyclic for $\pi \circ \Phi$.
@@ -1488,7 +1488,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[GNS covariance under a $*$-isomorphism]
     \label{thrm:gns-covariance}
-    \lean{Physicslib4.GNS.exists_unitary_of_gns_comp}
+    \lean{Hilbert6.GNS.exists_unitary_of_gns_comp}
     \uses{def:state-pullback, def:cyclic-vector, thrm:gns-construction-theorem}
     \leanok
     Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$. Let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing the pullback state $\omega \circ \Phi$, and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then there is a unitary $U : H_1 \simeq H_2$ with $U\Omega_1 = \Omega_2$ intertwining the two representations along $\Phi$: $U(\pi_1(a)x) = \pi_2(\Phi(a))(Ux)$ for all $a \in A$, $x \in H_1$. In other words the GNS data transports covariantly along an isomorphism of the algebras.
@@ -1496,12 +1496,12 @@ The comparison of representations is the entry point to superselection theory. F
 \begin{proof}
     \leanok
     \uses{lmm:cyclic-pullback-surjective, thrm:gns-construction-theorem, def:state-pullback}
-    The proof observes that $(H_2, \pi_2 \circ \Phi, \Omega_2)$ is itself a cyclic representation of $A$ (\ref{lmm:cyclic-pullback-surjective}, $\Phi$ being surjective) and that it reproduces $\omega \circ \Phi$, since $\langle \Omega_2, \pi_2(\Phi a)\Omega_2\rangle = \omega(\Phi a) = (\omega \circ \Phi)(a)$ by the defining equation of the pullback state. One then applies the \emph{uniqueness clause} of \ref{thrm:gns-construction-theorem} --- in Lean the separate declaration \texttt{Physicslib4.GNS.gns\_unique}, not \texttt{gns\_construction} --- to the two cyclic representations of $A$ attached to the single state $\omega \circ \Phi$.
+    The proof observes that $(H_2, \pi_2 \circ \Phi, \Omega_2)$ is itself a cyclic representation of $A$ (\ref{lmm:cyclic-pullback-surjective}, $\Phi$ being surjective) and that it reproduces $\omega \circ \Phi$, since $\langle \Omega_2, \pi_2(\Phi a)\Omega_2\rangle = \omega(\Phi a) = (\omega \circ \Phi)(a)$ by the defining equation of the pullback state. One then applies the \emph{uniqueness clause} of \ref{thrm:gns-construction-theorem} --- in Lean the separate declaration \texttt{Hilbert6.GNS.gns\_unique}, not \texttt{gns\_construction} --- to the two cyclic representations of $A$ attached to the single state $\omega \circ \Phi$.
 \end{proof}
 
 \begin{theorem}[The GNS representation of a pullback state]
     \label{thrm:gns-covariance-unitary-equiv}
-    \lean{Physicslib4.GNS.unitaryEquiv_comp_of_gns}
+    \lean{Hilbert6.GNS.unitaryEquiv_comp_of_gns}
     \uses{def:unitary-equivalence, def:state-pullback}
     \leanok
     Restated in the language of unitary equivalence. Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$; let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing $\omega \circ \Phi$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then $\pi_1$ and $\pi_2 \circ \Phi$ are unitarily equivalent (\ref{def:unitary-equivalence}).
@@ -1514,7 +1514,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{lemma}[Pullback along a surjection preserves the image algebra]
     \label{lmm:pullback-image-invariants}
-    \lean{Physicslib4.GNS.range_comp_of_surjective, Physicslib4.GNS.isIrreducible_comp_iff, Physicslib4.GNS.gnsVonNeumann_comp_of_surjective}
+    \lean{Hilbert6.GNS.range_comp_of_surjective, Hilbert6.GNS.isIrreducible_comp_iff, Hilbert6.GNS.gnsVonNeumann_comp_of_surjective}
     \uses{def:irreducible-representation, def:local-von-neumann, def:generated-von-neumann-algebra}
     \leanok
     Let $\pi : B \to \mathcal{B}(H)$ be a $*$-representation and $\Phi : A \to B$ a surjective unital $*$-homomorphism, and let $\pi \circ \Phi$ be the composite $*$-homomorphism (Mathlib's \texttt{StarAlgHom.comp}). Then $\pi \circ \Phi$ has the same image as $\pi$: $(\pi \circ \Phi)(A) = \pi(B)$. Consequently everything computed from the image alone is unchanged: $\pi \circ \Phi$ is irreducible if and only if $\pi$ is (irreducibility being triviality of the commutant of the image), and the generated von Neumann algebras (\ref{def:local-von-neumann}) coincide, $(\pi \circ \Phi)(A)'' = \pi(B)''$. The conclusion is sharper than a mere unitary equivalence would give: no transport is involved at all, since the two representations act on the \emph{same} Hilbert space and generate literally the same algebras, not just isomorphic ones.
@@ -1522,12 +1522,12 @@ The comparison of representations is the entry point to superselection theory. F
 \begin{proof}
     \leanok
     \uses{def:irreducible-representation, def:local-von-neumann}
-    The image identity is surjectivity of $\Phi$ applied to ranges, $\operatorname{range}(\pi \circ \Phi) = \operatorname{range}(\pi)$, which is Mathlib's \texttt{Function.Surjective.range\_comp}. For irreducibility, the existing repository lemma \texttt{Physicslib4.GNS.isIrreducible\_iff\_centralizer} (in \texttt{Physicslib4/GNS/UnitaryEquiv.lean}) already identifies irreducibility with triviality of the centralizer of the image, $\operatorname{centralizer}(\operatorname{range} \pi) = \mathbb{C} \cdot 1$; rewriting that criterion along the image identity gives the equivalence with no re-derivation. The generated von Neumann algebra is the double commutant of the image, so the same rewriting gives $(\pi \circ \Phi)(A)'' = \pi(B)''$.
+    The image identity is surjectivity of $\Phi$ applied to ranges, $\operatorname{range}(\pi \circ \Phi) = \operatorname{range}(\pi)$, which is Mathlib's \texttt{Function.Surjective.range\_comp}. For irreducibility, the existing repository lemma \texttt{Hilbert6.GNS.isIrreducible\_iff\_centralizer} (in \texttt{Hilbert6/GNS/UnitaryEquiv.lean}) already identifies irreducibility with triviality of the centralizer of the image, $\operatorname{centralizer}(\operatorname{range} \pi) = \mathbb{C} \cdot 1$; rewriting that criterion along the image identity gives the equivalence with no re-derivation. The generated von Neumann algebra is the double commutant of the image, so the same rewriting gives $(\pi \circ \Phi)(A)'' = \pi(B)''$.
 \end{proof}
 
 \begin{theorem}[Superselection type transports along a $*$-isomorphism]
     \label{thrm:gns-sector-transport}
-    \lean{Physicslib4.GNS.isIrreducible_iff_of_gns_comp, Physicslib4.GNS.isFactor_iff_of_gns_comp}
+    \lean{Hilbert6.GNS.isIrreducible_iff_of_gns_comp, Hilbert6.GNS.isFactor_iff_of_gns_comp}
     \uses{thrm:gns-covariance-unitary-equiv, thrm:unitary-equiv-invariants, lmm:pullback-image-invariants, def:state-pullback, def:factor}
     \leanok
     Let $\Phi : A \simeq B$ be a $*$-isomorphism of unital C*-algebras and $\omega$ a state on $B$; let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $A$ reproducing $\omega \circ \Phi$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $B$ reproducing $\omega$. Then $\pi_1$ is irreducible if and only if $\pi_2$ is, and $\pi_1(A)''$ is a factor if and only if $\pi_2(B)''$ is. The chain is: $\pi_1$ is unitarily equivalent to $\pi_2 \circ \Phi$ (\ref{thrm:gns-covariance-unitary-equiv}), unitary equivalence preserves irreducibility and factoriality (\ref{thrm:unitary-equiv-invariants}), and $\pi_2 \circ \Phi$ has the same image algebra as $\pi_2$ (\ref{lmm:pullback-image-invariants}). Thus an isomorphism of the observable algebra carries superselection sectors to superselection sectors, preserving their type; together with the invariance of purity (\ref{thrm:pure-pullback-invariant}) it shows the whole sector structure is an invariant of the algebra, not of its presentation.
@@ -1540,7 +1540,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[GNS covariance for local algebras]
     \label{thrm:gns-covariance-local}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.unitaryEquiv_gns_covEquiv, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducible_iff_gns_covEquiv, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_iff_gns_covEquiv}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.unitaryEquiv_gns_covEquiv, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.isIrreducible_iff_gns_covEquiv, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.isFactor_iff_gns_covEquiv}
     \uses{def:haag-kastler-net, def:lorentz-covariance, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback, def:factor}
     \leanok
     Let $\mathfrak{U}$ be a Haag-Kastler net (\ref{def:haag-kastler-net}). The covariance equivalence $\alpha_L : \mathfrak{U}(\mathbf{B}) \simeq \mathfrak{U}(L\cdot\mathbf{B})$ supplied by Axiom 5 (\ref{def:lorentz-covariance}) is a $*$-isomorphism of local algebras, so the abstract GNS-covariance results apply to it region by region. Let $\omega$ be a state on $\mathfrak{U}(L\cdot\mathbf{B})$, so that $\omega \circ \alpha_L$ is a state on $\mathfrak{U}(\mathbf{B})$ (\ref{def:state-pullback}); let $(H_1, \pi_1, \Omega_1)$ be a cyclic representation of $\mathfrak{U}(\mathbf{B})$ reproducing $\omega \circ \alpha_L$ and $(H_2, \pi_2, \Omega_2)$ a cyclic representation of $\mathfrak{U}(L\cdot\mathbf{B})$ reproducing $\omega$. Then $\pi_1$ is unitarily equivalent to $\pi_2 \circ \alpha_L$; moreover $\pi_1$ is irreducible if and only if $\pi_2$ is, and $\pi_1(\mathfrak{U}(\mathbf{B}))''$ is a factor if and only if $\pi_2(\mathfrak{U}(L\cdot\mathbf{B}))''$ is. In physical terms: the superselection type of a local state is constant along the Lorentz orbit of the region.
@@ -1555,8 +1555,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{definition}[Disjoint Representations]
     \label{def:disjoint-representations}
-    \lean{Physicslib4.GNS.AreDisjoint, Physicslib4.GNS.not_areDisjoint_self, Physicslib4.GNS.UnitaryEquiv.not_areDisjoint, Physicslib4.GNS.Intertwines}
-    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \lean{Hilbert6.GNS.AreDisjoint, Hilbert6.GNS.not_areDisjoint_self, Hilbert6.GNS.UnitaryEquiv.not_areDisjoint, Hilbert6.GNS.Intertwines}
+    \leanfile{Hilbert6/GNS/Superselection.lean}
     \leanok
     \uses{def:unitary-equivalence}
     An \emph{intertwiner} $T : H_1 \to H_2$ between $\pi_1$ and $\pi_2$ satisfies $T(\pi_1(a)\,x) = \pi_2(a)(T x)$; intertwiners are closed under sums, scalars, composition, and the adjoint (the adjoint of a $\pi_1 \to \pi_2$ intertwiner is a $\pi_2 \to \pi_1$ intertwiner). Two representations are \emph{disjoint} when the only intertwiner between them is $0$. Disjointness is symmetric (take adjoints), and a representation on a nonzero Hilbert space is never disjoint from itself; more generally, unitarily equivalent representations on nonzero spaces are never disjoint, since the implementing unitary is a nonzero intertwiner.
@@ -1564,8 +1564,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{definition}[Quasi-Equivalence of Representations]
     \label{def:quasi-equivalence}
-    \lean{Physicslib4.GNS.QuasiEquiv, Physicslib4.GNS.UnitaryEquiv.quasiEquiv}
-    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \lean{Hilbert6.GNS.QuasiEquiv, Hilbert6.GNS.UnitaryEquiv.quasiEquiv}
+    \leanfile{Hilbert6/GNS/Superselection.lean}
     \leanok
     \uses{def:unitary-equivalence, thrm:irreducible-factor}
     Two representations are \emph{quasi-equivalent} when there is a $*$-isomorphism of their generated von Neumann algebras $\pi_1(A)'' \simeq \pi_2(A)''$ carrying $\pi_1(a)$ to $\pi_2(a)$. This is an equivalence relation, and it is coarser than unitary equivalence: unitary equivalence implies quasi-equivalence, because the conjugation $*$-isomorphism $T \mapsto U T U^{-1}$ restricts to a $*$-isomorphism of the generated von Neumann algebras.
@@ -1573,8 +1573,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[Schur's Lemma and the Irreducible Dichotomy]
     \label{thrm:irreducible-dichotomy}
-    \lean{Physicslib4.GNS.UnitaryEquiv.of_intertwines_of_isIrreducible, Physicslib4.GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible}
-    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \lean{Hilbert6.GNS.UnitaryEquiv.of_intertwines_of_isIrreducible, Hilbert6.GNS.areDisjoint_or_unitaryEquiv_of_isIrreducible}
+    \leanfile{Hilbert6/GNS/Superselection.lean}
     \uses{def:unitary-equivalence, def:disjoint-representations, def:irreducible-representation}
     \leanok
     A nonzero intertwiner $T$ between two \emph{irreducible} representations rescales to a unitary equivalence. Consequently two irreducible representations are either \emph{disjoint} or \emph{unitarily equivalent} --- the foundational trichotomy of superselection theory, identifying sectors with unitary-equivalence classes of irreducible representations.
@@ -1587,8 +1587,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{lemma}[Schur Multiplicity]
     \label{lmm:schur-multiplicity}
-    \lean{Physicslib4.GNS.eq_smul_of_intertwines_of_isIrreducible}
-    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \lean{Hilbert6.GNS.eq_smul_of_intertwines_of_isIrreducible}
+    \leanfile{Hilbert6/GNS/Superselection.lean}
     \uses{def:irreducible-representation}
     \leanok
     The space of intertwiners between two irreducible representations is at most one-dimensional: any two intertwiners $S, T$ with $S \neq 0$ are proportional, $T = \lambda \cdot S$.
@@ -1601,8 +1601,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{lemma}[Endomorphism Algebra of an Irreducible Representation]
     \label{lmm:endomorphism-scalar}
-    \lean{Physicslib4.GNS.intertwines_self_iff_isScalar}
-    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \lean{Hilbert6.GNS.intertwines_self_iff_isScalar}
+    \leanfile{Hilbert6/GNS/Superselection.lean}
     \uses{def:irreducible-representation, def:disjoint-representations}
     \leanok
     The endomorphism algebra of an irreducible representation is $\mathbb{C}\cdot 1$: every self-intertwiner of an irreducible representation is a scalar multiple of the identity.
@@ -1615,8 +1615,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[The commutant (self-intertwiner) von Neumann algebra]
     \label{thrm:commutant-von-neumann}
-    \lean{Physicslib4.GNS.commutantVonNeumann, Physicslib4.GNS.mem_commutantVonNeumann_iff_intertwines, Physicslib4.GNS.isIrreducible_iff_commutantVonNeumann_eq_scalars}
-    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \lean{Hilbert6.GNS.commutantVonNeumann, Hilbert6.GNS.mem_commutantVonNeumann_iff_intertwines, Hilbert6.GNS.isIrreducible_iff_commutantVonNeumann_eq_scalars}
+    \leanfile{Hilbert6/GNS/Superselection.lean}
     \uses{def:irreducible-representation, lmm:bicommutant-of-selfadjoint-is-von-neumann}
     \leanok
     The commutant $\pi(A)'$ of a representation is packaged as a von Neumann algebra --- the algebra of self-intertwiners, i.e. the intertwiner/gauge algebra of $\pi$. Its underlying set is the centralizer of $\pi(A)$, which is a von Neumann algebra by \ref{lmm:bicommutant-of-selfadjoint-is-von-neumann} applied to the self-adjoint set $\pi(A)$; an operator lies in it exactly when it is a self-intertwiner of $\pi$, and $\pi$ is irreducible if and only if this algebra is trivial ($\pi(A)' = \mathbb{C}\cdot 1$) --- the von Neumann form of Schur's lemma.
@@ -1629,8 +1629,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[Double-Commutant Duality]
     \label{thrm:double-commutant-duality}
-    \lean{Physicslib4.GNS.commutant_gnsVonNeumannAlgebra, Physicslib4.GNS.commutant_commutantVonNeumann}
-    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \lean{Hilbert6.GNS.commutant_gnsVonNeumannAlgebra, Hilbert6.GNS.commutant_commutantVonNeumann}
+    \leanfile{Hilbert6/GNS/Superselection.lean}
     \uses{thrm:commutant-von-neumann, def:generated-von-neumann-algebra}
     \leanok
     The generated von Neumann algebra $\pi(A)''$ and the commutant von Neumann algebra $\pi(A)'$ (\ref{thrm:commutant-von-neumann}) are each other's commutants.
@@ -1643,8 +1643,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[A Factor and its Commutant; Triviality Duality]
     \label{thrm:commutant-factor-duality}
-    \lean{Physicslib4.GNS.isFactor_gnsVonNeumann_iff_isFactor_commutant, Physicslib4.GNS.commutantVonNeumann_eq_scalars_iff_gnsVonNeumann_eq_univ}
-    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \lean{Hilbert6.GNS.isFactor_gnsVonNeumann_iff_isFactor_commutant, Hilbert6.GNS.commutantVonNeumann_eq_scalars_iff_gnsVonNeumann_eq_univ}
+    \leanfile{Hilbert6/GNS/Superselection.lean}
     \uses{thrm:commutant-von-neumann, def:generated-von-neumann-algebra, def:factor}
     \leanok
     A von Neumann algebra and its commutant share the same center. Consequently $\pi(A)''$ is a factor (trivial center) if and only if its commutant $\pi(A)'$ is a factor. Dually, at the extreme of triviality, the commutant collapses to the scalars $\pi(A)' = \mathbb{C}\cdot 1$ if and only if the generated algebra is everything $\pi(A)'' = \mathcal{B}(H)$.
@@ -1657,7 +1657,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{lemma}[Abelian $\iff$ Self-Commuting]
     \label{lmm:von-neumann-abelian-self-commuting}
-    \lean{Physicslib4.GNS.isAbelian_iff_le_commutant}
+    \lean{Hilbert6.GNS.isAbelian_iff_le_commutant}
     \leanok
     A von Neumann algebra $R$ is abelian --- every pair of its elements commutes --- if and only if it is contained in its own commutant, $R \subseteq R'$. It is the operator-algebraic characterization of commutativity via the commutant, and the boundary case of microcausality $R(\mathbf{B}_1) \subseteq R(\mathbf{B}_2)'$ where the two regions coincide.
 \end{lemma}
@@ -1668,14 +1668,14 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{definition}[Center of a von Neumann algebra]
     \label{def:von-neumann-center}
-    \lean{Physicslib4.GNS.vonNeumannCenter}
+    \lean{Hilbert6.GNS.vonNeumannCenter}
     \leanok
     The center of a von Neumann algebra $R$ on a Hilbert space $H$ is $Z(R) = R \cap R'$, the operators of $R$ that commute with every element of $R$. Since Mathlib's \texttt{VonNeumannAlgebra} carries no lattice meet, it is built as the meet of the star-subalgebras of $R$ and its commutant $R'$; its underlying set is $R \cap R'$. That this set is again a von Neumann algebra is recorded separately in \ref{lmm:von-neumann-inter-is-von-neumann}.
 \end{definition}
 
 \begin{lemma}[The center is a von Neumann algebra]
     \label{lmm:von-neumann-inter-is-von-neumann}
-    \lean{Physicslib4.GNS.bicommutant_inter_commutant_eq}
+    \lean{Hilbert6.GNS.bicommutant_inter_commutant_eq}
     \uses{def:von-neumann-center}
     \leanok
     Let $R$ be a bundled von Neumann algebra on a Hilbert space $H$. Then $R \cap R'$ is bicommutant-closed, $(R \cap R')'' = R \cap R'$, so the center $Z(R) = R \cap R'$ of \ref{def:von-neumann-center} is again a von Neumann algebra.
@@ -1690,11 +1690,11 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{lemma}[The intersection of two von Neumann algebras is a von Neumann algebra]
     \label{lmm:von-neumann-inter-general}
-    \lean{Physicslib4.GNS.bicommutant_inter_eq}
+    \lean{Hilbert6.GNS.bicommutant_inter_eq}
     \leanok
     Let $M$ and $N$ be bundled von Neumann algebras on a Hilbert space $H$. Then their underlying sets intersect in a bicommutant-closed set: $(M \cap N)'' = M \cap N$, so $M \cap N$ is again a von Neumann algebra. Here $M$ and $N$ are arbitrary and need \emph{not} form a commutant pair.
 
-    This general form is what \ref{def:relative-commutant} needs, the relative commutant $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$ being the instance $M = R(\mathbf{B}_1)'$, $N = R(\mathbf{B}_2)$, and likewise for its curved-spacetime counterpart \ref{def:relative-commutant-in-curved-spacetime}. It is formalized as \texttt{Physicslib4.GNS.bicommutant\_inter\_eq}, sitting alongside the commutant-pair instance \texttt{Physicslib4.GNS.bicommutant\_inter\_commutant\_eq} of \ref{lmm:von-neumann-inter-is-von-neumann}. One nuance is worth recording: in Lean the two are independent declarations, since \texttt{bicommutant\_inter\_commutant\_eq} proves the commutant-pair case directly rather than by specialising \texttt{bicommutant\_inter\_eq}, so when \ref{lmm:von-neumann-inter-is-von-neumann} describes itself as the instance $M = R$, $N = R'$ of this lemma that records the mathematics, not the Lean proof structure; the Lean proof of the special case does not go through the general one.
+    This general form is what \ref{def:relative-commutant} needs, the relative commutant $R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)$ being the instance $M = R(\mathbf{B}_1)'$, $N = R(\mathbf{B}_2)$, and likewise for its curved-spacetime counterpart \ref{def:relative-commutant-in-curved-spacetime}. It is formalized as \texttt{Hilbert6.GNS.bicommutant\_inter\_eq}, sitting alongside the commutant-pair instance \texttt{Hilbert6.GNS.bicommutant\_inter\_commutant\_eq} of \ref{lmm:von-neumann-inter-is-von-neumann}. One nuance is worth recording: in Lean the two are independent declarations, since \texttt{bicommutant\_inter\_commutant\_eq} proves the commutant-pair case directly rather than by specialising \texttt{bicommutant\_inter\_eq}, so when \ref{lmm:von-neumann-inter-is-von-neumann} describes itself as the instance $M = R$, $N = R'$ of this lemma that records the mathematics, not the Lean proof structure; the Lean proof of the special case does not go through the general one.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1703,7 +1703,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[The center of a von Neumann algebra is abelian]
     \label{thrm:von-neumann-center-abelian}
-    \lean{Physicslib4.GNS.vonNeumannCenter_isAbelian}
+    \lean{Hilbert6.GNS.vonNeumannCenter_isAbelian}
     \uses{def:von-neumann-center}
     \leanok
     The center $Z(R) = R \cap R'$ is abelian: any two of its elements commute.
@@ -1716,7 +1716,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{lemma}[$R$ is abelian iff it equals its center]
     \label{lmm:von-neumann-center-eq-self-iff-abelian}
-    \lean{Physicslib4.GNS.vonNeumannCenter_eq_self_iff_isAbelian}
+    \lean{Hilbert6.GNS.vonNeumannCenter_eq_self_iff_isAbelian}
     \uses{def:von-neumann-center, lmm:von-neumann-abelian-self-commuting}
     \leanok
     A von Neumann algebra $R$ is abelian if and only if its center is all of $R$, i.e. $Z(R) = R \cap R' = R$. By \ref{lmm:von-neumann-abelian-self-commuting}, $R$ is abelian iff $R \subseteq R'$, and $R \cap R' = R$ holds exactly when $R \subseteq R'$.
@@ -1729,7 +1729,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[A factor is abelian iff it is the scalars]
     \label{thrm:factor-abelian-iff-scalars}
-    \lean{Physicslib4.GNS.isAbelian_iff_eq_scalars_of_isFactor}
+    \lean{Hilbert6.GNS.isAbelian_iff_eq_scalars_of_isFactor}
     \uses{def:von-neumann-center, def:factor}
     \leanok
     A factor $R$ (a von Neumann algebra with trivial center $R \cap R' = \mathbb{C}\cdot 1$) is abelian if and only if it equals the scalars $\mathbb{C}\cdot 1$.
@@ -1742,7 +1742,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[A von Neumann algebra and its commutant share a center]
   \label{thrm:center-eq-commutant-center}
-  \lean{Physicslib4.GNS.vonNeumannCenter_eq_commutant}
+  \lean{Hilbert6.GNS.vonNeumannCenter_eq_commutant}
   \uses{def:von-neumann-center}
   \leanok
   The center of a von Neumann algebra equals the center of its commutant: $Z(R) = Z(R')$.
@@ -1755,7 +1755,7 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[A von Neumann algebra is a factor iff its center is the scalars]
   \label{thrm:factor-iff-center-scalars}
-  \lean{Physicslib4.GNS.isFactor_iff_center_eq_scalars}
+  \lean{Hilbert6.GNS.isFactor_iff_center_eq_scalars}
   \uses{def:von-neumann-center, def:factor}
   \leanok
   A von Neumann algebra $R$ is a factor if and only if its center is the scalars, $Z(R) = R \cap R' = \mathbb{C}\cdot 1$.
@@ -1768,8 +1768,8 @@ The comparison of representations is the entry point to superselection theory. F
 
 \begin{theorem}[The Pure-State Dichotomy]
     \label{thrm:pure-state-dichotomy}
-    \lean{Physicslib4.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}
-    \leanfile{Physicslib4/GNS/Superselection.lean}
+    \lean{Hilbert6.GNS.exists_gns_areDisjoint_or_unitaryEquiv_of_isPure}
+    \leanfile{Hilbert6/GNS/Superselection.lean}
     \uses{def:pure-state}
     \leanok
     The GNS representations of two pure states are either disjoint or unitarily equivalent.
@@ -1786,8 +1786,8 @@ Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their di
 
 \begin{definition}[Direct-Sum Representation]
     \label{def:direct-sum-representation}
-    \lean{Physicslib4.GNS.directSum}
-    \leanfile{Physicslib4/GNS/DirectSum.lean}
+    \lean{Hilbert6.GNS.directSum}
+    \leanfile{Hilbert6/GNS/DirectSum.lean}
     \leanok
     \uses{thrm:gns-construction-theorem}
     The \emph{direct sum} $\bigoplus_i \pi_i : A \to \mathcal{B}(\ell^2(\iota, H))$ of a family of $*$-representations acts coordinatewise: $(\bigoplus_i \pi_i)(a)$ is the diagonal operator $x \mapsto (\pi_i(a)\,x_i)_i$ on the $\ell^2$-direct sum. It is a $*$-representation, the diagonal being uniformly bounded by $\Vert a\Vert$ since each $\pi_i$ is contractive.
@@ -1795,8 +1795,8 @@ Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their di
 
 \begin{theorem}[Subrepresentations and Commutant of a Direct Sum]
     \label{thrm:direct-sum-subrepresentation}
-    \lean{Physicslib4.GNS.intertwines_single, Physicslib4.GNS.summandProj_mem_commutant}
-    \leanfile{Physicslib4/GNS/DirectSum.lean}
+    \lean{Hilbert6.GNS.intertwines_single, Hilbert6.GNS.summandProj_mem_commutant}
+    \leanfile{Hilbert6/GNS/DirectSum.lean}
     \uses{def:direct-sum-representation, def:disjoint-representations}
     \leanok
     Each summand embeds as a subrepresentation: the isometric inclusion $H_j \hookrightarrow \ell^2(\iota, H)$ intertwines $\pi_j$ with $\bigoplus_i \pi_i$. Moreover the orthogonal projection onto the $j$-th summand lies in the commutant of the direct sum, so each summand is a reducing subspace.
@@ -1809,8 +1809,8 @@ Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their di
 
 \begin{definition}[Amplification]
     \label{def:amplification}
-    \lean{Physicslib4.GNS.amplification}
-    \leanfile{Physicslib4/GNS/Amplification.lean}
+    \lean{Hilbert6.GNS.amplification}
+    \leanfile{Hilbert6/GNS/Amplification.lean}
     \leanok
     \uses{def:direct-sum-representation}
     The \emph{$\iota$-fold amplification} $\iota \cdot \pi := \bigoplus_{i : \iota} \pi$ of a single representation is the direct sum of $\iota$ copies of $\pi$; $\pi$ embeds as each summand.
@@ -1818,8 +1818,8 @@ Given a family of $*$-representations $\pi_i : A \to \mathcal{B}(H_i)$, their di
 
 \begin{theorem}[Reducibility of a Direct Sum]
     \label{thrm:direct-sum-reducible}
-    \lean{Physicslib4.GNS.not_isIrreducible_directSum}
-    \leanfile{Physicslib4/GNS/Amplification.lean}
+    \lean{Hilbert6.GNS.not_isIrreducible_directSum}
+    \leanfile{Hilbert6/GNS/Amplification.lean}
     \uses{def:direct-sum-representation, def:irreducible-representation}
     \leanok
     A direct sum with two summands carrying nonzero vectors is \emph{reducible}. In particular an amplification $\iota \cdot \pi$ with at least two copies (and $\pi$ acting on a nonzero space) is reducible --- the multiplicity is visible in the commutant.
@@ -1836,8 +1836,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{definition}[Covariant Family of Local States]
     \label{def:covariant-state-family}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily}
-    \leanfile{Physicslib4/AQFT/HaagKastler/CovariantState.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily}
+    \leanfile{Hilbert6/AQFT/HaagKastler/CovariantState.lean}
     \leanok
     \uses{def:haag-kastler-net, def:state, def:lorentz-covariance}
     Given a Haag-Kastler net (\ref{def:haag-kastler-net}), a \emph{covariant family of local states} assigns to every region $\mathbf{B}$ a state $\omega_{\mathbf{B}}$ on the local algebra $\mathfrak{U}(\mathbf{B})$ such that, for every Lorentz transformation $L$ and every $a \in \mathfrak{U}(\mathbf{B})$, one has $\omega_{\mathbf{B}}(a) = \omega_{L\cdot\mathbf{B}}(\alpha_L a)$, where $\alpha_L$ is the covariance isomorphism of \ref{def:lorentz-covariance}. The local states are thus intertwined by the Lorentz action.
@@ -1845,8 +1845,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{lemma}[Composition of Covariance]
     \label{lmm:covariant-state-family-compose}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily.comp}
-    \leanfile{Physicslib4/AQFT/HaagKastler/CovariantState.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily.comp}
+    \leanfile{Hilbert6/AQFT/HaagKastler/CovariantState.lean}
     \uses{def:covariant-state-family}
     \leanok
     For a covariant family of local states, the covariance relation composes along the group: $\omega_{\mathbf{B}}(a) = \omega_{L'\cdot(L\cdot\mathbf{B})}\big(\alpha_{L'}(\alpha_L a)\big)$.
@@ -1859,8 +1859,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{definition}[Quasilocal Covariance Automorphism]
     \label{def:quasilocal-lift}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAction.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalAction.lean}
     \leanok
     \uses{def:quasilocal-algebra, def:lorentz-covariance}
     A \emph{lift} of the fiberwise Lorentz action of $L$ to a quasilocal algebra $\mathfrak{U}$ (\ref{def:quasilocal-algebra}) is a $*$-automorphism $\beta_L$ of $\mathfrak{U}$ intertwining the local embeddings $\iota_{\mathbf{B}}$ with the covariance isomorphisms: $\beta_L(\iota_{\mathbf{B}} a) = \iota_{L\cdot\mathbf{B}}(\alpha_L a)$ for every Alexandrov-basis set $\mathbf{B}$.
@@ -1868,8 +1868,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{lemma}[Uniqueness of the Quasilocal Lift]
     \label{lmm:quasilocal-lift-unique}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift.unique}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalAction.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift.unique}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalAction.lean}
     \uses{def:quasilocal-lift}
     \leanok
     Any two lifts of the same $L$ have the same underlying automorphism.
@@ -1882,7 +1882,7 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{lemma}[Every Quasilocal Algebra is Covariance-Compatible]
     \label{lmm:quasilocal-covariance-compatible}
-    \lean{Physicslib4.AQFT.HaagKastler.isCovariantQuasilocal}
+    \lean{Hilbert6.AQFT.HaagKastler.isCovariantQuasilocal}
     \uses{def:quasilocal-algebra, def:lorentz-covariance, def:isotony, def:haag-kastler-net}
     \leanok
     Let $\mathfrak{U}$ be any quasilocal algebra (\ref{def:quasilocal-algebra}) of a Haag--Kastler net, with embeddings $\iota_{\mathbf{B}}$. For every Lorentz transformation $L$, all basis sets $\mathbf{B} \subseteq \mathbf{C}$ and $a \in \mathfrak{U}(\mathbf{B})$, $\iota_{L\cdot\mathbf{B}}(\alpha_L a) = \iota_{L\cdot\mathbf{C}}(\alpha_L(i_{\mathbf{B}\mathbf{C}}(a)))$. That is, every quasilocal algebra is covariance-compatible in the sense required by \ref{thrm:quasilocal-lift-exists}.
@@ -1895,8 +1895,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{theorem}[Existence of the Quasilocal Lift]
     \label{thrm:quasilocal-lift-exists}
-    \lean{Physicslib4.AQFT.HaagKastler.nonempty_quasilocalLift}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.nonempty_quasilocalLift}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:quasilocal-lift, def:quasilocal-algebra}
     \leanok
     For every quasilocal algebra of a Haag--Kastler net, the fiberwise Lorentz action extends to a $*$-automorphism of $\mathfrak{U}$, so the lift of \ref{def:quasilocal-lift} exists. Covariance compatibility holds for every quasilocal algebra (\ref{lmm:quasilocal-covariance-compatible}).
@@ -1909,8 +1909,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{theorem}[Existence for the Trivial Net]
     \label{thrm:quasilocal-lift-trivial}
-    \lean{Physicslib4.AQFT.HaagKastler.nonempty_trivialQuasilocalLift}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.nonempty_trivialQuasilocalLift}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
     For the trivial net (every region $\mapsto \mathbb{C}$) and its trivial quasilocal algebra, the quasilocal lift exists for every Lorentz transformation.
 \end{theorem}
@@ -1922,8 +1922,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{definition}[Covariant Quasilocal Algebra]
     \label{def:covariant-quasilocal-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.action}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.action}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
     \uses{def:haag-kastler-net, def:quasilocal-algebra, def:lorentz-covariance, def:quasilocal-lift, thrm:quasilocal-lift-exists}
     The \emph{covariant quasilocal algebra} of a Haag-Kastler net (\ref{def:haag-kastler-net}) is its canonical quasilocal algebra $\mathfrak{U}$ (\ref{def:quasilocal-algebra}, \ref{thrm:quasilocal-algebra-exists}) together with the \emph{covariance action} $L \mapsto \beta_L$, where $\beta_L$ is the quasilocal lift (\ref{def:quasilocal-lift}) of the fiberwise Lorentz action, which exists for every $L$ by \ref{thrm:quasilocal-lift-exists}. No further data is needed: the embeddings of $\mathfrak{U}$ are automatically covariance-compatible (\ref{lmm:quasilocal-covariance-compatible}). The covariance dynamics below are therefore stated directly for the net.
@@ -1931,8 +1931,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{lemma}[Group-Action Coherence of the Covariance Automorphism]
     \label{lmm:quasilocal-action-coherence}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.action_one, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.action_mul}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.action_one, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.action_mul}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:covariant-quasilocal-algebra}
     \leanok
     The covariance action $L \mapsto \beta_L$ of a covariant quasilocal algebra is a genuine action of the Lorentz group by $*$-automorphisms of the quasilocal algebra: $\beta_{\mathbf{1}} = \mathrm{id}$ and $\beta_{L'L} = \beta_{L'} \circ \beta_L$.
@@ -1945,8 +1945,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{definition}[Invariant State]
     \label{def:invariant-state}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \leanok
     \uses{def:covariant-quasilocal-algebra, def:state}
     A state $\omega$ on the quasilocal algebra of a covariant quasilocal algebra (\ref{def:covariant-quasilocal-algebra}) is \emph{(Poincar\'e-)invariant} if it is a fixed point of the dual covariance action: $\omega(\beta_L a) = \omega(a)$ for every Lorentz transformation $L$ and observable $a$. This is the invariance condition of a vacuum state; further conditions (e.g.\ the spectrum condition) are imposed separately.
@@ -1954,7 +1954,7 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{lemma}[Weak Continuity Implies Strong Continuity]
     \label{lmm:weak-continuity-implies-strong}
-    \lean{Physicslib4.strongContinuous_of_weak}
+    \lean{Hilbert6.strongContinuous_of_weak}
     \uses{def:unitary-operator}
     \leanok
     Let $X$ be a topological space, $H$ a complex inner product space, and $x \mapsto U(x)$ a family of unitary operators on $H$ (\ref{def:unitary-operator}) indexed by $X$. Suppose $D \subseteq H$ is dense and the matrix coefficients $x \mapsto \langle \xi, U(x)\eta \rangle$ are continuous for all $\xi, \eta \in D$. Then $x \mapsto U(x)\psi$ is continuous for every $\psi \in H$.
@@ -1971,7 +1971,7 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{theorem}[GNS Unitary Implementation of an Invariant Symmetry]
     \label{thrm:invariant-state-gns-unitary-general}
-    \lean{Physicslib4.GNS.exists_gns_unitary_of_invariant, Physicslib4.GNS.exists_gns_unitaryRep_of_invariant, Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous, Physicslib4.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous}
+    \lean{Hilbert6.GNS.exists_gns_unitary_of_invariant, Hilbert6.GNS.exists_gns_unitaryRep_of_invariant, Hilbert6.GNS.exists_gns_unitary_of_invariant_strongContinuous, Hilbert6.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous}
     \uses{def:state, def:cyclic-vector, thrm:gns-construction-theorem}
     \leanok
     Let $A$ be a unital C*-algebra, $G$ a monoid, and $\gamma_g$, $g \in G$, $*$-automorphisms of $A$ with $\gamma_{g'g} = \gamma_{g'} \circ \gamma_g$ and $\gamma_1 = \mathrm{id}$. Let $\omega$ be a state on $A$ invariant under them, $\omega(\gamma_g a) = \omega(a)$ for all $g \in G$ and $a \in A$. Then there is a GNS triple $(H, \pi, \Omega)$ of $\omega$, that is $\omega(a) = \langle \Omega, \pi(a)\Omega\rangle$ with $\Omega$ cyclic for $\pi$, and unitaries $U(g)$ on $H$ such that
@@ -1990,8 +1990,8 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{theorem}[GNS Unitary Implementation of an Invariant State]
     \label{thrm:invariant-state-gns-unitary}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitary, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitary, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:invariant-state, thrm:gns-construction-theorem}
     \leanok
     For an invariant state $\omega$, the covariance action is implemented on the GNS Hilbert space by a family of unitaries $U(L)$ satisfying $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\,\Omega$ and $U(L)\Omega = \Omega$.
@@ -2006,7 +2006,7 @@ The Lorentz covariance of a Haag-Kastler net (\ref{def:lorentz-covariance}) acts
 
 \begin{theorem}[Strongly Continuous GNS Unitary of an Invariant State]
     \label{thrm:invariant-state-gns-unitary-strongly-continuous}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitary_strongContinuous, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep_strongContinuous}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitary_strongContinuous, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep_strongContinuous}
     \uses{thrm:invariant-state-gns-unitary, def:inhomogeneous-lorentz-group}
     \leanok
     Equip the inhomogeneous Lorentz group (\ref{def:inhomogeneous-lorentz-group}) with the topology induced by the embedding $(L, a) \mapsto (L, L^{-1}, a)$ into the product of the operator-norm topology on linear maps of $\mathbb{R}^4$ (twice) and $\mathbb{R}^4$. Let $\omega$ be an invariant state whose matrix coefficients $L \mapsto \omega(a^* \beta_L b)$ are continuous for all $a, b \in \mathfrak{U}$. Then the GNS unitary representation of \ref{thrm:invariant-state-gns-unitary} can be chosen \emph{strongly continuous}: there is a GNS triple $(H, \pi, \Omega)$ and unitaries $U(L)$ with $U(L)\,\pi(a)\Omega = \pi(\beta_L a)\Omega$, $U(L)\Omega = \Omega$, $U(L'L) = U(L')\,U(L)$, $U(1) = \mathrm{id}$, $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$, and $L \mapsto U(L)\psi$ continuous for every $\psi \in H$. The bundled form \texttt{exists\_gns\_unitaryRep\_strongContinuous} returns $U$ as a group homomorphism into the unitary group of $H$.
@@ -2021,8 +2021,8 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[Irreducible Covariant Representation of a Pure Invariant State]
     \label{thrm:irreducible-covariant-representation}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_irreducible_covariant}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_irreducible_covariant}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalIntertwiner.lean}
     \uses{def:pure-state, def:irreducible-representation, thrm:irreducible-generates-all, def:generated-von-neumann-algebra}
     \leanok
     A state $\omega$ on the quasilocal algebra that is both invariant under the covariance action and pure yields a GNS representation that is simultaneously \emph{covariant} - implemented by a unitary representation $U(L)$ of the inhomogeneous Lorentz group fixing the cyclic vector $\Omega$, with operator covariance $U(L)\,\pi(a)\,U(L)^{-1} = \pi(\beta_L a)$ - and \emph{irreducible}; in particular it generates all of $\mathcal{B}(H)$ ($\pi(\mathfrak{U})'' = \mathcal{B}(H)$, by \ref{thrm:irreducible-generates-all}). It is a necessary precursor to a vacuum representation; the spectrum condition would be the remaining ingredient.
@@ -2035,7 +2035,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{definition}[Positive Energy]
     \label{def:positive-energy}
-    \lean{Physicslib4.AQFT.IsPositiveEnergy}
+    \lean{Hilbert6.AQFT.IsPositiveEnergy}
     \uses{def:hall-10.11, def:hall-10.13, def:positive-unbounded-operator}
     \leanok
     A family $V(t)$, $t \in \mathbb{R}$, of unitary operators on $H$ has \emph{positive energy} when $V$ is a strongly continuous one-parameter unitary group (\ref{def:hall-10.11}) whose infinitesimal generator $A$ (\ref{def:hall-10.13}) is a positive operator (\ref{def:positive-unbounded-operator}): $A$ is symmetric and $\left< \psi, A\psi \right> \ge 0$ for every $\psi \in \text{Dom}(A)$. By Stone's Theorem (\ref{thrm:hall-10.15}) the generator $A$ is then densely defined and self-adjoint, and $V(t) = e^{itA}$ for all $t$; so the condition says exactly that $V(t) = e^{itP}$ with $P$ a positive self-adjoint operator, which is Theorem~\ref{thrm:positive-energy-iff-exp}. The positivity of the generator is the energy-positivity asserted by the spectrum condition.
@@ -2043,7 +2043,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[The Trivial Group has Positive Energy]
     \label{lmm:positive-energy-const}
-    \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl}
+    \lean{Hilbert6.AQFT.isPositiveEnergy_const_refl}
     \uses{def:positive-energy}
     \leanok
     The constant group $t \mapsto \mathbf{1}$ has positive energy, with generator $0$ on domain $H$.
@@ -2056,7 +2056,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[Uniqueness of the Generator]
     \label{lmm:exp-generator-unique}
-    \lean{Physicslib4.AQFT.generator_eq_of_eq_expUnitary}
+    \lean{Hilbert6.AQFT.generator_eq_of_eq_expUnitary}
     \uses{def:hall-10.13, def:exp-unitary-group, def:hall-9.5}
     \leanok
     Let $V(t)$, $t \in \mathbb{R}$, be a family of unitary operators on $H$, and let $B$ be a self-adjoint operator with $V(t) = e^{itB}$ (\ref{def:exp-unitary-group}) for all $t$. Then $B$ is the infinitesimal generator of $V$, with equality of domains. In particular the positive operator witnessing positive energy is unique.
@@ -2069,7 +2069,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[Unitary Conjugation Preserves Positivity]
     \label{lmm:positive-conj}
-    \lean{Physicslib4.Spectral.Unbounded.IsPositive.of_conj}
+    \lean{Hilbert6.Spectral.Unbounded.IsPositive.of_conj}
     \uses{def:positive-unbounded-operator, def:unitary-operator}
     \leanok
     Let $A$ be a positive operator on $H$~(\ref{def:positive-unbounded-operator}) and $W$ a unitary operator on $H$. Then the operator $WAW^{-1}$ with domain $W\,\text{Dom}(A)$ is positive.
@@ -2086,7 +2086,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[Positive Energy is Unitarily Invariant]
     \label{lmm:positive-energy-conj}
-    \lean{Physicslib4.AQFT.IsPositiveEnergy.conj}
+    \lean{Hilbert6.AQFT.IsPositiveEnergy.conj}
     \uses{def:positive-energy, def:unitary-operator}
     \leanok
     If $V$ has positive energy, with generator $A$, and $W$ is unitary, then $t \mapsto WV(t)W^{-1}$ has positive energy, with generator $WAW^{-1}$ on domain $W\,\text{Dom}(A)$. Physically, the spectrum condition does not depend on the choice of unitary frame.
@@ -2099,7 +2099,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[A Positive-Energy Group is Strongly Continuous]
     \label{lmm:positive-energy-strong-continuous}
-    \lean{Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}
+    \lean{Hilbert6.AQFT.IsPositiveEnergy.strongContinuous}
     \uses{def:positive-energy}
     \leanok
     If $V$ has positive energy, then $V$ is strongly continuous: $t \mapsto V(t)x$ is continuous for every $x \in H$.
@@ -2112,7 +2112,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{lemma}[The Bounded Case]
     \label{lmm:positive-energy-exp-bounded}
-    \lean{Physicslib4.AQFT.isPositiveEnergy_exp}
+    \lean{Hilbert6.AQFT.isPositiveEnergy_exp}
     \uses{def:positive-energy, def:non-negative-operator}
     \leanok
     If $P \in \mathcal{B}(H)$ is a bounded positive operator, then $t \mapsto \exp(itP)$, the norm-convergent exponential series, has positive energy, with generator $P$ on domain $H$.
@@ -2125,7 +2125,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[Positive Energy in Exponential Form]
     \label{thrm:positive-energy-iff-exp}
-    \lean{Physicslib4.AQFT.isPositiveEnergy_iff_exists_exp}
+    \lean{Hilbert6.AQFT.isPositiveEnergy_iff_exists_exp}
     \uses{def:positive-energy, def:exp-unitary-group, def:positive-unbounded-operator, def:hall-9.5}
     \leanok
     A family $V(t)$, $t \in \mathbb{R}$, of unitary operators on $H$ has positive energy if and only if there is a positive self-adjoint operator $A$ with $V(t) = e^{itA}$ for all $t$.
@@ -2138,7 +2138,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[Properties of Positive Energy]
     \label{thrm:positive-energy-api}
-    \lean{Physicslib4.AQFT.isPositiveEnergy_const_refl, Physicslib4.AQFT.generator_eq_of_eq_expUnitary, Physicslib4.AQFT.IsPositiveEnergy.conj, Physicslib4.AQFT.IsPositiveEnergy.strongContinuous, Physicslib4.AQFT.isPositiveEnergy_exp, Physicslib4.AQFT.isPositiveEnergy_iff_exists_exp}
+    \lean{Hilbert6.AQFT.isPositiveEnergy_const_refl, Hilbert6.AQFT.generator_eq_of_eq_expUnitary, Hilbert6.AQFT.IsPositiveEnergy.conj, Hilbert6.AQFT.IsPositiveEnergy.strongContinuous, Hilbert6.AQFT.isPositiveEnergy_exp, Hilbert6.AQFT.isPositiveEnergy_iff_exists_exp}
     \uses{def:positive-energy, def:exp-unitary-group, def:positive-unbounded-operator}
     \leanok
     Let $V$ be a family of unitary operators on $H$ indexed by $\mathbb{R}$.
@@ -2164,7 +2164,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{definition}[Vacuum State]
     \label{def:vacuum-state}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}
     \leanok
     \uses{def:invariant-state, def:positive-energy, def:covariant-quasilocal-algebra, thrm:invariant-state-gns-unitary}
     A state $\omega$ on the quasilocal algebra is a \emph{vacuum state} (relative to a future-timelike-translation predicate) when it is invariant under the covariance action (\ref{def:invariant-state}) and, in a GNS representation reproducing $\omega$ and implementing the action by unitaries $U(L)$, every future-timelike translation one-parameter subgroup $\gamma$ has positive energy: $t \mapsto U(\gamma(t))$ satisfies \ref{def:positive-energy}. This packages the two \emph{necessary} vacuum conditions --- invariance and the spectrum condition --- with the spectrum condition entering as the positive-energy hypothesis on the implementing unitaries. The future-timelike-translation predicate is a parameter, instantiated by the concrete predicate of \ref{def:future-timelike-translation} in \ref{def:vacuum-state-concrete}.
@@ -2174,7 +2174,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[Consequences of Invariance for a Vacuum State]
     \label{thrm:vacuum-invariance-consequences}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.invariant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.invariant, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant}
     \uses{def:vacuum-state, thrm:irreducible-covariant-representation}
     \leanok
     The conditions a vacuum state satisfies that do not use the spectrum condition. First, a vacuum state is \emph{invariant} (the first conjunct of the definition). Second, a \emph{pure} vacuum state yields the irreducible covariant GNS representation of \ref{thrm:irreducible-covariant-representation}: a covariant GNS triple with implementing unitaries $U(L)$ fixing $\Omega$ and operator covariance $U(L)\pi(a)U(L)^{-1} = \pi(\beta_L a)$, whose representation is irreducible and generates all of $\mathcal{B}(H)$.
@@ -2187,8 +2187,8 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{definition}[Future-Timelike Translation Subgroup]
     \label{def:future-timelike-translation}
-    \lean{Physicslib4.AQFT.HaagKastler.translationSub, Physicslib4.AQFT.HaagKastler.translationFlow, Physicslib4.AQFT.HaagKastler.isOneParameterSubgroup_translationFlow, Physicslib4.AQFT.HaagKastler.IsFutureTimelikeTranslation}
-    \leanfile{Physicslib4/AQFT/HaagKastler/VacuumState.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.translationSub, Hilbert6.AQFT.HaagKastler.translationFlow, Hilbert6.AQFT.HaagKastler.isOneParameterSubgroup_translationFlow, Hilbert6.AQFT.HaagKastler.IsFutureTimelikeTranslation}
+    \leanfile{Hilbert6/AQFT/HaagKastler/VacuumState.lean}
     \leanok
     \uses{def:lorentz-covariance, def:vacuum-state}
     The pure \emph{translations} of the inhomogeneous Lorentz group: an element is a pair $(\text{linear}, \text{translation})$, and a pure translation $\mathrm{translationSub}(n) = (\mathrm{id}, n)$ has trivial linear part, so $n \mapsto (\mathrm{id}, n)$ embeds the additive group of the spacetime carrier ($\mathrm{translationSub}(0) = 1$, $\mathrm{translationSub}(n+m) = \mathrm{translationSub}(n)\,\mathrm{translationSub}(m)$). The one-parameter translation flow in a direction $n$ is $\mathrm{translationFlow}(n)(t) = (\mathrm{id}, t \cdot n)$, which is a one-parameter subgroup. A one-parameter subgroup $\gamma$ is a \emph{future-timelike translation} when $\gamma = \mathrm{translationFlow}(n)$ for some future-pointing timelike $n$ --- i.e. $n$ lies in the forward Minkowski cone at the origin. This wires in the translation subgroup and its causal structure, giving the concrete predicate with which the abstract future-timelike-translation parameter of \ref{def:vacuum-state} is discharged.
@@ -2196,7 +2196,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{definition}[Vacuum State with the Concrete Spectrum Condition]
     \label{def:vacuum-state-concrete}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumStateConcrete}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumStateConcrete}
     \leanok
     \uses{def:vacuum-state, def:future-timelike-translation}
     The vacuum-state condition of \ref{def:vacuum-state} with its future-timelike-translation parameter fixed to the concrete predicate \ref{def:future-timelike-translation}: the spectrum condition is imposed on exactly the one-parameter translation subgroups $t \mapsto (\mathrm{id}, t \cdot n)$ with $n$ future-pointing timelike. The vacuum definition then depends on no free predicate. Invariance and (for a pure state) the irreducible covariant representation follow as in \ref{thrm:vacuum-invariance-consequences}, since the concrete form unfolds to the parameterized one.
@@ -2204,8 +2204,8 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[Purity is Covariance-Invariant]
     \label{thrm:purity-covariance-invariant}
-    \lean{Physicslib4.GNS.isPure_precomp_iff, Physicslib4.GNS.State.precomp, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isPure_precomp_action_iff}
-    \leanfile{Physicslib4/GNS/ExtremeState.lean}
+    \lean{Hilbert6.GNS.isPure_precomp_iff, Hilbert6.GNS.State.precomp, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.isPure_precomp_action_iff}
+    \leanfile{Hilbert6/GNS/ExtremeState.lean}
     \uses{def:pure-state, lmm:quasilocal-action-coherence}
     \leanok
     Purity is preserved by any $*$-automorphism: for $\Phi : \mathfrak{U} \xrightarrow{\sim} \mathfrak{U}$, the pullback state $\omega \circ \Phi$ is pure if and only if $\omega$ is. Applied to the covariance automorphism $\Phi = \beta_L$, this says purity of a state is a Lorentz-covariance-invariant property.
@@ -2218,7 +2218,7 @@ Combining invariance with purity makes the GNS representation both covariant and
 
 \begin{theorem}[GNS covariance along the quasilocal action]
     \label{thrm:gns-covariance-quasilocal-action}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.unitaryEquiv_gns_action, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isIrreducible_iff_gns_action, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isFactor_iff_gns_action}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.unitaryEquiv_gns_action, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.isIrreducible_iff_gns_action, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.isFactor_iff_gns_action}
     \uses{def:covariant-quasilocal-algebra, thrm:gns-covariance-unitary-equiv, thrm:gns-sector-transport, def:state-pullback, def:factor}
     \leanok
     The lifted covariance automorphism $\beta_L$ of the quasilocal algebra $\mathfrak{U}$ is a $*$-automorphism, hence in particular a $*$-isomorphism, so the abstract GNS-covariance results apply to it. Let $\omega$ be a state on $\mathfrak{U}$. A cyclic representation of $\mathfrak{U}$ reproducing the pullback state $\omega \circ \beta_L$ is unitarily equivalent to $\pi_\omega \circ \beta_L$ (\ref{thrm:gns-covariance-unitary-equiv}), is irreducible exactly when $\pi_\omega$ is, and generates a factor exactly when $\pi_\omega$ does (\ref{thrm:gns-sector-transport}). Whereas \ref{thrm:gns-covariance-local} moves between the algebras of two different regions, here the algebra is fixed and the Lorentz group acts on it: the conclusion is that the superselection type of a \emph{global} state is a Lorentz invariant. Together with the invariance of purity (\ref{thrm:purity-covariance-invariant}) this says the entire sector classification of global states is Lorentz invariant.
@@ -2235,8 +2235,8 @@ A faithful state has a sharper consequence at the level of the GNS construction 
 
 \begin{theorem}[Separating Vector of a Faithful State]
     \label{thrm:separating-faithful}
-    \lean{Physicslib4.GNS.separating_of_faithful, Physicslib4.GNS.exists_gns_separating}
-    \leanfile{Physicslib4/GNS/Separating.lean}
+    \lean{Hilbert6.GNS.separating_of_faithful, Hilbert6.GNS.exists_gns_separating}
+    \leanfile{Hilbert6/GNS/Separating.lean}
     \uses{def:state, def:cyclic-vector, thrm:gns-construction-theorem}
     \leanok
     Let $\omega$ be a faithful state and $(\mathcal{H}_\omega, \pi_\omega, \Omega)$ its GNS triple. Then the cyclic vector $\Omega$ is \emph{separating} for $\pi_\omega(\mathfrak{U})$: if $\pi_\omega(a)\Omega = 0$ then $a = 0$. This holds in any representation reproducing a faithful state, not only the GNS one.
@@ -2253,16 +2253,16 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
 
 \begin{definition}[One-Parameter Automorphism Group]
     \label{def:one-parameter-aut}
-    \lean{Physicslib4.AQFT.IsOneParameterAut}
-    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \lean{Hilbert6.AQFT.IsOneParameterAut}
+    \leanfile{Hilbert6/AQFT/KMS.lean}
     \leanok
     A family $\alpha : \mathbb{R} \to (A \simeq_{\star\mathrm{a}} A)$ of $*$-automorphisms of a C$^*$-algebra $A$ is a \emph{one-parameter group} if $\alpha_0 = \mathrm{id}$ and $\alpha_{s+t} = \alpha_s \circ \alpha_t$. This is the algebraic time evolution; in the curved-spacetime setting it is the automorphism group induced by a Killing flow.
 \end{definition}
 
 \begin{definition}[KMS State]
     \label{def:kms-state}
-    \lean{Physicslib4.AQFT.IsKMSState}
-    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \lean{Hilbert6.AQFT.IsKMSState}
+    \leanfile{Hilbert6/AQFT/KMS.lean}
     \leanok
     \uses{def:one-parameter-aut, def:state}
     A state $\omega$ on $A$ is \emph{$(\alpha, \beta)$-KMS} for a one-parameter automorphism group $\alpha$ (\ref{def:one-parameter-aut}) at inverse temperature $\beta$ if for every $a, b \in A$ the correlation function $t \mapsto \omega(a\,\alpha_t b)$ extends to a function $F$ on the closed strip $0 \le \operatorname{Im} z \le \beta$ that is continuous there, holomorphic on the open strip, bounded, and whose boundary value on $\operatorname{Im} z = \beta$ is $t \mapsto \omega(\alpha_t b\, \cdot a)$.
@@ -2270,8 +2270,8 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
 
 \begin{theorem}[The KMS State Set is Convex]
     \label{thrm:kms-convex}
-    \lean{Physicslib4.AQFT.IsKMSState.convexCombo}
-    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \lean{Hilbert6.AQFT.IsKMSState.convexCombo}
+    \leanfile{Hilbert6/AQFT/KMS.lean}
     \uses{def:kms-state}
     \leanok
     A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two $(\alpha, \beta)$-KMS states is again $(\alpha, \beta)$-KMS. Thus the equilibrium states at a fixed temperature form a convex set.
@@ -2284,8 +2284,8 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
 
 \begin{lemma}[Boundary Coincidence for $a = 1$]
     \label{lmm:kms-correlation-one}
-    \lean{Physicslib4.AQFT.IsKMSState.correlationOne}
-    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \lean{Hilbert6.AQFT.IsKMSState.correlationOne}
+    \leanfile{Hilbert6/AQFT/KMS.lean}
     \uses{def:kms-state}
     \leanok
     For a KMS state $\omega$ and any observable $a$, the correlation function $F$ of the pair $(1, a)$ has its two boundary values \emph{equal} - both are $t \mapsto \omega(\alpha_t a)$.
@@ -2298,16 +2298,16 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
 
 \begin{definition}[Strip-Liouville Principle]
     \label{def:strip-liouville}
-    \lean{Physicslib4.AQFT.StripLiouville}
-    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \lean{Hilbert6.AQFT.StripLiouville}
+    \leanfile{Hilbert6/AQFT/KMS.lean}
     \leanok
     The \emph{strip-Liouville principle} at width $\beta$ is the statement that any function $F$ continuous and bounded on the closed strip $0 \le \operatorname{Im} z \le \beta$, holomorphic on the open strip, and with equal boundary values $F(t) = F(t + i\beta)$ for all real $t$, is constant along the real axis: $F(t) = F(0)$. It is the analytic input that turns boundary coincidence into invariance.
 \end{definition}
 
 \begin{theorem}[$i\beta$-Periodic Entire Extension (Strip Schwarz Reflection)]
     \label{thrm:strip-periodic-extension}
-    \lean{Physicslib4.exists_bounded_entire_extension_of_strip_periodic}
-    \leanfile{Physicslib4/Analysis/StripPeriodicExtension.lean}
+    \lean{Hilbert6.exists_bounded_entire_extension_of_strip_periodic}
+    \leanfile{Hilbert6/Analysis/StripPeriodicExtension.lean}
     \leanok
     A function $F$ continuous on the closed strip $0 \le \operatorname{Im} z \le \beta$, holomorphic on the open strip, bounded, and with equal boundary values $F(t) = F(t + i\beta)$ on the real axis, admits a \emph{bounded entire} extension $H$ agreeing with $F$ on $\mathbb{R}$. This is the analytic engine behind the strip-Liouville principle.
 \end{theorem}
@@ -2319,8 +2319,8 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
 
 \begin{theorem}[Strip-Liouville Holds for $\beta > 0$]
     \label{thrm:strip-liouville-pos}
-    \lean{Physicslib4.AQFT.stripLiouville_of_pos}
-    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \lean{Hilbert6.AQFT.stripLiouville_of_pos}
+    \leanfile{Hilbert6/AQFT/KMS.lean}
     \uses{def:strip-liouville}
     \leanok
     At positive width $\beta > 0$ the strip-Liouville principle (\ref{def:strip-liouville}) is a theorem. The hypothesis $\beta > 0$ is necessary: at $\beta = 0$ the open strip is empty and at $\beta < 0$ the strip itself is empty, and in both cases the principle is false.
@@ -2333,8 +2333,8 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
 
 \begin{theorem}[KMS States are Invariant]
     \label{thrm:kms-invariance}
-    \lean{Physicslib4.AQFT.IsKMSState.invariant_of_pos}
-    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \lean{Hilbert6.AQFT.IsKMSState.invariant_of_pos}
+    \leanfile{Hilbert6/AQFT/KMS.lean}
     \uses{def:kms-state}
     \leanok
     At positive inverse temperature $\beta > 0$, every $(\alpha, \beta)$-KMS state $\omega$ is $\alpha$-invariant: $\omega(\alpha_t a) = \omega(a)$ for all $t$ and $a$.
@@ -2347,8 +2347,8 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
 
 \begin{theorem}[Uniqueness on the Strip from Boundary Values]
     \label{thrm:strip-uniqueness}
-    \lean{Physicslib4.eqOn_strip_of_eq_boundary}
-    \leanfile{Physicslib4/Analysis/StripPeriodicExtension.lean}
+    \lean{Hilbert6.eqOn_strip_of_eq_boundary}
+    \leanfile{Hilbert6/Analysis/StripPeriodicExtension.lean}
     \leanok
     Two functions continuous and bounded on the closed strip $0 \le \operatorname{Im} z \le \beta$ (with $\beta > 0$), holomorphic on the open strip, that agree on \emph{both} boundary lines $\operatorname{Im} z = 0$ and $\operatorname{Im} z = \beta$, agree on the whole strip.
 \end{theorem}
@@ -2360,8 +2360,8 @@ Poincar\'e (or Killing-flow) invariance is only part of what singles out a physi
 
 \begin{theorem}[Uniqueness of the KMS Correlation Function]
     \label{thrm:kms-correlation-unique}
-    \lean{Physicslib4.AQFT.IsKMSState.correlation_eqOn}
-    \leanfile{Physicslib4/AQFT/KMS.lean}
+    \lean{Hilbert6.AQFT.IsKMSState.correlation_eqOn}
+    \leanfile{Hilbert6/AQFT/KMS.lean}
     \uses{def:kms-state}
     \leanok
     For $\beta > 0$, the analytic completion of a KMS correlation function is unique: any two functions satisfying the KMS analytic data for the same pair $(a, b)$ - continuous and bounded on the strip, holomorphic on the interior, with the prescribed boundary values $t \mapsto \omega(a\,\alpha_t b)$ and $t \mapsto \omega(\alpha_t b\,\cdot a)$ - agree on the whole strip.
@@ -2378,8 +2378,8 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{definition}[Covariance-Flow Automorphism Family]
     \label{def:flow-aut-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.flowAut}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.flowAut}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalKMS.lean}
     \leanok
     \uses{def:covariant-quasilocal-algebra, lmm:quasilocal-action-coherence}
     Given a one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group, the \emph{covariance-flow automorphism family} of $\mathfrak{U}$ is $t \mapsto \beta_{L_t}$, the covariance action evaluated along the flow.
@@ -2387,8 +2387,8 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{lemma}[A Lorentz One-Parameter Subgroup Induces a One-Parameter Group]
     \label{lmm:one-parameter-aut-flow-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isOneParameterAut_flowAut}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.isOneParameterAut_flowAut}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalKMS.lean}
     \uses{def:flow-aut-covariance, def:one-parameter-aut}
     \leanok
     If $t \mapsto L_t$ is a one-parameter subgroup ($L_0 = 1$, $L_{s+t} = L_s L_t$), then the induced automorphisms $t \mapsto \beta_{L_t}$ of $\mathfrak{U}$ form a one-parameter automorphism group (\ref{def:one-parameter-aut}).
@@ -2401,8 +2401,8 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{definition}[KMS State for the Covariance Flow]
     \label{def:kms-state-for-flow-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalKMS.lean}
     \leanok
     \uses{lmm:one-parameter-aut-flow-covariance, def:kms-state, def:state}
     A state $\omega$ on the quasilocal algebra $\mathfrak{U}$ is a \emph{KMS state for the covariance flow} $L$ at inverse temperature $\beta$ if it satisfies the KMS condition (\ref{def:kms-state}) for the induced one-parameter automorphism group (\ref{lmm:one-parameter-aut-flow-covariance}).
@@ -2410,8 +2410,8 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{theorem}[Convexity of the Covariance-Flow KMS States]
     \label{thrm:kms-convex-for-flow-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow.convexCombo}
-    \leanfile{Physicslib4/AQFT/HaagKastler/QuasilocalKMS.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow.convexCombo}
+    \leanfile{Hilbert6/AQFT/HaagKastler/QuasilocalKMS.lean}
     \uses{def:kms-state-for-flow-covariance}
     \leanok
     A convex combination $s\,\omega_1 + (1-s)\,\omega_2$ ($0 \le s \le 1$) of two KMS states on $\mathfrak{U}$ for the same covariance flow $L$ at the same inverse temperature $\beta$ is again a KMS state for that flow. Physically, the equilibrium states for a one-parameter symmetry flow form a convex set.
@@ -2424,7 +2424,7 @@ A one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group - fo
 
 \begin{definition}[Ground State for a Covariance Flow]
     \label{def:ground-state-for-flow-covariance}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow.invariant, Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow.exists_strongContinuous_unitary}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow.invariant, Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow.exists_strongContinuous_unitary}
     \leanok
     \uses{def:kms-state-for-flow-covariance, def:positive-energy, def:covariant-quasilocal-algebra, lmm:positive-energy-strong-continuous}
     A state $\omega$ on the quasilocal algebra $\mathfrak{U}$ is a \emph{ground state} for a one-parameter subgroup $t \mapsto L_t$ of the inhomogeneous Lorentz group (e.g.\ a translation or boost flow) when it is invariant under the flow and, in a GNS representation reproducing $\omega$ and implementing the flow by unitaries $U(t)$ fixing $\Omega$, the one-parameter unitary group $t \mapsto U(t)$ has positive energy (\ref{def:positive-energy}). This is the ground-state ($\beta \to \infty$, spectrum-condition) counterpart of the covariance-flow KMS state \ref{def:kms-state-for-flow-covariance}: the stationary state whose flow generator, the Hamiltonian for a timelike flow, is positive. Two consequences that do not use the positivity of the generator: a ground state is flow-invariant, and its implementing unitary group is strongly continuous. It is the Minkowski analogue of the curved Killing-flow ground state \ref{def:ground-state-for-flow-in-curved-spacetime}.

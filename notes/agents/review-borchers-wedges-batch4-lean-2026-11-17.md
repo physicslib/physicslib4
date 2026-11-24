@@ -1,6 +1,6 @@
 # Review: Lean statements for borchers-wedges batch 4, part 1 (2026-11-17)
 
-File reviewed: `Physicslib4/AQFT/HaagKastler/BisognanoWichmann.lean`.
+File reviewed: `Hilbert6/AQFT/HaagKastler/BisognanoWichmann.lean`.
 
 There are 12 sorry'd statements. Fifteen nodes that need the four new definitions are deferred,
 pending guard approval for this file.

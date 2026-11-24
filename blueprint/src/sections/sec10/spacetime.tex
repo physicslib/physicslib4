@@ -1,8 +1,8 @@
 \section{Spacetime}\label{sctn:spacetime}
 \begin{definition}[Spacetime]
     \label{def:spacetime}
-    \lean{Physicslib4.Spacetime}
-    \leanfile{Physicslib4/Spacetime/Basic.lean}
+    \lean{Hilbert6.Spacetime}
+    \leanfile{Hilbert6/Spacetime/Basic.lean}
     \leanok
     A \textit{spacetime} is a real, four-dimensional, connected, smooth, Hausdorff manifold $M$ with a globally defined smooth tensor field $g$ of type $(0,2)$ which is non-degenerate and ``Lorentzian''. By \textit{Lorentzian} we mean that for any $p \in M$ there is a basis of the tangent space $TM|_p$ to $M$ at $p$ relative to which $g|_p$ is zero in its non-diagonal entries and on the diagonal takes the form $\text{diag}(-1,1,1,1)$.
 
@@ -35,8 +35,8 @@
 
 \begin{definition}[Standard Minkowski Spacetime]
     \label{def:standard-minkowski-spacetime}
-    \lean{Physicslib4.StandardMinkowskiSpacetime}
-    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \lean{Hilbert6.StandardMinkowskiSpacetime}
+    \leanfile{Hilbert6/Spacetime/Minkowski.lean}
     \uses{def:spacetime}
     \leanok
     \textit{Standard Minkowski spacetime} is a spacetime in which the underlying real, four-dimensional, connected, smooth, Hausdorff manifold is $\mathbb{R}^4$ with the Euclidean topology. In addition $g$ takes the form $g|_p=\text{diag}(-1,1,1,1)$ for all $p$ in $\mathbb{R}^4$ with respect to the standard coordinates on $\mathbb{R}^4$.
@@ -44,8 +44,8 @@
 
 \begin{definition}[Timelike, Spacelike, or Null Vectors]
     \label{def:timelike-spacelike-null-vectors}
-    \lean{Physicslib4.Spacetime.IsTimelike, Physicslib4.Spacetime.IsSpacelike, Physicslib4.Spacetime.IsNull}
-    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \lean{Hilbert6.Spacetime.IsTimelike, Hilbert6.Spacetime.IsSpacelike, Hilbert6.Spacetime.IsNull}
+    \leanfile{Hilbert6/Spacetime/CausalStructure.lean}
     \leanok
     \uses{def:spacetime}
     Let $M$ be a spacetime, $p$ a point in $M$, and $g$ the tensor field of type $(0,2)$ associated to $M$. Any tangent vector $v \in TM|_p$ is \textit{timelike}, \textit{spacelike}, or \textit{null} if $g|_p(v,v)$ is negative, positive, or zero respectively.
@@ -53,8 +53,8 @@
 
 \begin{lemma}[Causal Classification]
     \label{lmm:causal-classification}
-    \lean{Physicslib4.Spacetime.isTimelike_or_isNull_or_isSpacelike, Physicslib4.Spacetime.not_isSpacelike_of_isTimelike, Physicslib4.Spacetime.not_isTimelike_of_isSpacelike, Physicslib4.Spacetime.not_isNull_of_isTimelike, Physicslib4.Spacetime.not_isNull_of_isSpacelike, Physicslib4.Spacetime.isNull_zero}
-    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \lean{Hilbert6.Spacetime.isTimelike_or_isNull_or_isSpacelike, Hilbert6.Spacetime.not_isSpacelike_of_isTimelike, Hilbert6.Spacetime.not_isTimelike_of_isSpacelike, Hilbert6.Spacetime.not_isNull_of_isTimelike, Hilbert6.Spacetime.not_isNull_of_isSpacelike, Hilbert6.Spacetime.isNull_zero}
+    \leanfile{Hilbert6/Spacetime/CausalStructure.lean}
     \uses{def:timelike-spacelike-null-vectors}
     \leanok
     Every tangent vector $v \in TM|_p$ is exactly one of timelike, null, or spacelike. In particular the three classes are mutually exclusive, and the zero vector is null.
@@ -66,8 +66,8 @@
 
 \begin{lemma}[Reverse Cauchy-Schwarz for Timelike Vectors]
     \label{lmm:reverse-cauchy-schwarz}
-    \lean{Physicslib4.reverse_cauchy_schwarz_of_lorentzianAt, Physicslib4.Spacetime.reverse_cauchy_schwarz}
-    \leanfile{Physicslib4/Spacetime/LorentzCauchySchwarz.lean}
+    \lean{Hilbert6.reverse_cauchy_schwarz_of_lorentzianAt, Hilbert6.Spacetime.reverse_cauchy_schwarz}
+    \leanfile{Hilbert6/Spacetime/LorentzCauchySchwarz.lean}
     \uses{def:spacetime, def:timelike-spacelike-null-vectors}
     \leanok
     Let $g$ be a symmetric Lorentzian bilinear form on a real four-dimensional vector space and let $v, w$ be timelike, that is $g(v,v) < 0$ and $g(w,w) < 0$. Then the reverse Cauchy-Schwarz inequality holds:
@@ -87,8 +87,8 @@
 
 \begin{lemma}[Timelike Cone Convexity and Reverse Triangle Inequality]
     \label{lmm:timelike-cone-convexity}
-    \lean{Physicslib4.add_isTimelike_of_lorentzianAt, Physicslib4.reverse_triangle_of_lorentzianAt, Physicslib4.Spacetime.add_isTimelike, Physicslib4.Spacetime.reverse_triangle}
-    \leanfile{Physicslib4/Spacetime/LorentzCone.lean}
+    \lean{Hilbert6.add_isTimelike_of_lorentzianAt, Hilbert6.reverse_triangle_of_lorentzianAt, Hilbert6.Spacetime.add_isTimelike, Hilbert6.Spacetime.reverse_triangle}
+    \leanfile{Hilbert6/Spacetime/LorentzCone.lean}
     \uses{def:spacetime, def:timelike-spacelike-null-vectors, lmm:reverse-cauchy-schwarz}
     \leanok
     Let $g$ be a symmetric Lorentzian bilinear form on a real four-dimensional vector space and let $v, w$ be timelike and \emph{aligned}, that is $g(v,v) < 0$, $g(w,w) < 0$ and $g(v,w) \le 0$. Then $v + w$ is timelike, and the reverse (Lorentzian) triangle inequality holds:
@@ -105,7 +105,7 @@
 
 \begin{definition}[Lorentz, Proper and Orthochronous Transformations]
     \label{def:lorentz-transformation}
-    \lean{Physicslib4.IsLorentz, Physicslib4.IsProper, Physicslib4.IsOrthochronous}
+    \lean{Hilbert6.IsLorentz, Hilbert6.IsProper, Hilbert6.IsOrthochronous}
     \uses{def:standard-minkowski-spacetime}
     \leanok
     Let $\eta(v,w) = -v^0 w^0 + v^1 w^1 + v^2 w^2 + v^3 w^3$ be the Minkowski form on $\mathbb{R}^4$ and $e_0 = (1,0,0,0)$. A linear automorphism $L$ of $\mathbb{R}^4$ is
@@ -119,7 +119,7 @@
 
 \begin{lemma}[Orthochronous Lorentz Transformations Preserve the Future Cone]
     \label{lmm:orthochronous-preserves-future-timelike}
-    \lean{Physicslib4.isOrthochronous_pos_time_of_timelike}
+    \lean{Hilbert6.isOrthochronous_pos_time_of_timelike}
     \uses{def:lorentz-transformation}
     \leanok
     Let $L$ be an orthochronous Lorentz transformation and let $v \in \mathbb{R}^4$ be timelike, $\eta(v,v) < 0$, with positive time component $v^0 > 0$. Then $(Lv)^0 > 0$.
@@ -132,7 +132,7 @@
 
 \begin{lemma}[Closure of the Lorentz Conditions]
     \label{lmm:lorentz-closure}
-    \lean{Physicslib4.isLorentz_refl, Physicslib4.isLorentz_trans, Physicslib4.isLorentz_symm, Physicslib4.isProper_refl, Physicslib4.isProper_trans, Physicslib4.isProper_symm, Physicslib4.isOrthochronous_refl, Physicslib4.isOrthochronous_trans, Physicslib4.isOrthochronous_symm}
+    \lean{Hilbert6.isLorentz_refl, Hilbert6.isLorentz_trans, Hilbert6.isLorentz_symm, Hilbert6.isProper_refl, Hilbert6.isProper_trans, Hilbert6.isProper_symm, Hilbert6.isOrthochronous_refl, Hilbert6.isOrthochronous_trans, Hilbert6.isOrthochronous_symm}
     \uses{def:lorentz-transformation}
     \leanok
     The identity is Lorentz, proper and orthochronous. Each of the Lorentz and proper conditions is preserved by composition and inversion. If $L_1, L_2$ are orthochronous Lorentz transformations, then $L_2 \circ L_1$ and $L_1^{-1}$ are orthochronous. Hence $SO(1,3)^{\uparrow}$ is a group.
@@ -145,7 +145,7 @@
 
 \begin{definition}[Inhomogeneous Lorentz Group]
     \label{def:inhomogeneous-lorentz-group}
-    \lean{Physicslib4.AQFT.HaagKastler.InhomogeneousLorentzGroup}
+    \lean{Hilbert6.AQFT.HaagKastler.InhomogeneousLorentzGroup}
     \uses{def:lorentz-transformation, lmm:lorentz-closure, def:standard-minkowski-spacetime}
     \leanok
     The \textit{inhomogeneous Lorentz group} (the identity component of the Poincar\'e group) is the set of pairs $(L, a)$ with $L \in SO(1,3)^{\uparrow}$ and $a \in \mathbb{R}^4$, with product $(L_1, a_1)(L_2, a_2) = (L_1 L_2,\, a_1 + L_1 a_2)$. It acts on standard Minkowski spacetime by the affine maps $(L, a) \cdot x = Lx + a$.
@@ -153,8 +153,8 @@
 
 \begin{definition}[Time Orientation]
     \label{def:time-orientable}
-    \lean{Physicslib4.Spacetime.TimeOrientation, Physicslib4.Spacetime.IsTimeOrientable}
-    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \lean{Hilbert6.Spacetime.TimeOrientation, Hilbert6.Spacetime.IsTimeOrientable}
+    \leanfile{Hilbert6/Spacetime/CausalStructure.lean}
     \uses{def:spacetime, def:timelike-spacelike-null-vectors}
     \leanok
     A spacetime $M$ is \textit{time-orientable} if it admits a smooth, non-vanishing vector field $t$ that is timelike. Such a smooth, non-vanishing vector field is called a \textit{time-orientation}.
@@ -168,8 +168,8 @@
 
 \begin{definition}[Future and Past Pointing Vectors]
     \label{def:future-and-past-pointing-vectors}
-    \lean{Physicslib4.Spacetime.IsFuturePointing, Physicslib4.Spacetime.IsPastPointing}
-    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \lean{Hilbert6.Spacetime.IsFuturePointing, Hilbert6.Spacetime.IsPastPointing}
+    \leanfile{Hilbert6/Spacetime/CausalStructure.lean}
     \leanok
     \uses{def:spacetime, def:timelike-spacelike-null-vectors, def:time-orientable}
     Let $t$ be a time orientation on $M$ (\ref{def:time-orientable}). For any $p$ in a spacetime $M$ a timelike tangent vector $v \in TM|_p$ is \textit{future-pointing} if $g|_p(t,v)$ is negative and \textit{past-pointing} if $g|_p(t,v)$ is positive. A null tangent vector $n \in TM|_p$ is \textit{future-pointing} if it is the limit of \textit{future-pointing} timelike tangent vectors and it is \textit{past-pointing} if it is the limit of \textit{past-pointing} timelike tangent vectors.
@@ -177,8 +177,8 @@
 
 \begin{lemma}[Orientation of Pointing Vectors]
     \label{lmm:pointing-orientation}
-    \lean{Physicslib4.Spacetime.isTimelike_or_isNull_of_isFuturePointing, Physicslib4.Spacetime.isTimelike_or_isNull_of_isPastPointing, Physicslib4.Spacetime.not_isFuturePointing_and_isPastPointing_of_isTimelike}
-    \leanfile{Physicslib4/Spacetime/CausalStructure.lean}
+    \lean{Hilbert6.Spacetime.isTimelike_or_isNull_of_isFuturePointing, Hilbert6.Spacetime.isTimelike_or_isNull_of_isPastPointing, Hilbert6.Spacetime.not_isFuturePointing_and_isPastPointing_of_isTimelike}
+    \leanfile{Hilbert6/Spacetime/CausalStructure.lean}
     \uses{def:future-and-past-pointing-vectors, lmm:causal-classification}
     \leanok
     A future-pointing or past-pointing vector is timelike or null. Moreover a timelike vector cannot be both future-pointing and past-pointing with respect to a fixed time orientation.
@@ -190,8 +190,8 @@
 
 \begin{lemma}[Sign Lemma for the Future Cone]
     \label{lmm:cone-sign-lemma}
-    \lean{Physicslib4.nonneg_of_orthogonal_timelike, Physicslib4.cauchy_schwarz_on_orthogonal, Physicslib4.bilin_neg_of_inner_t_neg, Physicslib4.Spacetime.inner_neg_of_future_timelike, Physicslib4.Spacetime.inner_neg_of_past_timelike}
-    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \lean{Hilbert6.nonneg_of_orthogonal_timelike, Hilbert6.cauchy_schwarz_on_orthogonal, Hilbert6.bilin_neg_of_inner_t_neg, Hilbert6.Spacetime.inner_neg_of_future_timelike, Hilbert6.Spacetime.inner_neg_of_past_timelike}
+    \leanfile{Hilbert6/Spacetime/LorentzOrthogonal.lean}
     \uses{def:spacetime, def:time-orientable, def:future-and-past-pointing-vectors, lmm:reverse-cauchy-schwarz}
     \leanok
     Let $g$ be a symmetric Lorentzian bilinear form, $t$ a timelike vector, and write $t^\perp = \{u : g(t,u) = 0\}$ for the spacelike complement. Then $g$ is positive semidefinite on $t^\perp$ (so the ordinary Cauchy-Schwarz inequality holds there), and consequently for any timelike $v, w$ with $g(t,v) < 0$ and $g(t,w) < 0$ one has $g(v,w) < 0$. In particular two timelike tangent vectors that are future-pointing with respect to a common time orientation have negative inner product; by time reversal the same holds for two past-pointing timelike vectors (with $g(t,v) > 0$ and $g(t,w) > 0$).
@@ -204,8 +204,8 @@
 
 \begin{lemma}[Definiteness of the Spacelike Complement]
     \label{lmm:spacelike-complement-definite}
-    \lean{Physicslib4.eq_zero_of_forall_bilin_eq_zero, Physicslib4.pos_of_orthogonal_timelike, Physicslib4.Spacetime.isSpacelike_of_orthogonal_timelike}
-    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \lean{Hilbert6.eq_zero_of_forall_bilin_eq_zero, Hilbert6.pos_of_orthogonal_timelike, Hilbert6.Spacetime.isSpacelike_of_orthogonal_timelike}
+    \leanfile{Hilbert6/Spacetime/LorentzOrthogonal.lean}
     \uses{def:spacetime, def:timelike-spacelike-null-vectors, lmm:cone-sign-lemma}
     \leanok
     A Lorentzian bilinear form is nondegenerate: if $g(v,w) = 0$ for every $w$, then $v = 0$ (this is read off the signature basis, on which the Gram matrix $\mathrm{diag}(-1,1,1,1)$ is invertible). Consequently $g$ is positive \emph{definite} on the spacelike complement: if $t$ is timelike and $u \ne 0$ satisfies $g(t,u) = 0$, then $g(u,u) > 0$, i.e. $u$ is spacelike.
@@ -218,8 +218,8 @@
 
 \begin{lemma}[Convexity of the Future Cone]
     \label{lmm:future-cone-convexity}
-    \lean{Physicslib4.Spacetime.isFuturePointing_add, Physicslib4.Spacetime.exists_seq_of_isFuturePointing, Physicslib4.Spacetime.inner_t_nonpos_of_future, Physicslib4.Spacetime.inner_nonpos_of_future, Physicslib4.Spacetime.isFuturePointing_add_general, Physicslib4.Spacetime.isPastPointing_iff_isFuturePointing_neg, Physicslib4.Spacetime.isPastPointing_add, Physicslib4.Spacetime.isFuturePointing_smul_pos, Physicslib4.Spacetime.isFuturePointing_pos_combination, Physicslib4.Spacetime.isPastPointing_smul_pos, Physicslib4.Spacetime.isPastPointing_pos_combination}
-    \leanfile{Physicslib4/Spacetime/LorentzOrthogonal.lean}
+    \lean{Hilbert6.Spacetime.isFuturePointing_add, Hilbert6.Spacetime.exists_seq_of_isFuturePointing, Hilbert6.Spacetime.inner_t_nonpos_of_future, Hilbert6.Spacetime.inner_nonpos_of_future, Hilbert6.Spacetime.isFuturePointing_add_general, Hilbert6.Spacetime.isPastPointing_iff_isFuturePointing_neg, Hilbert6.Spacetime.isPastPointing_add, Hilbert6.Spacetime.isFuturePointing_smul_pos, Hilbert6.Spacetime.isFuturePointing_pos_combination, Hilbert6.Spacetime.isPastPointing_smul_pos, Hilbert6.Spacetime.isPastPointing_pos_combination}
+    \leanfile{Hilbert6/Spacetime/LorentzOrthogonal.lean}
     \uses{def:future-and-past-pointing-vectors, lmm:cone-sign-lemma, lmm:timelike-cone-convexity}
     \leanok
     The sum of two timelike future-pointing tangent vectors (with respect to a fixed time orientation) is again timelike and future-pointing. More generally, the sum of any two future-pointing tangent vectors -- timelike or null -- is future-pointing, so the full future cone, including its null boundary, is convex. Since a vector is past-pointing exactly when its negation is future-pointing, the past cone is convex as well. Downstream this packages as the statement that the future-pointing and past-pointing tangent vectors each form a convex cone: they are closed under positive scaling and, more generally, under positive linear combinations $a v + b w$ with $a, b > 0$.
@@ -232,8 +232,8 @@
 
 \begin{definition}[Paths]
     \label{def:paths}
-    \lean{Physicslib4.Spacetime.Path, Physicslib4.Spacetime.SmoothPath}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.Path, Hilbert6.Spacetime.SmoothPath}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \leanok
     \uses{def:spacetime}
     A \textit{path} is a continuous map $\mu :\Sigma \rightarrow M$ from the \textit{parameter space}--a closed, connected subset $\Sigma$ of $\mathbb{R}$ that contains more than a single point--to a spacetime $M$. A \textit{smooth path} is a path $\mu$ that is smooth and has a non-vanishing derivative.
@@ -241,8 +241,8 @@
 
 \begin{definition}[Curves]
     \label{def:curves}
-    \lean{Physicslib4.Spacetime.Curve, Physicslib4.Spacetime.SmoothCurve}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.Curve, Hilbert6.Spacetime.SmoothCurve}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \leanok
     \uses{def:paths}
     A \textit{curve} is an equivalence class of paths equivalent under homeomorphisms of the parameter space. A \textit{smooth curve} is an equivalence class of smooth paths equivalent under diffeomorphisms of the parameter space.
@@ -250,8 +250,8 @@
 
 \begin{definition}[Timelike and Causal Smooth Curves]
     \label{def:timelike-and-causal-smooth-curves}
-    \lean{Physicslib4.Spacetime.IsTimelikeSmoothCurve, Physicslib4.Spacetime.IsCausalSmoothCurve}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.IsTimelikeSmoothCurve, Hilbert6.Spacetime.IsCausalSmoothCurve}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \leanok
     \uses{def:timelike-spacelike-null-vectors}
     A \textit{timelike smooth curve} is a smooth curve with a tangent vector that is timelike at every point along the smooth curve. A \textit{causal smooth curve} is a smooth curve with a tangent vector that is timelike or null at every point along the smooth curve.
@@ -259,8 +259,8 @@
 
 \begin{definition}[Future and Past Oriented Smooth Curves]
     \label{def:future-and-past-oriented-smooth-curves}
-    \lean{Physicslib4.Spacetime.IsFutureOrientedSmoothCurve, Physicslib4.Spacetime.IsPastOrientedSmoothCurve}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.IsFutureOrientedSmoothCurve, Hilbert6.Spacetime.IsPastOrientedSmoothCurve}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \leanok
     \uses{def:future-and-past-pointing-vectors}
     A \textit{future-oriented smooth curve} is a smooth curve with a tangent vector that is future-pointing at every point. A \textit{past-oriented smooth curve} is a smooth curve with a tangent vector that is past-pointing at every point.
@@ -268,8 +268,8 @@
 
 \begin{theorem}[Reparametrisation-Invariance of the Causal Type]
     \label{thrm:smooth-curve-causal-well-defined}
-    \lean{Physicslib4.Spacetime.isTimelikeSmoothCurve_ofPath_iff, Physicslib4.Spacetime.isCausalSmoothCurve_ofPath_iff}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.isTimelikeSmoothCurve_ofPath_iff, Hilbert6.Spacetime.isCausalSmoothCurve_ofPath_iff}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \uses{def:timelike-and-causal-smooth-curves}
     \leanok
     The timelike and causal predicates are well-defined on smooth curves, independently of the chosen path representative: a smooth path is timelike (resp. causal) if and only if its associated smooth curve is.
@@ -282,8 +282,8 @@
 
 \begin{definition}[Oriented Smooth Curve]
     \label{def:oriented-smooth-curve}
-    \lean{Physicslib4.Spacetime.OrientedSmoothCurve}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.OrientedSmoothCurve}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \leanok
     \uses{def:curves}
     An orientation-reversing reparametrisation flips the time-orientation of the tangent, so future/past orientation is well-defined only on the finer quotient by \emph{orientation-preserving} reparametrisations (those with positive within-derivative). An \emph{oriented smooth curve} is an equivalence class of smooth paths under this finer relation.
@@ -291,8 +291,8 @@
 
 \begin{theorem}[Reparametrisation-Invariance of Orientation]
     \label{thrm:oriented-curve-well-defined}
-    \lean{Physicslib4.Spacetime.isFutureOrientedCurve_ofPath_iff, Physicslib4.Spacetime.isPastOrientedCurve_ofPath_iff}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.isFutureOrientedCurve_ofPath_iff, Hilbert6.Spacetime.isPastOrientedCurve_ofPath_iff}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \uses{def:oriented-smooth-curve, def:future-and-past-oriented-smooth-curves}
     \leanok
     Future- and past-orientation are well-defined on oriented smooth curves: a smooth path is future-oriented (resp. past-oriented) if and only if its oriented smooth curve is.
@@ -305,8 +305,8 @@
 
 \begin{theorem}[The Forgetful Projection of Oriented Curves]
     \label{thrm:oriented-curve-projection}
-    \lean{Physicslib4.Spacetime.OrientedSmoothCurve.toSmoothCurve, Physicslib4.Spacetime.IsFutureOrientedCurve.isCausal_toSmoothCurve}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.OrientedSmoothCurve.toSmoothCurve, Hilbert6.Spacetime.IsFutureOrientedCurve.isCausal_toSmoothCurve}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \uses{def:oriented-smooth-curve, def:curves, def:timelike-and-causal-smooth-curves}
     \leanok
     Every oriented smooth curve has an underlying smooth curve, via a canonical surjection $\mathrm{OrientedSmoothCurve} \to \mathrm{SmoothCurve}$ that forgets the orientation data. The timelike and causal predicates factor through it, and a future- or past-oriented curve projects to a causal smooth curve.
@@ -319,8 +319,8 @@
 
 \begin{definition}[Endpoints]
     \label{def:endpoints}
-    \lean{Physicslib4.Spacetime.IsEndpoint, Physicslib4.Spacetime.IsPastEndpoint, Physicslib4.Spacetime.IsFutureEndpoint}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.IsEndpoint, Hilbert6.Spacetime.IsPastEndpoint, Hilbert6.Spacetime.IsFutureEndpoint}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \leanok
     \uses{def:spacetime, def:paths, def:curves, def:timelike-and-causal-smooth-curves}
     A point $p$ in a spacetime $M$ is the \textit{endpoint} of a path $\mu : \Sigma \to M$ or its associated curve if it is a member of the image $\mu(\partial\Sigma)$ of the boundary $\partial\Sigma$ of the parameter space under $\mu$, i.e.\ if $\mu(s) = p$ for some $s \in \partial\Sigma$.
@@ -332,7 +332,7 @@
 
 \begin{lemma}[Endpoints of curves are well defined]
     \label{lmm:curve-endpoint-well-defined}
-    \lean{Physicslib4.Spacetime.IsCurveEndpoint, Physicslib4.Spacetime.IsSmoothCurveEndpoint, Physicslib4.Spacetime.IsEndpoint.of_pathEquiv, Physicslib4.Spacetime.IsEndpoint.of_smoothPathEquiv, Physicslib4.Spacetime.isCurveEndpoint_ofPath_iff, Physicslib4.Spacetime.isSmoothCurveEndpoint_ofPath_iff}
+    \lean{Hilbert6.Spacetime.IsCurveEndpoint, Hilbert6.Spacetime.IsSmoothCurveEndpoint, Hilbert6.Spacetime.IsEndpoint.of_pathEquiv, Hilbert6.Spacetime.IsEndpoint.of_smoothPathEquiv, Hilbert6.Spacetime.isCurveEndpoint_ofPath_iff, Hilbert6.Spacetime.isSmoothCurveEndpoint_ofPath_iff}
     \uses{def:endpoints, def:paths, def:curves}
     \leanok
     If two paths (resp.\ smooth paths) are equivalent, then they have the same endpoints. Hence ``$p$ is an endpoint of the curve $[\mu]$'', meaning that $p$ is an endpoint of some representative of $[\mu]$, is well defined, both for curves and for smooth curves: $p$ is an endpoint of the curve (resp.\ smooth curve) of $\mu$ if and only if $p$ is an endpoint of $\mu$. Past and future endpoints, by contrast, are not defined for unoriented curves, because an orientation-reversing reparametrisation exchanges them.
@@ -345,7 +345,7 @@
 
 \begin{lemma}[An extremal parameter lies in the frontier]
     \label{lmm:extremal-parameter-mem-frontier}
-    \lean{Physicslib4.Spacetime.mem_frontier_of_isMin, Physicslib4.Spacetime.mem_frontier_of_isMax, Physicslib4.Spacetime.isEndpoint_of_isPastEndpoint, Physicslib4.Spacetime.isEndpoint_of_isFutureEndpoint}
+    \lean{Hilbert6.Spacetime.mem_frontier_of_isMin, Hilbert6.Spacetime.mem_frontier_of_isMax, Hilbert6.Spacetime.isEndpoint_of_isPastEndpoint, Hilbert6.Spacetime.isEndpoint_of_isFutureEndpoint}
     \uses{def:endpoints, def:paths}
     \leanok
     Let $\mu : \Sigma \to M$ be a path, so that $\Sigma$ is a closed connected subset of $\mathbb{R}$ with more than one point. If $s \in \Sigma$ is minimal or maximal in $\Sigma$, then $s \in \partial\Sigma$. Consequently a past or future endpoint of $\mu$ is in particular an endpoint of $\mu$.
@@ -358,7 +358,7 @@
 
 \begin{lemma}[Two endpoints force a compact parameter interval]
     \label{lmm:endpoint-parameter-space-eq-Icc}
-    \lean{Physicslib4.Spacetime.parameterSpace_eq_Icc_of_endpoints}
+    \lean{Hilbert6.Spacetime.parameterSpace_eq_Icc_of_endpoints}
     \uses{def:paths, def:endpoints}
     \leanok
     Let $\mu : \Sigma \to M$ be a path. If $\mu$ has both a past endpoint and a future endpoint, then $\Sigma = [a,b]$ for some $a < b$.
@@ -374,7 +374,7 @@
 
 \begin{definition}[Pseudo-Riemannian Metric]
     \label{def:pseudo-riemannian-metric}
-    \lean{Physicslib4.Geometry.PseudoRiemannianMetric, Physicslib4.Spacetime.toPseudoRiemannianMetric}
+    \lean{Hilbert6.Geometry.PseudoRiemannianMetric, Hilbert6.Spacetime.toPseudoRiemannianMetric}
     \uses{def:spacetime}
     \leanok
     Let $M$ be a smooth Hausdorff manifold modelled on a finite-dimensional real normed space $E$ \emph{without boundary}: the model with corners $I$ is boundaryless (\texttt{I.Boundaryless}), so chart targets are open in $E$. (The chart and bump-function arguments below rely on this. The manifold of a spacetime in \ref{def:spacetime} has no boundary, so it satisfies this; the Lean structure \texttt{Spacetime} records this as its field \texttt{boundaryless}.) A \textit{pseudo-Riemannian metric} on $M$ is a family $g$ of continuous bilinear forms $g_x : TM|_x \to_L[\mathbb{R}] TM|_x \to_L[\mathbb{R}] \mathbb{R}$, one for each $x \in M$, such that
@@ -390,7 +390,7 @@
 
 \begin{definition}[Covariant Derivative; Metric Compatibility]
     \label{def:metric-compatible-connection}
-    \lean{Physicslib4.Geometry.CovariantDerivative.IsMetricCompatibleWith}
+    \lean{Hilbert6.Geometry.CovariantDerivative.IsMetricCompatibleWith}
     \uses{def:pseudo-riemannian-metric}
     \leanok
     A \textit{vector field} is a section $X$ of $TM$, $x \mapsto X(x) \in TM|_x$. A \textit{covariant derivative} (\textit{Koszul connection}) on $TM$ is a map $\nabla$ sending each vector field $Y$ to a section $\nabla Y$ of $\mathrm{Hom}(TM, TM)$, so that $(\nabla Y)_x : TM|_x \to_L[\mathbb{R}] TM|_x$, such that for every $x \in M$
@@ -409,7 +409,7 @@
 
 \begin{definition}[Levi-Civita Connection]
     \label{def:levi-civita-connection}
-    \lean{Physicslib4.Geometry.CovariantDerivative.IsLeviCivitaFor}
+    \lean{Hilbert6.Geometry.CovariantDerivative.IsLeviCivitaFor}
     \uses{def:metric-compatible-connection}
     \leanok
     A covariant derivative $\nabla$ on $TM$ is a \textit{Levi-Civita connection} of the pseudo-Riemannian metric $g$ if it is
@@ -422,7 +422,7 @@
 
 \begin{lemma}[Musical Isomorphism]
     \label{lmm:musical-isomorphism}
-    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.bijective_val}
+    \lean{Hilbert6.Geometry.PseudoRiemannianMetric.bijective_val}
     \uses{def:pseudo-riemannian-metric}
     \leanok
     Let $g$ be a pseudo-Riemannian metric on $M$. For each $x \in M$ the map $\flat_x : TM|_x \to (TM|_x)^*$, $v \mapsto g_x(v, \cdot)$, is a linear isomorphism.
@@ -435,7 +435,7 @@
 
 \begin{lemma}[Smoothness of the Inverse Musical Isomorphism]
     \label{lmm:musical-inverse-smooth}
-    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.contMDiff_flatEquiv_symm, Physicslib4.Geometry.PseudoRiemannianMetric.flatEquiv}
+    \lean{Hilbert6.Geometry.PseudoRiemannianMetric.contMDiff_flatEquiv_symm, Hilbert6.Geometry.PseudoRiemannianMetric.flatEquiv}
     \uses{lmm:musical-isomorphism}
     \leanok
     The map $x \mapsto \flat_x^{-1}$ of \ref{lmm:musical-isomorphism} is smooth: it is a $C^\infty$ section of the bundle $\mathrm{Hom}(T^*M, TM)$.
@@ -448,7 +448,7 @@
 
 \begin{lemma}[Koszul Formula]
     \label{lmm:koszul-formula}
-    \lean{Physicslib4.Geometry.CovariantDerivative.IsLeviCivitaFor.koszul}
+    \lean{Hilbert6.Geometry.CovariantDerivative.IsLeviCivitaFor.koszul}
     \uses{def:levi-civita-connection}
     \leanok
     Let $\nabla$ be a Levi-Civita connection of $g$. For every $x \in M$ and all vector fields $X, Y, Z$ differentiable at $x$,
@@ -466,7 +466,7 @@
 
 \begin{lemma}[Tensoriality of the Koszul Expression]
     \label{lmm:koszul-expression-tensorial}
-    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.tensorialAt_koszulAux₁, Physicslib4.Geometry.PseudoRiemannianMetric.tensorialAt_koszulAux₃, Physicslib4.Geometry.PseudoRiemannianMetric.koszulAux}
+    \lean{Hilbert6.Geometry.PseudoRiemannianMetric.tensorialAt_koszulAux₁, Hilbert6.Geometry.PseudoRiemannianMetric.tensorialAt_koszulAux₃, Hilbert6.Geometry.PseudoRiemannianMetric.koszulAux}
     \uses{def:pseudo-riemannian-metric, def:metric-compatible-connection}
     \leanok
     For vector fields $X, Y, Z$ write $K(X,Y,Z)$ for one half of the right-hand side of the Koszul formula (\ref{lmm:koszul-formula}). Fix $x \in M$ and a vector field $Y$ differentiable at $x$. Then $K(X,Y,Z)(x)$ depends on $X$ and $Z$ only through $X(x)$ and $Z(x)$, and is bilinear in them. Hence there is a continuous bilinear form $K_x(Y) : TM|_x \times TM|_x \to \mathbb{R}$ with $K_x(Y)\big(X(x), Z(x)\big) = K(X,Y,Z)(x)$ for all $X, Z$ differentiable at $x$.
@@ -479,7 +479,7 @@
 
 \begin{lemma}[The Koszul Connection is a Covariant Derivative]
     \label{lmm:koszul-connection-is-covariant-derivative}
-    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.isCovariantDerivativeOn_leviCivitaAux}
+    \lean{Hilbert6.Geometry.PseudoRiemannianMetric.isCovariantDerivativeOn_leviCivitaAux}
     \uses{lmm:koszul-expression-tensorial, lmm:musical-isomorphism, def:metric-compatible-connection}
     \leanok
     Define $\nabla^K$ by letting $(\nabla^K Y)_x(v) \in TM|_x$ be the unique vector with $g_x\big((\nabla^K Y)_x(v), w\big) = K_x(Y)(v, w)$ for all $w \in TM|_x$, that is $(\nabla^K Y)_x(v) = \flat_x^{-1}\big(K_x(Y)(v,\cdot)\big)$ (and $0$ if $Y$ is not differentiable at $x$). Then $\nabla^K$ is a covariant derivative on $TM$.
@@ -492,7 +492,7 @@
 
 \begin{lemma}[The Koszul Connection is Levi-Civita]
     \label{lmm:koszul-connection-is-levi-civita}
-    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.isMetricCompatibleWith_koszulConnection, Physicslib4.Geometry.PseudoRiemannianMetric.torsion_koszulConnection_eq_zero}
+    \lean{Hilbert6.Geometry.PseudoRiemannianMetric.isMetricCompatibleWith_koszulConnection, Hilbert6.Geometry.PseudoRiemannianMetric.torsion_koszulConnection_eq_zero}
     \uses{lmm:koszul-connection-is-covariant-derivative, def:levi-civita-connection}
     \leanok
     The covariant derivative $\nabla^K$ of \ref{lmm:koszul-connection-is-covariant-derivative} is a Levi-Civita connection of $g$.
@@ -505,7 +505,7 @@
 
 \begin{theorem}[Existence and Uniqueness of the Levi-Civita Connection]
     \label{thrm:levi-civita-exists-unique}
-    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.exists_isLeviCivitaFor, Physicslib4.Geometry.CovariantDerivative.IsLeviCivitaFor.uniqueness, Physicslib4.Geometry.PseudoRiemannianMetric.leviCivita, Physicslib4.Geometry.PseudoRiemannianMetric.isLeviCivitaFor_leviCivita}
+    \lean{Hilbert6.Geometry.PseudoRiemannianMetric.exists_isLeviCivitaFor, Hilbert6.Geometry.CovariantDerivative.IsLeviCivitaFor.uniqueness, Hilbert6.Geometry.PseudoRiemannianMetric.leviCivita, Hilbert6.Geometry.PseudoRiemannianMetric.isLeviCivitaFor_leviCivita}
     \uses{def:levi-civita-connection}
     \leanok
     Every pseudo-Riemannian manifold $(M,g)$ has a Levi-Civita connection, and any two Levi-Civita connections $\nabla, \nabla'$ of $g$ agree on differentiable vector fields: $(\nabla Y)_x = (\nabla' Y)_x$ whenever $Y$ is differentiable at $x$. We call it \textit{the} Levi-Civita connection of $g$. (Covariant derivatives are unconstrained on non-differentiable fields, so this is the correct form of uniqueness, as in Mathlib's \texttt{IsLeviCivitaConnection.uniqueness}.)
@@ -518,7 +518,7 @@
 
 \begin{lemma}[A Function Vanishing Along a Path has Zero Derivative Along It]
     \label{lmm:derivative-vanishes-along-path}
-    \lean{Physicslib4.Spacetime.SmoothPath.mfderiv_apply_tangent_eq_zero}
+    \lean{Hilbert6.Spacetime.SmoothPath.mfderiv_apply_tangent_eq_zero}
     \uses{def:paths}
     \leanok
     Let $\mu : \Sigma \to M$ be a smooth path, $s \in \Sigma$, and $f : M \to \mathbb{R}$ differentiable at $\mu(s)$ with $f(\mu(t)) = 0$ for all $t \in \Sigma$ in a neighbourhood of $s$. Then $df_{\mu(s)}\big(\dot\mu(s)\big) = 0$, where $\dot\mu(s)$ is the tangent vector of $\mu$ at $s$ (the within-derivative on $\Sigma$).
@@ -531,7 +531,7 @@
 
 \begin{lemma}[Covariant Derivative Along a Curve is Local]
     \label{lmm:covariant-derivative-along-curve-local}
-    \lean{Physicslib4.Spacetime.SmoothPath.covDeriv_eq_of_eventuallyEq}
+    \lean{Hilbert6.Spacetime.SmoothPath.covDeriv_eq_of_eventuallyEq}
     \uses{def:metric-compatible-connection, def:paths}
     \leanok
     Let $\nabla$ be a covariant derivative on $TM$, $\mu : \Sigma \to M$ a smooth path, $s \in \Sigma$, and $X$ a vector field with $X(\mu(s)) = \dot\mu(s)$, where $\dot\mu(s)$ is the tangent vector of $\mu$ at $s$ (the within-derivative on $\Sigma$). If $Y, Y'$ are smooth vector fields with $Y(\mu(t)) = Y'(\mu(t))$ for all $t \in \Sigma$ in a neighbourhood of $s$, then $(\nabla_X Y)(\mu(s)) = (\nabla_X Y')(\mu(s))$.
@@ -544,7 +544,7 @@
 
 \begin{lemma}[Local Vector Fields Globalise]
     \label{lmm:local-vector-field-globalises}
-    \lean{Physicslib4.Spacetime.exists_contMDiff_vectorField_eventuallyEq}
+    \lean{Hilbert6.Spacetime.exists_contMDiff_vectorField_eventuallyEq}
     \leanok
     Let $p \in M$ and let $X_0$ be a vector field that is smooth on an open neighbourhood $U$ of $p$ (for instance, one whose expression in the tangent-bundle trivialisation over the chart at $p$ is $C^\infty$ on $U$). There is a smooth vector field $X$ on $M$ that agrees with $X_0$ on a neighbourhood of $p$.
 \end{lemma}
@@ -555,7 +555,7 @@
 
 \begin{lemma}[Local Left Inverse of a Smooth Path]
     \label{lmm:path-local-left-inverse}
-    \lean{Physicslib4.Spacetime.SmoothPath.exists_localLeftInverse}
+    \lean{Hilbert6.Spacetime.SmoothPath.exists_localLeftInverse}
     \uses{def:paths, def:pseudo-riemannian-metric}
     \leanok
     Let $\mu : \Sigma \to M$ be a smooth path into a boundaryless manifold and $s$ an interior point of $\Sigma$. There are an open neighbourhood $U$ of $\mu(s)$ and a $C^\infty$ function $\tau : U \to \mathbb{R}$ with $\tau(\mu(t)) = t$ for all $t$ in a neighbourhood of $s$ (inside the interior of $\Sigma$).
@@ -568,7 +568,7 @@
 
 \begin{lemma}[The Velocity of a Smooth Path Extends to a Vector Field]
     \label{lmm:velocity-extends}
-    \lean{Physicslib4.Spacetime.SmoothPath.exists_vectorField_eq_tangent}
+    \lean{Hilbert6.Spacetime.SmoothPath.exists_vectorField_eq_tangent}
     \uses{def:paths}
     \leanok
     Let $\mu : \Sigma \to M$ be a smooth path into a boundaryless manifold and $s$ an interior point of $\Sigma$. There is a smooth vector field $X$ on $M$ with $X(\mu(t)) = \dot\mu(t)$ for all $t$ in a neighbourhood of $s$.
@@ -581,7 +581,7 @@
 
 \begin{definition}[Geodesic]
     \label{def:geodesic}
-    \lean{Physicslib4.Spacetime.IsGeodesic}
+    \lean{Hilbert6.Spacetime.IsGeodesic}
     \uses{def:paths, thrm:levi-civita-exists-unique, lmm:covariant-derivative-along-curve-local, lmm:velocity-extends}
     \leanok
     Let $(M,g)$ be a spacetime with Levi-Civita connection $\nabla$ (\ref{thrm:levi-civita-exists-unique}). A smooth path $\mu : \Sigma \to M$ is a \textit{geodesic} if for every $s$ in the interior of $\Sigma$ and every smooth vector field $X$ on $M$ with $X(\mu(t)) = \dot\mu(t)$ for all $t$ in a neighbourhood of $s$,
@@ -595,8 +595,8 @@
 
 \begin{definition}[Trip]
     \label{def:trip}
-    \lean{Physicslib4.Spacetime.IsTripSegment, Physicslib4.Spacetime.IsTrip, Physicslib4.Spacetime.ChronologicallyPrecedes}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.IsTripSegment, Hilbert6.Spacetime.IsTrip, Hilbert6.Spacetime.ChronologicallyPrecedes}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \leanok
     \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints, def:geodesic}
     A \textit{trip segment} is a curve which is a future-oriented, timelike geodesic (\ref{def:geodesic}). A \textit{trip} is a curve which is \emph{piecewise} a future-oriented, timelike geodesic: a finite chain of trip segments $p = x_0, x_1, \dots, x_n = q$ joined at matching endpoints. Formally this is the transitive closure of single-segment precedence, which is what makes the relation transitive by concatenation. A trip \textit{from} $p$ to $q$ is a trip with past endpoint $p$ and future endpoint $q$. We write $p \ll q$ if and only if there exists a trip from $p$ to $q$.
@@ -604,8 +604,8 @@
 
 \begin{definition}[Causal Trip]
     \label{def:causal-trip}
-    \lean{Physicslib4.Spacetime.IsCausalTripSegment, Physicslib4.Spacetime.IsCausalTrip, Physicslib4.Spacetime.CausallyPrecedes, Physicslib4.Spacetime.causallyPrecedes_refl, Physicslib4.Spacetime.causallyPrecedes_iff_eq_or_isCausalTrip, Physicslib4.Spacetime.causallyPrecedes_of_isCausalTrip}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.IsCausalTripSegment, Hilbert6.Spacetime.IsCausalTrip, Hilbert6.Spacetime.CausallyPrecedes, Hilbert6.Spacetime.causallyPrecedes_refl, Hilbert6.Spacetime.causallyPrecedes_iff_eq_or_isCausalTrip, Hilbert6.Spacetime.causallyPrecedes_of_isCausalTrip}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \leanok
     \uses{def:curves, def:future-and-past-oriented-smooth-curves, def:timelike-and-causal-smooth-curves, def:endpoints, def:geodesic}
     A \textit{causal trip segment} is a curve which is a future-oriented, causal geodesic (\ref{def:geodesic}). A \textit{causal trip} is a curve which is piecewise a future-oriented, causal geodesic: a finite chain of causal trip segments joined at matching endpoints. A causal trip \textit{from} $p$ to $q$ is a causal trip with past endpoint $p$ and future endpoint $q$. We write $p \prec q$ if and only if $p = q$ or there exists a causal trip from $p$ to $q$; in particular a causal trip from $p$ to $q$ gives $p \prec q$. Thus $\prec$ is reflexive, $p \prec p$ for every $p$, as in Hawking--Ellis: the trivial case $p = q$ plays the role of a degenerate causal curve, while causal trips themselves are genuine curves, with nowhere-vanishing velocity. Formally $\prec$ is the reflexive-transitive closure of single-segment causal precedence, a chain of zero or more causal trip segments.
@@ -615,8 +615,8 @@
 
 \begin{theorem}[Transitivity of chronological and causal precedence]
     \label{thrm:precedence-transitive}
-    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_trans, Physicslib4.Spacetime.isCausalTrip_trans, Physicslib4.Spacetime.causallyPrecedes_trans}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.chronologicallyPrecedes_trans, Hilbert6.Spacetime.isCausalTrip_trans, Hilbert6.Spacetime.causallyPrecedes_trans}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \uses{def:trip, def:causal-trip}
     \leanok
     Chronological precedence $\ll$ and causal precedence $\prec$ are transitive: if $p \ll q$ and $q \ll r$ then $p \ll r$, and likewise for $\prec$. Likewise a causal trip from $p$ to $q$ and a causal trip from $q$ to $r$ give a causal trip from $p$ to $r$.
@@ -631,8 +631,8 @@
 
 \begin{definition}[No Closed Causal Curve (Causality Condition)]
     \label{def:no-closed-causal-curve}
-    \lean{Physicslib4.Spacetime.NoClosedCausalCurve}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.NoClosedCausalCurve}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \leanok
     \uses{def:causal-trip}
     A spacetime $M$ with time orientation $t$ satisfies the \emph{causality condition} --- equivalently, has \emph{no closed causal curve} --- when there is no causal trip from a point to itself: for every $p$ there is no causal trip from $p$ back to $p$. A closed causal curve through $p$ is exactly such a causal trip, so its absence is this condition. The condition is not $\lnot(p \prec p)$, which fails in every spacetime because $\prec$ is reflexive (\ref{def:causal-trip}). This is the standard causality condition, strictly weaker than strong causality and strictly stronger than the chronology condition ($\lnot(p \ll p)$ for all $p$).
@@ -642,8 +642,8 @@
 
 \begin{theorem}[Irreflexivity and Antisymmetry under Causality]
     \label{thrm:causal-order-refinements}
-    \lean{Physicslib4.Spacetime.chronologicallyPrecedes_irrefl, Physicslib4.Spacetime.isCausalTrip_asymm, Physicslib4.Spacetime.causallyPrecedes_antisymm}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.chronologicallyPrecedes_irrefl, Hilbert6.Spacetime.isCausalTrip_asymm, Hilbert6.Spacetime.causallyPrecedes_antisymm}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \uses{def:no-closed-causal-curve, def:trip}
     \leanok
     Assume $M$ has no closed causal curve. Then chronological precedence is irreflexive, $\lnot(p \ll p)$ for every $p$; causal trips are asymmetric: a causal trip from $p$ to $q$ excludes a causal trip from $q$ to $p$; and causal precedence is antisymmetric: $p \prec q$ together with $q \prec p$ forces $p = q$. Thus, under the causality condition, the reflexive relation $\prec$ is a partial order on the events of the spacetime.
@@ -658,8 +658,8 @@
 
 \begin{definition}[Chronological Future and Chronological Past]
     \label{def:chronological-future-and-chronological-past}
-    \lean{Physicslib4.Spacetime.chronologicalFuture, Physicslib4.Spacetime.chronologicalPast, Physicslib4.Spacetime.chronologicalFutureSet, Physicslib4.Spacetime.chronologicalPastSet}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.chronologicalFuture, Hilbert6.Spacetime.chronologicalPast, Hilbert6.Spacetime.chronologicalFutureSet, Hilbert6.Spacetime.chronologicalPastSet}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \leanok
     \uses{def:spacetime, def:trip}
     For a spacetime $M$ and $p$ in $M$ the set $I^+(p) = \{q \in M : p \ll q\}$ is called the \textit{chronological future} of $p$. $I^-(p) = \{q \in M : q \ll p\}$ is called the \textit{chronological past} of $p$. The \textit{chronological future} of a set $S \subset M$ is the union of the chronological future of each element of the set
@@ -676,8 +676,8 @@
 
 \begin{definition}[Causal Future and Causal Past]
     \label{def:causal-future-and-causal-past}
-    \lean{Physicslib4.Spacetime.causalFuture, Physicslib4.Spacetime.causalPast, Physicslib4.Spacetime.causalFutureSet, Physicslib4.Spacetime.causalPastSet}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.causalFuture, Hilbert6.Spacetime.causalPast, Hilbert6.Spacetime.causalFutureSet, Hilbert6.Spacetime.causalPastSet}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \leanok
     \uses{def:spacetime, def:causal-trip}
     For a spacetime $M$ and $p$ in $M$ the set $J^+(p) = \{q \in M : p \prec q\}$ is called the \textit{causal future} of $p$. $J^-(p) = \{q \in M : q \prec p\}$ is called the \textit{causal past} of $p$. The \textit{causal future} of a set $S \subset M$ is the union of the causal future of each element of the set
@@ -695,8 +695,8 @@
 
 \begin{lemma}[Chronological Precedence Implies Causal Precedence]
     \label{lmm:chronological-implies-causal}
-    \lean{Physicslib4.Spacetime.isCausal_of_isTimelike, Physicslib4.Spacetime.isCausalTrip_of_chronologicallyPrecedes, Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture, Physicslib4.Spacetime.chronologicalPast_subset_causalPast}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.isCausal_of_isTimelike, Hilbert6.Spacetime.isCausalTrip_of_chronologicallyPrecedes, Hilbert6.Spacetime.causallyPrecedes_of_chronologicallyPrecedes, Hilbert6.Spacetime.chronologicalFuture_subset_causalFuture, Hilbert6.Spacetime.chronologicalPast_subset_causalPast}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \uses{def:trip, def:causal-trip, def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
     \leanok
     Every trip is a causal trip, so $p \ll q$ gives a causal trip from $p$ to $q$, and hence $p \prec q$. Consequently $I^+(p) \subseteq J^+(p)$ and $I^-(p) \subseteq J^-(p)$.
@@ -710,8 +710,8 @@
 
 \begin{lemma}[Monotonicity of Futures and Pasts]
     \label{lmm:future-past-monotone}
-    \lean{Physicslib4.Spacetime.chronologicalFutureSet_mono, Physicslib4.Spacetime.chronologicalPastSet_mono, Physicslib4.Spacetime.causalFutureSet_mono, Physicslib4.Spacetime.causalPastSet_mono}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.chronologicalFutureSet_mono, Hilbert6.Spacetime.chronologicalPastSet_mono, Hilbert6.Spacetime.causalFutureSet_mono, Hilbert6.Spacetime.causalPastSet_mono}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \uses{def:chronological-future-and-chronological-past, def:causal-future-and-causal-past}
     \leanok
     The set-valued chronological and causal futures and pasts are monotone: if $S \subseteq T$ then $I^\pm(S) \subseteq I^\pm(T)$ and $J^\pm(S) \subseteq J^\pm(T)$.
@@ -727,7 +727,7 @@
 
 \begin{definition}[Causal and chronological diamonds]
     \label{def:causal-diamond}
-    \lean{Physicslib4.Spacetime.causalDiamond, Physicslib4.Spacetime.chronologicalDiamond, Physicslib4.Spacetime.mem_causalDiamond, Physicslib4.Spacetime.mem_chronologicalDiamond}
+    \lean{Hilbert6.Spacetime.causalDiamond, Hilbert6.Spacetime.chronologicalDiamond, Hilbert6.Spacetime.mem_causalDiamond, Hilbert6.Spacetime.mem_chronologicalDiamond}
     \uses{def:causal-future-and-causal-past, def:chronological-future-and-chronological-past}
     \leanok
     Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The \textit{causal diamond} of $p$ and $q$ is the intersection of the causal future of $p$ with the causal past of $q$,
@@ -745,7 +745,7 @@
 
 \begin{lemma}[Structural properties of the causal diamond]
     \label{lmm:causal-diamond-structure}
-    \lean{Physicslib4.Spacetime.causalDiamond_subset_of, Physicslib4.Spacetime.causalDiamond_causallyConvex, Physicslib4.Spacetime.causallyPrecedes_of_causalDiamond_nonempty}
+    \lean{Hilbert6.Spacetime.causalDiamond_subset_of, Hilbert6.Spacetime.causalDiamond_causallyConvex, Hilbert6.Spacetime.causallyPrecedes_of_causalDiamond_nonempty}
     \uses{def:causal-diamond, thrm:precedence-transitive}
     \leanok
     Let $M$ be a spacetime with time orientation $t$, and write $D(p,q) = J^+(p) \cap J^-(q)$ for the causal diamond. Then:
@@ -765,7 +765,7 @@
 
 \begin{theorem}[Chronological diamonds inside causal diamonds]
     \label{thrm:causal-diamond-vs-chronological}
-    \lean{Physicslib4.Spacetime.chronologicalDiamond_subset_causalDiamond, Physicslib4.Spacetime.mem_alexandrovBasis_iff_eq_chronologicalDiamond}
+    \lean{Hilbert6.Spacetime.chronologicalDiamond_subset_causalDiamond, Hilbert6.Spacetime.mem_alexandrovBasis_iff_eq_chronologicalDiamond}
     \uses{def:causal-diamond, lmm:chronological-implies-causal, def:alexandrov-topology}
     \leanok
     Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The chronological diamond is contained in the causal diamond,
@@ -784,8 +784,8 @@
 
 \begin{definition}[Spacelike Related]
     \label{def:spacelike-related}
-    \lean{Physicslib4.Spacetime.IsSpacelikeRelated, Physicslib4.Spacetime.isSpacelikeRelated_irrefl}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.IsSpacelikeRelated, Hilbert6.Spacetime.isSpacelikeRelated_irrefl}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \leanok
     \uses{def:spacetime, def:causal-future-and-causal-past}
     Consider two points $p_1$ and $p_2$ in a spacetime. The points are said to be \textit{spacelike related} if $p_2 \notin J^+(p_1) \cup J^-(p_1)$ or equivalently $p_1 \notin J^+(p_2) \cup J^-(p_2)$. Since $p \in J^+(p)$, no point is spacelike related to itself.
@@ -795,8 +795,8 @@
 
 \begin{definition}[Completely Spacelike]
     \label{def:completely-spacelike}
-    \lean{Physicslib4.Spacetime.IsCompletelySpacelike}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.IsCompletelySpacelike}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \leanok
     \uses{def:spacetime, def:spacelike-related}
     Consider two sets $\mathbf{O}_1$ and $\mathbf{O}_2$ in a spacetime. $\mathbf{O}_1$ and $\mathbf{O}_2$ are \textit{completely spacelike}  with respect to each other if every $p_1$ in $\mathbf{O}_1$ is spacelike related to every $p_2$ in $\mathbf{O}_2$.
@@ -806,8 +806,8 @@
 
 \begin{lemma}[Symmetry of Spacelike Separation]
     \label{lmm:completely-spacelike-symm}
-    \lean{Physicslib4.Spacetime.isSpacelikeRelated_comm, Physicslib4.Spacetime.isCompletelySpacelike_comm}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.isSpacelikeRelated_comm, Hilbert6.Spacetime.isCompletelySpacelike_comm}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \uses{def:spacelike-related, def:completely-spacelike}
     \leanok
     Spacelike relatedness is symmetric, and consequently complete spacelike separation is symmetric in its two regions: $\mathbf{O}_1, \mathbf{O}_2$ are completely spacelike if and only if $\mathbf{O}_2, \mathbf{O}_1$ are.
@@ -821,8 +821,8 @@
 
 \begin{lemma}[Structural Properties of Complete Spacelike Separation]
     \label{lmm:completely-spacelike-structural}
-    \lean{Physicslib4.Spacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.isCompletelySpacelike_union_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_right, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_left, Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_right}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.isCompletelySpacelike_mono, Hilbert6.Spacetime.isCompletelySpacelike_empty_left, Hilbert6.Spacetime.isCompletelySpacelike_empty_right, Hilbert6.Spacetime.isCompletelySpacelike_union_left, Hilbert6.Spacetime.isCompletelySpacelike_union_right, Hilbert6.Spacetime.LorentzianSpacetime.isCompletelySpacelike_mono, Hilbert6.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_left, Hilbert6.Spacetime.LorentzianSpacetime.isCompletelySpacelike_empty_right, Hilbert6.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_left, Hilbert6.Spacetime.LorentzianSpacetime.isCompletelySpacelike_union_right}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \uses{def:completely-spacelike, def:lorentzian-spacetime}
     \leanok
     Complete spacelike separation is monotone under shrinking either region; the empty region is completely spacelike to any region; and a union of regions is completely spacelike to $\mathbf{O}$ if and only if each part is. The same properties hold for the bundled Lorentzian spacetime.
@@ -836,7 +836,7 @@
 
 \begin{lemma}[Precedence-Preserving Maps Preserve Spacelike Separation]
     \label{lmm:precedence-preserving-spacelike}
-    \lean{Physicslib4.Spacetime.isSpacelikeRelated_congr, Physicslib4.Spacetime.isCompletelySpacelike_image}
+    \lean{Hilbert6.Spacetime.isSpacelikeRelated_congr, Hilbert6.Spacetime.isCompletelySpacelike_image}
     \uses{def:spacelike-related, def:completely-spacelike, def:causal-trip}
     \leanok
     Let $M$ be a spacetime with a time orientation and let $\varphi : M \to M$ be any map with $\varphi(p) \prec \varphi(q) \iff p \prec q$ for all $p, q$. Then $\varphi(p_1)$ and $\varphi(p_2)$ are spacelike related if and only if $p_1$ and $p_2$ are, and $\varphi(\mathbf{O}_1)$, $\varphi(\mathbf{O}_2)$ are completely spacelike if and only if $\mathbf{O}_1$, $\mathbf{O}_2$ are.
@@ -851,8 +851,8 @@
 
 \begin{definition}[Spacelike Complement of a Region]
     \label{def:spacelike-complement}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement, Physicslib4.Spacetime.disjoint_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.disjoint_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_univ}
-    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.spacelikeComplement, Hilbert6.Spacetime.disjoint_spacelikeComplement, Hilbert6.Spacetime.LorentzianSpacetime.disjoint_spacelikeComplement, Hilbert6.Spacetime.LorentzianSpacetime.spacelikeComplement_univ}
+    \leanfile{Hilbert6/Spacetime/CausalComplement.lean}
     \leanok
     \uses{def:completely-spacelike, def:lorentzian-spacetime, def:spacelike-related}
     The \emph{spacelike complement} $\mathbf{B}^\perp$ of a region $\mathbf{B}$ is the set of points completely spacelike-separated from all of $\mathbf{B}$: $\mathbf{B}^\perp = \{ x \mid \{x\} \text{ is completely spacelike to } \mathbf{B} \}$. It is the geometric substrate of locality and Haag duality. Since no point is spacelike related to itself (\ref{def:spacelike-related}), a region and its spacelike complement are disjoint, $\mathbf{B} \cap \mathbf{B}^\perp = \emptyset$; in particular the spacelike complement of the whole spacetime is empty.
@@ -862,8 +862,8 @@
 
 \begin{lemma}[Order Structure of the Spacelike Complement]
     \label{lmm:spacelike-complement-order}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_spacelikeComplement_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_iff}
-    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.spacelikeComplement_antitone, Hilbert6.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_spacelikeComplement, Hilbert6.Spacetime.LorentzianSpacetime.spacelikeComplement_spacelikeComplement_spacelikeComplement, Hilbert6.Spacetime.LorentzianSpacetime.subset_spacelikeComplement_iff}
+    \leanfile{Hilbert6/Spacetime/CausalComplement.lean}
     \uses{def:spacelike-complement, lmm:completely-spacelike-symm, lmm:completely-spacelike-structural}
     \leanok
     The spacelike complement is antitone ($\mathbf{B}_1 \subseteq \mathbf{B}_2 \Rightarrow \mathbf{B}_2^\perp \subseteq \mathbf{B}_1^\perp$), a region is contained in its double complement ($\mathbf{B} \subseteq \mathbf{B}^{\perp\perp}$), and the triple complement collapses ($\mathbf{B}^{\perp\perp\perp} = \mathbf{B}^\perp$). Moreover $\mathbf{B}_1 \subseteq \mathbf{B}_2^\perp$ if and only if $\mathbf{B}_1$ and $\mathbf{B}_2$ are completely spacelike-separated, so complementation is the Galois connection attached to the spacelike-separation relation.
@@ -877,8 +877,8 @@
 
 \begin{definition}[Causal closure operator]
     \label{def:causal-closure}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalClosure}
-    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.causalClosure}
+    \leanfile{Hilbert6/Spacetime/CausalComplement.lean}
     \leanok
     \uses{def:spacelike-complement}
     The \emph{causal closure} of a region $\mathbf{B}$ of a Lorentzian spacetime is its double spacelike complement $\mathbf{B}^{\perp\perp}$. This defines the operator $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ on regions; that it is a closure operator is \ref{lmm:causal-closure-is-closure-operator}.
@@ -888,7 +888,7 @@
 
 \begin{lemma}[The Causal Closure is a Closure Operator]
     \label{lmm:causal-closure-is-closure-operator}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalClosure, Physicslib4.Spacetime.LorentzianSpacetime.causalClosure_apply}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.causalClosure, Hilbert6.Spacetime.LorentzianSpacetime.causalClosure_apply}
     \uses{def:causal-closure, lmm:spacelike-complement-order}
     \leanok
     The causal closure $\mathbf{B} \mapsto \mathbf{B}^{\perp\perp}$ is a \emph{closure operator} on the regions of a Lorentzian spacetime:
@@ -909,8 +909,8 @@
 
 \begin{definition}[Causally complete region]
     \label{def:causally-complete-region}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.IsCausallyComplete}
-    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.IsCausallyComplete}
+    \leanfile{Hilbert6/Spacetime/CausalComplement.lean}
     \leanok
     \uses{def:causal-closure}
     A region is \emph{causally complete} if it equals its own double complement, $\mathbf{B}^{\perp\perp} = \mathbf{B}$ (a fixed point of the causal closure operator). These are the regions on which algebraic QFT is naturally indexed.
@@ -920,8 +920,8 @@
 
 \begin{lemma}[De Morgan Laws for the Spacelike Complement]
     \label{lmm:spacelike-complement-de-morgan}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_union, Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement_iUnion}
-    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.spacelikeComplement_union, Hilbert6.Spacetime.LorentzianSpacetime.spacelikeComplement_iUnion}
+    \leanfile{Hilbert6/Spacetime/CausalComplement.lean}
     \uses{def:spacelike-complement, lmm:completely-spacelike-structural}
     \leanok
     At the level of the underlying sets, the spacelike complement turns unions into intersections. In binary form, for regions $\mathbf{B}_1, \mathbf{B}_2$,
@@ -943,8 +943,8 @@
 
 \begin{theorem}[Lattice of causally complete regions]
     \label{thrm:causally-complete-lattice}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.CausallyCompleteRegion, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_iff_isClosed, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_spacelikeComplement, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_inter, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyComplete_iInter, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_coe, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.inf_causalComplement, Physicslib4.Spacetime.LorentzianSpacetime.sup_causalComplement}
-    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.CausallyCompleteRegion, Hilbert6.Spacetime.LorentzianSpacetime.isCausallyComplete_iff_isClosed, Hilbert6.Spacetime.LorentzianSpacetime.isCausallyComplete_spacelikeComplement, Hilbert6.Spacetime.LorentzianSpacetime.isCausallyComplete_inter, Hilbert6.Spacetime.LorentzianSpacetime.isCausallyComplete_iInter, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_coe, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_causalComplement, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_antitone, Hilbert6.Spacetime.LorentzianSpacetime.inf_causalComplement, Hilbert6.Spacetime.LorentzianSpacetime.sup_causalComplement}
+    \leanfile{Hilbert6/Spacetime/CausalComplement.lean}
     \uses{def:causally-complete-region, def:causal-closure, def:spacelike-complement}
     \leanok
     The causally complete regions form a \emph{complete lattice} (meets are intersections, joins are causal closures of unions). The spacelike complement of any region is causally complete, causally complete regions are closed under intersection, and the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an \emph{order-reversing involution} on this lattice ($\mathbf{B}^{\perp\perp} = \mathbf{B}$). Moreover it is an \emph{orthocomplement}: $\mathbf{B} \wedge \mathbf{B}^\perp = \bot$ (non-contradiction) and $\mathbf{B} \vee \mathbf{B}^\perp = \top$ (excluded middle). So the causally complete regions form a complete orthocomplemented lattice. In the formalization the \texttt{CompleteLattice} structure on the causally complete regions is transported from the causal closure operator along its Galois insertion and is declared as an anonymous \texttt{instance}, so it has no stable name that could be cited above; the lattice claim is therefore witnessed by the carrier abbreviation \texttt{CausallyCompleteRegion} together with the bridge \texttt{isCausallyComplete\_iff\_isClosed} identifying causally complete regions with the closed elements of that closure operator.
@@ -959,8 +959,8 @@
 
 \begin{theorem}[De Morgan Laws for the Causal Complement]
     \label{thrm:causal-complement-de-morgan}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_antitone, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_bot, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_top, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_sup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_inf, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iSup, Physicslib4.Spacetime.LorentzianSpacetime.causalComplement_iInf}
-    \leanfile{Physicslib4/Spacetime/CausalComplement.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_antitone, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_bot, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_top, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_sup, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_inf, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_iSup, Hilbert6.Spacetime.LorentzianSpacetime.causalComplement_iInf}
+    \leanfile{Hilbert6/Spacetime/CausalComplement.lean}
     \uses{thrm:causally-complete-lattice, lmm:spacelike-complement-de-morgan}
     \leanok
     On the complete lattice of causally complete regions the causal complement $\mathbf{B} \mapsto \mathbf{B}^\perp$ is an order-reversing involution, and therefore satisfies the full De Morgan laws. Explicitly:
@@ -1000,7 +1000,7 @@
 
 \begin{definition}[Causally convex region]
     \label{def:causally-convex-region}
-    \lean{Physicslib4.Spacetime.IsCausallyConvex}
+    \lean{Hilbert6.Spacetime.IsCausallyConvex}
     \uses{def:causal-future-and-causal-past}
     \leanok
     Let $M$ be a spacetime with time orientation $t$. A subset $\mathbf{C} \subseteq M$ is \emph{causally convex} if it contains every point causally between two of its own points: whenever $p, r \in \mathbf{C}$ and $q$ is causally between them, in the sense that $p \prec q$ and $q \prec r$, then $q \in \mathbf{C}$. Intuitively, $\mathbf{C}$ contains every causal curve segment whose endpoints lie in $\mathbf{C}$.
@@ -1010,7 +1010,7 @@
 
 \begin{lemma}[Causal diamonds are causally convex]
     \label{lmm:causal-diamond-causally-convex}
-    \lean{Physicslib4.Spacetime.causalDiamond_isCausallyConvex}
+    \lean{Hilbert6.Spacetime.causalDiamond_isCausallyConvex}
     \uses{def:causally-convex-region, def:causal-diamond, lmm:causal-diamond-structure}
     \leanok
     Let $M$ be a spacetime with time orientation $t$, and let $p, q \in M$. The causal diamond $J^+(p) \cap J^-(q)$ is a causally convex region.
@@ -1025,7 +1025,7 @@
 
 \begin{theorem}[Causally complete regions are causally convex]
     \label{thrm:causally-complete-convex}
-    \lean{Physicslib4.Spacetime.spacelikeComplement_isCausallyConvex, Physicslib4.Spacetime.LorentzianSpacetime.isCausallyConvex_of_isCausallyComplete, Physicslib4.Spacetime.LorentzianSpacetime.CausallyCompleteRegion.isCausallyConvex}
+    \lean{Hilbert6.Spacetime.spacelikeComplement_isCausallyConvex, Hilbert6.Spacetime.LorentzianSpacetime.isCausallyConvex_of_isCausallyComplete, Hilbert6.Spacetime.LorentzianSpacetime.CausallyCompleteRegion.isCausallyConvex}
     \uses{def:causally-convex-region, def:spacelike-complement, def:causally-complete-region, thrm:precedence-transitive}
     \leanok
     Let $M$ be a Lorentzian spacetime.
@@ -1049,7 +1049,7 @@
 
 \begin{lemma}[Causally convex regions form a closure system]
     \label{lmm:causally-convex-closure-ops}
-    \lean{Physicslib4.Spacetime.isCausallyConvex_univ, Physicslib4.Spacetime.isCausallyConvex_empty, Physicslib4.Spacetime.isCausallyConvex_inter, Physicslib4.Spacetime.isCausallyConvex_iInter, Physicslib4.Spacetime.isCausallyConvex_sInter}
+    \lean{Hilbert6.Spacetime.isCausallyConvex_univ, Hilbert6.Spacetime.isCausallyConvex_empty, Hilbert6.Spacetime.isCausallyConvex_inter, Hilbert6.Spacetime.isCausallyConvex_iInter, Hilbert6.Spacetime.isCausallyConvex_sInter}
     \uses{def:causally-convex-region}
     \leanok
     Let $M$ be a spacetime with time orientation $t$. The causally convex regions of $M$ form a closure system (a Moore family):
@@ -1074,7 +1074,7 @@
 
 \begin{definition}[Causal-convex hull]
     \label{def:causal-convex-hull}
-    \lean{Physicslib4.Spacetime.causalConvexHull}
+    \lean{Hilbert6.Spacetime.causalConvexHull}
     \uses{def:causally-convex-region}
     \leanok
     Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be an arbitrary region. The \emph{causal-convex hull} of $\mathbf{B}$ is the intersection of all causally convex regions containing $\mathbf{B}$:
@@ -1088,7 +1088,7 @@
 
 \begin{lemma}[The Causal-Convex Hull is Extensive and Causally Convex]
     \label{lmm:causal-convex-hull-extensive}
-    \lean{Physicslib4.Spacetime.subset_causalConvexHull, Physicslib4.Spacetime.isCausallyConvex_causalConvexHull}
+    \lean{Hilbert6.Spacetime.subset_causalConvexHull, Hilbert6.Spacetime.isCausallyConvex_causalConvexHull}
     \uses{def:causal-convex-hull, def:causally-convex-region, lmm:causally-convex-closure-ops}
     \leanok
     Let $M$ be a spacetime with time orientation $t$ and let $\mathbf{B} \subseteq M$ be a region. Then the causal-convex hull satisfies the two defining properties of a hull:
@@ -1107,7 +1107,7 @@
 
 \begin{theorem}[The causal-convex hull is a closure operator]
     \label{thrm:causal-convex-hull-closure}
-    \lean{Physicslib4.Spacetime.causalConvexHull_minimal, Physicslib4.Spacetime.causalConvexHull_mono, Physicslib4.Spacetime.causalConvexHull_eq_of_isCausallyConvex, Physicslib4.Spacetime.causalConvexHull_idem}
+    \lean{Hilbert6.Spacetime.causalConvexHull_minimal, Hilbert6.Spacetime.causalConvexHull_mono, Hilbert6.Spacetime.causalConvexHull_eq_of_isCausallyConvex, Hilbert6.Spacetime.causalConvexHull_idem}
     \uses{def:causal-convex-hull, lmm:causal-convex-hull-extensive}
     \leanok
     Let $M$ be a spacetime with time orientation $t$. The map $\mathbf{B} \mapsto \mathrm{ccHull}(\mathbf{B})$ satisfies the closure-operator laws:
@@ -1135,8 +1135,8 @@
 
 \begin{definition}[Alexandrov Topology]
     \label{def:alexandrov-topology}
-    \lean{Physicslib4.Spacetime.alexandrovTopology, Physicslib4.Spacetime.alexandrovBasis}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.alexandrovTopology, Hilbert6.Spacetime.alexandrovBasis}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \leanok
     \uses{def:spacetime, def:chronological-future-and-chronological-past}
     \textit{Alexandrov topology} on a spacetime $M$ is the topology generated by the basis consisting of all sets of the form $I^+(p) \cap I^-(q)$ for points $p$ and $q$ in $M$.
@@ -1146,8 +1146,8 @@
 
 \begin{lemma}[Basis Sets Are Alexandrov-Open]
     \label{lmm:alexandrov-basis-open}
-    \lean{Physicslib4.Spacetime.isOpen_alexandrov_of_mem_basis}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.isOpen_alexandrov_of_mem_basis}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \uses{def:alexandrov-topology}
     \leanok
     Every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
@@ -1161,8 +1161,8 @@
 
 \begin{lemma}[Openness of Chronological Futures and Pasts]
     \label{lmm:chronological-future-past-open}
-    \lean{Physicslib4.Spacetime.isOpen_chronologicalFuture_inter_chronologicalPast, Physicslib4.Spacetime.isOpen_chronologicalFuture, Physicslib4.Spacetime.isOpen_chronologicalPast}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.isOpen_chronologicalFuture_inter_chronologicalPast, Hilbert6.Spacetime.isOpen_chronologicalFuture, Hilbert6.Spacetime.isOpen_chronologicalPast}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \uses{def:chronological-future-and-chronological-past, def:alexandrov-topology, lmm:alexandrov-basis-open}
     \leanok
     Let $M$ be a spacetime with time orientation $t$, equipped with the Alexandrov topology.
@@ -1190,8 +1190,8 @@
 
 \begin{lemma}[Unconditional Openness of Chronological Futures and Pasts on Standard Minkowski]
     \label{lmm:minkowski-chronological-open}
-    \lean{Physicslib4.exists_chronologicalFuture_standardMinkowski, Physicslib4.exists_chronologicalPast_standardMinkowski, Physicslib4.isOpen_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_chronologicalPast_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalFuture_standardMinkowski, Physicslib4.isOpen_alexandrov_chronologicalPast_standardMinkowski}
-    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \lean{Hilbert6.exists_chronologicalFuture_standardMinkowski, Hilbert6.exists_chronologicalPast_standardMinkowski, Hilbert6.isOpen_chronologicalFuture_standardMinkowski, Hilbert6.isOpen_chronologicalPast_standardMinkowski, Hilbert6.isOpen_alexandrov_chronologicalFuture_standardMinkowski, Hilbert6.isOpen_alexandrov_chronologicalPast_standardMinkowski}
+    \leanfile{Hilbert6/Spacetime/Minkowski.lean}
     \uses{lmm:chronological-future-past-open, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, def:alexandrov-topology}
     \leanok
     Work on standard Minkowski spacetime, with underlying manifold $\mathbb{R}^4$, and let $e_0$ denote the unit time vector (the first standard coordinate vector).
@@ -1215,7 +1215,7 @@
 
 \begin{lemma}[The Directional Derivative is Levi-Civita on Standard Minkowski]
     \label{lmm:minkowski-directional-derivative-levi-civita}
-    \lean{Physicslib4.Geometry.PseudoRiemannianMetric.isLeviCivitaFor_flatConnection, Physicslib4.Geometry.flatConnection, Physicslib4.Geometry.isCovariantDerivativeOn_fderiv}
+    \lean{Hilbert6.Geometry.PseudoRiemannianMetric.isLeviCivitaFor_flatConnection, Hilbert6.Geometry.flatConnection, Hilbert6.Geometry.isCovariantDerivativeOn_fderiv}
     \uses{def:standard-minkowski-spacetime, def:levi-civita-connection}
     \leanok
     On standard Minkowski spacetime the tangent space at every point is $\mathbb{R}^4$ itself, so a vector field is a map $Y : \mathbb{R}^4 \to \mathbb{R}^4$. The \textit{trivial connection} $D$, $(DY)_x(v) = DY(x)\,v$ (the Fr\'echet derivative of the components of $Y$ in the direction $v$, and $0$ where $Y$ is not differentiable), is a Levi-Civita connection of the Minkowski metric.
@@ -1228,7 +1228,7 @@
 
 \begin{lemma}[The Minkowski Levi-Civita Connection is Flat]
     \label{lmm:minkowski-levi-civita-flat}
-    \lean{Physicslib4.standardMinkowski_leviCivita_apply, Physicslib4.Geometry.PseudoRiemannianMetric.leviCivita_apply_eq_fderiv}
+    \lean{Hilbert6.standardMinkowski_leviCivita_apply, Hilbert6.Geometry.PseudoRiemannianMetric.leviCivita_apply_eq_fderiv}
     \uses{lmm:minkowski-directional-derivative-levi-civita, thrm:levi-civita-exists-unique}
     \leanok
     On standard Minkowski spacetime the Levi-Civita connection $\nabla$ is the trivial connection: $(\nabla_X Y)(x) = DY(x)\,X(x)$ for every vector field $X$ and every $Y$ differentiable at $x$.
@@ -1241,7 +1241,7 @@
 
 \begin{lemma}[Straight Lines are Geodesics in Standard Minkowski]
     \label{lmm:minkowski-lines-are-geodesics}
-    \lean{Physicslib4.standardMinkowskiLineSegmentPath_isGeodesic, Physicslib4.standardMinkowski_isGeodesic_iff}
+    \lean{Hilbert6.standardMinkowskiLineSegmentPath_isGeodesic, Hilbert6.standardMinkowski_isGeodesic_iff}
     \uses{def:geodesic, def:standard-minkowski-spacetime}
     \leanok
     On standard Minkowski spacetime, let $p, v \in \mathbb{R}^4$ with $v \neq 0$ and let $\Sigma$ be a parameter space. The affinely parametrised straight path $\mu(t) = p + t v$, $t \in \Sigma$, is a smooth path and a geodesic.
@@ -1254,8 +1254,8 @@
 
 \begin{definition}[Minkowski Spacetime]
     \label{def:minkowski-spacetime}
-    \lean{Physicslib4.MinkowskiSpacetime}
-    \leanfile{Physicslib4/Spacetime/Minkowski.lean}
+    \lean{Hilbert6.MinkowskiSpacetime}
+    \leanfile{Hilbert6/Spacetime/Minkowski.lean}
     \uses{def:standard-minkowski-spacetime, def:alexandrov-topology}
     \leanok
     \textit{Minkowski spacetime} is standard Minkowski spacetime equipped with Alexandrov topology.
@@ -1265,8 +1265,8 @@
 
 \begin{definition}[Lorentzian Spacetime]
     \label{def:lorentzian-spacetime}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime}
-    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime}
+    \leanfile{Hilbert6/Spacetime/LorentzianSpacetime.lean}
     \leanok
     \uses{def:spacetime, def:alexandrov-topology}
     \textit{Lorentzian spacetime} is a spacetime equipped with a Hausdorff Alexandrov topology.
@@ -1276,8 +1276,8 @@
 
 \begin{lemma}[Bundled Spacelike Separation and Basis Openness]
     \label{lmm:lorentzian-causal-lifts}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.isCompletelySpacelike_comm, Physicslib4.Spacetime.LorentzianSpacetime.isOpen_alexandrov_of_isBasisSet}
-    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.isCompletelySpacelike_comm, Hilbert6.Spacetime.LorentzianSpacetime.isOpen_alexandrov_of_isBasisSet}
+    \leanfile{Hilbert6/Spacetime/LorentzianSpacetime.lean}
     \uses{def:lorentzian-spacetime, lmm:completely-spacelike-symm, lmm:alexandrov-basis-open}
     \leanok
     On a Lorentzian spacetime, complete spacelike separation of two regions is symmetric, and every basis set $I^+(p) \cap I^-(q)$ is open in the Alexandrov topology.
@@ -1291,8 +1291,8 @@
 
 \begin{lemma}[No-Diamond Points Have Only the Whole Space as Neighbourhood]
     \label{lmm:alexandrov-nbhd-univ-of-no-diamond}
-    \lean{Physicslib4.Spacetime.alexandrov_nbhd_univ_of_no_diamond}
-    \leanfile{Physicslib4/Spacetime/Causality.lean}
+    \lean{Hilbert6.Spacetime.alexandrov_nbhd_univ_of_no_diamond}
+    \leanfile{Hilbert6/Spacetime/Causality.lean}
     \uses{def:alexandrov-topology}
     \leanok
     On a spacetime equipped with the Alexandrov topology, suppose a point $x$ lies in no diamond $I^+(p) \cap I^-(q)$. Then every Alexandrov-open set containing $x$ is the whole space $M$: the only open neighbourhood of $x$ is $M$ itself.
@@ -1306,7 +1306,7 @@
 
 \begin{lemma}[Covering from the Hausdorff Assumption]
     \label{lmm:alexandrov-covering-hausdorff}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.sUnion_alexandrovBasis_eq_univ}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.sUnion_alexandrovBasis_eq_univ}
     \uses{def:lorentzian-spacetime, def:alexandrov-topology, lmm:alexandrov-nbhd-univ-of-no-diamond}
     \leanok
     On a Lorentzian spacetime with at least two points, the Alexandrov diamonds cover the whole space: every point lies in some diamond $I^+(p) \cap I^-(q)$. Equivalently, every point has both a chronological past point and a chronological future point (a ``no endpoints'' condition). This is a genuine consequence of the Hausdorff assumption on the Alexandrov topology, not an extra hypothesis.
@@ -1321,8 +1321,8 @@
 
 \begin{theorem}[The Alexandrov Diamonds Form a Topological Basis]
     \label{thrm:alexandrov-topological-basis}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.isTopologicalBasis_alexandrovBasis}
-    \leanfile{Physicslib4/Spacetime/LorentzianSpacetime.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.isTopologicalBasis_alexandrovBasis}
+    \leanfile{Hilbert6/Spacetime/LorentzianSpacetime.lean}
     \uses{lmm:alexandrov-covering-hausdorff, def:alexandrov-topology, def:lorentzian-spacetime}
     \leanok
     On a Lorentzian spacetime with at least two points, suppose the diamonds are downward-directed: for any two diamonds $B_1, B_2$ and any point $x \in B_1 \cap B_2$ there is a diamond $B_3$ with $x \in B_3 \subseteq B_1 \cap B_2$ (the intersection property). Then the diamonds form a genuine topological basis for the Alexandrov topology.
@@ -1336,8 +1336,8 @@
 
 \begin{lemma}[Past Interpolation on Standard Minkowski]
     \label{lmm:minkowski-past-between}
-    \lean{Physicslib4.Spacetime.exists_past_between_standardMinkowski}
-    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \lean{Hilbert6.Spacetime.exists_past_between_standardMinkowski}
+    \leanfile{Hilbert6/Spacetime/MinkowskiDirected.lean}
     \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
     \leanok
     On standard Minkowski spacetime, if $p_1 \ll x$ and $p_2 \ll x$ then there is a point $a$ with $p_1 \ll a$, $p_2 \ll a$, and $a \ll x$.
@@ -1352,8 +1352,8 @@
 
 \begin{lemma}[Future Interpolation on Standard Minkowski]
     \label{lmm:minkowski-future-between}
-    \lean{Physicslib4.Spacetime.exists_future_between_standardMinkowski}
-    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \lean{Hilbert6.Spacetime.exists_future_between_standardMinkowski}
+    \leanfile{Hilbert6/Spacetime/MinkowskiDirected.lean}
     \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
     \leanok
     On standard Minkowski spacetime, if $x \ll q_1$ and $x \ll q_2$ then there is a point $b$ with $x \ll b$, $b \ll q_1$, and $b \ll q_2$.
@@ -1368,8 +1368,8 @@
 
 \begin{lemma}[Standard Minkowski Diamonds Are Downward-Directed]
     \label{lmm:minkowski-diamonds-downward-directed}
-    \lean{Physicslib4.Spacetime.alexandrovBasis_exists_subset_inter_standardMinkowski}
-    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \lean{Hilbert6.Spacetime.alexandrovBasis_exists_subset_inter_standardMinkowski}
+    \leanfile{Hilbert6/Spacetime/MinkowskiDirected.lean}
     \uses{lmm:minkowski-past-between, lmm:minkowski-future-between, thrm:precedence-transitive, def:standard-minkowski-spacetime, def:alexandrov-topology, def:chronological-future-and-chronological-past}
     \leanok
     On standard Minkowski spacetime the Alexandrov diamonds have the downward intersection property: for any two diamonds $B_1 = I^+(p_1) \cap I^-(q_1)$ and $B_2 = I^+(p_2) \cap I^-(q_2)$ and any $x \in B_1 \cap B_2$, there is a diamond $B_3$ with $x \in B_3 \subseteq B_1 \cap B_2$.
@@ -1384,7 +1384,7 @@
 
 \begin{lemma}[Common Chronological Predecessor on Standard Minkowski]
     \label{lmm:minkowski-exists-common-past}
-    \lean{Physicslib4.Spacetime.exists_common_past}
+    \lean{Hilbert6.Spacetime.exists_common_past}
     \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
     \leanok
     On standard Minkowski spacetime, for any two points $p_1$ and $p_2$ there is a point $p$ with $p \ll p_1$ and $p \ll p_2$. Note the absence of hypotheses: unlike the interpolation lemma \ref{lmm:minkowski-past-between}, which needs a common future point $x$ to aim below, this one holds for an arbitrary pair.
@@ -1399,7 +1399,7 @@
 
 \begin{lemma}[Common Chronological Successor on Standard Minkowski]
     \label{lmm:minkowski-exists-common-future}
-    \lean{Physicslib4.Spacetime.exists_common_future}
+    \lean{Hilbert6.Spacetime.exists_common_future}
     \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
     \leanok
     On standard Minkowski spacetime, for any two points $q_1$ and $q_2$ there is a point $q$ with $q_1 \ll q$ and $q_2 \ll q$. Again there are no hypotheses on the pair.
@@ -1414,7 +1414,7 @@
 
 \begin{lemma}[Standard Minkowski Diamonds Are Upward-Directed]
     \label{lmm:minkowski-diamonds-upward-directed}
-    \lean{Physicslib4.Spacetime.alexandrovBasis_directed}
+    \lean{Hilbert6.Spacetime.alexandrovBasis_directed}
     \uses{lmm:minkowski-exists-common-past, lmm:minkowski-exists-common-future, thrm:precedence-transitive, def:standard-minkowski-spacetime, def:alexandrov-topology, def:chronological-future-and-chronological-past}
     \leanok
     On standard Minkowski spacetime the Alexandrov diamonds are \emph{upward directed}: for any two diamonds $B_1$ and $B_2$ there is a diamond $B$ with $B_1 \subseteq B$ and $B_2 \subseteq B$.
@@ -1426,15 +1426,15 @@
     \uses{lmm:minkowski-exists-common-past, lmm:minkowski-exists-common-future, thrm:precedence-transitive}
     Write $B_1 = I^+(p_1) \cap I^-(q_1)$ and $B_2 = I^+(p_2) \cap I^-(q_2)$. Apply \ref{lmm:minkowski-exists-common-past} to $p_1, p_2$ to get $p$ with $p \ll p_1$ and $p \ll p_2$, and \ref{lmm:minkowski-exists-common-future} to $q_1, q_2$ to get $q$ with $q_1 \ll q$ and $q_2 \ll q$. Put $B = I^+(p) \cap I^-(q)$, again a diamond. By monotonicity of the Minkowski forward and backward cones --- i.e.\ transitivity of $\ll$ (\ref{thrm:precedence-transitive}) --- $p \ll p_i$ gives $I^+(p_i) \subseteq I^+(p)$ and $q_i \ll q$ gives $I^-(q_i) \subseteq I^-(q)$; intersecting these, $B_i \subseteq B$ for $i = 1, 2$.
 
-    In Lean this lemma is \texttt{Physicslib4.Spacetime.alexandrovBasis\_directed}, and the two point-existence helpers it uses are \texttt{exists\_common\_past} and \texttt{exists\_common\_future}.
+    In Lean this lemma is \texttt{Hilbert6.Spacetime.alexandrovBasis\_directed}, and the two point-existence helpers it uses are \texttt{exists\_common\_past} and \texttt{exists\_common\_future}.
 \end{proof}
 
 \medskip
 
 \begin{theorem}[The Alexandrov Diamonds are a Basis on Standard Minkowski]
     \label{thrm:minkowski-alexandrov-basis}
-    \lean{Physicslib4.Spacetime.isTopologicalBasis_alexandrovBasis_standardMinkowski}
-    \leanfile{Physicslib4/Spacetime/MinkowskiDirected.lean}
+    \lean{Hilbert6.Spacetime.isTopologicalBasis_alexandrovBasis_standardMinkowski}
+    \leanfile{Hilbert6/Spacetime/MinkowskiDirected.lean}
     \uses{thrm:alexandrov-topological-basis, lmm:minkowski-diamonds-downward-directed, lmm:minkowski-chronological-open, def:standard-minkowski-spacetime, def:alexandrov-topology}
     \leanok
     On standard Minkowski spacetime the Alexandrov diamonds form a genuine topological basis for the Alexandrov topology, unconditionally.
@@ -1453,7 +1453,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Dilations Preserve the Minkowski Cones]
     \label{lmm:minkowski-dilation-cone}
-    \lean{Physicslib4.minkowskiForwardCone_smul, Physicslib4.minkowskiBackwardCone_smul}
+    \lean{Hilbert6.minkowskiForwardCone_smul, Hilbert6.minkowskiBackwardCone_smul}
     \uses{def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past, lmm:minkowski-chronological-open}
     \leanok
     For $\lambda > 0$, the dilation $x \mapsto \lambda x$ preserves the forward and backward Minkowski cones: $\lambda q \in I^+(\lambda p) \iff q \in I^+(p)$ and $\lambda p \in I^-(\lambda q) \iff p \in I^-(q)$.
@@ -1468,7 +1468,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{theorem}[Dilations are Causal Automorphisms]
     \label{thrm:minkowski-dilation-causal-automorphism}
-    \lean{Physicslib4.alexandrovBasis_image_smul}
+    \lean{Hilbert6.alexandrovBasis_image_smul}
     \uses{def:alexandrov-topology, def:standard-minkowski-spacetime, def:chronological-future-and-chronological-past}
     \leanok
     For $\lambda > 0$, the dilation $x \mapsto \lambda x$ carries Alexandrov basis sets to Alexandrov basis sets: the image of a diamond $I^+(p) \cap I^-(q)$ is again a diamond, $I^+(\lambda p) \cap I^-(\lambda q)$. So a positive dilation preserves the causal (Alexandrov) structure --- it is a causal automorphism.
@@ -1483,7 +1483,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{theorem}[Dilations are Not Isometries]
     \label{thrm:minkowski-dilation-not-isometry}
-    \lean{Physicslib4.minkowskiForm_smul, Physicslib4.exists_minkowskiForm_smul_ne}
+    \lean{Hilbert6.minkowskiForm_smul, Hilbert6.exists_minkowskiForm_smul_ne}
     \uses{def:standard-minkowski-spacetime}
     \leanok
     The Minkowski metric scales by $\lambda^2$ under a dilation, $g(\lambda v, \lambda w) = \lambda^2\, g(v,w)$. Consequently, whenever $\lambda^2 \neq 1$ the dilation does not preserve $g$.
@@ -1498,8 +1498,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Isometries Preserve the Causal Classification]
     \label{lmm:isometry-preserves-classification}
-    \lean{Physicslib4.Spacetime.Isometry, Physicslib4.Spacetime.Isometry.preserves_self, Physicslib4.Spacetime.Isometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.Isometry.isNull_mfderiv_iff, Physicslib4.Spacetime.Isometry.isSpacelike_mfderiv_iff}
-    \leanfile{Physicslib4/Spacetime/Isometry.lean}
+    \lean{Hilbert6.Spacetime.Isometry, Hilbert6.Spacetime.Isometry.preserves_self, Hilbert6.Spacetime.Isometry.isTimelike_mfderiv_iff, Hilbert6.Spacetime.Isometry.isNull_mfderiv_iff, Hilbert6.Spacetime.Isometry.isSpacelike_mfderiv_iff}
+    \leanfile{Hilbert6/Spacetime/Isometry.lean}
     \uses{def:spacetime, def:timelike-spacelike-null-vectors}
     \leanok
     An isometry $\varphi$ of a spacetime preserves the metric square of a tangent vector, $g_{\varphi(x)}(d\varphi_x v, d\varphi_x v) = g_x(v,v)$, and therefore $d\varphi_x v$ is timelike, null, or spacelike if and only if $v$ is.
@@ -1511,8 +1511,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Unique Differentials Along a Path]
     \label{lmm:path-parameter-unique-diff}
-    \lean{Physicslib4.Spacetime.Path.uniqueDiffOn_parameterSpace}
-    \leanfile{Physicslib4/Spacetime/Curves.lean}
+    \lean{Hilbert6.Spacetime.Path.uniqueDiffOn_parameterSpace}
+    \leanfile{Hilbert6/Spacetime/Curves.lean}
     \uses{def:paths}
     \leanok
     The parameter space of a path has unique differentials: being a closed, connected subset of $\mathbb{R}$ with more than one point, it is a non-degenerate interval, hence convex with non-empty interior.
@@ -1524,8 +1524,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Pushforward of a Path Under an Isometry]
     \label{lmm:pushforward-path}
-    \lean{Physicslib4.Spacetime.Isometry.pushforwardPath, Physicslib4.Spacetime.Isometry.pushforwardPath_tangent, Physicslib4.Spacetime.Isometry.pushforwardPath_isTimelike, Physicslib4.Spacetime.Isometry.pushforwardPath_isCausal, Physicslib4.Spacetime.Isometry.pushforwardPath_isPastEndpoint, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureEndpoint}
-    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \lean{Hilbert6.Spacetime.Isometry.pushforwardPath, Hilbert6.Spacetime.Isometry.pushforwardPath_tangent, Hilbert6.Spacetime.Isometry.pushforwardPath_isTimelike, Hilbert6.Spacetime.Isometry.pushforwardPath_isCausal, Hilbert6.Spacetime.Isometry.pushforwardPath_isPastEndpoint, Hilbert6.Spacetime.Isometry.pushforwardPath_isFutureEndpoint}
+    \leanfile{Hilbert6/Spacetime/IsometryCausality.lean}
     \uses{def:paths, def:timelike-and-causal-smooth-curves, def:endpoints, lmm:isometry-preserves-classification, lmm:path-parameter-unique-diff}
     \leanok
     An isometry $\varphi$ pushes a smooth path $\mu$ forward to the smooth path $\varphi \circ \mu$ on the same parameter space, with tangent vector $d\varphi(\dot\mu)$. The pushforward preserves the timelike and causal conditions and carries the past and future endpoints of $\mu$ to those of $\varphi \circ \mu$.
@@ -1537,10 +1537,10 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Pullback of Vector Fields and the Metric Under an Isometry]
     \label{lmm:isometry-pullback-metric}
-    \lean{Physicslib4.Spacetime.Isometry.val_mpullback, Physicslib4.Spacetime.Isometry.mfderiv_mpullback, Physicslib4.Spacetime.CrossIsometry.val_mpullback, Physicslib4.Spacetime.CrossIsometry.mfderiv_mpullback}
+    \lean{Hilbert6.Spacetime.Isometry.val_mpullback, Hilbert6.Spacetime.Isometry.mfderiv_mpullback, Hilbert6.Spacetime.CrossIsometry.val_mpullback, Hilbert6.Spacetime.CrossIsometry.mfderiv_mpullback}
     \uses{lmm:isometry-preserves-classification}
     \leanok
-    Let $\varphi$ be an isometry of a spacetime $M$, in the sense used throughout this section (\ref{lmm:isometry-preserves-classification}, \ref{lmm:pushforward-path}; the Lean structure \texttt{Physicslib4.Spacetime.Isometry}): a $C^\infty$ diffeomorphism of $M$ with $g_{\varphi(x)}(d\varphi_x v, d\varphi_x w) = g_x(v,w)$ for all $x$ and $v, w \in TM|_x$, where $d\varphi_x$ is the manifold derivative. For a vector field $V$ write $\varphi^* V$ for its pullback, $(\varphi^* V)(x) = (d\varphi_x)^{-1} V(\varphi(x))$ (Mathlib's \texttt{VectorField.mpullback}). Then for every $x \in M$ and all vector fields $V, W$,
+    Let $\varphi$ be an isometry of a spacetime $M$, in the sense used throughout this section (\ref{lmm:isometry-preserves-classification}, \ref{lmm:pushforward-path}; the Lean structure \texttt{Hilbert6.Spacetime.Isometry}): a $C^\infty$ diffeomorphism of $M$ with $g_{\varphi(x)}(d\varphi_x v, d\varphi_x w) = g_x(v,w)$ for all $x$ and $v, w \in TM|_x$, where $d\varphi_x$ is the manifold derivative. For a vector field $V$ write $\varphi^* V$ for its pullback, $(\varphi^* V)(x) = (d\varphi_x)^{-1} V(\varphi(x))$ (Mathlib's \texttt{VectorField.mpullback}). Then for every $x \in M$ and all vector fields $V, W$,
     \begin{align}
         d\varphi_x\big((\varphi^* V)(x)\big) = V(\varphi(x)), \qquad g_x\big((\varphi^* V)(x), (\varphi^* W)(x)\big) = g_{\varphi(x)}\big(V(\varphi(x)), W(\varphi(x))\big).
     \end{align}
@@ -1553,7 +1553,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Derivatives of Metric Pairings of Pulled-Back Fields]
     \label{lmm:isometry-pullback-metric-derivative}
-    \lean{Physicslib4.Spacetime.Isometry.mfderiv_val_mpullback, Physicslib4.Spacetime.CrossIsometry.mfderiv_val_mpullback}
+    \lean{Hilbert6.Spacetime.Isometry.mfderiv_val_mpullback, Hilbert6.Spacetime.CrossIsometry.mfderiv_val_mpullback}
     \uses{lmm:isometry-pullback-metric}
     \leanok
     Let $\varphi$ be an isometry as in \ref{lmm:isometry-pullback-metric}, $x \in M$, and $A, B, C$ vector fields with $B, C$ differentiable at $\varphi(x)$. Then the derivative of $y \mapsto g_y\big((\varphi^* B)(y), (\varphi^* C)(y)\big)$ at $x$ in the direction $(\varphi^* A)(x)$ equals the derivative of $y \mapsto g_y\big(B(y), C(y)\big)$ at $\varphi(x)$ in the direction $A(\varphi(x))$; that is, $(\varphi^*A)\,g(\varphi^*B, \varphi^*C)(x) = A\,g(B,C)(\varphi(x))$.
@@ -1566,7 +1566,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Metric Pairings with Lie Brackets of Pulled-Back Fields]
     \label{lmm:isometry-pullback-lie-bracket}
-    \lean{Physicslib4.Spacetime.Isometry.val_mlieBracket_mpullback, Physicslib4.Spacetime.CrossIsometry.val_mlieBracket_mpullback}
+    \lean{Hilbert6.Spacetime.Isometry.val_mlieBracket_mpullback, Hilbert6.Spacetime.CrossIsometry.val_mlieBracket_mpullback}
     \uses{lmm:isometry-pullback-metric}
     \leanok
     Let $\varphi$ be an isometry as in \ref{lmm:isometry-pullback-metric}, $x \in M$, and $A, B, C$ vector fields with $B, C$ differentiable at $\varphi(x)$. Then
@@ -1582,7 +1582,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Isometries Preserve the Levi-Civita Connection]
     \label{lmm:isometry-preserves-levi-civita}
-    \lean{Physicslib4.Spacetime.Isometry.mfderiv_leviCivita_mpullback, Physicslib4.Spacetime.CrossIsometry.mfderiv_leviCivita_mpullback}
+    \lean{Hilbert6.Spacetime.Isometry.mfderiv_leviCivita_mpullback, Hilbert6.Spacetime.CrossIsometry.mfderiv_leviCivita_mpullback}
     \uses{def:levi-civita-connection, lmm:isometry-pullback-metric}
     \leanok
     Let $\varphi$ be an isometry of a spacetime $M$ (as in \ref{lmm:isometry-pullback-metric}) and $\nabla$ the Levi-Civita connection of $g$. Then $\nabla$ is natural under $\varphi$: for every $x \in M$ and all vector fields $A, B$ differentiable at $\varphi(x)$,
@@ -1604,7 +1604,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Isometries Preserve Geodesics]
     \label{lmm:isometry-preserves-geodesics}
-    \lean{Physicslib4.Spacetime.Isometry.pushforwardPath_isGeodesic, Physicslib4.lorentzPath_isGeodesic, Physicslib4.Spacetime.CrossIsometry.pushforwardPath_isGeodesic}
+    \lean{Hilbert6.Spacetime.Isometry.pushforwardPath_isGeodesic, Hilbert6.lorentzPath_isGeodesic, Hilbert6.Spacetime.CrossIsometry.pushforwardPath_isGeodesic}
     \uses{def:geodesic, lmm:pushforward-path}
     \leanok
     Let $\varphi$ be an isometry of a spacetime $M$ (as in \ref{lmm:isometry-pullback-metric}) and $\mu$ a smooth path. Then $\mu$ is a geodesic if and only if the pushforward path $\varphi \circ \mu$ (\ref{lmm:pushforward-path}) is a geodesic.
@@ -1617,7 +1617,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{definition}[Lorentz Pushforward of a Smooth Path]
     \label{def:lorentz-path}
-    \lean{Physicslib4.lorentzPath, Physicslib4.standardMinkowskiTimeOrientation}
+    \lean{Hilbert6.lorentzPath, Hilbert6.standardMinkowskiTimeOrientation}
     \uses{def:inhomogeneous-lorentz-group, def:paths, def:time-orientable, lmm:pushforward-path}
     \leanok
     For $g = (L, a)$ in the inhomogeneous Lorentz group and a smooth path $\mu : \Sigma \to \mathbb{R}^4$ in standard Minkowski spacetime, the \textit{Lorentz pushforward} of $\mu$ is the smooth path $g\mu : \Sigma \to \mathbb{R}^4$, $s \mapsto L\mu(s) + a$, on the same parameter space. It is the Minkowski instance of the pushforward of a path under an isometry (\ref{lmm:pushforward-path}). The \textit{standard time orientation} of standard Minkowski spacetime (\ref{def:time-orientable}) is the constant vector field $e_0 = \partial_0$.
@@ -1625,7 +1625,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Lorentz Pushforward of Causal Paths]
     \label{lmm:lorentz-path-causal}
-    \lean{Physicslib4.lorentzPath_mfderivWithin, Physicslib4.lorentzPath_isCausal, Physicslib4.lorentzPath_isFutureOriented, Physicslib4.lorentzPath_isPastEndpoint, Physicslib4.lorentzPath_isFutureEndpoint}
+    \lean{Hilbert6.lorentzPath_mfderivWithin, Hilbert6.lorentzPath_isCausal, Hilbert6.lorentzPath_isFutureOriented, Hilbert6.lorentzPath_isPastEndpoint, Hilbert6.lorentzPath_isFutureEndpoint}
     \uses{def:lorentz-path, def:timelike-and-causal-smooth-curves, def:future-and-past-oriented-smooth-curves, def:endpoints, def:time-orientable}
     \leanok
     Let $g = (L, a)$ be in the inhomogeneous Lorentz group and $\mu$ a smooth path in standard Minkowski spacetime. The tangent of $g\mu$ at $s$ is $L\dot\mu(s)$. If $\mu$ is causal, so is $g\mu$; if $\mu$ is future-oriented with respect to the standard time orientation, so is $g\mu$; and if $p$ (respectively $q$) is the past (respectively future) endpoint of $\mu$, then $g \cdot p$ (respectively $g \cdot q$) is the past (respectively future) endpoint of $g\mu$.
@@ -1638,7 +1638,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{theorem}[Lorentz Invariance of Causal Precedence]
     \label{thrm:causal-precedence-lorentz-invariant}
-    \lean{Physicslib4.causalSegmentPrecedes_smul, Physicslib4.causallyPrecedes_smul, Physicslib4.causallyPrecedes_smul_iff}
+    \lean{Hilbert6.causalSegmentPrecedes_smul, Hilbert6.causallyPrecedes_smul, Hilbert6.causallyPrecedes_smul_iff}
     \uses{def:inhomogeneous-lorentz-group, def:causal-trip, def:time-orientable}
     \leanok
     For every $g$ in the inhomogeneous Lorentz group and all points $p, q$ of standard Minkowski spacetime (with its standard time orientation), $g \cdot p \prec g \cdot q$ if and only if $p \prec q$.
@@ -1651,7 +1651,7 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{corollary}[Lorentz Invariance of Spacelike Separation]
     \label{crllr:spacelike-lorentz-invariant}
-    \lean{Physicslib4.isSpacelikeRelated_smul_iff, Physicslib4.isCompletelySpacelike_smul_iff}
+    \lean{Hilbert6.isSpacelikeRelated_smul_iff, Hilbert6.isCompletelySpacelike_smul_iff}
     \uses{def:inhomogeneous-lorentz-group, def:spacelike-related, def:completely-spacelike, def:time-orientable}
     \leanok
     For every $g$ in the inhomogeneous Lorentz group, points $p_1, p_2$ and regions $\mathbf{O}_1, \mathbf{O}_2$ of standard Minkowski spacetime (with its standard time orientation), $g \cdot p_1$ and $g \cdot p_2$ are spacelike related if and only if $p_1$ and $p_2$ are, and $g\mathbf{O}_1$, $g\mathbf{O}_2$ are completely spacelike if and only if $\mathbf{O}_1$, $\mathbf{O}_2$ are.
@@ -1664,8 +1664,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Isometries Preserve Chronology]
     \label{lmm:isometry-preserves-chronology}
-    \lean{Physicslib4.Spacetime.Isometry.PreservesFutureOrientation, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_one, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_mul, Physicslib4.Spacetime.Isometry.pushforwardPath_isFutureOriented, Physicslib4.Spacetime.Isometry.chronologicallyPrecedes_pushforward, Physicslib4.Spacetime.Isometry.chronologicalFuture_image_subset, Physicslib4.Spacetime.Isometry.chronologicalFuture_image, Physicslib4.Spacetime.Isometry.chronologicalPast_image_subset, Physicslib4.Spacetime.Isometry.chronologicalPast_image}
-    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \lean{Hilbert6.Spacetime.Isometry.PreservesFutureOrientation, Hilbert6.Spacetime.Isometry.preservesFutureOrientation_one, Hilbert6.Spacetime.Isometry.preservesFutureOrientation_mul, Hilbert6.Spacetime.Isometry.pushforwardPath_isFutureOriented, Hilbert6.Spacetime.Isometry.chronologicallyPrecedes_pushforward, Hilbert6.Spacetime.Isometry.chronologicalFuture_image_subset, Hilbert6.Spacetime.Isometry.chronologicalFuture_image, Hilbert6.Spacetime.Isometry.chronologicalPast_image_subset, Hilbert6.Spacetime.Isometry.chronologicalPast_image}
+    \leanfile{Hilbert6/Spacetime/IsometryCausality.lean}
     \uses{def:trip, def:chronological-future-and-chronological-past, lmm:pushforward-path}
     \leanok
     Say an isometry $\varphi$ \emph{preserves the future orientation} if its differential sends future-pointing vectors to future-pointing vectors; this property holds for the identity and is closed under composition. Under it, $\varphi$ carries trips to trips, so $p \ll q$ implies $\varphi(p) \ll \varphi(q)$, and the chronological futures and pasts satisfy $\varphi(I^\pm(p)) = I^\pm(\varphi(p))$.
@@ -1679,8 +1679,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Isometries Preserve Basis Sets]
     \label{lmm:isometry-preserves-basis-sets}
-    \lean{Physicslib4.Spacetime.Isometry.futureOrientationPreserving, Physicslib4.Spacetime.Isometry.orientedIdentityComponent, Physicslib4.Spacetime.Isometry.alexandrovBasis_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem, Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent, Physicslib4.Spacetime.Isometry.smul_set_eq_image, Physicslib4.Spacetime.Isometry.alexandrovBasis_smul_of_mem, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_image, Physicslib4.Spacetime.LorentzianSpacetime.isBasisSet_smul}
-    \leanfile{Physicslib4/Spacetime/IsometryCausality.lean}
+    \lean{Hilbert6.Spacetime.Isometry.futureOrientationPreserving, Hilbert6.Spacetime.Isometry.orientedIdentityComponent, Hilbert6.Spacetime.Isometry.alexandrovBasis_image, Hilbert6.Spacetime.Isometry.alexandrovBasis_image_of_mem, Hilbert6.Spacetime.Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent, Hilbert6.Spacetime.Isometry.smul_set_eq_image, Hilbert6.Spacetime.Isometry.alexandrovBasis_smul_of_mem, Hilbert6.Spacetime.LorentzianSpacetime.isBasisSet_image, Hilbert6.Spacetime.LorentzianSpacetime.isBasisSet_smul}
+    \leanfile{Hilbert6/Spacetime/IsometryCausality.lean}
     \uses{def:alexandrov-topology, def:lorentzian-spacetime, lmm:isometry-preserves-chronology}
     \leanok
     The future-orientation-preserving isometries (those $\varphi$ with both $\varphi$ and $\varphi^{-1}$ preserving the orientation) form a subgroup, and intersecting it with the identity component gives the \emph{oriented identity component}. Every such isometry maps Alexandrov-basis diamonds to diamonds, $\varphi(I^+(p) \cap I^-(q)) = I^+(\varphi(p)) \cap I^-(\varphi(q))$, both as an image and in pointwise-action form $\varphi \cdot \mathbf{B}$, and this lifts to the bundled Lorentzian spacetime.
@@ -1694,8 +1694,8 @@ A \emph{dilation} $x \mapsto \lambda x$ (with $\lambda > 0$) of standard Minkows
 
 \begin{lemma}[Axiom 5 Basis-Set Preservation]
     \label{lmm:axiom5-basis-preservation}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_isBasisSet_smul}
-    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/Concrete.lean}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_isBasisSet_smul}
+    \leanfile{Hilbert6/AQFT/HaagKastlerCurved/Concrete.lean}
     \uses{lmm:isometry-preserves-basis-sets, def:isometric-covariance-in-curved-spacetime}
     \leanok
     Instantiating the abstract curved-spacetime interface with the oriented identity component, every isometry $\varphi$ of the abstract spacetime carries Alexandrov-basis sets to basis sets, $\varphi \cdot \mathbf{B}$ is again a basis set. This is exactly the well-definedness condition for the Axiom 5 action $\mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))$.
@@ -1713,7 +1713,7 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{definition}[Pullback of a Spacetime Metric]
     \label{def:pullback-metric}
-    \lean{Physicslib4.Spacetime.bilinearPrecomp, Physicslib4.Spacetime.bilinearPrecomp_apply, Physicslib4.Spacetime.pullbackVal, Physicslib4.Spacetime.pullbackVal_apply}
+    \lean{Hilbert6.Spacetime.bilinearPrecomp, Hilbert6.Spacetime.bilinearPrecomp_apply, Hilbert6.Spacetime.pullbackVal, Hilbert6.Spacetime.pullbackVal_apply}
     \uses{def:spacetime}
     \leanok
     Let $(M,g)$ be a spacetime (\ref{def:spacetime}) and let $\psi : M \to M$ be a $C^\infty$ diffeomorphism. The \emph{pullback metric} $\psi^*g$ is the field of bilinear forms
@@ -1731,7 +1731,7 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{lemma}[The Differential of a Diffeomorphism is a Linear Equivalence]
     \label{lmm:mfderiv-diffeo-linear-equiv}
-    \lean{Physicslib4.Spacetime.Diffeo, Physicslib4.Spacetime.mfderivEquiv, Physicslib4.Spacetime.mfderivEquiv_coe, Physicslib4.Spacetime.mfderiv_eq_mfderivEquiv, Physicslib4.Spacetime.isInvertible_mfderiv}
+    \lean{Hilbert6.Spacetime.Diffeo, Hilbert6.Spacetime.mfderivEquiv, Hilbert6.Spacetime.mfderivEquiv_coe, Hilbert6.Spacetime.mfderiv_eq_mfderivEquiv, Hilbert6.Spacetime.isInvertible_mfderiv}
     \uses{def:spacetime}
     \leanok
     For a $C^\infty$ diffeomorphism $\psi$ of $M$ and any $x \in M$, the differential $d\psi_x : TM|_x \to TM|_{\psi(x)}$ is a continuous linear isomorphism.
@@ -1755,7 +1755,7 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{lemma}[Round-Trip Cancellation: $d\psi$ After $d(\psi^{-1})$]
     \label{lmm:mfderiv-symm-cancel-left}
-    \lean{Physicslib4.Spacetime.mfderiv_symm_cancel_left}
+    \lean{Hilbert6.Spacetime.mfderiv_symm_cancel_left}
     \uses{def:spacetime}
     \leanok
     Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $x \in M$. Then, pointwise,
@@ -1782,7 +1782,7 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{lemma}[Round-Trip Cancellation: $d(\psi^{-1})$ After $d\psi$]
     \label{lmm:mfderiv-symm-cancel-right}
-    \lean{Physicslib4.Spacetime.mfderiv_symm_cancel_right}
+    \lean{Hilbert6.Spacetime.mfderiv_symm_cancel_right}
     \uses{def:spacetime}
     \leanok
     Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $x \in M$. Then, pointwise,
@@ -1800,7 +1800,7 @@ The single-metric isometry lemmas above compare a spacetime with itself. General
 
 \begin{lemma}[The Formal Inverse of $d\psi_x$ is the Inverse Equivalence]
     \label{lmm:mfderiv-inverse-eq-symm}
-    \lean{Physicslib4.Spacetime.inverse_mfderiv_eq_symm, Physicslib4.Spacetime.inverse_mfderiv_apply_mfderiv, Physicslib4.Spacetime.mfderiv_apply_inverse_mfderiv}
+    \lean{Hilbert6.Spacetime.inverse_mfderiv_eq_symm, Hilbert6.Spacetime.inverse_mfderiv_apply_mfderiv, Hilbert6.Spacetime.mfderiv_apply_inverse_mfderiv}
     \uses{lmm:mfderiv-diffeo-linear-equiv}
     \leanok
     For a $C^\infty$ diffeomorphism $\psi$ of $M$ and any $x \in M$, the formal inverse $\mathtt{ContinuousLinearMap.inverse}\,(d\psi_x)$ agrees with the inverse of the continuous linear equivalence of \ref{lmm:mfderiv-diffeo-linear-equiv}; in particular $(d\psi_x)^{-1}\,(d\psi_x v) = v$ and $d\psi_x\big((d\psi_x)^{-1}u\big) = u$.
@@ -1814,7 +1814,7 @@ This leaf is what licenses the $d\psi$ cancellations used below, and it is not o
 
 \begin{lemma}[The Pullback Metric is Symmetric]
     \label{lmm:pullback-metric-symm}
-    \lean{Physicslib4.Spacetime.pullbackVal_symm}
+    \lean{Hilbert6.Spacetime.pullbackVal_symm}
     \uses{def:pullback-metric}
     \leanok
     For every $x \in M$ the form $(\psi^*g)_x$ of \ref{def:pullback-metric} is symmetric.
@@ -1826,7 +1826,7 @@ This leaf is what licenses the $d\psi$ cancellations used below, and it is not o
 
 \begin{lemma}[The Pullback Metric is Non-Degenerate]
     \label{lmm:pullback-metric-nondegenerate}
-    \lean{Physicslib4.Spacetime.pullbackVal_nondegenerate}
+    \lean{Hilbert6.Spacetime.pullbackVal_nondegenerate}
     \uses{def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv}
     \leanok
     For every $x \in M$ the form $(\psi^*g)_x$ of \ref{def:pullback-metric} is non-degenerate: if $(\psi^*g)_x(v,w) = 0$ for all $w$, then $v = 0$.
@@ -1838,7 +1838,7 @@ This leaf is what licenses the $d\psi$ cancellations used below, and it is not o
 
 \begin{lemma}[The Pullback Metric is Lorentzian]
     \label{lmm:pullback-metric-lorentzian}
-    \lean{Physicslib4.Spacetime.pullbackVal_lorentzian}
+    \lean{Hilbert6.Spacetime.pullbackVal_lorentzian}
     \uses{def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv, lmm:mfderiv-inverse-eq-symm, def:spacetime}
     \leanok
     For every $x \in M$ there is a basis of $TM|_x$ whose Gram matrix under $(\psi^*g)_x$ is $\mathrm{diag}(-1,1,1,1)$.
@@ -1858,7 +1858,7 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
 
 \begin{lemma}[The Pullback Metric is a Smooth Section of the Bilinear-Form Bundle]
     \label{lmm:pullback-metric-smooth-in-charts}
-    \lean{Physicslib4.Spacetime.pullbackVal_contMDiff}
+    \lean{Hilbert6.Spacetime.pullbackVal_contMDiff}
     \uses{def:spacetime, def:pullback-metric, lmm:mfderiv-diffeo-linear-equiv}
     \leanok
     The assignment $x \mapsto (\psi^*g)_x$ of \ref{def:pullback-metric} satisfies the \texttt{contMDiff} field of \ref{def:spacetime}: it is a section of the bundle of continuous bilinear forms on the tangent bundle of regularity index $\infty$, i.e.\ a $C^\infty$ section,
@@ -1888,7 +1888,7 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
         \item the match between that $\mathtt{inTangentCoordinates}$ conclusion and the $\mathtt{inCoordinates}$ shape the goal wants is \emph{definitional}: $\mathtt{inTangentCoordinates}$ is \emph{defined} as the two-base-point $\mathtt{inCoordinates}$ (\texttt{Mathlib/Geometry/Manifold/VectorBundle/Tangent.lean}). Mathlib itself relies on this defeq, assigning the output of \texttt{mfderivWithin\_const} directly to a goal spelled with raw \texttt{inCoordinates} (\texttt{Mathlib/Geometry/Manifold/VectorField/Pullback.lean}). That file's \texttt{ContMDiffWithinAt.mpullbackWithin\_vectorField\_inter} is the closest Mathlib model for this whole node;
         \item the two-slot precomposition is Mathlib's, via the identity $\beta.\mathtt{bilinearComp}\,A\,A = (A.\mathtt{precomp}\,\mathbb{R}) \circ (\beta \circ A)$ and then \texttt{ContMDiffAt.clm\_precomp} with \texttt{ContMDiffAt.clm\_comp}, both in \texttt{Mathlib/Geometry/Manifold/ContMDiff/NormedSpace.lean}.
     \end{itemize}
-    Two \emph{local algebraic} helpers are proved by hand, but neither is a smoothness statement, and both are \texttt{have}s \emph{inside} the single proof rather than top-level lemmas. The first is the $\mathtt{precomp}$ identity just displayed, $(\Gamma\,x).\mathtt{bilinearComp}\,(\Delta\,x)\,(\Delta\,x) = ((\Delta\,x).\mathtt{precomp}\;\mathbb{R}) \circ \big((\Gamma\,x) \circ (\Delta\,x)\big)$; it holds identically, with no side conditions, and is proved by \texttt{filter\_upwards}, then \texttt{ext v w}, then \texttt{simp [ContinuousLinearMap.bilinearComp\_apply]}. The second --- that the $\mathtt{inCoordinates}$ reading of a $\mathtt{bilinearComp}$ is the $\mathtt{bilinearComp}$ of the $\mathtt{inCoordinates}$ readings --- is \emph{not} an identity: it holds only on the intersection of the two relevant trivialisation base sets, because \texttt{continuousLinearMapAt} and \texttt{symmL} are mutually inverse only there. It is therefore established as an eventual equality at $x_0$, via \texttt{filter\_upwards} on two neighbourhood facts: that $x$ lies in the base set of the trivialisation at $x_0$, and that $\psi(x)$ lies in the base set of the trivialisation at $\psi(x_0)$, the latter obtained from continuity of $\psi$ by \texttt{ContinuousAt.preimage\_mem\_nhds}; both memberships come from \texttt{FiberBundle.mem\_baseSet\_trivializationAt'} together with \texttt{Trivialization.open\_baseSet.mem\_nhds}. The computation then goes through \texttt{hom\_trivializationAt\_apply}, \texttt{Bundle.ContinuousLinearMap.inCoordinates\_apply\_eq\ensuremath{_2}} (twice), \texttt{ContinuousLinearMap.inCoordinates\_eq}, and a small telescoping step cancelling a trivialisation against its inverse via \texttt{Bundle.Trivialization.coe\_linearMapAt\_of\_mem} and \texttt{Bundle.Trivialization.symm\_linearMapAt}, finishing with \texttt{congr\_of\_eventuallyEq}. Note that those last two lemmas live in the \texttt{Bundle.Trivialization} namespace, \emph{not} \texttt{Trivialization}: in \texttt{Mathlib/Topology/VectorBundle/Basic.lean} the \texttt{end Pretrivialization} closes only the inner namespace, leaving \texttt{Bundle} open, so the \texttt{Trivialization} block that follows nests as \texttt{Bundle.Trivialization}. Both helpers are of the same kind as the \texttt{filter\_upwards}/\texttt{ext}/\texttt{simp} steps that close the constant-metric case in \texttt{Physicslib4/Spacetime/Minkowski.lean}.
+    Two \emph{local algebraic} helpers are proved by hand, but neither is a smoothness statement, and both are \texttt{have}s \emph{inside} the single proof rather than top-level lemmas. The first is the $\mathtt{precomp}$ identity just displayed, $(\Gamma\,x).\mathtt{bilinearComp}\,(\Delta\,x)\,(\Delta\,x) = ((\Delta\,x).\mathtt{precomp}\;\mathbb{R}) \circ \big((\Gamma\,x) \circ (\Delta\,x)\big)$; it holds identically, with no side conditions, and is proved by \texttt{filter\_upwards}, then \texttt{ext v w}, then \texttt{simp [ContinuousLinearMap.bilinearComp\_apply]}. The second --- that the $\mathtt{inCoordinates}$ reading of a $\mathtt{bilinearComp}$ is the $\mathtt{bilinearComp}$ of the $\mathtt{inCoordinates}$ readings --- is \emph{not} an identity: it holds only on the intersection of the two relevant trivialisation base sets, because \texttt{continuousLinearMapAt} and \texttt{symmL} are mutually inverse only there. It is therefore established as an eventual equality at $x_0$, via \texttt{filter\_upwards} on two neighbourhood facts: that $x$ lies in the base set of the trivialisation at $x_0$, and that $\psi(x)$ lies in the base set of the trivialisation at $\psi(x_0)$, the latter obtained from continuity of $\psi$ by \texttt{ContinuousAt.preimage\_mem\_nhds}; both memberships come from \texttt{FiberBundle.mem\_baseSet\_trivializationAt'} together with \texttt{Trivialization.open\_baseSet.mem\_nhds}. The computation then goes through \texttt{hom\_trivializationAt\_apply}, \texttt{Bundle.ContinuousLinearMap.inCoordinates\_apply\_eq\ensuremath{_2}} (twice), \texttt{ContinuousLinearMap.inCoordinates\_eq}, and a small telescoping step cancelling a trivialisation against its inverse via \texttt{Bundle.Trivialization.coe\_linearMapAt\_of\_mem} and \texttt{Bundle.Trivialization.symm\_linearMapAt}, finishing with \texttt{congr\_of\_eventuallyEq}. Note that those last two lemmas live in the \texttt{Bundle.Trivialization} namespace, \emph{not} \texttt{Trivialization}: in \texttt{Mathlib/Topology/VectorBundle/Basic.lean} the \texttt{end Pretrivialization} closes only the inner namespace, leaving \texttt{Bundle} open, so the \texttt{Trivialization} block that follows nests as \texttt{Bundle.Trivialization}. Both helpers are of the same kind as the \texttt{filter\_upwards}/\texttt{ext}/\texttt{simp} steps that close the constant-metric case in \texttt{Hilbert6/Spacetime/Minkowski.lean}.
 
     The reduction of the goal, and its match with the differential, use the following API:
     \begin{itemize}
@@ -1903,7 +1903,7 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
 
 \begin{theorem}[The Pullback of a Spacetime is a Spacetime]
     \label{thrm:pullback-is-spacetime}
-    \lean{Physicslib4.Spacetime.pullback, Physicslib4.Spacetime.pullback_Carrier, Physicslib4.Spacetime.pullback_model, Physicslib4.Spacetime.pullback_val, Physicslib4.Spacetime.pullbackDiffeo}
+    \lean{Hilbert6.Spacetime.pullback, Hilbert6.Spacetime.pullback_Carrier, Hilbert6.Spacetime.pullback_model, Hilbert6.Spacetime.pullback_val, Hilbert6.Spacetime.pullbackDiffeo}
     \uses{def:spacetime, def:pullback-metric, lmm:pullback-metric-symm, lmm:pullback-metric-nondegenerate, lmm:pullback-metric-lorentzian, lmm:pullback-metric-smooth-in-charts}
     \leanok
     For a spacetime $(M,g)$ and a $C^\infty$ diffeomorphism $\psi$ of $M$, the pullback datum $\psi^*(M,g)$ of \ref{def:pullback-metric} is again a spacetime.
@@ -1915,7 +1915,7 @@ Mathlib has no pullback operation on covariant tensor fields, so the smoothness 
 
 \begin{definition}[Two-Sided Preservation of Future Orientation]
     \label{def:preserves-future-orientation}
-    \lean{Physicslib4.Spacetime.PreservesFutureOrientation, Physicslib4.Spacetime.PreservesFutureOrientationTwoSided}
+    \lean{Hilbert6.Spacetime.PreservesFutureOrientation, Hilbert6.Spacetime.PreservesFutureOrientationTwoSided}
     \uses{def:time-orientable, def:future-and-past-pointing-vectors}
     \leanok
     Let $g_1$ and $g_2$ be metrics on $M$ with time orientations $t_1$ and $t_2$ respectively, and let $\psi$ be a $C^\infty$ diffeomorphism of $M$. Say $\psi$ \emph{preserves the future orientation} when
@@ -1933,7 +1933,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{lemma}[The Pullback of a Bundle-Smooth Vector Field Along a Diffeomorphism is Bundle-Smooth]
     \label{lmm:mpullback-vectorField-contMDiff-of-diffeo}
-    \lean{Physicslib4.Spacetime.contMDiff_mpullback_vectorField}
+    \lean{Hilbert6.Spacetime.contMDiff_mpullback_vectorField}
     \uses{def:time-orientable, lmm:mfderiv-diffeo-linear-equiv, def:spacetime}
     \leanok
     Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and let $V$ be a vector field on $M$ with $\mathtt{CMDiff}\;\infty\;(\mathtt{T\%}\;V)$. Then
@@ -1956,7 +1956,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{lemma}[The Pullback Time Orientation is Nowhere Vanishing]
     \label{lmm:pullback-time-orientation-ne-zero}
-    \lean{Physicslib4.Spacetime.mpullback_field_ne_zero}
+    \lean{Hilbert6.Spacetime.mpullback_field_ne_zero}
     \uses{def:time-orientable, lmm:mfderiv-inverse-eq-symm}
     \leanok
     For every $x \in M$, $(\psi^*t)_x = (d\psi_x)^{-1}\,t_{\psi(x)} \neq 0$.
@@ -1968,7 +1968,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{lemma}[The Pullback Time Orientation is Everywhere Timelike]
     \label{lmm:pullback-time-orientation-timelike}
-    \lean{Physicslib4.Spacetime.pullbackVal_mpullback_field_self, Physicslib4.Spacetime.isTimelike_mpullback_field}
+    \lean{Hilbert6.Spacetime.pullbackVal_mpullback_field_self, Hilbert6.Spacetime.isTimelike_mpullback_field}
     \uses{def:pullback-metric, def:time-orientable, lmm:mfderiv-inverse-eq-symm}
     \leanok
     For every $x \in M$,
@@ -1984,7 +1984,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{lemma}[Pullback of a Time Orientation]
     \label{lmm:pullback-time-orientation}
-    \lean{Physicslib4.Spacetime.pullbackTimeOrientation, Physicslib4.Spacetime.pullbackTimeOrientation_field}
+    \lean{Hilbert6.Spacetime.pullbackTimeOrientation, Hilbert6.Spacetime.pullbackTimeOrientation_field}
     \uses{def:time-orientable, def:pullback-metric, thrm:pullback-is-spacetime, lmm:mpullback-vectorField-contMDiff-of-diffeo, lmm:pullback-time-orientation-ne-zero, lmm:pullback-time-orientation-timelike}
     \leanok
     Let $t$ be a time orientation of $(M,g)$ (\ref{def:time-orientable}). Then the pullback vector field $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)}$ is a time orientation of $\psi^*(M,g)$ (\ref{thrm:pullback-is-spacetime}): it is smooth, nowhere vanishing, and everywhere timelike for $\psi^*g$.
@@ -1996,7 +1996,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{lemma}[Transport of Future-Pointing Timelike Vectors]
     \label{lmm:pullback-future-pointing-timelike}
-    \lean{Physicslib4.Spacetime.pullbackVal_mpullback_field_apply, Physicslib4.Spacetime.isFuturePointing_pullback_iff_of_isTimelike}
+    \lean{Hilbert6.Spacetime.pullbackVal_mpullback_field_apply, Hilbert6.Spacetime.isFuturePointing_pullback_iff_of_isTimelike}
     \uses{def:pullback-metric, lmm:pullback-time-orientation, def:future-and-past-pointing-vectors, lmm:mfderiv-inverse-eq-symm}
     \leanok
     For $v \in TM|_x$ timelike for $\psi^*g$,
@@ -2012,7 +2012,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{lemma}[Transport of Future-Pointing Null Vectors]
     \label{lmm:pullback-future-pointing-null}
-    \lean{Physicslib4.Spacetime.isFuturePointing_pullback_iff_of_isNull}
+    \lean{Hilbert6.Spacetime.isFuturePointing_pullback_iff_of_isNull}
     \uses{def:pullback-metric, lmm:pullback-time-orientation, def:future-and-past-pointing-vectors, lmm:pullback-future-pointing-timelike, lmm:mfderiv-diffeo-linear-equiv}
     \leanok
     For $v \in TM|_x$ null for $\psi^*g$, $v$ is future-pointing for $(\psi^*g, \psi^*t)$ if and only if $d\psi_x v$ is future-pointing for $(g,t)$.
@@ -2026,7 +2026,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{lemma}[The Pullback Preserves the Future Orientation Two-Sidedly]
     \label{lmm:pullback-preserves-future-orientation}
-    \lean{Physicslib4.Spacetime.pullback_preservesFutureOrientationTwoSided}
+    \lean{Hilbert6.Spacetime.pullback_preservesFutureOrientationTwoSided}
     \uses{def:preserves-future-orientation, lmm:pullback-future-pointing-timelike, lmm:pullback-future-pointing-null, lmm:mfderiv-symm-cancel-left}
     \leanok
     The diffeomorphism $\psi$, regarded as carrying $(\psi^*g, \psi^*t)$ to $(g,t)$, satisfies the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}.
@@ -2040,7 +2040,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{definition}[Isometry Between Two Metrics on One Manifold]
     \label{def:cross-metric-isometry}
-    \lean{Physicslib4.Spacetime.CrossIsometry, Physicslib4.Spacetime.pullbackCrossIsometry, Physicslib4.Spacetime.Isometry.toCrossIsometry, Physicslib4.Spacetime.Isometry.toCrossIsometry_toDiffeo, Physicslib4.Spacetime.Isometry.preservesFutureOrientation_iff}
+    \lean{Hilbert6.Spacetime.CrossIsometry, Hilbert6.Spacetime.pullbackCrossIsometry, Hilbert6.Spacetime.Isometry.toCrossIsometry, Hilbert6.Spacetime.Isometry.toCrossIsometry_toDiffeo, Hilbert6.Spacetime.Isometry.preservesFutureOrientation_iff}
     \uses{def:pullback-metric}
     \leanok
     Let $g_1$ and $g_2$ be metrics on the same manifold $M$. A $C^\infty$ diffeomorphism $\psi : M \to M$ is an \emph{isometry from $(M,g_1)$ to $(M,g_2)$} when $\psi^*g_2 = g_1$ (\ref{def:pullback-metric}), that is, when
@@ -2052,7 +2052,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{lemma}[The Inverse of a Cross-Metric Isometry is a Cross-Metric Isometry]
     \label{lmm:cross-metric-isometry-symm}
-    \lean{Physicslib4.Spacetime.CrossIsometry.symm_preserves, Physicslib4.Spacetime.CrossIsometry.symm}
+    \lean{Hilbert6.Spacetime.CrossIsometry.symm_preserves, Hilbert6.Spacetime.CrossIsometry.symm}
     \uses{def:cross-metric-isometry, lmm:mfderiv-symm-cancel-left, lmm:mfderiv-symm-cancel-right}
     \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ in the sense of \ref{def:cross-metric-isometry}. Then $\psi^{-1}$ is an isometry from $(M,g_2)$ to $(M,g_1)$: for every $y \in M$ and all $u, u' \in TM|_y$,
@@ -2074,7 +2074,7 @@ The pullback time orientation is $\psi^*t : x \mapsto (d\psi_x)^{-1}\,t_{\psi(x)
 
 \begin{lemma}[Cross-Metric Isometries Preserve the Causal Classification]
     \label{lmm:cross-metric-isometry-preserves-classification}
-    \lean{Physicslib4.Spacetime.CrossIsometry.preserves_self, Physicslib4.Spacetime.CrossIsometry.isTimelike_mfderiv_iff, Physicslib4.Spacetime.CrossIsometry.isNull_mfderiv_iff, Physicslib4.Spacetime.CrossIsometry.isSpacelike_mfderiv_iff}
+    \lean{Hilbert6.Spacetime.CrossIsometry.preserves_self, Hilbert6.Spacetime.CrossIsometry.isTimelike_mfderiv_iff, Hilbert6.Spacetime.CrossIsometry.isNull_mfderiv_iff, Hilbert6.Spacetime.CrossIsometry.isSpacelike_mfderiv_iff}
     \uses{def:cross-metric-isometry, def:timelike-spacelike-null-vectors}
     \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ (\ref{def:cross-metric-isometry}). Then $g_2(d\psi_x v, d\psi_x v) = g_1(v,v)$, and hence $d\psi_x v$ is timelike, null, or spacelike for $g_2$ if and only if $v$ is timelike, null, or spacelike for $g_1$.
@@ -2088,7 +2088,7 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[The Tangent Chain Rule Along a Path]
     \label{lmm:cross-metric-pushforward-path-tangent}
-    \lean{Physicslib4.Spacetime.mfderivWithin_comp_diffeo, Physicslib4.Spacetime.pushforwardPath_tangent}
+    \lean{Hilbert6.Spacetime.mfderivWithin_comp_diffeo, Hilbert6.Spacetime.pushforwardPath_tangent}
     \uses{def:paths, lmm:path-parameter-unique-diff, lmm:mfderiv-diffeo-linear-equiv}
     \leanok
     Let $\psi$ be a $C^\infty$ diffeomorphism of $M$ and $\mu$ a smooth path. For every parameter $s$ in the parameter space of $\mu$,
@@ -2107,12 +2107,12 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     \end{align}
     of which two are easy to overlook. The uniqueness hypothesis is \emph{pointwise} --- a $\mathtt{UniqueMDiffWithinAt}$ at the single parameter $s$, not a $\mathtt{UniqueMDiffOn}$ on the whole of $P$ --- so what \ref{lmm:path-parameter-unique-diff} supplies must be specialised to $s$ and converted, as $(\dots\,s\,hs).\mathtt{uniqueMDiffWithinAt}$. And there is a set side condition $P \subseteq \mu^{-1}(u)$ relating the inner set to the outer one; here $u = \mathtt{univ}$, so it is immediate, and correspondingly the outer derivative is an unrestricted \texttt{mfderiv} obtained by \texttt{mfderivWithin\_univ}. Differentiability of $\mu$ within $P$ comes from its smoothness, and differentiability of $\psi$ from \texttt{Diffeomorph.mdifferentiable} (with side condition $n \neq 0$), as in the single-metric proof cited below --- not from \ref{lmm:mfderiv-diffeo-linear-equiv}, which delivers a \texttt{ContinuousLinearEquiv} rather than an $\mathtt{MDifferentiableWithinAt}$ hypothesis.
 
-    The single-metric form of exactly this statement is \texttt{Physicslib4.Spacetime.Isometry.mfderivWithin\_comp\_diffeo} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean}, whose proof carries out precisely the four steps above (including the \texttt{uniqueMDiffWithinAt} specialisation and the \texttt{mfderivWithin\_univ} rewrite). The cross-metric statement differs from it only in the target metric, since the identity is about the differential of $\psi$ alone and mentions no metric. The unique-differentials input \ref{lmm:path-parameter-unique-diff} is \texttt{Physicslib4.Spacetime.Path.uniqueDiffOn\_parameterSpace} in \texttt{Physicslib4/Spacetime/Curves.lean}.
+    The single-metric form of exactly this statement is \texttt{Hilbert6.Spacetime.Isometry.mfderivWithin\_comp\_diffeo} in \texttt{Hilbert6/Spacetime/IsometryCausality.lean}, whose proof carries out precisely the four steps above (including the \texttt{uniqueMDiffWithinAt} specialisation and the \texttt{mfderivWithin\_univ} rewrite). The cross-metric statement differs from it only in the target metric, since the identity is about the differential of $\psi$ alone and mentions no metric. The unique-differentials input \ref{lmm:path-parameter-unique-diff} is \texttt{Hilbert6.Spacetime.Path.uniqueDiffOn\_parameterSpace} in \texttt{Hilbert6/Spacetime/Curves.lean}.
 \end{proof}
 
 \begin{lemma}[Pushforward of a Path Under a Cross-Metric Isometry]
     \label{lmm:cross-metric-pushforward-path}
-    \lean{Physicslib4.Spacetime.pushforwardPath, Physicslib4.Spacetime.pushforwardPath_parameterSpace, Physicslib4.Spacetime.pushforwardPath_toFun}
+    \lean{Hilbert6.Spacetime.pushforwardPath, Hilbert6.Spacetime.pushforwardPath_parameterSpace, Hilbert6.Spacetime.pushforwardPath_toFun}
     \uses{def:cross-metric-isometry, def:paths, lmm:cross-metric-pushforward-path-tangent, lmm:mfderiv-diffeo-linear-equiv}
     \leanok
     An isometry $\psi$ from $(M,g_1)$ to $(M,g_2)$ pushes a smooth path $\mu$ forward to a smooth path $\psi \circ \mu$ on the same parameter space, with the same closedness, connectedness and non-triviality data.
@@ -2121,12 +2121,12 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     \leanok
     The parameter space and its properties are copied. Continuity and smoothness of $\psi \circ \mu$ follow by composing the smooth $\psi$ with the smooth $\mu$. Non-vanishing of the tangent vector is the only real obligation: rewrite it with \ref{lmm:cross-metric-pushforward-path-tangent} and use that $d\psi_{\mu(s)}$ is injective (\ref{lmm:mfderiv-diffeo-linear-equiv}) together with non-vanishing of $\dot\mu(s)$.
 
-    This follows \texttt{Physicslib4.Spacetime.Isometry.pushforwardPath} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean}, the single-metric version of this very construction, whose \texttt{nonvanishing} field is proved the same way as the obligation above --- it rewrites with \texttt{mfderivWithin\_comp\_diffeo}, then with $\leftarrow$\,\texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} and \texttt{ContinuousLinearEquiv.coe\_coe} to expose the equivalence, and finishes with its \texttt{injective}. The remaining fields (\texttt{parameterSpace}, \texttt{isClosed}, \texttt{isConnected}, \texttt{nontrivial}, \texttt{continuousOn}, \texttt{smoothOn}) are the same as in \texttt{pushforwardPath}, none of them mentioning a metric.
+    This follows \texttt{Hilbert6.Spacetime.Isometry.pushforwardPath} in \texttt{Hilbert6/Spacetime/IsometryCausality.lean}, the single-metric version of this very construction, whose \texttt{nonvanishing} field is proved the same way as the obligation above --- it rewrites with \texttt{mfderivWithin\_comp\_diffeo}, then with $\leftarrow$\,\texttt{Diffeomorph.mfderivToContinuousLinearEquiv\_coe} and \texttt{ContinuousLinearEquiv.coe\_coe} to expose the equivalence, and finishes with its \texttt{injective}. The remaining fields (\texttt{parameterSpace}, \texttt{isClosed}, \texttt{isConnected}, \texttt{nontrivial}, \texttt{continuousOn}, \texttt{smoothOn}) are the same as in \texttt{pushforwardPath}, none of them mentioning a metric.
 \end{proof}
 
 \begin{lemma}[The Pushforward Preserves the Timelike and Causal Conditions]
     \label{lmm:cross-metric-pushforward-path-causal}
-    \lean{Physicslib4.Spacetime.CrossIsometry.pushforwardPath_isTimelike, Physicslib4.Spacetime.CrossIsometry.pushforwardPath_isCausal}
+    \lean{Hilbert6.Spacetime.CrossIsometry.pushforwardPath_isTimelike, Hilbert6.Spacetime.CrossIsometry.pushforwardPath_isCausal}
     \uses{lmm:cross-metric-pushforward-path, lmm:cross-metric-pushforward-path-tangent, def:timelike-and-causal-smooth-curves, lmm:cross-metric-isometry-preserves-classification}
     \leanok
     If $\mu$ is timelike (respectively causal) for $g_1$, then $\psi \circ \mu$ is timelike (respectively causal) for $g_2$.
@@ -2138,7 +2138,7 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[The Pushforward Transports Endpoints]
     \label{lmm:cross-metric-pushforward-path-endpoints}
-    \lean{Physicslib4.Spacetime.pushforwardPath_isPastEndpoint, Physicslib4.Spacetime.pushforwardPath_isFutureEndpoint}
+    \lean{Hilbert6.Spacetime.pushforwardPath_isPastEndpoint, Hilbert6.Spacetime.pushforwardPath_isFutureEndpoint}
     \uses{lmm:cross-metric-pushforward-path, def:endpoints}
     \leanok
     If $p$ is a past (respectively future) endpoint of $\mu$, then $\psi(p)$ is a past (respectively future) endpoint of $\psi \circ \mu$.
@@ -2150,7 +2150,7 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[Cross-Metric Isometries Transport Chronological Precedence]
     \label{lmm:cross-metric-isometry-preserves-chronology}
-    \lean{Physicslib4.Spacetime.pushforwardPath_isFutureOriented, Physicslib4.Spacetime.CrossIsometry.segmentPrecedes, Physicslib4.Spacetime.CrossIsometry.chronologicallyPrecedes}
+    \lean{Hilbert6.Spacetime.pushforwardPath_isFutureOriented, Hilbert6.Spacetime.CrossIsometry.segmentPrecedes, Hilbert6.Spacetime.CrossIsometry.chronologicallyPrecedes}
     \uses{def:cross-metric-isometry, def:preserves-future-orientation, def:trip, def:chronological-future-and-chronological-past, lmm:cross-metric-pushforward-path, lmm:cross-metric-pushforward-path-causal, lmm:cross-metric-pushforward-path-endpoints}
     \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$, each equipped with a time orientation, and suppose $\psi$ preserves the future orientation in the sense of \ref{def:preserves-future-orientation}. Then $p \ll_1 q$ implies $\psi(p) \ll_2 \psi(q)$.
@@ -2164,7 +2164,7 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[Image of the Chronological Future]
     \label{lmm:cross-metric-chronological-future-image}
-    \lean{Physicslib4.Spacetime.CrossIsometry.chronologicalFuture_image}
+    \lean{Hilbert6.Spacetime.CrossIsometry.chronologicalFuture_image}
     \uses{lmm:cross-metric-isometry-preserves-chronology, lmm:cross-metric-isometry-symm, def:preserves-future-orientation, def:chronological-future-and-chronological-past}
     \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ satisfying the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}. Then $\psi\big(I^+_1(p)\big) = I^+_2(\psi(p))$ for every $p$.
@@ -2173,14 +2173,14 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
     \leanok
     The inclusion $\subseteq$ is \ref{lmm:cross-metric-isometry-preserves-chronology} applied to $p \ll_1 q$. For $\supseteq$, note that $\psi^{-1}$ is an isometry from $(M,g_2)$ to $(M,g_1)$ by \ref{lmm:cross-metric-isometry-symm}, and preserves the future orientation by the second half of the two-sided hypothesis. Applying \ref{lmm:cross-metric-isometry-preserves-chronology} to $\psi^{-1}$ at the point $\psi(p)$ gives $\psi^{-1}\big(I^+_2(\psi(p))\big) \subseteq I^+_1(p)$, which is the reverse inclusion after applying the bijection $\psi$.
 
-    The single-metric forms \texttt{Physicslib4.Spacetime.Isometry.chronologicalFuture\_image\_subset} and \texttt{...chronologicalFuture\_image} in \texttt{Physicslib4/Spacetime/IsometryCausality.lean} are exactly this argument, and the cross-metric version differs only in carrying two metrics. In particular the proof uses \emph{neither} \texttt{Set.image\_subset\_iff} \emph{nor} any \texttt{Equiv.image\_eq\_preimage}-style rewriting: the $\subseteq$ half destructures the image membership directly (\texttt{rintro \_ $\langle$q, hq, rfl$\rangle$}) and the $\supseteq$ half exhibits the witness $\psi^{-1}(r)$ together with the point-level cancellation \texttt{toDiffeo\_inv\_apply}. The chronology step itself is lifted along the transitive closure by \texttt{Relation.TransGen.lift}.
+    The single-metric forms \texttt{Hilbert6.Spacetime.Isometry.chronologicalFuture\_image\_subset} and \texttt{...chronologicalFuture\_image} in \texttt{Hilbert6/Spacetime/IsometryCausality.lean} are exactly this argument, and the cross-metric version differs only in carrying two metrics. In particular the proof uses \emph{neither} \texttt{Set.image\_subset\_iff} \emph{nor} any \texttt{Equiv.image\_eq\_preimage}-style rewriting: the $\subseteq$ half destructures the image membership directly (\texttt{rintro \_ $\langle$q, hq, rfl$\rangle$}) and the $\supseteq$ half exhibits the witness $\psi^{-1}(r)$ together with the point-level cancellation \texttt{toDiffeo\_inv\_apply}. The chronology step itself is lifted along the transitive closure by \texttt{Relation.TransGen.lift}.
 \end{proof}
 
 \medskip
 
 \begin{lemma}[Image of the Chronological Past]
     \label{lmm:cross-metric-chronological-past-image}
-    \lean{Physicslib4.Spacetime.CrossIsometry.chronologicalPast_image}
+    \lean{Hilbert6.Spacetime.CrossIsometry.chronologicalPast_image}
     \uses{lmm:cross-metric-isometry-preserves-chronology, lmm:cross-metric-isometry-symm, def:preserves-future-orientation, def:chronological-future-and-chronological-past}
     \leanok
     Under the hypotheses of \ref{lmm:cross-metric-chronological-future-image}, $\psi\big(I^-_1(p)\big) = I^-_2(\psi(p))$ for every $p$.
@@ -2194,7 +2194,7 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[Cross-Metric Isometries Preserve Basis Sets]
     \label{lmm:cross-metric-isometry-preserves-basis-sets}
-    \lean{Physicslib4.Spacetime.CrossIsometry.alexandrovDiamond_image, Physicslib4.Spacetime.CrossIsometry.alexandrovBasis_image}
+    \lean{Hilbert6.Spacetime.CrossIsometry.alexandrovDiamond_image, Hilbert6.Spacetime.CrossIsometry.alexandrovBasis_image}
     \uses{def:alexandrov-topology, def:preserves-future-orientation, lmm:cross-metric-chronological-future-image, lmm:cross-metric-chronological-past-image, lmm:pullback-time-orientation, lmm:pullback-preserves-future-orientation}
     \leanok
     Let $\psi$ be an isometry from $(M,g_1)$ to $(M,g_2)$ satisfying the two-sided orientation hypothesis of \ref{def:preserves-future-orientation}. Then $\psi$ carries Alexandrov basis sets of $(M,g_1)$ to Alexandrov basis sets of $(M,g_2)$:
@@ -2211,7 +2211,7 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[A Bijection Matching Generating Families is a Homeomorphism]
     \label{lmm:bijection-generated-topology-homeomorphism}
-    \lean{Physicslib4.continuous_generateFrom_of_preimage_mem, Physicslib4.continuous_symm_generateFrom_of_image_mem, Physicslib4.homeomorphOfGenerateFrom, Physicslib4.homeomorphOfGenerateFrom_apply, Physicslib4.homeomorphOfGenerateFrom_symm_apply}
+    \lean{Hilbert6.continuous_generateFrom_of_preimage_mem, Hilbert6.continuous_symm_generateFrom_of_image_mem, Hilbert6.homeomorphOfGenerateFrom, Hilbert6.homeomorphOfGenerateFrom_apply, Hilbert6.homeomorphOfGenerateFrom_symm_apply}
     \leanok
     Let $f : X \to Y$ be a bijection, let $\mathcal{S}$ and $\mathcal{T}$ be families of subsets of $X$ and $Y$, and equip $X$ and $Y$ with the topologies generated by $\mathcal{S}$ and $\mathcal{T}$. If $f$ carries $\mathcal{S}$ onto $\mathcal{T}$, in the sense that $f(S) \in \mathcal{T}$ for every $S \in \mathcal{S}$ and $f^{-1}(T) \in \mathcal{S}$ for every $T \in \mathcal{T}$, then $f$ is a homeomorphism.
 \end{lemma}
@@ -2228,7 +2228,7 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{lemma}[The Pullback Alexandrov Topology]
     \label{lmm:pullback-alexandrov-homeomorphism}
-    \lean{Physicslib4.Spacetime.pullback_alexandrovBasis_image, Physicslib4.Spacetime.pullback_alexandrovBasis_preimage, Physicslib4.Spacetime.pullbackAlexandrovHomeomorph, Physicslib4.Spacetime.pullbackAlexandrovHomeomorph_apply}
+    \lean{Hilbert6.Spacetime.pullback_alexandrovBasis_image, Hilbert6.Spacetime.pullback_alexandrovBasis_preimage, Hilbert6.Spacetime.pullbackAlexandrovHomeomorph, Hilbert6.Spacetime.pullbackAlexandrovHomeomorph_apply}
     \uses{def:alexandrov-topology, def:pullback-metric, lmm:pullback-preserves-future-orientation, lmm:cross-metric-isometry-preserves-basis-sets, lmm:bijection-generated-topology-homeomorphism}
     \leanok
     Let $(M,g,t)$ be a spacetime with time orientation and $\psi$ a $C^\infty$ diffeomorphism of $M$. Then $\psi$ is a homeomorphism from $\psi^*(M,g)$ carrying the Alexandrov topology of $\psi^*g$ and $\psi^*t$ to $(M,g)$ carrying the Alexandrov topology of $g$ and $t$.
@@ -2242,7 +2242,7 @@ The pushforward of a path under a cross-metric isometry is decomposed exactly as
 
 \begin{theorem}[The Pullback of a Lorentzian Spacetime is a Lorentzian Spacetime]
     \label{thrm:pullback-is-lorentzian-spacetime}
-    \lean{Physicslib4.Spacetime.LorentzianSpacetime.pullback_alexandrov_t2, Physicslib4.Spacetime.LorentzianSpacetime.pullback, Physicslib4.Spacetime.LorentzianSpacetime.pullback_toSpacetime, Physicslib4.Spacetime.LorentzianSpacetime.pullback_timeOrientation}
+    \lean{Hilbert6.Spacetime.LorentzianSpacetime.pullback_alexandrov_t2, Hilbert6.Spacetime.LorentzianSpacetime.pullback, Hilbert6.Spacetime.LorentzianSpacetime.pullback_toSpacetime, Hilbert6.Spacetime.LorentzianSpacetime.pullback_timeOrientation}
     \uses{def:lorentzian-spacetime, thrm:pullback-is-spacetime, lmm:pullback-time-orientation, lmm:pullback-alexandrov-homeomorphism}
     \leanok
     Let $(M,g,t)$ be a Lorentzian spacetime (\ref{def:lorentzian-spacetime}) --- a spacetime with a time orientation and a Hausdorff Alexandrov topology --- and $\psi$ a $C^\infty$ diffeomorphism of $M$. Then $\psi^*(M,g,t)$, carrying $\psi^*g$, $\psi^*t$ and its own Alexandrov topology, is again a Lorentzian spacetime.

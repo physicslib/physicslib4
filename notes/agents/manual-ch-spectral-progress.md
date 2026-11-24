@@ -1,8 +1,8 @@
 # Reference manual, chapter "Bounded spectral theory": progress log
 
 Plan: `plan-verso-reference-manual-2026-10-17.md` (chapter 2). Part A is a docstring pass over the
-headline declarations of `Physicslib4/Spectral/` (top level only, not `Unbounded/` or `Stone/`)
-and `Physicslib4/Operators/LpDiagonal.lean`; part B (the chapter text) is a later step. Appended
+headline declarations of `Hilbert6/Spectral/` (top level only, not `Unbounded/` or `Stone/`)
+and `Hilbert6/Operators/LpDiagonal.lean`; part B (the chapter text) is a later step. Appended
 after each file.
 
 ## Step 0: reconnaissance (2026-10-22)
@@ -190,30 +190,30 @@ theorem "unproved" / uniqueness "left open").
 
 Uncited declarations whose docstrings carry a descriptive Blueprint line:
 
-1. `Physicslib4.Spectral.realCalculus`, `Physicslib4.Spectral.polyOn`: add to `\lean{}` of
+1. `Hilbert6.Spectral.realCalculus`, `Hilbert6.Spectral.polyOn`: add to `\lean{}` of
    prpstn:hall-8.3 (the map and its polynomial inputs).
-2. `Physicslib4.Spectral.assocFunctional`, `Physicslib4.Spectral.assocMeasure`: add to
+2. `Hilbert6.Spectral.assocFunctional`, `Hilbert6.Spectral.assocMeasure`: add to
    prpstn:associated-measures-self-adjoint (Λ_ψ and μ_ψ); `assocMeasure` could also go to
    def:hall-8.6, whose statement uses μ_ψ.
-3. `Physicslib4.Spectral.ProjectionValuedMeasure.assoc`: add to
+3. `Hilbert6.Spectral.ProjectionValuedMeasure.assoc`: add to
    thrm:projection-valued-measures-associated-measure.
-4. `Physicslib4.Spectral.ProjectionValuedMeasure.integral`: add to
+4. `Hilbert6.Spectral.ProjectionValuedMeasure.integral`: add to
    thrm:operator-valued-integration.
-5. `Physicslib4.Spectral.spectralMeasure`: add to thrm:hall-8.10 (and possibly
+5. `Hilbert6.Spectral.spectralMeasure`: add to thrm:hall-8.10 (and possibly
    thrm:spectral-theorem-for-bounded-operators).
-6. `Physicslib4.Spectral.SesquilinearForm`: add to def:bounded-sesquilinear-form;
-   `Physicslib4.Spectral.IsQuadraticForm`, `Physicslib4.Spectral.polarization`: add to
+6. `Hilbert6.Spectral.SesquilinearForm`: add to def:bounded-sesquilinear-form;
+   `Hilbert6.Spectral.IsQuadraticForm`, `Hilbert6.Spectral.polarization`: add to
    def:bounded-quadratic-form.
-7. `Physicslib4.Spectral.IsBoundedQuadraticForm.toSesq`: add to prpstn:hall-a.61;
-   `Physicslib4.Spectral.IsBoundedQuadraticForm.toOperator`: add to prpstn:hall-a.63.
-8. `Physicslib4.Spectral.IsMonotoneClass`: add to thrm:monotone-class-theorem;
-   `Physicslib4.Spectral.IsBorelGenerating`: add to lmm:hall-prblm-8.3.3b.
-9. `Physicslib4.Spectral.BddMeasurable`: add to def:hall-8.8 or thrm:operator-valued-integration
+7. `Hilbert6.Spectral.IsBoundedQuadraticForm.toSesq`: add to prpstn:hall-a.61;
+   `Hilbert6.Spectral.IsBoundedQuadraticForm.toOperator`: add to prpstn:hall-a.63.
+8. `Hilbert6.Spectral.IsMonotoneClass`: add to thrm:monotone-class-theorem;
+   `Hilbert6.Spectral.IsBorelGenerating`: add to lmm:hall-prblm-8.3.3b.
+9. `Hilbert6.Spectral.BddMeasurable`: add to def:hall-8.8 or thrm:operator-valued-integration
    (or a small definition node "bounded Borel functions");
-   `Physicslib4.Spectral.BoundedPointwiseLimit`: add to thrm:bounded-convergence-theorem.
-10. `Physicslib4.Spectral.mul_resolvent_of_mem_resolventSet`: add to
+   `Hilbert6.Spectral.BoundedPointwiseLimit`: add to thrm:bounded-convergence-theorem.
+10. `Hilbert6.Spectral.mul_resolvent_of_mem_resolventSet`: add to
     def:bounded-operator-resolvent-and-spectrum (records the sign of Mathlib's `resolvent`).
-11. `Physicslib4.lpDiag`: add to `\lean{}` of def:finite-amplification
+11. `Hilbert6.lpDiag`: add to `\lean{}` of def:finite-amplification
     (`haag-kastler-axioms.tex`), which names it in its text.
 
 Follow-ups outside this pass:
@@ -229,11 +229,11 @@ Follow-ups outside this pass:
 - New chapter `web/Manual/Spectral.lean` (tag `spectral`, file `Bounded-spectral-theory`),
   included in `web/Manual.lean` right after the GNS chapter (the include order follows the
   section numbers of Chapter 10: 10.1, 10.2, 10.5, 10.6, 10.7–8).
-- Imports `Physicslib4.Spectral.SpectralTheorem` (all of §10.2 transitively); opens
-  `Physicslib4.Spectral` and the namespaces `ProjectionValuedMeasure`, `IsBoundedQuadraticForm`,
+- Imports `Hilbert6.Spectral.SpectralTheorem` (all of §10.2 transitively); opens
+  `Hilbert6.Spectral` and the namespaces `ProjectionValuedMeasure`, `IsBoundedQuadraticForm`,
   `IsBorelGenerating` so that docstring code spans resolve.
 - Overview: Hermitian-matrix reminder, the theorem as an integral, the seven stages, "every
-  statement proved". Checked: no `sorry` or `axiom` in `Physicslib4/Spectral/*.lean`; all 144
+  statement proved". Checked: no `sorry` or `axiom` in `Hilbert6/Spectral/*.lean`; all 144
   blueprint nodes of the section carry `\lean{}` and `\leanok` (the only exception is the
   convention conv:nonzero-hilbert-space, which has no Lean content). Example of continuous
   spectrum taken from the `spectrum_eq_compl_resolventSet` docstring (multiplication operator on
@@ -310,7 +310,7 @@ Follow-ups outside this pass:
 
 - `lake build` and `generate-manual` succeed; `python3 scripts/check_temporal_wording.py`: OK.
 - Links in `_out/manual/html-multi/Bounded-spectral-theory/index.html`: all 40-odd blueprint
-  anchors exist in `blueprint/web/chptr-haag-kastler-axioms-blueprint.html`; every Physicslib4
+  anchors exist in `blueprint/web/chptr-haag-kastler-axioms-blueprint.html`; every Hilbert6
   API-docs link points at an existing source file containing the name; `sec10-2-spectral` exists.
   The chapter has no cross-chapter `{ref}` links; the title page lists it second, after GNS.
 - Reread fixes: Design intro no longer says every departure has a blueprint note; "in the order
@@ -339,7 +339,7 @@ Follow-ups outside this pass:
   declarations of the proposals list plus `lpDiag`), not 19 as in the commit message.
 - Comments only: the 5 changed files, comments stripped, are identical to HEAD. No new line over
   100 characters, none starting with a Lean keyword; no guard blocks.
-- `lake build`: succeeds, warning count of `Physicslib4.Spectral.SpectralTheorem` unchanged
+- `lake build`: succeeds, warning count of `Hilbert6.Spectral.SpectralTheorem` unchanged
   (56 before and after). `lake lint`: passed.
 - Blueprint proposals of the memo: not applied (out of scope).
 

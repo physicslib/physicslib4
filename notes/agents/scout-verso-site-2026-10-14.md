@@ -106,7 +106,7 @@ fetched 2026-10-14):
   needing a closer read of the Verso manual's own "Multi-page documents"/site-linking
   chapter before implementing**).
 - **Can a manual embed docstrings of declarations from a dependency, and elaborate
-  examples that `import Physicslib4`?** Yes, via two distinct, confirmed mechanisms:
+  examples that `import Hilbert6`?** Yes, via two distinct, confirmed mechanisms:
   1. **In-process** (`leanprover/reference-manual`, the flagship real example — Apache
      2.0, `lean-toolchain` = `v4.35.0`, fetched 2026-10-14): the manual package directly
      imports the library whose declarations it documents (there, Lean's own stdlib,
@@ -368,41 +368,41 @@ repository on 2026-10-14 (paths relative to repo root):
    (per the project's own `home_page/index.md`, already read: "675 declarations...
    mapped onto 1,191 distinct Lean declarations").
 4. **Worked example: a trivial net and its axioms.**
-   - `Physicslib4.AQFT.HaagKastler.Net.HaagKastlerNet` — the flat-spacetime net
-     structure (`Physicslib4/AQFT/HaagKastler/Net.lean:71`), with fields `U :
+   - `Hilbert6.AQFT.HaagKastler.Net.HaagKastlerNet` — the flat-spacetime net
+     structure (`Hilbert6/AQFT/HaagKastler/Net.lean:71`), with fields `U :
      LocalNet`, `isotony : Isotony U`, `localCommutativity : LocalCommutativity U
      isotony`, `lorentzCovariance : LorentzCovariance U isotony` (confirmed by
      direct read of lines 71–90).
-   - `Physicslib4.AQFT.HaagKastler.Isotony.Isotony`
-     (`Physicslib4/AQFT/HaagKastler/Isotony.lean`, read in full) — Axiom 2, with
+   - `Hilbert6.AQFT.HaagKastler.Isotony.Isotony`
+     (`Hilbert6/AQFT/HaagKastler/Isotony.lean`, read in full) — Axiom 2, with
      `map`, `injective`, `map_self`, `map_comp` fields, and its lemma
      `Isotony.exists_injective_self`.
-   - `Physicslib4.AQFT.HaagKastler.LocalCommutativity`
-     (`Physicslib4/AQFT/HaagKastler/LocalCommutativity.lean`, read in full) — Axiom
+   - `Hilbert6.AQFT.HaagKastler.LocalCommutativity`
+     (`Hilbert6/AQFT/HaagKastler/LocalCommutativity.lean`, read in full) — Axiom
      3, plus `QuasilocalAlgebra.commute_ι_iff_commute_map`.
    - **Correction (orchestrator check):** a concrete net exists. Minkowski:
-     `Physicslib4.AQFT.HaagKastler.trivialLocalNet`, `trivialLocalNetIsotony`,
+     `Hilbert6.AQFT.HaagKastler.trivialLocalNet`, `trivialLocalNetIsotony`,
      `trivialHaagKastlerNet`, `nonempty_haagKastlerNet`
-     (`Physicslib4/AQFT/HaagKastler/Net.lean:306-382`). Curved: the same names in
-     `Physicslib4.AQFT.HaagKastlerCurved` (`HaagKastlerCurved/Net.lean:343-401`). The
+     (`Hilbert6/AQFT/HaagKastler/Net.lean:306-382`). Curved: the same names in
+     `Hilbert6.AQFT.HaagKastlerCurved` (`HaagKastlerCurved/Net.lean:343-401`). The
      scout's grep missed them because they are `def`s, not instances.
 5. **Worked example: a state and its GNS representation.**
-   - `Physicslib4.GNS.State` (`Physicslib4/GNS/Basic.lean:59`,
+   - `Hilbert6.GNS.State` (`Hilbert6/GNS/Basic.lean:59`,
      `structure State extends A →L[ℂ] ℂ`).
-   - `Physicslib4.GNS.gns_construction` and `.gns_unique`
-     (`Physicslib4/GNS/Construction.lean:64,163`).
+   - `Hilbert6.GNS.gns_construction` and `.gns_unique`
+     (`Hilbert6/GNS/Construction.lean:64,163`).
 6. **Worked example: local commutativity in a diamond.**
    - Same `LocalCommutativity` def as above (flat case); for the curved/general
-     setting, `Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity`
-     (`Physicslib4/AQFT/HaagKastlerCurved/LocalCommutativity.lean:67`). Diamonds are the Alexandrov basis sets
-     $I^+(p) \cap I^-(q)$: `Physicslib4.AQFT.HaagKastler.IsAlexandrovBasisSet`
+     setting, `Hilbert6.AQFT.HaagKastlerCurved.LocalCommutativity`
+     (`Hilbert6/AQFT/HaagKastlerCurved/LocalCommutativity.lean:67`). Diamonds are the Alexandrov basis sets
+     $I^+(p) \cap I^-(q)$: `Hilbert6.AQFT.HaagKastler.IsAlexandrovBasisSet`
      (`HaagKastler/LocalAlgebras.lean:62`) and, for a general spacetime,
-     `Physicslib4.Spacetime.alexandrovBasis` (`Spacetime/Causality.lean:428`). Axiom 3
+     `Hilbert6.Spacetime.alexandrovBasis` (`Spacetime/Causality.lean:428`). Axiom 3
      is stated for spacelike-separated diamonds inside a common containing diamond.
      (Orchestrator correction: the scout flagged this as unresolved.)
 7. **Worked example: Lorentz invariance of causal precedence.**
-   - `Physicslib4.causallyPrecedes_smul_iff`
-     (`Physicslib4/Spacetime/LorentzCausality.lean:357`, grep-confirmed), alongside
+   - `Hilbert6.causallyPrecedes_smul_iff`
+     (`Hilbert6/Spacetime/LorentzCausality.lean:357`, grep-confirmed), alongside
      the related `isSpacelikeRelated_smul_iff` (line 370) and
      `isCompletelySpacelike_smul_iff` (line 381) in the same file — a strong,
      directly on-topic cluster of lemmas for this chapter.

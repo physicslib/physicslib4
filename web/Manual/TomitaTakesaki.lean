@@ -1,14 +1,14 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.Operators.Modular.VanDaele
-import Physicslib4.Operators.Modular.TakesakiKMS
+import Hilbert6.Operators.Modular.VanDaele
+import Hilbert6.Operators.Modular.TakesakiKMS
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 open Book
 -- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
 -- written relative to the library's namespaces, resolve and link.
-open Physicslib4 Physicslib4.Modular Physicslib4.Spectral.Unbounded Physicslib4.Spectral.Stone
+open Hilbert6 Hilbert6.Modular Hilbert6.Spectral.Unbounded Hilbert6.Spectral.Stone
 
 #doc (Manual) "Tomita–Takesaki theory" =>
 
@@ -73,9 +73,9 @@ covariance. What the library proves is everything of Section 10.10, with no `sor
 $`J`, their basic properties, Takesaki's lemma, the description $`S^* = \overline{F_0}` of the
 adjoint of the Tomita operator, the modular objects of the commutant, a strip formula for bounded
 holomorphic functions, the uniqueness of Fourier transforms, Tomita's theorem,
-`tomita_theorem`, and Takesaki's theorem, `isKMSState_modularAutomorphism`. The modular theory is in the namespace `Physicslib4.Modular`, the general
-results on unbounded operators it needs in `Physicslib4.Spectral.Unbounded`, and the strip formula
-in `Physicslib4`.
+`tomita_theorem`, and Takesaki's theorem, `isKMSState_modularAutomorphism`. The modular theory is in the namespace `Hilbert6.Modular`, the general
+results on unbounded operators it needs in `Hilbert6.Spectral.Unbounded`, and the strip formula
+in `Hilbert6`.
 
 # Design
 %%%
@@ -149,7 +149,7 @@ it works on the vectors $`\xi` with $`E_n\xi = \xi` for some $`n`, where $`E_n` 
 projection of $`\Delta` for $`[1/n, n]`. On them $`\Delta^z` is the bounded operator
 $`p_{z,n}(\Delta)`, with $`p_{z,n}(\lambda) = 1_{[1/n,n]}(\lambda)\lambda^z`, and
 $`z \mapsto p_{z,n}(\Delta)\xi` is entire. These vectors are dense
-({apiDocs Physicslib4.Modular.dense_modularSpectralSubspace}[`dense_modularSpectralSubspace`]),
+({apiDocs Hilbert6.Modular.dense_modularSpectralSubspace}[`dense_modularSpectralSubspace`]),
 and the only unbounded functions of $`\Delta` the proof uses are $`\Delta^{\pm 1/2}`.
 
 ## Van Daele's proof, with bounded operators
@@ -195,9 +195,9 @@ The setting
 ([def:von-neumann-algebra-commutant-convention][bp-vna],
 [def:cyclic-separating-vector][bp-csv]):
 
-{docstring Physicslib4.Modular.IsVonNeumannSet}
+{docstring Hilbert6.Modular.IsVonNeumannSet}
 
-{docstring Physicslib4.Modular.IsCyclicSeparatingVector}
+{docstring Hilbert6.Modular.IsCyclicSeparatingVector}
 
 [bp-vna]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:von-neumann-algebra-commutant-convention
 [bp-csv]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:cyclic-separating-vector
@@ -206,31 +206,31 @@ The setting
 
 A reference conjugation ([def:reference-conjugation][bp-rc]) exists on every Hilbert space:
 
-{docstring Physicslib4.Modular.referenceConjugation}
+{docstring Hilbert6.Modular.referenceConjugation}
 
 The Tomita operator ([def:tomita-operator][bp-to]) is $`C` applied to the closure of the
 linearized pre-operator `linearizedTomitaPre M Ω C`:
 
-{docstring Physicslib4.Modular.tomitaOperator}
+{docstring Hilbert6.Modular.tomitaOperator}
 
 Its graph is the closure of the graph of the pre-operator `tomitaPre M Ω`, $`a\Omega \mapsto
 a^*\Omega` ([lmm:tomita-operator-independent-of-c][bp-toc]), so neither $`S` nor its domain
 depends on $`C`:
 
 ```lean (name := checkTomitaGraph)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check tomitaOperator_graph_eq_closure
 ```
 
 ```leanOutput checkTomitaGraph
-Physicslib4.Modular.tomitaOperator_graph_eq_closure.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Modular.tomitaOperator_graph_eq_closure.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω)
   (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ (x : H), C (C x) = x) :
   (Set.range fun x => (↑x, tomitaOperator M Ω C x)) = closure (Set.range fun x => (↑x, tomitaPre M Ω x))
 ```
 
 The Tomita operator is an injective involution with dense domain and dense range
-({apiDocs Physicslib4.Modular.tomitaOperator_involution}[`tomitaOperator_involution`],
+({apiDocs Hilbert6.Modular.tomitaOperator_involution}[`tomitaOperator_involution`],
 [thrm:tomita-operator-involution][bp-toi]).
 
 [bp-rc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:reference-conjugation
@@ -241,18 +241,18 @@ The Tomita operator is an injective involution with dense domain and dense range
 ## Von Neumann's theorem and the polar decomposition
 
 For a closed, densely defined operator $`T`, von Neumann's theorem
-({apiDocs Physicslib4.Spectral.Unbounded.isSelfAdjoint_adjointMulSelf}[`isSelfAdjoint_adjointMulSelf`],
+({apiDocs Hilbert6.Spectral.Unbounded.isSelfAdjoint_adjointMulSelf}[`isSelfAdjoint_adjointMulSelf`],
 [thrm:von-neumann-adjoint-product][bp-vn]) makes `adjointMulSelf T` positive, self-adjoint and
 densely defined. If $`T` is also injective with dense range, it has a polar decomposition
 ([thrm:polar-decomposition][bp-pd]):
 
 ```lean (name := checkPolar)
-open Physicslib4 Spectral.Unbounded in
+open Hilbert6 Spectral.Unbounded in
 #check polar_decomposition
 ```
 
 ```leanOutput checkPolar
-Physicslib4.Spectral.Unbounded.polar_decomposition.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.Unbounded.polar_decomposition.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {T : H →ₗ.[ℂ] H} (hT : HasDenseDomain T) (hcl : T.IsClosed) (hinj : ker T = ⊥)
   (hran : Dense ↑(range T)) :
   ∃ V,
@@ -263,7 +263,7 @@ Physicslib4.Spectral.Unbounded.polar_decomposition.{u_1} {H : Type u_1} [NormedA
 ```
 
 The unitary `V` is a `H ≃ₗᵢ[ℂ] H`; uniqueness is
-{apiDocs Physicslib4.Spectral.Unbounded.polar_decomposition_unique}[`polar_decomposition_unique`].
+{apiDocs Hilbert6.Spectral.Unbounded.polar_decomposition_unique}[`polar_decomposition_unique`].
 
 [bp-vn]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-adjoint-product
 [bp-pd]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:polar-decomposition
@@ -272,21 +272,21 @@ The unitary `V` is a `H ≃ₗᵢ[ℂ] H`; uniqueness is
 
 The two modular objects ([def:modular-operator][bp-mo], [def:modular-conjugation][bp-mc]):
 
-{docstring Physicslib4.Modular.modularOperator}
+{docstring Hilbert6.Modular.modularOperator}
 
-{docstring Physicslib4.Modular.modularConjugation}
+{docstring Hilbert6.Modular.modularConjugation}
 
 The modular operator is positive, self-adjoint, densely defined and injective, and $`\Delta^{1/2}`
 has the domain of $`S` with $`\|\Delta^{1/2}\psi\| = \|S\psi\|`
 ([thrm:modular-operator-properties][bp-mop]):
 
 ```lean (name := checkModProps)
-open Physicslib4 Modular Spectral.Unbounded in
+open Hilbert6 Modular Spectral.Unbounded in
 #check modularOperator_properties
 ```
 
 ```leanOutput checkModProps
-Physicslib4.Modular.modularOperator_properties.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Modular.modularOperator_properties.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω)
   (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ (x : H), C (C x) = x) :
   IsPositive (modularOperator M Ω C) ∧
@@ -303,12 +303,12 @@ The polar decomposition of the Tomita operator, $`S = J\Delta^{1/2}` including d
 ([thrm:modular-conjugation-polar][bp-mcp]):
 
 ```lean (name := checkPolarS)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check tomitaOperator_eq_modularConjugation_sqrt
 ```
 
 ```leanOutput checkPolarS
-Physicslib4.Modular.tomitaOperator_eq_modularConjugation_sqrt.{u_1} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.Modular.tomitaOperator_eq_modularConjugation_sqrt.{u_1} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M)
   (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ (x : H), C (C x) = x) :
   (linearizedTomitaPre M Ω C).closure.domain = (modularOperatorSqrt hM hΩ C hC).domain ∧
@@ -320,12 +320,12 @@ Independence of the reference conjugation
 ([thrm:modular-objects-independent-of-c][bp-ind]):
 
 ```lean (name := checkIndep)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check modular_objects_independent_of_conjugation
 ```
 
 ```leanOutput checkIndep
-Physicslib4.Modular.modular_objects_independent_of_conjugation.{u_1} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.Modular.modular_objects_independent_of_conjugation.{u_1} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M)
   (hΩ : IsCyclicSeparatingVector M Ω) (C₁ C₂ : H ≃ₗᵢ⋆[ℂ] H) (hC₁ : ∀ (x : H), C₁ (C₁ x) = x)
   (hC₂ : ∀ (x : H), C₂ (C₂ x) = x) :
@@ -335,9 +335,9 @@ Physicslib4.Modular.modular_objects_independent_of_conjugation.{u_1} {H : Type u
 ```
 
 The modular conjugation is an involution with $`J\Delta^{1/2}J = \Delta^{-1/2}`
-({apiDocs Physicslib4.Modular.modularConjugation_involution}[`modularConjugation_involution`]), and
+({apiDocs Hilbert6.Modular.modularConjugation_involution}[`modularConjugation_involution`]), and
 it inverts the modular operator, $`J\Delta J = \Delta^{-1}`
-({apiDocs Physicslib4.Modular.modularConjugation_conj_modularOperator}[`modularConjugation_conj_modularOperator`],
+({apiDocs Hilbert6.Modular.modularConjugation_conj_modularOperator}[`modularConjugation_conj_modularOperator`],
 [crllr:modular-conjugation-inverts][bp-inv]), where `antiunitaryConj W A` is the operator
 $`WAW^{-1}`.
 
@@ -357,12 +357,12 @@ $`\|a\| \le \|a'\| / \sqrt{2(|z| - \operatorname{Re} z)}`
 $`t \mapsto 1_{[0,\infty)}(t)(z - t)^{-1}` against the spectral measure of $`\Delta`:
 
 ```lean (name := checkTakesaki)
-open Physicslib4 Modular Spectral.Unbounded in
+open Hilbert6 Modular Spectral.Unbounded in
 #check takesaki_lemma
 ```
 
 ```leanOutput checkTakesaki
-Physicslib4.Modular.takesaki_lemma.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+Hilbert6.Modular.takesaki_lemma.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
   (hC : ∀ (x : H), C (C x) = x) {z : ℂ} (hz : z ∉ Complex.ofReal '' Set.Ici 0) {a' : H →L[ℂ] H}
   (ha' : a' ∈ M.centralizer) :
@@ -373,7 +373,7 @@ Physicslib4.Modular.takesaki_lemma.{u_1} {H : Type u_1} [NormedAddCommGroup H] [
 ```
 
 That this integral is the resolvent of $`\Delta` is
-{apiDocs Physicslib4.Modular.modularResolvent_isResolvent}[`modularResolvent_isResolvent`].
+{apiDocs Hilbert6.Modular.modularResolvent_isResolvent}[`modularResolvent_isResolvent`].
 
 [bp-tak]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:takesaki-lemma
 
@@ -384,12 +384,12 @@ $`F_0 : b'\Omega \mapsto b'^*\Omega`, $`b' \in \mathcal{M}'`
 ([thrm:tomita-adjoint-eq-closure][bp-adj]):
 
 ```lean (name := checkAdjoint)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check mem_tomitaAdjoint_iff_mem_closure_graph
 ```
 
 ```leanOutput checkAdjoint
-Physicslib4.Modular.mem_tomitaAdjoint_iff_mem_closure_graph.{u_1} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.Modular.mem_tomitaAdjoint_iff_mem_closure_graph.{u_1} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M)
   (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ (x : H), C (C x) = x) (ξ η : H) :
   (∃ (h : C ξ ∈ (linearizedTomitaPre M Ω C).closure.adjoint.domain),
@@ -405,12 +405,12 @@ $`\mathcal{M}'`, and
 $$`S_{\mathcal{M}'} = S^* = J\Delta^{-1/2}, \qquad \Delta_{\mathcal{M}'} = \Delta^{-1}, \qquad \Delta_{\mathcal{M}'}^{1/2} = \Delta^{-1/2}, \qquad J_{\mathcal{M}'} = J.`
 
 ```lean (name := checkCommutant)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check commutant_modular_objects
 ```
 
 ```leanOutput checkCommutant
-Physicslib4.Modular.commutant_modular_objects.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Modular.commutant_modular_objects.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω)
   (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ (x : H), C (C x) = x) :
   IsCyclicSeparatingVector M.centralizer Ω ∧
@@ -439,11 +439,11 @@ of Jones's notes) recovers $`f(0)` from the boundary values of a function bounde
 on the strip $`|\operatorname{Re} z| \le \tfrac12` and holomorphic inside it:
 
 ```lean (name := checkStrip)
-#check Physicslib4.strip_formula
+#check Hilbert6.strip_formula
 ```
 
 ```leanOutput checkStrip
-Physicslib4.strip_formula {f : ℂ → ℂ} (hc : ContinuousOn f (Complex.re ⁻¹' Set.Icc (-1 / 2) (1 / 2)))
+Hilbert6.strip_formula {f : ℂ → ℂ} (hc : ContinuousOn f (Complex.re ⁻¹' Set.Icc (-1 / 2) (1 / 2)))
   (hd : DifferentiableOn ℂ f (Complex.re ⁻¹' Set.Ioo (-1 / 2) (1 / 2)))
   (hb : ∃ M, ∀ z ∈ Complex.re ⁻¹' Set.Icc (-1 / 2) (1 / 2), ‖f z‖ ≤ M) :
   f 0 = ∫ (t : ℝ), (f (1 / 2 + ↑t * Complex.I) + f (-1 / 2 + ↑t * Complex.I)) / (2 * ↑(Real.cosh (Real.pi * t)))
@@ -453,11 +453,11 @@ A continuous integrable function all of whose Fourier integrals vanish is zero
 ([thrm:fourier-uniqueness][bp-fu]); the proof is Mathlib's Fourier inversion theorem:
 
 ```lean (name := checkFourier)
-#check Physicslib4.eq_zero_of_integral_exp_mul_eq_zero
+#check Hilbert6.eq_zero_of_integral_exp_mul_eq_zero
 ```
 
 ```leanOutput checkFourier
-Physicslib4.eq_zero_of_integral_exp_mul_eq_zero {h : ℝ → ℂ} (hc : Continuous h)
+Hilbert6.eq_zero_of_integral_exp_mul_eq_zero {h : ℝ → ℂ} (hc : Continuous h)
   (hi : MeasureTheory.Integrable h MeasureTheory.volume)
   (hh : ∀ (θ : ℝ), ∫ (t : ℝ), Complex.exp (↑θ * ↑t * Complex.I) * h t = 0) : h = 0
 ```
@@ -469,11 +469,11 @@ Physicslib4.eq_zero_of_integral_exp_mul_eq_zero {h : ℝ → ℂ} (hc : Continuo
 
 The unitaries $`\Delta^{it}` ([def:modular-unitary-group][bp-mug]):
 
-{docstring Physicslib4.Modular.modularUnitaryGroup}
+{docstring Hilbert6.Modular.modularUnitaryGroup}
 
 They form a strongly continuous one-parameter unitary group in the sense of the Stone chapter,
 with $`(\Delta^{it})^* = (\Delta^{it})^{-1} = \Delta^{-it}`
-({apiDocs Physicslib4.Modular.modularUnitaryGroup_properties}[`modularUnitaryGroup_properties`]).
+({apiDocs Hilbert6.Modular.modularUnitaryGroup_properties}[`modularUnitaryGroup_properties`]).
 
 [bp-mug]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-unitary-group
 
@@ -482,19 +482,19 @@ with $`(\Delta^{it})^* = (\Delta^{it})^{-1} = \Delta^{-it}`
 The theorem conjugates bounded operators by $`J`
 ([def:modular-conjugation-conjugate][bp-jtj]); since $`J` is antilinear, $`JTJ` is linear:
 
-{docstring Physicslib4.Modular.modularConjugationConj}
+{docstring Hilbert6.Modular.modularConjugationConj}
 
 Tomita's theorem ([thrm:tomita][bp-tt], Theorem 13.2.3 of Jones's notes) states both halves as
 equalities of sets: the image of $`\mathcal{M}` under $`x \mapsto JxJ` is $`\mathcal{M}'`, and its
 image under $`x \mapsto \Delta^{it}x\Delta^{-it}` is $`\mathcal{M}` for every real $`t`.
 
 ```lean (name := checkTomita)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check tomita_theorem
 ```
 
 ```leanOutput checkTomita
-Physicslib4.Modular.tomita_theorem.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+Hilbert6.Modular.tomita_theorem.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
   (hC : ∀ (x : H), C (C x) = x) :
   (fun x => modularConjugationConj hM hΩ C hC x) '' M = M.centralizer ∧
@@ -514,25 +514,25 @@ Physicslib4.Modular.tomita_theorem.{u_1} {H : Type u_1} [NormedAddCommGroup H] [
 tag := "tomita-takesaki-kms"
 %%%
 
-The library's KMS condition, `Physicslib4.AQFT.IsKMSState`, is stated for a state on a
+The library's KMS condition, `Hilbert6.AQFT.IsKMSState`, is stated for a state on a
 C*-algebra and a one-parameter group of `*`-automorphisms. Three definitions put the modular
 objects in that form. The _modular algebra_ ([def:modular-algebra][bp-ma]) bundles the set
 $`\mathcal{M}` as a unital `*`-subalgebra of $`B(H)`; it is norm-closed, being a centralizer, so
 Mathlib's `StarSubalgebra.cstarAlgebra` makes it a C*-algebra:
 
-{docstring Physicslib4.Modular.modularAlgebra}
+{docstring Hilbert6.Modular.modularAlgebra}
 
 The _vector state_ ([def:vector-state][bp-vs]) is defined for every norm-closed unital
 `*`-subalgebra of $`B(H)` and every unit vector:
 
-{docstring Physicslib4.GNS.vectorState}
+{docstring Hilbert6.GNS.vectorState}
 
 The _modular automorphism group_ ([def:modular-automorphism][bp-maut]) is
 $`\sigma_t(x) = \Delta^{it}x\Delta^{-it}`, a `*`-automorphism of the modular algebra by Tomita's
 theorem, and a one-parameter group
-({apiDocs Physicslib4.Modular.isOneParameterAut_modularAutomorphism}[`isOneParameterAut_modularAutomorphism`]):
+({apiDocs Hilbert6.Modular.isOneParameterAut_modularAutomorphism}[`isOneParameterAut_modularAutomorphism`]):
 
-{docstring Physicslib4.Modular.modularAutomorphism}
+{docstring Hilbert6.Modular.modularAutomorphism}
 
 Takesaki's theorem ([thrm:takesaki-kms][bp-tkms]; Bratteli–Robinson, vol. 2, Theorem 5.3.10)
 states that the vector state of $`\Omega` is a KMS state at inverse temperature $`1` for the
@@ -541,12 +541,12 @@ condition at $`\beta = -1` for $`\sigma`; the library's KMS strip $`0 \le \opera
 \beta` is empty for negative $`\beta`, so the theorem is stated for the reversed flow.
 
 ```lean (name := checkTakesakiKMS)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check isKMSState_modularAutomorphism
 ```
 
 ```leanOutput checkTakesakiKMS
-Physicslib4.Modular.isKMSState_modularAutomorphism.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Modular.isKMSState_modularAutomorphism.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω)
   (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ (x : H), C (C x) = x) (hΩ1 : ‖Ω‖ = 1) :
   AQFT.IsKMSState (fun t => modularAutomorphism hM hΩ C hC (-t)) 1 (GNS.vectorState (modularAlgebra M) Ω hΩ1)
@@ -578,22 +578,22 @@ $`z = -\lambda^{-2}` gives $`a \in \mathcal{M}` with $`\|a\| \le \|a'\|/2` and
 $$`a'\Omega = \lambda S(a\Omega) + \lambda^{-1}S^*(a\Omega),`
 
 with $`a\Omega` in the domains of both $`S` and $`S^*`
-({apiDocs Physicslib4.Modular.exists_isVanDaeleTriple}[`exists_isVanDaeleTriple`], Jones's Lemma
+({apiDocs Hilbert6.Modular.exists_isVanDaeleTriple}[`exists_isVanDaeleTriple`], Jones's Lemma
 13.1.5). The library calls $`(\lambda, a', a)` a _van Daele triple_:
 
-{docstring Physicslib4.Modular.IsVanDaeleTriple}
+{docstring Hilbert6.Modular.IsVanDaeleTriple}
 
 _A sesquilinear identity._ Approximating vectors of $`\operatorname{Dom} S \cap \operatorname{Dom} S^*`
 by vectors $`x\Omega`, $`x \in \mathcal{M}`, in the graph norms of $`S` and $`S^*` (Jones's
 Corollary 13.1.6,
-{apiDocs Physicslib4.Modular.exists_tendsto_tomitaOperator_of_mem}[`exists_tendsto_tomitaOperator_of_mem`])
+{apiDocs Hilbert6.Modular.exists_tendsto_tomitaOperator_of_mem}[`exists_tendsto_tomitaOperator_of_mem`])
 turns the defining equation into
 $`\lambda\langle aS\xi, S^*\eta \rangle + \lambda^{-1}\langle aS^*\xi, S\eta \rangle = \langle \eta, a'\xi \rangle`
 for all such $`\xi, \eta`
-({apiDocs Physicslib4.Modular.IsVanDaeleTriple.inner_identity}[`IsVanDaeleTriple.inner_identity`],
+({apiDocs Hilbert6.Modular.IsVanDaeleTriple.inner_identity}[`IsVanDaeleTriple.inner_identity`],
 Jones's Lemma 13.1.7). With $`S = J\Delta^{1/2}` and $`S^* = J\Delta^{-1/2}` it becomes
 $`\langle \eta, Ja'J\xi \rangle = \lambda\langle \Delta^{1/2}\eta, a\Delta^{-1/2}\xi \rangle + \lambda^{-1}\langle \Delta^{-1/2}\eta, a\Delta^{1/2}\xi \rangle`
-({apiDocs Physicslib4.Modular.IsVanDaeleTriple.inner_modularConjugationConj}[`IsVanDaeleTriple.inner_modularConjugationConj`]).
+({apiDocs Hilbert6.Modular.IsVanDaeleTriple.inner_modularConjugationConj}[`IsVanDaeleTriple.inner_modularConjugationConj`]).
 
 _The integral formula._ For $`\xi, \eta` in the range of a spectral projection $`E_n`, the
 function $`f(z) = \lambda^{2z}\langle \eta, p_{z,n}(\Delta)\,a\,p_{-z,n}(\Delta)\xi \rangle` is
@@ -603,15 +603,15 @@ Jones's Proposition 13.2.2 on $`\operatorname{Range} E_n`, and dominated converg
 all vectors:
 
 ```lean (name := checkIntegral)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check IsVanDaeleTriple.inner_eq_integral
 ```
 
 ```leanOutput checkIntegral
-Physicslib4.Modular.IsVanDaeleTriple.inner_eq_integral.{u_1} {H : Type u_1} [NormedAddCommGroup H]
-  [InnerProductSpace ℂ H] [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M)
-  (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ (x : H), C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H}
-  (htriple : IsVanDaeleTriple M Ω C l a' a) (ξ η : H) :
+Hilbert6.Modular.IsVanDaeleTriple.inner_eq_integral.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H] {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω)
+  (C : H ≃ₗᵢ⋆[ℂ] H) (hC : ∀ (x : H), C (C x) = x) {l : ℝ} {a' a : H →L[ℂ] H} (htriple : IsVanDaeleTriple M Ω C l a' a)
+  (ξ η : H) :
   inner ℂ η (a ξ) =
     ∫ (t : ℝ),
       ↑l ^ (2 * (Complex.I * ↑t)) *
@@ -625,69 +625,69 @@ _Fourier uniqueness._ For $`b' \in \mathcal{M}'`, apply the integral formula to 
 $`a` with $`b'`, which vanishes because $`a \in \mathcal{M}`. With $`\lambda = e^{\theta/2}` this
 says that every Fourier integral of
 $`t \mapsto \langle \eta, [\Delta^{it}Ja'J\Delta^{-it}, b']\xi \rangle / 2\cosh(\pi t)` vanishes
-({apiDocs Physicslib4.Modular.integral_exp_mul_vanDaele_commutator_eq_zero}[`integral_exp_mul_vanDaele_commutator_eq_zero`]),
+({apiDocs Hilbert6.Modular.integral_exp_mul_vanDaele_commutator_eq_zero}[`integral_exp_mul_vanDaele_commutator_eq_zero`]),
 so the function is zero, and $`\Delta^{it}Ja'J\Delta^{-it}` commutes with $`\mathcal{M}'`
-({apiDocs Physicslib4.Modular.modularUnitaryGroup_conj_commute}[`modularUnitaryGroup_conj_commute`]).
+({apiDocs Hilbert6.Modular.modularUnitaryGroup_conj_commute}[`modularUnitaryGroup_conj_commute`]).
 As $`\mathcal{M} = \mathcal{M}''`, it lies in $`\mathcal{M}`
-({apiDocs Physicslib4.Modular.modularUnitaryGroup_conj_mem}[`modularUnitaryGroup_conj_mem`]).
+({apiDocs Hilbert6.Modular.modularUnitaryGroup_conj_mem}[`modularUnitaryGroup_conj_mem`]).
 
 _Symmetry._ Everything so far holds for every pair, in particular for $`(\mathcal{M}', \Omega)`,
 whose modular conjugation is $`J` and whose commutant is $`\mathcal{M}`. At $`t = 0` this gives
 $`J\mathcal{M}J \subseteq \mathcal{M}'`
-({apiDocs Physicslib4.Modular.modularConjugationConj_mem_centralizer}[`modularConjugationConj_mem_centralizer`]),
+({apiDocs Hilbert6.Modular.modularConjugationConj_mem_centralizer}[`modularConjugationConj_mem_centralizer`]),
 and with $`J\mathcal{M}'J \subseteq \mathcal{M}` and $`J^2 = 1` equality
-({apiDocs Physicslib4.Modular.modularConjugationConj_image}[`modularConjugationConj_image`]). For
+({apiDocs Hilbert6.Modular.modularConjugationConj_image}[`modularConjugationConj_image`]). For
 $`x \in \mathcal{M}`, $`x = Ja'J` with $`a' = JxJ \in \mathcal{M}'`, so
 $`\Delta^{it}x\Delta^{-it} \in \mathcal{M}`; the group law gives the reverse inclusion
-({apiDocs Physicslib4.Modular.modularUnitaryGroup_conj_image}[`modularUnitaryGroup_conj_image`]).
+({apiDocs Hilbert6.Modular.modularUnitaryGroup_conj_image}[`modularUnitaryGroup_conj_image`]).
 
 # Where to look
 %%%
 tag := "tomita-takesaki-files"
 %%%
 
-The modular theory is in `Physicslib4/Operators/Modular/`, in seven files listed in dependency
+The modular theory is in `Hilbert6/Operators/Modular/`, in seven files listed in dependency
 order. Each entry links to the API documentation of a representative declaration.
 
 * `Antiunitary.lean`: antiunitary operators and closability from a densely defined adjoint,
-  {apiDocs Physicslib4.Modular.antiunitary_composition}[`antiunitary_composition`].
+  {apiDocs Hilbert6.Modular.antiunitary_composition}[`antiunitary_composition`].
 * `Tomita.lean`: the reference conjugation, von Neumann algebras, cyclic and separating vectors,
   the pre-operators $`S_0` and $`F_0` and the Tomita operator,
-  {apiDocs Physicslib4.Modular.tomitaOperator}[`tomitaOperator`].
+  {apiDocs Hilbert6.Modular.tomitaOperator}[`tomitaOperator`].
 * `Modular.lean`: the modular operator, its square root and inverse square root, and the modular
   conjugation,
-  {apiDocs Physicslib4.Modular.tomitaOperator_eq_modularConjugation_sqrt}[`tomitaOperator_eq_modularConjugation_sqrt`].
+  {apiDocs Hilbert6.Modular.tomitaOperator_eq_modularConjugation_sqrt}[`tomitaOperator_eq_modularConjugation_sqrt`].
 * `Takesaki.lean`: the commutant extension lemma, the resolvent of $`\Delta` and Takesaki's
-  lemma, {apiDocs Physicslib4.Modular.takesaki_lemma}[`takesaki_lemma`].
+  lemma, {apiDocs Hilbert6.Modular.takesaki_lemma}[`takesaki_lemma`].
 * `TomitaAdjoint.lean`: the adjoint of the Tomita operator and the modular objects of the
   commutant,
-  {apiDocs Physicslib4.Modular.commutant_modular_objects}[`commutant_modular_objects`].
+  {apiDocs Hilbert6.Modular.commutant_modular_objects}[`commutant_modular_objects`].
 * `VanDaele.lean`: complex powers of $`\Delta`, the modular unitary group, van Daele triples, the
   integral formula and Tomita's theorem,
-  {apiDocs Physicslib4.Modular.tomita_theorem}[`tomita_theorem`].
+  {apiDocs Hilbert6.Modular.tomita_theorem}[`tomita_theorem`].
 * `TakesakiKMS.lean`: the modular algebra, the modular automorphism group, the KMS function and
   Takesaki's theorem,
-  {apiDocs Physicslib4.Modular.isKMSState_modularAutomorphism}[`isKMSState_modularAutomorphism`].
+  {apiDocs Hilbert6.Modular.isKMSState_modularAutomorphism}[`isKMSState_modularAutomorphism`].
 
-The vector state is in `Physicslib4/GNS/VectorState.lean`,
-{apiDocs Physicslib4.GNS.vectorState}[`vectorState`].
+The vector state is in `Hilbert6/GNS/VectorState.lean`,
+{apiDocs Hilbert6.GNS.vectorState}[`vectorState`].
 
-The general results on unbounded operators are in four files of `Physicslib4/Spectral/Unbounded/`:
+The general results on unbounded operators are in four files of `Hilbert6/Spectral/Unbounded/`:
 
 * `Composition.lean`: the composition law and core property of the functional calculus,
-  {apiDocs Physicslib4.Spectral.Unbounded.pmapIntegral_comp}[`pmapIntegral_comp`].
+  {apiDocs Hilbert6.Spectral.Unbounded.pmapIntegral_comp}[`pmapIntegral_comp`].
 * `Polar.lean`: products of operators, von Neumann's theorem, the absolute value, polar
   decomposition, inverses and square roots, and conjugation by an antiunitary,
-  {apiDocs Physicslib4.Spectral.Unbounded.polar_decomposition}[`polar_decomposition`].
+  {apiDocs Hilbert6.Spectral.Unbounded.polar_decomposition}[`polar_decomposition`].
 * `Commuting.lean`: unitaries commuting with an unbounded operator and the bounded approximants
   of a closed operator,
-  {apiDocs Physicslib4.Spectral.Unbounded.approximant_operator}[`approximant_operator`].
+  {apiDocs Hilbert6.Spectral.Unbounded.approximant_operator}[`approximant_operator`].
 * `Eigenvector.lean`: the moments of the spectral measure and the action of bounded functions of a
   self-adjoint operator on its eigenvectors,
-  {apiDocs Physicslib4.Spectral.Unbounded.spectralMeasure_integral_apply_of_eigenvector}[`spectralMeasure_integral_apply_of_eigenvector`].
+  {apiDocs Hilbert6.Spectral.Unbounded.spectralMeasure_integral_apply_of_eigenvector}[`spectralMeasure_integral_apply_of_eigenvector`].
 
-The strip formula and Fourier uniqueness are in `Physicslib4/Analysis/StripFormula.lean`,
-{apiDocs Physicslib4.strip_formula}[`strip_formula`].
+The strip formula and Fourier uniqueness are in `Hilbert6/Analysis/StripFormula.lean`,
+{apiDocs Hilbert6.strip_formula}[`strip_formula`].
 
 The blueprint section is
 [Section 10.10](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:tomita-takesaki),

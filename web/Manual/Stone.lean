@@ -1,9 +1,9 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.AQFT.PositiveEnergy
-import Physicslib4.Analysis.StrongContinuity
-import Physicslib4.GNS.UnitaryRepresentation
-import Physicslib4.AQFT.HaagKastler.VacuumState
+import Hilbert6.AQFT.PositiveEnergy
+import Hilbert6.Analysis.StrongContinuity
+import Hilbert6.GNS.UnitaryRepresentation
+import Hilbert6.AQFT.HaagKastler.VacuumState
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
@@ -11,9 +11,9 @@ open Book
 -- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
 -- written relative to the library's namespaces, resolve and link. `spectralMeasure` and
 -- `functionalCalculus` exist in both namespaces; the unbounded ones are meant here.
-open Physicslib4 Physicslib4.Spectral.Unbounded Physicslib4.Spectral.Stone Physicslib4.AQFT
-open Physicslib4.AQFT.HaagKastler
-open Physicslib4.Spectral hiding spectralMeasure functionalCalculus
+open Hilbert6 Hilbert6.Spectral.Unbounded Hilbert6.Spectral.Stone Hilbert6.AQFT
+open Hilbert6.AQFT.HaagKastler
+open Hilbert6.Spectral hiding spectralMeasure functionalCalculus
 
 #doc (Manual) "Stone's theorem" =>
 
@@ -93,8 +93,8 @@ weak-continuity lemma, with no `sorry`. The four standard results the blueprint 
 proof (the Bochner integral, smooth approximate identities, two facts about derivatives, and the
 calculus of convolutions) are Mathlib theorems. Where a result assumes anything of $`H`, it is
 completeness; no result assumes $`H` separable or nonzero. The declarations of Section 10.4 are
-in the namespace `Physicslib4.Spectral.Stone`, positive energy is in `Physicslib4.AQFT`, and the
-weak-continuity lemma is in `Physicslib4`.
+in the namespace `Hilbert6.Spectral.Stone`, positive energy is in `Hilbert6.AQFT`, and the
+weak-continuity lemma is in `Hilbert6`.
 
 # Design
 %%%
@@ -129,7 +129,7 @@ $`(it)^{-1}(U(t)\psi - \psi)`, converges along the punctured filter `𝓝[≠] 0
 Mathlib's `limUnder` along that filter. The domain is exactly the set where the orbit has a
 derivative at $`t = 0`, as in the blueprint
 ([def:hall-10.13](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.13)).
-{apiDocs Physicslib4.Spectral.Stone.exists_generator_eq_iff}[`exists_generator_eq_iff`] handles
+{apiDocs Hilbert6.Spectral.Stone.exists_generator_eq_iff}[`exists_generator_eq_iff`] handles
 membership and value together: $`\psi` is in the domain with $`A\psi = \chi` exactly when the
 quotient tends to $`\chi`. At $`t = 0` the quotient is $`0`, by Lean's convention $`0^{-1} = 0`,
 and the punctured limit never uses this value.
@@ -138,7 +138,7 @@ The definition assumes nothing about `U`: no group law, no continuity, and no de
 domain, which is a theorem rather than part of the type. Because the library's symmetry predicate
 does not presuppose a dense domain, the symmetry identity is itself the statement that the
 generator is symmetric,
-{apiDocs Physicslib4.Spectral.Stone.isSymmetric_generator}[`isSymmetric_generator`], for every
+{apiDocs Hilbert6.Spectral.Stone.isSymmetric_generator}[`isSymmetric_generator`], for every
 one-parameter unitary group (the remark in
 [lmm:generator-symmetry-identity](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-symmetry-identity)).
 
@@ -148,7 +148,7 @@ For unbounded $`A` the series $`\sum_n (itA)^n/n!` is meaningless, since $`A^n\p
 defined. The library defines $`e^{itA}` as `expUnitary hA t`, the bounded integral of
 $`f_t(\lambda) = e^{it\lambda}` (`expFun t`) against the spectral measure of $`A`, which is
 unitary and is made an element of `H ≃ₗᵢ[ℂ] H`.
-{apiDocs Physicslib4.Spectral.Stone.functionalCalculus_expFun}[`functionalCalculus_expFun`]
+{apiDocs Hilbert6.Spectral.Stone.functionalCalculus_expFun}[`functionalCalculus_expFun`]
 identifies it with the functional calculus $`f_t(A)`, so the results on bounded integrals against a
 projection-valued measure apply. The spectral measure and the functional calculus are described in
 the {ref "unbounded"}[unbounded chapter]. The bounded case uses Mathlib's series `NormedSpace.exp`
@@ -178,7 +178,7 @@ For a real weight $`f`, the average $`B_f\psi = \int f(\tau)\,U(\tau)\psi \, d\t
 `average U f ψ`, a Bochner integral. The density proof
 ([lmm:hall-10.18](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.18))
 writes it as a convolution, $`U(t)B_f\psi = (f \star g_\psi)(-t)` with $`g_\psi(x) = U(-x)\psi`
-({apiDocs Physicslib4.Spectral.Stone.average_eq_convolution}[`average_eq_convolution`]), so that
+({apiDocs Hilbert6.Spectral.Stone.average_eq_convolution}[`average_eq_convolution`]), so that
 Mathlib's convolution calculus does the analysis.
 `HasCompactSupport.hasDerivAt_convolution_left` differentiates $`t \mapsto U(t)B_f\psi` for a
 compactly supported $`C^1` weight, which puts $`B_f\psi` in the domain of the generator, and
@@ -189,7 +189,7 @@ Gårding's smoothing argument.
 
 ## The proof of the theorem, and uniqueness
 
-The proof of {apiDocs Physicslib4.Spectral.Stone.stone}[`stone`] follows the blueprint
+The proof of {apiDocs Hilbert6.Spectral.Stone.stone}[`stone`] follows the blueprint
 ([thrm:hall-10.15](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.15)).
 The generator $`A` is essentially self-adjoint, because the deficiency subspaces
 $`\mathrm{Ker}(A^* \mp i\mathbf{1})` are trivial: for $`\psi` in one of them and
@@ -202,14 +202,14 @@ $`e^{itA^{(\mathrm{cl})}}` is $`A^{(\mathrm{cl})}`, so $`A = A^{(\mathrm{cl})}`.
 Uniqueness needs no further argument. The generator is a function of `U`, so if
 $`U(t) = e^{itB}` for a self-adjoint $`B`, the generator of $`U` is the generator of $`e^{itB}`,
 which is $`B`. The same argument gives
-{apiDocs Physicslib4.AQFT.generator_eq_of_eq_expUnitary}[`generator_eq_of_eq_expUnitary`], for
+{apiDocs Hilbert6.AQFT.generator_eq_of_eq_expUnitary}[`generator_eq_of_eq_expUnitary`], for
 any family $`V` with $`V(t) = e^{itB}`. For bounded operators,
-{apiDocs Physicslib4.AQFT.exp_generator_unique}[`exp_generator_unique`] proves uniqueness directly,
+{apiDocs Hilbert6.AQFT.exp_generator_unique}[`exp_generator_unique`] proves uniqueness directly,
 by differentiating $`\exp(itP)` at $`t = 0`.
 
 ## Positive energy is a property of the generator
 
-{apiDocs Physicslib4.AQFT.IsPositiveEnergy}[`IsPositiveEnergy V`] is a structure with three
+{apiDocs Hilbert6.AQFT.IsPositiveEnergy}[`IsPositiveEnergy V`] is a structure with three
 fields: the group law, strong continuity, and positivity of `generator V`, which is the library's
 `Spectral.Unbounded.IsPositive` (symmetric, with $`\mathrm{Re}\langle \psi, A\psi \rangle \ge 0`
 on the domain). The condition is imposed on the generator itself, which may be unbounded, and
@@ -223,7 +223,7 @@ $`(-,+,+,+)` and $`P^0 = \hat H`; this is the inverse of the Schrödinger evolut
 $`\hat H` and positive energy says $`\hat H \ge 0`.
 
 The definition refers to no spacetime. A vacuum state
-({apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}[`HaagKastlerNet.IsVacuumState`])
+({apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}[`HaagKastlerNet.IsVacuumState`])
 asks for positive energy of the unitary group of every future-timelike translation subgroup, and a
 ground state for a flow, in Minkowski or curved spacetime, asks it of the unitary group
 implementing the flow; see the {ref "haag-kastler"}[Haag–Kastler chapter] and the
@@ -233,16 +233,16 @@ implementing the flow; see the {ref "haag-kastler"}[Haag–Kastler chapter] and 
 
 Stone's theorem assumes strong continuity, and for a one-parameter unitary group continuity at
 $`t = 0` suffices
-({apiDocs Physicslib4.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero}[`isStronglyContinuous_iff_tendsto_zero`]).
+({apiDocs Hilbert6.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero}[`isStronglyContinuous_iff_tendsto_zero`]).
 In the applications the unitaries come from the GNS construction of an invariant state $`\omega`,
 where what can be computed are the matrix elements
 $`\langle \pi(a)\Omega, U(g)\pi(b)\Omega \rangle = \omega(a^*\gamma_g(b))` on the dense set of
 vectors $`\pi(a)\Omega`.
-{apiDocs Physicslib4.strongContinuous_of_weak}[`strongContinuous_of_weak`] upgrades their
+{apiDocs Hilbert6.strongContinuous_of_weak}[`strongContinuous_of_weak`] upgrades their
 continuity to strong continuity. It is stated for any family of unitaries indexed by a topological
 space, with no group law and no completeness of $`H`, and taking the dense set to be all of $`H`
 shows that a weakly continuous family of unitaries is strongly continuous. The GNS theorems
-{apiDocs Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous}[`exists_gns_unitary_of_invariant_strongContinuous`]
+{apiDocs Hilbert6.GNS.exists_gns_unitary_of_invariant_strongContinuous}[`exists_gns_unitary_of_invariant_strongContinuous`]
 and its bundled form use it
 ([thrm:invariant-state-gns-unitary-general](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:invariant-state-gns-unitary-general);
 see also the {ref "gns-design"}[GNS chapter]).
@@ -264,7 +264,7 @@ four standard results that the blueprint imports
 ([thrm:bochner-integral][st-boch], [lmm:smooth-approximate-identity][st-sai],
 [prpstn:calculus-facts][st-calc], [lmm:convolution-facts][st-conv]) are Mathlib theorems, named
 in the blueprint. For the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Physicslib4/Spectral/Stone/Theorem.html)
+[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/Spectral/Stone/Theorem.html)
 and the files listed at the end of the chapter.
 
 [st-boch]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bochner-integral
@@ -281,31 +281,31 @@ Blueprint: [def:hall-10.11][st-1011], [lmm:strongly-continuous-iff-at-zero][st-s
 [lmm:generator-conj][st-gconj], [lmm:orbit-hasDerivAt][st-orb],
 [lmm:generator-commutes][st-comm], [lmm:hall-10.17][st-1017].
 
-{docstring Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup}
+{docstring Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup}
 
-{docstring Physicslib4.Spectral.Stone.IsStronglyContinuous}
+{docstring Hilbert6.Spectral.Stone.IsStronglyContinuous}
 
-{docstring Physicslib4.Spectral.Stone.generator}
+{docstring Hilbert6.Spectral.Stone.generator}
 
 Continuity at $`t = 0` suffices
-({apiDocs Physicslib4.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero}[`isStronglyContinuous_iff_tendsto_zero`]),
+({apiDocs Hilbert6.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero}[`isStronglyContinuous_iff_tendsto_zero`]),
 and $`U(t)^* = U(-t)`
-({apiDocs Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.adjoint_eq}[`IsOneParameterUnitaryGroup.adjoint_eq`]).
+({apiDocs Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup.adjoint_eq}[`IsOneParameterUnitaryGroup.adjoint_eq`]).
 The domain and value of the generator are characterised by the limit in
-{apiDocs Physicslib4.Spectral.Stone.exists_generator_eq_iff}[`exists_generator_eq_iff`], and the
+{apiDocs Hilbert6.Spectral.Stone.exists_generator_eq_iff}[`exists_generator_eq_iff`], and the
 symmetry identity is
-{apiDocs Physicslib4.Spectral.Stone.isSymmetric_generator}[`isSymmetric_generator`]. For
+{apiDocs Hilbert6.Spectral.Stone.isSymmetric_generator}[`isSymmetric_generator`]. For
 $`\psi \in \mathrm{Dom}(A)`, the orbit $`t \mapsto U(t)\psi` stays in the domain and has derivative
 $`iAU(t)\psi = iU(t)A\psi`
-({apiDocs Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator}[`IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator`]).
+({apiDocs Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator}[`IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator`]).
 The trivial group has generator $`0`
-({apiDocs Physicslib4.Spectral.Stone.generator_refl}[`generator_refl`]); the conjugated group
+({apiDocs Hilbert6.Spectral.Stone.generator_refl}[`generator_refl`]); the conjugated group
 $`WU(t)W^{-1}` is a strongly continuous one-parameter unitary group
-({apiDocs Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.conj}[`IsOneParameterUnitaryGroup.conj`],
-{apiDocs Physicslib4.Spectral.Stone.IsStronglyContinuous.conj}[`IsStronglyContinuous.conj`]) with
+({apiDocs Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup.conj}[`IsOneParameterUnitaryGroup.conj`],
+{apiDocs Hilbert6.Spectral.Stone.IsStronglyContinuous.conj}[`IsStronglyContinuous.conj`]) with
 generator $`WAW^{-1}` on $`W\,\mathrm{Dom}(A)`
-({apiDocs Physicslib4.Spectral.Stone.mem_generator_conj_domain_iff}[`mem_generator_conj_domain_iff`],
-{apiDocs Physicslib4.Spectral.Stone.generator_conj_apply}[`generator_conj_apply`]).
+({apiDocs Hilbert6.Spectral.Stone.mem_generator_conj_domain_iff}[`mem_generator_conj_domain_iff`],
+{apiDocs Hilbert6.Spectral.Stone.generator_conj_apply}[`generator_conj_apply`]).
 
 [st-1011]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.11
 [st-sc0]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:strongly-continuous-iff-at-zero
@@ -327,18 +327,18 @@ Blueprint: [lmm:exp-bounded-unitary-group][st-ebg], [lmm:exp-bounded-hasDerivAt]
 
 For bounded self-adjoint $`P`, $`\exp(itP)` is Mathlib's `NormedSpace.exp` of $`(t\,i)P`. It is a
 one-parameter unitary group
-({apiDocs Physicslib4.Spectral.Stone.exists_isOneParameterUnitaryGroup_exp}[`exists_isOneParameterUnitaryGroup_exp`]),
+({apiDocs Hilbert6.Spectral.Stone.exists_isOneParameterUnitaryGroup_exp}[`exists_isOneParameterUnitaryGroup_exp`]),
 strongly continuous
-({apiDocs Physicslib4.Spectral.Stone.isStronglyContinuous_of_eq_exp}[`isStronglyContinuous_of_eq_exp`]),
+({apiDocs Hilbert6.Spectral.Stone.isStronglyContinuous_of_eq_exp}[`isStronglyContinuous_of_eq_exp`]),
 and its generator is $`P` on all of $`H`:
 
 ```lean (name := checkGenExp)
-open Physicslib4 Spectral Stone in
+open Hilbert6 Spectral Stone in
 #check generator_eq_of_eq_exp
 ```
 
 ```leanOutput checkGenExp
-Physicslib4.Spectral.Stone.generator_eq_of_eq_exp.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.Stone.generator_eq_of_eq_exp.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {P : H →L[ℂ] H} {V : ℝ → H ≃ₗᵢ[ℂ] H}
   (hV : ∀ (t : ℝ) (x : H), (V t) x = (NormedSpace.exp ((↑t * Complex.I) • P)) x) : generator V = (↑P).toPMap ⊤
 ```
@@ -357,25 +357,25 @@ Blueprint: [lmm:exp-unitary][st-eu], [def:exp-unitary-group][st-eug],
 [lmm:functional-calculus-sub-bounded][st-fcs], [lmm:exp-quotient-norm-identity][st-eqn],
 [lmm:exp-derivative-at-zero][st-edz], [prpstn:hall-10.14][st-1014].
 
-{docstring Physicslib4.Spectral.Stone.expUnitary}
+{docstring Hilbert6.Spectral.Stone.expUnitary}
 
 The group law, strong continuity and the generator are one statement, the blueprint's
 Proposition 10.14:
 
 ```lean (name := checkGenExpUnitary)
-open Physicslib4 Spectral Stone in
+open Hilbert6 Spectral Stone in
 #check generator_expUnitary
 ```
 
 ```leanOutput checkGenExpUnitary
-Physicslib4.Spectral.Stone.generator_expUnitary.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.Stone.generator_expUnitary.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
   IsOneParameterUnitaryGroup (expUnitary hA) ∧ IsStronglyContinuous (expUnitary hA) ∧ generator (expUnitary hA) = A
 ```
 
 The last conjunct is an equality of partial maps, so $`\mathrm{Dom}(A)` is exactly the set of
 $`\psi` for which the difference quotient converges. The derivative of $`e^{itA}\psi` at $`0` is
-{apiDocs Physicslib4.Spectral.Stone.tendsto_generatorQuotient_expUnitary}[`tendsto_generatorQuotient_expUnitary`].
+{apiDocs Hilbert6.Spectral.Stone.tendsto_generatorQuotient_expUnitary}[`tendsto_generatorQuotient_expUnitary`].
 
 [st-eu]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-unitary
 [st-eug]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:exp-unitary-group
@@ -391,25 +391,25 @@ $`\psi` for which the difference quotient converges. The derivative of $`e^{itA}
 Blueprint: [lmm:averaging-translate][st-avt], [lmm:averaging-in-generator-domain][st-avd],
 [lmm:averaging-approximates][st-ava], [lmm:hall-10.18][st-1018].
 
-{docstring Physicslib4.Spectral.Stone.average}
+{docstring Hilbert6.Spectral.Stone.average}
 
 ```lean (name := checkDense)
-open Physicslib4 Spectral Stone in
+open Hilbert6 Spectral Stone in
 #check hasDenseDomain_generator
 ```
 
 ```leanOutput checkDense
-Physicslib4.Spectral.Stone.hasDenseDomain_generator.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.Stone.hasDenseDomain_generator.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {U : ℝ → H ≃ₗᵢ[ℂ] H} (hU : IsOneParameterUnitaryGroup U) (hc : IsStronglyContinuous U) :
   HasDenseDomain (generator U)
 ```
 
 The two steps are
-{apiDocs Physicslib4.Spectral.Stone.average_mem_generator_domain}[`average_mem_generator_domain`]
+{apiDocs Hilbert6.Spectral.Stone.average_mem_generator_domain}[`average_mem_generator_domain`]
 (an average against a compactly supported $`C^1` weight is in the domain) and
-{apiDocs Physicslib4.Spectral.Stone.tendsto_average_bump}[`tendsto_average_bump`] (averages
+{apiDocs Hilbert6.Spectral.Stone.tendsto_average_bump}[`tendsto_average_bump`] (averages
 against shrinking bumps tend to $`\psi`). Both assume strong continuity; the convolution formula
-{apiDocs Physicslib4.Spectral.Stone.average_eq_convolution}[`average_eq_convolution`] needs only
+{apiDocs Hilbert6.Spectral.Stone.average_eq_convolution}[`average_eq_convolution`] needs only
 the group law.
 
 [st-avt]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-translate
@@ -426,12 +426,12 @@ Blueprint: [lmm:linear-ode-scalar][st-ode], [lmm:orbit-inner-ode][st-oio],
 [lmm:agree-on-dense-subspace][st-ads], [thrm:hall-10.15][st-1015].
 
 ```lean (name := checkStone)
-open Physicslib4 Spectral Stone in
+open Hilbert6 Spectral Stone in
 #check stone
 ```
 
 ```leanOutput checkStone
-Physicslib4.Spectral.Stone.stone.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+Hilbert6.Spectral.Stone.stone.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   {U : ℝ → H ≃ₗᵢ[ℂ] H} (hU : IsOneParameterUnitaryGroup U) (hc : IsStronglyContinuous U) :
   ∃ (hA : IsSelfAdjoint (generator U)),
     HasDenseDomain (generator U) ∧
@@ -441,17 +441,17 @@ Physicslib4.Spectral.Stone.stone.{u_1} {H : Type u_1} [NormedAddCommGroup H] [In
 
 The generator is self-adjoint and densely defined, $`U(t) = e^{itA}` for every $`t`, and every
 self-adjoint $`B` with $`U(t) = e^{itB}` is the generator. The steps of the proof are
-{apiDocs Physicslib4.Spectral.Stone.ker_adjoint_generator_subSmul_eq_bot}[`ker_adjoint_generator_subSmul_eq_bot`]
+{apiDocs Hilbert6.Spectral.Stone.ker_adjoint_generator_subSmul_eq_bot}[`ker_adjoint_generator_subSmul_eq_bot`]
 (trivial deficiency subspaces),
-{apiDocs Physicslib4.Spectral.Stone.isEssentiallySelfAdjoint_generator}[`isEssentiallySelfAdjoint_generator`]
-and {apiDocs Physicslib4.Spectral.Stone.orbit_eq_expUnitary_closure}[`orbit_eq_expUnitary_closure`]
+{apiDocs Hilbert6.Spectral.Stone.isEssentiallySelfAdjoint_generator}[`isEssentiallySelfAdjoint_generator`]
+and {apiDocs Hilbert6.Spectral.Stone.orbit_eq_expUnitary_closure}[`orbit_eq_expUnitary_closure`]
 (the orbits of $`U` and $`e^{itA^{(\mathrm{cl})}}` agree on $`\mathrm{Dom}(A)`).
 
 The self-adjointness proof `hA` is the first component of the existential, and the other
 conjuncts mention it. A proof that uses the theorem takes the components apart with `obtain`:
 
 ```lean
-open Physicslib4 Spectral Stone in
+open Hilbert6 Spectral Stone in
 example {H : Type*} [NormedAddCommGroup H]
     [InnerProductSpace ℂ H] [CompleteSpace H]
     {U : ℝ → (H ≃ₗᵢ[ℂ] H)}
@@ -482,31 +482,31 @@ Blueprint: [def:positive-energy][st-pe], [lmm:positive-energy-const][st-pec],
 [lmm:positive-energy-exp-bounded][st-peb], [thrm:positive-energy-iff-exp][st-pei],
 [thrm:positive-energy-api][st-pea].
 
-{docstring Physicslib4.AQFT.IsPositiveEnergy}
+{docstring Hilbert6.AQFT.IsPositiveEnergy}
 
 The exponential form:
 
 ```lean (name := checkPosExp)
-open Physicslib4 AQFT in
+open Hilbert6 AQFT in
 #check isPositiveEnergy_iff_exists_exp
 ```
 
 ```leanOutput checkPosExp
-Physicslib4.AQFT.isPositiveEnergy_iff_exists_exp.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.AQFT.isPositiveEnergy_iff_exists_exp.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {V : ℝ → H ≃ₗᵢ[ℂ] H} :
   IsPositiveEnergy V ↔ ∃ A, ∃ (hA : IsSelfAdjoint A), IsPositive A ∧ ∀ (t : ℝ), V t = expUnitary hA t
 ```
 
 The operator $`A` is unique
-({apiDocs Physicslib4.AQFT.generator_eq_of_eq_expUnitary}[`generator_eq_of_eq_expUnitary`]).
+({apiDocs Hilbert6.AQFT.generator_eq_of_eq_expUnitary}[`generator_eq_of_eq_expUnitary`]).
 The trivial group has positive energy
-({apiDocs Physicslib4.AQFT.isPositiveEnergy_const_refl}[`isPositiveEnergy_const_refl`]), so does
+({apiDocs Hilbert6.AQFT.isPositiveEnergy_const_refl}[`isPositiveEnergy_const_refl`]), so does
 $`\exp(itP)` for a bounded positive $`P`
-({apiDocs Physicslib4.AQFT.isPositiveEnergy_exp}[`isPositiveEnergy_exp`]), and positive energy is
+({apiDocs Hilbert6.AQFT.isPositiveEnergy_exp}[`isPositiveEnergy_exp`]), and positive energy is
 preserved by unitary conjugation
-({apiDocs Physicslib4.AQFT.IsPositiveEnergy.conj}[`IsPositiveEnergy.conj`], with
-{apiDocs Physicslib4.Spectral.Unbounded.IsPositive.of_conj}[`IsPositive.of_conj`]).
-{apiDocs Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}[`IsPositiveEnergy.strongContinuous`]
+({apiDocs Hilbert6.AQFT.IsPositiveEnergy.conj}[`IsPositiveEnergy.conj`], with
+{apiDocs Hilbert6.Spectral.Unbounded.IsPositive.of_conj}[`IsPositive.of_conj`]).
+{apiDocs Hilbert6.AQFT.IsPositiveEnergy.strongContinuous}[`IsPositiveEnergy.strongContinuous`]
 unpacks strong continuity. The blueprint collects these six results in
 [thrm:positive-energy-api][st-pea].
 
@@ -525,20 +525,20 @@ unpacks strong continuity. The blueprint collects these six results in
 Blueprint: [lmm:weak-continuity-implies-strong][st-weak].
 
 ```lean (name := checkWeak)
-open Physicslib4 in
+open Hilbert6 in
 #check strongContinuous_of_weak
 ```
 
 ```leanOutput checkWeak
-Physicslib4.strongContinuous_of_weak.{u_1, u_2} {X : Type u_1} [TopologicalSpace X] {H : Type u_2}
-  [NormedAddCommGroup H] [InnerProductSpace ℂ H] (U : X → H ≃ₗᵢ[ℂ] H) {D : Set H} (hD : Dense D)
+Hilbert6.strongContinuous_of_weak.{u_1, u_2} {X : Type u_1} [TopologicalSpace X] {H : Type u_2} [NormedAddCommGroup H]
+  [InnerProductSpace ℂ H] (U : X → H ≃ₗᵢ[ℂ] H) {D : Set H} (hD : Dense D)
   (hweak : ∀ ξ ∈ D, ∀ η ∈ D, Continuous fun x => inner ℂ ξ ((U x) η)) (ψ : H) : Continuous fun x => (U x) ψ
 ```
 
 `inner ℂ ξ ((U x) η)` is $`\langle \xi, U(x)\eta \rangle`. The GNS theorems that use it are
-{apiDocs Physicslib4.GNS.exists_gns_unitary_of_invariant_strongContinuous}[`exists_gns_unitary_of_invariant_strongContinuous`]
+{apiDocs Hilbert6.GNS.exists_gns_unitary_of_invariant_strongContinuous}[`exists_gns_unitary_of_invariant_strongContinuous`]
 and
-{apiDocs Physicslib4.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous}[`exists_gns_unitaryRep_of_invariant_strongContinuous`].
+{apiDocs Hilbert6.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous}[`exists_gns_unitaryRep_of_invariant_strongContinuous`].
 
 [st-weak]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:weak-continuity-implies-strong
 
@@ -547,29 +547,29 @@ and
 tag := "stone-files"
 %%%
 
-Section 10.4 is formalised in `Physicslib4/Spectral/Stone/`, in five files, by topic. Each entry
+Section 10.4 is formalised in `Hilbert6/Spectral/Stone/`, in five files, by topic. Each entry
 links to the API documentation of a representative declaration, from which the rest of the file
 can be browsed.
 
 * `Basic.lean`: one-parameter unitary groups, strong continuity, the generator and its domain,
   the symmetry identity, orbits, the trivial group and conjugation, and the equation $`y' = cy`
-  ({apiDocs Physicslib4.Spectral.Stone.eq_mul_exp_of_hasDerivAt}[`eq_mul_exp_of_hasDerivAt`]),
-  {apiDocs Physicslib4.Spectral.Stone.generator}[`generator`].
+  ({apiDocs Hilbert6.Spectral.Stone.eq_mul_exp_of_hasDerivAt}[`eq_mul_exp_of_hasDerivAt`]),
+  {apiDocs Hilbert6.Spectral.Stone.generator}[`generator`].
 * `Bounded.lean`: the exponential series of a bounded self-adjoint operator and its generator,
-  {apiDocs Physicslib4.Spectral.Stone.generator_eq_of_eq_exp}[`generator_eq_of_eq_exp`].
+  {apiDocs Hilbert6.Spectral.Stone.generator_eq_of_eq_exp}[`generator_eq_of_eq_exp`].
 * `Exponential.lean`: the unitary group $`e^{itA}` of a self-adjoint operator and its generator,
-  {apiDocs Physicslib4.Spectral.Stone.generator_expUnitary}[`generator_expUnitary`].
+  {apiDocs Hilbert6.Spectral.Stone.generator_expUnitary}[`generator_expUnitary`].
 * `Density.lean`: averages of orbits and the density of the generator's domain,
-  {apiDocs Physicslib4.Spectral.Stone.hasDenseDomain_generator}[`hasDenseDomain_generator`].
+  {apiDocs Hilbert6.Spectral.Stone.hasDenseDomain_generator}[`hasDenseDomain_generator`].
 * `Theorem.lean`: essential self-adjointness of the generator and Stone's theorem,
-  {apiDocs Physicslib4.Spectral.Stone.stone}[`stone`].
+  {apiDocs Hilbert6.Spectral.Stone.stone}[`stone`].
 
 Two files outside the directory hold the results of Section 10.6 described here:
 
-* `Physicslib4/AQFT/PositiveEnergy.lean`: the positive-energy condition,
-  {apiDocs Physicslib4.AQFT.isPositiveEnergy_iff_exists_exp}[`isPositiveEnergy_iff_exists_exp`].
-* `Physicslib4/Analysis/StrongContinuity.lean`: weak continuity implies strong continuity,
-  {apiDocs Physicslib4.strongContinuous_of_weak}[`strongContinuous_of_weak`].
+* `Hilbert6/AQFT/PositiveEnergy.lean`: the positive-energy condition,
+  {apiDocs Hilbert6.AQFT.isPositiveEnergy_iff_exists_exp}[`isPositiveEnergy_iff_exists_exp`].
+* `Hilbert6/Analysis/StrongContinuity.lean`: weak continuity implies strong continuity,
+  {apiDocs Hilbert6.strongContinuous_of_weak}[`strongContinuous_of_weak`].
 
 The unbounded operators, the spectral measure and the functional calculus these files use are
 described in the {ref "unbounded-files"}[unbounded chapter]. The blueprint section is

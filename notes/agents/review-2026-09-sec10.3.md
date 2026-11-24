@@ -10,7 +10,7 @@ that are cheap to verify exhaustively. See "Coverage" under Method.
 
 - Blueprint: `blueprint/src/sections/sec10/unbounded-spectral-theorems.tex`
   (3170 lines / ~120 labelled items, all marked `\leanok`).
-- Lean: `Physicslib4/Spectral/Unbounded/{Basic,Spectrum,DirectSum,Integral,
+- Lean: `Hilbert6/Spectral/Unbounded/{Basic,Spectrum,DirectSum,Integral,
   Normal,AbstractCalculus,Cayley}.lean` (5644 lines total).
 - No `.lean`/`.tex` file was modified. No fuse/lean-kit MCP tools
   (`lean_hover_info`, `lean_verify`, `lean_minimal_hypotheses`) were available
@@ -20,9 +20,9 @@ that are cheap to verify exhaustively. See "Coverage" under Method.
 ## Method
 
 - Extracted all 188 distinct identifiers named in `\lean{...}` macros in the
-  section (118 `Physicslib4.*`, 70 root/Mathlib names) and checked each
+  section (118 `Hilbert6.*`, 70 root/Mathlib names) and checked each
   resolves to a real declaration: by exact grep against the 7 audited files
-  for the `Physicslib4.*` names, and against `.lake/packages/mathlib/Mathlib`
+  for the `Hilbert6.*` names, and against `.lake/packages/mathlib/Mathlib`
   (lenient, namespace-aware grep) for the rest.
 - Grepped the 7 files for `sorry`, `admit`, `native_decide`,
   `debug.skipKernelTC`, `implemented_by`, `nolint`, and the restriction
@@ -108,7 +108,7 @@ in λ, but `thrm:hall-10.23`'s proof needs it to be.**
 **M1. Lean's proof of `thrm:hall-10.23` takes a different, undocumented
 route that happens to sidestep H2 — but the deviation isn't recorded
 anywhere.**
-- Location: `Physicslib4/Spectral/Unbounded/Normal.lean:806-830`
+- Location: `Hilbert6/Spectral/Unbounded/Normal.lean:806-830`
   (`mvApply_eq_cfc`, `spectrum_mvApply`).
 - Problem: `spectrum_mvApply` (tagged "Blueprint reference: `thrm:hall-10.23`")
   is proved by rewriting `mvApply A p` as Mathlib's `cfc (mvEvalConj p) A`
@@ -135,7 +135,7 @@ anywhere.**
 **M2. `CompleteSpace (K n)` instance hypothesis on the internal-direct-sum
 lemmas, marked `Restriction:` but argued to cost nothing — marker used
 non-standardly.**
-- Location: `Physicslib4/Spectral/Unbounded/DirectSum.lean:535-632`, five
+- Location: `Hilbert6/Spectral/Unbounded/DirectSum.lean:535-632`, five
   theorems (`isEssentiallySelfAdjoint_of_isInternalDirectSumOperator`,
   `domain_closure_eq_internalDomain`, `domain_adjoint_eq_internalDomain`,
   `hasSum_closure_apply_of_isInternalDirectSumOperator`,
@@ -166,7 +166,7 @@ non-standardly.**
 ### Low
 
 **L1. `inclSpectrum`/`continuous_inclSpectrum` duplicate Mathlib.**
-- Location: `Physicslib4/Spectral/Unbounded/AbstractCalculus.lean:727-737`.
+- Location: `Hilbert6/Spectral/Unbounded/AbstractCalculus.lean:727-737`.
 - `inclSpectrum hsub := fun lam => ⟨(lam : ℂ), hsub lam.2⟩` is definitionally
   `Set.inclusion hsub`, and `continuous_inclSpectrum` restates Mathlib's
   `continuous_inclusion` (both confirmed present:
@@ -218,10 +218,10 @@ sec10.3 content, noted for completeness).**
   blueprint's standing "H is separable" convention), so this lemma
   re-introduces separability explicitly exactly where the conclusion needs
   it. This matches blueprint intent; not a mismatch.
-- **All 118 `Physicslib4.*` `\lean{}` links**: resolve to real declarations
+- **All 118 `Hilbert6.*` `\lean{}` links**: resolve to real declarations
   in the 7 audited files (checked via anchored grep for
   `theorem|lemma|def|abbrev|structure|instance|class <name>`).
-- **All 70 non-`Physicslib4` `\lean{}` links**: resolve in
+- **All 70 non-`Hilbert6` `\lean{}` links**: resolve in
   `.lake/packages/mathlib/Mathlib` (13 needed a second, namespace-aware pass
   after a naive grep first missed them — e.g. `Filter.Tendsto.cauchySeq` and
   `IsCompact.tendsto_subseq` are real Mathlib declarations reached via dot

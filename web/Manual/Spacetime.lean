@@ -1,32 +1,32 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.Spacetime.Causality
-import Physicslib4.Spacetime.CausalComplement
-import Physicslib4.Spacetime.LorentzianSpacetime
-import Physicslib4.Spacetime.LorentzOrthogonal
-import Physicslib4.Spacetime.LorentzCone
-import Physicslib4.Spacetime.MinkowskiDilation
-import Physicslib4.Spacetime.CrossMetricIsometry
-import Physicslib4.Spacetime.Minkowski
-import Physicslib4.Spacetime.MinkowskiDirected
-import Physicslib4.Spacetime.LorentzCausality
-import Physicslib4.Spacetime.IsometryTopology
-import Physicslib4.Spacetime.IsometryCausality
-import Physicslib4.Geometry.PseudoRiemannian.LeviCivita
-import Physicslib4.Geometry.PseudoRiemannian.Flat
+import Hilbert6.Spacetime.Causality
+import Hilbert6.Spacetime.CausalComplement
+import Hilbert6.Spacetime.LorentzianSpacetime
+import Hilbert6.Spacetime.LorentzOrthogonal
+import Hilbert6.Spacetime.LorentzCone
+import Hilbert6.Spacetime.MinkowskiDilation
+import Hilbert6.Spacetime.CrossMetricIsometry
+import Hilbert6.Spacetime.Minkowski
+import Hilbert6.Spacetime.MinkowskiDirected
+import Hilbert6.Spacetime.LorentzCausality
+import Hilbert6.Spacetime.IsometryTopology
+import Hilbert6.Spacetime.IsometryCausality
+import Hilbert6.Geometry.PseudoRiemannian.LeviCivita
+import Hilbert6.Geometry.PseudoRiemannian.Flat
 -- Imported only so that names in the docstrings shown below resolve and link.
 import Mathlib.Geometry.Manifold.VectorBundle.Riemannian
-import Physicslib4.AQFT.HaagKastlerCurved.Concrete
+import Hilbert6.AQFT.HaagKastlerCurved.Concrete
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 open Book
 -- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
 -- written relative to the library's namespaces, resolve and link.
-open Physicslib4 Physicslib4.Spacetime Physicslib4.Spacetime.LorentzianSpacetime
-open Physicslib4.Spacetime.Isometry
-open Physicslib4.Geometry Physicslib4.Geometry.PseudoRiemannianMetric
-open Physicslib4.Geometry.CovariantDerivative
+open Hilbert6 Hilbert6.Spacetime Hilbert6.Spacetime.LorentzianSpacetime
+open Hilbert6.Spacetime.Isometry
+open Hilbert6.Geometry Hilbert6.Geometry.PseudoRiemannianMetric
+open Hilbert6.Geometry.CovariantDerivative
 
 #doc (Manual) "Spacetime and geometry" =>
 
@@ -89,8 +89,8 @@ From these the library proves, among other things:
   fields; on Minkowski space it is the ordinary derivative, so the geodesics are the straight lines
   at constant velocity; isometries map geodesics to geodesics.
 
-The declarations are in the namespaces `Physicslib4`, `Physicslib4.Spacetime` and
-`Physicslib4.Geometry`, written below without the prefix `Physicslib4`.
+The declarations are in the namespaces `Hilbert6`, `Hilbert6.Spacetime` and
+`Hilbert6.Geometry`, written below without the prefix `Hilbert6`.
 
 # Design
 %%%
@@ -237,7 +237,7 @@ therefore stated for isometries, not for a metric-free notion of causal automorp
 ## The pseudo-Riemannian layer
 
 Trips are built from geodesics, and Mathlib has neither geodesics nor a Levi-Civita connection for
-an indefinite metric. The library supplies them in `Physicslib4/Geometry/PseudoRiemannian/`, for
+an indefinite metric. The library supplies them in `Hilbert6/Geometry/PseudoRiemannian/`, for
 any finite-dimensional smooth manifold and any signature; a spacetime metric enters through
 `Spacetime.toPseudoRiemannianMetric`, and the Lorentzian signature is never used in this layer.
 
@@ -266,7 +266,7 @@ subsection opens with the blueprint entries it covers. In the printed statements
 the set of points of the spacetime `M`, `p ≺[M, t] q` is causal precedence for the time orientation
 `t`, and `M.IsCausalTrip t p q` is Lean's dot notation for `Spacetime.IsCausalTrip M t p q`. For
 the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Physicslib4/Spacetime/Causality.html)
+[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/Spacetime/Causality.html)
 and the files listed at the end of the chapter.
 
 ## Spacetimes and time orientations
@@ -278,18 +278,18 @@ The structure, with its fields. The manifold structure is in the bracketed field
 `chartedSpace`, `isManifold` and the like), which the library registers as instances, so that Lean
 finds them wherever `M : Spacetime` is in scope:
 
-{docstring Physicslib4.Spacetime}
+{docstring Hilbert6.Spacetime}
 
 The causal type of a tangent vector is the sign of $`g_x(v, v)`: `Spacetime.IsTimelike`,
 `Spacetime.IsNull` and `Spacetime.IsSpacelike`, exactly one of which holds
 (`isTimelike_or_isNull_or_isSpacelike`). A time orientation picks the future half of each cone:
 
-{docstring Physicslib4.Spacetime.TimeOrientation}
+{docstring Hilbert6.Spacetime.TimeOrientation}
 
-{docstring Physicslib4.Spacetime.IsFuturePointing}
+{docstring Hilbert6.Spacetime.IsFuturePointing}
 
 The future-pointing vectors at a point form a convex cone, null boundary included
-({apiDocs Physicslib4.Spacetime.isFuturePointing_add_general}[`isFuturePointing_add_general`]);
+({apiDocs Hilbert6.Spacetime.isFuturePointing_add_general}[`isFuturePointing_add_general`]);
 the proof runs through the reverse Cauchy–Schwarz inequality for timelike vectors,
 $`g(v,v)\,g(w,w) \le g(v,w)^2`, in `LorentzCauchySchwarz.lean`.
 
@@ -303,18 +303,18 @@ $`g(v,v)\,g(w,w) \le g(v,w)^2`, in `LorentzCauchySchwarz.lean`.
 Blueprint: [def:paths][bp-paths], [def:curves][bp-curves], [def:endpoints][bp-end],
 [def:geodesic][bp-geo].
 
-{docstring Physicslib4.Spacetime.Path}
+{docstring Hilbert6.Spacetime.Path}
 
 `SmoothPath` extends `Path`; its own fields are smoothness and the non-vanishing velocity:
 
-{docstring Physicslib4.Spacetime.SmoothPath}
+{docstring Hilbert6.Spacetime.SmoothPath}
 
 The velocity $`\dot\mu(s)` is `SmoothPath.tangent`. The classes under reparametrisation are
 `Curve`, `SmoothCurve` and `OrientedSmoothCurve`; the causal type is well defined on smooth curves
 (`isTimelikeSmoothCurve_ofPath_iff`), and the orientation on oriented ones
 (`isFutureOrientedCurve_ofPath_iff`). The geodesic condition:
 
-{docstring Physicslib4.Spacetime.IsGeodesic}
+{docstring Hilbert6.Spacetime.IsGeodesic}
 
 [bp-paths]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:paths
 [bp-curves]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:curves
@@ -331,31 +331,31 @@ Blueprint: [def:trip][bp-trip], [def:causal-trip][bp-ctrip],
 The three relations, from the strict ones to the reflexive one. A single segment is
 `IsTripSegment` or `IsCausalTripSegment`; the relations chain them.
 
-{docstring Physicslib4.Spacetime.ChronologicallyPrecedes}
+{docstring Hilbert6.Spacetime.ChronologicallyPrecedes}
 
-{docstring Physicslib4.Spacetime.IsCausalTrip}
+{docstring Hilbert6.Spacetime.IsCausalTrip}
 
-{docstring Physicslib4.Spacetime.CausallyPrecedes}
+{docstring Hilbert6.Spacetime.CausallyPrecedes}
 
 Reflexivity is the chain of no segments, and transitivity is concatenation of chains:
 
 ```lean (name := checkRefl)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check causallyPrecedes_refl
 ```
 
 ```leanOutput checkRefl
-Physicslib4.Spacetime.causallyPrecedes_refl (M : Spacetime) (t : M.TimeOrientation) (p : M.Carrier) : p ≺[M, t] p
+Hilbert6.Spacetime.causallyPrecedes_refl (M : Spacetime) (t : M.TimeOrientation) (p : M.Carrier) : p ≺[M, t] p
 ```
 
 ```lean (name := checkTrans)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check causallyPrecedes_trans
 ```
 
 ```leanOutput checkTrans
-Physicslib4.Spacetime.causallyPrecedes_trans (M : Spacetime) (t : M.TimeOrientation) {p q r : M.Carrier}
-  (h₁ : p ≺[M, t] q) (h₂ : q ≺[M, t] r) : p ≺[M, t] r
+Hilbert6.Spacetime.causallyPrecedes_trans (M : Spacetime) (t : M.TimeOrientation) {p q r : M.Carrier} (h₁ : p ≺[M, t] q)
+  (h₂ : q ≺[M, t] r) : p ≺[M, t] r
 ```
 
 The reflexive relation is the strict one plus equality. `chronologicallyPrecedes_trans` and
@@ -363,40 +363,40 @@ The reflexive relation is the strict one plus equality. `chronologicallyPrecedes
 `causallyPrecedes_of_chronologicallyPrecedes` says that $`p \ll q` implies $`p \prec q`.
 
 ```lean (name := checkEqOr)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check causallyPrecedes_iff_eq_or_isCausalTrip
 ```
 
 ```leanOutput checkEqOr
-Physicslib4.Spacetime.causallyPrecedes_iff_eq_or_isCausalTrip (M : Spacetime) (t : M.TimeOrientation)
-  {p q : M.Carrier} : (p ≺[M, t] q) ↔ p = q ∨ M.IsCausalTrip t p q
+Hilbert6.Spacetime.causallyPrecedes_iff_eq_or_isCausalTrip (M : Spacetime) (t : M.TimeOrientation) {p q : M.Carrier} :
+  (p ≺[M, t] q) ↔ p = q ∨ M.IsCausalTrip t p q
 ```
 
 The causality condition forbids closed causal curves, stated with the strict relation:
 
-{docstring Physicslib4.Spacetime.NoClosedCausalCurve}
+{docstring Hilbert6.Spacetime.NoClosedCausalCurve}
 
 Under it, causal trips are asymmetric, since two opposite trips concatenate to a closed one, and
 $`\prec` is antisymmetric, hence a partial order; `chronologicallyPrecedes_irrefl` gives
 $`\lnot(p \ll p)`.
 
 ```lean (name := checkAsymm)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check isCausalTrip_asymm
 ```
 
 ```leanOutput checkAsymm
-Physicslib4.Spacetime.isCausalTrip_asymm (M : Spacetime) (t : M.TimeOrientation) (hc : M.NoClosedCausalCurve t)
+Hilbert6.Spacetime.isCausalTrip_asymm (M : Spacetime) (t : M.TimeOrientation) (hc : M.NoClosedCausalCurve t)
   {p q : M.Carrier} (hpq : M.IsCausalTrip t p q) : ¬M.IsCausalTrip t q p
 ```
 
 ```lean (name := checkAntisymm)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check causallyPrecedes_antisymm
 ```
 
 ```leanOutput checkAntisymm
-Physicslib4.Spacetime.causallyPrecedes_antisymm (M : Spacetime) (t : M.TimeOrientation) (hc : M.NoClosedCausalCurve t)
+Hilbert6.Spacetime.causallyPrecedes_antisymm (M : Spacetime) (t : M.TimeOrientation) (hc : M.NoClosedCausalCurve t)
   {p q : M.Carrier} (hpq : p ≺[M, t] q) (hqp : q ≺[M, t] p) : p = q
 ```
 
@@ -405,19 +405,19 @@ The futures and pasts are the sets `chronologicalFuture M t p` $`= I^+(p)`,
 `causalFutureSet` $`= J^+(S)`. Spacelike separation is the absence of causal precedence in both
 directions:
 
-{docstring Physicslib4.Spacetime.IsSpacelikeRelated}
+{docstring Hilbert6.Spacetime.IsSpacelikeRelated}
 
-{docstring Physicslib4.Spacetime.IsCompletelySpacelike}
+{docstring Hilbert6.Spacetime.IsCompletelySpacelike}
 
 Because $`\prec` is reflexive, no point is spacelike to itself:
 
 ```lean (name := checkIrrefl)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check isSpacelikeRelated_irrefl
 ```
 
 ```leanOutput checkIrrefl
-Physicslib4.Spacetime.isSpacelikeRelated_irrefl (M : Spacetime) (t : M.TimeOrientation) (p : M.Carrier) :
+Hilbert6.Spacetime.isSpacelikeRelated_irrefl (M : Spacetime) (t : M.TimeOrientation) (p : M.Carrier) :
   ¬M.IsSpacelikeRelated t p p
 ```
 
@@ -438,9 +438,9 @@ Blueprint: [def:causal-diamond][bp-cd], [lmm:causal-diamond-structure][bp-cds],
 
 The two kinds of diamond. The chronological ones are the regions of the net:
 
-{docstring Physicslib4.Spacetime.chronologicalDiamond}
+{docstring Hilbert6.Spacetime.chronologicalDiamond}
 
-{docstring Physicslib4.Spacetime.causalDiamond}
+{docstring Hilbert6.Spacetime.causalDiamond}
 
 The structure lemmas of the causal diamond all follow from transitivity of $`\prec`. Enlarging the
 vertices enlarges the diamond (`causalDiamond_subset_of`, proved step by step in the
@@ -448,24 +448,24 @@ vertices enlarges the diamond (`causalDiamond_subset_of`, proved step by step in
 a nonempty diamond has $`p \prec q`, and the diamond is causally convex:
 
 ```lean (name := checkNonempty)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check causallyPrecedes_of_causalDiamond_nonempty
 ```
 
 ```leanOutput checkNonempty
-Physicslib4.Spacetime.causallyPrecedes_of_causalDiamond_nonempty (M : Spacetime) (t : M.TimeOrientation)
-  {p q : M.Carrier} (h : (M.causalDiamond t p q).Nonempty) : p ≺[M, t] q
+Hilbert6.Spacetime.causallyPrecedes_of_causalDiamond_nonempty (M : Spacetime) (t : M.TimeOrientation) {p q : M.Carrier}
+  (h : (M.causalDiamond t p q).Nonempty) : p ≺[M, t] q
 ```
 
-{docstring Physicslib4.Spacetime.IsCausallyConvex}
+{docstring Hilbert6.Spacetime.IsCausallyConvex}
 
 ```lean (name := checkConvex)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check causalDiamond_isCausallyConvex
 ```
 
 ```leanOutput checkConvex
-Physicslib4.Spacetime.causalDiamond_isCausallyConvex (M : Spacetime) (t : M.TimeOrientation) (p q : M.Carrier) :
+Hilbert6.Spacetime.causalDiamond_isCausallyConvex (M : Spacetime) (t : M.TimeOrientation) (p q : M.Carrier) :
   M.IsCausallyConvex t (M.causalDiamond t p q)
 ```
 
@@ -474,23 +474,23 @@ The chronological diamond lies inside the causal one
 `alexandrovBasis M t`, and its members are exactly the sets `chronologicalDiamond M t p q`
 (`mem_alexandrovBasis_iff_eq_chronologicalDiamond`). The topology they generate:
 
-{docstring Physicslib4.Spacetime.alexandrovTopology}
+{docstring Hilbert6.Spacetime.alexandrovTopology}
 
 A Lorentzian spacetime bundles a spacetime, a time orientation and the Hausdorff condition:
 
-{docstring Physicslib4.Spacetime.LorentzianSpacetime}
+{docstring Hilbert6.Spacetime.LorentzianSpacetime}
 
 On it, the diamonds form a basis under the intersection hypothesis `hdir`; the covering
 condition is proved from the Hausdorff field (`sUnion_alexandrovBasis_eq_univ`), and needs at least
 two points:
 
 ```lean (name := checkBasis)
-open Physicslib4 Spacetime LorentzianSpacetime in
+open Hilbert6 Spacetime LorentzianSpacetime in
 #check isTopologicalBasis_alexandrovBasis
 ```
 
 ```leanOutput checkBasis
-Physicslib4.Spacetime.LorentzianSpacetime.isTopologicalBasis_alexandrovBasis (M : LorentzianSpacetime)
+Hilbert6.Spacetime.LorentzianSpacetime.isTopologicalBasis_alexandrovBasis (M : LorentzianSpacetime)
   [Nontrivial M.Carrier]
   (hdir :
     ∀ B₁ ∈ M.toSpacetime.alexandrovBasis M.timeOrientation,
@@ -516,11 +516,11 @@ Blueprint: [def:standard-minkowski-spacetime][bp-sms], [def:minkowski-spacetime]
 [lmm:minkowski-chronological-open][bp-mco], [thrm:minkowski-alexandrov-basis][bp-mab],
 [lmm:minkowski-diamonds-upward-directed][bp-mud].
 
-{docstring Physicslib4.StandardMinkowskiSpacetime}
+{docstring Hilbert6.StandardMinkowskiSpacetime}
 
-{docstring Physicslib4.standardMinkowskiTimeOrientation}
+{docstring Hilbert6.standardMinkowskiTimeOrientation}
 
-{docstring Physicslib4.MinkowskiSpacetime}
+{docstring Hilbert6.MinkowskiSpacetime}
 
 With the curve-based definitions, the chronological future of a point is the open forward light
 cone, $`I^+(p) = \{q : \eta(q-p, q-p) < 0,\ q^0 > p^0\}` (`minkowskiForwardCone`). The inclusion
@@ -528,12 +528,12 @@ $`\subseteq` integrates the velocity along each trip segment; the inclusion $`\s
 straight segment from $`p` to $`q`, a geodesic.
 
 ```lean (name := checkCone)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check chronologicalFuture_standardMinkowski
 ```
 
 ```leanOutput checkCone
-Physicslib4.chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
+Hilbert6.chronologicalFuture_standardMinkowski (p : SpacetimeModel) :
   StandardMinkowskiSpacetime.chronologicalFuture standardMinkowskiTimeOrientation p = minkowskiForwardCone p
 ```
 
@@ -541,29 +541,29 @@ From the cone description, the Alexandrov topology of standard Minkowski space i
 topology (`inferInstance` in the statement is the Euclidean topology of $`\mathbb{R}^4`):
 
 ```lean (name := checkEuclid)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check alexandrov_eq_euclidean_standardMinkowski
 ```
 
 ```leanOutput checkEuclid
-Physicslib4.alexandrov_eq_euclidean_standardMinkowski :
+Hilbert6.alexandrov_eq_euclidean_standardMinkowski :
   StandardMinkowskiSpacetime.alexandrovTopology standardMinkowskiTimeOrientation = inferInstance
 ```
 
 The diamonds of Minkowski space have the intersection property
 (`alexandrovBasis_exists_subset_inter_standardMinkowski`), so they form a basis of the Alexandrov
 topology without hypotheses
-({apiDocs Physicslib4.Spacetime.isTopologicalBasis_alexandrovBasis_standardMinkowski}[`isTopologicalBasis_alexandrovBasis_standardMinkowski`]).
+({apiDocs Hilbert6.Spacetime.isTopologicalBasis_alexandrovBasis_standardMinkowski}[`isTopologicalBasis_alexandrovBasis_standardMinkowski`]).
 They are also upward directed: any two lie in a common diamond, whose vertices are a common
 chronological past point and a common chronological future point of theirs.
 
 ```lean (name := checkDirected)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check alexandrovBasis_directed
 ```
 
 ```leanOutput checkDirected
-Physicslib4.Spacetime.alexandrovBasis_directed {B₁ B₂ : Set SpacetimeModel}
+Hilbert6.Spacetime.alexandrovBasis_directed {B₁ B₂ : Set SpacetimeModel}
   (h₁ : B₁ ∈ StandardMinkowskiSpacetime.alexandrovBasis standardMinkowskiTimeOrientation)
   (h₂ : B₂ ∈ StandardMinkowskiSpacetime.alexandrovBasis standardMinkowskiTimeOrientation) :
   ∃ B ∈ StandardMinkowskiSpacetime.alexandrovBasis standardMinkowskiTimeOrientation, B₁ ⊆ B ∧ B₂ ⊆ B
@@ -571,7 +571,7 @@ Physicslib4.Spacetime.alexandrovBasis_directed {B₁ B₂ : Set SpacetimeModel}
 
 The geodesics of standard Minkowski space are the paths with zero acceleration, so the straight
 lines traversed at constant velocity
-({apiDocs Physicslib4.standardMinkowski_isGeodesic_iff}[`standardMinkowski_isGeodesic_iff`]),
+({apiDocs Hilbert6.standardMinkowski_isGeodesic_iff}[`standardMinkowski_isGeodesic_iff`]),
 because its Levi-Civita connection is the ordinary derivative of the components
 (`standardMinkowski_leviCivita_apply`).
 
@@ -591,38 +591,38 @@ Blueprint: [def:spacelike-complement][bp-sc], [lmm:spacelike-complement-order][b
 The lattice theory is stated on a Lorentzian spacetime, with its own time orientation;
 `Spacetime.spacelikeComplement M t` is the same set for an explicit time orientation.
 
-{docstring Physicslib4.Spacetime.LorentzianSpacetime.spacelikeComplement}
+{docstring Hilbert6.Spacetime.LorentzianSpacetime.spacelikeComplement}
 
-{docstring Physicslib4.Spacetime.LorentzianSpacetime.causalClosure}
+{docstring Hilbert6.Spacetime.LorentzianSpacetime.causalClosure}
 
-{docstring Physicslib4.Spacetime.LorentzianSpacetime.IsCausallyComplete}
+{docstring Hilbert6.Spacetime.LorentzianSpacetime.IsCausallyComplete}
 
-{docstring Physicslib4.Spacetime.LorentzianSpacetime.CausallyCompleteRegion}
+{docstring Hilbert6.Spacetime.LorentzianSpacetime.CausallyCompleteRegion}
 
-{docstring Physicslib4.Spacetime.LorentzianSpacetime.causalComplement}
+{docstring Hilbert6.Spacetime.LorentzianSpacetime.causalComplement}
 
 The orthocomplement laws. Their proofs use that $`\mathbf{B} \cap \mathbf{B}^\perp = \emptyset`,
 which rests on the reflexivity of $`\prec`, and the set-level De Morgan law
 $`(\mathbf{B}_1 \cup \mathbf{B}_2)^\perp = \mathbf{B}_1^\perp \cap \mathbf{B}_2^\perp`:
 
 ```lean (name := checkInf)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check LorentzianSpacetime.inf_causalComplement
 ```
 
 ```leanOutput checkInf
-Physicslib4.Spacetime.LorentzianSpacetime.inf_causalComplement (M : LorentzianSpacetime)
-  (B : M.CausallyCompleteRegion) : B ⊓ M.causalComplement B = ⊥
+Hilbert6.Spacetime.LorentzianSpacetime.inf_causalComplement (M : LorentzianSpacetime) (B : M.CausallyCompleteRegion) :
+  B ⊓ M.causalComplement B = ⊥
 ```
 
 ```lean (name := checkSup)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check LorentzianSpacetime.sup_causalComplement
 ```
 
 ```leanOutput checkSup
-Physicslib4.Spacetime.LorentzianSpacetime.sup_causalComplement (M : LorentzianSpacetime)
-  (B : M.CausallyCompleteRegion) : B ⊔ M.causalComplement B = ⊤
+Hilbert6.Spacetime.LorentzianSpacetime.sup_causalComplement (M : LorentzianSpacetime) (B : M.CausallyCompleteRegion) :
+  B ⊔ M.causalComplement B = ⊤
 ```
 
 The De Morgan laws are `causalComplement_sup`, `causalComplement_inf` and their infinitary forms
@@ -647,29 +647,29 @@ Blueprint: [def:lorentz-transformation][bp-lt], [lmm:lorentz-closure][bp-lc],
 
 The three conditions on a linear automorphism of $`\mathbb{R}^4`:
 
-{docstring Physicslib4.IsLorentz}
+{docstring Hilbert6.IsLorentz}
 
-{docstring Physicslib4.IsProper}
+{docstring Hilbert6.IsProper}
 
-{docstring Physicslib4.IsOrthochronous}
+{docstring Hilbert6.IsOrthochronous}
 
 Their closure properties are `isLorentz_trans`, `isLorentz_symm` and the like. The group
 `AQFT.HaagKastler.InhomogeneousLorentzGroup` of pairs $`(\Lambda, a)` is shown in the
 [Haag–Kastler chapter](Haag-Kastler-axioms-in-Minkowski-spacetime/#physicslib4-reference-manual--The-Haag___Kastler-axioms-in-Minkowski-spacetime--Main-definitions-and-theorems--The-axioms).
 Its action on smooth paths:
 
-{docstring Physicslib4.lorentzPath}
+{docstring Hilbert6.lorentzPath}
 
 The pushforward of a causal trip segment is a causal trip segment, so chains go to chains, and the
 inverse gives the converse:
 
 ```lean (name := checkSmul)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check causallyPrecedes_smul_iff
 ```
 
 ```leanOutput checkSmul
-Physicslib4.causallyPrecedes_smul_iff (g : AQFT.HaagKastler.InhomogeneousLorentzGroup)
+Hilbert6.causallyPrecedes_smul_iff (g : AQFT.HaagKastler.InhomogeneousLorentzGroup)
   (p q : StandardMinkowskiSpacetime.Carrier) :
   (g • p ≺[StandardMinkowskiSpacetime, standardMinkowskiTimeOrientation] g • q) ↔
     p ≺[StandardMinkowskiSpacetime, standardMinkowskiTimeOrientation] q
@@ -684,30 +684,30 @@ spacelike separation are invariant (`isSpacelikeRelated_smul_iff`,
 
 For a general spacetime the symmetries are the isometries:
 
-{docstring Physicslib4.Spacetime.Isometry}
+{docstring Hilbert6.Spacetime.Isometry}
 
-{docstring Physicslib4.Spacetime.Isometry.identityComponent}
+{docstring Hilbert6.Spacetime.Isometry.identityComponent}
 
 An isometry preserves the causal type of vectors (`Isometry.isTimelike_mfderiv_iff` and its null
 and spacelike companions), and pushes smooth paths forward (`Isometry.pushforwardPath`). If it
 also preserves the future orientation, it maps trips to trips:
 
-{docstring Physicslib4.Spacetime.Isometry.PreservesFutureOrientation}
+{docstring Hilbert6.Spacetime.Isometry.PreservesFutureOrientation}
 
-{docstring Physicslib4.Spacetime.Isometry.orientedIdentityComponent}
+{docstring Hilbert6.Spacetime.Isometry.orientedIdentityComponent}
 
 Every member of the oriented identity component maps diamonds to diamonds, which is what makes the
 curved-spacetime Axiom 5 maps $`\mathfrak{U}(\mathbf{B}) \to \mathfrak{U}(\varphi(\mathbf{B}))`
 well defined. In the statement, `⇑g.toDiffeo '' B` is the image $`\varphi(\mathbf{B})`:
 
 ```lean (name := checkIsomBasis)
-open Physicslib4 Spacetime Isometry in
+open Hilbert6 Spacetime Isometry in
 #check
   alexandrovBasis_image_of_mem_orientedIdentityComponent
 ```
 
 ```leanOutput checkIsomBasis
-Physicslib4.Spacetime.Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent {M : Spacetime} (g : M.Isometry)
+Hilbert6.Spacetime.Isometry.alexandrovBasis_image_of_mem_orientedIdentityComponent {M : Spacetime} (g : M.Isometry)
   (t : M.TimeOrientation) (hg : g ∈ orientedIdentityComponent M t) {B : Set M.Carrier} (hB : B ∈ M.alexandrovBasis t) :
   ⇑g.toDiffeo '' B ∈ M.alexandrovBasis t
 ```
@@ -733,23 +733,23 @@ Blueprint: [def:pseudo-riemannian-metric][bp-prm], [def:metric-compatible-connec
 
 The metric, of any signature, on a manifold `M` modelled by `I`:
 
-{docstring Physicslib4.Geometry.PseudoRiemannianMetric}
+{docstring Hilbert6.Geometry.PseudoRiemannianMetric}
 
 Connections are Mathlib's `CovariantDerivative`, and the two conditions on them are:
 
-{docstring Physicslib4.Geometry.CovariantDerivative.IsMetricCompatibleWith}
+{docstring Hilbert6.Geometry.CovariantDerivative.IsMetricCompatibleWith}
 
-{docstring Physicslib4.Geometry.CovariantDerivative.IsLeviCivitaFor}
+{docstring Hilbert6.Geometry.CovariantDerivative.IsLeviCivitaFor}
 
 Existence is the Koszul construction, `koszulConnection`:
 
 ```lean (name := checkLCExists)
-open Physicslib4 Geometry in
+open Hilbert6 Geometry in
 #check PseudoRiemannianMetric.exists_isLeviCivitaFor
 ```
 
 ```leanOutput checkLCExists
-Physicslib4.Geometry.PseudoRiemannianMetric.exists_isLeviCivitaFor.{u_1, u_2, u_3} {E : Type u_1} [NormedAddCommGroup E]
+Hilbert6.Geometry.PseudoRiemannianMetric.exists_isLeviCivitaFor.{u_1, u_2, u_3} {E : Type u_1} [NormedAddCommGroup E]
   [NormedSpace ℝ E] {H : Type u_2} [TopologicalSpace H] {I : ModelWithCorners ℝ E H} {M : Type u_3} [TopologicalSpace M]
   [ChartedSpace H M] [IsManifold I (↑⊤) M] [FiniteDimensional ℝ E] (g : PseudoRiemannianMetric I M) :
   ∃ cov, IsLeviCivitaFor g cov
@@ -761,28 +761,28 @@ Lie brackets alone, and non-degeneracy. The hypothesis `hY` is differentiability
 (`IsManifold I (↑⊤) M` is Lean's rendering of a $`C^\infty` manifold.)
 
 ```lean (name := checkLCUnique)
-open Physicslib4 Geometry in
+open Hilbert6 Geometry in
 #check CovariantDerivative.IsLeviCivitaFor.uniqueness
 ```
 
 ```leanOutput checkLCUnique
-Physicslib4.Geometry.CovariantDerivative.IsLeviCivitaFor.uniqueness.{u_1, u_2, u_3} {E : Type u_1}
-  [NormedAddCommGroup E] [NormedSpace ℝ E] {H : Type u_2} [TopologicalSpace H] {I : ModelWithCorners ℝ E H}
-  {M : Type u_3} [TopologicalSpace M] [ChartedSpace H M] [IsManifold I (↑⊤) M] [FiniteDimensional ℝ E]
-  {g : PseudoRiemannianMetric I M} {cov cov' : CovariantDerivative I E (TangentSpace I)} (hcov : IsLeviCivitaFor g cov)
-  (hcov' : IsLeviCivitaFor g cov') {x : M} {Y : (x : M) → TangentSpace I x} (hY : (MDiffAt fun x => ⟨x, Y x⟩) x)
-  (X₀ : TangentSpace I x) : (↑cov Y x) X₀ = (↑cov' Y x) X₀
+Hilbert6.Geometry.CovariantDerivative.IsLeviCivitaFor.uniqueness.{u_1, u_2, u_3} {E : Type u_1} [NormedAddCommGroup E]
+  [NormedSpace ℝ E] {H : Type u_2} [TopologicalSpace H] {I : ModelWithCorners ℝ E H} {M : Type u_3} [TopologicalSpace M]
+  [ChartedSpace H M] [IsManifold I (↑⊤) M] [FiniteDimensional ℝ E] {g : PseudoRiemannianMetric I M}
+  {cov cov' : CovariantDerivative I E (TangentSpace I)} (hcov : IsLeviCivitaFor g cov) (hcov' : IsLeviCivitaFor g cov')
+  {x : M} {Y : (x : M) → TangentSpace I x} (hY : (MDiffAt fun x => ⟨x, Y x⟩) x) (X₀ : TangentSpace I x) :
+  (↑cov Y x) X₀ = (↑cov' Y x) X₀
 ```
 
 The connection the library uses, chosen from the existence theorem:
 
-{docstring Physicslib4.Geometry.PseudoRiemannianMetric.leviCivita}
+{docstring Hilbert6.Geometry.PseudoRiemannianMetric.leviCivita}
 
 On a vector space with a constant metric, such as standard Minkowski space, the ordinary
 directional derivative `Geometry.flatConnection` is a Levi-Civita connection
 (`isLeviCivitaFor_flatConnection`), so by uniqueness `leviCivita` is the ordinary derivative on
 differentiable fields
-({apiDocs Physicslib4.Geometry.PseudoRiemannianMetric.leviCivita_apply_eq_fderiv}[`leviCivita_apply_eq_fderiv`]).
+({apiDocs Hilbert6.Geometry.PseudoRiemannianMetric.leviCivita_apply_eq_fderiv}[`leviCivita_apply_eq_fderiv`]).
 
 Isometries preserve the Levi-Civita connection, $`d\varphi\big(\nabla_{\varphi^*X}\varphi^*Y\big) =
 \nabla_X Y` at corresponding points (`Isometry.mfderiv_leviCivita_mpullback`), because every term of
@@ -790,12 +790,12 @@ the Koszul formula is natural under $`\varphi`. Hence they map geodesics to geod
 is the same statement for $`\varphi^{-1}`:
 
 ```lean (name := checkGeod)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check Isometry.pushforwardPath_isGeodesic
 ```
 
 ```leanOutput checkGeod
-Physicslib4.Spacetime.Isometry.pushforwardPath_isGeodesic.{u_1} {M : Spacetime} (g : M.Isometry) (μ : M.SmoothPath)
+Hilbert6.Spacetime.Isometry.pushforwardPath_isGeodesic.{u_1} {M : Spacetime} (g : M.Isometry) (μ : M.SmoothPath)
   (h : M.IsGeodesic μ) : M.IsGeodesic (g.pushforwardPath μ)
 ```
 
@@ -817,68 +817,68 @@ spacetimes; they serve general covariance and are described with it.
 tag := "spacetime-files"
 %%%
 
-The section is formalised in `Physicslib4/Spacetime/` and `Physicslib4/Geometry/PseudoRiemannian/`,
+The section is formalised in `Hilbert6/Spacetime/` and `Hilbert6/Geometry/PseudoRiemannian/`,
 one topic per file. Each entry links to the API documentation of a representative declaration,
 from which the rest of the file can be browsed.
 
 Spacetimes and vectors:
 
-* `Basic.lean`: the structure, {apiDocs Physicslib4.Spacetime}[].
+* `Basic.lean`: the structure, {apiDocs Hilbert6.Spacetime}[].
 * `CausalStructure.lean`: timelike, null and spacelike vectors, time orientations, future- and
-  past-pointing vectors, {apiDocs Physicslib4.Spacetime.TimeOrientation}[].
+  past-pointing vectors, {apiDocs Hilbert6.Spacetime.TimeOrientation}[].
 * `LorentzCauchySchwarz.lean`, `LorentzCone.lean` and `LorentzOrthogonal.lean`: the reverse
   Cauchy–Schwarz and triangle inequalities, and the convexity of the future cone,
-  {apiDocs Physicslib4.Spacetime.reverse_triangle}[`reverse_triangle`].
+  {apiDocs Hilbert6.Spacetime.reverse_triangle}[`reverse_triangle`].
 
 Curves and causality:
 
 * `Curves.lean`: paths, smooth paths, curves, oriented curves and endpoints,
-  {apiDocs Physicslib4.Spacetime.SmoothPath}[].
+  {apiDocs Hilbert6.Spacetime.SmoothPath}[].
 * `AlongPath.lean`: the extension and locality lemmas behind the geodesic condition,
-  {apiDocs Physicslib4.Spacetime.SmoothPath.exists_vectorField_eq_tangent}[`SmoothPath.exists_vectorField_eq_tangent`].
+  {apiDocs Hilbert6.Spacetime.SmoothPath.exists_vectorField_eq_tangent}[`SmoothPath.exists_vectorField_eq_tangent`].
 * `Causality.lean`: geodesics, trips, $`\ll` and $`\prec`, futures and pasts, spacelike
   separation, the causality condition, diamonds, causal convexity and the Alexandrov topology,
-  {apiDocs Physicslib4.Spacetime.CausallyPrecedes}[].
+  {apiDocs Hilbert6.Spacetime.CausallyPrecedes}[].
 * `CausalComplement.lean`: spacelike complements, the causal closure and the lattice of causally
   complete regions,
-  {apiDocs Physicslib4.Spacetime.LorentzianSpacetime.causalComplement}[`LorentzianSpacetime.causalComplement`].
+  {apiDocs Hilbert6.Spacetime.LorentzianSpacetime.causalComplement}[`LorentzianSpacetime.causalComplement`].
 * `LorentzianSpacetime.lean`: the bundled structure and the basis theorem,
-  {apiDocs Physicslib4.Spacetime.LorentzianSpacetime}[].
+  {apiDocs Hilbert6.Spacetime.LorentzianSpacetime}[].
 
 Minkowski space:
 
 * `Minkowski.lean`: standard Minkowski spacetime, the Lorentz conditions, the standard time
   orientation, the cone description of $`I^\pm(p)`, the geodesics, the Alexandrov topology equal to
-  the Euclidean one, and `MinkowskiSpacetime`, {apiDocs Physicslib4.StandardMinkowskiSpacetime}[].
+  the Euclidean one, and `MinkowskiSpacetime`, {apiDocs Hilbert6.StandardMinkowskiSpacetime}[].
 * `MinkowskiDirected.lean`: the diamonds have the intersection property, are upward directed,
   and form a basis,
-  {apiDocs Physicslib4.Spacetime.alexandrovBasis_directed}[`alexandrovBasis_directed`].
+  {apiDocs Hilbert6.Spacetime.alexandrovBasis_directed}[`alexandrovBasis_directed`].
 * `LorentzCausality.lean`: the action on paths and the invariance of the causal relations,
-  {apiDocs Physicslib4.causallyPrecedes_smul_iff}[].
+  {apiDocs Hilbert6.causallyPrecedes_smul_iff}[].
 * `MinkowskiDilation.lean`: dilations preserve the causal structure but not the metric,
-  {apiDocs Physicslib4.alexandrovBasis_image_smul}[].
+  {apiDocs Hilbert6.alexandrovBasis_image_smul}[].
 
 Isometries:
 
-* `Isometry.lean`: the group of isometries, {apiDocs Physicslib4.Spacetime.Isometry}[].
+* `Isometry.lean`: the group of isometries, {apiDocs Hilbert6.Spacetime.Isometry}[].
 * `IsometryTopology.lean`: its topology and identity component,
-  {apiDocs Physicslib4.Spacetime.Isometry.identityComponent}[`Isometry.identityComponent`].
+  {apiDocs Hilbert6.Spacetime.Isometry.identityComponent}[`Isometry.identityComponent`].
 * `IsometryCausality.lean`: pushforward of paths, preservation of the Levi-Civita connection,
   geodesics, trips and diamonds, and the oriented identity component,
-  {apiDocs Physicslib4.Spacetime.Isometry.orientedIdentityComponent}[`Isometry.orientedIdentityComponent`].
+  {apiDocs Hilbert6.Spacetime.Isometry.orientedIdentityComponent}[`Isometry.orientedIdentityComponent`].
 * `Diffeo.lean`, `DiffeoPath.lean`, `Pullback.lean` and `CrossMetricIsometry.lean`: diffeomorphisms
   between two spacetimes, pullback metrics and cross-metric isometries, for general covariance,
-  {apiDocs Physicslib4.Spacetime.CrossIsometry}[`CrossIsometry`].
+  {apiDocs Hilbert6.Spacetime.CrossIsometry}[`CrossIsometry`].
 
-The pseudo-Riemannian layer, in `Physicslib4/Geometry/PseudoRiemannian/`:
+The pseudo-Riemannian layer, in `Hilbert6/Geometry/PseudoRiemannian/`:
 
 * `Basic.lean`: the metric and the musical isomorphism,
-  {apiDocs Physicslib4.Geometry.PseudoRiemannianMetric}[`Geometry.PseudoRiemannianMetric`].
+  {apiDocs Hilbert6.Geometry.PseudoRiemannianMetric}[`Geometry.PseudoRiemannianMetric`].
 * `LeviCivita.lean`: metric compatibility, the Levi-Civita condition, the Koszul formula,
   existence and uniqueness,
-  {apiDocs Physicslib4.Geometry.PseudoRiemannianMetric.leviCivita}[`PseudoRiemannianMetric.leviCivita`].
+  {apiDocs Hilbert6.Geometry.PseudoRiemannianMetric.leviCivita}[`PseudoRiemannianMetric.leviCivita`].
 * `Flat.lean`: the flat connection of a constant metric,
-  {apiDocs Physicslib4.Geometry.flatConnection}[`Geometry.flatConnection`].
+  {apiDocs Hilbert6.Geometry.flatConnection}[`Geometry.flatConnection`].
 
 The blueprint section is
 [Section 10.5](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:spacetime),

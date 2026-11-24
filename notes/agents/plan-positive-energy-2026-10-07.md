@@ -10,7 +10,7 @@ nothing is changed until the user approves.
 
 ## Current state
 
-- `Physicslib4/AQFT/PositiveEnergy.lean:54`:
+- `Hilbert6/AQFT/PositiveEnergy.lean:54`:
   `IsPositiveEnergy V := ∃ P : H →L[ℂ] H, P.IsPositive ∧ ∀ t x, V t x = exp((t I) • P) x`.
   - It has a `**Restriction:**` docstring line saying it is waiting on Stone's theorem.
   - API, all in the same file:
@@ -150,8 +150,8 @@ nothing is changed until the user approves.
 
 ## Risks
 
-- **Universe and instance mismatch.** `IsPositiveEnergy` lives in `Physicslib4.AQFT`, and the
-  Stone API is in `Physicslib4.Spectral.Stone`, which needs `[CompleteSpace H]`. That is already
+- **Universe and instance mismatch.** `IsPositiveEnergy` lives in `Hilbert6.AQFT`, and the
+  Stone API is in `Hilbert6.Spectral.Stone`, which needs `[CompleteSpace H]`. That is already
   required here.
 - **Conjugation lemma.** `generator_conj` changes the domain (`W(Dom A)`). Stating it as an
   equation of `LinearPMap`s needs care with domains; an `∃ h, … = …` characterisation, as in

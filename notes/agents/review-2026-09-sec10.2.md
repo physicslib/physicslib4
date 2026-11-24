@@ -9,16 +9,16 @@ Reviewer: audit subagent (read-only)
   144 `\lean{...}` tags, 186 individual Lean identifiers cited across
   ~120 blueprint items: definitions, propositions, lemmas, theorems,
   corollaries).
-- Lean: `Physicslib4/Spectral/{Basic,BorelCalculus,BorelClasses,
+- Lean: `Hilbert6/Spectral/{Basic,BorelCalculus,BorelClasses,
   ContinuousCalculus,Forms,OperatorIntegral,ProjectionValuedMeasure,
-  SpectralTheorem,Spectrum}.lean`. `Physicslib4/Operators/*.lean` was checked
+  SpectralTheorem,Spectrum}.lean`. `Hilbert6/Operators/*.lean` was checked
   for citations but is not cited from this section.
 - Out of scope (per task and per CLAUDE.md): chapters 1-9, and
   `blueprint/src/sections/sec10/unbounded-spectral-theorems.tex`
-  (§10.3, `Physicslib4/Spectral/Unbounded/*`), which is a separate blueprint
+  (§10.3, `Hilbert6/Spectral/Unbounded/*`), which is a separate blueprint
   file already covered by a prior review
   (`notes/agents/review-2026-09-sec10.1-10.7.md`).
-- `scratch_*` files ignored (none present under `Physicslib4/Spectral`).
+- `scratch_*` files ignored (none present under `Hilbert6/Spectral`).
 
 ## Method
 
@@ -34,10 +34,10 @@ Reviewer: audit subagent (read-only)
   no `lean_hover_info`/LSP tool calls were available in this session, so all
   comparisons are by direct source reading.
 - Mechanically verified, for all 144 `\lean{}` tags: (a) that every
-  `Physicslib4.*` identifier is textually declared in the cited files
+  `Hilbert6.*` identifier is textually declared in the cited files
   (regex scan for `theorem|def|lemma|abbrev|structure|instance` + manual
   grep resolution of the three regex false positives, all of which existed);
-  (b) that all 24 distinct non-`Physicslib4` (core Mathlib) identifiers exist
+  (b) that all 24 distinct non-`Hilbert6` (core Mathlib) identifiers exist
   in `.lake/packages/mathlib` under the exact dotted name used (two looked
   like 0-hits under a naive `grep -w`, both resolved on inspection:
   `Complex.analyticOnNhd_iff_differentiableOn` and
@@ -146,40 +146,40 @@ block, and the two-spectral-measures-agree chain) were all **match**, with
 junk values (e.g. `ProjectionValuedMeasure.integral f = 0` when `f` is not
 bounded-measurable) documented at the definition site.
 
-- `def:projection-valued-measure` / `Physicslib4.Spectral.ProjectionValuedMeasure`
+- `def:projection-valued-measure` / `Hilbert6.Spectral.ProjectionValuedMeasure`
   — **match**. The blueprint's implicit `μ(∅) = 0` is correctly *not*
   encoded as a structure field (it's derivable from `hasSum'`); documented
   in the docstring. Five structure fields correspond to the blueprint's
   five conditions one-for-one.
-- `thrm:riesz-representation` / `Physicslib4.Spectral.existsUnique_measure_of_positive_linear`
+- `thrm:riesz-representation` / `Hilbert6.Spectral.existsUnique_measure_of_positive_linear`
   — **match**. `X` compact metric + `[BorelSpace X]`, `Λ` a positive linear
   functional on `C(X, ℝ)`, conclusion `∃! ν, IsFiniteMeasure ν ∧ ∀ f, ∫ f ∂ν
   = Λ f`. The `IsFiniteMeasure` conjunct is not an extra hypothesis but part
   of the existence claim, matching "positive measure" for a functional
   defined on all of `C(X,ℝ)` on a compact space.
 - `thrm:spectral-theorem-for-bounded-operators` /
-  `Physicslib4.Spectral.existsUnique_spectralMeasure` — **match**. `hA :
+  `Hilbert6.Spectral.existsUnique_spectralMeasure` — **match**. `hA :
   IsSelfAdjoint A → ∃! μ : ProjectionValuedMeasure (spectrum ℝ A) H, μ.integral
   (fun l => (l:ℝ):ℂ) = A`, exactly the blueprint's existence-and-uniqueness
   claim (modulo the `spectrum ℝ A` representation noted above).
   `#print axioms` shows only `propext, Classical.choice, Quot.sound`.
-- `def:functional-calculus` / `Physicslib4.Spectral.functionalCalculus` —
+- `def:functional-calculus` / `Hilbert6.Spectral.functionalCalculus` —
   **match**, with a documented junk value (`0` outside `BddMeasurable`) and
   a proved coincidence (`borelCalculus_eq_integral`) with the section's
   *other* construction of `f(A)`, exactly as the blueprint's closing prose
   claims.
-- `def:bounded-sesquilinear-form` / `Physicslib4.Spectral.BoundedSesquilinearForm`
+- `def:bounded-sesquilinear-form` / `Hilbert6.Spectral.BoundedSesquilinearForm`
   — **match**, via Mathlib's bundled `H →L⋆[ℂ] H →L[ℂ] ℂ`; the
   implementation notes correctly explain why bundling (rather than a
   predicate on raw functions) is equivalent to the blueprint's definition.
 - `def:hall-8.6` (`borelForm`), `def:F-class` (`FClass`), `def:hall-8.8`
   (`borelCalculus`) — **match**, all following the `spectrum ℝ A` /
   `BddMeasurable` conventions consistently.
-- `thrm:hall-8.10` / `Physicslib4.Spectral.exists_spectralMeasure` —
+- `thrm:hall-8.10` / `Hilbert6.Spectral.exists_spectralMeasure` —
   **match**. Existence half of the capstone theorem is proved compositionally
   from `spectralMeasure_apply` and `spectralMeasure_integral_id`, exactly
   mirroring the blueprint's two-part proof structure.
-- `thrm:hall-prblm-8.3.4` / `Physicslib4.Spectral.pvm_eq_of_integral_id_eq`
+- `thrm:hall-prblm-8.3.4` / `Hilbert6.Spectral.pvm_eq_of_integral_id_eq`
   — **match** (uniqueness half).
 
 No item was classified as **Lean assumes more**, **Lean concludes less**,

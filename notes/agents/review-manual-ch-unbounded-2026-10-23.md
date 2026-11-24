@@ -1,12 +1,12 @@
 # Review: manual chapter Unbounded + docstring passes (2026-10-23)
 
-Scope: commits 3309c86, 9ff9402 (docstrings, Physicslib4/Spectral/Unbounded/), 7663dbe (web/Manual/Unbounded.lean).
+Scope: commits 3309c86, 9ff9402 (docstrings, Hilbert6/Spectral/Unbounded/), 7663dbe (web/Manual/Unbounded.lean).
 
 ## A. Docstring passes
 
-Checks run. Comments-only: all eight files of `Physicslib4/Spectral/Unbounded/` are identical
+Checks run. Comments-only: all eight files of `Hilbert6/Spectral/Unbounded/` are identical
 between `3309c86^` and `9ff9402` with `--` and `/- -/` comments stripped and whitespace
-normalised (own stripper, string-literal aware). Nothing in `Physicslib4/` changed after
+normalised (own stripper, string-literal aware). Nothing in `Hilbert6/` changed after
 `9ff9402`. Format: no added line over 100 characters, no unescaped asterisk outside code spans,
 no keyword-initial line; every "Blueprint:" line is plain text. Accuracy: each cited lemma was
 looked up and its hypotheses compared with the prose. Mathlib's adjoint
@@ -20,7 +20,7 @@ two corrected names and the "nonzero Hilbert space" fix are right.
 A1. *should fix.* `AbstractCalculus.lean`, module docstring l. 14–17, and the
 `IsAbstractCalculus` docstring (new in `9ff9402`, l. 72–74 of the docstring body).
 - **Problem.** The module docstring says the bounded self-adjoint case of
-  `Physicslib4/Spectral/SpectralTheorem.lean` and the bounded normal case "are then two instances
+  `Hilbert6/Spectral/SpectralTheorem.lean` and the bounded normal case "are then two instances
   of the one statement". The `IsAbstractCalculus` docstring repeats it: "the passage ... is
   carried out once, for the self-adjoint and the normal case together". Neither holds in Lean.
   `abstractPVM`/`IsAbstractCalculus` occur only in `AbstractCalculus.lean` and `Cayley.lean`, and
@@ -31,7 +31,7 @@ A1. *should fix.* `AbstractCalculus.lean`, module docstring l. 14–17, and the
 - **Fix, module docstring** (replace the sentence "The bounded self-adjoint case of ... one
   statement."):
   "The bounded normal case below is an instance of it. The bounded self-adjoint case of
-  `Physicslib4/Spectral/SpectralTheorem.lean` runs the same argument directly on X = σ(A), and
+  `Hilbert6/Spectral/SpectralTheorem.lean` runs the same argument directly on X = σ(A), and
   is not derived from this file."
 - **Fix, `IsAbstractCalculus`** (replace "so the passage from a continuous functional calculus
   to a spectral measure is carried out once, for the self-adjoint and the normal case together."):
@@ -62,7 +62,7 @@ A5. *Proposals.*
   unlabelled paragraph right after def:hall-3.1 (l. 28 of the section), so citing it from
   def:hall-3.1's `\lean{}` is defensible. Cleaner: wrap that paragraph in a
   `\begin{convention}` node (the section already uses `conv:` nodes, e.g. `conv:section-abstract`),
-  say `conv:operator-minus-scalar`, with `\lean{Physicslib4.Spectral.Unbounded.subSmul}`; the
+  say `conv:operator-minus-scalar`, with `\lean{Hilbert6.Spectral.Unbounded.subSmul}`; the
   docstring line then becomes "Blueprint: conv:operator-minus-scalar". Either is for the
   lean-blueprint agent and the user.
 - **`pushforwardPVM` → thrm:hall-10.4: correct it.** The `\lean{}` list of thrm:hall-10.4
@@ -111,7 +111,7 @@ B2. *should fix.* Design l. 102: "no declaration assumes $`H` separable".
   the same of "the `Spectral` directory"; it needs the same qualification.)
 - **Fix.** "bounded operators are `H →L[ℂ] H`, no result on the way to the spectral theorem
   assumes $`H` separable (only
-  {apiDocs Physicslib4.Spectral.Unbounded.completeSpace_and_separableSpace_of_isClosed}[`completeSpace_and_separableSpace_of_isClosed`],
+  {apiDocs Hilbert6.Spectral.Unbounded.completeSpace_and_separableSpace_of_isClosed}[`completeSpace_and_separableSpace_of_isClosed`],
   the blueprint's lemma on closed subspaces, does), and bounded operators are obtained from
   bounded quadratic forms."
 
@@ -165,7 +165,7 @@ B10. *nit.* Plain code where `{apiDocs}` is used elsewhere (spectral review B5 p
 l. 179 `isEssentiallySelfAdjoint_of_isDirectSumOperator`, l. 207 `exists_isCayleyTransform`,
 l. 216–222 `cayleyPVM`, `restrictPVM`, `mapPVM`, `eq_of_integral_id_eq_ambient`, `pushforwardPVM`;
 Main l. 630 `isSelfAdjoint_pmapIntegral_of_real`. Wrap each in
-`{apiDocs Physicslib4.Spectral.Unbounded.<name>}[...]`.
+`{apiDocs Hilbert6.Spectral.Unbounded.<name>}[...]`.
 
 ## Writer's doubts B(1)–(5)
 
@@ -182,12 +182,12 @@ Main l. 630 `isSelfAdjoint_pmapIntegral_of_real`. Wrap each in
    Better still, add the note (A5).
 5. **Hellinger–Toeplitz: reads as background.** It sits in the "As you will recall" paragraph,
    is attributed by name, and no library name is attached; nothing in the library proves or
-   uses it (no match for "Hellinger" in `Physicslib4/` or the blueprint). No change needed.
+   uses it (no match for "Hellinger" in `Hilbert6/` or the blueprint). No change needed.
    The Sobolev example likewise reads as a reminder.
 
 ## web/ temporal-wording check
 
-`scripts/check_temporal_wording.py` scans `blueprint/src/sections`, `Physicslib4`, `home_page`,
+`scripts/check_temporal_wording.py` scans `blueprint/src/sections`, `Hilbert6`, `home_page`,
 `README.md`, not `web/`. A `/tmp` copy with `ROOTS = ["web/Tutorial", "web/Manual",
 "web/Tutorial.lean", "web/Manual.lean"]` flags three lines, all in
 `web/Tutorial/DoingItYourself.lean`, all false positives:

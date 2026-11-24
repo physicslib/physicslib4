@@ -71,18 +71,18 @@ writer's grouping. One change: put the commutant lemmas in the existing proof's 
 than in a node of their own, and use one short new subsection in `haag-kastler-axioms.tex` just
 before thrm:von-neumann-geometric-covariance (l. 927), "Conjugation by a unitary":
 - `def:unitary-conjugation`:
-  `\lean{Units.conjMulEquiv, Physicslib4.lieConj, Physicslib4.lieConj_apply_eq_conjStarAlgEquiv, Physicslib4.norm_lieConj, Physicslib4.exp_lieConj}`.
+  `\lean{Units.conjMulEquiv, Hilbert6.lieConj, Hilbert6.lieConj_apply_eq_conjStarAlgEquiv, Hilbert6.norm_lieConj, Hilbert6.exp_lieConj}`.
   The map T ↦ UTU⁻¹ on B(H); a `*`-automorphism, isometric, and exp(UAU⁻¹) = U exp(A) U⁻¹.
 - `lmm:automorphism-commutant`: `\lean{MulEquiv.image_centralizer, MulEquiv.image_centralizer_centralizer}`
   (φ(S') = φ(S)', φ(S'') = φ(S)''). Add it to the `\uses{}` of the proofs of
   thrm:von-neumann-geometric-covariance and of its curved-spacetime counterpart, which already
   describe it in prose.
-- `def:factor`: `\lean{Physicslib4.scalarOperators, Physicslib4.IsFactor}` (R ∩ R' = ℂ𝟙, for any
+- `def:factor`: `\lean{Hilbert6.scalarOperators, Hilbert6.IsFactor}` (R ∩ R' = ℂ𝟙, for any
   set R). It replaces the inline definition in thrm:von-neumann-factor-orbit and goes in the
   `\uses{}` of thrm:irreducible-inclusion-factor and thrm:self-inclusion-factor (l. 1041, 1054).
-- `lmm:factor-conj`: `\lean{Physicslib4.IsFactor.conj}`, in the `\uses{}` of the proof of
+- `lmm:factor-conj`: `\lean{Hilbert6.IsFactor.conj}`, in the `\uses{}` of the proof of
   thrm:von-neumann-factor-orbit.
-- `lmm:restrict-star-alg-equiv`: `\lean{Physicslib4.restrictStarAlgEquiv}`, used where R(B) ≃⋆ₐ
+- `lmm:restrict-star-alg-equiv`: `\lean{Hilbert6.restrictStarAlgEquiv}`, used where R(B) ≃⋆ₐ
   R(L·B) is stated (`localVonNeumannEquiv`, under thrm:von-neumann-geometric-covariance).
   `GNS/Superselection.lean`'s `restrictStarAlgEquiv'` (two ambient algebras) could share this node.
 

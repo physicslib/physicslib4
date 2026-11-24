@@ -11,8 +11,8 @@ The first release, 1.0, is in preparation.
 - The blueprint has a section on the Reeh–Schlieder theorem (§10.9): a main theorem with no additivity
   hypothesis, and corollaries under cyclicity for the translation-generated algebras, the von Neumann
   form of weak additivity, and weak additivity. All of it is formalized and proved in Lean
-  (`Physicslib4/AQFT/HaagKastler/ReehSchlieder/`, with the analytic lemmas in
-  `Physicslib4/AQFT/PositiveEnergyHolomorphic.lean` and `Physicslib4/Analysis/EdgeVanishing.lean`),
+  (`Hilbert6/AQFT/HaagKastler/ReehSchlieder/`, with the analytic lemmas in
+  `Hilbert6/AQFT/PositiveEnergyHolomorphic.lean` and `Hilbert6/Analysis/EdgeVanishing.lean`),
   and the reference manual has a chapter on it.
 
 - The blueprint has a section on Tomita–Takesaki theory (§10.10): the Tomita operator S, the
@@ -22,11 +22,11 @@ The first release, 1.0, is in preparation.
   as presented in Jones's notes, Ch. 13. It ends with Takesaki's theorem: the vector state of a unit
   cyclic and separating vector is a KMS state at inverse temperature 1 for the reversed modular flow,
   stated with the modular algebra, the modular automorphism group and the vector state
-  (`Physicslib4/GNS/VectorState.lean`). The antilinear Tomita operator is handled through a reference
+  (`Hilbert6/GNS/VectorState.lean`). The antilinear Tomita operator is handled through a reference
   conjugation C, on which Δ and J do not depend. All of it is formalized and proved in Lean
-  (`Physicslib4/Operators/Modular/`, with the unbounded-operator results in
-  `Physicslib4/Spectral/Unbounded/Composition.lean`, `Polar.lean` and `Commuting.lean`, and the strip
-  formula in `Physicslib4/Analysis/StripFormula.lean`),
+  (`Hilbert6/Operators/Modular/`, with the unbounded-operator results in
+  `Hilbert6/Spectral/Unbounded/Composition.lean`, `Polar.lean` and `Commuting.lean`, and the strip
+  formula in `Hilbert6/Analysis/StripFormula.lean`),
   and the reference manual has a chapter on it.
 
 - The blueprint has a section on Borchers' theorem and the wedge modular group (§10.11). It proves
@@ -37,11 +37,11 @@ The first release, 1.0, is in preparation.
   Δ^{it} = Z(t)U(b(-2πt)) with Z(t) an internal symmetry commuting with the translations. Wedges and the
   algebra R(O) of a region are derived from the diamond algebras, and the vacuum representation is a
   hypothesis structure, `IsCovariantVacuumRep`. All of it is formalized and proved in Lean
-  (`Physicslib4/AQFT/Borchers.lean`, `Physicslib4/AQFT/HaagKastler/Wedges.lean`, `RegionAlgebra.lean`,
+  (`Hilbert6/AQFT/Borchers.lean`, `Hilbert6/AQFT/HaagKastler/Wedges.lean`, `RegionAlgebra.lean`,
   `CovariantVacuum.lean` and `BisognanoWichmann.lean`, with supporting results in
-  `Physicslib4/Spacetime/MinkowskiCausalCone.lean`, `Physicslib4/Spectral/Unbounded/UnitaryConjugation.lean`,
-  `Physicslib4/Operators/Modular/Intertwining.lean`, `Physicslib4/Analysis/StripRealBoundary.lean` and
-  `Physicslib4/AQFT/PositiveEnergyHalfPlane.lean`), and the reference manual has a chapter on it.
+  `Hilbert6/Spacetime/MinkowskiCausalCone.lean`, `Hilbert6/Spectral/Unbounded/UnitaryConjugation.lean`,
+  `Hilbert6/Operators/Modular/Intertwining.lean`, `Hilbert6/Analysis/StripRealBoundary.lean` and
+  `Hilbert6/AQFT/PositiveEnergyHalfPlane.lean`), and the reference manual has a chapter on it.
 
 - The website has About, Roadmap and Get Involved pages, and the header on every page links to them.
 
@@ -147,7 +147,7 @@ declarations.
 
 ### Operator theory
 
-- **Stone's theorem** (§10.4, `thrm:hall-10.15`, Lean `Physicslib4.Spectral.Stone.stone`) was added,
+- **Stone's theorem** (§10.4, `thrm:hall-10.15`, Lean `Hilbert6.Spectral.Stone.stone`) was added,
   together with the §10.3 nodes it uses: a self-adjoint operator has no proper symmetric extension
   (`lmm:self-adjoint-maximally-symmetric`), the spectral measure of a self-adjoint operator
   (`def:spectral-measure`), its functional calculus (`def:hall-10.5`) and its agreement with the

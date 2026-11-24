@@ -1,0 +1,323 @@
+/-
+Copyright (c) 2026 Lean Community. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Lean Community
+-/
+import Hilbert6.Spacetime.Basic
+import Mathlib.Geometry.Manifold.ContMDiff.Basic
+import Mathlib.Topology.Basic
+
+/-!
+# Causal structure on a spacetime
+
+This file formalises the pointwise causal structure attached to a spacetime,
+following section 10.5 of the AQFT-in-Lean blueprint.
+
+## Main definitions
+
+* `Hilbert6.Spacetime.IsTimelike`, `IsSpacelike`, `IsNull`: classification of
+  tangent vectors by the sign of `g x v v`.
+* `Hilbert6.Spacetime.TimeOrientation`: a smooth non-vanishing global
+  timelike vector field, presented as a section of the tangent bundle.
+* `Hilbert6.Spacetime.IsTimeOrientable`: existence of a time orientation.
+* `Hilbert6.Spacetime.IsFuturePointing` / `IsPastPointing`: the classification
+  of timelike (and null, by a limit construction) tangent vectors against a
+  chosen time orientation.
+
+## Supporting lemmas
+
+* `isTimelike_smul_iff`, `isNull_smul_iff`, `isSpacelike_smul_iff`: scaling-invariance
+  of the three causal classes under nonzero real multiples of a tangent vector.
+
+## Modelling notes
+
+Mathlib has no single named type for smooth vector fields. We use the obvious
+unbundled form: a function `t : ∀ x, TangentSpace M.model x`
+together with two pointwise predicates (non-vanishing and timelike) and an
+unbundled smoothness statement carried as a `Prop` field. Smoothness of a
+section of the tangent bundle is captured exactly as in `Spacetime.contMDiff`:
+in Mathlib's bundle-section idiom, as `ContMDiff` of `x ↦ TotalSpace.mk' _ x (t x)`
+into the tangent bundle. This is the left-hand side of `Bundle.contMDiffAt_section`
+and the shape `ContMDiff.mpullback_vectorField` expects.
+
+For the null future/past-pointing case we follow the blueprint and define
+future-pointing null vectors as the closure (in the obvious tangent space
+topology coming from `TangentSpace M.model x ≃ ℝ⁴`) of the set of
+future-pointing timelike vectors. We capture this with the existence of a
+sequence of future-pointing timelike vectors tending to `n`. The underlying
+topology on each tangent space is inherited from Mathlib's tangent space
+typeclass instances.
+-/
+
+namespace Hilbert6
+
+namespace Spacetime
+
+open scoped ContDiff
+
+variable (M : Spacetime)
+
+attribute [instance] Spacetime.topology Spacetime.hausdorff Spacetime.connected
+  Spacetime.chartedSpace Spacetime.isManifold Spacetime.tangent_findim
+
+/-! ### Classification of tangent vectors -/
+
+/-- A tangent vector v at a point x is timelike when g_x(v, v) < 0.
+
+With the signature (-, +, +, +), timelike vectors are the velocities of massive particles.
+
+Blueprint: def:timelike-spacelike-null-vectors -/
+def IsTimelike {x : M.Carrier} (v : TangentSpace M.model x) : Prop :=
+  M.val x v v < 0
+
+/-- A tangent vector v at a point x is spacelike when g_x(v, v) > 0.
+
+Blueprint: def:timelike-spacelike-null-vectors -/
+def IsSpacelike {x : M.Carrier} (v : TangentSpace M.model x) : Prop :=
+  0 < M.val x v v
+
+/-- A tangent vector v at a point x is null when g_x(v, v) = 0.
+
+Every tangent vector is exactly one of timelike, null and spacelike
+(`isTimelike_or_isNull_or_isSpacelike`). The zero vector is null (`isNull_zero`); smooth paths
+have a non-vanishing velocity (`SmoothPath`), so a null curve moves along the light cone.
+
+Blueprint: def:timelike-spacelike-null-vectors -/
+def IsNull {x : M.Carrier} (v : TangentSpace M.model x) : Prop :=
+  M.val x v v = 0
+
+/-! ### Basic classification lemmas
+
+Every tangent vector falls into exactly one of the three classes, fixed by the
+sign of `g|_p(v,v)`. -/
+
+/-- Causal trichotomy: every tangent vector is timelike, null, or spacelike. -/
+theorem isTimelike_or_isNull_or_isSpacelike {x : M.Carrier}
+    (v : TangentSpace M.model x) :
+    M.IsTimelike v ∨ M.IsNull v ∨ M.IsSpacelike v :=
+  lt_trichotomy (M.val x v v) 0
+
+/-- A timelike vector is not spacelike. -/
+theorem not_isSpacelike_of_isTimelike {x : M.Carrier}
+    {v : TangentSpace M.model x} (h : M.IsTimelike v) : ¬ M.IsSpacelike v :=
+  fun hs => lt_asymm h hs
+
+/-- A spacelike vector is not timelike. -/
+theorem not_isTimelike_of_isSpacelike {x : M.Carrier}
+    {v : TangentSpace M.model x} (h : M.IsSpacelike v) : ¬ M.IsTimelike v :=
+  fun ht => lt_asymm ht h
+
+/-- A timelike vector is not null. -/
+theorem not_isNull_of_isTimelike {x : M.Carrier}
+    {v : TangentSpace M.model x} (h : M.IsTimelike v) : ¬ M.IsNull v :=
+  ne_of_lt h
+
+/-- A spacelike vector is not null. -/
+theorem not_isNull_of_isSpacelike {x : M.Carrier}
+    {v : TangentSpace M.model x} (h : M.IsSpacelike v) : ¬ M.IsNull v :=
+  ne_of_gt h
+
+/-- The zero tangent vector is null. -/
+theorem isNull_zero {x : M.Carrier} : M.IsNull (0 : TangentSpace M.model x) := by
+  simp [IsNull]
+
+/-! ### Scaling invariance of the causal classification
+
+The causal type of a tangent vector depends only on the sign of `g(v,v)`, which
+scales quadratically under `v ↦ c • v`. Hence for `c ≠ 0` the timelike / null /
+spacelike classification is invariant under scaling — the algebraic fact behind
+reparametrisation-invariance of the causal type of a curve. -/
+
+/-- The metric square scales quadratically: `g(c•v, c•v) = c² · g(v,v)`. -/
+theorem val_smul_smul {x : M.Carrier} (c : ℝ) (v : TangentSpace M.model x) :
+    M.val x (c • v) (c • v) = c ^ 2 * M.val x v v := by
+  simp only [map_smul, smul_apply, smul_eq_mul]
+  ring
+
+/-- **Scaling invariance of timelikeness.** For `c ≠ 0`, `c • v` is timelike iff
+`v` is. -/
+theorem isTimelike_smul_iff {x : M.Carrier} {c : ℝ} (hc : c ≠ 0)
+    (v : TangentSpace M.model x) : M.IsTimelike (c • v) ↔ M.IsTimelike v := by
+  have hc2 : 0 < c ^ 2 := by positivity
+  simp only [IsTimelike, val_smul_smul]
+  constructor <;> intro h <;> nlinarith [hc2]
+
+/-- **Scaling invariance of nullness.** For `c ≠ 0`, `c • v` is null iff `v` is. -/
+theorem isNull_smul_iff {x : M.Carrier} {c : ℝ} (hc : c ≠ 0)
+    (v : TangentSpace M.model x) : M.IsNull (c • v) ↔ M.IsNull v := by
+  have hc2 : ¬ (c ^ 2 = 0) := pow_ne_zero 2 hc
+  simp only [IsNull, val_smul_smul, mul_eq_zero]
+  tauto
+
+/-- **Scaling invariance of spacelikeness.** For `c ≠ 0`, `c • v` is spacelike iff
+`v` is. -/
+theorem isSpacelike_smul_iff {x : M.Carrier} {c : ℝ} (hc : c ≠ 0)
+    (v : TangentSpace M.model x) : M.IsSpacelike (c • v) ↔ M.IsSpacelike v := by
+  have hc2 : 0 < c ^ 2 := by positivity
+  simp only [IsSpacelike, val_smul_smul]
+  constructor <;> intro h <;> nlinarith [hc2]
+
+/-! ### Time orientation -/
+
+/--
+A time orientation of a spacetime: a smooth, nowhere-vanishing, everywhere timelike vector field.
+
+A time orientation t decides at every point which half of the light cone is the future: a
+timelike vector v is future-pointing when g_x(t(x), v) < 0 (`Spacetime.IsFuturePointing`), that
+is, when it lies in the same half of the cone as t(x). A spacetime that has a time orientation is
+time-orientable (`Spacetime.IsTimeOrientable`). For standard Minkowski spacetime the usual choice
+is the constant field e₀ = ∂₀ (`standardMinkowskiTimeOrientation`).
+
+The causal relations of the library (≪, ≺, the futures and pasts I⁺(p), J⁺(p), and the
+Alexandrov topology) all take a time orientation as an argument.
+
+Blueprint: def:time-orientable
+-/
+structure TimeOrientation where
+  /-- The vector field t: a tangent vector t(x) at each point x. -/
+  field : ∀ x : M.Carrier, TangentSpace M.model x
+  /-- t vanishes nowhere: t(x) ≠ 0. -/
+  nonvanishing : ∀ x : M.Carrier, field x ≠ 0
+  /-- t is timelike everywhere: g_x(t(x), t(x)) < 0. -/
+  timelike_at : ∀ x : M.Carrier, M.IsTimelike (field x)
+  /-- t is smooth: it is a `C^∞` section of the tangent bundle.
+
+  Implementation note: the statement is Mathlib's bundle-section idiom, matching the field
+  `Spacetime.contMDiff` of the metric. It is the left-hand side of `Bundle.contMDiffAt_section`,
+  the hypothesis of `ContMDiff.mpullback_vectorField` and an input of
+  `ContMDiff.clm_bundle_apply₂`. A chart-local double-`mfderiv` formulation would need a
+  hand-built bridge in both directions, since Mathlib relates `tangentCoordChange` to
+  neither. -/
+  smooth : ContMDiff M.model M.model.tangent ∞
+    (fun x ↦ Bundle.TotalSpace.mk' SpacetimeModel
+      (E := fun x ↦ TangentSpace M.model x) x (field x))
+
+/-- A spacetime `M` is *time-orientable* if it admits a time orientation. -/
+def IsTimeOrientable : Prop := Nonempty M.TimeOrientation
+
+/-! ### Future and past pointing vectors -/
+
+/-- A tangent vector is future-pointing for a time orientation t: timelike with
+g_x(t(x), v) < 0, or null and a limit of such vectors.
+
+A timelike v is future-pointing when g_x(t(x), v) < 0, so that v and t(x) lie in the same half
+of the light cone. A null v is future-pointing when it is the limit of a sequence of
+future-pointing timelike vectors, so the future-pointing null vectors form the boundary of the
+future timelike cone. The zero vector, the limit of ε t(x) as ε → 0, is both future- and
+past-pointing; curves exclude it by requiring a non-vanishing velocity (`SmoothPath`).
+Spacelike vectors are neither future- nor past-pointing.
+
+Blueprint: def:future-and-past-pointing-vectors -/
+def IsFuturePointing (t : M.TimeOrientation) {x : M.Carrier}
+    (v : TangentSpace M.model x) : Prop :=
+  (M.IsTimelike v ∧ M.val x (t.field x) v < 0) ∨
+  (M.IsNull v ∧
+    ∃ vs : ℕ → TangentSpace M.model x,
+      (∀ n, M.IsTimelike (vs n) ∧ M.val x (t.field x) (vs n) < 0) ∧
+      Filter.Tendsto vs Filter.atTop (nhds v))
+
+/-- A tangent vector is past-pointing for a time orientation t: timelike with
+g_x(t(x), v) > 0, or null and a limit of such vectors.
+
+This is the time reverse of `Spacetime.IsFuturePointing`: v is past-pointing exactly when -v is
+future-pointing (`isPastPointing_iff_isFuturePointing_neg`).
+
+Blueprint: def:future-and-past-pointing-vectors -/
+def IsPastPointing (t : M.TimeOrientation) {x : M.Carrier}
+    (v : TangentSpace M.model x) : Prop :=
+  (M.IsTimelike v ∧ 0 < M.val x (t.field x) v) ∨
+  (M.IsNull v ∧
+    ∃ vs : ℕ → TangentSpace M.model x,
+      (∀ n, M.IsTimelike (vs n) ∧ 0 < M.val x (t.field x) (vs n)) ∧
+      Filter.Tendsto vs Filter.atTop (nhds v))
+
+/-! ### Future/past-pointing classification lemmas -/
+
+/-- A future-pointing vector is either timelike or null. -/
+theorem isTimelike_or_isNull_of_isFuturePointing (t : M.TimeOrientation)
+    {x : M.Carrier} {v : TangentSpace M.model x}
+    (h : M.IsFuturePointing t v) : M.IsTimelike v ∨ M.IsNull v :=
+  h.imp And.left And.left
+
+/-- A past-pointing vector is either timelike or null. -/
+theorem isTimelike_or_isNull_of_isPastPointing (t : M.TimeOrientation)
+    {x : M.Carrier} {v : TangentSpace M.model x}
+    (h : M.IsPastPointing t v) : M.IsTimelike v ∨ M.IsNull v :=
+  h.imp And.left And.left
+
+/-- A timelike vector cannot be both future-pointing and past-pointing with
+respect to a fixed time orientation. -/
+theorem not_isFuturePointing_and_isPastPointing_of_isTimelike
+    (t : M.TimeOrientation) {x : M.Carrier} {v : TangentSpace M.model x}
+    (hv : M.IsTimelike v) :
+    ¬ (M.IsFuturePointing t v ∧ M.IsPastPointing t v) := by
+  rintro ⟨hf, hp⟩
+  have hft : M.val x (t.field x) v < 0 := by
+    rcases hf with ⟨_, h⟩ | ⟨hn, _⟩
+    · exact h
+    · exact absurd hn (M.not_isNull_of_isTimelike hv)
+  have hpt : 0 < M.val x (t.field x) v := by
+    rcases hp with ⟨_, h⟩ | ⟨hn, _⟩
+    · exact h
+    · exact absurd hn (M.not_isNull_of_isTimelike hv)
+  exact lt_asymm hft hpt
+
+/-! ### Positive-scaling invariance of orientation
+
+Unlike the causal *type* (invariant under any non-zero scaling), future/past-
+pointing is preserved only under scaling by a **positive** scalar — scaling by a
+negative one swaps the two. This is the algebraic fact behind the
+reparametrisation-invariance of the *orientation* of a curve under
+orientation-preserving reparametrisations. -/
+
+/-- Linearity of the metric in the second argument: `g(t, c • v) = c · g(t, v)`. -/
+theorem val_field_smul (t : M.TimeOrientation) {x : M.Carrier} (c : ℝ)
+    (v : TangentSpace M.model x) :
+    M.val x (t.field x) (c • v) = c * M.val x (t.field x) v := by
+  simp only [map_smul, smul_eq_mul]
+
+/-- **Positive scaling preserves future-pointing** (forward direction). -/
+theorem isFuturePointing_smul_of (t : M.TimeOrientation) {x : M.Carrier} {c : ℝ}
+    (hc : 0 < c) {v : TangentSpace M.model x} (h : M.IsFuturePointing t v) :
+    M.IsFuturePointing t (c • v) := by
+  rcases h with ⟨htl, hlt⟩ | ⟨hnull, vs, hvs, htends⟩
+  · exact Or.inl ⟨(M.isTimelike_smul_iff hc.ne' v).mpr htl, by
+      rw [val_field_smul]; exact mul_neg_of_pos_of_neg hc hlt⟩
+  · refine Or.inr ⟨(M.isNull_smul_iff hc.ne' v).mpr hnull,
+      fun n => c • vs n, fun n => ⟨?_, ?_⟩, htends.const_smul c⟩
+    · exact (M.isTimelike_smul_iff hc.ne' (vs n)).mpr (hvs n).1
+    · rw [val_field_smul]; exact mul_neg_of_pos_of_neg hc (hvs n).2
+
+/-- **Positive-scaling invariance of future-pointing.** For `c > 0`, `c • v` is
+future-pointing iff `v` is. -/
+theorem isFuturePointing_smul_iff (t : M.TimeOrientation) {x : M.Carrier} {c : ℝ}
+    (hc : 0 < c) (v : TangentSpace M.model x) :
+    M.IsFuturePointing t (c • v) ↔ M.IsFuturePointing t v := by
+  refine ⟨fun h => ?_, M.isFuturePointing_smul_of t hc⟩
+  have h' := M.isFuturePointing_smul_of t (inv_pos.mpr hc) h
+  rwa [smul_smul, inv_mul_cancel₀ hc.ne', one_smul] at h'
+
+/-- **Positive scaling preserves past-pointing** (forward direction). -/
+theorem isPastPointing_smul_of (t : M.TimeOrientation) {x : M.Carrier} {c : ℝ}
+    (hc : 0 < c) {v : TangentSpace M.model x} (h : M.IsPastPointing t v) :
+    M.IsPastPointing t (c • v) := by
+  rcases h with ⟨htl, hgt⟩ | ⟨hnull, vs, hvs, htends⟩
+  · exact Or.inl ⟨(M.isTimelike_smul_iff hc.ne' v).mpr htl, by
+      rw [val_field_smul]; exact mul_pos hc hgt⟩
+  · refine Or.inr ⟨(M.isNull_smul_iff hc.ne' v).mpr hnull,
+      fun n => c • vs n, fun n => ⟨?_, ?_⟩, htends.const_smul c⟩
+    · exact (M.isTimelike_smul_iff hc.ne' (vs n)).mpr (hvs n).1
+    · rw [val_field_smul]; exact mul_pos hc (hvs n).2
+
+/-- **Positive-scaling invariance of past-pointing.** For `c > 0`, `c • v` is
+past-pointing iff `v` is. -/
+theorem isPastPointing_smul_iff (t : M.TimeOrientation) {x : M.Carrier} {c : ℝ}
+    (hc : 0 < c) (v : TangentSpace M.model x) :
+    M.IsPastPointing t (c • v) ↔ M.IsPastPointing t v := by
+  refine ⟨fun h => ?_, M.isPastPointing_smul_of t hc⟩
+  have h' := M.isPastPointing_smul_of t (inv_pos.mpr hc) h
+  rwa [smul_smul, inv_mul_cancel₀ hc.ne', one_smul] at h'
+
+end Spacetime
+
+end Hilbert6

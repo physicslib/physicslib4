@@ -4,8 +4,8 @@ Status: COMPLETE (read-only research; no `.lean`/`.tex` edited)
 
 ## Target
 
-Can `Physicslib4.Spacetime.IsGeodesic` (placeholder `:= True`,
-`Physicslib4/Spacetime/Causality.lean:66-82`, with a `**Restriction:**`
+Can `Hilbert6.Spacetime.IsGeodesic` (placeholder `:= True`,
+`Hilbert6/Spacetime/Causality.lean:66-82`, with a `**Restriction:**`
 docstring) be given real content via chart Christoffel symbols of the
 Lorentzian metric, **without new dependencies**? Context: `qinz1yang/differential-geometry`
 defines geodesics only for positive-definite `SmoothRiemannianMetric` via
@@ -22,9 +22,9 @@ obligations — see §4 — most of which are currently *vacuous* consequences o
 differential-geometric argument (isometries preserve Christoffel symbols /
 are affine). This is not a small refactor.
 
-## 1. Representation of the metric (`Physicslib4/Spacetime/Basic.lean`)
+## 1. Representation of the metric (`Hilbert6/Spacetime/Basic.lean`)
 
-`Spacetime` (`Physicslib4/Spacetime/Basic.lean:117-176`) bundles:
+`Spacetime` (`Hilbert6/Spacetime/Basic.lean:117-176`) bundles:
 - `Carrier : Type*` with `TopologicalSpace`, `T2Space`, `ConnectedSpace`,
   `ChartedSpace SpacetimeModel Carrier` where
   `SpacetimeModel := EuclideanSpace ℝ (Fin 4)` (`Basic.lean:69`);
@@ -154,7 +154,7 @@ a connection, not a tensor" computation) that Mathlib does not provide
   `Matrix.nonsing_inv` (`.lake/packages/mathlib/Mathlib/LinearAlgebra/Matrix/NonsingularInverse.lean`).
 - Derivatives: `derivWithin`, `fderivWithin` (`Mathlib.Analysis.Calculus.Deriv.Basic`,
   `Mathlib.Analysis.Calculus.FDeriv.Basic`), `UniqueDiffOn` — the project already
-  has `Path.uniqueDiffOn_parameterSpace` (`Physicslib4/Spacetime/Curves.lean:118-133`)
+  has `Path.uniqueDiffOn_parameterSpace` (`Hilbert6/Spacetime/Curves.lean:118-133`)
   proving `UniqueDiffOn ℝ μ.parameterSpace`, the exact prerequisite for
   well-behaved `derivWithin`/second-`derivWithin`.
 - **No Christoffel/connection API in Mathlib**: `grep -rl "Christoffel\|LeviCivita\|Levi-Civita\|AffineConnection" .lake/packages/mathlib/Mathlib/` returns **no files**. The only Riemannian-adjacent material is
@@ -199,7 +199,7 @@ a connection, not a tensor" computation) that Mathlib does not provide
   each needs: **isometries send geodesics to geodesics.** This is the
   standard fact that an isometry (metric-preserving diffeomorphism, exactly
   `Isometry.preserves : ∀ x v w, val (φ x) (dφ v) (dφ w) = val x v w`,
-  `Physicslib4/Spacetime/Isometry.lean:62-67`) pulls back the Christoffel
+  `Hilbert6/Spacetime/Isometry.lean:62-67`) pulls back the Christoffel
   symbols computed from `g` to the Christoffel symbols of the pulled-back
   chart — i.e. isometries are *affine* maps of the (unique, torsion-free,
   metric-compatible) connection determined by `g`. **This is a real,

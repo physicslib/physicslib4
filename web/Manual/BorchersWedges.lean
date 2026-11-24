@@ -1,14 +1,14 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.AQFT.HaagKastler.BisognanoWichmann
+import Hilbert6.AQFT.HaagKastler.BisognanoWichmann
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 open Book
 -- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
 -- written relative to the library's namespaces, resolve and link.
-open Physicslib4 Physicslib4.Modular Physicslib4.AQFT Physicslib4.AQFT.HaagKastler
-open Physicslib4.AQFT.HaagKastler.HaagKastlerNet Physicslib4.Spectral.Unbounded
+open Hilbert6 Hilbert6.Modular Hilbert6.AQFT Hilbert6.AQFT.HaagKastler
+open Hilbert6.AQFT.HaagKastler.HaagKastlerNet Hilbert6.Spectral.Unbounded
 
 #doc (Manual) "Borchers' theorem and the wedge modular group" =>
 
@@ -76,9 +76,9 @@ In nets with a global gauge group, $`Z(t)` may lie in that group, so BW-a exclud
 internal symmetries.
 
 Every statement of Section 10.11 is proved in Lean, with no `sorry`. Borchers' theorem is in the
-namespace `Physicslib4.Modular`, the wedges, region algebras and covariant vacuum representations
-in `Physicslib4.AQFT.HaagKastler`, and the strip lemma and the causal-cone lemmas in
-`Physicslib4`.
+namespace `Hilbert6.Modular`, the wedges, region algebras and covariant vacuum representations
+in `Hilbert6.AQFT.HaagKastler`, and the strip lemma and the causal-cone lemmas in
+`Hilbert6`.
 
 # Design
 %%%
@@ -190,18 +190,18 @@ modular conjugation of $`(\mathcal{M}_1, \Omega_1)` onto those of $`(\mathcal{M}
 For the unbounded objects, "`B = V A V⁻¹`, including domains" is the graph identity
 $`\operatorname{graph} B = \Phi_V(\operatorname{graph} A)` with $`\Phi_V(\varphi, \psi) = (V\varphi, V\psi)`;
 the general facts about unitary conjugation of unbounded operators, including the transport of
-the functional calculus, are in `Physicslib4/Spectral/Unbounded/UnitaryConjugation.lean`.
+the functional calculus, are in `Hilbert6/Spectral/Unbounded/UnitaryConjugation.lean`.
 
 ```lean (name := checkIntertwine)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check modular_objects_unitary_intertwine
 ```
 
 ```leanOutput checkIntertwine
-Physicslib4.Modular.modular_objects_unitary_intertwine.{u_1} {H : Type u_1} [NormedAddCommGroup H]
-  [InnerProductSpace ℂ H] [CompleteSpace H] {M₁ M₂ : Set (H →L[ℂ] H)} {Ω₁ Ω₂ : H} (hM₁ : IsVonNeumannSet M₁)
-  (hM₂ : IsVonNeumannSet M₂) (hΩ₁ : IsCyclicSeparatingVector M₁ Ω₁) (hΩ₂ : IsCyclicSeparatingVector M₂ Ω₂)
-  (C₁ C₂ : H ≃ₗᵢ⋆[ℂ] H) (hC₁ : ∀ (x : H), C₁ (C₁ x) = x) (hC₂ : ∀ (x : H), C₂ (C₂ x) = x) (V : H ≃ₗᵢ[ℂ] H)
+Hilbert6.Modular.modular_objects_unitary_intertwine.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H] {M₁ M₂ : Set (H →L[ℂ] H)} {Ω₁ Ω₂ : H} (hM₁ : IsVonNeumannSet M₁) (hM₂ : IsVonNeumannSet M₂)
+  (hΩ₁ : IsCyclicSeparatingVector M₁ Ω₁) (hΩ₂ : IsCyclicSeparatingVector M₂ Ω₂) (C₁ C₂ : H ≃ₗᵢ⋆[ℂ] H)
+  (hC₁ : ∀ (x : H), C₁ (C₁ x) = x) (hC₂ : ∀ (x : H), C₂ (C₂ x) = x) (V : H ≃ₗᵢ[ℂ] H)
   (hV :
     (fun a => V.toLinearIsometry.toContinuousLinearMap ∘SL a ∘SL V.symm.toLinearIsometry.toContinuousLinearMap) '' M₁ =
       M₂)
@@ -222,17 +222,17 @@ Physicslib4.Modular.modular_objects_unitary_intertwine.{u_1} {H : Type u_1} [Nor
 
 ## Wedges, boosts and region algebras
 
-{docstring Physicslib4.AQFT.HaagKastler.rightWedge}
+{docstring Hilbert6.AQFT.HaagKastler.rightWedge}
 
-{docstring Physicslib4.AQFT.HaagKastler.IsWedge}
+{docstring Hilbert6.AQFT.HaagKastler.IsWedge}
 
-{docstring Physicslib4.AQFT.HaagKastler.boostMatrix}
+{docstring Hilbert6.AQFT.HaagKastler.boostMatrix}
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann}
 
 ## Covariant vacuum representations
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep}
 
 Under weak additivity in the von Neumann sense, the vacuum is cyclic and separating for the
 algebra of every wedge
@@ -242,14 +242,14 @@ separation comes from cyclicity for the algebra of the opposite wedge, which lie
 commutant by locality.
 
 ```lean (name := checkWedgeCS)
-open Physicslib4 AQFT HaagKastler HaagKastlerNet in
+open Hilbert6 AQFT HaagKastler HaagKastlerNet in
 #check
   IsCovariantVacuumRep.wedge_isCyclicSeparatingVector
 ```
 
 ```leanOutput checkWedgeCS
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_isCyclicSeparatingVector.{u_1, u_2}
-  {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet}
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_isCyclicSeparatingVector.{u_1, u_2} {H : Type u_1}
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet}
   {π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H} {Ω : H} {U : InhomogeneousLorentzGroup → H ≃ₗᵢ[ℂ] H}
   (h : N.IsCovariantVacuumRep π Ω U) (hwa : N.IsWeaklyAdditiveVonNeumann π) :
   (∀ (g : InhomogeneousLorentzGroup),
@@ -261,7 +261,7 @@ Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_isCyclicS
 
 ## Borchers' theorem
 
-{docstring Physicslib4.Modular.IsHalfSidedTranslation}
+{docstring Hilbert6.Modular.IsHalfSidedTranslation}
 
 The theorem
 ([thrm:borchers](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:borchers))
@@ -270,12 +270,12 @@ states both relations as identities of bounded operators. $`\Delta^{is}` is
 unitary `V t` as a bounded operator.
 
 ```lean (name := checkBorchers)
-open Physicslib4 Modular in
+open Hilbert6 Modular in
 #check borchers
 ```
 
 ```leanOutput checkBorchers
-Physicslib4.Modular.borchers.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+Hilbert6.Modular.borchers.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   {M : Set (H →L[ℂ] H)} {Ω : H} (hM : IsVonNeumannSet M) (hΩ : IsCyclicSeparatingVector M Ω) (C : H ≃ₗᵢ⋆[ℂ] H)
   (hC : ∀ (x : H), C (C x) = x) {V : ℝ → H ≃ₗᵢ[ℂ] H} (hV : IsHalfSidedTranslation M Ω V) :
   (∀ (s t : ℝ),
@@ -290,7 +290,7 @@ Physicslib4.Modular.borchers.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerP
 
 ## The wedge corollary
 
-{docstring Physicslib4.AQFT.HaagKastler.wedgeReflection}
+{docstring Hilbert6.AQFT.HaagKastler.wedgeReflection}
 
 For a covariant vacuum representation in which $`(R(W_R), \Omega)` is standard
 ([thrm:wedge-modular-translations](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:wedge-modular-translations)),
@@ -299,13 +299,13 @@ conjugation as the wedge reflection. The version for every wedge $`gW_R`,
 `IsCovariantVacuumRep.wedge_modular_translations_general`, conjugates by $`U(g)`.
 
 ```lean (name := checkWedgeMT)
-open Physicslib4 AQFT HaagKastler HaagKastlerNet in
+open Hilbert6 AQFT HaagKastler HaagKastlerNet in
 #check
   IsCovariantVacuumRep.wedge_modular_translations
 ```
 
 ```leanOutput checkWedgeMT
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_translations.{u_1, u_2} {H : Type u_1}
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_translations.{u_1, u_2} {H : Type u_1}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet}
   {π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H} {Ω : H} {U : InhomogeneousLorentzGroup → H ≃ₗᵢ[ℂ] H}
   (h : N.IsCovariantVacuumRep π Ω U) (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
@@ -322,7 +322,7 @@ Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_modular_t
         (U (translationSub (wedgeReflection a))).toLinearIsometry.toContinuousLinearMap
 ```
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.wedgeModularDefect}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.wedgeModularDefect}
 
 Without further hypotheses, $`Z` is a strongly continuous one-parameter unitary group with
 $`\Delta_{W_R}^{it} = Z(t)U(b(-2\pi t))`; it fixes $`\Omega`, preserves $`R(W_R)` and commutes
@@ -335,9 +335,9 @@ with every translation and every boost of $`W_R`
 tag := "borchers-wedges-bw-internal"
 %%%
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWedgeModularCovariant}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsWedgeModularCovariant}
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInternalSymmetry}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInternalSymmetry}
 
 The theorem
 ([thrm:bisognano-wichmann-internal](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bisognano-wichmann-internal))
@@ -347,13 +347,13 @@ the action of $`J_{W_R}` on the translations. Its docstring carries the `**Restr
 naming exact Bisognano–Wichmann as the intended form.
 
 ```lean (name := checkBWa)
-open Physicslib4 AQFT HaagKastler HaagKastlerNet in
+open Hilbert6 AQFT HaagKastler HaagKastlerNet in
 #check
   IsCovariantVacuumRep.bisognanoWichmann_internal
 ```
 
 ```leanOutput checkBWa
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.bisognanoWichmann_internal.{u_1, u_2} {H : Type u_1}
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.bisognanoWichmann_internal.{u_1, u_2} {H : Type u_1}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {N : HaagKastlerNet}
   {π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H} {Ω : H} {U : InhomogeneousLorentzGroup → H ≃ₗᵢ[ℂ] H}
   (h : N.IsCovariantVacuumRep π Ω U) (hΩ : IsCyclicSeparatingVector (N.regionVonNeumann π rightWedge) Ω)
@@ -394,7 +394,7 @@ $`\operatorname{Im}(\tau e^{2\pi z}) \ge 0` there. Three ingredients make this p
 * The positive-energy group continues to the closed upper half-plane: with $`P` its positive
   generator, $`\widetilde V(w) = \varepsilon_w(P)`, $`\varepsilon_w(\lambda) = \mathbf{1}_{[0,\infty)}(\lambda)e^{iw\lambda}`,
   is a contraction extending $`V`, holomorphic for $`\operatorname{Im} w > 0` and strongly
-  continuous up to the real axis (`Physicslib4/AQFT/PositiveEnergyHalfPlane.lean`).
+  continuous up to the real axis (`Hilbert6/AQFT/PositiveEnergyHalfPlane.lean`).
 * The powers $`\Delta^{-iz}` on the strip are written with the bounded functions $`k_\zeta(\Delta)`
   and approximated by the cutoffs $`F_n` with the spectral projections of $`\Delta` on
   $`[1/n, n]`, as in the proof of Takesaki's theorem; the $`F_n` converge uniformly on the strip
@@ -411,11 +411,11 @@ the reflection relation for $`\tau \ge 0`, matrix coefficient by matrix coeffici
 all $`t` through $`V(-t) = V(t)^*`.
 
 ```lean (name := checkStrip)
-#check Physicslib4.eq_of_real_strip_boundary
+#check Hilbert6.eq_of_real_strip_boundary
 ```
 
 ```leanOutput checkStrip
-Physicslib4.eq_of_real_strip_boundary {β : ℝ} (hβ : 0 < β) {f : ℂ → ℂ} (hf : ContinuousOn f {z | 0 ≤ z.im ∧ z.im ≤ β})
+Hilbert6.eq_of_real_strip_boundary {β : ℝ} (hβ : 0 < β) {f : ℂ → ℂ} (hf : ContinuousOn f {z | 0 ≤ z.im ∧ z.im ≤ β})
   (hfb : ∃ C, ∀ z ∈ {z | 0 ≤ z.im ∧ z.im ≤ β}, ‖f z‖ ≤ C) (hfd : DifferentiableOn ℂ f {z | 0 < z.im ∧ z.im < β})
   (hreal₀ : ∀ (t : ℝ), (f ↑t).im = 0) (hrealβ : ∀ (t : ℝ), (f (↑t + ↑β * Complex.I)).im = 0) (z : ℂ) :
   z ∈ {z | 0 ≤ z.im ∧ z.im ≤ β} → f z = f 0
@@ -453,32 +453,32 @@ tag := "borchers-wedges-files"
 The section is formalised in ten files, listed in dependency order. Each entry links to the API
 documentation of a representative declaration.
 
-* `Physicslib4/Spacetime/MinkowskiCausalCone.lean`: causal precedence and the closed forward cone,
+* `Hilbert6/Spacetime/MinkowskiCausalCone.lean`: causal precedence and the closed forward cone,
   and the coordinate criterion for complete spacelike separation,
-  {apiDocs Physicslib4.standardMinkowski_isCompletelySpacelike_of_coord}[`standardMinkowski_isCompletelySpacelike_of_coord`].
-* `Physicslib4/Spectral/Unbounded/UnitaryConjugation.lean`: unitary conjugation of unbounded
+  {apiDocs Hilbert6.standardMinkowski_isCompletelySpacelike_of_coord}[`standardMinkowski_isCompletelySpacelike_of_coord`].
+* `Hilbert6/Spectral/Unbounded/UnitaryConjugation.lean`: unitary conjugation of unbounded
   operators and of their functional calculus,
-  {apiDocs Physicslib4.Spectral.Unbounded.functionalCalculus_unitaryConj}[`functionalCalculus_unitaryConj`].
-* `Physicslib4/Operators/Modular/Intertwining.lean`: unitaries between standard pairs intertwine
+  {apiDocs Hilbert6.Spectral.Unbounded.functionalCalculus_unitaryConj}[`functionalCalculus_unitaryConj`].
+* `Hilbert6/Operators/Modular/Intertwining.lean`: unitaries between standard pairs intertwine
   the modular objects,
-  {apiDocs Physicslib4.Modular.modular_objects_unitary_intertwine}[`modular_objects_unitary_intertwine`].
-* `Physicslib4/AQFT/HaagKastler/Wedges.lean`: wedges, boosts and continuous one-parameter
-  subgroups, {apiDocs Physicslib4.AQFT.HaagKastler.wedgeBoost}[`wedgeBoost`].
-* `Physicslib4/AQFT/HaagKastler/RegionAlgebra.lean`: the algebra of a region and its locality,
-  {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann}[`regionVonNeumann`].
-* `Physicslib4/AQFT/HaagKastler/CovariantVacuum.lean`: covariant vacuum representations, covariance
+  {apiDocs Hilbert6.Modular.modular_objects_unitary_intertwine}[`modular_objects_unitary_intertwine`].
+* `Hilbert6/AQFT/HaagKastler/Wedges.lean`: wedges, boosts and continuous one-parameter
+  subgroups, {apiDocs Hilbert6.AQFT.HaagKastler.wedgeBoost}[`wedgeBoost`].
+* `Hilbert6/AQFT/HaagKastler/RegionAlgebra.lean`: the algebra of a region and its locality,
+  {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.regionVonNeumann}[`regionVonNeumann`].
+* `Hilbert6/AQFT/HaagKastler/CovariantVacuum.lean`: covariant vacuum representations, covariance
   of region algebras and the standardness of wedge algebras,
-  {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep}[`IsCovariantVacuumRep`].
-* `Physicslib4/Analysis/StripRealBoundary.lean`: functions real on both edges of a strip,
-  {apiDocs Physicslib4.eq_of_real_strip_boundary}[`eq_of_real_strip_boundary`].
-* `Physicslib4/AQFT/PositiveEnergyHalfPlane.lean`: the positive-energy group on the upper
+  {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep}[`IsCovariantVacuumRep`].
+* `Hilbert6/Analysis/StripRealBoundary.lean`: functions real on both edges of a strip,
+  {apiDocs Hilbert6.eq_of_real_strip_boundary}[`eq_of_real_strip_boundary`].
+* `Hilbert6/AQFT/PositiveEnergyHalfPlane.lean`: the positive-energy group on the upper
   half-plane,
-  {apiDocs Physicslib4.AQFT.positiveEnergyExtension_operators}[`positiveEnergyExtension_operators`].
-* `Physicslib4/AQFT/Borchers.lean`: the Borchers function and Borchers' theorem,
-  {apiDocs Physicslib4.Modular.borchers}[`borchers`].
-* `Physicslib4/AQFT/HaagKastler/BisognanoWichmann.lean`: Borchers' theorem for the commutant, the
+  {apiDocs Hilbert6.AQFT.positiveEnergyExtension_operators}[`positiveEnergyExtension_operators`].
+* `Hilbert6/AQFT/Borchers.lean`: the Borchers function and Borchers' theorem,
+  {apiDocs Hilbert6.Modular.borchers}[`borchers`].
+* `Hilbert6/AQFT/HaagKastler/BisognanoWichmann.lean`: Borchers' theorem for the commutant, the
   wedge corollary, the defect $`Z(t)` and BW-a,
-  {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.bisognanoWichmann_internal}[`bisognanoWichmann_internal`].
+  {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.bisognanoWichmann_internal}[`bisognanoWichmann_internal`].
 
 The blueprint section is
 [Section 10.11](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:borchers-wedges),

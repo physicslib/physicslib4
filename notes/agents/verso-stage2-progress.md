@@ -46,7 +46,7 @@ Sub-path deployment and CI. Appended after each step.
 - Moved `web/.lake` aside and ran the CI commands from scratch in `web/`. `lake exe cache get`: clones the
   dependencies, then "Decompressing 9030 already-cached file(s)", "No files to download" (it reuses
   `~/.cache/mathlib`, which in CI is filled by `lean-action`'s cache step), 1 min 38 s in all. `lake build`:
-  6728 jobs, 2 min 46 s; no `.olean` rebuilt for Mathlib or Physicslib4 (0 `Built Physicslib4.*` lines; the
+  6728 jobs, 2 min 46 s; no `.olean` rebuilt for Mathlib or Hilbert6 (0 `Built Hilbert6.*` lines; the
   2884 `Built Mathlib.*` lines are all `:c.o`, native objects that the `generate-site` executable links, about
   0.13 s each). `generate-site`: 4 s; output identical to the earlier build. The old `web/.lake` was then deleted.
 - Disk: `web/.lake/packages/mathlib` is a second Mathlib copy (about 7 GB with build), separate from the root's.

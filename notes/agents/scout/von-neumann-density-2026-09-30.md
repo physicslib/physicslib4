@@ -2,8 +2,8 @@
 
 ## Target
 
-`Physicslib4.AQFT.HaagKastler.dense_range_in_bicommutant`
-(`Physicslib4/AQFT/HaagKastler/StrongDensity.lean:68`), blueprint
+`Hilbert6.AQFT.HaagKastler.dense_range_in_bicommutant`
+(`Hilbert6/AQFT/HaagKastler/StrongDensity.lean:68`), blueprint
 `thrm:quasilocal-strongly-dense`
 (`blueprint/src/sections/sec10/haag-kastler-axioms.tex` ~line 569):
 
@@ -48,19 +48,19 @@ operator-topology statement. No route below weakens the target.
 
 ## 2. What the repo already has
 
-- `Physicslib4/Operators/LpDiagonal.lean` — **fully general**, no C*-algebra
+- `Hilbert6/Operators/LpDiagonal.lean` — **fully general**, no C*-algebra
   hypothesis: `lpDiag (T : ∀ i, E i →L[𝕜] E i) (hK : 0≤K) (hTK : ∀i,‖T i‖≤K) :
   lp E 2 →L[𝕜] lp E 2`, plus `lpDiag_apply_coe/_congr/_ext/_one/_mul/_add/
   _smul/_star`. Exactly the amplification machinery for step (b), and it
   needs no norm on the source algebra — `hTK` is discharged from the already
   existing CLM norms.
-- `Physicslib4/GNS/DirectSum.lean` — wraps `lpDiag` into a `StarAlgHom`
+- `Hilbert6/GNS/DirectSum.lean` — wraps `lpDiag` into a `StarAlgHom`
   `directSum π : A →⋆ₐ[ℂ] (lp H 2 →L[ℂ] lp H 2)` for a *family*
   `π i : A →⋆ₐ[ℂ] (H i →L[ℂ] H i)`, requiring `[CStarAlgebra A]` only to get
   `‖π i a‖ ≤ ‖a‖` across *different* `π i` (`NonUnitalStarAlgHom.norm_apply_le`).
   Also has `intertwines_single` and `summandProj_mem_commutant` (projection
   onto summand `j` lies in the commutant) — reusable verbatim.
-- `Physicslib4/GNS/Amplification.lean` — `ι`-fold amplification of a single
+- `Hilbert6/GNS/Amplification.lean` — `ι`-fold amplification of a single
   `π`, still under `[CStarAlgebra A]`; docstring flags that the full
   amplification commutant theorem `(π⊗1)'' = π''⊗ℂ1` is **not proved** and is
   "a genuine von Neumann algebra result Mathlib does not currently provide."
@@ -109,11 +109,11 @@ matrix-isomorphism needed:
 | Nbhd basis at 0 | have | `PointwiseConvergenceCLM.hasBasis_nhds_zero`; general `UniformConvergenceCLM.hasBasis_nhds_zero(_of_basis)`, `.../UniformConvergenceCLM.lean:275-291` |
 | Closure via nbhd basis | have | `mem_closure_iff_nhds_basis'`, `mem_closure_iff_nhds`, `Mathlib/Topology/ClusterPt.lean:298,309` |
 | `Set.centralizer` basics | have | `Set.centralizer`, `Set.mem_centralizer_iff`, `Mathlib/Algebra/Group/Center.lean:125,159` (root-level, distinct from `Subsemigroup.centralizer`) |
-| Diagonal operator on finite ℓ² sum | have, general | `Physicslib4.lpDiag` + laws, `Physicslib4/Operators/LpDiagonal.lean` |
+| Diagonal operator on finite ℓ² sum | have, general | `Hilbert6.lpDiag` + laws, `Hilbert6/Operators/LpDiagonal.lean` |
 | Finite ℓ² decomposition `x=∑single k (x k)` | have, as `HasSum` | `lp.hasSum_single`, `.../l2Space.lean:435`; needs bridge to `Finset.sum` for `Fintype` |
-| Coordinate projection/inclusion on `lp` | have | `lpEvalCLM`, `lp.singleContinuousLinearMap`, `Physicslib4/GNS/DirectSum.lean` |
+| Coordinate projection/inclusion on `lp` | have | `lpEvalCLM`, `lp.singleContinuousLinearMap`, `Hilbert6/GNS/DirectSum.lean` |
 | **Reducing subspace ⇒ projection commutes with operator** | **MISSING** | grepped `Mathlib/Analysis/InnerProductSpace/{Projection/*,Adjoint,Spectrum,Symmetric,Positive,Reproducing}.lean`; only `IsSymmetric.restrict_invariant` found (gives a restriction *given* invariance, symmetric operators only) — nothing of the needed shape. |
-| Full amplification commutant theorem | MISSING (already flagged in-repo) | `Physicslib4/GNS/Amplification.lean` docstring; not needed here, only the weaker diagonal fact above is |
+| Full amplification commutant theorem | MISSING (already flagged in-repo) | `Hilbert6/GNS/Amplification.lean` docstring; not needed here, only the weaker diagonal fact above is |
 | `VonNeumannAlgebra.commutant_commutant` | have, wrong shape | double-commutant *property* of an already-bundled vN algebra, not density; matches blueprint's own assessment |
 
 ## 4. Proof decomposition
@@ -121,7 +121,7 @@ matrix-isomorphism needed:
 New `def`s (item 4) must be added by the orchestrator/prover, not this agent.
 
 1. **`reducing_subspace_commutes_projection`** (new, general, e.g.
-   `Physicslib4/Operators/`): `K : Submodule ℂ H` closed, `T : H →L[ℂ] H`,
+   `Hilbert6/Operators/`): `K : Submodule ℂ H` closed, `T : H →L[ℂ] H`,
    `MapsTo T K K`, `MapsTo (adjoint T) K K` ⇒ `Commute T (K.starProjection :
    H →L[ℂ] H)`. ~10–15 lines (orthogonal decomposition `x=y+z`, `y∈K,z∈Kᗮ`,
    show `Tz∈Kᗮ` via `hK'` and inner-product characterization of `Kᗮ`). **The

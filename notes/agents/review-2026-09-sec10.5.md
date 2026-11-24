@@ -14,10 +14,10 @@ Reviewer: audit subagent (read-only)
   construction, Einstein causality and local von Neumann algebras, and spot-checks
   the remainder (GNS/KMS/vacuum) for hygiene (sorry/axiom/nolint) and `\lean{}`
   link integrity rather than re-deriving every one of the ~150 blueprint nodes.
-- Lean: `Physicslib4/AQFT/HaagKastler/*.lean` (all files read except the
+- Lean: `Hilbert6/AQFT/HaagKastler/*.lean` (all files read except the
   `Curved*`/`HaagKastlerCurved` tree, which is out of scope for §10.5),
-  `Physicslib4/AQFT/{KMS,PositiveEnergy}.lean`, spot checks into `Physicslib4/GNS/*`
-  and `Physicslib4/Analysis/CStarCompletion.lean`.
+  `Hilbert6/AQFT/{KMS,PositiveEnergy}.lean`, spot checks into `Hilbert6/GNS/*`
+  and `Hilbert6/Analysis/CStarCompletion.lean`.
 - `scratch_*` files ignored (none found under this scope).
 - No file was modified.
 
@@ -54,7 +54,7 @@ Reviewer: audit subagent (read-only)
 are proved about the wrong ambient algebra, with no bridge to the canonical
 quasilocal algebra.**
 
-- Location: `Physicslib4/AQFT/HaagKastler/LocalCommutativity.lean:62-69`,
+- Location: `Hilbert6/AQFT/HaagKastler/LocalCommutativity.lean:62-69`,
   `EinsteinCausality.lean` (whole file), `LocalVonNeumann.lean` (whole file,
   defines `localOperators`, `localVonNeumann`, `localVonNeumannAlgebra`,
   `relativeCommutant`, `IsIrreducibleInclusion`), vs.
@@ -85,7 +85,7 @@ quasilocal algebra.**
   representations `π : N.commAlgebra.carrier →⋆ₐ[ℂ] (H →L[ℂ] H)`, not about
   `N.quasilocal`. Nothing in the codebase connects the two: `grep -rn
   "localVonNeumann\|localOperators\|relativeCommutant\|IsIrreducibleInclusion"`
-  across the rest of `Physicslib4/AQFT/HaagKastler/*.lean` finds no use outside
+  across the rest of `Hilbert6/AQFT/HaagKastler/*.lean` finds no use outside
   `LocalVonNeumann.lean` itself. Meanwhile `GeometricCovariance.lean` (geometric
   covariance of the von Neumann net, orbit-invariance of factoriality, the vN
   isomorphism theorem — blueprint's `thrm:von-neumann-geometric-covariance`
@@ -130,17 +130,17 @@ quasilocal algebra.**
 the project's `Restriction:` marker, despite CLAUDE.md naming this file as the
 example to convert.**
 
-- Location: `Physicslib4/AQFT/PositiveEnergy.lean:14-21,45-47` and
-  `Physicslib4/AQFT/HaagKastler/VacuumState.lean:18-28`.
+- Location: `Hilbert6/AQFT/PositiveEnergy.lean:14-21,45-47` and
+  `Hilbert6/AQFT/HaagKastler/VacuumState.lean:18-28`.
 - Problem: `.claude/CLAUDE.md` states: "Record a deliberate restriction in the
   docstring of the declaration, on a line starting `**Restriction:**`... Example
   to convert: the positive-energy docstring in
-  `Physicslib4/AQFT/HaagKastler/VacuumState.lean` (bounded generators until
+  `Hilbert6/AQFT/HaagKastler/VacuumState.lean` (bounded generators until
   Stone's theorem is available)." Both files clearly *describe* the restriction
   in prose ("requiring `P` bounded is a genuine restriction... the faithful
   unbounded form needs Stone's theorem... which Mathlib does not yet provide")
   but neither uses a line beginning `**Restriction:**`. `grep -rln
-  'Restriction:'` across the whole `Physicslib4/AQFT` tree finds only
+  'Restriction:'` across the whole `Hilbert6/AQFT` tree finds only
   `StrongDensity.lean` (which does follow the convention correctly, and is a
   useful positive contrast). Automated restriction audits/greps (as this very
   audit's §3 instructions describe) will silently miss the positive-energy /
@@ -182,7 +182,7 @@ example to convert.**
 
 **L2 — `nolint` usage is isolated and justified; no action needed.**
 
-- Location: `Physicslib4/Analysis/CStarCompletion.lean:84`,
+- Location: `Hilbert6/Analysis/CStarCompletion.lean:84`,
   `@[nolint unusedArguments]` on `abbrev CStarCompletion`.
 - The preceding docstring (lines 70-83) explicitly explains why two of the five
   listed hypotheses (`StarModule ℂ A`, `CStarRing A`) are unused by the
@@ -214,7 +214,7 @@ example to convert.**
 ## Hygiene summary (verified by grep, not by `lake build`)
 
 - `sorry`/`admit`/`native_decide`/`skipKernelTC`/`implemented_by`: exactly one
-  hit in scope, `Physicslib4/AQFT/HaagKastler/StrongDensity.lean:74`
+  hit in scope, `Hilbert6/AQFT/HaagKastler/StrongDensity.lean:74`
   (`dense_range_in_bicommutant`). This is the known, already-disclosed von
   Neumann density theorem gap; it carries a correct `**Restriction:**` line
   (line 57) and the blueprint correctly declines to mark the *proof* block

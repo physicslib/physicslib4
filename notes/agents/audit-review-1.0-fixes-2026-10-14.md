@@ -1,6 +1,6 @@
 # Audit: review-1.0 fix plan, stages 1-7 (40a55f6..working tree)
 
-Scope: `git diff 40a55f6 -- Physicslib4 blueprint/src` plus uncommitted `home_page/`.
+Scope: `git diff 40a55f6 -- Hilbert6 blueprint/src` plus uncommitted `home_page/`.
 Commits baf635a..309b89d (stages 1-7 of `notes/agents/plan-review-1.0-fixes-2026-10-11.md`).
 `scratch_*` ignored.
 
@@ -35,11 +35,11 @@ decision:
   statement, as the plan records. Matches.
 
 No other changed Lean signature found outside these four files when diffing the full
-`Physicslib4/` tree against `40a55f6`. **Pass.**
+`Hilbert6/` tree against `40a55f6`. **Pass.**
 
 ## 2. sorry / admit / native_decide / axioms / set_option maxHeartbeats
 
-`git diff 40a55f6 -- Physicslib4` grepped (case-insensitive) for `sorry`, `admit`,
+`git diff 40a55f6 -- Hilbert6` grepped (case-insensitive) for `sorry`, `admit`,
 `native_decide`, `axiom `, `set_option maxHeartbeats`: no additions, no removals. Consistent
 with stage 2's note that all 11 `set_option`s were kept (none removable) and stage 3's `erw`
 removal being unrelated to heartbeats. **Pass.**
@@ -68,7 +68,7 @@ those patterns over all `+` lines in the Lean diff: no hits). Content checks:
 
 Collected every name inside an added `\lean{...}` tag in `git diff 40a55f6 -- blueprint/src`
 (55 names, stage 4/5 additions). All 55 resolve in `blueprint/lean_decls`. The one name that
-disappears from a `\lean{}` tag (`Physicslib4.AQFT.exp_generator_unique`) is on a deletion
+disappears from a `\lean{}` tag (`Hilbert6.AQFT.exp_generator_unique`) is on a deletion
 line only (R06-2, stage 4), not a dangling reference.
 
 Spot-checked declarations exist with matching signatures:

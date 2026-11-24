@@ -29,8 +29,8 @@ def docsUrl : String := publishedRoot ++ "docs/"
 /--
 The API documentation of the declaration `decl`, defined in the module `module`. doc-gen4 writes
 one page per module, at the module's path, and anchors each declaration by its full name: for
-example `Physicslib4.AQFT.HaagKastler.LocalNet`, in `Physicslib4.AQFT.HaagKastler.LocalAlgebras`, is
-at `docs/Physicslib4/AQFT/HaagKastler/LocalAlgebras.html#Physicslib4.AQFT.HaagKastler.LocalNet`.
+example `Hilbert6.AQFT.HaagKastler.LocalNet`, in `Hilbert6.AQFT.HaagKastler.LocalAlgebras`, is
+at `docs/Hilbert6/AQFT/HaagKastler/LocalAlgebras.html#Hilbert6.AQFT.HaagKastler.LocalNet`.
 -/
 def apiDocsUrl (module decl : String) : String :=
   docsUrl ++ "/".intercalate (module.splitOn ".") ++ ".html#" ++ decl

@@ -1,6 +1,6 @@
 # Review: Tomita–Takesaki stage 2, Lean statements (batches A–D)
 
-Files: `Physicslib4/Spectral/Unbounded/Polar.lean` (A–C), `Physicslib4/Operators/Modular/Modular.lean` (D).
+Files: `Hilbert6/Spectral/Unbounded/Polar.lean` (A–C), `Hilbert6/Operators/Modular/Modular.lean` (D).
 Blueprint: `blueprint/src/sections/sec10/tomita-takesaki.tex` (§ modular operator / modular conjugation).
 
 **VERDICT: REVISE.** There is 1 blocking item, a documentation-accuracy fix only. Every statement checked is true, and the batch-D statements follow from A–C plus stage 1.

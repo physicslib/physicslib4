@@ -10,8 +10,8 @@ Before stating the theorem we'll need to introduce terminology that appears in t
 
 \begin{definition}[State]
     \label{def:state}
-    \lean{Physicslib4.GNS.State, Physicslib4.GNS.State.IsFaithful}
-    \leanfile{Physicslib4/GNS/Basic.lean}
+    \lean{Hilbert6.GNS.State, Hilbert6.GNS.State.IsFaithful}
+    \leanfile{Hilbert6/GNS/Basic.lean}
     \leanok
     Let $\mathfrak{U}$ be an abstract C*-algebra. A \textit{state} is an element $\omega$ of the dual space $\mathfrak{U}^*$ that is
     \begin{itemize}
@@ -25,8 +25,8 @@ We will also have need of the term "cyclic vector".
 
 \begin{definition}[Cyclic Vector]
     \label{def:cyclic-vector}
-    \lean{Physicslib4.GNS.IsCyclicVector}
-    \leanfile{Physicslib4/GNS/Basic.lean}
+    \lean{Hilbert6.GNS.IsCyclicVector}
+    \leanfile{Hilbert6/GNS/Basic.lean}
     \leanok
     Let $\mathcal{A}$ be an algebra represented by the bounded operators $\pi(\mathcal{A})$ on the Hilbert space $\mathcal{H}$. A vector $\Omega$ in $\mathcal{H}$ is said to be a \textit{cyclic vector} if the set
     \begin{align}
@@ -39,8 +39,8 @@ With this terminology we are then able to state the GNS Construction Theorem.
 
 \begin{theorem}[GNS Construction Theorem]
     \label{thrm:gns-construction-theorem}
-    \lean{Physicslib4.GNS.gns_construction, Physicslib4.GNS.gns_unique}
-    \leanfile{Physicslib4/GNS/Construction.lean}
+    \lean{Hilbert6.GNS.gns_construction, Hilbert6.GNS.gns_unique}
+    \leanfile{Hilbert6/GNS/Construction.lean}
     \uses{def:state, def:cyclic-vector}
     \leanok
     Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. One can then construct a Hilbert space $\mathcal{H}_\omega$ and *-representation $\pi_\omega$ of $\mathfrak{U}$ by bounded operators on $\mathcal{H}_\omega$ such that
@@ -332,8 +332,8 @@ The most famous of these results is the Cauchy-Schwarz Inequality
 
 \begin{lemma}[Cauchy-Schwarz Inequality]
     \label{lmm:cauchy-schwarz-inequality}
-    \lean{Physicslib4.GNS.cauchy_schwarz_inequality, Physicslib4.GNS.omega_star_swap_conj}
-    \leanfile{Physicslib4/GNS/CauchySchwarz.lean}
+    \lean{Hilbert6.GNS.cauchy_schwarz_inequality, Hilbert6.GNS.omega_star_swap_conj}
+    \leanfile{Hilbert6/GNS/CauchySchwarz.lean}
     \uses{def:state}
     \leanok
     Let $\mathcal{A}$ be a *-algebra and $\omega$ a \textit{positive} element of the dual space $\mathcal{A}^*$, i.e. $\omega$ is an element of the dual space $\mathcal{A}^*$ such that for any $a \in \mathcal{A}$ one has $0 \le \omega(a^*a)$. Then
@@ -420,8 +420,8 @@ The next result we need to prove is:
 
 \begin{lemma}
     \label{lmm:lmm1}
-    \lean{Physicslib4.GNS.lmm1, Physicslib4.GNS.nullSet, Physicslib4.GNS.orthSet}
-    \leanfile{Physicslib4/GNS/NullSpace.lean}
+    \lean{Hilbert6.GNS.lmm1, Hilbert6.GNS.nullSet, Hilbert6.GNS.orthSet}
+    \leanfile{Hilbert6/GNS/NullSpace.lean}
     \uses{def:state}
     \leanok
     Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}_1$ defined by
@@ -456,8 +456,8 @@ Next we will prove $\mathcal{N}$ is a closed, linear subspace of $\mathfrak{U}$.
 
 \begin{lemma}
     \label{lmm:lmm2}
-    \lean{Physicslib4.GNS.lmm2, Physicslib4.GNS.nullSubmodule}
-    \leanfile{Physicslib4/GNS/NullSpace.lean}
+    \lean{Hilbert6.GNS.lmm2, Hilbert6.GNS.nullSubmodule}
+    \leanfile{Hilbert6/GNS/NullSpace.lean}
     \uses{def:state}
     \leanok
     Let $\omega$ be a state over a unital C*-algebra $\mathfrak{U}$. Then the set $\mathcal{N}$ defined by

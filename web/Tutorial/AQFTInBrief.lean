@@ -83,7 +83,7 @@ the supports of $`f` and $`g` are spacelike separated: a first sign of the local
 :::::
 
 *In the library:* the net, with its axioms, is the structure
-`Physicslib4.AQFT.HaagKastler.HaagKastlerNet`.
+`Hilbert6.AQFT.HaagKastler.HaagKastlerNet`.
 
 # Regions of spacetime
 
@@ -177,9 +177,9 @@ $`I^-(q_k) \subseteq I^-(q)`. Then both diamonds lie in $`I^+(p) \cap I^-(q)`.
 ::::
 :::::
 
-*In the library:* `Physicslib4.MinkowskiSpacetime`, with the Alexandrov topology
-`Physicslib4.Spacetime.alexandrovTopology` and the diamonds
-`Physicslib4.Spacetime.chronologicalDiamond`.
+*In the library:* `Hilbert6.MinkowskiSpacetime`, with the Alexandrov topology
+`Hilbert6.Spacetime.alexandrovTopology` and the diamonds
+`Hilbert6.Spacetime.chronologicalDiamond`.
 
 # C\*-algebras of observables
 
@@ -254,7 +254,7 @@ $`1`, and it is not $`0` because $`\mathbf{1} \neq 0` in a nonzero algebra.
 :::::
 
 *In the library:* C\*-algebras are Mathlib's class `CStarAlgebra` (unital, complex); the net assigns
-one to each diamond in `Physicslib4.AQFT.HaagKastler.LocalNet`.
+one to each diamond in `Hilbert6.AQFT.HaagKastler.LocalNet`.
 
 # The axioms
 
@@ -392,9 +392,9 @@ in $`\mathbf{B}_1` took place, so the measurement cannot be used to send a signa
 ::::
 :::::
 
-*In the library:* `Physicslib4.AQFT.HaagKastler.LocalNet`, `Physicslib4.AQFT.HaagKastler.Isotony`,
-`Physicslib4.AQFT.HaagKastler.LocalCommutativity`, `Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra`
-and `Physicslib4.AQFT.HaagKastler.LorentzCovariance`.
+*In the library:* `Hilbert6.AQFT.HaagKastler.LocalNet`, `Hilbert6.AQFT.HaagKastler.Isotony`,
+`Hilbert6.AQFT.HaagKastler.LocalCommutativity`, `Hilbert6.AQFT.HaagKastler.QuasilocalAlgebra`
+and `Hilbert6.AQFT.HaagKastler.LorentzCovariance`.
 
 # States and the GNS construction
 
@@ -523,8 +523,8 @@ it.
 ::::
 :::::
 
-*In the library:* `Physicslib4.GNS.State`, `Physicslib4.GNS.gns_construction`, and for the vacuum
-`Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState`.
+*In the library:* `Hilbert6.GNS.State`, `Hilbert6.GNS.gns_construction`, and for the vacuum
+`Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState`.
 
 # What this project sharpens
 
@@ -583,9 +583,9 @@ $`10`, so no diamond of $`M` contains both.
 ::::
 :::::
 
-*In the library:* the curved-spacetime net is `Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet`,
+*In the library:* the curved-spacetime net is `Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet`,
 and the physical principle of the quasilocal algebra is
-`Physicslib4.AQFT.HaagKastler.ObservableCorrespondence`.
+`Hilbert6.AQFT.HaagKastler.ObservableCorrespondence`.
 
 # Further reading
 

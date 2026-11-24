@@ -1,6 +1,6 @@
 # Review: reference manual chapter "Spacetime and geometry" and its docstring pass (2026-10-20)
 
-Scope: commit `be40b01` (docstrings in `Physicslib4/Spacetime/`, `Physicslib4/Geometry/PseudoRiemannian/`) and commit `8e50772` (`web/Manual/Spacetime.lean`). Read-only review.
+Scope: commit `be40b01` (docstrings in `Hilbert6/Spacetime/`, `Hilbert6/Geometry/PseudoRiemannian/`) and commit `8e50772` (`web/Manual/Spacetime.lean`). Read-only review.
 
 Severity: error / should fix / nit.
 
@@ -8,7 +8,7 @@ Severity: error / should fix / nit.
 
 ### What was checked and is correct
 
-- **Only docstrings/comments changed.** All 14 `Physicslib4/` files of `be40b01` compared with
+- **Only docstrings/comments changed.** All 14 `Hilbert6/` files of `be40b01` compared with
   `be40b01^`, with every `--` and nested `/- -/` comment removed (string literals kept) and
   whitespace normalised: identical in all 14. No library file changed between `be40b01` and HEAD.
 - **Cited names.** All 191 backticked names in the added lines resolve: in the library, or in Mathlib
@@ -75,7 +75,7 @@ A5. **nit**: `Minkowski.lean` module docstring has two near-duplicate bullets ab
 note; drop "unique".
 
 A6. **nit** (blueprint, side finding): def:alexandrov-topology has
-`\leanfile{Physicslib4/Spacetime/Minkowski.lean}`, but `alexandrovTopology` and `alexandrovBasis` are
+`\leanfile{Hilbert6/Spacetime/Minkowski.lean}`, but `alexandrovTopology` and `alexandrovBasis` are
 in `Causality.lean`. Correct the `\leanfile`.
 
 ### A(4): the three declarations without a blueprint citation
@@ -88,7 +88,7 @@ in `Causality.lean`. Correct the `\leanfile`.
   into def:standard-minkowski-spacetime and list it there (blueprint prose: a proposal for the
   lean-blueprint agent, not a Lean change).
 - `Isometry` → add to `\lean{}` of **lmm:isometry-preserves-classification** (the first isometry node,
-  `\leanfile{Physicslib4/Spacetime/Isometry.lean}`, already listing `Isometry.preserves_self` etc.;
+  `\leanfile{Hilbert6/Spacetime/Isometry.lean}`, already listing `Isometry.preserves_self` etc.;
   lmm:isometry-pullback-metric refers back to it for "the sense used throughout"). A cleaner option is
   a new def:isometry node carrying the sentence now in lmm:isometry-pullback-metric; draft it as a
   proposal under `notes/agents/`. Either way, the docstring then ends `Blueprint: <label>`.
@@ -205,7 +205,7 @@ X(x) and Z(x)".
 B10. **nit** (rendering; doubt 1): of 190 highlighted inline spans in the docstring boxes, 11 stay
 unresolved. Two are fixable by imports in `web/Manual/Spacetime.lean`:
 `import Mathlib.Geometry.Manifold.VectorBundle.Riemannian` (for `Bundle.ContMDiffRiemannianMetric`
-and `.contMDiff`) and `import Physicslib4.AQFT.HaagKastlerCurved.Concrete` (for
+and `.contMDiff`) and `import Hilbert6.AQFT.HaagKastlerCurved.Concrete` (for
 `AQFT.HaagKastlerCurved.LorentzianSpacetime` and `toAbstractIdentityComponent`). The rest are field
 names (`pos`, `isVonNBounded`, `Isom`) and expressions with free variables (`p ≪[M, t] q`, `g • x`);
 accept.
@@ -216,14 +216,14 @@ isometries" gets one sentence. Add: "The pullback metric ψ*g and cross-metric i
 they serve general covariance and are described with it."
 
 B12. **nit** (rendering, infrastructure): docstring spans `LorentzianSpacetime`, `toSpacetime` and
-`alexandrov_t2` all link to the anchor `#Physicslib4___Spacetime___LorentzianSpacetime___mk` (the
+`alexandrov_t2` all link to the anchor `#Hilbert6___Spacetime___LorentzianSpacetime___mk` (the
 constructor), not to the structure or the field. Verso quirk; record in `web/README.md` if it recurs.
 
 ## Answers to the writer's doubts
 
 1. **Unlinked `Isometry`/`LorentzianSpacetime`.** In the docstring boxes these names do resolve and
    link (the file-level `open`s work). The unresolved `Isometry`, `LorentzianSpacetime`,
-   `Spacetime`, `Physicslib4` tokens in the HTML are the namespace names in the `open … in` lines of
+   `Spacetime`, `Hilbert6` tokens in the HTML are the namespace names in the `open … in` lines of
    the `#check` blocks, which Verso does not link; harmless. Plain Lean with the chapter's opens
    resolves both names uniquely (checked with `lake env lean`). Fully qualifying names in the
    library docstrings would not help and would hurt doc-gen4 and hovers. The real fixes are the two

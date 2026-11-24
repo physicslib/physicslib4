@@ -39,7 +39,7 @@ it points to *Theorem Proving in Lean 4* and *Mathematics in Lean* for that.
   - namespaces;
   - Mathlib.
 - **Lean code:** every example is elaborated by Verso when the site is built, with hover information.
-  Examples come from the library, or are small self-contained snippets that import `Physicslib4`.
+  Examples come from the library, or are small self-contained snippets that import `Hilbert6`.
 
 ## Proposed sections
 
@@ -70,7 +70,7 @@ it points to *Theorem Proving in Lean 4* and *Mathematics in Lean* for that.
    - `LocalCommutativity` (`LocalCommutativity.lean:64`) is a `def` whose value is a `Prop`.
    - Reading it line by line against Axiom 3 of chapter 1.
    - `IsAlexandrovBasisSet` (`LocalAlgebras.lean:62`) for diamonds.
-   - `Physicslib4.GNS.State` (`GNS/Basic.lean:59`), a structure that extends a continuous linear map.
+   - `Hilbert6.GNS.State` (`GNS/Basic.lean:59`), a structure that extends a continuous linear map.
 7. **Mathlib and finding things.**
    - What Mathlib provides, and how this library builds on it.
    - Namespaces and `open`.
@@ -94,7 +94,7 @@ is a full, checked proof. Target length: 4,000–5,000 words, since the code exa
   one applies.
 - **Proof states.** Verso must display the goal state after each tactic in the worked proof of
   section 4. The Lean reference manual shows goals this way; find the mechanism.
-- **Build time.** Each chapter that imports `Physicslib4` adds elaboration time, which is CI time,
+- **Build time.** Each chapter that imports `Hilbert6` adds elaboration time, which is CI time,
   only when `web/` or the library changes.
 
 ## Process (as for chapter 1)

@@ -147,7 +147,7 @@ blocks, citations; the directives of `Tutorial.Meta` are available by importing 
 are shown in two ways, both elaborated against the library, so a renamed declaration breaks the
 build:
 
-- Definitions and structures: `{docstring Physicslib4.AQFT.HaagKastler.LocalNet}` on a line of its
+- Definitions and structures: `{docstring Hilbert6.AQFT.HaagKastler.LocalNet}` on a line of its
   own shows a box with the signature, the docstring and, for a structure, the constructor and the
   fields with their types and docstrings. Fields inherited from a parent structure are hidden; the
   parent is listed under "Extends" with a checkbox that shows them. `+hideFields` and
@@ -156,7 +156,7 @@ build:
   as Lean. Code spans are elaborated in the chapter's own scope, not the declaration's, so a name
   written relative to a library namespace (`QuasilocalAlgebra`, `HaagKastlerNet.quasilocal`) is
   resolved and linked only if the chapter opens that namespace: a chapter therefore opens the
-  namespaces of the declarations it shows, before `#doc` (`open Physicslib4.AQFT.HaagKastler`).
+  namespaces of the declarations it shows, before `#doc` (`open Hilbert6.AQFT.HaagKastler`).
   Field names and file names in code spans stay unresolved and are shown as plain code. A
   highlighted structure name or field name links to the anchor of the structure's constructor
   (`…___mk`) in the docstring box, not to the structure or the field; the hover text names the
@@ -167,7 +167,7 @@ build:
 
   ````
   ```lean (name := checkEinstein)
-  open Physicslib4 AQFT HaagKastler in
+  open Hilbert6 AQFT HaagKastler in
   #check HaagKastlerNet.einstein_causality
   ```
 
@@ -176,10 +176,10 @@ build:
   ```
   ````
 
-- Links to the API docs: `{apiDocs Physicslib4.AQFT.HaagKastler.LocalNet}[]` shows the name in code
-  type, `{apiDocs Physicslib4.AQFT.HaagKastler.LocalNet}[the local net]` the given text. The link is
+- Links to the API docs: `{apiDocs Hilbert6.AQFT.HaagKastler.LocalNet}[]` shows the name in code
+  type, `{apiDocs Hilbert6.AQFT.HaagKastler.LocalNet}[the local net]` the given text. The link is
   `Site.apiDocsUrl`: doc-gen4's page of the declaring module, anchored by the full name, for example
-  `https://physicslib.github.io/physicslib4/docs/Physicslib4/AQFT/HaagKastler/LocalAlgebras.html#Physicslib4.AQFT.HaagKastler.LocalNet`.
+  `https://physicslib.github.io/physicslib4/docs/Hilbert6/AQFT/HaagKastler/LocalAlgebras.html#Hilbert6.AQFT.HaagKastler.LocalNet`.
   It works for Mathlib declarations too.
 
 A chapter that uses library declarations imports the library modules it needs and opens
@@ -318,7 +318,7 @@ placed at `/tmp/srv/physicslib4/docs` in the layout of "Build and view locally".
      TeX Live container, with the versions pinned in `blueprint/requirements.txt`;
   4. builds the API docs with doc-gen4 the way `leanprover-community/docgen-action` does: a
      `docbuild/` Lake package requiring physicslib4 from `../` and doc-gen4 at the tag matching
-     `lean-toolchain`, sharing `../.lake/packages`, built with `lake build Physicslib4:docs` into
+     `lean-toolchain`, sharing `../.lake/packages`, built with `lake build Hilbert6:docs` into
      `docbuild/.lake/build/doc`; the API docs are cached, keyed by `lake-manifest.json`. Swap and memory overcommit are switched on first, for doc-gen4's many
      `git` processes;
   5. step "Assemble the site": copies `web/_out/site/.` to `_site/`, `web/_out/tutorial/html-multi`

@@ -1,8 +1,8 @@
 # Upgrade to Lean/Mathlib v4.35.0: progress log
 
-## Physicslib4/Geometry/PseudoRiemannian/Flat.lean
+## Hilbert6/Geometry/PseudoRiemannian/Flat.lean
 
-- Declaration: `Physicslib4.Geometry.isCovariantDerivativeOn_fderiv` (smul case).
+- Declaration: `Hilbert6.Geometry.isCovariantDerivativeOn_fderiv` (smul case).
 - Cause: in Mathlib v4.35.0 the Leibniz term of `IsCovariantDerivativeOn` is stated with
   `d% g x` (`mvfderiv`, i.e. `fromTangentSpace (g x) ∘L mfderiv% g x`) rather than with a bare
   `mfderiv`, and `mfderiv_eq_fderiv` now reads
@@ -12,9 +12,9 @@
   (`d% f x = fderiv 𝕜 f x ∘L fromTangentSpace x`), then close it with `exact h`
   (the composition with `fromTangentSpace x` is definitionally the identity).
 
-## Physicslib4/GNS/Irreducibility.lean
+## Hilbert6/GNS/Irreducibility.lean
 
-- Declaration: `Physicslib4.GNS.isAbelian_iff_le_commutant` (deprecation warning only).
+- Declaration: `Hilbert6.GNS.isAbelian_iff_le_commutant` (deprecation warning only).
 - Cause: `SetLike.le_def` is deprecated in Mathlib v4.35.0 in favour of `IsConcreteLE.le_iff`.
 - Fix: one-line switch of the simp lemma to `IsConcreteLE.le_iff`.
 

@@ -1,14 +1,14 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.Spectral.SpectralTheorem
+import Hilbert6.Spectral.SpectralTheorem
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 open Book
 -- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
 -- written relative to the library's namespaces, resolve and link.
-open Physicslib4 Physicslib4.Spectral Physicslib4.Spectral.ProjectionValuedMeasure
-open Physicslib4.Spectral.IsBoundedQuadraticForm Physicslib4.Spectral.IsBorelGenerating
+open Hilbert6 Hilbert6.Spectral Hilbert6.Spectral.ProjectionValuedMeasure
+open Hilbert6.Spectral.IsBoundedQuadraticForm Hilbert6.Spectral.IsBorelGenerating
 
 #doc (Manual) "Bounded spectral theory" =>
 
@@ -77,7 +77,7 @@ The library proves the theorem as the blueprint does, in stages:
 Every statement of the section is proved in Lean. The standard results the blueprint states
 without proof, such as the Heine–Borel, Riesz representation, Stone–Weierstrass and bounded
 convergence theorems, are Mathlib theorems or short derivations from them. The declarations are in
-the namespace `Physicslib4.Spectral`, written without the prefix below.
+the namespace `Hilbert6.Spectral`, written without the prefix below.
 
 # Design
 %%%
@@ -226,7 +226,7 @@ subsection opens with the blueprint entries it covers. In the printed statements
 the inner product $`\langle x, y \rangle`, `hA : IsSelfAdjoint A` is the hypothesis that $`A` is
 self-adjoint, `↑(spectrum ℝ A)` is the real spectrum as a type, and `fun l => ↑↑l` is the function
 $`\lambda` on it. For the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Physicslib4/Spectral/SpectralTheorem.html)
+[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/Spectral/SpectralTheorem.html)
 and the files listed at the end of the chapter. The subsections follow the order of the proof; the
 blueprint introduces projection-valued measures before the continuous calculus.
 
@@ -241,38 +241,38 @@ The spectrum and the resolvent set are Mathlib's. The library identifies them wi
 in its sign convention:
 
 ```lean (name := checkResolvent)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check mem_resolventSet_iff_isUnit_sub_smul
 ```
 
 ```leanOutput checkResolvent
-Physicslib4.Spectral.mem_resolventSet_iff_isUnit_sub_smul.{u_1} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.Spectral.mem_resolventSet_iff_isUnit_sub_smul.{u_1} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] (A : H →L[ℂ] H) (lam : ℂ) : lam ∈ resolventSet ℂ A ↔ IsUnit (A - lam • 1)
 ```
 
 The spectrum is compact
-({apiDocs Physicslib4.Spectral.isCompact_spectrum}[`isCompact_spectrum`]) and, for $`H \neq 0`,
-nonempty ({apiDocs Physicslib4.Spectral.spectrum_nonempty}[`spectrum_nonempty`]); the resolvent set
+({apiDocs Hilbert6.Spectral.isCompact_spectrum}[`isCompact_spectrum`]) and, for $`H \neq 0`,
+nonempty ({apiDocs Hilbert6.Spectral.spectrum_nonempty}[`spectrum_nonempty`]); the resolvent set
 is open, and near each of its points the resolvent is a norm-convergent power series
-({apiDocs Physicslib4.Spectral.isOpen_resolventSet}[`isOpen_resolventSet`],
-{apiDocs Physicslib4.Spectral.exists_hasSum_resolvent}[`exists_hasSum_resolvent`]). The spectral
+({apiDocs Hilbert6.Spectral.isOpen_resolventSet}[`isOpen_resolventSet`],
+{apiDocs Hilbert6.Spectral.exists_hasSum_resolvent}[`exists_hasSum_resolvent`]). The spectral
 radius and Gelfand's formula are Mathlib's {apiDocs spectralRadius}[`spectralRadius`] and
 {apiDocs spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius}[`spectrum.pow_nnnorm_pow_one_div_tendsto_nhds_spectralRadius`].
 For a self-adjoint operator the spectrum is real:
 
 ```lean (name := checkReal)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check spectrum_subset_real
 ```
 
 ```leanOutput checkReal
-Physicslib4.Spectral.spectrum_subset_real.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.spectrum_subset_real.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) : spectrum ℂ A ⊆ {z | z.im = 0}
 ```
 
 The proof takes this from Mathlib (`IsSelfAdjoint.spectrumRestricts`). The blueprint's estimate
 behind it, $`\|(A - (a + ib)\mathbf{1})\psi\|^2 \ge b^2\|\psi\|^2` for real $`a` and $`b`, is
-{apiDocs Physicslib4.Spectral.sq_norm_sub_smul_apply_le}[`sq_norm_sub_smul_apply_le`].
+{apiDocs Hilbert6.Spectral.sq_norm_sub_smul_apply_le}[`sq_norm_sub_smul_apply_le`].
 
 [bp-res]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:bounded-operator-resolvent-and-spectrum
 [bp-75]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.5
@@ -287,34 +287,34 @@ behind it, $`\|(A - (a + ib)\mathbf{1})\psi\|^2 \ge b^2\|\psi\|^2` for real $`a`
 Blueprint: [prpstn:hall-8.3][bp-83], [prpstn:hall-8.4][bp-84], and its parts
 [prpstn:cfc-multiplicative][bp-cfcm] to [prpstn:cfc-spectral-mapping][bp-cfcs].
 
-{docstring Physicslib4.Spectral.realCalculus}
+{docstring Hilbert6.Spectral.realCalculus}
 
 The blueprint's characterisation, with `polyOn A p` the polynomial $`p` restricted to
 $`\sigma(A)`:
 
 ```lean (name := checkRealCalc)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check existsUnique_realCalculus
 ```
 
 ```leanOutput checkRealCalc
-Physicslib4.Spectral.existsUnique_realCalculus.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.existsUnique_realCalculus.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) :
   ∃! T, ∀ (p : Polynomial ℝ), T (polyOn A p) = (Polynomial.aeval A) p
 ```
 
 Here `T` ranges over the bounded ℝ-linear maps `C(spectrum ℝ A, ℝ) →L[ℝ] (H →L[ℂ] H)`, and
-{apiDocs Physicslib4.Spectral.realCalculus_polyOn}[`realCalculus_polyOn`] says that `realCalculus` is the one. The properties are separate theorems,
-collected in {apiDocs Physicslib4.Spectral.realCalculus_properties}[`realCalculus_properties`]; for
+{apiDocs Hilbert6.Spectral.realCalculus_polyOn}[`realCalculus_polyOn`] says that `realCalculus` is the one. The properties are separate theorems,
+collected in {apiDocs Hilbert6.Spectral.realCalculus_properties}[`realCalculus_properties`]; for
 example, the norm identity $`\|f(A)\| = \sup_{\sigma(A)} |f|`:
 
 ```lean (name := checkNormCalc)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check norm_realCalculus
 ```
 
 ```leanOutput checkNormCalc
-Physicslib4.Spectral.norm_realCalculus.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.norm_realCalculus.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (f : C(↑(spectrum ℝ A), ℝ)) : ‖(realCalculus hA) f‖ = ‖f‖
 ```
 
@@ -328,17 +328,17 @@ Physicslib4.Spectral.norm_realCalculus.{u_1} {H : Type u_1} [NormedAddCommGroup 
 Blueprint: [thrm:riesz-representation][bp-rmk], [prpstn:associated-measures-self-adjoint][bp-am],
 [lmm:associated-measures-are-finite][bp-amf].
 
-{docstring Physicslib4.Spectral.assocMeasure}
+{docstring Hilbert6.Spectral.assocMeasure}
 
 The associated-measure theorem, existence and uniqueness:
 
 ```lean (name := checkAssocMeasure)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check existsUnique_assocMeasure
 ```
 
 ```leanOutput checkAssocMeasure
-Physicslib4.Spectral.existsUnique_assocMeasure.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.existsUnique_assocMeasure.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (ψ : H) :
   ∃! ν,
     MeasureTheory.IsFiniteMeasure ν ∧
@@ -347,11 +347,11 @@ Physicslib4.Spectral.existsUnique_assocMeasure.{u_1} {H : Type u_1} [NormedAddCo
 
 Here `ν` ranges over the measures on `spectrum ℝ A`; the integral is real, and `↑` embeds it in
 $`\mathbb{C}`. The total mass is
-{apiDocs Physicslib4.Spectral.assocMeasure_univ}[`assocMeasure_univ`],
+{apiDocs Hilbert6.Spectral.assocMeasure_univ}[`assocMeasure_univ`],
 $`\mu_\psi(\sigma(A)) = \|\psi\|^2`, stated in Mathlib's extended non-negative reals, where
 measures take their values. The Riesz–Markov–Kakutani theorem itself,
 for a positive functional on the continuous functions on a compact metric space, is
-{apiDocs Physicslib4.Spectral.existsUnique_measure_of_positive_linear}[`existsUnique_measure_of_positive_linear`].
+{apiDocs Hilbert6.Spectral.existsUnique_measure_of_positive_linear}[`existsUnique_measure_of_positive_linear`].
 
 [bp-rmk]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:riesz-representation
 [bp-am]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:associated-measures-self-adjoint
@@ -362,29 +362,29 @@ for a positive functional on the continuous functions on a compact metric space,
 Blueprint: [def:bounded-sesquilinear-form][bp-bsf], [def:bounded-quadratic-form][bp-bqf],
 [prpstn:hall-a.61][bp-a61], [prpstn:hall-a.63][bp-a63].
 
-{docstring Physicslib4.Spectral.BoundedSesquilinearForm}
+{docstring Hilbert6.Spectral.BoundedSesquilinearForm}
 
-{docstring Physicslib4.Spectral.IsQuadraticForm}
+{docstring Hilbert6.Spectral.IsQuadraticForm}
 
-{docstring Physicslib4.Spectral.IsBoundedQuadraticForm}
+{docstring Hilbert6.Spectral.IsBoundedQuadraticForm}
 
 The representation theorem for bounded quadratic forms:
 
 ```lean (name := checkQuadOp)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check existsUnique_operator_of_isBoundedQuadraticForm
 ```
 
 ```leanOutput checkQuadOp
-Physicslib4.Spectral.existsUnique_operator_of_isBoundedQuadraticForm.{u_1} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.Spectral.existsUnique_operator_of_isBoundedQuadraticForm.{u_1} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {Q : H → ℂ} (hQ : IsBoundedQuadraticForm Q) :
   ∃! A, ∀ (ψ : H), Q ψ = inner ℂ ψ (A ψ)
 ```
 
-The operator is {apiDocs Physicslib4.Spectral.IsBoundedQuadraticForm.toOperator}[`hQ.toOperator`],
-and it is self-adjoint when $`Q` is real-valued ({apiDocs Physicslib4.Spectral.IsBoundedQuadraticForm.isSelfAdjoint_toOperator}[`IsBoundedQuadraticForm.isSelfAdjoint_toOperator`]).
+The operator is {apiDocs Hilbert6.Spectral.IsBoundedQuadraticForm.toOperator}[`hQ.toOperator`],
+and it is self-adjoint when $`Q` is real-valued ({apiDocs Hilbert6.Spectral.IsBoundedQuadraticForm.isSelfAdjoint_toOperator}[`IsBoundedQuadraticForm.isSelfAdjoint_toOperator`]).
 The polarization formula is
-{apiDocs Physicslib4.Spectral.polarization}[`polarization`]. To apply the theorem to a candidate
+{apiDocs Hilbert6.Spectral.polarization}[`polarization`]. To apply the theorem to a candidate
 $`Q_f`, one proves the homogeneity $`Q_f(c\psi) = |c|^2 Q_f(\psi)`, the sesquilinearity of its
 polarization and a bound $`|Q_f(\psi)| \le C\|\psi\|^2`; for the Borel calculus these are the
 propositions from
@@ -403,30 +403,30 @@ Blueprint: [thrm:bounded-convergence-theorem][bp-bct], [def:L0-class][bp-l0],
 [thrm:monotone-class-theorem][bp-mct], [lmm:hall-prblm-8.3.3a][bp-33a],
 [lmm:hall-prblm-8.3.3b][bp-33b], [lmm:hall-prblm-8.3.3c][bp-33c].
 
-{docstring Physicslib4.Spectral.BddMeasurable}
+{docstring Hilbert6.Spectral.BddMeasurable}
 
-{docstring Physicslib4.Spectral.BoundedPointwiseLimit}
+{docstring Hilbert6.Spectral.BoundedPointwiseLimit}
 
-{docstring Physicslib4.Spectral.IsBorelGenerating}
+{docstring Hilbert6.Spectral.IsBorelGenerating}
 
 The conclusion of the bootstrap:
 
 ```lean (name := checkBootstrap)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check IsBorelGenerating.eq_bddMeasurable
 ```
 
 ```leanOutput checkBootstrap
-Physicslib4.Spectral.IsBorelGenerating.eq_bddMeasurable.{u_1} {X : Type u_1} [MetricSpace X] [MeasurableSpace X]
+Hilbert6.Spectral.IsBorelGenerating.eq_bddMeasurable.{u_1} {X : Type u_1} [MetricSpace X] [MeasurableSpace X]
   [BorelSpace X] {𝒞 : Set (X → ℂ)} (h𝒞 : IsBorelGenerating 𝒞) : 𝒞 = ↑(BddMeasurable X)
 ```
 
-Its ingredients are the class {apiDocs Physicslib4.Spectral.L0}[`L0`], an algebra of sets
-containing the open sets ({apiDocs Physicslib4.Spectral.isSetAlgebra_L0}[`isSetAlgebra_L0`]), the
+Its ingredients are the class {apiDocs Hilbert6.Spectral.L0}[`L0`], an algebra of sets
+containing the open sets ({apiDocs Hilbert6.Spectral.isSetAlgebra_L0}[`isSetAlgebra_L0`]), the
 monotone class theorem
-({apiDocs Physicslib4.Spectral.generateFrom_subset_of_isMonotoneClass}[`generateFrom_subset_of_isMonotoneClass`]),
+({apiDocs Hilbert6.Spectral.generateFrom_subset_of_isMonotoneClass}[`generateFrom_subset_of_isMonotoneClass`]),
 and the indicator step
-{apiDocs Physicslib4.Spectral.IsBorelGenerating.indicator_mem}[`IsBorelGenerating.indicator_mem`].
+{apiDocs Hilbert6.Spectral.IsBorelGenerating.indicator_mem}[`IsBorelGenerating.indicator_mem`].
 
 [bp-bct]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bounded-convergence-theorem
 [bp-l0]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:L0-class
@@ -443,22 +443,22 @@ Blueprint: [def:projection-valued-measure][bp-pvm],
 [prpstn:integral-norm-bound][bp-nb], [prpstn:integral-multiplicative][bp-mul],
 [prpstn:integral-conjugation][bp-conj].
 
-{docstring Physicslib4.Spectral.ProjectionValuedMeasure}
+{docstring Hilbert6.Spectral.ProjectionValuedMeasure}
 
-{docstring Physicslib4.Spectral.ProjectionValuedMeasure.assoc}
+{docstring Hilbert6.Spectral.ProjectionValuedMeasure.assoc}
 
-{docstring Physicslib4.Spectral.ProjectionValuedMeasure.integral}
+{docstring Hilbert6.Spectral.ProjectionValuedMeasure.integral}
 
 The integral comes from a unique linear map on the bounded measurable functions, characterised by
 its expectation values:
 
 ```lean (name := checkIntegral)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check ProjectionValuedMeasure.existsUnique_integral
 ```
 
 ```leanOutput checkIntegral
-Physicslib4.Spectral.ProjectionValuedMeasure.existsUnique_integral.{u_1, u_2} {X : Type u_1} [MeasurableSpace X]
+Hilbert6.Spectral.ProjectionValuedMeasure.existsUnique_integral.{u_1, u_2} {X : Type u_1} [MeasurableSpace X]
   {H : Type u_2} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (μ : ProjectionValuedMeasure X H) :
   ∃! T, ∀ (f : ↥(BddMeasurable X)) (ψ : H), inner ℂ ψ ((T f) ψ) = ∫ (x : X), ↑f x ∂μ.assoc ψ
 ```
@@ -468,29 +468,29 @@ underlying an element of the subspace, and `μ.assoc ψ` is $`\mu_\psi`. That
 $`Q_f(\psi) = \int f \, d\mu_\psi` is a bounded quadratic form is proved in three stages, as in the
 blueprint: for indicator functions, for simple functions, and for bounded measurable functions as
 uniform limits of simple ones
-({apiDocs Physicslib4.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral_bddMeasurable}[`isBoundedQuadraticForm_integral_bddMeasurable`]).
+({apiDocs Hilbert6.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral_bddMeasurable}[`isBoundedQuadraticForm_integral_bddMeasurable`]).
 
 It is multiplicative, the operator form of $`\int fg \, d\mu = (\int f \, d\mu)(\int g \, d\mu)`:
 
 ```lean (name := checkIntegralMul)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check ProjectionValuedMeasure.integral_mul
 ```
 
 ```leanOutput checkIntegralMul
-Physicslib4.Spectral.ProjectionValuedMeasure.integral_mul.{u_1, u_2} {X : Type u_1} [MeasurableSpace X] {H : Type u_2}
+Hilbert6.Spectral.ProjectionValuedMeasure.integral_mul.{u_1, u_2} {X : Type u_1} [MeasurableSpace X] {H : Type u_2}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (μ : ProjectionValuedMeasure X H) {f g : X → ℂ}
   (hf : f ∈ BddMeasurable X) (hg : g ∈ BddMeasurable X) : μ.integral (f * g) = μ.integral f * μ.integral g
 ```
 
 The bound $`\|\int f \, d\mu\| \le \sup_x |f(x)|` is
-{apiDocs Physicslib4.Spectral.ProjectionValuedMeasure.norm_integral_le}[`norm_integral_le`]; its
+{apiDocs Hilbert6.Spectral.ProjectionValuedMeasure.norm_integral_le}[`norm_integral_le`]; its
 proof first establishes the weaker bound $`6\sup_x |f(x)|`, which it uses to pass to the limit of
 simple functions (formalization note of [prpstn:integral-norm-bound][bp-nb]). The identity
 $`\int \bar f \, d\mu = (\int f \, d\mu)^*` is
-{apiDocs Physicslib4.Spectral.ProjectionValuedMeasure.integral_conj}[`integral_conj`]. The measure
+{apiDocs Hilbert6.Spectral.ProjectionValuedMeasure.integral_conj}[`integral_conj`]. The measure
 $`\mu_\psi` exists and is unique by
-{apiDocs Physicslib4.Spectral.ProjectionValuedMeasure.existsUnique_assoc}[`existsUnique_assoc`].
+{apiDocs Hilbert6.Spectral.ProjectionValuedMeasure.existsUnique_assoc}[`existsUnique_assoc`].
 
 [bp-pvm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:projection-valued-measure
 [bp-pvma]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:projection-valued-measures-associated-measure
@@ -506,35 +506,35 @@ Blueprint: [def:hall-8.6][bp-86], [prpstn:hall-8.7][bp-87], [def:F-class][bp-F],
 [def:hall-8.8][bp-88], [lmm:lemma-3][bp-l3], [prpstn:hall-8.9][bp-89],
 [def:F1-F2-classes][bp-F12].
 
-{docstring Physicslib4.Spectral.borelForm}
+{docstring Hilbert6.Spectral.borelForm}
 
 Every bounded Borel function gives a bounded quadratic form, by the bootstrap applied to
-{apiDocs Physicslib4.Spectral.FClass}[`FClass`]:
+{apiDocs Hilbert6.Spectral.FClass}[`FClass`]:
 
 ```lean (name := checkBorelForm)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check isBoundedQuadraticForm_borelForm
 ```
 
 ```leanOutput checkBorelForm
-Physicslib4.Spectral.isBoundedQuadraticForm_borelForm.{u_1} {H : Type u_1} [NormedAddCommGroup H]
-  [InnerProductSpace ℂ H] [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) {f : ↑(spectrum ℝ A) → ℂ}
+Hilbert6.Spectral.isBoundedQuadraticForm_borelForm.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) {f : ↑(spectrum ℝ A) → ℂ}
   (hf : f ∈ BddMeasurable ↑(spectrum ℝ A)) : IsBoundedQuadraticForm (borelForm hA f)
 ```
 
-{docstring Physicslib4.Spectral.borelCalculus}
+{docstring Hilbert6.Spectral.borelCalculus}
 
 Multiplicativity, proved by the bootstrap twice, through the classes
-{apiDocs Physicslib4.Spectral.F1Class}[`F1Class`] and
-{apiDocs Physicslib4.Spectral.F2Class}[`F2Class`]:
+{apiDocs Hilbert6.Spectral.F1Class}[`F1Class`] and
+{apiDocs Hilbert6.Spectral.F2Class}[`F2Class`]:
 
 ```lean (name := checkBorelMul)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check borelCalculus_mul
 ```
 
 ```leanOutput checkBorelMul
-Physicslib4.Spectral.borelCalculus_mul.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.borelCalculus_mul.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) {f g : ↑(spectrum ℝ A) → ℂ}
   (hf : f ∈ BddMeasurable ↑(spectrum ℝ A)) (hg : g ∈ BddMeasurable ↑(spectrum ℝ A)) :
   (borelCalculus hA fun l => f l * g l) = borelCalculus hA f * borelCalculus hA g
@@ -559,39 +559,39 @@ Blueprint: [thrm:hall-8.10][bp-810], [prpstn:mua-projection][bp-muap] to
 [prpstn:mua-integrates-to-A][bp-muaA], [thrm:hall-prblm-8.3.4][bp-uniq],
 [thrm:spectral-theorem-for-bounded-operators][bp-st], [def:functional-calculus][bp-fc].
 
-{docstring Physicslib4.Spectral.spectralMeasure}
+{docstring Hilbert6.Spectral.spectralMeasure}
 
 The headline theorem of the section:
 
 ```lean (name := checkSpectral)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check existsUnique_spectralMeasure
 ```
 
 ```leanOutput checkSpectral
-Physicslib4.Spectral.existsUnique_spectralMeasure.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.existsUnique_spectralMeasure.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) : ∃! μ, (μ.integral fun l => ↑↑l) = A
 ```
 
 Here `μ` ranges over `ProjectionValuedMeasure (spectrum ℝ A) H`, and the integrand is
 $`\lambda`. The blueprint's form of the existence half, with $`\mu^A(E) = 1_E(A)` on Borel sets,
-is {apiDocs Physicslib4.Spectral.exists_spectralMeasure}[`exists_spectralMeasure`]. Existence is
-{apiDocs Physicslib4.Spectral.spectralMeasure_integral_id}[`spectralMeasure_integral_id`] and
-uniqueness {apiDocs Physicslib4.Spectral.pvm_eq_of_integral_id_eq}[`pvm_eq_of_integral_id_eq`].
+is {apiDocs Hilbert6.Spectral.exists_spectralMeasure}[`exists_spectralMeasure`]. Existence is
+{apiDocs Hilbert6.Spectral.spectralMeasure_integral_id}[`spectralMeasure_integral_id`] and
+uniqueness {apiDocs Hilbert6.Spectral.pvm_eq_of_integral_id_eq}[`pvm_eq_of_integral_id_eq`].
 The two Borel calculi agree:
 
 ```lean (name := checkAgree)
-open Physicslib4 Spectral in
+open Hilbert6 Spectral in
 #check borelCalculus_eq_integral
 ```
 
 ```leanOutput checkAgree
-Physicslib4.Spectral.borelCalculus_eq_integral.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+Hilbert6.Spectral.borelCalculus_eq_integral.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) {f : ↑(spectrum ℝ A) → ℂ}
   (hf : f ∈ BddMeasurable ↑(spectrum ℝ A)) : borelCalculus hA f = (spectralMeasure hA).integral f
 ```
 
-{docstring Physicslib4.Spectral.functionalCalculus}
+{docstring Hilbert6.Spectral.functionalCalculus}
 
 [bp-810]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-8.10
 [bp-muap]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:mua-projection
@@ -605,34 +605,34 @@ Physicslib4.Spectral.borelCalculus_eq_integral.{u_1} {H : Type u_1} [NormedAddCo
 tag := "spectral-files"
 %%%
 
-The section is formalised in the top-level files of `Physicslib4/Spectral/`, one topic per file.
+The section is formalised in the top-level files of `Hilbert6/Spectral/`, one topic per file.
 Each entry links to the API documentation of a representative declaration, from which the rest of
 the file can be browsed.
 
 * `Basic.lean`: the prerequisites about bounded operators that Mathlib does not state in the
   blueprint's form, bounded measurable functions, the resolvent in the blueprint's sign convention,
-  and the bounded convergence theorem, {apiDocs Physicslib4.Spectral.BddMeasurable}[`BddMeasurable`].
+  and the bounded convergence theorem, {apiDocs Hilbert6.Spectral.BddMeasurable}[`BddMeasurable`].
   Its module documentation lists the blueprint entries that are Mathlib declarations.
 * `Spectrum.lean`: compactness and nonemptiness of the spectrum, the resolvent as a power series,
   and the reality of the spectrum of a self-adjoint operator,
-  {apiDocs Physicslib4.Spectral.spectrum_subset_real}[`spectrum_subset_real`].
+  {apiDocs Hilbert6.Spectral.spectrum_subset_real}[`spectrum_subset_real`].
 * `ContinuousCalculus.lean`: the continuous functional calculus and the associated measures,
-  {apiDocs Physicslib4.Spectral.realCalculus}[`realCalculus`].
+  {apiDocs Hilbert6.Spectral.realCalculus}[`realCalculus`].
 * `Forms.lean`: sesquilinear and quadratic forms, polarization, and the operator of a bounded
   quadratic form,
-  {apiDocs Physicslib4.Spectral.existsUnique_operator_of_isBoundedQuadraticForm}[`existsUnique_operator_of_isBoundedQuadraticForm`].
+  {apiDocs Hilbert6.Spectral.existsUnique_operator_of_isBoundedQuadraticForm}[`existsUnique_operator_of_isBoundedQuadraticForm`].
 * `BorelClasses.lean`: bump functions, the monotone class theorem, $`\mathcal{L}_0` and the
-  bootstrap, {apiDocs Physicslib4.Spectral.IsBorelGenerating}[`IsBorelGenerating`].
+  bootstrap, {apiDocs Hilbert6.Spectral.IsBorelGenerating}[`IsBorelGenerating`].
 * `ProjectionValuedMeasure.lean`: projection-valued measures, their associated measures, and sums of
   orthogonal projections,
-  {apiDocs Physicslib4.Spectral.ProjectionValuedMeasure}[`ProjectionValuedMeasure`].
+  {apiDocs Hilbert6.Spectral.ProjectionValuedMeasure}[`ProjectionValuedMeasure`].
 * `OperatorIntegral.lean`: the operator-valued integral and its properties,
-  {apiDocs Physicslib4.Spectral.ProjectionValuedMeasure.integral}[`ProjectionValuedMeasure.integral`].
+  {apiDocs Hilbert6.Spectral.ProjectionValuedMeasure.integral}[`ProjectionValuedMeasure.integral`].
 * `BorelCalculus.lean`: the quadratic forms $`Q_f`, the Borel functional calculus and its
-  multiplicativity, {apiDocs Physicslib4.Spectral.borelCalculus}[`borelCalculus`].
+  multiplicativity, {apiDocs Hilbert6.Spectral.borelCalculus}[`borelCalculus`].
 * `SpectralTheorem.lean`: the spectral measure, uniqueness, the spectral theorem and the
   functional calculus,
-  {apiDocs Physicslib4.Spectral.existsUnique_spectralMeasure}[`existsUnique_spectralMeasure`].
+  {apiDocs Hilbert6.Spectral.existsUnique_spectralMeasure}[`existsUnique_spectralMeasure`].
 
 The subdirectories `Unbounded/` and `Stone/` formalise Sections 10.3 and 10.4 of the blueprint.
 The blueprint section is

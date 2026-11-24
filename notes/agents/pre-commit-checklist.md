@@ -21,7 +21,7 @@ the repo currently fails `lake lint` with 9 pre-existing errors.
    pre-existing noise, present since before 2026-09-17; confirm they are not in the
    commit rather than assuming.
 6. `lake exe mk_all` — only needed when a **new file** is added; adding declarations
-   to an existing file does not require it. Always inspect `git diff Physicslib4.lean`
+   to an existing file does not require it. Always inspect `git diff Hilbert6.lean`
    afterwards rather than committing it blind: `mk_all` globs the tree and would add
    any `scratch_*.lean` to the root import list, which `.claude/CLAUDE.md` says to ignore.
 7. `lake exe checkdecls blueprint/lean_decls` — after any `\lean{}` tag change.

@@ -1,4 +1,4 @@
-name = "physicslib4-web"
+name = "hilbert6-web"
 version = "0.1.0"
 defaultTargets = ["Site", "generate-site", "Tutorial", "generate-tutorial", "Manual", "generate-manual"]
 
@@ -13,7 +13,7 @@ git = "https://github.com/leanprover/verso-web-components.git"
 rev = "v4.35.0"
 
 [[require]]
-name = "physicslib4"
+name = "hilbert6"
 path = ".."
 
 [[lean_lib]]

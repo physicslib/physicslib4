@@ -8,7 +8,7 @@ Read-only review; nothing else was edited. Severities: **error** / **should fix*
 
 ### The library
 
-`Physicslib4/Spacetime/Causality.lean:162-175`:
+`Hilbert6/Spacetime/Causality.lean:162-175`:
 
 ```lean
 /-- A *causal trip* from `p` to `q`: a curve which is piecewise a

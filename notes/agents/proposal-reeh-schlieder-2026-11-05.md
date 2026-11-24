@@ -75,7 +75,7 @@ form `isPositiveEnergy_iff_exists_exp`.
 These are general facts, and each is a separate node below.
 
 - **G1. Spectral support.** The spectral measure of a positive self-adjoint operator is supported
-  on `[0, ∞)`. No such lemma was found in `Physicslib4/Spectral/Unbounded/`.
+  on `[0, ∞)`. No such lemma was found in `Hilbert6/Spectral/Unbounded/`.
 - **G2. Off-diagonal matrix elements.** `ProjectionValuedMeasure.inner_integral` gives
   `⟪ψ, (∫ f dE) ψ⟫ = ∫ f d(E.assoc ψ)` for the diagonal only. The off-diagonal `⟪χ, (∫ f dE) φ⟫`
   follows by polarization; it may be easier to work with polarized diagonal terms throughout.
@@ -86,7 +86,7 @@ These are general facts, and each is a separate node below.
   real axis, and zero on a real interval, is identically zero.
   - Proof: Schwarz reflection across the interval, then the identity theorem.
   - The reflection step reuses `differentiableOn_of_continuousOn_off_horizontal_line`
-    (`Physicslib4/Analysis/HorizontalLineRemovable.lean`, with `ℓ = 0`).
+    (`Hilbert6/Analysis/HorizontalLineRemovable.lean`, with `ℓ = 0`).
   - No Schwarz reflection principle was found in Mathlib.
 - **G5. Closure under the bicommutant.** For a unital \*-algebra S of bounded operators and any
   vector Ω, S Ω and S'' Ω have the same closure. The existing `lmm:cyclic-subspace-reduces` may

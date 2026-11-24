@@ -138,7 +138,7 @@ Also grep the blueprint, the home page and the docstrings for "irreflexive", "re
 ## Stages
 
 1. **Your approval** of the design above (items 1–2). Then guard approvals:
-   - `python3 ~/.claude/lean-kit/lean_guard.py approve --file Physicslib4/Spacetime/Causality.lean --note causal-refl`;
+   - `python3 ~/.claude/lean-kit/lean_guard.py approve --file Hilbert6/Spacetime/Causality.lean --note causal-refl`;
    - the same for `LorentzCausality.lean` and `CausalComplement.lean`, in case a statement there needs
      a change.
 2. **Lean (one prover):**

@@ -237,7 +237,7 @@ checked in Stage 7.
 
 - `lake build`, `lake lint`, `checkdecls`, a PDF build (no errors, no overfull lines) and a web
   build.
-- A comment-stripped diff of `Physicslib4/` against the branch point must be empty: no code
+- A comment-stripped diff of `Hilbert6/` against the branch point must be empty: no code
   changed.
 - A blueprint check that the set of labels and every `\lean` / `\uses` / `\leanok` line is
   unchanged since the branch point, by script.
@@ -308,7 +308,7 @@ checked in Stage 7.
   Liouville is proved, LorentzCone sign lemma exists, stale "towards …" titles fixed. Leftover
   "-- (extracted by Fuse golfer)" markers removed everywhere. Checks: a comment-stripped
   comparison against HEAD shows code unchanged in all 30 files; no Lean/Mathlib version strings
-  remain in Physicslib4/; build and lint clean; residue = 3 positional uses (CStarCompletion "the
+  remain in Hilbert6/; build and lint clean; residue = 3 positional uses (CStarCompletion "the
   former" = first of two items; QuasilocalAlgebra quotes the blueprint's "as previously proven").
 - 2026-10-09, Stage 6 done:
   - index.md: the three "Recently completed" blocks are replaced by a new "## Highlights" section,

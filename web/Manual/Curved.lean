@@ -1,29 +1,29 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.AQFT.HaagKastlerCurved.Spacetime
-import Physicslib4.AQFT.HaagKastlerCurved.Net
-import Physicslib4.AQFT.HaagKastlerCurved.Concrete
-import Physicslib4.AQFT.HaagKastlerCurved.IdentityComponent
-import Physicslib4.AQFT.HaagKastlerCurved.EinsteinCausality
-import Physicslib4.AQFT.HaagKastlerCurved.LocalVonNeumann
-import Physicslib4.AQFT.HaagKastlerCurved.GeometricCovariance
-import Physicslib4.AQFT.HaagKastlerCurved.CovariantState
-import Physicslib4.AQFT.HaagKastlerCurved.StabilizerAction
-import Physicslib4.AQFT.HaagKastlerCurved.StabilizerKMS
-import Physicslib4.AQFT.HaagKastlerCurved.Purity
-import Physicslib4.AQFT.HaagKastlerCurved.GeneralCovariance
+import Hilbert6.AQFT.HaagKastlerCurved.Spacetime
+import Hilbert6.AQFT.HaagKastlerCurved.Net
+import Hilbert6.AQFT.HaagKastlerCurved.Concrete
+import Hilbert6.AQFT.HaagKastlerCurved.IdentityComponent
+import Hilbert6.AQFT.HaagKastlerCurved.EinsteinCausality
+import Hilbert6.AQFT.HaagKastlerCurved.LocalVonNeumann
+import Hilbert6.AQFT.HaagKastlerCurved.GeometricCovariance
+import Hilbert6.AQFT.HaagKastlerCurved.CovariantState
+import Hilbert6.AQFT.HaagKastlerCurved.StabilizerAction
+import Hilbert6.AQFT.HaagKastlerCurved.StabilizerKMS
+import Hilbert6.AQFT.HaagKastlerCurved.Purity
+import Hilbert6.AQFT.HaagKastlerCurved.GeneralCovariance
 -- Imported only for the link to the Minkowski equivalence of Axiom 3.
-import Physicslib4.AQFT.HaagKastler.LocalCommutativity
+import Hilbert6.AQFT.HaagKastler.LocalCommutativity
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 open Book
 -- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
--- written relative to the library's namespaces, resolve and link. `Physicslib4.Spacetime` is not
+-- written relative to the library's namespaces, resolve and link. `Hilbert6.Spacetime` is not
 -- opened, since its `LorentzianSpacetime` would clash with the interface of the same name.
-open Physicslib4 Physicslib4.AQFT Physicslib4.AQFT.HaagKastlerCurved
-open Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet
-open Physicslib4.Spacetime.LorentzianSpacetime
+open Hilbert6 Hilbert6.AQFT Hilbert6.AQFT.HaagKastlerCurved
+open Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet
+open Hilbert6.Spacetime.LorentzianSpacetime
 
 #doc (Manual) "The axioms in curved spacetime and general covariance" =>
 
@@ -92,9 +92,9 @@ From the axioms the library proves:
 * the characterisations of pure states on each $`\mathfrak{U}(\mathbf{B})`.
 
 It also defines covariant families of local states, and KMS and ground states for a Killing flow
-fixing a region. The declarations are in the namespace `Physicslib4.AQFT.HaagKastlerCurved`,
+fixing a region. The declarations are in the namespace `Hilbert6.AQFT.HaagKastlerCurved`,
 written without it below, except for the bridge and the pullback relabelling, which are in
-`Physicslib4.Spacetime.LorentzianSpacetime`.
+`Hilbert6.Spacetime.LorentzianSpacetime`.
 
 # Design
 %%%
@@ -180,7 +180,7 @@ $`i_{(\mathbf{B}_1\mathbf{B})}(a_1)` and $`i_{(\mathbf{B}_2\mathbf{B})}(a_2)` co
 $`\mathfrak{U}(\mathbf{B})`. When no such $`\mathbf{B}` exists the condition is vacuous: the two
 algebras lie in no common algebra, so the question does not arise. In Minkowski spacetime the same
 statement is equivalent to commutation in the quasilocal algebra (Minkowski:
-{apiDocs Physicslib4.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι}[`localCommutativity_iff_exists_commute_ι`]).
+{apiDocs Hilbert6.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι}[`localCommutativity_iff_exists_commute_ι`]).
 
 Every later result follows the same pattern. Einstein causality, the local von Neumann algebras
 and the GNS results are stated in, or in a representation of, the algebra
@@ -266,7 +266,7 @@ tag := "curved-main"
 Definitions are shown with their docstrings, which give the mathematics and the blueprint entry;
 theorems with their statements, as Lean prints them, and a line or two of explanation. Each
 subsection opens with the blueprint entries it covers. For the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Physicslib4/AQFT/HaagKastlerCurved/Net.html)
+[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/AQFT/HaagKastlerCurved/Net.html)
 and the files listed at the end of the chapter.
 
 ## The spacetime interface and the bridge
@@ -274,13 +274,13 @@ and the files listed at the end of the chapter.
 Blueprint: [def:lorentzian-spacetime][bp-ls], [def:isometric-covariance-in-curved-spacetime][bp-cov]
 (formalization note), [lmm:axiom5-basis-preservation][bp-a5b].
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.LorentzianSpacetime}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.LorentzianSpacetime}
 
-{docstring Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent}
+{docstring Hilbert6.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent}
 
 The interface carries no topology on `Isom`, so the strongly continuous results below take
 `[TopologicalSpace M.Isom]` as an argument. Over the bridge the instance
-{apiDocs Physicslib4.Spacetime.LorentzianSpacetime.instTopologicalSpaceToAbstractIdentityComponentIsom}[`instTopologicalSpaceToAbstractIdentityComponentIsom`]
+{apiDocs Hilbert6.Spacetime.LorentzianSpacetime.instTopologicalSpaceToAbstractIdentityComponentIsom}[`instTopologicalSpaceToAbstractIdentityComponentIsom`]
 supplies it: the isometry group has the topology induced by
 $`\varphi \mapsto (\varphi, \varphi^{-1})` into $`C(M, M) \times C(M, M)` with the compact-open
 topology, and the subgroup inherits it.
@@ -301,28 +301,28 @@ Axioms 1 and 2. As in Minkowski spacetime, the isotony maps take the basis-set h
 explicitly and the regions as strict-implicit arguments, so the embedding of $`\mathbf{B}_1` in
 $`\mathbf{B}_2` is `i.map hB₁ hB₂ h`:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.LocalNet}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.LocalNet}
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.Isotony}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.Isotony}
 
 Axiom 3:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.LocalCommutativity}
 
 Axiom 4 and the local observables it refers to:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.IsLocalObservable}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.IsLocalObservable}
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.LocalAlgebra}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.LocalAlgebra}
 
 Axiom 5:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.IsometricCovariance}
 
 The bundled net. A theorem about a theory on $`M` takes `N : HaagKastlerNet M`, and reaches the
 isotony maps as `N.commIsotony` and the covariance maps as `N.covEquiv`:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet}
 
 The axioms are consistent over every instance of the interface. The witness is the trivial net
 `trivialHaagKastlerNet`, which assigns $`\mathbb{C}` to every region with every map the identity;
@@ -330,12 +330,12 @@ the [tutorial](../tutorial/Worked-examples/#physicslib4-tutorial--Worked-example
 compares it with the Minkowski one.
 
 ```lean (name := checkNonempty)
-open Physicslib4 AQFT HaagKastlerCurved in
+open Hilbert6 AQFT HaagKastlerCurved in
 #check nonempty_haagKastlerNet
 ```
 
 ```leanOutput checkNonempty
-Physicslib4.AQFT.HaagKastlerCurved.nonempty_haagKastlerNet.{u} (M : LorentzianSpacetime) : Nonempty (HaagKastlerNet M)
+Hilbert6.AQFT.HaagKastlerCurved.nonempty_haagKastlerNet.{u} (M : LorentzianSpacetime) : Nonempty (HaagKastlerNet M)
 ```
 
 Lean does not print the second universe of `HaagKastlerNet`: the net has its algebras in
@@ -343,13 +343,13 @@ universe 0, since the model is built from $`\mathbb{C}`. The geometric form, for
 spacetime $`L` with the group of Axiom 5 taken to be its isometries connected to the identity:
 
 ```lean (name := checkNonemptyGeom)
-open Physicslib4 Spacetime LorentzianSpacetime in
+open Hilbert6 Spacetime LorentzianSpacetime in
 #check nonempty_haagKastlerNet_identityComponent
 ```
 
 ```leanOutput checkNonemptyGeom
-Physicslib4.Spacetime.LorentzianSpacetime.nonempty_haagKastlerNet_identityComponent
-  (L : Spacetime.LorentzianSpacetime) : Nonempty (HaagKastlerNet L.toAbstractIdentityComponent)
+Hilbert6.Spacetime.LorentzianSpacetime.nonempty_haagKastlerNet_identityComponent (L : Spacetime.LorentzianSpacetime) :
+  Nonempty (HaagKastlerNet L.toAbstractIdentityComponent)
 ```
 
 [bp-la]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-algebras-in-curved-spacetime
@@ -374,12 +374,12 @@ $`\mathfrak{U}(\mathbf{B})`: the operators of completely spacelike basis sets
 $`\mathbf{B}_1, \mathbf{B}_2 \subseteq \mathbf{B}` commute. It is Axiom 3 mapped by $`\pi`.
 
 ```lean (name := checkEinstein)
-open Physicslib4 AQFT HaagKastlerCurved in
+open Hilbert6 AQFT HaagKastlerCurved in
 #check HaagKastlerNet.einstein_causality
 ```
 
 ```leanOutput checkEinstein
-Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.einstein_causality.{u, v, u_1} {M : LorentzianSpacetime}
+Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.einstein_causality.{u, v, u_1} {M : LorentzianSpacetime}
   (N : HaagKastlerNet M) {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   {B : Set M.Carrier} (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] H →L[ℂ] H) ⦃B₁ B₂ : Set M.Carrier⦄
   (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂) (hs : M.IsCompletelySpacelike B₁ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B)
@@ -387,29 +387,29 @@ Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.einstein_causality.{u, v, u_1}
 ```
 
 The GNS form, for a state on $`\mathfrak{U}(\mathbf{B})`, is
-{apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_einstein_causality}[`exists_gns_einstein_causality`].
+{apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_einstein_causality}[`exists_gns_einstein_causality`].
 The version for subregions $`\mathbf{B}'_1 \subseteq \mathbf{B}_1` and
 $`\mathbf{B}'_2 \subseteq \mathbf{B}_2` of a completely spacelike pair is
-{apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.commute_of_spacelike_mono_geometric}[`commute_of_spacelike_mono_geometric`],
+{apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.commute_of_spacelike_mono_geometric}[`commute_of_spacelike_mono_geometric`],
 over the bridge, where complete spacelike separation is inherited by subsets.
 
 The local von Neumann algebras are relative to a containing basis set and a representation of its
 algebra. The local operators $`\pi(\mathfrak{U}(\mathbf{B}'))` and their bicommutant as a set are
-{apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localOperators}[`localOperators`] and
-{apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann}[`localVonNeumann`];
+{apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localOperators}[`localOperators`] and
+{apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann}[`localVonNeumann`];
 the bundled form is
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra}
 
 Microcausality, $`R(\mathbf{B}_1) \le R(\mathbf{B}_2)'`:
 
 ```lean (name := checkMicro)
-open Physicslib4 AQFT HaagKastlerCurved in
+open Hilbert6 AQFT HaagKastlerCurved in
 #check HaagKastlerNet.localVonNeumannAlgebra_le_commutant
 ```
 
 ```leanOutput checkMicro
-Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_le_commutant.{u_1, u_2, u_3}
+Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_le_commutant.{u_1, u_2, u_3}
   {M : LorentzianSpacetime} (N : HaagKastlerNet M) {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H] {B : Set M.Carrier} (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] H →L[ℂ] H) ⦃B₁ B₂ : Set M.Carrier⦄
   (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂) (hs : M.IsCompletelySpacelike B₁ B₂) (h₁ : B₁ ⊆ B) (h₂ : B₂ ⊆ B) :
@@ -418,7 +418,7 @@ Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_le_comm
 
 Over the bridge, the hypothesis may be weakened to $`\mathbf{B}_1` lying in the spacelike
 complement of $`\mathbf{B}_2`, additive-free locality
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement_geometric}[`localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement_geometric`]);
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement_geometric}[`localVonNeumannAlgebra_le_commutant_of_subset_spacelikeComplement_geometric`]);
 no algebra is attached to the complement itself.
 
 Isotony, $`R(\mathbf{B}_1) \le R(\mathbf{B}_2)` for
@@ -427,12 +427,12 @@ axioms, since the composition law of Axiom 2 factors the embedding. Lean prints 
 $`\mathbf{B}_1 \subseteq \mathbf{B}`, `h₁₂.trans h₂`, as `⋯`:
 
 ```lean (name := checkMono)
-open Physicslib4 AQFT HaagKastlerCurved in
+open Hilbert6 AQFT HaagKastlerCurved in
 #check HaagKastlerNet.localVonNeumannAlgebra_mono
 ```
 
 ```leanOutput checkMono
-Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_mono.{u_1, u_2, u_3} {M : LorentzianSpacetime}
+Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_mono.{u_1, u_2, u_3} {M : LorentzianSpacetime}
   (N : HaagKastlerNet M) {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   {B : Set M.Carrier} (hB : M.IsBasisSet B) (π : N.algebra B →⋆ₐ[ℂ] H →L[ℂ] H) ⦃B₁ B₂ : Set M.Carrier⦄
   (hB₁ : M.IsBasisSet B₁) (hB₂ : M.IsBasisSet B₂) (h₁₂ : B₁ ⊆ B₂) (h₂ : B₂ ⊆ B) :
@@ -440,18 +440,18 @@ Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_mono.{u
 ```
 
 The monotone map $`\mathbf{B}' \mapsto R(\mathbf{B}')` on the basis subsets of $`\mathbf{B}` is
-{apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.vonNeumannNet}[`vonNeumannNet`]. The
+{apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.vonNeumannNet}[`vonNeumannNet`]. The
 Schlieder property,
-{apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_separating}[`localVonNeumannAlgebra_separating`],
+{apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_separating}[`localVonNeumannAlgebra_separating`],
 says that if $`\mathbf{B}_1` and $`\mathbf{B}_2` are completely spacelike and $`\Omega` is cyclic
 for the local operators of $`\mathbf{B}_1`, then $`\Omega` is separating for $`R(\mathbf{B}_2)`.
 The library's Reeh–Schlieder theorem ({ref "reeh-schlieder"}[The Reeh–Schlieder theorem]) is for
 Minkowski spacetime, so here cyclicity is a hypothesis. The
 relative commutant $`R(\mathbf{B}_1)' \cap R(\mathbf{B}_2)` is
-{apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant}[`relativeCommutant`];
+{apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.relativeCommutant}[`relativeCommutant`];
 the inclusion of $`R(\mathbf{B}')` in itself is irreducible exactly when $`R(\mathbf{B}')` is a
 factor
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}[`isIrreducibleInclusion_self_iff_isFactor`]).
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}[`isIrreducibleInclusion_self_iff_isFactor`]).
 
 [bp-ec]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:einstein-causality-in-curved-spacetime
 [bp-lcm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:local-commutativity-mono-in-curved-spacetime
@@ -475,18 +475,18 @@ Blueprint: [def:stabilizer-action-in-curved-spacetime][bp-sa],
 The stabiliser automorphisms, and their bundled form as a group homomorphism into the
 \*-automorphisms of $`\mathfrak{U}(\mathbf{B})`:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAut}
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutMonoidHom}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutMonoidHom}
 
 A state $`\omega` on $`\mathfrak{U}(\mathbf{B})` invariant under the stabiliser gives a GNS triple
 $`(H, \pi, \Omega)` and unitaries $`U(g)`, $`g \in \mathrm{Stab}(\mathbf{B})`, with
 $`U(g)\pi(a)\Omega = \pi(\hat\alpha_g a)\Omega`, $`U(g)\Omega = \Omega`, the group laws, and
 operator covariance $`U(g)\pi(a)U(g)^{-1} = \pi(\hat\alpha_g a)`
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer}[`exists_gns_unitary_stabilizer`]).
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer}[`exists_gns_unitary_stabilizer`]).
 With a topology on `M.Isom` and continuous matrix coefficients
 $`g \mapsto \omega(a^*\hat\alpha_g b)`, $`U` is strongly continuous
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer_strongContinuous}[`exists_gns_unitary_stabilizer_strongContinuous`]);
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer_strongContinuous}[`exists_gns_unitary_stabilizer_strongContinuous`]);
 the `Rep` forms return $`U` as a group homomorphism. They are the GNS chapter's
 [unitary implementation theorems](The-GNS-construction/#physicslib4-reference-manual--The-GNS-construction--Design--Covariance-and-unitary-implementation) applied to the algebra
 $`\mathfrak{U}(\mathbf{B})` and the action $`\hat\alpha`; their statements are long nested
@@ -494,63 +494,63 @@ existentials, best read in the API documentation.
 
 Such unitaries carry the local von Neumann algebras along the stabiliser:
 $`U(g) R(\mathbf{B}_1) U(g)^{-1} = R(g\mathbf{B}_1)` for $`\mathbf{B}_1 \subseteq \mathbf{B}`
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumann}[`lieConj_image_localVonNeumann`]),
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.lieConj_image_localVonNeumann}[`lieConj_image_localVonNeumann`]),
 so being a factor is preserved by the stabiliser
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_isFactor_smul}[`localVonNeumann_isFactor_smul`]).
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumann_isFactor_smul}[`localVonNeumann_isFactor_smul`]).
 As a \*-isomorphism:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannEquiv}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannEquiv}
 
 Each $`\mathfrak{U}(\mathbf{B})` is a unital C\*-algebra, so the GNS chapter's results on purity
 apply to it region by region: a state is pure if and only if it is extreme
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.pure_iff_extreme}[`pure_iff_extreme`]),
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.pure_iff_extreme}[`pure_iff_extreme`]),
 if and only if its GNS representation is irreducible
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_pure_iff_irreducible}[`exists_gns_pure_iff_irreducible`]).
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_pure_iff_irreducible}[`exists_gns_pure_iff_irreducible`]).
 A pure invariant state has an irreducible covariant GNS representation
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_irreducible_covariant_stabilizer}[`exists_gns_irreducible_covariant_stabilizer`]).
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_irreducible_covariant_stabilizer}[`exists_gns_irreducible_covariant_stabilizer`]).
 This is not a vacuum: curved spacetime has no global vacuum, and no analogue of the spectrum
 condition is imposed. Further results, one line each: the centre of $`R(\mathbf{B}')` is that of
-its commutant ({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_center_eq_commutant}[`localVonNeumannAlgebra_center_eq_commutant`]),
+its commutant ({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_center_eq_commutant}[`localVonNeumannAlgebra_center_eq_commutant`]),
 and $`R(\mathbf{B}')` is a factor exactly when its centre is the scalars
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_isFactor_iff_center_eq_scalars}[`localVonNeumannAlgebra_isFactor_iff_center_eq_scalars`]);
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra_isFactor_iff_center_eq_scalars}[`localVonNeumannAlgebra_isFactor_iff_center_eq_scalars`]);
 two irreducible representations of $`\mathfrak{U}(\mathbf{B})` are disjoint or unitarily
-equivalent ({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.areDisjoint_or_unitaryEquiv_of_isIrreducible}[`areDisjoint_or_unitaryEquiv_of_isIrreducible`]);
+equivalent ({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.areDisjoint_or_unitaryEquiv_of_isIrreducible}[`areDisjoint_or_unitaryEquiv_of_isIrreducible`]);
 the GNS representation of a state pulled back along $`\alpha_\varphi` or $`\hat\alpha_g` is,
 up to unitary equivalence, the original one composed with the map, so the superselection type is
-invariant ({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.unitaryEquiv_gns_covEquiv}[`unitaryEquiv_gns_covEquiv`],
-{apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.unitaryEquiv_gns_stabAut}[`unitaryEquiv_gns_stabAut`]);
+invariant ({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.unitaryEquiv_gns_covEquiv}[`unitaryEquiv_gns_covEquiv`],
+{apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.unitaryEquiv_gns_stabAut}[`unitaryEquiv_gns_stabAut`]);
 and purity is invariant under the stabiliser
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isPure_precomp_stabAut_iff}[`isPure_precomp_stabAut_iff`]).
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.isPure_precomp_stabAut_iff}[`isPure_precomp_stabAut_iff`]).
 
 Without a quasilocal algebra there is no single global state; the available form of a covariant
 state is a family of local states:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsCovariantFamily}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.IsCovariantFamily}
 
 A curve $`t \mapsto \varphi_t` in $`\mathrm{Stab}(\mathbf{B})` gives automorphisms
 $`\tau_t = \hat\alpha_{(\varphi_t)}` of $`\mathfrak{U}(\mathbf{B})`
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.flowAut}[`flowAut`]). When the curve
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.flowAut}[`flowAut`]). When the curve
 is a one-parameter subgroup, they form a one-parameter group, the time evolution along the flow:
 
 ```lean (name := checkFlow)
-open Physicslib4 AQFT HaagKastlerCurved in
+open Hilbert6 AQFT HaagKastlerCurved in
 #check HaagKastlerNet.isOneParameterAut_flowAut
 ```
 
 ```leanOutput checkFlow
-Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.isOneParameterAut_flowAut.{u, v} {M : LorentzianSpacetime}
+Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.isOneParameterAut_flowAut.{u, v} {M : LorentzianSpacetime}
   (N : HaagKastlerNet M) (B : Set M.Carrier) (flow : ℝ → ↥(MulAction.stabilizer M.Isom B)) (h0 : flow 0 = 1)
   (hadd : ∀ (s t : ℝ), flow (s + t) = flow s * flow t) : IsOneParameterAut (N.flowAut B flow)
 ```
 
 Thermal and ground states for the flow:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsKMSStateForFlow}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.IsKMSStateForFlow}
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsGroundStateForFlow}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.IsGroundStateForFlow}
 
 The KMS states for a flow at a given $`\beta` form a convex set
-({apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsKMSStateForFlow.convexCombo}[`IsKMSStateForFlow.convexCombo`]).
+({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.IsKMSStateForFlow.convexCombo}[`IsKMSStateForFlow.convexCombo`]).
 The library does not prove that the Hartle–Hawking or Bunch–Davies states are KMS states; no
 concrete net on Schwarzschild or de Sitter spacetime is constructed. The regions of those
 examples are not basis sets, and no Killing flow of that kind fixes a nonempty diamond, so the
@@ -575,22 +575,22 @@ Blueprint: [def:net-equivalence-in-curved-spacetime][bp-neq],
 
 An equivalence of two nets along a bijection of their spacetimes:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.NetEquivalence}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.NetEquivalence}
 
 A theory, as a net on every geometric spacetime, and the relabelling map along which general
 covariance compares the nets over $`\psi^*L` and over $`L`:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.NetTheory}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.NetTheory}
 
-{docstring Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv}
+{docstring Hilbert6.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv}
 
 The postulate:
 
-{docstring Physicslib4.AQFT.HaagKastlerCurved.IsGenerallyCovariant}
+{docstring Hilbert6.AQFT.HaagKastlerCurved.IsGenerallyCovariant}
 
 The library states the postulate and proves the geometry it rests on: that the pullback of a
 Lorentzian spacetime is one, and that $`\psi` carries the diamonds of $`\psi^*L` to those of $`L`
-({apiDocs Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_pullback_isBasisSet}[`toAbstractIdentityComponent_pullback_isBasisSet`];
+({apiDocs Hilbert6.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_pullback_isBasisSet}[`toAbstractIdentityComponent_pullback_isBasisSet`];
 the {ref "spacetime-main"}[Spacetime chapter] describes pullbacks and cross-metric isometries). It
 proves no net theory generally covariant. Mathematically the trivial theory, with
 $`\mathfrak{U}_L` the trivial net on every $`L` and every $`\Theta_{\mathbf{B}}` the identity of
@@ -601,54 +601,54 @@ $`\mathbb{C}`, is; the library has no lemma for it.
 tag := "curved-files"
 %%%
 
-The sections are formalised in `Physicslib4/AQFT/HaagKastlerCurved/`, one topic per file. Each
+The sections are formalised in `Hilbert6/AQFT/HaagKastlerCurved/`, one topic per file. Each
 entry links to the API documentation of a representative declaration, from which the rest of the
 file can be browsed.
 
 The axioms:
 
 * `Spacetime.lean`: the abstract interface,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.LorentzianSpacetime}[`LorentzianSpacetime`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.LorentzianSpacetime}[`LorentzianSpacetime`].
 * `LocalAlgebras.lean`, `Isotony.lean`, `LocalCommutativity.lean`: Axioms 1 to 3,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.LocalNet}[`LocalNet`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.LocalNet}[`LocalNet`].
 * `LocalAlgebra.lean`: local observables and Axiom 4, which holds for every net,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.localAlgebra_of}[`localAlgebra_of`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.localAlgebra_of}[`localAlgebra_of`].
 * `IsometricCovariance.lean`: Axiom 5,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.IsometricCovariance}[`IsometricCovariance`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.IsometricCovariance}[`IsometricCovariance`].
 * `Net.lean`: the bundled net, the maps `commIsotony` and `covEquiv`, and the trivial net,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet}[`HaagKastlerNet`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet}[`HaagKastlerNet`].
 * `Concrete.lean`: the bridge from a geometric spacetime and the geometric forms of two results,
-  {apiDocs Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent}[`toAbstractIdentityComponent`].
+  {apiDocs Hilbert6.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent}[`toAbstractIdentityComponent`].
 * `IdentityComponent.lean`: consistency over a geometric spacetime,
-  {apiDocs Physicslib4.Spacetime.LorentzianSpacetime.nonempty_haagKastlerNet_identityComponent}[`nonempty_haagKastlerNet_identityComponent`].
+  {apiDocs Hilbert6.Spacetime.LorentzianSpacetime.nonempty_haagKastlerNet_identityComponent}[`nonempty_haagKastlerNet_identityComponent`].
 
 Consequences:
 
 * `EinsteinCausality.lean`: Einstein causality in a representation,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.einstein_causality}[`einstein_causality`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.einstein_causality}[`einstein_causality`].
 * `LocalVonNeumann.lean`: local von Neumann algebras, relative commutants and factors,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra}[`localVonNeumannAlgebra`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannAlgebra}[`localVonNeumannAlgebra`].
 * `Purity.lean`: purity of states on a local algebra,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.pure_iff_extreme}[`pure_iff_extreme`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.pure_iff_extreme}[`pure_iff_extreme`].
 * `CovariantState.lean`: covariant families of local states,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsCovariantFamily}[`IsCovariantFamily`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.IsCovariantFamily}[`IsCovariantFamily`].
 * `StabilizerAction.lean`: the stabiliser action and its GNS unitary implementation,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutMonoidHom}[`stabAutMonoidHom`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.stabAutMonoidHom}[`stabAutMonoidHom`].
 * `GeometricCovariance.lean`: covariance of the local von Neumann algebras under the stabiliser,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannEquiv}[`localVonNeumannEquiv`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.localVonNeumannEquiv}[`localVonNeumannEquiv`].
 * `StabilizerKMS.lean`: flows, KMS states and ground states,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.HaagKastlerNet.IsKMSStateForFlow}[`IsKMSStateForFlow`].
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.IsKMSStateForFlow}[`IsKMSStateForFlow`].
 
 General covariance:
 
 * `GeneralCovariance.lean`: net equivalences, net theories and the postulate,
-  {apiDocs Physicslib4.AQFT.HaagKastlerCurved.IsGenerallyCovariant}[`IsGenerallyCovariant`]. The
+  {apiDocs Hilbert6.AQFT.HaagKastlerCurved.IsGenerallyCovariant}[`IsGenerallyCovariant`]. The
   geometry it uses, pullback metrics and cross-metric isometries, is in
-  `Physicslib4/Spacetime/Pullback.lean` and `Physicslib4/Spacetime/CrossMetricIsometry.lean`.
+  `Hilbert6/Spacetime/Pullback.lean` and `Hilbert6/Spacetime/CrossMetricIsometry.lean`.
 
 The general definitions these files use, the KMS condition `AQFT.IsKMSState` and positive energy
-`AQFT.IsPositiveEnergy`, are in `Physicslib4/AQFT/KMS.lean` and
-`Physicslib4/AQFT/PositiveEnergy.lean`; the GNS results are described in the
+`AQFT.IsPositiveEnergy`, are in `Hilbert6/AQFT/KMS.lean` and
+`Hilbert6/AQFT/PositiveEnergy.lean`; the GNS results are described in the
 {ref "gns"}[GNS chapter]. The blueprint sections are
 [Section 10.7](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:haag-kastler-axioms-in-curved-spacetime)
 and

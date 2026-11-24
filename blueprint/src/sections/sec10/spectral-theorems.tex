@@ -87,7 +87,7 @@ Two pieces of notation are used pervasively throughout this section and are fixe
 
 \begin{definition}[The Identity Operator and Indicator Functions]
     \label{def:identity-and-indicator}
-    \lean{Physicslib4.Spectral.one_apply_and_indicator_apply}
+    \lean{Hilbert6.Spectral.one_apply_and_indicator_apply}
     \uses{def:identity-operator, def:indicator-function}
     \leanok
     A compound reference to Definition~\ref{def:identity-operator} and Definition~\ref{def:indicator-function}, which state these two unrelated notations separately. Citations should prefer whichever of the two is actually needed.
@@ -97,7 +97,7 @@ We also fix the notation for the orthogonal complement of a subset, and record t
 
 \begin{definition}[Orthogonal Complement]
     \label{def:orthogonal-complement}
-    \lean{Physicslib4.Spectral.mem_span_orthogonal_iff}
+    \lean{Hilbert6.Spectral.mem_span_orthogonal_iff}
     \leanok
     If $V \subset \mathbf{H}$ is any subset, its \textit{orthogonal complement} is
     \begin{align}
@@ -188,7 +188,7 @@ With that stated, we now give an "elementary" lemma that proves $\mathcal{B}(\ma
 
 \begin{lemma}[Bounded Operators form a Banach Space]
     \label{lmm:bounded-operators-form-a-banach-space}
-    \lean{Physicslib4.Spectral.completeSpace_boundedOp}
+    \lean{Hilbert6.Spectral.completeSpace_boundedOp}
     \leanok
     $\mathcal{B}(\mathbf{H})$ forms a Banach space under the operator norm.
 \end{lemma}
@@ -308,7 +308,7 @@ This is required to define the "spectrum" of an operator, which is required by m
 
 \begin{definition}[Resolvent and Spectrum]
     \label{def:bounded-operator-resolvent-and-spectrum}
-    \lean{Physicslib4.Spectral.mem_resolventSet_iff_isUnit_sub_smul, Physicslib4.Spectral.spectrum_eq_compl_resolventSet, Physicslib4.Spectral.mul_resolvent_of_mem_resolventSet}
+    \lean{Hilbert6.Spectral.mem_resolventSet_iff_isUnit_sub_smul, Hilbert6.Spectral.spectrum_eq_compl_resolventSet, Hilbert6.Spectral.mul_resolvent_of_mem_resolventSet}
     \uses{def:identity-operator, def:bounded-operator-notation, def:bounded-inverse}
     \leanok
     For $A \in \mathcal{B}(\mathbf{H})$, the \textit{resolvent set} of $A$, denoted as $\rho(A)$, is the set of all $\lambda \in \mathbb{C}$ such that the operator $(A - \lambda \mathbf{1})$ has a bounded inverse. The \textit{spectrum} of $A$, denoted by $\sigma(A)$, is the complement of $A$'s resolvent set $\rho(A)$ in $\mathbb{C}$. For $\lambda$ in the resolvent set of $A$ the bounded inverse of $(A - \lambda \mathbf{1})$, which we notate as $(A - \lambda \mathbf{1})^{-1}$, is called the \textit{resolvent} of $A$ at $\lambda$.
@@ -318,7 +318,7 @@ Two further pieces of Hilbert space theory are needed before we begin. The first
 
 \begin{theorem}[Riesz Theorem]
     \label{thrm:hall-a.52}
-    \lean{Physicslib4.Spectral.riesz_representation}
+    \lean{Hilbert6.Spectral.riesz_representation}
     \uses{def:bounded-operator-notation}
     \leanok
     If $\xi : \mathbf{H} \rightarrow \mathbb{C}$ is a bounded linear functional on the Hilbert space $\mathbf{H}$, then there exists a unique $\chi \in \mathbf{H}$ such that
@@ -347,7 +347,7 @@ The adjoint is used from here onward; we fix it and its basic algebra before the
 
 \begin{proposition}[The Adjoint is a Bounded Operator]
     \label{prpstn:adjoint-is-bounded}
-    \lean{Physicslib4.Spectral.norm_adjoint}
+    \lean{Hilbert6.Spectral.norm_adjoint}
     \leanok
     For every $A \in \mathcal{B}(\mathbf{H})$ the adjoint $A^*$ is linear and bounded, with $\left\| A^* \right\| \le \left\| A \right\|$; in particular $A^* \in \mathcal{B}(\mathbf{H})$.
 \end{proposition}
@@ -369,7 +369,7 @@ If $\left\| A^*\phi \right\| = 0$ the bound $\left\| A^*\phi \right\| \le \left\
 
 \begin{lemma}[Algebraic Properties of the Adjoint]
     \label{lmm:adjoint-algebra}
-    \lean{Physicslib4.Spectral.adjoint_add, Physicslib4.Spectral.adjoint_smul, Physicslib4.Spectral.adjoint_mul, Physicslib4.Spectral.adjoint_pow, Physicslib4.Spectral.adjoint_one}
+    \lean{Hilbert6.Spectral.adjoint_add, Hilbert6.Spectral.adjoint_smul, Hilbert6.Spectral.adjoint_mul, Hilbert6.Spectral.adjoint_pow, Hilbert6.Spectral.adjoint_one}
     \leanok
     For all $A, B \in \mathcal{B}(\mathbf{H})$ and $c \in \mathbb{C}$:
     \begin{enumerate}
@@ -414,7 +414,7 @@ Orthogonal projections are norm-decreasing, a fact used repeatedly below.
 
 \begin{lemma}[Orthogonal Projections are Norm-Decreasing]
     \label{lmm:projection-norm-decreasing}
-    \lean{Physicslib4.Spectral.norm_apply_le_of_isStarProjection}
+    \lean{Hilbert6.Spectral.norm_apply_le_of_isStarProjection}
     \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$ be a bounded orthogonal projection. Then $\left\| P\psi \right\| \le \left\| \psi \right\|$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
@@ -432,7 +432,7 @@ The notion of a bounded orthogonal projection can then be employed to define a "
 
 \begin{definition}[Projection-Valued Measure]
     \label{def:projection-valued-measure}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure}
     \uses{def:identity-operator, def:bounded-operator-notation, def:bounded-orthogonal-projection}
     \leanok
     Let $X$ be a set and $\Omega(X)$ a $\sigma$-algebra on $X$. A map $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ is called a \textit{projection-valued measure} if the following properties are satisfied:
@@ -453,7 +453,7 @@ Now, we can associate a positive, real-valued measure $\mu_\psi$ to a projection
 
 \begin{theorem}[Projection-Valued Measure's Associated Measure]
     \label{thrm:projection-valued-measures-associated-measure}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.existsUnique_assoc, Physicslib4.Spectral.ProjectionValuedMeasure.assoc}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.existsUnique_assoc, Hilbert6.Spectral.ProjectionValuedMeasure.assoc}
     \leanok
     Given a projection-valued measure $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ and any $\psi \in \mathbf{H}$ the map $\mu_\psi$ defined by
     \begin{align}
@@ -513,7 +513,7 @@ Projection-valued measures give rise to a type of integration known as "operator
 
 \begin{theorem}[Operator-Valued Integration]
     \label{thrm:operator-valued-integration}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.existsUnique_integral, Physicslib4.Spectral.ProjectionValuedMeasure.integral, Physicslib4.Spectral.BddMeasurable}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.existsUnique_integral, Hilbert6.Spectral.ProjectionValuedMeasure.integral, Hilbert6.Spectral.BddMeasurable}
     \leanok
     Let $\Omega(X)$ be a $\sigma$-algebra on a set $X$ and let $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ be a projection-valued measure. Then there exists a unique linear map, denoted by
     \begin{align}
@@ -534,7 +534,7 @@ To streamline the proof of this theorem, we will introduce a few new terms
 
 \begin{definition}[(Bounded) Sesquilinear Form]
     \label{def:bounded-sesquilinear-form}
-    \lean{Physicslib4.Spectral.BoundedSesquilinearForm, Physicslib4.Spectral.SesquilinearForm}
+    \lean{Hilbert6.Spectral.BoundedSesquilinearForm, Hilbert6.Spectral.SesquilinearForm}
     \leanok
     A \textit{sesquilinear form} on a Hilbert space $\mathbf{H}$ is a map $L : \mathbf{H} \times \mathbf{H} \rightarrow \mathbb{C}$ that is conjugate linear in the first factor and linear in the second factor. A sesquilinear form $L$ is a \textit{bounded sesquilinear form} if there exists a constant $C$ in $\mathbb{R}$ such that for all $\phi, \psi \in \mathbf{H}$
     \begin{align}
@@ -545,7 +545,7 @@ To streamline the proof of this theorem, we will introduce a few new terms
 
 \begin{definition}[(Bounded) Quadratic Form]
     \label{def:bounded-quadratic-form}
-    \lean{Physicslib4.Spectral.IsBoundedQuadraticForm, Physicslib4.Spectral.IsQuadraticForm, Physicslib4.Spectral.polarization}
+    \lean{Hilbert6.Spectral.IsBoundedQuadraticForm, Hilbert6.Spectral.IsQuadraticForm, Hilbert6.Spectral.polarization}
     \uses{def:bounded-sesquilinear-form}
     \leanok
     A \textit{quadratic form} on a Hilbert space $\mathbf{H}$ is a map $Q : \mathbf{H} \rightarrow \mathbb{C}$ with the following properties:
@@ -575,7 +575,7 @@ The next lemma uses the Complex-Valued Simple Approximation Theorem, which we st
 
 \begin{theorem}[Complex-Valued Simple Approximation Theorem]
     \label{thrm:complex-valued-simple-approximation-theorem}
-    \lean{Physicslib4.Spectral.exists_simpleFunc_tendstoUniformly}
+    \lean{Hilbert6.Spectral.exists_simpleFunc_tendstoUniformly}
     \uses{def:indicator-function}
     \leanok
     Let $X$ be a measurable space, i.e. a set equipped with a $\sigma$-algebra $\Omega(X)$. Given any bounded, measurable, complex-valued function $f$ on $X$, there exists a sequence of complex-valued simple functions $\{s_i\}_{i \in \mathbb{N}}$ on $X$---i.e. functions of the form $s_i = \sum_{j = 1}^{n_i} \alpha_{ij} 1_{E_{ij}}$ with $\alpha_{ij} \in \mathbb{C}$ and $E_{ij} \in \Omega(X)$ pairwise disjoint---such that $\{s_i\}_{i \in \mathbb{N}}$ converges uniformly to $f$ on $X$.
@@ -588,7 +588,7 @@ where $\mu_\psi$ is the positive real-valued measure of Theorem~\ref{thrm:projec
 
 \begin{lemma}[The Quadratic Form of a Bounded Measurable Function]
     \label{lmm:lemma1-of-operator-valued-integration}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral}
     \leanok
     Let $\Omega(X)$ be a $\sigma$-algebra on a set $X$ and let $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ be a projection-valued measure. For any bounded, measurable, complex-valued function $f$ on $X$ and any $\psi \in \mathbf{H}$ the map $Q_f : \mathbf{H} \rightarrow \mathbb{C}$ defined by
     \begin{align}
@@ -604,7 +604,7 @@ The result is proved in three stages, each resting on the previous: for indicato
 
 \begin{proposition}[The Quadratic Form of an Indicator Function is Bounded]
     \label{prpstn:Q-indicator-bounded-form}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral_indicator, Physicslib4.Spectral.ProjectionValuedMeasure.norm_integral_indicator_le}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral_indicator, Hilbert6.Spectral.ProjectionValuedMeasure.norm_integral_indicator_le}
     \leanok
     Let $\Omega(X)$ be a $\sigma$-algebra on a set $X$ and let $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ be a projection-valued measure. For any $E \in \Omega(X)$ the map $Q_{1_E} : \mathbf{H} \rightarrow \mathbb{C}$, $Q_{1_E}(\psi) \equiv \int_X 1_E \, d\mu_\psi$, is a bounded quadratic form, with constant $1$.
 \end{proposition}
@@ -686,7 +686,7 @@ which implies that the constant required to prove that $Q_{1_E}$ is a bounded qu
 
 \begin{proposition}[The Quadratic Form of a Simple Function is Bounded]
     \label{prpstn:Q-simple-bounded-form}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral_simpleFunc}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral_simpleFunc}
     \leanok
     With notation as in Proposition~\ref{prpstn:Q-indicator-bounded-form}, let $s = \sum_{i} c_i 1_{E_i}$ be a simple function on $X$. Then $Q_s : \mathbf{H} \rightarrow \mathbb{C}$, $Q_s(\psi) \equiv \int_X s \, d\mu_\psi$, is a bounded quadratic form.
 \end{proposition}
@@ -764,7 +764,7 @@ This completes the proof that $Q_s$ is a bounded quadratic form for any simple f
 
 \begin{proposition}[The Quadratic Form of a Bounded Measurable Function is Bounded]
     \label{prpstn:Q-measurable-bounded-form}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral_bddMeasurable}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.isBoundedQuadraticForm_integral_bddMeasurable}
     \leanok
     With notation as in Proposition~\ref{prpstn:Q-indicator-bounded-form}, let $f$ be a bounded, measurable, complex-valued function on $X$. Then $Q_f : \mathbf{H} \rightarrow \mathbb{C}$, $Q_f(\psi) \equiv \int_X f \, d\mu_\psi$, is a bounded quadratic form.
 \end{proposition}
@@ -868,7 +868,7 @@ Our next step in the larger proof is establishing several propositions we will h
 
 \begin{proposition}[Properties of the Sesquilinear Form Associated to a Quadratic Form]
     \label{prpstn:hall-a.61}
-    \lean{Physicslib4.Spectral.polarization_diag, Physicslib4.Spectral.exists_bound_polarization, Physicslib4.Spectral.polarization_conj_symm, Physicslib4.Spectral.IsBoundedQuadraticForm.toSesq}
+    \lean{Hilbert6.Spectral.polarization_diag, Hilbert6.Spectral.exists_bound_polarization, Hilbert6.Spectral.polarization_conj_symm, Hilbert6.Spectral.IsBoundedQuadraticForm.toSesq}
     \leanok
     If $Q$ is a quadratic form on $\mathbf{H}$ and $L$ is the associated sesquilinear form
     \begin{align}
@@ -1026,7 +1026,7 @@ Two closure properties of sesquilinear forms are used repeatedly below; we recor
 
 \begin{lemma}[Linear Combinations of Sesquilinear Forms are Sesquilinear]
     \label{lmm:sesquilinear-linear-combination}
-    \lean{Physicslib4.Spectral.exists_sesquilinearForm_sum}
+    \lean{Hilbert6.Spectral.exists_sesquilinearForm_sum}
     \leanok
     Let $L_1, \ldots, L_n$ be sesquilinear forms on $\mathbf{H}$ and let $\alpha_1, \ldots, \alpha_n \in \mathbb{C}$. Then
     \begin{align}
@@ -1048,7 +1048,7 @@ using that finite sums may be rearranged. The same computation with linearity in
 
 \begin{lemma}[Pointwise Limits of Sesquilinear Forms are Sesquilinear]
     \label{lmm:sesquilinear-pointwise-limit}
-    \lean{Physicslib4.Spectral.exists_sesquilinearForm_of_tendsto}
+    \lean{Hilbert6.Spectral.exists_sesquilinearForm_of_tendsto}
     \leanok
     Let $\{L_i\}_{i \in \mathbb{N}}$ be sesquilinear forms on $\mathbf{H}$ such that $L(\phi,\psi) \equiv \lim_{i \rightarrow \infty} L_i(\phi,\psi)$ exists for all $\phi,\psi \in \mathbf{H}$. Then $L$ is a sesquilinear form on $\mathbf{H}$.
 \end{lemma}
@@ -1066,7 +1066,7 @@ The same two closure properties hold for bounded quadratic forms, and it is in t
 
 \begin{lemma}[Linear Combinations of Bounded Quadratic Forms are Bounded Quadratic Forms]
     \label{lmm:bqf-linear-combination}
-    \lean{Physicslib4.Spectral.IsBoundedQuadraticForm.sum}
+    \lean{Hilbert6.Spectral.IsBoundedQuadraticForm.sum}
     \leanok
     Let $Q_1, \ldots, Q_n$ be bounded quadratic forms on $\mathbf{H}$ and let $\alpha_1, \ldots, \alpha_n \in \mathbb{C}$. Then $Q \equiv \sum_{k=1}^n \alpha_k Q_k$ is a bounded quadratic form on $\mathbf{H}$.
 \end{lemma}
@@ -1084,7 +1084,7 @@ The same two closure properties hold for bounded quadratic forms, and it is in t
 
 \begin{lemma}[Uniformly Bounded Pointwise Limits of Bounded Quadratic Forms]
     \label{lmm:bqf-pointwise-limit}
-    \lean{Physicslib4.Spectral.isBoundedQuadraticForm_of_tendsto}
+    \lean{Hilbert6.Spectral.isBoundedQuadraticForm_of_tendsto}
     \leanok
     Let $\{Q_i\}_{i \in \mathbb{N}}$ be bounded quadratic forms on $\mathbf{H}$ such that $Q(\psi) \equiv \lim_{i \rightarrow \infty} Q_i(\psi)$ exists for every $\psi \in \mathbf{H}$, and suppose there is a single constant $C$ with $\lvert Q_i(\phi) \rvert \le C \lVert \phi \rVert^2$ for all $i$ and all $\phi$. Then $Q$ is a bounded quadratic form on $\mathbf{H}$, with the same constant $C$.
 
@@ -1106,7 +1106,7 @@ The next in the set of "helper" propositions that we will prove is the propositi
 
 \begin{proposition}[A Bounded Quadratic Form Determines a Unique Bounded Operator]
     \label{prpstn:hall-a.63}
-    \lean{Physicslib4.Spectral.existsUnique_operator_of_isBoundedQuadraticForm, Physicslib4.Spectral.IsBoundedQuadraticForm.isSelfAdjoint_toOperator, Physicslib4.Spectral.IsBoundedQuadraticForm.toOperator}
+    \lean{Hilbert6.Spectral.existsUnique_operator_of_isBoundedQuadraticForm, Hilbert6.Spectral.IsBoundedQuadraticForm.isSelfAdjoint_toOperator, Hilbert6.Spectral.IsBoundedQuadraticForm.toOperator}
     \leanok
     If $Q$ is a bounded quadratic form on $\mathbf{H}$, there is a unique $A \in \mathcal{B}(\mathbf{H})$ such that $Q(\psi) = \left< \psi, A\psi \right>$ for all $\psi \in \mathbf{H}$. If $Q(\psi)$ belongs to $\mathbb{R}$ for all $\psi \in \mathbf{H}$, then the operator $A$ is self-adjoint.
 \end{proposition}
@@ -1256,7 +1256,7 @@ We now establish, one at a time, the four properties asserted by the theorem.
 
 \begin{proposition}[Integral of an Indicator Function]
     \label{prpstn:integral-of-indicator}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.integral_indicator, Physicslib4.Spectral.ProjectionValuedMeasure.integral_one}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.integral_indicator, Hilbert6.Spectral.ProjectionValuedMeasure.integral_one}
     \leanok
     Let $\Omega(X)$ be a $\sigma$-algebra on a set $X$, let $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ be a projection-valued measure, and let $f \mapsto \int_X f \, d\mu$ be the map of Theorem~\ref{thrm:operator-valued-integration}. Then for all $E \in \Omega(X)$,
     \begin{align}
@@ -1292,7 +1292,7 @@ which is the desired result.
 
 \begin{proposition}[Norm Bound for the Operator-Valued Integral]
     \label{prpstn:integral-norm-bound}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.norm_integral_le}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.norm_integral_le}
     \leanok
     With notation as in Proposition~\ref{prpstn:integral-of-indicator}, for all bounded, measurable, complex-valued functions $f$ on $X$,
     \begin{align}
@@ -1315,7 +1315,7 @@ To prove this we will first prove a "utility" lemma that will aid our argument.
 
 \begin{lemma}[Orthogonality of Spectral Projections on a Disjoint Cover]
     \label{lmm:lemma2-of-operator-valued-integration}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.inner_eq_zero_of_disjoint, Physicslib4.Spectral.ProjectionValuedMeasure.norm_sq_eq_sum_of_partition}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.inner_eq_zero_of_disjoint, Hilbert6.Spectral.ProjectionValuedMeasure.norm_sq_eq_sum_of_partition}
     \leanok
     Let $X$ be a set with $\sigma$-algebra $\Omega(X)$, and let $\mu : \Omega(X) \rightarrow \mathcal{B}(\mathbf{H})$ be a projection-valued measure. If $E_1, E_2, \ldots, E_n \in \Omega(X)$ are a finite set of elements that are pairwise disjoint, then for any $\psi \in \mathbf{H}$
     \begin{enumerate}
@@ -1382,7 +1382,7 @@ One more "utility" lemma we will require is
 
 \begin{lemma}[Operator Norm via the Inner Product]
     \label{lmm:lemma-1}
-    \lean{Physicslib4.Spectral.opNorm_eq_sSup_inner}
+    \lean{Hilbert6.Spectral.opNorm_eq_sSup_inner}
     \leanok
     Let $\mathcal{B}(\mathbf{H})$ be the set of operators on a complex Hilbert space $\mathbf{H}$ that are bounded with respect to the operator norm as $\mathcal{B}(\mathbf{H})$. For any $A$ in $\mathcal{B}(\mathbf{H})$ we can write the operator norm $\|A\|$ of $A$ as follows
     \begin{align}
@@ -1469,7 +1469,7 @@ as required.
 
 \begin{proposition}[Norm Bound for the Integral of a Simple Function]
     \label{prpstn:integral-norm-bound-simple}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.norm_integral_simple_le}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.norm_integral_simple_le}
     \leanok
     With notation as in Theorem~\ref{thrm:operator-valued-integration}, let $E_1, E_2, \ldots, E_n \in \Omega(X)$ be pairwise disjoint with $X = \bigcup_{i=1}^n E_i$, let $c_1, \ldots, c_n \in \mathbb{C}$, and let
     \begin{align}
@@ -1554,7 +1554,7 @@ for our simple function $s$.
 
 \begin{proposition}[The Integral as a Limit of Integrals of Simple Functions]
     \label{prpstn:integral-as-limit-of-simple}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.tendsto_integral_of_tendstoUniformly}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.tendsto_integral_of_tendstoUniformly}
     \leanok
     With notation as in Theorem~\ref{thrm:operator-valued-integration}, let $f$ be a bounded, measurable, complex-valued function on $X$ and let $\{s_i\}_{i \in \mathbb{N}}$ be a sequence of simple functions converging uniformly to $f$. Then $\{A_{s_i}\}_{i \in \mathbb{N}}$ is Cauchy in $\mathcal{B}(\mathbf{H})$, hence converges in the operator norm to some $A_s \in \mathcal{B}(\mathbf{H})$, and
     \begin{align}
@@ -1709,7 +1709,7 @@ This is the desired identification.
 
 \begin{proposition}[Operator-Valued Integration is Multiplicative]
     \label{prpstn:integral-multiplicative}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.integral_mul}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.integral_mul}
     \leanok
     With notation as in Proposition~\ref{prpstn:integral-of-indicator}, for all bounded, measurable, complex-valued functions $f$ and $g$ on $X$,
     \begin{align}
@@ -1724,7 +1724,7 @@ The result is proved in three stages, each resting on the previous: for indicato
 
 \begin{proposition}[Multiplicativity of the Integral for Indicator Functions]
     \label{prpstn:integral-mult-indicator}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.integral_indicator_mul}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.integral_indicator_mul}
     \leanok
     With notation as in Proposition~\ref{prpstn:integral-of-indicator}, for all $E_1, E_2 \in \Omega(X)$,
     \begin{align}
@@ -1750,7 +1750,7 @@ for indicator functions.
 
 \begin{proposition}[Multiplicativity of the Integral for Simple Functions]
     \label{prpstn:integral-mult-simple}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.integral_simpleFunc_mul}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.integral_simpleFunc_mul}
     \leanok
     With notation as in Proposition~\ref{prpstn:integral-of-indicator}, for all simple functions $s_1, s_2$ on $X$,
     \begin{align}
@@ -1790,7 +1790,7 @@ as required.
 
 \begin{proposition}[Products of Uniform Approximants Converge Uniformly]
     \label{prpstn:products-converge-uniformly}
-    \lean{Physicslib4.Spectral.tendstoUniformly_mul_of_bounded}
+    \lean{Hilbert6.Spectral.tendstoUniformly_mul_of_bounded}
     \leanok
     Let $f, g$ be bounded, complex-valued functions on a set $X$, and let $\{s_i\}$ and $\{r_j\}$ be sequences of complex-valued functions converging uniformly to $f$ and $g$ respectively, with each $r_j$ bounded. Then $s_i r_j \rightarrow fg$ uniformly as $i, j \rightarrow \infty$: for every $\epsilon > 0$ there is an $N$ with
     \begin{align}
@@ -1875,7 +1875,7 @@ implies that for any $\epsilon > 0$ there exists a natural number $L$ such that 
 
 \begin{proposition}[Multiplicativity of the Integral for Bounded Measurable Functions]
     \label{prpstn:integral-mult-measurable}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.integral_bddMeasurable_mul}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.integral_bddMeasurable_mul}
     \leanok
     With notation as in Proposition~\ref{prpstn:integral-of-indicator}, for all bounded, measurable, complex-valued functions $f, g$ on $X$,
     \begin{align}
@@ -1969,7 +1969,7 @@ the desired result, integration is multiplicative for bounded, measurable, compl
 
 \begin{proposition}[Operator-Valued Integration Intertwines Conjugation and the Adjoint]
     \label{prpstn:integral-conjugation}
-    \lean{Physicslib4.Spectral.ProjectionValuedMeasure.integral_conj}
+    \lean{Hilbert6.Spectral.ProjectionValuedMeasure.integral_conj}
     \leanok
     With notation as in Proposition~\ref{prpstn:integral-of-indicator}, for all bounded, measurable, complex-valued functions $f$ on $X$,
     \begin{align}
@@ -2126,7 +2126,7 @@ The next "utility" lemma we must prove is the following
 
 \begin{lemma}[Neumann Series for a Contraction]
     \label{lmm:hall-7.6}
-    \lean{Physicslib4.Spectral.isUnit_one_sub, Physicslib4.Spectral.hasSum_geometric_inverse_one_sub}
+    \lean{Hilbert6.Spectral.isUnit_one_sub, Hilbert6.Spectral.hasSum_geometric_inverse_one_sub}
     \leanok
     Suppose $X \in \mathcal{B}(\mathbf{H})$ satisfies $\|X\| < 1$, where $\|X\|$ is the operator norm of $X$. Then the operator $\mathbf{1} - X$ has a bounded inverse $(\mathbf{1} - X)^{-1}$ in $\mathcal{B}(\mathbf{H})$; and this bounded inverse is given by the following series
     \begin{align}
@@ -2214,7 +2214,7 @@ The proof of the next proposition draws on two standard results from complex ana
 
 \begin{proposition}[The Spectrum is Closed, Bounded and Non-Empty]
     \label{prpstn:hall-7.5}
-    \lean{Physicslib4.Spectral.mem_resolventSet_of_norm_lt}
+    \lean{Hilbert6.Spectral.mem_resolventSet_of_norm_lt}
     \leanok
     Suppose $\mathbf{H} \ne \{0\}$. For all $A \in \mathcal{B}(\mathbf{H})$, the following results hold.
     \begin{enumerate}
@@ -2305,7 +2305,7 @@ The proof of the preceding proposition establishes two facts about the resolvent
 
 \begin{proposition}[Operator-Norm Holomorphy and the Neumann Series of the Resolvent]
     \label{prpstn:resolvent-holomorphy-and-neumann-series}
-    \lean{Physicslib4.Spectral.isOpen_resolventSet, Physicslib4.Spectral.exists_hasSum_resolvent, Physicslib4.Spectral.hasSum_resolvent_of_norm_lt}
+    \lean{Hilbert6.Spectral.isOpen_resolventSet, Hilbert6.Spectral.exists_hasSum_resolvent, Hilbert6.Spectral.hasSum_resolvent_of_norm_lt}
     \leanok
     Suppose $\mathbf{H} \ne \{0\}$ and $A \in \mathcal{B}(\mathbf{H})$.
     \begin{enumerate}
@@ -2369,7 +2369,7 @@ Another result we will require is
 
 \begin{lemma}[The $b^2$ Inequality for a Self-Adjoint Operator]
     \label{lmm:hall-7.8}
-    \lean{Physicslib4.Spectral.sq_norm_sub_smul_apply_le}
+    \lean{Hilbert6.Spectral.sq_norm_sub_smul_apply_le}
     \leanok
     If $A \in \mathcal{B}(\mathbf{H})$ is self-adjoint, then for all $a,b \in \mathbb{R}$ and associated $\lambda \equiv a + ib$ in $\mathbb{C}$, we have
     \begin{align}
@@ -2409,7 +2409,7 @@ The next proposition uses the following elementary fact, which we state first.
 
 \begin{proposition}[Bounded Operators are Continuous]
     \label{prpstn:bounded-operators-are-continuous}
-    \lean{Physicslib4.Spectral.continuous_iff_exists_bound}
+    \lean{Hilbert6.Spectral.continuous_iff_exists_bound}
     \leanok
     A linear operator between normed spaces is bounded if and only if it is continuous.
 \end{proposition}
@@ -2421,7 +2421,7 @@ Now we move onto the result
 
 \begin{proposition}[The Spectrum of a Self-Adjoint Operator is Real]
     \label{prpstn:hall-7.7}
-    \lean{Physicslib4.Spectral.spectrum_subset_real}
+    \lean{Hilbert6.Spectral.spectrum_subset_real}
     \leanok
     If $A \in \mathcal{B}(\mathbf{H})$ is self-adjoint, then the spectrum $\sigma(A)$ of $A$ is in $\mathbb{R}$.
 
@@ -2510,7 +2510,7 @@ with that stated let us begin the consolidation.
 
 \begin{lemma}[The Spectrum is a Compact Metric Measurable Space]
     \label{lmm:spectrum-is-compact-metric-measurable}
-    \lean{Physicslib4.Spectral.isCompact_spectrum, Physicslib4.Spectral.spectrum_nonempty}
+    \lean{Hilbert6.Spectral.isCompact_spectrum, Hilbert6.Spectral.spectrum_nonempty}
     \leanok
     Suppose $\mathbf{H} \ne \{0\}$ and let $A \in \mathcal{B}(\mathbf{H})$. Then the spectrum $\sigma(A)$ of $A$ satisfies the following.
     \begin{enumerate}
@@ -2582,7 +2582,7 @@ The next "utility" proposition we will require details properties of the operato
 
 \begin{proposition}[The Adjoint Preserves the Operator Norm]
     \label{prpstn:hall-7.2}
-    \lean{Physicslib4.Spectral.norm_adjoint, Physicslib4.Spectral.norm_adjoint_mul_self}
+    \lean{Hilbert6.Spectral.norm_adjoint, Hilbert6.Spectral.norm_adjoint_mul_self}
     \leanok
     For any $A \in \mathcal{B}(\mathbf{H})$ the operator norm satisfies
     \begin{align}
@@ -2652,7 +2652,7 @@ As a consequence of the first result of the Proposition~\ref{prpstn:hall-7.2} ju
 
 \begin{proposition}[Continuity of the Adjoint]
     \label{prpstn:continuity-of-the-adjoint}
-    \lean{Physicslib4.Spectral.tendsto_adjoint}
+    \lean{Hilbert6.Spectral.tendsto_adjoint}
     \leanok
     Let $\mathbf{H}$ be a Hilbert space and let $\{ B_n \}_{n \in \mathbb{N}}$ be a sequence in $\mathcal{B}(\mathbf{H})$ converging in the operator norm to $B \in \mathcal{B}(\mathbf{H})$. Then $\{ B_n^* \}_{n \in \mathbb{N}}$ converges in the operator norm to $B^*$, i.e.
     \begin{align}
@@ -2730,7 +2730,7 @@ However, to prove the \textbf{Spectral Mapping Theorem}~(\ref{lmm:spectral-mappi
 
 \begin{lemma}[A Product with a Non-Invertible Commuting Factor is Non-Invertible]
     \label{lmm:hall-ex-8.3.1}
-    \lean{Physicslib4.Spectral.not_isUnit_mul_of_commute}
+    \lean{Hilbert6.Spectral.not_isUnit_mul_of_commute}
     \leanok
     If $A,B \in \mathcal{B}(\mathbf{H})$ commute and $A$ is not invertible, then $AB$ is not invertible.
 \end{lemma}
@@ -2936,7 +2936,7 @@ We record separately a fact used both in constructing the continuous functional 
 
 \begin{lemma}[A Real Polynomial in a Self-Adjoint Operator is Self-Adjoint]
     \label{lmm:real-polynomial-self-adjoint}
-    \lean{Physicslib4.Spectral.isSelfAdjoint_aeval_real}
+    \lean{Hilbert6.Spectral.isSelfAdjoint_aeval_real}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and let $p$ be a polynomial with real coefficients, so that
     \begin{align}
@@ -3000,7 +3000,7 @@ The construction in the next proposition draws on four standard results, which w
 
 \begin{theorem}[Bounded Linear Transformation Theorem]
     \label{thrm:bounded-linear-transformation-theorem}
-    \lean{Physicslib4.Spectral.existsUnique_extension_of_dense}
+    \lean{Hilbert6.Spectral.existsUnique_extension_of_dense}
     \leanok
     Let $V_1$ be a normed space and $V_2$ a Banach space. Suppose $W$ is a dense subspace of $V_1$ and $T: W \rightarrow V_2$ is a bounded linear map. Then there exists a unique bounded linear map $\widetilde{T}: V_1 \rightarrow V_2$ such that $\widetilde{T}\vert_W = T$. Furthermore, the norm of $\widetilde{T}$ equals the norm of $T$.
 \end{theorem}
@@ -3012,7 +3012,7 @@ Let's get started.
 
 \begin{proposition}[The Continuous Functional Calculus]
     \label{prpstn:hall-8.3}
-    \lean{Physicslib4.Spectral.existsUnique_realCalculus, Physicslib4.Spectral.realCalculus_polyOn, Physicslib4.Spectral.polyOn, Physicslib4.Spectral.realCalculus}
+    \lean{Hilbert6.Spectral.existsUnique_realCalculus, Hilbert6.Spectral.realCalculus_polyOn, Hilbert6.Spectral.polyOn, Hilbert6.Spectral.realCalculus}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then there exists a unique bounded linear map from $C^0(\sigma(A); \mathbb{R})$---the space of continuous, real-valued functions on the spectrum $\sigma(A)$ of $A$---to $\mathcal{B}(\mathbf{H})$
     \begin{align}
@@ -3230,7 +3230,7 @@ The properties of the (real-valued) functional calculus are captured in the foll
 
 \begin{proposition}[Properties of the Continuous Functional Calculus]
     \label{prpstn:hall-8.4}
-    \lean{Physicslib4.Spectral.realCalculus_properties}
+    \lean{Hilbert6.Spectral.realCalculus_properties}
     \leanok
     If $A \in \mathcal{B}(\mathbf{H})$ is self-adjoint, the (real-valued) functional calculus for $A$, mapping $C^0(\sigma(A); \mathbb{R})$ into $\mathcal{B}(\mathbf{H})$, has the following properties
     \begin{enumerate}
@@ -3260,7 +3260,7 @@ Each of the four properties is established separately below: multiplicativity in
 
 \begin{proposition}[The Continuous Functional Calculus is Multiplicative]
     \label{prpstn:cfc-multiplicative}
-    \lean{Physicslib4.Spectral.realCalculus_mul}
+    \lean{Hilbert6.Spectral.realCalculus_mul}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and let $f \mapsto f(A)$ be the real-valued functional calculus of Proposition~\ref{prpstn:hall-8.3}. Then for all $f,g \in C^0(\sigma(A); \mathbb{R})$,
     \begin{align}
@@ -3308,7 +3308,7 @@ In summary this proves the desired multiplicativity result, $(fg)(A) = f(A) g(A)
 
 \begin{proposition}[The Continuous Functional Calculus Yields Self-Adjoint Operators]
     \label{prpstn:cfc-self-adjoint}
-    \lean{Physicslib4.Spectral.isSelfAdjoint_realCalculus}
+    \lean{Hilbert6.Spectral.isSelfAdjoint_realCalculus}
     \leanok
     With notation as in Proposition~\ref{prpstn:cfc-multiplicative}, for any $f \in C^0(\sigma(A); \mathbb{R})$ the operator $f(A)$ is self-adjoint.
 \end{proposition}
@@ -3337,7 +3337,7 @@ proving that $f(A)^* = f(A)$ and thus that $f(A)$ is self-adjoint, the desired s
 
 \begin{proposition}[The Continuous Functional Calculus Preserves Non-Negativity]
     \label{prpstn:cfc-non-negative}
-    \lean{Physicslib4.Spectral.isPositive_realCalculus}
+    \lean{Hilbert6.Spectral.isPositive_realCalculus}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $f \mapsto f(A)$ the real-valued functional calculus of Proposition~\ref{prpstn:hall-8.3}, if $f \in C^0(\sigma(A); \mathbb{R})$ is non-negative then $f(A)$ is a non-negative bounded operator.
 \end{proposition}
@@ -3369,7 +3369,7 @@ As $f(A)$ is bounded as a result of Proposition~\ref{prpstn:hall-8.3}, this is n
 
 \begin{proposition}[Norm of an Operator from the Continuous Functional Calculus]
     \label{prpstn:cfc-norm}
-    \lean{Physicslib4.Spectral.norm_realCalculus}
+    \lean{Hilbert6.Spectral.norm_realCalculus}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $f \mapsto f(A)$ the real-valued functional calculus of Proposition~\ref{prpstn:hall-8.3}, for any $f \in C^0(\sigma(A); \mathbb{R})$,
     \begin{align}
@@ -3417,7 +3417,7 @@ as required.
 
 \begin{proposition}[Spectral Mapping for the Continuous Functional Calculus]
     \label{prpstn:cfc-spectral-mapping}
-    \lean{Physicslib4.Spectral.spectrum_realCalculus}
+    \lean{Hilbert6.Spectral.spectrum_realCalculus}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $f \mapsto f(A)$ the real-valued functional calculus of Proposition~\ref{prpstn:hall-8.3}, for any $f \in C^0(\sigma(A); \mathbb{R})$,
     \begin{align}
@@ -3519,7 +3519,7 @@ We are finally in a position to kick off Stage 2. In this stage we will prove th
 
 \begin{theorem}[Riesz Representation]
     \label{thrm:riesz-representation}
-    \lean{Physicslib4.Spectral.existsUnique_measure_of_positive_linear}
+    \lean{Hilbert6.Spectral.existsUnique_measure_of_positive_linear}
     \leanok
     Let $X$ be a compact metric space and let $C^0(X; \mathbb{R})$ be the space of continuous, real-valued functions on $X$. Suppose $\Lambda : C^0(X; \mathbb{R}) \rightarrow \mathbb{R}$ is a linear function with the property that $\Lambda(f)$ is non-negative whenever all the values of $f$ are non-negative. Then there exists a unique, real-valued, positive measure $\mu$ on the Borel $\sigma$-algebra of $X$ for which
     \begin{align}
@@ -3555,7 +3555,7 @@ is well-defined, in the sense that it does indeed take values in $\mathbb{R}$, a
 
 \begin{proposition}[The Measures Associated to a Self-Adjoint Operator]
     \label{prpstn:associated-measures-self-adjoint}
-    \lean{Physicslib4.Spectral.existsUnique_assocMeasure, Physicslib4.Spectral.assocFunctional, Physicslib4.Spectral.assocMeasure}
+    \lean{Hilbert6.Spectral.existsUnique_assocMeasure, Hilbert6.Spectral.assocFunctional, Hilbert6.Spectral.assocMeasure}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. For every $\psi \in \mathbf{H}$ there is a unique positive, real-valued measure $\mu_\psi$ on the Borel $\sigma$-algebra of $\sigma(A)$ such that
     \begin{align}
@@ -3579,7 +3579,7 @@ To that end let us make the following definition
 
 \begin{definition}[The Quadratic Form Associated to a Bounded Measurable Function]
     \label{def:hall-8.6}
-    \lean{Physicslib4.Spectral.borelForm}
+    \lean{Hilbert6.Spectral.borelForm}
     \uses{def:adjoint-bounded, prpstn:basic-integral-properties, def:bounded-operator-notation, def:bounded-operator-resolvent-and-spectrum, thrm:riesz-representation, prpstn:hall-8.3, prpstn:hall-8.4}
     \leanok
     Let $A$ in $\mathcal{B}(\mathbf{H})$ be self-adjoint. For any bounded, measurable, complex-valued function $f$ on the spectrum $\sigma(A)$ of $A$ let us define a map $Q_f : \mathbf{H} \rightarrow \mathbb{C}$ by
@@ -3593,7 +3593,7 @@ Before proceeding, let us record a basic property of the measures $\mu_\psi$ jus
 
 \begin{lemma}[The Associated Measures are Finite]
     \label{lmm:associated-measures-are-finite}
-    \lean{Physicslib4.Spectral.assocMeasure_univ}
+    \lean{Hilbert6.Spectral.assocMeasure_univ}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and, for any $\psi \in \mathbf{H}$, let $\mu_\psi$ be the measure on $\sigma(A)$ of Definition~\ref{def:hall-8.6}. Then
     \begin{align}
@@ -3628,7 +3628,7 @@ It turns out that $Q_f$ is a bounded quadratic form, as proven in the following 
 
 \begin{proposition}[The Associated Quadratic Form is Bounded]
     \label{prpstn:hall-8.7}
-    \lean{Physicslib4.Spectral.isBoundedQuadraticForm_borelForm}
+    \lean{Hilbert6.Spectral.isBoundedQuadraticForm_borelForm}
     \leanok
     Let $A$ in $\mathcal{B}(\mathbf{H})$ be self-adjoint. For any bounded, measurable, complex-valued function $f$ on the spectrum $\sigma(A)$ of $A$, let $Q_f : \mathbf{H} \rightarrow \mathbb{C}$ be its associated map
     \begin{align}
@@ -3648,7 +3648,7 @@ Since $\sigma(A)$ is a compact metric measurable space by Lemma~\ref{lmm:spectru
 
 \begin{definition}[The Class of Functions with Bounded Quadratic Form]
     \label{def:F-class}
-    \lean{Physicslib4.Spectral.FClass}
+    \lean{Hilbert6.Spectral.FClass}
     \uses{def:adjoint-bounded, def:hall-8.6, def:bounded-quadratic-form, lmm:spectrum-is-compact-metric-measurable}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Write $\mathcal{F}$ for the set of all bounded, Borel-measurable, complex-valued functions $f$ on $\sigma(A)$ such that the associated map $Q_f$ of Definition~\ref{def:hall-8.6} is a bounded quadratic form on $\mathbf{H}$.
@@ -3656,7 +3656,7 @@ Since $\sigma(A)$ is a compact metric measurable space by Lemma~\ref{lmm:spectru
 
 \begin{proposition}[The Map $f \mapsto Q_f$ is Linear]
     \label{prpstn:Q-is-linear}
-    \lean{Physicslib4.Spectral.borelForm_add, Physicslib4.Spectral.borelForm_smul}
+    \lean{Hilbert6.Spectral.borelForm_add, Hilbert6.Spectral.borelForm_smul}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint, let $f,g$ be bounded, Borel-measurable, complex-valued functions on $\sigma(A)$, and let $\alpha,\beta \in \mathbb{C}$. Then
     \begin{align}
@@ -3678,7 +3678,7 @@ As $\psi$ was arbitrary, $Q_{\alpha f + \beta g} = \alpha Q_f + \beta Q_g$.
 
 \begin{proposition}[Homogeneity of the Quadratic Form of a Linear Combination]
     \label{prpstn:F-homogeneous}
-    \lean{Physicslib4.Spectral.borelForm_smul_of_mem_FClass}
+    \lean{Hilbert6.Spectral.borelForm_smul_of_mem_FClass}
     \leanok
     Let $f,g \in \mathcal{F}$ and $\alpha,\beta \in \mathbb{C}$, with $\mathcal{F}$ as in Definition~\ref{def:F-class}. Then $Q_{\alpha f + \beta g}(\lambda\psi) = \lvert \lambda \rvert^2 Q_{\alpha f + \beta g}(\psi)$ for all $\psi \in \mathbf{H}$ and $\lambda \in \mathbb{C}$.
 \end{proposition}
@@ -3703,7 +3703,7 @@ the first desired result.
 
 \begin{proposition}[The Associated Form of a Linear Combination is Sesquilinear]
     \label{prpstn:F-sesquilinear}
-    \lean{Physicslib4.Spectral.isSesquilinearForm_polarization_borelForm}
+    \lean{Hilbert6.Spectral.isSesquilinearForm_polarization_borelForm}
     \leanok
     With $f,g,\alpha,\beta$ as in Proposition~\ref{prpstn:F-homogeneous}, the map $L_{\alpha f + \beta g} : \mathbf{H} \times \mathbf{H} \rightarrow \mathbb{C}$ defined by
     \begin{align}
@@ -3733,7 +3733,7 @@ Now as $Q_f$ and $Q_g$ are bounded quadratic forms, $L_f$ and $L_g$ are sesquili
 
 \begin{proposition}[The Quadratic Form of a Linear Combination is Bounded]
     \label{prpstn:F-bounded}
-    \lean{Physicslib4.Spectral.bounded_borelForm_of_mem_FClass, Physicslib4.Spectral.smul_add_mem_FClass}
+    \lean{Hilbert6.Spectral.bounded_borelForm_of_mem_FClass, Hilbert6.Spectral.smul_add_mem_FClass}
     \leanok
     With $f,g,\alpha,\beta$ as in Proposition~\ref{prpstn:F-homogeneous}, there is a constant $C \in \mathbb{R}$ with $\lvert Q_{\alpha f + \beta g}(\phi) \rvert \le C \|\phi\|^2$ for all $\phi \in \mathbf{H}$. Consequently $\mathcal{F}$ is a complex vector space.
 \end{proposition}
@@ -3773,7 +3773,7 @@ the final desired result. This completes the proof that $Q_{\alpha f + \beta g}$
 
 \begin{proposition}[The Class Contains the Continuous Functions]
     \label{prpstn:F-contains-continuous}
-    \lean{Physicslib4.Spectral.continuous_mem_FClass}
+    \lean{Hilbert6.Spectral.continuous_mem_FClass}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mathcal{F}$ as in Definition~\ref{def:F-class}, $C^0(\sigma(A); \mathbb{R}) \subseteq \mathcal{F}$.
 \end{proposition}
@@ -3800,7 +3800,7 @@ where bounded operator $f(A)$ is the image of $f$ under the real-valued function
 
 \begin{proposition}[The Quadratic Form of a Bounded Operator]
     \label{prpstn:hall-a.62}
-    \lean{Physicslib4.Spectral.isBoundedQuadraticForm_inner, Physicslib4.Spectral.polarization_inner}
+    \lean{Hilbert6.Spectral.isBoundedQuadraticForm_inner, Hilbert6.Spectral.polarization_inner}
     \uses{def:bounded-operator-notation, def:bounded-quadratic-form, def:bounded-sesquilinear-form}
     \leanok
     % Hall states this as Example A.62; we record it as a proposition since later results cite it.
@@ -3839,7 +3839,7 @@ Each $f_i$ is an element of $\mathcal{F}$, and thus a bounded, Borel-measurable,
 
 \begin{proposition}[The Class is Closed under Bounded Pointwise Limits]
     \label{prpstn:F-closed-under-limits}
-    \lean{Physicslib4.Spectral.mem_FClass_of_tendsto}
+    \lean{Hilbert6.Spectral.mem_FClass_of_tendsto}
     \leanok
     With $\mathcal{F}$ as in Definition~\ref{def:F-class}, if $\{f_n\}$ is a sequence in $\mathcal{F}$, uniformly bounded and converging pointwise to $f$, then $f \in \mathcal{F}$.
 \end{proposition}
@@ -3869,7 +3869,7 @@ The key "engine" in proving the $Q_f$ is a bounded quadratic form is the \textbf
 
 \begin{theorem}[Bounded Convergence Theorem]
     \label{thrm:bounded-convergence-theorem}
-    \lean{Physicslib4.Spectral.tendsto_integral_of_boundedPointwiseLimit, Physicslib4.Spectral.BoundedPointwiseLimit}
+    \lean{Hilbert6.Spectral.tendsto_integral_of_boundedPointwiseLimit, Hilbert6.Spectral.BoundedPointwiseLimit}
     \leanok
     Let $X$ be a set with finite measure $\mu(X) < \infty$ and $\{ f_i \}_{i \in \mathbb{N}}$ a sequence of uniformly bounded, complex valued functions on $X$ that converge pointwise to $f$, then
     \begin{align}
@@ -3989,7 +3989,7 @@ Our proof of this result requires that we first prove some "utility" lemmas as s
 
 \begin{lemma}[The Class $\mathcal{L}_0$ is an Algebra Containing the Open Sets]
     \label{lmm:hall-prblm-8.3.3a}
-    \lean{Physicslib4.Spectral.isSetAlgebra_L0}
+    \lean{Hilbert6.Spectral.isSetAlgebra_L0}
     \leanok
     Let $X$ be a compact metric measurable space with a measure $\mu_X$. Let $\mathcal{L}_0$ be as in Definition~\ref{def:L0-class} below: the measurable subsets $E \subseteq X$ whose indicator function $1_E$ is the \textit{pointwise} limit of a uniformly bounded sequence of continuous functions. Then $\mathcal{L}_0$ is an algebra and contains all open sets in $X$.
 \end{lemma}
@@ -4003,7 +4003,7 @@ For the open sets: every closed subset of $X$ lies in $\mathcal{L}_0$ by Proposi
 
 \begin{definition}[The Class $\mathcal{L}_0$]
     \label{def:L0-class}
-    \lean{Physicslib4.Spectral.L0}
+    \lean{Hilbert6.Spectral.L0}
     \uses{def:indicator-function}
     \leanok
     Let $X$ be a compact metric measurable space. Write $\mathcal{L}_0$ for the set of all measurable subsets $E \subseteq X$ whose indicator function $1_E$ is the \textit{pointwise} limit of a uniformly bounded sequence of continuous functions: that is, there are $\{f_n\} \subset C^0(X;\mathbb{R})$ and a constant $C$ with $\lvert f_n(x) \rvert \le C$ for all $n$ and all $x$, such that \textbf{for each $x \in X$} and each $\epsilon > 0$ there is an $N$ — depending on $x$ as well as on $\epsilon$ — with $\lvert f_n(x) - 1_E(x) \rvert < \epsilon$ for all $n \ge N$.
@@ -4013,7 +4013,7 @@ For the open sets: every closed subset of $X$ lies in $\mathcal{L}_0$ by Proposi
 
 \begin{proposition}[The Empty Set Lies in $\mathcal{L}_0$]
     \label{prpstn:L0-contains-empty}
-    \lean{Physicslib4.Spectral.empty_mem_L0}
+    \lean{Hilbert6.Spectral.empty_mem_L0}
     \leanok
     With $\mathcal{L}_0$ as in Definition~\ref{def:L0-class}, $\emptyset \in \mathcal{L}_0$.
 \end{proposition}
@@ -4083,7 +4083,7 @@ As $f_n(x) \equiv 1 / (n + 1)$, this is true as a result of the \textbf{Archimed
 
 \begin{proposition}[$\mathcal{L}_0$ is Closed under Complements]
     \label{prpstn:L0-complement}
-    \lean{Physicslib4.Spectral.compl_mem_L0}
+    \lean{Hilbert6.Spectral.compl_mem_L0}
     \leanok
     With $\mathcal{L}_0$ as in Definition~\ref{def:L0-class}, if $E \in \mathcal{L}_0$ then $E^c \in \mathcal{L}_0$.
 \end{proposition}
@@ -4157,7 +4157,7 @@ Having proven both parts we conclude that $\mathcal{L}_0$ is closed under comple
 
 \begin{proposition}[$\mathcal{L}_0$ is Closed under Finite Unions]
     \label{prpstn:L0-union}
-    \lean{Physicslib4.Spectral.union_mem_L0}
+    \lean{Hilbert6.Spectral.union_mem_L0}
     \leanok
     With $\mathcal{L}_0$ as in Definition~\ref{def:L0-class}, if $E_1, E_2 \in \mathcal{L}_0$ then $E_1 \cup E_2 \in \mathcal{L}_0$.
 \end{proposition}
@@ -4233,7 +4233,7 @@ We will prove that $\mathcal{L}_0$ contains all open sets in $X$ by \textbf{Step
 
 \begin{proposition}[$\mathcal{L}_0$ Contains all Closed Sets]
     \label{prpstn:L0-contains-closed}
-    \lean{Physicslib4.Spectral.isClosed_mem_L0}
+    \lean{Hilbert6.Spectral.isClosed_mem_L0}
     \leanok
     With $\mathcal{L}_0$ as in Definition~\ref{def:L0-class}, every closed subset of $X$ lies in $\mathcal{L}_0$.
 \end{proposition}
@@ -4254,7 +4254,7 @@ To this end let us review a definition we will require, that of a "bump function
 
 \begin{definition}[Bump Function]
     \label{def:bump-function}
-    \lean{Physicslib4.Spectral.IsBumpFunction}
+    \lean{Hilbert6.Spectral.IsBumpFunction}
     \leanok
     Given a topological manifold $X$, a closed subset $\overline{E}$ of $X$, and an open subset $U$ of $X$ that contains $\overline{E}$, i.e. $\overline{E} \subset U$, then a function $f$ in $C^0(X; \mathbb{R})$ is called a \textit{bump function} for $\overline{E}$ supported in $U$ if
     \begin{enumerate}
@@ -4268,7 +4268,7 @@ The existence of a bump function is guaranteed by the following theorem
 
 \begin{theorem}[Existence of Bump Functions]
     \label{thrm:existence-of-bump-functions}
-    \lean{Physicslib4.Spectral.exists_isBumpFunction}
+    \lean{Hilbert6.Spectral.exists_isBumpFunction}
     \leanok
     Let $X$ be a normal topological space. For any closed set $\overline{E}$ in $X$ and any open set $U$ containing $\overline{E}$, there exists a bump function for $\overline{E}$ supported in $U$.
 \end{theorem}
@@ -4295,7 +4295,7 @@ The next lemma uses the Monotone Class Theorem, which we state first.
 
 \begin{theorem}[Monotone Class Theorem]
     \label{thrm:monotone-class-theorem}
-    \lean{Physicslib4.Spectral.generateFrom_subset_of_isMonotoneClass, Physicslib4.Spectral.IsMonotoneClass}
+    \lean{Hilbert6.Spectral.generateFrom_subset_of_isMonotoneClass, Hilbert6.Spectral.IsMonotoneClass}
     \leanok
     Let $\mathcal{A}$ be an algebra of subsets of a set $X$, and let $\mathcal{M}$ be a monotone class, i.e. a collection of subsets of $X$ closed under countable increasing unions and countable decreasing intersections, such that $\mathcal{A} \subseteq \mathcal{M}$. Then $\sigma(\mathcal{A}) \subseteq \mathcal{M}$, where $\sigma(\mathcal{A})$ is the smallest $\sigma$-algebra containing $\mathcal{A}$.
 \end{theorem}
@@ -4307,7 +4307,7 @@ The next of these "utility" lemmas is the following:
 
 \begin{lemma}[Extension from an Algebra to the Generated $\sigma$-Algebra]
     \label{lmm:hall-prblm-8.3.3b}
-    \lean{Physicslib4.Spectral.IsBorelGenerating.indicator_mem, Physicslib4.Spectral.IsBorelGenerating}
+    \lean{Hilbert6.Spectral.IsBorelGenerating.indicator_mem, Hilbert6.Spectral.IsBorelGenerating}
     \leanok
     Let $X$ be a compact metric measurable space and $C^0(X; \mathbb{R})$ the set of continuous real-valued functions on $X$. Let $\mathcal{C}$ be the set of bounded, measurable, complex-valued functions on $X$ such that (1) $\mathcal{C}$ is a complex vector space, (2) $\mathcal{C}$ contains $C^0(X; \mathbb{R})$, and (3) $\mathcal{C}$ is closed under pointwise limits of uniformly bounded sequences. Finally let $\mathcal{L}_1$ be the set of all measurable sets $E$ in $X$ such that the indicator function $1_E$ belongs to $\mathcal{C}$. Then $\mathcal{L}_1$ contains all Borel sets in $X$.
 \end{lemma}
@@ -4359,7 +4359,7 @@ Before proving the final of these "utility" lemmas, we isolate the following ele
 
 \begin{lemma}[Pointwise Limits of Uniformly Bounded, Borel-Measurable Functions]
     \label{lmm:pointwise-limits-of-borel-measurable-functions}
-    \lean{Physicslib4.Spectral.measurable_of_tendsto_pointwise, Physicslib4.Spectral.norm_le_of_tendsto}
+    \lean{Hilbert6.Spectral.measurable_of_tendsto_pointwise, Hilbert6.Spectral.norm_le_of_tendsto}
     \leanok
     Let $X$ be a compact metric measurable space. Let $\{ f_i \}_{i \in \mathbb{N}}$ be a sequence of bounded, Borel-measurable, complex-valued functions on $X$ that are uniformly bounded, i.e. there exists a real-valued constant $M$ such that
     \begin{align}
@@ -4469,7 +4469,7 @@ The final of these "utility" lemmas is the following:
 
 \begin{lemma}[A Class Containing the Continuous Functions and Closed under Bounded Limits is Everything]
     \label{lmm:hall-prblm-8.3.3c}
-    \lean{Physicslib4.Spectral.IsBorelGenerating.eq_bddMeasurable}
+    \lean{Hilbert6.Spectral.IsBorelGenerating.eq_bddMeasurable}
     \leanok
     Let $X$ be a compact metric measurable space and $C^0(X; \mathbb{R})$ the set of continuous real-valued functions on $X$. Let $\mathcal{C}$ be the set of bounded, measurable, complex-valued functions on $X$ such that (1) $\mathcal{C}$ is a complex vector space, (2) $\mathcal{C}$ contains $C^0(X; \mathbb{R})$, and (3) $\mathcal{C}$ is closed under pointwise limits of uniformly bounded sequences. Then $\mathcal{C}$ consists of all bounded, Borel-measurable functions on $X$.
 \end{lemma}
@@ -4516,7 +4516,7 @@ With Proposition~\ref{prpstn:hall-8.7} established, let us introduce another def
 
 \begin{definition}[The Bounded Borel Functional Calculus]
     \label{def:hall-8.8}
-    \lean{Physicslib4.Spectral.existsUnique_borelCalculus, Physicslib4.Spectral.borelCalculus}
+    \lean{Hilbert6.Spectral.existsUnique_borelCalculus, Hilbert6.Spectral.borelCalculus}
     \uses{def:adjoint-bounded, prpstn:basic-integral-properties, def:bounded-operator-notation, def:bounded-operator-resolvent-and-spectrum, def:hall-8.6, prpstn:hall-a.63, prpstn:hall-8.7}
     \leanok
     Let $A$ in $\mathcal{B}(\mathbf{H})$ be self-adjoint and let $f$ be a bounded, measurable, complex-valued function on the spectrum $\sigma(A)$ of $A$. By Proposition~\ref{prpstn:hall-8.7} the quadratic form $Q_f$ of Definition~\ref{def:hall-8.6} is a \textbf{bounded} quadratic form, which is exactly the hypothesis of Proposition~\ref{prpstn:hall-a.63}. Let $f(A)$ be the operator that proposition associates to $Q_f$. This means that $f(A)$ is the unique operator such that
@@ -4530,7 +4530,7 @@ As a first use of this definition we can prove the following lemma
 
 \begin{lemma}[The Operator of a Real-Valued Function is Self-Adjoint]
     \label{lmm:lemma-3}
-    \lean{Physicslib4.Spectral.isSelfAdjoint_borelCalculus}
+    \lean{Hilbert6.Spectral.isSelfAdjoint_borelCalculus}
     \leanok
     Let $A$ in $\mathcal{B}(\mathbf{H})$ be self-adjoint, $f$ a bounded, measurable, complex-valued function on the spectrum $\sigma(A)$ of $A$, and $f(A)$ the operator associated to $f$ by way of the previous Definition~\ref{def:hall-8.8}. If $f$ is real-valued, then $f(A)$ is self-adjoint.
 \end{lemma}
@@ -4560,7 +4560,7 @@ The next proposition uses the Polarization Identity, which we state first.
 
 \begin{proposition}[Polarization Identity]
     \label{prpstn:hall-a.59}
-    \lean{Physicslib4.Spectral.sesquilinear_polarization}
+    \lean{Hilbert6.Spectral.sesquilinear_polarization}
     \uses{def:bounded-sesquilinear-form}
     \leanok
     If $L$ is a sesquilinear form on the Hilbert space $\mathbf{H}$, then for any $\phi, \psi \in \mathbf{H}$ the value of $L(\phi, \psi)$ can be determined from the values of $L$ "on the diagonal" (i.e. the values of $L(\xi, \xi)$ for various $\xi \in \mathbf{H}$) as follows:
@@ -4577,7 +4577,7 @@ The next proposition proves the analog of multiplicativity from Proposition~\ref
 
 \begin{proposition}[The Bounded Borel Functional Calculus is Multiplicative]
     \label{prpstn:hall-8.9}
-    \lean{Physicslib4.Spectral.borelCalculus_mul}
+    \lean{Hilbert6.Spectral.borelCalculus_mul}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and $f$ and $g$ be bounded, measurable, complex-valued functions on the spectrum $\sigma(A)$ of $A$, then
     \begin{align}
@@ -4593,7 +4593,7 @@ The result is obtained by applying Lemma~\ref{lmm:hall-prblm-8.3.3c} twice. The 
 
 \begin{definition}[The Classes $\mathcal{F}_1$ and $\mathcal{F}_2$]
     \label{def:F1-F2-classes}
-    \lean{Physicslib4.Spectral.F1Class, Physicslib4.Spectral.F2Class}
+    \lean{Hilbert6.Spectral.F1Class, Hilbert6.Spectral.F2Class}
     \uses{def:adjoint-bounded, def:F-class, def:hall-8.8, lmm:spectrum-is-compact-metric-measurable}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint, and let $f \mapsto f(A)$ be the bounded Borel functional calculus of Definition~\ref{def:hall-8.8}. Write
@@ -4608,7 +4608,7 @@ The result is obtained by applying Lemma~\ref{lmm:hall-prblm-8.3.3c} twice. The 
 
 \begin{proposition}[$\mathcal{F}_1$ is a Vector Space]
     \label{prpstn:F1-vector-space}
-    \lean{Physicslib4.Spectral.isBorelGenerating_F1Class}
+    \lean{Hilbert6.Spectral.isBorelGenerating_F1Class}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mathcal{F}_1$ as in Definition~\ref{def:F1-F2-classes}, $\mathcal{F}_1$ is a complex vector space containing $C^0(\sigma(A); \mathbb{R})$.
 \end{proposition}
@@ -4654,7 +4654,7 @@ for all $\psi \in \mathbf{H}$. Note here we have used Proposition~\ref{prpstn:as
 
 \begin{proposition}[The Quadratic Form is Continuous under Bounded Pointwise Limits]
     \label{prpstn:Q-continuous-under-limits}
-    \lean{Physicslib4.Spectral.tendsto_borelForm}
+    \lean{Hilbert6.Spectral.tendsto_borelForm}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and $\psi \in \mathbf{H}$. If $\{f_i\}$ are bounded, Borel-measurable, uniformly bounded and converge pointwise to $f$ on $\sigma(A)$, then $Q_{f_i}(\psi) \rightarrow Q_f(\psi)$, and likewise for the associated sesquilinear forms.
 \end{proposition}
@@ -4708,7 +4708,7 @@ for all $\psi \in \mathbf{H}$, all $f \in \mathcal{F}_1$, and all $g \in C^0(\si
 
 \begin{proposition}[$\mathcal{F}_1$ is Closed under Bounded Pointwise Limits]
     \label{prpstn:F1-closed-under-limits}
-    \lean{Physicslib4.Spectral.mem_F1Class_of_tendsto, Physicslib4.Spectral.F1Class_eq_bddMeasurable}
+    \lean{Hilbert6.Spectral.mem_F1Class_of_tendsto, Hilbert6.Spectral.F1Class_eq_bddMeasurable}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mathcal{F}_1$ as in Definition~\ref{def:F1-F2-classes}, if $\{f_i\}$ is a uniformly bounded sequence in $\mathcal{F}_1$ converging pointwise to $f$, then $f \in \mathcal{F}_1$. Consequently, by Lemma~\ref{lmm:hall-prblm-8.3.3c}, $\mathcal{F}_1$ is the set of \textit{all} bounded, Borel-measurable, complex-valued functions on $\sigma(A)$ — that is, $(fg)(A) = f(A)g(A)$ for every bounded Borel $f$ and every continuous $g$.
 \end{proposition}
@@ -4756,7 +4756,7 @@ As $\sigma(A)$ is a compact metric measurable space by Lemma~\ref{lmm:spectrum-i
 
 \begin{proposition}[$\mathcal{F}_2$ Contains all Bounded Borel Functions]
     \label{prpstn:F2-is-everything}
-    \lean{Physicslib4.Spectral.isBorelGenerating_F2Class, Physicslib4.Spectral.F2Class_eq_bddMeasurable}
+    \lean{Hilbert6.Spectral.isBorelGenerating_F2Class, Hilbert6.Spectral.F2Class_eq_bddMeasurable}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mathcal{F}_2$ as in Definition~\ref{def:F1-F2-classes}, $\mathcal{F}_2$ is a complex vector space, contains $C^0(\sigma(A); \mathbb{R})$, and is closed under bounded pointwise limits; hence it is the set of \textit{all} bounded, Borel-measurable, complex-valued functions on $\sigma(A)$.
 \end{proposition}
@@ -4822,7 +4822,7 @@ In what is the penultimate result required to prove the \textbf{Spectral Theorem
 
 \begin{theorem}[The Spectral Measure of a Self-Adjoint Operator]
     \label{thrm:hall-8.10}
-    \lean{Physicslib4.Spectral.exists_spectralMeasure, Physicslib4.Spectral.spectralMeasure}
+    \lean{Hilbert6.Spectral.exists_spectralMeasure, Hilbert6.Spectral.spectralMeasure}
     \leanok
     Suppose $A \in \mathcal{B}(\mathbf{H})$ is self-adjoint. For any measurable subset $E$ of the spectrum $\sigma(A)$ of $A$, define the operator $\mu^A(E)$ by
     \begin{align}
@@ -4845,7 +4845,7 @@ That $\mu^A$ is a projection-valued measure is the conjunction of the four axiom
 
 \begin{proposition}[Each Spectral Projection is an Orthogonal Projection]
     \label{prpstn:mua-projection}
-    \lean{Physicslib4.Spectral.isStarProjection_borelCalculus_indicator}
+    \lean{Hilbert6.Spectral.isStarProjection_borelCalculus_indicator}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and, for measurable $E \subseteq \sigma(A)$, define $\mu^A(E) \equiv 1_E(A)$, where $1_E(A)$ is given by Definition~\ref{def:hall-8.8}. Then $\mu^A(E)$ is a bounded orthogonal projection.
 \end{proposition}
@@ -4877,7 +4877,7 @@ is also an orthogonal projection for any measurable subset $E$ of the spectrum $
 
 \begin{proposition}[Spectral Projections Multiply to the Intersection]
     \label{prpstn:mua-multiplicative}
-    \lean{Physicslib4.Spectral.borelCalculus_indicator_mul}
+    \lean{Hilbert6.Spectral.borelCalculus_indicator_mul}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mu^A(E) \equiv 1_E(A)$ as in Proposition~\ref{prpstn:mua-projection}, for any measurable $E_1, E_2 \subseteq \sigma(A)$,
     \begin{align}
@@ -4909,7 +4909,7 @@ as required.
 
 \begin{proposition}[Spectral Projections of the Empty Set and the Whole Spectrum]
     \label{prpstn:mua-empty-and-whole}
-    \lean{Physicslib4.Spectral.borelCalculus_indicator_empty, Physicslib4.Spectral.borelCalculus_indicator_univ}
+    \lean{Hilbert6.Spectral.borelCalculus_indicator_empty, Hilbert6.Spectral.borelCalculus_indicator_univ}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mu^A(E) \equiv 1_E(A)$ as in Proposition~\ref{prpstn:mua-projection}, 
     \begin{align}
@@ -4976,7 +4976,7 @@ the second, as required.
 
 \begin{proposition}[Spectral Projections are Countably Additive]
     \label{prpstn:mua-countably-additive}
-    \lean{Physicslib4.Spectral.hasSum_borelCalculus_indicator}
+    \lean{Hilbert6.Spectral.hasSum_borelCalculus_indicator}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mu^A(E) \equiv 1_E(A)$ as in Proposition~\ref{prpstn:mua-projection}, for pairwise disjoint measurable sets $\{E_j\}$ in $\sigma(A)$ and any $\psi \in \mathbf{H}$,
     \begin{align}
@@ -5029,7 +5029,7 @@ The next lemma uses the Monotone Convergence Theorem for real sequences, which w
 
 \begin{theorem}[Monotone Convergence Theorem]
     \label{thrm:monotone-convergence-theorem}
-    \lean{Physicslib4.Spectral.tendsto_iff_isBounded_of_monotone, Physicslib4.Spectral.tendsto_iff_isBounded_of_antitone}
+    \lean{Hilbert6.Spectral.tendsto_iff_isBounded_of_monotone, Hilbert6.Spectral.tendsto_iff_isBounded_of_antitone}
     \leanok
     Let $\{ a_n \}_{n \in \mathbb{N}}$ be a monotone sequence of real numbers (either $a_n \le a_{n+1}$ or $a_n \ge a_{n+1}$ for all $n$). Then the sequence $\{ a_n \}_{n \in \mathbb{N}}$ has a finite limit in $\mathbb{R}$ if and only if $\{ a_n \}_{n \in \mathbb{N}}$ is bounded.
 \end{theorem}
@@ -5041,7 +5041,7 @@ With this result as motivation, let us prove the following "utility" lemma
 
 \begin{lemma}[Sums of Pairwise Orthogonal Projections]
     \label{lmm:lemma-4}
-    \lean{Physicslib4.Spectral.exists_isStarProjection_tendsto_partialSum}
+    \lean{Hilbert6.Spectral.exists_isStarProjection_tendsto_partialSum}
     \leanok
     Let $\{ P_i \}_{i \in \mathbb{N}}$ be a set of bounded orthogonal projections on a complex Hilbert space $\mathbf{H}$ that satisfy $P_iP_j = 0$ for $i \neq j$. Then for all $\psi \in \mathbf{H}$ the sequence of partial sums
     \begin{align}
@@ -5057,7 +5057,7 @@ Convergence of the partial sums is Proposition~\ref{prpstn:orthogonal-sum-conver
 
 \begin{proposition}[Partial Sums of Pairwise Orthogonal Projections Converge]
     \label{prpstn:orthogonal-sum-converges}
-    \lean{Physicslib4.Spectral.exists_tendsto_partialSum_of_isStarProjection}
+    \lean{Hilbert6.Spectral.exists_tendsto_partialSum_of_isStarProjection}
     \leanok
     Let $\{ P_i \}_{i \in \mathbb{N}}$ be bounded orthogonal projections on a complex Hilbert space $\mathbf{H}$ with $P_iP_j = 0$ for $i \ne j$. Then for every $\psi \in \mathbf{H}$ the sequence of partial sums $S_n\psi \equiv \sum_{i=0}^n P_i\psi$ converges in $\mathbf{H}$. We write $P\psi$ for its limit.
 \end{proposition}
@@ -5141,7 +5141,7 @@ As $S_n\psi$ is a Cauchy sequence and $\mathbf{H}$ is a Hilbert, and thus a Bana
 
 \begin{proposition}[The Limit of the Partial Sums is a Bounded Orthogonal Projection]
     \label{prpstn:orthogonal-sum-is-projection}
-    \lean{Physicslib4.Spectral.exists_isStarProjection_tendsto_partialSum'}
+    \lean{Hilbert6.Spectral.exists_isStarProjection_tendsto_partialSum'}
     \leanok
     With $\{P_i\}$ and $P$ as in Proposition~\ref{prpstn:orthogonal-sum-converges}, the map $\psi \mapsto P\psi$ is a bounded orthogonal projection on $\mathbf{H}$: it lies in $\mathcal{B}(\mathbf{H})$, is self-adjoint, and satisfies $PP = P$.
 \end{proposition}
@@ -5225,7 +5225,7 @@ for arbitrary $\psi \in \mathbf{H}$, the third and final condition, so $P$ is a 
 
 \begin{proposition}[The Range of the Limit Projection]
     \label{prpstn:orthogonal-sum-range}
-    \lean{Physicslib4.Spectral.range_eq_topologicalClosure_iSup_of_tendsto_partialSum}
+    \lean{Hilbert6.Spectral.range_eq_topologicalClosure_iSup_of_tendsto_partialSum}
     \leanok
     With $\{P_i\}$ and $P$ as in Proposition~\ref{prpstn:orthogonal-sum-converges}, the range of $P$ is the smallest closed subspace of $\mathbf{H}$ containing the ranges of all the $P_i$.
 \end{proposition}
@@ -5328,7 +5328,7 @@ for arbitrary $\psi \in \mathbf{H}$. This is nothing more than the statement tha
 
 \begin{proposition}[Spectral Projections are the Integrals of their Indicators]
     \label{prpstn:mua-indicator-integral}
-    \lean{Physicslib4.Spectral.spectralMeasure_integral_indicator}
+    \lean{Hilbert6.Spectral.spectralMeasure_integral_indicator}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mu^A(E) \equiv 1_E(A)$ as in Proposition~\ref{prpstn:mua-projection}, and given that $\mu^A$ is a projection-valued measure, for every measurable $E \subseteq \sigma(A)$,
     \begin{align}
@@ -5397,7 +5397,7 @@ which, as $E$ is arbitrary, is none other than the statement that the measures $
 
 \begin{proposition}[The Two Bounded Functional Calculi Agree]
     \label{prpstn:mua-bounded-calculus-agrees}
-    \lean{Physicslib4.Spectral.borelCalculus_eq_integral}
+    \lean{Hilbert6.Spectral.borelCalculus_eq_integral}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mu^A(E) \equiv 1_E(A)$ as in Proposition~\ref{prpstn:mua-projection}, for every bounded, Borel-measurable, complex-valued $f$ on $\sigma(A)$ the operator $f(A)$ of Definition~\ref{def:hall-8.8} coincides with the projection-valued integral of $f$ against $\mu^A$:
     \begin{align}
@@ -5435,7 +5435,7 @@ However, by the uniqueness clause of Proposition~\ref{prpstn:hall-a.63} the oper
 
 \begin{proposition}[The Spectral Measure Integrates to the Operator]
     \label{prpstn:mua-integrates-to-A}
-    \lean{Physicslib4.Spectral.spectralMeasure_integral_id}
+    \lean{Hilbert6.Spectral.spectralMeasure_integral_id}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint. With $\mu^A(E) \equiv 1_E(A)$ as in Proposition~\ref{prpstn:mua-projection}, 
     \begin{align}
@@ -5493,7 +5493,7 @@ The final result we need to prove to complete our proof of the \textbf{Spectral 
 
 \begin{theorem}[Uniqueness of the Spectral Measure]
     \label{thrm:hall-prblm-8.3.4}
-    \lean{Physicslib4.Spectral.pvm_eq_of_integral_id_eq}
+    \lean{Hilbert6.Spectral.pvm_eq_of_integral_id_eq}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and let $\mu^A$ and $\nu^A$ be two projection-valued measures on the spectrum $\sigma(A)$ of $A$ such that
     \begin{align}
@@ -5533,7 +5533,7 @@ the desired result of this final part.
 
 \begin{proposition}[Two Spectral Measures Agree on Polynomials]
     \label{prpstn:pvm-agree-on-polynomials}
-    \lean{Physicslib4.Spectral.pvm_integral_polynomial_eq}
+    \lean{Hilbert6.Spectral.pvm_integral_polynomial_eq}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and let $\mu^A, \nu^A$ be projection-valued measures on $\sigma(A)$ with $\int_{\sigma(A)} \lambda \, d\mu^A(\lambda) = A = \int_{\sigma(A)} \lambda \, d\nu^A(\lambda)$. Then for every polynomial $p$ on $\sigma(A)$,
     \begin{align}
@@ -5574,7 +5574,7 @@ operator-valued integration with respect to $\mu^A$ agrees with that with respec
 
 \begin{proposition}[Two Spectral Measures Agree on Continuous Functions]
     \label{prpstn:pvm-agree-on-continuous}
-    \lean{Physicslib4.Spectral.pvm_integral_continuous_eq}
+    \lean{Hilbert6.Spectral.pvm_integral_continuous_eq}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and let $\mu^A, \nu^A$ be projection-valued measures on $\sigma(A)$ with $\int_{\sigma(A)} \lambda \, d\mu^A(\lambda) = A = \int_{\sigma(A)} \lambda \, d\nu^A(\lambda)$. Then for every continuous, complex-valued $g$ on $\sigma(A)$,
     \begin{align}
@@ -5603,7 +5603,7 @@ We will have need of the fact that the set of complex-valued polynomials on $\si
 
 \begin{lemma}[Polynomials are Dense in the Continuous Functions on the Spectrum]
     \label{lmm:lemma-5}
-    \lean{Physicslib4.Spectral.dense_polynomial_spectrum}
+    \lean{Hilbert6.Spectral.dense_polynomial_spectrum}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint, then the set of complex-valued polynomials on $\sigma(A)$ is dense in the set of continuous, complex-valued functions on $\sigma(A)$ with respect to the supremum norm.
 \end{lemma}
@@ -5698,7 +5698,7 @@ Hence, we have proven as required: operator-valued integration with respect to $
 
 \begin{proposition}[Two Spectral Measures Agree on Bounded Measurable Functions]
     \label{prpstn:pvm-agree-on-measurable}
-    \lean{Physicslib4.Spectral.pvm_integral_bddMeasurable_eq}
+    \lean{Hilbert6.Spectral.pvm_integral_bddMeasurable_eq}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and let $\mu^A, \nu^A$ be projection-valued measures on $\sigma(A)$ with $\int_{\sigma(A)} \lambda \, d\mu^A(\lambda) = A = \int_{\sigma(A)} \lambda \, d\nu^A(\lambda)$. Then for every bounded, Borel-measurable, complex-valued $f$ on $\sigma(A)$,
     \begin{align}
@@ -5799,7 +5799,7 @@ So with this we have proven that under the hypotheses of the Theorem~\ref{thrm:h
 
 \begin{theorem}[Spectral Theorem for Bounded, Self-Adjoint Operators]
     \label{thrm:spectral-theorem-for-bounded-operators}
-    \lean{Physicslib4.Spectral.existsUnique_spectralMeasure}
+    \lean{Hilbert6.Spectral.existsUnique_spectralMeasure}
     \leanok
     If $A \in \mathcal{B}(\mathbf{H})$ is self-adjoint, then there exists a unique projection-valued measure $\mu^A$ on the Borel $\sigma$-algebra of $\sigma(A)$, the spectrum of $A$, with values in orthogonal projections on $\mathbf{H}$ such that
     \begin{align}
@@ -5820,7 +5820,7 @@ With the \textbf{Spectral Theorem for Bounded, Self-Adjoint Operators}~(\ref{thr
 
 \begin{definition}[Functional Calculus]
     \label{def:functional-calculus}
-    \lean{Physicslib4.Spectral.functionalCalculus}
+    \lean{Hilbert6.Spectral.functionalCalculus}
     \uses{def:adjoint-bounded, prpstn:basic-integral-properties, def:bounded-operator-notation, def:bounded-operator-resolvent-and-spectrum, thrm:spectral-theorem-for-bounded-operators, thrm:operator-valued-integration, prpstn:hall-a.63, prpstn:mua-bounded-calculus-agrees, def:hall-8.8}
     \leanok
     If $A \in \mathcal{B}(\mathbf{H})$ is self-adjoint and $f : \sigma(A) \rightarrow \mathbb{C}$ is a bounded measurable function on the spectrum $\sigma(A)$ of $A$, \textit{functional calculus} defines an operator $f(A)$ by

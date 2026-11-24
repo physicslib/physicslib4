@@ -2,7 +2,7 @@
 
 Plan: `notes/agents/plan-reflexive-causal-precedence-2026-10-16.md`.
 
-## 2026-10-16 `Physicslib4/Spacetime/Causality.lean` compiles
+## 2026-10-16 `Hilbert6/Spacetime/Causality.lean` compiles
 
 - `CausallyPrecedes M t p q := Relation.ReflTransGen (M.CausalSegmentPrecedes t) p q`; docstring
   states reflexivity, the Hawking–Ellis convention and the relation to `IsCausalTrip`.
@@ -16,12 +16,12 @@ Plan: `notes/agents/plan-reflexive-causal-precedence-2026-10-16.md`.
 - Docstrings: module header, `IsSpacelikeRelated`, `causallyPrecedes_antisymm` ("partial order").
 - Blueprint `spacetime.tex` still has `\lean{...causallyPrecedes_asymm}`; for the blueprint stage.
 
-## 2026-10-16 `Physicslib4/Spacetime/LorentzCausality.lean` compiles
+## 2026-10-16 `Hilbert6/Spacetime/LorentzCausality.lean` compiles
 
 - Repaired `causallyPrecedes_smul` (`Relation.ReflTransGen.lift`); docstring mentions the
   reflexive case. Other proofs compile unchanged.
 
-## 2026-10-16 `Physicslib4/Spacetime/CausalComplement.lean` compiles
+## 2026-10-16 `Hilbert6/Spacetime/CausalComplement.lean` compiles
 
 - Added `Spacetime.disjoint_spacelikeComplement`, `LorentzianSpacetime.disjoint_spacelikeComplement`,
   `LorentzianSpacetime.spacelikeComplement_univ`, `LorentzianSpacetime.inf_causalComplement`,

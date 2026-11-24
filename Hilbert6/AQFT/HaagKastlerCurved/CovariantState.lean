@@ -1,0 +1,103 @@
+/-
+Copyright (c) 2026 Lean Community. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Lean Community
+-/
+import Hilbert6.AQFT.HaagKastlerCurved.Net
+import Hilbert6.GNS.Basic
+
+/-!
+# Covariant families of local states, curved spacetime
+
+This file mirrors `Hilbert6.AQFT.HaagKastler.CovariantState` for a
+Haag-Kastler net over an abstract Lorentzian spacetime `M`. The
+identity-component isometry action on the net is implemented fiberwise by
+the covariance equivalences `α_φ : 𝔘(B) ≃⋆ₐ[ℂ] 𝔘(φ·B)`
+(`HaagKastlerNet.covEquiv`, from Axiom 5). A *covariant family of local
+states* is a choice of state `ω B` on each local algebra `𝔘(B)` that is
+intertwined by these equivalences.
+
+## Main definitions
+
+* `Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.IsCovariantFamily`: a
+  family `ω : ∀ B, State 𝔘(B)` is covariant if `ω B a = ω (φ·B) (α_φ a)`
+  for every isometry `φ`, region `B`, and `a ∈ 𝔘(B)`.
+
+## Main results
+
+* `IsCovariantFamily.one`: at the identity, covariance reduces to the
+  canonical identification `𝔘(B) = 𝔘(1·B)` (via `covEquiv_one`).
+* `IsCovariantFamily.comp`: covariance composes - chaining through `φ`
+  then `φ'` expresses `ω B` via the state on `φ'·(φ·B)`.
+
+## Notes
+
+As in the Minkowski case, this is the local, fiberwise form of covariance.
+Lifting the fiberwise action to an automorphism group is realized per region by
+the stabilizer action `stabAut` (`StabilizerAction.lean`): for `g` fixing `B`,
+`α_g` is an automorphism of the single algebra `𝔘(B)`. Since curved spacetime
+has no quasilocal algebra, there is no global isometry-invariant vacuum;
+equilibrium is instead captured by KMS states for Killing flows
+(`StabilizerKMS.lean`).
+-/
+
+namespace Hilbert6
+namespace AQFT
+namespace HaagKastlerCurved
+
+open Hilbert6 Hilbert6.GNS
+open scoped Pointwise
+
+namespace HaagKastlerNet
+
+variable {M : LorentzianSpacetime} (N : HaagKastlerNet M)
+
+/--
+A covariant family of local states: a state ω_B on each 𝔘(B), carried into one another by the
+isometries.
+
+The family assigns to every region B a state ω_B on its local algebra 𝔘(B). It is covariant when
+ω_B(a) = ω_(φ(B))(α_φ a) for every isometry φ connected to the identity, every region B and every
+a ∈ 𝔘(B), where α_φ is the covariance isomorphism of Axiom 5 (`covEquiv`). Expectation values in a
+region and in its image under a symmetry of the spacetime are then the same. Curved spacetime
+has no quasilocal algebra, hence no single global state to be invariant; this local family is the
+available form of a covariant state. Mathematically, on a region fixed by φ the condition makes
+ω_B invariant under the stabilizer automorphism of 𝔘(B) (`stabAut`); the library has no separate
+lemma for this.
+
+Implementation note: the family is indexed by all subsets of M; only its values on basis sets are
+meaningful.
+
+Blueprint: def:covariant-state-family-in-curved-spacetime
+-/
+def IsCovariantFamily (ω : ∀ B : Set M.Carrier, State (N.algebra B)) : Prop :=
+  ∀ (φ : M.Isom) (B : Set M.Carrier) (a : N.algebra B),
+    ω B a = ω (φ • B) (N.covEquiv φ B a)
+
+/-- **Covariance at the identity.** For a covariant family, the state on `B`
+agrees with the state on `1·B` transported along the canonical identification
+`𝔘(B) = 𝔘(1·B)` (from `one_smul`). -/
+theorem IsCovariantFamily.one
+    {ω : ∀ B : Set M.Carrier, State (N.algebra B)}
+    (hω : N.IsCovariantFamily ω) (B : Set M.Carrier) (a : N.algebra B) :
+    ω B a
+      = ω ((1 : M.Isom) • B)
+          ((congrArg N.U.algebra (one_smul M.Isom B).symm).mp a) := by
+  rw [hω 1 B a, N.covEquiv_one B a]
+
+/-- **Covariance composes.** Chaining covariance through `φ` and then `φ'`
+expresses the state on `B` via the state on `φ'·(φ·B)` and the composed
+equivalences. -/
+theorem IsCovariantFamily.comp
+    {ω : ∀ B : Set M.Carrier, State (N.algebra B)}
+    (hω : N.IsCovariantFamily ω) (φ φ' : M.Isom)
+    (B : Set M.Carrier) (a : N.algebra B) :
+    ω B a
+      = ω (φ' • (φ • B)) (N.covEquiv φ' (φ • B) (N.covEquiv φ B a)) := by
+  rw [hω φ B a, hω φ' (φ • B) (N.covEquiv φ B a)]
+
+end HaagKastlerNet
+
+end HaagKastlerCurved
+end AQFT
+end Hilbert6

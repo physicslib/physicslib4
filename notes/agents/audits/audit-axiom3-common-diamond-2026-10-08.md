@@ -17,17 +17,17 @@ and "lake lint" have not been confirmed to pass since Stage 3's proofs were writ
 should be closed with a fresh `lean_guard.py verify` before this merges into
 `numina/aqft-in-lean`.
 
-## 1. Changes to defs/structures/classes/instances/fields under `Physicslib4/`
+## 1. Changes to defs/structures/classes/instances/fields under `Hilbert6/`
 
-`git diff 15cdea7 -- Physicslib4` touches four files, one declaration body, and otherwise only
+`git diff 15cdea7 -- Hilbert6` touches four files, one declaration body, and otherwise only
 docstrings:
 
-- **`Physicslib4.AQFT.HaagKastler.LocalCommutativity`** (def, protected) —
+- **`Hilbert6.AQFT.HaagKastler.LocalCommutativity`** (def, protected) —
   `LocalCommutativity.lean`.
   - Old: `∃ Q : QuasilocalAlgebra U i, ∀ ⦃B₁ B₂⦄ hB₁ hB₂, IsCompletelySpacelike B₁ B₂ → ∀ a b, Commute (Q.ι hB₁ a) (Q.ι hB₂ b)` — commutation in *some* quasilocal algebra.
   - New: `∀ ⦃B₁ B₂ B⦄ hB₁ hB₂ hB, IsCompletelySpacelike B₁ B₂ → (h₁ : B₁ ⊆ B) → (h₂ : B₂ ⊆ B) → ∀ a b, Commute (i.map hB₁ hB h₁ a) (i.map hB₂ hB h₂ b)` — commutation of the isotony images in every common containing basis set `B`.
   - Matches plan D1(a) exactly, and is binder-for-binder parallel to
-    `Physicslib4.AQFT.HaagKastlerCurved.LocalCommutativity` (verified by reading both
+    `Hilbert6.AQFT.HaagKastlerCurved.LocalCommutativity` (verified by reading both
     definitions side by side; only the Minkowski-specific `IsAlexandrovBasisSet` /
     `Spacetime.IsCompletelySpacelike StandardMinkowskiSpacetime …` replace the curved `M.IsBasisSet`
     / `M.IsCompletelySpacelike`). Approved.
@@ -37,7 +37,7 @@ docstrings:
 - **`QuasilocalAlgebra` structure** (`QuasilocalAlgebra.lean`) — unchanged except for one comment
   on the `carrier` field explaining why a free universe isn't used, updated to name the new lemma
   it would otherwise have complicated. No field added, removed or retyped.
-- No other def/structure/class/instance/abbrev changed under `Physicslib4/`.
+- No other def/structure/class/instance/abbrev changed under `Hilbert6/`.
 
 Everything here is covered by the approved plan; nothing looks unapproved.
 
@@ -85,7 +85,7 @@ actual history edited those files. Flagging for awareness, not action.
 ## 3. sorry / non-standard axioms / Restriction markers
 
 - Grep for `sorry`, `admit`, `native_decide`, `debug.skipKernelTC`, `implemented_by` across
-  `Physicslib4/` (excluding `scratch_*`) finds no occurrences in code; the only hits are two
+  `Hilbert6/` (excluding `scratch_*`) finds no occurrences in code; the only hits are two
   prose mentions of the word "sorry" in doc comments explaining that other structures are
   *sorry-free*.
 - `#print axioms` (via `lake env lean` on a throwaway file, tool-verified) on the five relevant
@@ -105,7 +105,7 @@ actual history edited those files. Flagging for awareness, not action.
 
 Checked `blueprint/src/sections/sec10/haag-kastler-axioms.tex` for the five named nodes:
 
-- **`def:local-commutativity`** — `\lean{Physicslib4.AQFT.HaagKastler.LocalCommutativity}`
+- **`def:local-commutativity`** — `\lean{Hilbert6.AQFT.HaagKastler.LocalCommutativity}`
   exists and the Lean name resolves. Statement: "for any Alexandrov topology basis element `B`
   such that `B1, B2 ⊆ B` the algebras … commute in … `U(B)`" — matches the new Lean definition
   quantifier-for-quantifier (universal in `B`, isotony images, commute in `U(B)`). It states
@@ -113,7 +113,7 @@ Checked `blueprint/src/sections/sec10/haag-kastler-axioms.tex` for the five name
   shape as its curved counterpart", both of which I independently verified by reading the curved
   definition (§1). It also correctly points to `lmm:local-commutativity-iff-quasilocal` for the
   quasilocal form and no longer `\uses{def:quasilocal-algebra}`. Match.
-- **`def:quasilocal-algebra`** — `\lean{Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra}`; now
+- **`def:quasilocal-algebra`** — `\lean{Hilbert6.AQFT.HaagKastler.QuasilocalAlgebra}`; now
   carries the `ι`/cocone-condition prose that used to live partly in the Axiom 3 node. Matches
   the unchanged `QuasilocalAlgebra` structure (carrier, `ι`, `ι_injective`, cocone field,
   `dense_range`). Match.

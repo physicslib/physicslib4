@@ -1,6 +1,6 @@
 # Review: manual chapter on curved spacetime and general covariance (2026-10-21)
 
-Scope: A. docstring pass `fe2a3f4` (58 docstrings, 15 files of `Physicslib4/AQFT/HaagKastlerCurved/`);
+Scope: A. docstring pass `fe2a3f4` (58 docstrings, 15 files of `Hilbert6/AQFT/HaagKastlerCurved/`);
 B. the uncommitted chapter `web/Manual/Curved.lean` and its rendered HTML. Read-only; nothing else
 edited. Conventions applied are those of the three earlier manual reviews.
 
@@ -96,9 +96,9 @@ none appears.
 
 1. A **new node** `def:abstract-lorentzian-spacetime-interface` at the head of
    `haag-kastler-axioms-in-curved-spacetime.tex`, before Axiom 1. It would hold
-   `\lean{Physicslib4.AQFT.HaagKastlerCurved.LorentzianSpacetime,
-   Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent,
-   Physicslib4.Spacetime.LorentzianSpacetime.instTopologicalSpaceToAbstractIdentityComponentIsom}`
+   `\lean{Hilbert6.AQFT.HaagKastlerCurved.LorentzianSpacetime,
+   Hilbert6.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent,
+   Hilbert6.Spacetime.LorentzianSpacetime.instTopologicalSpaceToAbstractIdentityComponentIsom}`
    and `\uses{def:lorentzian-spacetime, def:alexandrov-topology, def:completely-spacelike,
    lmm:axiom5-basis-preservation}`. Its text: the five pieces the axioms use, the one law, and the
    bridge with the D3 note.
@@ -200,7 +200,7 @@ the GNS Design section. Link the subsection instead:
 (anchor present, base-relative).
 
 B6. **nit** (l. 175): back the Minkowski claim with its lemma, for example "(Minkowski:
-{apiDocs Physicslib4.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι}[`localCommutativity_iff_exists_commute_ι`])".
+{apiDocs Hilbert6.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι}[`localCommutativity_iff_exists_commute_ι`])".
 
 B7. **nit** (l. 477): "being a factor is constant along a stabiliser orbit". The lemma gives
 R(B₁) factor ⇒ R(gB₁) factor; constancy follows with g⁻¹. Write "being a factor is preserved
@@ -221,7 +221,7 @@ round.
 ### The writer's doubts
 
 1. **The three "not proved" statements.**
-   - Reeh–Schlieder (l. 428): accurate (no such theorem in `Physicslib4/`) and well placed,
+   - Reeh–Schlieder (l. 428): accurate (no such theorem in `Hilbert6/`) and well placed,
      right where cyclicity enters as a hypothesis.
    - Hartle–Hawking/Bunch–Davies (l. 522–523): accurate and well placed, directly after the KMS
      docstring that names them. It is incomplete, though: add the basis-set point (B2).

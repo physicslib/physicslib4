@@ -9,7 +9,7 @@ the `modularAlgebra` / `modularAutomorphism` / `vectorState` defs) are taken as 
 
 The mathematics is correct throughout. I re-derived every sign and boundary computation with the
 inner product conjugate-linear in the first slot, and they all check out. The theorem matches
-`Physicslib4.AQFT.IsKMSState` exactly. Every cited existing label states what the new proofs use it
+`Hilbert6.AQFT.IsKMSState` exactly. Every cited existing label states what the new proofs use it
 for, every `\uses` target exists (`blueprint_validate` reports no issue in this subsection), and the
 Mathlib names cited are real with matching statements. The prose is in the present tense and has no
 historical narration.

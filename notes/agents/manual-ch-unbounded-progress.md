@@ -1,7 +1,7 @@
 # Reference manual, chapter "Unbounded spectral theory": progress log
 
 Part 1 of the docstring pass: headline definitions and structures (and their fields) of
-`Physicslib4/Spectral/Unbounded/Basic.lean`, `Spectrum.lean` and `Integral.lean`. The remaining
+`Hilbert6/Spectral/Unbounded/Basic.lean`, `Spectrum.lean` and `Integral.lean`. The remaining
 files of `Spectral/Unbounded/` are for a later session. Appended after each file.
 
 ## Step 0: reconnaissance (2026-10-22)
@@ -29,7 +29,7 @@ files of `Spectral/Unbounded/` are for a later session. Appended after each file
 - Checked: Mathlib's `adjoint` has domain `adjointDomain` (continuity of ψ ↦ ⟨φ, Tψ⟩) and
   `toFun := if dense then adjointAux else 0`; `IsSelfAdjoint.dense_domain` is a root-namespace
   Mathlib lemma; `isSelfAdjoint_def : IsSelfAdjoint A ↔ A† = A`; `IsPositive` is used by
-  `Physicslib4.AQFT.IsPositiveEnergy.isPositive_generator`; `isEssentiallySelfAdjoint_iff_dense_range`
+  `Hilbert6.AQFT.IsPositiveEnergy.isPositive_generator`; `isEssentiallySelfAdjoint_iff_dense_range`
   needs `HasDenseDomain` (stated "densely defined"); T + i𝟙 is `subSmul T (-Complex.I)`.
 - No errors in the old headline docstrings. Found outside scope (helper theorem, left for the
   later session): `adjoint_le_adjoint_of_le` says "Mathlib's `LinearPMap.adjoint` is `0` on all
@@ -97,7 +97,7 @@ files of `Spectral/Unbounded/` are for a later session. Appended after each file
 
 | Declaration | Proposed `\lean{}` node | Note |
 |---|---|---|
-| `Physicslib4.Spectral.Unbounded.subSmul` | def:hall-3.1 | The A − λ𝟙 convention is the paragraph right after def:hall-3.1; alternatively a new definition node for it. |
+| `Hilbert6.Spectral.Unbounded.subSmul` | def:hall-3.1 | The A − λ𝟙 convention is the paragraph right after def:hall-3.1; alternatively a new definition node for it. |
 
 All other declarations whose docstrings were rewritten are already cited.
 
@@ -234,7 +234,7 @@ checks as part 1 (`/tmp/dscheck/check.py`, `/tmp/dscheck/strip.py`).
 
 | Declaration | Proposed `\lean{}` node | Note |
 |---|---|---|
-| `Physicslib4.Spectral.Unbounded.pushforwardPVM` | thrm:hall-10.4 | Used in Step 3 of the uniqueness proof (`eq_cayleyPVM_of_pmapIntegral_eq`); alternatively next to `mapPVM` in lmm:borel-bijection-transports-pvm as a non-bijective variant. |
+| `Hilbert6.Spectral.Unbounded.pushforwardPVM` | thrm:hall-10.4 | Used in Step 3 of the uniqueness proof (`eq_cayleyPVM_of_pmapIntegral_eq`); alternatively next to `mapPVM` in lmm:borel-bijection-transports-pvm as a non-bijective variant. |
 
 The part 1 proposal (`subSmul`) stands. Every other declaration whose docstring was rewritten
 in part 2 is already cited.
@@ -260,8 +260,8 @@ pattern of `web/Manual/Spectral.lean`. Appended after each section.
   (formalization note l. 1818). The bounded self-adjoint theorem of §10.2 is *not* derived from
   `abstractPVM` in Lean (the AbstractCalculus module doc says the two are "instances of the one
   statement"; only the normal case is, in Lean), so the chapter does not claim it.
-- Name clash: `spectralMeasure` and `functionalCalculus` exist in both `Physicslib4.Spectral` and
-  `Physicslib4.Spectral.Unbounded`; the chapter opens `Physicslib4.Spectral hiding
+- Name clash: `spectralMeasure` and `functionalCalculus` exist in both `Hilbert6.Spectral` and
+  `Hilbert6.Spectral.Unbounded`; the chapter opens `Hilbert6.Spectral hiding
   spectralMeasure functionalCalculus`, so docstring spans resolve to the unbounded ones.
 
 ## Step 13: chapter header and Overview (2026-10-23)
@@ -336,8 +336,8 @@ pattern of `web/Manual/Spectral.lean`. Appended after each section.
 
 ## Step 19: final checks and reread (2026-10-23)
 
-- Rendering: docstring code spans checked in the HTML. Added `import Physicslib4.AQFT.PositiveEnergy`
-  so `Physicslib4.AQFT.IsPositiveEnergy` (in the `IsPositive` box) links. Remaining unlinked spans
+- Rendering: docstring code spans checked in the HTML. Added `import Hilbert6.AQFT.PositiveEnergy`
+  so `Hilbert6.AQFT.IsPositiveEnergy` (in the `IsPositive` box) links. Remaining unlinked spans
   are harmless (`T ↦ T†`, `T† = T`, `T.closure† = T.closure`, `MemLp f 2 (μ.assoc ψ)`, `pmap`:
   unbound variables or a prefix). `functionalCalculus` and `spectralMeasure` in the boxes link to
   the unbounded declarations (the `hiding` works).

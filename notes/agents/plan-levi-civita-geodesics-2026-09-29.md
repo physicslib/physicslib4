@@ -5,7 +5,7 @@ Status: plan only. Nothing below is implemented.
 
 ## Goal
 
-Replace the placeholder `IsGeodesic := True` (`Physicslib4/Spacetime/Causality.lean`,
+Replace the placeholder `IsGeodesic := True` (`Hilbert6/Spacetime/Causality.lean`,
 with its `**Restriction:**` line) by "γ is a geodesic of the Levi-Civita connection of
 the spacetime metric", built on Mathlib's covariant-derivative API rather than on
 hand-written chart Christoffel symbols (the alternative in
@@ -25,7 +25,7 @@ Folder `Mathlib/Geometry/Manifold/VectorBundle/CovariantDerivative/`:
 
 Mathlib has no covariant derivative along a curve, no parallel transport, no geodesics.
 
-Our side (`Physicslib4/Spacetime/Basic.lean`, `structure Spacetime`): the metric is
+Our side (`Hilbert6/Spacetime/Basic.lean`, `structure Spacetime`): the metric is
 `val : ∀ x, TangentSpace model x →L[ℝ] TangentSpace model x →L[ℝ] ℝ`, with fields
 `symm`, `nondegenerate`, `lorentzian`, `tangent_findim`, and a `contMDiff` field stating
 smoothness as a bundle section, deliberately the same shape as
@@ -40,7 +40,7 @@ musical isomorphism obtained from `nondegenerate` + finite dimension.
    smooth nondegenerate symmetric bilinear bundle metric (reusable, closer to a future
    Mathlib pseudo-Riemannian API), or specialise directly to `Spacetime`. Recommendation:
    a small general layer (`PseudoRiemannian`-style section `g` + `symm` + `nondegenerate`)
-   instantiated by `Spacetime`, in a new folder `Physicslib4/Geometry/`.
+   instantiated by `Spacetime`, in a new folder `Hilbert6/Geometry/`.
 2. **Derivative along a curve** (Mathlib has none). DECIDED (2026-09-29): chart-free
    extension definition. `μ` is a geodesic iff for every `s` in the parameter space and
    every smooth vector field `X` with `X (μ t) = μ' t` for `t` near `s` (within the
@@ -105,7 +105,7 @@ errors.
 
 ### Stage 2: definitions and sorry'd statements (fuse:formalizer + reviewer)
 
-New file(s), e.g. `Physicslib4/Geometry/PseudoRiemannian/Musical.lean`,
+New file(s), e.g. `Hilbert6/Geometry/PseudoRiemannian/Musical.lean`,
 `.../MetricCompatible.lean`, `.../LeviCivita.lean`:
 - `musical` : `TangentSpace I x ≃L[ℝ] (TangentSpace I x →L[ℝ] ℝ)` from `val x`,
   `nondegenerate`, `tangent_findim` (via `LinearMap.BilinForm`/`ContinuousLinearMap`
@@ -205,7 +205,7 @@ Expected size: 300–600 lines, depending on decision 2.
     geodesics (Mathlib's `IsCovariantDerivativeOn` imposes no smoothness), so the plan's
     "largest risk" is off the critical path. Two claims in `def:geodesic` (endpoint
     continuity, affine reparametrisations) are informal remarks, not targets.
-- 2026-09-30, Stage 2: `Physicslib4/Geometry/PseudoRiemannian/Basic.lean`
+- 2026-09-30, Stage 2: `Hilbert6/Geometry/PseudoRiemannian/Basic.lean`
   (`PseudoRiemannianMetric`, `bijective_val` [sorry], `Spacetime.toPseudoRiemannianMetric`)
   and `.../LeviCivita.lean` (`IsMetricCompatibleWith`, `IsLeviCivitaFor`, `koszul`,
   `uniqueness`, `exists_isLeviCivitaFor` [all sorry], `leviCivita` via `choose`).
@@ -228,7 +228,7 @@ Expected size: 300–600 lines, depending on decision 2.
   `mfderiv_apply_eq_mvfderiv`, `eq_of_forall_val_apply_eq`. No sorry in the layer; standard
   axioms only. `thrm:levi-civita-exists-unique` proved. Not yet committed. Next: Stage 4.
 - 2026-09-30, Stage 3 committed as `9068056`. Stage 4 started on branch `numina/geodesics`:
-  new `Physicslib4/Spacetime/AlongPath.lean` with the five along-the-curve lemmas, all
+  new `Hilbert6/Spacetime/AlongPath.lean` with the five along-the-curve lemmas, all
   proved (standard axioms): `SmoothPath.mfderiv_apply_tangent_eq_zero`,
   `SmoothPath.covDeriv_eq_of_eventuallyEq` (local frame from `trivializationAt` +
   `Basis.ofVectorSpace`), `exists_contMDiff_vectorField_eventuallyEq` (Mathlib
@@ -251,7 +251,7 @@ Expected size: 300–600 lines, depending on decision 2.
      or directly from flatness (∇ = directional derivative, affine maps preserve it).
   Every other module failed only because it imports one of these files.
 - 2026-09-30, breakages 1, 2, 4, 5 repaired (not committed): new
-  `Physicslib4/Geometry/PseudoRiemannian/Flat.lean` (`flatConnection`, Levi-Civita for a
+  `Hilbert6/Geometry/PseudoRiemannian/Flat.lean` (`flatConnection`, Levi-Civita for a
   constant metric, `leviCivita_apply_eq_fderiv`); in `Minkowski.lean`
   `standardMinkowski_leviCivita_apply`, `standardMinkowski_isGeodesic_iff` (geodesic ⟺ velocity
   has derivative 0 at interior parameters), `standardMinkowskiLineSegmentPath_isGeodesic`; in

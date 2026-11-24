@@ -1,9 +1,9 @@
 import VersoManual
 import Tutorial.Meta
 import Tutorial.Papers
-import Physicslib4.AQFT.HaagKastler.EinsteinCausality
-import Physicslib4.AQFT.HaagKastler.VacuumState
-import Physicslib4.AQFT.HaagKastlerCurved.Net
+import Hilbert6.AQFT.HaagKastler.EinsteinCausality
+import Hilbert6.AQFT.HaagKastler.VacuumState
+import Hilbert6.AQFT.HaagKastlerCurved.Net
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
@@ -29,7 +29,7 @@ blueprint entry that it formalises, so that you can find the statement in ordina
 All code below uses the short names made available by
 
 ```lean
-open Physicslib4 Spacetime AQFT.HaagKastler
+open Hilbert6 Spacetime AQFT.HaagKastler
 open scoped Pointwise
 ```
 
@@ -188,7 +188,7 @@ The existence of this term is the theorem that the axioms are consistent:
 ```
 
 ```leanOutput checkNonempty
-Physicslib4.AQFT.HaagKastler.nonempty_haagKastlerNet : Nonempty HaagKastlerNet
+Hilbert6.AQFT.HaagKastler.nonempty_haagKastlerNet : Nonempty HaagKastlerNet
 ```
 
 `Nonempty T` says that the type `T` has at least one term; the proof is `⟨trivialHaagKastlerNet⟩`.
@@ -214,7 +214,7 @@ The curved-spacetime axioms of chapter 1 have their own trivial net,
 ```
 
 ```leanOutput checkCurvedTrivial
-Physicslib4.AQFT.HaagKastlerCurved.trivialHaagKastlerNet.{u} (M : AQFT.HaagKastlerCurved.LorentzianSpacetime) :
+Hilbert6.AQFT.HaagKastlerCurved.trivialHaagKastlerNet.{u} (M : AQFT.HaagKastlerCurved.LorentzianSpacetime) :
   AQFT.HaagKastlerCurved.HaagKastlerNet M
 ```
 
@@ -434,7 +434,7 @@ for all from the existence theorem by `Classical.choice`, and the vacuum is a pr
 ```
 
 ```leanOutput checkVacuum
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.{u} (N : HaagKastlerNet)
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.{u} (N : HaagKastlerNet)
   (ftl : (ℝ → InhomogeneousLorentzGroup) → Prop) (ω : GNS.State N.quasilocal.carrier) : Prop
 ```
 
@@ -616,7 +616,7 @@ For a Haag–Kastler net `N`, the quasilocal algebra is `N.quasilocal`, a struct
 ```
 
 ```leanOutput checkInclusion
-Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra.ι_inclusion.{u} {U : LocalNet} {i : Isotony U}
+Hilbert6.AQFT.HaagKastler.QuasilocalAlgebra.ι_inclusion.{u} {U : LocalNet} {i : Isotony U}
   (self : QuasilocalAlgebra U i) ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄ (hB₁ : IsAlexandrovBasisSet B₁)
   (hB₂ : IsAlexandrovBasisSet B₂) (h : B₁ ⊆ B₂) (a : U.algebra B₁) : (self.ι hB₂) ((i.map hB₁ hB₂ h) a) = (self.ι hB₁) a
 ```
@@ -868,7 +868,7 @@ the five conditions of a causal trip segment: `lorentzPath_isCausal`,
 ```
 
 ```leanOutput checkSegment
-Physicslib4.causalSegmentPrecedes_smul (g : InhomogeneousLorentzGroup) {p q : StandardMinkowskiSpacetime.Carrier}
+Hilbert6.causalSegmentPrecedes_smul (g : InhomogeneousLorentzGroup) {p q : StandardMinkowskiSpacetime.Carrier}
   (h : StandardMinkowskiSpacetime.CausalSegmentPrecedes standardMinkowskiTimeOrientation p q) :
   StandardMinkowskiSpacetime.CausalSegmentPrecedes standardMinkowskiTimeOrientation (g • p) (g • q)
 ```
