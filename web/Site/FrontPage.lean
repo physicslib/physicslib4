@@ -11,7 +11,7 @@ import Hilbert6.AQFT.HaagKastler.BisognanoWichmann
 open Verso Genre Blog
 open Site
 
-#doc (Page) "physicslib4" =>
+#doc (Page) "hilbert6" =>
 
 %%%
 showInNav := false
@@ -22,10 +22,10 @@ htmlId := some "frontpage"
 A Lean 4 formalisation of axiomatic physical theories.
 :::
 
-```leanInit physicslib4
+```leanInit hilbert6
 ```
 
-```lean physicslib4 -show
+```lean hilbert6 -show
 set_option linter.unusedVariables false
 
 open Hilbert6 Spacetime AQFT HaagKastler Modular GNS
@@ -91,7 +91,7 @@ Hover over a name to see its type.
 
 Lorentz invariance
 
-```lean physicslib4
+```lean hilbert6
 /-- Causal precedence is invariant under the Poincaré group: an inhomogeneous Lorentz
 transformation `g` maps causal curves to causal curves, so the event `g • p` can influence the
 event `g • q` exactly when `p` can influence `q`. No choice of inertial frame changes which events
@@ -107,7 +107,7 @@ manual/Spacetime-and-geometry/
 
 Consistent axioms
 
-```lean physicslib4
+```lean hilbert6
 /-- The Haag–Kastler axioms have a model: the net that assigns the trivial algebra `ℂ` to every
 causal diamond satisfies isotony, local commutativity and Poincaré covariance. A theory whose
 axioms had no model would prove everything, so this example is the consistency check of the
@@ -122,7 +122,7 @@ manual/Haag-Kastler-axioms-in-Minkowski-spacetime/
 
 Reeh–Schlieder
 
-```lean physicslib4
+```lean hilbert6
 /-- The Reeh–Schlieder theorem for a covariant vacuum representation `(π, Ω, U)` of a weakly
 additive net: for every nonempty causal diamond `B`, the vectors `A Ω` with `A` a local operator
 of `B` are dense in the Hilbert space. Operations in an arbitrarily small region of spacetime
@@ -140,7 +140,7 @@ manual/The-Reeh-Schlieder-theorem/
 
 Tomita–Takesaki
 
-```lean physicslib4
+```lean hilbert6
 /-- Tomita's theorem: for a von Neumann algebra `M` with a cyclic and separating vector `Ω`, the
 modular conjugation `J` maps `M` onto its commutant, `J M J = M′`, and the modular unitary group
 `Δ^{it}` maps `M` onto itself for every real `t`. Here `Δ[t]` is `Δ^{it}` and `J[x]` is `J x J`,
@@ -156,7 +156,7 @@ manual/Tomita-Takesaki-theory/
 
 Takesaki KMS
 
-```lean physicslib4
+```lean hilbert6
 /-- Takesaki's theorem: the vector state `ω_Ω` of a cyclic and separating unit vector is a KMS
 state at inverse temperature `1` for the reversed modular flow `t ↦ σ_{-t}`. The modular group,
 built from the pair `(M, Ω)` alone, is the time evolution for which `ω_Ω` is a thermal
@@ -172,7 +172,7 @@ manual/Tomita-Takesaki-theory/
 
 Borchers
 
-```lean physicslib4
+```lean hilbert6
 /-- Borchers' theorem: if `V` is a half-sided translation for `(M, Ω)`, a positive-energy
 unitary group fixing `Ω` with `V(t) M V(-t) ⊆ M` for `t ≥ 0`, then the modular group acts on it
 as dilations, `Δ^{is} V(t) Δ^{-is} = V(e^{-2πs} t)`, and the modular conjugation reflects it,
@@ -190,7 +190,7 @@ manual/Borchers-theorem-and-the-wedge-modular-group/
 
 Bisognano–Wichmann
 
-```lean physicslib4
+```lean hilbert6
 /-- Bisognano–Wichmann up to an internal symmetry: in a covariant vacuum representation with
 modular covariance for the right wedge `W_R`, the wedge modular group is the boost group
 `U(b(-2πt))` up to the factor `Z(t)`, an internal symmetry of `(π, Ω)` that commutes with the

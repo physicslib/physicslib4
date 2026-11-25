@@ -597,6 +597,6 @@ and the physical principle of the quasilocal algebra is
   hyperbolic spacetimes at once.
 * {citehere grossi2024}[] A clear introduction to C\*-algebras, states, the GNS construction and
   nets, whose proof of the GNS theorem the blueprint follows.
-* The [physicslib4 blueprint](https://physicslib.github.io/physicslib4/blueprint/). Chapters 1 to 9
+* The [hilbert6 blueprint](https://hilbert6.org/blueprint/). Chapters 1 to 9
   discuss each 1964 axiom and the choices made in sharpening it; Chapter 10 states the sharpened
   axioms and the results proved about them.

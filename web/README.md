@@ -1,8 +1,8 @@
-# physicslib4 website, tutorial and reference manual
+# hilbert6 website, tutorial and reference manual
 
 Three documents written with [Verso](https://github.com/leanprover/verso):
 
-- the website: the physicslib4 landing page, in Verso's website (`VersoBlog`) genre, styled with
+- the website: the hilbert6 landing page, in Verso's website (`VersoBlog`) genre, styled with
   [verso-web-components](https://github.com/leanprover/verso-web-components), the components behind
   lean-lang.org;
 - the tutorial: a book in Verso's manual (`VersoManual`) genre, with one chapter per file;
@@ -10,10 +10,10 @@ Three documents written with [Verso](https://github.com/leanprover/verso):
   the blueprint.
 
 All three share one look: the verso-web-components design tokens with a deep-teal accent, and the
-same header with the "physicslib4" wordmark and the navigation About, Tutorial, Roadmap, Get involved,
+same header with the "hilbert6" wordmark and the navigation About, Tutorial, Roadmap, Get involved,
 Reference manual, Blueprint, API docs.
 
-This directory is a Lake package of its own. It requires physicslib4 from `..`, so the Lean
+This directory is a Lake package of its own. It requires hilbert6 from `..`, so the Lean
 examples on the page are elaborated against the library itself.
 
 ## Layout
@@ -75,7 +75,8 @@ examples on the page are elaborated against the library itself.
 - `Manual/Theme.lean`: the manual's configuration and header, built from `Book/Theme.lean`.
 - `docs-theme/`: the header, stylesheet and theme script that `scripts/restyle_api_docs.py` puts on
   the API docs; see "The API docs" below.
-- `static_files/`: the "p4" wordmark icons (favicon and Apple touch icon), used by all three, and
+- `static_files/`: the "h6" icons (favicon and Apple touch icon, drawn by `scripts/gen_favicon.py`
+  from `favicon.svg`), used by all three, and
   the landing page's hero background `hero-wedge.svg` (boost orbits and the light cone, a CSS mask
   over the accent colour with holes over the hero's text and figure); `static_files/cards/` holds
   standalone copies of the card illustrations. These, and `Site/CardArt.lean` (the card
@@ -89,7 +90,7 @@ examples on the page are elaborated against the library itself.
   reference manual or, for `site/`, to the website at `../`. Their URLs are relative. `404.html` is the
   site's "page not found" page: GitHub Pages serves it at any depth, so it is self-contained (the
   design tokens, header rules and theme script of the web blueprint, inlined) and its links are
-  absolute paths under `/physicslib4/`.
+  absolute paths from the site root `/`.
 
 ## Writing the tutorial
 
@@ -179,7 +180,7 @@ build:
 - Links to the API docs: `{apiDocs Hilbert6.AQFT.HaagKastler.LocalNet}[]` shows the name in code
   type, `{apiDocs Hilbert6.AQFT.HaagKastler.LocalNet}[the local net]` the given text. The link is
   `Site.apiDocsUrl`: doc-gen4's page of the declaring module, anchored by the full name, for example
-  `https://physicslib.github.io/physicslib4/docs/Hilbert6/AQFT/HaagKastler/LocalAlgebras.html#Hilbert6.AQFT.HaagKastler.LocalNet`.
+  `https://hilbert6.org/docs/Hilbert6/AQFT/HaagKastler/LocalAlgebras.html#Hilbert6.AQFT.HaagKastler.LocalNet`.
   It works for Mathlib declarations too.
 
 A chapter that uses library declarations imports the library modules it needs and opens
@@ -201,36 +202,36 @@ lake exe generate-manual --draft --output _out/manual-draft       # with the dra
 cd ..
 ```
 
-The first `lake build` also builds physicslib4 if `../.lake` has no up-to-date build. A book's
+The first `lake build` also builds hilbert6 if `../.lake` has no up-to-date build. A book's
 generator adds to its output directory without clearing it, so delete the directory first after
 renaming a chapter. The website links to the books through `tutorial/` and `manual/`, and the books
 link back through `../`, so view them in the published layout, the website at the root:
 
 ```sh
-rm -rf /tmp/srv && mkdir -p /tmp/srv/physicslib4
-cp -R web/_out/site/. /tmp/srv/physicslib4/
-cp -R web/_out/tutorial/html-multi /tmp/srv/physicslib4/tutorial
-cp -R web/_out/manual/html-multi /tmp/srv/physicslib4/manual
-cp -R blueprint/web /tmp/srv/physicslib4/blueprint   # optional, after `leanblueprint web`
-cp blueprint/print/print.pdf /tmp/srv/physicslib4/blueprint.pdf   # optional, after `leanblueprint pdf`
-cp -R web/redirects/. /tmp/srv/physicslib4/
+rm -rf /tmp/srv && mkdir -p /tmp/srv
+cp -R web/_out/site/. /tmp/srv/
+cp -R web/_out/tutorial/html-multi /tmp/srv/tutorial
+cp -R web/_out/manual/html-multi /tmp/srv/manual
+cp -R blueprint/web /tmp/srv/blueprint   # optional, after `leanblueprint web`
+cp blueprint/print/print.pdf /tmp/srv/blueprint.pdf   # optional, after `leanblueprint pdf`
+cp -R web/redirects/. /tmp/srv/
 python3 -m http.server -d /tmp/srv
 ```
 
-and open <http://localhost:8000/physicslib4/>, <http://localhost:8000/physicslib4/tutorial/> and
-<http://localhost:8000/physicslib4/manual/>. (`cp -R dir/. target/` copies the contents of `dir`;
+and open <http://localhost:8000/>, <http://localhost:8000/tutorial/> and
+<http://localhost:8000/manual/>. (`cp -R dir/. target/` copies the contents of `dir`;
 the tutorial and manual targets are new directories, so `cp -R` creates them.) `http.server` answers
 a missing page with its own error page, not `404.html`; open
-<http://localhost:8000/physicslib4/404.html> to see the latter.
+<http://localhost:8000/404.html> to see the latter.
 
 `.lake/` and `_out/` are ignored by git.
 
-## Served from a sub-path
+## Relative links
 
-The website is published at the root of the project site, <https://physicslib.github.io/physicslib4/>,
-the tutorial at <https://physicslib.github.io/physicslib4/tutorial/> and the reference manual at
-<https://physicslib.github.io/physicslib4/manual/>, beside the blueprint (`/physicslib4/blueprint/`,
-with `/physicslib4/blueprint.pdf`) and the API docs (`/physicslib4/docs/`). The pages of
+The website is published at the root of the domain, <https://hilbert6.org/>,
+the tutorial at <https://hilbert6.org/tutorial/> and the reference manual at
+<https://hilbert6.org/manual/>, beside the blueprint (`/blueprint/`,
+with `/blueprint.pdf`) and the API docs (`/docs/`). The pages of
 `redirects/` are copied over the root. The generated pages
 contain no root-relative URLs: each page carries a relative `<base href>` pointing at the root of its
 document (`./` on the website's landing page; in a book `./` on the title page and `./../` on a
@@ -238,7 +239,7 @@ chapter), and every local link and asset is relative to it. The website's Tutori
 manual links go to `tutorial/` and `manual/` (`Site.tutorialPath`, `Site.manualPath`); in each book
 the wordmark goes to `../` (`Site.siteFromBook`) and the link to the other book to `../tutorial/` or
 `../manual/` (`Site.tutorialFromBook`, `Site.manualFromBook`). They therefore work under any prefix,
-provided the URL ends in `/` (GitHub Pages redirects `/physicslib4` to `/physicslib4/`). The feature
+provided the URL ends in `/`. The feature
 cards link to the top of reference-manual chapters through `Site.manualChapterUrl`
 (`manual/<chapter>/`); the caption links of the code gallery, plain text in `Site/FrontPage.lean`,
 write the same paths directly. Links to the
@@ -252,19 +253,19 @@ no footer.
 ## The web blueprint
 
 The web blueprint (`leanblueprint web`, published at
-<https://physicslib.github.io/physicslib4/blueprint/>) carries the same header, fonts, colours and
+<https://hilbert6.org/blueprint/>) carries the same header, fonts, colours and
 light and dark theme. It is built by plasTeX, not Verso, so the header is kept in a second copy:
 
 - `blueprint/src/webtheme/site-header.html`: the header, with Blueprint as the active entry. Its
-  links are absolute URLs under `https://physicslib.github.io/physicslib4/`, so they also work in
+  links are absolute URLs under `https://hilbert6.org/`, so they also work in
   `leanblueprint serve` and in a blueprint opened from disk; the Blueprint entry is `index.html`.
-- `blueprint/src/webtheme/physicslib4web.py`: a plasTeX package, loaded by `web.tex` and found
+- `blueprint/src/webtheme/hilbert6web.py`: a plasTeX package, loaded by `web.tex` and found
   through `packages-dirs` in `plastex.cfg`, which puts the header on the chapter pages, the title
   page (the layouts in `webtheme/templates/`) and the dependency graph page (`webtheme/dep_graph.html`,
-  selected by the `tpl=` option of the `blueprint` package). `blueprint/src/physicslib4web.sty` is
+  selected by the `tpl=` option of the `blueprint` package). `blueprint/src/hilbert6web.sty` is
   its empty LaTeX counterpart, needed because plasTeX draws the pictures of the web version with
   LaTeX and the preamble of `web.tex`.
-- `blueprint/src/webtheme/physicslib4-theme.js`: the theme switch, with the website's
+- `blueprint/src/webtheme/hilbert6-theme.js`: the theme switch, with the website's
   `localStorage` keys, so the three documents and the blueprint show the same theme.
 - `blueprint/src/extra_styles.css`: the design tokens and the header rules of `Site.headerCss`,
   then the blueprint's own pages, theorem boxes, table of contents and dependency graph.
@@ -278,7 +279,7 @@ pinned in `blueprint/requirements.txt` (step "Build the blueprint" in
 
 ## The API docs
 
-The API docs (doc-gen4, published at <https://physicslib.github.io/physicslib4/docs/>) carry the
+The API docs (doc-gen4, published at <https://hilbert6.org/docs/>) carry the
 same header, fonts, colours and light and dark theme. doc-gen4 has no theme mechanism, so
 `scripts/restyle_api_docs.py DOCS_DIR` (Python 3, standard library only) rewrites its HTML after the
 build. On every page it puts the header in place of doc-gen4's top bar, moves doc-gen4's search form
@@ -288,28 +289,28 @@ and moves the module name to the top of a module page's text. Every page and the
 The header is kept in a third copy:
 
 - `docs-theme/site-header.html`: the header, with API docs as the active entry and links absolute
-  under `/physicslib4/`, so that they work at any depth under `docs/`. In place of the blueprint's
+  paths from the site root, so that they work at any depth under `docs/`. In place of the blueprint's
   table-of-contents button it has the button for doc-gen4's module list on narrow screens (a label
   for doc-gen4's checkbox `nav_toggle`); the line `SEARCH_FORM` marks where the search form goes.
-- `docs-theme/physicslib4-docs.css`: the design tokens and header rules, copied from
+- `docs-theme/hilbert6-docs.css`: the design tokens and header rules, copied from
   `blueprint/src/extra_styles.css`, then doc-gen4's own CSS variables, fonts and colours mapped to
   the site's, and doc-gen4's rules for bare `header` and `nav` elements undone on the header.
-- `docs-theme/physicslib4-docs.js`: keeps doc-gen4's colour scheme (the attribute `data-theme` and
+- `docs-theme/hilbert6-docs.js`: keeps doc-gen4's colour scheme (the attribute `data-theme` and
   the key `theme`, read by doc-gen4's `color-scheme.js`) and the module-list frame in step with the
-  site's theme, which `blueprint/src/webtheme/physicslib4-theme.js` (also copied) sets. doc-gen4's
+  site's theme, which `blueprint/src/webtheme/hilbert6-theme.js` (also copied) sets. doc-gen4's
   own colour-scheme picker at the foot of the module list is hidden: the header's switch takes its
   place.
 
 A change to the header or the design tokens is copied to these files as well. The script marks the
 pages it rewrites and leaves marked pages alone, so a second run changes nothing; it takes about a
 second on the 5,904 pages of the API docs. To check it locally, run it on a copy of the API docs
-placed at `/tmp/srv/physicslib4/docs` in the layout of "Build and view locally".
+placed at `/tmp/srv/docs` in the layout of "Build and view locally".
 
 ## Continuous integration
 
 - `.github/workflows/blueprint.yml` (pushes to `main`, and manual runs) builds and publishes the
   whole site. Its `build` job:
-  1. builds and lints physicslib4 with `lean-action`;
+  1. builds and lints hilbert6 with `lean-action`;
   2. step "Build the Verso site, tutorial and manual": runs `lake exe cache get`, `lake build`,
      `lake exe generate-site --output _out/site`, `lake exe generate-tutorial --output _out/tutorial`
      and `lake exe generate-manual --output _out/manual` in `web/`, then removes `web/.lake` to free
@@ -317,7 +318,7 @@ placed at `/tmp/srv/physicslib4/docs` in the layout of "Build and view locally".
   3. builds the blueprint PDF and web version (`leanblueprint pdf`, `leanblueprint web`) in a
      TeX Live container, with the versions pinned in `blueprint/requirements.txt`;
   4. builds the API docs with doc-gen4 the way `leanprover-community/docgen-action` does: a
-     `docbuild/` Lake package requiring physicslib4 from `../` and doc-gen4 at the tag matching
+     `docbuild/` Lake package requiring hilbert6 from `../` and doc-gen4 at the tag matching
      `lean-toolchain`, sharing `../.lake/packages`, built with `lake build Hilbert6:docs` into
      `docbuild/.lake/build/doc`; the API docs are cached, keyed by `lake-manifest.json`. Swap and memory overcommit are switched on first, for doc-gen4's many
      `git` processes;
@@ -339,7 +340,7 @@ placed at `/tmp/srv/physicslib4/docs` in the layout of "Build and view locally".
   root-relative `href` or `src`.
 
 In both, `lake exe cache get` only unpacks Mathlib from the cache that `lean-action` has already
-downloaded, and the physicslib4 build in `../.lake/build` is reused through the `path = ".."`
-dependency, so neither Mathlib nor physicslib4 is rebuilt. `lake build` compiles Verso and
+downloaded, and the hilbert6 build in `../.lake/build` is reused through the `path = ".."`
+dependency, so neither Mathlib nor hilbert6 is rebuilt. `lake build` compiles Verso and
 verso-web-components, and the native code of the modules that the three executables link (including
 Mathlib's), which accounts for most of its time.

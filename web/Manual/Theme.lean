@@ -20,7 +20,7 @@ def manualHeader : Html :=
 
 /-- The HTML configuration of the reference manual (`Book.config`). -/
 def config : RenderConfig :=
-  Book.config "The reference manual of physicslib4, a Lean 4 formalisation of algebraic quantum field theory."
+  Book.config "The reference manual of hilbert6, a Lean 4 formalisation of algebraic quantum field theory."
 
 /-- An extra build step: puts `manualHeader` in place of the manual header on every HTML page. -/
 def replaceHeader : ExtraStep := Book.replaceHeader manualHeader

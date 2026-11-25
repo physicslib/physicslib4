@@ -24,7 +24,7 @@ file := "Stones-theorem"
 
 This chapter describes how the library encodes one-parameter unitary groups and their generators,
 and proves Stone's theorem. It corresponds to
-[Section 10.4](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:stones-theorem)
+[Section 10.4](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:stones-theorem)
 of the blueprint, which, like Sections 10.2 and 10.3, follows Hall's
 [_Quantum Theory for Mathematicians_](https://doi.org/10.1007/978-1-4614-7116-5). It builds on the
 {ref "unbounded"}[unbounded chapter]: a generator is an unbounded operator, and the unitary group
@@ -128,7 +128,7 @@ $`\psi` for which the difference quotient `generatorQuotient U ψ t`, that is
 $`(it)^{-1}(U(t)\psi - \psi)`, converges along the punctured filter `𝓝[≠] 0`; its value is
 Mathlib's `limUnder` along that filter. The domain is exactly the set where the orbit has a
 derivative at $`t = 0`, as in the blueprint
-([def:hall-10.13](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.13)).
+([def:hall-10.13](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.13)).
 {apiDocs Hilbert6.Spectral.Stone.exists_generator_eq_iff}[`exists_generator_eq_iff`] handles
 membership and value together: $`\psi` is in the domain with $`A\psi = \chi` exactly when the
 quotient tends to $`\chi`. At $`t = 0` the quotient is $`0`, by Lean's convention $`0^{-1} = 0`,
@@ -140,7 +140,7 @@ does not presuppose a dense domain, the symmetry identity is itself the statemen
 generator is symmetric,
 {apiDocs Hilbert6.Spectral.Stone.isSymmetric_generator}[`isSymmetric_generator`], for every
 one-parameter unitary group (the remark in
-[lmm:generator-symmetry-identity](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-symmetry-identity)).
+[lmm:generator-symmetry-identity](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-symmetry-identity)).
 
 ## The exponential comes from the functional calculus
 
@@ -165,18 +165,18 @@ and for $`\psi \in \mathrm{Dom}(A)` the squared error of the difference quotient
 $`\int |g_t(\lambda) - \lambda|^2 \, d\mu^A_\psi(\lambda)`, with
 $`g_t(\lambda) = (e^{it\lambda} - 1)/(it)`. Both tend to $`0` by dominated convergence in Mathlib's
 filter form, `tendsto_integral_filter_of_dominated_convergence` (the proofs of
-[lmm:exp-strongly-continuous](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-strongly-continuous) and
-[lmm:exp-derivative-at-zero](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-derivative-at-zero)), along $`s \to t` and along the
+[lmm:exp-strongly-continuous](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-strongly-continuous) and
+[lmm:exp-derivative-at-zero](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-derivative-at-zero)), along $`s \to t` and along the
 punctured filter at $`0`, with dominating functions $`4` and $`4\lambda^2`; the second is
 integrable because $`\psi \in \mathrm{Dom}(A)`. So the generator of $`e^{itA}` extends $`A`. It is
 symmetric, and a self-adjoint operator has no proper symmetric extension, so it equals $`A`
-([prpstn:hall-10.14](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.14)).
+([prpstn:hall-10.14](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.14)).
 
 ## Density by smoothing
 
 For a real weight $`f`, the average $`B_f\psi = \int f(\tau)\,U(\tau)\psi \, d\tau` is
 `average U f ψ`, a Bochner integral. The density proof
-([lmm:hall-10.18](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.18))
+([lmm:hall-10.18](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.18))
 writes it as a convolution, $`U(t)B_f\psi = (f \star g_\psi)(-t)` with $`g_\psi(x) = U(-x)\psi`
 ({apiDocs Hilbert6.Spectral.Stone.average_eq_convolution}[`average_eq_convolution`]), so that
 Mathlib's convolution calculus does the analysis.
@@ -190,7 +190,7 @@ Gårding's smoothing argument.
 ## The proof of the theorem, and uniqueness
 
 The proof of {apiDocs Hilbert6.Spectral.Stone.stone}[`stone`] follows the blueprint
-([thrm:hall-10.15](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.15)).
+([thrm:hall-10.15](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.15)).
 The generator $`A` is essentially self-adjoint, because the deficiency subspaces
 $`\mathrm{Ker}(A^* \mp i\mathbf{1})` are trivial: for $`\psi` in one of them and
 $`\varphi \in \mathrm{Dom}(A)`, $`\langle U(t)\varphi, \psi \rangle` is a bounded solution of
@@ -215,7 +215,7 @@ fields: the group law, strong continuity, and positivity of `generator V`, which
 on the domain). The condition is imposed on the generator itself, which may be unbounded, and
 needs no self-adjointness hypothesis, since the generator is defined for every family. Stone's
 theorem then gives the textbook form
-([thrm:positive-energy-iff-exp](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-iff-exp)):
+([thrm:positive-energy-iff-exp](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-iff-exp)):
 $`V` has positive energy exactly when $`V(t) = e^{itA}` with $`A` positive and self-adjoint.
 For time translations the unitaries are $`U(t) = e^{it\hat H}`, in the convention
 $`U(a) = e^{-iP\cdot a}`, where $`P\cdot a = -P^0 a^0 + \vec P\cdot\vec a` uses the signature
@@ -244,7 +244,7 @@ space, with no group law and no completeness of $`H`, and taking the dense set t
 shows that a weakly continuous family of unitaries is strongly continuous. The GNS theorems
 {apiDocs Hilbert6.GNS.exists_gns_unitary_of_invariant_strongContinuous}[`exists_gns_unitary_of_invariant_strongContinuous`]
 and its bundled form use it
-([thrm:invariant-state-gns-unitary-general](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:invariant-state-gns-unitary-general);
+([thrm:invariant-state-gns-unitary-general](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:invariant-state-gns-unitary-general);
 see also the {ref "gns-design"}[GNS chapter]).
 
 # Main definitions and theorems
@@ -264,13 +264,13 @@ four standard results that the blueprint imports
 ([thrm:bochner-integral][st-boch], [lmm:smooth-approximate-identity][st-sai],
 [prpstn:calculus-facts][st-calc], [lmm:convolution-facts][st-conv]) are Mathlib theorems, named
 in the blueprint. For the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/Spectral/Stone/Theorem.html)
+[API documentation](https://hilbert6.org/docs/Hilbert6/Spectral/Stone/Theorem.html)
 and the files listed at the end of the chapter.
 
-[st-boch]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bochner-integral
-[st-sai]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:smooth-approximate-identity
-[st-calc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:calculus-facts
-[st-conv]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:convolution-facts
+[st-boch]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bochner-integral
+[st-sai]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:smooth-approximate-identity
+[st-calc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:calculus-facts
+[st-conv]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:convolution-facts
 
 ## One-parameter unitary groups and their generators
 
@@ -307,18 +307,18 @@ generator $`WAW^{-1}` on $`W\,\mathrm{Dom}(A)`
 ({apiDocs Hilbert6.Spectral.Stone.mem_generator_conj_domain_iff}[`mem_generator_conj_domain_iff`],
 {apiDocs Hilbert6.Spectral.Stone.generator_conj_apply}[`generator_conj_apply`]).
 
-[st-1011]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.11
-[st-sc0]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:strongly-continuous-iff-at-zero
-[st-adj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-group-inner-adjoint
-[st-1013]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.13
-[st-spec]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-spec
-[st-sym]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-symmetry-identity
-[st-const]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-const
-[st-conj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:conj-unitary-group
-[st-gconj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-conj
-[st-orb]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-hasDerivAt
-[st-comm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-commutes
-[st-1017]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.17
+[st-1011]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.11
+[st-sc0]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:strongly-continuous-iff-at-zero
+[st-adj]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-group-inner-adjoint
+[st-1013]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.13
+[st-spec]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-spec
+[st-sym]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-symmetry-identity
+[st-const]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-const
+[st-conj]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:conj-unitary-group
+[st-gconj]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-conj
+[st-orb]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-hasDerivAt
+[st-comm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-commutes
+[st-1017]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.17
 
 ## The bounded case
 
@@ -346,9 +346,9 @@ Hilbert6.Spectral.Stone.generator_eq_of_eq_exp.{u_1} {H : Type u_1} [NormedAddCo
 `(↑P).toPMap ⊤` is $`P` as a partial map with domain $`H`. The statement assumes nothing of
 $`P`; self-adjointness is needed only for $`V` to exist.
 
-[st-ebg]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-unitary-group
-[st-ebd]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-hasDerivAt
-[st-geb]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-exp-bounded
+[st-ebg]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-unitary-group
+[st-ebd]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-bounded-hasDerivAt
+[st-geb]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-exp-bounded
 
 ## The unitary group of a self-adjoint operator
 
@@ -377,14 +377,14 @@ The last conjunct is an equality of partial maps, so $`\mathrm{Dom}(A)` is exact
 $`\psi` for which the difference quotient converges. The derivative of $`e^{itA}\psi` at $`0` is
 {apiDocs Hilbert6.Spectral.Stone.tendsto_generatorQuotient_expUnitary}[`tendsto_generatorQuotient_expUnitary`].
 
-[st-eu]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-unitary
-[st-eug]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:exp-unitary-group
-[st-egl]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-group-law
-[st-esc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-strongly-continuous
-[st-fcs]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:functional-calculus-sub-bounded
-[st-eqn]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-quotient-norm-identity
-[st-edz]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-derivative-at-zero
-[st-1014]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.14
+[st-eu]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-unitary
+[st-eug]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:exp-unitary-group
+[st-egl]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-group-law
+[st-esc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-strongly-continuous
+[st-fcs]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:functional-calculus-sub-bounded
+[st-eqn]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-quotient-norm-identity
+[st-edz]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-derivative-at-zero
+[st-1014]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.14
 
 ## Density of the generator's domain
 
@@ -412,10 +412,10 @@ against shrinking bumps tend to $`\psi`). Both assume strong continuity; the con
 {apiDocs Hilbert6.Spectral.Stone.average_eq_convolution}[`average_eq_convolution`] needs only
 the group law.
 
-[st-avt]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-translate
-[st-avd]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-in-generator-domain
-[st-ava]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-approximates
-[st-1018]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.18
+[st-avt]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-translate
+[st-avd]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-in-generator-domain
+[st-ava]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:averaging-approximates
+[st-1018]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.18
 
 ## Stone's theorem
 
@@ -463,16 +463,16 @@ example {H : Type*} [NormedAddCommGroup H]
   exact ⟨hA, hexp t⟩
 ```
 
-[st-ode]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:linear-ode-scalar
-[st-oio]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-inner-ode
-[st-bes]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bounded-exp-solution-zero
-[st-ker]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-ker-adjoint-trivial
-[st-esa]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-essentially-self-adjoint
-[st-odd]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-difference-hasDerivAt
-[st-ncs]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:norm-const-of-symmetric-derivative
-[st-oad]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbits-agree-on-domain
-[st-ads]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:agree-on-dense-subspace
-[st-1015]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.15
+[st-ode]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:linear-ode-scalar
+[st-oio]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-inner-ode
+[st-bes]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:bounded-exp-solution-zero
+[st-ker]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-ker-adjoint-trivial
+[st-esa]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:generator-essentially-self-adjoint
+[st-odd]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbit-difference-hasDerivAt
+[st-ncs]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:norm-const-of-symmetric-derivative
+[st-oad]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:orbits-agree-on-domain
+[st-ads]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:agree-on-dense-subspace
+[st-1015]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.15
 
 ## Positive energy
 
@@ -510,15 +510,15 @@ preserved by unitary conjugation
 unpacks strong continuity. The blueprint collects these six results in
 [thrm:positive-energy-api][st-pea].
 
-[st-pe]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:positive-energy
-[st-pec]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-const
-[st-egu]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-generator-unique
-[st-pc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-conj
-[st-pecj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-conj
-[st-pesc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-strong-continuous
-[st-peb]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-exp-bounded
-[st-pei]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-iff-exp
-[st-pea]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-api
+[st-pe]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:positive-energy
+[st-pec]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-const
+[st-egu]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:exp-generator-unique
+[st-pc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-conj
+[st-pecj]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-conj
+[st-pesc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-strong-continuous
+[st-peb]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:positive-energy-exp-bounded
+[st-pei]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-iff-exp
+[st-pea]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:positive-energy-api
 
 ## Weak continuity
 
@@ -540,7 +540,7 @@ Hilbert6.strongContinuous_of_weak.{u_1, u_2} {X : Type u_1} [TopologicalSpace X]
 and
 {apiDocs Hilbert6.GNS.exists_gns_unitaryRep_of_invariant_strongContinuous}[`exists_gns_unitaryRep_of_invariant_strongContinuous`].
 
-[st-weak]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:weak-continuity-implies-strong
+[st-weak]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:weak-continuity-implies-strong
 
 # Where to look
 %%%
@@ -573,5 +573,5 @@ Two files outside the directory hold the results of Section 10.6 described here:
 
 The unbounded operators, the spectral measure and the functional calculus these files use are
 described in the {ref "unbounded-files"}[unbounded chapter]. The blueprint section is
-[Section 10.4](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:stones-theorem),
+[Section 10.4](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:stones-theorem),
 and each entry there links to the Lean declarations that formalise it.

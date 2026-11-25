@@ -14,7 +14,7 @@ website's look from the website's own theme code (`Site.Theme`), through this mo
 * the `verso-web-components` header styles (`navbar.css`), its hover highlight for the navigation
   (`navbar.js`) and its theme switch script (`dark.js`), which stores the choice of light or dark
   mode in the browser, so the website and the books share it;
-* the header `Site.headerWith`, with the plain "physicslib4" wordmark and the same navigation as the
+* the header `Site.headerWith`, with the "hilbert6" wordmark and the same navigation as the
   website, laid out by the website's `Site.headerCss`, so that it has the same size and position on
   every page. `replaceHeader` puts it in place of the manual genre's header once the HTML is
   written. The manual genre's search box sits at the top of the table of contents (`searchToToc`),
@@ -131,12 +131,12 @@ figure.tutorial-figure figcaption p { margin: 0; }
 "
 
 /--
-The books' stylesheet, written to `-verso-data/physicslib4.css`: the website's design tokens,
+The books' stylesheet, written to `-verso-data/hilbert6.css`: the website's design tokens,
 the `verso-web-components` header styles, the website's stylesheet and `bookCss`, in
 that order (later rules override earlier ones of equal specificity).
 -/
 def themeCss : CssFile where
-  filename := "physicslib4.css"
+  filename := "hilbert6.css"
   contents := "\n".intercalate [
     Site.colorTheme.toCSS, Static.navbar.css, Site.siteCss, Site.headerCss, bookCss]
 

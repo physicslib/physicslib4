@@ -4,11 +4,11 @@ import Site
 open Verso Genre Blog Site Syntax
 
 /--
-The physicslib4 website: the landing page and the About, Roadmap and Get Involved pages. The tutorial and the reference manual are separate books
+The hilbert6 website: the landing page and the About, Roadmap and Get Involved pages. The tutorial and the reference manual are separate books
 (`TutorialMain.lean`, `ManualMain.lean`).
 The wordmark icons and the hero background in `static_files/` are copied to the site root.
 -/
-def physicslib4Site : Verso.Genre.Blog.Site := site Site.FrontPage /
+def hilbert6Site : Verso.Genre.Blog.Site := site Site.FrontPage /
   "about" Site.About
   "roadmap" Site.Roadmap
   "get-involved" Site.GetInvolved
@@ -17,4 +17,4 @@ def physicslib4Site : Verso.Genre.Blog.Site := site Site.FrontPage /
   static "hero-wedge.svg" ← "static_files/hero-wedge.svg"
 
 def main (args : List String) : IO UInt32 :=
-  blogMain Site.theme physicslib4Site (options := args)
+  blogMain Site.theme hilbert6Site (options := args)

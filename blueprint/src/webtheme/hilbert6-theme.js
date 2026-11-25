@@ -1,4 +1,4 @@
-// Light and dark theme of the blueprint, shared with the physicslib4 website and books.
+// Light and dark theme of the blueprint, shared with the hilbert6 website and books.
 //
 // The theme is the class `light-theme` or `dark-theme` on <html>, as on the website. The
 // choice is kept in localStorage under the keys of the website's theme script (`theme-local`,

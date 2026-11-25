@@ -18,7 +18,7 @@ a new kind of answer: an axiom system written in a proof assistant is unambiguou
 is explicit, and every theorem drawn from it is checked by machine. They are also a natural setting
 for AI systems that reason about physics.
 
-At the heart of this effort is *physicslib4*, an open-source library in the
+At the heart of this effort is *hilbert6*, an open-source library in the
 [Lean proof assistant](https://lean-lang.org/). Its aim is to solve Hilbert's sixth problem in Lean 4
 by presenting physical theories axiomatically: algebraic quantum field theory (AQFT), locally
 covariant quantum field theory (LCQFT), topological quantum field theory (TQFT), axiomatic quantum
@@ -41,10 +41,10 @@ and reason over, and a proof checker that accepts a machine-generated proof only
 ::::anchoredHeading "with-openness-and-intent" "With Openness and Intent"
 ::::
 
-physicslib4 is a global effort. It is open source under the Apache 2.0 licence, developed in public on
-[GitHub](https://github.com/physicslib/physicslib4), and open to contributions from anyone, anywhere:
+hilbert6 is a global effort. It is open source under the Apache 2.0 licence, developed in public on
+[GitHub](https://github.com/hilbert6/hilbert6), and open to contributions from anyone, anywhere:
 physicists, mathematicians, Lean users and students alike. Every statement is written down first in
-a public [blueprint](https://physicslib.github.io/physicslib4/blueprint/), so that what the library
+a public [blueprint](https://hilbert6.org/blueprint/), so that what the library
 claims can be read and questioned without knowing Lean.
 
 To see where the project is heading, read the [roadmap](roadmap/). To take part, see

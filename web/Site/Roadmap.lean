@@ -8,7 +8,7 @@ open Site
 
 # Two pillars
 
-physicslib4 is built around two pillars.
+hilbert6 is built around two pillars.
 
 *Pillar 1: Formalizing physics in Lean.* The first pillar is to solve Hilbert's sixth problem in
 Lean 4, presenting physical theories axiomatically: algebraic quantum field theory, locally covariant

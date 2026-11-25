@@ -20,7 +20,7 @@ file := "Tomita-Takesaki-theory"
 This chapter describes how the library constructs the modular operator and the modular
 conjugation of a von Neumann algebra with a cyclic and separating vector, and how it proves
 Tomita's theorem and Takesaki's KMS theorem. It corresponds to
-[Section 10.10](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:tomita-takesaki)
+[Section 10.10](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:tomita-takesaki)
 of the blueprint. The section is pure operator algebra and involves no net. It builds on the
 {ref "unbounded"}[chapter on unbounded operators], which supplies closures, adjoints, the spectral
 measure and the functional calculus of a self-adjoint operator, and on the
@@ -199,8 +199,8 @@ The setting
 
 {docstring Hilbert6.Modular.IsCyclicSeparatingVector}
 
-[bp-vna]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:von-neumann-algebra-commutant-convention
-[bp-csv]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:cyclic-separating-vector
+[bp-vna]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:von-neumann-algebra-commutant-convention
+[bp-csv]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:cyclic-separating-vector
 
 ## The Tomita operator
 
@@ -233,10 +233,10 @@ The Tomita operator is an injective involution with dense domain and dense range
 ({apiDocs Hilbert6.Modular.tomitaOperator_involution}[`tomitaOperator_involution`],
 [thrm:tomita-operator-involution][bp-toi]).
 
-[bp-rc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:reference-conjugation
-[bp-to]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:tomita-operator
-[bp-toc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:tomita-operator-independent-of-c
-[bp-toi]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:tomita-operator-involution
+[bp-rc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:reference-conjugation
+[bp-to]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:tomita-operator
+[bp-toc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:tomita-operator-independent-of-c
+[bp-toi]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:tomita-operator-involution
 
 ## Von Neumann's theorem and the polar decomposition
 
@@ -265,8 +265,8 @@ Hilbert6.Spectral.Unbounded.polar_decomposition.{u_1} {H : Type u_1} [NormedAddC
 The unitary `V` is a `H ≃ₗᵢ[ℂ] H`; uniqueness is
 {apiDocs Hilbert6.Spectral.Unbounded.polar_decomposition_unique}[`polar_decomposition_unique`].
 
-[bp-vn]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-adjoint-product
-[bp-pd]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:polar-decomposition
+[bp-vn]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-adjoint-product
+[bp-pd]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:polar-decomposition
 
 ## The modular operator and the modular conjugation
 
@@ -341,12 +341,12 @@ it inverts the modular operator, $`J\Delta J = \Delta^{-1}`
 [crllr:modular-conjugation-inverts][bp-inv]), where `antiunitaryConj W A` is the operator
 $`WAW^{-1}`.
 
-[bp-mo]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-operator
-[bp-mc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-conjugation
-[bp-mop]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:modular-operator-properties
-[bp-mcp]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:modular-conjugation-polar
-[bp-ind]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:modular-objects-independent-of-c
-[bp-inv]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:modular-conjugation-inverts
+[bp-mo]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-operator
+[bp-mc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-conjugation
+[bp-mop]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:modular-operator-properties
+[bp-mcp]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:modular-conjugation-polar
+[bp-ind]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:modular-objects-independent-of-c
+[bp-inv]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:modular-conjugation-inverts
 
 ## Takesaki's lemma
 
@@ -375,7 +375,7 @@ Hilbert6.Modular.takesaki_lemma.{u_1} {H : Type u_1} [NormedAddCommGroup H] [Inn
 That this integral is the resolvent of $`\Delta` is
 {apiDocs Hilbert6.Modular.modularResolvent_isResolvent}[`modularResolvent_isResolvent`].
 
-[bp-tak]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:takesaki-lemma
+[bp-tak]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:takesaki-lemma
 
 ## The adjoint of the Tomita operator and the commutant
 
@@ -429,8 +429,8 @@ Hilbert6.Modular.commutant_modular_objects.{u_1} {H : Type u_1} [NormedAddCommGr
             ∀ (x : H), (modularConjugation ⋯ ⋯ C hC) x = (modularConjugation hM hΩ C hC) x
 ```
 
-[bp-adj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:tomita-adjoint-eq-closure
-[bp-com]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:commutant-modular-objects
+[bp-adj]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:tomita-adjoint-eq-closure
+[bp-com]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:commutant-modular-objects
 
 ## The strip formula and Fourier uniqueness
 
@@ -462,8 +462,8 @@ Hilbert6.eq_zero_of_integral_exp_mul_eq_zero {h : ℝ → ℂ} (hc : Continuous 
   (hh : ∀ (θ : ℝ), ∫ (t : ℝ), Complex.exp (↑θ * ↑t * Complex.I) * h t = 0) : h = 0
 ```
 
-[bp-sf]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:strip-formula
-[bp-fu]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:fourier-uniqueness
+[bp-sf]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:strip-formula
+[bp-fu]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:fourier-uniqueness
 
 ## The modular unitary group
 
@@ -475,7 +475,7 @@ They form a strongly continuous one-parameter unitary group in the sense of the 
 with $`(\Delta^{it})^* = (\Delta^{it})^{-1} = \Delta^{-it}`
 ({apiDocs Hilbert6.Modular.modularUnitaryGroup_properties}[`modularUnitaryGroup_properties`]).
 
-[bp-mug]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-unitary-group
+[bp-mug]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-unitary-group
 
 ## Tomita's theorem
 
@@ -506,8 +506,8 @@ Hilbert6.Modular.tomita_theorem.{u_1} {H : Type u_1} [NormedAddCommGroup H] [Inn
         M
 ```
 
-[bp-jtj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-conjugation-conjugate
-[bp-tt]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:tomita
+[bp-jtj]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-conjugation-conjugate
+[bp-tt]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:tomita
 
 ## Takesaki's KMS theorem
 %%%
@@ -563,10 +563,10 @@ $`\omega(a\sigma_{-t}(b))`, using $`\Delta^{it}\Omega = \Omega`; on the upper ed
 $`\Delta^{1/2}x\Omega = Jx^*\Omega` and $`J\Delta^{it} = \Delta^{it}J` turn $`G(t + i)` into
 $`\omega(\sigma_{-t}(b)a)`.
 
-[bp-ma]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-algebra
-[bp-vs]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:vector-state
-[bp-maut]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-automorphism
-[bp-tkms]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:takesaki-kms
+[bp-ma]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-algebra
+[bp-vs]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:vector-state
+[bp-maut]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:modular-automorphism
+[bp-tkms]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:takesaki-kms
 
 ## A tour of the proof
 
@@ -690,5 +690,5 @@ The strip formula and Fourier uniqueness are in `Hilbert6/Analysis/StripFormula.
 {apiDocs Hilbert6.strip_formula}[`strip_formula`].
 
 The blueprint section is
-[Section 10.10](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:tomita-takesaki),
+[Section 10.10](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:tomita-takesaki),
 and each entry there links to the Lean declarations that formalise it.

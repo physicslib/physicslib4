@@ -1,4 +1,4 @@
-/* The look of the physicslib4 website, tutorial, reference manual and web blueprint on the API docs
+/* The look of the hilbert6 website, tutorial, reference manual and web blueprint on the API docs
  * (doc-gen4's HTML). scripts/restyle_api_docs.py copies this file to the API docs and links it
  * after doc-gen4's style.css on every page and in the module list (navbar.html).
  *
@@ -10,12 +10,13 @@
  *    and `nav` undone on it, the search form and the module-list button.
  * 3. doc-gen4's variables, fonts and colours mapped to the site's.
  *
- * The site's theme is the class `dark-theme` on <html>; physicslib4-docs.js keeps doc-gen4's
+ * The site's theme is the class `dark-theme` on <html>; hilbert6-docs.js keeps doc-gen4's
  * `data-theme` attribute equal to it, so doc-gen4's own dark colours (declaration kinds) follow. */
 
 /* ── 1. Design tokens ───────────────────────────────────────────────────────── */
 
 :root {
+  --color-six: #e11d48;
   --font-primary: 'Open Sans', Arial, sans-serif;
   --font-code: 'Fira Code', monospace;
   --fs-xs: 0.75rem;
@@ -57,6 +58,7 @@
 }
 
 .dark-theme {
+  --color-six: #fb7185;
   --color-surface: #121212;
   --color-primary: #0d9488;
   --color-primary-light: #5eead4;
@@ -110,6 +112,7 @@ header.site-header .nav-logo.wordmark {
   letter-spacing: 0.01em; margin: 0 var(--space-6) 0 0; padding: 0;
 }
 header.site-header .nav-logo.wordmark:hover { color: var(--color-primary); }
+header.site-header .wordmark-six { color: var(--color-six); }
 header.site-header .desktop-menu {
   display: flex; justify-content: space-between; align-items: center; width: 100%; gap: var(--space-6);
 }

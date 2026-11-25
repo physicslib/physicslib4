@@ -19,7 +19,7 @@ permissions:
 # `_site/` as the Pages artifact. The `deploy` job publishes it, on `main` only: a manual run on
 # another branch builds and uploads the artifact without deploying it.
 #
-# Published layout, under https://physicslib.github.io/physicslib4/:
+# Published layout, under https://hilbert6.org/:
 #   /              the Verso website (web/_out/site)
 #   /tutorial/     the tutorial (web/_out/tutorial/html-multi)
 #   /manual/       the reference manual (web/_out/manual/html-multi)

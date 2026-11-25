@@ -1,8 +1,8 @@
-# physicslib4
+# hilbert6
 
 A Lean 4 library for axiomatic physics.
 
-Official website at <https://physicslib.github.io/physicslib4/>.
+Official website at <https://hilbert6.org/>.
 
 <p align="center">
   <picture>
@@ -13,9 +13,9 @@ Official website at <https://physicslib.github.io/physicslib4/>.
 
 <p align="center"><em>Algebraic quantum field theory's axiom 3 in one picture: the diamonds B₁ and B₂ are spacelike separated inside B, so their observables commute.</em></p>
 
-# What's physicslib4?
+# What's hilbert6?
 
-physicslib4 aims to formalise axiomatic physical theories in the [Lean 4 theorem prover](https://leanprover-community.github.io).
+hilbert6 aims to formalise axiomatic physical theories in the [Lean 4 theorem prover](https://leanprover-community.github.io).
 
 The library covers algebraic quantum field theory: the [Haag–Kastler axioms](https://doi.org/10.1063/1.1704187) in Minkowski and curved spacetime, the GNS construction, spectral theory, Stone's theorem, the Reeh–Schlieder theorem and Tomita–Takesaki theory.
 
@@ -30,15 +30,15 @@ Hilbert asked for a treatment analogous to what Euclidean geometry received from
 Requires [Lean 4](https://leanprover-community.github.io/get_started.html) and [Mathlib4](https://github.com/leanprover-community/mathlib4), both at v4.35.0, as pinned by `lean-toolchain` and `lakefile.toml`.
 
 ```bash
-git clone https://github.com/physicslib/physicslib4.git
-cd physicslib4
+git clone https://github.com/hilbert6/hilbert6.git
+cd hilbert6
 lake exe cache get    # download prebuilt dependencies
 lake build            # build the project
 ```
 
 # Contributing
 
-Contributions are welcome; see [Get Involved](https://physicslib.github.io/physicslib4/get-involved/). The [blueprint](https://physicslib.github.io/physicslib4/blueprint/) is the canonical guide to what is stated and what is proved. The tutorial's chapter ["Doing it yourself"](https://physicslib.github.io/physicslib4/tutorial/Doing-it-yourself/) explains how to set up Lean, add a result to the blueprint and the library, and run the checks; a pull request against `main` is merged once it passes all status checks, has no conflicts with `main`, and is approved by a reviewer.
+Contributions are welcome; see [Get Involved](https://hilbert6.org/get-involved/). The [blueprint](https://hilbert6.org/blueprint/) is the canonical guide to what is stated and what is proved. The tutorial's chapter ["Doing it yourself"](https://hilbert6.org/tutorial/Doing-it-yourself/) explains how to set up Lean, add a result to the blueprint and the library, and run the checks; a pull request against `main` is merged once it passes all status checks, has no conflicts with `main`, and is approved by a reviewer.
 
 # Acknowledgements
 

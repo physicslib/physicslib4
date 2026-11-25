@@ -35,11 +35,11 @@ file := "The-axioms-in-curved-spacetime-and-general-covariance"
 This chapter describes how the library states the Haag–Kastler axioms on a curved spacetime, what
 it proves from them, and how it formulates general covariance, which relates the nets of one theory
 over different spacetimes. It corresponds to
-[Section 10.7](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:haag-kastler-axioms-in-curved-spacetime)
+[Section 10.7](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:haag-kastler-axioms-in-curved-spacetime)
 and
-[Section 10.8](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:general-covariance-in-curved-spacetime)
+[Section 10.8](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:general-covariance-in-curved-spacetime)
 of the blueprint. The physics is introduced in
-[chapter 1 of the tutorial](../tutorial/AQFT-in-brief/#physicslib4-tutorial--AQFT-in-brief--What-this-project-sharpens).
+[chapter 1 of the tutorial](../tutorial/AQFT-in-brief/#hilbert6-tutorial--AQFT-in-brief--What-this-project-sharpens).
 The axioms mirror the Minkowski ones closely, so this chapter assumes the
 {ref "haag-kastler"}[Haag–Kastler chapter] and describes mainly where the curved axioms differ.
 
@@ -148,7 +148,7 @@ preservation in the definition is an implementation choice, not a restriction: a
 connected to the identity preserves the future orientation, but the proof needs a
 Myers–Steenrod-type rigidity theorem that Mathlib does not provide (blueprint
 [def:isometric-covariance-in-curved-spacetime][bp-cov], formalization note). The
-[Spacetime chapter](Spacetime-and-geometry/#physicslib4-reference-manual--Spacetime-and-geometry--Design--Symmetries)
+[Spacetime chapter](Spacetime-and-geometry/#hilbert6-reference-manual--Spacetime-and-geometry--Design--Symmetries)
 explains why orientation matters: an isometry that reverses the time orientation maps $`I^+(p)`
 onto $`I^-(\varphi(p))`.
 
@@ -168,7 +168,7 @@ directed system and the quasilocal algebra exists. In a curved spacetime this fa
 Schwarzschild black hole, a diamond just below the singularity and a diamond outside the horizon
 at late times lie in no common diamond: the top vertex of a common diamond would have to lie in
 the future of both, and the future of the first ends on the singularity (tutorial,
-[chapter 1](../tutorial/AQFT-in-brief/#physicslib4-tutorial--AQFT-in-brief--What-this-project-sharpens);
+[chapter 1](../tutorial/AQFT-in-brief/#hilbert6-tutorial--AQFT-in-brief--What-this-project-sharpens);
 blueprint, Chapter 9,
 [Axiom 3][bp-ch9-ax3]). Their algebras then lie in no common algebra, and the construction of a
 quasilocal algebra fails. The blueprint argues this informally; the library does not formalise
@@ -248,15 +248,15 @@ one spacetime. Unlike Axiom 5, it is not restricted to diffeomorphisms connected
 it compares two nets, and makes no group act on one. Nor is it the locally covariant
 framework of Brunetti, Fredenhagen and Verch
 ([Commun. Math. Phys. 237 (2003) 31–68](https://doi.org/10.1007/s00220-003-0815-7); compared in
-[tutorial chapter 1](../tutorial/AQFT-in-brief/#physicslib4-tutorial--AQFT-in-brief--What-this-project-sharpens)),
+[tutorial chapter 1](../tutorial/AQFT-in-brief/#hilbert6-tutorial--AQFT-in-brief--What-this-project-sharpens)),
 a functor on a category of globally hyperbolic spacetimes and their embeddings: here only
 diffeomorphisms of a whole spacetime are compared.
 
-[bp-cov]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isometric-covariance-in-curved-spacetime
-[bp-iso]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isotony-in-curved-spacetime
-[bp-neq]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:net-equivalence-in-curved-spacetime
-[bp-gc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:general-covariance-in-curved-spacetime
-[bp-ch9-ax3]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-in-curved-spacetime.html#sctn:axiom-3-%28local-commutativity%29
+[bp-cov]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isometric-covariance-in-curved-spacetime
+[bp-iso]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isotony-in-curved-spacetime
+[bp-neq]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:net-equivalence-in-curved-spacetime
+[bp-gc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:general-covariance-in-curved-spacetime
+[bp-ch9-ax3]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-in-curved-spacetime.html#sctn:axiom-3-%28local-commutativity%29
 
 # Main definitions and theorems
 %%%
@@ -266,7 +266,7 @@ tag := "curved-main"
 Definitions are shown with their docstrings, which give the mathematics and the blueprint entry;
 theorems with their statements, as Lean prints them, and a line or two of explanation. Each
 subsection opens with the blueprint entries it covers. For the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/AQFT/HaagKastlerCurved/Net.html)
+[API documentation](https://hilbert6.org/docs/Hilbert6/AQFT/HaagKastlerCurved/Net.html)
 and the files listed at the end of the chapter.
 
 ## The spacetime interface and the bridge
@@ -285,8 +285,8 @@ supplies it: the isometry group has the topology induced by
 $`\varphi \mapsto (\varphi, \varphi^{-1})` into $`C(M, M) \times C(M, M)` with the compact-open
 topology, and the subgroup inherits it.
 
-[bp-ls]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:lorentzian-spacetime
-[bp-a5b]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:axiom5-basis-preservation
+[bp-ls]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:lorentzian-spacetime
+[bp-a5b]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:axiom5-basis-preservation
 
 ## The axioms
 
@@ -326,7 +326,7 @@ isotony maps as `N.commIsotony` and the covariance maps as `N.covEquiv`:
 
 The axioms are consistent over every instance of the interface. The witness is the trivial net
 `trivialHaagKastlerNet`, which assigns $`\mathbb{C}` to every region with every map the identity;
-the [tutorial](../tutorial/Worked-examples/#physicslib4-tutorial--Worked-examples--The-trivial-net--An-aside___-the-trivial-net-in-curved-spacetime)
+the [tutorial](../tutorial/Worked-examples/#hilbert6-tutorial--Worked-examples--The-trivial-net--An-aside___-the-trivial-net-in-curved-spacetime)
 compares it with the Minkowski one.
 
 ```lean (name := checkNonempty)
@@ -352,12 +352,12 @@ Hilbert6.Spacetime.LorentzianSpacetime.nonempty_haagKastlerNet_identityComponent
   Nonempty (HaagKastlerNet L.toAbstractIdentityComponent)
 ```
 
-[bp-la]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-algebras-in-curved-spacetime
-[bp-lc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-commutativity-in-curved-spacetime
-[bp-lo]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-observable
-[bp-lcomp]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-completeness-in-curved-spacetime
-[bp-net]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:haag-kastler-net-in-curved-spacetime
-[bp-ne]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:haag-kastler-net-in-curved-spacetime-nonempty
+[bp-la]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-algebras-in-curved-spacetime
+[bp-lc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-commutativity-in-curved-spacetime
+[bp-lo]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-observable
+[bp-lcomp]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-completeness-in-curved-spacetime
+[bp-net]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:haag-kastler-net-in-curved-spacetime
+[bp-ne]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:haag-kastler-net-in-curved-spacetime-nonempty
 
 ## Einstein causality and local von Neumann algebras
 
@@ -453,13 +453,13 @@ the inclusion of $`R(\mathbf{B}')` in itself is irreducible exactly when $`R(\ma
 factor
 ({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.isIrreducibleInclusion_self_iff_isFactor}[`isIrreducibleInclusion_self_iff_isFactor`]).
 
-[bp-ec]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:einstein-causality-in-curved-spacetime
-[bp-lcm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:local-commutativity-mono-in-curved-spacetime
-[bp-lvn]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-von-neumann-algebra-in-curved-spacetime
-[bp-vno]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-bundled-order-in-curved-spacetime
-[bp-si]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:statistical-independence-bundled-in-curved-spacetime
-[bp-rc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:relative-commutant-in-curved-spacetime
-[bp-sif]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:self-inclusion-factor-in-curved-spacetime
+[bp-ec]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:einstein-causality-in-curved-spacetime
+[bp-lcm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:local-commutativity-mono-in-curved-spacetime
+[bp-lvn]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-von-neumann-algebra-in-curved-spacetime
+[bp-vno]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-bundled-order-in-curved-spacetime
+[bp-si]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:statistical-independence-bundled-in-curved-spacetime
+[bp-rc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:relative-commutant-in-curved-spacetime
+[bp-sif]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:self-inclusion-factor-in-curved-spacetime
 
 ## Stabilisers, covariant states and KMS states
 
@@ -488,7 +488,7 @@ With a topology on `M.Isom` and continuous matrix coefficients
 $`g \mapsto \omega(a^*\hat\alpha_g b)`, $`U` is strongly continuous
 ({apiDocs Hilbert6.AQFT.HaagKastlerCurved.HaagKastlerNet.exists_gns_unitary_stabilizer_strongContinuous}[`exists_gns_unitary_stabilizer_strongContinuous`]);
 the `Rep` forms return $`U` as a group homomorphism. They are the GNS chapter's
-[unitary implementation theorems](The-GNS-construction/#physicslib4-reference-manual--The-GNS-construction--Design--Covariance-and-unitary-implementation) applied to the algebra
+[unitary implementation theorems](The-GNS-construction/#hilbert6-reference-manual--The-GNS-construction--Design--Covariance-and-unitary-implementation) applied to the algebra
 $`\mathfrak{U}(\mathbf{B})` and the action $`\hat\alpha`; their statements are long nested
 existentials, best read in the API documentation.
 
@@ -558,15 +558,15 @@ axioms as stated place no constraint on their algebras: the examples motivate th
 are not instances of them (see the
 {ref "curved-design"}[Design section]).
 
-[bp-sa]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:stabilizer-action-in-curved-spacetime
-[bp-sal]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:stabilizer-action-laws-in-curved-spacetime
-[bp-gu]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:gns-unitary-stabilizer-in-curved-spacetime
-[bp-gus]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:gns-unitary-stabilizer-strongly-continuous-in-curved-spacetime
-[bp-vci]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-covariance-iso-in-curved-spacetime
-[bp-csf]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:covariant-state-family-in-curved-spacetime
-[bp-fa]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:flow-aut-in-curved-spacetime
-[bp-kms]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kms-state-for-flow-in-curved-spacetime
-[bp-gs]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:ground-state-for-flow-in-curved-spacetime
+[bp-sa]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:stabilizer-action-in-curved-spacetime
+[bp-sal]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:stabilizer-action-laws-in-curved-spacetime
+[bp-gu]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:gns-unitary-stabilizer-in-curved-spacetime
+[bp-gus]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:gns-unitary-stabilizer-strongly-continuous-in-curved-spacetime
+[bp-vci]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-covariance-iso-in-curved-spacetime
+[bp-csf]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:covariant-state-family-in-curved-spacetime
+[bp-fa]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:flow-aut-in-curved-spacetime
+[bp-kms]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kms-state-for-flow-in-curved-spacetime
+[bp-gs]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:ground-state-for-flow-in-curved-spacetime
 
 ## General covariance
 
@@ -650,7 +650,7 @@ The general definitions these files use, the KMS condition `AQFT.IsKMSState` and
 `AQFT.IsPositiveEnergy`, are in `Hilbert6/AQFT/KMS.lean` and
 `Hilbert6/AQFT/PositiveEnergy.lean`; the GNS results are described in the
 {ref "gns"}[GNS chapter]. The blueprint sections are
-[Section 10.7](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:haag-kastler-axioms-in-curved-spacetime)
+[Section 10.7](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:haag-kastler-axioms-in-curved-spacetime)
 and
-[Section 10.8](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:general-covariance-in-curved-spacetime),
+[Section 10.8](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:general-covariance-in-curved-spacetime),
 and each entry there links to the Lean declarations that formalise it.
