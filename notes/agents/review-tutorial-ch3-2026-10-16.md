@@ -3,7 +3,7 @@
 Reviewed file: `web/Tutorial/WorkedExamples.lean` (with the plan and the writer's log). Read-only
 review; the chapter is not edited. Rebuilt with `cd web && lake build && lake exe generate-tutorial
 --output _out/tutorial`: build succeeds; the only warning from the chapter is Lake's module-system
-warning for the Mathlib import (see 2c). Declarations checked against `Physicslib4/AQFT/HaagKastler/
+warning for the Mathlib import (see 2c). Declarations checked against `Hilbert6/AQFT/HaagKastler/
 {Net,LocalCommutativity,EinsteinCausality,VacuumState,QuasilocalIntertwiner}.lean`,
 `GNS/{Basic,Construction,ExtremeState}.lean`, `Spacetime/{Causality,LorentzCausality}.lean`,
 `AQFT/HaagKastlerCurved/{Net,Spacetime}.lean`. Side experiments were run in `/tmp/ch3rev/`
@@ -141,7 +141,7 @@ Optionally contrast with chapter 2, where `mul_comm _ _` works because the goal 
 
 **2c. The Mathlib import.** Harmless (the library's own files trigger the same warning, e.g.
 `HaagKastlerCurved/Net.lean`), but **avoidable**: the import is redundant. With only the three
-`Physicslib4` imports, `CStarAlgebra (EuclideanSpace ℂ (Fin n) →L[ℂ] EuclideanSpace ℂ (Fin n))`
+`Hilbert6` imports, `CStarAlgebra (EuclideanSpace ℂ (Fin n) →L[ℂ] EuclideanSpace ℂ (Fin n))`
 and `StarOrderedRing (…)` are found by `inferInstance`/`#synth`, and the full vector-state code
 (`Cn`, `vectorFun`, `vectorFun_nonneg`, `norm_vectorFun`, `vectorState`) elaborates (checked in
 `/tmp/ch3rev/V.lean`). Fix (should fix): delete line 7,

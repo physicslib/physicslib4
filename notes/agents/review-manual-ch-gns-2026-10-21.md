@@ -1,12 +1,12 @@
 # Review: GNS manual chapter and docstring pass (2026-10-21)
 
-Scope: commit `3b3cfcd` (docstrings, `Physicslib4/GNS/`) and the uncommitted chapter `web/Manual/GNS.lean`.
+Scope: commit `3b3cfcd` (docstrings, `Hilbert6/GNS/`) and the uncommitted chapter `web/Manual/GNS.lean`.
 
 ## A. Docstring pass (`3b3cfcd`)
 
 ### What was checked and is correct
 
-- **Comments only.** All 15 `Physicslib4/GNS/` files of `3b3cfcd` compared with `3b3cfcd^` with
+- **Comments only.** All 15 `Hilbert6/GNS/` files of `3b3cfcd` compared with `3b3cfcd^` with
   `--` and nested `/- -/` comments removed and whitespace normalised: identical in all 15. No GNS
   file changed between `3b3cfcd` and HEAD.
 - **Mathlib's GNS space.** `gns_construction` and `nullSet` docstrings are right: Mathlib's
@@ -51,7 +51,7 @@ as is but reflowed (nit level for the second part).
 A3. **should fix** (blueprint citation): `CauchySchwarz.lean`, `omega_star_swap_conj` ends
 "Blueprint: lmm:cauchy-schwarz-inequality", but that node's `\lean{}` lists only
 `cauchy_schwarz_inequality`. This is a 14th uncited declaration, missing from the log's list.
-Proposal: add `Physicslib4.GNS.omega_star_swap_conj` to `\lean{}` of lmm:cauchy-schwarz-inequality
+Proposal: add `Hilbert6.GNS.omega_star_swap_conj` to `\lean{}` of lmm:cauchy-schwarz-inequality
 (its proof uses the Hermitian symmetry). Until then, write "Blueprint: the Hermitian symmetry used
 in lmm:cauchy-schwarz-inequality".
 
@@ -165,8 +165,8 @@ a scalar when its own summand and another summand are both nonzero:".
 B6. **nit** (l. 374–376): "an irreducible representation generates a factor
 (`center_gnsVonNeumann_eq_of_isIrreducible`)". The factor form is
 `isFactor_gnsVonNeumann_of_isIrreducible`, which lives in
-`Physicslib4/AQFT/HaagKastler/GeometricCovariance.lean`; `IsFactor` is in
-`Physicslib4/Operators/Conjugation.lean`. Cite both lemmas ("its centre is the scalars
+`Hilbert6/AQFT/HaagKastler/GeometricCovariance.lean`; `IsFactor` is in
+`Hilbert6/Operators/Conjugation.lean`. Cite both lemmas ("its centre is the scalars
 (`center_gnsVonNeumann_eq_of_isIrreducible`), so it generates a factor
 (`isFactor_gnsVonNeumann_of_isIrreducible`)"), and in "Where to look" change `Irreducibility.lean`
 "the centre and factors" to "the centre (`IsFactor` itself is in `Operators/Conjugation.lean`)".

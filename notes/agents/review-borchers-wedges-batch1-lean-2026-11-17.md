@@ -1,9 +1,9 @@
 # Review: Lean statements for borchers-wedges batch 1 (2026-11-17)
 
 Files reviewed:
-- `Physicslib4/Spacetime/MinkowskiCausalCone.lean`
-- `Physicslib4/Spectral/Unbounded/UnitaryConjugation.lean`
-- `Physicslib4/Operators/Modular/Intertwining.lean`
+- `Hilbert6/Spacetime/MinkowskiCausalCone.lean`
+- `Hilbert6/Spectral/Unbounded/UnitaryConjugation.lean`
+- `Hilbert6/Operators/Modular/Intertwining.lean`
 
 There are 22 labels, all sorry'd. **Verdict: PASS.**
 

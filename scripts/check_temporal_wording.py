@@ -7,7 +7,7 @@ text ("as we previously proved") are allowed by POSITIONAL below; a line contain
 """
 import re, sys, pathlib
 
-ROOTS = ["blueprint/src/sections", "Physicslib4", "web", "README.md"]
+ROOTS = ["blueprint/src/sections", "Hilbert6", "web", "README.md"]
 EXTS = {".tex", ".lean", ".md", ".html"}
 SKIP = re.compile(r"(^|/)(scratch_|_site/|\.lake/|_out/)")
 PATTERN = re.compile(

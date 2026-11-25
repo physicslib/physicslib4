@@ -1,9 +1,9 @@
 # Review: Lean statements for borchers-wedges batch 2 (2026-11-17)
 
 Files reviewed:
-- `Physicslib4/AQFT/HaagKastler/Wedges.lean`
-- `Physicslib4/AQFT/HaagKastler/RegionAlgebra.lean`
-- `Physicslib4/AQFT/HaagKastler/CovariantVacuum.lean`
+- `Hilbert6/AQFT/HaagKastler/Wedges.lean`
+- `Hilbert6/AQFT/HaagKastler/RegionAlgebra.lean`
+- `Hilbert6/AQFT/HaagKastler/CovariantVacuum.lean`
 
 There are 48 labels, all sorry'd.
 

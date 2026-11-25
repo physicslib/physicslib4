@@ -1,7 +1,7 @@
 # Reference manual, chapter "The GNS construction": progress log
 
 Plan: `plan-verso-reference-manual-2026-10-17.md` (chapter 1). Part A is a docstring pass over the
-headline declarations the chapter shows with `{docstring}`, in `Physicslib4/GNS/`; part B (the
+headline declarations the chapter shows with `{docstring}`, in `Hilbert6/GNS/`; part B (the
 chapter text) is a later step. Appended after each file.
 
 ## Step 0: reconnaissance (2026-10-21)
@@ -66,7 +66,7 @@ chapter text) is a later step. Appended after each file.
   C*-algebra are continuous; equivalences cited (`isPure_iff_isExtremePoint`,
   `isPure_iff_isIrreducible`, in later files).
 - `gnsVonNeumann`: density cited as `exists_forall_norm_sub_lt_of_mem_bicommutant`
-  (`Operators/DensityTheorem.lean`, root namespace `Physicslib4`; not imported by this file, so
+  (`Operators/DensityTheorem.lean`, root namespace `Hilbert6`; not imported by this file, so
   Verso may not link it). `gnsVonNeumann` and `gnsVonNeumannAlgebra` have no `\lean{}` node; no
   Blueprint line (proposal: add them to def:local-von-neumann or a new node).
 - Built (the `haveILetI` notice is pre-existing).
@@ -143,7 +143,7 @@ chapter text) is a later step. Appended after each file.
 
 ## Step A14: final checks (2026-10-21)
 
-- 41 docstrings in 15 files. No `**Restriction:**` lines existed in `Physicslib4/GNS/` at HEAD;
+- 41 docstrings in 15 files. No `**Restriction:**` lines existed in `Hilbert6/GNS/` at HEAD;
   none added. No guard blocks. One docstring line starting with "with" reworded; no line starts
   with a Lean keyword.
 - Full `lake build` passes; the GNS warnings (`Try this`, `simp` suggestions in proofs, the empty
@@ -215,7 +215,7 @@ chapter text) is a later step. Appended after each file.
 
 ### Step B4: Where to look, final checks (2026-10-21)
 
-- All 15 files of `Physicslib4/GNS/` listed with an `{apiDocs}` link each; the section pages are
+- All 15 files of `Hilbert6/GNS/` listed with an `{apiDocs}` link each; the section pages are
   `home_page/sec10-1-gns.md` and `sec10-6-haag-kastler.md` (the Spacetime chapter's naming pattern
   does not apply). About 300 words.
 - Reread: "commutant form" equivalence now gives both directions; superselection sectors
@@ -279,7 +279,7 @@ chapter text) is a later step. Appended after each file.
   `IsIrreducible` is about subsets of a topological space. B4: "among the missing pieces …
   `LocallyConvexSpace ℝ (WeakDual ℂ A)`". B5: both summands nonzero. B6: centre lemma plus
   `isFactor_gnsVonNeumann_of_isIrreducible` (checked: `AQFT/HaagKastler/GeometricCovariance.lean`,
-  namespace `Physicslib4.GNS`); "Where to look" notes `IsFactor` is in `Operators/Conjugation.lean`.
+  namespace `Hilbert6.GNS`); "Where to look" notes `IsFactor` is in `Operators/Conjugation.lean`.
   B7: "mostly for an arbitrary C\*-algebra". B8: (π(A) ⊗ 1)' = π(A)' ⊗̄ B(ℓ²(ι)). B9: "any unital
   C\*-algebra". B10: "The chapter has five parts". B11: GNS representations of two pure states.
   B12: "as `Nontrivial H` or as a nonzero vector". B13: types of `x`, `x_1`, `x_2` named

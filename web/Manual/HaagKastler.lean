@@ -1,23 +1,23 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.AQFT.HaagKastler.Net
-import Physicslib4.AQFT.HaagKastler.EinsteinCausality
-import Physicslib4.AQFT.HaagKastler.LocalVonNeumann
-import Physicslib4.AQFT.HaagKastler.StrongDensity
-import Physicslib4.AQFT.HaagKastler.ObservableBridge
-import Physicslib4.AQFT.HaagKastler.VacuumState
-import Physicslib4.AQFT.HaagKastler.QuasilocalKMS
-import Physicslib4.AQFT.HaagKastler.GeometricCovariance
-import Physicslib4.AQFT.HaagKastler.CovariantState
-import Physicslib4.AQFT.HaagKastler.Purity
+import Hilbert6.AQFT.HaagKastler.Net
+import Hilbert6.AQFT.HaagKastler.EinsteinCausality
+import Hilbert6.AQFT.HaagKastler.LocalVonNeumann
+import Hilbert6.AQFT.HaagKastler.StrongDensity
+import Hilbert6.AQFT.HaagKastler.ObservableBridge
+import Hilbert6.AQFT.HaagKastler.VacuumState
+import Hilbert6.AQFT.HaagKastler.QuasilocalKMS
+import Hilbert6.AQFT.HaagKastler.GeometricCovariance
+import Hilbert6.AQFT.HaagKastler.CovariantState
+import Hilbert6.AQFT.HaagKastler.Purity
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
 open Book
 -- Docstring code spans are elaborated in this scope; these namespaces let the names they mention,
 -- written relative to the library's namespaces, resolve and link.
-open Physicslib4 Physicslib4.AQFT Physicslib4.AQFT.HaagKastler
-open Physicslib4.AQFT.HaagKastler.HaagKastlerNet
+open Hilbert6 Hilbert6.AQFT Hilbert6.AQFT.HaagKastler
+open Hilbert6.AQFT.HaagKastler.HaagKastlerNet
 
 #doc (Manual) "The Haag–Kastler axioms in Minkowski spacetime" =>
 
@@ -78,7 +78,7 @@ From the axioms the library proves:
 
 It also defines vacuum states, by invariance and the spectrum condition, and KMS and ground states
 for a one-parameter subgroup of the Poincaré group. All declarations of the chapter are in the
-namespace `Physicslib4.AQFT.HaagKastler`, written without it below.
+namespace `Hilbert6.AQFT.HaagKastler`, written without it below.
 
 # Design
 %%%
@@ -231,7 +231,7 @@ tag := "haag-kastler-main"
 Definitions are shown with their docstrings, which give the mathematics and the blueprint entry;
 theorems with their statements, as Lean prints them, and a line or two of explanation. Each
 subsection opens with the blueprint entries it covers. For the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Physicslib4/AQFT/HaagKastler/Net.html)
+[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/AQFT/HaagKastler/Net.html)
 and the files listed at the end of the chapter.
 
 ## The axioms
@@ -241,36 +241,36 @@ Blueprint: [def:local-algebras][bp-local], [def:isotony][bp-isotony],
 
 The regions are the causal diamonds:
 
-{docstring Physicslib4.AQFT.HaagKastler.IsAlexandrovBasisSet}
+{docstring Hilbert6.AQFT.HaagKastler.IsAlexandrovBasisSet}
 
 Axiom 1 is a structure with three fields. Lean finds the field `instCStarAlgebra` automatically
 (it is an instance), so `U.algebra B` is a C\*-algebra wherever `U : LocalNet` is in scope:
 
-{docstring Physicslib4.AQFT.HaagKastler.LocalNet}
+{docstring Hilbert6.AQFT.HaagKastler.LocalNet}
 
 Axiom 2 is a structure over the net. Its fields take the diamond hypotheses explicitly and the
 regions as strict-implicit arguments, so the embedding of $`\mathbf{B}_1` in $`\mathbf{B}_2` is
 written `i.map hB₁ hB₂ h`, with `h : B₁ ⊆ B₂`:
 
-{docstring Physicslib4.AQFT.HaagKastler.Isotony}
+{docstring Hilbert6.AQFT.HaagKastler.Isotony}
 
 Axiom 3 is a proposition about a net and its isotony family. Read with the tutorial's
 [unfolding](../tutorial/Lean-in-brief/#physicslib4-tutorial--Lean-in-brief--Definitions-that-are-propositions--Local-commutativity)
 of its quantifiers, it is the displayed equation of the Design section:
 
-{docstring Physicslib4.AQFT.HaagKastler.LocalCommutativity}
+{docstring Hilbert6.AQFT.HaagKastler.LocalCommutativity}
 
 The symmetry group of Axiom 5, and the axiom itself:
 
-{docstring Physicslib4.AQFT.HaagKastler.InhomogeneousLorentzGroup +hideStructureConstructor}
+{docstring Hilbert6.AQFT.HaagKastler.InhomogeneousLorentzGroup +hideStructureConstructor}
 
-{docstring Physicslib4.AQFT.HaagKastler.LorentzCovariance}
+{docstring Hilbert6.AQFT.HaagKastler.LorentzCovariance}
 
 The bundled net. A theorem about a quantum field theory takes `N : HaagKastlerNet` as a
 hypothesis, and reaches the axioms as `N.U`, `N.isotony`, `N.localCommutativity` and
 `N.lorentzCovariance`:
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet}
 
 The axioms are consistent. The trivial net, which assigns $`\mathbb{C}` to every region with every
 map the identity, satisfies all of them; the
@@ -278,12 +278,12 @@ map the identity, satisfies all of them; the
 builds it step by step.
 
 ```lean (name := checkNonempty)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check nonempty_haagKastlerNet
 ```
 
 ```leanOutput checkNonempty
-Physicslib4.AQFT.HaagKastler.nonempty_haagKastlerNet : Nonempty HaagKastlerNet
+Hilbert6.AQFT.HaagKastler.nonempty_haagKastlerNet : Nonempty HaagKastlerNet
 ```
 
 The statement is at universe 0, since the model is built from $`\mathbb{C}`, a type in `Type`.
@@ -303,24 +303,23 @@ Blueprint: [def:quasilocal-algebra][bp-qa], [thrm:quasilocal-algebra-exists][bp-
 
 The interface through which the library uses the quasilocal algebra:
 
-{docstring Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra}
+{docstring Hilbert6.AQFT.HaagKastler.QuasilocalAlgebra}
 
 Every net satisfying Axiom 2 has a quasilocal algebra. The proof assembles the colimit-and-completion
 construction of `QuasilocalColimit.lean`; nothing about $`\mathfrak{U}` is assumed.
 
 ```lean (name := checkExists)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check exists_quasilocalAlgebra
 ```
 
 ```leanOutput checkExists
-Physicslib4.AQFT.HaagKastler.exists_quasilocalAlgebra.{u} (U : LocalNet) (i : Isotony U) :
-  Nonempty (QuasilocalAlgebra U i)
+Hilbert6.AQFT.HaagKastler.exists_quasilocalAlgebra.{u} (U : LocalNet) (i : Isotony U) : Nonempty (QuasilocalAlgebra U i)
 ```
 
 A net's own quasilocal algebra is chosen from this theorem:
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.quasilocal}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.quasilocal}
 
 Local commutativity then holds in every quasilocal algebra. The proof picks a diamond containing
 both regions, uses the compatibility $`\iota_{\mathbf{B}} \circ i_{\mathbf{B}_k\mathbf{B}} =
@@ -328,14 +327,14 @@ both regions, uses the compatibility $`\iota_{\mathbf{B}} \circ i_{\mathbf{B}_k\
 applies the homomorphism $`\iota_{\mathbf{B}}` to the commutation in $`\mathfrak{U}(\mathbf{B})`:
 
 ```lean (name := checkCommuteι)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check LocalCommutativity.commute_ι
 ```
 
 ```leanOutput checkCommuteι
-Physicslib4.AQFT.HaagKastler.LocalCommutativity.commute_ι.{u_1} {U : LocalNet} {i : Isotony U}
-  (h : LocalCommutativity U i) (Q : QuasilocalAlgebra U i) ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
-  (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
+Hilbert6.AQFT.HaagKastler.LocalCommutativity.commute_ι.{u_1} {U : LocalNet} {i : Isotony U} (h : LocalCommutativity U i)
+  (Q : QuasilocalAlgebra U i) ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄ (hB₁ : IsAlexandrovBasisSet B₁)
+  (hB₂ : IsAlexandrovBasisSet B₂)
   (hs : StandardMinkowskiSpacetime.IsCompletelySpacelike standardMinkowskiTimeOrientation B₁ B₂) (a : U.algebra B₁)
   (b : U.algebra B₂) : Commute ((Q.ι hB₁) a) ((Q.ι hB₂) b)
 ```
@@ -345,12 +344,12 @@ Conversely, commutation in a single quasilocal algebra implies Axiom 3; this dir
 injectivity of $`\iota_{\mathbf{B}}`. So the library's axiom is equivalent to the textbook form:
 
 ```lean (name := checkIff)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check localCommutativity_iff_exists_commute_ι
 ```
 
 ```leanOutput checkIff
-Physicslib4.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι.{u_1} (U : LocalNet) (i : Isotony U) :
+Hilbert6.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι.{u_1} (U : LocalNet) (i : Isotony U) :
   LocalCommutativity U i ↔
     ∃ Q,
       ∀ ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄ (hB₁ : IsAlexandrovBasisSet B₁)
@@ -362,23 +361,23 @@ Physicslib4.AQFT.HaagKastler.localCommutativity_iff_exists_commute_ι.{u_1} (U :
 As you will recall, the observables of a theory in a state $`\omega` are the self-adjoint operators
 $`\pi_\omega(a)` of its GNS representation. The library defines them for any representation:
 
-{docstring Physicslib4.AQFT.HaagKastler.IsQuasilocalObservable}
+{docstring Hilbert6.AQFT.HaagKastler.IsQuasilocalObservable}
 
 Axiom 4 joins the physical observables to these. Its encoding lands in the algebra, not in a
 representation, so that whether a physical observable is quasilocal does not depend on a choice of
 state:
 
-{docstring Physicslib4.AQFT.HaagKastler.ObservableCorrespondence}
+{docstring Hilbert6.AQFT.HaagKastler.ObservableCorrespondence}
 
 Being a quasilocal observable in every representation is then a theorem:
 
 ```lean (name := checkMeasure)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check isQuasilocalObservable_measure
 ```
 
 ```leanOutput checkMeasure
-Physicslib4.AQFT.HaagKastler.isQuasilocalObservable_measure.{u, u_1, u_2} {U : LocalNet} {i : Isotony U}
+Hilbert6.AQFT.HaagKastler.isQuasilocalObservable_measure.{u, u_1, u_2} {U : LocalNet} {i : Isotony U}
   {Q : QuasilocalAlgebra U i} (C : ObservableCorrespondence Q) {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] (π : Q.carrier →⋆ₐ[ℂ] H →L[ℂ] H) (o : C.Observable) :
   IsQuasilocalObservable Q π (π (C.measure o))
@@ -406,12 +405,12 @@ Einstein causality is local commutativity pushed through `π`: the operators rep
 observables of completely spacelike diamonds commute.
 
 ```lean (name := checkEinstein)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check HaagKastlerNet.einstein_causality
 ```
 
 ```leanOutput checkEinstein
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.einstein_causality.{u, u_1} (N : HaagKastlerNet) {H : Type u_1}
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.einstein_causality.{u, u_1} (N : HaagKastlerNet) {H : Type u_1}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H)
   ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄ (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
   (hs : StandardMinkowskiSpacetime.IsCompletelySpacelike standardMinkowskiTimeOrientation B₁ B₂) (a : N.U.algebra B₁)
@@ -424,9 +423,9 @@ In a representation, the local algebras generate von Neumann algebras. The libra
 two forms, as sets of operators and as Mathlib's bundled `VonNeumannAlgebra`, with the same
 underlying set:
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumann}
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra}
 
 The von Neumann algebras inherit isotony and local commutativity. Isotony, $`R(\mathbf{B}_1) \le
 R(\mathbf{B}_2)` for $`\mathbf{B}_1 \subseteq \mathbf{B}_2`, follows from the compatibility of the
@@ -434,12 +433,12 @@ embeddings $`\iota` with isotony, and makes $`\mathbf{B} \mapsto R(\mathbf{B})` 
 (`HaagKastlerNet.vonNeumannNet`):
 
 ```lean (name := checkVNMono)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check HaagKastlerNet.localVonNeumannAlgebra_mono
 ```
 
 ```leanOutput checkVNMono
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_mono.{u_1, u_2} (N : HaagKastlerNet) {H : Type u_1}
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_mono.{u_1, u_2} (N : HaagKastlerNet) {H : Type u_1}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H)
   ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄ (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
   (h : B₁ ⊆ B₂) : N.localVonNeumannAlgebra π hB₁ ≤ N.localVonNeumannAlgebra π hB₂
@@ -449,12 +448,12 @@ Microcausality, $`R(\mathbf{B}_1) \le R(\mathbf{B}_2)'` for completely spacelike
 from Einstein causality, since taking commutants reverses inclusions and $`S''' = S'`:
 
 ```lean (name := checkVNComm)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check HaagKastlerNet.localVonNeumannAlgebra_le_commutant
 ```
 
 ```leanOutput checkVNComm
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant.{u_1, u_2} (N : HaagKastlerNet)
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_le_commutant.{u_1, u_2} (N : HaagKastlerNet)
   {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
   (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
@@ -471,12 +470,12 @@ Reeh–Schlieder theorem ({ref "reeh-schlieder"}[The Reeh–Schlieder theorem]),
 `reeh_schlieder_separating` combines the two; here cyclicity is a hypothesis.
 
 ```lean (name := checkSeparating)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check HaagKastlerNet.localVonNeumannAlgebra_separating
 ```
 
 ```leanOutput checkSeparating
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_separating.{u_1, u_2} (N : HaagKastlerNet)
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra_separating.{u_1, u_2} (N : HaagKastlerNet)
   {H : Type u_1} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   (π : N.quasilocal.carrier →⋆ₐ[ℂ] H →L[ℂ] H) ⦃B₁ B₂ : Set StandardMinkowskiSpacetime.Carrier⦄
   (hB₁ : IsAlexandrovBasisSet B₁) (hB₂ : IsAlexandrovBasisSet B₂)
@@ -502,12 +501,12 @@ topology of pointwise convergence, that is, uniform convergence on finite sets, 
 `UniformConvergenceCLM.ofFun` with the family of finite sets:
 
 ```lean (name := checkDensity)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check dense_range_in_bicommutant
 ```
 
 ```leanOutput checkDensity
-Physicslib4.AQFT.HaagKastler.dense_range_in_bicommutant.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
+Hilbert6.AQFT.HaagKastler.dense_range_in_bicommutant.{u_1, u_2} {H : Type u_1} [NormedAddCommGroup H]
   [InnerProductSpace ℂ H] [CompleteSpace H] {𝔄 : Type u_2} [Ring 𝔄] [StarRing 𝔄] [Algebra ℂ 𝔄]
   (π : 𝔄 →⋆ₐ[ℂ] H →L[ℂ] H) :
   ⇑(UniformConvergenceCLM.ofFun (RingHom.id ℂ) H {s | s.Finite}) '' (Set.range ⇑π).centralizer.centralizer ⊆
@@ -520,7 +519,7 @@ the argument above does not need it.
 The blueprint section also develops the representation theory used here: irreducibility and
 Schur's lemma, unitary equivalence and superselection, disjointness and quasi-equivalence, direct
 sums and amplification, and the separating vector of a faithful state. These hold for any
-C\*-algebra and are formalised in `Physicslib4/GNS/`
+C\*-algebra and are formalised in `Hilbert6/GNS/`
 ([Section 10.6](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html),
 from "Irreducibility and Schur's Lemma"). `Purity.lean` specialises purity and irreducibility to
 the quasilocal algebra.
@@ -543,18 +542,18 @@ Blueprint: [def:covariant-quasilocal-algebra][bp-action], [lmm:quasilocal-lift-u
 
 Axiom 5 acts between local algebras. Its action on the quasilocal algebra is constructed:
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.action}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.action}
 
 The defining property, $`\beta_L(\iota_{\mathbf{B}}a) = \iota_{L\mathbf{B}}(\alpha_L a)`, is
 `action_ι`. (Lean prints the proof that $`L\mathbf{B}` is a diamond as `⋯`.)
 
 ```lean (name := checkActionι)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check HaagKastlerNet.action_ι
 ```
 
 ```leanOutput checkActionι
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.action_ι.{u_1} (N : HaagKastlerNet) (L : InhomogeneousLorentzGroup)
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.action_ι.{u_1} (N : HaagKastlerNet) (L : InhomogeneousLorentzGroup)
   {B : Set StandardMinkowskiSpacetime.Carrier} (hB : IsAlexandrovBasisSet B) (a : N.U.algebra B) :
   (N.action L) ((N.quasilocal.ι hB) a) = (N.quasilocal.ι ⋯) ((N.covEquiv L B) a)
 ```
@@ -563,49 +562,49 @@ The property determines $`\beta_L`: two automorphisms of any quasilocal algebra 
 agree on the dense union of the local images, and are continuous.
 
 ```lean (name := checkUnique)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check HaagKastlerNet.QuasilocalLift.unique
 ```
 
 ```leanOutput checkUnique
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift.unique.{u_1} {N : HaagKastlerNet}
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.QuasilocalLift.unique.{u_1} {N : HaagKastlerNet}
   {Q : QuasilocalAlgebra N.U N.isotony} {L : InhomogeneousLorentzGroup} (l₁ l₂ : N.QuasilocalLift Q L) : l₁.β = l₂.β
 ```
 
 As you will recall, a state on a unital C\*-algebra is a positive linear functional of norm 1; in
-the library it is `Physicslib4.GNS.State A`, a continuous linear functional with
+the library it is `Hilbert6.GNS.State A`, a continuous linear functional with
 $`\omega(a^*a) \ge 0` and $`\|\omega\| = 1`. A state of the net is a state on
 `N.quasilocal.carrier`.
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState}
 
 For an invariant state, the library proves that the action is implemented by unitaries on the GNS
 space, $`U(L)\pi(a)\Omega = \pi(\beta_L a)\Omega` and $`U(L)\Omega = \Omega`, forming a unitary
 representation of the group
-({apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep}[`IsInvariantState.exists_gns_unitaryRep`]).
+({apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep}[`IsInvariantState.exists_gns_unitaryRep`]).
 The representation is strongly continuous when the matrix coefficients
 $`L \mapsto \omega(a^*\beta_L b)` are continuous
-({apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep_strongContinuous}[`IsInvariantState.exists_gns_unitaryRep_strongContinuous`]),
+({apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_unitaryRep_strongContinuous}[`IsInvariantState.exists_gns_unitaryRep_strongContinuous`]),
 and irreducible when $`\omega` is also pure
-({apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_irreducible_covariant}[`IsInvariantState.exists_gns_irreducible_covariant`]).
+({apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInvariantState.exists_gns_irreducible_covariant}[`IsInvariantState.exists_gns_irreducible_covariant`]).
 These statements are long existentials over the Hilbert space and its structure, so they are linked
 rather than printed.
 
 A vacuum state adds the spectrum condition. The library states it as positive energy along every
 future-timelike translation: the unitary group $`t \mapsto U(\gamma(t))` is strongly continuous and
-its generator is a positive operator (`Physicslib4.AQFT.IsPositiveEnergy`). By Stone's theorem,
+its generator is a positive operator (`Hilbert6.AQFT.IsPositiveEnergy`). By Stone's theorem,
 proved in the library, this says $`U(\gamma(t)) = e^{itA}` with $`A` positive and self-adjoint.
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}
 
-{docstring Physicslib4.AQFT.HaagKastler.IsFutureTimelikeTranslation}
+{docstring Hilbert6.AQFT.HaagKastler.IsFutureTimelikeTranslation}
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumStateConcrete}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumStateConcrete}
 
 The library proves the consequences of a vacuum state that do not use the spectrum condition: it is
 invariant (`HaagKastlerNet.IsVacuumState.invariant`), and if it is pure its GNS representation is
 covariant and irreducible
-({apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant}[`IsVacuumState.exists_gns_irreducible_covariant`]).
+({apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState.exists_gns_irreducible_covariant}[`IsVacuumState.exists_gns_irreducible_covariant`]).
 It does not construct a vacuum state of a nontrivial net. The consequences that do use the spectrum
 condition, the Reeh–Schlieder theorem and its corollaries, are in
 {ref "reeh-schlieder"}[The Reeh–Schlieder theorem].
@@ -614,40 +613,40 @@ Thermal equilibrium is described by KMS states. In Minkowski spacetime every Poi
 transformation acts on the one algebra $`\mathfrak{U}`, so a one-parameter subgroup $`t \mapsto
 L_t`, such as the time translations, defines dynamics on it:
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.flowAut}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.flowAut}
 
 ```lean (name := checkFlowAut)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check HaagKastlerNet.isOneParameterAut_flowAut
 ```
 
 ```leanOutput checkFlowAut
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.isOneParameterAut_flowAut.{u_1} (N : HaagKastlerNet)
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.isOneParameterAut_flowAut.{u_1} (N : HaagKastlerNet)
   (flow : ℝ → InhomogeneousLorentzGroup) (h0 : flow 0 = 1) (hadd : ∀ (s t : ℝ), flow (s + t) = flow s * flow t) :
   IsOneParameterAut (N.flowAut flow)
 ```
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow}
 
 The KMS states for a flow at a given temperature form a convex set:
 
 ```lean (name := checkKMSConvex)
-open Physicslib4 AQFT HaagKastler in
+open Hilbert6 AQFT HaagKastler in
 #check HaagKastlerNet.IsKMSStateForFlow.convexCombo
 ```
 
 ```leanOutput checkKMSConvex
-Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow.convexCombo.{u_1} (N : HaagKastlerNet)
+Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow.convexCombo.{u_1} (N : HaagKastlerNet)
   (flow : ℝ → InhomogeneousLorentzGroup) {β : ℝ} {ω₁ ω₂ : GNS.State N.quasilocal.carrier} (s : ℝ) (hs0 : 0 ≤ s)
   (hs1 : s ≤ 1) (h₁ : N.IsKMSStateForFlow flow β ω₁) (h₂ : N.IsKMSStateForFlow flow β ω₂) :
   N.IsKMSStateForFlow flow β (ω₁.convexCombo ω₂ s hs0 hs1)
 ```
 
 The general theory of the KMS condition, including the invariance of a KMS state under its
-dynamics at positive inverse temperature, is in `Physicslib4/AQFT/KMS.lean`
-({apiDocs Physicslib4.AQFT.IsKMSState}[]). At zero temperature the counterpart is a ground state:
+dynamics at positive inverse temperature, is in `Hilbert6/AQFT/KMS.lean`
+({apiDocs Hilbert6.AQFT.IsKMSState}[]). At zero temperature the counterpart is a ground state:
 
-{docstring Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow}
+{docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow}
 
 [bp-action]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:covariant-quasilocal-algebra
 [bp-unique]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:quasilocal-lift-unique
@@ -664,68 +663,68 @@ dynamics at positive inverse temperature, is in `Physicslib4/AQFT/KMS.lean`
 tag := "haag-kastler-files"
 %%%
 
-The Minkowski axioms and their consequences are in `Physicslib4/AQFT/HaagKastler/`, one topic per
+The Minkowski axioms and their consequences are in `Hilbert6/AQFT/HaagKastler/`, one topic per
 file. Each entry links to the API documentation of a representative declaration, from which the
 rest of the file can be browsed.
 
 The axioms:
 
 * `LocalAlgebras.lean`: diamonds and Axiom 1,
-  {apiDocs Physicslib4.AQFT.HaagKastler.LocalNet}[].
-* `Isotony.lean`: Axiom 2, {apiDocs Physicslib4.AQFT.HaagKastler.Isotony}[].
+  {apiDocs Hilbert6.AQFT.HaagKastler.LocalNet}[].
+* `Isotony.lean`: Axiom 2, {apiDocs Hilbert6.AQFT.HaagKastler.Isotony}[].
 * `LocalCommutativity.lean`: Axiom 3 and its quasilocal forms,
-  {apiDocs Physicslib4.AQFT.HaagKastler.LocalCommutativity}[].
+  {apiDocs Hilbert6.AQFT.HaagKastler.LocalCommutativity}[].
 * `LorentzCovariance.lean`: the group and its action on spacetime,
-  {apiDocs Physicslib4.AQFT.HaagKastler.InhomogeneousLorentzGroup}[].
+  {apiDocs Hilbert6.AQFT.HaagKastler.InhomogeneousLorentzGroup}[].
 * `LorentzCovarianceAxiom.lean`: Axiom 5,
-  {apiDocs Physicslib4.AQFT.HaagKastler.LorentzCovariance}[].
+  {apiDocs Hilbert6.AQFT.HaagKastler.LorentzCovariance}[].
 * `Net.lean`: the bundled net, its chosen quasilocal algebra and covariance maps, and the trivial
-  net, {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet}[].
+  net, {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet}[].
 * `ObservableBridge.lean`: Axiom 4,
-  {apiDocs Physicslib4.AQFT.HaagKastler.ObservableCorrespondence}[].
+  {apiDocs Hilbert6.AQFT.HaagKastler.ObservableCorrespondence}[].
 
 The quasilocal algebra:
 
 * `QuasilocalAlgebra.lean`: the interface,
-  {apiDocs Physicslib4.AQFT.HaagKastler.QuasilocalAlgebra}[].
+  {apiDocs Hilbert6.AQFT.HaagKastler.QuasilocalAlgebra}[].
 * `QuasilocalColimit.lean`: the directed colimit, its norm and its completion,
-  {apiDocs Physicslib4.AQFT.HaagKastler.QuasilocalCompletion}[]; the completion of a normed
-  \*-algebra is in `Physicslib4/Analysis/CStarCompletion.lean`.
+  {apiDocs Hilbert6.AQFT.HaagKastler.QuasilocalCompletion}[]; the completion of a normed
+  \*-algebra is in `Hilbert6/Analysis/CStarCompletion.lean`.
 * `QuasilocalExistence.lean`: existence,
-  {apiDocs Physicslib4.AQFT.HaagKastler.exists_quasilocalAlgebra}[].
+  {apiDocs Hilbert6.AQFT.HaagKastler.exists_quasilocalAlgebra}[].
 * `QuasilocalObservable.lean`: quasilocal observables,
-  {apiDocs Physicslib4.AQFT.HaagKastler.IsQuasilocalObservable}[].
+  {apiDocs Hilbert6.AQFT.HaagKastler.IsQuasilocalObservable}[].
 * `QuasilocalAction.lean` and `QuasilocalIntertwiner.lean`: the action $`\beta_L`, invariant states
-  and their GNS unitaries, {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.action}[].
+  and their GNS unitaries, {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.action}[].
 
 Representations:
 
-* `EinsteinCausality.lean`: {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.einstein_causality}[`einstein_causality`].
+* `EinsteinCausality.lean`: {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.einstein_causality}[`einstein_causality`].
 * `LocalVonNeumann.lean`: local von Neumann algebras, microcausality, the Schlieder property,
-  relative commutants, {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra}[`localVonNeumannAlgebra`].
+  relative commutants, {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.localVonNeumannAlgebra}[`localVonNeumannAlgebra`].
 * `GeometricCovariance.lean`: the action on the local von Neumann algebras,
-  {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localVonNeumann}[`lieConj_image_localVonNeumann`].
+  {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.lieConj_image_localVonNeumann}[`lieConj_image_localVonNeumann`].
 * `StrongDensity.lean`: the density theorem,
-  {apiDocs Physicslib4.AQFT.HaagKastler.dense_range_in_bicommutant}[]; its operator-theoretic core is
-  in `Physicslib4/Operators/DensityTheorem.lean`.
+  {apiDocs Hilbert6.AQFT.HaagKastler.dense_range_in_bicommutant}[]; its operator-theoretic core is
+  in `Hilbert6/Operators/DensityTheorem.lean`.
 * `Purity.lean`: pure states of the quasilocal algebra and irreducibility,
-  {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.pure_iff_extreme}[].
+  {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.pure_iff_extreme}[].
 
 States:
 
 * `CovariantState.lean`: covariant families of local states,
-  {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily}[`IsCovariantFamily`].
-* `VacuumState.lean`: {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}[]; positive
-  energy is in `Physicslib4/AQFT/PositiveEnergy.lean`.
-* `QuasilocalKMS.lean`: {apiDocs Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow}[`IsKMSStateForFlow`]; the
-  KMS condition itself is in `Physicslib4/AQFT/KMS.lean`.
+  {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantFamily}[`IsCovariantFamily`].
+* `VacuumState.lean`: {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsVacuumState}[]; positive
+  energy is in `Hilbert6/AQFT/PositiveEnergy.lean`.
+* `QuasilocalKMS.lean`: {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsKMSStateForFlow}[`IsKMSStateForFlow`]; the
+  KMS condition itself is in `Hilbert6/AQFT/KMS.lean`.
 
 Elsewhere in the library, the facts about Minkowski spacetime that the axioms rely on are
-`Physicslib4/Spacetime/MinkowskiDirected.lean`, where two diamonds lie in a common diamond
-({apiDocs Physicslib4.Spacetime.alexandrovBasis_directed}[]), and
-`Physicslib4/Spacetime/LorentzCausality.lean`, where the Poincaré group maps diamonds to diamonds
-({apiDocs Physicslib4.isAlexandrovBasisSet_smul}[]). The GNS construction and the theory of
-representations are in `Physicslib4/GNS/`.
+`Hilbert6/Spacetime/MinkowskiDirected.lean`, where two diamonds lie in a common diamond
+({apiDocs Hilbert6.Spacetime.alexandrovBasis_directed}[]), and
+`Hilbert6/Spacetime/LorentzCausality.lean`, where the Poincaré group maps diamonds to diamonds
+({apiDocs Hilbert6.isAlexandrovBasisSet_smul}[]). The GNS construction and the theory of
+representations are in `Hilbert6/GNS/`.
 
 The blueprint section is
 [Section 10.6](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html),

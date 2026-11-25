@@ -8,7 +8,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[A Positive Operator Has No Spectrum in $(-n, -1/n)$]
     \label{lmm:positive-spectral-support-interval}
-    \lean{Physicslib4.AQFT.spectralMeasure_Ioo_neg_eq_zero}
+    \lean{Hilbert6.AQFT.spectralMeasure_Ioo_neg_eq_zero}
     \uses{def:spectral-measure, def:positive-unbounded-operator}
     \leanok
     Let $A$ be a positive self-adjoint operator with spectral measure $\mu^A$. Then $\mu^A((-n, -1/n)) = 0$ for every integer $n \ge 1$.
@@ -21,7 +21,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[Spectral Support of a Positive Operator]
     \label{lmm:positive-spectral-support}
-    \lean{Physicslib4.AQFT.spectralMeasure_Iio_zero_eq_zero}
+    \lean{Hilbert6.AQFT.spectralMeasure_Iio_zero_eq_zero}
     \uses{def:spectral-measure, def:positive-unbounded-operator}
     \leanok
     The spectral measure $\mu^A$ of a positive self-adjoint operator $A$ satisfies $\mu^A((-\infty, 0)) = 0$.
@@ -34,7 +34,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[Matrix Coefficients of $e^{itA}$ by Polarization]
     \label{lmm:exp-matrix-coefficient-polarization}
-    \lean{Physicslib4.AQFT.exists_inner_expUnitary_eq_sum}
+    \lean{Hilbert6.AQFT.exists_inner_expUnitary_eq_sum}
     \uses{def:exp-unitary-group, def:spectral-measure}
     \leanok
     Let $A$ be a self-adjoint operator on $H$ and $\chi, \varphi \in H$. There are vectors $\psi_0, \dots, \psi_3 \in H$ and constants $c_0, \dots, c_3 \in \mathbb{C}$, independent of $t$, with
@@ -50,7 +50,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[Boundedness and Continuity of the Fourier--Laplace Transform]
     \label{lmm:fourier-laplace-continuous}
-    \lean{Physicslib4.AQFT.fourierLaplace_bounded_continuousOn}
+    \lean{Hilbert6.AQFT.fourierLaplace_bounded_continuousOn}
     \leanok
     Let $\nu$ be a finite positive Borel measure on $\mathbb{R}$ with $\nu((-\infty, 0)) = 0$, and let $G(z) = \int e^{iz\lambda} \, d\nu(\lambda)$. Then $G$ is defined, bounded by $\nu(\mathbb{R})$, and continuous on $\{\operatorname{Im} z \ge 0\}$.
 \end{lemma}
@@ -61,7 +61,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[Holomorphy of the Fourier--Laplace Transform]
     \label{lmm:fourier-laplace-holomorphic}
-    \lean{Physicslib4.AQFT.differentiableOn_fourierLaplace}
+    \lean{Hilbert6.AQFT.differentiableOn_fourierLaplace}
     \leanok
     Let $\nu$ and $G$ be as in Lemma~\ref{lmm:fourier-laplace-continuous}. Then $G$ is holomorphic on $\{\operatorname{Im} z > 0\}$.
 \end{lemma}
@@ -72,7 +72,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[Holomorphic Extension under Positive Energy]
     \label{lmm:positive-energy-holomorphic}
-    \lean{Physicslib4.AQFT.IsPositiveEnergy.exists_holomorphic_extension}
+    \lean{Hilbert6.AQFT.IsPositiveEnergy.exists_holomorphic_extension}
     \uses{def:positive-energy}
     \leanok
     Let $V$ be a family of unitary operators on $H$, indexed by $\mathbb{R}$, with positive energy, and let $\chi, \varphi \in H$. Then $t \mapsto \left< \chi, V(t)\varphi \right>$ is the restriction to $\mathbb{R}$ of a function that is holomorphic on $\{\operatorname{Im} z > 0\}$ and bounded and continuous on $\{\operatorname{Im} z \ge 0\}$.
@@ -85,7 +85,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[Removability of a Horizontal Line]
     \label{lmm:horizontal-line-removable}
-    \lean{Physicslib4.differentiableOn_of_continuousOn_off_horizontal_line}
+    \lean{Hilbert6.differentiableOn_of_continuousOn_off_horizontal_line}
     \leanok
     Let $U \subseteq \mathbb{C}$ be open, $\ell \in \mathbb{R}$, and $f$ a function on $U$ with values in a complex Banach space. If $f$ is continuous on $U$ and complex-differentiable on $U \setminus \{\operatorname{Im} z = \ell\}$, then $f$ is complex-differentiable on $U$.
 \end{lemma}
@@ -96,7 +96,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[The Reflection Domain is Open]
     \label{lmm:reflection-domain-open}
-    \lean{Physicslib4.isOpen_im_ne_zero_union_image_ofReal}
+    \lean{Hilbert6.isOpen_im_ne_zero_union_image_ofReal}
     \leanok
     For an open interval $I \subseteq \mathbb{R}$, the set $D = \{\operatorname{Im} z \ne 0\} \cup I$ is open in $\mathbb{C}$.
 \end{lemma}
@@ -107,7 +107,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[The Reflection Domain is Connected]
     \label{lmm:reflection-domain-connected}
-    \lean{Physicslib4.isConnected_im_ne_zero_union_image_ofReal}
+    \lean{Hilbert6.isConnected_im_ne_zero_union_image_ofReal}
     \leanok
     For a nonempty open interval $I \subseteq \mathbb{R}$, the set $D = \{\operatorname{Im} z \ne 0\} \cup I$ is connected.
 \end{lemma}
@@ -118,7 +118,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[Continuity of the Reflected Function]
     \label{lmm:schwarz-reflection-continuous}
-    \lean{Physicslib4.continuousOn_schwarzReflection_of_eq_zero}
+    \lean{Hilbert6.continuousOn_schwarzReflection_of_eq_zero}
     \leanok
     Let $f$ be continuous on $\{\operatorname{Im} z \ge 0\}$ and zero on an open interval $I \subseteq \mathbb{R}$. Let $g(z) = f(z)$ for $\operatorname{Im} z \ge 0$ and $g(z) = \overline{f(\bar z)}$ for $\operatorname{Im} z < 0$. Then $g$ is continuous on $D = \{\operatorname{Im} z \ne 0\} \cup I$.
 \end{lemma}
@@ -129,7 +129,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[Schwarz Reflection across a Zero Interval]
     \label{lmm:schwarz-reflection-zero}
-    \lean{Physicslib4.differentiableOn_schwarzReflection_of_eq_zero}
+    \lean{Hilbert6.differentiableOn_schwarzReflection_of_eq_zero}
     \uses{lmm:horizontal-line-removable}
     \leanok
     Let $f$ be continuous on $\{\operatorname{Im} z \ge 0\}$, holomorphic on $\{\operatorname{Im} z > 0\}$, and zero on an open interval $I \subseteq \mathbb{R}$. Let $g(z) = f(z)$ for $\operatorname{Im} z \ge 0$ and $g(z) = \overline{f(\bar z)}$ for $\operatorname{Im} z < 0$. Then $g$ is holomorphic on $D = \{\operatorname{Im} z \ne 0\} \cup I$.
@@ -142,7 +142,7 @@ The lemmas of this subsection concern a single positive self-adjoint operator an
 
 \begin{lemma}[Vanishing on an Edge]
     \label{lmm:edge-vanishing}
-    \lean{Physicslib4.eq_zero_of_eq_zero_on_Ioo}
+    \lean{Hilbert6.eq_zero_of_eq_zero_on_Ioo}
     \leanok
     Let $f$ be continuous on the closed upper half-plane $\{\operatorname{Im} z \ge 0\}$, holomorphic on the open upper half-plane, and zero on a nonempty open interval $I = (a, b)$, $a < b$, of the real axis. Then $f$ vanishes on the closed upper half-plane.
 \end{lemma}
@@ -158,7 +158,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{definition}[Translation-Generated Algebra]
     \label{def:translation-generated-algebra}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.translationGeneratedAlgebra}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.translationGeneratedAlgebra}
     \uses{def:covariant-quasilocal-algebra, def:causal-diamond, def:future-timelike-translation}
     \leanok
     For a diamond $\mathbf{B}$, $\mathfrak{A}_{\mathbf{B}}$ is the C*-subalgebra of the quasilocal algebra $\mathfrak{U}$ generated by the translates $\iota_{\mathbf{B}+x}(\mathfrak{U}(\mathbf{B}+x))$, $x \in \mathbb{R}^4$: the norm closure of the $*$-algebra they generate.
@@ -166,7 +166,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{definition}[Weak Additivity]
     \label{def:weak-additivity}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditive}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditive}
     \uses{def:translation-generated-algebra}
     \leanok
     A Haag--Kastler net is \emph{weakly additive} if $\mathfrak{A}_{\mathbf{B}} = \mathfrak{U}$ for every nonempty diamond $\mathbf{B}$.
@@ -174,7 +174,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{definition}[Weak Additivity, von Neumann Form]
     \label{def:weak-additivity-von-neumann}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditiveVonNeumann}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditiveVonNeumann}
     \uses{def:translation-generated-algebra}
     \leanok
     A $*$-representation $\pi$ of $\mathfrak{U}$ satisfies \emph{weak additivity in the von Neumann sense} if $\pi(\mathfrak{U}) \subseteq \pi(\mathfrak{A}_{\mathbf{B}})''$ for every nonempty diamond $\mathbf{B}$, the commutant being taken in $\mathcal{B}(H)$.
@@ -182,7 +182,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Weak Additivity Implies the von Neumann Form]
     \label{lmm:weak-additivity-von-neumann}
-    \lean{Physicslib4.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditive.isWeaklyAdditiveVonNeumann}
+    \lean{Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsWeaklyAdditive.isWeaklyAdditiveVonNeumann}
     \uses{def:weak-additivity, def:weak-additivity-von-neumann}
     \leanok
     If the net is weakly additive, every $*$-representation of $\mathfrak{U}$ satisfies weak additivity in the von Neumann sense.
@@ -195,7 +195,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Translate of a Diamond]
     \label{lmm:diamond-translate}
-    \lean{Physicslib4.AQFT.HaagKastler.translationSub_smul_diamond}
+    \lean{Hilbert6.AQFT.HaagKastler.translationSub_smul_diamond}
     \uses{def:causal-diamond, def:future-timelike-translation}
     \leanok
     For all $p, q, x \in \mathbb{R}^4$, $\mathrm{translationSub}(x) \cdot (I^+(p) \cap I^-(q)) = I^+(p + x) \cap I^-(q + x)$.
@@ -208,7 +208,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Translates of a Smaller Diamond]
     \label{lmm:diamond-small-translates}
-    \lean{Physicslib4.AQFT.HaagKastler.exists_diamond_translate_subset}
+    \lean{Hilbert6.AQFT.HaagKastler.exists_diamond_translate_subset}
     \uses{def:causal-diamond, def:future-timelike-translation}
     \leanok
     For every nonempty diamond $\mathbf{B}$ there are a nonempty diamond $\mathbf{B}_1$ and an open neighbourhood $V$ of $0$ in $\mathbb{R}^4$ with $\mathbf{B}_1 + x \subseteq \mathbf{B}$ for every $x \in V$.
@@ -221,7 +221,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Spreading Along One Timelike Direction]
     \label{lmm:timelike-spreading-direction}
-    \lean{Physicslib4.AQFT.HaagKastler.inner_translation_eq_zero_add_smul}
+    \lean{Hilbert6.AQFT.HaagKastler.inner_translation_eq_zero_add_smul}
     \uses{def:positive-energy, def:future-timelike-translation}
     \leanok
     Let $x \mapsto U(x)$ be unitaries on $H$ indexed by the translations $\mathbb{R}^4$, and $K_0 \subseteq H$ a closed subspace invariant under every $U(x)$, on which $U(x+y) = U(x)U(y)$. Let $n$ be future-pointing timelike with $t \mapsto U(tn)$ of positive energy, $\chi \in H$ and $\varphi \in K_0$. If $h(x) = \left< \chi, U(x)\varphi \right>$ vanishes on an open set $W$, it vanishes on $W + \mathbb{R}n$.
@@ -234,7 +234,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[A Basis of Future-Timelike Vectors]
     \label{lmm:future-timelike-basis}
-    \lean{Physicslib4.AQFT.HaagKastler.futureTimelike_basis}
+    \lean{Hilbert6.AQFT.HaagKastler.futureTimelike_basis}
     \uses{def:future-timelike-translation}
     \leanok
     The vectors $n_0 = e_0$ and $n_i = e_0 + \tfrac{1}{2}e_i$, $i = 1, 2, 3$, are future-pointing timelike and form a basis of $\mathbb{R}^4$.
@@ -246,7 +246,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Spreading Along Timelike Directions]
     \label{lmm:timelike-spreading}
-    \lean{Physicslib4.AQFT.HaagKastler.inner_translation_eq_zero}
+    \lean{Hilbert6.AQFT.HaagKastler.inner_translation_eq_zero}
     \uses{def:positive-energy, def:future-timelike-translation}
     \leanok
     Let $U$ and $K_0$ be as in Lemma~\ref{lmm:timelike-spreading-direction}, and suppose every future-timelike translation subgroup $t \mapsto U(tn)$ has positive energy. If $\chi \in H$, $\varphi \in K_0$, and $x \mapsto \left< \chi, U(x)\varphi \right>$ vanishes on a nonempty open set $W$, it vanishes identically.
@@ -259,7 +259,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Agreement on the Cyclic Subspace]
     \label{lmm:agree-on-cyclic-subspace}
-    \lean{Physicslib4.AQFT.HaagKastler.apply_eq_of_mem_cyclicSubspace}
+    \lean{Hilbert6.AQFT.HaagKastler.apply_eq_of_mem_cyclicSubspace}
     \leanok
     Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$, and $K_0$ the closure of $\pi(\mathfrak{U})\Omega$. Bounded operators $S, T$ on $H$ with $S\pi(a)\Omega = T\pi(a)\Omega$ for every $a \in \mathfrak{U}$ agree on $K_0$.
 \end{lemma}
@@ -270,7 +270,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[The Cyclic Subspace is Invariant]
     \label{lmm:translations-cyclic-subspace-invariant}
-    \lean{Physicslib4.AQFT.HaagKastler.translations_cyclicSubspace_invariant}
+    \lean{Hilbert6.AQFT.HaagKastler.translations_cyclicSubspace_invariant}
     \uses{def:covariant-quasilocal-algebra, def:future-timelike-translation}
     \leanok
     Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$, and $x \mapsto U(x)$ unitaries with $U(x)\pi(a)\Omega = \pi(\beta_x a)\Omega$ for all translations $x$ and all $a \in \mathfrak{U}$. Let $K_0$ be the closure of $\pi(\mathfrak{U})\Omega$. Then $U(x)\Omega = \Omega$, and $K_0$ is invariant under every $\pi(a)$ and every $U(x)$.
@@ -282,7 +282,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Intertwining on the Cyclic Subspace]
     \label{lmm:translations-intertwine-cyclic-subspace}
-    \lean{Physicslib4.AQFT.HaagKastler.translations_intertwine_cyclicSubspace}
+    \lean{Hilbert6.AQFT.HaagKastler.translations_intertwine_cyclicSubspace}
     \uses{lmm:translations-cyclic-subspace-invariant}
     \leanok
     Under the hypotheses of Lemma~\ref{lmm:translations-cyclic-subspace-invariant}, $U(x)\pi(a) = \pi(\beta_x a)U(x)$ on $K_0$ for every translation $x$ and every $a \in \mathfrak{U}$.
@@ -295,7 +295,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Group Law on the Cyclic Subspace]
     \label{lmm:translations-group-law-cyclic-subspace}
-    \lean{Physicslib4.AQFT.HaagKastler.translations_add_cyclicSubspace}
+    \lean{Hilbert6.AQFT.HaagKastler.translations_add_cyclicSubspace}
     \uses{lmm:translations-cyclic-subspace-invariant}
     \leanok
     Under the hypotheses of Lemma~\ref{lmm:translations-cyclic-subspace-invariant}, $U(x+y) = U(x)U(y)$ on $K_0$ for all translations $x, y$.
@@ -308,7 +308,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Translations on the Cyclic Subspace]
     \label{lmm:covariant-translations-cyclic-subspace}
-    \lean{Physicslib4.AQFT.HaagKastler.covariant_translations_cyclicSubspace}
+    \lean{Hilbert6.AQFT.HaagKastler.covariant_translations_cyclicSubspace}
     \uses{def:covariant-quasilocal-algebra, def:future-timelike-translation}
     \leanok
     Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$, and $x \mapsto U(x)$ unitaries with $U(x)\pi(a)\Omega = \pi(\beta_x a)\Omega$ for all translations $x$ and all $a \in \mathfrak{U}$. Let $K_0$ be the closure of $\pi(\mathfrak{U})\Omega$. Then $U(x)\Omega = \Omega$; $K_0$ is invariant under every $\pi(a)$ and $U(x)$; and on $K_0$, $U(x)\pi(a) = \pi(\beta_x a)U(x)$ and $U(x+y) = U(x)U(y)$.
@@ -321,7 +321,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Translated Products]
     \label{lmm:reeh-schlieder-translated-products}
-    \lean{Physicslib4.AQFT.HaagKastler.translated_products_apply}
+    \lean{Hilbert6.AQFT.HaagKastler.translated_products_apply}
     \uses{lmm:covariant-translations-cyclic-subspace, def:future-timelike-translation}
     \leanok
     Under the hypotheses of Lemma~\ref{lmm:covariant-translations-cyclic-subspace}, for $a_1, \dots, a_n \in \mathfrak{U}$ and $\xi_1, \dots, \xi_n \in \mathbb{R}^4$,
@@ -337,7 +337,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Translates of a Local Subalgebra]
     \label{lmm:translate-local-subalgebra}
-    \lean{Physicslib4.AQFT.HaagKastler.action_translationSub_image_range_ι}
+    \lean{Hilbert6.AQFT.HaagKastler.action_translationSub_image_range_ι}
     \uses{def:covariant-quasilocal-algebra, def:future-timelike-translation}
     \leanok
     For diamonds $\mathbf{B}_1, \mathbf{B}$ and $x \in \mathbb{R}^4$, $\beta_x\,\iota_{\mathbf{B}_1}(\mathfrak{U}(\mathbf{B}_1)) = \iota_{\mathbf{B}_1 + x}(\mathfrak{U}(\mathbf{B}_1 + x))$, and if $\mathbf{B}_1 + x \subseteq \mathbf{B}$ this set is contained in $\iota_{\mathbf{B}}(\mathfrak{U}(\mathbf{B}))$.
@@ -350,7 +350,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Small Partial Sums]
     \label{lmm:neighbourhood-partial-sums}
-    \lean{Physicslib4.AQFT.HaagKastler.exists_isOpen_sum_mem_of_mem_nhds}
+    \lean{Hilbert6.AQFT.HaagKastler.exists_isOpen_sum_mem_of_mem_nhds}
     \leanok
     For every neighbourhood $V$ of $0$ in $\mathbb{R}^4$ and every $n \ge 1$ there is an open neighbourhood $V_0$ of $0$ such that $\xi_1 + \dots + \xi_k \in V$ whenever $1 \le k \le n$ and $\xi_1, \dots, \xi_k \in V_0$.
 \end{lemma}
@@ -361,7 +361,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Correlation Functions Vanish near the Origin]
     \label{lmm:reeh-schlieder-vanishing-near-origin}
-    \lean{Physicslib4.AQFT.HaagKastler.inner_translated_products_eq_zero_of_mem}
+    \lean{Hilbert6.AQFT.HaagKastler.inner_translated_products_eq_zero_of_mem}
     \uses{lmm:covariant-translations-cyclic-subspace, def:local-von-neumann}
     \leanok
     Let $\pi$, $\Omega$ and $U$ be as in Lemma~\ref{lmm:covariant-translations-cyclic-subspace}. Let $\mathbf{B}_1$ and $\mathbf{B}$ be diamonds with $\mathbf{B}_1 + x \subseteq \mathbf{B}$ for every $x$ in an open neighbourhood $V$ of $0$, let $\psi \in H$ be orthogonal to $\pi(\mathfrak{U}(\mathbf{B}))\Omega$, and let $a_1, \dots, a_n \in \iota_{\mathbf{B}_1}(\mathfrak{U}(\mathbf{B}_1))$. Write
@@ -378,7 +378,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Factorization in One Variable]
     \label{lmm:reeh-schlieder-factorization}
-    \lean{Physicslib4.AQFT.HaagKastler.inner_translated_products_update_eq_inner}
+    \lean{Hilbert6.AQFT.HaagKastler.inner_translated_products_update_eq_inner}
     \uses{lmm:covariant-translations-cyclic-subspace}
     \leanok
     In the setting of Lemma~\ref{lmm:reeh-schlieder-vanishing-near-origin}, fix $1 \le k \le n$ and all variables except $\xi_k$. Then $F = \left< \chi, U(\xi_k)\varphi \right>$ as a function of $\xi_k$, with $\chi = (U(\xi_1)\pi(a_1) \cdots U(\xi_{k-1})\pi(a_{k-1}))^*\psi \in H$ and $\varphi = \pi(a_k)U(\xi_{k+1})\pi(a_{k+1}) \cdots U(\xi_n)\pi(a_n)\Omega \in K_0$.
@@ -391,7 +391,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Vanishing of the Correlation Functions]
     \label{lmm:reeh-schlieder-correlations-vanish}
-    \lean{Physicslib4.AQFT.HaagKastler.inner_translated_products_eq_zero}
+    \lean{Hilbert6.AQFT.HaagKastler.inner_translated_products_eq_zero}
     \uses{lmm:covariant-translations-cyclic-subspace, def:local-von-neumann, def:future-timelike-translation}
     \leanok
     Let $\pi$, $\Omega$, $U$, $\mathbf{B}_1$, $\mathbf{B}$, $V$, $\psi$, $a_1, \dots, a_n$ and $F$ be as in Lemma~\ref{lmm:reeh-schlieder-vanishing-near-origin}, and suppose moreover that every future-timelike translation subgroup $t \mapsto U(tn)$ has positive energy. Then $F$ vanishes identically on $(\mathbb{R}^4)^n$.
@@ -404,7 +404,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Orthogonality on Monomials]
     \label{lmm:reeh-schlieder-monomial-orthogonal}
-    \lean{Physicslib4.AQFT.HaagKastler.inner_monomial_eq_zero}
+    \lean{Hilbert6.AQFT.HaagKastler.inner_monomial_eq_zero}
     \uses{lmm:reeh-schlieder-correlations-vanish}
     \leanok
     In the setting of Lemma~\ref{lmm:reeh-schlieder-correlations-vanish}, for every $n \ge 0$, all $y_1, \dots, y_n \in \mathbb{R}^4$ and all $a_1, \dots, a_n \in \iota_{\mathbf{B}_1}(\mathfrak{U}(\mathbf{B}_1))$, $\left< \psi, \pi(\beta_{y_1}a_1 \cdots \beta_{y_n}a_n)\Omega \right> = 0$, the empty product being $1$.
@@ -417,7 +417,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Orthogonality on the Generated $*$-Algebra]
     \label{lmm:reeh-schlieder-star-algebra-orthogonal}
-    \lean{Physicslib4.AQFT.HaagKastler.inner_adjoin_translates_eq_zero}
+    \lean{Hilbert6.AQFT.HaagKastler.inner_adjoin_translates_eq_zero}
     \uses{lmm:reeh-schlieder-correlations-vanish}
     \leanok
     In the setting of Lemma~\ref{lmm:reeh-schlieder-correlations-vanish}, $\psi$ is orthogonal to $\pi(P)\Omega$ for every $P$ in the $*$-algebra generated by the translates $\iota_{\mathbf{B}_1 + y}(\mathfrak{U}(\mathbf{B}_1 + y))$, $y \in \mathbb{R}^4$.
@@ -430,7 +430,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{theorem}[Reeh--Schlieder]
     \label{thrm:reeh-schlieder}
-    \lean{Physicslib4.AQFT.HaagKastler.reeh_schlieder}
+    \lean{Hilbert6.AQFT.HaagKastler.reeh_schlieder}
     \uses{def:translation-generated-algebra, def:local-von-neumann, def:covariant-quasilocal-algebra, def:positive-energy, def:future-timelike-translation}
     \leanok
     Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$, and $x \mapsto U(x)$ unitaries with $U(x)\pi(a)\Omega = \pi(\beta_x a)\Omega$ for all translations $x$ and all $a \in \mathfrak{U}$, such that every future-timelike translation subgroup $t \mapsto U(tn)$ has positive energy. Let $\mathbf{B}_1$ and $\mathbf{B}$ be diamonds with $\mathbf{B}_1 + x \subseteq \mathbf{B}$ for every $x$ in an open neighbourhood of $0$. Then $\pi(\mathfrak{A}_{\mathbf{B}_1})\Omega$ lies in the closure of $\pi(\mathfrak{U}(\mathbf{B}))\Omega$.
@@ -443,7 +443,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{corollary}[Reeh--Schlieder under Cyclicity for the Translation-Generated Algebras]
     \label{crllr:reeh-schlieder-cyclic}
-    \lean{Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic}
+    \lean{Hilbert6.AQFT.HaagKastler.reeh_schlieder_cyclic}
     \uses{thrm:reeh-schlieder, def:cyclic-vector}
     \leanok
     Under the hypotheses of Theorem~\ref{thrm:reeh-schlieder} on $\pi$, $\Omega$ and $U$, if $\Omega$ is cyclic for $\pi(\mathfrak{A}_{\mathbf{B}'})$ for every nonempty diamond $\mathbf{B}'$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$.
@@ -456,7 +456,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{lemma}[Closure of a Bicommutant Orbit]
     \label{lmm:bicommutant-orbit-closure}
-    \lean{Physicslib4.AQFT.HaagKastler.apply_mem_closure_translationGeneratedAlgebra}
+    \lean{Hilbert6.AQFT.HaagKastler.apply_mem_closure_translationGeneratedAlgebra}
     \uses{def:translation-generated-algebra}
     \leanok
     Let $\pi$ be a $*$-representation of $\mathfrak{U}$ on $H$, $\Omega \in H$ and $\mathbf{B}$ a diamond. Then $\pi(\mathfrak{A}_{\mathbf{B}})''\Omega$ lies in the closure of $\pi(\mathfrak{A}_{\mathbf{B}})\Omega$.
@@ -469,7 +469,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{corollary}[Reeh--Schlieder under the von Neumann Form of Weak Additivity]
     \label{crllr:reeh-schlieder-von-neumann}
-    \lean{Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vonNeumann}
+    \lean{Hilbert6.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vonNeumann}
     \uses{thrm:reeh-schlieder, def:weak-additivity-von-neumann, def:cyclic-vector}
     \leanok
     Under the hypotheses of Theorem~\ref{thrm:reeh-schlieder} on $\pi$, $\Omega$ and $U$, if $\pi$ satisfies weak additivity in the von Neumann sense and $\Omega$ is cyclic for $\pi(\mathfrak{U})$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$.
@@ -482,7 +482,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{corollary}[Reeh--Schlieder under Weak Additivity]
     \label{crllr:reeh-schlieder-weak-additivity}
-    \lean{Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic_of_weaklyAdditive}
+    \lean{Hilbert6.AQFT.HaagKastler.reeh_schlieder_cyclic_of_weaklyAdditive}
     \uses{thrm:reeh-schlieder, def:weak-additivity, def:cyclic-vector}
     \leanok
     Under the hypotheses of Theorem~\ref{thrm:reeh-schlieder} on $\pi$, $\Omega$ and $U$, if the net is weakly additive and $\Omega$ is cyclic for $\pi(\mathfrak{U})$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$.
@@ -495,7 +495,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{corollary}[Reeh--Schlieder for a Vacuum State]
     \label{crllr:reeh-schlieder-vacuum}
-    \lean{Physicslib4.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vacuum}
+    \lean{Hilbert6.AQFT.HaagKastler.reeh_schlieder_cyclic_of_vacuum}
     \uses{def:vacuum-state-concrete, def:weak-additivity, def:cyclic-vector}
     \leanok
     Let the net be weakly additive, and let $(K, \pi, \Omega)$ be a representation and $U(L)$ unitaries satisfying the implementation and spectrum conditions of a vacuum state (\ref{def:vacuum-state-concrete}): $U(L)\pi(a)\Omega = \pi(\beta_L a)\Omega$ for every $L$ and $a$, and $t \mapsto U(\gamma(t))$ has positive energy for every future-timelike translation subgroup $\gamma$. If $\Omega$ is cyclic for $\pi(\mathfrak{U})$, then $\Omega$ is cyclic for $\pi(\mathfrak{U}(\mathbf{B}))$ for every nonempty diamond $\mathbf{B}$. In particular this holds for the witnessing data of any vacuum state $\omega$ with $\Omega$ cyclic; the state itself, and the condition that the representation reproduces it, play no role.
@@ -508,7 +508,7 @@ Throughout, $\mathfrak{U}$ is the quasilocal algebra of a Haag--Kastler net with
 
 \begin{corollary}[The Vacuum is Separating]
     \label{crllr:reeh-schlieder-separating}
-    \lean{Physicslib4.AQFT.HaagKastler.reeh_schlieder_separating}
+    \lean{Hilbert6.AQFT.HaagKastler.reeh_schlieder_separating}
     \uses{crllr:reeh-schlieder-cyclic, def:local-von-neumann, def:completely-spacelike}
     \leanok
     Under the hypotheses of Corollary~\ref{crllr:reeh-schlieder-cyclic}, $\Omega$ is separating for the local von Neumann algebra $R(\mathbf{C})$ of every diamond $\mathbf{C}$ that is completely spacelike to some nonempty diamond $\mathbf{B}$: every $R \in R(\mathbf{C})$ with $R\Omega = 0$ is zero.

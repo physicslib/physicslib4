@@ -14,7 +14,7 @@ Reviewer pass on 2026-11-09, covering 67 nodes, none formalized yet.
 
 ## Blocking findings
 
-1. **The preamble (line 7) assumes separability without justification.** The Lean `Spectral` directory deliberately carries no `SeparableSpace H` (see the module docstring of `Physicslib4/Spectral/Basic.lean`, around line 85: separability "is *never* needed in this directory"). The only exception is `completeSpace_and_separableSpace_of_isClosed` (`Integral.lean:399`), which is the Lean name of `lmm:closed-subspace-is-hilbert`. The file also contradicts itself: `def:reference-conjugation` says "no separability is needed". Fix:
+1. **The preamble (line 7) assumes separability without justification.** The Lean `Spectral` directory deliberately carries no `SeparableSpace H` (see the module docstring of `Hilbert6/Spectral/Basic.lean`, around line 85: separability "is *never* needed in this directory"). The only exception is `completeSpace_and_separableSpace_of_isClosed` (`Integral.lean:399`), which is the Lean name of `lmm:closed-subspace-is-hilbert`. The file also contradicts itself: `def:reference-conjugation` says "no separability is needed". Fix:
    - Replace "a separable complex Hilbert space" with "a complex Hilbert space", and add a sentence saying that the results of Section `sctn:unbounded-spectral-theorems` that are used here hold without separability, as their Lean forms do.
    - In `lmm:core-of-adjoint-product`, replace the citation of `lmm:closed-subspace-is-hilbert` with completeness of a closed subspace (Mathlib `IsClosed.completeSpace_coe`). Otherwise the Lean proof inherits `[SeparableSpace H]`.
 
@@ -27,7 +27,7 @@ Reviewer pass on 2026-11-09, covering 67 nodes, none formalized yet.
 
 3. **`lmm:fc-core` is ill-typed as stated.** `def:core` requires a closed operator, but closedness of f(A) for complex f is not established anywhere: `prpstn:hall-10.3` gives self-adjointness only for real f. Only f = s is used. Fix: restrict to real f and cite `prpstn:hall-10.3` and `prpstn:hall-9.8` for closedness. Alternatively, keep complex f but drop the word "core" and state only the explicit convergence.
 
-4. **`thrm:von-neumann-adjoint-product` cites the wrong node.** It cites `thrm:hall-9.21`, whose statement is the ±i essential-self-adjointness criterion. What it actually uses is `adjoint_eq_of_range_eq_top` (`Spectrum.lean:323`): S ≤ S†, ran(S − μ) = ⊤ and ker(S† − μ) = ⊥ imply S† = S. That result has no blueprint node of its own, and the proof re-derives it inline. Fix: add `lmm:self-adjoint-of-range-eq-top` with `\lean{Physicslib4...adjoint_eq_of_range_eq_top}`, cite it, and delete the inline re-derivation. This also helps with item 5.
+4. **`thrm:von-neumann-adjoint-product` cites the wrong node.** It cites `thrm:hall-9.21`, whose statement is the ±i essential-self-adjointness criterion. What it actually uses is `adjoint_eq_of_range_eq_top` (`Spectrum.lean:323`): S ≤ S†, ran(S − μ) = ⊤ and ker(S† − μ) = ⊥ imply S† = S. That result has no blueprint node of its own, and the proof re-derives it inline. Fix: add `lmm:self-adjoint-of-range-eq-top` with `\lean{Hilbert6...adjoint_eq_of_range_eq_top}`, cite it, and delete the inline re-derivation. This also helps with item 5.
 
 5. **Proofs that are too large for one node.** Size estimates use the spike line counts where available.
 

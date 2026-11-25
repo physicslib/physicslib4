@@ -12,7 +12,7 @@ We begin with the objects the theorem is about.
 
 \begin{definition}[One-Parameter Unitary Group]
     \label{def:hall-10.11}
-    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup, Physicslib4.Spectral.Stone.IsStronglyContinuous}
+    \lean{Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup, Hilbert6.Spectral.Stone.IsStronglyContinuous}
     \uses{def:bounded-operator-notation, def:unitary-operator, def:identity-operator, def:adjoint-bounded, def:induced-norm, lmm:unitary-is-normal}
     \leanok
     A \textit{one-parameter unitary group} on $\mathbf{H}$ is a family $U(t)$, $t \in \mathbb{R}$, of unitary operators on $\mathbf{H}$ such that
@@ -31,7 +31,7 @@ We begin with the objects the theorem is about.
 
 \begin{lemma}[Strong Continuity is Strong Continuity at $0$]
     \label{lmm:strongly-continuous-iff-at-zero}
-    \lean{Physicslib4.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero}
+    \lean{Hilbert6.Spectral.Stone.isStronglyContinuous_iff_tendsto_zero}
     \uses{def:hall-10.11}
     \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$. Then $U(\cdot)$ is strongly continuous if and only if $\lim_{s \to 0} \left\| U(s)\psi - \psi \right\| = 0$ for every $\psi \in \mathbf{H}$.
@@ -48,7 +48,7 @@ and the right-hand side tends to $0$ as $s \to t$, since $t - s \to 0$, by conti
 
 \begin{lemma}[The Adjoint of $U(t)$ is $U(-t)$]
     \label{lmm:unitary-group-inner-adjoint}
-    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.adjoint_eq, Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.inner_apply}
+    \lean{Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup.adjoint_eq, Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup.inner_apply}
     \uses{def:hall-10.11, def:adjoint-bounded}
     \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$. Then $U(t)^* = U(-t)$ for every $t \in \mathbb{R}$; equivalently,
@@ -64,7 +64,7 @@ The group law forces $U(t)^{-1} = U(-t)$, since $U(t)U(-t) = U(0) = \mathbf{1} =
 
 \begin{definition}[Infinitesimal Generator]
     \label{def:hall-10.13}
-    \lean{Physicslib4.Spectral.Stone.generator, Physicslib4.Spectral.Stone.generatorDomain, Physicslib4.Spectral.Stone.generatorQuotient}
+    \lean{Hilbert6.Spectral.Stone.generator, Hilbert6.Spectral.Stone.generatorDomain, Hilbert6.Spectral.Stone.generatorQuotient}
     \uses{def:hall-10.11, def:hall-3.1, def:unitary-operator, def:induced-norm}
     \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$. The \textit{infinitesimal generator} of $U(\cdot)$ is the operator $A$ given by
@@ -78,7 +78,7 @@ The group law forces $U(t)^{-1} = U(-t)$, since $U(t)U(-t) = U(0) = \mathbf{1} =
 
 \begin{lemma}[Characterization of the Generator]
     \label{lmm:generator-spec}
-    \lean{Physicslib4.Spectral.Stone.exists_generator_eq_iff}
+    \lean{Hilbert6.Spectral.Stone.exists_generator_eq_iff}
     \uses{def:hall-10.13}
     \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, and let $\psi, \chi \in \mathbf{H}$. Then $\psi \in \text{Dom}(A)$ and $A\psi = \chi$ if and only if
@@ -97,7 +97,7 @@ The generator of any such group satisfies the symmetry identity. We record this 
 
 \begin{lemma}[The Generator Satisfies the Symmetry Identity]
     \label{lmm:generator-symmetry-identity}
-    \lean{Physicslib4.Spectral.Stone.isSymmetric_generator}
+    \lean{Hilbert6.Spectral.Stone.isSymmetric_generator}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.2, def:hall-3.1}
     \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $B$. Then
@@ -132,7 +132,7 @@ Three examples of generators are used in the positive-energy condition of the Ha
 
 \begin{lemma}[The Generator of the Trivial Group]
     \label{lmm:generator-const}
-    \lean{Physicslib4.Spectral.Stone.generator_refl}
+    \lean{Hilbert6.Spectral.Stone.generator_refl}
     \uses{def:hall-10.11, def:hall-10.13}
     \leanok
     The constant family $U(t) = \mathbf{1}$, $t \in \mathbb{R}$, is a strongly continuous one-parameter unitary group, and its infinitesimal generator is the operator $0$ with domain $\mathbf{H}$.
@@ -145,7 +145,7 @@ Three examples of generators are used in the positive-energy condition of the Ha
 
 \begin{lemma}[Conjugating a Unitary Group]
     \label{lmm:conj-unitary-group}
-    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.conj, Physicslib4.Spectral.Stone.IsStronglyContinuous.conj}
+    \lean{Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup.conj, Hilbert6.Spectral.Stone.IsStronglyContinuous.conj}
     \uses{def:hall-10.11, def:unitary-operator}
     \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ and let $W$ be a unitary operator on $\mathbf{H}$. Then $V(t) \equiv WU(t)W^{-1}$ is a one-parameter unitary group, and it is strongly continuous if $U(\cdot)$ is.
@@ -158,7 +158,7 @@ Three examples of generators are used in the positive-energy condition of the Ha
 
 \begin{lemma}[Conjugating a Group Conjugates its Generator]
     \label{lmm:generator-conj}
-    \lean{Physicslib4.Spectral.Stone.mem_generator_conj_domain_iff, Physicslib4.Spectral.Stone.generator_conj_apply}
+    \lean{Hilbert6.Spectral.Stone.mem_generator_conj_domain_iff, Hilbert6.Spectral.Stone.generator_conj_apply}
     \uses{lmm:conj-unitary-group, def:hall-10.13, def:unitary-operator}
     \leanok
     Let $U(\cdot)$ be a one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, let $W$ be a unitary operator on $\mathbf{H}$, and let $B$ be the infinitesimal generator of the one-parameter unitary group $V(t) = WU(t)W^{-1}$ of Lemma~\ref{lmm:conj-unitary-group}. Then $\text{Dom}(B) = W\,\text{Dom}(A)$ and $B = WAW^{-1}$, that is,
@@ -184,7 +184,7 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
 
 \begin{lemma}[$\exp(itP)$ is a One-Parameter Unitary Group]
     \label{lmm:exp-bounded-unitary-group}
-    \lean{Physicslib4.Spectral.Stone.exists_isOneParameterUnitaryGroup_exp}
+    \lean{Hilbert6.Spectral.Stone.exists_isOneParameterUnitaryGroup_exp}
     \uses{def:hall-10.11, def:bounded-operator-notation, def:adjoint-bounded}
     \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then $V(t) \equiv \exp(itP)$ is a one-parameter unitary group.
@@ -197,7 +197,7 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
 
 \begin{lemma}[The Derivative of $\exp(itP)$ at $0$]
     \label{lmm:exp-bounded-hasDerivAt}
-    \lean{Physicslib4.Spectral.Stone.hasDerivAt_exp_smul_I}
+    \lean{Hilbert6.Spectral.Stone.hasDerivAt_exp_smul_I}
     \uses{def:bounded-operator-notation}
     \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$. The map $\mathbb{R} \to \mathcal{B}(\mathbf{H})$, $t \mapsto \exp(t \cdot iP)$, is differentiable at $t = 0$ in the operator norm, with derivative $iP$.
@@ -205,12 +205,12 @@ the exponential series, convergent in the operator norm of the Banach algebra $\
 \begin{proof}
     \leanok
     \uses{def:bounded-operator-notation}
-    Mathlib's \texttt{hasDerivAt\_exp\_smul\_const}, with scalar field $\mathbb{K} = \mathbb{R}$ and Banach algebra $\mathcal{B}(\mathbf{H})$ (\texttt{H →L[ℂ] H}), $x = iP$ and $t = 0$, gives the derivative $\exp(0 \cdot iP)\,iP = \exp(0)\,iP = iP$, using \texttt{NormedSpace.exp\_zero}. This is the instantiation used in the Lean proof of \texttt{Physicslib4.AQFT.exp\_generator\_unique} (\texttt{Physicslib4/AQFT/PositiveEnergy.lean}).
+    Mathlib's \texttt{hasDerivAt\_exp\_smul\_const}, with scalar field $\mathbb{K} = \mathbb{R}$ and Banach algebra $\mathcal{B}(\mathbf{H})$ (\texttt{H →L[ℂ] H}), $x = iP$ and $t = 0$, gives the derivative $\exp(0 \cdot iP)\,iP = \exp(0)\,iP = iP$, using \texttt{NormedSpace.exp\_zero}. This is the instantiation used in the Lean proof of \texttt{Hilbert6.AQFT.exp\_generator\_unique} (\texttt{Hilbert6/AQFT/PositiveEnergy.lean}).
 \end{proof}
 
 \begin{lemma}[The Generator of $\exp(itP)$]
     \label{lmm:generator-exp-bounded}
-    \lean{Physicslib4.Spectral.Stone.generator_eq_of_eq_exp}
+    \lean{Hilbert6.Spectral.Stone.generator_eq_of_eq_exp}
     \uses{lmm:exp-bounded-unitary-group, def:hall-10.13}
     \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$ be self-adjoint. Then the one-parameter unitary group $V(t) = \exp(itP)$ of Lemma~\ref{lmm:exp-bounded-unitary-group} is strongly continuous, and its infinitesimal generator is $P$, with domain $\mathbf{H}$.
@@ -276,7 +276,7 @@ The equation $y' = cy$ follows from point 2 directly.
 
 \begin{lemma}[The Equation $y' = cy$]
     \label{lmm:linear-ode-scalar}
-    \lean{Physicslib4.Spectral.Stone.eq_mul_exp_of_hasDerivAt}
+    \lean{Hilbert6.Spectral.Stone.eq_mul_exp_of_hasDerivAt}
     \uses{prpstn:calculus-facts}
     \leanok
     Let $c \in \mathbb{C}$. A differentiable function $y : \mathbb{R} \rightarrow \mathbb{C}$ satisfying $y'(t) = cy(t)$ for all $t$ is given by $y(t) = y(0)e^{ct}$.
@@ -314,7 +314,7 @@ One direction of the correspondence follows from the spectral theorem: every sel
 
 \begin{lemma}[The Bounded Integral of $e^{it\lambda}$ is Unitary]
     \label{lmm:exp-unitary}
-    \lean{Physicslib4.Spectral.Stone.integral_expFun_mem_unitary}
+    \lean{Hilbert6.Spectral.Stone.integral_expFun_mem_unitary}
     \uses{def:hall-9.5, def:spectral-measure, thrm:operator-valued-integration, def:unitary-operator}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and $t \in \mathbb{R}$. Then the bounded integral $\int_{\mathbb{R}} f_t \, d\mu^A \in \mathcal{B}(\mathbf{H})$, where $f_t(\lambda) = e^{it\lambda}$, is unitary.
@@ -331,7 +331,7 @@ From this $V$ is unitary in the sense of Definition~\ref{def:unitary-operator}: 
 
 \begin{definition}[The Unitary Group $e^{itA}$]
     \label{def:exp-unitary-group}
-    \lean{Physicslib4.Spectral.Stone.expFun, Physicslib4.Spectral.Stone.expUnitary, Physicslib4.Spectral.Stone.functionalCalculus_expFun}
+    \lean{Hilbert6.Spectral.Stone.expFun, Hilbert6.Spectral.Stone.expUnitary, Hilbert6.Spectral.Stone.functionalCalculus_expFun}
     \uses{def:hall-9.5, def:hall-10.5, def:spectral-measure, lmm:functional-calculus-bounded, lmm:exp-unitary}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$. For each $t \in \mathbb{R}$ let
@@ -343,7 +343,7 @@ From this $V$ is unitary in the sense of Definition~\ref{def:unitary-operator}: 
 
 \begin{lemma}[The Group Law for $e^{itA}$]
     \label{lmm:exp-group-law}
-    \lean{Physicslib4.Spectral.Stone.isOneParameterUnitaryGroup_expUnitary}
+    \lean{Hilbert6.Spectral.Stone.isOneParameterUnitaryGroup_expUnitary}
     \uses{def:exp-unitary-group, def:hall-10.11}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$. Then $e^{i0A} = \mathbf{1}$ and $e^{i(s+t)A} = e^{isA}e^{itA}$ for all $s, t \in \mathbb{R}$; so $t \mapsto e^{itA}$ is a one-parameter unitary group.
@@ -356,7 +356,7 @@ The constant function $f_0 = 1$ gives $e^{i0A} = \mu^A(\mathbb{R}) = \mathbf{1}$
 
 \begin{lemma}[$e^{itA}$ is Strongly Continuous]
     \label{lmm:exp-strongly-continuous}
-    \lean{Physicslib4.Spectral.Stone.isStronglyContinuous_expUnitary}
+    \lean{Hilbert6.Spectral.Stone.isStronglyContinuous_expUnitary}
     \uses{def:exp-unitary-group, def:hall-10.11}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$. Then the one-parameter unitary group $t \mapsto e^{itA}$ is strongly continuous.
@@ -375,7 +375,7 @@ The derivative of $e^{itA}$ at $t = 0$ involves the unbounded function $\iota(\l
 
 \begin{lemma}[Subtracting from a Bounded Function]
     \label{lmm:functional-calculus-sub-bounded}
-    \lean{Physicslib4.Spectral.Stone.functionalCalculus_sub_of_bddMeasurable}
+    \lean{Hilbert6.Spectral.Stone.functionalCalculus_sub_of_bddMeasurable}
     \uses{def:hall-9.5, def:hall-10.5, lmm:functional-calculus-bounded}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$, let $f : \mathbb{R} \to \mathbb{C}$ be measurable, and let $g : \mathbb{R} \to \mathbb{C}$ be bounded and measurable. Then $W_{g - f} = W_f$, and
@@ -403,7 +403,7 @@ By the uniqueness in Part 3 of Proposition~\ref{prpstn:hall-10.2}, applied to $h
 
 \begin{lemma}[Norm Identity for the Difference Quotient]
     \label{lmm:exp-quotient-norm-identity}
-    \lean{Physicslib4.Spectral.Stone.norm_sq_generatorQuotient_expUnitary_sub}
+    \lean{Hilbert6.Spectral.Stone.norm_sq_generatorQuotient_expUnitary_sub}
     \uses{def:exp-unitary-group, def:spectral-measure}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and $U(t) = e^{itA}$. For $t \ne 0$ write
@@ -431,7 +431,7 @@ and Part 3 of Proposition~\ref{prpstn:hall-10.2}, applied to the measurable func
 
 \begin{lemma}[The Derivative of $e^{itA}$ at $0$]
     \label{lmm:exp-derivative-at-zero}
-    \lean{Physicslib4.Spectral.Stone.tendsto_generatorQuotient_expUnitary}
+    \lean{Hilbert6.Spectral.Stone.tendsto_generatorQuotient_expUnitary}
     \uses{def:exp-unitary-group}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and $U(t) = e^{itA}$. Then for all $\psi \in \text{Dom}(A)$,
@@ -448,7 +448,7 @@ By Lemma~\ref{lmm:exp-quotient-norm-identity} it suffices to show that $\int_{\m
 
 \begin{proposition}[Exponentiating a Self-Adjoint Operator]
     \label{prpstn:hall-10.14}
-    \lean{Physicslib4.Spectral.Stone.generator_expUnitary}
+    \lean{Hilbert6.Spectral.Stone.generator_expUnitary}
     \uses{def:hall-9.5, def:hall-10.11, def:hall-10.13, def:exp-unitary-group, def:unitary-operator}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and, for each $t \in \mathbb{R}$, define
@@ -488,7 +488,7 @@ Before proving Stone's Theorem we establish two facts about an arbitrary strongl
 
 \begin{lemma}[Differentiating an Orbit]
     \label{lmm:orbit-hasDerivAt}
-    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit}
+    \lean{Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit}
     \uses{def:hall-10.11, def:hall-10.13}
     \leanok
     Let $U(\cdot)$ be a one-parameter unitary group with infinitesimal generator $A$, and let $\psi \in \text{Dom}(A)$. Then for every $t \in \mathbb{R}$ the curve $s \mapsto U(s)\psi$ is differentiable at $t$ in the norm topology on $\mathbf{H}$, with derivative $iU(t)A\psi$.
@@ -505,7 +505,7 @@ By Lemma~\ref{lmm:generator-spec}, $\left( U(h)\psi - \psi \right)/h \to iA\psi$
 
 \begin{lemma}[The Group Commutes with its Generator]
     \label{lmm:generator-commutes}
-    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.generator_apply_comm}
+    \lean{Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup.generator_apply_comm}
     \uses{def:hall-10.11, def:hall-10.13}
     \leanok
     Let $U(\cdot)$ be a one-parameter unitary group with infinitesimal generator $A$, and let $\psi \in \text{Dom}(A)$. Then for every $t \in \mathbb{R}$, $U(t)\psi \in \text{Dom}(A)$ and $AU(t)\psi = U(t)A\psi$.
@@ -522,7 +522,7 @@ By Lemma~\ref{lmm:generator-spec} the bracket tends to $A\psi$ as $h \to 0$, $h 
 
 \begin{lemma}[The Group Preserves the Generator's Domain]
     \label{lmm:hall-10.17}
-    \lean{Physicslib4.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator}
+    \lean{Hilbert6.Spectral.Stone.IsOneParameterUnitaryGroup.hasDerivAt_orbit_generator}
     \uses{def:hall-10.11, def:hall-10.13, def:unitary-operator, def:bounded-operator-notation}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group and let $A$ be its infinitesimal generator. If $\psi \in \text{Dom}(A)$, then for all $t \in \mathbb{R}$ the vector $U(t)\psi$ belongs to $\text{Dom}(A)$ and
@@ -541,7 +541,7 @@ The density of the generator's domain is proved by smoothing: averaging the orbi
 
 \begin{lemma}[Averages of an Orbit are Convolutions]
     \label{lmm:averaging-translate}
-    \lean{Physicslib4.Spectral.Stone.average_eq_convolution, Physicslib4.Spectral.Stone.average}
+    \lean{Hilbert6.Spectral.Stone.average_eq_convolution, Hilbert6.Spectral.Stone.average}
     \uses{def:hall-10.11, thrm:bochner-integral, lmm:convolution-facts}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$, let $\psi \in \mathbf{H}$, and let $f : \mathbb{R} \rightarrow \mathbb{R}$ be continuous with compact support. Write $g_\psi(x) \equiv U(-x)\psi$, a continuous function $\mathbb{R} \rightarrow \mathbf{H}$ by strong continuity of $U(\cdot)$, and define the \textit{average}
@@ -566,7 +566,7 @@ The case $t = 0$ uses $U(0) = \mathbf{1}$.
 
 \begin{lemma}[Averages Lie in the Generator's Domain]
     \label{lmm:averaging-in-generator-domain}
-    \lean{Physicslib4.Spectral.Stone.average_mem_generator_domain}
+    \lean{Hilbert6.Spectral.Stone.average_mem_generator_domain}
     \uses{def:hall-10.11, def:hall-10.13, lmm:averaging-translate}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, let $\psi \in \mathbf{H}$, and let $f : \mathbb{R} \rightarrow \mathbb{R}$ be continuously differentiable with compact support. Then $B_f\psi \in \text{Dom}(A)$.
@@ -583,7 +583,7 @@ By Lemma~\ref{lmm:generator-spec}, $B_f\psi \in \text{Dom}(A)$.
 
 \begin{lemma}[Averages Approximate the Vector]
     \label{lmm:averaging-approximates}
-    \lean{Physicslib4.Spectral.Stone.tendsto_average_bump}
+    \lean{Hilbert6.Spectral.Stone.tendsto_average_bump}
     \uses{def:hall-10.11, lmm:averaging-translate, lmm:smooth-approximate-identity}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$, let $\psi \in \mathbf{H}$, and let $\{f_n\}$ be the smooth approximate identity of Lemma~\ref{lmm:smooth-approximate-identity}. Then $B_{f_n}\psi \to \psi$ as $n \to \infty$.
@@ -596,7 +596,7 @@ Each $f_n$ is continuous with compact support, so $B_{f_n}\psi = (f_n \star g_\p
 
 \begin{lemma}[The Generator is Densely Defined]
     \label{lmm:hall-10.18}
-    \lean{Physicslib4.Spectral.Stone.hasDenseDomain_generator}
+    \lean{Hilbert6.Spectral.Stone.hasDenseDomain_generator}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-3.1, def:unitary-operator}
     \leanok
     For any strongly continuous one-parameter unitary group $U(\cdot)$ on $\mathbf{H}$, the infinitesimal generator $A$ is densely defined; that is, $\text{Dom}(A)$ is dense in $\mathbf{H}$. In particular $A$ is an unbounded operator in the sense of Definition~\ref{def:hall-3.1}.
@@ -614,7 +614,7 @@ We can now prove the theorem. It is the converse of Proposition~\ref{prpstn:hall
 
 \begin{lemma}[An Ordinary Differential Equation along Orbits]
     \label{lmm:orbit-inner-ode}
-    \lean{Physicslib4.Spectral.Stone.hasDerivAt_inner_orbit}
+    \lean{Hilbert6.Spectral.Stone.hasDerivAt_inner_orbit}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.1, lmm:hall-10.18}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$, densely defined by Lemma~\ref{lmm:hall-10.18}, so that its adjoint $A^*$ is defined~(\ref{def:hall-9.1}). Let $\varepsilon \in \{1, -1\}$, let $\psi \in \text{Dom}(A^*)$ with $A^*\psi = \varepsilon i\psi$, let $\phi \in \text{Dom}(A)$, and set
@@ -635,7 +635,7 @@ the fourth equality because the inner product is conjugate-linear in its first a
 
 \begin{lemma}[Bounded Solutions of $y' = \pm y$ Vanish]
     \label{lmm:bounded-exp-solution-zero}
-    \lean{Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_bounded}
+    \lean{Hilbert6.Spectral.Stone.eq_zero_of_hasDerivAt_of_bounded}
     \leanok
     Let $\varepsilon \in \{1, -1\}$ and let $y : \mathbb{R} \rightarrow \mathbb{C}$ be differentiable and bounded, with $y'(t) = \varepsilon y(t)$ for all $t$. Then $y(0) = 0$.
 \end{lemma}
@@ -647,7 +647,7 @@ By Lemma~\ref{lmm:linear-ode-scalar} with $c = \varepsilon$, $y(t) = y(0)e^{\var
 
 \begin{lemma}[The Deficiency Subspaces of the Generator are Trivial]
     \label{lmm:generator-ker-adjoint-trivial}
-    \lean{Physicslib4.Spectral.Stone.ker_adjoint_generator_subSmul_eq_bot}
+    \lean{Hilbert6.Spectral.Stone.ker_adjoint_generator_subSmul_eq_bot}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.1, def:kernel-of-an-unbounded-operator, def:identity-operator, lmm:hall-10.18}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$. Then $\text{Ker}(A^* - i\mathbf{1}) = \{0\}$ and $\text{Ker}(A^* + i\mathbf{1}) = \{0\}$.
@@ -660,7 +660,7 @@ Let $\varepsilon \in \{1, -1\}$ and suppose $\psi \in \text{Ker}(A^* - \varepsil
 
 \begin{lemma}[The Generator is Essentially Self-Adjoint]
     \label{lmm:generator-essentially-self-adjoint}
-    \lean{Physicslib4.Spectral.Stone.isEssentiallySelfAdjoint_generator}
+    \lean{Hilbert6.Spectral.Stone.isEssentiallySelfAdjoint_generator}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.2, def:hall-9.6, def:hall-9.7}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$. Then $A$ is densely defined, symmetric and essentially self-adjoint; in particular $A$ is closable and its closure $A^{\text{cl}}$ is self-adjoint.
@@ -679,7 +679,7 @@ and symmetrically $\left( \text{Range}(A + i\mathbf{1}) \right)^\perp = \text{Ke
 
 \begin{lemma}[Differentiating the Difference of the Orbits]
     \label{lmm:orbit-difference-hasDerivAt}
-    \lean{Physicslib4.Spectral.Stone.hasDerivAt_orbit_sub_expUnitary}
+    \lean{Hilbert6.Spectral.Stone.hasDerivAt_orbit_sub_expUnitary}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.6, def:exp-unitary-group, lmm:generator-essentially-self-adjoint}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$; by Lemma~\ref{lmm:generator-essentially-self-adjoint} the closure $A^{\text{cl}}$ is self-adjoint, and we let $V(t) \equiv e^{itA^{\text{cl}}}$ as in Definition~\ref{def:exp-unitary-group}. Let $\psi \in \text{Dom}(A)$ and $w(t) \equiv U(t)\psi - V(t)\psi$. Then for every $t \in \mathbb{R}$, $w(t) \in \text{Dom}(A^{\text{cl}})$, and $w$ is differentiable at $t$ in the norm topology on $\mathbf{H}$ with
@@ -698,7 +698,7 @@ By Proposition~\ref{prpstn:hall-10.14}, $V(\cdot)$ is a strongly continuous one-
 
 \begin{lemma}[A Solution of $w' = iCw$ with $C$ Symmetric Preserves the Norm]
     \label{lmm:norm-const-of-symmetric-derivative}
-    \lean{Physicslib4.Spectral.Stone.eq_zero_of_hasDerivAt_of_isSymmetric}
+    \lean{Hilbert6.Spectral.Stone.eq_zero_of_hasDerivAt_of_isSymmetric}
     \uses{def:hall-9.2}
     \leanok
     Let $C$ be a symmetric operator on $\mathbf{H}$, in the sense that $\left< C\chi, \chi' \right> = \left< \chi, C\chi' \right>$ for all $\chi, \chi' \in \text{Dom}(C)$~(\ref{def:hall-9.2}). Let $w : \mathbb{R} \rightarrow \mathbf{H}$ be differentiable, with $w(t) \in \text{Dom}(C)$ and $w'(t) = iCw(t)$ for every $t$, and $w(0) = 0$. Then $w(t) = 0$ for every $t \in \mathbb{R}$.
@@ -715,7 +715,7 @@ because $\left< w, Cw \right>$ is real: by symmetry and conjugate symmetry of th
 
 \begin{lemma}[The Orbits Agree on the Generator's Domain]
     \label{lmm:orbits-agree-on-domain}
-    \lean{Physicslib4.Spectral.Stone.orbit_eq_expUnitary_closure}
+    \lean{Hilbert6.Spectral.Stone.orbit_eq_expUnitary_closure}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.6, def:exp-unitary-group, lmm:generator-essentially-self-adjoint}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$ with infinitesimal generator $A$; by Lemma~\ref{lmm:generator-essentially-self-adjoint} the closure $A^{\text{cl}}$ is self-adjoint, and we let $V(t) \equiv e^{itA^{\text{cl}}}$ as in Definition~\ref{def:exp-unitary-group}. Then
@@ -731,7 +731,7 @@ Fix $\psi \in \text{Dom}(A)$ and set $w(t) \equiv U(t)\psi - V(t)\psi$. By Lemma
 
 \begin{lemma}[Bounded Operators Agreeing on a Dense Subspace are Equal]
     \label{lmm:agree-on-dense-subspace}
-    \lean{Physicslib4.Spectral.Stone.eq_of_eqOn_dense}
+    \lean{Hilbert6.Spectral.Stone.eq_of_eqOn_dense}
     \uses{def:bounded-operator-notation}
     \leanok
     Let $S, T \in \mathcal{B}(\mathbf{H})$ and let $D \subset \mathbf{H}$ be a dense subspace with $S\psi = T\psi$ for all $\psi \in D$. Then $S = T$.
@@ -748,7 +748,7 @@ using $S\psi_n = T\psi_n$ in the first step and the operator-norm bound of Defin
 
 \begin{theorem}[Stone's Theorem]
     \label{thrm:hall-10.15}
-    \lean{Physicslib4.Spectral.Stone.stone}
+    \lean{Hilbert6.Spectral.Stone.stone}
     \uses{def:hall-10.11, def:hall-10.13, def:hall-9.5, def:exp-unitary-group, def:unitary-operator}
     \leanok
     Let $U(\cdot)$ be a strongly continuous one-parameter unitary group on $\mathbf{H}$. Then the infinitesimal generator $A$ of $U(\cdot)$ is densely defined and self-adjoint, and

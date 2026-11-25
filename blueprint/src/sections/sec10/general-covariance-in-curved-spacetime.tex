@@ -6,8 +6,8 @@ The geometry this rests on --- the pullback metric, the pullback of a time orien
 
 \begin{definition}[Equivalence of Haag-Kastler Nets]
     \label{def:net-equivalence-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.NetEquivalence}
-    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeneralCovariance.lean}
+    \lean{Hilbert6.AQFT.HaagKastlerCurved.NetEquivalence}
+    \leanfile{Hilbert6/AQFT/HaagKastlerCurved/GeneralCovariance.lean}
     \uses{def:haag-kastler-net-in-curved-spacetime, def:local-commutativity-in-curved-spacetime, def:local-algebras-in-curved-spacetime, def:lorentzian-spacetime}
     \leanok
     Let $M_1$ and $M_2$ be Lorentzian spacetimes (\ref{def:lorentzian-spacetime}) and let $e : M_1.\mathrm{Carrier} \simeq M_2.\mathrm{Carrier}$ be a bijection of their carriers which \emph{maps basis sets to basis sets}: $M_2.\mathrm{IsBasisSet}\,(e(\mathbf{B}))$ holds whenever $M_1.\mathrm{IsBasisSet}\,\mathbf{B}$ does. Let $\mathfrak{U}_1$ and $\mathfrak{U}_2$ be Haag-Kastler nets (\ref{def:haag-kastler-net-in-curved-spacetime}) over $M_1$ and $M_2$ respectively. An \emph{equivalence of nets along $e$} is a chosen family of unital $*$-isomorphisms
@@ -40,8 +40,8 @@ The geometry this rests on --- the pullback metric, the pullback of a time orien
 
 \begin{definition}[General Covariance]
     \label{def:general-covariance-in-curved-spacetime}
-    \lean{Physicslib4.AQFT.HaagKastlerCurved.NetTheory, Physicslib4.AQFT.HaagKastlerCurved.IsGenerallyCovariant, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv, Physicslib4.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv_apply, Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_pullback_isBasisSet}
-    \leanfile{Physicslib4/AQFT/HaagKastlerCurved/GeneralCovariance.lean}
+    \lean{Hilbert6.AQFT.HaagKastlerCurved.NetTheory, Hilbert6.AQFT.HaagKastlerCurved.IsGenerallyCovariant, Hilbert6.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv, Hilbert6.Spacetime.LorentzianSpacetime.pullbackCarrierEquiv_apply, Hilbert6.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent_pullback_isBasisSet}
+    \leanfile{Hilbert6/AQFT/HaagKastlerCurved/GeneralCovariance.lean}
     \uses{def:net-equivalence-in-curved-spacetime, def:haag-kastler-net-in-curved-spacetime, def:pullback-metric, def:lorentzian-spacetime, thrm:pullback-is-lorentzian-spacetime, lmm:pullback-preserves-future-orientation, lmm:cross-metric-isometry-preserves-basis-sets, def:cross-metric-isometry}
     \leanok
     A \emph{net theory} is a section of the family of Haag-Kastler nets over Lorentzian spacetimes, that is, a term

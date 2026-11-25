@@ -7,8 +7,8 @@ Research: `notes/agents/scout/von-neumann-density-2026-09-30.md` (API inventory,
 
 ## Goal
 
-Prove `Physicslib4.AQFT.HaagKastler.dense_range_in_bicommutant`
-(`Physicslib4/AQFT/HaagKastler/StrongDensity.lean`, blueprint `thrm:quasilocal-strongly-dense`,
+Prove `Hilbert6.AQFT.HaagKastler.dense_range_in_bicommutant`
+(`Hilbert6/AQFT/HaagKastler/StrongDensity.lean`, blueprint `thrm:quasilocal-strongly-dense`,
 `blueprint/src/sections/sec10/haag-kastler-axioms.tex` ~line 569), the project's only remaining
 `sorry`, **without changing its statement**: for a unital `*`-algebra hom
 `π : 𝔄 →⋆ₐ[ℂ] (H →L[ℂ] H)`, the bicommutant `π(𝔄)''` lies in the strong-operator closure of
@@ -35,13 +35,13 @@ Nothing else in the project depends on the theorem, so every stage keeps the bui
 1. **Finite amplification.** DECIDED (2026-10-01): option (a). `GNS/Amplification.lean` and `GNS/DirectSum.lean` require
    `[CStarAlgebra A]`, but the target has a bare `*`-algebra `𝔄`. Options:
    - (a) a new `Fin n`-indexed amplification for a single `π`, built directly on the fully
-     general `lpDiag` (`Physicslib4/Operators/LpDiagonal.lean`) with the bound `‖π a‖` itself
+     general `lpDiag` (`Hilbert6/Operators/LpDiagonal.lean`) with the bound `‖π a‖` itself
      (recommended: additive, touches nothing existing);
    - (b) generalise `DirectSum.directSumFun`/`directSum` from `[CStarAlgebra A]` to an explicit
      uniform bound hypothesis (more general, but changes existing signatures).
 2. **Where the new lemmas live.** DECIDED (2026-10-01): the recommendation. Recommendation: the general operator-theory lemma (reducing
-   subspace) in `Physicslib4/Operators/ReducingSubspace.lean`; the amplification and density
-   lemmas in a new `Physicslib4/Operators/DensityTheorem.lean` (or in `GNS/Amplification.lean`
+   subspace) in `Hilbert6/Operators/ReducingSubspace.lean`; the amplification and density
+   lemmas in a new `Hilbert6/Operators/DensityTheorem.lean` (or in `GNS/Amplification.lean`
    if option (b) is chosen); `StrongDensity.lean` keeps only the final assembly.
 3. **Kaplansky density** (self-adjoint approximants) stays out of scope, as the blueprint says.
    DECIDED (2026-10-01): out of scope.
@@ -74,7 +74,7 @@ Deliverable: reviewed blueprint (validate clean apart from the known `conv:` err
 
 ### Stage 2: the one-vector case (Lean; can run before any `def` exists)
 
-- `reducing_subspace_commutes_projection` (general, `Physicslib4/Operators/`): for `K` closed,
+- `reducing_subspace_commutes_projection` (general, `Hilbert6/Operators/`): for `K` closed,
   `MapsTo T K K` and `MapsTo (adjoint T) K K`, `Commute T K.starProjection` (or the
   `orthogonalProjection` form). First search Mathlib live (`lean_loogle`, leansearch) for an
   existing statement phrased via `IsIdempotentElem`, `IsStarProjection`, `ker`/`range` — the
@@ -177,8 +177,8 @@ Total estimate: about 130–200 Lean lines in about 7–10 lemmas plus 1–2 def
   own lemma. Optional reviewer notes: `norm_sub_rev` orientation in the finite-vectors lemma;
   cite `Submodule.topologicalClosure_coe`; phrase the basis lemma on the `ofFun` image.
 - 2026-10-01, Stage 1 committed as `76fc546`. Stage 2 done (not committed): new
-  `Physicslib4/Operators/ReducingSubspace.lean` (`commute_starProjection_of_invariant`, by hand —
-  no Mathlib lemma found) and `Physicslib4/Operators/DensityTheorem.lean`
+  `Hilbert6/Operators/ReducingSubspace.lean` (`commute_starProjection_of_invariant`, by hand —
+  no Mathlib lemma found) and `Hilbert6/Operators/DensityTheorem.lean`
   (`starProjection_cyclic_mem_centralizer`, `apply_mem_closure_of_mem_bicommutant`), all proved,
   standard axioms. The cyclic subspace is phrased as
   `(Submodule.span ℂ (Set.range fun a ↦ ρ a ξ)).topologicalClosure`; the conclusion uses

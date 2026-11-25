@@ -3,7 +3,7 @@
 Date: 2026-09-25
 Scope: `blueprint/src/sections/sec10/spacetime.tex` (all ~90 numbered nodes,
 from `def:spacetime` through `def:cross-metric-isometry`), and the Lean files
-its `\lean{}` tags cite, principally `Physicslib4/Spacetime/{Basic, CausalStructure,
+its `\lean{}` tags cite, principally `Hilbert6/Spacetime/{Basic, CausalStructure,
 Curves, Causality, CausalComplement, LorentzianSpacetime, Minkowski,
 MinkowskiDirected, MinkowskiDilation, LorentzCauchySchwarz, LorentzCone,
 LorentzOrthogonal, Diffeo, DiffeoPath, Isometry, IsometryCausality,
@@ -14,17 +14,17 @@ IsometryTopology, Pullback, CrossMetricIsometry}.lean`.
 Tool-verified:
 - All 294 distinct `\lean{...}` names in `spacetime.tex` resolve against
   `blueprint/lean_decls` (0 missing) and every short name has at least one
-  occurrence somewhere under `Physicslib4/` (0 missing).
+  occurrence somewhere under `Hilbert6/` (0 missing).
 - `grep` for `sorry`, `admit`, `native_decide`, `implemented_by`,
   `skipKernelTC`, `nolint`, `axiom`, `maxHeartbeats`, `Restriction:`,
-  `: Prop := True` across `Physicslib4/Spacetime/`.
+  `: Prop := True` across `Hilbert6/Spacetime/`.
 - `lake env lean` + `#print axioms` on six sampled theorems spanning the
   causal-order core, the causally-complete-region lattice, curve
   well-definedness, and the Minkowski/dilation/cross-isometry results — all
   six report exactly `[propext, Classical.choice, Quot.sound]`.
 - `.git/lean-kit/verify-receipt.json` (last `lake build` + `lake lint`,
   2026-09-18) and `git log` since that timestamp restricted to
-  `Physicslib4/Spacetime/` and the blueprint file (no hits): the receipt is
+  `Hilbert6/Spacetime/` and the blueprint file (no hits): the receipt is
   stale for the repository as a whole (many unrelated spectral-theory commits
   since), but nothing in §10.4's scope changed after it, so its content is not
   invalidated for this section.
@@ -59,7 +59,7 @@ Of the ~90 blueprint nodes with `\lean{}` in scope:
 condition of `≪`/`≺`, and essentially the whole back half of the chapter is a
 theorem about the resulting non-geodesic relation.**
 
-- `Physicslib4/Spacetime/Causality.lean:76`:
+- `Hilbert6/Spacetime/Causality.lean:76`:
   ```
   @[nolint unusedArguments]
   def IsGeodesic (_μ : M.SmoothPath) : Prop := True
@@ -122,7 +122,7 @@ non-`\leanok`-honest node was found in this section.)
 chart-local ("`ContDiffWithinAt`") smoothness formulation, contradicting the
 correct bundle-section (`ContMDiff`) field they sit next to.**
 
-- `Physicslib4/Spacetime/Basic.lean:48-51` (file-level docstring): "The
+- `Hilbert6/Spacetime/Basic.lean:48-51` (file-level docstring): "The
   'smoothness' of `g` is encoded via the standard idiom used by
   `PseudoRiemannianMetric`: smoothness of the coordinate-expression in any
   extended chart, applied to two arbitrary constant vectors in the model
@@ -130,7 +130,7 @@ correct bundle-section (`ContMDiff`) field they sit next to.**
   documented at `Basic.lean:152-168`) is the bundle-section `ContMDiff`
   statement mandated by the current `def:spacetime` text, not a chart-local
   statement on constant vectors.
-- `Physicslib4/Spacetime/CausalStructure.lean:145-158` (structure-level
+- `Hilbert6/Spacetime/CausalStructure.lean:145-158` (structure-level
   docstring for `TimeOrientation`): "`smooth`: smoothness of the section in
   any extended chart, expressed via the chart-local form of the field... a
   genuine `Prop` field of the structure (a `ContDiffWithinAt` condition on the
@@ -148,7 +148,7 @@ correct bundle-section (`ContMDiff`) field they sit next to.**
 **m-2. `Curve`/`SmoothCurve`/`OrientedSmoothCurve` are quotients by relations
 that are never shown to be equivalence relations.**
 
-- `Physicslib4/Spacetime/Curves.lean:333` (`def Curve : Type := Quot
+- `Hilbert6/Spacetime/Curves.lean:333` (`def Curve : Type := Quot
   M.PathEquiv`) docstring: "We package this as a `Quot` over the (possibly
   non-equivalence) relation `PathEquiv`; the actual equivalence-class
   structure is left implicit." Confirmed by grep: there is no
@@ -171,7 +171,7 @@ that are never shown to be equivalence relations.**
 **m-3. `SmoothPath.nonvanishing` docstring says "at each interior point" but
 the field quantifies over the whole parameter space.**
 
-- `Physicslib4/Spacetime/Curves.lean:109-114`: docstring reads "non-zero at
+- `Hilbert6/Spacetime/Curves.lean:109-114`: docstring reads "non-zero at
   each interior point of the parameter space," but the field is
   `∀ s ∈ parameterSpace, mfderivWithin ... s (1:ℝ) ≠ 0`, i.e. quantified over
   all of `Σ` including its two boundary points, matching the blueprint's
@@ -195,7 +195,7 @@ the field quantifies over the whole parameter space.**
   because a reader of just this docstring (without cross-referencing
   `IsGeodesic`'s own docstring) would not learn that the bullet is inert.
 - No oversized single-tactic-block proofs; the longest proof in scope
-  (`Physicslib4/Spacetime/Minkowski.lean`'s pullback/contMDiff machinery,
+  (`Hilbert6/Spacetime/Minkowski.lean`'s pullback/contMDiff machinery,
   outside the file list above but adjacent) is well-commented and structured
   in `have`-steps, consistent with the blueprint's own detailed proof prose
   for the corresponding nodes (`lmm:pullback-metric-smooth-in-charts`).
@@ -211,15 +211,15 @@ the field quantifies over the whole parameter space.**
 ## Integrity checklist
 
 - `sorry` / `admit` / `native_decide` / `implemented_by` / `skipKernelTC`:
-  none in `Physicslib4/Spacetime/` (the only two grep hits for the string
+  none in `Hilbert6/Spacetime/` (the only two grep hits for the string
   "sorry" are inside docstring prose explaining that the structures are
   sorry-free, at `Basic.lean:59` and `Curves.lean:53`).
 - `nolint`: exactly one use in scope,
   `Causality.lean:75` (`@[nolint unusedArguments]` on `IsGeodesic`) — justified
   by the placeholder's nature (the argument is unused because the predicate is
   `True`), but see C-1 for the missing `**Restriction:**` marker.
-- `axiom`: none declared in `Physicslib4/Spacetime/`.
-- `maxHeartbeats`: one use, `Physicslib4/Spacetime/Pullback.lean:154`
+- `axiom`: none declared in `Hilbert6/Spacetime/`.
+- `maxHeartbeats`: one use, `Hilbert6/Spacetime/Pullback.lean:154`
   (`set_option maxHeartbeats 1000000 in`), a performance escape hatch on one
   proof, not a correctness concern.
 - `#print axioms` (via `lake env lean` on a `/tmp` scratch file, oleans were
@@ -235,7 +235,7 @@ the field quantifies over the whole parameter space.**
   axiom.
 - `verify-receipt.json`: `lake build` and `lake lint` both exited 0 on
   2026-09-18T14:08:28Z. No commit since then touches
-  `Physicslib4/Spacetime/*` or `blueprint/src/sections/sec10/spacetime.tex`,
+  `Hilbert6/Spacetime/*` or `blueprint/src/sections/sec10/spacetime.tex`,
   so the receipt is current *for this section specifically*, even though the
   repository as a whole has since had ~15 unrelated commits (spectral-theory
   work) that would need a fresh `lake build`/`lake lint` pass to be covered by
@@ -276,14 +276,14 @@ the field quantifies over the whole parameter space.**
 ## Files referenced
 
 - `/Users/kdavis/Code/physicslib/physicslib4/blueprint/src/sections/sec10/spacetime.tex`
-- `/Users/kdavis/Code/physicslib/physicslib4/Physicslib4/Spacetime/Basic.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Physicslib4/Spacetime/CausalStructure.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Physicslib4/Spacetime/Curves.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Physicslib4/Spacetime/Causality.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Physicslib4/Spacetime/CausalComplement.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Physicslib4/Spacetime/LorentzianSpacetime.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Physicslib4/Spacetime/Minkowski.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Physicslib4/Spacetime/LorentzCauchySchwarz.lean`
+- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/Basic.lean`
+- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/CausalStructure.lean`
+- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/Curves.lean`
+- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/Causality.lean`
+- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/CausalComplement.lean`
+- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/LorentzianSpacetime.lean`
+- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/Minkowski.lean`
+- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/LorentzCauchySchwarz.lean`
 - `/Users/kdavis/Code/physicslib/physicslib4/blueprint/lean_decls`
 - `/Users/kdavis/Code/physicslib/physicslib4/.git/lean-kit/verify-receipt.json`
 - `/Users/kdavis/Code/physicslib/physicslib4/notes/agents/review-2026-09-sec10.1-10.7.md`

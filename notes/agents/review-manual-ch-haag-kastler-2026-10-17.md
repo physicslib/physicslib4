@@ -1,6 +1,6 @@
 # Review: manual chapter "Haag–Kastler" and docstring pass (2026-10-17)
 
-Read-only review of the uncommitted docstring pass on `Physicslib4/AQFT/HaagKastler/` and the manual
+Read-only review of the uncommitted docstring pass on `Hilbert6/AQFT/HaagKastler/` and the manual
 chapter `web/Manual/HaagKastler.lean`. Read: `.claude/CLAUDE.md`, the plan
 `plan-verso-reference-manual-2026-10-17.md`, the writer's log `manual-ch-haag-kastler-progress.md`,
 the blueprint section `haag-kastler-axioms.tex` (and the 1964 axioms in `sec1/`).
@@ -113,11 +113,11 @@ Independence (Schlieder Property)".
 B4. **should fix** (coverage): the blueprint section's subsections "Irreducibility and Schur's
 Lemma", "Unitary Equivalence and Superselection", "Disjointness and Quasi-Equivalence", "Direct
 Sums, Amplification, and Reducibility" and "The Separating Vector of a Faithful State" (blueprint
-lines 1067–1763, 2143) are not mentioned. They are almost all `Physicslib4.GNS` declarations, so one
+lines 1067–1763, 2143) are not mentioned. They are almost all `Hilbert6.GNS` declarations, so one
 paragraph suffices, e.g. at the end of "Representations and local von Neumann algebras": "The
 blueprint section also develops the representation theory used here: irreducibility and Schur's
 lemma, unitary and quasi-equivalence, disjointness and direct sums. These hold for any C\*-algebra and
-are formalised in `Physicslib4/GNS/`; the GNS chapter describes them. `Purity.lean` specialises
+are formalised in `Hilbert6/GNS/`; the GNS chapter describes them. `Purity.lean` specialises
 purity and irreducibility to the quasilocal algebra." Everything else of headline importance
 (axioms, construction, Axiom 4, Einstein causality, R(B), density, β_L, invariant, vacuum, KMS and
 ground states) is covered.

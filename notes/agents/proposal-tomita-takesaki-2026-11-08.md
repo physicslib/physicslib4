@@ -13,7 +13,7 @@ Trial 2 done (2026-11-08): the functional-calculus composition law f(A)g(A) ⊆ 
 Dom(f(A)g(A)) = Dom g(A) ∩ Dom (fg)(A) and μ_{g(A)x} = |g|² μ_x, is FEASIBLE (proved in a spike, about
 200 lines, no sorry). Dom |T| = Dom T with ‖|T|x‖ = ‖Tx‖ is FEASIBLE WITH GAPS: the core fact for √D is
 proved; about 150–200 more lines and 5 nodes remain. One gap, spectral support of a positive operator,
-is already proved (`Physicslib4.AQFT.spectralMeasure_Iio_zero_eq_zero`), so the remainder is smaller.
+is already proved (`Hilbert6.AQFT.spectralMeasure_Iio_zero_eq_zero`), so the remainder is smaller.
 Scout: `scout-tomita-antilinear-polar-2026-11-08.md` (representation of antilinear operators,
 polar decomposition, available Mathlib and project API).
 
@@ -149,8 +149,8 @@ Reeh–Schlieder.
      - the composition law f(A) g(A) ⊆ (fg)(A);
      - a core API;
      - spectral support of positive operators. That is proved:
-       `Physicslib4.AQFT.spectralMeasure_Iio_zero_eq_zero` in
-       `Physicslib4/AQFT/PositiveEnergyHolomorphic.lean`.
+       `Hilbert6.AQFT.spectralMeasure_Iio_zero_eq_zero` in
+       `Hilbert6/AQFT/PositiveEnergyHolomorphic.lean`.
 3. **Takesaki's lemma and S\* = F̄₀** (revised 2026-11-11):
    - **3a (drafted, reviewed PASS, 32 nodes):** the commutant extension lemma, the resolvent of Δ,
      and Takesaki's lemma for z ∉ [0, ∞).
@@ -190,7 +190,7 @@ against roughly 145–240 for the Sorce route. Carlson's theorem is no longer on
   file that holds it when stage 2 is formalized.
 - **D2. Other new definitions** (guard approval needed): C; the Tomita operator S₀ and its closure S; Δ;
   J; the tidy operators; probably a predicate "cyclic and separating" or a reuse of
-  `IsCyclicVector` and `IsSeparating`. All in new files under `Physicslib4/Operators/Modular/` (or
+  `IsCyclicVector` and `IsSeparating`. All in new files under `Hilbert6/Operators/Modular/` (or
   similar), approved file by file as for `Additivity.lean`.
 - **D3. Setting.** Mathlib's `VonNeumannAlgebra` structure, or a set of operators equal to its
   bicommutant using the project's `Set.centralizer` convention (as `localVonNeumann` does).

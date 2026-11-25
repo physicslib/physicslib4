@@ -8,7 +8,7 @@ Plan: `notes/agents/plan-verso-stage3-tutorial-ch2-2026-10-16.md`. Chapter file:
 - **Lean blocks in the manual genre.** The chapter needs `open Verso.Genre.Manual.InlineLean` for the
   `lean`, `leanOutput` and `signature` code blocks. Blocks elaborate in the chapter module's own
   environment, so the chapter imports the library modules it uses (`import
-  Physicslib4.AQFT.HaagKastler.Net`, etc.), as the website's `FrontPage.lean` does; no `leanInit`
+  Hilbert6.AQFT.HaagKastler.Net`, etc.), as the website's `FrontPage.lean` does; no `leanInit`
   is needed. Declarations persist between blocks (`keep` defaults to true), so `open` in one block
   applies to the later ones, and exercise names must be unique (use `example`).
 - **(a) `sorry`.** A plain ```` ```lean ```` block containing `sorry` builds: the manual genre

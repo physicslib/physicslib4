@@ -5,7 +5,7 @@ Plan: `notes/agents/plan-verso-stage3-tutorial-ch4-2026-10-17.md`.
 ## Step 0: feasibility of the worked project
 
 Option A is feasible, with API that exists, and is used. Prototype in `/tmp/ch4/A.lean`
-(`import Physicslib4`), checked with `lake env lean`:
+(`import Hilbert6`), checked with `lake env lean`:
 
 - every local element is a scalar: `Q.ι hB a = algebraMap ℂ Q.carrier a`, by
   `(AlgHomClass.commutes (Q.ι hB) a).symm` (the trivial net's local algebras are `ℂ` by definition);

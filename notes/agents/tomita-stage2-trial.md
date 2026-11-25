@@ -4,14 +4,14 @@ Date: 2026-11-08. Status: COMPLETE. Verdict: **FEASIBLE** (fully proved in the s
 
 ## Existing API (findings)
 
-- `Physicslib4/Spectral/Unbounded/Basic.lean`
+- `Hilbert6/Spectral/Unbounded/Basic.lean`
   - `existsUnique_add_mem_orthogonal` (l.574): orthogonal decomposition for a closed
     `V : Submodule ℂ H` in any complete inner-product space. Works on
     `WithLp 2 (H × H)` (Mathlib's L² product); no H × H version in the project.
   - `orthogonal_range_eq_ker_adjoint`, `adjoint_subSmul`, `orthogonal_range_subSmul`
     (`(ran (S - λ))ᗮ = ker (S† - λ̄)`), `isSymmetric_iff_le_adjoint`, `mem_ker`, `mem_range`.
   - private `adjoint_eq_of_forall_inner_iff`, `forall_inner_iff_adjoint` (not usable outside).
-- `Physicslib4/Spectral/Unbounded/Spectrum.lean`
+- `Hilbert6/Spectral/Unbounded/Spectrum.lean`
   - **`adjoint_eq_of_range_eq_top`** (l.~323): `S ≤ S†`, `range (subSmul S μ) = ⊤`,
     `ker (subSmul S† μ) = ⊥` ⇒ `S† = S`. With μ = −1 this is the criterion
     "ran(1 + A) = H ⇒ self-adjoint" for symmetric densely-defined A. No bounded inverse needed.
@@ -34,7 +34,7 @@ Date: 2026-11-08. Status: COMPLETE. Verdict: **FEASIBLE** (fully proved in the s
 
 All four declarations compiled with `lean_diagnostic_messages` showing no errors and no
 `sorry` (only the module-docstring lint warning). The file imported only
-`Physicslib4.Spectral.Unbounded.Spectrum`. About 18 tool calls were used.
+`Hilbert6.Spectral.Unbounded.Spectrum`. About 18 tool calls were used.
 
 | Step | Lean name | Lines | API used |
 |---|---|---|---|
@@ -88,9 +88,9 @@ satisfies `hS`, so that the hypothesis is never vacuous. If the guard allowed a 
 ## Verified code (the deleted scratch file)
 
 ```lean
-import Physicslib4.Spectral.Unbounded.Spectrum
+import Hilbert6.Spectral.Unbounded.Spectrum
 
-namespace Physicslib4.Spectral.Unbounded
+namespace Hilbert6.Spectral.Unbounded
 
 open scoped InnerProductSpace LinearPMap
 
@@ -227,13 +227,13 @@ theorem vN_comp_graph (T : H →ₗ.[ℂ] H) (x z : H) :
     congr 2
     exact (T.domRestrict_apply (x := ⟨q, hd⟩) (y := q) rfl).trans (hq2.trans hr1.symm)
 
-end Physicslib4.Spectral.Unbounded
+end Hilbert6.Spectral.Unbounded
 ```
 
 # Trial 2: functional-calculus composition and |T|
 
-Date: 2026-11-08. Status: COMPLETE (about 40 tool calls). Scratch (deleted): `Physicslib4/Spectral/Unbounded/scratch_fc_trial.lean`
-(imports `Physicslib4.Spectral.Unbounded.FunctionalCalculus`; context as in `Integral.lean`, general
+Date: 2026-11-08. Status: COMPLETE (about 40 tool calls). Scratch (deleted): `Hilbert6/Spectral/Unbounded/scratch_fc_trial.lean`
+(imports `Hilbert6.Spectral.Unbounded.FunctionalCalculus`; context as in `Integral.lean`, general
 `μ : ProjectionValuedMeasure X H`).
 
 ## Existing API found
@@ -322,9 +322,9 @@ dependent subtypes. In this Mathlib, `MemLp f p μ` is just `eLpNorm f p μ < �
 ## Verified code (Trial 2, the deleted scratch file)
 
 ```lean
-import Physicslib4.Spectral.Unbounded.FunctionalCalculus
+import Hilbert6.Spectral.Unbounded.FunctionalCalculus
 
-namespace Physicslib4.Spectral.Unbounded
+namespace Hilbert6.Spectral.Unbounded
 
 open scoped InnerProductSpace LinearPMap ENNReal NNReal
 open Filter Topology ContinuousLinearMap MeasureTheory
@@ -580,9 +580,9 @@ theorem fc_core {h k : X → ℂ} (_hh : Measurable h) (hk : Measurable k)
   · simpa only [μ.integral_indicator (hE _)] using fc_tendsto_indicator μ hk (ψ : H)
   · simpa only [μ.integral_indicator (hE _)] using fc_tendsto_indicator μ hk (pmapIntegral μ h ψ)
 
-end Physicslib4.Spectral.Unbounded
+end Hilbert6.Spectral.Unbounded
 ```
 
 Note (orchestrator, 2026-11-08): the gap "a positive self-adjoint D has μ^D((−∞,0)) = 0" is already
-proved in the library as `Physicslib4.AQFT.spectralMeasure_Iio_zero_eq_zero`
-(`Physicslib4/AQFT/PositiveEnergyHolomorphic.lean`); reuse it (or move it to a spectral file).
+proved in the library as `Hilbert6.AQFT.spectralMeasure_Iio_zero_eq_zero`
+(`Hilbert6/AQFT/PositiveEnergyHolomorphic.lean`); reuse it (or move it to a spectral file).

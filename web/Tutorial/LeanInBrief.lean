@@ -1,8 +1,8 @@
 import VersoManual
 import Tutorial.Meta
 import Tutorial.Papers
-import Physicslib4.AQFT.HaagKastler.Net
-import Physicslib4.GNS.Basic
+import Hilbert6.AQFT.HaagKastler.Net
+import Hilbert6.GNS.Basic
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
@@ -81,14 +81,12 @@ is checked. Here it is for the theorem that the algebra of the empty region is c
 consequence of Axiom 1:
 
 ```lean (name := axiomsEmpty)
-open Physicslib4.AQFT.HaagKastler in
+open Hilbert6.AQFT.HaagKastler in
 #print axioms LocalNet.mul_comm_algebra_empty
 ```
 
 ```leanOutput axiomsEmpty
-'Physicslib4.AQFT.HaagKastler.LocalNet.mul_comm_algebra_empty' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
+'Hilbert6.AQFT.HaagKastler.LocalNet.mul_comm_algebra_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
 ```
 
 These three are the standard axioms of Lean's mathematics: propositional extensionality (two
@@ -176,7 +174,7 @@ organised in _namespaces_ ({ref "lean-in-brief-mathlib"}[section 7]); the comman
 short names available, and all the code that follows uses them.
 
 ```lean
-open Physicslib4 Spacetime AQFT.HaagKastler
+open Hilbert6 Spacetime AQFT.HaagKastler
 ```
 
 ```lean (name := checkCarrier)
@@ -197,7 +195,7 @@ The diamond $`I^+(p) \cap I^-(q)` of chapter 1 is, in the library, the _chronolo
 ```
 
 ```leanOutput checkDiamond
-Physicslib4.Spacetime.chronologicalDiamond (M : Spacetime) (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carrier
+Hilbert6.Spacetime.chronologicalDiamond (M : Spacetime) (t : M.TimeOrientation) (p q : M.Carrier) : Set M.Carrier
 ```
 
 This is the form in which the library writes its declarations: the name, then the arguments, each
@@ -227,8 +225,7 @@ types, and an observable of `B` is a term `a : U.algebra B`, whose type depends 
 ```
 
 ```leanOutput checkAlgebra
-Physicslib4.AQFT.HaagKastler.LocalNet.algebra.{u_1} (self : LocalNet) :
-  Set StandardMinkowskiSpacetime.Carrier → Type u_1
+Hilbert6.AQFT.HaagKastler.LocalNet.algebra.{u_1} (self : LocalNet) : Set StandardMinkowskiSpacetime.Carrier → Type u_1
 ```
 
 (The `u_1` is a universe level; {ref "lean-in-brief-structures"}[section 5] explains it.)
@@ -304,8 +301,8 @@ objects and hypotheses of the statement. Here is one from the library, as `#chec
 ```
 
 ```leanOutput checkCausalOfChrono
-Physicslib4.Spacetime.causallyPrecedes_of_chronologicallyPrecedes (M : Spacetime) (t : M.TimeOrientation)
-  {p q : M.Carrier} (h : p ≪[M, t] q) : p ≺[M, t] q
+Hilbert6.Spacetime.causallyPrecedes_of_chronologicallyPrecedes (M : Spacetime) (t : M.TimeOrientation) {p q : M.Carrier}
+  (h : p ≪[M, t] q) : p ≺[M, t] q
 ```
 
 It says that chronological precedence implies causal precedence: if $`p \ll q`, then
@@ -794,7 +791,7 @@ live in any universe. A structure with such a field is one level higher:
 ```
 
 ```leanOutput checkLocalNet
-Physicslib4.AQFT.HaagKastler.LocalNet.{u_1} : Type (u_1 + 1)
+Hilbert6.AQFT.HaagKastler.LocalNet.{u_1} : Type (u_1 + 1)
 ```
 
 `HaagKastlerNet` writes `LocalNet.{u}` for its field `U`, so that it, too, takes the universe as a
@@ -873,7 +870,7 @@ it.
 The simplest example is the predicate "is a diamond". Its signature, checked against the library:
 
 ```signature
-def Physicslib4.AQFT.HaagKastler.IsAlexandrovBasisSet
+def Hilbert6.AQFT.HaagKastler.IsAlexandrovBasisSet
     (B : Set StandardMinkowskiSpacetime.Carrier) : Prop
 ```
 
@@ -900,7 +897,7 @@ Nothing requires $`p \ll q`, so the empty set is a diamond, as in chapter 1.
 The signature of Axiom 3 shows that it is a property of a net `U` together with isotony data `i`:
 
 ```signature
-def Physicslib4.AQFT.HaagKastler.LocalCommutativity
+def Hilbert6.AQFT.HaagKastler.LocalCommutativity
     (U : LocalNet) (i : Isotony U) : Prop
 ```
 
@@ -939,7 +936,7 @@ the statement may refer to it.
 
 ## States
 
-The library's notion of state, `Physicslib4.GNS.State`, is a structure built on another one. For a
+The library's notion of state, `Hilbert6.GNS.State`, is a structure built on another one. For a
 type `A` with `[CStarAlgebra A]`, and without documentation comments:
 
 ```
@@ -1054,11 +1051,11 @@ C\*-algebra, so the library introduces `GNS.State`.
 ## Namespaces
 
 Lean's names are hierarchical, like paths in a file system. The full name of the net is
-`Physicslib4.AQFT.HaagKastler.LocalNet`: the declaration `LocalNet` in the _namespace_
-`Physicslib4.AQFT.HaagKastler`. Source files open a namespace with `namespace … end`, and every
+`Hilbert6.AQFT.HaagKastler.LocalNet`: the declaration `LocalNet` in the _namespace_
+`Hilbert6.AQFT.HaagKastler`. Source files open a namespace with `namespace … end`, and every
 name declared inside receives the prefix. Three mechanisms keep the names short in use.
 
-* `open Physicslib4 Spacetime AQFT.HaagKastler`, as in {ref "lean-in-brief-types"}[section 2], makes the names in those
+* `open Hilbert6 Spacetime AQFT.HaagKastler`, as in {ref "lean-in-brief-types"}[section 2], makes the names in those
   namespaces available without prefix, until the end of the file or section. `open … in` does the
   same for the next command only, as in the `#print axioms` example of {ref "lean-in-brief-checking"}[section 1].
 * Dot notation, as in {ref "lean-in-brief-types"}[section 2]: if `U : LocalNet`, then `U.algebra` means `LocalNet.algebra U`,
@@ -1091,7 +1088,7 @@ To find a theorem, there are four tools.
 Here is the documentation of `Isotony` as the API documentation shows it, with its docstring, the
 blueprint label `def:isotony`, and the docstring of each field:
 
-{docstring Physicslib4.AQFT.HaagKastler.Isotony +hideStructureConstructor}
+{docstring Hilbert6.AQFT.HaagKastler.Isotony +hideStructureConstructor}
 
 :::::exercise
 Mathlib proves that the involution of a C\*-algebra preserves the norm, $`\|a^*\| = \|a\|`
@@ -1128,7 +1125,7 @@ Using the naming convention, say what the library's theorem
 ```
 
 ```leanOutput checkFutureSubset
-Physicslib4.Spacetime.chronologicalFuture_subset_causalFuture (M : Spacetime) (t : M.TimeOrientation) (p : M.Carrier) :
+Hilbert6.Spacetime.chronologicalFuture_subset_causalFuture (M : Spacetime) (t : M.TimeOrientation) (p : M.Carrier) :
   M.chronologicalFuture t p ⊆ M.causalFuture t p
 ```
 ::::

@@ -1,6 +1,6 @@
 # Review: Takesaki's lemma statements (stage 3a), 2026-11-11
 
-Scope: `Physicslib4/Operators/Modular/Takesaki.lean` against `sbsctn:takesaki-lemma` (32 labels).
+Scope: `Hilbert6/Operators/Modular/Takesaki.lean` against `sbsctn:takesaki-lemma` (32 labels).
 All 32 labels have a `leanDeclaration`. The file compiles with only `sorry` warnings. Nothing
 was added except theorems and one `local notation`: no `def`, `abbrev`, `instance` or
 `structure`.

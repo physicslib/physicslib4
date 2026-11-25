@@ -8,7 +8,7 @@ stage 5" notes of `site-consolidation-stage4-progress.md`.
 - `docgen-action` at `7b5b9a1822650bd45aaeb4182d94bceba2030f89` read (`action.yml`,
   `scripts/build_docs.sh`, `src/index.js`, `src/deprecation.js`). Its API-docs build:
   1. `index.js` reads `lakefile.toml` and `lake-manifest.json`: outputs `name` (`physicslib4`),
-     `docs_facets` (each default target + `:docs`: `Physicslib4:docs`) and the cache path list
+     `docs_facets` (each default target + `:docs`: `Hilbert6:docs`) and the cache path list
      (`docbuild/.lake/build/doc/<Module>` for each manifest package mapped to its module names, a
      known table plus an UpperCamelCase fallback, then `Init Lake Lean Std`, then `doc-data`, the
      `declarations/declaration-data.bmp`, `api-docs.db`, `doc-manifest.json` and doc-gen4's static
@@ -19,7 +19,7 @@ stage 5" notes of `site-consolidation-stage4-progress.md`.
      requires the project from `../` and `leanprover/doc-gen4` at the revision derived from
      `lean-toolchain`: `v4.X.Y[-rcZ]` tag, else `nightly-testing`/`main`); copies `references.bib`
      to `docbuild/docs/` if present; `MATHLIB_NO_CACHE_ON_UPDATE=1 lake update physicslib4`;
-     `lake build Physicslib4:docs`; copies `docbuild/.lake/build/doc` to `<homepage>/docs`.
+     `lake build Hilbert6:docs`; copies `docbuild/.lake/build/doc` to `<homepage>/docs`.
   4. Upload/deploy: `upload-pages-artifact@56afc609…` (v3.0.1), `deploy-pages@d6db9016…` (v4.0.5).
   - The API docs build and deployment run only on `push`, so a `workflow_dispatch` run of the
     current workflow deploys nothing.
@@ -54,7 +54,7 @@ stage 5" notes of `site-consolidation-stage4-progress.md`.
 
 - `ruby -ryaml` parses it; every `uses:` is pinned to a 40-hex SHA.
 - The metadata step, run locally on `lakefile.toml`/`lake-manifest.json`: `name=physicslib4`,
-  `docs_facets=Physicslib4:docs`, and a 47-line cache path list identical, line for line, to the
+  `docs_facets=Hilbert6:docs`, and a 47-line cache path list identical, line for line, to the
   one docgen-action logged in run 40730350694 (so the cache it saved under
   `Docs-19034e0a…` can be restored, as long as `lake-manifest.json` is unchanged).
 - The docs build step, with the `lake` lines removed, run in `/tmp`: `docbuild/lakefile.toml`

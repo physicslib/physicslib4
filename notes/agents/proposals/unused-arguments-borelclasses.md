@@ -1,8 +1,8 @@
-# Proposals: `unusedArguments` in `Physicslib4/Spectral/BorelClasses.lean`
+# Proposals: `unusedArguments` in `Hilbert6/Spectral/BorelClasses.lean`
 
 Author: lean-simplifier agent, for kdavis@alum.mit.edu.
 Scope note: `BorelClasses.lean` is outside this task's edit allowlist
-(`Physicslib4/Spectral/Unbounded/{Basic,Spectrum}.lean` only), so nothing in this
+(`Hilbert6/Spectral/Unbounded/{Basic,Spectrum}.lean` only), so nothing in this
 file was changed. These are proposals only.
 
 ## 1. `L0` (line ~279) — unused `[MeasurableSpace X]`

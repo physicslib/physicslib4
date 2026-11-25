@@ -1,7 +1,7 @@
 # Reference manual, chapters "The axioms in curved spacetime" and "General covariance": progress log
 
 Plan: `plan-verso-reference-manual-2026-10-17.md` (chapters 7 and 8). Part A is a docstring pass
-over the headline declarations of `Physicslib4/AQFT/HaagKastlerCurved/`; part B (the chapter text)
+over the headline declarations of `Hilbert6/AQFT/HaagKastlerCurved/`; part B (the chapter text)
 is a later step. Appended after each file.
 
 ## Step 0: reconnaissance (2026-10-21)
@@ -26,7 +26,7 @@ is a later step. Appended after each file.
   `Type u`; the only axiom of the interface is `isBasisSet_smul`; the concrete instance is
   `toAbstractIdentityComponent`. The old text said the interface "corresponds to"
   def:lorentzian-spacetime; that node's `\lean{}` lists only the geometric
-  `Physicslib4.Spacetime.LorentzianSpacetime`, so the Blueprint line names the interface
+  `Hilbert6.Spacetime.LorentzianSpacetime`, so the Blueprint line names the interface
   descriptively. Uncited: `HaagKastlerCurved.LorentzianSpacetime` (proposal below).
 - Built (only the pre-existing module-system notices).
 
@@ -188,10 +188,10 @@ StabilizerKMS 3, GeneralCovariance 6 (including the 2 fields of `NetEquivalence`
 
 Uncited declarations whose docstrings carry a descriptive Blueprint line:
 
-1. `Physicslib4.AQFT.HaagKastlerCurved.LorentzianSpacetime`: add to `\lean{}` of
+1. `Hilbert6.AQFT.HaagKastlerCurved.LorentzianSpacetime`: add to `\lean{}` of
    def:local-algebras-in-curved-spacetime (it is the M of Axiom 1), or a new node "abstract
    Lorentzian spacetime interface" in `haag-kastler-axioms-in-curved-spacetime.tex`.
-2. `Physicslib4.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent`: add to `\lean{}` of
+2. `Hilbert6.Spacetime.LorentzianSpacetime.toAbstractIdentityComponent`: add to `\lean{}` of
    def:isometric-covariance-in-curved-spacetime (its formalization note describes exactly this
    group), or to the new node of item 1.
 3. `HaagKastlerCurved.nonempty_haagKastlerNet`, `trivialHaagKastlerNet`, `trivialLocalNet`,
@@ -221,9 +221,9 @@ is a subsection of Design and of Main, not a part of its own). Tag `curved`, fil
 
 ### Step B1: skeleton, introduction and Overview (2026-10-21)
 
-- Imports the 12 `HaagKastlerCurved` modules used. Opens `Physicslib4`, `Physicslib4.AQFT`,
-  `…HaagKastlerCurved`, `…HaagKastlerCurved.HaagKastlerNet`, `Physicslib4.Spacetime.LorentzianSpacetime`;
-  not `Physicslib4.Spacetime` (its `LorentzianSpacetime` would clash with the interface's).
+- Imports the 12 `HaagKastlerCurved` modules used. Opens `Hilbert6`, `Hilbert6.AQFT`,
+  `…HaagKastlerCurved`, `…HaagKastlerCurved.HaagKastlerNet`, `Hilbert6.Spacetime.LorentzianSpacetime`;
+  not `Hilbert6.Spacetime` (its `LorentzianSpacetime` would clash with the interface's).
 - Overview (~520 words): what changes in curved spacetime; the six axiom declarations; general
   covariance as a property of a `NetTheory`; the list of proved results. Cross-chapter links via
   `{ref "haag-kastler"}` and `{ref "haag-kastler-design"}` (tags, so base-relative).
@@ -260,7 +260,7 @@ is a subsection of Design and of Main, not a part of its own). Tag `curved`, fil
   `localVonNeumannAlgebra_le_commutant`, `localVonNeumannAlgebra_mono`, `isOneParameterAut_flowAut`).
   The stabiliser GNS unitary theorems, `lieConj_image_localVonNeumann` (prints `⋯` in its
   conclusion), the Schlieder property and the purity results are linked with `apiDocs`, not printed.
-- "Not proved" statements: no Reeh–Schlieder theorem (grep: none in `Physicslib4/`); no concrete
+- "Not proved" statements: no Reeh–Schlieder theorem (grep: none in `Hilbert6/`); no concrete
   Schwarzschild/de Sitter net, so Hartle–Hawking/Bunch–Davies are not proved KMS; no net theory
   proved generally covariant (the trivial theory is, mathematically).
 - `nonempty_haagKastlerNet` prints without the algebra universe (0); said so in the prose.
@@ -345,7 +345,7 @@ Follow-ups outside the passes (module docstrings), in addition to the two above:
   `unitaryEquiv_gns_stabAut`, `isPure_precomp_stabAut_iff`).
 - B5: link to the GNS Design subsection "Covariance and unitary implementation".
 - B6: Minkowski link `localCommutativity_iff_exists_commute_ι` (needed the import
-  `Physicslib4.AQFT.HaagKastler.LocalCommutativity`).
+  `Hilbert6.AQFT.HaagKastler.LocalCommutativity`).
 - B7: "preserved by the stabiliser". B8: Overview uses R(gB₁), g ∈ Stab(B).
 - B9: BFV cited with the DOI link (Commun. Math. Phys. 237 (2003) 31–68) and the tutorial link.
 - Built: `lake build`, `generate-manual` OK; 47 internal anchors resolve;

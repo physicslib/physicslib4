@@ -65,7 +65,7 @@ construction step (the unitary conjugation lemma), and two oversized proofs. The
   U^{-1}.
 - `lmm:tomita-adjoint-closure-props`: three moves (closability, extension, c^*Ω = η by a limit). The
   repository has an adjoint-of-closure lemma (`adjoint_closure_eq_adjoint` in
-  `Physicslib4/Spectral/Unbounded/Basic.lean`). With it, c^* = a_0^*, so c^*Ω = a_0^*Ω = η in one
+  `Hilbert6/Spectral/Unbounded/Basic.lean`). With it, c^* = a_0^*, so c^*Ω = a_0^*Ω = η in one
   line. Cite it instead of the sequence argument.
 - `lmm:tomita-adjoint-sqrt-conjugation`: about 12 lines, borderline. It is acceptable as is.
   Optionally split off the inner-product identity <ξ, J v> = conj<Jξ, v>.

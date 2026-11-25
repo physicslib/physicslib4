@@ -8,7 +8,7 @@ included last in `web/Manual.lean` (after `Manual.Curved`, before the draft-only
 
 - Written, ~440 words (raw, URLs included). Placeholders ("This section is in preparation.") for
   sections 5 (Universes) and 6 (Implementation choices). Include line added to `web/Manual.lean`.
-- Verified: no `**Restriction:**` line in `Physicslib4/` (grep empty); "Blueprint: <label>" lines in
+- Verified: no `**Restriction:**` line in `Hilbert6/` (grep empty); "Blueprint: <label>" lines in
   82 files (285 lines); "Implementation note:" paragraphs exist (207); "Formalization note"
   paragraphs in 9 sec10 entries, examples used: thrm:gns-construction-theorem (Mathlib GNS space),
   prpstn:hall-8.3 (`cfcHom`); `CHANGELOG.md` exists; `home_page/guide.md` is the guide page.
@@ -20,7 +20,7 @@ included last in `web/Manual.lean` (after `Manual.Curved`, before the draft-only
   lmm:causal-classification); generator with factor 1/i (def:hall-10.13); time-translation
   unitaries e^{itĤ}, inverse of the Schrödinger evolution (`IsPositiveEnergy` docstring, Stone
   chapter Design); Mathlib inner product conjugate-linear in the first argument; notation `≪[M, t]`,
-  `≺[M, t]` scoped in `Physicslib4.Spacetime` (Causality.lean l. 150, 214); `U.algebra`,
+  `≺[M, t]` scoped in `Hilbert6.Spacetime` (Causality.lean l. 150, 214); `U.algebra`,
   `N.algebra`, `Q.ι hB`, `i.map hB₁ hB₂ h`, `covEquiv` as printed in the HK and curved chapters.
 - Doubt: the `IsPositiveEnergy` docstring writes the convention as U(a) = e^(iP·a). With signature
   (−,+,+,+) and the η-pairing, P·a at a = (t, 0) is −Ĥt, which gives e^(−itĤ), the opposite sign.
@@ -111,7 +111,7 @@ included last in `web/Manual.lean` (after `Manual.Curved`, before the draft-only
   quasilocal algebra (informal in the blueprint); Hartle–Hawking/Bunch–Davies as KMS; general
   covariance of the trivial theory.
 - The intro's claim that a theorem depending on one of them takes it as a hypothesis: checked that
-  `Physicslib4/` has no `sorry` and no `axiom` declarations.
+  `Hilbert6/` has no `sorry` and no `axiom` declarations.
 - Conventions section 1 links the appendix ("Where the library stops"). `web/README.md` lists both
   files.
 - `check_temporal_wording.py` OK. Link check of both generated pages: all blueprint anchors, section

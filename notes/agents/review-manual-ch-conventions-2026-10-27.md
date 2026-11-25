@@ -10,7 +10,7 @@ Severity: error / should fix / nit.
 
 Verified correct (no action):
 - Blueprint/Lean mapping (`\lean`, `\leanok`, `\uses`, "Blueprint:" lines, formalization notes);
-  no `**Restriction:**` line anywhere in `Physicslib4/` or the blueprint (grep empty).
+  no `**Restriction:**` line anywhere in `Hilbert6/` or the blueprint (grep empty).
 - Signature (−,+,+,+), null includes zero (def:timelike-spacelike-null-vectors uses "zero").
 - U(a) = e^(−iP·a), P·a = −P⁰a⁰ + P⃗·a⃗, P⁰ = Ĥ, U(t) = e^(itĤ): matches the `IsPositiveEnergy`
   docstring (PositiveEnergy.lean l. 55–59) and Stone.lean l. 221. Generator with factor 1/i and
@@ -68,7 +68,7 @@ C8. **nit** — l. 300 is a 140-character prose line (not a URL); rewrap to ≤ 
 
 ## 2. Appendix items
 
-Absence check (grep `Physicslib4/`, excluding `scratch_*`; no `sorry`/`axiom` declarations):
+Absence check (grep `Hilbert6/`, excluding `scratch_*`; no `sorry`/`axiom` declarations):
 all 13 items confirmed not proved.
 - Pure states: `PureStateExists.lean` proves only weak-* compactness (and `convex_stateSpace` in
   ExtremeState.lean); its note confirms the missing `LocallyConvexSpace` instance. OK.

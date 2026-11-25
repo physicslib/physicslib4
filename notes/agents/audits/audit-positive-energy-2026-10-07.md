@@ -5,12 +5,12 @@ Date: 2026-10-07. Base: `b1cf7d9` (tip of `numina/aqft-in-lean`). Branch under a
 `notes/agents/plan-positive-energy-2026-10-07.md` (decisions D1–D5, D2 refinement, both approved
 2026-10-07).
 
-## 1. Protected-definition changes (`git diff b1cf7d9 -- Physicslib4`)
+## 1. Protected-definition changes (`git diff b1cf7d9 -- Hilbert6`)
 
-`python3 ~/.claude/lean-kit/lean_guard.py check --base b1cf7d9` reports two `Physicslib4/`
+`python3 ~/.claude/lean-kit/lean_guard.py check --base b1cf7d9` reports two `Hilbert6/`
 protected changes (plus guard-context and blueprint-prose findings, below).
 
-**1a. `Physicslib4.AQFT.IsPositiveEnergy`, `Physicslib4/AQFT/PositiveEnergy.lean`.** Changed from
+**1a. `Hilbert6.AQFT.IsPositiveEnergy`, `Hilbert6/AQFT/PositiveEnergy.lean`.** Changed from
 a `def` to a `structure`:
 
 - Old: `def IsPositiveEnergy (V : ℝ → (H ≃ₗᵢ[ℂ] H)) : Prop := ∃ P : H →L[ℂ] H, P.IsPositive ∧ ∀ t x, V t x = exp((t·I) • P) x` — bounded generator only.
@@ -23,7 +23,7 @@ unchanged, so this is a strict generalization (every old instance, with `P` boun
 instance of the new structure via `isPositiveEnergy_exp`; the converse needs Stone and does not
 hold the other way, which is the intended effect of lifting the restriction).
 
-**1b. `Physicslib4.Spectral.Unbounded.IsPositive`, `Physicslib4/Spectral/Unbounded/Basic.lean`
+**1b. `Hilbert6.Spectral.Unbounded.IsPositive`, `Hilbert6/Spectral/Unbounded/Basic.lean`
 (new def).** `def IsPositive (A : H →ₗ.[ℂ] H) : Prop := IsSymmetric A ∧ ∀ ψ : A.domain, 0 ≤ (⟪(ψ:H), A ψ⟫_ℂ).re`.
 This is **exactly D2 as refined** (quadratic-form positivity, with the symmetric conjunct
 mirroring `ContinuousLinearMap.IsPositive`). The guard flags new `def`s as reserved for the user
@@ -38,7 +38,7 @@ theorem's binders and statement text against `b1cf7d9`; none changed (see §2). 
 does not introduce a name clash with anything the kept statements reference. Benign.
 
 **No other `def`/`structure`/`class`/`abbrev`/`instance` or structure field changed** in
-`Physicslib4/`. `Spectral/Stone/Basic.lean` and the new `Spectral/Stone/Bounded.lean` only add
+`Hilbert6/`. `Spectral/Stone/Basic.lean` and the new `Spectral/Stone/Bounded.lean` only add
 `theorem`s (allowed by policy); `VacuumState.lean`, `QuasilocalKMS.lean`, `StabilizerKMS.lean`,
 `CovariantState.lean` change only docstrings/module comments — the `def`s
 `IsVacuumState`, `IsVacuumStateConcrete`, and both `IsGroundStateForFlow` are byte-for-byte
@@ -80,7 +80,7 @@ equivalence via Stone, per the D1(a)/D1(b) reconciliation in the plan). In
 `generator_eq_of_eq_exp`. In `Spectral/Unbounded/Basic.lean`: `isPositive_toPMap_iff`,
 `IsPositive.of_conj`.
 
-**No theorem was removed or renamed** in `Physicslib4/` on this branch. (The blueprint label
+**No theorem was removed or renamed** in `Hilbert6/` on this branch. (The blueprint label
 `thrm:vacuum-no-stone` was renamed to `thrm:vacuum-invariance-consequences` in commit `79f642a`;
 that is a blueprint-label rename, not a Lean rename — the underlying Lean theorems
 `IsVacuumState.invariant` and `IsVacuumState.exists_gns_irreducible_covariant` are unaffected.)
@@ -106,24 +106,24 @@ silently assumed a bounded generator").
 
 - `#print axioms` (via `lake env lean` on a temp file, against the current `.lake` build — the
   `.olean` for `PositiveEnergy.lean` is newer than its source, so the build is current):
-  - `Physicslib4.AQFT.isPositiveEnergy_iff_exists_exp`: `[propext, Classical.choice, Quot.sound]`
-  - `Physicslib4.AQFT.IsPositiveEnergy.conj`: `[propext, Classical.choice, Quot.sound]`
-  - `Physicslib4.AQFT.isPositiveEnergy_exp`: `[propext, Classical.choice, Quot.sound]`
-  - `Physicslib4.Spectral.Stone.stone`: `[propext, Classical.choice, Quot.sound]`
+  - `Hilbert6.AQFT.isPositiveEnergy_iff_exists_exp`: `[propext, Classical.choice, Quot.sound]`
+  - `Hilbert6.AQFT.IsPositiveEnergy.conj`: `[propext, Classical.choice, Quot.sound]`
+  - `Hilbert6.AQFT.isPositiveEnergy_exp`: `[propext, Classical.choice, Quot.sound]`
+  - `Hilbert6.Spectral.Stone.stone`: `[propext, Classical.choice, Quot.sound]`
 
   No axiom beyond the three standard ones.
-- `grep -rn "sorry\|admit\b\|native_decide\|debug.skipKernelTC\|implemented_by" Physicslib4/`:
+- `grep -rn "sorry\|admit\b\|native_decide\|debug.skipKernelTC\|implemented_by" Hilbert6/`:
   no hits that are actual tactics/attributes — the only matches are two prose uses of the word
   "sorry" inside comments in `Spacetime/Basic.lean` and `Spacetime/Curves.lean` (pre-existing,
   unrelated to this branch, describing that a structure is *free of* `sorry`). **No `sorry` in
   the project.**
-- `**Restriction:**` lines: **none remain anywhere in `Physicslib4/`.** All four
+- `**Restriction:**` lines: **none remain anywhere in `Hilbert6/`.** All four
   (`PositiveEnergy.lean`'s old `IsPositiveEnergy`, `VacuumState.lean`'s `IsVacuumState` and
   `IsVacuumStateConcrete`, `QuasilocalKMS.lean`'s and `StabilizerKMS.lean`'s
   `IsGroundStateForFlow`) were removed in stage 5 (commit `85c1072`), consistent with lifting the
   restriction. One process note, already flagged in the plan's own log: CLAUDE.md's worked
   example of the marker convention ("the positive-energy docstring in
-  `Physicslib4/AQFT/HaagKastler/VacuumState.lean` (bounded generators until Stone's theorem is
+  `Hilbert6/AQFT/HaagKastler/VacuumState.lean` (bounded generators until Stone's theorem is
   available)") no longer exists as written — CLAUDE.md itself is a protected file and wasn't
   touched, so this is a now-stale example the user may want to update, not a bug in the branch.
 - No new unrecorded restriction found: D5 (scope of the vacuum spectrum condition — per-direction
@@ -133,7 +133,7 @@ silently assumed a bounded generator").
   absent from the Lean and the blueprint alike (no dangling reference to it), so it is not an
   unrecorded gap either.
 - `nolint`: two pre-existing uses, both predating this branch and untouched by it —
-  `Physicslib4/Analysis/CStarCompletion.lean:84` and `Physicslib4/Spectral/BorelClasses.lean:279`,
+  `Hilbert6/Analysis/CStarCompletion.lean:84` and `Hilbert6/Spectral/BorelClasses.lean:279`,
   both `@[nolint unusedArguments]`. Out of scope for this audit (no diff touches either file).
 - Verify receipt: `.git/lean-kit/verify-receipt.json` records `lake build` and `lake lint` both
   exit 0, but at `2026-09-29T11:11:06Z` — **before** this branch's commits (2026-10-07). The
@@ -155,14 +155,14 @@ Files changed: `haag-kastler-axioms.tex`, `stones-theorem.tex`, `unbounded-spect
 diffs was checked against `blueprint/lean_decls` (a declaration-name cache dated today) and, for
 the positive-energy nodes, against the Lean source directly:
 
-- `def:positive-energy` (`Physicslib4.AQFT.IsPositiveEnergy`) — **match**. Blueprint: "a family
+- `def:positive-energy` (`Hilbert6.AQFT.IsPositiveEnergy`) — **match**. Blueprint: "a family
   $V(t)$ ... has positive energy when $V$ is a strongly continuous one-parameter unitary group
   ... whose infinitesimal generator $A$ ... is a positive operator ... By Stone's Theorem the
   generator $A$ is then ... self-adjoint, and $V(t)=e^{itA}$ ..." — this is exactly the three
   structure fields plus the Stone-theorem consequence stated as a remark (proved separately as
   `thrm:positive-energy-iff-exp` / `isPositiveEnergy_iff_exists_exp`). Title and prose no longer
   say "bounded-generator scaffold"; good.
-- `def:positive-unbounded-operator` (`Physicslib4.Spectral.Unbounded.IsPositive`) — **match**.
+- `def:positive-unbounded-operator` (`Hilbert6.Spectral.Unbounded.IsPositive`) — **match**.
   Blueprint: "symmetric ... and $\mathrm{Re}\langle\psi,A\psi\rangle \ge 0$ for all
   $\psi\in\mathrm{Dom}(A)$," explicitly density-free — matches the Lean `IsSymmetric A ∧ ∀ ψ : A.domain, 0 ≤ re ⟪ψ, A ψ⟫` exactly, including the density-free framing.
 - `lmm:positive-conj` (`Spectral.Unbounded.IsPositive.of_conj`) — **match**. Blueprint states
@@ -190,7 +190,7 @@ read directly against the Lean declarations.
 
 **One unresolved loose end, already flagged by the plan's own stage-2 log and left for the user's
 call**: `thrm:positive-energy-api` (kept, same label, rewritten body) carries
-`\lean{Physicslib4.AQFT.isPositiveEnergy_const_refl, Physicslib4.AQFT.exp_generator_unique, Physicslib4.AQFT.IsPositiveEnergy.conj, Physicslib4.AQFT.IsPositiveEnergy.strongContinuous}`
+`\lean{Hilbert6.AQFT.isPositiveEnergy_const_refl, Hilbert6.AQFT.exp_generator_unique, Hilbert6.AQFT.IsPositiveEnergy.conj, Hilbert6.AQFT.IsPositiveEnergy.strongContinuous}`
 and `\leanok`, but its body now states six parts (i)-(vi), and its own `\uses` line correctly
 points the *proof* at the newer, finer-grained lemmas
 (`lmm:positive-energy-const, lmm:exp-generator-unique, lmm:positive-conj, lmm:positive-energy-conj, lmm:positive-energy-strong-continuous, lmm:positive-energy-exp-bounded, thrm:positive-energy-iff-exp`).

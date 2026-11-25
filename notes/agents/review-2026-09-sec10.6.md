@@ -4,12 +4,12 @@ Date: 2026-09-25
 Scope: `blueprint/src/sections/sec10/haag-kastler-axioms-in-curved-spacetime.tex`
 (all nodes, `def:local-algebras-in-curved-spacetime` through
 `def:ground-state-for-flow-in-curved-spacetime`), and the Lean it cites:
-`Physicslib4/AQFT/HaagKastlerCurved/{LocalAlgebras, Isotony, LocalCommutativity,
+`Hilbert6/AQFT/HaagKastlerCurved/{LocalAlgebras, Isotony, LocalCommutativity,
 LocalAlgebra, IsometricCovariance, Net, EinsteinCausality, LocalVonNeumann,
 Concrete, GeometricCovariance, Purity, CovariantState, StabilizerAction,
-StabilizerKMS, Spacetime}.lean`, plus the `Physicslib4.Spacetime.*` bridge
+StabilizerKMS, Spacetime}.lean`, plus the `Hilbert6.Spacetime.*` bridge
 declarations these touch (`LorentzianSpacetime.toAbstract`, `Isometry`,
-`CausalComplement`) and `Physicslib4.AQFT.PositiveEnergy`.
+`CausalComplement`) and `Hilbert6.AQFT.PositiveEnergy`.
 
 Read-only review. No `.lean`/`.tex` files were modified.
 `notes/agents/review-2026-09-sec10.1-10.7.md` (§10.1/§10.7) and
@@ -33,12 +33,12 @@ Tool-verified:
   Classical.choice, Quot.sound]`.
 - `grep` for `sorry`, `admit`, `native_decide`, `debug.skipKernelTC`,
   `implemented_by`, `nolint`, `axiom`, `Restriction:` across
-  `Physicslib4/AQFT/HaagKastlerCurved/*.lean`: no hits for any of these
+  `Hilbert6/AQFT/HaagKastlerCurved/*.lean`: no hits for any of these
   except the English word "axiom" in two docstrings (not a declaration).
   In particular **no `Restriction:` marker exists anywhere in this
   directory**, despite there being a restriction that needs one (see
   Medium-1).
-- `git log --since <verify-receipt time> -- Physicslib4/AQFT/HaagKastlerCurved
+- `git log --since <verify-receipt time> -- Hilbert6/AQFT/HaagKastlerCurved
   blueprint/src/.../haag-kastler-axioms-in-curved-spacetime.tex`: empty. The
   last commit touching any file in scope is `ac97898`
   (2026-09-06T00:05:20Z), before the recorded `verify-receipt.json`
@@ -69,7 +69,7 @@ private isotony family, disconnected from Axiom 2's actual chosen family.**
   \mathbf{B}_\kappa$ and the unital $*$-monomorphism $i$ **of Axiom 2
   (Isotony)** $\alpha_\varphi$ commutes with $i$" — i.e. the blueprint reads
   clause (3) as referring to the *same* `i` that Axiom 2 supplies.
-- Lean, `Physicslib4/AQFT/HaagKastlerCurved/IsometricCovariance.lean:78-108`:
+- Lean, `Hilbert6/AQFT/HaagKastlerCurved/IsometricCovariance.lean:78-108`:
   `IsometricCovariance` is
   ```
   def IsometricCovariance (U : LocalNet M) : Prop :=
@@ -147,15 +147,15 @@ prose but never carries the project's `**Restriction:**` marker, even though
 - `CLAUDE.md`: "Record a deliberate restriction in the docstring of the
   declaration, on a line starting `**Restriction:**` ... Example to convert:
   the positive-energy docstring in
-  `Physicslib4/AQFT/HaagKastler/VacuumState.lean` (bounded generators until
+  `Hilbert6/AQFT/HaagKastler/VacuumState.lean` (bounded generators until
   Stone's theorem is available)."
 - The shared definition actually used here,
-  `Physicslib4/AQFT/PositiveEnergy.lean:39-46` (`IsPositiveEnergy`), explains
+  `Hilbert6/AQFT/PositiveEnergy.lean:39-46` (`IsPositiveEnergy`), explains
   the same restriction in prose ("The generator of a physical translation is
   unbounded, so requiring `P` bounded is a restriction; the faithful
   unbounded form needs Stone's theorem ... absent from Mathlib") but has no
   line starting `**Restriction:**`. Neither does
-  `Physicslib4/AQFT/HaagKastler/VacuumState.lean` (confirmed by grep — the
+  `Hilbert6/AQFT/HaagKastler/VacuumState.lean` (confirmed by grep — the
   conversion CLAUDE.md asks for has not happened).
 - Blueprint `def:ground-state-for-flow-in-curved-spacetime`
   (`tex:688-695`) is honest about the same gap in its own prose: "The
@@ -164,7 +164,7 @@ prose but never carries the project's `**Restriction:**` marker, even though
   flagged in a way this audit's own §3 marker-grep would find (there is no
   restriction-marker convention on the *blueprint* side either).
 - Grep confirms: zero occurrences of `Restriction:` anywhere in
-  `Physicslib4/AQFT/HaagKastlerCurved/` or `Physicslib4/AQFT/PositiveEnergy.lean`.
+  `Hilbert6/AQFT/HaagKastlerCurved/` or `Hilbert6/AQFT/PositiveEnergy.lean`.
   This restriction is otherwise well-documented in prose at every site
   (`PositiveEnergy.lean`, `StabilizerKMS.lean:137-145`, blueprint `tex:694`),
   so this is a marker-convention gap, not a hidden one — but it means an
@@ -183,7 +183,7 @@ describes Axiom 3 in its pre-fix, existentially-quantified form, even though
 the actual declaration (correctly) takes the Axiom 2 family as an explicit
 parameter.**
 
-- `Physicslib4/AQFT/HaagKastlerCurved/LocalCommutativity.lean:40-46`
+- `Hilbert6/AQFT/HaagKastlerCurved/LocalCommutativity.lean:40-46`
   (docstring immediately above `LocalCommutativity`): "A local net `U` ...
   satisfies *local commutativity* if **there is a coherent family of isotony
   `*`-monomorphisms** `ι : 𝔘(B₁) ↪ 𝔘(B₂)` ... such that ...". This describes
@@ -219,7 +219,7 @@ but not cross-referenced from the blueprint.**
 
 - Blueprint Axiom 5 (`tex:93-94`): "A member $\varphi$ of the group of
   isometries of $M$ **connected to the identity**."
-- `Physicslib4/AQFT/HaagKastlerCurved/Concrete.lean:65-72`:
+- `Hilbert6/AQFT/HaagKastlerCurved/Concrete.lean:65-72`:
   `LorentzianSpacetime.toAbstract` sets `Isom := Isometry L.toSpacetime` (the
   *full* isometry group), with the identity-component restriction deferred to
   a sibling bridge `toAbstractIdentityComponent`

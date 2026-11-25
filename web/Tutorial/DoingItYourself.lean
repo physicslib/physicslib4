@@ -2,8 +2,8 @@ import VersoManual
 import Tutorial.Meta
 import Tutorial.Papers
 import Tutorial.WorkedExamples
-import Physicslib4.AQFT.HaagKastler.Net
-import Physicslib4.GNS.ExtremeState
+import Hilbert6.AQFT.HaagKastler.Net
+import Hilbert6.GNS.ExtremeState
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
@@ -27,7 +27,7 @@ is built. Lean code is checked against the library, as in chapters 2 and 3. The 
 the short names of chapter 3:
 
 ```lean
-open Physicslib4 Spacetime AQFT.HaagKastler
+open Hilbert6 Spacetime AQFT.HaagKastler
 open scoped ComplexOrder
 ```
 
@@ -74,7 +74,7 @@ A build that ends without errors has checked every proof in the library.
 
 The standard editor is [VS Code](https://code.visualstudio.com/) with the _Lean 4_ extension.
 Open the folder `physicslib4` itself, so that the extension finds `lean-toolchain`, and then a
-library file, say `Physicslib4/AQFT/HaagKastler/Net.lean`, the home of chapter 3's trivial net.
+library file, say `Hilbert6/AQFT/HaagKastler/Net.lean`, the home of chapter 3's trivial net.
 A Lean server starts, loads the file's imports (seconds, once `lake build` has run) and checks the
 file as you type. Three things are then at hand.
 
@@ -94,13 +94,13 @@ A file sees changes to the files it imports once they are saved and its server i
 Create a file at the root of the repository, say `Playground.lean`, and start it with
 
 ```
-import Physicslib4
+import Hilbert6
 
-open Physicslib4 Spacetime AQFT.HaagKastler
+open Hilbert6 Spacetime AQFT.HaagKastler
 open scoped ComplexOrder InnerProductSpace
 ```
 
-`import Physicslib4` loads the whole library, and Mathlib with it. Below, paste an exercise from
+`import Hilbert6` loads the whole library, and Mathlib with it. Below, paste an exercise from
 chapter 2 or 3, together with any definition from the text it uses, such as chapter 3's
 `identityState`, and replace the `sorry` by a proof. The file is yours; do not commit it.
 
@@ -120,7 +120,7 @@ code of the modules it links, and takes a while. The last command writes the HTM
 that it fails to check, and the build stops there.
 
 :::::exercise
-_Needs a local setup._ Build the library, open `Physicslib4/AQFT/HaagKastler/Net.lean`, and find
+_Needs a local setup._ Build the library, open `Hilbert6/AQFT/HaagKastler/Net.lean`, and find
 the proof of `trivialLocalNet_localCommutativity`. Put the cursor after `intro` and read the goal
 in the infoview. Then replace `@mul_comm ℂ _ _ _` by `mul_comm` and read the error.
 
@@ -173,11 +173,11 @@ says what its blueprint entry says, so it is checked against the blueprint, and 
 
 The repository has four parts.
 
-* `Physicslib4/`: the library, by subject. `Spacetime/` and `Geometry/` hold spacetimes, their
+* `Hilbert6/`: the library, by subject. `Spacetime/` and `Geometry/` hold spacetimes, their
   causal structure and the Alexandrov topology; `GNS/` states and the GNS construction;
   `Spectral/` and `Operators/` the spectral theorems, Stone's theorem and operator algebra;
   `Analysis/` supporting analysis; `AQFT/HaagKastler/` and `AQFT/HaagKastlerCurved/` the axioms
-  in Minkowski and in curved spacetime. The file `Physicslib4.lean` imports every file of the
+  in Minkowski and in curved spacetime. The file `Hilbert6.lean` imports every file of the
   library.
 * `blueprint/src/`: the blueprint's LaTeX source; chapter 10 is in `sections/sec10/`, one file per
   section.
@@ -214,8 +214,8 @@ blueprint entries does it use?
 ::::solution
 The entry names two declarations, `HaagKastlerNet.einstein_causality` and
 `HaagKastlerNet.exists_gns_einstein_causality`, both in the namespace
-`Physicslib4.AQFT.HaagKastler` and in the file
-`Physicslib4/AQFT/HaagKastler/EinsteinCausality.lean`.
+`Hilbert6.AQFT.HaagKastler` and in the file
+`Hilbert6/AQFT/HaagKastler/EinsteinCausality.lean`.
 It uses `def:haag-kastler-net`, `thrm:gns-construction-theorem` and `def:state`: the edges into
 its node in the dependency graph.
 ::::
@@ -269,9 +269,9 @@ it tells you which lemmas the Lean proof needs.
 ## Translate it into Lean
 
 The statement goes in the library next to what it uses. Here that is a new file,
-`Physicslib4/AQFT/HaagKastler/TrivialState.lean`, which imports the files that define the trivial
-net and `GNS.State.comp`, opens `namespace Physicslib4.AQFT.HaagKastler` like its neighbours, and
-is added to `Physicslib4.lean`. The two claims, with `sorry` for their proofs:
+`Hilbert6/AQFT/HaagKastler/TrivialState.lean`, which imports the files that define the trivial
+net and `GNS.State.comp`, opens `namespace Hilbert6.AQFT.HaagKastler` like its neighbours, and
+is added to `Hilbert6.lean`. The two claims, with `sorry` for their proofs:
 
 ```lean
 example (x : trivialHaagKastlerNet.quasilocal.carrier) :
@@ -747,9 +747,9 @@ The blueprint entry then gets its links and its marks:
 ```
 \begin{proposition}[The State of the Trivial Net]
     \label{prpstn:trivial-net-state}
-    \lean{Physicslib4.AQFT.HaagKastler.trivial_exists_scalar,
-      Physicslib4.AQFT.HaagKastler.trivialNetState}
-    \leanfile{Physicslib4/AQFT/HaagKastler/TrivialState.lean}
+    \lean{Hilbert6.AQFT.HaagKastler.trivial_exists_scalar,
+      Hilbert6.AQFT.HaagKastler.trivialNetState}
+    \leanfile{Hilbert6/AQFT/HaagKastler/TrivialState.lean}
     \uses{def:state, def:quasilocal-algebra}
     \leanok
     ...
@@ -813,7 +813,7 @@ GitHub. It checks, in order:
 * that it passes the linters of Mathlib's companion library Batteries (`lake lint`): every
   definition has a docstring, no argument is unused, `simp` lemmas are in the right form, and so
   on;
-* that `Physicslib4.lean` imports every file of the library (`lake exe mk_all --check`), so a new
+* that `Hilbert6.lean` imports every file of the library (`lake exe mk_all --check`), so a new
   file must be added there;
 * that every Lean name in a blueprint `\lean{…}` exists (`checkdecls`, from the package of the
   same name);
@@ -871,15 +871,15 @@ definitions, go to the
 [repository's issues](https://github.com/physicslib/physicslib4/issues).
 
 :::::exercise
-You add the file `Physicslib4/AQFT/HaagKastler/TrivialState.lean` of the worked project, with a
+You add the file `Hilbert6/AQFT/HaagKastler/TrivialState.lean` of the worked project, with a
 docstring on `trivialNetState` that reads "The state is now proved unique." You forget to add the
-file to `Physicslib4.lean`. Which checks fail?
+file to `Hilbert6.lean`. Which checks fail?
 
 ::::solution
-Two. `lake exe mk_all --check` fails, because `Physicslib4.lean` does not import the new file. And
+Two. `lake exe mk_all --check` fails, because `Hilbert6.lean` does not import the new file. And
 `scripts/check_temporal_wording.py` fails on "now proved", which narrates history; the docstring
 should say "The state is unique." Note that `lake build` passes: it builds only what
-`Physicslib4.lean` imports, so the new file is not even compiled, and an error in it would go
+`Hilbert6.lean` imports, so the new file is not even compiled, and an error in it would go
 unnoticed, which is one reason for the import check. If the blueprint entry of section 6 is
 already in place, `checkdecls` fails too: its `\lean{…}` names are declared in a file that is not
 built.
@@ -902,7 +902,7 @@ blueprint as well as the Lean. Some directions, from small to large:
 * _A net with quantum physics in it._ The free scalar field, as a net of Weyl algebras with its
   Fock vacuum, would be the first model whose local algebras are not commutative.
 * _Restrictions._ A declaration that is less general than intended says so in a
-  `**Restriction:**` line, naming what it waits on; `grep -rn "Restriction:" Physicslib4` lists
+  `**Restriction:**` line, naming what it waits on; `grep -rn "Restriction:" Hilbert6` lists
   them, and each is a ready-made project. The search can come back empty, when every declaration
   has its intended general form.
 * _Mathlib._ Results proved here that are not about physics, such as the extension of a

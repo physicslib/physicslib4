@@ -12,7 +12,7 @@ Moved the three paragraphs describing `MinkowskiSpacetime` (carrier, convention,
 into `MinkowskiSpacetime`'s own docstring at line ~1729 (merged, no duplication). Left
 `standardMinkowskiTimeOrientation`'s docstring as a short standalone description (the `∂_0`
 vector field and why it's needed, pointing to `MinkowskiSpacetime` for the Alexandrov-topology
-context). Verified with `lake env lean Physicslib4/Spacetime/Minkowski.lean`: no output (no
+context). Verified with `lake env lean Hilbert6/Spacetime/Minkowski.lean`: no output (no
 errors/warnings).
 
 ## 3. R13-5 — docstrings on substantive undocumented theorems
@@ -29,14 +29,14 @@ Corrected the "Notes" paragraph: it had claimed `IsCyclicVector` keeps `A` "gene
 plain algebra per `def:cyclic-vector`, but `A` is fixed to `[CStarAlgebra A]` via the file's
 ambient `variable`. Reworded to say Lean requires a unital C*-algebra (matching every call site)
 and that the generality is kept on the `H` side instead. Docstring-only change.
-Verified with `lake env lean Physicslib4/GNS/Basic.lean`: no output.
+Verified with `lake env lean Hilbert6/GNS/Basic.lean`: no output.
 
 ## 5. R10-3 — KMS.lean module docstring wording
 Replaced "unconditionally for `β > 0`" (ambiguous: reads as "with no hypotheses") with an explicit
 statement that `IsKMSState.invariant` needs a `StripLiouville β` hypothesis and that
 `invariant_of_pos` discharges it automatically whenever `β > 0`. Confirmed against the actual
 signatures (`IsKMSState.invariant` takes `hSL : StripLiouville β`; `invariant_of_pos` takes
-`hβ : 0 < β`). Verified with `lake env lean Physicslib4/AQFT/KMS.lean`: no output.
+`hβ : 0 < β`). Verified with `lake env lean Hilbert6/AQFT/KMS.lean`: no output.
 
 ## 6. Unexplained `set_option` uses
 All six `respectTransparency` declarations (`StandardMinkowskiSpacetime`,
@@ -63,7 +63,7 @@ warning the option was suppressing (`'not_isIrreducible_directSum' does not use 
 ι]`), i.e. single-file `lake env lean` does not run this linter the same way the full build does.
 Restored the `set_option` with a one-line comment explaining the hypothesis is bound by the
 ambient `variable` but only used irrelevantly (through `lp.single`/instance resolution).
-Re-verified with `lake build Physicslib4.GNS.Amplification`: warning gone, build succeeds.
+Re-verified with `lake build Hilbert6.GNS.Amplification`: warning gone, build succeeds.
 Set_options removed: 0. Set_options kept with an added comment: 9 (`respectTransparency` × 3 in
 Minkowski.lean, × 6 in Pullback.lean [one site also carries `maxHeartbeats`, already commented],
 × 1 in CrossMetricIsometry.lean; `linter.unusedDecidableInType false` × 1 in Amplification.lean).
@@ -79,14 +79,14 @@ files/lines untouched by stage 2 (`GNS/Construction.lean`, `GNS/ExtremeState.lea
 — none of the eight files edited in this stage (CausalComplement.lean, PureStateExists.lean,
 QuasilocalIntertwiner.lean, Net.lean, GNS/Basic.lean, KMS.lean, BorelClasses.lean, DirectSum.lean,
 Minkowski.lean, Pullback.lean, Amplification.lean, OperatorIntegral.lean) contribute a new warning.
-`lake lint`: "Linting passed for Physicslib4." Stage 2 complete.
+`lake lint`: "Linting passed for Hilbert6." Stage 2 complete.
 
 ## 7. R03-2 — `@[nolint unusedArguments]` on `L0` (BorelClasses.lean:279)
 Added a one-line comment above the attribute: `MeasurableSpace X` is unused in the body (only
 `TopologicalSpace X` is needed via `C(X, ℝ)`), kept for parity with the file's other definitions,
 and pointed back at the docstring for why the measurability conjunct is dropped. Comment-only
 edit (the `def` itself untouched). Verified with
-`lake env lean Physicslib4/Spectral/BorelClasses.lean`: no output.
+`lake env lean Hilbert6/Spectral/BorelClasses.lean`: no output.
 
 ## 8. R04-2 — unexplained `erw` in DirectSum.lean (lines 262, 294, 467 in the original; shifted by
 docstring edits elsewhere in this stage)
@@ -100,5 +100,5 @@ committed `private theorem`s, not statement changes, so not guard-protected):
   Replaced `erw` with `rw` — a genuine simplification, no comment needed.
 - `summand_mem_range_subSmul` (`apply_of_mem_summand hT m ξ`): same `subSmul`-domain mismatch as
   the first site; `rw` fails the same way. Kept `erw`, added a one-line comment.
-Verified with `lake env lean Physicslib4/Spectral/Unbounded/DirectSum.lean`: no output (no new
+Verified with `lake env lean Hilbert6/Spectral/Unbounded/DirectSum.lean`: no output (no new
 errors/warnings) after all three changes together.

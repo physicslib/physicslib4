@@ -40,7 +40,7 @@ project: building a state on a net's quasilocal algebra with `GNS.State.comp`.
 2. **How the project is organised.**
    - The blueprint is the specification; the Lean is checked against it.
    - Only Chapter 10 is formalised.
-   - The directory layout: `Physicslib4/`, `blueprint/src/`, `web/`, `home_page/`.
+   - The directory layout: `Hilbert6/`, `blueprint/src/`, `web/`, `home_page/`.
    - Conventions:
      - definitions and axiom structures are design decisions: propose changes, don't just make them;
      - `**Restriction:**` lines record deliberate restrictions;

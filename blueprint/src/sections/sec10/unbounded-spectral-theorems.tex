@@ -19,7 +19,7 @@ Recall from Section~\ref{sctn:spectral-theorems} that $\mathbf{H}$ denotes a sep
 
 \begin{definition}[Unbounded Operator]
     \label{def:hall-3.1}
-    \lean{LinearPMap, Physicslib4.Spectral.Unbounded.HasDenseDomain, Physicslib4.Spectral.Unbounded.subSmul}
+    \lean{LinearPMap, Hilbert6.Spectral.Unbounded.HasDenseDomain, Hilbert6.Spectral.Unbounded.subSmul}
     \uses{def:bounded-operator-notation}
     \leanok
     Let $\mathbf{H}$ be a separable, complex Hilbert space. An \textit{unbounded operator} $A$ on $\mathbf{H}$ is a linear map $A : \text{Dom}(A) \to \mathbf{H}$, where $\text{Dom}(A)$, called the \textit{domain} of $A$, is a dense subspace of $\mathbf{H}$. Here "unbounded" means "not necessarily bounded": we permit the case $\text{Dom}(A) = \mathbf{H}$ together with $A \in \mathcal{B}(\mathbf{H})$, the set of bounded operators on $\mathbf{H}$, but do not require it.
@@ -102,7 +102,7 @@ The definition just given is not self-evidently well posed: it declares $A^*\phi
 
 \begin{proposition}[The Adjoint is Well Defined]
     \label{prpstn:adjoint-well-defined}
-    \lean{Physicslib4.Spectral.Unbounded.existsUnique_adjoint_apply}
+    \lean{Hilbert6.Spectral.Unbounded.existsUnique_adjoint_apply}
     \leanok
     Let $A$ be an unbounded operator on $\mathbf{H}$ and let $\phi \in \text{Dom}(A^*)$. Then there is exactly one $\chi \in \mathbf{H}$ with
     \begin{align}
@@ -127,7 +127,7 @@ Before proceeding, we check that $A^*$, as just constructed, is again a linear o
 
 \begin{proposition}[Linearity of the Adjoint]
     \label{prpstn:hall-linearity-of-the-adjoint}
-    \lean{Physicslib4.Spectral.Unbounded.smul_add_mem_adjoint_domain, Physicslib4.Spectral.Unbounded.adjoint_smul_add}
+    \lean{Hilbert6.Spectral.Unbounded.smul_add_mem_adjoint_domain, Hilbert6.Spectral.Unbounded.adjoint_smul_add}
     \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$. Then $A^*$ is linear on $\text{Dom}(A^*)$: for all $\phi_1, \phi_2 \in \text{Dom}(A^*)$ and $\alpha, \beta \in \mathbb{C}$, we have $\alpha\phi_1 + \beta\phi_2 \in \text{Dom}(A^*)$, and
     \begin{align}
@@ -152,7 +152,7 @@ Several proofs below establish $\psi \in \text{Dom}(A^*)$ by exhibiting a vector
 
 \begin{lemma}[Characterizing Membership in the Adjoint's Domain]
     \label{lmm:characterizing-adjoint-domain-membership}
-    \lean{Physicslib4.Spectral.Unbounded.mem_adjoint_domain_iff_exists, Physicslib4.Spectral.Unbounded.adjoint_apply_eq_of_forall_inner}
+    \lean{Hilbert6.Spectral.Unbounded.mem_adjoint_domain_iff_exists, Hilbert6.Spectral.Unbounded.adjoint_apply_eq_of_forall_inner}
     \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$ and $\psi \in \mathbf{H}$. Then $\psi \in \text{Dom}(A^*)$ if and only if there exists $\varphi \in \mathbf{H}$ such that $\left< \psi, A\chi \right> = \left< \varphi, \chi \right>$ for all $\chi \in \text{Dom}(A)$; in that case, $\varphi = A^*\psi$.
 \end{lemma}
@@ -168,7 +168,7 @@ Among unbounded operators, the ones of central interest to us are those whose ad
 
 \begin{definition}[Symmetric Operator]
     \label{def:hall-9.2}
-    \lean{Physicslib4.Spectral.Unbounded.IsSymmetric, Physicslib4.Spectral.Unbounded.isSymmetric_iff_isFormalAdjoint}
+    \lean{Hilbert6.Spectral.Unbounded.IsSymmetric, Hilbert6.Spectral.Unbounded.isSymmetric_iff_isFormalAdjoint}
     \uses{def:hall-3.1, def:hall-9.1}
     \leanok
     An unbounded operator $A$ on $\mathbf{H}$ is \textit{symmetric} if
@@ -192,7 +192,7 @@ If $A$ is symmetric, it turns out that $A^*$ is always an extension of $A$ in th
 
 \begin{proposition}[Symmetric Operators and the Adjoint]
     \label{prpstn:hall-9.4}
-    \lean{Physicslib4.Spectral.Unbounded.isSymmetric_iff_le_adjoint}
+    \lean{Hilbert6.Spectral.Unbounded.isSymmetric_iff_le_adjoint}
     \leanok
     An unbounded operator $A$ is symmetric if and only if $A^*$ is an extension of $A$.
 \end{proposition}
@@ -232,7 +232,7 @@ Positivity of an unbounded operator is a condition on its expectation values, im
 
 \begin{definition}[Positive Operator]
     \label{def:positive-unbounded-operator}
-    \lean{Physicslib4.Spectral.Unbounded.IsPositive}
+    \lean{Hilbert6.Spectral.Unbounded.IsPositive}
     \uses{def:hall-3.1, def:hall-9.2}
     \leanok
     An unbounded operator $A$ on $\mathbf{H}$ is \textit{positive} if it is symmetric~(\ref{def:hall-9.2}) and
@@ -244,7 +244,7 @@ Positivity of an unbounded operator is a condition on its expectation values, im
 
 \begin{lemma}[Positivity of a Bounded Operator]
     \label{lmm:positive-bounded-agrees}
-    \lean{Physicslib4.Spectral.Unbounded.isPositive_toPMap_iff}
+    \lean{Hilbert6.Spectral.Unbounded.isPositive_toPMap_iff}
     \uses{def:positive-unbounded-operator, def:bounded-operator-notation, def:non-negative-operator}
     \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$, regarded as an unbounded operator with domain $\mathbf{H}$. Then $P$ is positive in the sense of Definition~\ref{def:positive-unbounded-operator} if and only if it is positive as a bounded operator, that is, symmetric with $\text{Re}\left< P\psi, \psi \right> \ge 0$ for all $\psi \in \mathbf{H}$ (in Mathlib, \texttt{ContinuousLinearMap.IsPositive}; for a symmetric bounded operator this is the non-negativity of Definition~\ref{def:non-negative-operator}).
@@ -326,7 +326,7 @@ Two elementary facts about this closure — that it is automatically linear, and
 
 \begin{proposition}[Linearity and the Sequential Description of the Closure]
     \label{prpstn:closure-linearity-and-sequential-description}
-    \lean{Physicslib4.Spectral.Unbounded.hasDenseDomain_closure, Physicslib4.Spectral.Unbounded.mem_domain_closure_iff, Physicslib4.Spectral.Unbounded.closure_apply_eq_of_tendsto, Physicslib4.Spectral.Unbounded.closure_le_of_isClosed, LinearPMap.le_closure, LinearPMap.IsClosable.closure_isClosed}
+    \lean{Hilbert6.Spectral.Unbounded.hasDenseDomain_closure, Hilbert6.Spectral.Unbounded.mem_domain_closure_iff, Hilbert6.Spectral.Unbounded.closure_apply_eq_of_tendsto, Hilbert6.Spectral.Unbounded.closure_le_of_isClosed, LinearPMap.le_closure, LinearPMap.IsClosable.closure_isClosed}
     \leanok
     Suppose $A$ is a closable operator on $\mathbf{H}$.
     \begin{enumerate}
@@ -353,7 +353,7 @@ Hall poses the next fact as Exercise 9.11.7(a); we need it in the proof of essen
 
 \begin{lemma}[The Closure of a Symmetric Operator is Symmetric]
     \label{lmm:closure-of-symmetric-is-symmetric}
-    \lean{Physicslib4.Spectral.Unbounded.isSymmetric_closure}
+    \lean{Hilbert6.Spectral.Unbounded.isSymmetric_closure}
     \leanok
     Let $A$ be a symmetric, closable, unbounded operator on $\mathbf{H}$. Then $A^{\text{cl}}$ is symmetric.
 \end{lemma}
@@ -373,7 +373,7 @@ With self-adjointness, symmetry, and closure all in hand, we can state the last 
 
 \begin{definition}[Essentially Self-Adjoint Operator]
     \label{def:hall-9.7}
-    \lean{Physicslib4.Spectral.Unbounded.IsEssentiallySelfAdjoint}
+    \lean{Hilbert6.Spectral.Unbounded.IsEssentiallySelfAdjoint}
     \uses{def:hall-3.1, def:hall-9.2, def:hall-9.5, def:hall-9.6, def:hall-9.1}
     \leanok
     An unbounded operator $A$ on $\mathbf{H}$ is \textit{essentially self-adjoint} if $A$ is symmetric, $A$ is closable, and $A^{\text{cl}}$ is self-adjoint.
@@ -386,7 +386,7 @@ A remark on typing, before the first proposition of this section. Definition~\re
 
 \begin{definition}[Closed Linear Map on a Subspace]
     \label{def:closed-linear-map-on-a-subspace}
-    \lean{LinearPMap.IsClosed, Physicslib4.Spectral.Unbounded.isClosed_iff_forall_tendsto}
+    \lean{LinearPMap.IsClosed, Hilbert6.Spectral.Unbounded.isClosed_iff_forall_tendsto}
     \uses{def:hall-9.6, def:hall-3.1, prpstn:hall-9.4}
     \leanok
     Let $D \subset \mathbf{H}$ be a subspace, not necessarily dense, and $T : D \to \mathbf{H}$ a linear map. The \textit{graph} of $T$ is $\{ (\psi, T\psi) \mid \psi \in D \} \subset \mathbf{H} \times \mathbf{H}$, and $T$ is \textit{closed} if its graph is a closed subset of $\mathbf{H} \times \mathbf{H}$ (in the product topology fixed above). Equivalently, by sequential closedness and componentwise convergence exactly as in Definition~\ref{def:hall-9.6}: $T$ is closed if and only if, whenever $\{\psi_n\}$ is a sequence in $D$ with $\psi_n \to \psi$ and $T\psi_n \to \varphi$ for some $\psi,\varphi \in \mathbf{H}$, it follows that $\psi \in D$ and $T\psi = \varphi$.
@@ -400,7 +400,7 @@ Our first observation is that the adjoint's graph is always closed, regardless o
 
 \begin{proposition}[Closed Graph of the Adjoint; Closability of Symmetric Operators]
     \label{prpstn:hall-9.8}
-    \lean{Physicslib4.Spectral.Unbounded.isClosable_of_isSymmetric, LinearPMap.adjoint_isClosed}
+    \lean{Hilbert6.Spectral.Unbounded.isClosable_of_isSymmetric, LinearPMap.adjoint_isClosed}
     \leanok
     \begin{enumerate}
         \item If $A$ is an unbounded operator on $\mathbf{H}$, then the graph of $A^*$ (which may or may not be densely defined) is closed in $\mathbf{H} \times \mathbf{H}$.
@@ -423,7 +423,7 @@ Having shown that closable operators are exactly those with a well-behaved closu
 
 \begin{proposition}[The Adjoint of a Closure]
     \label{prpstn:hall-9.10}
-    \lean{Physicslib4.Spectral.Unbounded.adjoint_closure_eq_adjoint}
+    \lean{Hilbert6.Spectral.Unbounded.adjoint_closure_eq_adjoint}
     \leanok
     If $A$ is a closable operator on $\mathbf{H}$, then the adjoint of $A^{\text{cl}}$ coincides with the adjoint of $A$.
 \end{proposition}
@@ -445,7 +445,7 @@ The proof of the next proposition uses a general monotonicity fact about adjoint
 
 \begin{lemma}[Extension Reverses Adjoint Domains]
     \label{lmm:extension-reverses-adjoint-domains}
-    \lean{Physicslib4.Spectral.Unbounded.adjoint_le_adjoint_of_le}
+    \lean{Hilbert6.Spectral.Unbounded.adjoint_le_adjoint_of_le}
     \leanok
     If $C_1$ is an extension of $C_2$, then $\text{Dom}(C_1^*) \subset \text{Dom}(C_2^*)$, and $C_1^*$ and $C_2^*$ agree on $\text{Dom}(C_1^*)$.
 \end{lemma}
@@ -461,7 +461,7 @@ A self-adjoint operator admits no symmetric enlargement of its domain: any symme
 
 \begin{lemma}[A Self-Adjoint Operator has no Proper Symmetric Extension]
     \label{lmm:self-adjoint-maximally-symmetric}
-    \lean{Physicslib4.Spectral.Unbounded.eq_of_isSelfAdjoint_of_isSymmetric_of_le}
+    \lean{Hilbert6.Spectral.Unbounded.eq_of_isSelfAdjoint_of_isSymmetric_of_le}
     \uses{def:hall-9.2, def:hall-9.3, def:hall-9.5}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and let $B$ be a symmetric extension of $A$. Then $\text{Dom}(A) = \text{Dom}(B)$, and hence $A = B$.
@@ -490,7 +490,7 @@ Finally, $B$ agrees with $A$ on $\text{Dom}(A)$, again because $B$ extends $A$; 
 
 \begin{proposition}[Uniqueness of the Self-Adjoint Extension of an Essentially Self-Adjoint Operator]
     \label{prpstn:hall-9.11}
-    \lean{Physicslib4.Spectral.Unbounded.existsUnique_isSelfAdjoint_extension, Physicslib4.Spectral.Unbounded.eq_closure_of_isSelfAdjoint_of_le}
+    \lean{Hilbert6.Spectral.Unbounded.existsUnique_isSelfAdjoint_extension, Hilbert6.Spectral.Unbounded.eq_closure_of_isSelfAdjoint_of_le}
     \leanok
     If $A$ is essentially self-adjoint, then $A^{\text{cl}}$ is the unique self-adjoint extension of $A$.
 \end{proposition}
@@ -514,7 +514,7 @@ We record next a description of $\text{Ker}(A^*)$ in terms of $A$ itself, genera
 
 \begin{definition}[Kernel of an Unbounded Operator]
     \label{def:kernel-of-an-unbounded-operator}
-    \lean{Physicslib4.Spectral.Unbounded.ker}
+    \lean{Hilbert6.Spectral.Unbounded.ker}
     \uses{def:hall-3.1}
     \leanok
     If $A$ is an unbounded operator on $\mathbf{H}$, its \textit{kernel} is
@@ -526,7 +526,7 @@ We record next a description of $\text{Ker}(A^*)$ in terms of $A$ itself, genera
 
 \begin{definition}[Range of an Unbounded Operator]
     \label{def:range-of-an-unbounded-operator}
-    \lean{Physicslib4.Spectral.Unbounded.range}
+    \lean{Hilbert6.Spectral.Unbounded.range}
     \uses{def:hall-3.1, def:orthogonal-complement}
     \leanok
     If $A$ is an unbounded operator on $\mathbf{H}$, its \textit{range} is $\text{Range}(A) \equiv \{ A\psi \mid \psi \in \text{Dom}(A) \} \subset \mathbf{H}$. Since $\text{Dom}(A)$ is a subspace of $\mathbf{H}$ and $A$ is linear, $\text{Range}(A)$ is again a subspace of $\mathbf{H}$: it contains $0 = A0$, and for $A\psi_1, A\psi_2 \in \text{Range}(A)$ and $\alpha,\beta \in \mathbb{C}$, linearity of $A$ gives $\alpha A\psi_1 + \beta A\psi_2 = A(\alpha\psi_1+\beta\psi_2) \in \text{Range}(A)$, as $\alpha\psi_1+\beta\psi_2 \in \text{Dom}(A)$. Unwinding Definition~\ref{def:orthogonal-complement} for $V = \text{Range}(A)$: $\left( \text{Range}(A) \right)^\perp = \{ \psi \in \mathbf{H} \mid \left< \psi, A\phi \right> = 0 \text{ for all } \phi \in \text{Dom}(A) \}$ — the quantifier ranges over $\text{Dom}(A)$, not all of $\mathbf{H}$.
@@ -536,7 +536,7 @@ We will need two standard facts about closed subspaces of a Hilbert space at sev
 
 \begin{proposition}[Orthogonal Decomposition and the Double Complement]
     \label{prpstn:hall-a.49}
-    \lean{Physicslib4.Spectral.Unbounded.existsUnique_add_mem_orthogonal, Submodule.orthogonal_orthogonal_eq_closure}
+    \lean{Hilbert6.Spectral.Unbounded.existsUnique_add_mem_orthogonal, Submodule.orthogonal_orthogonal_eq_closure}
     \uses{def:orthogonal-complement}
     \leanok
     \begin{enumerate}
@@ -552,7 +552,7 @@ We record one immediate consequence of Part 2, in the form we will repeatedly ne
 
 \begin{corollary}[Trivial Complement Characterizes Density]
     \label{crllr:trivial-complement-characterizes-density}
-    \lean{Physicslib4.Spectral.Unbounded.dense_iff_orthogonal_eq_bot}
+    \lean{Hilbert6.Spectral.Unbounded.dense_iff_orthogonal_eq_bot}
     \leanok
     A subspace $V \subset \mathbf{H}$ is dense in $\mathbf{H}$ if and only if $V^\perp = \{0\}$.
 \end{corollary}
@@ -566,7 +566,7 @@ Conversely, suppose $V$ is dense, i.e. $\overline{V} = \mathbf{H}$. Let $\psi \i
 
 \begin{proposition}[Orthogonal Complement of the Range]
     \label{prpstn:hall-9.12}
-    \lean{Physicslib4.Spectral.Unbounded.orthogonal_range_eq_ker_adjoint}
+    \lean{Hilbert6.Spectral.Unbounded.orthogonal_range_eq_ker_adjoint}
     \leanok
     If $A$ is an unbounded operator on $\mathbf{H}$, then
     \begin{align}
@@ -589,7 +589,7 @@ The next proposition tells us how the adjoint interacts with adding a bounded op
 
 \begin{proposition}[Adjoint of a Sum with a Bounded Operator]
     \label{prpstn:hall-9.13}
-    \lean{Physicslib4.Spectral.Unbounded.adjoint_add_toPMap, Physicslib4.Spectral.Unbounded.isSelfAdjoint_add_of_isSelfAdjoint}
+    \lean{Hilbert6.Spectral.Unbounded.adjoint_add_toPMap, Hilbert6.Spectral.Unbounded.isSelfAdjoint_add_of_isSelfAdjoint}
     \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$ and $B \in \mathcal{B}(\mathbf{H})$ is a bounded operator defined on all of $\mathbf{H}$. Let $A + B$ denote the operator with $\text{Dom}(A+B) = \text{Dom}(A)$, given by $(A+B)\psi = A\psi + B\psi$ for all $\psi \in \text{Dom}(A)$. Then $(A+B)^*$ has the same domain as $A^*$, and
     \begin{align}
@@ -639,7 +639,7 @@ Proposition~\ref{prpstn:hall-9.13} tells us how to add a bounded operator $B$ to
 
 \begin{lemma}[Adjoint of a Scalar Multiple of the Identity]
     \label{lmm:adjoint-of-scalar-multiple-of-identity}
-    \lean{Physicslib4.Spectral.Unbounded.adjoint_smul_id}
+    \lean{Hilbert6.Spectral.Unbounded.adjoint_smul_id}
     \leanok
     For $\lambda \in \mathbb{C}$, the bounded operator $\lambda\mathbf{1}$ (defined on all of $\mathbf{H}$) has adjoint $(\lambda\mathbf{1})^* = \overline{\lambda}\mathbf{1}$.
 \end{lemma}
@@ -657,7 +657,7 @@ We record one more elementary fact about closed operators before turning to the 
 
 \begin{proposition}[Closedness of the Range from a Lower Bound]
     \label{prpstn:hall-9.14}
-    \lean{Physicslib4.Spectral.Unbounded.isClosed_range_subSmul}
+    \lean{Hilbert6.Spectral.Unbounded.isClosed_range_subSmul}
     \leanok
     Let $A$ be a closed operator on $\mathbf{H}$ and $\lambda \in \mathbb{C}$. Suppose there exists $\varepsilon > 0$ such that
     \begin{align}
@@ -684,7 +684,7 @@ Recall that for a bounded operator, a number $\lambda \in \mathbb{C}$ belongs to
 
 \begin{definition}[Resolvent Set and Spectrum of an Unbounded Operator]
     \label{def:hall-9.16}
-    \lean{Physicslib4.Spectral.Unbounded.pmapResolventSet, Physicslib4.Spectral.Unbounded.pmapSpectrum, Physicslib4.Spectral.Unbounded.IsResolvent}
+    \lean{Hilbert6.Spectral.Unbounded.pmapResolventSet, Hilbert6.Spectral.Unbounded.pmapSpectrum, Hilbert6.Spectral.Unbounded.IsResolvent}
     \uses{def:hall-3.1, def:bounded-operator-notation, def:identity-operator}
     \leanok
     Suppose $A$ is an unbounded operator on $\mathbf{H}$. A number $\lambda \in \mathbb{C}$ belongs to the \textit{resolvent set} of $A$ if there exists a bounded operator $B \in \mathcal{B}(\mathbf{H})$ with the following properties:
@@ -699,7 +699,7 @@ The operator $B$ in this definition is unique when it exists, which is what lice
 
 \begin{lemma}[Uniqueness of the Resolvent]
     \label{lmm:uniqueness-of-resolvent}
-    \lean{Physicslib4.Spectral.Unbounded.existsUnique_isResolvent}
+    \lean{Hilbert6.Spectral.Unbounded.existsUnique_isResolvent}
     \leanok
     Let $A$ be an unbounded operator on $\mathbf{H}$ and $\lambda$ a point of its resolvent set. Then there is exactly one $B \in \mathcal{B}(\mathbf{H})$ satisfying properties 1 and 2 of Definition~\ref{def:hall-9.16}. We denote it $(A - \lambda\mathbf{1})^{-1}$.
 \end{lemma}
@@ -717,7 +717,7 @@ Two notions of resolvent set are now in play: the one just defined, for an unbou
 
 \begin{lemma}[The Two Notions of Spectrum Agree for Bounded Operators]
     \label{lmm:spectrum-notions-agree}
-    \lean{Physicslib4.Spectral.Unbounded.pmapResolventSet_toPMap_top, Physicslib4.Spectral.Unbounded.pmapSpectrum_toPMap_top}
+    \lean{Hilbert6.Spectral.Unbounded.pmapResolventSet_toPMap_top, Hilbert6.Spectral.Unbounded.pmapSpectrum_toPMap_top}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$, regarded also as an unbounded operator with $\text{Dom}(A) = \mathbf{H}$. Then $\lambda \in \mathbb{C}$ lies in the resolvent set of $A$ in the sense of Definition~\ref{def:hall-9.16} if and only if it lies in the resolvent set in the sense of Definition~\ref{def:bounded-operator-resolvent-and-spectrum}. Consequently the two resulting spectra $\sigma(A)$ coincide.
 \end{lemma}
@@ -737,7 +737,7 @@ We now come to a central result: the spectrum of a self-adjoint operator, bounde
 
 \begin{lemma}[The $b^2$ Inequality for Symmetric Operators]
     \label{lmm:b-squared-inequality-symmetric}
-    \lean{Physicslib4.Spectral.Unbounded.sq_norm_le_of_isSymmetric}
+    \lean{Hilbert6.Spectral.Unbounded.sq_norm_le_of_isSymmetric}
     \leanok
     If $A$ is a symmetric operator on $\mathbf{H}$, then for all $a, b \in \mathbb{R}$ and associated $\lambda \equiv a + ib \in \mathbb{C}$,
     \begin{align}
@@ -768,7 +768,7 @@ using positive-definiteness of the inner product for the last step.
 
 \begin{theorem}[Spectrum of a Self-Adjoint Operator is Real]
     \label{thrm:hall-9.17}
-    \lean{Physicslib4.Spectral.Unbounded.pmapSpectrum_subset_real}
+    \lean{Hilbert6.Spectral.Unbounded.pmapSpectrum_subset_real}
     \leanok
     If $A$ is an unbounded self-adjoint operator on $\mathbf{H}$, the spectrum of $A$ is contained in the real line.
 \end{theorem}
@@ -819,7 +819,7 @@ We conclude this part of the development with a criterion for essential self-adj
 
 \begin{theorem}[Essential Self-Adjointness via Dense Range]
     \label{thrm:hall-9.21}
-    \lean{Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_iff_dense_range}
+    \lean{Hilbert6.Spectral.Unbounded.isEssentiallySelfAdjoint_iff_dense_range}
     \leanok
     If $A$ is a symmetric operator on $\mathbf{H}$, then $A$ is essentially self-adjoint if and only if $\text{Range}(A - i\mathbf{1})$ and $\text{Range}(A + i\mathbf{1})$ are dense subspaces of $\mathbf{H}$.
 \end{theorem}
@@ -881,7 +881,7 @@ The finite direct sum is dense in the full direct sum. This is used in the proof
 
 \begin{lemma}[The Finite Direct Sum is Dense]
     \label{lmm:finite-direct-sum-dense}
-    \lean{Physicslib4.Spectral.Unbounded.dense_setOf_finite_support}
+    \lean{Hilbert6.Spectral.Unbounded.dense_setOf_finite_support}
     \leanok
     Let $\{\mathbf{H}_j\}_{j}$ be a countable family of separable, complex Hilbert spaces and let $\mathbf{H} = \bigoplus_j \mathbf{H}_j$ be their direct sum, as in Definition~\ref{def:hall-a.45}. Then the finite direct sum — the set of sequences in $\mathbf{H}$ with only finitely many non-zero entries — is a dense subspace of $\mathbf{H}$.
 \end{lemma}
@@ -909,7 +909,7 @@ The identification below is by a \textit{unitary} map, so we record that notion 
 
 \begin{definition}[Internal Orthogonal Decomposition]
     \label{def:internal-orthogonal-decomposition}
-    \lean{Physicslib4.Spectral.Unbounded.IsInternalOrthogonalDecomposition}
+    \lean{Hilbert6.Spectral.Unbounded.IsInternalOrthogonalDecomposition}
     \uses{def:orthogonal-complement}
     \leanok
     A sequence $\{ \mathbf{K}_n \}_{n=1}^\infty$ of closed subspaces of $\mathbf{H}$ is an \textit{internal orthogonal decomposition} of $\mathbf{H}$ if
@@ -950,7 +950,7 @@ For the consequence, suppose $T$ is linear with $\left\| T\chi \right\| = \left\
 
 \begin{lemma}[Internal Decompositions are Unitarily External Direct Sums]
     \label{lmm:internal-decomposition-unitary}
-    \lean{Physicslib4.Spectral.Unbounded.hasSum_injective_of_isInternalOrthogonalDecomposition, Physicslib4.Spectral.Unbounded.hasSum_norm_sq_of_isInternalOrthogonalDecomposition, Physicslib4.Spectral.Unbounded.isHilbertSum_of_isInternalOrthogonalDecomposition}
+    \lean{Hilbert6.Spectral.Unbounded.hasSum_injective_of_isInternalOrthogonalDecomposition, Hilbert6.Spectral.Unbounded.hasSum_norm_sq_of_isInternalOrthogonalDecomposition, Hilbert6.Spectral.Unbounded.isHilbertSum_of_isInternalOrthogonalDecomposition}
     \leanok
     Suppose $\{ \mathbf{K}_n \}_{n=1}^\infty$ is an internal orthogonal decomposition of $\mathbf{H}$, with each $\mathbf{K}_n$ separable. Then:
     \begin{enumerate}
@@ -994,7 +994,7 @@ With the identification in hand, we can restate Proposition~\ref{prpstn:hall-9.2
 
 \begin{proposition}[Direct Sums of Bounded Self-Adjoint Operators]
     \label{prpstn:hall-9.26}
-    \lean{Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isDirectSumOperator, Physicslib4.Spectral.Unbounded.domain_closure_eq_directSumDomain, Physicslib4.Spectral.Unbounded.domain_adjoint_eq_directSumDomain, Physicslib4.Spectral.Unbounded.closure_apply_eq_of_isDirectSumOperator, Physicslib4.Spectral.Unbounded.adjoint_apply_eq_of_isDirectSumOperator, Physicslib4.Spectral.Unbounded.directSumDomain, Physicslib4.Spectral.Unbounded.IsDirectSumOperator}
+    \lean{Hilbert6.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isDirectSumOperator, Hilbert6.Spectral.Unbounded.domain_closure_eq_directSumDomain, Hilbert6.Spectral.Unbounded.domain_adjoint_eq_directSumDomain, Hilbert6.Spectral.Unbounded.closure_apply_eq_of_isDirectSumOperator, Hilbert6.Spectral.Unbounded.adjoint_apply_eq_of_isDirectSumOperator, Hilbert6.Spectral.Unbounded.directSumDomain, Hilbert6.Spectral.Unbounded.IsDirectSumOperator}
     \leanok
     % Hall states this as Example 9.26; we record it as a proposition and prove it.
     Suppose $\mathbf{H}$ is a Hilbert space direct sum of a sequence of separable Hilbert spaces $\mathbf{H}_j$:
@@ -1075,7 +1075,7 @@ We now record the internal-form version promised above.
 
 \begin{proposition}[Direct Sums of Bounded Self-Adjoint Operators, Internal Form]
     \label{prpstn:hall-9.26-internal}
-    \lean{Physicslib4.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isInternalDirectSumOperator, Physicslib4.Spectral.Unbounded.domain_closure_eq_internalDomain, Physicslib4.Spectral.Unbounded.domain_adjoint_eq_internalDomain, Physicslib4.Spectral.Unbounded.hasSum_closure_apply_of_isInternalDirectSumOperator, Physicslib4.Spectral.Unbounded.hasSum_adjoint_apply_of_isInternalDirectSumOperator, Physicslib4.Spectral.Unbounded.internalDomain, Physicslib4.Spectral.Unbounded.IsInternalDirectSumOperator}
+    \lean{Hilbert6.Spectral.Unbounded.isEssentiallySelfAdjoint_of_isInternalDirectSumOperator, Hilbert6.Spectral.Unbounded.domain_closure_eq_internalDomain, Hilbert6.Spectral.Unbounded.domain_adjoint_eq_internalDomain, Hilbert6.Spectral.Unbounded.hasSum_closure_apply_of_isInternalDirectSumOperator, Hilbert6.Spectral.Unbounded.hasSum_adjoint_apply_of_isInternalDirectSumOperator, Hilbert6.Spectral.Unbounded.internalDomain, Hilbert6.Spectral.Unbounded.IsInternalDirectSumOperator}
     \leanok
     Suppose $\{ \mathbf{K}_n \}_{n=1}^\infty$ is an internal orthogonal decomposition of $\mathbf{H}$ into separable closed subspaces, and $A_n$ is a bounded, self-adjoint operator on $\mathbf{K}_n$ for each $n$. Define
     \begin{align}
@@ -1120,7 +1120,7 @@ The associated measures are finite, with total mass determined by $\psi$. Sectio
 
 \begin{lemma}[The Associated Measure has Total Mass $\left\| \psi \right\|^2$]
     \label{lmm:associated-measure-total-mass}
-    \lean{Physicslib4.Spectral.Unbounded.assoc_univ_eq, Physicslib4.Spectral.Unbounded.assoc_le_norm_sq}
+    \lean{Hilbert6.Spectral.Unbounded.assoc_univ_eq, Hilbert6.Spectral.Unbounded.assoc_le_norm_sq}
     \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$ and $\psi \in \mathbf{H}$. Then
     \begin{align}
@@ -1140,7 +1140,7 @@ finite since $\psi \in \mathbf{H}$. The final claim follows since $\mu_\psi$ is 
 
 \begin{lemma}[Norm Identity for the Bounded Integral]
     \label{lmm:norm-identity-bounded-integral}
-    \lean{Physicslib4.Spectral.Unbounded.norm_sq_integral_apply}
+    \lean{Hilbert6.Spectral.Unbounded.norm_sq_integral_apply}
     \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$ and let $f : X \to \mathbb{C}$ be bounded and measurable. Then for every $\psi \in \mathbf{H}$,
     \begin{align}
@@ -1164,7 +1164,7 @@ If $f$ is \textit{unbounded}, this identity suggests defining the domain of $\in
 
 \begin{definition}[Sesquilinear Form on a Subspace]
     \label{def:hall-sesquilinear-form-on-a-subspace}
-    \lean{Physicslib4.Spectral.Unbounded.SesquilinearFormOn}
+    \lean{Hilbert6.Spectral.Unbounded.SesquilinearFormOn}
     \uses{conv:section-integration, def:bounded-sesquilinear-form}
     \leanok
     Let $D$ be a subspace of $\mathbf{H}$. A \textit{sesquilinear form on $D$} is a map $L : D \times D \to \mathbb{C}$ that is conjugate-linear in its first argument and linear in its second argument. As with quadratic forms below, taking $D = \mathbf{H}$ recovers Section~\ref{sctn:spectral-theorems}'s definition of a sesquilinear form~(\ref{def:bounded-sesquilinear-form}), and taking $D$ a closed subspace recovers that definition on the Hilbert space $D$.
@@ -1172,7 +1172,7 @@ If $f$ is \textit{unbounded}, this identity suggests defining the domain of $\in
 
 \begin{definition}[Quadratic Form on a Subspace]
     \label{def:hall-quadratic-form-on-a-subspace}
-    \lean{Physicslib4.Spectral.Unbounded.IsQuadraticFormOn, Physicslib4.Spectral.Unbounded.polarizationOn, Physicslib4.Spectral.Unbounded.IsBoundedQuadraticFormOn}
+    \lean{Hilbert6.Spectral.Unbounded.IsQuadraticFormOn, Hilbert6.Spectral.Unbounded.polarizationOn, Hilbert6.Spectral.Unbounded.IsBoundedQuadraticFormOn}
     \uses{conv:section-integration, def:hall-sesquilinear-form-on-a-subspace, def:bounded-quadratic-form, prpstn:hall-a.61, prpstn:hall-a.63}
     \leanok
     Let $D$ be a subspace of $\mathbf{H}$. A \textit{quadratic form on $D$} is a map $Q : D \to \mathbb{C}$ with the following properties:
@@ -1194,7 +1194,7 @@ Two elementary facts about quadratic forms on a subspace, generalizing Propositi
 
 \begin{proposition}[Properties of Quadratic Forms on a Subspace]
     \label{prpstn:quadratic-forms-on-a-subspace-properties}
-    \lean{Physicslib4.Spectral.Unbounded.polarizationOn_eq_inner, Physicslib4.Spectral.Unbounded.polarizationOn_conj_symm}
+    \lean{Hilbert6.Spectral.Unbounded.polarizationOn_eq_inner, Hilbert6.Spectral.Unbounded.polarizationOn_conj_symm}
     \leanok
     Let $D$ be a subspace of $\mathbf{H}$, let $Q$ be a quadratic form on $D$, and let $L$ be its associated sesquilinear form.
     \begin{enumerate}
@@ -1246,7 +1246,7 @@ Since our forms are now defined on arbitrary subspaces, restriction to a smaller
 
 \begin{lemma}[Restriction of a Quadratic Form to a Subspace]
     \label{lmm:restriction-of-quadratic-form}
-    \lean{Physicslib4.Spectral.Unbounded.isQuadraticFormOn_restrict, Physicslib4.Spectral.Unbounded.polarizationOn_restrict}
+    \lean{Hilbert6.Spectral.Unbounded.isQuadraticFormOn_restrict, Hilbert6.Spectral.Unbounded.polarizationOn_restrict}
     \leanok
     Let $D' \subset D$ be subspaces of $\mathbf{H}$ and $Q$ a quadratic form on $D$. Then $Q\vert_{D'}$ is a quadratic form on $D'$, and its associated sesquilinear form is the restriction to $D' \times D'$ of the sesquilinear form associated to $Q$.
 \end{lemma}
@@ -1351,7 +1351,7 @@ The proofs of Proposition~\ref{prpstn:hall-10.2} and Proposition~\ref{prpstn:hal
 
 \begin{proposition}[Integrals Agree when Measures Agree on a Set]
     \label{prpstn:integrals-agree-when-measures-agree}
-    \lean{Physicslib4.Spectral.Unbounded.setLIntegral_congr_measure}
+    \lean{Hilbert6.Spectral.Unbounded.setLIntegral_congr_measure}
     \uses{conv:section-integration, prpstn:basic-integral-properties}
     \leanok
     Let $\nu, \nu'$ be measures on $(X,\Omega)$ and $E \in \Omega$, and suppose $\nu(S) = \nu'(S)$ for every measurable $S \subset E$. Then $\int_E g \, d\nu = \int_E g \, d\nu'$ for every nonnegative measurable $g$ on $X$.
@@ -1364,7 +1364,7 @@ We record two more facts about projection-valued measures before the main proof,
 
 \begin{lemma}[The Range of a Projection is the Kernel of its Complement]
     \label{lmm:range-of-projection-is-kernel}
-    \lean{Physicslib4.Spectral.Unbounded.range_eq_ker_one_sub, Physicslib4.Spectral.Unbounded.mem_range_iff_apply_eq, Physicslib4.Spectral.Unbounded.isClosed_range_of_isStarProjection}
+    \lean{Hilbert6.Spectral.Unbounded.range_eq_ker_one_sub, Hilbert6.Spectral.Unbounded.mem_range_iff_apply_eq, Hilbert6.Spectral.Unbounded.isClosed_range_of_isStarProjection}
     \leanok
     Let $P \in \mathcal{B}(\mathbf{H})$ be a bounded orthogonal projection. Then $\text{Range}(P) = \text{Ker}(\mathbf{1} - P)$, and this is a closed subspace of $\mathbf{H}$. Moreover $\eta \in \text{Range}(P)$ if and only if $P\eta = \eta$.
 \end{lemma}
@@ -1380,7 +1380,7 @@ Closed subspaces recur as Hilbert spaces in their own right — the whole develo
 
 \begin{lemma}[A Closed Subspace is a Separable Hilbert Space]
     \label{lmm:closed-subspace-is-hilbert}
-    \lean{Physicslib4.Spectral.Unbounded.completeSpace_and_separableSpace_of_isClosed, Submodule.innerProductSpace, Submodule.coe_norm}
+    \lean{Hilbert6.Spectral.Unbounded.completeSpace_and_separableSpace_of_isClosed, Submodule.innerProductSpace, Submodule.coe_norm}
     \leanok
     Let $V$ be a closed subspace of $\mathbf{H}$. Then $V$, with the inner product inherited from $\mathbf{H}$, is itself a separable, complex Hilbert space, and its norm is the restriction of the norm of $\mathbf{H}$.
 \end{lemma}
@@ -1392,7 +1392,7 @@ The inner-product axioms hold on $V$ because they hold on $\mathbf{H}$ and $V \s
 
 \begin{lemma}[Range Membership Concentrates the Associated Measure]
     \label{lmm:range-membership-concentrates-measure}
-    \lean{Physicslib4.Spectral.Unbounded.assoc_compl_eq_zero, Physicslib4.Spectral.Unbounded.lintegral_assoc_eq_setLIntegral}
+    \lean{Hilbert6.Spectral.Unbounded.assoc_compl_eq_zero, Hilbert6.Spectral.Unbounded.lintegral_assoc_eq_setLIntegral}
     \leanok
     Suppose $\mu$ is a projection-valued measure on $(X,\Omega(X))$ and $\eta \in \text{Range}(\mu(E))$ for some $E \in \Omega(X)$. Then $\mu_\eta(E^c) = 0$. Consequently, for any nonnegative measurable $g$ on $X$,
     \begin{align}
@@ -1415,7 +1415,7 @@ For the consequence: since $g \ge 0$ and the measure of $E^c$ under $\mu_\eta$ i
 
 \begin{lemma}[Norm-Convergent Decomposition over a Disjoint Cover]
     \label{lmm:norm-convergent-decomposition}
-    \lean{Physicslib4.Spectral.Unbounded.hasSum_apply_of_partition, Physicslib4.Spectral.Unbounded.apply_biUnion_eq_sum}
+    \lean{Hilbert6.Spectral.Unbounded.hasSum_apply_of_partition, Hilbert6.Spectral.Unbounded.apply_biUnion_eq_sum}
     \leanok
     Suppose $\mu$ is a projection-valued measure on $(X,\Omega(X))$, and $\{F_n\}_{n\in\mathbb{N}}$ is a pairwise disjoint sequence in $\Omega(X)$ with $\bigcup_n F_n = X$. Then for every $\psi \in \mathbf{H}$:
     \begin{enumerate}
@@ -1455,7 +1455,7 @@ We can now state and prove the central technical result of this section. It is t
 
 \begin{proposition}[Properties of the Integral against a Projection-Valued Measure]
     \label{prpstn:hall-10.2}
-    \lean{Physicslib4.Spectral.Unbounded.integralDomain, Physicslib4.Spectral.Unbounded.integralForm, Physicslib4.Spectral.Unbounded.dense_integralDomain, Physicslib4.Spectral.Unbounded.isQuadraticFormOn_integralForm, Physicslib4.Spectral.Unbounded.norm_polarizationOn_integralForm_le, Physicslib4.Spectral.Unbounded.existsUnique_repr_integralForm, Physicslib4.Spectral.Unbounded.pmapIntegral, Physicslib4.Spectral.Unbounded.norm_sq_pmapIntegral}
+    \lean{Hilbert6.Spectral.Unbounded.integralDomain, Hilbert6.Spectral.Unbounded.integralForm, Hilbert6.Spectral.Unbounded.dense_integralDomain, Hilbert6.Spectral.Unbounded.isQuadraticFormOn_integralForm, Hilbert6.Spectral.Unbounded.norm_polarizationOn_integralForm_le, Hilbert6.Spectral.Unbounded.existsUnique_repr_integralForm, Hilbert6.Spectral.Unbounded.pmapIntegral, Hilbert6.Spectral.Unbounded.norm_sq_pmapIntegral}
     \leanok
     Let $\mu$ be a projection-valued measure on $(X, \Omega(X))$ with values in $\mathcal{B}(\mathbf{H})$, and let $f : X \to \mathbb{C}$ be a measurable function, not necessarily bounded (but everywhere finite-valued, since its values lie in $\mathbb{C}$ — this is used below, where the sets $\{ \lvert f \rvert < n \}$ are required to exhaust $X$). Let
     \begin{align}
@@ -1569,7 +1569,7 @@ The proof of Part 1 above showed, along the way, that $\text{Range}(\mu(E_n)) \s
 
 \begin{lemma}[Bounded on a Set Implies the Range Lies in the Domain]
     \label{lmm:bounded-on-set-range-in-domain}
-    \lean{Physicslib4.Spectral.Unbounded.range_subset_integralDomain, Physicslib4.Spectral.Unbounded.integral_norm_sq_le_of_mem_range}
+    \lean{Hilbert6.Spectral.Unbounded.range_subset_integralDomain, Hilbert6.Spectral.Unbounded.integral_norm_sq_le_of_mem_range}
     \leanok
     Suppose $\mu$ is a projection-valued measure on $(X,\Omega(X))$, $f : X \to \mathbb{C}$ is measurable, and $E \in \Omega(X)$ is a set on which $f$ is bounded, say $\lvert f \rvert \le c$ on $E$. Then $\text{Range}(\mu(E)) \subset W_f$, and indeed $\int_X \lvert f \rvert^2\,d\mu_\eta \le c^2 \left\| \eta \right\|^2$ for every $\eta \in \text{Range}(\mu(E))$.
 \end{lemma}
@@ -1587,7 +1587,7 @@ With \textbf{Proposition} \textit{(hall-10.2)} established, we can now give the 
 
 \begin{proposition}[The Integral against a Projection-Valued Measure]
     \label{prpstn:hall-10.1}
-    \lean{Physicslib4.Spectral.Unbounded.pmapIntegral, Physicslib4.Spectral.Unbounded.integralApply, Physicslib4.Spectral.Unbounded.inner_pmapIntegral, Physicslib4.Spectral.Unbounded.inner_self_pmapIntegral, Physicslib4.Spectral.Unbounded.norm_sq_pmapIntegral, Physicslib4.Spectral.Unbounded.eq_pmapIntegral_of_inner_self}
+    \lean{Hilbert6.Spectral.Unbounded.pmapIntegral, Hilbert6.Spectral.Unbounded.integralApply, Hilbert6.Spectral.Unbounded.inner_pmapIntegral, Hilbert6.Spectral.Unbounded.inner_self_pmapIntegral, Hilbert6.Spectral.Unbounded.norm_sq_pmapIntegral, Hilbert6.Spectral.Unbounded.eq_pmapIntegral_of_inner_self}
     \leanok
     Suppose $\mu$ is a projection-valued measure on $(X, \Omega(X))$ with values in $\mathcal{B}(\mathbf{H})$ and $f : X \to \mathbb{C}$ is a measurable function, not necessarily bounded. Let $W_f$, $Q_f$, and $L_f$ be as in Proposition~\ref{prpstn:hall-10.2}. Then there exists a unique unbounded operator on $\mathbf{H}$, with domain $W_f$ — which we denote by $\int_X f \, d\mu$ — with the property that
     \begin{align}
@@ -1627,7 +1627,7 @@ The next proposition records a natural compatibility check, confirming that Prop
 
 \begin{proposition}[Coincidence with the Bounded Integral]
     \label{prpstn:coincidence-with-the-bounded-integral}
-    \lean{Physicslib4.Spectral.Unbounded.integralDomain_eq_top_of_bddMeasurable, Physicslib4.Spectral.Unbounded.pmapIntegral_of_bddMeasurable}
+    \lean{Hilbert6.Spectral.Unbounded.integralDomain_eq_top_of_bddMeasurable, Hilbert6.Spectral.Unbounded.pmapIntegral_of_bddMeasurable}
     \leanok
     If $f$ is bounded, then $W_f = \mathbf{H}$, and the operator $\int_X f \, d\mu$ of Proposition~\ref{prpstn:hall-10.1} coincides with the bounded integral~(\ref{thrm:operator-valued-integration}) $\int_X f \, d\mu \in \mathcal{B}(\mathbf{H})$ of Section~\ref{sctn:spectral-theorems}.
 \end{proposition}
@@ -1641,7 +1641,7 @@ The integral is insensitive to changing the integrand on a set the projection-va
 
 \begin{lemma}[The Integral Ignores Null Sets]
     \label{lmm:integral-ignores-null-sets}
-    \lean{Physicslib4.Spectral.Unbounded.integralDomain_congr_of_null, Physicslib4.Spectral.Unbounded.pmapIntegral_congr_of_null}
+    \lean{Hilbert6.Spectral.Unbounded.integralDomain_congr_of_null, Hilbert6.Spectral.Unbounded.pmapIntegral_congr_of_null}
     \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$ and let $f, g : X \to \mathbb{C}$ be measurable functions agreeing off a set $N \in \Omega(X)$ with $\mu(N) = 0$. Then $W_f = W_g$ and $\int_X f \, d\mu = \int_X g \, d\mu$ (as operators, with equal domains).
 \end{lemma}
@@ -1659,7 +1659,7 @@ Two further facts about the unbounded integral will be needed when we come to th
 
 \begin{lemma}[Truncations Converge to the Unbounded Integral]
     \label{lmm:truncations-converge}
-    \lean{Physicslib4.Spectral.Unbounded.tendsto_integral_truncation}
+    \lean{Hilbert6.Spectral.Unbounded.tendsto_integral_truncation}
     \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$, let $f : X \to \mathbb{C}$ be measurable, and let $\psi \in W_f$. Put $E_n \equiv \{ x \in X \mid \lvert f(x) \rvert < n \}$ and $f_n \equiv f\cdot 1_{E_n}$, a bounded measurable function. Then
     \begin{align}
@@ -1693,7 +1693,7 @@ the first equality by continuity of the inner product~(\ref{prpstn:continuity-of
 
 \begin{lemma}[The Associated Measure of a Bounded-Calculus Image]
     \label{lmm:associated-measure-of-image}
-    \lean{Physicslib4.Spectral.Unbounded.assoc_integral_apply, Physicslib4.Spectral.Unbounded.lintegral_assoc_integral_apply}
+    \lean{Hilbert6.Spectral.Unbounded.assoc_integral_apply, Hilbert6.Spectral.Unbounded.lintegral_assoc_integral_apply}
     \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$, let $h$ be a bounded measurable function on $X$, and set $T \equiv \int_X h \, d\mu \in \mathcal{B}(\mathbf{H})$. Then for every $\psi \in \mathbf{H}$ and every $E \in \Omega(X)$,
     \begin{align}
@@ -1723,7 +1723,7 @@ We now extract, as a standalone lemma, the fact that $A_f$ preserves the spectra
 
 \begin{lemma}[The Integral Preserves Spectral Subspaces on which the Integrand is Bounded]
     \label{lmm:integral-preserves-spectral-subspaces}
-    \lean{Physicslib4.Spectral.Unbounded.mapsTo_pmapIntegral_range, Physicslib4.Spectral.Unbounded.range_subset_integralDomain}
+    \lean{Hilbert6.Spectral.Unbounded.mapsTo_pmapIntegral_range, Hilbert6.Spectral.Unbounded.range_subset_integralDomain}
     \leanok
     Let $\mu$ be a projection-valued measure on $(X,\Omega(X))$, let $f : X \to \mathbb{C}$ be measurable, and let $E \in \Omega(X)$ be a set on which $f$ is bounded. Write $A_f \equiv \int_X f\,d\mu$ and $V_E \equiv \text{Range}(\mu(E))$. Then $V_E \subset W_f$ and $A_f(V_E) \subset V_E$.
 \end{lemma}
@@ -1765,7 +1765,7 @@ We close this section with the fact we will actually need about $\int_X f \, d\m
 
 \begin{proposition}[The Integral of a Real-Valued Function is Self-Adjoint]
     \label{prpstn:hall-10.3}
-    \lean{Physicslib4.Spectral.Unbounded.isSelfAdjoint_pmapIntegral_of_real}
+    \lean{Hilbert6.Spectral.Unbounded.isSelfAdjoint_pmapIntegral_of_real}
     \leanok
     If $f$ is a real-valued, measurable function on $X$, then $\int_X f \, d\mu$ is self-adjoint on $W_f$.
 \end{proposition}
@@ -1858,7 +1858,7 @@ The growth bound we need follows directly from \textbf{Gelfand's Formula}~(\ref{
 
 \begin{lemma}[Power Growth is Controlled by the Spectral Radius]
     \label{lmm:power-growth-controlled-by-spectral-radius}
-    \lean{Physicslib4.Spectral.Unbounded.tendsto_norm_pow_div_atTop}
+    \lean{Hilbert6.Spectral.Unbounded.tendsto_norm_pow_div_atTop}
     \leanok
     Suppose $\mathbf{H} \ne \{0\}$, $A \in \mathcal{B}(\mathbf{H})$, and $T \in \mathbb{R}$ with $T > R(A)$. (The hypothesis $\mathbf{H} \ne \{0\}$ is what makes $R(A)$ well defined: by Definition~\ref{def:spectral-radius} it is a supremum over $\sigma(A)$, and $\sigma(A)$ is non-empty only because of Part 1 of Proposition~\ref{prpstn:hall-7.5}, which fails on the zero space.) Then
     \begin{align}
@@ -1881,7 +1881,7 @@ We now use this growth bound to establish submultiplicativity of the spectral ra
 
 \begin{lemma}[Spectral Radius of a Product of Commuting Operators]
     \label{lmm:hall-10.22}
-    \lean{Physicslib4.Spectral.Unbounded.spectralRadius_mul_le_of_commute}
+    \lean{Hilbert6.Spectral.Unbounded.spectralRadius_mul_le_of_commute}
     \leanok
     Suppose $\mathbf{H} \ne \{0\}$ (so that the spectral radii below are well defined, as in Lemma~\ref{lmm:power-growth-controlled-by-spectral-radius}). If $A$ and $B$ are commuting elements of $\mathcal{B}(\mathbf{H})$, then
     \begin{align}
@@ -1979,7 +1979,7 @@ The route to the two-variable spectral mapping theorem passes through \textit{sp
 
 \begin{definition}[Spectral Subspaces]
     \label{def:hall-7.14}
-    \lean{Physicslib4.Spectral.Unbounded.spectralSubspace}
+    \lean{Hilbert6.Spectral.Unbounded.spectralSubspace}
     \uses{def:projection-valued-measure, thrm:spectral-theorem-for-bounded-operators, lmm:range-of-projection-is-kernel, lmm:closed-subspace-is-hilbert}
     \leanok
     Let $\mu$ be a projection-valued measure on a $\sigma$-algebra $\Omega(Y)$ over a set $Y$. For each $E \in \Omega(Y)$, the \textit{spectral subspace} $V_E$ of $\mathbf{H}$ (relative to $\mu$) is
@@ -1995,7 +1995,7 @@ We need three properties of these subspaces. The first two follow directly from 
 
 \begin{proposition}[Properties of Spectral Subspaces]
     \label{prpstn:hall-7.15}
-    \lean{Physicslib4.Spectral.Unbounded.pvmOperator, Physicslib4.Spectral.Unbounded.mapsTo_pvmOperator_spectralSubspace, Physicslib4.Spectral.Unbounded.norm_sub_smul_le_of_mem_spectralSubspace, Physicslib4.Spectral.Unbounded.spectralSubspace_ne_bot}
+    \lean{Hilbert6.Spectral.Unbounded.pvmOperator, Hilbert6.Spectral.Unbounded.mapsTo_pvmOperator_spectralSubspace, Hilbert6.Spectral.Unbounded.norm_sub_smul_le_of_mem_spectralSubspace, Hilbert6.Spectral.Unbounded.spectralSubspace_ne_bot}
     \leanok
     Let $X \subset \mathbb{C}$ be compact, let $\mu$ be a projection-valued measure on the Borel $\sigma$-algebra of $X$, and set $A \equiv \int_X \iota \, d\mu$ — a bounded operator, since $\iota(\lambda) = \lambda$ is bounded on the compact set $X$. Let $V_E \equiv \text{Range}(\mu(E))$ be the associated spectral subspaces~(\ref{def:hall-7.14}). Then:
     \begin{enumerate}
@@ -2039,7 +2039,7 @@ The last property we need is that an operator commuting with $A$ preserves every
 
 \begin{proposition}[Commuting Operators Preserve Spectral Subspaces]
     \label{prpstn:hall-7.16}
-    \lean{Physicslib4.Spectral.Unbounded.commute_borelCalculus, Physicslib4.Spectral.Unbounded.mapsTo_spectralSubspace_of_commute}
+    \lean{Hilbert6.Spectral.Unbounded.commute_borelCalculus, Hilbert6.Spectral.Unbounded.mapsTo_spectralSubspace_of_commute}
     \leanok
     Suppose $\mathbf{H} \ne \{0\}$. Let $A \in \mathcal{B}(\mathbf{H})$ be self-adjoint and let $B \in \mathcal{B}(\mathbf{H})$ commute with $A$. Then
     \begin{enumerate}
@@ -2092,7 +2092,7 @@ Recall the target: the two-variable spectral mapping theorem $\sigma\big(p(A,A^*
 
 \begin{lemma}[Normality Balances the Two Norms]
     \label{lmm:normality-balances-norms}
-    \lean{Physicslib4.Spectral.Unbounded.norm_adjoint_sub_smul_apply}
+    \lean{Hilbert6.Spectral.Unbounded.norm_adjoint_sub_smul_apply}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal and $\lambda \in \mathbb{C}$. Then for every $\psi \in \mathbf{H}$,
     \begin{align}
@@ -2121,7 +2121,7 @@ the middle equality being the commutation just verified. Taking square roots giv
 
 \begin{definition}[$\varepsilon$-Almost Eigenvector]
     \label{def:hall-10.24}
-    \lean{Physicslib4.Spectral.Unbounded.IsAlmostEigenvector}
+    \lean{Hilbert6.Spectral.Unbounded.IsAlmostEigenvector}
     \uses{def:identity-operator, def:bounded-operator-notation}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$, $\lambda \in \mathbb{C}$, and $\varepsilon > 0$. An \textit{$\varepsilon$-almost eigenvector for $A$ with eigenvalue $\lambda$} is a nonzero vector $\psi \in \mathbf{H}$ with
@@ -2134,7 +2134,7 @@ Note that, unlike the set of genuine eigenvectors for a fixed $\lambda$, the set
 
 \begin{lemma}[Almost Eigenvectors and the Spectrum of a Normal Operator]
     \label{lmm:hall-10.25}
-    \lean{Physicslib4.Spectral.Unbounded.isAlmostEigenvector_adjoint, Physicslib4.Spectral.Unbounded.mem_spectrum_iff_forall_isAlmostEigenvector}
+    \lean{Hilbert6.Spectral.Unbounded.isAlmostEigenvector_adjoint, Hilbert6.Spectral.Unbounded.mem_spectrum_iff_forall_isAlmostEigenvector}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal.
     \begin{enumerate}
@@ -2170,7 +2170,7 @@ So $A - \lambda\mathbf{1}$ is a bijection of $\mathbf{H}$ onto $\mathbf{H}$; let
 
 \begin{lemma}[Polynomials Preserve Almost Eigenvectors]
     \label{lmm:hall-10.26}
-    \lean{Physicslib4.Spectral.Unbounded.exists_const_isAlmostEigenvector_mvApply_uniform, Physicslib4.Spectral.Unbounded.exists_const_isAlmostEigenvector_mvApply}
+    \lean{Hilbert6.Spectral.Unbounded.exists_const_isAlmostEigenvector_mvApply_uniform, Hilbert6.Spectral.Unbounded.exists_const_isAlmostEigenvector_mvApply}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, $p$ a polynomial in two variables, and $R \ge 0$. Then there is a constant $C > 0$, depending on $p$, $A$, and $R$ but not on $\lambda$, $\varepsilon$, or $\psi$, such that for every $\lambda \in \mathbb{C}$ with $\lvert \lambda \rvert \le R$: if $\psi$ is an $\varepsilon$-almost eigenvector for $A$ with eigenvalue $\lambda$, then $\psi$ is a $(C\varepsilon)$-almost eigenvector for $p(A,A^*)$ with eigenvalue $p(\lambda,\overline\lambda)$.
 \end{lemma}
@@ -2214,7 +2214,7 @@ Two small structural facts are needed before the main construction: that polynom
 
 \begin{lemma}[Polynomials in a Normal Operator are Normal]
     \label{lmm:polynomials-in-normal-are-normal}
-    \lean{Physicslib4.Spectral.Unbounded.mvApply, Physicslib4.Spectral.Unbounded.mvEvalConj, Physicslib4.Spectral.Unbounded.adjoint_mvApply, Physicslib4.Spectral.Unbounded.isStarNormal_mvApply, Physicslib4.Spectral.Unbounded.commute_mvApply}
+    \lean{Hilbert6.Spectral.Unbounded.mvApply, Hilbert6.Spectral.Unbounded.mvEvalConj, Hilbert6.Spectral.Unbounded.adjoint_mvApply, Hilbert6.Spectral.Unbounded.isStarNormal_mvApply, Hilbert6.Spectral.Unbounded.commute_mvApply}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal and $p$ a polynomial in two variables, $p(\lambda,\overline\lambda) = \sum_{k,l} a_{kl}\lambda^k\overline\lambda^{\,l}$. Then $p(A,A^*) \equiv \sum_{k,l} a_{kl}A^k(A^*)^l$ satisfies
     \begin{align}
@@ -2232,7 +2232,7 @@ Since $A$ commutes with $A^*$ (normality), any two words in the letters $A$ and 
 
 \begin{lemma}[Restriction of a Normal Operator to a Doubly Invariant Subspace]
     \label{lmm:restriction-of-normal-operator}
-    \lean{Physicslib4.Spectral.Unbounded.exists_restrict_isStarNormal}
+    \lean{Hilbert6.Spectral.Unbounded.exists_restrict_isStarNormal}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal and let $W \subset \mathbf{H}$ be a nonzero closed subspace invariant under both $A$ and $A^*$. Then $W$ is a separable Hilbert space in the inherited inner product, $A\vert_W \in \mathcal{B}(W)$, its adjoint (computed in $W$) is $A^*\vert_W$, and $A\vert_W$ is normal.
 \end{lemma}
@@ -2250,7 +2250,7 @@ We can now carry out the construction that replaces the matrix-case eigenspace a
 
 \begin{lemma}[An Almost-Eigenvector Subspace for a Polynomial in a Normal Operator]
     \label{lmm:hall-10.27}
-    \lean{Physicslib4.Spectral.Unbounded.exists_subspace_isAlmostEigenvector}
+    \lean{Hilbert6.Spectral.Unbounded.exists_subspace_isAlmostEigenvector}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, $p$ a polynomial in two variables, and $\mu \in \sigma\big( p(A,A^*) \big)$. Then for every $\varepsilon > 0$ there is a nonzero closed subspace $W^\varepsilon \subset \mathbf{H}$, invariant under both $A$ and $A^*$, every nonzero element of which is an $\varepsilon$-almost eigenvector for $p(A,A^*)$ with eigenvalue $\mu$.
 \end{lemma}
@@ -2284,7 +2284,7 @@ so $\left\| B\psi \right\| \le \tfrac{\varepsilon}{2}\left\| \psi \right\| < \va
 
 \begin{theorem}[Spectral Mapping for Polynomials in $A$ and $A^*$]
     \label{thrm:hall-10.23}
-    \lean{Physicslib4.Spectral.Unbounded.spectrum_mvApply}
+    \lean{Hilbert6.Spectral.Unbounded.spectrum_mvApply}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, with $\mathbf{H} \ne \{0\}$, and let $p$ be a polynomial in two variables. Then
     \begin{align}
@@ -2333,7 +2333,7 @@ Combining Theorem~\ref{thrm:hall-10.23} with Proposition~\ref{prpstn:hall-10.21}
 
 \begin{corollary}[Norm of a Polynomial in $A$ and $A^*$]
     \label{crllr:norm-of-polynomial-in-a-astar}
-    \lean{Physicslib4.Spectral.Unbounded.norm_mvApply}
+    \lean{Hilbert6.Spectral.Unbounded.norm_mvApply}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, with $\mathbf{H} \ne \{0\}$, and $p$ a polynomial in two variables. Then
     \begin{align}
@@ -2355,7 +2355,7 @@ With the norm identity in hand, extending $p \mapsto p(A,A^*)$ from polynomials 
 
 \begin{theorem}[Continuous Functional Calculus for a Normal Operator]
     \label{thrm:continuous-functional-calculus-normal}
-    \lean{Physicslib4.Spectral.Unbounded.mvPolyOn, Physicslib4.Spectral.Unbounded.normalCalculus, Physicslib4.Spectral.Unbounded.existsUnique_normalCalculus, Physicslib4.Spectral.Unbounded.normalCalculus_mvPolyOn, Physicslib4.Spectral.Unbounded.normalCalculus_mul, Physicslib4.Spectral.Unbounded.normalCalculus_star, Physicslib4.Spectral.Unbounded.norm_normalCalculus, Physicslib4.Spectral.Unbounded.normalCalculus_one_and_id, Physicslib4.Spectral.Unbounded.isSelfAdjoint_normalCalculus_of_real, Physicslib4.Spectral.Unbounded.isStarNormal_normalCalculus}
+    \lean{Hilbert6.Spectral.Unbounded.mvPolyOn, Hilbert6.Spectral.Unbounded.normalCalculus, Hilbert6.Spectral.Unbounded.existsUnique_normalCalculus, Hilbert6.Spectral.Unbounded.normalCalculus_mvPolyOn, Hilbert6.Spectral.Unbounded.normalCalculus_mul, Hilbert6.Spectral.Unbounded.normalCalculus_star, Hilbert6.Spectral.Unbounded.norm_normalCalculus, Hilbert6.Spectral.Unbounded.normalCalculus_one_and_id, Hilbert6.Spectral.Unbounded.isSelfAdjoint_normalCalculus_of_real, Hilbert6.Spectral.Unbounded.isStarNormal_normalCalculus}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, with $\mathbf{H} \ne \{0\}$. There is a unique bounded linear map
     \begin{align}
@@ -2399,7 +2399,7 @@ Throughout this section, $X$ denotes a compact metric space, equipped with its B
 
 \begin{definition}[Abstract Continuous Functional Calculus]
     \label{def:abstract-continuous-functional-calculus}
-    \lean{Physicslib4.Spectral.Unbounded.IsAbstractCalculus}
+    \lean{Hilbert6.Spectral.Unbounded.IsAbstractCalculus}
     \uses{def:identity-operator, def:bounded-operator-notation, thrm:continuous-functional-calculus-normal, conv:section-abstract}
     \leanok
     Let $X$ be a compact metric space. An \textit{abstract continuous functional calculus} on $X$ is a map $\Phi : C^0(X;\mathbb{C}) \to \mathcal{B}(\mathbf{H})$ satisfying, for all $f,g \in C^0(X;\mathbb{C})$ and $\alpha,\beta\in\mathbb{C}$:
@@ -2418,7 +2418,7 @@ Our first observation is that such a $\Phi$ takes non-negative functions to non-
 
 \begin{lemma}[An Abstract Calculus is Non-Negative]
     \label{lmm:abstract-calculus-non-negative}
-    \lean{Physicslib4.Spectral.Unbounded.isSelfAdjoint_of_real, Physicslib4.Spectral.Unbounded.inner_nonneg_of_nonneg, Physicslib4.Spectral.Unbounded.ofRealCM}
+    \lean{Hilbert6.Spectral.Unbounded.isSelfAdjoint_of_real, Hilbert6.Spectral.Unbounded.inner_nonneg_of_nonneg, Hilbert6.Spectral.Unbounded.ofRealCM}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$.
     \begin{enumerate}
@@ -2442,7 +2442,7 @@ Non-negativity is exactly the hypothesis of the Riesz representation theorem, wh
 
 \begin{definition}[The Measures Associated to an Abstract Calculus]
     \label{def:abstract-associated-measures}
-    \lean{Physicslib4.Spectral.Unbounded.abstractMeasure, Physicslib4.Spectral.Unbounded.existsUnique_abstractMeasure, Physicslib4.Spectral.Unbounded.integral_abstractMeasure}
+    \lean{Hilbert6.Spectral.Unbounded.abstractMeasure, Hilbert6.Spectral.Unbounded.existsUnique_abstractMeasure, Hilbert6.Spectral.Unbounded.integral_abstractMeasure}
     \uses{conv:section-abstract, def:abstract-continuous-functional-calculus, lmm:abstract-calculus-non-negative, thrm:riesz-representation}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$ and let $\psi \in \mathbf{H}$. Define $\Lambda_\psi : C^0(X;\mathbb{R}) \to \mathbb{R}$ by
@@ -2458,7 +2458,7 @@ Non-negativity is exactly the hypothesis of the Riesz representation theorem, wh
 
 \begin{lemma}[The Abstract Associated Measures are Finite]
     \label{lmm:abstract-associated-measures-finite}
-    \lean{Physicslib4.Spectral.Unbounded.abstractMeasure_univ}
+    \lean{Hilbert6.Spectral.Unbounded.abstractMeasure_univ}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with associated measures $\mu_\psi$. For every $\psi \in \mathbf{H}$, $\mu_\psi(X) = \left\| \psi \right\|^2 < \infty$. In particular $\mu_\psi$ is a finite measure.
 \end{lemma}
@@ -2476,7 +2476,7 @@ The point of introducing the measures $\mu_\psi$ is that the right-hand side $\i
 
 \begin{proposition}[The Extended Forms are Bounded Quadratic Forms]
     \label{prpstn:abstract-extended-forms-are-bounded}
-    \lean{Physicslib4.Spectral.Unbounded.isBoundedQuadraticForm_abstractForm, Physicslib4.Spectral.Unbounded.norm_abstractForm_le, Physicslib4.Spectral.Unbounded.abstractForm_continuous, Physicslib4.Spectral.Unbounded.abstractForm}
+    \lean{Hilbert6.Spectral.Unbounded.isBoundedQuadraticForm_abstractForm, Hilbert6.Spectral.Unbounded.norm_abstractForm_le, Hilbert6.Spectral.Unbounded.abstractForm_continuous, Hilbert6.Spectral.Unbounded.abstractForm}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$. For a bounded measurable $f : X \to \mathbb{C}$, define $Q_f : \mathbf{H} \to \mathbb{C}$ by
     \begin{align}
@@ -2506,7 +2506,7 @@ With the forms in hand, converting them back to operators is immediate, and defi
 
 \begin{definition}[The Extended Calculus]
     \label{def:abstract-extended-calculus}
-    \lean{Physicslib4.Spectral.Unbounded.extendedCalculus, Physicslib4.Spectral.Unbounded.inner_extendedCalculus, Physicslib4.Spectral.Unbounded.extendedCalculus_continuous}
+    \lean{Hilbert6.Spectral.Unbounded.extendedCalculus, Hilbert6.Spectral.Unbounded.inner_extendedCalculus, Hilbert6.Spectral.Unbounded.extendedCalculus_continuous}
     \uses{conv:section-abstract, prpstn:abstract-extended-forms-are-bounded, prpstn:hall-a.63}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$ and let $f : X \to \mathbb{C}$ be bounded and measurable. By Proposition~\ref{prpstn:abstract-extended-forms-are-bounded}, $Q_f$ is a bounded quadratic form, so by Proposition~\ref{prpstn:hall-a.63} there is a unique $\widetilde\Phi(f) \in \mathcal{B}(\mathbf{H})$ with
@@ -2520,7 +2520,7 @@ Before going further we record that $\widetilde\Phi$ is linear — used repeated
 
 \begin{lemma}[The Extended Calculus is Linear]
     \label{lmm:abstract-extended-linear}
-    \lean{Physicslib4.Spectral.Unbounded.extendedCalculus_smul_add}
+    \lean{Hilbert6.Spectral.Unbounded.extendedCalculus_smul_add}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. For all bounded measurable $f,g : X \to \mathbb{C}$ and $\alpha,\beta \in \mathbb{C}$,
     \begin{align}
@@ -2541,7 +2541,7 @@ We isolate two facts about $\widetilde\Phi$ that the rest of this section uses r
 
 \begin{lemma}[Off-Diagonal Formula and Bounded Convergence for the Extended Calculus]
     \label{lmm:abstract-extended-convergence}
-    \lean{Physicslib4.Spectral.Unbounded.polarization_abstractForm, Physicslib4.Spectral.Unbounded.tendsto_inner_extendedCalculus}
+    \lean{Hilbert6.Spectral.Unbounded.polarization_abstractForm, Hilbert6.Spectral.Unbounded.tendsto_inner_extendedCalculus}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. For bounded measurable $h$ let $L_h$ denote the sesquilinear form associated to $Q_h$. Then:
     \begin{enumerate}
@@ -2568,7 +2568,7 @@ The extended calculus inherits the algebraic properties of $\Phi$. Multiplicativ
 
 \begin{lemma}[Real Functions Give Self-Adjoint Operators]
     \label{lmm:abstract-extended-real-self-adjoint}
-    \lean{Physicslib4.Spectral.Unbounded.isSelfAdjoint_extendedCalculus_of_real}
+    \lean{Hilbert6.Spectral.Unbounded.isSelfAdjoint_extendedCalculus_of_real}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$, and let $f : X \to \mathbb{C}$ be bounded, measurable, and real-valued. Then $\widetilde\Phi(f)$ is self-adjoint.
 \end{lemma}
@@ -2580,7 +2580,7 @@ Since $f$ is real-valued and each $\mu_\psi$ is a positive real measure, $Q_f(\p
 
 \begin{proposition}[The Extended Calculus is Multiplicative]
     \label{prpstn:abstract-extended-multiplicative}
-    \lean{Physicslib4.Spectral.Unbounded.extendedCalculus_mul}
+    \lean{Hilbert6.Spectral.Unbounded.extendedCalculus_mul}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. For all bounded measurable $f,g : X \to \mathbb{C}$,
     \begin{align}
@@ -2625,7 +2625,7 @@ By uniqueness of limits, $\left< \phi, \widetilde\Phi(fg)\psi \right> = \left< \
 
 \begin{lemma}[The Extended Calculus Respects Conjugation]
     \label{lmm:abstract-extended-conjugation}
-    \lean{Physicslib4.Spectral.Unbounded.extendedCalculus_conj}
+    \lean{Hilbert6.Spectral.Unbounded.extendedCalculus_conj}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. For every bounded measurable $f : X \to \mathbb{C}$, $\widetilde\Phi(\overline f) = \widetilde\Phi(f)^*$.
 \end{lemma}
@@ -2646,7 +2646,7 @@ We can now assemble the projection-valued measure. This is the abstract form of 
 
 \begin{theorem}[A Continuous Functional Calculus Yields a Projection-Valued Measure]
     \label{thrm:abstract-calculus-yields-pvm}
-    \lean{Physicslib4.Spectral.Unbounded.abstractPVM, Physicslib4.Spectral.Unbounded.abstractPVM_integral, Physicslib4.Spectral.Unbounded.abstractPVM_integral_continuous}
+    \lean{Hilbert6.Spectral.Unbounded.abstractPVM, Hilbert6.Spectral.Unbounded.abstractPVM_integral, Hilbert6.Spectral.Unbounded.abstractPVM_integral_continuous}
     \leanok
     Let $X$ be a compact metric space and $\Phi$ an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. Define, for each Borel set $E \subset X$,
     \begin{align}
@@ -2695,7 +2695,7 @@ The extended calculus is norm-bounded by the supremum norm. This is \textit{not}
 
 \begin{corollary}[The Extended Calculus is Norm-Bounded]
     \label{crllr:abstract-extended-norm-bound}
-    \lean{Physicslib4.Spectral.Unbounded.norm_extendedCalculus_le}
+    \lean{Hilbert6.Spectral.Unbounded.norm_extendedCalculus_le}
     \leanok
     Let $\Phi$ be an abstract continuous functional calculus on $X$, with extended calculus $\widetilde\Phi$. Then for every bounded measurable $f : X \to \mathbb{C}$,
     \begin{align}
@@ -2713,7 +2713,7 @@ Assembling the two stages gives the result this section was aiming at.
 
 \begin{theorem}[Spectral Theorem for Bounded Normal Operators]
     \label{thrm:hall-10.20}
-    \lean{Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_normal, Physicslib4.Spectral.Unbounded.eq_of_integral_id_eq_ambient}
+    \lean{Hilbert6.Spectral.Unbounded.existsUnique_spectralMeasure_normal, Hilbert6.Spectral.Unbounded.eq_of_integral_id_eq_ambient}
     \leanok
     Let $A \in \mathcal{B}(\mathbf{H})$ be normal, with $\mathbf{H} \ne \{0\}$. Then there is a \textit{unique} projection-valued measure $\mu^A$ on the Borel $\sigma$-algebra of $\sigma(A)$ with
     \begin{align}
@@ -2763,7 +2763,7 @@ We will need one fact about unitary operators, from Definition~\ref{def:unitary-
 
 \begin{lemma}[Unitary Operators are Normal]
     \label{lmm:unitary-is-normal}
-    \lean{Physicslib4.Spectral.Unbounded.unitary_mul_adjoint}
+    \lean{Hilbert6.Spectral.Unbounded.unitary_mul_adjoint}
     \leanok
     If $U \in \mathcal{B}(\mathbf{H})$ is unitary, then $U^*U = UU^* = \mathbf{1}$; in particular $U$ is normal.
 \end{lemma}
@@ -2799,7 +2799,7 @@ We record the scalar maps and their elementary properties. Write $S^1 \equiv \{ 
 
 \begin{lemma}[The Cayley Map and its Inverse]
     \label{lmm:cayley-map}
-    \lean{Physicslib4.Spectral.Unbounded.unitCircleMinusOne, Physicslib4.Spectral.Unbounded.cayleyMap, Physicslib4.Spectral.Unbounded.cayleyInv, Physicslib4.Spectral.Unbounded.cayleyMap_mem, Physicslib4.Spectral.Unbounded.continuous_cayleyMap, Physicslib4.Spectral.Unbounded.continuousOn_cayleyInv, Physicslib4.Spectral.Unbounded.cayleyInv_ofReal, Physicslib4.Spectral.Unbounded.cayleyInv_cayleyMap, Physicslib4.Spectral.Unbounded.cayleyMap_cayleyInv, Physicslib4.Spectral.Unbounded.bijOn_cayleyMap}
+    \lean{Hilbert6.Spectral.Unbounded.unitCircleMinusOne, Hilbert6.Spectral.Unbounded.cayleyMap, Hilbert6.Spectral.Unbounded.cayleyInv, Hilbert6.Spectral.Unbounded.cayleyMap_mem, Hilbert6.Spectral.Unbounded.continuous_cayleyMap, Hilbert6.Spectral.Unbounded.continuousOn_cayleyInv, Hilbert6.Spectral.Unbounded.cayleyInv_ofReal, Hilbert6.Spectral.Unbounded.cayleyInv_cayleyMap, Hilbert6.Spectral.Unbounded.cayleyMap_cayleyInv, Hilbert6.Spectral.Unbounded.bijOn_cayleyMap}
     \leanok
     Define $C : \mathbb{R} \to \mathbb{C}$ and $D : S^1\setminus\{1\} \to \mathbb{C}$ by
     \begin{align}
@@ -2837,7 +2837,7 @@ We now construct the operator $U$. Recall from Theorem~\ref{thrm:hall-9.17} that
 
 \begin{theorem}[Cayley Transform]
     \label{thrm:hall-10.28}
-    \lean{Physicslib4.Spectral.Unbounded.IsCayleyTransform, Physicslib4.Spectral.Unbounded.exists_isCayleyTransform}
+    \lean{Hilbert6.Spectral.Unbounded.IsCayleyTransform, Hilbert6.Spectral.Unbounded.exists_isCayleyTransform}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and define
     \begin{align}
@@ -2905,7 +2905,7 @@ The Cayley transform carries the spectrum of $A$ onto the spectrum of $U$, minus
 
 \begin{lemma}[Spectral Mapping for the Cayley Transform]
     \label{lmm:cayley-spectral-mapping}
-    \lean{Physicslib4.Spectral.Unbounded.mem_spectrum_iff_cayleyMap_mem_spectrum, Physicslib4.Spectral.Unbounded.cayleyMap_image_spectrum}
+    \lean{Hilbert6.Spectral.Unbounded.mem_spectrum_iff_cayleyMap_mem_spectrum, Hilbert6.Spectral.Unbounded.cayleyMap_image_spectrum}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$, with $\mathbf{H} \ne \{0\}$, and let $U$ be its Cayley transform. Then for every $\lambda \in \mathbb{R}$,
     \begin{align}
@@ -2967,7 +2967,7 @@ We also isolate the purely set-theoretic transport of a projection-valued measur
 
 \begin{lemma}[A Borel Bijection Transports a Projection-Valued Measure]
     \label{lmm:borel-bijection-transports-pvm}
-    \lean{Physicslib4.Spectral.Unbounded.restrictPVM, Physicslib4.Spectral.Unbounded.mapPVM, Physicslib4.Spectral.Unbounded.assoc_mapPVM}
+    \lean{Hilbert6.Spectral.Unbounded.restrictPVM, Hilbert6.Spectral.Unbounded.mapPVM, Hilbert6.Spectral.Unbounded.assoc_mapPVM}
     \leanok
     Let $(Y,\Omega(Y))$ and $(Z,\Omega(Z))$ be measurable spaces.
     \begin{enumerate}
@@ -3013,7 +3013,7 @@ One more observation is needed: $1$ is never an atom of $\mu^U$, so $D$ — unde
 
 \begin{lemma}[The Cayley Transform Omits the Point $1$]
     \label{lmm:cayley-omits-one}
-    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure_singleton_one_eq_zero}
+    \lean{Hilbert6.Spectral.Unbounded.spectralMeasure_singleton_one_eq_zero}
     \leanok
     Let $A$ be self-adjoint with Cayley transform $U$, and $\mu^U$ the projection-valued measure of $U$. Then $\mu^U(\{1\}) = 0$, and consequently $\mu^U_\psi(\{1\}) = 0$ for every $\psi \in \mathbf{H}$.
 \end{lemma}
@@ -3027,7 +3027,7 @@ The next proposition is the heart of the matter: $A$ is recovered from $U$ by th
 
 \begin{proposition}[Spectral Subspaces of the Cayley Transform]
     \label{prpstn:hall-10.29}
-    \lean{Physicslib4.Spectral.Unbounded.pmapIntegral_cayleyInv_eq}
+    \lean{Hilbert6.Spectral.Unbounded.pmapIntegral_cayleyInv_eq}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$, with $\mathbf{H} \ne \{0\}$, let $U$ be its Cayley transform, and let $D$ be as in Lemma~\ref{lmm:cayley-map}. (The hypothesis $\mathbf{H} \ne \{0\}$ is needed because the projection-valued measure $\mu^U$ below is supplied by Theorem~\ref{thrm:hall-10.20}, which assumes it.) Then
     \begin{align}
@@ -3096,7 +3096,7 @@ Transporting the measure along $C$ now gives the projection-valued measure for $
 
 \begin{theorem}[Transporting the Spectral Measure through the Cayley Transform]
     \label{thrm:hall-10.30}
-    \lean{Physicslib4.Spectral.Unbounded.cayleyPVM, Physicslib4.Spectral.Unbounded.pmapIntegral_cayleyPVM_id}
+    \lean{Hilbert6.Spectral.Unbounded.cayleyPVM, Hilbert6.Spectral.Unbounded.pmapIntegral_cayleyPVM_id}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$, with $\mathbf{H} \ne \{0\}$, let $U$ be its Cayley transform, and let $\mu^U$ be the projection-valued measure of $U$ supplied by Theorem~\ref{thrm:hall-10.20}. Define, for each Borel set $E \subset \mathbb{R}$,
     \begin{align}
@@ -3141,7 +3141,7 @@ We can finally state and prove the theorem this section set out to establish.
 
 \begin{theorem}[Spectral Theorem for Unbounded, Self-Adjoint Operators]
     \label{thrm:hall-10.4}
-    \lean{Physicslib4.Spectral.Unbounded.existsUnique_spectralMeasure_unbounded, Physicslib4.Spectral.Unbounded.spectralMeasure_concentrated}
+    \lean{Hilbert6.Spectral.Unbounded.existsUnique_spectralMeasure_unbounded, Hilbert6.Spectral.Unbounded.spectralMeasure_concentrated}
     \leanok
     If $A$ is an unbounded self-adjoint operator on $\mathbf{H}$, there is a unique projection-valued measure $\mu^A$ on the Borel $\sigma$-algebra of $\mathbb{R}$ such that
     \begin{align}
@@ -3241,7 +3241,7 @@ With the spectral theorem in hand, every measurable function of a self-adjoint o
 
 \begin{definition}[Spectral Measure of a Self-Adjoint Operator]
     \label{def:spectral-measure}
-    \lean{Physicslib4.Spectral.Unbounded.spectralMeasure, Physicslib4.Spectral.Unbounded.pmapIntegral_spectralMeasure, Physicslib4.Spectral.Unbounded.eq_spectralMeasure_of_pmapIntegral, Physicslib4.Spectral.Unbounded.domain_eq_integralDomain_spectralMeasure}
+    \lean{Hilbert6.Spectral.Unbounded.spectralMeasure, Hilbert6.Spectral.Unbounded.pmapIntegral_spectralMeasure, Hilbert6.Spectral.Unbounded.eq_spectralMeasure_of_pmapIntegral, Hilbert6.Spectral.Unbounded.domain_eq_integralDomain_spectralMeasure}
     \uses{def:hall-9.5, def:projection-valued-measure, thrm:hall-10.4}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$. The \textit{spectral measure} of $A$ is the unique projection-valued measure $\mu^A$ on the Borel $\sigma$-algebra of $\mathbb{R}$ with
@@ -3253,7 +3253,7 @@ With the spectral theorem in hand, every measurable function of a self-adjoint o
 
 \begin{definition}[Functional Calculus for an Unbounded Self-Adjoint Operator]
     \label{def:hall-10.5}
-    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus, Physicslib4.Spectral.Unbounded.functionalCalculus_domain, Physicslib4.Spectral.Unbounded.functionalCalculus_id}
+    \lean{Hilbert6.Spectral.Unbounded.functionalCalculus, Hilbert6.Spectral.Unbounded.functionalCalculus_domain, Hilbert6.Spectral.Unbounded.functionalCalculus_id}
     \uses{def:spectral-measure, def:hall-9.5, thrm:hall-9.17, thrm:hall-10.4, prpstn:hall-10.1, prpstn:hall-10.2, prpstn:coincidence-with-the-bounded-integral, def:projection-valued-measure, lmm:integral-ignores-null-sets, def:bounded-operator-resolvent-and-spectrum}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and let $\mu^A$ be its spectral measure~(\ref{def:spectral-measure}), the unique projection-valued measure on the Borel $\sigma$-algebra of $\mathbb{R}$ supplied by Theorem~\ref{thrm:hall-10.4}. For any measurable function $f : \mathbb{R} \to \mathbb{C}$, the \textit{functional calculus} defines a (possibly unbounded) operator $f(A)$ by
@@ -3273,7 +3273,7 @@ The second remark is the case used in Stone's Theorem, and we record it as a lem
 
 \begin{lemma}[Functional Calculus of a Bounded Function]
     \label{lmm:functional-calculus-bounded}
-    \lean{Physicslib4.Spectral.Unbounded.functionalCalculus_of_bddMeasurable}
+    \lean{Hilbert6.Spectral.Unbounded.functionalCalculus_of_bddMeasurable}
     \uses{def:hall-10.5, def:spectral-measure, thrm:operator-valued-integration}
     \leanok
     Let $A$ be a self-adjoint operator on $\mathbf{H}$ and let $f : \mathbb{R} \to \mathbb{C}$ be bounded and measurable. Then $W_f = \mathbf{H}$, and $f(A)$ coincides with the bounded integral $\int_{\mathbb{R}} f \, d\mu^A \in \mathcal{B}(\mathbf{H})$ of Section~\ref{sctn:spectral-theorems}~(\ref{thrm:operator-valued-integration}). In particular $f(A)$ is a bounded operator defined on all of $\mathbf{H}$.

@@ -1,6 +1,6 @@
 # Review: manual chapter on spectral theory (2026-10-22)
 
-Scope: A. docstring pass `25c01d5` (`Physicslib4/Spectral/`, 9 files, and
+Scope: A. docstring pass `25c01d5` (`Hilbert6/Spectral/`, 9 files, and
 `Operators/LpDiagonal.lean`); B. `web/Manual/Spectral.lean` (uncommitted) and its rendered HTML
 (`web/_out/manual/html-multi/Bounded-spectral-theory/index.html`, rebuilt: `lake build` and
 `generate-manual` succeed).
@@ -50,7 +50,7 @@ writer's log.
     `F2Class`: accurate.
   - `spectralMeasure`: the four prpstn:mua-* labels exist.
   - `existsUnique_spectralMeasure`: the integrand is `fun l => ((l : ℝ) : ℂ)`, as stated.
-  - `lpDiag`: def:finite-amplification names `Physicslib4.lpDiag` in its text, but its `\lean{}`
+  - `lpDiag`: def:finite-amplification names `Hilbert6.lpDiag` in its text, but its `\lean{}`
     is `diagAmplification, ampDiag, toLp2`. `lpDiag` is used in `GNS/DirectSum.lean` and
     `GNS/Amplification.lean`, as the docstring says.
 
@@ -119,7 +119,7 @@ lean-blueprint agent.
 | 9 | `BddMeasurable` | thrm:operator-valued-integration | Its first use in the blueprint's order; better still, a new definition node "Bounded measurable functions" next to def:indicator-function. Not def:hall-8.8, which comes later. |
 | 9 | `BoundedPointwiseLimit` | thrm:bounded-convergence-theorem | |
 | 10 | `mul_resolvent_of_mem_resolventSet` | def:bounded-operator-resolvent-and-spectrum | |
-| 11 | `Physicslib4.lpDiag` | def:finite-amplification (`haag-kastler-axioms.tex`) | Its prose already names it. |
+| 11 | `Hilbert6.lpDiag` | def:finite-amplification (`haag-kastler-axioms.tex`) | Its prose already names it. |
 
 ## B. Chapter `web/Manual/Spectral.lean`
 
@@ -192,7 +192,7 @@ B5. *nit.* Some names in Main and Design are plain code where neighbours use `{a
 - **Names:** `isOpen_resolventSet`, `exists_hasSum_resolvent` (l. 250), `realCalculus_polyOn`
   (l. 295), `isSetAlgebra_L0`, `IsBorelGenerating.indicator_mem` (l. 413–415),
   `IsBoundedQuadraticForm.isSelfAdjoint_toOperator` (l. 373).
-- **Fix.** Wrap each in `{apiDocs Physicslib4.Spectral.<name>}[...]`.
+- **Fix.** Wrap each in `{apiDocs Hilbert6.Spectral.<name>}[...]`.
 
 B6. *nit.* l. 35 is about 120 characters (the formula line). Reflow.
 
@@ -215,7 +215,7 @@ projection-valued measures before the continuous calculus."
 4. **`lpDiag` omitted: right.** It is §10.6 material (def:finite-amplification) used by
    `GNS/DirectSum.lean` and `GNS/Amplification.lean`; nothing in §10.2 uses it. Its natural home
    is the GNS chapter's "Direct sums and amplification" (`web/Manual/GNS.lean` l. 198). That
-   chapter does not mention it either, so a `{docstring Physicslib4.lpDiag}` or an `apiDocs` link
+   chapter does not mention it either, so a `{docstring Hilbert6.lpDiag}` or an `apiDocs` link
    there is a follow-up.
 
 ## Verdict and top 5

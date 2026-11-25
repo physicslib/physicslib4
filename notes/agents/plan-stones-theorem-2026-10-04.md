@@ -96,14 +96,14 @@ Each stage: build, lint, checkdecls, commit, progress entry here.
   `domain_eq_integralDomain_spectralMeasure`, `functionalCalculus` (+ `_domain`, `_id`) and
   `functionalCalculus_of_bddMeasurable`. All four §10.3 nodes proved/formalised; build, lint clean.
   Home page still shows them as not formalised (refresh in stage 8).
-- 2026-10-04, Stage 4 done: new `Physicslib4/Spectral/Stone/Basic.lean` (orchestrator defs:
+- 2026-10-04, Stage 4 done: new `Hilbert6/Spectral/Stone/Basic.lean` (orchestrator defs:
   `IsOneParameterUnitaryGroup` (pointwise map_zero/map_add), `IsStronglyContinuous`,
   `generatorQuotient`, `generatorDomain`, `generator`). Proved: strongly-continuous-iff-at-zero,
   unitary-group-inner-adjoint (inner + adjoint forms), generator-spec, generator-symmetry-identity,
   linear-ode-scalar, orbit-hasDerivAt, generator-commutes, hall-10.17 (strong continuity dropped,
   unused). Imported results linked and marked proved; BumpFunction imports added, so checkdecls
   is clean. Build, lint clean; no sorry.
-- 2026-10-06, Stage 5 done: new `Physicslib4/Spectral/Stone/Exponential.lean`. Defs `expFun`,
+- 2026-10-06, Stage 5 done: new `Hilbert6/Spectral/Stone/Exponential.lean`. Defs `expFun`,
   `expUnitary` (bounded integral via `Unitary.linearIsometryEquiv`; `functionalCalculus_expFun`
   links to f_t(A)). Proved exp-unitary (any PVM on ℝ), group law, strong continuity (DCT),
   functional-calculus-sub-bounded (as `(g - f)(A) = g(A) - f(A)` of LinearPMaps, via general
@@ -111,12 +111,12 @@ Each stage: build, lint, checkdecls, commit, progress entry here.
   (DCT; bound (3|x|)² via `Complex.norm_exp_sub_one_le` instead of the blueprint's
   `Real.norm_exp_I_mul_ofReal_sub_one_le`, to avoid an import), and prpstn:hall-10.14 as
   `generator (expUnitary hA) = A`. Three proofs are 40–56 lines; candidates for the stage 8 golf.
-- 2026-10-06, Stage 6 done: new `Physicslib4/Spectral/Stone/Density.lean`. Def `average`
+- 2026-10-06, Stage 6 done: new `Hilbert6/Spectral/Stone/Density.lean`. Def `average`
   (∫ f τ • U τ ψ). Proved averaging-translate (as `average_eq_convolution`, for every f and with
   no continuity hypotheses; they were unused), averaging-in-generator-domain (Mathlib convolution
   derivative), averaging-approximates (stated for any bumps with rOut → 0 along a filter), and
   lmm:hall-10.18 as `HasDenseDomain (generator U)`. Build, lint, checkdecls clean.
-- 2026-10-06, Stage 7 done: new `Physicslib4/Spectral/Stone/Theorem.lean`. Proved all nine
+- 2026-10-06, Stage 7 done: new `Hilbert6/Spectral/Stone/Theorem.lean`. Proved all nine
   §10.4.5 nodes, ending in `stone` (thrm:hall-10.15): ∃ hA : IsSelfAdjoint (generator U),
   HasDenseDomain ∧ (∀ t, U t = expUnitary hA t) ∧ uniqueness among self-adjoint B. Axioms: propext,
   Classical.choice, Quot.sound only. Generalisations: orbit-inner-ode for any ε ∈ ℂ,

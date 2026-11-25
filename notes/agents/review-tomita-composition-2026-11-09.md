@@ -1,4 +1,4 @@
-# Review: Physicslib4/Spectral/Unbounded/Composition.lean (2026-11-09)
+# Review: Hilbert6/Spectral/Unbounded/Composition.lean (2026-11-09)
 
 Scope: lmm:fc-difference-to-truncation, lmm:fc-dominated-convergence, lmm:fc-bounded-left-composition,
 lmm:fc-associated-measure, lmm:fc-composition-domain, thrm:fc-composition,

@@ -12,13 +12,13 @@ solution); Loogle queried; library, Mathlib and leanblueprint sources read.
 
 The worked project is correct and correctly explained. `Q₀ := trivialHaagKastlerNet.quasilocal`
 uses only the fields `ι`, `ι_injective` and `dense_range` of `QuasilocalAlgebra`
-(`Physicslib4/AQFT/HaagKastler/QuasilocalAlgebra.lean`), so the argument does not depend on how
+(`Hilbert6/AQFT/HaagKastler/QuasilocalAlgebra.lean`), so the argument does not depend on how
 `HaagKastlerNet.quasilocal` is built. Local images lie in `ℂ·1` (`AlgHomClass.commutes`), `ℂ·1` is a
 finite-dimensional subspace and so closed (`Submodule.closed_of_finiteDimensional`, whose
 hypotheses the text states correctly: Hausdorff TVS, complete nontrivially normed field), density
 then gives `Q₀.carrier = ℂ·1`, injectivity follows from `1 ≠ 0` (through `ι_injective`), and
 `identityState.comp (StarAlgEquiv.ofBijective _ _).symm.toStarAlgHom` is a state
-(`GNS.State.comp`, `Physicslib4/GNS/ExtremeState.lean:489`, pulls back along any unital
+(`GNS.State.comp`, `Hilbert6/GNS/ExtremeState.lean:489`, pulls back along any unital
 *-homomorphism, as described). All Lean blocks build. The uniqueness solution (section 6) and the
 covariance-invariance solution (section 8) are correct and checked by the build. `GNS.State` has a
 `FunLike` instance (`GNS/Basic.lean:68`), so `DFunLike.ext` does give `ω = trivialNetState`.
@@ -57,8 +57,8 @@ CI description (section 7) matches `.github/workflows/lean_action_ci.yml` step b
 `build`, `lint`, `mk_all-check`; checkdecls over the grep'd `\lean{}` names; the temporal-wording
 script; the conditional Verso build with the root-relative-URL check), and `blueprint.yml` (main
 only; builds, lints, builds Verso site and tutorial, docgen-action with blueprint and homepage,
-deploys). `lake build` building only what `Physicslib4.lean` imports is right (`defaultTargets =
-["Physicslib4"]`, default roots). `check_temporal_wording.py` does flag "is now proved" (pattern
+deploys). `lake build` building only what `Hilbert6.lean` imports is right (`defaultTargets =
+["Hilbert6"]`, default roots). `check_temporal_wording.py` does flag "is now proved" (pattern
 `\b(is|are) now (proved|…)`). Contribution process = README's plus a `CHANGELOG.md` line under
 "Unreleased" (that heading exists). No Lean/Mathlib version, no maintainer-local or AI tooling in
 the chapter.
@@ -105,7 +105,7 @@ the chapter.
   and for `web/`: "The first `lake build` in `web/` compiles Verso, the tool that renders these
   pages, and the native code of the modules it links, and takes a while." Better still: time one
   clean build (`rm -rf .lake/build && time lake build`) on an ordinary laptop and state that range.
-- **3b. Restrictions.** Confirmed: `grep -rn "Restriction:" Physicslib4` returns nothing. Section 2's
+- **3b. Restrictions.** Confirmed: `grep -rn "Restriction:" Hilbert6` returns nothing. Section 2's
   generic description is accurate and adequate, but two things need fixing:
   - **(error), lines 201–203.** The example is "…waiting on Stone's theorem", while line 178 tells
     the reader the library contains Stone's theorem. A reader sees a contradiction. Present the form
@@ -119,7 +119,7 @@ the chapter.
   - **(should fix), lines 895–897.** "a search for that string lists them, and each is a ready-made
     project" implies some exist. Replace: "_Restrictions._ A declaration that is less general than
     intended says so in a `**Restriction:**` line, naming what it waits on; `grep -rn
-    "Restriction:" Physicslib4` lists them, and each is a ready-made project. The search can come
+    "Restriction:" Hilbert6` lists them, and each is a ready-made project. The search can come
     back empty, when every declaration has its intended general form."
 - **3c. `web/README.md` (should fix).** The Layout list names `AQFTInBrief.lean` and
   `LeanInBrief.lean` but neither `WorkedExamples.lean` (chapter 3) nor the new file. After the

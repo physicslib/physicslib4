@@ -1,6 +1,6 @@
 import VersoManual
 import Book.Meta
-import Physicslib4.Spacetime.Causality
+import Hilbert6.Spacetime.Causality
 
 open Verso.Genre Manual
 open Verso.Genre.Manual.InlineLean
@@ -155,7 +155,7 @@ library's names correspond to them as follows.
   is `i.map hB₁ hB₂ h`, and the covariance maps $`\alpha_L` are `covEquiv`.
 * $`p \ll q` (chronological precedence) and $`p \prec q` (causal precedence) are
   `ChronologicallyPrecedes M t p q` and `CausallyPrecedes M t p q`, with the notation
-  `p ≪[M, t] q` and `p ≺[M, t] q`, scoped to the namespace `Physicslib4.Spacetime`. The time
+  `p ≪[M, t] q` and `p ≺[M, t] q`, scoped to the namespace `Hilbert6.Spacetime`. The time
   orientation `t` is always explicit.
 * $`I^\pm(p)` and $`J^\pm(p)` are `chronologicalFuture`, `chronologicalPast`, `causalFuture` and
   `causalPast`, and $`\mathbf{B}^\perp` is `spacelikeComplement`.
@@ -176,13 +176,13 @@ causal segments, the reflexive-transitive closure `Relation.ReflTransGen`. So $`
 reflexive while `IsCausalTrip` is strict, and the two are related by
 
 ```lean (name := checkEqOr)
-open Physicslib4 Spacetime in
+open Hilbert6 Spacetime in
 #check causallyPrecedes_iff_eq_or_isCausalTrip
 ```
 
 ```leanOutput checkEqOr
-Physicslib4.Spacetime.causallyPrecedes_iff_eq_or_isCausalTrip (M : Spacetime) (t : M.TimeOrientation)
-  {p q : M.Carrier} : (p ≺[M, t] q) ↔ p = q ∨ M.IsCausalTrip t p q
+Hilbert6.Spacetime.causallyPrecedes_iff_eq_or_isCausalTrip (M : Spacetime) (t : M.TimeOrientation) {p q : M.Carrier} :
+  (p ≺[M, t] q) ↔ p = q ∨ M.IsCausalTrip t p q
 ```
 
 This is the convention of Hawking and Ellis, $`p \in J^+(p)`

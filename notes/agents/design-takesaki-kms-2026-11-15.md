@@ -2,7 +2,7 @@
 
 Scope: a new subsection of blueprint §10.10, after Tomita's theorem. Its main theorem says that the
 vector state of a cyclic and separating vector is a KMS state for the modular flow, stated with
-`Physicslib4.AQFT.IsKMSState` (`Physicslib4/AQFT/KMS.lean`). This memo proposes how to package the
+`Hilbert6.AQFT.IsKMSState` (`Hilbert6/AQFT/KMS.lean`). This memo proposes how to package the
 inputs. Every new `def` or `instance` below needs the user's approval through the lean-kit guard.
 
 ## 1. What `IsKMSState` expects
@@ -15,7 +15,7 @@ def IsKMSState (α : ℝ → (A ≃⋆ₐ[ℂ] A)) (β : ℝ) (ω : State A) : P
     (∀ t : ℝ, F t = ω (a * α t b)) ∧ (∀ t : ℝ, F (t + β * I) = ω (α t b * a))
 ```
 
-`State A` (`Physicslib4/GNS/Basic.lean`) is a continuous linear functional with
+`State A` (`Hilbert6/GNS/Basic.lean`) is a continuous linear functional with
 `0 ≤ ω (star a * a)` and `‖ω‖ = 1`. `IsOneParameterAut α` covers only the group law. Continuity in
 `t` is not part of the KMS definition.
 

@@ -1,7 +1,7 @@
 # Review: sorry'd statements for `sbsctn:tomita-adjoint` (stage 3b), 2026-11-11
 
-Files: `Physicslib4/Spectral/Unbounded/Commuting.lean` (15 labels),
-`Physicslib4/Operators/Modular/TomitaAdjoint.lean` (23 labels). All 38 labels are recorded and
+Files: `Hilbert6/Spectral/Unbounded/Commuting.lean` (15 labels),
+`Hilbert6/Operators/Modular/TomitaAdjoint.lean` (23 labels). All 38 labels are recorded and
 each blueprint `\lean{}` matches. Both files compile with only `declaration uses sorry` warnings.
 `Commuting.lean` imports only `Polar.lean`. No `def`/`abbrev`/`instance`/`structure` is added.
 Docstrings are one line plus `Blueprint: <label>`, in the present tense.

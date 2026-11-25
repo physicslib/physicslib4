@@ -1,7 +1,7 @@
 # Review: Tomita–Takesaki stage-1 Lean statements (2026-11-09)
 
-Scope: `Physicslib4/Operators/Modular/Antiunitary.lean` (6 nodes incl. `def:antiunitary-operator` →
-`LinearIsometryEquiv`), `Physicslib4/Operators/Modular/Tomita.lean` (19 nodes). Blueprint
+Scope: `Hilbert6/Operators/Modular/Antiunitary.lean` (6 nodes incl. `def:antiunitary-operator` →
+`LinearIsometryEquiv`), `Hilbert6/Operators/Modular/Tomita.lean` (19 nodes). Blueprint
 `blueprint/src/sections/sec10/tomita-takesaki.tex` §"The Tomita Operator". Decisions D1 (Option K),
 D2a, D3 from `notes/agents/proposal-tomita-takesaki-2026-11-08.md`.
 

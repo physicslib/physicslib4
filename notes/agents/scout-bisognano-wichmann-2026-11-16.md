@@ -131,7 +131,7 @@ recorded under a `**Restriction:**` line or as an explicit binder.
    - which extra hypothesis, if any, a conditional BW uses.
 2. **Wedge algebra basics:** von Neumann algebra; Ω cyclic and separating; covariance
    U(g)R(W)U(g)* = R(gW). Small, about 10–15 nodes.
-3. **Borchers' theorem** as pure operator algebra in `Physicslib4/Operators/Modular/`. It is
+3. **Borchers' theorem** as pure operator algebra in `Hilbert6/Operators/Modular/`. It is
    independent of nets, reuses the Tomita/Takesaki infrastructure, and is a self-contained
    milestone. About 30–50 nodes.
 4. **Wedge corollary** (Borchers 1992 Thm II): commutation of Δ_W^{it} and J_W with all

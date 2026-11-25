@@ -34,7 +34,7 @@ Each example follows the same pattern:
 
 1. **The trivial net and its axioms.**
    - **Lean:**
-     - `Physicslib4.AQFT.HaagKastler.trivialLocalNet` (`AQFT/HaagKastler/Net.lean:306`);
+     - `Hilbert6.AQFT.HaagKastler.trivialLocalNet` (`AQFT/HaagKastler/Net.lean:306`);
      - `trivialLocalNetIsotony`, `trivialLocalNet_localCommutativity`, `trivialLocalNet_lorentzCovariance`;
      - `trivialHaagKastlerNet`, and `nonempty_haagKastlerNet` (the axioms are consistent).
    - Every region gets ℂ, so every axiom holds for simple reasons: show which, axiom by axiom.
@@ -42,7 +42,7 @@ Each example follows the same pattern:
      model needs non-commutative local algebras.
    - The curved counterpart, `HaagKastlerCurved.trivialHaagKastlerNet`, gets a short aside.
 2. **A state and its GNS representation.**
-   - **Lean:** `Physicslib4.GNS.State` (`GNS/Basic.lean:59`), `gns_construction`, `gns_unique`.
+   - **Lean:** `Hilbert6.GNS.State` (`GNS/Basic.lean:59`), `gns_construction`, `gns_unique`.
    - The library has no named concrete state. The chapter builds one, for example the identity state on
      ℂ (or a vector state $`\omega(a) = \langle \Omega, a\Omega \rangle`$ on bounded operators), and
      runs `gns_construction` on it. Then it reads off $`(H, \pi, \Omega)`$ and the reproducing formula
@@ -62,7 +62,7 @@ Each example follows the same pattern:
      overlapping regions are never completely spacelike.
 4. **Lorentz invariance of causal precedence.**
    - **Lean:**
-     - `Physicslib4.causallyPrecedes_smul_iff`, `isCompletelySpacelike_smul_iff`;
+     - `Hilbert6.causallyPrecedes_smul_iff`, `isCompletelySpacelike_smul_iff`;
      - `lorentzPath`;
      - `HaagKastlerNet.covEquiv`, and how covariance moves observables between diamonds.
    - Worked proof: why $`g \cdot p \prec g \cdot q \leftrightarrow p \prec q`$. The proof transports

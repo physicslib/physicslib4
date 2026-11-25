@@ -23,7 +23,7 @@ Proposed addition to `.claude/CLAUDE.md`, under "## Intent", after the `**Restri
 
 ### Script: `scripts/check_temporal_wording.py` (new file)
 
-It scans `blueprint/src/sections`, `Physicslib4`, `home_page` and `README.md`, skipping
+It scans `blueprint/src/sections`, `Hilbert6`, `home_page` and `README.md`, skipping
 `scratch_*` files. It fails on two things:
 - temporal wording, matched against a conservative pattern list that is deliberately narrower than
   the Stage 7 audit search, so that positional prose such as "as we previously proved" never
@@ -43,7 +43,7 @@ text ("as we previously proved") are allowed by the allowlist below.
 """
 import re, sys, pathlib
 
-ROOTS = ["blueprint/src/sections", "Physicslib4", "home_page", "README.md"]
+ROOTS = ["blueprint/src/sections", "Hilbert6", "home_page", "README.md"]
 EXTS = {".tex", ".lean", ".md", ".html"}
 SKIP = re.compile(r"(^|/)(scratch_|_site/)")
 PATTERN = re.compile(

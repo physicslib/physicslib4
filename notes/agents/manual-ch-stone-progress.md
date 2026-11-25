@@ -1,7 +1,7 @@
 # Reference manual, chapter "Stone's theorem": progress log
 
 Part 1 of the docstring pass: headline definitions and structures (and their fields), plus the
-headline statements, of `Physicslib4/Spectral/Stone/` (Basic, Bounded, Exponential, Density,
+headline statements, of `Hilbert6/Spectral/Stone/` (Basic, Bounded, Exponential, Density,
 Theorem). Files outside the directory (`AQFT/PositiveEnergy.lean`, `Operators/Conjugation.lean`,
 `Analysis/StrongContinuity.lean`) are for a later session. Appended after each file.
 
@@ -216,19 +216,19 @@ thrm:hall-10.15).
 None of `Operators/Conjugation.lean` is in a `\lean{}` list. Proposed homes (all in
 `haag-kastler-axioms.tex`, near thrm:von-neumann-geometric-covariance; the curved chapter could
 reference them):
-- `Units.conjMulEquiv`, `Physicslib4.lieConj`, `Physicslib4.lieConj_apply_eq_conjStarAlgEquiv`,
-  `Physicslib4.norm_lieConj`, `Physicslib4.exp_lieConj`: a definition node
+- `Units.conjMulEquiv`, `Hilbert6.lieConj`, `Hilbert6.lieConj_apply_eq_conjStarAlgEquiv`,
+  `Hilbert6.norm_lieConj`, `Hilbert6.exp_lieConj`: a definition node
   "Conjugation by a unitary" (T ↦ U T U⁻¹ as an automorphism of B(H), a `*`-automorphism,
   isometric, commuting with exp).
 - `MulEquiv.image_centralizer`, `MulEquiv.image_centralizer_centralizer`: a lemma node
   "Automorphisms preserve commutants and bicommutants", the "reusable core" already described in
   prose in the proof of thrm:von-neumann-geometric-covariance; add it to that proof's `\uses{}`.
-- `Physicslib4.scalarOperators`, `Physicslib4.IsFactor`: a definition node "Factor" (center
+- `Hilbert6.scalarOperators`, `Hilbert6.IsFactor`: a definition node "Factor" (center
   R ∩ R' = ℂ𝟙), currently defined only inline in the statement of thrm:von-neumann-factor-orbit
   and used by thrm:irreducible-inclusion-factor and thrm:self-inclusion-factor.
-- `Physicslib4.IsFactor.conj`: a lemma node "Unitary conjugation preserves factors", used by the
+- `Hilbert6.IsFactor.conj`: a lemma node "Unitary conjugation preserves factors", used by the
   proof of thrm:von-neumann-factor-orbit.
-- `Physicslib4.restrictStarAlgEquiv`: a lemma node "Restriction of a `*`-automorphism", used
+- `Hilbert6.restrictStarAlgEquiv`: a lemma node "Restriction of a `*`-automorphism", used
   for the bundled equivalence R(B) ≃ R(L·B) (`localVonNeumannEquiv`).
 Each docstring carries a descriptive "Blueprint: uncited (...)" line until then.
 
@@ -295,8 +295,8 @@ Each docstring carries a descriptive "Blueprint: uncited (...)" line until then.
   `IsStronglyContinuous`, `generator`, `expUnitary`, `average`, `IsPositiveEnergy`; `#check` of
   `generator_expUnitary`, `hasDenseDomain_generator`, `stone`, `isPositiveEnergy_iff_exists_exp`,
   `strongContinuous_of_weak`), with Blueprint lines; Where to look. Add the `open` lines for
-  docstring code spans (`Physicslib4.Spectral.Stone`, `Physicslib4.AQFT`, and
-  `Physicslib4.Spectral.Unbounded` hiding the bounded/unbounded name clashes as in
+  docstring code spans (`Hilbert6.Spectral.Stone`, `Hilbert6.AQFT`, and
+  `Hilbert6.Spectral.Unbounded` hiding the bounded/unbounded name clashes as in
   `Unbounded.lean`).
 
 # Part 4: the chapter, part 2 (Main definitions and theorems, Where to look)
@@ -394,12 +394,12 @@ Each docstring carries a descriptive "Blueprint: uncited (...)" line until then.
 
 - New subsection "Conjugation by a Unitary" in `blueprint/src/sections/sec10/haag-kastler-axioms.tex`,
   after thrm:additive-free-locality and before thrm:von-neumann-geometric-covariance.
-- def:unitary-conjugation: `Units.conjMulEquiv(_apply)`, `Physicslib4.lieConj(_apply, _one, _add,
+- def:unitary-conjugation: `Units.conjMulEquiv(_apply)`, `Hilbert6.lieConj(_apply, _one, _add,
   _smul, _star)`, `lieConj_apply_eq_conjStarAlgEquiv`, `norm_lieConj`, `exp_lieConj`.
 - lmm:automorphism-commutant: `MulEquiv.image_centralizer`, `MulEquiv.image_centralizer_centralizer`.
-- def:factor: `Physicslib4.scalarOperators`, `Physicslib4.IsFactor` (any set of operators).
-- lmm:factor-conj: `Physicslib4.IsFactor.conj`, `Physicslib4.lieConj_image_scalarOperators`.
-- lmm:restrict-star-alg-equiv: `Physicslib4.restrictStarAlgEquiv` (two inclusion hypotheses).
+- def:factor: `Hilbert6.scalarOperators`, `Hilbert6.IsFactor` (any set of operators).
+- lmm:factor-conj: `Hilbert6.IsFactor.conj`, `Hilbert6.lieConj_image_scalarOperators`.
+- lmm:restrict-star-alg-equiv: `Hilbert6.restrictStarAlgEquiv` (two inclusion hypotheses).
 - `leanDeclaration` recorded for all five; status left to the orchestrator.
 - Proof `\uses` added: geometric covariance (Minkowski, curved) += def:unitary-conjugation,
   lmm:automorphism-commutant; factor orbit (both) += lmm:factor-conj; covariance iso (both) +=
@@ -407,6 +407,6 @@ Each docstring carries a descriptive "Blueprint: uncited (...)" line until then.
   on both geometric-covariance theorems, and += def:factor on the 17 nodes whose Lean statements
   use `IsFactor` (10 Minkowski, 7 curved).
 - `Conjugation.lean`: the 11 "Blueprint: uncited ..." lines now cite the new nodes.
-- Validate: only the 14 known `conv:` errors. `lake build Physicslib4.Operators.Conjugation`: OK.
+- Validate: only the 14 known `conv:` errors. `lake build Hilbert6.Operators.Conjugation`: OK.
 - Not done: `GNS/Superselection.lean`'s `restrictStarAlgEquiv'` is not attached to
   lmm:restrict-star-alg-equiv.

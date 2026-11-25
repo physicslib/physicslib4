@@ -55,10 +55,10 @@ jobs:
           lint: true
           mk_all-check: true
 
-      # The Verso site, tutorial and reference manual (`web/`, a Lake package requiring physicslib4
+      # The Verso site, tutorial and reference manual (`web/`, a Lake package requiring hilbert6
       # from `..`) are written to `web/_out/`; `generate-tutorial` and `generate-manual` write each
       # book to `<output>/html-multi/`. `lake exe cache get` unpacks Mathlib from the cache the step
-      # above downloaded, and the physicslib4 build in `../.lake/build` is reused, so neither is
+      # above downloaded, and the hilbert6 build in `../.lake/build` is reused, so neither is
       # rebuilt. `web/.lake` is removed afterwards to free disk space for the API docs; `web/_out`
       # stays for the assembly step.
       - name: Build the Verso site, tutorial and manual
@@ -177,9 +177,9 @@ jobs:
           path: ${{ steps.docs-metadata.outputs.cached_docbuild_dependencies }}
           key: Docs-${{ hashFiles('lake-manifest.json', 'references.bib') }}
 
-      # `docbuild/` is a Lake package requiring physicslib4 from `../` and doc-gen4 at the revision
+      # `docbuild/` is a Lake package requiring hilbert6 from `../` and doc-gen4 at the revision
       # matching `lean-toolchain` (a `v4.X.Y` or `v4.X.Y-rcZ` tag; `nightly-testing` for a nightly;
-      # `main` otherwise). It shares `../.lake/packages`, so Mathlib and physicslib4 are not rebuilt.
+      # `main` otherwise). It shares `../.lake/packages`, so Mathlib and hilbert6 are not rebuilt.
       - name: Build the API docs
         env:
           NAME: ${{ steps.docs-metadata.outputs.name }}
@@ -252,10 +252,10 @@ jobs:
           cp -R web/redirects/. "$SITE"/
           # Stop before deploying if the API docs lack a page of the library: the root module's
           # page and the page of each module it imports.
-          modules=$(sed -n 's/^import \(Physicslib4\.[^ ]*\).*/\1/p' Physicslib4.lean)
+          modules=$(sed -n 's/^import \(Hilbert6\.[^ ]*\).*/\1/p' Hilbert6.lean)
           test -n "$modules"
           missing=0
-          for page in Physicslib4.html $(echo "$modules" | sed 's/\./\//g; s/$/.html/'); do
+          for page in Hilbert6.html $(echo "$modules" | sed 's/\./\//g; s/$/.html/'); do
             if [ ! -f "$SITE/docs/$page" ]; then
               echo "::error::API docs page missing: docs/$page"
               missing=$((missing + 1))

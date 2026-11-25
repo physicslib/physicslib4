@@ -61,7 +61,7 @@ Paths are relative to the repo root; M = `.lake/packages/mathlib/Mathlib`. All s
 ### (e) Option K (recommended, not in the task list): reference conjugation C
 - Choose any antiunitary involution C : H → H (complex conjugation in a Hilbert basis). Replace S₀ by the ℂ-LINEAR operator S₀' := C∘S₀ (aΩ ↦ C(a*Ω)), a normal `H →ₗ.[ℂ] H`.
   - It is well defined since Ω is separating.
-  - It is densely defined, and closable by `T†` having dense domain, using the project's `HasDenseDomain`, `IsClosable` and `adjoint_closure_eq_adjoint` (`Physicslib4/Spectral/Unbounded/Basic.lean:332,487`).
+  - It is densely defined, and closable by `T†` having dense domain, using the project's `HasDenseDomain`, `IsClosable` and `adjoint_closure_eq_adjoint` (`Hilbert6/Spectral/Unbounded/Basic.lean:332,487`).
 - Since C is isometric, antilinear, and an involution, (S₀')†S₀' = S₀*S₀. So Δ := (S')†S' falls out in the project's ℂ-linear framework with no ℝ or conjugate-space machinery.
 - Cost: build C. This needs `HilbertBasis` plus coordinate conjugation on ℓ²: `HilbertBasis.repr`, `lp`, and `Complex.conjLIE` applied coordinatewise. A conjugation exists on any Hilbert space this way (Hilbert basis exists: `exists_hilbertBasis`). A Mathlib search found no ready-made antiunitary involution on a general H.
 - The antiunitary J is recovered as J := C∘V with V a unitary from the (linear) polar decomposition of S'.
@@ -117,9 +117,9 @@ Lemma list, stage 2: von Neumann (T†T self-adjoint), Dom √A = Dom T with equ
   - Quadrants: `quadrant_I..IV`, `eq_zero_on_quadrant_*`, `eqOn_quadrant_*`.
   - The strip versions are the natural fit for KMS (strip 0 < Im z < β, `horizontal_strip`).
 - Resolvents of unbounded self-adjoint operators (project): `IsResolvent T lam B` (`Spectral/Unbounded/Spectrum.lean:57`), `pmapResolventSet` (78), `IsCayleyTransform` (`Cayley.lean:227`), `exists_isCayleyTransform` (270), `integral_inv_sub_I_eq_resolvent` (932). Bounded: `Spectral/Spectrum.lean`/`Basic.lean` (`mem_resolventSet_iff_isUnit_sub_smul` etc.).
-- Bicommutant / density: `Physicslib4/Operators/DensityTheorem.lean` has `exists_forall_norm_sub_lt_of_mem_bicommutant` (line 228, for a *-representation ρ), `apply_mem_closure_of_mem_bicommutant` (60), `starProjection_cyclic_mem_centralizer` (39), amplification `diagAmplification`, `ampDiag_mem_bicommutant`. This supplies von Neumann's density theorem.
+- Bicommutant / density: `Hilbert6/Operators/DensityTheorem.lean` has `exists_forall_norm_sub_lt_of_mem_bicommutant` (line 228, for a *-representation ρ), `apply_mem_closure_of_mem_bicommutant` (60), `starProjection_cyclic_mem_centralizer` (39), amplification `diagAmplification`, `ampDiag_mem_bicommutant`. This supplies von Neumann's density theorem.
 - Mathlib `VonNeumannAlgebra H` (`M/Analysis/VonNeumannAlgebra/Basic.lean:67`): `centralizer_centralizer' : Set.centralizer (Set.centralizer carrier) = carrier`, `centralizer_centralizer` (line 118). The commutant is `Set.centralizer` (for sets of `H →L[ℂ] H`). The project's use is in `AQFT/HaagKastler/LocalVonNeumann.lean`, `StrongDensity.lean`, `GNS/Superselection.lean`, `GNS/Irreducibility.lean`.
-- Separating vector: `Physicslib4/GNS/Separating.lean` (`separating_of_faithful`, `exists_gns_separating`) already names the Tomita starting point. There is no existing Tomita/modular/antiunitary code (grep of `Physicslib4/`).
+- Separating vector: `Hilbert6/GNS/Separating.lean` (`separating_of_faithful`, `exists_gns_separating`) already names the Tomita starting point. There is no existing Tomita/modular/antiunitary code (grep of `Hilbert6/`).
 - Stone's theorem exists (`Spectral/Stone/Theorem.lean:228 stone`), which gives Δ^{it} ↔ log Δ for the modular group.
 
 ## 4. Recommendation

@@ -7,7 +7,7 @@ pass over the declarations the chapter shows with `{docstring}`; part B is the c
 ## Step 0: reconnaissance (2026-10-17)
 
 - Read the plan, `web/README.md`, the stage-0 log, the prose-style section of the Verso scout memo,
-  tutorial chapters 1 and 2, the Lean files of `Physicslib4/AQFT/HaagKastler/` and the blueprint
+  tutorial chapters 1 and 2, the Lean files of `Hilbert6/AQFT/HaagKastler/` and the blueprint
   section `haag-kastler-axioms.tex`.
 - Docstring conventions for the pass: first line a one-sentence summary; then the mathematics; an
   "Implementation note:" paragraph last when needed; blueprint labels as plain text after
@@ -51,9 +51,9 @@ Docstrings and comments only; each module built with `lake build <module>` (only
 
 ## Step A3: checks after the docstring pass (2026-10-17)
 
-- Full `lake build`: passes (3403 jobs). The only warnings in `Physicslib4/AQFT/HaagKastler/` are
+- Full `lake build`: passes (3403 jobs). The only warnings in `Hilbert6/AQFT/HaagKastler/` are
   the pre-existing module-system notices; no new warnings.
-- `lake lint`: "Linting passed for Physicslib4."
+- `lake lint`: "Linting passed for Hilbert6."
 - `python3 scripts/check_temporal_wording.py`: OK.
 - `lean_guard.py check --base HEAD`: only the untracked `.claude/` files (present before this
   session); no signature, field, type, proof or attribute changes. No edit was blocked.
@@ -118,7 +118,7 @@ Docstrings and comments only; each module built with `lake build <module>` (only
 
 ## Step B5: Where to look (2026-10-17)
 
-- Files of `Physicslib4/AQFT/HaagKastler/` grouped (axioms, quasilocal algebra, representations,
+- Files of `Hilbert6/AQFT/HaagKastler/` grouped (axioms, quasilocal algebra, representations,
   states), each with an `apiDocs` link to a representative declaration; the spacetime facts the
   axioms use (`alexandrovBasis_directed`, `isAlexandrovBasisSet_smul`); links to the blueprint
   section and the home page's section page.
@@ -155,10 +155,10 @@ Memo: `review-manual-ch-haag-kastler-2026-10-17.md`. All 21 findings applied.
   converse the injectivity; Schlieder property with "completely spacelike" and the blueprint's name;
   "to any given accuracy" (twice); strong operator topology wording; 1964 Axiom 4 wording;
   uniqueness of 𝔘 remark; common unit wording; KMS "at positive inverse temperature"; a paragraph
-  pointing to the blueprint's representation-theory subsections and `Physicslib4/GNS/`.
+  pointing to the blueprint's representation-theory subsections and `Hilbert6/GNS/`.
 - B10: Verso elaborates docstring code spans in the chapter's scope (`getCurrNamespace`,
-  `getOpenDecls` in `VersoManual/Docstring.lean`). The chapter now opens `Physicslib4`,
-  `Physicslib4.AQFT`, `Physicslib4.AQFT.HaagKastler` and `...HaagKastlerNet` before `#doc`:
+  `getOpenDecls` in `VersoManual/Docstring.lean`). The chapter now opens `Hilbert6`,
+  `Hilbert6.AQFT`, `Hilbert6.AQFT.HaagKastler` and `...HaagKastlerNet` before `#doc`:
   unresolved docstring spans drop from 55 of 72 to 2 of 74 (a field name and a file name); every
   `leanOutput` is unchanged. Recorded in `web/README.md` ("Writing the reference manual").
 - Checks: `lake build` (no new warnings), `lake lint` pass; `cd web && lake build && lake exe
