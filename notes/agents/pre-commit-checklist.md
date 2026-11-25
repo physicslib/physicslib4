@@ -1,4 +1,4 @@
-# Pre-commit checklist for Lean work in physicslib4
+# Pre-commit checklist for Lean work in hilbert6
 
 Standing routine for the orchestrator and any specialist landing Lean changes.
 Added 2026-09-18 after `lake lint` was found never to have been run: commits

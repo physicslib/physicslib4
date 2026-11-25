@@ -275,17 +275,17 @@ the field quantifies over the whole parameter space.**
 
 ## Files referenced
 
-- `/Users/kdavis/Code/physicslib/physicslib4/blueprint/src/sections/sec10/spacetime.tex`
-- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/Basic.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/CausalStructure.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/Curves.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/Causality.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/CausalComplement.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/LorentzianSpacetime.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/Minkowski.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/Hilbert6/Spacetime/LorentzCauchySchwarz.lean`
-- `/Users/kdavis/Code/physicslib/physicslib4/blueprint/lean_decls`
-- `/Users/kdavis/Code/physicslib/physicslib4/.git/lean-kit/verify-receipt.json`
-- `/Users/kdavis/Code/physicslib/physicslib4/notes/agents/review-2026-09-sec10.1-10.7.md`
+- `blueprint/src/sections/sec10/spacetime.tex`
+- `Hilbert6/Spacetime/Basic.lean`
+- `Hilbert6/Spacetime/CausalStructure.lean`
+- `Hilbert6/Spacetime/Curves.lean`
+- `Hilbert6/Spacetime/Causality.lean`
+- `Hilbert6/Spacetime/CausalComplement.lean`
+- `Hilbert6/Spacetime/LorentzianSpacetime.lean`
+- `Hilbert6/Spacetime/Minkowski.lean`
+- `Hilbert6/Spacetime/LorentzCauchySchwarz.lean`
+- `blueprint/lean_decls`
+- `.git/lean-kit/verify-receipt.json`
+- `notes/agents/review-2026-09-sec10.1-10.7.md`
   (prior partial review; this memo independently re-verifies and extends its
   `IsGeodesic` finding).
