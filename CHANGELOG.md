@@ -8,6 +8,23 @@ file is where its history lives.
 
 The first release, 1.0, is in preparation.
 
+- The project is renamed from physicslib4 to hilbert6, after Hilbert's sixth problem, and moves to
+  its own organisation and domain:
+  - The repository moves from `physicslib/physicslib4` to `hilbert6/hilbert6` on GitHub. GitHub
+    redirects the old repository address, including `git clone`, fetch and push.
+  - The Lean library `Physicslib4` is renamed `Hilbert6`: the directory `Hilbert6/`, the root module
+    `Hilbert6.lean`, every namespace and declaration name, and the blueprint's `\lean{}` tags. The
+    Lake packages are `hilbert6` and `hilbert6-web`; a project that requires `physicslib4` from git
+    requires `hilbert6` instead.
+  - The website, tutorial, reference manual, blueprint and API docs are served from the root of
+    https://hilbert6.org/ instead of https://physicslib.github.io/physicslib4/. The repository
+    `physicslib/physicslib.github.io` redirects every old address to the same path on hilbert6.org,
+    and renames API-doc paths and fragments (`Physicslib4…` to `Hilbert6…`) and the manual's and
+    tutorial's anchors (`physicslib4-…` to `hilbert6-…`) on the way.
+  - The display name is "hilbert6" throughout. The "6" of the wordmark is a rose
+    (`--color-six`) opposite the teal accent, and the icons are an "h6" tile drawn by
+    `scripts/gen_favicon.py`.
+
 - The blueprint has a section on the Reeh–Schlieder theorem (§10.9): a main theorem with no additivity
   hypothesis, and corollaries under cyclicity for the translation-generated algebras, the von Neumann
   form of weak additivity, and weak additivity. All of it is formalized and proved in Lean
