@@ -28,7 +28,7 @@ file := "Haag-Kastler-axioms-in-Minkowski-spacetime"
 
 This chapter describes how the library states the Haag–Kastler axioms on Minkowski spacetime and
 what it proves from them. It corresponds to Section 10.6 of the
-[blueprint](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html).
+[blueprint](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html).
 The physics is introduced in [chapter 1 of the tutorial](../tutorial/AQFT-in-brief/), and the Lean
 needed to read the declarations in [chapter 2](../tutorial/Lean-in-brief/); this chapter assumes
 both.
@@ -100,7 +100,7 @@ diamonds $`I^+(p) \cap I^-(q)`, and attaches algebras to the diamonds themselves
 `IsAlexandrovBasisSet`. Chronological rather than causal cones make every diamond open, so no
 algebra is attached to a point, and the empty set counts as a diamond, the one with
 $`p \not\ll q`; its algebra is $`\mathbb{C}\mathbf{1}`. The
-[tutorial](../tutorial/AQFT-in-brief/#physicslib4-tutorial--AQFT-in-brief--Regions-of-spacetime--Causal-diamonds)
+[tutorial](../tutorial/AQFT-in-brief/#hilbert6-tutorial--AQFT-in-brief--Regions-of-spacetime--Causal-diamonds)
 explains why diamonds are the right regions physically.
 
 In Lean the field `LocalNet.algebra` is a function on _all_ subsets of spacetime. This keeps it a
@@ -109,7 +109,7 @@ sets that are not diamonds are never constrained: every axiom, and every embeddi
 quasilocal algebra, takes a proof `hB : IsAlexandrovBasisSet B` as an argument, and quantifies only
 over diamonds. Indexing the quasilocal embeddings over all subsets would be wrong, not merely
 wasteful: the blueprint gives a net for which no such family exists
-([thrm:quasilocal-algebra-exists](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:quasilocal-algebra-exists),
+([thrm:quasilocal-algebra-exists](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:quasilocal-algebra-exists),
 first design note).
 
 ## Isotony is data
@@ -126,7 +126,7 @@ laws, which are equations between particular maps. The laws are required rather 
 nothing about the spacetime constrains which monomorphism a net chooses. They make the local
 algebras a directed system, and this is what gives the quasilocal algebra a well-defined product
 (blueprint
-[def:isotony](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isotony)).
+[def:isotony](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isotony)).
 Because the maps are unital (Mathlib's `StarAlgHom` preserves $`\mathbf{1}`), the local algebras
 have in effect a common unit, as the 1964 Axiom 2 requires; because they are injective, they are
 isometric.
@@ -151,9 +151,9 @@ choice is curved spacetime, where two diamonds need not lie in a common diamond 
 quasilocal algebra at all; the same statement then still makes sense, and is the curved-spacetime
 Axiom 3. Stating it the same way in both settings lets the Minkowski axioms be read as the special
 case (blueprint
-[def:local-commutativity](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-commutativity);
+[def:local-commutativity](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-commutativity);
 the tutorial works through the equivalence in
-[chapter 3](../tutorial/Worked-examples/#physicslib4-tutorial--Worked-examples--Local-commutativity-in-a-diamond--Worked-proof___-from-the-common-diamond-to-the-quasilocal-algebra)).
+[chapter 3](../tutorial/Worked-examples/#hilbert6-tutorial--Worked-examples--Local-commutativity-in-a-diamond--Worked-proof___-from-the-common-diamond-to-the-quasilocal-algebra)).
 
 ## Covariance under the identity component
 
@@ -207,7 +207,7 @@ $`\mathfrak{U}` is constructed, what remains is a claim about physics: every phy
 corresponds to a self-adjoint element of $`\mathfrak{U}`. The library keeps it apart, as
 the structure `ObservableCorrespondence`, which no theorem about nets uses; `HaagKastlerNet`
 therefore has no field for it (blueprint
-[def:quasilocal-completeness](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:quasilocal-completeness)).
+[def:quasilocal-completeness](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:quasilocal-completeness)).
 The von Neumann density theorem below is what keeps it consistent with the larger von Neumann
 algebras of a representation.
 
@@ -221,7 +221,7 @@ closure of the images of the local algebras. `HaagKastlerNet` names the universe
 so that it, too, is a parameter. The consistency theorem `nonempty_haagKastlerNet` is stated for
 `HaagKastlerNet.{0}`, since its model is built from $`\mathbb{C}`; one model suffices. Universes in
 general are explained in the
-[tutorial](../tutorial/Lean-in-brief/#physicslib4-tutorial--Lean-in-brief--Structures-and-type-classes--An-aside-on-universes).
+[tutorial](../tutorial/Lean-in-brief/#hilbert6-tutorial--Lean-in-brief--Structures-and-type-classes--An-aside-on-universes).
 
 # Main definitions and theorems
 %%%
@@ -231,7 +231,7 @@ tag := "haag-kastler-main"
 Definitions are shown with their docstrings, which give the mathematics and the blueprint entry;
 theorems with their statements, as Lean prints them, and a line or two of explanation. Each
 subsection opens with the blueprint entries it covers. For the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/AQFT/HaagKastler/Net.html)
+[API documentation](https://hilbert6.org/docs/Hilbert6/AQFT/HaagKastler/Net.html)
 and the files listed at the end of the chapter.
 
 ## The axioms
@@ -255,7 +255,7 @@ written `i.map hB₁ hB₂ h`, with `h : B₁ ⊆ B₂`:
 {docstring Hilbert6.AQFT.HaagKastler.Isotony}
 
 Axiom 3 is a proposition about a net and its isotony family. Read with the tutorial's
-[unfolding](../tutorial/Lean-in-brief/#physicslib4-tutorial--Lean-in-brief--Definitions-that-are-propositions--Local-commutativity)
+[unfolding](../tutorial/Lean-in-brief/#hilbert6-tutorial--Lean-in-brief--Definitions-that-are-propositions--Local-commutativity)
 of its quantifiers, it is the displayed equation of the Design section:
 
 {docstring Hilbert6.AQFT.HaagKastler.LocalCommutativity}
@@ -274,7 +274,7 @@ hypothesis, and reaches the axioms as `N.U`, `N.isotony`, `N.localCommutativity`
 
 The axioms are consistent. The trivial net, which assigns $`\mathbb{C}` to every region with every
 map the identity, satisfies all of them; the
-[tutorial](../tutorial/Worked-examples/#physicslib4-tutorial--Worked-examples--The-trivial-net--The-Lean-statement)
+[tutorial](../tutorial/Worked-examples/#hilbert6-tutorial--Worked-examples--The-trivial-net--The-Lean-statement)
 builds it step by step.
 
 ```lean (name := checkNonempty)
@@ -288,11 +288,11 @@ Hilbert6.AQFT.HaagKastler.nonempty_haagKastlerNet : Nonempty HaagKastlerNet
 
 The statement is at universe 0, since the model is built from $`\mathbb{C}`, a type in `Type`.
 
-[bp-local]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-algebras
-[bp-isotony]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isotony
-[bp-lc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-commutativity
-[bp-cov]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:lorentz-covariance
-[bp-net]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:haag-kastler-net
+[bp-local]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-algebras
+[bp-isotony]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:isotony
+[bp-lc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-commutativity
+[bp-cov]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:lorentz-covariance
+[bp-net]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:haag-kastler-net
 
 ## The quasilocal algebra and Axiom 4
 
@@ -383,12 +383,12 @@ Hilbert6.AQFT.HaagKastler.isQuasilocalObservable_measure.{u, u_1, u_2} {U : Loca
   IsQuasilocalObservable Q π (π (C.measure o))
 ```
 
-[bp-qa]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:quasilocal-algebra
-[bp-qa-exists]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:quasilocal-algebra-exists
-[bp-lc-any]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:local-commutativity-any-quasilocal
-[bp-lc-iff]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:local-commutativity-iff-quasilocal
-[bp-qo]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:quasilocal-observable
-[bp-ax4]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:quasilocal-completeness
+[bp-qa]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:quasilocal-algebra
+[bp-qa-exists]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:quasilocal-algebra-exists
+[bp-lc-any]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:local-commutativity-any-quasilocal
+[bp-lc-iff]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:local-commutativity-iff-quasilocal
+[bp-qo]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:quasilocal-observable
+[bp-ax4]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:quasilocal-completeness
 
 ## Representations and local von Neumann algebras
 
@@ -520,17 +520,17 @@ The blueprint section also develops the representation theory used here: irreduc
 Schur's lemma, unitary equivalence and superselection, disjointness and quasi-equivalence, direct
 sums and amplification, and the separating vector of a faithful state. These hold for any
 C\*-algebra and are formalised in `Hilbert6/GNS/`
-([Section 10.6](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html),
+([Section 10.6](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html),
 from "Irreducibility and Schur's Lemma"). `Purity.lean` specialises purity and irreducibility to
 the quasilocal algebra.
 
-[bp-ec]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:einstein-causality
-[bp-lvn]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-von-neumann
-[bp-lvna]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-von-neumann-algebra
-[bp-vn-iso]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-isotony
-[bp-vn-order]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-bundled-order
-[bp-si]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:statistical-independence-bundled
-[bp-dense]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:quasilocal-strongly-dense
+[bp-ec]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:einstein-causality
+[bp-lvn]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-von-neumann
+[bp-lvna]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:local-von-neumann-algebra
+[bp-vn-iso]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-isotony
+[bp-vn-order]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:von-neumann-bundled-order
+[bp-si]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:statistical-independence-bundled
+[bp-dense]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:quasilocal-strongly-dense
 
 ## Symmetry and states
 
@@ -648,15 +648,15 @@ dynamics at positive inverse temperature, is in `Hilbert6/AQFT/KMS.lean`
 
 {docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsGroundStateForFlow}
 
-[bp-action]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:covariant-quasilocal-algebra
-[bp-unique]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:quasilocal-lift-unique
-[bp-inv]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:invariant-state
-[bp-inv-gns]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:invariant-state-gns-unitary
-[bp-vac]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:vacuum-state
-[bp-ftl]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:future-timelike-translation
-[bp-vac-c]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:vacuum-state-concrete
-[bp-kms]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kms-state-for-flow-covariance
-[bp-ground]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:ground-state-for-flow-covariance
+[bp-action]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:covariant-quasilocal-algebra
+[bp-unique]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:quasilocal-lift-unique
+[bp-inv]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:invariant-state
+[bp-inv-gns]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:invariant-state-gns-unitary
+[bp-vac]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:vacuum-state
+[bp-ftl]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:future-timelike-translation
+[bp-vac-c]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:vacuum-state-concrete
+[bp-kms]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kms-state-for-flow-covariance
+[bp-ground]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:ground-state-for-flow-covariance
 
 # Where to look
 %%%
@@ -727,5 +727,5 @@ Elsewhere in the library, the facts about Minkowski spacetime that the axioms re
 representations are in `Hilbert6/GNS/`.
 
 The blueprint section is
-[Section 10.6](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html),
+[Section 10.6](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html),
 and each entry there links to the Lean declarations that formalise it.

@@ -1079,8 +1079,8 @@ To find a theorem, there are four tools.
   closes the goal and suggests the proof it found.
 * The API documentation lists every declaration with its signature and docstring, organised by
   namespace and file: [Mathlib's](https://leanprover-community.github.io/mathlib4_docs/) and
-  [this library's](https://physicslib.github.io/physicslib4/docs/).
-* The [blueprint](https://physicslib.github.io/physicslib4/blueprint/) states each definition and
+  [this library's](https://hilbert6.org/docs/).
+* The [blueprint](https://hilbert6.org/blueprint/) states each definition and
   theorem of the project in ordinary mathematics. Each one names the Lean declarations that
   formalise it and links to their API documentation, and the dependency graph shows which are
   formalised. In the other direction, the docstrings in the library give the blueprint label.

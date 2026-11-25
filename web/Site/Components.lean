@@ -126,7 +126,7 @@ block_component +directive hero where
     return {{
       <section class="landing-hero container">
         <div class="landing-hero-text">
-          <h1 class="landing-wordmark">"physicslib4"</h1>
+          <h1 class="landing-wordmark">"hilbert"<span class="wordmark-six">"6"</span></h1>
           <p class="landing-tagline">{{ tagline }}</p>
           <div class="landing-lede">{{ ← contents.mapM goB }}</div>
           <div class="landing-buttons">{{ tutorial }}{{ blueprint }}{{ docs }}</div>

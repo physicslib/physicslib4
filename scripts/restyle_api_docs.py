@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Give the API docs (doc-gen4's HTML) the look of the rest of the physicslib4 site.
+"""Give the API docs (doc-gen4's HTML) the look of the rest of the hilbert6 site.
 
 Usage: python3 scripts/restyle_api_docs.py DOCS_DIR [--jobs N]
 
-DOCS_DIR is doc-gen4's output directory, as published at /physicslib4/docs/. The script rewrites its
+DOCS_DIR is doc-gen4's output directory, as published at /docs/. The script rewrites its
 pages in place:
 
 - the site's shared header (web/docs-theme/site-header.html, with "API docs" as the active entry)
   takes the place of doc-gen4's top bar; doc-gen4's search form moves into it, between the wordmark
   and the links, and the page name of a module page moves to the top of the text;
 - every page, and the module list (navbar.html), loads the site's fonts, the stylesheet
-  physicslib4-docs.css (web/docs-theme/), the site's theme script physicslib4-theme.js
-  (blueprint/src/webtheme/) and physicslib4-docs.js (web/docs-theme/), which keeps doc-gen4's colour
+  hilbert6-docs.css (web/docs-theme/), the site's theme script hilbert6-theme.js
+  (blueprint/src/webtheme/) and hilbert6-docs.js (web/docs-theme/), which keeps doc-gen4's colour
   scheme in step with the site's theme; these three files are copied into DOCS_DIR;
 - the icon is the site's.
 
-A rewritten page carries the marker <meta name="physicslib4-restyle">, and pages with the marker are
+A rewritten page carries the marker <meta name="hilbert6-restyle">, and pages with the marker are
 left alone, so running the script again changes nothing. Standard library only.
 """
 
@@ -35,14 +35,14 @@ THEME_DIR = REPO / "web" / "docs-theme"
 HEADER_TEMPLATE = THEME_DIR / "site-header.html"
 # File name in DOCS_DIR -> source in the repository.
 ASSETS = {
-    "physicslib4-docs.css": THEME_DIR / "physicslib4-docs.css",
-    "physicslib4-docs.js": THEME_DIR / "physicslib4-docs.js",
-    "physicslib4-theme.js": REPO / "blueprint" / "src" / "webtheme" / "physicslib4-theme.js",
+    "hilbert6-docs.css": THEME_DIR / "hilbert6-docs.css",
+    "hilbert6-docs.js": THEME_DIR / "hilbert6-docs.js",
+    "hilbert6-theme.js": REPO / "blueprint" / "src" / "webtheme" / "hilbert6-theme.js",
 }
-SITE_ICON = "/physicslib4/favicon.png"
+SITE_ICON = "/favicon.png"
 
-MARKER = b'<meta name="physicslib4-restyle" content="1">'
-MARKER_PROBE = b'name="physicslib4-restyle"'
+MARKER = b'<meta name="hilbert6-restyle" content="1">'
+MARKER_PROBE = b'name="hilbert6-restyle"'
 # doc-gen4 opens the body of every page but the module list with its checkbox and its top bar.
 BODY_START = b'<body><input id="nav_toggle" type="checkbox"></input><header>'
 HEADER_END = b"</header>"
@@ -79,9 +79,9 @@ def head_additions(prefix: str) -> bytes:
     p = prefix.encode()
     return (
         FONTS
-        + b'<link rel="stylesheet" href="' + p + b'physicslib4-docs.css">'
-        + b'<script src="' + p + b'physicslib4-theme.js"></script>'
-        + b'<script src="' + p + b'physicslib4-docs.js"></script>'
+        + b'<link rel="stylesheet" href="' + p + b'hilbert6-docs.css">'
+        + b'<script src="' + p + b'hilbert6-theme.js"></script>'
+        + b'<script src="' + p + b'hilbert6-docs.js"></script>'
     )
 
 

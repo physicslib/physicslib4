@@ -6,10 +6,11 @@ import Site.Links
 /-!
 # Site theme
 
-The physicslib4 site uses the Lean FRO look from `verso-web-components`: its stylesheets, scripts,
+The hilbert6 site uses the Lean FRO look from `verso-web-components`: its stylesheets, scripts,
 `<head>` builder, page templates and design tokens. Three things differ from lean-lang.org.
 
-* The header and footer carry a plain "physicslib4" wordmark. The stock `NavBar` and `Footer`
+* The header and footer carry a text wordmark, "hilbert6", whose "6" is in the rose accent
+  `--color-six` (see `siteCss`). The stock `NavBar` and `Footer`
   components of `verso-web-components` draw the Lean logo, so this module writes its own header and
   footer markup with the same CSS classes.
 * The accent colour (`--color-primary` and its derived shades) is a deep teal, `#0f766e`.
@@ -154,7 +155,9 @@ spacetime diagram, and colours for highlighted Lean code. The line drawings of t
 hero background `hero-wedge.svg` is a CSS mask over a block filled with the accent colour, with holes
 over the hero's text and figure; the card illustrations are inline SVG in `currentColor` with two
 accent colours, `--card-accent-1` (amber) and `--card-accent-2` (indigo). All of them follow the
-light and dark themes. Colours come from the design tokens above.
+light and dark themes. Colours come from the design tokens above. The "6" of the wordmark is in
+`--color-six`, a rose (`#e11d48`, and `#fb7185` in the dark theme) opposite the teal accent on the
+colour wheel.
 
 Verso marks up Lean code with `.keyword`, `.const` and `.var` token classes, but its defaults (and
 lean-lang.org) render all of them in the text colour, distinguished only by weight and slant. This
@@ -168,6 +171,7 @@ inside the gallery `visibility` switches at once.
 -/
 def siteCss : String := "
 :root {
+  --color-six: #e11d48;
   --verso-code-color: var(--color-text);
   --verso-code-keyword-color: #0f766e;
   --verso-code-const-color: #9a3412;
@@ -176,6 +180,7 @@ def siteCss : String := "
   --verso-info-indicator-color: var(--color-primary);
 }
 .dark-theme {
+  --color-six: #fb7185;
   --verso-code-keyword-color: #5eead4;
   --verso-code-const-color: #fdba74;
   --verso-code-var-color: #93c5fd;
@@ -186,6 +191,8 @@ def siteCss : String := "
 .code-gallery-box .hl.lean span.var { color: var(--verso-code-var-color) !important; }
 .code-gallery-box .hl.lean span.doc-comment, .code-gallery-box .hl.lean span.comment { color: var(--color-text-light) !important; }
 
+.wordmark-six { color: var(--color-six); }
+.footer-wordmark .wordmark-six { color: #fb7185; } /* the lighter rose, legible on the teal footer */
 .nav-logo.wordmark { font-weight: 600; font-size: 1.4rem; letter-spacing: 0.01em; color: var(--color-text); text-decoration: none; }
 .nav-logo.wordmark:hover { color: var(--color-primary); }
 .footer-wordmark { font-weight: 600; font-size: 1.25rem; color: var(--color-text-contrast); text-decoration: none; }
@@ -388,7 +395,7 @@ def headerWith (home : String) (links : Array (String × String)) (isActive : St
   <header class="site-header">
     <nav class="navbar" role="navigation" aria-label="Primary navigation">
       <div class="navbar-container container">
-        <a class="nav-logo wordmark" href={{ home }}>"physicslib4"</a>
+        <a class="nav-logo wordmark" href={{ home }}>"hilbert"<span class="wordmark-six">"6"</span></a>
         <div class="nav-toggle">
           <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox" />
           <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">"☰"</label>
@@ -435,8 +442,8 @@ def footerWith (home : String) (links : Array (String × String)) : Html :=
   {{
     <footer role="contentinfo" aria-label="Site footer">
       <div class="footer-grid container">
-        <nav class="footer-column" aria-label="physicslib4">
-          <a class="footer-wordmark" href={{ home }}>"physicslib4"</a>
+        <nav class="footer-column" aria-label="hilbert6">
+          <a class="footer-wordmark" href={{ home }}>"hilbert"<span class="wordmark-six">"6"</span></a>
         </nav>
         <nav class="footer-column" aria-label="Documentation">
           <h3 class="footer-heading">"Documentation"</h3>
@@ -457,7 +464,7 @@ def footerWith (home : String) (links : Array (String × String)) : Html :=
       </div>
       <div class="footer-divider container" role="separator"></div>
       <div class="footer-bottom container">
-        <div class="footer-copy">"physicslib4 is released under the Apache 2.0 licence."</div>
+        <div class="footer-copy">"hilbert6 is released under the Apache 2.0 licence."</div>
         <div class="footer-socials">
           <label class="theme-switch">
             <input type="checkbox" class="change-theme" />
@@ -472,8 +479,9 @@ def footerWith (home : String) (links : Array (String × String)) : Html :=
 def footer : Html := footerWith "./" (docLinksFrom tutorialPath manualPath)
 
 /--
-Page metadata for the `<head>`. The icons are a plain "p4" wordmark tile in the accent colour
-(`static_files/apple-touch-icon.png`, `static_files/favicon.png`), copied to the site root.
+Page metadata for the `<head>`. The icons are an "h6" tile in the accent colour with the "6" in
+the rose accent (`static_files/apple-touch-icon.png`, `static_files/favicon.png`, drawn by
+`scripts/gen_favicon.py`), copied to the site root.
 -/
 def headConfig : HeadConfig := {
   description := tagline
@@ -485,7 +493,7 @@ def headConfig : HeadConfig := {
 
 /-- The outer HTML template, modelled on `Verso.Web.Theme.primaryTemplate`. -/
 def primaryTemplate : TemplateM Html := do
-  let headHtml ← Verso.Web.Theme.head "physicslib4" s!"physicslib4: {tagline}" headConfig colorTheme
+  let headHtml ← Verso.Web.Theme.head "hilbert6" s!"hilbert6: {tagline}" headConfig colorTheme
     (extraHead := {{ <style>{{ .text false (siteCss ++ headerCss) }}</style> }})
   return {{
     <html lang="en">

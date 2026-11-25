@@ -1,4 +1,4 @@
-/* The look of the physicslib4 website, tutorial and reference manual (web/, built with Verso and
+/* The look of the hilbert6 website, tutorial and reference manual (web/, built with Verso and
  * verso-web-components) on the web blueprint. Loaded after plasTeX's theme-white.css,
  * leanblueprint's and plastexdepgraph's stylesheets (`extra-css` in plastex.cfg).
  *
@@ -15,6 +15,7 @@
 /* ── 1. Design tokens ───────────────────────────────────────────────────────── */
 
 :root {
+  --color-six: #e11d48;
   --font-primary: 'Open Sans', Arial, sans-serif;
   --font-code: 'Fira Code', monospace;
   --fs-xs: 0.75rem;
@@ -56,6 +57,7 @@
 }
 
 .dark-theme {
+  --color-six: #fb7185;
   --color-surface: #121212;
   --color-primary: #0d9488;
   --color-primary-light: #5eead4;
@@ -109,6 +111,7 @@ header.site-header .nav-logo.wordmark {
   letter-spacing: 0.01em; margin: 0 var(--space-6) 0 0; padding: 0;
 }
 header.site-header .nav-logo.wordmark:hover { color: var(--color-primary); }
+header.site-header .wordmark-six { color: var(--color-six); }
 header.site-header .desktop-menu {
   display: flex; justify-content: space-between; align-items: center; width: 100%; gap: var(--space-6);
 }
@@ -240,8 +243,8 @@ nav.prev_up_next a, nav.prev_up_next svg.showmore { color: var(--color-text); te
 nav.prev_up_next a:hover, nav.prev_up_next svg.showmore:hover { color: var(--color-primary); }
 
 /* A target (followed link) flashes in the accent colour */
-@keyframes physicslib4-target { from { background-color: var(--color-active); } to { background-color: transparent; } }
-div[class*=_thmwrapper]:target, div.hilite { animation: physicslib4-target 1s ease; }
+@keyframes hilbert6-target { from { background-color: var(--color-active); } to { background-color: transparent; } }
+div[class*=_thmwrapper]:target, div.hilite { animation: hilbert6-target 1s ease; }
 
 /* ── 4. Theorem, definition and proof boxes ─────────────────────────────────── */
 

@@ -52,8 +52,8 @@ curl https://elan.lean-lang.org/elan-init.sh -sSf | sh
 and a new terminal. With `git` installed, fetch the library and build it:
 
 ```
-git clone https://github.com/physicslib/physicslib4.git
-cd physicslib4
+git clone https://github.com/hilbert6/hilbert6.git
+cd hilbert6
 lake exe cache get
 lake build
 ```
@@ -73,7 +73,7 @@ A build that ends without errors has checked every proof in the library.
 ## The editor
 
 The standard editor is [VS Code](https://code.visualstudio.com/) with the _Lean 4_ extension.
-Open the folder `physicslib4` itself, so that the extension finds `lean-toolchain`, and then a
+Open the folder `hilbert6` itself, so that the extension finds `lean-toolchain`, and then a
 library file, say `Hilbert6/AQFT/HaagKastler/Net.lean`, the home of chapter 3's trivial net.
 A Lean server starts, loads the file's imports (seconds, once `lake build` has run) and checks the
 file as you type. Three things are then at hand.
@@ -425,7 +425,7 @@ unknown terms, such as `closure ?s ⊆ ?t`, narrow the search further.
 
 ## Documentation and sources
 
-The [API documentation](https://physicslib.github.io/physicslib4/docs/) lists each declaration of
+The [API documentation](https://hilbert6.org/docs/) lists each declaration of
 the library, and Mathlib's lists each of Mathlib's, with its docstring and a link to its source.
 From the blueprint, each entry links to the documentation of its Lean declarations, so a concept
 you know in mathematics leads to its Lean name. Finally, the sources are on your disk: Mathlib is
@@ -868,7 +868,7 @@ its "new members" and "Is there code for X?" channels, answers questions about L
 usually within hours; a question with a short complete example that shows the problem gets the
 best answers. Questions and proposals about this project, including proposed changes to its
 definitions, go to the
-[repository's issues](https://github.com/physicslib/physicslib4/issues).
+[repository's issues](https://github.com/hilbert6/hilbert6/issues).
 
 :::::exercise
 You add the file `Hilbert6/AQFT/HaagKastler/TrivialState.lean` of the worked project, with a

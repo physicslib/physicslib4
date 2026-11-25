@@ -22,7 +22,7 @@ file := "Unbounded-operators-and-their-spectral-theorem"
 
 This chapter describes how the library encodes unbounded operators on a complex Hilbert space and
 proves the spectral theorem for unbounded self-adjoint operators. It corresponds to
-[Section 10.3](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:unbounded-spectral-theorems)
+[Section 10.3](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:unbounded-spectral-theorems)
 of the blueprint, which, like Section 10.2, follows Hall's
 [_Quantum Theory for Mathematicians_](https://doi.org/10.1007/978-1-4614-7116-5). It builds on the
 {ref "spectral"}[bounded spectral theory chapter]: projection-valued measures, the bounded
@@ -120,7 +120,7 @@ intersection of the domains, the graph, closedness (`LinearPMap.IsClosed`), clos
 closure (`LinearPMap.IsClosable`, `LinearPMap.closure`). The graph lies in the plain product
 `H × H`: every use of it in the section is topological, so the inner product of the blueprint's
 product Hilbert space is not needed (the remark on the Lean formalization in
-[def:product-hilbert-space](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:product-hilbert-space)).
+[def:product-hilbert-space](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:product-hilbert-space)).
 A bounded operator `B` becomes a partial map with domain all of $`H` as
 `(B : H →ₗ[ℂ] H).toPMap ⊤`.
 
@@ -128,7 +128,7 @@ Density of the domain is not part of the type. It is the predicate `HasDenseDoma
 hypothesis wherever the blueprint needs it. Symmetry (`IsSymmetric`) assumes no density, so it
 applies to extensions not yet known to be densely defined (the blueprint records this in the proof
 of
-[lmm:self-adjoint-maximally-symmetric](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:self-adjoint-maximally-symmetric)).
+[lmm:self-adjoint-maximally-symmetric](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:self-adjoint-maximally-symmetric)).
 
 ## The adjoint is Mathlib's, with its convention
 
@@ -158,7 +158,7 @@ Mathlib's `resolvent`.
 ## The integral of an unbounded function
 
 For a measurable $`f` that may be unbounded, the library follows the blueprint
-([prpstn:hall-10.2](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.2)):
+([prpstn:hall-10.2](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.2)):
 
 1. The domain $`W_f` is `integralDomain μ f`, the $`\psi` with `MemLp f 2 (μ.assoc ψ)`, Mathlib's
    "square-integrable for $`\mu_\psi`".
@@ -174,7 +174,7 @@ theorem about its values assumes `Measurable f`, as theorems about the bounded i
 `f ∈ BddMeasurable X`.
 
 The blueprint proves that $`\int f \, d\mu` is self-adjoint for real $`f`
-([prpstn:hall-10.3](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.3))
+([prpstn:hall-10.3](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.3))
 by decomposing $`H` into the spectral subspaces where $`n - 1 \le |f| < n`, on which the operator is
 bounded, and applying its result on direct sums. The Lean proof avoids direct sums:
 $`\int f \, d\mu` is symmetric, and for non-real $`c` the bounded integral of $`(f - c)^{-1}` is
@@ -192,7 +192,7 @@ is Mathlib's `IsStarNormal`, and the continuous functional calculus `normalCalcu
 characterisation by polynomials in $`A` and $`A^*`. It proves the two-variable spectral mapping
 theorem from Mathlib's spectral mapping theorem for the continuous functional calculus, not by
 the blueprint's almost-eigenvector argument (formalization note of
-[thrm:hall-10.23](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.23));
+[thrm:hall-10.23](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.23));
 the almost-eigenvector lemmas are formalised separately.
 
 The passage from a continuous calculus to a projection-valued measure is done once, abstractly, as
@@ -225,7 +225,7 @@ Three choices differ from the blueprint's text; the blueprint records only the s
   ({apiDocs Hilbert6.Spectral.Unbounded.eq_of_integral_id_eq_ambient}[`eq_of_integral_id_eq_ambient`]). The blueprint transports $`\nu` along the
   bijection onto the circle without $`1`; the library pushes it forward to the whole circle
   ({apiDocs Hilbert6.Spectral.Unbounded.pushforwardPVM}[`pushforwardPVM`]), which needs no bijectivity (formalization note after the proof
-  of [thrm:hall-10.4](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.4)).
+  of [thrm:hall-10.4](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.4)).
 * The blueprint assumes $`H \neq \{0\}`. Some intermediate lemmas carry `Nontrivial H`; the
   spectral theorem treats $`H = \{0\}` separately and has no such hypothesis.
 
@@ -244,7 +244,7 @@ the type of unbounded operators, `↑` is a coercion (a vector of a domain regar
 $`H`, a partial map applied as a function, a real number regarded as complex), and
 `fun x => ↑x` is the function $`\lambda` on $`\mathbb{R}`. For the declarations not shown here,
 see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/Spectral/Unbounded/FunctionalCalculus.html)
+[API documentation](https://hilbert6.org/docs/Hilbert6/Spectral/Unbounded/FunctionalCalculus.html)
 and the files listed at the end of the chapter.
 
 ## Domains, adjoints and self-adjointness
@@ -296,24 +296,24 @@ with the kernel and range of a partial map defined as subspaces of $`H`
 A self-adjoint operator plus a bounded self-adjoint one is self-adjoint on the same domain
 ({apiDocs Hilbert6.Spectral.Unbounded.isSelfAdjoint_add_of_isSelfAdjoint}[`isSelfAdjoint_add_of_isSelfAdjoint`]).
 
-[ub-31]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-3.1
-[ub-91]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.1
-[ub-adj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:adjoint-well-defined
-[ub-92]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.2
-[ub-94]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.4
-[ub-95]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.5
-[ub-pos]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:positive-unbounded-operator
-[ub-96]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.6
-[ub-97]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.7
-[ub-911]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.11
-[ub-912]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.12
-[ub-93]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.3
-[ub-clm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:closed-linear-map-on-a-subspace
-[ub-98]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.8
-[ub-910]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.10
-[ub-ker]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kernel-of-an-unbounded-operator
-[ub-ran]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:range-of-an-unbounded-operator
-[ub-913]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.13
+[ub-31]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-3.1
+[ub-91]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.1
+[ub-adj]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:adjoint-well-defined
+[ub-92]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.2
+[ub-94]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.4
+[ub-95]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.5
+[ub-pos]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:positive-unbounded-operator
+[ub-96]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.6
+[ub-97]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.7
+[ub-911]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.11
+[ub-912]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.12
+[ub-93]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.3
+[ub-clm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:closed-linear-map-on-a-subspace
+[ub-98]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.8
+[ub-910]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.10
+[ub-ker]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:kernel-of-an-unbounded-operator
+[ub-ran]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:range-of-an-unbounded-operator
+[ub-913]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.13
 
 ## The spectrum and essential self-adjointness
 
@@ -358,11 +358,11 @@ Hilbert6.Spectral.Unbounded.isEssentiallySelfAdjoint_iff_dense_range.{u_1} {H : 
   IsEssentiallySelfAdjoint T ↔ Dense ↑(range (subSmul T Complex.I)) ∧ Dense ↑(range (subSmul T (-Complex.I)))
 ```
 
-[ub-916]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.16
-[ub-ures]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:uniqueness-of-resolvent
-[ub-agree]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:spectrum-notions-agree
-[ub-917]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-9.17
-[ub-921]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-9.21
+[ub-916]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-9.16
+[ub-ures]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:uniqueness-of-resolvent
+[ub-agree]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:spectrum-notions-agree
+[ub-917]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-9.17
+[ub-921]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-9.21
 
 ## Direct sums
 
@@ -397,11 +397,11 @@ such a decomposition makes $`H` unitarily the external direct sum of its summand
 ({apiDocs Hilbert6.Spectral.Unbounded.isHilbertSum_of_isInternalOrthogonalDecomposition}[`isHilbertSum_of_isInternalOrthogonalDecomposition`],
 in Mathlib's language of `IsHilbertSum`).
 
-[ub-fds]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:finite-direct-sum-dense
-[ub-iod]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:internal-orthogonal-decomposition
-[ub-idu]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:internal-decomposition-unitary
-[ub-926]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.26
-[ub-926i]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.26-internal
+[ub-fds]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:finite-direct-sum-dense
+[ub-iod]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:internal-orthogonal-decomposition
+[ub-idu]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:internal-decomposition-unitary
+[ub-926]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.26
+[ub-926i]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-9.26-internal
 
 ## Integration against a projection-valued measure
 
@@ -455,12 +455,12 @@ and the forms on a subspace are
 The truncations $`f \cdot 1_{|f| < n}` give $`(\int f \, d\mu)\psi` as a limit of bounded integrals
 ({apiDocs Hilbert6.Spectral.Unbounded.tendsto_integral_truncation}[`tendsto_integral_truncation`]).
 
-[ub-qf]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-quadratic-form-on-a-subspace
-[ub-102]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.2
-[ub-101]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.1
-[ub-coin]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:coincidence-with-the-bounded-integral
-[ub-trunc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:truncations-converge
-[ub-103]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.3
+[ub-qf]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-quadratic-form-on-a-subspace
+[ub-102]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.2
+[ub-101]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.1
+[ub-coin]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:coincidence-with-the-bounded-integral
+[ub-trunc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:truncations-converge
+[ub-103]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.3
 
 ## Bounded normal operators
 
@@ -498,15 +498,15 @@ blueprint's own proof are
 and the spectral subspaces
 {apiDocs Hilbert6.Spectral.Unbounded.spectralSubspace}[`spectralSubspace`].
 
-[ub-1019]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.19
-[ub-714]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-7.14
-[ub-poly]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:polynomials-in-normal-are-normal
-[ub-1024]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.24
-[ub-1025]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.25
-[ub-1027]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.27
-[ub-1023]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.23
-[ub-norm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:norm-of-polynomial-in-a-astar
-[ub-cfcn]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:continuous-functional-calculus-normal
+[ub-1019]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.19
+[ub-714]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-7.14
+[ub-poly]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:polynomials-in-normal-are-normal
+[ub-1024]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.24
+[ub-1025]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.25
+[ub-1027]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-10.27
+[ub-1023]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.23
+[ub-norm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:norm-of-polynomial-in-a-astar
+[ub-cfcn]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:continuous-functional-calculus-normal
 
 ## The abstract functional calculus
 
@@ -542,12 +542,12 @@ $`\lambda` on the complex spectrum. It has the form of the bounded self-adjoint 
 The ambient form of uniqueness, for a measure on a larger compact set such as the unit circle, is
 {apiDocs Hilbert6.Spectral.Unbounded.eq_of_integral_id_eq_ambient}[`eq_of_integral_id_eq_ambient`].
 
-[ub-acfc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-continuous-functional-calculus
-[ub-aam]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-associated-measures
-[ub-aef]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:abstract-extended-forms-are-bounded
-[ub-aec]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-extended-calculus
-[ub-apvm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:abstract-calculus-yields-pvm
-[ub-1020]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.20
+[ub-acfc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-continuous-functional-calculus
+[ub-aam]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-associated-measures
+[ub-aef]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:abstract-extended-forms-are-bounded
+[ub-aec]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:abstract-extended-calculus
+[ub-apvm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:abstract-calculus-yields-pvm
+[ub-1020]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.20
 
 ## The Cayley transform
 
@@ -593,14 +593,14 @@ The blueprint's restriction and transport of projection-valued measures are
 {apiDocs Hilbert6.Spectral.Unbounded.mapPVM}[`mapPVM`]; the pushforward used for uniqueness is
 {apiDocs Hilbert6.Spectral.Unbounded.pushforwardPVM}[`pushforwardPVM`].
 
-[ub-unn]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-is-normal
-[ub-cm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-map
-[ub-1028]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.28
-[ub-csm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-spectral-mapping
-[ub-bbt]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:borel-bijection-transports-pvm
-[ub-c1]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-omits-one
-[ub-1029]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.29
-[ub-1030]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.30
+[ub-unn]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:unitary-is-normal
+[ub-cm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-map
+[ub-1028]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.28
+[ub-csm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-spectral-mapping
+[ub-bbt]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:borel-bijection-transports-pvm
+[ub-c1]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:cayley-omits-one
+[ub-1029]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-10.29
+[ub-1030]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.30
 
 ## The spectral theorem and the functional calculus
 
@@ -662,10 +662,10 @@ Hilbert6.Spectral.Unbounded.functionalCalculus_of_bddMeasurable.{u_1} {H : Type 
 
 The unitary group $`e^{itA}` of Stone's theorem is of this kind.
 
-[ub-104]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.4
-[ub-sm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:spectral-measure
-[ub-105]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.5
-[ub-fcb]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:functional-calculus-bounded
+[ub-104]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-10.4
+[ub-sm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:spectral-measure
+[ub-105]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-10.5
+[ub-fcb]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:functional-calculus-bounded
 
 # Where to look
 %%%
@@ -710,5 +710,5 @@ functional calculus, serves Section 10.11 and is described in the
 
 The bounded theory these files build on is in the top-level files of `Hilbert6/Spectral/`,
 described in the {ref "spectral-files"}[bounded chapter]. The blueprint section is
-[Section 10.3](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:unbounded-spectral-theorems),
+[Section 10.3](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:unbounded-spectral-theorems),
 and each entry there links to the Lean declarations that formalise it.

@@ -1,12 +1,12 @@
-// Keeps doc-gen4's colour scheme in step with the physicslib4 theme on the API docs.
+// Keeps doc-gen4's colour scheme in step with the hilbert6 theme on the API docs.
 //
-// The site's theme script (physicslib4-theme.js, loaded just before this one) puts the class
+// The site's theme script (hilbert6-theme.js, loaded just before this one) puts the class
 // `light-theme` or `dark-theme` on <html> and stores the reader's choice under the website's
 // `localStorage` keys. doc-gen4 keys its own colours on the attribute `data-theme` of <html>, set
 // by its color-scheme.js (in the module-list frame, navbar.html) from `localStorage.theme`. This
 // script makes the site's class the one source: whenever it changes, `data-theme`, the key `theme`
 // and the module-list frame follow. doc-gen4's own picker at the foot of the module list is
-// hidden by physicslib4-docs.css, so the header's switch is the only one, as on the rest of the site.
+// hidden by hilbert6-docs.css, so the header's switch is the only one, as on the rest of the site.
 (function () {
   var root = document.documentElement;
 

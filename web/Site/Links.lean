@@ -1,8 +1,8 @@
 /-!
 # Site-wide strings and links
 
-The website is published at the root of the project site, `/physicslib4/`, with the tutorial and
-the reference manual beneath it, at `/physicslib4/tutorial/` and `/physicslib4/manual/`. Every page
+The website is published at the root of the domain, `https://hilbert6.org/`, with the tutorial and
+the reference manual beneath it, at `/tutorial/` and `/manual/`. Every page
 of each carries a `<base href>` pointing at its own root, so the relative paths below resolve to the
 same place from every page: `tutorial/`, `manual/` and `about/` from the website, `../` (the website),
 `../about/` and `../tutorial/` or `../manual/` (the other book) from the books.
@@ -14,10 +14,10 @@ namespace Site
 def tagline : String := "Solving Hilbert's 6th problem in Lean 4"
 
 /-- The project's GitHub repository. -/
-def githubUrl : String := "https://github.com/physicslib/physicslib4"
+def githubUrl : String := "https://github.com/hilbert6/hilbert6"
 
 /-- The published site that hosts the blueprint and the API docs. -/
-def publishedRoot : String := "https://physicslib.github.io/physicslib4/"
+def publishedRoot : String := "https://hilbert6.org/"
 
 /-- The blueprint. -/
 def blueprintUrl : String := publishedRoot ++ "blueprint/"
@@ -49,8 +49,8 @@ def manualFromBook : String := "../manual/"
 
 /--
 The top of a reference-manual chapter, relative to the root of the website, given the chapter's
-page name, e.g. `manualChapterUrl "The-GNS-construction"`. The website is served at
-`/physicslib4/` and the manual at `/physicslib4/manual/`. The feature cards use this function; the
+page name, e.g. `manualChapterUrl "The-GNS-construction"`. The website is served at `/`
+and the manual at `/manual/`. The feature cards use this function; the
 caption links of the code gallery in `Site/FrontPage.lean` are plain text in the page's markup and
 write the same `manual/` prefix directly.
 -/

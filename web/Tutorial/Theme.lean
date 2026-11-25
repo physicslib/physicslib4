@@ -20,7 +20,7 @@ def tutorialHeader : Html :=
 
 /-- The HTML configuration of the tutorial (`Book.config`). -/
 def config : RenderConfig :=
-  Book.config "A tutorial on algebraic quantum field theory and its formalisation in Lean 4 in physicslib4."
+  Book.config "A tutorial on algebraic quantum field theory and its formalisation in Lean 4 in hilbert6."
 
 /-- An extra build step: puts `tutorialHeader` in place of the manual header on every HTML page. -/
 def replaceHeader : ExtraStep := Book.replaceHeader tutorialHeader

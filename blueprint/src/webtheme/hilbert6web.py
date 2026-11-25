@@ -1,7 +1,7 @@
 """
-plasTeX package physicslib4web: the physicslib4 website's header and theme on the web blueprint.
+plasTeX package hilbert6web: the hilbert6 website's header and theme on the web blueprint.
 
-Loaded by `\\usepackage{physicslib4web}` in `web.tex`, after the `blueprint` package, and found
+Loaded by `\\usepackage{hilbert6web}` in `web.tex`, after the `blueprint` package, and found
 through `packages-dirs` in `plastex.cfg`. It is used by the web version only; `print.tex` does
 not load it, so the PDF is unaffected.
 
@@ -13,7 +13,7 @@ not load it, so the PDF is unaffected.
 - `site-header.html` is the header, kept in `rendererdata['html5']['site_header']`, from where
   the two layouts and the dependency graph template (`dep_graph.html`, selected by the
   `tpl=` option of the `blueprint` package in `web.tex`) insert it.
-- `physicslib4-theme.js` switches between the light and dark theme, as on the website.
+- `hilbert6-theme.js` switches between the light and dark theme, as on the website.
 
 The look itself (fonts, colours, header measurements, theorem boxes, table of contents,
 dependency graph page) is in `extra_styles.css`, the stylesheet named by `extra-css` in
@@ -33,5 +33,5 @@ def ProcessOptions(options, document):
     document.addPackageResource([
         PackageTemplateDir(path=PKG_DIR/'templates'),
         # Copied to js/ only: the layouts load it in the head, before the page is drawn.
-        PackageJs(path=PKG_DIR/'physicslib4-theme.js', copy_only=True),
+        PackageJs(path=PKG_DIR/'hilbert6-theme.js', copy_only=True),
     ])

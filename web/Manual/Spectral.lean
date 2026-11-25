@@ -19,7 +19,7 @@ file := "Bounded-spectral-theory"
 
 This chapter describes how the library encodes the spectral theory of bounded self-adjoint
 operators on a complex Hilbert space, up to the spectral theorem. It corresponds to
-[Section 10.2](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:spectral-theorems)
+[Section 10.2](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:spectral-theorems)
 of the blueprint, which follows the presentation of Hall's
 [_Quantum Theory for Mathematicians_](https://doi.org/10.1007/978-1-4614-7116-5). The spectral
 theorem for unbounded operators and Stone's theorem, in Sections 10.3 and 10.4 of the blueprint,
@@ -98,13 +98,13 @@ blueprint's $`\mathcal{B}(H)`. Mathlib supplies the operator norm, the adjoint
 (`ContinuousLinearMap.adjoint`), self-adjointness (`IsSelfAdjoint`), orthogonal projections
 (`IsStarProjection`), and a C\*-algebra structure on `H →L[ℂ] H`. Its inner product is
 conjugate-linear in the first argument, the physics convention that the blueprint fixes in
-[def:inner-product](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:inner-product).
+[def:inner-product](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:inner-product).
 
 The blueprint takes $`H` separable and nonzero, but only for convenience. No declaration assumes
 separability; the convergence arguments use only completeness. Nonzero $`H` appears as a
 `Nontrivial H` hypothesis on just the statements that use it, such as the nonemptiness of the
 spectrum
-([conv:nonzero-hilbert-space](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#conv:nonzero-hilbert-space)).
+([conv:nonzero-hilbert-space](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#conv:nonzero-hilbert-space)).
 
 ## Spectrum and resolvent are Mathlib's
 
@@ -131,7 +131,7 @@ multiplicativity and compatibility with the adjoint, and Mathlib proves the norm
 spectral mapping for it. What the library adds is the blueprint's characterisation: `realCalculus`
 is the unique bounded linear map that sends each polynomial to $`p(A)`, proved from the density
 of the polynomials (formalization note of
-[prpstn:hall-8.3](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.3)).
+[prpstn:hall-8.3](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.3)).
 
 As in the blueprint, the continuous calculus is for real functions; the Borel calculus below takes
 complex ones.
@@ -148,7 +148,7 @@ associated-measure theorem is fully proved.
 
 Two constructions in the section produce operators: the Borel calculus $`f(A)` and the integral
 $`\int f \, d\mu`. Both go through the same lemma
-([prpstn:hall-a.63](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.63)):
+([prpstn:hall-a.63](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.63)):
 a bounded quadratic form $`Q` determines a unique bounded $`B` with
 $`Q(\psi) = \langle \psi, B\psi \rangle`. The form in both cases is
 $`Q_f(\psi) = \int f \, d\mu_\psi`, so the hard work is to show that it is a bounded quadratic
@@ -194,7 +194,7 @@ blueprint's requirement that the set be measurable, since that follows
 ## Projection-valued measures
 
 `ProjectionValuedMeasure X H` is a structure, with the blueprint's axioms as fields
-([def:projection-valued-measure](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:projection-valued-measure)).
+([def:projection-valued-measure](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:projection-valued-measure)).
 As for Mathlib's vector measures, the underlying map is defined on all subsets of $`X`, and is
 $`0` on non-measurable ones, so applying $`\mu` to a set needs no measurability proof. Countable
 additivity is strong: $`\sum_j \mu(E_j)v` converges to $`\mu(\bigcup_j E_j)v` for each vector $`v`,
@@ -226,7 +226,7 @@ subsection opens with the blueprint entries it covers. In the printed statements
 the inner product $`\langle x, y \rangle`, `hA : IsSelfAdjoint A` is the hypothesis that $`A` is
 self-adjoint, `↑(spectrum ℝ A)` is the real spectrum as a type, and `fun l => ↑↑l` is the function
 $`\lambda` on it. For the declarations not shown here, see the
-[API documentation](https://physicslib.github.io/physicslib4/docs/Hilbert6/Spectral/SpectralTheorem.html)
+[API documentation](https://hilbert6.org/docs/Hilbert6/Spectral/SpectralTheorem.html)
 and the files listed at the end of the chapter. The subsections follow the order of the proof; the
 blueprint introduces projection-valued measures before the continuous calculus.
 
@@ -274,13 +274,13 @@ The proof takes this from Mathlib (`IsSelfAdjoint.spectrumRestricts`). The bluep
 behind it, $`\|(A - (a + ib)\mathbf{1})\psi\|^2 \ge b^2\|\psi\|^2` for real $`a` and $`b`, is
 {apiDocs Hilbert6.Spectral.sq_norm_sub_smul_apply_le}[`sq_norm_sub_smul_apply_le`].
 
-[bp-res]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:bounded-operator-resolvent-and-spectrum
-[bp-75]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.5
-[bp-neu]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:resolvent-holomorphy-and-neumann-series
-[bp-77]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.7
-[bp-cpt]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:spectrum-is-compact-metric-measurable
-[bp-rad]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:spectral-radius
-[bp-gel]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:gelfand-formula
+[bp-res]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:bounded-operator-resolvent-and-spectrum
+[bp-75]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.5
+[bp-neu]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:resolvent-holomorphy-and-neumann-series
+[bp-77]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-7.7
+[bp-cpt]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:spectrum-is-compact-metric-measurable
+[bp-rad]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:spectral-radius
+[bp-gel]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:gelfand-formula
 
 ## The continuous functional calculus
 
@@ -318,10 +318,10 @@ Hilbert6.Spectral.norm_realCalculus.{u_1} {H : Type u_1} [NormedAddCommGroup H] 
   [CompleteSpace H] {A : H →L[ℂ] H} (hA : IsSelfAdjoint A) (f : C(↑(spectrum ℝ A), ℝ)) : ‖(realCalculus hA) f‖ = ‖f‖
 ```
 
-[bp-83]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.3
-[bp-84]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.4
-[bp-cfcm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:cfc-multiplicative
-[bp-cfcs]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:cfc-spectral-mapping
+[bp-83]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.3
+[bp-84]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.4
+[bp-cfcm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:cfc-multiplicative
+[bp-cfcs]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:cfc-spectral-mapping
 
 ## The associated measures
 
@@ -353,9 +353,9 @@ measures take their values. The Riesz–Markov–Kakutani theorem itself,
 for a positive functional on the continuous functions on a compact metric space, is
 {apiDocs Hilbert6.Spectral.existsUnique_measure_of_positive_linear}[`existsUnique_measure_of_positive_linear`].
 
-[bp-rmk]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:riesz-representation
-[bp-am]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:associated-measures-self-adjoint
-[bp-amf]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:associated-measures-are-finite
+[bp-rmk]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:riesz-representation
+[bp-am]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:associated-measures-self-adjoint
+[bp-amf]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:associated-measures-are-finite
 
 ## Sesquilinear and quadratic forms
 
@@ -388,14 +388,14 @@ The polarization formula is
 $`Q_f`, one proves the homogeneity $`Q_f(c\psi) = |c|^2 Q_f(\psi)`, the sesquilinearity of its
 polarization and a bound $`|Q_f(\psi)| \le C\|\psi\|^2`; for the Borel calculus these are the
 propositions from
-[prpstn:F-homogeneous](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:F-homogeneous)
+[prpstn:F-homogeneous](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:F-homogeneous)
 to
-[prpstn:F-bounded](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:F-bounded).
+[prpstn:F-bounded](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:F-bounded).
 
-[bp-bsf]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:bounded-sesquilinear-form
-[bp-bqf]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:bounded-quadratic-form
-[bp-a61]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.61
-[bp-a63]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.63
+[bp-bsf]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:bounded-sesquilinear-form
+[bp-bqf]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:bounded-quadratic-form
+[bp-a61]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.61
+[bp-a63]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-a.63
 
 ## Bounded Borel functions and the bootstrap
 
@@ -428,12 +428,12 @@ monotone class theorem
 and the indicator step
 {apiDocs Hilbert6.Spectral.IsBorelGenerating.indicator_mem}[`IsBorelGenerating.indicator_mem`].
 
-[bp-bct]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bounded-convergence-theorem
-[bp-l0]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:L0-class
-[bp-mct]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:monotone-class-theorem
-[bp-33a]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-prblm-8.3.3a
-[bp-33b]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-prblm-8.3.3b
-[bp-33c]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-prblm-8.3.3c
+[bp-bct]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bounded-convergence-theorem
+[bp-l0]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:L0-class
+[bp-mct]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:monotone-class-theorem
+[bp-33a]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-prblm-8.3.3a
+[bp-33b]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-prblm-8.3.3b
+[bp-33c]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:hall-prblm-8.3.3c
 
 ## Projection-valued measures and the operator-valued integral
 
@@ -492,13 +492,13 @@ $`\int \bar f \, d\mu = (\int f \, d\mu)^*` is
 $`\mu_\psi` exists and is unique by
 {apiDocs Hilbert6.Spectral.ProjectionValuedMeasure.existsUnique_assoc}[`existsUnique_assoc`].
 
-[bp-pvm]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:projection-valued-measure
-[bp-pvma]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:projection-valued-measures-associated-measure
-[bp-ovi]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:operator-valued-integration
-[bp-ind]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-of-indicator
-[bp-nb]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-norm-bound
-[bp-mul]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-multiplicative
-[bp-conj]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-conjugation
+[bp-pvm]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:projection-valued-measure
+[bp-pvma]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:projection-valued-measures-associated-measure
+[bp-ovi]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:operator-valued-integration
+[bp-ind]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-of-indicator
+[bp-nb]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-norm-bound
+[bp-mul]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-multiplicative
+[bp-conj]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:integral-conjugation
 
 ## The Borel functional calculus
 
@@ -545,13 +545,13 @@ continuous real $`g` form a class satisfying `IsBorelGenerating`, starting from 
 multiplicativity of the continuous calculus. The second does the same for the $`g` with
 $`(fg)(A) = f(A)g(A)` for every bounded Borel $`f`, starting from the first.
 
-[bp-86]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-8.6
-[bp-87]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.7
-[bp-F]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:F-class
-[bp-88]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-8.8
-[bp-l3]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lemma-3
-[bp-89]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.9
-[bp-F12]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:F1-F2-classes
+[bp-86]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-8.6
+[bp-87]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.7
+[bp-F]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:F-class
+[bp-88]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:hall-8.8
+[bp-l3]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#lmm:lemma-3
+[bp-89]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:hall-8.9
+[bp-F12]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:F1-F2-classes
 
 ## The spectral theorem
 
@@ -593,12 +593,12 @@ Hilbert6.Spectral.borelCalculus_eq_integral.{u_1} {H : Type u_1} [NormedAddCommG
 
 {docstring Hilbert6.Spectral.functionalCalculus}
 
-[bp-810]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-8.10
-[bp-muap]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:mua-projection
-[bp-muaA]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:mua-integrates-to-A
-[bp-uniq]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-prblm-8.3.4
-[bp-st]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:spectral-theorem-for-bounded-operators
-[bp-fc]: https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:functional-calculus
+[bp-810]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-8.10
+[bp-muap]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:mua-projection
+[bp-muaA]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#prpstn:mua-integrates-to-A
+[bp-uniq]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:hall-prblm-8.3.4
+[bp-st]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:spectral-theorem-for-bounded-operators
+[bp-fc]: https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#def:functional-calculus
 
 # Where to look
 %%%
@@ -636,5 +636,5 @@ the file can be browsed.
 
 The subdirectories `Unbounded/` and `Stone/` formalise Sections 10.3 and 10.4 of the blueprint.
 The blueprint section is
-[Section 10.2](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:spectral-theorems),
+[Section 10.2](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:spectral-theorems),
 and each entry there links to the Lean declarations that formalise it.

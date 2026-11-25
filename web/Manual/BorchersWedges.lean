@@ -20,7 +20,7 @@ file := "Borchers-theorem-and-the-wedge-modular-group"
 This chapter describes how the library states and proves Borchers' theorem, its corollary for the
 modular group of a wedge algebra, and the Bisognano–Wichmann theorem up to an internal symmetry.
 It corresponds to
-[Section 10.11](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:borchers-wedges)
+[Section 10.11](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:borchers-wedges)
 of the blueprint. It joins the two preceding chapters: the {ref "tomita-takesaki"}[Tomita–Takesaki
 chapter] supplies the modular unitary group $`\Delta^{it}` and the modular conjugation $`J` of a
 von Neumann algebra with a cyclic and separating vector, and the {ref "reeh-schlieder"}[Reeh–Schlieder
@@ -186,7 +186,7 @@ tag := "borchers-wedges-main"
 A unitary $`V` with $`V\mathcal{M}_1V^{-1} = \mathcal{M}_2` and $`V\Omega_1 = \Omega_2` carries
 the Tomita operator, the modular operator, its square root, the modular unitary group and the
 modular conjugation of $`(\mathcal{M}_1, \Omega_1)` onto those of $`(\mathcal{M}_2, \Omega_2)`
-([thrm:unitary-intertwines-modular-objects](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:unitary-intertwines-modular-objects)).
+([thrm:unitary-intertwines-modular-objects](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:unitary-intertwines-modular-objects)).
 For the unbounded objects, "`B = V A V⁻¹`, including domains" is the graph identity
 $`\operatorname{graph} B = \Phi_V(\operatorname{graph} A)` with $`\Phi_V(\varphi, \psi) = (V\varphi, V\psi)`;
 the general facts about unitary conjugation of unbounded operators, including the transport of
@@ -236,7 +236,7 @@ Hilbert6.Modular.modular_objects_unitary_intertwine.{u_1} {H : Type u_1} [Normed
 
 Under weak additivity in the von Neumann sense, the vacuum is cyclic and separating for the
 algebra of every wedge
-([thrm:wedge-cyclic-separating](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:wedge-cyclic-separating)).
+([thrm:wedge-cyclic-separating](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:wedge-cyclic-separating)).
 Cyclicity comes from the Reeh–Schlieder theorem, since every wedge contains a nonempty diamond;
 separation comes from cyclicity for the algebra of the opposite wedge, which lies in the
 commutant by locality.
@@ -264,7 +264,7 @@ Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.wedge_isCyclicSepa
 {docstring Hilbert6.Modular.IsHalfSidedTranslation}
 
 The theorem
-([thrm:borchers](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:borchers))
+([thrm:borchers](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:borchers))
 states both relations as identities of bounded operators. $`\Delta^{is}` is
 `modularUnitaryGroup hM hΩ C hC s`, $`J T J` is `modularConjugationConj`, and $`V(t)` is the
 unitary `V t` as a bounded operator.
@@ -293,7 +293,7 @@ Hilbert6.Modular.borchers.{u_1} {H : Type u_1} [NormedAddCommGroup H] [InnerProd
 {docstring Hilbert6.AQFT.HaagKastler.wedgeReflection}
 
 For a covariant vacuum representation in which $`(R(W_R), \Omega)` is standard
-([thrm:wedge-modular-translations](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:wedge-modular-translations)),
+([thrm:wedge-modular-translations](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:wedge-modular-translations)),
 the wedge modular group acts on the translations as the boost $`b(-2\pi s)` does, and the modular
 conjugation as the wedge reflection. The version for every wedge $`gW_R`,
 `IsCovariantVacuumRep.wedge_modular_translations_general`, conjugates by $`U(g)`.
@@ -328,7 +328,7 @@ Without further hypotheses, $`Z` is a strongly continuous one-parameter unitary 
 $`\Delta_{W_R}^{it} = Z(t)U(b(-2\pi t))`; it fixes $`\Omega`, preserves $`R(W_R)` and commutes
 with every translation and every boost of $`W_R`
 (`IsCovariantVacuumRep.wedgeModularDefect_properties`,
-[crllr:wedge-modular-defect](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:wedge-modular-defect)).
+[crllr:wedge-modular-defect](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:wedge-modular-defect)).
 
 ## Bisognano–Wichmann up to an internal symmetry
 %%%
@@ -340,7 +340,7 @@ tag := "borchers-wedges-bw-internal"
 {docstring Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsInternalSymmetry}
 
 The theorem
-([thrm:bisognano-wichmann-internal](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bisognano-wichmann-internal))
+([thrm:bisognano-wichmann-internal](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#thrm:bisognano-wichmann-internal))
 assumes (MC) as `hMC` and concludes, for every $`t`, the factorisation of $`\Delta_{W_R}^{it}`,
 that $`Z(t)` is an internal symmetry, and that it commutes with the translations, together with
 the action of $`J_{W_R}` on the translations. Its docstring carries the `**Restriction:**` line
@@ -372,7 +372,7 @@ Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.bisognanoWichmann_
 ```
 
 The corollary `IsCovariantVacuumRep.wedgeModularDefect_commute_wedge_modular`
-([crllr:bw-defect-commutes-wedge-modular](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:bw-defect-commutes-wedge-modular))
+([crllr:bw-defect-commutes-wedge-modular](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#crllr:bw-defect-commutes-wedge-modular))
 adds that $`Z(t)` commutes with the modular group and the modular conjugation of every region
 $`W` for which $`\Omega` is cyclic and separating, in particular of every wedge, since an internal
 symmetry preserves every region algebra and a unitary that preserves $`\mathcal{M}` and fixes
@@ -481,5 +481,5 @@ documentation of a representative declaration.
   {apiDocs Hilbert6.AQFT.HaagKastler.HaagKastlerNet.IsCovariantVacuumRep.bisognanoWichmann_internal}[`bisognanoWichmann_internal`].
 
 The blueprint section is
-[Section 10.11](https://physicslib.github.io/physicslib4/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:borchers-wedges),
+[Section 10.11](https://hilbert6.org/blueprint/chptr-haag-kastler-axioms-blueprint.html#sctn:borchers-wedges),
 and each entry there links to the Lean declarations that formalise it.
