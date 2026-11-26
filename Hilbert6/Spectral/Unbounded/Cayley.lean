@@ -141,8 +141,10 @@ Blueprint reference: `lmm:cayley-map`.
 -/
 theorem continuousOn_cayleyInv : ContinuousOn cayleyInv unitCircleMinusOne :=
   Complex.continuous_re.comp_continuousOn <|
-    ContinuousOn.div (by fun_prop) (by fun_prop)
-      fun u hu h => hu.2 (sub_eq_zero.mp h)
+    ContinuousOn.div₀ (f := fun u : ℂ => Complex.I * (u + 1)) (g := fun u : ℂ => u - 1)
+      (continuous_const.mul (continuous_id.add continuous_const)).continuousOn
+      (continuous_id.sub continuous_const).continuousOn
+      fun _ hu h => hu.2 (sub_eq_zero.mp h)
 
 /--
 On the unit circle minus `1`, `i (u+1)/(u-1)` is real, so `cayleyInv` loses no information.
@@ -602,9 +604,12 @@ theorem spectralMeasure_singleton_one_eq_zero [Nontrivial H] {A : H →ₗ.[ℂ]
   exact hinj _ (by simpa using congrArg (fun T => T ψ) hUP)
 
 /-- `D` is Borel measurable on all of `ℂ`. -/
-theorem measurable_cayleyInv : Measurable cayleyInv :=
-  Complex.measurable_re.comp
-    ((measurable_const.mul (measurable_id.add_const 1)).div (measurable_id.sub_const 1))
+theorem measurable_cayleyInv : Measurable cayleyInv := by
+  have h1 : Measurable (fun u : ℂ => Complex.I * (u + 1)) :=
+    (continuous_const.mul (continuous_id.add continuous_const)).measurable
+  have h2 : Measurable (fun u : ℂ => u - 1) :=
+    (continuous_id.sub continuous_const).measurable
+  exact Complex.measurable_re.comp (h1.div h2)
 
 /-- A self-adjoint operator has no proper self-adjoint extension. -/
 theorem eq_of_le_of_isSelfAdjoint {T S : H →ₗ.[ℂ] H} (hT : IsSelfAdjoint T)

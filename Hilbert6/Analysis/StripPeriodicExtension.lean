@@ -103,13 +103,17 @@ theorem pext_differentiableAt_offline (hβ : 0 < β)
   have hmem : z - (m : ℂ) * ((β : ℂ) * Complex.I) ∈ {w : ℂ | 0 < w.im ∧ w.im < β} := by
     change 0 < (z - (m : ℂ) * ((β : ℂ) * Complex.I)).im ∧
       (z - (m : ℂ) * ((β : ℂ) * Complex.I)).im < β
-    have hval : (z - (m : ℂ) * ((β : ℂ) * Complex.I)).im = (pshift β z).im := rfl
+    have hval : (z - (m : ℂ) * ((β : ℂ) * Complex.I)).im = (pshift β z).im :=
+      (sub_intMul_im m β z).trans hpsim.symm
     rw [hval]; exact ⟨hz, hzlt⟩
+  have hSopen : IsOpen {w : ℂ | 0 < w.im ∧ w.im < β} :=
+    (isOpen_lt continuous_const Complex.continuous_im).and
+      (isOpen_lt Complex.continuous_im continuous_const)
   have hFdiff : DifferentiableAt ℂ F (z - (m : ℂ) * ((β : ℂ) * Complex.I)) :=
-    hdiff.differentiableAt
-      (((isOpen_lt continuous_const Complex.continuous_im).inter
-        (isOpen_lt Complex.continuous_im continuous_const)).mem_nhds hmem)
-  exact hFdiff.comp z (differentiableAt_id.sub_const _)
+    hdiff.differentiableAt (hSopen.mem_nhds hmem)
+  have hshift : DifferentiableAt ℂ (fun w : ℂ => w - (m : ℂ) * ((β : ℂ) * Complex.I)) z :=
+    differentiableAt_id.sub_const _
+  exact DifferentiableAt.comp (g := F) z hFdiff hshift
 
 /-- **On a gluing line**, the periodic extension is differentiable: on a ball
 around the point it equals a two-piece function glued across the line, which is

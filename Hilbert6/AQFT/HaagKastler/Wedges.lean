@@ -34,6 +34,7 @@ namespace HaagKastler
 
 open scoped Pointwise
 
+set_option quotPrecheck false in
 /-- The diamond `I⁺(p) ∩ I⁻(q)` of standard Minkowski spacetime with its standard time
 orientation. -/
 local notation "◇[" p ", " q "]" =>
@@ -395,8 +396,13 @@ theorem boostMatrix_apply (s : ℝ) (x : SpacetimeModel) :
     boostMatrix s x =
       !₂[Real.cosh s * x 0 + Real.sinh s * x 1, Real.sinh s * x 0 + Real.cosh s * x 1,
         x 2, x 3] := by
+  have h : boostMatrix s x = Matrix.toEuclideanCLM (𝕜 := ℝ)
+      !![Real.cosh s, Real.sinh s, 0, 0; Real.sinh s, Real.cosh s, 0, 0; 0, 0, 1, 0;
+        0, 0, 0, 1] x := rfl
+  rw [h]
   ext i
-  fin_cases i <;> simp [boostMatrix, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
+  rw [Matrix.ofLp_toEuclideanCLM]
+  fin_cases i <;> simp [Matrix.mulVec, dotProduct, Fin.sum_univ_four]
 
 /-- The boost matrices preserve the Minkowski form: `η(Λ(s)v, Λ(s)w) = η(v, w)`.
 
@@ -586,8 +592,11 @@ theorem isContinuousOneParameterSubgroup_translationFlow
     (n : StandardMinkowskiSpacetime.Carrier) :
     IsContinuousOneParameterSubgroup (translationFlow n) := by
   refine ⟨isOneParameterSubgroup_translationFlow n, continuous_induced_rng.2 ?_⟩
-  change Continuous fun t : ℝ => (_, _, t • n)
-  fun_prop
+  change Continuous fun t : ℝ =>
+    (LinearMap.toContinuousLinearMap (LinearMap.id : StandardMinkowskiSpacetime.Carrier →ₗ[ℝ] _),
+      LinearMap.toContinuousLinearMap (LinearMap.id : StandardMinkowskiSpacetime.Carrier →ₗ[ℝ] _),
+      t • n)
+  exact continuous_const.prodMk (continuous_const.prodMk (continuous_id.smul continuous_const))
 
 end HaagKastler
 end AQFT

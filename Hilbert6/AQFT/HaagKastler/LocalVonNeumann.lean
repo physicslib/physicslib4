@@ -39,7 +39,7 @@ Here π is a *-representation of the quasilocal algebra 𝔘 on a Hilbert space 
 local algebra 𝔘(B) in 𝔘. The result is a set of bounded operators on H, written π(𝔘(B)) for short.
 
 Blueprint: def:local-von-neumann -/
-def localOperators (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+noncomputable def localOperators (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) : Set (H →L[ℂ] H) :=
   Set.range fun a : N.U.algebra B => π (N.quasilocal.ι hB a)
 
@@ -54,7 +54,7 @@ Neumann algebra.
 Implementation note: the commutant is Mathlib's `Set.centralizer` in the bounded operators on H.
 
 Blueprint: def:local-von-neumann -/
-def localVonNeumann (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+noncomputable def localVonNeumann (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B : Set StandardMinkowskiSpacetime.Carrier⦄ (hB : IsAlexandrovBasisSet B) :
     Set (H →L[ℂ] H) :=
   Set.centralizer (Set.centralizer (N.localOperators π hB))

@@ -71,10 +71,10 @@ theorem differentiableOn_stripReflection {β : ℝ} {f : ℂ → ℂ}
     (hreal : ∀ t : ℝ, (f t).im = 0) :
     DifferentiableOn ℂ Φ[f] {z : ℂ | -β < z.im ∧ z.im < β} := by
   have hU : IsOpen {z : ℂ | -β < z.im ∧ z.im < β} :=
-    (isOpen_lt continuous_const Complex.continuous_im).inter
+    (isOpen_lt continuous_const Complex.continuous_im).and
       (isOpen_lt Complex.continuous_im continuous_const)
   have hO : IsOpen (Σ°[β]) :=
-    (isOpen_lt continuous_const Complex.continuous_im).inter
+    (isOpen_lt continuous_const Complex.continuous_im).and
       (isOpen_lt Complex.continuous_im continuous_const)
   refine differentiableOn_if_of_eqOn_horizontal_line hU 0 ?_ ?_ ?_ ?_ ?_
   · refine Complex.continuous_conj.comp_continuousOn

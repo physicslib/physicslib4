@@ -134,7 +134,7 @@ theorem SmoothPath.covDeriv_eq_of_eventuallyEq
     funext x; simp [W]
   have h0 : ∀ᶠ t in 𝓝[μ.parameterSpace] s, W (μ.toFun t) = 0 :=
     h.mono fun t ht ↦ by simp [W, ht]
-  rw [hYW, cov.isCovariantDerivativeOn.add hY' hW, add_apply,
+  rw [hYW, cov.isCovariantDerivativeOnUniv.add hY' hW, add_apply,
     covDeriv_apply_eq_zero_of_eventually_eq_zero cov μ hs hW h0, add_zero]
 
 /-- **Local vector fields globalise.** A vector field smooth on an open neighbourhood of `p`
@@ -296,8 +296,10 @@ theorem SmoothPath.exists_vectorField_eq_tangent (μ : M.SmoothPath) {s : ℝ}
   have hτp : τ p = s := hτμ.self_of_nhds
   have hU : {y | y ∈ (chartAt SpacetimeModel p).source ∧
       ContMDiffAt M.model 𝓘(ℝ, ℝ) ∞ τ y ∧ τ y ∈ J} ∈ 𝓝 p := by
-    refine Filter.inter_mem (chart_source_mem_nhds _ _) (Filter.inter_mem hτ ?_)
-    exact hτ.self_of_nhds.continuousAt.preimage_mem_nhds (hτp ▸ hJ.mem_nhds hsJ)
+    have hJp : ∀ᶠ y in 𝓝 p, τ y ∈ J :=
+      hτ.self_of_nhds.continuousAt.preimage_mem_nhds (hτp ▸ hJ.mem_nhds hsJ)
+    filter_upwards [chart_source_mem_nhds SpacetimeModel p, hτ, hJp] with y h1 h2 h3
+    exact ⟨h1, h2, h3⟩
   obtain ⟨U, hUsub, hUo, hpU⟩ := mem_nhds_iff.mp hU
   let X₀ : Π x : M.Carrier, TangentSpace M.model x :=
     fun y ↦ tangentCoordChange M.model p y y (deriv c (τ y))

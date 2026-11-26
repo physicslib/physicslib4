@@ -37,7 +37,7 @@ variable (N : HaagKastlerNet)
 union of the local von Neumann algebras of the diamonds contained in `O`.
 
 Blueprint: def:region-algebra -/
-def regionGeneratingSet (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+noncomputable def regionGeneratingSet (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     (O : Set StandardMinkowskiSpacetime.Carrier) : Set (H →L[ℂ] H) :=
   ⋃ (B : Set StandardMinkowskiSpacetime.Carrier) (hB : IsAlexandrovBasisSet B) (_ : B ⊆ O),
     N.localVonNeumann π hB
@@ -50,7 +50,7 @@ inclusion, so `R(B)` agrees with `localVonNeumann` on every diamond
 `R(O) = ℂ1`. The wedge algebras are the `R(W)` with `IsWedge W`.
 
 Blueprint: def:region-algebra -/
-def regionVonNeumann (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
+noncomputable def regionVonNeumann (π : N.quasilocal.carrier →⋆ₐ[ℂ] (H →L[ℂ] H))
     (O : Set StandardMinkowskiSpacetime.Carrier) : Set (H →L[ℂ] H) :=
   Set.centralizer (Set.centralizer (N.regionGeneratingSet π O))
 
