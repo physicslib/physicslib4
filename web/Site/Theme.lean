@@ -494,7 +494,7 @@ def headConfig : HeadConfig := {
 /-- The outer HTML template, modelled on `Verso.Web.Theme.primaryTemplate`. -/
 def primaryTemplate : TemplateM Html := do
   let headHtml ← Verso.Web.Theme.head "hilbert6" s!"hilbert6: {tagline}" headConfig colorTheme
-    (extraHead := {{ <style>{{ .text false (siteCss ++ headerCss) }}</style> }})
+    (extraHead := {{ <style>{{ .raw (siteCss ++ headerCss) }}</style> }})
   return {{
     <html lang="en">
       {{ headHtml }}

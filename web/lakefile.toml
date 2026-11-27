@@ -5,12 +5,12 @@ defaultTargets = ["Site", "generate-site", "Tutorial", "generate-tutorial", "Man
 [[require]]
 name = "verso"
 git = "https://github.com/leanprover/verso.git"
-rev = "v4.35.0"
+rev = "v4.36.0"
 
 [[require]]
 name = "versowebcomponents"
 git = "https://github.com/leanprover/verso-web-components.git"
-rev = "v4.35.0"
+rev = "v4.36.0"
 
 [[require]]
 name = "hilbert6"

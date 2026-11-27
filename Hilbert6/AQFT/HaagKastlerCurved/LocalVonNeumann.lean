@@ -44,7 +44,7 @@ Axiom 2 carries 𝔘(B') into 𝔘(B). The result is a set of bounded operators 
 π(𝔘(B')) for short.
 
 Blueprint: def:local-von-neumann-in-curved-spacetime -/
-def localOperators {B : Set M.Carrier} (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+noncomputable def localOperators {B : Set M.Carrier} (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B)
     (h : B' ⊆ B) : Set (H →L[ℂ] H) :=
   Set.range fun a : N.algebra B' => π (N.commIsotony hB' hB h a)
@@ -62,7 +62,7 @@ algebra 𝔘(B).
 Implementation note: the commutant is Mathlib's `Set.centralizer` in the bounded operators on H.
 
 Blueprint: def:local-von-neumann-in-curved-spacetime -/
-def localVonNeumann {B : Set M.Carrier} (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
+noncomputable def localVonNeumann {B : Set M.Carrier} (π : N.algebra B →⋆ₐ[ℂ] (H →L[ℂ] H))
     ⦃B' : Set M.Carrier⦄ (hB' : M.IsBasisSet B') (hB : M.IsBasisSet B)
     (h : B' ⊆ B) : Set (H →L[ℂ] H) :=
   Set.centralizer (Set.centralizer (N.localOperators π hB' hB h))

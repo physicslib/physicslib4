@@ -78,6 +78,7 @@ theorem isVonNeumannSet_centralizer {M : Set (H →L[ℂ] H)} (hM : IsVonNeumann
     IsVonNeumannSet (Set.centralizer M) ∧ Set.centralizer (Set.centralizer M) = M ∧
       (∃ A : StarSubalgebra ℂ (H →L[ℂ] H), (A : Set (H →L[ℂ] H)) = M) ∧
       ∃ A : StarSubalgebra ℂ (H →L[ℂ] H), (A : Set (H →L[ℂ] H)) = Set.centralizer M := by
+  open scoped Pointwise in
   have hstar : ∀ {S : Set (H →L[ℂ] H)}, (∀ a ∈ S, star a ∈ S) → S ∪ star S = S :=
     fun hS => Set.union_eq_left.mpr fun a ha => by simpa using hS _ ha
   have hA : (StarSubalgebra.centralizer ℂ M : Set (H →L[ℂ] H)) = Set.centralizer M := by

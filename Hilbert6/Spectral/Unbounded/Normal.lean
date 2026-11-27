@@ -1004,6 +1004,7 @@ theorem existsUnique_normalCalculus {A : H →L[ℂ] H} (hA : IsStarNormal A) :
       mvEvalConj, ι, ContinuousMap.sum_apply, mul_assoc]
   have hadj : ∀ f ∈ StarAlgebra.adjoin ℂ {ι}, T f = Φ f := by
     intro f hf
+    open scoped Pointwise in
     have hle : Algebra.adjoin ℂ ({ι} ∪ star {ι}) ≤ (MvPolynomial.aeval ![ι, star ι]).range := by
       refine Algebra.adjoin_le ?_
       rintro g (rfl | hg)

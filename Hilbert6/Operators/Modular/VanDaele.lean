@@ -2106,10 +2106,18 @@ theorem vanDaele_commutator_integrand {M : Set (H →L[ℂ] H)} {Ω : H}
               (modularUnitaryGroup hM hΩ C hC (-t) ξ)))⟫_ℂ /
           ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) := by
     simp_rw [h1]
-    refine Continuous.div (((continuous_inner_modularUnitaryGroup_conj hM hΩ C hC a'
-      (b' ξ) η).2).sub (continuous_inner_modularUnitaryGroup_conj hM hΩ C hC a' ξ
-        (star b' η)).2) ?_ hcosh
-    fun_prop
+    have hnum : Continuous (fun t : ℝ => ⟪η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) (b' ξ)))⟫_ℂ -
+        ⟪star b' η, modularUnitaryGroup hM hΩ C hC t
+          (modularConjugationConj hM hΩ C hC a'
+            (modularUnitaryGroup hM hΩ C hC (-t) ξ))⟫_ℂ) :=
+      ((continuous_inner_modularUnitaryGroup_conj hM hΩ C hC a' (b' ξ) η).2).sub
+        (continuous_inner_modularUnitaryGroup_conj hM hΩ C hC a' ξ (star b' η)).2
+    have hden : Continuous (fun t : ℝ => ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ)) :=
+      Complex.continuous_ofReal.comp
+        (continuous_const.mul (Real.continuous_cosh.comp (continuous_const.mul continuous_id)))
+    exact hnum.div₀ hden hcosh
   refine ⟨h1, hc, integrable_of_norm_le_div_cosh hc (‖a'‖ * ‖b'‖ * ‖ξ‖ * ‖η‖) fun t => ?_⟩
   rw [h1, norm_div, Complex.norm_real, Real.norm_of_nonneg (by positivity)]
   have hA := norm_inner_modularUnitaryGroup_conj_le hM hΩ C hC a' (b' ξ) η t
@@ -2198,8 +2206,12 @@ theorem modularUnitaryGroup_conj_commute {M : Set (H →L[ℂ] H)} {Ω : H}
         (modularUnitaryGroup hM hΩ C hC (-t)).toLinearIsometry.toContinuousLinearMap)) ξ with hw
   obtain ⟨-, hc, hi⟩ := vanDaele_commutator_integrand hM hΩ C hC a' b' ξ w
   have h0 := congrFun (eq_zero_of_integral_exp_mul_eq_zero hc hi fun θ => by
-    rw [← integral_exp_mul_vanDaele_commutator_eq_zero hM hΩ C hC ha' hb' ξ w θ]
-    congr 1; ext s; congr 2; ring) t
+    have he : ∀ s : ℝ, Complex.exp ((θ : ℂ) * s * Complex.I) =
+        Complex.exp (Complex.I * θ * s) := fun s => by
+      congr 1; ring
+    refine (MeasureTheory.integral_congr_ae (Filter.Eventually.of_forall fun s => ?_)).trans
+      (integral_exp_mul_vanDaele_commutator_eq_zero hM hΩ C hC ha' hb' ξ w θ)
+    exact congrArg (· * _) (he s)) t
   have hcosh : ((2 * Real.cosh (Real.pi * t) : ℝ) : ℂ) ≠ 0 :=
     Complex.ofReal_ne_zero.2 (by positivity)
   have hww : ⟪w, w⟫_ℂ = 0 := (div_eq_zero_iff.1 h0).resolve_right hcosh

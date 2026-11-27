@@ -273,7 +273,6 @@ theorem pullbackVal_contMDiff (M : Spacetime) (ψ : Diffeo M M) :
       rw [hce]
       exact Bundle.Trivialization.symm_linearMapAt (e := trivializationAt F E (ψ x₀)) hψx' z
     simp [htele]
-    rfl
   exact hZ.congr_of_eventuallyEq hMain
 
 /--

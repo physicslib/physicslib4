@@ -192,10 +192,10 @@ instance instCStarRingCompletion : CStarRing (Completion A) where
     intro x
     refine UniformSpace.Completion.induction_on x ?_ ?_
     · -- closedness: {x | ‖x‖ * ‖x‖ ≤ ‖x⋆ * x‖} since both sides are continuous
-      haveI : UniformContinuous (star : A → A) := star_isometry.uniformContinuous
-      have hstar : Continuous (star : Completion A → Completion A) := by
-        exact Completion.continuous_map
-      exact isClosed_le (by fun_prop) (by fun_prop)
+      have hstar : Continuous (star : Completion A → Completion A) :=
+        Completion.continuous_map
+      exact isClosed_le (continuous_norm.mul continuous_norm)
+        (continuous_norm.comp (hstar.mul continuous_id))
     · intro a
       simpa only [star_completion_coe, Completion.norm_coe, ← Completion.coe_mul] using
         (CStarRing.norm_mul_self_le a : ‖a‖ * ‖a‖ ≤ ‖star a * a‖)

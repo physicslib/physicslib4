@@ -514,7 +514,7 @@ theorem borchersFunction_analytic {M : Set (H →L[ℂ] H)} {Ω : H}
   have hU := (borchersApproximant_tendstoUniformlyOn hM hΩ C hC hV hτ hφ hψ).2
   have hsub : kmsStripInterior (1 / 2) ⊆ kmsStrip (1 / 2) := fun z hz => ⟨hz.1.le, hz.2.le⟩
   have hopen : IsOpen (kmsStripInterior (1 / 2)) :=
-    (isOpen_lt continuous_const Complex.continuous_im).inter
+    (isOpen_lt continuous_const Complex.continuous_im).and
       (isOpen_lt Complex.continuous_im continuous_const)
   refine ⟨hU.continuousOn ((eventually_ge_atTop 1).mono fun n hn =>
       continuousOn_borchersApproximant hM hΩ C hC hV hτ hφ hψ hn).frequently,

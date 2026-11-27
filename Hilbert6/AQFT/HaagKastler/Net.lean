@@ -314,7 +314,7 @@ noncomputable def trivialLocalNet : LocalNet where
 
 /-- A concrete Alexandrov-basis set of standard Minkowski spacetime
 (`I⁺(0) ∩ I⁻(0)`), used as a witness that basis sets exist. -/
-def trivialBasisSet : Set StandardMinkowskiSpacetime.Carrier :=
+noncomputable def trivialBasisSet : Set StandardMinkowskiSpacetime.Carrier :=
   chronologicalFuture StandardMinkowskiSpacetime standardMinkowskiTimeOrientation 0
     ∩ chronologicalPast StandardMinkowskiSpacetime standardMinkowskiTimeOrientation 0
 

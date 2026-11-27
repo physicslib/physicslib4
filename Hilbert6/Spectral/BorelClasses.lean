@@ -129,7 +129,7 @@ theorem generateFrom_subset_of_isMonotoneClass {X : Type*} {𝒜 ℳ : Set (Set 
     (h𝒜 : IsSetAlgebra 𝒜) (hℳ : IsMonotoneClass ℳ) (h : 𝒜 ⊆ ℳ) :
     {s : Set X | MeasurableSet[MeasurableSpace.generateFrom 𝒜] s} ⊆ ℳ := by
   -- 𝒦 is the smallest monotone class containing 𝒜.
-  let 𝒦 : Set (Set X) := fun s => ∀ 𝓜 : Set (Set X), IsMonotoneClass 𝓜 → 𝒜 ⊆ 𝓜 → s ∈ 𝓜
+  let 𝒦 : Set (Set X) := {s | ∀ 𝓜 : Set (Set X), IsMonotoneClass 𝓜 → 𝒜 ⊆ 𝓜 → s ∈ 𝓜}
   have h𝒜𝒦 : 𝒜 ⊆ 𝒦 := by
     intro s hs 𝓜 _h𝓜 h𝒜𝓜
     exact h𝒜𝓜 hs
@@ -146,7 +146,7 @@ theorem generateFrom_subset_of_isMonotoneClass {X : Type*} {𝒜 ℳ : Set (Set 
   -- 𝒦 is closed under complement.
   have hcompl : ∀ s : Set X, s ∈ 𝒦 → sᶜ ∈ 𝒦 := by
     intro s hs
-    let 𝒦c : Set (Set X) := fun t => tᶜ ∈ 𝒦
+    let 𝒦c : Set (Set X) := {t | tᶜ ∈ 𝒦}
     have h𝒦c_mono : IsMonotoneClass 𝒦c := by
       refine ⟨?_, ?_⟩
       · intro f hf hf𝒦c
@@ -167,7 +167,7 @@ theorem generateFrom_subset_of_isMonotoneClass {X : Type*} {𝒜 ℳ : Set (Set 
   -- 𝒦 is closed under union with an element of 𝒜.
   have hunion_mem_algebra : ∀ a ∈ 𝒜, ∀ u, u ∈ 𝒦 → a ∪ u ∈ 𝒦 := by
     intro a ha u hu
-    let 𝒦a : Set (Set X) := fun v => a ∪ v ∈ 𝒦
+    let 𝒦a : Set (Set X) := {v | a ∪ v ∈ 𝒦}
     have h𝒦a_mono : IsMonotoneClass 𝒦a := by
       refine ⟨?_, ?_⟩
       · intro f hf hf𝒦a
@@ -188,7 +188,7 @@ theorem generateFrom_subset_of_isMonotoneClass {X : Type*} {𝒜 ℳ : Set (Set 
   -- 𝒦 is closed under finite unions.
   have hunion : ∀ u v, u ∈ 𝒦 → v ∈ 𝒦 → u ∪ v ∈ 𝒦 := by
     intro u v hu hv
-    let 𝒦u : Set (Set X) := fun w => u ∪ w ∈ 𝒦
+    let 𝒦u : Set (Set X) := {w | u ∪ w ∈ 𝒦}
     have h𝒦u_mono : IsMonotoneClass 𝒦u := by
       refine ⟨?_, ?_⟩
       · intro f hf hf𝒦u

@@ -147,7 +147,8 @@ theorem differentiableOn_schwarzReflection_of_eq_zero {f : ℂ → ℂ} {I : Set
       (hf'.differentiableAt (hU.mem_nhds (show 0 < (conj z).im by simpa using h)))
     rw [Complex.conj_conj] at hc
     refine hc.congr_of_eventuallyEq ?_
-    filter_upwards [(isOpen_lt Complex.continuous_im continuous_const).mem_nhds h] with w hw
+    filter_upwards [(isOpen_lt Complex.continuous_im continuous_const).mem_nhds h] with w
+      (hw : w.im < 0)
     simp [not_le.2 hw]
   · refine (hf'.differentiableAt (hU.mem_nhds h)).congr_of_eventuallyEq ?_
     filter_upwards [hU.mem_nhds h] with w hw

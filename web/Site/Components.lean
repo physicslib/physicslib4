@@ -321,7 +321,7 @@ def featureCardHtml (c : FeatureCard) : Html :=
   let art := ((cardArt.lookup c.image).getD "")
   {{
     <a class="feature-card rail-card" href={{ c.url }}>
-      <span class="feature-card-art" aria-hidden="true">{{ Html.text false art }}</span>
+      <span class="feature-card-art" aria-hidden="true">{{ Html.raw art }}</span>
       <span class="feature-card-title">{{ c.title }}</span>
       <span class="feature-card-desc">{{ c.desc }}</span>
       <span class="feature-card-footer">

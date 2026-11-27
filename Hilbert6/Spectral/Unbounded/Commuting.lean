@@ -180,11 +180,11 @@ theorem functionalCalculus_adjointMulSelf_commute_of_commute {c : H →ₗ.[ℂ]
   have hmem : U ψ ∈ (antiunitaryConj (C.trans U) (antiunitaryConj C F)).domain := by
     change C.symm (C.symm (U.symm (U ψ))) ∈ F.domain
     rwa [U.symm_apply_apply, hCs]
-  refine ⟨by rw [e] at hmem; exact hmem, ?_⟩
-  have key : ∀ (G : H →ₗ.[ℂ] H) (hG : G = F) (h : U ψ ∈ G.domain),
-      G ⟨U ψ, h⟩ = F ⟨U ψ, hG ▸ h⟩ := by
-    rintro G rfl h; rfl
-  rw [← key _ e hmem]
+  have hF : U ψ ∈ F.domain := by rw [e] at hmem; exact hmem
+  have key : ∀ (G : H →ₗ.[ℂ] H) (hG : G = F) (h : U ψ ∈ G.domain) (h' : U ψ ∈ F.domain),
+      G ⟨U ψ, h⟩ = F ⟨U ψ, h'⟩ := by
+    rintro G rfl h h'; rfl
+  refine ⟨hF, (key _ e hmem hF).symm.trans ?_⟩
   change U (C (C (F ⟨C.symm (C.symm (U.symm (U ψ))), _⟩))) = _
   rw [hC]
   congr 2
@@ -219,7 +219,8 @@ theorem approximant_functions :
   refine ⟨fun n hn => ?_, fun x => ?_⟩
   · have hn' : (0 : ℝ) < n := by exact_mod_cast hn
     have hc : Continuous (fun x : ℝ => (n / (n + Real.sqrt x) : ℝ)) :=
-      continuous_const.div (continuous_const.add Real.continuous_sqrt) fun x => by positivity
+      continuous_const.div (continuous_const.add Real.continuous_sqrt) fun x =>
+        (show (n : ℝ) + Real.sqrt x ≠ 0 by positivity)
     have hc2 := Real.continuous_sqrt.mul hc
     refine ⟨hc, hc.measurable, hc2, hc2.measurable, fun x => ?_⟩
     have hs := Real.sqrt_nonneg x

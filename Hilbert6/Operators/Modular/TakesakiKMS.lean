@@ -212,7 +212,7 @@ theorem takesaki_functions_lower_sum (t x : ℝ) :
   rw [Set.indicator_of_mem (Set.mem_Ioi.mpr hx), he]
   rcases lt_or_ge x 1 with h1 | h1
   · simp [Set.indicator, hx, h1, not_le.mpr h1]
-  · rw [Set.indicator_of_notMem (fun h => absurd h1 (not_le.mpr h.2)),
+  · rw [Set.indicator_of_notMem (fun h : x ∈ Set.Ioo (0 : ℝ) 1 => absurd h1 (not_le.mpr h.2)),
       Set.indicator_of_mem (Set.mem_Ici.mpr h1), ← Complex.ofReal_pow, hs, hm, zero_add,
       sub_add_cancel]
 
@@ -448,7 +448,7 @@ theorem takesakiFunction_analytic {M : Set (H →L[ℂ] H)} {Ω : H}
       (differentiable_takesakiApproximant hM hΩ C hC hξ hη hn).1
   have hsub : kmsStripInterior 1 ⊆ kmsStrip 1 := fun z hz => ⟨hz.1.le, hz.2.le⟩
   have hopen : IsOpen (kmsStripInterior 1) :=
-    (isOpen_lt continuous_const Complex.continuous_im).inter
+    (isOpen_lt continuous_const Complex.continuous_im).and
       (isOpen_lt Complex.continuous_im continuous_const)
   refine ⟨hU.continuousOn (hev.mono fun n hn => hn.continuous.continuousOn).frequently,
     TendstoLocallyUniformlyOn.differentiableOn (hU.mono hsub).tendstoLocallyUniformlyOn
@@ -605,6 +605,7 @@ theorem coe_starSubalgebra_centralizer_centralizer {M : Set (H →L[ℂ] H)}
         Set (H →L[ℂ] H)) = M ∧
       IsClosed ((StarSubalgebra.centralizer ℂ (Set.centralizer M) :
         StarSubalgebra ℂ (H →L[ℂ] H)) : Set (H →L[ℂ] H)) := by
+  open scoped Pointwise in
   have hstar : ∀ {S : Set (H →L[ℂ] H)}, (∀ a ∈ S, star a ∈ S) → S ∪ star S = S :=
     fun hS => Set.union_eq_left.mpr fun a ha => by simpa using hS _ ha
   have hA : (StarSubalgebra.centralizer ℂ M : Set (H →L[ℂ] H)) = Set.centralizer M := by
