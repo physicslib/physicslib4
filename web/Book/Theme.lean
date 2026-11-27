@@ -182,13 +182,13 @@ def config (description : String) : RenderConfig where
 function updateFaviconForSystemTheme(theme) {}"
     |>.insert searchToToc
   extraHead := #[
-    {{ <link rel="preconnect" href="https://fonts.googleapis.com" /> }},
-    {{ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" /> }},
-    {{ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" /> }},
-    {{ <link rel="icon" href="favicon.png" /> }},
-    {{ <link rel="apple-touch-icon" href="apple-touch-icon.png" /> }},
-    {{ <meta name="theme-color" content={{ Site.accent }} /> }},
-    {{ <meta name="description" content={{ description }} /> }}
+    html%{ <link rel="preconnect" href="https://fonts.googleapis.com" /> },
+    html%{ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" /> },
+    html%{ <link rel="stylesheet" href={"https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"} /> },
+    html%{ <link rel="icon" href="favicon.png" /> },
+    html%{ <link rel="apple-touch-icon" href="apple-touch-icon.png" /> },
+    html%{ <meta name="theme-color" content={Site.accent} /> },
+    html%{ <meta name="description" content={description} /> }
   ]
   extraFilesHtml := [
     ("static_files/favicon.png", "favicon.png"),
@@ -210,7 +210,7 @@ def replaceHeaderIn (header page : String) : Option String :=
 /-- An extra build step: puts `header` in place of the manual header on every HTML page. -/
 def replaceHeader (header : Html) : ExtraStep := fun mode cfg _ _ => do
   let dir := cfg.destination / (match mode with | .single => "html-single" | .multi => "html-multi")
-  let header := header.asString
+  let header := header.render
   for file in ← (dir.walkDir : IO _) do
     if file.extension == some "html" then
       let page ← (IO.FS.readFile file : IO _)

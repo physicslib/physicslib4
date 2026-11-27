@@ -23,7 +23,7 @@ namespace Site
 /-- The list of a page's sections, beside the text; the contents of the directive are a list of links. -/
 block_component +directive pageToc where
   toHtml _ _ _ goB contents := do
-    return {{ <nav class="page-toc" aria-label="On this page">{{ ← contents.mapM goB }}</nav> }}
+    return html%{ <nav class="page-toc" aria-label="On this page">{← contents.mapM goB}</nav> }
 
 /--
 A section heading with a fixed anchor, the target of a `pageToc` link. The directive has no contents;
@@ -31,20 +31,20 @@ the text of the section follows it.
 -/
 block_component +directive anchoredHeading (anchor : String) (heading : String) where
   toHtml _ _ _ _ _ := do
-    return {{ <h2 id={{ anchor }}>{{ heading }}</h2> }}
+    return html%{ <h2 id={anchor}>{heading}</h2> }
 
 /-- Text beside the causal-diamond diagram; the argument is the diagram's caption. -/
 block_component +directive sideFigure (caption : String) where
   toHtml _ _ _ goB contents := do
-    return {{
+    return html%{
       <div class="side-figure">
-        <div class="side-figure-text">{{ ← contents.mapM goB }}</div>
+        <div class="side-figure-text">{← contents.mapM goB}</div>
         <figure class="side-figure-image">
-          {{ diamondDiagram }}
-          <figcaption>{{ caption }}</figcaption>
+          {diamondDiagram}
+          <figcaption>{caption}</figcaption>
         </figure>
       </div>
-    }}
+    }
 
 /-- The steps of a contribution, as a numbered row. -/
 def contributeStepList : Array (String × String) := #[
@@ -57,21 +57,21 @@ def contributeStepList : Array (String × String) := #[
 /-- The row of numbered contribution steps. -/
 block_component +directive contributeSteps where
   toHtml _ _ _ _ _ := do
-    let items : Array Html := contributeStepList.mapIdx fun i (title, desc) => {{
+    let items : Array Html := contributeStepList.mapIdx fun i (title, desc) => html%{
       <li class="step">
-        <span class="step-number" aria-hidden="true">{{ toString (i + 1) }}</span>
-        <strong class="step-title">{{ title }}</strong>
-        <span class="step-text">{{ desc }}</span>
+        <span class="step-number" aria-hidden="true">{toString (i + 1)}</span>
+        <strong class="step-title">{title}</strong>
+        <span class="step-text">{desc}</span>
       </li>
-    }}
-    return {{ <ol class="steps">{{ items }}</ol> }}
+    }
+    return html%{ <ol class="steps">{items}</ol> }
 
 /-- A line icon of the Get Involved cards, from its SVG path data. -/
-def cardIcon (path : String) : Html := {{
+def cardIcon (path : String) : Html := html%{
   <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-    <path d={{ path }} />
+    <path d={path} />
   </svg>
-}}
+}
 
 /-- The cards of the Get Involved page: icon path, title, description, link text and link. -/
 def contributeCardList : Array (String × String × String × String × String) := #[
@@ -89,30 +89,30 @@ def contributeCardList : Array (String × String × String × String × String) 
 /-- The grid of cards of the Get Involved page, in the style of the landing page's feature cards. -/
 block_component +directive contributeCards where
   toHtml _ _ _ _ _ := do
-    let cards : Array Html := contributeCardList.map fun (icon, title, desc, label, url) => {{
-      <a class="feature-card contribute-card" href={{ url }}>
+    let cards : Array Html := contributeCardList.map fun (icon, title, desc, label, url) => html%{
+      <a class="feature-card contribute-card" href={url}>
         <div>
-          {{ cardIcon icon }}
-          <p class="feature-card-text"><strong>{{ title }}</strong></p>
-          <p class="feature-card-text">{{ desc }}</p>
+          {cardIcon icon}
+          <p class="feature-card-text"><strong>{title}</strong></p>
+          <p class="feature-card-text">{desc}</p>
         </div>
-        <div class="feature-card-footer"><span class="feature-card-more">{{ label }}" →"</span></div>
+        <div class="feature-card-footer"><span class="feature-card-more">{label}{" →"}</span></div>
       </a>
-    }}
-    return {{ <div class="feature-grid contribute-grid">{{ cards }}</div> }}
+    }
+    return html%{ <div class="feature-grid contribute-grid">{cards}</div> }
 
 /-- A coloured band with a heading, the contents of the directive and a button. -/
 block_component +directive callout (heading : String) (label : String) (url : String) where
   toHtml _ _ _ goB contents := do
-    return {{
+    return html%{
       <aside class="callout">
         <div class="callout-text">
-          <h3 class="callout-heading">{{ heading }}</h3>
-          {{ ← contents.mapM goB }}
+          <h3 class="callout-heading">{heading}</h3>
+          {← contents.mapM goB}
         </div>
-        <a class="callout-button" href={{ url }}>{{ label }}</a>
+        <a class="callout-button" href={url}>{label}</a>
       </aside>
-    }}
+    }
 
 /--
 The hero: wordmark, tagline, the contents of the directive (one sentence), the three call-to-action
@@ -120,33 +120,33 @@ buttons, and the causal-diamond diagram.
 -/
 block_component +directive hero where
   toHtml _ _ _ goB contents := do
-    let tutorial ← button .primary tutorialPath {{ "Read the tutorial" }}
-    let blueprint ← button .secondary blueprintUrl {{ "Blueprint" }}
-    let docs ← button .secondary docsUrl {{ "API docs" }}
-    return {{
+    let tutorial ← button .primary tutorialPath html%{Read the tutorial}
+    let blueprint ← button .secondary blueprintUrl html%{Blueprint}
+    let docs ← button .secondary docsUrl html%{API docs}
+    return html%{
       <section class="landing-hero container">
         <div class="landing-hero-text">
-          <h1 class="landing-wordmark">"hilbert"<span class="wordmark-six">"6"</span></h1>
-          <p class="landing-tagline">{{ tagline }}</p>
-          <div class="landing-lede">{{ ← contents.mapM goB }}</div>
-          <div class="landing-buttons">{{ tutorial }}{{ blueprint }}{{ docs }}</div>
+          <h1 class="landing-wordmark">hilbert<span class="wordmark-six">6</span></h1>
+          <p class="landing-tagline">{tagline}</p>
+          <div class="landing-lede">{← contents.mapM goB}</div>
+          <div class="landing-buttons">{tutorial}{blueprint}{docs}</div>
         </div>
         <figure class="landing-hero-figure">
-          {{ diamondDiagram }}
+          {diamondDiagram}
           <figcaption>
-            "Algebraic quantum field theory's axiom 3 in one picture: the diamonds B₁ and B₂ are spacelike separated inside B, so their observables commute."
+            {"Algebraic quantum field theory's axiom 3 in one picture: the diamonds B₁ and B₂ are spacelike separated inside B, so their observables commute."}
           </figcaption>
         </figure>
       </section>
-    }}
+    }
 
 /-- The markup of a landing-page section; `extraClass` is appended to its classes. -/
-def sectionHtml (anchor heading extraClass : String) (body : Html) : Html := {{
-  <section class=s!"landing-section container{extraClass}" id={{ anchor }}>
-    <h2 class="landing-section-title">{{ heading }}</h2>
-    {{ body }}
+def sectionHtml (anchor heading extraClass : String) (body : Html) : Html := html%{
+  <section class={s!"landing-section container{extraClass}"} id={anchor}>
+    <h2 class="landing-section-title">{heading}</h2>
+    {body}
   </section>
-}}
+}
 
 /-- A landing-page section with an anchor and a heading. -/
 block_component +directive landingSection (anchor : String) (heading : String) where
@@ -319,19 +319,19 @@ One feature card, a single link. Its illustration is the inline SVG of `Site.car
 -/
 def featureCardHtml (c : FeatureCard) : Html :=
   let art := ((cardArt.lookup c.image).getD "")
-  {{
-    <a class="feature-card rail-card" href={{ c.url }}>
-      <span class="feature-card-art" aria-hidden="true">{{ Html.raw art }}</span>
-      <span class="feature-card-title">{{ c.title }}</span>
-      <span class="feature-card-desc">{{ c.desc }}</span>
+  html%{
+    <a class="feature-card rail-card" href={c.url}>
+      <span class="feature-card-art" aria-hidden="true">{Html.raw art}</span>
+      <span class="feature-card-title">{c.title}</span>
+      <span class="feature-card-desc">{c.desc}</span>
       <span class="feature-card-footer">
         <span class="feature-card-tags">
-          {{ c.sections.map fun (t : String) => ({{ <span class="feature-card-tag">{{ t }}</span> }} : Html) }}
+          {c.sections.map fun (t : String) => (html%{ <span class="feature-card-tag">{t}</span> } : Html)}
         </span>
-        <span class="feature-card-more">"Read more →"</span>
+        <span class="feature-card-more">Read more →</span>
       </span>
     </a>
-  }}
+  }
 
 /--
 The feature cards in four rails, one per `FeatureGroup`, each with a heading and a horizontally
@@ -342,21 +342,21 @@ rail is a scrollable row; with it, `railScript` adds previous and next buttons.
 block_component +directive features where
   toHtml _ _ _ _ _ := do
     saveJs railScript
-    let rail (g : FeatureGroup) : Html := {{
-      <section class="feature-rail" aria-labelledby={{ g.anchor }}>
+    let rail (g : FeatureGroup) : Html := html%{
+      <section class="feature-rail" aria-labelledby={g.anchor}>
         <div class="feature-rail-head">
-          <h3 class="feature-rail-heading" id={{ g.anchor }}>{{ g.heading }}</h3>
+          <h3 class="feature-rail-heading" id={g.anchor}>{g.heading}</h3>
           <div class="feature-rail-controls" hidden="">
-            <button type="button" class="feature-rail-button feature-rail-prev" aria-label=s!"Previous cards: {g.heading}">"←"</button>
-            <button type="button" class="feature-rail-button feature-rail-next" aria-label=s!"Next cards: {g.heading}">"→"</button>
+            <button type="button" class="feature-rail-button feature-rail-prev" aria-label={s!"Previous cards: {g.heading}"}>←</button>
+            <button type="button" class="feature-rail-button feature-rail-next" aria-label={s!"Next cards: {g.heading}"}>→</button>
           </div>
         </div>
-        <div class="feature-rail-track" role="list" tabindex="0" aria-label={{ g.heading }}>
-          {{ (featureCards.filter (·.group == g)).map fun c =>
-              ({{ <div class="feature-rail-item" role="listitem">{{ featureCardHtml c }}</div> }} : Html) }}
+        <div class="feature-rail-track" role="list" tabindex="0" aria-label={g.heading}>
+          {(featureCards.filter (·.group == g)).map fun c =>
+              (html%{ <div class="feature-rail-item" role="listitem">{featureCardHtml c}</div> } : Html)}
         </div>
       </section>
-    }}
-    return {{ <div class="feature-rails">{{ featureGroups.map rail }}</div> }}
+    }
+    return html%{ <div class="feature-rails">{featureGroups.map rail}</div> }
 
 end Site

@@ -1235,7 +1235,7 @@ theorem ker_sqrt_functionalCalculus {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A
     exact hx2 (le_antisymm (Real.sqrt_eq_zero'.1 this) hx1)
   have hν : μ.assoc ψ = 0 := MeasureTheory.ae_eq_bot.1 (Filter.eventually_false_iff_eq_bot.1 hF)
   have hu := assoc_univ_eq μ ψ
-  rw [hν, MeasureTheory.Measure.coe_zero, Pi.zero_apply, eq_comm, ENNReal.ofReal_eq_zero] at hu
+  rw [hν, FunLike.coe_zero, Pi.zero_apply, eq_comm, ENNReal.ofReal_eq_zero] at hu
   have : ‖ψ‖ = 0 := by nlinarith [norm_nonneg ψ]
   simpa using this
 

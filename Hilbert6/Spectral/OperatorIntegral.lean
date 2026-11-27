@@ -1501,7 +1501,7 @@ theorem integral_bddMeasurable_mul (μ : ProjectionValuedMeasure X H) {f g : X �
   have hlim1 : Tendsto (fun n => μ.integral (fun x => s n x * r n x)) atTop
       (𝓝 (μ.integral (f * g))) := by
     exact tendsto_integral_of_tendstoUniformly μ hfg (s := fun n => s n * r n)
-      (by simpa only [SimpleFunc.mul_apply] using hdiag)
+      (by simpa only [mul_apply] using hdiag)
   -- `∫ sᵢ dμ → ∫ f dμ` and `∫ rᵢ dμ → ∫ g dμ`, so the products converge too
   have hlimS : Tendsto (fun n => μ.integral (fun x => s n x)) atTop (𝓝 (μ.integral f)) :=
     tendsto_integral_of_tendstoUniformly μ hf (s := s) hs
