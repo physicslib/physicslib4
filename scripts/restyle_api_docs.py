@@ -44,17 +44,22 @@ SITE_ICON = "/favicon.png"
 MARKER = b'<meta name="hilbert6-restyle" content="1">'
 MARKER_PROBE = b'name="hilbert6-restyle"'
 # doc-gen4 opens the body of every page but the module list with its checkbox and its top bar.
-BODY_START = b'<body><input id="nav_toggle" type="checkbox"></input><header>'
+# Void elements are written either self-closing (`<input .../>`, doc-gen4 rendering through
+# Lean's `Html`) or with an end tag (`<input ...></input>`); both forms are recognised.
+BODY_STARTS = (
+    b'<body><input id="nav_toggle" type="checkbox"/><header>',
+    b'<body><input id="nav_toggle" type="checkbox"></input><header>',
+)
 HEADER_END = b"</header>"
 FORM_START = b'<form id="search_form">'
 FORM_END = b"</form>"
-SEARCH_INPUT = b'<input type="text" name="q" autocomplete="off"></input>'
+SEARCH_INPUT = re.compile(rb'<input type="text" name="q" autocomplete="off"(?:/>|></input>)')
 SEARCH_INPUT_NEW = (
     b'<input type="search" name="q" autocomplete="off" placeholder="Search the API docs"'
-    b' aria-label="Search the API docs"></input>'
+    b' aria-label="Search the API docs"/>'
 )
 PAGE_NAME = re.compile(rb'<h2 class="header_filename break_within">(.*?)</h2>', re.S)
-ICON = re.compile(rb'<link rel="icon" href="[^"]*favicon\.svg"></link>')
+ICON = re.compile(rb'<link rel="icon" href="[^"]*favicon\.svg"(?:/>|></link>)')
 FONTS = (
     b'<link rel="preconnect" href="https://fonts.googleapis.com">'
     b'<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">'
@@ -96,20 +101,25 @@ def restyle(data: bytes, prefix: str, header: bytes) -> tuple[bytes | None, str]
     if head_start < 0 or head_start > head_end:
         return None, "other"
     head = data[head_start + len(b"<head>"):head_end]
-    body_start = data.find(BODY_START, head_end)
+    body_start, body_start_len = -1, 0
+    for start in BODY_STARTS:
+        body_start = data.find(start, head_end)
+        if body_start >= 0:
+            body_start_len = len(start)
+            break
     if body_start >= 0:
         kind = "page"
-    elif b'class="navframe"' in data and b'<base target="_parent">' in head:
+    elif b'class="navframe"' in data and b'<base target="_parent"' in head:
         kind = "navbar"
     else:
         return None, "other"
 
-    head = ICON.sub(b'<link rel="icon" href="' + SITE_ICON.encode() + b'"></link>', head, count=1)
+    head = ICON.sub(b'<link rel="icon" href="' + SITE_ICON.encode() + b'"/>', head, count=1)
     new_head = b"<head>" + MARKER + head + head_additions(prefix) + b"</head>"
     if kind == "navbar":
         return data[:head_start] + new_head + data[head_end + len(b"</head>"):], kind
 
-    old_start = body_start + len(BODY_START) - len(b"<header>")
+    old_start = body_start + body_start_len - len(b"<header>")
     old_end = data.find(HEADER_END, old_start)
     if old_end < 0:
         return None, "other"
@@ -119,7 +129,7 @@ def restyle(data: bytes, prefix: str, header: bytes) -> tuple[bytes | None, str]
     f1 = old_header.find(FORM_END, f0)
     if f0 < 0 or f1 < 0:
         return None, "other"
-    form = old_header[f0:f1 + len(FORM_END)].replace(SEARCH_INPUT, SEARCH_INPUT_NEW, 1)
+    form = SEARCH_INPUT.sub(SEARCH_INPUT_NEW, old_header[f0:f1 + len(FORM_END)], count=1)
     rest = data[old_end:]
     # A module page: the page name (from doc-gen4's top bar) goes to the top of the text.
     name = PAGE_NAME.search(old_header)
