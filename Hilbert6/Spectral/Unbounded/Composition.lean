@@ -60,8 +60,8 @@ private theorem fc_indicator_bdd {E : Set X} (hE : MeasurableSet E) :
 
 private theorem fc_memLp_two_iff {F : X → ℂ} (hF : Measurable F) (ν : Measure X) :
     MemLp F 2 ν ↔ ∫⁻ x, ‖F x‖ₑ ^ (2 : ℝ) ∂ν < ∞ :=
-  ⟨fun h => lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top h,
-    fun h => (eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero ENNReal.ofNat_ne_top
+  ⟨fun h => lintegral_rpow_eNorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top h,
+    fun h => (eLpNorm_lt_top_iff_lintegral_rpow_eNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top
         hF.aestronglyMeasurable).2 h⟩
 
 private theorem fc_pmap_congr {f f' : X → ℂ} (e : f = f') {x : H}
@@ -210,7 +210,7 @@ private theorem fc_assoc_pmapIntegral {h : X → ℂ} (hh : Measurable h) (ψ : 
       (ae_of_all _ fun x => by positivity), ← lintegral_indicator hE]
   congr 1
   funext x
-  by_cases hx : x ∈ E <;> simp [hx, enorm_eq_nnnorm]
+  by_cases hx : x ∈ E <;> simp [hx, eNorm_eq_nnNorm]
 
 /--
 The associated measure of `h(μ)ψ`, for measurable and not necessarily bounded `h` and
@@ -239,10 +239,10 @@ theorem pmapIntegral_mem_integralDomain_iff {f g : X → ℂ} (hf : Measurable f
   rw [mem_integralDomain, mem_integralDomain, assoc_pmapIntegral μ hg ψ,
     fc_memLp_two_iff hf, fc_memLp_two_iff (hf.mul hg),
     lintegral_withDensity_eq_lintegral_mul _
-      (hg.nnnorm.coe_nnreal_ennreal.pow_const 2) (hf.enorm.pow_const _)]
+      (hg.nnNorm.coe_nnreal_ennreal.pow_const 2) (hf.eNorm.pow_const _)]
   refine Iff.of_eq (congrArg (· < ∞) (lintegral_congr fun x => ?_))
-  simp only [Pi.mul_apply, ENNReal.rpow_two, enorm_eq_nnnorm]
-  rw [nnnorm_mul, ENNReal.coe_mul]
+  simp only [Pi.mul_apply, ENNReal.rpow_two, eNorm_eq_nnNorm]
+  rw [nnNorm_mul, ENNReal.coe_mul]
   ring
 
 /-- `μ({|f| < n}) w → w`. -/

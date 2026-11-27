@@ -175,7 +175,7 @@ noncomputable def StandardMinkowskiSpacetime : Spacetime where
     fin_cases i <;> fin_cases j <;> simp [Matrix.of_apply]
   contMDiff := by
     intro x
-    rw [contMDiffAt_section]
+    rw [contMDiffAt_section_iff]
     convert! contMDiffAt_const (c := minkowskiForm)
     ext v w
     simp [hom_trivializationAt_apply, ContinuousLinearMap.inCoordinates, TangentSpace]
@@ -1825,7 +1825,7 @@ noncomputable def MinkowskiSpacetime : Spacetime where
     fin_cases i <;> fin_cases j <;> simp [Matrix.of_apply]
   contMDiff := by
     intro x
-    rw [Bundle.contMDiffAt_section]
+    rw [contMDiffAt_section_iff]
     convert! contMDiffAt_const (c := minkowskiForm)
     ext v w
     simp [hom_trivializationAt_apply, ContinuousLinearMap.inCoordinates, TangentSpace]

@@ -178,7 +178,7 @@ theorem pullbackVal_contMDiff (M : Spacetime) (ψ : Diffeo M M) :
         (E := fun x ↦ TangentSpace M.model x →L[ℝ] TangentSpace M.model x →L[ℝ] ℝ)
         x (M.pullbackVal ψ x)) := by
   intro x₀
-  rw [Bundle.contMDiffAt_section]
+  rw [Bundle.contMDiffAt_section_iff]
   let F : Type := SpacetimeModel
   let E : M.Carrier → Type := fun x => TangentSpace M.model x
   let E₁₂ : M.Carrier → Type := fun y => E y →L[ℝ] ℝ

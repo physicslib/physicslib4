@@ -42,23 +42,23 @@ block_extension Block.exercise where
   traverse _ _ _ := pure none
   toTeX := some fun _ goB _ _ contents => contents.mapM goB
   toHtml := some fun _ goB _ _ contents => do
-    return {{
+    return html%{
       <div class="exercise">
-        <p class="exercise-label">"Exercise"</p>
-        {{ ← contents.mapM goB }}
+        <p class="exercise-label">Exercise</p>
+        {← contents.mapM goB}
       </div>
-    }}
+    }
 
 block_extension Block.solution where
   traverse _ _ _ := pure none
   toTeX := some fun _ goB _ _ contents => contents.mapM goB
   toHtml := some fun _ goB _ _ contents => do
-    return {{
+    return html%{
       <details class="solution">
-        <summary>"Solution"</summary>
-        <div class="solution-body">{{ ← contents.mapM goB }}</div>
+        <summary>Solution</summary>
+        <div class="solution-body">{← contents.mapM goB}</div>
       </details>
-    }}
+    }
 
 block_extension Block.figure (name : String) where
   data := .str name
@@ -69,12 +69,12 @@ block_extension Block.figure (name : String) where
       | Verso.reportError s!"Malformed figure data: {data}"; return .empty
     let some svg := diagrams.lookup name
       | Verso.reportError s!"Unknown diagram '{name}'"; return .empty
-    return {{
+    return html%{
       <figure class="tutorial-figure">
-        {{ svg }}
-        <figcaption>{{ ← contents.mapM goB }}</figcaption>
+        {svg}
+        <figcaption>{← contents.mapM goB}</figcaption>
       </figure>
-    }}
+    }
 
 block_extension Block.goals where
   traverse _ _ _ := pure none
@@ -98,7 +98,7 @@ block_extension Block.goals where
   toTeX := some fun _ goB _ _ contents => contents.mapM goB
   toHtml := some fun _ goB _ _ contents =>
     withReader (fun ρ => { ρ with codeOptions.visibleProofStates := .all }) do
-      return {{ <div class="goals">{{ ← contents.mapM goB }}</div> }}
+      return html%{ <div class="goals">{← contents.mapM goB}</div> }
 
 /-- An exercise. Its solution, if any, goes in a nested `solution` directive. -/
 @[directive]

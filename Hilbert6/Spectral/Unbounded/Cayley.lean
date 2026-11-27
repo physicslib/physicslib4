@@ -676,12 +676,12 @@ theorem pmapIntegral_cayleyInv_apply_sub_one {U : H →L[ℂ] H} (hUu : U ∈ un
     · rw [hDh u hu]; exact hgb u
   rw [← hhint]
   have hmem : μU.integral h χ ∈ integralDomain μU D := by
-    rw [mem_integralDomain, memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero
+    rw [mem_integralDomain, memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_eNorm_lt_top two_ne_zero
         ENNReal.ofNat_ne_top hDm.aestronglyMeasurable,
-      lintegral_assoc_integral_apply μU hh χ (hDm.enorm.pow_const _)]
+      lintegral_assoc_integral_apply μU hh χ (hDm.eNorm.pow_const _)]
     refine lt_of_le_of_lt (lintegral_mono fun x => ?_ :
       _ ≤ ∫⁻ _, ENNReal.ofReal ((2 : ℝ) ^ 2) ∂(μU.assoc χ)) ?_
-    · rw [← enorm_eq_nnnorm, ← ofReal_norm, ← ofReal_norm,
+    · rw [← eNorm_eq_nnNorm, ← ofReal_norm, ← ofReal_norm,
         ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) (by norm_num),
         ← ENNReal.ofReal_pow (norm_nonneg _), ← ENNReal.ofReal_mul (by positivity)]
       apply ENNReal.ofReal_le_ofReal

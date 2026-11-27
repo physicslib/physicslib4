@@ -384,44 +384,44 @@ header.site-header .desktop-menu .nav-link { padding-left: var(--space-2); paddi
 
 /-- One navigation entry, marked active when `active` holds. -/
 def navItem (active : Bool) (title url : String) : Html :=
-  {{ <li class=s!"nav-item{if active then " active" else ""}"><a class="nav-link" href={{url}}>{{title}}</a></li> }}
+  html%{ <li class={s!"nav-item{if active then " active" else ""}"}><a class="nav-link" href={url}>{title}</a></li> }
 
 /--
 The header shared by the website and the books: the wordmark (linking to `home`) on the left;
 the navigation `links`, GitHub and the theme switch on the right. `isActive` picks the navigation
 entry of the current page by its title.
 -/
-def headerWith (home : String) (links : Array (String × String)) (isActive : String → Bool) : Html := {{
+def headerWith (home : String) (links : Array (String × String)) (isActive : String → Bool) : Html := html%{
   <header class="site-header">
     <nav class="navbar" role="navigation" aria-label="Primary navigation">
       <div class="navbar-container container">
-        <a class="nav-logo wordmark" href={{ home }}>"hilbert"<span class="wordmark-six">"6"</span></a>
+        <a class="nav-logo wordmark" href={home}>hilbert<span class="wordmark-six">6</span></a>
         <div class="nav-toggle">
           <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox" />
-          <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">"☰"</label>
+          <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation menu">☰</label>
         </div>
         <menu class="desktop-menu">
           <ul class="desktop-menu-part"></ul>
           <ul class="desktop-menu-part">
-            {{ links.map fun (t, u) => navItem (isActive t) t u }}
+            {links.map fun (t, u) => navItem (isActive t) t u}
             <li class="nav-item">
-              <a class="nav-link" href={{ githubUrl }} aria-label="GitHub">{{ (Icon.github : Html) }}</a>
+              <a class="nav-link" href={githubUrl} aria-label="GitHub">{(Icon.github : Html)}</a>
             </li>
             <li class="nav-item">
-              <button class="nav-link change-theme" aria-label="Change theme">{{ (Icon.moon : Html) }}</button>
+              <button class="nav-link change-theme" aria-label="Change theme">{(Icon.moon : Html)}</button>
             </li>
           </ul>
         </menu>
       </div>
       <menu class="mobile-nav">
         <ul class="nav-list">
-          {{ links.map fun (t, u) => navItem (isActive t) t u }}
-          {{ navItem false "GitHub" githubUrl }}
+          {links.map fun (t, u) => navItem (isActive t) t u}
+          {navItem false "GitHub" githubUrl}
         </ul>
       </menu>
     </nav>
   </header>
-}}
+}
 
 /--
 The website header on the page at `path`. The entry of the current page is active; the entries of
@@ -438,33 +438,33 @@ The footer of the website, using the `verso-web-components` footer classes. `hom
 -/
 def footerWith (home : String) (links : Array (String × String)) : Html :=
   let link (title url : String) : Html :=
-    {{ <li><a class="footer-text" href={{url}}>{{title}}</a></li> }}
-  {{
+    html%{ <li><a class="footer-text" href={url}>{title}</a></li> }
+  html%{
     <footer role="contentinfo" aria-label="Site footer">
       <div class="footer-grid container">
         <nav class="footer-column" aria-label="hilbert6">
-          <a class="footer-wordmark" href={{ home }}>"hilbert"<span class="wordmark-six">"6"</span></a>
+          <a class="footer-wordmark" href={home}>hilbert<span class="wordmark-six">6</span></a>
         </nav>
         <nav class="footer-column" aria-label="Documentation">
-          <h3 class="footer-heading">"Documentation"</h3>
+          <h3 class="footer-heading">Documentation</h3>
           <ul class="footer-links">
-            {{ links.map fun (t, u) => link t u }}
+            {links.map fun (t, u) => link t u}
           </ul>
         </nav>
         <nav class="footer-column" aria-label="Project">
-          <h3 class="footer-heading">"Project"</h3>
+          <h3 class="footer-heading">Project</h3>
           <ul class="footer-links">
-            {{ link "About" aboutPath }}
-            {{ link "Roadmap" roadmapPath }}
-            {{ link "Get involved" getInvolvedPath }}
-            {{ link "GitHub" githubUrl }}
-            {{ link "Blueprint (PDF)" (publishedRoot ++ "blueprint.pdf") }}
+            {link "About" aboutPath}
+            {link "Roadmap" roadmapPath}
+            {link "Get involved" getInvolvedPath}
+            {link "GitHub" githubUrl}
+            {link "Blueprint (PDF)" (publishedRoot ++ "blueprint.pdf")}
           </ul>
         </nav>
       </div>
       <div class="footer-divider container" role="separator"></div>
       <div class="footer-bottom container">
-        <div class="footer-copy">"hilbert6 is released under the Apache 2.0 licence."</div>
+        <div class="footer-copy">hilbert6 is released under the Apache 2.0 licence.</div>
         <div class="footer-socials">
           <label class="theme-switch">
             <input type="checkbox" class="change-theme" />
@@ -473,7 +473,7 @@ def footerWith (home : String) (links : Array (String × String)) : Html :=
         </div>
       </div>
     </footer>
-  }}
+  }
 
 /-- The website footer. -/
 def footer : Html := footerWith "./" (docLinksFrom tutorialPath manualPath)
@@ -494,22 +494,22 @@ def headConfig : HeadConfig := {
 /-- The outer HTML template, modelled on `Verso.Web.Theme.primaryTemplate`. -/
 def primaryTemplate : TemplateM Html := do
   let headHtml ← Verso.Web.Theme.head "hilbert6" s!"hilbert6: {tagline}" headConfig colorTheme
-    (extraHead := {{ <style>{{ .raw (siteCss ++ headerCss) }}</style> }})
-  return {{
+    (extraHead := html%{ <style>{.raw (siteCss ++ headerCss)}</style> })
+  return html%{
     <html lang="en">
-      {{ headHtml }}
+      {headHtml}
       <body>
-        {{ header (← currentPath) }}
-        {{ ← param "content" }}
-        {{ footer }}
+        {header (← currentPath)}
+        {← param "content"}
+        {footer}
         <script>
-          "// dark.js points the favicon at /static/favicon-*.ico, which this site does not have; keep favicon.png.
-          function updateFaviconForSystemTheme(theme) {}"
+          {"// dark.js points the favicon at /static/favicon-*.ico, which this site does not have; keep favicon.png.
+          function updateFaviconForSystemTheme(theme) {}"}
         </script>
         <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       </body>
     </html>
-  }}
+  }
 
 /--
 The page template. The landing page is a sequence of full-width sections built by the components in
@@ -519,20 +519,20 @@ def pageTemplate : TemplateM Html := do
   let path ← currentPath
   let content ← param "content"
   if path.isEmpty then
-    return {{ <main class="landing">{{ content }}</main> }}
+    return html%{ <main class="landing">{content}</main> }
   else
-    return {{
+    return html%{
       <main class="container">
         <div class="post-center post-page">
           <article class="post-container">
             <div class="post-content">
-              <h1 class="page-title">{{ ← param (α := String) "title" }}</h1>
-              {{ content }}
+              <h1 class="page-title">{← param (α := String) "title"}</h1>
+              {content}
             </div>
           </article>
         </div>
       </main>
-    }}
+    }
 
 /-- The site theme. -/
 def theme : Theme := {

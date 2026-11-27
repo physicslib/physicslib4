@@ -441,7 +441,7 @@ theorem assoc_add_le (φ ψ : H) :
     μ.assoc (φ + ψ) ≤ (2 : ℝ≥0∞) • (μ.assoc φ + μ.assoc ψ) := by
   rw [Measure.le_iff]
   intro E hE
-  rw [Measure.smul_apply, Measure.add_apply, assoc_apply_eq_norm_sq μ _ hE,
+  rw [smul_apply, add_apply, assoc_apply_eq_norm_sq μ _ hE,
     assoc_apply_eq_norm_sq μ _ hE, assoc_apply_eq_norm_sq μ _ hE, map_add, smul_eq_mul,
     ← ENNReal.ofReal_add (by positivity) (by positivity), ← ENNReal.ofReal_ofNat 2,
     ← ENNReal.ofReal_mul (by norm_num)]
@@ -454,7 +454,7 @@ theorem assoc_add_le (φ ψ : H) :
 theorem assoc_smul (c : ℂ) (ψ : H) :
     μ.assoc (c • ψ) = ENNReal.ofReal (‖c‖ ^ 2) • μ.assoc ψ := by
   ext E hE
-  rw [Measure.smul_apply, assoc_apply_eq_norm_sq μ _ hE, assoc_apply_eq_norm_sq μ _ hE,
+  rw [smul_apply, assoc_apply_eq_norm_sq μ _ hE, assoc_apply_eq_norm_sq μ _ hE,
     map_smul, norm_smul, smul_eq_mul, ← ENNReal.ofReal_mul (by positivity), mul_pow]
 
 /-- The associated measure of the zero vector is zero. -/
@@ -487,12 +487,12 @@ def integralDomain (f : X → ℂ) : Submodule ℂ H where
     intro φ ψ hφ hψ
     simp only [Set.mem_ofPred_eq] at *
     have hsum : MemLp f 2 (μ.assoc φ + μ.assoc ψ) := by
-      rw [memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero
+      rw [memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_eNorm_lt_top two_ne_zero
         ENNReal.ofNat_ne_top (hφ.aestronglyMeasurable.add_measure hψ.aestronglyMeasurable),
         lintegral_add_measure]
       exact ENNReal.add_lt_top.2
-        ⟨lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top hφ,
-          lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top hψ⟩
+        ⟨lintegral_rpow_eNorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top hφ,
+          lintegral_rpow_eNorm_lt_top_of_eLpNorm_lt_top two_ne_zero ENNReal.ofNat_ne_top hψ⟩
     exact hsum.of_measure_le_smul (by norm_num) (assoc_add_le μ φ ψ)
   zero_mem' := by simp [assoc_zero]
   smul_mem' := by
@@ -1042,7 +1042,7 @@ theorem assoc_integral_apply {h : X → ℂ} (hh : h ∈ BddMeasurable X) (ψ : 
     ← lintegral_indicator hE]
   congr 1
   funext x
-  by_cases hx : x ∈ E <;> simp [hx, enorm_eq_nnnorm]
+  by_cases hx : x ∈ E <;> simp [hx, eNorm_eq_nnNorm]
 
 /--
 Consequently integrals against `μ_{Tψ}` are integrals against `μ_ψ` weighted by `|h|²`.
@@ -1054,7 +1054,7 @@ theorem lintegral_assoc_integral_apply {h : X → ℂ} (hh : h ∈ BddMeasurable
     ∫⁻ x, g x ∂(μ.assoc (μ.integral h ψ)) =
       ∫⁻ x, g x * (‖h x‖₊ : ℝ≥0∞) ^ 2 ∂(μ.assoc ψ) := by
   have hd : Measurable fun x => (‖h x‖₊ : ℝ≥0∞) ^ 2 :=
-    (measurable_of_mem_bddMeasurable hh).nnnorm.coe_nnreal_ennreal.pow_const 2
+    (measurable_of_mem_bddMeasurable hh).nnNorm.coe_nnreal_ennreal.pow_const 2
   have hmeas : μ.assoc (μ.integral h ψ) =
       (μ.assoc ψ).withDensity fun x => (‖h x‖₊ : ℝ≥0∞) ^ 2 :=
     Measure.ext fun E hE => by rw [withDensity_apply _ hE, assoc_integral_apply μ hh ψ hE]
@@ -1126,12 +1126,12 @@ theorem pmapIntegral_sub_smul_integral_inv {f : X → ℂ} (hf : Measurable f)
     exact add_le_add_right (mul_le_mul_of_nonneg_left (hgb x) (norm_nonneg c)) 1
   set ψ := μ.integral g η
   have hψ : ψ ∈ integralDomain μ f := by
-    rw [mem_integralDomain, memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top two_ne_zero
+    rw [mem_integralDomain, memLp_iff, eLpNorm_lt_top_iff_lintegral_rpow_eNorm_lt_top two_ne_zero
         ENNReal.ofNat_ne_top hf.aestronglyMeasurable,
-      lintegral_assoc_integral_apply μ hg η (hf.enorm.pow_const _)]
+      lintegral_assoc_integral_apply μ hg η (hf.eNorm.pow_const _)]
     refine lt_of_le_of_lt (lintegral_mono fun x => ?_ :
       _ ≤ ∫⁻ _, ENNReal.ofReal (K ^ 2) ∂(μ.assoc η)) ?_
-    · rw [← enorm_eq_nnnorm, ← ofReal_norm, ← ofReal_norm,
+    · rw [← eNorm_eq_nnNorm, ← ofReal_norm, ← ofReal_norm,
         ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) (by norm_num),
         ← ENNReal.ofReal_pow (norm_nonneg _), ← ENNReal.ofReal_mul (by positivity)]
       apply ENNReal.ofReal_le_ofReal

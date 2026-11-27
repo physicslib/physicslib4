@@ -135,7 +135,7 @@ Blueprint reference: `lmm:hall-10.22`.
 theorem spectralRadius_mul_le_of_commute {A B : H →L[ℂ] H} (h : Commute A B) :
     spectralRadius ℂ (A * B) ≤ spectralRadius ℂ A * spectralRadius ℂ B := by
   have hfin : ∀ C : H →L[ℂ] H, spectralRadius ℂ C ≠ ⊤ := fun C =>
-    ((spectralRadius_le_nnnorm C).trans_lt ENNReal.coe_lt_top).ne
+    ((spectralRadius_le_nnNorm C).trans_lt ENNReal.coe_lt_top).ne
   refine le_of_tendsto_of_tendsto' (spectrum.pow_norm_pow_one_div_tendsto_nhds_spectralRadius _)
     (ENNReal.Tendsto.mul (spectrum.pow_norm_pow_one_div_tendsto_nhds_spectralRadius A)
       (Or.inr (hfin B)) (spectrum.pow_norm_pow_one_div_tendsto_nhds_spectralRadius B)
